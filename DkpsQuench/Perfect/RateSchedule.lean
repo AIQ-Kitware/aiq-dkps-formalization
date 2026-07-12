@@ -517,7 +517,166 @@ theorem safe_configBound_zero
             (responseDistBound m
               (populationResponseBound + safeResponseTolerance n))
             (safeResponseTolerance n))) atTop (𝓝 0) := by
-  sorry
+  have hm' : (m : ℝ) ≠ 0 := Nat.cast_ne_zero.mpr hm.ne'
+  have hκ' : κ ≠ 0 := ne_of_gt hκ
+  set en : ℕ → ℝ := fun n => ((n + 1 : ℕ) : ℝ) *
+      cmdsEntrywiseRate (n + 1) m
+        (responseDistBound m (populationResponseBound + safeResponseTolerance n))
+        (safeResponseTolerance n) with hen
+  have hpt : ∀ n : ℕ, en n = ((n + 1 : ℕ) : ℝ) *
+      cmdsEntrywiseRate (n + 1) m
+        (responseDistBound m (populationResponseBound + safeResponseTolerance n))
+        (safeResponseTolerance n) := fun n => by rw [hen]
+  simp only [← hpt]
+  -- `1/(n+1) → 0` and a generic zero-at-zero continuous composition tool.
+  have hpow : ∀ k : ℕ, 1 ≤ k →
+      Tendsto (fun n : ℕ => (((n + 1 : ℕ) : ℝ)) ^ k) atTop atTop := by
+    intro k hk
+    have hnat : Tendsto (fun n : ℕ => (n + 1) ^ k) atTop atTop :=
+      tendsto_atTop_mono
+        (fun n => le_trans (Nat.le_succ n) (le_self_pow (by omega) (by omega))) tendsto_id
+    simp_rw [← Nat.cast_pow]
+    exact tendsto_natCast_atTop_atTop.comp hnat
+  have hu : Tendsto (fun n : ℕ => (((n + 1 : ℕ) : ℝ))⁻¹) atTop (𝓝 0) := by
+    simpa only [one_div, Nat.cast_add, Nat.cast_one] using
+      (tendsto_one_div_add_atTop_nhds_zero_nat (𝕜 := ℝ))
+  have key : ∀ f : ℝ → ℝ, Continuous f → f 0 = 0 →
+      Tendsto (fun n : ℕ => f ((((n + 1 : ℕ) : ℝ))⁻¹)) atTop (𝓝 0) := by
+    intro f hf hf0
+    have h := (hf.tendsto (0 : ℝ)).comp hu
+    rw [hf0] at h
+    exact h
+  -- Building-block limits (each an explicit polynomial in `x = (n+1)⁻¹`).
+  have he : Tendsto en atTop (𝓝 0) := by
+    refine (key (fun x => (32 / (m : ℝ) ^ 2) *
+        (populationResponseBound * x ^ 2 + x ^ 7)) (by fun_prop) (by simp)).congr ?_
+    intro n
+    simp only [hen, cmdsEntrywiseRate, responseFrobRate, responseDistBound,
+      safeResponseTolerance]
+    have hN : ((n + 1 : ℕ) : ℝ) ≠ 0 := by positivity
+    field_simp
+    ring
+  have hP : Tendsto (fun n : ℕ =>
+      4 * ((n + 1 : ℕ) : ℝ) * (en n) ^ 2 / (κ / 2) ^ 2) atTop (𝓝 0) := by
+    refine (key (fun x => (16 * (32 / (m : ℝ) ^ 2) ^ 2 / κ ^ 2) *
+        (populationResponseBound ^ 2 * x ^ 3 + 2 * populationResponseBound * x ^ 8 + x ^ 13))
+      (by fun_prop) (by simp)).congr ?_
+    intro n
+    simp only [hen, cmdsEntrywiseRate, responseFrobRate, responseDistBound,
+      safeResponseTolerance]
+    have hN : ((n + 1 : ℕ) : ℝ) ≠ 0 := by positivity
+    field_simp
+    ring
+  have hPN : Tendsto (fun n : ℕ =>
+      (4 * ((n + 1 : ℕ) : ℝ) * (en n) ^ 2 / (κ / 2) ^ 2) * ((n + 1 : ℕ) : ℝ))
+      atTop (𝓝 0) := by
+    refine (key (fun x => (16 * (32 / (m : ℝ) ^ 2) ^ 2 / κ ^ 2) *
+        (populationResponseBound ^ 2 * x ^ 2 + 2 * populationResponseBound * x ^ 7 + x ^ 12))
+      (by fun_prop) (by simp)).congr ?_
+    intro n
+    simp only [hen, cmdsEntrywiseRate, responseFrobRate, responseDistBound,
+      safeResponseTolerance]
+    have hN : ((n + 1 : ℕ) : ℝ) ≠ 0 := by positivity
+    field_simp
+    ring
+  have hNen : Tendsto (fun n : ℕ => ((n + 1 : ℕ) : ℝ) * en n) atTop (𝓝 0) := by
+    refine (key (fun x => (32 / (m : ℝ) ^ 2) *
+        (populationResponseBound * x + x ^ 6)) (by fun_prop) (by simp)).congr ?_
+    intro n
+    simp only [hen, cmdsEntrywiseRate, responseFrobRate, responseDistBound,
+      safeResponseTolerance]
+    have hN : ((n + 1 : ℕ) : ℝ) ≠ 0 := by positivity
+    field_simp
+    ring
+  have hN2P : Tendsto (fun n : ℕ =>
+      ((n + 1 : ℕ) : ℝ) ^ 2 * (4 * ((n + 1 : ℕ) : ℝ) * (en n) ^ 2 / (κ / 2) ^ 2))
+      atTop (𝓝 0) := by
+    refine (key (fun x => (16 * (32 / (m : ℝ) ^ 2) ^ 2 / κ ^ 2) *
+        (populationResponseBound ^ 2 * x + 2 * populationResponseBound * x ^ 6 + x ^ 11))
+      (by fun_prop) (by simp)).congr ?_
+    intro n
+    simp only [hen, cmdsEntrywiseRate, responseFrobRate, responseDistBound,
+      safeResponseTolerance]
+    have hN : ((n + 1 : ℕ) : ℝ) ≠ 0 := by positivity
+    field_simp
+    ring
+  -- The three square-root summands of `configBound`, each scaled by `√(n+1)`.
+  have hsq1 : Tendsto (fun n : ℕ => Real.sqrt (((n + 1 : ℕ) : ℝ) *
+      ((2 * ((d : ℝ) * (4 * ((n + 1 : ℕ) : ℝ) * (en n) ^ 2 / (κ / 2) ^ 2))) ^ 2 *
+        ((d : ℝ) * (4 * ((n + 1 : ℕ) : ℝ) * perspectiveBound ^ 2 + en n)))))
+      atTop (𝓝 0) := by
+    have hlim : Tendsto (fun n : ℕ => ((n + 1 : ℕ) : ℝ) *
+        ((2 * ((d : ℝ) * (4 * ((n + 1 : ℕ) : ℝ) * (en n) ^ 2 / (κ / 2) ^ 2))) ^ 2 *
+          ((d : ℝ) * (4 * ((n + 1 : ℕ) : ℝ) * perspectiveBound ^ 2 + en n))))
+        atTop (𝓝 0) := by
+      have hbase : Tendsto (fun n : ℕ =>
+          16 * (d : ℝ) ^ 3 * perspectiveBound ^ 2 *
+            ((4 * ((n + 1 : ℕ) : ℝ) * (en n) ^ 2 / (κ / 2) ^ 2 * ((n + 1 : ℕ) : ℝ)) *
+              (4 * ((n + 1 : ℕ) : ℝ) * (en n) ^ 2 / (κ / 2) ^ 2 * ((n + 1 : ℕ) : ℝ)))
+          + 4 * (d : ℝ) ^ 3 *
+            ((4 * ((n + 1 : ℕ) : ℝ) * (en n) ^ 2 / (κ / 2) ^ 2) *
+              (4 * ((n + 1 : ℕ) : ℝ) * (en n) ^ 2 / (κ / 2) ^ 2 * ((n + 1 : ℕ) : ℝ)) *
+              en n)) atTop (𝓝 0) := by
+        simpa using
+          (((hPN.mul hPN).const_mul (16 * (d : ℝ) ^ 3 * perspectiveBound ^ 2)).add
+            (((hP.mul hPN).mul he).const_mul (4 * (d : ℝ) ^ 3)))
+      refine hbase.congr (fun n => ?_)
+      field_simp
+      ring
+    have h := (Real.continuous_sqrt.tendsto (0 : ℝ)).comp hlim
+    rw [Real.sqrt_zero] at h
+    exact h
+  have hsq2 : Tendsto (fun n : ℕ => Real.sqrt (((n + 1 : ℕ) : ℝ) *
+      ((d : ℝ) ^ 2 * (en n / Real.sqrt ((κ / 2) / 2)) ^ 2))) atTop (𝓝 0) := by
+    have hlim : Tendsto (fun n : ℕ => ((n + 1 : ℕ) : ℝ) *
+        ((d : ℝ) ^ 2 * (en n / Real.sqrt ((κ / 2) / 2)) ^ 2)) atTop (𝓝 0) := by
+      have hbase : Tendsto (fun n : ℕ =>
+          (d : ℝ) ^ 2 / ((κ / 2) / 2) * (en n * (((n + 1 : ℕ) : ℝ) * en n)))
+          atTop (𝓝 0) := by
+        simpa using (he.mul hNen).const_mul ((d : ℝ) ^ 2 / ((κ / 2) / 2))
+      refine hbase.congr (fun n => ?_)
+      have hc : Real.sqrt ((κ / 2) / 2) ^ 2 = (κ / 2) / 2 := Real.sq_sqrt (by positivity)
+      rw [div_pow, hc]
+      field_simp
+    have h := (Real.continuous_sqrt.tendsto (0 : ℝ)).comp hlim
+    rw [Real.sqrt_zero] at h
+    exact h
+  have hsq3 : Tendsto (fun n : ℕ => Real.sqrt (((n + 1 : ℕ) : ℝ) *
+      ((4 * ((n + 1 : ℕ) : ℝ) * perspectiveBound ^ 2) *
+        (4 * ((n + 1 : ℕ) : ℝ) * (en n) ^ 2 / (κ / 2) ^ 2)))) atTop (𝓝 0) := by
+    have hlim : Tendsto (fun n : ℕ => ((n + 1 : ℕ) : ℝ) *
+        ((4 * ((n + 1 : ℕ) : ℝ) * perspectiveBound ^ 2) *
+          (4 * ((n + 1 : ℕ) : ℝ) * (en n) ^ 2 / (κ / 2) ^ 2))) atTop (𝓝 0) := by
+      have hbase : Tendsto (fun n : ℕ =>
+          4 * perspectiveBound ^ 2 *
+            (((n + 1 : ℕ) : ℝ) ^ 2 * (4 * ((n + 1 : ℕ) : ℝ) * (en n) ^ 2 / (κ / 2) ^ 2)))
+          atTop (𝓝 0) := by
+        simpa using hN2P.const_mul (4 * perspectiveBound ^ 2)
+      refine hbase.congr (fun n => ?_)
+      ring
+    have h := (Real.continuous_sqrt.tendsto (0 : ℝ)).comp hlim
+    rw [Real.sqrt_zero] at h
+    exact h
+  -- Rewrite `configBound` as those three summands via `√a·√b = √(a·b)`.
+  have hfun : (fun n : ℕ => configBound (n + 1) d (κ / 2)
+      (4 * ((n + 1 : ℕ) : ℝ) * perspectiveBound ^ 2) (en n))
+      = fun n : ℕ =>
+        Real.sqrt (((n + 1 : ℕ) : ℝ) *
+          ((2 * ((d : ℝ) * (4 * ((n + 1 : ℕ) : ℝ) * (en n) ^ 2 / (κ / 2) ^ 2))) ^ 2 *
+            ((d : ℝ) * (4 * ((n + 1 : ℕ) : ℝ) * perspectiveBound ^ 2 + en n))))
+        + Real.sqrt (((n + 1 : ℕ) : ℝ) *
+            ((d : ℝ) ^ 2 * (en n / Real.sqrt ((κ / 2) / 2)) ^ 2))
+        + Real.sqrt (((n + 1 : ℕ) : ℝ) *
+            ((4 * ((n + 1 : ℕ) : ℝ) * perspectiveBound ^ 2) *
+              (4 * ((n + 1 : ℕ) : ℝ) * (en n) ^ 2 / (κ / 2) ^ 2))) := by
+    funext n
+    simp only [configBound]
+    rw [mul_add, mul_add,
+      ← Real.sqrt_mul (by positivity : (0 : ℝ) ≤ ((n + 1 : ℕ) : ℝ)),
+      ← Real.sqrt_mul (by positivity : (0 : ℝ) ≤ ((n + 1 : ℕ) : ℝ)),
+      ← Real.sqrt_mul (by positivity : (0 : ℝ) ≤ ((n + 1 : ℕ) : ℝ))]
+  rw [hfun]
+  simpa using (hsq1.add hsq2).add hsq3
 
 /-- The conservative tolerance and linear spectral ceiling satisfy every field
 of `GrowingConfigControl` for the current proved CMDS perturbation bound.
