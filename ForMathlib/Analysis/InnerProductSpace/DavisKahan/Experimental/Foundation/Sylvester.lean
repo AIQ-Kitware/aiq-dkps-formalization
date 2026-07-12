@@ -249,36 +249,6 @@ theorem norm_sylvester_le_of_generalSeparation
     d * ‖X‖ ≤ (Real.pi / 2) * ‖C‖ := by
   sorry
 
-/-- Finite-dimensional rectangular unitarily invariant Sylvester estimate.
-
-This is the finite bimodule form of the Bhatia--Davis--McIntosh Fourier
-multiplier theorem.  It is the appropriate analytic black box for the
-finite-dimensional theory: unlike the former square `SymmetricNormIdeal`
-signature, it directly covers maps between different Hilbert spaces and every
-rectangular UI seminorm.
-
-Proof strategy:
-
-1. use the same reciprocal Fourier multiplier as the operator-norm theorem;
-2. represent the solution by the two-sided unitary average
-   `exp(itA) ∘ C ∘ exp(-itB)`;
-3. apply rectangular unitary invariance and finite-dimensional Bochner
-   integration/finite-sum approximation;
-4. use the scalar total-variation bound `π/(2d)`.
-
-This remains the explicit analytic assumption seam in this overlay.  The
-ranking rubric permits downstream proofs to consume existing declarations as
-black boxes, but this theorem itself still requires the Fourier proof. -/
-theorem ideal_sylvester_le
-    [FiniteDimensional 𝕜 E] [FiniteDimensional 𝕜 F]
-    (N : DavisKahanTheory.RectangularUnitarilyInvariantNorm 𝕜 E F)
-    {A : F →L[𝕜] F} {B : E →L[𝕜] E} {X C : E →L[𝕜] F}
-    (hA : IsSelfAdjointOperator A) (hB : IsSelfAdjointOperator B)
-    {d : ℝ} (hd : 0 < d)
-    (hsep : SpectraSeparated A ⊤ B ⊤ d)
-    (hEq : sylvesterOperator A B X = C) :
-    d * N X.toLinearMap ≤ (Real.pi / 2) * N C.toLinearMap := by
-  sorry
 
 end DavisKahanExt
 end ForMathlib

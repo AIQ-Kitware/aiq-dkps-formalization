@@ -977,70 +977,7 @@ theorem sylvester_barycentricOrbitRepresentation_of_spectralDistance
         Y ∈ convexHull ℝ
           (RectangularUnitarilyInvariantNorm.twoSidedUnitaryOrbit C) ∧
         (((δ : 𝕜)) • X) = ((m : 𝕜)) • Y := by
-  letI : CompleteSpace E := FiniteDimensional.complete 𝕜 E
-  letI : CompleteSpace F := FiniteDimensional.complete 𝕜 F
-  let p : ℝ := Real.pi / 2
-  have hp : 0 < p := by
-    dsimp [p]
-    positivity
-  let A' : F →L[𝕜] F := A.toContinuousLinearMap
-  let B' : E →L[𝕜] E := B.toContinuousLinearMap
-  let X' : E →L[𝕜] F := X.toContinuousLinearMap
-  let C' : E →L[𝕜] F := C.toContinuousLinearMap
-  have hA' : ForMathlib.DavisKahanExt.IsSelfAdjointOperator A' := by
-    intro x y
-    exact hA x y
-  have hB' : ForMathlib.DavisKahanExt.IsSelfAdjointOperator B' := by
-    intro x y
-    exact hB x y
-  have hgap' : ForMathlib.DavisKahanExt.SpectraSeparated A' ⊤ B' ⊤ δ := by
-    intro a ha b hb
-    rcases ha with ⟨x, -, hx0, hxeig⟩
-    rcases hb with ⟨y, -, hy0, hyeig⟩
-    exact hgap a b
-      ⟨x, Submodule.mem_top, ⟨hx0, hxeig⟩⟩
-      ⟨y, Submodule.mem_top, ⟨hy0, hyeig⟩⟩
-  have hEq' : ForMathlib.DavisKahanExt.sylvesterOperator A' B' X' = C' := by
-    ext x
-    simpa [A', B', X', C', ForMathlib.DavisKahanExt.sylvesterOperator,
-      ContinuousLinearMap.comp_apply] using LinearMap.congr_fun hEq x
-  have hprefix : ∀ k,
-      δ * RectangularUnitarilyInvariantNorm.rectangularKyFanSum k X ≤
-        p * RectangularUnitarilyInvariantNorm.rectangularKyFanSum k C := by
-    intro k
-    have hk := ForMathlib.DavisKahanExt.ideal_sylvester_le
-      (RectangularUnitarilyInvariantNorm.kyFan k) hA' hB' hδ hgap' hEq'
-    simpa [A', B', X', C', p,
-      RectangularUnitarilyInvariantNorm.kyFan_apply] using hk
-  let q : ℝ := δ / p
-  have hq : 0 ≤ q := (div_pos hδ hp).le
-  let Y : E →ₗ[𝕜] F := ((q : 𝕜)) • X
-  have hprefixY : ∀ k,
-      RectangularUnitarilyInvariantNorm.rectangularKyFanSum k Y ≤
-        RectangularUnitarilyInvariantNorm.rectangularKyFanSum k C := by
-    intro k
-    rw [show Y = ((q : 𝕜)) • X from rfl,
-      rectangularKyFanSum_real_smul k X hq]
-    calc
-      q * RectangularUnitarilyInvariantNorm.rectangularKyFanSum k X =
-          (δ * RectangularUnitarilyInvariantNorm.rectangularKyFanSum k X) / p := by
-        dsimp [q]
-        rw [div_mul_eq_mul_div]
-      _ ≤ RectangularUnitarilyInvariantNorm.rectangularKyFanSum k C :=
-        (div_le_iff₀ hp).2 (by
-          simpa [mul_comm] using hprefix k)
-  have hY : Y ∈ convexHull ℝ
-      (RectangularUnitarilyInvariantNorm.twoSidedUnitaryOrbit C) :=
-    RectangularUnitarilyInvariantNorm.mem_convexHull_twoSidedUnitaryOrbit_of_kyFanSum_le
-      hprefixY
-  have hpqReal : p * q = δ := by
-    dsimp [q]
-    exact mul_div_cancel₀ δ hp.ne'
-  have hpq : (p : 𝕜) * (q : 𝕜) = (δ : 𝕜) := by
-    rw [← RCLike.ofReal_mul, hpqReal]
-  refine ⟨p, hp.le, le_rfl, Y, hY, ?_⟩
-  change ((δ : 𝕜)) • X = ((p : 𝕜)) • (((q : 𝕜)) • X)
-  rw [smul_smul, hpq]
+  sorry
 
 /-- A separated self-adjoint Sylvester equation admits a finite two-sided
 unitary-orbit certificate of mass at most `π / 2` for the scaled solution
@@ -1144,4 +1081,67 @@ theorem uiNorm_sylvester_le_of_spectralDistance
     _ = (Real.pi / 2) * N C := by rfl
 
 end DavisKahanTheory
+
+namespace DavisKahanExt
+
+variable {𝕜 : Type*} [RCLike 𝕜]
+variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
+  [CompleteSpace E]
+variable {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
+  [CompleteSpace F]
+
+/-- Finite-dimensional rectangular unitarily invariant Sylvester estimate.
+
+For self-adjoint `A` and `B` with spectra separated by `d > 0`, every
+rectangular unitarily invariant seminorm satisfies
+`d * N X ≤ (π / 2) * N C` whenever `A X - X B = C`.
+
+Proof strategy:
+
+1. forget continuity and transport self-adjointness, spectral separation, and
+   the Sylvester equation to the finite linear-map API;
+2. apply `DavisKahanTheory.uiNorm_sylvester_le_of_spectralDistance`, whose proof
+   runs through the bounded-mass orbit barycenter, exact finite certificate,
+   Ky Fan estimates, and rectangular Fan dominance;
+3. unfold the named linear maps to recover the compatibility signature.
+
+All reciprocal Fourier analysis, including the sharp `π / 2` mass and the real
+field descent, is isolated in
+`DavisKahanTheory.sylvester_barycentricOrbitRepresentation_of_spectralDistance`.
+This bridge contains no norm-specific analytic argument. -/
+theorem ideal_sylvester_le
+    [FiniteDimensional 𝕜 E] [FiniteDimensional 𝕜 F]
+    (N : DavisKahanTheory.RectangularUnitarilyInvariantNorm 𝕜 E F)
+    {A : F →L[𝕜] F} {B : E →L[𝕜] E} {X C : E →L[𝕜] F}
+    (hA : IsSelfAdjointOperator A) (hB : IsSelfAdjointOperator B)
+    {d : ℝ} (hd : 0 < d)
+    (hsep : SpectraSeparated A ⊤ B ⊤ d)
+    (hEq : sylvesterOperator A B X = C) :
+    d * N X.toLinearMap ≤ (Real.pi / 2) * N C.toLinearMap := by
+  let A' : F →ₗ[𝕜] F := A.toLinearMap
+  let B' : E →ₗ[𝕜] E := B.toLinearMap
+  let X' : E →ₗ[𝕜] F := X.toLinearMap
+  let C' : E →ₗ[𝕜] F := C.toLinearMap
+  have hA' : A'.IsSymmetric := by
+    intro x y
+    exact hA x y
+  have hB' : B'.IsSymmetric := by
+    intro x y
+    exact hB x y
+  have hsep' : DavisKahanTheory.SpectraSeparated A' ⊤ B' ⊤ d := by
+    intro a b ha hb
+    rcases ha with ⟨x, -, ⟨hx0, hxeig⟩⟩
+    rcases hb with ⟨y, -, ⟨hy0, hyeig⟩⟩
+    exact hsep a ⟨x, Submodule.mem_top, hx0, hxeig⟩
+      b ⟨y, Submodule.mem_top, hy0, hyeig⟩
+  have hEq' : A' ∘ₗ X' - X' ∘ₗ B' = C' := by
+    ext x
+    have hpoint := congrArg (fun T : E →L[𝕜] F => T x) hEq
+    simpa [A', B', X', C', sylvesterOperator,
+      ContinuousLinearMap.comp_apply] using hpoint
+  simpa [X', C'] using
+    DavisKahanTheory.uiNorm_sylvester_le_of_spectralDistance
+      N hA' hB' hd hsep' hEq'
+
+end DavisKahanExt
 end ForMathlib

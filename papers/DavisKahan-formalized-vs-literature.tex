@@ -698,14 +698,17 @@ unitary invariance then prove the finite-certificate theorem, every Ky Fan
 prefix, and every rectangular UI-norm estimate.  The finite convex-geometric converse is now supplied by
 \texttt{mem\_convexHull\_twoSidedUnitaryOrbit\_of\_kyFanSum\_le}: Ky Fan
 prefix domination implies membership in the real convex hull of the two-sided
-unitary orbit.  Consequently the barycentric theorem has a complete downstream
-derivation from a rectangular UI-norm Sylvester multiplier estimate.  The
-remaining analytic obligation is the rectangular Bhatia--Davis--McIntosh
-Fourier theorem currently isolated as
-\texttt{DavisKahanExt.ideal\_sylvester\_le}; it must still establish the
-sharp $\pi/2$ Ky Fan/UI-norm bound, including the real-field case.  Thus the
-convex-orbit and certificate layers are explicit, but the arbitrary-spectrum
-chain is not yet unconditional.
+unitary orbit.  The dependency has now been restored to the mathematically
+natural direction: the remaining analytic obligation is
+\texttt{sylvester\_barycentricOrbitRepresentation\_of\_spectralDistance},
+which must construct the Bhatia--Davis--McIntosh Fourier barycenter with mass at
+most $\pi/2$, including an honest real-field treatment.  Exact finite
+certificate extraction then proves every Ky Fan prefix and every rectangular
+UI-norm estimate.  In particular,
+\texttt{DavisKahanExt.ideal\_sylvester\_le} is now a proved downstream
+certificate consequence rather than the assumption used to recover the
+barycenter.  The arbitrary-spectrum chain is nevertheless not yet
+unconditional because the barycentric analytic root remains open.
 
 \paragraph{The rectangular residual $\sin\Theta$ theorem, every UI norm.}
 The canonical residual interface is now connected to that Sylvester engine.
@@ -1026,18 +1029,16 @@ The remaining work is ordered by mathematical dependency:
   The remaining sharp single-angle capstone is the coupled full-space
   $|P_U-P_V|$ theorem under forward and reverse interval/exterior gaps.
 \item \emph{The remaining Sylvester extension.}
-  Prove the rectangular analytic root
-  \texttt{DavisKahanExt.ideal\_sylvester\_le}.  The new
-  \texttt{mem\_convexHull\_twoSidedUnitaryOrbit\_of\_kyFanSum\_le}
-  theorem converts its Ky Fan consequences into the required real
-  orbit-convex representation, and
+  Prove
   \texttt{sylvester\_barycentric}\allowbreak
   \texttt{OrbitRepresentation\_of\_}\allowbreak
-  \texttt{spectralDistance} now performs that downstream derivation.  The
-  remaining proof is the genuine Bhatia--Davis--McIntosh reciprocal Fourier
-  multiplier estimate with total variation $\pi/2$ and an honest real-field
-  treatment.  Exact finite certificate extraction, Fan dominance, and the
-  residual and perturbation transports are otherwise in place.  The sharp
+  \texttt{spectralDistance}, the sole rectangular analytic root.  It must
+  construct the genuine Bhatia--Davis--McIntosh reciprocal Fourier barycenter
+  with total mass at most $\pi/2$ and an honest real-field treatment.
+  \texttt{DavisKahanExt.ideal\_sylvester\_le} is now proved downstream by
+  extracting the exact finite unitary-orbit certificate and applying an
+  arbitrary rectangular UI seminorm.  Ky Fan transport, Fan dominance, and the
+  residual and perturbation wrappers are otherwise in place.  The sharp
   ordered and interval/exterior constant-one estimates remain complete and
   independent.
 \item \emph{Complete the four-theorem square.}
