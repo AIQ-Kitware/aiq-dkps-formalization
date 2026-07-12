@@ -307,7 +307,32 @@ theorem single_double_sine_tangent_ratios_tendsto_one :
     Tendsto (fun θ : ℝ => Real.sin θ / Real.tan θ) (nhdsWithin 0 (Set.Ioi 0)) (nhds 1) ∧
     Tendsto (fun θ : ℝ => Real.sin (2 * θ) / Real.tan (2 * θ))
       (nhdsWithin 0 (Set.Ioi 0)) (nhds 1) := by
-  sorry
+  have base : Tendsto (fun θ : ℝ => Real.sin θ / Real.tan θ)
+      (nhdsWithin 0 (Set.Ioi 0)) (nhds 1) := by
+    have hcos : Tendsto (fun θ : ℝ => Real.cos θ)
+        (nhdsWithin 0 (Set.Ioi 0)) (nhds 1) := by
+      have h : Tendsto Real.cos (nhdsWithin 0 (Set.Ioi 0)) (nhds (Real.cos 0)) :=
+        (Real.continuous_cos.tendsto 0).mono_left nhdsWithin_le_nhds
+      simpa using h
+    have hmem : Set.Ioo (0 : ℝ) (Real.pi / 2) ∈ nhdsWithin (0 : ℝ) (Set.Ioi 0) := by
+      rw [← Set.Ioi_inter_Iio]
+      exact inter_mem_nhdsWithin _ (Iio_mem_nhds Real.pi_div_two_pos)
+    refine hcos.congr' ?_
+    filter_upwards [hmem] with θ hθ
+    have hsin : Real.sin θ ≠ 0 :=
+      ne_of_gt (Real.sin_pos_of_pos_of_lt_pi hθ.1 (by linarith [Real.pi_pos, hθ.2]))
+    rw [Real.tan_eq_sin_div_cos, div_div_eq_mul_div,
+      mul_comm (Real.sin θ) (Real.cos θ), mul_div_assoc, div_self hsin, mul_one]
+  refine ⟨base, ?_⟩
+  have h2 : Tendsto (fun θ : ℝ => 2 * θ)
+      (nhdsWithin 0 (Set.Ioi 0)) (nhdsWithin 0 (Set.Ioi 0)) := by
+    rw [tendsto_nhdsWithin_iff]
+    refine ⟨?_, ?_⟩
+    · have hc : Continuous (fun θ : ℝ => 2 * θ) := continuous_const.mul continuous_id
+      simpa using (hc.tendsto 0).mono_left nhdsWithin_le_nhds
+    · filter_upwards [self_mem_nhdsWithin] with θ (hθ : (0 : ℝ) < θ)
+      exact mul_pos two_pos hθ
+  exact base.comp h2
 
 end DavisKahanTheory
 end ForMathlib
