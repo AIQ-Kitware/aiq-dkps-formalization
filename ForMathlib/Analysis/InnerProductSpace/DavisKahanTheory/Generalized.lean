@@ -202,8 +202,9 @@ theorem generalizedTanTheta_residual_le
     (hgap : OrderedGap (generalizedCompression A X hX) ⊤ A Vᗮ δ) :
     δ * N (tanThetaEmbedding V (orthonormalizedEmbedding X hX)) ≤
       N (residual A (orthonormalizedEmbedding X hX)
-        (generalizedCompression A X hX)) := by
-  sorry
+        (generalizedCompression A X hX)) :=
+  tanTheta_residual_le N hA hV (orthonormalizedEmbedding X hX)
+    (isSymmetric_generalizedCompression hA X hX) rfl hδ hgap
 
 /-- The unequal-dimensional `sin 2Θ` extension mentioned after Theorem 8.2.
 
