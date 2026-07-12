@@ -474,6 +474,43 @@ noncomputable def augmentedRawResponseMeanSubevents_infinite
       (jointStageMeasure_probability μref hμref μresp Hraw.probability)
       (augmentedRawSampleMean f_ref replicates Y)
       (augmentedRawPopulationMean f_ref μmodel) η := by
-  sorry
+  have hXbar : ∀ n f, Measurable (fun ω => modelReplicateMean replicates Y n ω f) := by
+    intro n f
+    simp only [modelReplicateMean, replicateMean]
+    exact (Finset.measurable_sum _ (fun k _ => Hraw.measurable n f k)).const_smul
+      ((replicates n : Real)⁻¹)
+  have hint : ∀ n f,
+      Integrable (fun ω => ‖modelReplicateMean replicates Y n ω f - μmodel f‖ ^ 2) (μresp n) := by
+    intro n f
+    haveI := Hraw.probability n
+    have hL2 : MemLp (fun ω => modelReplicateMean replicates Y n ω f) 2 (μresp n) := by
+      simp only [modelReplicateMean, replicateMean]
+      exact (memLp_finsetSum _ (fun k _ => Hraw.memLp_two n f k)).const_smul
+        ((replicates n : Real)⁻¹)
+    exact ((hL2.sub (memLp_const _)).norm).integrable_sq
+  have hσ2 : ∀ n f,
+      ∫ ω, ‖modelReplicateMean replicates Y n ω f - μmodel f‖ ^ 2 ∂(μresp n)
+        ≤ variance n / replicates n := fun n f =>
+    integral_norm_sq_modelReplicateMean_sub_mean_le μresp replicates Y μmodel variance Hraw n f
+  have hnet : HighProbAtTop μresp Hraw.probability
+      (modelNetResponseEventFor ψ (modelReplicateMean replicates Y) μmodel net τ) :=
+    highProb_modelNetResponseEventFor_of_secondMoment μresp Hraw.probability ψ
+      (modelReplicateMean replicates Y) μmodel net (fun n => variance n / replicates n) τ
+      hint hσ2 hτ hratio
+  have hEmeas : ∀ n, MeasurableSet
+      (modelNetResponseEventFor ψ (modelReplicateMean replicates Y) μmodel net τ n) :=
+    fun n => measurableSet_modelNetResponseEventFor ψ (modelReplicateMean replicates Y) μmodel
+      net τ hXbar n
+  exact
+    { event := fun n => {ω : Ωref × Ωresp |
+        ω.2 ∈ modelNetResponseEventFor ψ (modelReplicateMean replicates Y) μmodel net τ n}
+      measurable := fun n => measurable_snd (hEmeas n)
+      highProb := highProb_prod_mk_right μref hμref μresp Hraw.probability
+        (modelNetResponseEventFor ψ (modelReplicateMean replicates Y) μmodel net τ) hEmeas hnet
+      subset := fun n ω hω =>
+        modelUniformResponseEvent_subset_augmented f_ref (modelReplicateMean replicates Y)
+          μmodel η n
+          (modelNetResponseEventFor_subset_uniform ψ (modelReplicateMean replicates Y) μmodel
+            net Lsample Lpopulation τ η Hreg hbudget n hω) }
 
 end DkpsQuench.Perfect
