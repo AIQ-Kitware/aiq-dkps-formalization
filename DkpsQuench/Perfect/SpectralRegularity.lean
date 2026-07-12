@@ -304,7 +304,31 @@ theorem measurableSet_referenceCovarianceEntryEvent
     MeasurableSet {ωref |
       |referenceEmpiricalCovariance ψ f_ref n ωref a b -
         perspectiveCovarianceMatrix Pf ψ center a b| ≤ ε} := by
-  sorry
+  have hcoord : ∀ (i : Fin n) (c : Fin d),
+      Measurable (fun ωref => ψ (f_ref n ωref i) c) :=
+    fun i c => ((EuclideanSpace.proj c).continuous.measurable).comp (hψ.comp (href n i))
+  have hmeanA : Measurable (fun ωref => referenceCoordinateMean ψ f_ref n ωref a) := by
+    simp only [referenceCoordinateMean]
+    exact measurable_const.mul (Finset.measurable_sum _ (fun i _ => hcoord i a))
+  have hmeanB : Measurable (fun ωref => referenceCoordinateMean ψ f_ref n ωref b) := by
+    simp only [referenceCoordinateMean]
+    exact measurable_const.mul (Finset.measurable_sum _ (fun i _ => hcoord i b))
+  have hprod : Measurable (fun ωref =>
+      referenceCoordinateProductMean ψ f_ref n ωref a b) := by
+    simp only [referenceCoordinateProductMean]
+    exact measurable_const.mul
+      (Finset.measurable_sum _ (fun i _ => (hcoord i a).mul (hcoord i b)))
+  have hcov : Measurable (fun ωref =>
+      referenceEmpiricalCovariance ψ f_ref n ωref a b) := by
+    have heq : (fun ωref => referenceEmpiricalCovariance ψ f_ref n ωref a b) =
+        (fun ωref => referenceCoordinateProductMean ψ f_ref n ωref a b -
+          referenceCoordinateMean ψ f_ref n ωref a *
+            referenceCoordinateMean ψ f_ref n ωref b) :=
+      funext fun ωref =>
+        referenceEmpiricalCovariance_entry_eq_product_sub_mean_mul_mean ψ f_ref n ωref a b
+    rw [heq]
+    exact hprod.sub (hmeanA.mul hmeanB)
+  exact measurableSet_le ((hcov.sub measurable_const).abs) measurable_const
 
 /-- The empirical covariance event is measurable.
 
@@ -332,7 +356,15 @@ theorem measurableSet_referenceCovarianceEvent
     (href : ∀ n i, Measurable fun ωref => f_ref n ωref i)
     (center : Vec d) (ε : Real) (n : Nat) :
     MeasurableSet (referenceCovarianceEvent Pf ψ f_ref center ε n) := by
-  sorry
+  have hev : referenceCovarianceEvent Pf ψ f_ref center ε n =
+      ⋂ (a : Fin d), ⋂ (b : Fin d),
+        {ωref | |referenceEmpiricalCovariance ψ f_ref n ωref a b -
+          perspectiveCovarianceMatrix Pf ψ center a b| ≤ ε} := by
+    ext ωref
+    simp only [referenceCovarianceEvent, EntrywiseClose, Set.mem_setOf_eq, Set.mem_iInter]
+  rw [hev]
+  exact MeasurableSet.iInter fun a => MeasurableSet.iInter fun b =>
+    measurableSet_referenceCovarianceEntryEvent Pf ψ hψ f_ref href center ε n a b
 
 /-- Scalar weak law for one empirical covariance entry.
 
