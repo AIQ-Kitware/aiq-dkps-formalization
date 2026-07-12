@@ -174,7 +174,69 @@ theorem perfectQuench_finite_fixedSubset
       Pf sqLoss (yFull score Qstar)
       (finitePerfectQuenchEstimator f_ref score Qstar D)
       (fun _ _ f => yQ score Qsub f) := by
-  sorry
+  let hμjoint := jointStageMeasure_probability μref hμref μresp H.raw.probability
+  let hiidJoint := iidReferenceSampler_lifted_prod Pf μref hμref μresp
+    H.raw.probability f_ref hiid
+  obtain ⟨B, hB0, hB⟩ :=
+    exists_populationMean_norm_bound_finite D.populationMean
+  let Hmean := augmentedRawResponseMeanSubevents_finite
+    μref hμref μresp f_ref hiid.measurable
+    safeFiniteReplicates D.rawResponse D.populationMean
+    (fun _ => D.varianceBound) safeResponseTolerance H.raw
+    safeResponseTolerance_pos
+    (safeFinite_concentration_ratio_zero
+      (Fintype.card (Model Q X)) D.varianceBound)
+  let hrealize :
+      PerspectiveResponseRealization D.perspective
+        (liftedReferenceSampler (Ωresp := Ωresp) f_ref)
+        (augmentedRawPopulationMean f_ref D.populationMean) :=
+    augmentedRawPopulationMean_realization (Ωresp := Ωresp)
+      D.perspective f_ref D.populationMean H.response_realization
+  let hcompact : IsCompact (Set.range D.perspective) :=
+    isCompact_range_of_fintype D.perspective
+  obtain ⟨Bψ, hBψ0, hBψ, Hspectral0⟩ :=
+    exists_growingSpectralSubevents_of_compact_iid_nondegenerate
+      Pf (jointStageMeasure μref μresp) hμjoint D.perspective
+      H.perspective_measurable hcompact
+      (liftedReferenceSampler (Ωresp := Ωresp) f_ref) hiidJoint
+      (augmentedRawPopulationMean f_ref D.populationMean) hrealize H.nondegenerate
+  let Hspectral := Classical.choice Hspectral0
+  let Hrate := safe_growingConfigControl m d hm B Bψ D.covarianceFloor
+    hB0 hBψ0 H.nondegenerate.kappa_pos
+  change HighProbQQueryEfficient (Q := Q) (X := X)
+    (jointStageMeasure μref μresp) hμjoint Pf sqLoss
+    (yFull score Qstar)
+    (fun n ω f => yNNTieAverage_augmentedCMDS (d := d)
+      (augmentedSampleResponseDist
+        (augmentedRawSampleMean f_ref safeFiniteReplicates D.rawResponse))
+      (fun n ω f =>
+        Acharyya2025.AlignedPipeline.isHermitian_disMatToMatrix_classicalMDSMatrix_responseDist
+          (augmentedRawSampleMean f_ref safeFiniteReplicates D.rawResponse n ω f))
+      (liftedReferenceSampler (Ωresp := Ωresp) f_ref)
+      score Qstar n ω f)
+    (fun _ _ f => yQ score Qsub f)
+  exact
+    highProbQQueryEfficient_tieAverage_of_responseSubevents_realization_spectralSubevents
+      (d := d) (m := m) (p := p)
+      (Pf := Pf) (μ := jointStageMeasure μref μresp) (hμ := hμjoint)
+      (ψ := D.perspective) (hψmeas := H.perspective_measurable)
+      (hcompact := hcompact) (hfull := H.full_support)
+      (f_ref := liftedReferenceSampler (Ωresp := Ωresp) f_ref)
+      (hiid := hiidJoint)
+      (Xbar := augmentedRawSampleMean f_ref safeFiniteReplicates D.rawResponse)
+      (μbar := augmentedRawPopulationMean f_ref D.populationMean)
+      (η := safeResponseTolerance) (B := fun _ => B)
+      (hηNonneg := fun n => (safeResponseTolerance_pos n).le)
+      (Hmean := Hmean)
+      (hpopulationNorm := augmentedRawPopulationMean_norm_le f_ref D.populationMean hB)
+      (hrealize := hrealize)
+      (α := D.covarianceFloor / 2)
+      (hα := by linarith [H.nondegenerate.kappa_pos])
+      (ceiling := fun n => 4 * ((n + 1 : Nat) : Real) * Bψ ^ 2)
+      (Hspectral := Hspectral) (Hrate := Hrate)
+      (score := score) (Qstar := Qstar) (Qsub := Qsub)
+      (γ := D.lipschitzConstant) (hlip := H.score_lipschitz)
+      (hγ := H.lipschitz_pos) (hbase := H.baseline_pos)
 
 /-- Raw data needed for one compact infinite-model Perfect Quench theorem. -/
 structure InfinitePerfectSubsetData (d m p : Nat) where
@@ -436,7 +498,18 @@ theorem perfectQuench_finite_allQueries
       Pf sqLoss Qstar (yFull score Qstar)
       (fun Qsub => finitePerfectQuenchEstimator f_ref score Qstar (D Qsub))
       (fun Qsub _ _ f => yQ score Qsub f) := by
-  sorry
+  intro m0 hm0 Qsub hsub hcard
+  have hlt : Qsub.card < Qstar.card := by
+    simpa [hcard] using hm0
+  simpa only using
+    (perfectQuench_finite_fixedSubset
+      (Q := Q) (X := X) (Ωref := Ωref) (Ωresp := Ωresp)
+      (d := d Qsub) (m := m Qsub) (p := p Qsub)
+      (hm := hm Qsub hsub hlt)
+      (Pf := Pf) (μref := μref) (hμref := hμref) (μresp := μresp)
+      (f_ref := f_ref) (hiid := hiid) (score := score)
+      (Qstar := Qstar) (Qsub := Qsub) (D := D Qsub)
+      (H := H Qsub hsub hlt))
 
 /-- All-proper-subsets compact infinite-model Perfect Quench.
 
@@ -482,6 +555,17 @@ theorem perfectQuench_infinite_allQueries
       Pf sqLoss Qstar (yFull score Qstar)
       (fun Qsub => infinitePerfectQuenchEstimator f_ref score Qstar (D Qsub))
       (fun Qsub _ _ f => yQ score Qsub f) := by
-  sorry
+  intro m0 hm0 Qsub hsub hcard
+  have hlt : Qsub.card < Qstar.card := by
+    simpa [hcard] using hm0
+  simpa only using
+    (perfectQuench_infinite_fixedSubset
+      (Q := Q) (X := X) (Ωref := Ωref) (Ωresp := Ωresp)
+      (d := d Qsub) (m := m Qsub) (p := p Qsub)
+      (hm := hm Qsub hsub hlt)
+      (Pf := Pf) (μref := μref) (hμref := hμref) (μresp := μresp)
+      (f_ref := f_ref) (hiid := hiid) (score := score)
+      (Qstar := Qstar) (Qsub := Qsub) (D := D Qsub)
+      (H := H Qsub hsub hlt))
 
 end DkpsQuench.Perfect
