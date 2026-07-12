@@ -568,8 +568,14 @@ that the cosines lie in $[0,1]$ and are sorted, are \emph{symmetric} in the two
 families (the swapped overlap operator is the adjoint, and adjoints share
 singular values --- this is exactly where $\sigma(M^{*})=\sigma(M)$ is used, and
 the reason it was proved), and satisfy $\norm{\sinT}_{\F}^2=d-\mathrm{overlap}$
-with $\mathrm{overlap}=\sum_j\sum_i|\inner{u_i}{v_j}|^2$.  The Yu--Wang--Samworth
-aligned-basis bound is restated in this vocabulary as
+with $\mathrm{overlap}=\sum_j\sum_i|\inner{u_i}{v_j}|^2$.  At the canonical
+subspace level, the directed sine spectra and hence the finitely supported
+principal-angle sequences are now proved symmetric whenever
+$\dim U=\dim V$.  The proof chooses common-length orthonormal coordinates,
+identifies the two sine-map Gram operators as $I-M^{*}M$ and $I-MM^{*}$, and
+uses the polar unitary of $M$ to conjugate them before transporting the result
+back to the ambient cross projections.  The Yu--Wang--Samworth aligned-basis
+bound is restated in this vocabulary as
 $\sum_j\norm{w_j-u_j}^2\le2\norm{\sinT}_{\F}^2$.  The singular-value symmetry
 $\sigma(A^{*})=\sigma(A)$ (square case) is itself a new addition, proved through
 the invariance of a symmetric operator's sorted eigenvalues under unitary
@@ -1138,8 +1144,12 @@ $\sigma(A^{*})=\sigma(A)$ / eigenvalue conjugation-invariance
     (\texttt{SingularSubspace.lean}) \\
 Principal-angle cosines / $\sin\Theta$ / symmetry / overlap bridge
   & \texttt{cosPrincipalAngles}, \texttt{sinThetaSq},
-    \texttt{cosPrincipalAngles\_comm}, \texttt{sinThetaSq\_eq\_sub\_overlap}
-    (\texttt{PrincipalAngles.lean}) \\
+    \texttt{cosPrincipalAngles\_comm},
+    \texttt{singularValues\_orthogonal\_familyIsometry\_comm},
+    \texttt{sinThetaSq\_eq\_sub\_overlap}
+    (\texttt{PrincipalAngles.lean});
+    \texttt{principalSines\_comm}, \texttt{principalAngles\_comm}
+    (\texttt{DavisKahanTheory/Basic.lean}) \\
 Extreme singular values: bounds and attainment
   & \texttt{singularValues\_last\_mul\_norm\_le},
     \texttt{norm\_apply\_le\_singularValues\_zero\_mul},

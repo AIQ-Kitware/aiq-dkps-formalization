@@ -646,29 +646,61 @@ theorem spectralSubspace_eq_span_eigenvectors (A : E →ₗ[𝕜] E)
       Submodule.span 𝕜 {x | ∃ lam ∈ Ω, IsEigenvectorAt A lam x} :=
   rfl
 
+/-- The directed principal-sine sequences are symmetric for equal-rank
+subspaces.  Equal rank lets us choose orthonormal families with the same finite
+index type; the family-level complementary-Gram theorem then identifies the two
+directed cross-projection singular-value sequences. -/
+theorem principalSines_comm (U V : Submodule 𝕜 E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hrank : finrank 𝕜 U = finrank 𝕜 V) :
+    principalSines U V = principalSines V U := by
+  classical
+  let d := finrank 𝕜 U
+  let bU := stdOrthonormalBasis 𝕜 U
+  let bV := stdOrthonormalBasis 𝕜 V
+  have hdV : d = finrank 𝕜 V := by simpa only [d] using hrank
+  let u : Fin d → E := fun i => ((bU i : U) : E)
+  let v : Fin d → E := fun i => ((bV (Fin.cast hdV i) : V) : E)
+  have hu : Orthonormal 𝕜 u := by
+    rw [orthonormal_iff_ite]
+    intro i j
+    change ⟪bU i, bU j⟫_𝕜 = if i = j then 1 else 0
+    exact orthonormal_iff_ite.mp bU.orthonormal i j
+  have hv : Orthonormal 𝕜 v := by
+    rw [orthonormal_iff_ite]
+    intro i j
+    change ⟪bV (Fin.cast hdV i), bV (Fin.cast hdV j)⟫_𝕜 =
+      if i = j then 1 else 0
+    rw [orthonormal_iff_ite.mp bV.orthonormal]
+    simp only [Fin.cast_inj]
+  have hspanU : Submodule.span 𝕜 (Set.range u) = U := by
+    apply Submodule.eq_of_le_of_finrank_eq
+    · apply Submodule.span_le.mpr
+      rintro _ ⟨i, rfl⟩
+      exact (bU i).2
+    · rw [finrank_span_eq_card hu.linearIndependent, Fintype.card_fin]
+  have hspanV : Submodule.span 𝕜 (Set.range v) = V := by
+    apply Submodule.eq_of_le_of_finrank_eq
+    · apply Submodule.span_le.mpr
+      rintro _ ⟨i, rfl⟩
+      exact (bV (Fin.cast hdV i)).2
+    · rw [finrank_span_eq_card hv.linearIndependent, Fintype.card_fin]
+      exact hdV
+  change
+    (((Vᗮ.starProjection ∘L U.starProjection : E →L[𝕜] E) : E →ₗ[𝕜] E).singularValues) =
+      (((Uᗮ.starProjection ∘L V.starProjection : E →L[𝕜] E) : E →ₗ[𝕜] E).singularValues)
+  simpa only [hspanU, hspanV] using
+    singularValues_orthogonal_starProjection_comp_starProjection_comm hu hv
+
 /-- Principal angles are symmetric for equal-dimensional subspaces.
 
-The equal-rank hypothesis is essential for the current directed-sine
-multiplicity convention: without it, `P_{Vᗮ} P_U` and `P_{Uᗮ} P_V` can carry
-different numbers of quarter-turn defect directions.
-
-Lean proof route:
-
-1. prove that the two directed cross projections have the same nonzero singular
-   values because they are the off-diagonal blocks of the same pair of
-   projections;
-2. use `hrank` to identify the kernel/defect multiplicities, so zero padding and
-   quarter-turn multiplicities also agree;
-3. rewrite `principalAngles` and apply `Finsupp.mapRange_congr` to the equality
-   of `principalSines`.
-
-A later cosine-based redesign may remove `hrank` by storing only the common
-`min (finrank U) (finrank V)` angle list. -/
+The equal-rank hypothesis matches the multiplicities of quarter-turn defect
+directions in the two directed sine maps. -/
 theorem principalAngles_comm (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hrank : finrank 𝕜 U = finrank 𝕜 V) :
     principalAngles U V = principalAngles V U := by
-  sorry
+  rw [principalAngles, principalAngles, principalSines_comm U V hrank]
 
 /-- Principal-angle cosines are the singular values of `P_V P_U` (definitional:
 `principalCosines` is defined as those singular values). -/
