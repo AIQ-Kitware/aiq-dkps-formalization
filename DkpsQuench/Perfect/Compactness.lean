@@ -355,6 +355,8 @@ theorem exists_growingPerspectiveNet_with_polynomial_card
       (∀ n, ((net.centers n).card : Real) ≤
         C * (max 1 (radius n)⁻¹) ^ d) ∧
       (∀ n, net.radius n = radius n) := by
-  sorry
+  obtain ⟨C, hC, hcov⟩ := exists_polynomial_perspective_covers_of_isCompact_range ψ hcompact
+  choose centers hcover hcard using fun n => hcov (radius n) (hradiusPos n)
+  exact ⟨⟨radius, hradiusPos, hradiusZero, centers, hcover⟩, C, hC, hcard, fun _ => rfl⟩
 
 end DkpsQuench.Perfect
