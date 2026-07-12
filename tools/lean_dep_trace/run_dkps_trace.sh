@@ -2,7 +2,7 @@
 set -euo pipefail
 
 OUTDIR="${1:-build/lean-dep-trace}"
-TARGET="${2:-DkpsQuench.AcharyyaBridge.queryEfficient_nn_of_second_moment}"
+TARGET="${2:-DkpsQuench2026.QueryEfficiency.infiniteFixedSubset}"
 
 python tools/lean_dep_trace/trace_deps.py . \
   --outdir "$OUTDIR" \

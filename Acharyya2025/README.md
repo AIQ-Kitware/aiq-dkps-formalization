@@ -7,7 +7,7 @@ generative models.* arXiv:2511.08307. A markdown transcription is in
 
 This library formalizes the **finite-sample / high-probability DKPS
 concentration** result — the load-bearing hypothesis used downstream by the
-`DkpsQuench` and `Helm2025` formalizations.
+`DkpsQuench2026` and `Helm2025` formalizations.
 
 > **For the authors:** this README maps your Theorems 1–2 / Corollaries 1–2 /
 > Assumptions 1–2 onto the Lean statements so you can check faithfulness without
@@ -170,7 +170,7 @@ user-observed model labels.
 | [`prose/`](prose/) | Markdown transcription of the paper. |
 
 Downstream consumers of this library:
-[`../DkpsQuench/AcharyyaBridge.lean`](../DkpsQuench/AcharyyaBridge.lean) and
+[`../DkpsQuench2026/Geometry/AlignedCMDS.lean`](../DkpsQuench2026/Geometry/AlignedCMDS.lean) and
 [`../Helm2025/AcharyyaBridge.lean`](../Helm2025/AcharyyaBridge.lean).
 
 ## Build / sanity checks

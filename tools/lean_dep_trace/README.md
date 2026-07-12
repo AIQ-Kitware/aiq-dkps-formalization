@@ -4,7 +4,7 @@ These tools generate dependency graphs for the AIQ DKPS formalization, with a
 focus on the path into:
 
 ```lean
-DkpsQuench.AcharyyaBridge.queryEfficient_nn_of_second_moment
+DkpsQuench2026.QueryEfficiency.infiniteFixedSubset
 ```
 
 The intended workflow is to generate an auditable dependency map, then edit
@@ -19,7 +19,7 @@ From the repository root:
 python -m pip install networkx
 python tools/lean_dep_trace/trace_deps.py . \
     --outdir build/lean-dep-trace \
-    --target DkpsQuench.AcharyyaBridge.queryEfficient_nn_of_second_moment
+    --target DkpsQuench2026.QueryEfficiency.infiniteFixedSubset
 ```
 
 Outputs:
@@ -60,13 +60,13 @@ Then render graphs from that JSONL:
 python tools/lean_dep_trace/trace_deps.py . \
     --lean-jsonl build/lean-dep-trace/elab_deps.jsonl \
     --outdir build/lean-dep-trace-elab \
-    --target DkpsQuench.AcharyyaBridge.queryEfficient_nn_of_second_moment
+    --target DkpsQuench2026.QueryEfficiency.infiniteFixedSubset
 ```
 
 `ExportDeclDeps.lean` uses Lean's compiled environment and `Expr.getUsedConstants`
 on theorem types and proof terms. This sees elaborated constants that are not
 visible as plain text. It still filters to project roots (`ForMathlib`,
-`Acharyya2024`, `Acharyya2025`, `DkpsQuench`) so the output is useful for slide
+`Acharyya2024`, `Acharyya2025`, `DkpsQuench2026`) so the output is useful for slide
 planning instead of being dominated by Mathlib internals.
 
 If the Lean helper breaks after a Lean version bump, the most likely API points

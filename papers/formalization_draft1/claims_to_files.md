@@ -20,7 +20,7 @@ for line-accurate citations in a final submission.
 
 - DKPS is treated as the motivating application and integration test:
   `README.md`, `Acharyya2024/README.md`, `Acharyya2025/README.md`,
-  `DkpsQuench/README.md`, `Helm2025/README.md`.
+  `DkpsQuench2026/README.md`, `Helm2025/README.md`.
 - The formalization contribution is concentrated in reusable bridges and
   infrastructure: `Acharyya2025/ConfigPerturbation.lean`,
   `Acharyya2024/RawStress.lean`, `Acharyya2025/AlignedPipeline.lean`,
@@ -32,7 +32,7 @@ for line-accurate citations in a final submission.
   crosswalk, explicit assumptions beyond the prose statements.
 - `Acharyya2025/README.md`: finite-sample concentration, deterministic spectral
   perturbation bridge, theorem crosswalk, downstream consumers.
-- `DkpsQuench/README.md`: query-efficiency theorem layer and Acharyya bridge.
+- `DkpsQuench2026/README.md`: query-efficiency theorem layer and Acharyya bridge.
 - `Helm2025/README.md`: statistical-inference transfer and honest bridge seam.
 - `ForMathlib/README.md`: staged reusable lemmas and intended Mathlib targets.
 
@@ -43,7 +43,7 @@ for line-accurate citations in a final submission.
 - `Acharyya2024/Consistency.lean`: repaired paper-facing consistency theorems.
 - `Acharyya2025/SpectralPipeline.lean`: `CMDSpectralAssumptions` and population
   realization bridge.
-- `DkpsQuench/Theorem2.lean`: sub-event variants for measurable concentration
+- `DkpsQuench2026/Paper/Theorem2.lean`: sub-event variants for measurable concentration
   events.
 - `Helm2025/AcharyyaBridge.lean`: documented `HONEST SEAM` for the per-sample
   population alignment bridge.
@@ -90,9 +90,9 @@ for line-accurate citations in a final submission.
 
 ## Downstream integration
 
-- `DkpsQuench/AcharyyaBridge.lean`: bridges aligned spectral concentration to
+- `DkpsQuench2026/Geometry/AlignedCMDS.lean`: bridges aligned spectral concentration to
   query-efficiency theorems, including response-mean and second-moment variants.
-- `DkpsQuench/Theorem2.lean`: paper-facing query-efficiency theorem statements.
+- `DkpsQuench2026/Paper/Theorem2.lean`: paper-facing query-efficiency theorem statements.
 - `Helm2025/AcharyyaBridge.lean`: bridges aligned spectral concentration to the
   Helm alignment-consistency interface subject to `halign`.
 - `Helm2025/Inference.lean`: paper-facing inference-transfer statements.
@@ -115,7 +115,7 @@ for line-accurate citations in a final submission.
 Use `model_provenance.md` for a longer record.  Summary:
 
 - Aristotle evidence: `Helm2025/Basic.lean`, `Helm2025/Internal.lean`, and
-  `DkpsQuench/Basic.lean` include explicit scaffold comments naming Harmonic's
+  `DkpsQuench2026/Core/Definitions.lean` include explicit scaffold comments naming Harmonic's
   Aristotle.
 - GPT/Codex evidence: many comments in `Acharyya2024/Common.lean`,
   `Acharyya2024/WellKnown.lean`, `Acharyya2025/Bridge.lean`,

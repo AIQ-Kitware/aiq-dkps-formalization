@@ -1,6 +1,6 @@
 # Distilled literature for the DKPS formalization
 
-This directory is the source registry and future home of source-order mathematical reconstructions for the DKPS, response-embedding, Perfect Quench, classical MDS, Gram-rigidity, and Davis--Kahan theorem families developed in this repository.
+This directory is the source registry and future home of source-order mathematical reconstructions for the DKPS, response-embedding, raw-response Quench, classical MDS, Gram-rigidity, and Davis--Kahan theorem families developed in this repository.
 
 `source_manifest.json` is canonical. `source_index.md` and `distilled_papers_index.tex` are generated views.
 

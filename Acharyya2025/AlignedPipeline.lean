@@ -12,7 +12,7 @@ The estimator `alignedSpectralConfig` is built by `Classical.choose` from the
 matrix-world assembly's existential alignment isometry `W`: whenever the alignment exists with
 a given bound `c u`, the estimator achieves `ConfigError ≤ c u`; otherwise it
 falls back to the raw sample spectral embedding.  This packaging makes the two
-downstream consumer files (`DkpsQuench`, `Helm2025`) a one-application-deep honest
+downstream consumer files (`DkpsQuench2026`, `Helm2025`) a one-application-deep honest
 composition.
 
 Contents:

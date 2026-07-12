@@ -5,7 +5,7 @@
 # colors, patterns, and edges to tune the slide-level narrative.
 
 [target]
-name = "DkpsQuench.AcharyyaBridge.queryEfficient_nn_of_second_moment"
+name = "DkpsQuench2026.QueryEfficiency.infiniteFixedSubset"
 label = "DKPSQuench query-efficiency theorem"
 
 [[milestone]]

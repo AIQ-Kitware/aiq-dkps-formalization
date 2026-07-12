@@ -57,8 +57,8 @@ END_RE = re.compile(r"(?m)^\s*end(?:\s+([A-Za-z0-9_'.]+))?\s*(?:--.*)?$")
 WORD_RE = re.compile(r"[A-Za-z_][A-Za-z0-9_'.₀-₉]*")
 QUALIFIED_RE = re.compile(r"[A-Za-z_][A-Za-z0-9_'.₀-₉]*(?:\.[A-Za-z_][A-Za-z0-9_'.₀-₉]*)+")
 
-DEFAULT_INCLUDE_ROOTS = ["ForMathlib", "Acharyya2024", "Acharyya2025", "DkpsQuench"]
-DEFAULT_TARGET = "DkpsQuench.AcharyyaBridge.queryEfficient_nn_of_second_moment"
+DEFAULT_INCLUDE_ROOTS = ["ForMathlib", "Acharyya2024", "Acharyya2025", "DkpsQuench2026"]
+DEFAULT_TARGET = "DkpsQuench2026.QueryEfficiency.infiniteFixedSubset"
 
 
 @dataclass
@@ -374,7 +374,7 @@ def ancestors_subgraph(g: nx.DiGraph, targets: list[str]) -> nx.DiGraph:
 def module_color(module: str, *, focus: bool = False) -> str:
     if focus:
         return "#fff2cc"
-    if module.startswith("DkpsQuench"):
+    if module.startswith("DkpsQuench2026"):
         return "#d9ead3"
     if module.startswith("Acharyya2025"):
         return "#cfe2f3"

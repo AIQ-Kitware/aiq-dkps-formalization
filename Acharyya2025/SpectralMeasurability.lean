@@ -2,7 +2,7 @@
 Measurability of the sample CMDS matrix and the CMDS-entrywise-closeness event,
 from measurability of the sample dissimilarity matrix alone.
 
-These are the measurability facts the DkpsQuench / Helm bridges use to discharge
+These are the measurability facts the DkpsQuench2026 / Helm consumers use to discharge
 the `hmeas_spec` seam: the sample CMDS matrix is a measurable function of the
 sample (every entry is algebraic in the `Dhat` entries), so the
 CMDS-entrywise-closeness event is Borel — and that event is *deterministically*

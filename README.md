@@ -12,7 +12,7 @@ This repository focuses on five active Lean libraries:
 | `ForMathlib`   | Mathlib-staging library: paper-agnostic results restated in Mathlib idiom/generality, one file per target Mathlib path. |
 | `Acharyya2024` | Asymptotic DKPS/raw-stress MDS consistency for model representations.                                                   |
 | `Acharyya2025` | Finite-sample concentration for response-based vector embeddings, including a proved CMDS spectral perturbation bridge. |
-| `DkpsQuench`   | Query-efficiency theorem layer for DKPS-based benchmark prediction from cached responses.                               |
+| `DkpsQuench2026` | Query-efficiency theorem family for DKPS-based benchmark prediction from cached responses.                             |
 | `Helm2025`     | Transfer of statistical-inference guarantees from population DKPS embeddings to estimated/aligned embeddings.           |
 
 The active libraries formalize more than paper-facing wrappers.  They include
@@ -31,16 +31,15 @@ high-probability event propagation, and consistency transfer.
 ├── Acharyya2024/          # raw-stress MDS, probability, second moments, paper-facing consistency
 ├── Acharyya2025.lean      # root module for the 2025 concentration library
 ├── Acharyya2025/          # CMDS, Weyl/Davis-Kahan, Gram rigidity/polar factor, aligned finite-sample rates
-├── DkpsQuench.lean        # root module for the cached-response query-efficiency layer
-├── DkpsQuench/            # theorem statements plus bridge from Acharyya2025 concentration
-│   └── Perfect/           # executable scaffold for the remaining hypothesis-minimal Quench theorem
+├── DkpsQuench2026.lean    # root module for the 2026 Quench formalization
+├── DkpsQuench2026/        # subject-oriented paper, geometry, response, spectral, rate, and query-efficiency modules
 ├── Helm2025.lean          # root module for the statistical-inference transfer layer
 ├── Helm2025/              # population/estimated DKPS transfer theorem statements and bridge
 ├── Challenge/             # comparator challenges (MathlibCandidate / MathlibPending) + manifest
 ├── comparator/            # per-PR comparator configs
 ├── docs/                  # planning trackers (docs/planning) and challenge how-to (docs/challenge)
 ├── dev/                   # engineering memory: benchmark questions + debug postmortems (agent-readable)
-├── lakefile.toml          # Lake workspace for the four active libraries
+├── lakefile.toml          # Lake workspace for the five active libraries
 ├── lake-manifest.json     # pinned dependency manifest
 └── lean-toolchain         # Lean toolchain pin
 ```
@@ -68,7 +67,7 @@ In a fresh environment you will need to setup Lean4, see:
 
 ```bash
 lake exe cache get
-lake build ForMathlib Acharyya2024 Acharyya2025 DkpsQuench Helm2025
+lake build ForMathlib Acharyya2024 Acharyya2025 DkpsQuench2026 Helm2025
 ```
 
 To build everything declared in `lakefile.toml`:
@@ -106,7 +105,7 @@ entrywise-to-operator transport, Weyl-style spectral perturbation,
 Davis-Kahan-style subspace control, Gram realization facts,
 quantitative polar alignment, and an explicit end-to-end rate chain.
 
-### `DkpsQuench`
+### `DkpsQuench2026`
 
 Formalizes query-efficient benchmark-score prediction from cached model
 responses.  The theorem layer uses the literal tie-averaged nearest-neighbor
@@ -117,14 +116,12 @@ support, and iid sampling.  A fixed-population theorem connects directly to the
 on `Fin (n+1)` at stage `n`, controls only target-to-reference distances, and
 removes the global finite factorization of the model class.
 
-`DkpsQuench/Perfect/` is the executable completion scaffold for the
-hypothesis-minimal theorem.  It contains 61 deliberately isolated open proofs:
-population double-centering, high-probability spectral regularity, raw iid
-response averages, compactness and response-regularity bridges, finite-net
-uniform concentration, conservative schedules, event-level spectral
-composition, and finite/infinite all-query capstones.  Its
-README gives the dependency graph and weaker-agent proof instructions.  The
-proved production path remains available while those obligations are filled.
+`DkpsQuench2026/` is organized by mathematical subject rather than by
+workflow stage.  The `Paper` modules retain the theorem shape closest to the
+article; `Geometry`, `Response`, `Spectral`, `Probability`, and `Rates` derive
+the intermediate certificates; and `QueryEfficiency` exposes the finite,
+compact-infinite, and all-query raw-response theorem family.  The canonical tree
+contains no remaining proof holes.
 
 ### `Helm2025`
 
@@ -138,7 +135,7 @@ hypotheses used by the inference layer.
 [`papers/DKPS-formalized-vs-literature.tex`](papers/DKPS-formalized-vs-literature.tex)
 is the maintained audit for the four primary DKPS papers. It records repaired
 statements, surfaced assumptions, strengthened or weakened conclusions, MDS
-variant differences, and remaining composition gaps. Update it whenever a
+variant differences, completed theorem mappings, and the remaining opportunities for hypothesis reduction. Update it whenever a
 preferred public capstone changes its hypothesis load or scope.
 
 ## References

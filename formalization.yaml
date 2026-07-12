@@ -35,7 +35,7 @@ sources:
     id: "Helm et al. 2026"
     type: "research paper"
     author_contacted: "yes; ongoing subject-matter discussion"
-    prior_work: "Downstream theorem layer in DkpsQuench/ (consumes Acharyya2025 concentration interfaces)."
+    prior_work: "Subject-oriented theorem library in DkpsQuench2026/; its raw-response capstones derive the Quench conclusion from Acharyya2025 concentration, covariance, coverage, and rate interfaces."
 
 status:
   repository_build:
@@ -123,9 +123,10 @@ status:
       - id: "Acharyya2025"
         capstones:
           - "Acharyya2025.RateChain.tendsto_endToEndRate_zero"
-      - id: "DkpsQuench"
+      - id: "DkpsQuench2026"
         capstones:
-          - "DkpsQuench.AcharyyaBridge.quench_uniform_embedding_error_of_finite_configError"
+          - "DkpsQuench2026.QueryEfficiency.finiteAllQueries"
+          - "DkpsQuench2026.QueryEfficiency.infiniteAllQueries"
       - id: "Helm2025"
         capstones:
           - "Helm2025.DKPS.Theorem1"

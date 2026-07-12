@@ -1,6 +1,6 @@
 # DKPS source-paper index
 
-Generated from `source_manifest.json`. This is the canonical inventory of works whose definitions, theorem families, or proof architecture are directly formalized, actively scaffolded, or inherited by the DKPS and Perfect Quench development.
+Generated from `source_manifest.json`. This is the canonical inventory of works whose definitions, theorem families, or proof architecture are directly formalized, actively scaffolded, or inherited by the DKPS and raw-response Quench development.
 
 The index deliberately separates a paper's **formalization role** from the state of its local literature asset. A transcription is normally not a proof-level reconstruction; an exact short-paper transcription may be marked sufficient only when a maintained discrepancy ledger performs the modernization and theorem mapping. A modern textbook never silently replaces a primary source.
 
@@ -34,7 +34,7 @@ The index deliberately separates a paper's **formalization role** from the state
 | `TrossetPriebe2024` | 2024 | Continuous Multidimensional Scaling | primary method source | methods imported by Acharyya 2024 formalization | `missing` | P0 |
 | `AcharyyaAgterbergParkPriebe2025` | 2025 | Concentration Bounds on Response-Based Vector Embeddings of Black-Box Generative Models | direct target | substantially formalized | `transcription_only` | P0 |
 | `HelmAcharyyaDuderstadtParkPriebe2025` | 2025 | Statistical Inference on Black-Box Generative Models in the Data Kernel Perspective Space | direct target | substantially formalized | `source_text_only` | P0 |
-| `HelmJohnsonPriebe2026` | 2026 | Query-Efficient Model Evaluation Using Cached Responses | direct target | formal theorem family complete, including finite, compact-infinite, and all-query Perfect Quench capstones | `transcription_sufficient` | P0 |
+| `HelmJohnsonPriebe2026` | 2026 | Query-Efficient Model Evaluation Using Cached Responses | direct target | formal theorem family complete, including finite, compact-infinite, and all-query raw-response Quench capstones | `transcription_sufficient` | P0 |
 
 ## MDS, Euclidean distance geometry, Gram rigidity, and alignment
 
