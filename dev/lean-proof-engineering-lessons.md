@@ -827,3 +827,37 @@ omit [FiniteDimensional 𝕜 E] [FiniteDimensional 𝕜 F] in
 
 before the docstring and declaration so the public signature records the true
 level of generality and the unused-section-variable linter stays quiet.
+
+### Separate a convex-orbit theorem from the analytic Sylvester multiplier
+
+For a finite-dimensional rectangular operator, Ky Fan prefix domination can
+be converted into membership in the real convex hull of a two-sided unitary
+orbit without introducing a norm-specific separation argument.  Pull the orbit
+convex hull back along the real-linear diagonal singular-value lift, prove that
+this preimage is convex and invariant under coordinate transpositions and
+single-coordinate sign changes, and run a finite T-transform descent on the
+singular-value vectors.  Equal singular values are then transported back to
+the original operator with the existing rectangular SVD factorization.
+
+This cleanly separates two obligations:
+
+* the finite convex-geometric theorem
+  `mem_convexHull_twoSidedUnitaryOrbit_of_kyFanSum_le`;
+* the analytic Bhatia--Davis--McIntosh estimate supplying every Ky Fan prefix.
+
+Do not claim the downstream barycentric Sylvester theorem is unconditional
+while the analytic rectangular UI-norm estimate is still a `sorry`.  Moving the
+Fourier theorem to an explicit assumption seam is useful progress, but it does
+not discharge the original analytic root.
+
+### Block spectral labels must account for multiplicity and scalar action
+
+A hypothesis of the form `SpectrumIn A (range Pᵢ) {λᵢ}` is not by itself a
+usable block-eigenvalue equation unless the restricted-spectrum interface and
+invariance hypotheses actually imply that `A` acts as `λᵢ` on the whole block.
+Moreover, an unweighted sum `Σᵢ (λᵢ-μᵢ)^2` is wrong for arbitrary non-rank-one
+blocks: multiplicity must appear.  When the repository already contains the
+rank-one eigenbasis form of Davis's inequalities, prefer a canonical sorted
+eigenbasis theorem over an invalid arbitrary-block wrapper.  A future block
+version should require reducing/scalar-action hypotheses and use rank-weighted
+eigenvalue motion.
