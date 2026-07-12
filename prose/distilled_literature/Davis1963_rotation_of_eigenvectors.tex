@@ -1,0 +1,745 @@
+\input{preamble}
+\title{Source-order modernization of Davis (1963): rotation of eigenvectors under Hermitian perturbation}
+\author{}
+\date{Distilled reconstruction from a supplied local transcription}
+\begin{document}
+\maketitle
+
+\section*{Source map and scope}
+\begin{sourceguide}
+\item[Primary source] Chandler Davis, \emph{The Rotation of Eigenvectors by a Perturbation}, Journal of Mathematical Analysis and Applications 6 (1963), 159--173.
+\item[Local evidence] Supplied transcription {\small\code{Davis-1963-Rotation-of-Eigenvecvtors-by-Perturbation.tex}}.\\ SHA--256 \texttt{\seqsplit{15e584e699e29d8f1d3d5c77d8f65178ed07c33f727e565072c8be51519f39ba}}.
+\item[Redistribution] The transcription itself is not vendored. This document is a new mathematical reconstruction and formalization map.
+\item[Coverage] Sections I--V in source order: direct rotations, block pinching, Theorems 1.1--1.3, Theorems 2.1--2.3, Theorems 3.1--3.3, Theorem 4.1, Theorem 5.1, equations (2.1)--(2.5), (3.1)--(3.3), (4.1)--(4.2), and (5.1)--(5.2).
+\item[Modernization] Operators are written on a finite-dimensional real or complex Hilbert space. Orthogonal complements, adjoints, positive square roots, principal angles, Frobenius norms, and Loewner inequalities are made explicit.
+\item[Formalization target] The Davis-specific endpoints in \code{ForMathlib/Analysis/InnerProductSpace/DavisKahanTheory/Davis1963.lean}, together with \code{RotationBound.lean}, \code{RotationSharp.lean}, and the unfinished canonical direct-rotation layer in \code{DirectRotation.lean}.
+\end{sourceguide}
+
+This note is intentionally more detailed than a theorem summary. It records the exact hypotheses and algebraic route of every mathematical result in the paper, while separating Davis's own argument from modern completions of steps that the source leaves implicit.
+
+\section{Global setting and notation}
+
+Let $\Hsp$ be an $n$-dimensional Hilbert space over $\R$ or $\C$. Let
+\[
+  A=A^*,\qquad H=H^*,\qquad B:=A+H.
+\]
+Write the eigenvalues of $A$ and $B$ in decreasing order as
+\[
+  \lambda_1\ge\cdots\ge\lambda_n,
+  \qquad
+  \lambda'_1\ge\cdots\ge\lambda'_n,
+\]
+with normalized eigenvectors $x_i$ and $x'_i$ when a simple-spectrum description is being used. For a Borel set $I\subset\R$, write $E(I)$ and $E'(I)$ for the spectral projectors of $A$ and $B$.
+
+The operator norm is
+\[
+  \norm{T}_{\op}:=\sup_{\norm{x}=1}\norm{Tx}.
+\]
+The paper also uses arbitrary unitarily invariant norms $\norm{\cdot}_{\Phi}$ and especially the Frobenius norm
+\[
+  \norm{T}_{\F}^2=\tr(T^*T).
+\]
+For Hermitian $T$, this reduces to $\norm{T}_{\F}^2=\tr(T^2)$.
+
+\subsection{Pinching and off-diagonal decomposition}
+
+Let $P_1,\dots,P_m$ be a complete orthogonal family:
+\[
+  P_j=P_j^*=P_j^2,\qquad P_jP_k=0\ (j\ne k),\qquad \sum_{j=1}^mP_j=I.
+\]
+Define the block-diagonal pinching and its off-diagonal complement by
+\[
+  \Pinch(T):=\sum_{j=1}^m P_jTP_j,
+  \qquad
+  \Off(T):=T-\Pinch(T).
+\]
+On the real Hilbert space of Hermitian operators with Frobenius inner product
+\[
+  \ip{S}{T}_{\F}:=\tr(ST),
+\]
+$\Pinch$ is an orthogonal projection. Hence
+\[
+  \ip{\Pinch(T)}{\Off(T)}_{\F}=0,
+  \qquad
+  \norm{T}_{\F}^2=\norm{\Pinch(T)}_{\F}^2+\norm{\Off(T)}_{\F}^2.
+\]
+For $f(t)=t^2$, Davis's convex-function digression gives the exact identity
+\[
+  \norm{\Off(H)}_{\F}^2
+  =\tr(H^2)-\tr(\Pinch(H)^2).
+\]
+The paper interprets $\norm{\Off(H)}_{\F}$ as a natural quantitative measure of how strongly $H$ couples distinct spectral blocks of $A$.
+
+\subsection{Simple eigenvectors and phase convention}
+
+When $x_i$ and $x'_i$ are one-dimensional eigenvectors, the phase of $x'_i$ is chosen to minimize $\norm{x'_i-x_i}$. Equivalently,
+\[
+  \ip{x'_i}{x_i}>0,
+  \qquad
+  x'_i=\frac{P'_ix_i}{\norm{P'_ix_i}},
+\]
+where $P'_i$ projects onto $\C x'_i$ or $\R x'_i$. The rotation angle is
+\[
+  \theta_i:=\arccos\ip{x'_i}{x_i}\in[0,\pi/2).
+\]
+Then
+\[
+  \sin^2\theta_i=1-\abs{\ip{x'_i}{x_i}}^2.
+\]
+
+\subsection{Clustered spectra}
+
+Assume the spectrum of $A$ lies in disjoint intervals
+\[
+  [\nu_j,\mu_j],\qquad 0\le\mu_j-\nu_j\le 2\beta,
+\]
+separated by gaps of size at least $\gamma>0$:
+\[
+  \nu_j-\mu_{j+1}\ge\gamma.
+\]
+Set
+\[
+  P_j:=E([\nu_j,\mu_j]).
+\]
+If
+\[
+  \norm{H}_{\op}=\delta<\gamma/2,
+\]
+then the perturbed projectors
+\[
+  P'_j:=E'([\nu_j-\delta,\mu_j+\delta])
+\]
+have the same ranks as $P_j$. Every $x\in P_j\Hsp$ is an approximate eigenvector centered at the midpoint of the cluster:
+\[
+  \norm{Ax-\tfrac12(\mu_j+\nu_j)x}
+  \le \beta\norm{x}.
+\]
+
+\section{Section I: canonical direct rotation}
+
+\sourceanchor{Section I, Theorems 1.1--1.3.}
+
+Suppose $P_1,\dots,P_m$ and $P'_1,\dots,P'_m$ are complete orthogonal families with equal corresponding ranks and satisfy the nondegeneracy condition
+\[
+  x=P_jx\ne0\quad\Longrightarrow\quad P'_jx\ne0.
+\]
+The canonical direct rotation $U$ is defined blockwise by
+\[
+  UP_j=(P'_jP_jP'_j)^{-1/2}P'_jP_j.
+\]
+Equivalently,
+\[
+  UP_j=P'_jU
+  =P'_j(P_jP'_jP_j)^{-1/2}P_j.
+\]
+The inverse square roots act on the relevant ranges. The nondegeneracy hypothesis makes $P_jP'_jP_j$ and $P'_jP_jP'_j$ positive definite on those ranges. The resulting $U$ is unitary and intertwines the two decompositions:
+\[
+  UP_j=P'_jU\qquad(1\le j\le m).
+\]
+
+For any unitary $W$, the displacement of a unit vector $y$ is
+\[
+  \norm{(I-W)y}^2
+  =\ip{(I-W^*)(I-W)y}{y}.
+\]
+Consequently,
+\[
+  \norm{I-W}_{\op}^2
+  =\norm{(I-W^*)(I-W)}_{\op},
+\]
+and
+\[
+  \norm{I-W}_{\F}^2
+  =\tr((I-W^*)(I-W)).
+\]
+
+\begin{theorem}[Davis 1.1: Frobenius-minimal intertwiner]
+For every unitary $W$ satisfying $WP_j=P'_jW$ for all $j$,
+\[
+  \norm{I-W}_{\F}\ge \norm{I-U}_{\F}.
+\]
+\end{theorem}
+
+The source derives this from a stronger pinched positive-operator statement inherited from Davis's 1958 two-subspace work.
+
+\begin{theorem}[Davis 1.2: unitarily invariant pinched displacement]
+Under the same assumptions, for every unitarily invariant norm,
+\[
+  \norm{\Pinch((I-W^*)(I-W))}_{\Phi}
+  \ge
+  \norm{\Pinch((I-U^*)(I-U))}_{\Phi}.
+\]
+\end{theorem}
+
+The trace norm specialization yields Theorem 1.1 because pinching preserves trace and $(I-W^*)(I-W)$ is positive.
+
+For an orthonormal basis $x_1,\dots,x_n$ adapted to the $P_j$ blocks, define
+\[
+  \sigma(W,\{x_i\})^2
+  :=\sum_{i=1}^n\left(1-\abs{\ip{Wx_i}{x_i}}^2\right).
+\]
+
+\begin{theorem}[Davis 1.3: off-diagonal rotation energy]
+Among all admissible intertwiners and all adapted orthonormal bases,
+\[
+  \norm{\Off(W)}_{\F}
+  =\norm{\Off(U)}_{\F}
+  =\min \sigma(W,\{x_i\}).
+\]
+In particular, $\norm{\Off(W)}_{\F}$ is independent of the chosen admissible unitary $W$.
+\end{theorem}
+
+\begin{argument}
+\item Since $WP_j=P'_jW$,
+\begin{align*}
+  \norm{\Pinch(W)}_{\F}^2
+  &=\tr\bigl(\Pinch(W)^*\Pinch(W)\bigr)\\
+  &=\tr\sum_j W^*P_jWP_j\\
+  &=\tr\sum_j P'_jP_j.
+\end{align*}
+The right side depends only on the two projector families.
+\item Because $\Pinch(W)\perp\Off(W)$ and $W$ is unitary,
+\[
+  \norm{\Off(W)}_{\F}^2
+  =\norm{W}_{\F}^2-\norm{\Pinch(W)}_{\F}^2
+  =n-\tr\sum_jP'_jP_j.
+\]
+\item For any adapted basis,
+\[
+  \norm{\Pinch(W)}_{\F}^2
+  =\sum_{j}\sum_{x_i,x_{i'}\in P_j\Hsp}
+    \abs{\ip{Wx_i}{x_{i'}}}^2
+  \ge \sum_i\abs{\ip{Wx_i}{x_i}}^2.
+\]
+\item For $W=U$, choose each block basis to diagonalize
+\[
+  P_jUP_j=(P_jP'_jP_j)^{1/2}.
+\]
+Then every within-block cross term vanishes and equality is attained.
+\end{argument}
+
+The eigenvalues of $P_jP'_jP_j$ are $\cos^2\theta_i$, where $\theta_i$ are the principal angles between corresponding subspaces. Thus all three Section I rotation measures become symmetric increasing functions of the principal angles.
+
+\sourcecomment{The source explicitly states that it does not establish operator-norm minimality of $U$. The direct-rotation construction and its strongest minimality statements are the largest remaining unfinished part of the current Lean development.}
+
+\section{Section II: one spectral block}
+
+After translating the selected cluster, take
+\[
+  P=E([-\beta,\beta]),
+\]
+and assume the adjacent intervals
+\[
+  (-\beta-\gamma,-\beta),\qquad(\beta,\beta+\gamma)
+\]
+contain no spectrum of $A$. Under $\norm{H}_{\op}\le\delta<\gamma/2$, set
+\[
+  P'=E'([-\beta-\delta,\beta+\delta]).
+\]
+
+\begin{theorem}[Davis 2.1]
+\[
+  \norm{(I-P')P}_{\op}
+  \le
+  \frac{\beta+\delta}{\beta+\gamma-\delta}.
+\]
+\end{theorem}
+
+For a unit vector $x=Px$, the upper energy estimate is
+\begin{align}
+  \ip{(A+H)^2x}{x}
+  &=\ip{A^2x}{x}+2\operatorname{Re}\ip{AHx}{x}+\ip{H^2x}{x}\notag\\
+  &\le \beta^2+2\norm{Ax}\norm{Hx}+\delta^2
+  \le(\beta+\delta)^2. \tag{2.1}
+\end{align}
+Because $P'$ reduces $A+H$,
+\begin{equation}
+  \ip{(A+H)^2x}{x}
+  =\ip{(A+H)^2P'x}{P'x}
+   +\ip{(A+H)^2(I-P')x}{(I-P')x}. \tag{2.2}
+\end{equation}
+On $(I-P')\Hsp$, every perturbed eigenvalue has absolute value at least $\beta+\gamma-\delta$, so
+\begin{equation}
+  \ip{(A+H)^2x}{x}
+  \ge(\beta+\gamma-\delta)^2\norm{(I-P')x}^2. \tag{2.3}
+\end{equation}
+Combining (2.1) and (2.3) proves the theorem.
+
+\subsection{Retaining the in-block energy when the unperturbed eigenvalue is zero}
+
+Now specialize to $\beta=0$, so $AP=0$ although $P$ may have rank greater than one. Let $\lambda\ge0$ be a lower bound for the absolute values of all eigenvalues of $A+H$ on $P'\Hsp$.
+
+\begin{theorem}[Davis 2.2]
+The operator-angle estimate is
+\begin{equation}
+  \norm{(I-P')P}_{\op}^2
+  \le
+  \frac{\delta^2-\lambda^2}{(\gamma-\delta)^2-\lambda^2}
+  \le
+  \frac{\delta^2-\lambda^2}{\gamma(\gamma-2\delta)}. \tag{2.4}
+\end{equation}
+The trace and Frobenius forms are
+\[
+  \tr((I-P')P)
+  \le
+  \frac{\tr(H^2P)-\tr((A+H)^2P')}{\gamma(\gamma-2\delta)},
+\]
+and
+\begin{equation}
+  \norm{(I-P')P}_{\F}^2
+  \le
+  \frac{\norm{HP}_{\F}^2-\norm{(A+H)P'}_{\F}^2}
+       {\gamma(\gamma-2\delta)}. \tag{2.5}
+\end{equation}
+\end{theorem}
+
+The retained first term of (2.2) satisfies
+\[
+  \ip{(A+H)^2P'x}{P'x}
+  \ge \lambda^2\norm{P'x}^2
+  =\lambda^2\bigl(1-\norm{(I-P')x}^2\bigr).
+\]
+Therefore
+\[
+  \ip{(A+H)^2x}{x}
+  \ge
+  \bigl((\gamma-\delta)^2-\lambda^2\bigr)
+     \norm{(I-P')x}^2+\lambda^2.
+\]
+Together with $\ip{(A+H)^2x}{x}=\ip{H^2x}{x}\le\delta^2$, this gives the first inequality in (2.4). The second uses $\lambda^2\le\delta^2$ and
+\[
+  (\gamma-\delta)^2-\lambda^2
+  \ge(\gamma-\delta)^2-\delta^2
+  =\gamma(\gamma-2\delta).
+\]
+
+For the trace estimate, choose $x$ from an orthonormal eigenbasis of $PP'P$ and set
+\[
+  y:=\frac{P'x}{\norm{P'x}}=Ux.
+\]
+Then the source derives
+\[
+  \ip{H^2x}{x}
+  \ge
+  \gamma(\gamma-2\delta)\ip{(I-P')x}{x}
+  +\ip{(A+H)^2y}{y}.
+\]
+Summing over the chosen basis of $P\Hsp$, while $Ux$ ranges over an orthonormal basis of $P'\Hsp$, yields
+\[
+  \tr(H^2P)
+  \ge
+  \gamma(\gamma-2\delta)\tr((I-P')P)
+  +\tr((A+H)^2P').
+\]
+
+The source records the equivalent identities
+\[
+  \tr(H^2P)=\norm{HP}_{\F}^2,
+  \qquad
+  \tr((A+H)^2P')=\norm{(A+H)P'}_{\F}^2,
+\]
+and
+\[
+  \tr((I-P')P)
+  =\norm{(I-P')P}_{\F}^2
+  =\sum_i\sin^2\theta_i
+  =\tr\bigl(P-(UP)^2\bigr).
+\]
+For a simple eigenvalue, the Frobenius estimate coincides with the scalar second estimate in (2.4). The source further compares (2.4) with Theorem 2.1 at $\beta=0$: the first fraction in (2.4) is strictly better whenever $\lambda>0$, while the coarser second fraction improves Theorem 2.1 provided
+\[
+  \lambda>\frac{\delta^2}{\gamma-\delta}.
+\]
+
+\begin{theorem}[Davis 2.3: off-diagonal perturbation on the selected block]
+Assume Theorem 2.1 and additionally
+\[
+  PHP=0.
+\]
+Then
+\[
+  \norm{(I-P')P}_{\F}^2
+  \le
+  \frac{\norm{HP}_{\F}^2+\norm{AP}_{\F}^2-
+        \norm{(A+H)P'}_{\F}^2}
+       {(\beta+\gamma)(\beta+\gamma-2\delta)}.
+\]
+\end{theorem}
+The proof repeats the preceding trace argument; the mixed terms $\ip{AHx}{x}$ vanish because $PHP=0$.
+
+\section{Section III: total rotation}
+
+Assume first that $A$ has simple spectrum with pairwise gaps at least $\gamma$ and $\norm{H}_{\op}=\delta<\gamma/2$. Let $U$ be the canonical eigenbasis-matching rotation and define
+\[
+  \Theta:=\arcsin\frac{\delta}{\gamma-\delta}.
+\]
+
+\begin{theorem}[Davis 3.1]
+\[
+  \norm{I-U}_{\F}^2
+  \le
+  \frac{2}{1+\cos\Theta}
+  \frac{\norm{H}_{\F}^2}{\gamma(\gamma-2\delta)}.
+\]
+\end{theorem}
+For principal angles $\theta_i$,
+\[
+  \norm{I-U}_{\F}^2
+  =4\sum_i\sin^2(\theta_i/2)
+  =2\sum_i(1-\cos\theta_i).
+\]
+Using
+\[
+  1-\cos\theta_i
+  =\frac{\sin^2\theta_i}{1+\cos\theta_i}
+  \le\frac{\sin^2\theta_i}{1+\min_k\cos\theta_k},
+\]
+and Theorem 2.1, which gives $\min_i\cos\theta_i\ge\cos\Theta$, reduces the proof to
+\[
+  \sum_i\sin^2\theta_i
+  \le\frac{\norm{H}_{\F}^2}{\gamma(\gamma-2\delta)}.
+\]
+This follows by summing (2.5) over all one-dimensional spectral projectors and discarding the nonpositive perturbed-eigenvalue term.
+
+The paper notes that $\norm{H}_{\F}^2\le n\norm{H}_{\op}^2$ is usually too crude: near-scalar perturbations nearly saturate that inequality but cause little eigenvector rotation.
+
+\subsection{Rotation energy minus eigenvalue-motion energy}
+
+Let
+\[
+  \gamma_i:=\min_{j\ne i}\abs{\lambda_i-\lambda'_j},
+\]
+and
+\[
+  (\gamma')^2
+  :=\min_i\left(\gamma_i^2-(\lambda'_i-\lambda_i)^2\right).
+\]
+Under the hypotheses below this quantity is positive.
+
+\begin{theorem}[Davis 3.2]
+If $A$ has simple eigenvalues separated by at least $\gamma$ and $\norm{H}_{\op}<\gamma/2$, then
+\begin{equation}
+  (\gamma')^2\norm{\Off(U)}_{\F}^2
+  \le
+  \norm{H}_{\F}^2-
+  \sum_i(\lambda_i-\lambda'_i)^2. \tag{3.1}
+\end{equation}
+\end{theorem}
+
+Let $\lambda_i^0$ denote the eigenvalue of $A+\Pinch(H)$ on $x_i$. Since $\Pinch(H)$ preserves each old eigenspace, the off-diagonal cross term vanishes and
+\begin{align}
+  \ip{(A+H-\lambda_i)^2x_i}{x_i}
+  &=(\lambda_i^0-\lambda_i)^2
+    +\ip{\Off(H)^2x_i}{x_i}. \tag{3.2}
+\end{align}
+Expanding $x_i$ in the perturbed eigenbasis gives
+\begin{align}
+  \ip{(A+H-\lambda_i)^2x_i}{x_i}
+  &\ge
+  (\lambda'_i-\lambda_i)^2(1-\sin^2\theta_i)
+  +\gamma_i^2\sin^2\theta_i\notag\\
+  &\ge
+  (\lambda'_i-\lambda_i)^2
+  +(\gamma')^2\sin^2\theta_i. \tag{3.3}
+\end{align}
+Summing (3.2) and (3.3), and using
+\[
+  \sum_i(\lambda_i^0-\lambda_i)^2=\norm{\Pinch(H)}_{\F}^2,
+  \qquad
+  \sum_i\ip{\Off(H)^2x_i}{x_i}=\norm{\Off(H)}_{\F}^2,
+\]
+produces (3.1).
+
+The source says $(\gamma')^2$ may be replaced by $\gamma(\gamma-2\delta)$. The intended comparison is that the mixed separation term admits the lower bound needed to replace $(\gamma')^2$ by this explicit quantity. The transcription's phrase ``which is no smaller'' should not be read as a reliable direction-of-inequality statement without checking the original scan.
+
+The theorem expresses an energy tradeoff: perturbation energy can be spent on eigenvalue displacement or on eigenspace rotation, but the two cannot simultaneously consume more than $\norm{H}_{\F}^2$.
+
+\begin{theorem}[Davis 3.3]
+Under Theorem 3.2, if
+\[
+  \sqrt2\,\norm{\Pinch(H)}_{\F}+2\norm{H}_{\op}<\gamma,
+\]
+then
+\[
+  (\gamma')^2\norm{\Off(U)}_{\F}^2
+  \le2\norm{\Off(H)}_{\F}^2.
+\]
+\end{theorem}
+The proof is exactly the combination of Theorem 3.2 with the eigenvalue-motion lower bound in Theorem 4.1.
+
+\section{Section IV: lower bound for eigenvalue motion}
+
+\sourceanchor{Theorem 4.1 and equations (4.1)--(4.2).}
+
+Let $\Pinch$ now be pinching in the eigenbasis of $A$. Define the perturbed spectral separation
+\[
+  \gamma:=\min_{i\ne j}\abs{\lambda'_i-\lambda'_j}>0.
+\]
+The gap is deliberately taken from $A+H$, not from $A$.
+
+\begin{theorem}[Davis 4.1]
+If
+\[
+  \norm{\Pinch(H)}_{\F}\le\frac{\gamma}{\sqrt2},
+\]
+then
+\begin{equation}
+  \sum_i(\lambda'_i-\lambda_i)^2
+  \ge
+  \norm{\Pinch(H)}_{\F}^2-
+  \norm{\Off(H)}_{\F}^2. \tag{4.1}
+\end{equation}
+\end{theorem}
+
+The source gives the counterexample
+\[
+  A=\begin{pmatrix}3&0\\0&-3\end{pmatrix},
+  \qquad
+  H=\begin{pmatrix}-2&1\\1&2\end{pmatrix},
+\]
+to show that replacing the perturbed gap by the old gap makes the assertion false.
+
+\subsection{Modernized proof in the Frobenius operator space}
+
+The source restricts without proof to simple spectrum and a natural eigenvalue matching. Let $B_0$ be diagonal in the old eigenbasis but carry the new eigenvalues:
+\[
+  B_0x_i=\lambda'_ix_i.
+\]
+Set
+\[
+  \Delta:=B_0-A,
+  \qquad
+  C:=A+\Pinch(H)=\Pinch(A+H).
+\]
+Then
+\[
+  \norm{\Delta}_{\F}^2=\sum_i(\lambda'_i-\lambda_i)^2.
+\]
+Normalize homogeneously so that
+\[
+  \norm{A+H}_{\F}^2=\norm{B_0}_{\F}^2
+  =\sum_i(\lambda'_i)^2=1.
+\]
+
+By the Schur--Horn convexity theorem, $C$ lies in the convex hull of diagonal operators obtained by permuting the eigenvalues of $B_0$:
+\[
+  C=\sum_{\pi}a_\pi B_\pi,
+  \qquad a_\pi\ge0,
+  \qquad\sum_\pi a_\pi=1.
+\]
+The convex-geometry step proves
+\begin{equation}
+  \frac{\ip{B_0-C}{B_0}_{\F}}
+       {\norm{B_0-C}_{\F}}
+  \ge\frac{\gamma}{\sqrt2}. \tag{4.2}
+\end{equation}
+Indeed, it suffices to check vertices. The nearest nontrivial permutation swaps two eigenvalues at distance $\gamma$, for which
+\[
+  \norm{B_\pi-B_0}_{\F}=\sqrt2\,\gamma,
+  \qquad
+  \ip{B_0-B_\pi}{B_0}_{\F}=\gamma^2.
+\]
+
+The identity
+\[
+  \Delta+C-B_0=\Pinch(H)
+\]
+gives
+\[
+  \norm{\Delta}_{\F}^2-
+  \norm{\Pinch(H)}_{\F}^2
+  =-2\ip{C-B_0}{\Pinch(H)}_{\F}
+   +\norm{B_0-C}_{\F}^2.
+\]
+For fixed $B_0,C$, the right side is minimized under
+$\norm{\Pinch(H)}_{\F}\le\gamma/\sqrt2$ when $\Pinch(H)$ points in the direction $C-B_0$. Hence
+\[
+  \norm{\Delta}_{\F}^2-
+  \norm{\Pinch(H)}_{\F}^2
+  \ge
+  -\sqrt2\gamma\norm{B_0-C}_{\F}
+  +\norm{B_0-C}_{\F}^2.
+\]
+Because $\Off(H)=\Off(A+H)$ is orthogonal to $C=\Pinch(A+H)$,
+\[
+  \norm{\Off(H)}_{\F}^2
+  =1-\norm{C}_{\F}^2.
+\]
+Finally,
+\[
+  \norm{B_0-C}_{\F}^2+1-\norm{C}_{\F}^2
+  =2\ip{B_0-C}{B_0}_{\F},
+\]
+and (4.2) makes the desired sum nonnegative. The paper points separately to Hoffman--Wielandt for a different lower bound on eigenvalue motion; that result is not used in this proof.
+
+\section{Section V: sharp two-subspace rotation}
+
+Scale the spectral gap so that
+\[
+  P=E([1,\infty)),
+  \qquad
+  P^{\perp}=E(( -\infty,-1]).
+\]
+Thus $A$ has no spectrum in $(-1,1)$.
+
+\begin{theorem}[Davis 5.1]
+Let $\norm{H}_{\op}=\delta<1$. If $x$ is a normalized eigenvector of $A+H$ with eigenvalue $\lambda\ge0$, and $\theta$ is the acute angle between $x$ and $Px$, then
+\[
+  \sin(2\theta)\le\delta.
+\]
+If additionally
+\[
+  \Pinch(H)=PHP+P^{\perp}HP^{\perp}=0,
+\]
+then the restriction $\delta<1$ may be removed and
+\[
+  \tan(2\theta)\le\delta.
+\]
+Both constants are sharp.
+\end{theorem}
+
+Write
+\[
+  x=\cos\theta\,e_1+\sin\theta\,e_2,
+  \qquad
+  e_1:=\frac{Px}{\norm{Px}},
+  \qquad
+  e_2:=\frac{P^{\perp}x}{\norm{P^{\perp}x}}.
+\]
+Compress $A$ and $H$ to $Q:=\spanop\{e_1,e_2\}$:
+\[
+  QAQ=
+  \begin{pmatrix}a_1&0\\0&a_2\end{pmatrix},
+  \qquad a_1\ge1,\ a_2\le-1,
+\]
+\[
+  QHQ=
+  \begin{pmatrix}h_{11}&h_{12}\\\overline{h}_{12}&h_{22}\end{pmatrix},
+  \qquad
+  \norm{QHQ}_{\op}\le\delta.
+\]
+The eigenvalue equation yields
+\begin{equation}
+  0\le\lambda
+  =a_1+h_{11}+h_{12}\tan\theta
+  =\overline{h}_{12}\cot\theta+a_2+h_{22}. \tag{5.1}
+\end{equation}
+It follows that $h_{12}$ is real and
+\[
+  h_{12}(\cot\theta-\tan\theta)
+  =a_1-a_2+h_{11}-h_{22}
+  \ge2-2\delta>0.
+\]
+If $\theta\ge\pi/4$, then $h_{12}<0$ and the second expression in (5.1) gives
+\[
+  0\le\lambda<a_2+h_{22}\le-1+\delta<0,
+\]
+a contradiction. Hence $\theta<\pi/4$ and $h_{12}>0$.
+
+For fixed $h_{12}$, the spectral constraint $-\delta I\le QHQ\le\delta I$ implies
+\[
+  h_{11}-h_{22}
+  \ge-2\sqrt{\delta^2-h_{12}^2}.
+\]
+Therefore
+\[
+  \cot\theta-\tan\theta
+  \ge
+  \frac{a_1-a_2-2\sqrt{\delta^2-h_{12}^2}}{h_{12}}.
+\]
+Minimizing over $0<h_{12}\le\delta$ gives
+\begin{equation}
+  \cot\theta-\tan\theta
+  \ge
+  \delta^{-1}\sqrt{(a_1-a_2)^2-4\delta^2}
+  \ge2\delta^{-1}\sqrt{1-\delta^2}. \tag{5.2}
+\end{equation}
+Since
+\[
+  \cot\theta-\tan\theta=2\cot(2\theta),
+\]
+(5.2) is equivalent, on $0\le\theta<\pi/4$, to $\sin(2\theta)\le\delta$.
+
+\subsection{The omitted off-diagonal completion}
+
+When $\Pinch(H)=0$, we have $h_{11}=h_{22}=0$. Equation (5.1) gives
+\[
+  h_{12}(\cot\theta-\tan\theta)=a_1-a_2\ge2.
+\]
+Since $0<h_{12}\le\norm{H}_{\op}=\delta$,
+\[
+  2\cot(2\theta)=\cot\theta-\tan\theta\ge\frac{2}{\delta},
+\]
+so
+\[
+  \tan(2\theta)\le\delta.
+\]
+This is a modern completion of the short argument that Davis explicitly omits.
+
+\subsection{Explicit sharpness models omitted by the source}
+
+For $0<\delta<1$, take
+\[
+  A=\begin{pmatrix}1&0\\0&-1\end{pmatrix},
+  \qquad
+  H=\delta
+  \begin{pmatrix}
+    -\delta&\sqrt{1-\delta^2}\\
+    \sqrt{1-\delta^2}&\delta
+  \end{pmatrix}.
+\]
+Then $\norm{H}_{\op}=\delta$, and the top eigenvector of $A+H$ has
+\[
+  \sin(2\theta)=\delta.
+\]
+For the off-diagonal theorem, take
+\[
+  A=\begin{pmatrix}1&0\\0&-1\end{pmatrix},
+  \qquad
+  H=\begin{pmatrix}0&\delta\\\delta&0\end{pmatrix}.
+\]
+Then $\Pinch(H)=0$, $\norm{H}_{\op}=\delta$, and the top eigenvector satisfies
+\[
+  \tan(2\theta)=\delta.
+\]
+These examples supply the constructions that the paper leaves to the reader.
+
+The source also observes that the first theorem can be sharpened by replacing $\delta<1$ with
+\[
+  \norm{\Pinch(H)}_{\op}<1.
+\]
+It further stresses that Theorem 5.1 is an eigenvector statement: it does not establish the same $\sin(2\theta)$ bound uniformly for every vector in the perturbed spectral subspace.
+
+\section{Formalization map}
+
+\begin{formalizationmap}
+Section I, direct rotation & Canonical unitary from polar factors; intertwining; Frobenius and UI-norm minimality; block principal angles. & \code{DavisKahanTheory/DirectRotation.lean} contains the intended architecture but still has unfinished proofs. Theorem 1.1--1.3 are not yet fully represented by green public endpoints. \\
+Theorem 2.1 & Single-cluster operator-angle estimate from squared-energy comparison. & The repository has stronger modern $\sin\Theta$ machinery, but no declaration named as an exact source-order transcription of 2.1. \\
+Theorem 2.2 and (2.4)--(2.5) & Eigenvalue-aware operator and Frobenius rotation bounds. & Mathematical ingredients occur in rotation/intertwining infrastructure; exact source-shaped theorem packaging remains incomplete. \\
+Theorem 2.3 & Off-diagonal selected-block Frobenius estimate. & Covered only indirectly by general off-diagonal perturbation machinery. \\
+Theorem 3.1 & Frobenius distance of canonical rotation bounded through total squared sine. & \code{RotationBound.lean}: \code{rotation_add_displacement_le_hilbertSchmidt} and related canonical-basis results provide the modern route. \\
+Theorem 3.2 & Total rotation plus matched eigenvalue motion is bounded by perturbation Frobenius energy. & \code{Davis1963.lean}: \code{totalRotation_add_eigenvalueMotion_le}; supporting result \code{rotation_add_displacement_le_hilbertSchmidt_intertwining}. Fully proved. \\
+Theorem 4.1 & Eigenvalue motion dominates pinch energy minus off-diagonal energy under a perturbed-gap hypothesis. & \code{Davis1963.lean}: \code{diagonalPerturbation_sub_offDiagonal_le_eigenvalueMotion}. The repository explicitly corrects an earlier wrong off-diagonal hypothesis. Fully proved. \\
+Theorem 3.3 & Total rotation bounded by twice off-diagonal perturbation energy. & \code{Davis1963.lean}: \code{totalRotation_le_two_mul_offDiagonal}; \code{RotationBound.lean}: \code{rotation_le_two_mul_offDiag}. Fully proved. \\
+Theorem 5.1, sine form & Sharp product inequality equivalent to $\sin2\theta$. & \code{Davis1963.lean}: \code{sinTwoTheta_eigenvector_product_le}; \code{RotationSharp.lean}: \code{sin_two_theta_le_of_mem}, \code{sin_two_theta_le}; sharp model in \code{DavisKahanTheory/Sharpness.lean}. Fully proved. \\
+Theorem 5.1, tangent form & Vanishing diagonal blocks imply the stronger $\tan2\theta$ estimate. & \code{Davis1963.lean}: \code{tanTwoTheta_eigenvector_product_le}; \code{RotationSharp.lean}: \code{tan_two_theta_le_of_mem}, \code{tan_two_theta_le}; sharp model in \code{DavisKahanTheory/Sharpness.lean}. Fully proved. \\
+\end{formalizationmap}
+
+\section{Source-faithfulness and unresolved issues}
+
+\begin{enumerate}[leftmargin=2em]
+\item The transcription appears to preserve all numbered statements, but exact page typography and one comparison phrase following Theorem 3.2 should be checked against a scan before quoting verbatim.
+\item Section IV openly suppresses the reduction from repeated spectrum to simple spectrum and assumes a natural matching. The Lean theorem uses sorted eigenvalues and explicit separation hypotheses instead of inheriting that omission.
+\item Theorem 1.2 is cited back to the 1958 paper rather than reproved. A source-complete formalization must either import a separately reconstructed 1958 result or give a new proof with explicit attribution.
+\item The source omits the short $\tan2\theta$ derivation and the sharp $2\times2$ examples; both are supplied above and labeled as completions.
+\item The paper's unproved desire for a uniform subspace version of Theorem 5.1 is historical context, not a theorem. Later Davis--Kahan theory supplies operator/subspace forms under appropriately formulated separation hypotheses.
+\end{enumerate}
+
+\begin{thebibliography}{9}
+\bibitem{Davis1963} C. Davis, \emph{The Rotation of Eigenvectors by a Perturbation}, J. Math. Anal. Appl. 6 (1963), 159--173.
+\bibitem{Davis1958} C. Davis, \emph{Separation of two linear subspaces}, Acta Sci. Math. Szeged 19 (1958), 172--187.
+\bibitem{Kato1949} T. Kato, \emph{Upper and lower bounds of eigenvalues}, J. Phys. Soc. Japan 4 (1949), 334--339.
+\bibitem{Horn1954} A. Horn, \emph{Doubly stochastic matrices and the diagonal of a rotation matrix}, Amer. J. Math. 76 (1954), 620--630.
+\bibitem{HoffmanWielandt1953} A. J. Hoffman and H. W. Wielandt, \emph{The variation of the spectrum of a normal matrix}, Duke Math. J. 20 (1953), 37--39.
+\end{thebibliography}
+
+\end{document}
