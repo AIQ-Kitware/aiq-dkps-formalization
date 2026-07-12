@@ -157,7 +157,21 @@ theorem yuWangSamworth_alignedBasis_le
         2 * Real.sqrt 2 *
           min (Real.sqrt d * ‖(B - A).toContinuousLinearMap‖)
             (UnitarilyInvariantNorm.frobenius 𝕜 E (B - A)) / Δ := by
-  sorry
+  obtain ⟨u, v, hu, hv, hspanU, hspanV, hsum⟩ :=
+    exists_aligned_orthonormalBasis hrankU hrankV
+  refine ⟨u, v, hu, hv, hspanU, hspanV, ?_⟩
+  have hsine := yuWangSamworth_sinTheta_le hA hB hU hV hcorr hrankU hΔ hgap
+  have hsnn : (0 : ℝ) ≤ sinThetaFrobenius U V :=
+    (UnitarilyInvariantNorm.frobenius 𝕜 E).nonneg _
+  calc Real.sqrt (∑ i, ‖v i - u i‖ ^ 2)
+      ≤ Real.sqrt (2 * sinThetaFrobenius U V ^ 2) := Real.sqrt_le_sqrt hsum
+    _ = Real.sqrt 2 * sinThetaFrobenius U V := by
+        rw [Real.sqrt_mul (by norm_num : (0 : ℝ) ≤ 2), Real.sqrt_sq hsnn]
+    _ ≤ Real.sqrt 2 * (2 * min (Real.sqrt d * ‖(B - A).toContinuousLinearMap‖)
+          (UnitarilyInvariantNorm.frobenius 𝕜 E (B - A)) / Δ) :=
+        mul_le_mul_of_nonneg_left hsine (Real.sqrt_nonneg 2)
+    _ = 2 * Real.sqrt 2 * min (Real.sqrt d * ‖(B - A).toContinuousLinearMap‖)
+          (UnitarilyInvariantNorm.frobenius 𝕜 E (B - A)) / Δ := by ring
 
 /-- Rank-one/sign-aligned eigenvector corollary.
 
