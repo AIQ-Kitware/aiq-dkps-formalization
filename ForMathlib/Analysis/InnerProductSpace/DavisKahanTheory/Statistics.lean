@@ -73,6 +73,20 @@ theorem yuWangSamworth_sinTheta_le
         (UnitarilyInvariantNorm.frobenius 𝕜 E (B - A)) / Δ := by
   sorry
 
+/-- A spectral subspace of an eigenbasis reduces the operator: it is spanned by
+eigenvectors, each of which maps to a scalar multiple of itself. -/
+theorem reduces_specSubspace {n : ℕ} {B : E →ₗ[𝕜] E} (hB : B.IsSymmetric)
+    (hn : finrank 𝕜 E = n) (p : Fin n → Prop) :
+    Reduces B (specSubspace (hB.eigenvectorBasis hn) p) := by
+  intro x hx
+  refine Submodule.span_induction ?_ ?_ ?_ ?_ hx
+  · rintro y ⟨i, rfl⟩
+    rw [hB.apply_eigenvectorBasis hn (i : Fin n)]
+    exact Submodule.smul_mem _ _ (Submodule.subset_span ⟨i, rfl⟩)
+  · rw [map_zero]; exact Submodule.zero_mem _
+  · intro a b _ _ ha hb; rw [map_add]; exact Submodule.add_mem _ ha hb
+  · intro c a _ ha; rw [map_smul]; exact Submodule.smul_mem _ c ha
+
 /-- Arbitrary contiguous population eigenblock.
 
 Lean proof route for a weaker agent:
@@ -96,7 +110,10 @@ theorem yuWangSamworth_intervalBlock_le
     sinThetaFrobenius U V ≤
       2 * min (Real.sqrt (finrank 𝕜 U) * ‖(B - A).toContinuousLinearMap‖)
         (UnitarilyInvariantNorm.frobenius 𝕜 E (B - A)) / Δ := by
-  sorry
+  obtain ⟨n, hn, p, -, hVp⟩ := id hcorr
+  refine yuWangSamworth_sinTheta_le hA hB ?_ ?_ hcorr rfl hΔ hgap
+  · rw [hUeq]; exact reduces_spectralSubspace A (Set.Icc a b)
+  · rw [hVp]; exact reduces_specSubspace hB hn p
 
 /-- Procrustes-aligned orthonormal bases.
 
