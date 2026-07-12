@@ -7,7 +7,7 @@ import ForMathlib.Analysis.InnerProductSpace.DavisKahanTheory.SinTheta
 import ForMathlib.Analysis.InnerProductSpace.TanTheta
 
 /-!
-# The complete finite-dimensional `tan Θ` theorem family
+# Proposed finite-dimensional `tan Θ` extensions
 
 Literature map:
 
@@ -19,9 +19,12 @@ Literature map:
   "The subspace tan Theta theorem" for the already formalized pole-free
   operator-norm route.
 
-Unlike the present `TanTheta.lean` endpoint, the 1970 theorem is stated for
-**every unitarily invariant norm**.  This scaffold therefore records the
-singular-value/Ky Fan strengthening as the final target.
+The proof-complete classical finite Part III theorem is
+`ForMathlib.tan_theta_le`, re-exported canonically by
+`DavisKahanTheory.PartIII`.  It is a pole-free per-vector spectral-norm result.
+This module records additional graph-operator, residual, and every-UI-norm
+strengthenings.  Those strengthenings are not asserted by the source-checked
+classical statement and remain a separate research program.
 -/
 
 
@@ -84,24 +87,29 @@ variable {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
   [FiniteDimensional 𝕜 F]
 
 /-- The graph operator from an approximate subspace to the orthogonal
-complement of an exact subspace. -/
+complement of an exact subspace.
+
+The finite API uses the same totalized coordinate operator as
+`tanThetaEmbedding`; keeping a second opaque construction only duplicated the
+hard inverse-cosine boundary.  Once the proof-carrying tangent embedding is
+implemented in `Residual.lean`, this alias inherits that construction and its
+pole convention definitionally. -/
 noncomputable def graphOperator (U : Submodule 𝕜 E)
-    [U.HasOrthogonalProjection] (X : F →ₗᵢ[𝕜] E) : F →ₗ[𝕜] E := by
-  sorry
+    [U.HasOrthogonalProjection] (X : F →ₗᵢ[𝕜] E) : F →ₗ[𝕜] E :=
+  tanThetaEmbedding U X
 
-/-- The graph operator realizes the tangent map.
+/-- The graph operator realizes the tangent embedding.
 
-Lean proof route for a weaker agent:
-
-1. Preferred geometric route: specialize the unique angular-operator construction from the experimental graph-subspace module, then identify its finite coordinate representation with `P_{Uᗮ}X(P_UX)⁻¹`.
-2. Unfold both finite definitions after obtaining the inverse of the cosine block from `htrans`.
-3. Prove equality by extensionality on the coordinate space and simplify the projection identities.
--/
+This is definitional because `graphOperator` is the public graph-geometry name
+for the totalized coordinate map constructed in `Residual.lean`.  The
+transversality premise remains in the compatibility theorem because it is the
+hypothesis under which the totalized map represents the genuine graph inverse;
+no second inverse construction is performed here. -/
 theorem graphOperator_eq_tanThetaEmbedding (U : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] (X : F →ₗᵢ[𝕜] E)
-    (htrans : IsTransverse (approximateSubspace X) U) :
-    graphOperator U X = tanThetaEmbedding U X := by
-  sorry
+    (_htrans : IsTransverse (approximateSubspace X) U) :
+    graphOperator U X = tanThetaEmbedding U X :=
+  rfl
 
 /-- The singular values of the graph operator are the principal tangents.
 

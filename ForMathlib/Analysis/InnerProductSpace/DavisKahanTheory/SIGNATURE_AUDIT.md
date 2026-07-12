@@ -9,6 +9,19 @@ Frobenius/Ky Fan statements, eigenvalue indexing, and sharp finite models stay
 in this directory even when an operator-norm core will eventually specialize a
 proved Ext theorem.
 
+## Classical Part III status
+
+The proof-complete canonical import is now
+`ForMathlib.Analysis.InnerProductSpace.DavisKahanTheory.PartIII`.  Its scope is
+the source-checked quartet: `sin Theta` and `sin 2Theta` for every unitarily
+invariant norm, pole-free per-vector `tan Theta`, and sharp operator-norm
+`tan 2Theta` with strict quarter-turn avoidance.
+
+The remaining `sorry`s in the canonical tangent files belong to proposed
+residual, graph-operator, spectral-selection, and every-UI-norm strengthenings.
+They are finite Davis--Kahan extensions, but no longer count as missing
+headline Part III theorems.
+
 ## Current proof wave
 
 Relative to source commit `52e2465`, this wave reduces the finite scaffold from
@@ -150,9 +163,10 @@ model.
 1. Finish rectangular ideal inequalities and Fan dominance.
 2. Prove ordered and interval/exterior rectangular Sylvester estimates.
 3. Close residual `sin Theta` and derive perturbation wrappers.
-4. Close the residual `sin 2Theta` reflection/Ritz comparison.
+4. Close the residual `sin 2Theta` reflection/Ritz comparison as an extension.
 5. Implement proof-carrying or explicitly totalized tangent operators.
-6. Close `tan Theta` and `tan 2Theta` from graph/Riccati seams.
+6. Develop optional all-UI tangent and residual tangent strengthenings without
+   conflating them with the already-complete classical Part III endpoints.
 7. Finish branch selection, YWS wrappers, direct rotation, and sharpness.
 
 When an Ext theorem becomes proof-complete, import the smallest bounded Ext

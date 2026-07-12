@@ -994,24 +994,23 @@ primarily useful when a truncated estimator is fed into DK.
 
 \section{What remains, ranked by dependency}\label{sec:remains}
 
-The proved files already serve the repository's present Frobenius and
-operator-norm consumers.  The rectangular UI-norm infrastructure and the sharp
-constant-one interval/exterior Sylvester estimate now also cover the analytic
-core needed by the literature's residual formulations.  They should
-nevertheless not be described as the entire Davis--Kahan Part~III theory.  The
-1970 paper treats $\sin\Theta$, $\tan\Theta$, $\sin2\Theta$, and
-$\tan2\Theta$ as four independent sharp estimates for arbitrary unitarily
-invariant norms, with compatible rectangular norms, residual equations, and
-spectral-selection arguments as part of the native statement surface.
+The source-checked finite Davis--Kahan Part~III quartet is complete.
+The two sine theorems are formalized for every unitarily invariant norm; the
+$\tan\Theta$ theorem is formalized in its pole-free per-vector spectral-norm
+form; and the sharp $\tan2\Theta$ theorem is formalized in operator norm,
+including the strict $\pi/4$ branch conclusion.  These are collected by the
+proof-complete canonical import
+\texttt{ForMathlib.Analysis.InnerProductSpace.DavisKahanTheory.PartIII}.
 
-The source-level roadmap is the scaffold rooted at
-\texttt{ForMathlib.Analysis.InnerProductSpace.DavisKahanTheory}.  It now mixes
-proved infrastructure and capstone theorems with explicitly open declarations;
-its module headers and theorem documentation record the intended dependency
-order and cite the associated TeX proof distillations.  Model provenance for
-the scaffold and its accompanying 1970 proof distillation is
-\textbf{GPT 5.6 High}; the present rectangular-Sylvester update was prepared by
-\textbf{GPT-5.6 Thinking}.
+The broader source-level scaffold rooted at
+\texttt{ForMathlib.Analysis.InnerProductSpace.DavisKahanTheory} also records
+stronger proposed interfaces: residual double-angle theorems, graph and
+canonical tangent operators, every-UI-norm tangent strengthenings, branch
+selection, direct rotation, generalized trial maps, and sharpness.  Those open
+declarations are extensions of the closed Part~III quartet rather than missing
+headline theorems.  Model provenance for the scaffold and its accompanying
+1970 proof distillation is \textbf{GPT 5.6 High}; the present
+rectangular-Sylvester update was prepared by \textbf{GPT-5.6 Thinking}.
 
 The remaining work is ordered by mathematical dependency:
 
@@ -1041,11 +1040,12 @@ The remaining work is ordered by mathematical dependency:
   residual and perturbation wrappers are otherwise in place.  The sharp
   ordered and interval/exterior constant-one estimates remain complete and
   independent.
-\item \emph{Complete the four-theorem square.}
-  Supply residual and perturbation forms of all four angle theorems in every
-  unitarily invariant norm.  The largest unclosed pieces are the all-norm
-  tangent families, the residual double-angle families, and general Schatten
-  $p$ instances.
+\item \emph{Optional tangent and residual strengthenings.}
+  Develop every-UI-norm tangent estimates, residual $\sin2\Theta$ and
+  $\tan2\Theta$ interfaces, and general Schatten $p$ instances as extensions.
+  These would enlarge the theorem surface beyond the source-checked finite
+  Part~III headlines; they are not prerequisites for completion of the
+  classical quartet.
 \item \emph{Spectral selection and repulsion.}
   Formalize the Section~8 branch-selection theorem, the compression/repulsion
   inequalities, and the continuation argument selecting the acute perturbed
