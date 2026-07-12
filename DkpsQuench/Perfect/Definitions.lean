@@ -145,10 +145,13 @@ population mean `perspectiveMean Pf ψ`, and every direction has second moment a
 least `κ`.  This is the genuine identifiability assumption that replaces the
 current stage-by-stage eigenvalue-floor hypothesis.
 
-The compactness/measurability assumptions in the spectral module will supply
-integrability.  The proof agent should not add a second spectral-floor premise
-to downstream capstones; this structure is meant to be the sole lower-spectrum
-input. -/
+Because Mathlib defines a nonintegrable Bochner integral to be zero, the
+positive lower bound itself forces integrability of every squared linear form
+with nonzero coefficient vector; polarization then recovers the coordinate
+products needed for covariance algebra.  Compactness and measurability remain
+necessary for the probabilistic concentration layer, not for the deterministic
+entrywise-to-quadratic transfer.  Downstream capstones should not add a second
+spectral-floor premise: this structure is the sole lower-spectrum input. -/
 structure PerspectiveNondegeneracy
     {d : Nat}
     (Pf : Measure (Model Q X))

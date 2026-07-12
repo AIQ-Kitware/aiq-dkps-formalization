@@ -15,7 +15,7 @@ augmentation, and eigenvalue comparison steps so no single proof must solve the
 whole argument.
 -/
 
-import DkpsQuench.Perfect.PopulationGeometry
+import DkpsQuench.Perfect.CovarianceFloor
 
 set_option linter.mathlibStandardSet false
 
@@ -47,14 +47,6 @@ universe u v wr
 variable {Q : Type u} [DecidableEq Q]
 variable {X : Type v} [MeasurableSpace X]
 variable {Ωref : Type wr} [MeasurableSpace Ωref]
-
-/-- Population covariance matrix around the center supplied by the
-nondegeneracy certificate. -/
-noncomputable def perspectiveCovarianceMatrix
-    {d : Nat}
-    (Pf : Measure (Model Q X))
-    (ψ : Model Q X → Vec d) (center : Vec d) : DisMat d :=
-  fun i j => ∫ f, (ψ f - center) i * (ψ f - center) j ∂Pf
 
 /-- Stage-`n` reference perspective configuration. -/
 def referencePerspectiveConfig
@@ -639,12 +631,6 @@ theorem highProb_referenceCoordinateProductMean_of_compact_iid
     (Eventually.of_forall fun _ => zero_le)
     (eventually_atTop.mpr ⟨1, fun n hn => hcompl n hn⟩)
 
-/-- A safe entrywise covariance tolerance.  The `d+1` denominator avoids a
-special zero-dimensional branch while remaining small enough for the finite
-entrywise-to-quadratic-form estimate. -/
-noncomputable def covarianceEntryTolerance (d : Nat) (κ : Real) : Real :=
-  κ / (4 * (d + 1))
-
 /-- Measurable finite-dimensional event that empirical reference covariance is
 entrywise close to population covariance. -/
 def referenceCovarianceEvent
@@ -1048,50 +1034,6 @@ theorem highProb_referenceCovarianceEvent_of_compact_iid
       hcompact f_ref hiid center hcenter a b hε)
     (fun a b n => measurableSet_referenceCovarianceEntryEvent Pf ψ hψ f_ref
       hiid.measurable center ε n a b)
-
-/-- Entrywise covariance closeness preserves a uniform quadratic-form floor.
-
-Suggested proof route:
-
-* expand `xᵀ(A-B)x` as a double finite sum;
-* bound it by `d * ε * ‖x‖₁²`, then use the finite-dimensional
-  `ℓ¹ ≤ √d ℓ²` estimate, or use the repository's entrywise-to-operator bridge;
-* the definition `covarianceEntryTolerance` leaves enough slack to retain at
-  least half of the population floor.
-
-Keep this lemma independent of random sampling.
-
-Implementation recipe (execute in this order):
-1. Split the target quadratic form as population quadratic form plus the error
-   `xᵀ(A-C)x`, with `C := perspectiveCovarianceMatrix ...`.
-2. Apply `Hnondeg.quadratic_floor` to the population part; first prove the
-   integral quadratic form equals `∑ a,∑ b, x a * C a b * x b` by expanding the
-   finite inner-product square and interchanging finite sums with the integral.
-3. Bound the absolute error by
-   `ε * (∑ a, |x a|)^2` using `hclose a b` and finite sum triangle inequalities.
-4. Use Cauchy--Schwarz to show
-   `(∑ a, |x a|)^2 ≤ d * ‖x‖^2`; it is acceptable to use the looser
-   `(d+1) * ‖x‖^2` matching `covarianceEntryTolerance`.
-5. Substitute `ε = κ/(4*(d+1))` and prove the error is at most
-   `(κ/2) * ‖x‖^2`; handle `d=0` by simp.
-6. Combine lower bounds with `linarith`/`nlinarith`.
-7. Search for an existing entrywise-to-operator or Frobenius bound first; if it
-   yields the same half-floor, use it instead of rebuilding step 3.
--/
-theorem empiricalCovariance_quadratic_floor_of_entrywise
-    {d : Nat}
-    (Pf : Measure (Model Q X))
-    (ψ : Model Q X → Vec d)
-    {κ : Real}
-    (Hnondeg : PerspectiveNondegeneracy Pf ψ κ)
-    (A : DisMat d)
-    (hclose : EntrywiseClose A
-      (perspectiveCovarianceMatrix Pf ψ (perspectiveMean Pf ψ))
-      (covarianceEntryTolerance d κ))
-    (x : Vec d) :
-    (κ / 2) * ‖x‖ ^ 2 ≤
-      ∑ a, ∑ b, x a * A a b * x b := by
-  sorry
 
 /-- Convert the entrywise covariance event into the quadratic-form
 floor needed by the reference-scatter theorem.

@@ -180,19 +180,26 @@ hypothesis. & Deliberate implementation choice \\
 \bottomrule
 \end{longtable}
 
-The main remaining paper-facing burden is the uniform lower spectral bound.  It
-is a genuine identifiability condition for the spectral estimator rather than a
-proof-engineering artifact.  The upper spectral envelope and the eventual rate
-certificate are also still supplied uniformly over stages and targets.
+The genuine remaining paper-facing assumption is a population covariance
+floor; it is an identifiability condition for the spectral estimator rather than
+a proof-engineering artifact.  The formalization now proves the first
+deterministic reduction in that chain: entrywise closeness to the population
+covariance preserves at least half of its quadratic-form floor.  This theorem
+requires no separate compactness, measurability, or integrability premise;
+integrability of the required coordinate products is recovered from the
+positive nondegeneracy certificate by polarization.  The remaining work is to
+transport this floor through sample centering, the rectangular scatter--Gram
+spectral bridge, target augmentation, and the measurable high-probability event.
 
 
 \paragraph{Role in the Perfect Quench scaffold.}
 The completion program replaces stagewise global spectral assumptions by a
 high-probability certificate derived from a population covariance floor and iid
-reference sampling.  It also supplies an explicit conservative response
-schedule.  These changes reduce the assumptions of the Quench composition; the
-proved 2025 concentration statements remain intact until the new event-level
-spectral bridge is completed.
+reference sampling.  The deterministic covariance perturbation seam is now
+closed in \code{DkpsQuench.Perfect.CovarianceFloor}; the random covariance event
+and the later scatter/Gram eigenvalue transfers remain.  The explicit response
+schedule is already proved.  These changes reduce the assumptions of the
+Quench composition without altering the proved 2025 concentration statements.
 
 \section{Helm et al. (2025): statistical inference transfer}
 
@@ -310,9 +317,10 @@ Composition gap \\
 \section{Perfect Quench completion scaffold}
 
 The repository now contains an executable proof scaffold under
-\code{DkpsQuench/Perfect}.  Its 61 open proof bodies are split so the count
-reflects the amount of mathematical work rather than hiding the program in one
-final declaration.
+\code{DkpsQuench/Perfect}.  Twelve open proof bodies remain after the
+polynomial-cover theorem and the deterministic covariance-floor transfer were
+completed.  The count below is the live source count, not an estimate derived
+from the difficulty-ranking document.
 
 \begin{longtable}{>{\raggedright\arraybackslash}p{0.22\textwidth}
                   >{\raggedright\arraybackslash}p{0.10\textwidth}
@@ -322,37 +330,40 @@ final declaration.
 Track & Open proofs & New mathematical content & Hypotheses removed from the current bridge \\
 \midrule
 \endhead
-Population geometry & 4 & Centering, exact Euclidean double centering, and the
-augmented radial identity. & Separate configuration, Gram, radial, PSD, and rank
-inputs collapse to one response-distance realization. \\
+Population geometry & 0 & Centering, exact Euclidean double centering, and the
+augmented radial identity are proved. & Separate configuration, Gram, radial,
+PSD, and rank inputs collapse to one response-distance realization. \\
 \addlinespace
-Spectral regularity & 15 & Coordinate mean/product weak laws, covariance algebra,
-scalar-event measurability, fixed-dimensional
-covariance weak law, entrywise-to-quadratic transfer, reference scatter, target
-augmentation, and a trace ceiling. & Global floor and ceiling assumptions over
-every reference outcome are replaced by one population covariance
-nondegeneracy condition and a measurable high-probability event. \\
+Spectral regularity & 4 & The coordinate weak laws, covariance algebra,
+measurability, fixed-dimensional covariance event, and
+entrywise-to-quadratic transfer are proved.  The remaining proofs are the
+reference scatter lower bound, the rectangular scatter--Gram eigenvalue bridge,
+target augmentation, and construction of the high-probability spectral
+certificate. & Global floor and ceiling assumptions over every reference
+outcome are replaced by one population covariance nondegeneracy condition and a
+measurable high-probability event. \\
 \addlinespace
-Raw responses & 9 & Independent product probability space, concrete replicate
-averages, second moments after random model selection, and a finite-class union
-bound. & Abstract response means, manual moment events, and per-index
-measurability obligations. \\
+Raw responses & 0 & The independent product probability space, concrete
+replicate averages, random-model second moments, and finite-class union bound
+are proved. & Abstract response means, manual moment events, and per-index
+measurability obligations are removed. \\
 \addlinespace
-Compactness and regularity & 8 & Finite and compact response envelopes,
-pathwise-raw to sample/population Lipschitz bridges, and polynomial Euclidean
-covering numbers. & Explicit population bounds, selected finite nets, entropy
-exponents, covering constants, and separately supplied regularity certificates.
+Compactness and regularity & 1 & Finite/compact response envelopes and
+polynomial Euclidean covering numbers are proved.  Only the derivation of
+population-mean Lipschitzness from pathwise raw-response Lipschitzness remains.
+& Explicit population bounds, selected finite nets, entropy exponents, covering
+constants, and separately supplied regularity certificates are removed. \\
+\addlinespace
+Infinite-class concentration & 0 & Finite stage nets, measurable finite
+subevents, entropy union bounds, and deterministic Lipschitz extension are
+proved. & The finite-model restriction or an assumed uniform concentration
+event is removed. \\
+\addlinespace
+Explicit schedules & 0 & Conservative polynomial tolerances, canonical
+shrinking-net radii, entropy-aware replicate budgets, and all limit calculations
+are proved. & Caller-selected nets, entry rates, smallness inequalities, polar
+bookkeeping, and the full \code{GrowingConfigControl} certificate are removed.
 \\
-\addlinespace
-Infinite-class concentration & 8 & Finite stage nets, measurable finite
-subevents, entropy union bounds, and deterministic Lipschitz extension. & The
-finite-model restriction or an assumed uniform concentration event. \\
-\addlinespace
-Explicit schedules & 10 & Conservative polynomial tolerance, canonical
-shrinking-net radius, entropy-aware replicate budgets, and all limit
-calculations exposed. & Caller-selected nets, entry rates, smallness
-inequalities, polar bookkeeping, and the full
-\code{GrowingConfigControl} certificate. \\
 \addlinespace
 Spectral composition & 3 & Intersection of response and spectral subevents with
 the existing proved pairwise CMDS perturbation theorem. & Global spectral facts
@@ -384,17 +395,18 @@ program.
 
 The scaffold defines the remaining frontier precisely:
 \begin{enumerate}
-\item complete the exact population double-centering identities;
-\item derive high-probability spectral floor and ceiling events from compact iid
-      references and population covariance nondegeneracy;
-\item connect raw iid response arrays to the augmented response event on an
-      independent product probability space;
-\item derive population response envelopes, raw-to-mean regularity, and
-      polynomial finite nets from finiteness or compactness;
-\item derive infinite-class uniform concentration from those finite nets;
-\item discharge the conservative polynomial schedule and event-level spectral
-      composition;
-\item assemble the finite, compact-infinite, and all-query capstones.
+\item rewrite the reference empirical covariance quadratic form as the average
+      of squared projections of the sample-centered reference configuration;
+\item transport that feature-space floor to the first $d$ sorted eigenvalues
+      of the centered reference Gram matrix through a reusable rectangular
+      scatter--Gram spectral theorem;
+\item prove that target augmentation/recentering preserves the lower floor,
+      then combine it with the already-proved trace ceiling to assemble the
+      measurable high-probability spectral certificate;
+\item derive population-mean Lipschitzness from the pathwise raw-response
+      Lipschitz hypothesis;
+\item discharge the three event-level spectral-composition proofs;
+\item assemble the four finite, compact-infinite, and all-query capstones.
 \end{enumerate}
 
 No cleaner-only spectral refactor is on this list.  Once these declarations are
