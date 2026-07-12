@@ -258,7 +258,14 @@ theorem kyFan_sinTwoTheta_le
     [V.HasOrthogonalProjection] (hU : Reduces A U) (hV : Reduces B V)
     {δ : ℝ} (hδ : 0 < δ) (hgap : InternalGap A U δ) (k : ℕ) :
     δ * kyFanSum k (sinTwoAngleOperator U V) ≤ 2 * kyFanSum k (B - A) := by
-  sorry
+  let NK : UnitarilyInvariantNorm 𝕜 E :=
+    (RectangularUnitarilyInvariantNorm.kyFan
+      (𝕜 := 𝕜) (E := E) (F := E) k).toSquare
+  have h := sinTwoTheta_perturbation_le NK hA hB hU hV hδ hgap
+  simpa [NK, RectangularUnitarilyInvariantNorm.toSquare,
+    RectangularUnitarilyInvariantNorm.kyFan_apply,
+    RectangularUnitarilyInvariantNorm.rectangularKyFanSum,
+    kyFanSum_eq_sum_fin] using h
 
 end DavisKahanTheory
 end ForMathlib

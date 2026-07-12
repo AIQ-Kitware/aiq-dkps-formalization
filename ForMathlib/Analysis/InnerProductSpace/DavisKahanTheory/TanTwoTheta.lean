@@ -363,7 +363,15 @@ theorem kyFan_tanTwoTheta_le
     (k : ℕ) :
     AvoidsQuarterTurn U V ∧
       δ * kyFanSum k (tanTwoAngleOperator U V) ≤ 2 * kyFanSum k (B - A) := by
-  sorry
+  let NK : UnitarilyInvariantNorm 𝕜 E :=
+    (RectangularUnitarilyInvariantNorm.kyFan
+      (𝕜 := 𝕜) (E := E) (F := E) k).toSquare
+  have h := tanTwoTheta_perturbation_le NK hA hB hU hV hoff hδ hgap
+  refine ⟨h.1, ?_⟩
+  simpa [NK, RectangularUnitarilyInvariantNorm.toSquare,
+    RectangularUnitarilyInvariantNorm.kyFan_apply,
+    RectangularUnitarilyInvariantNorm.rectangularKyFanSum,
+    kyFanSum_eq_sum_fin] using h.2
 
 end DavisKahanTheory
 end ForMathlib
