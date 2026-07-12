@@ -1,6 +1,6 @@
 {
   "version": "2026-07-12-quench-complete-and-transcription-policy",
-  "purpose": "Canonical, machine-checked inventory of works whose definitions, theorem families, or proof architecture are directly formalized, actively scaffolded, or inherited by the DKPS and Perfect Quench development.",
+  "purpose": "Canonical, machine-checked inventory of works whose definitions, theorem families, or proof architecture are directly formalized, actively scaffolded, or inherited by the DKPS and raw-response Quench development.",
   "scope_rule": [
     "Include every DKPS-lineage paper whose definitions or theorems are used by a paper-facing Lean namespace.",
     "Include primary historical papers for theorem families explicitly formalized or actively scaffolded under ForMathlib.",
@@ -38,7 +38,7 @@
       "target_note": "HelmEtAl2020_partition_similarity.tex",
       "repo_evidence": [
         "Helm2025/prose/statistical_inference_black_box_generative_models_dkps.md",
-        "DkpsQuench/prose/quench-tex-src/biblio.bib"
+        "DkpsQuench2026/prose/quench-tex-src/biblio.bib"
       ],
       "existing_assets": [],
       "scope": "The partition/task-similarity framework that precedes the data-kernel model-comparison program.",
@@ -90,7 +90,7 @@
       "target_note": "HelmPriebeYang2023_statistical_turing_test.tex",
       "repo_evidence": [
         "Helm2025/prose/statistical_inference_black_box_generative_models_dkps.md",
-        "DkpsQuench/prose/quench-tex-src/biblio.bib"
+        "DkpsQuench2026/prose/quench-tex-src/biblio.bib"
       ],
       "existing_assets": [],
       "scope": "The statistical pattern-recognition framing for context-conditioned human/model distribution comparison that precedes response-based DKPS evaluation.",
@@ -257,24 +257,23 @@
       "group": "DKPS lineage and target papers",
       "tier": "primary",
       "priority": "P0",
-      "formalization_status": "formal theorem family complete, including finite, compact-infinite, and all-query Perfect Quench capstones",
+      "formalization_status": "formal theorem family complete, including finite, compact-infinite, and all-query raw-response Quench capstones",
       "distilled_status": "transcription_sufficient",
       "primary_url": "https://arxiv.org/abs/2605.07096",
       "target_note": "HelmJohnsonPriebe2026_quench.tex",
       "repo_evidence": [
-        "DkpsQuench/README.md",
-        "DkpsQuench/Theorem2.lean",
-        "DkpsQuench/QueryEfficiency.lean",
-        "DkpsQuench/Perfect/Capstone.lean",
-        "DkpsQuench/Perfect/README.md",
+        "DkpsQuench2026/README.md",
+        "DkpsQuench2026/Paper/Theorem2.lean",
+        "DkpsQuench2026/Paper/QueryEfficiency.lean",
+        "DkpsQuench2026/QueryEfficiency/AllQueries.lean",
         "papers/DKPS-formalized-vs-literature.tex"
       ],
       "existing_assets": [
-        "DkpsQuench/prose/quench-icml-nonanon_transcription.md",
-        "DkpsQuench/prose/quench-tex-src/main_icml.tex",
+        "DkpsQuench2026/prose/quench-icml-nonanon_transcription.md",
+        "DkpsQuench2026/prose/quench-tex-src/main_icml.tex",
         "papers/DKPS-formalized-vs-literature.tex"
       ],
-      "scope": "Theorem 2, its literal tie-averaged nearest-neighbor estimator, the fixed-subset and all-budget query-efficiency predicates, and the stronger raw-response Perfect Quench theorem family.",
+      "scope": "Theorem 2, its literal tie-averaged nearest-neighbor estimator, the fixed-subset and all-budget query-efficiency predicates, and the stronger raw-response Quench theorem family.",
       "missing_work": "No separate distilled note is currently planned: the exact source-order transcription is retained, while papers/DKPS-formalized-vs-literature.tex supplies the modern mathematical reconstruction, discrepancy audit, and hypothesis ledger. Revisit only if the source theorem changes materially.",
       "role": "direct_target",
       "bibliographic_status": "verified"
@@ -595,7 +594,7 @@
       ],
       "existing_assets": [],
       "scope": "Best low-rank approximation via singular values.",
-      "missing_work": "Treat as related upstream work; it is not required for Perfect Quench but is a natural endpoint of the same singular-system API.",
+      "missing_work": "Treat as related upstream work; it is not required for raw-response Quench but is a natural endpoint of the same singular-system API.",
       "role": "related_upstream",
       "bibliographic_status": "verified"
     },

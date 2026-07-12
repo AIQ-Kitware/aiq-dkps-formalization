@@ -85,7 +85,7 @@ def render_markdown(manifest: dict) -> str:
     lines = [
         "# DKPS source-paper index",
         "",
-        "Generated from `source_manifest.json`. This is the canonical inventory of works whose definitions, theorem families, or proof architecture are directly formalized, actively scaffolded, or inherited by the DKPS and Perfect Quench development.",
+        "Generated from `source_manifest.json`. This is the canonical inventory of works whose definitions, theorem families, or proof architecture are directly formalized, actively scaffolded, or inherited by the DKPS and raw-response Quench development.",
         "",
         "The index deliberately separates a paper's **formalization role** from the state of its local literature asset. A transcription is normally not a proof-level reconstruction; an exact short-paper transcription may be marked sufficient only when a maintained discrepancy ledger performs the modernization and theorem mapping. A modern textbook never silently replaces a primary source.",
         "",
@@ -216,7 +216,7 @@ def render_tex(manifest: dict) -> str:
         r"\begin{document}",
         r"\maketitle",
         r"\section*{Purpose}",
-        "This document inventories the works whose definitions, theorem families, or proof architecture are directly formalized, actively scaffolded, or inherited by the DKPS and Perfect Quench development. It is an index, not yet a corpus of completed proof reconstructions.",
+        "This document inventories the works whose definitions, theorem families, or proof architecture are directly formalized, actively scaffolded, or inherited by the DKPS and raw-response Quench development. It is an index, not yet a corpus of completed proof reconstructions.",
         r"\section*{Current state}",
         f"The inventory contains {len(works)} works: {kinds['paper']} papers, {kinds['book']} books, and {kinds['monograph']} monograph. "
         f"There are {statuses['complete']} completed source-order reconstructions, {statuses['transcription_sufficient']} intentionally sufficient exact transcription(s), {statuses['core_note']} broad core notes, {statuses['transcription_only'] + statuses['source_text_only']} transcription/source-text assets awaiting reconstruction, and {statuses['missing']} works with no local distilled note.",

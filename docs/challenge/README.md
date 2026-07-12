@@ -30,7 +30,7 @@ certifies its whole proof tree, so supporting lemmas need not be listed.
   **axiom-audit leaderboard only** (its matrix-valued measurability statement is
   not cleanly Mathlib-only expressible, so it has no comparator conformance).
 
-The four DKPS-family papers (`Acharyya2024`, `Acharyya2025`, `DkpsQuench`,
+The four DKPS-family papers (`Acharyya2024`, `Acharyya2025`, `DkpsQuench2026`,
 `Helm2025`) are the repo's end states. They are documented in `Challenge/README.md`
 and each library's `README.md`, and were verified axiom-clean, but they are **not**
 comparator challenges: their statements are inherently in each paper's own

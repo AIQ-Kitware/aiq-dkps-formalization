@@ -28,7 +28,7 @@ point where:
    statement is worse than no theorem, because downstream code type-checks
    against a lie.
 3. The deterministic + probabilistic reduction chains are fully proved, and the
-   downstream consumers (`DkpsQuench/AcharyyaBridge`, `Helm2025/AcharyyaBridge`)
+   downstream consumers (`DkpsQuench2026/Geometry/AlignedCMDS.lean`, `Helm2025/AcharyyaBridge`)
    are re-wired to the hardened statements.
 4. Paper-agnostic lemmas land in `WellKnown.lean`-style files, Mathlib-ready.
 
@@ -39,7 +39,7 @@ point where:
   and are satisfiable in the paper's setting (no vacuous `Prop` struct fields,
   no `1/(u+1)` placeholder rates).
 - One logical commit per work package (WP). Do not commit unrelated dirty files
-  (`DkpsQuench/Basic.lean`, `Helm2025/Basic.lean` are dirty from other
+  (`DkpsQuench2026/Core/Definitions.lean`, `Helm2025/Basic.lean` are dirty from other
   work — leave them out).
 - Failed proof strategies get a dated entry in the graveyard, not silence.
 - Provenance lines in docstrings (`Formalized by <model>`).
@@ -159,7 +159,7 @@ File: `Acharyya2025/Weyl.lean`.
 - Restate #5/#6 with `∃ W ∈ O(d)` alignment.
 - Re-derive `quench_style_uniform_embedding_error` and the
   `dkps_config_concentration_from_response_mean_hp` chain from hardened
-  versions; update `DkpsQuench/AcharyyaBridge` + `Helm2025/AcharyyaBridge`
+  versions; update `DkpsQuench2026/Geometry/AlignedCMDS.lean` + `Helm2025/AcharyyaBridge`
   call-sites if shapes shift.
 
 ### WP7(c) — Configuration assembly: ELEMENTARY DESIGN (2026-06-11)
@@ -298,7 +298,7 @@ componentwise via `ProbabilityTheory.variance` + independence. Paper-agnostic �
       SUPERSEDED scaffold records pointing at proved replacements)
 - [x] Downstream wiring committed (AlignedPipeline.lean: alignedSpectralConfig
       choice-based aligned estimator, TRUE replacement of legacy seam #6,
-      end-to-end response-mean → aligned ConfigError; DkpsQuench
+      end-to-end response-mean → aligned ConfigError; DkpsQuench2026
       quench_uniform_embedding_error_of_aligned_spectral; Helm2025
       alignmentConsistency_of_aligned_spectral — the per-ω-population seam in
       Helm is documented as the halign hypothesis)
@@ -390,7 +390,7 @@ ALL MILESTONES COMPLETE.
   COMMITTED 1473c6e: AlignedPipeline.lean (symmetry plumbing,
   alignedSpectralConfig via Classical.choose, HP aligned-ConfigError theorems
   incl. end-to-end response-mean version),
-  DkpsQuench.quench_uniform_embedding_error_of_aligned_spectral,
+  DkpsQuench2026.quench_uniform_embedding_error_of_aligned_spectral,
   Helm2025.alignmentConsistency_of_aligned_spectral. All four wiring theorems
   audit to [propext, Classical.choice, Quot.sound]. The chain
   iid responses → Chebyshev → dissimilarity → CMDS perturbation → aligned
@@ -424,7 +424,7 @@ ALL MILESTONES COMPLETE.
   (1) Workspace bumped: toolchain v4.28.0-rc1 → v4.31.0-rc2, mathlib
   0e4799ceff90 (Feb 13) → master 476fb97b621c (Jun 11). Breakage fixed in 4
   files (10 errors): `zero_le _` → `zero_le` (argument now implicit;
-  Probability, RawStress ×2); DkpsQuench/Basic ennreal_inter_bound rewritten
+  Probability, RawStress ×2); DkpsQuench2026/Core/Definitions.lean ennreal_inter_bound rewritten
   cleanly (old ring_nf/decide tactic soup died; note `le_tsub_of_add_le_right`
   and `tsub_add_tsub_comm` do NOT apply to ENNReal — missing AddLeftReflectLE;
   use `ENNReal.le_sub_of_add_le_right`/`ENNReal.sub_add_eq_add_sub`);

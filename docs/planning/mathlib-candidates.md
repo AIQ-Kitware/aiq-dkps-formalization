@@ -98,7 +98,7 @@ generalization (typically ℝ → `RCLike 𝕜`, restating in Mathlib idiom);
 | 11 | Countable restrict-cover measurability: `⋃ₖ sₖ = univ`, each `sₖ` measurable, each `sₖ.restrict g` measurable ⇒ `g` measurable (countable analogue of `measurable_of_restrict_of_restrict_compl`) | `ForMathlib/MeasureTheory/CfcMeasurable.lean` (STAGED, `measurable_of_iUnion_restrict`) | S | `MeasureTheory/MeasurableSpace/Constructions.lean` |
 
 **Update 2026-06-12 (Opus session, `hmeas_spec` discharge):** three new
-measurability candidates (#9–#11) surfaced while discharging the DkpsQuench
+measurability candidates (#9–#11) surfaced while discharging the DkpsQuench2026
 `hmeas_spec` seam.  #9 (`measurable_cfc_comp`) and #11
 (`measurable_of_iUnion_restrict`) are STAGED in
 `ForMathlib/MeasureTheory/CfcMeasurable.lean` (built green, RCLike-where-applicable

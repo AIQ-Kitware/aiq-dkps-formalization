@@ -139,7 +139,7 @@ Library & Formalized role \\
 \midrule
 \file{Acharyya2024} & Raw-stress MDS and asymptotic consistency interfaces. \\
 \file{Acharyya2025} & Finite-sample concentration and CMDS perturbation. \\
-\file{DkpsQuench} & Query-efficiency reduction consuming aligned embedding error. \\
+\file{DkpsQuench2026} & Query-efficiency reduction consuming aligned embedding error. \\
 \file{Helm2025} & Inference-transfer reduction consuming alignment consistency. \\
 \file{ForMathlib} & Reusable spectral, geometric, probability, and measurability lemmas. \\
 \bottomrule
@@ -291,7 +291,7 @@ more primitive response-level assumptions.
 
 \subsection{Downstream reductions as integration tests}
 
-The \file{DkpsQuench} and \file{Helm2025} libraries are best viewed in this
+The \file{DkpsQuench2026} and \file{Helm2025} libraries are best viewed in this
 paper as integration tests for the mathematical interfaces.  The query-efficiency
 layer consumes a high-probability uniform embedding-error event; the Acharyya
 bridge supplies this event from aligned spectral concentration, and further
@@ -331,7 +331,7 @@ than as a substitute for verification.
 
 The evidence currently available is heterogeneous.  Some files contain explicit
 provenance comments.  For example, \file{Helm2025/Basic.lean} and
-\file{DkpsQuench/Basic.lean} record that their initial scaffolds were generated
+\file{DkpsQuench2026/Core/Definitions.lean} record that their initial scaffolds were generated
 by Harmonic's Aristotle.  Many Acharyya scaffold or bridge files contain comments
 such as ``Formalized by Codex 5.5 High, per user-observed model label.''  The
 Acharyya READMEs record that the spectral bridge, aligned pipeline, rate chain,

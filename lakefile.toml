@@ -1,9 +1,9 @@
 name = "aiq_dkps_formalization"
 version = "0.1.0"
 keywords = ["math", "formalization", "DKPS", "MDS", "spectral-perturbation"]
-defaultTargets = ["ForMathlib", "Acharyya2024", "Acharyya2025", "DkpsQuench", "Helm2025"]
+defaultTargets = ["ForMathlib", "Acharyya2024", "Acharyya2025", "DkpsQuench2026", "Helm2025"]
 
-# Standalone Lean workspace for four DKPS-related theorem developments.
+# Standalone Lean workspace for five DKPS-related theorem developments.
 # The libraries share one Mathlib checkout/build and are intentionally kept as
 # separate top-level Lean libraries so each paper-facing theorem layer can be
 # built or imported independently.
@@ -29,7 +29,7 @@ name = "Acharyya2024"
 name = "Acharyya2025"
 
 [[lean_lib]]
-name = "DkpsQuench"
+name = "DkpsQuench2026"
 
 [[lean_lib]]
 name = "Helm2025"

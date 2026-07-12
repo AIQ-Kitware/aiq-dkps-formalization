@@ -118,7 +118,7 @@ set or its invariant pair-distance profile.  A fixed representative is available
 only after a uniqueness condition makes it mathematically meaningful.
 
 
-\paragraph{Role in the Perfect Quench scaffold.}
+\paragraph{Role in the raw-response Quench theorem family.}
 The new raw-response track reuses the 2024 matrix-valued sample-mean
 second-moment theorem rather than postulating response means.  It adds an
 independent product probability space for reference and response randomness,
@@ -201,17 +201,17 @@ event is the covariance event intersected with the deterministic dimension
 gate $d \le n$.
 
 
-\paragraph{Role in the Perfect Quench scaffold.}
-The completion program replaces stagewise global spectral assumptions by a
+\paragraph{Role in the raw-response Quench theorem family.}
+The completed theorem family replaces stagewise global spectral assumptions by a
 high-probability certificate derived from a population covariance floor and iid
 reference sampling.  The deterministic covariance perturbation seam is now
-closed in \code{DkpsQuench.Perfect.CovarianceFloor}, and the sample-centered
-quadratic identity is closed in \code{DkpsQuench.Perfect.CenteredCovariance}.
+closed in \code{DkpsQuench2026/Geometry/Covariance.lean}, and the sample-centered
+quadratic identity is closed in \code{DkpsQuench2026/Geometry/CenteredCovariance.lean}.
 The rectangular scatter/Gram eigenvalue transfers are closed in
-\code{DkpsQuench.Perfect.GramSpectrumBridge} on top of the new proved
+\code{DkpsQuench2026/Spectral/GramSpectrum.lean} on top of the new proved
 \code{ForMathlib} rectangular spectral layer, and the spectral-event assembly
 \code{exists\_growingSpectralSubevents\_of\_compact\_iid\_nondegenerate} is
-proved in \code{DkpsQuench.Perfect.SpectralRegularity}.  The explicit response
+proved in \code{DkpsQuench2026/Spectral/Regularity.lean}.  The explicit response
 schedule is already proved.  These changes reduce the assumptions of the
 Quench composition without altering the proved 2025 concentration statements.
 
@@ -260,7 +260,7 @@ necessary eigenvalue-stability condition.  The current formalization takes the
 second route and states the condition explicitly.
 
 
-\paragraph{Role in the Perfect Quench scaffold.}
+\paragraph{Role in the raw-response Quench theorem family.}
 No new inference-transfer theorem is required for the fixed-subset Quench
 result.  The reusable contribution from this paper track is its discipline
 around continuity, compactness, and measurable event composition.  The ledger
@@ -313,7 +313,7 @@ interfaces additionally asked callers to prove positivity of the particular
 stored constant. & The public certificate now accepts any constant satisfying
 the displayed Lipschitz inequality and internally replaces it by
 $\max\{\gamma,1\}$.  The separate positivity field is gone from both the
-paper-shaped and Perfect Quench interfaces. & Redundant hypothesis removed \\
+paper-shaped and raw-response Quench interfaces. & Redundant hypothesis removed \\
 \addlinespace
 Assumption~2 & The paper says that every compact subset has positive measure and
 calls this equivalent to positive probability of every target-centered ball.
@@ -330,7 +330,7 @@ theorem derived from iid sampling and full support rather than a second
 probabilistic assumption. & Surfaced probabilistic interface \\
 \addlinespace
 Reference and response randomness & The source proof does not separate the
-random reference sample from cached-response noise. & Perfect Quench uses a
+random reference sample from cached-response noise. & raw-response Quench uses a
 product probability space.  This makes independence structural and prevents a
 randomly selected reference model from biasing the response array selected for
 averaging. & Model clarification \\
@@ -350,7 +350,7 @@ assumed for every reference outcome. & Technical assumption isolated and
 samplewise assumptions removed \\
 \addlinespace
 Response concentration & The paper imports a representation-concentration
-bound and uses the qualitative regime $r=\omega(n^3)$. & Perfect Quench starts
+bound and uses the qualitative regime $r=\omega(n^3)$. & raw-response Quench starts
 from measurable pairwise-independent raw replicates with a uniform second
 moment, constructs their averages, and proves finite-class or entropy-net
 uniform concentration using conservative explicit schedules. & Stronger input
@@ -378,16 +378,16 @@ convergence of the new estimator's MSE to zero. & Faithful necessary hypothesis
 \bottomrule
 \end{longtable}
 
-\section{Perfect Quench theorem family: completed state}
+\section{Raw-response Quench theorem family: completed state}
 
-The \code{DkpsQuench/Perfect} development is no longer a scaffold.  Every proof
+The \code{DkpsQuench2026} development is proof-complete.  Every proof
 body in the directory is closed, including the finite, compact-infinite, and
 all-proper-subset capstones:
 \begin{itemize}
-\item \code{perfectQuench\_finite\_fixedSubset};
-\item \code{perfectQuench\_infinite\_fixedSubset};
-\item \code{perfectQuench\_finite\_allQueries};
-\item \code{perfectQuench\_infinite\_allQueries}.
+\item \code{DkpsQuench2026.QueryEfficiency.finiteFixedSubset};
+\item \code{DkpsQuench2026.QueryEfficiency.infiniteFixedSubset};
+\item \code{DkpsQuench2026.QueryEfficiency.finiteAllQueries};
+\item \code{DkpsQuench2026.QueryEfficiency.infiniteAllQueries}.
 \end{itemize}
 
 \begin{longtable}{>{\raggedright\arraybackslash}p{0.22\textwidth}

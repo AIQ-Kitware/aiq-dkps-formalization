@@ -182,7 +182,7 @@ Date: 2026-06-14 · Tags: `comment-grep-false-positive`, `sorry-hygiene`,
 You need to confirm four Lean libraries are sorry-free. You run:
 
 ```bash
-grep -rn "sorry" Acharyya2024 Acharyya2025 DkpsQuench Helm2025 --include=*.lean \
+grep -rn "sorry" Acharyya2024 Acharyya2025 DkpsQuench2026 Helm2025 --include=*.lean \
   | grep -vE "/-|--.*sorry"
 ```
 

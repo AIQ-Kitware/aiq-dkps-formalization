@@ -2,18 +2,18 @@
 
 Status: R1 (rectangular adjoint invariance), R2 (intrinsic singular system), the
 finite-frame core of R4, and R5 (add-one centered scatter) are **fully proved** and
-imported by `ForMathlib.lean`; the Perfect Quench spectral track consumes R1/R4/R5
-through `DkpsQuench/Perfect/GramSpectrumBridge.lean`.  R3 and the rest of R4 are
+imported by `ForMathlib.lean`; the fully grounded Quench spectral track consumes R1/R4/R5
+through `DkpsQuench2026/Spectral/GramSpectrum.lean`.  R3 and the rest of R4 are
 future work.
 
 This plan records the general mathematical layer that should replace application-specific
-Gram arguments in Perfect Quench. The target is not the smallest local lemma. It is a
+Gram arguments in fully grounded Quench. The target is not the smallest local lemma. It is a
 coherent Mathlib-quality contribution built on the current rectangular
 `LinearMap.singularValues` API.
 
 ## Why this layer
 
-Perfect Quench repeatedly moves between three equivalent views of finite data:
+fully grounded Quench repeatedly moves between three equivalent views of finite data:
 
 1. a synthesis or analysis map;
 2. its domain Gram operator `T.adjoint.comp T`;
@@ -37,7 +37,7 @@ SingularSystem
 FiniteFrame              Eckart-Young / norms
         |
         v
-Perfect Quench adapters
+fully grounded Quench adapters
 
 CenteredScatter (separate branch, depends only on positive/rank-one operators)
 ```
@@ -184,7 +184,7 @@ Required theorems:
 8. linearly independent finite families admit a positive lower bound;
 9. explicit inverse-matrix and condition-number certificates imply concrete bounds.
 
-For Perfect Quench, the finite-frame adapter should turn the centered response family into
+For fully grounded Quench, the finite-frame adapter should turn the centered response family into
 an analysis or synthesis map and obtain the covariance floor from R4. The paper-specific
 normalization factors should remain outside the general file.
 

@@ -35,9 +35,9 @@ per-candidate dossiers live in `planning/mathlib-candidates.md`.
 ## Singular-value and frame layer
 
 `RectangularSingularValues.lean`, `SingularSystem.lean`, `FiniteFrame.lean`, and
-`CenteredScatter.lean` are fully proved and imported by `ForMathlib.lean`; the Perfect
+`CenteredScatter.lean` are fully proved and imported by `ForMathlib.lean`; the raw-response
 Quench spectral track consumes the first, third, and fourth through
-`DkpsQuench/Perfect/GramSpectrumBridge.lean`.  The
+`DkpsQuench2026/Spectral/GramSpectrum.lean`.  The
 design and external proof-source map are in
 `docs/planning/rectangular-singular-values-and-frames.md` and
 `dev/external-lean-references.md`. Licensed proof snapshots are isolated under

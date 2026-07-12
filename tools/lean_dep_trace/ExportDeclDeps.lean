@@ -31,7 +31,7 @@ def projectRoots : List String := [
   "ForMathlib",
   "Acharyya2024",
   "Acharyya2025",
-  "DkpsQuench"
+  "DkpsQuench2026"
 ]
 
 /-- Root modules to load into the environment. -/
@@ -39,7 +39,7 @@ def projectImports : Array Import := #[
   { module := `ForMathlib },
   { module := `Acharyya2024 },
   { module := `Acharyya2025 },
-  { module := `DkpsQuench }
+  { module := `DkpsQuench2026 }
 ]
 
 private def hasPrefixRoot (name : Name) : Bool :=
