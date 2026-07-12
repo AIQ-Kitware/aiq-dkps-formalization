@@ -229,8 +229,13 @@ theorem uniformModelResponseRegularity_of_raw_lipschitz
     (Hlip : RawResponseLipschitz ψ replicates Y L) :
     UniformModelResponseRegularity ψ
       (modelReplicateMean replicates Y) μmodel
-      (fun _ => L) (fun _ => L) := by
-  sorry
+      (fun _ => L) (fun _ => L) :=
+  { sample_nonneg := fun _ => Hlip.constant_nonneg
+    population_nonneg := fun _ => Hlip.constant_nonneg
+    sample_lipschitz := fun n ω f g =>
+      modelReplicateMean_lipschitz_of_raw ψ replicates Y L Hlip n ω f g
+    population_lipschitz := fun n f g =>
+      populationMean_lipschitz_of_raw μresp ψ replicates Y μmodel variance Hraw L Hlip n f g }
 
 /-- Compact perspective range and population Lipschitzness imply a population
 response norm envelope.
