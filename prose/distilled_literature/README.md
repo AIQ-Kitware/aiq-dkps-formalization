@@ -29,7 +29,7 @@ A completed distilled note should be a standalone LaTeX document that records:
 - the matching Lean declarations and discrepancies between paper and formal theorem;
 - unresolved source issues and any supplementary references used to repair them.
 
-A transcription is evidence, not a reconstruction. A broad “core arguments” note is useful, but it is not complete until it has precise source anchors and an explicit Lean theorem map.
+A transcription is normally evidence rather than a reconstruction. A narrow exception is allowed for a short paper whose exact source-order transcription already contains the complete mathematical argument, provided a maintained formalization-versus-literature ledger supplies the modernization, hidden-hypothesis audit, and explicit Lean theorem map. The Quench paper currently uses this exception. A broad “core arguments” note is useful, but it is not complete until it has precise source anchors and an explicit Lean theorem map.
 
 ## Citation discipline
 
@@ -41,7 +41,7 @@ Entries marked `needs_verification` in the manifest must be bibliographically ch
 
 The repository already contains:
 
-- transcriptions of the 2024 consistency paper, the 2025 concentration paper, and the 2026 Quench paper;
+- transcriptions of the 2024 consistency paper, the 2025 concentration paper, and the 2026 Quench paper; the Quench transcription is intentionally retained as the source-order asset because its short proof is reconstructed and audited in `papers/DKPS-formalized-vs-literature.tex`;
 - source prose and TeX for the 2025 inference paper;
 - broad core-argument notes for Davis (1963), Davis--Kahan Part III, Horn--Johnson Gram theory, and Yu--Wang--Samworth;
 - broad formalized-versus-literature comparison documents under `papers/`.

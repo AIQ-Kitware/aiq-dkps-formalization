@@ -1,230 +1,131 @@
-# Perfect Quench completion scaffold
+# Perfect Quench
 
-This directory is the proof plan for the smallest honest end-to-end Quench
-interface.  It is intentionally executable Lean source rather than a prose-only
-roadmap: every remaining mathematical seam is represented by a theorem with an
-open proof body, and every final result is already stated in the form that the
-completed lower layers should support.
+This directory contains the complete end-to-end Quench theorem family. It starts
+from raw cached response replicates and derives the response concentration,
+population geometry, spectral regularity, explicit asymptotic schedules, and
+nearest-neighbor risk comparison needed by the paper-facing capstones.
 
-The production theorems outside this directory remain unchanged and proved.
-Nothing in this scaffold should replace a working bespoke argument merely for
-style.  A replacement is valuable only when it removes or weakens a hypothesis
-visible to callers.
+The four public endpoints are:
 
-## Target theorem
-
-The final fixed-subset theorems are:
-
-- `perfectQuench_finite_fixedSubset` for finite model classes;
-- `perfectQuench_infinite_fixedSubset` for compact infinite model classes.
-
-The final all-budget theorems are:
-
+- `perfectQuench_finite_fixedSubset`;
+- `perfectQuench_infinite_fixedSubset`;
 - `perfectQuench_finite_allQueries`;
 - `perfectQuench_infinite_allQueries`.
 
-The finite theorem starts from raw iid response replicates, a population
-response map, exact response-distance realization of the perspective, one
-population covariance nondegeneracy condition, full support, and score
-Lipschitzness.  The infinite theorem adds exactly the finite-net entropy and
-response-regularity assumptions required to derive uniform concentration.
+There are no incomplete proof bodies under `DkpsQuench/Perfect` in the current
+source tree.
+
+## The two routes
+
+The finite-model route assumes a finite model class and uses a direct union
+bound over target models. Finiteness also supplies compactness of the
+perspective image and a uniform population-response norm bound.
+
+The compact-infinite route assumes a compact perspective image and one
+pathwise Lipschitz condition on the raw response embedding. From these it
+derives:
+
+- sample-mean and population-mean Lipschitz regularity;
+- a population-response norm envelope;
+- polynomial finite covers of the perspective range;
+- measurable finite-net response events;
+- entropy-aware uniform concentration.
+
+Both routes use the same population-geometry, covariance, spectral, CMDS, and
+query-efficiency layers.
 
 ## Dependency graph
 
 ```text
 Definitions
 ├── PopulationGeometry
+├── CovarianceFloor
+├── CenteredCovariance
+├── GramSpectrumBridge
 ├── SpectralRegularity
 │   └── RawResponses
 │       └── Compactness
-│           └── UniformConcentration
-│               └── RateSchedule
-│                   └── SpectralCapstone
-│                       └── Capstone
-└───────────────────────────────────────┘
+│           └── PolynomialCover
+│               └── UniformConcentration
+│                   └── RateSchedule
+│                       └── SpectralCapstone
+│                           └── Capstone
+└───────────────────────────────────────────────┘
 ```
 
-The import order is linear to keep elaboration predictable, but the mathematical
-work is more parallel than the import graph suggests:
+## What is derived internally
 
-1. Population geometry is independent of probability.
-2. Spectral regularity depends only on population geometry and iid references.
-3. Raw responses depends on the product probability space and sample-mean
-   algebra, not on spectral perturbation.
-4. Compactness derives response envelopes, raw-to-mean regularity, and
-   polynomial finite nets.
-5. Infinite-class uniform concentration builds on those finite nets.
-6. Rate schedules are elementary asymptotic arithmetic and choose the canonical
-   net radius and entropy-aware replicate budget.
-7. Spectral capstones are event-intersection and theorem-composition work.
-8. Final capstones assemble the preceding certificates and lift across query
-   subsets.
+The public capstones do not require callers to provide:
 
-## Open-proof inventory
+- centered configurations or Gram matrices;
+- positive-semidefinite or rank proofs;
+- samplewise spectral floors and ceilings;
+- response-mean concentration events;
+- population response norm envelopes;
+- finite nets, cover sizes, or entropy exponents;
+- entrywise CMDS error schedules;
+- polar-decomposition smallness bookkeeping;
+- a `GrowingConfigControl` certificate.
 
-| Module | Open proofs | Main mathematical work | Current hypotheses removed when complete |
-|---|---:|---|---|
-| `PopulationGeometry.lean` | 0 | finite centering and double-centering algebra | explicit configuration, Gram identity, radial identity, PSD, rank |
-| `GramSpectrumBridge.lean` | 0 | rectangular scatter--Gram spectral transfer and augmented online-variance floor | local matrix-coordinate eigenvalue arguments |
-| `SpectralRegularity.lean` | 0 | covariance measurability/weak law, quadratic-form transfer, Gram spectral floor, augmentation floor, spectral-certificate assembly | global samplewise eigenvalue floor and ceiling |
-| `RawResponses.lean` | 0 | product-space iid lifting, replicate means, finite union bound | abstract response means, per-index moment events, manual measurability |
-| `Compactness.lean` | 1 | finite/compact response envelopes, raw-to-mean Lipschitz bridges, polynomial Euclidean covers | explicit population bounds, nets, entropy certificates, separate regularity proofs |
-| `UniformConcentration.lean` | 0 | finite-net concentration and deterministic extension | finite model-class restriction or assumed uniform concentration |
-| `RateSchedule.lean` | 0 | polynomial limit arithmetic, canonical shrinking net and entropy schedule | caller-built nets, entry rates, and `GrowingConfigControl` |
-| `SpectralCapstone.lean` | 3 | high-probability event intersections and reuse of the proved CMDS bound | global spectral hypotheses in the response bridge |
-| `Capstone.lean` | 4 | final assembly and query-subset quantifier lift | all remaining intermediate certificates |
-| **Total** | **8** | | |
+These objects are constructed from the smaller paper-facing assumptions.
 
-The spectral-regularity track is complete: the reference-Gram floor
-(`sortedEigenvalues_reference_centeredGram_lower`), the augmentation floor
-(`augmented_centeredGram_floor_of_reference_floor`), and the certificate
-constructor (`exists_growingSpectralSubevents_of_compact_iid_nondegenerate`)
-are proved on top of the reusable rectangular spectral layer in `ForMathlib`
-(`RectangularSingularValues`, `FiniteFrame`, `CenteredScatter`) via
-`GramSpectrumBridge.lean`.
+## Current public assumptions
 
-The count is meant to track real proof debt.  Small algebraic or measurability
-facts have their own obligations; the probability-heavy covariance and
-finite-net results remain larger because they represent genuinely larger pieces
-of mathematics.  The four final proofs should be short compositions once the
-lower modules are complete.
+The finite fixed-subset theorem uses:
 
-## Per-obligation proof-recipe contract
+- a measurable perspective map;
+- positive mass in every target-centered perspective ball;
+- an iid reference sampler;
+- measurable pairwise-independent raw response replicates with uniform second
+  moment control;
+- exact realization of perspective distances by population response means;
+- a positive population covariance floor;
+- a score-Lipschitz inequality;
+- positive baseline MSE;
+- a positive number of queried response rows.
 
-Every declaration whose body is currently `sorry` has an immediately preceding
-doc comment containing the exact marker:
+The compact-infinite theorem additionally uses compactness of the perspective
+range and pathwise raw-response Lipschitzness.
 
-```text
-Implementation recipe (execute in this order):
-```
+A separate positivity proof for the stored score-Lipschitz constant is no
+longer required. The proof replaces any valid constant `γ` by `max γ 1` before
+using the quantitative nearest-neighbor bound.
 
-Each recipe must:
+## Remaining hypothesis-reduction opportunities
 
-1. identify the first definitions to unfold or the first existing theorem to
-   apply;
-2. name the intermediate equalities, event inclusions, or limit statements that
-   should be proved locally;
-3. identify the repository lemmas or Mathlib APIs to search for;
-4. state the intended final composition step;
-5. warn against the most likely false shortcut or accidental hypothesis
-   strengthening.
+The theorem family is complete, but two fields appear derivable using machinery
+already in the repository:
 
-A recipe may instruct an agent to factor out a reusable helper when Mathlib lacks
-an exact bridge, but it may not replace a proof with a new caller-visible
-assumption.  If Lean exposes that a scaffold statement is false, repair the
-statement at the lowest module where the missing premise is mathematically
-needed and update the final-capstone recipe in the same patch.
+1. `RawIIDResponseModel.mean_measurable` should follow from joint measurability
+   of the raw response family, the coordinate mean identities, and parameter
+   integration.
+2. `PerspectiveNondegeneracy.center_is_mean` should follow from the quadratic
+   floor. The covariance development already obtains integrability of centered
+   squared linear forms; probability-space `L² → L¹` and the definition of
+   `perspectiveMean` should finish the centered-mean identity.
 
-Run the mechanical audit after adding, moving, or splitting any open proof:
+The response-distance realization hypothesis is a larger architectural seam.
+It can disappear only if the public perspective is constructed canonically from
+population response distances; pairwise realization alone does not make an
+arbitrary supplied perspective measurable or canonical.
 
-```bash
-python dev/check_perfect_proof_recipes.py
-```
+## Source comparison
 
-The checker verifies that all 61 current obligations have a local doc comment,
-the required marker, and at least three ordered proof steps.  The audit count
-must be updated together with this README whenever obligations are added or
-removed.
+The exact Quench transcription remains under
+`DkpsQuench/prose/quench-icml-nonanon_transcription.md`. The modernized theorem
+reconstruction, source discrepancies, and live hypothesis audit are maintained
+in `papers/DKPS-formalized-vs-literature.tex`; a second distilled copy of the
+short paper proof is intentionally not maintained.
 
-## Module guidance
-
-### PopulationGeometry
-
-Prove the finite Euclidean double-centering identity directly.  Do not invoke an
-eigendecomposition.  The intended public assumption is
-`ModelResponseRealization`; all configuration-level data must be derived from
-it.  This track should be completed first because several later theorem types
-mention its Gram witness.
-
-### SpectralRegularity
-
-The goal is not a sharp random-matrix theorem.  A fixed-dimensional entrywise
-weak law plus a finite union bound is sufficient.  The essential public
-assumption is `PerspectiveNondegeneracy`, a population covariance floor.  Do not
-reintroduce a stagewise spectral floor as a field of a final assumptions
-structure.
-
-The production CMDS proof currently uses a bespoke cross-energy and polar-factor
-argument.  Retain it.  New Davis--Kahan machinery should enter only if it removes
-`polar_eventually` or another caller-visible condition.
-
-### RawResponses
-
-Keep reference randomness and response randomness on independent factors of a
-product probability space.  This prevents selection bias when a random
-reference chooses which cached response array is averaged.  Reuse the existing
-matrix-valued replicate-mean second-moment theorem rather than reproving sample
-mean algebra.
-
-### Compactness
-
-Derive every finite-dimensional auxiliary object rather than exposing it in the
-final theorem.  Finite model classes supply response norm envelopes by a finite
-maximum.  Compact infinite classes use one pathwise raw-response Lipschitz
-constant to derive sample-mean and population-mean regularity, a population
-response envelope, and polynomial finite covers.  The exact constants are not
-important; eliminating coupled caller certificates is.
-
-### UniformConcentration
-
-Never ask for measurability of an uncountable universal event.  Concentrate on a
-finite stage net, prove that finite event measurable, and use regularity only in
-the deterministic event-inclusion field.  The finite-model route should remain
-a direct union bound and should not depend on this module's entropy machinery.
-
-### RateSchedule
-
-The polynomial exponents are deliberately conservative.  Finish the theorem by
-power comparison; do not optimize constants.  A later rate-sharpening patch may
-change the schedule without changing either final theorem signature.
-
-### SpectralCapstone
-
-Copy the event construction in
-`highProbQQueryEfficient_tieAverage_of_growing_augmented_cmds`.  The substantive
-change is that floor and ceiling facts come from `GrowingSpectralSubevents` only
-after entering its event.  The existing pairwise-distance perturbation theorem
-should be used unchanged.
-
-### Capstone
-
-Do not add new mathematics here.  Each fixed-subset proof should construct the
-geometry, response, spectral, and rate certificates and pass them to the
-spectral capstone.  Each all-query proof should unfold the corresponding
-predicate and apply the fixed-subset theorem.
-
-## Suggested parallel assignment
-
-- Agent A: `PopulationGeometry.lean`.
-- Agent B: first seven obligations in `SpectralRegularity.lean`.
-- Agent C: `RawResponses.lean`.
-- Agent D: `Compactness.lean`, especially raw-to-population Lipschitzness and
-  finite-dimensional covering numbers.
-- Agent E: `UniformConcentration.lean` after the compactness interfaces settle.
-- Agent F: `RateSchedule.lean`.
-- Agent G: `SpectralCapstone.lean` after population geometry is stable.
-- Final integrator: the last constructor in `SpectralRegularity.lean` and all of
-  `Capstone.lean`.
-
-Agents should preserve theorem signatures unless a signature is false or cannot
-express the intended dependency.  When a change is necessary, update this file,
-the relevant theorem docstring, and
-`papers/DKPS-formalized-vs-literature.tex` in the same patch.
-
-## Validation commands
-
-During scaffold development, open proof bodies are expected.  The important
-checks are that every declaration elaborates and no accidental placeholders are
-introduced outside this directory.
+## Validation
 
 ```bash
 lake build DkpsQuench.Perfect
 lake build Acharyya2024 Acharyya2025 DkpsQuench Helm2025
 
-python dev/check_perfect_proof_recipes.py
-grep -RIn '\bsorry\b' DkpsQuench/Perfect
-grep -RIn '\baxiom\b' DkpsQuench/Perfect
+grep -RIn '\bsorry\b' DkpsQuench/Perfect --include='*.lean'
+grep -RIn '^axiom ' DkpsQuench/Perfect --include='*.lean'
 ```
 
-The first grep should report exactly the inventory above until the program is
-complete.  The second should report no declarations.
+For a kernel-level release audit, also inspect the four final declarations with
+`#print axioms` in a temporary audit module.

@@ -4,6 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
 import ForMathlib.Analysis.InnerProductSpace.DavisKahanTheory.Sylvester
+import ForMathlib.Analysis.InnerProductSpace.DavisKahanTheory.RectangularUINorm
+import ForMathlib.Analysis.InnerProductSpace.RectangularSingularValues
 import ForMathlib.Analysis.InnerProductSpace.SinThetaUINorm
 import ForMathlib.Analysis.InnerProductSpace.SinThetaOpNorm
 import ForMathlib.Analysis.InnerProductSpace.DavisKahan.SinTheta
@@ -566,7 +568,195 @@ theorem sinAngleOperator_perturbation_le
     (hgapUV : IntervalExteriorGap A B U V a b δ)
     (hgapVU : IntervalExteriorGap B A V U c d δ) :
     δ * N (sinAngleOperator U V) ≤ N (B - A) := by
-  sorry
+  classical
+  have hUperp : Reduces A Uᗮ := reduces_orthogonal_of_isSymmetric hA hU
+  have hVperp : Reduces B Vᗮ := reduces_orthogonal_of_isSymmetric hB hV
+
+  let AU : U →ₗ[𝕜] U := A.restrict hU
+  let BVperp : Vᗮ →ₗ[𝕜] Vᗮ := B.restrict hVperp
+  let XUV : U →ₗ[𝕜] Vᗮ :=
+    Vᗮ.orthogonalProjectionOnto.toLinearMap ∘ₗ U.subtype
+  let CUV : U →ₗ[𝕜] Vᗮ :=
+    Vᗮ.orthogonalProjectionOnto.toLinearMap ∘ₗ
+      ((B - A) ∘ₗ U.subtype)
+  have hAU : AU.IsSymmetric := isSymmetric_restrict hA hU
+  have hBVperp : BVperp.IsSymmetric := isSymmetric_restrict hB hVperp
+  have hgapUV' : IntervalSylvesterGap BVperp AU a b δ := by
+    constructor
+    · exact (spectrumIn_restrict_iff A hU (Set.Icc a b)).2 hgapUV.1
+    · exact (spectrumIn_restrict_iff B hVperp
+        {lam | lam ∉ Set.Ioo (a - δ) (b + δ)}).2 hgapUV.2
+  have hEqUV : BVperp ∘ₗ XUV - XUV ∘ₗ AU = CUV := by
+    ext x
+    have hcomm := projection_apply_comm_of_reduces hB hVperp (x : E)
+    change Vᗮ.starProjection (B (x : E)) =
+      B (Vᗮ.starProjection (x : E)) at hcomm
+    change B (Vᗮ.starProjection (x : E)) -
+        Vᗮ.starProjection (A (x : E)) =
+      Vᗮ.starProjection ((B - A) (x : E))
+    rw [← hcomm]
+    simp only [LinearMap.sub_apply, map_sub]
+  have hkyUV : ∀ k,
+      RectangularUnitarilyInvariantNorm.rectangularKyFanSum k
+          (((δ : ℝ) : 𝕜) • XUV) ≤
+        RectangularUnitarilyInvariantNorm.rectangularKyFanSum k CUV := by
+    intro k
+    change (RectangularUnitarilyInvariantNorm.kyFan k)
+        (((δ : ℝ) : 𝕜) • XUV) ≤
+      (RectangularUnitarilyInvariantNorm.kyFan k) CUV
+    rw [(RectangularUnitarilyInvariantNorm.kyFan k).smul_eq,
+      RCLike.norm_ofReal, abs_of_nonneg hδ.le]
+    exact kyFan_sylvester_le_of_intervalGap
+      hBVperp hAU hδ hgapUV' hEqUV k
+
+  let BV : V →ₗ[𝕜] V := B.restrict hV
+  let AUperp : Uᗮ →ₗ[𝕜] Uᗮ := A.restrict hUperp
+  let XVU : V →ₗ[𝕜] Uᗮ :=
+    Uᗮ.orthogonalProjectionOnto.toLinearMap ∘ₗ V.subtype
+  let CVU : V →ₗ[𝕜] Uᗮ :=
+    Uᗮ.orthogonalProjectionOnto.toLinearMap ∘ₗ
+      ((A - B) ∘ₗ V.subtype)
+  have hBV : BV.IsSymmetric := isSymmetric_restrict hB hV
+  have hAUperp : AUperp.IsSymmetric := isSymmetric_restrict hA hUperp
+  have hgapVU' : IntervalSylvesterGap AUperp BV c d δ := by
+    constructor
+    · exact (spectrumIn_restrict_iff B hV (Set.Icc c d)).2 hgapVU.1
+    · exact (spectrumIn_restrict_iff A hUperp
+        {lam | lam ∉ Set.Ioo (c - δ) (d + δ)}).2 hgapVU.2
+  have hEqVU : AUperp ∘ₗ XVU - XVU ∘ₗ BV = CVU := by
+    ext x
+    have hcomm := projection_apply_comm_of_reduces hA hUperp (x : E)
+    change Uᗮ.starProjection (A (x : E)) =
+      A (Uᗮ.starProjection (x : E)) at hcomm
+    change A (Uᗮ.starProjection (x : E)) -
+        Uᗮ.starProjection (B (x : E)) =
+      Uᗮ.starProjection ((A - B) (x : E))
+    rw [← hcomm]
+    simp only [LinearMap.sub_apply, map_sub]
+  have hkyVU : ∀ k,
+      RectangularUnitarilyInvariantNorm.rectangularKyFanSum k
+          (((δ : ℝ) : 𝕜) • (-XVU.adjoint)) ≤
+        RectangularUnitarilyInvariantNorm.rectangularKyFanSum k CVU.adjoint := by
+    intro k
+    have hbase := kyFan_sylvester_le_of_intervalGap
+      hAUperp hBV hδ hgapVU' hEqVU k
+    have hleft :
+        RectangularUnitarilyInvariantNorm.rectangularKyFanSum k
+            (-XVU.adjoint) =
+          RectangularUnitarilyInvariantNorm.rectangularKyFanSum k XVU := by
+      calc
+        RectangularUnitarilyInvariantNorm.rectangularKyFanSum k
+            (-XVU.adjoint) =
+            RectangularUnitarilyInvariantNorm.rectangularKyFanSum k
+              XVU.adjoint := by
+          exact (RectangularUnitarilyInvariantNorm.kyFan k).apply_neg XVU.adjoint
+        _ = RectangularUnitarilyInvariantNorm.rectangularKyFanSum k XVU := by
+          unfold RectangularUnitarilyInvariantNorm.rectangularKyFanSum
+          exact Finset.sum_congr rfl fun i _ =>
+            XVU.singularValues_adjoint_apply (i : ℕ)
+    have hright :
+        RectangularUnitarilyInvariantNorm.rectangularKyFanSum k CVU.adjoint =
+          RectangularUnitarilyInvariantNorm.rectangularKyFanSum k CVU := by
+      unfold RectangularUnitarilyInvariantNorm.rectangularKyFanSum
+      exact Finset.sum_congr rfl fun i _ =>
+        CVU.singularValues_adjoint_apply (i : ℕ)
+    calc
+      RectangularUnitarilyInvariantNorm.rectangularKyFanSum k
+          (((δ : ℝ) : 𝕜) • (-XVU.adjoint)) =
+          δ * RectangularUnitarilyInvariantNorm.rectangularKyFanSum k
+            (-XVU.adjoint) :=
+        RectangularUnitarilyInvariantNorm.rectangularKyFanSum_real_smul
+          k (-XVU.adjoint) hδ.le
+      _ = δ * RectangularUnitarilyInvariantNorm.rectangularKyFanSum k XVU := by
+        rw [hleft]
+      _ ≤ RectangularUnitarilyInvariantNorm.rectangularKyFanSum k CVU := hbase
+      _ = RectangularUnitarilyInvariantNorm.rectangularKyFanSum k CVU.adjoint :=
+        hright.symm
+
+  let EU : E ≃ₗᵢ[𝕜] WithLp 2 (U × Uᗮ) := U.orthogonalDecomposition
+  let EV : E ≃ₗᵢ[𝕜] WithLp 2 (Vᗮ × V) :=
+    V.orthogonalDecomposition.trans
+      (LinearIsometryEquiv.withLpProdComm 2 𝕜 V Vᗮ)
+  let NB : RectangularUnitarilyInvariantNorm 𝕜
+      (WithLp 2 (U × Uᗮ)) (WithLp 2 (Vᗮ × V)) :=
+    RectangularUnitarilyInvariantNorm.domainIsometryTransport
+      (N.toRectangular.codomainIsometryTransport EV.symm.toLinearIsometry)
+      EU.symm.toLinearIsometry
+  let Xblock := RectangularUnitarilyInvariantNorm.orthogonalBlockSum
+    XUV (-XVU.adjoint)
+  let Cblock := RectangularUnitarilyInvariantNorm.orthogonalBlockSum
+    CUV CVU.adjoint
+  have hNBscaled : NB (((δ : ℝ) : 𝕜) • Xblock) ≤ NB Cblock := by
+    have h :=
+      RectangularUnitarilyInvariantNorm.
+        orthogonalBlockSum_apply_le_of_kyFanSum_le NB hkyUV hkyVU
+    simpa [Xblock, Cblock] using h
+  have hNB : δ * NB Xblock ≤ NB Cblock := by
+    rw [NB.smul_eq, RCLike.norm_ofReal, abs_of_nonneg hδ.le] at hNBscaled
+    exact hNBscaled
+
+
+  let liftBlock :
+      ((WithLp 2 (U × Uᗮ)) →ₗ[𝕜] (WithLp 2 (Vᗮ × V))) →
+        (E →ₗ[𝕜] E) := fun T =>
+    EV.symm.toLinearMap ∘ₗ T ∘ₗ EU.toLinearMap
+  have hNB_apply (T : WithLp 2 (U × Uᗮ) →ₗ[𝕜]
+      WithLp 2 (Vᗮ × V)) : NB T = N (liftBlock T) := by
+    simp only [NB, RectangularUnitarilyInvariantNorm.domainIsometryTransport_apply,
+      RectangularUnitarilyInvariantNorm.codomainIsometryTransport_apply,
+      liftBlock]
+    rw [(EU.symm).adjoint_toLinearMap_eq_symm]
+    rfl
+  have hXlift : liftBlock Xblock = projection U - projection V := by
+    ext x
+    simp [liftBlock, Xblock, EU, EV,
+      RectangularUnitarilyInvariantNorm.orthogonalBlockSum,
+      projection, Submodule.orthogonalDecomposition_apply,
+      LinearMap.comp_apply]
+  have hClift : liftBlock Cblock =
+      (B - A) ∘ₗ projection U - projection V ∘ₗ (B - A) := by
+    ext x
+    simp [liftBlock, Cblock, EU, EV, CUV, CVU,
+      RectangularUnitarilyInvariantNorm.orthogonalBlockSum,
+      projection, Submodule.orthogonalDecomposition_apply,
+      LinearMap.comp_apply, Submodule.starProjection_orthogonal_apply]
+    module
+  rw [hNB_apply, hNB_apply, hXlift, hClift] at hNB
+  rw [uiNorm_projection_sub_eq_sinAngleOperator N U V] at hNB
+
+  let H : E →ₗ[𝕜] E := B - A
+  let JU : E ≃ₗᵢ[𝕜] E := U.reflection
+  let JV : E ≃ₗᵢ[𝕜] E := V.reflection
+  have hchecker : H ∘ₗ projection U - projection V ∘ₗ H =
+      (((2 : ℝ)⁻¹ : ℝ) : 𝕜) •
+        (H ∘ₗ JU.toLinearMap - JV.toLinearMap ∘ₗ H) := by
+    ext x
+    simp [H, JU, JV, projection, Submodule.reflection_apply,
+      LinearMap.comp_apply]
+    module
+  have hcheckerNorm :
+      N (H ∘ₗ projection U - projection V ∘ₗ H) ≤ N H := by
+    rw [hchecker, N.smul_eq, RCLike.norm_ofReal,
+      abs_of_nonneg (by positivity : 0 ≤ (2 : ℝ)⁻¹)]
+    calc
+      (2 : ℝ)⁻¹ * N (H ∘ₗ JU.toLinearMap - JV.toLinearMap ∘ₗ H) ≤
+          (2 : ℝ)⁻¹ *
+            (N (H ∘ₗ JU.toLinearMap) + N (-(JV.toLinearMap ∘ₗ H))) := by
+        gcongr
+        simpa [sub_eq_add_neg] using
+          N.add_le (H ∘ₗ JU.toLinearMap) (-(JV.toLinearMap ∘ₗ H))
+      _ = (2 : ℝ)⁻¹ * (N H + N H) := by
+        rw [N.apply_neg]
+        have hright := N.invariant (LinearIsometryEquiv.refl 𝕜 E) JU H
+        have hleft := N.invariant JV (LinearIsometryEquiv.refl 𝕜 E) H
+        simp only [LinearMap.comp_apply] at hright hleft
+        have hr : N (H ∘ₗ JU.toLinearMap) = N H := by
+          simpa using hright
+        have hl : N (JV.toLinearMap ∘ₗ H) = N H := by
+          simpa using hleft
+        rw [hr, hl]
+      _ = N H := by ring
+  exact hNB.trans (by simpa [H] using hcheckerNorm)
 
 /-- Ordered half-line perturbation form.
 

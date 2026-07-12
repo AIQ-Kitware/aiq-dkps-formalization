@@ -87,13 +87,14 @@ def render_markdown(manifest: dict) -> str:
         "",
         "Generated from `source_manifest.json`. This is the canonical inventory of works whose definitions, theorem families, or proof architecture are directly formalized, actively scaffolded, or inherited by the DKPS and Perfect Quench development.",
         "",
-        "The index deliberately separates a paper's **formalization role** from the state of its local literature asset. A transcription is not a proof-level reconstruction, and a modern textbook does not silently replace a primary source.",
+        "The index deliberately separates a paper's **formalization role** from the state of its local literature asset. A transcription is normally not a proof-level reconstruction; an exact short-paper transcription may be marked sufficient only when a maintained discrepancy ledger performs the modernization and theorem mapping. A modern textbook never silently replaces a primary source.",
         "",
         "## Inventory summary",
         "",
         f"- **{len(works)} works**: {kinds['paper']} papers, {kinds['book']} books, and {kinds['monograph']} monograph.",
         f"- **{statuses['complete']}** source-order distilled reconstructions are complete.",
         f"- **{statuses['core_note']}** broad core notes remain to be upgraded.",
+        f"- **{statuses['transcription_sufficient']}** exact transcriptions are intentionally sufficient because a maintained discrepancy ledger supplies the theorem-level reconstruction.",
         f"- **{statuses['transcription_only'] + statuses['source_text_only']}** works have transcription or source text but no source-order proof reconstruction.",
         f"- **{statuses['missing']}** works have no local distilled note at all.",
         f"- **{bib_statuses['needs_verification']}** entries remain in the bibliographic verification queue.",
@@ -133,7 +134,7 @@ def render_markdown(manifest: dict) -> str:
         (key, work)
         for key, work in works.items()
         if work["priority"] in {"P0", "P1"}
-        and work["distilled_status"] != "complete"
+        and work["distilled_status"] not in {"complete", "transcription_sufficient"}
     ]
     lines.extend([
         "## Highest-value missing reconstructions",
@@ -218,7 +219,7 @@ def render_tex(manifest: dict) -> str:
         "This document inventories the works whose definitions, theorem families, or proof architecture are directly formalized, actively scaffolded, or inherited by the DKPS and Perfect Quench development. It is an index, not yet a corpus of completed proof reconstructions.",
         r"\section*{Current state}",
         f"The inventory contains {len(works)} works: {kinds['paper']} papers, {kinds['book']} books, and {kinds['monograph']} monograph. "
-        f"There are {statuses['complete']} completed source-order reconstructions, {statuses['core_note']} broad core notes, {statuses['transcription_only'] + statuses['source_text_only']} transcription/source-text assets, and {statuses['missing']} works with no local distilled note.",
+        f"There are {statuses['complete']} completed source-order reconstructions, {statuses['transcription_sufficient']} intentionally sufficient exact transcription(s), {statuses['core_note']} broad core notes, {statuses['transcription_only'] + statuses['source_text_only']} transcription/source-text assets awaiting reconstruction, and {statuses['missing']} works with no local distilled note.",
     ]
 
     for group in GROUP_ORDER:

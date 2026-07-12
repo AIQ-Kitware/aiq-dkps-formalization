@@ -231,7 +231,9 @@ theorem highProbQQueryEfficient_tieAverage_of_compact_iid_fullSupport
 
 /-- All assumptions that vary with a query subset, packaged for finite-subset
 quantification.  The common model law, reference sampler, score, and full
-benchmark are supplied outside this structure. -/
+benchmark are supplied outside this structure.  No positivity field is needed
+for `gamma`: the theorem enlarges any valid Lipschitz constant to `max gamma 1`
+before the quantitative parameter choice. -/
 structure QuerySubsetCertificate
     (Pf : Measure (Model Q X)) [IsProbabilityMeasure Pf]
     (μ : ℕ → Measure Ω) (hμ : ∀ n, IsProbabilityMeasure (μ n))
@@ -241,7 +243,6 @@ structure QuerySubsetCertificate
     (score : Model Q X → Finset Q → ℝ)
     (Qstar Qsub : Finset Q) where
   gamma : ℝ
-  gamma_pos : 0 < gamma
   lipschitz : ∀ f f',
     |score f Qstar - score f' Qstar| ≤
       gamma * ‖ψ Qsub f - ψ Qsub f'‖
@@ -279,11 +280,21 @@ theorem QuerySubsetCertificate.highProbQQueryEfficient
     (fun n ω f => tieAverageNN (fun u ω' g => ψHat u ω' Qsub g)
       f_ref (yFull score Qstar) n ω f)
     (fun _ _ f => yQ score Qsub f)
+  let gamma : ℝ := max H.gamma 1
+  have hgamma : 0 < gamma := by
+    dsimp [gamma]
+    exact lt_of_lt_of_le zero_lt_one (le_max_right H.gamma 1)
+  have hlipschitz : ∀ f f',
+      |score f Qstar - score f' Qstar| ≤
+        gamma * ‖ψ Qsub f - ψ Qsub f'‖ := by
+    intro f f'
+    exact (H.lipschitz f f').trans
+      (mul_le_mul_of_nonneg_right (le_max_left H.gamma 1) (norm_nonneg _))
   exact highProbQQueryEfficient_tieAverage_of_compact_iid_fullSupport
     Pf μ hμ (ψ Qsub) H.perspective_measurable
     H.compact_perspective_range H.full_support
     (fun n ω f => ψHat n ω Qsub f) f_ref hiid score Qstar Qsub
-    H.gamma H.lipschitz H.gamma_pos H.rate H.rate_zero H.rate_nonneg
+    gamma hlipschitz hgamma H.rate H.rate_zero H.rate_nonneg
     H.event H.event_measurable H.event_subset H.event_highProb H.baseline_pos
 
 /-- If every size-`m` subset has a certificate, the literal tie-averaged

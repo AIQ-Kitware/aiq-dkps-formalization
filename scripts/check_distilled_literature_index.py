@@ -39,7 +39,7 @@ REQUIRED_WORK_FIELDS = {
 }
 KINDS = {"paper", "book", "monograph"}
 PRIORITIES = {"P0", "P1", "P2", "P3"}
-DISTILLED_STATUSES = {"missing", "transcription_only", "source_text_only", "core_note", "complete"}
+DISTILLED_STATUSES = {"missing", "transcription_only", "transcription_sufficient", "source_text_only", "core_note", "complete"}
 BIBLIOGRAPHIC_STATUSES = {"verified", "needs_verification"}
 GROUPS = {
     "DKPS lineage and target papers",
