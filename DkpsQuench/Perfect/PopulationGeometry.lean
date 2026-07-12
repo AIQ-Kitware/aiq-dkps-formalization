@@ -80,7 +80,10 @@ Implementation recipe (execute in this order):
 theorem sum_centerConfig_eq_zero
     {n d : Nat} (hn : 0 < n) (z : Config n d) :
     ∑ i, centerConfig z i = 0 := by
-  sorry
+  have hn' : (n : ℝ) ≠ 0 := Nat.cast_ne_zero.mpr hn.ne'
+  simp only [centerConfig, configCentroid]
+  rw [Finset.sum_sub_distrib, Finset.sum_const, Finset.card_univ, Fintype.card_fin,
+    ← Nat.cast_smul_eq_nsmul ℝ, smul_smul, mul_inv_cancel₀ hn', one_smul, sub_self]
 
 /-- Classical double centering of exact Euclidean distances recovers the Gram
 matrix of the centered configuration.

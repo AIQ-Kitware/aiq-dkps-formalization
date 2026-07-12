@@ -98,7 +98,17 @@ Implementation recipe (execute in this order):
 theorem safePerspectiveRadius_zero
     (L : Real) (hL : 0 ≤ L) :
     Tendsto (safePerspectiveRadius L) atTop (𝓝 0) := by
-  sorry
+  have h0 : Tendsto safeResponseTolerance atTop (𝓝 0) := by
+    have hnat : Tendsto (fun n : ℕ => (n + 1) ^ 5) atTop atTop :=
+      tendsto_atTop_mono
+        (fun n => le_trans (Nat.le_succ n) (le_self_pow (by omega) (by norm_num)))
+        tendsto_id
+    have h5 : Tendsto (fun n : ℕ => (((n + 1 : ℕ) : ℝ)) ^ 5) atTop atTop := by
+      simp_rw [← Nat.cast_pow]
+      exact tendsto_natCast_atTop_atTop.comp hnat
+    exact h5.inv_tendsto_atTop
+  unfold safePerspectiveRadius
+  simpa using h0.div_const (4 * (L + 1))
 
 /-- Compact finite-dimensional perspective ranges admit canonical safe nets
 with polynomial stage cardinality.
@@ -158,7 +168,14 @@ Implementation recipe (execute in this order):
 -/
 theorem safeResponseTolerance_zero :
     Tendsto safeResponseTolerance atTop (𝓝 0) := by
-  sorry
+  have hnat : Tendsto (fun n : ℕ => (n + 1) ^ 5) atTop atTop :=
+    tendsto_atTop_mono
+      (fun n => le_trans (Nat.le_succ n) (le_self_pow (by omega) (by norm_num)))
+      tendsto_id
+  have h5 : Tendsto (fun n : ℕ => (((n + 1 : ℕ) : ℝ)) ^ 5) atTop atTop := by
+    simp_rw [← Nat.cast_pow]
+    exact tendsto_natCast_atTop_atTop.comp hnat
+  exact h5.inv_tendsto_atTop
 
 /-- The finite-model Chebyshev/union-bound ratio vanishes under the safe
 replicate schedule.

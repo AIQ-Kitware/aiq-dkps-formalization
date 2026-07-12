@@ -101,12 +101,14 @@ variable {𝕜 : Type*} [RCLike 𝕜]
 abbrev Plane (𝕜 : Type*) [RCLike 𝕜] := EuclideanSpace 𝕜 (Fin 2)
 
 /-- Coordinate line in the two-dimensional model. -/
-noncomputable def modelSubspace : Submodule 𝕜 (Plane 𝕜) := by
-  sorry
+noncomputable def modelSubspace : Submodule 𝕜 (Plane 𝕜) :=
+  Submodule.span 𝕜 {EuclideanSpace.single (0 : Fin 2) (1 : 𝕜)}
 
 /-- Line obtained by rotating the coordinate line by angle `θ`. -/
-noncomputable def rotatedModelSubspace (θ : ℝ) : Submodule 𝕜 (Plane 𝕜) := by
-  sorry
+noncomputable def rotatedModelSubspace (θ : ℝ) : Submodule 𝕜 (Plane 𝕜) :=
+  Submodule.span 𝕜
+    {(Real.cos θ : 𝕜) • EuclideanSpace.single (0 : Fin 2) (1 : 𝕜) +
+      (Real.sin θ : 𝕜) • EuclideanSpace.single (1 : Fin 2) (1 : 𝕜)}
 
 /-! Construct the following five operators as explicit `2 × 2` matrices in
 the standard basis.  Start with `diag(a,b)`, conjugate by the planar rotation
@@ -120,8 +122,8 @@ Construction route: use the diagonal `2×2` matrix with entries `a,b`; define
 the linear map by matrix multiplication and prove the gap from the two
 coordinate eigenvectors. -/
 noncomputable def modelGappedOperator (a b : ℝ) :
-    Plane 𝕜 →ₗ[𝕜] Plane 𝕜 := by
-  sorry
+    Plane 𝕜 →ₗ[𝕜] Plane 𝕜 :=
+  Matrix.toEuclideanLin (Matrix.diagonal ![(a : 𝕜), (b : 𝕜)])
 
 /-- Perturbation producing equality in the `sin Θ` model.
 

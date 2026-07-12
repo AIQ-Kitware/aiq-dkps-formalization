@@ -104,7 +104,11 @@ theorem jointStageMeasure_probability
     (μref : Nat → Measure Ωref) (hμref : ∀ n, IsProbabilityMeasure (μref n))
     (μresp : Nat → Measure Ωresp) (hμresp : ∀ n, IsProbabilityMeasure (μresp n)) :
     ∀ n, IsProbabilityMeasure (jointStageMeasure μref μresp n) := by
-  sorry
+  intro n
+  letI := hμref n
+  letI := hμresp n
+  unfold jointStageMeasure
+  infer_instance
 
 /-- The lifted reference sampler preserves its iid law under independent
 product extension.
