@@ -212,7 +212,23 @@ theorem integral_norm_sq_modelReplicateMean_sub_mean_le
     ∫ ωresp,
       ‖modelReplicateMean replicates Y n ωresp f - μmodel f‖ ^ 2
         ∂(μresp n) ≤ variance n / replicates n := by
-  sorry
+  haveI := Hraw.probability n
+  -- Upgrade the coordinate means to a Bochner (vector-valued) mean.
+  have hmean : ∀ k, ∫ ω, Y n f k ω ∂(μresp n) = μmodel f := by
+    intro k
+    have hint : Integrable (Y n f k) (μresp n) :=
+      (Hraw.memLp_two n f k).integrable one_le_two
+    ext c
+    have h : (EuclideanSpace.proj c : Acharyya2024.Mat m p →L[Real] Real)
+          (∫ ω, Y n f k ω ∂(μresp n)) = ∫ ω, Y n f k ω c ∂(μresp n) :=
+      (ContinuousLinearMap.integral_comp_comm _ hint).symm
+    rw [Hraw.mean_entry n f k c] at h
+    exact h
+  -- Apply the universe-polymorphic sample-mean second-moment bound.
+  have hbound := ForMathlib.integral_norm_sq_average_sub_le_of_bound
+    (μresp n) (Hraw.replicates_pos n) (Y n f) (μmodel f)
+    (Hraw.memLp_two n f) hmean (Hraw.pairwise_independent n f) (Hraw.second_moment n f)
+  simpa [modelReplicateMean, replicateMean] using hbound
 
 /-- Uniform modelwise second moments transfer through random reference
 selection on the independent product space.
