@@ -112,6 +112,16 @@ absolute separation alone instead leads to the separate `π/2` estimate. -/
 def InternalGap (A : E →ₗ[𝕜] E) (U : Submodule 𝕜 E) (δ : ℝ) : Prop :=
   SpectraSeparated A U A Uᗮ δ
 
+/-- Ordered quadratic-form separation between the two blocks of `A`.
+
+The selected block `U` lies above `b`, while its orthogonal complement lies
+below `a`.  Together with `a < b`, this is the sharp constant-one hypothesis
+used by the finite-dimensional `sin (2 Θ)` theorem. -/
+def TwoBlockFormGap (A : E →ₗ[𝕜] E) (U : Submodule 𝕜 E)
+    (a b : ℝ) : Prop :=
+  (∀ x ∈ U, b * ‖x‖ ^ 2 ≤ RCLike.re ⟪A x, x⟫_𝕜) ∧
+    (∀ x ∈ Uᗮ, RCLike.re ⟪A x, x⟫_𝕜 ≤ a * ‖x‖ ^ 2)
+
 /-- The interval/exterior form of the mixed gap. -/
 def IntervalExteriorGap (A B : E →ₗ[𝕜] E) (U V : Submodule 𝕜 E)
     (a b δ : ℝ) : Prop :=
