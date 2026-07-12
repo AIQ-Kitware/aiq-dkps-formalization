@@ -545,7 +545,13 @@ noncomputable def safe_growingConfigControl
       (fun n => cmdsEntrywiseRate (n + 1) m
         (responseDistBound m
           (populationResponseBound + safeResponseTolerance n))
-        (safeResponseTolerance n)) := by
-  sorry
+        (safeResponseTolerance n)) :=
+  GrowingConfigControl.of_tendsto (by positivity)
+    (fun n => by
+      simp only [cmdsEntrywiseRate, responseFrobRate, responseDistBound, safeResponseTolerance]
+      positivity)
+    (safe_scaled_cmdsEntrywiseRate_zero m hm populationResponseBound)
+    (safe_polar_expression_zero m d hm populationResponseBound κ hκ)
+    (safe_configBound_zero m d hm populationResponseBound perspectiveBound κ hκ)
 
 end DkpsQuench.Perfect
