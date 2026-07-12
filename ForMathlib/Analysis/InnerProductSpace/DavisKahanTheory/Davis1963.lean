@@ -202,13 +202,22 @@ Lean proof route for a weaker agent:
 theorem sinTwoTheta_eigenvector_product_le
     {A H : E →ₗ[𝕜] E} (hA : A.IsSymmetric) (hH : H.IsSymmetric)
     {U : Submodule 𝕜 E} [U.HasOrthogonalProjection]
-    (hU : Reduces A U) {a b ε lam : ℝ} (hab : a < b)
+    (hU : Reduces A U) {a b ε lam : ℝ} (_hab : a < b)
     (hupper : ∀ z ∈ Uᗮ, RCLike.re ⟪A z, z⟫_𝕜 ≤ a * ‖z‖ ^ 2)
     (hlower : ∀ y ∈ U, b * ‖y‖ ^ 2 ≤ RCLike.re ⟪A y, y⟫_𝕜)
     {x : E} (hx : ‖x‖ = 1) (heig : (A + H) x = (lam : 𝕜) • x)
     (hHnorm : ‖H.toContinuousLinearMap‖ ≤ ε) :
     (b - a) * ‖projection U x‖ * ‖complementaryProjection U x‖ ≤ ε := by
-  sorry
+  have hHbound : ∀ v : E, ‖H v‖ ≤ ε * ‖v‖ := by
+    intro v
+    calc
+      ‖H v‖ ≤ ‖H.toContinuousLinearMap‖ * ‖v‖ :=
+        H.toContinuousLinearMap.le_opNorm v
+      _ ≤ ε * ‖v‖ := by gcongr
+  have heig' : A x + H x = (lam : 𝕜) • x := by
+    simpa using heig
+  simpa [projection, complementaryProjection, mul_assoc] using
+    sin_two_theta_le hA hH hU hlower hupper hHbound hx heig'
 
 /-- Vanishing-pinch product estimate, the 1963 ancestor of `tan 2Θ`.
 
@@ -222,14 +231,24 @@ theorem tanTwoTheta_eigenvector_product_le
     {A H : E →ₗ[𝕜] E} (hA : A.IsSymmetric) (hH : H.IsSymmetric)
     {U : Submodule 𝕜 E} [U.HasOrthogonalProjection]
     (hU : Reduces A U) (hoff : IsOffDiagonal U H)
-    {a b ε lam : ℝ} (hab : a < b)
+    {a b ε lam : ℝ} (_hab : a < b)
     (hupper : ∀ z ∈ Uᗮ, RCLike.re ⟪A z, z⟫_𝕜 ≤ a * ‖z‖ ^ 2)
     (hlower : ∀ y ∈ U, b * ‖y‖ ^ 2 ≤ RCLike.re ⟪A y, y⟫_𝕜)
     {x : E} (hx : ‖x‖ = 1) (heig : (A + H) x = (lam : 𝕜) • x)
     (hHnorm : ‖H.toContinuousLinearMap‖ ≤ ε) :
     (b - a) * ‖projection U x‖ * ‖complementaryProjection U x‖ ≤
       |‖projection U x‖ ^ 2 - ‖complementaryProjection U x‖ ^ 2| * ε := by
-  sorry
+  have hHbound : ∀ v : E, ‖H v‖ ≤ ε * ‖v‖ := by
+    intro v
+    calc
+      ‖H v‖ ≤ ‖H.toContinuousLinearMap‖ * ‖v‖ :=
+        H.toContinuousLinearMap.le_opNorm v
+      _ ≤ ε * ‖v‖ := by gcongr
+  obtain ⟨hHU, hHUperp⟩ := inner_blocks_eq_zero_of_isOffDiagonal U H hoff
+  have heig' : A x + H x = (lam : 𝕜) • x := by
+    simpa using heig
+  simpa [projection, complementaryProjection, mul_assoc] using
+    tan_two_theta_le hA hH hU hlower hupper hHbound hHU hHUperp hx heig'
 
 end DavisKahanTheory
 end ForMathlib

@@ -3,6 +3,7 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
+import ForMathlib.Analysis.InnerProductSpace.DavisKahanTheory.Basic
 import ForMathlib.Analysis.InnerProductSpace.DavisKahanTheory.TanTheta
 import ForMathlib.Analysis.InnerProductSpace.SinTwoThetaUINorm
 
@@ -73,9 +74,30 @@ theorem sinTwoTheta_perturbation_le
     {A B : E →ₗ[𝕜] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {U V : Submodule 𝕜 E} [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] (hU : Reduces A U) (hV : Reduces B V)
-    {δ : ℝ} (hδ : 0 < δ) (hgap : InternalGap A U δ) :
-    δ * N (sinTwoAngleOperator U V) ≤ 2 * N (B - A) := by
-  sorry
+    {a b : ℝ} (hab : a < b) (hgap : TwoBlockFormGap A U a b) :
+    (b - a) * N (sinTwoAngleOperator U V) ≤ 2 * N (B - A) := by
+  letI : CompleteSpace E := FiniteDimensional.complete 𝕜 E
+  have hcross :
+      N (complementaryProjection U ∘ₗ projection V ∘ₗ projection U) ≤
+        N (B - A) / (b - a) := by
+    simpa [projection, complementaryProjection] using
+      N.sin_two_theta_starProjection_le hA hB hU hV hab hgap.1 hgap.2
+  have hg : 0 < b - a := sub_pos.mpr hab
+  rw [le_div_iff₀ hg] at hcross
+  have hscale :
+      N (sinTwoAngleOperator U V) =
+        2 * N (complementaryProjection U ∘ₗ projection V ∘ₗ projection U) := by
+    rw [sinTwoAngleOperator_eq_two_smul_cross, N.smul_eq]
+    norm_num
+  rw [hscale]
+  calc
+    (b - a) * (2 * N
+        (complementaryProjection U ∘ₗ projection V ∘ₗ projection U)) =
+        2 * ((b - a) * N
+          (complementaryProjection U ∘ₗ projection V ∘ₗ projection U)) := by ring
+    _ ≤ 2 * N (B - A) := by
+      gcongr
+      simpa [mul_comm] using hcross
 
 /-- One-sided cross-block normalization matching the theorem already proved in
 `SinTwoThetaUINorm.lean`.
@@ -91,10 +113,15 @@ theorem sinTwoTheta_cross_perturbation_le
     {A B : E →ₗ[𝕜] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {U V : Submodule 𝕜 E} [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] (hU : Reduces A U) (hV : Reduces B V)
-    {δ : ℝ} (hδ : 0 < δ) (hgap : InternalGap A U δ) :
-    δ * N (complementaryProjection U ∘ₗ projection V ∘ₗ projection U) ≤
+    {a b : ℝ} (hab : a < b) (hgap : TwoBlockFormGap A U a b) :
+    (b - a) *
+        N (complementaryProjection U ∘ₗ projection V ∘ₗ projection U) ≤
       N (B - A) := by
-  sorry
+  letI : CompleteSpace E := FiniteDimensional.complete 𝕜 E
+  have h := N.sin_two_theta_starProjection_le
+    hA hB hU hV hab hgap.1 hgap.2
+  rw [le_div_iff₀ (sub_pos.mpr hab)] at h
+  simpa [projection, complementaryProjection, mul_comm] using h
 
 /-- Mirror-defect theorem with no second operator.
 
@@ -107,10 +134,24 @@ theorem sinTwoTheta_reflectionDefect_le
     (N : UnitarilyInvariantNorm 𝕜 E)
     {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric) {U V : Submodule 𝕜 E}
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hU : Reduces A U) {δ : ℝ} (hδ : 0 < δ)
-    (hgap : InternalGap A U δ) :
-    δ * N (sinTwoAngleOperator U V) ≤ N (reflectionDefect V A) := by
-  sorry
+    (hU : Reduces A U) {a b : ℝ} (hab : a < b)
+    (hgap : TwoBlockFormGap A U a b) :
+    (b - a) * N (sinTwoAngleOperator U V) ≤ N (reflectionDefect V A) := by
+  letI : CompleteSpace E := FiniteDimensional.complete 𝕜 E
+  have hmirror :
+      2 * N (complementaryProjection U ∘ₗ projection V ∘ₗ projection U) ≤
+        N (reflectionDefect V A) / (b - a) := by
+    simpa [projection, complementaryProjection, reflectionDefect,
+      reflectionConjugate] using
+      N.sin_two_theta_reflection_le hA hU hab hgap.1 hgap.2
+  rw [le_div_iff₀ (sub_pos.mpr hab)] at hmirror
+  have hscale :
+      N (sinTwoAngleOperator U V) =
+        2 * N (complementaryProjection U ∘ₗ projection V ∘ₗ projection U) := by
+    rw [sinTwoAngleOperator_eq_two_smul_cross, N.smul_eq]
+    norm_num
+  rw [hscale]
+  simpa [mul_assoc, mul_left_comm, mul_comm] using hmirror
 
 /-- The reflection defect is at most twice the perturbation when `V` reduces
 `B`.
@@ -187,12 +228,12 @@ Lean proof route for a weaker agent:
 theorem sinTwoTheta_spectralSubspace_le
     (N : UnitarilyInvariantNorm 𝕜 E)
     {A B : E →ₗ[𝕜] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
-    {Ω : Set ℝ} {δ : ℝ} (hδ : 0 < δ)
-    (hgap : InternalGap A (spectralSubspace A Ω) δ) :
-    δ * N (sinTwoAngleOperator (spectralSubspace A Ω)
+    {Ω : Set ℝ} {a b : ℝ} (hab : a < b)
+    (hgap : TwoBlockFormGap A (spectralSubspace A Ω) a b) :
+    (b - a) * N (sinTwoAngleOperator (spectralSubspace A Ω)
         (spectralSubspace B Ω)) ≤ 2 * N (B - A) := by
   exact sinTwoTheta_perturbation_le N hA hB
-    (reduces_spectralSubspace A Ω) (reduces_spectralSubspace B Ω) hδ hgap
+    (reduces_spectralSubspace A Ω) (reduces_spectralSubspace B Ω) hab hgap
 
 /-- Unequal-dimensional extension: zero padding records the unmatched
 principal directions.
@@ -207,9 +248,9 @@ theorem sinTwoTheta_perturbation_le_unequalFinrank
     {A B : E →ₗ[𝕜] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {U V : Submodule 𝕜 E} [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] (hU : Reduces A U) (hV : Reduces B V)
-    {δ : ℝ} (hδ : 0 < δ) (hgap : InternalGap A U δ) :
-    δ * N (sinTwoAngleOperator U V) ≤ 2 * N (B - A) := by
-  exact sinTwoTheta_perturbation_le N hA hB hU hV hδ hgap
+    {a b : ℝ} (hab : a < b) (hgap : TwoBlockFormGap A U a b) :
+    (b - a) * N (sinTwoAngleOperator U V) ≤ 2 * N (B - A) := by
+  exact sinTwoTheta_perturbation_le N hA hB hU hV hab hgap
 
 /-- Operator-norm form.
 
@@ -222,11 +263,11 @@ theorem opNorm_sinTwoTheta_le
     {A B : E →ₗ[𝕜] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {U V : Submodule 𝕜 E} [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] (hU : Reduces A U) (hV : Reduces B V)
-    {δ : ℝ} (hδ : 0 < δ) (hgap : InternalGap A U δ) :
-    δ * ‖(sinTwoAngleOperator U V).toContinuousLinearMap‖ ≤
+    {a b : ℝ} (hab : a < b) (hgap : TwoBlockFormGap A U a b) :
+    (b - a) * ‖(sinTwoAngleOperator U V).toContinuousLinearMap‖ ≤
       2 * ‖(B - A).toContinuousLinearMap‖ := by
   exact sinTwoTheta_perturbation_le (UnitarilyInvariantNorm.opNorm 𝕜 E)
-    hA hB hU hV hδ hgap
+    hA hB hU hV hab hgap
 
 /-- Frobenius form.
 
@@ -239,11 +280,11 @@ theorem frobenius_sinTwoTheta_le
     {A B : E →ₗ[𝕜] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {U V : Submodule 𝕜 E} [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] (hU : Reduces A U) (hV : Reduces B V)
-    {δ : ℝ} (hδ : 0 < δ) (hgap : InternalGap A U δ) :
-    δ * UnitarilyInvariantNorm.frobenius 𝕜 E (sinTwoAngleOperator U V) ≤
+    {a b : ℝ} (hab : a < b) (hgap : TwoBlockFormGap A U a b) :
+    (b - a) * UnitarilyInvariantNorm.frobenius 𝕜 E (sinTwoAngleOperator U V) ≤
       2 * UnitarilyInvariantNorm.frobenius 𝕜 E (B - A) := by
   exact sinTwoTheta_perturbation_le (UnitarilyInvariantNorm.frobenius 𝕜 E)
-    hA hB hU hV hδ hgap
+    hA hB hU hV hab hgap
 
 /-- Ky Fan form.
 
@@ -256,12 +297,12 @@ theorem kyFan_sinTwoTheta_le
     {A B : E →ₗ[𝕜] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {U V : Submodule 𝕜 E} [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] (hU : Reduces A U) (hV : Reduces B V)
-    {δ : ℝ} (hδ : 0 < δ) (hgap : InternalGap A U δ) (k : ℕ) :
-    δ * kyFanSum k (sinTwoAngleOperator U V) ≤ 2 * kyFanSum k (B - A) := by
+    {a b : ℝ} (hab : a < b) (hgap : TwoBlockFormGap A U a b) (k : ℕ) :
+    (b - a) * kyFanSum k (sinTwoAngleOperator U V) ≤ 2 * kyFanSum k (B - A) := by
   let NK : UnitarilyInvariantNorm 𝕜 E :=
     (RectangularUnitarilyInvariantNorm.kyFan
       (𝕜 := 𝕜) (E := E) (F := E) k).toSquare
-  have h := sinTwoTheta_perturbation_le NK hA hB hU hV hδ hgap
+  have h := sinTwoTheta_perturbation_le NK hA hB hU hV hab hgap
   simpa [NK, RectangularUnitarilyInvariantNorm.toSquare,
     RectangularUnitarilyInvariantNorm.kyFan_apply,
     RectangularUnitarilyInvariantNorm.rectangularKyFanSum,
