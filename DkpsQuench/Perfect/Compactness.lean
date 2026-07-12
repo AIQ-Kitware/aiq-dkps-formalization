@@ -128,7 +128,28 @@ theorem modelReplicateMean_lipschitz_of_raw
     ‖modelReplicateMean replicates Y n ω f -
         modelReplicateMean replicates Y n ω g‖ ≤
       L * ‖ψ f - ψ g‖ := by
-  sorry
+  rcases Nat.eq_zero_or_pos (replicates n) with hr | hr
+  · have hrr : (replicates n : ℝ) = 0 := by exact_mod_cast hr
+    simp only [modelReplicateMean, replicateMean, hrr, inv_zero, zero_smul, sub_self,
+      norm_zero]
+    exact mul_nonneg Hlip.constant_nonneg (norm_nonneg _)
+  · have hr' : (replicates n : ℝ) ≠ 0 := by exact_mod_cast hr.ne'
+    have hbound : ‖∑ k, (Y n f k ω - Y n g k ω)‖ ≤
+        (replicates n : ℝ) * (L * ‖ψ f - ψ g‖) := by
+      calc ‖∑ k, (Y n f k ω - Y n g k ω)‖
+          ≤ ∑ k, ‖Y n f k ω - Y n g k ω‖ := norm_sum_le _ _
+        _ ≤ ∑ _k : Fin (replicates n), (L * ‖ψ f - ψ g‖) :=
+            Finset.sum_le_sum (fun k _ => Hlip.bound n f g k ω)
+        _ = (replicates n : ℝ) * (L * ‖ψ f - ψ g‖) := by
+            rw [Finset.sum_const, Finset.card_univ, Fintype.card_fin, nsmul_eq_mul]
+    simp only [modelReplicateMean, replicateMean]
+    rw [← smul_sub, ← Finset.sum_sub_distrib, norm_smul, Real.norm_eq_abs,
+      abs_of_nonneg (by positivity : (0 : ℝ) ≤ (replicates n : ℝ)⁻¹)]
+    calc (replicates n : ℝ)⁻¹ * ‖∑ k, (Y n f k ω - Y n g k ω)‖
+        ≤ (replicates n : ℝ)⁻¹ * ((replicates n : ℝ) * (L * ‖ψ f - ψ g‖)) :=
+          mul_le_mul_of_nonneg_left hbound (by positivity)
+      _ = L * ‖ψ f - ψ g‖ := by
+          rw [← mul_assoc, inv_mul_cancel₀ hr', one_mul]
 
 /-- Pathwise raw-response Lipschitzness passes to the population mean.
 
