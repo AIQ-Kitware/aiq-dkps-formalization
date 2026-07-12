@@ -187,17 +187,22 @@ deterministic reduction in that chain: entrywise closeness to the population
 covariance preserves at least half of its quadratic-form floor.  This theorem
 requires no separate compactness, measurability, or integrability premise;
 integrability of the required coordinate products is recovered from the
-positive nondegeneracy certificate by polarization.  The remaining work is to
-transport this floor through sample centering, the rectangular scatter--Gram
-spectral bridge, target augmentation, and the measurable high-probability event.
+positive nondegeneracy certificate by polarization.  The formalization now
+also identifies the sample-centered empirical covariance quadratic form with
+the average squared projections of the centered reference cloud, so the event
+membership directly yields the reference-scatter quadratic floor.  The
+remaining work is the rectangular scatter--Gram spectral bridge, target
+augmentation, and assembly of the measurable high-probability event.
 
 
 \paragraph{Role in the Perfect Quench scaffold.}
 The completion program replaces stagewise global spectral assumptions by a
 high-probability certificate derived from a population covariance floor and iid
 reference sampling.  The deterministic covariance perturbation seam is now
-closed in \code{DkpsQuench.Perfect.CovarianceFloor}; the random covariance event
-and the later scatter/Gram eigenvalue transfers remain.  The explicit response
+closed in \code{DkpsQuench.Perfect.CovarianceFloor}, and the sample-centered
+quadratic identity is closed in \code{DkpsQuench.Perfect.CenteredCovariance}.
+The rectangular scatter/Gram eigenvalue transfers and final spectral-event
+assembly remain.  The explicit response
 schedule is already proved.  These changes reduce the assumptions of the
 Quench composition without altering the proved 2025 concentration statements.
 
@@ -317,9 +322,9 @@ Composition gap \\
 \section{Perfect Quench completion scaffold}
 
 The repository now contains an executable proof scaffold under
-\code{DkpsQuench/Perfect}.  Twelve open proof bodies remain after the
-polynomial-cover theorem and the deterministic covariance-floor transfer were
-completed.  The count below is the live source count, not an estimate derived
+\code{DkpsQuench/Perfect}.  Eleven open proof bodies remain after the
+polynomial-cover theorem, deterministic covariance-floor transfer, and
+sample-centered quadratic-form bridge were completed.  The count below is the live source count, not an estimate derived
 from the difficulty-ranking document.
 
 \begin{longtable}{>{\raggedright\arraybackslash}p{0.22\textwidth}
@@ -334,12 +339,11 @@ Population geometry & 0 & Centering, exact Euclidean double centering, and the
 augmented radial identity are proved. & Separate configuration, Gram, radial,
 PSD, and rank inputs collapse to one response-distance realization. \\
 \addlinespace
-Spectral regularity & 4 & The coordinate weak laws, covariance algebra,
-measurability, fixed-dimensional covariance event, and
-entrywise-to-quadratic transfer are proved.  The remaining proofs are the
-reference scatter lower bound, the rectangular scatter--Gram eigenvalue bridge,
-target augmentation, and construction of the high-probability spectral
-certificate. & Global floor and ceiling assumptions over every reference
+Spectral regularity & 3 & The coordinate weak laws, covariance algebra,
+measurability, fixed-dimensional covariance event, entrywise-to-quadratic
+transfer, and exact sample-centered projection identity are proved.  The
+remaining proofs are the rectangular scatter--Gram eigenvalue bridge, target
+augmentation, and construction of the high-probability spectral certificate. & Global floor and ceiling assumptions over every reference
 outcome are replaced by one population covariance nondegeneracy condition and a
 measurable high-probability event. \\
 \addlinespace
@@ -395,9 +399,7 @@ program.
 
 The scaffold defines the remaining frontier precisely:
 \begin{enumerate}
-\item rewrite the reference empirical covariance quadratic form as the average
-      of squared projections of the sample-centered reference configuration;
-\item transport that feature-space floor to the first $d$ sorted eigenvalues
+\item transport the proved sample-centered feature-space floor to the first $d$ sorted eigenvalues
       of the centered reference Gram matrix through a reusable rectangular
       scatter--Gram spectral theorem;
 \item prove that target augmentation/recentering preserves the lower floor,

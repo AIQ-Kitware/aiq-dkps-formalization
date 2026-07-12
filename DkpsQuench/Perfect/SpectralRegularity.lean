@@ -15,7 +15,7 @@ augmentation, and eigenvalue comparison steps so no single proof must solve the
 whole argument.
 -/
 
-import DkpsQuench.Perfect.CovarianceFloor
+import DkpsQuench.Perfect.CenteredCovariance
 
 set_option linter.mathlibStandardSet false
 
@@ -1072,7 +1072,20 @@ theorem reference_centered_quadratic_floor_of_event
       (n : Real)⁻¹ * ∑ i : Fin n,
         ((∑ a : Fin d, x a * centerConfig
           (referencePerspectiveConfig ψ f_ref n ωref) i a)) ^ 2 := by
-  sorry
+  change EntrywiseClose
+    (referenceEmpiricalCovariance ψ f_ref n ωref)
+    (perspectiveCovarianceMatrix Pf ψ (perspectiveMean Pf ψ))
+    (covarianceEntryTolerance d κ) at hω
+  have href :
+      referenceEmpiricalCovariance ψ f_ref n ωref =
+        centeredEmpiricalCovariance
+          (referencePerspectiveConfig ψ f_ref n ωref) := by
+    rfl
+  rw [href] at hω
+  apply centeredEmpiricalCovariance_quadratic_floor_of_entrywise
+    (Pf := Pf) (ψ := ψ) Hnondeg
+    (z := referencePerspectiveConfig ψ f_ref n ωref)
+  exact hω
 
 /-- Usable reference-scatter spectral floor.
 
