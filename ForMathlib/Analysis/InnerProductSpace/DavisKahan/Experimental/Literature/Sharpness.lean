@@ -36,8 +36,8 @@ variable {𝕜 : Type*} [RCLike 𝕜]
 abbrev Plane (𝕜 : Type*) [RCLike 𝕜] := EuclideanSpace 𝕜 (Fin 2)
 abbrev ThresholdSpace (𝕜 : Type*) [RCLike 𝕜] := EuclideanSpace 𝕜 (Fin 4)
 
-noncomputable def modelProjection0 : Plane 𝕜 →L[𝕜] Plane 𝕜 := by
-  sorry
+noncomputable def modelProjection0 : Plane 𝕜 →L[𝕜] Plane 𝕜 :=
+  (Matrix.toEuclideanLin !![(1 : 𝕜), 0; 0, 0]).toContinuousLinearMap
 
 noncomputable def modelProjectionTheta (theta : ℝ) :
     Plane 𝕜 →L[𝕜] Plane 𝕜 := by
@@ -62,21 +62,19 @@ trigonometric normalization then supplies every later sharpness identity. -/
 idempotent and identify `modelSubspace0` with its range, then invoke the generic
 range-of-star-projection instance. -/
 noncomputable instance modelSubspace0_hasOrthogonalProjection :
-    (modelSubspace0 (𝕜 := 𝕜)).HasOrthogonalProjection := by
-  sorry
+    (modelSubspace0 (𝕜 := 𝕜)).HasOrthogonalProjection := inferInstance
 
 /-- Construction strategy: prove the rotated matrix is a self-adjoint
 idempotent by conjugating the coordinate projection with the planar rotation,
 then identify its range. -/
 noncomputable instance modelSubspaceTheta_hasOrthogonalProjection (theta : ℝ) :
-    (modelSubspaceTheta (𝕜 := 𝕜) theta).HasOrthogonalProjection := by
-  sorry
+    (modelSubspaceTheta (𝕜 := 𝕜) theta).HasOrthogonalProjection := inferInstance
 
 /-- Construction route: use the diagonal matrix with eigenvalues separated
 by `d` in the standard planar basis and bundle its matrix norm bound. -/
 noncomputable def modelGappedOperator (d : ℝ) :
-    Plane 𝕜 →L[𝕜] Plane 𝕜 := by
-  sorry
+    Plane 𝕜 →L[𝕜] Plane 𝕜 :=
+  (Matrix.toEuclideanLin !![(0 : 𝕜), 0; 0, (d : 𝕜)]).toContinuousLinearMap
 
 /-- Difference between the rotated and unrotated two-level operators.
 This is the exact equality model for `sin Θ`; it is generally not off-diagonal
