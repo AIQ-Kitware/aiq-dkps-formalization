@@ -196,7 +196,74 @@ theorem yuWangSamworth_eigenvector_le
       Δ ≤ |lam - ν|) :
     ∃ c : 𝕜, ‖c‖ = 1 ∧
       ‖c • v - u‖ ≤ 2 * Real.sqrt 2 * ‖(B - A).toContinuousLinearMap‖ / Δ := by
-  sorry
+  have hu0 : u ≠ 0 := by rw [← norm_ne_zero_iff, hu]; norm_num
+  have hv0 : v ≠ 0 := by rw [← norm_ne_zero_iff, hv]; norm_num
+  -- The eigenlines reduce the operators.
+  have hU : Reduces A (Submodule.span 𝕜 {u}) := by
+    intro x hx
+    rw [Submodule.mem_span_singleton] at hx
+    obtain ⟨a, rfl⟩ := hx
+    rw [map_smul, hAu]
+    exact Submodule.smul_mem _ _ (Submodule.smul_mem _ _ (Submodule.mem_span_singleton_self u))
+  have hV : Reduces B (Submodule.span 𝕜 {v}) := by
+    intro x hx
+    rw [Submodule.mem_span_singleton] at hx
+    obtain ⟨a, rfl⟩ := hx
+    rw [map_smul, hBv]
+    exact Submodule.smul_mem _ _ (Submodule.smul_mem _ _ (Submodule.mem_span_singleton_self v))
+  have hrankU : finrank 𝕜 (Submodule.span 𝕜 {u}) = 1 := finrank_span_singleton hu0
+  have hrankV : finrank 𝕜 (Submodule.span 𝕜 {v}) = 1 := finrank_span_singleton hv0
+  -- The restricted spectrum of `A` on the eigenline is exactly `{lam}`, so the internal
+  -- gap follows from `hgap`.
+  have hgap' : PopulationGap A (Submodule.span 𝕜 {u}) Δ := by
+    intro l ν hl hν
+    obtain ⟨x, hxU, hx0, hAx⟩ := hl
+    rw [Submodule.mem_span_singleton] at hxU
+    obtain ⟨a, rfl⟩ := hxU
+    have heq : (lam : 𝕜) • (a • u) = (l : 𝕜) • (a • u) := by
+      rw [smul_comm, ← hAu, ← map_smul]; exact hAx
+    have hll : lam = l := by
+      by_contra hne
+      have hz : ((lam : 𝕜) - (l : 𝕜)) • (a • u) = 0 := by rw [sub_smul, heq, sub_self]
+      rcases smul_eq_zero.mp hz with h | h
+      · exact hne (by exact_mod_cast sub_eq_zero.mp h)
+      · exact hx0 h
+    rw [← hll]; exact hgap ν hν
+  obtain ⟨u', v', hu'on, hv'on, hspanU, hspanV, hbound⟩ :=
+    yuWangSamworth_alignedBasis_le hA hB hU hV hcorr hrankU hrankV hΔ hgap'
+  -- Extract the unit scalars relating the aligned basis vectors to `u`, `v`.
+  have hu'0 : u' 0 ∈ Submodule.span 𝕜 {u} := hspanU ▸ Submodule.subset_span ⟨0, rfl⟩
+  rw [Submodule.mem_span_singleton] at hu'0
+  obtain ⟨α, hα⟩ := hu'0
+  have hv'0 : v' 0 ∈ Submodule.span 𝕜 {v} := hspanV ▸ Submodule.subset_span ⟨0, rfl⟩
+  rw [Submodule.mem_span_singleton] at hv'0
+  obtain ⟨β, hβ⟩ := hv'0
+  have hαnorm : ‖α‖ = 1 := by
+    have h := hu'on.norm_eq_one 0
+    rw [← hα, norm_smul, hu, mul_one] at h; exact h
+  have hβnorm : ‖β‖ = 1 := by
+    have h := hv'on.norm_eq_one 0
+    rw [← hβ, norm_smul, hv, mul_one] at h; exact h
+  have hα0 : α ≠ 0 := by rw [← norm_ne_zero_iff, hαnorm]; norm_num
+  refine ⟨β * α⁻¹, by rw [norm_mul, norm_inv, hαnorm, hβnorm]; norm_num, ?_⟩
+  -- `‖(βα⁻¹) v - u‖ = ‖v' 0 - u' 0‖`, then use the aligned-basis bound.
+  have hαv : α • ((β * α⁻¹) • v) = v' 0 := by
+    rw [smul_smul, mul_comm β α⁻¹, ← mul_assoc, mul_inv_cancel₀ hα0, one_mul, hβ]
+  have key : ‖(β * α⁻¹) • v - u‖ = ‖v' 0 - u' 0‖ := by
+    have hsub : α • ((β * α⁻¹) • v - u) = v' 0 - u' 0 := by rw [smul_sub, hαv, hα]
+    calc ‖(β * α⁻¹) • v - u‖
+        = ‖α‖ * ‖(β * α⁻¹) • v - u‖ := by rw [hαnorm, one_mul]
+      _ = ‖α • ((β * α⁻¹) • v - u)‖ := by rw [norm_smul]
+      _ = ‖v' 0 - u' 0‖ := by rw [hsub]
+  have hsum1 : Real.sqrt (∑ i : Fin 1, ‖v' i - u' i‖ ^ 2) = ‖v' 0 - u' 0‖ := by
+    rw [Fin.sum_univ_one, Real.sqrt_sq (norm_nonneg _)]
+  rw [key, ← hsum1]
+  refine hbound.trans ?_
+  have hmin : min (Real.sqrt (↑(1 : ℕ)) * ‖(B - A).toContinuousLinearMap‖)
+      (UnitarilyInvariantNorm.frobenius 𝕜 E (B - A))
+      ≤ ‖(B - A).toContinuousLinearMap‖ :=
+    (min_le_left _ _).trans_eq (by rw [Nat.cast_one, Real.sqrt_one, one_mul])
+  gcongr
 
 end DavisKahanTheory
 end ForMathlib
