@@ -56,3 +56,17 @@ authors = ["Yuanhe Zhang", "Jason D. Lee", "Fanghui Liu"]
 copy_kind = "excerpt"
 local_changes = "Added provenance wrapper and omitted surrounding declarations; selected declaration text is unchanged."
 retrieved = "2026-07-12"
+
+[[source]]
+id = "lean-stat-learning-theory-davis-kahan-spectral-projection"
+local_path = "vendor/lean/lean-stat-learning-theory/DavisKahanSpectralProjection.excerpt.lean"
+repository = "https://github.com/YuanheZ/lean-stat-learning-theory"
+commit = "216e578c9576bab6b0abc3ba6c65762536768e96"
+source_path = "SLT/MatrixInfra/Perturb.lean"
+blob_sha = "1de3e2023f6051fe75f2fb4ecb6ec437fb6cf118"
+source_lines = "540-649"
+license = "Apache-2.0"
+authors = ["Yuanhe Zhang", "Jason D. Lee", "Fanghui Liu"]
+copy_kind = "excerpt"
+local_changes = "Added provenance wrapper only; copied theorem text is unchanged."
+retrieved = "2026-07-12"

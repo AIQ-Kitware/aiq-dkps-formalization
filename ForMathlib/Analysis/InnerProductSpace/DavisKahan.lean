@@ -476,6 +476,12 @@ Composition of `gap_of_rank_floor` with
 of rank `d` with spectral floor `α` and `S` is `ε`-operator-close with
 `ε ≤ α / 2`, the squared overlap between the leading eigenvectors of `T` and the
 trailing eigenvectors of `S` is at most `4 n ε² / α²`.
+
+Related Lean work: `YuanheZ/lean-stat-learning-theory` proves an operator-norm
+spectral-projection DK theorem and an eigenvector-angle endpoint in
+`SLT/MatrixInfra/Perturb.lean`.  This declaration is a different Frobenius
+cross-block/rank-floor specialization and is the source of the projector-sum
+corollaries used by the local statistical development.
 -/
 theorem sum_cross_norm_inner_eigenvectorBasis_sq_le_of_rank_floor
     (hT : T.IsSymmetric) (hS : S.IsSymmetric) (hn : finrank 𝕜 E = n)

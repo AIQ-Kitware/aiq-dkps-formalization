@@ -31,6 +31,8 @@ outside the `ForMathlib` dependency graph so that:
   vectors, zero/nonzero cases, orthonormality, and reconstruction.
 - `lean-stat-learning-theory/EYMOperatorNorm.excerpt.lean`: the operator-norm lower and
   attained halves of Eckart-Young-Mirsky.
+- `lean-stat-learning-theory/DavisKahanSpectralProjection.excerpt.lean`: the centered
+  operator-norm spectral-projection Davis--Kahan proof.
 - `drifting-identifiability/FiniteFrameBound.excerpt.lean`: qualitative linear
   independence to a positive finite lower-frame constant.
 

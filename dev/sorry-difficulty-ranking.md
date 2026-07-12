@@ -2,6 +2,8 @@
 
 Updated 2026-07-12 after closing equal-rank principal-angle symmetry, from the original 10-way static-analysis pass. Completed obligations were removed by matching the ranking against the current Lean source tree; surviving entries retain the original 1–5 estimates and relative order.
 
+Existing-work survey note: the newly identified `lean-stat-learning-theory/SLT/MatrixInfra/Perturb.lean` donor materially lowers implementation risk for finite-dimensional interval/set-separated spectral-projection adapters, but it does not solve the remaining infinite-dimensional Borel functional-calculus/PVM obligations. No open item was removed or re-tiered in this documentation-only pass.
+
 **Scale:** 1 = trivial one-liner · 2 = easy (few lines) · 3 = moderate (~10–30 lines) · 4 = hard (new API / intricate) · 5 = research-grade crux.
 
 | Difficulty | Count |

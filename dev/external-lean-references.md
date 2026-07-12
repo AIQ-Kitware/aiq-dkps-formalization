@@ -33,8 +33,10 @@ When no license is visible, we do not copy source text into the repository. We m
 permalinks, theorem names, and proof strategies, then independently re-derive the result.
 A local git-ignored cache under `dev/reference-repos/` may be used during development.
 
-The full mathematical roadmap is in
-`docs/planning/rectangular-singular-values-and-frames.md`.
+The focused Davis--Kahan reuse analysis is in
+`dev/davis-kahan-existing-work-survey.md`.  The local rectangular and frame APIs are staged in
+`ForMathlib/Analysis/InnerProductSpace/RectangularSingularValues.lean`,
+`SingularSystem.lean`, and `FiniteFrame.lean`.
 
 ---
 
@@ -103,6 +105,7 @@ Vendored excerpt:
   - `SLT/MatrixInfra/Basic.lean`, `8c7dd1aaeaedd6c702c28fee2845d9f66cecf219`
   - `SLT/MatrixInfra/CourantFischer.lean`, `ff953534b773b60a5940a7bff0aeae275fc87704`
   - `SLT/MatrixInfra/EYM.lean`, `ef6e16a2942555987e9bfc4d944f96838d72627f`
+  - `SLT/MatrixInfra/Perturb.lean`, `1de3e2023f6051fe75f2fb4ecb6ec437fb6cf118`
 
 This is the strongest licensed source found in the extended survey. It develops:
 
@@ -112,7 +115,10 @@ This is the strongest licensed source found in the extended survey. It develops:
 - Rayleigh and singular quotients;
 - full eigenvalue and singular-value Courant-Fischer formulas;
 - leading/trailing spectral subspaces; and
-- an attained operator-norm Eckart-Young-Mirsky theorem.
+- an attained operator-norm Eckart-Young-Mirsky theorem;
+- Weyl perturbation bounds for sorted eigenvalues and singular values;
+- spectral-subspace and spectral-projection APIs; and
+- eigenvector and spectral-projection Davis--Kahan theorems.
 
 The repository's associated paper describes a human-AI collaborative workflow. Reuse should
 credit the named file authors and the project, without assigning a particular theorem to a
@@ -124,6 +130,8 @@ Vendored excerpts:
   right/left singular-vector core, the zero case, orthonormality, and reconstruction.
 - `vendor/lean/lean-stat-learning-theory/EYMOperatorNorm.excerpt.lean` preserves the
   operator-norm Eckart--Young lower and attained bounds.
+- `vendor/lean/lean-stat-learning-theory/DavisKahanSpectralProjection.excerpt.lean` preserves
+  the centered operator-norm spectral-projection DK proof.
 
 ### `Dronmong/drifting-identifiability`
 
@@ -144,6 +152,46 @@ antilipschitz proof is a strong donor for the existence direction.
 
 Vendored excerpt:
 `vendor/lean/drifting-identifiability/FiniteFrameBound.excerpt.lean`.
+
+---
+
+## Direct Davis--Kahan formalizations found in the 2026-07-12 pass
+
+### Licensed direct donor: `YuanheZ/lean-stat-learning-theory`
+
+`SLT/MatrixInfra/Perturb.lean` is the closest compatible external DK development found.  At
+commit `216e578c9576bab6b0abc3ba6c65762536768e96` it proves finite-dimensional `RCLike`
+operator-norm versions of Weyl, an eigenvector-angle bound, and centered/closed-interval/general
+spectral-projection DK bounds.  Its public spectral-subspace API is parallel to, but not
+identical with, this repository's `SpectrumIn` and reduction-based API.
+
+Use it as:
+
+- an independent audit of the local operator-norm endpoint;
+- a donor for interval/set-separated convenience wrappers;
+- a source of already-debugged spectral-projection helper lemmas; and
+- a coordination point before upstreaming overlapping Mathlib declarations.
+
+Do not replace the local dimension-free Sylvester, unitarily invariant norm, residual,
+projector-difference, sharp-angle, or YWS layers with the narrower finite proof.
+
+### Restrictive reference: `facebookresearch/atlas-lean`
+
+At commit `34ffed396f376454c1a9b297f3fd74c5c801fb50`,
+`Atlas/HighDimensionalStatistics/code/Chapter4/Thm_4_8.lean` proves a real-matrix leading
+spiked-covariance eigenvector bound, and `Cor_4_9.lean` combines it with concentration for a
+PCA application.  The repository uses CC BY-NC 4.0 plus additional restrictions, including a
+machine-learning-use rider.  No source or proof text is copied; the files are recorded only
+for theorem-statement comparison.
+
+### Screened out: `jrgochan/prime`
+
+`proofs/Cathedral/Spectral/DavisKahan.lean` at commit
+`3b554aa38b0d30f13e81262eeef4d4cf3e8696f6` assumes a DK statement rather than proving it.
+It supplies no reusable perturbation argument.
+
+See `dev/davis-kahan-existing-work-survey.md` for the applicability matrix and recommended
+reuse boundaries.
 
 ---
 
@@ -314,6 +362,8 @@ should preserve this design rather than introduce a competing finite-indexed def
 | operator-norm Eckart-Young | lean-stat `EYM.lean`; jbarrcfl SVD | licensed adaptation |
 | finite lower frame existence | drifting-identifiability `FiniteStability.lean` | generalize from application indexing/norm to finite frames |
 | finite frame definitions | Cantor frames; local generalized DK theory | statement design, independent implementation |
+| finite operator-norm spectral projection DK | lean-stat `Perturb.lean` | licensed audit/donor for interval and set-separation wrappers |
+| statistical leading-eigenvector application | Atlas `Thm_4_8.lean` / `Cor_4_9.lean` | restrictive reference-only statement comparison |
 | sorted compression/interlacing | lean-genius corpus | reference-only alternate route |
 
 ---

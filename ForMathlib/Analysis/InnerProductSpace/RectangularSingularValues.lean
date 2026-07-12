@@ -35,7 +35,10 @@ Licensed proof snapshots and exact provenance are recorded under `vendor/lean/`.
 particular, `lean-stat-learning-theory/SingularSystemGram.excerpt.lean` constructs the left
 singular vectors and both Gram decompositions. Reference-only approaches using
 `spectrum.nonzero_mul_comm`, characteristic polynomials, or full SVDs are catalogued in
-`dev/external-lean-references.md`.
+`dev/external-lean-references.md`.  The top-singular-value and
+Eckart--Young excerpts are downstream endpoints rather than substitutes for the
+root eigenspace equivalence: they become reusable once adjoint invariance and an
+intrinsic singular system are available.
 -/
 
 namespace ForMathlib

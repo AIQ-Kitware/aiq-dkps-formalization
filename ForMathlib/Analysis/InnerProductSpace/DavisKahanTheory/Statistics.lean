@@ -109,6 +109,12 @@ Lean proof route for a weaker agent:
 
 Signature audit: `hcorr` now fixes the perturbed block by the same ordered eigenvalue indices;
 this excludes arbitrary reducing subspaces when `B=A`.
+
+Related Lean work: `YuanheZ/lean-stat-learning-theory` proves operator-norm
+eigenvector and spectral-projection DK endpoints in `SLT/MatrixInfra/Perturb.lean`.
+Those results provide an independent check of the gap/perturbation mechanism but
+do not include the YWS Frobenius minimum, population-gap residual sandwich, or
+aligned-basis conclusion proved here.
 -/
 theorem yuWangSamworth_sinTheta_le
     {A B : E →ₗ[𝕜] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
@@ -476,6 +482,12 @@ Lean proof route for a weaker agent:
 
 Signature audit: The rank-one `hcorr` premise selects `v` from the corresponding ordered
 perturbed eigenline rather than an arbitrary eigenvector of `B`.
+
+Related formalization: `facebookresearch/atlas-lean`,
+`Atlas/HighDimensionalStatistics/code/Chapter4/Thm_4_8.lean`, contains a
+real-matrix leading-eigenvector DK endpoint for a spiked covariance model, and
+`Cor_4_9.lean` applies it to PCA.  That source is recorded only for statement
+comparison because its repository terms are not compatible with vendoring here.
 -/
 theorem yuWangSamworth_eigenvector_le
     {A B : E →ₗ[𝕜] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
