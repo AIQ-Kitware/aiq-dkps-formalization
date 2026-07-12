@@ -347,6 +347,7 @@ no scalar-tower or codomain real-module instance is required. -/
 local instance realModuleLinearMap : Module ℝ (E →ₗ[𝕜] F) :=
   Module.compHom (E →ₗ[𝕜] F) (algebraMap ℝ 𝕜)
 
+omit [FiniteDimensional 𝕜 E] [FiniteDimensional 𝕜 F] in
 /-- Convert an exact convex-hull barycentric representation into a finite
 unitary-orbit certificate.
 
@@ -1282,9 +1283,7 @@ theorem mem_convexHull_twoSidedUnitaryOrbit_of_kyFanSum_le
       simp only [LinearMap.comp_apply, OrthonormalBasis.coe_toBasis]
       rw [diagOp_apply_basis]
       have hPi : P (b i) = b (Equiv.swap j l i) := by
-        simpa [P, b] using
-          (EuclideanSpace.piLpCongrLeft_single (𝕜 := 𝕜)
-            (Equiv.swap j l) i (1 : 𝕜))
+        simp [P, b]
       change ((q (Equiv.swap j l i) : ℝ) : 𝕜) • b i =
         P.symm (diagOp b q (P (b i)))
       rw [hPi, diagOp_apply_basis, map_smul]
@@ -1536,6 +1535,7 @@ noncomputable def zeroExtension (A : E →ₗ[𝕜] F) :
     zeroExtensionProd A ∘ₗ
       (WithLp.linearEquiv 2 𝕜 (E × F)).toLinearMap
 
+omit [FiniteDimensional 𝕜 E] [FiniteDimensional 𝕜 F] in
 @[simp] theorem zeroExtension_apply (A : E →ₗ[𝕜] F)
     (z : WithLp 2 (E × F)) :
     zeroExtension A z = WithLp.toLp 2 (0, A (WithLp.ofLp z).1) := by
@@ -1557,10 +1557,12 @@ private noncomputable def zeroExtensionInr :
     intro x y
     simp [WithLp.prod_inner_apply])
 
+omit [FiniteDimensional 𝕜 E] [FiniteDimensional 𝕜 F] in
 @[simp] private theorem zeroExtensionInl_apply (x : E) :
     zeroExtensionInl (𝕜 := 𝕜) (F := F) x = WithLp.toLp 2 (x, 0) := by
   rfl
 
+omit [FiniteDimensional 𝕜 E] [FiniteDimensional 𝕜 F] in
 @[simp] private theorem zeroExtensionInr_apply (y : F) :
     zeroExtensionInr (𝕜 := 𝕜) (E := E) y = WithLp.toLp 2 (0, y) := by
   rfl

@@ -50,6 +50,54 @@ noncomputable def sinThetaFrobenius (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : ℝ :=
   UnitarilyInvariantNorm.frobenius 𝕜 E (sinThetaMap U V)
 
+private theorem specSubspace_eq_span_filter {n : ℕ}
+    (b : OrthonormalBasis (Fin n) 𝕜 E) (p : Fin n → Prop) [DecidablePred p] :
+    specSubspace b p =
+      Submodule.span 𝕜 (b '' (↑(Finset.univ.filter p) : Set (Fin n))) := by
+  unfold specSubspace
+  congr 1
+  ext x
+  simp
+
+/-- The canonical Frobenius sine of two equally indexed eigenblocks is exactly
+    the square root of the cross-block overlap sum used by Yu--Wang--Samworth. -/
+private theorem sinThetaFrobenius_eq_sqrt_sum_cross {n : ℕ}
+    (bT bS : OrthonormalBasis (Fin n) 𝕜 E) (s : Finset (Fin n)) :
+    sinThetaFrobenius
+        (Submodule.span 𝕜 (bT '' (↑s : Set (Fin n))))
+        (Submodule.span 𝕜 (bS '' (↑s : Set (Fin n)))) =
+      Real.sqrt (∑ j ∈ s, ∑ k ∈ sᶜ, ‖⟪bT k, bS j⟫_𝕜‖ ^ 2) := by
+  classical
+  let U : Submodule 𝕜 E := Submodule.span 𝕜 (bT '' (↑s : Set (Fin n)))
+  let V : Submodule 𝕜 E := Submodule.span 𝕜 (bS '' (↑s : Set (Fin n)))
+  have hn : finrank 𝕜 E = n := by
+    rw [Module.finrank_eq_card_basis bT.toBasis, Fintype.card_fin]
+  rw [sinThetaFrobenius, UnitarilyInvariantNorm.frobenius_apply 𝕜 E _ hn bT]
+  congr 1
+  have hcol : ∀ i : Fin n,
+      ‖sinThetaMap U V (bT i)‖ ^ 2 =
+        if i ∈ s then ∑ k ∈ sᶜ, ‖⟪bS k, bT i⟫_𝕜‖ ^ 2 else 0 := by
+    intro i
+    rw [sinThetaMap, LinearMap.comp_apply]
+    change ‖Vᗮ.starProjection (U.starProjection (bT i))‖ ^ 2 = _
+    rw [show U.starProjection (bT i) = if i ∈ s then bT i else 0 by
+      simpa [U] using
+        Orthonormal.starProjection_span_image_apply_self bT.orthonormal s i]
+    split_ifs with hi
+    · rw [Submodule.starProjection_orthogonal_val]
+      simpa [V] using
+        OrthonormalBasis.norm_sq_sub_starProjection_span_image bS s (bT i)
+    · simp
+  calc
+    ∑ i, ‖sinThetaMap U V (bT i)‖ ^ 2
+        = ∑ i, if i ∈ s then ∑ k ∈ sᶜ, ‖⟪bS k, bT i⟫_𝕜‖ ^ 2 else 0 :=
+          Finset.sum_congr rfl fun i _ => hcol i
+    _ = ∑ i ∈ s, ∑ k ∈ sᶜ, ‖⟪bS k, bT i⟫_𝕜‖ ^ 2 := by simp
+    _ = ∑ j ∈ s, ∑ k ∈ sᶜ, ‖⟪bT k, bS j⟫_𝕜‖ ^ 2 := by
+      rw [← sinThetaSq_blockFamily_eq_sum_cross bS bT rfl rfl,
+        sinThetaSq_comm,
+        sinThetaSq_blockFamily_eq_sum_cross bT bS rfl rfl]
+
 /-- Exact Yu--Wang--Samworth population-gap theorem.
 
 Lean proof route for a weaker agent:
@@ -64,14 +112,83 @@ this excludes arbitrary reducing subspaces when `B=A`.
 theorem yuWangSamworth_sinTheta_le
     {A B : E →ₗ[𝕜] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {U V : Submodule 𝕜 E} [U.HasOrthogonalProjection]
-    [V.HasOrthogonalProjection] (hU : Reduces A U) (hV : Reduces B V)
+    [V.HasOrthogonalProjection] (_hU : Reduces A U) (_hV : Reduces B V)
     (hcorr : CorrespondingEigenblock hA hB U V)
     {d : ℕ} (hrank : finrank 𝕜 U = d) {Δ : ℝ} (hΔ : 0 < Δ)
     (hgap : PopulationGap A U Δ) :
     sinThetaFrobenius U V ≤
       2 * min (Real.sqrt d * ‖(B - A).toContinuousLinearMap‖)
         (UnitarilyInvariantNorm.frobenius 𝕜 E (B - A)) / Δ := by
-  sorry
+  classical
+  obtain ⟨n, hn, p, rfl, rfl⟩ := hcorr
+  let s : Finset (Fin n) := Finset.univ.filter p
+  have hcard : s.card = d := by
+    rw [← hrank, finrank_specSubspace]
+  have hindexGap : ∀ j ∈ s, ∀ k ∉ s,
+      Δ ≤ |hA.eigenvalues hn j - hA.eigenvalues hn k| := by
+    intro j hj k hk
+    apply hgap (hA.eigenvalues hn j) (hA.eigenvalues hn k)
+    · refine ⟨hA.eigenvectorBasis hn j, ?_, ?_, hA.apply_eigenvectorBasis hn j⟩
+      · rw [specSubspace_eq_span_filter]
+        exact Submodule.subset_span ⟨j, hj, rfl⟩
+      · exact (hA.eigenvectorBasis hn).orthonormal.ne_zero j
+    · refine ⟨hA.eigenvectorBasis hn k, ?_, ?_, hA.apply_eigenvectorBasis hn k⟩
+      · rw [orthogonal_specSubspace, specSubspace_eq_span_filter]
+        apply Submodule.subset_span
+        refine ⟨k, ?_, rfl⟩
+        simpa [s] using hk
+      · exact (hA.eigenvectorBasis hn).orthonormal.ne_zero k
+  have hsine : sinThetaFrobenius
+      (specSubspace (hA.eigenvectorBasis hn) p)
+      (specSubspace (hB.eigenvectorBasis hn) p) =
+      Real.sqrt (∑ j ∈ s, ∑ k ∈ sᶜ,
+        ‖⟪hA.eigenvectorBasis hn k, hB.eigenvectorBasis hn j⟫_𝕜‖ ^ 2) := by
+    simpa only [specSubspace_eq_span_filter] using
+      (sinThetaFrobenius_eq_sqrt_sum_cross
+        (hA.eigenvectorBasis hn) (hB.eigenvectorBasis hn) s)
+  rw [hsine]
+  have hopBound :
+      Real.sqrt (∑ j ∈ s, ∑ k ∈ sᶜ,
+        ‖⟪hA.eigenvectorBasis hn k, hB.eigenvectorBasis hn j⟫_𝕜‖ ^ 2)
+        ≤ 2 * (Real.sqrt d * ‖(B - A).toContinuousLinearMap‖) / Δ := by
+    have hop := sq_gap_mul_sum_cross_le_of_population_gap_opNorm
+      hA hB hn s hΔ.le hindexGap
+      (ε := ‖(B - A).toContinuousLinearMap‖)
+      (fun x => by
+        have hx := (B - A).toContinuousLinearMap.le_opNorm x
+        rwa [LinearMap.coe_toContinuousLinearMap'] at hx)
+    have hover0 : 0 ≤ ∑ j ∈ s, ∑ k ∈ sᶜ,
+        ‖⟪hA.eigenvectorBasis hn k, hB.eigenvectorBasis hn j⟫_𝕜‖ ^ 2 :=
+      Finset.sum_nonneg fun j _ => Finset.sum_nonneg fun k _ => sq_nonneg _
+    have hsq :
+        (Real.sqrt (∑ j ∈ s, ∑ k ∈ sᶜ,
+          ‖⟪hA.eigenvectorBasis hn k, hB.eigenvectorBasis hn j⟫_𝕜‖ ^ 2) * Δ) ^ 2
+          ≤ (2 * Real.sqrt d * ‖(B - A).toContinuousLinearMap‖) ^ 2 := by
+      rw [mul_pow, Real.sq_sqrt hover0, mul_pow, mul_pow,
+        Real.sq_sqrt (Nat.cast_nonneg d)]
+      rw [hcard] at hop
+      nlinarith
+    rw [le_div_iff₀ hΔ]
+    have hleft : 0 ≤ Real.sqrt (∑ j ∈ s, ∑ k ∈ sᶜ,
+        ‖⟪hA.eigenvectorBasis hn k, hB.eigenvectorBasis hn j⟫_𝕜‖ ^ 2) * Δ := by
+      positivity
+    have hright : 0 ≤ 2 * (Real.sqrt d * ‖(B - A).toContinuousLinearMap‖) := by
+      positivity
+    nlinarith [hsq]
+  have hfrobBound :
+      Real.sqrt (∑ j ∈ s, ∑ k ∈ sᶜ,
+        ‖⟪hA.eigenvectorBasis hn k, hB.eigenvectorBasis hn j⟫_𝕜‖ ^ 2)
+        ≤ 2 * UnitarilyInvariantNorm.frobenius 𝕜 E (B - A) / Δ := by
+    have hfrob := sqrt_sum_cross_le_of_population_gap hA hB hn s hΔ hindexGap
+    rw [UnitarilyInvariantNorm.frobenius_apply 𝕜 E (B - A) hn
+      (hA.eigenvectorBasis hn)]
+    exact hfrob
+  rcases le_total (Real.sqrt d * ‖(B - A).toContinuousLinearMap‖)
+      (UnitarilyInvariantNorm.frobenius 𝕜 E (B - A)) with hle | hle
+  · rw [min_eq_left hle]
+    exact hopBound
+  · rw [min_eq_right hle]
+    exact hfrobBound
 
 /-- A spectral subspace of an eigenbasis reduces the operator: it is spanned by
 eigenvectors, each of which maps to a scalar multiple of itself. -/

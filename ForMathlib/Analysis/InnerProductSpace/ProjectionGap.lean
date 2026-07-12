@@ -105,7 +105,7 @@ theorem norm_add_eq_max_of_block {P A B : E →L[𝕜] E}
     have h := norm_add_sq (𝕜 := 𝕜) (P x) ((1 - P) x)
     rw [show P x + (1 - P) x = x by
       rw [sub_apply, one_apply_eq_self]; abel] at h
-    simp only [horth, map_zero, mul_zero, add_zero, zero_add] at h
+    simp only [horth, map_zero, mul_zero, add_zero] at h
     linarith
   refine le_antisymm ?_ ?_
   · refine ContinuousLinearMap.opNorm_le_bound _ (le_max_of_le_left (norm_nonneg _)) fun x => ?_
@@ -113,7 +113,7 @@ theorem norm_add_eq_max_of_block {P A B : E →L[𝕜] E}
       rw [← hPArange x, hPsymC (A x) (B x), hPBker, inner_zero_right]
     have hnormsq : ‖(A + B) x‖ ^ 2 = ‖A x‖ ^ 2 + ‖B x‖ ^ 2 := by
       have h := norm_add_sq (𝕜 := 𝕜) (A x) (B x)
-      simp only [horthAB, map_zero, mul_zero, add_zero, zero_add] at h
+      simp only [horthAB, map_zero, mul_zero, add_zero] at h
       simp only [add_apply]; linarith
     have hAxle : ‖A x‖ ≤ max ‖A‖ ‖B‖ * ‖P x‖ := by
       rw [← hAppx x]; exact (ContinuousLinearMap.le_opNorm _ _).trans (by gcongr; exact le_max_left _ _)

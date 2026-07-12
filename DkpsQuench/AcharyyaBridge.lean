@@ -251,8 +251,8 @@ theorem quench_part2_from_aligned_configError_hp
   have hside_meas : ∀ k, MeasurableSet {ω : Ω | side k} := by
     intro k
     by_cases hk : side k
-    · simpa [hk] using (MeasurableSet.univ : MeasurableSet (Set.univ : Set Ω))
-    · simpa [hk] using (MeasurableSet.empty : MeasurableSet (∅ : Set Ω))
+    · simp [hk]
+    · simp [hk]
   have hE_meas : ∀ k, MeasurableSet (E k) := by
     intro k
     rw [hE_def]

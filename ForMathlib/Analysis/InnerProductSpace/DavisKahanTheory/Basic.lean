@@ -140,6 +140,7 @@ argument to the elementary ordered Sylvester theorem. -/
 def OrderedInternalGap (A : E →ₗ[𝕜] E) (U : Submodule 𝕜 E) (δ : ℝ) : Prop :=
   OrderedGap A U A Uᗮ δ ∨ OrderedGap A Uᗮ A U δ
 
+omit [FiniteDimensional 𝕜 E] in
 /-- Ordered block separation implies absolute block separation.
 
 Lean proof route for a weaker agent:
@@ -410,6 +411,7 @@ theorem inner_map_eq_zero_of_hasZeroCompression
       U.inner_starProjection_left_eq_right u (H u')
     _ = 0 := by rw [hproj, inner_zero_right]
 
+omit [FiniteDimensional 𝕜 E] in
 /-- Both diagonal sesquilinear blocks vanish for an off-diagonal map.
 
 Lean proof route for a weaker agent:
@@ -483,6 +485,7 @@ an invariant subspace and identify its full point spectrum with the `U`-carried
 point spectrum of `A`.  This is the bridge used to discharge the spectral
 hypotheses of the residual/perturbation `sin Θ` theorems on the subtype. -/
 
+omit [FiniteDimensional 𝕜 E] in
 /-- The restriction of a symmetric operator to an invariant subspace is
 symmetric (mathlib's `LinearMap.IsSymmetric.restrict_invariant`, restated for the
 `Reduces` predicate). -/
@@ -491,6 +494,7 @@ theorem isSymmetric_restrict {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric)
     (A.restrict hU).IsSymmetric :=
   hA.restrict_invariant hU
 
+omit [FiniteDimensional 𝕜 E] in
 /-- **The restricted-spectrum bridge.**  The point spectrum of the restriction
 `A.restrict hU : U →ₗ[𝕜] U` (over the whole `⊤`) equals the `U`-carried point
 spectrum of `A`.  Eigenvectors transport across the subtype coercion. -/
@@ -502,11 +506,11 @@ theorem restrictedSpectrum_restrict (A : E →ₗ[𝕜] E)
   · rintro ⟨x, -, hx0, hxEig⟩
     refine ⟨(x : E), x.2, fun hx => hx0 (Subtype.ext hx), ?_⟩
     have h := congrArg (Subtype.val) hxEig
-    rwa [LinearMap.restrict_coe_apply, Submodule.coe_smul] at h
+    rwa [LinearMap.coe_restrict_apply, Submodule.coe_smul] at h
   · rintro ⟨x, hxU, hx0, hxEig⟩
     refine ⟨⟨x, hxU⟩, Submodule.mem_top, fun hxu => hx0 (congrArg Subtype.val hxu), ?_⟩
     apply Subtype.ext
-    rw [LinearMap.restrict_coe_apply, Submodule.coe_smul]
+    rw [LinearMap.coe_restrict_apply, Submodule.coe_smul]
     exact hxEig
 
 /-- The containment form of the restricted-spectrum bridge: `A.restrict hU` has
@@ -517,6 +521,7 @@ theorem spectrumIn_restrict_iff (A : E →ₗ[𝕜] E)
   unfold SpectrumIn
   rw [restrictedSpectrum_restrict]
 
+omit [FiniteDimensional 𝕜 E] in
 /-- **A symmetric operator commutes with the projection onto a reducing
 subspace.**  For `A` symmetric and `U` an `A`-invariant subspace (so `Uᗮ` is
 invariant too), `P_U (A x) = A (P_U x)`. -/
@@ -717,6 +722,7 @@ theorem uiNorm_projection_sub_eq_sinAngleOperator (N : UnitarilyInvariantNorm �
     N (projection U - projection V) = N (sinAngleOperator U V) :=
   N.eq_of_singularValues_eq (singularValues_projection_sub_projection U V)
 
+omit [FiniteDimensional 𝕜 E] in
 /-- The one-sided double-angle map is exactly twice the cross block.
 
 Lean proof route for a weaker agent:

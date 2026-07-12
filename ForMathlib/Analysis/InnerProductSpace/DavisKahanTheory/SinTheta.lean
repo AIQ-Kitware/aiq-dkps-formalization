@@ -294,7 +294,7 @@ theorem opNorm_directed_sinTheta_le {A B : E →ₗ[𝕜] E}
   have hnorm : ‖(Bc - Ac : E →L[𝕜] E)‖ ≤ ε := by
     refine ContinuousLinearMap.opNorm_le_bound _ hε0 fun x => ?_
     have hsub : (Bc - Ac) x = (B - A) x := by
-      simp only [ContinuousLinearMap.sub_apply, LinearMap.sub_apply, hApp, hBpp]
+      simp only [sub_apply, LinearMap.sub_apply, hApp, hBpp]
     rw [hsub]; exact hε x
   calc ‖(V.starProjection ∘L U.starProjection : E →L[𝕜] E)‖
       ≤ ‖(Bc - Ac : E →L[𝕜] E)‖ / g := hExt

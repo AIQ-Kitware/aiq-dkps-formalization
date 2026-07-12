@@ -83,7 +83,7 @@ noncomputable def configGram {n d : Nat} (z : Config n d) : DisMat n :=
   fun i j => ∑ k, z i k * z j k
 
 /-- Positive semidefiniteness of a configuration Gram matrix. -/
-noncomputable def configGramPosSemidef {n d : Nat} (z : Config n d) :
+theorem configGramPosSemidef {n d : Nat} (z : Config n d) :
     (disMatToMatrix (configGram z)).PosSemidef :=
   (Acharyya2025.GramRealization.posSemidef_and_rank_le_of_config_gram_eq
     (disMatToMatrix (configGram z)) z (by intro i j; rfl)).1

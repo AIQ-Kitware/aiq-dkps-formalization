@@ -20,6 +20,7 @@ noncomputable def reflectionDefect (U : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] (A : E →L[𝕜] E) : E →L[𝕜] E :=
   reflectionOperator U ∘L A ∘L reflectionOperator U - A
 
+omit [CompleteSpace E] in
 /-- The mirror defect vanishes when the subspace reduces the operator.
 
 Lean proof route for a weaker agent:

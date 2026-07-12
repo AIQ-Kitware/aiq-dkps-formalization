@@ -176,7 +176,7 @@ lemma radial_parameter_choice
         field_simp [ne_of_gt hγ]
         ring
   have h := step6_parameter_choice ε γ hε hγ (c / 2) hcHalf hcHalfBound
-  convert h using 1 <;> ring
+  convert h using 1; ring
 
 /-- Radial-distance concentration and coverage imply tie-averaged MSE
 convergence.  This theorem has no estimated global coordinate map. -/
