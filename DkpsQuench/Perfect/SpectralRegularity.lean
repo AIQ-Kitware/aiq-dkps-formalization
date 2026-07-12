@@ -1091,28 +1091,13 @@ theorem reference_centered_quadratic_floor_of_event
 
 /-- Usable reference-scatter spectral floor.
 
-The preceding conceptual step is stated directly on a configuration here to
-avoid forcing later agents through the dummy covariance expression above.  The
-proof should identify the reference scatter as `n` times an empirical
-covariance and then use the shared nonzero-spectrum result.
-
-Implementation recipe (execute in this order):
-1. Define the linear map `T : Vec d → EuclideanSpace Real (Fin n)` by
-   `T x i = ⟪x, zref i⟫_ℝ`; the hypothesis says
-   `n*(κ/2)*‖x‖² ≤ ‖T x‖²` after multiplying by `n`.
-2. Identify `T†T` with the feature-space scatter matrix and its nonzero spectrum
-   with the centered configuration Gram matrix `configGram zref` using the
-   repository's rectangular Gram/singular-value bridge.
-3. Convert the quadratic floor into a lower bound on all `d` eigenvalues of
-   `T†T` via the min--max/Courant--Fischer theorem.
-4. Transfer that lower bound to the first `d` sorted eigenvalues of `TT†`, which
-   is `configGram zref`; use `hi : i < d` and `hn` to justify index ranges.
-5. If the exact bridge already exists, search for
-   `rectangular`, `nonzero_spectrum`, `gram`, `sortedEigenvalues`, and
-   `quadratic_floor` in `ForMathlib` and `Acharyya2025` before defining `T`.
-6. Do not prove the claim by choosing an eigenbasis manually; isolate any missing
-   rectangular-spectrum lemma as a reusable helper.
--/
+The normalized quadratic floor is scaled by `n` into an unnormalized floor
+`n(κ/2)‖x‖² ≤ ∑ᵢ ⟪x, zᵢ⟫²` and handed to the rectangular Gram bridge
+`sortedEigenvalues_configGram_lower_of_quadratic_floor`: the configuration Gram
+matrix is the codomain Gram operator `TT†` of the analysis map `T` of `zref`,
+whose first `d` sorted eigenvalues dominate any quadratic floor of `T†T`.
+For `κ ≤ 0` the claim is positive semidefiniteness; for `κ > 0` the floor
+`κ/2 ≤ n·κ/2` uses `1 ≤ n`. -/
 theorem sortedEigenvalues_reference_centeredGram_lower
     {d n : Nat} (hn : 0 < n)
     (zref : Config n d) {κ : Real}
@@ -1144,30 +1129,17 @@ theorem sortedEigenvalues_reference_centeredGram_lower
 /-- Adding the target and recentering the enlarged cloud cannot decrease the
 reference scatter in any perspective direction.
 
-A clean proof uses the online variance identity: total centered scatter after
-adding one point equals the old scatter plus a nonnegative rank-one term.  Prove
-the quadratic-form inequality first, then transfer it to sorted eigenvalues by
-Courant--Fischer.  The premise `d ≤ n` is essential: without it the augmented
-cloud can introduce a new index below `d` for which the reference cloud supplied
-no lower bound.
-
-Implementation recipe (execute in this order):
-1. Prove the online-scatter identity for every `x : Vec d`:
-   the squared projection sum of the centered augmented cloud equals the old
-   centered reference sum plus
-   `(n/(n+1)) * ⟪x, target - referenceCentroid⟫²`.
-2. Deduce the feature-space scatter quadratic form of the augmented cloud
-   dominates that of the reference cloud.
-3. Convert `href` into a rank-`d` lower bound on the reference scatter (or use
-   the same rectangular nonzero-spectrum bridge as the preceding theorem).
-4. Apply eigenvalue monotonicity/Courant--Fischer to transfer the lower bound to
-   the augmented scatter.
-5. Transfer from feature scatter to the augmented centered Gram matrix's first
-   `d` nonzero eigenvalues.
-6. Use `hdn : d ≤ n` and `hi : i < d` to keep every index within both spectra.
-7. Keep the rank-one update term explicit and nonnegative; do not use a false
-   claim that arbitrary matrix principal extension preserves sorted indices.
--/
+The proof is the online-variance route through the rectangular Gram bridge:
+`quadratic_floor_of_sortedEigenvalues_configGram_lower` converts `href` (with
+`d ≤ n`) back into the quadratic floor of the centered reference cloud;
+`sum_sq_centered_le_augmented` — the exact add-one centered-scatter identity
+`ForMathlib.centeredScatter_append` — shows the augmented centered
+squared-projection sum dominates it by the nonnegative rank-one correction
+`(n/(n+1)) ⟪x, target - centroid⟫²`; and
+`sortedEigenvalues_configGram_lower_of_quadratic_floor` transfers the floor to
+the first `d` sorted eigenvalues of the augmented centered Gram matrix.  The
+premise `d ≤ n` is essential: without it the augmented cloud can introduce a
+new index below `d` for which the reference cloud supplied no lower bound. -/
 theorem augmented_centeredGram_floor_of_reference_floor
     {d n : Nat} (hn : 0 < n) (hdn : d ≤ n)
     (ψref : Fin n → Vec d) (target : Vec d) {α : Real}
@@ -1259,39 +1231,19 @@ set_option maxHeartbeats 1000000 in
 /-- Assemble the covariance weak law and deterministic Gram lemmas into the
 high-probability spectral certificate consumed by the new Quench capstone.
 
-Once complete, this theorem dispatches the old global `hfloor`, `hceiling`, and
-caller-chosen `ceiling` inputs.  Define the certificate event with an explicit
-deterministic gate `d ≤ n`; that gate is eventually true and is needed by
-`augmented_centeredGram_floor_of_reference_floor`.  The only lower-spectrum
-assumption remaining in the final theorem is `PerspectiveNondegeneracy`.
-
-Implementation recipe (execute in this order):
-1. Obtain `B ≥ 0` and `hB : ∀ f, ‖ψ f‖ ≤ B` from
-   `exists_perspective_norm_bound_of_isCompact_range`.
-2. Define
-   `event n := referenceCovarianceEvent Pf ψ f_ref (perspectiveMean Pf ψ)
-   (covarianceEntryTolerance d κ) n ∩ {ω | d ≤ n}`.
-3. Prove measurability using
-   `measurableSet_referenceCovarianceEvent`, `hiid.measurable`, and the fact that
-   the dimension gate is either `univ` or `∅`.
-4. Prove high probability by intersecting
-   `highProb_referenceCovarianceEvent_of_compact_iid` (with
-   `Hnondeg.center_is_mean`) and the deterministic eventual event `d ≤ n`.
-5. For the `floor` field, use
-   `reference_centered_quadratic_floor_of_event`, then
-   `sortedEigenvalues_reference_centeredGram_lower`, and finally
-   `augmented_centeredGram_floor_of_reference_floor` for the target-augmented
-   configuration.  Rewrite its Gram matrix to the population CMDS matrix with
-   `centeredAugmentedPerspectiveConfig_gram_eq` and `hrealize`.
-6. For `ceiling_bound`, apply
-   `sortedEigenvalues_augmented_centeredGram_upper` to
-   `augmentedPerspectiveConfig ψ f_ref n ωref f`; obtain point bounds from `hB`.
-7. Package the structure with `α := κ/2` and
-   `ceiling n := 4*(n+1)*B²`.
-8. Use named fields throughout.  This constructor should not contain new
-   covariance or eigenvalue algebra; repair the preceding lemmas if a field is
-   hard to fill.
--/
+This theorem dispatches the old global `hfloor`, `hceiling`, and caller-chosen
+`ceiling` inputs; the only lower-spectrum assumption remaining is
+`PerspectiveNondegeneracy`.  The certificate event is the entrywise covariance
+event (tolerance `covarianceEntryTolerance d κ` about the population mean)
+intersected with the deterministic dimension gate `d ≤ n ∧ 0 < n`, which is
+eventually true and needed by the augmentation floor.  On the event, the
+`floor` field chains `reference_centered_quadratic_floor_of_event`,
+`sortedEigenvalues_reference_centeredGram_lower`, and
+`augmented_centeredGram_floor_of_reference_floor`, then rewrites the augmented
+centered Gram matrix to the population CMDS matrix via
+`centeredAugmentedPerspectiveConfig_gram_eq`.  The `ceiling_bound` field is
+`sortedEigenvalues_augmented_centeredGram_upper` with the compactness envelope
+`B`, giving `ceiling n := 4(n+1)B²`. -/
 theorem exists_growingSpectralSubevents_of_compact_iid_nondegenerate
     {d m p : Nat}
     (Pf : Measure (Model Q X)) [IsProbabilityMeasure Pf]
