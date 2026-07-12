@@ -628,8 +628,13 @@ is:
 5. use finite-dimensional Carathéodory to replace the barycenter by an exact
    finite convex combination.
 
-This moves the sole `sorry` to the constructive certificate theorem while the
-Ky Fan and arbitrary-UI-norm theorems become proved algebraic corollaries.
+The public analytic boundary should be the bounded-mass barycentric theorem,
+not an already norm-quantified estimate.  Once the barycenter is available,
+finite certificate extraction, every Ky Fan estimate, Fan dominance, and the
+arbitrary-UI-norm theorem are algebraic consequences.  In particular,
+`DavisKahanExt.ideal_sylvester_le` should be proved downstream from the
+certificate rather than used to manufacture the barycenter from its Ky Fan
+specializations.
 
 ## 26. Every new analytic seam needs an executable proof-strategy comment
 
@@ -839,16 +844,22 @@ single-coordinate sign changes, and run a finite T-transform descent on the
 singular-value vectors.  Equal singular values are then transported back to
 the original operator with the existing rectangular SVD factorization.
 
-This cleanly separates two obligations:
+This cleanly separates three obligations:
 
 * the finite convex-geometric theorem
   `mem_convexHull_twoSidedUnitaryOrbit_of_kyFanSum_le`;
-* the analytic Bhatia--Davis--McIntosh estimate supplying every Ky Fan prefix.
+* the analytic Bhatia--Davis--McIntosh barycentric representation;
+* downstream finite-certificate and norm transport.
 
-Do not claim the downstream barycentric Sylvester theorem is unconditional
-while the analytic rectangular UI-norm estimate is still a `sorry`.  Moving the
-Fourier theorem to an explicit assumption seam is useful progress, but it does
-not discharge the original analytic root.
+Keep the arrows in that order.  Deriving the barycenter from an assumed theorem
+quantified over every UI norm is logically possible through Ky Fan dominance,
+but it inverts the intended architecture and obscures the true Fourier
+boundary.  The repaired dependency makes
+`sylvester_barycentricOrbitRepresentation_of_spectralDistance` the sole
+analytic root and proves `DavisKahanExt.ideal_sylvester_le` from its exact
+finite orbit certificate.  Until the barycentric declaration itself is closed,
+the arbitrary-spectrum chain remains conditional even though the ideal theorem
+has no local proof hole.
 
 ### Block spectral labels must account for multiplicity and scalar action
 
