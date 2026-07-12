@@ -1,0 +1,56 @@
+\documentclass[11pt]{article}
+\usepackage[margin=0.9in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{enumitem}
+\usepackage{booktabs,longtable,array,seqsplit}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage{microtype}
+\hypersetup{colorlinks=true,linkcolor=blue!45!black,citecolor=blue!45!black,urlcolor=blue!45!black}
+\setlength{\emergencystretch}{6em}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{claim}[theorem]{Claim}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{assumption}[theorem]{Assumption}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Hsp}{\mathcal{H}}
+\newcommand{\Fsp}{\mathcal{F}}
+\newcommand{\Id}{\mathrm{Id}}
+\newcommand{\tr}{\operatorname{tr}}
+\newcommand{\diag}{\operatorname{diag}}
+\newcommand{\rank}{\operatorname{rank}}
+\newcommand{\spec}{\operatorname{spec}}
+\newcommand{\spanop}{\operatorname{span}}
+\newcommand{\dist}{\operatorname{dist}}
+\newcommand{\range}{\operatorname{ran}}
+\newcommand{\Ker}{\operatorname{ker}}
+\newcommand{\Pinch}{\mathcal{C}}
+\newcommand{\Off}{\widetilde{\mathcal{C}}}
+\newcommand{\Pperp}{P^{\perp}}
+\newcommand{\Qperp}{Q^{\perp}}
+\newcommand{\op}{\mathrm{op}}
+\newcommand{\F}{\mathrm{F}}
+\newcommand{\HS}{\mathrm{HS}}
+\newcommand{\ip}[2]{\left\langle #1,#2\right\rangle}
+\newcommand{\norm}[1]{\left\lVert #1\right\rVert}
+\newcommand{\abs}[1]{\left\lvert #1\right\rvert}
+\newcommand{\code}[1]{\nolinkurl{#1}}
+
+\newenvironment{argument}{\paragraph{Argument.}\begin{enumerate}[leftmargin=2em]}{\end{enumerate}}
+\newenvironment{proofoutline}{\paragraph{Proof architecture.}\begin{enumerate}[leftmargin=2em]}{\end{enumerate}}
+\newcommand{\sourceanchor}[1]{\par\smallskip\noindent\textbf{Source anchor.} #1\par\smallskip}
+\newcommand{\sourcecomment}[1]{\begin{remark}#1\end{remark}}
+\newenvironment{sourceguide}{\begin{description}[style=nextline,leftmargin=3.3cm,labelwidth=3.1cm]}{\end{description}}
+\newenvironment{formalizationmap}{\begin{longtable}{@{}p{0.20\textwidth}p{0.31\textwidth}p{0.40\textwidth}@{}}\toprule Source item & Modern mathematical content & Repository status \\\midrule\endfirsthead\toprule Source item & Modern mathematical content & Repository status \\\midrule\endhead}{\bottomrule\end{longtable}}

@@ -1,0 +1,614 @@
+\input{preamble}
+\title{Source-order modernization of Yu--Wang--Samworth: a population-gap Davis--Kahan theorem for statistics}
+\author{}
+\date{2015 journal paper; reconstructed from the supplied 2014 preprint transcription}
+\begin{document}
+\maketitle
+
+\section*{Source map and scope}
+\begin{sourceguide}
+\item[Primary source] Yi Yu, Tengyao Wang, and Richard J. Samworth, \emph{A Useful Variant of the Davis--Kahan Theorem for Statisticians}, Biometrika 102 (2015), 315--323; preprint arXiv:1405.0680.
+\item[Local evidence] Supplied transcription {\small\code{Yu-Wang-Samworth-2014-Useful-DavisKahanVariant(1).tex}}.\\ SHA--256 \texttt{\seqsplit{ed45f19eb1a619a182a737aa971b2120727d2bebb86760852f860a9fbe54ecfe}}.
+\item[Redistribution] The transcription is not copied into the repository. This note is a new, source-order mathematical reconstruction.
+\item[Coverage] Principal-angle definitions; the statistical Davis--Kahan baseline; Theorem 2; sharpness examples; the rank-one corollary; the application audit; Theorem 3 for singular subspaces; Appendix Lemma 1; all displayed proof identities and constants.
+\item[Formalization target] \code{YuWangSamworth.lean}, \code{AlignedBasis.lean}, \code{DavisKahanTheory/Statistics.lean}, and \code{DavisKahanTheory/SingularSubspace.lean}.
+\end{sourceguide}
+
+The purpose is not to repeat the paper's prose. The reconstruction isolates every mathematical assertion, normalizes notation, expands all hidden matrix identities, and records exactly how the paper's finite-dimensional proof maps to the intrinsic Lean development.
+
+\section{Principal angles and distances between subspaces}
+
+Let $V,\widehat V\in\R^{p\times d}$ have orthonormal columns:
+\[
+  V^TV=I_d,
+  \qquad
+  \widehat V^T\widehat V=I_d.
+\]
+Let
+\[
+  \sigma_1\ge\cdots\ge\sigma_d\ge0
+\]
+be the singular values of $\widehat V^TV$. The principal angles are
+\[
+  \theta_j:=\arccos\sigma_j\in[0,\pi/2].
+\]
+Write
+\[
+  \Theta(\widehat V,V):=\diag(\theta_1,\dots,\theta_d),
+  \qquad
+  \sin\Theta(\widehat V,V):=\diag(\sin\theta_1,\dots,\sin\theta_d).
+\]
+The Frobenius sine distance is
+\[
+  \norm{\sin\Theta(\widehat V,V)}_{\F}^2
+  =\sum_{j=1}^d\sin^2\theta_j
+  =d-\norm{\widehat V^TV}_{\F}^2.
+\]
+If $V_1$ is an orthonormal complement to $V$, then
+\[
+  \norm{V_1^T\widehat V}_{\F}^2
+  =\norm{\sin\Theta(\widehat V,V)}_{\F}^2.
+\]
+
+The basis-sensitive distance is minimized over orthogonal alignments:
+\[
+  \min_{O\in O(d)}\norm{\widehat VO-V}_{\F}.
+\]
+If $O$ is the Procrustes alignment obtained from an SVD of $\widehat V^TV$, then
+\[
+  \norm{\widehat VO-V}_{\F}^2
+  =2\sum_{j=1}^d(1-\cos\theta_j)
+  \le2\sum_{j=1}^d\sin^2\theta_j.
+\]
+Therefore
+\[
+  \norm{\widehat VO-V}_{\F}
+  \le\sqrt2\norm{\sin\Theta(\widehat V,V)}_{\F}.
+\]
+
+\section{The mixed-gap Davis--Kahan baseline used by statisticians}
+
+\sourceanchor{Introduction, stated Davis--Kahan theorem and equation (1).}
+
+Let $\Sigma,\widehat\Sigma\in\R^{p\times p}$ be symmetric, with decreasing eigenvalues
+\[
+  \lambda_1\ge\cdots\ge\lambda_p,
+  \qquad
+  \widehat\lambda_1\ge\cdots\ge\widehat\lambda_p.
+\]
+Fix $1\le r\le s\le p$, set $d=s-r+1$, and choose orthonormal eigenvector blocks
+\[
+  V=(v_r,\dots,v_s),
+  \qquad
+  \widehat V=(\widehat v_r,\dots,\widehat v_s),
+\]
+with
+\[
+  \Sigma v_j=\lambda_jv_j,
+  \qquad
+  \widehat\Sigma\widehat v_j=\widehat\lambda_j\widehat v_j.
+\]
+The source defines a mixed population--sample separation
+\[
+  \delta
+  :=\inf\left\{
+      \abs{\widehat\lambda-\lambda}:
+      \lambda\in[\lambda_s,\lambda_r],\ 
+      \widehat\lambda\in
+      (-\infty,\widehat\lambda_{s-1}]
+      \cup[\widehat\lambda_{r+1},\infty)
+    \right\},
+\]
+with endpoint conventions printed as
+\[
+  \widehat\lambda_0=-\infty,
+  \qquad
+  \widehat\lambda_{p+1}=\infty.
+\]
+
+\sourcecomment{The interval indices and endpoint signs in the supplied transcription are awkward relative to decreasing eigenvalue order. This note records the source statement but does not treat those conventions as a new canonical formulation. The formal development uses explicit spectral-block separation predicates.}
+
+\begin{theorem}[Statistical Davis--Kahan baseline]
+If $\delta>0$, then
+\[
+  \norm{\sin\Theta(\widehat V,V)}_{\F}
+  \le
+  \frac{\norm{\widehat\Sigma-\Sigma}_{\F}}{\delta}.
+\]
+\end{theorem}
+The source states that both Frobenius norms may be replaced simultaneously by the operator norm or, more generally, by any orthogonally invariant norm.
+
+For a single eigenvector, $r=s=j$, this specializes to
+\[
+  \sin\Theta(\widehat v_j,v_j)
+  \le
+  \frac{\norm{\widehat\Sigma-\Sigma}_{\op}}
+       {\min\bigl(
+          \abs{\widehat\lambda_{j-1}-\lambda_j},
+          \abs{\widehat\lambda_{j+1}-\lambda_j}
+        \bigr)}.
+\]
+After choosing the sign of $\widehat v_j$ so that $\widehat v_j^Tv_j\ge0$,
+\[
+  \norm{\widehat v_j-v_j}
+  \le\sqrt2\sin\Theta(\widehat v_j,v_j).
+\]
+The usual statistical workflow then invokes Weyl's inequality to replace the random mixed gaps by fractions of the population gaps on a high-probability event. The main theorem eliminates that intermediate event from the theorem statement.
+
+\section{Main population-gap theorem}
+
+\sourceanchor{Theorem 2, equations (2)--(3), sharpness discussion, equation (4), and Corollary 1.}
+
+Define the population exterior gap around the block $r,\dots,s$ by
+\[
+  \Delta
+  :=\min(\lambda_{r-1}-\lambda_r,\lambda_s-\lambda_{s+1}),
+\]
+with
+\[
+  \lambda_0:=+\infty,
+  \qquad
+  \lambda_{p+1}:=-\infty.
+\]
+Let
+\[
+  E:=\widehat\Sigma-\Sigma.
+\]
+
+\begin{theorem}[Yu--Wang--Samworth population-gap theorem]
+If $\Delta>0$, then
+\begin{equation}
+  \norm{\sin\Theta(\widehat V,V)}_{\F}
+  \le
+  \frac{2\min\bigl(\sqrt d\norm{E}_{\op},\norm{E}_{\F}\bigr)}{\Delta}. \tag{YWS-1}
+\end{equation}
+Moreover, there exists $\widehat O\in O(d)$ such that
+\begin{equation}
+  \norm{\widehat V\widehat O-V}_{\F}
+  \le
+  \frac{2^{3/2}\min\bigl(\sqrt d\norm{E}_{\op},\norm{E}_{\F}\bigr)}{\Delta}. \tag{YWS-2}
+\end{equation}
+\end{theorem}
+
+The paper emphasizes two improvements over the commonly quoted statistical Davis--Kahan form:
+\begin{enumerate}[leftmargin=2em]
+\item the denominator contains only population eigenvalues;
+\item the numerator automatically chooses between the dimension-scaled operator norm and the Frobenius norm.
+\end{enumerate}
+
+Let
+\[
+  \Lambda:=\diag(\lambda_r,\dots,\lambda_s).
+\]
+The proof actually establishes the sharper residual forms
+\[
+  \norm{\sin\Theta(\widehat V,V)}_{\F}
+  \le
+  \frac{\norm{\widehat V\Lambda-\Sigma\widehat V}_{\F}}{\Delta},
+\]
+and
+\[
+  \norm{\widehat V\widehat O-V}_{\F}
+  \le
+  \frac{\sqrt2\norm{\widehat V\Lambda-\Sigma\widehat V}_{\F}}{\Delta}.
+\]
+The displayed theorem replaces the residual by a directly usable perturbation bound.
+
+\subsection{Sharpness example with orthogonal target subspaces}
+
+Let
+\[
+  \Sigma=\diag(\underbrace{3,\dots,3}_{d},
+                       \underbrace{1,\dots,1}_{p-d}),
+\]
+and
+\[
+  \widehat\Sigma
+  =\diag(\underbrace{2-\varepsilon,\dots,2-\varepsilon}_{p-d},
+         \underbrace{2,\dots,2}_{d}),
+\]
+where $0<\varepsilon$ and $1\le d\le\lfloor p/2\rfloor$. The top-$d$ eigenspaces are orthogonal. Hence for every $O\in O(d)$,
+\[
+  \norm{\widehat VO-V}_{\F}
+  =\sqrt2\norm{\sin\Theta(\widehat V,V)}_{\F}
+  =\sqrt{2d}.
+\]
+The perturbation norm and population gap give
+\[
+  \sqrt{2d}
+  \le\sqrt{2d}(1+\varepsilon)
+  =
+  \frac{2^{3/2}\sqrt d\norm{E}_{\op}}
+       {\lambda_d-\lambda_{d+1}}.
+\]
+This shows that the aligned-basis constant and dimension dependence cannot be uniformly improved beyond the displayed constant scale.
+
+\subsection{Sharpness scale for nearby one-dimensional eigenspaces}
+
+Take
+\[
+  \Sigma=\diag(3,1),
+\]
+and
+\[
+  \widehat\Sigma
+  =R_\varepsilon\diag(3,1)R_\varepsilon^T,
+  \qquad
+  R_\varepsilon=
+  \begin{pmatrix}
+    \sqrt{1-\varepsilon^2}&-\varepsilon\\
+    \varepsilon&\sqrt{1-\varepsilon^2}
+  \end{pmatrix}.
+\]
+For
+\[
+  v=(1,0)^T,
+  \qquad
+  \widehat v=(\sqrt{1-\varepsilon^2},-\varepsilon)^T,
+\]
+we have
+\[
+  \sin\Theta(\widehat v,v)=\varepsilon,
+\]
+\[
+  \norm{\widehat v-v}^2
+  =2-2\sqrt{1-\varepsilon^2},
+\]
+and
+\[
+  \frac{2\norm{\widehat\Sigma-\Sigma}_{\op}}{3-1}
+  =2\varepsilon.
+\]
+Thus the sine bound is tight up to factor $2$, and the vector bound up to factor $2^{3/2}$, even in a small-angle regime.
+
+\subsection{Why a double-angle estimate does not directly solve the statistical problem}
+
+For oriented unit vectors $v,\widehat v$ with $c:=\widehat v^Tv\ge0$,
+\[
+  \sin^2(2\Theta(\widehat v,v))
+  =(2c)^2(1-c^2).
+\]
+Since
+\[
+  \norm{\widehat v-v}^2=2-2c,
+\]
+the source rewrites this as
+\begin{equation}
+  \sin^2(2\Theta(\widehat v,v))
+  =\frac14\norm{\widehat v-v}^2
+    \bigl(2-\norm{\widehat v-v}^2\bigr)
+    \bigl(4-\norm{\widehat v-v}^2\bigr). \tag{YWS-3}
+\end{equation}
+A bound on $\sin2\theta$ alone does not control $\sin\theta$ globally because $\sin2\theta$ is small both near $0$ and near $\pi/2$. An additional acute-overlap hypothesis, such as $c\ge1/\sqrt2$, would be needed.
+
+\begin{corollary}[Rank-one form]
+Fix $j$ and assume
+\[
+  \Delta_j:=\min(\lambda_{j-1}-\lambda_j,
+                  \lambda_j-\lambda_{j+1})>0.
+\]
+For normalized eigenvectors $v,\widehat v$ corresponding to the $j$th decreasing eigenvalues,
+\[
+  \sin\Theta(\widehat v,v)
+  \le
+  \frac{2\norm{E}_{\op}}{\Delta_j}.
+\]
+If $\widehat v^Tv\ge0$, then
+\[
+  \norm{\widehat v-v}
+  \le
+  \frac{2^{3/2}\norm{E}_{\op}}{\Delta_j}.
+\]
+\end{corollary}
+
+\section{The source's audit of statistical applications}
+
+This section of the paper does not introduce a new perturbation theorem. It makes the following mathematical diagnosis of existing proof patterns.
+
+\begin{enumerate}[leftmargin=2em]
+\item In covariance, correlation, sparse PCA, factor-model, false-discovery, and leave-one-observation analyses, authors often apply a mixed-gap Davis--Kahan theorem and then use Weyl's inequality to recover a population-gap denominator. The population-gap theorem packages those two steps into one deterministic result.
+\item Spectral clustering papers apply variants to adjacency matrices or graph Laplacians. Statements that appear to assume only a population gap may still hide a requirement that the perturbed and population matrices have the same number of eigenvalues in the selected interval. This is effectively a mixed spectral-separation condition.
+\item The new theorem avoids that hidden interval-counting requirement by selecting corresponding ordered eigenblocks and imposing only the two exterior population gaps.
+\end{enumerate}
+
+These are literature-comparison claims rather than independent formal theorem statements. They motivate the theorem's interface and explain why its denominator is useful in probabilistic applications.
+
+\section{Extension to rectangular matrices and singular subspaces}
+
+\sourceanchor{Theorem 3 and equations (10)--(12) in the Appendix proof.}
+
+Let $A,\widehat A\in\R^{p\times q}$ and set
+\[
+  D:=\widehat A-A.
+\]
+Let the singular values be
+\[
+  \sigma_1\ge\cdots\ge\sigma_{\min(p,q)},
+  \qquad
+  \widehat\sigma_1\ge\cdots\ge\widehat\sigma_{\min(p,q)}.
+\]
+Fix
+\[
+  1\le r\le s\le\rank(A),
+  \qquad
+  d=s-r+1,
+\]
+and define the squared population singular gap
+\[
+  \Delta_{\mathrm{sv}}
+  :=\min(\sigma_{r-1}^2-\sigma_r^2,
+         \sigma_s^2-\sigma_{s+1}^2)>0,
+\]
+with source conventions
+\[
+  \sigma_0^2:=+\infty,
+  \qquad
+  \sigma_{\rank(A)+1}^2:=-\infty.
+\]
+Let $V,\widehat V\in\R^{q\times d}$ contain the corresponding right singular vectors:
+\[
+  Av_j=\sigma_ju_j,
+  \qquad
+  \widehat A\widehat v_j=\widehat\sigma_j\widehat u_j.
+\]
+
+\begin{theorem}[Yu--Wang--Samworth singular-subspace theorem]
+\[
+  \norm{\sin\Theta(\widehat V,V)}_{\F}
+  \le
+  \frac{
+    2(2\sigma_1+\norm{D}_{\op})
+    \min(\sqrt d\norm{D}_{\op},\norm{D}_{\F})
+  }{\Delta_{\mathrm{sv}}}.
+\]
+Moreover, some $\widehat O\in O(d)$ satisfies
+\[
+  \norm{\widehat V\widehat O-V}_{\F}
+  \le
+  \frac{
+    2^{3/2}(2\sigma_1+\norm{D}_{\op})
+    \min(\sqrt d\norm{D}_{\op},\norm{D}_{\F})
+  }{\Delta_{\mathrm{sv}}}.
+\]
+The identical statements hold for the corresponding left singular-vector blocks $U,\widehat U$.
+\end{theorem}
+
+The paper presents this as a population-gap counterpart of Wedin's generalized $\sin\theta$ theorem.
+
+\section{Appendix lemma: Frobenius compression}
+
+\begin{lemma}[Orthogonal compression]
+Let $M\in\R^{m\times n}$. If $U\in\R^{m\times p}$ and $W\in\R^{n\times q}$ have orthonormal columns, then
+\[
+  \norm{U^TMW}_{\F}\le\norm{M}_{\F}.
+\]
+If instead $U$ and $W$ have orthonormal rows, then
+\[
+  \norm{U^TMW}_{\F}=\norm{M}_{\F}.
+\]
+\end{lemma}
+
+For the inequality, extend $U,W$ to square orthogonal matrices $[U\ U_1]$ and $[W\ W_1]$. Orthogonal invariance of the Frobenius norm gives
+\[
+  \norm{M}_{\F}
+  =\norm{
+     \begin{pmatrix}U^T\\U_1^T\end{pmatrix}
+     M
+     \begin{pmatrix}W&W_1\end{pmatrix}
+   }_{\F}
+  \ge\norm{U^TMW}_{\F}.
+\]
+For orthonormal rows, $UU^T=I_m$ and $WW^T=I_n$, so
+\[
+  \norm{U^TMW}_{\F}^2
+  =\tr(U^TMWW^TM^TU)
+  =\tr(MM^TUU^T)
+  =\tr(MM^T)
+  =\norm{M}_{\F}^2.
+\]
+
+\section{Proof of the population-gap theorem}
+
+Set
+\[
+  \Lambda:=\diag(\lambda_r,\dots,\lambda_s),
+  \qquad
+  \widehat\Lambda:=\diag(\widehat\lambda_r,\dots,\widehat\lambda_s).
+\]
+The perturbed eigen-equation gives the residual identity
+\[
+  0=\widehat\Sigma\widehat V-
+       \widehat V\widehat\Lambda
+   =\Sigma\widehat V-
+       \widehat V\Lambda
+     +E\widehat V-
+       \widehat V(\widehat\Lambda-\Lambda).
+\]
+Hence
+\[
+  R:=\widehat V\Lambda-
+      \Sigma\widehat V
+  =E\widehat V-
+    \widehat V(\widehat\Lambda-\Lambda).
+\]
+
+\subsection{Two upper bounds for the residual}
+
+Using the compression lemma and Weyl's eigenvalue inequality,
+\begin{align}
+  \norm{R}_{\F}
+  &\le\norm{E\widehat V}_{\F}
+      +\norm{\widehat V(\widehat\Lambda-\Lambda)}_{\F}\notag\\
+  &\le\sqrt d\norm{E}_{\op}
+      +\norm{\widehat\Lambda-\Lambda}_{\F}\notag\\
+  &\le2\sqrt d\norm{E}_{\op}. \tag{YWS-4}
+\end{align}
+Alternatively, using Frobenius compression and Hoffman--Wielandt,
+\begin{align}
+  \norm{R}_{\F}
+  &\le\norm{E}_{\F}
+      +\norm{\widehat\Lambda-\Lambda}_{\F}\notag\\
+  &\le2\norm{E}_{\F}. \tag{YWS-5}
+\end{align}
+Therefore
+\[
+  \norm{R}_{\F}
+  \le2\min(\sqrt d\norm{E}_{\op},\norm{E}_{\F}).
+\]
+
+\subsection{Population gap gives the lower bound}
+
+Choose $V_1\in\R^{p\times(p-d)}$ such that
+\[
+  P:=[V\ V_1]\in O(p),
+\]
+and
+\[
+  P^T\Sigma P=
+  \begin{pmatrix}
+    \Lambda&0\\0&\Lambda_1
+  \end{pmatrix},
+\]
+where $\Lambda_1$ contains all eigenvalues outside the selected block.
+
+Decompose $R$ in the $V\oplus V_1$ splitting. Orthogonality and Frobenius contraction give
+\begin{align}
+  \norm{R}_{\F}
+  &\ge
+  \norm{V_1V_1^T\widehat V\Lambda-
+        V_1\Lambda_1V_1^T\widehat V}_{\F}\notag\\
+  &\ge
+  \norm{V_1^T\widehat V\Lambda-
+        \Lambda_1V_1^T\widehat V}_{\F}. \tag{YWS-6}
+\end{align}
+Vectorization uses
+\[
+  \operatorname{vec}(ABC)
+  =(C^T\otimes A)\operatorname{vec}(B),
+\]
+so
+\begin{align}
+ &\norm{V_1^T\widehat V\Lambda-
+        \Lambda_1V_1^T\widehat V}_{\F}\notag\\
+ &\quad=
+ \norm{(\Lambda\otimes I_{p-d}-I_d\otimes\Lambda_1)
+       \operatorname{vec}(V_1^T\widehat V)}\notag\\
+ &\quad\ge
+ \Delta\norm{\operatorname{vec}(V_1^T\widehat V)}. \tag{YWS-7}
+\end{align}
+Every diagonal entry of the Kronecker difference has magnitude at least $\Delta$ because one eigenvalue lies inside the selected population block and the other lies outside it.
+
+Finally,
+\begin{align*}
+  \norm{\operatorname{vec}(V_1^T\widehat V)}^2
+  &=\tr(\widehat V^TV_1V_1^T\widehat V)\\
+  &=\tr((I-VV^T)\widehat V\widehat V^T)\\
+  &=d-\norm{\widehat V^TV}_{\F}^2\\
+  &=\norm{\sin\Theta(\widehat V,V)}_{\F}^2.
+\end{align*}
+Combining (YWS-4)--(YWS-7) proves (YWS-1).
+
+\subsection{Procrustes alignment}
+
+Choose $O_1,O_2\in O(d)$ so that
+\[
+  O_1^T\widehat V^TVO_2
+  =\diag(\cos\theta_1,\dots,\cos\theta_d),
+\]
+and set
+\[
+  \widehat O:=O_1O_2^T.
+\]
+Then
+\begin{align}
+  \norm{\widehat V\widehat O-V}_{\F}^2
+  &=2d-2\sum_{j=1}^d\cos\theta_j\notag\\
+  &\le2d-2\sum_{j=1}^d\cos^2\theta_j\notag\\
+  &=2\norm{\sin\Theta(\widehat V,V)}_{\F}^2. \tag{YWS-8}
+\end{align}
+Together with (YWS-1), this gives (YWS-2).
+
+\section{Proof of the singular-subspace theorem}
+
+Apply the symmetric theorem to the Gram matrices
+\[
+  A^TA,
+  \qquad
+  \widehat A^T\widehat A.
+\]
+Their selected eigenvectors are precisely the right singular vectors, and the eigenvalues are the squared singular values. Thus
+\begin{equation}
+  \norm{\sin\Theta(\widehat V,V)}_{\F}
+  \le
+  \frac{2\min\bigl(
+      \sqrt d\norm{\widehat A^T\widehat A-A^TA}_{\op},
+      \norm{\widehat A^T\widehat A-A^TA}_{\F}
+    \bigr)}{\Delta_{\mathrm{sv}}}. \tag{YWS-9}
+\end{equation}
+
+Since
+\[
+  \widehat A^T\widehat A-A^TA
+  =D^T\widehat A+A^TD,
+\]
+submultiplicativity gives
+\begin{align}
+  \norm{\widehat A^T\widehat A-A^TA}_{\op}
+  &\le(\norm{\widehat A}_{\op}+\norm{A}_{\op})
+       \norm{D}_{\op}\notag\\
+  &\le(2\sigma_1+\norm{D}_{\op})\norm{D}_{\op}. \tag{YWS-10}
+\end{align}
+Here
+\[
+  \norm{\widehat A}_{\op}
+  \le\norm{A}_{\op}+\norm{D}_{\op}
+  =\sigma_1+\norm{D}_{\op}.
+\]
+
+For the Frobenius estimate, vectorization and Kronecker operator norms yield
+\begin{align}
+  \norm{\widehat A^T\widehat A-A^TA}_{\F}
+  &\le
+  \norm{(\widehat A^T\otimes I_q)
+        \operatorname{vec}(D^T)}
+  +\norm{(I_p\otimes A^T)\operatorname{vec}(D)}\notag\\
+  &\le
+  (\norm{\widehat A}_{\op}+\norm{A}_{\op})
+  \norm{D}_{\F}\notag\\
+  &\le
+  (2\sigma_1+\norm{D}_{\op})\norm{D}_{\F}. \tag{YWS-11}
+\end{align}
+Substituting (YWS-10)--(YWS-11) into (YWS-9) proves the right-subspace bound. The Procrustes conclusion follows from (YWS-8). Applying the same argument to $AA^T$ and $\widehat A\widehat A^T$ proves the left-subspace version.
+
+\section{Formalization map}
+
+\begin{formalizationmap}
+Principal angles & Singular values of $\widehat V^TV$, Frobenius sine distance, cross-complement identity. & \code{PrincipalAngles.lean}, \code{AlignedBasis.lean}, and the canonical subspace API used by \code{DavisKahanTheory/Statistics.lean}. \\
+Population residual lower bound & $\Delta^2$ times cross-subspace energy is bounded by squared residual-column energy. & \code{YuWangSamworth.lean}: \code{sq_gap_mul_sum_cross_le_sum_sq_norm_residualColumn} and \code{sq_gap_mul_sum_cross_le_of_population_gap}. Fully proved. \\
+Operator-norm numerator & Residual bounded by $2\sqrt d\norm{E}_{\op}$. & \code{YuWangSamworth.lean}: \code{sq_gap_mul_sum_cross_le_of_population_gap_opNorm}. Fully proved. \\
+Sine theorem & Population-only gap bound for Frobenius principal-angle distance. & \code{YuWangSamworth.lean}: \code{sqrt_sum_cross_le_of_population_gap}; \code{DavisKahanTheory/Statistics.lean}: \code{yuWangSamworth_sinTheta_le}, \code{yuWangSamworth_intervalBlock_le}. Fully proved. \\
+Procrustes step & Existence of aligned orthonormal bases with squared distance at most twice squared sine distance. & \code{AlignedBasis.lean}: \code{sum_sq_norm_aligned_le}; \code{Statistics.lean}: \code{exists_aligned_orthonormalBasis}, \code{yuWangSamworth_alignedBasis_le}. Fully proved. \\
+Rank-one corollary & Sign-aligned eigenvector difference with constant $2^{3/2}$. & \code{Statistics.lean}: \code{yuWangSamworth_eigenvector_le}. Fully proved. \\
+Rectangular extension & Right and left singular subspace sine bounds. & \code{DavisKahanTheory/SingularSubspace.lean}: \code{rightSingularSubspace_sinTheta_le}, \code{leftSingularSubspace_sinTheta_le}, and \code{singularSubspace_dilation_sinTheta_le}. Fully proved. \\
+Frobenius compression & Orthogonal compression cannot increase Frobenius norm. & Replaced by intrinsic orthonormal-family and unitarily invariant norm lemmas rather than copied as a matrix-only helper. \\
+\end{formalizationmap}
+
+\section{Source-faithfulness and transcription audit}
+
+\begin{enumerate}[leftmargin=2em]
+\item The paper appeared in 2015, while the supplied source is the 2014 preprint transcription. The theorem numbering used here follows the transcription's labeled structure.
+\item The transcription contains a duplicate, deprecated Davis--Kahan theorem and unfinished scratch calculations after its end-of-document marker. They are not part of the paper and are excluded from the reconstruction.
+\item The baseline mixed-gap theorem's printed endpoint conventions should be checked against the official article before being used as a canonical index formula. The population-gap theorem and its proof are internally consistent.
+\item The source uses finite real matrices. The Lean development generalizes the central symmetric-operator statements to finite-dimensional real or complex inner-product spaces and expresses subspaces intrinsically.
+\item The source's SVD theorem is obtained through squared Gram matrices. The repository additionally contains a self-adjoint dilation route, which is mathematically equivalent but should be identified as a modern alternative rather than attributed to the paper.
+\end{enumerate}
+
+\begin{thebibliography}{8}
+\bibitem{YWS} Y. Yu, T. Wang, and R. J. Samworth, \emph{A Useful Variant of the Davis--Kahan Theorem for Statisticians}, Biometrika 102 (2015), 315--323.
+\bibitem{DavisKahan1970} C. Davis and W. M. Kahan, \emph{The Rotation of Eigenvectors by a Perturbation. III}, SIAM J. Numer. Anal. 7 (1970), 1--46.
+\bibitem{Wedin1972} P.-\AA. Wedin, \emph{Perturbation bounds in connection with singular value decomposition}, BIT 12 (1972), 99--111.
+\bibitem{HoffmanWielandt1953} A. J. Hoffman and H. W. Wielandt, \emph{The variation of the spectrum of a normal matrix}, Duke Math. J. 20 (1953), 37--39.
+\bibitem{StewartSun1990} G. W. Stewart and J.-G. Sun, \emph{Matrix Perturbation Theory}, Academic Press, 1990.
+\end{thebibliography}
+
+\end{document}

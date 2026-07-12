@@ -1,0 +1,1380 @@
+{
+  "version": "2026-07-12-initial-52-work-source-inventory",
+  "purpose": "Canonical, machine-checked inventory of works whose definitions, theorem families, or proof architecture are directly formalized, actively scaffolded, or inherited by the DKPS and Perfect Quench development.",
+  "scope_rule": [
+    "Include every DKPS-lineage paper whose definitions or theorems are used by a paper-facing Lean namespace.",
+    "Include primary historical papers for theorem families explicitly formalized or actively scaffolded under ForMathlib.",
+    "Include modern books/surveys only when repository code cites them as a theorem-level reference.",
+    "Do not include empirical application citations that contribute no formalized definition, theorem, or proof step."
+  ],
+  "status_legend": {
+    "missing": "No source-order distilled note exists.",
+    "transcription_only": "A transcription exists, but not a proof-level reconstruction.",
+    "source_text_only": "Source prose/TeX exists, but not a proof-level reconstruction.",
+    "core_note": "A broad core-arguments note exists and should be upgraded to the common manifest/anchor format."
+  },
+  "works": {
+    "HelmMehtaDuderstadtYangWhiteGeisaVogelsteinPriebe2020": {
+      "title": "A Partition-Based Similarity for Classification Distributions",
+      "authors": [
+        "Hayden S. Helm",
+        "Ronak D. Mehta",
+        "Brandon Duderstadt",
+        "Weiwei Yang",
+        "Christopher M. White",
+        "Ali Geisa",
+        "Joshua T. Vogelstein",
+        "Carey E. Priebe"
+      ],
+      "year": 2020,
+      "kind": "paper",
+      "group": "DKPS lineage and target papers",
+      "tier": "lineage_background",
+      "priority": "P2",
+      "formalization_status": "background lineage for distribution and task similarity",
+      "distilled_status": "missing",
+      "primary_url": "https://arxiv.org/abs/2011.06557",
+      "target_note": "HelmEtAl2020_partition_similarity.tex",
+      "repo_evidence": [
+        "Helm2025/prose/statistical_inference_black_box_generative_models_dkps.md",
+        "DkpsQuench/prose/quench-tex-src/biblio.bib"
+      ],
+      "existing_assets": [],
+      "scope": "The partition/task-similarity framework that precedes the data-kernel model-comparison program.",
+      "missing_work": "Audit whether any population-response or distribution-similarity definitions in the DKPS papers are inherited verbatim; distill only those inherited pieces.",
+      "role": "lineage_background",
+      "bibliographic_status": "verified"
+    },
+    "DuderstadtHelmPriebe2023": {
+      "title": "Comparing Foundation Models Using Data Kernels",
+      "authors": [
+        "Brandon Duderstadt",
+        "Hayden S. Helm",
+        "Carey E. Priebe"
+      ],
+      "year": 2023,
+      "kind": "paper",
+      "group": "DKPS lineage and target papers",
+      "tier": "primary",
+      "priority": "P0",
+      "formalization_status": "foundational definitions reused downstream",
+      "distilled_status": "missing",
+      "primary_url": "https://arxiv.org/abs/2305.05126",
+      "target_note": "DuderstadtHelmPriebe2023_data_kernels.tex",
+      "repo_evidence": [
+        "README.md",
+        "Helm2025/prose/statistical_inference_black_box_generative_models_dkps.md"
+      ],
+      "existing_assets": [],
+      "scope": "The data-kernel construction, population model geometry, and the first model-manifold interpretation used by later DKPS papers.",
+      "missing_work": "Acquire source; reconstruct the data-kernel and population-geometry definitions that later papers treat as inherited.",
+      "role": "inherited_foundation",
+      "bibliographic_status": "verified"
+    },
+    "HelmPriebeYang2023": {
+      "title": "A Statistical Turing Test for Generative Models",
+      "authors": [
+        "Hayden Helm",
+        "Carey E. Priebe",
+        "Weiwei Yang"
+      ],
+      "year": 2023,
+      "kind": "paper",
+      "group": "DKPS lineage and target papers",
+      "tier": "lineage_background",
+      "priority": "P2",
+      "formalization_status": "background lineage for response-conditioned generative-model comparison",
+      "distilled_status": "missing",
+      "primary_url": "https://arxiv.org/abs/2309.08913",
+      "target_note": "HelmPriebeYang2023_statistical_turing_test.tex",
+      "repo_evidence": [
+        "Helm2025/prose/statistical_inference_black_box_generative_models_dkps.md",
+        "DkpsQuench/prose/quench-tex-src/biblio.bib"
+      ],
+      "existing_assets": [],
+      "scope": "The statistical pattern-recognition framing for context-conditioned human/model distribution comparison that precedes response-based DKPS evaluation.",
+      "missing_work": "Determine whether this contributes a formal definition used downstream or should remain a lineage-only supplementary reference.",
+      "role": "lineage_background",
+      "bibliographic_status": "verified"
+    },
+    "AcharyyaTrossetPriebeHelm2024": {
+      "title": "Consistent Estimation of Generative Model Representations in the Data Kernel Perspective Space",
+      "authors": [
+        "Aranyak Acharyya",
+        "Michael W. Trosset",
+        "Carey E. Priebe",
+        "Hayden S. Helm"
+      ],
+      "year": 2024,
+      "kind": "paper",
+      "group": "DKPS lineage and target papers",
+      "tier": "primary",
+      "priority": "P0",
+      "formalization_status": "substantially formalized",
+      "distilled_status": "transcription_only",
+      "primary_url": "https://arxiv.org/abs/2409.17308",
+      "target_note": "AcharyyaTrossetPriebeHelm2024_consistency.tex",
+      "repo_evidence": [
+        "Acharyya2024/README.md",
+        "Acharyya2024/Consistency.lean",
+        "Acharyya2024/RawStress.lean"
+      ],
+      "existing_assets": [
+        "Acharyya2024/prose/consistent-estimation-dkps-2409.17308_transcription.md"
+      ],
+      "scope": "Theorems 1--5, raw-stress MDS stability, fixed/growing query regimes, and the paper-to-Lean hypothesis repairs.",
+      "missing_work": "Turn the transcription and crosswalk into a source-order proof reconstruction with equation/theorem anchors and discrepancy notes.",
+      "role": "direct_target",
+      "bibliographic_status": "verified"
+    },
+    "HelmDuderstadtParkPriebe2024": {
+      "title": "Tracking the Perspectives of Interacting Language Models",
+      "authors": [
+        "Hayden Helm",
+        "Brandon Duderstadt",
+        "Youngser Park",
+        "Carey E. Priebe"
+      ],
+      "year": 2024,
+      "kind": "paper",
+      "group": "DKPS lineage and target papers",
+      "tier": "primary",
+      "priority": "P0",
+      "formalization_status": "foundational perspective-space definitions reused downstream",
+      "distilled_status": "missing",
+      "primary_url": "https://arxiv.org/abs/2406.11938",
+      "target_note": "HelmDuderstadtParkPriebe2024_tracking_perspectives.tex",
+      "repo_evidence": [
+        "README.md",
+        "Helm2025/prose/statistical_inference_black_box_generative_models_dkps.md"
+      ],
+      "existing_assets": [],
+      "scope": "The perspective-space construction for interacting models and its relation to response-derived model coordinates.",
+      "missing_work": "Acquire source and reconstruct the exact DKPS definitions inherited by the theorem papers.",
+      "role": "inherited_foundation",
+      "bibliographic_status": "verified"
+    },
+    "TrossetPriebe2024": {
+      "title": "Continuous Multidimensional Scaling",
+      "authors": [
+        "Michael W. Trosset",
+        "Carey E. Priebe"
+      ],
+      "year": 2024,
+      "kind": "paper",
+      "group": "DKPS lineage and target papers",
+      "tier": "primary",
+      "priority": "P0",
+      "formalization_status": "methods imported by Acharyya 2024 formalization",
+      "distilled_status": "missing",
+      "primary_url": "https://arxiv.org/abs/2402.04436",
+      "target_note": "TrossetPriebe2024_continuous_mds.tex",
+      "repo_evidence": [
+        "README.md",
+        "Acharyya2024/prose/consistent-estimation-dkps-2409.17308_transcription.md",
+        "Acharyya2024/RawStress.lean"
+      ],
+      "existing_assets": [],
+      "scope": "Continuous raw-stress MDS, fixed-space reformulation for growing object sets, and consistency machinery used by the DKPS asymptotic paper.",
+      "missing_work": "Acquire source and identify exactly which compactness/argmin-continuity results are reused or replaced in Lean.",
+      "role": "primary_method_source",
+      "bibliographic_status": "verified"
+    },
+    "AcharyyaAgterbergParkPriebe2025": {
+      "title": "Concentration Bounds on Response-Based Vector Embeddings of Black-Box Generative Models",
+      "authors": [
+        "Aranyak Acharyya",
+        "Joshua Agterberg",
+        "Youngser Park",
+        "Carey E. Priebe"
+      ],
+      "year": 2025,
+      "kind": "paper",
+      "group": "DKPS lineage and target papers",
+      "tier": "primary",
+      "priority": "P0",
+      "formalization_status": "substantially formalized",
+      "distilled_status": "transcription_only",
+      "primary_url": "https://arxiv.org/abs/2511.08307",
+      "target_note": "AcharyyaAgterbergParkPriebe2025_concentration.tex",
+      "repo_evidence": [
+        "Acharyya2025/README.md",
+        "Acharyya2025/Deterministic.lean",
+        "Acharyya2025/ConfigPerturbation.lean",
+        "Acharyya2025/RateChain.lean"
+      ],
+      "existing_assets": [
+        "Acharyya2025/prose/concentration-bounds-response-embeddings-2511.08307_transcription.md"
+      ],
+      "scope": "Theorems 1--2, Corollaries 1--2, CMDS perturbation, Procrustes alignment, and the complete response-to-configuration rate chain.",
+      "missing_work": "Create a source-order reconstruction that distinguishes the paper proof from the stronger/generalized Lean lemmas.",
+      "role": "direct_target",
+      "bibliographic_status": "verified"
+    },
+    "HelmAcharyyaDuderstadtParkPriebe2025": {
+      "title": "Statistical Inference on Black-Box Generative Models in the Data Kernel Perspective Space",
+      "authors": [
+        "Hayden S. Helm",
+        "Aranyak Acharyya",
+        "Brandon Duderstadt",
+        "Youngser Park",
+        "Carey E. Priebe"
+      ],
+      "year": 2025,
+      "kind": "paper",
+      "group": "DKPS lineage and target papers",
+      "tier": "primary",
+      "priority": "P0",
+      "formalization_status": "substantially formalized",
+      "distilled_status": "source_text_only",
+      "primary_url": "https://arxiv.org/abs/2410.01106",
+      "target_note": "HelmAcharyyaDuderstadtParkPriebe2025_inference.tex",
+      "repo_evidence": [
+        "Helm2025/README.md",
+        "Helm2025/Basic.lean",
+        "Helm2025/Inference.lean",
+        "Helm2025/AcharyyaBridge.lean"
+      ],
+      "existing_assets": [
+        "Helm2025/prose/statistical_inference_black_box_generative_models_dkps.md",
+        "Helm2025/prose/statistical-black-box-dkps-tex-src"
+      ],
+      "scope": "The inference-transfer theorems and their dependence on consistency/alignment of DKPS embeddings.",
+      "missing_work": "Create a source-order theorem reconstruction and clearly isolate the inference-preservation assumptions not stated in the paper.",
+      "role": "direct_target",
+      "bibliographic_status": "verified"
+    },
+    "HelmJohnsonPriebe2026": {
+      "title": "Query-Efficient Model Evaluation Using Cached Responses",
+      "authors": [
+        "Hayden Helm",
+        "Ben Johnson",
+        "Carey E. Priebe"
+      ],
+      "year": 2026,
+      "kind": "paper",
+      "group": "DKPS lineage and target papers",
+      "tier": "primary",
+      "priority": "P0",
+      "formalization_status": "substantially formalized; Perfect Quench capstone incomplete",
+      "distilled_status": "transcription_only",
+      "primary_url": "https://arxiv.org/abs/2605.07096",
+      "target_note": "HelmJohnsonPriebe2026_quench.tex",
+      "repo_evidence": [
+        "DkpsQuench/README.md",
+        "DkpsQuench/Theorem2.lean",
+        "DkpsQuench/QueryEfficiency.lean",
+        "DkpsQuench/Perfect/README.md"
+      ],
+      "existing_assets": [
+        "DkpsQuench/prose/quench-icml-nonanon_transcription.md"
+      ],
+      "scope": "The query-efficiency theorem, cached-response bridge, nearest-neighbor/tie averaging, and the stronger Perfect Quench target.",
+      "missing_work": "Build a theorem-by-theorem source reconstruction, recording where Perfect Quench strengthens or changes the paper assumptions.",
+      "role": "direct_target",
+      "bibliographic_status": "verified"
+    },
+    "Schoenberg1935": {
+      "title": "Remarks to Maurice Frechet's Article: Sur la Definition Axiomatique d'une Classe d'Espace Distancies Vectoriellement Applicable sur l'Espace de Hilbert",
+      "authors": [
+        "I. J. Schoenberg"
+      ],
+      "year": 1935,
+      "kind": "paper",
+      "group": "MDS, Euclidean distance geometry, Gram rigidity, and alignment",
+      "tier": "discovered_primary",
+      "priority": "P2",
+      "formalization_status": "classical source for Euclidean distance matrices",
+      "distilled_status": "missing",
+      "primary_url": "",
+      "target_note": "Schoenberg1935_euclidean_distance_matrices.tex",
+      "repo_evidence": [
+        "Acharyya2025/Deterministic.lean",
+        "ForMathlib/LinearAlgebra/Matrix/PosDef.lean"
+      ],
+      "existing_assets": [],
+      "scope": "Conditional negative type and Hilbert-space realization underlying Euclidean distance matrices and double centering.",
+      "missing_work": "Confirm which finite-dimensional specialization exactly matches the Lean double-centering/PSD realization chain.",
+      "role": "primary_theorem_source",
+      "bibliographic_status": "needs_verification"
+    },
+    "YoungHouseholder1938": {
+      "title": "Discussion of a Set of Points in Terms of Their Mutual Distances",
+      "authors": [
+        "Gale Young",
+        "A. S. Householder"
+      ],
+      "year": 1938,
+      "kind": "paper",
+      "group": "MDS, Euclidean distance geometry, Gram rigidity, and alignment",
+      "tier": "discovered_primary",
+      "priority": "P2",
+      "formalization_status": "historical source for distance-to-coordinate realization",
+      "distilled_status": "missing",
+      "primary_url": "",
+      "target_note": "YoungHouseholder1938_mutual_distances.tex",
+      "repo_evidence": [
+        "ForMathlib/LinearAlgebra/Matrix/PosDef.lean",
+        "Acharyya2025/GramRealization.lean"
+      ],
+      "existing_assets": [],
+      "scope": "Early Euclidean distance realization and coordinate recovery from mutual distances.",
+      "missing_work": "Verify the exact theorem correspondence with the rank-constrained PSD/Gram realization formalization.",
+      "role": "primary_theorem_source",
+      "bibliographic_status": "needs_verification"
+    },
+    "Torgerson1952": {
+      "title": "Multidimensional Scaling: I. Theory and Method",
+      "authors": [
+        "Warren S. Torgerson"
+      ],
+      "year": 1952,
+      "kind": "paper",
+      "group": "MDS, Euclidean distance geometry, Gram rigidity, and alignment",
+      "tier": "primary",
+      "priority": "P1",
+      "formalization_status": "classical scaling algorithm formalized",
+      "distilled_status": "missing",
+      "primary_url": "https://doi.org/10.1007/BF02288916",
+      "target_note": "Torgerson1952_classical_mds.tex",
+      "repo_evidence": [
+        "README.md",
+        "Helm2025/prose/statistical_inference_black_box_generative_models_dkps.md",
+        "Acharyya2025/Deterministic.lean"
+      ],
+      "existing_assets": [],
+      "scope": "Classical MDS, double centering, spectral coordinates, and uniqueness up to orthogonal transformations.",
+      "missing_work": "Acquire source and reconstruct the exact classical-scaling theorem chain used in DKPS.",
+      "role": "primary_theorem_source",
+      "bibliographic_status": "verified"
+    },
+    "Kruskal1964": {
+      "title": "Multidimensional Scaling by Optimizing Goodness of Fit to a Nonmetric Hypothesis",
+      "authors": [
+        "J. B. Kruskal"
+      ],
+      "year": 1964,
+      "kind": "paper",
+      "group": "MDS, Euclidean distance geometry, Gram rigidity, and alignment",
+      "tier": "primary",
+      "priority": "P1",
+      "formalization_status": "raw-stress objective and minimizer theory formalized",
+      "distilled_status": "missing",
+      "primary_url": "https://doi.org/10.1007/BF02289565",
+      "target_note": "Kruskal1964_raw_stress.tex",
+      "repo_evidence": [
+        "README.md",
+        "Acharyya2024/RawStress.lean"
+      ],
+      "existing_assets": [],
+      "scope": "Raw stress as an MDS objective and its invariances.",
+      "missing_work": "Separate the raw-stress criterion actually used by DKPS from the nonmetric optimization material not formalized.",
+      "role": "primary_theorem_source",
+      "bibliographic_status": "verified"
+    },
+    "Gower1966": {
+      "title": "Some Distance Properties of Latent Root and Vector Methods Used in Multivariate Analysis",
+      "authors": [
+        "J. C. Gower"
+      ],
+      "year": 1966,
+      "kind": "paper",
+      "group": "MDS, Euclidean distance geometry, Gram rigidity, and alignment",
+      "tier": "primary",
+      "priority": "P1",
+      "formalization_status": "classical scaling identities formalized",
+      "distilled_status": "missing",
+      "primary_url": "https://doi.org/10.1093/biomet/53.3-4.325",
+      "target_note": "Gower1966_distance_properties.tex",
+      "repo_evidence": [
+        "README.md",
+        "Acharyya2025/Deterministic.lean",
+        "Acharyya2025/GramRealization.lean"
+      ],
+      "existing_assets": [],
+      "scope": "Distance/Gram conversion and latent-root realization used by classical MDS.",
+      "missing_work": "Reconstruct the source formulas and map them to exact double-centering and Gram-realization declarations.",
+      "role": "primary_theorem_source",
+      "bibliographic_status": "verified"
+    },
+    "Schoenemann1966": {
+      "title": "A Generalized Solution of the Orthogonal Procrustes Problem",
+      "authors": [
+        "Peter H. Schoenemann"
+      ],
+      "year": 1966,
+      "kind": "paper",
+      "group": "MDS, Euclidean distance geometry, Gram rigidity, and alignment",
+      "tier": "discovered_primary",
+      "priority": "P1",
+      "formalization_status": "exact classical source for the polar/SVD alignment step",
+      "distilled_status": "missing",
+      "primary_url": "https://doi.org/10.1007/BF02289451",
+      "target_note": "Schoenemann1966_orthogonal_procrustes.tex",
+      "repo_evidence": [
+        "Acharyya2025/AlignedPipeline.lean",
+        "ForMathlib/Analysis/InnerProductSpace/AlignedBasis.lean",
+        "ForMathlib/Analysis/InnerProductSpace/DavisKahanTheory/Statistics.lean"
+      ],
+      "existing_assets": [],
+      "scope": "The orthogonal Procrustes minimizer and its SVD/polar-factor representation.",
+      "missing_work": "Add as an explicit source: the repo currently cites later Procrustes surveys but formalizes the classical polar-factor solution itself.",
+      "role": "primary_theorem_source",
+      "bibliographic_status": "verified"
+    },
+    "Sibson1979": {
+      "title": "Studies in the Robustness of Multidimensional Scaling: Perturbational Analysis of Classical Scaling",
+      "authors": [
+        "Robin Sibson"
+      ],
+      "year": 1979,
+      "kind": "paper",
+      "group": "MDS, Euclidean distance geometry, Gram rigidity, and alignment",
+      "tier": "primary",
+      "priority": "P1",
+      "formalization_status": "direct precedent for CMDS perturbation/alignment",
+      "distilled_status": "missing",
+      "primary_url": "",
+      "target_note": "Sibson1979_classical_scaling_perturbation.tex",
+      "repo_evidence": [
+        "Acharyya2025/GramRigidity.lean",
+        "Acharyya2025/ConfigPerturbation.lean"
+      ],
+      "existing_assets": [],
+      "scope": "Perturbational analysis of classical scaling and aligned coordinate error.",
+      "missing_work": "Acquire source; compare constants and hypotheses against the Acharyya 2025 deterministic perturbation chain.",
+      "role": "primary_theorem_source",
+      "bibliographic_status": "verified"
+    },
+    "Goodall1991": {
+      "title": "Procrustes Methods in the Statistical Analysis of Shape",
+      "authors": [
+        "Colin Goodall"
+      ],
+      "year": 1991,
+      "kind": "paper",
+      "group": "MDS, Euclidean distance geometry, Gram rigidity, and alignment",
+      "tier": "supporting",
+      "priority": "P2",
+      "formalization_status": "alignment vocabulary and statistical context",
+      "distilled_status": "missing",
+      "primary_url": "",
+      "target_note": "Goodall1991_procrustes_methods.tex",
+      "repo_evidence": [
+        "README.md",
+        "papers/formalization_draft1/references.bib"
+      ],
+      "existing_assets": [],
+      "scope": "Procrustes alignment and shape-analysis formulations surrounding the exact alignment used in DKPS.",
+      "missing_work": "Distill only the orthogonal alignment results actually used; keep statistical shape material out of scope.",
+      "role": "modern_comparison",
+      "bibliographic_status": "verified"
+    },
+    "ChienWaldron2016": {
+      "title": "A Characterization of Projective Unitary Equivalence of Finite Frames and Applications",
+      "authors": [
+        "Tuan-Yow Chien",
+        "Shayne Waldron"
+      ],
+      "year": 2016,
+      "kind": "paper",
+      "group": "MDS, Euclidean distance geometry, Gram rigidity, and alignment",
+      "tier": "supporting",
+      "priority": "P2",
+      "formalization_status": "frame-theoretic Gram rigidity source",
+      "distilled_status": "missing",
+      "primary_url": "https://arxiv.org/abs/1312.5393",
+      "target_note": "ChienWaldron2016_finite_frame_gram_rigidity.tex",
+      "repo_evidence": [
+        "ForMathlib/Analysis/InnerProductSpace/GramMatrix.lean",
+        "papers/GramRigidity-formalized-vs-literature.tex"
+      ],
+      "existing_assets": [],
+      "scope": "Unitary/projective equivalence of finite frames from Gram data.",
+      "missing_work": "Distill the exact equal-Gram equivalence and distinguish it from the stronger projective classification.",
+      "role": "modern_comparison",
+      "bibliographic_status": "verified"
+    },
+    "LittleXieSun2023": {
+      "title": "An Analysis of Classical Multidimensional Scaling with Applications to Clustering",
+      "authors": [
+        "Anna Little",
+        "Yuying Xie",
+        "Qiang Sun"
+      ],
+      "year": 2023,
+      "kind": "paper",
+      "group": "MDS, Euclidean distance geometry, Gram rigidity, and alignment",
+      "tier": "supporting",
+      "priority": "P2",
+      "formalization_status": "modern CMDS perturbation comparison source",
+      "distilled_status": "missing",
+      "primary_url": "https://arxiv.org/abs/1812.11954",
+      "target_note": "LittleXieSun2023_cmds_perturbation.tex",
+      "repo_evidence": [
+        "README.md",
+        "Acharyya2025/ConfigPerturbation.lean"
+      ],
+      "existing_assets": [],
+      "scope": "Modern statistical perturbation analysis for classical MDS; published title differs from the arXiv title Exact Cluster Recovery via Classical Multidimensional Scaling.",
+      "missing_work": "Map its CMDS perturbation bounds against the constants and decomposition formalized for Acharyya 2025.",
+      "role": "modern_comparison",
+      "bibliographic_status": "verified"
+    },
+    "Weyl1912": {
+      "title": "Das asymptotische Verteilungsgesetz der Eigenwerte linearer partieller Differentialgleichungen (mit einer Anwendung auf die Theorie der Hohlraumstrahlung)",
+      "authors": [
+        "Hermann Weyl"
+      ],
+      "year": 1912,
+      "kind": "paper",
+      "group": "Spectral perturbation, principal angles, and matrix inequalities",
+      "tier": "discovered_primary",
+      "priority": "P1",
+      "formalization_status": "historical primary source for Weyl eigenvalue inequalities",
+      "distilled_status": "missing",
+      "primary_url": "https://doi.org/10.1007/BF01456804",
+      "target_note": "Weyl1912_eigenvalue_inequalities.tex",
+      "repo_evidence": [
+        "ForMathlib/Analysis/InnerProductSpace/CourantFischer.lean",
+        "papers/DavisKahan-formalized-vs-literature.tex"
+      ],
+      "existing_assets": [],
+      "scope": "The eigenvalue inequalities whose operator-norm perturbation corollary is proved locally and repeatedly used in the DKPS spectral chain.",
+      "missing_work": "Verify the exact location and historical formulation of the finite-dimensional sum inequalities; compare the local perturbation corollary with the original statement.",
+      "role": "primary_theorem_source",
+      "bibliographic_status": "verified"
+    },
+    "Schur1923": {
+      "title": "Ueber eine Klasse von Mittelbildungen mit Anwendungen auf die Determinantentheorie",
+      "authors": [
+        "Issai Schur"
+      ],
+      "year": 1923,
+      "kind": "paper",
+      "group": "Spectral perturbation, principal angles, and matrix inequalities",
+      "tier": "primary",
+      "priority": "P1",
+      "formalization_status": "forward Schur--Horn/Karamata direction formalized",
+      "distilled_status": "missing",
+      "primary_url": "",
+      "target_note": "Schur1923_diagonal_majorization.tex",
+      "repo_evidence": [
+        "ForMathlib/Analysis/InnerProductSpace/SchurHorn.lean",
+        "ForMathlib/Analysis/InnerProductSpace/HoffmanWielandt.lean"
+      ],
+      "existing_assets": [],
+      "scope": "Majorization of diagonal entries by eigenvalues and the convex/Karamata consequences used downstream.",
+      "missing_work": "Acquire/translate source and separate Schur majorization from later Horn converse results.",
+      "role": "primary_theorem_source",
+      "bibliographic_status": "verified"
+    },
+    "EckartYoung1936": {
+      "title": "The Approximation of One Matrix by Another of Lower Rank",
+      "authors": [
+        "Carl Eckart",
+        "Gale Young"
+      ],
+      "year": 1936,
+      "kind": "paper",
+      "group": "Spectral perturbation, principal angles, and matrix inequalities",
+      "tier": "supporting",
+      "priority": "P2",
+      "formalization_status": "related to newly scaffolded singular-system/Eckart--Young infrastructure",
+      "distilled_status": "missing",
+      "primary_url": "",
+      "target_note": "EckartYoung1936_low_rank_approximation.tex",
+      "repo_evidence": [
+        "dev/external-lean-references.md",
+        "papers/DavisKahan-formalized-vs-literature.tex"
+      ],
+      "existing_assets": [],
+      "scope": "Best low-rank approximation via singular values.",
+      "missing_work": "Treat as related upstream work; it is not required for Perfect Quench but is a natural endpoint of the same singular-system API.",
+      "role": "related_upstream",
+      "bibliographic_status": "verified"
+    },
+    "vonNeumann1937": {
+      "title": "Some Matrix-Inequalities and Metrization of Matrix-Space",
+      "authors": [
+        "John von Neumann"
+      ],
+      "year": 1937,
+      "kind": "paper",
+      "group": "Spectral perturbation, principal angles, and matrix inequalities",
+      "tier": "discovered_primary",
+      "priority": "P1",
+      "formalization_status": "primary source for trace and symmetric-norm inequalities used in the local spectral infrastructure",
+      "distilled_status": "missing",
+      "primary_url": "",
+      "target_note": "vonNeumann1937_trace_and_symmetric_norms.tex",
+      "repo_evidence": [
+        "ForMathlib/Analysis/InnerProductSpace/HoffmanWielandt.lean",
+        "ForMathlib/Analysis/InnerProductSpace/UnitarilyInvariantNorm.lean",
+        "papers/DavisKahan-formalized-vs-literature.tex"
+      ],
+      "existing_assets": [],
+      "scope": "The singular-value trace inequality and symmetric-norm viewpoint behind the local von-Neumann-type trace bound and unitarily invariant norm layer.",
+      "missing_work": "Acquire a reliable scan/edition and separate the exact original results from later Mirsky/Fan dominance formulations.",
+      "role": "primary_theorem_source",
+      "bibliographic_status": "needs_verification"
+    },
+    "Fan1949": {
+      "title": "On a Theorem of Weyl Concerning Eigenvalues of Linear Transformations I",
+      "authors": [
+        "Ky Fan"
+      ],
+      "year": 1949,
+      "kind": "paper",
+      "group": "Spectral perturbation, principal angles, and matrix inequalities",
+      "tier": "primary",
+      "priority": "P1",
+      "formalization_status": "Ky Fan variational and dominance infrastructure formalized",
+      "distilled_status": "missing",
+      "primary_url": "https://doi.org/10.1073/pnas.35.11.652",
+      "target_note": "Fan1949_eigenvalue_sums.tex",
+      "repo_evidence": [
+        "ForMathlib/Analysis/InnerProductSpace/KyFan.lean",
+        "ForMathlib/Analysis/InnerProductSpace/UnitarilyInvariantNorm.lean"
+      ],
+      "existing_assets": [],
+      "scope": "Extremal eigenvalue sums and the variational principles underlying Ky Fan norms and dominance.",
+      "missing_work": "Identify which 1949 statements correspond exactly to the current finite-dimensional API.",
+      "role": "primary_theorem_source",
+      "bibliographic_status": "verified"
+    },
+    "HoffmanWielandt1953": {
+      "title": "The Variation of the Spectrum of a Normal Matrix",
+      "authors": [
+        "A. J. Hoffman",
+        "H. W. Wielandt"
+      ],
+      "year": 1953,
+      "kind": "paper",
+      "group": "Spectral perturbation, principal angles, and matrix inequalities",
+      "tier": "primary",
+      "priority": "P1",
+      "formalization_status": "formalized",
+      "distilled_status": "missing",
+      "primary_url": "https://doi.org/10.1215/S0012-7094-53-02004-3",
+      "target_note": "HoffmanWielandt1953_spectral_variation.tex",
+      "repo_evidence": [
+        "ForMathlib/Analysis/InnerProductSpace/HoffmanWielandt.lean",
+        "ForMathlib/Analysis/InnerProductSpace/YuWangSamworth.lean"
+      ],
+      "existing_assets": [],
+      "scope": "The normal/symmetric Hoffman--Wielandt eigenvalue matching inequality and its use in the exact YWS proof.",
+      "missing_work": "Reconstruct the original doubly-stochastic/rearrangement proof and compare it with the Lean route.",
+      "role": "primary_theorem_source",
+      "bibliographic_status": "verified"
+    },
+    "FanHoffman1955": {
+      "title": "Some Metric Inequalities in the Space of Matrices",
+      "authors": [
+        "Ky Fan",
+        "A. J. Hoffman"
+      ],
+      "year": 1955,
+      "kind": "paper",
+      "group": "Spectral perturbation, principal angles, and matrix inequalities",
+      "tier": "discovered_primary",
+      "priority": "P2",
+      "formalization_status": "classical nearest-unitary/polar-factor source",
+      "distilled_status": "missing",
+      "primary_url": "",
+      "target_note": "FanHoffman1955_nearest_unitary.tex",
+      "repo_evidence": [
+        "ForMathlib/Analysis/InnerProductSpace/NearIsometry.lean",
+        "ForMathlib/Analysis/InnerProductSpace/PolarDecomposition.lean",
+        "ForMathlib/Analysis/InnerProductSpace/AlignedBasis.lean"
+      ],
+      "existing_assets": [],
+      "scope": "Metric optimality of the unitary polar factor and related unitarily invariant norm inequalities.",
+      "missing_work": "Add as a more exact source for the nearest-isometry and Procrustes polar-factor claims than the current textbook-only citation.",
+      "role": "primary_theorem_source",
+      "bibliographic_status": "needs_verification"
+    },
+    "Rosenblum1956": {
+      "title": "On the Operator Equation BX - XA = Q",
+      "authors": [
+        "Marvin Rosenblum"
+      ],
+      "year": 1956,
+      "kind": "paper",
+      "group": "Spectral perturbation, principal angles, and matrix inequalities",
+      "tier": "supporting",
+      "priority": "P2",
+      "formalization_status": "background for the Sylvester--Rosenblum equation",
+      "distilled_status": "missing",
+      "primary_url": "",
+      "target_note": "Rosenblum1956_operator_equation.tex",
+      "repo_evidence": [
+        "ForMathlib/Analysis/InnerProductSpace/SylvesterBound.lean",
+        "ForMathlib/Analysis/InnerProductSpace/DavisKahanTheory/Sylvester.lean"
+      ],
+      "existing_assets": [],
+      "scope": "Existence/uniqueness and contour-integral solution of the separated-spectrum operator equation.",
+      "missing_work": "Distill only the operator-equation material used to contextualize the constructive finite-dimensional proof.",
+      "role": "supporting_source",
+      "bibliographic_status": "needs_verification"
+    },
+    "Mirsky1960": {
+      "title": "Symmetric Gauge Functions and Unitarily Invariant Norms",
+      "authors": [
+        "Leon Mirsky"
+      ],
+      "year": 1960,
+      "kind": "paper",
+      "group": "Spectral perturbation, principal angles, and matrix inequalities",
+      "tier": "primary",
+      "priority": "P1",
+      "formalization_status": "unitarily invariant norm framework formalized",
+      "distilled_status": "missing",
+      "primary_url": "https://doi.org/10.1093/qmath/11.1.50",
+      "target_note": "Mirsky1960_symmetric_gauge_ui_norms.tex",
+      "repo_evidence": [
+        "ForMathlib/Analysis/InnerProductSpace/UnitarilyInvariantNorm.lean",
+        "ForMathlib/prose/Davis-Kahan-1970-part-III-core-arguments.tex"
+      ],
+      "existing_assets": [],
+      "scope": "Symmetric gauge representations, unitarily invariant norms, and dominance principles used in the Part III extension.",
+      "missing_work": "Reconstruct the exact representation theorem and note where the Lean interface is finite-dimensional or norm-seminorm generalized.",
+      "role": "primary_theorem_source",
+      "bibliographic_status": "verified"
+    },
+    "Davis1963": {
+      "title": "The Rotation of Eigenvectors by a Perturbation",
+      "authors": [
+        "Chandler Davis"
+      ],
+      "year": 1963,
+      "kind": "paper",
+      "group": "Spectral perturbation, principal angles, and matrix inequalities",
+      "tier": "primary",
+      "priority": "P0",
+      "formalization_status": "Sections I--V reconstructed in source order; core endpoints formalized, canonical direct rotation remains unfinished",
+      "distilled_status": "complete",
+      "primary_url": "https://doi.org/10.1016/0022-247X(63)90001-5",
+      "target_note": "Davis1963_rotation_of_eigenvectors.tex",
+      "repo_evidence": [
+        "ForMathlib/Analysis/InnerProductSpace/DavisKahanTheory/Davis1963.lean",
+        "ForMathlib/Analysis/InnerProductSpace/RotationBound.lean",
+        "ForMathlib/Analysis/InnerProductSpace/RotationSharp.lean"
+      ],
+      "existing_assets": [
+        "ForMathlib/prose/Davis-1963-core-arguments.tex",
+        "prose/distilled_literature/Davis1963_rotation_of_eigenvectors.tex"
+      ],
+      "scope": "Davis Sections 2--5, canonical rotations, total-rotation bound, sharp two-subspace estimates, sin 2 theta and tan 2 theta precursors.",
+      "missing_work": "The distilled mathematical reconstruction is complete. Remaining repository work is Lean completion of the canonical direct-rotation/minimality layer and exact packaging of several Section II source-shaped estimates.",
+      "role": "primary_theorem_source",
+      "bibliographic_status": "verified"
+    },
+    "Halmos1969": {
+      "title": "Two Subspaces",
+      "authors": [
+        "Paul R. Halmos"
+      ],
+      "year": 1969,
+      "kind": "paper",
+      "group": "Spectral perturbation, principal angles, and matrix inequalities",
+      "tier": "discovered_primary",
+      "priority": "P2",
+      "formalization_status": "canonical two-subspace/direct-rotation background",
+      "distilled_status": "missing",
+      "primary_url": "",
+      "target_note": "Halmos1969_two_subspaces.tex",
+      "repo_evidence": [
+        "ForMathlib/Analysis/InnerProductSpace/PrincipalAngles.lean",
+        "ForMathlib/Analysis/InnerProductSpace/DavisKahanTheory/DirectRotation.lean",
+        "ForMathlib/Analysis/InnerProductSpace/DavisKahanExt/OperatorAngle.lean"
+      ],
+      "existing_assets": [],
+      "scope": "Canonical decomposition of a pair of subspaces/projections and the generic two-subspace model.",
+      "missing_work": "Determine whether Davis Section 2 alone is sufficient or whether Halmos gives the cleaner source-order reconstruction for the shared geometry.",
+      "role": "primary_theorem_source",
+      "bibliographic_status": "verified"
+    },
+    "DavisKahan1970": {
+      "title": "The Rotation of Eigenvectors by a Perturbation. III",
+      "authors": [
+        "Chandler Davis",
+        "W. M. Kahan"
+      ],
+      "year": 1970,
+      "kind": "paper",
+      "group": "Spectral perturbation, principal angles, and matrix inequalities",
+      "tier": "primary",
+      "priority": "P0",
+      "formalization_status": "large finite-dimensional theory formalized/scaffolded",
+      "distilled_status": "core_note",
+      "primary_url": "https://doi.org/10.1137/0707001",
+      "target_note": "DavisKahan1970_part_III.tex",
+      "repo_evidence": [
+        "ForMathlib/Analysis/InnerProductSpace/DavisKahan.lean",
+        "ForMathlib/Analysis/InnerProductSpace/DavisKahanTheory.lean",
+        "papers/DavisKahan-formalized-vs-literature.tex"
+      ],
+      "existing_assets": [
+        "ForMathlib/prose/Davis-Kahan-1970-part-III-core-arguments.tex"
+      ],
+      "scope": "Part III sin Theta, tan Theta, sin 2 Theta, direct rotation, residual, projector, and unitarily invariant norm theorem families.",
+      "missing_work": "Convert the broad core note into a section-by-section reconstruction with every theorem numbered and the formalized/generalized variants separated.",
+      "role": "primary_theorem_source",
+      "bibliographic_status": "verified"
+    },
+    "Wedin1972": {
+      "title": "Perturbation Bounds in Connection with Singular Value Decomposition",
+      "authors": [
+        "Per-Ake Wedin"
+      ],
+      "year": 1972,
+      "kind": "paper",
+      "group": "Spectral perturbation, principal angles, and matrix inequalities",
+      "tier": "primary",
+      "priority": "P1",
+      "formalization_status": "singular-subspace/Wedin-style corollaries scaffolded",
+      "distilled_status": "missing",
+      "primary_url": "",
+      "target_note": "Wedin1972_svd_perturbation.tex",
+      "repo_evidence": [
+        "ForMathlib/Analysis/InnerProductSpace/DavisKahanTheory/SingularSubspace.lean",
+        "ForMathlib/Analysis/InnerProductSpace/DavisKahan/Experimental/Literature/CompactAndSingular.lean"
+      ],
+      "existing_assets": [],
+      "scope": "Residual-based perturbation bounds for left and right singular subspaces.",
+      "missing_work": "Acquire source and determine which theorem should be the canonical named Wedin wrapper over the Hermitian-dilation results.",
+      "role": "primary_theorem_source",
+      "bibliographic_status": "verified"
+    },
+    "BhatiaDavisMcIntosh1983": {
+      "title": "Perturbation of Spectral Subspaces and Solution of Linear Operator Equations",
+      "authors": [
+        "Rajendra Bhatia",
+        "Chandler Davis",
+        "Alan McIntosh"
+      ],
+      "year": 1983,
+      "kind": "paper",
+      "group": "Spectral perturbation, principal angles, and matrix inequalities",
+      "tier": "primary",
+      "priority": "P1",
+      "formalization_status": "hard arbitrary-spectrum Sylvester estimate scaffolded",
+      "distilled_status": "missing",
+      "primary_url": "",
+      "bibliographic_verification": "needed",
+      "target_note": "BhatiaDavisMcIntosh1983_spectral_subspaces_sylvester.tex",
+      "repo_evidence": [
+        "ForMathlib/Analysis/InnerProductSpace/DavisKahanTheory/Sylvester.lean",
+        "dev/davis-kahan-expert-completion-plan.md",
+        "dev/lean-proof-engineering-lessons.md"
+      ],
+      "existing_assets": [],
+      "scope": "The reciprocal Fourier/Schur-multiplier estimate with the pi/2 constant for separated spectra and its spectral-subspace consequences.",
+      "missing_work": "Acquire and verify the original bibliographic record, then reconstruct the analytic proof before completing the Lean seam.",
+      "role": "primary_theorem_source",
+      "bibliographic_status": "needs_verification"
+    },
+    "Higham1986": {
+      "title": "Computing the Polar Decomposition--with Applications",
+      "authors": [
+        "Nicholas J. Higham"
+      ],
+      "year": 1986,
+      "kind": "paper",
+      "group": "Spectral perturbation, principal angles, and matrix inequalities",
+      "tier": "supporting",
+      "priority": "P2",
+      "formalization_status": "quantitative polar-factor comparison source",
+      "distilled_status": "missing",
+      "primary_url": "https://doi.org/10.1137/0907079",
+      "target_note": "Higham1986_polar_decomposition.tex",
+      "repo_evidence": [
+        "ForMathlib/Analysis/InnerProductSpace/NearIsometry.lean",
+        "ForMathlib/Analysis/InnerProductSpace/PolarDecomposition.lean"
+      ],
+      "existing_assets": [],
+      "scope": "Polar decomposition algorithms, perturbation behavior, and nearest-unitary applications.",
+      "missing_work": "Extract only the analytic polar-factor results that match the formalized exact and quantitative statements.",
+      "role": "modern_comparison",
+      "bibliographic_status": "verified"
+    },
+    "BhatiaRosenthal1997": {
+      "title": "How and Why to Solve the Operator Equation AX - XB = Y",
+      "authors": [
+        "Rajendra Bhatia",
+        "Peter Rosenthal"
+      ],
+      "year": 1997,
+      "kind": "paper",
+      "group": "Spectral perturbation, principal angles, and matrix inequalities",
+      "tier": "supporting",
+      "priority": "P2",
+      "formalization_status": "modern reference for Sylvester equations",
+      "distilled_status": "missing",
+      "primary_url": "",
+      "target_note": "BhatiaRosenthal1997_sylvester_equation.tex",
+      "repo_evidence": [
+        "ForMathlib/Analysis/InnerProductSpace/SylvesterBound.lean",
+        "ForMathlib/Analysis/InnerProductSpace/DavisKahanTheory/Sylvester.lean"
+      ],
+      "existing_assets": [],
+      "scope": "Operator-equation solution methods, spectral separation, and norm estimates.",
+      "missing_work": "Use as a modern bridge source, not as a substitute for the Bhatia--Davis--McIntosh proof.",
+      "role": "supporting_source",
+      "bibliographic_status": "needs_verification"
+    },
+    "KostrykinMakarovMotovilov2005": {
+      "title": "On the Existence of Solutions to the Operator Riccati Equation and the Tan Theta Theorem",
+      "authors": [
+        "Vadim Kostrykin",
+        "Konstantin A. Makarov",
+        "Alexander K. Motovilov"
+      ],
+      "year": 2005,
+      "kind": "paper",
+      "group": "Spectral perturbation, principal angles, and matrix inequalities",
+      "tier": "primary",
+      "priority": "P1",
+      "formalization_status": "tan Theta and Riccati scaffold sources",
+      "distilled_status": "missing",
+      "primary_url": "",
+      "target_note": "KostrykinMakarovMotovilov2005_riccati_tan_theta.tex",
+      "repo_evidence": [
+        "ForMathlib/Analysis/InnerProductSpace/TanTheta.lean",
+        "ForMathlib/Analysis/InnerProductSpace/DavisKahanExt/Riccati.lean"
+      ],
+      "existing_assets": [],
+      "scope": "Operator Riccati graph-subspace construction and tan Theta estimates.",
+      "missing_work": "Reconstruct the exact hypotheses and distinguish the bounded finite-dimensional specialization from the full operator theorem.",
+      "role": "primary_theorem_source",
+      "bibliographic_status": "needs_verification"
+    },
+    "KnyazevArgentati2006": {
+      "title": "Majorization for Changes in Angles Between Subspaces, Ritz Values, and Graph Laplacian Spectra",
+      "authors": [
+        "Andrew V. Knyazev",
+        "Merico E. Argentati"
+      ],
+      "year": 2006,
+      "kind": "paper",
+      "group": "Spectral perturbation, principal angles, and matrix inequalities",
+      "tier": "supporting",
+      "priority": "P2",
+      "formalization_status": "principal-angle and majorization comparison source",
+      "distilled_status": "missing",
+      "primary_url": "https://arxiv.org/abs/math/0508591",
+      "target_note": "KnyazevArgentati2006_subspace_angle_majorization.tex",
+      "repo_evidence": [
+        "ForMathlib/Analysis/InnerProductSpace/PrincipalAngles.lean",
+        "ForMathlib/Analysis/InnerProductSpace/KyFan.lean"
+      ],
+      "existing_assets": [],
+      "scope": "Weak-majorization relations for principal angles and Ritz values.",
+      "missing_work": "Index the exact angle identities already formalized and reserve the broader Ritz-value results as future work.",
+      "role": "modern_comparison",
+      "bibliographic_status": "verified"
+    },
+    "KnyazevJujunashviliArgentati2010": {
+      "title": "Angles Between Infinite Dimensional Subspaces with Applications to the Rayleigh--Ritz and Alternating Projectors Methods",
+      "authors": [
+        "Andrew V. Knyazev",
+        "Alexander Jujunashvili",
+        "Merico E. Argentati"
+      ],
+      "year": 2010,
+      "kind": "paper",
+      "group": "Spectral perturbation, principal angles, and matrix inequalities",
+      "tier": "supporting",
+      "priority": "P3",
+      "formalization_status": "future arbitrary-dimensional principal-angle reference",
+      "distilled_status": "missing",
+      "primary_url": "",
+      "target_note": "KnyazevJujunashviliArgentati2010_infinite_subspace_angles.tex",
+      "repo_evidence": [
+        "ForMathlib/Analysis/InnerProductSpace/DavisKahanExt/OperatorAngle.lean",
+        "ForMathlib/Analysis/InnerProductSpace/DavisKahanExt/PROOF_PLAN.md"
+      ],
+      "existing_assets": [],
+      "scope": "Infinite-dimensional principal angles and alternating projections.",
+      "missing_work": "Defer full reconstruction until the arbitrary-dimensional operator-angle layer is active.",
+      "role": "future_extension",
+      "bibliographic_status": "needs_verification"
+    },
+    "Motovilov2012": {
+      "title": "Comment on 'The Tan Theta Theorem with Relaxed Conditions'",
+      "authors": [
+        "Alexander K. Motovilov"
+      ],
+      "year": 2012,
+      "kind": "paper",
+      "group": "Spectral perturbation, principal angles, and matrix inequalities",
+      "tier": "primary",
+      "priority": "P1",
+      "formalization_status": "used to audit the relaxed tan Theta statement",
+      "distilled_status": "missing",
+      "primary_url": "https://arxiv.org/abs/1204.4441",
+      "target_note": "Motovilov2012_tan_theta_comment.tex",
+      "repo_evidence": [
+        "ForMathlib/Analysis/InnerProductSpace/TanTheta.lean",
+        "papers/DavisKahan-formalized-vs-literature.tex"
+      ],
+      "existing_assets": [],
+      "scope": "Correction/clarification of the spectral condition in the relaxed tan Theta theorem.",
+      "missing_work": "Distill together with Nakatsukasa 2012 while preserving the disagreement and corrected statement.",
+      "role": "primary_theorem_source",
+      "bibliographic_status": "verified"
+    },
+    "Nakatsukasa2012": {
+      "title": "The Tan Theta Theorem with Relaxed Conditions",
+      "authors": [
+        "Yuji Nakatsukasa"
+      ],
+      "year": 2012,
+      "kind": "paper",
+      "group": "Spectral perturbation, principal angles, and matrix inequalities",
+      "tier": "primary",
+      "priority": "P1",
+      "formalization_status": "tan Theta statement source",
+      "distilled_status": "missing",
+      "primary_url": "",
+      "target_note": "Nakatsukasa2012_relaxed_tan_theta.tex",
+      "repo_evidence": [
+        "ForMathlib/Analysis/InnerProductSpace/TanTheta.lean"
+      ],
+      "existing_assets": [],
+      "scope": "Relaxed spectral conditions for tan Theta bounds.",
+      "missing_work": "Record the exact pole/separation condition and the issue corrected by Motovilov.",
+      "role": "primary_theorem_source",
+      "bibliographic_status": "needs_verification"
+    },
+    "GrubisicKostrykinMakarovVeselic2013": {
+      "title": "The Tan 2 Theta Theorem for Indefinite Quadratic Forms",
+      "authors": [
+        "Luka Grubisic",
+        "Vadim Kostrykin",
+        "Konstantin A. Makarov",
+        "Kresimir Veselic"
+      ],
+      "year": 2013,
+      "kind": "paper",
+      "group": "Spectral perturbation, principal angles, and matrix inequalities",
+      "tier": "primary",
+      "priority": "P1",
+      "formalization_status": "tan 2 Theta source",
+      "distilled_status": "missing",
+      "primary_url": "https://arxiv.org/abs/1006.3190",
+      "target_note": "GrubisicKostrykinMakarovVeselic2013_tan_two_theta.tex",
+      "repo_evidence": [
+        "ForMathlib/Analysis/InnerProductSpace/TanTwoTheta.lean",
+        "papers/DavisKahan-formalized-vs-literature.tex"
+      ],
+      "existing_assets": [],
+      "scope": "Sharp tan 2 Theta theorem for indefinite quadratic forms and the pi/4 regime.",
+      "missing_work": "Reconstruct the form-domain theorem and clearly state the finite-dimensional bounded specialization formalized here.",
+      "role": "primary_theorem_source",
+      "bibliographic_status": "verified"
+    },
+    "Seelmann2014": {
+      "title": "Notes on the Sin 2 Theta Theorem",
+      "authors": [
+        "Albrecht Seelmann"
+      ],
+      "year": 2014,
+      "kind": "paper",
+      "group": "Spectral perturbation, principal angles, and matrix inequalities",
+      "tier": "primary",
+      "priority": "P1",
+      "formalization_status": "operator-angle sin 2 Theta source",
+      "distilled_status": "missing",
+      "primary_url": "https://arxiv.org/abs/1310.2036",
+      "target_note": "Seelmann2014_sin_two_theta.tex",
+      "repo_evidence": [
+        "ForMathlib/Analysis/InnerProductSpace/TanTwoTheta.lean",
+        "ForMathlib/Analysis/InnerProductSpace/DavisKahan/Experimental/Literature/DoubleAngle.lean"
+      ],
+      "existing_assets": [],
+      "scope": "General spectral-separation sin 2 Theta theorem and operator-angle formalism.",
+      "missing_work": "Reconstruct the exact separation hypotheses and compare its angle conventions with the Lean API.",
+      "role": "primary_theorem_source",
+      "bibliographic_status": "verified"
+    },
+    "YuWangSamworth2015": {
+      "title": "A Useful Variant of the Davis--Kahan Theorem for Statisticians",
+      "authors": [
+        "Yi Yu",
+        "Tengyao Wang",
+        "Richard J. Samworth"
+      ],
+      "year": 2015,
+      "kind": "paper",
+      "group": "Spectral perturbation, principal angles, and matrix inequalities",
+      "tier": "primary",
+      "priority": "P0",
+      "formalization_status": "source-order reconstruction complete; symmetric, aligned-basis, and singular-subspace theorem families formalized",
+      "distilled_status": "complete",
+      "primary_url": "https://arxiv.org/abs/1405.0680",
+      "target_note": "YuWangSamworth2015_statistical_davis_kahan.tex",
+      "repo_evidence": [
+        "ForMathlib/Analysis/InnerProductSpace/YuWangSamworth.lean",
+        "ForMathlib/Analysis/InnerProductSpace/AlignedBasis.lean",
+        "ForMathlib/Analysis/InnerProductSpace/DavisKahanTheory/Statistics.lean"
+      ],
+      "existing_assets": [
+        "ForMathlib/prose/Yu-Wang-Samworth-2014-core-arguments.tex",
+        "prose/distilled_literature/YuWangSamworth2015_statistical_davis_kahan.tex"
+      ],
+      "scope": "Population-gap Frobenius sin Theta bound, Hoffman--Wielandt step, singular-vector extension, and Procrustes-aligned basis conclusion.",
+      "missing_work": "The distilled mathematical reconstruction is complete. Remaining work is maintenance against theorem/API changes and verification of the official journal typography for the mixed-gap baseline conventions.",
+      "role": "primary_theorem_source",
+      "bibliographic_status": "verified"
+    },
+    "Kato1966": {
+      "title": "Perturbation Theory for Linear Operators",
+      "authors": [
+        "Tosio Kato"
+      ],
+      "year": 1966,
+      "kind": "book",
+      "group": "Reference works and modern syntheses",
+      "tier": "reference",
+      "priority": "P3",
+      "formalization_status": "reference horizon for the retained unbounded and spectral-projection scaffolds",
+      "distilled_status": "missing",
+      "primary_url": "https://doi.org/10.1007/978-3-642-66282-9",
+      "target_note": "Kato1966_selected_perturbation_theory.tex",
+      "repo_evidence": [
+        "ForMathlib/Analysis/InnerProductSpace/DavisKahan/Experimental/README.md",
+        "ForMathlib/Analysis/InnerProductSpace/DavisKahan/Experimental/Foundation/Unbounded.lean",
+        "ForMathlib/Analysis/InnerProductSpace/DavisKahanExt/PROOF_PLAN.md"
+      ],
+      "existing_assets": [],
+      "scope": "Selected spectral-projection, graph-subspace, bounded/unbounded perturbation, and Kato--Rellich results corresponding to retained experimental targets.",
+      "missing_work": "Do not distill the whole monograph; first map each retained experimental declaration to an exact chapter/theorem and exclude aspirational scaffolds without a source match.",
+      "role": "reference_work",
+      "bibliographic_status": "verified"
+    },
+    "StewartSun1990": {
+      "title": "Matrix Perturbation Theory",
+      "authors": [
+        "G. W. Stewart",
+        "Ji-guang Sun"
+      ],
+      "year": 1990,
+      "kind": "book",
+      "group": "Reference works and modern syntheses",
+      "tier": "reference",
+      "priority": "P2",
+      "formalization_status": "cross-check source for matrix/subspace perturbation statements",
+      "distilled_status": "missing",
+      "primary_url": "",
+      "target_note": "StewartSun1990_selected_matrix_perturbation.tex",
+      "repo_evidence": [
+        "dev/davis-kahan-expert-completion-plan.md",
+        "papers/DavisKahan-formalized-vs-literature.tex"
+      ],
+      "existing_assets": [],
+      "scope": "Selected eigenvector, invariant-subspace, singular-subspace, and Procrustes perturbation statements.",
+      "missing_work": "Use to cross-check conventions and constants after primary-paper reconstructions exist.",
+      "role": "reference_work",
+      "bibliographic_status": "needs_verification"
+    },
+    "Bhatia1997": {
+      "title": "Matrix Analysis",
+      "authors": [
+        "Rajendra Bhatia"
+      ],
+      "year": 1997,
+      "kind": "book",
+      "group": "Reference works and modern syntheses",
+      "tier": "reference",
+      "priority": "P1",
+      "formalization_status": "modern reference for UI norms, Sylvester bounds, and Davis--Kahan",
+      "distilled_status": "missing",
+      "primary_url": "",
+      "target_note": "Bhatia1997_selected_matrix_analysis.tex",
+      "repo_evidence": [
+        "ForMathlib/Analysis/InnerProductSpace/SylvesterBound.lean",
+        "ForMathlib/Analysis/InnerProductSpace/SinThetaUINorm.lean",
+        "ForMathlib/Analysis/InnerProductSpace/UnitarilyInvariantNorm.lean"
+      ],
+      "existing_assets": [],
+      "scope": "Selected Chapters III, IV, and VII theorem chains used by the formalization.",
+      "missing_work": "Create a theorem-indexed bridge note, not a chapter summary.",
+      "role": "reference_work",
+      "bibliographic_status": "needs_verification"
+    },
+    "CoxCox2001": {
+      "title": "Multidimensional Scaling, Second Edition",
+      "authors": [
+        "Trevor F. Cox",
+        "Michael A. A. Cox"
+      ],
+      "year": 2001,
+      "kind": "book",
+      "group": "Reference works and modern syntheses",
+      "tier": "reference",
+      "priority": "P2",
+      "formalization_status": "modern classical-MDS reference",
+      "distilled_status": "missing",
+      "primary_url": "",
+      "target_note": "CoxCox2001_selected_mds.tex",
+      "repo_evidence": [
+        "Acharyya2025/GramRigidity.lean",
+        "Acharyya2025/GramRealization.lean",
+        "ForMathlib/LinearAlgebra/Matrix/PosDef.lean"
+      ],
+      "existing_assets": [],
+      "scope": "Selected classical-scaling and Euclidean-distance realization sections.",
+      "missing_work": "Create only after the original Torgerson/Gower sources are indexed.",
+      "role": "reference_work",
+      "bibliographic_status": "needs_verification"
+    },
+    "BorgGroenen2005": {
+      "title": "Modern Multidimensional Scaling: Theory and Applications, Second Edition",
+      "authors": [
+        "Ingwer Borg",
+        "Patrick J. F. Groenen"
+      ],
+      "year": 2005,
+      "kind": "book",
+      "group": "Reference works and modern syntheses",
+      "tier": "reference",
+      "priority": "P3",
+      "formalization_status": "modern Procrustes/MDS reference",
+      "distilled_status": "missing",
+      "primary_url": "",
+      "target_note": "BorgGroenen2005_selected_mds.tex",
+      "repo_evidence": [
+        "Acharyya2025/GramRigidity.lean",
+        "Acharyya2024/prose/consistent-estimation-dkps-2409.17308_transcription.md"
+      ],
+      "existing_assets": [],
+      "scope": "Selected Procrustes and MDS background chapters.",
+      "missing_work": "Reference-only until the primary papers are reconstructed.",
+      "role": "reference_work",
+      "bibliographic_status": "needs_verification"
+    },
+    "Higham2008": {
+      "title": "Functions of Matrices: Theory and Computation",
+      "authors": [
+        "Nicholas J. Higham"
+      ],
+      "year": 2008,
+      "kind": "book",
+      "group": "Reference works and modern syntheses",
+      "tier": "reference",
+      "priority": "P3",
+      "formalization_status": "modern polar decomposition and matrix-function reference",
+      "distilled_status": "missing",
+      "primary_url": "",
+      "target_note": "Higham2008_selected_matrix_functions.tex",
+      "repo_evidence": [
+        "ForMathlib/Analysis/InnerProductSpace/NearIsometry.lean",
+        "ForMathlib/Analysis/InnerProductSpace/PositiveSqrt.lean"
+      ],
+      "existing_assets": [],
+      "scope": "Selected polar decomposition, positive square root, and nearest-isometry results.",
+      "missing_work": "Use as a modern API cross-check after Fan--Hoffman and Higham 1986 are reconstructed.",
+      "role": "reference_work",
+      "bibliographic_status": "needs_verification"
+    },
+    "MarshallOlkinArnold2011": {
+      "title": "Inequalities: Theory of Majorization and Its Applications, Second Edition",
+      "authors": [
+        "Albert W. Marshall",
+        "Ingram Olkin",
+        "Barry C. Arnold"
+      ],
+      "year": 2011,
+      "kind": "book",
+      "group": "Reference works and modern syntheses",
+      "tier": "reference",
+      "priority": "P3",
+      "formalization_status": "modern majorization reference",
+      "distilled_status": "missing",
+      "primary_url": "",
+      "target_note": "MarshallOlkinArnold2011_selected_majorization.tex",
+      "repo_evidence": [
+        "ForMathlib/Analysis/InnerProductSpace/SchurHorn.lean",
+        "ForMathlib/Analysis/InnerProductSpace/UnitarilyInvariantNorm.lean"
+      ],
+      "existing_assets": [],
+      "scope": "Selected Schur majorization, Karamata, and weak-majorization results.",
+      "missing_work": "Reference-only; primary Schur, Fan, and Mirsky sources have priority.",
+      "role": "reference_work",
+      "bibliographic_status": "needs_verification"
+    },
+    "HornJohnson2013": {
+      "title": "Matrix Analysis, Second Edition",
+      "authors": [
+        "Roger A. Horn",
+        "Charles R. Johnson"
+      ],
+      "year": 2013,
+      "kind": "book",
+      "group": "Reference works and modern syntheses",
+      "tier": "reference",
+      "priority": "P1",
+      "formalization_status": "primary modern reference across Gram, Courant--Fischer, Weyl, and spectral theory",
+      "distilled_status": "core_note",
+      "primary_url": "https://doi.org/10.1017/CBO9781139020411",
+      "target_note": "HornJohnson2013_selected_matrix_analysis.tex",
+      "repo_evidence": [
+        "ForMathlib/Analysis/InnerProductSpace/CourantFischer.lean",
+        "ForMathlib/Analysis/InnerProductSpace/GramMatrix.lean",
+        "papers/GramRigidity-formalized-vs-literature.tex"
+      ],
+      "existing_assets": [
+        "ForMathlib/prose/Horn-Johnson-2013-Gram-core-arguments.tex"
+      ],
+      "scope": "Selected theorem-level references: Gram rigidity, Courant--Fischer, Weyl, PSD factorization.",
+      "missing_work": "Keep as a multi-source reference note; do not attempt to distill the whole book.",
+      "role": "reference_work",
+      "bibliographic_status": "verified"
+    },
+    "ChenChiFanMa2021": {
+      "title": "Spectral Methods for Data Science: A Statistical Perspective",
+      "authors": [
+        "Yuxin Chen",
+        "Yuejie Chi",
+        "Jianqing Fan",
+        "Cong Ma"
+      ],
+      "year": 2021,
+      "kind": "monograph",
+      "group": "Reference works and modern syntheses",
+      "tier": "reference",
+      "priority": "P3",
+      "formalization_status": "statistical spectral-methods context",
+      "distilled_status": "missing",
+      "primary_url": "",
+      "target_note": "ChenChiFanMa2021_selected_spectral_methods.tex",
+      "repo_evidence": [
+        "README.md",
+        "papers/formalization_draft1/references.bib"
+      ],
+      "existing_assets": [],
+      "scope": "Modern statistical context for eigenvector and singular-subspace perturbation.",
+      "missing_work": "Reference-only; not an exact proof source for current core theorems.",
+      "role": "reference_work",
+      "bibliographic_status": "needs_verification"
+    }
+  },
+  "role_legend": {
+    "direct_target": "A DKPS/Quench paper whose named results are formalization targets.",
+    "inherited_foundation": "A paper supplying definitions or population geometry inherited by a direct target.",
+    "primary_method_source": "A primary paper supplying a mathematical method used inside a direct target.",
+    "primary_theorem_source": "The primary source for a theorem family implemented under ForMathlib.",
+    "supporting_source": "A supporting paper used to audit, extend, or compare a formalized theorem family.",
+    "modern_comparison": "A later comparison/generalization useful for statement and constant audits.",
+    "lineage_background": "Earlier programmatic work that may explain inherited definitions but is not yet confirmed as a theorem target.",
+    "future_extension": "A source for an explicitly retained future arbitrary-dimensional extension.",
+    "related_upstream": "A natural mathlib-facing endpoint of infrastructure introduced for DKPS, not required by a paper proof.",
+    "reference_work": "A book or monograph used as a theorem-level reference or audit source."
+  },
+  "bibliographic_status_legend": {
+    "verified": "Core bibliographic identity has been checked against a repository citation, DOI/arXiv record, or reliable catalog.",
+    "needs_verification": "Identity is plausible but exact title, venue, pages, edition, or stable source still needs confirmation."
+  }
+}
