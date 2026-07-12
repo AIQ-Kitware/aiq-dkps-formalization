@@ -53,8 +53,8 @@ noncomputable def sylvesterResolventIntegral (A : F →L[𝕜] F)
 
 /-- Canonical solution selected by the resolvent integral. -/
 noncomputable def solveSylvester (A : F →L[𝕜] F)
-    (B : E →L[𝕜] E) (C : E →L[𝕜] F) : E →L[𝕜] F := by
-  sorry
+    (B : E →L[𝕜] E) (C : E →L[𝕜] F) : E →L[𝕜] F :=
+  sylvesterResolventIntegral A B C
 
 /-- Bochner/resolvent integral representation of the solution.
 
@@ -87,8 +87,7 @@ bounds.
 -/
 theorem solveSylvester_eq_resolventIntegral
     (A : F →L[𝕜] F) (B : E →L[𝕜] E) (C : E →L[𝕜] F) :
-    solveSylvester A B C = sylvesterResolventIntegral A B C := by
-  sorry
+    solveSylvester A B C = sylvesterResolventIntegral A B C := rfl
 
 /-- The resolvent solution satisfies the equation under separated spectra. 
 
