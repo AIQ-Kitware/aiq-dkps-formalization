@@ -29,7 +29,17 @@ open Module (finrank)
 
 variable {𝕜 : Type*} [RCLike 𝕜]
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
-  [FiniteDimensional 𝕜 E]
+
+private theorem specSubspace_eq_span_filter {n : ℕ}
+    (b : OrthonormalBasis (Fin n) 𝕜 E) (p : Fin n → Prop) [DecidablePred p] :
+    specSubspace b p =
+      Submodule.span 𝕜 (b '' (↑(Finset.univ.filter p) : Set (Fin n))) := by
+  unfold specSubspace
+  congr 1
+  ext x
+  simp
+
+variable [FiniteDimensional 𝕜 E]
 
 /-- Population-only gap around a selected spectral set. -/
 def PopulationGap (A : E →ₗ[𝕜] E) (U : Submodule 𝕜 E) (Δ : ℝ) : Prop :=
@@ -49,15 +59,6 @@ def CorrespondingEigenblock {A B : E →ₗ[𝕜] E}
 noncomputable def sinThetaFrobenius (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : ℝ :=
   UnitarilyInvariantNorm.frobenius 𝕜 E (sinThetaMap U V)
-
-private theorem specSubspace_eq_span_filter {n : ℕ}
-    (b : OrthonormalBasis (Fin n) 𝕜 E) (p : Fin n → Prop) [DecidablePred p] :
-    specSubspace b p =
-      Submodule.span 𝕜 (b '' (↑(Finset.univ.filter p) : Set (Fin n))) := by
-  unfold specSubspace
-  congr 1
-  ext x
-  simp
 
 /-- The canonical Frobenius sine of two equally indexed eigenblocks is exactly
     the square root of the cross-block overlap sum used by Yu--Wang--Samworth. -/
@@ -232,13 +233,132 @@ theorem yuWangSamworth_intervalBlock_le
   · rw [hUeq]; exact reduces_spectralSubspace A (Set.Icc a b)
   · rw [hVp]; exact reduces_specSubspace hB hn p
 
-/-- Procrustes-aligned orthonormal bases.
+/-- The family-level squared sine agrees with the canonical Frobenius
+sine whenever the two orthonormal families span the supplied subspaces. -/
+theorem sinThetaSq_eq_sinThetaFrobenius_sq_of_spans
+    {U V : Submodule 𝕜 E} [U.HasOrthogonalProjection]
+    [V.HasOrthogonalProjection] {d : ℕ}
+    {u v : Fin d → E} (hu : Orthonormal 𝕜 u) (hv : Orthonormal 𝕜 v)
+    (hspanU : Submodule.span 𝕜 (Set.range u) = U)
+    (hspanV : Submodule.span 𝕜 (Set.range v) = V) :
+    sinThetaSq hu hv = sinThetaFrobenius U V ^ 2 := by
+  classical
+  subst U
+  subst V
+  let n := finrank 𝕜 E
+  have hspanrank : finrank 𝕜 (Submodule.span 𝕜 (Set.range u)) = d := by
+    rw [finrank_span_eq_card hu.linearIndependent, Fintype.card_fin]
+  have hdn : d ≤ n := by
+    have hle := Submodule.finrank_le (Submodule.span 𝕜 (Set.range u))
+    rw [hspanrank] at hle
+    simpa only [n] using hle
+  let e : Fin d ↪ Fin n := Fin.castLEEmb hdn
+  let S : Set (Fin n) := Set.range e
+  let uExt : Fin n → E := Function.extend e u (fun _ => 0)
+  let vExt : Fin n → E := Function.extend e v (fun _ => 0)
+  have huS : Orthonormal 𝕜 (S.restrict uExt) := by
+    rw [orthonormal_iff_ite]
+    intro i j
+    rcases i with ⟨i, hi⟩
+    rcases j with ⟨j, hj⟩
+    rcases hi with ⟨i', rfl⟩
+    rcases hj with ⟨j', rfl⟩
+    change ⟪uExt (e i'), uExt (e j')⟫_𝕜 =
+      if (⟨e i', ⟨i', rfl⟩⟩ : S) = ⟨e j', ⟨j', rfl⟩⟩ then 1 else 0
+    rw [show uExt (e i') = u i' by
+      exact e.injective.extend_apply u (fun _ => 0) i',
+      show uExt (e j') = u j' by
+        exact e.injective.extend_apply u (fun _ => 0) j',
+      orthonormal_iff_ite.mp hu i' j']
+    simp only [Subtype.mk.injEq, EmbeddingLike.apply_eq_iff_eq]
+  have hvS : Orthonormal 𝕜 (S.restrict vExt) := by
+    rw [orthonormal_iff_ite]
+    intro i j
+    rcases i with ⟨i, hi⟩
+    rcases j with ⟨j, hj⟩
+    rcases hi with ⟨i', rfl⟩
+    rcases hj with ⟨j', rfl⟩
+    change ⟪vExt (e i'), vExt (e j')⟫_𝕜 =
+      if (⟨e i', ⟨i', rfl⟩⟩ : S) = ⟨e j', ⟨j', rfl⟩⟩ then 1 else 0
+    rw [show vExt (e i') = v i' by
+      exact e.injective.extend_apply v (fun _ => 0) i',
+      show vExt (e j') = v j' by
+        exact e.injective.extend_apply v (fun _ => 0) j',
+      orthonormal_iff_ite.mp hv i' j']
+    simp only [Subtype.mk.injEq, EmbeddingLike.apply_eq_iff_eq]
+  have hncard : finrank 𝕜 E = Fintype.card (Fin n) := by simp [n]
+  obtain ⟨bU, hbU⟩ :=
+    Orthonormal.exists_orthonormalBasis_extension_of_card_eq hncard huS
+  obtain ⟨bV, hbV⟩ :=
+    Orthonormal.exists_orthonormalBasis_extension_of_card_eq hncard hvS
+  let s : Finset (Fin n) := Finset.univ.map e
+  have hscard : s.card = d := by simp [s]
+  have hbUe (i : Fin d) : bU (e i) = u i := by
+    rw [hbU (e i) ⟨i, rfl⟩]
+    exact e.injective.extend_apply u (fun _ => 0) i
+  have hbVe (i : Fin d) : bV (e i) = v i := by
+    rw [hbV (e i) ⟨i, rfl⟩]
+    exact e.injective.extend_apply v (fun _ => 0) i
+  have himageU : bU '' (↑s : Set (Fin n)) = Set.range u := by
+    ext x
+    constructor
+    · rintro ⟨j, hj, rfl⟩
+      rw [Finset.mem_coe, Finset.mem_map] at hj
+      obtain ⟨i, -, rfl⟩ := hj
+      exact ⟨i, (hbUe i).symm⟩
+    · rintro ⟨i, rfl⟩
+      exact ⟨e i, by simp [s], hbUe i⟩
+  have himageV : bV '' (↑s : Set (Fin n)) = Set.range v := by
+    ext x
+    constructor
+    · rintro ⟨j, hj, rfl⟩
+      rw [Finset.mem_coe, Finset.mem_map] at hj
+      obtain ⟨i, -, rfl⟩ := hj
+      exact ⟨i, (hbVe i).symm⟩
+    · rintro ⟨i, rfl⟩
+      exact ⟨e i, by simp [s], hbVe i⟩
+  let uBlock : Fin d → E := blockFamily bU s hscard
+  let vBlock : Fin d → E := blockFamily bV s hscard
+  have huBlock : Orthonormal 𝕜 uBlock := orthonormal_blockFamily bU s hscard
+  have hvBlock : Orthonormal 𝕜 vBlock := orthonormal_blockFamily bV s hscard
+  have hspanUBlock : Submodule.span 𝕜 (Set.range uBlock) =
+      Submodule.span 𝕜 (Set.range u) := by
+    rw [show Set.range uBlock = bU '' (↑s : Set (Fin n)) by
+      exact range_blockFamily bU s hscard,
+      himageU]
+  have hspanVBlock : Submodule.span 𝕜 (Set.range vBlock) =
+      Submodule.span 𝕜 (Set.range v) := by
+    rw [show Set.range vBlock = bV '' (↑s : Set (Fin n)) by
+      exact range_blockFamily bV s hscard,
+      himageV]
+  have hcosUV := principalCosines_span_eq_cosPrincipalAngles hu hv
+  have hcosBlock := principalCosines_span_eq_cosPrincipalAngles huBlock hvBlock
+  have hcosBlock' :
+      principalCosines (Submodule.span 𝕜 (Set.range u))
+          (Submodule.span 𝕜 (Set.range v)) =
+        cosPrincipalAngles huBlock hvBlock := by
+    simpa only [hspanUBlock, hspanVBlock] using hcosBlock
+  have hcos : cosPrincipalAngles hu hv = cosPrincipalAngles huBlock hvBlock :=
+    hcosUV.symm.trans hcosBlock'
+  have hsq : sinThetaSq hu hv =
+      ∑ j ∈ s, ∑ k ∈ sᶜ, ‖⟪bU k, bV j⟫_𝕜‖ ^ 2 := by
+    calc
+      sinThetaSq hu hv = sinThetaSq huBlock hvBlock := by
+        unfold sinThetaSq
+        rw [hcos]
+      _ = ∑ j ∈ s, ∑ k ∈ sᶜ, ‖⟪bU k, bV j⟫_𝕜‖ ^ 2 :=
+        sinThetaSq_blockFamily_eq_sum_cross bU bV hscard hscard
+  have hfrob :
+      sinThetaFrobenius (Submodule.span 𝕜 (Set.range u))
+          (Submodule.span 𝕜 (Set.range v)) =
+        Real.sqrt (∑ j ∈ s, ∑ k ∈ sᶜ, ‖⟪bU k, bV j⟫_𝕜‖ ^ 2) := by
+    simpa only [himageU, himageV] using
+      (sinThetaFrobenius_eq_sqrt_sum_cross bU bV s)
+  have hnonneg : 0 ≤ ∑ j ∈ s, ∑ k ∈ sᶜ, ‖⟪bU k, bV j⟫_𝕜‖ ^ 2 :=
+    Finset.sum_nonneg fun j _ => Finset.sum_nonneg fun k _ => sq_nonneg _
+  rw [hfrob, Real.sq_sqrt hnonneg, hsq]
 
-Lean proof route for a weaker agent:
-
-1. Choose principal vector bases and the polar/Procrustes alignment of the overlap matrix
-2. sum `‖v_i-u_i‖² = 2(1-cos θ_i)` and use `1-cos θ ≤ sin² θ`.
--/
+/-- Procrustes-aligned orthonormal bases. -/
 theorem exists_aligned_orthonormalBasis
     {U V : Submodule 𝕜 E} [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] {d : ℕ}
@@ -247,7 +367,63 @@ theorem exists_aligned_orthonormalBasis
       Submodule.span 𝕜 (Set.range u) = U ∧
       Submodule.span 𝕜 (Set.range v) = V ∧
       ∑ i, ‖v i - u i‖ ^ 2 ≤ 2 * sinThetaFrobenius U V ^ 2 := by
-  sorry
+  classical
+  let bU := stdOrthonormalBasis 𝕜 U
+  let bV := stdOrthonormalBasis 𝕜 V
+  let u : Fin d → E := fun i => ((bU (Fin.cast hrankU.symm i) : U) : E)
+  let v0 : Fin d → E := fun i => ((bV (Fin.cast hrankV.symm i) : V) : E)
+  have hu : Orthonormal 𝕜 u := by
+    rw [orthonormal_iff_ite]
+    intro i j
+    change ⟪bU (Fin.cast hrankU.symm i), bU (Fin.cast hrankU.symm j)⟫_𝕜 =
+      if i = j then 1 else 0
+    rw [orthonormal_iff_ite.mp bU.orthonormal]
+    simp only [Fin.cast_inj]
+  have hv0 : Orthonormal 𝕜 v0 := by
+    rw [orthonormal_iff_ite]
+    intro i j
+    change ⟪bV (Fin.cast hrankV.symm i), bV (Fin.cast hrankV.symm j)⟫_𝕜 =
+      if i = j then 1 else 0
+    rw [orthonormal_iff_ite.mp bV.orthonormal]
+    simp only [Fin.cast_inj]
+  have hspanU : Submodule.span 𝕜 (Set.range u) = U := by
+    apply Submodule.eq_of_le_of_finrank_eq
+    · apply Submodule.span_le.mpr
+      rintro _ ⟨i, rfl⟩
+      exact (bU (Fin.cast hrankU.symm i)).2
+    · rw [finrank_span_eq_card hu.linearIndependent, Fintype.card_fin, hrankU]
+  have hspanV0 : Submodule.span 𝕜 (Set.range v0) = V := by
+    apply Submodule.eq_of_le_of_finrank_eq
+    · apply Submodule.span_le.mpr
+      rintro _ ⟨i, rfl⟩
+      exact (bV (Fin.cast hrankV.symm i)).2
+    · rw [finrank_span_eq_card hv0.linearIndependent, Fintype.card_fin, hrankV]
+  let O := polarUnitary (overlapOp hu hv0)
+  let v : Fin d → E := fun i =>
+    familyIsometry hv0 (O.symm (EuclideanSpace.single i 1))
+  have hv : Orthonormal 𝕜 v := by
+    rw [orthonormal_iff_ite]
+    intro i j
+    change
+      ⟪familyIsometry hv0 (O.symm (EuclideanSpace.single i (1 : 𝕜))),
+        familyIsometry hv0 (O.symm (EuclideanSpace.single j (1 : 𝕜)))⟫_𝕜 =
+          if i = j then 1 else 0
+    rw [(familyIsometry hv0).inner_map_map, O.symm.inner_map_map]
+    exact orthonormal_iff_ite.mp EuclideanSpace.orthonormal_single i j
+  have hspanV : Submodule.span 𝕜 (Set.range v) = V := by
+    apply Submodule.eq_of_le_of_finrank_eq
+    · apply Submodule.span_le.mpr
+      rintro _ ⟨i, rfl⟩
+      have hi := familyIsometry_mem_span hv0
+        (O.symm (EuclideanSpace.single i 1))
+      rw [hspanV0] at hi
+      exact hi
+    · rw [finrank_span_eq_card hv.linearIndependent, Fintype.card_fin, hrankV]
+  have hsum := sum_sq_norm_aligned_le_sinThetaSq hu hv0
+  have hbridge := sinThetaSq_eq_sinThetaFrobenius_sq_of_spans
+    hu hv0 hspanU hspanV0
+  refine ⟨u, v, hu, hv, hspanU, hspanV, ?_⟩
+  simpa only [v, O, hbridge] using hsum
 
 /-- YWS aligned-basis perturbation bound.
 
