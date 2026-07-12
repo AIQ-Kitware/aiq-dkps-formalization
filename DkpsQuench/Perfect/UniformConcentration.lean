@@ -192,7 +192,40 @@ theorem highProb_modelNetResponseEventFor_of_secondMoment
       ((net.centers n).card : Real) * σ2 n / (τ n) ^ 2) atTop (𝓝 0)) :
     HighProbAtTop μresp hμresp
       (modelNetResponseEventFor ψ Xbar μmodel net τ) := by
-  sorry
+  apply highProbAtTop_of_tendsto_compl_zero
+  have hbound : ∀ n,
+      μresp n ((modelNetResponseEventFor ψ Xbar μmodel net τ n)ᶜ)
+        ≤ ENNReal.ofReal (((net.centers n).card : Real) * σ2 n / (τ n) ^ 2) := by
+    intro n
+    have hincl : (modelNetResponseEventFor ψ Xbar μmodel net τ n)ᶜ
+        ⊆ ⋃ f ∈ net.centers n, {ω | τ n < ‖Xbar n ω f - μmodel f‖} := by
+      intro ω hω
+      simp only [modelNetResponseEventFor, Set.mem_compl_iff, Set.mem_setOf_eq, not_forall,
+        not_le] at hω
+      obtain ⟨f, hfc, hfgt⟩ := hω
+      exact Set.mem_biUnion hfc hfgt
+    have hcheb : ∀ f, μresp n {ω | τ n < ‖Xbar n ω f - μmodel f‖}
+        ≤ ENNReal.ofReal (σ2 n / (τ n) ^ 2) := fun f =>
+      ForMathlib.meas_gt_le_ofReal_integral_sq_div_sq (μresp n) (hint n f) (hτ n) (hσ2 n f)
+    calc
+      μresp n ((modelNetResponseEventFor ψ Xbar μmodel net τ n)ᶜ)
+          ≤ μresp n (⋃ f ∈ net.centers n, {ω | τ n < ‖Xbar n ω f - μmodel f‖}) :=
+            measure_mono hincl
+      _ ≤ ∑ f ∈ net.centers n, μresp n {ω | τ n < ‖Xbar n ω f - μmodel f‖} :=
+            measure_biUnion_finset_le _ _
+      _ ≤ ∑ _f ∈ net.centers n, ENNReal.ofReal (σ2 n / (τ n) ^ 2) :=
+            Finset.sum_le_sum fun f _ => hcheb f
+      _ = ((net.centers n).card : ENNReal) * ENNReal.ofReal (σ2 n / (τ n) ^ 2) := by
+            rw [Finset.sum_const, nsmul_eq_mul]
+      _ = ENNReal.ofReal (((net.centers n).card : Real) * (σ2 n / (τ n) ^ 2)) := by
+            rw [ENNReal.ofReal_mul (Nat.cast_nonneg _), ENNReal.ofReal_natCast]
+      _ = ENNReal.ofReal (((net.centers n).card : Real) * σ2 n / (τ n) ^ 2) := by
+            congr 1; ring
+  have hub : Tendsto
+      (fun n => ENNReal.ofReal (((net.centers n).card : Real) * σ2 n / (τ n) ^ 2))
+      atTop (𝓝 0) := by simpa using ENNReal.tendsto_ofReal hratio
+  exact tendsto_of_tendsto_of_tendsto_of_le_of_le tendsto_const_nhds hub
+    (fun _ => zero_le) hbound
 
 /-- Infinite-class uniform response concentration by finite nets and
 regularity.
