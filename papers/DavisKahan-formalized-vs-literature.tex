@@ -677,13 +677,17 @@ It extracts a finite convex combination with
 computes the coefficient mass exactly, and reindexes only at the final
 \texttt{Fin~n} boundary.  Finite-sum subadditivity, absolute homogeneity, and
 unitary invariance then prove the finite-certificate theorem, every Ky Fan
-prefix, and every rectangular UI-norm estimate.  The single remaining analytic
-obligation is
-\texttt{sylvester\_barycentric}\allowbreak
-\texttt{OrbitRepresentation\_of\_}\allowbreak
-\texttt{spectralDistance}: establish the Fourier average, phase absorption,
-sharp total-variation bound, actual real convex-hull membership, and real-field
-descent.  No norm-specific or finite-certificate reasoning remains open.
+prefix, and every rectangular UI-norm estimate.  The finite convex-geometric converse is now supplied by
+\texttt{mem\_convexHull\_twoSidedUnitaryOrbit\_of\_kyFanSum\_le}: Ky Fan
+prefix domination implies membership in the real convex hull of the two-sided
+unitary orbit.  Consequently the barycentric theorem has a complete downstream
+derivation from a rectangular UI-norm Sylvester multiplier estimate.  The
+remaining analytic obligation is the rectangular Bhatia--Davis--McIntosh
+Fourier theorem currently isolated as
+\texttt{DavisKahanExt.ideal\_sylvester\_le}; it must still establish the
+sharp $\pi/2$ Ky Fan/UI-norm bound, including the real-field case.  Thus the
+convex-orbit and certificate layers are explicit, but the arbitrary-spectrum
+chain is not yet unconditional.
 
 \paragraph{The rectangular residual $\sin\Theta$ theorem, every UI norm.}
 The canonical residual interface is now connected to that Sylvester engine.
@@ -963,18 +967,20 @@ The remaining work is ordered by mathematical dependency:
   The remaining sharp single-angle capstone is the coupled full-space
   $|P_U-P_V|$ theorem under forward and reverse interval/exterior gaps.
 \item \emph{The remaining Sylvester extension.}
-  Prove the single analytic root
+  Prove the rectangular analytic root
+  \texttt{DavisKahanExt.ideal\_sylvester\_le}.  The new
+  \texttt{mem\_convexHull\_twoSidedUnitaryOrbit\_of\_kyFanSum\_le}
+  theorem converts its Ky Fan consequences into the required real
+  orbit-convex representation, and
   \texttt{sylvester\_barycentric}\allowbreak
   \texttt{OrbitRepresentation\_of\_}\allowbreak
-  \texttt{spectralDistance}.  It must express $\delta X=mY$ with
-  $0\le m\le\pi/2$ and $Y$ in the real convex hull of the two-sided unitary
-  orbit of $C$.  The intended proof is the Bhatia--Davis--McIntosh Fourier
-  average, phase absorption, compactness/closedness of the finite-dimensional
-  orbit convex hull, and an honest real-field descent.  Exact finite
-  certificate extraction, the Ky Fan theorem, the Fan-dominance lift to every
-  rectangular UI norm, and residual and perturbation $\pi/2$ transports are
-  now proved consequences.  The sharp ordered and interval/exterior
-  constant-one estimates remain complete and independent.
+  \texttt{spectralDistance} now performs that downstream derivation.  The
+  remaining proof is the genuine Bhatia--Davis--McIntosh reciprocal Fourier
+  multiplier estimate with total variation $\pi/2$ and an honest real-field
+  treatment.  Exact finite certificate extraction, Fan dominance, and the
+  residual and perturbation transports are otherwise in place.  The sharp
+  ordered and interval/exterior constant-one estimates remain complete and
+  independent.
 \item \emph{Complete the four-theorem square.}
   Supply residual and perturbation forms of all four angle theorems in every
   unitarily invariant norm.  The largest unclosed pieces are the all-norm

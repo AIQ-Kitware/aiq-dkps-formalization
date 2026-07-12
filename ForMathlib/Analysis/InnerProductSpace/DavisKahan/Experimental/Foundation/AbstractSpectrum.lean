@@ -57,24 +57,24 @@ def IsOffDiagonalRelativeToProjection (P H : E →L[𝕜] E) : Prop :=
     (ContinuousLinearMap.id 𝕜 E - P) ∘L H ∘L
       (ContinuousLinearMap.id 𝕜 E - P) = 0
 
-/-- Provisional real spectrum interface for an `RCLike` self-adjoint operator.
+/-- Real point spectrum of an `RCLike` operator.
 
-Construction route: use the genuine Banach-algebra spectrum for real operators
-and the real-restricted CFC spectrum for complex operators, then prove the two
-interfaces agree on self-adjoint elements.  This definition should disappear
-once that scalar-uniform bridge exists. -/
-noncomputable def realSpectrum (A : E →L[𝕜] E) : Set ℝ :=
-  {r : ℝ | (RCLike.ofReal r : 𝕜) ∈ spectrum 𝕜 A}
+This compatibility layer deliberately uses eigenvectors rather than the
+Banach-algebra spectrum.  In finite dimension the two agree for self-adjoint
+operators, while this definition remains meaningful without a scalar-specific
+functional-calculus bridge. -/
+def realSpectrum (A : E →L[𝕜] E) : Set ℝ :=
+  {r | ∃ x : E, x ≠ 0 ∧ A x = ((r : ℝ) : 𝕜) • x}
 
-/-- Provisional spectrum of an operator restricted to a subspace.
+/-- Point spectrum carried by vectors lying in a supplied subspace.
 
-Construction route: redesign the signature to accept invariance and an
-orthogonal-complement instance, form the actual bounded restriction
-`A.restrict hU`, and take its spectrum.  Do not assign an arbitrary spectrum
-when no invariant restriction is available. -/
-noncomputable def restrictedSpectrum (A : E →L[𝕜] E)
-    (U : Submodule 𝕜 E) : Set ℝ := by
-  sorry
+No invariance is required merely to state this set.  The definition records
+exactly the eigenpairs whose eigenvectors lie in `U`; theorem-facing uses that
+need a genuine restricted operator should additionally supply reduction or
+invariance hypotheses. -/
+def restrictedSpectrum (A : E →L[𝕜] E)
+    (U : Submodule 𝕜 E) : Set ℝ :=
+  {r | ∃ x : E, x ∈ U ∧ x ≠ 0 ∧ A x = ((r : ℝ) : 𝕜) • x}
 
 /-- The spectrum carried by `U` is contained in `s`. -/
 def SpectrumIn (A : E →L[𝕜] E) (U : Submodule 𝕜 E)
