@@ -334,7 +334,28 @@ theorem safe_scaled_cmdsEntrywiseRate_zero
           (responseDistBound m
             (populationResponseBound + safeResponseTolerance n))
           (safeResponseTolerance n)) atTop (𝓝 0) := by
-  sorry
+  have hm' : (m : ℝ) ≠ 0 := Nat.cast_ne_zero.mpr hm.ne'
+  have hpow : ∀ k : ℕ, 1 ≤ k → Tendsto (fun n : ℕ => (((n + 1 : ℕ) : ℝ)) ^ k) atTop atTop := by
+    intro k hk
+    have hnat : Tendsto (fun n : ℕ => (n + 1) ^ k) atTop atTop :=
+      tendsto_atTop_mono
+        (fun n => le_trans (Nat.le_succ n) (le_self_pow (by omega) (by omega))) tendsto_id
+    simp_rw [← Nat.cast_pow]
+    exact tendsto_natCast_atTop_atTop.comp hnat
+  have h2 : Tendsto (fun n : ℕ => (((n + 1 : ℕ) : ℝ) ^ 2)⁻¹) atTop (𝓝 0) :=
+    (hpow 2 (by norm_num)).inv_tendsto_atTop
+  have h7 : Tendsto (fun n : ℕ => (((n + 1 : ℕ) : ℝ) ^ 7)⁻¹) atTop (𝓝 0) :=
+    (hpow 7 (by norm_num)).inv_tendsto_atTop
+  have hfinal : Tendsto (fun n : ℕ => 32 * ((m : ℝ)⁻¹) ^ 2 *
+      (populationResponseBound * (((n + 1 : ℕ) : ℝ) ^ 2)⁻¹
+        + (((n + 1 : ℕ) : ℝ) ^ 7)⁻¹)) atTop (𝓝 0) := by
+    have := ((h2.const_mul populationResponseBound).add h7).const_mul (32 * ((m : ℝ)⁻¹) ^ 2)
+    simpa using this
+  refine hfinal.congr (fun n => ?_)
+  have hN : ((n + 1 : ℕ) : ℝ) ≠ 0 := by positivity
+  simp only [cmdsEntrywiseRate, responseFrobRate, responseDistBound, safeResponseTolerance]
+  field_simp
+  ring
 
 /-- The polar-factor side expression vanishes under the safe tolerance.
 
