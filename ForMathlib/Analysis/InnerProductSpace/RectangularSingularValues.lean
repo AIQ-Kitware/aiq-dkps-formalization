@@ -42,6 +42,16 @@ The eigenspace equivalence and the counting argument are original to this file. 
 Apache-2.0 excerpt `vendor/lean/lean-stat-learning-theory/SingularSystemGram.excerpt.lean`
 (Zhang–Lee–Liu) constructs explicit left singular vectors for Euclidean matrix maps and was
 consulted as a cross-check for the spectral bookkeeping; no code was copied from it here.
+
+## Preferred variant
+
+This is the **preferred** implementation of the rectangular adjoint-spectrum layer, and the
+one the Perfect Quench build depends on (via `GramSpectrumBridge`).  A near-identical
+alternative proof from the `dk-work` branch (GPT-5.6 High) is preserved verbatim for
+comparison at `RectangularSingularValuesDkVariant.lean`; the two differ only in three minor
+spots, and that variant does not elaborate on the pinned toolchain (its `calc` form of
+`sq_singularValues_selfCompAdjoint` provokes a `whnf` heartbeat blow-up), which is why this
+file rewrote that proof.
 -/
 
 namespace ForMathlib
