@@ -419,7 +419,225 @@ theorem highProb_referenceCoordinateProductMean_of_compact_iid
     HighProbAtTop μref hμref (fun n => {ωref |
       |referenceCoordinateProductMean ψ f_ref n ωref a b -
         ∫ f, ψ f a * ψ f b ∂Pf| ≤ ε}) := by
-  sorry
+  have hmap : ∀ (n : Nat) (i : Fin n),
+      (μref n).map (fun ωref => f_ref n ωref i) = Pf := by
+    intro n i
+    apply Measure.ext
+    intro A hA
+    rw [Measure.map_apply (hiid.measurable n i) hA]
+    have hj := hiid.joint_law n (fun j => if j = i then A else Set.univ)
+      (fun j => by by_cases h : j = i <;> simp [h, hA])
+    have hset : {ωref | ∀ j, f_ref n ωref j ∈ if j = i then A else Set.univ}
+        = (fun ωref => f_ref n ωref i) ⁻¹' A := by
+      ext ωref
+      simp only [Set.mem_setOf_eq, Set.mem_preimage]
+      exact ⟨fun h => by have := h i; simpa using this,
+        fun h j => by by_cases hji : j = i <;> simp [hji, h]⟩
+    rw [hset] at hj
+    rw [hj]
+    simp only [apply_ite Pf, measure_univ, Finset.prod_ite_eq', Finset.mem_univ, if_true]
+  obtain ⟨rB, hrB⟩ := hcompact.isBounded.subset_closedBall 0
+  set B := max 0 rB with hBdef
+  have hB0 : 0 ≤ B := le_max_left _ _
+  have hBbound : ∀ f, ‖ψ f‖ ≤ B := fun f => by
+    have hmem : ψ f ∈ Metric.closedBall (0 : Vec d) rB := hrB ⟨f, rfl⟩
+    rw [Metric.mem_closedBall, dist_eq_norm, sub_zero] at hmem
+    exact hmem.trans (le_max_right _ _)
+  set Bg := B ^ 2 with hBgdef
+  have hBg0 : 0 ≤ Bg := by positivity
+  have hcoord_a : ∀ f, |ψ f a| ≤ B := fun f => by
+    rw [show |ψ f a| = ‖ψ f a‖ from (Real.norm_eq_abs _).symm]
+    exact (PiLp.norm_apply_le (ψ f) a).trans (hBbound f)
+  have hcoord_b : ∀ f, |ψ f b| ≤ B := fun f => by
+    rw [show |ψ f b| = ‖ψ f b‖ from (Real.norm_eq_abs _).symm]
+    exact (PiLp.norm_apply_le (ψ f) b).trans (hBbound f)
+  set c := ∫ f, ψ f a * ψ f b ∂Pf with hc
+  have hcoord_bound : ∀ f, |ψ f a * ψ f b| ≤ Bg := by
+    intro f
+    rw [abs_mul, hBgdef, sq]
+    exact mul_le_mul (hcoord_a f) (hcoord_b f) (abs_nonneg _) hB0
+  have hcoordMeas : Measurable (fun f => ψ f a * ψ f b) :=
+    (((EuclideanSpace.proj a).continuous.measurable).comp hψ).mul
+      (((EuclideanSpace.proj b).continuous.measurable).comp hψ)
+  have hZmeas : ∀ n (i : Fin n),
+      Measurable (fun ωref => ψ (f_ref n ωref i) a * ψ (f_ref n ωref i) b) :=
+    fun n i => hcoordMeas.comp (hiid.measurable n i)
+  have hint_coord : ∀ n (i : Fin n),
+      ∫ ωref, ψ (f_ref n ωref i) a * ψ (f_ref n ωref i) b ∂(μref n) = c := by
+    intro n i
+    have hmap' : ∫ m, ψ m a * ψ m b ∂((μref n).map (fun ωref => f_ref n ωref i))
+        = ∫ ωref, ψ (f_ref n ωref i) a * ψ (f_ref n ωref i) b ∂(μref n) :=
+      integral_map (hiid.measurable n i).aemeasurable hcoordMeas.aestronglyMeasurable
+    rw [hmap n i] at hmap'
+    rw [hc]; exact hmap'.symm
+  have hL2 : ∀ n (i : Fin n),
+      MemLp (fun ωref => ψ (f_ref n ωref i) a * ψ (f_ref n ωref i) b) 2 (μref n) := by
+    intro n i
+    haveI := hμref n
+    exact MemLp.of_bound (hZmeas n i).aestronglyMeasurable Bg
+      (Eventually.of_forall fun ωref => by rw [Real.norm_eq_abs]; exact hcoord_bound _)
+  have hc_bound : |c| ≤ Bg := by
+    have hInt : Integrable (fun f => ψ f a * ψ f b) Pf :=
+      (MemLp.of_bound hcoordMeas.aestronglyMeasurable Bg
+        (Eventually.of_forall fun f => by rw [Real.norm_eq_abs]; exact hcoord_bound _)).integrable
+        le_rfl
+    calc |c| ≤ ∫ f, |ψ f a * ψ f b| ∂Pf := abs_integral_le_integral_abs
+      _ ≤ ∫ _f, Bg ∂Pf := integral_mono hInt.abs (integrable_const Bg) (fun f => hcoord_bound f)
+      _ = Bg := by simp
+  have hindep : ∀ n, Set.Pairwise (Set.univ : Set (Fin n))
+      (fun i j => IndepFun (fun ωref => ψ (f_ref n ωref i) a * ψ (f_ref n ωref i) b)
+        (fun ωref => ψ (f_ref n ωref j) a * ψ (f_ref n ωref j) b) (μref n)) := by
+    intro n i _ j _ hij
+    rw [indepFun_iff_measure_inter_preimage_eq_mul]
+    intro s t hs ht
+    set A' := (fun f => ψ f a * ψ f b) ⁻¹' s with hA'
+    set B' := (fun f => ψ f a * ψ f b) ⁻¹' t with hB'
+    have hsm : MeasurableSet A' := hcoordMeas hs
+    have htm : MeasurableSet B' := hcoordMeas ht
+    have hj := hiid.joint_law n
+      (fun k => if k = i then A' else if k = j then B' else Set.univ)
+      (fun k => by
+        rcases eq_or_ne k i with h1 | h1
+        · simp only [if_pos h1]; exact hsm
+        · rcases eq_or_ne k j with h2 | h2
+          · simp only [if_neg h1, if_pos h2]; exact htm
+          · simp only [if_neg h1, if_neg h2]; exact MeasurableSet.univ)
+    have hset : {ωref | ∀ k, f_ref n ωref k ∈
+          (if k = i then A' else if k = j then B' else Set.univ)}
+        = ((fun ωref => ψ (f_ref n ωref i) a * ψ (f_ref n ωref i) b) ⁻¹' s)
+          ∩ ((fun ωref => ψ (f_ref n ωref j) a * ψ (f_ref n ωref j) b) ⁻¹' t) := by
+      ext ωref
+      simp only [Set.mem_setOf_eq, Set.mem_inter_iff, Set.mem_preimage, hA', hB']
+      constructor
+      · intro h
+        exact ⟨by have := h i; simpa using this,
+          by have := h j; rwa [if_neg (Ne.symm hij), if_pos rfl] at this⟩
+      · rintro ⟨hi', hj'⟩ k
+        rcases eq_or_ne k i with h1 | h1
+        · subst h1; simp only [if_pos rfl]; exact hi'
+        · rcases eq_or_ne k j with h2 | h2
+          · subst h2; simp only [if_neg h1, if_pos rfl]; exact hj'
+          · simp only [if_neg h1, if_neg h2]; exact Set.mem_univ _
+    rw [hset] at hj
+    rw [hj]
+    have hmi : (μref n) ((fun ωref => ψ (f_ref n ωref i) a * ψ (f_ref n ωref i) b) ⁻¹' s)
+        = Pf A' := by
+      rw [show (fun ωref => ψ (f_ref n ωref i) a * ψ (f_ref n ωref i) b) ⁻¹' s
+          = (fun ωref => f_ref n ωref i) ⁻¹' A' from rfl,
+        ← Measure.map_apply (hiid.measurable n i) hsm, hmap n i]
+    have hmj : (μref n) ((fun ωref => ψ (f_ref n ωref j) a * ψ (f_ref n ωref j) b) ⁻¹' t)
+        = Pf B' := by
+      rw [show (fun ωref => ψ (f_ref n ωref j) a * ψ (f_ref n ωref j) b) ⁻¹' t
+          = (fun ωref => f_ref n ωref j) ⁻¹' B' from rfl,
+        ← Measure.map_apply (hiid.measurable n j) htm, hmap n j]
+    rw [hmi, hmj]
+    rw [Finset.prod_congr rfl (g := fun k =>
+        if k = i then Pf A' else if k = j then Pf B' else 1) (fun k _ => by
+      rcases eq_or_ne k i with h1 | h1
+      · simp only [if_pos h1]
+      · rcases eq_or_ne k j with h2 | h2
+        · simp only [if_neg h1, if_pos h2]
+        · simp only [if_neg h1, if_neg h2, measure_univ])]
+    rw [← Finset.prod_subset (Finset.subset_univ ({i, j} : Finset (Fin n)))
+      (fun k _ hk => by
+        simp only [Finset.mem_insert, Finset.mem_singleton, not_or] at hk
+        simp only [if_neg hk.1, if_neg hk.2])]
+    rw [Finset.prod_pair hij, if_pos rfl, if_neg (Ne.symm hij), if_pos rfl]
+  have hmse : ∀ n : Nat, 0 < n →
+      ∫ ωref, (referenceCoordinateProductMean ψ f_ref n ωref a b - c) ^ 2 ∂(μref n)
+        ≤ 4 * Bg ^ 2 / n := by
+    intro n hn
+    haveI := hμref n
+    have hbound_i : ∀ i : Fin n,
+        ∫ ωref, (ψ (f_ref n ωref i) a * ψ (f_ref n ωref i) b - c) ^ 2 ∂(μref n)
+          ≤ 4 * Bg ^ 2 := by
+      intro i
+      have hle : ∀ ωref,
+          (ψ (f_ref n ωref i) a * ψ (f_ref n ωref i) b - c) ^ 2 ≤ 4 * Bg ^ 2 := by
+        intro ωref
+        have h1 : |ψ (f_ref n ωref i) a * ψ (f_ref n ωref i) b - c| ≤ 2 * Bg := by
+          have htriangle : |ψ (f_ref n ωref i) a * ψ (f_ref n ωref i) b - c|
+              ≤ |ψ (f_ref n ωref i) a * ψ (f_ref n ωref i) b| + |c| := by
+            rw [sub_eq_add_neg, ← abs_neg c]; exact abs_add_le _ _
+          have h2 := hcoord_bound (f_ref n ωref i)
+          linarith [hc_bound]
+        have hsq : |ψ (f_ref n ωref i) a * ψ (f_ref n ωref i) b - c|
+            * |ψ (f_ref n ωref i) a * ψ (f_ref n ωref i) b - c| ≤ (2 * Bg) * (2 * Bg) :=
+          mul_le_mul h1 h1 (abs_nonneg _) (by linarith)
+        nlinarith [hsq, sq_abs (ψ (f_ref n ωref i) a * ψ (f_ref n ωref i) b - c)]
+      calc ∫ ωref, (ψ (f_ref n ωref i) a * ψ (f_ref n ωref i) b - c) ^ 2 ∂(μref n)
+          ≤ ∫ _ωref, 4 * Bg ^ 2 ∂(μref n) :=
+            integral_mono ((hL2 n i).sub (memLp_const c)).integrable_sq (integrable_const _) hle
+        _ = 4 * Bg ^ 2 := by simp
+    simp only [referenceCoordinateProductMean]
+    rw [ForMathlib.integral_sq_scaledSum_sub_of_pairwise_indep (μref n) hn
+      (fun i ωref => ψ (f_ref n ωref i) a * ψ (f_ref n ωref i) b) c (fun i => hL2 n i)
+      (fun i => hint_coord n i) (hindep n)]
+    have hsum : ∑ i : Fin n,
+        ∫ ωref, (ψ (f_ref n ωref i) a * ψ (f_ref n ωref i) b - c) ^ 2 ∂(μref n)
+        ≤ (n : Real) * (4 * Bg ^ 2) := by
+      calc ∑ i : Fin n,
+            ∫ ωref, (ψ (f_ref n ωref i) a * ψ (f_ref n ωref i) b - c) ^ 2 ∂(μref n)
+          ≤ ∑ _i : Fin n, 4 * Bg ^ 2 := Finset.sum_le_sum fun i _ => hbound_i i
+        _ = (n : Real) * (4 * Bg ^ 2) := by
+            rw [Finset.sum_const, Finset.card_univ, Fintype.card_fin, nsmul_eq_mul]
+    have hn0 : (0 : Real) < (n : Real) := by exact_mod_cast hn
+    calc (n : Real)⁻¹ ^ 2 * ∑ i : Fin n,
+          ∫ ωref, (ψ (f_ref n ωref i) a * ψ (f_ref n ωref i) b - c) ^ 2 ∂(μref n)
+        ≤ (n : Real)⁻¹ ^ 2 * ((n : Real) * (4 * Bg ^ 2)) :=
+          mul_le_mul_of_nonneg_left hsum (by positivity)
+      _ = 4 * Bg ^ 2 / n := by rw [sq]; field_simp
+  apply Acharyya2025.GrowingResponse.highProbAtTop_of_tendsto_compl_zero
+  have hcompl : ∀ n : Nat, 0 < n →
+      μref n ({ωref | |referenceCoordinateProductMean ψ f_ref n ωref a b - c| ≤ ε}ᶜ)
+        ≤ ENNReal.ofReal (2 * (4 * Bg ^ 2 / n) / ε ^ 2) := by
+    intro n hn
+    haveI := hμref n
+    have hInt : Integrable
+        (fun ωref => (referenceCoordinateProductMean ψ f_ref n ωref a b - c) ^ 2) (μref n) := by
+      have hM : MemLp
+          (fun ωref => referenceCoordinateProductMean ψ f_ref n ωref a b) 2 (μref n) := by
+        simp only [referenceCoordinateProductMean]
+        exact (memLp_finsetSum _ (fun i _ => hL2 n i)).const_mul _
+      exact (hM.sub (memLp_const c)).integrable_sq
+    have hInt' : Integrable
+        (fun ωref => (-(referenceCoordinateProductMean ψ f_ref n ωref a b - c)) ^ 2) (μref n) := by
+      simpa only [neg_sq] using hInt
+    have hpos := ForMathlib.meas_gt_le_ofReal_integral_sq_div_sq (μref n)
+      (Y := fun ωref => referenceCoordinateProductMean ψ f_ref n ωref a b - c) hInt hε (hmse n hn)
+    have hneg := ForMathlib.meas_gt_le_ofReal_integral_sq_div_sq (μref n)
+      (Y := fun ωref => -(referenceCoordinateProductMean ψ f_ref n ωref a b - c)) hInt' hε
+      (by simpa only [neg_sq] using hmse n hn)
+    have hsub : {ωref | |referenceCoordinateProductMean ψ f_ref n ωref a b - c| ≤ ε}ᶜ
+        ⊆ {ωref | ε < referenceCoordinateProductMean ψ f_ref n ωref a b - c}
+          ∪ {ωref | ε < -(referenceCoordinateProductMean ψ f_ref n ωref a b - c)} := by
+      intro ωref hω
+      simp only [Set.mem_compl_iff, Set.mem_setOf_eq, not_le] at hω
+      rcases lt_abs.mp hω with h | h
+      · exact Or.inl h
+      · exact Or.inr h
+    calc μref n ({ωref | |referenceCoordinateProductMean ψ f_ref n ωref a b - c| ≤ ε}ᶜ)
+        ≤ μref n ({ωref | ε < referenceCoordinateProductMean ψ f_ref n ωref a b - c}
+            ∪ {ωref | ε < -(referenceCoordinateProductMean ψ f_ref n ωref a b - c)}) :=
+          measure_mono hsub
+      _ ≤ μref n {ωref | ε < referenceCoordinateProductMean ψ f_ref n ωref a b - c}
+            + μref n {ωref | ε < -(referenceCoordinateProductMean ψ f_ref n ωref a b - c)} :=
+          measure_union_le _ _
+      _ ≤ ENNReal.ofReal (4 * Bg ^ 2 / n / ε ^ 2) + ENNReal.ofReal (4 * Bg ^ 2 / n / ε ^ 2) :=
+          add_le_add hpos hneg
+      _ = ENNReal.ofReal (2 * (4 * Bg ^ 2 / n) / ε ^ 2) := by
+          rw [← ENNReal.ofReal_add (by positivity) (by positivity)]; congr 1; ring
+  have hupperlim : Tendsto
+      (fun n : Nat => ENNReal.ofReal (2 * (4 * Bg ^ 2 / n) / ε ^ 2)) atTop (𝓝 0) := by
+    have hlim : Tendsto (fun n : Nat => 2 * (4 * Bg ^ 2 / n) / ε ^ 2) atTop (𝓝 0) := by
+      refine (tendsto_const_div_atTop_nhds_zero_nat (8 * Bg ^ 2 / ε ^ 2)).congr (fun n => ?_)
+      rcases Nat.eq_zero_or_pos n with hn | hn
+      · simp [hn]
+      · field_simp; ring
+    simpa using ENNReal.tendsto_ofReal hlim
+  refine tendsto_of_tendsto_of_tendsto_of_le_of_le' tendsto_const_nhds hupperlim
+    (Eventually.of_forall fun _ => zero_le)
+    (eventually_atTop.mpr ⟨1, fun n hn => hcompl n hn⟩)
 
 /-- A safe entrywise covariance tolerance.  The `d+1` denominator avoids a
 special zero-dimensional branch while remaining small enough for the finite
