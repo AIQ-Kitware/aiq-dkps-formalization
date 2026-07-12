@@ -698,7 +698,45 @@ theorem sortedEigenvalues_augmented_centeredGram_upper
     sortedEigenvalues
       (configGramPosSemidef (centerConfig points)).isHermitian i ≤
       4 * ((n + 1 : Nat) : Real) * B ^ 2 := by
-  sorry
+  have hinner : ∀ x y : Vec d, @inner ℝ _ _ x y = ∑ k, x k * y k := by
+    intro x y
+    rw [PiLp.inner_apply]
+    simp only [RCLike.inner_apply, starRingEnd_apply, star_trivial]
+    exact Finset.sum_congr rfl fun k _ => mul_comm _ _
+  have hcent : ‖configCentroid points‖ ≤ B := by
+    rw [configCentroid, norm_smul, Real.norm_eq_abs,
+      abs_of_nonneg (by positivity : (0 : ℝ) ≤ ((n + 1 : ℕ) : ℝ)⁻¹)]
+    calc ((n + 1 : ℕ) : ℝ)⁻¹ * ‖∑ i, points i‖
+        ≤ ((n + 1 : ℕ) : ℝ)⁻¹ * ∑ i, ‖points i‖ :=
+          mul_le_mul_of_nonneg_left (norm_sum_le _ _) (by positivity)
+      _ ≤ ((n + 1 : ℕ) : ℝ)⁻¹ * ∑ _i : Fin (n + 1), B :=
+          mul_le_mul_of_nonneg_left (Finset.sum_le_sum fun i _ => hB i) (by positivity)
+      _ = B := by
+          rw [Finset.sum_const, Finset.card_univ, Fintype.card_fin, nsmul_eq_mul,
+            ← mul_assoc, inv_mul_cancel₀ (by positivity : ((n + 1 : ℕ) : ℝ) ≠ 0), one_mul]
+  have hcnorm : ∀ a, ‖centerConfig points a‖ ≤ 2 * B := by
+    intro a
+    calc ‖centerConfig points a‖ = ‖points a - configCentroid points‖ := rfl
+      _ ≤ ‖points a‖ + ‖configCentroid points‖ := norm_sub_le _ _
+      _ ≤ B + B := add_le_add (hB a) hcent
+      _ = 2 * B := by ring
+  have hentry : ∀ a b,
+      |configGram (centerConfig points) a b| ≤ 4 * B ^ 2 := by
+    intro a b
+    have h1 : configGram (centerConfig points) a b
+        = @inner ℝ _ _ (centerConfig points a) (centerConfig points b) := by
+      simp only [configGram]
+      exact (hinner _ _).symm
+    rw [h1]
+    calc |@inner ℝ _ _ (centerConfig points a) (centerConfig points b)|
+        ≤ ‖centerConfig points a‖ * ‖centerConfig points b‖ := abs_real_inner_le_norm _ _
+      _ ≤ 2 * B * (2 * B) := mul_le_mul (hcnorm a) (hcnorm b) (norm_nonneg _) (by positivity)
+      _ = 4 * B ^ 2 := by ring
+  calc sortedEigenvalues (configGramPosSemidef (centerConfig points)).isHermitian i
+      ≤ ((n + 1 : ℕ) : ℝ) * (4 * B ^ 2) :=
+        sortedEigenvalues_le_of_entry_le
+          (configGramPosSemidef (centerConfig points)).isHermitian hentry i
+    _ = 4 * ((n + 1 : Nat) : ℝ) * B ^ 2 := by ring
 
 /-- Assemble the covariance weak law and deterministic Gram lemmas into the
 high-probability spectral certificate consumed by the new Quench capstone.
