@@ -32,6 +32,7 @@ open Acharyya2024
 open Acharyya2025.Bridge
 open Acharyya2025.Deterministic
 open Acharyya2025.MathlibBridge
+open Acharyya2025.ConfigPerturbation
 open Acharyya2025.GrowingPipeline
 open Acharyya2025.GrowingResponse
 open DkpsQuench.GrowingAcharyyaBridge
@@ -127,7 +128,80 @@ theorem highProbQQueryEfficient_tieAverage_of_growing_augmented_cmds_spectralSub
       (fun n ω f => yNNTieAverage_augmentedCMDS (d := d)
         Dhat hsym f_ref score Qstar n ω f)
       (fun _ _ f => yQ score Qsub f) := by
-  sorry
+  let good : Nat → Prop := fun n =>
+    d ≤ n + 1 ∧
+    ((n + 1 : Nat) : Real) * entryRate n ≤ α / 2 ∧
+    (d : Real) *
+      (4 * ((n + 1 : Nat) : Real) *
+        ((((n + 1 : Nat) : Real) * entryRate n)^2) / α^2) ≤ 1 / 2 ∧
+    configBound (n + 1) d α (ceiling n)
+      (((n + 1 : Nat) : Real) * entryRate n) ≤ Hrate.bound n
+  let Es : Nat → Set Ω := fun n => E n ∩ Hspectral.event n
+  let Eg : Nat → Set Ω := fun n => Es n ∩ {ω | good n}
+  have hgood : ∀ᶠ n in atTop, good n := by
+    filter_upwards [eventually_dimension_le_succ d, Hrate.eventually_all]
+      with n hdim hsides
+    exact ⟨hdim, hsides.1, hsides.2.1, hsides.2.2⟩
+  have hEsMeas : ∀ n, MeasurableSet (Es n) := by
+    intro n
+    exact (hEmeas n).inter (Hspectral.measurable n)
+  have hEs : HighProbAtTop μ hμ Es := by
+    exact HighProbAtTop.inter hE Hspectral.highProb hEmeas Hspectral.measurable
+  have hEgMeas : ∀ n, MeasurableSet (Eg n) := by
+    intro n
+    by_cases hn : good n
+    · simp [Eg, hn, hEsMeas n]
+    · simp [Eg, hn]
+  have hEg : HighProbAtTop μ hμ Eg := by
+    apply hEs.mono_eventually
+    filter_upwards [hgood] with n hn
+    intro ω hω
+    exact ⟨hω, hn⟩
+  let radialRate : Nat → Real := fun n => 2 * Hrate.bound n
+  have hradialRateZero : Tendsto radialRate atTop (nhds 0) := by
+    dsimp [radialRate]
+    simpa using tendsto_const_nhds.mul Hrate.bound_zero
+  have hradialRateNonneg : ∀ n, 0 ≤ radialRate n := by
+    intro n
+    dsimp [radialRate]
+    exact mul_nonneg (by norm_num) (Hrate.bound_nonneg n)
+  have hEgSub : ∀ n, Eg n ⊆ {ω | ∀ f i,
+      |augmentedSpectralRadialDistance (d := d) Dhat hsym n ω f i -
+          ‖ψ (f_ref n ω i) - ψ f‖| ≤ radialRate n} := by
+    intro n ω hω f i
+    rcases hω with ⟨⟨hentryEvent, hspectralEvent⟩, hdim, hsmall, hpolar, hbound⟩
+    have hentry := hEsub n hentryEvent f
+    have hfloor := Hspectral.floor n ω hspectralEvent f
+    have hceiling := Hspectral.ceiling_bound n ω hspectralEvent f
+    have hpair :=
+      abs_pairwiseDistance_spectralConfig_sub_le_two_configBound
+        hdim
+        (disMatToMatrix (classicalMDSMatrix (D n ω f)))
+        (disMatToMatrix (classicalMDSMatrix (Dhat n ω f)))
+        (populationPosSemidefOfGram D z hzGram n ω f)
+        (hsym n ω f)
+        (populationRankLeOfGram D z hzGram n ω f)
+        hα (Hrate.entry_nonneg n) hfloor hceiling
+        hentry hsmall hpolar (z n ω f) (hzGram n ω f)
+        i.castSucc (Fin.last n)
+    have hraw : rawAugmentedSpectralConfig (d := d) Dhat hsym n ω f =
+        spectralConfig
+          (Matrix.toEuclideanLin
+            (disMatToMatrix (classicalMDSMatrix (Dhat n ω f))))
+          (Acharyya2025.MatrixPerturbation.opSym (hsym n ω f)) hdim :=
+      rawAugmentedSpectralConfig_of_dimension Dhat hsym n ω f hdim
+    change
+      |‖rawAugmentedSpectralConfig (d := d) Dhat hsym n ω f i.castSucc -
+            rawAugmentedSpectralConfig (d := d) Dhat hsym n ω f (Fin.last n)‖ -
+          ‖ψ (f_ref n ω i) - ψ f‖| ≤ 2 * Hrate.bound n
+    rw [hraw, ← hzRadial n ω f i]
+    exact hpair.trans (mul_le_mul_of_nonneg_left hbound (by norm_num))
+  exact highProbQQueryEfficient_radialTieAverage_of_compact_iid_fullSupport
+    Pf μ hμ ψ hψmeas hcompact hfull
+    (augmentedSpectralRadialDistance (d := d) Dhat hsym)
+    f_ref hiid score Qstar Qsub γ hlip hγ
+    radialRate hradialRateZero hradialRateNonneg
+    Eg hEgMeas hEgSub hEg hbase
 
 /-- Response-mean capstone with population geometry reduced to one distance
 realization and spectral assumptions reduced to a high-probability certificate.
