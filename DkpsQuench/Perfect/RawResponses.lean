@@ -430,7 +430,15 @@ noncomputable def augmentedRawResponseMeanSubevents_finite
       (jointStageMeasure μref μresp)
       (jointStageMeasure_probability μref hμref μresp Hraw.probability)
       (augmentedRawSampleMean f_ref replicates Y)
-      (augmentedRawPopulationMean f_ref μmodel) η := by
-  sorry
+      (augmentedRawPopulationMean f_ref μmodel) η :=
+  { event := augmentedUniformResponseMeanEvent
+      (augmentedRawSampleMean f_ref replicates Y)
+      (augmentedRawPopulationMean f_ref μmodel) η
+    measurable := fun n =>
+      measurableSet_augmentedRawResponseMeanEvent_finite μresp f_ref href replicates Y
+        μmodel variance η Hraw n
+    highProb := highProb_augmentedRawResponseMean_finite μref hμref μresp f_ref href
+      replicates Y μmodel variance η Hraw hη hratio
+    subset := fun _ => Set.Subset.rfl }
 
 end DkpsQuench.Perfect
