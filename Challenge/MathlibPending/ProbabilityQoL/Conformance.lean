@@ -16,7 +16,10 @@ open scoped ENNReal
 /-- For a probability measure, `1 - μ sᶜ ≤ μ s`, with no measurability assumption on `s`. -/
 theorem one_sub_measure_compl_le {Ω : Type*} [MeasurableSpace Ω] (μ : Measure Ω)
     [IsProbabilityMeasure μ] (s : Set Ω) : 1 - μ sᶜ ≤ μ s := by
-  sorry
+  rw [tsub_le_iff_right]
+  calc (1 : ℝ≥0∞) = μ Set.univ := measure_univ.symm
+    _ = μ (s ∪ sᶜ) := by rw [Set.union_compl_self]
+    _ ≤ μ s + μ sᶜ := measure_union_le s sᶜ
 
 /-- **Uncentered second-moment Chebyshev.** -/
 theorem meas_gt_le_ofReal_integral_sq_div_sq {Ω : Type*} [MeasurableSpace Ω]
