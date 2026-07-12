@@ -203,7 +203,18 @@ theorem safeFinite_concentration_ratio_zero
       (targetCount : Real) * ((n + 1 : Nat) : Real) *
         (varianceBound / safeFiniteReplicates n) /
         (safeResponseTolerance n) ^ 2) atTop (𝓝 0) := by
-  sorry
+  have h1 : Tendsto (fun n : ℕ => ((n : ℝ) + 1)⁻¹) atTop (𝓝 0) :=
+    (tendsto_atTop_add_const_right atTop 1 tendsto_natCast_atTop_atTop).inv_tendsto_atTop
+  have hlim : Tendsto (fun n : ℕ => (((n : ℝ) + 1)⁻¹) ^ 2) atTop (𝓝 0) := by
+    simpa using h1.pow 2
+  have hmain : Tendsto (fun n : ℕ =>
+      (targetCount * varianceBound : ℝ) * (((n : ℝ) + 1)⁻¹) ^ 2) atTop (𝓝 0) := by
+    simpa using hlim.const_mul (targetCount * varianceBound : ℝ)
+  refine hmain.congr (fun n => ?_)
+  have hpos : ((n : ℝ) + 1) ≠ 0 := by positivity
+  simp only [safeFiniteReplicates, safeResponseTolerance]
+  push_cast
+  field_simp
 
 /-- Entropy-aware concentration ratio for polynomial-size shrinking nets.
 
@@ -277,7 +288,23 @@ theorem safe_net_extension_budget
       safeNetTolerance n +
           (Lsample n + Lpopulation n) * radius n ≤
         safeResponseTolerance n := by
-  sorry
+  intro n
+  have hη : (0 : ℝ) ≤ safeResponseTolerance n := (safeResponseTolerance_pos n).le
+  have hLpos : (0 : ℝ) < 4 * (L + 1) := by linarith
+  have hratio : 2 * L / (4 * (L + 1)) ≤ 1 / 2 := by
+    rw [div_le_iff₀ hLpos]
+    nlinarith [hL]
+  have hnet : safeNetTolerance n = safeResponseTolerance n / 2 := rfl
+  have hprod : (Lsample n + Lpopulation n) * radius n ≤ safeResponseTolerance n / 2 :=
+    calc (Lsample n + Lpopulation n) * radius n
+        ≤ (2 * L) * (safeResponseTolerance n / (4 * (L + 1))) :=
+          mul_le_mul (by linarith [hsample n, hpopulation n]) (hradius n)
+            (hradiusNonneg n) (by linarith [hL])
+      _ = (2 * L / (4 * (L + 1))) * safeResponseTolerance n := by ring
+      _ ≤ (1 / 2) * safeResponseTolerance n := mul_le_mul_of_nonneg_right hratio hη
+      _ = safeResponseTolerance n / 2 := by ring
+  rw [hnet]
+  linarith [hprod]
 
 /-- The batch-size-scaled CMDS entry rate vanishes under the safe
 tolerance.
