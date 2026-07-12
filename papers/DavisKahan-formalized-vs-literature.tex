@@ -83,7 +83,7 @@ represented by the theorem scaffold under
 
 \vspace{1.5em}
 % NOTE: Update permalink if underlying proof changes, so this always is up to date wrt to the referenced lean file.
-\noindent Companion note to \href{https://github.com/AIQ-Kitware/aiq-dkps-formalization/blob/ec453246c0b202f8ad9d2036080c5cc8fe009a09/ForMathlib/Analysis/InnerProductSpace/DavisKahan.lean}{ForMathlib/Analysis/InnerProductSpace/DavisKahan.lean} and its sibling files under \href{https://github.com/AIQ-Kitware/aiq-dkps-formalization/tree/ec453246c0b202f8ad9d2036080c5cc8fe009a09/ForMathlib/Analysis/InnerProductSpace}{ForMathlib/Analysis/InnerProductSpace/}, part of a larger formalization effort at \href{https://github.com/AIQ-Kitware/aiq-dkps-formalization}{github.com/AIQ-Kitware/aiq-dkps-formalization}.
+\noindent Companion note to \href{https://github.com/AIQ-Kitware/aiq-dkps-formalization/blob/74b37b24097bc63416fc9e402912e89d5a4ba528/ForMathlib/Analysis/InnerProductSpace/DavisKahan.lean}{ForMathlib/Analysis/InnerProductSpace/DavisKahan.lean} and its sibling files under \href{https://github.com/AIQ-Kitware/aiq-dkps-formalization/tree/74b37b24097bc63416fc9e402912e89d5a4ba528/ForMathlib/Analysis/InnerProductSpace}{ForMathlib/Analysis/InnerProductSpace/}, part of a larger formalization effort at \href{https://github.com/AIQ-Kitware/aiq-dkps-formalization}{github.com/AIQ-Kitware/aiq-dkps-formalization}.
 
 
 
@@ -444,20 +444,32 @@ YWS headline
 with the population-only gap $\Delta$ and YWS's constant $2$, in both branches.
 
 \paragraph{The aligned-basis (Procrustes) bound.}
-There is an orthonormal family $w_1,\dots,w_d$ spanning the sample block
-$\spann(\widehat v_1,\dots,\widehat v_d)$ with
+The subspace-facing theorem
+\texttt{DavisKahanTheory.exists\_aligned\_orthonormalBasis} now constructs
+orthonormal families $u_1,\dots,u_d$ and $w_1,\dots,w_d$ spanning the two
+arbitrary equal-rank subspaces and proves
 \[
-  \sum_{j\le d}\norm{w_j-u_j}^2\;\le\;2\,\norm{\sinT}_{\F}^2,
-  \qquad\text{hence}\qquad
+  \sum_{j\le d}\norm{w_j-u_j}^2\;\le\;2\,\norm{\sinT}_{\F}^2.
+\]
+Combined with \texttt{yuWangSamworth\_sinTheta\_le}, the capstone
+\texttt{yuWangSamworth\_alignedBasis\_le} gives
+\[
   \Bigl(\sum_j\norm{w_j-u_j}^2\Bigr)^{1/2}
   \le\frac{2^{3/2}\min\{d^{1/2}\norm{E}_{\op},\norm{E}_{\F}\}}{\Delta},
 \]
 which is YWS's $\norm{\widehat VO-V}_{\F}$ conclusion in operator language
-($w=\widehat VO$).  The rotation $O$ is the \emph{kernel-completed unitary}
-polar factor of the $d\times d$ overlap operator $M_{ij}=\inner{u_i}{\widehat
-v_j}$ --- genuinely unitary even when $M$ is singular (a principal angle of
-$\pi/2$), which is what lets the proof avoid the singular value decomposition
-entirely: the Procrustes cross term becomes the exact identity
+($w=\widehat VO$).  The proof first chooses canonical orthonormal bases of the
+two subspaces and uses the \emph{kernel-completed unitary} polar factor of the
+$d\times d$ overlap operator $M_{ij}=\inner{u_i}{\widehat v_j}$.  It then
+extends those families to ambient orthonormal bases over a shared finite index
+set.  This proves the exact representation bridge
+\[
+  \operatorname{sinThetaSq}(u,v)
+  = \operatorname{sinThetaFrobenius}(U,V)^2
+\]
+from the existing cross-block column formula, rather than assuming that the
+family-level and canonical subspace encodings coincide.  The Procrustes cross
+term is the identity
 $\mathrm{re}\tr(O^{*}M)=\tr\lvert M\rvert=\sum_i\sigma_i(M)$, and the
 elementary chain $\sum_i\sigma_i\ge\sum_i\sigma_i^2=d-\norm{\sinT}_{\F}^2$
 (each $\sigma_i\le 1$ because $M$ is a contraction) finishes exactly as in
@@ -996,8 +1008,9 @@ The remaining work is ordered by mathematical dependency:
   remaining generalized forms; and the two-dimensional equality models
   proving optimality of the constants.
 \item \emph{Derived interfaces.}
-  Finish the Yu--Wang--Samworth/statistical wrappers, singular-subspace and
-  Hermitian-dilation forms, and matrix-facing formulations.
+  The finite-dimensional Yu--Wang--Samworth population-gap, interval-block,
+  aligned-basis, and rank-one wrappers are now closed.  Finish the remaining
+  singular-subspace, Hermitian-dilation, and matrix-facing formulations.
 \end{enumerate}
 
 The detailed source map is in
@@ -1082,8 +1095,12 @@ Exact YWS, Frobenius branch ($\Delta^2\cdot\text{overlap}\le4\norm{E}_{\F}^2$)
     \texttt{sqrt\_sum\_cross\_le\_of\_population\_gap} (\texttt{YuWangSamworth.lean}) \\
 Exact YWS, $d^{1/2}$ operator-norm branch
   & \texttt{sq\_gap\_mul\_sum\_cross\_le\_of\_population\_gap\_opNorm} (\texttt{YuWangSamworth.lean}) \\
-Aligned-basis bound $\sum_j\norm{w_j-u_j}^2\le2\norm{\sinT}_{\F}^2$
-  & \texttt{sum\_sq\_norm\_aligned\_le} (\texttt{AlignedBasis.lean}) \\
+Family-level aligned-basis bound $\sum_j\norm{w_j-u_j}^2\le2\norm{\sinT}_{\F}^2$
+  & \texttt{sum\_sq\_norm\_aligned\_le\_sinThetaSq} (\texttt{PrincipalAngles.lean}) \\
+Canonical subspace/Frobenius bridge and arbitrary-subspace aligned bases
+  & \texttt{sinThetaSq\_eq\_sinThetaFrobenius\_sq\_of\_spans},
+    \texttt{exists\_aligned\_orthonormalBasis},
+    \texttt{yuWangSamworth\_alignedBasis\_le} (\texttt{DavisKahanTheory/Statistics.lean}) \\
 Overlap operator, contraction, $\sum\sigma^2$, $d-\text{overlap}\le\sum\sigma$
   & \texttt{overlapOp}, \texttt{overlapOp\_contraction},
     \texttt{sum\_sq\_singularValues\_overlapOp},
