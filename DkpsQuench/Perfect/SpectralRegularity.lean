@@ -449,7 +449,22 @@ theorem highProb_referenceCovarianceEvent_of_entries
           perspectiveCovarianceMatrix Pf ψ center a b| ≤ ε}) :
     HighProbAtTop μref hμref
       (referenceCovarianceEvent Pf ψ f_ref center ε) := by
-  sorry
+  have key := HighProbAtTop.finset_all (Ω := Ωref)
+    (Finset.univ : Finset (Fin d × Fin d))
+    (fun p n => {ωref | |referenceEmpiricalCovariance ψ f_ref n ωref p.1 p.2 -
+      perspectiveCovarianceMatrix Pf ψ center p.1 p.2| ≤ ε})
+    (fun p _ => hentry p.1 p.2)
+    (fun p _ n => hentryMeas p.1 p.2 n)
+  have heq : (fun n => {ωref | ∀ p ∈ (Finset.univ : Finset (Fin d × Fin d)),
+      ωref ∈ {ωref | |referenceEmpiricalCovariance ψ f_ref n ωref p.1 p.2 -
+        perspectiveCovarianceMatrix Pf ψ center p.1 p.2| ≤ ε}})
+      = referenceCovarianceEvent Pf ψ f_ref center ε := by
+    funext n
+    ext ωref
+    simp only [referenceCovarianceEvent, EntrywiseClose, Set.mem_setOf_eq, Finset.mem_univ,
+      forall_true_left, Prod.forall]
+  rw [← heq]
+  exact key
 
 /-- Fixed-dimensional weak law for all covariance entries simultaneously.
 
