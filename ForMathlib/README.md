@@ -32,10 +32,30 @@ per-candidate dossiers live in `planning/mathlib-candidates.md`.
    human author must understand and vouch for every line.
 4. After the PR lands, delete the staged file here and bump the Mathlib pin.
 
+## Experimental singular-value and frame scaffolds
+
+The following files are intentionally **not** imported by `ForMathlib.lean` yet. They record
+reviewable theorem signatures, proof routes, and the intended Mathlib contribution boundary
+for the next Perfect Quench support layer:
+
+- `Analysis/InnerProductSpace/RectangularSingularValues.lean`
+- `Analysis/InnerProductSpace/SingularSystem.lean`
+- `Analysis/InnerProductSpace/FiniteFrame.lean`
+- `Analysis/InnerProductSpace/CenteredScatter.lean`
+
+They contain deliberate `sorry` placeholders. Their design and external proof-source map are
+in `docs/planning/rectangular-singular-values-and-frames.md` and
+`dev/external-lean-references.md`. Licensed proof snapshots are isolated under
+`vendor/lean/` and are not build dependencies.
+
 ## Inventory
 
 | Staged file | Destination | Candidate (mathlib-candidates.md) |
 | --- | --- | --- |
+| `Analysis/InnerProductSpace/RectangularSingularValues.lean` | proposed additions near `Mathlib/Analysis/InnerProductSpace/SingularValues.lean` | nonzero eigenspace equivalence for `A†A`/`AA†`, multiplicities, and rectangular adjoint invariance |
+| `Analysis/InnerProductSpace/SingularSystem.lean` | proposed new singular-system/SVD file | intrinsic right/left singular vectors, orthonormality, and rank-one reconstruction |
+| `Analysis/InnerProductSpace/FiniteFrame.lean` | proposed new finite-frame file | analysis/synthesis/frame/Gram operators and frame-bound equivalences |
+| `Analysis/InnerProductSpace/CenteredScatter.lean` | proposed finite-family mean/scatter file | exact add-one centered-scatter identity and Löwner monotonicity |
 | `Analysis/InnerProductSpace/CourantFischer.lean` | new `Mathlib/Analysis/InnerProductSpace/CourantFischer.lean` | #3a Courant–Fischer (both directions) + Weyl's eigenvalue perturbation inequality, `RCLike` |
 | `Analysis/InnerProductSpace/DavisKahan.lean` | new `Mathlib/Analysis/InnerProductSpace/DavisKahan.lean` | Davis–Kahan cross-block (squared sin-Θ) bound `∑ ‖⟪uᵢ,v̂ⱼ⟫‖² ≤ nε²/gap²` + rank-`d`/floor corollary `≤ 4nε²/α²` (`RCLike`); canonical **projector form** `‖P̂−P‖_F² = 2·Σcross ≤ 2nε²/gap²` (ℝ) |
 | `Analysis/InnerProductSpace/IntertwiningUnitary.lean` | new `Mathlib/Analysis/InnerProductSpace/IntertwiningUnitary.lean` | Davis §2 canonical intertwining unitary of two complete orthogonal projection families: `spectralProjection` API, `OrthoProjFamily`, `intertwiningUnitary` (`U Pⱼ = P'ⱼ U`), block polar factors `range Pⱼ ≃ₗᵢ range P'ⱼ`, rotation angles (`RCLike`) |
