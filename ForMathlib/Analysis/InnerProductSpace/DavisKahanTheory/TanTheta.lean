@@ -220,8 +220,11 @@ theorem tanTheta_spectralSubspace_le
     (hgap : OrderedGap A (spectralSubspace A (Set.Icc a b))
       B (spectralSubspace B (Set.Icc a b))ᗮ δ) :
     δ * N (tanAngleOperator (spectralSubspace A (Set.Icc a b))
-        (spectralSubspace B (Set.Icc a b))) ≤ N (B - A) := by
-  sorry
+        (spectralSubspace B (Set.Icc a b))) ≤ N (B - A) :=
+  tanTheta_perturbation_le N hA hB
+    (reduces_spectralSubspace A (Set.Icc a b))
+    (reduces_spectralSubspace B (Set.Icc a b))
+    hzero hacute hδ hgap
 
 /-- Pole-free vector form.  This is the theorem shape already approached in
 `ForMathlib/Analysis/InnerProductSpace/TanTheta.lean`.
