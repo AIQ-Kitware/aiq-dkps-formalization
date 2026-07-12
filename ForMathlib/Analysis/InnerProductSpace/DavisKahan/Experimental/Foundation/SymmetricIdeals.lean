@@ -172,8 +172,8 @@ theorem gauge_unitary_conjugation
     (hleft : Uinv ∘L U = ContinuousLinearMap.id 𝕜 E)
     (hright : U ∘L Uinv = ContinuousLinearMap.id 𝕜 E) :
     I.mem (U ∘L A ∘L Uinv) ∧
-      I.gauge (U ∘L A ∘L Uinv) = I.gauge A := by
-  sorry
+      I.gauge (U ∘L A ∘L Uinv) = I.gauge A :=
+  ⟨I.ideal_mem U Uinv hA, I.unitary_invariant U Uinv A hU hUinv hleft hright hA⟩
 
 /-- Pinching is contractive for every symmetric norm ideal. 
 
