@@ -209,8 +209,12 @@ theorem highProb_modelUniformResponseEvent_of_net_regular
     (hbudget : ∀ n,
       τ n + (Lsample n + Lpopulation n) * net.radius n ≤ η n) :
     HighProbAtTop μresp hμresp
-      (modelUniformResponseEvent Xbar μmodel η) := by
-  sorry
+      (modelUniformResponseEvent Xbar μmodel η) :=
+  HighProbAtTop.mono
+    (highProb_modelNetResponseEventFor_of_secondMoment μresp hμresp ψ Xbar μmodel net σ2 τ
+      hint hσ2 hτ hratio)
+    (fun n => modelNetResponseEventFor_subset_uniform ψ Xbar μmodel net Lsample Lpopulation
+      τ η Hreg hbudget n)
 
 /-- A model-uniform response event implies every target-augmented response
 event, including randomly selected references.
