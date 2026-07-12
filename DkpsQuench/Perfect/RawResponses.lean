@@ -523,7 +523,18 @@ theorem highProb_augmentedRawResponseMean_finite
       (augmentedUniformResponseMeanEvent
         (augmentedRawSampleMean f_ref replicates Y)
         (augmentedRawPopulationMean f_ref μmodel) η) := by
-  sorry
+  haveI : ∀ u, IsProbabilityMeasure (jointStageMeasure μref μresp u) :=
+    jointStageMeasure_probability μref hμref μresp Hraw.probability
+  exact highProb_uniformTargetResponseMeanClose_of_secondMoment
+    (jointStageMeasure μref μresp) (fun n => n + 1)
+    (augmentedRawSampleMean f_ref replicates Y)
+    (augmentedRawPopulationMean f_ref μmodel)
+    (fun n => variance n / replicates n) η
+    (fun n f i => integrable_sq_augmentedRawSampleMean_sub_population
+      μref hμref μresp f_ref href replicates Y μmodel variance Hraw n f i)
+    (fun n f i => integral_norm_sq_augmentedRawSampleMean_sub_population_le
+      μref hμref μresp f_ref href replicates Y μmodel variance Hraw n f i)
+    hη hratio
 
 /-- Finite-model measurable subevent certificate for raw response means.
 
