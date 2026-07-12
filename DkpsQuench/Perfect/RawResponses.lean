@@ -438,7 +438,40 @@ theorem measurableSet_augmentedRawResponseMeanEvent_finite
     MeasurableSet (augmentedUniformResponseMeanEvent
       (augmentedRawSampleMean f_ref replicates Y)
       (augmentedRawPopulationMean f_ref μmodel) η n) := by
-  sorry
+  have hmeas : ∀ (f : Model Q X) (i : Fin (n + 1)),
+      Measurable (fun ω : Ωref × Ωresp =>
+        ‖augmentedRawSampleMean f_ref replicates Y n ω f i -
+          augmentedRawPopulationMean f_ref μmodel n ω f i‖) := by
+    intro f i
+    have hsel : Measurable (fun ωref => augmentedModelAt f_ref n ωref f i) := by
+      induction i using Fin.lastCases with
+      | last => simp [augmentedModelAt]
+      | cast j => simpa [augmentedModelAt] using href n j
+    have hpair : Measurable (fun ω : Ωref × Ωresp =>
+        (augmentedModelAt f_ref n ω.1 f i, ω.2)) :=
+      (hsel.comp measurable_fst).prodMk measurable_snd
+    have hmeasSample : Measurable (fun ω : Ωref × Ωresp =>
+        augmentedRawSampleMean f_ref replicates Y n ω f i) := by
+      simp only [augmentedRawSampleMean, modelReplicateMean, replicateMean]
+      exact (Finset.measurable_sum _
+        (fun k _ => (Hraw.jointly_measurable n k).comp hpair)).const_smul
+        ((replicates n : Real)⁻¹)
+    have hmeasPop : Measurable (fun ω : Ωref × Ωresp =>
+        augmentedRawPopulationMean f_ref μmodel n ω f i) := by
+      simp only [augmentedRawPopulationMean]
+      exact Hraw.mean_measurable.comp (hsel.comp measurable_fst)
+    exact (hmeasSample.sub hmeasPop).norm
+  have hev : augmentedUniformResponseMeanEvent (augmentedRawSampleMean f_ref replicates Y)
+      (augmentedRawPopulationMean f_ref μmodel) η n
+      = ⋂ f, ⋂ i, {ω : Ωref × Ωresp |
+          ‖augmentedRawSampleMean f_ref replicates Y n ω f i -
+            augmentedRawPopulationMean f_ref μmodel n ω f i‖ ≤ η n} := by
+    ext ω
+    simp only [augmentedUniformResponseMeanEvent, Acharyya2025.Bridge.UniformResponseMeanClose,
+      Set.mem_setOf_eq, Set.mem_iInter]
+  rw [hev]
+  exact MeasurableSet.iInter fun f => MeasurableSet.iInter fun i =>
+    measurableSet_le (hmeas f i) measurable_const
 
 /-- Finite-model uniform response concentration derived directly from raw iid
 replicates.
