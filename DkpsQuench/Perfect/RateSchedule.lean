@@ -388,7 +388,40 @@ theorem safe_polar_expression_zero
                 (populationResponseBound + safeResponseTolerance n))
               (safeResponseTolerance n)) ^ 2) / (κ / 2) ^ 2))
       atTop (𝓝 0) := by
-  sorry
+  have hm' : (m : ℝ) ≠ 0 := Nat.cast_ne_zero.mpr hm.ne'
+  have hκ2 : (κ / 2 : ℝ) ≠ 0 := ne_of_gt (by positivity)
+  have hpow : ∀ k : ℕ, 1 ≤ k → Tendsto (fun n : ℕ => (((n + 1 : ℕ) : ℝ)) ^ k) atTop atTop := by
+    intro k hk
+    have hnat : Tendsto (fun n : ℕ => (n + 1) ^ k) atTop atTop :=
+      tendsto_atTop_mono
+        (fun n => le_trans (Nat.le_succ n) (le_self_pow (by omega) (by omega))) tendsto_id
+    simp_rw [← Nat.cast_pow]
+    exact tendsto_natCast_atTop_atTop.comp hnat
+  have h3 : Tendsto (fun n : ℕ => (((n + 1 : ℕ) : ℝ) ^ 3)⁻¹) atTop (𝓝 0) :=
+    (hpow 3 (by norm_num)).inv_tendsto_atTop
+  have h8 : Tendsto (fun n : ℕ => (((n + 1 : ℕ) : ℝ) ^ 8)⁻¹) atTop (𝓝 0) :=
+    (hpow 8 (by norm_num)).inv_tendsto_atTop
+  have h13 : Tendsto (fun n : ℕ => (((n + 1 : ℕ) : ℝ) ^ 13)⁻¹) atTop (𝓝 0) :=
+    (hpow 13 (by norm_num)).inv_tendsto_atTop
+  have hsum : Tendsto (fun n : ℕ =>
+      populationResponseBound ^ 2 * (((n + 1 : ℕ) : ℝ) ^ 3)⁻¹
+      + 2 * populationResponseBound * (((n + 1 : ℕ) : ℝ) ^ 8)⁻¹
+      + (((n + 1 : ℕ) : ℝ) ^ 13)⁻¹) atTop (𝓝 0) := by
+    have := ((h3.const_mul (populationResponseBound ^ 2)).add
+      (h8.const_mul (2 * populationResponseBound))).add h13
+    simpa only [mul_zero, add_zero, zero_add] using this
+  have hfinal : Tendsto (fun n : ℕ =>
+      ((d : ℝ) * 4096 * ((m : ℝ)⁻¹) ^ 4 / (κ / 2) ^ 2) *
+      (populationResponseBound ^ 2 * (((n + 1 : ℕ) : ℝ) ^ 3)⁻¹
+        + 2 * populationResponseBound * (((n + 1 : ℕ) : ℝ) ^ 8)⁻¹
+        + (((n + 1 : ℕ) : ℝ) ^ 13)⁻¹)) atTop (𝓝 0) := by
+    simpa only [mul_zero] using
+      hsum.const_mul ((d : ℝ) * 4096 * ((m : ℝ)⁻¹) ^ 4 / (κ / 2) ^ 2)
+  refine hfinal.congr (fun n => ?_)
+  have hN : ((n + 1 : ℕ) : ℝ) ≠ 0 := by positivity
+  simp only [cmdsEntrywiseRate, responseFrobRate, responseDistBound, safeResponseTolerance]
+  field_simp
+  ring
 
 /-- The complete deterministic configuration envelope vanishes under the safe
 schedule and linear population spectral ceiling.
