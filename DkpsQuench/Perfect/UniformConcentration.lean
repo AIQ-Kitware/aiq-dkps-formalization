@@ -95,7 +95,30 @@ theorem modelNetResponseEventFor_subset_uniform
     (n : Nat) :
     modelNetResponseEventFor ψ Xbar μmodel net τ n ⊆
       modelUniformResponseEvent Xbar μmodel η n := by
-  sorry
+  intro ω hω
+  simp only [modelNetResponseEventFor, modelUniformResponseEvent, Set.mem_setOf_eq] at hω ⊢
+  intro g
+  obtain ⟨c, hc, hcov⟩ := net.covers n g
+  have h1 : ‖Xbar n ω g - Xbar n ω c‖ ≤ Lsample n * ‖ψ g - ψ c‖ :=
+    Hreg.sample_lipschitz n ω g c
+  have h2 : ‖Xbar n ω c - μmodel c‖ ≤ τ n := hω c hc
+  have h3 : ‖μmodel c - μmodel g‖ ≤ Lpopulation n * ‖ψ c - ψ g‖ :=
+    Hreg.population_lipschitz n c g
+  have htri : ‖Xbar n ω g - μmodel g‖ ≤
+      ‖Xbar n ω g - Xbar n ω c‖ + ‖Xbar n ω c - μmodel c‖ + ‖μmodel c - μmodel g‖ := by
+    have heq : Xbar n ω g - μmodel g =
+        Xbar n ω g - Xbar n ω c + (Xbar n ω c - μmodel c) + (μmodel c - μmodel g) := by abel
+    rw [heq]
+    exact (norm_add_le _ _).trans (add_le_add (norm_add_le _ _) le_rfl)
+  have hsym : ‖ψ g - ψ c‖ = ‖ψ c - ψ g‖ := norm_sub_rev _ _
+  have hle : ‖ψ c - ψ g‖ ≤ net.radius n := hcov.le
+  have hb1 : Lsample n * ‖ψ g - ψ c‖ ≤ Lsample n * net.radius n := by
+    rw [hsym]; exact mul_le_mul_of_nonneg_left hle (Hreg.sample_nonneg n)
+  have hb3 : Lpopulation n * ‖ψ c - ψ g‖ ≤ Lpopulation n * net.radius n :=
+    mul_le_mul_of_nonneg_left hle (Hreg.population_nonneg n)
+  have hbud : τ n + (Lsample n * net.radius n + Lpopulation n * net.radius n) ≤ η n := by
+    have := hbudget n; rwa [add_mul] at this
+  linarith [htri, h1, h2, h3, hb1, hb3, hbud]
 
 /-- Measurability of the finite-net response event.
 
