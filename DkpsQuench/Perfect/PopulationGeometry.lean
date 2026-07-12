@@ -154,7 +154,10 @@ theorem centeredAugmentedPerspectiveConfig_radial
     ‖centeredAugmentedPerspectiveConfig ψ f_ref n ωref f i.castSucc -
         centeredAugmentedPerspectiveConfig ψ f_ref n ωref f (Fin.last n)‖ =
       ‖ψ (f_ref n ωref i) - ψ f‖ := by
-  sorry
+  simp only [centeredAugmentedPerspectiveConfig]
+  rw [norm_centerConfig_sub_centerConfig]
+  simp [augmentedPerspectiveConfig, augmentedModelAt, Fin.lastCases_castSucc,
+    Fin.lastCases_last]
 
 /-- A single population distance-realization assumption yields the exact Gram
 identity currently supplied manually to the growing CMDS theorem.

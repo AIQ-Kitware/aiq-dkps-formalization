@@ -246,7 +246,11 @@ theorem exists_perspective_norm_bound_of_isCompact_range
     (ψ : Model Q X → Vec d)
     (hcompact : IsCompact (Set.range ψ)) :
     ∃ B : Real, 0 ≤ B ∧ ∀ f, ‖ψ f‖ ≤ B := by
-  sorry
+  obtain ⟨r, hr⟩ := hcompact.isBounded.subset_closedBall 0
+  refine ⟨max 0 r, le_max_left _ _, fun f => ?_⟩
+  have hmem : ψ f ∈ Metric.closedBall (0 : Vec d) r := hr ⟨f, rfl⟩
+  rw [Metric.mem_closedBall, dist_eq_norm, sub_zero] at hmem
+  exact hmem.trans (le_max_right _ _)
 
 /-- One scalar empirical-covariance entry event is measurable.
 
