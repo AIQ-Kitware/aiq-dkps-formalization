@@ -129,7 +129,25 @@ theorem referenceEmpiricalCovariance_entry_eq_product_sub_mean_mul_mean
       referenceCoordinateProductMean ψ f_ref n ωref a b -
         referenceCoordinateMean ψ f_ref n ωref a *
           referenceCoordinateMean ψ f_ref n ωref b := by
-  sorry
+  simp only [referenceEmpiricalCovariance, referenceCoordinateProductMean,
+    referenceCoordinateMean, centerConfig, configCentroid, referencePerspectiveConfig,
+    PiLp.sub_apply, PiLp.smul_apply, WithLp.ofLp_sum, Finset.sum_apply, smul_eq_mul]
+  rcases Nat.eq_zero_or_pos n with hn | hn
+  · subst hn; simp
+  · have hn' : (n : ℝ) ≠ 0 := Nat.cast_ne_zero.mpr hn.ne'
+    have expand : ∀ i : Fin n,
+        (ψ (f_ref n ωref i) a - (n : ℝ)⁻¹ * ∑ j, ψ (f_ref n ωref j) a) *
+          (ψ (f_ref n ωref i) b - (n : ℝ)⁻¹ * ∑ j, ψ (f_ref n ωref j) b) =
+        ψ (f_ref n ωref i) a * ψ (f_ref n ωref i) b
+          - (n : ℝ)⁻¹ * (∑ j, ψ (f_ref n ωref j) b) * ψ (f_ref n ωref i) a
+          - (n : ℝ)⁻¹ * (∑ j, ψ (f_ref n ωref j) a) * ψ (f_ref n ωref i) b
+          + (n : ℝ)⁻¹ * (∑ j, ψ (f_ref n ωref j) a) *
+              ((n : ℝ)⁻¹ * ∑ j, ψ (f_ref n ωref j) b) :=
+      fun i => by ring
+    simp only [expand, Finset.sum_add_distrib, Finset.sum_sub_distrib, ← Finset.mul_sum,
+      Finset.sum_const, Finset.card_univ, Fintype.card_fin, nsmul_eq_mul]
+    field_simp
+    ring
 
 /-- Scalar weak law for one perspective coordinate mean.
 
