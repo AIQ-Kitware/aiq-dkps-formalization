@@ -141,7 +141,16 @@ theorem iidReferenceSampler_lifted_prod
     (hiid : IIDReferenceSampler Pf μref f_ref) :
     IIDReferenceSampler Pf (jointStageMeasure μref μresp)
       (liftedReferenceSampler (Ωresp := Ωresp) f_ref) := by
-  sorry
+  refine ⟨fun n i => ?_, fun n s hs => ?_⟩
+  · exact (hiid.measurable n i).comp measurable_fst
+  · have hcyl : {ω : Ωref × Ωresp | ∀ i, liftedReferenceSampler f_ref n ω i ∈ s i}
+        = {ωref | ∀ i, f_ref n ωref i ∈ s i} ×ˢ (Set.univ : Set Ωresp) := by
+      ext ω; simp [liftedReferenceSampler]
+    show ((μref n).prod (μresp n))
+        {ω | ∀ i, liftedReferenceSampler f_ref n ω i ∈ s i} = ∏ i, Pf (s i)
+    haveI := hμresp n
+    rw [hcyl, Measure.prod_prod, measure_univ, mul_one]
+    exact hiid.joint_law n s hs
 
 /-- Model-level response-distance realization automatically realizes every
 random target-augmented population batch.
