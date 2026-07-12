@@ -411,6 +411,17 @@ The scaffold defines the remaining frontier precisely:
 \item assemble the four finite, compact-infinite, and all-query capstones.
 \end{enumerate}
 
+The general mathematics needed by items 1--2 is now explicitly staged outside the
+application layer.  The new, non-imported \texttt{ForMathlib} scaffolds specify the
+nonzero-eigenspace equivalence between $T^*T$ and $TT^*$, rectangular adjoint
+invariance of singular values, intrinsic singular systems, finite analysis/synthesis
+and frame operators, and the exact add-one centered-scatter identity.  The source
+survey, licensing decisions, and immutable snapshots of compatible external Lean
+proofs are recorded in \texttt{dev/external-lean-references.md} and
+\texttt{vendor/lean/}.  This setup does not claim the rectangular spectral bridge is
+proved, and it introduces no new paper-facing hypothesis; it fixes the intended
+Mathlib contribution boundary and proof routes before the next proof wave.
+
 No cleaner-only spectral refactor is on this list.  Once these declarations are
 proved, remaining work should be rate sharpening or assumption comparison, not
 construction of another theorem layer.

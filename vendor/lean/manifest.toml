@@ -1,0 +1,58 @@
+# Machine-readable provenance for committed third-party Lean source snapshots.
+# These files are reference material and are not imported by the project build.
+
+[[source]]
+id = "jbarrcfl-mathlib4-top-singular-value"
+local_path = "vendor/lean/jbarrcfl-mathlib4/TopSingularValue.excerpt.lean"
+repository = "https://github.com/jbarrcfl/mathlib4"
+commit = "f99fc7704e93eb402469ab24cd6970601aad1141"
+source_path = "Mathlib/Analysis/InnerProductSpace/SingularValuesNorm.lean"
+blob_sha = "d0df4abf5a71e8f80e03640f31155fe19b83c5f7"
+source_lines = "124-153"
+license = "Apache-2.0"
+authors = ["Jacob Barr"]
+copy_kind = "excerpt"
+local_changes = "Added provenance wrapper only; copied theorem text is unchanged."
+retrieved = "2026-07-12"
+
+[[source]]
+id = "lean-stat-learning-theory-eym-operator-norm"
+local_path = "vendor/lean/lean-stat-learning-theory/EYMOperatorNorm.excerpt.lean"
+repository = "https://github.com/YuanheZ/lean-stat-learning-theory"
+commit = "216e578c9576bab6b0abc3ba6c65762536768e96"
+source_path = "SLT/MatrixInfra/EYM.lean"
+blob_sha = "ef6e16a2942555987e9bfc4d944f96838d72627f"
+source_lines = "227-347"
+license = "Apache-2.0"
+authors = ["Yuanhe Zhang", "Jason D. Lee", "Fanghui Liu"]
+copy_kind = "excerpt"
+local_changes = "Added provenance wrapper only; copied declarations are unchanged."
+retrieved = "2026-07-12"
+
+[[source]]
+id = "drifting-identifiability-finite-frame-bound"
+local_path = "vendor/lean/drifting-identifiability/FiniteFrameBound.excerpt.lean"
+repository = "https://github.com/Dronmong/drifting-identifiability"
+commit = "06c699d07c2fa186ba8e708597ccdb9b8ba1c04f"
+source_path = "DriftingIdentifiability/FiniteStability.lean"
+blob_sha = "dc984c30c7cb4b7059bf16df31209658dfb8c6e3"
+source_lines = "36-165"
+license = "MIT"
+authors = ["Dronmong"]
+copy_kind = "excerpt"
+local_changes = "Added provenance wrapper only; copied declarations are unchanged."
+retrieved = "2026-07-12"
+
+[[source]]
+id = "lean-stat-learning-theory-singular-system-gram"
+local_path = "vendor/lean/lean-stat-learning-theory/SingularSystemGram.excerpt.lean"
+repository = "https://github.com/YuanheZ/lean-stat-learning-theory"
+commit = "216e578c9576bab6b0abc3ba6c65762536768e96"
+source_path = "SLT/MatrixInfra/Basic.lean"
+blob_sha = "8c7dd1aaeaedd6c702c28fee2845d9f66cecf219"
+source_lines = "selected declarations beginning at 164-339"
+license = "Apache-2.0"
+authors = ["Yuanhe Zhang", "Jason D. Lee", "Fanghui Liu"]
+copy_kind = "excerpt"
+local_changes = "Added provenance wrapper and omitted surrounding declarations; selected declaration text is unchanged."
+retrieved = "2026-07-12"

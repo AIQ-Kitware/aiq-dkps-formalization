@@ -8,6 +8,25 @@ Zulip discussion (R6). Independent search confirmed none of these results exist
 upstream (Weyl and Davis–Kahan are entirely absent; Courant–Fischer has only the
 extremal Rayleigh case).
 
+
+## 2026-07-12 extension: rectangular singular-value layer
+
+The original decomposition below covers the self-adjoint perturbation stack. A separate but
+adjacent plan now covers the rectangular machinery needed by singular-vector and Perfect
+Quench applications:
+
+- `docs/planning/rectangular-singular-values-and-frames.md`
+- `ForMathlib/Analysis/InnerProductSpace/RectangularSingularValues.lean`
+- `ForMathlib/Analysis/InnerProductSpace/SingularSystem.lean`
+- `ForMathlib/Analysis/InnerProductSpace/FiniteFrame.lean`
+- `ForMathlib/Analysis/InnerProductSpace/CenteredScatter.lean`
+
+The rectangular work should not be folded into the Davis-Kahan PRs. It is independently
+useful SVD/frame infrastructure and has its own upstream sequence. The centered-scatter file
+is a separate finite-family contribution that depends only on positive/rank-one operators,
+not on the full SVD layer. The full external source
+and attribution registry is `dev/external-lean-references.md`.
+
 ## Current files and declaration inventory
 
 | File | Declarations (public unless noted) |

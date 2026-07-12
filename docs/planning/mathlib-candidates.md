@@ -6,6 +6,18 @@ probability/analysis) of the proved, zero-sorry content in `Acharyya2024/` and
 against the local checkout `proofs/.lake/packages/mathlib` at commit
 `0e4799ceff90` (2026-02-13), not from memory.
 
+
+**Update 2026-07-12 -- rectangular singular values, finite frames, and centered
+scatter:** a new contribution-sized roadmap is scaffolded in
+`docs/planning/rectangular-singular-values-and-frames.md`. It covers the canonical nonzero
+eigenspace equivalence for `A†A` and `AA†`, rectangular adjoint invariance, intrinsic
+singular systems, variational singular-value results, finite analysis/synthesis frame
+operators, and exact add-one centered-scatter identities. The design was checked against the
+current pinned Mathlib revision `c368140668f5fa16a1bd977448c1f665d48c3df4`. The source
+survey and licensing decisions are in `dev/external-lean-references.md`; selected compatible
+proof excerpts are preserved under `vendor/lean/`. These scaffolds are deliberately not part
+of the default build until the signatures and imported proofs have been audited.
+
 **Update 2026-06-11 (same day, later session):** the workspace was bumped to
 Mathlib master `476fb97b621c` (2026-06-11, toolchain v4.31.0-rc2).  Gap claims
 for candidates #1, #2 (both halves), and #3b were RE-VERIFIED against the new
