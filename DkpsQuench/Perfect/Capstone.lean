@@ -301,7 +301,94 @@ theorem perfectQuench_infinite_fixedSubset
       Pf sqLoss (yFull score Qstar)
       (infinitePerfectQuenchEstimator f_ref score Qstar D)
       (fun _ _ f => yQ score Qsub f) := by
-  sorry
+  let hμjoint := jointStageMeasure_probability μref hμref μresp H.raw.probability
+  let hiidJoint := iidReferenceSampler_lifted_prod Pf μref hμref μresp
+    H.raw.probability f_ref hiid
+  let Hreg := uniformModelResponseRegularity_of_raw_lipschitz
+    μresp D.perspective (safeEntropyReplicates (5 * d)) D.rawResponse
+    D.populationMean (fun _ => D.varianceBound) H.raw
+    D.rawResponseLipschitzConstant H.raw_lipschitz
+  obtain ⟨net, C, hC, hcard, hradius⟩ :=
+    exists_safeGrowingPerspectiveNet D.perspective H.compact_range
+      D.rawResponseLipschitzConstant H.raw_lipschitz.constant_nonneg
+  obtain ⟨B, hB0, hB⟩ :=
+    exists_populationMean_norm_bound_of_compact_lipschitz Pf D.perspective
+      H.compact_range D.populationMean D.rawResponseLipschitzConstant
+      H.raw_lipschitz.constant_nonneg (fun f g => Hreg.population_lipschitz 0 f g)
+  let Hmean := augmentedRawResponseMeanSubevents_infinite
+    μref hμref μresp f_ref D.perspective
+    (safeEntropyReplicates (5 * d)) D.rawResponse D.populationMean
+    (fun _ => D.varianceBound) H.raw net
+    (fun _ => D.rawResponseLipschitzConstant)
+    (fun _ => D.rawResponseLipschitzConstant)
+    safeNetTolerance safeResponseTolerance Hreg
+    (fun n => by
+      rw [safeNetTolerance]
+      exact div_pos (safeResponseTolerance_pos n) (by norm_num))
+    (safeEntropy_concentration_ratio_zero (5 * d) D.varianceBound C
+      (fun n => (net.centers n).card) hcard)
+    (safe_net_extension_budget
+      (fun _ => D.rawResponseLipschitzConstant)
+      (fun _ => D.rawResponseLipschitzConstant)
+      net.radius D.rawResponseLipschitzConstant
+      H.raw_lipschitz.constant_nonneg
+      (fun _ => H.raw_lipschitz.constant_nonneg)
+      (fun _ => H.raw_lipschitz.constant_nonneg)
+      (fun n => (net.radius_pos n).le)
+      (fun _ => le_rfl) (fun _ => le_rfl)
+      (fun n => by simpa [safePerspectiveRadius, hradius n]))
+  let hrealize :
+      PerspectiveResponseRealization D.perspective
+        (liftedReferenceSampler (Ωresp := Ωresp) f_ref)
+        (augmentedRawPopulationMean f_ref D.populationMean) :=
+    augmentedRawPopulationMean_realization (Ωresp := Ωresp)
+      D.perspective f_ref D.populationMean H.response_realization
+  obtain ⟨Bψ, hBψ0, hBψ, Hspectral0⟩ :=
+    exists_growingSpectralSubevents_of_compact_iid_nondegenerate
+      Pf (jointStageMeasure μref μresp) hμjoint D.perspective
+      H.perspective_measurable H.compact_range
+      (liftedReferenceSampler (Ωresp := Ωresp) f_ref) hiidJoint
+      (augmentedRawPopulationMean f_ref D.populationMean) hrealize H.nondegenerate
+  let Hspectral := Classical.choice Hspectral0
+  let Hrate := safe_growingConfigControl m d hm B Bψ D.covarianceFloor
+    hB0 hBψ0 H.nondegenerate.kappa_pos
+  change HighProbQQueryEfficient (Q := Q) (X := X)
+    (jointStageMeasure μref μresp) hμjoint Pf sqLoss
+    (yFull score Qstar)
+    (fun n ω f => yNNTieAverage_augmentedCMDS (d := d)
+      (augmentedSampleResponseDist
+        (augmentedRawSampleMean f_ref
+          (safeEntropyReplicates (5 * d)) D.rawResponse))
+      (fun n ω f =>
+        Acharyya2025.AlignedPipeline.isHermitian_disMatToMatrix_classicalMDSMatrix_responseDist
+          (augmentedRawSampleMean f_ref
+            (safeEntropyReplicates (5 * d)) D.rawResponse n ω f))
+      (liftedReferenceSampler (Ωresp := Ωresp) f_ref)
+      score Qstar n ω f)
+    (fun _ _ f => yQ score Qsub f)
+  exact
+    highProbQQueryEfficient_tieAverage_of_responseSubevents_realization_spectralSubevents
+      (d := d) (m := m) (p := p)
+      (Pf := Pf) (μ := jointStageMeasure μref μresp) (hμ := hμjoint)
+      (ψ := D.perspective) (hψmeas := H.perspective_measurable)
+      (hcompact := H.compact_range) (hfull := H.full_support)
+      (f_ref := liftedReferenceSampler (Ωresp := Ωresp) f_ref)
+      (hiid := hiidJoint)
+      (Xbar := augmentedRawSampleMean f_ref
+        (safeEntropyReplicates (5 * d)) D.rawResponse)
+      (μbar := augmentedRawPopulationMean f_ref D.populationMean)
+      (η := safeResponseTolerance) (B := fun _ => B)
+      (hηNonneg := fun n => (safeResponseTolerance_pos n).le)
+      (Hmean := Hmean)
+      (hpopulationNorm := augmentedRawPopulationMean_norm_le f_ref D.populationMean hB)
+      (hrealize := hrealize)
+      (α := D.covarianceFloor / 2)
+      (hα := by linarith [H.nondegenerate.kappa_pos])
+      (ceiling := fun n => 4 * ((n + 1 : Nat) : Real) * Bψ ^ 2)
+      (Hspectral := Hspectral) (Hrate := Hrate)
+      (score := score) (Qstar := Qstar) (Qsub := Qsub)
+      (γ := D.lipschitzConstant) (hlip := H.score_lipschitz)
+      (hγ := H.lipschitz_pos) (hbase := H.baseline_pos)
 
 /-- All-proper-subsets finite-model Perfect Quench.
 
