@@ -272,7 +272,35 @@ theorem integral_norm_sq_augmentedRawSampleMean_sub_population_le
         augmentedRawPopulationMean f_ref μmodel n ω f i‖ ^ 2
         ∂(jointStageMeasure μref μresp n) ≤
       variance n / replicates n := by
-  sorry
+  haveI := hμref n
+  haveI := Hraw.probability n
+  have hC0 : (0 : Real) ≤ variance n / replicates n := by
+    apply div_nonneg _ (Nat.cast_nonneg _)
+    have hk : (0 : Real) ≤
+        ∫ ω, ‖Y n f ⟨0, Hraw.replicates_pos n⟩ ω - μmodel f‖ ^ 2 ∂(μresp n) :=
+      integral_nonneg fun _ => by positivity
+    exact le_trans hk (Hraw.second_moment n f ⟨0, Hraw.replicates_pos n⟩)
+  by_cases hInt : Integrable
+      (fun ω => ‖augmentedRawSampleMean f_ref replicates Y n ω f i -
+        augmentedRawPopulationMean f_ref μmodel n ω f i‖ ^ 2)
+      (jointStageMeasure μref μresp n)
+  · have hprod : jointStageMeasure μref μresp n = (μref n).prod (μresp n) := rfl
+    rw [hprod] at hInt ⊢
+    rw [MeasureTheory.integral_prod _ hInt]
+    have hfib : ∀ ωref, ∫ ωresp,
+        ‖augmentedRawSampleMean f_ref replicates Y n (ωref, ωresp) f i -
+          augmentedRawPopulationMean f_ref μmodel n (ωref, ωresp) f i‖ ^ 2 ∂(μresp n)
+          ≤ variance n / replicates n := by
+      intro ωref
+      simpa [augmentedRawSampleMean, augmentedRawPopulationMean]
+        using integral_norm_sq_modelReplicateMean_sub_mean_le μresp replicates Y μmodel
+          variance Hraw n (augmentedModelAt f_ref n ωref f i)
+    have hconst : ∫ _ωref : Ωref, (variance n / (replicates n : Real)) ∂(μref n)
+        = variance n / replicates n := by
+      simp
+    exact le_trans
+      (integral_mono hInt.integral_prod_left (integrable_const _) hfib) (le_of_eq hconst)
+  · rw [integral_undef hInt]; exact hC0
 
 /-- Measurability and integrability package for augmented raw sample errors.
 
