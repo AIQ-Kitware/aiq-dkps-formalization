@@ -63,8 +63,8 @@ Construction route: use the genuine Banach-algebra spectrum for real operators
 and the real-restricted CFC spectrum for complex operators, then prove the two
 interfaces agree on self-adjoint elements.  This definition should disappear
 once that scalar-uniform bridge exists. -/
-noncomputable def realSpectrum (A : E →L[𝕜] E) : Set ℝ := by
-  sorry
+noncomputable def realSpectrum (A : E →L[𝕜] E) : Set ℝ :=
+  {r : ℝ | (RCLike.ofReal r : 𝕜) ∈ spectrum 𝕜 A}
 
 /-- Provisional spectrum of an operator restricted to a subspace.
 
