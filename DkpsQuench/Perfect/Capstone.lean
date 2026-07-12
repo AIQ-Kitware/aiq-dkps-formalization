@@ -64,7 +64,9 @@ Fields deliberately omitted because the scaffold derives them:
 * no global eigenvalue floor or ceiling over every sample outcome;
 * no explicit CMDS entry-rate or `GrowingConfigControl` certificate;
 * no compactness proof for the finite model class;
-* no population response-norm envelope, which follows from finiteness.
+* no population response-norm envelope, which follows from finiteness;
+* no positivity proof for the stored score-Lipschitz constant, which is
+  enlarged to `max γ 1` internally.
 -/
 structure FinitePerfectSubsetAssumptions
     [Fintype (Model Q X)]
@@ -81,7 +83,6 @@ structure FinitePerfectSubsetAssumptions
     D.populationMean (fun _ => D.varianceBound)
   response_realization : ModelResponseRealization D.perspective D.populationMean
   nondegenerate : PerspectiveNondegeneracy Pf D.perspective D.covarianceFloor
-  lipschitz_pos : 0 < D.lipschitzConstant
   score_lipschitz : ∀ f g,
     |score f Qstar - score g Qstar| ≤
       D.lipschitzConstant * ‖D.perspective f - D.perspective g‖
@@ -203,6 +204,17 @@ theorem perfectQuench_finite_fixedSubset
   let Hspectral := Classical.choice Hspectral0
   let Hrate := safe_growingConfigControl m d hm B Bψ D.covarianceFloor
     hB0 hBψ0 H.nondegenerate.kappa_pos
+  let gamma : Real := max D.lipschitzConstant 1
+  have hgamma : 0 < gamma := by
+    dsimp [gamma]
+    exact lt_of_lt_of_le zero_lt_one (le_max_right D.lipschitzConstant 1)
+  have hlipschitz : ∀ f g,
+      |score f Qstar - score g Qstar| ≤
+        gamma * ‖D.perspective f - D.perspective g‖ := by
+    intro f g
+    exact (H.score_lipschitz f g).trans
+      (mul_le_mul_of_nonneg_right
+        (le_max_left D.lipschitzConstant 1) (norm_nonneg _))
   change HighProbQQueryEfficient (Q := Q) (X := X)
     (jointStageMeasure μref μresp) hμjoint Pf sqLoss
     (yFull score Qstar)
@@ -235,8 +247,8 @@ theorem perfectQuench_finite_fixedSubset
       (ceiling := fun n => 4 * ((n + 1 : Nat) : Real) * Bψ ^ 2)
       (Hspectral := Hspectral) (Hrate := Hrate)
       (score := score) (Qstar := Qstar) (Qsub := Qsub)
-      (γ := D.lipschitzConstant) (hlip := H.score_lipschitz)
-      (hγ := H.lipschitz_pos) (hbase := H.baseline_pos)
+      (γ := gamma) (hlip := hlipschitz)
+      (hγ := hgamma) (hbase := H.baseline_pos)
 
 /-- Raw data needed for one compact infinite-model Perfect Quench theorem. -/
 structure InfinitePerfectSubsetData (d m p : Nat) where
@@ -256,7 +268,9 @@ The additional assumption relative to the finite theorem is pathwise
 Lipschitz regularity of the raw response embedding over a compact perspective
 range.  The scaffold derives the replicate-mean and population-mean regularity,
 finite nets, polynomial covering bound, entropy exponent, shrinking radius,
-and population response envelope internally. -/
+and population response envelope internally.  As in the finite route, the
+stored score-Lipschitz constant need not carry a separate positivity proof; the
+capstone uses a positive envelope internally. -/
 structure InfinitePerfectSubsetAssumptions
     {d m p : Nat}
     (Pf : Measure (Model Q X)) [IsProbabilityMeasure Pf]
@@ -276,7 +290,6 @@ structure InfinitePerfectSubsetAssumptions
     D.rawResponseLipschitzConstant
   response_realization : ModelResponseRealization D.perspective D.populationMean
   nondegenerate : PerspectiveNondegeneracy Pf D.perspective D.covarianceFloor
-  lipschitz_pos : 0 < D.lipschitzConstant
   score_lipschitz : ∀ f g,
     |score f Qstar - score g Qstar| ≤
       D.lipschitzConstant * ‖D.perspective f - D.perspective g‖
@@ -414,6 +427,17 @@ theorem perfectQuench_infinite_fixedSubset
   let Hspectral := Classical.choice Hspectral0
   let Hrate := safe_growingConfigControl m d hm B Bψ D.covarianceFloor
     hB0 hBψ0 H.nondegenerate.kappa_pos
+  let gamma : Real := max D.lipschitzConstant 1
+  have hgamma : 0 < gamma := by
+    dsimp [gamma]
+    exact lt_of_lt_of_le zero_lt_one (le_max_right D.lipschitzConstant 1)
+  have hlipschitz : ∀ f g,
+      |score f Qstar - score g Qstar| ≤
+        gamma * ‖D.perspective f - D.perspective g‖ := by
+    intro f g
+    exact (H.score_lipschitz f g).trans
+      (mul_le_mul_of_nonneg_right
+        (le_max_left D.lipschitzConstant 1) (norm_nonneg _))
   change HighProbQQueryEfficient (Q := Q) (X := X)
     (jointStageMeasure μref μresp) hμjoint Pf sqLoss
     (yFull score Qstar)
@@ -449,8 +473,8 @@ theorem perfectQuench_infinite_fixedSubset
       (ceiling := fun n => 4 * ((n + 1 : Nat) : Real) * Bψ ^ 2)
       (Hspectral := Hspectral) (Hrate := Hrate)
       (score := score) (Qstar := Qstar) (Qsub := Qsub)
-      (γ := D.lipschitzConstant) (hlip := H.score_lipschitz)
-      (hγ := H.lipschitz_pos) (hbase := H.baseline_pos)
+      (γ := gamma) (hlip := hlipschitz)
+      (hγ := hgamma) (hbase := H.baseline_pos)
 
 /-- All-proper-subsets finite-model Perfect Quench.
 

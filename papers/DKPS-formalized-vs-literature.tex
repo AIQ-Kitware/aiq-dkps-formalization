@@ -269,6 +269,15 @@ be added only when it removes a Quench-facing hypothesis.
 
 \section{Helm, Johnson, and Priebe (2026): Quench}
 
+\paragraph{Source asset policy.}
+The repository retains both the paper's exact Markdown transcription and its
+original \LaTeX{} source.  A second standalone distilled note is not currently
+useful: Theorem~2 and its proof are short, contiguous, and already preserved in
+source order.  This section is therefore the transformative mathematical
+reconstruction.  It modernizes the argument, identifies hidden steps, and maps
+them to the preferred \Lean{} declarations without duplicating the paper's
+prose.
+
 \begin{longtable}{>{\raggedright\arraybackslash}p{0.18\textwidth}
                   >{\raggedright\arraybackslash}p{0.25\textwidth}
                   >{\raggedright\arraybackslash}p{0.36\textwidth}
@@ -277,179 +286,237 @@ be added only when it removes a Quench-facing hypothesis.
 Topic & Literature & Formalization & Classification \\
 \midrule
 \endhead
-Nearest-neighbor ties & The estimator is described as averaging cached scores
-of nearest references. & The preferred theorem uses the literal tie-averaged
-estimator.  An older selected-neighbor compatibility theorem is retained but is
-not the strongest paper-facing result. & Faithfulness repair \\
+Estimator and ties & The displayed estimator averages all references tied for
+minimum estimated distance, but the proof immediately replaces it by one
+chosen nearest reference. & The preferred theorem proves the bound for the
+literal tie average.  Every tied reference satisfies the same distance bound,
+so convex averaging preserves the pointwise score estimate. & Faithfulness
+repair \\
 \addlinespace
-Coverage assumption & The paper describes positive probability on relevant
-compact regions. & \code{PerspectiveFullSupport} requires positive mass in
-every positive-radius ball centered on the perspective range, exactly what the
-finite-net iid coverage proof consumes. & Measure-theoretic repair \\
+Theorem quantifiers & Theorem~2 says that for every error tolerance there exists
+a triple $(n,m,r)$ giving small MSE, then interprets this as eventual
+query-efficiency. & The formal result fixes a proper query subset and supplies
+explicit stage-dependent sample schedules.  It proves an eventual
+high-probability risk comparison, then lifts this statement to every proper
+subset with the same quantifier order used by the paper's definition. &
+Stronger and more explicit conclusion \\
 \addlinespace
-Reference sampling & Iid sampling is described informally. &
-\code{IIDReferenceSampler} records the finite joint-product law needed for the
-miss-probability calculation.  Coverage is then proved rather than assumed. &
-Surfaced probabilistic interface \\
+Pointwise error to MSE & The proof obtains a high-probability pointwise error
+bound and then states the corresponding MSE bound.  Uniformity in the target
+model and measurability of the good event are implicit. & The formal proof
+constructs a measurable event on which the squared error bound holds for every
+target model, then integrates that uniform bound against $P_f$. & Missing step
+made explicit \\
 \addlinespace
-Finite factorization of the model class & Early formal capstones represented all
-models in one fixed finite configuration. & The strongest theorem adjoins the
-current target to the growing reference sample and runs CMDS on
-\(\operatorname{Fin}(n+1)\).  No global model-to-finite-index map or globally
-aligned estimated perspective is required. & Assumption removed \\
+Assumption~1 constant & The paper states existence of some $\gamma>0$.  Earlier
+interfaces additionally asked callers to prove positivity of the particular
+stored constant. & The public certificate now accepts any constant satisfying
+the displayed Lipschitz inequality and internally replaces it by
+$\max\{\gamma,1\}$.  The separate positivity field is gone from both the
+paper-shaped and Perfect Quench interfaces. & Redundant hypothesis removed \\
 \addlinespace
-Population CMDS validity & The paper treats the population embedding as given. &
-A supplied population Gram witness now derives positive semidefiniteness and
-rank at most \(d\); callers no longer prove those consequences separately. &
-Hypotheses reduced \\
+Assumption~2 & The paper says that every compact subset has positive measure and
+calls this equivalent to positive probability of every target-centered ball.
+The first statement is not literally correct, since it includes the empty set
+and may include zero-mass compact sets. & \code{PerspectiveFullSupport} records
+exactly the property used by the proof: every positive-radius perspective ball
+centered at a model has positive $P_f$ mass.  Compactness plus finite covering
+then upgrades pointwise positive mass to uniform high-probability coverage. &
+Measure-theoretic repair \\
 \addlinespace
-Dissimilarity boundedness & Bounded sample and population dissimilarities were
-previously separate bridge assumptions. & The preferred finite-model capstone
-requires one population response-norm envelope.  Sample boundedness is derived
-only on the high-probability response-mean event, where it is actually needed. &
-Hypotheses reduced \\
+Reference sampling & Iid reference sampling is prose-level. &
+\code{IIDReferenceSampler} records the finite joint-product law.  Coverage is a
+theorem derived from iid sampling and full support rather than a second
+probabilistic assumption. & Surfaced probabilistic interface \\
 \addlinespace
-Compactness for finite model classes & Previously explicit. & Finiteness of the
-model class derives compactness of the perspective range. & Assumption removed
+Reference and response randomness & The source proof does not separate the
+random reference sample from cached-response noise. & Perfect Quench uses a
+product probability space.  This makes independence structural and prevents a
+randomly selected reference model from biasing the response array selected for
+averaging. & Model clarification \\
+\addlinespace
+Population perspective geometry & The paper treats the true perspective as the
+population target of the estimated DKPS coordinates. & The formal theorem asks
+for one model-level response-distance realization.  Centering, double
+centering, the CMDS Gram identity, positive semidefiniteness, rank, and the
+reference-to-target radial identity are derived internally. & Hidden bridge
+made explicit; downstream hypotheses removed \\
+\addlinespace
+Spectral regularity & The concentration theorem is invoked ``under technical
+assumptions,'' with the stable rank-$d$ geometry left implicit. & One population
+covariance floor, \code{PerspectiveNondegeneracy}, yields measurable
+high-probability lower and upper spectral events.  No eigenvalue bound is
+assumed for every reference outcome. & Technical assumption isolated and
+samplewise assumptions removed \\
+\addlinespace
+Response concentration & The paper imports a representation-concentration
+bound and uses the qualitative regime $r=\omega(n^3)$. & Perfect Quench starts
+from measurable pairwise-independent raw replicates with a uniform second
+moment, constructs their averages, and proves finite-class or entropy-net
+uniform concentration using conservative explicit schedules. & Stronger input
+model and constructive rate proof \\
+\addlinespace
+Finite versus infinite model classes & The paper speaks about a general model
+population without specifying how uniform control over all target models is
+obtained. & There are two complete capstones: a finite-model theorem using a
+finite union bound, and a compact-infinite theorem using pathwise response
+regularity and polynomial Euclidean covers. & Ambiguous scope split into two
+honest theorems \\
+\addlinespace
+All query subsets & Query efficiency ranges over all budgets below the full
+benchmark. & The fixed-subset theorem is lifted to size-$m$ and all-proper-
+subset predicates.  Each subset may have its own perspective and response
+certificate, matching the source quantifier order; no unjustified uncountable
+or combinatorial event intersection is introduced. & Quantifier-faithful
+completion \\
+\addlinespace
+Baseline positivity & The paper explicitly restricts the comparison to
+$\operatorname{MSE}(\hat y_Q)>0$. & The same condition is retained.  It is
+mathematically necessary for deriving strict eventual improvement solely from
+convergence of the new estimator's MSE to zero. & Faithful necessary hypothesis
 \\
-\addlinespace
-Uniform response concentration & The paper's broad model-class presentation
-suggests uniform control. & The complete second-moment derivation currently
-uses a finite target class and a double union bound.  For an infinite class,
-uniform concentration remains an explicit input. & Major remaining scope gap
-\\
-\addlinespace
-All query subsets & The paper's efficiency claim ranges over query budgets. &
-The coordinate-level library has fixed-subset, size-\(m\), and all-proper-subset
-capstones through per-subset certificates.  The strongest growing response
-bridge currently closes one fixed subset at a time; a uniform family of
-spectral and Lipschitz certificates is still application-level input. &
-Composition gap \\
 \bottomrule
 \end{longtable}
 
-\section{Perfect Quench completion scaffold}
+\section{Perfect Quench theorem family: completed state}
 
-The repository now contains an executable proof scaffold under
-\code{DkpsQuench/Perfect}.  Seven open proof bodies remain after the
-polynomial-cover theorem, deterministic covariance-floor transfer,
-sample-centered quadratic-form bridge, rectangular spectral transfer, and the
-first event-localized spectral-composition theorem were completed.  The count below is the live source count, not an estimate derived
-from the difficulty-ranking document.
+The \code{DkpsQuench/Perfect} development is no longer a scaffold.  Every proof
+body in the directory is closed, including the finite, compact-infinite, and
+all-proper-subset capstones:
+\begin{itemize}
+\item \code{perfectQuench\_finite\_fixedSubset};
+\item \code{perfectQuench\_infinite\_fixedSubset};
+\item \code{perfectQuench\_finite\_allQueries};
+\item \code{perfectQuench\_infinite\_allQueries}.
+\end{itemize}
 
 \begin{longtable}{>{\raggedright\arraybackslash}p{0.22\textwidth}
-                  >{\raggedright\arraybackslash}p{0.10\textwidth}
-                  >{\raggedright\arraybackslash}p{0.30\textwidth}
-                  >{\raggedright\arraybackslash}p{0.29\textwidth}}
+                  >{\raggedright\arraybackslash}p{0.31\textwidth}
+                  >{\raggedright\arraybackslash}p{0.37\textwidth}}
 \toprule
-Track & Open proofs & New mathematical content & Hypotheses removed from the current bridge \\
+Track & Proved mathematical content & Caller-visible data eliminated \\
 \midrule
 \endhead
-Population geometry & 0 & Centering, exact Euclidean double centering, and the
-augmented radial identity are proved. & Separate configuration, Gram, radial,
-PSD, and rank inputs collapse to one response-distance realization. \\
+Population geometry & Exact finite centering, Euclidean double centering,
+configuration Gram realization, PSD/rank, and target radial identities. &
+Separate configuration, Gram, radial, PSD, and rank witnesses collapse to one
+model-level response realization. \\
 \addlinespace
-Spectral regularity & 0 & The coordinate weak laws, covariance algebra,
-measurability, fixed-dimensional covariance event, entrywise-to-quadratic
-transfer, exact sample-centered projection identity, rectangular
-scatter--Gram eigenvalue bridge, target-augmentation floor, and the
-high-probability spectral certificate are all proved. & Global floor and ceiling assumptions over every reference
-outcome are replaced by one population covariance nondegeneracy condition and a
-measurable high-probability event. \\
+Raw responses & Product-space iid lifting, concrete replicate means,
+second-moment transfer through random reference selection, finite union bounds,
+and finite-net response events. & Abstract response means, hand-built moment
+events, and per-coordinate augmented measurability certificates. \\
 \addlinespace
-Raw responses & 0 & The independent product probability space, concrete
-replicate averages, random-model second moments, and finite-class union bound
-are proved. & Abstract response means, manual moment events, and per-index
-measurability obligations are removed. \\
-\addlinespace
-Compactness and regularity & 1 & Finite/compact response envelopes and
-polynomial Euclidean covering numbers are proved.  Only the derivation of
-population-mean Lipschitzness from pathwise raw-response Lipschitzness remains.
-& Explicit population bounds, selected finite nets, entropy exponents, covering
-constants, and separately supplied regularity certificates are removed. \\
-\addlinespace
-Infinite-class concentration & 0 & Finite stage nets, measurable finite
-subevents, entropy union bounds, and deterministic Lipschitz extension are
-proved. & The finite-model restriction or an assumed uniform concentration
-event is removed. \\
-\addlinespace
-Explicit schedules & 0 & Conservative polynomial tolerances, canonical
-shrinking-net radii, entropy-aware replicate budgets, and all limit calculations
-are proved. & Caller-selected nets, entry rates, smallness inequalities, polar
-bookkeeping, and the full \code{GrowingConfigControl} certificate are removed.
+Spectral regularity & Population covariance algebra, coordinate weak laws,
+entrywise-to-quadratic transfer, centered scatter identities, rectangular
+scatter--Gram spectral transport, target augmentation, and measurable spectral
+subevents. & Global lower and upper eigenvalue bounds for every sample outcome.
 \\
 \addlinespace
-Spectral composition & 2 & The central event-localized CMDS theorem is
-proved by intersecting the response and spectral subevents with the deterministic
-rate gate.  Two response-geometry adapters remain. & Global spectral facts
-inside the response bridge. \\
+Compactness and infinite classes & Response envelopes, raw-to-sample and
+raw-to-population Lipschitz transfer, polynomial covers, entropy union bounds,
+and deterministic extension from the stage net. & Caller-selected nets,
+covering constants, entropy exponents, response envelopes, and separate sample
+and population regularity certificates. \\
 \addlinespace
-Final composition & 4 & Finite and compact-infinite fixed-subset capstones plus
-the two all-proper-subset lifts. & All intermediate certificates from the public
-Perfect Quench interface. \\
+Rates and composition & Explicit safe tolerances, finite and entropy-aware
+replicate schedules, event intersections, CMDS perturbation, tie averaging, and
+risk conversion. & Entry-rate arithmetic, polar smallness bookkeeping, and the
+full internal growing-configuration certificate. \\
+\addlinespace
+Query budgets & Fixed-subset results and direct lifts to every proper subset. &
+No common event across all subsets is demanded; the source's subset-specific
+eventual thresholds are preserved. \\
 \bottomrule
 \end{longtable}
 
-The four final theorem statements already expose the intended endpoint.  The
-finite theorem assumes raw iid response replicates, exact population
-response-distance realization, a population covariance floor, full support,
-and score Lipschitzness.  The compact infinite-model theorem adds only compact
-perspective range and one pathwise raw-response Lipschitz condition; polynomial
-nets, entropy growth, replicate-mean/population-mean regularity, and response
-norm envelopes are derived internally.  The all-query theorems
-allow each proper query subset to carry its own perspective and response model
-while sharing the reference and response probability spaces.
+The safe schedules are deliberately existence-oriented.  They are explicit and
+proved sufficient, but they are not advertised as a sharp restatement of the
+paper's $r=\omega(n^3)$ regime.  A future rate theorem should parameterize the
+capstone by abstract asymptotic conditions and recover both the safe schedule
+and sharper literature schedules as corollaries, without changing the
+probabilistic or geometric core.
 
-The production cross-energy and polar-factor proof is deliberately retained.
-General Davis--Kahan results should replace it only if they eliminate or weaken
-a caller-visible assumption, especially the polar smallness condition.  A
-constant improvement or shorter proof alone is not part of this completion
-program.
+\section{Current Quench hypothesis audit}
 
-\section{Current hypothesis-reduction frontier}
+The preferred public interfaces now have the smallest hypothesis load that the
+current proof architecture justifies.  The latest reduction removes the
+standalone positivity proof for the stored score-Lipschitz constant: any valid
+constant is enlarged internally to $\max\{\gamma,1\}$ before the quantitative
+nearest-neighbor argument divides by it.
 
-The scaffold defines the remaining frontier precisely:
-\begin{enumerate}
-\item derive population-mean Lipschitzness from the pathwise raw-response
-      Lipschitz hypothesis;
-\item discharge the two remaining response-level spectral-composition adapters;
-\item assemble the four finite, compact-infinite, and all-query capstones.
-\end{enumerate}
+The remaining assumptions divide as follows.
 
-The general mathematics behind the former first two frontier items (the
-scatter--Gram transport and the augmentation floor) is now fully proved in the
-imported \texttt{ForMathlib} layer: the nonzero-eigenspace equivalence between
-$T^*T$ and $TT^*$ with equal multiplicities, the rectangular adjoint invariance
-\texttt{LinearMap.singularValues\_adjoint}, the two-way transfer between
-quadratic floors and codomain-Gram spectral floors, finite analysis/synthesis
-and frame/Gram operators with the frame-bound correspondence, and the exact
-add-one centered-scatter identity with its L\"owner and quadratic-form
-corollaries.  The intrinsic singular system (explicit left singular vectors,
-orthonormality on the nonzero subtype, reconstruction, and the codomain
-orthonormal-basis extension) is proved as well.  The source
-survey, licensing decisions, and immutable snapshots of compatible external Lean
-proofs are recorded in \texttt{dev/external-lean-references.md},
-\texttt{dev/davis-kahan-existing-work-survey.md}, and \texttt{vendor/lean/}.
+\begin{longtable}{>{\raggedright\arraybackslash}p{0.23\textwidth}
+                  >{\raggedright\arraybackslash}p{0.30\textwidth}
+                  >{\raggedright\arraybackslash}p{0.37\textwidth}}
+\toprule
+Hypothesis & Present status & Reduction assessment \\
+\midrule
+\endhead
+Measurable perspective & Used by perspective-ball events, covariance sampling,
+and pushforward/integration arguments. & Retain for now.  It is not a formal
+consequence of pairwise distance realization alone. \\
+\addlinespace
+Perspective full support & Exactly supplies nearest-reference coverage. &
+Retain unless the conclusion is weakened to targets in the support or coverage
+is supplied directly. \\
+\addlinespace
+Iid reference sampler & Supplies the product miss-probability formula. & Retain
+for the current theorem.  Mixing or exchangeable samplers require a separate
+coverage theorem, not deletion of the sampling hypothesis. \\
+\addlinespace
+Raw response measurability, $L^2$ control, pairwise independence, and second
+moment & These are the concrete assumptions from which the response-mean event
+is proved. & Retain the mathematical content.  Pairwise independence is already
+weaker than full independence. \\
+\addlinespace
+Measurability of the supplied population mean & Stored in
+\code{RawIIDResponseModel}. & Candidate for removal.  Joint measurability of the
+raw response and the coordinate mean identities should permit a parameter-
+integral measurability proof using the product-integral machinery already used
+in \code{RawResponses.lean}. \\
+\addlinespace
+Exact response-distance realization & Connects the population response metric
+to the supplied perspective. & Conceptually necessary unless the perspective
+is defined canonically from the population responses.  The next architectural
+improvement is a canonical constructor that turns realization from an
+assumption into a theorem. \\
+\addlinespace
+Population covariance floor & Provides identifiability of all retained
+perspective directions and the stable rank-$d$ CMDS geometry. & Cannot be
+removed without weakening the conclusion.  Existing finite-frame tools can,
+however, derive it from concrete spanning/frame assumptions in applications.
+\\
+\addlinespace
+Centered-mean field in the nondegeneracy certificate & The structure
+currently records that each coordinate centered at \code{perspectiveMean} has
+zero integral. & Candidate for removal.  The covariance-floor development
+already derives integrability of every centered squared linear form; $L^2$ to
+$L^1$ plus the definition of the Bochner mean should prove the field
+automatically. \\
+\addlinespace
+Compact perspective range and pathwise raw-response Lipschitzness & Used only by
+the compact-infinite route to construct polynomial nets and extend finite-net
+concentration. & Retain for this route.  Alternate entropy or stochastic-
+equicontinuity interfaces can be added as parallel capstones rather than
+weakening these hypotheses syntactically. \\
+\addlinespace
+Positive baseline MSE & Converts convergence to zero into strict improvement
+over the subset-score baseline. & Retain; this is explicit in the paper and
+logically necessary for the stated comparison. \\
+\addlinespace
+Positive number of queried response rows & Needed because the response metric
+uses the inverse of the query count. & Retain or redefine the zero-query case;
+it is not an artifact of the proof. \\
+\bottomrule
+\end{longtable}
 
-The surveyed donors have different roles.  The singular-system/Gram snapshot directly
-supports the rectangular scatter--Gram bridge and later singular-subspace DK wrappers.
-The finite-frame snapshot can convert independence/spanning assumptions into the positive
-coercivity constant needed by generalized DK and by the Quench covariance floor.  The
-operator-norm Eckart--Young proof is mainly useful at a truncation or estimator boundary,
-where it can certify the error of a low-rank surrogate before a DK theorem is applied.  The
-top-singular-value proof supplies operator-norm endpoints.  Finally, the newly vendored
-centered spectral-projection proof from \texttt{lean-stat-learning-theory} independently
-checks the finite operator-norm DK mechanism but does not replace the broader local
-Sylvester/UINorm theory.
-
-The rectangular spectral bridge is now proved from Mathlib's
-\texttt{LinearMap.singularValues} API without a competing singular-value
-definition and without new paper-facing hypotheses; the vendored snapshots were
-used as cross-checks only, and no external code was copied into the build.
-
-No cleaner-only spectral refactor is on this list.  Once these declarations are
-proved, remaining work should be rate sharpening or assumption comparison, not
-construction of another theorem layer.
+The two most promising next reductions using machinery already present in the
+repository are therefore: (1) derive population-mean measurability from the
+jointly measurable raw response family, and (2) derive the centered-mean
+identity inside \code{PerspectiveNondegeneracy}.  Neither should be replaced by
+a stronger application-facing assumption.
 
 \section{Audit checklist for future edits}
 

@@ -2,14 +2,15 @@
 
 Generated from `source_manifest.json`. This is the canonical inventory of works whose definitions, theorem families, or proof architecture are directly formalized, actively scaffolded, or inherited by the DKPS and Perfect Quench development.
 
-The index deliberately separates a paper's **formalization role** from the state of its local literature asset. A transcription is not a proof-level reconstruction, and a modern textbook does not silently replace a primary source.
+The index deliberately separates a paper's **formalization role** from the state of its local literature asset. A transcription is normally not a proof-level reconstruction; an exact short-paper transcription may be marked sufficient only when a maintained discrepancy ledger performs the modernization and theorem mapping. A modern textbook never silently replaces a primary source.
 
 ## Inventory summary
 
 - **52 works**: 43 papers, 8 books, and 1 monograph.
 - **2** source-order distilled reconstructions are complete.
 - **2** broad core notes remain to be upgraded.
-- **4** works have transcription or source text but no source-order proof reconstruction.
+- **1** exact transcriptions are intentionally sufficient because a maintained discrepancy ledger supplies the theorem-level reconstruction.
+- **3** works have transcription or source text but no source-order proof reconstruction.
 - **44** works have no local distilled note at all.
 - **17** entries remain in the bibliographic verification queue.
 - Priority split: P0=10, P1=20, P2=16, P3=6.
@@ -33,7 +34,7 @@ The index deliberately separates a paper's **formalization role** from the state
 | `TrossetPriebe2024` | 2024 | Continuous Multidimensional Scaling | primary method source | methods imported by Acharyya 2024 formalization | `missing` | P0 |
 | `AcharyyaAgterbergParkPriebe2025` | 2025 | Concentration Bounds on Response-Based Vector Embeddings of Black-Box Generative Models | direct target | substantially formalized | `transcription_only` | P0 |
 | `HelmAcharyyaDuderstadtParkPriebe2025` | 2025 | Statistical Inference on Black-Box Generative Models in the Data Kernel Perspective Space | direct target | substantially formalized | `source_text_only` | P0 |
-| `HelmJohnsonPriebe2026` | 2026 | Query-Efficient Model Evaluation Using Cached Responses | direct target | substantially formalized; Perfect Quench capstone incomplete | `transcription_only` | P0 |
+| `HelmJohnsonPriebe2026` | 2026 | Query-Efficient Model Evaluation Using Cached Responses | direct target | formal theorem family complete, including finite, compact-infinite, and all-query Perfect Quench capstones | `transcription_sufficient` | P0 |
 
 ## MDS, Euclidean distance geometry, Gram rigidity, and alignment
 
@@ -101,7 +102,6 @@ The index deliberately separates a paper's **formalization role** from the state
 - **`TrossetPriebe2024` — Continuous Multidimensional Scaling**: Acquire source and identify exactly which compactness/argmin-continuity results are reused or replaced in Lean.
 - **`AcharyyaAgterbergParkPriebe2025` — Concentration Bounds on Response-Based Vector Embeddings of Black-Box Generative Models**: Create a source-order reconstruction that distinguishes the paper proof from the stronger/generalized Lean lemmas.
 - **`HelmAcharyyaDuderstadtParkPriebe2025` — Statistical Inference on Black-Box Generative Models in the Data Kernel Perspective Space**: Create a source-order theorem reconstruction and clearly isolate the inference-preservation assumptions not stated in the paper.
-- **`HelmJohnsonPriebe2026` — Query-Efficient Model Evaluation Using Cached Responses**: Build a theorem-by-theorem source reconstruction, recording where Perfect Quench strengthens or changes the paper assumptions.
 - **`Torgerson1952` — Multidimensional Scaling: I. Theory and Method**: Acquire source and reconstruct the exact classical-scaling theorem chain used in DKPS.
 - **`Kruskal1964` — Multidimensional Scaling by Optimizing Goodness of Fit to a Nonmetric Hypothesis**: Separate the raw-stress criterion actually used by DKPS from the nonmetric optimization material not formalized.
 - **`Gower1966` — Some Distance Properties of Latent Root and Vector Methods Used in Multivariate Analysis**: Reconstruct the source formulas and map them to exact double-centering and Gram-realization declarations.

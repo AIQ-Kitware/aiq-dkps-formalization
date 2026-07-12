@@ -6,6 +6,7 @@ Authors: Jon Crall, GPT 5.6 High
 import ForMathlib.Analysis.InnerProductSpace.DavisKahanTheory.Basic
 import ForMathlib.Analysis.InnerProductSpace.KyFan
 import ForMathlib.Analysis.InnerProductSpace.GramMatrix
+import ForMathlib.Analysis.InnerProductSpace.RectangularSingularValues
 import Mathlib.Analysis.InnerProductSpace.ProdL2
 import Mathlib.Analysis.Convex.Caratheodory
 
@@ -1444,6 +1445,228 @@ theorem apply_le_of_kyFanSum_le {A B : E →ₗ[𝕜] F}
   intro k
   rw [kyFanSum_eq_sum_fin, kyFanSum_eq_sum_fin, hσA, hσB]
   exact h k
+
+/-- Nonnegative real scaling commutes with rectangular Ky Fan prefix sums.
+
+This public form is used when a sharp Sylvester inequality is converted into
+unitary-orbit convex-hull membership.  The proof is coefficientwise scaling of
+the singular-value sequence. -/
+theorem rectangularKyFanSum_real_smul
+    (k : ℕ) (A : E →ₗ[𝕜] F) {r : ℝ} (hr : 0 ≤ r) :
+    rectangularKyFanSum k (((r : 𝕜)) • A) =
+      r * rectangularKyFanSum k A := by
+  unfold rectangularKyFanSum
+  rw [Finset.mul_sum]
+  exact Finset.sum_congr rfl fun i _ => singularValues_real_smul A hr i
+
+/-- Convex-hull domination by a two-sided unitary orbit implies domination in
+any rectangular unitarily invariant norm.
+
+The proof extracts the existing finite orbit certificate with mass one and
+then applies the certificate norm bound. -/
+theorem apply_le_of_mem_convexHull_twoSidedUnitaryOrbit
+    {A B : E →ₗ[𝕜] F}
+    (h : A ∈ convexHull ℝ (twoSidedUnitaryOrbit B)) :
+    N A ≤ N B := by
+  have hcert : HasFiniteUnitaryOrbitCertificate 1 A B :=
+    hasFiniteUnitaryOrbitCertificate_of_smul_mem_convexHull
+      (m := 1) (mass := 1) zero_le_one le_rfl h (by simp)
+  simpa using N.apply_le_of_finiteUnitaryOrbitCertificate hcert
+
+/-- Orthogonal block sum of two rectangular maps on Hilbert `L²` products.
+
+The construction is the linear lift of `LinearMap.prodMap`; it sends
+`(x₁,x₂)` to `(A x₁,B x₂)`.  It is used to assemble the two directed sine
+blocks without a triangle inequality and therefore without losing the sharp
+constant. -/
+noncomputable def orthogonalBlockSum
+    {E₁ E₂ F₁ F₂ : Type*}
+    [NormedAddCommGroup E₁] [InnerProductSpace 𝕜 E₁]
+    [NormedAddCommGroup E₂] [InnerProductSpace 𝕜 E₂]
+    [NormedAddCommGroup F₁] [InnerProductSpace 𝕜 F₁]
+    [NormedAddCommGroup F₂] [InnerProductSpace 𝕜 F₂]
+    (A : E₁ →ₗ[𝕜] F₁) (B : E₂ →ₗ[𝕜] F₂) :
+    WithLp 2 (E₁ × E₂) →ₗ[𝕜] WithLp 2 (F₁ × F₂) :=
+  LinearMap.withLpMap 2 (A.prodMap B)
+
+@[simp] theorem orthogonalBlockSum_apply
+    {E₁ E₂ F₁ F₂ : Type*}
+    [NormedAddCommGroup E₁] [InnerProductSpace 𝕜 E₁]
+    [NormedAddCommGroup E₂] [InnerProductSpace 𝕜 E₂]
+    [NormedAddCommGroup F₁] [InnerProductSpace 𝕜 F₁]
+    [NormedAddCommGroup F₂] [InnerProductSpace 𝕜 F₂]
+    (A : E₁ →ₗ[𝕜] F₁) (B : E₂ →ₗ[𝕜] F₂)
+    (x : WithLp 2 (E₁ × E₂)) :
+    orthogonalBlockSum A B x = WithLp.toLp 2 (A x.fst, B x.snd) :=
+  rfl
+
+@[simp] theorem orthogonalBlockSum_smul
+    {E₁ E₂ F₁ F₂ : Type*}
+    [NormedAddCommGroup E₁] [InnerProductSpace 𝕜 E₁]
+    [NormedAddCommGroup E₂] [InnerProductSpace 𝕜 E₂]
+    [NormedAddCommGroup F₁] [InnerProductSpace 𝕜 F₁]
+    [NormedAddCommGroup F₂] [InnerProductSpace 𝕜 F₂]
+    (a : 𝕜) (A : E₁ →ₗ[𝕜] F₁) (B : E₂ →ₗ[𝕜] F₂) :
+    orthogonalBlockSum (a • A) (a • B) =
+      a • orthogonalBlockSum A B := by
+  ext x
+  apply WithLp.ofLp_injective 2
+  simp [orthogonalBlockSum]
+
+/-- Real orbit-convex domination is stable under orthogonal block sums.
+
+Proof strategy:
+
+1. extract finite real convex combinations for the two hypotheses;
+2. use the product index type and product weights;
+3. combine the two pairs of unitary factors with
+   `LinearIsometryEquiv.withLpProdCongr`;
+4. factor the two product-weight sums using that each original weight family
+   has total mass one.
+
+This is the sharp coupling seam needed by the symmetric projector theorem:
+it combines two one-sided sine estimates without adding their norms. -/
+theorem orthogonalBlockSum_mem_convexHull_twoSidedUnitaryOrbit
+    {E₁ E₂ F₁ F₂ : Type*}
+    [NormedAddCommGroup E₁] [InnerProductSpace 𝕜 E₁]
+    [NormedAddCommGroup E₂] [InnerProductSpace 𝕜 E₂]
+    [NormedAddCommGroup F₁] [InnerProductSpace 𝕜 F₁]
+    [NormedAddCommGroup F₂] [InnerProductSpace 𝕜 F₂]
+    [FiniteDimensional 𝕜 E₁] [FiniteDimensional 𝕜 E₂]
+    [FiniteDimensional 𝕜 F₁] [FiniteDimensional 𝕜 F₂]
+    {A C : E₁ →ₗ[𝕜] F₁} {B D : E₂ →ₗ[𝕜] F₂}
+    (hA : A ∈ convexHull ℝ (twoSidedUnitaryOrbit C))
+    (hB : B ∈ convexHull ℝ (twoSidedUnitaryOrbit D)) :
+    orthogonalBlockSum A B ∈
+      convexHull ℝ (twoSidedUnitaryOrbit (orthogonalBlockSum C D)) := by
+  classical
+  rcases mem_convexHull_iff_exists_fintype.mp hA with
+    ⟨ι, instι, w, z, hw, hwsum, hz, hzsum⟩
+  rcases mem_convexHull_iff_exists_fintype.mp hB with
+    ⟨κ, instκ, v, t, hv, hvsum, ht, htsum⟩
+  letI : Fintype ι := instι
+  letI : Fintype κ := instκ
+  refine mem_convexHull_iff_exists_fintype.mpr
+    ⟨ι × κ, inferInstance, (fun p => w p.1 * v p.2),
+      (fun p => orthogonalBlockSum (z p.1) (t p.2)), ?_, ?_, ?_, ?_⟩
+  · intro p
+    exact mul_nonneg (hw p.1) (hv p.2)
+  · rw [Fintype.sum_prod_type]
+    calc
+      ∑ i, ∑ j, w i * v j = ∑ i, w i * ∑ j, v j := by
+        apply Finset.sum_congr rfl
+        intro i _
+        rw [Finset.mul_sum]
+      _ = ∑ i, w i := by simp [hvsum]
+      _ = 1 := hwsum
+  · intro p
+    rcases hz p.1 with ⟨U₁, V₁, hp₁⟩
+    rcases ht p.2 with ⟨U₂, V₂, hp₂⟩
+    refine ⟨LinearIsometryEquiv.withLpProdCongr 2 U₁ U₂,
+      LinearIsometryEquiv.withLpProdCongr 2 V₁ V₂, ?_⟩
+    ext x <;>
+      simp [orthogonalBlockSum, hp₁, hp₂, LinearMap.comp_apply]
+  · have hfirst :
+        (∑ p : ι × κ, (w p.1 * v p.2) • z p.1) = A := by
+      rw [Fintype.sum_prod_type]
+      calc
+        ∑ i, ∑ j, (w i * v j) • z i =
+            ∑ i, w i • z i := by
+          apply Finset.sum_congr rfl
+          intro i _
+          rw [← Finset.sum_smul, ← Finset.mul_sum, hvsum, mul_one]
+        _ = A := hzsum
+    have hsecond :
+        (∑ p : ι × κ, (w p.1 * v p.2) • t p.2) = B := by
+      rw [Fintype.sum_prod_type]
+      calc
+        ∑ i, ∑ j, (w i * v j) • t j =
+            ∑ j, v j • t j := by
+          rw [Finset.sum_comm]
+          apply Finset.sum_congr rfl
+          intro j _
+          rw [← Finset.sum_smul, ← Finset.sum_mul, hwsum, one_mul]
+        _ = B := htsum
+    have real_smul_first_eq (r : ℝ) (T : E₁ →ₗ[𝕜] F₁) :
+        r • T = ((r : 𝕜)) • T := by
+      change (algebraMap ℝ 𝕜 r) • T = ((r : 𝕜)) • T
+      rfl
+    have real_smul_second_eq (r : ℝ) (T : E₂ →ₗ[𝕜] F₂) :
+        r • T = ((r : 𝕜)) • T := by
+      change (algebraMap ℝ 𝕜 r) • T = ((r : 𝕜)) • T
+      rfl
+    have real_smul_block_eq (r : ℝ)
+        (T : WithLp 2 (E₁ × E₂) →ₗ[𝕜] WithLp 2 (F₁ × F₂)) :
+        r • T = ((r : 𝕜)) • T := by
+      change (algebraMap ℝ 𝕜 r) • T = ((r : 𝕜)) • T
+      rfl
+    have hfirst' :
+        (∑ p : ι × κ, (((w p.1 * v p.2 : ℝ) : 𝕜)) • z p.1) = A := by
+      calc
+        ∑ p : ι × κ, (((w p.1 * v p.2 : ℝ) : 𝕜)) • z p.1 =
+            ∑ p : ι × κ, (w p.1 * v p.2) • z p.1 := by
+          apply Finset.sum_congr rfl
+          intro p _
+          exact (real_smul_first_eq (w p.1 * v p.2) (z p.1)).symm
+        _ = A := hfirst
+    have hsecond' :
+        (∑ p : ι × κ, (((w p.1 * v p.2 : ℝ) : 𝕜)) • t p.2) = B := by
+      calc
+        ∑ p : ι × κ, (((w p.1 * v p.2 : ℝ) : 𝕜)) • t p.2 =
+            ∑ p : ι × κ, (w p.1 * v p.2) • t p.2 := by
+          apply Finset.sum_congr rfl
+          intro p _
+          exact (real_smul_second_eq (w p.1 * v p.2) (t p.2)).symm
+        _ = B := hsecond
+    calc
+      ∑ p : ι × κ, (w p.1 * v p.2) •
+          orthogonalBlockSum (z p.1) (t p.2) =
+          ∑ p : ι × κ, (((w p.1 * v p.2 : ℝ) : 𝕜)) •
+            orthogonalBlockSum (z p.1) (t p.2) := by
+        apply Finset.sum_congr rfl
+        intro p _
+        exact real_smul_block_eq (w p.1 * v p.2)
+          (orthogonalBlockSum (z p.1) (t p.2))
+      _ = orthogonalBlockSum
+          (∑ p : ι × κ, (((w p.1 * v p.2 : ℝ) : 𝕜)) • z p.1)
+          (∑ p : ι × κ, (((w p.1 * v p.2 : ℝ) : 𝕜)) • t p.2) := by
+        ext x
+        apply WithLp.ofLp_injective 2
+        simp only [LinearMap.sum_apply, LinearMap.smul_apply,
+          orthogonalBlockSum_apply, WithLp.ofLp_sum, WithLp.ofLp_smul,
+          WithLp.ofLp_toLp]
+        refine Prod.ext ?_ ?_
+        · rw [Prod.fst_sum]
+          exact Finset.sum_congr rfl fun p _ => Prod.smul_fst ..
+        · rw [Prod.snd_sum]
+          exact Finset.sum_congr rfl fun p _ => Prod.smul_snd ..
+      _ = orthogonalBlockSum A B := by rw [hfirst', hsecond']
+
+/-- Two simultaneous rectangular Ky Fan majorizations combine sharply on the
+orthogonal block sum.
+
+The real convex-hull argument is intentionally internal to this file, where
+`realModuleLinearMap` provides the restricted scalar action.  Callers only
+supply field-native Ky Fan inequalities and receive a norm inequality, so no
+`Module ℝ` instance leaks across module boundaries. -/
+theorem orthogonalBlockSum_apply_le_of_kyFanSum_le
+    {E₁ E₂ F₁ F₂ : Type*}
+    [NormedAddCommGroup E₁] [InnerProductSpace 𝕜 E₁]
+    [NormedAddCommGroup E₂] [InnerProductSpace 𝕜 E₂]
+    [NormedAddCommGroup F₁] [InnerProductSpace 𝕜 F₁]
+    [NormedAddCommGroup F₂] [InnerProductSpace 𝕜 F₂]
+    [FiniteDimensional 𝕜 E₁] [FiniteDimensional 𝕜 E₂]
+    [FiniteDimensional 𝕜 F₁] [FiniteDimensional 𝕜 F₂]
+    (NB : RectangularUnitarilyInvariantNorm 𝕜
+      (WithLp 2 (E₁ × E₂)) (WithLp 2 (F₁ × F₂)))
+    {A C : E₁ →ₗ[𝕜] F₁} {B D : E₂ →ₗ[𝕜] F₂}
+    (hA : ∀ k, rectangularKyFanSum k A ≤ rectangularKyFanSum k C)
+    (hB : ∀ k, rectangularKyFanSum k B ≤ rectangularKyFanSum k D) :
+    NB (orthogonalBlockSum A B) ≤ NB (orthogonalBlockSum C D) := by
+  apply NB.apply_le_of_mem_convexHull_twoSidedUnitaryOrbit
+  exact orthogonalBlockSum_mem_convexHull_twoSidedUnitaryOrbit
+    (mem_convexHull_twoSidedUnitaryOrbit_of_kyFanSum_le hA)
+    (mem_convexHull_twoSidedUnitaryOrbit_of_kyFanSum_le hB)
 
 /-- Pointwise singular-value dominance implies norm dominance.
 

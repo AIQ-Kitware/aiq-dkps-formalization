@@ -1,5 +1,5 @@
 {
-  "version": "2026-07-12-initial-52-work-source-inventory",
+  "version": "2026-07-12-quench-complete-and-transcription-policy",
   "purpose": "Canonical, machine-checked inventory of works whose definitions, theorem families, or proof architecture are directly formalized, actively scaffolded, or inherited by the DKPS and Perfect Quench development.",
   "scope_rule": [
     "Include every DKPS-lineage paper whose definitions or theorems are used by a paper-facing Lean namespace.",
@@ -11,7 +11,8 @@
     "missing": "No source-order distilled note exists.",
     "transcription_only": "A transcription exists, but not a proof-level reconstruction.",
     "source_text_only": "Source prose/TeX exists, but not a proof-level reconstruction.",
-    "core_note": "A broad core-arguments note exists and should be upgraded to the common manifest/anchor format."
+    "core_note": "A broad core-arguments note exists and should be upgraded to the common manifest/anchor format.",
+    "transcription_sufficient": "An exact source-order transcription plus a maintained formalization-versus-literature ledger is sufficient; a second distilled note would be duplicative."
   },
   "works": {
     "HelmMehtaDuderstadtYangWhiteGeisaVogelsteinPriebe2020": {
@@ -256,21 +257,25 @@
       "group": "DKPS lineage and target papers",
       "tier": "primary",
       "priority": "P0",
-      "formalization_status": "substantially formalized; Perfect Quench capstone incomplete",
-      "distilled_status": "transcription_only",
+      "formalization_status": "formal theorem family complete, including finite, compact-infinite, and all-query Perfect Quench capstones",
+      "distilled_status": "transcription_sufficient",
       "primary_url": "https://arxiv.org/abs/2605.07096",
       "target_note": "HelmJohnsonPriebe2026_quench.tex",
       "repo_evidence": [
         "DkpsQuench/README.md",
         "DkpsQuench/Theorem2.lean",
         "DkpsQuench/QueryEfficiency.lean",
-        "DkpsQuench/Perfect/README.md"
+        "DkpsQuench/Perfect/Capstone.lean",
+        "DkpsQuench/Perfect/README.md",
+        "papers/DKPS-formalized-vs-literature.tex"
       ],
       "existing_assets": [
-        "DkpsQuench/prose/quench-icml-nonanon_transcription.md"
+        "DkpsQuench/prose/quench-icml-nonanon_transcription.md",
+        "DkpsQuench/prose/quench-tex-src/main_icml.tex",
+        "papers/DKPS-formalized-vs-literature.tex"
       ],
-      "scope": "The query-efficiency theorem, cached-response bridge, nearest-neighbor/tie averaging, and the stronger Perfect Quench target.",
-      "missing_work": "Build a theorem-by-theorem source reconstruction, recording where Perfect Quench strengthens or changes the paper assumptions.",
+      "scope": "Theorem 2, its literal tie-averaged nearest-neighbor estimator, the fixed-subset and all-budget query-efficiency predicates, and the stronger raw-response Perfect Quench theorem family.",
+      "missing_work": "No separate distilled note is currently planned: the exact source-order transcription is retained, while papers/DKPS-formalized-vs-literature.tex supplies the modern mathematical reconstruction, discrepancy audit, and hypothesis ledger. Revisit only if the source theorem changes materially.",
       "role": "direct_target",
       "bibliographic_status": "verified"
     },
