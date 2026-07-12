@@ -347,7 +347,60 @@ theorem integrable_sq_augmentedRawSampleMean_sub_population
       ‖augmentedRawSampleMean f_ref replicates Y n ω f i -
         augmentedRawPopulationMean f_ref μmodel n ω f i‖ ^ 2)
       (jointStageMeasure μref μresp n) := by
-  sorry
+  haveI := hμref n
+  haveI := Hraw.probability n
+  have hsel : Measurable (fun ωref => augmentedModelAt f_ref n ωref f i) := by
+    induction i using Fin.lastCases with
+    | last => simp [augmentedModelAt]
+    | cast j => simpa [augmentedModelAt] using href n j
+  have hpair : Measurable (fun ω : Ωref × Ωresp =>
+      (augmentedModelAt f_ref n ω.1 f i, ω.2)) :=
+    (hsel.comp measurable_fst).prodMk measurable_snd
+  have hmeasSample : Measurable (fun ω : Ωref × Ωresp =>
+      augmentedRawSampleMean f_ref replicates Y n ω f i) := by
+    simp only [augmentedRawSampleMean, modelReplicateMean, replicateMean]
+    exact (Finset.measurable_sum _
+      (fun k _ => (Hraw.jointly_measurable n k).comp hpair)).const_smul
+      ((replicates n : Real)⁻¹)
+  have hmeasPop : Measurable (fun ω : Ωref × Ωresp =>
+      augmentedRawPopulationMean f_ref μmodel n ω f i) := by
+    simp only [augmentedRawPopulationMean]
+    exact Hraw.mean_measurable.comp (hsel.comp measurable_fst)
+  have hmeas : Measurable (fun ω : Ωref × Ωresp =>
+      ‖augmentedRawSampleMean f_ref replicates Y n ω f i -
+        augmentedRawPopulationMean f_ref μmodel n ω f i‖ ^ 2) :=
+    (hmeasSample.sub hmeasPop).norm.pow_const 2
+  -- Per-fiber second-moment bound (uniform in the reference outcome).
+  have hfib : ∀ ωref, ∫ ωresp,
+      ‖augmentedRawSampleMean f_ref replicates Y n (ωref, ωresp) f i -
+        augmentedRawPopulationMean f_ref μmodel n (ωref, ωresp) f i‖ ^ 2 ∂(μresp n)
+        ≤ variance n / replicates n := fun ωref => by
+    simpa [augmentedRawSampleMean, augmentedRawPopulationMean]
+      using integral_norm_sq_modelReplicateMean_sub_mean_le μresp replicates Y μmodel variance
+        Hraw n (augmentedModelAt f_ref n ωref f i)
+  -- Per-fiber integrability (the replicate mean is L², so its centred square is L¹).
+  have hfibInt : ∀ ωref, Integrable (fun ωresp =>
+      ‖augmentedRawSampleMean f_ref replicates Y n (ωref, ωresp) f i -
+        augmentedRawPopulationMean f_ref μmodel n (ωref, ωresp) f i‖ ^ 2) (μresp n) := by
+    intro ωref
+    have hL2 : MemLp (fun ωresp =>
+        augmentedRawSampleMean f_ref replicates Y n (ωref, ωresp) f i) 2 (μresp n) := by
+      simp only [augmentedRawSampleMean, modelReplicateMean, replicateMean]
+      exact (memLp_finsetSum _ (fun k _ =>
+        Hraw.memLp_two n (augmentedModelAt f_ref n ωref f i) k)).const_smul
+        ((replicates n : Real)⁻¹)
+    have hpop : MemLp (fun ωresp =>
+        augmentedRawPopulationMean f_ref μmodel n (ωref, ωresp) f i) 2 (μresp n) := by
+      simp only [augmentedRawPopulationMean]; exact memLp_const _
+    exact (hL2.sub hpop).norm.integrable_sq
+  have hprod : jointStageMeasure μref μresp n = (μref n).prod (μresp n) := rfl
+  rw [hprod, MeasureTheory.integrable_prod_iff hmeas.aestronglyMeasurable]
+  refine ⟨Eventually.of_forall hfibInt, ?_⟩
+  refine Integrable.mono' (integrable_const (variance n / replicates n))
+    (hmeas.aestronglyMeasurable.norm.integral_prod_right') (Eventually.of_forall fun ωref => ?_)
+  rw [Real.norm_of_nonneg (integral_nonneg fun _ => norm_nonneg _)]
+  refine le_trans (le_of_eq (integral_congr_ae (Eventually.of_forall fun ωresp => ?_))) (hfib ωref)
+  exact Real.norm_of_nonneg (by positivity)
 
 /-- Measurability of the target-augmented raw response event.
 
