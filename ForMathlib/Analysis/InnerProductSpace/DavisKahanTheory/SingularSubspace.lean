@@ -298,8 +298,9 @@ theorem nonempty_rightSingularSubspace_isometry
     (hrank : finrank 𝕜 (rightSingularSubspace A Ω) =
       finrank 𝕜 (rightSingularSubspace Â Ω)) :
     Nonempty (rightSingularSubspace Â Ω ≃ₗᵢ[𝕜]
-      rightSingularSubspace A Ω) := by
-  sorry
+      rightSingularSubspace A Ω) :=
+  ⟨(stdOrthonormalBasis 𝕜 (rightSingularSubspace Â Ω)).equiv
+    (stdOrthonormalBasis 𝕜 (rightSingularSubspace A Ω)) (finCongr hrank.symm)⟩
 
 end DavisKahanTheory
 end ForMathlib
