@@ -249,7 +249,46 @@ theorem safeEntropy_concentration_ratio_zero
       (centersCard n : Real) *
         (varianceBound / safeEntropyReplicates entropyPower n) /
         (safeNetTolerance n) ^ 2) atTop (𝓝 0) := by
-  sorry
+  have hcov : 0 ≤ coverConstant := by
+    have h := hcard 0
+    simpa using le_trans (Nat.cast_nonneg (centersCard 0)) h
+  have hpow3 : Tendsto (fun n : ℕ => (((n + 1 : ℕ) : ℝ) ^ 3)⁻¹) atTop (𝓝 0) := by
+    have hnat : Tendsto (fun n : ℕ => (n + 1) ^ 3) atTop atTop :=
+      tendsto_atTop_mono
+        (fun n => le_trans (Nat.le_succ n) (le_self_pow (by omega) (by omega))) tendsto_id
+    have h3 : Tendsto (fun n : ℕ => (((n + 1 : ℕ) : ℝ)) ^ 3) atTop atTop := by
+      simp_rw [← Nat.cast_pow]; exact tendsto_natCast_atTop_atTop.comp hnat
+    exact h3.inv_tendsto_atTop
+  have hg : Tendsto (fun n : ℕ =>
+      4 * coverConstant * |varianceBound| * (((n + 1 : ℕ) : ℝ) ^ 3)⁻¹) atTop (𝓝 0) := by
+    simpa only [mul_zero] using hpow3.const_mul (4 * coverConstant * |varianceBound|)
+  refine squeeze_zero_norm (fun n => ?_) hg
+  have hNpos : (0 : ℝ) < ((n + 1 : ℕ) : ℝ) := by positivity
+  have hNne : ((n + 1 : ℕ) : ℝ) ≠ 0 := ne_of_gt hNpos
+  have hfeq : (centersCard n : ℝ) * (varianceBound / safeEntropyReplicates entropyPower n) /
+      (safeNetTolerance n) ^ 2
+      = 4 * varianceBound * ((centersCard n : ℝ) * (((n + 1 : ℕ) : ℝ) ^ entropyPower)⁻¹) *
+          (((n + 1 : ℕ) : ℝ) ^ 3)⁻¹ := by
+    simp only [safeEntropyReplicates, safeNetTolerance, safeResponseTolerance]
+    push_cast
+    rw [pow_add]
+    field_simp
+    ring
+  have hcard' : (centersCard n : ℝ) * (((n + 1 : ℕ) : ℝ) ^ entropyPower)⁻¹ ≤ coverConstant := by
+    rw [mul_inv_le_iff₀ (by positivity)]
+    simpa [mul_comm] using hcard n
+  rw [hfeq, Real.norm_eq_abs, abs_mul, abs_mul,
+    abs_of_pos (by positivity : (0 : ℝ) < (((n + 1 : ℕ) : ℝ) ^ 3)⁻¹)]
+  have h4 : |4 * varianceBound| = 4 * |varianceBound| := by rw [abs_mul]; norm_num
+  have hc2 : |(centersCard n : ℝ) * (((n + 1 : ℕ) : ℝ) ^ entropyPower)⁻¹|
+      = (centersCard n : ℝ) * (((n + 1 : ℕ) : ℝ) ^ entropyPower)⁻¹ :=
+    abs_of_nonneg (by positivity)
+  rw [h4, hc2]
+  calc 4 * |varianceBound| *
+        ((centersCard n : ℝ) * (((n + 1 : ℕ) : ℝ) ^ entropyPower)⁻¹) *
+          (((n + 1 : ℕ) : ℝ) ^ 3)⁻¹
+      ≤ 4 * |varianceBound| * coverConstant * (((n + 1 : ℕ) : ℝ) ^ 3)⁻¹ := by gcongr
+    _ = 4 * coverConstant * |varianceBound| * (((n + 1 : ℕ) : ℝ) ^ 3)⁻¹ := by ring
 
 /-- A small enough shrinking-net radius fits inside the half-tolerance budget
 when sample and population response maps have a common Lipschitz envelope.
