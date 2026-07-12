@@ -219,8 +219,8 @@ theorem generalizedSinTwoTheta_unequalFinrank
     {U : Submodule 𝕜 E} [U.HasOrthogonalProjection] (hU : Reduces A U)
     (X : F →ₗᵢ[𝕜] E) {M : F →ₗ[𝕜] F} (hM : M.IsSymmetric)
     {δ : ℝ} (hδ : 0 < δ) (hgap : InternalGap A U δ) :
-    δ * N (sinTwoThetaEmbedding U X) ≤ 2 * N (residual A X M) := by
-  sorry
+    δ * N (sinTwoThetaEmbedding U X) ≤ 2 * N (residual A X M) :=
+  sinTwoTheta_residual_le N hA hU X hM hδ hgap
 
 /-- Spectral projectors along the homotopy `A+tH` stay on one isolated branch.
 

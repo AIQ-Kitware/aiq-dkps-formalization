@@ -282,8 +282,7 @@ diagonalization.
 -/
 theorem range_spectralProjection (A : E →L[𝕜] E) (s : Set ℝ) :
     LinearMap.range (spectralProjection A s).toLinearMap =
-      spectralSubspace A s := by
-  sorry
+      spectralSubspace A s := rfl
 
 /-- Complementary Borel sets produce complementary projections. 
 

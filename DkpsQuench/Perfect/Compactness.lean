@@ -60,7 +60,12 @@ Implementation recipe (execute in this order):
 theorem nonempty_model_of_probability
     (Pf : Measure (Model Q X)) [IsProbabilityMeasure Pf] :
     Nonempty (Model Q X) := by
-  sorry
+  by_contra h
+  rw [not_nonempty_iff] at h
+  have huniv : (Set.univ : Set (Model Q X)) = ∅ := Set.univ_eq_empty_iff.mpr h
+  have h1 : Pf Set.univ = 1 := measure_univ
+  rw [huniv, measure_empty] at h1
+  exact one_ne_zero h1.symm
 
 /-- A population response map on a finite model class has a uniform norm
 bound automatically.
@@ -87,7 +92,8 @@ theorem exists_populationMean_norm_bound_finite
     {m p : Nat}
     (μmodel : Model Q X → Acharyya2024.Mat m p) :
     ∃ B : Real, 0 ≤ B ∧ ∀ f, ‖μmodel f‖ ≤ B := by
-  sorry
+  obtain ⟨B, hB⟩ := Finite.exists_le (fun f => ‖μmodel f‖)
+  exact ⟨max 0 B, le_max_left _ _, fun f => (hB f).trans (le_max_right _ _)⟩
 
 /-- Pathwise raw-response Lipschitzness passes to the concrete replicate mean.
 
