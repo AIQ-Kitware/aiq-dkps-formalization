@@ -277,7 +277,40 @@ theorem highProbQQueryEfficient_tieAverage_of_response_mean_realization_spectral
             (Xbar n ω f))
         f_ref score Qstar n ω f)
       (fun _ _ f => yQ score Qsub f) := by
-  sorry
+  let Dhat : ∀ n, Ω → Model Q X → DisMat (n + 1) :=
+    augmentedSampleResponseDist Xbar
+  let D : ∀ n, Ω → Model Q X → DisMat (n + 1) :=
+    fun n ω f => responseDist (μbar n ω f)
+  let E : Nat → Set Ω := augmentedUniformResponseMeanEvent Xbar μbar η
+  have hEsub : ∀ n, E n ⊆ {ω | ∀ f,
+      EntrywiseClose
+        (classicalMDSMatrix (Dhat n ω f))
+        (classicalMDSMatrix (D n ω f))
+        (cmdsEntrywiseRate (n + 1) m
+          (responseDistBound m (B n + η n)) (η n))} := by
+    intro n ω hω f
+    simpa [Dhat, D, augmentedSampleResponseDist] using
+      cmdsEntrywise_of_responseMeanClose_of_population_norm (by omega)
+        (Xbar n ω f) (μbar n ω f) (hηNonneg n) (hω f)
+        (hpopulationNorm n ω f)
+  exact highProbQQueryEfficient_tieAverage_of_growing_augmented_cmds_spectralSubevents
+    (Pf := Pf) (μ := μ) (hμ := hμ)
+    (ψ := ψ) (hψmeas := hψmeas) (hcompact := hcompact) (hfull := hfull)
+    (f_ref := f_ref) (hiid := hiid)
+    (Dhat := Dhat) (D := D)
+    (hsym := fun n ω f =>
+      Acharyya2025.AlignedPipeline.isHermitian_disMatToMatrix_classicalMDSMatrix_responseDist
+        (Xbar n ω f))
+    (z := centeredAugmentedPerspectiveConfig ψ f_ref)
+    (hzGram := centeredAugmentedPerspectiveConfig_gram_eq ψ f_ref μbar hrealize)
+    (hzRadial := centeredAugmentedPerspectiveConfig_radial ψ f_ref)
+    (hα := hα) (ceiling := ceiling)
+    (entryRate := fun n => cmdsEntrywiseRate (n + 1) m
+      (responseDistBound m (B n + η n)) (η n))
+    (Hspectral := Hspectral) (Hrate := Hrate)
+    (E := E) (hEmeas := hmeanMeas) (hEsub := hEsub) (hE := hmean)
+    (score := score) (Qstar := Qstar) (Qsub := Qsub)
+    (γ := γ) (hlip := hlip) (hγ := hγ) (hbase := hbase)
 
 /-- Infinite-class-compatible response capstone using measurable response
 subevents rather than measurability of the universal response event.
@@ -346,6 +379,40 @@ theorem highProbQQueryEfficient_tieAverage_of_responseSubevents_realization_spec
             (Xbar n ω f))
         f_ref score Qstar n ω f)
       (fun _ _ f => yQ score Qsub f) := by
-  sorry
+  let Dhat : ∀ n, Ω → Model Q X → DisMat (n + 1) :=
+    augmentedSampleResponseDist Xbar
+  let D : ∀ n, Ω → Model Q X → DisMat (n + 1) :=
+    fun n ω f => responseDist (μbar n ω f)
+  have hEsub : ∀ n, Hmean.event n ⊆ {ω | ∀ f,
+      EntrywiseClose
+        (classicalMDSMatrix (Dhat n ω f))
+        (classicalMDSMatrix (D n ω f))
+        (cmdsEntrywiseRate (n + 1) m
+          (responseDistBound m (B n + η n)) (η n))} := by
+    intro n ω hω f
+    have hmean := Hmean.subset n hω f
+    simpa [Dhat, D, augmentedSampleResponseDist] using
+      cmdsEntrywise_of_responseMeanClose_of_population_norm (by omega)
+        (Xbar n ω f) (μbar n ω f) (hηNonneg n) hmean
+        (hpopulationNorm n ω f)
+  exact highProbQQueryEfficient_tieAverage_of_growing_augmented_cmds_spectralSubevents
+    (Pf := Pf) (μ := μ) (hμ := hμ)
+    (ψ := ψ) (hψmeas := hψmeas) (hcompact := hcompact) (hfull := hfull)
+    (f_ref := f_ref) (hiid := hiid)
+    (Dhat := Dhat) (D := D)
+    (hsym := fun n ω f =>
+      Acharyya2025.AlignedPipeline.isHermitian_disMatToMatrix_classicalMDSMatrix_responseDist
+        (Xbar n ω f))
+    (z := centeredAugmentedPerspectiveConfig ψ f_ref)
+    (hzGram := centeredAugmentedPerspectiveConfig_gram_eq ψ f_ref μbar hrealize)
+    (hzRadial := centeredAugmentedPerspectiveConfig_radial ψ f_ref)
+    (hα := hα) (ceiling := ceiling)
+    (entryRate := fun n => cmdsEntrywiseRate (n + 1) m
+      (responseDistBound m (B n + η n)) (η n))
+    (Hspectral := Hspectral) (Hrate := Hrate)
+    (E := Hmean.event) (hEmeas := Hmean.measurable)
+    (hEsub := hEsub) (hE := Hmean.highProb)
+    (score := score) (Qstar := Qstar) (Qsub := Qsub)
+    (γ := γ) (hlip := hlip) (hγ := hγ) (hbase := hbase)
 
 end DkpsQuench.Perfect

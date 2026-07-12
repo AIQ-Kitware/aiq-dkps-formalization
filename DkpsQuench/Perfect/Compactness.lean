@@ -196,7 +196,40 @@ theorem populationMean_lipschitz_of_raw
     (Hlip : RawResponseLipschitz ψ replicates Y L)
     (n : Nat) (f g : Model Q X) :
     ‖μmodel f - μmodel g‖ ≤ L * ‖ψ f - ψ g‖ := by
-  sorry
+  letI := Hraw.probability n
+  let k : Fin (replicates n) := ⟨0, Hraw.replicates_pos n⟩
+  have hintf : Integrable (Y n f k) (μresp n) :=
+    (Hraw.memLp_two n f k).integrable one_le_two
+  have hintg : Integrable (Y n g k) (μresp n) :=
+    (Hraw.memLp_two n g k).integrable one_le_two
+  have hmeanf : ∫ ω, Y n f k ω ∂(μresp n) = μmodel f := by
+    ext c
+    have h : (EuclideanSpace.proj c : Acharyya2024.Mat m p →L[Real] Real)
+          (∫ ω, Y n f k ω ∂(μresp n)) =
+        ∫ ω, Y n f k ω c ∂(μresp n) :=
+      (ContinuousLinearMap.integral_comp_comm _ hintf).symm
+    rw [Hraw.mean_entry n f k c] at h
+    exact h
+  have hmeang : ∫ ω, Y n g k ω ∂(μresp n) = μmodel g := by
+    ext c
+    have h : (EuclideanSpace.proj c : Acharyya2024.Mat m p →L[Real] Real)
+          (∫ ω, Y n g k ω ∂(μresp n)) =
+        ∫ ω, Y n g k ω c ∂(μresp n) :=
+      (ContinuousLinearMap.integral_comp_comm _ hintg).symm
+    rw [Hraw.mean_entry n g k c] at h
+    exact h
+  calc
+    ‖μmodel f - μmodel g‖ =
+        ‖∫ ω, (Y n f k ω - Y n g k ω) ∂(μresp n)‖ := by
+      rw [integral_sub hintf hintg, hmeanf, hmeang]
+    _ ≤ ∫ ω, ‖Y n f k ω - Y n g k ω‖ ∂(μresp n) :=
+      MeasureTheory.norm_integral_le_integral_norm _
+    _ ≤ ∫ _ω, L * ‖ψ f - ψ g‖ ∂(μresp n) := by
+      apply integral_mono_ae
+      · exact (hintf.sub hintg).norm
+      · exact integrable_const _
+      · exact Filter.Eventually.of_forall fun ω => Hlip.bound n f g k ω
+    _ = L * ‖ψ f - ψ g‖ := by simp
 
 /-- Construct the two regularity certificates used by finite-net extension from
 one pathwise raw-response Lipschitz condition.
