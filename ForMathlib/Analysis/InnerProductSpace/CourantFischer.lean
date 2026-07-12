@@ -321,7 +321,14 @@ theorem abs_eigenvalues_sub_le
 two symmetric operators `T`, `S` on a finite-dimensional inner product space
 differ by at most the (continuous-linear-map) operator norm `‖T − S‖` of their
 difference.  This is `abs_eigenvalues_sub_le` with the bound supplied by
-`ContinuousLinearMap.le_opNorm`. -/
+`ContinuousLinearMap.le_opNorm`.
+
+Related Lean work: `YuanheZ/lean-stat-learning-theory`,
+`SLT/MatrixInfra/Perturb.lean` at commit
+`216e578c9576bab6b0abc3ba6c65762536768e96`, proves the same operator-norm
+endpoint under the same declaration name.  The present proof belongs to the
+local Courant--Fischer chain and is retained to keep the DK development
+self-contained. -/
 theorem abs_eigenvalues_sub_le_opNorm (hT : T.IsSymmetric) (hS : S.IsSymmetric)
     (hn : finrank 𝕜 E = n) (k : Fin n) :
     |hT.eigenvalues hn k - hS.eigenvalues hn k|

@@ -417,10 +417,23 @@ nonzero-eigenspace equivalence between $T^*T$ and $TT^*$, rectangular adjoint
 invariance of singular values, intrinsic singular systems, finite analysis/synthesis
 and frame operators, and the exact add-one centered-scatter identity.  The source
 survey, licensing decisions, and immutable snapshots of compatible external Lean
-proofs are recorded in \texttt{dev/external-lean-references.md} and
-\texttt{vendor/lean/}.  This setup does not claim the rectangular spectral bridge is
-proved, and it introduces no new paper-facing hypothesis; it fixes the intended
-Mathlib contribution boundary and proof routes before the next proof wave.
+proofs are recorded in \texttt{dev/external-lean-references.md},
+\texttt{dev/davis-kahan-existing-work-survey.md}, and \texttt{vendor/lean/}.
+
+The surveyed donors have different roles.  The singular-system/Gram snapshot directly
+supports the rectangular scatter--Gram bridge and later singular-subspace DK wrappers.
+The finite-frame snapshot can convert independence/spanning assumptions into the positive
+coercivity constant needed by generalized DK and by the Quench covariance floor.  The
+operator-norm Eckart--Young proof is mainly useful at a truncation or estimator boundary,
+where it can certify the error of a low-rank surrogate before a DK theorem is applied.  The
+top-singular-value proof supplies operator-norm endpoints.  Finally, the newly vendored
+centered spectral-projection proof from \texttt{lean-stat-learning-theory} independently
+checks the finite operator-norm DK mechanism but does not replace the broader local
+Sylvester/UINorm theory.
+
+This setup does not claim the rectangular spectral bridge is proved, and it introduces no
+new paper-facing hypothesis; it fixes the intended Mathlib contribution boundary and proof
+routes before the next proof wave.
 
 No cleaner-only spectral refactor is on this list.  Once these declarations are
 proved, remaining work should be rate sharpening or assumption comparison, not

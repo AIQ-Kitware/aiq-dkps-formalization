@@ -83,7 +83,7 @@ represented by the theorem scaffold under
 
 \vspace{1.5em}
 % NOTE: Update permalink if underlying proof changes, so this always is up to date wrt to the referenced lean file.
-\noindent Companion note to \href{https://github.com/AIQ-Kitware/aiq-dkps-formalization/blob/74b37b24097bc63416fc9e402912e89d5a4ba528/ForMathlib/Analysis/InnerProductSpace/DavisKahan.lean}{ForMathlib/Analysis/InnerProductSpace/DavisKahan.lean} and its sibling files under \href{https://github.com/AIQ-Kitware/aiq-dkps-formalization/tree/74b37b24097bc63416fc9e402912e89d5a4ba528/ForMathlib/Analysis/InnerProductSpace}{ForMathlib/Analysis/InnerProductSpace/}, part of a larger formalization effort at \href{https://github.com/AIQ-Kitware/aiq-dkps-formalization}{github.com/AIQ-Kitware/aiq-dkps-formalization}.
+\noindent Companion note to \href{https://github.com/AIQ-Kitware/aiq-dkps-formalization/blob/82d20de0546c5414317df8bcffb4229fb72f8d89/ForMathlib/Analysis/InnerProductSpace/DavisKahan.lean}{ForMathlib/Analysis/InnerProductSpace/DavisKahan.lean} and its sibling files under \href{https://github.com/AIQ-Kitware/aiq-dkps-formalization/tree/82d20de0546c5414317df8bcffb4229fb72f8d89/ForMathlib/Analysis/InnerProductSpace}{ForMathlib/Analysis/InnerProductSpace/}, part of a larger formalization effort at \href{https://github.com/AIQ-Kitware/aiq-dkps-formalization}{github.com/AIQ-Kitware/aiq-dkps-formalization}.
 
 
 
@@ -947,6 +947,47 @@ $\mu_0=1-2\nu$, uniformly over $\mathbb R$ and $\mathbb C$ --- no polar decompos
 spectral theorem for unitaries, and equality on the $2\times2$ model.  A
 Rayleigh bound ties $t^2$ to $\mu_0$ and monotonicity of
 $\tau\mapsto4\tau(1-\tau)$ on $[0,\tfrac12]$ finishes.
+
+
+\section{Related Lean formalizations and reusable proof donors}
+
+A repository-wide existing-work survey was rerun on 2026-07-12 and is recorded in
+\texttt{dev/davis-kahan-existing-work-survey.md}.  The closest compatible external
+formalization is Yuanhe Zhang, Jason D. Lee, and Fanghui Liu's Apache-2.0
+\texttt{SLT/MatrixInfra/Perturb.lean} in
+\href{https://github.com/YuanheZ/lean-stat-learning-theory}{lean-stat-learning-theory}.
+At commit \texttt{216e578c9576bab6b0abc3ba6c65762536768e96} it proves Weyl bounds,
+spectral-subspace and spectral-projection APIs, a rank-one eigenvector-angle theorem,
+and centered, interval, and general set-separated operator-norm Davis--Kahan projection
+bounds.  The centered proof has been preserved as an unbuilt, provenance-stamped excerpt in
+\texttt{vendor/lean/lean-stat-learning-theory/DavisKahanSpectralProjection.excerpt.lean}.
+
+That development is a high-value independent audit and a donor for convenience wrappers,
+but it does not subsume the present library.  Its DK layer is finite-dimensional and
+operator-norm focused.  The local development additionally provides the dimension-free
+coercive Sylvester kernel, arbitrary unitarily invariant norms, Frobenius and Ky Fan
+specializations, residual theorems, factor-one projector differences, principal-angle
+symmetry and dictionaries, Davis's sharp $\sin 2\Theta$ and $\tan 2\Theta$ theories,
+sharpness, rectangular singular-subspace results, and the Yu--Wang--Samworth
+population-gap/aligned-basis chain.  The intended reuse policy is therefore to port only
+missing helper seams with attribution, not to replace the local architecture or add a
+second public spectral-subspace API.
+
+A second formalization exists in
+\href{https://github.com/facebookresearch/atlas-lean}{facebookresearch/atlas-lean}:
+\texttt{Chapter4/Thm\_4\_8.lean} proves a real-matrix leading-eigenvector bound for a
+spiked covariance model, and \texttt{Cor\_4\_9.lean} combines it with covariance
+concentration for PCA.  It is mathematically narrower and its repository terms are not
+compatible with copying into this project, so it is cited only for statement comparison.
+No independent substantial Lean proof was found for the principal-angle symmetry,
+unitarily invariant-norm Sylvester theorem, sharp Davis $\sin 2\Theta$ theory, or the full
+YWS aligned-basis result.
+
+The Perfect Quench vendor set also contributes shared infrastructure rather than another DK
+proof: the singular-system/Gram snapshot is directly useful for rectangular and singular
+subspace DK, the top-singular-value proof closes operator-norm endpoints, the finite-frame
+snapshot supplies coercivity for generalized/trial-subspace variants, and Eckart--Young is
+primarily useful when a truncated estimator is fed into DK.
 
 \section{What remains, ranked by dependency}\label{sec:remains}
 

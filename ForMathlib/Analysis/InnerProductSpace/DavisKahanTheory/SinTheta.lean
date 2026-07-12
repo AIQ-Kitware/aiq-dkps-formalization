@@ -304,7 +304,15 @@ theorem opNorm_directed_sinTheta_le {A B : E →ₗ[𝕜] E}
 spectral subspaces automatically reduce their operators, so the one-sided bound
 holds for `‖P_{spec B t} ∘ P_{spec A s}‖` under the corresponding spectral-gap
 hypotheses.  This is the directed operator-norm form of the canonical
-spectral-projector Davis--Kahan theorem. -/
+spectral-projector Davis--Kahan theorem.
+
+Related Lean work: `YuanheZ/lean-stat-learning-theory`,
+`SLT/MatrixInfra/Perturb.lean` at commit
+`216e578c9576bab6b0abc3ba6c65762536768e96`, proves a closely matching
+interval/set-separated cross-projection estimate named
+`davisKahan_spectralProjection_hdp`.  That proof is finite-dimensional and
+centered-shift based; this theorem instead exposes the local `SpectrumIn` API
+and dispatches through the dimension-free coercive Sylvester core. -/
 theorem opNorm_spectralSubspace_directed_sinTheta_le {A B : E →ₗ[𝕜] E}
     (hA : A.IsSymmetric) (hB : B.IsSymmetric) {s t : Set ℝ}
     {c g ε : ℝ} (hg : 0 < g)
@@ -400,7 +408,13 @@ theorem opNorm_starProjection_sub_le_two {A B : E →ₗ[𝕜] E}
 
 /-- **Sharp spectral-subspace projector theorem.**  Canonical finite
 spectral subspaces reduce their operators automatically, so the sharp
-factor-one theorem applies directly. -/
+factor-one theorem applies directly.
+
+The cross-projection endpoint in
+`YuanheZ/lean-stat-learning-theory/SLT/MatrixInfra/Perturb.lean` is related but
+does not replace this projector-difference theorem: the present result uses
+both selected and complementary gaps and inherits the factor-one identity from
+the generic projection geometry. -/
 theorem opNorm_spectralSubspace_sub_le {A B : E →ₗ[𝕜] E}
     (hA : A.IsSymmetric) (hB : B.IsSymmetric) {s t : Set ℝ}
     {c g ε : ℝ} (hg : 0 < g)

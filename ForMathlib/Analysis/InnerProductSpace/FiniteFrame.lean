@@ -24,6 +24,15 @@ Define the analysis map first and define synthesis as its adjoint unless a direc
 definition proves substantially easier to simplify. Whichever direction is chosen, establish
 `analysis† = synthesis` immediately; frame and Gram identities should then be consequences of
 adjoint composition rather than repeated coordinate calculations.
+
+## Proof donor and DK relevance
+
+`vendor/lean/drifting-identifiability/FiniteFrameBound.excerpt.lean` proves that
+finite linear independence yields a positive lower stability constant through
+an antilipschitz estimate.  Its application-specific coordinates should be
+re-authored as the intrinsic frame API below.  The resulting lower frame bound
+is also a coercivity certificate for generalized and trial-subspace
+Davis--Kahan theorems, not only a Perfect Quench prerequisite.
 -/
 
 namespace ForMathlib
