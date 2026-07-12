@@ -331,9 +331,10 @@ Composition gap \\
 \section{Perfect Quench completion scaffold}
 
 The repository now contains an executable proof scaffold under
-\code{DkpsQuench/Perfect}.  Eleven open proof bodies remain after the
-polynomial-cover theorem, deterministic covariance-floor transfer, and
-sample-centered quadratic-form bridge were completed.  The count below is the live source count, not an estimate derived
+\code{DkpsQuench/Perfect}.  Seven open proof bodies remain after the
+polynomial-cover theorem, deterministic covariance-floor transfer,
+sample-centered quadratic-form bridge, rectangular spectral transfer, and the
+first event-localized spectral-composition theorem were completed.  The count below is the live source count, not an estimate derived
 from the difficulty-ranking document.
 
 \begin{longtable}{>{\raggedright\arraybackslash}p{0.22\textwidth}
@@ -378,8 +379,9 @@ are proved. & Caller-selected nets, entry rates, smallness inequalities, polar
 bookkeeping, and the full \code{GrowingConfigControl} certificate are removed.
 \\
 \addlinespace
-Spectral composition & 3 & Intersection of response and spectral subevents with
-the existing proved pairwise CMDS perturbation theorem. & Global spectral facts
+Spectral composition & 2 & The central event-localized CMDS theorem is
+proved by intersecting the response and spectral subevents with the deterministic
+rate gate.  Two response-geometry adapters remain. & Global spectral facts
 inside the response bridge. \\
 \addlinespace
 Final composition & 4 & Finite and compact-infinite fixed-subset capstones plus
@@ -410,7 +412,7 @@ The scaffold defines the remaining frontier precisely:
 \begin{enumerate}
 \item derive population-mean Lipschitzness from the pathwise raw-response
       Lipschitz hypothesis;
-\item discharge the three event-level spectral-composition proofs;
+\item discharge the two remaining response-level spectral-composition adapters;
 \item assemble the four finite, compact-infinite, and all-query capstones.
 \end{enumerate}
 
