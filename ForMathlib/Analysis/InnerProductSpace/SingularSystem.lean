@@ -1,7 +1,7 @@
 /-
 Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
-Authors: Jon Crall, GPT-5.6 High
+Authors: Jon Crall, GPT-5.6 High, Claude Fable 5
 -/
 
 import Mathlib.Analysis.InnerProductSpace.SingularValues
@@ -10,26 +10,35 @@ import ForMathlib.Analysis.InnerProductSpace.RectangularSingularValues
 /-!
 # Intrinsic singular systems for rectangular linear maps
 
-This file scaffolds a reusable singular-vector and SVD layer stated directly for a linear map
-between finite-dimensional `RCLike` inner-product spaces. It is deliberately not imported by
-`ForMathlib.lean` while signatures and proofs are being audited.
+A reusable singular-vector layer stated directly for a linear map between finite-dimensional
+`RCLike` inner-product spaces.  The right singular basis is the sorted orthonormal eigenbasis
+of `A†A`; left singular vectors are the normalized images `σᵢ⁻¹ • A vᵢ`.
 
-The final API should be intrinsic and basis-free. Matrix factorizations should be corollaries
-obtained after choosing orthonormal bases, not the foundational definitions.
+## Main results
 
-## Proof donors
+* `ForMathlib.apply_rightSingularBasis_eq_smul_leftSingularVector`: the singular relation
+  `A vᵢ = σᵢ • uᵢ`, including the zero case;
+* `ForMathlib.orthonormal_leftSingularVector_subtype`: left singular vectors attached to
+  nonzero singular values are orthonormal;
+* `ForMathlib.selfCompAdjoint_apply_leftSingularVector`: nonzero left singular vectors are
+  eigenvectors of `AA†` with eigenvalue `σᵢ²`;
+* `ForMathlib.singular_reconstruction` and `ForMathlib.eq_sum_singularValue_rankOne`: the
+  intrinsic singular expansion of `A`;
+* `ForMathlib.exists_orthonormalBasis_extending_leftSingularVector`: the nonzero left
+  singular family extends to an orthonormal basis of the codomain.
 
-The closest licensed donor is
-`vendor/lean/lean-stat-learning-theory/SingularSystemGram.excerpt.lean`, which proves the
-right-basis equation, total left singular vectors, orthonormality on the nonzero subtype,
-reconstruction, and both Gram decompositions for Euclidean matrix maps. Asterism contains a
-modular full-basis completion route but is reference-only because no repository license was
-visible during the survey. Full source notes are in `dev/external-lean-references.md`.
+## Proof sources
+
+The construction parallels the Apache-2.0 matrix-Euclidean development in
+`vendor/lean/lean-stat-learning-theory/SingularSystemGram.excerpt.lean` (Zhang–Lee–Liu),
+restated intrinsically for linear maps; the excerpt was used as a route map and no code was
+copied verbatim.
 -/
 
 namespace ForMathlib
 
-open Module
+open Module LinearMap
+open scoped InnerProductSpace
 
 variable {𝕜 E F : Type*} [RCLike 𝕜]
   [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [FiniteDimensional 𝕜 E]
@@ -43,136 +52,134 @@ noncomputable def rightSingularBasis (A : E →ₗ[𝕜] F) :
 /-- The total left singular-vector expression `σᵢ⁻¹ • A vᵢ`.
 
 At a zero singular value this definition evaluates to zero because division in a field is
-total. Orthonormality is asserted only on the subtype of nonzero singular values.
--/
+total. Orthonormality is asserted only on the subtype of nonzero singular values. -/
 noncomputable def leftSingularVector (A : E →ₗ[𝕜] F)
     (i : Fin (finrank 𝕜 E)) : F :=
   (((A.singularValues i : ℝ) : 𝕜)⁻¹) • A (rightSingularBasis A i)
 
-/-- The right singular basis diagonalizes `A†A`.
-
-Proof strategy: unfold `rightSingularBasis`, apply
-`LinearMap.IsSymmetric.apply_eigenvectorBasis`, and rewrite the eigenvalue with
-`LinearMap.sq_singularValues_fin`.
--/
+/-- The right singular basis diagonalizes `A†A`. -/
 theorem adjointCompSelf_apply_rightSingularBasis
     (A : E →ₗ[𝕜] F) (i : Fin (finrank 𝕜 E)) :
     (A.adjoint.comp A) (rightSingularBasis A i) =
       (((A.singularValues i : ℝ) ^ 2 : ℝ) : 𝕜) • rightSingularBasis A i := by
-  sorry
+  have h := A.isSymmetric_adjoint_comp_self.apply_eigenvectorBasis rfl i
+  rw [← A.sq_singularValues_fin rfl i] at h
+  exact h
 
-/-- A right singular vector with zero singular value lies in the kernel of `A`.
-
-Executable proof strategy:
-
-1. Rewrite membership in `ker (A†A)` using
-   `LinearMap.ker_adjoint_comp_self`.
-2. Apply `adjointCompSelf_apply_rightSingularBasis` and the zero hypothesis.
-3. Extract `A vᵢ = 0` with `LinearMap.mem_ker`.
-
-An alternative proof expands `‖A vᵢ‖²` as the Gram quadratic form and uses
-`inner_self_eq_zero`.
--/
+/-- A right singular vector with zero singular value lies in the kernel of `A`. -/
 theorem apply_rightSingularBasis_eq_zero_of_singularValue_eq_zero
     (A : E →ₗ[𝕜] F) {i : Fin (finrank 𝕜 E)}
     (hi : A.singularValues i = 0) :
     A (rightSingularBasis A i) = 0 := by
-  sorry
+  have hker : rightSingularBasis A i ∈ (A.adjoint ∘ₗ A).ker := by
+    rw [LinearMap.mem_ker, adjointCompSelf_apply_rightSingularBasis A i, hi]
+    simp
+  rw [LinearMap.ker_adjoint_comp_self] at hker
+  exact LinearMap.mem_ker.mp hker
 
-/-- The singular relation `A vᵢ = σᵢ uᵢ`, including the zero case.
-
-Proof strategy:
-
-* if `σᵢ = 0`, use `apply_rightSingularBasis_eq_zero_of_singularValue_eq_zero`;
-* otherwise unfold `leftSingularVector`, normalize `smul_smul`, cast nonzeroness from `ℝ`
-  to `𝕜`, and cancel the inverse.
--/
+/-- The singular relation `A vᵢ = σᵢ uᵢ`, including the zero case. -/
 theorem apply_rightSingularBasis_eq_smul_leftSingularVector
     (A : E →ₗ[𝕜] F) (i : Fin (finrank 𝕜 E)) :
     A (rightSingularBasis A i) =
       ((A.singularValues i : ℝ) : 𝕜) • leftSingularVector A i := by
-  sorry
+  by_cases hi : A.singularValues i = 0
+  · rw [apply_rightSingularBasis_eq_zero_of_singularValue_eq_zero A hi, hi]
+    simp
+  · have hσ : ((A.singularValues i : ℝ) : 𝕜) ≠ 0 := RCLike.ofReal_ne_zero.mpr hi
+    rw [leftSingularVector, smul_smul, mul_inv_cancel₀ hσ, one_smul]
 
-/-- Left singular vectors attached to nonzero singular values are orthonormal.
-
-Executable proof strategy:
-
-1. Rewrite both left vectors as normalized images of right singular vectors.
-2. Move one occurrence of `A` through the inner product using
-   `LinearMap.adjoint_inner_left`.
-3. insert `adjointCompSelf_apply_rightSingularBasis`;
-4. use orthonormality of `rightSingularBasis` to reduce to an `if i = j` expression;
-5. cancel singular-value factors in the diagonal case and simplify the off-diagonal case.
-
-The vendored `lean-stat-learning-theory` excerpt contains this proof in matrix-Euclidean
-notation and should be adapted rather than rediscovered.
--/
+/-- Left singular vectors attached to nonzero singular values are orthonormal. -/
 theorem orthonormal_leftSingularVector_subtype (A : E →ₗ[𝕜] F) :
     Orthonormal 𝕜
       (fun i : {j : Fin (finrank 𝕜 E) // A.singularValues j ≠ 0} =>
         leftSingularVector A i.1) := by
-  sorry
+  classical
+  rw [orthonormal_iff_ite]
+  intro i j
+  have hconj : (starRingEnd 𝕜) (((A.singularValues i.1 : ℝ) : 𝕜)⁻¹) =
+      ((A.singularValues i.1 : ℝ) : 𝕜)⁻¹ := by
+    rw [map_inv₀, RCLike.conj_ofReal]
+  rw [leftSingularVector, leftSingularVector, inner_smul_left, inner_smul_right, hconj,
+    ← LinearMap.adjoint_inner_right,
+    show A.adjoint (A (rightSingularBasis A j.1)) =
+      (A.adjoint.comp A) (rightSingularBasis A j.1) from rfl,
+    adjointCompSelf_apply_rightSingularBasis, inner_smul_right,
+    orthonormal_iff_ite.mp (rightSingularBasis A).orthonormal]
+  rcases eq_or_ne i j with h | h
+  · subst h
+    rw [if_pos rfl, if_pos rfl]
+    have hσ : ((A.singularValues i.1 : ℝ) : 𝕜) ≠ 0 := RCLike.ofReal_ne_zero.mpr i.2
+    rw [mul_one, RCLike.ofReal_pow]
+    field_simp
+  · rw [if_neg (fun hc : (i.1 : Fin (finrank 𝕜 E)) = j.1 => h (Subtype.ext hc)), if_neg h]
+    ring
 
-/-- Every nonzero left singular vector is an eigenvector of `AA†` with eigenvalue `σᵢ²`.
-
-Proof strategy: start from `A vᵢ = σᵢ uᵢ`, derive `A†uᵢ = σᵢvᵢ` from the right-Gram
-eigen-equation, and apply `A`. This theorem is also a concrete witness for the abstract
-nonzero eigenspace equivalence in `RectangularSingularValues.lean`.
--/
+/-- Every nonzero left singular vector is an eigenvector of `AA†` with eigenvalue `σᵢ²`. -/
 theorem selfCompAdjoint_apply_leftSingularVector
     (A : E →ₗ[𝕜] F) {i : Fin (finrank 𝕜 E)}
     (hi : A.singularValues i ≠ 0) :
     (A.comp A.adjoint) (leftSingularVector A i) =
       (((A.singularValues i : ℝ) ^ 2 : ℝ) : 𝕜) • leftSingularVector A i := by
-  sorry
+  have hσ : ((A.singularValues i : ℝ) : 𝕜) ≠ 0 := RCLike.ofReal_ne_zero.mpr hi
+  have hadj : A.adjoint (leftSingularVector A i) =
+      ((A.singularValues i : ℝ) : 𝕜) • rightSingularBasis A i := by
+    rw [leftSingularVector, map_smul,
+      show A.adjoint (A (rightSingularBasis A i)) =
+        (A.adjoint.comp A) (rightSingularBasis A i) from rfl,
+      adjointCompSelf_apply_rightSingularBasis, smul_smul, RCLike.ofReal_pow]
+    congr 1
+    field_simp
+  calc (A.comp A.adjoint) (leftSingularVector A i)
+      = A (A.adjoint (leftSingularVector A i)) := rfl
+    _ = ((A.singularValues i : ℝ) : 𝕜) • A (rightSingularBasis A i) := by
+        rw [hadj, map_smul]
+    _ = (((A.singularValues i : ℝ) ^ 2 : ℝ) : 𝕜) • leftSingularVector A i := by
+        rw [apply_rightSingularBasis_eq_smul_leftSingularVector, smul_smul,
+          RCLike.ofReal_pow, sq]
 
-/-- Intrinsic finite singular expansion of `A x`.
-
-Proof strategy:
-
-1. Expand `x` in `rightSingularBasis A` with `OrthonormalBasis.sum_repr`.
-2. Apply `A` through the finite sum and scalar multiplication.
-3. Rewrite each image using
-   `apply_rightSingularBasis_eq_smul_leftSingularVector`.
-4. Rewrite basis coefficients as inner products and normalize scalar order with
-   `smul_smul` and commutativity in `𝕜`.
--/
+/-- Intrinsic finite singular expansion of `A x`. -/
 theorem singular_reconstruction (A : E →ₗ[𝕜] F) (x : E) :
     A x = ∑ i : Fin (finrank 𝕜 E),
       (inner 𝕜 (rightSingularBasis A i) x * ((A.singularValues i : ℝ) : 𝕜)) •
         leftSingularVector A i := by
-  sorry
+  conv_lhs => rw [← (rightSingularBasis A).sum_repr x, map_sum]
+  refine Finset.sum_congr rfl fun i _ => ?_
+  rw [map_smul, apply_rightSingularBasis_eq_smul_leftSingularVector, smul_smul,
+    (rightSingularBasis A).repr_apply_apply]
 
-/-- Rank-one operator reconstruction of `A`.
-
-Proof strategy: ext on `x`, rewrite each rank-one application, and invoke
-`singular_reconstruction`. This is the intrinsic source for literal matrix `UΣV†`
-factorizations and for both Gram decompositions.
--/
+/-- Rank-one operator reconstruction of `A`. -/
 theorem eq_sum_singularValue_rankOne (A : E →ₗ[𝕜] F) :
     A = ∑ i : Fin (finrank 𝕜 E),
       ((A.singularValues i : ℝ) : 𝕜) •
         (InnerProductSpace.rankOne 𝕜
           (leftSingularVector A i) (rightSingularBasis A i)).toLinearMap := by
-  sorry
+  apply LinearMap.ext
+  intro x
+  rw [LinearMap.sum_apply, singular_reconstruction A x]
+  refine Finset.sum_congr rfl fun i _ => ?_
+  rw [LinearMap.smul_apply, ContinuousLinearMap.coe_coe, InnerProductSpace.rankOne_apply,
+    smul_smul, mul_comm]
 
-/-- The nonzero left singular family extends to an orthonormal basis of the codomain.
-
-Proof strategy:
-
-1. Apply `orthonormal_leftSingularVector_subtype`.
-2. Use Mathlib's orthonormal-family extension theorem directly.
-3. Reindex the resulting basis by `Fin (finrank 𝕜 F)` using finite-dimensional cardinality.
-
-Avoid packaging a basis indexed by a `Finset F`; that introduces equality and cardinality
-obligations unrelated to the mathematics.
--/
+/-- The nonzero left singular family extends to an orthonormal basis of the codomain. -/
 theorem exists_orthonormalBasis_extending_leftSingularVector
     (A : E →ₗ[𝕜] F) :
     ∃ b : OrthonormalBasis (Fin (finrank 𝕜 F)) 𝕜 F,
       Set.range
           (fun i : {j : Fin (finrank 𝕜 E) // A.singularValues j ≠ 0} =>
             leftSingularVector A i.1) ⊆ Set.range b := by
-  sorry
+  classical
+  have hon := orthonormal_leftSingularVector_subtype A
+  have hsub : Orthonormal 𝕜 ((↑) : Set.range
+      (fun i : {j : Fin (finrank 𝕜 E) // A.singularValues j ≠ 0} =>
+        leftSingularVector A i.1) → F) := hon.toSubtypeRange
+  obtain ⟨u, b, hvu, hb⟩ := hsub.exists_orthonormalBasis_extension
+  have hcard : Fintype.card u = finrank 𝕜 F := by
+    rw [Fintype.card_coe]
+    exact (Module.finrank_eq_card_finset_basis b.toBasis).symm
+  refine ⟨b.reindex (Fintype.equivFinOfCardEq hcard), ?_⟩
+  intro y hy
+  have hyu : y ∈ (u : Set F) := hvu hy
+  refine ⟨Fintype.equivFinOfCardEq hcard ⟨y, hyu⟩, ?_⟩
+  rw [OrthonormalBasis.reindex_apply, Equiv.symm_apply_apply, hb]
 
 end ForMathlib

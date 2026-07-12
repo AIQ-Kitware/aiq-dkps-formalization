@@ -64,15 +64,24 @@ work is more parallel than the import graph suggests:
 
 | Module | Open proofs | Main mathematical work | Current hypotheses removed when complete |
 |---|---:|---|---|
-| `PopulationGeometry.lean` | 4 | finite centering and double-centering algebra | explicit configuration, Gram identity, radial identity, PSD, rank |
-| `SpectralRegularity.lean` | 15 | covariance measurability/weak law, quadratic-form transfer, augmented scatter | global samplewise eigenvalue floor and ceiling |
-| `RawResponses.lean` | 9 | product-space iid lifting, replicate means, finite union bound | abstract response means, per-index moment events, manual measurability |
-| `Compactness.lean` | 8 | finite/compact response envelopes, raw-to-mean Lipschitz bridges, polynomial Euclidean covers | explicit population bounds, nets, entropy certificates, separate regularity proofs |
-| `UniformConcentration.lean` | 8 | finite-net concentration and deterministic extension | finite model-class restriction or assumed uniform concentration |
-| `RateSchedule.lean` | 10 | polynomial limit arithmetic, canonical shrinking net and entropy schedule | caller-built nets, entry rates, and `GrowingConfigControl` |
+| `PopulationGeometry.lean` | 0 | finite centering and double-centering algebra | explicit configuration, Gram identity, radial identity, PSD, rank |
+| `GramSpectrumBridge.lean` | 0 | rectangular scatter--Gram spectral transfer and augmented online-variance floor | local matrix-coordinate eigenvalue arguments |
+| `SpectralRegularity.lean` | 0 | covariance measurability/weak law, quadratic-form transfer, Gram spectral floor, augmentation floor, spectral-certificate assembly | global samplewise eigenvalue floor and ceiling |
+| `RawResponses.lean` | 0 | product-space iid lifting, replicate means, finite union bound | abstract response means, per-index moment events, manual measurability |
+| `Compactness.lean` | 1 | finite/compact response envelopes, raw-to-mean Lipschitz bridges, polynomial Euclidean covers | explicit population bounds, nets, entropy certificates, separate regularity proofs |
+| `UniformConcentration.lean` | 0 | finite-net concentration and deterministic extension | finite model-class restriction or assumed uniform concentration |
+| `RateSchedule.lean` | 0 | polynomial limit arithmetic, canonical shrinking net and entropy schedule | caller-built nets, entry rates, and `GrowingConfigControl` |
 | `SpectralCapstone.lean` | 3 | high-probability event intersections and reuse of the proved CMDS bound | global spectral hypotheses in the response bridge |
 | `Capstone.lean` | 4 | final assembly and query-subset quantifier lift | all remaining intermediate certificates |
-| **Total** | **61** | | |
+| **Total** | **8** | | |
+
+The spectral-regularity track is complete: the reference-Gram floor
+(`sortedEigenvalues_reference_centeredGram_lower`), the augmentation floor
+(`augmented_centeredGram_floor_of_reference_floor`), and the certificate
+constructor (`exists_growingSpectralSubevents_of_compact_iid_nondegenerate`)
+are proved on top of the reusable rectangular spectral layer in `ForMathlib`
+(`RectangularSingularValues`, `FiniteFrame`, `CenteredScatter`) via
+`GramSpectrumBridge.lean`.
 
 The count is meant to track real proof debt.  Small algebraic or measurability
 facts have their own obligations; the probability-heavy covariance and

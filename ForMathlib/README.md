@@ -32,21 +32,17 @@ per-candidate dossiers live in `planning/mathlib-candidates.md`.
    human author must understand and vouch for every line.
 4. After the PR lands, delete the staged file here and bump the Mathlib pin.
 
-## Experimental singular-value and frame scaffolds
+## Singular-value and frame layer
 
-The following files are intentionally **not** imported by `ForMathlib.lean` yet. They record
-reviewable theorem signatures, proof routes, and the intended Mathlib contribution boundary
-for the next Perfect Quench support layer:
-
-- `Analysis/InnerProductSpace/RectangularSingularValues.lean`
-- `Analysis/InnerProductSpace/SingularSystem.lean`
-- `Analysis/InnerProductSpace/FiniteFrame.lean`
-- `Analysis/InnerProductSpace/CenteredScatter.lean`
-
-They contain deliberate `sorry` placeholders. Their design and external proof-source map are
-in `docs/planning/rectangular-singular-values-and-frames.md` and
+`RectangularSingularValues.lean`, `SingularSystem.lean`, `FiniteFrame.lean`, and
+`CenteredScatter.lean` are fully proved and imported by `ForMathlib.lean`; the Perfect
+Quench spectral track consumes the first, third, and fourth through
+`DkpsQuench/Perfect/GramSpectrumBridge.lean`.  The
+design and external proof-source map are in
+`docs/planning/rectangular-singular-values-and-frames.md` and
 `dev/external-lean-references.md`. Licensed proof snapshots are isolated under
-`vendor/lean/` and are not build dependencies.
+`vendor/lean/` and are not build dependencies; they were used as cross-checks only, and no
+vendored code was copied into the build.
 
 ## Inventory
 

@@ -191,8 +191,14 @@ positive nondegeneracy certificate by polarization.  The formalization now
 also identifies the sample-centered empirical covariance quadratic form with
 the average squared projections of the centered reference cloud, so the event
 membership directly yields the reference-scatter quadratic floor.  The
-remaining work is the rectangular scatter--Gram spectral bridge, target
-augmentation, and assembly of the measurable high-probability event.
+rectangular scatter--Gram spectral bridge, the target-augmentation floor, and
+the assembly of the measurable high-probability spectral certificate are now
+proved as well: the quadratic floor transfers to the first $d$ sorted
+eigenvalues of the centered reference Gram matrix through the general
+nonzero-spectrum bridge between $T^*T$ and $TT^*$, augmentation preserves the
+floor through the exact add-one centered-scatter identity, and the certificate
+event is the covariance event intersected with the deterministic dimension
+gate $d \le n$.
 
 
 \paragraph{Role in the Perfect Quench scaffold.}
@@ -201,8 +207,11 @@ high-probability certificate derived from a population covariance floor and iid
 reference sampling.  The deterministic covariance perturbation seam is now
 closed in \code{DkpsQuench.Perfect.CovarianceFloor}, and the sample-centered
 quadratic identity is closed in \code{DkpsQuench.Perfect.CenteredCovariance}.
-The rectangular scatter/Gram eigenvalue transfers and final spectral-event
-assembly remain.  The explicit response
+The rectangular scatter/Gram eigenvalue transfers are closed in
+\code{DkpsQuench.Perfect.GramSpectrumBridge} on top of the new proved
+\code{ForMathlib} rectangular spectral layer, and the spectral-event assembly
+\code{exists\_growingSpectralSubevents\_of\_compact\_iid\_nondegenerate} is
+proved in \code{DkpsQuench.Perfect.SpectralRegularity}.  The explicit response
 schedule is already proved.  These changes reduce the assumptions of the
 Quench composition without altering the proved 2025 concentration statements.
 
@@ -339,11 +348,11 @@ Population geometry & 0 & Centering, exact Euclidean double centering, and the
 augmented radial identity are proved. & Separate configuration, Gram, radial,
 PSD, and rank inputs collapse to one response-distance realization. \\
 \addlinespace
-Spectral regularity & 3 & The coordinate weak laws, covariance algebra,
+Spectral regularity & 0 & The coordinate weak laws, covariance algebra,
 measurability, fixed-dimensional covariance event, entrywise-to-quadratic
-transfer, and exact sample-centered projection identity are proved.  The
-remaining proofs are the rectangular scatter--Gram eigenvalue bridge, target
-augmentation, and construction of the high-probability spectral certificate. & Global floor and ceiling assumptions over every reference
+transfer, exact sample-centered projection identity, rectangular
+scatter--Gram eigenvalue bridge, target-augmentation floor, and the
+high-probability spectral certificate are all proved. & Global floor and ceiling assumptions over every reference
 outcome are replaced by one population covariance nondegeneracy condition and a
 measurable high-probability event. \\
 \addlinespace
@@ -399,23 +408,23 @@ program.
 
 The scaffold defines the remaining frontier precisely:
 \begin{enumerate}
-\item transport the proved sample-centered feature-space floor to the first $d$ sorted eigenvalues
-      of the centered reference Gram matrix through a reusable rectangular
-      scatter--Gram spectral theorem;
-\item prove that target augmentation/recentering preserves the lower floor,
-      then combine it with the already-proved trace ceiling to assemble the
-      measurable high-probability spectral certificate;
 \item derive population-mean Lipschitzness from the pathwise raw-response
       Lipschitz hypothesis;
 \item discharge the three event-level spectral-composition proofs;
 \item assemble the four finite, compact-infinite, and all-query capstones.
 \end{enumerate}
 
-The general mathematics needed by items 1--2 is now explicitly staged outside the
-application layer.  The new, non-imported \texttt{ForMathlib} scaffolds specify the
-nonzero-eigenspace equivalence between $T^*T$ and $TT^*$, rectangular adjoint
-invariance of singular values, intrinsic singular systems, finite analysis/synthesis
-and frame operators, and the exact add-one centered-scatter identity.  The source
+The general mathematics behind the former first two frontier items (the
+scatter--Gram transport and the augmentation floor) is now fully proved in the
+imported \texttt{ForMathlib} layer: the nonzero-eigenspace equivalence between
+$T^*T$ and $TT^*$ with equal multiplicities, the rectangular adjoint invariance
+\texttt{LinearMap.singularValues\_adjoint}, the two-way transfer between
+quadratic floors and codomain-Gram spectral floors, finite analysis/synthesis
+and frame/Gram operators with the frame-bound correspondence, and the exact
+add-one centered-scatter identity with its L\"owner and quadratic-form
+corollaries.  The intrinsic singular system (explicit left singular vectors,
+orthonormality on the nonzero subtype, reconstruction, and the codomain
+orthonormal-basis extension) is proved as well.  The source
 survey, licensing decisions, and immutable snapshots of compatible external Lean
 proofs are recorded in \texttt{dev/external-lean-references.md},
 \texttt{dev/davis-kahan-existing-work-survey.md}, and \texttt{vendor/lean/}.
@@ -431,9 +440,10 @@ centered spectral-projection proof from \texttt{lean-stat-learning-theory} indep
 checks the finite operator-norm DK mechanism but does not replace the broader local
 Sylvester/UINorm theory.
 
-This setup does not claim the rectangular spectral bridge is proved, and it introduces no
-new paper-facing hypothesis; it fixes the intended Mathlib contribution boundary and proof
-routes before the next proof wave.
+The rectangular spectral bridge is now proved from Mathlib's
+\texttt{LinearMap.singularValues} API without a competing singular-value
+definition and without new paper-facing hypotheses; the vendored snapshots were
+used as cross-checks only, and no external code was copied into the build.
 
 No cleaner-only spectral refactor is on this list.  Once these declarations are
 proved, remaining work should be rate sharpening or assumption comparison, not
