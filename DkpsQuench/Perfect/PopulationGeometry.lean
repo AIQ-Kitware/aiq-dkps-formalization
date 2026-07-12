@@ -266,7 +266,15 @@ theorem centeredAugmentedPerspectiveConfig_gram_eq
       centeredAugmentedPerspectiveConfig ψ f_ref n ωref f i k *
       centeredAugmentedPerspectiveConfig ψ f_ref n ωref f j k) =
       classicalMDSMatrix (responseDist (μbar n ωref f)) i j := by
-  sorry
+  have key := classicalMDSMatrix_pairDist_eq_centered_gram (n := n + 1) (by omega)
+    (augmentedPerspectiveConfig ψ f_ref n ωref f) i j
+  have hDeq : (fun a b => ‖augmentedPerspectiveConfig ψ f_ref n ωref f a -
+      augmentedPerspectiveConfig ψ f_ref n ωref f b‖) = responseDist (μbar n ωref f) := by
+    funext a b
+    simp only [augmentedPerspectiveConfig]
+    rw [hrealize n ωref f a b]
+  simp only [centeredAugmentedPerspectiveConfig]
+  rw [← key, hDeq]
 
 /-- Construct all population geometry consumed by growing Quench from the one
 paper-facing distance-realization hypothesis.
