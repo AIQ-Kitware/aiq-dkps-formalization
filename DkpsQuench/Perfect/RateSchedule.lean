@@ -152,7 +152,27 @@ theorem exists_safeGrowingPerspectiveNet
       (∀ n, ((net.centers n).card : Real) ≤
         C * (((n + 1 : Nat) : Real) ^ (5 * d))) ∧
       (∀ n, net.radius n = safePerspectiveRadius L n) := by
-  sorry
+  obtain ⟨net, C0, hC0, hcard0, hradius⟩ :=
+    exists_growingPerspectiveNet_with_polynomial_card ψ hcompact
+      (safePerspectiveRadius L) (safePerspectiveRadius_pos L hL) (safePerspectiveRadius_zero L hL)
+  refine ⟨net, C0 * (1 + 4 * (L + 1)) ^ d, by positivity, fun n => ?_, hradius⟩
+  have h1 : (1 : ℝ) ≤ ((n + 1 : ℕ) : ℝ) ^ 5 :=
+    one_le_pow₀ (by exact_mod_cast Nat.one_le_iff_ne_zero.mpr (by omega))
+  have hpos5 : (0 : ℝ) ≤ ((n + 1 : ℕ) : ℝ) ^ 5 := by positivity
+  have hinv : (safePerspectiveRadius L n)⁻¹ = 4 * (L + 1) * ((n + 1 : ℕ) : ℝ) ^ 5 := by
+    rw [safePerspectiveRadius, safeResponseTolerance, inv_div, div_eq_mul_inv, inv_inv]
+  have hmax : max 1 (safePerspectiveRadius L n)⁻¹ ≤ (1 + 4 * (L + 1)) * ((n + 1 : ℕ) : ℝ) ^ 5 := by
+    rw [hinv]
+    refine max_le ?_ ?_
+    · nlinarith [h1, hL, mul_nonneg (by linarith : (0 : ℝ) ≤ 4 * (L + 1)) hpos5]
+    · nlinarith [hpos5, hL]
+  calc ((net.centers n).card : ℝ)
+      ≤ C0 * (max 1 (safePerspectiveRadius L n)⁻¹) ^ d := hcard0 n
+    _ ≤ C0 * ((1 + 4 * (L + 1)) * ((n + 1 : ℕ) : ℝ) ^ 5) ^ d :=
+        mul_le_mul_of_nonneg_left
+          (pow_le_pow_left₀ (le_trans zero_le_one (le_max_left _ _)) hmax d) hC0
+    _ = C0 * (1 + 4 * (L + 1)) ^ d * (((n + 1 : ℕ) : ℝ)) ^ (5 * d) := by
+        rw [mul_pow, ← pow_mul]; ring
 
 /-- The conservative response tolerance vanishes.
 
