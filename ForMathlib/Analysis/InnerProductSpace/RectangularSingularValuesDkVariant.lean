@@ -11,6 +11,23 @@ import ForMathlib.Analysis.InnerProductSpace.CourantFischer
 /-!
 # Rectangular singular values and adjoint-product spectra
 
+> **Comparison variant — not preferred, not built.** This is the `dk-work`-branch proof of the
+> rectangular adjoint-spectrum layer (GPT-5.6 High), preserved **verbatim** for side-by-side
+> comparison of proof strategy. It is intentionally **not** imported by `ForMathlib.lean`.
+> The **preferred** implementation — the one the Perfect Quench build depends on — is the
+> sibling file `RectangularSingularValues.lean` (Claude Fable 5).
+>
+> The two proofs share the same public API and differ in only three spots: this variant marks
+> `eigenvalues_congr'` `private` (the preferred file keeps it public because `FiniteFrame` and
+> `GramSpectrumBridge` reference `ForMathlib.eigenvalues_congr'`), and it uses `calc`/compact
+> proof forms in `sq_singularValues_selfCompAdjoint` and
+> `hasEigenvalue_selfCompAdjoint_sq_singularValues`.
+>
+> WARNING: this variant does **not** elaborate on the pinned toolchain — the `calc` form of
+> `sq_singularValues_selfCompAdjoint` provokes a `whnf` heartbeat blow-up that does not clear
+> even at `maxHeartbeats 1000000`. That is precisely why the preferred file rewrote the proof.
+> This file is kept as a readable record of the alternative approach, not as a build target.
+
 For a linear map `A : E →ₗ[𝕜] F` between finite-dimensional inner-product spaces, the two
 Gram operators `A†A` (on `E`) and `AA†` (on `F`) share their nonzero spectrum, including
 multiplicity.  Mathlib defines the zero-padded singular-value sequence
@@ -42,16 +59,6 @@ The eigenspace equivalence and the counting argument are original to this file. 
 Apache-2.0 excerpt `vendor/lean/lean-stat-learning-theory/SingularSystemGram.excerpt.lean`
 (Zhang–Lee–Liu) constructs explicit left singular vectors for Euclidean matrix maps and was
 consulted as a cross-check for the spectral bookkeeping; no code was copied from it here.
-
-## Preferred variant
-
-This is the **preferred** implementation of the rectangular adjoint-spectrum layer, and the
-one the Perfect Quench build depends on (via `GramSpectrumBridge`).  A near-identical
-alternative proof from the `dk-work` branch (GPT-5.6 High) is preserved verbatim for
-comparison at `RectangularSingularValuesDkVariant.lean`; the two differ only in three minor
-spots, and that variant does not elaborate on the pinned toolchain (its `calc` form of
-`sq_singularValues_selfCompAdjoint` provokes a `whnf` heartbeat blow-up), which is why this
-file rewrote that proof.
 -/
 
 namespace ForMathlib
@@ -219,10 +226,7 @@ theorem hasEigenvalue_adjointCompSelf_iff_selfCompAdjoint
 
 /-! ### Equality of the sorted nonzero spectra -/
 
-/-- Sorted eigenvalues are congruent along an operator equality.  (A primed variant of
-`ForMathlib.eigenvalues_congr` from `SingularSubspace.lean`, restated here to keep this
-file's import footprint minimal; the two should be merged when upstreaming.) -/
-theorem eigenvalues_congr' {G : Type*} [NormedAddCommGroup G]
+private theorem eigenvalues_congr' {G : Type*} [NormedAddCommGroup G]
     [InnerProductSpace 𝕜 G] [FiniteDimensional 𝕜 G] {S₁ S₂ : G →ₗ[𝕜] G} (h : S₁ = S₂)
     (hS₁ : S₁.IsSymmetric) (hS₂ : S₂.IsSymmetric) {m : ℕ} (hm : finrank 𝕜 G = m) :
     hS₁.eigenvalues hm = hS₂.eigenvalues hm := by
@@ -299,12 +303,14 @@ theorem _root_.LinearMap.singularValues_adjoint_apply (A : E →ₗ[𝕜] F) (k 
 values of `A`, zero-padded past the rank of `A`. -/
 theorem sq_singularValues_selfCompAdjoint (A : E →ₗ[𝕜] F) {n : ℕ}
     (hn : finrank 𝕜 F = n) (i : Fin n) :
-    A.singularValues i ^ 2 = (isSymmetric_self_comp_adjoint A).eigenvalues hn i := by
-  have h1 := A.adjoint.sq_singularValues_fin hn i
-  rw [A.singularValues_adjoint_apply] at h1
-  rw [h1]
-  exact congrFun (eigenvalues_congr' (by rw [adjoint_adjoint])
-    A.adjoint.isSymmetric_adjoint_comp_self (isSymmetric_self_comp_adjoint A) hn) i
+    A.singularValues i ^ 2 = (isSymmetric_self_comp_adjoint A).eigenvalues hn i :=
+  calc A.singularValues i ^ 2
+      = A.adjoint.singularValues i ^ 2 := by rw [A.singularValues_adjoint_apply]
+    _ = A.adjoint.isSymmetric_adjoint_comp_self.eigenvalues hn i :=
+        A.adjoint.sq_singularValues_fin hn i
+    _ = (isSymmetric_self_comp_adjoint A).eigenvalues hn i :=
+        congrFun (eigenvalues_congr' (by rw [adjoint_adjoint])
+          A.adjoint.isSymmetric_adjoint_comp_self (isSymmetric_self_comp_adjoint A) hn) i
 
 /-- Every positive squared singular value of `A` is an eigenvalue of `AA†`. -/
 theorem hasEigenvalue_selfCompAdjoint_sq_singularValues
@@ -312,12 +318,10 @@ theorem hasEigenvalue_selfCompAdjoint_sq_singularValues
     Module.End.HasEigenvalue (A.comp A.adjoint) ((A.singularValues i ^ 2 : ℝ) : 𝕜) := by
   have hiE : i < finrank 𝕜 E := hi.trans_le A.finrank_range_le
   have hpos : 0 < A.singularValues i := A.singularValues_pos_iff_lt_finrank_range.mpr hi
-  have h0 := A.hasEigenvalue_adjoint_comp_self_sq_singularValues hiE
-  rw [RCLike.ofReal_pow]
-  have hne : ((A.singularValues i : ℝ) : 𝕜) ^ 2 ≠ 0 :=
-    pow_ne_zero 2 (RCLike.ofReal_ne_zero.mpr hpos.ne')
-  exact (hasEigenvalue_adjointCompSelf_iff_selfCompAdjoint A
-    (((A.singularValues i : ℝ) : 𝕜) ^ 2) hne).mp h0
+  have hne : ((A.singularValues i ^ 2 : ℝ) : 𝕜) ≠ 0 :=
+    RCLike.ofReal_ne_zero.mpr (by positivity)
+  exact (hasEigenvalue_adjointCompSelf_iff_selfCompAdjoint A _ hne).mp
+    (A.hasEigenvalue_adjoint_comp_self_sq_singularValues hiE)
 
 /-! ### Quadratic floors and Gram spectra -/
 
