@@ -828,7 +828,128 @@ theorem highProb_referenceCovarianceEntry_of_compact_iid
     HighProbAtTop μref hμref (fun n => {ωref |
       |referenceEmpiricalCovariance ψ f_ref n ωref a b -
         perspectiveCovarianceMatrix Pf ψ center a b| ≤ ε}) := by
-  sorry
+  obtain ⟨B, hB0, hBbound⟩ := exists_perspective_norm_bound_of_isCompact_range ψ hcompact
+  have hcma : Measurable (fun f => ψ f a) :=
+    ((EuclideanSpace.proj a).continuous.measurable).comp hψ
+  have hcmb : Measurable (fun f => ψ f b) :=
+    ((EuclideanSpace.proj b).continuous.measurable).comp hψ
+  have hbnd_a : ∀ f, |ψ f a| ≤ B := fun f => by
+    rw [show |ψ f a| = ‖ψ f a‖ from (Real.norm_eq_abs _).symm]
+    exact (PiLp.norm_apply_le (ψ f) a).trans (hBbound f)
+  have hbnd_b : ∀ f, |ψ f b| ≤ B := fun f => by
+    rw [show |ψ f b| = ‖ψ f b‖ from (Real.norm_eq_abs _).symm]
+    exact (PiLp.norm_apply_le (ψ f) b).trans (hBbound f)
+  have hInta : Integrable (fun f => ψ f a) Pf :=
+    (MemLp.of_bound hcma.aestronglyMeasurable B
+      (Eventually.of_forall fun f => by rw [Real.norm_eq_abs]; exact hbnd_a f)).integrable le_rfl
+  have hIntb : Integrable (fun f => ψ f b) Pf :=
+    (MemLp.of_bound hcmb.aestronglyMeasurable B
+      (Eventually.of_forall fun f => by rw [Real.norm_eq_abs]; exact hbnd_b f)).integrable le_rfl
+  have hIntab : Integrable (fun f => ψ f a * ψ f b) Pf :=
+    (MemLp.of_bound (hcma.mul hcmb).aestronglyMeasurable (B * B)
+      (Eventually.of_forall fun f => by
+        simp only [Pi.mul_apply, Real.norm_eq_abs, abs_mul]
+        exact mul_le_mul (hbnd_a f) (hbnd_b f) (abs_nonneg _) hB0)).integrable le_rfl
+  have hpu : Pf.real Set.univ = 1 := by simp
+  have hmeana : ∫ f, ψ f a ∂Pf = center a := by
+    have h : ∫ f, (ψ f a - center a) ∂Pf = 0 := hcenter a
+    rw [integral_sub hInta (integrable_const (center a)), integral_const, hpu, one_smul,
+      sub_eq_zero] at h
+    exact h
+  have hmeanb : ∫ f, ψ f b ∂Pf = center b := by
+    have h : ∫ f, (ψ f b - center b) ∂Pf = 0 := hcenter b
+    rw [integral_sub hIntb (integrable_const (center b)), integral_const, hpu, one_smul,
+      sub_eq_zero] at h
+    exact h
+  have hi1 : Integrable (fun f => center b * ψ f a) Pf := hInta.const_mul _
+  have hi2 : Integrable (fun f => center a * ψ f b) Pf := hIntb.const_mul _
+  have hpop : perspectiveCovarianceMatrix Pf ψ center a b
+      = (∫ f, ψ f a * ψ f b ∂Pf) - (∫ f, ψ f a ∂Pf) * (∫ f, ψ f b ∂Pf) := by
+    have hdef : perspectiveCovarianceMatrix Pf ψ center a b
+        = ∫ f, (ψ f a - center a) * (ψ f b - center b) ∂Pf := rfl
+    rw [hdef]
+    have hexp : ∫ f, (ψ f a - center a) * (ψ f b - center b) ∂Pf
+        = ∫ f, (ψ f a * ψ f b - center b * ψ f a - center a * ψ f b + center a * center b) ∂Pf :=
+      integral_congr_ae (Eventually.of_forall fun f => by ring)
+    have hI2 : Integrable (fun f => ψ f a * ψ f b - center b * ψ f a) Pf := hIntab.sub hi1
+    have hI3 : Integrable
+        (fun f => ψ f a * ψ f b - center b * ψ f a - center a * ψ f b) Pf := hI2.sub hi2
+    rw [hexp, integral_add hI3 (integrable_const _),
+      integral_sub hI2 hi2, integral_sub hIntab hi1,
+      integral_const_mul, integral_const_mul, integral_const, hpu, one_smul,
+      hmeana, hmeanb]
+    ring
+  set δ := min 1 (ε / (2 * (1 + B))) with hδdef
+  have hδpos : 0 < δ := lt_min one_pos (by positivity)
+  have hprod := highProb_referenceCoordinateProductMean_of_compact_iid Pf μref hμref ψ hψ
+    hcompact f_ref hiid a b hδpos
+  have hma := highProb_referenceCoordinateMean_of_compact_iid Pf μref hμref ψ hψ
+    hcompact f_ref hiid a hδpos
+  have hmb := highProb_referenceCoordinateMean_of_compact_iid Pf μref hμref ψ hψ
+    hcompact f_ref hiid b hδpos
+  have hmeasProd : ∀ n, MeasurableSet {ωref |
+      |referenceCoordinateProductMean ψ f_ref n ωref a b - ∫ f, ψ f a * ψ f b ∂Pf| ≤ δ} := by
+    intro n
+    refine measurableSet_le (Measurable.abs (Measurable.sub ?_ measurable_const)) measurable_const
+    simp only [referenceCoordinateProductMean]
+    exact (Finset.measurable_sum _ (fun i _ =>
+      (hcma.comp (hiid.measurable n i)).mul (hcmb.comp (hiid.measurable n i)))).const_mul _
+  have hmeasA : ∀ n, MeasurableSet {ωref |
+      |referenceCoordinateMean ψ f_ref n ωref a - ∫ f, ψ f a ∂Pf| ≤ δ} := by
+    intro n
+    refine measurableSet_le (Measurable.abs (Measurable.sub ?_ measurable_const)) measurable_const
+    simp only [referenceCoordinateMean]
+    exact (Finset.measurable_sum _ (fun i _ => hcma.comp (hiid.measurable n i))).const_mul _
+  have hmeasB : ∀ n, MeasurableSet {ωref |
+      |referenceCoordinateMean ψ f_ref n ωref b - ∫ f, ψ f b ∂Pf| ≤ δ} := by
+    intro n
+    refine measurableSet_le (Measurable.abs (Measurable.sub ?_ measurable_const)) measurable_const
+    simp only [referenceCoordinateMean]
+    exact (Finset.measurable_sum _ (fun i _ => hcmb.comp (hiid.measurable n i))).const_mul _
+  have hinter := (hprod.inter hma hmeasProd hmeasA).inter hmb
+    (fun n => (hmeasProd n).inter (hmeasA n)) hmeasB
+  refine HighProbAtTop.mono hinter (fun n ωref hω => ?_)
+  obtain ⟨⟨hωprod, hωa⟩, hωb⟩ := hω
+  simp only [Set.mem_setOf_eq] at hωprod hωa hωb ⊢
+  rw [referenceEmpiricalCovariance_entry_eq_product_sub_mean_mul_mean, hpop]
+  set P := referenceCoordinateProductMean ψ f_ref n ωref a b
+  set Ma := referenceCoordinateMean ψ f_ref n ωref a
+  set Mb := referenceCoordinateMean ψ f_ref n ωref b
+  set Ea := ∫ f, ψ f a ∂Pf
+  set Eb := ∫ f, ψ f b ∂Pf
+  set Eab := ∫ f, ψ f a * ψ f b ∂Pf
+  have hδ1 : δ ≤ 1 := min_le_left _ _
+  have hδε : δ ≤ ε / (2 * (1 + B)) := min_le_right _ _
+  have hEa : |Ea| ≤ B := by
+    calc |Ea| ≤ ∫ f, |ψ f a| ∂Pf := abs_integral_le_integral_abs
+      _ ≤ ∫ _f, B ∂Pf := integral_mono hInta.abs (integrable_const B) hbnd_a
+      _ = B := by simp
+  have hEb : |Eb| ≤ B := by
+    calc |Eb| ≤ ∫ f, |ψ f b| ∂Pf := abs_integral_le_integral_abs
+      _ ≤ ∫ _f, B ∂Pf := integral_mono hIntb.abs (integrable_const B) hbnd_b
+      _ = B := by simp
+  have hMa : |Ma| ≤ B + δ := by
+    have hh : |Ma| ≤ |Ma - Ea| + |Ea| := by
+      have := abs_add_le (Ma - Ea) Ea; rwa [sub_add_cancel] at this
+    linarith [hωa]
+  have hkey : |Ma * Mb - Ea * Eb| ≤ |Ma| * |Mb - Eb| + |Eb| * |Ma - Ea| := by
+    have heq : Ma * Mb - Ea * Eb = Ma * (Mb - Eb) + Eb * (Ma - Ea) := by ring
+    rw [heq]
+    exact (abs_add_le _ _).trans (by rw [abs_mul, abs_mul])
+  have htri : |P - Ma * Mb - (Eab - Ea * Eb)| ≤ |P - Eab| + |Ma * Mb - Ea * Eb| := by
+    have heq : P - Ma * Mb - (Eab - Ea * Eb) = (P - Eab) + (-(Ma * Mb - Ea * Eb)) := by ring
+    rw [heq]; exact (abs_add_le _ _).trans_eq (by rw [abs_neg])
+  have h2 : |Ma * Mb - Ea * Eb| ≤ (B + δ) * δ + B * δ :=
+    hkey.trans (add_le_add (mul_le_mul hMa hωb (abs_nonneg _) (by linarith))
+      (mul_le_mul hEb hωa (abs_nonneg _) hB0))
+  have hfinal : |P - Ma * Mb - (Eab - Ea * Eb)| ≤ δ + ((B + δ) * δ + B * δ) := by
+    linarith [htri, hωprod, h2]
+  refine hfinal.trans ?_
+  have hstep : δ + ((B + δ) * δ + B * δ) ≤ δ * (2 * (1 + B)) := by nlinarith [hδ1, hδpos.le, hB0]
+  refine hstep.trans ?_
+  calc δ * (2 * (1 + B)) ≤ (ε / (2 * (1 + B))) * (2 * (1 + B)) :=
+        mul_le_mul_of_nonneg_right hδε (by positivity)
+    _ = ε := by field_simp
 
 /-- Finite intersection of the scalar covariance-entry events.
 
