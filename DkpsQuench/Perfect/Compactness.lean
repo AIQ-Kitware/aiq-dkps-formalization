@@ -269,7 +269,20 @@ theorem exists_populationMean_norm_bound_of_compact_lipschitz
     (hμlip : ∀ f g,
       ‖μmodel f - μmodel g‖ ≤ L * ‖ψ f - ψ g‖) :
     ∃ B : Real, 0 ≤ B ∧ ∀ f, ‖μmodel f‖ ≤ B := by
-  sorry
+  obtain ⟨f0⟩ := nonempty_model_of_probability Pf
+  obtain ⟨Bψ, hBψ0, hBψ⟩ := exists_perspective_norm_bound_of_isCompact_range ψ hcompact
+  refine ⟨max 0 (L * (2 * Bψ) + ‖μmodel f0‖), le_max_left _ _, fun f => ?_⟩
+  have hψsub : ‖ψ f - ψ f0‖ ≤ 2 * Bψ :=
+    calc ‖ψ f - ψ f0‖ ≤ ‖ψ f‖ + ‖ψ f0‖ := norm_sub_le _ _
+      _ ≤ Bψ + Bψ := add_le_add (hBψ f) (hBψ f0)
+      _ = 2 * Bψ := by ring
+  calc ‖μmodel f‖
+      = ‖(μmodel f - μmodel f0) + μmodel f0‖ := by rw [sub_add_cancel]
+    _ ≤ ‖μmodel f - μmodel f0‖ + ‖μmodel f0‖ := norm_add_le _ _
+    _ ≤ L * ‖ψ f - ψ f0‖ + ‖μmodel f0‖ := by linarith [hμlip f f0]
+    _ ≤ L * (2 * Bψ) + ‖μmodel f0‖ := by
+        linarith [mul_le_mul_of_nonneg_left hψsub hL]
+    _ ≤ max 0 (L * (2 * Bψ) + ‖μmodel f0‖) := le_max_right _ _
 
 /-- Polynomial finite covers for a compact subset of finite-dimensional
 Euclidean space, with centers pulled back to models.
