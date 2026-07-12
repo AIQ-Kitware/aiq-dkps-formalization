@@ -266,7 +266,15 @@ theorem highProb_prod_mk_right
     HighProbAtTop (jointStageMeasure μref μresp)
       (jointStageMeasure_probability μref hμref μresp hμresp)
       (fun n => {ω : Ωref × Ωresp | ω.2 ∈ E n}) := by
-  sorry
+  intro δ hδ
+  obtain ⟨N, hN⟩ := hE δ hδ
+  refine ⟨N, fun n hn => ?_⟩
+  have hrect : {ω : Ωref × Ωresp | ω.2 ∈ E n} = (Set.univ : Set Ωref) ×ˢ E n := by
+    ext ω; simp
+  show ((μref n).prod (μresp n)) {ω : Ωref × Ωresp | ω.2 ∈ E n} ≥ 1 - δ
+  haveI := hμref n
+  rw [hrect, Measure.prod_prod, measure_univ, one_mul]
+  exact hN n hn
 
 /-- Infinite-model augmented response concentration from raw iid replicates,
 shrinking perspective nets, and response regularity.
