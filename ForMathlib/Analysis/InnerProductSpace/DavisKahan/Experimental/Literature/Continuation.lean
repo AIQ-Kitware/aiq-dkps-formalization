@@ -114,8 +114,8 @@ theorem continuedProjection_same_component
       IsOrthogonalProjection (continuedProjection A H contour t)) :
     SameProjectionComponent
       (continuedProjection A H contour 0)
-      (continuedProjection A H contour 1) := by
-  sorry
+      (continuedProjection A H contour 1) :=
+  ⟨continuedProjection A H contour, hcontinuous, rfl, rfl, hproj⟩
 
 /-- Continued Riesz projections select the spectral component born from the
 initial component. 
