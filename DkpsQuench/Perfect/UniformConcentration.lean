@@ -123,7 +123,11 @@ theorem measurableSet_modelNetResponseEventFor
     (hXbar : ∀ n f, Measurable fun ω => Xbar n ω f)
     (n : Nat) :
     MeasurableSet (modelNetResponseEventFor ψ Xbar μmodel net τ n) := by
-  sorry
+  unfold modelNetResponseEventFor
+  exact measurableSet_finset_all (net.centers n)
+    (fun f => {ω | ‖Xbar n ω f - μmodel f‖ ≤ τ n})
+    (fun f _ => measurableSet_le
+      (((hXbar n f).sub measurable_const).norm) measurable_const)
 
 /-- Finite-net response concentration from uniform modelwise second moments.
 
@@ -231,7 +235,8 @@ theorem modelUniformResponseEvent_subset_augmented
         (fun n ω f i => Xbar n ω.2
           (augmentedModelAt f_ref n ω.1 f i))
         (augmentedRawPopulationMean f_ref μmodel) η n := by
-  sorry
+  intro ω hω f i
+  exact hω (augmentedModelAt f_ref n ω.1 f i)
 
 /-- Lift a high-probability response-only event to the independent joint sample
 space.
