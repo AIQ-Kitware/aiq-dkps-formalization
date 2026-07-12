@@ -7,7 +7,7 @@ import ForMathlib.Analysis.InnerProductSpace.DavisKahanTheory.SinTwoTheta
 import ForMathlib.Analysis.InnerProductSpace.TanTwoTheta
 
 /-!
-# The complete finite-dimensional `tan (2 Θ)` theorem family
+# Proposed finite-dimensional `tan (2 Θ)` extensions
 
 Literature map:
 
@@ -19,9 +19,13 @@ Literature map:
 * `ForMathlib/prose/Davis-1963-core-arguments.tex`, Section
   "The sharp two-subspace estimate" for the one-vector ancestor.
 
-The current `TanTwoTheta.lean` proves the largest-angle/operator-norm endpoint.
-The final classic theorem is stronger: it is stated for every unitarily
-invariant norm and has both residual and perturbation conclusions.
+The proof-complete classical finite Part III theorem is
+`ForMathlib.tan_two_theta_norm_sub_le`, re-exported canonically by
+`DavisKahanTheory.PartIII`.  It is the sharp operator-norm theorem and includes
+the strict quarter-turn conclusion.  This module records proposed residual,
+canonical-angle-operator, spectral-selection, and every-UI-norm
+strengthenings; those declarations are extensions rather than missing pieces
+of the source-checked Part III headline.
 -/
 
 

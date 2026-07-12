@@ -3,9 +3,11 @@
 Roadmap for taking the Davis–Kahan formalization from its current state —
 `dev/davis-kahan-gap-closure-plan.md` (v6) fully executed, everything the DKPS
 pipeline consumes formalized — to a state that would satisfy an expert asked
-"is the Davis–Kahan *theory* formalized?", i.e. the Part III (1970) package:
-the four theorems (sinΘ, sin2Θ, tanΘ, tan2Θ) at the subspace level, in every
-unitarily invariant norm, with the principal-angle dictionary certified.
+"is the Davis–Kahan *theory* formalized?", i.e. the source-checked Part III
+(1970) package: the `sinΘ` and `sin2Θ` subspace theorems for every unitarily
+invariant norm, the pole-free per-vector `tanΘ` theorem, and the sharp
+operator-norm `tan2Θ` theorem with its strict quarter-turn conclusion, together
+with the principal-angle dictionary needed to interpret those statements.
 
 Written for an Opus-level agent; every step names its target file, statement
 shape, proof route, existing assets, pitfalls, and a difficulty grade.  House
@@ -16,6 +18,14 @@ gates, `lake build` green after every step, `#print axioms` =
 
 ## Revision log
 
+- **v15 (2026-07-12, GPT-5.6 High — canonical Part III facade):** added
+  `DavisKahanTheory.PartIII`, a proof-complete stable import surface for the
+  four source-checked headline theorems.  Reconciled the later canonical
+  tangent scaffolds with the statement-first gates: all-UI `tanΘ` and
+  `tan2Θ`, graph operators, residual tangent forms, and branch-selection APIs
+  are valuable extensions, but they are not prerequisites for completion of
+  the classical quartet.  The umbrella module and literature comparison now
+  distinguish the closed quartet from those extensions.
 - **v1 (2026-07-09, Fable):** initial plan, incorporating a review of Opus's
   2026-07-09 expert-gap diagnosis.
 - **v14 (2026-07-10, Fable — G3 ✅ DONE, G2.2b ✅ DONE; THE PLAN IS

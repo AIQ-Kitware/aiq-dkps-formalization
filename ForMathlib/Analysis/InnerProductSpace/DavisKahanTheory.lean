@@ -11,6 +11,7 @@ import ForMathlib.Analysis.InnerProductSpace.DavisKahanTheory.Sylvester
 import ForMathlib.Analysis.InnerProductSpace.DavisKahanTheory.SinTheta
 import ForMathlib.Analysis.InnerProductSpace.DavisKahanTheory.TanTheta
 import ForMathlib.Analysis.InnerProductSpace.DavisKahanTheory.SinTwoTheta
+import ForMathlib.Analysis.InnerProductSpace.DavisKahanTheory.PartIII
 import ForMathlib.Analysis.InnerProductSpace.DavisKahanTheory.TanTwoTheta
 import ForMathlib.Analysis.InnerProductSpace.DavisKahanTheory.Generalized
 import ForMathlib.Analysis.InnerProductSpace.DavisKahanTheory.DirectRotation
@@ -20,13 +21,20 @@ import ForMathlib.Analysis.InnerProductSpace.DavisKahanTheory.Statistics
 import ForMathlib.Analysis.InnerProductSpace.DavisKahanTheory.SingularSubspace
 
 /-!
-# Complete finite-dimensional Davis--Kahan theory scaffold
+# Finite-dimensional Davis--Kahan theory
 
-Umbrella import for the literature-indexed roadmap under
+Umbrella import for the literature-indexed finite theory under
 `ForMathlib.Analysis.InnerProductSpace.DavisKahanTheory`.
 
-The declarations are intentionally left unproved. Their proof architecture is
-recorded in
-`ForMathlib/prose/Davis-Kahan-1970-part-III-core-arguments.tex` and
-`ForMathlib/prose/Davis-1963-core-arguments.tex`.
+The classical Part III quartet has a proof-complete, scope-accurate facade in
+`DavisKahanTheory.PartIII`.  In particular, the two sine theorems are available
+for every unitarily invariant norm, while the classical tangent headlines are
+the pole-free vector `tan Theta` theorem and the sharp operator-norm
+`tan 2 Theta` theorem.
+
+Other imported modules also contain explicit research scaffolds for stronger
+residual, graph-operator, all-UI tangent, direct-rotation, generalized, and
+sharpness results.  Their remaining proof holes are extensions of the finite
+Part III core, not evidence that the four classical headline theorems are
+missing.
 -/
