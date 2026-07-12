@@ -77,8 +77,9 @@ noncomputable def unboundedBlockOperator
 
 /-- Graph subspace of a bounded angular operator in the Hilbert direct sum. -/
 noncomputable def unboundedBlockGraph (X : E0 →L[𝕜] E1) :
-    Submodule 𝕜 (WithLp 2 (E0 × E1)) := by
-  sorry
+    Submodule 𝕜 (WithLp 2 (E0 × E1)) :=
+  LinearMap.range ((WithLp.linearEquiv 2 𝕜 (E0 × E1)).symm.toLinearMap ∘ₗ
+    LinearMap.id.prod X.toLinearMap)
 
 noncomputable instance unboundedBlockGraph_hasOrthogonalProjection
     (X : E0 →L[𝕜] E1) :
