@@ -504,8 +504,12 @@ theorem highProb_referenceCovarianceEvent_of_compact_iid
     (hcenter : ∀ j, ∫ f, (ψ f - center) j ∂Pf = 0)
     {ε : Real} (hε : 0 < ε) :
     HighProbAtTop μref hμref
-      (referenceCovarianceEvent Pf ψ f_ref center ε) := by
-  sorry
+      (referenceCovarianceEvent Pf ψ f_ref center ε) :=
+  highProb_referenceCovarianceEvent_of_entries Pf μref hμref ψ f_ref center
+    (fun a b => highProb_referenceCovarianceEntry_of_compact_iid Pf μref hμref ψ hψ
+      hcompact f_ref hiid center hcenter a b hε)
+    (fun a b n => measurableSet_referenceCovarianceEntryEvent Pf ψ hψ f_ref
+      hiid.measurable center ε n a b)
 
 /-- Entrywise covariance closeness preserves a uniform quadratic-form floor.
 
