@@ -226,7 +226,7 @@ Davis--Kahan theorem.  In the finite spectral specialization, `H = |A-mI|`,
 uses neither finite dimensionality nor a spectral theorem. -/
 theorem gap_mul_opNorm_le_of_comp_sub_comp_eq
     {H : E →L[𝕜] E} {T : F →L[𝕜] F} {X Z Y : F →L[𝕜] E}
-    (hH : H.IsSymmetric) {r g : ℝ} (hr : 0 ≤ r) (hg : 0 < g)
+    (hH : H.IsSymmetric) {r g : ℝ} (_hr : 0 ≤ r) (_hg : 0 < g)
     (hHc : ∀ x, (r + g) * ‖x‖ ^ 2 ≤ RCLike.re ⟪H x, x⟫_𝕜)
     (hT : ‖T‖ ≤ r) (hZX : ‖Z‖ = ‖X‖)
     (hEq : H ∘L X - Z ∘L T = Y) :
@@ -501,7 +501,7 @@ by every rectangular unitarily invariant norm.  No finite-dimensionality,
 spectral theorem, completeness, or singular-value argument is used. -/
 theorem gap_mul_le_of_comp_sub_comp_eq_rectangular
     {H : F →L[𝕜] F} {T : E →L[𝕜] E} {X Z Y : E →L[𝕜] F}
-    (hH : H.IsSymmetric) {r g : ℝ} (hr : 0 ≤ r) (hg : 0 < g)
+    (hH : H.IsSymmetric) {r g : ℝ} (_hr : 0 ≤ r) (_hg : 0 < g)
     (hHc : ∀ x, (r + g) * ‖x‖ ^ 2 ≤ RCLike.re ⟪H x, x⟫_𝕜)
     (hT : ‖T‖ ≤ r) (hZX : N Z = N X)
     (hEq : H ∘L X - Z ∘L T = Y) :

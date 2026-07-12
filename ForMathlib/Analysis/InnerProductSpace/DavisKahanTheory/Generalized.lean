@@ -195,8 +195,8 @@ theorem generalizedTanTheta_residual_le
     {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric)
     {V : Submodule 𝕜 E} [V.HasOrthogonalProjection] (hV : Reduces A V)
     (X : F →ₗ[𝕜] E) (hX : Function.Injective X)
-    (hdim : finrank 𝕜 F ≤ finrank 𝕜 V)
-    (htrans : IsTransverse
+    (_hdim : finrank 𝕜 F ≤ finrank 𝕜 V)
+    (_htrans : IsTransverse
       (approximateSubspace (orthonormalizedEmbedding X hX)) V)
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : OrderedGap (generalizedCompression A X hX) ⊤ A Vᗮ δ) :

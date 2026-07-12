@@ -9,6 +9,7 @@ condition.
 -/
 
 import DkpsQuench.Perfect.RawResponses
+import DkpsQuench.Perfect.PolynomialCover
 
 set_option linter.mathlibStandardSet false
 
@@ -283,46 +284,6 @@ theorem exists_populationMean_norm_bound_of_compact_lipschitz
     _ ≤ L * (2 * Bψ) + ‖μmodel f0‖ := by
         linarith [mul_le_mul_of_nonneg_left hψsub hL]
     _ ≤ max 0 (L * (2 * Bψ) + ‖μmodel f0‖) := le_max_right _ _
-
-/-- Polynomial finite covers for a compact subset of finite-dimensional
-Euclidean space, with centers pulled back to models.
-
-A suitable proof can use Mathlib's total-boundedness API followed by a bounded
-box grid, or an existing covering-number theorem if one is available.  The
-important conclusion is the exponent `d`; the constant is existential and may
-absorb norm equivalences and the diameter of the compact range.
-
-The `max 1 ρ⁻¹` form handles large radii and avoids separate early-stage cases.
-
-Implementation recipe (execute in this order):
-1. Move from models to the compact set `K := Set.range ψ ⊆ EuclideanSpace Real
-   (Fin d)`; use `hcompact.isTotallyBounded` to obtain finite covers for every
-   positive radius.
-2. To obtain the polynomial cardinality, enclose `K` in a cube
-   `[-B,B]^d` using a norm bound from compactness.
-3. For `0 < ρ ≤ 1`, build a coordinate grid with mesh comparable to
-   `ρ / sqrt d`; prove every point of the cube is within `ρ` of a grid point and
-   bound the grid cardinality by `C * ρ⁻¹ ^ d`.
-4. For `ρ > 1`, use one fixed center (or the total-boundedness cover) and absorb
-   the finite early-radius cost into `C`; this is why the statement uses
-   `max 1 ρ⁻¹`.
-5. Pull each selected grid/cover point in `K` back to a model using its range
-   witness, form a `Finset (Model Q X)`, and prove `PerspectiveFiniteCover`.
-6. Isolate the Euclidean grid lemma as a local helper if Mathlib lacks an exact
-   covering-number theorem.  Search anchors: `IsCompact.isTotallyBounded`,
-   `Metric.isCompact_iff_totallyBounded_isComplete`, `Finset.pi`, and existing
-   finite-dimensional entropy lemmas.
-7. Do not expose the constructed grid or its constants in the final theorem.
--/
-theorem exists_polynomial_perspective_covers_of_isCompact_range
-    {d : Nat}
-    (ψ : Model Q X → Vec d)
-    (hcompact : IsCompact (Set.range ψ)) :
-    ∃ C : Real, 0 ≤ C ∧ ∀ ρ : Real, 0 < ρ →
-      ∃ centers : Finset (Model Q X),
-        PerspectiveFiniteCover ψ ρ centers ∧
-        ((centers.card : Nat) : Real) ≤ C * (max 1 ρ⁻¹) ^ d := by
-  sorry
 
 /-- Turn polynomial covers at arbitrary radii into a coherent growing finite
 net for a prescribed shrinking radius sequence.

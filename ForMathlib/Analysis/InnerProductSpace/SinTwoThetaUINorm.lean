@@ -357,6 +357,7 @@ section Dictionary
 
 variable {d : ℕ}
 
+omit [CompleteSpace E] in
 /-- **The sin 2Θ dictionary.**  For orthonormal families `u, v` spanning `U, V`,
 `P = P_U`, `P̂ = P_V`, `Q = P_{Uᗮ}`, and every unitarily invariant norm `N`,
 `N (Q ∘ P̂ ∘ P) = N (diagOp bC (fun i ↦ cᵢ √(1 − cᵢ²)))` where

@@ -264,6 +264,7 @@ theorem reduces_spectralSubspace (A : E →L[𝕜] E)
     Reduces A (spectralSubspace A s) := by
   sorry
 
+omit [CompleteSpace E] in
 /-- The spectral projection has the expected range. 
 
 Lean proof route for a weaker agent:

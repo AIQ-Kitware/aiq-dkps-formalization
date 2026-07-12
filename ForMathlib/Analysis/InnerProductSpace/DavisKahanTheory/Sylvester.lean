@@ -187,11 +187,15 @@ theorem sylvesterOperator_injective {A : F →ₗ[𝕜] F} {B : E →ₗ[𝕜] E
   have hα : α ∈ restrictedSpectrum A ⊤ :=
     ⟨hA.eigenvectorBasis rfl i, Submodule.mem_top,
       (hA.eigenvectorBasis rfl).orthonormal.ne_zero i,
-      by simpa [α] using hA.apply_eigenvectorBasis rfl i⟩
+      by
+        dsimp [α]
+        exact hA.apply_eigenvectorBasis rfl i⟩
   have hβ : β ∈ restrictedSpectrum B ⊤ :=
     ⟨hB.eigenvectorBasis rfl j, Submodule.mem_top,
       (hB.eigenvectorBasis rfl).orthonormal.ne_zero j,
-      by simpa [β] using hB.apply_eigenvectorBasis rfl j⟩
+      by
+        dsimp [β]
+        exact hB.apply_eigenvectorBasis rfl j⟩
   have hαβ : α ≠ β := by
     have habs : 0 < |α - β| := lt_of_lt_of_le hδ (hgap α β hα hβ)
     exact sub_ne_zero.mp (abs_pos.mp habs)
@@ -243,6 +247,7 @@ noncomputable def solveSylvester (A : F →ₗ[𝕜] F) (B : E →ₗ[𝕜] E)
   else
     0
 
+omit [FiniteDimensional 𝕜 E] [FiniteDimensional 𝕜 F] in
 private theorem solveSylvester_eq_of_bijective
     (A : F →ₗ[𝕜] F) (B : E →ₗ[𝕜] E) (C : E →ₗ[𝕜] F)
     (h : Function.Bijective (sylvesterOperator A B)) :
@@ -277,7 +282,7 @@ private theorem eigenvalue_mem_restrictedSpectrum_top
     hT.eigenvalues rfl i ∈ restrictedSpectrum T ⊤ :=
   ⟨hT.eigenvectorBasis rfl i, Submodule.mem_top,
     (hT.eigenvectorBasis rfl).orthonormal.ne_zero i,
-    by simpa using hT.apply_eigenvectorBasis rfl i⟩
+    hT.apply_eigenvectorBasis rfl i⟩
 
 private theorem re_inner_le_of_eigenvalues_le
     {T : E →ₗ[𝕜] E} (hT : T.IsSymmetric) {c : ℝ}

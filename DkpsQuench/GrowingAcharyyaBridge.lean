@@ -102,7 +102,7 @@ noncomputable def yNNTieAverage_augmentedCMDS
 /-- A population Gram realization already implies positive semidefiniteness of
 its classical-MDS matrix.  This is exposed separately so higher-level Quench
 capstones do not ask callers to restate a consequence of their Gram witness. -/
-noncomputable def populationPosSemidefOfGram
+theorem populationPosSemidefOfGram
     (D : ∀ n, Ω → Model Q X → DisMat (n + 1))
     (z : ∀ n, Ω → Model Q X → Config (n + 1) d)
     (hzGram : ∀ n ω f i j,
@@ -219,8 +219,8 @@ theorem highProbQQueryEfficient_tieAverage_of_growing_augmented_cmds
   have hEgMeas : ∀ n, MeasurableSet (Eg n) := by
     intro n
     by_cases hn : good n
-    · simpa [Eg, hn] using hEmeas n
-    · simpa [Eg, hn] using (MeasurableSet.empty : MeasurableSet (∅ : Set Ω))
+    · simp [Eg, hn, hEmeas n]
+    · simp [Eg, hn]
   have hEg : HighProbAtTop μ hμ Eg := by
     apply hE.mono_eventually
     filter_upwards [hgood] with n hn

@@ -175,7 +175,7 @@ theorem augmentedRawPopulationMean_realization
       (augmentedRawPopulationMean f_ref μmodel) := by
   intro n ω f i j
   simp only [responseDist, responseDistEntry, augmentedRawPopulationMean,
-    liftedReferenceSampler, augmentedModelAt]
+    augmentedModelAt]
   exact hrealize _ _
 
 /-- A model-level population norm envelope lifts to every augmented batch. -/

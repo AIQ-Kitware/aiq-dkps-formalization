@@ -340,7 +340,7 @@ theorem highProbQQueryEfficient_tieAverage_of_growing_augmented_secondMoment
 
 /-- Positive semidefiniteness of the population response CMDS matrix, derived
 from an explicit population Gram configuration. -/
-noncomputable def augmentedPopulationPosSemidefOfGram
+theorem augmentedPopulationPosSemidefOfGram
     {m p : Nat}
     (μbar : ∀ n, Ω → Model Q X → Fin (n + 1) → Acharyya2024.Mat m p)
     (z : ∀ n, Ω → Model Q X → Config (n + 1) d)

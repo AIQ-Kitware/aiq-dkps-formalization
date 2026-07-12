@@ -57,6 +57,7 @@ noncomputable def solveSylvester (A : F →L[𝕜] F)
     (B : E →L[𝕜] E) (C : E →L[𝕜] F) : E →L[𝕜] F :=
   sylvesterResolventIntegral A B C
 
+omit [CompleteSpace E] [CompleteSpace F] in
 /-- Bochner/resolvent integral representation of the solution.
 
 Proof strategy for the ordered case: shift the operators so that `A >= d/2`
@@ -182,6 +183,7 @@ theorem norm_sylvester_le_of_orderedSeparation
     d * ‖X‖ ≤ ‖C‖ := by
   sorry
 
+omit [CompleteSpace E] [CompleteSpace F] in
 /-- **The sharp constant-one Sylvester operator-norm bound, quadratic-form
 (coercivity) form — dimension-free and completeness-free.**  If the quadratic
 form of the self-adjoint `A` is at least `(c+g)‖·‖²` while that of `B` is at most
