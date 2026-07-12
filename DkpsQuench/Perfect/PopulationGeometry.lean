@@ -126,7 +126,81 @@ theorem classicalMDSMatrix_pairDist_eq_centered_gram
     {n d : Nat} (hn : 0 < n) (z : Config n d) (i j : Fin n) :
     classicalMDSMatrix (fun a b => ‖z a - z b‖) i j =
       ∑ k, centerConfig z i k * centerConfig z j k := by
-  sorry
+  classical
+  have hn' : (n : ℝ) ≠ 0 := Nat.cast_ne_zero.mpr hn.ne'
+  -- Squared distance expanded coordinatewise into Gram entries.
+  have hgram : ∀ a b : Fin n, ‖z a - z b‖ ^ 2
+      = (∑ k, z a k * z a k) - 2 * (∑ k, z a k * z b k) + (∑ k, z b k * z b k) := by
+    intro a b
+    rw [PiLp.norm_sq_eq_of_L2]
+    have hk : ∀ k, ‖(z a - z b) k‖ ^ 2
+        = z a k * z a k - 2 * (z a k * z b k) + z b k * z b k :=
+      fun k => by rw [PiLp.sub_apply, Real.norm_eq_abs, sq_abs]; ring
+    rw [Finset.sum_congr rfl (fun k _ => hk k), Finset.sum_add_distrib,
+      Finset.sum_sub_distrib, ← Finset.mul_sum]
+  -- Centroid coordinate.
+  have hc : ∀ (a : Fin n) (k : Fin d),
+      centerConfig z a k = z a k - (n : ℝ)⁻¹ * ∑ b, z b k := fun a k => by
+    simp only [centerConfig, configCentroid, PiLp.sub_apply, PiLp.smul_apply,
+      WithLp.ofLp_sum, Finset.sum_apply, smul_eq_mul]
+  -- Sum-swap helpers.
+  have hswR : ∑ k, (∑ b, z b k) * z i k = ∑ b, ∑ k, z i k * z b k := by
+    simp only [Finset.sum_mul]
+    rw [Finset.sum_comm]
+    exact Finset.sum_congr rfl fun b _ => Finset.sum_congr rfl fun k _ => mul_comm _ _
+  have hswC : ∑ k, (∑ b, z b k) * z j k = ∑ a, ∑ k, z a k * z j k := by
+    simp only [Finset.sum_mul]
+    rw [Finset.sum_comm]
+  have hswG : ∑ k, (∑ b, z b k) * (∑ b, z b k) = ∑ a, ∑ b, ∑ k, z a k * z b k := by
+    simp only [Finset.sum_mul_sum]
+    rw [Finset.sum_comm]
+    exact Finset.sum_congr rfl fun a _ => Finset.sum_comm
+  -- RHS as Gram atoms.
+  have hRHS : ∑ k, centerConfig z i k * centerConfig z j k
+      = (∑ k, z i k * z j k) - (n : ℝ)⁻¹ * (∑ b, ∑ k, z i k * z b k)
+        - (n : ℝ)⁻¹ * (∑ a, ∑ k, z a k * z j k)
+        + (n : ℝ)⁻¹ ^ 2 * (∑ a, ∑ b, ∑ k, z a k * z b k) := by
+    simp only [hc]
+    have hk : ∀ k,
+        (z i k - (n : ℝ)⁻¹ * ∑ b, z b k) * (z j k - (n : ℝ)⁻¹ * ∑ b, z b k)
+        = z i k * z j k - (n : ℝ)⁻¹ * ((∑ b, z b k) * z i k)
+          - (n : ℝ)⁻¹ * ((∑ b, z b k) * z j k)
+          + (n : ℝ)⁻¹ ^ 2 * ((∑ b, z b k) * (∑ b, z b k)) :=
+      fun k => by ring
+    rw [Finset.sum_congr rfl (fun k _ => hk k), Finset.sum_add_distrib,
+      Finset.sum_sub_distrib, Finset.sum_sub_distrib, ← Finset.mul_sum, ← Finset.mul_sum,
+      ← Finset.mul_sum, hswR, hswC, hswG]
+  -- Mean expansions.
+  have heRow : ∑ b, ((∑ k, z i k * z i k) - 2 * (∑ k, z i k * z b k)
+        + (∑ k, z b k * z b k))
+      = (n : ℝ) * (∑ k, z i k * z i k) - 2 * (∑ b, ∑ k, z i k * z b k)
+        + (∑ b, ∑ k, z b k * z b k) := by
+    rw [Finset.sum_add_distrib, Finset.sum_sub_distrib, Finset.sum_const, Finset.card_univ,
+      Fintype.card_fin, nsmul_eq_mul, ← Finset.mul_sum]
+  have heCol : ∑ a, ((∑ k, z a k * z a k) - 2 * (∑ k, z a k * z j k)
+        + (∑ k, z j k * z j k))
+      = (∑ a, ∑ k, z a k * z a k) - 2 * (∑ a, ∑ k, z a k * z j k)
+        + (n : ℝ) * (∑ k, z j k * z j k) := by
+    rw [Finset.sum_add_distrib, Finset.sum_sub_distrib, Finset.sum_const, Finset.card_univ,
+      Fintype.card_fin, nsmul_eq_mul, ← Finset.mul_sum]
+  have heGrand : ∑ a, ∑ b, ((∑ k, z a k * z a k) - 2 * (∑ k, z a k * z b k)
+        + (∑ k, z b k * z b k))
+      = (n : ℝ) * (∑ a, ∑ k, z a k * z a k) - 2 * (∑ a, ∑ b, ∑ k, z a k * z b k)
+        + (n : ℝ) * (∑ b, ∑ k, z b k * z b k) := by
+    have hrowa : ∀ a : Fin n,
+        ∑ b, ((∑ k, z a k * z a k) - 2 * (∑ k, z a k * z b k) + (∑ k, z b k * z b k))
+        = (n : ℝ) * (∑ k, z a k * z a k) - 2 * (∑ b, ∑ k, z a k * z b k)
+          + (∑ b, ∑ k, z b k * z b k) := fun a => by
+      rw [Finset.sum_add_distrib, Finset.sum_sub_distrib, Finset.sum_const, Finset.card_univ,
+        Fintype.card_fin, nsmul_eq_mul, ← Finset.mul_sum]
+    rw [Finset.sum_congr rfl (fun a _ => hrowa a), Finset.sum_add_distrib,
+      Finset.sum_sub_distrib, ← Finset.mul_sum, ← Finset.mul_sum, Finset.sum_const,
+      Finset.card_univ, Fintype.card_fin, nsmul_eq_mul]
+  -- Assemble.
+  simp only [classicalMDSMatrix, doubleCenter, rowMean, colMean, grandMean, hgram]
+  rw [heRow, heCol, heGrand, hRHS]
+  field_simp
+  ring
 
 /-- The centered target-augmented perspective configuration has the radial
 identity needed by the Quench nearest-neighbor engine.
