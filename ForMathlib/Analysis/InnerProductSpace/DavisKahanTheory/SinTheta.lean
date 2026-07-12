@@ -463,6 +463,32 @@ private theorem adjoint_subtype_eq_orthogonalProjectionOnto
   rw [U.inner_starProjection_left_eq_right,
     U.starProjection_eq_self_iff.mpr y.2]
 
+/-- The linear map underlying the canonical isometric inclusion is the
+ordinary submodule inclusion. -/
+private theorem subtypeₗᵢ_toLinearMap_eq_subtype
+    (U : Submodule 𝕜 E) [U.HasOrthogonalProjection] :
+    U.subtypeₗᵢ.toLinearMap = U.subtype := by
+  ext x
+  rfl
+
+/-- The adjoint of the ordinary submodule inclusion is orthogonal projection
+onto that subspace. -/
+private theorem adjoint_subtypeLinearMap_eq_orthogonalProjectionOnto
+    (U : Submodule 𝕜 E) [U.HasOrthogonalProjection] :
+    LinearMap.adjoint U.subtype =
+      U.orthogonalProjectionOnto.toLinearMap := by
+  rw [← subtypeₗᵢ_toLinearMap_eq_subtype U]
+  exact adjoint_subtype_eq_orthogonalProjectionOnto U
+
+/-- The adjoint of orthogonal projection onto a subspace, viewed as a map into
+that subspace, is the canonical inclusion. -/
+private theorem adjoint_orthogonalProjectionOnto_eq_subtype
+    (U : Submodule 𝕜 E) [U.HasOrthogonalProjection] :
+    LinearMap.adjoint U.orthogonalProjectionOnto.toLinearMap = U.subtype := by
+  rw [← adjoint_subtype_eq_orthogonalProjectionOnto U,
+    LinearMap.adjoint_adjoint,
+    subtypeₗᵢ_toLinearMap_eq_subtype]
+
 /-- Transporting the rectangular sine embedding on `U` back to the ambient
 square space gives the one-sided sine cross projection `P_{Vᗮ} P_U`. -/
 private theorem domainTransport_sinThetaEmbedding_apply
@@ -688,39 +714,64 @@ theorem sinAngleOperator_perturbation_le
     CUV CVU.adjoint
   have hNBscaled : NB (((δ : ℝ) : 𝕜) • Xblock) ≤ NB Cblock := by
     have h :=
-      RectangularUnitarilyInvariantNorm.
-        orthogonalBlockSum_apply_le_of_kyFanSum_le NB hkyUV hkyVU
-    simpa [Xblock, Cblock] using h
+      RectangularUnitarilyInvariantNorm.orthogonalBlockSum_apply_le_of_kyFanSum_le
+        NB hkyUV hkyVU
+    change NB (((δ : ℝ) : 𝕜) •
+        RectangularUnitarilyInvariantNorm.orthogonalBlockSum
+          XUV (-XVU.adjoint)) ≤
+      NB (RectangularUnitarilyInvariantNorm.orthogonalBlockSum
+        CUV CVU.adjoint)
+    rw [← RectangularUnitarilyInvariantNorm.orthogonalBlockSum_smul]
+    exact h
   have hNB : δ * NB Xblock ≤ NB Cblock := by
     rw [NB.smul_eq, RCLike.norm_ofReal, abs_of_nonneg hδ.le] at hNBscaled
     exact hNBscaled
 
-
+  -- The ambient operator represented by a block map in the `U ⊕ Uᗮ` domain
+  -- and `Vᗮ ⊕ V` codomain coordinates.  This uses the exact adjoint appearing
+  -- in `domainIsometryTransport`, so the norm identity below is definitional.
   let liftBlock :
       ((WithLp 2 (U × Uᗮ)) →ₗ[𝕜] (WithLp 2 (Vᗮ × V))) →
         (E →ₗ[𝕜] E) := fun T =>
-    EV.symm.toLinearMap ∘ₗ T ∘ₗ EU.toLinearMap
+    EV.symm.toLinearIsometry.toLinearMap ∘ₗ T ∘ₗ
+      LinearMap.adjoint EU.symm.toLinearIsometry.toLinearMap
   have hNB_apply (T : WithLp 2 (U × Uᗮ) →ₗ[𝕜]
       WithLp 2 (Vᗮ × V)) : NB T = N (liftBlock T) := by
-    simp only [NB, RectangularUnitarilyInvariantNorm.domainIsometryTransport_apply,
-      RectangularUnitarilyInvariantNorm.codomainIsometryTransport_apply,
-      liftBlock]
-    rw [(EU.symm).adjoint_toLinearMap_eq_symm]
     rfl
+  have hEUadj :
+      LinearMap.adjoint EU.symm.toLinearIsometry.toLinearMap =
+        EU.toLinearMap := by
+    change LinearMap.adjoint EU.symm.toLinearMap = EU.toLinearMap
+    exact (EU.symm).adjoint_toLinearMap_eq_symm
+  have hXVUadj :
+      XVU.adjoint =
+        V.orthogonalProjectionOnto.toLinearMap ∘ₗ Uᗮ.subtype := by
+    simp only [XVU, LinearMap.adjoint_comp,
+      adjoint_subtypeLinearMap_eq_orthogonalProjectionOnto,
+      adjoint_orthogonalProjectionOnto_eq_subtype]
+  have hCVUadj :
+      CVU.adjoint =
+        (V.orthogonalProjectionOnto.toLinearMap ∘ₗ (A - B)) ∘ₗ
+          Uᗮ.subtype := by
+    simp only [CVU, LinearMap.adjoint_comp, map_sub,
+      hA.adjoint_eq, hB.adjoint_eq,
+      adjoint_subtypeLinearMap_eq_orthogonalProjectionOnto,
+      adjoint_orthogonalProjectionOnto_eq_subtype]
   have hXlift : liftBlock Xblock = projection U - projection V := by
     ext x
-    simp [liftBlock, Xblock, EU, EV,
+    simp [liftBlock, Xblock, EU, EV, hEUadj, hXVUadj, XUV,
       RectangularUnitarilyInvariantNorm.orthogonalBlockSum,
       projection, Submodule.orthogonalDecomposition_apply,
-      LinearMap.comp_apply]
+      LinearMap.comp_apply, Submodule.starProjection_orthogonal_apply] <;>
+      module
   have hClift : liftBlock Cblock =
       (B - A) ∘ₗ projection U - projection V ∘ₗ (B - A) := by
     ext x
-    simp [liftBlock, Cblock, EU, EV, CUV, CVU,
+    simp [liftBlock, Cblock, EU, EV, hEUadj, CUV, hCVUadj,
       RectangularUnitarilyInvariantNorm.orthogonalBlockSum,
       projection, Submodule.orthogonalDecomposition_apply,
-      LinearMap.comp_apply, Submodule.starProjection_orthogonal_apply]
-    module
+      LinearMap.comp_apply, Submodule.starProjection_orthogonal_apply] <;>
+      module
   rw [hNB_apply, hNB_apply, hXlift, hClift] at hNB
   rw [uiNorm_projection_sub_eq_sinAngleOperator N U V] at hNB
 
@@ -746,15 +797,7 @@ theorem sinAngleOperator_perturbation_le
         simpa [sub_eq_add_neg] using
           N.add_le (H ∘ₗ JU.toLinearMap) (-(JV.toLinearMap ∘ₗ H))
       _ = (2 : ℝ)⁻¹ * (N H + N H) := by
-        rw [N.apply_neg]
-        have hright := N.invariant (LinearIsometryEquiv.refl 𝕜 E) JU H
-        have hleft := N.invariant JV (LinearIsometryEquiv.refl 𝕜 E) H
-        simp only [LinearMap.comp_apply] at hright hleft
-        have hr : N (H ∘ₗ JU.toLinearMap) = N H := by
-          simpa using hright
-        have hl : N (JV.toLinearMap ∘ₗ H) = N H := by
-          simpa using hleft
-        rw [hr, hl]
+        rw [N.apply_neg, N.invariant_right JU H, N.invariant_left JV H]
       _ = N H := by ring
   exact hNB.trans (by simpa [H] using hcheckerNorm)
 
