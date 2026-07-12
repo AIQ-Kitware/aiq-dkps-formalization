@@ -61,24 +61,24 @@ noncomputable def safeNetTolerance (n : Nat) : Real :=
 
 theorem safeResponseTolerance_pos (n : Nat) :
     0 < safeResponseTolerance n := by
-  unfold safeResponseTolerance
-  positivity
+  rw [safeResponseTolerance]
+  exact inv_pos.mpr (pow_pos (by positivity : (0 : Real) < ((n + 1 : Nat) : Real)) 5)
 
 theorem safeFiniteReplicates_pos (n : Nat) :
     0 < safeFiniteReplicates n := by
-  unfold safeFiniteReplicates
-  positivity
+  rw [safeFiniteReplicates]
+  exact pow_pos (Nat.succ_pos n) 13
 
 theorem safeEntropyReplicates_pos (entropyPower n : Nat) :
     0 < safeEntropyReplicates entropyPower n := by
-  unfold safeEntropyReplicates
-  positivity
+  rw [safeEntropyReplicates]
+  exact pow_pos (Nat.succ_pos n) (13 + entropyPower)
 
 theorem safePerspectiveRadius_pos
     (L : Real) (hL : 0 ≤ L) (n : Nat) :
     0 < safePerspectiveRadius L n := by
-  unfold safePerspectiveRadius
-  have hden : 0 < 4 * (L + 1) := by linarith
+  rw [safePerspectiveRadius]
+  have hden : (0 : Real) < 4 * (L + 1) := by nlinarith
   exact div_pos (safeResponseTolerance_pos n) hden
 
 /-- The canonical perspective-net radius vanishes for every nonnegative fixed
