@@ -16,6 +16,7 @@ whole argument.
 -/
 
 import DkpsQuench.Perfect.CenteredCovariance
+import DkpsQuench.Perfect.GramSpectrumBridge
 
 set_option linter.mathlibStandardSet false
 
@@ -40,6 +41,7 @@ open Acharyya2024
 open Acharyya2025.Bridge
 open Acharyya2025.Deterministic
 open Acharyya2025.MatrixPerturbation
+open Acharyya2025.MathlibBridge
 open DkpsQuench.GrowingAcharyyaBridge
 
 universe u v wr
@@ -1120,7 +1122,24 @@ theorem sortedEigenvalues_reference_centeredGram_lower
     (i : Fin n) (hi : (i : Nat) < d) :
     κ / 2 ≤ sortedEigenvalues
       (configGramPosSemidef zref).isHermitian i := by
-  sorry
+  rcases le_or_gt κ 0 with hκ | hκ
+  · exact le_trans (by linarith) (sortedEigenvalues_nonneg (configGramPosSemidef zref) i)
+  · have hnpos : (0 : Real) < (n : Real) := by exact_mod_cast hn
+    have hn1 : (1 : Real) ≤ (n : Real) := by exact_mod_cast hn
+    have hquad' : ∀ x : Vec d,
+        ((n : Real) * (κ / 2)) * ‖x‖ ^ 2 ≤
+          ∑ j : Fin n, (∑ a : Fin d, x a * zref j a) ^ 2 := by
+      intro x
+      calc ((n : Real) * (κ / 2)) * ‖x‖ ^ 2
+          = (n : Real) * ((κ / 2) * ‖x‖ ^ 2) := by ring
+        _ ≤ (n : Real) * ((n : Real)⁻¹ *
+              ∑ j : Fin n, (∑ a : Fin d, x a * zref j a) ^ 2) :=
+            mul_le_mul_of_nonneg_left (hquad x) hnpos.le
+        _ = ∑ j : Fin n, (∑ a : Fin d, x a * zref j a) ^ 2 := by
+            rw [← mul_assoc, mul_inv_cancel₀ hnpos.ne', one_mul]
+    have hfloor := sortedEigenvalues_configGram_lower_of_quadratic_floor hquad' i hi
+    have hgrow : κ / 2 ≤ (n : Real) * (κ / 2) := by nlinarith
+    linarith
 
 /-- Adding the target and recentering the enlarged cloud cannot decrease the
 reference scatter in any perspective direction.
@@ -1158,7 +1177,12 @@ theorem augmented_centeredGram_floor_of_reference_floor
     (i : Fin (n + 1)) (hi : (i : Nat) < d) :
     α ≤ sortedEigenvalues
       (configGramPosSemidef (centerConfig (Fin.lastCases target ψref))).isHermitian i := by
-  sorry
+  have hquad_ref := quadratic_floor_of_sortedEigenvalues_configGram_lower hdn href
+  have hquad_aug : ∀ x : Vec d,
+      α * ‖x‖ ^ 2 ≤ ∑ j : Fin (n + 1),
+        (∑ a : Fin d, x a * centerConfig (Fin.lastCases target ψref) j a) ^ 2 :=
+    fun x => (hquad_ref x).trans (sum_sq_centered_le_augmented ψref target x)
+  exact sortedEigenvalues_configGram_lower_of_quadratic_floor hquad_aug i hi
 
 /-- A uniform perspective norm bound gives a deterministic linear-in-`n`
 ceiling for every eigenvalue of the augmented centered Gram matrix.
@@ -1231,6 +1255,7 @@ theorem sortedEigenvalues_augmented_centeredGram_upper
           (configGramPosSemidef (centerConfig points)).isHermitian hentry i
     _ = 4 * ((n + 1 : Nat) : ℝ) * B ^ 2 := by ring
 
+set_option maxHeartbeats 1000000 in
 /-- Assemble the covariance weak law and deterministic Gram lemmas into the
 high-probability spectral certificate consumed by the new Quench capstone.
 
@@ -1286,6 +1311,86 @@ theorem exists_growingSpectralSubevents_of_compact_iid_nondegenerate
           ψ f_ref μbar hrealize)
         (κ / 2)
         (fun n => 4 * ((n + 1 : Nat) : Real) * B ^ 2)) := by
-  sorry
+  obtain ⟨B, hB0, hBbound⟩ := exists_perspective_norm_bound_of_isCompact_range ψ hcompact
+  refine ⟨B, hB0, hBbound, ?_⟩
+  have hε : 0 < covarianceEntryTolerance d κ := by
+    have := Hnondeg.kappa_pos
+    unfold covarianceEntryTolerance
+    positivity
+  set center := perspectiveMean Pf ψ with hcenter_def
+  set ε := covarianceEntryTolerance d κ with hε_def
+  -- The certificate event: covariance closeness plus the deterministic dimension gate.
+  set event : Nat → Set Ωref := fun n =>
+    referenceCovarianceEvent Pf ψ f_ref center ε n ∩ {_ωref | d ≤ n ∧ 0 < n}
+    with hevent_def
+  have hcovMeas : ∀ n, MeasurableSet (referenceCovarianceEvent Pf ψ f_ref center ε n) :=
+    fun n => measurableSet_referenceCovarianceEvent Pf ψ hψ f_ref hiid.measurable center ε n
+  have hgateMeas : ∀ n : Nat, MeasurableSet ({_ωref | d ≤ n ∧ 0 < n} : Set Ωref) :=
+    fun n => MeasurableSet.const _
+  have hcovHP : HighProbAtTop μref hμref
+      (referenceCovarianceEvent Pf ψ f_ref center ε) :=
+    highProb_referenceCovarianceEvent_of_compact_iid Pf μref hμref ψ hψ hcompact
+      f_ref hiid center Hnondeg.center_is_mean hε
+  have hgateHP : HighProbAtTop μref hμref
+      (fun n => ({_ωref | d ≤ n ∧ 0 < n} : Set Ωref)) := by
+    intro δ hδ
+    refine ⟨d + 1, fun n hn => ?_⟩
+    haveI := hμref n
+    have hset : ({_ωref | d ≤ n ∧ 0 < n} : Set Ωref) = Set.univ := by
+      have h1 : d ≤ n := by omega
+      have h2 : 0 < n := by omega
+      ext ωref
+      simp [h1, h2]
+    show μref n ({_ωref | d ≤ n ∧ 0 < n} : Set Ωref) ≥ 1 - δ
+    rw [hset, measure_univ]
+    exact tsub_le_self
+  -- Transfer between the population CMDS matrix and the centered augmented Gram matrix.
+  have hmat : ∀ (n : Nat) (ωref : Ωref) (f : Model Q X),
+      disMatToMatrix (classicalMDSMatrix (responseDist (μbar n ωref f))) =
+        disMatToMatrix (configGram
+          (centeredAugmentedPerspectiveConfig ψ f_ref n ωref f)) :=
+    fun n ωref f => Matrix.ext fun i j =>
+      (centeredAugmentedPerspectiveConfig_gram_eq ψ f_ref μbar hrealize n ωref f i j).symm
+  refine ⟨⟨event, ?_, ?_, ?_, ?_⟩⟩
+  · exact fun n => (hcovMeas n).inter (hgateMeas n)
+  · exact HighProbAtTop.inter hcovHP hgateHP hcovMeas hgateMeas
+  · -- Spectral floor on the first `d` eigenvalues of the augmented CMDS matrix.
+    rintro n ωref ⟨hcov, hdn, hn0⟩ f i hi
+    have hquadref := reference_centered_quadratic_floor_of_event Pf ψ f_ref Hnondeg ωref hcov
+    have href : ∀ j : Fin n, (j : Nat) < d →
+        κ / 2 ≤ sortedEigenvalues (configGramPosSemidef
+          (centerConfig (referencePerspectiveConfig ψ f_ref n ωref))).isHermitian j :=
+      fun j hj => sortedEigenvalues_reference_centeredGram_lower hn0
+        (centerConfig (referencePerspectiveConfig ψ f_ref n ωref)) hquadref j hj
+    have haug := augmented_centeredGram_floor_of_reference_floor hn0 hdn
+      (referencePerspectiveConfig ψ f_ref n ωref) (ψ f) href i hi
+    have haugcfg : augmentedPerspectiveConfig ψ f_ref n ωref f =
+        Fin.lastCases (ψ f) (referencePerspectiveConfig ψ f_ref n ωref) := by
+      funext j
+      refine Fin.lastCases ?_ (fun j => ?_) j
+      · show ψ (augmentedModelAt f_ref n ωref f (Fin.last n)) = _
+        rw [Fin.lastCases_last]
+        show ψ (Fin.lastCases f (f_ref n ωref) (Fin.last n)) = ψ f
+        rw [Fin.lastCases_last]
+      · show ψ (augmentedModelAt f_ref n ωref f j.castSucc) = _
+        rw [Fin.lastCases_castSucc]
+        show ψ (Fin.lastCases f (f_ref n ωref) j.castSucc) = _
+        rw [Fin.lastCases_castSucc]
+        rfl
+    have hcfgmat : disMatToMatrix (configGram (centerConfig
+          (Fin.lastCases (ψ f) (referencePerspectiveConfig ψ f_ref n ωref)))) =
+        disMatToMatrix (classicalMDSMatrix (responseDist (μbar n ωref f))) := by
+      rw [← haugcfg]
+      exact (hmat n ωref f).symm
+    convert haug using 2
+    exact hcfgmat.symm
+  · -- Trace-style deterministic ceiling for every eigenvalue.
+    rintro n ωref - f i
+    have hpoints : ∀ j, ‖augmentedPerspectiveConfig ψ f_ref n ωref f j‖ ≤ B :=
+      fun j => hBbound _
+    have hupper := sortedEigenvalues_augmented_centeredGram_upper
+      (augmentedPerspectiveConfig ψ f_ref n ωref f) hB0 hpoints i
+    convert hupper using 2
+    exact hmat n ωref f
 
 end DkpsQuench.Perfect
