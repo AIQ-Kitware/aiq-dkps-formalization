@@ -872,3 +872,35 @@ rank-one eigenbasis form of Davis's inequalities, prefer a canonical sorted
 eigenbasis theorem over an invalid arbitrary-block wrapper.  A future block
 version should require reducing/scalar-action hypotheses and use rank-weighted
 eigenvalue motion.
+
+## 31. Refute a suspect universal scaffold before spending waves on it
+
+The exact undoubled real reciprocal orbit interpolation at mass `π/2` was a
+long-standing scaffold hypothesis.  It is false over `ℝ` already in dimension
+two: for `α = (-1, 1)`, `β = (0, 2)`, `δ = 1`, any certificate has mass at
+least `5/3 > π/2` (`real_reciprocalOrbitInterpolation_mass_lower_bound`).
+The refutation only extracts the diagonal matrix coefficients of the
+orthogonal factors and tests the reciprocal-value matrix against one linear
+functional, so it applies to arbitrary (non-basis-diagonal) real rotations,
+and it forecloses the compactness/Carathéodory attainment plans that had been
+recorded for that scaffold.
+
+Durable rules:
+
+1. When a scaffold proposition resists proof across several sessions, spend
+   one short wave attempting a small-dimension counterexample before another
+   long proof wave.  A two-by-two obstruction costs far less than a failed
+   compactness program.
+2. Certificate-style propositions (`∃ finite family, identity ∧ mass bound`)
+   are refuted by linear functionals: bound the functional on every atom the
+   certificate can use, then evaluate it on the target.
+3. Downstream inequalities usually survive such a refutation because they
+   need only `mass ≤ target + ε` representations.  Here the generic sharp
+   Ky Fan chain was recovered by realizing complex phases as doubled
+   rotations `[[cos θ, -sin θ], [sin θ, cos θ]]` with real entries embedded
+   in an arbitrary `RCLike` field, then cancelling the doubling through
+   singular-value duplication (`rectangularKyFanSum_orthogonalBlockSum_self`).
+   Doubling is a proof representation, not a weakening of the endpoint.
+4. Keep the status map of true/false/replacement statements in a module-level
+   note next to the refuted declaration's former location, so the false form
+   is not reintroduced under a new name.
