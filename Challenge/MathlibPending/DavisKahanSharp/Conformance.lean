@@ -5,6 +5,8 @@ This challenge imports the trusted statement vocabulary but not the theorem's
 implementation. The paired leaderboard imports the completed project theorem.
 -/
 
+import ForMathlib.Analysis.InnerProductSpace.DavisKahanTheory.Basic
+
 /-!
 ## Comparator maintenance rule
 
@@ -14,7 +16,6 @@ The implementation belongs in `DavisKahanTheory/SinTheta.lean`; Comparator
 verifies that implementation against this independently compiled statement.
 -/
 
-import ForMathlib.Analysis.InnerProductSpace.DavisKahanTheory.Basic
 
 namespace ForMathlib
 namespace DavisKahanTheory

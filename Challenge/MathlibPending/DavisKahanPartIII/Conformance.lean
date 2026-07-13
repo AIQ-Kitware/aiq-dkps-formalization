@@ -7,6 +7,8 @@ and the sharp operator-norm tan 2Theta theorem with strict quarter-turn
 avoidance.
 -/
 
+import ForMathlib.Analysis.InnerProductSpace.UnitarilyInvariantNorm
+
 /-!
 ## Comparator maintenance rule
 
@@ -17,7 +19,6 @@ paired `Leaderboard.lean`; Comparator checks statement identity and permitted
 kernel dependencies.
 -/
 
-import ForMathlib.Analysis.InnerProductSpace.UnitarilyInvariantNorm
 
 namespace ForMathlib
 namespace DavisKahanTheory
@@ -71,7 +72,7 @@ variable {𝕜 E : Type*} [RCLike 𝕜] [NormedAddCommGroup E]
 theorem partIII_tanTheta_vector {T : E →ₗ[𝕜] E} (hT : T.IsSymmetric)
     {Z V : Submodule 𝕜 E} [Z.HasOrthogonalProjection]
     [V.HasOrthogonalProjection]
-    (hVinv : ∀ x ∈ V, T x ∈ V) (hdim : finrank 𝕜 Z = finrank 𝕜 V)
+    (hVinv : ∀ x ∈ V, T x ∈ V)
     {α β δ ρ : ℝ} (hαβ : α ≤ β) (hδ : 0 < δ) (hρ0 : 0 ≤ ρ)
     (hZ : ∀ x ∈ Z, ((β - α) / 2 + δ) * ‖x‖
       ≤ ‖Z.starProjection (T x) - (((α + β) / 2 : ℝ) : 𝕜) • x‖)
