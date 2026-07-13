@@ -1,0 +1,1160 @@
+\input{preamble}
+\newcommand{\M}{\mathcal{M}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\supp}{\operatorname{supp}}
+\newcommand{\sgn}{\operatorname{sgn}}
+\newcommand{\TV}{\operatorname{TV}}
+\newcommand{\cF}{\mathcal{F}}
+\newcommand{\Lip}{\operatorname{Lip}}
+\newcommand{\esssup}{\operatorname*{ess\,sup}}
+\renewenvironment{formalizationmap}{%
+  \begin{longtable}{@{}p{0.20\textwidth}p{0.31\textwidth}p{0.40\textwidth}@{}}%
+  \toprule Source item & Modern mathematical content & Repository status \\\midrule\endhead%
+}{\bottomrule\end{longtable}}
+\title{Source-order modernization of Haagerup--Zsid\'o (1994): sharp Hermitian resolvents and minimal Fourier extrapolation}
+\author{}
+\date{Distilled reconstruction from the supplied published article}
+\begin{document}
+\maketitle
+
+\section*{Source map and scope}
+\begin{sourceguide}
+\item[Primary source] Uffe Haagerup and L\'aszl\'o Zsid\'o, \emph{Resolvent Estimate for Hermitian Operators and a Related Minimal Extrapolation Problem}, Acta Scientiarum Mathematicarum (Szeged) 59 (1994), 503--524.
+\item[Local evidence] Supplied PDF \code{595055268644.pdf}.\\ SHA--256 \texttt{\seqsplit{77fe9c625a913bcd46b9b0038aa3321039c777fce0d35e45e738b0faabd9642c}}.
+\item[Redistribution] The source PDF is not vendored. This document is a new mathematical reconstruction, correction ledger, and formalization map.
+\item[Coverage] Introduction; Theorems 1.1, 1.2, 1.5; Lemma 1.3; Corollaries 1.4 and 1.6; Theorem 2.1; Corollaries 2.2 and 2.4; Theorem 2.3; Propositions 3.1 and 3.2; Lemmas 3.3--3.5; Theorem 3.6; all displayed identities used in their proofs; the sharpness construction; and the source's two typographical slips relevant to formalization.
+\item[Modernization] Fourier-transform conventions, dual-pairing arguments, operator-valued integration, support statements, and scaling are made explicit. ``Hermitian'' is kept in the Banach-space generator sense used by the paper and is not conflated with Hilbert-space self-adjointness.
+\item[Formalization target] The scalar analytic root in
+\texttt{\seqsplit{ForMathlib/Analysis/InnerProductSpace/DavisKahanTheory/Sylvester.lean}}, especially
+\texttt{\seqsplit{sylvester\_barycentricOrbitRepresentation\_of\_spectralDistance}}. The special case $\alpha=0$ of Theorem 3.6 gives the sharp reciprocal Fourier multiplier of total $L^1$ mass $\pi/2$ needed by that theorem.
+\end{sourceguide}
+
+This note follows the source in proof order. It does not merely quote the final resolvent bound: the full abstract minimal-extrapolation theorem, the sign certificate, the explicit extremizer, the norm computation, and the passage to operator resolvents are reconstructed because each is a possible formalization seam.
+
+\section{Conventions and modern terminology}
+
+\subsection{Fourier convention}
+
+For $f\in L^1(\R)$ the paper uses the inverse-Fourier-sign convention
+\[
+  \widehat f(x):=\int_{\R} f(t)e^{ixt}\,dt.
+  \tag{HZ-F}\label{HZ-F}
+\]
+For a bounded complex regular Borel measure $\mu\in M(G)$ on a locally compact abelian group $G$,
+\[
+  \widehat\mu(\gamma):=\int_G \gamma(t)\,d\mu(t),
+  \qquad \gamma\in\widehat G.
+  \tag{HZ-M}\label{HZ-M}
+\]
+An $L^1$ function is identified with its absolutely continuous measure $f(t)\,dt$.
+
+\subsection{Hermitian operators on Banach spaces}
+
+Let $X$ be a complex Banach space and let $T$ be a densely defined closed operator. The paper calls $T$ \emph{Hermitian} when either, hence both, of the following equivalent statements hold:
+\begin{enumerate}[label=(\roman*)]
+\item $\sigma(T)\subset\R$ and
+\[
+  \norm{(\lambda I-T)^{-1}}
+  \le \frac{1}{\abs{\Im\lambda}}
+  \qquad(\lambda\in\C\setminus\R);
+  \tag{HZ-H1}\label{HZ-H1}
+\]
+\item $iT$ is the infinitesimal generator of a strongly continuous one-parameter group $(U_t)_{t\in\R}$ of linear contractions. We record this as
+\[
+  iT=\operatorname{gen}(U_t)
+  \quad\text{with }\norm{U_t}\le1\text{ for all }t\in\R.
+  \tag{HZ-H2}\label{HZ-H2}
+\]
+\end{enumerate}
+Because $U_tU_{-t}=I$ and both $U_t$ and $U_{-t}$ are contractions, each $U_t$ is in fact an isometry.
+
+On a Hilbert space, a self-adjoint operator satisfies the stronger exact identity
+\[
+  \norm{(\lambda I-T)^{-1}}
+  =\frac{1}{\dist(\lambda,\sigma(T))}.
+  \tag{HZ-Hilbert}\label{HZ-Hilbert}
+\]
+The paper determines the best universal replacement for general Banach-space Hermitian operators.
+
+\section{Introduction and the inherited estimates}
+
+\sourceanchor{Introduction and Section 1 through Corollary 1.4.}
+
+Partington had shown that a universal constant exists and that it cannot be smaller than $\pi/2$.
+
+\begin{theorem}[Partington, source Theorem 1.1]
+Let $T$ be Hermitian.
+\begin{enumerate}[label=(\arabic*)]
+\item For every real $\lambda\notin\sigma(T)$,
+\[
+  \norm{(\lambda I-T)^{-1}}
+  \le \frac{\pi}{2}\,\dist(\lambda,\sigma(T))^{-1},
+  \tag{HZ-1.1a}\label{HZ-1.1a}
+\]
+and $\pi/2$ is optimal.
+\item For every $\lambda\in\C\setminus\sigma(T)$,
+\[
+  \norm{(\lambda I-T)^{-1}}
+  \le \sqrt{1+\frac{\pi}{2}}\,
+      \dist(\lambda,\sigma(T))^{-1}.
+  \tag{HZ-1.1b}\label{HZ-1.1b}
+\]
+\end{enumerate}
+\end{theorem}
+
+The conjecture settled by Haagerup--Zsid\'o is that the constant in the second statement can also be $\pi/2$.
+
+\begin{theorem}[Zsid\'o, source Theorem 1.2]
+Let $T$ be closed, let $\sigma(T)\subset\R$, and suppose that for constants $m,c\ge0$,
+\[
+  \norm{(\lambda I-T)^{-1}}
+  \le c\abs{\Im\lambda}^{-(m+1)}
+  \qquad(\lambda\in\C\setminus\R).
+  \tag{HZ-1.2-hyp}\label{HZ-1.2-hyp}
+\]
+Then
+\[
+  \norm{(\lambda I-T)^{-1}}
+  \le (2\sqrt e)^{m+1}c\,
+      \dist(\lambda,\sigma(T))^{-(m+1)}
+  \qquad(\lambda\in\C\setminus\sigma(T)).
+  \tag{HZ-1.2}\label{HZ-1.2}
+\]
+\end{theorem}
+
+The analytic input is the following subharmonic estimate.
+
+\begin{lemma}[Source Lemma 1.3]
+Let $\Omega\subset\C$ be open and let $u:\Omega\to[-\infty,+\infty)$ be subharmonic. If
+\[
+  u(\lambda)\le \log\abs{\Im\lambda}^{-1}
+  \qquad(\lambda\in\Omega\setminus\R),
+  \tag{HZ-1.3-hyp}\label{HZ-1.3-hyp}
+\]
+then
+\[
+  u(\lambda)
+  \le \log\!\left(2\sqrt e\,\dist(\lambda,\partial\Omega)^{-1}\right)
+  \qquad(\lambda\in\Omega).
+  \tag{HZ-1.3}\label{HZ-1.3}
+\]
+\end{lemma}
+
+Partington later reduced $2\sqrt e$ to the optimal constant $2$ for this lemma. For $m=0$ and $c=1$ this gives:
+
+\begin{corollary}[Source Corollary 1.4]
+Every Hermitian operator satisfies
+\[
+  \norm{(\lambda I-T)^{-1}}
+  \le 2\,\dist(\lambda,\sigma(T))^{-1}
+  \qquad(\lambda\in\C\setminus\sigma(T)).
+  \tag{HZ-1.4}\label{HZ-1.4}
+\]
+\end{corollary}
+
+The source also records that a more elaborate subharmonic argument lowers $2$ to an approximately $1.87$ constant, but not to the conjectured sharp $\pi/2$.
+
+\section{The normalized resolvent theorem and its sharpness example}
+
+\sourceanchor{Section 1, Theorem 1.5 and Corollary 1.6.}
+
+\begin{theorem}[Source Theorem 1.5]
+Let $T$ be Hermitian and suppose
+\[
+  \sigma(T)\subset\R\setminus(-1,1).
+\]
+Then for every $\alpha\in\R$,
+\[
+  \norm{(i\alpha I+T)^{-1}}
+  \le
+  \begin{cases}
+    \displaystyle \frac{1}{\alpha}\tanh\!\left(\frac{\pi\alpha}{2}\right),
+      & \alpha\ne0,\\[1.1ex]
+    \displaystyle \frac{\pi}{2},&\alpha=0.
+  \end{cases}
+  \tag{HZ-1.5}\label{HZ-1.5}
+\]
+The expression for $\alpha\ne0$ is positive because $\tanh$ is odd.
+
+Moreover, there is a Hermitian $T$ with
+\[
+  \sigma(T)=2\Z+1
+\]
+for which equality holds for every $\alpha\in\R$.
+\end{theorem}
+
+\subsection{Upper bound from the extrapolating kernel}
+
+Let $(U_t)$ be the isometric group generated by $iT$. For $\alpha>0$, the Hille--Yosida resolvent formula gives, in the weak-operator/Pettis sense,
+\[
+  i(i\alpha I+T)^{-1}
+  =(\alpha I-iT)^{-1}
+  =\int_0^\infty e^{-\alpha t}U_t\,dt.
+  \tag{HZ-1.5-res}\label{HZ-1.5-res}
+\]
+The integrated group representation
+\[
+  \widehat f\longmapsto \int_{\R}f(t)U_t\,dt
+  \tag{HZ-fc}\label{HZ-fc}
+\]
+has support equal to $\sigma(T)$. Hence, whenever $f,g\in L^1(\R)$ satisfy
+\[
+  \widehat f(x)=\widehat g(x)
+  \qquad\text{for every }x\in\R\setminus(-1,1),
+  \tag{HZ-support}\label{HZ-support}
+\]
+their integrated operators agree.
+
+Theorem 3.6 constructs $f_\alpha\in L^1(\R)$ with
+\[
+  \widehat f_\alpha(x)=\frac{1}{\alpha-ix}
+  \quad(|x|\ge1),
+  \qquad
+  \norm{f_\alpha}_1
+  =\frac1\alpha\tanh\!\left(\frac{\pi\alpha}{2}\right).
+  \tag{HZ-ext-alpha}\label{HZ-ext-alpha}
+\]
+Since $e^{-\alpha t}\mathbf1_{[0,\infty)}(t)$ has Fourier transform $(\alpha-ix)^{-1}$, the support principle and \eqref{HZ-1.5-res} imply
+\[
+  i(i\alpha I+T)^{-1}
+  =\int_{\R}f_\alpha(t)U_t\,dt.
+  \tag{HZ-op-ext}\label{HZ-op-ext}
+\]
+Therefore
+\[
+\begin{aligned}
+  \norm{(i\alpha I+T)^{-1}}
+  &\le \int_{\R}\abs{f_\alpha(t)}\norm{U_t}\,dt\\
+  &=\norm{f_\alpha}_1
+   =\frac1\alpha\tanh\!\left(\frac{\pi\alpha}{2}\right).
+\end{aligned}
+\tag{HZ-op-bound}\label{HZ-op-bound}
+\]
+Applying the same argument to $-T$ treats $\alpha<0$. Resolvent continuity at $\alpha=0$ gives
+\[
+  \norm{T^{-1}}
+  \le\lim_{\alpha\downarrow0}
+      \frac1\alpha\tanh\!\left(\frac{\pi\alpha}{2}\right)
+  =\frac\pi2.
+  \tag{HZ-alpha0}\label{HZ-alpha0}
+\]
+
+\subsection{The sharp antiperiodic translation model}
+
+Define $X$ to be the space of measurable complex functions modulo almost-everywhere equality satisfying
+\[
+  f(s+\pi)=-f(s),
+  \qquad
+  \norm f_X:=\int_0^\pi\abs{f(s)}\,ds<\infty.
+  \tag{HZ-anti}\label{HZ-anti}
+\]
+Translations
+\[
+  (U_tf)(s):=f(s-t)
+  \tag{HZ-shift}\label{HZ-shift}
+\]
+form a strongly continuous isometric group. Let $iT$ be its generator. Since $U_\pi=-I$, splitting the Laplace integral into intervals of length $\pi$ gives
+\[
+  (\alpha I-iT)^{-1}
+  =\int_0^\infty e^{-\alpha t}U_t\,dt
+  =\frac{1}{1+e^{-\alpha\pi}}
+     \int_0^\pi e^{-\alpha t}U_t\,dt,
+  \qquad\alpha>0.
+  \tag{HZ-periodic-res}\label{HZ-periodic-res}
+\]
+\sourcecomment{The printed display has $1+e^{-\alpha t}$ in the denominator. The next display, the period splitting, and the geometric-series derivation force $1+e^{-\alpha\pi}$; this note records the corrected identity.}
+
+The right side is analytic in $\alpha\in\C\setminus i(2\Z+1)$. Thus $\sigma(T)\subset2\Z+1$. Conversely, for every odd integer $n$, the function $s\mapsto e^{-ins}$ belongs to $X$ and is an eigenvector of $T$ with eigenvalue $n$. Hence
+\[
+  \sigma(T)=2\Z+1.
+  \tag{HZ-odd-spectrum}\label{HZ-odd-spectrum}
+\]
+The upper bound becomes
+\[
+  \norm{(\alpha I-iT)^{-1}}
+  \le \frac{1}{1+e^{-\alpha\pi}}
+      \int_0^\pi e^{-\alpha t}\,dt
+  =\frac1\alpha\tanh\!\left(\frac{\pi\alpha}{2}\right).
+  \tag{HZ-sharp-upper}\label{HZ-sharp-upper}
+\]
+
+For $n\ge1$, define $f_n$ on $(0,\pi)$ by
+\[
+  f_n(s)=n\mathbf1_{[0,1/n)}(s)
+  \tag{HZ-testfn}\label{HZ-testfn}
+\]
+and extend antiperiodically. Then $\norm{f_n}_X=1$. For $s\in[1/n,\pi)$,
+\[
+\begin{aligned}
+  [(\alpha I-iT)^{-1}f_n](s)
+  &=\frac{n}{1+e^{-\alpha\pi}}
+      \int_{s-1/n}^{s}e^{-\alpha t}\,dt\\
+  &=\frac{e^{-\alpha s}}{1+e^{-\alpha\pi}}
+      \frac{n}{\alpha}(e^{\alpha/n}-1).
+\end{aligned}
+\tag{HZ-test-image}\label{HZ-test-image}
+\]
+Consequently,
+\[
+\begin{aligned}
+ \norm{(\alpha I-iT)^{-1}}
+ &\ge\limsup_{n\to\infty}
+      \int_{1/n}^{\pi}
+      \abs{[(\alpha I-iT)^{-1}f_n](s)}\,ds\\
+ &=\frac1\alpha\tanh\!\left(\frac{\pi\alpha}{2}\right).
+\end{aligned}
+\tag{HZ-sharp-lower}\label{HZ-sharp-lower}
+\]
+Thus equality holds for $\alpha\ne0$, and continuity gives $\norm{T^{-1}}=\pi/2$.
+
+\begin{corollary}[Source Corollary 1.6: Partington's conjecture]
+For every Hermitian operator $T$ and every $\lambda\in\C\setminus\sigma(T)$,
+\[
+  \norm{(\lambda I-T)^{-1}}
+  \le \frac\pi2\,\dist(\lambda,\sigma(T))^{-1}.
+  \tag{HZ-1.6}\label{HZ-1.6}
+\]
+The constant $\pi/2$ is optimal.
+\end{corollary}
+
+\begin{proofoutline}
+\item If $\dist(\lambda,\sigma(T))=\abs{\Im\lambda}$, the defining Hermitian resolvent estimate \eqref{HZ-H1} is already stronger.
+\item Otherwise set
+\[
+  a:=\sqrt{\dist(\lambda,\sigma(T))^2-(\Im\lambda)^2}>0.
+  \tag{HZ-normal-a}\label{HZ-normal-a}
+\]
+Translate by $\Re\lambda$ and scale by $a$. The normalized operator has spectrum outside $(-1,1)$ with at least one of $\pm1$ in its spectrum, and the normalized spectral parameter is $-i\alpha$ where
+\[
+  \alpha:=a^{-1}\Im\lambda.
+  \tag{HZ-normal-alpha}\label{HZ-normal-alpha}
+\]
+\item Theorem 1.5 reduces the claim to
+\[
+  \frac1\alpha\tanh\!\left(\frac{\pi\alpha}{2}\right)
+  \le \frac\pi2(1+\alpha^2)^{-1/2}
+  \qquad(\alpha>0).
+  \tag{HZ-hyperbolic-target}\label{HZ-hyperbolic-target}
+\]
+\item Differentiate both sides after normalizing:
+\[
+  \frac2\pi\tanh\!\left(\frac{\pi\alpha}{2}\right)
+  =\int_0^\alpha\frac{du}{\cosh^2(\pi u/2)},
+  \tag{HZ-hyperbolic-int}\label{HZ-hyperbolic-int}
+\]
+\[
+  \frac{\alpha}{\sqrt{1+\alpha^2}}
+  =\int_0^\alpha\frac{du}{(1+u^2)^{3/2}}.
+  \tag{HZ-algebraic-int}\label{HZ-algebraic-int}
+\]
+The Taylor estimate
+\[
+  \cosh^2\!\left(\frac{\pi u}{2}\right)
+  \ge\left(1+\frac{\pi^2u^2}{8}\right)^2
+  \ge(1+u^2)^2
+  \ge(1+u^2)^{3/2}
+  \tag{HZ-denom-compare}\label{HZ-denom-compare}
+\]
+proves the integrand comparison and hence \eqref{HZ-hyperbolic-target}.
+\end{proofoutline}
+
+\section{Abstract minimal extrapolation on a locally compact abelian group}
+
+\sourceanchor{Section 2.}
+
+Let $G$ be a locally compact abelian group, $\widehat G$ its Pontryagin dual, and $M(G)$ the Banach space of finite complex regular Borel measures with total-variation norm $\norm\mu$.
+
+Let $\varnothing\ne E\subset\widehat G$ be closed and let $\varphi:E\to\C$ be bounded and continuous. Assume at least one $\mu\in M(G)$ extrapolates $\varphi$:
+\[
+  \widehat\mu|_E=\varphi.
+\]
+The minimal extrapolation problem asks:
+\begin{enumerate}[label=(\Roman*)]
+\item compute
+\[
+  \inf\{\norm\mu:\mu\in M(G),\ \widehat\mu|_E=\varphi\};
+  \tag{HZ-ME-I}\label{HZ-ME-I}
+\]
+\item decide whether the infimum is attained;
+\item classify every minimizer.
+\end{enumerate}
+
+\begin{theorem}[Beurling, source Theorem 2.1]
+Assume every nonempty relatively open subset of $E$ has nonzero Haar measure. Then
+\[
+  \{\mu\in M(G):\widehat\mu|_E=\varphi\}
+  \tag{HZ-feasible}\label{HZ-feasible}
+\]
+is weak-star closed in $M(G)=C_0(G)^*$. If it is nonempty, the set of norm-minimizing extrapolants is a nonempty weak-star compact convex subset of $M(G)$.
+\end{theorem}
+
+\subsection{Compact spectral complement forces absolute continuity}
+
+Suppose $\widehat G\setminus E$ is relatively compact and $\mu,\nu\in M(G)$ agree on $E$. Then
+\[
+  \supp(\widehat\mu-\widehat\nu)
+  \subset\widehat G\setminus E
+  \tag{HZ-compact-support}\label{HZ-compact-support}
+\]
+is compact. Hence $\widehat\mu-\widehat\nu\in L^1(\widehat G)$, and Fourier inversion implies
+\[
+  \mu-\nu\in L^1(G)\cap C_0(G).
+  \tag{HZ-ac-difference}\label{HZ-ac-difference}
+\]
+This is the step that converts measure minimizers into actual $L^1$ functions in the application $E=\R\setminus(-1,1)$.
+
+\begin{corollary}[Source Corollary 2.2]
+Assume $E$ satisfies the hypotheses of Theorem 2.1, $\widehat G\setminus E$ is relatively compact, and
+\[
+  \varphi=\widehat g|_E
+  \qquad\text{for some }g\in L^1(G).
+\]
+Then every feasible measure belongs to
+\[
+  L^1(G)\cap(g+C_0(G)).
+  \tag{HZ-feasible-L1}\label{HZ-feasible-L1}
+\]
+The minimizing set is a nonempty convex subset of this affine space and is compact for the weak topology induced by the pairing $L^1(G)\times C_0(G)$.
+\end{corollary}
+
+\begin{theorem}[Beurling--Sz\H{o}kefalvi-Nagy, source Theorem 2.3]
+Let $\varnothing\ne E\subset\widehat G$ and $f\in L^1(G)$. The following are equivalent.
+\begin{enumerate}[label=(\arabic*)]
+\item $f$ is minimal among measure extrapolants:
+\[
+  \norm f_1
+  =\inf\{\norm\mu:\mu\in M(G),\ \widehat\mu|_E=\widehat f|_E\}.
+  \tag{HZ-2.3a}\label{HZ-2.3a}
+\]
+\item $f$ is minimal among $L^1$ extrapolants:
+\[
+  \norm f_1
+  =\inf\{\norm g_1:g\in L^1(G),\ \widehat g|_E=\widehat f|_E\}.
+  \tag{HZ-2.3b}\label{HZ-2.3b}
+\]
+\item There exists $\sigma\in L^\infty(G)$ such that
+\[
+  \norm\sigma_\infty\le1,
+  \qquad \sigma f=\abs f\quad\text{a.e.},
+  \tag{HZ-dual-phase}\label{HZ-dual-phase}
+\]
+and
+\[
+  \int_G\sigma(t)h(t)\,dt=0
+  \quad\text{whenever }h\in L^1(G),\ \widehat h|_E=0.
+  \tag{HZ-annihilator}\label{HZ-annihilator}
+\]
+\end{enumerate}
+\end{theorem}
+
+The function $\sigma$ is a norming functional for $f$ that annihilates the closed subspace of admissible perturbations. It is the exact dual certificate for minimality.
+
+\begin{corollary}[Source Corollary 2.4]
+Assume $E$ is closed, $\widehat G\setminus E$ is relatively compact, and $f\in L^1(G)$ admits a certificate $\sigma$ satisfying \eqref{HZ-dual-phase} and \eqref{HZ-annihilator}. Then:
+\begin{enumerate}[label=(\arabic*)]
+\item $f$ is a minimal measure extrapolant:
+\[
+  \norm f_1
+  =\inf\{\norm\mu:\mu\in M(G),\ \widehat\mu|_E=\widehat f|_E\};
+  \tag{HZ-2.4a}\label{HZ-2.4a}
+\]
+\item every feasible measure is $g(t)\,dt$ for some $g\in L^1(G)$, and every such $g$ satisfies
+\[
+  \norm f_1=\int_G\sigma(t)g(t)\,dt;
+  \tag{HZ-2.4b}\label{HZ-2.4b}
+\]
+\item for feasible $g\in L^1(G)$,
+\[
+  \norm g_1=\norm f_1
+  \quad\Longleftrightarrow\quad
+  \sigma g=\abs g\quad\text{a.e.}
+  \tag{HZ-2.4c}\label{HZ-2.4c}
+\]
+\end{enumerate}
+\end{corollary}
+
+\sourcecomment{The printed item (1) of Corollary 2.4 places $\mu$ in $M(\widehat G)$. The feasible measures throughout the section are measures on $G$, and the proof invokes Theorem 2.3 with $M(G)$; this note uses the mathematically consistent $M(G)$.}
+
+\begin{argument}
+\item Theorem 2.3 gives \eqref{HZ-2.4a}.
+\item Corollary 2.2 gives $\mu=g(t)\,dt$. Since $\widehat{f-g}|_E=0$, annihilation yields
+\[
+  0=\int_G\sigma(f-g),
+\]
+and $\sigma f=\abs f$ gives \eqref{HZ-2.4b}.
+\item If $\sigma g=\abs g$, then \eqref{HZ-2.4b} gives equality of norms. Conversely, if the norms agree, then
+\[
+  \int_G\bigl(\abs g-\Re(\sigma g)\bigr)=0.
+\]
+The integrand is nonnegative, so it vanishes a.e. Together with $\abs{\sigma g}\le\abs g$, this forces $\sigma g=\abs g$ a.e.
+\end{argument}
+
+\section{Minimal extrapolation on the real line}
+
+\sourceanchor{Section 3. Here $G=\widehat G=\R$ and $E=\R\setminus(-1,1)$.}
+
+\subsection{A periodic annihilator and the sign certificate}
+
+Let $\sigma\in L^\infty(\R)$ be $2\pi$-periodic. If $h\in L^1(\R)$ and
+\[
+  \widehat h(k)=0\qquad(k\in\Z\setminus\{0\}),
+  \tag{HZ-integer-zero}\label{HZ-integer-zero}
+\]
+then
+\[
+  \int_{\R}\sigma(t)h(t)\,dt
+  =\frac1{2\pi}\left(\int_{-\pi}^{\pi}\sigma(t)\,dt\right)
+       \left(\int_{\R}h(t)\,dt\right).
+  \tag{HZ-periodic-pairing}\label{HZ-periodic-pairing}
+\]
+Indeed, it suffices by weak-star density of trigonometric polynomials to verify the identity for $\sigma(t)=e^{ikt}$, where it is exactly the Fourier coefficient condition.
+
+If $\sigma$ has mean zero over one period, then it annihilates every $h$ with
+\[
+  \widehat h|_{\R\setminus(-1,1)}=0,
+  \tag{HZ-bandlimited}\label{HZ-bandlimited}
+\]
+because all nonzero integers belong to the exterior set. The source chooses
+\[
+  \sigma(t)=\sgn(\sin t),
+  \qquad\abs{\sigma(t)}=1\text{ a.e.},
+  \qquad\int_{-\pi}^{\pi}\sigma(t)\,dt=0.
+  \tag{HZ-sign-cert}\label{HZ-sign-cert}
+\]
+
+\begin{proposition}[Source Proposition 3.1]
+Let $f\in L^1(\R)$ satisfy
+\[
+  f(t)\sin t\ge0\quad\text{a.e.}
+  \tag{HZ-sign-condition}\label{HZ-sign-condition}
+\]
+Then:
+\begin{enumerate}[label=(\arabic*)]
+\item $f$ minimizes total variation among all measures with the same exterior Fourier data;
+\item every feasible measure is $g(t)\,dt$ and
+\[
+  \norm f_1=\int_{\R}g(t)\sgn(\sin t)\,dt;
+  \tag{HZ-3.1-pair}\label{HZ-3.1-pair}
+\]
+\item a feasible $g\in L^1$ is also minimizing exactly when
+\[
+  g(t)\sin t\ge0\quad\text{a.e.}
+  \tag{HZ-3.1-min}\label{HZ-3.1-min}
+\]
+\end{enumerate}
+\end{proposition}
+
+This is Corollary 2.4 with the explicit dual certificate \eqref{HZ-sign-cert}.
+
+\begin{proposition}[Source Proposition 3.2: uniqueness]
+Let $f$ be continuous on $\R\setminus\{0\}$, integrable, and satisfy
+\[
+  f(t)\sin t\ge0\qquad(t\ne0).
+\]
+Then $f(t)\,dt$ is the unique minimum-norm measure whose Fourier transform agrees with $\widehat f$ on $\R\setminus(-1,1)$.
+\end{proposition}
+
+\begin{argument}
+\item If another minimizer is $g(t)\,dt$, Proposition 3.1 gives $g(t)\sin t\ge0$ a.e.
+\item Set $h=g-f$. Since $\supp\widehat h\subset[-1,1]$, Fourier inversion gives a continuous representative
+\[
+  h(t)=\frac1{2\pi}\int_{-1}^{1}\widehat h(x)e^{-ixt}\,dx.
+  \tag{HZ-band-inversion}\label{HZ-band-inversion}
+\]
+Thus $g$ may be chosen continuous on $\R\setminus\{0\}$.
+\item At every nonzero $n\in\Z$, the sign of $\sin t$ changes at $n\pi$. Continuity and the two sign conditions force
+\[
+  f(n\pi)=g(n\pi)=0.
+  \tag{HZ-lattice-zero}\label{HZ-lattice-zero}
+\]
+Hence
+\[
+  \frac1{2\pi}\int_{-1}^{1}\widehat h(x)e^{-in\pi x}\,dx=0
+  \qquad(n\in\Z\setminus\{0\}).
+  \tag{HZ-Fourier-coeff-zero}\label{HZ-Fourier-coeff-zero}
+\]
+\item Uniqueness of Fourier coefficients in $L^1([-1,1])$ implies $\widehat h$ is a.e. constant on $[-1,1]$. Continuity of $\widehat h$ and its vanishing off $[-1,1]$ force that constant to be zero. Therefore $h=0$.
+\end{argument}
+
+\subsection{A Laplace-transform integrability lemma}
+
+For $F:[0,\infty)\to\C$, write
+\[
+  \mathcal L_y(F)(t):=\int_0^\infty F(y)e^{-ty}\,dy
+  \qquad(t>0).
+  \tag{HZ-Laplace}\label{HZ-Laplace}
+\]
+
+\begin{lemma}[Source Lemma 3.3]
+Let $F$ be bounded and continuous on $[0,\infty)$, with $F(0)=0$, and differentiable at $0$. Then
+\[
+  \int_0^\infty\abs{\sin t}\,
+     \abs{\mathcal L_y(F)(t)}\,dt<\infty.
+  \tag{HZ-3.3}\label{HZ-3.3}
+\]
+\end{lemma}
+
+Since $F(y)=O(y)$ near $0$ and is bounded at infinity,
+\[
+  c:=\sup_{y>0}\frac{\abs{F(y)}}{1-e^{-y}}<\infty.
+  \tag{HZ-cF}\label{HZ-cF}
+\]
+Therefore
+\[
+  \abs{\mathcal L_y(F)(t)}
+  \le c\int_0^\infty(1-e^{-y})e^{-ty}\,dy
+  =\frac{c}{t(1+t)},
+  \tag{HZ-Laplace-bound}\label{HZ-Laplace-bound}
+\]
+and \eqref{HZ-3.3} follows from integrability of $\abs{\sin t}/(t(1+t))$.
+
+\section{The explicit minimizer for nonzero parameter}
+
+\sourceanchor{Lemma 3.4.}
+
+Fix $\alpha>0$. Let
+\[
+  g_\alpha(t):=e^{-\alpha t}\mathbf1_{[0,\infty)}(t),
+  \qquad
+  \widehat g_\alpha(x)=\frac1{\alpha-ix}.
+  \tag{HZ-galpha}\label{HZ-galpha}
+\]
+
+\begin{lemma}[Source Lemma 3.4]
+There is exactly one $f_\alpha\in L^1(\R)$ satisfying
+\[
+  f_\alpha(t)\sin t\ge0\quad\text{a.e.}
+  \tag{HZ-3.4-sign}\label{HZ-3.4-sign}
+\]
+and
+\[
+  \widehat f_\alpha(x)=\frac1{\alpha-ix}
+  \qquad(|x|\ge1).
+  \tag{HZ-3.4-data}\label{HZ-3.4-data}
+\]
+It is given, for $t\ne0$, by
+\[
+ f_\alpha(t)=
+ \begin{cases}
+ \displaystyle
+ \sin t\int_0^\infty
+ \left(\frac1{e^{\pi\alpha}+1}
+       -\frac1{e^{\pi(\alpha+y)}+1}\right)e^{ty}\,dy,
+ &t<0,\\[2.2ex]
+ \displaystyle
+ \sin t\int_0^\infty
+ \left(\frac1{e^{\pi(\alpha-y)}+1}
+       -\frac1{e^{\pi\alpha}+1}\right)e^{-ty}\,dy,
+ &t>0.
+ \end{cases}
+ \tag{HZ-3.4-formula}\label{HZ-3.4-formula}
+\]
+Its Fourier transform on all of $\R$ is
+\[
+ \widehat f_\alpha(x)
+ =\frac1{\alpha-ix}
+ -\pi\left(
+     \frac1{e^{\pi\alpha}+1}
+     +\frac1{e^{\pi(\alpha-ix)}-1}
+   \right)\mathbf1_{[-1,1]}(x).
+ \tag{HZ-3.4-Fourier}\label{HZ-3.4-Fourier}
+\]
+\end{lemma}
+
+\subsection{Uniqueness and reconstruction of the compactly supported correction}
+
+Suppose $f_\alpha$ satisfies the two conditions and set
+\[
+  h_\alpha:=g_\alpha-f_\alpha.
+\]
+Then
+\[
+  \supp\widehat h_\alpha\subset[-1,1],
+  \tag{HZ-ha-support}\label{HZ-ha-support}
+\]
+and $h_\alpha$ has a continuous representative. The sign condition forces
+\[
+  f_\alpha(n\pi)=0\qquad(n\in\Z\setminus\{0\}).
+\]
+Thus, for $n\ne0$,
+\[
+  \frac1{2\pi}\int_{-1}^{1}\widehat h_\alpha(x)e^{-in\pi x}\,dx
+  =h_\alpha(n\pi)
+  =
+  \begin{cases}
+    e^{-n\pi\alpha},&n>0,\\
+    0,&n<0.
+  \end{cases}
+  \tag{HZ-3.4-coeff}\label{HZ-3.4-coeff}
+\]
+The resulting absolutely convergent Fourier series on $[-1,1]$ is
+\[
+  \widehat h_\alpha(x)
+  =\pi\left(c_\alpha+\sum_{n=1}^\infty
+       e^{-n\pi\alpha}e^{in\pi x}\right)
+  =\pi\left(c_\alpha+
+       \frac1{e^{\pi(\alpha-ix)}-1}\right).
+  \tag{HZ-3.4-series}\label{HZ-3.4-series}
+\]
+Continuity and support imply $\widehat h_\alpha(\pm1)=0$, so
+\[
+  c_\alpha=\frac1{e^{\pi\alpha}+1}.
+  \tag{HZ-calpha}\label{HZ-calpha}
+\]
+Therefore
+\[
+  h_\alpha(t)
+  =\frac12\int_{-1}^{1}
+   \left(
+    \frac1{e^{\pi\alpha}+1}
+    +\frac1{e^{\pi(\alpha-ix)}-1}
+   \right)e^{ixt}\,dx.
+  \tag{HZ-3.4-h}\label{HZ-3.4-h}
+\]
+This identifies the only possible candidate $f_\alpha=g_\alpha-h_\alpha$.
+
+\subsection{Contour calculation for \texorpdfstring{$t<0$}{t less than 0}}
+
+Introduce
+\[
+  F_t(z):=\frac12\left(
+    \frac1{e^{\pi\alpha}+1}
+    +\frac1{e^{\pi(\alpha-iz)}-1}
+  \right)e^{-itz}.
+  \tag{HZ-meromorphic}\label{HZ-meromorphic}
+\]
+Its poles are $z=-i\alpha+2n$, $n\in\Z$, with
+\[
+  \operatorname*{Res}_{z=-i\alpha}F_t(z)
+  =-\frac{1}{2\pi i}e^{-\alpha t}.
+  \tag{HZ-residue}\label{HZ-residue}
+\]
+For $t<0$, integrate around
+\[
+  R(T)=\{z:-1\le\Re z\le1,\ 0\le\Im z\le T\}.
+\]
+There are no poles, so
+\[
+  \int_{\partial R(T)}F_t(z)\,dz=0.
+  \tag{HZ-contour-up}\label{HZ-contour-up}
+\]
+The top edge vanishes as $T\to\infty$, and the vertical edges yield
+\[
+  h_\alpha(t)
+  =-\sin t\int_0^\infty
+    \left(\frac1{e^{\pi\alpha}+1}
+          -\frac1{e^{\pi(\alpha+y)}+1}
+    \right)e^{ty}\,dy.
+  \tag{HZ-v}\label{HZ-v}
+\]
+Since $g_\alpha(t)=0$ for $t<0$, this gives the first branch of \eqref{HZ-3.4-formula}.
+
+\subsection{Contour calculation for \texorpdfstring{$t>0$}{t greater than 0}}
+
+For $t>0$, integrate around
+\[
+  R'(T)=\{z:-1\le\Re z\le1,\ -T\le\Im z\le0\}.
+\]
+When $T>\alpha$, the contour contains exactly the pole $-i\alpha$, and the residue theorem gives
+\[
+  \int_{\partial R'(T)}F_t(z)\,dz=e^{-\alpha t}.
+  \tag{HZ-contour-down}\label{HZ-contour-down}
+\]
+Again the horizontal edge vanishes, and the vertical edges give
+\[
+  h_\alpha(t)
+  =e^{-\alpha t}
+   +\sin t\int_0^\infty
+    \left(\frac1{e^{\pi\alpha}+1}
+          -\frac1{e^{\pi(\alpha-y)}+1}
+    \right)e^{-ty}\,dy.
+  \tag{HZ-vii-h}\label{HZ-vii-h}
+\]
+Subtracting from $g_\alpha(t)=e^{-\alpha t}$ gives the second branch of \eqref{HZ-3.4-formula}.
+
+The integrands in both branches have the sign needed to show
+\[
+  f_\alpha(t)\sin t\ge0\qquad(t\ne0).
+  \tag{HZ-3.4-sign-pointwise}\label{HZ-3.4-sign-pointwise}
+\]
+Lemma 3.3 proves $f_\alpha\in L^1$. Fourier inversion applied to \eqref{HZ-3.4-h} then yields \eqref{HZ-3.4-Fourier} and the exterior data \eqref{HZ-3.4-data}. Uniqueness also follows immediately from Proposition 3.2.
+
+\section{The exact norm of the minimizer}
+
+\sourceanchor{Lemma 3.5.}
+
+\begin{lemma}[Source Lemma 3.5]
+For $\alpha>0$,
+\[
+  \norm{f_\alpha}_1
+  =\frac1\alpha\tanh\!\left(\frac{\pi\alpha}{2}\right).
+  \tag{HZ-3.5}\label{HZ-3.5}
+\]
+\end{lemma}
+
+For $0<t<\pi$, define the antiperiodization
+\[
+  k_\alpha(t):=\sum_{n\in\Z}(-1)^n f_\alpha(t+n\pi).
+  \tag{HZ-kalpha}\label{HZ-kalpha}
+\]
+The sum converges a.e. and in $L^1(0,\pi)$. Because $f_\alpha(t)\sin t\ge0$,
+\[
+  \norm{f_\alpha}_1
+  =\int_{\R}f_\alpha(t)\sgn(\sin t)\,dt
+  =\int_0^\pi k_\alpha(t)\,dt.
+  \tag{HZ-norm-antiperiod}\label{HZ-norm-antiperiod}
+\]
+For every odd integer $m$,
+\[
+  \int_0^\pi k_\alpha(t)e^{imt}\,dt
+  =\int_{\R}f_\alpha(t)e^{imt}\,dt
+  =\frac1{\alpha-im}.
+  \tag{HZ-viii}\label{HZ-viii}
+\]
+Apply the same construction to $g_\alpha=e^{-\alpha t}\mathbf1_{[0,\infty)}$. Its antiperiodization is
+\[
+  \ell_\alpha(t)
+  :=\sum_{n\in\Z}(-1)^n g_\alpha(t+n\pi)
+  =\sum_{n=0}^\infty(-1)^n e^{-\alpha(t+n\pi)}
+  =\frac{e^{-\alpha t}}{1+e^{-\alpha\pi}}.
+  \tag{HZ-lalpha}\label{HZ-lalpha}
+\]
+The source prints the denominator in the last expression in an algebraically equivalent but OCR-prone form; the geometric series fixes it unambiguously.
+
+The odd, $2\pi$-periodic extensions of $k_\alpha$ and $\ell_\alpha$ have the same Fourier coefficients, so they agree a.e. on $(0,\pi)$. Therefore
+\[
+\begin{aligned}
+  \norm{f_\alpha}_1
+  &=\int_0^\pi\frac{e^{-\alpha t}}{1+e^{-\alpha\pi}}\,dt\\
+  &=\frac1\alpha\frac{1-e^{-\alpha\pi}}{1+e^{-\alpha\pi}}
+   =\frac1\alpha\tanh\!\left(\frac{\pi\alpha}{2}\right).
+\end{aligned}
+\tag{HZ-norm-computation}\label{HZ-norm-computation}
+\]
+
+\section{The complete minimal-extrapolation theorem}
+
+\sourceanchor{Theorem 3.6.}
+
+\begin{theorem}[Source Theorem 3.6]
+For every $\alpha\in\R$ there is a unique measure $\nu_\alpha\in M(\R)$ such that
+\[
+  \widehat\nu_\alpha(x)=\frac1{\alpha-ix}
+  \qquad(|x|\ge1)
+  \tag{HZ-3.6-data}\label{HZ-3.6-data}
+\]
+and
+\[
+  \norm{\nu_\alpha}
+  =\inf\left\{\norm\mu:
+      \mu\in M(\R),\ 
+      \widehat\mu(x)=\frac1{\alpha-ix}\text{ for }|x|\ge1
+    \right\}.
+  \tag{HZ-3.6-min}\label{HZ-3.6-min}
+\]
+The minimizer is absolutely continuous:
+\[
+  d\nu_\alpha(t)=f_\alpha(t)\,dt.
+\]
+For $t\ne0$,
+\[
+ f_\alpha(t)=
+ \begin{cases}
+ \displaystyle
+ \frac{\sin t}{2}\int_0^\infty
+ \left(
+  \tanh\!\frac{\pi(\alpha+y)}2-
+  \tanh\!\frac{\pi\alpha}2
+ \right)e^{ty}\,dy,
+ &t<0,\\[2.2ex]
+ \displaystyle
+ \frac{\sin t}{2}\int_0^\infty
+ \left(
+  \tanh\!\frac{\pi\alpha}2-
+  \tanh\!\frac{\pi(\alpha-y)}2
+ \right)e^{-ty}\,dy,
+ &t>0.
+ \end{cases}
+ \tag{HZ-3.6-f}\label{HZ-3.6-f}
+\]
+For $x\ne0$,
+\[
+  \widehat f_\alpha(x)
+  =\frac1{\alpha-ix}
+   +\frac\pi2\left(
+      \tanh\!\frac{\pi\alpha}{2}
+      -\coth\!\frac{\pi(\alpha-ix)}{2}
+    \right)\mathbf1_{[-1,1]}(x).
+  \tag{HZ-3.6-Fourier}\label{HZ-3.6-Fourier}
+\]
+Finally,
+\[
+  \norm{\nu_\alpha}=\norm{f_\alpha}_1
+  =
+  \begin{cases}
+    \displaystyle\frac1\alpha\tanh\!\left(\frac{\pi\alpha}{2}\right),
+      &\alpha\ne0,\\[1.1ex]
+    \displaystyle\frac\pi2,&\alpha=0.
+  \end{cases}
+  \tag{HZ-3.6-norm}\label{HZ-3.6-norm}
+\]
+\end{theorem}
+
+\subsection{Negative parameters}
+
+For $h:\R\to\C$, write $\check h(x)=h(-x)$. Since
+\[
+  \frac1{-\alpha-ix}
+  =-\left(\frac1{\alpha-ix}\right)\!\check{\ },
+  \tag{HZ-reflect-multiplier}\label{HZ-reflect-multiplier}
+\]
+uniqueness for $\alpha>0$ implies
+\[
+  f_{-\alpha}=-\check f_\alpha.
+  \tag{HZ-reflect-density}\label{HZ-reflect-density}
+\]
+The oddness of $\tanh$ extends \eqref{HZ-3.6-f}, \eqref{HZ-3.6-Fourier}, and \eqref{HZ-3.6-norm} to $\alpha<0$.
+
+\subsection{The limiting parameter \texorpdfstring{$\alpha=0$}{alpha equals 0}}
+
+The source establishes pointwise continuity of $\alpha\mapsto f_\alpha(t)$ for $t\ne0$ and then proves a uniform integrable majorant. First,
+\[
+  \abs{f_\alpha(t)}\le\abs{\frac{\sin t}{t}}.
+  \tag{HZ-xi}\label{HZ-xi}
+\]
+If $F$ and $F'$ are bounded with $F(0)=0$, integration by parts gives
+\[
+  \mathcal L_y(F)(t)=\frac1t\mathcal L_y(F')(t).
+  \tag{HZ-Laplace-parts}\label{HZ-Laplace-parts}
+\]
+Applying this to the derivatives of the hyperbolic-tangent expressions yields
+\[
+ f_\alpha(t)=
+ \begin{cases}
+ \displaystyle
+ -\frac{\pi\sin t}{4t}
+  \int_0^\infty
+  \frac{e^{ty}}{\cosh^2(\pi(\alpha+y)/2)}\,dy,
+ &t<0,\\[2.2ex]
+ \displaystyle
+ \frac{\pi\sin t}{4t}
+  \int_0^\infty
+  \frac{e^{-ty}}{\cosh^2(\pi(\alpha-y)/2)}\,dy,
+ &t>0.
+ \end{cases}
+ \tag{HZ-partial-integration-form}\label{HZ-partial-integration-form}
+\]
+Since $\cosh^{-2}\le1$,
+\[
+  \abs{f_\alpha(t)}\le\frac{\pi\abs{\sin t}}{4t^2}.
+  \tag{HZ-tail-bound}\label{HZ-tail-bound}
+\]
+Combining \eqref{HZ-xi} and \eqref{HZ-tail-bound} gives an integrable bound independent of $\alpha$:
+\[
+  \abs{f_\alpha(t)}
+  \le \frac{2\abs{\sin t}}{\abs t(1+\abs t)}.
+  \tag{HZ-dominated}\label{HZ-dominated}
+\]
+Dominated convergence therefore proves continuity
+\[
+  \R\ni\alpha\longmapsto f_\alpha\in L^1(\R).
+  \tag{HZ-L1-cont}\label{HZ-L1-cont}
+\]
+At $\alpha=0$,
+\[
+  f_0(t)
+  =\frac{\sin t}{2}
+     \int_0^\infty\tanh\!\left(\frac{\pi y}{2}\right)
+       e^{-\abs t y}\,dy,
+  \qquad t\ne0.
+  \tag{HZ-f0}\label{HZ-f0}
+\]
+It is continuous away from $0$ and satisfies $f_0(t)\sin t\ge0$. Proposition 3.2 gives uniqueness, while $L^1$ continuity gives
+\[
+  \widehat f_0(x)=\frac1{-ix}\qquad(|x|\ge1)
+  \tag{HZ-f0-transform}\label{HZ-f0-transform}
+\]
+and
+\[
+  \norm{f_0}_1
+  =\lim_{\alpha\to0}
+    \frac1\alpha\tanh\!\left(\frac{\pi\alpha}{2}\right)
+  =\frac\pi2.
+  \tag{HZ-f0-norm}\label{HZ-f0-norm}
+\]
+The source notes that this $\alpha=0$ case was already obtained by Sz\H{o}kefalvi-Nagy and Strausz.
+
+\section{The exact reciprocal multiplier needed by the Sylvester theorem}
+
+This section is a modern extraction from Theorem 3.6, not a separately numbered theorem in the source.
+
+\begin{corollary}[Sharp reciprocal Fourier extension]
+Define
+\[
+  g(t):=-i f_0(t).
+  \tag{HZ-g0}\label{HZ-g0}
+\]
+Then
+\[
+  \widehat g(x)=\frac1x\qquad(|x|\ge1),
+  \qquad
+  \norm g_1=\frac\pi2.
+  \tag{HZ-reciprocal-unit}\label{HZ-reciprocal-unit}
+\]
+For $\delta>0$, define
+\[
+  g_\delta(t):=g(\delta t).
+  \tag{HZ-scale-density}\label{HZ-scale-density}
+\]
+Then
+\[
+  \widehat g_\delta(x)=\frac1x
+  \qquad(\abs x\ge\delta),
+  \qquad
+  \norm{g_\delta}_1=\frac\pi{2\delta}.
+  \tag{HZ-reciprocal-scaled}\label{HZ-reciprocal-scaled}
+\]
+Moreover, $\pi/(2\delta)$ is the least possible $L^1$ norm among all Fourier extensions of $x\mapsto1/x$ from $\abs x\ge\delta$.
+\end{corollary}
+
+\begin{argument}
+\item By \eqref{HZ-f0-transform}, $\widehat f_0(x)=1/(-ix)=i/x$, so multiplication by $-i$ gives \eqref{HZ-reciprocal-unit}.
+\item Under the convention \eqref{HZ-F},
+\[
+  \widehat{g(\delta\,\cdot)}(x)
+  =\frac1\delta\widehat g(x/\delta).
+  \tag{HZ-scale-FT}\label{HZ-scale-FT}
+\]
+For $\abs x\ge\delta$, this is $(1/\delta)(\delta/x)=1/x$. The $L^1$ norm scales by $1/\delta$.
+\item Minimality follows by the inverse scaling map from Theorem 3.6 at $\alpha=0$.
+\end{argument}
+
+\begin{corollary}[Finite-dimensional Sylvester integral formula]
+Let $A:F\to F$ and $B:E\to E$ be self-adjoint operators on finite-dimensional complex Hilbert spaces, and suppose
+\[
+  \abs{a-b}\ge\delta>0
+  \qquad(a\in\sigma(A),\ b\in\sigma(B)).
+  \tag{HZ-spectral-separation}\label{HZ-spectral-separation}
+\]
+If
+\[
+  AX-XB=C,
+  \tag{HZ-Sylvester}\label{HZ-Sylvester}
+\]
+then
+\[
+  X=\int_{\R}g_\delta(t)e^{itA}Ce^{-itB}\,dt.
+  \tag{HZ-Sylvester-integral}\label{HZ-Sylvester-integral}
+\]
+Consequently every unitarily invariant norm $N$ satisfies
+\[
+  \delta N(X)\le\frac\pi2N(C).
+  \tag{HZ-Sylvester-bound}\label{HZ-Sylvester-bound}
+\]
+\end{corollary}
+
+\begin{argument}
+\item In eigenbases of $A$ and $B$, equation \eqref{HZ-Sylvester} is
+\[
+  (a_i-b_j)X_{ij}=C_{ij}.
+  \tag{HZ-Sylvester-coeff}\label{HZ-Sylvester-coeff}
+\]
+\item Separation and \eqref{HZ-reciprocal-scaled} imply
+\[
+  \frac1{a_i-b_j}
+  =\int_{\R}g_\delta(t)e^{it(a_i-b_j)}\,dt.
+  \tag{HZ-coeff-integral}\label{HZ-coeff-integral}
+\]
+Substitution proves \eqref{HZ-Sylvester-integral} coefficientwise.
+\item Since $e^{itA}$ and $e^{-itB}$ are unitary,
+\[
+\begin{aligned}
+  N(X)
+  &\le\int_{\R}\abs{g_\delta(t)}
+      N(e^{itA}Ce^{-itB})\,dt\\
+  &=\norm{g_\delta}_1N(C)
+   =\frac\pi{2\delta}N(C).
+\end{aligned}
+\tag{HZ-UI-bound}\label{HZ-UI-bound}
+\]
+\end{argument}
+
+For the repository's barycentric formulation, write
+\[
+  g_\delta(t)=\abs{g_\delta(t)}\omega(t),
+  \qquad\abs{\omega(t)}=1
+  \quad\text{a.e. on }\{g_\delta\ne0\}.
+\]
+Absorb the phase $\omega(t)$ into the left unitary. Multiplying \eqref{HZ-Sylvester-integral} by $\delta$ produces a positive measure of total mass $\pi/2$ whose normalized integral lies in the closed real convex hull of the two-sided unitary orbit of $C$. This is precisely the analytic content expected by
+\code{sylvester_barycentricOrbitRepresentation_of_spectralDistance}.
+The remaining Lean-specific issue is the real-field descent: the paper and its Fourier phase argument are complex. For $\R$, one must either complexify and descend a conjugation-invariant average or replace scalar phases by real $2\times2$ rotations.
+
+\section{Formalization map}
+
+\begin{formalizationmap}
+Hermitian definition & Banach-space generator/resolvent equivalence & Not presently a target; Mathlib's self-adjoint Hilbert operators are a narrower setting. \\
+Theorems 1.1--1.2, Lemma 1.3, Corollary 1.4 & Historical progression of universal resolvent constants & Literature context only. \\
+Theorem 1.5 & Sharp normalized resolvent bound and antiperiodic equality model & Not formalized; useful as an independent endpoint after Fourier infrastructure exists. \\
+Corollary 1.6 & Universal sharp $\pi/2$ Hermitian resolvent estimate & Not formalized; broader Banach-space operator theory than the current finite Hilbert-space project. \\
+Theorem 2.1 and Corollary 2.2 & Existence/compactness of minimum-norm extrapolants and automatic absolute continuity & Largely delegated to functional analysis and Fourier theory not yet assembled in this repository. \\
+Theorem 2.3 and Corollary 2.4 & $L^1$ dual certificate and classification of minimizers & Missing reusable theorem layer; a plausible standalone \code{ForMathlib} target. \\
+Propositions 3.1--3.2 & The $\sgn(\sin t)$ certificate and uniqueness from lattice zeros & Missing; these are the cleanest route to source-faithful minimality. \\
+Lemma 3.3 & Weighted Laplace-transform integrability & Missing but elementary once the paper's Laplace notation is represented. \\
+Lemma 3.4 & Explicit nonzero-parameter extremizer via Fourier series and contour integration & Missing; analytically heavy and not needed to close only the $\alpha=0$ Sylvester seam. \\
+Lemma 3.5 & Exact norm by antiperiodization & Missing; source-faithful proof of the sharp constant for $\alpha>0$. \\
+Theorem 3.6, $\alpha=0$ & Unique $L^1$ extension of $1/(-ix)$ with norm $\pi/2$ & Exact scalar analytic root needed by \code{DavisKahanTheory/Sylvester.lean}. \\
+Scaled reciprocal corollary & $\widehat g_\delta(x)=1/x$ off $(-\delta,\delta)$ and $\norm{g_\delta}_1=\pi/(2\delta)$ & Should be the first formal theorem extracted from this source. \\
+Sylvester integral & $X=\int g_\delta(t)e^{itA}Ce^{-itB}\,dt$ & This is the intended proof of the remaining barycentric-orbit theorem over $\C$. \\
+Real-field descent & Replace complex phases by a real convex-orbit certificate & Not in the source; remains an explicit formalization obligation. \\
+\end{formalizationmap}
+
+\section{Recommended formalization decomposition}
+
+A source-faithful implementation should not begin with contour integration. The shortest path to the active theorem seam is:
+\begin{enumerate}
+\item State an abstract reciprocal-extension certificate:
+\[
+  \exists g\in L^1(\R),\quad
+  \widehat g(x)=x^{-1}\ (\abs x\ge1),\quad
+  \norm g_1\le\pi/2.
+\]
+\item Prove the scaling theorem \eqref{HZ-reciprocal-scaled}.
+\item Prove the finite spectral-coordinate operator integral \eqref{HZ-Sylvester-integral}.
+\item Convert the integral into closed convex-hull membership of the two-sided unitary orbit and then into the existing finite orbit certificate.
+\item Handle $\R$ by complexification/descent or real rotations.
+\item Only then reconstruct Theorem 3.6 source-faithfully from Propositions 3.1--3.2, Lemmas 3.3--3.5, and the limiting argument.
+\end{enumerate}
+
+The logical dependency should remain visible: Theorem 3.6 supplies the sharp scalar measure; operator spectral calculus transports it to a two-sided unitary average; convex geometry and Fan dominance transport that average to all unitarily invariant norms.
+
+\section{Source-faithfulness and correction ledger}
+
+\begin{itemize}
+\item The source proof order is preserved: inherited resolvent estimates, normalized sharp theorem, abstract minimal extrapolation, real-line sign certificate, explicit extremizer, exact norm, then the complete theorem.
+\item No later Bhatia--Davis--McIntosh or textbook proof is attributed to Haagerup--Zsid\'o. The Sylvester corollary is labeled as a modern extraction from their scalar theorem.
+\item The paper works with complex Banach-space Hermitian operators. The current Lean application uses finite-dimensional real or complex Hilbert spaces; these are distinct scopes.
+\item The denominator in the antiperiodic resolvent identity is corrected from the printed $1+e^{-\alpha t}$ to $1+e^{-\alpha\pi}$.
+\item Corollary 2.4's measure space is corrected from the printed $M(\widehat G)$ to $M(G)$.
+\item The source's Fourier convention is retained exactly. This matters for the factor $-i$ turning $1/(-ix)$ into $1/x$.
+\item Operator-valued integrals are stated with the topology actually used by the paper. In the finite-dimensional Sylvester extraction they may be treated as Bochner integrals.
+\item The source proves existence, uniqueness, and exact minimal norm, not merely an upper bound. The distilled statement preserves all three.
+\item The $\alpha=0$ case is historically credited by the source to Sz\H{o}kefalvi-Nagy and Strausz; this note preserves that attribution.
+\end{itemize}
+
+\section{Bibliographic dependency ledger}
+\begingroup\small
+
+The paper explicitly depends on the following prior mathematical inputs:
+\begin{itemize}
+\item Lumer--Phillips and Stampfli--Williams for the Banach-space Hermitian/generator framework;
+\item Partington for the original conjecture, the real-axis sharp bound, and subharmonic improvements;
+\item Zsid\'o for the earlier general resolvent-growth theorem;
+\item Beurling, Sz\H{o}kefalvi-Nagy, Domar, Esseen, and Shapiro for minimal Fourier extrapolation and its dual certificate;
+\item Evans for the support of the integrated one-parameter-group functional calculus;
+\item Rudin for Fourier inversion on locally compact abelian groups;
+\item Sz\H{o}kefalvi-Nagy--Strausz for the $\alpha=0$ extremal problem.
+\end{itemize}
+These are dependencies of the source proof, not claims that the present repository has distilled each cited work.
+\endgroup
+
+\end{document}
