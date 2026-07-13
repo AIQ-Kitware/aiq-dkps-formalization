@@ -7,6 +7,7 @@ import Mathlib.Analysis.Fourier.PoissonSummation
 import Mathlib.Analysis.Fourier.Inversion
 import Mathlib.Analysis.SpecialFunctions.ImproperIntegrals
 import Mathlib.Analysis.SpecialFunctions.Integrals.Basic
+import Mathlib.Analysis.SpecificLimits.Basic
 import Mathlib.MeasureTheory.Integral.IntervalIntegral.Basic
 
 /-!
@@ -704,6 +705,202 @@ theorem integral_Ioi_sq_div_two_quadratics
           have hsum : a + c ≠ 0 := by positivity
           field_simp [hdiff, hc.ne', haPos.ne', hsum]
           ring
+
+/-- Integrability of the nonnegative rational kernel used in the telescoping
+argument. -/
+theorem integrable_sq_div_two_quadratics
+    {a c : ℝ} (_ha : 0 ≤ a) (hc : 0 < c) :
+    Integrable (fun y : ℝ =>
+      y ^ 2 / ((y ^ 2 + c ^ 2) * (y ^ 2 + a ^ 2))) := by
+  have hCauchy : Integrable (fun y : ℝ => (c ^ 2 + y ^ 2)⁻¹) :=
+    integrable_inv_sq_add_sq hc.ne'
+  apply hCauchy.mono'
+  · exact (by fun_prop : Measurable (fun y : ℝ =>
+      y ^ 2 / ((y ^ 2 + c ^ 2) * (y ^ 2 + a ^ 2)))).aestronglyMeasurable
+  · filter_upwards [] with y
+    by_cases hy : y = 0
+    · subst y
+      simp
+      positivity
+    · have hySq : 0 < y ^ 2 := sq_pos_of_ne_zero hy
+      have hC : 0 < y ^ 2 + c ^ 2 := by positivity
+      have hA : 0 < y ^ 2 + a ^ 2 := by positivity
+      have hquot : 0 ≤ y ^ 2 / ((y ^ 2 + c ^ 2) * (y ^ 2 + a ^ 2)) := by positivity
+      rw [Real.norm_eq_abs, abs_of_nonneg hquot]
+      calc
+        y ^ 2 / ((y ^ 2 + c ^ 2) * (y ^ 2 + a ^ 2)) ≤
+            (y ^ 2 + a ^ 2) / ((y ^ 2 + c ^ 2) * (y ^ 2 + a ^ 2)) :=
+          div_le_div_of_nonneg_right (by nlinarith [sq_nonneg a]) (by positivity)
+        _ = (c ^ 2 + y ^ 2)⁻¹ := by
+          field_simp [hC.ne', hA.ne']
+          ring
+
+/-- The elementary reciprocal series telescopes by steps of two. -/
+theorem hasSum_reciprocal_step_difference
+    {a : ℝ} (ha : 0 ≤ a) :
+    HasSum (fun n : ℕ =>
+      (a + 2 * n + 1)⁻¹ - (a + 2 * n + 3)⁻¹) (a + 1)⁻¹ := by
+  let u : ℕ → ℝ := fun n => (a + 2 * n + 1)⁻¹
+  have hnonneg : ∀ n : ℕ, 0 ≤ u n - u (n + 1) := by
+    intro n
+    dsimp only [u]
+    have hleft : 0 < a + 2 * (n : ℝ) + 1 := by positivity
+    have hright : 0 < a + 2 * ((n + 1 : ℕ) : ℝ) + 1 := by positivity
+    apply sub_nonneg.mpr
+    exact (inv_le_inv₀ hright hleft).2 (by push_cast; linarith)
+  have hfinite : ∀ N : ℕ,
+      (∑ n ∈ Finset.range N, (u n - u (n + 1))) = u 0 - u N := by
+    intro N
+    induction N with
+    | zero => simp
+    | succ N ih =>
+        rw [Finset.sum_range_succ, ih]
+        ring
+  have hDenTop : Tendsto (fun n : ℕ => a + 2 * (n : ℝ) + 1) atTop atTop := by
+    convert tendsto_atTop_add_const_right atTop (a + 1)
+      (tendsto_natCast_atTop_atTop.const_mul_atTop (by norm_num : (0 : ℝ) < 2)) using 1
+    funext n
+    ring
+  have huZero : Tendsto u atTop (nhds 0) := by
+    exact hDenTop.inv_tendsto_atTop
+  rw [show (fun n : ℕ =>
+      (a + 2 * n + 1)⁻¹ - (a + 2 * n + 3)⁻¹) =
+      fun n : ℕ => u n - u (n + 1) by
+    funext n
+    dsimp only [u]
+    push_cast
+    congr 2
+    ring]
+  apply (hasSum_iff_tendsto_nat_of_nonneg hnonneg _).2
+  convert tendsto_const_nhds.sub huZero using 1
+  · funext N
+    exact hfinite N
+  · dsimp only [u]
+    norm_num
+
+/-- Integrating the odd-pole expansion against a difference of two adjacent
+resolvents produces the elementary step-two telescoping term. -/
+theorem integral_weight_mul_reciprocal_difference
+    {a : ℝ} (ha : 0 ≤ a) :
+    (∫ y : ℝ in Set.Ioi 0,
+        weight y * y *
+          ((y ^ 2 + a ^ 2)⁻¹ - (y ^ 2 + (a + 2) ^ 2)⁻¹)) =
+      2 / (a + 1) := by
+  let c : ℕ → ℝ := fun n => 2 * n + 1
+  let F : ℕ → ℝ → ℝ := fun n y =>
+    (4 / Real.pi) *
+      (y ^ 2 / ((y ^ 2 + (c n) ^ 2) * (y ^ 2 + a ^ 2)) -
+        y ^ 2 / ((y ^ 2 + (c n) ^ 2) * (y ^ 2 + (a + 2) ^ 2)))
+  have hc (n : ℕ) : 0 < c n := by
+    dsimp only [c]
+    positivity
+  have hFInt (n : ℕ) : IntegrableOn (F n) (Set.Ioi 0) := by
+    have hA := integrable_sq_div_two_quadratics ha (hc n)
+    have hB := integrable_sq_div_two_quadratics (by linarith : 0 ≤ a + 2) (hc n)
+    exact ((hA.sub hB).const_mul (4 / Real.pi)).integrableOn
+  have hFintegral (n : ℕ) :
+      (∫ y : ℝ in Set.Ioi 0, F n y) =
+        2 * ((a + 2 * n + 1)⁻¹ - (a + 2 * n + 3)⁻¹) := by
+    have hA := integrable_sq_div_two_quadratics ha (hc n)
+    have hB := integrable_sq_div_two_quadratics (by linarith : 0 ≤ a + 2) (hc n)
+    dsimp only [F]
+    rw [integral_const_mul, integral_sub hA.integrableOn hB.integrableOn,
+      integral_Ioi_sq_div_two_quadratics ha (hc n),
+      integral_Ioi_sq_div_two_quadratics (by linarith : 0 ≤ a + 2) (hc n)]
+    dsimp only [c]
+    have hpi : Real.pi ≠ 0 := Real.pi_ne_zero
+    have hleft : a + (2 * (n : ℝ) + 1) ≠ 0 := by positivity
+    have hright : a + 2 + (2 * (n : ℝ) + 1) ≠ 0 := by positivity
+    have hstepLeft : a + 2 * (n : ℝ) + 1 ≠ 0 := by positivity
+    have hstepRight : a + 2 * (n : ℝ) + 3 ≠ 0 := by positivity
+    field_simp [hpi, hleft, hright, hstepLeft, hstepRight]
+    ring
+  have hFnonneg (n : ℕ) {y : ℝ} (hy : y ∈ Set.Ioi (0 : ℝ)) : 0 ≤ F n y := by
+    have hyPos : 0 < y := hy
+    have hcommon : 0 < y ^ 2 + (c n) ^ 2 := by positivity
+    have hA : 0 < y ^ 2 + a ^ 2 := by positivity
+    have hAB : y ^ 2 + a ^ 2 ≤ y ^ 2 + (a + 2) ^ 2 := by
+      nlinarith
+    have hden :
+        (y ^ 2 + (c n) ^ 2) * (y ^ 2 + a ^ 2) ≤
+          (y ^ 2 + (c n) ^ 2) * (y ^ 2 + (a + 2) ^ 2) :=
+      mul_le_mul_of_nonneg_left hAB hcommon.le
+    have hquot :
+        y ^ 2 / ((y ^ 2 + (c n) ^ 2) * (y ^ 2 + (a + 2) ^ 2)) ≤
+          y ^ 2 / ((y ^ 2 + (c n) ^ 2) * (y ^ 2 + a ^ 2)) :=
+      div_le_div_of_nonneg_left (sq_nonneg y) (mul_pos hcommon hA) hden
+    dsimp only [F]
+    positivity
+  have hFnormIntegral (n : ℕ) :
+      (∫ y : ℝ in Set.Ioi 0, ‖F n y‖) =
+        2 * ((a + 2 * n + 1)⁻¹ - (a + 2 * n + 3)⁻¹) := by
+    calc
+      (∫ y : ℝ in Set.Ioi 0, ‖F n y‖) =
+          ∫ y : ℝ in Set.Ioi 0, F n y := by
+        apply setIntegral_congr_fun measurableSet_Ioi
+        intro y hy
+        change ‖F n y‖ = F n y
+        rw [Real.norm_eq_abs, abs_of_nonneg (hFnonneg n hy)]
+      _ = 2 * ((a + 2 * n + 1)⁻¹ - (a + 2 * n + 3)⁻¹) := hFintegral n
+  have hNormSum : Summable (fun n : ℕ => ∫ y : ℝ in Set.Ioi 0, ‖F n y‖) := by
+    apply ((hasSum_reciprocal_step_difference ha).summable.mul_left (2 : ℝ)).congr
+    intro n
+    exact (hFnormIntegral n).symm
+  have hExchange :
+      (∑' n : ℕ, ∫ y : ℝ in Set.Ioi 0, F n y) =
+        ∫ y : ℝ in Set.Ioi 0, ∑' n : ℕ, F n y :=
+    integral_tsum_of_summable_integral_norm hFInt hNormSum
+  have hPointwise {y : ℝ} (hy : 0 < y) :
+      (∑' n : ℕ, F n y) =
+        weight y * y *
+          ((y ^ 2 + a ^ 2)⁻¹ - (y ^ 2 + (a + 2) ^ 2)⁻¹) := by
+    have hw := weight_div_eq_tsum_odd hy
+    let D : ℝ := y ^ 2 *
+      ((y ^ 2 + a ^ 2)⁻¹ - (y ^ 2 + (a + 2) ^ 2)⁻¹)
+    calc
+      (∑' n : ℕ, F n y) =
+          ∑' n : ℕ, (4 / Real.pi) *
+            (y ^ 2 + (2 * n + 1) ^ 2)⁻¹ * D := by
+        apply tsum_congr
+        intro n
+        dsimp only [F, c, D]
+        have hC : y ^ 2 + (2 * (n : ℝ) + 1) ^ 2 ≠ 0 := by positivity
+        have hA : y ^ 2 + a ^ 2 ≠ 0 := by positivity
+        have hB : y ^ 2 + (a + 2) ^ 2 ≠ 0 := by positivity
+        field_simp [hC, hA, hB]
+      _ = (4 / Real.pi) *
+          ((∑' n : ℕ, (y ^ 2 + (2 * n + 1) ^ 2)⁻¹) * D) := by
+        rw [← tsum_mul_right, ← tsum_mul_left]
+        apply tsum_congr
+        intro n
+        ring
+      _ = (weight y / y) * D := by
+        have hw' : weight y / y =
+            (4 / Real.pi) *
+              ∑' n : ℕ, (y ^ 2 + (2 * (n : ℝ) + 1) ^ 2)⁻¹ := by
+          simpa only [Nat.cast_add, Nat.cast_mul, Nat.cast_ofNat, Nat.cast_one] using hw
+        rw [hw']
+        ring
+      _ = weight y * y *
+          ((y ^ 2 + a ^ 2)⁻¹ - (y ^ 2 + (a + 2) ^ 2)⁻¹) := by
+        dsimp only [D]
+        field_simp [hy.ne']
+  calc
+    (∫ y : ℝ in Set.Ioi 0,
+        weight y * y *
+          ((y ^ 2 + a ^ 2)⁻¹ - (y ^ 2 + (a + 2) ^ 2)⁻¹)) =
+        ∫ y : ℝ in Set.Ioi 0, ∑' n : ℕ, F n y := by
+      apply setIntegral_congr_fun measurableSet_Ioi
+      intro y hy
+      exact (hPointwise hy).symm
+    _ = ∑' n : ℕ, ∫ y : ℝ in Set.Ioi 0, F n y := hExchange.symm
+    _ = ∑' n : ℕ,
+        2 * ((a + 2 * n + 1)⁻¹ - (a + 2 * n + 3)⁻¹) := by
+      apply tsum_congr
+      exact hFintegral
+    _ = 2 * (a + 1)⁻¹ := by
+      rw [tsum_mul_left, (hasSum_reciprocal_step_difference ha).tsum_eq]
+    _ = 2 / (a + 1) := by rw [div_eq_mul_inv]
 
 end
 
