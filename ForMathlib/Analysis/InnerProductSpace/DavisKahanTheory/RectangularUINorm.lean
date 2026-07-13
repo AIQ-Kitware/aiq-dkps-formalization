@@ -1549,6 +1549,112 @@ noncomputable def orthogonalBlockSum
   apply WithLp.ofLp_injective 2
   simp [orthogonalBlockSum, LinearMap.comp_apply]
 
+/-- Doubling a rectangular map in an orthogonal block sum repeats every
+singular value twice.  The quotient `i / 2` expresses the interleaved sorted
+order of the two identical copies. -/
+theorem singularValues_orthogonalBlockSum_self
+    {E₀ F₀ : Type*}
+    [NormedAddCommGroup E₀] [InnerProductSpace 𝕜 E₀]
+    [NormedAddCommGroup F₀] [InnerProductSpace 𝕜 F₀]
+    [FiniteDimensional 𝕜 E₀] [FiniteDimensional 𝕜 F₀]
+    (A : E₀ →ₗ[𝕜] F₀) (i : ℕ) :
+    (orthogonalBlockSum A A).singularValues i = A.singularValues (i / 2) := by
+  classical
+  let n := finrank 𝕜 E₀
+  have hn : finrank 𝕜 (WithLp 2 (E₀ × E₀)) = n * 2 := by
+    calc
+      finrank 𝕜 (WithLp 2 (E₀ × E₀)) = finrank 𝕜 (E₀ × E₀) :=
+        (WithLp.linearEquiv 2 𝕜 (E₀ × E₀)).finrank_eq
+      _ = n + n := by simp [n, Module.finrank_prod]
+      _ = n * 2 := by omega
+  rcases lt_or_ge i (n * 2) with hi | hi
+  · let S : E₀ →ₗ[𝕜] E₀ := A.adjoint ∘ₗ A
+    let hS : S.IsSymmetric := A.isSymmetric_adjoint_comp_self
+    let b : OrthonormalBasis (Fin n) 𝕜 E₀ := hS.eigenvectorBasis rfl
+    let pairToSum : Fin n × Fin 2 ≃ Fin n ⊕ Fin n :=
+      (Equiv.prodComm (Fin n) (Fin 2)).trans <|
+        (Equiv.prodCongr finTwoEquiv (Equiv.refl (Fin n))).trans <|
+          Equiv.boolProdEquivSum (Fin n)
+    let e : (Fin n ⊕ Fin n) ≃ Fin (n * 2) :=
+      pairToSum.symm.trans finProdFinEquiv
+    let b₂ : OrthonormalBasis (Fin (n * 2)) 𝕜 (WithLp 2 (E₀ × E₀)) :=
+      (b.prod b).reindex e
+    let μ : Fin (n * 2) → ℝ := fun j =>
+      hS.eigenvalues rfl (finProdFinEquiv.symm j).1
+    have hμ : Antitone μ := by
+      intro j k hjk
+      apply hS.eigenvalues_antitone
+      change j.val / 2 ≤ k.val / 2
+      exact Nat.div_le_div_right (Fin.le_def.mp hjk)
+    have hgram :
+        (orthogonalBlockSum A A).adjoint ∘ₗ orthogonalBlockSum A A =
+          orthogonalBlockSum S S := by
+      simp only [orthogonalBlockSum_adjoint, orthogonalBlockSum_comp, S]
+    have heigen :
+        (orthogonalBlockSum A A).isSymmetric_adjoint_comp_self.eigenvalues hn = μ := by
+      apply eigenvalues_eq_of_eigenbasis _ hn b₂ hμ
+      intro j
+      rw [hgram]
+      simp only [b₂, OrthonormalBasis.reindex_apply]
+      obtain ⟨⟨q, r⟩, rfl⟩ := finProdFinEquiv.surjective j
+      fin_cases r
+      · simp [e, pairToSum, finTwoEquiv, μ, b, S,
+          hS.apply_eigenvectorBasis]
+        have hidx : (finProdFinEquiv (q, (0 : Fin 2))).divNat = q :=
+          congrArg Prod.fst (finProdFinEquiv.symm_apply_apply (q, (0 : Fin 2)))
+        rw [hidx]
+        apply WithLp.ofLp_injective 2
+        simp
+      · simp [e, pairToSum, finTwoEquiv, μ, b, S,
+          hS.apply_eigenvectorBasis]
+        have hidx : (finProdFinEquiv (q, (1 : Fin 2))).divNat = q :=
+          congrArg Prod.fst (finProdFinEquiv.symm_apply_apply (q, (1 : Fin 2)))
+        rw [hidx]
+        apply WithLp.ofLp_injective 2
+        simp
+    rw [(orthogonalBlockSum A A).singularValues_of_lt hn hi,
+      congrFun heigen ⟨i, hi⟩]
+    have hdiv : i / 2 < n := (Nat.div_lt_iff_lt_mul (by omega)).2 hi
+    change √(A.isSymmetric_adjoint_comp_self.eigenvalues rfl
+      ⟨i / 2, hdiv⟩) = A.singularValues (i / 2)
+    rw [A.singularValues_of_lt rfl hdiv]
+  · rw [(orthogonalBlockSum A A).singularValues_of_finrank_le (hn.symm ▸ hi)]
+    have hdiv : n ≤ i / 2 := (Nat.le_div_iff_mul_le (by omega)).2 (by
+      simpa [two_mul] using hi)
+    rw [A.singularValues_of_finrank_le hdiv]
+
+/-- Every Ky Fan prefix doubles on the orthogonal sum of two identical maps. -/
+theorem rectangularKyFanSum_orthogonalBlockSum_self
+    {E₀ F₀ : Type*}
+    [NormedAddCommGroup E₀] [InnerProductSpace 𝕜 E₀]
+    [NormedAddCommGroup F₀] [InnerProductSpace 𝕜 F₀]
+    [FiniteDimensional 𝕜 E₀] [FiniteDimensional 𝕜 F₀]
+    (A : E₀ →ₗ[𝕜] F₀) (k : ℕ) :
+    rectangularKyFanSum (2 * k) (orthogonalBlockSum A A) =
+      2 * rectangularKyFanSum k A := by
+  classical
+  let e : Fin k × Fin 2 ≃ Fin (2 * k) :=
+    finProdFinEquiv.trans (finCongr (by omega))
+  unfold rectangularKyFanSum
+  calc
+    ∑ j : Fin (2 * k), (orthogonalBlockSum A A).singularValues (j : ℕ) =
+        ∑ p : Fin k × Fin 2,
+          (orthogonalBlockSum A A).singularValues (e p : ℕ) := by
+      exact (e.sum_comp fun j => (orthogonalBlockSum A A).singularValues (j : ℕ)).symm
+    _ = ∑ p : Fin k × Fin 2, A.singularValues (p.1 : ℕ) := by
+      apply Finset.sum_congr rfl
+      intro p _
+      rw [singularValues_orthogonalBlockSum_self]
+      congr 1
+      change (p.2.val + 2 * p.1.val) / 2 = p.1.val
+      omega
+    _ = ∑ i : Fin k, ∑ _r : Fin 2, A.singularValues (i : ℕ) := by
+      rw [Fintype.sum_prod_type]
+    _ = 2 * ∑ i : Fin k, A.singularValues (i : ℕ) := by
+      simp only [Fin.sum_univ_two, add_self_eq_mul]
+      rw [← Finset.sum_mul]
+      ring
+
 /-- Real orbit-convex domination is stable under orthogonal block sums.
 
 Proof strategy:
