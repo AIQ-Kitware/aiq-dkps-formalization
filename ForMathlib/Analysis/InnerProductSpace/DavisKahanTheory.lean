@@ -7,6 +7,7 @@ Authors: Jon Crall, GPT 5.6 High
 import ForMathlib.Analysis.InnerProductSpace.DavisKahanTheory.Basic
 import ForMathlib.Analysis.InnerProductSpace.DavisKahanTheory.RectangularUINorm
 import ForMathlib.Analysis.InnerProductSpace.DavisKahanTheory.Residual
+import ForMathlib.Analysis.InnerProductSpace.DavisKahanTheory.FrameFactorization
 import ForMathlib.Analysis.InnerProductSpace.DavisKahanTheory.Sylvester
 import ForMathlib.Analysis.InnerProductSpace.DavisKahanTheory.SinTheta
 import ForMathlib.Analysis.InnerProductSpace.DavisKahanTheory.TanTheta

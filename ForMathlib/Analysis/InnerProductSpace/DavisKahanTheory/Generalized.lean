@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
 import ForMathlib.Analysis.InnerProductSpace.DavisKahanTheory.TanTwoTheta
+import ForMathlib.Analysis.InnerProductSpace.DavisKahanTheory.FrameFactorization
 
 /-!
 # Generalized finite-dimensional Davis--Kahan theorems
@@ -25,15 +26,15 @@ so their conditioning losses are visible in theorem statements.
 -/
 
 
-/-! ## Remaining construction plan
+/-! ## Construction status
 
-For injective `X`, let `G = X.adjoint * X`.  Prove `G` is positive definite,
-construct its positive inverse square root, and define
-`orthonormalizedEmbedding X = X * G^{-1/2}`.  Verify the isometry identity
-entrywise, prove the whitening factor is invertible, and obtain range equality
-by postcomposition with that equivalence.  All generalized residual estimates
-should then reduce to the isometric theory with explicit condition-number
-bounds from the lower frame hypothesis.
+The shared injective-trial-map coordinate layer now lives in
+`DavisKahanTheory.FrameFactorization`.  It provides the canonical rectangular
+polar factorization `X = Q T`, proves that `Q` is isometric with
+`range Q = range X`, and packages the positive Gram square root `T` as a
+linear equivalence.  The remaining generalized estimates should use this
+factorization only to transport angle geometry and norm bounds; coordinate
+operators such as `M` must remain in their original self-adjoint coordinates.
 -/
 
 namespace ForMathlib
@@ -48,16 +49,6 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
 variable {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
   [FiniteDimensional 𝕜 F]
 
-/-- A quantitative lower frame bound for a not-necessarily-isometric trial
-map.  Davis--Kahan's parameter `e` is this lower singular-value bound. -/
-def LowerFrameBound (X : F →ₗ[𝕜] E) (ε : ℝ) : Prop :=
-  ∀ y, ε * ‖y‖ ≤ ‖X y‖
-
-/-- Isometric factor in the polar decomposition of an injective trial map. -/
-noncomputable def orthonormalizedEmbedding (X : F →ₗ[𝕜] E)
-    (hX : Function.Injective X) : F →ₗᵢ[𝕜] E := by
-  sorry
-
 /-- Symmetric compression after whitening a full-column-rank trial map.
 
 If `X = Q G^{1/2}` is the polar/whitening factorization, this is `Q⋆ A Q`.
@@ -66,20 +57,6 @@ but is generally only self-adjoint for the Gram inner product. -/
 noncomputable def generalizedCompression (A : E →ₗ[𝕜] E)
     (X : F →ₗ[𝕜] E) (hX : Function.Injective X) : F →ₗ[𝕜] F :=
   compression A (orthonormalizedEmbedding X hX)
-
-/-- The range is unchanged by orthonormalization.
-
-Lean proof route for a weaker agent:
-
-1. Unfold `orthonormalizedEmbedding` and name the positive Gram square root and its inverse.
-2. Prove the whitening factor is a linear equivalence using `hX` and positivity of `X⋆X`.
-3. Rewrite the isometry as `X` postcomposed with this equivalence and apply `LinearMap.range_comp_of_surjective`.
--/
-theorem range_orthonormalizedEmbedding (X : F →ₗ[𝕜] E)
-    (hX : Function.Injective X) :
-    LinearMap.range (orthonormalizedEmbedding X hX).toLinearMap =
-      LinearMap.range X := by
-  sorry
 
 /-- The whitened generalized compression is symmetric for a symmetric
 ambient operator.
