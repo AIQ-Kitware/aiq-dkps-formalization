@@ -27,7 +27,7 @@ certificate bound.
 namespace ForMathlib
 namespace DavisKahanTheory
 
-open scoped InnerProductSpace BigOperators
+open scoped InnerProductSpace BigOperators ComplexConjugate
 
 variable {𝕜 E F : Type*} [RCLike 𝕜]
   [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [FiniteDimensional 𝕜 E]
@@ -148,6 +148,59 @@ theorem unitaryOrbitAction_basisMatrixUnit
     simp only [ite_true, one_smul, basisDiagonalUnitary_apply_basis]
     rw [smul_smul, mul_comm]
   · simp [hjq]
+
+/-- The complex unitary phase with angular frequency parameter `x`. -/
+noncomputable def complexFourierPhase (x : ℝ) : unitary ℂ := by
+  let z : ℂ := Circle.exp x
+  have hz : ‖z‖ = 1 := Circle.norm_coe (Circle.exp x)
+  refine ⟨z, ?_⟩
+  rw [Unitary.mem_iff]
+  constructor
+  · change conj z * z = 1
+    rw [RCLike.conj_mul, hz]
+    norm_num
+  · change z * conj z = 1
+    rw [RCLike.mul_conj, hz]
+    norm_num
+
+@[simp]
+theorem complexFourierPhase_coe (x : ℝ) :
+    (complexFourierPhase x : ℂ) =
+      Complex.exp ((x : ℂ) * Complex.I) :=
+  rfl
+
+@[simp]
+theorem complexFourierPhase_mul (x y : ℝ) :
+    (complexFourierPhase x : ℂ) * (complexFourierPhase y : ℂ) =
+      (complexFourierPhase (x + y) : ℂ) := by
+  exact (congrArg ((↑) : Circle → ℂ) (Circle.exp_add x y)).symm
+
+/-- The complex basis-diagonal orbit realizes the Fourier character at the
+coordinate difference `α i - β j`.  This is the exact operator-valued atom
+used after obtaining a scalar reciprocal Fourier representation. -/
+theorem complexUnitaryOrbitAction_basisMatrixUnit_exp_sub
+    {EC FC : Type*}
+    [NormedAddCommGroup EC] [InnerProductSpace ℂ EC]
+    [FiniteDimensional ℂ EC]
+    [NormedAddCommGroup FC] [InnerProductSpace ℂ FC]
+    [FiniteDimensional ℂ FC]
+    (eF : OrthonormalBasis (Fin (Module.finrank ℂ FC)) ℂ FC)
+    (eE : OrthonormalBasis (Fin (Module.finrank ℂ EC)) ℂ EC)
+    (α : Fin (Module.finrank ℂ FC) → ℝ)
+    (β : Fin (Module.finrank ℂ EC) → ℝ)
+    (t : ℝ) (i : Fin (Module.finrank ℂ FC))
+    (j : Fin (Module.finrank ℂ EC)) :
+    unitaryOrbitAction
+        (basisDiagonalUnitary eF fun q => complexFourierPhase (t * α q))
+        (basisDiagonalUnitary eE fun q => complexFourierPhase (-(t * β q)))
+        (basisMatrixUnit eF eE i j) =
+      Complex.exp ((((t * (α i - β j)) : ℝ) : ℂ) * Complex.I) •
+        basisMatrixUnit eF eE i j := by
+  rw [unitaryOrbitAction_basisMatrixUnit, complexFourierPhase_mul,
+    complexFourierPhase_coe]
+  congr 1
+  congr 1
+  ring_nf
 
 /-- A simultaneous finite orbit interpolation of the reciprocal coordinate
 multiplier.
