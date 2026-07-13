@@ -184,6 +184,71 @@ theorem complexFourierPhase_mul (x y : ℝ) :
       (complexFourierPhase (x + y) : ℂ) := by
   exact (congrArg ((↑) : Circle → ℂ) (Circle.exp_add x y)).symm
 
+/-- The real-linear rotation by `theta` on two copies of a real vector space. -/
+private noncomputable def realRotationLinearEquiv
+    {G : Type*} [AddCommGroup G] [Module ℝ G]
+    (theta : ℝ) : (G × G) ≃ₗ[ℝ] (G × G) where
+  toFun x :=
+    (Real.cos theta • x.1 - Real.sin theta • x.2,
+      Real.sin theta • x.1 + Real.cos theta • x.2)
+  invFun x :=
+    (Real.cos theta • x.1 + Real.sin theta • x.2,
+      -Real.sin theta • x.1 + Real.cos theta • x.2)
+  left_inv x := by
+    have htrig : Real.cos theta * Real.cos theta +
+        Real.sin theta * Real.sin theta = 1 := by
+      nlinarith [Real.sin_sq_add_cos_sq theta]
+    apply Prod.ext <;> dsimp
+    · conv_rhs => rw [← one_smul ℝ x.1, ← htrig]
+      module
+    · conv_rhs => rw [← one_smul ℝ x.2, ← htrig]
+      module
+  right_inv x := by
+    have htrig : Real.cos theta * Real.cos theta +
+        Real.sin theta * Real.sin theta = 1 := by
+      nlinarith [Real.sin_sq_add_cos_sq theta]
+    apply Prod.ext <;> dsimp
+    · conv_rhs => rw [← one_smul ℝ x.1, ← htrig]
+      module
+    · conv_rhs => rw [← one_smul ℝ x.2, ← htrig]
+      module
+  map_add' x y := by
+    apply Prod.ext <;> simp <;> module
+  map_smul' r x := by
+    apply Prod.ext <;> simp [smul_smul] <;> module
+
+/-- A complex phase acting on a real Hilbert space after doubling is the
+ordinary two-dimensional rotation, applied simultaneously in every direction. -/
+noncomputable def doubledRealRotation
+    {G : Type*} [NormedAddCommGroup G] [InnerProductSpace ℝ G]
+    (theta : ℝ) : WithLp 2 (G × G) ≃ₗᵢ[ℝ] WithLp 2 (G × G) where
+  __ := (realRotationLinearEquiv theta).withLpCongr 2
+  norm_map' x := by
+    have htrig : Real.cos theta * Real.cos theta +
+        Real.sin theta * Real.sin theta = 1 := by
+      nlinarith [Real.sin_sq_add_cos_sq theta]
+    change ‖WithLp.toLp 2
+      (Real.cos theta • x.fst - Real.sin theta • x.snd,
+        Real.sin theta • x.fst + Real.cos theta • x.snd)‖ = ‖x‖
+    rw [← sq_eq_sq₀ (norm_nonneg _) (norm_nonneg _),
+      norm_sq_eq_re_inner ( 𝕜 := ℝ), norm_sq_eq_re_inner ( 𝕜 := ℝ)]
+    simp only [WithLp.prod_inner_apply]
+    change _ = ⟪x.fst, x.fst⟫_ℝ + ⟪x.snd, x.snd⟫_ℝ
+    simp only [inner_sub_left, inner_sub_right, inner_add_left, inner_add_right,
+      inner_smul_left, inner_smul_right, RCLike.conj_to_real,
+      RCLike.re_to_real]
+    rw [real_inner_comm x.fst x.snd]
+    linear_combination
+      (⟪x.fst, x.fst⟫_ℝ + ⟪x.snd, x.snd⟫_ℝ) * htrig
+
+@[simp] theorem doubledRealRotation_apply
+    {G : Type*} [NormedAddCommGroup G] [InnerProductSpace ℝ G]
+    (theta : ℝ) (x : WithLp 2 (G × G)) :
+    doubledRealRotation theta x = WithLp.toLp 2
+      (Real.cos theta • x.fst - Real.sin theta • x.snd,
+        Real.sin theta • x.fst + Real.cos theta • x.snd) :=
+  rfl
+
 /-- The complex basis-diagonal orbit realizes the Fourier character at the
 coordinate difference `α i - β j`.  This is the exact operator-valued atom
 used after obtaining a scalar reciprocal Fourier representation. -/
