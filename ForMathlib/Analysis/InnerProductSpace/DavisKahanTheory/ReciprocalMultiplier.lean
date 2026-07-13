@@ -202,6 +202,52 @@ theorem complexUnitaryOrbitAction_basisMatrixUnit_exp_sub
   congr 1
   ring_nf
 
+/-- A finite scalar Fourier interpolation of the reciprocal function on two
+finite real frequency arrays.
+
+The certificate is deliberately independent of Hilbert spaces, matrix units,
+singular values, and norms on operators.  Its coefficient mass is the finite
+analogue of the total variation of the classical reciprocal Fourier measure. -/
+def HasFiniteReciprocalFourierInterpolation
+    {m n : ℕ} (α : Fin m → ℝ) (β : Fin n → ℝ)
+    (δ mass : ℝ) : Prop :=
+  ∃ q : ℕ, ∃ a : Fin q → ℂ, ∃ t : Fin q → ℝ,
+    (∀ i j,
+      (δ : ℂ) = (((α i - β j : ℝ) : ℂ)) *
+        ∑ r, a r * Complex.exp
+          ((((t r * (α i - β j)) : ℝ) : ℂ) * Complex.I)) ∧
+    ∑ r, ‖a r‖ ≤ mass
+
+/-- Rescale a unit-gap finite Fourier interpolation to an arbitrary positive
+gap.  The coefficient mass is unchanged and the Fourier frequencies are
+divided by the gap. -/
+theorem hasFiniteReciprocalFourierInterpolation_of_normalized
+    {m n : ℕ} (α : Fin m → ℝ) (β : Fin n → ℝ)
+    {δ mass : ℝ} (hδ : 0 < δ)
+    (h : HasFiniteReciprocalFourierInterpolation
+      (fun i => α i / δ) (fun j => β j / δ) 1 mass) :
+    HasFiniteReciprocalFourierInterpolation α β δ mass := by
+  rcases h with ⟨q, a, t, hscalar, hmass⟩
+  refine ⟨q, a, fun r => t r / δ, ?_, hmass⟩
+  intro i j
+  have harg (r : Fin q) :
+      (t r / δ) * (α i - β j) =
+        t r * (α i / δ - β j / δ) := by
+    field_simp [ne_of_gt hδ]
+  simp_rw [harg]
+  let S : ℂ := ∑ r, a r * Complex.exp
+    ((((t r * (α i / δ - β j / δ)) : ℝ) : ℂ) * Complex.I)
+  have hs : (1 : ℂ) =
+      (((α i / δ - β j / δ : ℝ) : ℂ)) * S := by
+    simpa [S] using hscalar i j
+  calc
+    (δ : ℂ) = (δ : ℂ) * 1 := by ring
+    _ = (δ : ℂ) *
+        ((((α i / δ - β j / δ : ℝ) : ℂ)) * S) := by rw [hs]
+    _ = (((α i - β j : ℝ) : ℂ)) * S := by
+      push_cast
+      field_simp [ne_of_gt hδ]
+
 /-- A simultaneous finite orbit interpolation of the reciprocal coordinate
 multiplier.
 
@@ -226,6 +272,44 @@ def HasReciprocalOrbitInterpolation
               ((∑ r, a r • unitaryOrbitAction (U r) (V r))
                 (basisMatrixUnit eF eE i j)))) ∧
         ∑ r, ‖a r‖ ≤ mass
+
+/-- A finite scalar reciprocal Fourier interpolation produces the exact
+simultaneous complex unitary-orbit interpolation.  All matrix-unit transport
+is supplied by `complexUnitaryOrbitAction_basisMatrixUnit_exp_sub`; the input
+certificate contains the whole remaining analytic content. -/
+theorem hasReciprocalOrbitInterpolation_of_finiteFourierInterpolation
+    {EC FC : Type*}
+    [NormedAddCommGroup EC] [InnerProductSpace ℂ EC]
+    [FiniteDimensional ℂ EC]
+    [NormedAddCommGroup FC] [InnerProductSpace ℂ FC]
+    [FiniteDimensional ℂ FC]
+    (eF : OrthonormalBasis (Fin (Module.finrank ℂ FC)) ℂ FC)
+    (eE : OrthonormalBasis (Fin (Module.finrank ℂ EC)) ℂ EC)
+    (α : Fin (Module.finrank ℂ FC) → ℝ)
+    (β : Fin (Module.finrank ℂ EC) → ℝ)
+    {δ mass : ℝ}
+    (h : HasFiniteReciprocalFourierInterpolation α β δ mass) :
+    HasReciprocalOrbitInterpolation eF eE α β δ mass := by
+  classical
+  rcases h with ⟨q, a, t, hscalar, hmass⟩
+  let U : Fin q → FC ≃ₗᵢ[ℂ] FC := fun r =>
+    basisDiagonalUnitary eF fun i => complexFourierPhase (t r * α i)
+  let V : Fin q → EC ≃ₗᵢ[ℂ] EC := fun r =>
+    basisDiagonalUnitary eE fun j => complexFourierPhase (-(t r * β j))
+  refine ⟨q, a, U, V, ?_, hmass⟩
+  intro i j
+  have horbit :
+      ((∑ r, a r • unitaryOrbitAction (U r) (V r))
+          (basisMatrixUnit eF eE i j)) =
+        (∑ r, a r * Complex.exp
+          ((((t r * (α i - β j)) : ℝ) : ℂ) * Complex.I)) •
+            basisMatrixUnit eF eE i j := by
+    simp only [LinearMap.sum_apply, LinearMap.smul_apply, U, V,
+      complexUnitaryOrbitAction_basisMatrixUnit_exp_sub, smul_smul]
+    rw [Finset.sum_smul]
+  rw [horbit, smul_smul]
+  exact congrArg (fun z : ℂ => z • basisMatrixUnit eF eE i j)
+    (hscalar i j)
 
 /-- **Finite harmonic-analysis root.**  Separated finite real frequencies admit
 a simultaneous reciprocal orbit interpolation of mass at most `π / 2`.
