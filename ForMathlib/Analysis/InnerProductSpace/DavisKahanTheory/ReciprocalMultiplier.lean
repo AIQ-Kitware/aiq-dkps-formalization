@@ -267,6 +267,100 @@ theorem exists_finite_fourier_interpolation
   push_cast
   ring
 
+/-- The finite Fourier interpolation map can be chosen with coefficient mass
+bounded linearly by the `ℓ1` mass of the prescribed values.
+
+For a fixed finite frequency set the constant is allowed to depend on that
+set.  This is exactly the stability needed to correct a uniformly vanishing
+finite error vector without changing the limiting Fourier mass. -/
+theorem exists_finite_fourier_interpolation_with_mass_bound
+    (s : Finset ℝ) :
+    ∃ K : ℝ, 0 ≤ K ∧ ∀ y : ℝ → ℂ,
+      ∃ q : ℕ, ∃ a : Fin q → ℂ, ∃ t : Fin q → ℝ,
+        (∀ x ∈ s, y x = ∑ r, a r * Complex.exp
+          ((((t r * x) : ℝ) : ℂ) * Complex.I)) ∧
+        ∑ r, ‖a r‖ ≤ K * ∑ x ∈ s, ‖y x‖ := by
+  classical
+  let R : ℝ := ∑ x ∈ s, |x|
+  let τ : ℝ := (1 + R)⁻¹
+  have hR : 0 ≤ R := by
+    exact Finset.sum_nonneg fun _ _ => abs_nonneg _
+  have hτ : 0 < τ := by
+    simp only [τ]
+    positivity
+  have harg (x : ℝ) (hx : x ∈ s) : τ * x ∈ Set.Icc (-1 : ℝ) 1 := by
+    have hxR : |x| ≤ R := by
+      exact Finset.single_le_sum (fun z hz => abs_nonneg z) hx
+    have hden : 0 < 1 + R := by linarith
+    have habs : |τ * x| < 1 := by
+      rw [abs_mul, abs_of_pos hτ]
+      change (1 + R)⁻¹ * |x| < 1
+      rw [inv_mul_eq_div, div_lt_one hden]
+      linarith
+    exact ⟨le_of_lt (abs_lt.mp habs).1, le_of_lt (abs_lt.mp habs).2⟩
+  let z : ℝ → ℂ := fun x => (Circle.exp (τ * x) : ℂ)
+  have hzinj : Set.InjOn z s := by
+    intro x hx x' hx' hzx
+    have harc : (1 : ℝ) - (-1) < 2 * Real.pi := by
+      nlinarith [Real.pi_gt_three]
+    have hphase : τ * x = τ * x' :=
+      Circle.exp_injOn_Icc harc (harg x hx) (harg x' hx') (Subtype.ext hzx)
+    exact mul_left_cancel₀ (ne_of_gt hτ) hphase
+  let q : ℕ := s.card + 1
+  let K : ℝ := ∑ n : Fin q, ∑ x ∈ s,
+    ‖(Lagrange.basis s z x).coeff (n : ℕ)‖
+  refine ⟨K, Finset.sum_nonneg fun _ _ =>
+    Finset.sum_nonneg fun _ _ => norm_nonneg _, ?_⟩
+  intro y
+  let p : Polynomial ℂ := Lagrange.interpolate s z y
+  have hpdeg : p.natDegree < q := by
+    apply Nat.lt_succ_of_le
+    apply Polynomial.natDegree_le_of_degree_le
+    exact (Lagrange.degree_interpolate_le y hzinj).trans (by
+      exact_mod_cast Nat.sub_le s.card 1)
+  refine ⟨q, fun n => p.coeff n, fun n => (n : ℕ) * τ, ?_, ?_⟩
+  · intro x hx
+    rw [← Lagrange.eval_interpolate_at_node y hzinj hx]
+    rw [Polynomial.eval_eq_sum_range' hpdeg, ← Fin.sum_univ_eq_sum_range]
+    apply Finset.sum_congr rfl
+    intro n _
+    change p.coeff n * z x ^ (n : ℕ) =
+      p.coeff n * Complex.exp
+        ((((((n : ℕ) : ℝ) * τ * x) : ℝ) : ℂ) * Complex.I)
+    congr 1
+    simp only [z, Circle.coe_exp]
+    rw [← Complex.exp_nat_mul]
+    congr 1
+    push_cast
+    ring
+  · have hcoeff (n : ℕ) :
+        p.coeff n = ∑ x ∈ s, y x * (Lagrange.basis s z x).coeff n := by
+      simp [p, Lagrange.interpolate_apply]
+    calc
+      ∑ n : Fin q, ‖p.coeff n‖ ≤
+          ∑ n : Fin q, ∑ x ∈ s,
+            ‖y x‖ * ‖(Lagrange.basis s z x).coeff (n : ℕ)‖ := by
+        apply Finset.sum_le_sum
+        intro n _
+        rw [hcoeff]
+        simpa only [norm_mul] using
+          norm_sum_le s (fun x => y x * (Lagrange.basis s z x).coeff (n : ℕ))
+      _ ≤ ∑ n : Fin q, (∑ x ∈ s, ‖y x‖) *
+          (∑ x ∈ s, ‖(Lagrange.basis s z x).coeff (n : ℕ)‖) := by
+        apply Finset.sum_le_sum
+        intro n _
+        rw [Finset.mul_sum]
+        apply Finset.sum_le_sum
+        intro x hx
+        gcongr
+        exact Finset.single_le_sum (fun u hu => norm_nonneg (y u)) hx
+      _ = K * ∑ x ∈ s, ‖y x‖ := by
+        simp only [K]
+        rw [Finset.sum_mul]
+        apply Finset.sum_congr rfl
+        intro n _
+        ring
+
 /-- A finite scalar Fourier interpolation of the reciprocal function on two
 finite real frequency arrays.
 

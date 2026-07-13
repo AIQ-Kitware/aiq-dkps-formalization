@@ -225,10 +225,11 @@ The repository now supplies the algebraic part of the error-correction route in
 on a finite real set, it rescales the real nodes into an arc shorter than one
 full circle, applies finite Lagrange interpolation to their distinct phases,
 and reads the resulting polynomial coefficients as a finite Fourier sum. Thus
-an approximation error can always be corrected exactly. What remains at this
-boundary is the quantitative version: bound the correction coefficient mass
-linearly in the finite error vector, so that increasingly accurate Fourier
-approximations have vanishing correction cost.
+an approximation error can always be corrected exactly. The strengthened
+theorem \code{exists\_finite\_fourier\_interpolation\_with\_mass\_bound}
+fixes the interpolation nodes once and bounds the correction coefficient mass
+linearly in the finite error vector. Consequently increasingly accurate
+Fourier approximations have vanishing exact-correction cost.
 
 \section{Why the real case is a separate formal obligation}
 
@@ -252,7 +253,7 @@ Equation \texttt{fourie} & Reciprocal Fourier multiplier on the spectral differe
 Equation \texttt{HeinzMod} & Two-sided unitary orbit average & \code{basisDiagonalUnitary}, \code{unitaryOrbitAction_basisMatrixUnit}, and \code{complexUnitaryOrbitAction_basisMatrixUnit_exp_sub}. \\
 Equation \texttt{ozenka} & Symmetric-ideal norm domination & Finite orbit certificate $\Rightarrow$ simultaneous rectangular Ky Fan bounds $\Rightarrow$ \code{uiNorm_sylvester_le_of_spectralDistance}. \\
 Equation \texttt{cpi2} and Remark \texttt{nad} & Sharp constant as an infimum of Fourier masses & \code{kyFan_reciprocalMultiplier_le_complex_of_approximateFourierInterpolation}; it correctly needs masses $\pi/2+\varepsilon$, not an attaining kernel. \\
-Finite exact correction after Fourier approximation & Lagrange interpolation on finitely many distinct circle phases & \code{exists_finite_fourier_interpolation}; a linear coefficient-mass bound is the remaining quantitative step. \\
+Finite exact correction after Fourier approximation & Lagrange interpolation on finitely many distinct circle phases & \code{exists_finite_fourier_interpolation} and \code{exists_finite_fourier_interpolation_with_mass_bound}; the latter supplies a fixed linear coefficient-mass bound. \\
 Unit-gap to gap-$d$ scaling & $f_d(t)=f(dt)$ and $\norm{f_d}_1=d^{-1}\norm f_1$ & \code{hasFiniteReciprocalFourierInterpolation_of_normalized}. \\
 Symmetric ideal property & Invariance under left/right unitaries and ideal contraction & \code{RectangularUnitarilyInvariantNorm} and rectangular Fan dominance. \\
 Real scalar field & Not supplied by complex diagonal phases & Still requires singular-value-preserving complexification or doubled-space rotation descent. \\
