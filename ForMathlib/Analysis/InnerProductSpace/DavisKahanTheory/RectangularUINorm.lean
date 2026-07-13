@@ -1651,8 +1651,8 @@ theorem rectangularKyFanSum_orthogonalBlockSum_self
     _ = ∑ i : Fin k, ∑ _r : Fin 2, A.singularValues (i : ℕ) := by
       rw [Fintype.sum_prod_type]
     _ = 2 * ∑ i : Fin k, A.singularValues (i : ℕ) := by
-      simp only [Fin.sum_univ_two, add_self_eq_mul]
-      rw [← Finset.sum_mul]
+      simp only [Fin.sum_univ_two]
+      rw [Finset.sum_add_distrib]
       ring
 
 /-- Real orbit-convex domination is stable under orthogonal block sums.
