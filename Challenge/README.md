@@ -76,7 +76,12 @@ transport lemmas are deliberately excluded.
 | Challenge | Leaf theorem(s) | Why it clears the advertising bar |
 |---|---|---|
 | DavisKahanSharp | `DavisKahanTheory.sinAngleOperator_perturbation_le` | sharp full-space sin-Theta theorem for every unitarily invariant norm, obtained by coupling both directed blocks without a factor-two loss |
-| DavisKahanPartIII | `DavisKahanTheory.partIII_sinTheta_uiNorm`, `DavisKahanTheory.partIII_sinTwoTheta_uiNorm`, `DavisKahanTheory.partIII_tanTheta_vector`, `DavisKahanTheory.partIII_tanTwoTheta_opNorm` | the source-checked classical Part III quartet: all-UI sin Theta and sin 2Theta, pole-free residual tan Theta, and sharp operator-norm tan 2Theta with strict quarter-turn avoidance |
+| DavisKahanSinTheta | `DavisKahanTheory.partIII_sinTheta_uiNorm` | the source-faithful Part III sin Theta theorem for every unitarily invariant norm |
+| DavisKahanSinTwoTheta | `DavisKahanTheory.partIII_sinTwoTheta_uiNorm` | the source-faithful Part III sin 2Theta theorem for every unitarily invariant norm |
+| DavisKahanTanTheta | `DavisKahanTheory.partIII_tanTheta_vector` | the pole-free per-vector Part III tan Theta theorem, with no unnecessary dimension-comparison hypothesis |
+| DavisKahanTanTwoTheta | `DavisKahanTheory.partIII_tanTwoTheta_opNorm` | the sharp operator-norm Part III tan 2Theta theorem with strict quarter-turn avoidance |
+| DavisKahanProjectorDifference | `DavisKahanTheory.projector_difference_opNorm` | the sharp factor-one finite projector-difference theorem under two-sided gaps, with no rank hypothesis |
+| DavisKahanSylvesterPiOverTwo | `DavisKahanTheory.uiNorm_sylvester_le_of_spectralDistance`, `DavisKahanTheory.sylvester_hasFiniteUnitaryOrbitCertificate_of_spectralDistance` | the arbitrary-disjoint-spectrum Bhatia--Davis--McIntosh bound for every rectangular UI norm and the exact solution-specific finite orbit certificate at mass pi/2 |
 | Davis1963Rotation | `rotation_add_displacement_le_hilbertSchmidt` | Davis's sharpened 1963 total-rotation theorem: eigenvalue motion and eigenvector rotation share one Frobenius perturbation budget |
 | YuWangSamworth | `sqrt_sum_cross_le_of_population_gap` | the exact population-gap Frobenius sin-Theta theorem used in modern statistical perturbation theory |
 
@@ -85,6 +90,12 @@ Ky Fan/orbit-majorization machinery. It is advertising-level mathematics, but
 currently leaderboard-only because its vocabulary and implementation still
 cohabit one large staging module; a clean conformance surface should be created
 only when that code is split for an upstream PR.
+
+The legacy `DavisKahanPartIII` aggregate remains as a compatibility audit, but the
+six focused comparator configurations above are the authoritative advertising
+surfaces.  The canonical spectral-projector wrapper is printed by the projector
+leaderboard but is not a second challenge leaf because it is a direct corollary
+of the reducing-subspace theorem.
 
 ### Other pending results
 

@@ -1,0 +1,14 @@
+{
+  "challenge_module": "Challenge.MathlibPending.DavisKahanSylvesterPiOverTwo.Conformance",
+  "solution_module": "Challenge.MathlibPending.DavisKahanSylvesterPiOverTwo.Leaderboard",
+  "theorem_names": [
+    "ForMathlib.DavisKahanTheory.uiNorm_sylvester_le_of_spectralDistance",
+    "ForMathlib.DavisKahanTheory.sylvester_hasFiniteUnitaryOrbitCertificate_of_spectralDistance"
+  ],
+  "permitted_axioms": [
+    "propext",
+    "Quot.sound",
+    "Classical.choice"
+  ],
+  "enable_nanoda": false
+}

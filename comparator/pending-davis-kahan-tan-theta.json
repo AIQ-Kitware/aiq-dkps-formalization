@@ -1,0 +1,13 @@
+{
+  "challenge_module": "Challenge.MathlibPending.DavisKahanTanTheta.Conformance",
+  "solution_module": "Challenge.MathlibPending.DavisKahanTanTheta.Leaderboard",
+  "theorem_names": [
+    "ForMathlib.DavisKahanTheory.partIII_tanTheta_vector"
+  ],
+  "permitted_axioms": [
+    "propext",
+    "Quot.sound",
+    "Classical.choice"
+  ],
+  "enable_nanoda": false
+}

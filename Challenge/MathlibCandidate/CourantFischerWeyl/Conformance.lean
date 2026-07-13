@@ -10,6 +10,9 @@ min-max characterization is the proof vehicle (developed in
 (top-level) theorems are listed -- `#print axioms` on a leaf transitively certifies its
 whole proof tree.
 -/
+
+import Mathlib
+
 /-!
 ## Comparator maintenance rule
 
@@ -20,7 +23,6 @@ Implementations belong in the project modules imported by the paired
 statements and use only the permitted kernel dependencies.
 -/
 
-import Mathlib
 
 namespace ForMathlib
 
