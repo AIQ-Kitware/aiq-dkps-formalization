@@ -1,0 +1,615 @@
+\input{preamble}
+\newcommand{\cothh}{\operatorname{coth}}
+\newcommand{\sgn}{\operatorname{sgn}}
+\newcommand{\Lap}{\mathcal{L}}
+\newcommand{\FT}{\mathcal{F}}
+\newcommand{\Ioi}{(0,\infty)}
+\renewenvironment{formalizationmap}{%
+  \begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.19\textwidth}>{\raggedright\arraybackslash}p{0.31\textwidth}>{\raggedright\arraybackslash}p{0.41\textwidth}@{}}%
+  \toprule Source item & Modern mathematical content & Repository status \\\midrule\endhead%
+}{\bottomrule\end{longtable}}
+\title{The Haagerup--Zsid\'o \texorpdfstring{$\alpha=0$}{alpha=0} analytic bridge:\\
+Poisson summation, odd-pole expansions, and the sharp reciprocal kernel}
+\author{}
+\date{Lean-oriented distilled synthesis for the finite Davis--Kahan formalization}
+\begin{document}
+\maketitle
+
+\section*{Purpose and source map}
+\begin{sourceguide}
+\item[Primary analytic source]
+Uffe Haagerup and L\'aszl\'o Zsid\'o, \emph{Resolvent Estimate for Hermitian Operators and a Related Minimal Extrapolation Problem}, Acta Sci. Math. (Szeged) 59 (1994), 503--524.
+\item[Earlier $\alpha=0$ source]
+B. Sz.-Nagy and A. Strausz, the 1938 extremal theorem cited as reference [14] by Haagerup--Zsid\'o, together with Sz.-Nagy's 1953 follow-up. The present note does not claim an independent reconstruction of those unavailable texts; it records the exact $\alpha=0$ theorem as stated and proved in the 1994 paper.
+\item[Partial-fraction source]
+The classical partial-fraction expansion of $\cothh$ and its use in accelerated Dirichlet-series formulas; a convenient modern reference is David M. Bradley, \emph{Series acceleration formulas for Dirichlet series with periodic coefficients}, Ramanujan J. 6 (2002), 331--346, arXiv:math/0505078.
+\item[Formal Poisson source]
+The pinned Mathlib modules \code{Mathlib.Analysis.Fourier.PoissonSummation}, \code{Mathlib.Analysis.Fourier.FourierTransform}, \code{Mathlib.Analysis.Fourier.Inversion}, and \code{Mathlib.Analysis.SpecialFunctions.ImproperIntegrals}.
+\item[Repository target]
+\code{ForMathlib/Analysis/Fourier/HaagerupZsidoKernel.lean} and the scalar root packaged by \code{HasIntegrableReciprocalFourierKernel}.
+\item[Scope]
+This is not a second source-order reconstruction of the 1994 paper. It is a focused synthesis of the smallest analytic theorem needed by the sharp finite-dimensional Sylvester and Davis--Kahan chain. Every displayed identity below is proved or reduced to explicitly named classical inputs.
+\end{sourceguide}
+
+The target is an integrable complex kernel $g:\R\to\C$ satisfying
+\begin{equation}
+  \int_{\R} g(t)e^{ixt}\,dt=\frac1x
+  \qquad (\abs{x}\ge1),
+  \tag{A0-Fourier}\label{A0-Fourier}
+\end{equation}
+and
+\begin{equation}
+  \int_{\R}\abs{g(t)}\,dt=\frac\pi2.
+  \tag{A0-mass}\label{A0-mass}
+\end{equation}
+The 1994 paper proves a much larger minimal-extrapolation theorem. For the current formalization, \eqref{A0-Fourier} and \eqref{A0-mass} are the exact scalar root.
+
+\section{The explicit $\alpha=0$ kernel}
+
+\subsection{Fourier convention}
+
+The source uses
+\begin{equation}
+  \widehat f(x)=\int_{\R}f(t)e^{ixt}\,dt.
+  \tag{F}\label{F}
+\end{equation}
+This is an unnormalized Fourier transform with positive phase. Mathlib's notation $\mathcal F$ on $\R$ instead uses a $-2\pi ixt$ phase. The two conventions must never be conflated. The Mathlib transform is useful for Poisson summation; the final reciprocal identity must be translated back to \eqref{F}.
+
+\subsection{Kernel formula}
+
+Define the positive hyperbolic weight
+\begin{equation}
+  w(y):=\tanh\!\left(\frac{\pi y}{2}\right),
+  \qquad y\ge0.
+  \tag{weight}\label{weight}
+\end{equation}
+For $t\ne0$, define
+\begin{equation}
+  f_0(t)
+  :=\frac{\sin t}{2}
+     \int_0^\infty w(y)e^{-\abs{t}y}\,dy.
+  \tag{kernel-real}\label{kernel-real}
+\end{equation}
+Assign any value at $t=0$; the natural Lean definition may use zero. The point value does not affect integrals.
+
+Finally set
+\begin{equation}
+  g_0(t):=-i f_0(t).
+  \tag{kernel-complex}\label{kernel-complex}
+\end{equation}
+The source proves
+\begin{equation}
+  \widehat f_0(x)=\frac{i}{x}
+  \qquad(\abs{x}\ge1),
+  \tag{f0-transform}\label{f0-transform}
+\end{equation}
+so \eqref{kernel-complex} gives \eqref{A0-Fourier}.
+
+\begin{lemma}[Sign and parity]
+The function $f_0$ is real-valued and odd. Moreover,
+\[
+  f_0(t)\sin t\ge0
+  \qquad(t\ne0).
+\]
+Consequently
+\[
+  \abs{f_0(t)}
+  =\frac{\abs{\sin t}}2
+     \int_0^\infty w(y)e^{-\abs{t}y}\,dy.
+\]
+\end{lemma}
+
+\begin{proofoutline}
+\item The Laplace factor in \eqref{kernel-real} depends only on $\abs t$ and is nonnegative because $w(y)\ge0$ for $y\ge0$.
+\item Multiplication by $\sin t$ therefore gives the sign assertion.
+\item Since $\sin$ is odd and the Laplace factor is even, $f_0$ is odd.
+\end{proofoutline}
+
+\section{The exact mass: the shortest part of the proof}
+
+The norm computation is independent of the exterior Fourier identity and should be formalized first.
+
+\subsection{Laplace transform of $\abs{\sin}$}
+
+\begin{lemma}[One-period integral]
+For $y>0$,
+\begin{equation}
+  \int_0^\pi e^{-yt}\sin t\,dt
+  =\frac{1+e^{-\pi y}}{1+y^2}.
+  \tag{sin-period}\label{sin-period}
+\end{equation}
+\end{lemma}
+
+\begin{proofoutline}
+\item An antiderivative is
+\[
+  -\frac{e^{-yt}}{1+y^2}\bigl(y\sin t+\cos t\bigr).
+\]
+\item Evaluate at $0$ and $\pi$.
+\end{proofoutline}
+
+\begin{lemma}[Laplace transform of absolute sine]
+For $y>0$,
+\begin{equation}
+  \int_0^\infty \abs{\sin t}e^{-yt}\,dt
+  =\frac{1+e^{-\pi y}}{1-e^{-\pi y}}\frac1{1+y^2}
+  =\frac{\cothh(\pi y/2)}{1+y^2}.
+  \tag{abs-sin-laplace}\label{abs-sin-laplace}
+\end{equation}
+\end{lemma}
+
+\begin{proofoutline}
+\item Partition $\Ioi$ into $[n\pi,(n+1)\pi]$.
+\item Write $t=n\pi+s$. Then $\abs{\sin(n\pi+s)}=\sin s$ for $0\le s\le\pi$.
+\item The $n$th interval contributes
+\[
+  e^{-n\pi y}\int_0^\pi e^{-ys}\sin s\,ds.
+\]
+\item Sum the geometric series and use \eqref{sin-period}.
+\end{proofoutline}
+
+The formula is especially Lean-friendly because all summands are nonnegative. Tonelli and monotone convergence can be used without constructing an absolute-convergence argument for a signed series.
+
+\subsection{Hyperbolic cancellation}
+
+For $y>0$,
+\begin{equation}
+  \tanh\!\left(\frac{\pi y}{2}\right)
+  \cothh\!\left(\frac{\pi y}{2}\right)=1.
+  \tag{tanh-coth}\label{tanh-coth}
+\end{equation}
+If the available API for $\cothh$ is inconvenient, expand both functions using exponentials:
+\[
+  \tanh z=\frac{1-e^{-2z}}{1+e^{-2z}},
+  \qquad
+  \cothh z=\frac{1+e^{-2z}}{1-e^{-2z}}.
+\]
+For $z>0$, the denominators are nonzero and the product is visibly one.
+
+\begin{theorem}[Exact $L^1$ mass]
+The functions $f_0$ and $g_0$ are integrable and
+\begin{equation}
+  \int_{\R}\abs{f_0(t)}\,dt
+  =\int_{\R}\abs{g_0(t)}\,dt
+  =\frac\pi2.
+  \tag{mass}\label{mass}
+\end{equation}
+\end{theorem}
+
+\begin{proofoutline}
+\item By the sign formula and Tonelli,
+\begin{align*}
+\int_{\R}\abs{f_0(t)}\,dt
+&=\int_0^\infty
+    w(y)\left(\int_0^\infty\abs{\sin t}e^{-yt}\,dt\right)dy.
+\end{align*}
+The factor $1/2$ in \eqref{kernel-real} cancels the factor two from the two halves of $\R$.
+\item Insert \eqref{abs-sin-laplace} and cancel by \eqref{tanh-coth}:
+\[
+  \int_{\R}\abs{f_0(t)}\,dt
+  =\int_0^\infty\frac{dy}{1+y^2}.
+\]
+\item Use the antiderivative $\arctan y$ and its limit $\pi/2$ at $+\infty$.
+\item Since multiplication by $-i$ preserves the complex norm, $g_0$ has the same mass.
+\end{proofoutline}
+
+This proof simultaneously establishes integrability. A separate pointwise majorant is useful only if the formal Tonelli route becomes awkward.
+
+\section{The elementary two-sided Cauchy transform}
+
+For $y>0$ and $a\in\R$, define
+\[
+  C_y(a):=\int_{\R} e^{-y\abs t}e^{iat}\,dt.
+\]
+
+\begin{lemma}[Cauchy transform]
+For $y>0$,
+\begin{equation}
+  C_y(a)=\frac{2y}{y^2+a^2}.
+  \tag{cauchy-transform}\label{cauchy-transform}
+\end{equation}
+\end{lemma}
+
+\begin{proofoutline}
+\item Split $\R$ into $(-\infty,0]$ and $(0,\infty)$.
+\item On the positive half-line integrate $e^{(-y+ia)t}$.
+\item On the negative half-line substitute $u=-t$ and integrate $e^{(-y-ia)u}$.
+\item Add
+\[
+  \frac1{y-ia}+\frac1{y+ia}=\frac{2y}{y^2+a^2}.
+\]
+\end{proofoutline}
+
+\begin{corollary}[Inner sine transform]
+For $y>0$ and $x\in\R$,
+\begin{equation}
+\int_{\R}\sin t\,e^{-y\abs t}e^{ixt}\,dt
+=i y\left(
+  \frac1{y^2+(x-1)^2}
+  -\frac1{y^2+(x+1)^2}
+\right).
+\tag{sine-cauchy}\label{sine-cauchy}
+\end{equation}
+\end{corollary}
+
+\begin{proofoutline}
+\item Use
+\[
+  \sin t=\frac{e^{it}-e^{-it}}{2i}.
+\]
+\item Apply \eqref{cauchy-transform} at frequencies $x+1$ and $x-1$.
+\item Check the sign carefully: the answer is $i$ times ``minus-frequency denominator first,'' as shown in \eqref{sine-cauchy}.
+\end{proofoutline}
+
+The agent's current status indicates that the Lean version of this checkpoint already compiles. It should remain the primitive transform lemma for both the Poisson and direct routes.
+
+\section{Three routes to the exterior Fourier identity}
+
+There are three mathematically sound routes. They have different formalization costs.
+
+\subsection{Route A: source-faithful contour and limiting argument}
+
+Haagerup--Zsid\'o obtain $f_0$ as the $L^1$ limit of their kernels $f_\alpha$ as $\alpha\to0$. For $\alpha\ne0$ they prove
+\[
+  \widehat f_\alpha(x)=\frac1{\alpha-ix}
+  \qquad(\abs x\ge1).
+\]
+Continuity in $L^1$ implies uniform convergence of Fourier transforms, hence
+\[
+  \widehat f_0(x)=\frac1{-ix}=\frac{i}{x}.
+\]
+
+This route is source-faithful but expensive in Lean. It requires the full $\alpha$-family, contour deformation, dominated convergence in $L^1$, and endpoint control. It proves much more than the current project needs.
+
+\subsection{Route B: Mittag--Leffler or product formula}
+
+The zeros of $\cosh z$ occur at
+\[
+  z=i\pi\left(n+\frac12\right),\qquad n\in\mathbb Z.
+\]
+Taking the logarithmic derivative of the canonical product for $\cosh$ yields a partial-fraction expansion for $\tanh$. This is classical and concise on paper, but Mathlib does not currently supply the needed infinite product or Mittag--Leffler infrastructure in a directly usable form.
+
+\subsection{Route C: Poisson summation and odd Cauchy poles}
+
+This route uses APIs already present in Mathlib and is therefore the best current candidate. Its analytic heart is the Cauchy lattice sum, from which the odd-pole $\tanh$ expansion follows by subtracting the even lattice.
+
+\section{Poisson summation and the Cauchy lattice}
+
+\subsection{Normalized transform used only in this section}
+
+For Poisson summation use Mathlib's normalized transform
+\[
+  (\FT h)(\xi)
+  :=\int_{\R}e^{-2\pi i t\xi}h(t)\,dt.
+\]
+For $y>0$, set
+\[
+  h_y(t):=e^{-2\pi y\abs t}.
+\]
+By \eqref{cauchy-transform},
+\begin{equation}
+  (\FT h_y)(\xi)
+  =\frac{y}{\pi(y^2+\xi^2)}.
+  \tag{hy-transform}\label{hy-transform}
+\end{equation}
+
+\subsection{Poisson identity}
+
+At $x=0$, Poisson summation gives
+\[
+  \sum_{n\in\mathbb Z}h_y(n)
+  =\sum_{n\in\mathbb Z}(\FT h_y)(n).
+\]
+The left side is geometric:
+\begin{equation}
+  \sum_{n\in\mathbb Z}e^{-2\pi y\abs n}
+  =1+2\sum_{n=1}^\infty e^{-2\pi yn}
+  =\frac{1+e^{-2\pi y}}{1-e^{-2\pi y}}
+  =\cothh(\pi y).
+  \tag{geom-coth}\label{geom-coth}
+\end{equation}
+Using \eqref{hy-transform} yields the classical Cauchy lattice formula.
+
+\begin{theorem}[Cauchy lattice sum]
+For $y>0$,
+\begin{equation}
+  \sum_{n\in\mathbb Z}\frac1{y^2+n^2}
+  =\frac\pi y\cothh(\pi y).
+  \tag{cauchy-lattice}\label{cauchy-lattice}
+\end{equation}
+\end{theorem}
+
+\subsection{Extracting the odd lattice}
+
+The even part is
+\begin{align}
+  \sum_{n\in\mathbb Z}\frac1{y^2+(2n)^2}
+  &=\frac14
+    \sum_{n\in\mathbb Z}\frac1{(y/2)^2+n^2}
+  \notag\\
+  &=\frac\pi{2y}\cothh\!\left(\frac{\pi y}{2}\right).
+  \tag{even-lattice}\label{even-lattice}
+\end{align}
+Subtract \eqref{even-lattice} from \eqref{cauchy-lattice}. The elementary identity
+\begin{equation}
+  \cothh(2z)-\frac12\cothh z
+  =\frac12\tanh z
+  \tag{double-coth}\label{double-coth}
+\end{equation}
+gives
+\begin{equation}
+  \sum_{\substack{k\in\mathbb Z\\ k\text{ odd}}}
+    \frac1{y^2+k^2}
+  =\frac\pi{2y}\tanh\!\left(\frac{\pi y}{2}\right).
+  \tag{odd-lattice}\label{odd-lattice}
+\end{equation}
+The summand is even in $k$, so the positive odd terms contribute half.
+
+\begin{theorem}[Odd-pole expansion of $\tanh$]
+For $y>0$,
+\begin{equation}
+  \frac{\tanh(\pi y/2)}{y}
+  =\frac4\pi\sum_{n=0}^\infty
+    \frac1{y^2+(2n+1)^2}.
+  \tag{tanh-odd}\label{tanh-odd}
+\end{equation}
+\end{theorem}
+
+This is the exact scalar series needed below. It is also the piece of classical analysis most worth isolating as a reusable `ForMathlib` theorem.
+
+\section{The rational integral that makes the series telescope}
+
+\begin{lemma}[Two Cauchy denominators]
+Let $a\ge0$ and $c>0$. Then
+\begin{equation}
+  \int_0^\infty
+  \frac{y^2}{(y^2+c^2)(y^2+a^2)}\,dy
+  =\frac\pi{2(a+c)}.
+  \tag{two-cauchy}\label{two-cauchy}
+\end{equation}
+\end{lemma}
+
+\begin{proofoutline}
+\item If $a=0$, the integrand is $(y^2+c^2)^{-1}$ and the result is immediate.
+\item If $a>0$ and $a\ne c$, use
+\[
+\frac{y^2}{(y^2+c^2)(y^2+a^2)}
+=\frac{c^2}{c^2-a^2}\frac1{y^2+c^2}
+ -\frac{a^2}{c^2-a^2}\frac1{y^2+a^2}.
+\]
+\item Integrate each Cauchy kernel:
+\[
+  \int_0^\infty\frac{dy}{y^2+r^2}=\frac\pi{2r}
+  \qquad(r>0).
+\]
+\item If $a=c$, either take the limit or prove directly using the derivative of $y/(y^2+c^2)$, or use
+\[
+  \frac{y^2}{(y^2+c^2)^2}
+  =\frac1{y^2+c^2}-\frac{c^2}{(y^2+c^2)^2}.
+\]
+\end{proofoutline}
+
+For the application, only $c=2n+1$ and $a=x-1\ge0$ occur. Thus $c>0$ is automatic and the delicate $a=c$ branch occurs at isolated real values of $x$; nevertheless the clean general lemma should handle it.
+
+\section{The telescoping identity}
+
+\begin{theorem}[Scalar exterior multiplier identity]
+For $a\ge0$,
+\begin{equation}
+\begin{aligned}
+&\int_0^\infty
+  \tanh\!\left(\frac{\pi y}{2}\right)y
+  \left(
+    \frac1{y^2+a^2}
+    -\frac1{y^2+(a+2)^2}
+  \right)dy\\
+&\hspace{5cm}=\frac2{a+1}.
+\end{aligned}
+\tag{telescoping-integral}\label{telescoping-integral}
+\end{equation}
+\end{theorem}
+
+\begin{proofoutline}
+\item Insert \eqref{tanh-odd}:
+\[
+  \tanh\!\left(\frac{\pi y}{2}\right)y
+  =\frac4\pi\sum_{n=0}^\infty
+     \frac{y^2}{y^2+(2n+1)^2}.
+\]
+\item For $a\ge0$, the bracket in \eqref{telescoping-integral} is nonnegative. Every series term is therefore nonnegative. Tonelli or monotone convergence justifies exchanging sum and integral.
+\item Apply \eqref{two-cauchy} twice with $c_n=2n+1$:
+\begin{align*}
+&\int_0^\infty
+\frac{y^2}{y^2+c_n^2}
+\left(\frac1{y^2+a^2}-\frac1{y^2+(a+2)^2}\right)dy\\
+&\qquad=\frac\pi2
+\left(\frac1{a+c_n}-\frac1{a+2+c_n}\right).
+\end{align*}
+\item Multiplication by $4/\pi$ gives
+\[
+  2\sum_{n=0}^\infty
+  \left(
+    \frac1{a+2n+1}-\frac1{a+2n+3}
+  \right).
+\]
+\item The $N$th partial sum is
+\[
+  2\left(\frac1{a+1}-\frac1{a+2N+3}\right),
+\]
+which converges to $2/(a+1)$.
+\end{proofoutline}
+
+This telescoping is the main conceptual payoff of the Poisson route. The infinite harmonic-analysis expression collapses to one boundary term.
+
+\section{Exterior Fourier identity}
+
+\begin{theorem}[Positive exterior frequencies]
+For $x\ge1$,
+\begin{equation}
+  \widehat f_0(x)=\frac{i}{x}.
+  \tag{positive-exterior}\label{positive-exterior}
+\end{equation}
+\end{theorem}
+
+\begin{proofoutline}
+\item Substitute \eqref{kernel-real} into the Fourier integral.
+\item Use Fubini. The absolute double integral is bounded by the mass calculation, so no new domination theorem is needed.
+\item Apply \eqref{sine-cauchy}:
+\begin{align*}
+\widehat f_0(x)
+&=\frac i2\int_0^\infty w(y)y
+\left(
+  \frac1{y^2+(x-1)^2}
+ -\frac1{y^2+(x+1)^2}
+\right)dy.
+\end{align*}
+\item Set $a=x-1\ge0$. Then $x+1=a+2$.
+\item Apply \eqref{telescoping-integral} to obtain
+\[
+  \widehat f_0(x)=\frac i2\frac2{a+1}=\frac i x.
+\]
+\end{proofoutline}
+
+\begin{theorem}[Negative exterior frequencies]
+For $x\le-1$,
+\begin{equation}
+  \widehat f_0(x)=\frac{i}{x}.
+  \tag{negative-exterior}\label{negative-exterior}
+\end{equation}
+\end{theorem}
+
+\begin{proofoutline}
+\item Since $f_0$ is real and odd, its Fourier transform under convention \eqref{F} is imaginary and odd.
+\item Apply \eqref{positive-exterior} to $-x\ge1$.
+\end{proofoutline}
+
+\begin{corollary}[Sharp reciprocal kernel]
+The complex kernel $g_0=-if_0$ satisfies
+\[
+  \widehat g_0(x)=\frac1x\qquad(\abs x\ge1)
+\]
+and
+\[
+  \norm{g_0}_{L^1}=\frac\pi2.
+\]
+\end{corollary}
+
+\section{Lean-sized theorem seams}
+
+The following decomposition minimizes simultaneous elaboration risk.
+
+\begin{formalizationmap}
+Hyperbolic weight & $0\le w(y)\le1$ for $y\ge0$; exponential formula for $w$; $w\cdot\cothh=1$ for $y>0$. & New scalar helpers in \code{HaagerupZsidoKernel.lean}.\\
+Two-sided Laplace transform & Equation \eqref{cauchy-transform} and sine corollary \eqref{sine-cauchy}. & Agent reports this checkpoint already compiles.\\
+Absolute sine Laplace transform & Equations \eqref{sin-period} and \eqref{abs-sin-laplace}. & Prefer nonnegative interval decomposition plus geometric series.\\
+Exact mass & Equation \eqref{mass}. & Use Tonelli; this proves integrability and norm equality together.\\
+Normalized exponential transform & Equation \eqref{hy-transform}. & Reuse two-sided Laplace transform with the $2\pi$ normalization made explicit.\\
+Cauchy lattice & Equation \eqref{cauchy-lattice}. & Apply Mathlib Poisson summation to $h_y(t)=e^{-2\pi y\abs t}$.\\
+Odd-pole $\tanh$ expansion & Equation \eqref{tanh-odd}. & Split the integer lattice into even and odd terms; avoid residues.\\
+Rational integral & Equation \eqref{two-cauchy}. & Isolate zero, equal-parameter, and generic partial-fraction branches.\\
+Telescoping integral & Equation \eqref{telescoping-integral}. & All terms nonnegative; exchange sum and integral by Tonelli; prove finite telescoping explicitly.\\
+Exterior transform & Equations \eqref{positive-exterior} and \eqref{negative-exterior}. & Positive branch from telescoping; negative branch from real odd symmetry.\\
+Kernel package & Equations \eqref{A0-Fourier} and \eqref{A0-mass}. & Construct the \texttt{\seqsplit{HasIntegrableReciprocalFourierKernel}} certificate at mass $\pi/2$.\\
+\end{formalizationmap}
+
+Suggested declaration shapes:
+
+\begin{verbatim}
+theorem integral_abs_sin_mul_exp_neg
+    {y : R} (hy : 0 < y) :
+    integral (Ioi 0) (fun t => |sin t| * exp (-y * t))
+      = ((1 + exp (-pi * y)) / (1 - exp (-pi * y)))
+          / (1 + y^2)
+
+ theorem cauchy_lattice_sum
+    {y : R} (hy : 0 < y) :
+    tsum (fun n : Z => (y^2 + (n : R)^2)^(-1))
+      = pi / y * coth (pi * y)
+
+ theorem tanh_div_eq_odd_cauchy_tsum
+    {y : R} (hy : 0 < y) :
+    tanh (pi * y / 2) / y
+      = (4 / pi) * tsum (fun n : N =>
+          (y^2 + ((2*n+1 : N) : R)^2)^(-1))
+
+ theorem integral_tanh_reciprocal_difference
+    {a : R} (ha : 0 <= a) :
+    integral (Ioi 0) (fun y =>
+      tanh (pi*y/2) * y *
+        ((y^2+a^2)^(-1) - (y^2+(a+2)^2)^(-1)))
+      = 2 / (a+1)
+\end{verbatim}
+
+These are schematic, not guaranteed exact syntax. Preserve the mathematical boundaries even if the pinned APIs suggest different names.
+
+\section{Failure modes and route-selection advice}
+
+\begin{enumerate}[leftmargin=2em]
+\item \textbf{Normalization drift.} Poisson summation uses a $2\pi$-normalized transform; the final reciprocal theorem does not. State conversion lemmas rather than relying on simplification.
+\item \textbf{Continuity at zero.} The kernel need not be continuous at zero. Do not make continuity a prerequisite for integrability or Fourier evaluation.
+\item \textbf{Signed Fubini too early.} Prove the exact nonnegative mass identity first. It supplies the absolute-integrability certificate needed by the transform calculation.
+\item \textbf{Integer parity bookkeeping.} Prove a dedicated equivalence between odd integers and $\pm(2n+1)$. Avoid repeatedly normalizing casts inside a large calculation.
+\item \textbf{Infinite telescoping by automation.} Prove the finite partial-sum identity and then take a limit. `simp` should not be asked to discover the telescoping structure.
+\item \textbf{Exact finite orbit attainment.} The $L^1$ kernel theorem is enough for sharp inequalities through $\pi/2+\varepsilon$ finite approximants. Do not block the analytic theorem on a stronger compactness statement.
+\item \textbf{Overformalizing minimal extrapolation.} Weak-star compactness, uniqueness of minimizers, and the full $\alpha$-family are valuable future contributions but not prerequisites for the finite DK theorem.
+\end{enumerate}
+
+\section{What the literature contributes to the current proof}
+
+Haagerup--Zsid\'o supply the explicit extremal kernel, its sign structure, exact mass, and exterior transform. Their theorem confirms that the desired $\pi/2$ constant is not a convenient upper bound but the optimal minimal extrapolation norm.
+
+The classical $\cothh$ partial fraction identity supplies an alternative derivation of the only difficult scalar transform. Bradley's exposition is useful because it treats the partial fraction expansion as a reusable analytic engine rather than an isolated table entry.
+
+Mathlib's Poisson summation theorem makes that classical identity reachable without first developing general Mittag--Leffler theory. The exponential Cauchy kernel has elementary decay and an elementary Fourier transform, exactly matching the hypotheses for the formal Poisson API.
+
+Thus the literature synthesis supports a proof strategy that is simultaneously:
+\begin{itemize}
+\item faithful to the sharp Haagerup--Zsid\'o theorem;
+\item substantially smaller than their full contour/minimal-extrapolation proof;
+\item based on analysis already represented in Mathlib;
+\item modular enough to preserve useful scalar results even if the final exchange of sum and integral needs iteration.
+\end{itemize}
+
+\section*{Recommended implementation order}
+
+\begin{enumerate}[leftmargin=2em]
+\item Keep the compiled hyperbolic-weight and Cauchy-transform checkpoint.
+\item Prove \eqref{abs-sin-laplace} and the exact mass theorem.
+\item Prove the normalized Fourier transform \eqref{hy-transform}.
+\item Apply Poisson summation to obtain \eqref{cauchy-lattice}.
+\item Derive the odd-pole expansion \eqref{tanh-odd}.
+\item Prove the rational integral \eqref{two-cauchy}.
+\item Prove the telescoping identity \eqref{telescoping-integral}.
+\item Complete the positive exterior transform, then obtain the negative branch by oddness.
+\item Package the reciprocal kernel and immediately run the axiom audit on the real and complex Ky Fan and Sylvester endpoints.
+\end{enumerate}
+
+\section*{Bibliographic references}
+
+\begin{thebibliography}{9}
+\bibitem{HZ1994}
+U. Haagerup and L. Zsid\'o,
+\emph{Resolvent estimate for Hermitian operators and a related minimal extrapolation problem},
+Acta Sci. Math. (Szeged) 59 (1994), 503--524.
+
+\bibitem{Bradley2002}
+D. M. Bradley,
+\emph{Series acceleration formulas for Dirichlet series with periodic coefficients},
+Ramanujan J. 6 (2002), 331--346; arXiv:math/0505078.
+
+\bibitem{SzNagyStrausz1938}
+B. Sz.-Nagy and A. Strausz,
+\emph{On a theorem of H. Bohr} (Hungarian),
+Mat. Term\'eszettud. \`Ertes\'it\H{o} 37 (1938), 121--133.
+
+\bibitem{SzNagy1953}
+B. Sz.-Nagy,
+\emph{\"Uber die Ungleichung von H. Bohr},
+Math. Nachr. 9 (1953), 255--259.
+\end{thebibliography}
+
+\section*{Source-faithfulness statement}
+
+The explicit kernel and the sharp mass and exterior-transform claims are reconstructed from Haagerup--Zsid\'o's $\alpha=0$ theorem. The Poisson-summation derivation of the odd-pole $\tanh$ expansion is a modern alternative proof assembled for formalization; it is not presented as the proof used in the 1994 article. The note deliberately distinguishes source content from the proposed Lean route.
+
+\end{document}

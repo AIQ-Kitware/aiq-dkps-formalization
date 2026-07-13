@@ -1,0 +1,253 @@
+\input{preamble}
+\title{The $\tan\Theta$ theorem after Davis--Kahan:\\graph subspaces, Riccati equations, relaxed conditions, and corrected finite statements}
+\author{}
+\date{Comparative formalization dossier}
+\begin{document}
+\maketitle
+
+\section*{Sources and purpose}
+\begin{sourceguide}
+\item[Primary sources] V. Kostrykin, K. A. Makarov, and A. K. Motovilov, \emph{On the Existence of Solutions to the Operator Riccati Equation and the $\tan\Theta$ Theorem}, Integral Equations Operator Theory 51 (2005), 121--140, arXiv:math/0210032. Yuji Nakatsukasa, \emph{The $\tan\theta$ Theorem with Relaxed Conditions}, Linear Algebra Appl. 436 (2012), 1521--1534. A. K. Motovilov, \emph{Comment on ``The $\tan\theta$ Theorem with Relaxed Conditions''}, arXiv:1204.4441.
+\item[Companion source] S. Albeverio and A. K. Motovilov, \emph{The a priori $\tan\Theta$ Theorem for Spectral Subspaces}, Integral Equations Operator Theory 73 (2012), 413--430, arXiv:1012.1569.
+\item[Purpose] Separate four statements often conflated under the name ``tan theta theorem'': a posteriori residual bounds, graph/Riccati bounds, a priori spectral-subspace bounds, and relaxed Ritz-subspace conditions.
+\item[Formalization target] \code{DavisKahanTheory/TanTheta.lean}, \code{DavisKahan/Experimental/Literature/GraphSubspace.lean}, \code{Riccati.lean}, and the generalized trial-map layer.
+\end{sourceguide}
+
+\section{Graph geometry is the primitive object}
+
+Let $E=E_0\oplus E_1$ and let $X:E_0\to E_1$ be bounded. Its graph is
+\[
+  \mathcal G(X)=\{u\oplus Xu:u\in E_0\}.
+\]
+The graph is transverse to $E_1$ and the coordinate projection onto $E_0$ is invertible. The operator angle between $E_0$ and $\mathcal G(X)$ satisfies
+\[
+  \Theta=\arctan\sqrt{X^*X},
+\]
+so
+\[
+  \|\tan\Theta\|=\|X\|.
+\]
+In finite dimension the full singular-value statement is
+\[
+  s_j(X)=\tan\theta_j(E_0,\mathcal G(X)).
+\]
+This identity, rather than a totalized trigonometric operator, is the correct root for every-UI-norm tangent theorems.
+
+\section{Block operator and Riccati equation}
+
+Consider the self-adjoint block matrix
+\[
+  L=\begin{bmatrix}A&B\\B^*&C\end{bmatrix}
+\]
+on $E_0\oplus E_1$. Direct expansion shows that $\mathcal G(X)$ is invariant precisely when
+\[
+  XA-CX+XBX=B^*.
+\]
+For a self-adjoint $L$, an invariant closed graph is reducing. This yields the fundamental equivalence:
+\[
+  X\text{ solves Riccati}
+  \quad\Longleftrightarrow\quad
+  \mathcal G(X)\text{ reduces }L.
+\]
+
+Kostrykin--Makarov--Motovilov further use the graph transform
+\[
+  V=\begin{bmatrix}I&-X^*\\X&I\end{bmatrix}
+\]
+to obtain block diagonalization
+\[
+  V^{-1}LV=
+  \begin{bmatrix}
+    A+BX&0\\0&C-B^*X^*
+  \end{bmatrix}.
+\]
+After normalization by $(I+X^*X)^{1/2}$ and $(I+XX^*)^{1/2}$, the diagonal blocks are similar to self-adjoint operators. This similarity is why their spectra remain real and why a Sylvester estimate can be applied to the Riccati equation rewritten around the perturbed diagonal block.
+
+\section{Kostrykin--Makarov--Motovilov's generalized $\tan\Theta$ theorem}
+
+Let $Z=A+BX$ be the diagonal block associated with the graph. Rewrite Riccati as
+\[
+  XZ-CX=B^*.
+\]
+Assume the spectrum of $Z$, equivalently the spectrum of $L|_{\mathcal G(X)}$, lies in a spectral gap of $C$, and let
+\[
+  \delta:=\dist(\spec(Z),\spec(C))>0.
+\]
+Then their Theorem 2 gives
+\[
+  \|X\|\le\frac{\|B\|}{\delta},
+\]
+or equivalently
+\[
+  \|\tan\Theta(E_0,\mathcal G(X))\|
+  \le\frac{\|B\|}{\delta}.
+\]
+
+The important hypothesis is not merely $\dist(\spec(A),\spec(C))>0$. The denominator uses the spectrum of the \emph{perturbed graph block} $Z$. Thus the theorem is an a posteriori tangent theorem unless additional arguments control $\spec(Z)$ from unperturbed data.
+
+\subsection{Proof mechanism}
+
+Choose the center $\gamma$ of the spectral interval containing $\spec(Z)$. The gap hypothesis places $\spec(C)$ outside that interval by $\delta$. Rewriting
+\[
+  X(Z-\gamma I)-(C-\gamma I)X=B^*
+\]
+and multiplying by $(C-\gamma I)^{-1}$ gives
+\[
+  X=(C-\gamma I)^{-1}(X(Z-\gamma I)-B^*).
+\]
+The normalized self-adjoint representative of $Z$ yields a bound on $\|X(Z-\gamma I)\|$ with the same factor controlling $\|(C-\gamma I)^{-1}\|$. The scalar terms cancel to leave $\delta\|X\|\le\|B\|$.
+
+In finite dimensions, an ordered rectangular Sylvester theorem gives a cleaner proof and automatically extends the estimate from operator norm to all rectangular UI norms, provided the graph equation has the correct left and right self-adjoint coefficients.
+
+\section{Existence versus estimation}
+
+The same paper proves existence and uniqueness of bounded Riccati solutions under stronger hypotheses. If $C$ has a finite spectral gap $\Delta$ containing $\spec(A)$ and
+\[
+  \|B\|<\sqrt{d|\Delta|},
+  \qquad
+  d=\dist(\spec(A),\spec(C)),
+\]
+then the spectral subspace of $L$ associated with $\Delta$ is the graph of a unique bounded solution with the prescribed spectral split.
+
+Under additional boundedness and a stronger smallness condition, the solution is a strict contraction. The paper establishes sharp threshold phenomena: $\sqrt2$ is the optimal universal scale for existence in the finite-gap configuration, while $1$ is the sharp scale guaranteeing a contractive branch in the bounded setting.
+
+These existence theorems should not be folded into a residual $\tan\Theta$ theorem. In finite DK work, the exact subspace may already be supplied and transversality may be derivable from the residual equation without a global Riccati existence theorem.
+
+\section{Nakatsukasa's residual theorem as reconstructed by Motovilov}
+
+Let $A$ be Hermitian. Let $Q_1$ have orthonormal columns and define its Ritz matrix and residual by
+\[
+  A_1=Q_1^*AQ_1,
+  \qquad
+  R=AQ_1-Q_1A_1.
+\]
+Let $X_1$ span an exact spectral subspace and let $\Lambda_2$ represent its complementary exact block. Suppose there is an interval $[\alpha,\beta]$ and $\delta>0$ such that
+\[
+  \spec(A_1)\subset(-\infty,\alpha-\delta]\cup[\beta+\delta,\infty),
+\]
+\[
+  \spec(\Lambda_2)\subset[\alpha,\beta].
+\]
+Then Nakatsukasa's Theorem 1 states, in spectral norm,
+\[
+  \tan\angle(\range Q_1,\range X_1)
+  \le\frac{\|R\|}{\delta}.
+\]
+
+Motovilov observes that this is a coordinate reformulation of the earlier graph theorem. Complete $Q_1$ to a unitary $Q=[Q_1\ Q_2]$ and set $L=Q^*AQ$. Then
+\[
+  L=\begin{bmatrix}A_1&B^*\\B&A_2\end{bmatrix},
+  \qquad B=Q_2^*R,
+\]
+so $\|B\|=\|R\|$. The exact complementary spectral subspace lies in the gap of $A_1$. A dimension and separation argument proves the needed graph transversality automatically. Applying the earlier block $\tan\Theta$ theorem gives the result.
+
+\section{What ``relaxed conditions'' actually change}
+
+The relaxed result does not remove all separation. It changes which blocks are required to be separated.
+
+Classical presentations often demand separation between the desired exact eigenvalue cluster and all approximate Ritz values. Nakatsukasa's formulation uses the approximate Ritz block $A_1$ and the \emph{unwanted exact complementary block} $\Lambda_2$. This is useful because the residual equation naturally couples those two blocks.
+
+The theorem does not require prior knowledge that the approximate and exact subspaces are acute. Motovilov's Lemma 3 proves graph transversality from:
+\begin{enumerate}
+\item equal dimensions;
+\item confinement of the exact complementary spectrum to $[\alpha,\beta]$;
+\item exclusion of the approximate Ritz spectrum from the enlarged interval.
+\end{enumerate}
+A vector in the forbidden intersection would simultaneously satisfy incompatible lower and upper bounds for $\|(L-cI)y\|$, where $c=(\alpha+\beta)/2$.
+
+This is a highly valuable Lean seam:
+\[
+  \text{spectral gap plus reducing exact block}
+  \Longrightarrow
+  \text{transversality}.
+\]
+It should be proved before the UI-norm tangent inequality.
+
+\section{Motovilov's correction and clarification}
+
+Motovilov's comment makes two points.
+
+\begin{enumerate}
+\item In spectral norm, Nakatsukasa's Theorem 1 is not a new independent analytic estimate; it is a finite-dimensional corollary of the 2005 graph/Riccati tangent theorem.
+\item A second a priori tangent statement can be formulated using a residual threshold $\|R\|<\sqrt2d$, a spectral continuation result, and the same sharp bound
+\[
+  \tan\angle(Q_1,X_1)\le\frac{\|R\|}{d}.
+\]
+The threshold cannot in general be omitted because it is what guarantees existence and identification of the desired spectral branch.
+\end{enumerate}
+
+The correction is conceptual rather than a claim that the displayed residual inequality is false. It separates an a posteriori theorem, where the target exact spectral block is already identified, from an a priori theorem, where the existence and selection of that block require a smallness condition.
+
+\section{Every-UI-norm finite parent theorem}
+
+The literature statements above are mostly in operator norm. The maximal finite theorem should instead use the graph singular-value dictionary and rectangular Sylvester estimates.
+
+Let $U$ reduce a self-adjoint $A$, let $X:F\to E$ be isometric, and let $M=M^*$. Assume:
+\begin{enumerate}
+\item the residual is $R=AX-XM$;
+\item the spectral placement implies transversality of $\range X$ relative to $U^\perp$;
+\item the graph map $T:F\to U^\perp$ satisfies an ordered Sylvester equation with gap $\delta$.
+\end{enumerate}
+Then for every rectangular UI norm $N$,
+\[
+  \delta N(T)\le N(R).
+\]
+The proof should be:
+\begin{enumerate}
+\item derive transversality;
+\item construct $T$ with the proof of invertibility;
+\item derive the exact graph Sylvester equation;
+\item apply the ordered rectangular theorem;
+\item identify the singular values of $T$ with principal tangents.
+\end{enumerate}
+
+This theorem subsumes the spectral-norm residual statement, Frobenius and Ky Fan forms, and perturbation theorems obtained by taking $X$ to embed a reducing subspace of a perturbed operator.
+
+\section{Nonorthonormal trial maps}
+
+For an injective trial map $Y$ with Gram operator $G=Y^*Y$, set
+\[
+  X=YG^{-1/2}.
+\]
+The residual transforms by right multiplication with $G^{-1/2}$. Therefore the generalized tangent theorem should not need a new Riccati proof. Its only new ingredient is a lower frame bound
+\[
+  \varepsilon^2I\le G,
+\]
+which yields
+\[
+  N(RG^{-1/2})\le \varepsilon^{-1}N(R).
+\]
+The graph geometry is carried by $\range Y=\range X$.
+
+\section{Formalization decisions}
+
+\begin{enumerate}
+\item Define a proof-carrying \code{graphOperatorOfTransverse}; retain totalized maps only as wrappers.
+\item Prove \code{singularValues_graphOperator} from principal planes.
+\item Prove transversality from the residual-gap configuration before the norm theorem.
+\item State the a posteriori theorem separately from branch-existence theorems.
+\item Keep ordered-gap constant one separate from arbitrary spectral separation.
+\item Avoid using a scalar maximal-angle theorem as the parent of all UI norms.
+\item Make the Ritz/Galerkin hypothesis explicit when $M=X^*AX$ is used.
+\end{enumerate}
+
+\section{Repository map}
+
+\begin{formalizationmap}
+Graph angle identity & $\tan\Theta=|X|$ for graph subspaces & Experimental \code{GraphSubspace.lean}; key lemmas remain sorry. \\
+Riccati equivalence & Reducing graph iff Riccati equation & Experimental \code{Riccati.lean}; block operator construction and equivalence unfinished. \\
+A posteriori tangent & $\delta\|X\|\le\|B\|$ using perturbed graph spectrum & Operator-norm skeleton exists in older modules; maximal every-UI parent remains in \code{TanTheta.lean}. \\
+Relaxed residual theorem & Ritz block separated from unwanted exact block & Signature exists; transversality and graph Sylvester equation are the hard proof seams. \\
+A priori branch theorem & Residual smallness selects exact spectral branch & Depends on continuation and spectral inclusion modules. \\
+Generalized trial map & Whitening transport & \code{Generalized.lean}; Gram inverse-square-root API remains incomplete. \\
+\end{formalizationmap}
+
+\section*{Bibliography}
+\begin{thebibliography}{9}
+\bibitem{KMM2005} V. Kostrykin, K. A. Makarov, and A. K. Motovilov, \emph{On the Existence of Solutions to the Operator Riccati Equation and the $\tan\Theta$ Theorem}, Integral Equations Operator Theory 51 (2005), 121--140.
+\bibitem{Nakatsukasa2012} Y. Nakatsukasa, \emph{The $\tan\theta$ Theorem with Relaxed Conditions}, Linear Algebra Appl. 436 (2012), 1521--1534.
+\bibitem{Motovilov2012} A. K. Motovilov, \emph{Comment on ``The $\tan\theta$ Theorem with Relaxed Conditions''}, arXiv:1204.4441.
+\bibitem{AM2012} S. Albeverio and A. K. Motovilov, \emph{The a priori $\tan\Theta$ Theorem for Spectral Subspaces}, Integral Equations Operator Theory 73 (2012), 413--430.
+\end{thebibliography}
+
+\end{document}

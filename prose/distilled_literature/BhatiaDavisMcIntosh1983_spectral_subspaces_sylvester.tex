@@ -1,0 +1,264 @@
+\input{preamble}
+\title{Bhatia--Davis--McIntosh (1983): spectral subspaces through the Sylvester equation}
+\author{}
+\date{Distilled reconstruction for the finite Davis--Kahan formalization}
+\begin{document}
+\maketitle
+
+\section*{Source map and attribution boundary}
+\begin{sourceguide}
+\item[Primary source] Rajendra Bhatia, Chandler Davis, and Alan McIntosh, \emph{Perturbation of Spectral Subspaces and Solution of Linear Operator Equations}, Linear Algebra and its Applications 52/53 (1983), 45--67, DOI \href{https://doi.org/10.1016/0024-3795(83)80007-X}{10.1016/0024-3795(83)80007-X}.
+\item[Source evidence] The bibliographic record and abstract were checked against the publisher record. The mathematical reconstruction follows the archival scan indexed under the same title and the paper's later theorem-level restatement in Albeverio--Makarov--Motovilov. OCR of the 1983 scan is irregular, so this note avoids inventing equation numbers where the scan does not support a stable anchor.
+\item[Paper scope] Normal operators $A,B$; spectral sets $K_A,K_B$ separated in the complex plane; estimates for $EF$ in terms of $E(A-B)F$; equivalent norm estimates for solutions of $AX-XB=Y$; constant-one estimates in ordered or geometrically favorable configurations; Fourier-transform estimates in the general separated case.
+\item[Formalization target] \code{DavisKahanTheory.Sylvester}, \code{ReciprocalMultiplier}, and \code{RectangularUINorm}; in particular the distinction between ordered-gap constant one and arbitrary-separated sharp constant $\pi/2$.
+\item[Historical boundary] The 1983 paper initiates the Fourier/Sylvester route and obtains universal estimates, but the exact extremal Fourier value $\pi/2$ is supplied by later Fourier analysis. The final sharp constant must therefore be attributed through the later Sz.-Nagy--Strausz/Bhatia--Davis--Koosis/Haagerup--Zsidó chain, not retroactively assigned to the 1983 proof.
+\end{sourceguide}
+
+The conceptual achievement of this paper is the systematic equivalence between two problems:
+\begin{enumerate}[leftmargin=2em]
+\item perturbation of spectral subspaces, measured by a product of spectral projections; and
+\item inversion of the Sylvester operator $X\mapsto AX-XB$ under spectral separation.
+\end{enumerate}
+Once this equivalence is made explicit, the geometry of the spectral sets dictates the correct analytic representation of the reciprocal denominator.
+
+\section{The spectral-subspace inequality}
+
+Let $A$ and $B$ be normal operators on a Hilbert space. Let $K_A,K_B\subset\C$ be spectral sets with
+\[
+  \dist(K_A,K_B)\ge\delta>0,
+\]
+and let $E$ and $F$ be the corresponding spectral projections of $A$ and $B$. The paper seeks inequalities of the form
+\begin{equation}
+  \delta\norm{EF}
+  \le c\norm{E(A-B)F}.
+  \tag{BDM-subspace}\label{BDM-subspace}
+\end{equation}
+The norm may be the operator norm or a suitable unitarily invariant/symmetric ideal norm.
+
+The right-hand side is not an arbitrary perturbation norm. It is the part of $A-B$ that actually couples the selected spectral subspaces. This is the same residual localization used in Davis--Kahan:
+\[
+  E(A-B)F
+  =A_E(EF)-(EF)B_F,
+\]
+where $A_E$ and $B_F$ are the restrictions or compressions to the ranges of $E$ and $F$.
+
+Thus $X=EF$ solves the Sylvester equation
+\begin{equation}
+  A_EX-XB_F=E(A-B)F.
+  \tag{BDM-projected-Sylvester}\label{BDM-projected-Sylvester}
+\end{equation}
+The spectra of $A_E$ and $B_F$ lie in $K_A$ and $K_B$, respectively. Every bound for the inverse Sylvester operator immediately yields a spectral-subspace perturbation theorem.
+
+\section{The abstract Sylvester problem}
+
+Given normal operators $A$ and $B$ with disjoint spectra, solve
+\begin{equation}
+  AX-XB=Y.
+  \tag{BDM-Sylvester}\label{BDM-Sylvester}
+\end{equation}
+In finite dimensions, diagonalizing $A$ and $B$ gives
+\[
+  (\alpha_i-\beta_j)X_{ij}=Y_{ij},
+  \qquad
+  X_{ij}=\frac{1}{\alpha_i-\beta_j}Y_{ij}.
+\]
+The inverse is therefore a rectangular Schur multiplier by the reciprocal difference matrix.
+
+The scalar lower bound
+\[
+  \abs{\alpha_i-\beta_j}\ge\delta
+\]
+does not by itself imply that the multiplier norm is $1/\delta$ for every operator ideal. Entrywise magnitude control is insufficient for the operator norm and for general unitarily invariant norms. The paper's main analysis identifies geometric configurations where a positive integral gives constant one and a general Fourier representation giving a universal constant.
+
+\section{Ordered separation and the constant-one mechanism}
+
+Suppose the spectra are separated by a line. In the self-adjoint case, after translation and possibly reversing orientation, assume
+\[
+  A\ge aI,
+  \qquad
+  B\le bI,
+  \qquad
+  a-b\ge\delta>0.
+\]
+Then
+\begin{equation}
+  X=\int_0^\infty e^{-tA}Ye^{tB}\,dt
+  \tag{BDM-semigroup}
+\end{equation}
+solves $AX-XB=Y$. Differentiating the integrand gives
+\[
+  -\frac{d}{dt}\bigl(e^{-tA}Ye^{tB}\bigr)
+  =Ae^{-tA}Ye^{tB}-e^{-tA}Ye^{tB}B.
+\]
+The endpoint at infinity vanishes because of the spectral gap, and the endpoint at zero is $Y$.
+
+For every two-sided ideal norm,
+\[
+  \norm{e^{-tA}Ye^{tB}}
+  \le e^{-\delta t}\norm{Y},
+\]
+so
+\begin{equation}
+  \norm{X}\le\frac1\delta\norm{Y}.
+  \tag{BDM-ordered}
+\end{equation}
+This is the conceptual continuation of Davis--Kahan Theorem 5.1 and is the correct source model for the repository's ordered-gap and interval-gap Sylvester theorems.
+
+The same argument works for normal spectra separated by a line after rotating the complex plane. It also explains exactly why the constant is one: the reciprocal is represented by a positive one-sided Laplace integral whose total mass is $1/\delta$.
+
+\section{General separated spectra and Fourier synthesis}
+
+When the spectral sets interlace, no line orders all differences with the same sign. The semigroup representation cannot be used globally. The paper instead asks for an integrable scalar function $f$ satisfying
+\begin{equation}
+  \widehat f(s)=\frac1s
+  \quad\text{on the set of spectral differences.}
+  \tag{BDM-reciprocal}
+\end{equation}
+With a Fourier convention fixed consistently, define
+\begin{equation}
+  X=\int_{\R}e^{itA}Ye^{-itB}f(t)\,dt.
+  \tag{BDM-Fourier}\label{BDM-Fourier}
+\end{equation}
+In joint eigen-coordinates, the $(i,j)$ coefficient is multiplied by
+\[
+  \int_{\R}e^{it(\alpha_i-\beta_j)}f(t)\,dt
+  =\frac1{\alpha_i-\beta_j},
+\]
+so \eqref{BDM-Fourier} solves \eqref{BDM-Sylvester}.
+
+Because the exponentials are unitary,
+\begin{equation}
+  \norm{X}
+  \le \norm{f}_{L^1}\norm{Y}
+  \tag{BDM-orbit-bound}
+\end{equation}
+for every symmetric ideal norm. The operator problem is reduced to a scalar minimal-extrapolation problem:
+\begin{equation}
+  c_*
+  =\inf\left\{
+    \norm{f}_{L^1(\R)}:
+    \widehat f(s)=\frac1s\text{ for }\abs{s}\ge1
+  \right\}.
+  \tag{BDM-extremal}
+\end{equation}
+Scaling gives $c_*/\delta$ for a gap $\delta$.
+
+This reduction is the enduring mathematical seam. It separates:
+\begin{itemize}[leftmargin=2em]
+\item spectral geometry and the Sylvester identity;
+\item scalar harmonic analysis of the reciprocal function;
+\item norm transfer through unitary left/right orbits.
+\end{itemize}
+The current repository follows this separation almost literally.
+
+\section{What the 1983 paper proves and what later work sharpens}
+
+The paper obtains universal constants and establishes the Fourier extremal problem as the quantity governing the general estimate. Later accounts record the historical bounds on the best constant as lying between explicit lower and upper estimates; the exact value
+\[
+  c_*=\frac\pi2
+\]
+is supplied by the later Fourier-analysis chain. Consequently the modern sharp theorem is
+\begin{equation}
+  \norm{X}
+  \le\frac{\pi}{2\delta}\norm{Y}.
+  \tag{BDM-modern-sharp}
+\end{equation}
+
+For source-faithful formalization, the theorem should be decomposed into two layers:
+\begin{enumerate}[leftmargin=2em]
+\item the Bhatia--Davis--McIntosh operator-theoretic reduction from reciprocal Fourier synthesis to a Sylvester norm estimate;
+\item the later exact reciprocal kernel or finite interpolation theorem with mass $\pi/2$.
+\end{enumerate}
+The repository's explicit Haagerup--Zsidó kernel now closes the second layer for the field-specific real and complex chains.
+
+\section{Finite-dimensional compression of the Fourier integral}
+
+The source works with an operator-valued integral. In the finite theorem, only finitely many differences
+\[
+  D=\{\alpha_i-\beta_j\}
+\]
+are relevant. One may replace the integral by a finite Fourier certificate. For every $\varepsilon>0$, seek frequencies $t_r$ and coefficients $a_r$ such that
+\begin{align*}
+  \sum_r a_r e^{it_r d}&=\frac1d
+    &&(d\in D),\\
+  \sum_r\abs{a_r}&\le\frac\pi2+\varepsilon.
+\end{align*}
+For complex spaces, diagonal phase unitaries realize each character. For real spaces, a two-copy rotation realizes the same character through its cosine and sine components.
+
+The endpoint inequality follows by applying the finite orbit estimate at mass $\pi/2+\varepsilon$ and then letting $\varepsilon\downarrow0$. Exact finite attainment at mass $\pi/2$ is not needed.
+
+\subsection{The false stronger real certificate}
+
+A universal undoubled real orbit certificate at exact mass $\pi/2$ is stronger than the BDM inequality and is false. The two-dimensional reciprocal matrix generated by
+\[
+  \alpha=(-1,1),
+  \qquad
+  \beta=(0,2)
+\]
+has an atomic real orbit norm at least $5/3>\pi/2$. Therefore the generic finite theory must use doubled phase realization or specialize to the complex field; it must not encode the later sharp inequality through a false exact undoubled interpolation theorem.
+
+This does not conflict with BDM. The paper proves a norm inequality through an integral representation. It does not require one finite real orbit operator that simultaneously reproduces every matrix unit at the exact endpoint.
+
+\section{From the Sylvester equation back to projectors}
+
+Let $E$ and $F$ be spectral projections as in \eqref{BDM-subspace}. The projected identity \eqref{BDM-projected-Sylvester} and the general estimate give
+\[
+  \delta\norm{EF}
+  \le c_*\norm{E(A-B)F}.
+\]
+The ordered configurations give $c_*=1$ by the semigroup argument. Arbitrary separated spectra give the universal Fourier constant, modernly $\pi/2$.
+
+This is the clean bridge between the general Sylvester infrastructure and Davis--Kahan geometry. The classical four 1970 statements mostly use the constant-one ordered branch. The arbitrary-separated branch is a stronger reusable theorem family, not a prerequisite for every classical statement.
+
+\section{Formalization map}
+
+\begin{formalizationmap}
+Projected spectral-subspace identity & $X=EF$ solves a Sylvester equation with right side $E(A-B)F$ & Basis-free residual identities in \code{SinTheta.lean} and \code{Sylvester.lean} \\
+Ordered spectral separation & Semigroup/positive reciprocal representation with constant one & \code{opNorm_sylvester_le_of_intervalGap}, \code{uiNorm_sylvester_le_of_orderedGap}, \code{uiNorm_sylvester_le_of_intervalGap} \\
+General separated spectra & Reciprocal Fourier representation and unitary-orbit norm transfer & \code{ReciprocalMultiplier.lean} and the spectral-distance Ky Fan theorems \\
+Sharp scalar constant & Exact reciprocal kernel of mass $\pi/2$ from later Fourier analysis & \code{HaagerupZsidoKernel.lean}; packaged by the integrable-kernel theorem \\
+Finite replacement of operator integral & Approximate finite Fourier interpolation plus exact correction and endpoint limiting & Finite-interpolation section of \code{ReciprocalMultiplier.lean} \\
+Real phase descent & Two-copy real rotation, singular-value duplication, and cancellation & Doubled-real construction plus \code{orthogonalBlockSum}; generalize it to \code{RCLike} \\
+Fan dominance & Ky Fan prefix estimates imply every rectangular UI norm estimate & \code{RectangularUINorm.lean}, \code{uiNorm_sylvester_le_of_spectralDistance_*} \\
+Solution-specific exact orbit certificate & Convex-orbit representation derived after majorization, not a universal multiplier identity & \code{sylvester_barycentricOrbitRepresentation_of_spectralDistance}, \code{sylvester_hasFiniteUnitaryOrbitCertificate_of_spectralDistance} \\
+\end{formalizationmap}
+
+\section{Proof obligations exposed by the paper}
+
+For a maximally general finite API, the reusable theorem seams are:
+\begin{enumerate}[leftmargin=2em]
+\item diagonalize finite self-adjoint operators without leaking basis choices into public statements;
+\item prove the coefficient equation for $AX-XB=Y$;
+\item realize reciprocal Fourier characters by unitary two-sided actions;
+\item prove Ky Fan contraction under a finite signed orbit certificate;
+\item descend from doubled spaces without losing the sharp constant;
+\item pass from all Ky Fan prefixes to an arbitrary rectangular unitarily invariant norm;
+\item wrap the Sylvester theorem back into canonical spectral projections and subspaces.
+\end{enumerate}
+
+The paper's most valuable lesson for the current project is architectural: do not prove every Davis--Kahan theorem by fresh angle algebra. Build one trustworthy Sylvester layer, then let spectral geometry supply the appropriate equation and gap configuration.
+
+\section*{Bibliography}
+\begin{thebibliography}{9}
+\bibitem{BDM1983}
+R. Bhatia, C. Davis, and A. McIntosh,
+\emph{Perturbation of spectral subspaces and solution of linear operator equations},
+Linear Algebra Appl. 52/53 (1983), 45--67.
+
+\bibitem{BDK1989}
+R. Bhatia, C. Davis, and P. Koosis,
+\emph{An extremal problem in Fourier analysis with applications to operator theory},
+J. Funct. Anal. 82 (1989), 138--150.
+
+\bibitem{AMM2001}
+S. Albeverio, K. A. Makarov, and A. K. Motovilov,
+\emph{Graph Subspaces and the Spectral Shift Function},
+arXiv:math/0105142.
+
+\bibitem{DK1970}
+C. Davis and W. M. Kahan,
+\emph{The Rotation of Eigenvectors by a Perturbation. III},
+SIAM J. Numer. Anal. 7 (1970), 1--46.
+\end{thebibliography}
+
+\end{document}

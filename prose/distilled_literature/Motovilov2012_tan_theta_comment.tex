@@ -1,0 +1,273 @@
+\input{preamble}
+\title{Motovilov (2012): graph subspaces, the relaxed tan $\Theta$ theorem, and an a priori companion}
+\author{}
+\date{Source-order distilled reconstruction of arXiv:1204.4441v2}
+\begin{document}
+\maketitle
+
+\section*{Source map and scope}
+\begin{sourceguide}
+\item[Primary source] Alexander K. Motovilov,\linebreak \emph{Comment on ``The tan theta theorem with relaxed conditions''} by Y. Nakatsukasa, arXiv:1204.4441v2 (2012).
+\item[Coverage] Proposition 1; Remark 2; Lemma 3; Proposition 4 and its proof; Remark 5; Proposition 6 and Remark 7.
+\item[Formalization target] The no-pole content and proof interpretation of \code{tan_theta_le}; canonical graph-subspace and spectral-subspace wrappers; the distinction between a posteriori and a priori tan bounds.
+\item[Norm scope] The comment deliberately works with the spectral norm and the largest principal angle. It does not reproduce Nakatsukasa's every-UI-norm theorem.
+\end{sourceguide}
+
+The comment makes two corrections of perspective rather than correcting Nakatsukasa's theorem. First, the relaxed spectral-norm theorem is a finite-dimensional instance of an earlier block-operator graph-subspace theorem. Second, the graph condition required by that theorem is automatic under the finite-dimensional spectral hypotheses. It then places the a posteriori theorem beside a sharp a priori theorem with a residual smallness threshold.
+
+\section{Proposition 1: the block-operator tan theorem}
+
+\sourceanchor{Proposition 1.}
+
+Let
+\[
+  L=\begin{pmatrix}A_1&B^*\\B&A_2\end{pmatrix}
+\]
+be Hermitian on $\C^k\oplus\C^{n-k}$. Let
+\[
+  \mathcal A_1=\C^k\oplus\{0\},
+  \qquad
+  \mathcal A_2=\{0\}\oplus\C^{n-k}.
+\]
+Assume that for some $\alpha\le\beta$ and $\delta>0$,
+\[
+  \spec(A_1)
+  \subseteq(-\infty,\alpha-\delta]
+    \cup[\beta+\delta,\infty).
+\]
+Let $\mathcal L_2$ be a reducing spectral subspace of $L$ with
+\[
+  \spec(L|_{\mathcal L_2})\subseteq[\alpha,\beta],
+\]
+and let $\mathcal L_1=\mathcal L_2^\perp$ have dimension $k$. Then
+\begin{equation}
+  \tan\angle(\mathcal A_1,\mathcal L_1)
+  \le\frac{\norm{B}_{\op}}{\delta}.
+  \tag{M-2}\label{M-2}
+\end{equation}
+Here $\angle$ denotes the largest principal angle.
+
+The hypothesis is exactly the relaxed interval/exterior orientation: the coordinate block $A_1$ lies outside, while the complementary exact spectral subspace lies in the middle interval.
+
+\section{Remark 2: the graph formulation}
+
+Earlier operator-Riccati results state the estimate using the angle between the complementary subspaces $\mathcal A_2$ and $\mathcal L_2$, provided $\mathcal L_2$ is the graph of an operator
+\[
+  X:\mathcal A_2\to\mathcal A_1.
+\]
+For a graph subspace,
+\[
+  \tan\angle(\mathcal A_2,\mathcal L_2)=\norm{X}_{\op}.
+\]
+Because complementary principal-angle lists agree, this is equivalent to \eqref{M-2} when dimensions match.
+
+The apparent extra graph assumption is not a genuine finite-dimensional hypothesis. Lemma 3 proves it from spectral separation.
+
+\section{Lemma 3: automatic transversality}
+
+\sourceanchor{Lemma 3 and equation (3).}
+
+Under Proposition 1,
+\begin{equation}
+  \mathcal A_2\cap\mathcal L_1=\{0\},
+  \qquad
+  \mathcal A_1\cap\mathcal L_2=\{0\}.
+  \tag{M-transverse}
+\end{equation}
+Hence $\mathcal L_2$ is the graph of an operator from $\mathcal A_2$ to $\mathcal A_1$.
+
+\begin{proofoutline}
+\item Since $\dim\mathcal L_1=\dim\mathcal A_1=k$, the canonical decomposition of two finite-dimensional subspaces gives
+\[
+  \dim(\mathcal A_2\cap\mathcal L_1)
+  =\dim(\mathcal A_1\cap\mathcal L_2).
+\]
+It is enough to show the second intersection is zero.
+\item Suppose $0\ne y\in\mathcal A_1\cap\mathcal L_2$. Write $y=(x,0)$ with $x\ne0$.
+\item Center the interval at
+\[
+  c=\frac{\alpha+\beta}{2}.
+\]
+Because $y$ occupies only the first coordinate block,
+\[
+  \norm{(L-cI)y}^2
+  =\norm{(A_1-cI)x}^2+\norm{Bx}^2
+  \ge\left(\frac{\beta-\alpha}{2}+\delta\right)^2\norm{y}^2.
+\]
+\item Because $y\in\mathcal L_2$ and the spectrum of $L|_{\mathcal L_2}$ lies in $[\alpha,\beta]$,
+\[
+  \norm{(L-cI)y}
+  \le\frac{\beta-\alpha}{2}\norm{y}.
+\]
+\item The two inequalities contradict $\delta>0$. Therefore $y=0$, and the dimension identity gives the other intersection.
+\end{proofoutline}
+
+This is the cleanest source explanation of the ``pole-free'' tangent theorem. The denominator $\cos\Theta$ is not assumed nonzero. Spectral coercivity proves transversality, and transversality proves the graph representation.
+
+\section{Proposition 4: Nakatsukasa's theorem as a corollary}
+
+\sourceanchor{Proposition 4 and its proof.}
+
+Let $A$ be Hermitian, let $Q_1$ have orthonormal columns, and set
+\[
+  A_1=Q_1^*AQ_1,
+  \qquad
+  R=AQ_1-Q_1A_1.
+\]
+Let $X=[X_1\ X_2]$ be a unitary eigenvector matrix for $A$. Assume
+\[
+  \spec(A_1)
+  \subseteq(-\infty,\alpha-\delta]
+      \cup[\beta+\delta,\infty),
+  \qquad
+  \spec(\Lambda_2)\subseteq[\alpha,\beta].
+\]
+Then
+\begin{equation}
+  \tan\angle(Q_1,X_1)
+  \le\frac{\norm{R}_{\op}}{\delta}.
+  \tag{M-4}
+\end{equation}
+
+Complete $Q_1$ to a unitary $Q=[Q_1\ Q_2]$. In the $Q$ coordinates,
+\[
+  L=Q^*AQ
+  =\begin{pmatrix}
+      A_1&B^*\\B&A_2
+    \end{pmatrix},
+  \qquad
+  B=Q_2^*AQ_1=Q_2^*R.
+\]
+Since $R\perp\range(Q_1)$,
+\[
+  \norm{B}_{\op}=\norm{R}_{\op}.
+\]
+The subspaces
+\[
+  \mathcal L_1=Q^*\range(X_1),
+  \qquad
+  \mathcal L_2=Q^*\range(X_2)
+\]
+reduce $L$, and the spectrum on $\mathcal L_2$ is $\spec(\Lambda_2)$. Proposition 1 applies, and unitary invariance of principal angles transports the result back to $Q_1$ and $X_1$.
+
+Remark 5 observes that the implication reverses: Proposition 1 is obtained from Proposition 4 by taking $Q=I$. Thus the matrix residual theorem and the block graph-subspace theorem are equivalent formulations in finite dimensions.
+
+\section{Proposition 6: the a priori tan theorem}
+
+\sourceanchor{Proposition 6 and Remark 7.}
+
+Proposition 4 is a posteriori: it assumes knowledge of the exact unwanted eigenvalues $\Lambda_2$. Proposition 6 replaces this with separation of the two computable compression blocks.
+
+Let
+\[
+  A_1=Q_1^*AQ_1,
+  \qquad
+  A_2=Q_2^*AQ_2,
+  \qquad
+  R=AQ_1-Q_1A_1.
+\]
+Assume
+\[
+  \spec(A_1)
+  \subseteq(-\infty,a-d]\cup[b+d,\infty),
+  \qquad
+  \spec(A_2)\subseteq[a,b],
+\]
+and
+\begin{equation}
+  \norm{R}_{\op}<\sqrt2\,d.
+  \tag{M-small}
+\end{equation}
+Then the eigenvalues of $A$ can be partitioned so that the exact exterior subspace $X_1$ has the same dimension as $Q_1$, the complementary spectrum remains in an explicitly enlarged interval, and
+\begin{equation}
+  \tan\angle(Q_1,X_1)
+  \le\frac{\norm{R}_{\op}}{d}.
+  \tag{M-5}
+\end{equation}
+
+The spectral enlargement is controlled by
+\[
+  \delta_R
+  =\norm{R}_{\op}
+    \tan\left(
+      \frac12\arctan\frac{2\norm{R}_{\op}}{d}
+    \right)
+  <d.
+\]
+The smallness condition guarantees that the perturbed spectral cluster exists with the required cardinality and remains separated. Remark 7 warns that it cannot simply be dropped: beyond the threshold, the desired middle cluster may disappear.
+
+This theorem has two logically distinct components:
+\begin{enumerate}[leftmargin=2em]
+\item spectral branch selection and cluster persistence;
+\item the tangent estimate after the correct exact subspace has been identified.
+\end{enumerate}
+A robust formal API should keep these components separable.
+
+\section{Relation to the coordinate-free Lean proof}
+
+The current theorem \code{tan_theta_le} proves, for every $x$ in the trial subspace $Z$,
+\[
+  \delta\norm{x-P_Vx}
+  \le\rho\norm{P_Vx}.
+\]
+Its coercivity hypothesis on the trial compression is the basis-free analogue of
+\[
+  \spec(A_1)
+  \subseteq(-\infty,\alpha-\delta]
+      \cup[\beta+\delta,\infty),
+\]
+while the form bounds on $V^\perp$ replace
+\[
+  \spec(\Lambda_2)\subseteq[\alpha,\beta].
+\]
+The residual bound is the normwise form of $R=AQ_1-Q_1A_1$.
+
+The proof uses a maximal projection vector in $V^\perp$ rather than explicitly constructing the graph operator. Its key coercive contradiction is the same one as Lemma 3. The result is therefore a coordinate-free modernization of Motovilov's graph argument, not an unrelated theorem.
+
+The conclusion directly supplies transversality:
+\[
+  x\in Z\cap V^\perp
+  \implies
+  \delta\norm{x}\le0
+  \implies x=0.
+\]
+In finite equal dimension, this is enough to identify $Z$ as a graph over $V$ and to recover the maximal tangent bound.
+
+\begin{formalizationmap}
+Proposition 1 & Block Hermitian operator; exterior coordinate block; exact middle spectral subspace; largest-angle tan bound & Conceptual block form of \code{tan_theta_le} \\
+Lemma 3 & Spectral coercivity forces both cross intersections to vanish & Pole-free content of \code{tan_theta_le}; should be available as a named transversality corollary \\
+Proposition 4 & Residual/Rayleigh--Ritz form of Nakatsukasa's theorem & \code{tan_theta_le} and \code{partIII_tanTheta_vector} \\
+Unitary coordinate change & $B=Q_2^*R$ and $\|B\|=\|R\|$ & Projection residual and adjoint residual lemmas in \code{TanTheta.lean} \\
+Proposition 6 & A priori compression-gap theorem plus spectral branch selection & Not the same as the current endpoint; relevant to future canonical spectral wrappers and continuation theory \\
+Remark 7 & Residual smallness is needed for cluster existence, not merely for numerical sharpness & Must remain explicit in any a priori wrapper \\
+\end{formalizationmap}
+
+\section{What this comment settles for the finite DK API}
+
+\begin{enumerate}[leftmargin=2em]
+\item The tan theorem can be stated without an assumed inverse cosine or assumed graph operator.
+\item The correct proof order is spectral coercivity $\Rightarrow$ transversality $\Rightarrow$ graph/tangent.
+\item The relaxed theorem is inherently oriented: approximate exterior versus exact interior.
+\item The current source-faithful public endpoint may remain a per-vector/operator-norm theorem even though Nakatsukasa proves more for UI norms; the two sources must not be conflated.
+\item Canonical spectral-subspace wrappers need a separate branch-selection theorem, especially in the a priori setting.
+\end{enumerate}
+
+\section*{Bibliography}
+\begin{thebibliography}{9}
+\bibitem{Mot2012}
+A. K. Motovilov,
+\emph{Comment on ``The tan theta theorem with relaxed conditions'' by Y. Nakatsukasa},
+arXiv:1204.4441v2 (2012).
+
+\bibitem{Nak2012}
+Y. Nakatsukasa,
+\emph{The tan $\theta$ theorem with relaxed conditions},
+Linear Algebra Appl. 436 (2012), 1528--1534.
+
+\bibitem{DK1970}
+C. Davis and W. M. Kahan,
+\emph{The Rotation of Eigenvectors by a Perturbation. III},
+SIAM J. Numer. Anal. 7 (1970), 1--46.
+\end{thebibliography}
+
+\end{document}

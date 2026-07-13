@@ -1,0 +1,252 @@
+\input{preamble}
+\title{Double-angle Davis--Kahan theory:\\reflection defects, generic separation, tangent branches, and canonical spectral selection}
+\author{}
+\date{Comparative formalization dossier}
+\begin{document}
+\maketitle
+
+\section*{Sources and purpose}
+\begin{sourceguide}
+\item[Primary source] Davis--Kahan (1970), especially the Section 7 reflection proof and Theorems 8.1--8.2.
+\item[Generic separation] Albrecht Seelmann, \emph{Notes on the $\sin 2\Theta$ Theorem}, arXiv:1310.2036.
+\item[Off-diagonal tangent] L. Grubi\v{s}i\'c, V. Kostrykin, K. A. Makarov, and K. Veseli\'c, \emph{The $\tan 2\Theta$ Theorem for Indefinite Quadratic Forms}, arXiv:1006.3190.
+\item[Companion literature] Albeverio--Motovilov on generic scalar $\sin 2\theta$ bounds and a priori tangent theorems.
+\item[Purpose] Determine the valid parent statements for $\sin 2\Theta$ and $\tan 2\Theta$, explain why a residual theorem needs a Ritz/Galerkin structure, and isolate the continuation theorem that selects the canonical branch.
+\end{sourceguide}
+
+\section{Why doubled angles need a separate theory}
+
+For principal angles $\theta_j\in[0,\pi/2]$, the doubled sine and tangent are
+\[
+  \sin(2\theta_j)=2\sin\theta_j\cos\theta_j,
+\]
+\[
+  \tan(2\theta_j)=\frac{2\tan\theta_j}{1-\tan^2\theta_j}.
+\]
+The sine is finite everywhere but is not monotone after $\pi/4$. The tangent has a pole at $\pi/4$ and changes sign across it. Therefore:
+\begin{itemize}
+\item an operator $\sin(2\Theta)$ theorem can be stated without an acute branch;
+\item a scalar theorem involving only the maximal angle may discard information;
+\item a $\tan(2\Theta)$ theorem must prove or assume that the angle spectrum stays on a chosen side of $\pi/4$.
+\end{itemize}
+
+\section{Reflection reduction}
+
+Let $P$ project onto the unperturbed target subspace $U$, and let $Q$ project onto a comparison subspace $V$. Define the reflection
+\[
+  J_Q:=2Q-I.
+\]
+On a principal two-plane, $J_QJ_P$ is rotation by $2\theta$. Thus the single-angle geometry between $U$ and $J_QU$ is the doubled geometry between $U$ and $V$.
+
+Let $A=A^*$ and assume $U$ reduces $A$. If $V$ reduces $B=B^*$, then $J_QBJ_Q=B$. Hence
+\[
+  A-J_QAJ_Q
+  =(A-B)-J_Q(A-B)J_Q.
+\]
+Every UI norm satisfies
+\[
+  N(A-J_QAJ_Q)\le2N(A-B).
+\]
+Applying a $\sin\Theta$ theorem to $A$ and $J_QAJ_Q$ yields the doubled-sine perturbation theorem.
+
+This is the clean parent proof. A direct expansion in principal coordinates should be reserved for the geometric identification of the cross block with $\sin(2\Theta)$.
+
+\section{Classical ordered finite-gap $\sin 2\Theta$}
+
+Davis--Kahan impose a geometric separation stronger than arbitrary disjoint spectra: the convex hull of one component does not meet the other, or equivalently a relevant ordered interval/exterior configuration exists. Then the Sylvester constant is one. The reflection proof gives
+\[
+  \delta N(\sin(2\Theta(U,V)))
+  \le2N(B-A)
+\]
+for arbitrary unitarily invariant norms.
+
+This theorem is sharp in its classical configuration. It should remain distinct from the generic separated-spectrum theorem.
+
+\section{Seelmann's generic $\sin 2\Theta$ theorem}
+
+Let
+\[
+  \spec(A)=\sigma\cup\Sigma,
+  \qquad
+  d=\dist(\sigma,\Sigma)>0,
+\]
+with no convex-hull separation. Let $V$ be a bounded self-adjoint perturbation and let $Q$ project onto any reducing subspace for $A+V$. Seelmann proves
+\[
+  \|\sin(2\Theta(E_A(\sigma),Q))\|
+  \le \frac{\pi}{2}\frac{2\|V\|}{d}
+  =\pi\frac{\|V\|}{d}.
+\]
+The projection $Q$ need not initially be a spectral projection for $A+V$.
+
+The proof replaces the ordered constant-one cross-block estimate by the generic $\pi/2$ spectral-subspace estimate. In symmetrically normed ideals the same architecture gives the corresponding ideal-gauge statement.
+
+\subsection{Operator theorem versus maximal-angle theorem}
+
+Seelmann emphasizes
+\[
+  \sin(2\|\Theta\|)\le\|\sin(2\Theta)\|.
+\]
+Equality holds when the angle spectrum is contained in $[0,\pi/4]$, but not in general. A maximal-angle scalar theorem cannot serve as the parent for arbitrary UI norms or even for the strongest operator-norm statement.
+
+This validates the repository's decision to state \code{sinTwoTheta_generalSeparation} at the operator level.
+
+\section{Residual $\sin 2\Theta$: the signature audit}
+
+Suppose $X:F\to E$ is isometric and $M=M^*$. A naive desired theorem is
+\[
+  \delta N(\sin(2\Theta(U,\range X)))
+  \le2N(AX-XM).
+\]
+This is not valid from an arbitrary coordinate operator $M$ alone. The reflection argument needs a comparison operator that is invariant under the reflection across $\range X$. The canonical choice is the block-diagonal operator formed from the Ritz compression and its complementary compression, or equivalently a Galerkin condition ensuring the residual is off-diagonal:
+\[
+  X^*(AX-XM)=0.
+\]
+
+Thus a correct parent residual theorem should use one of the following equivalent packages:
+\begin{enumerate}
+\item $M=X^*AX$ and the exact Ritz residual;
+\item an explicit Galerkin hypothesis $X^*R=0$;
+\item a reflected comparison operator $B$ reducing $\range X$ with $B-A$ controlled by the residual;
+\item a stated block defect larger than the raw residual.
+\end{enumerate}
+
+The formalization must audit \code{sinTwoTheta_residual_le} before filling its proof. A proof that silently rewrites arbitrary $M$ as the Ritz matrix would establish a different theorem.
+
+\section{The off-diagonal $\tan 2\Theta$ mechanism}
+
+The strongest doubled-tangent results arise when the perturbation is off-diagonal relative to the unperturbed spectral split. In block form,
+\[
+  A=\begin{bmatrix}A_+&0\\0&A_-\end{bmatrix},
+  \qquad
+  V=\begin{bmatrix}0&B\\B^*&0\end{bmatrix}.
+\]
+The diagonal blocks do not move directly; the rotation is driven entirely by $B$. This structure gives both a stable spectral split and the acute branch.
+
+Grubi\v{s}i\'c--Kostrykin--Makarov--Veseli\'c treat a more general indefinite quadratic-form setting. Under a relative off-diagonal bound $v$, their main estimate is
+\[
+  \|P-Q\|
+  \le
+  \sin\left(\frac12\arctan v\right)
+  <\frac{\sqrt2}{2},
+\]
+where $P$ and $Q$ are positive spectral projections before and after perturbation. Equivalently, for the maximal angle $\theta$,
+\[
+  \tan(2\theta)\le v.
+\]
+The strict bound $\|P-Q\|<\sqrt2/2$ is exactly the branch conclusion $\theta<\pi/4$.
+
+In bounded finite dimensions the form machinery specializes to an operator block estimate. The reusable content is:
+\begin{enumerate}
+\item off-diagonal structure;
+\item a sign or reflection operator $J$;
+\item positivity of the shifted indefinite form;
+\item sectorial control of the polar unitary;
+\item conversion from the polar-unitary angle to projection distance.
+\end{enumerate}
+
+\section{$\tan 2\Theta$ as a proof-carrying operator}
+
+On the branch where $\cos(2\Theta)$ is invertible and positive, define
+\[
+  \tan(2\Theta)
+  :=\sin(2\Theta)\cos(2\Theta)^{-1}.
+\]
+The definition should carry a proof that
+\[
+  \spec(\Theta)\subset[0,\pi/4).
+\]
+A totalized function assigning an arbitrary value at the pole is inappropriate for the analytic parent theorem because it can make a false statement appear total.
+
+The branch proof may come from:
+\begin{itemize}
+\item off-diagonal perturbation structure;
+\item a half-gap smallness theorem;
+\item continuation from $t=0$ together with a spectral exclusion around $\pi/4$;
+\item a direct projection bound $\|P-Q\|<\sqrt2/2$.
+\end{itemize}
+
+\section{Canonical spectral selection by continuation}
+
+Let
+\[
+  A_t=A+tH,
+  \qquad t\in[0,1].
+\]
+Choose a contour $\Gamma$ or a fixed interval/exterior decomposition separating the target cluster from its complement along the entire path. Define
+\[
+  P_t=\frac{1}{2\pi i}\int_\Gamma(z-A_t)^{-1}\,dz.
+\]
+In finite dimension, resolvent continuity implies norm continuity of $P_t$. Rank is integer-valued and locally constant, hence constant. If $\|P_t-P_s\|<1$ for nearby parameters, their ranges are graph-related and lie in the same projection component.
+
+The endpoint $P_1$ is thereby the unique spectral branch continued from $P_0$. This is the geometric content needed for Davis--Kahan Theorem 8.1 and for honest canonical $\tan 2\Theta$ statements.
+
+A theorem that defines the perturbed subspace only at $t=1$ using a numerical Borel set may choose the wrong component if eigenvalue neighborhoods overlap or if both reducing branches satisfy a coarse separation property.
+
+\section{Repulsion and the acute branch}
+
+Theorem 8.1 contains more than projection continuity. It proves that the selected eigenvalues are repelled from the gap boundary. In principal coordinates, the cosine block compares compressions of $A$ and $B$. Positivity and min--max arguments show that eigenvalues on the selected branch cannot cross inward through the gap.
+
+Theorem 8.2 supplies a quantitative criterion, often a half-gap condition, ensuring the selected projection remains within norm one of the original projection. This gives a graph representation. A stronger bound below $\sqrt2/2$ selects the $\pi/4$ branch needed by doubled tangent.
+
+The formal dependency should be:
+\[
+  \text{spectral inclusion/repulsion}
+  \Longrightarrow
+  \text{projection component}
+  \Longrightarrow
+  \text{acute or quarter-angle branch}
+  \Longrightarrow
+  \tan(2\Theta)\text{ theorem}.
+\]
+Do not reverse this by assuming an unnamed ``canonical'' acute subspace in the tangent theorem.
+
+\section{Maximal finite theorem matrix}
+
+\begin{longtable}{@{}p{0.20\textwidth}p{0.31\textwidth}p{0.40\textwidth}@{}}
+\toprule Configuration & Correct parent result & Constant and branch \\
+\midrule\endfirsthead
+\toprule Configuration & Correct parent result & Constant and branch \\
+\midrule\endhead
+Ordered/convex-hull separation & Every-UI $\sin 2\Theta$ perturbation theorem & $2/\delta$; no acute branch needed. \\
+Arbitrary separated spectra & Operator/ideal $\sin 2\Theta$ via generic Sylvester & $\pi/\delta$; operator theorem stronger than scalar maximal-angle form. \\
+Ritz residual & Every-UI residual $\sin 2\Theta$ & Requires Galerkin/off-diagonal residual structure. \\
+Off-diagonal perturbation & $\tan 2\Theta$ and projection-distance bound & Sharp half-arctangent form; branch $\Theta<\pi/4$ is derived. \\
+General perturbation, canonical cluster & Branch-selected $\tan 2\Theta$ & Needs continuation and repulsion; not valid for arbitrary reducing subspace. \\
+\bottomrule
+\end{longtable}
+
+\section{Lean-sized proof seams}
+
+\begin{enumerate}
+\item Centralize reflection and doubled-angle identities.
+\item Prove the UI reflection-defect bound.
+\item Audit the residual theorem and add the minimal Galerkin hypothesis.
+\item Prove the generic $\pi$ operator-valued theorem from the sharp generic Sylvester result.
+\item Define a proof-carrying quarter-angle branch object.
+\item Prove continuous spectral projections along $A_t$.
+\item Prove projection-component and range-equivalence lemmas from norm $<1$.
+\item Prove spectral repulsion and endpoint identification.
+\item Derive the canonical finite $\tan 2\Theta$ theorem.
+\item Add planar sharpness models on both sides of the branch threshold.
+\end{enumerate}
+
+\section{Repository map}
+
+\begin{formalizationmap}
+Reflection defect & Reduction of doubled sine to a single-angle theorem & \code{SinTwoTheta.lean} has a green perturbation route; residual parent still needs audit. \\
+Generic separation & $\pi$ constant and symmetrically normed ideals & Experimental \code{DoubleAngle.lean}; public finite theorem should follow once generic Sylvester is unconditional. \\
+Quarter-angle branch & Proof-carrying $\tan(2\Theta)$ & \code{TanTwoTheta.lean}; several branch and selection results remain sorry. \\
+Continuation & Norm-continuous Riesz/spectral projection path & Experimental \code{Continuation.lean}; primary missing topological root. \\
+Repulsion & Theorem 8.1 compression and eigenvalue movement & Signatures present in \code{TanTwoTheta.lean}; proofs incomplete. \\
+Half-gap criterion & Theorem 8.2 acute selection & \code{Generalized.lean} and \code{TanTwoTheta.lean}; should be downstream of continuation. \\
+\end{formalizationmap}
+
+\section*{Bibliography}
+\begin{thebibliography}{9}
+\bibitem{DK1970} C. Davis and W. M. Kahan, \emph{The Rotation of Eigenvectors by a Perturbation. III}, SIAM J. Numer. Anal. 7 (1970), 1--46.
+\bibitem{Seelmann2013} A. Seelmann, \emph{Notes on the $\sin 2\Theta$ Theorem}, arXiv:1310.2036.
+\bibitem{GKMV2010} L. Grubi\v{s}i\'c, V. Kostrykin, K. A. Makarov, and K. Veseli\'c, \emph{The $\tan 2\Theta$ Theorem for Indefinite Quadratic Forms}, arXiv:1006.3190.
+\bibitem{AM2013} S. Albeverio and A. K. Motovilov, generic $\sin 2\theta$ estimates for spectral subspaces, Complex Analysis and Operator Theory 7 (2013), 1389--1416.
+\end{thebibliography}
+
+\end{document}
