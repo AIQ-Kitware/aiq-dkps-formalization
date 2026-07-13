@@ -1,0 +1,296 @@
+\input{preamble}
+\title{Grubi\v{s}i\'c--Kostrykin--Makarov--Veseli\'c (2013): tan $2\Theta$ through signs, polar factors, and indefinite forms}
+\author{}
+\date{Distilled reconstruction for the finite Davis--Kahan formalization}
+\begin{document}
+\maketitle
+
+\section*{Source map and scope}
+\begin{sourceguide}
+\item[Primary source] Luka Grubi\v{s}i\'c, Vadim Kostrykin, Konstantin A. Makarov, and Kre\v{s}imir Veseli\'c, \emph{The Tan $2\Theta$ Theorem for Indefinite Quadratic Forms}, Journal of Spectral Theory 3 (2013), 83--100, DOI \href{https://doi.org/10.4171/JST/38}{10.4171/JST/38}; preprint \href{https://arxiv.org/abs/1006.3190}{arXiv:1006.3190}.
+\item[Paper scope] Possibly unbounded, not necessarily semibounded self-adjoint operators defined by closed quadratic forms; off-diagonal form perturbations; sign operators and positive spectral projections; sharp quarter-turn estimates.
+\item[Formalization target] The bounded finite specialization underlying \code{TanTwoTheta.lean}: off-diagonal perturbations, reflection anticommutation, sign/projector geometry, the sharp factor $2$, and proof of \code{AvoidsQuarterTurn}.
+\item[Source-faithful norm scope] The principal theorem is an operator-norm/maximal-angle result. The repository may derive stronger finite UI-norm descendants by separate finite majorization arguments; those strengthenings should not be retroactively attributed to this paper.
+\end{sourceguide}
+
+The paper reveals a conceptual form of tan $2\Theta$ that is especially useful for formalization. Instead of beginning with a tangent operator, it compares two self-adjoint involutions: the sign of the unperturbed operator and the sign of the perturbed operator. The angle bound follows from the polar factor of a sectorial operator. This simultaneously proves the numerical estimate and the strict quarter-turn branch.
+
+\section{The bounded classical model}
+
+Let
+\[
+ A=
+ \begin{pmatrix}
+ A_+&0\\
+ 0&-A_-
+ \end{pmatrix}
+\]
+on $\Hsp=\Hsp_+\oplus\Hsp_-$, with $A_+>0$ and $A_->0$. Let
+\[
+ J=
+ \begin{pmatrix}
+ I&0\\
+ 0&-I
+ \end{pmatrix}
+\]
+be the grading involution. An off-diagonal self-adjoint perturbation has the form
+\[
+ V=
+ \begin{pmatrix}
+ 0&B\\
+ B^*&0
+ \end{pmatrix},
+\]
+equivalently
+\[
+ JV=-VJ.
+\]
+Set $L=A+V$. The reference projection and perturbed positive spectral projection are
+\[
+ P=E_A((0,\infty))=\frac{I+J}{2},
+ \qquad
+ Q=E_L((0,\infty))=\frac{I+\operatorname{sign} L}{2}.
+\]
+
+The classical tan $2\Theta$ estimate reads
+\[
+ \norm{\tan(2\Theta)}_{\op}
+ \le\frac{2\norm V_{\op}}{d},
+\]
+where $d$ is the spectral separation between the two diagonal blocks in the appropriate shifted configuration. Equivalently,
+\[
+ \norm{P-Q}_{\op}
+ \le
+ \sin\left(\frac12\arctan\frac{2\norm V}{d}\right)
+ <\frac{1}{\sqrt2}.
+\]
+The strict final inequality is not an afterthought. It says the perturbed positive subspace lies on the same side of the quarter-turn branch as the reference subspace.
+
+\section{Quadratic-form formulation}
+
+The paper replaces bounded operators by a symmetric quadratic form $\mathfrak a$ and a self-adjoint involution $J$. Its basic hypothesis requires
+\[
+ \mathfrak a_J[x,y]:=\mathfrak a[x,Jy]
+\]
+to be positive definite and closed. The eigenspaces of $J$ supply the positive and negative reference decomposition.
+
+A symmetric perturbation form $\mathfrak v$ is off-diagonal when
+\[
+ \mathfrak v[Jx,y]=-\mathfrak v[x,Jy].
+\]
+The relative size is measured by
+\[
+ v_0
+ =
+ \sup_{x\ne0}
+ \frac{\abs{\mathfrak v[x]}}{\mathfrak a_J[x]}.
+\]
+For a shift $\mu$ in the unperturbed gap, define
+\[
+ \mathfrak a_\mu[x,y]
+ =\mathfrak a[x,Jy]-\mu\ip{x}{Jy},
+ \qquad
+ v_\mu
+ =
+ \sup_{x\ne0}
+ \frac{\abs{\mathfrak v[x]}}{\mathfrak a_\mu[x]}.
+\]
+The optimization over $\mu$ is the form-theoretic analogue of choosing the best center of a finite spectral gap.
+
+In finite dimensions, all forms are bounded and represented by matrices. Nevertheless this formulation explains which assumptions are structural:
+\begin{itemize}[leftmargin=2em]
+\item a grading/reflection $J$;
+\item positivity of the signed unperturbed operator $JA$ after a shift;
+\item off-diagonal anticommutation of the perturbation;
+\item a relative perturbation size.
+\end{itemize}
+
+\section{The polar-factor mechanism}
+
+For each admissible shift $\mu$, the paper constructs a sectorial operator $T_\mu$ representing the perturbed form relative to the positive form $\mathfrak a_\mu$. Its polar decomposition is
+\[
+ T_\mu=U_\mu\abs{T_\mu}.
+\]
+The sectorial semi-angle is bounded by
+\[
+ \theta_\mu=\arctan v_\mu.
+\]
+A key structural identity connects the perturbed self-adjoint operator $L-\mu$ to $T_\mu$:
+\[
+ L-\mu=JT_\mu
+\]
+at the form/representation level. Consequently
+\[
+ \abs{T_\mu}=\abs{L-\mu},
+ \qquad
+ U_\mu=J\operatorname{sign}(L-\mu).
+\]
+Because $\mu$ remains inside a resolvent gap, $\operatorname{sign}(L-\mu)$ is independent of the particular shift.
+
+The polar factor of a sectorial operator stays in the same sector. Therefore
+\[
+ \norm{I-U_\mu}
+ \le
+ 2\sin\left(\frac12\arctan v_\mu\right).
+\]
+Using $U_\mu=J\operatorname{sign} L$ gives
+\[
+ \norm{J-\operatorname{sign} L}
+ \le
+ 2\sin\left(\frac12\arctan v_\mu\right).
+\]
+Since
+\[
+ P-Q=\frac{J-\operatorname{sign} L}{2},
+\]
+one obtains the projector estimate
+\begin{equation}
+ \norm{P-Q}
+ \le
+ \sin\left(\frac12\arctan v\right)
+ <\frac1{\sqrt2},
+ \qquad
+ v:=\inf_\mu v_\mu.
+ \tag{GKMMV-proj}\label{GKMMV-proj}
+\end{equation}
+
+This proof packages branch selection automatically: $\arctan v<\pi/2$, so the half-angle is strictly below $\pi/4$.
+
+\section{Theorem 3.1: indefinite sign-subspace rotation}
+
+Let $A$ and $L$ be the self-adjoint operators associated with the unperturbed and perturbed forms. Let
+\[
+ P=E_A((0,\infty)),
+ \qquad
+ Q=E_L((0,\infty)).
+\]
+Under the form hypotheses, Theorem 3.1 states exactly the bound \eqref{GKMMV-proj}. In angle language,
+\[
+ \norm\Theta(P,Q)
+ \le
+ \frac12\arctan v
+ <\frac{\pi}{4}.
+\]
+Equivalently,
+\[
+ \norm{\tan(2\Theta)}\le v.
+\]
+For the bounded additive model, $v$ reduces to a normalized off-diagonal perturbation size and recovers the familiar factor $2\norm V/d$.
+
+\section{Semibounded operators with a finite gap}
+
+The paper next treats a semibounded self-adjoint operator with a finite gap $(\alpha,\beta)$. Let the reference spectral projection select one side of the gap, and assume the perturbation form is off-diagonal relative to this projection.
+
+With distances $d_+$ and $d_-$ from the chosen shift/selected spectrum to the two gap edges, Theorem 4.2 gives
+\[
+ \norm{P-Q}
+ \le
+ \sin\left(
+   \frac12\arctan\frac{2v}{\delta}
+ \right)
+ <\frac1{\sqrt2},
+\]
+where the dimensionless geometric factor $\delta$ is built from $d_+$ and $d_-$; the paper distinguishes two configurations, producing respectively
+\[
+ \delta=\frac{d_++d_-}{\sqrt{d_+d_-}}
+ \quad\text{or}\quad
+ \delta=\frac{d_+-d_-}{\sqrt{d_+d_-}}.
+\]
+The first configuration is the stable interior-gap analogue of the classical theorem; the second records a more delicate asymmetric arrangement.
+
+A two-dimensional example attains the displayed angle. This confirms both the factor $2$ and the half-arctangent functional form. Any finite theorem that changes the constant or drops the branch conclusion must therefore be clearly labeled as a different result.
+
+\section{Reflection and sign dictionaries for Lean}
+
+The finite formalization can avoid quadratic-form infrastructure while retaining the proof's reusable core.
+
+Given a subspace $U$, define its reflection
+\[
+ J_U=2P_U-I.
+\]
+For a self-adjoint operator $L$ with no zero eigenvalue,
+\[
+ \operatorname{sign} L=2E_L((0,\infty))-I.
+\]
+Thus the difference of projections and the difference of involutions satisfy
+\[
+ 2(P_U-P_V)=J_U-J_V.
+\]
+The direct-rotation phase is encoded by
+\[
+ J_UJ_V,
+\]
+whose eigenvalues on a principal two-plane are $e^{\pm2i\theta}$. This is the exact origin of the doubled angle.
+
+The following equivalences are high-value API lemmas:
+\begin{align*}
+ \norm{P_U-P_V}<1/\sqrt2
+ &\Longleftrightarrow
+ \theta_{\max}<\pi/4,\\
+ \theta_{\max}<\pi/4
+ &\Longrightarrow
+ \cos(2\Theta)>0,\\
+ \cos(2\Theta)>0
+ &\Longrightarrow
+ \tan(2\Theta)\text{ is everywhere defined}.
+\end{align*}
+They separate the branch proof from the subsequent norm estimate.
+
+\section{Relation to the Riccati proof}
+
+When $V$ is off-diagonal and $Q$ is a graph subspace, its graph operator $X$ solves a Riccati equation. The tangent identities are
+\[
+ \tan\Theta=\abs X,
+ \qquad
+ \tan(2\Theta)=2\abs X(I-\abs X^2)^{-1}.
+\]
+A Riccati manipulation yields a Sylvester equation whose unknown is the doubled tangent expression. The paper's sign/polar proof and the finite Riccati/Sylvester proof are two views of the same geometry:
+\begin{itemize}[leftmargin=2em]
+\item the sign proof establishes the acute branch globally;
+\item the Riccati proof exposes the residual and is well suited to UI-norm estimates;
+\item both use off-diagonality essentially.
+\end{itemize}
+
+For the current Lean development, it may be best to prove branch selection with reflection/sign or spectral repulsion, then prove the quantitative tangent estimate with the existing finite Sylvester/Ky Fan machinery.
+
+\section{Finite formalization map}
+
+\begin{formalizationmap}
+Grading & $J=2P-I$, a self-adjoint isometric involution & Projection/reflection lemmas should be centralized.\\
+Off-diagonal perturbation & $JV=-VJ$, equivalently diagonal compressions vanish & Existing hypotheses around \code{offDiagonal} and residual identities should expose this equivalence.\\
+Sign projection & $E_L((0,\infty))=(I+\operatorname{sign} L)/2$ & Finite spectral-projector wrappers can express this through eigenvalue selection.\\
+Quarter-turn avoidance & $\norm{P-Q}<1/\sqrt2$ implies every angle is $<\pi/4$ & \code{isAcute_canonical_tanTwoTheta} and \code{largestPrincipalAngle_lt_pi_div_four} target this content.\\
+Raw tan $2\Theta$ & $\delta N(\tan2\Theta)\le2N(V)$ & \code{tanTwoTheta_perturbation_le} and norm-specific wrappers are scaffolded.\\
+Canonical spectral theorem & Choose the perturbed spectral subspace and prove branch/gap persistence & \code{tanTwoTheta_spectralSubspace_le} is the intended wrapper.\\
+Sharpness & Two-dimensional off-diagonal model attains half-arctangent bound & Should become a finite regression example after the endpoint is complete.\\
+\end{formalizationmap}
+
+\section{Proof guidance for the remaining finite endpoint}
+
+A stable route is:
+\begin{enumerate}[leftmargin=2em]
+\item Represent the reference subspace by its reflection $J$ and show the perturbation anticommutes with $J$.
+\item Choose a shift in the gap so the signed diagonal part $J(A-\mu I)$ is positive.
+\item Prove spectral repulsion or a positive lower bound for the perturbed signed operator.
+\item Deduce $\norm{P-Q}<1/\sqrt2$ and hence \code{AvoidsQuarterTurn}.
+\item Construct the graph/angular operator only after the branch has been established.
+\item Derive the Riccati identity and isolate the linear Sylvester equation for the doubled tangent embedding.
+\item Apply the ordered-gap Ky Fan/UI estimate, yielding the factor $2$.
+\item Add the operator-norm Part III alias and the strict quarter-turn conclusion together.
+\end{enumerate}
+
+\section{Failure modes to exclude}
+
+\begin{itemize}[leftmargin=2em]
+\item A bound on $\sin(2\Theta)$ alone does not choose between angles below and above $\pi/4$; branch selection needs a separate argument.
+\item Off-diagonal means anticommutation with the reference reflection, not merely that one displayed matrix block happens to vanish in an arbitrary decomposition.
+\item Do not divide by $\cos(2\Theta)$ before proving it is invertible and positive on the selected branch.
+\item Do not attribute an all-UI-norm finite strengthening to this operator-norm form theorem.
+\item Do not discard the factor $2$: it is intrinsic to the double-angle identity and is sharp in dimension two.
+\end{itemize}
+
+\section*{Distilled conclusion}
+
+The most reusable lesson of the paper is that tan $2\Theta$ is fundamentally a theorem about two sign involutions. Off-diagonal perturbation makes the perturbed sign accessible through a sectorial polar factor; the polar angle gives both the sharp quantitative estimate and strict avoidance of the quarter turn. In the finite Lean theory, this sign/reflection layer should establish the branch, while Riccati and Sylvester machinery supplies the source-faithful residual and norm inequalities.
+
+\end{document}
