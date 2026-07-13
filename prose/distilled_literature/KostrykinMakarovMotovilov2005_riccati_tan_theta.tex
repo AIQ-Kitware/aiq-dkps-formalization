@@ -1,0 +1,268 @@
+\input{preamble}
+\title{Kostrykin--Makarov--Motovilov (2005): Riccati graph subspaces and the tan $\Theta$ theorem}
+\author{}
+\date{Distilled reconstruction for the finite Davis--Kahan formalization}
+\begin{document}
+\maketitle
+
+\section*{Source map and formalization scope}
+\begin{sourceguide}
+\item[Primary source] Vadim Kostrykin, Konstantin A. Makarov, and Alexander K. Motovilov, \emph{On the Existence of Solutions to the Operator Riccati Equation and the tan $\Theta$ Theorem}, Integral Equations and Operator Theory 51 (2005), 121--140; preprint \href{https://arxiv.org/abs/math/0210032}{arXiv:math/0210032}.
+\item[Coverage] Theorems 1 and 2; graph-subspace equivalence and block diagonalization in Theorem 2.3; spectral uniqueness; the a priori estimate of Theorem 5.1; the use of tan $2\Theta$ for strict contractivity.
+\item[Formalization target] \code{DavisKahan.Experimental.Literature.Riccati}, \code{DavisKahanExt.Riccati}, and the graph/no-pole interpretation of the source-faithful finite tan $\Theta$ theorem.
+\item[Scope boundary] The paper permits a possibly unbounded diagonal block $C$ and uses analytic factorization for existence. The repository's immediate target is finite-dimensional bounded operators over arbitrary \code{RCLike}; the graph, Riccati, angle, uniqueness, and norm arguments survive without domain theory.
+\item[Logical separation] The paper has three distinct layers: existence of a graph solution, identification of its spectral location, and a tan bound once those facts hold. Do not collapse them into one theorem with hidden assumptions.
+\end{sourceguide}
+
+\section{The block operator and its Riccati equation}
+
+On an orthogonal decomposition
+\[
+ \Hsp=\Hsp_A\oplus\Hsp_C,
+\]
+consider
+\[
+ H=
+ \begin{pmatrix}
+ A&B\\
+ B^*&C
+ \end{pmatrix},
+\]
+where $A=A^*$ is bounded, $C=C^*$ may be unbounded in the source, and $B:\Hsp_C\to\Hsp_A$ is bounded. A bounded operator $X:\Hsp_A\to\Hsp_C$ is sought satisfying
+\begin{equation}
+ XA-CX+XBX=B^*.
+ \tag{KMM-R}\label{KMM-R}
+\end{equation}
+The graph is
+\[
+ \mathcal G(X)=\{x\oplus Xx:x\in\Hsp_A\}.
+\]
+
+The nonlinear term $XBX$ is not an optional complication. It records the fact that the target subspace is invariant for the full block operator rather than merely approximately invariant for its diagonal part.
+
+\section{Graph reduction if and only if Riccati}
+
+For $x\in\Hsp_A$,
+\[
+ H(x\oplus Xx)
+ =
+ (Ax+BXx)\oplus(B^*x+CXx).
+\]
+This belongs to $\mathcal G(X)$ exactly when
+\[
+ B^*x+CXx=X(Ax+BXx),
+\]
+which is equivalent to \eqref{KMM-R}. Since $H$ is self-adjoint, invariance of the graph implies reduction.
+
+The paper packages the equivalence as:
+\[
+ X\text{ solves \eqref{KMM-R}}
+ \quad\Longleftrightarrow\quad
+ \mathcal G(X)\text{ reduces }H.
+\]
+This elementary finite-dimensional identity should be a foundational reusable theorem, not reproved inside every tan argument.
+
+Define
+\[
+ V=
+ \begin{pmatrix}
+ I&-X^*\\
+ X&I
+ \end{pmatrix}.
+\]
+When $X$ solves the Riccati equation,
+\[
+ V^{-1}HV
+ =
+ \begin{pmatrix}
+ A+BX&0\\
+ 0&C-B^*X^*
+ \end{pmatrix}.
+\]
+The diagonal blocks are generally only similar to self-adjoint operators. Conjugating them by $(I+X^*X)^{1/2}$ and $(I+XX^*)^{1/2}$ produces self-adjoint representatives. This explains why their spectra are real and why they are the correct spectral parts attached to the graph and its orthogonal complement.
+
+\section{The graph-angle dictionary}
+
+Let $P_A$ be the projection onto $\Hsp_A\oplus\{0\}$ and $P_X$ the projection onto $\mathcal G(X)$. The operator angle $\Theta$ between these subspaces satisfies
+\[
+ \Theta=\arctan\sqrt{X^*X}.
+\]
+Consequently
+\[
+ \tan\Theta=\sqrt{X^*X},
+ \qquad
+ \norm{\tan\Theta}_{\op}=\norm{X}_{\op},
+\]
+and
+\[
+ \norm{P_A-P_X}_{\op}
+ =\frac{\norm X}{\sqrt{1+\norm X^2}}.
+\]
+Thus strict contractivity $\norm X<1$ is exactly the acute branch condition
+\[
+ \norm\Theta<\frac{\pi}{4}.
+\]
+
+The finite formalization should expose this dictionary in both directions:
+\begin{itemize}[leftmargin=2em]
+\item transversality to the vertical coordinate space gives a unique graph operator;
+\item the graph operator gives the tangent-angle operator;
+\item contractivity selects the quarter-turn branch required by tan $2\Theta$.
+\end{itemize}
+
+\section{Theorem 1: existence in a finite gap}
+
+Assume $C$ has a finite spectral gap
+\[
+ \Delta=(\alpha,\beta)
+\]
+containing $\spec(A)$, and let
+\[
+ d=\dist(\spec(A),\spec(C)).
+\]
+Theorem 1(i) states that if
+\[
+ \norm B<\sqrt{d\abs\Delta},
+\]
+then the spectrum of $H$ inside $\Delta$ is a proper closed subset of $\Delta$, and its spectral subspace is the graph of a bounded solution $X$ of \eqref{KMM-R}. Moreover $X$ is uniquely characterized among bounded solutions by
+\[
+ \spec(A+BX)\subset\Delta,
+ \qquad
+ \spec(C-B^*X^*)\subset\R\setminus\Delta.
+\]
+
+If $C$ is also bounded and
+\[
+ \norm B<\sqrt{d(\abs\Delta-d)},
+\]
+then Theorem 1(ii) proves $\norm X<1$ and gives the half-angle estimate
+\[
+ \norm X
+ \le
+ \tan\left[
+  \frac12\arctan
+  \frac{2\norm{AB+BC}}
+       {d(\abs\Delta-d)-\norm B^2}
+ \right]
+ <1.
+\]
+The exact expression belongs to the paper's a priori existence theory. It is not the same theorem as the simpler a posteriori tan bound below.
+
+\section{Theorem 2: the extended tan $\Theta$ estimate}
+
+Theorem 2 makes no a priori assumption on the mutual position of $\spec(A)$ and $\spec(C)$. Instead it assumes that a bounded Riccati solution already exists and that its graph spectral part lies inside a gap of $C$.
+
+Let $\Delta$ be a finite or infinite spectral gap of $C$. Suppose $X$ solves \eqref{KMM-R}, so $\mathcal G(X)$ reduces $H$, and suppose
+\[
+ \spec(H|_{\mathcal G(X)})
+\]
+is a proper closed subset of $\Delta$. Set
+\[
+ \delta
+ =\dist\bigl(\spec(H|_{\mathcal G(X)}),\spec(C)\bigr).
+\]
+Then
+\begin{equation}
+ \norm X\le\frac{\norm B}{\delta},
+ \qquad
+ \norm{\tan\Theta}\le\frac{\norm B}{\delta}.
+ \tag{KMM-tan}\label{KMM-tan}
+\end{equation}
+
+This is the decisive source-faithful denominator. It uses the spectrum of the actual graph restriction $H|_{\mathcal G(X)}$, equivalently the self-adjoint representative of $A+BX$, against the original complementary block $C$.
+
+The paper explicitly warns that a tempting symmetric replacement generally fails. One cannot simply replace $\delta$ by
+\[
+ \dist\bigl(\spec(C-B^*X^*),\spec(A)\bigr)
+\]
+and expect the same inequality. The direction of the spectral gap is part of the theorem.
+
+\section{Why the pole cannot occur}
+
+The graph formulation itself excludes an angle of $\pi/2$: $\mathcal G(X)$ is transverse to $\Hsp_C$. In a theorem stated directly for two subspaces, this must be proved rather than assumed.
+
+A finite-dimensional route is:
+\begin{enumerate}[leftmargin=2em]
+\item identify the target reducing subspace by its spectral location;
+\item prove its intersection with the wrong coordinate subspace is zero using the spectral gap;
+\item use dimension balance to obtain transversality in both directions;
+\item construct the unique graph map $X$;
+\item translate its norm to $\tan\Theta$.
+\end{enumerate}
+This is the bridge between the abstract Riccati theorem and Nakatsukasa's pole-free finite matrix statement.
+
+\section{Proof mechanism for the tan bound}
+
+After conjugating the graph restriction to a self-adjoint operator $\Lambda$ on $\Hsp_A$, the Riccati equation can be reorganized as a linear Sylvester equation for a normalized graph operator. Schematically,
+\[
+ C Y-Y\Lambda=T,
+\]
+where the normalization absorbs $(I+X^*X)^{\pm1/2}$ and $T$ is controlled by $B$.
+
+The spectra of $C$ and $\Lambda$ are separated by $\delta$. The ordered/interval gap permits a constant-one Sylvester estimate,
+\[
+ \delta\norm Y\le\norm T.
+\]
+Undoing the normalization yields \eqref{KMM-tan}. This is why the result remains sharp and why the proof does not require a smallness assumption on $B$ once the graph and spectral localization are given.
+
+For Lean, there are two possible proof presentations:
+\begin{itemize}[leftmargin=2em]
+\item derive the exact normalized Sylvester equation and apply the existing ordered-gap theorem; or
+\item use the current coercive per-vector tan argument directly, then prove equivalence to the graph formulation.
+\end{itemize}
+The first is closer to the paper's operator architecture; the second may be shorter for the existing finite API.
+
+\section{A priori bounds and strict contractivity}
+
+Theorem 5.1 combines existence and spectral localization with Theorem 2. If the graph solution from Theorem 1 has its perturbed spectral set at distance $\widetilde\delta$ from $\spec(C)$, then
+\[
+ \norm X\le\frac{\norm B}{\widetilde\delta}.
+\]
+The work is therefore split cleanly:
+\begin{enumerate}[leftmargin=2em]
+\item construct the graph spectral subspace;
+\item localize its spectrum;
+\item feed that distance into the a posteriori tan theorem.
+\end{enumerate}
+
+For strict contractivity, the paper shifts the block operator and applies a tan $2\Theta$ theorem to its square. Squaring converts a finite interior gap into an ordered spectral configuration while preserving an off-diagonal structure. The resulting half-angle formula proves $\norm X<1$ under the stated threshold. A low-dimensional example shows the threshold is sharp.
+
+This shifted-square idea is valuable for the finite formalization: branch selection for tan $2\Theta$ can often be proved from a positivity or ordered-gap theorem applied to a square, instead of manipulating inverse cosine operators directly.
+
+\section{Finite formalization map}
+
+\begin{formalizationmap}
+Block operator data & $H=\begin{psmallmatrix}A&B\\B^*&C\end{psmallmatrix}$ on an orthogonal sum & \code{BlockOperatorData} and \code{blockOperator} are scaffolded.\\
+Graph subspace & $\mathcal G(X)=\{x\oplus Xx\}$ & \code{blockGraph} exists.\\
+Riccati equation & Graph invariance/reduction iff nonlinear defect vanishes & \code{riccatiDefect}, \code{SolvesRiccati}, and \code{graph_reduces_iff_solvesRiccati} exist.\\
+Block diagonalization & Similarity to $A+BX$ and $C-B^*X^*$ & A theorem seam exists but should be connected to spectral localization.\\
+Graph angle & $\Theta=\arctan\sqrt{X^*X}$ and $\norm{\tan\Theta}=\norm X$ & Needs a stable coordinate-free theorem connecting graph maps to existing angle operators.\\
+A posteriori tan theorem & Gap between graph restriction and $C$ gives $\delta\norm X\le\norm B$ & The finite per-vector tan theorem captures the no-pole content; a graph wrapper remains high value.\\
+Existence and uniqueness & Finite-gap spectral subspace is the unique graph solution with specified spectral parts & Scaffolded but not the immediate prerequisite for the classical Part III endpoint.\\
+Strict contraction & Shift-square plus tan $2\Theta$ selects $\norm X<1$ & Maps to quarter-turn avoidance and canonical branch selection.\\
+\end{formalizationmap}
+
+A high-value implementation order is:
+\begin{enumerate}[leftmargin=2em]
+\item finish the graph/reduction/Riccati equivalence in the reusable bounded finite setting;
+\item prove the graph-angle and projector formulas;
+\item wrap the existing no-pole tan theorem as a graph-subspace theorem with the exact KMM denominator;
+\item prove spectral-subspace transversality automatically under the finite interval/exterior hypotheses;
+\item only then attack global existence or analytic factorization analogues.
+\end{enumerate}
+
+\section{Failure modes to exclude}
+
+\begin{itemize}[leftmargin=2em]
+\item Do not infer existence of a Riccati solution from spectral separation alone; the paper stresses that separation by itself is insufficient in general.
+\item Do not use the spectrum of $C-B^*X^*$ against $A$ as an interchangeable denominator.
+\item Do not state a tan theorem before proving transversality or otherwise excluding a principal angle of $\pi/2$.
+\item Do not confuse the a posteriori estimate \eqref{KMM-tan} with the small-perturbation assumptions needed to construct the graph in Theorem 1.
+\item Do not treat strict contractivity as a mere numerical improvement; it is the branch-selection statement $\Theta<\pi/4$.
+\end{itemize}
+
+\section*{Distilled conclusion}
+
+The Riccati equation is the algebraic certificate that a perturbed spectral subspace is a graph. Once that graph and its spectral location are known, the tan $\Theta$ estimate is a sharp constant-one Sylvester theorem with no perturbation-smallness assumption. The finite Lean development should separate existence, transversality, graph-angle geometry, and the final norm bound, then expose thin wrappers connecting the source theorem to the classical Part III API.
+
+\end{document}

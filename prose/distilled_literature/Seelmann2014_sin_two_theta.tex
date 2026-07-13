@@ -1,0 +1,294 @@
+\input{preamble}
+\title{Seelmann (2014): generic sin $2\Theta$, operator angles, and the sharp $\pi/2$ Sylvester route}
+\author{}
+\date{Distilled reconstruction for the finite Davis--Kahan formalization}
+\begin{document}
+\maketitle
+
+\section*{Source map and formalization scope}
+\begin{sourceguide}
+\item[Primary source] Albrecht Seelmann, \emph{Notes on the sin $2\Theta$ Theorem}, Integral Equations and Operator Theory 79 (2014), 579--597, DOI \href{https://doi.org/10.1007/s00020-014-2127-z}{10.1007/s00020-014-2127-z}; preprint \href{https://arxiv.org/abs/1310.2036}{arXiv:1310.2036}.
+\item[Coverage] Theorem 1 and its spectral-projection corollary; operator-angle identities in Section 2; the sharp self-adjoint Sylvester representation in Theorem 3.1; the symmetric sin $\Theta$ ideal theorem in Proposition 4.1; the generic ideal-valued sin $2\Theta$ theorem in Theorem 4.2.
+\item[Formalization target] The bridge between \code{SinTwoThetaUINorm}, the arbitrary-separated \code{Sylvester}/\code{ReciprocalMultiplier} chain, projection/reflection geometry, and canonical perturbed spectral-subspace wrappers.
+\item[Attribution boundary] Davis--Kahan's ordered/convex-hull configurations admit constant one. Seelmann's generic separated-spectrum theorem carries the sharp universal Sylvester factor $\pi/2$. These are complementary APIs, not contradictory constants for the same hypotheses.
+\item[Branch warning] A small value of $\sin(2\Theta)$ does not by itself determine whether an angle lies below or above $\pi/4$. Canonical spectral selection or a separate continuity/acute-branch argument is required.
+\end{sourceguide}
+
+\section{The generic sin $2\Theta$ theorem}
+
+Let $A=A^*$ have spectrum split into disjoint closed sets
+\[
+ \spec(A)=\sigma\cup\Sigma,
+ \qquad
+ d=\dist(\sigma,\Sigma)>0.
+\]
+Let $V=V^*$ be bounded. Let $Q$ project onto an arbitrary reducing subspace of $A+V$, and suppose the spectral parts associated with $Q$ and $Q^\perp$ are paired with $\sigma$ and $\Sigma$ in the cross-separated sense required by the theorem.
+
+Set
+\[
+ P=E_A(\sigma),
+ \qquad
+ \Theta=\Theta(P,Q).
+\]
+Theorem 1 gives the generic estimate
+\begin{equation}
+ \norm{\sin(2\Theta)}_{\op}
+ \le
+ \frac{\pi}{2}\frac{2\norm V_{\op}}{d}.
+ \tag{S-generic-sin2}
+\end{equation}
+The key generality is that the two spectral components need only be separated by distance $d$; neither must lie in the convex hull complement of the other.
+
+In the classical Davis--Kahan ordered or convex-hull separation geometry, the corresponding Sylvester inverse has norm $1/d$, so the factor $\pi/2$ is replaced by $1$. The source-faithful finite API should preserve both results:
+\begin{itemize}[leftmargin=2em]
+\item a constant-one Part III sin $2\Theta$ theorem under the classical gap geometry;
+\item a generic arbitrary-separated theorem with constant $\pi/2$.
+\end{itemize}
+
+\section{Operator angle without a direct rotation}
+
+For orthogonal projections $P,Q$, define
+\begin{align*}
+ C(P,Q)&=PQP+P^\perp Q^\perp P^\perp,\\
+ S(P,Q)&=PQ^\perp P+P^\perp QP^\perp.
+\end{align*}
+These positive contractions satisfy
+\[
+ C(P,Q)+S(P,Q)=I.
+\]
+The operator angle is
+\[
+ \Theta(P,Q)
+ =\arccos\sqrt{C(P,Q)}
+ =\arcsin\sqrt{S(P,Q)}.
+\]
+A fundamental identity is
+\[
+ (P-Q)^2=S(P,Q)=\sin^2\Theta,
+\]
+so
+\begin{equation}
+ \abs{P-Q}=\sin\Theta,
+ \qquad
+ \norm{P-Q}=\norm{\sin\Theta}.
+ \tag{S-angle-proj}\label{S-angle-proj}
+\end{equation}
+This definition remains valid even when $P$ and $Q$ are not equivalently positioned and a global direct rotation is unavailable.
+
+For finite formalization, \eqref{S-angle-proj} is the principal dictionary from abstract angle maps to the sharp projector-difference theorem. It should be available independently of any later direct-rotation construction.
+
+\section{The reflection/mirror identity for doubled angles}
+
+Define the reflection across $\range Q$ by
+\[
+ K=Q-Q^\perp=2Q-I.
+\]
+Conjugating $P$ by $K$ gives the mirror subspace
+\[
+ \widetilde P=KPK.
+\]
+On each principal two-plane, reflection across $Q$ sends the line $P$ to a line at twice the original angle. Seelmann's operator identity packages this as
+\[
+ \sin\Theta(P,\widetilde P)
+ \quad\text{unitarily/singular-value equivalent to}\quad
+ \sin(2\Theta(P,Q)).
+\]
+At the projector level, the corresponding difference $P-KPK$ should not be expanded informally; the stable formal route is to prove the principal-block identity or an exact polynomial identity in $P$ and $Q$, then pass to singular values.
+
+The mirror construction is the clean explanation for why a sin $2\Theta$ theorem can be reduced to a sin $\Theta$ theorem: compare $P$ with its reflection across the perturbed reducing subspace.
+
+\section{The sharp self-adjoint Sylvester theorem}
+
+Let $B_0$ and $B_1$ be self-adjoint operators with
+\[
+ \dist(\spec(B_0),\spec(B_1))\ge d>0.
+\]
+For a bounded operator $T$, the Sylvester equation
+\begin{equation}
+ YB_0-B_1Y=T
+ \tag{S-Sylv}
+\end{equation}
+has a unique strong solution.
+
+Choose $f_d\in L^1(\R)$ whose Fourier transform satisfies
+\[
+ \widehat f_d(\lambda)=\frac1\lambda
+ \qquad\text{for }\abs\lambda\ge d.
+\]
+Then the solution has the weak integral representation
+\begin{equation}
+ \ip{h}{Yg}
+ =
+ \int_{\R}
+ \ip{h}{e^{itB_1}Te^{-itB_0}g}
+ f_d(t)\,dt.
+ \tag{S-Fourier}
+\end{equation}
+The optimal reciprocal-kernel mass is
+\[
+ \inf\norm{f_d}_{L^1}=\frac{\pi}{2d}.
+\]
+Therefore
+\begin{equation}
+ \norm Y
+ \le
+ \frac{\pi}{2d}\norm T.
+ \tag{S-sharp-Sylv}
+\end{equation}
+The constant is sharp in the general separated self-adjoint setting.
+
+This is precisely the analytic root now completed in the repository by the explicit Haagerup--Zsid\'o $\alpha=0$ kernel for the real and complex chains. The theorem does not require exact finite undoubled orbit interpolation. Integral approximation plus Ky Fan inequalities and an endpoint limit suffice for norm bounds.
+
+\section{Proposition 4.1: symmetric sin $\Theta$ in ideals}
+
+Let $P$ reduce $A$ and $Q$ reduce $A+V$. Denote the corresponding parts by
+\[
+ A_0=A|_{\range P},
+ \quad
+ A_1=A|_{\range P^\perp},
+ \quad
+ \Lambda_0=(A+V)|_{\range Q},
+ \quad
+ \Lambda_1=(A+V)|_{\range Q^\perp}.
+\]
+Assume the two cross separations
+\[
+ \dist(\spec A_0,\spec\Lambda_1)\ge d,
+ \qquad
+ \dist(\spec A_1,\spec\Lambda_0)\ge d.
+\]
+
+Set
+\[
+ X=P-Q=PQ^\perp-P^\perp Q
+\]
+and
+\[
+ T=PVQ^\perp-P^\perp VQ.
+\]
+The two cross blocks solve two Sylvester equations. Combining their Fourier representations yields
+\[
+ X
+ =
+ \int_{\R}e^{itA}Te^{-it(A+V)}f_d(t)\,dt
+\]
+in the weak sense.
+
+For every Ky Fan norm,
+\[
+ \norm X_{(k)}
+ \le
+ \frac{\pi}{2d}\norm T_{(k)}.
+\]
+The reflection identity
+\[
+ (P-P^\perp)V-V(Q-Q^\perp)=2T
+\]
+and two-sided unitary invariance give
+\[
+ \norm T_{(k)}\le\norm V_{(k)}.
+\]
+Fan dominance therefore yields, for every symmetrically normed ideal admitting it,
+\begin{equation}
+ \norm{P-Q}_{\mathcal S}
+ =\norm{\sin\Theta}_{\mathcal S}
+ \le
+ \frac{\pi}{2d}\norm V_{\mathcal S}.
+ \tag{S-symmetric-sin}
+\end{equation}
+
+This proof is extremely close to the finite Lean architecture:
+\begin{enumerate}[leftmargin=2em]
+\item prove every Ky Fan prefix inequality;
+\item pass to an arbitrary UI norm by finite Fan dominance;
+\item use reflections to control the cross residual without losing a factor.
+\end{enumerate}
+
+\section{Theorem 4.2: ideal-valued generic sin $2\Theta$}
+
+Apply the symmetric sin $\Theta$ theorem to the mirror pair $P$ and $KPK$. The perturbation between the corresponding operators is controlled by $2V$. This gives
+\begin{equation}
+ \norm{\sin(2\Theta)}_{\mathcal S}
+ \le
+ \frac{\pi}{2}\frac{2\norm V_{\mathcal S}}{d}.
+ \tag{S-ideal-sin2}
+\end{equation}
+Thus the generic sin $2\Theta$ theorem extends to every symmetrically normed ideal supporting Ky Fan dominance.
+
+In finite dimensions this becomes an every-unitarily-invariant-norm theorem. It is therefore a direct source for the desired maximally general finite ambient API, while retaining the correct generic constant.
+
+\section{Canonical spectral projection and branch selection}
+
+When $Q$ is chosen canonically as the perturbed spectral projection associated with the $d/2$ neighborhood of $\sigma$, spectral enclosure can select the correct branch. Under the smallness condition
+\[
+ \norm V\le\frac d\pi,
+\]
+Theorem 1 gives
+\[
+ \norm{\sin(2\Theta)}\le1.
+\]
+The canonical continuation from $V=0$ prevents the angle from jumping to the obtuse branch and yields an arcsine estimate for
+\[
+ \norm{E_A(\sigma)-E_{A+V}(\text{selected neighborhood})}.
+\]
+
+The logic must remain explicit:
+\begin{enumerate}[leftmargin=2em]
+\item the sin $2\Theta$ inequality bounds a doubled trigonometric quantity;
+\item canonical spectral selection and gap persistence choose the connected acute branch;
+\item only then may one divide the arcsine by two or infer a projector-angle bound.
+\end{enumerate}
+Without step 2, the same sine value is compatible with an angle near $\pi/2$.
+
+\section{Ordered versus arbitrary separation}
+
+The finite theory should expose a clean hierarchy:
+\begin{center}
+\begin{tabular}{@{}lll@{}}
+\toprule
+Geometry & Sylvester constant & sin $2\Theta$ constant\\
+\midrule
+Ordered/convex-hull separation & $1/d$ & $2/d$ before angle normalization\\
+Arbitrary separated self-adjoint spectra & $\pi/(2d)$ & $\pi/d$ before angle normalization\\
+Hilbert--Schmidt special case & often $1/d$ & corresponding constant-one form\\
+\bottomrule
+\end{tabular}
+\end{center}
+The constants differ because the reciprocal multiplier is positive/semigroup representable in the ordered case and requires the sharp Fourier kernel in the arbitrary-separated case.
+
+\section{Finite formalization map}
+
+\begin{formalizationmap}
+Operator angle & $\Theta=\arcsin\sqrt{S(P,Q)}$ and $\abs{P-Q}=\sin\Theta$ & Projection/angle dictionary is substantially present and should back the projector facade.\\
+Mirror reflection & $K=2Q-I$, compare $P$ with $KPK$ to realize $2\Theta$ & This is the source architecture of \code{SinTwoThetaUINorm}.\\
+Sharp generic Sylvester & Arbitrary separated spectra, reciprocal Fourier mass $\pi/2$ & Explicit kernel and field-specific real/complex chains are complete; generic doubled descent is the remaining abstraction repair.\\
+Symmetric sin $\Theta$ & Two cross Sylvester equations plus reflection residual estimate & Maps to arbitrary-separated projection and UI-norm bounds.\\
+Generic sin $2\Theta$ & Mirror reduction plus symmetric sin $\Theta$ & Should remain distinct from the constant-one Part III theorem.\\
+Canonical wrapper & Perturbed spectral projection plus gap persistence selects acute branch & Needed for user-facing spectral-subspace statements.\\
+\end{formalizationmap}
+
+A productive next sequence is:
+\begin{enumerate}[leftmargin=2em]
+\item stabilize the projector/reflection identities independently of direct rotation;
+\item recover the generic \code{RCLike} Ky Fan Sylvester inequality through doubled phase realization rather than the false undoubled orbit certificate;
+\item package the two cross equations into a generic symmetric sin $\Theta$ theorem;
+\item prove the mirror singular-value identity for every UI norm;
+\item expose both the constant-one classical Part III theorem and the $\pi/2$ generic theorem with visibly different hypotheses;
+\item add canonical spectral-projection branch wrappers last.
+\end{enumerate}
+
+\section{Failure modes to exclude}
+
+\begin{itemize}[leftmargin=2em]
+\item Do not use the factor $\pi/2$ in the ordered Davis--Kahan theorem, where constant one is available.
+\item Do not claim constant one under arbitrary separated spectra; the general Sylvester inverse has sharp factor $\pi/2$.
+\item Do not infer $\Theta\le\frac12\arcsin c$ solely from $\sin(2\Theta)\le c$ without selecting the branch.
+\item Do not require equivalent positioning or direct rotation merely to define the operator angle or prove \eqref{S-angle-proj}.
+\item Do not replace the paired cross-separation hypotheses by a single informal distance unless the chosen spectral wrappers prove both directions.
+\end{itemize}
+
+\section*{Distilled conclusion}
+
+Seelmann's paper connects all three layers needed by the finite formalization: projection geometry turns doubled angles into a mirror problem; the sharp reciprocal Fourier kernel solves arbitrary-separated Sylvester equations with constant $\pi/2$; and Ky Fan dominance lifts the result to every finite unitarily invariant norm. The remaining formal work is primarily architectural: preserve the constant-one classical theorem, add the distinct generic theorem, and make branch selection explicit in canonical spectral-projector wrappers.
+
+\end{document}
