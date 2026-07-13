@@ -1353,6 +1353,116 @@ theorem integral_norm_reciprocalKernel :
       rw [norm_reciprocalKernel]
     _ = Real.pi / 2 := integral_abs_realKernel
 
+/-! ### The oscillatory sine transform -/
+
+/-- Two-sided integrability of a symmetric exponential. -/
+theorem integrable_exp_neg_mul_abs {y : ℝ} (hy : 0 < y) :
+    Integrable (fun t : ℝ => Real.exp (-y * |t|)) := by
+  apply integrable_of_even_integrableOn_Ioi
+  · intro t
+    rw [abs_neg]
+  · apply (exp_neg_integrableOn_Ioi 0 hy).congr_fun _ measurableSet_Ioi
+    intro t ht
+    dsimp only
+    rw [abs_of_pos (show (0 : ℝ) < t from ht)]
+
+/-- Integrability of the modulated two-sided exponential. -/
+theorem integrable_cexp_neg_mul_abs_mul_cexp (x : ℝ) {y : ℝ} (hy : 0 < y) :
+    Integrable (fun t : ℝ =>
+      Complex.exp ((-(y * |t|) : ℝ) : ℂ) *
+        Complex.exp ((((t * x : ℝ) : ℂ) * Complex.I))) := by
+  apply (integrable_exp_neg_mul_abs hy).mono'
+  · exact (by fun_prop : Measurable fun t : ℝ =>
+      Complex.exp ((-(y * |t|) : ℝ) : ℂ) *
+        Complex.exp ((((t * x : ℝ) : ℂ) * Complex.I))).aestronglyMeasurable
+  · filter_upwards [] with t
+    rw [norm_mul, Complex.norm_exp_ofReal_mul_I, mul_one, Complex.norm_exp,
+      Complex.ofReal_re, neg_mul]
+
+/-- The oscillatory sine transform against a symmetric exponential, from the
+two-sided Laplace transform at the shifted frequencies `x ± 1`. -/
+theorem integral_sin_mul_cexp_neg_mul_abs_mul_cexp
+    (x : ℝ) {y : ℝ} (hy : 0 < y) :
+    (∫ t : ℝ,
+        ((Real.sin t : ℝ) : ℂ) * Complex.exp ((-(y * |t|) : ℝ) : ℂ) *
+          Complex.exp ((((t * x : ℝ) : ℂ) * Complex.I))) =
+      Complex.I *
+        (((y / (y ^ 2 + (x - 1) ^ 2) : ℝ) : ℂ) -
+          ((y / (y ^ 2 + (x + 1) ^ 2) : ℝ) : ℂ)) := by
+  have hplus := integral_cexp_neg_mul_abs_mul_cexp (x + 1) hy
+  have hminus := integral_cexp_neg_mul_abs_mul_cexp (x - 1) hy
+  have hintp := integrable_cexp_neg_mul_abs_mul_cexp (x + 1) hy
+  have hintm := integrable_cexp_neg_mul_abs_mul_cexp (x - 1) hy
+  have hexpsin (t : ℝ) :
+      Complex.exp ((t : ℂ) * Complex.I) -
+        Complex.exp (-(t : ℂ) * Complex.I) =
+      2 * Complex.sin t * Complex.I := by
+    rw [Complex.exp_mul_I,
+      show -(t : ℂ) * Complex.I = (-(t : ℂ)) * Complex.I by ring,
+      Complex.exp_mul_I, Complex.sin_neg, Complex.cos_neg]
+    ring
+  have hsin (t : ℝ) : ((Real.sin t : ℝ) : ℂ) =
+      (Complex.exp ((t : ℂ) * Complex.I) -
+        Complex.exp (-(t : ℂ) * Complex.I)) / (2 * Complex.I) := by
+    rw [Complex.ofReal_sin, hexpsin,
+      eq_div_iff (by simp [Complex.I_ne_zero] : (2 : ℂ) * Complex.I ≠ 0)]
+    ring
+  have hphase1 (t : ℝ) : Complex.exp ((t : ℂ) * Complex.I) *
+      Complex.exp ((((t * x : ℝ) : ℂ) * Complex.I)) =
+      Complex.exp ((((t * (x + 1) : ℝ) : ℂ) * Complex.I)) := by
+    rw [← Complex.exp_add]
+    congr 1
+    push_cast
+    ring
+  have hphase2 (t : ℝ) : Complex.exp (-(t : ℂ) * Complex.I) *
+      Complex.exp ((((t * x : ℝ) : ℂ) * Complex.I)) =
+      Complex.exp ((((t * (x - 1) : ℝ) : ℂ) * Complex.I)) := by
+    rw [← Complex.exp_add]
+    congr 1
+    push_cast
+    ring
+  have hpoint (t : ℝ) :
+      ((Real.sin t : ℝ) : ℂ) * Complex.exp ((-(y * |t|) : ℝ) : ℂ) *
+          Complex.exp ((((t * x : ℝ) : ℂ) * Complex.I)) =
+        (1 / (2 * Complex.I)) *
+          (Complex.exp ((-(y * |t|) : ℝ) : ℂ) *
+              Complex.exp ((((t * (x + 1) : ℝ) : ℂ) * Complex.I)) -
+            Complex.exp ((-(y * |t|) : ℝ) : ℂ) *
+              Complex.exp ((((t * (x - 1) : ℝ) : ℂ) * Complex.I))) := by
+    rw [← hphase1, ← hphase2, hsin]
+    ring
+  have hd1 : (y ^ 2 + (x - 1) ^ 2 : ℝ) ≠ 0 := by
+    nlinarith [sq_nonneg (x - 1), sq_nonneg y, hy]
+  have hd2 : (y ^ 2 + (x + 1) ^ 2 : ℝ) ≠ 0 := by
+    nlinarith [sq_nonneg (x + 1), sq_nonneg y, hy]
+  have hc1 : ((y : ℂ) ^ 2 + ((x : ℂ) - 1) ^ 2) ≠ 0 := fun h =>
+    hd1 (Complex.ofReal_eq_zero.mp (by push_cast; exact h))
+  have hc2 : ((y : ℂ) ^ 2 + ((x : ℂ) + 1) ^ 2) ≠ 0 := fun h =>
+    hd2 (Complex.ofReal_eq_zero.mp (by push_cast; exact h))
+  calc
+    (∫ t : ℝ,
+        ((Real.sin t : ℝ) : ℂ) * Complex.exp ((-(y * |t|) : ℝ) : ℂ) *
+          Complex.exp ((((t * x : ℝ) : ℂ) * Complex.I))) =
+        ∫ t : ℝ, (1 / (2 * Complex.I)) *
+          (Complex.exp ((-(y * |t|) : ℝ) : ℂ) *
+              Complex.exp ((((t * (x + 1) : ℝ) : ℂ) * Complex.I)) -
+            Complex.exp ((-(y * |t|) : ℝ) : ℂ) *
+              Complex.exp ((((t * (x - 1) : ℝ) : ℂ) * Complex.I))) := by
+      apply integral_congr_ae
+      filter_upwards [] with t
+      exact hpoint t
+    _ = (1 / (2 * Complex.I)) *
+        (((2 * (y : ℝ) / ((y : ℝ) ^ 2 + (x + 1) ^ 2) : ℝ) : ℂ) -
+          ((2 * (y : ℝ) / ((y : ℝ) ^ 2 + (x - 1) ^ 2) : ℝ) : ℂ)) := by
+      rw [integral_const_mul, integral_sub hintp hintm, hplus, hminus]
+    _ = Complex.I *
+        (((y / (y ^ 2 + (x - 1) ^ 2) : ℝ) : ℂ) -
+          ((y / (y ^ 2 + (x + 1) ^ 2) : ℝ) : ℂ)) := by
+      push_cast
+      field_simp
+      rw [Complex.I_sq]
+      ring
+
 end
 
 end HaagerupZsido
