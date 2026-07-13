@@ -1415,13 +1415,37 @@ unitarily invariant norm.  Its data are only finite real frequency arrays,
 coordinate matrix units, and a common finite unitary representation of their
 reciprocal multiplier.
 
-The complex construction should come from the extremal Fourier--Stieltjes
-representation of `1 / x` off `[-1, 1]`, with total variation `π / 2`, by
-using diagonal phase unitaries in `eF` and `eE`.  The real case must be handled
-honestly: either realify that phase representation through finite orthogonal
-rotations and finite convex decomposition, or prove a real certificate with
-the same mass directly.  Do not obtain this theorem from the downstream Ky Fan
-or orbit-convexity statements, since that would create a dependency cycle. -/
+Status: this declaration remains an open obligation, but it is no longer on
+the critical path of the sharp real and complex results.  The explicit
+Haagerup--Zsidó kernel now proves
+`hasIntegrableReciprocalFourierKernel_pi_div_two`, and the unconditional
+endpoints `kyFan_reciprocalMultiplier_le_complex`,
+`kyFan_reciprocalMultiplier_le_real`, and the field-specific Sylvester
+theorems are derived from it through certificates of mass `π / 2 + ε` for
+every positive `ε`.  Only the generic `RCLike` statements still route through
+this declaration.
+
+What is genuinely missing is exact attainment at mass `π / 2` for a *finite*
+orbit certificate, uniformly in the scalar field:
+
+1. For `𝕜 = ℂ`, fix the finite arrays and consider the map sending a finite
+   Fourier certificate to its matrix of coordinate multiplier values in
+   `ℂ^(m × n)`.  The `π / 2 + ε` certificates witness that the reciprocal
+   value matrix lies in `(π / 2 + ε) K` for every `ε > 0`, where `K` is the
+   absolutely convex hull of the compact set of phase-orbit value matrices.
+   In finite dimension `K` is compact, hence closed, so the intersection over
+   `ε` places the value matrix in `(π / 2) K`; finite-dimensional
+   Carathéodory then recovers a finite certificate of mass at most `π / 2`.
+2. For `𝕜 = ℝ` the `π / 2 + ε` certificates currently exist only on the
+   doubled spaces (`HasDoubledRealReciprocalOrbitInterpolation`), not for
+   this undoubled real orbit statement, because real diagonal unitaries carry
+   only signs, not phases.  A real proof must either produce genuinely real
+   finite certificates (for example from rotation pairs that are not
+   basis-diagonal) or reformulate the generic root at the doubled level.
+
+Do not obtain this theorem from the downstream Ky Fan or orbit-convexity
+statements, since that would create a dependency cycle, and do not replace it
+with an assumption of equivalent content. -/
 theorem hasReciprocalOrbitInterpolation_pi_div_two
     (eF : OrthonormalBasis (Fin (Module.finrank 𝕜 F)) 𝕜 F)
     (eE : OrthonormalBasis (Fin (Module.finrank 𝕜 E)) 𝕜 E)
