@@ -754,6 +754,24 @@ theorem hasFiniteReciprocalFourierInterpolation_pi_div_two_add_eps_of_approximat
   convert h using 1
   ring
 
+/-- A sharp integrable reciprocal kernel gives exact finite interpolation on
+every separated finite frequency array, with arbitrarily small excess mass.
+
+The kernel is first compressed to an approximate finite Fourier sum by
+`hasApproximateFiniteReciprocalFourierInterpolation_of_integrableKernel`.
+The finite interpolation correction then removes every moment error exactly;
+its coefficient cost tends to zero with the quadrature tolerance. -/
+theorem hasFiniteReciprocalFourierInterpolation_pi_div_two_add_eps_of_integrableKernel
+    {m n : ℕ} (α : Fin m → ℝ) (β : Fin n → ℝ)
+    (hgap : ∀ i j, 1 ≤ |α i - β j|) {eps : ℝ} (heps : 0 < eps)
+    (hkernel : HasIntegrableReciprocalFourierKernel (Real.pi / 2)) :
+    HasFiniteReciprocalFourierInterpolation
+      α β 1 (Real.pi / 2 + eps) := by
+  exact hasFiniteReciprocalFourierInterpolation_of_approximate
+    α β hgap heps fun tolerance htolerance =>
+      hasApproximateFiniteReciprocalFourierInterpolation_of_integrableKernel
+        α β hgap htolerance hkernel
+
 /-- Rescale a unit-gap finite Fourier interpolation to an arbitrary positive
 gap.  The coefficient mass is unchanged and the Fourier frequencies are
 divided by the gap. -/
@@ -1023,6 +1041,45 @@ theorem kyFan_reciprocalMultiplier_le_complex_of_approximateFourierInterpolation
         (Real.pi / 2 + ε) * K := hbound
     _ = (Real.pi / 2) * K + ε * K := by ring
     _ ≤ (Real.pi / 2) * K + η := by gcongr
+
+/-- A sharp integrable reciprocal kernel implies the unconditional complex
+Ky Fan reciprocal-multiplier estimate.
+
+The scalar kernel is compressed and corrected only after the finite spectral
+differences are known.  The resulting certificates have mass
+`pi / 2 + eps`; the preceding theorem removes `eps` at the level of the real
+Ky Fan inequality. -/
+theorem kyFan_reciprocalMultiplier_le_complex_of_integrableKernel
+    {EC FC : Type*}
+    [NormedAddCommGroup EC] [InnerProductSpace ℂ EC]
+    [FiniteDimensional ℂ EC]
+    [NormedAddCommGroup FC] [InnerProductSpace ℂ FC]
+    [FiniteDimensional ℂ FC]
+    (eF : OrthonormalBasis (Fin (Module.finrank ℂ FC)) ℂ FC)
+    (eE : OrthonormalBasis (Fin (Module.finrank ℂ EC)) ℂ EC)
+    (α : Fin (Module.finrank ℂ FC) → ℝ)
+    (β : Fin (Module.finrank ℂ EC) → ℝ)
+    {X C : EC →ₗ[ℂ] FC} {δ : ℝ} (hδ : 0 < δ)
+    (hgap : ∀ i j, δ ≤ |α i - β j|)
+    (hkernel : HasIntegrableReciprocalFourierKernel (Real.pi / 2))
+    (hcoeff : ∀ i j,
+      (((α i : ℝ) : ℂ) - ((β j : ℝ) : ℂ)) *
+          ⟪X (eE j), eF i⟫_ℂ =
+        ⟪C (eE j), eF i⟫_ℂ)
+    (k : ℕ) :
+    δ * RectangularUnitarilyInvariantNorm.rectangularKyFanSum k X ≤
+      (Real.pi / 2) *
+        RectangularUnitarilyInvariantNorm.rectangularKyFanSum k C := by
+  apply kyFan_reciprocalMultiplier_le_complex_of_approximateFourierInterpolation
+    eF eE α β hδ _ hcoeff k
+  intro eps heps
+  apply hasFiniteReciprocalFourierInterpolation_of_normalized α β hδ
+  apply hasFiniteReciprocalFourierInterpolation_pi_div_two_add_eps_of_integrableKernel
+    (fun i => α i / δ) (fun j => β j / δ) _ heps hkernel
+  intro i j
+  rw [show α i / δ - β j / δ = (α i - β j) / δ by ring]
+  rw [abs_div, abs_of_pos hδ]
+  exact (le_div_iff₀ hδ).2 (by simpa using hgap i j)
 
 /-- Every finite reciprocal multiplier with gap `δ` satisfies the sharp
 simultaneous Ky Fan prefix estimate.  All operator and singular-value content
