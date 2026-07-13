@@ -1793,6 +1793,40 @@ theorem kyFan_reciprocalMultiplier_le_complex_of_integrableKernel
   rw [abs_div, abs_of_pos hδ]
   exact (le_div_iff₀ hδ).2 (by simpa using hgap i j)
 
+/-- A sharp integrable reciprocal kernel implies the sharp real Ky Fan
+estimate through doubled orthogonal rotations and singular-value descent. -/
+theorem kyFan_reciprocalMultiplier_le_real_of_integrableKernel
+    {ER FR : Type*}
+    [NormedAddCommGroup ER] [InnerProductSpace ℝ ER]
+    [FiniteDimensional ℝ ER]
+    [NormedAddCommGroup FR] [InnerProductSpace ℝ FR]
+    [FiniteDimensional ℝ FR]
+    (eF : OrthonormalBasis (Fin (Module.finrank ℝ FR)) ℝ FR)
+    (eE : OrthonormalBasis (Fin (Module.finrank ℝ ER)) ℝ ER)
+    (alpha : Fin (Module.finrank ℝ FR) → ℝ)
+    (beta : Fin (Module.finrank ℝ ER) → ℝ)
+    {X C : ER →ₗ[ℝ] FR} {delta : ℝ} (hdelta : 0 < delta)
+    (hgap : ∀ i j, delta ≤ |alpha i - beta j|)
+    (hkernel : HasIntegrableReciprocalFourierKernel (Real.pi / 2))
+    (hcoeff : ∀ i j,
+      (alpha i - beta j) * ⟪X (eE j), eF i⟫_ℝ =
+        ⟪C (eE j), eF i⟫_ℝ)
+    (k : ℕ) :
+    delta * RectangularUnitarilyInvariantNorm.rectangularKyFanSum k X ≤
+      (Real.pi / 2) *
+        RectangularUnitarilyInvariantNorm.rectangularKyFanSum k C := by
+  apply kyFan_reciprocalMultiplier_le_real_of_approximateFourierInterpolation
+    eF eE alpha beta hdelta _ hcoeff k
+  intro eps heps
+  apply hasFiniteReciprocalFourierInterpolation_of_normalized alpha beta hdelta
+  apply hasFiniteReciprocalFourierInterpolation_pi_div_two_add_eps_of_integrableKernel
+    (fun i => alpha i / delta) (fun j => beta j / delta) _ heps hkernel
+  intro i j
+  rw [show alpha i / delta - beta j / delta =
+    (alpha i - beta j) / delta by ring]
+  rw [abs_div, abs_of_pos hdelta]
+  exact (le_div_iff₀ hdelta).2 (by simpa using hgap i j)
+
 /-- Every finite reciprocal multiplier with gap `δ` satisfies the sharp
 simultaneous Ky Fan prefix estimate.  All operator and singular-value content
 is discharged from the finite orbit interpolation certificate. -/
