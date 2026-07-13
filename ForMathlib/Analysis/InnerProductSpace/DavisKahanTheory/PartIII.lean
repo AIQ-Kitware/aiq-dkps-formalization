@@ -20,9 +20,16 @@ statements:
 
 * `sin Theta` is available for every unitarily invariant norm;
 * `sin 2 Theta` is available for every unitarily invariant norm;
-* `tan Theta` is the pole-free, per-vector spectral-norm theorem;
+* `tan Theta` is the pole-free, per-vector spectral-norm theorem, with no
+  dimension comparison between the trial and invariant subspaces;
 * `tan 2 Theta` is the sharp operator-norm sectorial theorem, including the
   strict quarter-turn conclusion.
+
+The sharp factor-one projector-difference theorem is exposed here as the
+canonical companion of the quartet, in both the reducing-subspace and the
+canonical spectral-subspace forms.  Canonical spectral-subspace wrappers for
+the directed `sin Θ` bound in every unitarily invariant norm are provided by
+`uiNorm_spectralSubspace_directed_sinTheta_le`.
 
 The newer files `DavisKahanTheory/TanTheta.lean` and
 `DavisKahanTheory/TanTwoTheta.lean` contain proposed residual, graph, and
@@ -78,6 +85,20 @@ perturbation.
 -/
 alias partIII_tanTwoTheta_opNorm :=
   ForMathlib.tan_two_theta_norm_sub_le
+
+/-- The sharp factor-one finite projector-difference theorem, the canonical
+companion of the Part III quartet.
+
+This is an exact canonical alias of `opNorm_starProjection_sub_le`: for
+symmetric `A, B` with reducing subspaces carrying two-sided spectral gaps,
+`‖P_U − P_W‖ ≤ ε / g` with no rank hypothesis and no factor-two loss. -/
+alias projector_difference_opNorm :=
+  opNorm_starProjection_sub_le
+
+/-- The sharp projector-difference theorem for the canonical spectral
+subspaces, an exact canonical alias of `opNorm_spectralSubspace_sub_le`. -/
+alias spectralProjector_difference_opNorm :=
+  opNorm_spectralSubspace_sub_le
 
 end DavisKahanTheory
 end ForMathlib

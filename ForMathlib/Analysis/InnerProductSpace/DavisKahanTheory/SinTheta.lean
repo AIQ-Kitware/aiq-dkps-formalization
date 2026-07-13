@@ -326,6 +326,44 @@ theorem opNorm_spectralSubspace_directed_sinTheta_le {A B : E →ₗ[𝕜] E}
   opNorm_directed_sinTheta_le hA hB (reduces_spectralSubspace A s)
     (reduces_spectralSubspace B t) hg hUspec hVspec hε0 hε
 
+/-- **Every-unitarily-invariant-norm directed `sin Θ` theorem, spectral
+hypothesis form.**  If `A, B` are symmetric, `U` reduces `A` with `U`-carried
+spectrum `≥ c + g`, and `V` reduces `B` with `V`-carried spectrum `≤ c`, then
+`N (P_V ∘ P_U) ≤ N (B − A) / g` for every unitarily invariant norm `N`.
+The quadratic-form hypotheses of the invariant-subspace theorem are supplied
+by the spectral coercivity bridges. -/
+theorem uiNorm_directed_sinTheta_le (N : UnitarilyInvariantNorm 𝕜 E)
+    {A B : E →ₗ[𝕜] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
+    {U V : Submodule 𝕜 E} [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hU : Reduces A U) (hV : Reduces B V)
+    {c g : ℝ} (hg : 0 < g)
+    (hUspec : SpectrumIn A U (Set.Ici (c + g)))
+    (hVspec : SpectrumIn B V (Set.Iic c)) :
+    N ((V.starProjection ∘L U.starProjection : E →L[𝕜] E) : E →ₗ[𝕜] E)
+      ≤ N (B - A) / g := by
+  haveI : CompleteSpace E := FiniteDimensional.complete 𝕜 E
+  exact UnitarilyInvariantNorm.apply_starProjection_comp_starProjection_le N
+    hA hB hU hV hg
+    (fun x hx => le_re_inner_of_spectrumIn hA hU hUspec hx)
+    (fun x hx => re_inner_le_of_spectrumIn hB hV hVspec hx)
+
+/-- **Every-unitarily-invariant-norm directed `sin Θ` theorem for the
+canonical spectral subspaces.**  The canonical spectral subspaces reduce
+their operators automatically, so the full unitarily-invariant-norm `sin Θ`
+bound holds for `N (P_{spec B t} ∘ P_{spec A s})` under the spectral-gap
+hypotheses alone. -/
+theorem uiNorm_spectralSubspace_directed_sinTheta_le
+    (N : UnitarilyInvariantNorm 𝕜 E)
+    {A B : E →ₗ[𝕜] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric) {s t : Set ℝ}
+    {c g : ℝ} (hg : 0 < g)
+    (hUspec : SpectrumIn A (spectralSubspace A s) (Set.Ici (c + g)))
+    (hVspec : SpectrumIn B (spectralSubspace B t) (Set.Iic c)) :
+    N (((spectralSubspace B t).starProjection ∘L
+        (spectralSubspace A s).starProjection : E →L[𝕜] E) : E →ₗ[𝕜] E)
+      ≤ N (B - A) / g :=
+  uiNorm_directed_sinTheta_le N hA hB (reduces_spectralSubspace A s)
+    (reduces_spectralSubspace B t) hg hUspec hVspec
+
 /-! ## Two-sided projector-difference operator-norm form
 
 The generic `RCLike` projector theorem now supplies the sharp factor-one bound
