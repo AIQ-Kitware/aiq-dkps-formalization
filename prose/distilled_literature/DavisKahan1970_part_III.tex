@@ -1,0 +1,332 @@
+\input{preamble}
+\title{Davis--Kahan Part III: the four classical finite subspace-rotation theorems}
+\author{}
+\date{Source-order distilled reconstruction of Davis--Kahan (1970)}
+\begin{document}
+\maketitle
+
+\section*{Source map and formalization scope}
+\begin{sourceguide}
+\item[Primary source] Chandler Davis and W. M. Kahan, \emph{The Rotation of Eigenvectors by a Perturbation. III}, SIAM Journal on Numerical Analysis 7(1) (1970), 1--46, DOI \href{https://doi.org/10.1137/0707001}{10.1137/0707001}.
+\item[Source order] Introduction; Sections 1--3 on block notation and subspace geometry; Section 4 on the direct rotation; Section 5 on $AX-XB=C$; Section 6 on the single-angle theorems; the unbounded-operator appendix; Section 7 on the double-angle theorems; Section 8 on interpretation and spectral selection; Section 9 on the numerical example; Section 10 on open questions.
+\item[Formalization target] The source-faithful finite API exposed through \code{DavisKahanTheory.PartIII}: \code{partIII_sinTheta_uiNorm}, \code{partIII_sinTwoTheta_uiNorm}, \code{partIII_tanTheta_vector}, and \code{partIII_tanTwoTheta_opNorm}, together with the companion projector bounds \code{opNorm_starProjection_sub_le} and \code{opNorm_spectralSubspace_sub_le}.
+\item[Scope boundary] The paper is infinite-dimensional and permits unbounded self-adjoint operators in an appendix. The repository target is finite-dimensional over an arbitrary \code{RCLike} scalar field. This note therefore preserves the source hypotheses and proof architecture while marking the places where the formal endpoint deliberately has a different norm scope.
+\item[Terminology] The source writes $\sin\theta$, $\tan\theta$, $\sin 2\theta$, and $\tan 2\theta$. We use $\Theta$ for the principal-angle operator or its finite list of principal angles.
+\end{sourceguide}
+
+The paper is not one theorem with four cosmetic variants. It explicitly emphasizes that none of the four main results implies the other three. Their gap configurations and off-diagonal hypotheses differ, and their sharp conclusions answer different geometric questions. A source-faithful API should therefore share the strongest ambient finite-dimensional generality while retaining four distinct statement shapes.
+
+\section{Section 1: two block decompositions and the residual}
+
+\sourceanchor{Section 1, equations (1.1)--(1.9).}
+
+Let $A=A^*$ act on a Hilbert space $\Hsp$, let $P$ be a reducing orthogonal projection for $A$, and write
+\[
+  \Hsp=P\Hsp\oplus P^\perp\Hsp.
+\]
+Relative to isometries $E_0,E_1$ onto these two summands, the source represents
+\[
+  A\sim
+  \begin{pmatrix}A_0&0\\0&A_1\end{pmatrix},
+  \qquad
+  H\sim
+  \begin{pmatrix}H_0&B^*\\B&H_1\end{pmatrix}.
+\]
+A second reducing projection $Q$ for $A+H$ gives isometries $F_0,F_1$ and another diagonal representation
+\[
+  A+H\sim
+  \begin{pmatrix}\widehat A_0&0\\0&\widehat A_1\end{pmatrix}.
+\]
+No basis of eigenvectors is required. This is already the coordinate-free subspace formulation that the Lean development should preserve.
+
+For numerical approximation, $E_0$ is an isometry whose range is a trial subspace, and $A_0$ is a chosen Ritz or trial operator. The residual is
+\begin{equation}
+  R=(A+H)E_0-E_0A_0.
+  \tag{DK-1.8}
+\end{equation}
+If $A_0=E_0^*(A+H)E_0$, then $E_0^*R=0$; in the source block notation this is $H_0=0$. Thus the tan theorem's off-diagonal hypothesis is the Rayleigh--Ritz condition, not an arbitrary technical decoration.
+
+\subsection{Unitarily invariant norms}
+
+\sourceanchor{Section 1, equations (1.9)--(1.13).}
+
+The source works systematically with norms invariant under left and right unitary multiplication. It recalls:
+\begin{itemize}[leftmargin=2em]
+\item compatibility with contractions on both sides;
+\item dependence only on singular values;
+\item the Ky Fan prefix norms
+\[
+  \norm{K}_{(r)}=s_1(K)+\cdots+s_r(K);
+\]
+\item Fan dominance: comparison of every Ky Fan prefix is equivalent to comparison in every unitarily invariant norm.
+\end{itemize}
+This is why the Sylvester lemma in Section 5 is the central analytic engine: once a suitable inequality is proved for every unitarily invariant norm, the geometric angle operators inherit it without choosing coordinates.
+
+\section{Sections 1 and 3: principal angles, sines, and projectors}
+
+\sourceanchor{Section 1 around equations (1.14)--(1.18), and Section 3.}
+
+For two subspaces $P\Hsp$ and $Q\Hsp$ of compatible dimension, the singular values of the cross-compressions determine their canonical angles. In a principal two-plane one has the model
+\[
+ P=\begin{pmatrix}1&0\\0&0\end{pmatrix},
+ \qquad
+ Q=\begin{pmatrix}
+   \cos^2\theta&\cos\theta\sin\theta\\
+   \cos\theta\sin\theta&\sin^2\theta
+ \end{pmatrix}.
+\]
+The off-diagonal maps have singular value $\sin\theta\cos\theta$, while
+\[
+  \norm{P-Q}_{\op}=\sin\theta_{
+  \max}.
+\]
+At the operator level, the source packages the angles in a positive operator $\Theta$ and defines $\sin\Theta$, $\cos\Theta$, $\tan\Theta$, and their double-angle analogues by functional calculus.
+
+The finite projector theorem is a direct companion to the sine theorem because the nonzero singular values of $P-Q$ are the directed sine singular values, with the usual zero or multiplicity adjustments. In Lean this relationship is represented by declarations around
+\code{opNorm_projection_sub_eq_opNorm_sinThetaMap},
+\code{norm_starProjection_sub_eq_max}, and the directed sine maps.
+
+\section{Section 4: the direct rotation}
+
+\sourceanchor{Section 4, extremal properties of the direct rotation.}
+
+The direct rotation $U$ is the distinguished unitary carrying $P\Hsp$ to $Q\Hsp$ while rotating each principal two-plane through its canonical angle and fixing the common parts appropriately. Formally it has the trigonometric form
+\[
+  U=\cos\Theta+J\sin\Theta=\exp(J\Theta),
+\]
+where $J$ is the quarter-turn partial isometry on the generic two-plane component.
+
+The paper proves that the direct rotation is extremal among unitaries intertwining $P$ and $Q$: it is closest to the identity in the natural spectral sense. Section 4 is geometrically important but is not used to prove all four inequalities. This separation matters for formalization. The classical inequalities can be established from projection geometry and Sylvester equations before a complete reusable API for extremal direct rotations exists.
+
+\section{Section 2: the four source statements}
+
+\sourceanchor{Section 2, ``Statement of the theorems.''}
+
+The notation below follows the residual formulation. The trial block is $A_0$, the complementary exact block is denoted by $\widehat A_1$ or its appropriate source counterpart, and $R$ is the residual. The source gives perturbation versions by replacing $R$ with the relevant block of $H$.
+
+\subsection{The sin $\Theta$ theorem}
+
+Suppose the trial spectral set lies in an interval $[\alpha,\beta]$ and the complementary exact spectral set lies outside the enlarged interval
+\[
+  (\alpha-\delta,\beta+\delta).
+\]
+Then, for every unitarily invariant norm,
+\begin{equation}
+  \delta\,\norm{\sin\Theta}
+  \le \norm{R}.
+  \tag{DK-sin}\label{DK-sin}
+\end{equation}
+The source immediately notes that this interval/exterior statement is not the definitive formulation; Theorem 6.1 gives the ordered spectral-separation hypothesis that the proof actually needs.
+
+The important asymmetry is that the unwanted exact spectrum may occur on both sides of the trial spectrum. This broad gap geometry is one reason the sine theorem is more generally applicable than the tangent theorem.
+
+\subsection{The tan $\Theta$ theorem}
+
+Assume the trial spectrum lies in $[\alpha,\beta]$, the complementary exact spectrum lies entirely on one side, for example in $[\beta+\delta,\infty)$, and the trial residual is orthogonal to the trial subspace, equivalently $H_0=0$. Then
+\begin{equation}
+  \delta\,\norm{\tan\Theta}
+  \le \norm{R}.
+  \tag{DK-tan}
+\end{equation}
+The source states this for arbitrary unitarily invariant norms. The repository's source-faithful public endpoint is currently the pole-free per-vector/spectral-norm form, whose proof uses later graph-subspace technology to avoid assuming in advance that the cosine operator is invertible. The distinction must remain explicit rather than being hidden behind a theorem alias.
+
+\subsection{The sin $2\Theta$ theorem}
+
+Here the gap is between the two diagonal blocks of the unperturbed operator, and the perturbation need not be off-diagonal. Under the source interval/exterior hypothesis,
+\begin{equation}
+  \delta\,\norm{\sin 2\Theta}
+  \le 2\norm{R},
+  \tag{DK-sin2}\label{DK-sin2}
+\end{equation}
+with the perturbation version bounded by $2\norm{H}$. The factor two comes from comparing a projection with its reflected image, not from a loss in the Sylvester estimate.
+
+\subsection{The tan $2\Theta$ theorem}
+
+Assume the perturbation is fully off-diagonal relative to $P$:
+\[
+  PHP=0,
+  \qquad
+  P^\perp HP^\perp=0,
+\]
+and the two diagonal spectral blocks of $A$ are separated by $\delta$. Then
+\begin{equation}
+  \delta\,\norm{\tan 2\Theta}
+  \le 2\norm{R}.
+  \tag{DK-tan2}\label{DK-tan2}
+\end{equation}
+Section 8 adds the strict geometric conclusion that the maximal angle is less than $\pi/4$ in the selected branch. This branch conclusion is essential: $\tan(2\theta)$ alone cannot distinguish angles on opposite sides of a quarter turn.
+
+\section{Section 5: the source's analytic engine $AX-XB=C$}
+
+\sourceanchor{Section 5, especially Theorems 5.1 and 5.2.}
+
+Let $A$ and $B$ be Hermitian operators on possibly different Hilbert spaces, and let $X$ be rectangular. The equation
+\begin{equation}
+  AX-XB=C
+  \tag{DK-Syl}
+\end{equation}
+is the common algebraic core of the angle estimates.
+
+\subsection{Theorem 5.1: ordered separation}
+
+When the quadratic forms are ordered with a gap,
+\[
+  A\le \alpha I,
+  \qquad
+  B\ge (\alpha+\delta)I,
+\]
+or with the orientation reversed, the source proves
+\begin{equation}
+  \delta\norm{X}\le \norm{AX-XB}
+  \tag{DK-5.1}
+\end{equation}
+for every unitarily invariant norm.
+
+The proof proceeds through singular-vector compressions and Ky Fan variational principles. In finite dimensions it can also be viewed as a sharp ordered Schur-multiplier inequality: every denominator has the same sign and magnitude at least $\delta$.
+
+This is the source-faithful root for the classical interval/exterior sine estimates. It has constant one. It should not be replaced by the later arbitrary-separated-spectrum estimate with constant $\pi/2$, which solves a genuinely harder but different problem.
+
+\subsection{Theorem 5.2: non-ordered separation}
+
+The paper also considers spectra separated only by distance. Its strongest general statement at this point is not the modern sharp every-UI-norm theorem. The source obtains Hilbert-space or Hilbert--Schmidt style conclusions and dimension-dependent consequences. Later Bhatia--Davis--McIntosh and Fourier-analytic work supply the general arbitrary-separated norm-ideal theory.
+
+This source boundary is important for attribution: the modern repository may expose stronger arbitrary-separated Sylvester endpoints, but they are not part of the proof provenance of the four 1970 Part III statements.
+
+\section{Section 6: the single-angle proofs}
+
+\sourceanchor{Theorem 6.1, the generalized sin theorem; the subsequent tan theorem proof.}
+
+\subsection{The generalized sine theorem}
+
+Theorem 6.1 replaces the interval picture by the exact separation condition needed for the Sylvester equation. Let the relevant trial block and complementary exact block satisfy an ordered form gap of size $\delta$. The projected residual identity is
+\begin{equation}
+  \widehat A_1 S-SA_0=F_1^*R,
+  \tag{DK-sine-Syl}
+\end{equation}
+where $S=F_1^*E_0$ is the cross map whose singular values are the sines of the principal angles.
+
+Apply Theorem 5.1:
+\[
+  \delta\norm{S}
+  \le \norm{F_1^*R}
+  \le \norm{R}.
+\]
+Since $S$ has the same nonzero singular values as $\sin\Theta$, this is \eqref{DK-sin}.
+
+The Lean proof should preserve these three seams:
+\begin{enumerate}[leftmargin=2em]
+\item a geometric identification of the directed sine map;
+\item a basis-free projected-residual Sylvester identity;
+\item a rectangular unitarily invariant Sylvester estimate.
+\end{enumerate}
+This is precisely the architecture around \code{sylvester_sinThetaEmbedding_eq_projectedResidual}, \code{sinTheta_residual_le_of_orderedGap}, and its interval and spectral wrappers.
+
+\subsection{The tangent theorem}
+
+For the tangent estimate, the off-diagonal condition allows the residual equation to be divided by the cosine block. In principal-coordinate notation the cross block has the form
+\[
+  S C^{-1}=\tan\Theta.
+\]
+The source's one-sided spectral placement ensures the relevant cosine is invertible and gives another ordered Sylvester inequality. The gain from $\sin\Theta$ to $\tan\Theta$ is paid for by the stronger spectral orientation and by the Rayleigh--Ritz condition.
+
+A modern pole-free proof should not simply write $C^{-1}$ before proving that no angle equals $\pi/2$. Nakatsukasa and Motovilov clarify how the required graph property follows from finite-dimensional spectral placement. The repository theorem \code{tan_theta_le} should therefore be read with those companion sources, not solely as a transcription of the 1970 algebra.
+
+\section{Section 7: reflection and the double-angle theorems}
+
+\sourceanchor{Section 7, proof of the sin $2\theta$ and tan $2\theta$ theorems.}
+
+Let
+\[
+  J_P=2P-I
+\]
+be the reflection across $P\Hsp$. Conjugating by $J_P$ leaves the diagonal blocks unchanged and flips the sign of the off-diagonal blocks. If
+\[
+  \widetilde A=J_P(A+H)J_P,
+\]
+then the subspace $J_PQ\Hsp$ makes angle $2\Theta$ with $Q\Hsp$ on the canonical two-plane component. This ``mirror'' converts the double-angle problem into a single-angle problem for two related operators.
+
+For the sine theorem, the residual between the original and reflected systems is twice the off-diagonal contribution, producing the factor two in \eqref{DK-sin2}. Because the sine theorem tolerates spectrum on both sides, no full off-diagonal assumption is needed.
+
+For the tangent theorem, full off-diagonality makes the reflected operator the opposite perturbation of the same diagonal $A$:
+\[
+  J_P(A+H)J_P=A-H.
+\]
+The tangent theorem can then be applied to the pair $A+H$ and $A-H$, yielding \eqref{DK-tan2}. The branch analysis is deferred to Section 8.
+
+The finite Lean implementation mirrors this structure through projection reflections and theorems such as
+\code{sin_two_theta_reflection_le},
+\code{sin_two_theta_starProjection_le}, and
+\code{tan_two_theta_norm_sub_le}.
+
+\section{Section 8: branch selection and the quarter-turn barrier}
+
+\sourceanchor{Theorems 8.1 and 8.2.}
+
+Theorem 8.1 interprets the tan $2\Theta$ hypotheses geometrically and proves that the selected subspaces lie in the acute branch:
+\[
+  \norm{\Theta}_{\op}<\frac{\pi}{4}.
+\]
+This is not recoverable from a bound on $\tan 2\Theta$ alone, because the tangent has a pole at $\pi/4$ and changes branch afterward. A source-faithful formal theorem must therefore carry either an explicit branch conclusion or hypotheses strong enough to derive it.
+
+Theorem 8.2 treats spectral continuation under a small perturbation and identifies the correct perturbed spectral cluster. This is the source-level origin of canonical spectral-subspace wrappers: an abstract invariant subspace inequality becomes useful only after proving that the invariant subspace is the spectral subspace selected by the intended interval.
+
+\section{Sharpness and planar models}
+
+\sourceanchor{Section 2 sharpness remarks and Section 9.}
+
+Each constant is already sharp in a two-dimensional principal plane. A typical model takes
+\[
+  A=\begin{pmatrix}-a&0\\0&a\end{pmatrix}
+\]
+and rotates or perturbs its eigenspaces by an angle $\theta$. Direct sums of such planes can make several singular-angle coordinates simultaneously extremal. This explains why equality is meaningful for arbitrary unitarily invariant norms, not only for the operator norm.
+
+The formalization should retain small explicit equality models as regression tests. They catch errors in the factor two, in the orientation of the residual, and in the definition of the directed sine map.
+
+\section{Source-faithful finite API}
+
+The four classical statements should share ambient generality but not be forced into one conclusion type.
+
+\begin{formalizationmap}
+Section 5, Theorem 5.1 & Ordered-gap Sylvester estimate with constant one for rectangular UI norms & \code{uiNorm_sylvester_le_of_orderedGap}, \code{uiNorm_sylvester_le_of_intervalGap} \\
+Section 6, generalized sin theorem & Residual-to-sine estimate through a cross-block Sylvester equation & \code{sinTheta_residual_le}, \code{sinTheta_residual_le_of_orderedGap}, \code{partIII_sinTheta_uiNorm} \\
+Section 7, sin $2\Theta$ & Reflection reduction and factor-two UI-norm estimate & \code{sin_two_theta_reflection_le}, \code{sin_two_theta_starProjection_le}, \code{partIII_sinTwoTheta_uiNorm} \\
+Section 6, tan theorem & Rayleigh--Ritz/off-diagonal residual and one-sided spectral placement & \code{tan_theta_le}, \code{partIII_tanTheta_vector}; proof interpretation supplemented by Nakatsukasa--Motovilov \\
+Sections 7--8, tan $2\Theta$ & Off-diagonal reflection, operator-norm bound, and acute branch & \code{tan_two_theta_norm_sub_le}, \code{partIII_tanTwoTheta_opNorm} \\
+Projector geometry & Operator norm of projector difference equals maximal directed sine & \code{opNorm_starProjection_sub_le}, \code{opNorm_spectralSubspace_sub_le} \\
+Spectral selection & Replace an arbitrary reducing subspace by the canonical spectral subspace associated with the separated cluster & \code{spectralProjection}, \code{opNorm_spectralSubspace_sub_le}, and the spectral wrappers in the sine modules \\
+\end{formalizationmap}
+
+\section{What should not be conflated with this paper}
+
+\begin{enumerate}[leftmargin=2em]
+\item The arbitrary-separated-spectrum Sylvester estimate with sharp constant $\pi/2$ is later theory. It is useful infrastructure but is not the analytic root of the four source statements.
+\item Exact finite reciprocal orbit interpolation is stronger than any of the four classical conclusions. In particular, a generic undoubled real certificate at mass $\pi/2$ is false and must not be installed as a hidden premise of this API.
+\item The paper states broader UI-norm tangent results than the current pole-free public Lean endpoint. Until the full source theorem is formalized, the facade should advertise the actual proved theorem rather than silently overstate it.
+\item Direct rotation extremality is conceptually central but can remain a separate module from the inequalities themselves.
+\end{enumerate}
+
+\section*{Bibliographic note}
+
+\begin{thebibliography}{9}
+\bibitem{DK1970}
+C. Davis and W. M. Kahan,
+\emph{The Rotation of Eigenvectors by a Perturbation. III},
+SIAM J. Numer. Anal. 7 (1970), 1--46.
+
+\bibitem{BDM1983}
+R. Bhatia, C. Davis, and A. McIntosh,
+\emph{Perturbation of spectral subspaces and solution of linear operator equations},
+Linear Algebra Appl. 52/53 (1983), 45--67.
+
+\bibitem{Nak2012}
+Y. Nakatsukasa,
+\emph{The tan theta theorem with relaxed conditions},
+Linear Algebra Appl. 436 (2012), 1528--1534.
+
+\bibitem{Mot2012}
+A. K. Motovilov,
+\emph{Comment on ``The tan theta theorem with relaxed conditions'' by Y. Nakatsukasa},
+arXiv:1204.4441 (2012).
+\end{thebibliography}
+
+\end{document}

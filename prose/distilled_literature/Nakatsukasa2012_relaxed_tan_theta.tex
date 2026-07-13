@@ -1,0 +1,269 @@
+\input{preamble}
+\title{Nakatsukasa (2012): the tan $\Theta$ theorem with relaxed spectral placement}
+\author{}
+\date{Source-order distilled reconstruction}
+\begin{document}
+\maketitle
+
+\section*{Source map and scope}
+\begin{sourceguide}
+\item[Primary source] Yuji Nakatsukasa, \emph{The tan $\theta$ theorem with relaxed conditions}, Linear Algebra and its Applications 436 (2012), 1528--1534, DOI \href{https://doi.org/10.1016/j.laa.2011.08.038}{10.1016/j.laa.2011.08.038}.
+\item[Coverage] Introduction; Section 2.1, Lemma 2.1 and the CS decomposition; Section 2.2, Theorem 1 and its proof; the two remarks and counterexample discussion; Section 2.3, generalized Theorem 2.
+\item[Formalization target] The mathematical meaning of \code{tan_theta_le}, especially the coercive strip/exterior hypotheses, the residual, the graph/no-pole conclusion, and the distinction between the paper's every-UI-norm statement and the repository's current per-vector endpoint.
+\item[Orientation warning] The theorem permits the approximate/Ritz spectrum to lie on both sides of the unwanted exact spectrum. It does not permit the reverse configuration. The source's discussion of the Davis--Kahan example is essential for preventing an invalid symmetric reformulation.
+\end{sourceguide}
+
+\section{The classical setting and the relaxation}
+
+Let $A\in\C^{n\times n}$ be Hermitian and choose a unitary eigenvector matrix
+\[
+  X=[X_1\ X_2],
+  \qquad
+  X^*AX=\diag(\Lambda_1,\Lambda_2).
+\]
+Let $Q_1\in\C^{n\times k}$ have orthonormal columns and define its Rayleigh quotient and residual by
+\[
+  A_1=Q_1^*AQ_1,
+  \qquad
+  R=AQ_1-Q_1A_1.
+\]
+Since $Q_1^*R=0$, this is the off-diagonal residual required by a tan theorem.
+
+The original Davis--Kahan tan theorem places all Ritz values on one side of the unwanted exact spectrum. Nakatsukasa observes that the proof should only need the exact unwanted eigenvalues to occupy an interval while the Ritz values avoid a larger interval. Thus the Ritz spectrum may have one cluster below and another above.
+
+\begin{theorem}[Nakatsukasa Theorem 1]
+Assume
+\[
+  \spec(\Lambda_2)\subseteq[a,b]
+\]
+and, for some $\delta>0$,
+\[
+  \spec(A_1)
+  \subseteq(-\infty,a-\delta]\cup[b+\delta,\infty).
+\]
+Then for every unitarily invariant norm,
+\begin{equation}
+  \norm{\tan\angle(Q_1,X_1)}
+  \le\frac{\norm{R}}{\delta}.
+  \tag{N-7}\label{N-7}
+\end{equation}
+\end{theorem}
+
+The exact complement $X_2$ is the part whose spectrum lies in the middle interval. The approximate block $Q_1$ is the exterior block. This direction is not interchangeable.
+
+\section{Section 2.1: the singular-value product lemma}
+
+\sourceanchor{Lemma 2.1, equation (5).}
+
+For conformable matrices $X,Y,Z$, let $\widehat\Sigma_X$ and $\widehat\Sigma_Z$ contain the common number of largest singular values. For every unitarily invariant norm,
+\begin{equation}
+  \norm{XYZ}
+  \le \norm{Y}_{\op}
+      \norm{\widehat\Sigma_X\widehat\Sigma_Z}.
+  \tag{N-5}
+\end{equation}
+Analogous inequalities hold with any one of the three factors measured in operator norm.
+
+\begin{proofoutline}
+\item Apply the singular-value product majorization
+\[
+  \sum_{i=1}^r s_i(XYZ)
+  \le\sum_{i=1}^r s_i(X)s_i(YZ).
+\]
+\item Bound $s_i(YZ)\le\norm{Y}_{\op}s_i(Z)$.
+\item Obtain weak majorization of the singular values of $XYZ$ by those of
+$\norm{Y}_{\op}\widehat\Sigma_X\widehat\Sigma_Z$.
+\item Invoke Fan dominance to pass to every unitarily invariant norm.
+\end{proofoutline}
+
+This lemma is the source's mechanism for keeping the tangent estimate in every unitarily invariant norm. A proof that replaces it by pointwise operator-norm inequalities will generally recover only the maximal angle.
+
+\section{The CS decomposition and principal-angle blocks}
+
+\sourceanchor{Section 2.1, equation (6).}
+
+Complete $Q_1$ to a unitary $Q=[Q_1\ Q_2]$ and set
+\[
+  W=Q^*X.
+\]
+The CS decomposition gives unitary changes of coordinates under which the nontrivial blocks of $W$ are
+\[
+  \begin{pmatrix}C&-S\\S&C\end{pmatrix},
+  \qquad
+  C=\diag(\cos\theta_i),
+  \qquad
+  S=\diag(\sin\theta_i).
+\]
+The singular values of $SC^{-1}$, when $C$ is invertible, are the tangents of the canonical angles.
+
+Rectangular identity blocks appear when $k\ne n-k$. They carry zero angles and should not be allowed to obscure the active $p=\min(k,n-k)$ principal planes.
+
+\section{Section 2.2: proof of Theorem 1}
+
+\subsection{The block eigen-equation}
+
+In the $Q$ coordinates,
+\[
+  \widetilde A=Q^*AQ
+  =\begin{pmatrix}A_1&\widetilde R^*\\
+                   \widetilde R&A_2\end{pmatrix},
+  \qquad
+  \widetilde R=Q_2^*R,
+  \qquad
+  \norm{\widetilde R}=\norm{R}.
+\]
+The columns of the second block $W_2=Q^*X_2$ satisfy
+\[
+  \widetilde A W_2=W_2\Lambda_2.
+\]
+Taking the first block row gives the rectangular Sylvester identity
+\begin{equation}
+  A_1W_2^{(1)}-W_2^{(1)}\Lambda_2
+  =-\widetilde R^*W_2^{(2)}.
+  \tag{N-8}\label{N-8}
+\end{equation}
+After the CS decomposition,
+\[
+  W_2^{(1)}=U_1\widehat S V^*,
+  \qquad
+  W_2^{(2)}=U_2\widehat C V^*.
+\]
+
+\subsection{The nontrivial step: prove the cosine block is invertible}
+
+The source does not assume that all angles are below $\pi/2$ and then divide by $C$. It first proves this.
+
+Suppose $\widehat C$ were singular. Then some eigenvector from the exact middle spectral subspace would have all its mass in the $Q_1$ coordinate block. After shifting by the midpoint
+\[
+  \gamma=\frac{a+b}{2},
+  \qquad
+  c=\frac{b-a}{2},
+\]
+the exact block satisfies
+\[
+  \norm{\Lambda_2-\gamma I}_{\op}\le c,
+\]
+whereas the exterior Ritz block satisfies
+\[
+  \sigma_{\min}(A_1-\gamma I)\ge c+\delta.
+\]
+The same nonzero vector would therefore be expanded by at least $c+\delta$ and by at most $c$, a contradiction. Hence $C$ is invertible and no canonical angle is a right angle.
+
+This is the finite matrix version of the graph-subspace condition. It is logically prior to forming $SC^{-1}$.
+
+\subsection{Shift, divide by cosine, and estimate}
+
+Substitute the CS blocks into \eqref{N-8} and right-multiply by the inverse cosine block. After shifting by $\gamma$ one obtains an identity of the form
+\begin{equation}
+  -\widetilde R^*U_2
+  =(A_1-\gamma I)U_1\widehat S\widehat C^{-1}
+   -U_1\widehat S\,(V^*(\Lambda_2-\gamma I)V)\widehat C^{-1}.
+  \tag{N-shifted}
+\end{equation}
+The first term has lower bound
+\[
+  \norm{(A_1-\gamma I)U_1\widehat S\widehat C^{-1}}
+  \ge(c+\delta)\norm{\widehat S\widehat C^{-1}}.
+\]
+Lemma 2.1 bounds the second term by
+\[
+  c\norm{\widehat S\widehat C^{-1}}.
+\]
+Thus
+\[
+  \norm{R}
+  \ge\delta\norm{\widehat S\widehat C^{-1}}
+  =\delta\norm{\tan\angle(Q_1,X_1)},
+\]
+which is \eqref{N-7}.
+
+\section{Why the orientation cannot be reversed}
+
+The theorem allows
+\[
+  \text{Ritz spectrum outside},
+  \qquad
+  \text{unwanted exact spectrum inside}.
+\]
+It does not assert the same conclusion when the exact desired spectrum is inside and the complementary Ritz spectrum surrounds it.
+
+The paper revisits a Davis--Kahan three-dimensional example in which the sine theorem applies but the naive reversed relaxed tan theorem fails. For the original pairing, the residual-over-gap ratio is strictly smaller than the true tangent. If the complementary pair of subspaces is used instead, the spectral orientation matches Theorem 1 and the sharp tangent estimate is recovered.
+
+This is a major API constraint. A theorem stated only as ``the two spectral sets are at distance $\delta$'' is false for tan $\Theta$. The interval/exterior roles must be encoded.
+
+\section{Why the same relaxation does not apply to tan $2\Theta$}
+
+The source gives a small example showing that the analogous two-sided relaxation fails for the tan $2\Theta$ theorem. In the double-angle problem the gap is between two approximate/Ritz blocks, and permitting both sets to surround one another can place an angle at the quarter-turn pole. The quantity $\tan(2\theta)$ then becomes unbounded even though the set distance remains positive.
+
+Thus the four classical Davis--Kahan statements should not be unified by replacing all their gap hypotheses with one symmetric distance predicate.
+
+\section{Section 2.3: generalized unequal dimensions}
+
+\sourceanchor{Theorem 2.}
+
+Theorem 2 permits $X_1$ to have at least as many columns as $Q_1$. The active canonical-angle list still has length equal to the smaller dimension. The proof repeats the CS/Sylvester argument with the rectangular identity and zero blocks tracked explicitly.
+
+This explains the comment in the current Lean theorem that equality of dimensions is not analytically consumed. A source-faithful generalized API should prefer the weakest dimension relation forced by the geometry, while a classical alias may retain equal dimensions for recognizability.
+
+\section{Relation to the current Lean theorem}
+
+The repository theorem
+\code{tan_theta_le}
+uses a basis-free finite-dimensional formulation:
+\begin{itemize}[leftmargin=2em]
+\item a symmetric map $T$;
+\item a $T$-invariant target subspace $V$;
+\item a test subspace $Z$;
+\item form bounds placing $T|_{V^\perp}$ in $[\alpha,\beta]$;
+\item coercivity of the compression to $Z$ outside the midpoint strip by an additional $\delta$;
+\item a residual bound $\rho$ on $Tz-P_ZTz$.
+\end{itemize}
+Its conclusion is the pole-free per-vector inequality
+\[
+  \delta\norm{z-P_Vz}
+  \le\rho\norm{P_Vz}
+  \qquad(z\in Z).
+\]
+This implies $Z\cap V^\perp=\{0\}$ and hence the tangent graph condition. It is an operator-norm/per-vector theorem, not yet the source's full every-UI-norm matrix statement.
+
+The proof is not a literal CS decomposition. It uses a maximizer of the projection from $V^\perp$ into $Z$, strip contraction on $V^\perp$, a residual adjoint estimate, and Pythagorean identities. This is a sound coordinate-free modernization of the same coercive mechanism.
+
+\begin{formalizationmap}
+Theorem 1 hypotheses & Exact complement in an interval; Ritz compression outside the enlarged interval & \code{hVa}, \code{hVb}, and coercivity hypothesis \code{hZ} in \code{tan_theta_le} \\
+Rayleigh residual & $R=AQ_1-Q_1A_1$ and $Q_1^*R=0$ & \code{T x - Z.starProjection (T x)} and \code{hρ} \\
+Invertibility of $C$ & No right-angle canonical direction; graph property & Pole-free conclusion of \code{tan_theta_le}; Motovilov Lemma 3 supplies a complementary spectral proof \\
+Tangent estimate & $\delta\|\tan\Theta\|\le\|R\|$ & Per-vector theorem \code{tan_theta_le}; alias \code{partIII_tanTheta_vector} \\
+Lemma 2.1 & UI-norm triple-product estimate through singular-value majorization & Needed for any future upgrade from the per-vector theorem to the source's full UI-norm conclusion \\
+Theorem 2 & Unequal-dimensional generalized tangent theorem & Current proof notes that its equality-of-finrank assumption is unused; a future generalized wrapper may weaken it \\
+Orientation counterexample & Reverse interval/exterior configuration is invalid & Should be encoded as theorem documentation or a finite regression example before adding spectral wrappers \\
+\end{formalizationmap}
+
+\section{Formalization priorities suggested by the paper}
+
+\begin{enumerate}[leftmargin=2em]
+\item Keep the current pole-free theorem as the stable classical endpoint unless and until the full UI-norm statement is proved.
+\item Add canonical spectral-subspace wrappers that preserve the exterior-Ritz/interior-exact orientation.
+\item Do not replace the coercive interval/exterior hypotheses by arbitrary spectral distance.
+\item If proving the full source theorem, first formalize the singular-value product majorization used in Lemma 2.1 or derive an equivalent Ky Fan inequality in the rectangular UI-norm layer.
+\item Separate the no-pole/graph theorem from the numerical tangent estimate so it can be reused by generalized trial-map developments.
+\end{enumerate}
+
+\section*{Bibliography}
+\begin{thebibliography}{9}
+\bibitem{Nak2012}
+Y. Nakatsukasa,
+\emph{The tan $\theta$ theorem with relaxed conditions},
+Linear Algebra Appl. 436 (2012), 1528--1534.
+
+\bibitem{DK1970}
+C. Davis and W. M. Kahan,
+\emph{The Rotation of Eigenvectors by a Perturbation. III},
+SIAM J. Numer. Anal. 7 (1970), 1--46.
+
+\bibitem{Mot2012}
+A. K. Motovilov,
+\emph{Comment on ``The tan theta theorem with relaxed conditions'' by Y. Nakatsukasa},
+arXiv:1204.4441.
+\end{thebibliography}
+
+\end{document}

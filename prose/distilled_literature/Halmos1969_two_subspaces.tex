@@ -1,0 +1,303 @@
+\input{preamble}
+\title{Halmos (1969), \emph{Two Subspaces}:\\canonical projection geometry for tangent maps and direct rotations}
+\author{}
+\date{Formalization-oriented distilled reconstruction and Davis comparison}
+\begin{document}
+\maketitle
+
+\section*{Source map and scope}
+\begin{sourceguide}
+\item[Primary source] Paul R. Halmos, \emph{Two Subspaces}, Transactions of the American Mathematical Society 144 (1969), 381--389.
+\item[Companion source] Chandler Davis, \emph{The Rotation of Eigenvectors by a Perturbation} (1963), especially the canonical rotation layer already reconstructed in \code{Davis1963_rotation_of_eigenvectors.tex}.
+\item[Modern checks] Later formulations of Halmos's two-projection theorem and graph-subspace geometry; the repository's \code{PrincipalAngles.lean}, \code{DavisKahanExt/OperatorAngle.lean}, \code{DavisKahanTheory/DirectRotation.lean}, and experimental \code{GraphSubspace.lean}.
+\item[Purpose] Extract the exact decomposition and functional calculus needed for proof-carrying graph operators, principal tangent singular values, projection-distance criteria, and canonical direct rotation.
+\end{sourceguide}
+
+Halmos's theorem is the right geometric foundation because it separates all degeneracies before introducing an angle operator. In finite dimension this becomes a direct sum of trivial intersection blocks and generic principal two-planes. Almost every hard tangent or direct-rotation proof becomes scalar once this decomposition is available.
+
+\section{The four intersection subspaces and generic remainder}
+
+Let $P$ and $Q$ be orthogonal projections on a finite-dimensional Hilbert space $E$. Define
+\[
+  E_{11}:=\range P\cap\range Q,
+  \qquad
+  E_{10}:=\range P\cap\ker Q,
+\]
+\[
+  E_{01}:=\ker P\cap\range Q,
+  \qquad
+  E_{00}:=\ker P\cap\ker Q.
+\]
+These subspaces are mutually orthogonal and reduce both projections. Let $E_g$ be their common orthogonal complement. Then
+\[
+  E=E_{11}\oplus E_{10}\oplus E_{01}\oplus E_{00}\oplus E_g.
+\]
+On the first four pieces, $(P,Q)$ is respectively
+\[
+  (I,I),\quad(I,0),\quad(0,I),\quad(0,0).
+\]
+The pair on $E_g$ is in generic position:
+\[
+  \range P\cap\range Q=0,
+  \quad
+  \range P\cap\ker Q=0,
+\]
+\[
+  \ker P\cap\range Q=0,
+  \quad
+  \ker P\cap\ker Q=0.
+\]
+
+This decomposition must be explicit in a maximal finite-dimensional API. Totalized tangent definitions often hide $E_{10}$, the precise pole subspace where a principal angle equals $\pi/2$.
+
+\section{Generic-position block model}
+
+On the generic part, choose $K:=\range(P|_{E_g})$. There is a unitary identification
+\[
+  E_g\cong K\oplus K
+\]
+under which
+\[
+  P=\begin{bmatrix}I&0\\0&0\end{bmatrix}
+\]
+and
+\[
+  Q=\begin{bmatrix}
+      C^2 & CS\\
+      CS & S^2
+    \end{bmatrix}.
+\]
+Here $C$ and $S$ are commuting positive contractions on $K$ satisfying
+\[
+  C^2+S^2=I,
+\]
+and generic position means
+\[
+  \ker C=0,
+  \qquad
+  \ker S=0.
+\]
+In finite dimension, $C$ and $S$ are simultaneously diagonalizable. Their eigenvalues are
+\[
+  \cos\theta_j,
+  \qquad
+  \sin\theta_j,
+  \qquad 0<\theta_j<\frac\pi2.
+\]
+Thus the generic block is an orthogonal direct sum of ordinary two-dimensional principal planes.
+
+\begin{remark}
+The off-diagonal block is $CS$, not an independent operator. Proving commutation and the identity $C^2+S^2=I$ before diagonalization is what makes all later functional-calculus formulas basis independent.
+\end{remark}
+
+\section{Coordinate-free closeness, separation, and angle operators}
+
+Halmos-style full-space operators are
+\[
+  \mathcal C(P,Q):=PQP+P^\perp Q^\perp P^\perp,
+\]
+\[
+  \mathcal S(P,Q):=PQ^\perp P+P^\perp QP^\perp.
+\]
+They satisfy
+\[
+  0\le\mathcal C\le I,
+  \qquad
+  0\le\mathcal S\le I,
+  \qquad
+  \mathcal C+\mathcal S=I.
+\]
+Define the full operator angle by
+\[
+  \Theta(P,Q):=\arccos\sqrt{\mathcal C(P,Q)}.
+\]
+Then
+\[
+  \cos^2\Theta=\mathcal C,
+  \qquad
+  \sin^2\Theta=\mathcal S.
+\]
+This full-space definition is symmetric in the two subspaces and records unmatched dimensions. Restricted angle operators on $\range P$ are convenient for directed theorems, but they should be derived from the full geometry.
+
+\section{Principal singular-value dictionary}
+
+Let $U=\range P$ and $V=\range Q$. The singular values of the directed blocks are:
+\[
+  s(QP|_U)=\cos\theta_j,
+\]
+\[
+  s(Q^\perp P|_U)=\sin\theta_j.
+\]
+For equal rank, the nonzero singular values of $P-Q$ are the principal sines, each with the standard doubled multiplicity on the generic planes. In particular,
+\[
+  \|P-Q\|=\max_j\sin\theta_j.
+\]
+The double-angle cross block is
+\[
+  2P^\perp QP,
+\]
+with singular values $\sin(2\theta_j)$.
+
+The tangent graph map on the transverse part is
+\[
+  T=SC^{-1},
+\]
+with singular values
+\[
+  \tan\theta_j.
+\]
+This theorem is the exact missing dictionary behind \code{singularValues_graphOperator}. It should be proved once from simultaneous diagonalization, not by a separate matrix calculation for each tangent construction.
+
+\section{Transversality and graph subspaces}
+
+Let $U$ be fixed and let $V$ have the same finite dimension. The following are equivalent:
+\begin{enumerate}
+\item $V\cap U^\perp=\{0\}$;
+\item the compression $P_U|_V:V\to U$ is invertible;
+\item $V$ is the graph of a unique linear map $T:U\to U^\perp$;
+\item every principal angle is $<\pi/2$;
+\item $\|P_U-P_V\|<1$.
+\end{enumerate}
+The graph is
+\[
+  V=\{u+Tu:u\in U\}.
+\]
+Its normalized isometric embedding is
+\[
+  u\longmapsto (I+T^*T)^{-1/2}u
+    +T(I+T^*T)^{-1/2}u.
+\]
+Hence
+\[
+  C=(I+T^*T)^{-1/2},
+  \qquad
+  S=T(I+T^*T)^{-1/2},
+\]
+and
+\[
+  SC^{-1}=T.
+\]
+Therefore the operator angle satisfies
+\[
+  \tan\Theta=|T|
+\]
+on the source coordinate space, and
+\[
+  \tan\theta_{\max}=\|T\|.
+\]
+
+\subsection{Unequal dimensions}
+
+If $\dim V>\dim U$, transversality to $U^\perp$ is impossible. If $\dim V<\dim U$, $V$ may be the graph over a proper subspace of $U$. Thus the equal-rank graph theorem and the directed rectangular sine theorem have different maximal domains. An API should not use one implicit dimension convention for both.
+
+\section{Reflection algebra and doubled angles}
+
+Define the reflections
+\[
+  J_P:=2P-I,
+  \qquad
+  J_Q:=2Q-I.
+\]
+On a principal two-plane with angle $\theta$, the product $J_QJ_P$ is rotation by $2\theta$. Consequently,
+\[
+  \frac12\|J_Q-J_P\|
+  =\|P-Q\|
+  =\sin\theta_{\max},
+\]
+and the skew or off-diagonal block of the reflection product encodes $\sin(2\Theta)$.
+
+This explains the Davis--Kahan reflection proof: conjugating an operator by $J_Q$ turns the angle between $P$ and $Q$ into a single-angle comparison between $P$ and $J_QP$, whose principal angles are doubled on the correct component.
+
+The branch problem at $\pi/4$ is visible here. Rotation by $2\theta$ cannot distinguish $\theta$ from $\pi/2-\theta$ using sine alone. A tangent or inverse-cosine reconstruction must select the component containing zero.
+
+\section{Canonical direct rotation}
+
+On each generic principal plane define
+\[
+  W_\theta=
+  \begin{bmatrix}
+    \cos\theta&-\sin\theta\\
+    \sin\theta&\cos\theta
+  \end{bmatrix}.
+\]
+Extend it by the identity on $E_{11}\oplus E_{00}$. Defect subspaces $E_{10}$ and $E_{01}$ require equal dimension for a unitary intertwiner and destroy uniqueness unless additional data are supplied. For an acute equal-rank pair they are absent, and the direct rotation is canonical.
+
+In generic block form,
+\[
+  W=
+  \begin{bmatrix}
+    C&-S\\
+    S&C
+  \end{bmatrix}.
+\]
+It satisfies
+\[
+  WPW^*=Q,
+  \qquad
+  W^2=J_QJ_P.
+\]
+If
+\[
+  K:=QP+Q^\perp P^\perp,
+\]
+then $K$ has block form
+\[
+  K=\begin{bmatrix}C^2&-CS\\CS&C^2\end{bmatrix},
+\]
+and the direct rotation is its polar factor on the acute part:
+\[
+  W=K|K|^{-1}.
+\]
+This is the cleanest construction for Lean because uniqueness of the polar factor packages basis independence.
+
+\section{Minimality statements and their hypotheses}
+
+The direct rotation is ``most direct'' in several inequivalent senses.
+
+\begin{enumerate}
+\item It minimizes Frobenius displacement among unitaries sending $U$ to $V$.
+\item It minimizes the sum of squared angles moved by an orthonormal basis.
+\item It minimizes maximal vector displacement.
+\item Under an appropriate angle cap, positive displacement singular values are weakly majorized by those of any competing intertwiner, yielding UI-norm minimality.
+\end{enumerate}
+
+The last statement is the most delicate. On a principal plane, the direct rotation chooses the short arc. Without an acute or stronger angle cap, another unitary can change branches and invalidate a naive scalar monotonicity argument. The current \code{DirectRotation.lean} comments correctly warn that the UI-norm claims must retain the qualifications in Davis--Kahan Section 4.
+
+\section{Lean-sized theorem seams}
+
+A reusable finite implementation should prove the following in order.
+
+\begin{enumerate}
+\item Orthogonal decomposition into $E_{11},E_{10},E_{01},E_{00},E_g$.
+\item Generic block equivalence $E_g\simeq K\oplus K$.
+\item Positive commuting $C,S$ with $C^2+S^2=I$.
+\item Simultaneous eigenbasis and principal-plane decomposition.
+\item Singular values of cosine, sine, difference, and doubled cross blocks.
+\item Equivalence of transversality, graph representation, and projection norm $<1$.
+\item Graph embedding formulas and $\tan\Theta=|T|$.
+\item Reflection product and doubled-angle formulas.
+\item Polar-factor construction of direct rotation.
+\item Uniqueness and intertwining.
+\item Frobenius, operator-norm, and UI-norm minimality with exact angle hypotheses.
+\end{enumerate}
+
+\section{Repository map}
+
+\begin{formalizationmap}
+Intersection and generic decomposition & Four defect spaces plus principal generic part & Partially implicit in \code{PrincipalAngles.lean}; should become an explicit reusable theorem. \\
+Cosine/sine blocks & Positive commuting pair and principal singular values & Much of the sine layer exists; the tangent singular-value dictionary remains incomplete. \\
+Graph theorem & $\|P-Q\|<1$, transversality, unique angular operator & Experimental \code{GraphSubspace.lean} contains the intended statements with sorries. \\
+Tangent identity & $\tan\Theta=|T|$ and maximal-angle norm formula & Central missing seam for \code{TanTheta.lean}. \\
+Reflection geometry & Product of reflections and doubled angles & Used by \code{SinTwoTheta.lean}; should be centralized. \\
+Direct rotation & Polar factor, trigonometric block, square identity, uniqueness & \code{DirectRotation.lean} has the architecture but several root proofs remain. \\
+Minimality & Frobenius/UI/max displacement & Largest unfinished Davis geometry cluster. \\
+\end{formalizationmap}
+
+\section*{Bibliography}
+\begin{thebibliography}{9}
+\bibitem{Halmos1969} P. R. Halmos, \emph{Two Subspaces}, Trans. Amer. Math. Soc. 144 (1969), 381--389.
+\bibitem{Davis1963} C. Davis, \emph{The Rotation of Eigenvectors by a Perturbation}, J. Math. Anal. Appl. 6 (1963), 159--173.
+\bibitem{DK1970} C. Davis and W. M. Kahan, \emph{The Rotation of Eigenvectors by a Perturbation. III}, SIAM J. Numer. Anal. 7 (1970), 1--46.
+\end{thebibliography}
+
+\end{document}
