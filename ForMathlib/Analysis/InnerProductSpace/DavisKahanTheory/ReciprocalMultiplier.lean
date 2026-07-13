@@ -91,6 +91,64 @@ theorem unitaryOrbitAction_apply
     unitaryOrbitAction U V T = U.toLinearMap ∘ₗ T ∘ₗ V.toLinearMap :=
   rfl
 
+/-- The unitary diagonal in an orthonormal basis with prescribed unit-modulus
+coordinate factors.  This is the finite-dimensional operator attached to one
+Fourier character in the reciprocal-multiplier argument. -/
+noncomputable def basisDiagonalUnitary {G : Type*}
+    [NormedAddCommGroup G] [InnerProductSpace 𝕜 G]
+    {ι : Type*} [Fintype ι] [DecidableEq ι]
+    (e : OrthonormalBasis ι 𝕜 G) (ζ : ι → unitary 𝕜) : G ≃ₗᵢ[𝕜] G :=
+  e.repr.trans <|
+    (LinearIsometryEquiv.piLpCongrRight 2 fun i =>
+      ζ i • LinearIsometryEquiv.refl 𝕜 𝕜).trans e.repr.symm
+
+/-- A basis diagonal acts on each basis vector by its prescribed phase. -/
+@[simp]
+theorem basisDiagonalUnitary_apply_basis {G : Type*}
+    [NormedAddCommGroup G] [InnerProductSpace 𝕜 G]
+    {ι : Type*} [Fintype ι] [DecidableEq ι]
+    (e : OrthonormalBasis ι 𝕜 G) (ζ : ι → unitary 𝕜) (i : ι) :
+    basisDiagonalUnitary e ζ (e i) = (ζ i : 𝕜) • e i := by
+  rw [← e.repr_symm_single i]
+  simp only [basisDiagonalUnitary, LinearIsometryEquiv.trans_apply,
+    LinearIsometryEquiv.apply_symm_apply]
+  rw [LinearIsometryEquiv.piLpCongrRight_single]
+  simp only [LinearIsometryEquiv.smul_apply]
+  change e.repr.symm (PiLp.single 2 i ((ζ i : 𝕜) * 1)) = _
+  rw [mul_one]
+  rw [← map_smul]
+  congr 1
+  ext q
+  simp [PiLp.single_apply]
+
+/-- Left and right basis diagonals act on a coordinate matrix unit by the
+product of the corresponding coordinate phases.  Taking the left phase at
+frequency `α i` and the right phase at frequency `-β j` therefore realizes
+the Fourier character at the difference `α i - β j`. -/
+theorem unitaryOrbitAction_basisMatrixUnit
+    (eF : OrthonormalBasis (Fin (Module.finrank 𝕜 F)) 𝕜 F)
+    (eE : OrthonormalBasis (Fin (Module.finrank 𝕜 E)) 𝕜 E)
+    (ζF : Fin (Module.finrank 𝕜 F) → unitary 𝕜)
+    (ζE : Fin (Module.finrank 𝕜 E) → unitary 𝕜)
+    (i : Fin (Module.finrank 𝕜 F))
+    (j : Fin (Module.finrank 𝕜 E)) :
+    unitaryOrbitAction (basisDiagonalUnitary eF ζF)
+        (basisDiagonalUnitary eE ζE) (basisMatrixUnit eF eE i j) =
+      ((ζF i : 𝕜) * (ζE j : 𝕜)) • basisMatrixUnit eF eE i j := by
+  refine eE.toBasis.ext fun q => ?_
+  rw [OrthonormalBasis.coe_toBasis]
+  change basisDiagonalUnitary eF ζF
+      (basisMatrixUnit eF eE i j (basisDiagonalUnitary eE ζE (eE q))) =
+    (((ζF i : 𝕜) * (ζE j : 𝕜)) • basisMatrixUnit eF eE i j) (eE q)
+  rw [basisDiagonalUnitary_apply_basis, map_smul, map_smul,
+    basisMatrixUnit_apply, LinearMap.smul_apply, basisMatrixUnit_apply,
+    eE.inner_eq_ite]
+  by_cases hjq : j = q
+  · subst q
+    simp only [ite_true, one_smul, basisDiagonalUnitary_apply_basis]
+    rw [smul_smul, mul_comm]
+  · simp [hjq]
+
 /-- A simultaneous finite orbit interpolation of the reciprocal coordinate
 multiplier.
 
