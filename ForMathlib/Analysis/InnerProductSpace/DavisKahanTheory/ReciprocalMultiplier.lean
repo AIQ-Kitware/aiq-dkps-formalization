@@ -3,6 +3,7 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
+import ForMathlib.Analysis.Fourier.HaagerupZsidoKernel
 import ForMathlib.Analysis.InnerProductSpace.DavisKahanTheory.RectangularUINorm
 import Mathlib.Analysis.Convex.Integral
 import Mathlib.Analysis.SpecialFunctions.Complex.Arg
@@ -919,6 +920,17 @@ def HasIntegrableReciprocalFourierKernel (mass : ℝ) : Prop :=
         (1 : ℂ) / (x : ℂ)) ∧
     (∫ t, ‖f t‖) ≤ mass
 
+/-- **The sharp reciprocal kernel exists.**  The explicit Haagerup--Zsidó
+`α = 0` kernel is measurable and integrable, represents `1 / x` on the whole
+exterior region `1 ≤ |x|`, and has `L¹` mass exactly `π / 2`. -/
+theorem hasIntegrableReciprocalFourierKernel_pi_div_two :
+    HasIntegrableReciprocalFourierKernel (Real.pi / 2) :=
+  ⟨HaagerupZsido.reciprocalKernel,
+    HaagerupZsido.measurable_reciprocalKernel,
+    HaagerupZsido.integrable_reciprocalKernel,
+    fun x hx => HaagerupZsido.reciprocalKernel_fourier x hx,
+    HaagerupZsido.integral_norm_reciprocalKernel.le⟩
+
 /-- An integrable reciprocal Fourier kernel yields finite Fourier sums of no
 greater mass which uniformly approximate any prescribed finite frequency
 array. -/
@@ -1826,6 +1838,56 @@ theorem kyFan_reciprocalMultiplier_le_real_of_integrableKernel
     (alpha i - beta j) / delta by ring]
   rw [abs_div, abs_of_pos hdelta]
   exact (le_div_iff₀ hdelta).2 (by simpa using hgap i j)
+
+/-- **Unconditional sharp complex Ky Fan reciprocal-multiplier estimate.**
+The explicit Haagerup--Zsidó kernel supplies the analytic certificate; no
+open assumption remains. -/
+theorem kyFan_reciprocalMultiplier_le_complex
+    {EC FC : Type*}
+    [NormedAddCommGroup EC] [InnerProductSpace ℂ EC]
+    [FiniteDimensional ℂ EC]
+    [NormedAddCommGroup FC] [InnerProductSpace ℂ FC]
+    [FiniteDimensional ℂ FC]
+    (eF : OrthonormalBasis (Fin (Module.finrank ℂ FC)) ℂ FC)
+    (eE : OrthonormalBasis (Fin (Module.finrank ℂ EC)) ℂ EC)
+    (α : Fin (Module.finrank ℂ FC) → ℝ)
+    (β : Fin (Module.finrank ℂ EC) → ℝ)
+    {X C : EC →ₗ[ℂ] FC} {δ : ℝ} (hδ : 0 < δ)
+    (hgap : ∀ i j, δ ≤ |α i - β j|)
+    (hcoeff : ∀ i j,
+      (((α i : ℝ) : ℂ) - ((β j : ℝ) : ℂ)) *
+          ⟪X (eE j), eF i⟫_ℂ =
+        ⟪C (eE j), eF i⟫_ℂ)
+    (k : ℕ) :
+    δ * RectangularUnitarilyInvariantNorm.rectangularKyFanSum k X ≤
+      (Real.pi / 2) *
+        RectangularUnitarilyInvariantNorm.rectangularKyFanSum k C :=
+  kyFan_reciprocalMultiplier_le_complex_of_integrableKernel eF eE α β hδ hgap
+    hasIntegrableReciprocalFourierKernel_pi_div_two hcoeff k
+
+/-- **Unconditional sharp real Ky Fan reciprocal-multiplier estimate**,
+through the doubled orthogonal descent from the explicit complex kernel. -/
+theorem kyFan_reciprocalMultiplier_le_real
+    {ER FR : Type*}
+    [NormedAddCommGroup ER] [InnerProductSpace ℝ ER]
+    [FiniteDimensional ℝ ER]
+    [NormedAddCommGroup FR] [InnerProductSpace ℝ FR]
+    [FiniteDimensional ℝ FR]
+    (eF : OrthonormalBasis (Fin (Module.finrank ℝ FR)) ℝ FR)
+    (eE : OrthonormalBasis (Fin (Module.finrank ℝ ER)) ℝ ER)
+    (alpha : Fin (Module.finrank ℝ FR) → ℝ)
+    (beta : Fin (Module.finrank ℝ ER) → ℝ)
+    {X C : ER →ₗ[ℝ] FR} {delta : ℝ} (hdelta : 0 < delta)
+    (hgap : ∀ i j, delta ≤ |alpha i - beta j|)
+    (hcoeff : ∀ i j,
+      (alpha i - beta j) * ⟪X (eE j), eF i⟫_ℝ =
+        ⟪C (eE j), eF i⟫_ℝ)
+    (k : ℕ) :
+    delta * RectangularUnitarilyInvariantNorm.rectangularKyFanSum k X ≤
+      (Real.pi / 2) *
+        RectangularUnitarilyInvariantNorm.rectangularKyFanSum k C :=
+  kyFan_reciprocalMultiplier_le_real_of_integrableKernel eF eE alpha beta
+    hdelta hgap hasIntegrableReciprocalFourierKernel_pi_div_two hcoeff k
 
 /-- Every finite reciprocal multiplier with gap `δ` satisfies the sharp
 simultaneous Ky Fan prefix estimate.  All operator and singular-value content
