@@ -11,6 +11,7 @@ import ForMathlib.Analysis.InnerProductSpace.DavisKahanTheory.FrameFactorization
 import ForMathlib.Analysis.InnerProductSpace.DavisKahanTheory.Sylvester
 import ForMathlib.Analysis.InnerProductSpace.DavisKahanTheory.SinTheta
 import ForMathlib.Analysis.InnerProductSpace.DavisKahanTheory.TanTheta
+import ForMathlib.Analysis.InnerProductSpace.DavisKahanTheory.TanThetaPaper
 import ForMathlib.Analysis.InnerProductSpace.DavisKahanTheory.SinTwoTheta
 import ForMathlib.Analysis.InnerProductSpace.DavisKahanTheory.PartIII
 import ForMathlib.Analysis.InnerProductSpace.DavisKahanTheory.TanTwoTheta
