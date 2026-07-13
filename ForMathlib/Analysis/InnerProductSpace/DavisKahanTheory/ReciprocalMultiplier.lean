@@ -430,6 +430,64 @@ theorem finiteUnitaryOrbitCertificate_of_reciprocalInterpolation
       simp only [S, LinearMap.sum_apply, LinearMap.smul_apply,
         unitaryOrbitAction_apply]
 
+/-- Approximate finite scalar Fourier interpolations with masses tending to
+`π / 2` imply the sharp complex Ky Fan reciprocal-multiplier estimate.
+
+This formulation matches the classical extremal result, whose sharp constant
+is an infimum.  No attaining Fourier density and no compactness argument for
+the family of frequencies is required: apply the finite orbit estimate at
+mass `π / 2 + ε`, then let `ε` decrease to zero in `ℝ`. -/
+theorem kyFan_reciprocalMultiplier_le_complex_of_approximateFourierInterpolation
+    {EC FC : Type*}
+    [NormedAddCommGroup EC] [InnerProductSpace ℂ EC]
+    [FiniteDimensional ℂ EC]
+    [NormedAddCommGroup FC] [InnerProductSpace ℂ FC]
+    [FiniteDimensional ℂ FC]
+    (eF : OrthonormalBasis (Fin (Module.finrank ℂ FC)) ℂ FC)
+    (eE : OrthonormalBasis (Fin (Module.finrank ℂ EC)) ℂ EC)
+    (α : Fin (Module.finrank ℂ FC) → ℝ)
+    (β : Fin (Module.finrank ℂ EC) → ℝ)
+    {X C : EC →ₗ[ℂ] FC} {δ : ℝ} (hδ : 0 < δ)
+    (hfourier : ∀ ε : ℝ, 0 < ε →
+      HasFiniteReciprocalFourierInterpolation
+        α β δ (Real.pi / 2 + ε))
+    (hcoeff : ∀ i j,
+      (((α i : ℝ) : ℂ) - ((β j : ℝ) : ℂ)) *
+          ⟪X (eE j), eF i⟫_ℂ =
+        ⟪C (eE j), eF i⟫_ℂ)
+    (k : ℕ) :
+    δ * RectangularUnitarilyInvariantNorm.rectangularKyFanSum k X ≤
+      (Real.pi / 2) *
+        RectangularUnitarilyInvariantNorm.rectangularKyFanSum k C := by
+  let K := RectangularUnitarilyInvariantNorm.rectangularKyFanSum k C
+  have hK0 : 0 ≤ K := by
+    dsimp [K, RectangularUnitarilyInvariantNorm.rectangularKyFanSum]
+    exact Finset.sum_nonneg fun i _ => C.singularValues_nonneg (i : ℕ)
+  apply le_of_forall_pos_le_add
+  intro η hη
+  let ε := η / (K + 1)
+  have hdenom : 0 < K + 1 := by positivity
+  have hε : 0 < ε := div_pos hη hdenom
+  have hinterp :=
+    hasReciprocalOrbitInterpolation_of_finiteFourierInterpolation
+      eF eE α β (hfourier ε hε)
+  have hcert := finiteUnitaryOrbitCertificate_of_reciprocalInterpolation
+    eF eE α β hinterp hcoeff
+  have hbound :=
+    RectangularUnitarilyInvariantNorm.rectangularKyFanSum_le_of_finiteUnitaryOrbitCertificate
+      k hcert
+  rw [RectangularUnitarilyInvariantNorm.rectangularKyFanSum_real_smul
+    k X hδ.le] at hbound
+  have hεK : ε * K ≤ η := by
+    rw [show ε = η / (K + 1) by rfl, div_mul_eq_mul_div,
+      div_le_iff₀ hdenom]
+    nlinarith
+  calc
+    δ * RectangularUnitarilyInvariantNorm.rectangularKyFanSum k X ≤
+        (Real.pi / 2 + ε) * K := hbound
+    _ = (Real.pi / 2) * K + ε * K := by ring
+    _ ≤ (Real.pi / 2) * K + η := by gcongr
+
 /-- Every finite reciprocal multiplier with gap `δ` satisfies the sharp
 simultaneous Ky Fan prefix estimate.  All operator and singular-value content
 is discharged from the finite orbit interpolation certificate. -/
