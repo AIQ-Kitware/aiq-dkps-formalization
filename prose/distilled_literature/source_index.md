@@ -6,14 +6,14 @@ The index deliberately separates a paper's **formalization role** from the state
 
 ## Inventory summary
 
-- **52 works**: 43 papers, 8 books, and 1 monograph.
-- **2** source-order distilled reconstructions are complete.
+- **53 works**: 44 papers, 8 books, and 1 monograph.
+- **3** source-order distilled reconstructions are complete.
 - **2** broad core notes remain to be upgraded.
 - **1** exact transcriptions are intentionally sufficient because a maintained discrepancy ledger supplies the theorem-level reconstruction.
 - **3** works have transcription or source text but no source-order proof reconstruction.
 - **44** works have no local distilled note at all.
 - **17** entries remain in the bibliographic verification queue.
-- Priority split: P0=10, P1=20, P2=16, P3=6.
+- Priority split: P0=10, P1=21, P2=16, P3=6.
 
 ## Interpretation
 
@@ -71,6 +71,7 @@ The index deliberately separates a paper's **formalization role** from the state
 | `BhatiaDavisMcIntosh1983` | 1983 | Perturbation of Spectral Subspaces and Solution of Linear Operator Equations | primary theorem source | hard arbitrary-spectrum Sylvester estimate scaffolded | `missing` | P1 |
 | `Higham1986` | 1986 | Computing the Polar Decomposition--with Applications | modern comparison | quantitative polar-factor comparison source | `missing` | P2 |
 | `BhatiaRosenthal1997` | 1997 | How and Why to Solve the Operator Equation AX - XB = Y | supporting source | modern reference for Sylvester equations | `missing` | P2 |
+| `AlbeverioMakarovMotovilov2001` | 2001 | Graph Subspaces and the Spectral Shift Function | supporting source | source-order sharp Sylvester/Fourier bridge reconstructed; scalar pi/2 interpolation and real descent remain active | `complete` | P1 |
 | `KostrykinMakarovMotovilov2005` | 2005 | On the Existence of Solutions to the Operator Riccati Equation and the Tan Theta Theorem | primary theorem source | tan Theta and Riccati scaffold sources | `missing` | P1 |
 | `KnyazevArgentati2006` | 2006 | Majorization for Changes in Angles Between Subspaces, Ritz Values, and Graph Laplacian Spectra | modern comparison | principal-angle and majorization comparison source | `missing` | P2 |
 | `KnyazevJujunashviliArgentati2010` | 2010 | Angles Between Infinite Dimensional Subspaces with Applications to the Rayleigh--Ritz and Alternating Projectors Methods | future extension | future arbitrary-dimensional principal-angle reference | `missing` | P3 |
@@ -115,7 +116,7 @@ The index deliberately separates a paper's **formalization role** from the state
 - **`Mirsky1960` — Symmetric Gauge Functions and Unitarily Invariant Norms**: Reconstruct the exact representation theorem and note where the Lean interface is finite-dimensional or norm-seminorm generalized.
 - **`DavisKahan1970` — The Rotation of Eigenvectors by a Perturbation. III**: Convert the broad core note into a section-by-section reconstruction with every theorem numbered and the formalized/generalized variants separated.
 - **`Wedin1972` — Perturbation Bounds in Connection with Singular Value Decomposition**: Acquire source and determine which theorem should be the canonical named Wedin wrapper over the Hermitian-dilation results.
-- **`BhatiaDavisMcIntosh1983` — Perturbation of Spectral Subspaces and Solution of Linear Operator Equations**: Acquire and verify the original bibliographic record, then reconstruct the analytic proof before completing the Lean seam.
+- **`BhatiaDavisMcIntosh1983` — Perturbation of Spectral Subspaces and Solution of Linear Operator Equations**: Acquire and reconstruct the original 1983 paper in source order. The Albeverio--Makarov--Motovilov note documents the later sharp pi/2 synthesis and attribution chain but is not a substitute for the original proof.
 - **`KostrykinMakarovMotovilov2005` — On the Existence of Solutions to the Operator Riccati Equation and the Tan Theta Theorem**: Reconstruct the exact hypotheses and distinguish the bounded finite-dimensional specialization from the full operator theorem.
 - **`Motovilov2012` — Comment on 'The Tan Theta Theorem with Relaxed Conditions'**: Distill together with Nakatsukasa 2012 while preserving the disagreement and corrected statement.
 - **`Nakatsukasa2012` — The Tan Theta Theorem with Relaxed Conditions**: Record the exact pole/separation condition and the issue corrected by Motovilov.

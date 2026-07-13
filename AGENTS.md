@@ -52,3 +52,20 @@ The highest-value operating rules are:
   "unproved below" — and refer to `#print axioms` as "the axiom audit" only outside Lean
   sources. To flag work for a stronger agent, write the explanation in the docstring using
   such wording, never the banned words.
+
+
+## Comparator challenge rule
+
+Files named `Challenge/**/Conformance.lean` intentionally contain open proof
+placeholders. They are immutable challenge statements, not unfinished project
+proofs. Never fill those placeholders. Put the implementation in the normal
+library module; the paired `Leaderboard.lean` and Comparator configuration test
+that the implementation has the same statement and only the permitted trusted
+dependencies.
+
+Challenge admission has an intentionally high bar. Add a theorem only when it
+is a recognizable literature endpoint or a broadly reusable canonical result
+that would be worth highlighting outside this repository. Do not create
+challenges for local transport lemmas, notation bridges, conditional reduction
+steps, routine norm specializations, or every theorem that happened to be hard.
+Prefer one strong leaf over a long inventory of supporting declarations.

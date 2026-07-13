@@ -13,6 +13,21 @@ The comparator check needs external tools: `landrun`, `comparator`, and
 `lean4export`. The working setup used `landrun` from the `main` branch rather
 than the latest released tag.
 
+## Do not fill challenge placeholders
+
+The proof placeholders in `Challenge/**/Conformance.lean` are intentional. They
+are the trusted challenge statements that Comparator compares against the
+project implementation imported by `Leaderboard.lean`. Filling them locally
+would destroy the separation between statement and solution and would not
+advance the formalization. The official Comparator model explicitly permits a
+challenge theorem to contain a placeholder while requiring the solution theorem
+to match its statement and use only the configured permitted dependencies:
+<https://github.com/leanprover/comparator>.
+
+When a project theorem is unfinished, work in `ForMathlib/`, the paper namespace,
+or another ordinary library module. Never repair a red dependency audit by
+editing the corresponding `Conformance.lean`.
+
 ## Install tools
 
 From the repository root:
@@ -53,6 +68,19 @@ lake env comparator comparator/candidate-01-gram-rigidity.json
 
 using explicit `COMPARATOR_LANDRUN` and `COMPARATOR_LEAN4EXPORT` paths.
 
+The advertising-level Davis--Kahan configs can also be run individually:
+
+```bash
+bash scripts/run_challenge_comparator.sh --config comparator/pending-davis-kahan-sharp.json
+bash scripts/run_challenge_comparator.sh --config comparator/pending-davis-kahan-part-iii.json
+bash scripts/run_challenge_comparator.sh --config comparator/pending-davis-1963-rotation.json
+bash scripts/run_challenge_comparator.sh --config comparator/pending-yu-wang-samworth.json
+```
+
+`Challenge/MathlibPending/RectangularFanDominance/Leaderboard.lean` is an
+axiom-audit-only flagship until its definitions are separated from their
+implementation module; it intentionally has no comparator config yet.
+
 ## Development fallback
 
 If real `landrun` fails locally with a sandbox permission error, the wiring can
@@ -82,10 +110,14 @@ Default configs run by `scripts/run_challenge_comparator.sh`:
 * `comparator/candidate-01-gram-rigidity.json`
 * `comparator/candidate-02-courant-fischer-weyl.json`
 * `comparator/candidate-03-davis-kahan.json`
+* `comparator/pending-davis-kahan-sharp.json`
+* `comparator/pending-davis-kahan-part-iii.json`
+* `comparator/pending-davis-1963-rotation.json`
+* `comparator/pending-yu-wang-samworth.json`
 * `comparator/pending-*.json` (Berge, RankFactorization, RankPsdRealization,
   RestrictCoverMeasurable, SampleMeanMSE, NearIsometry, CfcMeasurable,
   MatrixConcentration, ProbabilityQoL, TendstoInMeasure)
 
-See `Challenge/README.md` for the manifest. SpectralFunctionMeasurable is an
-axiom-audit leaderboard only (no comparator config). The four DKPS papers are
-documented, not comparator challenges.
+See `Challenge/README.md` for the manifest. SpectralFunctionMeasurable and
+RectangularFanDominance are axiom-audit leaderboards only (no comparator
+config). The four DKPS papers are documented, not comparator challenges.

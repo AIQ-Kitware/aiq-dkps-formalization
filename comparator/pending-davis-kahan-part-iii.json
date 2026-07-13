@@ -1,0 +1,16 @@
+{
+  "challenge_module": "Challenge.MathlibPending.DavisKahanPartIII.Conformance",
+  "solution_module": "Challenge.MathlibPending.DavisKahanPartIII.Leaderboard",
+  "theorem_names": [
+    "ForMathlib.DavisKahanTheory.partIII_sinTheta_uiNorm",
+    "ForMathlib.DavisKahanTheory.partIII_sinTwoTheta_uiNorm",
+    "ForMathlib.DavisKahanTheory.partIII_tanTheta_vector",
+    "ForMathlib.DavisKahanTheory.partIII_tanTwoTheta_opNorm"
+  ],
+  "permitted_axioms": [
+    "propext",
+    "Quot.sound",
+    "Classical.choice"
+  ],
+  "enable_nanoda": false
+}

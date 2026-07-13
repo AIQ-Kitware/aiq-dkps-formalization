@@ -21,6 +21,9 @@ Literature map:
 * Davis--Kahan (1970), Section 5, "On the equation `AX-XB=C`".
 * The ordered/coercive special case already proved in
   `ForMathlib/Analysis/InnerProductSpace/SylvesterBound.lean`.
+* `prose/distilled_literature/AlbeverioMakarovMotovilov2001_sylvester_fourier_pi_over_two.tex`,
+  Theorem `Kiexp` and Remark `nad`, for the arbitrary-disjoint-spectrum
+  Fourier representation, sharp constant, scaling audit, and attribution.
 
 The interval/exterior theorem has sharp constant one.  The final section
 scaffolds the separate `π/2`-constant extension for arbitrary disjoint spectral

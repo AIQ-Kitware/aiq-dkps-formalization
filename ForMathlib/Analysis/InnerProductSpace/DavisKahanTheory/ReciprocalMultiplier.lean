@@ -11,6 +11,13 @@ import ForMathlib.Analysis.InnerProductSpace.DavisKahanTheory.RectangularUINorm
 This file isolates the harmonic-analysis core of the finite
 Bhatia--Davis--McIntosh Sylvester estimate.
 
+Literature bridge:
+
+* `prose/distilled_literature/AlbeverioMakarovMotovilov2001_sylvester_fourier_pi_over_two.tex`
+  reconstructs the separated-spectrum Fourier representation, the `pi / 2`
+  provenance chain, the finite interpolation reduction, and the real-field
+  descent that remains to be supplied.
+
 The operator-theoretic theorem is factored through one simultaneous finite
 interpolation certificate.  For fixed orthonormal coordinates and separated
 real arrays `α` and `β`, the certificate supplies one finite family of

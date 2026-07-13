@@ -1,0 +1,269 @@
+\input{preamble}
+\title{The sharp reciprocal-Fourier Sylvester estimate in Albeverio--Makarov--Motovilov (2001)}
+\author{}
+\date{Source-order distilled reconstruction from arXiv source math/0105142v3}
+\begin{document}
+\maketitle
+
+\section*{Source map and scope}
+\begin{sourceguide}
+\item[Primary source] Sergio Albeverio, Konstantin A. Makarov, and Alexander K. Motovilov, \emph{Graph Subspaces and the Spectral Shift Function}, arXiv:math/0105142v3 (2001).
+\item[Local evidence] Supplied compressed arXiv source \code{arXiv-math0105142v3.gz}.\\
+Compressed SHA--256 \texttt{\seqsplit{40b4529a750165605c96856fd304dc17a8c57fb7619509f52f2289212a5a42d3}}.\\
+Decompressed \code{ssflanl.tex} SHA--256 \texttt{\seqsplit{0ab8682761f4db2dfa0e3098bdd2887ae076d371a64816d808fa0a4dec7a2c86}}.
+\item[Redistribution] The supplied source is not vendored. This document is a new mathematical reconstruction and formalization map.
+\item[Coverage] Section ``Sylvester equation,'' especially Definition~\texttt{enorm}, Definition~\texttt{DefSolSyl}, Lemmas~\texttt{Krein} and \texttt{Kexp}, Theorem~\texttt{Kiexp}, equations \texttt{Tsemib}, \texttt{HeinzMod}, \texttt{fourie}, \texttt{ozenka}, \texttt{cpi2}, and Remark~\texttt{nad}. The later Riccati fixed-point use of the same Fourier extremal problem is included only where it confirms scaling.
+\item[Formalization target] \code{ForMathlib/Analysis/InnerProductSpace/DavisKahanTheory/ReciprocalMultiplier.lean} and \code{Sylvester.lean}, especially the normalized finite reciprocal-Fourier interpolation seam and the sharp rectangular Ky Fan/UI-norm consequences.
+\item[Attribution boundary] The paper is a bridge source for the sharp theorem, not the original source of every ingredient. It attributes the earlier spectral-subspace/Sylvester estimate to Bhatia--Davis--McIntosh (1983), the extremal Fourier norm $\pi/2$ to Sz.-Nagy (1953, with Strausz credited in the prose), and sharpness of the final constant to McEachin (1993).
+\end{sourceguide}
+
+The full paper concerns graph subspaces, Riccati equations, admissible operators, and spectral shift functions. The present reconstruction deliberately isolates the theorem family that is active in the finite Davis--Kahan formalization: solving a Sylvester equation between self-adjoint operators with disjoint spectra, representing the reciprocal spectral multiplier by Fourier characters, and obtaining the sharp $\pi/2$ bound in every symmetric operator ideal.
+
+\section{The source setting}
+
+\sourceanchor{Section ``Sylvester equation,'' opening paragraphs and Definition \texttt{enorm}.}
+
+Let $\Hsp$ and $\Fsp$ be Hilbert spaces. The source writes the Sylvester equation as
+\begin{equation}
+  XA-CX=Y,
+  \tag{AMM-Syl}\label{eq:amm-syl}
+\end{equation}
+where $A$ acts on $\Hsp$, $C$ acts on $\Fsp$, and $X,Y:\Hsp\to\Fsp$ are bounded. Both $A$ and $C$ may be unbounded in the paper, so the source distinguishes weak, strong, and operator solutions. The finite-dimensional formalization has bounded maps everywhere and therefore needs only the algebraic equation, but the source distinctions explain why its integral representation is initially stated in the weak operator topology.
+
+A symmetric normed ideal $\mathcal S\subseteq\mathcal B(\Hsp,\Fsp)$ carries a norm $\lVert\!\lVert\!\lVert\cdot\rVert\!\rVert\!\rVert$ satisfying
+\[
+  \lVert\!\lVert\!\lVert KTH\rVert\!\rVert\!\rVert
+  \le \norm{K}_{\op}\,
+      \lVert\!\lVert\!\lVert T\rVert\!\rVert\!\rVert\,
+      \norm{H}_{\op},
+\]
+and agrees with the operator norm on rank-one maps. The paper additionally assumes weak-operator lower semicontinuity for uniformly norm-bounded sequences. In finite dimensions this closure condition is automatic, while the first inequality is precisely the two-sided ideal property encoded by the repository's rectangular unitarily invariant norms.
+
+\section{Three solution representations before the sharp theorem}
+
+\subsection{Contour representation}
+
+\sourceanchor{Lemma \texttt{Krein}, equation \texttt{ESylKrein}.}
+
+If $A$ is closed, $C$ is bounded, and their spectra are disjoint, the source recalls the contour formula
+\[
+  X=\frac{1}{2\pi i}\int_\gamma
+      (C-\zeta)^{-1}Y(A-\zeta)^{-1}\,d\zeta.
+\]
+The resulting ideal-norm estimate depends on the chosen contour length and resolvent bounds. This proves existence and uniqueness but does not expose the sharp universal function of spectral distance.
+
+\subsection{Ordered half-plane representation}
+
+\sourceanchor{Lemma \texttt{Kexp}, equation \texttt{XYSol1}.}
+
+Under a one-sided accretivity hypothesis separated by $d>0$, Heinz's semigroup formula gives
+\[
+  X=\int_0^\infty e^{tC}Ye^{-tA}\,dt,
+  \qquad
+  \lVert\!\lVert\!\lVert X\rVert\!\rVert\!\rVert
+  \le \frac1d\lVert\!\lVert\!\lVert Y\rVert\!\rVert\!\rVert.
+\]
+This is the infinite-dimensional analogue of the repository's sharp constant-one ordered and interval/exterior Sylvester theorems. It is stronger than the arbitrary-disjoint-spectrum estimate because the spectra are separated by an orientation, not merely by absolute distance.
+
+\subsection{Why arbitrary disjoint spectra are different}
+
+If the spectra interlace or lie on both sides of one another, no single positive semigroup parameter resolves every denominator with the same sign. In joint eigen-coordinates the equation is
+\[
+  (\alpha_i-\beta_j)X_{ij}=Y_{ij}.
+\]
+The solution is therefore the Schur multiplier
+\[
+  X_{ij}=\frac{1}{\alpha_i-\beta_j}Y_{ij},
+\]
+and the problem becomes one of representing the reciprocal function on the separated difference set by averages of characters.
+
+\section{The sharp separated-spectrum theorem}
+
+\sourceanchor{Theorem \texttt{Kiexp}, equations \texttt{Tsemib}, \texttt{HeinzMod}, \texttt{fourie}, \texttt{ozenka}, \texttt{cpi2}, and \texttt{ozenkaR}.}
+
+Assume $A=A^*$ and $C=C^*$ and set
+\[
+  d:=\dist\bigl(\spec(A),\spec(C)\bigr)>0.
+\]
+The paper states that the unique weak solution of \eqref{eq:amm-syl} has a Fourier-orbit representation
+\begin{equation}
+  X=\int_{-\infty}^{\infty}
+      e^{itC}Ye^{-itA}f_d(t)\,dt.
+  \tag{AMM-Fourier}
+\end{equation}
+Here $f_d\in L^1(\R)$ is chosen so that its Fourier transform agrees with the reciprocal function on all spectral differences. With a consistent scaling convention this condition is
+\begin{equation}
+  \widehat f_d(x)=\int_{\R}e^{-itx}f_d(t)\,dt=\frac1x
+  \qquad\text{whenever }\abs{x}\ge d.
+  \tag{AMM-Reciprocal}
+\end{equation}
+Indeed, taking the $(i,j)$ matrix coefficient of \eqref{AMM-Fourier} multiplies $Y_{ij}$ by $\widehat f_d(\alpha_i-\beta_j)$.
+
+Each left and right exponential is unitary. Thus every symmetric ideal norm satisfies
+\[
+  \lVert\!\lVert\!\lVert X\rVert\!\rVert\!\rVert
+  \le \norm{f_d}_{L^1}\,
+      \lVert\!\lVert\!\lVert Y\rVert\!\rVert\!\rVert.
+\]
+The extremal reciprocal-Fourier problem gives kernels with mass arbitrarily close to
+\[
+  \frac{\pi}{2d}.
+\]
+Consequently
+\begin{equation}
+  \lVert\!\lVert\!\lVert X\rVert\!\rVert\!\rVert
+  \le \frac{\pi}{2d}
+      \lVert\!\lVert\!\lVert Y\rVert\!\rVert\!\rVert.
+  \tag{AMM-Sharp}
+\end{equation}
+The operator norm is a special case.
+
+\subsection{Verification of the Sylvester identity}
+
+For bounded finite-dimensional operators, the formal verification is transparent. Define
+\[
+  \Phi(Y):=\int_{\R}e^{itC}Ye^{-itA}f_d(t)\,dt.
+\]
+In eigenbases $Ce_i=\alpha_i e_i$ and $Au_j=\beta_j u_j$,
+\[
+  \ip{e_i}{\Phi(Y)u_j}
+  =\widehat f_d(\beta_j-\alpha_i)\ip{e_i}{Yu_j},
+\]
+with the sign determined by the Fourier convention. Choosing the convention to make this multiplier $(\beta_j-\alpha_i)^{-1}$ yields
+\[
+  \Phi(Y)A-C\Phi(Y)=Y.
+\]
+The source formula and the repository formula use opposite presentations of the Sylvester commutator in places; the formalization should normalize the sign once at the matrix-coefficient boundary rather than scatter sign repairs through the orbit argument.
+
+\section{The extremal constant and its provenance}
+
+\sourceanchor{Remark \texttt{nad}.}
+
+The source separates three historical claims.
+
+\begin{enumerate}[leftmargin=2em]
+\item Bhatia--Davis--McIntosh (1983) proved the separated-spectrum theorem with bounds
+\[
+  \sqrt{\frac32}\le c\le 2
+\]
+for the best universal constant and reduced the upper estimate to the Fourier extremal quantity
+\[
+  \inf\left\{\norm{f}_{L^1(\R)}:
+    \widehat f(x)=\frac1x\text{ for }\abs{x}\ge1\right\}.
+\]
+\item The source attributes the identity
+\begin{equation}
+  \inf\left\{\norm{f}_{L^1(\R)}:
+    \widehat f(x)=\frac1x\text{ for }\abs{x}\ge1\right\}
+  =\frac\pi2
+  \tag{AMM-Favard}
+\end{equation}
+to the Bohr-inequality work of B.~Sz.-Nagy, with A.~Strausz credited in the prose.
+\item McEachin (1993) proved that the resulting $\pi/2$ constant in the subspace perturbation bound is sharp.
+\end{enumerate}
+
+Therefore this paper is an excellent theorem-level bridge but must not be cited as if it supplied the original proof of \eqref{AMM-Favard} or the original sharpness construction.
+
+\section{Scaling audit and a source-level inconsistency}
+
+The displayed condition \texttt{fourie} in Theorem \texttt{Kiexp} says that
+\[
+  \widehat f_d(x)=1/x\quad\text{for }\abs{x}\ge 1/d.
+\]
+Taken literally together with $d=\dist(\spec(A),\spec(C))$, this does not produce the stated $1/d$ norm scaling.
+
+Later, in the Riccati fixed-point proof, the source starts from a unit-gap kernel $f$ satisfying
+\[
+  \widehat f(s)=1/s\quad(\abs{s}\ge1)
+\]
+and defines
+\[
+  f_d(t):=f(dt).
+\]
+Then
+\[
+  \widehat f_d(x)=\frac1d\widehat f(x/d)=\frac1x
+  \quad\text{when }\abs{x}\ge d,
+  \qquad
+  \norm{f_d}_{L^1}=\frac1d\norm{f}_{L^1}.
+\]
+This is consistent with \eqref{AMM-Sharp}. The reconstruction therefore treats $\abs{x}\ge d$ as the intended threshold and records the displayed $1/d$ threshold as a source-level scaling slip, not as a mathematical hypothesis to copy into Lean.
+
+\section{Finite exact interpolation versus operator integration}
+
+The paper uses an $L^1$ Fourier kernel and a weak operator integral. The finite formalization can avoid building a general operator-valued integration layer.
+
+Let $\alpha:I\to\R$ and $\beta:J\to\R$ be the finite eigenvalue lists, with
+\[
+  \delta\le\abs{\alpha_i-\beta_j}.
+\]
+It is enough, for every $\varepsilon>0$, to construct finitely many coefficients $a_r\in\C$ and frequencies $t_r\in\R$ such that
+\begin{align*}
+  \delta
+  &= (\alpha_i-\beta_j)
+     \sum_r a_r e^{it_r(\alpha_i-\beta_j)},
+     &&\text{for every }(i,j),\\
+  \sum_r\abs{a_r}
+  &\le \frac\pi2+\varepsilon.
+\end{align*}
+This is the repository predicate
+\code{HasFiniteReciprocalFourierInterpolation}.
+
+For complex Hilbert spaces, each character is realized by diagonal unitaries:
+\[
+  U_r e_i=e^{it_r\alpha_i}e_i,
+  \qquad
+  V_r u_j=e^{-it_r\beta_j}u_j.
+\]
+Their two-sided action multiplies the $(i,j)$ matrix unit by
+$e^{it_r(\alpha_i-\beta_j)}$. The scalar interpolation therefore becomes one common finite orbit identity, from which every Ky Fan prefix and every rectangular unitarily invariant norm estimate follow.
+
+The exact finite interpolation is stronger than pointwise approximation. Starting from an $L^1$ kernel, one still needs an exact finite moment-compression argument on the finite difference set, or an error-correction construction whose extra mass tends to zero. The source does not supply that finite reduction because its weak integral is already an acceptable endpoint.
+
+\section{Why the real case is a separate formal obligation}
+
+Complex diagonal phases are not diagonal real orthogonal maps unless the phases are signs. The complex proof therefore does not directly instantiate the repository's theorem quantified over an arbitrary real-or-complex scalar field.
+
+A faithful real route should pass through one of the following equivalent mechanisms:
+
+\begin{enumerate}[leftmargin=2em]
+\item complexify the real spaces and prove that singular values and Ky Fan sums of the real operator agree with those of its complexification;
+\item realize each complex phase by a two-dimensional real rotation on a doubled space, then compress or identify the original singular values;
+\item prove the real Ky Fan inequality by a field-independent dilation theorem and recover any real orbit-convexity statement only afterward.
+\end{enumerate}
+
+Requiring an exact finite orbit certificate on the original real spaces before proving the Ky Fan estimate may be stronger than the source argument and stronger than the application requires.
+
+\section{Formalization map}
+
+\begin{formalizationmap}
+Theorem \texttt{Kiexp}, spectral distance $d>0$ & General separated-spectrum Sylvester equation & \code{SpectraSeparated} and \code{kyFan_sylvester_le_of_spectralDistance} in \code{Sylvester.lean}; the generic sharp chain still depends on the open harmonic root. \\
+Equation \texttt{fourie} & Reciprocal Fourier multiplier on the spectral difference set & \code{HasFiniteReciprocalFourierInterpolation} in \code{ReciprocalMultiplier.lean}; the formal statement uses a finite exact character sum. \\
+Equation \texttt{HeinzMod} & Two-sided unitary orbit average & \code{basisDiagonalUnitary}, \code{unitaryOrbitAction_basisMatrixUnit}, and \code{complexUnitaryOrbitAction_basisMatrixUnit_exp_sub}. \\
+Equation \texttt{ozenka} & Symmetric-ideal norm domination & Finite orbit certificate $\Rightarrow$ simultaneous rectangular Ky Fan bounds $\Rightarrow$ \code{uiNorm_sylvester_le_of_spectralDistance}. \\
+Equation \texttt{cpi2} and Remark \texttt{nad} & Sharp constant as an infimum of Fourier masses & \code{kyFan_reciprocalMultiplier_le_complex_of_approximateFourierInterpolation}; it correctly needs masses $\pi/2+\varepsilon$, not an attaining kernel. \\
+Unit-gap to gap-$d$ scaling & $f_d(t)=f(dt)$ and $\norm{f_d}_1=d^{-1}\norm f_1$ & \code{hasFiniteReciprocalFourierInterpolation_of_normalized}. \\
+Symmetric ideal property & Invariance under left/right unitaries and ideal contraction & \code{RectangularUnitarilyInvariantNorm} and rectangular Fan dominance. \\
+Real scalar field & Not supplied by complex diagonal phases & Still requires singular-value-preserving complexification or doubled-space rotation descent. \\
+\end{formalizationmap}
+
+\section{Current proof obligations exposed by the source}
+
+The source makes the remaining work unusually precise.
+
+\begin{enumerate}[leftmargin=2em]
+\item Prove the normalized scalar theorem: for every finite separated difference set and every $\varepsilon>0$, construct an exact finite reciprocal-Fourier interpolation of mass at most $\pi/2+\varepsilon$.
+\item Derive that construction from the Sz.-Nagy--Strausz extremal theorem or a modern equivalent, while preserving exactness on the finite set.
+\item Transfer the sharp complex Ky Fan result to real Hilbert spaces without a constant loss.
+\item Replace the field-uniform harmonic placeholder only after both field cases are connected to the generic theorem.
+\end{enumerate}
+
+No additional barycentric, residual, or tangent wrapper is needed before these obligations are discharged; the downstream finite operator theory is already in place.
+
+\section*{Source-faithfulness and limitations}
+
+This reconstruction follows the source order inside its Sylvester section and preserves the paper's distinction between ordered constant-one estimates and arbitrary-disjoint-spectrum $\pi/2$ estimates. It does not reconstruct the paper's main spectral-shift theorem, its full Stieltjes operator-integral machinery, or its graph-subspace/Riccati development except where the later fixed-point proof resolves the Fourier scaling convention.
+
+The note also keeps attribution explicit. Albeverio--Makarov--Motovilov state and use the sharp theorem; Bhatia--Davis--McIntosh provide the earlier perturbation/Sylvester reduction; Sz.-Nagy--Strausz supply the extremal reciprocal-Fourier norm; McEachin supplies sharpness. A future reconstruction of Bhatia--Davis--McIntosh (1983) remains necessary to document the original operator-theoretic proof in its own source order.
+
+\end{document}
