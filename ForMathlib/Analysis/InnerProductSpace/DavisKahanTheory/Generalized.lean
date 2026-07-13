@@ -32,9 +32,16 @@ The shared injective-trial-map coordinate layer now lives in
 `DavisKahanTheory.FrameFactorization`.  It provides the canonical rectangular
 polar factorization `X = Q T`, proves that `Q` is isometric with
 `range Q = range X`, and packages the positive Gram square root `T` as a
-linear equivalence.  The remaining generalized estimates should use this
-factorization only to transport angle geometry and norm bounds; coordinate
-operators such as `M` must remain in their original self-adjoint coordinates.
+linear equivalence.  It also proves `‖T⁻¹‖ ≤ ε⁻¹`, the corresponding
+right-ideal estimate for every rectangular UI norm, and the assembled
+frame-to-sine transport inequality
+`ε * N (P_{Vᗮ} Q) ≤ N (P_{Vᗮ} X)`.
+
+The remaining Theorem 6.1 proof is therefore the spectral half only: apply the
+interval/exterior Sylvester estimate to the raw block `P_{Vᗮ} X`, contract the
+projected residual, and combine with the completed frame-transport theorem.
+Coordinate operators such as `M` remain in their original self-adjoint
+coordinates throughout.
 -/
 
 namespace ForMathlib
