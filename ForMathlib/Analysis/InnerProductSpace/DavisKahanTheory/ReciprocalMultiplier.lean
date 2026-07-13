@@ -356,6 +356,18 @@ noncomputable def basisDoubledRealRotation
     linear_combination
       ((e.repr x.fst i) ^ 2 + (e.repr x.snd i) ^ 2) * htrig
 
+@[simp] theorem basisDoubledRealRotation_apply
+    {G ι : Type*} [NormedAddCommGroup G] [InnerProductSpace ℝ G]
+    [Fintype ι] [DecidableEq ι]
+    (e : OrthonormalBasis ι ℝ G) (theta : ι → ℝ)
+    (x : WithLp 2 (G × G)) :
+    basisDoubledRealRotation e theta x = WithLp.toLp 2
+      (basisDiagonalRealMap e (fun i => Real.cos (theta i)) x.fst -
+          basisDiagonalRealMap e (fun i => Real.sin (theta i)) x.snd,
+        basisDiagonalRealMap e (fun i => Real.sin (theta i)) x.fst +
+          basisDiagonalRealMap e (fun i => Real.cos (theta i)) x.snd) := by
+  rfl
+
 @[simp] theorem basisDoubledRealRotation_apply_first
     {G ι : Type*} [NormedAddCommGroup G] [InnerProductSpace ℝ G]
     [Fintype ι] [DecidableEq ι]
@@ -405,6 +417,98 @@ noncomputable def doubledPhaseAction
         Real.sin theta • T x.fst + Real.cos theta • T x.snd) := by
   rfl
 
+/-- The real `2 × 2` block action of a complex scalar on a doubled real map. -/
+def doubledComplexScalarAction
+    {ER FR : Type*}
+    [NormedAddCommGroup ER] [InnerProductSpace ℝ ER]
+    [NormedAddCommGroup FR] [InnerProductSpace ℝ FR]
+    (z : ℂ) (T : ER →ₗ[ℝ] FR) :
+    WithLp 2 (ER × ER) →ₗ[ℝ] WithLp 2 (FR × FR) where
+  toFun x := WithLp.toLp 2
+    (z.re • T x.fst - z.im • T x.snd,
+      z.im • T x.fst + z.re • T x.snd)
+  map_add' x y := by
+    apply WithLp.ofLp_injective 2
+    apply Prod.ext <;> simp <;> module
+  map_smul' r x := by
+    apply WithLp.ofLp_injective 2
+    apply Prod.ext <;> simp [smul_smul] <;> module
+
+@[simp] theorem doubledComplexScalarAction_apply
+    {ER FR : Type*}
+    [NormedAddCommGroup ER] [InnerProductSpace ℝ ER]
+    [NormedAddCommGroup FR] [InnerProductSpace ℝ FR]
+    (z : ℂ) (T : ER →ₗ[ℝ] FR) (x : WithLp 2 (ER × ER)) :
+    doubledComplexScalarAction z T x = WithLp.toLp 2
+      (z.re • T x.fst - z.im • T x.snd,
+        z.im • T x.fst + z.re • T x.snd) :=
+  rfl
+
+/-- A doubled phase action is complex scalar action by its unit phase. -/
+theorem doubledPhaseAction_eq_complexScalarAction
+    {ER FR : Type*}
+    [NormedAddCommGroup ER] [InnerProductSpace ℝ ER]
+    [NormedAddCommGroup FR] [InnerProductSpace ℝ FR]
+    (theta : ℝ) (T : ER →ₗ[ℝ] FR) :
+    doubledPhaseAction theta T =
+      doubledComplexScalarAction (Complex.exp ((theta : ℂ) * Complex.I)) T := by
+  ext x
+  apply WithLp.ofLp_injective 2
+  simp [doubledPhaseAction_apply, doubledComplexScalarAction_apply,
+    Complex.exp_mul_I, Complex.cos_ofReal_re, Complex.sin_ofReal_re]
+
+/-- Complex-scalar block action is additive in the scalar. -/
+theorem doubledComplexScalarAction_add
+    {ER FR : Type*}
+    [NormedAddCommGroup ER] [InnerProductSpace ℝ ER]
+    [NormedAddCommGroup FR] [InnerProductSpace ℝ FR]
+    (z w : ℂ) (T : ER →ₗ[ℝ] FR) :
+    doubledComplexScalarAction (z + w) T =
+      doubledComplexScalarAction z T + doubledComplexScalarAction w T := by
+  ext x
+  apply WithLp.ofLp_injective 2
+  apply Prod.ext <;> simp [doubledComplexScalarAction_apply] <;> module
+
+/-- Real scaling of complex-scalar block action agrees with multiplication of
+the complex scalar by that real number. -/
+theorem doubledComplexScalarAction_real_smul
+    {ER FR : Type*}
+    [NormedAddCommGroup ER] [InnerProductSpace ℝ ER]
+    [NormedAddCommGroup FR] [InnerProductSpace ℝ FR]
+    (r : ℝ) (z : ℂ) (T : ER →ₗ[ℝ] FR) :
+    r • doubledComplexScalarAction z T =
+      doubledComplexScalarAction ((r : ℂ) * z) T := by
+  ext x
+  apply WithLp.ofLp_injective 2
+  apply Prod.ext <;>
+    simp [doubledComplexScalarAction_apply, smul_smul] <;> module
+
+/-- A finite sum of complex-scalar block actions is the action of the scalar
+sum. -/
+theorem sum_doubledComplexScalarAction
+    {ER FR ι : Type*}
+    [NormedAddCommGroup ER] [InnerProductSpace ℝ ER]
+    [NormedAddCommGroup FR] [InnerProductSpace ℝ FR]
+    [Fintype ι] [DecidableEq ι]
+    (z : ι → ℂ) (T : ER →ₗ[ℝ] FR) :
+    ∑ i, doubledComplexScalarAction (z i) T =
+      doubledComplexScalarAction (∑ i, z i) T := by
+  classical
+  have h (s : Finset ι) :
+      s.sum (fun i => doubledComplexScalarAction (z i) T) =
+        doubledComplexScalarAction (s.sum z) T := by
+    induction s using Finset.induction_on with
+    | empty =>
+        simp only [Finset.sum_empty]
+        ext x
+        apply WithLp.ofLp_injective 2
+        simp [doubledComplexScalarAction]
+        exact Prod.ext rfl rfl
+    | @insert a s ha ih =>
+        rw [Finset.sum_insert ha, Finset.sum_insert ha, ih,
+          doubledComplexScalarAction_add]
+  exact h Finset.univ
+
 /-- Coordinatewise doubled-real rotations realize addition of the left and
 right phase angles on a doubled coordinate matrix unit. -/
 theorem basisDoubledRealRotation_comp_basisMatrixUnit
@@ -428,38 +532,34 @@ theorem basisDoubledRealRotation_comp_basisMatrixUnit
   apply (eE.prod eE).toBasis.ext
   intro q
   rcases q with q | q
-  · simp only [OrthonormalBasis.coe_toBasis, OrthonormalBasis.prod_apply,
-      Sum.elim_inl, Function.comp_apply, LinearMap.coe_inl,
-      basisDoubledRealRotation_apply_first, LinearMap.comp_apply,
-      RectangularUnitarilyInvariantNorm.orthogonalBlockSum_apply,
-      WithLp.fst_toLp, WithLp.snd_toLp, map_smul,
-      basisMatrixUnit_apply, eE.inner_eq_ite]
-    by_cases hq : j = q
+  · by_cases hq : j = q
     · subst q
-      simp only [ite_true, one_smul, basisDoubledRealRotation_apply_first,
-        basisDoubledRealRotation_apply_second, doubledPhaseAction_apply,
-        WithLp.fst_toLp, WithLp.snd_toLp, basisMatrixUnit_apply,
-        eE.inner_eq_ite, map_smul]
       apply WithLp.ofLp_injective 2
-      simp only [WithLp.ofLp_toLp]
-      apply Prod.ext <;> simp [Real.cos_add, Real.sin_add] <;> module
-    · simp [hq, doubledPhaseAction_apply, basisMatrixUnit_apply]
-  · simp only [OrthonormalBasis.coe_toBasis, OrthonormalBasis.prod_apply,
-      Sum.elim_inr, Function.comp_apply, LinearMap.coe_inr,
-      basisDoubledRealRotation_apply_second, LinearMap.comp_apply,
-      RectangularUnitarilyInvariantNorm.orthogonalBlockSum_apply,
-      WithLp.fst_toLp, WithLp.snd_toLp, map_smul,
-      basisMatrixUnit_apply, eE.inner_eq_ite]
-    by_cases hq : j = q
+      apply Prod.ext <;>
+        simp [basisDoubledRealRotation_apply,
+          RectangularUnitarilyInvariantNorm.orthogonalBlockSum_apply,
+          doubledPhaseAction_apply, basisMatrixUnit_apply, eE.inner_eq_ite,
+          real_inner_smul_right, Real.cos_add, Real.sin_add] <;> module
+    · apply WithLp.ofLp_injective 2
+      apply Prod.ext <;>
+        simp [basisDoubledRealRotation_apply,
+          RectangularUnitarilyInvariantNorm.orthogonalBlockSum_apply,
+          doubledPhaseAction_apply, basisMatrixUnit_apply, eE.inner_eq_ite,
+          real_inner_smul_right, hq]
+  · by_cases hq : j = q
     · subst q
-      simp only [ite_true, one_smul, basisDoubledRealRotation_apply_first,
-        basisDoubledRealRotation_apply_second, doubledPhaseAction_apply,
-        WithLp.fst_toLp, WithLp.snd_toLp, basisMatrixUnit_apply,
-        eE.inner_eq_ite, map_smul]
       apply WithLp.ofLp_injective 2
-      simp only [WithLp.ofLp_toLp]
-      apply Prod.ext <;> simp [Real.cos_add, Real.sin_add] <;> module
-    · simp [hq, doubledPhaseAction_apply, basisMatrixUnit_apply]
+      apply Prod.ext <;>
+        simp [basisDoubledRealRotation_apply,
+          RectangularUnitarilyInvariantNorm.orthogonalBlockSum_apply,
+          doubledPhaseAction_apply, basisMatrixUnit_apply, eE.inner_eq_ite,
+          real_inner_smul_right, Real.cos_add, Real.sin_add] <;> module
+    · apply WithLp.ofLp_injective 2
+      apply Prod.ext <;>
+        simp [basisDoubledRealRotation_apply,
+          RectangularUnitarilyInvariantNorm.orthogonalBlockSum_apply,
+          doubledPhaseAction_apply, basisMatrixUnit_apply, eE.inner_eq_ite,
+          real_inner_smul_right, hq]
 
 /-- The complex basis-diagonal orbit realizes the Fourier character at the
 coordinate difference `α i - β j`.  This is the exact operator-valued atom
