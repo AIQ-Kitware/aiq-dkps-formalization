@@ -1513,6 +1513,42 @@ noncomputable def orthogonalBlockSum
   apply WithLp.ofLp_injective 2
   simp [orthogonalBlockSum]
 
+/-- The adjoint of an orthogonal block sum is the block sum of the adjoints. -/
+@[simp] theorem orthogonalBlockSum_adjoint
+    {E₁ E₂ F₁ F₂ : Type*}
+    [NormedAddCommGroup E₁] [InnerProductSpace 𝕜 E₁]
+    [NormedAddCommGroup E₂] [InnerProductSpace 𝕜 E₂]
+    [NormedAddCommGroup F₁] [InnerProductSpace 𝕜 F₁]
+    [NormedAddCommGroup F₂] [InnerProductSpace 𝕜 F₂]
+    [FiniteDimensional 𝕜 E₁] [FiniteDimensional 𝕜 E₂]
+    [FiniteDimensional 𝕜 F₁] [FiniteDimensional 𝕜 F₂]
+    (A : E₁ →ₗ[𝕜] F₁) (B : E₂ →ₗ[𝕜] F₂) :
+    (orthogonalBlockSum A B).adjoint =
+      orthogonalBlockSum A.adjoint B.adjoint := by
+  symm
+  rw [LinearMap.eq_adjoint_iff]
+  intro x y
+  simp only [orthogonalBlockSum_apply, WithLp.prod_inner_apply,
+    LinearMap.adjoint_inner_left]
+  rfl
+
+/-- Composition of compatible orthogonal block sums is blockwise. -/
+@[simp] theorem orthogonalBlockSum_comp
+    {E₁ E₂ F₁ F₂ G₁ G₂ : Type*}
+    [NormedAddCommGroup E₁] [InnerProductSpace 𝕜 E₁]
+    [NormedAddCommGroup E₂] [InnerProductSpace 𝕜 E₂]
+    [NormedAddCommGroup F₁] [InnerProductSpace 𝕜 F₁]
+    [NormedAddCommGroup F₂] [InnerProductSpace 𝕜 F₂]
+    [NormedAddCommGroup G₁] [InnerProductSpace 𝕜 G₁]
+    [NormedAddCommGroup G₂] [InnerProductSpace 𝕜 G₂]
+    (A : F₁ →ₗ[𝕜] G₁) (B : F₂ →ₗ[𝕜] G₂)
+    (C : E₁ →ₗ[𝕜] F₁) (D : E₂ →ₗ[𝕜] F₂) :
+    orthogonalBlockSum A B ∘ₗ orthogonalBlockSum C D =
+      orthogonalBlockSum (A ∘ₗ C) (B ∘ₗ D) := by
+  ext x
+  apply WithLp.ofLp_injective 2
+  simp [orthogonalBlockSum, LinearMap.comp_apply]
+
 /-- Real orbit-convex domination is stable under orthogonal block sums.
 
 Proof strategy:
