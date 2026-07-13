@@ -123,7 +123,7 @@ theorem singularValues_graphOperator (U : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] (X : F →ₗᵢ[𝕜] E)
     (htrans : IsTransverse (approximateSubspace X) U) :
     (graphOperator U X).singularValues =
-      principalTangents U (approximateSubspace X) := by
+      principalTangents (approximateSubspace X) U := by
   sorry
 
 /-- **Davis--Kahan `tan Θ`, residual form, every UI norm.**
