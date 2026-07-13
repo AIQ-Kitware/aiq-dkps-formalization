@@ -5,6 +5,7 @@ Authors: Jon Crall, GPT 5.6 High
 -/
 import ForMathlib.Analysis.InnerProductSpace.DavisKahanTheory.RectangularUINorm
 import Mathlib.Analysis.Convex.Integral
+import Mathlib.Analysis.SpecialFunctions.Complex.Arg
 import Mathlib.LinearAlgebra.Lagrange
 
 /-!
@@ -508,6 +509,54 @@ theorem sum_doubledComplexScalarAction
         rw [Finset.sum_insert ha, Finset.sum_insert ha, ih,
           doubledComplexScalarAction_add]
   exact h Finset.univ
+
+/-- Polar decomposition of one complex Fourier coefficient: its norm becomes
+a nonnegative real weight and its argument becomes an additional doubled-real
+rotation angle. -/
+theorem norm_smul_doubledPhaseAction_arg_add
+    {ER FR : Type*}
+    [NormedAddCommGroup ER] [InnerProductSpace ℝ ER]
+    [NormedAddCommGroup FR] [InnerProductSpace ℝ FR]
+    (a : ℂ) (theta : ℝ) (T : ER →ₗ[ℝ] FR) :
+    ‖a‖ • doubledPhaseAction (Complex.arg a + theta) T =
+      doubledComplexScalarAction
+        (a * Complex.exp ((theta : ℂ) * Complex.I)) T := by
+  rw [doubledPhaseAction_eq_complexScalarAction,
+    doubledComplexScalarAction_real_smul]
+  congr 1
+  change ((‖a‖ : ℝ) : ℂ) *
+      Complex.exp (((Complex.arg a + theta : ℝ) : ℂ) * Complex.I) =
+    a * Complex.exp ((theta : ℂ) * Complex.I)
+  calc
+    ((‖a‖ : ℝ) : ℂ) *
+        Complex.exp (((Complex.arg a + theta : ℝ) : ℂ) * Complex.I) =
+      ((‖a‖ : ℝ) : ℂ) *
+        (Complex.exp (((Complex.arg a : ℝ) : ℂ) * Complex.I) *
+          Complex.exp ((theta : ℂ) * Complex.I)) := by
+            rw [← Complex.exp_add]
+            congr 2
+            push_cast
+            ring
+    _ = (((‖a‖ : ℝ) : ℂ) *
+          Complex.exp (((Complex.arg a : ℝ) : ℂ) * Complex.I)) *
+        Complex.exp ((theta : ℂ) * Complex.I) := by ring
+    _ = a * Complex.exp ((theta : ℂ) * Complex.I) := by
+      rw [Complex.norm_mul_exp_arg_mul_I]
+
+/-- A finite complex Fourier sum acts on doubled real maps as a finite sum of
+nonnegatively weighted real phase rotations. -/
+theorem sum_norm_smul_doubledPhaseAction_arg_add
+    {ER FR ι : Type*}
+    [NormedAddCommGroup ER] [InnerProductSpace ℝ ER]
+    [NormedAddCommGroup FR] [InnerProductSpace ℝ FR]
+    [Fintype ι] [DecidableEq ι]
+    (a : ι → ℂ) (theta : ι → ℝ) (T : ER →ₗ[ℝ] FR) :
+    ∑ r, ‖a r‖ • doubledPhaseAction (Complex.arg (a r) + theta r) T =
+      doubledComplexScalarAction
+        (∑ r, a r * Complex.exp (((theta r : ℝ) : ℂ) * Complex.I)) T := by
+  classical
+  simp_rw [norm_smul_doubledPhaseAction_arg_add]
+  exact sum_doubledComplexScalarAction _ T
 
 /-- Coordinatewise doubled-real rotations realize addition of the left and
 right phase angles on a doubled coordinate matrix unit. -/
