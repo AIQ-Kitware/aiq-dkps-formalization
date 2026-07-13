@@ -228,10 +228,11 @@ vector satisfies `δ ‖x − P_V x‖ ≤ ρ ‖P_V x‖` — the per-vector, p
 of `tan ∠(Z, V) ≤ ρ/δ`, which in particular forces `Z ∩ Vᗮ = 0` (Motovilov's
 Lemma 3).  See the module docstring for the literature cross-check.
 
-The dimension hypothesis is not consumed by the proof (matching Nakatsukasa's
-generalized Theorem 2, where `dim Z ≤ dim V` suffices — an inequality the
-remaining hypotheses force anyway); it is kept because the classical record of
-the theorem carries it.
+No dimension comparison between `Z` and `V` is assumed (matching
+Nakatsukasa's generalized Theorem 2, where `dim Z ≤ dim V` suffices — an
+inequality the remaining hypotheses force anyway, since the conclusion
+forces `Z ∩ Vᗮ = 0`).  The classical record of the theorem carries an
+equal-rank hypothesis, but the proof never consumes one.
 
 Proof: on `Vᗮ`, at a maximizer `u₀` of `u ↦ ‖P_Z u‖` on the unit sphere with
 `a := ‖P_Z u₀‖`, `b := ‖u₀ − P_Z u₀‖`, the identity
@@ -245,7 +246,7 @@ via `‖u‖² = re ⟪x, P_Z u⟫ ≤ ‖x‖ ‖P_Z u‖` (Cauchy–Schwarz du
 Pythagoras identities. -/
 theorem tan_theta_le (hT : T.IsSymmetric)
     {Z V : Submodule 𝕜 E} [Z.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hVinv : ∀ x ∈ V, T x ∈ V) (hdim : finrank 𝕜 Z = finrank 𝕜 V)
+    (hVinv : ∀ x ∈ V, T x ∈ V)
     {α β δ ρ : ℝ} (hαβ : α ≤ β) (hδ : 0 < δ) (hρ0 : 0 ≤ ρ)
     (hZ : ∀ x ∈ Z, ((β - α) / 2 + δ) * ‖x‖
       ≤ ‖Z.starProjection (T x) - (((α + β) / 2 : ℝ) : 𝕜) • x‖)
