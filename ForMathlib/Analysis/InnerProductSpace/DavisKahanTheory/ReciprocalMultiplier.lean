@@ -1407,6 +1407,230 @@ theorem hasDoubledRealReciprocalOrbitInterpolation_of_finiteFourierInterpolation
     exact hscalar i j
   · simpa only [w, abs_of_nonneg (norm_nonneg _)] using hmass
 
+/-! ### The two-by-two real obstruction
+
+The following theorems refute the exact *undoubled* real reciprocal orbit
+interpolation at mass `π / 2`.  The frequency data is `α = (-1, 1)`,
+`β = (0, 2)`, `δ = 1`, so the separation hypothesis holds with gap one, yet
+any real certificate has coefficient mass at least `5 / 3 > π / 2`.
+
+The reduction extracts, from the operator identity on each coordinate matrix
+unit, the scalar identities `M i j = ∑ r, a r * u r i * v r j`, where
+`u r i` and `v r j` are the diagonal matrix coefficients of the arbitrary
+real orthogonal factors, hence bounded by one in absolute value.  Testing
+the entrywise-reciprocal matrix `M = ![![-1, -1/3], ![1, -1]]` against the
+functional `L X = (-X₀₀ - X₀₁ + X₁₀ - X₁₁) / 2`, whose value on every
+rank-one atom `u vᵀ` with `‖u‖∞, ‖v‖∞ ≤ 1` is at most one while
+`L M = 5 / 3`, forces the mass bound.  Because only diagonal matrix
+coefficients of arbitrary orthogonal operators are used, no choice of
+non-basis-diagonal real rotations can evade the argument. -/
+
+/-- Left frequency array of the two-by-two obstruction: `(-1, 1)`. -/
+def obstructionAlpha {n : ℕ} (i : Fin n) : ℝ :=
+  if (i : ℕ) = 0 then -1 else 1
+
+/-- Right frequency array of the two-by-two obstruction: `(0, 2)`. -/
+def obstructionBeta {n : ℕ} (j : Fin n) : ℝ :=
+  if (j : ℕ) = 0 then 0 else 2
+
+/-- The obstruction data satisfies the unit separation hypothesis, so it is
+admissible input for any claimed generic interpolation theorem. -/
+theorem obstruction_gap {n : ℕ} (i j : Fin n) :
+    1 ≤ |obstructionAlpha i - obstructionBeta j| := by
+  unfold obstructionAlpha obstructionBeta
+  by_cases hi : (i : ℕ) = 0 <;> by_cases hj : (j : ℕ) = 0
+  · rw [if_pos hi, if_pos hj, le_abs]
+    right
+    norm_num
+  · rw [if_pos hi, if_neg hj, le_abs]
+    right
+    norm_num
+  · rw [if_neg hi, if_pos hj, le_abs]
+    left
+    norm_num
+  · rw [if_neg hi, if_neg hj, le_abs]
+    right
+    norm_num
+
+/-- **Mass obstruction.**  Every undoubled real reciprocal orbit interpolation
+certificate for the two-by-two obstruction data has coefficient mass at least
+`5 / 3`. -/
+theorem real_reciprocalOrbitInterpolation_mass_lower_bound
+    {G : Type*} [NormedAddCommGroup G] [InnerProductSpace ℝ G]
+    [FiniteDimensional ℝ G]
+    (e : OrthonormalBasis (Fin (Module.finrank ℝ G)) ℝ G)
+    (h2 : Module.finrank ℝ G = 2)
+    {mass : ℝ}
+    (hcert : HasReciprocalOrbitInterpolation e e
+      obstructionAlpha obstructionBeta 1 mass) :
+    (5 : ℝ) / 3 ≤ mass := by
+  classical
+  obtain ⟨n, a, U, V, hinterp, hmass⟩ := hcert
+  let u : Fin n → Fin (Module.finrank ℝ G) → ℝ := fun r i =>
+    ⟪e i, (U r).toLinearMap (e i)⟫_ℝ
+  let v : Fin n → Fin (Module.finrank ℝ G) → ℝ := fun r j =>
+    ⟪e j, (V r).toLinearMap (e j)⟫_ℝ
+  have hu_le (r : Fin n) (i : Fin (Module.finrank ℝ G)) : |u r i| ≤ 1 := by
+    have hnorm : ‖(U r).toLinearMap (e i)‖ = 1 := by
+      change ‖(U r) (e i)‖ = 1
+      rw [(U r).norm_map, e.norm_eq_one]
+    calc
+      |u r i| ≤ ‖e i‖ * ‖(U r).toLinearMap (e i)‖ :=
+        abs_real_inner_le_norm _ _
+      _ = 1 := by rw [hnorm, e.norm_eq_one, one_mul]
+  have hv_le (r : Fin n) (j : Fin (Module.finrank ℝ G)) : |v r j| ≤ 1 := by
+    have hnorm : ‖(V r).toLinearMap (e j)‖ = 1 := by
+      change ‖(V r) (e j)‖ = 1
+      rw [(V r).norm_map, e.norm_eq_one]
+    calc
+      |v r j| ≤ ‖e j‖ * ‖(V r).toLinearMap (e j)‖ :=
+        abs_real_inner_le_norm _ _
+      _ = 1 := by rw [hnorm, e.norm_eq_one, one_mul]
+  have hterm (r : Fin n) (i j : Fin (Module.finrank ℝ G)) :
+      ⟪e i, (unitaryOrbitAction (U r) (V r))
+        (basisMatrixUnit e e i j) (e j)⟫_ℝ = u r i * v r j := by
+    change ⟪e i, (U r).toLinearMap
+      ((basisMatrixUnit e e i j) ((V r).toLinearMap (e j)))⟫_ℝ = _
+    rw [basisMatrixUnit_apply, map_smul, real_inner_smul_right]
+    exact mul_comm _ _
+  have hscalar (i j : Fin (Module.finrank ℝ G)) :
+      (1 : ℝ) = (obstructionAlpha i - obstructionBeta j) *
+        ∑ r, a r * (u r i * v r j) := by
+    have h := congrArg (fun T : G →ₗ[ℝ] G => ⟪e i, T (e j)⟫_ℝ) (hinterp i j)
+    rw [LinearMap.smul_apply, LinearMap.smul_apply, real_inner_smul_right,
+      real_inner_smul_right, basisMatrixUnit_apply, e.inner_eq_one, one_smul,
+      e.inner_eq_one, LinearMap.sum_apply, LinearMap.sum_apply, inner_sum] at h
+    calc
+      (1 : ℝ) = (1 : ℝ) * 1 := (mul_one 1).symm
+      _ = (obstructionAlpha i - obstructionBeta j) *
+          ∑ r, ⟪e i, (a r • unitaryOrbitAction (U r) (V r))
+            (basisMatrixUnit e e i j) (e j)⟫_ℝ := h
+      _ = (obstructionAlpha i - obstructionBeta j) *
+          ∑ r, a r * (u r i * v r j) := by
+        congr 1
+        apply Finset.sum_congr rfl
+        intro r _
+        rw [LinearMap.smul_apply, LinearMap.smul_apply,
+          real_inner_smul_right, hterm r i j]
+  have hzero : (0 : ℕ) < Module.finrank ℝ G := by omega
+  have hone : (1 : ℕ) < Module.finrank ℝ G := by omega
+  set i₀ : Fin (Module.finrank ℝ G) := ⟨0, hzero⟩ with hi₀
+  set i₁ : Fin (Module.finrank ℝ G) := ⟨1, hone⟩ with hi₁
+  have hS00 : (∑ r, a r * (u r i₀ * v r i₀)) = -1 := by
+    have h := hscalar i₀ i₀
+    rw [show obstructionAlpha i₀ - obstructionBeta i₀ = -1 by
+      simp [obstructionAlpha, obstructionBeta, hi₀]] at h
+    linarith
+  have hS01 : (∑ r, a r * (u r i₀ * v r i₁)) = -(1 / 3) := by
+    have h := hscalar i₀ i₁
+    rw [show obstructionAlpha i₀ - obstructionBeta i₁ = -3 by
+      simp [obstructionAlpha, obstructionBeta, hi₀, hi₁]
+      norm_num] at h
+    linarith
+  have hS10 : (∑ r, a r * (u r i₁ * v r i₀)) = 1 := by
+    have h := hscalar i₁ i₀
+    rw [show obstructionAlpha i₁ - obstructionBeta i₀ = 1 by
+      simp [obstructionAlpha, obstructionBeta, hi₀, hi₁]] at h
+    linarith
+  have hS11 : (∑ r, a r * (u r i₁ * v r i₁)) = -1 := by
+    have h := hscalar i₁ i₁
+    rw [show obstructionAlpha i₁ - obstructionBeta i₁ = -1 by
+      simp [obstructionAlpha, obstructionBeta, hi₁]
+      norm_num] at h
+    linarith
+  let ℓ : Fin n → ℝ := fun r =>
+    (u r i₁ * (v r i₀ - v r i₁) - u r i₀ * (v r i₀ + v r i₁)) / 2
+  have hLval : (∑ r, a r * ℓ r) = 5 / 3 := by
+    have hsplit : (∑ r, a r * ℓ r) =
+        ((∑ r, a r * (u r i₁ * v r i₀)) - (∑ r, a r * (u r i₁ * v r i₁)) -
+          (∑ r, a r * (u r i₀ * v r i₀)) -
+          (∑ r, a r * (u r i₀ * v r i₁))) / 2 := by
+      rw [eq_div_iff (two_ne_zero (α := ℝ)), Finset.sum_mul,
+        ← Finset.sum_sub_distrib, ← Finset.sum_sub_distrib,
+        ← Finset.sum_sub_distrib]
+      apply Finset.sum_congr rfl
+      intro r _
+      simp only [ℓ]
+      ring
+    rw [hsplit, hS00, hS01, hS10, hS11]
+    norm_num
+  have hℓ_le (r : Fin n) : |ℓ r| ≤ 1 := by
+    obtain ⟨hv0l, hv0r⟩ := abs_le.mp (hv_le r i₀)
+    obtain ⟨hv1l, hv1r⟩ := abs_le.mp (hv_le r i₁)
+    have hsum2 : |v r i₀ - v r i₁| + |v r i₀ + v r i₁| ≤ 2 := by
+      rcases abs_cases (v r i₀ - v r i₁) with ⟨e1, _⟩ | ⟨e1, _⟩ <;>
+        rcases abs_cases (v r i₀ + v r i₁) with ⟨e2, _⟩ | ⟨e2, _⟩ <;>
+          rw [e1, e2] <;> linarith
+    have hnum : |u r i₁ * (v r i₀ - v r i₁) - u r i₀ * (v r i₀ + v r i₁)| ≤ 2 := by
+      calc
+        |u r i₁ * (v r i₀ - v r i₁) - u r i₀ * (v r i₀ + v r i₁)| ≤
+            |u r i₁ * (v r i₀ - v r i₁)| + |u r i₀ * (v r i₀ + v r i₁)| :=
+          abs_sub _ _
+        _ = |u r i₁| * |v r i₀ - v r i₁| + |u r i₀| * |v r i₀ + v r i₁| := by
+          rw [abs_mul, abs_mul]
+        _ ≤ 1 * |v r i₀ - v r i₁| + 1 * |v r i₀ + v r i₁| := by
+          gcongr
+          · exact hu_le r i₁
+          · exact hu_le r i₀
+        _ = |v r i₀ - v r i₁| + |v r i₀ + v r i₁| := by ring
+        _ ≤ 2 := hsum2
+    simp only [ℓ]
+    rw [abs_div, abs_two, div_le_one (by norm_num : (0 : ℝ) < 2)]
+    exact hnum
+  have habs : |∑ r, a r * ℓ r| ≤ ∑ r, |a r| := by
+    calc
+      |∑ r, a r * ℓ r| ≤ ∑ r, |a r * ℓ r| :=
+        Finset.abs_sum_le_sum_abs _ _
+      _ ≤ ∑ r, |a r| := by
+        apply Finset.sum_le_sum
+        intro r _
+        rw [abs_mul]
+        exact mul_le_of_le_one_right (abs_nonneg _) (hℓ_le r)
+  rw [hLval] at habs
+  have hmass' : (∑ r, |a r|) ≤ mass := by
+    calc
+      (∑ r, |a r|) = ∑ r, ‖a r‖ := by
+        apply Finset.sum_congr rfl
+        intro r _
+        rw [Real.norm_eq_abs]
+      _ ≤ mass := hmass
+  calc
+    (5 : ℝ) / 3 = |(5 : ℝ) / 3| := by norm_num
+    _ ≤ ∑ r, |a r| := habs
+    _ ≤ mass := hmass'
+
+/-- **The exact undoubled real reciprocal orbit interpolation at mass `π / 2`
+is refuted.**  The separation hypotheses are satisfiable (`obstruction_gap`
+with `δ = 1 > 0`), yet no certificate of mass `π / 2` exists because
+`π / 2 < 5 / 3`. -/
+theorem not_real_reciprocalOrbitInterpolation_pi_div_two
+    {G : Type*} [NormedAddCommGroup G] [InnerProductSpace ℝ G]
+    [FiniteDimensional ℝ G]
+    (e : OrthonormalBasis (Fin (Module.finrank ℝ G)) ℝ G)
+    (h2 : Module.finrank ℝ G = 2) :
+    ¬ HasReciprocalOrbitInterpolation e e
+      obstructionAlpha obstructionBeta 1 (Real.pi / 2) := by
+  intro hcert
+  have h53 := real_reciprocalOrbitInterpolation_mass_lower_bound e h2 hcert
+  nlinarith [Real.pi_lt_d2]
+
+/-- The concrete two-dimensional Euclidean orthonormal basis witnessing the
+obstruction. -/
+noncomputable def obstructionBasis :
+    OrthonormalBasis (Fin (Module.finrank ℝ (EuclideanSpace ℝ (Fin 2)))) ℝ
+      (EuclideanSpace ℝ (Fin 2)) :=
+  (EuclideanSpace.basisFun (Fin 2) ℝ).reindex
+    (finCongr finrank_euclideanSpace_fin.symm)
+
+/-- Fully concrete refutation on `EuclideanSpace ℝ (Fin 2)`: the hypotheses
+of the previously conjectured generic undoubled interpolation are satisfied,
+but its conclusion fails. -/
+theorem not_hasReciprocalOrbitInterpolation_pi_div_two_euclidean :
+    ¬ HasReciprocalOrbitInterpolation obstructionBasis obstructionBasis
+      obstructionAlpha obstructionBeta 1 (Real.pi / 2) :=
+  not_real_reciprocalOrbitInterpolation_pi_div_two obstructionBasis
+    finrank_euclideanSpace_fin
+
 /-- **Finite harmonic-analysis root.**  Separated finite real frequencies admit
 a simultaneous reciprocal orbit interpolation of mass at most `π / 2`.
 
