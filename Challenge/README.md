@@ -22,6 +22,12 @@ Mathlib-candidate-focused.
 
 Principles:
 
+- **Challenge holes are immutable.** The open proofs in every
+  `Conformance.lean` are intentional comparator placeholders, not repository
+  proof debt. Never fill them. Implement the theorem in the ordinary library
+  module and let the paired `Leaderboard.lean` plus Comparator verify statement
+  equality and permitted dependencies. This follows Comparator's challenge /
+  solution model: <https://github.com/leanprover/comparator>.
 - **Leaf theorems only.** Each challenge lists only the *leaf* (top-level) theorems
   — those not used to prove any other listed theorem. `#print axioms` on a leaf
   transitively certifies its entire proof tree, so the supporting lemmas need not
@@ -58,6 +64,29 @@ All sorry-free and axiom-clean, but **not** part of the opening push — each ei
 needs work to clear the maintainer bar, or is being deliberately held until the
 headline three land and reviewers can help triage. Each may graduate to a Candidate
 later.
+
+### Advertising-level Davis--Kahan results
+
+This subsection is intentionally selective. A theorem appears here only when it
+is a recognizable literature endpoint or a genuinely reusable majorization
+result—not because it was difficult to formalize or useful internally. Routine
+corollaries, conditional harmonic reductions, notation bridges, and local
+transport lemmas are deliberately excluded.
+
+| Challenge | Leaf theorem(s) | Why it clears the advertising bar |
+|---|---|---|
+| DavisKahanSharp | `DavisKahanTheory.sinAngleOperator_perturbation_le` | sharp full-space sin-Theta theorem for every unitarily invariant norm, obtained by coupling both directed blocks without a factor-two loss |
+| DavisKahanPartIII | `DavisKahanTheory.partIII_sinTheta_uiNorm`, `DavisKahanTheory.partIII_sinTwoTheta_uiNorm`, `DavisKahanTheory.partIII_tanTheta_vector`, `DavisKahanTheory.partIII_tanTwoTheta_opNorm` | the source-checked classical Part III quartet: all-UI sin Theta and sin 2Theta, pole-free residual tan Theta, and sharp operator-norm tan 2Theta with strict quarter-turn avoidance |
+| Davis1963Rotation | `rotation_add_displacement_le_hilbertSchmidt` | Davis's sharpened 1963 total-rotation theorem: eigenvalue motion and eigenvector rotation share one Frobenius perturbation budget |
+| YuWangSamworth | `sqrt_sum_cross_le_of_population_gap` | the exact population-gap Frobenius sin-Theta theorem used in modern statistical perturbation theory |
+
+`RectangularFanDominance/Leaderboard.lean` separately audits the rectangular
+Ky Fan/orbit-majorization machinery. It is advertising-level mathematics, but
+currently leaderboard-only because its vocabulary and implementation still
+cohabit one large staging module; a clean conformance surface should be created
+only when that code is split for an upstream PR.
+
+### Other pending results
 
 | Challenge | Leaf theorem(s) | Why pending |
 |---|---|---|

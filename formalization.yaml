@@ -39,8 +39,8 @@ sources:
 
 status:
   repository_build:
-    last_user_reported_build: "lake build completes green. Challenge layer restructured 2026-06-14 into MathlibCandidate (3) + MathlibPending (10 comparator configs + 1 leaderboard-only); all leaf #print axioms verified clean."
-    last_user_reported_challenge_summary: "candidate-01 (Gram) confirmed PASS under the real-landrun comparator (2026-06-14); conformances were corrected to mirror their ForMathlib source's universe/instance export signature. Remaining configs build green, are axiom-clean, and pass a local pp.all type-match check against the solution exports; run scripts/run_challenge_comparator.sh for the full comparator sweep."
+    last_user_reported_build: "The source repository was last user-reported green before this challenge expansion. The challenge layer now contains MathlibCandidate (3), MathlibPending (14 comparator configs), and 2 leaderboard-only audits; the newly added Davis--Kahan flagship configs still require local Lean/signature/comparator validation."
+    last_user_reported_challenge_summary: "candidate-01 (Gram) confirmed PASS under the real-landrun comparator (2026-06-14); conformances were corrected to mirror their ForMathlib source's universe/instance export signature. The previously listed configs build green and are dependency-clean. The sharp/full Part III, Davis 1963 rotation, and Yu--Wang--Samworth configs are newly packaged and require local signature pre-flight plus their first external Comparator sweep."
     challenge_commands:
       - "lake env lean Challenge/MathlibCandidate/GramRigidity/Conformance.lean"
       - "lake env lean Challenge/MathlibCandidate/GramRigidity/Leaderboard.lean"
@@ -49,6 +49,10 @@ status:
       - "comparator/candidate-01-gram-rigidity.json"
       - "comparator/candidate-02-courant-fischer-weyl.json"
       - "comparator/candidate-03-davis-kahan.json"
+      - "comparator/pending-davis-kahan-sharp.json"
+      - "comparator/pending-davis-kahan-part-iii.json"
+      - "comparator/pending-davis-1963-rotation.json"
+      - "comparator/pending-yu-wang-samworth.json"
       - "comparator/pending-berge.json"
       - "comparator/pending-rank-factorization.json"
       - "comparator/pending-rank-psd-realization.json"
@@ -98,7 +102,28 @@ status:
       comparator_config: "comparator/candidate-03-davis-kahan.json"
   pending_challenges:
     note: "Proven (sorry-free, axiom-clean) but held back from the upstream push; see Challenge/README.md for why each is not yet PR-ready."
+    advertising_level_davis_kahan:
+      - declaration: "ForMathlib.DavisKahanTheory.sinAngleOperator_perturbation_le"
+        category: "sharp full-space all-UI sin-Theta"
+        comparator_config: "comparator/pending-davis-kahan-sharp.json"
+      - declarations:
+          - "ForMathlib.DavisKahanTheory.partIII_sinTheta_uiNorm"
+          - "ForMathlib.DavisKahanTheory.partIII_sinTwoTheta_uiNorm"
+          - "ForMathlib.DavisKahanTheory.partIII_tanTheta_vector"
+          - "ForMathlib.DavisKahanTheory.partIII_tanTwoTheta_opNorm"
+        category: "classical Davis--Kahan Part III quartet"
+        comparator_config: "comparator/pending-davis-kahan-part-iii.json"
+      - declaration: "ForMathlib.rotation_add_displacement_le_hilbertSchmidt"
+        category: "Davis 1963 sharpened total rotation"
+        comparator_config: "comparator/pending-davis-1963-rotation.json"
+      - declaration: "ForMathlib.sqrt_sum_cross_le_of_population_gap"
+        category: "Yu--Wang--Samworth population-gap sin-Theta"
+        comparator_config: "comparator/pending-yu-wang-samworth.json"
     configs:
+      - "comparator/pending-davis-kahan-sharp.json"
+      - "comparator/pending-davis-kahan-part-iii.json"
+      - "comparator/pending-davis-1963-rotation.json"
+      - "comparator/pending-yu-wang-samworth.json"
       - "comparator/pending-berge.json"
       - "comparator/pending-rank-factorization.json"
       - "comparator/pending-rank-psd-realization.json"
@@ -113,6 +138,11 @@ status:
       - declaration: "ForMathlib.Matrix.measurable_specTransform"
         solution_file: "Challenge/MathlibPending/SpectralFunctionMeasurable/Leaderboard.lean"
         reason: "Matrix-valued measurability statement is not cleanly Mathlib-only expressible; axiom-audit leaderboard only, no comparator conformance."
+      - declarations:
+          - "ForMathlib.DavisKahanTheory.RectangularUnitarilyInvariantNorm.mem_convexHull_twoSidedUnitaryOrbit_of_kyFanSum_le"
+          - "ForMathlib.DavisKahanTheory.RectangularUnitarilyInvariantNorm.apply_le_of_kyFanSum_le"
+        solution_file: "Challenge/MathlibPending/RectangularFanDominance/Leaderboard.lean"
+        reason: "Flagship rectangular majorization results; vocabulary and implementation currently cohabit one staging module, so a separate conformance surface would not yet be independent."
   dkps_papers:
     note: "Fully formalized end-state papers; documented here and in each library's README, NOT comparator challenges. All capstones verified #print axioms = {propext, Classical.choice, Quot.sound} (2026-06-14)."
     papers:
@@ -148,12 +178,13 @@ review:
   reviewers:
     - "Jon Crall"
   notes: >
-    Self-assessed metadata and challenge package. The MathlibCandidate and
-    MathlibPending comparator configs build green with axiom-clean leaves.
-    candidate-01 (Gram rigidity) is confirmed passing under the real-landrun
-    comparator (2026-06-14); a full local comparator sweep of the remaining
-    configs is pending. The candidates have not yet undergone independent Mathlib
-    reviewer approval or source-author verification.
+    Self-assessed metadata and challenge package. The previously existing
+    MathlibCandidate and MathlibPending configs were reported build-green with
+    dependency-clean leaves. candidate-01 (Gram rigidity) is confirmed passing
+    under the real-landrun comparator (2026-06-14). The newly added Davis--Kahan
+    flagship configs still require local Lean signature pre-flight and their first
+    external Comparator sweep. The candidates have not yet undergone independent
+    Mathlib reviewer approval or source-author verification.
 
 alignment:
   statements:
@@ -273,6 +304,10 @@ challenge_packages:
     - comparator/candidate-02-courant-fischer-weyl.json
     - comparator/candidate-03-davis-kahan.json
   pending_configs:
+    - comparator/pending-davis-kahan-sharp.json
+    - comparator/pending-davis-kahan-part-iii.json
+    - comparator/pending-davis-1963-rotation.json
+    - comparator/pending-yu-wang-samworth.json
     - comparator/pending-berge.json
     - comparator/pending-rank-factorization.json
     - comparator/pending-rank-psd-realization.json

@@ -48,12 +48,13 @@ The repository already contains:
 
 It did not have a canonical source inventory tying these assets and the mathematical infrastructure to one paper-level roadmap. The initial manifest fills that gap and explicitly records missing primary sources discovered by the audit.
 
-The first completed source-order reconstructions are:
+The completed source-order reconstructions are:
 
 - `Davis1963_rotation_of_eigenvectors.tex`, covering Sections I--V and every numbered theorem/equation in the supplied transcription;
-- `YuWangSamworth2015_statistical_davis_kahan.tex`, covering the mixed-gap baseline, population-gap theorem, sharpness examples, rank-one corollary, rectangular extension, and complete appendix proofs.
+- `YuWangSamworth2015_statistical_davis_kahan.tex`, covering the mixed-gap baseline, population-gap theorem, sharpness examples, rank-one corollary, rectangular extension, and complete appendix proofs;
+- `AlbeverioMakarovMotovilov2001_sylvester_fourier_pi_over_two.tex`, covering the separated-spectrum Sylvester theorem, reciprocal Fourier representation, sharp `pi / 2` provenance, scaling audit, finite interpolation reduction, and real-field formalization gap.
 
-Both notes are transformative mathematical reconstructions. They record local transcription hashes but do not redistribute the supplied transcriptions.
+These notes are transformative mathematical reconstructions. They record local source hashes but do not redistribute the supplied source files.
 
 ## Workflow
 

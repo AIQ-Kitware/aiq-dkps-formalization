@@ -1,0 +1,13 @@
+{
+  "challenge_module": "Challenge.MathlibPending.Davis1963Rotation.Conformance",
+  "solution_module": "Challenge.MathlibPending.Davis1963Rotation.Leaderboard",
+  "theorem_names": [
+    "ForMathlib.rotation_add_displacement_le_hilbertSchmidt"
+  ],
+  "permitted_axioms": [
+    "propext",
+    "Quot.sound",
+    "Classical.choice"
+  ],
+  "enable_nanoda": false
+}

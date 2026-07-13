@@ -871,13 +871,43 @@
       "repo_evidence": [
         "ForMathlib/Analysis/InnerProductSpace/DavisKahanTheory/Sylvester.lean",
         "dev/davis-kahan-expert-completion-plan.md",
-        "dev/lean-proof-engineering-lessons.md"
+        "dev/lean-proof-engineering-lessons.md",
+        "prose/distilled_literature/AlbeverioMakarovMotovilov2001_sylvester_fourier_pi_over_two.tex"
       ],
       "existing_assets": [],
       "scope": "The reciprocal Fourier/Schur-multiplier estimate with the pi/2 constant for separated spectra and its spectral-subspace consequences.",
-      "missing_work": "Acquire and verify the original bibliographic record, then reconstruct the analytic proof before completing the Lean seam.",
+      "missing_work": "Acquire and reconstruct the original 1983 paper in source order. The Albeverio--Makarov--Motovilov note documents the later sharp pi/2 synthesis and attribution chain but is not a substitute for the original proof.",
       "role": "primary_theorem_source",
       "bibliographic_status": "needs_verification"
+    },
+    "AlbeverioMakarovMotovilov2001": {
+      "title": "Graph Subspaces and the Spectral Shift Function",
+      "authors": [
+        "Sergio Albeverio",
+        "Konstantin A. Makarov",
+        "Alexander K. Motovilov"
+      ],
+      "year": 2001,
+      "kind": "paper",
+      "group": "Spectral perturbation, principal angles, and matrix inequalities",
+      "tier": "supporting",
+      "priority": "P1",
+      "formalization_status": "source-order sharp Sylvester/Fourier bridge reconstructed; scalar pi/2 interpolation and real descent remain active",
+      "distilled_status": "complete",
+      "primary_url": "https://arxiv.org/abs/math/0105142",
+      "target_note": "AlbeverioMakarovMotovilov2001_sylvester_fourier_pi_over_two.tex",
+      "repo_evidence": [
+        "ForMathlib/Analysis/InnerProductSpace/DavisKahanTheory/ReciprocalMultiplier.lean",
+        "ForMathlib/Analysis/InnerProductSpace/DavisKahanTheory/Sylvester.lean",
+        "papers/DavisKahan-formalized-vs-literature.tex"
+      ],
+      "existing_assets": [
+        "prose/distilled_literature/AlbeverioMakarovMotovilov2001_sylvester_fourier_pi_over_two.tex"
+      ],
+      "scope": "Theorem Kiexp and Remark nad: reciprocal Fourier representation of the separated-spectrum Sylvester solution, the sharp pi/2 symmetric-ideal estimate, scaling, provenance, and the finite formalization map.",
+      "missing_work": "Complete the normalized finite scalar interpolation theorem and a singular-value-preserving real descent; reconstruct the original Bhatia--Davis--McIntosh proof separately.",
+      "role": "supporting_source",
+      "bibliographic_status": "verified"
     },
     "Higham1986": {
       "title": "Computing the Polar Decomposition--with Applications",

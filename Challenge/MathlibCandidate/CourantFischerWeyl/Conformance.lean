@@ -10,6 +10,16 @@ min-max characterization is the proof vehicle (developed in
 (top-level) theorems are listed -- `#print axioms` on a leaf transitively certifies its
 whole proof tree.
 -/
+/-!
+## Comparator maintenance rule
+
+The proof holes in this module are deliberate challenge placeholders. Do not
+discharge them in this repository and do not count them as formalization debt.
+Implementations belong in the project modules imported by the paired
+`Leaderboard.lean`; Comparator verifies that those implementations match these
+statements and use only the permitted kernel dependencies.
+-/
+
 import Mathlib
 
 namespace ForMathlib
