@@ -177,5 +177,107 @@ noncomputable def trialMapFrameFactorizationOfLowerFrameBound
       trialGramSqrtEquiv X hX :=
   rfl
 
+/-- Pointwise bound for the inverse coordinate factor supplied by a positive
+lower frame bound. -/
+theorem norm_trialGramSqrtEquiv_symm_apply_le
+    (X : F →ₗ[𝕜] E) (hX : Function.Injective X)
+    {ε : ℝ} (hframe : LowerFrameBound X ε) (hε : 0 < ε) (y : F) :
+    ‖(trialGramSqrtEquiv X hX).symm y‖ ≤ ε⁻¹ * ‖y‖ := by
+  have hraw :
+      ε * ‖(trialGramSqrtEquiv X hX).symm y‖ ≤ ‖y‖ := by
+    calc
+      ε * ‖(trialGramSqrtEquiv X hX).symm y‖ ≤
+          ‖X ((trialGramSqrtEquiv X hX).symm y)‖ :=
+        hframe ((trialGramSqrtEquiv X hX).symm y)
+      _ = ‖trialGramSqrtEquiv X hX
+          ((trialGramSqrtEquiv X hX).symm y)‖ :=
+        (norm_trialGramSqrtEquiv_apply X hX
+          ((trialGramSqrtEquiv X hX).symm y)).symm
+      _ = ‖y‖ := by
+        rw [(trialGramSqrtEquiv X hX).apply_symm_apply]
+  have hdiv :
+      ‖(trialGramSqrtEquiv X hX).symm y‖ ≤ ‖y‖ / ε := by
+    apply (le_div_iff₀ hε).2
+    simpa [mul_comm] using hraw
+  simpa [div_eq_mul_inv, mul_comm] using hdiv
+
+/-- Operator-norm bound for the inverse coordinate factor.  This is the
+quantitative conditioning statement extracted from the lower frame bound. -/
+theorem opNorm_trialGramSqrtEquiv_symm_le
+    (X : F →ₗ[𝕜] E) (hX : Function.Injective X)
+    {ε : ℝ} (hframe : LowerFrameBound X ε) (hε : 0 < ε) :
+    ‖(trialGramSqrtEquiv X hX).symm.toLinearMap.toContinuousLinearMap‖ ≤ ε⁻¹ := by
+  refine (trialGramSqrtEquiv X hX).symm.toLinearMap.toContinuousLinearMap.opNorm_le_bound
+    (inv_nonneg.mpr hε.le) ?_
+  intro y
+  exact norm_trialGramSqrtEquiv_symm_apply_le X hX hframe hε y
+
+/-- Right-composition by the inverse frame coordinate costs at most the inverse
+lower-frame constant in every rectangular unitarily invariant norm. -/
+theorem uiNorm_comp_trialGramSqrtEquiv_symm_le
+    (N : RectangularUnitarilyInvariantNorm 𝕜 F E)
+    (X : F →ₗ[𝕜] E) (hX : Function.Injective X)
+    {ε : ℝ} (hframe : LowerFrameBound X ε) (hε : 0 < ε)
+    (A : F →ₗ[𝕜] E) :
+    N (A ∘ₗ (trialGramSqrtEquiv X hX).symm.toLinearMap) ≤
+      N A * ε⁻¹ := by
+  calc
+    N (A ∘ₗ (trialGramSqrtEquiv X hX).symm.toLinearMap) ≤
+        N A * ‖(trialGramSqrtEquiv X hX).symm.toLinearMap.toContinuousLinearMap‖ :=
+      N.comp_le_mul_opNorm A (trialGramSqrtEquiv X hX).symm.toLinearMap
+    _ ≤ N A * ε⁻¹ :=
+      mul_le_mul_of_nonneg_left
+        (opNorm_trialGramSqrtEquiv_symm_le X hX hframe hε)
+        (N.nonneg A)
+
+/-- Recomposition on the right by the inverse coordinate factor recovers the
+isometric range representative. -/
+theorem trialMap_comp_trialGramSqrtEquiv_symm
+    (X : F →ₗ[𝕜] E) (hX : Function.Injective X) :
+    X ∘ₗ (trialGramSqrtEquiv X hX).symm.toLinearMap =
+      (orthonormalizedEmbedding X hX).toLinearMap := by
+  ext y
+  have hfactor := LinearMap.congr_fun
+    (orthonormalizedEmbedding_comp_trialGramSqrtEquiv X hX)
+    ((trialGramSqrtEquiv X hX).symm y)
+  calc
+    X ((trialGramSqrtEquiv X hX).symm y) =
+        (orthonormalizedEmbedding X hX)
+          (trialGramSqrtEquiv X hX
+            ((trialGramSqrtEquiv X hX).symm y)) :=
+      hfactor.symm
+    _ = (orthonormalizedEmbedding X hX) y := by
+      rw [(trialGramSqrtEquiv X hX).apply_symm_apply]
+
+/-- The geometric sine block is the raw complementary trial block followed by
+the inverse frame coordinate. -/
+theorem complementaryTrialBlock_comp_trialGramSqrtEquiv_symm
+    (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
+    (X : F →ₗ[𝕜] E) (hX : Function.Injective X) :
+    complementaryTrialBlock U X ∘ₗ
+        (trialGramSqrtEquiv X hX).symm.toLinearMap =
+      sinThetaEmbedding U (orthonormalizedEmbedding X hX) := by
+  rw [complementaryTrialBlock, sinThetaEmbedding, LinearMap.comp_assoc,
+    trialMap_comp_trialGramSqrtEquiv_symm X hX]
+
+/-- Lower-frame transport from the raw complementary block to the canonical
+sine-angle map in every rectangular unitarily invariant norm. -/
+theorem lowerFrame_mul_uiNorm_sinTheta_le_complementaryTrialBlock
+    (N : RectangularUnitarilyInvariantNorm 𝕜 F E)
+    (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
+    (X : F →ₗ[𝕜] E) (hX : Function.Injective X)
+    {ε : ℝ} (hframe : LowerFrameBound X ε) (hε : 0 < ε) :
+    ε * N (sinThetaEmbedding U (orthonormalizedEmbedding X hX)) ≤
+      N (complementaryTrialBlock U X) := by
+  have hideal := uiNorm_comp_trialGramSqrtEquiv_symm_le
+    N X hX hframe hε (complementaryTrialBlock U X)
+  rw [complementaryTrialBlock_comp_trialGramSqrtEquiv_symm U X hX] at hideal
+  calc
+    ε * N (sinThetaEmbedding U (orthonormalizedEmbedding X hX)) ≤
+        ε * (N (complementaryTrialBlock U X) * ε⁻¹) :=
+      mul_le_mul_of_nonneg_left hideal hε.le
+    _ = N (complementaryTrialBlock U X) := by
+      field_simp [hε.ne']
+
 end DavisKahanTheory
 end ForMathlib
