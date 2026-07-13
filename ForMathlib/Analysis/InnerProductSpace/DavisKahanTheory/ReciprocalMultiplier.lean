@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
 import ForMathlib.Analysis.InnerProductSpace.DavisKahanTheory.RectangularUINorm
+import Mathlib.Analysis.Convex.Integral
 import Mathlib.LinearAlgebra.Lagrange
 
 /-!
@@ -209,6 +210,56 @@ theorem complexUnitaryOrbitAction_basisMatrixUnit_exp_sub
   congr 1
   congr 1
   ring_nf
+
+/-- The average of an integrable function for a nonzero finite measure can be
+approximated by a finite convex combination of actual values of the function.
+
+This is the finite quadrature step used to turn an integrable scalar Fourier
+kernel into finitely many Fourier atoms.  It is stated for a general real
+normed space so the coefficient mass can later be included as one additional
+coordinate of the integrand. -/
+theorem exists_finite_average_approximation
+    {Ω V : Type*} [MeasurableSpace Ω]
+    [NormedAddCommGroup V] [NormedSpace ℝ V] [CompleteSpace V]
+    (μ : MeasureTheory.Measure Ω) [MeasureTheory.IsFiniteMeasure μ] [NeZero μ]
+    (g : Ω → V) (hg : MeasureTheory.Integrable g μ)
+    {ε : ℝ} (hε : 0 < ε) :
+    ∃ q : ℕ, ∃ w : Fin q → ℝ, ∃ z : Fin q → Ω,
+      (∀ r, 0 ≤ w r) ∧
+      ∑ r, w r = 1 ∧
+      dist (∑ r, w r • g (z r)) (⨍ x, g x ∂μ) < ε := by
+  classical
+  have havg : (⨍ x, g x ∂μ) ∈
+      closedConvexHull ℝ (Set.range g) := by
+    exact convex_closedConvexHull.average_mem isClosed_closedConvexHull
+      (Filter.Eventually.of_forall fun x => subset_closedConvexHull (Set.mem_range_self x)) hg
+  rw [closedConvexHull_eq_closure_convexHull] at havg
+  obtain ⟨y, hy, hdist⟩ := Metric.mem_closure_iff.mp havg ε hε
+  rcases mem_convexHull_iff_exists_fintype.mp hy with
+    ⟨ι, hι, w, v, hw₀, hw₁, hv, hvsum⟩
+  letI : Fintype ι := hι
+  let z : ι → Ω := fun i => Classical.choose (hv i)
+  have hz (i : ι) : g (z i) = v i := Classical.choose_spec (hv i)
+  let e : ι ≃ Fin (Fintype.card ι) := Fintype.equivFin ι
+  refine ⟨Fintype.card ι, w ∘ e.symm, z ∘ e.symm, ?_, ?_, ?_⟩
+  · intro r
+    exact hw₀ (e.symm r)
+  · simpa only [Function.comp_apply] using (e.symm.sum_comp w).trans hw₁
+  · have hsum : ∑ i, w i • g (z i) = y := by
+      calc
+        ∑ i, w i • g (z i) = ∑ i, w i • v i := by
+          apply Finset.sum_congr rfl
+          intro i _
+          rw [hz i]
+        _ = y := hvsum
+    have hreindex :
+        (∑ r : Fin (Fintype.card ι),
+          (w ∘ e.symm) r • g ((z ∘ e.symm) r)) =
+        ∑ i : ι, w i • g (z i) := by
+      simpa only [Function.comp_apply] using
+        e.symm.sum_comp (fun i => w i • g (z i))
+    rw [hreindex, hsum, dist_comm]
+    exact hdist
 
 /-- Arbitrary complex values on a finite set of real frequencies admit an
 exact finite Fourier interpolation.
