@@ -254,6 +254,7 @@ Equation \texttt{HeinzMod} & Two-sided unitary orbit average & \code{basisDiagon
 Equation \texttt{ozenka} & Symmetric-ideal norm domination & Finite orbit certificate $\Rightarrow$ simultaneous rectangular Ky Fan bounds $\Rightarrow$ \code{uiNorm_sylvester_le_of_spectralDistance}. \\
 Equation \texttt{cpi2} and Remark \texttt{nad} & Sharp constant as an infimum of Fourier masses & \code{kyFan_reciprocalMultiplier_le_complex_of_approximateFourierInterpolation}; it correctly needs masses $\pi/2+\varepsilon$, not an attaining kernel. \\
 Finite exact correction after Fourier approximation & Lagrange interpolation on finitely many distinct circle phases & \code{exists_finite_fourier_interpolation} and \code{exists_finite_fourier_interpolation_with_mass_bound}; the latter supplies a fixed linear coefficient-mass bound. \\
+Approximation-to-exact reciprocal bridge & Correct the error on the finite difference set and concatenate the two Fourier sums & \code{HasApproximateFiniteReciprocalFourierInterpolation}, \code{hasFiniteReciprocalFourierInterpolation_of_approximate}, and \code{hasFiniteReciprocalFourierInterpolation_pi_div_two_add_eps_of_approximate}. \\
 Unit-gap to gap-$d$ scaling & $f_d(t)=f(dt)$ and $\norm{f_d}_1=d^{-1}\norm f_1$ & \code{hasFiniteReciprocalFourierInterpolation_of_normalized}. \\
 Symmetric ideal property & Invariance under left/right unitaries and ideal contraction & \code{RectangularUnitarilyInvariantNorm} and rectangular Fan dominance. \\
 Real scalar field & Not supplied by complex diagonal phases & Still requires singular-value-preserving complexification or doubled-space rotation descent. \\
@@ -264,8 +265,8 @@ Real scalar field & Not supplied by complex diagonal phases & Still requires sin
 The source makes the remaining work unusually precise.
 
 \begin{enumerate}[leftmargin=2em]
-\item Prove the normalized scalar theorem: for every finite separated difference set and every $\varepsilon>0$, construct an exact finite reciprocal-Fourier interpolation of mass at most $\pi/2+\varepsilon$.
-\item Derive that construction from the Sz.-Nagy--Strausz extremal theorem or a modern equivalent, while preserving exactness on the finite set.
+\item Derive uniformly accurate finite reciprocal Fourier sums, with coefficient masses approaching $\pi/2$, from the Sz.-Nagy--Strausz extremal theorem or a modern equivalent.
+\item Apply the proved approximation-to-exact bridge to obtain the normalized exact finite interpolation. The Lagrange correction and its vanishing mass estimate are now formalized, so exact finite moment compression is no longer an independent obligation.
 \item Transfer the sharp complex Ky Fan result to real Hilbert spaces without a constant loss.
 \item Replace the field-uniform harmonic placeholder only after both field cases are connected to the generic theorem.
 \end{enumerate}
