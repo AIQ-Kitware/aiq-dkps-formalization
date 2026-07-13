@@ -53,11 +53,6 @@ map.  Davis--Kahan's parameter `e` is this lower singular-value bound. -/
 def LowerFrameBound (X : F →ₗ[𝕜] E) (ε : ℝ) : Prop :=
   ∀ y, ε * ‖y‖ ≤ ‖X y‖
 
-/-- Residual for a general trial map. -/
-noncomputable def generalResidual (A : E →ₗ[𝕜] E) (X : F →ₗ[𝕜] E)
-    (M : F →ₗ[𝕜] F) : F →ₗ[𝕜] E :=
-  A ∘ₗ X - X ∘ₗ M
-
 /-- Isometric factor in the polar decomposition of an injective trial map. -/
 noncomputable def orthonormalizedEmbedding (X : F →ₗ[𝕜] E)
     (hX : Function.Injective X) : F →ₗᵢ[𝕜] E := by
@@ -108,11 +103,17 @@ theorem isSymmetric_generalizedCompression {A : E →ₗ[𝕜] E}
 /-- Davis--Kahan Theorem 6.1: generalized `sin Θ` for non-orthonormal trial
 vectors and unequal dimensions.
 
-Lean proof route for a weaker agent:
+Lean proof route:
 
-1. Whiten `X = Q G^{1/2}`, convert the residual to the isometric embedding `Q`, apply the finite `sinTheta_residual_le`, and use the lower frame bound to control multiplication by `G^{1/2}`.
-2. Establish the residual factorization `R_Q = R_X G⁻¹/²` as a separate lemma.
-3. Apply the right ideal inequality and use `hframe` to bound `‖G⁻¹/²‖ ≤ ε⁻¹`; clear the positive denominators last.
+1. Apply `sylvester_complementaryTrialBlock_eq_projectedGeneralResidual` directly
+   to `P_{Vᗮ} X`; do not conjugate `M` through a whitening factor, since that
+   conjugate need not remain symmetric.
+2. Use the interval/exterior rectangular Sylvester theorem to bound the raw
+   block `P_{Vᗮ} X` by the projected general residual.
+3. Factor `X = Q T`, where `Q` is an isometric embedding onto `range X` and
+   `T` is invertible.  The lower frame bound gives `‖T⁻¹‖ ≤ ε⁻¹`, while
+   `P_{Vᗮ} Q = (P_{Vᗮ} X) T⁻¹`.
+4. Apply the right ideal inequality and clear the positive scalar factors.
 -/
 theorem generalizedSinTheta_residual_le
     (N : RectangularUnitarilyInvariantNorm 𝕜 F E)

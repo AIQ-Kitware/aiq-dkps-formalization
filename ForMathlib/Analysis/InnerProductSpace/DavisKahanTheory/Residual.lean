@@ -136,10 +136,29 @@ noncomputable def compression (A : E →ₗ[𝕜] E) (X : F →ₗᵢ[𝕜] E) :
     F →ₗ[𝕜] F :=
   X.toLinearMap.adjoint ∘ₗ A ∘ₗ X.toLinearMap
 
-/-- Residual of an approximate invariant pair `(X,M)`. -/
+/-- Residual of a general, not necessarily isometric, trial map. -/
+noncomputable def generalResidual (A : E →ₗ[𝕜] E) (X : F →ₗ[𝕜] E)
+    (M : F →ₗ[𝕜] F) : F →ₗ[𝕜] E :=
+  A ∘ₗ X - X ∘ₗ M
+
+/-- Residual of an approximate invariant pair represented by an isometric
+embedding. -/
 noncomputable def residual (A : E →ₗ[𝕜] E) (X : F →ₗᵢ[𝕜] E)
     (M : F →ₗ[𝕜] F) : F →ₗ[𝕜] E :=
   A ∘ₗ X.toLinearMap - X.toLinearMap ∘ₗ M
+
+/-- The raw complementary block of an arbitrary trial map.  For an isometric
+embedding this specializes to `sinThetaEmbedding`; without normalization it is
+the algebraic block bounded first in the generalized sine and tangent proofs. -/
+noncomputable def complementaryTrialBlock (U : Submodule 𝕜 E)
+    [U.HasOrthogonalProjection] (X : F →ₗ[𝕜] E) : F →ₗ[𝕜] E :=
+  complementaryProjection U ∘ₗ X
+
+omit [FiniteDimensional 𝕜 E] [FiniteDimensional 𝕜 F] in
+@[simp] theorem generalResidual_toLinearMap (A : E →ₗ[𝕜] E)
+    (X : F →ₗᵢ[𝕜] E) (M : F →ₗ[𝕜] F) :
+    generalResidual A X.toLinearMap M = residual A X M :=
+  rfl
 
 /-- Galerkin/Ritz residual. -/
 noncomputable def ritzResidual (A : E →ₗ[𝕜] E) (X : F →ₗᵢ[𝕜] E) :
@@ -155,6 +174,12 @@ an exact subspace. -/
 noncomputable def sinThetaEmbedding (U : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] (X : F →ₗᵢ[𝕜] E) : F →ₗ[𝕜] E :=
   complementaryProjection U ∘ₗ X.toLinearMap
+
+omit [FiniteDimensional 𝕜 E] [FiniteDimensional 𝕜 F] in
+@[simp] theorem complementaryTrialBlock_toLinearMap (U : Submodule 𝕜 E)
+    [U.HasOrthogonalProjection] (X : F →ₗᵢ[𝕜] E) :
+    complementaryTrialBlock U X.toLinearMap = sinThetaEmbedding U X :=
+  rfl
 
 /-- Cosine map from approximate coordinates into an exact subspace. -/
 noncomputable def cosThetaEmbedding (U : Submodule 𝕜 E)
@@ -304,21 +329,42 @@ theorem residual_eq_perturbation_comp {A B : E →ₗ[𝕜] E}
   rw [LinearMap.sub_comp, hBX]
 
 omit [FiniteDimensional 𝕜 F] in
-/-- **The projected-residual (cross-block) Sylvester identity.**  For `A`
-symmetric and `U` an `A`-invariant subspace, the sine embedding
-`Y = P_{Uᗮ} X` satisfies the Sylvester equation
-`A Y - Y M = P_{Uᗮ} (A X - X M)`, i.e. its residual is the `Uᗮ`-projection of the
-ambient residual.  This is the algebraic heart of the residual `sin Θ` theorem;
-it uses only the commutation of `A` with the complementary projection. -/
+/-- **The arbitrary-trial-map projected-residual Sylvester identity.**
+
+For a symmetric operator `A`, an `A`-reducing subspace `U`, an arbitrary trial
+map `X`, and an arbitrary coordinate map `M`, the raw complementary block
+`Y = P_{Uᗮ} X` satisfies
+
+`A Y - Y M = P_{Uᗮ} (A X - X M)`.
+
+This statement deliberately assumes no isometry, injectivity, frame bound,
+or symmetry of `M`, and it does not require finite-dimensional trial
+coordinates.  It is the shared algebraic root of the ordinary and generalized
+residual sine bounds and of the graph-operator tangent development. -/
+theorem sylvester_complementaryTrialBlock_eq_projectedGeneralResidual
+    {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric)
+    {U : Submodule 𝕜 E} [U.HasOrthogonalProjection] (hU : Reduces A U)
+    (X : F →ₗ[𝕜] E) (M : F →ₗ[𝕜] F) :
+    A ∘ₗ complementaryTrialBlock U X - complementaryTrialBlock U X ∘ₗ M =
+      complementaryProjection U ∘ₗ generalResidual A X M := by
+  ext x
+  simp only [complementaryTrialBlock, generalResidual, LinearMap.comp_apply,
+    LinearMap.sub_apply, map_sub]
+  rw [complementaryProjection_apply_comm_of_reduces hA hU (X x)]
+
+omit [FiniteDimensional 𝕜 F] in
+/-- **The projected-residual (cross-block) Sylvester identity for an isometric
+trial map.**  This is the normalized specialization of
+`sylvester_complementaryTrialBlock_eq_projectedGeneralResidual`. -/
 theorem sylvester_sinThetaEmbedding_eq_projectedResidual
     {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric)
     {U : Submodule 𝕜 E} [U.HasOrthogonalProjection] (hU : Reduces A U)
     (X : F →ₗᵢ[𝕜] E) (M : F →ₗ[𝕜] F) :
     A ∘ₗ sinThetaEmbedding U X - sinThetaEmbedding U X ∘ₗ M =
       complementaryProjection U ∘ₗ residual A X M := by
-  ext x
-  simp only [sinThetaEmbedding, residual, LinearMap.comp_apply, LinearMap.sub_apply, map_sub]
-  rw [complementaryProjection_apply_comm_of_reduces hA hU (X.toLinearMap x)]
+  simpa only [complementaryTrialBlock_toLinearMap, generalResidual_toLinearMap] using
+    sylvester_complementaryTrialBlock_eq_projectedGeneralResidual
+      hA hU X.toLinearMap M
 
 /-- A unitarily invariant norm of the invariant-pair residual is bounded by
 that of the ambient perturbation.
