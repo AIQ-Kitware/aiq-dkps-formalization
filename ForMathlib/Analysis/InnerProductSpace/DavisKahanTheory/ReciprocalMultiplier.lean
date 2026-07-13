@@ -441,6 +441,213 @@ def HasApproximateFiniteReciprocalFourierInterpolation
           ((((t r * (α i - β j)) : ℝ) : ℂ) * Complex.I)‖ ≤ tolerance) ∧
     ∑ r, ‖a r‖ ≤ mass
 
+/-- An integrable scalar Fourier kernel representing the reciprocal function
+outside the unit interval, with controlled `L¹` mass. -/
+def HasIntegrableReciprocalFourierKernel (mass : ℝ) : Prop :=
+  ∃ f : ℝ → ℂ,
+    Measurable f ∧
+    MeasureTheory.Integrable f ∧
+    (∀ x : ℝ, 1 ≤ |x| →
+      (∫ t, f t * Complex.exp ((((t * x : ℝ) : ℂ) * Complex.I))) =
+        (1 : ℂ) / (x : ℂ)) ∧
+    (∫ t, ‖f t‖) ≤ mass
+
+/-- An integrable reciprocal Fourier kernel yields finite Fourier sums of no
+greater mass which uniformly approximate any prescribed finite frequency
+array. -/
+theorem hasApproximateFiniteReciprocalFourierInterpolation_of_integrableKernel
+    {m n : ℕ} (α : Fin m → ℝ) (β : Fin n → ℝ)
+    {mass tolerance : ℝ}
+    (hgap : ∀ i j, 1 ≤ |α i - β j|) (htolerance : 0 < tolerance)
+    (hkernel : HasIntegrableReciprocalFourierKernel mass) :
+    HasApproximateFiniteReciprocalFourierInterpolation
+      α β mass tolerance := by
+  classical
+  rcases hkernel with ⟨f, hfmeas, hfint, hfourier, hmass⟩
+  have hmass_nonneg : 0 ≤ mass :=
+    (MeasureTheory.integral_nonneg fun _ => norm_nonneg _).trans hmass
+  cases isEmpty_or_nonempty (Fin m) with
+  | inl hm =>
+      letI := hm
+      exact ⟨0, Fin.elim0, Fin.elim0, (fun i => isEmptyElim i), by simpa⟩
+  | inr hm =>
+    letI := hm
+    cases isEmpty_or_nonempty (Fin n) with
+    | inl hn =>
+        letI := hn
+        exact ⟨0, Fin.elim0, Fin.elim0,
+          (fun _i j => isEmptyElim j), by simpa⟩
+    | inr hn =>
+      letI := hn
+      let M : ℝ := ∫ t, ‖f t‖
+      let density : ℝ → ENNReal := fun t => ENNReal.ofReal ‖f t‖
+      let μ : MeasureTheory.Measure ℝ := MeasureTheory.volume.withDensity density
+      haveI : MeasureTheory.IsFiniteMeasure μ := by
+        dsimp only [μ, density]
+        exact MeasureTheory.isFiniteMeasure_withDensity_ofReal hfint.norm.2
+      let i₀ : Fin m := Classical.choice inferInstance
+      let j₀ : Fin n := Classical.choice inferInstance
+      let d₀ : ℝ := α i₀ - β j₀
+      have hd₀ : d₀ ≠ 0 := by
+        intro hd
+        have := hgap i₀ j₀
+        simp only [d₀, hd, abs_zero] at this
+        norm_num at this
+      have hMpos : 0 < M := by
+        have hbound : ‖(1 : ℂ) / (d₀ : ℂ)‖ ≤ M := by
+          rw [← hfourier d₀ (hgap i₀ j₀)]
+          have hexpnorm (t : ℝ) :
+              ‖Complex.exp ((((t * d₀ : ℝ) : ℂ) * Complex.I))‖ = 1 := by
+            rw [Complex.norm_exp]
+            simp
+          calc
+            ‖∫ t, f t * Complex.exp ((((t * d₀ : ℝ) : ℂ) * Complex.I))‖ ≤
+                ∫ t, ‖f t * Complex.exp ((((t * d₀ : ℝ) : ℂ) * Complex.I))‖ :=
+              MeasureTheory.norm_integral_le_integral_norm _
+            _ = M := by
+              dsimp only [M]
+              apply MeasureTheory.integral_congr_ae
+              filter_upwards [] with t
+              rw [norm_mul, hexpnorm t, mul_one]
+        exact lt_of_lt_of_le (norm_pos_iff.mpr (div_ne_zero one_ne_zero (by exact_mod_cast hd₀))) hbound
+      have hMnonneg : 0 ≤ M := hMpos.le
+      have hμreal : μ.real Set.univ = M := by
+        rw [MeasureTheory.measureReal_def]
+        simp only [μ, density, MeasureTheory.withDensity_apply _ MeasurableSet.univ,
+          MeasureTheory.setLIntegral_univ]
+        rw [← MeasureTheory.ofReal_integral_eq_lintegral_ofReal hfint.norm
+          (Filter.Eventually.of_forall fun _ => norm_nonneg _)]
+        exact ENNReal.toReal_ofReal hMnonneg
+      have hμne : μ ≠ 0 := by
+        intro hzero
+        have : μ.real Set.univ = 0 := by simp [hzero]
+        rw [hμreal] at this
+        linarith
+      letI : NeZero μ := ⟨hμne⟩
+      let phase : ℝ → ℂ := fun t =>
+        if f t = 0 then 0 else f t / (‖f t‖ : ℂ)
+      have hphase_meas : Measurable phase := by
+        dsimp only [phase]
+        exact Measurable.ite
+          (measurableSet_eq_fun hfmeas measurable_const)
+          measurable_const (by fun_prop)
+      have hphase_norm (t : ℝ) : ‖phase t‖ ≤ 1 := by
+        by_cases ht : f t = 0
+        · simp [phase, ht]
+        · simp [phase, ht]
+      have hnorm_mul_phase (t : ℝ) : (‖f t‖ : ℂ) * phase t = f t := by
+        by_cases ht : f t = 0
+        · simp [phase, ht]
+        · simp only [phase, if_neg ht]
+          field_simp [norm_ne_zero_iff.mpr ht]
+      let atom : ℝ → (Fin m × Fin n → ℂ) := fun t ij =>
+        phase t * Complex.exp
+          ((((t * (α ij.1 - β ij.2) : ℝ) : ℂ) * Complex.I))
+      have hatom_meas : Measurable atom := by
+        apply measurable_pi_lambda
+        intro ij
+        dsimp only [atom]
+        fun_prop
+      have hatom_norm (t : ℝ) : ‖atom t‖ ≤ 1 := by
+        rw [pi_norm_le_iff_of_nonneg zero_le_one]
+        intro ij
+        have hexpnorm :
+            ‖Complex.exp
+              ((((t * (α ij.1 - β ij.2) : ℝ) : ℂ) * Complex.I))‖ = 1 := by
+          rw [Complex.norm_exp]
+          simp
+        simp only [atom, norm_mul, hexpnorm, mul_one]
+        exact hphase_norm t
+      have hatom_int : MeasureTheory.Integrable atom μ :=
+        MeasureTheory.Integrable.of_bound hatom_meas.aestronglyMeasurable 1
+          (Filter.Eventually.of_forall hatom_norm)
+      have htolM : 0 < tolerance / M := div_pos htolerance hMpos
+      rcases exists_finite_average_approximation μ atom hatom_int htolM with
+        ⟨q, w, z, hw_nonneg, hw_sum, hquad⟩
+      have hmoment (ij : Fin m × Fin n) :
+          (∫ t, atom t ij ∂μ) =
+            (1 : ℂ) / ((α ij.1 - β ij.2 : ℝ) : ℂ) := by
+        change (∫ t, atom t ij ∂MeasureTheory.volume.withDensity density) = _
+        rw [integral_withDensity_eq_integral_toReal_smul
+          (by fun_prop)
+          (Filter.Eventually.of_forall fun _ => ENNReal.ofReal_lt_top) ]
+        rw [← hfourier (α ij.1 - β ij.2) (hgap ij.1 ij.2)]
+        apply MeasureTheory.integral_congr_ae
+        filter_upwards [] with t
+        simp only [ENNReal.toReal_ofReal (norm_nonneg _), atom]
+        calc
+          ‖f t‖ • (phase t * Complex.exp
+              ((((t * (α ij.1 - β ij.2) : ℝ) : ℂ) * Complex.I))) =
+              ((‖f t‖ : ℂ) * phase t) * Complex.exp
+                ((((t * (α ij.1 - β ij.2) : ℝ) : ℂ) * Complex.I)) := by
+            rw [RCLike.real_smul_eq_coe_mul, ← mul_assoc]
+            rfl
+          _ = _ := congrArg (fun u : ℂ => u * Complex.exp
+            ((((t * (α ij.1 - β ij.2) : ℝ) : ℂ) * Complex.I)))
+              (hnorm_mul_phase t)
+      let A : Fin m × Fin n → ℂ := ⨍ t, atom t ∂μ
+      let Q : Fin m × Fin n → ℂ := ∑ r, w r • atom (z r)
+      have hMA : M • A = ∫ t, atom t ∂μ := by
+        dsimp only [A]
+        rw [MeasureTheory.average_eq, hμreal, smul_smul,
+          mul_inv_cancel₀ (ne_of_gt hMpos), one_smul]
+      have hA_moment (ij : Fin m × Fin n) :
+          (M : ℂ) * A ij =
+            (1 : ℂ) / ((α ij.1 - β ij.2 : ℝ) : ℂ) := by
+        calc
+          (M : ℂ) * A ij = (M • A) ij := by
+            change (M : ℂ) * A ij = M • A ij
+            exact (RCLike.real_smul_eq_coe_mul M (A ij)).symm
+          _ = (∫ t, atom t ∂μ) ij := congrFun hMA ij
+          _ = ∫ t, atom t ij ∂μ := by
+            exact MeasureTheory.eval_integral
+              (fun ij => hatom_int.eval ij) ij
+          _ = _ := hmoment ij
+      have hQ : dist Q A < tolerance / M := by
+        exact hquad
+      rw [dist_eq_norm] at hQ
+      have hcoord (ij : Fin m × Fin n) :
+          ‖Q ij - A ij‖ < tolerance / M := by
+        exact (pi_norm_lt_iff htolM).mp hQ ij
+      let a : Fin q → ℂ := fun r =>
+        ((M * w r : ℝ) : ℂ) * phase (z r)
+      have hsum (ij : Fin m × Fin n) :
+          ∑ r, a r * Complex.exp
+              ((((z r * (α ij.1 - β ij.2) : ℝ) : ℂ) * Complex.I)) =
+            (M : ℂ) * Q ij := by
+        simp only [a, Q, Finset.sum_apply, Pi.smul_apply,
+          RCLike.real_smul_eq_coe_mul, atom]
+        rw [Finset.mul_sum]
+        apply Finset.sum_congr rfl
+        intro r _
+        push_cast
+        ac_rfl
+      refine ⟨q, a, z, ?_, ?_⟩
+      · intro i j
+        rw [hsum (i, j), ← hA_moment (i, j)]
+        calc
+          ‖(M : ℂ) * A (i, j) - (M : ℂ) * Q (i, j)‖ =
+              M * ‖A (i, j) - Q (i, j)‖ := by
+            rw [← mul_sub, norm_mul, Complex.norm_real,
+              Real.norm_of_nonneg hMnonneg]
+          _ ≤ M * (tolerance / M) := by
+            apply (mul_lt_mul_of_pos_left _ hMpos).le
+            simpa only [norm_sub_rev] using hcoord (i, j)
+          _ = tolerance := by field_simp [ne_of_gt hMpos]
+      · calc
+          ∑ r, ‖a r‖ ≤ ∑ r, M * w r := by
+            apply Finset.sum_le_sum
+            intro r _
+            simp only [a, norm_mul, Complex.norm_real, Real.norm_eq_abs,
+              abs_of_nonneg hMnonneg, abs_of_nonneg (hw_nonneg r)]
+            calc
+              M * w r * ‖phase (z r)‖ ≤ M * w r * 1 := by
+                exact mul_le_mul_of_nonneg_left (hphase_norm (z r))
+                  (mul_nonneg hMnonneg (hw_nonneg r))
+              _ = M * w r := mul_one _
+          _ = M := by rw [← Finset.mul_sum, hw_sum, mul_one]
+          _ ≤ mass := hmass
+
 /-- Uniformly accurate finite reciprocal Fourier sums can be corrected to an
 exact finite interpolation with arbitrarily small additional coefficient
 mass.
