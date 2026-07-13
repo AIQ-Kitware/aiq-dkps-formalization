@@ -38,10 +38,12 @@ frame-to-sine transport inequality
 `ε * N (P_{Vᗮ} Q) ≤ N (P_{Vᗮ} X)`.
 
 Theorem 6.1 is assembled below from this coordinate layer and the raw
-projected Sylvester identity.  The source-complete endpoint accepts either
-interval/exterior orientation, derives injectivity from the positive lower
-frame bound, and keeps coordinate operators such as `M` in their original
-self-adjoint coordinates throughout.
+projected Sylvester identity.  The source-complete endpoints accept either
+interval/exterior orientation, derive injectivity from either the positive
+lower frame bound or the paper's Gram-operator inequality, and keep coordinate
+operators such as `M` in their original self-adjoint coordinates throughout.
+The final wrapper also accepts any `sin Θ₀` operator with the canonical complete
+singular-value sequence.
 -/
 
 namespace ForMathlib
@@ -190,6 +192,54 @@ theorem generalizedSinTheta_residual_le_of_intervalGap
     _ ≤ δ * N (complementaryTrialBlock V X) :=
       mul_le_mul_of_nonneg_left htransport hδ.le
     _ ≤ N (generalResidual A X M) := hraw
+
+/-- **Davis--Kahan Theorem 6.1 with the paper's Gram hypothesis.**
+
+This source-facing wrapper accepts the operator inequality
+`X⋆ X ≥ ε² I` through `GramLowerBound`, rather than requiring callers to
+translate it into a pointwise norm bound. -/
+theorem generalizedSinTheta_residual_le_of_gramLowerBound
+    (N : RectangularUnitarilyInvariantNorm 𝕜 F E)
+    {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric)
+    {V : Submodule 𝕜 E} [V.HasOrthogonalProjection] (hV : Reduces A V)
+    (X : F →ₗ[𝕜] E)
+    {M : F →ₗ[𝕜] F} (hM : M.IsSymmetric)
+    {a b δ ε : ℝ} (hδ : 0 < δ) (hε : 0 < ε)
+    (hgram : GramLowerBound X ε)
+    (hgap : TrialComplementIntervalGap M A V a b δ) :
+    δ * ε * N (sinThetaEmbedding V
+      (orthonormalizedEmbedding X (hgram.injective hε))) ≤
+      N (generalResidual A X M) := by
+  exact generalizedSinTheta_residual_le_of_intervalGap
+    N hA hV X hM hδ hε (hgram.lowerFrameBound hε.le) hgap
+
+/-- **Davis--Kahan Theorem 6.1 in its permissive `sin Θ₀` form.**
+
+The paper allows `sin Θ₀` to be any rectangular operator with the same complete
+singular-value sequence as the canonical directed sine block.  Since every
+rectangular unitarily invariant norm depends only on that sequence, the
+canonical Gram-bound theorem transfers without loss. -/
+theorem generalizedSinTheta0_residual_le_of_gramLowerBound
+    (N : RectangularUnitarilyInvariantNorm 𝕜 F E)
+    {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric)
+    {V : Submodule 𝕜 E} [V.HasOrthogonalProjection] (hV : Reduces A V)
+    (X : F →ₗ[𝕜] E)
+    {M : F →ₗ[𝕜] F} (hM : M.IsSymmetric)
+    {a b δ ε : ℝ} (hδ : 0 < δ) (hε : 0 < ε)
+    (hgram : GramLowerBound X ε)
+    (hgap : TrialComplementIntervalGap M A V a b δ)
+    (sinTheta0 : F →ₗ[𝕜] E)
+    (hsin : sinTheta0.singularValues =
+      (sinThetaEmbedding V
+        (orthonormalizedEmbedding X (hgram.injective hε))).singularValues) :
+    δ * ε * N sinTheta0 ≤ N (generalResidual A X M) := by
+  have hcanonical := generalizedSinTheta_residual_le_of_gramLowerBound
+    N hA hV X hM hδ hε hgram hgap
+  have hnorm : N sinTheta0 = N (sinThetaEmbedding V
+      (orthonormalizedEmbedding X (hgram.injective hε))) :=
+    N.apply_eq_of_singularValues_eq hsin
+  rw [hnorm]
+  exact hcanonical
 
 /-- Compatibility specialization of Theorem 6.1 with the coordinate spectrum
 inside `[a,b]` and the unwanted exact spectrum outside the enlarged interval.

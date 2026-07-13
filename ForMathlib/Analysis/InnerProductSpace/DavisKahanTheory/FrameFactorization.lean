@@ -40,6 +40,66 @@ map.  Davis--Kahan's parameter `e` is this lower singular-value bound. -/
 def LowerFrameBound (X : F →ₗ[𝕜] E) (ε : ℝ) : Prop :=
   ∀ y, ε * ‖y‖ ≤ ‖X y‖
 
+/-- Davis--Kahan's Gram-operator lower bound
+`X⋆ X ≥ ε² I`, written as its quadratic-form inequality.
+
+The real part makes the definition uniform over `ℝ` and `ℂ`; for the positive
+Gram operator the quadratic form is real and equals `‖X y‖²`. -/
+def GramLowerBound (X : F →ₗ[𝕜] E) (ε : ℝ) : Prop :=
+  ∀ y, ε ^ 2 * ‖y‖ ^ 2 ≤
+    RCLike.re ⟪(X.adjoint ∘ₗ X) y, y⟫_𝕜
+
+/-- The quadratic form of the Gram operator is the squared norm of the
+rectangular map. -/
+theorem gramQuadraticForm_eq_norm_sq (X : F →ₗ[𝕜] E) (y : F) :
+    RCLike.re ⟪(X.adjoint ∘ₗ X) y, y⟫_𝕜 = ‖X y‖ ^ 2 := by
+  rw [LinearMap.comp_apply, LinearMap.adjoint_inner_left,
+    ← norm_sq_eq_re_inner (𝕜 := 𝕜)]
+
+/-- A nonnegative lower frame bound implies the corresponding Gram-operator
+quadratic-form bound. -/
+theorem LowerFrameBound.gramLowerBound {X : F →ₗ[𝕜] E} {ε : ℝ}
+    (hframe : LowerFrameBound X ε) (hε : 0 ≤ ε) :
+    GramLowerBound X ε := by
+  intro y
+  rw [gramQuadraticForm_eq_norm_sq]
+  have hle : ε * ‖y‖ ≤ ‖X y‖ := hframe y
+  have hleft : 0 ≤ ε * ‖y‖ := mul_nonneg hε (norm_nonneg y)
+  have hdiff : 0 ≤ ‖X y‖ - ε * ‖y‖ := sub_nonneg.mpr hle
+  have hsum : 0 ≤ ‖X y‖ + ε * ‖y‖ :=
+    add_nonneg (norm_nonneg (X y)) hleft
+  have hprod := mul_nonneg hdiff hsum
+  nlinarith
+
+/-- The Gram-operator lower bound implies the norm-form lower frame bound when
+its parameter is nonnegative. -/
+theorem GramLowerBound.lowerFrameBound {X : F →ₗ[𝕜] E} {ε : ℝ}
+    (hgram : GramLowerBound X ε) (hε : 0 ≤ ε) :
+    LowerFrameBound X ε := by
+  intro y
+  have hsq := hgram y
+  rw [gramQuadraticForm_eq_norm_sq] at hsq
+  by_contra hnot
+  have hlt : ‖X y‖ < ε * ‖y‖ := lt_of_not_ge hnot
+  have hleft_pos : 0 < ε * ‖y‖ :=
+    lt_of_le_of_lt (norm_nonneg (X y)) hlt
+  have hdiff : 0 < ε * ‖y‖ - ‖X y‖ := sub_pos.mpr hlt
+  have hsum : 0 < ε * ‖y‖ + ‖X y‖ :=
+    add_pos_of_pos_of_nonneg hleft_pos (norm_nonneg (X y))
+  have hprod := mul_pos hdiff hsum
+  nlinarith
+
+/-- For a nonnegative parameter, the paper's Gram lower bound and the norm-form
+lower frame bound are equivalent. -/
+theorem lowerFrameBound_iff_gramLowerBound (X : F →ₗ[𝕜] E) {ε : ℝ}
+    (hε : 0 ≤ ε) :
+    LowerFrameBound X ε ↔ GramLowerBound X ε := by
+  constructor
+  · intro hframe
+    exact hframe.gramLowerBound hε
+  · intro hgram
+    exact hgram.lowerFrameBound hε
+
 /-- A positive lower frame bound implies injectivity. -/
 theorem LowerFrameBound.injective {X : F →ₗ[𝕜] E} {ε : ℝ}
     (hframe : LowerFrameBound X ε) (hε : 0 < ε) :
@@ -51,6 +111,12 @@ theorem LowerFrameBound.injective {X : F →ₗ[𝕜] E} {ε : ℝ}
     nlinarith [norm_nonneg (x - y)]
   apply sub_eq_zero.mp
   exact norm_eq_zero.mp (le_antisymm hnorm (norm_nonneg _))
+
+/-- A positive Gram lower bound implies injectivity. -/
+theorem GramLowerBound.injective {X : F →ₗ[𝕜] E} {ε : ℝ}
+    (hgram : GramLowerBound X ε) (hε : 0 < ε) :
+    Function.Injective X :=
+  (hgram.lowerFrameBound hε.le).injective hε
 
 /-- The positive square root of the Gram operator `X⋆ X`. -/
 noncomputable def trialGramSqrt (X : F →ₗ[𝕜] E) : F →ₗ[𝕜] F :=
