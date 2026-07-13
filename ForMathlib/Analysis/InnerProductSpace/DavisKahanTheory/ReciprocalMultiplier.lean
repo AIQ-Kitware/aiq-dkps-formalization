@@ -249,6 +249,141 @@ noncomputable def doubledRealRotation
         Real.sin theta • x.fst + Real.cos theta • x.snd) :=
   rfl
 
+/-- A real diagonal map in an orthonormal basis. -/
+private noncomputable def basisDiagonalRealMap
+    {G ι : Type*} [NormedAddCommGroup G] [InnerProductSpace ℝ G]
+    [Fintype ι] [DecidableEq ι]
+    (e : OrthonormalBasis ι ℝ G) (c : ι → ℝ) : G →ₗ[ℝ] G :=
+  e.toBasis.constr ℝ fun i => c i • e i
+
+@[simp] private theorem basisDiagonalRealMap_apply_basis
+    {G ι : Type*} [NormedAddCommGroup G] [InnerProductSpace ℝ G]
+    [Fintype ι] [DecidableEq ι]
+    (e : OrthonormalBasis ι ℝ G) (c : ι → ℝ) (i : ι) :
+    basisDiagonalRealMap e c (e i) = c i • e i := by
+  exact e.toBasis.constr_basis ℝ _ i
+
+@[simp] private theorem basisDiagonalRealMap_repr
+    {G ι : Type*} [NormedAddCommGroup G] [InnerProductSpace ℝ G]
+    [Fintype ι] [DecidableEq ι]
+    (e : OrthonormalBasis ι ℝ G) (c : ι → ℝ) (x : G) (i : ι) :
+    e.repr (basisDiagonalRealMap e c x) i = c i * e.repr x i := by
+  rw [← e.sum_repr x]
+  simp only [map_sum, map_smul, basisDiagonalRealMap_apply_basis, smul_smul]
+  simp [Pi.single_apply]
+  ring
+
+/-- Coordinatewise real rotations in an orthonormal basis, before transporting
+the product norm to `WithLp 2`. -/
+private noncomputable def basisDoubledRealRotationLinearEquiv
+    {G ι : Type*} [NormedAddCommGroup G] [InnerProductSpace ℝ G]
+    [Fintype ι] [DecidableEq ι]
+    (e : OrthonormalBasis ι ℝ G) (theta : ι → ℝ) :
+    (G × G) ≃ₗ[ℝ] (G × G) := by
+  let C := basisDiagonalRealMap e fun i => Real.cos (theta i)
+  let S := basisDiagonalRealMap e fun i => Real.sin (theta i)
+  refine
+    { toFun := fun x => (C x.1 - S x.2, S x.1 + C x.2)
+      invFun := fun x => (C x.1 + S x.2, -S x.1 + C x.2)
+      left_inv := ?_
+      right_inv := ?_
+      map_add' := ?_
+      map_smul' := ?_ }
+  · intro x y
+    apply Prod.ext <;> simp [C, S] <;> module
+  · intro r x
+    apply Prod.ext <;> simp [C, S] <;> module
+  · intro x
+    have htrig (i : ι) : Real.cos (theta i) * Real.cos (theta i) +
+        Real.sin (theta i) * Real.sin (theta i) = 1 := by
+      nlinarith [Real.sin_sq_add_cos_sq (theta i)]
+    apply Prod.ext
+    · apply e.repr.injective
+      ext i
+      simp only [map_add, map_sub, map_neg, C, S, basisDiagonalRealMap_repr,
+        PiLp.add_apply, PiLp.sub_apply, PiLp.neg_apply]
+      linear_combination (e.repr x.1 i) * htrig i
+    · apply e.repr.injective
+      ext i
+      simp only [map_add, map_sub, map_neg, C, S, basisDiagonalRealMap_repr,
+        PiLp.add_apply, PiLp.sub_apply, PiLp.neg_apply]
+      linear_combination (e.repr x.2 i) * htrig i
+  · intro x
+    have htrig (i : ι) : Real.cos (theta i) * Real.cos (theta i) +
+        Real.sin (theta i) * Real.sin (theta i) = 1 := by
+      nlinarith [Real.sin_sq_add_cos_sq (theta i)]
+    apply Prod.ext
+    · apply e.repr.injective
+      ext i
+      simp only [map_add, map_sub, map_neg, C, S, basisDiagonalRealMap_repr,
+        PiLp.add_apply, PiLp.sub_apply, PiLp.neg_apply]
+      linear_combination (e.repr x.1 i) * htrig i
+    · apply e.repr.injective
+      ext i
+      simp only [map_add, map_sub, map_neg, C, S, basisDiagonalRealMap_repr,
+        PiLp.add_apply, PiLp.sub_apply, PiLp.neg_apply]
+      linear_combination (e.repr x.2 i) * htrig i
+
+/-- Coordinatewise phase rotations on two real copies of a Hilbert space. -/
+noncomputable def basisDoubledRealRotation
+    {G ι : Type*} [NormedAddCommGroup G] [InnerProductSpace ℝ G]
+    [Fintype ι] [DecidableEq ι]
+    (e : OrthonormalBasis ι ℝ G) (theta : ι → ℝ) :
+    WithLp 2 (G × G) ≃ₗᵢ[ℝ] WithLp 2 (G × G) where
+  __ := (basisDoubledRealRotationLinearEquiv e theta).withLpCongr 2
+  norm_map' x := by
+    let C := basisDiagonalRealMap e fun i => Real.cos (theta i)
+    let S := basisDiagonalRealMap e fun i => Real.sin (theta i)
+    have hparseval (z : G) : ∑ i, ‖e.repr z i‖ ^ 2 = ‖z‖ ^ 2 := by
+      simp_rw [e.repr_apply_apply]
+      exact e.sum_sq_norm_inner_right z
+    change ‖WithLp.toLp 2 (C x.fst - S x.snd, S x.fst + C x.snd)‖ = ‖x‖
+    rw [← sq_eq_sq₀ (norm_nonneg _) (norm_nonneg _),
+      WithLp.prod_norm_sq_eq_of_L2, WithLp.prod_norm_sq_eq_of_L2]
+    change ‖C x.fst - S x.snd‖ ^ 2 + ‖S x.fst + C x.snd‖ ^ 2 =
+      ‖x.fst‖ ^ 2 + ‖x.snd‖ ^ 2
+    rw [
+      ← hparseval (C x.fst - S x.snd), ← hparseval (S x.fst + C x.snd),
+      ← hparseval x.fst, ← hparseval x.snd,
+      ← Finset.sum_add_distrib, ← Finset.sum_add_distrib]
+    apply Finset.sum_congr rfl
+    intro i _
+    simp only [map_sub, map_add, C, S, basisDiagonalRealMap_repr,
+      PiLp.sub_apply, PiLp.add_apply, Real.norm_eq_abs, sq_abs]
+    have htrig : Real.cos (theta i) * Real.cos (theta i) +
+        Real.sin (theta i) * Real.sin (theta i) = 1 := by
+      nlinarith [Real.sin_sq_add_cos_sq (theta i)]
+    linear_combination
+      ((e.repr x.fst i) ^ 2 + (e.repr x.snd i) ^ 2) * htrig
+
+@[simp] theorem basisDoubledRealRotation_apply_first
+    {G ι : Type*} [NormedAddCommGroup G] [InnerProductSpace ℝ G]
+    [Fintype ι] [DecidableEq ι]
+    (e : OrthonormalBasis ι ℝ G) (theta : ι → ℝ) (i : ι) :
+    basisDoubledRealRotation e theta (WithLp.toLp 2 (e i, 0)) =
+      WithLp.toLp 2
+        (Real.cos (theta i) • e i, Real.sin (theta i) • e i) := by
+  change WithLp.toLp 2
+    (basisDiagonalRealMap e (fun q => Real.cos (theta q)) (e i) -
+        basisDiagonalRealMap e (fun q => Real.sin (theta q)) 0,
+      basisDiagonalRealMap e (fun q => Real.sin (theta q)) (e i) +
+        basisDiagonalRealMap e (fun q => Real.cos (theta q)) 0) = _
+  simp
+
+@[simp] theorem basisDoubledRealRotation_apply_second
+    {G ι : Type*} [NormedAddCommGroup G] [InnerProductSpace ℝ G]
+    [Fintype ι] [DecidableEq ι]
+    (e : OrthonormalBasis ι ℝ G) (theta : ι → ℝ) (i : ι) :
+    basisDoubledRealRotation e theta (WithLp.toLp 2 (0, e i)) =
+      WithLp.toLp 2
+        (-Real.sin (theta i) • e i, Real.cos (theta i) • e i) := by
+  change WithLp.toLp 2
+    (basisDiagonalRealMap e (fun q => Real.cos (theta q)) 0 -
+        basisDiagonalRealMap e (fun q => Real.sin (theta q)) (e i),
+      basisDiagonalRealMap e (fun q => Real.sin (theta q)) 0 +
+        basisDiagonalRealMap e (fun q => Real.cos (theta q)) (e i)) = _
+  simp
+
 /-- The complex basis-diagonal orbit realizes the Fourier character at the
 coordinate difference `α i - β j`.  This is the exact operator-valued atom
 used after obtaining a scalar reciprocal Fourier representation. -/
