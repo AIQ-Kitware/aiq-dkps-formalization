@@ -377,6 +377,125 @@ def HasFiniteReciprocalFourierInterpolation
           ((((t r * (α i - β j)) : ℝ) : ℂ) * Complex.I)) ∧
     ∑ r, ‖a r‖ ≤ mass
 
+/-- A finite Fourier sum that approximates the reciprocal function on two
+finite real frequency arrays.  Unlike the exact certificate, the error is
+measured before multiplication by the frequency difference. -/
+def HasApproximateFiniteReciprocalFourierInterpolation
+    {m n : ℕ} (α : Fin m → ℝ) (β : Fin n → ℝ)
+    (mass tolerance : ℝ) : Prop :=
+  ∃ q : ℕ, ∃ a : Fin q → ℂ, ∃ t : Fin q → ℝ,
+    (∀ i j,
+      ‖(1 : ℂ) / (((α i - β j : ℝ) : ℂ)) -
+        ∑ r, a r * Complex.exp
+          ((((t r * (α i - β j)) : ℝ) : ℂ) * Complex.I)‖ ≤ tolerance) ∧
+    ∑ r, ‖a r‖ ≤ mass
+
+/-- Uniformly accurate finite reciprocal Fourier sums can be corrected to an
+exact finite interpolation with arbitrarily small additional coefficient
+mass.
+
+The correction uses the fixed linear mass bound from
+`exists_finite_fourier_interpolation_with_mass_bound` on the finite set of
+distinct frequency differences. -/
+theorem hasFiniteReciprocalFourierInterpolation_of_approximate
+    {m n : ℕ} (α : Fin m → ℝ) (β : Fin n → ℝ)
+    {mass ε : ℝ}
+    (hgap : ∀ i j, 1 ≤ |α i - β j|) (hε : 0 < ε)
+    (happrox : ∀ η : ℝ, 0 < η →
+      HasApproximateFiniteReciprocalFourierInterpolation α β mass η) :
+    HasFiniteReciprocalFourierInterpolation α β 1 (mass + ε) := by
+  classical
+  let d : Fin m × Fin n → ℝ := fun ij => α ij.1 - β ij.2
+  let s : Finset ℝ := (Finset.univ ×ˢ Finset.univ).image d
+  obtain ⟨K, hK, hcorrect⟩ :=
+    exists_finite_fourier_interpolation_with_mass_bound s
+  let c : ℝ := s.card
+  let η : ℝ := ε / ((K + 1) * (c + 1))
+  have hc : 0 ≤ c := by positivity
+  have hden : 0 < (K + 1) * (c + 1) :=
+    mul_pos (by linarith) (by linarith)
+  have hη : 0 < η := div_pos hε hden
+  rcases happrox η hη with ⟨q₀, a₀, t₀, happ, hmass₀⟩
+  let base : ℝ → ℂ := fun x => ∑ r, a₀ r * Complex.exp
+    ((((t₀ r * x) : ℝ) : ℂ) * Complex.I)
+  let y : ℝ → ℂ := fun x => (1 : ℂ) / (x : ℂ) - base x
+  have hy (x : ℝ) (hx : x ∈ s) : ‖y x‖ ≤ η := by
+    rcases Finset.mem_image.mp hx with ⟨⟨i, j⟩, _, rfl⟩
+    simpa only [y, base, d] using happ i j
+  have hysum : ∑ x ∈ s, ‖y x‖ ≤ c * η := by
+    calc
+      ∑ x ∈ s, ‖y x‖ ≤ ∑ _x ∈ s, η := by
+        exact Finset.sum_le_sum fun x hx => hy x hx
+      _ = c * η := by simp [c]
+  rcases hcorrect y with ⟨q₁, a₁, t₁, hexact₁, hmass₁⟩
+  have hsmall : K * (∑ x ∈ s, ‖y x‖) < ε := by
+    have hnum : K * c < (K + 1) * (c + 1) := by nlinarith
+    have hfrac : K * c / ((K + 1) * (c + 1)) < 1 :=
+      (div_lt_one hden).2 hnum
+    calc
+      K * (∑ x ∈ s, ‖y x‖) ≤ K * (c * η) := by
+        exact mul_le_mul_of_nonneg_left hysum hK
+      _ = ε * (K * c / ((K + 1) * (c + 1))) := by
+        dsimp only [η]
+        field_simp
+      _ < ε * 1 := mul_lt_mul_of_pos_left hfrac hε
+      _ = ε := mul_one _
+  refine ⟨q₀ + q₁, Fin.append a₀ a₁, Fin.append t₀ t₁, ?_, ?_⟩
+  · intro i j
+    let x : ℝ := α i - β j
+    have hx : x ∈ s := by
+      exact Finset.mem_image.mpr ⟨(i, j), by simp, rfl⟩
+    have hx₀ : x ≠ 0 := by
+      intro hxz
+      have := hgap i j
+      change 1 ≤ |x| at this
+      rw [hxz, abs_zero] at this
+      norm_num at this
+    have hxc : (x : ℂ) ≠ 0 := by exact_mod_cast hx₀
+    have hsum :
+        (∑ r : Fin (q₀ + q₁),
+          Fin.append a₀ a₁ r * Complex.exp
+            (((Fin.append t₀ t₁ r * x : ℝ) : ℂ) * Complex.I)) =
+          base x + ∑ r : Fin q₁, a₁ r * Complex.exp
+            ((((t₁ r * x) : ℝ) : ℂ) * Complex.I) := by
+      simp only [Fin.sum_univ_add, Fin.append_left, Fin.append_right, base]
+    have hrecip :
+        (1 : ℂ) / (x : ℂ) = base x +
+          ∑ r : Fin q₁, a₁ r * Complex.exp
+            ((((t₁ r * x) : ℝ) : ℂ) * Complex.I) := by
+      rw [← hexact₁ x hx]
+      simp only [y]
+      ring
+    change (1 : ℂ) = (x : ℂ) * ∑ r : Fin (q₀ + q₁),
+      Fin.append a₀ a₁ r * Complex.exp
+        (((Fin.append t₀ t₁ r * x : ℝ) : ℂ) * Complex.I)
+    rw [hsum, ← hrecip]
+    field_simp
+  · rw [Fin.sum_univ_add]
+    simp only [Fin.append_left, Fin.append_right]
+    calc
+      ∑ r, ‖a₀ r‖ + ∑ r, ‖a₁ r‖ ≤
+          mass + K * (∑ x ∈ s, ‖y x‖) := add_le_add hmass₀ hmass₁
+      _ ≤ mass + ε := by
+        simpa only [add_comm] using (add_lt_add_left hsmall mass).le
+
+/-- Approximate reciprocal Fourier sums with masses tending to `π / 2`
+produce the exact normalized finite interpolation with mass `π / 2 + ε`.
+All exact finite compression is discharged here; the remaining analytic input
+only has to provide uniformly accurate finite sums. -/
+theorem hasFiniteReciprocalFourierInterpolation_pi_div_two_add_eps_of_approximate
+    {m n : ℕ} (α : Fin m → ℝ) (β : Fin n → ℝ)
+    (hgap : ∀ i j, 1 ≤ |α i - β j|) {ε : ℝ} (hε : 0 < ε)
+    (happrox : ∀ μ : ℝ, 0 < μ → ∀ η : ℝ, 0 < η →
+      HasApproximateFiniteReciprocalFourierInterpolation
+        α β (Real.pi / 2 + μ) η) :
+    HasFiniteReciprocalFourierInterpolation α β 1 (Real.pi / 2 + ε) := by
+  have hhalf : 0 < ε / 2 := by positivity
+  have h := hasFiniteReciprocalFourierInterpolation_of_approximate
+    α β hgap hhalf (happrox (ε / 2) hhalf)
+  convert h using 1
+  ring
+
 /-- Rescale a unit-gap finite Fourier interpolation to an arbitrary positive
 gap.  The coefficient mass is unchanged and the Fourier frequencies are
 divided by the gap. -/
