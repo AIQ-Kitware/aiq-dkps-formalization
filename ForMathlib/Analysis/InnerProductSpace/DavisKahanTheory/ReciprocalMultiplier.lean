@@ -1514,6 +1514,118 @@ theorem finiteUnitaryOrbitCertificate_of_reciprocalInterpolation
       simp only [S, LinearMap.sum_apply, LinearMap.smul_apply,
         unitaryOrbitAction_apply]
 
+/-- A doubled-real reciprocal interpolation recombines from matrix units into
+an exact finite orthogonal-orbit certificate for arbitrary real maps. -/
+theorem finiteUnitaryOrbitCertificate_orthogonalBlockSum_of_reciprocalInterpolation
+    {ER FR : Type*}
+    [NormedAddCommGroup ER] [InnerProductSpace ℝ ER]
+    [FiniteDimensional ℝ ER]
+    [NormedAddCommGroup FR] [InnerProductSpace ℝ FR]
+    [FiniteDimensional ℝ FR]
+    (eF : OrthonormalBasis (Fin (Module.finrank ℝ FR)) ℝ FR)
+    (eE : OrthonormalBasis (Fin (Module.finrank ℝ ER)) ℝ ER)
+    (alpha : Fin (Module.finrank ℝ FR) → ℝ)
+    (beta : Fin (Module.finrank ℝ ER) → ℝ)
+    {X C : ER →ₗ[ℝ] FR} {delta mass : ℝ}
+    (hinterp : HasDoubledRealReciprocalOrbitInterpolation
+      eF eE alpha beta delta mass)
+    (hcoeff : ∀ i j,
+      (alpha i - beta j) * ⟪X (eE j), eF i⟫_ℝ =
+        ⟪C (eE j), eF i⟫_ℝ) :
+    RectangularUnitarilyInvariantNorm.HasFiniteUnitaryOrbitCertificate
+      mass
+      (delta • RectangularUnitarilyInvariantNorm.orthogonalBlockSum X X)
+      (RectangularUnitarilyInvariantNorm.orthogonalBlockSum C C) := by
+  classical
+  rcases hinterp with ⟨q, w, U, V, hinterp, hmass⟩
+  let S :
+      (WithLp 2 (ER × ER) →ₗ[ℝ] WithLp 2 (FR × FR)) →ₗ[ℝ]
+        (WithLp 2 (ER × ER) →ₗ[ℝ] WithLp 2 (FR × FR)) :=
+    ∑ r, w r • unitaryOrbitAction (U r) (V r)
+  have hunit (i : Fin (Module.finrank ℝ FR))
+      (j : Fin (Module.finrank ℝ ER)) :
+      delta • RectangularUnitarilyInvariantNorm.orthogonalBlockSum
+          (basisMatrixUnit eF eE i j) (basisMatrixUnit eF eE i j) =
+        (alpha i - beta j) •
+          S (RectangularUnitarilyInvariantNorm.orthogonalBlockSum
+            (basisMatrixUnit eF eE i j) (basisMatrixUnit eF eE i j)) := by
+    exact hinterp i j
+  have hcoeff' (i : Fin (Module.finrank ℝ FR))
+      (j : Fin (Module.finrank ℝ ER)) :
+      (alpha i - beta j) * ⟪eF i, X (eE j)⟫_ℝ =
+        ⟪eF i, C (eE j)⟫_ℝ := by
+    simpa only [real_inner_comm] using hcoeff i j
+  let blockDiagonal :
+      (ER →ₗ[ℝ] FR) →ₗ[ℝ]
+        (WithLp 2 (ER × ER) →ₗ[ℝ] WithLp 2 (FR × FR)) := by
+    refine
+      { toFun := fun A =>
+          RectangularUnitarilyInvariantNorm.orthogonalBlockSum A A
+        map_add' := ?_
+        map_smul' := ?_ }
+    · intro A B
+      ext x
+      apply WithLp.ofLp_injective 2
+      apply Prod.ext <;>
+        simp [RectangularUnitarilyInvariantNorm.orthogonalBlockSum_apply]
+    · intro r A
+      exact RectangularUnitarilyInvariantNorm.orthogonalBlockSum_smul r A A
+  have hblock (A : ER →ₗ[ℝ] FR) :
+      RectangularUnitarilyInvariantNorm.orthogonalBlockSum A A =
+        ∑ i, ∑ j, ⟪eF i, A (eE j)⟫_ℝ •
+          RectangularUnitarilyInvariantNorm.orthogonalBlockSum
+            (basisMatrixUnit eF eE i j) (basisMatrixUnit eF eE i j) := by
+    change blockDiagonal A = _
+    conv_lhs => rw [sum_basisMatrixUnit eF eE A]
+    simp only [map_sum, map_smul, blockDiagonal]
+    rfl
+  refine ⟨q, w, U, V, ?_, ?_⟩
+  · calc
+      delta • RectangularUnitarilyInvariantNorm.orthogonalBlockSum X X =
+          delta • ∑ i, ∑ j, ⟪eF i, X (eE j)⟫_ℝ •
+            RectangularUnitarilyInvariantNorm.orthogonalBlockSum
+              (basisMatrixUnit eF eE i j) (basisMatrixUnit eF eE i j) := by
+        rw [hblock X]
+      _ = ∑ i, ∑ j, ⟪eF i, X (eE j)⟫_ℝ •
+            (delta • RectangularUnitarilyInvariantNorm.orthogonalBlockSum
+              (basisMatrixUnit eF eE i j) (basisMatrixUnit eF eE i j)) := by
+        rw [Finset.smul_sum]
+        apply Finset.sum_congr rfl
+        intro i _
+        rw [Finset.smul_sum]
+        apply Finset.sum_congr rfl
+        intro j _
+        rw [smul_smul, smul_smul, mul_comm]
+      _ = ∑ i, ∑ j, ⟪eF i, X (eE j)⟫_ℝ •
+            ((alpha i - beta j) •
+              S (RectangularUnitarilyInvariantNorm.orthogonalBlockSum
+                (basisMatrixUnit eF eE i j) (basisMatrixUnit eF eE i j))) := by
+        apply Finset.sum_congr rfl
+        intro i _
+        apply Finset.sum_congr rfl
+        intro j _
+        rw [hunit i j]
+      _ = ∑ i, ∑ j, ⟪eF i, C (eE j)⟫_ℝ •
+            S (RectangularUnitarilyInvariantNorm.orthogonalBlockSum
+              (basisMatrixUnit eF eE i j) (basisMatrixUnit eF eE i j)) := by
+        apply Finset.sum_congr rfl
+        intro i _
+        apply Finset.sum_congr rfl
+        intro j _
+        rw [← hcoeff' i j, smul_smul, mul_comm]
+      _ = S (∑ i, ∑ j, ⟪eF i, C (eE j)⟫_ℝ •
+            RectangularUnitarilyInvariantNorm.orthogonalBlockSum
+              (basisMatrixUnit eF eE i j) (basisMatrixUnit eF eE i j)) := by
+        simp only [map_sum, map_smul]
+      _ = S (RectangularUnitarilyInvariantNorm.orthogonalBlockSum C C) := by
+        rw [← hblock C]
+      _ = ∑ r, w r • ((U r).toLinearMap ∘ₗ
+          RectangularUnitarilyInvariantNorm.orthogonalBlockSum C C ∘ₗ
+            (V r).toLinearMap) := by
+        simp only [S, LinearMap.sum_apply, LinearMap.smul_apply,
+          unitaryOrbitAction_apply]
+  · simpa only [Real.norm_eq_abs] using hmass
+
 /-- Approximate finite scalar Fourier interpolations with masses tending to
 `π / 2` imply the sharp complex Ky Fan reciprocal-multiplier estimate.
 
