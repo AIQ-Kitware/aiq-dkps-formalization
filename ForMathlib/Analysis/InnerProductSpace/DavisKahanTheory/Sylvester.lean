@@ -109,12 +109,14 @@ constant-one absorption theorem:
    positive spectral separation;
 3. `sylvester_eigenbasis_coefficient_equation` identifies the coordinate
    Sylvester equation `(αᵢ-βⱼ)Xᵢⱼ=Cᵢⱼ`;
-4. `hasReciprocalOrbitInterpolation_pi_div_two` is the single remaining
-   harmonic-analysis root: construct one finite family of coefficients and
-   left/right unitary factors that realizes the reciprocal action on every
-   coordinate matrix unit simultaneously with mass at most `π / 2`;
-5. `kyFan_reciprocalMultiplier_le` follows by coordinate expansion and the
-   generic finite-orbit certificate bound;
+4. the harmonic-analysis root is closed: the explicit Haagerup--Zsidó
+   kernel supplies finite Fourier interpolations of mass `π / 2 + ε`, and
+   the generic doubled phase rotations realize them over every `RCLike`
+   field (the exact undoubled orbit certificate is refuted over `ℝ`; see
+   the status map in `ReciprocalMultiplier.lean`);
+5. `kyFan_reciprocalMultiplier_le` follows unconditionally by coordinate
+   expansion, the doubled finite-orbit certificate bound, and
+   singular-value duplication;
 6. `sylvester_barycentricOrbitRepresentation_of_spectralDistance` follows from
    that prefix estimate by rectangular orbit-convexity, uniformly over `ℝ` and
    `ℂ`;
@@ -1061,10 +1063,12 @@ Proof strategy:
    `Fin n`.
 
 Consequently this theorem contains no Fourier, integration, compactness, or
-Carathéodory bookkeeping.  The remaining harmonic analysis is isolated in
-`hasReciprocalOrbitInterpolation_pi_div_two`; the reciprocal Ky Fan theorem
-and this barycentric theorem are now finite-algebra and orbit-convexity
-consequences. -/
+Carathéodory bookkeeping.  The harmonic analysis enters only through the
+unconditional reciprocal Ky Fan theorem; this barycentric theorem and the
+certificate extraction are finite-algebra and orbit-convexity
+consequences, and they attain the exact mass `π / 2` for the particular
+Sylvester solution even though the universal undoubled multiplier
+certificate at that mass is refuted. -/
 theorem sylvester_hasFiniteUnitaryOrbitCertificate_of_spectralDistance
     {A : F →ₗ[𝕜] F} {B : E →ₗ[𝕜] E} {X C : E →ₗ[𝕜] F}
     (hA : A.IsSymmetric) (hB : B.IsSymmetric)
@@ -1292,9 +1296,9 @@ Proof strategy:
 3. unfold the named linear maps to recover the compatibility signature.
 
 All reciprocal-multiplier analysis, including the sharp `π / 2` constant,
-is isolated in
-`DavisKahanTheory.hasReciprocalOrbitInterpolation_pi_div_two`.  Coordinate
-expansion, singular-value control, the orbit barycenter, and this
+is supplied unconditionally by the Haagerup--Zsidó kernel through
+`DavisKahanTheory.kyFan_reciprocalMultiplier_le`.  Coordinate expansion,
+singular-value control, the orbit barycenter, and this
 continuous-linear-map bridge contain no further analytic argument. -/
 theorem ideal_sylvester_le
     [FiniteDimensional 𝕜 E] [FiniteDimensional 𝕜 F]
