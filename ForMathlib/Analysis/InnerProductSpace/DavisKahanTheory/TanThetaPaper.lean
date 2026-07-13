@@ -24,6 +24,7 @@ namespace ForMathlib
 namespace DavisKahanTheory
 
 open scoped InnerProductSpace BigOperators
+open Module (finrank)
 
 variable {𝕜 : Type*} [RCLike 𝕜]
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
@@ -106,7 +107,7 @@ theorem kyFan_tanTheta0_ritzResidual_le
     (hgap : TanThetaIntervalGap A U X β α δ)
     (tanTheta0 : F →ₗ[𝕜] E)
     (htan : tanTheta0.singularValues =
-      principalTangents U (approximateSubspace X)) (k : ℕ) :
+      principalTangents (approximateSubspace X) U) (k : ℕ) :
     δ * RectangularUnitarilyInvariantNorm.rectangularKyFanSum k tanTheta0 ≤
       RectangularUnitarilyInvariantNorm.rectangularKyFanSum k
         (ritzResidual A X) := by
@@ -129,7 +130,7 @@ theorem tanTheta0_ritzResidual_le
     (hgap : TanThetaIntervalGap A U X β α δ)
     (tanTheta0 : F →ₗ[𝕜] E)
     (htan : tanTheta0.singularValues =
-      principalTangents U (approximateSubspace X)) :
+      principalTangents (approximateSubspace X) U) :
     δ * N tanTheta0 ≤ N (ritzResidual A X) := by
   have hprefix : ∀ k,
       RectangularUnitarilyInvariantNorm.rectangularKyFanSum k
@@ -145,6 +146,45 @@ theorem tanTheta0_ritzResidual_le
   rw [N.smul_eq] at hN
   simpa [RCLike.norm_ofReal, abs_of_pos hδ] using hN
 
+/-- **The residual conclusion of the 1970 `tan Θ` theorem.**
+
+This wrapper retains the equal-dimension hypothesis that is part of the global
+setup of Sections 1--2 of Davis--Kahan.  The Ritz choice
+`compression A X = X⋆ A X` is exactly the paper's condition `H₀ = 0`.
+The tangent sequence is directed from the trial space `range X` toward the
+exact invariant subspace `U`. -/
+theorem davisKahan1970_tanTheta0_ritzResidual_le
+    (N : RectangularUnitarilyInvariantNorm 𝕜 F E)
+    {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric)
+    {U : Submodule 𝕜 E} [U.HasOrthogonalProjection] (hU : Reduces A U)
+    (X : F →ₗᵢ[𝕜] E) (_hrank : finrank 𝕜 F = finrank 𝕜 U)
+    {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
+    (hgap : TanThetaIntervalGap A U X β α δ)
+    (tanTheta0 : F →ₗ[𝕜] E)
+    (htan : tanTheta0.singularValues =
+      principalTangents (approximateSubspace X) U) :
+    δ * N tanTheta0 ≤ N (ritzResidual A X) := by
+  exact tanTheta0_ritzResidual_le N hA hU X hβα hδ hgap tanTheta0 htan
+
+/-- **Davis--Kahan Theorem 6.3, generalized `tan Θ`, residual conclusion.**
+
+This wrapper retains the paper's strict dimension hypothesis: the trial space
+has smaller dimension than the exact invariant subspace being approximated.
+All other assumptions and the conclusion are identical to the source theorem
+in the finite-dimensional setting. -/
+theorem davisKahan1970_generalizedTanTheta0_ritzResidual_le
+    (N : RectangularUnitarilyInvariantNorm 𝕜 F E)
+    {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric)
+    {U : Submodule 𝕜 E} [U.HasOrthogonalProjection] (hU : Reduces A U)
+    (X : F →ₗᵢ[𝕜] E) (_hrank : finrank 𝕜 F < finrank 𝕜 U)
+    {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
+    (hgap : TanThetaIntervalGap A U X β α δ)
+    (tanTheta0 : F →ₗ[𝕜] E)
+    (htan : tanTheta0.singularValues =
+      principalTangents (approximateSubspace X) U) :
+    δ * N tanTheta0 ≤ N (ritzResidual A X) := by
+  exact tanTheta0_ritzResidual_le N hA hU X hβα hδ hgap tanTheta0 htan
+
 /-- Canonical directed-tangent specialization of the paper theorem. -/
 theorem tanThetaEmbedding_ritzResidual_le
     (N : RectangularUnitarilyInvariantNorm 𝕜 F E)
@@ -155,7 +195,7 @@ theorem tanThetaEmbedding_ritzResidual_le
     δ * N (tanThetaEmbedding U X) ≤ N (ritzResidual A X) := by
   have htrans := isTransverse_of_tanThetaIntervalGap hA hU X hδ hgap
   have htan : (tanThetaEmbedding U X).singularValues =
-      principalTangents U (approximateSubspace X) := by
+      principalTangents (approximateSubspace X) U := by
     rw [← graphOperator_eq_tanThetaEmbedding U X htrans]
     exact singularValues_graphOperator U X htrans
   exact tanTheta0_ritzResidual_le N hA hU X hβα hδ hgap
@@ -171,7 +211,7 @@ theorem tanTheta0_ritzResidual_le_and_isTransverse
     (hgap : TanThetaIntervalGap A U X β α δ)
     (tanTheta0 : F →ₗ[𝕜] E)
     (htan : tanTheta0.singularValues =
-      principalTangents U (approximateSubspace X)) :
+      principalTangents (approximateSubspace X) U) :
     IsTransverse (approximateSubspace X) U ∧
       δ * N tanTheta0 ≤ N (ritzResidual A X) := by
   exact ⟨isTransverse_of_tanThetaIntervalGap hA hU X hδ hgap,

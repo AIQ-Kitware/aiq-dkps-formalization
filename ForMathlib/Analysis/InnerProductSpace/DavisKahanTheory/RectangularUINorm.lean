@@ -2087,6 +2087,59 @@ private theorem rectangularKyFanSum_eq_zeroExtension
   unfold rectangularKyFanSum
   rw [singularValues_zeroExtension]
 
+/-- **Rectangular Ky Fan variational principle, upper bound.**
+
+For orthonormal domain and codomain families, the real part of the paired
+matrix coefficient sum is bounded by the corresponding singular-value prefix.
+The proof embeds both families in the two coordinates of the `L²` product and
+applies the square Ky Fan variational principle to `zeroExtension A`. -/
+theorem re_sum_inner_map_le_rectangularKyFanSum
+    {A : E →ₗ[𝕜] F} {k : ℕ} (hk : k ≤ finrank 𝕜 E)
+    {u : Fin k → F} {v : Fin k → E}
+    (hu : Orthonormal 𝕜 u) (hv : Orthonormal 𝕜 v) :
+    RCLike.re (∑ i, ⟪u i, A (v i)⟫_𝕜) ≤ rectangularKyFanSum k A := by
+  let u' : Fin k → WithLp 2 (E × F) :=
+    fun i => WithLp.toLp 2 (0, u i)
+  let v' : Fin k → WithLp 2 (E × F) :=
+    fun i => WithLp.toLp 2 (v i, 0)
+  have hu' : Orthonormal 𝕜 u' := by
+    rw [orthonormal_iff_ite] at hu ⊢
+    intro i j
+    simpa [u', WithLp.prod_inner_apply] using hu i j
+  have hv' : Orthonormal 𝕜 v' := by
+    rw [orthonormal_iff_ite] at hv ⊢
+    intro i j
+    simpa [v', WithLp.prod_inner_apply] using hv i j
+  have hfin : finrank 𝕜 (WithLp 2 (E × F)) =
+      finrank 𝕜 E + finrank 𝕜 F := by
+    calc
+      finrank 𝕜 (WithLp 2 (E × F)) = finrank 𝕜 (E × F) :=
+        (WithLp.linearEquiv 2 𝕜 (E × F)).finrank_eq
+      _ = finrank 𝕜 E + finrank 𝕜 F := by
+        simp [Module.finrank_prod]
+  have hk' : k ≤ finrank 𝕜 (WithLp 2 (E × F)) := by
+    rw [hfin]
+    omega
+  have h := ForMathlib.re_sum_inner_map_le_sum_singularValues
+    (A := zeroExtension A) hk' hu' hv'
+  simpa [u', v', zeroExtension_apply, WithLp.prod_inner_apply,
+    rectangularKyFanSum, singularValues_zeroExtension] using h
+
+/-- A convenient witness form of the rectangular Ky Fan upper bound. -/
+theorem sum_le_rectangularKyFanSum_of_orthonormal
+    {A : E →ₗ[𝕜] F} {k : ℕ} (hk : k ≤ finrank 𝕜 E)
+    {u : Fin k → F} {v : Fin k → E} (hu : Orthonormal 𝕜 u)
+    (hv : Orthonormal 𝕜 v) {t : Fin k → ℝ}
+    (ht : ∀ i, t i ≤ RCLike.re ⟪u i, A (v i)⟫_𝕜) :
+    ∑ i, t i ≤ rectangularKyFanSum k A := by
+  calc
+    ∑ i, t i ≤ ∑ i, RCLike.re ⟪u i, A (v i)⟫_𝕜 :=
+      Finset.sum_le_sum fun i _ => ht i
+    _ = RCLike.re (∑ i, ⟪u i, A (v i)⟫_𝕜) := by
+      rw [map_sum]
+    _ ≤ rectangularKyFanSum k A :=
+      re_sum_inner_map_le_rectangularKyFanSum hk hu hv
+
 private theorem rectangularKyFanSum_add_le (k : ℕ)
     (A B : E →ₗ[𝕜] F) :
     rectangularKyFanSum k (A + B) ≤
