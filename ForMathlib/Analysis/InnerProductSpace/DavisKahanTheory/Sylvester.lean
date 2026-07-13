@@ -1131,6 +1131,141 @@ theorem uiNorm_sylvester_le_of_spectralDistance
       rw [N.smul_eq, RCLike.norm_ofReal, abs_of_nonneg hp0]
     _ = (Real.pi / 2) * N C := by rfl
 
+/-! ### Unconditional field-specific endpoints
+
+The explicit Haagerup--Zsidó kernel closes the analytic root over `ℂ`
+directly and over `ℝ` through the doubled orthogonal descent.  The theorems
+below repeat the sharp arbitrary-separated-spectrum statements at the two
+concrete scalar fields with no open obligation.  The generic `RCLike`
+versions above remain routed through the finite orbit-interpolation seam,
+which is still an open obligation. -/
+
+/-- Unconditional complex Ky Fan Sylvester estimate. -/
+theorem kyFan_sylvester_le_of_spectralDistance_complex
+    {EC FC : Type*}
+    [NormedAddCommGroup EC] [InnerProductSpace ℂ EC] [FiniteDimensional ℂ EC]
+    [NormedAddCommGroup FC] [InnerProductSpace ℂ FC] [FiniteDimensional ℂ FC]
+    {A : FC →ₗ[ℂ] FC} {B : EC →ₗ[ℂ] EC} {X C : EC →ₗ[ℂ] FC}
+    (hA : A.IsSymmetric) (hB : B.IsSymmetric)
+    {δ : ℝ} (hδ : 0 < δ) (hgap : SpectraSeparated A ⊤ B ⊤ δ)
+    (hEq : A ∘ₗ X - X ∘ₗ B = C) (k : ℕ) :
+    δ * RectangularUnitarilyInvariantNorm.rectangularKyFanSum k X ≤
+      (Real.pi / 2) *
+        RectangularUnitarilyInvariantNorm.rectangularKyFanSum k C := by
+  apply kyFan_reciprocalMultiplier_le_complex
+    (eF := hA.eigenvectorBasis rfl)
+    (eE := hB.eigenvectorBasis rfl)
+    (α := hA.eigenvalues rfl)
+    (β := hB.eigenvalues rfl)
+    (X := X) (C := C) hδ
+  · intro i j
+    exact hgap
+      (hA.eigenvalues rfl i) (hB.eigenvalues rfl j)
+      (eigenvalue_mem_restrictedSpectrum_top hA i)
+      (eigenvalue_mem_restrictedSpectrum_top hB j)
+  · intro i j
+    exact sylvester_eigenbasis_coefficient_equation hA hB hEq i j
+
+/-- Unconditional real Ky Fan Sylvester estimate. -/
+theorem kyFan_sylvester_le_of_spectralDistance_real
+    {ER FR : Type*}
+    [NormedAddCommGroup ER] [InnerProductSpace ℝ ER] [FiniteDimensional ℝ ER]
+    [NormedAddCommGroup FR] [InnerProductSpace ℝ FR] [FiniteDimensional ℝ FR]
+    {A : FR →ₗ[ℝ] FR} {B : ER →ₗ[ℝ] ER} {X C : ER →ₗ[ℝ] FR}
+    (hA : A.IsSymmetric) (hB : B.IsSymmetric)
+    {δ : ℝ} (hδ : 0 < δ) (hgap : SpectraSeparated A ⊤ B ⊤ δ)
+    (hEq : A ∘ₗ X - X ∘ₗ B = C) (k : ℕ) :
+    δ * RectangularUnitarilyInvariantNorm.rectangularKyFanSum k X ≤
+      (Real.pi / 2) *
+        RectangularUnitarilyInvariantNorm.rectangularKyFanSum k C := by
+  apply kyFan_reciprocalMultiplier_le_real
+    (eF := hA.eigenvectorBasis rfl)
+    (eE := hB.eigenvectorBasis rfl)
+    (alpha := hA.eigenvalues rfl)
+    (beta := hB.eigenvalues rfl)
+    (X := X) (C := C) hδ
+  · intro i j
+    exact hgap
+      (hA.eigenvalues rfl i) (hB.eigenvalues rfl j)
+      (eigenvalue_mem_restrictedSpectrum_top hA i)
+      (eigenvalue_mem_restrictedSpectrum_top hB j)
+  · intro i j
+    have h := sylvester_eigenbasis_coefficient_equation hA hB hEq i j
+    simpa only [RCLike.ofReal_real_eq_id, id_eq] using h
+
+/-- Unconditional complex arbitrary-UI-norm Sylvester estimate. -/
+theorem uiNorm_sylvester_le_of_spectralDistance_complex
+    {EC FC : Type*}
+    [NormedAddCommGroup EC] [InnerProductSpace ℂ EC] [FiniteDimensional ℂ EC]
+    [NormedAddCommGroup FC] [InnerProductSpace ℂ FC] [FiniteDimensional ℂ FC]
+    (N : RectangularUnitarilyInvariantNorm ℂ EC FC)
+    {A : FC →ₗ[ℂ] FC} {B : EC →ₗ[ℂ] EC} {X C : EC →ₗ[ℂ] FC}
+    (hA : A.IsSymmetric) (hB : B.IsSymmetric) {δ : ℝ} (hδ : 0 < δ)
+    (hgap : SpectraSeparated A ⊤ B ⊤ δ)
+    (hEq : A ∘ₗ X - X ∘ₗ B = C) :
+    δ * N X ≤ (Real.pi / 2) * N C := by
+  let p : ℝ := Real.pi / 2
+  have hδ0 : 0 ≤ δ := le_of_lt hδ
+  have hp0 : 0 ≤ p := by
+    dsimp [p]
+    positivity
+  have hscaled : N (((δ : ℂ)) • X) ≤ N (((p : ℂ)) • C) := by
+    apply N.apply_le_of_kyFanSum_le
+    intro k
+    have hX : RectangularUnitarilyInvariantNorm.rectangularKyFanSum k
+          (((δ : ℂ)) • X) =
+        δ * RectangularUnitarilyInvariantNorm.rectangularKyFanSum k X :=
+      RectangularUnitarilyInvariantNorm.rectangularKyFanSum_real_smul k X hδ0
+    have hC : RectangularUnitarilyInvariantNorm.rectangularKyFanSum k
+          (((p : ℂ)) • C) =
+        p * RectangularUnitarilyInvariantNorm.rectangularKyFanSum k C :=
+      RectangularUnitarilyInvariantNorm.rectangularKyFanSum_real_smul k C hp0
+    rw [hX, hC]
+    simpa [p] using
+      kyFan_sylvester_le_of_spectralDistance_complex hA hB hδ hgap hEq k
+  calc
+    δ * N X = N (((δ : ℂ)) • X) := by
+      rw [N.smul_eq, Complex.norm_real, Real.norm_eq_abs, abs_of_pos hδ]
+    _ ≤ N (((p : ℂ)) • C) := hscaled
+    _ = p * N C := by
+      rw [N.smul_eq, Complex.norm_real, Real.norm_eq_abs, abs_of_nonneg hp0]
+    _ = (Real.pi / 2) * N C := by rfl
+
+/-- Unconditional real arbitrary-UI-norm Sylvester estimate. -/
+theorem uiNorm_sylvester_le_of_spectralDistance_real
+    {ER FR : Type*}
+    [NormedAddCommGroup ER] [InnerProductSpace ℝ ER] [FiniteDimensional ℝ ER]
+    [NormedAddCommGroup FR] [InnerProductSpace ℝ FR] [FiniteDimensional ℝ FR]
+    (N : RectangularUnitarilyInvariantNorm ℝ ER FR)
+    {A : FR →ₗ[ℝ] FR} {B : ER →ₗ[ℝ] ER} {X C : ER →ₗ[ℝ] FR}
+    (hA : A.IsSymmetric) (hB : B.IsSymmetric) {δ : ℝ} (hδ : 0 < δ)
+    (hgap : SpectraSeparated A ⊤ B ⊤ δ)
+    (hEq : A ∘ₗ X - X ∘ₗ B = C) :
+    δ * N X ≤ (Real.pi / 2) * N C := by
+  let p : ℝ := Real.pi / 2
+  have hδ0 : 0 ≤ δ := le_of_lt hδ
+  have hp0 : 0 ≤ p := by
+    dsimp [p]
+    positivity
+  have hscaled : N (δ • X) ≤ N (p • C) := by
+    apply N.apply_le_of_kyFanSum_le
+    intro k
+    have hX := RectangularUnitarilyInvariantNorm.rectangularKyFanSum_real_smul
+      (𝕜 := ℝ) k X hδ0
+    have hC := RectangularUnitarilyInvariantNorm.rectangularKyFanSum_real_smul
+      (𝕜 := ℝ) k C hp0
+    simp only [RCLike.ofReal_real_eq_id, id_eq] at hX hC
+    rw [hX, hC]
+    simpa [p] using
+      kyFan_sylvester_le_of_spectralDistance_real hA hB hδ hgap hEq k
+  calc
+    δ * N X = N (δ • X) := by
+      rw [N.smul_eq, Real.norm_eq_abs, abs_of_pos hδ]
+    _ ≤ N (p • C) := hscaled
+    _ = p * N C := by
+      rw [N.smul_eq, Real.norm_eq_abs, abs_of_nonneg hp0]
+    _ = (Real.pi / 2) * N C := by rfl
+
 end DavisKahanTheory
 
 namespace DavisKahanExt
@@ -1193,6 +1328,84 @@ theorem ideal_sylvester_le
       ContinuousLinearMap.comp_apply] using hpoint
   simpa [X', C'] using
     DavisKahanTheory.uiNorm_sylvester_le_of_spectralDistance
+      N hA' hB' hd hsep' hEq'
+
+/-- **Unconditional complex sharp Sylvester estimate.**  Identical to
+`ideal_sylvester_le` at `𝕜 = ℂ`, but proved through the explicit
+Haagerup--Zsidó kernel with no open obligation. -/
+theorem ideal_sylvester_le_complex
+    {EC FC : Type*}
+    [NormedAddCommGroup EC] [InnerProductSpace ℂ EC] [FiniteDimensional ℂ EC]
+    [NormedAddCommGroup FC] [InnerProductSpace ℂ FC] [FiniteDimensional ℂ FC]
+    (N : DavisKahanTheory.RectangularUnitarilyInvariantNorm ℂ EC FC)
+    {A : FC →L[ℂ] FC} {B : EC →L[ℂ] EC} {X C : EC →L[ℂ] FC}
+    (hA : IsSelfAdjointOperator A) (hB : IsSelfAdjointOperator B)
+    {d : ℝ} (hd : 0 < d)
+    (hsep : SpectraSeparated A ⊤ B ⊤ d)
+    (hEq : sylvesterOperator A B X = C) :
+    d * N X.toLinearMap ≤ (Real.pi / 2) * N C.toLinearMap := by
+  let A' : FC →ₗ[ℂ] FC := A.toLinearMap
+  let B' : EC →ₗ[ℂ] EC := B.toLinearMap
+  let X' : EC →ₗ[ℂ] FC := X.toLinearMap
+  let C' : EC →ₗ[ℂ] FC := C.toLinearMap
+  have hA' : A'.IsSymmetric := by
+    intro x y
+    exact hA x y
+  have hB' : B'.IsSymmetric := by
+    intro x y
+    exact hB x y
+  have hsep' : DavisKahanTheory.SpectraSeparated A' ⊤ B' ⊤ d := by
+    intro a b ha hb
+    rcases ha with ⟨x, -, ⟨hx0, hxeig⟩⟩
+    rcases hb with ⟨y, -, ⟨hy0, hyeig⟩⟩
+    exact hsep a ⟨x, Submodule.mem_top, hx0, hxeig⟩
+      b ⟨y, Submodule.mem_top, hy0, hyeig⟩
+  have hEq' : A' ∘ₗ X' - X' ∘ₗ B' = C' := by
+    ext x
+    have hpoint := congrArg (fun T : EC →L[ℂ] FC => T x) hEq
+    simpa [A', B', X', C', sylvesterOperator,
+      ContinuousLinearMap.comp_apply] using hpoint
+  simpa [X', C'] using
+    DavisKahanTheory.uiNorm_sylvester_le_of_spectralDistance_complex
+      N hA' hB' hd hsep' hEq'
+
+/-- **Unconditional real sharp Sylvester estimate.**  Identical to
+`ideal_sylvester_le` at `𝕜 = ℝ`, proved through the doubled orthogonal
+descent from the explicit Haagerup--Zsidó kernel. -/
+theorem ideal_sylvester_le_real
+    {ER FR : Type*}
+    [NormedAddCommGroup ER] [InnerProductSpace ℝ ER] [FiniteDimensional ℝ ER]
+    [NormedAddCommGroup FR] [InnerProductSpace ℝ FR] [FiniteDimensional ℝ FR]
+    (N : DavisKahanTheory.RectangularUnitarilyInvariantNorm ℝ ER FR)
+    {A : FR →L[ℝ] FR} {B : ER →L[ℝ] ER} {X C : ER →L[ℝ] FR}
+    (hA : IsSelfAdjointOperator A) (hB : IsSelfAdjointOperator B)
+    {d : ℝ} (hd : 0 < d)
+    (hsep : SpectraSeparated A ⊤ B ⊤ d)
+    (hEq : sylvesterOperator A B X = C) :
+    d * N X.toLinearMap ≤ (Real.pi / 2) * N C.toLinearMap := by
+  let A' : FR →ₗ[ℝ] FR := A.toLinearMap
+  let B' : ER →ₗ[ℝ] ER := B.toLinearMap
+  let X' : ER →ₗ[ℝ] FR := X.toLinearMap
+  let C' : ER →ₗ[ℝ] FR := C.toLinearMap
+  have hA' : A'.IsSymmetric := by
+    intro x y
+    exact hA x y
+  have hB' : B'.IsSymmetric := by
+    intro x y
+    exact hB x y
+  have hsep' : DavisKahanTheory.SpectraSeparated A' ⊤ B' ⊤ d := by
+    intro a b ha hb
+    rcases ha with ⟨x, -, ⟨hx0, hxeig⟩⟩
+    rcases hb with ⟨y, -, ⟨hy0, hyeig⟩⟩
+    exact hsep a ⟨x, Submodule.mem_top, hx0, hxeig⟩
+      b ⟨y, Submodule.mem_top, hy0, hyeig⟩
+  have hEq' : A' ∘ₗ X' - X' ∘ₗ B' = C' := by
+    ext x
+    have hpoint := congrArg (fun T : ER →L[ℝ] FR => T x) hEq
+    simpa [A', B', X', C', sylvesterOperator,
+      ContinuousLinearMap.comp_apply] using hpoint
+  simpa [X', C'] using
+    DavisKahanTheory.uiNorm_sylvester_le_of_spectralDistance_real
       N hA' hB' hd hsep' hEq'
 
 end DavisKahanExt
