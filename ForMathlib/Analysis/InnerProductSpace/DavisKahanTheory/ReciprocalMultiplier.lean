@@ -384,6 +384,83 @@ noncomputable def basisDoubledRealRotation
         basisDiagonalRealMap e (fun q => Real.cos (theta q)) (e i)) = _
   simp
 
+/-- The doubled-real map corresponding to multiplication by the complex phase
+`exp (theta * I)` after applying a real rectangular map. -/
+noncomputable def doubledPhaseAction
+    {ER FR : Type*}
+    [NormedAddCommGroup ER] [InnerProductSpace ℝ ER]
+    [NormedAddCommGroup FR] [InnerProductSpace ℝ FR]
+    (theta : ℝ) (T : ER →ₗ[ℝ] FR) :
+    WithLp 2 (ER × ER) →ₗ[ℝ] WithLp 2 (FR × FR) :=
+  (doubledRealRotation (G := FR) theta).toLinearMap ∘ₗ
+    RectangularUnitarilyInvariantNorm.orthogonalBlockSum T T
+
+@[simp] theorem doubledPhaseAction_apply
+    {ER FR : Type*}
+    [NormedAddCommGroup ER] [InnerProductSpace ℝ ER]
+    [NormedAddCommGroup FR] [InnerProductSpace ℝ FR]
+    (theta : ℝ) (T : ER →ₗ[ℝ] FR) (x : WithLp 2 (ER × ER)) :
+    doubledPhaseAction theta T x = WithLp.toLp 2
+      (Real.cos theta • T x.fst - Real.sin theta • T x.snd,
+        Real.sin theta • T x.fst + Real.cos theta • T x.snd) := by
+  rfl
+
+/-- Coordinatewise doubled-real rotations realize addition of the left and
+right phase angles on a doubled coordinate matrix unit. -/
+theorem basisDoubledRealRotation_comp_basisMatrixUnit
+    {ER FR : Type*}
+    [NormedAddCommGroup ER] [InnerProductSpace ℝ ER]
+    [FiniteDimensional ℝ ER]
+    [NormedAddCommGroup FR] [InnerProductSpace ℝ FR]
+    [FiniteDimensional ℝ FR]
+    (eF : OrthonormalBasis (Fin (Module.finrank ℝ FR)) ℝ FR)
+    (eE : OrthonormalBasis (Fin (Module.finrank ℝ ER)) ℝ ER)
+    (thetaF : Fin (Module.finrank ℝ FR) → ℝ)
+    (thetaE : Fin (Module.finrank ℝ ER) → ℝ)
+    (i : Fin (Module.finrank ℝ FR))
+    (j : Fin (Module.finrank ℝ ER)) :
+    (basisDoubledRealRotation eF thetaF).toLinearMap ∘ₗ
+        RectangularUnitarilyInvariantNorm.orthogonalBlockSum
+          (basisMatrixUnit eF eE i j) (basisMatrixUnit eF eE i j) ∘ₗ
+        (basisDoubledRealRotation eE thetaE).toLinearMap =
+      doubledPhaseAction (thetaF i + thetaE j)
+        (basisMatrixUnit eF eE i j) := by
+  apply (eE.prod eE).toBasis.ext
+  intro q
+  rcases q with q | q
+  · simp only [OrthonormalBasis.coe_toBasis, OrthonormalBasis.prod_apply,
+      Sum.elim_inl, Function.comp_apply, LinearMap.coe_inl,
+      basisDoubledRealRotation_apply_first, LinearMap.comp_apply,
+      RectangularUnitarilyInvariantNorm.orthogonalBlockSum_apply,
+      WithLp.fst_toLp, WithLp.snd_toLp, map_smul,
+      basisMatrixUnit_apply, eE.inner_eq_ite]
+    by_cases hq : j = q
+    · subst q
+      simp only [ite_true, one_smul, basisDoubledRealRotation_apply_first,
+        basisDoubledRealRotation_apply_second, doubledPhaseAction_apply,
+        WithLp.fst_toLp, WithLp.snd_toLp, basisMatrixUnit_apply,
+        eE.inner_eq_ite, map_smul]
+      apply WithLp.ofLp_injective 2
+      simp only [WithLp.ofLp_toLp]
+      apply Prod.ext <;> simp [Real.cos_add, Real.sin_add] <;> module
+    · simp [hq, doubledPhaseAction_apply, basisMatrixUnit_apply]
+  · simp only [OrthonormalBasis.coe_toBasis, OrthonormalBasis.prod_apply,
+      Sum.elim_inr, Function.comp_apply, LinearMap.coe_inr,
+      basisDoubledRealRotation_apply_second, LinearMap.comp_apply,
+      RectangularUnitarilyInvariantNorm.orthogonalBlockSum_apply,
+      WithLp.fst_toLp, WithLp.snd_toLp, map_smul,
+      basisMatrixUnit_apply, eE.inner_eq_ite]
+    by_cases hq : j = q
+    · subst q
+      simp only [ite_true, one_smul, basisDoubledRealRotation_apply_first,
+        basisDoubledRealRotation_apply_second, doubledPhaseAction_apply,
+        WithLp.fst_toLp, WithLp.snd_toLp, basisMatrixUnit_apply,
+        eE.inner_eq_ite, map_smul]
+      apply WithLp.ofLp_injective 2
+      simp only [WithLp.ofLp_toLp]
+      apply Prod.ext <;> simp [Real.cos_add, Real.sin_add] <;> module
+    · simp [hq, doubledPhaseAction_apply, basisMatrixUnit_apply]
+
 /-- The complex basis-diagonal orbit realizes the Fourier character at the
 coordinate difference `α i - β j`.  This is the exact operator-valued atom
 used after obtaining a scalar reciprocal Fourier representation. -/
