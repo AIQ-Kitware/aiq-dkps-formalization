@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
 import ForMathlib.Analysis.InnerProductSpace.DavisKahanTheory.RectangularUINorm
+import Mathlib.LinearAlgebra.Lagrange
 
 /-!
 # Finite reciprocal multipliers
@@ -208,6 +209,63 @@ theorem complexUnitaryOrbitAction_basisMatrixUnit_exp_sub
   congr 1
   congr 1
   ring_nf
+
+/-- Arbitrary complex values on a finite set of real frequencies admit an
+exact finite Fourier interpolation.
+
+The proof places the finitely many frequencies in an arc shorter than a full
+circle, applies Lagrange interpolation to their distinct complex phases, and
+reads the polynomial coefficients as Fourier coefficients.  This is the
+algebraic correction mechanism needed when a reciprocal Fourier integral is
+first approximated by a finite sum. -/
+theorem exists_finite_fourier_interpolation
+    (s : Finset ℝ) (y : ℝ → ℂ) :
+    ∃ q : ℕ, ∃ a : Fin q → ℂ, ∃ t : Fin q → ℝ,
+      ∀ x ∈ s, y x = ∑ r, a r * Complex.exp
+        ((((t r * x) : ℝ) : ℂ) * Complex.I) := by
+  classical
+  let R : ℝ := ∑ x ∈ s, |x|
+  let τ : ℝ := (1 + R)⁻¹
+  have hR : 0 ≤ R := by
+    exact Finset.sum_nonneg fun _ _ => abs_nonneg _
+  have hτ : 0 < τ := by
+    simp only [τ]
+    positivity
+  have harg (x : ℝ) (hx : x ∈ s) : τ * x ∈ Set.Icc (-1 : ℝ) 1 := by
+    have hxR : |x| ≤ R := by
+      exact Finset.single_le_sum
+        (fun z hz => abs_nonneg z) hx
+    have hden : 0 < 1 + R := by linarith
+    have habs : |τ * x| < 1 := by
+      rw [abs_mul, abs_of_pos hτ]
+      change (1 + R)⁻¹ * |x| < 1
+      rw [inv_mul_eq_div, div_lt_one hden]
+      linarith
+    exact ⟨le_of_lt (abs_lt.mp habs).1, le_of_lt (abs_lt.mp habs).2⟩
+  let z : ℝ → ℂ := fun x => (Circle.exp (τ * x) : ℂ)
+  have hzinj : Set.InjOn z s := by
+    intro x hx x' hx' hzx
+    have harc : (1 : ℝ) - (-1) < 2 * Real.pi := by
+      nlinarith [Real.pi_gt_three]
+    have hphase : τ * x = τ * x' :=
+      Circle.exp_injOn_Icc harc (harg x hx) (harg x' hx') (Subtype.ext hzx)
+    exact (mul_left_cancel₀ (ne_of_gt hτ) hphase)
+  let p : Polynomial ℂ := Lagrange.interpolate s z y
+  refine ⟨p.natDegree + 1, fun r => p.coeff r, fun r => (r : ℕ) * τ, ?_⟩
+  intro x hx
+  rw [← Lagrange.eval_interpolate_at_node y hzinj hx]
+  rw [Polynomial.eval_eq_sum_range, ← Fin.sum_univ_eq_sum_range]
+  apply Finset.sum_congr rfl
+  intro r _
+  change p.coeff r * z x ^ (r : ℕ) =
+    p.coeff r * Complex.exp
+      ((((((r : ℕ) : ℝ) * τ * x) : ℝ) : ℂ) * Complex.I)
+  congr 1
+  simp only [z, Circle.coe_exp]
+  rw [← Complex.exp_nat_mul]
+  congr 1
+  push_cast
+  ring
 
 /-- A finite scalar Fourier interpolation of the reciprocal function on two
 finite real frequency arrays.
