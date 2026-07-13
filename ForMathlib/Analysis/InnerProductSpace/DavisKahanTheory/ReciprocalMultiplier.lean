@@ -484,6 +484,21 @@ theorem doubledComplexScalarAction_real_smul
   apply Prod.ext <;>
     simp [doubledComplexScalarAction_apply, smul_smul] <;> module
 
+/-- A real complex scalar acts as the same real scalar on two orthogonal
+copies of a real map. -/
+theorem doubledComplexScalarAction_ofReal
+    {ER FR : Type*}
+    [NormedAddCommGroup ER] [InnerProductSpace ℝ ER]
+    [NormedAddCommGroup FR] [InnerProductSpace ℝ FR]
+    (r : ℝ) (T : ER →ₗ[ℝ] FR) :
+    doubledComplexScalarAction (r : ℂ) T =
+      r • RectangularUnitarilyInvariantNorm.orthogonalBlockSum T T := by
+  ext x
+  apply WithLp.ofLp_injective 2
+  apply Prod.ext <;>
+    simp [doubledComplexScalarAction_apply,
+      RectangularUnitarilyInvariantNorm.orthogonalBlockSum_apply] <;> module
+
 /-- A finite sum of complex-scalar block actions is the action of the scalar
 sum. -/
 theorem sum_doubledComplexScalarAction
@@ -866,6 +881,32 @@ def HasApproximateFiniteReciprocalFourierInterpolation
         ∑ r, a r * Complex.exp
           ((((t r * (α i - β j)) : ℝ) : ℂ) * Complex.I)‖ ≤ tolerance) ∧
     ∑ r, ‖a r‖ ≤ mass
+
+/-- A reciprocal interpolation on real coordinate matrix units after doubling
+both Hilbert spaces.  Complex Fourier coefficients have been replaced by real
+weights and coordinatewise orthogonal rotations. -/
+def HasDoubledRealReciprocalOrbitInterpolation
+    {ER FR : Type*}
+    [NormedAddCommGroup ER] [InnerProductSpace ℝ ER]
+    [FiniteDimensional ℝ ER]
+    [NormedAddCommGroup FR] [InnerProductSpace ℝ FR]
+    [FiniteDimensional ℝ FR]
+    (eF : OrthonormalBasis (Fin (Module.finrank ℝ FR)) ℝ FR)
+    (eE : OrthonormalBasis (Fin (Module.finrank ℝ ER)) ℝ ER)
+    (alpha : Fin (Module.finrank ℝ FR) → ℝ)
+    (beta : Fin (Module.finrank ℝ ER) → ℝ)
+    (delta mass : ℝ) : Prop :=
+  ∃ q : ℕ, ∃ w : Fin q → ℝ,
+    ∃ U : Fin q → WithLp 2 (FR × FR) ≃ₗᵢ[ℝ] WithLp 2 (FR × FR),
+      ∃ V : Fin q → WithLp 2 (ER × ER) ≃ₗᵢ[ℝ] WithLp 2 (ER × ER),
+        (∀ i j,
+          delta • RectangularUnitarilyInvariantNorm.orthogonalBlockSum
+              (basisMatrixUnit eF eE i j) (basisMatrixUnit eF eE i j) =
+            (alpha i - beta j) •
+              ((∑ r, w r • unitaryOrbitAction (U r) (V r))
+                (RectangularUnitarilyInvariantNorm.orthogonalBlockSum
+                  (basisMatrixUnit eF eE i j) (basisMatrixUnit eF eE i j)))) ∧
+        ∑ r, |w r| ≤ mass
 
 /-- An integrable scalar Fourier kernel representing the reciprocal function
 outside the unit interval, with controlled `L¹` mass. -/
@@ -1290,6 +1331,69 @@ theorem hasReciprocalOrbitInterpolation_of_finiteFourierInterpolation
   rw [horbit, smul_smul]
   exact congrArg (fun z : ℂ => z • basisMatrixUnit eF eE i j)
     (hscalar i j)
+
+/-- A finite complex Fourier interpolation descends exactly to doubled real
+coordinate spaces.  The complex coefficient norm is the real orbit weight and
+its argument is absorbed into the left coordinate rotation. -/
+theorem hasDoubledRealReciprocalOrbitInterpolation_of_finiteFourierInterpolation
+    {ER FR : Type*}
+    [NormedAddCommGroup ER] [InnerProductSpace ℝ ER]
+    [FiniteDimensional ℝ ER]
+    [NormedAddCommGroup FR] [InnerProductSpace ℝ FR]
+    [FiniteDimensional ℝ FR]
+    (eF : OrthonormalBasis (Fin (Module.finrank ℝ FR)) ℝ FR)
+    (eE : OrthonormalBasis (Fin (Module.finrank ℝ ER)) ℝ ER)
+    (alpha : Fin (Module.finrank ℝ FR) → ℝ)
+    (beta : Fin (Module.finrank ℝ ER) → ℝ)
+    {delta mass : ℝ}
+    (h : HasFiniteReciprocalFourierInterpolation alpha beta delta mass) :
+    HasDoubledRealReciprocalOrbitInterpolation
+      eF eE alpha beta delta mass := by
+  classical
+  rcases h with ⟨q, a, t, hscalar, hmass⟩
+  let w : Fin q → ℝ := fun r => ‖a r‖
+  let U : Fin q → WithLp 2 (FR × FR) ≃ₗᵢ[ℝ] WithLp 2 (FR × FR) := fun r =>
+    basisDoubledRealRotation eF fun i => Complex.arg (a r) + t r * alpha i
+  let V : Fin q → WithLp 2 (ER × ER) ≃ₗᵢ[ℝ] WithLp 2 (ER × ER) := fun r =>
+    basisDoubledRealRotation eE fun j => -(t r * beta j)
+  refine ⟨q, w, U, V, ?_, ?_⟩
+  · intro i j
+    let T : ER →ₗ[ℝ] FR := basisMatrixUnit eF eE i j
+    let d : ℝ := alpha i - beta j
+    have horbit :
+        ((∑ r, w r • unitaryOrbitAction (U r) (V r))
+            (RectangularUnitarilyInvariantNorm.orthogonalBlockSum T T)) =
+          doubledComplexScalarAction
+            (∑ r, a r * Complex.exp ((((t r * d : ℝ) : ℂ) * Complex.I))) T := by
+      calc
+        ((∑ r, w r • unitaryOrbitAction (U r) (V r))
+            (RectangularUnitarilyInvariantNorm.orthogonalBlockSum T T)) =
+            ∑ r, ‖a r‖ •
+              doubledPhaseAction (Complex.arg (a r) + t r * d) T := by
+                simp only [LinearMap.sum_apply, LinearMap.smul_apply, w]
+                apply Finset.sum_congr rfl
+                intro r _
+                rw [unitaryOrbitAction_apply]
+                change ‖a r‖ •
+                    ((basisDoubledRealRotation eF
+                        (fun i => Complex.arg (a r) + t r * alpha i)).toLinearMap ∘ₗ
+                      RectangularUnitarilyInvariantNorm.orthogonalBlockSum T T ∘ₗ
+                        (basisDoubledRealRotation eE
+                          (fun j => -(t r * beta j))).toLinearMap) = _
+                rw [show T = basisMatrixUnit eF eE i j by rfl,
+                  basisDoubledRealRotation_comp_basisMatrixUnit]
+                congr 2
+                dsimp only [d]
+                ring
+        _ = doubledComplexScalarAction
+            (∑ r, a r * Complex.exp ((((t r * d : ℝ) : ℂ) * Complex.I))) T := by
+              exact sum_norm_smul_doubledPhaseAction_arg_add
+                a (fun r => t r * d) T
+    rw [← doubledComplexScalarAction_ofReal delta T, horbit,
+      doubledComplexScalarAction_real_smul]
+    congr 1
+    exact hscalar i j
+  · simpa only [w, abs_of_nonneg (norm_nonneg _)] using hmass
 
 /-- **Finite harmonic-analysis root.**  Separated finite real frequencies admit
 a simultaneous reciprocal orbit interpolation of mass at most `π / 2`.
