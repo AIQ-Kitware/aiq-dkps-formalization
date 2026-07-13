@@ -175,6 +175,13 @@ def IntervalSylvesterGap (A : F →ₗ[𝕜] F) (B : E →ₗ[𝕜] E)
   SpectrumIn B ⊤ (Set.Icc a b) ∧
     SpectrumIn A ⊤ {lam | lam ∉ Set.Ioo (a - δ) (b + δ)}
 
+/-- Interval/exterior separation in either orientation.  The first branch has
+the spectrum of `B` in `[a,b]` and that of `A` outside the enlarged interval;
+the second branch reverses those roles. -/
+def UnorderedIntervalSylvesterGap (A : F →ₗ[𝕜] F) (B : E →ₗ[𝕜] E)
+    (a b δ : ℝ) : Prop :=
+  IntervalSylvesterGap A B a b δ ∨ IntervalSylvesterGap B A a b δ
+
 /-- The Sylvester operator is injective under positive spectral separation.
 
 The proof is coordinate-free at the API boundary but uses the canonical
@@ -817,6 +824,44 @@ theorem uiNorm_sylvester_le_of_intervalGap
   have hbound' : δ * N X ≤ N Y := by
     simpa [N', X', Y'] using hbound
   rwa [hYnorm] at hbound'
+
+/-- Sharp constant-one interval/exterior Sylvester estimate in either
+orientation.
+
+The forward branch is `uiNorm_sylvester_le_of_intervalGap`.  In the reverse
+branch, take adjoints, negate the resulting Sylvester equation, and transport
+the rectangular UI norm across adjoint. -/
+theorem uiNorm_sylvester_le_of_unorderedIntervalGap
+    (N : RectangularUnitarilyInvariantNorm 𝕜 E F)
+    {A : F →ₗ[𝕜] F} {B : E →ₗ[𝕜] E} {X C : E →ₗ[𝕜] F}
+    (hA : A.IsSymmetric) (hB : B.IsSymmetric)
+    {a b δ : ℝ} (hδ : 0 < δ)
+    (hgap : UnorderedIntervalSylvesterGap A B a b δ)
+    (hEq : A ∘ₗ X - X ∘ₗ B = C) :
+    δ * N X ≤ N C := by
+  rcases hgap with hforward | hreverse
+  · exact uiNorm_sylvester_le_of_intervalGap N hA hB hδ hforward hEq
+  · have hadj : X.adjoint ∘ₗ A - B ∘ₗ X.adjoint = C.adjoint := by
+      simpa only [map_sub, LinearMap.adjoint_comp, hA.adjoint_eq, hB.adjoint_eq] using
+        congrArg (fun T : E →ₗ[𝕜] F => T.adjoint) hEq
+    have hEqAdj : B ∘ₗ X.adjoint - X.adjoint ∘ₗ A = -C.adjoint := by
+      calc
+        B ∘ₗ X.adjoint - X.adjoint ∘ₗ A =
+            -(X.adjoint ∘ₗ A - B ∘ₗ X.adjoint) := by abel
+        _ = -C.adjoint := congrArg Neg.neg hadj
+    have hbound := uiNorm_sylvester_le_of_intervalGap
+      (RectangularUnitarilyInvariantNorm.adjointTransport N)
+      hB hA hδ hreverse hEqAdj
+    have hXnorm :
+        (RectangularUnitarilyInvariantNorm.adjointTransport N) X.adjoint = N X := by
+      change N X.adjoint.adjoint = N X
+      rw [LinearMap.adjoint_adjoint]
+    have hCnorm :
+        (RectangularUnitarilyInvariantNorm.adjointTransport N) (-C.adjoint) = N C := by
+      change N ((-C.adjoint).adjoint) = N C
+      rw [map_neg, LinearMap.adjoint_adjoint, N.apply_neg]
+    rw [hXnorm, hCnorm] at hbound
+    exact hbound
 
 /-- Ky Fan specialization of the sharp interval/exterior Sylvester
 estimate.  The hard work is already contained in
