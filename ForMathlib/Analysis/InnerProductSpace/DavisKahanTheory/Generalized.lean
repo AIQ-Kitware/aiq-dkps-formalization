@@ -37,11 +37,11 @@ right-ideal estimate for every rectangular UI norm, and the assembled
 frame-to-sine transport inequality
 `ε * N (P_{Vᗮ} Q) ≤ N (P_{Vᗮ} X)`.
 
-The remaining Theorem 6.1 proof is therefore the spectral half only: apply the
-interval/exterior Sylvester estimate to the raw block `P_{Vᗮ} X`, contract the
-projected residual, and combine with the completed frame-transport theorem.
-Coordinate operators such as `M` remain in their original self-adjoint
-coordinates throughout.
+Theorem 6.1 is assembled below from this coordinate layer and the raw
+projected Sylvester identity.  The source-complete endpoint accepts either
+interval/exterior orientation, derives injectivity from the positive lower
+frame bound, and keeps coordinate operators such as `M` in their original
+self-adjoint coordinates throughout.
 -/
 
 namespace ForMathlib
@@ -84,21 +84,119 @@ theorem isSymmetric_generalizedCompression {A : E →ₗ[𝕜] E}
     (generalizedCompression A X hX).IsSymmetric := by
   exact isSymmetric_compression hA (orthonormalizedEmbedding X hX)
 
-/-- Davis--Kahan Theorem 6.1: generalized `sin Θ` for non-orthonormal trial
-vectors and unequal dimensions.
+/-- The interval/exterior spectral hypothesis for a generalized trial pair,
+in either orientation.
 
-Lean proof route:
+The first branch places the coordinate spectrum of `M` in `[a,b]` and the
+unwanted exact spectrum of `A` on `Vᗮ` outside the enlarged interval.  The
+second branch reverses those roles, as allowed in Davis--Kahan Theorem 6.1. -/
+def TrialComplementIntervalGap (M : F →ₗ[𝕜] F) (A : E →ₗ[𝕜] E)
+    (V : Submodule 𝕜 E) (a b δ : ℝ) : Prop :=
+  (SpectrumIn M ⊤ (Set.Icc a b) ∧
+      SpectrumIn A Vᗮ {lam | lam ∉ Set.Ioo (a - δ) (b + δ)}) ∨
+    (SpectrumIn A Vᗮ (Set.Icc a b) ∧
+      SpectrumIn M ⊤ {lam | lam ∉ Set.Ioo (a - δ) (b + δ)})
 
-1. Apply `sylvester_complementaryTrialBlock_eq_projectedGeneralResidual` directly
-   to `P_{Vᗮ} X`; do not conjugate `M` through a whitening factor, since that
-   conjugate need not remain symmetric.
-2. Use the interval/exterior rectangular Sylvester theorem to bound the raw
-   block `P_{Vᗮ} X` by the projected general residual.
-3. Factor `X = Q T`, where `Q` is an isometric embedding onto `range X` and
-   `T` is invertible.  The lower frame bound gives `‖T⁻¹‖ ≤ ε⁻¹`, while
-   `P_{Vᗮ} Q = (P_{Vᗮ} X) T⁻¹`.
-4. Apply the right ideal inequality and clear the positive scalar factors.
--/
+/-- **Raw generalized sine-block residual estimate, every UI norm.**
+
+For an arbitrary trial map `X`, the complementary block `P_{Vᗮ} X` satisfies
+the sharp interval/exterior Sylvester estimate in either spectral orientation.
+No injectivity or lower frame bound is needed at this stage. -/
+theorem complementaryTrialBlock_residual_le_of_intervalGap
+    (N : RectangularUnitarilyInvariantNorm 𝕜 F E)
+    {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric)
+    {V : Submodule 𝕜 E} [V.HasOrthogonalProjection] (hV : Reduces A V)
+    (X : F →ₗ[𝕜] E) {M : F →ₗ[𝕜] F} (hM : M.IsSymmetric)
+    {a b δ : ℝ} (hδ : 0 < δ)
+    (hgap : TrialComplementIntervalGap M A V a b δ) :
+    δ * N (complementaryTrialBlock V X) ≤ N (generalResidual A X M) := by
+  have hVperp : Reduces A Vᗮ := reduces_orthogonal_of_isSymmetric hA hV
+  let AV : Vᗮ →ₗ[𝕜] Vᗮ := A.restrict hVperp
+  let Y : F →ₗ[𝕜] Vᗮ :=
+    Vᗮ.orthogonalProjectionOnto.toLinearMap ∘ₗ X
+  let C : F →ₗ[𝕜] Vᗮ :=
+    Vᗮ.orthogonalProjectionOnto.toLinearMap ∘ₗ generalResidual A X M
+  let NV : RectangularUnitarilyInvariantNorm 𝕜 F Vᗮ :=
+    N.codomainIsometryTransport Vᗮ.subtypeₗᵢ
+  have hAV : AV.IsSymmetric := isSymmetric_restrict hA hVperp
+  have hgap' : UnorderedIntervalSylvesterGap AV M a b δ := by
+    rcases hgap with hforward | hreverse
+    · exact Or.inl ⟨hforward.1,
+        (spectrumIn_restrict_iff A hVperp _).2 hforward.2⟩
+    · exact Or.inr ⟨
+        (spectrumIn_restrict_iff A hVperp _).2 hreverse.1,
+        hreverse.2⟩
+  have hEq : AV ∘ₗ Y - Y ∘ₗ M = C := by
+    ext x
+    have hx := LinearMap.congr_fun
+      (sylvester_complementaryTrialBlock_eq_projectedGeneralResidual hA hV X M) x
+    simpa [AV, Y, C, complementaryTrialBlock, complementaryProjection, projection,
+      LinearMap.comp_apply] using hx
+  have hY : NV Y = N (complementaryTrialBlock V X) := by
+    change N (Vᗮ.subtypeₗᵢ.toLinearMap ∘ₗ Y) =
+      N (complementaryTrialBlock V X)
+    congr 1
+  have hC : NV C =
+      N (complementaryProjection V ∘ₗ generalResidual A X M) := by
+    change N (Vᗮ.subtypeₗᵢ.toLinearMap ∘ₗ C) =
+      N (complementaryProjection V ∘ₗ generalResidual A X M)
+    congr 1
+  have hproj : ‖(complementaryProjection V).toContinuousLinearMap‖ ≤ 1 := by
+    refine (complementaryProjection V).toContinuousLinearMap.opNorm_le_bound
+      zero_le_one fun x => ?_
+    change ‖Vᗮ.starProjection x‖ ≤ 1 * ‖x‖
+    simpa using Vᗮ.norm_starProjection_apply_le x
+  have hC_le : NV C ≤ N (generalResidual A X M) := by
+    rw [hC]
+    calc
+      N (complementaryProjection V ∘ₗ generalResidual A X M)
+          ≤ ‖(complementaryProjection V).toContinuousLinearMap‖ *
+              N (generalResidual A X M) :=
+        N.comp_le_opNorm_mul _ _
+      _ ≤ 1 * N (generalResidual A X M) :=
+        mul_le_mul_of_nonneg_right hproj (N.nonneg _)
+      _ = N (generalResidual A X M) := one_mul _
+  have hSylvester :=
+    uiNorm_sylvester_le_of_unorderedIntervalGap NV hAV hM hδ hgap' hEq
+  rw [hY] at hSylvester
+  exact hSylvester.trans hC_le
+
+/-- **Davis--Kahan Theorem 6.1, source-complete interval/exterior form.**
+
+A positive lower frame bound supplies injectivity automatically.  The theorem
+allows either interval/exterior orientation and compares subspaces of unequal
+dimension through the directed sine block. -/
+theorem generalizedSinTheta_residual_le_of_intervalGap
+    (N : RectangularUnitarilyInvariantNorm 𝕜 F E)
+    {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric)
+    {V : Submodule 𝕜 E} [V.HasOrthogonalProjection] (hV : Reduces A V)
+    (X : F →ₗ[𝕜] E)
+    {M : F →ₗ[𝕜] F} (hM : M.IsSymmetric)
+    {a b δ ε : ℝ} (hδ : 0 < δ) (hε : 0 < ε)
+    (hframe : LowerFrameBound X ε)
+    (hgap : TrialComplementIntervalGap M A V a b δ) :
+    δ * ε * N (sinThetaEmbedding V
+      (orthonormalizedEmbedding X (hframe.injective hε))) ≤
+      N (generalResidual A X M) := by
+  have htransport := lowerFrame_mul_uiNorm_sinTheta_le_complementaryTrialBlock
+    N V X (hframe.injective hε) hframe hε
+  have hraw := complementaryTrialBlock_residual_le_of_intervalGap
+    N hA hV X hM hδ hgap
+  calc
+    δ * ε * N (sinThetaEmbedding V
+        (orthonormalizedEmbedding X (hframe.injective hε))) =
+        δ * (ε * N (sinThetaEmbedding V
+          (orthonormalizedEmbedding X (hframe.injective hε)))) := by ring
+    _ ≤ δ * N (complementaryTrialBlock V X) :=
+      mul_le_mul_of_nonneg_left htransport hδ.le
+    _ ≤ N (generalResidual A X M) := hraw
+
+/-- Compatibility specialization of Theorem 6.1 with the coordinate spectrum
+inside `[a,b]` and the unwanted exact spectrum outside the enlarged interval.
+
+The explicit injectivity argument is retained for callers of the earlier API;
+the source-complete theorem above derives it from the positive lower frame
+bound. -/
 theorem generalizedSinTheta_residual_le
     (N : RectangularUnitarilyInvariantNorm 𝕜 F E)
     {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric)
@@ -111,7 +209,16 @@ theorem generalizedSinTheta_residual_le
     (hAspec : SpectrumIn A Vᗮ {lam | lam ∉ Set.Ioo (a - δ) (b + δ)}) :
     δ * ε * N (sinThetaEmbedding V (orthonormalizedEmbedding X hX)) ≤
       N (generalResidual A X M) := by
-  sorry
+  have htransport := lowerFrame_mul_uiNorm_sinTheta_le_complementaryTrialBlock
+    N V X hX hframe hε
+  have hraw := complementaryTrialBlock_residual_le_of_intervalGap
+    N hA hV X hM hδ (Or.inl ⟨hMspec, hAspec⟩)
+  calc
+    δ * ε * N (sinThetaEmbedding V (orthonormalizedEmbedding X hX)) =
+        δ * (ε * N (sinThetaEmbedding V (orthonormalizedEmbedding X hX))) := by ring
+    _ ≤ δ * N (complementaryTrialBlock V X) :=
+      mul_le_mul_of_nonneg_left htransport hδ.le
+    _ ≤ N (generalResidual A X M) := hraw
 
 /-- Davis--Kahan Theorem 6.2: under arbitrary spectral separation the sharp
 all-UI conclusion is replaced by the Hilbert--Schmidt/square-norm estimate.
