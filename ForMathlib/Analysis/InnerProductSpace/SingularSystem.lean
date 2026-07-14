@@ -114,6 +114,32 @@ theorem orthonormal_leftSingularVector_subtype (A : E →ₗ[𝕜] F) :
   · rw [if_neg (fun hc : (i.1 : Fin (finrank 𝕜 E)) = j.1 => h (Subtype.ext hc)), if_neg h]
     ring
 
+/-- The image of a right singular basis vector has norm equal to its singular value. -/
+theorem norm_apply_rightSingularBasis
+    (A : E →ₗ[𝕜] F) (i : Fin (finrank 𝕜 E)) :
+    ‖A (rightSingularBasis A i)‖ = A.singularValues i := by
+  by_cases hi : A.singularValues i = 0
+  · rw [apply_rightSingularBasis_eq_zero_of_singularValue_eq_zero A hi, norm_zero, hi]
+  · rw [apply_rightSingularBasis_eq_smul_leftSingularVector,
+      norm_smul, RCLike.norm_ofReal, abs_of_nonneg (A.singularValues_nonneg i)]
+    have hnorm : ‖leftSingularVector A i‖ = 1 :=
+      (orthonormal_leftSingularVector_subtype A).norm_eq_one ⟨i, hi⟩
+    rw [hnorm, mul_one]
+
+/-- The adjoint singular relation for a nonzero singular value. -/
+theorem adjoint_apply_leftSingularVector
+    (A : E →ₗ[𝕜] F) {i : Fin (finrank 𝕜 E)}
+    (hi : A.singularValues i ≠ 0) :
+    A.adjoint (leftSingularVector A i) =
+      ((A.singularValues i : ℝ) : 𝕜) • rightSingularBasis A i := by
+  have hσ : ((A.singularValues i : ℝ) : 𝕜) ≠ 0 := RCLike.ofReal_ne_zero.mpr hi
+  rw [leftSingularVector, map_smul,
+    show A.adjoint (A (rightSingularBasis A i)) =
+      (A.adjoint.comp A) (rightSingularBasis A i) from rfl,
+    adjointCompSelf_apply_rightSingularBasis, smul_smul, RCLike.ofReal_pow]
+  congr 1
+  field_simp
+
 /-- Every nonzero left singular vector is an eigenvector of `AA†` with eigenvalue `σᵢ²`. -/
 theorem selfCompAdjoint_apply_leftSingularVector
     (A : E →ₗ[𝕜] F) {i : Fin (finrank 𝕜 E)}

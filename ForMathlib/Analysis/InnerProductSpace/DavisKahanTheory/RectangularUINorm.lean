@@ -2080,6 +2080,18 @@ private theorem singularValues_smul_rect (a : 𝕜) (A : E →ₗ[𝕜] F) (i : 
     _ = ‖a‖ * A.singularValues i :=
       singularValues_real_smul A (norm_nonneg a) i
 
+/-- Prefix sums stabilize once the prefix length reaches the domain dimension. -/
+theorem rectangularKyFanSum_eq_finrank_of_finrank_le
+    (A : E →ₗ[𝕜] F) {k : ℕ} (hk : finrank 𝕜 E ≤ k) :
+    rectangularKyFanSum k A = rectangularKyFanSum (finrank 𝕜 E) A := by
+  unfold rectangularKyFanSum
+  rw [Fin.sum_univ_eq_sum_range, Fin.sum_univ_eq_sum_range]
+  symm
+  apply Finset.sum_subset (Finset.range_mono hk)
+  intro i hi hiE
+  rw [A.singularValues_of_finrank_le]
+  exact Nat.le_of_not_gt (by simpa only [Finset.mem_range] using hiE)
+
 private theorem rectangularKyFanSum_eq_zeroExtension
     (k : ℕ) (A : E →ₗ[𝕜] F) :
     rectangularKyFanSum k A = kyFanSum k (zeroExtension A) := by
