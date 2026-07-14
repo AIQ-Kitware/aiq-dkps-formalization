@@ -25,7 +25,7 @@
 \item[Coverage] Introduction; Theorems 1.1, 1.2, 1.5; Lemma 1.3; Corollaries 1.4 and 1.6; Theorem 2.1; Corollaries 2.2 and 2.4; Theorem 2.3; Propositions 3.1 and 3.2; Lemmas 3.3--3.5; Theorem 3.6; all displayed identities used in their proofs; the sharpness construction; and the source's two typographical slips relevant to formalization.
 \item[Modernization] Fourier-transform conventions, dual-pairing arguments, operator-valued integration, support statements, and scaling are made explicit. ``Hermitian'' is kept in the Banach-space generator sense used by the paper and is not conflated with Hilbert-space self-adjointness.
 \item[Formalization target] The scalar analytic root in
-\texttt{\seqsplit{DavisKahan/Sylvester/BoundedOperator.lean}}, especially
+\texttt{\seqsplit{DavisKahan/Alternative/FiniteDimensional/Sylvester/ContinuousLinearMapBridge.lean}}, especially
 \texttt{\seqsplit{sylvester\_barycentricOrbitRepresentation\_of\_spectralDistance}}. The special case $\alpha=0$ of Theorem 3.6 gives the sharp reciprocal Fourier multiplier of total $L^1$ mass $\pi/2$ needed by that theorem.
 \end{sourceguide}
 
@@ -1102,7 +1102,7 @@ Propositions 3.1--3.2 & The $\sgn(\sin t)$ certificate and uniqueness from latti
 Lemma 3.3 & Weighted Laplace-transform integrability & Missing but elementary once the paper's Laplace notation is represented. \\
 Lemma 3.4 & Explicit nonzero-parameter extremizer via Fourier series and contour integration & Missing; analytically heavy and not needed to close only the $\alpha=0$ Sylvester seam. \\
 Lemma 3.5 & Exact norm by antiperiodization & Missing; source-faithful proof of the sharp constant for $\alpha>0$. \\
-Theorem 3.6, $\alpha=0$ & Unique $L^1$ extension of $1/(-ix)$ with norm $\pi/2$ & Exact scalar analytic root needed by \code{DavisKahan/Sylvester/BoundedOperator.lean}. \\
+Theorem 3.6, $\alpha=0$ & Unique $L^1$ extension of $1/(-ix)$ with norm $\pi/2$ & Exact scalar analytic root needed by \code{DavisKahan/Alternative/FiniteDimensional/Sylvester/ContinuousLinearMapBridge.lean}. \\
 Scaled reciprocal corollary & $\widehat g_\delta(x)=1/x$ off $(-\delta,\delta)$ and $\norm{g_\delta}_1=\pi/(2\delta)$ & Should be the first formal theorem extracted from this source. \\
 Sylvester integral & $X=\int g_\delta(t)e^{itA}Ce^{-itB}\,dt$ & This is the intended proof of the remaining barycentric-orbit theorem over $\C$. \\
 Real-field descent & Replace complex phases by a real convex-orbit certificate & Not in the source; remains an explicit formalization obligation. \\

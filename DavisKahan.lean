@@ -3,6 +3,15 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
-import DavisKahan.All
+import DavisKahan.BoundedOperator.All
+import DavisKahan.FiniteDimensional.All
+import DavisKahan.Sources.DavisKahan1970.PartIII
 
-/-! # Davis--Kahan perturbation theory -/
+/-!
+# Davis--Kahan perturbation theory
+
+The deliberate public umbrella: supported bounded-operator and
+finite-dimensional theory together with the flagship Davis--Kahan Part III
+source facade. Other source transcriptions, specialized endpoints, alternative
+proofs, and experiments require explicit imports.
+-/

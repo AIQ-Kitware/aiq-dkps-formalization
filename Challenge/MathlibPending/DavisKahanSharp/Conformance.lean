@@ -5,7 +5,7 @@ This challenge imports the trusted statement vocabulary but not the theorem's
 implementation. The paired leaderboard imports the completed project theorem.
 -/
 
-import DavisKahan.Core.All
+import DavisKahan.FiniteDimensional.Core.All
 
 /-!
 ## Comparator maintenance rule

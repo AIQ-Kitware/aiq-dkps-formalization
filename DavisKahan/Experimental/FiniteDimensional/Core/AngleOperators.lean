@@ -3,12 +3,12 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
-import DavisKahan.Core.All
+import DavisKahan.FiniteDimensional.Core.All
 
 /-!
 # Compatibility surface for unfinished finite angle constructions
 
-The stable finite-dimensional core moved to `DavisKahan.Core.FiniteDimensional`.
+The stable finite-dimensional core moved to `DavisKahan.FiniteDimensional.Core.FiniteDimensional`.
 Only the still-open constructions remain declared at this historical path.
 -/
 

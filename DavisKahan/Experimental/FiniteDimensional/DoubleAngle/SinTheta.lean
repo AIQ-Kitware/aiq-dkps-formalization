@@ -3,7 +3,7 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
-import DavisKahan.Core.All
+import DavisKahan.FiniteDimensional.Core.All
 import DavisKahan.Experimental.FiniteDimensional.TanTheta.GraphOperator
 import DavisKahan.FiniteDimensional.DoubleAngle.SinTheta
 

@@ -20,7 +20,7 @@ Formalized by Claude Fable 5 (claude-fable-5[1m]).
 -/
 
 import Acharyya2025.DavisKahan
-import DavisKahan.Specialized.EigenbasisFrobenius
+import DavisKahan.Alternative.FiniteDimensional.EigenbasisFrobenius
 
 open scoped BigOperators RealInnerProductSpace InnerProductSpace
 open Module (finrank)

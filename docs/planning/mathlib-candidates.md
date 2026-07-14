@@ -180,7 +180,7 @@ ingredient.  Documented at `exists_modulus_pairDist`; bespoke proof kept.
 
 **Candidate #8 projector form — REDESIGNED (Fable, 2026-06-12), audit §4
 discharged.** The bespoke ℝ-only `spectralProjection` finite-sum def is gone; the
-projector section of `DavisKahan/Specialized/EigenbasisFrobenius.lean` is
+projector section of `DavisKahan/Alternative/FiniteDimensional/EigenbasisFrobenius.lean` is
 now phrased with **Mathlib's `Submodule.starProjection`** of orthonormal-subfamily
 spans, over **`RCLike 𝕜`**, with the index cutoff generalized to an **arbitrary
 `s : Finset (Fin m)`** (`sᶜ` the complementary block). New bridge lemmas (each
@@ -198,7 +198,7 @@ Main results renamed:
 
 **Update 2026-06-12 (Opus session):** candidate #8 (Davis–Kahan cross-block
 bound) is now STAGED, RCLike-general, in
-`DavisKahan/Specialized/EigenbasisFrobenius.lean` —
+`DavisKahan/Alternative/FiniteDimensional/EigenbasisFrobenius.lean` —
 `sum_norm_inner_eigenvectorBasis_map_sub_sq_le` (total cross-energy `≤ nε²`),
 `sum_cross_norm_inner_eigenvectorBasis_sq_le` (the sin-Θ bound `≤ nε²/gap²`),
 and `…_of_rank_floor` (the `≤ 4nε²/α²` corollary under PSD rank-`d` + spectral
@@ -240,7 +240,7 @@ API or requiring substantial new proofs.
 **Update 2026-07-03 (Opus session): sharp Davis–Kahan (Frobenius) done.** The sharp
 Frobenius sin-Θ bound `‖sin Θ‖_F ≤ ‖S − T‖_F / gap` (no operator-norm hypothesis, no
 dimension factor) is now the primary DK result in
-`DavisKahan/Specialized/EigenbasisFrobenius.lean`
+`DavisKahan/Alternative/FiniteDimensional/EigenbasisFrobenius.lean`
 (`sum_cross_norm_inner_eigenvectorBasis_sq_le_hilbertSchmidt` and the projector
 `sum_norm_sub_starProjection_span_sq_le_hilbertSchmidt`); the dimension factor `n`
 was isolated to the single degradation step `‖S − T‖²_F ≤ n ε²`

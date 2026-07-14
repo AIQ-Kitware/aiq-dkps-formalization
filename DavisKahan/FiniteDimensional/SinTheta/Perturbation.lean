@@ -3,8 +3,8 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
-import DavisKahan.Sylvester.All
-import DavisKahan.Residual.AngleEmbedding
+import DavisKahan.FiniteDimensional.Sylvester.All
+import DavisKahan.FiniteDimensional.Residual.AngleEmbedding
 import ForMathlib.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm
 import ForMathlib.Analysis.InnerProductSpace.RectangularSingularValues
 import DavisKahan.FiniteDimensional.SinTheta.UnitarilyInvariant

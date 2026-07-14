@@ -26,7 +26,7 @@ To be re-authored per Mathlib's AI-contribution policy at PR time.
 -/
 
 import ForMathlib.Analysis.InnerProductSpace.PrincipalAngles
-import DavisKahan.Sources.Davis1963.DoubleAngle
+import DavisKahan.FiniteDimensional.DoubleAngle.Vector
 import ForMathlib.Analysis.InnerProductSpace.SylvesterBound
 
 /-! # The Davis–Kahan tan Θ theorem (gated statement)

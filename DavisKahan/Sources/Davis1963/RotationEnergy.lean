@@ -5,7 +5,7 @@ Authors: Jon Crall, GPT 5.6 High
 -/
 import DavisKahan.Sources.Davis1963.RotationBound
 import DavisKahan.Sources.Davis1963.DoubleAngle
-import DavisKahan.Core.OperatorBlocks
+import DavisKahan.FiniteDimensional.Core.OperatorBlocks
 import ForMathlib.Analysis.InnerProductSpace.UnitarilyInvariantNorm
 
 /-!

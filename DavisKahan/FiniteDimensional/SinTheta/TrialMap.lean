@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
 import ForMathlib.Analysis.InnerProductSpace.FrameFactorization
-import DavisKahan.Residual.All
-import DavisKahan.Sylvester.All
+import DavisKahan.FiniteDimensional.Residual.All
+import DavisKahan.FiniteDimensional.Sylvester.All
 
 /-!
 # Generalized finite-dimensional Davis--Kahan theorems

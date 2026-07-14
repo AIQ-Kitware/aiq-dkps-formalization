@@ -93,7 +93,7 @@ fixed-`K` theorem does not subsume).  This is documented honestly at
 ## F4. Davis–Kahan: projector-form sin-Θ — ✅ DONE 2026-06-12 (Opus)
 
 The canonical projector form is now staged in
-`DavisKahan/Specialized/EigenbasisFrobenius.lean` (section `RealProjector`,
+`DavisKahan/Alternative/FiniteDimensional/EigenbasisFrobenius.lean` (section `RealProjector`,
 over ℝ):
 * `spectralProjection b d` — the rank-`d` orthogonal projector
   `x ↦ ∑_{i<d} ⟪bᵢ,x⟫ • bᵢ` of an orthonormal basis;

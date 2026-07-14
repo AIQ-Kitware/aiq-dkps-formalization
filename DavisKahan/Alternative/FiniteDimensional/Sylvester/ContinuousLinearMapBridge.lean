@@ -3,8 +3,8 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
-import DavisKahan.Sylvester.SpectralDistance
-import DavisKahan.Experimental.InfiniteDimensional.Core.Compatibility
+import DavisKahan.FiniteDimensional.Sylvester.SpectralDistance
+import DavisKahan.BoundedOperator.Basic
 
 /-!
 # Compatibility bridges for the historical continuous-linear-map API
@@ -20,6 +20,21 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
   [CompleteSpace E]
 variable {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
   [CompleteSpace F]
+
+namespace ContinuousLinearMapBridge
+
+/-- Point spectrum carried by vectors in a supplied subspace. This local
+compatibility definition keeps the finite continuous-linear-map bridge
+independent of the experimental bounded-operator spectrum interfaces. -/
+abbrev restrictedSpectrum (A : E →L[𝕜] E) (U : Submodule 𝕜 E) : Set ℝ :=
+  {r | ∃ x : E, x ∈ U ∧ x ≠ 0 ∧ A x = ((r : ℝ) : 𝕜) • x}
+
+/-- Separation of the two carried point spectra by at least `d`. -/
+abbrev SpectraSeparated (A : E →L[𝕜] E) (U : Submodule 𝕜 E)
+    (B : F →L[𝕜] F) (V : Submodule 𝕜 F) (d : ℝ) : Prop :=
+  ∀ a ∈ restrictedSpectrum A U, ∀ b ∈ restrictedSpectrum B V, d ≤ |a - b|
+
+end ContinuousLinearMapBridge
 
 /-- Finite-dimensional rectangular unitarily invariant Sylvester estimate.
 
@@ -38,7 +53,7 @@ theorem ideal_sylvester_le
     {A : F →L[𝕜] F} {B : E →L[𝕜] E} {X C : E →L[𝕜] F}
     (hA : IsSelfAdjointOperator A) (hB : IsSelfAdjointOperator B)
     {d : ℝ} (hd : 0 < d)
-    (hsep : SpectraSeparated A ⊤ B ⊤ d)
+    (hsep : ContinuousLinearMapBridge.SpectraSeparated A ⊤ B ⊤ d)
     (hEq : sylvesterOperator A B X = C) :
     d * N X.toLinearMap ≤ (Real.pi / 2) * N C.toLinearMap := by
   let A' : F →ₗ[𝕜] F := A.toLinearMap
@@ -77,7 +92,7 @@ theorem ideal_sylvester_le_complex
     {A : FC →L[ℂ] FC} {B : EC →L[ℂ] EC} {X C : EC →L[ℂ] FC}
     (hA : IsSelfAdjointOperator A) (hB : IsSelfAdjointOperator B)
     {d : ℝ} (hd : 0 < d)
-    (hsep : SpectraSeparated A ⊤ B ⊤ d)
+    (hsep : ContinuousLinearMapBridge.SpectraSeparated A ⊤ B ⊤ d)
     (hEq : sylvesterOperator A B X = C) :
     d * N X.toLinearMap ≤ (Real.pi / 2) * N C.toLinearMap := by
   let A' : FC →ₗ[ℂ] FC := A.toLinearMap
@@ -116,7 +131,7 @@ theorem ideal_sylvester_le_real
     {A : FR →L[ℝ] FR} {B : ER →L[ℝ] ER} {X C : ER →L[ℝ] FR}
     (hA : IsSelfAdjointOperator A) (hB : IsSelfAdjointOperator B)
     {d : ℝ} (hd : 0 < d)
-    (hsep : SpectraSeparated A ⊤ B ⊤ d)
+    (hsep : ContinuousLinearMapBridge.SpectraSeparated A ⊤ B ⊤ d)
     (hEq : sylvesterOperator A B X = C) :
     d * N X.toLinearMap ≤ (Real.pi / 2) * N C.toLinearMap := by
   let A' : FR →ₗ[ℝ] FR := A.toLinearMap

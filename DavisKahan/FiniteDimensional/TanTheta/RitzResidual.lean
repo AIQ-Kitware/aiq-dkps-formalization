@@ -3,9 +3,9 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
-import DavisKahan.Residual.All
+import DavisKahan.FiniteDimensional.Residual.All
 import ForMathlib.Analysis.InnerProductSpace.SingularSystem
-import DavisKahan.Specialized.SingularSubspaceCore
+import ForMathlib.Analysis.InnerProductSpace.SingularSubspace
 
 /-!
 # The paper-exact finite Davis--Kahan `tan Θ` theorem
