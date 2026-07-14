@@ -1,5 +1,5 @@
 \input{preamble}
-\title{Davis--Kahan Part III: the four classical finite subspace-rotation theorems}
+\title{Davis--Kahan Part III: full Hilbert-space source map and finite-specialization ledger}
 \author{}
 \date{Source-order distilled reconstruction of Davis--Kahan (1970)}
 \begin{document}
@@ -9,12 +9,73 @@
 \begin{sourceguide}
 \item[Primary source] Chandler Davis and W. M. Kahan, \emph{The Rotation of Eigenvectors by a Perturbation. III}, SIAM Journal on Numerical Analysis 7(1) (1970), 1--46, DOI \href{https://doi.org/10.1137/0707001}{10.1137/0707001}.
 \item[Source order] Introduction; Sections 1--3 on block notation and subspace geometry; Section 4 on the direct rotation; Section 5 on $AX-XB=C$; Section 6 on the single-angle theorems; the unbounded-operator appendix; Section 7 on the double-angle theorems; Section 8 on interpretation and spectral selection; Section 9 on the numerical example; Section 10 on open questions.
-\item[Formalization target] The source-facing finite API exposed through \code{DavisKahanTheory.PartIII}: the ordered and interval Sylvester roots; residual, generalized-trial-map, and perturbation \code{sin Theta}; the arbitrary-unitarily-invariant-norm Ritz-residual \code{tan Theta} theorem in both equal-rank and strict-lower-rank forms; \code{sin 2 Theta} for every unitarily invariant norm; and the sharp operator-norm \code{tan 2 Theta} theorem.  The elementary \code{partIII_tanTheta_vector} theorem remains as a low-dependency companion rather than the canonical source-facing tangent endpoint.
-\item[Scope boundary] The paper is infinite-dimensional and permits unbounded self-adjoint operators in an appendix. The repository target is finite-dimensional over an arbitrary \code{RCLike} scalar field. This note therefore preserves the source hypotheses and proof architecture while marking the places where the formal endpoint deliberately has a different norm scope.
+\item[Current proved specialization] The source-facing finite API exposed through \code{DavisKahanTheory.PartIII}: the ordered and interval Sylvester roots; residual, generalized-trial-map, and perturbation \code{sin Theta}; the arbitrary-unitarily-invariant-norm Ritz-residual \code{tan Theta} theorem in both equal-rank and strict-lower-rank forms; \code{sin 2 Theta} for every unitarily invariant norm; and the sharp operator-norm \code{tan 2 Theta} theorem.  The elementary \code{partIII_tanTheta_vector} theorem remains as a low-dependency companion rather than the canonical source-facing tangent endpoint.
+\item[Formalization target] The repository target is the full source scope: separable Hilbert spaces; the bounded Hermitian main body; all four theorem families in infinite and finite dimensions; arbitrary unitary-invariant norms with correct domains of finiteness; and the unbounded self-adjoint extensions with their domain assumptions.
+\item[Current boundary] The strongest proof-complete package is presently finite-dimensional over an arbitrary \code{RCLike} scalar field, with a partial bounded-operator branch. The finite package is a valuable specialization and weaker-foundation alternative, not the completion criterion for this paper.
+\item[Transcription audit] This committed note is an independent distillation. Its scope and source anchors have been checked against the maintained modernized local transcription, which is excluded from distributable source archives.
 \item[Terminology] The source writes $\sin\theta$, $\tan\theta$, $\sin 2\theta$, and $\tan 2\theta$. We use $\Theta$ for the principal-angle operator or its finite list of principal angles.
 \end{sourceguide}
 
-The paper is not one theorem with four cosmetic variants. It explicitly emphasizes that none of the four main results implies the other three. Their gap configurations and off-diagonal hypotheses differ, and their sharp conclusions answer different geometric questions. A source-faithful API should therefore share the strongest ambient finite-dimensional generality while retaining four distinct statement shapes.
+\section{Completion standard}
+
+The source explicitly says that all four headline theorems apply in infinite as
+well as finite dimensions and are asserted for arbitrary unitary-invariant
+norms. Its standing subject is a bounded Hermitian operator on a separable
+Hilbert space, while unbounded self-adjoint operators are covered by extensions
+whose extra work is concentrated in Theorem 5.2 and the Appendix to Section 6.
+Consequently, proof of the finite quartet is not proof of the paper.
+
+A paper-completion claim requires, at minimum:
+\begin{enumerate}[leftmargin=2em]
+\item source-faithful bounded Hilbert-space versions of the four main theorem
+families, in residual and perturbation forms;
+\item the source unitary-invariant norm scope, represented by honest
+operator-ideal or finiteness hypotheses rather than finite singular-value
+lists alone;
+\item the two-subspace and direct-rotation theory of Sections 1--4;
+\item the source Sylvester theorems, including the boundedness/domain cases;
+\item the Appendix to Section 6 and its unbounded self-adjoint extensions;
+\item the Section 8 continuation, branch-selection, spectral-subspace, and
+repulsion results;
+\item the sharpness/equality statements and a theorem-number audit of all
+numbered results.
+\end{enumerate}
+
+The current finite package remains a first-class deliverable because it has
+weaker foundational dependencies, supports rectangular maps and finite UI
+norms directly, and is useful for computation and applications.
+
+The paper is not one theorem with four cosmetic variants. It explicitly emphasizes that none of the four main results implies the other three. Their gap configurations and off-diagonal hypotheses differ, and their sharp conclusions answer different geometric questions. A source-faithful API should retain the paper's Hilbert-space ambient generality and four distinct statement shapes. Finite declarations should be labeled as specializations, even when they prove stronger rectangular or lower-frame variants within finite dimensions.
+
+\section{Standing assumptions from the transcription}
+
+\sourceanchor{Introduction; Section 1; Section 2 immediately following the four theorem statements.}
+
+The transcription fixes several scope facts that must govern theorem names and
+completion claims:
+\begin{enumerate}[leftmargin=2em]
+\item $\Hsp$ is a separable Hilbert space, real or complex, with finite
+ dimensionality only a special case.
+\item The standing main-body subject is a bounded Hermitian operator $A$ and a
+ Hermitian modification $A+H$.
+\item The results and proofs also apply to unbounded self-adjoint $A$ when the
+ domain of $H$ contains the domain of $A$; useful bounds require the relevant
+ perturbation or residual to be bounded.
+\item All four headline theorems are stated as applicable in infinite as well
+ as finite dimensions.
+\item All four headline bounds are asserted for arbitrary unitary-invariant
+ norms. For noncompact operators the source notes that singular-value lists may
+ need to be replaced by spectral multiplicity language and that some norm
+ statements can be vacuous when the norm is not finite.
+\item The additional work needed for the unbounded scope is concentrated in
+ Theorem 5.2 and the Appendix to Section 6, rather than being absent from the
+ paper.
+\end{enumerate}
+
+A Lean theorem with a finite-dimensional assumption can be paper-inspired,
+paper-exact after explicit specialization, or stronger in a finite rectangular
+direction. It is not the unqualified paper theorem merely because its formula
+and constant match the displayed source inequality.
 
 \section{Section 1: two block decompositions and the residual}
 
@@ -282,9 +343,9 @@ and rotates or perturbs its eigenspaces by an angle $\theta$. Direct sums of suc
 
 The formalization should retain small explicit equality models as regression tests. They catch errors in the factor two, in the orientation of the residual, and in the definition of the directed sine map.
 
-\section{Source-faithful finite API}
+\section{Current finite specialization and full source target}
 
-The four classical statements should share ambient generality but not be forced into one conclusion type.
+The declarations below record the current finite specialization. They should retain distinct theorem shapes, but the canonical source project must lift them to the paper's Hilbert-space setting rather than treating this table as the completion boundary.
 
 \begin{formalizationmap}
 Section 5, Theorem 5.1 & Ordered-gap Sylvester estimate with constant one for rectangular UI norms & \code{uiNorm_sylvester_le_of_orderedGap}, \code{uiNorm_sylvester_le_of_intervalGap} \\
@@ -296,9 +357,24 @@ Projector geometry & Operator norm of projector difference equals maximal direct
 Spectral selection & Replace an arbitrary reducing subspace by the canonical spectral subspace associated with the separated cluster & \code{spectralProjection}, \code{opNorm_spectralSubspace_sub_le}, and the spectral wrappers in the sine modules \\
 \end{formalizationmap}
 
+\subsection{Scope ledger}
+
+\begin{longtable}{p{0.25\textwidth}p{0.31\textwidth}p{0.34\textwidth}}
+\toprule
+Layer & Current status & Requirement before source completion \\
+\midrule
+Finite-dimensional quartet & Strong proof-complete specialization, with arbitrary finite rectangular UI norms for major sine and tangent results & Preserve as specialization and alternative proof surface \\
+Bounded Hilbert-space main body & Partial operator-norm foundation & Complete all four source theorem families, direct rotation, and Section 8 without finite-dimensional assumptions \\
+Infinite-dimensional UI norms & Scaffolded & Develop compatible compact/symmetric norm ideals, Ky Fan/approximation-number machinery, and source finiteness conventions \\
+Unbounded self-adjoint theory & Experimental scaffold & Formalize domain-aware Theorem 5.2 and the Appendix to Section 6 \\
+Full source audit & Partial & Map every numbered result and qualification against the maintained transcription \\
+\bottomrule
+\end{longtable}
+
 \section{What should not be conflated with this paper}
 
 \begin{enumerate}[leftmargin=2em]
+\item Completion of a finite-dimensional quartet is not completion of the 1970 paper. It is a specialization with valuable weaker foundations.
 \item The arbitrary-separated-spectrum Sylvester estimate with sharp constant $\pi/2$ is later theory. It is useful infrastructure but is not the analytic root of the four source statements.
 \item Exact finite reciprocal orbit interpolation is stronger than any of the four classical conclusions. In particular, a generic undoubled real certificate at mass $\pi/2$ is false and must not be installed as a hidden premise of this API.
 \item The arbitrary-unitarily-invariant-norm \code{tan Theta} Ritz-residual theorem is now proved.  This must not be conflated with the still-open all-unitarily-invariant-norm \code{tan 2 Theta} extension or with graph-operator APIs whose construction remains experimental.

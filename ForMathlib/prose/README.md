@@ -10,6 +10,7 @@
   arXiv:1405.0680.
 
 The committed TeX files in this directory are independent formalization notes,
-not transcriptions of the cited publications. Copyright-restricted local source
-material is kept under the ignored `non-distributable/` directory and is not
-part of source archives.
+not transcriptions of the cited publications. Copyright-restricted local
+source material, including the maintained modernized Davis--Kahan 1970
+transcription used for theorem-by-theorem audits, is kept under the ignored
+`non-distributable/` directory and is not part of source archives.

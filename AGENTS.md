@@ -41,6 +41,57 @@ The highest-value operating rules are:
   coordinate proof;
 - never claim a declaration is complete until Lean has accepted it.
 
+## Davis--Kahan project goal and completion discipline
+
+The default Davis--Kahan objective is a source-faithful formalization of the
+full 1970 paper, not merely its finite-dimensional specialization.
+
+The modernized local transcription fixes the ambient scope:
+
+- the paper works on a separable Hilbert space;
+- the standing main-body subject is a bounded Hermitian operator and its
+  Hermitian perturbation;
+- all four headline theorem families are stated as applicable in infinite as
+  well as finite dimensions;
+- the headline bounds are stated for arbitrary unitary-invariant norms;
+- the paper also treats unbounded self-adjoint operators under explicit domain
+  and bounded-residual/perturbation conditions, concentrating the additional
+  analytic work in Theorem 5.2 and the Appendix to Section 6.
+
+Accordingly:
+
+- `DavisKahan/BoundedOperator/` is the beginning of the canonical main-body
+  theory, not an optional extension of the finite library.
+- `DavisKahan/FiniteDimensional/` is a valuable specialization, implementation
+  laboratory, regression surface, and weaker-foundation alternative. It is not
+  evidence that the paper has been formalized in its stated ambient scope.
+- Unless the user explicitly requests a finite-dimensional push, choose work
+  that closes a gap toward the Hilbert-space source theorem. Finite work may be
+  used as an intermediate seam, but the response and documentation must state
+  which general theorem it advances and what remains to lift it.
+- Interpret unqualified requests to complete, polish, or finish Davis--Kahan or
+  the 1970 paper in this full source scope. Do not silently reinterpret them as
+  requests to finish the finite branch. Before source-facing work, consult the
+  maintained transcription or its audited distillation rather than inferring
+  the scope from whichever Lean modules are currently most complete.
+- Never say that Davis--Kahan, Part III, the four-theorem package, or the paper
+  is complete when only a finite specialization is complete. Use precise
+  status language such as “the finite arbitrary-UI-norm specialization is
+  proved” or “the bounded operator-norm sine theorem is proved.”
+- A full-paper completion claim requires a theorem-by-theorem audit against the
+  transcription, proof-complete Hilbert-space versions of the source results,
+  the source norm scope, the direct-rotation and spectral-selection theory,
+  the unbounded passages, sharpness/equality content, and a fresh build and
+  trusted-dependency audit.
+
+The finite branch may intentionally retain proofs with fewer foundational
+requirements, explicit coordinates, or simpler dependencies. Such results are
+excellent `Alternative/` or cherry-picking targets, but they must not replace
+the source-general theorem in the project roadmap.
+
+See [`docs/planning/davis-kahan-full-paper-goal.md`](docs/planning/davis-kahan-full-paper-goal.md)
+for the maintained scope ledger and completion standard.
+
 ## Lean source conventions
 
 - **Never write the words `sorry` or `axiom` in comments or docstrings.** A genuine

@@ -1,12 +1,17 @@
 # Experimental Davis--Kahan development
 
-This tree mirrors the mathematical organization of the stable `DavisKahan`
+This tree contains unfinished work toward both the canonical full-paper theory
+and optional extensions. In particular, the Hilbert-space modules are not a
+secondary generalization of an already completed finite theory: they contain
+major portions of the default Davis--Kahan 1970 objective.
+
+The tree mirrors the mathematical organization of the stable `DavisKahan`
 library. A completed cluster can therefore be promoted by moving it to the
 corresponding stable path rather than redesigning its module boundary.
 
 - `FiniteDimensional/` contains open finite-dimensional extensions.
 - `InfiniteDimensional/Core/` contains provisional spectral, form, and
-  operator-angle infrastructure.
+  operator-angle infrastructure required by the paper's Hilbert-space scope.
 - `InfiniteDimensional/Sylvester/` contains bounded, resolvent, and unbounded
   Sylvester developments.
 - `InfiniteDimensional/SinTheta/` contains bounded and unbounded sine-theta
@@ -18,7 +23,9 @@ corresponding stable path rather than redesigning its module boundary.
   the corresponding operator-theoretic programs.
 
 Experimental modules may import stable modules. Stable modules must not import
-this tree.
+this tree. Status as experimental means the declarations are not yet accepted
+as stable APIs; it does not mean they are outside the main source-fidelity
+roadmap.
 
 Build the complete experimental development with:
 

@@ -4,11 +4,24 @@ This directory is the publication-facing layer for Chandler Davis and
 W. M. Kahan, *The Rotation of Eigenvectors by a Perturbation. III*, SIAM
 Journal on Numerical Analysis 7 (1970), 1--46.
 
+## Source scope and completion warning
+
+The modernized local transcription states that the ambient space is a
+separable Hilbert space, that the standing main-body subject is a bounded
+Hermitian operator, that all four headline theorems apply in infinite and
+finite dimensions and for arbitrary unitary-invariant norms, and that
+unbounded self-adjoint operators are covered through explicit extensions and
+domain conditions.
+
+Therefore this directory is not complete merely because `PartIII.lean` builds.
+The present facade is a proof-complete **finite specialization** of a substantial
+portion of the paper. It must be described with that qualifier.
+
 `PartIII.lean` exposes only proof-complete finite results. It is deliberately a
 thin alias layer over the canonical mathematical modules; proof machinery
 stays under `DavisKahan/FiniteDimensional`.
 
-## Proof-complete source-facing results
+## Proof-complete finite source-facing specializations
 
 | Source role | Canonical declaration |
 |---|---|
@@ -31,11 +44,12 @@ transversality.
 
 ## Work still required for complete paper coverage
 
-The repository's local TeX notes are independent mathematical distillations,
-not a distributable transcription of the original article. Before a result is
-advertised with an exact theorem or proposition number, its hypotheses,
-orientation, norm scope, and conclusion must be checked against the original
-source.
+A modernized transcription is maintained locally outside the distributable
+source archive. The committed TeX notes are independent mathematical
+distillations audited against that transcription. Before a result is
+advertised with an exact theorem or proposition number, its ambient Hilbert
+space, bounded or unbounded status, domain assumptions, hypotheses, direction,
+norm scope, and conclusion must be checked against the transcription.
 
 The following paper components are not yet represented by a proof-complete
 source module:
@@ -56,3 +70,12 @@ source module:
 Experimental declarations are not evidence that these items are complete.
 They must first be source-checked, proved, moved to the stable tree, documented,
 and subjected to a fresh Lean build and trusted-dependency audit.
+
+
+## Completion standard
+
+A complete source package requires more than finite analogues of the four
+headline inequalities. It requires source-checked Hilbert-space theorem
+surfaces, the unitary-invariant norm scope with correct domains of finiteness,
+the direct-rotation theory, the Section 8 continuation/selection package, the
+unbounded passages, and the remaining numbered and sharpness results. See [`docs/planning/davis-kahan-full-paper-goal.md`](../../../docs/planning/davis-kahan-full-paper-goal.md).

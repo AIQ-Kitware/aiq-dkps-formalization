@@ -10,7 +10,7 @@ This repository focuses on six active Lean libraries:
 | Library        | Role                                                                                                                    |
 | -------------- | ------------------------------------------------------------------------------------------------------------------------|
 | `ForMathlib`   | Mathlib-staging library for reusable, paper-agnostic infrastructure. |
-| `DavisKahan`  | Canonical Davis--Kahan perturbation library, with stable finite-dimensional and bounded-operator branches plus mirrored experiments. |
+| `DavisKahan`  | Davis--Kahan perturbation library targeting the full Hilbert-space 1970 theory; the stable finite branch is a valuable specialization, while bounded, ideal-norm, and unbounded coverage remain active. |
 | `Acharyya2024` | Asymptotic DKPS/raw-stress MDS consistency for model representations.                                                   |
 | `Acharyya2025` | Finite-sample concentration for response-based vector embeddings, including a proved CMDS spectral perturbation bridge. |
 | `DkpsQuench2026` | Query-efficiency theorem family for DKPS-based benchmark prediction from cached responses.                             |
@@ -94,13 +94,17 @@ versions and keep only thin paper-facing specializations.  See
 ### `DavisKahan`
 
 Canonical spectral-subspace perturbation theory extracted from the former
-`ForMathlib` staging monoliths. `import DavisKahan` exposes the supported
-finite-dimensional and bounded-operator theories together with the flagship
-Davis--Kahan Part III facade. Other source transcriptions, specialized
-endpoints, alternative proofs, and mirrored experiments require explicit
-imports; `DavisKahan.All` collects all proof-finished branches. General-purpose
-linear-algebra infrastructure remains in `ForMathlib`. See
-`DavisKahan/README.md`.
+`ForMathlib` staging monoliths. The project target is the full Hilbert-space
+scope of Davis--Kahan (1970), including the bounded main body, arbitrary
+unitary-invariant norm scope, and unbounded self-adjoint passages. `import
+DavisKahan` currently exposes supported bounded-operator results, the strong
+finite-dimensional specialization, and a finite Part III facade; this import
+must not be interpreted as a full-paper completion claim. Other source
+surfaces, specialized endpoints, alternative proofs, and mirrored experiments
+require explicit imports; `DavisKahan.All` collects all proof-finished branches.
+General-purpose linear-algebra infrastructure remains in `ForMathlib`. See
+`DavisKahan/README.md` and
+`docs/planning/davis-kahan-full-paper-goal.md`.
 
 ### `Acharyya2024`
 
