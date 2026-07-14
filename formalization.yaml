@@ -157,6 +157,9 @@ status:
         capstones:
           - "DkpsQuench2026.QueryEfficiency.finiteAllQueries"
           - "DkpsQuench2026.QueryEfficiency.infiniteAllQueries"
+          - "DkpsQuench2026.Paper.OLS.highProb_queryEfficient_crossBudget_of_affineRiskGap"
+          - "DkpsQuench2026.Paper.OLS.highProb_queryEfficient_crossBudget_of_affineRealizable"
+          - "DkpsQuench2026.Paper.OLS.lipschitz_not_sufficient_for_affineRealizability"
       - id: "Helm2025"
         capstones:
           - "Helm2025.DKPS.Theorem1"
@@ -203,6 +206,12 @@ alignment:
     - informal: "Weyl's eigenvalue perturbation inequality for symmetric finite-dimensional operators."
       lean: "ForMathlib.abs_eigenvalues_sub_le"
       status: "proved by the downstream ForMathlib staging library"
+    - informal: "A fitted OLS predictor is cross-budget query-efficient when it asymptotically reaches an affine witness whose population MSE is strictly below the selected sample-score baseline."
+      lean: "DkpsQuench2026.Paper.OLS.highProb_queryEfficient_crossBudget_of_affineRiskGap"
+      status: "theory--practice bridge; explicit extra assumptions beyond the nearest-neighbor theorem"
+    - informal: "Lipschitz score regularity does not by itself imply affine realizability in perspective coordinates."
+      lean: "DkpsQuench2026.Paper.OLS.lipschitz_not_sufficient_for_affineRealizability"
+      status: "proved finite counterexample delimiting the OLS extension"
 
 automation:
   methods:
