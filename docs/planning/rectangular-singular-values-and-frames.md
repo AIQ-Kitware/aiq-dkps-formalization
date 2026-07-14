@@ -115,7 +115,7 @@ vectors. The characteristic-polynomial route is an independent cross-check and m
 smaller spectrum lemmas.
 
 Do not use the square-only polar-unitary proof in
-`DavisKahan/Specialized/SingularSubspaceCore.lean` as the final rectangular
+`DavisKahan/Specialized/SingularSubspace.lean` as the final rectangular
 argument. Keep it as a corollary or retire it after R1 lands.
 
 ## Milestone R2: intrinsic singular system — DONE

@@ -581,7 +581,7 @@ Depends on: W0.1, W3.1–W3.3; the headline constant additionally on W2.4.
 
 ## W4 — YWS singular-vector extension (G4)
 
-New file `DavisKahan/Specialized/SingularSubspaceCore.lean`.
+New file `DavisKahan/Specialized/SingularSubspace.lean`.
 Setting: `A Â : E →ₗ[𝕜] F`, right-singular subspaces = spectral subspaces of
 `A.adjoint ∘ₗ A` (self-adjoint, positive).
 

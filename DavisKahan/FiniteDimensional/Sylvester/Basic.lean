@@ -3,7 +3,8 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
-import DavisKahan.FiniteDimensional.Core.All
+import DavisKahan.FiniteDimensional.Core.SpectralSubspace
+import DavisKahan.FiniteDimensional.Core.SpectralGap
 import ForMathlib.Analysis.InnerProductSpace.SylvesterBound
 
 /-!
@@ -169,133 +170,6 @@ theorem sylvesterOperator_solveSylvester {A : F →ₗ[𝕜] F}
   change sylvesterOperator A B (solveSylvester A B C) = C
   rw [solveSylvester_eq_of_bijective A B C hbij]
   exact (LinearEquiv.ofBijective (sylvesterOperator A B) hbij).apply_symm_apply C
-
-theorem eigenvalue_mem_restrictedSpectrum_top
-    {T : E →ₗ[𝕜] E} (hT : T.IsSymmetric)
-    (i : Fin (Module.finrank 𝕜 E)) :
-    hT.eigenvalues rfl i ∈ restrictedSpectrum T ⊤ :=
-  ⟨hT.eigenvectorBasis rfl i, Submodule.mem_top,
-    (hT.eigenvectorBasis rfl).orthonormal.ne_zero i,
-    hT.apply_eigenvectorBasis rfl i⟩
-
-theorem re_inner_le_of_eigenvalues_le
-    {T : E →ₗ[𝕜] E} (hT : T.IsSymmetric) {c : ℝ}
-    (hc : ∀ i : Fin (Module.finrank 𝕜 E), hT.eigenvalues rfl i ≤ c)
-    (x : E) : RCLike.re ⟪T x, x⟫_𝕜 ≤ c * ‖x‖ ^ 2 := by
-  rw [re_inner_map_self_eq_sum_eigenvalues_mul_sq hT rfl x]
-  calc
-    (∑ i : Fin (Module.finrank 𝕜 E),
-        hT.eigenvalues rfl i * ‖(hT.eigenvectorBasis rfl).repr x i‖ ^ 2)
-        ≤ ∑ i : Fin (Module.finrank 𝕜 E),
-            c * ‖(hT.eigenvectorBasis rfl).repr x i‖ ^ 2 := by
-          exact Finset.sum_le_sum fun i _ =>
-            mul_le_mul_of_nonneg_right (hc i) (sq_nonneg _)
-    _ = c * ‖x‖ ^ 2 := by
-          rw [← Finset.mul_sum]
-          congr 1
-          simp_rw [OrthonormalBasis.repr_apply_apply]
-          exact (hT.eigenvectorBasis rfl).sum_sq_norm_inner_right x
-
-theorem le_re_inner_of_le_eigenvalues
-    {T : E →ₗ[𝕜] E} (hT : T.IsSymmetric) {c : ℝ}
-    (hc : ∀ i : Fin (Module.finrank 𝕜 E), c ≤ hT.eigenvalues rfl i)
-    (x : E) : c * ‖x‖ ^ 2 ≤ RCLike.re ⟪T x, x⟫_𝕜 := by
-  rw [re_inner_map_self_eq_sum_eigenvalues_mul_sq hT rfl x]
-  calc
-    c * ‖x‖ ^ 2 = ∑ i : Fin (Module.finrank 𝕜 E),
-        c * ‖(hT.eigenvectorBasis rfl).repr x i‖ ^ 2 := by
-          rw [← Finset.mul_sum]
-          congr 1
-          simp_rw [OrthonormalBasis.repr_apply_apply]
-          exact (hT.eigenvectorBasis rfl).sum_sq_norm_inner_right x |>.symm
-    _ ≤ ∑ i : Fin (Module.finrank 𝕜 E),
-        hT.eigenvalues rfl i * ‖(hT.eigenvectorBasis rfl).repr x i‖ ^ 2 := by
-          exact Finset.sum_le_sum fun i _ =>
-            mul_le_mul_of_nonneg_right (hc i) (sq_nonneg _)
-
-theorem opNorm_shift_le_of_spectrumIn_Icc
-    {T : E →ₗ[𝕜] E} (hT : T.IsSymmetric) {a b : ℝ} (hab : a ≤ b)
-    (hsp : SpectrumIn T ⊤ (Set.Icc a b)) :
-    ‖(T - (((a + b) / 2 : ℝ) : 𝕜) • LinearMap.id).toContinuousLinearMap‖ ≤
-      (b - a) / 2 := by
-  let m : ℝ := (a + b) / 2
-  let r : ℝ := (b - a) / 2
-  let S : E →ₗ[𝕜] E := T - (m : 𝕜) • LinearMap.id
-  have hS : S.IsSymmetric := hT.sub fun x y => by
-    simp only [LinearMap.smul_apply, LinearMap.id_apply, inner_smul_left,
-      inner_smul_right, RCLike.conj_ofReal]
-  have ha : ∀ x, a * ‖x‖ ^ 2 ≤ RCLike.re ⟪T x, x⟫_𝕜 :=
-    le_re_inner_of_le_eigenvalues hT fun i =>
-      (hsp (eigenvalue_mem_restrictedSpectrum_top hT i)).1
-  have hb : ∀ x, RCLike.re ⟪T x, x⟫_𝕜 ≤ b * ‖x‖ ^ 2 :=
-    re_inner_le_of_eigenvalues_le hT fun i =>
-      (hsp (eigenvalue_mem_restrictedSpectrum_top hT i)).2
-  have hr : 0 ≤ r := by simp only [r]; linarith
-  have hform : ∀ x, |RCLike.re ⟪S x, x⟫_𝕜| ≤ r * ‖x‖ ^ 2 := by
-    intro x
-    have hval : RCLike.re ⟪S x, x⟫_𝕜 =
-        RCLike.re ⟪T x, x⟫_𝕜 - m * ‖x‖ ^ 2 := by
-      simp only [S, LinearMap.sub_apply, LinearMap.smul_apply, LinearMap.id_apply,
-        inner_sub_left, inner_smul_left, RCLike.conj_ofReal, map_sub,
-        RCLike.re_ofReal_mul, inner_self_eq_norm_sq]
-    rw [hval, abs_le]
-    constructor <;> simp only [m, r] <;> nlinarith [ha x, hb x]
-  change ‖S.toContinuousLinearMap‖ ≤ r
-  exact ContinuousLinearMap.norm_le_of_abs_re_inner_map_self_le
-    (fun x y => hS x y) hr hform
-
-theorem norm_shift_lower_of_spectrumOutside
-    {T : E →ₗ[𝕜] E} (hT : T.IsSymmetric) {a b δ : ℝ}
-    (hab : a ≤ b) (hδ : 0 < δ)
-    (hsp : SpectrumIn T ⊤ {lam | lam ∉ Set.Ioo (a - δ) (b + δ)}) :
-    ∀ x : E, ((b - a) / 2 + δ) * ‖x‖ ≤
-      ‖(T - (((a + b) / 2 : ℝ) : 𝕜) •
-          (LinearMap.id : E →ₗ[𝕜] E)) x‖ := by
-  let m : ℝ := (a + b) / 2
-  let r : ℝ := (b - a) / 2
-  let S : E →ₗ[𝕜] E := T - (m : 𝕜) • LinearMap.id
-  have hS : S.IsSymmetric := hT.sub fun x y => by
-    simp only [LinearMap.smul_apply, LinearMap.id_apply, inner_smul_left,
-      inner_smul_right, RCLike.conj_ofReal]
-  have hr : 0 ≤ r := by simp only [r]; linarith
-  have hk : 0 ≤ r + δ := by linarith
-  have hsep : ∀ i : Fin (Module.finrank 𝕜 E),
-      r + δ ≤ |hT.eigenvalues rfl i - m| := by
-    intro i
-    have hi := hsp (eigenvalue_mem_restrictedSpectrum_top hT i)
-    simp only [Set.mem_setOf_eq, Set.mem_Ioo, not_and_or, not_lt] at hi
-    rcases hi with hi | hi
-    · rw [abs_of_nonpos]
-      · simp only [m, r]
-        linarith
-      · simp only [m]
-        linarith
-    · rw [abs_of_nonneg]
-      · simp only [m, r]
-        linarith
-      · simp only [m]
-        linarith
-  intro x
-  have hsq : (r + δ) ^ 2 * ‖x‖ ^ 2 ≤ ‖S x‖ ^ 2 := by
-    rw [← (hT.eigenvectorBasis rfl).sum_sq_norm_inner_right (S x),
-      ← (hT.eigenvectorBasis rfl).sum_sq_norm_inner_right x, Finset.mul_sum]
-    apply Finset.sum_le_sum
-    intro i _
-    have hinner :
-        ⟪hT.eigenvectorBasis rfl i, S x⟫_𝕜 =
-          (((hT.eigenvalues rfl i - m : ℝ) : 𝕜) *
-            ⟪hT.eigenvectorBasis rfl i, x⟫_𝕜) := by
-      rw [← hS (hT.eigenvectorBasis rfl i) x]
-      simp only [S, LinearMap.sub_apply, hT.apply_eigenvectorBasis,
-        LinearMap.smul_apply, LinearMap.id_apply, inner_sub_left,
-        inner_smul_left, RCLike.conj_ofReal, map_sub, sub_mul]
-    rw [hinner, norm_mul, RCLike.norm_ofReal, mul_pow]
-    gcongr
-    exact hsep i
-  change (r + δ) * ‖x‖ ≤ ‖S x‖
-  rw [← sq_le_sq₀ (mul_nonneg hk (norm_nonneg x)) (norm_nonneg (S x))]
-  simpa [mul_pow] using hsq
-
 
 end DavisKahanTheory
 end ForMathlib

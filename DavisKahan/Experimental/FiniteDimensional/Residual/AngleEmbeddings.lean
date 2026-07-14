@@ -3,13 +3,13 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
-import DavisKahan.FiniteDimensional.Residual.All
+import DavisKahan.FiniteDimensional.Residual.AngleEmbedding
 
 /-!
 # Compatibility surface for unfinished coordinate angle maps
 
 The proved compression, residual, and sine-embedding API moved to
-`DavisKahan.FiniteDimensional.Residual.FiniteDimensional`.
+`DavisKahan.FiniteDimensional.Residual.AngleEmbedding`.
 -/
 
 namespace ForMathlib

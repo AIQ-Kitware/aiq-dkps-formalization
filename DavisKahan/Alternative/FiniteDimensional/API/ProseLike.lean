@@ -4,7 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-5.5 Thinking
 -/
 
-import DavisKahan.Sources.DavisKahan1970.PartIII
+import DavisKahan.FiniteDimensional.SinTheta.UnitarilyInvariant
+import DavisKahan.FiniteDimensional.SinTheta.Perturbation
 
 /-!
 # Prose-like wrappers for the finite Davis--Kahan `sin Θ` theorem
@@ -82,8 +83,9 @@ structure AboveBelowGapProseLike (T S : E →ₗ[𝕜] E)
 /-- Prose-like Davis--Kahan Part III `sin Θ` theorem in every unitarily
 invariant norm.
 
-This is a thin wrapper around `partIII_sinTheta_uiNorm`.  The mathematical
-content is unchanged, but the statement now visibly has the shape
+This is a thin wrapper around the canonical finite UI-norm sine theorem.
+The mathematical content is unchanged, but the statement now visibly has the
+shape
 
 `N (sin Θ) ≤ N (S - T) / gap`,
 
@@ -94,8 +96,9 @@ theorem partIII_sinTheta_uiNorm_prose_like
     {c g : ℝ} (hgap : AboveBelowGapProseLike T S U V c g) :
     N ((directedSinThetaOperatorProseLike U V : E →L[𝕜] E) : E →ₗ[𝕜] E)
       ≤ N (S - T) / g := by
-  exact partIII_sinTheta_uiNorm N hgap.T_symm hgap.S_symm hgap.U_inv hgap.V_inv
-    hgap.gap_pos hgap.U_above hgap.V_below
+  exact UnitarilyInvariantNorm.apply_starProjection_comp_starProjection_le N
+    hgap.T_symm hgap.S_symm hgap.U_inv hgap.V_inv hgap.gap_pos
+    hgap.U_above hgap.V_below
 
 /-- Spectral-set version of the prose-like above/below gap hypotheses.
 

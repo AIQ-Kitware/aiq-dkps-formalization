@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
 import DavisKahan.FiniteDimensional.Sylvester.Basic
+import DavisKahan.FiniteDimensional.Sylvester.Internal.SpectralBounds
 import ForMathlib.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm
 import ForMathlib.Analysis.InnerProductSpace.SylvesterBound
 

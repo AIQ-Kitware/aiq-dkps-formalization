@@ -5,4 +5,4 @@ Authors: Jon Crall, GPT 5.6 High
 -/
 import DavisKahan.Alternative.FiniteDimensional.All
 
-/-! # Alternative proof surfaces -/
+/-! # Alternative proof and API surfaces -/

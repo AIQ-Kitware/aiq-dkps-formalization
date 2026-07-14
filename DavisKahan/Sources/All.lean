@@ -7,8 +7,6 @@ import DavisKahan.Sources.Davis1963.DoubleAngle
 import DavisKahan.Sources.Davis1963.RotationBound
 import DavisKahan.Sources.Davis1963.RotationEnergy
 import DavisKahan.Sources.DavisKahan1970.PartIII
-import DavisKahan.Sources.DavisKahan1970.ProseLike
-import DavisKahan.Sources.DavisKahan1970.ProseLikeClassical
 import DavisKahan.Sources.YuWangSamworth2015
 
 /-! # Source-facing theorem facades -/
