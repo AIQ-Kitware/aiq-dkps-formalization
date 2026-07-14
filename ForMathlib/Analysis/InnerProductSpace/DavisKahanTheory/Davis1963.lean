@@ -50,12 +50,6 @@ This is the finite simple-spectrum quantity appearing in Davis's Theorem 3.2:
 the two rank-one spectral families.  The earlier arbitrary-block signature was
 not mathematically sound: `SpectrumIn` alone neither makes a block reducing nor
 forces scalar action on it, and unweighted block labels mishandle multiplicity.
-
-Proof strategy:
-
-1. build the two rank-one projection families from the sorted eigenbases;
-2. use `nonDegenerate_ofOrthonormalBasis` from the supplied nonzero overlaps;
-3. sum `OrthoProjFamily.sqSinAngle` over the canonical eigenbasis.
 -/
 noncomputable def totalRotationEnergy
     {A B : E →ₗ[𝕜] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
@@ -92,13 +86,6 @@ the repository's completed rank-one spectral-resolution development.  An
 arbitrary block-family version requires explicit reducing/scalar-action
 hypotheses and rank-weighted eigenvalue motion; it cannot be obtained from the
 old `SpectrumIn` hypotheses.
-
-Proof strategy:
-
-1. apply `rotation_add_displacement_le_hilbertSchmidt_intertwining`;
-2. unfold the two canonical energy definitions;
-3. rewrite the column-norm sum as the squared Frobenius norm using
-   `UnitarilyInvariantNorm.frobenius_sq`.
 -/
 theorem totalRotation_add_eigenvalueMotion_le
     {A B : E →ₗ[𝕜] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
@@ -125,14 +112,6 @@ in Davis's theorem and `sum_sq_eigenvalues_sub_ge`.  The previous declaration
 controlled the off-diagonal energy and used arbitrary block labels; that form
 was not the theorem proved in the literature and was false without additional
 multiplicity and reducing-block hypotheses.
-
-Proof strategy:
-
-1. invoke `sum_sq_eigenvalues_sub_ge` with the diagonal-energy hypothesis;
-2. use `sum_sq_eigenvalues_sub_diag_eq` to identify Davis's spectral remainder
-   with the off-diagonal Frobenius energy;
-3. reverse each scalar difference under a square and unfold the canonical
-   energy definitions.
 -/
 theorem diagonalPerturbation_sub_offDiagonal_le_eigenvalueMotion
     {A B : E →ₗ[𝕜] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
@@ -162,13 +141,6 @@ theorem diagonalPerturbation_sub_offDiagonal_le_eigenvalueMotion
 
 /-- Davis's off-diagonal corollary for total rotation in the canonical sorted
 eigenvector matching.
-
-Proof strategy:
-
-1. use `rotation_le_two_mul_offDiag`, which already combines Theorems 3.2 and
-   4.1 at the scalar-energy level;
-2. unfold `totalRotationEnergy` and `eigenbasisOffDiagonalEnergy`;
-3. rewrite the Frobenius square in the eigenbasis of `A`.
 -/
 theorem totalRotation_le_two_mul_offDiagonal
     {A B : E →ₗ[𝕜] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
@@ -192,12 +164,6 @@ theorem totalRotation_le_two_mul_offDiagonal
   exact h
 
 /-- Sharp two-subspace product estimate, the 1963 ancestor of `sin 2Θ`.
-
-Lean proof route for a weaker agent:
-
-1. Set `y := projection U x` and `z := complementaryProjection U x`; prove `x=y+z` and `⟪y,z⟫=0`.
-2. Project the eigen-equation to both blocks, pair with `y` and `z`, and subtract the real parts so the eigenvalue term cancels.
-3. Apply `hlower`, `hupper`, and Cauchy--Schwarz to the perturbation cross term; use `hx` only at the final normalization step.
 -/
 theorem sinTwoTheta_eigenvector_product_le
     {A H : E →ₗ[𝕜] E} (hA : A.IsSymmetric) (hH : H.IsSymmetric)
@@ -220,12 +186,6 @@ theorem sinTwoTheta_eigenvector_product_le
     sin_two_theta_le hA hH hU hlower hupper hHbound hx heig'
 
 /-- Vanishing-pinch product estimate, the 1963 ancestor of `tan 2Θ`.
-
-Lean proof route for a weaker agent:
-
-1. Set `y := projection U x` and `z := complementaryProjection U x`; prove `x=y+z` and `⟪y,z⟫=0`.
-2. Project the eigen-equation to both blocks, pair with `y` and `z`, and subtract the real parts so the eigenvalue term cancels.
-3. Apply `hlower`, `hupper`, and Cauchy--Schwarz to the perturbation cross term; use `hx` only at the final normalization step.
 -/
 theorem tanTwoTheta_eigenvector_product_le
     {A H : E →ₗ[𝕜] E} (hA : A.IsSymmetric) (hH : H.IsSymmetric)

@@ -33,53 +33,8 @@ variable {Ωref : Type wr} [MeasurableSpace Ωref]
 variable {Ωresp : Type wy} [MeasurableSpace Ωresp]
 /-- Fixed-subset finite-model raw-response Quench theorem.
 
-Proof assembly guide:
-
-1. derive compactness and a population response-norm envelope from
-   `Fintype`;
-2. lift the iid reference sampler to the product space;
-3. construct the finite raw-response subevent certificate using
-   `safeFinite_concentration_ratio_zero`;
-4. derive target-augmented population realization from
-   `response_realization`;
-5. construct centered population geometry;
-6. obtain the high-probability spectral certificate from iid covariance
-   concentration and `nondegenerate`;
-7. build `GrowingConfigControl` using `safe_growingConfigControl`;
-8. invoke
-   `highProbQQueryEfficient_tieAverage_of_responseSubevents_realization_spectralSubevents`.
-
 The theorem's visible assumptions
 are the intended finite-model raw-response Quench interface.
-
-Implementation recipe (execute in this order):
-1. Install `H.raw.probability` and construct the product-space iid reference
-   sampler with `iidReferenceSampler_lifted_prod`; use
-   `hiid.measurable` for the reference measurability argument.
-2. Obtain a finite-model population norm bound `B` from
-   `exists_populationMean_norm_bound_finite D.populationMean`.
-3. Build `Hmean := augmentedRawResponseMeanSubevents_finite` with
-   `replicates := safeFiniteReplicates`, `η := safeResponseTolerance`, and
-   variance `fun _ => D.varianceBound`; discharge its ratio with
-   `safeFinite_concentration_ratio_zero (Fintype.card (Model Q X))
-   D.varianceBound`.
-4. Derive target-augmented realization using
-   `augmentedRawPopulationMean_realization D.perspective f_ref
-   D.populationMean H.response_realization`.
-5. Obtain `Bψ` and the spectral certificate from
-   `exists_growingSpectralSubevents_of_compact_iid_nondegenerate`; compactness of
-   the finite perspective range follows from finiteness.
-6. Build `Hrate` with `safe_growingConfigControl m d hm B Bψ
-   D.covarianceFloor`; use nonnegativity of `B`, `Bψ`, and
-   `H.nondegenerate.kappa_pos`.
-7. Invoke
-   `highProbQQueryEfficient_tieAverage_of_responseSubevents_realization_spectralSubevents`
-   on the joint space, with the lifted sampler, raw augmented sample/population
-   means, `Hmean`, realization, spectral certificate, and `Hrate`.
-8. Supply score Lipschitzness and the positive baseline from `H`; the theorem internally enlarges the Lipschitz constant to a positive envelope; finish by
-   `simpa [finiteEstimator]`.
-9. Use named arguments for all large constructors.  This proof should only
-   assemble certificates; any failed estimate belongs in a lower module.
 -/
 theorem finiteFixedSubset
     [Fintype (Model Q X)]

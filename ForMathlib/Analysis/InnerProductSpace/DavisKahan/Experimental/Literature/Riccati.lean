@@ -59,11 +59,7 @@ noncomputable def blockOperator
     WithLp 2 (E0 × E1) →L[𝕜] WithLp 2 (E0 × E1) := by
   sorry
 
-/-- Graph of a bounded angular operator in the Hilbert direct sum.
-
-Construction route: take the range of the bounded embedding
-`x ↦ (x, X x)` and prove closedness using the bounded inverse given by the
-first-coordinate projection. -/
+/-- Graph of a bounded angular operator in the Hilbert direct sum. -/
 noncomputable def blockGraph (X : E0 →L[𝕜] E1) :
     Submodule 𝕜 (WithLp 2 (E0 × E1)) :=
   LinearMap.range ((WithLp.linearEquiv 2 𝕜 (E0 × E1)).symm.toLinearMap ∘ₗ

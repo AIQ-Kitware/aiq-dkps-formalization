@@ -195,11 +195,7 @@ private theorem card_filter_ge (k : Fin n) :
 `k + 1` there is a unit vector `x` with `re ⟪T x, x⟫ ≤ λₖ(T)`, where `λ` is the
 decreasing enumeration `LinearMap.IsSymmetric.eigenvalues` of the eigenvalues
 of the symmetric operator `T`.
-
-Proof idea: `V` must intersect the `(n - k)`-dimensional "tail" eigenspace
-`span {bᵢ : k ≤ i}` nontrivially by dimension counting; on that intersection
-the quadratic form is bounded above by `λₖ` since the involved eigenvalues are
-all `≤ λₖ` (eigenvalues are sorted decreasingly). -/
+ -/
 theorem exists_unit_vector_re_inner_le_eigenvalue
     (hT : T.IsSymmetric) (hn : finrank 𝕜 E = n) (k : Fin n)
     (V : Submodule 𝕜 E) (hV : finrank 𝕜 V = (k : ℕ) + 1) :

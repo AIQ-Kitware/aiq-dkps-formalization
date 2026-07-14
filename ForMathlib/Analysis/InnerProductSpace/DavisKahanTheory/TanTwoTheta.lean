@@ -246,12 +246,6 @@ theorem spectral_repulsion_compression
 
 /-- Theorem 8.1(ii): ordered eigenvalues move away from the gap.
 
-Lean proof route for a weaker agent:
-
-1. Apply `spectral_repulsion_compression` to obtain the spectral inclusion for the perturbed complementary block.
-2. Unpack membership in `restrictedSpectrum (A+H) Vᗮ` and specialize that inclusion to the chosen eigenvalue `lam`.
-3. Extract the witnessing unperturbed eigenvalue `μ`; no additional min--max argument should be repeated in this corollary.
-
 Signature audit: The inherited ordered-gap premise fixes the eigenvalue comparison direction.
 -/
 theorem spectral_repulsion_eigenvalues
@@ -311,12 +305,6 @@ theorem largestPrincipalAngle_lt_pi_div_four
   sorry
 
 /-- Operator-norm endpoint already represented by `TanTwoTheta.lean`.
-
-Lean proof route for a weaker agent:
-
-1. Apply `tanTwoTheta_perturbation_le` with the operator-norm UI instance.
-2. Project the conjunction to obtain both `AvoidsQuarterTurn U V` and the norm estimate.
-3. Rewrite the abstract norm applications with the operator-norm instance theorem and simplify scalar multiplication.
 -/
 theorem opNorm_tanTwoTheta_le
     {A B : E →ₗ[𝕜] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
@@ -331,12 +319,6 @@ theorem opNorm_tanTwoTheta_le
     hA hB hU hV hoff hδ hgap
 
 /-- Frobenius endpoint.
-
-Lean proof route for a weaker agent:
-
-1. Apply `tanTwoTheta_perturbation_le` with the Frobenius UI instance.
-2. Retain the pole-avoidance conjunct and rewrite the UI norm applications as Frobenius norms.
-3. Normalize the factor `2` and use the established Frobenius instance simp lemmas; no new Riccati argument is needed.
 -/
 theorem frobenius_tanTwoTheta_le
     {A B : E →ₗ[𝕜] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
@@ -351,12 +333,6 @@ theorem frobenius_tanTwoTheta_le
     hA hB hU hV hoff hδ hgap
 
 /-- Ky Fan endpoint.
-
-Lean proof route for a weaker agent:
-
-1. Apply the Ky Fan prefix inequality proved inside the all-UI `tanTwoTheta_perturbation_le` argument, or instantiate its Ky Fan norm object when available.
-2. Preserve the `AvoidsQuarterTurn U V` conclusion from the parent theorem.
-3. Rewrite the norm application as `kyFanSum k` and simplify the scalar factor termwise.
 -/
 theorem kyFan_tanTwoTheta_le
     {A B : E →ₗ[𝕜] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)

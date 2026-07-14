@@ -190,24 +190,12 @@ instance : CoeFun (RectangularUnitarilyInvariantNorm 𝕜 E F)
 
 variable (N : RectangularUnitarilyInvariantNorm 𝕜 E F)
 
-/--
-Lean proof route for a weaker agent:
 
-1. Derive `N 0 ≤ N 0 + N 0` from `add_le'` and use homogeneity at scalar zero to rewrite the left side.
-2. Use nonnegativity of the codomain real norm value, or the same triangle/homogeneity argument used by the square UI-norm implementation.
-3. Finish with antisymmetry; keep this as a structure-level lemma with no singular-value dependency.
--/
 @[simp] theorem apply_zero : N (0 : E →ₗ[𝕜] F) = 0 := by
   have h := N.smul' 0 (0 : E →ₗ[𝕜] F)
   simpa using h
 
-/--
-Lean proof route for a weaker agent:
 
-1. For `add_le`, apply `N.add_le' A B` directly; for `smul_eq`, apply `N.smul' a A`; for `invariant`, apply `N.invariant' U V A`.
-2. Use `change` to expose `N.toFun` if coercion prevents field application.
-3. Close by `simpa` after normalizing the coercion from the structure to its function field.
--/
 theorem nonneg (A : E →ₗ[𝕜] F) : 0 ≤ N A := by
   have h := N.add_le' A (-A)
   rw [add_neg_cancel] at h
@@ -218,28 +206,15 @@ theorem nonneg (A : E →ₗ[𝕜] F) : 0 ≤ N A := by
   rw [hz, hneg] at h
   linarith
 
-/--
-Lean proof route for a weaker agent:
 
-1. For `add_le`, apply `N.add_le' A B` directly; for `smul_eq`, apply `N.smul' a A`; for `invariant`, apply `N.invariant' U V A`.
-2. Use `change` to expose `N.toFun` if coercion prevents field application.
-3. Close by `simpa` after normalizing the coercion from the structure to its function field.
--/
 theorem add_le (A B : E →ₗ[𝕜] F) : N (A + B) ≤ N A + N B :=
   N.add_le' A B
 
 /-- A rectangular UI seminorm of a finite sum is bounded by the sum of the
 individual seminorms.
 
-Proof strategy:
-
-1. induct on the finite index set;
-2. use `apply_zero` in the empty case;
-3. use `add_le` for the inserted term and the induction hypothesis for the
-   remaining sum.
-
 This is the finite replacement for the integral triangle inequality in the
-unitary-orbit proof of the `π/2` Sylvester theorem. -/
+unitary-orbit proof of the `π/2` Sylvester theorem.-/
 theorem sum_le {ι : Type*} (s : Finset ι) (A : ι → E →ₗ[𝕜] F) :
     N (∑ i ∈ s, A i) ≤ ∑ i ∈ s, N (A i) := by
   classical
@@ -256,17 +231,9 @@ left and right factors.  The phase of a complex Fourier coefficient is intended
 to be absorbed into `U`, so the convex hull of this set is the correct
 barycentric target for the arbitrary-spectrum `π/2` proof.
 
-Proof strategy for later uses:
-
-1. unfold membership to recover the two unitary factors;
-2. use `RectangularUnitarilyInvariantNorm.invariant` to erase them in norm
-   estimates;
-3. use `mem_convexHull_iff_exists_fintype` to turn convex-hull membership into
-   an exact finite convex combination.
-
 The definition is field-uniform: over `ℝ`, the only scalar phases absorbed into
 the orbit are the real unitary signs, while a complex proof must descend to a
-real orbit before invoking this API. -/
+real orbit before invoking this API.-/
 def twoSidedUnitaryOrbit (C : E →ₗ[𝕜] F) : Set (E →ₗ[𝕜] F) :=
   {Y | ∃ (U : F ≃ₗᵢ[𝕜] F) (V : E ≃ₗᵢ[𝕜] E),
     Y = U.toLinearMap ∘ₗ C ∘ₗ V.toLinearMap}
@@ -277,16 +244,9 @@ A certificate of mass `mass` writes `X` as a finite linear combination of maps
 `Uᵢ ∘ C ∘ Vᵢ`, where each `Uᵢ` and `Vᵢ` is unitary and the sum of coefficient
 norms is at most `mass`.
 
-Proof strategy for uses of this definition:
-
-1. apply finite-sum subadditivity to the represented map;
-2. use absolute homogeneity on each coefficient;
-3. erase the two unitary factors by invariance;
-4. bound the resulting coefficient sum by `mass`.
-
 For the arbitrary-spectrum `π/2` theorem, the difficult analytic task is exactly
 to construct such a certificate for `((δ : 𝕜) • X)` from the Sylvester defect
-`C` with mass `π / 2`. -/
+`C` with mass `π / 2`.-/
 def HasFiniteUnitaryOrbitCertificate
     (mass : ℝ) (X C : E →ₗ[𝕜] F) : Prop :=
   ∃ n : ℕ, ∃ a : Fin n → 𝕜,
@@ -299,15 +259,8 @@ def HasFiniteUnitaryOrbitCertificate
 omit [FiniteDimensional 𝕜 E] [FiniteDimensional 𝕜 F] in
 /-- Reindex a finite certificate candidate from an arbitrary finite type by `Fin n`.
 
-Proof strategy:
-
-1. use `(Fintype.equivFin ι).symm` to enumerate the original finite type;
-2. transport the exact operator sum with `Equiv.sum_comp`;
-3. transport the coefficient-mass sum by the same equivalence;
-4. package the reindexed data in `HasFiniteUnitaryOrbitCertificate`.
-
 This lemma keeps all `Fin n` bookkeeping out of the convex-geometric proof.
-It is purely finite algebra and has no analytic or field-specific content. -/
+It is purely finite algebra and has no analytic or field-specific content.-/
 theorem hasFiniteUnitaryOrbitCertificate_of_fintype
     {ι : Type*} [Fintype ι] {mass : ℝ} {X C : E →ₗ[𝕜] F}
     (a : ι → 𝕜) (U : ι → F ≃ₗᵢ[𝕜] F) (V : ι → E ≃ₗᵢ[𝕜] E)
@@ -332,19 +285,7 @@ theorem hasFiniteUnitaryOrbitCertificate_of_fintype
       _ ≤ mass := hmass
 
 /-- Restrict scalars on the rectangular-map space from `𝕜` to `ℝ` for the
-real convex-hull argument.
-
-Proof strategy:
-
-1. reuse the existing `𝕜`-module structure on `E →ₗ[𝕜] F`;
-2. compose its scalar action with `algebraMap ℝ 𝕜` via `Module.compHom`;
-3. keep the instance local so the convex-geometric API does not install a
-   competing global scalar action on linear maps.
-
-At the one boundary where real convex weights become `𝕜` coefficients,
-unfold this exact `Module.compHom` action.  Since the `RCLike` coercion from
-`ℝ` is the same algebra map, the bundled-map scalar equality is definitional;
-no scalar-tower or codomain real-module instance is required. -/
+real convex-hull argument. -/
 local instance realModuleLinearMap : Module ℝ (E →ₗ[𝕜] F) :=
   Module.compHom (E →ₗ[𝕜] F) (algebraMap ℝ 𝕜)
 
@@ -356,25 +297,11 @@ Suppose `Y` lies in the real convex hull of the two-sided unitary orbit of `C`,
 and `X = m • Y` for a nonnegative real mass `m ≤ mass`.  Then `X` has a finite
 unitary-orbit certificate of mass `mass`.
 
-Proof strategy:
-
-1. apply `mem_convexHull_iff_exists_fintype` to write `Y` as an exact finite
-   convex combination `Σ wᵢ zᵢ`, with `wᵢ ≥ 0` and `Σ wᵢ = 1`;
-2. unfold `twoSidedUnitaryOrbit` and choose unitary factors for every `zᵢ`;
-3. use coefficients `((m * wᵢ : ℝ) : 𝕜)` and distribute the scalar `m` across
-   the finite sum;
-4. unfold the file-local `Module.compHom` action to identify a real scalar
-   on the bundled map with the corresponding coerced `𝕜` scalar definitionally;
-5. compute the coefficient mass exactly as `m * Σ wᵢ = m`, then use
-   `m ≤ mass`;
-6. invoke `hasFiniteUnitaryOrbitCertificate_of_fintype` for the final `Fin n`
-   reindexing.
-
 This theorem discharges the entire exact finite-dimensional convex-combination
 stage of the `π/2` proof.  The remaining analytic theorem only has to produce a
 bounded-mass barycentric orbit representation.  The argument is valid over
 both `ℝ` and `ℂ`; any complexification/descent issue must already have been
-resolved before establishing the real convex-hull hypothesis. -/
+resolved before establishing the real convex-hull hypothesis.-/
 theorem hasFiniteUnitaryOrbitCertificate_of_smul_mem_convexHull
     {m mass : ℝ} (hm : 0 ≤ m) (hmass : m ≤ mass)
     {X Y C : E →ₗ[𝕜] F}
@@ -429,13 +356,7 @@ theorem hasFiniteUnitaryOrbitCertificate_of_smul_mem_convexHull
       _ = m := by rw [hwsum, mul_one]
       _ ≤ mass := hmass
 
-/--
-Lean proof route for a weaker agent:
 
-1. For `add_le`, apply `N.add_le' A B` directly; for `smul_eq`, apply `N.smul' a A`; for `invariant`, apply `N.invariant' U V A`.
-2. Use `change` to expose `N.toFun` if coercion prevents field application.
-3. Close by `simpa` after normalizing the coercion from the structure to its function field.
--/
 theorem smul_eq (a : 𝕜) (A : E →ₗ[𝕜] F) : N (a • A) = ‖a‖ * N A :=
   N.smul' a A
 
@@ -444,13 +365,7 @@ theorem smul_eq (a : 𝕜) (A : E →ₗ[𝕜] F) : N (a • A) = ‖a‖ * N A 
   have h := N.smul_eq (-1 : 𝕜) A
   simpa using h
 
-/--
-Lean proof route for a weaker agent:
 
-1. For `add_le`, apply `N.add_le' A B` directly; for `smul_eq`, apply `N.smul' a A`; for `invariant`, apply `N.invariant' U V A`.
-2. Use `change` to expose `N.toFun` if coercion prevents field application.
-3. Close by `simpa` after normalizing the coercion from the structure to its function field.
--/
 theorem invariant (U : F ≃ₗᵢ[𝕜] F) (V : E ≃ₗᵢ[𝕜] E)
     (A : E →ₗ[𝕜] F) :
     N (U.toLinearMap ∘ₗ A ∘ₗ V.toLinearMap) = N A :=
@@ -459,16 +374,9 @@ theorem invariant (U : F ≃ₗᵢ[𝕜] F) (V : E ≃ₗᵢ[𝕜] E)
 /-- Every rectangular UI seminorm is bounded by the mass of a finite two-sided
 unitary-orbit certificate.
 
-Proof strategy:
-
-1. destruct the certificate into coefficients and left/right unitary factors;
-2. rewrite `X` by the certified finite sum;
-3. invoke `sum_le`, then `smul_eq` and `invariant` term by term;
-4. factor out `N C` and use its nonnegativity to apply the mass bound.
-
 This theorem deliberately contains all norm-theoretic content needed by the
 `π/2` front. The remaining hard theorem may therefore focus solely on
-constructing the orbit certificate. -/
+constructing the orbit certificate.-/
 theorem apply_le_of_finiteUnitaryOrbitCertificate
     {mass : ℝ} {X C : E →ₗ[𝕜] F}
     (hcert : HasFiniteUnitaryOrbitCertificate mass X C) :
@@ -1398,12 +1306,6 @@ theorem mem_convexHull_twoSidedUnitaryOrbit_of_kyFanSum_le
 
 
 /-- Fan dominance in rectangular form.
-
-Lean proof route for a weaker agent:
-
-1. Transfer `N` to its finite symmetric gauge on singular values and apply the Ky Fan dominance theorem already developed in `KyFan.lean`.
-2. Translate `rectangularKyFanSum` to the square zero-extension convention.
-3. Apply the existing square Fan-dominance theorem and simplify `ofSquareFamily`.
 -/
 theorem apply_le_of_kyFanSum_le {A B : E →ₗ[𝕜] F}
     (h : ∀ k, rectangularKyFanSum k A ≤ rectangularKyFanSum k B) : N A ≤ N B := by
@@ -1657,17 +1559,8 @@ theorem rectangularKyFanSum_orthogonalBlockSum_self
 
 /-- Real orbit-convex domination is stable under orthogonal block sums.
 
-Proof strategy:
-
-1. extract finite real convex combinations for the two hypotheses;
-2. use the product index type and product weights;
-3. combine the two pairs of unitary factors with
-   `LinearIsometryEquiv.withLpProdCongr`;
-4. factor the two product-weight sums using that each original weight family
-   has total mass one.
-
 This is the sharp coupling seam needed by the symmetric projector theorem:
-it combines two one-sided sine estimates without adding their norms. -/
+it combines two one-sided sine estimates without adding their norms.-/
 theorem orthogonalBlockSum_mem_convexHull_twoSidedUnitaryOrbit
     {E₁ E₂ F₁ F₂ : Type*}
     [NormedAddCommGroup E₁] [InnerProductSpace 𝕜 E₁]
@@ -1811,12 +1704,6 @@ theorem orthogonalBlockSum_apply_le_of_kyFanSum_le
     (mem_convexHull_twoSidedUnitaryOrbit_of_kyFanSum_le hB)
 
 /-- Pointwise singular-value dominance implies norm dominance.
-
-Lean proof route for a weaker agent:
-
-1. Sum the pointwise inequalities to obtain all Ky Fan prefix inequalities, then apply `apply_le_of_kyFanSum_le`.
-2. Sum the pointwise inequalities over each finite prefix using `Finset.sum_le_sum`.
-3. Invoke `apply_le_of_kyFanSum_le` with the resulting prefix inequalities.
 -/
 theorem apply_le_of_singularValues_le {A B : E →ₗ[𝕜] F}
     (h : ∀ i, A.singularValues i ≤ B.singularValues i) : N A ≤ N B := by
@@ -1849,12 +1736,7 @@ noncomputable def adjointTransport
       LinearMap.comp_assoc] using
       N.invariant V.symm U.symm A.adjoint
 
-/--
-Lean proof route for a weaker agent:
 
-1. Unfold `adjointTransport`; the theorem is the defining equation of the transported rectangular UI norm.
-2. Prove it by `rfl` after the constructor is implemented, or by the constructor simp lemma.
--/
 @[simp] theorem adjointTransport_apply (A : E →ₗ[𝕜] F) :
     (adjointTransport N).toFun A.adjoint = N.toFun A := by
   simp only [adjointTransport, LinearMap.adjoint_adjoint]
@@ -1941,11 +1823,6 @@ private theorem zeroExtensionInl_adjoint_apply
   simp [WithLp.prod_inner_apply]
 
 /-- Singular values are unchanged by zero extension, apart from zero padding.
-
-Lean proof route for a weaker agent:
-
-1. Choose orthonormal bases of `E` and `F`; the zero extension is the block matrix with `A` in one off-diagonal block, so its Gram operator is `A⋆A` plus a zero block.
-2. Compare sorted eigenvalues with zero padding.
 -/
 theorem singularValues_zeroExtension (A : E →ₗ[𝕜] F) :
     (zeroExtension A).singularValues = A.singularValues := by
@@ -2192,12 +2069,6 @@ noncomputable def schatten (p : ℝ) (hp : 1 ≤ p) :
 
 /-- The rectangular Frobenius norm is the square root of the sum of squared
 column norms in any orthonormal basis of the domain.
-
-Lean proof route for a weaker agent:
-
-1. Unfold the rectangular Frobenius norm through zero extension or its singular values and reuse Parseval/the existing square Frobenius basis formula.
-2. Rewrite the zero extension on the canonical L² direct-sum basis and eliminate the codomain-only basis vectors.
-3. Use `Real.sqrt_eq_iff_sq_eq` only after proving nonnegativity of the finite sum.
 -/
 theorem frobenius_apply (A : E →ₗ[𝕜] F)
     (b : OrthonormalBasis (Fin (finrank 𝕜 E)) 𝕜 E) :
@@ -2207,11 +2078,6 @@ theorem frobenius_apply (A : E →ₗ[𝕜] F)
     ← sum_sq_singularValues A rfl b]
 
 /-- The Ky Fan norm evaluates to the prefix sum of singular values.
-
-Lean proof route for a weaker agent:
-
-1. This should be definitional once `kyFan` is constructed from `rectangularKyFanSum`
-2. otherwise reduce through the zero-extension square norm.
 -/
 theorem kyFan_apply (k : ℕ) (A : E →ₗ[𝕜] F) :
     kyFan k A = rectangularKyFanSum k A :=
@@ -2220,13 +2086,7 @@ theorem kyFan_apply (k : ℕ) (A : E →ₗ[𝕜] F) :
 /-- A finite two-sided unitary-orbit certificate bounds every rectangular
 Ky Fan prefix by the same certificate mass.
 
-Proof strategy:
-
-1. instantiate `apply_le_of_finiteUnitaryOrbitCertificate` with `kyFan k`;
-2. use the definitional evaluation of `kyFan` as `rectangularKyFanSum`;
-3. leave the certificate construction entirely outside the Ky Fan layer.
-
-This is the exact bridge used by the arbitrary-spectrum Sylvester theorem. -/
+This is the exact bridge used by the arbitrary-spectrum Sylvester theorem.-/
 theorem rectangularKyFanSum_le_of_finiteUnitaryOrbitCertificate
     {mass : ℝ} {X C : E →ₗ[𝕜] F} (k : ℕ)
     (hcert : HasFiniteUnitaryOrbitCertificate mass X C) :
@@ -2278,12 +2138,7 @@ noncomputable def toRectangular
   smul' := N.smul'
   invariant' := N.invariant'
 
-/--
-Lean proof route for a weaker agent:
 
-1. Unfold `UnitarilyInvariantNorm.toRectangular` and the zero-extension bridge.
-2. The proof should be definitional once the square-to-rectangular constructor is implemented.
--/
 @[simp] theorem toRectangular_apply
     (N : UnitarilyInvariantNorm 𝕜 E) (A : E →ₗ[𝕜] E) :
     N.toRectangular A = N A :=

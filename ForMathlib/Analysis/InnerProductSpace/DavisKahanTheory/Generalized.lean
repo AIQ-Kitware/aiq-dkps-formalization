@@ -70,14 +70,6 @@ noncomputable def generalizedCompression (A : E →ₗ[𝕜] E)
 /-- The whitened generalized compression is symmetric for a symmetric
 ambient operator.
 
-Lean proof route for a weaker agent:
-
-1. Unfold `generalizedCompression`.
-2. Apply `isSymmetric_compression hA` to the isometric factor
-   `orthonormalizedEmbedding X hX`.
-3. Keep any future theorem about `(X⋆X)⁻¹ X⋆ A X` separate and formulate it as
-   Gram-self-adjointness or similarity to this compression.
-
 Signature audit: Valid because the public compression is now the whitened
 ordinary-self-adjoint operator.
 -/
@@ -319,15 +311,6 @@ theorem generalizedSinTheta_nuclear_le_of_spectralDistance
 /-- Davis--Kahan Theorem 6.3: generalized `tan Θ`, allowing the exact target
 subspace to have larger dimension than the trial space.
 
-Lean proof route for a weaker agent:
-
-1. Set `Q := orthonormalizedEmbedding X hX` and rewrite the range with
-   `range_orthonormalizedEmbedding`.
-2. Use `htrans` to construct the graph operator from `range Q` to `V`.
-3. Derive the ordered tangent Sylvester equation for the Ritz pair
-   `(Q, compression A Q)` and apply `tanTheta_residual_le`.
-4. Simplify `generalizedCompression` and the residual definitions.
-
 Signature audit: The theorem now uses the symmetric whitened compression and its matching
 whitened residual.  The previous statement mixed whitened coordinates with the unwhitened
 trial map.
@@ -349,12 +332,6 @@ theorem generalizedTanTheta_residual_le
     (isSymmetric_generalizedCompression hA X hX) rfl hδ hgap
 
 /-- The unequal-dimensional `sin 2Θ` extension mentioned after Theorem 8.2.
-
-Lean proof route for a weaker agent:
-
-1. Form the reflection across `U` and rewrite the double-angle embedding as the corresponding off-diagonal reflection block.
-2. Apply the finite rectangular reflection-defect/Sylvester estimate under `InternalGap A U δ`.
-3. Use the residual equation for `(X,M)` and UI ideal inequalities to bound the reflection defect by twice `N (residual A X M)`; unequal dimensions require only zero-padding in the final singular-value identification.
 -/
 theorem generalizedSinTwoTheta_unequalFinrank
     (N : RectangularUnitarilyInvariantNorm 𝕜 F E)

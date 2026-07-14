@@ -90,21 +90,11 @@ def SameProjectionComponent (P Q : E →L[𝕜] E) : Prop :=
     ContinuousOn path (Set.Icc (0 : ℝ) 1) ∧ path 0 = P ∧ path 1 = Q ∧
       ∀ t ∈ Set.Icc (0 : ℝ) 1, IsOrthogonalProjection (path t)
 
-/-- The continued projection remains in the component selected at `t = 0`. 
-
-Lean proof route for a weaker agent:
-
-1. Use the supplied continued projection path restricted to `[0,1]` as the witness.
-2. Reuse `hcontinuous` for path continuity and `hproj` for projection-valuedness.
-3. Normalize the endpoints with `rfl`; no spectral argument is needed in this lemma.
-
+/-- The continued projection remains in the component selected at `t = 0`.
 
 Ext-agent signature audit (GPT 5.6 High): Correct after `SameProjectionComponent` was
 localized to continuity on `[0,1]`; global continuity would be unnecessary
 overstrengthening.
-
-Preferred dependency route: Use a uniformly separating Riesz contour on `[0,1]`,
-norm-continuity of resolvents, and local equivalences of close projection ranges.
 -/
 theorem continuedProjection_same_component
     (A H : E →L[𝕜] E) (contour : ℝ → 𝕜)

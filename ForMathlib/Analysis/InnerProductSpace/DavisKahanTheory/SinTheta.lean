@@ -48,11 +48,6 @@ variable {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
 The spectrum of the approximate coordinate operator `M` lies in `[a,b]`, the
 unwanted spectrum of `A` on `Uᗮ` lies outside `(a-δ,b+δ)`, and `R = AX-XM`.
 Then `δ ‖sin Θ‖ ≤ ‖R‖`.
-
-Lean proof route for a weaker agent:
-
-1. Project `AX-XM` into `Uᗮ`; reduction of `U` gives a Sylvester equation between `A|Uᗮ` and `M`.
-2. Apply the interval/exterior finite UI Sylvester theorem and the projection ideal bound.
 -/
 theorem sinTheta_residual_le
     (N : RectangularUnitarilyInvariantNorm 𝕜 F E)
@@ -110,11 +105,6 @@ theorem sinTheta_residual_le
   exact hSylvester.trans hC_le
 
 /-- Ordered half-line residual form.
-
-Lean proof route for a weaker agent:
-
-1. Project the residual onto `Uᗮ`, identify the ordered Sylvester equation, and apply `uiNorm_sylvester_le_of_orderedGap`.
-2. The operator-norm core should later specialize the supported `DavisKahan.SinTheta` module.
 -/
 theorem sinTheta_residual_le_of_orderedGap
     (N : RectangularUnitarilyInvariantNorm 𝕜 F E)
@@ -177,12 +167,6 @@ theorem sinTheta_residual_le_of_orderedGap
 Bhatia--Davis--McIntosh extension, not the sharp interval/exterior theorem.
 The restriction and projection proof below is complete; the only open input is
 `kyFan_sylvester_le_of_spectralDistance` in the Sylvester layer.
-
-Lean proof route for a weaker agent:
-
-1. Project the residual onto `Uᗮ`, obtain the rectangular Sylvester equation, apply `uiNorm_sylvester_le_of_spectralDistance`, and contract the projected residual.
-2. Record the exact Sylvester equation as a named local equality before applying the general estimate.
-3. Use the projection contraction and positivity of `δ` to normalize the final scalar inequality.
 -/
 theorem sinTheta_residual_le_of_spectralDistance
     (N : RectangularUnitarilyInvariantNorm 𝕜 F E)
@@ -571,11 +555,6 @@ private theorem domainTransport_residual_le
 
 
 /-- **Davis--Kahan `sin Θ`, perturbation form, every square UI norm.**
-
-Lean proof route for a weaker agent:
-
-1. Represent the perturbed reducing subspace by an isometric embedding, rewrite its residual as `(A-B)X`, apply the corresponding residual theorem, and contract composition by the embedding.
-2. The operator-norm instance should be a thin specialization of `DavisKahan.SinTheta`.
 -/
 theorem sinTheta_perturbation_le
     (N : UnitarilyInvariantNorm 𝕜 E)
@@ -614,14 +593,6 @@ two arbitrary mixed spectral-distance gaps support only the separate
 `π/2` theory.  A single interval/exterior gap controls only
 `sinThetaMap U V` (except in the operator norm).  This is the finite
 Davis--Kahan Proposition 6.1 configuration.
-
-Lean proof route for a weaker agent:
-
-1. Apply the one-sided interval/exterior theorem in both directions.
-2. Identify the two directed blocks of `P_U-P_V` in the `U ⊕ Uᗮ` to
-   `V ⊕ Vᗮ` coordinates.
-3. Prove simultaneous Ky Fan prefix bounds for their direct sum and dominate
-   the corresponding off-diagonal pinching of `B-A`; finish by Fan dominance.
 -/
 theorem sinAngleOperator_perturbation_le
     (N : UnitarilyInvariantNorm 𝕜 E)
@@ -840,11 +811,6 @@ theorem sinAngleOperator_perturbation_le
   exact hNB.trans (by simpa [H] using hcheckerNorm)
 
 /-- Ordered half-line perturbation form.
-
-Lean proof route for a weaker agent:
-
-1. Represent the perturbed reducing subspace by an isometric embedding, rewrite its residual as `(A-B)X`, apply the corresponding residual theorem, and contract composition by the embedding.
-2. The operator-norm instance should be a thin specialization of `DavisKahan.SinTheta`.
 -/
 theorem sinTheta_perturbation_le_of_orderedGap
     (N : UnitarilyInvariantNorm 𝕜 E)
@@ -882,11 +848,6 @@ theorem sinTheta_perturbation_le_of_orderedGap
     _ ≤ N (B - A) := hresBound
 
 /-- Canonical spectral-projector statement with no eigenbasis in the API.
-
-Lean proof route for a weaker agent:
-
-1. Represent the perturbed reducing subspace by an isometric embedding, rewrite its residual as `(A-B)X`, apply the corresponding residual theorem, and contract composition by the embedding.
-2. The operator-norm instance should be a thin specialization of `DavisKahan.SinTheta`.
 -/
 theorem sinTheta_spectralSubspace_le
     (N : UnitarilyInvariantNorm 𝕜 E)
@@ -975,11 +936,6 @@ theorem opNorm_sinThetaMap_le_of_intervalGap
   exact hSylvester.trans hCnorm
 
 /-- Difference-of-projectors operator-norm form.
-
-Lean proof route for a weaker agent:
-
-1. Combine the operator-norm one-sided `sin Θ` theorem with the equal-rank projection/cross-gap identity.
-2. The analytic bound should specialize the supported Davis--Kahan core; only the finite rank bridge remains local.
 -/
 theorem opNorm_projection_sub_projection_le
     {A B : E →ₗ[𝕜] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
@@ -1017,12 +973,6 @@ theorem opNorm_spectralProjection_sub_spectralProjection_le
       hrank hδ ⟨hAselected, hBoutside⟩
 
 /-- Frobenius form.
-
-Lean proof route for a weaker agent:
-
-1. Instantiate the every-UI perturbation theorem with the existing Frobenius or Ky Fan norm and simplify the evaluation theorem.
-2. Instantiate `sinTheta_perturbation_le` with `UnitarilyInvariantNorm.frobenius`.
-3. Rewrite the norm application with the Frobenius evaluation lemma and close by `simpa`.
 -/
 theorem frobenius_sinTheta_le
     {A B : E →ₗ[𝕜] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
@@ -1036,12 +986,6 @@ theorem frobenius_sinTheta_le
     hA hB hU hV hδ hgap
 
 /-- Ky Fan form, simultaneously controlling every singular-value prefix.
-
-Lean proof route for a weaker agent:
-
-1. Instantiate the every-UI perturbation theorem with the existing Frobenius or Ky Fan norm and simplify the evaluation theorem.
-2. Instantiate `sinTheta_perturbation_le` with the finite Ky Fan UI norm.
-3. Rewrite both applications using the Ky Fan evaluation theorem.
 -/
 theorem kyFan_sinTheta_le
     {A B : E →ₗ[𝕜] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
@@ -1062,11 +1006,6 @@ theorem kyFan_sinTheta_le
 /-- General two-sided spectral separation with the `π/2` constant.  The
 ambient transport proof is complete; the only open analytic input is the Ky Fan
 separated reciprocal-multiplier theorem in `Sylvester.lean`.
-
-Lean proof route for a weaker agent:
-
-1. Use the residual equation and the general `π/2` Sylvester estimate.
-2. Prefer the experimental general-separation theorem for operator norm and retain finite Fan dominance for arbitrary UI norms.
 -/
 theorem sinTheta_perturbation_le_of_spectralDistance
     (N : UnitarilyInvariantNorm 𝕜 E)

@@ -142,12 +142,6 @@ def OrderedInternalGap (A : E →ₗ[𝕜] E) (U : Submodule 𝕜 E) (δ : ℝ) 
 
 omit [FiniteDimensional 𝕜 E] in
 /-- Ordered block separation implies absolute block separation.
-
-Lean proof route for a weaker agent:
-
-1. Unfold `OrderedInternalGap`, `InternalGap`, and `SpectraSeparated`, then split the disjunction into its two orientations.
-2. In each branch specialize the ordered inequality to the chosen eigenvalues and derive the corresponding real order with `linarith`.
-3. Rewrite the absolute value using `abs_of_nonpos` or `abs_of_nonneg`, and finish the remaining scalar inequality with `linarith`.
 -/
 theorem OrderedInternalGap.internalGap {A : E →ₗ[𝕜] E}
     {U : Submodule 𝕜 E} {δ : ℝ} (hδ : 0 ≤ δ)
@@ -163,11 +157,7 @@ theorem OrderedInternalGap.internalGap {A : E →ₗ[𝕜] E}
     rw [abs_of_nonneg (sub_nonneg.mpr hμ_le)]
     linarith
 
-/-- Canonical finite-dimensional spectral subspace selected by a real set.
-
-The eventual implementation should be basis-independent, but may be proved by
-choosing `LinearMap.IsSymmetric.eigenvectorBasis` and showing independence of
-that choice. -/
+/-- Canonical finite-dimensional spectral subspace selected by a real set. -/
 noncomputable def spectralSubspace (A : E →ₗ[𝕜] E) (Ω : Set ℝ) :
     Submodule 𝕜 E :=
   Submodule.span 𝕜 {x | ∃ lam ∈ Ω, IsEigenvectorAt A lam x}
@@ -313,11 +303,6 @@ def AvoidsQuarterTurn (U V : Submodule 𝕜 E)
 
 omit [FiniteDimensional 𝕜 E] in
 /-- Acuteness is symmetric.
-
-Lean proof route for a weaker agent:
-
-1. Unfold `IsAcute`; the two projection-kernel clauses are exchanged.
-2. Keep this direct and independent of the experimental hierarchy.
 -/
 theorem IsAcute.symm {U V : Submodule 𝕜 E}
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
@@ -347,12 +332,6 @@ def HasZeroCompression (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
 
 omit [FiniteDimensional 𝕜 E] in
 /-- A vanishing pinch has a vanishing selected diagonal block.
-
-Lean proof route for a weaker agent:
-
-1. Unfold `IsOffDiagonal`, `pinch`, and `HasZeroCompression`.
-2. Apply `LinearMap.ext`; for each vector, compose the zero-pinch identity with `projection U` on the left and right.
-3. Simplify projection idempotence and `projection U ∘ complementaryProjection U = 0` to isolate the selected diagonal block.
 -/
 theorem hasZeroCompression_of_isOffDiagonal
     (U : Submodule 𝕜 E) [U.HasOrthogonalProjection] (H : E →ₗ[𝕜] E)
@@ -374,11 +353,6 @@ theorem hasZeroCompression_of_isOffDiagonal
 omit [FiniteDimensional 𝕜 E] in
 /-- A vanishing pinch is unchanged when the two summands of the orthogonal
 splitting are exchanged.
-
-Lean proof route for a weaker agent:
-
-1. Unfold `pinch`; exchanging `U` and `Uᗮ` merely swaps the two summands.
-2. The matching infinite lemma should live in `DavisKahan.Basic` and the finite proof can later specialize it.
 -/
 theorem isOffDiagonal_orthogonal
     (U : Submodule 𝕜 E) [U.HasOrthogonalProjection] (H : E →ₗ[𝕜] E)
@@ -389,12 +363,6 @@ theorem isOffDiagonal_orthogonal
 omit [FiniteDimensional 𝕜 E] in
 /-- Operator-form zero compression implies the corresponding sesquilinear
 block vanishes.
-
-Lean proof route for a weaker agent:
-
-1. Apply the compression equality to `u′`, use self-adjointness of the orthogonal projection to move it across the inner product, and simplify `P_U u = u`.
-2. Obtain the projected-vector equality with `LinearMap.congr_fun hzero u'` before entering the inner-product calculation.
-3. Finish with `Submodule.inner_starProjection_left_eq_right` and `inner_zero_right`.
 -/
 theorem inner_map_eq_zero_of_hasZeroCompression
     (U : Submodule 𝕜 E) [U.HasOrthogonalProjection] (H : E →ₗ[𝕜] E)
@@ -413,12 +381,6 @@ theorem inner_map_eq_zero_of_hasZeroCompression
 
 omit [FiniteDimensional 𝕜 E] in
 /-- Both diagonal sesquilinear blocks vanish for an off-diagonal map.
-
-Lean proof route for a weaker agent:
-
-1. Apply `hasZeroCompression_of_isOffDiagonal` to `U` and `Uᗮ`, then invoke `inner_map_eq_zero_of_hasZeroCompression` on each block.
-2. Use `isOffDiagonal_orthogonal` to obtain the complementary zero-compression premise.
-3. Build the conjunction explicitly so elaboration failures remain localized to one block.
 -/
 theorem inner_blocks_eq_zero_of_isOffDiagonal
     (U : Submodule 𝕜 E) [U.HasOrthogonalProjection] (H : E →ₗ[𝕜] E)
@@ -439,11 +401,6 @@ theorem inner_blocks_eq_zero_of_isOffDiagonal
 omit [FiniteDimensional 𝕜 E] in
 /-- A symmetric operator leaves the orthogonal complement of an invariant
 subspace invariant.
-
-Lean proof route for a weaker agent:
-
-1. Preferred route: specialize `ContinuousLinearMap.IsSymmetric.reduces_of_invariant` after converting the finite linear map to a continuous linear map.
-2. Until that bridge exists, the direct inner-product proof is only a few lines.
 -/
 theorem reduces_orthogonal_of_isSymmetric {A : E →ₗ[𝕜] E}
     (hA : A.IsSymmetric) {U : Submodule 𝕜 E} (hU : Reduces A U) :
@@ -458,12 +415,6 @@ omit [FiniteDimensional 𝕜 E] in
 /-- The canonical spectral subspace reduces its operator.  Symmetry is not
 needed for this algebraic fact; it is needed later for orthogonal reduction and
 for completeness of the real eigenvector decomposition.
-
-Lean proof route for a weaker agent:
-
-1. Unfold `spectralSubspace` and `Reduces`, and fix a vector in the generated span.
-2. Apply `Submodule.span_induction`; for each generator unpack its eigenvalue/eigenvector witness and rewrite `A x` as a scalar multiple of `x`.
-3. Close the zero, addition, and scalar cases by linearity and the submodule closure rules.
 -/
 theorem reduces_spectralSubspace (A : E →ₗ[𝕜] E) (Ω : Set ℝ) :
     Reduces A (spectralSubspace A Ω) := by
@@ -620,12 +571,6 @@ theorem le_re_inner_of_spectrumIn {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric)
   exact hquad
 
 /-- The canonical projector has the expected range.
-
-Lean proof route for a weaker agent:
-
-1. Unfold `spectralProjection` and use the standard theorem that the range of `Submodule.starProjection` is the submodule.
-2. Check the coercion from continuous linear maps to linear maps before applying `Submodule.range_starProjection`.
-3. Close by exact equality rather than extensionality.
 -/
 theorem range_spectralProjection (A : E →ₗ[𝕜] E) (Ω : Set ℝ) :
     LinearMap.range (spectralProjection A Ω) = spectralSubspace A Ω := by
@@ -633,12 +578,6 @@ theorem range_spectralProjection (A : E →ₗ[𝕜] E) (Ω : Set ℝ) :
 
 omit [FiniteDimensional 𝕜 E] in
 /-- Spectral selection is independent of the chosen eigenbasis.
-
-Lean proof route for a weaker agent:
-
-1. Unfold `spectralSubspace` and `restrictedSpectrum` only enough to expose the defining eigenvector span.
-2. Attempt `rfl`; if reducible wrappers block it, use `simp only` with those definitions rather than extensional set reasoning.
-3. Keep this theorem as the API bridge if `spectralSubspace` is later reimplemented through an eigenbasis or projector.
 -/
 theorem spectralSubspace_eq_span_eigenvectors (A : E →ₗ[𝕜] E)
     (Ω : Set ℝ) :
@@ -756,14 +695,6 @@ theorem uiNorm_projection_sub_eq_sinAngleOperator (N : UnitarilyInvariantNorm �
 
 omit [FiniteDimensional 𝕜 E] in
 /-- The one-sided double-angle map is exactly twice the cross block.
-
-Lean proof route for a weaker agent:
-
-1. Unfold `sinTwoAngleOperator`.
-2. Close the goal with `rfl`.
-3. Keep this theorem as the normalization bridge used by the reflection and
-   UI-norm files; do not replace it by a full positive angle operator without
-   also changing every downstream multiplicity convention.
 
 Signature audit: Valid after defining `sinTwoAngleOperator` as the one-sided
 classic Davis--Kahan map rather than a full-space positive operator.

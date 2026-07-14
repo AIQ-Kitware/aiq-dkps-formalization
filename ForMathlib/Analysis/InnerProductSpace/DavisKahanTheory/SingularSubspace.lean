@@ -103,11 +103,6 @@ noncomputable def gramBlockDiagonal (A : E →ₗ[𝕜] F) :
   rfl
 
 /-- The dilation is symmetric.
-
-Lean proof route for a weaker agent:
-
-1. Prove directly by block-matrix/adjoint algebra and the operator-norm ideal inequality.
-2. These finite identities are prerequisites for, rather than consequences of, the experimental compact/singular layer.
 -/
 theorem isSymmetric_hermitianDilation (A : E →ₗ[𝕜] F) :
     (hermitianDilation A).IsSymmetric := fun x y => by
@@ -115,11 +110,6 @@ theorem isSymmetric_hermitianDilation (A : E →ₗ[𝕜] F) :
   rw [LinearMap.adjoint_inner_left, LinearMap.adjoint_inner_right, add_comm]
 
 /-- Squaring the dilation gives the two Gram operators on the diagonal.
-
-Lean proof route for a weaker agent:
-
-1. Prove directly by block-matrix/adjoint algebra and the operator-norm ideal inequality.
-2. These finite identities are prerequisites for, rather than consequences of, the experimental compact/singular layer.
 -/
 theorem hermitianDilation_sq (A : E →ₗ[𝕜] F) :
     hermitianDilation A ∘ₗ hermitianDilation A =
@@ -129,11 +119,6 @@ theorem hermitianDilation_sq (A : E →ₗ[𝕜] F) :
   ext <;> simp [rightGram, leftGram]
 
 /-- Gram perturbation identity.
-
-Lean proof route for a weaker agent:
-
-1. Prove directly by block-matrix/adjoint algebra and the operator-norm ideal inequality.
-2. These finite identities are prerequisites for, rather than consequences of, the experimental compact/singular layer.
 -/
 theorem rightGram_sub_rightGram
     (A Â : E →ₗ[𝕜] F) :
@@ -151,11 +136,6 @@ theorem leftGram_sub_leftGram
   simp [leftGram, map_sub]
 
 /-- Operator-norm Gram perturbation bound.
-
-Lean proof route for a weaker agent:
-
-1. Prove directly by block-matrix/adjoint algebra and the operator-norm ideal inequality.
-2. These finite identities are prerequisites for, rather than consequences of, the experimental compact/singular layer.
 -/
 theorem opNorm_rightGram_sub_le
     (A Â : E →ₗ[𝕜] F) :
@@ -203,11 +183,6 @@ theorem opNorm_leftGram_sub_le
   simpa [leftGram, map_sub, add_comm] using h
 
 /-- Right singular-subspace `sin Θ` theorem obtained from the Gram operators.
-
-Lean proof route for a weaker agent:
-
-1. Apply the finite operator-norm `sin Θ` theorem to the appropriate Gram operators, then use `opNorm_rightGram_sub_le` (or its left analogue).
-2. Keep this finite instead of waiting for the experimental compact/singular-subspace module.
 -/
 theorem rightSingularSubspace_sinTheta_le
     {A Â : E →ₗ[𝕜] F} {a b δ : ℝ} (hδ : 0 < δ)
@@ -228,11 +203,6 @@ theorem rightSingularSubspace_sinTheta_le
   exact hdk.trans (opNorm_rightGram_sub_le A Â)
 
 /-- Left singular-subspace counterpart.
-
-Lean proof route for a weaker agent:
-
-1. Apply the finite operator-norm `sin Θ` theorem to the appropriate Gram operators, then use `opNorm_rightGram_sub_le` (or its left analogue).
-2. Keep this finite instead of waiting for the experimental compact/singular-subspace module.
 -/
 theorem leftSingularSubspace_sinTheta_le
     {A Â : E →ₗ[𝕜] F} {a b δ : ℝ} (hδ : 0 < δ)
@@ -255,16 +225,6 @@ theorem leftSingularSubspace_sinTheta_le
 /-- Hermitian-dilation form controlling left and right singular subspaces in a
 single Davis--Kahan application.
 
-Lean proof route for a weaker agent:
-
-1. Apply the generic separated-spectrum finite `sin Θ` theorem to the two
-   explicit Hermitian dilations.
-2. Keep the `pi / 2` factor: `HybridGap` does not encode ordered or
-   interval/exterior geometry.
-3. A later Wedin wrapper may separately prove
-   `‖hermitianDilation (Â-A)‖ = ‖Â-A‖` and replace the dilation difference by the
-   rectangular perturbation norm.
-
 Signature audit: the previous constant-one conclusion was too strong for an
 arbitrary `HybridGap`; constant one requires a stronger gap predicate.
 -/
@@ -286,12 +246,6 @@ theorem singularSubspace_dilation_sinTheta_le
 /-- Equal-dimensional right singular subspaces admit an isometric
 identification; the aligned-frame theorem in `Statistics.lean` chooses the
 identification minimizing basis discrepancy.
-
-Lean proof route for a weaker agent:
-
-1. Use equality of finite dimensions to choose orthonormal bases of the two subspaces and map one basis isometrically to the other.
-2. Obtain orthonormal bases indexed by the common finrank.
-3. Use `OrthonormalBasis.equiv` or construct the linear isometry by basis extension, then package it in `Nonempty`.
 -/
 theorem nonempty_rightSingularSubspace_isometry
     {A Â : E →ₗ[𝕜] F} {Ω : Set ℝ}

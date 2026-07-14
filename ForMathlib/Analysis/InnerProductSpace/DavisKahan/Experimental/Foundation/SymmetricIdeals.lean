@@ -148,22 +148,12 @@ noncomputable def kyFan (k : ℕ) (hk : 0 < k) :
     SymmetricNormIdeal (𝕜 := 𝕜) (E := E) := by
   sorry
 
-/-- Unitary invariance of a symmetric ideal norm. 
-
-Lean proof route for a weaker agent:
-
-1. Apply the structure field `unitary_invariant` with the supplied unitary and inverse hypotheses.
-2. If the final structure is refactored to one unitary plus adjoint, first prove the supplied inverse equals the adjoint.
-3. Keep `hA` available for downstream membership lemmas even though equality of the total gauge is immediate.
-
+/-- Unitary invariance of a symmetric ideal norm.
 
 Ext-agent signature audit (GPT 5.6 High): Correct with explicit membership and two-sided
 inverse data. The structure laws are deliberately restricted to ideal members; a real-valued
 trace or Schatten gauge cannot satisfy norm laws on every bounded operator. The eventual
 bundled ideal norm should make the equality a norm-isometry theorem.
-
-Preferred dependency route: First realize ideal members as a complete normed space; then
-use reflection averaging, two-sided ideal bounds, and unitary invariance.
 -/
 theorem gauge_unitary_conjugation
     (I : SymmetricNormIdeal (𝕜 := 𝕜) (E := E))

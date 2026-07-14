@@ -210,11 +210,6 @@ theorem tanThetaMap_perturbation_le
 
 /-- Canonical spectral-subspace version.
 
-Lean proof route for a weaker agent:
-
-1. Convert the reducing subspace of `B` into a graph over `U`, use the zero-compression hypothesis to obtain the tangent Sylvester equation, and apply the residual theorem.
-2. Reuse the experimental graph/Riccati geometry for the operator-norm skeleton; keep UI singular values finite.
-
 Signature audit: `hacute` explicitly selects the transverse spectral branch.  A later
 continuation theorem may derive this premise in common applications.
 -/
@@ -260,12 +255,6 @@ theorem tanTheta_vector_le
 
 /-- Operator-norm largest-angle form.
 
-Lean proof route for a weaker agent:
-
-1. Apply `tanTheta_perturbation_le` with the concrete operator-norm `UnitarilyInvariantNorm` instance.
-2. Rewrite the abstract norm of `tanAngleOperator U V` and `B-A` using the instance's application theorem.
-3. Preserve `hacute` through the specialization; do not divide by a cosine or re-prove graph existence in this wrapper.
-
 Signature audit: The explicit `hacute` premise makes the full-space tangent operator a valid
 finite principal-angle object.
 -/
@@ -283,14 +272,8 @@ theorem opNorm_tanTheta_le
 
 /-- Frobenius `tan Θ` form.
 
-Lean proof route for a weaker agent:
-
-1. Apply `tanTheta_perturbation_le` with the concrete operator-norm `UnitarilyInvariantNorm` instance.
-2. Rewrite the abstract norm of `tanAngleOperator U V` and `B-A` using the instance's application theorem.
-3. Preserve `hacute` through the specialization; do not divide by a cosine or re-prove graph existence in this wrapper.
-
-Signature audit: The explicit `hacute` premise rules out tangent poles; the proof should still
-pass through the one-sided graph singular values.
+Signature audit: The explicit `hacute` premise rules out tangent poles and makes the
+one-sided graph singular values well-defined.
 -/
 theorem frobenius_tanTheta_le
     {A B : E →ₗ[𝕜] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
@@ -306,14 +289,8 @@ theorem frobenius_tanTheta_le
 
 /-- Ky Fan `tan Θ` form.
 
-Lean proof route for a weaker agent:
-
-1. Apply `tanTheta_perturbation_le` with the concrete operator-norm `UnitarilyInvariantNorm` instance.
-2. Rewrite the abstract norm of `tanAngleOperator U V` and `B-A` using the instance's application theorem.
-3. Preserve `hacute` through the specialization; do not divide by a cosine or re-prove graph existence in this wrapper.
-
-Signature audit: The explicit `hacute` premise rules out tangent poles; the proof should still
-pass through the one-sided graph singular values.
+Signature audit: The explicit `hacute` premise rules out tangent poles and makes the
+one-sided graph singular values well-defined.
 -/
 theorem kyFan_tanTheta_le
     {A B : E →ₗ[𝕜] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
