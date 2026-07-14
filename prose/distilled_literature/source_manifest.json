@@ -418,7 +418,7 @@
       "repo_evidence": [
         "Acharyya2025/AlignedPipeline.lean",
         "ForMathlib/Analysis/InnerProductSpace/AlignedBasis.lean",
-        "ForMathlib/Analysis/InnerProductSpace/DavisKahanTheory/Statistics.lean"
+        "DavisKahan/Specialized/Statistics.lean"
       ],
       "existing_assets": [],
       "scope": "The orthogonal Procrustes minimizer and its SVD/polar-factor representation.",
@@ -664,7 +664,7 @@
       "target_note": "HoffmanWielandt1953_spectral_variation.tex",
       "repo_evidence": [
         "ForMathlib/Analysis/InnerProductSpace/HoffmanWielandt.lean",
-        "ForMathlib/Analysis/InnerProductSpace/YuWangSamworth.lean"
+        "DavisKahan/Sources/YuWangSamworth2015.lean"
       ],
       "existing_assets": [],
       "scope": "The normal/symmetric Hoffman--Wielandt eigenvalue matching inequality and its use in the exact YWS proof.",
@@ -714,7 +714,7 @@
       "target_note": "Rosenblum1956_operator_equation.tex",
       "repo_evidence": [
         "ForMathlib/Analysis/InnerProductSpace/SylvesterBound.lean",
-        "ForMathlib/Analysis/InnerProductSpace/DavisKahanTheory/Sylvester.lean"
+        "DavisKahan/Sylvester/BoundedOperator.lean"
       ],
       "existing_assets": [],
       "scope": "Existence/uniqueness and contour-integral solution of the separated-spectrum operator equation.",
@@ -761,9 +761,9 @@
       "primary_url": "https://doi.org/10.1016/0022-247X(63)90001-5",
       "target_note": "Davis1963_rotation_of_eigenvectors.tex",
       "repo_evidence": [
-        "ForMathlib/Analysis/InnerProductSpace/DavisKahanTheory/Davis1963.lean",
-        "ForMathlib/Analysis/InnerProductSpace/RotationBound.lean",
-        "ForMathlib/Analysis/InnerProductSpace/RotationSharp.lean"
+        "DavisKahan/Sources/Davis1963/RotationEnergy.lean",
+        "DavisKahan/Sources/Davis1963/RotationBound.lean",
+        "DavisKahan/Sources/Davis1963/DoubleAngle.lean"
       ],
       "existing_assets": [
         "ForMathlib/prose/Davis-1963-core-arguments.tex",
@@ -790,8 +790,8 @@
       "target_note": "Halmos1969_two_subspaces.tex",
       "repo_evidence": [
         "ForMathlib/Analysis/InnerProductSpace/PrincipalAngles.lean",
-        "ForMathlib/Analysis/InnerProductSpace/DavisKahanTheory/DirectRotation.lean",
-        "ForMathlib/Analysis/InnerProductSpace/DavisKahanExt/OperatorAngle.lean"
+        "DavisKahan/Experimental/FiniteDimensional/DirectRotation.lean",
+        "DavisKahan/Experimental/InfiniteDimensional/Core/OperatorAngle.lean"
       ],
       "existing_assets": [],
       "scope": "Canonical decomposition of a pair of subspaces/projections and the generic two-subspace model.",
@@ -815,8 +815,8 @@
       "primary_url": "https://doi.org/10.1137/0707001",
       "target_note": "DavisKahan1970_part_III.tex",
       "repo_evidence": [
-        "ForMathlib/Analysis/InnerProductSpace/DavisKahan.lean",
-        "ForMathlib/Analysis/InnerProductSpace/DavisKahanTheory.lean",
+        "DavisKahan/Specialized/EigenbasisFrobenius.lean",
+        "DavisKahan/All.lean",
         "papers/DavisKahan-formalized-vs-literature.tex"
       ],
       "existing_assets": [
@@ -842,8 +842,8 @@
       "primary_url": "",
       "target_note": "Wedin1972_svd_perturbation.tex",
       "repo_evidence": [
-        "ForMathlib/Analysis/InnerProductSpace/DavisKahanTheory/SingularSubspace.lean",
-        "ForMathlib/Analysis/InnerProductSpace/DavisKahan/Experimental/Literature/CompactAndSingular.lean"
+        "DavisKahan/Specialized/SingularSubspace.lean",
+        "DavisKahan/Experimental/InfiniteDimensional/Ideals/CompactAndSingular.lean"
       ],
       "existing_assets": [],
       "scope": "Residual-based perturbation bounds for left and right singular subspaces.",
@@ -869,7 +869,7 @@
       "bibliographic_verification": "needed",
       "target_note": "BhatiaDavisMcIntosh1983_spectral_subspaces_sylvester.tex",
       "repo_evidence": [
-        "ForMathlib/Analysis/InnerProductSpace/DavisKahanTheory/Sylvester.lean",
+        "DavisKahan/Sylvester/BoundedOperator.lean",
         "dev/davis-kahan-expert-completion-plan.md",
         "dev/lean-proof-engineering-lessons.md",
         "prose/distilled_literature/AlbeverioMakarovMotovilov2001_sylvester_fourier_pi_over_two.tex"
@@ -897,8 +897,8 @@
       "primary_url": "https://arxiv.org/abs/math/0105142",
       "target_note": "AlbeverioMakarovMotovilov2001_sylvester_fourier_pi_over_two.tex",
       "repo_evidence": [
-        "ForMathlib/Analysis/InnerProductSpace/DavisKahanTheory/ReciprocalMultiplier.lean",
-        "ForMathlib/Analysis/InnerProductSpace/DavisKahanTheory/Sylvester.lean",
+        "DavisKahan/Sylvester/Internal/ReciprocalMultiplier.lean",
+        "DavisKahan/Sylvester/BoundedOperator.lean",
         "papers/DavisKahan-formalized-vs-literature.tex"
       ],
       "existing_assets": [
@@ -950,7 +950,7 @@
       "target_note": "BhatiaRosenthal1997_sylvester_equation.tex",
       "repo_evidence": [
         "ForMathlib/Analysis/InnerProductSpace/SylvesterBound.lean",
-        "ForMathlib/Analysis/InnerProductSpace/DavisKahanTheory/Sylvester.lean"
+        "DavisKahan/Sylvester/BoundedOperator.lean"
       ],
       "existing_assets": [],
       "scope": "Operator-equation solution methods, spectral separation, and norm estimates.",
@@ -975,8 +975,8 @@
       "primary_url": "",
       "target_note": "KostrykinMakarovMotovilov2005_riccati_tan_theta.tex",
       "repo_evidence": [
-        "ForMathlib/Analysis/InnerProductSpace/TanTheta.lean",
-        "ForMathlib/Analysis/InnerProductSpace/DavisKahanExt/Riccati.lean"
+        "DavisKahan/FiniteDimensional/TanTheta/Vector.lean",
+        "DavisKahan/Experimental/InfiniteDimensional/Riccati/Bounded.lean"
       ],
       "existing_assets": [],
       "scope": "Operator Riccati graph-subspace construction and tan Theta estimates.",
@@ -1026,8 +1026,8 @@
       "primary_url": "",
       "target_note": "KnyazevJujunashviliArgentati2010_infinite_subspace_angles.tex",
       "repo_evidence": [
-        "ForMathlib/Analysis/InnerProductSpace/DavisKahanExt/OperatorAngle.lean",
-        "ForMathlib/Analysis/InnerProductSpace/DavisKahanExt/PROOF_PLAN.md"
+        "DavisKahan/Experimental/InfiniteDimensional/Core/OperatorAngle.lean",
+        "docs/planning/historical/davis-kahan-pre-reorganization/infinite-proof-plan.md"
       ],
       "existing_assets": [],
       "scope": "Infinite-dimensional principal angles and alternating projections.",
@@ -1050,7 +1050,7 @@
       "primary_url": "https://arxiv.org/abs/1204.4441",
       "target_note": "Motovilov2012_tan_theta_comment.tex",
       "repo_evidence": [
-        "ForMathlib/Analysis/InnerProductSpace/TanTheta.lean",
+        "DavisKahan/FiniteDimensional/TanTheta/Vector.lean",
         "papers/DavisKahan-formalized-vs-literature.tex"
       ],
       "existing_assets": [],
@@ -1074,7 +1074,7 @@
       "primary_url": "",
       "target_note": "Nakatsukasa2012_relaxed_tan_theta.tex",
       "repo_evidence": [
-        "ForMathlib/Analysis/InnerProductSpace/TanTheta.lean"
+        "DavisKahan/FiniteDimensional/TanTheta/Vector.lean"
       ],
       "existing_assets": [],
       "scope": "Relaxed spectral conditions for tan Theta bounds.",
@@ -1100,7 +1100,7 @@
       "primary_url": "https://arxiv.org/abs/1006.3190",
       "target_note": "GrubisicKostrykinMakarovVeselic2013_tan_two_theta.tex",
       "repo_evidence": [
-        "ForMathlib/Analysis/InnerProductSpace/TanTwoTheta.lean",
+        "DavisKahan/FiniteDimensional/DoubleAngle/TanTheta.lean",
         "papers/DavisKahan-formalized-vs-literature.tex"
       ],
       "existing_assets": [],
@@ -1124,8 +1124,8 @@
       "primary_url": "https://arxiv.org/abs/1310.2036",
       "target_note": "Seelmann2014_sin_two_theta.tex",
       "repo_evidence": [
-        "ForMathlib/Analysis/InnerProductSpace/TanTwoTheta.lean",
-        "ForMathlib/Analysis/InnerProductSpace/DavisKahan/Experimental/Literature/DoubleAngle.lean"
+        "DavisKahan/FiniteDimensional/DoubleAngle/TanTheta.lean",
+        "DavisKahan/Experimental/InfiniteDimensional/DoubleAngle.lean"
       ],
       "existing_assets": [],
       "scope": "General spectral-separation sin 2 Theta theorem and operator-angle formalism.",
@@ -1150,9 +1150,9 @@
       "primary_url": "https://arxiv.org/abs/1405.0680",
       "target_note": "YuWangSamworth2015_statistical_davis_kahan.tex",
       "repo_evidence": [
-        "ForMathlib/Analysis/InnerProductSpace/YuWangSamworth.lean",
+        "DavisKahan/Sources/YuWangSamworth2015.lean",
         "ForMathlib/Analysis/InnerProductSpace/AlignedBasis.lean",
-        "ForMathlib/Analysis/InnerProductSpace/DavisKahanTheory/Statistics.lean"
+        "DavisKahan/Specialized/Statistics.lean"
       ],
       "existing_assets": [
         "ForMathlib/prose/Yu-Wang-Samworth-2014-core-arguments.tex",
@@ -1178,9 +1178,9 @@
       "primary_url": "https://doi.org/10.1007/978-3-642-66282-9",
       "target_note": "Kato1966_selected_perturbation_theory.tex",
       "repo_evidence": [
-        "ForMathlib/Analysis/InnerProductSpace/DavisKahan/Experimental/README.md",
-        "ForMathlib/Analysis/InnerProductSpace/DavisKahan/Experimental/Foundation/Unbounded.lean",
-        "ForMathlib/Analysis/InnerProductSpace/DavisKahanExt/PROOF_PLAN.md"
+        "DavisKahan/Experimental/README.md",
+        "DavisKahan/Experimental/InfiniteDimensional/Core/Unbounded.lean",
+        "docs/planning/historical/davis-kahan-pre-reorganization/infinite-proof-plan.md"
       ],
       "existing_assets": [],
       "scope": "Selected spectral-projection, graph-subspace, bounded/unbounded perturbation, and Kato--Rellich results corresponding to retained experimental targets.",
@@ -1229,7 +1229,7 @@
       "target_note": "Bhatia1997_selected_matrix_analysis.tex",
       "repo_evidence": [
         "ForMathlib/Analysis/InnerProductSpace/SylvesterBound.lean",
-        "ForMathlib/Analysis/InnerProductSpace/SinThetaUINorm.lean",
+        "DavisKahan/FiniteDimensional/SinTheta/UnitarilyInvariant.lean",
         "ForMathlib/Analysis/InnerProductSpace/UnitarilyInvariantNorm.lean"
       ],
       "existing_assets": [],

@@ -1,4 +1,4 @@
-import ForMathlib.Analysis.InnerProductSpace.DavisKahanTheory.Basic
+import DavisKahan.Core.All
 
 /-!
 # Sharp finite Davis--Kahan projector-difference theorems

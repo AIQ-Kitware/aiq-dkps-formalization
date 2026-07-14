@@ -1,0 +1,187 @@
+/-
+Copyright (c) 2026 Kitware, Inc. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Jon Crall, GPT 5.6 High
+-/
+import DavisKahan.Experimental.InfiniteDimensional.Riccati.Unbounded
+
+/-!
+# Quadratic-form perturbations
+
+Literature writeup: local TeX, Sections 30--31.  Form perturbations are needed
+for Schrödinger operators and PDE applications where operator differences are
+not bounded on the ambient Hilbert space.
+-/
+
+
+/-! ## Construction plan
+
+The three constructors at the top of this module must be implemented only
+after the form-domain Hilbert space is explicit.
+
+1. Redesign `formSum` to carry equality of domains and the relative-bound data
+   needed for closedness; the permanent constructor should not choose a closed
+   form from arbitrary inputs.
+2. Construct `ClosedForm.associatedOperator` through the first representation
+   theorem: represent continuous functionals in the form norm, define the
+   operator domain by ambient representability, and prove the graph is closed.
+3. Define `formPerturbationSize` as the operator norm of the perturbing form on
+   the shifted form-domain Hilbert space.  Its evaluation theorem should expose
+   exactly the inequality consumed by the form Sylvester estimate.
+-/
+
+
+/-! ## Weak-agent execution plan: closed forms before form perturbation theorems
+
+Use a bundled densely-defined sesquilinear form with a domain submodule and a
+closed graph/form norm.  Separate algebraic form operations from analytic
+closedness.  The minimal dependency ladder is:
+
+1. form domain intersection and restriction;
+2. symmetric, lower-bounded, and closed predicates;
+3. form norm and completeness of the domain;
+4. bounded form perturbations;
+5. relative form bounds;
+6. KLMN construction of the perturbed self-adjoint operator;
+7. resolvent comparison and spectral-subspace consequences.
+
+When proving KLMN, shift by a lower bound so the form is coercive, use
+Lax--Milgram to construct the resolvent, and recover the operator from the
+representation theorem.  Keep constants explicit throughout.  Do not encode a
+form as an everywhere-defined function on the ambient Hilbert space; that
+would make domain-sensitive statements formally false.
+-/
+
+namespace ForMathlib
+namespace DavisKahanExt
+
+open scoped InnerProductSpace
+
+variable {𝕜 : Type*} [RCLike 𝕜]
+variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
+  [CompleteSpace E]
+
+/-- Closed symmetric sesquilinear form, represented at roadmap level. -/
+structure ClosedForm where
+  domain : Submodule 𝕜 E
+  form : domain → domain → 𝕜
+  dense_domain : Dense (domain : Set E)
+  hermitian : ∀ x y, star (form x y) = form y x
+  sesquilinear : Prop
+  lowerSemibounded : Prop
+  closedness : Prop
+
+/-- Relative form boundedness. -/
+def FormRelativelyBounded (a v : ClosedForm (𝕜 := 𝕜) (E := E))
+    (alpha beta : ℝ) : Prop :=
+  ∃ hdom : v.domain = a.domain,
+    ∀ x : a.domain,
+      ‖v.form (hdom.symm ▸ x) (hdom.symm ▸ x)‖ ≤
+        alpha * ‖(x : E)‖ ^ 2 + beta * ‖a.form x x‖
+
+/-- Closed form sum, constructed under a relative-bound hypothesis.
+
+Construction route: use the common form domain supplied by
+`FormRelativelyBounded`, add the two sesquilinear forms there, and transport
+closedness/lower semiboundedness from the norm-equivalence estimate.  The
+constructor should eventually take the relative-bound witness explicitly. -/
+noncomputable def formSum
+    (a v : ClosedForm (𝕜 := 𝕜) (E := E)) :
+    ClosedForm (𝕜 := 𝕜) (E := E) := by
+  sorry
+
+/-- Operator associated with a closed semibounded form.
+
+Construction route: complete the form domain in the shifted form norm, use
+Riesz representation for vectors whose form functional is ambient-norm
+bounded, and define the operator domain from exactly those vectors.  Closedness
+and self-adjointness are consequences of the representation theorem. -/
+noncomputable def ClosedForm.associatedOperator
+    (a : ClosedForm (𝕜 := 𝕜) (E := E)) :
+    ClosedOperator (𝕜 := 𝕜) (E := E) := by
+  sorry
+
+/-- Quantitative size of a form perturbation in the form-domain norm.
+
+Construction route: define the form-domain Hilbert norm from a coercive shift
+of `a`, bundle `v` as a bounded sesquilinear form on that space, and take its
+operator norm.  Prove independence, up to the required equivalent constants,
+of the chosen admissible shift. -/
+noncomputable def formPerturbationSize
+    (a v : ClosedForm (𝕜 := 𝕜) (E := E)) : ℝ := by
+  sorry
+
+/-- KLMN theorem.
+
+Proof strategy: shift the reference form to make its form norm coercive and
+complete.  Relative form bound below one proves equivalence of the original
+and perturbed form norms, hence closedness of the sum.  Establish lower
+semiboundedness by absorbing the relative term.  The representation theorem
+then produces the associated self-adjoint operator.  Formalization should
+first package the form-domain Hilbert space and bounded inclusion into the
+ambient space. 
+
+Lean proof route for a weaker agent:
+
+1. Use `ha_sesq`, `ha_closed`, and `ha_lower`, then shift `a` by a scalar so its form norm is coercive and complete.
+2. Use the relative form estimate with `beta<1` to prove equivalence of the original and perturbed form norms.
+3. Deduce closedness and lower semiboundedness of `formSum a v`.
+4. Apply the first representation theorem to prove self-adjointness of the associated operator.
+
+
+Ext-agent signature audit (GPT 5.6 High): The earlier signature was false because the
+roadmap `ClosedForm` fields are propositions, not assumptions. The added
+sesquilinearity, closedness, and lower-semiboundedness hypotheses make the KLMN target
+meaningful.
+
+Preferred dependency route: Package a real form-domain Hilbert space and representation
+theorem first; use KLMN to obtain self-adjoint operators before applying
+spectral-subspace estimates.
+-/
+theorem klmn
+    (a v : ClosedForm (𝕜 := 𝕜) (E := E))
+    (ha_sesq : a.sesquilinear) (hv_sesq : v.sesquilinear)
+    (ha_closed : a.closedness) (ha_lower : a.lowerSemibounded)
+    {alpha beta : ℝ} (hrel : FormRelativelyBounded a v alpha beta)
+    (halpha : 0 ≤ alpha) (hbeta0 : 0 ≤ beta) (hbeta : beta < 1) :
+    (formSum a v).closedness ∧ (formSum a v).lowerSemibounded ∧
+      (formSum a v).associatedOperator.IsSelfAdjoint := by
+  sorry
+
+/-- Form-version `sin Θ` theorem. 
+
+Lean proof route for a weaker agent:
+
+1. Use the explicit validity hypotheses and KLMN to obtain self-adjoint associated operators for the original and perturbed forms.
+2. Translate `formPerturbationSize` into the off-diagonal form-residual estimate on the two selected spectral subspaces.
+3. Apply the general form-domain Sylvester estimate in both mixed directions.
+4. Recombine the directed blocks with the universal `π/2` constant; reserve constant one for a separate interval/exterior theorem.
+
+
+Ext-agent signature audit (GPT 5.6 High): Now carries the reference-form validity
+assumptions needed to invoke KLMN and the generic `π/2` constant forced by arbitrary
+spectral-set separation. `formPerturbationSize` still needs a concrete form-domain norm.
+
+Preferred dependency route: Package a real form-domain Hilbert space and representation
+theorem first; use KLMN to obtain self-adjoint operators before applying
+spectral-subspace estimates.
+-/
+theorem sinTheta_formPerturbation
+    (a v : ClosedForm (𝕜 := 𝕜) (E := E))
+    (ha_sesq : a.sesquilinear) (hv_sesq : v.sesquilinear)
+    (ha_closed : a.closedness) (ha_lower : a.lowerSemibounded)
+    {alpha beta d : ℝ} (hrel : FormRelativelyBounded a v alpha beta)
+    (halpha : 0 ≤ alpha) (hbeta0 : 0 ≤ beta) (hbeta : beta < 1)
+    (hd : 0 < d) (s t : Set ℝ)
+    (hs : MeasurableSet s) (ht : MeasurableSet t)
+    (hsepAB : ClosedOperator.SpectralSetsSeparated a.associatedOperator
+      (formSum a v).associatedOperator s tᶜ d)
+    (hsepBA : ClosedOperator.SpectralSetsSeparated (formSum a v).associatedOperator
+      a.associatedOperator t sᶜ d) :
+    d * ‖a.associatedOperator.spectralProjection s -
+      (formSum a v).associatedOperator.spectralProjection t‖ ≤
+      (Real.pi / 2) * formPerturbationSize a v := by
+  sorry
+
+end DavisKahanExt
+end ForMathlib

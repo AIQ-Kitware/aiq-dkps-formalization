@@ -9,7 +9,7 @@ because their public vocabulary and implementations still cohabit
 future PR-shaping work.
 -/
 
-import ForMathlib.Analysis.InnerProductSpace.DavisKahanTheory.RectangularUINorm
+import ForMathlib.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm
 
 #print axioms ForMathlib.DavisKahanTheory.RectangularUnitarilyInvariantNorm.mem_convexHull_twoSidedUnitaryOrbit_of_kyFanSum_le
 #print axioms ForMathlib.DavisKahanTheory.RectangularUnitarilyInvariantNorm.apply_le_of_kyFanSum_le

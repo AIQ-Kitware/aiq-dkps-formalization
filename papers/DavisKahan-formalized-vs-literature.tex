@@ -1,6 +1,6 @@
 % Davis-Kahan sin-Theta: what the Lean formalization proves, and how it relates
 % to the literature.  Written as an expert-readable companion to
-% ForMathlib/Analysis/InnerProductSpace/DavisKahan.lean, so that the statement
+% DavisKahan/Specialized/EigenbasisFrobenius.lean, so that the statement
 % can be checked against the source papers without reading Lean.
 %
 % Independently written; the two source-paper digests it draws on are
@@ -78,12 +78,12 @@ invariant norms and supplies both residual and perturbation forms.  The closing 
 the remaining canonical-angle, rectangular-residual, tangent-norm,
 spectral-selection, direct-rotation, generalized, and sharpness layers now
 represented by the theorem scaffold under
-\texttt{ForMathlib/Analysis/InnerProductSpace/DavisKahanTheory/}.
+\texttt{DavisKahan/}.
 \end{abstract}
 
 \vspace{1.5em}
 % NOTE: Update permalink if underlying proof changes, so this always is up to date wrt to the referenced lean file.
-\noindent Companion note to \href{https://github.com/AIQ-Kitware/aiq-dkps-formalization/blob/82d20de0546c5414317df8bcffb4229fb72f8d89/ForMathlib/Analysis/InnerProductSpace/DavisKahan.lean}{ForMathlib/Analysis/InnerProductSpace/DavisKahan.lean} and its sibling files under \href{https://github.com/AIQ-Kitware/aiq-dkps-formalization/tree/82d20de0546c5414317df8bcffb4229fb72f8d89/ForMathlib/Analysis/InnerProductSpace}{ForMathlib/Analysis/InnerProductSpace/}, part of a larger formalization effort at \href{https://github.com/AIQ-Kitware/aiq-dkps-formalization}{github.com/AIQ-Kitware/aiq-dkps-formalization}.
+\noindent Companion note to \href{https://github.com/AIQ-Kitware/aiq-dkps-formalization/blob/82d20de0546c5414317df8bcffb4229fb72f8d89/DavisKahan/Specialized/EigenbasisFrobenius.lean}{DavisKahan/Specialized/EigenbasisFrobenius.lean} and its sibling files under \href{https://github.com/AIQ-Kitware/aiq-dkps-formalization/tree/82d20de0546c5414317df8bcffb4229fb72f8d89/ForMathlib/Analysis/InnerProductSpace}{ForMathlib/Analysis/InnerProductSpace/}, part of a larger formalization effort at \href{https://github.com/AIQ-Kitware/aiq-dkps-formalization}{github.com/AIQ-Kitware/aiq-dkps-formalization}.
 
 
 
@@ -232,7 +232,7 @@ but not the complete 1970 theorem surface.  In particular, the original paper
 states $\sin\Theta$, $\tan\Theta$, $\sin2\Theta$, and $\tan2\Theta$ for
 arbitrary unitarily invariant norms, with residual as well as perturbation
 forms.  The theorem scaffold added under
-\texttt{ForMathlib/Analysis/InnerProductSpace/DavisKahanTheory/} records that
+\texttt{DavisKahan/} records that
 larger target, including the coordinate-free geometry and spectral-selection
 lemmas implicit in the paper.  Its rectangular norm layer, zero-extension
 calculus, Fan-dominance theorem, concrete Ky Fan/Frobenius/nuclear norms, and
@@ -815,7 +815,7 @@ of \texttt{principalSines}; the previous provisional statement had these
 arguments reversed and was corrected.  Finally, transversality of
 $\operatorname{ran}X$ to $U$ is characterized exactly by injectivity of the
 cosine-coordinate map.  These results are implemented in
-\texttt{DavisKahanTheory/Residual.lean}.
+\texttt{DavisKahan/Residual/All.lean}.
 
 \paragraph{The square perturbation $\sin\Theta$ theorem, every unitarily invariant norm.}
 With the square Fan-dominance library in hand, the Davis--Kahan~(1970)
@@ -1005,10 +1005,10 @@ $\tan\Theta$ theorem is formalized in its pole-free per-vector spectral-norm
 form; and the sharp $\tan2\Theta$ theorem is formalized in operator norm,
 including the strict $\pi/4$ branch conclusion.  These are collected by the
 proof-complete canonical import
-\texttt{ForMathlib.Analysis.InnerProductSpace.DavisKahanTheory.PartIII}.
+\texttt{DavisKahan.Sources.DavisKahan1970.PartIII}.
 
 The broader source-level scaffold rooted at
-\texttt{ForMathlib.Analysis.InnerProductSpace.DavisKahanTheory} also records
+\texttt{DavisKahan.All} also records
 stronger proposed interfaces: residual double-angle theorems, graph and
 canonical tangent operators, every-UI-norm tangent strengthenings, branch
 selection, direct rotation, generalized trial maps, and sharpness.  Those open
@@ -1069,7 +1069,7 @@ scope of the classic literature.
 \section{Dictionary to the Lean source}\label{sec:dictionary}
 
 The core ladder declarations live in
-\texttt{ForMathlib/Analysis/InnerProductSpace/DavisKahan.lean}
+\texttt{DavisKahan/Specialized/EigenbasisFrobenius.lean}
 (namespace \texttt{ForMathlib}).
 
 \begin{center}
@@ -1139,15 +1139,15 @@ Hoffman--Wielandt
   & \texttt{sum\_sq\_eigenvalues\_sub\_le\_sum\_sq\_norm\_apply} (\texttt{HoffmanWielandt.lean}) \\
 Exact YWS, Frobenius branch ($\Delta^2\cdot\text{overlap}\le4\norm{E}_{\F}^2$)
   & \texttt{sq\_gap\_mul\_sum\_cross\_le\_of\_population\_gap},
-    \texttt{sqrt\_sum\_cross\_le\_of\_population\_gap} (\texttt{YuWangSamworth.lean}) \\
+    \texttt{sqrt\_sum\_cross\_le\_of\_population\_gap} (\texttt{DavisKahan/Sources/YuWangSamworth2015.lean}) \\
 Exact YWS, $d^{1/2}$ operator-norm branch
-  & \texttt{sq\_gap\_mul\_sum\_cross\_le\_of\_population\_gap\_opNorm} (\texttt{YuWangSamworth.lean}) \\
+  & \texttt{sq\_gap\_mul\_sum\_cross\_le\_of\_population\_gap\_opNorm} (\texttt{DavisKahan/Sources/YuWangSamworth2015.lean}) \\
 Family-level aligned-basis bound $\sum_j\norm{w_j-u_j}^2\le2\norm{\sinT}_{\F}^2$
   & \texttt{sum\_sq\_norm\_aligned\_le\_sinThetaSq} (\texttt{PrincipalAngles.lean}) \\
 Canonical subspace/Frobenius bridge and arbitrary-subspace aligned bases
   & \texttt{sinThetaSq\_eq\_sinThetaFrobenius\_sq\_of\_spans},
     \texttt{exists\_aligned\_orthonormalBasis},
-    \texttt{yuWangSamworth\_alignedBasis\_le} (\texttt{DavisKahanTheory/Statistics.lean}) \\
+    \texttt{yuWangSamworth\_alignedBasis\_le} (\texttt{DavisKahan/Specialized/Statistics.lean}) \\
 Overlap operator, contraction, $\sum\sigma^2$, $d-\text{overlap}\le\sum\sigma$
   & \texttt{overlapOp}, \texttt{overlapOp\_contraction},
     \texttt{sum\_sq\_singularValues\_overlapOp},
@@ -1169,10 +1169,10 @@ Per-eigenvector $\sin2\theta$: decomposition / projection / angle form,
 $U^{\perp}$-invariance helper
   & \texttt{sin\_two\_theta\_le\_of\_mem}, \texttt{sin\_two\_theta\_le},
     \texttt{sin\_two\_arccos\_le},
-    \texttt{map\_mem\_orthogonal\_of\_forall\_map\_mem} (\texttt{RotationSharp.lean}) \\
+    \texttt{map\_mem\_orthogonal\_of\_forall\_map\_mem} (\texttt{DavisKahan/Sources/Davis1963/DoubleAngle.lean}) \\
 Per-eigenvector $\tan2\theta$ (vanishing pinch): decomposition / projection form
   & \texttt{tan\_two\_theta\_le\_of\_mem}, \texttt{tan\_two\_theta\_le}
-    (\texttt{RotationSharp.lean}) \\
+    (\texttt{DavisKahan/Sources/Davis1963/DoubleAngle.lean}) \\
 Sylvester bound, coercive / separated form
   & \texttt{opNorm\_le\_div\_of\_comp\_add\_comp\_eq},
     \texttt{opNorm\_le\_div\_of\_comp\_sub\_comp\_eq} (\texttt{SylvesterBound.lean}) \\
@@ -1190,7 +1190,7 @@ Principal-angle cosines / $\sin\Theta$ / symmetry / overlap bridge
     \texttt{sinThetaSq\_eq\_sub\_overlap}
     (\texttt{PrincipalAngles.lean});
     \texttt{principalSines\_comm}, \texttt{principalAngles\_comm}
-    (\texttt{DavisKahanTheory/Basic.lean}) \\
+    (\texttt{DavisKahan/Core/All.lean}) \\
 Extreme singular values: bounds and attainment
   & \texttt{singularValues\_last\_mul\_norm\_le},
     \texttt{norm\_apply\_le\_singularValues\_zero\_mul},
@@ -1248,15 +1248,15 @@ Rectangular UI norms: Fan dominance, ideal laws, zero extension
   & \texttt{apply\_le\_of\_kyFanSum\_le},
     \texttt{comp\_le\_opNorm\_mul}, \texttt{comp\_le\_mul\_opNorm},
     \texttt{singularValues\_zeroExtension}
-    (\texttt{DavisKahanTheory/RectangularUINorm.lean}) \\
+    (\texttt{ForMathlib/Analysis/InnerProductSpace/RectangularUnitarilyInvariantNorm.lean}) \\
 Rectangular UI transport; concrete Frobenius/Ky Fan/nuclear norms
   & \texttt{codomainIsometryTransport}, \texttt{domainIsometryTransport},
     \texttt{frobenius}, \texttt{kyFan}, \texttt{nuclear}
-    (\texttt{DavisKahanTheory/RectangularUINorm.lean}) \\
+    (\texttt{ForMathlib/Analysis/InnerProductSpace/RectangularUnitarilyInvariantNorm.lean}) \\
 Sharp interval/exterior Sylvester bound, every rectangular UI norm / Ky Fan
   & \texttt{uiNorm\_sylvester\_le\_of\_}\allowbreak\texttt{intervalGap},
     \texttt{kyFan\_sylvester\_le\_of\_}\allowbreak\texttt{intervalGap}
-    (\texttt{DavisKahanTheory/Sylvester.lean}) \\
+    (\texttt{DavisKahan/Sylvester/BoundedOperator.lean}) \\
 Arbitrary-separated Sylvester $\pi/2$ barycentric/certificate front
   & \texttt{sylvesterReciprocalKernel},
     \texttt{twoSidedUnitaryOrbit},
@@ -1270,41 +1270,41 @@ Arbitrary-separated Sylvester $\pi/2$ barycentric/certificate front
       \texttt{spectralDistance},
     \texttt{kyFan\_sylvester\_le\_of\_}\allowbreak\texttt{spectralDistance},
     \texttt{uiNorm\_sylvester\_le\_of\_}\allowbreak\texttt{spectralDistance}
-    (\texttt{DavisKahanTheory/RectangularUINorm.lean},
-     \texttt{DavisKahanTheory/Sylvester.lean}) \\
+    (\texttt{ForMathlib/Analysis/InnerProductSpace/RectangularUnitarilyInvariantNorm.lean},
+     \texttt{DavisKahan/Sylvester/BoundedOperator.lean}) \\
 Rectangular residual $\sin\Theta$, interval/exterior and ordered
   & \texttt{sinTheta\_residual\_le},
     \texttt{sinTheta\_residual\_le\_of\_orderedGap}
-    (\texttt{DavisKahanTheory/SinTheta.lean}) \\
+    (\texttt{DavisKahan/FiniteDimensional/SinTheta/Perturbation.lean}) \\
 Arbitrary-separated directed $\sin\Theta$, residual and perturbation
   & \texttt{sinTheta\_residual\_le\_of\_}\allowbreak\texttt{spectralDistance},
     \texttt{sinTheta\_perturbation\_le\_of\_}\allowbreak\texttt{spectralDistance}
-    (\texttt{DavisKahanTheory/SinTheta.lean}) \\
+    (\texttt{DavisKahan/FiniteDimensional/SinTheta/Perturbation.lean}) \\
 Sharp directed perturbation $\sin\Theta$, interval/exterior and ordered
   & \texttt{sinTheta\_perturbation\_le},
     \texttt{sinTheta\_perturbation\_le\_of\_orderedGap}
-    (\texttt{DavisKahanTheory/SinTheta.lean}) \\
+    (\texttt{DavisKahan/FiniteDimensional/SinTheta/Perturbation.lean}) \\
 Canonical/Frobenius/Ky Fan directed $\sin\Theta$ wrappers
   & \texttt{sinTheta\_spectralSubspace\_le},
     \texttt{frobenius\_sinTheta\_le},
     \texttt{kyFan\_sinTheta\_le}
-    (\texttt{DavisKahanTheory/SinTheta.lean}) \\
+    (\texttt{DavisKahan/FiniteDimensional/SinTheta/Perturbation.lean}) \\
 Ritz/Galerkin orthogonality and invariance criterion
   & \texttt{adjoint\_comp\_linearIsometry\_eq\_id},
     \texttt{adjoint\_comp\_ritzResidual\_eq\_zero},
     \texttt{ritzResidual\_eq\_zero\_iff\_reduces}
-    (\texttt{DavisKahanTheory/Residual.lean}) \\
+    (\texttt{DavisKahan/Residual/All.lean}) \\
 Residual covariance, perturbation contraction, and Frobenius optimality
   & \texttt{residual\_comp\_unitary},
     \texttt{opNorm\_residual\_le\_perturbation},
     \texttt{residual\_frobenius\_pythagoras},
     \texttt{ritzResidual\_frobenius\_minimal}
-    (\texttt{DavisKahanTheory/Residual.lean}) \\
+    (\texttt{DavisKahan/Residual/All.lean}) \\
 Trial-subspace projection, sine singular values, and transversality
   & \texttt{projection\_approximateSubspace\_eq\_comp\_adjoint},
     \texttt{singularValues\_sinThetaEmbedding},
     \texttt{tanThetaEmbedding\_defined\_iff}
-    (\texttt{DavisKahanTheory/Residual.lean}) \\
+    (\texttt{DavisKahan/Residual/All.lean}) \\
 Norm-free Davis--Kahan setup (shared with the op-norm proof)
   & \texttt{exists\_isSymmetric\_comp\_sub\_comp\_eq}
     (\texttt{SinThetaOpNorm.lean}) \\

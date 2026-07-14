@@ -2,7 +2,7 @@
 
 > **STATUS (2026-07-07): COMPLETE.** All milestones (M1: PD-01..PD-12, M2: PD-13..PD-17,
 > M3: PD-18) are proven, sorry-free, and axiom-clean; Davis Result B (BL1–BL6) is discharged
-> in `ForMathlib/Analysis/InnerProductSpace/RotationBound.lean`. See `tickets.md` for
+> in `DavisKahan/Sources/Davis1963/RotationBound.lean`. See `tickets.md` for
 > per-ticket implementation notes. Route deviation from this plan worth recording: `blockPolar`
 > (M2.2) is obtained by *restricting the assembled intertwining unitary* — block surjectivity
 > follows from `U Pⱼ = P'ⱼ U`, so the rank-equality/dimension-count argument sketched below was

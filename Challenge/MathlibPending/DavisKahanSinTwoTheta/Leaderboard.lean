@@ -1,5 +1,5 @@
 /- # Classical finite Davis--Kahan sin-2Theta dependency audit -/
 
-import ForMathlib.Analysis.InnerProductSpace.DavisKahanTheory.PartIII
+import DavisKahan.Sources.DavisKahan1970.PartIII
 
 #print axioms ForMathlib.DavisKahanTheory.partIII_sinTwoTheta_uiNorm

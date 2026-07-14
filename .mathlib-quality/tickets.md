@@ -77,7 +77,7 @@
 
 ## Result B formalization tickets — ✅ ALL DONE (2026-07-07, `RotationBound.lean`)
 
-> Implemented in `ForMathlib/Analysis/InnerProductSpace/RotationBound.lean`, sorry-free,
+> Implemented in `DavisKahan/Sources/Davis1963/RotationBound.lean`, sorry-free,
 > axiom-clean. The two-sided evaluation is run on `⟨(S−λᵢ)²xᵢ,xᵢ⟩ = ‖Hxᵢ‖²` (since `(A−λᵢ)xᵢ=0`),
 > which fuses BL1+BL2+BL5 into one clean per-`i` estimate — no pinching *operator* is needed.
 
