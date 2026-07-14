@@ -92,6 +92,44 @@ the source-general theorem in the project roadmap.
 See [`docs/planning/davis-kahan-full-paper-goal.md`](docs/planning/davis-kahan-full-paper-goal.md)
 for the maintained scope ledger and completion standard.
 
+<!-- BEGIN Spectra collaboration policy -->
+## Spectra collaboration and dependency policy
+
+`Spectra` is the preferred external foundation for complex Hilbert-space
+projection-valued measures, spectral calculus, possibly unbounded
+self-adjoint operators, bounded polar decomposition, trace class, and
+Hilbert--Schmidt infrastructure. Davis--Kahan geometry and paper-facing
+perturbation theorems remain owned by this repository.
+
+The active collaboration checkout is a Git submodule at `external/Spectra`.
+Follow these rules:
+
+- Do not copy Spectra source into `vendor/lean/` merely to make local progress.
+  Use the submodule for coordinated development and contribute generally useful
+  changes upstream.
+- Mathlib is already a direct dependency. Never vendor excerpts from the pinned
+  Mathlib checkout as though they were third-party source.
+- Keep `.gitmodules` pointed at the public upstream Spectra repository. Use the
+  submodule's `fork` remote for contribution branches.
+- Never edit Spectra while it is on detached `HEAD`. Work on a named branch,
+  normally based on the current DKPS compatibility branch.
+- Do not import the root `Spectra` module. Import the narrowest required modules
+  so unrelated physics and analysis developments do not enter the dependency
+  cone.
+- Keep a thin bridge in `DavisKahan/` for DKPS-specific names and interfaces.
+  PVM range subspaces, reducing-subspace lemmas, general graph geometry, and
+  other reusable operator theory should be proposed upstream.
+- The submodule alone does not make Spectra a production dependency. Enable the
+  Lake path dependency only after the root and submodule toolchains are aligned
+  and the narrow import smoke test is green.
+- Record the exact Spectra gitlink in every result that depends on it. Never
+  claim a Spectra-backed declaration is accepted without building it against
+  the pinned submodule commit.
+
+See [`dev/spectra-integration-survey-2026-07-14.md`](dev/spectra-integration-survey-2026-07-14.md)
+for the audited capability map, ownership boundary, and contribution plan.
+<!-- END Spectra collaboration policy -->
+
 ## Lean source conventions
 
 - **Never write the words `sorry` or `axiom` in comments or docstrings.** A genuine

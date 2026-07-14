@@ -22,6 +22,12 @@ once their statements and proofs stabilize.
   and analytic programs. Some are direct source obligations; others are later
   extensions and must be identified as such in their module documentation.
 
+The graph-subspace donor and vendor audit is recorded in
+`dev/graph-subspace-vendor-survey-2026-07-14.md`. It identifies the pinned
+Mathlib closed-graph, anti-Lipschitz, closed-range inverse, and near-identity
+inversion APIs that should be used before introducing new functional-analysis
+infrastructure.
+
 Definitions in this subtree are implementation seams rather than frozen APIs.
 Experimental modules may import supported modules; supported modules must not
 import this tree.

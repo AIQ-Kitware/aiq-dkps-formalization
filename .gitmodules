@@ -1,0 +1,3 @@
+[submodule "external/Spectra"]
+	path = external/Spectra
+	url = https://github.com/adambornemann-glitch/Spectra.git
