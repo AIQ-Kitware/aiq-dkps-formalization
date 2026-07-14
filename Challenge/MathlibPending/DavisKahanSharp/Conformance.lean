@@ -5,14 +5,14 @@ This challenge imports the trusted statement vocabulary but not the theorem's
 implementation. The paired leaderboard imports the completed project theorem.
 -/
 
-import ForMathlib.Analysis.InnerProductSpace.DavisKahanTheory.Basic
+import DavisKahan.Core.All
 
 /-!
 ## Comparator maintenance rule
 
 The proof hole in this module is a deliberate challenge placeholder. Do not
 discharge it in this repository and do not count it as formalization debt.
-The implementation belongs in `DavisKahanTheory/SinTheta.lean`; Comparator
+The implementation belongs in `DavisKahan/FiniteDimensional/SinTheta/Perturbation.lean`; Comparator
 verifies that implementation against this independently compiled statement.
 -/
 

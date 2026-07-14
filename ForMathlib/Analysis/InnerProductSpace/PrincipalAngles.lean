@@ -15,7 +15,7 @@ To be re-authored per Mathlib's AI-contribution policy at PR time.
 -/
 
 import ForMathlib.Analysis.InnerProductSpace.AlignedBasis
-import ForMathlib.Analysis.InnerProductSpace.DavisKahan
+import ForMathlib.Analysis.InnerProductSpace.ProjectionGeometry
 import ForMathlib.Analysis.InnerProductSpace.KyFan
 
 /-! # Principal angles between subspaces

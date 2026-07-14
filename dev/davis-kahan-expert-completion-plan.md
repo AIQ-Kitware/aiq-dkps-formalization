@@ -464,7 +464,7 @@ supply the `C`-spectrum lemma or hand step (2) to Fable.
 
 ### G2.1 — block-transfer lemma. ✅ Executable. **3/5 confirmed.**
 The vanishing-pinch hypotheses are exactly `tan_two_theta_le_of_mem`'s `hHU` /
-`hHUperp` (RotationSharp.lean:337, confirmed).  `P S P = P T P` etc. follow
+`hHUperp` (DavisKahan/Sources/Davis1963/DoubleAngle.lean:337, confirmed).  `P S P = P T P` etc. follow
 from `S = T + H` and those two identities.  Gate-independent, as the plan says;
 I can start it now.
 
@@ -641,7 +641,7 @@ these corrections and refinements, each folded into the step it concerns:
   (`U = span of leading T-eigenvectors`, etc.) are a concrete gap (E3).
 - **R-D (infinite dimension is closer than stated):** `SylvesterBound.lean`
   (no completeness, no finite dimension) and the per-vector sin2θ/tan2θ
-  (`RotationSharp.lean`, orthogonal-projection-only) are *already*
+  (`DavisKahan/Sources/Davis1963/DoubleAngle.lean`, orthogonal-projection-only) are *already*
   infinite-dimension-ready.  The genuinely finite-dimensional layer is the
   eigenbasis encoding.  A spectral-measure treatment remains out of scope
   (Phase H), but the frontier should be documented, not overstated.
@@ -651,7 +651,7 @@ these corrections and refinements, each folded into the step it concerns:
 Everything in `dev/davis-kahan-gap-closure-plan.md` §"Existing assets" plus,
 since v4 of that plan:
 
-- **RotationSharp.lean** — per-vector sin2θ (`sin_two_theta_le_of_mem`,
+- **DavisKahan/Sources/Davis1963/DoubleAngle.lean** — per-vector sin2θ (`sin_two_theta_le_of_mem`,
   `sin_two_theta_le`, `sin_two_arccos_le`; phase-free, projection-only) and
   tan2θ under vanishing pinch (`tan_two_theta_le_of_mem`, `tan_two_theta_le`);
   invariance helper `map_mem_orthogonal_of_forall_map_mem`; the μ-free
@@ -746,7 +746,7 @@ the largest principal-angle sine.  Route (two inequalities, `le_antisymm`):
   (`(overlapOp hw hu y) i = ⟪w i, x⟫`, from `adjoint_inner_right`).
 - *Pythagoras:* `‖Wᗮ.starProjection x‖² = ‖x‖² − ‖W.starProjection x‖²` (the
   two projections of `x` are orthogonal; `norm_add_sq` pattern as in
-  RotationSharp.lean; also `Wᗮ.starProjection x = x − W.starProjection x` —
+  DavisKahan/Sources/Davis1963/DoubleAngle.lean; also `Wᗮ.starProjection x = x − W.starProjection x` —
   `Submodule.starProjection_orthogonal_val` vicinity, check exact name).
 - *≤:* for any `z`, `P z ∈ U` with `‖P z‖ ≤ ‖z‖`; write `P z = ι(y)`,
   apply E1(a) to `overlapOp hw hu`: `‖overlap y‖ ≥ σ_min ‖y‖`, so
@@ -759,7 +759,7 @@ in the W5.2 setting with `V = Wᗮ` (`d`-codimensional trailing span),
 use `cosPrincipalAngles_comm` to normalize.
 
 **E3 — Spectral (eigenvalue-hypothesis) corollaries. Difficulty 2.5/5.**
-New section in `SinThetaOpNorm.lean` and `RotationSharp.lean`.
+New section in `SinThetaOpNorm.lean` and `DavisKahan/Sources/Davis1963/DoubleAngle.lean`.
 (a) *Un-`private`* in `CourantFischer.lean`: `specSubspace`,
 `finrank_specSubspace`, `re_inner_map_self_le_of_mem_specSubspace`,
 `le_re_inner_map_self_of_mem_specSubspace` (update the header note: they now
@@ -1196,7 +1196,7 @@ and the `|cos 2θ|` weight does not pass through a UI norm naively.
   identities, plus their form-level corollaries.  Independent of the gate's
   outcome; needed by every candidate.
 - **G2.2 (post-gate; Fable).**  The aggregation: per-vector `key_identity`
-  machinery (RotationSharp.lean) summed over an `S`-eigenbasis against the
+  machinery (DavisKahan/Sources/Davis1963/DoubleAngle.lean) summed over an `S`-eigenbasis against the
   OP3 dictionary, or the shape the gate settles on.  Route to be written
   after G2.0 — do not pre-commit.
 
@@ -1492,7 +1492,7 @@ never unfold `starProjection` itself, only expand through the
 - **H1 general-separation op-norm sinΘ (constant `π/2`)**: Fourier-analytic
   (Bhatia–Davis–McIntosh extremal function); genuinely a different proof
   technology.  Record in the paper as known-open in the formalization.
-- **H2 infinite dimensions**: `SylvesterBound.lean` and `RotationSharp.lean`
+- **H2 infinite dimensions**: `SylvesterBound.lean` and `DavisKahan/Sources/Davis1963/DoubleAngle.lean`
   already hold without finite dimension; the eigenbasis-encoded layer is
   finite-dimensional by design.  A spectral-measure DK is a separate project;
   document the frontier precisely (which theorems are already

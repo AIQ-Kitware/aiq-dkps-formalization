@@ -7,7 +7,7 @@ reduction and the still-open field-uniform Sylvester chain visible in ordinary
 challenge builds without pretending that they are additional comparator holes.
 -/
 
-import ForMathlib.Analysis.InnerProductSpace.DavisKahanTheory.SinTheta
+import DavisKahan.FiniteDimensional.SinTheta.Perturbation
 
 #print axioms ForMathlib.DavisKahanTheory.sinAngleOperator_perturbation_le
 #print axioms ForMathlib.DavisKahanTheory.kyFan_reciprocalMultiplier_le_complex_of_approximateFourierInterpolation

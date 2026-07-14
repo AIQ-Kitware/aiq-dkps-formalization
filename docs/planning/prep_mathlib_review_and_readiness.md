@@ -341,7 +341,7 @@ Ask Fable for a PR decomposition rather than a monolithic patch:
 
 Current file:
 
-- `ForMathlib/Analysis/InnerProductSpace/DavisKahan.lean`
+- `DavisKahan/Specialized/EigenbasisFrobenius.lean`
 
 Relevant declarations:
 

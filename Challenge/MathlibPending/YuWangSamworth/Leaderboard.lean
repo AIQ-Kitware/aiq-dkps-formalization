@@ -3,6 +3,6 @@
   -- solution / dependency audit
 -/
 
-import ForMathlib.Analysis.InnerProductSpace.YuWangSamworth
+import DavisKahan.Sources.YuWangSamworth2015
 
 #print axioms ForMathlib.sqrt_sum_cross_le_of_population_gap

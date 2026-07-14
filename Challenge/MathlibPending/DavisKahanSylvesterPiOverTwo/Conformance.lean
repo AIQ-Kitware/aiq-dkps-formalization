@@ -9,7 +9,7 @@ Two advertising-level leaves of the completed generic theory:
   separated Sylvester solution.
 -/
 
-import ForMathlib.Analysis.InnerProductSpace.DavisKahanTheory.RectangularUINorm
+import ForMathlib.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm
 
 /-!
 ## Comparator maintenance rule

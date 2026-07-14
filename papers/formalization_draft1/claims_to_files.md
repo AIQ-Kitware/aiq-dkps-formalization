@@ -100,7 +100,7 @@ for line-accurate citations in a final submission.
 ## Reusable Mathlib-style infrastructure
 
 - `ForMathlib/Analysis/InnerProductSpace/CourantFischer.lean`.
-- `ForMathlib/Analysis/InnerProductSpace/DavisKahan.lean`.
+- `DavisKahan/Specialized/EigenbasisFrobenius.lean`.
 - `ForMathlib/Analysis/InnerProductSpace/GramMatrix.lean`.
 - `ForMathlib/Analysis/InnerProductSpace/NearIsometry.lean`.
 - `ForMathlib/Analysis/Matrix/EntrywiseOpNorm.lean`.
@@ -131,7 +131,7 @@ Use `model_provenance.md` for a longer record.  Summary:
 - Opus evidence: `ForMathlib/*` staged files such as
   `ForMathlib/Topology/ApproxMinimizer.lean`,
   `ForMathlib/Analysis/Matrix/EntrywiseOpNorm.lean`,
-  `ForMathlib/Analysis/InnerProductSpace/DavisKahan.lean`,
+  `DavisKahan/Specialized/EigenbasisFrobenius.lean`,
   `ForMathlib/Probability/Moments/SampleMean.lean`, and
   `ForMathlib/Analysis/Matrix/Spectrum.lean` record `Claude Opus 4.8`; git
   commits on 2026-06-11/12 record staging, rewiring, RCLike generalization, and

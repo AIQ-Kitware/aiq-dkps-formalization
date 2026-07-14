@@ -92,7 +92,7 @@ status:
       reference: "Horn & Johnson, Matrix Analysis (2nd ed.), Thm 4.2.6 (Courant-Fischer) & 4.3.1 (Weyl); Bhatia, Matrix Analysis, Cor III.2.6 (Weyl)."
       comparator_config: "comparator/candidate-02-courant-fischer-weyl.json"
     - declaration: "ForMathlib.sum_norm_sub_starProjection_span_sq_le"
-      file: "ForMathlib/Analysis/InnerProductSpace/DavisKahan.lean"
+      file: "DavisKahan/Specialized/EigenbasisFrobenius.lean"
       sorry_count: 0
       axioms: ["propext", "Classical.choice", "Quot.sound"]
       challenge_file: "Challenge/MathlibCandidate/DavisKahan/Conformance.lean"

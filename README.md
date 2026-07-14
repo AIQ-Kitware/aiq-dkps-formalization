@@ -5,11 +5,12 @@ models, centered on the data kernel perspective space (DKPS) and the
 multidimensional-scaling / spectral-perturbation infrastructure needed to make
 those theorem statements precise.
 
-This repository focuses on five active Lean libraries:
+This repository focuses on six active Lean libraries:
 
 | Library        | Role                                                                                                                    |
 | -------------- | ------------------------------------------------------------------------------------------------------------------------|
-| `ForMathlib`   | Mathlib-staging library: paper-agnostic results restated in Mathlib idiom/generality, one file per target Mathlib path. |
+| `ForMathlib`   | Mathlib-staging library for reusable, paper-agnostic infrastructure. |
+| `DavisKahan`  | Canonical Davis--Kahan perturbation library, with stable finite-dimensional and bounded-operator branches plus mirrored experiments. |
 | `Acharyya2024` | Asymptotic DKPS/raw-stress MDS consistency for model representations.                                                   |
 | `Acharyya2025` | Finite-sample concentration for response-based vector embeddings, including a proved CMDS spectral perturbation bridge. |
 | `DkpsQuench2026` | Query-efficiency theorem family for DKPS-based benchmark prediction from cached responses.                             |
@@ -26,7 +27,9 @@ high-probability event propagation, and consistency transfer.
 ```text
 .
 ├── ForMathlib.lean        # root module for the Mathlib-staging library
-├── ForMathlib/            # staged Mathlib additions (see ForMathlib/README.md)
+├── ForMathlib/            # staged reusable Mathlib additions
+├── DavisKahan.lean        # root module for the stable Davis--Kahan library
+├── DavisKahan/            # core, residual, Sylvester, finite, bounded, source, specialized, and experimental branches
 ├── Acharyya2024.lean      # root module for the 2024 consistency library
 ├── Acharyya2024/          # raw-stress MDS, probability, second moments, paper-facing consistency
 ├── Acharyya2025.lean      # root module for the 2025 concentration library
@@ -39,7 +42,7 @@ high-probability event propagation, and consistency transfer.
 ├── comparator/            # per-PR comparator configs
 ├── docs/                  # planning trackers (docs/planning) and challenge how-to (docs/challenge)
 ├── dev/                   # engineering memory: benchmark questions + debug postmortems (agent-readable)
-├── lakefile.toml          # Lake workspace for the five active libraries
+├── lakefile.toml          # Lake workspace for the six active libraries
 ├── lake-manifest.json     # pinned dependency manifest
 └── lean-toolchain         # Lean toolchain pin
 ```
@@ -67,7 +70,7 @@ In a fresh environment you will need to setup Lean4, see:
 
 ```bash
 lake exe cache get
-lake build ForMathlib Acharyya2024 Acharyya2025 DkpsQuench2026 Helm2025
+lake build ForMathlib DavisKahan Acharyya2024 Acharyya2025 DkpsQuench2026 Helm2025
 ```
 
 To build everything declared in `lakefile.toml`:
@@ -87,6 +90,16 @@ paths, and import only Mathlib.  The paper libraries import these general
 versions and keep only thin paper-facing specializations.  See
 `ForMathlib/README.md` for the contribution workflow and
 `planning/mathlib-candidates.md` for the ranked candidate list.
+
+### `DavisKahan`
+
+Canonical spectral-subspace perturbation theory extracted from the former
+`ForMathlib` staging monoliths. The stable umbrella exposes finite-dimensional
+sine, tangent, and double-angle results; bounded-operator sine and projector
+results; and source-facing Davis--Kahan and Davis 1963 facades. General-purpose
+linear-algebra infrastructure remains in `ForMathlib`. Secondary endpoints and
+mirrored finite- and infinite-dimensional experiments require explicit imports.
+See `DavisKahan/README.md`.
 
 ### `Acharyya2024`
 

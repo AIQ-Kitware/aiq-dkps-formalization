@@ -83,7 +83,7 @@ check `propext, Classical.choice, Quot.sound` on headline declarations).
 | # | Gap | Workstream | Status (2026-07-07) |
 |---|-----|------------|---------------------|
 | G1 | Operator-norm `‖sinΘ‖_op ≤ ‖S−T‖_op/g` and general unitarily-invariant-norm sinΘ | W5, W7 | ◑ W5.1 ✅ + W5.2 ✅ (op-norm half **closed**); W7 (UI norms) deferred |
-| G2 | tanΘ, sin2Θ, tan2Θ theorems | W6 | ◑ W6.1 ✅ (Fable) + W6.2 ✅ (Opus) done in `RotationSharp.lean`; W6.3 defer |
+| G2 | tanΘ, sin2Θ, tan2Θ theorems | W6 | ◑ W6.1 ✅ (Fable) + W6.2 ✅ (Opus) done in `DavisKahan/Sources/Davis1963/DoubleAngle.lean`; W6.3 defer |
 | G3 | YWS aligned-basis bound | W3 | ✅ **closed** (W3.1–W3.4) |
 | G4 | YWS singular-vector extension (rectangular `A, Â`) | W4 | ✅ **closed** (W4.1–W4.3) |
 | G5 | General-interval spectral subspaces (two-sided gap) | W1 | ✅ **closed** (W1.1, W1.2) |
@@ -350,7 +350,7 @@ cardinalities in the interval corollary where Weyl forces them equal.
 ## W2 — Hoffman–Wielandt and the exact YWS theorem
 
 New file `ForMathlib/Analysis/InnerProductSpace/HoffmanWielandt.lean`, then
-`YuWangSamworth.lean`.
+`DavisKahan/Sources/YuWangSamworth2015.lean`.
 
 Why needed: the current formalization recovers YWS only through the Weyl
 bridge, which needs an *operator-norm* smallness case-split. For the
@@ -407,7 +407,7 @@ Pitfall: keep everything real-part-explicit; `⟪T bₖ, S bₖ⟫` is not real
 termwise-symmetric until summed — prove the summed symmetrization.
 
 **W2.4 — YWS theorem, exact form. Difficulty 4/5 (rerated per Opus R1). ✅ DONE
-2026-07-07 (Opus).** `YuWangSamworth.lean`: `residualColumn` +
+2026-07-07 (Opus).** `DavisKahan/Sources/YuWangSamworth2015.lean`: `residualColumn` +
 `inner_eigenvectorBasis_residualColumn` (the R1 T-only cross-term identity),
 `residualColumn_eq` (perturbation-column form), lower bound
 `sq_gap_mul_sum_cross_le_sum_sq_norm_residualColumn` (population gap, Bessel),
@@ -423,7 +423,7 @@ this version is re-derived against `prose/Yu-Wang-Samworth-2014…` and is the
 committed design. Statement-first gate applies: land the `sorry` stubs below
 before proving anything.)*
 
-In `YuWangSamworth.lean`. Headline (commit to this statement first):
+In `DavisKahan/Sources/YuWangSamworth2015.lean`. Headline (commit to this statement first):
 `‖sinΘ‖_F ≤ 2·min{√d·‖E‖_op, ‖E‖_F}/Δ` with `Δ` population-only, in the
 squared sum-encoded form `Δ² · overlap ≤ (2·min{√d·ε_op, ε_F})²`, with the
 gap given by the two guarded hypotheses of the R2 convention
@@ -474,7 +474,7 @@ Depends on: W1.1 (block-general engine vocabulary), W2.3.
 
 ## W3 — YWS aligned-basis bound (G3)
 
-Same file `YuWangSamworth.lean` (or `AlignedBasis.lean` if it grows).
+Same file `DavisKahan/Sources/YuWangSamworth2015.lean` (or `AlignedBasis.lean` if it grows).
 Operator-native statement of `∃ orthogonal O, ‖V̂O − V‖_F ≤ 2^{3/2}·min{…}/Δ`:
 
 > There is an orthonormal family `w : Fin d → E` with
@@ -581,7 +581,7 @@ Depends on: W0.1, W3.1–W3.3; the headline constant additionally on W2.4.
 
 ## W4 — YWS singular-vector extension (G4)
 
-New file `ForMathlib/Analysis/InnerProductSpace/SingularSubspace.lean`.
+New file `DavisKahan/Specialized/SingularSubspaceCore.lean`.
 Setting: `A Â : E →ₗ[𝕜] F`, right-singular subspaces = spectral subspaces of
 `A.adjoint ∘ₗ A` (self-adjoint, positive).
 
@@ -765,12 +765,12 @@ Depends on: W5.1 (done), W1.1 (done). **No W0.2 dependency.**
 
 ## W6 — sin2Θ / tan2Θ (G2)
 
-New file `ForMathlib/Analysis/InnerProductSpace/RotationSharp.lean`.
+New file `DavisKahan/Sources/Davis1963/DoubleAngle.lean`.
 Davis's 2×2-compression results (digest: `prose/Davis-1963-core-arguments.tex`
 §"The sharp two-subspace estimate").
 
 **W6.1 — Per-eigenvector sin2θ bound. Difficulty 4/5. ✅ DONE 2026-07-08
-(Fable) — `RotationSharp.lean` (new file, registered, library build green
+(Fable) — `DavisKahan/Sources/Davis1963/DoubleAngle.lean` (new file, registered, library build green
 8714 jobs, all four public declarations axiom-clean).**
 Implemented exactly along the v5 route below, with one further simplification
 found during implementation: **the half-angle square roots disappear
@@ -794,7 +794,7 @@ text warned about, and needs no location assumption on the perturbed
 eigenvalue. Verified on paper end-to-end, Fable 2026-07-08.)*
 
 **Statement (abstract subspace form — no spectral projections, no rescaling).**
-In `RotationSharp.lean` (new file). Context: `T H : E →ₗ[𝕜] E`,
+In `DavisKahan/Sources/Davis1963/DoubleAngle.lean` (new file). Context: `T H : E →ₗ[𝕜] E`,
 `hT : T.IsSymmetric`, `hH : H.IsSymmetric`, a subspace `U` with
 `hUinv : ∀ u ∈ U, T u ∈ U`, form bounds
 `hb : ∀ u ∈ U, b * ‖u‖^2 ≤ re ⟪T u, u⟫` and
@@ -852,7 +852,7 @@ and the sign split `s ≤ c` vs `c < s`. Provide the `Real.arccos` corollary
 wrapper — the product form is the API.
 
 **W6.2 — Per-eigenvector tan2θ bound under vanishing pinch. Difficulty 2/5.
-✅ DONE 2026-07-08 (Opus) — `RotationSharp.lean`, `tan_two_theta_le_of_mem`
+✅ DONE 2026-07-08 (Opus) — `DavisKahan/Sources/Davis1963/DoubleAngle.lean`, `tan_two_theta_le_of_mem`
 (orthogonal-decomposition form) + `tan_two_theta_le` (`starProjection` form),
 both axiom-clean, module build green.** Implemented exactly along the route
 below: the vanishing-pinch hypotheses are stated subspace-wise
@@ -952,11 +952,11 @@ Everything not listed here is ✅ done and verified (v4 sweep + v5 re-check).
 |------|------|------|-----------|----------|-------|
 | 1 | W6.3 | Subspace-level sin2Θ | 5/5 | **defer** (with W7) | v5 warning: per-vector summation does *not* recover part III; only weaker forms reachable |
 | 2 | W7.1–7.4 | Unitarily invariant norms | 4–5/5 | **defer** (separate project) | unchanged |
-| 3 | W6.1 | Per-vector sin2θ, product form | 4/5 | **✅ DONE** (Fable, 2026-07-08) | `RotationSharp.lean`; polynomial-coefficient rotation, no `sqrt`/inverses; axiom-clean |
+| 3 | W6.1 | Per-vector sin2θ, product form | 4/5 | **✅ DONE** (Fable, 2026-07-08) | `DavisKahan/Sources/Davis1963/DoubleAngle.lean`; polynomial-coefficient rotation, no `sqrt`/inverses; axiom-clean |
 | — | W5.2 | Op-norm sinΘ via Sylvester | 3/5 | **✅ DONE** (Opus, 2026-07-08) | `SinThetaOpNorm.lean`; full-space scalar-extension route (no subtypes), axiom-clean |
 | — | W0.2 | Principal-angle API | 3/5 | **✅ DONE** (Opus, 2026-07-08) | `PrincipalAngles.lean`; cos/sin defs + symmetry + overlap bridge, axiom-clean |
 | — | W0.1(d) | `singularValues_adjoint` (square case) | 2.5/5 | **✅ DONE** (Opus, 2026-07-08) | `SingularSubspace.lean`; `eigenvalues_conj_unitary` + polar identity, axiom-clean |
-| — | W6.2 | tan2θ under vanishing pinch | 2/5 | **✅ DONE** (Opus, 2026-07-08) | `RotationSharp.lean`; pure assembly on `key_identity`, axiom-clean |
+| — | W6.2 | tan2θ under vanishing pinch | 2/5 | **✅ DONE** (Opus, 2026-07-08) | `DavisKahan/Sources/Davis1963/DoubleAngle.lean`; pure assembly on `key_identity`, axiom-clean |
 
 Suggested order for Opus: **W6.2** (done first, closes G2), then **W0.1(d) →
 W0.2** (closes the canonical-angle API), then **W5.2** (closes G1's op-norm

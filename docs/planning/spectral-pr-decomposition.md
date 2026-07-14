@@ -33,7 +33,7 @@ and attribution registry is `dev/external-lean-references.md`.
 |---|---|
 | `ForMathlib/Analysis/InnerProductSpace/Spectrum.lean` (53 L) | `inner_eigenvectorBasis_map_sub_eigenvectorBasis` (cross-term identity) |
 | `ForMathlib/Analysis/InnerProductSpace/CourantFischer.lean` (≈315 L) | `specSubspace` (def), `finrank_specSubspace`, `repr_eq_zero_of_mem_specSubspace`, `sum_sq_norm_repr_eq_sq_norm` (private), `re_inner_map_self_eq_sum_eigenvalues_mul_sq`, `card_filter_le`/`card_filter_ge` (private), `exists_unit_vector_re_inner_le_eigenvalue`, `forall_unit_vector_eigenvalue_le_re_inner`, `eigenvalues_sub_le` (private), `abs_eigenvalues_sub_le`, `abs_eigenvalues_sub_le_opNorm` |
-| `ForMathlib/Analysis/InnerProductSpace/DavisKahan.lean` (≈430 L) | `sum_norm_inner_eigenvectorBasis_map_sub_sq_le`, `sum_cross_norm_inner_eigenvectorBasis_sq_le`, `gap_of_rank_floor`, `sum_cross_norm_inner_eigenvectorBasis_sq_le_of_rank_floor`, `spectralProjection` (def), `spectralProjection_apply`, `spectralProjection_apply_self`, `sum_norm_sub_spectralProjection_sq_eq`, `sum_norm_sub_spectralProjection_sq_le` |
+| `DavisKahan/Specialized/EigenbasisFrobenius.lean` (≈430 L) | `sum_norm_inner_eigenvectorBasis_map_sub_sq_le`, `sum_cross_norm_inner_eigenvectorBasis_sq_le`, `gap_of_rank_floor`, `sum_cross_norm_inner_eigenvectorBasis_sq_le_of_rank_floor`, `spectralProjection` (def), `spectralProjection_apply`, `spectralProjection_apply_self`, `sum_norm_sub_spectralProjection_sq_eq`, `sum_norm_sub_spectralProjection_sq_le` |
 
 ## Dependency graph (as currently imported)
 

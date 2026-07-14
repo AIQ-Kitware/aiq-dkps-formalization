@@ -15,8 +15,12 @@ inequality for all Ky Fan norms — weak majorization
 To be re-authored per Mathlib's AI-contribution policy at PR time.
 -/
 
+import Mathlib.Analysis.InnerProductSpace.SingularValues
+import ForMathlib.Analysis.InnerProductSpace.CourantFischer
 import ForMathlib.Analysis.InnerProductSpace.SingularSubspace
-import ForMathlib.Analysis.InnerProductSpace.DavisKahan
+import ForMathlib.Analysis.InnerProductSpace.PolarDecomposition
+import ForMathlib.Analysis.InnerProductSpace.ProjectionGeometry
+import ForMathlib.Analysis.InnerProductSpace.Spectrum
 
 /-! # Ky Fan sums of singular values
 
