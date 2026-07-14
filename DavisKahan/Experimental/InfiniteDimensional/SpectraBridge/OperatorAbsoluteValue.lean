@@ -51,6 +51,22 @@ theorem norm_spectraOperatorAbsoluteValue_apply (T : H →L[ℂ] H) (x : H) :
     ‖spectraOperatorAbsoluteValue T x‖ = ‖T x‖ :=
   Spectra.QuantumMechanics.Channels.norm_absOp_apply T x
 
+/-- The Spectra-backed modulus has the same operator norm as the original
+operator.  This is derived from the pointwise norm identity in both
+directions, so it does not require the heavier spectral-calculus stack. -/
+theorem norm_spectraOperatorAbsoluteValue (T : H →L[ℂ] H) :
+    ‖spectraOperatorAbsoluteValue T‖ = ‖T‖ := by
+  apply le_antisymm
+  · refine ContinuousLinearMap.opNorm_le_bound _ (norm_nonneg T) ?_
+    intro x
+    rw [norm_spectraOperatorAbsoluteValue_apply]
+    exact T.le_opNorm x
+  · refine ContinuousLinearMap.opNorm_le_bound _
+      (norm_nonneg (spectraOperatorAbsoluteValue T)) ?_
+    intro x
+    rw [← norm_spectraOperatorAbsoluteValue_apply T x]
+    exact (spectraOperatorAbsoluteValue T).le_opNorm x
+
 /-- Spectra's partial isometry in the bounded polar decomposition. -/
 noncomputable def spectraPolarIsometry (T : H →L[ℂ] H) : H →L[ℂ] H :=
   Spectra.QuantumMechanics.Channels.polarIsometry T
