@@ -52,6 +52,36 @@ four-query-versus-eight-query evaluation while explicitly requiring an affine
 risk gap and OLS risk consistency that are absent from the nearest-neighbor
 Theorem 2 assumptions.
 
+The rest of the Lean-side theory--practice chain is split into small modules:
+
+```text
+Paper/OLSInvariance.lean         rigid-coordinate invariance of affine OLS
+Paper/OLSPerturbation.lean       empirical optimality, generalization, and DKPS transfer
+Paper/TheoryPractice.lean        distinct MSE, MAE, and replicate-win claim shapes
+Paper/EvaluationBridges.lean     deterministic population-to-card margin logic
+Paper/EvaluationConcentration.lean explicit finite Chebyshev confidence bounds
+Geometry/OLSAligned.lean         composition with aligned-CMDS concentration
+```
+
+Important public anchors include:
+
+```lean
+DkpsQuench2026.Paper.OLS.affinePredict_rigid
+DkpsQuench2026.Paper.OLS.HighProbAffineGeneralizationOn
+DkpsQuench2026.Paper.OLS.highProbAffineRiskCompetitive_of_olsRiskBridge
+DkpsQuench2026.Paper.TheoryPractice.measure_not_empiricalCrossBudgetMAEClaim_le
+DkpsQuench2026.Paper.TheoryPractice.measure_not_empiricalWinRateClaim_le
+DkpsQuench2026.highProb_olsRiskBridge_of_finite_configError_on
+```
+
+The finite evaluation theorems return explicit failure-probability bounds; they
+do not collapse a fixed 32-replicate experiment into an asymptotic theorem.
+The only substantial statistical premise still exposed at the OLS training
+layer is uniform convergence of the affine squared-risk class on a declared
+admissible coefficient set, together with membership of the fitted coefficient
+and witness in that set.  This coefficient control is named explicitly rather
+than hidden inside the query-efficiency conclusion.
+
 The corresponding public interfaces are:
 
 ```lean
