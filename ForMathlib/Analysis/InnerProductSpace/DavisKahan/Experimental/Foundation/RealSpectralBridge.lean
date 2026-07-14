@@ -115,12 +115,14 @@ theorem lowerFormBoundOn_top_of_spectrum_subset_Ici
       rwa [spectrum.neg_eq]
     have hmr : -r ∈ spectrum ℝ A := by
       simpa only [Set.mem_neg] using hr'
-    have := hσ hmr
-    linarith
+    have hcr : c ≤ -r := hσ hmr
+    have hrc : r ≤ -c := by
+      simpa using neg_le_neg hcr
+    exact hrc
   have hupper := upperFormBoundOn_top_of_spectrum_subset_Iic (-A) hnegA hnegσ
   intro x hx
   have hx' := hupper x hx
-  simp only [ContinuousLinearMap.neg_apply, inner_neg_left, map_neg] at hx'
+  simp only [neg_apply, inner_neg_left, map_neg] at hx'
   linarith
 
 /-- Real restriction-spectrum upper bridge on an orthogonally complemented
