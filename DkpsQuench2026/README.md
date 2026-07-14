@@ -31,6 +31,27 @@ DkpsQuench2026.QueryEfficiency.finiteAllQueries
 DkpsQuench2026.QueryEfficiency.infiniteAllQueries
 ```
 
+## Theory--practice OLS bridge
+
+The paper deliberately proves a local nearest-neighbor theorem while evaluating
+ordinary least squares in its experiments.  The formal boundary and the extra
+assumptions needed for OLS are exposed under the stable namespace
+`DkpsQuench2026.Paper.OLS`:
+
+```lean
+DkpsQuench2026.Paper.OLS.OLSFit
+DkpsQuench2026.Paper.OLS.HighProbAffineRiskCompetitive
+DkpsQuench2026.Paper.OLS.highProb_queryEfficient_crossBudget_of_affineRiskGap
+DkpsQuench2026.Paper.OLS.highProb_queryEfficient_crossBudget_of_affineRealizable
+DkpsQuench2026.Paper.OLS.lipschitz_not_sufficient_for_affineRealizability
+```
+
+The cross-budget theorem permits the OLS DKPS and sample-score baseline to use
+different query subsets.  It therefore matches the shape of the practical
+four-query-versus-eight-query evaluation while explicitly requiring an affine
+risk gap and OLS risk consistency that are absent from the nearest-neighbor
+Theorem 2 assumptions.
+
 The corresponding public interfaces are:
 
 ```lean
