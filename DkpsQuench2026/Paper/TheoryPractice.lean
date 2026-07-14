@@ -26,9 +26,15 @@ Stable symbolic anchors exposed here include:
 * `DkpsQuench2026.Paper.TheoryPractice.sqLoss_clipUnit_le`
 * `DkpsQuench2026.Paper.TheoryPractice.empiricalMAE_clipUnit_le`
 * `DkpsQuench2026.Paper.TheoryPractice.empiricalMSE_clipUnit_le`
+* `DkpsQuench2026.Paper.TheoryPractice.populationMAE`
+* `DkpsQuench2026.Paper.TheoryPractice.PopulationMAEQueryEfficiency`
+* `DkpsQuench2026.Paper.TheoryPractice.populationMAE_sq_le_populationMSE`
+* `DkpsQuench2026.Paper.TheoryPractice.highProbMAE_queryEfficient_crossBudget_of_affineRiskGap`
 -/
 import DkpsQuench2026.Paper.QueryEfficiency
 import DkpsQuench2026.Paper.OLSQueryEfficiency
+import Mathlib.Analysis.Convex.Integral
+import Mathlib.Analysis.Convex.Mul
 
 set_option linter.mathlibStandardSet false
 
@@ -322,6 +328,233 @@ theorem empiricalCrossBudgetMAEClaim_of_mse_margin {n : ℕ}
   unfold EmpiricalCrossBudgetMAEClaim
   exact (empiricalMAE_lt_of_mse_lt_baseline_mae_sq
     hn truth candidate baseline hmargin).le
+
+
+/-! ## Population MSE-to-MAE bridge -/
+
+/-- Population mean absolute error over the model distribution. -/
+noncomputable def populationMAE
+    (Pf : Measure (Model Q X)) [IsProbabilityMeasure Pf]
+    (truth prediction : Model Q X → ℝ) : ℝ :=
+  Risk (Q := Q) (X := X) Pf absLoss truth prediction
+
+/-- Population-MAE, eventual high-probability query efficiency.
+
+This is the population analogue of the finite empirical MAE card claim.  It
+remains distinct from the finite-card proposition because it integrates over
+`Pf` and retains the theorem's eventual high-probability quantifiers. -/
+def PopulationMAEQueryEfficiency
+    (Pf : Measure (Model Q X)) [IsProbabilityMeasure Pf]
+    (μ : ℕ → Measure Ω) (hμ : ∀ n, IsProbabilityMeasure (μ n))
+    (truth : Model Q X → ℝ)
+    (candidate baseline : ℕ → Ω → Model Q X → ℝ) : Prop :=
+  HighProbQQueryEfficient (Q := Q) (X := X)
+    μ hμ Pf absLoss truth candidate baseline
+
+/-- Population MAE is nonnegative. -/
+theorem populationMAE_nonneg
+    (Pf : Measure (Model Q X)) [IsProbabilityMeasure Pf]
+    (truth prediction : Model Q X → ℝ) :
+    0 ≤ populationMAE Pf truth prediction := by
+  unfold populationMAE Risk absLoss
+  exact integral_nonneg fun _ => abs_nonneg _
+
+/-- On a probability distribution, population MAE squared is bounded by
+population MSE whenever the absolute and squared errors are integrable.
+
+This is Jensen's inequality for the convex map `x ↦ x²`, applied to the
+nonnegative absolute-error random variable. -/
+theorem populationMAE_sq_le_populationMSE
+    (Pf : Measure (Model Q X)) [IsProbabilityMeasure Pf]
+    (truth prediction : Model Q X → ℝ)
+    (habs : Integrable
+      (fun f => absLoss (prediction f) (truth f)) Pf)
+    (hsq : Integrable
+      (fun f => sqLoss (prediction f) (truth f)) Pf) :
+    (populationMAE Pf truth prediction) ^ 2 ≤
+      MSE Pf truth prediction := by
+  have hconv : ConvexOn ℝ (Set.Ici (0 : ℝ)) (fun x : ℝ => x ^ 2) :=
+    convexOn_pow 2
+  have hcont : ContinuousOn (fun x : ℝ => x ^ 2) (Set.Ici (0 : ℝ)) :=
+    (continuous_id.pow 2).continuousOn
+  have hnonneg : ∀ᵐ f ∂Pf,
+      absLoss (prediction f) (truth f) ∈ Set.Ici (0 : ℝ) :=
+    Filter.Eventually.of_forall fun f => by
+      change (0 : ℝ) ≤ |prediction f - truth f|
+      exact abs_nonneg _
+  have hsq' : Integrable
+      ((fun x : ℝ => x ^ 2) ∘
+        (fun f => absLoss (prediction f) (truth f))) Pf := by
+    simpa [Function.comp_def, absLoss, sqLoss, sq_abs] using hsq
+  have hjensen :=
+    hconv.map_integral_le hcont isClosed_Ici hnonneg habs hsq'
+  simpa [populationMAE, Risk, MSE, absLoss, sqLoss,
+    Function.comp_def, sq_abs] using hjensen
+
+/-- Square-root form of the population MSE-to-MAE bridge. -/
+theorem populationMAE_le_sqrt_populationMSE
+    (Pf : Measure (Model Q X)) [IsProbabilityMeasure Pf]
+    (truth prediction : Model Q X → ℝ)
+    (habs : Integrable
+      (fun f => absLoss (prediction f) (truth f)) Pf)
+    (hsq : Integrable
+      (fun f => sqLoss (prediction f) (truth f)) Pf) :
+    populationMAE Pf truth prediction ≤
+      Real.sqrt (MSE Pf truth prediction) := by
+  exact Real.le_sqrt_of_sq_le
+    (populationMAE_sq_le_populationMSE Pf truth prediction habs hsq)
+
+/-- High-probability MSE margin sufficient for population-MAE comparison.
+
+The candidate MSE is compared to the square of the baseline MAE, rather than
+to baseline MSE.  This stronger margin is exactly what the MSE-to-MAE bridge
+needs. -/
+def HighProbMSEBelowBaselineMAESq
+    (μ : ℕ → Measure Ω) (hμ : ∀ n, IsProbabilityMeasure (μ n))
+    (Pf : Measure (Model Q X)) [IsProbabilityMeasure Pf]
+    (truth : Model Q X → ℝ)
+    (candidate baseline : ℕ → Ω → Model Q X → ℝ) : Prop :=
+  HighProbAtTop μ hμ (fun n => {ω |
+    MSE Pf truth (candidate n ω) ≤
+      (populationMAE Pf truth (baseline n ω)) ^ 2})
+
+/-- An MSE-to-MAE bridge at every fitted estimator transfers the explicit
+high-probability MSE margin into population-MAE query efficiency. -/
+theorem populationMAEQueryEfficiency_of_highProbMSEMargin
+    (Pf : Measure (Model Q X)) [IsProbabilityMeasure Pf]
+    (μ : ℕ → Measure Ω) (hμ : ∀ n, IsProbabilityMeasure (μ n))
+    (truth : Model Q X → ℝ)
+    (candidate baseline : ℕ → Ω → Model Q X → ℝ)
+    (hmargin : HighProbMSEBelowBaselineMAESq
+      μ hμ Pf truth candidate baseline)
+    (hbridge : ∀ n ω,
+      (populationMAE Pf truth (candidate n ω)) ^ 2 ≤
+        MSE Pf truth (candidate n ω)) :
+    PopulationMAEQueryEfficiency Pf μ hμ truth candidate baseline := by
+  unfold PopulationMAEQueryEfficiency HighProbQQueryEfficient
+  unfold HighProbMSEBelowBaselineMAESq at hmargin
+  intro δ hδ
+  obtain ⟨N, hN⟩ := hmargin δ hδ
+  refine ⟨N, ?_⟩
+  intro n hn
+  exact (hN n hn).trans (measure_mono (by
+    intro ω hω
+    change MSE Pf truth (candidate n ω) ≤
+      (populationMAE Pf truth (baseline n ω)) ^ 2 at hω
+    change populationMAE Pf truth (candidate n ω) ≤
+      populationMAE Pf truth (baseline n ω)
+    have hc0 := populationMAE_nonneg Pf truth (candidate n ω)
+    have hb0 := populationMAE_nonneg Pf truth (baseline n ω)
+    have hsquare := (hbridge n ω).trans hω
+    nlinarith))
+
+/-- Integrability discharges the MSE-to-MAE bridge in
+`populationMAEQueryEfficiency_of_highProbMSEMargin`. -/
+theorem populationMAEQueryEfficiency_of_highProbMSEMargin_of_integrable
+    (Pf : Measure (Model Q X)) [IsProbabilityMeasure Pf]
+    (μ : ℕ → Measure Ω) (hμ : ∀ n, IsProbabilityMeasure (μ n))
+    (truth : Model Q X → ℝ)
+    (candidate baseline : ℕ → Ω → Model Q X → ℝ)
+    (hmargin : HighProbMSEBelowBaselineMAESq
+      μ hμ Pf truth candidate baseline)
+    (habs : ∀ n ω, Integrable
+      (fun f => absLoss (candidate n ω f) (truth f)) Pf)
+    (hsq : ∀ n ω, Integrable
+      (fun f => sqLoss (candidate n ω f) (truth f)) Pf) :
+    PopulationMAEQueryEfficiency Pf μ hμ truth candidate baseline := by
+  apply populationMAEQueryEfficiency_of_highProbMSEMargin
+    Pf μ hμ truth candidate baseline hmargin
+  intro n ω
+  exact populationMAE_sq_le_populationMSE
+    Pf truth (candidate n ω) (habs n ω) (hsq n ω)
+
+/-- Generic population-MAE risk-gap principle.
+
+If the candidate MSE approaches a target risk from above with high probability,
+and that target risk is strictly below the square of a fixed baseline's
+population MAE, then the candidate is population-MAE query-efficient. -/
+theorem highProbMAEQueryEfficient_of_mseAtMost_lt_baselineMAESq
+    (Pf : Measure (Model Q X)) [IsProbabilityMeasure Pf]
+    (μ : ℕ → Measure Ω) (hμ : ∀ n, IsProbabilityMeasure (μ n))
+    (truth baseline : Model Q X → ℝ)
+    (candidate : ℕ → Ω → Model Q X → ℝ)
+    (targetRisk : ℝ)
+    (h_atMost : ∀ ε : ℝ, 0 < ε →
+      HighProbAtTop μ hμ (fun n => {ω |
+        MSE Pf truth (candidate n ω) ≤ targetRisk + ε}))
+    (hgap : targetRisk < (populationMAE Pf truth baseline) ^ 2)
+    (habs : ∀ n ω, Integrable
+      (fun f => absLoss (candidate n ω f) (truth f)) Pf)
+    (hsq : ∀ n ω, Integrable
+      (fun f => sqLoss (candidate n ω f) (truth f)) Pf) :
+    PopulationMAEQueryEfficiency Pf μ hμ truth candidate
+      (fun _ _ => baseline) := by
+  let ε : ℝ := ((populationMAE Pf truth baseline) ^ 2 - targetRisk) / 2
+  have hε : 0 < ε := by
+    dsimp [ε]
+    linarith
+  have htarget : targetRisk + ε ≤
+      (populationMAE Pf truth baseline) ^ 2 := by
+    dsimp [ε]
+    linarith
+  have hmargin : HighProbMSEBelowBaselineMAESq
+      μ hμ Pf truth candidate (fun _ _ => baseline) := by
+    unfold HighProbMSEBelowBaselineMAESq
+    intro δ hδ
+    obtain ⟨N, hN⟩ := h_atMost ε hε δ hδ
+    refine ⟨N, ?_⟩
+    intro n hn
+    exact (hN n hn).trans (measure_mono (by
+      intro ω hω
+      change MSE Pf truth (candidate n ω) ≤ targetRisk + ε at hω
+      change MSE Pf truth (candidate n ω) ≤
+        (populationMAE Pf truth baseline) ^ 2
+      exact hω.trans htarget))
+  exact populationMAEQueryEfficiency_of_highProbMSEMargin_of_integrable
+    Pf μ hμ truth candidate (fun _ _ => baseline)
+    hmargin habs hsq
+
+/-- Population-MAE version of the cross-budget OLS theorem.
+
+The OLS risk seam remains stated in MSE, but Jensen transfers it to population
+MAE when the affine witness's MSE lies below the square of the selected
+cross-budget baseline's MAE. -/
+theorem highProbMAE_queryEfficient_crossBudget_of_affineRiskGap
+    (Pf : Measure (Model Q X)) [IsProbabilityMeasure Pf]
+    (μ : ℕ → Measure Ω) (hμ : ∀ n, IsProbabilityMeasure (μ n))
+    (ψ : Finset Q → Model Q X → Vec d)
+    (ψHat : ℕ → Ω → Finset Q → Model Q X → Vec d)
+    (f_ref : ∀ n, Ω → Fin n → Model Q X)
+    (score : Model Q X → Finset Q → ℝ)
+    (Qstar Qols Qbaseline : Finset Q)
+    (fit : ∀ n ω, OLS.OLSFit
+      (fun i => ψHat n ω Qols (f_ref n ω i))
+      (fun i => score (f_ref n ω i) Qstar))
+    (θ : OLS.AffineCoefficients d)
+    (hcompetitive : OLS.HighProbAffineRiskCompetitive μ hμ Pf
+      (yFull score Qstar)
+      (OLS.yOLS_paper ψHat f_ref score Qstar Qols fit)
+      (ψ Qols) θ)
+    (hgap :
+      MSE Pf (yFull score Qstar) (OLS.affineModel θ (ψ Qols)) <
+        (populationMAE Pf (yFull score Qstar)
+          (yQ score Qbaseline)) ^ 2)
+    (habs : ∀ n ω, Integrable
+      (fun f => absLoss
+        (OLS.yOLS_paper ψHat f_ref score Qstar Qols fit n ω f)
+        (yFull score Qstar f)) Pf)
+    (hsq : ∀ n ω, Integrable
+      (fun f => sqLoss
+        (OLS.yOLS_paper ψHat f_ref score Qstar Qols fit n ω f)
+        (yFull score Qstar f)) Pf) :
+    PopulationMAEQueryEfficiency Pf μ hμ (yFull score Qstar)
+      (OLS.yOLS_paper ψHat f_ref score Qstar Qols fit)
+      (fun _ _ => yQ score Qbaseline) := by
+  exact highProbMAEQueryEfficient_of_mseAtMost_lt_baselineMAESq
+    Pf μ hμ (yFull score Qstar) (yQ score Qbaseline)
+    (OLS.yOLS_paper ψHat f_ref score Qstar Qols fit)
+    (MSE Pf (yFull score Qstar) (OLS.affineModel θ (ψ Qols)))
+    hcompetitive hgap habs hsq
 
 /-! ## MSE does not determine replicate-win rate -/
 
