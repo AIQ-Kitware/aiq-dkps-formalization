@@ -12,8 +12,11 @@ This is the canonical Davis--Kahan library root.
   estimates and their internal reciprocal-multiplier machinery.
 - `FiniteDimensional/SinTheta/`, `TanTheta/`, and `DoubleAngle/` contain the
   stable finite theorem families.
+- `FiniteDimensional/DirectRotation/` contains the proved canonical rotation
+  construction and its basic intertwining surface.
 - `Sources/` contains publication-facing theorem surfaces and source-specific
-  wrappers.
+  wrappers. `Sources/DavisKahan1970/README.md` records the exact boundary
+  between the proof-complete Part III package and the remaining paper audit.
 - `Specialized/` contains distinct useful secondary endpoints.
 - `Alternative/` contains proof-complete duplicate or lower-dependency proofs
   and noncanonical wrapper APIs retained for explicit reuse and cherry-picking.

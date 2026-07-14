@@ -9,7 +9,7 @@
 \begin{sourceguide}
 \item[Primary source] Chandler Davis and W. M. Kahan, \emph{The Rotation of Eigenvectors by a Perturbation. III}, SIAM Journal on Numerical Analysis 7(1) (1970), 1--46, DOI \href{https://doi.org/10.1137/0707001}{10.1137/0707001}.
 \item[Source order] Introduction; Sections 1--3 on block notation and subspace geometry; Section 4 on the direct rotation; Section 5 on $AX-XB=C$; Section 6 on the single-angle theorems; the unbounded-operator appendix; Section 7 on the double-angle theorems; Section 8 on interpretation and spectral selection; Section 9 on the numerical example; Section 10 on open questions.
-\item[Formalization target] The source-faithful finite API exposed through \code{DavisKahanTheory.PartIII}: \code{partIII_sinTheta_uiNorm}, \code{partIII_sinTwoTheta_uiNorm}, \code{partIII_tanTheta_vector}, and \code{partIII_tanTwoTheta_opNorm}, together with the companion projector bounds \code{opNorm_starProjection_sub_le} and \code{opNorm_spectralSubspace_sub_le}.
+\item[Formalization target] The source-facing finite API exposed through \code{DavisKahanTheory.PartIII}: the ordered and interval Sylvester roots; residual, generalized-trial-map, and perturbation \code{sin Theta}; the arbitrary-unitarily-invariant-norm Ritz-residual \code{tan Theta} theorem in both equal-rank and strict-lower-rank forms; \code{sin 2 Theta} for every unitarily invariant norm; and the sharp operator-norm \code{tan 2 Theta} theorem.  The elementary \code{partIII_tanTheta_vector} theorem remains as a low-dependency companion rather than the canonical source-facing tangent endpoint.
 \item[Scope boundary] The paper is infinite-dimensional and permits unbounded self-adjoint operators in an appendix. The repository target is finite-dimensional over an arbitrary \code{RCLike} scalar field. This note therefore preserves the source hypotheses and proof architecture while marking the places where the formal endpoint deliberately has a different norm scope.
 \item[Terminology] The source writes $\sin\theta$, $\tan\theta$, $\sin 2\theta$, and $\tan 2\theta$. We use $\Theta$ for the principal-angle operator or its finite list of principal angles.
 \end{sourceguide}
@@ -229,7 +229,7 @@ For the tangent estimate, the off-diagonal condition allows the residual equatio
 \]
 The source's one-sided spectral placement ensures the relevant cosine is invertible and gives another ordered Sylvester inequality. The gain from $\sin\Theta$ to $\tan\Theta$ is paid for by the stronger spectral orientation and by the Rayleigh--Ritz condition.
 
-A modern pole-free proof should not simply write $C^{-1}$ before proving that no angle equals $\pi/2$. Nakatsukasa and Motovilov clarify how the required graph property follows from finite-dimensional spectral placement. The repository theorem \code{tan_theta_le} should therefore be read with those companion sources, not solely as a transcription of the 1970 algebra.
+A modern pole-free proof should not simply write $C^{-1}$ before proving that no angle equals $\pi/2$. Nakatsukasa and Motovilov clarify how the required graph property follows from finite-dimensional spectral placement.  The repository now exposes the source-facing arbitrary-unitarily-invariant-norm Ritz-residual theorem through \code{partIII_tanTheta_ritzResidual_uiNorm} and its strict-lower-rank companion, with transversality derived rather than assumed.  The elementary \code{tan_theta_le} theorem remains useful as a coordinate-free operator-norm proof with substantially lighter singular-value dependencies.
 
 \section{Section 7: reflection and the double-angle theorems}
 
@@ -290,7 +290,7 @@ The four classical statements should share ambient generality but not be forced 
 Section 5, Theorem 5.1 & Ordered-gap Sylvester estimate with constant one for rectangular UI norms & \code{uiNorm_sylvester_le_of_orderedGap}, \code{uiNorm_sylvester_le_of_intervalGap} \\
 Section 6, generalized sin theorem & Residual-to-sine estimate through a cross-block Sylvester equation & \code{sinTheta_residual_le}, \code{sinTheta_residual_le_of_orderedGap}, \code{partIII_sinTheta_uiNorm} \\
 Section 7, sin $2\Theta$ & Reflection reduction and factor-two UI-norm estimate & \code{sin_two_theta_reflection_le}, \code{sin_two_theta_starProjection_le}, \code{partIII_sinTwoTheta_uiNorm} \\
-Section 6, tan theorem & Rayleigh--Ritz/off-diagonal residual and one-sided spectral placement & \code{tan_theta_le}, \code{partIII_tanTheta_vector}; proof interpretation supplemented by Nakatsukasa--Motovilov \\
+Section 6, tan theorem & Rayleigh--Ritz residual, source-oriented interval placement, equal-rank and strict-lower-rank alternatives & \code{partIII_tanTheta_ritzResidual_uiNorm}, \code{partIII_generalizedTanTheta_ritzResidual_uiNorm}, and the low-dependency \code{partIII_tanTheta_vector} companion \\
 Sections 7--8, tan $2\Theta$ & Off-diagonal reflection, operator-norm bound, and acute branch & \code{tan_two_theta_norm_sub_le}, \code{partIII_tanTwoTheta_opNorm} \\
 Projector geometry & Operator norm of projector difference equals maximal directed sine & \code{opNorm_starProjection_sub_le}, \code{opNorm_spectralSubspace_sub_le} \\
 Spectral selection & Replace an arbitrary reducing subspace by the canonical spectral subspace associated with the separated cluster & \code{spectralProjection}, \code{opNorm_spectralSubspace_sub_le}, and the spectral wrappers in the sine modules \\
@@ -301,7 +301,7 @@ Spectral selection & Replace an arbitrary reducing subspace by the canonical spe
 \begin{enumerate}[leftmargin=2em]
 \item The arbitrary-separated-spectrum Sylvester estimate with sharp constant $\pi/2$ is later theory. It is useful infrastructure but is not the analytic root of the four source statements.
 \item Exact finite reciprocal orbit interpolation is stronger than any of the four classical conclusions. In particular, a generic undoubled real certificate at mass $\pi/2$ is false and must not be installed as a hidden premise of this API.
-\item The paper states broader UI-norm tangent results than the current pole-free public Lean endpoint. Until the full source theorem is formalized, the facade should advertise the actual proved theorem rather than silently overstate it.
+\item The arbitrary-unitarily-invariant-norm \code{tan Theta} Ritz-residual theorem is now proved.  This must not be conflated with the still-open all-unitarily-invariant-norm \code{tan 2 Theta} extension or with graph-operator APIs whose construction remains experimental.
 \item Direct rotation extremality is conceptually central but can remain a separate module from the inequalities themselves.
 \end{enumerate}
 
@@ -311,7 +311,7 @@ Spectral selection & Replace an arbitrary reducing subspace by the canonical spe
 \bibitem{DK1970}
 C. Davis and W. M. Kahan,
 \emph{The Rotation of Eigenvectors by a Perturbation. III},
-SIAM J. Numer. Anal. 7 (1970), 1--46.
+SIAM J. Numer. Anal. 7 (1970), 1--46, DOI 10.1137/0707001.
 
 \bibitem{BDM1983}
 R. Bhatia, C. Davis, and A. McIntosh,
