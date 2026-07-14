@@ -25,6 +25,7 @@ To be re-authored per Mathlib's AI-contribution policy at PR time.
 -/
 
 import DavisKahan.FiniteDimensional.SinTheta.UnitarilyInvariant
+import ForMathlib.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm
 import DavisKahan.FiniteDimensional.Core.AngleGeometry
 import DavisKahan.FiniteDimensional.Core.SpectralGap
 import DavisKahan.FiniteDimensional.Core.SpectralSubspace
