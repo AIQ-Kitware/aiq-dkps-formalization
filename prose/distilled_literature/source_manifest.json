@@ -714,7 +714,7 @@
       "target_note": "Rosenblum1956_operator_equation.tex",
       "repo_evidence": [
         "ForMathlib/Analysis/InnerProductSpace/SylvesterBound.lean",
-        "DavisKahan/Sylvester/BoundedOperator.lean"
+        "DavisKahan/Alternative/FiniteDimensional/Sylvester/ContinuousLinearMapBridge.lean"
       ],
       "existing_assets": [],
       "scope": "Existence/uniqueness and contour-integral solution of the separated-spectrum operator equation.",
@@ -815,7 +815,7 @@
       "primary_url": "https://doi.org/10.1137/0707001",
       "target_note": "DavisKahan1970_part_III.tex",
       "repo_evidence": [
-        "DavisKahan/Specialized/EigenbasisFrobenius.lean",
+        "DavisKahan/Alternative/FiniteDimensional/EigenbasisFrobenius.lean",
         "DavisKahan/All.lean",
         "papers/DavisKahan-formalized-vs-literature.tex"
       ],
@@ -869,7 +869,7 @@
       "bibliographic_verification": "needed",
       "target_note": "BhatiaDavisMcIntosh1983_spectral_subspaces_sylvester.tex",
       "repo_evidence": [
-        "DavisKahan/Sylvester/BoundedOperator.lean",
+        "DavisKahan/Alternative/FiniteDimensional/Sylvester/ContinuousLinearMapBridge.lean",
         "dev/davis-kahan-expert-completion-plan.md",
         "dev/lean-proof-engineering-lessons.md",
         "prose/distilled_literature/AlbeverioMakarovMotovilov2001_sylvester_fourier_pi_over_two.tex"
@@ -897,8 +897,8 @@
       "primary_url": "https://arxiv.org/abs/math/0105142",
       "target_note": "AlbeverioMakarovMotovilov2001_sylvester_fourier_pi_over_two.tex",
       "repo_evidence": [
-        "DavisKahan/Sylvester/Internal/ReciprocalMultiplier.lean",
-        "DavisKahan/Sylvester/BoundedOperator.lean",
+        "DavisKahan/FiniteDimensional/Sylvester/Internal/ReciprocalMultiplier.lean",
+        "DavisKahan/Alternative/FiniteDimensional/Sylvester/ContinuousLinearMapBridge.lean",
         "papers/DavisKahan-formalized-vs-literature.tex"
       ],
       "existing_assets": [
@@ -950,7 +950,7 @@
       "target_note": "BhatiaRosenthal1997_sylvester_equation.tex",
       "repo_evidence": [
         "ForMathlib/Analysis/InnerProductSpace/SylvesterBound.lean",
-        "DavisKahan/Sylvester/BoundedOperator.lean"
+        "DavisKahan/Alternative/FiniteDimensional/Sylvester/ContinuousLinearMapBridge.lean"
       ],
       "existing_assets": [],
       "scope": "Operator-equation solution methods, spectral separation, and norm estimates.",

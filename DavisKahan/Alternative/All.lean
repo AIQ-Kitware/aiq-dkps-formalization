@@ -3,7 +3,6 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
-import DavisKahan.Specialized.Statistics
-import DavisKahan.Specialized.SingularSubspace
+import DavisKahan.Alternative.FiniteDimensional.All
 
-/-! # Specialized Davis--Kahan endpoints -/
+/-! # Alternative proof surfaces -/

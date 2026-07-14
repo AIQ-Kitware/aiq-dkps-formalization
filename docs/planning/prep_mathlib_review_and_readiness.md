@@ -341,7 +341,7 @@ Ask Fable for a PR decomposition rather than a monolithic patch:
 
 Current file:
 
-- `DavisKahan/Specialized/EigenbasisFrobenius.lean`
+- `DavisKahan/Alternative/FiniteDimensional/EigenbasisFrobenius.lean`
 
 Relevant declarations:
 

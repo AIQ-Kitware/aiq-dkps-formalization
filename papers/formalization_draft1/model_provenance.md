@@ -110,7 +110,7 @@ later staged/generalized files, including:
 
 - `ForMathlib/Topology/ApproxMinimizer.lean`
 - `ForMathlib/Analysis/Matrix/EntrywiseOpNorm.lean`
-- `DavisKahan/Specialized/EigenbasisFrobenius.lean`
+- `DavisKahan/Alternative/FiniteDimensional/EigenbasisFrobenius.lean`
 - `ForMathlib/Probability/Moments/SampleMean.lean`
 - `ForMathlib/Analysis/Matrix/Spectrum.lean`
 - `ForMathlib/LinearAlgebra/Matrix/PosDef.lean`

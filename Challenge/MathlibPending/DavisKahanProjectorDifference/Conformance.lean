@@ -1,4 +1,4 @@
-import DavisKahan.Core.All
+import DavisKahan.FiniteDimensional.Core.All
 
 /-!
 # Sharp finite Davis--Kahan projector-difference theorems

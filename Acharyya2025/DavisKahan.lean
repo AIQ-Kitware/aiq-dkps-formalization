@@ -37,7 +37,7 @@ Formalized by Claude Fable 5 (claude-fable-5[1m]).
 
 import Mathlib
 import ForMathlib.Analysis.InnerProductSpace.Spectrum
-import DavisKahan.Specialized.EigenbasisFrobenius
+import DavisKahan.Alternative.FiniteDimensional.EigenbasisFrobenius
 import Acharyya2025.Weyl
 
 open scoped BigOperators RealInnerProductSpace InnerProductSpace

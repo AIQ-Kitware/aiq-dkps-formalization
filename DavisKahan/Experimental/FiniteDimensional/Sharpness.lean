@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
 import DavisKahan.Sources.Davis1963.RotationEnergy
-import DavisKahan.Core.AngleGeometry
-import DavisKahan.Core.SpectralGap
+import DavisKahan.FiniteDimensional.Core.AngleGeometry
+import DavisKahan.FiniteDimensional.Core.SpectralGap
 import DavisKahan.Experimental.FiniteDimensional.Core.AngleOperators
 
 /-!

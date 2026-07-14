@@ -29,7 +29,7 @@ high-probability event propagation, and consistency transfer.
 ├── ForMathlib.lean        # root module for the Mathlib-staging library
 ├── ForMathlib/            # staged reusable Mathlib additions
 ├── DavisKahan.lean        # root module for the stable Davis--Kahan library
-├── DavisKahan/            # core, residual, Sylvester, finite, bounded, source, specialized, and experimental branches
+├── DavisKahan/            # bounded, finite, source, specialized, alternative, and experimental branches
 ├── Acharyya2024.lean      # root module for the 2024 consistency library
 ├── Acharyya2024/          # raw-stress MDS, probability, second moments, paper-facing consistency
 ├── Acharyya2025.lean      # root module for the 2025 concentration library
@@ -94,12 +94,13 @@ versions and keep only thin paper-facing specializations.  See
 ### `DavisKahan`
 
 Canonical spectral-subspace perturbation theory extracted from the former
-`ForMathlib` staging monoliths. The stable umbrella exposes finite-dimensional
-sine, tangent, and double-angle results; bounded-operator sine and projector
-results; and source-facing Davis--Kahan and Davis 1963 facades. General-purpose
-linear-algebra infrastructure remains in `ForMathlib`. Secondary endpoints and
-mirrored finite- and infinite-dimensional experiments require explicit imports.
-See `DavisKahan/README.md`.
+`ForMathlib` staging monoliths. `import DavisKahan` exposes the supported
+finite-dimensional and bounded-operator theories together with the flagship
+Davis--Kahan Part III facade. Other source transcriptions, specialized
+endpoints, alternative proofs, and mirrored experiments require explicit
+imports; `DavisKahan.All` collects all proof-finished branches. General-purpose
+linear-algebra infrastructure remains in `ForMathlib`. See
+`DavisKahan/README.md`.
 
 ### `Acharyya2024`
 
