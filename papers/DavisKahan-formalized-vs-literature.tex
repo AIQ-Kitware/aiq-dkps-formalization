@@ -999,22 +999,26 @@ primarily useful when a truncated estimator is fed into DK.
 
 \section{What remains, ranked by dependency}\label{sec:remains}
 
-The source-checked finite Davis--Kahan Part~III quartet is complete.
-The two sine theorems are formalized for every unitarily invariant norm; the
-$\tan\Theta$ theorem is formalized in its pole-free per-vector spectral-norm
-form; and the sharp $\tan2\Theta$ theorem is formalized in operator norm,
-including the strict $\pi/4$ branch conclusion.  These are collected by the
-proof-complete canonical import
+The proof-complete finite source package now includes more than the
+original four-alias facade.  The ordered and interval/exterior Sylvester roots,
+the generalized trial-map $\sin\Theta$ theorem, and the equal-rank and
+strict-lower-rank Ritz-residual $\tan\Theta$ theorems are formalized for
+arbitrary rectangular unitarily invariant norms.  The tangent operator may be
+any representative with the canonical directed principal-tangent singular
+values, and transversality is concluded rather than assumed.  The two sine
+perturbation theorems are available for every unitarily invariant norm; the
+sharp $\tan2\Theta$ theorem is available in operator norm with the strict
+$\pi/4$ branch conclusion.  These results are collected by
 \texttt{DavisKahan.Sources.DavisKahan1970.PartIII}.
 
-The broader source-level scaffold rooted at
-\texttt{DavisKahan.All} also records
-stronger proposed interfaces: residual double-angle theorems, graph and
-canonical tangent operators, every-UI-norm tangent strengthenings, branch
-selection, direct rotation, generalized trial maps, and sharpness.  Those open
-declarations are extensions of the closed Part~III quartet rather than missing
-headline theorems.  Model provenance for the scaffold and its accompanying
-1970 proof distillation is \textbf{GPT 5.6 High}; the present
+This does not yet amount to a theorem-by-theorem formalization of the entire
+1970 article.  The direct-rotation extremal theory, the exact source version of
+the non-ordered Sylvester theorem, the unbounded appendix, the Section~8
+continuation/selection and repulsion package, and the Section~9 equality models
+remain separate obligations.  The open declarations under
+\texttt{DavisKahan.Experimental} are scaffolds for those obligations, not
+finished source results.  Model provenance for the scaffold and its
+accompanying 1970 proof distillation is \textbf{GPT 5.6 High}; the present
 rectangular-Sylvester update was prepared by \textbf{GPT-5.6 Thinking}.
 
 The remaining work is ordered by mathematical dependency:
@@ -1039,12 +1043,12 @@ The remaining work is ordered by mathematical dependency:
   are already proved.  Only after both field cases are connected should the
   generic harmonic root be replaced.  The sharp ordered and interval/exterior
   constant-one estimates remain complete and independent.
-\item \emph{Optional tangent and residual strengthenings.}
-  Develop every-UI-norm tangent estimates, residual $\sin2\Theta$ and
-  $\tan2\Theta$ interfaces, and general Schatten $p$ instances as extensions.
-  These would enlarge the theorem surface beyond the source-checked finite
-  Part~III headlines; they are not prerequisites for completion of the
-  classical quartet.
+\item \emph{Residual double-angle and canonical-operator interfaces.}
+  The paper-exact Ritz-residual $\tan\Theta$ inequality is now proved for
+  arbitrary rectangular unitarily invariant norms.  Remaining work in this
+  branch is the residual $\sin2\Theta$ and $\tan2\Theta$ surface, canonical
+  pole-safe tangent and double-angle operators, and any norm classes whose
+  source status is verified independently.
 \item \emph{Spectral selection and repulsion.}
   Formalize the Section~8 branch-selection theorem, the compression/repulsion
   inequalities, and the continuation argument selecting the acute perturbed

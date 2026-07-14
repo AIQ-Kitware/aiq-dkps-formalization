@@ -9,7 +9,7 @@
 \begin{sourceguide}
 \item[Primary source] Yuji Nakatsukasa, \emph{The tan $\theta$ theorem with relaxed conditions}, Linear Algebra and its Applications 436 (2012), 1528--1534, DOI \href{https://doi.org/10.1016/j.laa.2011.08.038}{10.1016/j.laa.2011.08.038}.
 \item[Coverage] Introduction; Section 2.1, Lemma 2.1 and the CS decomposition; Section 2.2, Theorem 1 and its proof; the two remarks and counterexample discussion; Section 2.3, generalized Theorem 2.
-\item[Formalization target] The mathematical meaning of \code{tan_theta_le}, especially the coercive strip/exterior hypotheses, the residual, the graph/no-pole conclusion, and the distinction between the paper's every-UI-norm statement and the repository's current per-vector endpoint.
+\item[Formalization target] The mathematical meaning of the pole-free tangent results: the coercive strip/exterior hypotheses, the Ritz residual, the directed graph/no-pole conclusion, the arbitrary-unitarily-invariant-norm theorem \code{davisKahan1970_tanTheta0_ritzResidual_le}, its strict-lower-rank generalization, and the lower-dependency per-vector theorem \code{tan_theta_le}.
 \item[Orientation warning] The theorem permits the approximate/Ritz spectrum to lie on both sides of the unwanted exact spectrum. It does not permit the reverse configuration. The source's discussion of the Davis--Kahan example is essential for preventing an invalid symmetric reformulation.
 \end{sourceguide}
 
@@ -224,7 +224,7 @@ Its conclusion is the pole-free per-vector inequality
   \le\rho\norm{P_Vz}
   \qquad(z\in Z).
 \]
-This implies $Z\cap V^\perp=\{0\}$ and hence the tangent graph condition. It is an operator-norm/per-vector theorem, not yet the source's full every-UI-norm matrix statement.
+This implies $Z\cap V^\perp=\{0\}$ and hence the tangent graph condition.  This elementary operator-norm/per-vector theorem remains useful, but the repository now also proves the source-facing arbitrary-UI-norm Ritz-residual theorem through \code{davisKahan1970_tanTheta0_ritzResidual_le} and its strict-lower-rank generalization.
 
 The proof is not a literal CS decomposition. It uses a maximizer of the projection from $V^\perp$ into $Z$, strip contraction on $V^\perp$, a residual adjoint estimate, and Pythagorean identities. This is a sound coordinate-free modernization of the same coercive mechanism.
 
@@ -232,20 +232,20 @@ The proof is not a literal CS decomposition. It uses a maximizer of the projecti
 Theorem 1 hypotheses & Exact complement in an interval; Ritz compression outside the enlarged interval & \code{hVa}, \code{hVb}, and coercivity hypothesis \code{hZ} in \code{tan_theta_le} \\
 Rayleigh residual & $R=AQ_1-Q_1A_1$ and $Q_1^*R=0$ & \code{T x - Z.starProjection (T x)} and \code{hρ} \\
 Invertibility of $C$ & No right-angle canonical direction; graph property & Pole-free conclusion of \code{tan_theta_le}; Motovilov Lemma 3 supplies a complementary spectral proof \\
-Tangent estimate & $\delta\|\tan\Theta\|\le\|R\|$ & Per-vector theorem \code{tan_theta_le}; alias \code{partIII_tanTheta_vector} \\
-Lemma 2.1 & UI-norm triple-product estimate through singular-value majorization & Needed for any future upgrade from the per-vector theorem to the source's full UI-norm conclusion \\
-Theorem 2 & Unequal-dimensional generalized tangent theorem & Current proof notes that its equality-of-finrank assumption is unused; a future generalized wrapper may weaken it \\
+Tangent estimate & $\delta\|\tan\Theta\|\le\|R\|$ & Arbitrary rectangular UI-norm theorem \code{davisKahan1970_tanTheta0_ritzResidual_le}; elementary companion \code{tan_theta_le} \\
+Lemma 2.1 & UI-norm triple-product estimate through singular-value majorization & Implemented through the singular-system witness and Ky Fan argument in \code{TanTheta/RitzResidual.lean} \\
+Theorem 2 & Unequal-dimensional generalized tangent theorem & \code{davisKahan1970_generalizedTanTheta0_ritzResidual_le}, with the strict-lower-rank alternative and no public transversality premise \\
 Orientation counterexample & Reverse interval/exterior configuration is invalid & Should be encoded as theorem documentation or a finite regression example before adding spectral wrappers \\
 \end{formalizationmap}
 
 \section{Formalization priorities suggested by the paper}
 
 \begin{enumerate}[leftmargin=2em]
-\item Keep the current pole-free theorem as the stable classical endpoint unless and until the full UI-norm statement is proved.
+\item Keep the per-vector theorem as a low-dependency companion to the arbitrary-UI-norm Ritz-residual theorem.
 \item Add canonical spectral-subspace wrappers that preserve the exterior-Ritz/interior-exact orientation.
 \item Do not replace the coercive interval/exterior hypotheses by arbitrary spectral distance.
-\item If proving the full source theorem, first formalize the singular-value product majorization used in Lemma 2.1 or derive an equivalent Ky Fan inequality in the rectangular UI-norm layer.
-\item Separate the no-pole/graph theorem from the numerical tangent estimate so it can be reused by generalized trial-map developments.
+\item Preserve the singular-system/Ky Fan proof as the source of the full UI-norm statement and document the directed tangent convention explicitly.
+\item Keep the no-pole/transversality conclusion separate enough to be reused by generalized trial-map developments.
 \end{enumerate}
 
 \section*{Bibliography}

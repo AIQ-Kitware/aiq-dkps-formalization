@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
 import DavisKahan.FiniteDimensional.Core.All
+import DavisKahan.FiniteDimensional.DirectRotation.Basic
 import DavisKahan.FiniteDimensional.Residual.All
 import ForMathlib.Analysis.InnerProductSpace.FrameFactorization
 import DavisKahan.FiniteDimensional.Sylvester.All
