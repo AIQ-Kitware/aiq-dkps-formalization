@@ -6,6 +6,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.Basic
 import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.PVMSubspace
 import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.OperatorAbsoluteValue
+import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.SinAngle
 
 /-!
 # Active shallow Spectra bridge
