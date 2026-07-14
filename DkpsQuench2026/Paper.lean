@@ -2,3 +2,7 @@ import DkpsQuench2026.Paper.Theorem2
 import DkpsQuench2026.Paper.QueryEfficiency
 import DkpsQuench2026.Paper.OLSQueryEfficiency
 import DkpsQuench2026.Paper.TheoryPractice
+import DkpsQuench2026.Paper.OLSInvariance
+import DkpsQuench2026.Paper.OLSPerturbation
+import DkpsQuench2026.Paper.EvaluationBridges
+import DkpsQuench2026.Paper.EvaluationConcentration
