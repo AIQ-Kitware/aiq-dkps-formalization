@@ -16,7 +16,9 @@ spaces in a fixed universe.
 
 The fields are intentionally explicit.  A concrete instance must provide
 membership, the gauge, adjoint invariance, two-sided ideal control, and
-completeness.  Later modules use only this interface.
+completeness.  The bounded and one-unbounded interval/exterior theory uses
+only this interface.  The genuinely two-unbounded cutoff route uses the
+stronger `KyFanDominantIdealFamily` defined in `ApproximationNumbers.lean`.
 -/
 
 namespace ForMathlib

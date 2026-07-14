@@ -38,7 +38,9 @@ def StronglyTendsto {ι : Type w} (T : ι → E →L[𝕜] E)
 def IsOrthogonalProjectionMap (P : E →L[𝕜] E) : Prop :=
   P ∘L P = P ∧ P.IsSymmetric
 
-/-- `n`th approximation number, serving as the infinite-dimensional singular value. -/
+/-- Zero-based approximation singular value.  The intended definition is the
+operator-norm distance to operators of rank at most `n`; in particular index
+zero is the operator norm. -/
 noncomputable def approximationSingularValue
     (n : ℕ) (K : E →L[𝕜] F) : ℝ := by
   sorry
@@ -47,6 +49,19 @@ noncomputable def approximationSingularValue
 theorem approximationSingularValue_nonneg
     (n : ℕ) (K : E →L[𝕜] F) :
     0 ≤ approximationSingularValue n K := by
+  sorry
+
+/-- The zero-based first approximation singular value is the operator norm. -/
+theorem approximationSingularValue_zero
+    (K : E →L[𝕜] F) :
+    approximationSingularValue 0 K = ‖K‖ := by
+  sorry
+
+/-- Approximation singular values are absolutely homogeneous. -/
+theorem approximationSingularValue_smul
+    (n : ℕ) (c : 𝕜) (K : E →L[𝕜] F) :
+    approximationSingularValue n (c • K) =
+      ‖c‖ * approximationSingularValue n K := by
   sorry
 
 /-- Approximation singular values decrease with the index. -/
@@ -95,6 +110,26 @@ noncomputable def kyFanApproximationGauge
     (k : ℕ) (K : E →L[𝕜] F) : ℝ :=
   ∑ n ∈ Finset.range k, approximationSingularValue n K
 
+/-- Ky Fan approximation gauges are absolutely homogeneous. -/
+theorem kyFanApproximationGauge_smul
+    (k : ℕ) (c : 𝕜) (K : E →L[𝕜] F) :
+    kyFanApproximationGauge k (c • K) =
+      ‖c‖ * kyFanApproximationGauge k K := by
+  sorry
+
+/-- Ky Fan approximation gauges are nonnegative. -/
+theorem kyFanApproximationGauge_nonneg
+    (k : ℕ) (K : E →L[𝕜] F) :
+    0 ≤ kyFanApproximationGauge k K := by
+  sorry
+
+/-- Ky Fan approximation gauges are invariant under adjoint. -/
+theorem kyFanApproximationGauge_adjoint
+    (k : ℕ) (K : E →L[𝕜] F) :
+    kyFanApproximationGauge k K.adjoint =
+      kyFanApproximationGauge k K := by
+  sorry
+
 /-- Ky Fan gauges converge under strong orthogonal cutoffs. -/
 theorem kyFanApproximationGauge_comp_strongProjection_tendsto
     {ι : Type w} {P : ι → E →L[𝕜] E} {l : Filter ι}
@@ -106,14 +141,95 @@ theorem kyFanApproximationGauge_comp_strongProjection_tendsto
       l (𝓝 (kyFanApproximationGauge k K)) := by
   sorry
 
-/-- Infinite-dimensional Fan dominance for a rectangular ideal family. -/
-theorem gauge_le_of_all_kyFanApproximationGauge_le
-    (N : RectangularSymmetricIdealFamily (𝕜 := 𝕜))
+/-- A rectangular ideal family whose gauge is fully symmetric with respect
+    to all finite Ky Fan approximation gauges.
+
+This is intentionally stronger than `RectangularSymmetricIdealFamily`.  The
+ordinary two-sided ideal and completeness laws do not imply Fan dominance on
+nonseparable Hilbert spaces. -/
+structure KyFanDominantIdealFamily (𝕜 : Type u) [RCLike 𝕜] where
+  toRectangularSymmetricIdealFamily :
+    RectangularSymmetricIdealFamily (𝕜 := 𝕜)
+  majorization_mem_and_gauge_le :
+    ∀ {E F : Type v}
+      [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+      [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
+      {A B : E →L[𝕜] F},
+      toRectangularSymmetricIdealFamily.Mem B →
+      (∀ k, kyFanApproximationGauge k A ≤
+        kyFanApproximationGauge k B) →
+      toRectangularSymmetricIdealFamily.Mem A ∧
+        toRectangularSymmetricIdealFamily.gauge A ≤
+          toRectangularSymmetricIdealFamily.gauge B
+
+/-- Source-facing name for the infinite-dimensional unitarily invariant norm
+families supported by the Davis--Kahan cutoff proof.  The finite-Ky-Fan
+majorization law is part of the abstraction, not an extra theorem inferred from
+ordinary Banach ideal laws. -/
+abbrev UnitaryInvariantIdealFamily
+    (𝕜 : Type u) [RCLike 𝕜] :=
+  KyFanDominantIdealFamily (𝕜 := 𝕜)
+
+namespace KyFanDominantIdealFamily
+
+/-- The ordinary operator norm with its finite-Ky-Fan dominance property. -/
+noncomputable def operatorNorm :
+    KyFanDominantIdealFamily (𝕜 := 𝕜) := by
+  sorry
+
+/-- Compact operators with the operator norm and the induced
+finite-Ky-Fan dominance property. -/
+noncomputable def compactOperatorNorm :
+    KyFanDominantIdealFamily (𝕜 := 𝕜) := by
+  sorry
+
+/-- A fixed positive Ky Fan gauge with its own dominance property. -/
+noncomputable def kyFan (k : ℕ) (hk : 0 < k) :
+    KyFanDominantIdealFamily (𝕜 := 𝕜) := by
+  sorry
+
+/-- Hilbert--Schmidt norm with its finite-Ky-Fan dominance property. -/
+noncomputable def hilbertSchmidt :
+    KyFanDominantIdealFamily (𝕜 := 𝕜) := by
+  sorry
+
+/-- Trace norm with its finite-Ky-Fan dominance property. -/
+noncomputable def traceClass :
+    KyFanDominantIdealFamily (𝕜 := 𝕜) := by
+  sorry
+
+/-- Schatten `p` norm with its finite-Ky-Fan dominance property. -/
+noncomputable def schatten (p : ℝ) (hp : 1 ≤ p) :
+    KyFanDominantIdealFamily (𝕜 := 𝕜) := by
+  sorry
+
+end KyFanDominantIdealFamily
+
+/-- Infinite-dimensional Fan dominance, now made an explicit field of the
+stronger family rather than incorrectly derived from ordinary ideal laws. -/
+theorem mem_and_gauge_le_of_all_kyFanApproximationGauge_le
+    (N : KyFanDominantIdealFamily (𝕜 := 𝕜))
     {A B : E →L[𝕜] F}
-    (hA : N.Mem A) (hB : N.Mem B)
+    (hB : N.toRectangularSymmetricIdealFamily.Mem B)
     (h : ∀ k, kyFanApproximationGauge k A ≤
       kyFanApproximationGauge k B) :
-    N.gauge A ≤ N.gauge B := by
+    N.toRectangularSymmetricIdealFamily.Mem A ∧
+      N.toRectangularSymmetricIdealFamily.gauge A ≤
+        N.toRectangularSymmetricIdealFamily.gauge B :=
+  N.majorization_mem_and_gauge_le hB h
+
+
+/-- Scaled Fan dominance in the exact form consumed by the Sylvester theorem. -/
+theorem mem_and_scaled_gauge_le_of_all_scaled_kyFan_le
+    (N : KyFanDominantIdealFamily (𝕜 := 𝕜))
+    {A B : E →L[𝕜] F} {δ : ℝ}
+    (hδ : 0 < δ)
+    (hB : N.toRectangularSymmetricIdealFamily.Mem B)
+    (h : ∀ k, δ * kyFanApproximationGauge k A ≤
+      kyFanApproximationGauge k B) :
+    N.toRectangularSymmetricIdealFamily.Mem A ∧
+      δ * N.toRectangularSymmetricIdealFamily.gauge A ≤
+        N.toRectangularSymmetricIdealFamily.gauge B := by
   sorry
 
 end ExactSinTheta

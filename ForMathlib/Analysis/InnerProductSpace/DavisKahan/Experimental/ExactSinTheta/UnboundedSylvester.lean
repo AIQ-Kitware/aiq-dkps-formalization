@@ -6,11 +6,13 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 import ForMathlib.Analysis.InnerProductSpace.DavisKahan.Experimental.ExactSinTheta.ApproximationNumbers
 
 /-!
-# Fully unbounded Sylvester estimate
+# Fully unbounded Sylvester estimates
 
-This module records the domain-aware equation and the spectral-truncation path
-to Davis--Kahan Theorem 5.2.  The Ky Fan truncation theorem is kept separate
-from the final ideal-norm consequence.
+This module combines two routes to Davis--Kahan Theorem 5.2.  The
+Laplace-semigroup route yields the final theorem from ordinary rectangular
+Banach ideal laws.  The spectral-cutoff route follows the paper through finite
+Ky Fan estimates and therefore uses `KyFanDominantIdealFamily`; that stronger
+property is not derived from the ordinary ideal laws.
 -/
 
 namespace ForMathlib
@@ -31,30 +33,6 @@ abbrev ClosedOperatorOnE :=
   ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := E)
 abbrev ClosedOperatorOnF :=
   ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := F)
-
-/-- Lower semibound for a closed operator. -/
-def SemiboundedBelow
-    (A : ClosedOperatorOnE (𝕜 := 𝕜) (E := E)) (c : ℝ) : Prop :=
-  ∀ x : A.domain,
-    c * ‖(x : E)‖ ^ 2 ≤
-      RCLike.re ⟪A.toLinearMap x, (x : E)⟫_𝕜
-
-/-- Upper semibound for a closed operator. -/
-def SemiboundedAbove
-    (A : ClosedOperatorOnE (𝕜 := 𝕜) (E := E)) (c : ℝ) : Prop :=
-  ∀ x : A.domain,
-    RCLike.re ⟪A.toLinearMap x, (x : E)⟫_𝕜
-      ≤ c * ‖(x : E)‖ ^ 2
-
-/-- Domain-aware equation `A X - X B = C`. -/
-def HasClosedSylvesterEquation
-    (A : ClosedOperatorOnE (𝕜 := 𝕜) (E := E))
-    (B : ClosedOperatorOnF (𝕜 := 𝕜) (F := F))
-    (X C : F →L[𝕜] E) : Prop :=
-  ∀ x : B.domain,
-    ∃ hx : X (x : F) ∈ A.domain,
-      A.toLinearMap ⟨X (x : F), hx⟩ -
-        X (B.toLinearMap x) = C (x : F)
 
 /-- Spectral cutoff converts the right block to a bounded Sylvester equation. -/
 theorem spectralCutoff_sylvester_equation
@@ -84,24 +62,24 @@ theorem kyFan_unbounded_sylvester_le_of_semibounded
       ≤ kyFanApproximationGauge k C := by
   sorry
 
-/-- Ideal membership of the Sylvester solution from the cutoff estimates. -/
-theorem unbounded_sylvester_mem_of_semibounded
-    (N : RectangularSymmetricIdealFamily (𝕜 := 𝕜))
+/-- The opposite ordered orientation, obtained by adjointing and swapping the
+two closed blocks. -/
+theorem kyFan_unbounded_sylvester_le_of_semibounded_swapped
     {A : ClosedOperatorOnE (𝕜 := 𝕜) (E := E)}
     {B : ClosedOperatorOnF (𝕜 := 𝕜) (F := F)}
     (hA : A.IsSelfAdjoint) (hB : B.IsSelfAdjoint)
     {X C : F →L[𝕜] E} {c δ : ℝ}
     (hδ : 0 < δ)
-    (hAc : SemiboundedBelow A (c + δ))
-    (hBc : SemiboundedAbove B c)
-    (hEq : HasClosedSylvesterEquation A B X C)
-    (hC : N.Mem C) :
-    N.Mem X := by
+    (hAc : SemiboundedAbove A c)
+    (hBc : SemiboundedBelow B (c + δ))
+    (hEq : HasClosedSylvesterEquation A B X C) :
+    ∀ k, δ * kyFanApproximationGauge k X
+      ≤ kyFanApproximationGauge k C := by
   sorry
 
-/-- Davis--Kahan Theorem 5.2 for a rectangular ideal family. -/
-theorem unbounded_sylvester_mem_and_gauge_le
-    (N : RectangularSymmetricIdealFamily (𝕜 := 𝕜))
+/-- Ideal membership of the Sylvester solution from ordered cutoff estimates. -/
+theorem unbounded_sylvester_mem_of_semibounded_viaKyFan
+    (N : KyFanDominantIdealFamily (𝕜 := 𝕜))
     {A : ClosedOperatorOnE (𝕜 := 𝕜) (E := E)}
     {B : ClosedOperatorOnF (𝕜 := 𝕜) (F := F)}
     (hA : A.IsSelfAdjoint) (hB : B.IsSelfAdjoint)
@@ -110,12 +88,43 @@ theorem unbounded_sylvester_mem_and_gauge_le
     (hAc : SemiboundedBelow A (c + δ))
     (hBc : SemiboundedAbove B c)
     (hEq : HasClosedSylvesterEquation A B X C)
-    (hC : N.Mem C) :
-    N.Mem X ∧ δ * N.gauge X ≤ N.gauge C := by
+    (hC : N.toRectangularSymmetricIdealFamily.Mem C) :
+    N.toRectangularSymmetricIdealFamily.Mem X := by
+  sorry
+
+/-- Davis--Kahan Theorem 5.2 in the lower-left/upper-right orientation. -/
+theorem unbounded_sylvester_mem_and_gauge_le_viaKyFan
+    (N : KyFanDominantIdealFamily (𝕜 := 𝕜))
+    {A : ClosedOperatorOnE (𝕜 := 𝕜) (E := E)}
+    {B : ClosedOperatorOnF (𝕜 := 𝕜) (F := F)}
+    (hA : A.IsSelfAdjoint) (hB : B.IsSelfAdjoint)
+    {X C : F →L[𝕜] E} {c δ : ℝ}
+    (hδ : 0 < δ)
+    (hAc : SemiboundedBelow A (c + δ))
+    (hBc : SemiboundedAbove B c)
+    (hEq : HasClosedSylvesterEquation A B X C)
+    (hC : N.toRectangularSymmetricIdealFamily.Mem C) :
+    N.toRectangularSymmetricIdealFamily.Mem X ∧ δ * N.toRectangularSymmetricIdealFamily.gauge X ≤ N.toRectangularSymmetricIdealFamily.gauge C := by
+  sorry
+
+/-- Davis--Kahan Theorem 5.2 in the upper-left/lower-right orientation. -/
+theorem unbounded_sylvester_mem_and_gauge_le_swapped_viaKyFan
+    (N : KyFanDominantIdealFamily (𝕜 := 𝕜))
+    {A : ClosedOperatorOnE (𝕜 := 𝕜) (E := E)}
+    {B : ClosedOperatorOnF (𝕜 := 𝕜) (F := F)}
+    (hA : A.IsSelfAdjoint) (hB : B.IsSelfAdjoint)
+    {X C : F →L[𝕜] E} {c δ : ℝ}
+    (hδ : 0 < δ)
+    (hAc : SemiboundedAbove A c)
+    (hBc : SemiboundedBelow B (c + δ))
+    (hEq : HasClosedSylvesterEquation A B X C)
+    (hC : N.toRectangularSymmetricIdealFamily.Mem C) :
+    N.toRectangularSymmetricIdealFamily.Mem X ∧ δ * N.toRectangularSymmetricIdealFamily.gauge X ≤ N.toRectangularSymmetricIdealFamily.gauge C := by
   sorry
 
 /-- Exact interval/exterior form with one bounded spectral block and one
-possibly unbounded exterior block. -/
+possibly unbounded exterior block.  This theorem only needs the ordinary
+rectangular ideal interface. -/
 theorem unbounded_sylvester_mem_and_gauge_le_of_intervalExteriorGap
     (N : RectangularSymmetricIdealFamily (𝕜 := 𝕜))
     {A : ClosedOperatorOnE (𝕜 := 𝕜) (E := E)}
@@ -127,6 +136,46 @@ theorem unbounded_sylvester_mem_and_gauge_le_of_intervalExteriorGap
     (hEq : HasClosedSylvesterEquation A B X C)
     (hC : N.Mem C) :
     N.Mem X ∧ δ * N.gauge X ≤ N.gauge C := by
+  sorry
+
+/-- All source-faithful unbounded gap configurations needed by the `sin Θ`
+endpoint.  The ordered constructors allow both diagonal blocks to be genuinely
+unbounded; the interval/exterior constructor has a bounded spectral block. -/
+inductive UnboundedSylvesterGap
+    (A : ClosedOperatorOnE (𝕜 := 𝕜) (E := E))
+    (B : ClosedOperatorOnF (𝕜 := 𝕜) (F := F))
+    (δ : ℝ) : Prop where
+  | intervalExterior
+      {β α : ℝ}
+      (hβα : β ≤ α)
+      (hgap : UnboundedIntervalExteriorGap A B β α δ)
+  | leftAboveRightBelow
+      (c : ℝ)
+      (hA : SemiboundedBelow A (c + δ))
+      (hB : SemiboundedAbove B c)
+  | leftBelowRightAbove
+      (c : ℝ)
+      (hA : SemiboundedAbove A c)
+      (hB : SemiboundedBelow B (c + δ))
+
+/-- Complete unified unbounded Sylvester estimate.  The finite-interval branch
+uses the one-unbounded theorem; the two ordered branches use the paper's
+spectral-cutoff and finite-Ky-Fan argument.  The stronger family is the precise
+abstraction needed for this passage and is not derived from ordinary ideal
+laws. -/
+theorem unbounded_sylvester_mem_and_gauge_le_of_gap
+    (N : KyFanDominantIdealFamily (𝕜 := 𝕜))
+    {A : ClosedOperatorOnE (𝕜 := 𝕜) (E := E)}
+    {B : ClosedOperatorOnF (𝕜 := 𝕜) (F := F)}
+    (hA : A.IsSelfAdjoint) (hB : B.IsSelfAdjoint)
+    {X C : F →L[𝕜] E} {δ : ℝ}
+    (hδ : 0 < δ)
+    (hgap : UnboundedSylvesterGap A B δ)
+    (hEq : HasClosedSylvesterEquation A B X C)
+    (hC : N.toRectangularSymmetricIdealFamily.Mem C) :
+    N.toRectangularSymmetricIdealFamily.Mem X ∧
+      δ * N.toRectangularSymmetricIdealFamily.gauge X ≤
+        N.toRectangularSymmetricIdealFamily.gauge C := by
   sorry
 
 end ExactSinTheta

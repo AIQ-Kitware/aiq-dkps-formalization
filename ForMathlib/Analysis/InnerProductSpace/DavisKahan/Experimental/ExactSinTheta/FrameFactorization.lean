@@ -49,7 +49,7 @@ theorem LowerFrameBound.closedRange
 /-- Coercivity of the Gram operator. -/
 theorem gram_coercive
     {X : F →L[𝕜] E} {ε : ℝ}
-    (hX : LowerFrameBound X ε) :
+    (hX : LowerFrameBound X ε) (hε : 0 ≤ ε) :
     ∀ x, ε ^ 2 * ‖x‖ ^ 2
       ≤ RCLike.re ⟪(X.adjoint ∘L X) x, x⟫_𝕜 := by
   sorry
