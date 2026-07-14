@@ -3,7 +3,12 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
-import DavisKahan.FiniteDimensional.Sylvester.All
+import DavisKahan.FiniteDimensional.Core.SpectralSubspace
+import DavisKahan.FiniteDimensional.Core.SpectralGap
+import DavisKahan.FiniteDimensional.Residual.Ritz
+import DavisKahan.FiniteDimensional.Core.AngleGeometry
+import DavisKahan.FiniteDimensional.Sylvester.Interval
+import DavisKahan.FiniteDimensional.Sylvester.SpectralDistance
 import DavisKahan.FiniteDimensional.Residual.AngleEmbedding
 import ForMathlib.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm
 import ForMathlib.Analysis.InnerProductSpace.RectangularSingularValues

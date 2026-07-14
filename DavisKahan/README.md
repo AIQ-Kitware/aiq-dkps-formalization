@@ -15,8 +15,8 @@ This is the canonical Davis--Kahan library root.
 - `Sources/` contains publication-facing theorem surfaces and source-specific
   wrappers.
 - `Specialized/` contains distinct useful secondary endpoints.
-- `Alternative/` contains proof-complete duplicate or lower-dependency proof
-  surfaces retained for explicit reuse and cherry-picking.
+- `Alternative/` contains proof-complete duplicate or lower-dependency proofs
+  and noncanonical wrapper APIs retained for explicit reuse and cherry-picking.
 - `Experimental/` contains incomplete or unstable finite- and
   infinite-dimensional work.
 

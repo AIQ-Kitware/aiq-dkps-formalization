@@ -12,6 +12,6 @@ import DavisKahan.Alternative.All
 # Complete proof-finished Davis--Kahan library
 
 This developer umbrella imports the public library, all source facades,
-specialized endpoints, and alternative proof surfaces. Experimental modules
-remain excluded and require explicit imports.
+specialized endpoints, and alternative proof and API surfaces. Experimental
+modules remain excluded and require explicit imports.
 -/

@@ -4,7 +4,11 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-5.5 Thinking
 -/
 
-import DavisKahan.Sources.DavisKahan1970.PartIII
+import DavisKahan.FiniteDimensional.SinTheta.UnitarilyInvariant
+import DavisKahan.FiniteDimensional.SinTheta.Perturbation
+import DavisKahan.FiniteDimensional.DoubleAngle.SinTheta
+import DavisKahan.FiniteDimensional.TanTheta.Vector
+import DavisKahan.FiniteDimensional.DoubleAngle.TanTheta
 
 /-!
 # Prose-like wrappers for the finite Davis--Kahan classical API
@@ -22,13 +26,14 @@ finite Davis--Kahan theorems are quoted:
 
 The suffix `ClassicalProseLike` is deliberate.  These names are exploratory
 wrappers for readability while the final public API shape is still being
-refined.  The mathematical content is supplied by the already proved Part III
-facade declarations.
+refined.  The mathematical content is supplied by the canonical theorem
+declarations underlying the proved Part III facade.
 
 The definitions in this file avoid the speculative angle-operator constructors
-from `DavisKahanTheory.Basic` whose full spectral-functional-calculus
-interpretations are still roadmap items.  For the two sine theorems we name the
-actual projection products used by the proved theorems.
+from `DavisKahan.Experimental.FiniteDimensional.Core.AngleOperators`
+whose full spectral-functional-calculus interpretations remain open work.
+For the two sine theorems we name the actual projection products used by the
+proved theorems.
 -/
 
 namespace ForMathlib
@@ -118,8 +123,8 @@ structure SinThetaGapClassicalProseLike (T S : E →ₗ[𝕜] E)
 /-- Prose-like Davis--Kahan Part III `sin Θ` theorem in every unitarily
 invariant norm.
 
-This is a thin wrapper around `partIII_sinTheta_uiNorm`; its conclusion visibly
-has the paper shape `N (sin Θ) ≤ N (S - T) / gap`.
+This is a thin wrapper around the canonical finite UI-norm sine theorem; its
+conclusion visibly has the paper shape `N (sin Θ) ≤ N (S - T) / gap`.
 -/
 theorem partIII_sinTheta_uiNorm_classical_prose_like
     (N : UnitarilyInvariantNorm 𝕜 E) {T S : E →ₗ[𝕜] E}
@@ -127,8 +132,9 @@ theorem partIII_sinTheta_uiNorm_classical_prose_like
     {c g : ℝ} (hgap : SinThetaGapClassicalProseLike T S U V c g) :
     N ((directedSinThetaOperatorClassicalProseLike U V : E →L[𝕜] E) : E →ₗ[𝕜] E)
       ≤ N (S - T) / g := by
-  exact partIII_sinTheta_uiNorm N hgap.T_symm hgap.S_symm hgap.U_inv hgap.V_inv
-    hgap.gap_pos hgap.U_above hgap.V_below
+  exact UnitarilyInvariantNorm.apply_starProjection_comp_starProjection_le N
+    hgap.T_symm hgap.S_symm hgap.U_inv hgap.V_inv hgap.gap_pos
+    hgap.U_above hgap.V_below
 
 /-! ## `sin 2Θ` -/
 
@@ -161,8 +167,9 @@ theorem partIII_half_sinTwoTheta_uiNorm_classical_prose_like
     N ((directedHalfSinTwoThetaOperatorClassicalProseLike U V : E →L[𝕜] E) :
         E →ₗ[𝕜] E)
       ≤ N (S - T) / (b - a) := by
-  exact partIII_sinTwoTheta_uiNorm N hgap.T_symm hgap.S_symm hgap.U_inv hgap.V_inv
-    hgap.gap_pos hgap.U_above hgap.Uperp_below
+  exact UnitarilyInvariantNorm.sin_two_theta_starProjection_le N
+    hgap.T_symm hgap.S_symm hgap.U_inv hgap.V_inv hgap.gap_pos
+    hgap.U_above hgap.Uperp_below
 
 /-! ## `tan Θ` -/
 
@@ -197,9 +204,9 @@ theorem partIII_tanTheta_vector_classical_prose_like
     [Z.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     {α β δ ρ : ℝ} (hgap : TanThetaVectorGapClassicalProseLike T Z V α β δ ρ) :
     ∀ x ∈ Z, δ * ‖x - V.starProjection x‖ ≤ ρ * ‖V.starProjection x‖ := by
-  exact partIII_tanTheta_vector hgap.T_symm hgap.V_inv hgap.strip_order hgap.gap_pos
-    hgap.residual_nonneg hgap.Z_outside_strip hgap.Vperp_lower hgap.Vperp_upper
-    hgap.residual_bound
+  exact ForMathlib.tan_theta_le hgap.T_symm hgap.V_inv hgap.strip_order
+    hgap.gap_pos hgap.residual_nonneg hgap.Z_outside_strip hgap.Vperp_lower
+    hgap.Vperp_upper hgap.residual_bound
 
 /-! ## `tan 2Θ` -/
 
@@ -239,10 +246,10 @@ theorem partIII_tanTwoTheta_opNorm_classical_prose_like
       (b - a) * (2 * ‖projectorDifferenceOperatorClassicalProseLike U V‖
           * Real.sqrt (1 - ‖projectorDifferenceOperatorClassicalProseLike U V‖ ^ 2))
         ≤ 2 * ε * (1 - 2 * ‖projectorDifferenceOperatorClassicalProseLike U V‖ ^ 2) := by
-  exact partIII_tanTwoTheta_opNorm hgap.T_symm hgap.S_symm hgap.U_inv hgap.V_inv
-    hgap.split_pos hgap.perturbation_nonneg hgap.U_above hgap.Uperp_below
-    hgap.V_above hgap.Vperp_below hgap.offdiag_U hgap.offdiag_Uperp
-    hgap.perturbation_bound
+  exact ForMathlib.tan_two_theta_norm_sub_le hgap.T_symm hgap.S_symm
+    hgap.U_inv hgap.V_inv hgap.split_pos hgap.perturbation_nonneg
+    hgap.U_above hgap.Uperp_below hgap.V_above hgap.Vperp_below
+    hgap.offdiag_U hgap.offdiag_Uperp hgap.perturbation_bound
 
 /-! ## Sharp projector-difference theorem -/
 
@@ -276,9 +283,10 @@ theorem projector_difference_opNorm_classical_prose_like
     [U.HasOrthogonalProjection] [W.HasOrthogonalProjection]
     {c g ε : ℝ} (hgap : ProjectorDifferenceGapClassicalProseLike A B U W c g ε) :
     ‖projectorDifferenceOperatorClassicalProseLike U W‖ ≤ ε / g := by
-  exact projector_difference_opNorm hgap.A_symm hgap.B_symm hgap.U_reduces hgap.W_reduces
-    hgap.gap_pos hgap.U_high hgap.Uperp_low hgap.W_high hgap.Wperp_low
-    hgap.perturbation_nonneg hgap.perturbation_bound
+  exact opNorm_starProjection_sub_le hgap.A_symm hgap.B_symm
+    hgap.U_reduces hgap.W_reduces hgap.gap_pos hgap.U_high
+    hgap.Uperp_low hgap.W_high hgap.Wperp_low hgap.perturbation_nonneg
+    hgap.perturbation_bound
 
 /-- Canonical spectral-subspace hypotheses for the sharp projector-difference
 theorem.
@@ -306,7 +314,7 @@ theorem spectralProjector_difference_opNorm_classical_prose_like
     (hgap : CanonicalProjectorDifferenceGapClassicalProseLike A B s t c g ε) :
     ‖projectorDifferenceOperatorClassicalProseLike
         (spectralSubspace A s) (spectralSubspace B t)‖ ≤ ε / g := by
-  exact spectralProjector_difference_opNorm hgap.A_symm hgap.B_symm hgap.gap_pos
+  exact opNorm_spectralSubspace_sub_le hgap.A_symm hgap.B_symm hgap.gap_pos
     hgap.A_high hgap.Aperp_low hgap.B_high hgap.Bperp_low
     hgap.perturbation_nonneg hgap.perturbation_bound
 
