@@ -1,10 +1,13 @@
 # Davis–Kahan expert-completion plan
 
-Roadmap for taking the Davis–Kahan formalization from its current state —
-`dev/davis-kahan-gap-closure-plan.md` (v6) fully executed, everything the DKPS
-pipeline consumes formalized — to a state that would satisfy an expert asked
-"is the Davis–Kahan *theory* formalized?", i.e. the source-checked Part III
-(1970) package: the `sinΘ` and `sin2Θ` subspace theorems for every unitarily
+> **Scope correction (2026-07-14).** This document records the completion of a
+> major finite-dimensional milestone. Its historical uses of “complete” refer
+> only to that finite package and must not be read as completion of
+> Davis--Kahan (1970). The maintained project goal is the full Hilbert-space
+> paper, as defined in `docs/planning/davis-kahan-full-paper-goal.md`.
+
+Historical roadmap for taking the finite-dimensional Davis–Kahan formalization
+from the state needed by the DKPS pipeline to a strong finite source package: the `sinΘ` and `sin2Θ` subspace theorems for every unitarily
 invariant norm, the pole-free per-vector `tanΘ` theorem, and the sharp
 operator-norm `tan2Θ` theorem with its strict quarter-turn conclusion, together
 with the principal-angle dictionary needed to interpret those statements.
@@ -23,15 +26,16 @@ gates, `lake build` green after every step, `#print axioms` =
   four source-checked headline theorems.  Reconciled the later canonical
   tangent scaffolds with the statement-first gates: all-UI `tanΘ` and
   `tan2Θ`, graph operators, residual tangent forms, and branch-selection APIs
-  are valuable extensions, but they are not prerequisites for completion of
-  the classical quartet.  The umbrella module and literature comparison now
-  distinguish the closed quartet from those extensions.
+  are valuable finite extensions, but they were not prerequisites for the
+  historical finite-quartet milestone tracked by this plan. The maintained
+  full-paper roadmap has a different completion standard.
 - **v1 (2026-07-09, Fable):** initial plan, incorporating a review of Opus's
   2026-07-09 expert-gap diagnosis.
-- **v14 (2026-07-10, Fable — G3 ✅ DONE, G2.2b ✅ DONE; THE PLAN IS
+- **v14 (2026-07-10, Fable — G3 ✅ DONE, G2.2b ✅ DONE; FINITE MILESTONE
   COMPLETE):** the two remaining headline proofs landed, both axiom-clean,
-  full library green (8722 jobs); the Davis–Kahan Part III quartet (sinΘ,
-  sin2Θ, tanΘ, tan2Θ) is formalized at the subspace level in full.
+  full library green (8722 jobs); the finite subspace quartet tracked by this
+  historical plan was formalized. This was not completion of the paper's
+  Hilbert-space, arbitrary-UI-norm, Section 8, or unbounded scopes.
   **G3** (`5ee2781`, `TanTheta.lean`): `tan_theta_le` proved by an elementary
   coordinate-free vectorization of Nakatsukasa's argument (LAA 436 (2012)),
   found while planning against the sources: (i) on `Vᗮ`, take a maximizer
@@ -1487,16 +1491,16 @@ never unfold `starProjection` itself, only expand through the
 
 ---
 
-## Phase H — recorded as out of scope (documentation only)
+## Phase H — recorded as out of scope for this historical finite plan
 
 - **H1 general-separation op-norm sinΘ (constant `π/2`)**: Fourier-analytic
   (Bhatia–Davis–McIntosh extremal function); genuinely a different proof
   technology.  Record in the paper as known-open in the formalization.
-- **H2 infinite dimensions**: `SylvesterBound.lean` and `DavisKahan/Sources/Davis1963/DoubleAngle.lean`
-  already hold without finite dimension; the eigenbasis-encoded layer is
-  finite-dimensional by design.  A spectral-measure DK is a separate project;
-  document the frontier precisely (which theorems are already
-  dimension-free).
+- **H2 Hilbert-space source scope**: this plan intentionally deferred the
+  bounded Hilbert-space and unbounded source theorems. That deferral is no
+  longer the repository's default roadmap; it is now the principal remaining
+  Davis--Kahan 1970 objective. The finite eigenbasis layer remains useful by
+  design, but does not discharge that obligation.
 - **H3 generalized eigenproblems / relative perturbation** (definite pencils,
   Ipsen/Li): modern extensions, not part of "the DK theory"; out of scope.
 
@@ -1521,12 +1525,14 @@ G2.2b ✅ (Fable, v14, 5e423ec);  G3 ✅ (Fable, v14, 5ee2781)
 (F3-annex: optional, anytime — off the critical path)
 ```
 
-**THE PLAN IS COMPLETE.**  All four Part III theorems — sinΘ (F4.c), sin2Θ
-(G1, dictionary certified by OP3), tanΘ (G3), tan2Θ (G2.2b) — are formalized
-at the subspace level, axiom-clean, with the principal-angle dictionary
-certified and the Frobenius/op-norm instantiations in place.  The only
-unexecuted items are the explicitly optional Mathlib-attractive annex
-bricks.
+**THE FINITE MILESTONE PLAN IS COMPLETE.** The four finite subspace endpoints
+tracked here—sinΘ (F4.c), sin2Θ (G1, dictionary certified by OP3), tanΘ (G3),
+and tan2Θ (G2.2b)—were formalized with the principal-angle dictionary and the
+listed norm instantiations. This statement is historical and scope-qualified:
+it does not claim completion of the bounded Hilbert-space quartet, the full
+unitary-invariant norm scope, direct rotation, Section 8, or the unbounded
+passages of Davis--Kahan (1970). The only unexecuted items *within this finite
+plan* are the optional Mathlib-attractive annex bricks.
 
 Each batch ends: `lake build` green, axiom check, golf pass, paper sync
 (move items out of §"What remains", extend the dictionary tables, update the

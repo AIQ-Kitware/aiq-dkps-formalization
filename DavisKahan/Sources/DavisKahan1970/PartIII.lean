@@ -14,10 +14,14 @@ import DavisKahan.FiniteDimensional.DoubleAngle.SinTheta
 import DavisKahan.FiniteDimensional.DoubleAngle.TanTheta
 
 /-!
-# Finite Davis--Kahan Part III source surface
+# Finite Davis--Kahan Part III specialization surface
 
 This module is the stable source-facing import surface for the finite Part III
-results that are currently proved in the library.
+results that are currently proved in the library. It is a specialization and a
+low-dependency proof surface, not the completion boundary for the 1970 paper.
+The default project goal remains the source's Hilbert-space theory, including
+the bounded main body, arbitrary unitary-invariant norm scope, and unbounded
+passages.
 
 The source package exposed here includes:
 

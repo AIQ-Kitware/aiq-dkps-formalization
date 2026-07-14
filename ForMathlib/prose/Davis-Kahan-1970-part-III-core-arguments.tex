@@ -34,8 +34,8 @@
 \theoremstyle{remark}
 \newtheorem{remark}[theorem]{Remark}
 
-\title{The finite-dimensional Davis--Kahan theory:\\
-formalization-oriented proof distillation and Lean roadmap}
+\title{Davis--Kahan 1970 in Hilbert space:\\
+formalization-oriented proof distillation and finite-specialization roadmap}
 \author{GPT 5.6 High}
 \date{10 July 2026}
 
@@ -43,11 +43,13 @@ formalization-oriented proof distillation and Lean roadmap}
 \maketitle
 
 \begin{abstract}
-This document distills the finite-dimensional content and proof architecture of
-Davis and Kahan's \emph{The Rotation of Eigenvectors by a Perturbation. III}
-(SIAM Journal on Numerical Analysis 7 (1970), 1--46), together with the
-finite-dimensional antecedents in Davis (1963).  It is written to support the
-Lean files under
+This document distills the proof architecture of Davis and Kahan's
+\emph{The Rotation of Eigenvectors by a Perturbation. III} (SIAM Journal on
+Numerical Analysis 7 (1970), 1--46), together with the finite-dimensional
+antecedents in Davis (1963). The source target is the paper's separable
+Hilbert-space setting: a bounded Hermitian main body, arbitrary
+unitary-invariant norms, and unbounded self-adjoint extensions with domain
+conditions. It is written to support the Lean files under
 \texttt{DavisKahan/}.
 It deliberately expands the operator-theoretic prose into the intermediate
 objects, block identities, singular-value statements, and spectral-selection
@@ -59,6 +61,14 @@ not a transcription of the source paper.
 
 \section{Scope and source map}
 
+The maintained transcription states that the ambient space is separable,
+that all four theorems apply in infinite and finite dimensions, and that the
+bounds are given for arbitrary unitary-invariant norms. It takes bounded
+Hermitian operators as the standing subject and treats unbounded self-adjoint
+extensions under domain and bounded-residual conditions. These facts define
+the completion target; the finite theory described throughout this note is a
+specialization and proof laboratory.
+
 The 1970 paper centers on four independent sharp estimates:
 \(\sin\Theta\), \(\tan\Theta\), \(\sin 2\Theta\), and
 \(\tan 2\Theta\).  Each has a perturbation form and a residual form, and the
@@ -69,11 +79,12 @@ its extremal properties; a sharp estimate for the Sylvester expression
 theorems; and the spectral-selection/repulsion interpretation of the
 double-angle bounds.
 
-The Lean scaffold follows the same dependency order.  Definitions are made on
-submodules and isometric embeddings rather than on a chosen pair of coordinate
-bases.  Finite dimensionality permits every spectral statement to be reduced to
-an orthonormal eigenbasis, but basis independence must be proved before the
-public theorem layer is considered complete.
+The Lean development should follow the same dependency order. Definitions are
+made on closed subspaces, projectors, and isometric embeddings rather than on a
+chosen pair of coordinate bases. The finite-dimensional branch may reduce
+spectral statements to orthonormal eigenbases and is retained as a valuable
+weaker-foundation specialization. The canonical source-facing layer must not
+require such a reduction.
 
 \section{Coordinate-free reducing subspaces and spectral blocks}
 

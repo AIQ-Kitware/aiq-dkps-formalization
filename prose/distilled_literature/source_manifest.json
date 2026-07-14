@@ -1,5 +1,5 @@
 {
-  "version": "2026-07-12-quench-complete-and-transcription-policy",
+  "version": "2026-07-14-davis-kahan-full-scope-correction",
   "purpose": "Canonical, machine-checked inventory of works whose definitions, theorem families, or proof architecture are directly formalized, actively scaffolded, or inherited by the DKPS and raw-response Quench development.",
   "scope_rule": [
     "Include every DKPS-lineage paper whose definitions or theorems are used by a paper-facing Lean namespace.",
@@ -810,7 +810,7 @@
       "group": "Spectral perturbation, principal angles, and matrix inequalities",
       "tier": "primary",
       "priority": "P0",
-      "formalization_status": "large finite-dimensional theory formalized/scaffolded",
+      "formalization_status": "strong finite specialization; partial bounded Hilbert-space theory; full source norm scope, Section 8, and unbounded passages remain active",
       "distilled_status": "core_note",
       "primary_url": "https://doi.org/10.1137/0707001",
       "target_note": "DavisKahan1970_part_III.tex",
@@ -820,10 +820,12 @@
         "papers/DavisKahan-formalized-vs-literature.tex"
       ],
       "existing_assets": [
-        "ForMathlib/prose/Davis-Kahan-1970-part-III-core-arguments.tex"
+        "ForMathlib/prose/Davis-Kahan-1970-part-III-core-arguments.tex",
+        "prose/distilled_literature/DavisKahan1970_part_III.tex",
+        "prose/InfiniteDimensionalDavisKahan.tex"
       ],
-      "scope": "Part III sin Theta, tan Theta, sin 2 Theta, direct rotation, residual, projector, and unitarily invariant norm theorem families.",
-      "missing_work": "Convert the broad core note into a section-by-section reconstruction with every theorem numbered and the formalized/generalized variants separated.",
+      "scope": "Full Part III theory on separable Hilbert spaces: bounded Hermitian main body, four angle theorem families for arbitrary unitary-invariant norms, direct rotation, spectral selection, and unbounded self-adjoint extensions.",
+      "missing_work": "Complete a theorem-number audit against the transcription; promote the bounded Hilbert-space four-theorem package; develop the infinite-dimensional unitary-invariant ideal layer; formalize direct-rotation extremality, Section 8, sharpness/equality results, and the unbounded Theorem 5.2/Appendix to Section 6 passages.",
       "role": "primary_theorem_source",
       "bibliographic_status": "verified"
     },

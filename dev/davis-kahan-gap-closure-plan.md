@@ -1,5 +1,10 @@
 # Davis–Kahan gap-closure plan
 
+> **Scope correction (2026-07-14).** This is a historical finite-dimensional
+> gap-closure plan. It remains useful engineering memory, but it does not define
+> completion of the 1970 paper. The active full-paper goal is
+> `docs/planning/davis-kahan-full-paper-goal.md`.
+
 Plan for closing the gaps between the Lean formalization and the literature, as
 catalogued in `papers/DavisKahan-formalized-vs-literature.tex` §"What is not
 formalized". Written for an Opus-level agent; every step names its target file,

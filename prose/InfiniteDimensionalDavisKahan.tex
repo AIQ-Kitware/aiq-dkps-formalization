@@ -8,17 +8,26 @@
 \newcommand{\dist}{\operatorname{dist}}
 \newcommand{\Ran}{\operatorname{Ran}}
 \newcommand{\Graph}{\operatorname{Graph}}
-\title{Infinite-dimensional Davis--Kahan theory: formalization distillation}
+\title{Davis--Kahan 1970 in its full Hilbert-space scope: formalization distillation}
 \author{Jon Crall and GPT 5.6 High}
 \begin{document}
 \maketitle
 
 \section{Purpose and source discipline}
 This document is an independent, formalization-oriented distillation of the
-operator-theoretic arguments needed beyond the repository's finite-dimensional
-Davis--Kahan development.  It records theorem interfaces, hidden analytic
-lemmas, and proof decompositions.  It intentionally does not reproduce source
-text.
+ambient Hilbert-space theory that is the default target of the repository.
+The finite-dimensional development is a valuable specialization and alternate
+proof surface; it is not the parent theory from which this document is an
+optional extension. This note records theorem interfaces, hidden analytic
+lemmas, proof decompositions, and the boundary between the bounded main body,
+unitary-invariant operator ideals, and the unbounded passages. It intentionally
+does not reproduce source text.
+
+The maintained modernized transcription records that the paper works on a
+separable Hilbert space, takes bounded Hermitian operators as the standing
+main-body subject, states all four headline theorems for infinite and finite
+dimensions and arbitrary unitary-invariant norms, and extends the results to
+unbounded self-adjoint operators under domain and bounded-residual conditions.
 
 Primary sources guiding the scaffold are Davis--Kahan (1970),
 Kostrykin--Makarov--Motovilov on Riccati equations and generalized
@@ -28,18 +37,21 @@ closed operators and quadratic forms.
 
 
 \section{Shared-core strategy}
-The efficient development is not to prove the entire infinite-dimensional
-scaffold before returning to the finite theory.  The first target is a small
-bounded Hilbert-space core: projection algebra, two-projection geometry,
-operator angles, graph subspaces, direct rotation, the ordered operator-norm
-Sylvester theorem, and the ordered $\sin\Theta$ and reflection
-$\sin 2\Theta$ estimates.  These arguments are basis free and should be
-specialized back to finite dimensions.
+The first canonical target is a bounded Hilbert-space core: projection algebra,
+two-projection geometry, operator angles, graph subspaces, direct rotation, the
+source Sylvester theorems, and the four angle families. These arguments are
+basis free and should be specialized back to finite dimensions.
 
-Finite-dimensional singular-value lists, arbitrary finite unitarily invariant
-norms, Frobenius identities, eigenvalue-order combinatorics, and statistical
-corollaries should remain in the finite development.  Waiting for infinite
-symmetric ideals before closing those results would be inefficient.
+Finite-dimensional singular-value lists, arbitrary finite rectangular
+unitarily invariant norms, Frobenius identities, eigenvalue-order
+combinatorics, and statistical corollaries remain important. They may be
+completed independently and retained as lower-dependency alternatives. They do
+not discharge the corresponding Hilbert-space source obligation.
+
+The full-paper roadmap must also include symmetric norm ideals and the
+unbounded passages. It is acceptable to stage those after the bounded
+operator-norm skeleton, but no intermediate finite or bounded-only milestone
+should be reported as completion of the paper.
 
 \section{Staged proof order}
 The proposed milestones are:
@@ -122,11 +134,25 @@ operator $X:U\to U^\perp$ with $V=\Graph(X)$.  The identities
 $\|X\|=\tan\|\Theta\|$ and the explicit block formula for $P_V$ provide the
 bridge from subspace geometry to Riccati equations.
 
-\section{Symmetric norm ideals}
-In infinite dimension, general unitarily invariant norms are defined on
-compact operator ideals.  The formal API must support two-sided ideal bounds,
-pinching, unitary invariance, direct sums, singular-value gauges, and concrete
-Schatten, trace-class, Hilbert--Schmidt, and Ky Fan instances.
+\section{Unitary-invariant norm domains}
+The paper does not globally assume compactness. It discusses compact singular
+values, Ky Fan norms, and the noncompact case through spectral multiplicity,
+while allowing some norm statements to become vacuous when the relevant norm
+is not finite. A faithful formal API must therefore distinguish several
+legitimate domains rather than replacing the source by a compact-operator
+restriction:
+\begin{itemize}
+\item the operator norm on every bounded operator;
+\item finite Ky Fan or approximation-number quantities where defined for
+bounded noncompact operators;
+\item compact and symmetric norm ideals with two-sided ideal bounds, pinching,
+unitary invariance, direct sums, and singular-value gauges;
+\item concrete trace-class, Hilbert--Schmidt, and Schatten instances;
+\item any broader spectral-multiplicity formulation needed to match the
+source's noncompact convention.
+\end{itemize}
+The compact/ideal theory is an important implementation layer, but compactness
+must not become an unadvertised hypothesis of the source-facing theorem.
 
 \section{Sylvester equation}
 For self-adjoint $A$ and $B$, solve
