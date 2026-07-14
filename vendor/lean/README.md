@@ -25,6 +25,10 @@ outside the `ForMathlib` dependency graph so that:
 
 ## Current snapshots
 
+  operator-graph infrastructure.
+  complete and closed range.
+  inverses for injective closed-range maps between Banach spaces.
+  inversion tools.
 - `jbarrcfl-mathlib4/TopSingularValue.excerpt.lean`: the operator norm equals the top
   singular value.
 - `lean-stat-learning-theory/SingularSystemGram.excerpt.lean`: right and left singular

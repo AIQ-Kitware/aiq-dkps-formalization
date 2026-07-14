@@ -34,7 +34,8 @@ permalinks, theorem names, and proof strategies, then independently re-derive th
 A local git-ignored cache under `dev/reference-repos/` may be used during development.
 
 The focused Davis--Kahan reuse analysis is in
-`dev/davis-kahan-existing-work-survey.md`.  The local rectangular and frame APIs are staged in
+`dev/davis-kahan-existing-work-survey.md`. The arbitrary-Hilbert-space graph-subspace donor audit is
+in `dev/graph-subspace-vendor-survey-2026-07-14.md`. The local rectangular and frame APIs are staged in
 `ForMathlib/Analysis/InnerProductSpace/RectangularSingularValues.lean`,
 `SingularSystem.lean`, and `FiniteFrame.lean`.
 
@@ -63,6 +64,25 @@ characteristic-polynomial relation and provide an algebraic route to zero-padded
 comparison.
 
 ---
+
+
+## Pinned Mathlib graph-subspace infrastructure
+
+The graph-subspace survey found no complete external implementation of the acute-projection-pair
+theorem, but it found that the project-pinned Mathlib already supplies nearly all of the supporting
+functional analysis:
+
+- `LinearPMap.graph`, closedness, closability, and graph closure;
+- anti-Lipschitz complete-range and closed-range theorems;
+- `ContinuousLinearMap.equivRange` and continuous left inverses for injective closed-range maps;
+- `ContinuousLinearEquiv.ofBijective` from the Banach open-mapping theorem; and
+- `Units.oneSub` / `NormedRing.inverse_one_sub` for near-identity compression inverses.
+
+Exact excerpts at pinned Mathlib commit `c368140668f5fa16a1bd977448c1f665d48c3df4` are preserved under
+`vendor/lean/mathlib4/`. They are references only; production modules import Mathlib directly.
+
+The complete search history, screened repositories, signature correction, and implementation order
+are recorded in `dev/graph-subspace-vendor-survey-2026-07-14.md`.
 
 ## Licensed sources vendored in this repository
 
@@ -155,6 +175,25 @@ Vendored excerpt:
 
 ---
 
+
+## Licensed source surveyed but not copied: `adambornemann-glitch/Spectra`
+
+- Repository: <https://github.com/adambornemann-glitch/Spectra>
+- Audited commit: `8dbaaf6728d1342ae16acf79fd7eef7c59b37e63`
+- License: Apache-2.0.
+- Reported toolchain: Lean `v4.31.0-rc1`, one release behind this project.
+
+The project reports a broad proof-complete operator-theory stack: closed and unbounded operators,
+self-adjoint extensions, resolvents, projection-valued measures, two spectral-theorem routes,
+bounded and unbounded functional calculus, polar decomposition, trace class, and Hilbert--Schmidt
+operators.
+
+It is the strongest future vendor candidate found for the spectral-projection, Section 8,
+unbounded-operator, and operator-ideal programs. No source is copied in the present pass: the
+immediate graph theorem does not need it, and importing or excerpting a large subtree before a
+theorem-level dependency audit would obscure the toolchain and API adaptation work still required.
+See `dev/graph-subspace-vendor-survey-2026-07-14.md`.
+
 ## Direct Davis--Kahan formalizations found in the 2026-07-12 pass
 
 ### Licensed direct donor: `YuanheZ/lean-stat-learning-theory`
@@ -194,6 +233,28 @@ See `dev/davis-kahan-existing-work-survey.md` for the applicability matrix and r
 reuse boundaries.
 
 ---
+
+<!-- BEGIN Spectra collaboration reference -->
+## Active external dependency candidate: `adambornemann-glitch/Spectra`
+
+- Repository: <https://github.com/adambornemann-glitch/Spectra>
+- Audited commit: `8dbaaf6728d1342ae16acf79fd7eef7c59b37e63`
+- License: Apache-2.0 in the repository and inspected source modules.
+- Integration mode: Git submodule during active collaboration; later a pinned
+  Lake Git dependency if the required APIs merge upstream.
+- Full audit: `dev/spectra-integration-survey-2026-07-14.md`.
+
+Spectra is the leading candidate for the complex PVM, spectral-theorem,
+unbounded self-adjoint, bounded polar-decomposition, trace-class, and
+Hilbert--Schmidt substrate. It does not contain the Davis--Kahan graph, angle,
+Sylvester, or four-theorem geometry. General PVM range-subspace and reducing
+subspace infrastructure should be contributed upstream; paper-facing
+perturbation results remain in this repository.
+
+Do not copy Spectra files into `vendor/lean/` as the production integration
+strategy, and do not classify declarations from the project's existing Mathlib
+dependency as third-party vendor material.
+<!-- END Spectra collaboration reference -->
 
 ## Reference-only sources: no visible license
 

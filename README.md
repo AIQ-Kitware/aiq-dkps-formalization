@@ -42,6 +42,7 @@ high-probability event propagation, and consistency transfer.
 ├── comparator/            # per-PR comparator configs
 ├── docs/                  # planning trackers (docs/planning) and challenge how-to (docs/challenge)
 ├── dev/                   # engineering memory: benchmark questions + debug postmortems (agent-readable)
+├── external/Spectra       # Git submodule for collaborative spectral/operator infrastructure
 ├── lakefile.toml          # Lake workspace for the six active libraries
 ├── lake-manifest.json     # pinned dependency manifest
 └── lean-toolchain         # Lean toolchain pin
@@ -65,6 +66,40 @@ In a fresh environment you will need to setup Lean4, see:
 ```bash
 ./setup_lean.sh
 ```
+
+<!-- BEGIN Spectra collaboration checkout -->
+## Spectra collaboration checkout
+
+The full Hilbert-space Davis--Kahan roadmap needs spectral-measure and
+unbounded-operator infrastructure that is being developed in the external
+[`Spectra`](https://github.com/adambornemann-glitch/Spectra) project. During the
+collaboration phase, this repository tracks Spectra as the Git submodule
+`external/Spectra` rather than copying selected source files.
+
+Initialize it with:
+
+```bash
+git submodule update --init --recursive
+```
+
+For a first checkout, or to configure the upstream and contribution remotes:
+
+```bash
+scripts/bootstrap_spectra_submodule.sh --create-fork
+```
+
+The submodule is intentionally staged separately from the Lake dependency.
+After porting the Spectra compatibility branch to this repository's Lean and
+Mathlib pins, enable and test the narrow dependency cone with:
+
+```bash
+python3 scripts/enable_spectra_lake_dependency.py
+scripts/spectra_import_smoke.sh
+```
+
+See `dev/spectra-integration-survey-2026-07-14.md` for the division of labor,
+reviewed modules, version-skew risks, and planned upstream contributions.
+<!-- END Spectra collaboration checkout -->
 
 ## Build
 

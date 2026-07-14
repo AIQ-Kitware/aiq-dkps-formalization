@@ -1,0 +1,71 @@
+Overlay: Spectra collaboration submodule integration
+Date: 2026-07-14
+Target repository: /home/joncrall/code/aiq-dkps-formalization
+Audited DKPS public base: d3acee67d72612301754b0fbc5cff4631dc35e0b
+Audited Spectra pin: 8dbaaf6728d1342ae16acf79fd7eef7c59b37e63
+
+Purpose
+-------
+- Record the deep Spectra capability and reuse survey.
+- Establish a real Git-submodule collaboration workflow without copying source.
+- Keep Mathlib APIs as direct imports, not misleading vendor snapshots.
+- Stage, but do not prematurely enable, the Lake path dependency while the
+  Lean 4.31 / 4.32 compatibility seam remains open.
+- Make upstream PR work easy through upstream/fork remotes and named branches.
+- Create or detect the authenticated user's fork without relying on unsupported
+  `gh repo fork --remote=false` syntax.
+
+Files installed directly by unzip
+---------------------------------
+- APPLY_SPECTRA_SUBMODULE_OVERLAY.md
+- dev/spectra-integration-survey-2026-07-14.md
+- external/README.md
+- scripts/apply_spectra_submodule_overlay.py
+- scripts/bootstrap_spectra_submodule.sh
+- scripts/enable_spectra_lake_dependency.py
+- scripts/disable_spectra_lake_dependency.py
+- scripts/spectra_import_smoke.sh
+- scripts/remove_redundant_mathlib_vendor_snapshots.py
+
+Files updated idempotently by apply_spectra_submodule_overlay.py
+---------------------------------------------------------------
+- AGENTS.md
+- README.md
+- lakefile.toml
+- dev/external-lean-references.md, when present
+- prior redundant vendor/lean/mathlib4 snapshot records, when present
+
+Git state created by bootstrap_spectra_submodule.sh
+--------------------------------------------------
+- .gitmodules entry for external/Spectra using public upstream URL
+- external/Spectra gitlink pinned initially to audited Spectra commit
+- local Spectra remotes: origin/upstream and fork
+- local named branch: dkps-lean-4.32
+
+A ZIP archive cannot encode a new Git gitlink when simply extracted.  The
+bootstrap script deliberately performs the Git operation and stages the parent
+repository changes.
+
+Default dependency behavior
+---------------------------
+The overlay does not immediately add Spectra as a Lake requirement.  The
+submodule's audited toolchain is Lean 4.31.0-rc1 while DKPS uses 4.32.0-rc1.
+After compatibility work, enable the path dependency with:
+
+  python3 scripts/enable_spectra_lake_dependency.py
+  scripts/spectra_import_smoke.sh
+
+Validation performed
+--------------------
+- Python scripts compile with py_compile.
+- Shell scripts pass bash -n.
+- Text patch application is idempotent in a synthetic DKPS tree.
+- Redundant Mathlib vendor cleanup is idempotent and preserves unrelated
+  manifest entries in a synthetic vendor tree.
+- Lake enablement refuses mismatched toolchains by default.
+- Lake enable/disable edits round-trip in a synthetic workspace.
+- Submodule bootstrap was exercised against a local bare Git remote, including
+  a rerun with an existing contribution branch.
+- Fork creation was exercised with a mocked gh CLI that rejects remote flags
+  for explicit repository arguments.
+- No Lean build was run in the packaging environment.

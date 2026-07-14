@@ -4,6 +4,10 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
 import DavisKahan.Experimental.InfiniteDimensional.Core.OperatorAngle
+import Mathlib.Analysis.Normed.Operator.Banach
+import Mathlib.Analysis.Normed.Ring.Units
+import Mathlib.Topology.Algebra.Module.LinearPMap
+import Mathlib.Topology.MetricSpace.Antilipschitz
 
 /-!
 # Graph subspaces and angular operators
@@ -27,14 +31,37 @@ between projection estimates and operator Riccati equations.
 -/
 
 
-/-! ## Weak-agent execution plan: graph subspaces
+/-! ## Donor API audit and execution plan
+
+The graph-subspace vendor survey is recorded in
+`dev/graph-subspace-vendor-survey-2026-07-14.md`.  The immediate proof should
+reuse the pinned Mathlib APIs below rather than rebuilding closed-range or
+inverse-continuity arguments locally.
 
 Work with subtype maps rather than ambient formulas first.  Define the graph
 embedding from `U` to `E` by `u ↦ u + X u`, where `IsAngularOperator U X`
-ensures `X u ∈ Uᗮ`.  Prove it is bounded below by
-`‖u + Xu‖² = ‖u‖² + ‖Xu‖²`; its range is therefore closed.  Define
-`graphSubspace` as that range and obtain the orthogonal-projection instance
-from closedness.
+ensures `X u ∈ Uᗮ`.  The Pythagorean identity gives a one-antilipschitz bound.
+Use `AntilipschitzWith.isClosed_range` to obtain closedness of the range, then
+the standard closed-subspace projection instance.
+
+For acute-to-graph, restrict `projection U` to `V`.  The preferred inverse
+routes are:
+
+* `ContinuousLinearMap.equivRange` after injectivity and closed range are known;
+* `ContinuousLinearEquiv.ofBijective` after direct injectivity and surjectivity;
+* `Units.oneSub` for the near-identity compression when the acute norm bound
+  yields an operator of norm strictly below one.
+
+`LinearPMap.graph` and `LinearPMap.IsClosed` are the canonical graph language
+for later alignment with the unbounded appendix.  The bounded graph may be
+implemented first as a continuous-map range, but its comparison with the
+`LinearPMap` graph should be explicit rather than introducing a second
+unrelated graph notion.
+
+The current unconditional projection instance for `graphSubspace U X` is a
+signature defect: an arbitrary ambient `X` need not give a closed graph range.
+The implementation pass must either add `hX : IsAngularOperator U X` to that
+instance or bundle angularity into the graph object before closing it.
 
 For the projection formula, define
 `G := I + X.adjoint ∘L X` on `U`.  Prove `G ≥ I`, hence invertible, before
@@ -42,10 +69,6 @@ mentioning `G⁻¹` or `G⁻¹/²`.  Construct the normalized graph isometry
 `J := graphEmbedding ∘ G⁻¹/²`; then the projection is `J ∘L J.adjoint`.
 Expand this identity blockwise and only afterward package the ambient
 `graphProjectionFormula`.
-
-For acute-to-graph, restrict `projection U` to `V`, prove it is bounded below,
-apply the bounded inverse theorem, and define the angular operator from the
-inverse.  Uniqueness is coordinatewise after applying `P_U` and `P_Uᗮ`.
 -/
 
 namespace ForMathlib

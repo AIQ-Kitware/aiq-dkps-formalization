@@ -2,6 +2,13 @@
 
 The files under `vendor/lean/` are source references, not linked build dependencies.
 
+## Lean community / Mathlib
+
+Selected excerpts from Mathlib at the project-pinned revision.
+Copyright is retained by the named upstream authors and Mathlib contributors.
+Licensed under the Apache License, Version 2.0.
+See `LICENSES/Apache-2.0.txt` and `manifest.toml`.
+
 ## Jacob Barr / jbarrcfl mathlib4 fork
 
 Copyright (c) 2026 Jacob Barr.
