@@ -58,20 +58,15 @@ instances from those facts.  Define the gapped operator diagonally and the
 rotated perturbation by conjugation with the planar rotation; matrix ext plus
 trigonometric normalization then supplies every later sharpness identity. -/
 
-/-- Construction strategy: prove `modelProjection0` is a self-adjoint
-idempotent and identify `modelSubspace0` with its range, then invoke the generic
-range-of-star-projection instance. -/
+
 noncomputable instance modelSubspace0_hasOrthogonalProjection :
     (modelSubspace0 (𝕜 := 𝕜)).HasOrthogonalProjection := inferInstance
 
-/-- Construction strategy: prove the rotated matrix is a self-adjoint
-idempotent by conjugating the coordinate projection with the planar rotation,
-then identify its range. -/
+
 noncomputable instance modelSubspaceTheta_hasOrthogonalProjection (theta : ℝ) :
     (modelSubspaceTheta (𝕜 := 𝕜) theta).HasOrthogonalProjection := inferInstance
 
-/-- Construction route: use the diagonal matrix with eigenvalues separated
-by `d` in the standard planar basis and bundle its matrix norm bound. -/
+/-- Diagonal planar operator with eigenvalues separated by `d`. -/
 noncomputable def modelGappedOperator (d : ℝ) :
     Plane 𝕜 →L[𝕜] Plane 𝕜 :=
   (Matrix.toEuclideanLin !![(0 : 𝕜), 0; 0, (d : 𝕜)]).toContinuousLinearMap

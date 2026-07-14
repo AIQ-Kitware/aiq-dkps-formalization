@@ -135,11 +135,6 @@ proves them over any `RCLike` field with `RCLike.re ⟪T x, x⟫` in place of
 /-- **Courant–Fischer, upper direction.** On any subspace `V` of dimension
 `k + 1` there is a unit vector `x` with `⟪T x, x⟫ ≤ λₖ(T)`.
 
-Proof idea: `V` must intersect the `(n - k)`-dimensional "tail" eigenspace
-`span {bᵢ : k ≤ i}` nontrivially by dimension counting; on that intersection
-the quadratic form is bounded above by `λₖ` since the involved eigenvalues are
-all `≤ λₖ` (eigenvalues are sorted decreasingly).
-
 Internal helper: one of the two directional Courant–Fischer bounds feeding
 Weyl's inequality below. -/
 theorem exists_unit_vector_inner_le_eigenvalue

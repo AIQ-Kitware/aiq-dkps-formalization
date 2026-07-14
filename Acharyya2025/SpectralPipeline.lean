@@ -102,9 +102,7 @@ structure CMDSpectralAssumptions (n d : Nat) (B : SqMat n) where
 Finite-dimensional norm comparison from entrywise matrix control to an operator
 bound for matrix-vector multiplication.
 
-This is a paper-independent bridge that should be developed toward Mathlib.  A
-typical proof uses Cauchy-Schwarz plus finite-dimensional norm equivalence:
-`‖(A-B)x‖₂ ≤ n * ε * ‖x‖₂` when all entries of `A-B` are bounded by `ε`.
+This is a paper-independent bridge that should be developed toward Mathlib.
 
 Mathematical source/citation:
 - Horn and Johnson, *Matrix Analysis*, 2nd ed., Section 5.6 on matrix norms and

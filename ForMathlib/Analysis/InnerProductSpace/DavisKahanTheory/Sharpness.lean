@@ -116,11 +116,7 @@ for the `sin Θ` model, use the graph residual for `tan Θ`, and take the
 reflection/off-diagonal parts for the double-angle models.  Matrix ext reduces
 all later norm and equality claims to scalar trigonometric identities. -/
 
-/-- Diagonal gapped operator used by the extremal examples.
-
-Construction route: use the diagonal `2×2` matrix with entries `a,b`; define
-the linear map by matrix multiplication and prove the gap from the two
-coordinate eigenvectors. -/
+/-- Diagonal gapped operator used by the extremal examples. -/
 noncomputable def modelGappedOperator (a b : ℝ) :
     Plane 𝕜 →ₗ[𝕜] Plane 𝕜 :=
   Matrix.toEuclideanLin (Matrix.diagonal ![(a : 𝕜), (b : 𝕜)])
@@ -294,11 +290,6 @@ theorem directSum_models_simultaneous_equality (m : ℕ) :
 
 /-- To first order in a linear perturbation parameter, all four theorem
 conclusions agree.
-
-Lean proof route for a weaker agent:
-
-1. For the current scalar statement, use the standard limits `sin x / x → 1` and `tan x / x → 1`.
-2. If the theorem retains its name, add the normalized Davis--Kahan expressions for all four bounds.
 
 Signature audit: The theorem has been renamed to match its scalar content.  The operator-level
 first-order comparison should be a separate corollary of the four planar equality theorems.

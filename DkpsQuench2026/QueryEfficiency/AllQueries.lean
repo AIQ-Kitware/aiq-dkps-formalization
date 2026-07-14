@@ -35,25 +35,8 @@ variable {Ωresp : Type wy} [MeasurableSpace Ωresp]
 /-- All-proper-subsets finite-model raw-response Quench.
 
 Each valid subset receives its own dimensions, data, and assumptions, while the
-reference law, response-noise law, and full score are shared.  Once
-`finiteFixedSubset` is complete, this proof is only the
-quantifier lift encoded by `HighProbQueryEfficient`.
-
-Implementation recipe (execute in this order):
-1. Unfold `HighProbQueryEfficient`, `HighProbQueryEfficientBelow`, and
-   `HighProbMQueryEfficient` until the goal introduces `m0`, `hm0`, `Qsub`,
-   `hsub`, and `hcard`.
-2. Derive `Qsub.card < Qstar.card` from `hcard` and `hm0` (usually by rewriting
-   `hcard` into `hm0`).
-3. Specialize `hm Qsub hsub hlt` and `H Qsub hsub hlt`.
-4. Apply `finiteFixedSubset` with dimensions
-   `d Qsub`, `m Qsub`, `p Qsub` and data `D Qsub`.
-5. Resolve the probability-instance equality between the theorem's
-   `H.raw.probability` and the supplied `hμresp` by proof irrelevance; `simpa`
-   should close it.
-6. Finish estimator lambdas by reflexivity.  No event intersection or union over
-   query subsets is required because the definition permits a subset-specific
-   eventual threshold.
+reference law, response-noise law, and full score are shared.  The theorem is
+the quantifier lift encoded by `HighProbQueryEfficient`.
 -/
 theorem finiteAllQueries
     [Fintype (Model Q X)]
@@ -96,21 +79,7 @@ theorem finiteAllQueries
 As in the finite theorem, each subset may use its own embedding and response
 dimensions, perspective, raw response embedding, and raw-response Lipschitz
 constant.  The finite net, entropy exponent, regularity certificates, and norm
-envelope are derived within the fixed-subset theorem.  The proof should apply
-`infiniteFixedSubset` subset-by-subset and unfold the all-budget
-predicate.
-
-Implementation recipe (execute in this order):
-1. Unfold the three high-probability query-efficiency predicates exactly as in
-   the finite all-query theorem.
-2. Introduce the budget and subset variables and derive the strict-cardinality
-   premise expected by `hm` and `H`.
-3. Apply `infiniteFixedSubset` to `D Qsub` with the specialized assumptions.
-4. Use proof irrelevance to reconcile the stagewise response probability
-   instance with `hμresp`, then `simpa` for the estimator families.
-5. Do not intersect events across all query subsets: the formal definition and
-   the literature quantifier order allow each subset its own eventual event and
-   threshold.
+envelope are derived within the fixed-subset theorem.
 -/
 theorem infiniteAllQueries
     (d m p : Finset Q → Nat)

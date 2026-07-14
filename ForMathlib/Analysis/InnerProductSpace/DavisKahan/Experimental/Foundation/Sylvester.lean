@@ -60,32 +60,11 @@ noncomputable def solveSylvester (A : F →L[𝕜] F)
 omit [CompleteSpace E] [CompleteSpace F] in
 /-- Bochner/resolvent integral representation of the solution.
 
-Proof strategy for the ordered case: shift the operators so that `A >= d/2`
-and `B <= -d/2`, then use the semigroup formula
-
 `X = ∫ t in Set.Ioi 0, exp(-t A) ∘ C ∘ exp(t B)`.
-
-Prove strong measurability of the operator-valued integrand, dominate its norm
-by `exp(-d t) ‖C‖`, and obtain Bochner integrability.  Evaluate finite-interval
-integrals using the derivative of the exponential product, then pass to the
-limit.  Keep the contour/Fourier representation as a separate implementation
-for arbitrary separated spectra; it is responsible for the `pi/2` constant. 
-
-Lean proof route for a weaker agent:
-
-1. Unfold `solveSylvester`; if it is defined by uniqueness, show the integral candidate solves the equation.
-2. Justify Bochner integrability using the separated-spectrum resolvent or semigroup bounds.
-3. Differentiate/integrate the truncated formula and pass to the limit.
-4. Invoke `sylvester_unique` to identify the canonical solution with the integral.
-
 
 Ext-agent signature audit (GPT 5.6 High): This unconditional equality is sound only
 because `solveSylvester` is intended to be defined by the displayed integral (or by a
 choice provably equal to it). It is not an existence theorem without separation.
-
-Preferred dependency route: Prove the ordered semigroup estimate first, then the general
-Fourier-multiplier estimate; derive uniqueness and ideal variants from those inverse
-bounds.
 -/
 theorem solveSylvester_eq_resolventIntegral
     (A : F →L[𝕜] F) (B : E →L[𝕜] E) (C : E →L[𝕜] F) :

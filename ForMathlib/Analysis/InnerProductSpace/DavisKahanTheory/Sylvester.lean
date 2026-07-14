@@ -881,11 +881,6 @@ theorem kyFan_sylvester_le_of_intervalGap
 
 /-- Ordered positivity/coercivity form used by the existing integral-free
 proof.
-
-Lean proof route for a weaker agent:
-
-1. Dispatch through the already proved `ForMathlib.SylvesterBound` theorem after converting its norm abstraction to the rectangular UI API.
-2. This is the fastest direct finite route.
 -/
 theorem uiNorm_sylvester_le_of_form_bounds
     (N : RectangularUnitarilyInvariantNorm 𝕜 E F)
@@ -977,16 +972,7 @@ theorem sylvester_eigenbasis_coefficient_equation
     inner_smul_right, RCLike.conj_ofReal, sub_mul] using hinner
 
 /-- Restrict scalars on the Sylvester map space from `𝕜` to `ℝ` so the
-barycentric theorem can state real convex-hull membership.
-
-Proof strategy:
-
-1. compose the existing `𝕜` action with `algebraMap ℝ 𝕜`;
-2. keep the instance file-local rather than exporting a second global module
-   structure;
-3. leave the real-to-`𝕜` coefficient conversion to an explicit definitional
-   `change` in the downstream certificate extraction theorem, avoiding an
-   unnecessary and fragile `IsScalarTower` instance. -/
+barycentric theorem can state real convex-hull membership.-/
 local instance realModuleSylvesterMap : Module ℝ (E →ₗ[𝕜] F) :=
   Module.compHom (E →ₗ[𝕜] F) (algebraMap ℝ 𝕜)
 
@@ -994,23 +980,12 @@ local instance realModuleSylvesterMap : Module ℝ (E →ₗ[𝕜] F) :=
 prefix of a separated self-adjoint Sylvester solution satisfies the
 Bhatia--Davis--McIntosh estimate.
 
-This is the weakest field-uniform analytic seam.  A Fourier or equivalent
-reciprocal-multiplier proof should establish this theorem directly.  The
-operator-valued barycenter, exact finite certificate, arbitrary unitarily
-invariant norm, residual, and perturbation statements are formal consequences.
-
-The preferred proof route is:
-
-1. diagonalize `A` and `B` and use
-   `sylvester_eigenbasis_coefficient_equation` to identify `X` with the
-   reciprocal Schur multiplier applied to `C`;
-2. prove the finite reciprocal-multiplier estimate with constant `π / 2` for
-   each Ky Fan prefix;
-3. keep the argument field-uniform at the singular-value level, so the real
-   case needs no separate descent from a complex operator-valued integral.
+This is the weakest field-uniform analytic seam.  The operator-valued
+barycenter, exact finite certificate, arbitrary unitarily invariant norm,
+residual, and perturbation statements are formal consequences.
 
 This statement deliberately contains no convex-hull or finite-certificate
-bookkeeping. -/
+bookkeeping.-/
 theorem kyFan_sylvester_le_of_spectralDistance_analytic
     {A : F →ₗ[𝕜] F} {B : E →ₗ[𝕜] E} {X C : E →ₗ[𝕜] F}
     (hA : A.IsSymmetric) (hB : B.IsSymmetric)
@@ -1097,23 +1072,13 @@ theorem sylvester_barycentricOrbitRepresentation_of_spectralDistance
 unitary-orbit certificate of mass at most `π / 2` for the scaled solution
 `δ • X` relative to the defect `C`.
 
-Proof strategy:
-
-1. obtain the bounded-mass convex-hull representation from
-   `sylvester_barycentricOrbitRepresentation_of_spectralDistance`;
-2. pass it to
-   `RectangularUnitarilyInvariantNorm.hasFiniteUnitaryOrbitCertificate_of_smul_mem_convexHull`;
-3. let that generic theorem extract the exact finite convex combination,
-   choose unitary factors, compute the coefficient mass, and reindex by
-   `Fin n`.
-
 Consequently this theorem contains no Fourier, integration, compactness, or
 Carathéodory bookkeeping.  The harmonic analysis enters only through the
 unconditional reciprocal Ky Fan theorem; this barycentric theorem and the
 certificate extraction are finite-algebra and orbit-convexity
 consequences, and they attain the exact mass `π / 2` for the particular
 Sylvester solution even though the universal undoubled multiplier
-certificate at that mass is refuted. -/
+certificate at that mass is refuted.-/
 theorem sylvester_hasFiniteUnitaryOrbitCertificate_of_spectralDistance
     {A : F →ₗ[𝕜] F} {B : E →ₗ[𝕜] E} {X C : E →ₗ[𝕜] F}
     (hA : A.IsSymmetric) (hB : B.IsSymmetric)
@@ -1145,13 +1110,6 @@ theorem kyFan_sylvester_le_of_spectralDistance
 /-- General disjoint-spectrum extension with the Bhatia--Davis--McIntosh
 constant `π/2`, lifted from the finite orbit certificate through Ky Fan
 prefixes and rectangular Fan dominance.
-
-Proof strategy:
-
-1. compare the positively scaled maps `δ • X` and `(π / 2) • C`;
-2. use the already proved Ky Fan theorem for every prefix;
-3. apply rectangular Fan dominance;
-4. rewrite absolute homogeneity only after the prefix comparison is complete.
 -/
 theorem uiNorm_sylvester_le_of_spectralDistance
     (N : RectangularUnitarilyInvariantNorm 𝕜 E F)
@@ -1331,20 +1289,11 @@ For self-adjoint `A` and `B` with spectra separated by `d > 0`, every
 rectangular unitarily invariant seminorm satisfies
 `d * N X ≤ (π / 2) * N C` whenever `A X - X B = C`.
 
-Proof strategy:
-
-1. forget continuity and transport self-adjointness, spectral separation, and
-   the Sylvester equation to the finite linear-map API;
-2. apply `DavisKahanTheory.uiNorm_sylvester_le_of_spectralDistance`, whose proof
-   runs through the finite reciprocal-multiplier Ky Fan estimate and
-   rectangular Fan dominance;
-3. unfold the named linear maps to recover the compatibility signature.
-
 All reciprocal-multiplier analysis, including the sharp `π / 2` constant,
 is supplied unconditionally by the Haagerup--Zsidó kernel through
 `DavisKahanTheory.kyFan_reciprocalMultiplier_le`.  Coordinate expansion,
 singular-value control, the orbit barycenter, and this
-continuous-linear-map bridge contain no further analytic argument. -/
+continuous-linear-map bridge contain no further analytic argument.-/
 theorem ideal_sylvester_le
     [FiniteDimensional 𝕜 E] [FiniteDimensional 𝕜 F]
     (N : DavisKahanTheory.RectangularUnitarilyInvariantNorm 𝕜 E F)

@@ -218,11 +218,6 @@ private theorem directRotation_comp_projection_aux (U V : Submodule 𝕜 E)
   simpa [directRotation, twoBlockProjectionFamily, LinearMap.comp_apply] using h
 
 /-- The direct rotation maps `U` onto `V`.
-
-Lean proof route for a weaker agent:
-
-1. Preferred route: specialize the corresponding bounded theorem from the experimental direct-rotation module through the finite continuous-linear-map/isometry equivalence bridge
-2. prove only the bundle/coercion normalization locally.
 -/
 theorem directRotation_map_eq (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
@@ -264,11 +259,6 @@ theorem directRotation_map_eq (U V : Submodule 𝕜 E)
       _ = W (W.symm y) := (W.apply_symm_apply y).symm
 
 /-- Intertwining identity `W P_U = P_V W`.
-
-Lean proof route for a weaker agent:
-
-1. Preferred route: specialize the corresponding bounded theorem from the experimental direct-rotation module through the finite continuous-linear-map/isometry equivalence bridge
-2. prove only the bundle/coercion normalization locally.
 -/
 theorem directRotation_comp_projection (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]

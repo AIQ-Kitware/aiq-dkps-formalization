@@ -101,12 +101,6 @@ private theorem sinThetaFrobenius_eq_sqrt_sum_cross {n : ℕ}
 
 /-- Exact Yu--Wang--Samworth population-gap theorem.
 
-Lean proof route for a weaker agent:
-
-1. After replacing arbitrary `V` by the corresponding ordered eigenblock of `B`, reuse the existing `YuWangSamworth.lean` theorem and bridge its eigenbasis/block notation to `sinThetaFrobenius`.
-2. Unpack `hcorr` to obtain one eigenbasis index predicate shared by `A` and `B`.
-3. Apply the existing YWS theorem and rewrite its block Frobenius quantity as `sinThetaFrobenius`.
-
 Signature audit: `hcorr` now fixes the perturbed block by the same ordered eigenvalue indices;
 this excludes arbitrary reducing subspaces when `B=A`.
 
@@ -212,12 +206,6 @@ theorem reduces_specSubspace {n : ℕ} {B : E →ₗ[𝕜] E} (hB : B.IsSymmetri
   · intro c a _ ha; rw [map_smul]; exact Submodule.smul_mem _ c ha
 
 /-- Arbitrary contiguous population eigenblock.
-
-Lean proof route for a weaker agent:
-
-1. Restate using contiguous eigenvalue indices (or a continued contour-selected branch), then apply the preceding YWS theorem with the population gap formed by the adjacent eigenvalues.
-2. Rewrite `U` using `hUeq` and unpack `hcorr` to identify the corresponding perturbed block.
-3. Apply `yuWangSamworth_sinTheta_le` with `d = finrank 𝕜 U`.
 
 Signature audit: `hUeq` records the population interval while `hcorr` selects the perturbed
 block by ordered indices, so eigenvalue drift across the numerical interval does not change the
@@ -433,12 +421,6 @@ theorem exists_aligned_orthonormalBasis
 
 /-- YWS aligned-basis perturbation bound.
 
-Lean proof route for a weaker agent:
-
-1. Combine the corrected YWS sine bound with `exists_aligned_orthonormalBasis`, take square roots, and simplify constants.
-2. Use `hcorr` in `yuWangSamworth_sinTheta_le`, then obtain aligned bases from `exists_aligned_orthonormalBasis`.
-3. Take square roots with explicit nonnegativity facts and simplify the constant to `2 * sqrt 2`.
-
 Signature audit: The aligned-basis theorem now inherits the same `hcorr` branch selection as
 the sine-distance theorem.
 -/
@@ -473,12 +455,6 @@ theorem yuWangSamworth_alignedBasis_le
           (UnitarilyInvariantNorm.frobenius 𝕜 E (B - A)) / Δ := by ring
 
 /-- Rank-one/sign-aligned eigenvector corollary.
-
-Lean proof route for a weaker agent:
-
-1. After selecting the corresponding isolated eigenvector branch, specialize the aligned-basis theorem to rank one and take the unit scalar supplied by complex/real Procrustes alignment.
-2. Convert the rank-one `hcorr` statement into the corresponding block premise for the aligned-basis theorem.
-3. Extract the unique basis vectors and convert the one-dimensional unitary alignment into a scalar `c` of norm one.
 
 Signature audit: The rank-one `hcorr` premise selects `v` from the corresponding ordered
 perturbed eigenline rather than an arbitrary eigenvector of `B`.

@@ -54,25 +54,6 @@ exponent `d`; the constant is existential and may absorb the diameter of the
 compact range.
 
 The `max 1 ρ⁻¹` form handles large radii and avoids separate early-stage cases.
-
-Implementation recipe (execute in this order):
-1. Enclose `Set.range ψ` in the coordinate cube `[-B,B]^d` using the uniform
-   norm bound supplied by compactness.
-2. Put `D := d + 1` and quantize each coordinate with mesh `δ := ρ / D`, using
-   the natural-valued key `floor ((ψ f i + B) / δ)`.
-3. Every key lies in the finite box from `0` to
-   `ceil (2 * B * D * ρ⁻¹)` in each coordinate.
-4. Retain only occupied keys and choose one model representative from each
-   occupied cell.  Thus every center is a model without requiring a projection
-   of an ambient grid point back into the compact range.
-5. Equal keys put every coordinate difference below `δ`; the Euclidean
-   norm-square formula and `d < (d + 1)^2` then give distance below `ρ`.
-6. Bound the occupied-cell count by the full box cardinality and absorb the
-   ceiling into `C * (max 1 ρ⁻¹)^d` with
-   `C := (2 * B * (d + 1) + 2)^d`.
-7. Handle `d = 0` separately so the constant remains one even when the model
-   type is empty.  Do not expose the quantization or constants in the theorem
-   statement.
 -/
 theorem exists_polynomial_perspective_covers_of_isCompact_range
     {d : Nat}

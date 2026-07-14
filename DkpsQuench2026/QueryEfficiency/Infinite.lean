@@ -33,45 +33,8 @@ variable {Ωref : Type wr} [MeasurableSpace Ωref]
 variable {Ωresp : Type wy} [MeasurableSpace Ωresp]
 /-- Fixed-subset compact infinite-model raw-response Quench theorem.
 
-This theorem has the same proof skeleton as the finite result.  Before the
-response subevent step:
-
-1. derive sample and population Lipschitz regularity from `raw_lipschitz`;
-2. construct the canonical polynomial finite net with
-   `exists_safeGrowingPerspectiveNet`;
-3. derive a population response-norm envelope from compactness and population
-   Lipschitzness;
-4. invoke `augmentedRawResponseMeanSubevents_infinite`, discharging its ratio
-   with `safeEntropy_concentration_ratio_zero` and its extension budget with
-   `safe_net_extension_budget`.
-
 This removes the abstract uniform response-concentration premise and every
 explicit net/envelope certificate from the arbitrary-model growing Quench path.
-
-Implementation recipe (execute in this order):
-1. Lift the iid reference sampler to the joint space with
-   `iidReferenceSampler_lifted_prod`.
-2. Derive `Hreg := uniformModelResponseRegularity_of_raw_lipschitz` from
-   `H.raw` and `H.raw_lipschitz`; both sample and population constants are the
-   fixed raw-response Lipschitz constant.
-3. Construct a canonical net and card bound with
-   `exists_safeGrowingPerspectiveNet D.perspective H.compact_range
-   D.rawResponseLipschitzConstant H.raw_lipschitz.constant_nonneg`.
-4. Derive the population response norm bound from
-   `exists_populationMean_norm_bound_of_compact_lipschitz`, using the population
-   Lipschitz field of `Hreg`.
-5. Build `Hmean := augmentedRawResponseMeanSubevents_infinite`; discharge the
-   entropy ratio with `safeEntropy_concentration_ratio_zero` and the selected
-   net-card bound, and discharge the extension budget with
-   `safe_net_extension_budget` plus the net radius identity.
-6. Derive augmented response realization from `H.response_realization`.
-7. Build the spectral certificate from
-   `exists_growingSpectralSubevents_of_compact_iid_nondegenerate` and the rate
-   certificate from `safe_growingConfigControl`.
-8. Invoke the response-subevent spectral capstone and finish with
-   `simpa [infiniteEstimator]`.
-9. Keep the finite net hidden inside this proof; do not add it or its entropy
-   constant to `InfiniteSubsetAssumptions`.
 -/
 theorem infiniteFixedSubset
     {d m p : Nat} (hm : 0 < m)

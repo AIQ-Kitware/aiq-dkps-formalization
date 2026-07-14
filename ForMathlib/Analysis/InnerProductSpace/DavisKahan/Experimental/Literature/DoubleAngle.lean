@@ -30,12 +30,6 @@ noncomputable def reflectionDefect (U : Submodule 𝕜 E)
   reflectionOperator U ∘L A ∘L reflectionOperator U - A
 
 /-- The mirror defect vanishes when the subspace reduces the operator.
-
-Lean proof route for a weaker agent:
-
-1. Evaluate reflection-operator commutation at the reflected vector.
-2. Evaluate reflection involutivity at the original vector.
-3. Unfold `reflectionDefect` and substitute both equalities.
 -/
 theorem reflectionDefect_eq_zero_of_reduces
     (A : E →L[𝕜] E) (U : Submodule 𝕜 E)
@@ -53,12 +47,6 @@ theorem reflectionDefect_eq_zero_of_reduces
 
 /-- Conjugating and subtracting a reducing comparison operator leaves only
 its perturbation.
-
-Lean proof route for a weaker agent:
-
-1. Use `reflectionDefect_eq_zero_of_reduces` for `B`.
-2. Subtract that zero defect from the defect of `A`.
-3. Extensionalize and distribute reflection through `A-B`.
 -/
 theorem reflectionDefect_eq_perturbationDefect
     (A B : E →L[𝕜] E) (V : Submodule 𝕜 E)
@@ -79,13 +67,6 @@ theorem reflectionDefect_eq_perturbationDefect
       abel
 
 /-- The reflection defect is bounded by twice the perturbation norm.
-
-Lean proof route for a weaker agent:
-
-1. Rewrite the defect using `reflectionDefect_eq_perturbationDefect`.
-2. Bound the conjugated perturbation with operator-norm submultiplicativity
-   and `norm_reflectionOperator_le_one` twice.
-3. Apply the norm triangle inequality to the final subtraction.
 -/
 theorem norm_reflectionDefect_le_two_mul
     (A B : E →L[𝕜] E) (V : Submodule 𝕜 E)
@@ -177,22 +158,11 @@ theorem sinTwoTheta_residual
     d * ‖sinTwoThetaEmbedding U X‖ ≤ 2 * ‖residual A X M‖ := by
   sorry
 
-/-- Perturbation form of the `sin 2Θ` theorem. 
-
-Lean proof route for a weaker agent:
-
-1. Apply `sinTwoTheta_reflectionDefect` with the perturbed reducing subspace `V`.
-2. Insert and subtract the reflection conjugate of `B`.
-3. Use reduction of `B` by `V` to cancel its reflection defect.
-4. Bound the two remaining perturbation terms by `2‖B-A‖`.
-
+/-- Perturbation form of the `sin 2Θ` theorem.
 
 Ext-agent signature audit (GPT 5.6 High): Correct under finite-gap geometry. Reduction
 of `B` by `V` is essential for cancellation of its reflection defect. Self-adjointness
 of `B` is not needed for this reflection argument and was removed from the signature.
-
-Preferred dependency route: Use reflection conjugation to reduce to `sin Θ`; keep
-finite-gap constant-one geometry separate from generic separated-spectrum estimates.
 -/
 theorem sinTwoTheta_perturbation
     {A B : E →L[𝕜] E}

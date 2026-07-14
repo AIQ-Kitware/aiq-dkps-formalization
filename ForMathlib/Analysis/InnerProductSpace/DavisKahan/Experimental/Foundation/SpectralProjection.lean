@@ -265,21 +265,11 @@ theorem reduces_spectralSubspace (A : E →L[𝕜] E)
   sorry
 
 omit [CompleteSpace E] in
-/-- The spectral projection has the expected range. 
-
-Lean proof route for a weaker agent:
-
-1. Unfold `spectralSubspace`.
-2. Close the goal by reflexivity; keep this named theorem as the public rewrite lemma.
-
+/-- The spectral projection has the expected range.
 
 Ext-agent signature audit (GPT 5.6 High): Definitionally true with the current
 `spectralSubspace`; retain it as a public simp/rewrite theorem rather than spending
 spectral-theorem effort here.
-
-Preferred dependency route: Implement the bounded self-adjoint spectral measure/Borel
-calculus first, then discharge this as a calculus law. Do not route through finite
-diagonalization.
 -/
 theorem range_spectralProjection (A : E →L[𝕜] E) (s : Set ℝ) :
     LinearMap.range (spectralProjection A s).toLinearMap =

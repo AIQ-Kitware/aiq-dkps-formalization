@@ -346,10 +346,6 @@ private theorem norm_le_of_centered (hn : n ≠ 0) (w : Config n d) {R : ℝ}
 Raw-stress minimizers exist: `MDS n d Δ` is nonempty for every dissimilarity
 matrix `Δ`.
 
-Strategy: minimize over the compact box `K = {w | ∀ i, ‖w i‖ ≤ R₀}` of centered
-configurations (`R₀ = coRadius Δ`), where raw stress is continuous; translation
-invariance and coercivity upgrade the local minimizer over `K` to a global one.
-
 Paper correspondence: this is the existence of a raw-stress minimizer asserted
 around Eq. (1) and Remark 2 ("This guarantees the existence of a solution to
 Eq. (1)"), i.e. `MDS(Δ)` is nonempty. The compactness/coercivity argument here
