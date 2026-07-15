@@ -1,0 +1,1052 @@
+\input{preamble}
+\title{Horn--Johnson's Courant--Fischer chain:\\prerequisites, eigenvalue inequalities, and singular-value descendants}
+\author{}
+\date{Selected source-order reconstruction from \emph{Matrix Analysis}, second edition (2013)}
+
+\newcommand{\RQ}[2]{\mathcal{R}_{#1}(#2)}
+\newcommand{\Gr}[2]{\operatorname{Gr}_{#1}(#2)}
+\newcommand{\Eig}{\operatorname{Eig}}
+\newcommand{\specsumtop}[2]{\Lambda^{\uparrow}_{#1}(#2)}
+\newcommand{\specsumbot}[2]{\Lambda^{\downarrow}_{#1}(#2)}
+\newcommand{\sv}{\sigma}
+\newcommand{\statusmathlib}{\textsf{Mathlib}}
+\newcommand{\statuslocal}{\textsf{Repository}}
+\newcommand{\statusmissing}{\textsf{Missing}}
+\newcommand{\statuspartial}{\textsf{Partial}}
+\newenvironment{coveragegrid}{\begin{longtable}{@{}p{0.19\textwidth}p{0.13\textwidth}p{0.29\textwidth}p{0.31\textwidth}@{}}\toprule Item & Status & Existing seam & Remaining obligation \\\midrule\endfirsthead\toprule Item & Status & Existing seam & Remaining obligation \\\midrule\endhead}{\bottomrule\end{longtable}}
+
+\begin{document}
+\maketitle
+\tableofcontents
+\clearpage
+
+\section*{Source map and scope}
+\addcontentsline{toc}{section}{Source map and scope}
+\begin{sourceguide}
+\item[Primary source] Roger A. Horn and Charles R. Johnson, \emph{Matrix Analysis}, second edition, Cambridge University Press, 2013, DOI \href{https://doi.org/10.1017/CBO9781139020411}{10.1017/CBO9781139020411}.
+\item[Local evidence] User-supplied PDF \code{Matrix Analysis by Roger A. Horn, Charles R. Johnson.pdf}. SHA--256 \texttt{\seqsplit{e9a80da3d86294d30450f745568175be9210e4e19d7b16205fdedf6a800d27aa}}.
+\item[Redistribution] The source PDF is not copied into the repository. This document is a new mathematical reconstruction with theorem and page anchors.
+\item[Primary coverage] Section 0.1.7; Section 4.2, book pages 234--239 (PDF pages 253--258); Section 4.3, book pages 239--256 (PDF pages 258--275); the ordered perturbation consequence on book pages 406--407 (PDF pages 425--426); Section 7.3, book pages 451--458 (PDF pages 470--477); and selected Section 7.4 consequences on book pages 458--474 (PDF pages 477--493).
+\item[Core anchors] (0.1.7.1)--(0.1.7.3), Theorems 4.2.2, 4.2.6, and 4.2.10; Corollary 4.2.12; Theorem 4.3.1 and its perturbation, interlacing, compression, Ky Fan, majorization, and trace descendants through Theorem 4.3.53; equation (6.3.4.1); Corollaries 7.3.5--7.3.6; Theorems 7.3.8 and 7.3.11; Problems 7.3.P16--P18 and 7.3.P44; and the selected unitarily invariant norm consequences in Section 7.4.
+\item[Formalization target] The existing \code{ForMathlib/Analysis/InnerProductSpace/CourantFischer.lean}, \code{KyFan.lean}, \code{SchurHorn.lean}, \code{SingularSubspace.lean}, and \code{UnitarilyInvariantNorm.lean}, together with proposed focused modules for a Rayleigh API, literal min--max packaging, interlacing/compressions, full Weyl inequalities, Lidskii majorization, singular-value min--max, and product inequalities.
+\item[Scope boundary] This is not a distillation of the whole book. It reconstructs the Courant--Fischer dependency chain and the theorem families that Horn--Johnson derive from that chain and that would materially improve the repository's reusable spectral API.
+\end{sourceguide}
+
+\section{Notation and index dictionary}
+
+The book uses algebraically nondecreasing, one-based eigenvalues
+\[
+  \lambda_1^{\uparrow}(A)\le\lambda_2^{\uparrow}(A)\le\cdots\le\lambda_n^{\uparrow}(A).
+\]
+The current Lean development uses a nonincreasing map indexed by \code{Fin n}. Write its mathematical value as
+\[
+  \lambda_0^{\downarrow}(T)\ge\lambda_1^{\downarrow}(T)\ge\cdots\ge
+  \lambda_{n-1}^{\downarrow}(T).
+\]
+The exact conversion is
+\begin{equation}
+  \lambda_k^{\uparrow}(T)=\lambda_{n-k}^{\downarrow}(T),
+  \qquad 1\le k\le n, \tag{HJ-index-up-down}
+\end{equation}
+and, for a Lean index $j:\mathrm{Fin}\,n$,
+\begin{equation}
+  \lambda_j^{\downarrow}(T)=\lambda_{n-j}^{\uparrow}(T),
+  \qquad j=0,\dots,n-1, \tag{HJ-index-down-up}
+\end{equation}
+where the right-hand index in the second display is one-based. Thus the integer attached to \code{j} is $n-j.\mathrm{val}$, not $n-1-j.\mathrm{val}$.
+
+Negation reverses either ordering:
+\begin{align}
+  \lambda_k^{\uparrow}(-T)&=-\lambda_{n-k+1}^{\uparrow}(T), \tag{HJ-neg-up}\\
+  \lambda_j^{\downarrow}(-T)&=-\lambda_{n-1-j}^{\downarrow}(T). \tag{HJ-neg-down}
+\end{align}
+For singular values, Horn--Johnson and Mathlib both use nonincreasing order, but Horn--Johnson are one-based while \code{singularValues} is indexed by natural numbers beginning at zero:
+\[
+  \sv_k^{\mathrm{HJ}}(A)=\operatorname{singularValues}_{k-1}(A).
+\]
+
+The index conversion changes the apparent dimensions in Courant--Fischer. The book's increasing-order formulas are
+\[
+  \lambda_k^{\uparrow}
+  =\min_{\dim S=k}\max_{x\in S}R_T(x)
+  =\max_{\dim S=n-k+1}\min_{x\in S}R_T(x).
+\]
+For the decreasing Lean index $j$ they become
+\begin{align}
+  \lambda_j^{\downarrow}
+  &=\min_{\dim S=n-j}\max_{x\in S}R_T(x), \tag{HJ-CF-down-minmax}\\
+  \lambda_j^{\downarrow}
+  &=\max_{\dim S=j+1}\min_{x\in S}R_T(x). \tag{HJ-CF-down-maxmin}
+\end{align}
+The existing directional Lean theorems both use subspaces of dimension $j+1$, so they are the two witness halves of the \emph{decreasing-order max--min} formula. This explicit dictionary should be imported by every later Weyl, interlacing, compression, and dilation theorem.
+
+\section{Coverage and implementation status}
+
+This note distinguishes general Mathlib infrastructure, declarations already proved in this repository, and theorem-shaped interfaces that remain absent. ``Mathlib'' below means that standard general machinery exists; it does not mean that the exact source theorem is already packaged.
+
+\begin{coveragegrid}
+Finite-dimensional spectral decomposition and ordered eigenvalues & \statusmathlib{} + \statuslocal{} & Mathlib's symmetric-operator eigenbasis and ordered-eigenvalue API; local wrappers in \code{CourantFischer.lean}. & Keep source/Lean indexing explicit and avoid duplicating the spectral theorem. \\
+Quadratic form in an eigenbasis & \statuslocal{} & \code{re\_inner\_map\_self\_eq\_sum\_eigenvalues\_mul\_sq} and \code{re\_inner\_map\_self\_eq\_sum\_of\_eigenbasis}. & Add homogeneous Rayleigh quotient, unit-sphere restrictions, and equality cases. \\
+Spectral subspace bounds & \statuslocal{} & \code{finrank\_specSubspace}, \code{re\_inner\_map\_self\_le\_of\_mem\_specSubspace}, and \code{le\_re\_inner\_map\_self\_of\_mem\_specSubspace}. & Package head/tail subspaces and extremal values as reusable named objects. \\
+Directional Courant--Fischer & \statuslocal{} & \code{exists\_unit\_vector\_re\_inner\_le\_eigenvalue} and \code{forall\_unit\_vector\_eigenvalue\_le\_re\_inner}. & Turn witnesses into literal \code{sInf}/\code{sSup} equalities and prove attainment. \\
+Arbitrary eigenbasis uniqueness and Loewner monotonicity & \statuslocal{} & \code{eigenvalues\_eq\_of\_eigenbasis} and \code{eigenvalues\_le\_eigenvalues\_of\_re\_inner\_le}. & Reuse these rather than reproving ordering facts in downstream modules. \\
+Spectral-subspace invariance and complement & \statuslocal{} & \code{map\_mem\_specSubspace} and \code{orthogonal\_specSubspace}. & Add head/tail complement wrappers and compression compatibility. \\
+Infima, suprema, compactness, and fixed-finrank submodules & \statusmathlib{} / \statusmissing{} & General order/topological facts and finite-dimensional compactness are available. & Define the exact value sets, prove nonemptiness and boundedness, and connect compact extrema to the source's max/min notation. \\
+Full two-index Weyl and equality & \statusmissing{} & Only \code{abs\_eigenvalues\_sub\_le} and \code{abs\_eigenvalues\_sub\_le\_opNorm} are present. & Add admissible index arithmetic, triple intersections, both inequality families, and common-eigenvector equality. \\
+Ky Fan and Schur--Horn descendants & \statuspartial{} & \code{sum\_re\_inner\_le\_sum\_eigenvalues\_top}, \code{re\_sum\_inner\_map\_le\_sum\_singularValues}, \code{exists\_orthonormal\_re\_sum\_inner\_map\_eq}, and convex Schur--Horn declarations. & Add self-adjoint top/bottom equalities, compression equality cases, a majorization predicate, and Lidskii. \\
+Individual singular-value min--max and product inequalities & \statusmissing{} & Endpoint singular-value attainment and squared-Gram perturbation exist in \code{SingularSubspace.lean}. & Add Theorem 7.3.8, unsquared perturbation, additive/product Weyl families, repeated deletion, and mixed-product bounds. \\
+\end{coveragegrid}
+
+\section{Dependency graph}
+
+The source argument is short only because several logically separate facts have already been isolated. The exact chain is
+\[
+\boxed{\text{spectral theorem and Parseval}}
+\Longrightarrow
+\boxed{\text{Rayleigh bounds on eigenvector spans}}
+\]
+\[
+\begin{aligned}
+&\boxed{\text{dimension formula for subspace intersections}}\\
+&\quad+\ \boxed{\text{monotonicity of }\sup\text{ and }\inf}\\
+&\quad+\ \boxed{\lambda_k(-A)=-\lambda_{n-k+1}(A)}
+\end{aligned}
+\]
+\[
+\Longrightarrow
+\boxed{\text{Courant--Fischer min--max and max--min}}
+\Longrightarrow
+\begin{cases}
+\text{subspace-to-eigenvalue bounds},\\
+\text{Weyl inequalities},\\
+\text{interlacing and compression},\\
+\text{Ky Fan sums and majorization},\\
+\text{singular-value min--max and perturbation}.
+\end{cases}
+\]
+
+The current repository has strong executable versions of the first line and the two directional witnesses needed for the middle line. What it lacks is the literal outer optimization theorem and several canonical downstream packages.
+
+\section{Linear-algebra prerequisite: forced subspace intersection}
+
+\sourceanchor{Section 0.1.7, equations (0.1.7.1)--(0.1.7.3), and Lemma 4.2.3.}
+
+Let $V$ be an $n$-dimensional vector space and let $S_1,S_2\le V$. The dimension identity is
+\begin{equation}
+  \dim(S_1\cap S_2)+\dim(S_1+S_2)=\dim S_1+\dim S_2. \tag{HJ-0.1.7.1}
+\end{equation}
+Because $\dim(S_1+S_2)\le n$,
+\begin{equation}
+  \dim(S_1\cap S_2)
+  \ge \dim S_1+\dim S_2-n. \tag{HJ-0.1.7.2}
+\end{equation}
+Induction gives, for subspaces $S_1,\dots,S_r$,
+\begin{equation}
+  \dim\bigcap_{j=1}^r S_j
+  \ge \sum_{j=1}^r\dim S_j-(r-1)n. \tag{HJ-0.1.7.3}
+\end{equation}
+Hence if the right side is at least $d\ge1$, the intersection contains an orthonormal family of length $d$.
+
+\begin{proofoutline}
+\item Prove the two-subspace dimension identity by rank--nullity for the linear map
+\[
+  S_1\times S_2\longrightarrow V,
+  \qquad (x,y)\longmapsto x-y.
+\]
+Its kernel identifies with $S_1\cap S_2$ and its range is $S_1+S_2$.
+\item Rearrange and use the ambient dimension bound.
+\item Induct on the number of subspaces.
+\item Choose $d$ members of an orthonormal basis of the intersection.
+\end{proofoutline}
+
+For Courant--Fischer, only the case
+\[
+  \dim S+\dim W=n+1
+\]
+is needed to force a nonzero vector in $S\cap W$. Full Weyl uses three subspaces with total dimension $2n+1$.
+
+\sourcecomment{The current Lean proofs establish the needed nontrivial intersections by combining \code{Submodule.finrank\_sup\_add\_finrank\_inf\_eq} with an ambient finrank bound. A public theorem giving the quantitative $r$-subspace statement and an orthonormal family in the intersection would be reusable for Weyl equality multiplicities and inclusion-principle equality cases.}
+
+\section{Rayleigh's theorem on a spectral span}
+
+\sourceanchor{Theorem 4.2.2, book pages 234--235.}
+
+Let $A\in M_n(\C)$ be Hermitian. Choose orthonormal eigenvectors
+\[
+  Ax_{i_p}=\lambda_{i_p}x_{i_p},
+  \qquad 1\le i_1<\cdots<i_r\le n,
+\]
+and put
+\[
+  S:=\spanop\{x_{i_1},\dots,x_{i_r}\}.
+\]
+For $x\ne0$, define the Rayleigh quotient
+\[
+  \RQ{A}{x}:=\frac{x^*Ax}{x^*x}.
+\]
+
+\begin{theorem}[Rayleigh on an eigenvector span]
+For every nonzero $x\in S$,
+\[
+  \lambda_{i_1}\le \RQ{A}{x}\le\lambda_{i_r}.
+\]
+Both endpoints are attained. For a unit vector $x\in S$, equality on the right holds exactly when $x$ belongs to the $\lambda_{i_r}$-eigenspace; equality on the left holds exactly when $x$ belongs to the $\lambda_{i_1}$-eigenspace.
+\end{theorem}
+
+\begin{argument}
+\item Normalize $x$; the quotient is homogeneous under nonzero scalar multiplication.
+\item Expand a unit vector as
+\[
+  x=\sum_{p=1}^r\alpha_p x_{i_p},
+  \qquad \sum_{p=1}^r|\alpha_p|^2=1.
+\]
+\item Orthogonality and the eigenvector equations give
+\begin{equation}
+  x^*Ax=\sum_{p=1}^r|\alpha_p|^2\lambda_{i_p}. \tag{HJ-Rayleigh-convex}
+\end{equation}
+Thus the quadratic form is a convex combination of selected eigenvalues.
+\item Equality at the upper endpoint forces $\alpha_p=0$ whenever $\lambda_{i_p}<\lambda_{i_r}$; the lower endpoint is dual.
+\end{argument}
+
+Taking $S=\C^n$ gives
+\[
+  \lambda_1(A)=\min_{\norm{x}=1}x^*Ax,
+  \qquad
+  \lambda_n(A)=\max_{\norm{x}=1}x^*Ax.
+\]
+
+\sourcecomment{The repository already contains the intrinsic operator identity \code{re\_inner\_map\_self\_eq\_sum\_eigenvalues\_mul\_sq} and the two spectral-subspace inequalities \code{re\_inner\_map\_self\_le\_of\_mem\_specSubspace} and \code{le\_re\_inner\_map\_self\_of\_mem\_specSubspace}. Those are the executable core of the displayed convex-combination identity. Missing source-shaped packaging includes the quotient formulation, attainment, and exact equality characterization.}
+
+\section{Order-theoretic prerequisites}
+
+\sourceanchor{Lemma 4.2.4 and Observation 4.2.5, book page 236.}
+
+If $S_1\subseteq S_2$ are nonempty subsets of the domain of a bounded real-valued function $f$, then
+\begin{equation}
+  \sup_{S_2}f\ge\sup_{S_1}f\ge\inf_{S_1}f\ge\inf_{S_2}f. \tag{HJ-set-chain}
+\end{equation}
+The middle inequality only uses nonemptiness; the outside inequalities use set inclusion.
+
+If $A$ is Hermitian, then $-A$ is Hermitian and
+\begin{equation}
+  \lambda_k(-A)=-\lambda_{n-k+1}(A). \tag{HJ-neg-spectrum}
+\end{equation}
+This order reversal is the source's standard device for deriving lower inequalities from upper inequalities.
+
+For formalization, there are two reasonable interfaces.
+\begin{enumerate}[leftmargin=2em]
+\item Work on the unit sphere, where the quadratic form is continuous and extrema are attained by compactness.
+\item Work with nonzero vectors and a homogeneous quotient, using \code{sInf}/\code{sSup} for the outer sets and separate witness theorems for attainment.
+\end{enumerate}
+The first is analytically cleaner inside each fixed subspace; the second matches the printed formula. Neither requires a topology on the Grassmannian if the proof directly supplies the extremizing spectral subspaces.
+
+\section{The full Courant--Fischer theorem}
+
+\sourceanchor{Theorem 4.2.6 and equations (4.2.7)--(4.2.9), book pages 236--237.}
+
+\begin{theorem}[Courant--Fischer, increasing order]
+Let $A\in M_n(\C)$ be Hermitian and $1\le k\le n$. Then
+\begin{align}
+  \lambda_k(A)
+  &=\min_{\dim S=k}\ \max_{0\ne x\in S}\RQ{A}{x}, \tag{HJ-CF-minmax}\\
+  \lambda_k(A)
+  &=\max_{\dim S=n-k+1}\ \min_{0\ne x\in S}\RQ{A}{x}. \tag{HJ-CF-maxmin}
+\end{align}
+The outer and inner extrema are attained.
+\end{theorem}
+
+\subsection{Source-order proof of the min--max identity}
+
+Choose an orthonormal eigenbasis $x_1,\dots,x_n$ with
+\[
+  Ax_i=\lambda_i x_i.
+\]
+Fix an arbitrary $k$-dimensional subspace $S$ and define the trailing spectral subspace
+\[
+  S':=\spanop\{x_k,x_{k+1},\dots,x_n\}.
+\]
+Its dimension is $n-k+1$, so
+\[
+  \dim S+\dim S'=n+1.
+\]
+The subspace-intersection lemma makes $S\cap S'$ nontrivial. The source then runs the complete containment chain
+\begin{align}
+  \sup_{0\ne x\in S}\RQ{A}{x}
+  &\ge \sup_{0\ne x\in S\cap S'}\RQ{A}{x} \notag\\
+  &\ge \inf_{0\ne x\in S\cap S'}\RQ{A}{x} \notag\\
+  &\ge \inf_{0\ne x\in S'}\RQ{A}{x} \notag\\
+  &=\lambda_k(A). \tag{HJ-CF-chain}
+\end{align}
+The final equality is Rayleigh's theorem on the span of eigenvectors with eigenvalues at least $\lambda_k$.
+
+Since the displayed sup/inf chain holds for every $k$-dimensional $S$,
+\[
+  \inf_{\dim S=k}\sup_{0\ne x\in S}\RQ{A}{x}\ge\lambda_k(A).
+\]
+Now choose the leading spectral subspace
+\[
+  S_0:=\spanop\{x_1,\dots,x_k\}.
+\]
+Rayleigh's theorem gives
+\[
+  \max_{0\ne x\in S_0}\RQ{A}{x}=\lambda_k(A),
+\]
+with $x_k$ an explicit maximizing vector. Therefore the preceding lower bound is sharp, and both outer and inner extrema are attained.
+
+\subsection{Source-order proof of the max--min identity}
+
+Apply the min--max identity to $-A$ at index $n-k+1$. Using the eigenvalue-order reversal under negation,
+\begin{align*}
+  -\lambda_k(A)
+  &=\min_{\dim S=n-k+1}\max_{0\ne x\in S}\bigl(-\RQ{A}{x}\bigr)\\
+  &=-\max_{\dim S=n-k+1}\min_{0\ne x\in S}\RQ{A}{x}.
+\end{align*}
+Negating proves the max--min identity.
+
+\subsection{Exact relation to the current Lean theorem}
+
+Mathlib's eigenvalues are decreasing. For $j:\mathrm{Fin}\ n$, the current file proves:
+\begin{itemize}[leftmargin=2em]
+\item every subspace of dimension $j+1$ contains a unit vector whose quadratic form is at most the $j$th decreasing eigenvalue;
+\item one subspace of dimension $j+1$ has quadratic form at least that eigenvalue on every unit vector.
+\end{itemize}
+These are the two witness inequalities from which the literal extrema follow. They are not themselves the printed min--max equality because the outer family of subspaces and inner extrema are not represented as one expression.
+
+A faithful public API should add, at minimum:
+\begin{enumerate}[leftmargin=2em]
+\item a Rayleigh quotient or unit-sphere quadratic-form functional;
+\item sets of values obtained from submodules of fixed finrank;
+\item equalities for the corresponding \code{sInf}/\code{sSup};
+\item explicit spectral-subspace witnesses attaining both levels;
+\item equivalence between the quotient and unit-vector formulations;
+\item increasing/decreasing index-translation lemmas.
+\end{enumerate}
+
+\section{Formalization-ready packaging of literal min--max}
+
+The source theorem is mathematically finite-dimensional, but a robust Lean statement still needs several explicit definitions and boundedness seams. Let $T:E\to E$ be symmetric over $\R$ or $\C$, with $\dim E=n$. Define
+\begin{align*}
+  q_T(x)&:=\operatorname{re}\ip{Tx}{x},\\
+  R_T(x)&:=\frac{q_T(x)}{\norm{x}^2},\qquad x\ne0,\\
+  \mathbb{S}(V)&:=\{x\in V:\norm{x}=1\}.
+\end{align*}
+For a nonzero submodule $V$, define its inner extremal values
+\begin{align}
+  \operatorname{rayleighMin}(T,V)
+  &:=\inf\{q_T(x):x\in\mathbb{S}(V)\}, \tag{HJ-inner-min}\\
+  \operatorname{rayleighMax}(T,V)
+  &:=\sup\{q_T(x):x\in\mathbb{S}(V)\}. \tag{HJ-inner-max}
+\end{align}
+Using the quotient instead gives the same sets of values:
+\begin{equation}
+ \{R_T(x):0\ne x\in V\}=\{q_T(u):u\in\mathbb{S}(V)\}. \tag{HJ-unit-quotient-equiv}
+\end{equation}
+The forward inclusion normalizes $x$ by $u=\norm{x}^{-1}x$; the reverse inclusion takes $x=u$. The proof needs a separate lemma that $R_T(c\,x)=R_T(x)$ for $c\ne0$ and careful scalar coercions over \code{RCLike}.
+
+For $0<r\le n$, let
+\[
+  \Gr{r}{E}:=\{V\le E:\operatorname{finrank}V=r\}.
+\]
+Define the outer value sets
+\begin{align*}
+  \mathcal{L}_r(T)&:=\{\operatorname{rayleighMin}(T,V):V\in\Gr{r}{E}\},\\
+  \mathcal{U}_r(T)&:=\{\operatorname{rayleighMax}(T,V):V\in\Gr{r}{E}\}.
+\end{align*}
+For decreasing zero-based eigenvalues, the target declarations are
+\begin{align}
+  \lambda_j^{\downarrow}(T)&=\sup\mathcal{L}_{j+1}(T), \tag{HJ-Lean-maxmin}\\
+  \lambda_j^{\downarrow}(T)&=\inf\mathcal{U}_{n-j}(T). \tag{HJ-Lean-minmax}
+\end{align}
+These statements can use \code{sSup}/\code{sInf}; the source's words ``max'' and ``min'' are recovered by separate attainment theorems.
+
+\subsection{Nonemptiness and boundedness obligations}
+
+Every extremum expression should be accompanied by the exact side conditions that make it meaningful.
+\begin{enumerate}[leftmargin=2em]
+\item \textbf{Fixed-rank submodules are nonempty.} For $r\le n$, take the span of the first $r$ vectors of any orthonormal basis. At the two CF ranks, the existing head and tail \code{specSubspace} constructions already provide canonical witnesses.
+\item \textbf{Their unit spheres are nonempty.} Because $r>0$, choose a nonzero vector in the submodule and normalize it. The zero-dimensional edge case should be excluded from the primary definition or assigned a separate convention rather than hidden in an impossible max/min.
+\item \textbf{The quadratic form is uniformly bounded on every unit sphere.} Cauchy--Schwarz gives
+\[
+  |q_T(x)|\le\norm{Tx}\norm{x}\le\norm{T}_{\op}
+  \qquad (\norm{x}=1).
+\]
+Thus all inner value sets, and hence all outer value sets, lie in the same compact interval $[-\norm{T}_{\op},\norm{T}_{\op}]$.
+\item \textbf{Inner extrema are attained.} The unit sphere of a finite-dimensional nonzero submodule is compact, and $q_T$ is continuous. This proves that each \code{sInf}/\code{sSup} is represented by an actual unit vector.
+\item \textbf{Outer extrema are attained without a Grassmannian topology.} The directional CF proofs show the universal inequality, and the explicit head/tail spectral subspaces realize equality. No compactness theorem for the space of submodules is required.
+\end{enumerate}
+
+\subsection{Proof assembly from the existing declarations}
+
+For (HJ-Lean-maxmin), let $j:\mathrm{Fin}\,n$.
+\begin{enumerate}[leftmargin=2em]
+\item \code{exists\_unit\_vector\_re\_inner\_le\_eigenvalue} says that for every $V\in\Gr{j+1}{E}$,
+\[
+  \operatorname{rayleighMin}(T,V)\le\lambda_j^{\downarrow}(T).
+\]
+Therefore $\sup\mathcal{L}_{j+1}(T)\le\lambda_j^{\downarrow}(T)$.
+\item \code{forall\_unit\_vector\_eigenvalue\_le\_re\_inner} supplies a head spectral subspace $V_0\in\Gr{j+1}{E}$ on which every unit vector has value at least $\lambda_j^{\downarrow}(T)$. Hence
+\[
+  \lambda_j^{\downarrow}(T)\le\operatorname{rayleighMin}(T,V_0)
+  \le\sup\mathcal{L}_{j+1}(T).
+\]
+\item Antisymmetry gives equality, and compactness supplies an inner minimizing vector. The eigenvector at index $j$ is an explicit minimizer on $V_0$.
+\end{enumerate}
+The decreasing-order min--max formula (HJ-Lean-minmax) can either be proved by the complementary head/tail intersection argument or derived from (HJ-Lean-maxmin) for $-T$ using (HJ-neg-down). A direct proof is useful as a consistency check on the index reversal.
+
+A practical module should expose theorem seams resembling
+\begin{center}
+\code{rayleighQuotient}, \code{unitRayleighValues}, \code{rayleighMin},
+\code{rayleighMax}, \code{fixedFinrankSubmodules},
+\code{courantFischerMaxMin}, \code{courantFischerMinMax},
+and explicit \code{...\_attained} corollaries.
+\end{center}
+These are proposed responsibilities, not declarations claimed to exist.
+
+\section{Subspace form bounds imply eigenvalue counts}
+
+\sourceanchor{Theorem 4.2.10, equation (4.2.11), and Corollary 4.2.12, book pages 237--238.}
+
+\begin{theorem}[Quadratic-form control on a subspace]
+Let $S$ be $k$-dimensional.
+\begin{enumerate}[label=(\alph*),leftmargin=2em]
+\item If $x^*Ax\ge c$ for every unit $x\in S$, then $\lambda_{n-k+1}(A)\ge c$. Strict form bounds give strict eigenvalue bounds.
+\item If $x^*Ax\le c$ for every unit $x\in S$, then $\lambda_k(A)\le c$. Strict form bounds give strict eigenvalue bounds.
+\end{enumerate}
+\end{theorem}
+
+For part (a), intersect $S$ with
+\[
+  S_1:=\spanop\{x_1,\dots,x_{n-k+1}\}.
+\]
+A unit vector in the intersection satisfies
+\begin{equation}
+  c\le x^*Ax\le\lambda_{n-k+1}(A). \tag{HJ-4.2.11}
+\end{equation}
+Part (b) follows by applying part (a) to $-A$.
+
+Setting $c=0$ yields the inertia consequence: if the form is nonnegative on a $k$-dimensional subspace, $A$ has at least $k$ nonnegative eigenvalues; if it is positive on every nonzero vector there, $A$ has at least $k$ positive eigenvalues.
+
+\sourcecomment{The current spectral-subspace lemmas prove the converse-looking direction ``membership in a chosen spectral span implies a form bound.'' A source-shaped theorem taking an arbitrary subspace form bound and returning an eigenvalue count is not exposed as a named result. It would support inertia arguments and later equality-case APIs.}
+
+\section{Full Weyl inequalities}
+
+\sourceanchor{Theorem 4.3.1 and equations (4.3.2a)--(4.3.2b), book pages 239--240.}
+
+Let $A,B$ be Hermitian and let $C=A+B$. For $1\le i\le n$,
+\begin{align}
+  \lambda_i(C)
+  &\le \lambda_{i+j}(A)+\lambda_{n-j}(B),
+  &&0\le j\le n-i, \tag{HJ-Weyl-upper}\\
+  \lambda_{i-j+1}(A)+\lambda_j(B)
+  &\le \lambda_i(C),
+  &&1\le j\le i. \tag{HJ-Weyl-lower}
+\end{align}
+
+\subsection{The three-subspace proof}
+
+Choose orthonormal eigenbases $x_r,y_r,z_r$ for $A,B,C$. For fixed $i$ and $j$ in the upper range, define
+\[
+  S_1=\spanop\{x_1,\dots,x_{i+j}\},
+  \quad
+  S_2=\spanop\{y_1,\dots,y_{n-j}\},
+  \quad
+  S_3=\spanop\{z_i,\dots,z_n\}.
+\]
+Their dimensions sum to
+\[
+  (i+j)+(n-j)+(n-i+1)=2n+1.
+\]
+Hence their triple intersection contains a unit vector $u$. Rayleigh's theorem gives
+\[
+  \lambda_i(C)
+  \le u^*Cu
+  =u^*Au+u^*Bu
+  \le\lambda_{i+j}(A)+\lambda_{n-j}(B).
+\]
+The lower family follows by applying the upper family to $-A,-B,-C$ and reversing indices.
+
+\subsection{Equality conditions}
+
+Equality in an upper Weyl inequality occurs exactly when there is a common nonzero vector $u$ satisfying
+\[
+  Au=\lambda_{i+j}(A)u,
+  \qquad
+  Bu=\lambda_{n-j}(B)u,
+  \qquad
+  Cu=\lambda_i(C)u.
+\]
+The lower family has the analogous indices. If $A$ and $B$ have no common eigenvector, all Weyl inequalities are strict.
+
+\sourcecomment{The current theorem \code{abs\_eigenvalues\_sub\_le} is the same-index operator-norm perturbation consequence, not Theorem 4.3.1. A full formalization needs the two-index upper and lower families, admissible-index arithmetic, the triple-intersection theorem, and equality characterization. This is the largest canonical gap immediately downstream of Courant--Fischer.}
+
+\section{The perturbation corollary ladder}
+
+\sourceanchor{Corollaries 4.3.3, 4.3.5, 4.3.7, 4.3.9, 4.3.12, and 4.3.15, book pages 240--242.}
+
+Horn--Johnson repeatedly specializes Weyl by inserting spectral information about the perturbation $B$.
+
+\subsection{Inertia-controlled displacement}
+
+If $B$ has exactly $\pi$ positive and $\nu$ negative eigenvalues, then
+\begin{align*}
+  \lambda_i(A+B)&\le\lambda_{i+\pi}(A), &&1\le i\le n-\pi,\\
+  \lambda_{i-\nu}(A)&\le\lambda_i(A+B), &&\nu+1\le i\le n.
+\end{align*}
+Equality requires a common eigenvector lying in $\Ker B$. If $B$ is nonsingular, all displayed inequalities are strict.
+
+If $B$ is singular of rank $r$, the coarser rank form is
+\begin{align*}
+  \lambda_i(A+B)&\le\lambda_{i+r}(A), &&1\le i\le n-r,\\
+  \lambda_{i-r}(A)&\le\lambda_i(A+B), &&r+1\le i\le n.
+\end{align*}
+This is a useful API even without explicit positive/negative inertia counts.
+
+\subsection{Rank-one and one-positive/one-negative interlacing}
+
+If $B$ has one positive and one negative eigenvalue, each interior eigenvalue of $A+B$ lies between neighboring eigenvalues of $A$. For $B=zz^*$,
+\begin{align}
+  \lambda_i(A)&\le\lambda_i(A+zz^*)\le\lambda_{i+1}(A), &&1\le i<n, \tag{HJ-rank-one-plus}\\
+  \lambda_{i-1}(A)&\le\lambda_i(A-zz^*)\le\lambda_i(A), &&2\le i\le n. \tag{HJ-rank-one-minus}
+\end{align}
+Equality is characterized by an eigenvector of $A$ orthogonal to $z$.
+
+\subsection{Loewner monotonicity}
+
+If $B\succeq0$, then
+\[
+  \lambda_i(A)\le\lambda_i(A+B)
+\]
+for every $i$; if $B\succ0$, all inequalities are strict. The repository already proves the non-strict intrinsic form as
+\code{eigenvalues\_le\_eigenvalues\_of\_re\_inner\_le}.
+
+\subsection{Endpoint perturbation bound}
+
+For arbitrary Hermitian $B$,
+\begin{equation}
+  \lambda_i(A)+\lambda_1(B)
+  \le\lambda_i(A+B)
+  \le\lambda_i(A)+\lambda_n(B). \tag{HJ-Weyl-endpoint}
+\end{equation}
+Consequently, if $E$ is Hermitian and $\widehat\lambda_i=\lambda_i(A+E)$,
+\begin{equation}
+  \lambda_1(E)
+  \le\widehat\lambda_i-\lambda_i(A)
+  \le\lambda_n(E), \tag{HJ-6.3.4.1}
+\end{equation}
+and
+\[
+  |\widehat\lambda_i-\lambda_i(A)|
+  \le \rho(E)=\norm{E}_{\op}.
+\]
+This is the exact Horn--Johnson route to the theorem currently present in Lean. The source's result is sharper than a bare norm estimate whenever the perturbation spectrum is asymmetric or one-sided.
+
+\section{Cauchy interlacing and inverse interlacing problems}
+
+\sourceanchor{Theorem 4.3.17, equations (4.3.18)--(4.3.20), Theorems 4.3.21 and 4.3.26, book pages 242--245.}
+
+Let
+\[
+  \widehat A=
+  \begin{pmatrix}
+    B&y\\y^*&a
+  \end{pmatrix}
+\]
+with $B\in M_n(\C)$ Hermitian. Then
+\begin{equation}
+  \lambda_1(\widehat A)\le\lambda_1(B)\le\lambda_2(\widehat A)
+  \le\cdots\le\lambda_n(B)\le\lambda_{n+1}(\widehat A). \tag{HJ-Cauchy}
+\end{equation}
+
+The book proves this from Weyl rather than directly from Courant--Fischer. Shift both matrices so that $B$ and $\widehat A$ are positive definite, and write
+\[
+  \widehat A=
+  \underbrace{\begin{pmatrix}B&0\\0&0\end{pmatrix}}_{H}
+  +
+  \underbrace{\begin{pmatrix}0&y\\y^*&a\end{pmatrix}}_{K}.
+\]
+The matrix $K$ has one positive and one negative eigenvalue when $y\ne0$. The one-positive/one-negative perturbation corollary interlaces the eigenvalues of $H+K$ and $H$. The opposite half follows from $-\widehat A$.
+
+Equality occurs precisely when an eigenvector of $B$ is orthogonal to the border vector $y$ and extends with zero last coordinate to the relevant eigenvector of $\widehat A$. If no eigenvector of $B$ is orthogonal to $y$, all inequalities are strict.
+
+\subsection{Converse bordering theorem}
+
+Given real lists
+\[
+  \mu_1\le\lambda_1\le\mu_2\le\cdots\le\lambda_n\le\mu_{n+1},
+\]
+Theorem 4.3.21 constructs $a\in\R$ and $y\in\R^n$ such that
+\[
+  \begin{pmatrix}\diag(\lambda)&y\\y^T&a\end{pmatrix}
+\]
+has eigenvalues $\mu_1,\dots,\mu_{n+1}$.
+
+The trace fixes
+\[
+  a=\sum_{r=1}^{n+1}\mu_r-\sum_{r=1}^n\lambda_r.
+\]
+Cauchy's bordered-determinant formula gives the polynomial identity
+\begin{equation}
+  \sum_{i=1}^n\eta_i\prod_{j\ne i}(t-\lambda_j)
+  =(t-a)\prod_{i=1}^n(t-\lambda_i)-\prod_{r=1}^{n+1}(t-\mu_r),
+  \qquad \eta_i:=y_i^2. \tag{HJ-border-poly}
+\end{equation}
+Interlacing controls the signs obtained by evaluating after removing repeated factors at each distinct $\lambda$. This permits nonnegative choices of the $\eta_i$, hence real $y_i$.
+
+\subsection{Converse rank-one perturbation theorem}
+
+Given
+\[
+  \lambda_1\le\mu_1\le\lambda_2\le\cdots\le\lambda_n\le\mu_n,
+\]
+Theorem 4.3.26 constructs $z\in\R^n$ such that
+\[
+  \diag(\lambda)+zz^T
+\]
+has eigenvalues $\mu_1,\dots,\mu_n$. The source reduces this to the bordering theorem after a positive shift, builds a singular positive semidefinite bordered matrix, factors its last column through the first block, and compresses a Gram factorization.
+
+\sourcecomment{No interlacing theorem was found in the current \code{ForMathlib} spectral stack. The forward inequalities are high-value and comparatively direct. The converse constructions are lower priority but provide strong tests of repeated-eigenvalue bookkeeping, characteristic-polynomial identities, and real square-root choices.}
+
+\section{Principal submatrices and compressions}
+
+\sourceanchor{Theorem 4.3.28 and Corollaries 4.3.34 and 4.3.37, book pages 246--248.}
+
+Let
+\[
+  A=\begin{pmatrix}B&C\\C^*&D\end{pmatrix},
+  \qquad B\in M_m(\C).
+\]
+The inclusion principle states
+\begin{equation}
+  \lambda_i(A)\le\lambda_i(B)\le\lambda_{i+n-m}(A),
+  \qquad 1\le i\le m. \tag{HJ-inclusion}
+\end{equation}
+
+The source gives a direct two-subspace proof. Embed eigenvectors $y_i$ of $B$ as
+\[
+  \widehat y_i=(y_i,0)\in\C^n.
+\]
+Intersect
+\[
+  \spanop\{x_1,\dots,x_{i+n-m}\}
+  \quad\text{with}\quad
+  \spanop\{\widehat y_i,\dots,\widehat y_m\}.
+\]
+A unit vector in the intersection has the form $(\xi,0)$ and satisfies
+\[
+  \lambda_i(B)\le \xi^*B\xi=(\xi,0)^*A(\xi,0)
+  \le\lambda_{i+n-m}(A).
+\]
+Apply the dual argument for the other side.
+
+Equality forces an eigenvector $\xi$ of $B$ with
+\[
+  C^*\xi=0,
+\]
+so that $(\xi,0)$ is also an eigenvector of $A$. The necessity comes from equality in both Rayleigh bounds in the intersecting vector; sufficiency follows immediately by extending $\xi$ with a zero lower block.
+
+The multiplicity statements use the quantitative, not merely nontrivial, intersection lemma. If
+\[
+  \lambda_{i-r+1}(A)=\cdots=\lambda_i(A)=\lambda_i(B),
+\]
+then interlacing first forces
+\[
+  \lambda_{i-r+1}(B)=\cdots=\lambda_i(B).
+\]
+Enlarge the embedded $B$-eigenspace in the second subspace from
+$\spanop\{\widehat y_i,\dots,\widehat y_m\}$ to
+$\spanop\{\widehat y_{i-r+1},\dots,\widehat y_m\}$. The two dimensions now sum to $n+r$, so their intersection has dimension at least $r$. Choosing an orthonormal family $x_a=(\xi_a,0)$ in that intersection and applying the equality case of Rayleigh's theorem yields
+\[
+  B\xi_a=\lambda_i(B)\xi_a,
+  \qquad C^*\xi_a=0,
+  \qquad a=1,\dots,r.
+\]
+The upper-endpoint multiplicity statement is dual. This proof requires a theorem that extracts an orthonormal family of a prescribed length from a submodule whose finrank has the corresponding lower bound.
+
+Summing the inclusion inequalities yields trace bounds for a principal block:
+\begin{align}
+  \sum_{r=1}^m\lambda_r(A)
+  &\le \tr B, \tag{HJ-principal-trace-low}\\
+  \tr B
+  &\le\sum_{r=n-m+1}^n\lambda_r(A). \tag{HJ-principal-trace-high}
+\end{align}
+Equality implies $C=0$, hence block diagonalization. Iterating gives the multi-block equality criterion in Corollary 4.3.34.
+
+For any isometry $V:\C^m\to\C^n$, the compression
+\[
+  B_m:=V^*AV
+\]
+has eigenvalues satisfying Poincare separation:
+\begin{equation}
+  \lambda_i(A)\le\lambda_i(V^*AV)\le\lambda_{i+n-m}(A). \tag{HJ-Poincare}
+\end{equation}
+Extend the columns of $V$ to a unitary basis and apply the principal-submatrix theorem.
+
+\sourcecomment{Poincare separation is the coordinate-free theorem most useful to this repository. A formal version for an isometric embedding or a finite-dimensional submodule compression would support Ritz values, residual methods, and Davis--Kahan compression arguments.}
+
+\section{Ky Fan trace variational principles}
+
+\sourceanchor{Corollary 4.3.39 and equation (4.3.40), book page 248.}
+
+Summing Poincare separation and choosing spectral subspaces gives
+\begin{align}
+  \sum_{i=1}^m\lambda_i(A)
+  &=\min_{V^*V=I_m}\tr(V^*AV), \tag{HJ-KyFan-min}\\
+  \sum_{i=n-m+1}^n\lambda_i(A)
+  &=\max_{V^*V=I_m}\tr(V^*AV). \tag{HJ-KyFan-max}
+\end{align}
+The extrema are attained by isometries whose columns are eigenvectors for the bottom or top $m$ eigenvalues. More precisely, if $V=[v_1\ \cdots\ v_m]$, then
+\[
+  \tr(V^*AV)=\sum_{a=1}^m v_a^*Av_a.
+\]
+Poincare separation bounds the ordered eigenvalues of the compression term by term. Equality in the sum therefore forces equality in every nonnegative termwise gap. The inclusion-principle equality cases then provide an orthonormal basis of the range of $V$ made of eigenvectors belonging to the selected endpoint spectral blocks. When the cutoff eigenvalue has multiplicity, there is freedom inside that eigenspace; the invariant statement is that the range of $V$ contains all strictly more extreme eigenspaces and chooses the remaining dimension inside the cutoff eigenspace. A formal equality theorem should be stated in terms of spectral submodule containment, not a unique ordered eigenbasis.
+
+This is the sum-level extension of Courant--Fischer. The repository already has:
+\begin{itemize}[leftmargin=2em]
+\item \code{sum\_re\_inner\_le\_sum\_eigenvalues\_top}, the upper inequality for an arbitrary orthonormal family;
+\item singular-value Ky Fan upper bounds and explicit attaining singular families;
+\item \code{kyFanSum} and its triangle inequality.
+\end{itemize}
+What remains for exact correspondence with Horn--Johnson is a self-adjoint trace-compression equality with both top and bottom forms, a compression operator API, and explicit equality/attainment packaging.
+
+\section{Majorization descendants}
+
+\sourceanchor{Definitions 4.3.41 and 4.3.43; Theorems 4.3.45, 4.3.47--4.3.50, and 4.3.53; book pages 248--256.}
+
+\subsection{Schur's diagonal majorization theorem}
+
+For Hermitian $A$, the eigenvalue vector majorizes the diagonal vector. In decreasing order,
+\begin{equation}
+  \sum_{i=1}^k\lambda_i(A)^{\downarrow}
+  \ge\sum_{i=1}^k d_i(A)^{\downarrow},
+  \qquad 1\le k\le n, \tag{HJ-Schur}
+\end{equation}
+with equality at $k=n$ by the trace identity.
+
+The source permutes the diagonal into decreasing order, takes the corresponding leading principal block, and applies the principal-block trace inequality. Equality for a proper prefix forces a reducing block decomposition.
+
+The repository has a stronger-in-one-direction but differently packaged result: \code{convexOn\_sum\_re\_inner\_orthonormalBasis\_self\_le} proves the Karamata/convex-function form via a doubly stochastic overlap matrix. It does not yet provide a majorization predicate, prefix-sum theorem, or source equality case.
+
+\subsection{Fan and Lidskii additive majorization}
+
+For Hermitian $A,B$,
+\begin{align}
+  \lambda(A)^{\downarrow}+\lambda(B)^{\downarrow}
+  &\succ \lambda(A+B), \tag{HJ-Fan-majorization}\\
+  \lambda(A+B)
+  &\succ \lambda(A)^{\downarrow}+\lambda(B)^{\uparrow}. \tag{HJ-Lidskii}
+\end{align}
+
+The Fan inequality is an immediate use of the Ky Fan maximum principle:
+\begin{align*}
+  \sum_{i=1}^k\lambda_i(A+B)^{\downarrow}
+  &=\max_{V^*V=I_k}\tr V^*(A+B)V\\
+  &\le \max_{V^*V=I_k}\tr V^*AV
+      +\max_{V^*V=I_k}\tr V^*BV.
+\end{align*}
+
+Horn--Johnson prove Lidskii by an equivalent difference formulation. After the substitutions $A=A'+B'$ and $B=-A'$, it is enough to prove
+\[
+  \lambda(B)\succ
+  \bigl(\lambda(A+B)^{\downarrow}-\lambda(A)^{\downarrow}\bigr).
+\]
+For a fixed prefix length $k$, the right-hand difference vector is \emph{sorted again} before taking its top-$k$ sum; this is a separate finite-order-statistics obligation and cannot be replaced by summing the first $k$ coordinatewise differences.
+
+Shift $B$ by $\lambda_k(B)^{\downarrow}I$ so that its $k$th decreasing eigenvalue is zero. Both sides of the desired prefix inequality decrease by the same scalar $k\lambda_k(B)^{\downarrow}$. Decompose
+\[
+  B=B_+-B_-,
+  \qquad B_+,B_-\succeq0.
+\]
+At this normalization the top-$k$ eigenvalues of $B$ are precisely the nonzero eigenvalues of $B_+$, padded by zeros, so
+\[
+  \sum_{i=1}^k\lambda_i(B)^{\downarrow}=\tr B_+.
+\]
+Loewner monotonicity gives, coordinatewise,
+\[
+  \lambda_i(A+B_+-B_-)^{\downarrow}-\lambda_i(A)^{\downarrow}
+  \le
+  \lambda_i(A+B_+)^{\downarrow}-\lambda_i(A)^{\downarrow},
+\]
+and the latter differences are nonnegative. Monotonicity of top-$k$ sums under coordinatewise domination, followed by padding the prefix to the whole nonnegative vector, gives
+\begin{align*}
+ \sum_{i=1}^k
+ \bigl(\lambda_i(A+B)^{\downarrow}-\lambda_i(A)^{\downarrow}\bigr)^{\downarrow}
+ &\le \sum_{i=1}^n
+ \bigl(\lambda_i(A+B_+)^{\downarrow}-\lambda_i(A)^{\downarrow}\bigr)\\
+ &=\tr(A+B_+)-\tr A=\tr B_+.
+\end{align*}
+This identifies three formalization seams beyond Loewner monotonicity: invariance of majorization under scalar shifts, top-$k$ sums of a sorted finite vector, and monotonicity of those sums under coordinatewise order.
+
+\sourcecomment{The current repository has Ky Fan subadditivity for singular values and forward Schur--Horn in convex form, but no general finite-vector majorization API and no Lidskii theorem. A well-designed majorization layer would unify Schur, Fan, Lidskii, and unitarily invariant norm dominance.}
+
+\subsection{Schur--Horn converse and doubly stochastic geometry}
+
+Theorem 4.3.48 proves the converse: if $x\succ y$, there is a real orthogonal $Q$ with
+\[
+  \diag\bigl(Q^T\diag(x)Q\bigr)=y.
+\]
+The proof is inductive. It performs one two-dimensional orthogonal mixing so that the first diagonal entry becomes $y_1$, then verifies that the remaining $(n-1)$-vector still satisfies the required majorization inequalities.
+
+Theorem 4.3.49 identifies
+\[
+  x\succ y
+  \quad\Longleftrightarrow\quad
+  y=Sx\text{ for some doubly stochastic }S
+  \quad\Longleftrightarrow\quad
+  y\in\operatorname{conv}\{Px:P\text{ permutation}\}.
+\]
+This uses the orthostochastic matrix $[q_{ij}^2]$ in one direction and Birkhoff's theorem in the other.
+
+Theorem 4.3.50 then characterizes which real vectors can occur as the eigenvalues of the Hermitian part of a matrix with prescribed complex eigenvalues. The forward direction uses Schur on the diagonal of a Schur triangular form; the converse inserts the desired imaginary parts into an upper triangular matrix.
+
+These results are not needed to prove Courant--Fischer, but they complete the book's main downstream majorization branch and would clarify the foundations of the repository's Schur--Horn and Hoffman--Wielandt developments.
+
+\subsection{Hermitian trace rearrangement inequality}
+
+For Hermitian $A,B$,
+\begin{equation}
+  \sum_{i=1}^n\lambda_i(A)^{\downarrow}\lambda_i(B)^{\uparrow}
+  \le\tr(AB)
+  \le\sum_{i=1}^n\lambda_i(A)^{\downarrow}\lambda_i(B)^{\downarrow}. \tag{HJ-trace-rearrangement}
+\end{equation}
+The source diagonalizes $A=U\diag(\lambda(A)^{\downarrow})U^*$ and writes $\widetilde B=U^*BU$. Then
+\[
+  \tr(AB)=\sum_i\lambda_i(A)^{\downarrow}\widetilde b_{ii}.
+\]
+Schur's theorem says that $\lambda(B)$ majorizes $\diag(\widetilde B)$. A summation-by-parts lemma converts the prefix inequalities into the weighted rearrangement bound because the weights $\lambda_i(A)^{\downarrow}$ are decreasing.
+
+For equality, group equal eigenvalues of $A$ into blocks of multiplicities $n_1,\dots,n_s$. Only the prefix conditions at the strict drops of the weight vector matter. Equality in the rearrangement lemma forces equality in Schur's prefix inequalities at the cumulative block sizes
+\[
+  n_1,\quad n_1+n_2,\quad\dots,\quad n_1+\cdots+n_{s-1}.
+\]
+The principal-block trace equality theorem then forces $\widetilde B$ to be block diagonal conformally with the eigenspace decomposition of $A$. Hence $A$ and $B$ commute. Diagonalizing $B$ independently inside each equal-$A$ block gives a common unitary eigenbasis with the eigenvalues of $B$ in decreasing order for the upper equality; replacing $B$ by $-B$ gives increasing order for the lower equality. A correct formal statement must permit arbitrary unitary rotation inside repeated eigenspaces.
+
+A formal theorem here would bridge the current forward Schur--Horn API to the von Neumann trace theorem and equality conditions used throughout unitarily invariant norm theory.
+
+\section{Singular-value descendants}
+
+\sourceanchor{Corollaries 7.3.5--7.3.6; Theorems 7.3.8 and 7.3.11; equations (7.3.9)--(7.3.10), (7.3.13)--(7.3.20); Problems 7.3.P16--P18 and 7.3.P44; book pages 451--458.}
+
+\subsection{Hermitian dilation and exact index arithmetic}
+
+For $A\in M_{m,n}$ define
+\[
+  \mathcal H(A)=\begin{pmatrix}0&A\\A^*&0\end{pmatrix}\in M_{m+n}.
+\]
+If $q=\min(m,n)$ and $r=|m-n|$, its increasing eigenvalue list is
+\[
+ -\sv_1(A)\le\cdots\le-\sv_q(A)
+ \le\underbrace{0\le\cdots\le0}_{r\text{ copies}}
+ \le\sv_q(A)\le\cdots\le\sv_1(A).
+\]
+Therefore the positive singular-value branch satisfies
+\begin{equation}
+  \sv_k(A)=\lambda_{m+n-k+1}^{\uparrow}(\mathcal H(A)),
+  \qquad 1\le k\le q. \tag{HJ-dilation-index-up}
+\end{equation}
+In decreasing zero-based order this is simply
+\begin{equation}
+  \sv_k^{\mathrm{HJ}}(A)=\lambda_{k-1}^{\downarrow}(\mathcal H(A)). \tag{HJ-dilation-index-down}
+\end{equation}
+The second formula is the cleaner Lean interface: the top $q$ eigenvalues of the dilation are the singular values in the same order. The formal proof still needs the zero multiplicity and the negative branch to show that no index crosses the central block.
+
+\subsection{Direct unsquared perturbation}
+
+Corollary 7.3.5 applies the same-index Hermitian perturbation theorem to
+$\mathcal H(A)$ and $\mathcal H(B)$:
+\begin{equation}
+  |\sv_i(A)-\sv_i(B)|\le\norm{A-B}_{\op}. \tag{HJ-SV-direct-perturb}
+\end{equation}
+The equality $\norm{\mathcal H(E)}_{\op}=\norm{E}_{\op}$ is part of the bridge. This result is preferable to first controlling $A^*A-B^*B$, because it is unsquared and does not introduce a factor depending on $\norm A+\norm B$.
+
+\subsection{Singular-value interlacing under deletion}
+
+If $\widehat A$ is obtained by deleting one row or one column of $A$, the singular values interlace:
+\[
+  \sv_1(A)\ge\sv_1(\widehat A)\ge\sv_2(A)
+  \ge\cdots\ge\sv_q(A)\ge\sv_q(\widehat A),
+\]
+with a terminal zero inserted when dimensions require it. Deleting a row of $A$ deletes the matching row and column in the first block of $\mathcal H(A)$; deleting a column does the same in the second block. Cauchy interlacing for the resulting principal submatrix, followed by (HJ-dilation-index-up), gives Corollary 7.3.6.
+
+Problem 7.3.P44 iterates this argument. If $\widehat A\in M_{r,s}$ is obtained by deleting $m-r$ rows and $n-s$ columns and
+\[
+  p=(m-r)+(n-s),
+\]
+then, with singular values beyond the shorter dimension defined to be zero,
+\begin{equation}
+  \sv_i(A)\ge\sv_i(\widehat A)\ge\sv_{i+p}(A),
+  \qquad 1\le i\le\min(r,s). \tag{HJ-SV-multiple-deletion}
+\end{equation}
+A formal proof can induct on the number of deletions or use the general principal-submatrix inclusion theorem for the two dilations.
+
+\subsection{Singular-value Courant--Fischer}
+
+For $A\in M_{n,m}$, $q=\min(n,m)$, and $1\le k\le q$,
+\begin{align}
+  \sv_k(A)
+  &=\min_{\dim S=m-k+1}\max_{0\ne x\in S}\frac{\norm{Ax}_2}{\norm{x}_2}, \tag{HJ-SV-minmax}\\
+  \sv_k(A)
+  &=\max_{\dim S=k}\min_{0\ne x\in S}\frac{\norm{Ax}_2}{\norm{x}_2}. \tag{HJ-SV-maxmin}
+\end{align}
+The proof applies Courant--Fischer to $A^*A$ and uses
+\[
+  x^*A^*Ax=\norm{Ax}_2^2,
+  \qquad
+  \lambda_{m-k+1}^{\uparrow}(A^*A)=\sv_k(A)^2.
+\]
+Because all quantities are nonnegative, monotonicity of the square root moves through the inner and outer extrema. A formal proof should avoid an unjustified rule that square root commutes with arbitrary \code{sInf}/\code{sSup}: either prove the monotone-continuous image lemma with the needed nonempty bounded hypotheses, or first use the attained extrema and take square roots of equal real numbers.
+
+The current repository has endpoint norm-attainment results for the largest and smallest singular values and a Ky Fan variational principle, but it does not expose the full individual theorem.
+
+\subsection{Mixed-product bound from singular-value min--max}
+
+The exercise following Theorem 7.3.8 proves
+\begin{equation}
+  \sv_k(AB)\le\sv_1(A)\sv_k(B). \tag{HJ-SV-mixed-product}
+\end{equation}
+Choose the $(n-k+1)$-dimensional subspace that attains the min--max formula for $B$. On it,
+\[
+  \norm{ABx}\le\sv_1(A)\norm{Bx}
+  \le\sv_1(A)\sv_k(B)\norm{x}.
+\]
+Taking the inner maximum and then the outer minimum gives the result. Applying the same theorem to adjoints yields the companion
+$\sv_k(AB)\le\sv_k(A)\sv_1(B)$ when dimensions match appropriately.
+
+\subsection{Additive and product Weyl inequalities}
+
+Problem 7.3.P16 records two two-index families. If $A,B\in M_{m,n}$, $q=\min(m,n)$, and $i+j\le q+1$, then
+\begin{align}
+  \sv_{i+j-1}(A+B)&\le\sv_i(A)+\sv_j(B), \tag{HJ-SV-Weyl-add}\\
+  \sv_{i+j-1}(AB^*)&\le\sv_i(A)\sv_j(B). \tag{HJ-SV-Weyl-product}
+\end{align}
+For the additive inequality, use
+\[
+  \mathcal H(A+B)=\mathcal H(A)+\mathcal H(B)
+\]
+and substitute (HJ-dilation-index-up) into the full two-index Hermitian Weyl inequality. The admissibility condition $i+j\le q+1$ ensures that the selected eigenvalues remain in the positive branch of each dilation.
+
+The perturbation bound follows by applying the additive inequality with $j=1$ and then swapping $A+B$ and $A$:
+\begin{equation}
+  |\sv_i(A+B)-\sv_i(A)|\le\sv_1(B). \tag{HJ-SV-perturb}
+\end{equation}
+The product inequality does not follow from the additive dilation identity. Horn--Johnson point to a proof using polar decomposition, subspace intersection, the spectral-span singular-vector bounds in Problem 7.3.P4(b), and Theorem 7.3.8. Its formalization therefore belongs after singular-value min--max and the polar/isometry API, not as a corollary of additive Weyl.
+
+\subsection{Weyl product majorization for eigenvalues}
+
+Problem 7.3.P17 compares the absolute eigenvalues of a square matrix, ordered by decreasing modulus, with its singular values:
+\begin{align}
+  \prod_{i=1}^k|\lambda_i(A)|&\le\prod_{i=1}^k\sv_i(A),
+  &&1\le k\le n, \tag{HJ-Weyl-product-majorization}\\
+  \sum_{i=1}^k|\lambda_i(A)|&\le\sum_{i=1}^k\sv_i(A),
+  &&1\le k\le n. \tag{HJ-Weyl-additive-majorization}
+\end{align}
+Equality holds in the product inequality at $k=n$ because both sides equal $|\det A|$. The additive weak-majorization family is a consequence of the multiplicative one but needs a separate finite-vector theorem. Problem 7.3.P18 gives a direct proof of the $k=n$ additive case and characterizes equality: the trace norm equals the sum of absolute eigenvalues exactly when $A$ is normal. These results extend the CF/Ky Fan branch toward spectral radius, trace norm, and unitarily invariant norm dominance, but they are lower priority than Theorem 7.3.8 and the two-index additive inequality.
+
+\subsection{Gram equality and isometric realization}
+
+Theorem 7.3.11 states that for $A\in M_{p,n}$ and $B\in M_{q,n}$ with $p\le q$,
+\begin{equation}
+  A^*A=B^*B
+  \quad\Longleftrightarrow\quad
+  \exists V\in M_{q,p},\ V^*V=I_p\ \text{ and }\ B=VA. \tag{HJ-Gram-isometry}
+\end{equation}
+The reverse direction is immediate. For the forward direction, use the same right singular vectors and positive singular values for $A$ and $B$, then extend the isometry between their left singular frames. This theorem is already covered in more detail by the repository's separate Horn--Johnson Gram note, but it belongs in the dependency map because it is the canonical equality bridge behind polar factors and aligned singular subspaces.
+
+\subsection{Selected Section 7.4 consequences}
+
+Section 7.4 develops the singular-value branch into unitarily invariant norm theory. The highest-value interfaces for this repository are:
+\begin{enumerate}[leftmargin=2em]
+\item von Neumann's trace inequality, which is the singular-value analogue of the Hermitian trace rearrangement theorem;
+\item Ky Fan dominance: comparison of all singular-value prefix sums implies comparison for every unitarily invariant norm;
+\item the use of (HJ-SV-mixed-product) to prove submultiplicativity criteria for unitarily invariant matrix norms.
+\end{enumerate}
+The repository already contains substantial infrastructure in \code{KyFan.lean} and \code{UnitarilyInvariantNorm.lean}. This note does not reproduce all of Section 7.4, but it records that the individual min--max and product inequalities are missing lower-level inputs that would simplify and strengthen that API.
+
+\section{Recommended formalization decomposition}
+
+The source suggests a sequence of focused modules rather than extending one large file indefinitely.
+
+\begin{enumerate}[leftmargin=2em]
+\item \textbf{Indexing and Rayleigh API.} Add explicit increasing/decreasing index conversion, negation reversal, the homogeneous quotient, unit-sphere values, equality cases, and continuity/boundedness lemmas.
+\item \textbf{Quantitative intersection API.} State the finite-family finrank lower bound and extraction of an orthonormal family from an intersection.
+\item \textbf{Full Courant--Fischer.} Define fixed-finrank submodule families and inner/outer value sets; prove nonempty/bounded hypotheses, literal \code{sInf}/\code{sSup} equalities, and inner/outer attainment.
+\item \textbf{Subspace bounds and inertia.} Package Theorem 4.2.10, strict variants, and positive/nonnegative eigenvalue counts.
+\item \textbf{Full Weyl.} Prove the two-index upper and lower families, admissible index arithmetic, and common-eigenvector equality conditions. Derive the current norm perturbation theorem as a corollary.
+\item \textbf{Interlacing and compression.} Add rank/inertia displacement, rank-one interlacing, Cauchy interlacing, principal-submatrix inclusion, quantitative equality multiplicities, Poincare separation, and a coordinate-free compression API.
+\item \textbf{Self-adjoint Ky Fan.} Package top/bottom trace-compression equalities, spectral-submodule attainment, and equality characterization at repeated cutoff eigenvalues.
+\item \textbf{Majorization.} Introduce sorted-prefix sums and a finite-vector majorization predicate; prove Schur prefix sums, Fan, Lidskii with the sorted-difference step, and trace rearrangement. Retain the existing convex/Karamata interface as an equivalent high-level corollary.
+\item \textbf{Hermitian dilation.} Formalize the full signed spectrum, zero multiplicity, operator norm, and exact positive-branch index map for rectangular operators.
+\item \textbf{Singular-value min--max and deletion.} Prove Theorem 7.3.8, direct unsquared perturbation, one-step and repeated deletion interlacing, and the mixed-product bound.
+\item \textbf{Singular-value two-index inequalities.} Add additive Weyl through dilation, product Weyl through polar/min--max geometry, and the perturbation corollaries.
+\item \textbf{Norm-dominance descendants.} Connect Weyl product majorization, von Neumann trace, Ky Fan dominance, and the existing unitarily invariant norm development.
+\end{enumerate}
+
+Steps 1--7 are directly useful to Davis--Kahan and Ritz/compression theory. Steps 9--11 support the singular-subspace branch. Converse interlacing constructions and the full Schur--Horn converse remain valuable stress tests but are lower priority for the active DK proof path.
+
+\section{Formalization map}
+
+\begin{coveragegrid}
+Subspace intersection, (0.1.7.1)--(0.1.7.3) and Lemma 4.2.3 & \statuspartial{} & Current CF proofs use \code{Submodule.finrank\_sup\_add\_finrank\_inf\_eq} to obtain a nonzero two-subspace intersection. & Public finite-family lower bound, exact $r$-dimensional conclusion, and orthonormal-family extraction. \\
+Rayleigh theorem 4.2.2 & \statuspartial{} & \code{re\_inner\_map\_self\_eq\_sum\_eigenvalues\_mul\_sq}; \code{re\_inner\_map\_self\_eq\_sum\_of\_eigenbasis}; both spectral-subspace form bounds. & Quotient/unit-sphere equivalence, extrema on a selected span, and exact equality eigenspace conditions. \\
+Inf/sup monotonicity, Lemma 4.2.4 & \statusmathlib{} & General \code{sInf}/\code{sSup} order lemmas and finite-dimensional compactness infrastructure. & Local wrappers for nonzero vectors and unit spheres, with nonempty and bounded hypotheses explicit. \\
+Negation order, Observation 4.2.5 & \statuspartial{} & \code{isSymmetric\_real\_smul} and \code{eigenvalues\_real\_smul} in \code{KyFan.lean}. & Public $-1$ specialization with the exact \code{Fin.rev} or arithmetic index conversion. \\
+Courant--Fischer 4.2.6 & \statuspartial{} & \code{exists\_unit\_vector\_re\_inner\_le\_eigenvalue}; \code{forall\_unit\_vector\_eigenvalue\_le\_re\_inner}. & Definitions of inner/outer value sets, nonempty/bounded proofs, both literal extrema equalities, and attainment. \\
+Eigenbasis uniqueness and Loewner order & \statuslocal{} & \code{eigenvalues\_eq\_of\_eigenbasis}; \code{eigenvalues\_le\_eigenvalues\_of\_re\_inner\_le}. & Re-export from downstream modules and add strict-order variants where hypotheses justify them. \\
+Spectral-subspace structure & \statuslocal{} & \code{finrank\_specSubspace}; \code{map\_mem\_specSubspace}; \code{orthogonal\_specSubspace}. & Named head/tail spectral submodules, complement/index wrappers, and compression restrictions. \\
+Theorem 4.2.10 / Corollary 4.2.12 & \statusmissing{} & Derivable from directional CF. & Source-shaped arbitrary-subspace form-bound theorem, strict form, and inertia-count corollaries. \\
+Full Weyl 4.3.1 & \statusmissing{} & \code{abs\_eigenvalues\_sub\_le} and \code{abs\_eigenvalues\_sub\_le\_opNorm} give only same-index norm perturbation. & Two-index upper/lower families, triple intersection, admissible indices, and equality/common-eigenvector characterization. \\
+Perturbation corollaries 4.3.3--4.3.15 & \statuspartial{} & Non-strict Loewner monotonicity and final norm endpoint exist. & Inertia/rank displacement, rank-one interlacing, sharper extremal-eigenvalue endpoint, strictness, and equality. \\
+Cauchy and inverse interlacing 4.3.17, 4.3.21, 4.3.26 & \statusmissing{} & No source-shaped interlacing theorem in the current spectral stack. & Forward theorem first; repeated-root polynomial signs and real square-root construction for the converse later. \\
+Inclusion and Poincare 4.3.28, 4.3.37 & \statusmissing{} & Current spectral subspaces and orthogonal-complement API are useful prerequisites. & Principal-submatrix and coordinate-free compression inequalities, equality, and multiplicity families. \\
+Ky Fan trace 4.3.39 & \statuspartial{} & \code{sum\_re\_inner\_le\_sum\_eigenvalues\_top}; singular-value variational upper bound and \code{exists\_orthonormal\_re\_sum\_inner\_map\_eq}. & Self-adjoint top/bottom equalities, compression trace definition, and cutoff-eigenspace equality characterization. \\
+Schur 4.3.45 & \statuspartial{} & \code{schurWeight\_nonneg}, row/column sums, \code{convexOn\_sum\_re\_inner\_orthonormalBasis\_self\_le}, and trace identities in \code{SchurHorn.lean}. & Sorted-prefix majorization theorem, predicate/interface equivalence, and block equality. \\
+Fan/Lidskii 4.3.47 & \statusmissing{} & Ky Fan singular-value subadditivity and Loewner monotonicity supply ingredients. & Eigenvalue prefix sums, sorted-difference/order-statistics API, scalar-shift invariance, and Lidskii proof. \\
+Schur--Horn converse 4.3.48--4.3.50 & \statusmissing{} & Forward doubly stochastic overlap weights exist. & Two-coordinate mixing induction, doubly stochastic equivalence, and Hermitian-part realization. \\
+Trace rearrangement 4.3.53 & \statusmissing{} & Forward Schur--Horn and principal-block equality are the intended dependencies. & Summation-by-parts majorization lemma, repeated-weight block equality, commuting and simultaneous-diagonalization conclusions. \\
+Ordered perturbation (6.3.4.1) & \statuspartial{} & Same-index absolute norm bound is present. & Expose $\lambda_{\min}(E)\le\widehat\lambda_i-\lambda_i\le\lambda_{\max}(E)$ separately. \\
+Hermitian dilation 7.3.3 & \statusmissing{} & Gram/singular-value infrastructure exists, but not the full signed dilation spectrum. & Positive/negative branches, central-zero multiplicity, exact index map, and norm identity. \\
+Direct singular perturbation 7.3.5 & \statusmissing{} & \code{abs\_sq\_singularValues\_sub\_le} controls squared values through Gram operators. & Direct unsquared same-index theorem via dilation. \\
+Deletion interlacing 7.3.6 and P44 & \statusmissing{} & No singular-value deletion theorem. & One-step and repeated row/column deletion with dimension-dependent zero padding. \\
+Singular min--max 7.3.8 & \statusmissing{} & \code{singularValues\_last\_mul\_norm\_le}, \code{exists\_norm\_apply\_eq\_singularValues\_last}, \code{norm\_apply\_le\_singularValues\_zero\_mul}, and \code{exists\_norm\_apply\_eq\_singularValues\_zero} cover endpoints. & Individual $k$th value, square-root/extrema transport, and attaining singular subspaces. \\
+Mixed product after 7.3.8 & \statusmissing{} & Operator norm endpoint is available. & $\sv_k(AB)\le\sv_1(A)\sv_k(B)$ and the adjoint companion. \\
+P16 additive/product Weyl & \statusmissing{} & Full Hermitian Weyl and singular min--max are the planned prerequisites. & Additive dilation proof, product polar/intersection proof, and direct perturbation. \\
+P17--P18 eigenvalue/singular-value majorization & \statusmissing{} & Ky Fan sums and unitarily invariant norm infrastructure exist. & Multiplicative majorization, additive weak majorization, trace-norm equality, and normality characterization. \\
+Theorem 7.3.11 Gram isometry & \statuspartial{} & Separate Gram-rigidity prose and local Gram results cover related statements. & Audit exact operator-level isometric realization and align with the existing Gram note rather than duplicate it. \\
+Section 7.4 norm consequences & \statuspartial{} & \code{kyFanSum}, its triangle inequality/invariance, and \code{UnitarilyInvariantNorm.lean}. & Connect individual/product inequalities to von Neumann trace and Ky Fan dominance with equality cases. \\
+\end{coveragegrid}
+
+\section{Source-faithfulness and limitations}
+
+\begin{enumerate}[leftmargin=2em]
+\item The reconstruction preserves Horn--Johnson's increasing eigenvalue order. The repository's decreasing order must be translated explicitly; silent index reversal would obscure source comparison.
+\item The proof of Courant--Fischer above follows the book's exact sequence: arbitrary subspace, trailing spectral span, nonzero intersection, the four-term sup/inf chain, and a leading spectral witness for sharpness. The dual formula is obtained from $-A$, as in the source.
+\item Horn--Johnson call Theorem 4.3.1 ``Weyl.'' The current Lean theorem bearing that description is only a standard consequence. The note keeps this distinction explicit.
+\item The source's equality cases are mathematically substantive. A first formalization may stage them after the inequalities, but a source-complete claim should include common-eigenvector, kernel, strictness, and multiplicity statements.
+\item The converse interlacing theorems use bordered characteristic-polynomial constructions. They are included because they complete the source's interlacing branch, but they are not prerequisites for Davis--Kahan.
+\item The majorization branch extends beyond Courant--Fischer narrowly construed. It is included because the source derives it through Poincare separation and Ky Fan trace extrema, and because the repository already has partial Schur--Horn and Ky Fan developments that would benefit from a common theorem map.
+\item The singular-value section includes the direct min--max, one-step and repeated deletion, unsquared perturbation, additive and product Weyl, mixed-product, and selected majorization descendants through book page 458, plus a dependency-level bridge into Section 7.4. It still does not reconstruct every theorem in Sections 7.3--7.4.
+\item These singular-value results are finite-dimensional matrix theorems. Their inclusion does not substitute for the full Hilbert-space operator scope required by the Davis--Kahan project goal.
+\item This note does not reconstruct unrelated material in Chapters 4, 6, or 7, nor the Perron--Frobenius max--min formulas in Chapter 8, which use a different order cone and proof mechanism.
+\end{enumerate}
+
+\begin{thebibliography}{9}
+\bibitem{HornJohnson2013}
+Roger A. Horn and Charles R. Johnson,
+\emph{Matrix Analysis}, second edition,
+Cambridge University Press, 2013.
+
+\bibitem{Fischer1905}
+E. Fischer,
+\emph{Ueber quadratische Formen mit reellen Koeffizienten},
+Monatshefte fuer Mathematik und Physik 16 (1905), 234--249.
+
+\bibitem{CourantHilbert}
+R. Courant and D. Hilbert,
+\emph{Methods of Mathematical Physics}, Volume I.
+
+\bibitem{Fan1949}
+Ky Fan,
+\emph{On a theorem of Weyl concerning eigenvalues of linear transformations I},
+Proceedings of the National Academy of Sciences 35 (1949), 652--655.
+\end{thebibliography}
+
+\end{document}
