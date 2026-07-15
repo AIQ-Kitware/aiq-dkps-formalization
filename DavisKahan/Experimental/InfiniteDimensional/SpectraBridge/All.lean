@@ -8,6 +8,7 @@ import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.PVMSubspace
 import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.OperatorAbsoluteValue
 import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.SinAngle
 import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.DirectRotation
+import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.DirectRotationAPI
 
 /-!
 # Active shallow Spectra bridge
