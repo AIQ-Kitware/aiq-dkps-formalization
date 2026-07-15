@@ -7,8 +7,8 @@ The index deliberately separates a paper's **formalization role** from the state
 ## Inventory summary
 
 - **53 works**: 44 papers, 8 books, and 1 monograph.
-- **3** source-order distilled reconstructions are complete.
-- **2** broad core notes remain to be upgraded.
+- **4** source-order distilled reconstructions are complete.
+- **1** broad core notes remain to be upgraded.
 - **1** exact transcriptions are intentionally sufficient because a maintained discrepancy ledger supplies the theorem-level reconstruction.
 - **3** works have transcription or source text but no source-order proof reconstruction.
 - **44** works have no local distilled note at all.
@@ -92,7 +92,7 @@ The index deliberately separates a paper's **formalization role** from the state
 | `BorgGroenen2005` | 2005 | Modern Multidimensional Scaling: Theory and Applications, Second Edition | reference work | modern Procrustes/MDS reference | `missing` | P3 |
 | `Higham2008` | 2008 | Functions of Matrices: Theory and Computation | reference work | modern polar decomposition and matrix-function reference | `missing` | P3 |
 | `MarshallOlkinArnold2011` | 2011 | Inequalities: Theory of Majorization and Its Applications, Second Edition | reference work | modern majorization reference | `missing` | P3 |
-| `HornJohnson2013` | 2013 | Matrix Analysis, Second Edition | reference work | primary modern reference across Gram, Courant--Fischer, Weyl, and spectral theory | `core_note` | P1 |
+| `HornJohnson2013` | 2013 | Matrix Analysis, Second Edition | reference work | strengthened source-order Courant--Fischer chain with explicit Lean index dictionary, literal min--max implementation obligations, declaration-level coverage, full Weyl/interlacing/majorization roadmap, and expanded singular-value deletion, min--max, additive/product, and norm-dominance descendants; core theorem families remain only partially formalized | `complete` | P1 |
 | `ChenChiFanMa2021` | 2021 | Spectral Methods for Data Science: A Statistical Perspective | reference work | statistical spectral-methods context | `missing` | P3 |
 
 ## Highest-value missing reconstructions
@@ -123,7 +123,6 @@ The index deliberately separates a paper's **formalization role** from the state
 - **`GrubisicKostrykinMakarovVeselic2013` — The Tan 2 Theta Theorem for Indefinite Quadratic Forms**: Reconstruct the form-domain theorem and clearly state the finite-dimensional bounded specialization formalized here.
 - **`Seelmann2014` — Notes on the Sin 2 Theta Theorem**: Reconstruct the exact separation hypotheses and compare its angle conventions with the Lean API.
 - **`Bhatia1997` — Matrix Analysis**: Create a theorem-indexed bridge note, not a chapter summary.
-- **`HornJohnson2013` — Matrix Analysis, Second Edition**: Keep as a multi-source reference note; do not attempt to distill the whole book.
 
 ## Sources missing from the repository's prior explicit source map
 
