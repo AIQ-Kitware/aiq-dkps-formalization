@@ -136,12 +136,7 @@ correspondences.
 theorem hermitianDilation_selfAdjoint (T : E →L[𝕜] F) :
     IsSelfAdjointOperator (hermitianDilation T) := by
   intro x y
-  simp only [hermitianDilation, ContinuousLinearMap.coe_comp',
-    Function.comp_apply, ContinuousLinearMap.prod_apply,
-    ContinuousLinearEquiv.coe_coe,
-    WithLp.prodContinuousLinearEquiv_symm_apply,
-    WithLp.prod_inner_apply, WithLp.ofLp_toLp,
-    WithLp.fstL_apply, WithLp.sndL_apply]
+  simp only [hermitianDilation, WithLp.prod_inner_apply]
   simp [ContinuousLinearMap.adjoint_inner_left,
     ContinuousLinearMap.adjoint_inner_right, add_comm]
 

@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Experimental.InfiniteDimensional.Sylvester.Bounded
+import DavisKahan.Experimental.InfiniteDimensional.Core.Unbounded
 
 /-!
 # Bounded spectral bridge for interval/exterior separation
@@ -27,9 +28,12 @@ variable {E F : Type v}
   [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
   [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
 
-/-- Real spectrum supplied by the eventual bounded self-adjoint spectral bridge. -/
-noncomputable def boundedRealSpectrum (A : E →L[𝕜] E) : Set ℝ := by
-  sorry
+/-- Real spectrum of a bounded operator, defined through the same closed-operator
+spectral API used by the canonical unbounded theorem.  This avoids maintaining
+an unrelated bounded spectrum placeholder and makes bounded gap hypotheses
+eligible for a direct full-domain specialization bridge. -/
+noncomputable def boundedRealSpectrum (A : E →L[𝕜] E) : Set ℝ :=
+  (ForMathlib.DavisKahanExt.ClosedOperator.ofBounded A).realSpectrum
 
 /-- The real spectrum is contained in a set. -/
 def SpectrumInRealSet (A : E →L[𝕜] E) (s : Set ℝ) : Prop :=

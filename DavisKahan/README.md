@@ -5,20 +5,23 @@ This is the canonical Davis--Kahan library root.
 ## Project mission
 
 The default target is the full Hilbert-space theory of Davis--Kahan (1970), not
-only the finite-dimensional specialization. The paper's main development uses
-bounded Hermitian operators on a separable Hilbert space, states all four
-headline theorems for infinite and finite dimensions and arbitrary
-unitary-invariant norms, and includes unbounded self-adjoint extensions under
-domain conditions.
+only a bounded or finite-dimensional specialization.  The canonical
+source-facing single-angle theorem must include the paper's unbounded
+self-adjoint scope with explicit domains and bounded residuals, together with
+arbitrary supported unitary-invariant norms.  Bounded Hermitian operators are a
+major specialization and proof seam, not the final API boundary.
 
 The finite branch is a valuable proof-complete specialization with weaker
 foundational requirements and a richer currently implemented UI-norm API. It
 must not be presented as completion of the paper unless the claim is explicitly
 qualified as finite-dimensional.
 
-- `BoundedOperator/` contains the supported arbitrary-Hilbert-space bounded
-  operator theory and is the canonical direction for the paper's main-body results.
-  It is not yet a complete implementation of all four source theorem families.
+- `BoundedOperator/` contains supported arbitrary-Hilbert-space bounded
+  specializations and reusable geometric foundations. It is not the owner of
+  the unqualified source-facing theorem names.
+- `Experimental/InfiniteDimensional/SinTheta/Canonical.lean` records the
+  maximally general source target while the closed-operator, ideal, and
+  spectral-cutoff dependencies are still incomplete.
 - `FiniteDimensional/Core/` contains finite spectral-subspace, gap, angle, and
   block-operator vocabulary.
 - `FiniteDimensional/Residual/` contains Ritz, trial-map, and angle-embedding
@@ -55,3 +58,5 @@ alternative module, while still excluding `Experimental`.
 
 The maintained completion standard is documented in
 [`docs/planning/davis-kahan-full-paper-goal.md`](../docs/planning/davis-kahan-full-paper-goal.md).
+The controlling single-angle dependency plan is
+[`docs/planning/davis-kahan-general-sin-theta-roadmap.md`](../docs/planning/davis-kahan-general-sin-theta-roadmap.md).

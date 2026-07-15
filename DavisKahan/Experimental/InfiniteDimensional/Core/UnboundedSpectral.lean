@@ -54,15 +54,62 @@ def SemiboundedAbove
     RCLike.re ⟪A.toLinearMap x, (x : E)⟫_𝕜 ≤
       c * ‖(x : E)‖ ^ 2
 
-/-- Domain-aware equation `A X - X B = C` for two closed blocks. -/
-def HasClosedSylvesterEquation
+/-- Domain-aware equation `A X - X B = C` for two closed blocks.
+
+The domain transport is a named field rather than an existential nested inside
+the equation.  This is essential for spectral-cutoff composition and for the
+residual block identity in the unbounded sine theorem. -/
+structure ClosedSylvesterEquation
+    (A : ClosedOperatorE (𝕜 := 𝕜) (E := E))
+    (B : ClosedOperatorF (𝕜 := 𝕜) (F := F))
+    (X C : F →L[𝕜] E) : Prop where
+  mapsTo_domain : A.MapsDomainTo B X
+  equation : ∀ x : B.domain,
+    A.toLinearMap ⟨X (x : F), mapsTo_domain x⟩ -
+      X (B.toLinearMap x) = C (x : F)
+
+/-- Compatibility name retained for the existing experimental theorem graph.
+
+The arguments are written explicitly rather than leaving Lean to synthesize the
+ambient Hilbert spaces from the polymorphic structure constant.  This avoids a
+stuck `CompleteSpace` metavariable at the alias declaration. -/
+abbrev HasClosedSylvesterEquation
     (A : ClosedOperatorE (𝕜 := 𝕜) (E := E))
     (B : ClosedOperatorF (𝕜 := 𝕜) (F := F))
     (X C : F →L[𝕜] E) : Prop :=
-  ∀ x : B.domain,
-    ∃ hx : X (x : F) ∈ A.domain,
-      A.toLinearMap ⟨X (x : F), hx⟩ -
-        X (B.toLinearMap x) = C (x : F)
+  ClosedSylvesterEquation A B X C
+
+namespace ClosedSylvesterEquation
+
+omit [CompleteSpace E] in
+/-- Extract the operator-domain transport from a Sylvester equation. -/
+theorem mapsTo
+    {A : ClosedOperatorE (𝕜 := 𝕜) (E := E)}
+    {B : ClosedOperatorF (𝕜 := 𝕜) (F := F)}
+    {X C : F →L[𝕜] E}
+    (h : HasClosedSylvesterEquation A B X C) :
+    A.MapsDomainTo B X :=
+  h.mapsTo_domain
+
+/-- A bounded Sylvester equation is a full-domain closed Sylvester equation. -/
+theorem ofBounded
+    {A : E →L[𝕜] E} {B : F →L[𝕜] F} {X C : F →L[𝕜] E}
+    (hEq : A ∘L X - X ∘L B = C) :
+    HasClosedSylvesterEquation
+      (ForMathlib.DavisKahanExt.ClosedOperator.ofBounded A)
+      (ForMathlib.DavisKahanExt.ClosedOperator.ofBounded B) X C := by
+  refine {
+    mapsTo_domain := ?_
+    equation := ?_
+  }
+  · intro x
+    simp
+  · intro x
+    have hx := congrArg (fun T : F →L[𝕜] E => T (x : F)) hEq
+    change A (X (x : F)) - X (B (x : F)) = C (x : F)
+    simpa only [ContinuousLinearMap.comp_apply, sub_apply] using hx
+
+end ClosedSylvesterEquation
 
 /-- A closed operator whose inverse is everywhere defined and bounded. -/
 structure HasBoundedEverywhereInverse
@@ -405,12 +452,15 @@ def UnboundedIntervalExteriorGap
   (B.realSpectrum ⊆ Set.Icc β α ∧
     A.realSpectrum ⊆ {x | x ≤ β - δ ∨ α + δ ≤ x})
 
-/-- Equation with one unbounded left block and one bounded right block. -/
-def HasUnboundedBoundedSylvesterEquation
+/-- Equation with one unbounded left block and one bounded right block.
+
+This is not a second equation model: it is the closed Sylvester equation with
+the right block embedded as a full-domain closed operator. -/
+abbrev HasUnboundedBoundedSylvesterEquation
     (A : ClosedOperatorE (𝕜 := 𝕜) (E := E))
     (B : F →L[𝕜] F) (X C : F →L[𝕜] E) : Prop :=
-  ∀ x, ∃ hx : X x ∈ A.domain,
-    A.toLinearMap ⟨X x, hx⟩ - X (B x) = C x
+  HasClosedSylvesterEquation A
+    (ForMathlib.DavisKahanExt.ClosedOperator.ofBounded B) X C
 
 /-- One-unbounded version of the bound/inverse Sylvester estimate. -/
 theorem sylvester_mem_and_gauge_le_of_unbounded_bound_inverse

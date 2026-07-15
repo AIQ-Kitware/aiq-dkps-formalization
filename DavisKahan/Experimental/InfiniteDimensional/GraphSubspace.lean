@@ -100,6 +100,7 @@ noncomputable instance graphSubspace_hasOrthogonalProjection
     (Submodule.isClosed_topologicalClosure _).completeSpace_coe
   exact Submodule.HasOrthogonalProjection.ofCompleteSpace _
 
+omit [CompleteSpace E] in
 /-- For an angular operator the graph embedding fixes the range pointwise
 through `T ∘ P_U = T` and `P_U ∘ T = P_U`, so the parametrized graph range is
 closed and the graph subspace is exactly that range. -/
@@ -115,12 +116,12 @@ theorem graphSubspace_eq_range (U : Submodule 𝕜 E)
   set T : E →L[𝕜] E := projection U + X ∘L projection U with hT
   have hPT : ∀ x, projection U (T x) = projection U x := by
     intro x
-    simp only [hT, ContinuousLinearMap.add_apply,
+    simp only [hT, add_apply,
       ContinuousLinearMap.comp_apply, map_add]
     rw [hidem, hPX, add_zero]
   have hTP : ∀ x, T (projection U x) = T x := by
     intro x
-    simp only [hT, ContinuousLinearMap.add_apply,
+    simp only [hT, add_apply,
       ContinuousLinearMap.comp_apply]
     rw [hidem]
   have hclosed :

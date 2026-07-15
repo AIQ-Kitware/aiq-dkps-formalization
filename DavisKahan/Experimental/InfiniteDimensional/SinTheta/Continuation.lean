@@ -90,6 +90,7 @@ def SameProjectionComponent (P Q : E →L[𝕜] E) : Prop :=
     ContinuousOn path (Set.Icc (0 : ℝ) 1) ∧ path 0 = P ∧ path 1 = Q ∧
       ∀ t ∈ Set.Icc (0 : ℝ) 1, IsOrthogonalProjection (path t)
 
+omit [CompleteSpace E] in
 /-- The continued projection remains in the component selected at `t = 0`.
 
 Ext-agent signature audit (GPT 5.6 High): Correct after `SameProjectionComponent` was
