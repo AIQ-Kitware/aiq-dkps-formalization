@@ -1,6 +1,6 @@
 # Davis--Kahan existing-work survey
 
-Survey date: 2026-07-12
+Survey date: 2026-07-15
 
 This document answers two separate questions:
 
@@ -29,7 +29,17 @@ spectral projections, an eigenvector-angle theorem, and an operator-norm spectra
 Davis--Kahan theorem. A focused excerpt of its centered projection proof is now preserved in
 `vendor/lean/lean-stat-learning-theory/DavisKahanSpectralProjection.excerpt.lean`.
 
-It should not replace the local architecture. The local development is substantially broader:
+Two additional projects are important adjacent work rather than direct Davis--Kahan donors:
+`abenenson/compact-spectral` gives an independent, proof-complete compact self-adjoint
+spectral theorem over `RCLike`, while `oliver-butterley/SpectralThm` is developing the
+projection-valued-measure spectral theorem for bounded operators. The former is a useful
+proof quarry for a future compact-operator Courant--Fischer extension; the latter is a useful
+architectural comparison for the experimental infinite-dimensional spectral-projection
+branch. Neither currently replaces the local finite-dimensional Courant--Fischer/Weyl layer
+or the selected Spectra integration path.
+
+`lean-stat-learning-theory` should not replace the local architecture. The local development
+is substantially broader:
 it has a dimension-free Sylvester core, arbitrary unitarily invariant norms, Frobenius and
 Ky Fan endpoints, residual theorems, projector differences, principal-angle dictionaries,
 Davis's `sin 2 theta` and `tan 2 theta` results, sharpness, singular subspaces, and the
@@ -166,6 +176,91 @@ This file assumes a Davis--Kahan statement and uses it in an unrelated speculati
 contains no reusable proof of the perturbation theorem and should not influence the local
 architecture.
 
+## Adjacent spectral-theorem formalizations
+
+These projects do not prove the local Davis--Kahan theorem family, but they overlap the
+spectral foundations needed by possible infinite-dimensional extensions.
+
+### `abenenson/compact-spectral`
+
+- Repository: <https://github.com/abenenson/compact-spectral>
+- Commit surveyed: `72cd62dbdd4c397d26fc0c5777d60fea2211e938`
+- License: Apache-2.0
+- Toolchain: Lean `v4.29.1`
+- Principal modules:
+  - `CompactSpectral/Analysis/InnerProductSpace/RayleighCompact.lean`;
+  - `CompactSpectral/Analysis/InnerProductSpace/CompactSelfAdjoint/Approximation.lean`;
+  - `CompactSpectral/Analysis/InnerProductSpace/CompactSelfAdjoint/CutoffProjector.lean`; and
+  - `CompactSpectral/Analysis/InnerProductSpace/CompactSelfAdjoint/SpectralTheorem.lean`.
+
+The main result
+`CompactSelfAdjoint.exists_hilbertBasis_hasEigenvector_of_isCompactOperator_of_isSelfAdjoint`
+constructs a `HilbertBasis` of eigenvectors for a compact self-adjoint continuous linear map on
+a complete `RCLike` Hilbert space. The repository also develops weak compactness of Hilbert
+balls, the Rayleigh-extremum theorem
+`CompactSelfAdjoint.exists_hasEigenvector_iSup_or_iInf_of_isCompactOperator`,
+finite-dimensional large-eigenvalue subspaces, their orthogonal projectors, and finite-rank
+approximation in operator norm. Its advertised build is proof-complete with no `sorry`s.
+
+Relative to this repository, it is more general in ambient dimension but does not expose the
+multiplicity-aware, all-index variational structure used by the finite-dimensional
+Courant--Fischer and Weyl development. In particular, it does not provide:
+
+- an ordered sequence of every eigenvalue with multiplicity on both sides of zero;
+- the `k`-dimensional min--max and max--min formulas;
+- the Horn--Johnson two-index Weyl inequalities; or
+- a spectral-projection Davis--Kahan perturbation theorem.
+
+There is also substantial endpoint overlap with current Mathlib, which already proves density
+of the compact self-adjoint eigenspaces and finite-dimensionality of nonzero eigenspaces, and
+with Spectra's bundled complex compact eigenbasis. Its distinctive value is therefore the
+independent `RCLike` proof architecture and its weak-compactness/Rayleigh/cutoff-projector
+seams.
+
+Recommended action:
+
+- cite and periodically cross-check it;
+- use it as a proof quarry when extending Courant--Fischer to compact operators;
+- do not add it as a dependency or vendor a snapshot while the required endpoint is already
+  available in Mathlib and Spectra; and
+- upstream generally useful compact Rayleigh or cutoff-projector improvements rather than
+  creating a third local spectral API.
+
+### `oliver-butterley/SpectralThm`
+
+- Repository: <https://github.com/oliver-butterley/SpectralThm>
+- Commit surveyed: `4f15a87cd8eb1c27730373a9c64c1b8ee7d51a7a`
+- License: Apache-2.0
+- Toolchain: Lean `v4.31.0-rc1`
+- Principal files:
+  - `SpectralThm.lean`; and
+  - `SpectralThm/Resolutions.lean`.
+
+The project targets the projection-valued-measure spectral theorem: a bounded normal operator
+should induce a resolution of the identity on its spectrum and be reconstructed by an
+integral. The current top-level development follows the bounded complex self-adjoint route
+through Mathlib's continuous functional calculus, scalar functionals obtained by pairing
+`f(A)` with two Hilbert-space vectors, the complex Riesz--Markov--Kakutani theorem, complex
+measures, indicator functions, and a bundled `ResolutionOfIdentity`. The intended endpoint is
+`SpectralDecomposition`, reconstructing the operator from that resolution.
+
+This is conceptually close to
+`DavisKahan/Experimental/InfiniteDimensional/Core/SpectralProjection.lean`, because a mature
+version would supply the Borel spectral projections used to define invariant spectral
+subspaces. It is not currently a usable dependency for that branch: the measure bounds,
+bounded-Borel extension, resolution axioms, and final reconstruction theorem still contain
+explicit `sorry`s. It is also presently narrower than its project-level normal-operator goal
+at the main theorem seam.
+
+Recommended action:
+
+- monitor it as an independent architectural comparison;
+- cross-check its Riesz--Markov--Kakutani and bounded-normal design against the selected
+  Spectra route;
+- do not import or vendor unfinished proof-bearing files; and
+- continue to use Spectra as the collaboration target because it already supplies a proved
+  PVM and spectral theorem, including an unbounded self-adjoint path.
+
 ## Mathlib and upstream coordination
 
 - Mathlib PR `#41477` develops a scoped Hilbert--Schmidt norm for rectangular linear maps and
@@ -176,6 +271,10 @@ architecture.
 - Mathlib PR `#40771` is the repository author's draft DK eigenspace contribution. It overlaps
   this repository rather than constituting independent external evidence; future upstream work
   should consolidate around the strongest local theorem family.
+- `Mathlib.Analysis.InnerProductSpace.Spectrum` already contains the compact self-adjoint
+  eigenspace-density theorem and finite-dimensionality of nonzero eigenspaces. External compact
+  spectral-theorem projects should therefore be evaluated mainly for reusable proof seams and
+  bundled APIs, not as missing foundational existence results.
 - No independent substantial Lean proof of principal-angle symmetry, the UINorm Sylvester
   theorem, Davis's sharp `sin 2 theta` theory, or the full YWS aligned-basis result was found.
 
@@ -184,8 +283,10 @@ architecture.
 ### Import as a dependency
 
 Not recommended now. The external SLT project tracks a nearby but different Lean/Mathlib
-revision and defines overlapping spectral infrastructure. A direct dependency would create
-namespace/API coupling for a small number of donor proofs.
+revision and defines overlapping spectral infrastructure. `compact-spectral` overlaps compact
+spectral results already present in Mathlib and Spectra, and `SpectralThm` is not proof-complete
+at its principal PVM seam. Direct dependencies would add namespace, toolchain, and API coupling
+without closing a current theorem gap.
 
 ### Vendor exact excerpts
 
@@ -202,12 +303,15 @@ vendor directory now covers:
 
 Recommended only when a donor closes an actual local seam. Production code should use local
 names and current Mathlib idiom, preserve theorem-level attribution in comments, and avoid
-copying application-specific wrappers.
+copying application-specific wrappers. For a future compact-operator Courant--Fischer layer,
+prefer adapting a small weak-compactness or Rayleigh-extremum seam from `compact-spectral` over
+adopting its whole namespace.
 
 ### Reference only
 
 Use this category for restrictive, unclear, or absent licenses and for developments that only
-state rather than prove a result. The Atlas files and the Prime file belong here.
+state rather than prove a result. The Atlas files and the Prime file belong here. The unfinished
+`SpectralThm` project is also reference-only until its advertised PVM construction is closed.
 
 ## Highest-value next actions
 
@@ -220,15 +324,21 @@ state rather than prove a result. The Atlas files and the Prime file belong here
 4. Track Mathlib PR `#41477`; replace local Frobenius infrastructure with upstream API when it
    stabilizes.
 5. Use EYM only at the estimator/truncation boundary, not as a detour in the classical DK core.
-6. Keep related-work notes on overlapping theorem declarations current as external projects
+6. Track `compact-spectral` as a compact Courant--Fischer proof quarry and monitor
+   `SpectralThm` as an independent bounded-PVM architecture, without adding either as a
+   dependency now.
+7. Keep related-work notes on overlapping theorem declarations current as external projects
    evolve.
 
 ## Search coverage and negative results
 
-The 2026-07-12 pass searched GitHub code and Mathlib pull requests for Davis--Kahan,
+The 2026-07-12 direct-DK pass searched GitHub code and Mathlib pull requests for Davis--Kahan,
 spectral-projection perturbation, principal/canonical angles, Sylvester spectral separation,
 Weyl singular-value perturbation, SVD, EYM, Hilbert--Schmidt norms, and finite-frame bounds.
+A 2026-07-15 follow-up surveyed adjacent compact and PVM spectral-theorem projects.
 
 The search found two substantive external DK developments: the Apache-2.0 lean-stat file and
-the restrictive Atlas PCA endpoint. It found no additional reusable Lean development that
-supersedes the local Sylvester/UINorm/principal-angle/sharp-Davis infrastructure.
+the restrictive Atlas PCA endpoint. It also found `compact-spectral` and `SpectralThm`, which
+are relevant to spectral foundations but do not supply an additional finished DK proof. No
+surveyed project supersedes the local Sylvester/UINorm/principal-angle/sharp-Davis
+infrastructure.
