@@ -112,6 +112,45 @@ The `Spectra/QuantumMechanics/Channels/TraceClass/` tree contains predicates,
 norms, ideal closure, trace-class completeness, Hilbert--Schmidt basis
 independence, and sharp Schatten-one/two product bounds.
 
+### Adjacent spectral-theorem projects considered
+
+The 2026-07-15 related-work follow-up compared the selected Spectra path with two
+additional Apache-2.0 projects. Neither comparison changes the integration
+decision.
+
+#### `abenenson/compact-spectral`
+
+Audited commit: `72cd62dbdd4c397d26fc0c5777d60fea2211e938`.
+
+This project gives an independent, proof-complete compact self-adjoint spectral
+theorem over `RCLike`. Its reusable seams include weak compactness, Rayleigh
+extremum attainment, finite-dimensional large-eigenvalue spaces, cutoff
+projectors, and finite-rank approximation. It does not provide a PVM spectral
+calculus, the all-index compact Courant--Fischer theorem, or Davis--Kahan.
+
+For DKPS it is a useful compact-operator proof quarry, not the preferred
+operator-theory dependency. Its main endpoint overlaps current Mathlib and the
+compact eigenbasis already assembled in Spectra, while Spectra additionally
+provides the PVM and unbounded self-adjoint infrastructure required by the
+long-term DK roadmap.
+
+#### `oliver-butterley/SpectralThm`
+
+Audited commit: `4f15a87cd8eb1c27730373a9c64c1b8ee7d51a7a`.
+
+This project targets the bounded normal-operator spectral theorem through the
+continuous functional calculus, complex Riesz--Markov--Kakutani measures, and a
+resolution of the identity. That architecture is directly relevant to the
+experimental bounded Hilbert-space DK branch. However, its principal measure
+bounds, resolution axioms, and reconstruction theorem still contain explicit
+`sorry`s at the audited commit.
+
+It should be monitored as an independent design comparison, especially for the
+bounded-normal and RMK route, but it is not currently a production dependency.
+Spectra remains the selected collaboration target because its PVM and
+self-adjoint spectral theorem are already proved and extend to the unbounded
+operator setting.
+
 ### Important missing APIs
 
 Spectra does not currently replace the Davis--Kahan development.

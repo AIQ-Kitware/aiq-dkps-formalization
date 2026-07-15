@@ -1352,20 +1352,24 @@
       "group": "Reference works and modern syntheses",
       "tier": "reference",
       "priority": "P1",
-      "formalization_status": "primary modern reference across Gram, Courant--Fischer, Weyl, and spectral theory",
-      "distilled_status": "core_note",
+      "formalization_status": "strengthened source-order Courant--Fischer chain with explicit Lean index dictionary, literal min--max implementation obligations, declaration-level coverage, full Weyl/interlacing/majorization roadmap, and expanded singular-value deletion, min--max, additive/product, and norm-dominance descendants; core theorem families remain only partially formalized",
+      "distilled_status": "complete",
       "primary_url": "https://doi.org/10.1017/CBO9781139020411",
       "target_note": "HornJohnson2013_selected_matrix_analysis.tex",
       "repo_evidence": [
         "ForMathlib/Analysis/InnerProductSpace/CourantFischer.lean",
+        "ForMathlib/Analysis/InnerProductSpace/KyFan.lean",
+        "ForMathlib/Analysis/InnerProductSpace/SchurHorn.lean",
+        "ForMathlib/Analysis/InnerProductSpace/SingularSubspace.lean",
         "ForMathlib/Analysis/InnerProductSpace/GramMatrix.lean",
         "papers/GramRigidity-formalized-vs-literature.tex"
       ],
       "existing_assets": [
+        "prose/distilled_literature/HornJohnson2013_selected_matrix_analysis.tex",
         "ForMathlib/prose/Horn-Johnson-2013-Gram-core-arguments.tex"
       ],
-      "scope": "Selected theorem-level references: Gram rigidity, Courant--Fischer, Weyl, PSD factorization.",
-      "missing_work": "Keep as a multi-source reference note; do not attempt to distill the whole book.",
+      "scope": "Selected theorem-level reconstruction: the complete Courant--Fischer prerequisite and literal-extrema chain; full Weyl, perturbation, interlacing, compression, Ky Fan, majorization, and trace descendants; Hermitian dilation, singular-value deletion and min--max, additive and product Weyl inequalities, mixed-product bounds, selected eigenvalue/singular-value majorization, and links into unitarily invariant norm theory, plus the separate Gram-rigidity reference material.",
+      "missing_work": "The selected source chain is distilled in formalization-ready detail. Remaining Lean gaps include the Rayleigh/unit-sphere value-set API; literal sInf/sSup Courant--Fischer equalities and attainment; quantitative intersection families; full two-index Weyl and equality; Cauchy/Poincare interlacing and compression; Lidskii and trace-rearrangement majorization; Hermitian dilation; individual singular-value min--max, deletion, unsquared perturbation, and additive/product inequalities. Do not attempt to distill unrelated portions of the book.",
       "role": "reference_work",
       "bibliographic_status": "verified"
     },
