@@ -32,12 +32,37 @@ variable {E F G : Type v}
 def LowerFrameBound (X : F →L[𝕜] E) (ε : ℝ) : Prop :=
   ∀ x, ε * ‖x‖ ≤ ‖X x‖
 
+omit [CompleteSpace E] [CompleteSpace F] in
 /-- A positive lower frame bound implies injectivity. -/
 theorem LowerFrameBound.injective
     {X : F →L[𝕜] E} {ε : ℝ}
     (hX : LowerFrameBound X ε) (hε : 0 < ε) :
     Function.Injective X := by
-  sorry
+  intro x y hxy
+  have hbound := hX (x - y)
+  have hzero : X (x - y) = 0 := by
+    rw [map_sub, hxy, sub_self]
+  rw [hzero, norm_zero] at hbound
+  have hnorm : ‖x - y‖ = 0 := by
+    nlinarith [norm_nonneg (x - y)]
+  exact sub_eq_zero.mp (norm_eq_zero.mp hnorm)
+
+omit [CompleteSpace E] [CompleteSpace F] in
+/-- An isometric trial map has lower frame bound one. -/
+theorem lowerFrameBound_one_of_isometry
+    {X : F →L[𝕜] E} (hX : IsometricEmbedding X) :
+    LowerFrameBound X 1 := by
+  intro x
+  simpa using le_of_eq (hX x).symm
+
+omit [CompleteSpace E] [CompleteSpace F] in
+/-- An isometric embedding is a contraction in operator norm. -/
+theorem opNorm_le_one_of_isometry
+    {X : F →L[𝕜] E} (hX : IsometricEmbedding X) :
+    ‖X‖ ≤ 1 := by
+  refine X.opNorm_le_bound zero_le_one ?_
+  intro x
+  simpa using le_of_eq (hX x)
 
 /-- A positive lower frame bound implies closed range. -/
 theorem LowerFrameBound.closedRange
@@ -79,6 +104,15 @@ noncomputable def frameIsometry
     (hX : LowerFrameBound X ε) (hε : 0 < ε) :
     F →L[𝕜] E :=
   X ∘L gramInvSqrt X hX hε
+
+/-- For an isometric trial map, the lower-frame polar factor is the trial
+map itself.  This is the bridge used to derive the isometric theorem from the
+generalized lower-frame theorem rather than maintaining two independent
+canonical proofs. -/
+theorem frameIsometry_eq_of_isometry
+    (X : F →L[𝕜] E) (hX : IsometricEmbedding X) :
+    frameIsometry X (lowerFrameBound_one_of_isometry hX) zero_lt_one = X := by
+  sorry
 
 /-- The polar factor preserves norms. -/
 theorem frameIsometry_isometry

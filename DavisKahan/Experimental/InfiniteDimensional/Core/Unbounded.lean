@@ -76,6 +76,56 @@ structure ClosedOperator where
 
 namespace ClosedOperator
 
+/-- Apply a closed operator to a vector carrying its domain witness. -/
+def apply (A : ClosedOperator (𝕜 := 𝕜) (E := E)) (x : A.domain) : E :=
+  A.toLinearMap x
+
+instance : CoeFun (ClosedOperator (𝕜 := 𝕜) (E := E))
+    (fun A => A.domain → E) where
+  coe A := A.apply
+
+/-- Two closed operators have the same operator domain. -/
+def SameDomain (A B : ClosedOperator (𝕜 := 𝕜) (E := E)) : Prop :=
+  A.domain = B.domain
+
+/-- A bounded map sends the domain of `B` into the domain of `A`. -/
+def MapsDomainTo
+    {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
+    (A : ClosedOperator (𝕜 := 𝕜) (E := E))
+    (B : ClosedOperator (𝕜 := 𝕜) (E := F))
+    (X : F →L[𝕜] E) : Prop :=
+  ∀ x : B.domain, X (x : F) ∈ A.domain
+
+/-- A linear map defined on a dense operator domain has a bounded extension to
+the ambient Hilbert space. -/
+structure BoundedExtension
+    {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
+    (D : Submodule 𝕜 F) (T : D →ₗ[𝕜] E) where
+  operator : F →L[𝕜] E
+  agrees : ∀ x : D, operator (x : F) = T x
+
+/-- Regard a bounded operator as a closed operator with full domain.
+
+Only the closed-graph field uses the general closed-graph theorem; the domain
+and action are definitionally the expected ones so bounded specializations can
+be reduced to the general API without a second operator model. -/
+noncomputable def ofBounded (A : E →L[𝕜] E) :
+    ClosedOperator (𝕜 := 𝕜) (E := E) where
+  domain := ⊤
+  toLinearMap := A.toLinearMap.domRestrict ⊤
+  dense_domain := by simp
+  closed_graph := by
+    sorry
+
+omit [CompleteSpace E] in
+@[simp] theorem ofBounded_domain (A : E →L[𝕜] E) :
+    (ofBounded A).domain = ⊤ := rfl
+
+omit [CompleteSpace E] in
+@[simp] theorem ofBounded_apply (A : E →L[𝕜] E)
+    (x : (ofBounded A).domain) :
+    (ofBounded A) x = A (x : E) := rfl
+
 /-- Extension relation for partially defined operators. -/
 def Extends (A B : ClosedOperator (𝕜 := 𝕜) (E := E)) : Prop :=
   ∃ hdom : A.domain ≤ B.domain,
@@ -104,6 +154,14 @@ Maximal symmetry alone is not used here: a maximal symmetric operator can fail
 to be self-adjoint when its deficiency indices are unequal. -/
 def IsSelfAdjoint (A : ClosedOperator (𝕜 := 𝕜) (E := E)) : Prop :=
   A.adjoint = A
+
+/-- A symmetric bounded operator becomes self-adjoint in the full-domain closed
+operator model.  This is the analytic bridge that makes bounded theorems true
+specializations of the canonical unbounded API. -/
+theorem ofBounded_isSelfAdjoint (A : E →L[𝕜] E)
+    (hA : A.IsSymmetric) :
+    (ofBounded A).IsSelfAdjoint := by
+  sorry
 
 /-- Graph norm. -/
 noncomputable def graphNorm (A : ClosedOperator (𝕜 := 𝕜) (E := E))

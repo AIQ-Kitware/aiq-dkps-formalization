@@ -68,6 +68,27 @@ theorem unbounded_adjoint_residual_block_identity
       (-(D.residual.adjoint ∘L D.F₁)) := by
   sorry
 
+/-- The projected residual block remains in the same rectangular ideal and its
+ gauge is no larger than the original residual gauge. -/
+theorem adjointResidualBlock_mem_and_gauge_le
+    (N : RectangularSymmetricIdealFamily (𝕜 := 𝕜))
+    (D : UnboundedSinThetaData (𝕜 := 𝕜) (E := E) (F := F) (G := G))
+    (hF₁ : IsometricEmbedding D.F₁)
+    (hR : N.Mem D.residual) :
+    N.Mem (-(D.residual.adjoint ∘L D.F₁)) ∧
+      N.gauge (-(D.residual.adjoint ∘L D.F₁)) ≤
+        N.gauge D.residual := by
+  have hAdj : N.Mem D.residual.adjoint := N.adjoint_mem hR
+  have hComp : N.Mem (D.residual.adjoint ∘L D.F₁) :=
+    N.comp_right_mem D.F₁ hAdj
+  refine ⟨N.neg_mem hComp, ?_⟩
+  calc
+    N.gauge (-(D.residual.adjoint ∘L D.F₁))
+        = N.gauge (D.residual.adjoint ∘L D.F₁) := N.gauge_neg hComp
+    _ ≤ N.gauge D.residual.adjoint :=
+      N.gauge_comp_right_le D.F₁ hAdj (opNorm_le_one_of_isometry hF₁)
+    _ = N.gauge D.residual := N.gauge_adjoint hR
+
 /-- Generalized finite-interval/exterior endpoint.  At least one diagonal block
 has bounded spectrum, so this is not the fully two-unbounded theorem. -/
 theorem generalizedSinTheta_unbounded_of_intervalExteriorGap
@@ -85,7 +106,20 @@ theorem generalizedSinTheta_unbounded_of_intervalExteriorGap
     N.Mem (sinThetaBlock D.X D.F₁ hframe hε) ∧
       δ * ε * N.gauge (sinThetaBlock D.X D.F₁ hframe hε)
         ≤ N.gauge D.residual := by
-  sorry
+  have hEq := unbounded_adjoint_residual_block_identity D hA hA₀ hΛ₁
+  have hC := adjointResidualBlock_mem_and_gauge_le N D hF₁ hR
+  have hRaw := unbounded_sylvester_mem_and_gauge_le_of_intervalExteriorGap
+    N hA₀ hΛ₁ hβα hδ hgap hEq hC.1
+  have hFrame := lowerFrame_sinThetaBlock_mem_and_gauge_le
+    N D.X D.F₁ hframe hε hRaw.1
+  refine ⟨hFrame.1, ?_⟩
+  calc
+    δ * ε * N.gauge (sinThetaBlock D.X D.F₁ hframe hε)
+        = δ * (ε * N.gauge (sinThetaBlock D.X D.F₁ hframe hε)) := by ring
+    _ ≤ δ * N.gauge (D.X.adjoint ∘L D.F₁) :=
+      mul_le_mul_of_nonneg_left hFrame.2 hδ.le
+    _ ≤ N.gauge (-(D.residual.adjoint ∘L D.F₁)) := hRaw.2
+    _ ≤ N.gauge D.residual := hC.2
 
 /-- Isometric finite-interval/exterior specialization. -/
 theorem sinTheta_unbounded_of_intervalExteriorGap
@@ -94,7 +128,7 @@ theorem sinTheta_unbounded_of_intervalExteriorGap
     (hA : D.A.IsSelfAdjoint)
     (hA₀ : D.A₀.IsSelfAdjoint)
     (hΛ₁ : D.Λ₁.IsSelfAdjoint)
-    (hX : IsometricEmbedding D.X)
+    (_hX : IsometricEmbedding D.X)
     (hF₁ : IsometricEmbedding D.F₁)
     {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
     (hgap : UnboundedIntervalExteriorGap D.A₀ D.Λ₁ β α δ)
@@ -102,7 +136,11 @@ theorem sinTheta_unbounded_of_intervalExteriorGap
     N.Mem (D.X.adjoint ∘L D.F₁) ∧
       δ * N.gauge (D.X.adjoint ∘L D.F₁)
         ≤ N.gauge D.residual := by
-  sorry
+  have hEq := unbounded_adjoint_residual_block_identity D hA hA₀ hΛ₁
+  have hC := adjointResidualBlock_mem_and_gauge_le N D hF₁ hR
+  have hRaw := unbounded_sylvester_mem_and_gauge_le_of_intervalExteriorGap
+    N hA₀ hΛ₁ hβα hδ hgap hEq hC.1
+  exact ⟨hRaw.1, hRaw.2.trans hC.2⟩
 
 /-- Exact generalized finite-interval/exterior endpoint, with the full
 directed sine identified by a complete orthogonal exact-space decomposition. -/
@@ -122,7 +160,13 @@ theorem generalizedSinTheta_unbounded_exact_of_intervalExteriorGap
     N.Mem (directedSinThetaOperator D.X F₀ hframe hε) ∧
       δ * ε * N.gauge (directedSinThetaOperator D.X F₀ hframe hε)
         ≤ N.gauge D.residual := by
-  sorry
+  have hBlock := generalizedSinTheta_unbounded_of_intervalExteriorGap
+    N D hA hA₀ hΛ₁ hdecomp.isometry₁ hβα hδ hε hframe hgap hR
+  have hAngle := sinThetaBlock_mem_and_gauge_eq_directedSinThetaOperator
+    N D.X F₀ D.F₁ hframe hε hdecomp hBlock.1
+  refine ⟨hAngle.1, ?_⟩
+  rw [hAngle.2]
+  exact hBlock.2
 
 /-- Exact isometric finite-interval/exterior endpoint. -/
 theorem sinTheta_unbounded_exact_of_intervalExteriorGap
@@ -142,7 +186,11 @@ theorem sinTheta_unbounded_exact_of_intervalExteriorGap
       δ * N.gauge
         ((ContinuousLinearMap.id 𝕜 E - F₀ ∘L F₀.adjoint) ∘L D.X)
         ≤ N.gauge D.residual := by
-  sorry
+  have hframe := lowerFrameBound_one_of_isometry hX
+  have hGeneral := generalizedSinTheta_unbounded_exact_of_intervalExteriorGap
+    N D F₀ hA hA₀ hΛ₁ hdecomp hβα hδ zero_lt_one hframe hgap hR
+  rw [directedSinThetaOperator_eq_of_isometry D.X F₀ hX] at hGeneral
+  simpa using hGeneral
 
 /-- Complete generalized unbounded complementary-block theorem.  The gap may
 be finite interval/exterior or either ordered half-line orientation. -/
@@ -161,7 +209,20 @@ theorem generalizedSinTheta_unbounded
     N.toRectangularSymmetricIdealFamily.Mem (sinThetaBlock D.X D.F₁ hframe hε) ∧
       δ * ε * N.toRectangularSymmetricIdealFamily.gauge (sinThetaBlock D.X D.F₁ hframe hε)
         ≤ N.toRectangularSymmetricIdealFamily.gauge D.residual := by
-  sorry
+  let M := N.toRectangularSymmetricIdealFamily
+  have hEq := unbounded_adjoint_residual_block_identity D hA hA₀ hΛ₁
+  have hC := adjointResidualBlock_mem_and_gauge_le M D hF₁ hR
+  have hRaw := davisKahan1970_sylvester N hA₀ hΛ₁ hδ hgap hEq hC.1
+  have hFrame := lowerFrame_sinThetaBlock_mem_and_gauge_le
+    M D.X D.F₁ hframe hε hRaw.1
+  refine ⟨hFrame.1, ?_⟩
+  calc
+    δ * ε * M.gauge (sinThetaBlock D.X D.F₁ hframe hε)
+        = δ * (ε * M.gauge (sinThetaBlock D.X D.F₁ hframe hε)) := by ring
+    _ ≤ δ * M.gauge (D.X.adjoint ∘L D.F₁) :=
+      mul_le_mul_of_nonneg_left hFrame.2 hδ.le
+    _ ≤ M.gauge (-(D.residual.adjoint ∘L D.F₁)) := hRaw.2
+    _ ≤ M.gauge D.residual := hC.2
 
 /-- Isometric headline specialization of the complete unbounded block theorem. -/
 theorem sinTheta_unbounded
@@ -170,7 +231,7 @@ theorem sinTheta_unbounded
     (hA : D.A.IsSelfAdjoint)
     (hA₀ : D.A₀.IsSelfAdjoint)
     (hΛ₁ : D.Λ₁.IsSelfAdjoint)
-    (hX : IsometricEmbedding D.X)
+    (_hX : IsometricEmbedding D.X)
     (hF₁ : IsometricEmbedding D.F₁)
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : UnboundedSylvesterGap D.A₀ D.Λ₁ δ)
@@ -178,7 +239,11 @@ theorem sinTheta_unbounded
     N.toRectangularSymmetricIdealFamily.Mem (D.X.adjoint ∘L D.F₁) ∧
       δ * N.toRectangularSymmetricIdealFamily.gauge (D.X.adjoint ∘L D.F₁)
         ≤ N.toRectangularSymmetricIdealFamily.gauge D.residual := by
-  sorry
+  let M := N.toRectangularSymmetricIdealFamily
+  have hEq := unbounded_adjoint_residual_block_identity D hA hA₀ hΛ₁
+  have hC := adjointResidualBlock_mem_and_gauge_le M D hF₁ hR
+  have hRaw := davisKahan1970_sylvester N hA₀ hΛ₁ hδ hgap hEq hC.1
+  exact ⟨hRaw.1, hRaw.2.trans hC.2⟩
 
 /-- Exact complete generalized unbounded Davis--Kahan theorem, with the full
 directed sine operator identified through a complete orthogonal exact-space
@@ -199,7 +264,14 @@ theorem generalizedSinTheta_unbounded_exact
     N.toRectangularSymmetricIdealFamily.Mem (directedSinThetaOperator D.X F₀ hframe hε) ∧
       δ * ε * N.toRectangularSymmetricIdealFamily.gauge (directedSinThetaOperator D.X F₀ hframe hε)
         ≤ N.toRectangularSymmetricIdealFamily.gauge D.residual := by
-  sorry
+  let M := N.toRectangularSymmetricIdealFamily
+  have hBlock := generalizedSinTheta_unbounded
+    N D hA hA₀ hΛ₁ hdecomp.isometry₁ hδ hε hframe hgap hR
+  have hAngle := sinThetaBlock_mem_and_gauge_eq_directedSinThetaOperator
+    M D.X F₀ D.F₁ hframe hε hdecomp hBlock.1
+  refine ⟨hAngle.1, ?_⟩
+  rw [hAngle.2]
+  exact hBlock.2
 
 /-- Exact isometric headline specialization of the complete unbounded theorem. -/
 theorem sinTheta_unbounded_exact
@@ -219,7 +291,11 @@ theorem sinTheta_unbounded_exact
       δ * N.toRectangularSymmetricIdealFamily.gauge
         ((ContinuousLinearMap.id 𝕜 E - F₀ ∘L F₀.adjoint) ∘L D.X)
         ≤ N.toRectangularSymmetricIdealFamily.gauge D.residual := by
-  sorry
+  have hframe := lowerFrameBound_one_of_isometry hX
+  have hGeneral := generalizedSinTheta_unbounded_exact
+    N D F₀ hA hA₀ hΛ₁ hdecomp hδ zero_lt_one hframe hgap hR
+  rw [directedSinThetaOperator_eq_of_isometry D.X F₀ hX] at hGeneral
+  simpa using hGeneral
 
 end ExactSinTheta
 end Experimental

@@ -7,19 +7,21 @@ Journal on Numerical Analysis 7 (1970), 1--46.
 ## Source scope and completion warning
 
 The modernized local transcription states that the ambient space is a
-separable Hilbert space, that the standing main-body subject is a bounded
-Hermitian operator, that all four headline theorems apply in infinite and
-finite dimensions and for arbitrary unitary-invariant norms, and that
-unbounded self-adjoint operators are covered through explicit extensions and
-domain conditions.
+separable Hilbert space, that all four headline theorems apply in infinite and
+finite dimensions and for arbitrary unitary-invariant norms, and that the
+single-angle theory extends to unbounded self-adjoint operators through
+explicit domain and bounded-residual conditions. The final source facade must
+therefore treat bounded statements as specializations rather than the
+unqualified target.
 
 Therefore this directory is not complete merely because `PartIII.lean` builds.
 The present facade is a proof-complete **finite specialization** of a substantial
 portion of the paper. It must be described with that qualifier.
 
 `PartIII.lean` exposes only proof-complete finite results. It is deliberately a
-thin alias layer over the canonical mathematical modules; proof machinery
-stays under `DavisKahan/FiniteDimensional`.
+thin scoped facade; proof machinery stays under `DavisKahan/FiniteDimensional`.
+`GeneralSinTheta.lean` exposes the experimental maximally general theorem shape
+and must not be described as proof-complete until its dependency audit is clean.
 
 ## Proof-complete finite source-facing specializations
 

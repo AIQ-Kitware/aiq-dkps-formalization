@@ -131,6 +131,56 @@ namespace RectangularSymmetricIdealFamily
 
 variable {𝕜 : Type u} [RCLike 𝕜]
 
+/-- Membership is preserved by right composition with a bounded map. -/
+theorem comp_right_mem
+    (N : RectangularSymmetricIdealFamily (𝕜 := 𝕜))
+    {E F H : Type v}
+    [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+    [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
+    [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] [CompleteSpace H]
+    {A : E →L[𝕜] F} (R : H →L[𝕜] E) (hA : N.Mem A) :
+    N.Mem (A ∘L R) := by
+  simpa using N.comp_mem (ContinuousLinearMap.id 𝕜 F) R hA
+
+/-- Right composition by a contraction does not increase the ideal gauge. -/
+theorem gauge_comp_right_le
+    (N : RectangularSymmetricIdealFamily (𝕜 := 𝕜))
+    {E F H : Type v}
+    [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+    [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
+    [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] [CompleteSpace H]
+    {A : E →L[𝕜] F} (R : H →L[𝕜] E)
+    (hA : N.Mem A) (hR : ‖R‖ ≤ 1) :
+    N.gauge (A ∘L R) ≤ N.gauge A := by
+  have hraw := N.gauge_comp_le (ContinuousLinearMap.id 𝕜 F) R hA
+  have hnonneg := N.gauge_nonneg hA
+  calc
+    N.gauge (A ∘L R)
+        = N.gauge ((ContinuousLinearMap.id 𝕜 F) ∘L A ∘L R) := by simp
+    _ ≤ ‖ContinuousLinearMap.id 𝕜 F‖ * N.gauge A * ‖R‖ := hraw
+    _ ≤ 1 * N.gauge A * 1 := by
+      gcongr
+      · exact ContinuousLinearMap.norm_id_le
+    _ = N.gauge A := by ring
+
+/-- Ideal membership is invariant under negation. -/
+theorem neg_mem
+    (N : RectangularSymmetricIdealFamily (𝕜 := 𝕜))
+    {E F : Type v}
+    [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+    [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
+    {A : E →L[𝕜] F} (hA : N.Mem A) : N.Mem (-A) := by
+  simpa using N.smul_mem (-1 : 𝕜) hA
+
+/-- The ideal gauge is invariant under negation. -/
+theorem gauge_neg
+    (N : RectangularSymmetricIdealFamily (𝕜 := 𝕜))
+    {E F : Type v}
+    [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+    [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
+    {A : E →L[𝕜] F} (hA : N.Mem A) : N.gauge (-A) = N.gauge A := by
+  simpa using N.gauge_smul (-1 : 𝕜) hA
+
 /-- Operator-norm bound for a two-sided composition. -/
 theorem opNorm_comp_comp_le
     {E F G H : Type v}
@@ -211,11 +261,11 @@ noncomputable def compactOperatorNorm :
       zero_mem := by intros; exact isCompactOperator_zero
       add_mem := by
         intros E F _ _ _ _ _ _ A B hA hB
-        rw [ContinuousLinearMap.coe_add']
+        rw [FunLike.coe_add]
         exact hA.add hB
       smul_mem := by
         intros E F _ _ _ _ _ _ c A hA
-        rw [ContinuousLinearMap.coe_smul']
+        rw [FunLike.coe_smul]
         exact hA.smul c
       adjoint_mem := by intros; sorry
       comp_mem := by

@@ -90,6 +90,7 @@ noncomputable def resolventOperator (A : E →L[𝕜] E) (z : 𝕜) : E →L[�
   haveI := Classical.propDecidable (InResolventSet A z)
   if h : InResolventSet A z then h.choose else 0
 
+omit [CompleteSpace E] in
 /-- On the resolvent set, `resolventOperator` is a two-sided inverse of
 `A - zI`. -/
 theorem resolventOperator_inverse (A : E →L[𝕜] E) {z : 𝕜}

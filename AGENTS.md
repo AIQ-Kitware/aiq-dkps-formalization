@@ -49,35 +49,44 @@ full 1970 paper, not merely its finite-dimensional specialization.
 The modernized local transcription fixes the ambient scope:
 
 - the paper works on a separable Hilbert space;
-- the standing main-body subject is a bounded Hermitian operator and its
-  Hermitian perturbation;
+- bounded Hermitian operators are an expository main-body specialization, not
+  the completion boundary of the paper-facing API;
+- the source explicitly carries the theory to unbounded self-adjoint operators
+  under domain and bounded-residual/perturbation hypotheses;
 - all four headline theorem families are stated as applicable in infinite as
   well as finite dimensions;
 - the headline bounds are stated for arbitrary unitary-invariant norms;
-- the paper also treats unbounded self-adjoint operators under explicit domain
-  and bounded-residual/perturbation conditions, concentrating the additional
-  analytic work in Theorem 5.2 and the Appendix to Section 6.
+- the additional analytic work for the unbounded scope is concentrated in the
+  closed-operator Sylvester theory and the Appendix to Section 6.
 
 Accordingly:
 
-- `DavisKahan/BoundedOperator/` is the beginning of the canonical main-body
-  theory, not an optional extension of the finite library.
+- The canonical source-facing `sin Θ` theorem is the unbounded
+  self-adjoint, domain-aware, arbitrary-unitarily-invariant-norm theorem.
+  Bounded-operator and finite-dimensional forms must be derived from it or
+  explicitly labeled alternative proofs/specializations.
+- `DavisKahan/BoundedOperator/` is a supported specialization and a useful
+  implementation seam. It is not the final theorem target.
 - `DavisKahan/FiniteDimensional/` is a valuable specialization, implementation
   laboratory, regression surface, and weaker-foundation alternative. It is not
   evidence that the paper has been formalized in its stated ambient scope.
-- Unless the user explicitly requests a finite-dimensional push, choose work
-  that closes a gap toward the Hilbert-space source theorem. Finite work may be
-  used as an intermediate seam, but the response and documentation must state
-  which general theorem it advances and what remains to lift it.
+- Unless the user explicitly requests a bounded or finite-dimensional push,
+  choose work that closes a gap toward the unbounded Hilbert-space source
+  theorem. Bounded and finite work may be used as intermediate seams, but the
+  response and documentation must state which general theorem it advances and
+  what remains to lift it.
 - Interpret unqualified requests to complete, polish, or finish Davis--Kahan or
   the 1970 paper in this full source scope. Do not silently reinterpret them as
   requests to finish the finite branch. Before source-facing work, consult the
   maintained transcription or its audited distillation rather than inferring
   the scope from whichever Lean modules are currently most complete.
 - Never say that Davis--Kahan, Part III, the four-theorem package, or the paper
-  is complete when only a finite specialization is complete. Use precise
-  status language such as “the finite arbitrary-UI-norm specialization is
-  proved” or “the bounded operator-norm sine theorem is proved.”
+  is complete when only a bounded or finite specialization is complete. Use
+  precise status language such as “the finite arbitrary-UI-norm specialization
+  is proved” or “the bounded operator-norm sine theorem is proved.”
+- Do not rename a bounded theorem to an unqualified source theorem. The
+  unqualified source-facing name is reserved for the maximally general
+  domain-aware result.
 - A full-paper completion claim requires a theorem-by-theorem audit against the
   transcription, proof-complete Hilbert-space versions of the source results,
   the source norm scope, the direct-rotation and spectral-selection theory,
@@ -158,3 +167,12 @@ that would be worth highlighting outside this repository. Do not create
 challenges for local transport lemmas, notation bridges, conditional reduction
 steps, routine norm specializations, or every theorem that happened to be hard.
 Prefer one strong leaf over a long inventory of supporting declarations.
+
+## Canonical sine-theta handoff
+
+Before changing the single-angle API, read
+`docs/planning/davis-kahan-general-sin-theta-roadmap.md`,
+`dev/davis-kahan-1970-one-shot-proof-manuscript.md`, and
+`DavisKahan/Experimental/InfiniteDimensional/SinTheta/README.md`. The canonical
+target is the domain-aware unbounded theorem; bounded and finite results are
+specializations or alternative proofs.

@@ -25,11 +25,16 @@ The maintained modernized transcription states that:
 - the complications needed to remove inessential boundedness restrictions are
   concentrated in Theorem 5.2 and the Appendix to Section 6.
 
-The source therefore has three connected scopes:
+The source therefore has one canonical theorem family with nested
+specializations:
 
-1. bounded operators on arbitrary Hilbert spaces—the main-body foundation;
-2. unitary-invariant norm and ideal statements in that setting;
-3. unbounded self-adjoint extensions with explicit domain control.
+1. unbounded self-adjoint operators with explicit domains and bounded residuals;
+2. bounded operators on arbitrary Hilbert spaces as full-domain corollaries;
+3. finite-dimensional and matrix forms as further specializations or
+   independent weaker-foundation alternatives.
+
+The source exposition may introduce the bounded case first. The formalization
+API must not turn that expository order into a loss of theorem generality.
 
 ## Status vocabulary
 
@@ -70,17 +75,30 @@ by the Hilbert-space theorem or be clearly labeled as an alternative endpoint.
 
 ## Canonical roadmap
 
-### Bounded main body
+### General single-angle root
 
-- closed/reducing subspaces and orthogonal projections;
+The first source theorem to own an unqualified API is the generalized
+unbounded `sin Theta` theorem. Its dependency ladder is maintained in
+`davis-kahan-general-sin-theta-roadmap.md` and consists of:
+
+- densely defined closed self-adjoint operators and domain-aware compositions;
+- unbounded spectral projections, cutoffs, and bounded truncations;
+- the Section 5 Sylvester estimate for the source gap configurations;
+- bounded residual block identities on explicit domains;
+- rectangular UI-norm ideals and the Ky Fan dominance passage;
+- lower-frame factorization and exact directed-angle identification.
+
+Bounded and finite forms are then derived or retained as scoped alternatives.
+
+### Remaining theorem families
+
 - source-faithful two-subspace geometry and operator angles;
 - direct rotation, existence, uniqueness, formulas, and extremality;
-- bounded Sylvester theorems in the source separation geometries;
-- residual and perturbation `sin Theta`;
 - graph/transversality machinery and `tan Theta`;
 - reflection theory, `sin 2 Theta`, and `tan 2 Theta`;
 - Section 8 continuation, branch selection, canonical spectral subspaces,
-  uniqueness, and spectral repulsion.
+  uniqueness, and spectral repulsion;
+- unbounded forms of every source result for which the paper supplies them.
 
 ### Unitary-invariant norm scope
 
@@ -120,9 +138,11 @@ they may quote only short anchors and should record:
 The finite-dimensional library contains a strong and valuable package,
 including arbitrary rectangular UI-norm sine and tangent results and stable
 double-angle endpoints. The bounded branch contains meaningful operator-norm
-foundations. The full Hilbert-space four-theorem package, infinite-dimensional
-UI-norm/ideal layer, direct-rotation extremal theory, Section 8 package, and
-unbounded source passages remain the controlling completion goals.
+foundations. Neither is the canonical completion boundary. The immediate
+controlling goal is the generalized unbounded single-angle theorem in
+`Experimental/InfiniteDimensional/SinTheta/Canonical.lean`; the remaining
+four-theorem package, direct-rotation extremal theory, Section 8 package, and
+full source audit follow from that foundation.
 
 ### Progress note (2026-07-15, easy-ladder closure session)
 
@@ -146,9 +166,10 @@ Structurally assembled on top of documented open black boxes:
 **Statement-soundness repair (2026-07-15).** The former
 `Core/AbstractSpectrum.lean` predicates were point-spectrum based and therefore
 vacuous for continuous-spectrum self-adjoint operators such as multiplication
-by `t` on `L²(0,1)`.  The repaired layer now defines `realSpectrum` by the real
-Banach-algebra spectrum and `restrictedSpectrum A U` by
-`spectrum ℝ (A.restrict hU)` for an invariant subspace.  `SpectrumIn`,
+by `t` on `L²(0,1)`.  The repaired layer now defines `realSpectrum` by pulling the native
+`RCLike` Banach-algebra spectrum back to real scalars and defines
+`restrictedSpectrum A U` from `spectrum 𝕜 (A.restrict hU)` for an invariant
+subspace.  `SpectrumIn`,
 `SpectraSeparated`, `OrderedSpectraSeparated`, and all derived gap predicates
 also carry invariance explicitly.  This removes the counterexample that made
 the Sylvester, `sin Θ`, ideal, off-diagonal, and Riccati declarations false as
@@ -156,6 +177,18 @@ stated.  Those declarations remain open proof obligations: the next analytic
 step is to connect these actual restriction spectra to the existing coercive
 bounds, using the complex spectral-order bridge first and a real bridge or
 complexification transport afterward.
+
+**General sine-theta architecture push (2026-07-15).** The unbounded
+closed-operator equation now has an explicit domain-transport field; bounded
+operators embed into the same model through `ClosedOperator.ofBounded`; the
+unified unbounded Sylvester theorem is assembled by cases from the
+interval/exterior and two semibounded orientations; the generalized and
+isometric unbounded sine endpoints are reduced to the residual block identity,
+Sylvester engine, ideal contraction, lower-frame transport, and exact-angle
+identification. `SinTheta/Canonical.lean` now bundles the intended source
+problem and reserves the unqualified source role for the generalized unbounded
+result. Compiler feedback is expected to drive repair of the newly exposed
+seams.
 
 Controlling blocker identified for the two-projection calculus at source
 scalar generality: an `RCLike`-generic positive operator square root
@@ -165,5 +198,4 @@ scalar generality: an `RCLike`-generic positive operator square root
 `angleOperator`, and their norm identities) waits on a route decision:
 norm-preserving complexification transfer versus a direct order-theoretic
 construction, or specializing the infinite-dimensional angle calculus to `ℂ`
-with a real-scalar bridge afterward. See `dev/sorry-difficulty-ranking.md`
-(2026-07-15 header) for the updated 178-item ranking.
+with a real-scalar bridge afterward. See `dev/sorry-difficulty-ranking.md` for the evolving proof-obligation ranking; verify its totals against the source tree before using them in status claims.

@@ -10,7 +10,7 @@
 \item[Primary source] Chandler Davis and W. M. Kahan, \emph{The Rotation of Eigenvectors by a Perturbation. III}, SIAM Journal on Numerical Analysis 7(1) (1970), 1--46, DOI \href{https://doi.org/10.1137/0707001}{10.1137/0707001}.
 \item[Source order] Introduction; Sections 1--3 on block notation and subspace geometry; Section 4 on the direct rotation; Section 5 on $AX-XB=C$; Section 6 on the single-angle theorems; the unbounded-operator appendix; Section 7 on the double-angle theorems; Section 8 on interpretation and spectral selection; Section 9 on the numerical example; Section 10 on open questions.
 \item[Current proved specialization] The source-facing finite API exposed through \code{DavisKahanTheory.PartIII}: the ordered and interval Sylvester roots; residual, generalized-trial-map, and perturbation \code{sin Theta}; the arbitrary-unitarily-invariant-norm Ritz-residual \code{tan Theta} theorem in both equal-rank and strict-lower-rank forms; \code{sin 2 Theta} for every unitarily invariant norm; and the sharp operator-norm \code{tan 2 Theta} theorem.  The elementary \code{partIII_tanTheta_vector} theorem remains as a low-dependency companion rather than the canonical source-facing tangent endpoint.
-\item[Formalization target] The repository target is the full source scope: separable Hilbert spaces; the bounded Hermitian main body; all four theorem families in infinite and finite dimensions; arbitrary unitary-invariant norms with correct domains of finiteness; and the unbounded self-adjoint extensions with their domain assumptions.
+\item[Formalization target] The repository target is the full source scope: separable Hilbert spaces; all four theorem families in infinite and finite dimensions; arbitrary unitary-invariant norms with correct domains of finiteness; and the unbounded self-adjoint extensions with their domain assumptions. For the single-angle family, the canonical Lean API is the generalized unbounded theorem. The bounded Hermitian statement is a full-domain specialization, not the terminal target.
 \item[Current boundary] The strongest proof-complete package is presently finite-dimensional over an arbitrary \code{RCLike} scalar field, with a partial bounded-operator branch. The finite package is a valuable specialization and weaker-foundation alternative, not the completion criterion for this paper.
 \item[Transcription audit] This committed note is an independent distillation. Its scope and source anchors have been checked against the maintained modernized local transcription, which is excluded from distributable source archives.
 \item[Terminology] The source writes $\sin\theta$, $\tan\theta$, $\sin 2\theta$, and $\tan 2\theta$. We use $\Theta$ for the principal-angle operator or its finite list of principal angles.
@@ -27,8 +27,12 @@ Consequently, proof of the finite quartet is not proof of the paper.
 
 A paper-completion claim requires, at minimum:
 \begin{enumerate}[leftmargin=2em]
-\item source-faithful bounded Hilbert-space versions of the four main theorem
-families, in residual and perturbation forms;
+\item a source-faithful generalized unbounded single-angle theorem with
+explicit domains, bounded residual, source gap configurations, and the stated
+unitary-invariant norm scope, together with bounded and finite specializations;
+\item source-faithful Hilbert-space versions of the remaining main theorem
+families, in residual and perturbation forms and with every unbounded extension
+supplied by the source;
 \item the source unitary-invariant norm scope, represented by honest
 operator-ideal or finiteness hypotheses rather than finite singular-value
 lists alone;
@@ -364,7 +368,8 @@ Spectral selection & Replace an arbitrary reducing subspace by the canonical spe
 Layer & Current status & Requirement before source completion \\
 \midrule
 Finite-dimensional quartet & Strong proof-complete specialization, with arbitrary finite rectangular UI norms for major sine and tangent results & Preserve as specialization and alternative proof surface \\
-Bounded Hilbert-space main body & Partial operator-norm foundation & Complete all four source theorem families, direct rotation, and Section 8 without finite-dimensional assumptions \\
+Canonical single-angle theorem & General unbounded theorem surface assembled over explicit analytic seams & Close the unbounded spectral, Sylvester, residual-domain, lower-frame, angle-identification, and UI-ideal obligations; derive bounded and finite specializations \\
+Bounded Hilbert-space main body & Partial operator-norm foundation plus an independent bounded single-angle route & Preserve as a scoped specialization/alternative and complete the remaining source families, direct rotation, and Section 8 without finite-dimensional assumptions \\
 Infinite-dimensional UI norms & Scaffolded & Develop compatible compact/symmetric norm ideals, Ky Fan/approximation-number machinery, and source finiteness conventions \\
 Unbounded self-adjoint theory & Experimental scaffold & Formalize domain-aware Theorem 5.2 and the Appendix to Section 6 \\
 Full source audit & Partial & Map every numbered result and qualification against the maintained transcription \\

@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Sources.DavisKahan1970.PartIII
+import DavisKahan.Sources.DavisKahan1970.GeneralSinTheta
 import DavisKahan.Experimental.FiniteDimensional.All
 import DavisKahan.Experimental.InfiniteDimensional.All
 import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.All
@@ -23,6 +24,16 @@ The mathematical dependency order and per-declaration repair ledger are in
 
 namespace ForMathlib
 namespace DavisKahan1970
+
+/-! ## Canonical single-angle target
+
+The unqualified source role belongs to the generalized unbounded theorem.
+The bounded aliases below are specializations and implementation seams. -/
+
+alias canonical_generalizedSinTheta := generalizedSinTheta
+alias canonical_sinTheta := sinTheta
+alias canonical_generalizedSinTheta_complementaryBlock :=
+  generalizedSinTheta_complementaryBlock
 
 /-! ## Bounded spectral calculus and operator angles -/
 

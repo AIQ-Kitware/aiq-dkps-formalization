@@ -2,10 +2,11 @@
 
 This subtree contains unfinished foundations and theorem families needed to
 formalize Davis--Kahan (1970) in the ambient scope stated by the paper. It is
-not an optional extension of a completed finite-dimensional project. The
-finite library is a valuable specialization and weaker-foundation alternative;
-the bounded Hilbert-space main body, operator-ideal norm scope, and unbounded
-passages remain the default source-fidelity target.
+not an optional extension of a completed bounded or finite-dimensional
+project. The canonical single-angle target is the unbounded, domain-aware,
+arbitrary-unitarily-invariant-norm theorem. Bounded and finite libraries are
+valuable specializations, weaker-foundation alternatives, and regression
+surfaces.
 
 This subtree is organized by the locations its modules are intended to occupy
 once their statements and proofs stabilize.
@@ -14,8 +15,10 @@ once their statements and proofs stabilize.
   with experimental spectral-projection, real/complex bridge, form,
   unbounded-operator, and operator-angle interfaces.
 - `Sylvester/` develops bounded, resolvent, and unbounded Sylvester estimates.
-- `SinTheta/` develops bounded and unbounded sine-theta theorems and the
-  required frame-factorization and spectral bridges.
+- `SinTheta/Canonical.lean` owns the target theorem surface while it remains
+  experimental. `SinTheta/Unbounded.lean` contains the analytic and geometric
+  endpoint chain; bounded results are downstream specializations or
+  independent alternatives.
 - `Ideals/` develops compact, approximation-number, rectangular, and symmetric
   operator-ideal interfaces.
 - `OperatorBlocks/`, `Riccati/`, `DirectRotation.lean`, `GraphSubspace.lean`,
@@ -25,9 +28,10 @@ once their statements and proofs stabilize.
 
 ### Restricted-spectrum statement repair (2026-07-15)
 
-`Core/AbstractSpectrum.lean` now defines `realSpectrum` using Mathlib's
-real Banach-algebra spectrum and `restrictedSpectrum` using the spectrum of
-`A.restrict hU` for an invariant subspace.  `SpectrumIn`, ordered and unordered
+`Core/AbstractSpectrum.lean` now defines `realSpectrum` by pulling the native
+`RCLike` Banach-algebra spectrum back to real scalars and defines
+`restrictedSpectrum` from the native spectrum of `A.restrict hU` for an
+invariant subspace. `SpectrumIn`, ordered and unordered
 separation, and the derived gap predicates carry invariance explicitly.  This
 removes the former empty-point-spectrum loophole for continuous-spectrum
 self-adjoint operators.  The affected Sylvester, sine-theta, ideal, Riccati,
