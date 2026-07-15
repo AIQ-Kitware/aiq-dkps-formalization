@@ -10,9 +10,9 @@ import DavisKahan.Experimental.InfiniteDimensional.Core.AbstractSpectrum
 # Compatibility layer for the former `DavisKahanExt.Basic`
 
 Supported declarations now live in general `ForMathlib` modules and in
-`ForMathlib.DavisKahan`.  Provisional spectral interfaces live under
-`DavisKahan.Experimental.Foundation`.  This module retains the old names so
-existing literature scaffolds continue to compile during migration.
+`ForMathlib.DavisKahan`.  Experimental restricted-operator spectral interfaces
+live under `DavisKahan.Experimental.Foundation`.  This module retains the old
+names so existing literature scaffolds continue to compile during migration.
 -/
 
 namespace ForMathlib
@@ -44,6 +44,8 @@ abbrev IsUnitaryOperator (W : E →L[𝕜] E) :=
   DavisKahan.Experimental.Foundation.IsUnitaryOperator W
 abbrev IsOffDiagonalRelativeToProjection (P H : E →L[𝕜] E) :=
   DavisKahan.Experimental.Foundation.IsOffDiagonalRelativeToProjection P H
+abbrev InvariantFor (A : E →L[𝕜] E) (U : Submodule 𝕜 E) :=
+  DavisKahan.Experimental.Foundation.InvariantFor A U
 noncomputable abbrev realSpectrum (A : E →L[𝕜] E) :=
   DavisKahan.Experimental.Foundation.realSpectrum A
 noncomputable abbrev restrictedSpectrum (A : E →L[𝕜] E) (U : Submodule 𝕜 E) :=

@@ -143,31 +143,19 @@ Structurally assembled on top of documented open black boxes:
 `continuedProjection_eq_spectralProjection`, `schatten_sinTheta`,
 `covariance_subspace_sinTheta`, and `tanTwoTheta_spectralSubspace_le`.
 
-**Statement-soundness finding (2026-07-15).** The infinite-dimensional
-separation predicates in `Core/AbstractSpectrum.lean` (`restrictedSpectrum`,
-`SpectrumIn`, `SpectraSeparated`, `InternalGap`, `IntervalExteriorSeparated`,
-`OrderedSpectraSeparated`) are point-spectrum (eigenvector) based.  In
-infinite dimensions a self-adjoint operator can have empty point spectrum
-(e.g. multiplication by `t` on `L²(0,1)`), which makes every one of these
-hypotheses vacuously true while the conclusions fail.  Concrete
-counterexample shape: with `A = B` the multiplication operator, `X = 1`,
-`C = 0`, the hypothesis of `norm_sylvester_le_of_generalSeparation` holds
-vacuously for any `d > 0` yet `d·‖X‖ ≤ (π/2)·‖C‖` is false; the same defect
-falsifies `sylvester_solve`/`sylvester_unique`, `sinTheta_perturbation`,
-`sinTheta_symmetric`, `ideal_sinTheta`, `compact_projection_difference`, and
-the Riccati gap theorems **as stated**.  These are therefore not merely open:
-they are unprovable until the predicates are redefined.  (~94 use sites
-across 10 InfDim files.)  Route options, in preference order: (1) redefine
-`restrictedSpectrum A U` for a reducing `U` as the Banach-algebra spectrum of
-the restriction of `A` to `U` (real part via self-adjointness); (2) state the
-gap hypotheses through quadratic-form/numerical-range bounds, matching the
-already-proved coercivity forms (`norm_sylvester_le_of_coercive`, the
-coercivity `sin Θ`), noting that form bounds capture intervals but not
-exterior sets, so the interval/exterior family needs genuine spectrum;
-(3) keep the current defs strictly as finite-dimensional compatibility and
-fork honest infinite-dimensional statements.  This decision gates most
-tier-4/5 items in the ranking and should be made before further InfDim
-statement-level work.
+**Statement-soundness repair (2026-07-15).** The former
+`Core/AbstractSpectrum.lean` predicates were point-spectrum based and therefore
+vacuous for continuous-spectrum self-adjoint operators such as multiplication
+by `t` on `L²(0,1)`.  The repaired layer now defines `realSpectrum` by the real
+Banach-algebra spectrum and `restrictedSpectrum A U` by
+`spectrum ℝ (A.restrict hU)` for an invariant subspace.  `SpectrumIn`,
+`SpectraSeparated`, `OrderedSpectraSeparated`, and all derived gap predicates
+also carry invariance explicitly.  This removes the counterexample that made
+the Sylvester, `sin Θ`, ideal, off-diagonal, and Riccati declarations false as
+stated.  Those declarations remain open proof obligations: the next analytic
+step is to connect these actual restriction spectra to the existing coercive
+bounds, using the complex spectral-order bridge first and a real bridge or
+complexification transport afterward.
 
 Controlling blocker identified for the two-projection calculus at source
 scalar generality: an `RCLike`-generic positive operator square root

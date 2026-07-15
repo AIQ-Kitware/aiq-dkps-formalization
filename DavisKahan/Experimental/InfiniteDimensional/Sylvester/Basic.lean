@@ -147,10 +147,10 @@ by the integral-free absorption argument
 `ForMathlib.ContinuousLinearMap.opNorm_le_div_of_comp_sub_comp_eq` (no semigroup
 integral, no spectral measure, no dimension hypothesis).  The
 `OrderedSpectraSeparated` hypothesis of `norm_sylvester_le_of_orderedSeparation`
-reduces to these quadratic-form bounds once a bounded spectral theorem
-(numerical range = closed convex hull of the spectrum) is available to interpret
-`restrictedSpectrum`; that reduction is the only remaining obstruction to the
-spectrum-predicate form. -/
+now uses spectra of the actual restricted operators.  The remaining bridge is
+the bounded spectral-order theorem converting that ordered spectral inclusion
+to these quadratic-form bounds; it is already available for complex Hilbert
+spaces and remains open at full `RCLike` generality. -/
 theorem norm_sylvester_le_of_coercive
     {A : F →L[𝕜] F} {B : E →L[𝕜] E} {X C : E →L[𝕜] F}
     (hA : IsSelfAdjointOperator A) (hB : IsSelfAdjointOperator B)

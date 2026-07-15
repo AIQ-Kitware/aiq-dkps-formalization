@@ -10,8 +10,9 @@ passages remain the default source-fidelity target.
 This subtree is organized by the locations its modules are intended to occupy
 once their statements and proofs stabilize.
 
-- `Core/` provides provisional abstract-spectrum, spectral-projection,
-  real/complex bridge, form, unbounded-operator, and operator-angle interfaces.
+- `Core/` provides actual restricted-operator spectrum predicates together
+  with experimental spectral-projection, real/complex bridge, form,
+  unbounded-operator, and operator-angle interfaces.
 - `Sylvester/` develops bounded, resolvent, and unbounded Sylvester estimates.
 - `SinTheta/` develops bounded and unbounded sine-theta theorems and the
   required frame-factorization and spectral bridges.
@@ -21,6 +22,17 @@ once their statements and proofs stabilize.
   `DoubleAngle.lean`, and `Sharpness.lean` retain the corresponding geometric
   and analytic programs. Some are direct source obligations; others are later
   extensions and must be identified as such in their module documentation.
+
+### Restricted-spectrum statement repair (2026-07-15)
+
+`Core/AbstractSpectrum.lean` now defines `realSpectrum` using Mathlib's
+real Banach-algebra spectrum and `restrictedSpectrum` using the spectrum of
+`A.restrict hU` for an invariant subspace.  `SpectrumIn`, ordered and unordered
+separation, and the derived gap predicates carry invariance explicitly.  This
+removes the former empty-point-spectrum loophole for continuous-spectrum
+self-adjoint operators.  The affected Sylvester, sine-theta, ideal, Riccati,
+and off-diagonal declarations remain experimental proof obligations, but their
+gap hypotheses are no longer false for that reason.
 
 The graph-subspace donor and vendor audit is recorded in
 `dev/graph-subspace-vendor-survey-2026-07-14.md`. It identifies the pinned
