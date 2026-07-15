@@ -131,7 +131,16 @@ theorem continuedProjection_eq_spectralProjection
     (hsep : ∀ t ∈ Set.Icc (0 : ℝ) 1,
       ContourSeparatesSpectrum (operatorPath A H t) s contour) :
     continuedProjection A H contour 1 = spectralProjection (A + H) s := by
-  sorry
+  have h1 : operatorPath A H 1 = A + H := by
+    simp [operatorPath]
+  have hA1 : IsSelfAdjointOperator (A + H) := by
+    have h := hA.add hH
+    rwa [← ContinuousLinearMap.coe_add] at h
+  have hc := hsep 1 ⟨zero_le_one, le_refl 1⟩
+  rw [h1] at hc
+  unfold continuedProjection
+  rw [h1]
+  exact rieszProjection_eq_spectralProjection (A + H) hA1 s hs contour hc
 
 /-- Norm-close projections have canonically isomorphic ranges; this is the
 local step used to propagate dimension and Fredholm-index data along a path.
