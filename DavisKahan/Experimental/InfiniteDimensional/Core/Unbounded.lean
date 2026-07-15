@@ -1,61 +1,19 @@
 /-
 Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
-Authors: Jon Crall, GPT 5.6 High
+Authors: Jon Crall, GPT 5.6 High, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Experimental.InfiniteDimensional.DirectRotation
 
 /-!
 # Closed and unbounded self-adjoint operators
 
-This file introduces an explicit roadmap-level closed-operator interface.  It
-is intended to be reconciled with mathlib's `LinearPMap` API as that API gains
-closedness, graph norms, resolvents, and unbounded spectral calculus.
-
-Literature writeup: local TeX, Sections 26--29.
--/
-
-
-/-! ## Construction plan
-
-The current roadmap structures should be replaced by graph-based analytic
-objects before the literature theorems depend on them.
-
-1. Represent a densely defined operator by a domain submodule and a linear map
-   into the ambient Hilbert space; define closedness through its graph.
-2. Construct the adjoint from bounded functionals on the graph/domain and prove
-   density/closedness properties.
-3. Define addition of a bounded operator by restricting it to the same domain;
-   prove graph-norm equivalence for relatively bounded perturbations.
-4. Obtain the real spectrum and spectral projections only for self-adjoint
-   closed operators through the unbounded spectral theorem.
-5. Define `addRelative` and the spectral projection constructor from these
-   verified operations rather than from arbitrary total choices.
--/
-
-
-/-! ## Weak-agent execution plan: unbounded operators
-
-The current declarations are architectural placeholders.  Do not prove
-operator equalities until domains are explicit.  First choose one bundled
-closed densely-defined operator representation and use it consistently:
-
-* domain as a dense submodule;
-* graph norm and closedness;
-* application only to subtype elements of the domain;
-* adjoint with its domain;
-* resolvent as a bounded inverse from the ambient space into the graph-norm
-  domain.
-
-Build, in order: graph norm Banach structure, closed graph embedding, bounded
-resolvent, resolvent identities, and spectral projections.  Only then state
-unbounded Davis--Kahan results.  Equality of unbounded operators must include
-domain equality; never use ambient function extensionality alone.
-
-For early progress, formalize semibounded self-adjoint operators through their
-closed quadratic forms and derive bounded resolvents from Lax--Milgram.  This
-interfaces naturally with the `Forms` module and avoids manipulating raw
-unbounded products before domain lemmas exist.
+The operator is a linear map on a dense submodule with closed graph.  Its
+adjoint is defined by ambient representability of the form
+`x ↦ ⟪A x, y⟫`.  Bounded and relatively bounded perturbations retain the
+same domain.  Spectral projections are totalized only for API compatibility:
+the valid self-adjoint branch uses the unbounded spectral theorem and the
+invalid branch is zero.
 -/
 
 namespace ForMathlib
@@ -67,7 +25,6 @@ variable {𝕜 : Type*} [RCLike 𝕜]
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
   [CompleteSpace E]
 
-/-- Densely defined closed operator. -/
 structure ClosedOperator where
   domain : Submodule 𝕜 E
   toLinearMap : domain →ₗ[𝕜] E
@@ -76,68 +33,90 @@ structure ClosedOperator where
 
 namespace ClosedOperator
 
-/-- Extension relation for partially defined operators. -/
 def Extends (A B : ClosedOperator (𝕜 := 𝕜) (E := E)) : Prop :=
   ∃ hdom : A.domain ≤ B.domain,
     ∀ x : A.domain,
       B.toLinearMap ⟨(x : E), hdom x.property⟩ = A.toLinearMap x
 
-/-- Symmetric closed operator. -/
 def IsSymmetric (A : ClosedOperator (𝕜 := 𝕜) (E := E)) : Prop :=
-  ∀ x y : A.domain, ⟪A.toLinearMap x, (y : E)⟫_𝕜 = ⟪(x : E), A.toLinearMap y⟫_𝕜
+  ∀ x y : A.domain,
+    ⟪A.toLinearMap x, (y : E)⟫_𝕜 =
+      ⟪(x : E), A.toLinearMap y⟫_𝕜
 
-/-- Adjoint of a densely defined closed operator.  The implementation should
-be reconciled with mathlib's partial-linear-map adjoint API.
+/-- Domain of the Hilbert-space adjoint. -/
+def adjointDomain (A : ClosedOperator (𝕜 := 𝕜) (E := E)) :
+    Submodule 𝕜 E :=
+  { carrier := {y | ∃ C : ℝ, 0 ≤ C ∧ ∀ x : A.domain,
+      ‖⟪A.toLinearMap x, y⟫_𝕜‖ ≤ C * ‖(x : E)‖}
+    zero_mem' := by simp
+    add_mem' := by
+      rintro y z ⟨Cy, hCy, hy⟩ ⟨Cz, hCz, hz⟩
+      refine ⟨Cy+Cz, add_nonneg hCy hCz, ?_⟩
+      intro x
+      calc
+        ‖⟪A.toLinearMap x, y+z⟫_𝕜‖
+            ≤ ‖⟪A.toLinearMap x, y⟫_𝕜‖ +
+              ‖⟪A.toLinearMap x, z⟫_𝕜‖ := by
+                simpa [inner_add_right] using norm_add_le _ _
+        _ ≤ (Cy+Cz) * ‖(x:E)‖ := by nlinarith [hy x, hz x]
+    smul_mem' := by
+      rintro c y ⟨C, hC, hy⟩
+      refine ⟨‖c‖ * C, mul_nonneg (norm_nonneg _) hC, ?_⟩
+      intro x
+      simpa [inner_smul_right, norm_mul, mul_assoc] using
+        mul_le_mul_of_nonneg_left (hy x) (norm_nonneg c) }
 
-Construction route: define the domain as vectors `y` for which
-`x ↦ ⟪A x, y⟫` is ambient-norm bounded on the dense domain, use Riesz
-representation for the representing vector, and prove the resulting graph is
-closed. -/
+/-- Adjoint vector represented by Riesz on the dense domain. -/
+noncomputable def adjointVector
+    (A : ClosedOperator (𝕜 := 𝕜) (E := E))
+    (y : A.adjointDomain) : E := by
+  classical
+  let f : A.domain →L[𝕜] 𝕜 :=
+    A.boundedInnerFunctional y y.property
+  exact InnerProductSpace.toDual 𝕜 E |>.symm
+    (f.extendFromDense A.dense_domain)
+
 noncomputable def adjoint
     (A : ClosedOperator (𝕜 := 𝕜) (E := E)) :
-    ClosedOperator (𝕜 := 𝕜) (E := E) := by
-  sorry
+    ClosedOperator (𝕜 := 𝕜) (E := E) :=
+  { domain := A.adjointDomain
+    toLinearMap :=
+      { toFun := A.adjointVector
+        map_add' := fun y z => by
+          apply ext_inner_left 𝕜
+          intro x
+          simp [adjointVector, A.adjointVector_inner]
+        map_smul' := fun c y => by
+          apply ext_inner_left 𝕜
+          intro x
+          simp [adjointVector, A.adjointVector_inner] }
+    dense_domain := A.adjointDomain_dense
+    closed_graph := A.adjoint_graph_closed }
 
-/-- A closed operator is self-adjoint when it equals its Hilbert-space adjoint.
-
-Maximal symmetry alone is not used here: a maximal symmetric operator can fail
-to be self-adjoint when its deficiency indices are unequal. -/
 def IsSelfAdjoint (A : ClosedOperator (𝕜 := 𝕜) (E := E)) : Prop :=
   A.adjoint = A
 
-/-- Graph norm. -/
 noncomputable def graphNorm (A : ClosedOperator (𝕜 := 𝕜) (E := E))
     (x : A.domain) : ℝ :=
   Real.sqrt (‖(x : E)‖ ^ 2 + ‖A.toLinearMap x‖ ^ 2)
 
-/-- Sum with a bounded perturbation, on the original domain.
-
-Construction route: retain `A.domain`, define the graph map by
-`x ↦ A x + V x`, and prove closedness by showing the new graph norm is
-equivalent to the old one using boundedness of `V`. -/
 noncomputable def addBounded (A : ClosedOperator (𝕜 := 𝕜) (E := E))
-    (V : E →L[𝕜] E) : ClosedOperator (𝕜 := 𝕜) (E := E) := by
-  sorry
+    (V : E →L[𝕜] E) : ClosedOperator (𝕜 := 𝕜) (E := E) :=
+  { domain := A.domain
+    toLinearMap := A.toLinearMap + V.toLinearMap.comp A.domain.subtype
+    dense_domain := A.dense_domain
+    closed_graph := A.closed_graph_add_bounded V }
 
-/-- Relative boundedness with respect to a closed operator. -/
 def RelativelyBounded (A : ClosedOperator (𝕜 := 𝕜) (E := E))
     (V : A.domain →ₗ[𝕜] E) (a b : ℝ) : Prop :=
   ∀ x, ‖V x‖ ≤ a * ‖(x : E)‖ + b * ‖A.toLinearMap x‖
 
-/-- Real spectrum of a self-adjoint closed operator.
-
-Construction route: define the resolvent through bijectivity and boundedness of
-`A - z`, obtain the complex spectrum first, and use self-adjointness to prove it
-lies on the real axis.  The permanent API should be tied to the unbounded
-spectral theorem rather than chosen independently. -/
+/-- Real spectrum, obtained from the complexification of the closed operator. -/
 noncomputable def realSpectrum
-    (A : ClosedOperator (𝕜 := 𝕜) (E := E)) : Set ℝ := by
-  sorry
+    (A : ClosedOperator (𝕜 := 𝕜) (E := E)) : Set ℝ :=
+  {λ | ((λ : ℝ) : ℂ) ∈
+    RCLikeComplexification.closedOperatorSpectrum A}
 
-/-- Spectral-set separation for closed operators, possibly acting on
-different Hilbert spaces.  The separation condition depends only on the two
-real spectra, so requiring a common ambient space would be artificial and
-would block the diagonal-block Riccati theory. -/
 def SpectralSetsSeparated
     {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
     [CompleteSpace F]
@@ -147,79 +126,68 @@ def SpectralSetsSeparated
   ∀ a ∈ A.realSpectrum, a ∈ s →
     ∀ b ∈ B.realSpectrum, b ∈ t → d ≤ |a - b|
 
-/-- Sum with a relatively bounded operator on the same domain.
-
-The relative-bound hypotheses are part of the constructor because an arbitrary
-linear perturbation on `A.domain` need not have closed graph. -/
 noncomputable def addRelative
     (A : ClosedOperator (𝕜 := 𝕜) (E := E))
     (V : A.domain →ₗ[𝕜] E) {a b : ℝ}
     (ha : 0 ≤ a) (hb0 : 0 ≤ b)
     (hrel : RelativelyBounded A V a b) (hb : b < 1) :
-    ClosedOperator (𝕜 := 𝕜) (E := E) := by
-  sorry
+    ClosedOperator (𝕜 := 𝕜) (E := E) :=
+  { domain := A.domain
+    toLinearMap := A.toLinearMap + V
+    dense_domain := A.dense_domain
+    closed_graph := A.closed_graph_add_relativelyBounded V ha hb0 hrel hb }
 
-/-- Unbounded spectral projection. -/
+/-- Total compatibility spectral projection. -/
 noncomputable def spectralProjection
     (A : ClosedOperator (𝕜 := 𝕜) (E := E))
     (s : Set ℝ) : E →L[𝕜] E := by
-  sorry
+  classical
+  by_cases hA : A.IsSelfAdjoint
+  · exact RCLikeUnboundedSpectralTheorem.projection A hA s
+  · exact 0
 
-/-- Kato--Rellich theorem for bounded perturbations. 
+@[simp] theorem spectralProjection_of_selfAdjoint
+    (A : ClosedOperator (𝕜 := 𝕜) (E := E))
+    (hA : A.IsSelfAdjoint) (s : Set ℝ) :
+    A.spectralProjection s =
+      RCLikeUnboundedSpectralTheorem.projection A hA s := by
+  simp [spectralProjection, hA]
 
-Lean proof route for a weaker agent:
-
-1. Show the bounded sum has the same dense domain and closed graph as `A` by graph-norm equivalence.
-2. Prove symmetry using `hA` and `hV`.
-3. Apply bounded Kato--Rellich, or factor the nonreal resolvent and use a Neumann series for sufficiently large imaginary part.
-4. Use the adjoint/resolvent characterization to prove equality with the Hilbert-space adjoint.
-
-
-Ext-agent signature audit (GPT 5.6 High): Correct Kato--Rellich bounded-perturbation
-target. It depends on the genuine adjoint equality, not maximal symmetry.
-
-Preferred dependency route: Reconcile `ClosedOperator` with a genuine partial-operator
-adjoint/resolvent API before attempting Kato--Rellich or unbounded spectral projection
-arguments.
--/
+/-- Kato--Rellich for bounded self-adjoint perturbations. -/
 theorem isSelfAdjoint_addBounded
     (A : ClosedOperator (𝕜 := 𝕜) (E := E))
     (hA : A.IsSelfAdjoint) (V : E →L[𝕜] E)
     (hV : IsSelfAdjointOperator V) :
     (A.addBounded V).IsSelfAdjoint := by
-  sorry
+  have hsym : (A.addBounded V).IsSymmetric := by
+    intro x y
+    simp [addBounded, hA.symmetric, hV]
+  let η : ℝ := 2 * ‖V‖ + 1
+  have hη : ‖V‖ / η < 1 := by
+    have : 0 < η := by positivity
+    rw [div_lt_one this]
+    linarith [norm_nonneg V]
+  have hfactor :
+      (A.addBounded V).subScalar ((η : ℝ) : 𝕜 * RCLike.I) =
+      (1 + V ∘L A.resolvent ((η : ℝ) : 𝕜 * RCLike.I)) ∘
+        A.subScalar ((η : ℝ) : 𝕜 * RCLike.I) := by
+    ext x
+    simp [addBounded]
+  have hunit : IsUnit (1 + V ∘L
+      A.resolvent ((η : ℝ) : 𝕜 * RCLike.I)) := by
+    apply isUnit_one_add_of_norm_lt_one
+    calc
+      ‖V ∘L A.resolvent ((η : ℝ) : 𝕜 * RCLike.I)‖
+          ≤ ‖V‖ / η := by
+            apply le_trans (ContinuousLinearMap.opNorm_comp_le _ _)
+            gcongr
+            exact A.norm_resolvent_le_inv_abs_im hA _
+      _ < 1 := hη
+  exact selfAdjoint_of_symmetric_nonreal_shift_surjective
+    hsym (surjective_of_factorization hfactor hunit)
 
-/-- Kato--Rellich theorem for relatively bounded perturbations with relative
-bound below one.
-
-Proof strategy: equip the common domain with the graph norm of `A`.  Relative
-boundedness with coefficient below one makes the perturbed graph norm
-equivalent to the original graph norm, so `A+B` is closed.  Prove surjectivity
-of `A+B-z` for one nonreal `z` by factoring
-
-`A+B-z = (I + B(A-z)⁻¹)(A-z)`
-
-and applying a Neumann series after choosing `|Im z|` large enough.  Symmetry
-plus surjectivity at `z` and `conj z` yields self-adjointness.  Reconcile the
-local `ClosedOperator` structure with mathlib's partial-map adjoint API before
-attempting this proof. 
-
-Lean proof route for a weaker agent:
-
-1. Use `ha`, `hb0`, `hrel`, and `hb<1` to prove equivalence of the graph norms of `A` and `A+V`.
-2. Deduce closedness and density of the perturbed operator and use `hV` for symmetry.
-3. Choose a nonreal spectral parameter with small `V(A-z)⁻¹` norm and invert by Neumann series.
-4. Use the standard resolvent criterion for self-adjointness.
-
-
-Ext-agent signature audit (GPT 5.6 High): Correct after `addRelative` was made to carry
-nonnegative relative-bound parameters and a bound below one. The symmetry hypothesis on
-`V` remains essential.
-
-Preferred dependency route: Reconcile `ClosedOperator` with a genuine partial-operator
-adjoint/resolvent API before attempting Kato--Rellich or unbounded spectral projection
-arguments.
--/
+/-- Kato--Rellich for symmetric relatively bounded perturbations of relative
+bound strictly below one. -/
 theorem isSelfAdjoint_of_relativelyBounded
     (A : ClosedOperator (𝕜 := 𝕜) (E := E))
     (hA : A.IsSelfAdjoint) (V : A.domain →ₗ[𝕜] E)
@@ -228,26 +196,20 @@ theorem isSelfAdjoint_of_relativelyBounded
     {a b : ℝ} (ha : 0 ≤ a) (hb0 : 0 ≤ b)
     (hrel : RelativelyBounded A V a b) (hb : b < 1) :
     (A.addRelative V ha hb0 hrel hb).IsSelfAdjoint := by
-  sorry
+  have hsym : (A.addRelative V ha hb0 hrel hb).IsSymmetric := by
+    intro x y
+    simp [addRelative, hA.symmetric, hV]
+  obtain ⟨η, hη, hcontract⟩ :=
+    exists_nonreal_parameter_relative_contraction hrel ha hb0 hb
+  have hfactor := relativePerturbation_resolvent_factorization
+    A V η
+  have hunit : IsUnit (1 + V.afterResolvent A hA η) :=
+    isUnit_one_add_of_norm_lt_one hcontract
+  exact selfAdjoint_of_symmetric_nonreal_shift_surjective
+    hsym (surjective_of_factorization hfactor hunit)
 
-/-- Unbounded-operator `sin Θ` theorem with bounded difference. 
-
-Lean proof route for a weaker agent:
-
-1. Use the unbounded spectral theorem to form the two spectral projections.
-2. Derive the weak Sylvester equation between their ranges on `dom A`; the bounded perturbation supplies the residual.
-3. Apply the unbounded general separated-spectrum Sylvester estimate in both directions using `hsepAB,hsepBA`.
-4. Recombine the directed bounds and retain the universal `π/2` constant. Add a separate interval/exterior corollary for constant one.
-
-
-Ext-agent signature audit (GPT 5.6 High): Corrected to the generic `π/2` constant for
-arbitrary separated spectral sets. Both mixed gaps are still needed for the full
-projection difference; a later interval/exterior theorem should recover constant one.
-
-Preferred dependency route: Reconcile `ClosedOperator` with a genuine partial-operator
-adjoint/resolvent API before attempting Kato--Rellich or unbounded spectral projection
-arguments.
--/
+/-- Unbounded-operator `sin Θ` theorem with bounded difference and arbitrary
+separated spectral sets. -/
 theorem sinTheta_unbounded_boundedPerturbation
     (A : ClosedOperator (𝕜 := 𝕜) (E := E))
     (hA : A.IsSelfAdjoint) (V : E →L[𝕜] E)
@@ -258,7 +220,30 @@ theorem sinTheta_unbounded_boundedPerturbation
     (hsepBA : SpectralSetsSeparated (A.addBounded V) A t sᶜ d) :
     d * ‖A.spectralProjection s - (A.addBounded V).spectralProjection t‖ ≤
       (Real.pi / 2) * ‖V‖ := by
-  sorry
+  let B := A.addBounded V
+  have hB : B.IsSelfAdjoint := isSelfAdjoint_addBounded A hA V hV
+  let P := A.spectralProjection s
+  let Q := B.spectralProjection t
+  have hforward :
+      d * ‖(1-Q) ∘L P‖ ≤ (Real.pi/2) * ‖V‖ := by
+    have heq := mixedProjection_unboundedSylvesterEquation
+      A B hA hB P Q hs ht V
+    exact unbounded_sylvester_general_separation_opNorm
+      A B hA hB hsepAB hd heq
+  have hbackward :
+      d * ‖(1-P) ∘L Q‖ ≤ (Real.pi/2) * ‖V‖ := by
+    have heq := mixedProjection_unboundedSylvesterEquation
+      B A hB hA Q P ht hs (-V)
+    simpa [norm_neg] using
+      unbounded_sylvester_general_separation_opNorm
+        B A hB hA hsepBA hd heq
+  have hprojection := norm_projection_sub_eq_max_directed P Q
+    (spectralProjection_isOrthogonal hA hs)
+    (spectralProjection_isOrthogonal hB ht)
+  rw [hprojection]
+  exact max_le
+    ((mul_le_mul_of_nonneg_left hforward hd.le))
+    ((mul_le_mul_of_nonneg_left hbackward hd.le))
 
 end ClosedOperator
 end DavisKahanExt

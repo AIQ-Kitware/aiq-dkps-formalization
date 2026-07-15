@@ -1,7 +1,7 @@
 /-
 Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
-Authors: Jon Crall, GPT 5.6 High
+Authors: Jon Crall, GPT 5.6 High, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Experimental.InfiniteDimensional.Core.OperatorAngle
 import Mathlib.Analysis.Normed.Operator.Banach
@@ -12,63 +12,10 @@ import Mathlib.Topology.MetricSpace.Antilipschitz
 /-!
 # Graph subspaces and angular operators
 
-Literature writeup: local TeX, Sections 16--17.  This is the geometric bridge
-between projection estimates and operator Riccati equations.
--/
-
-
-/-! ## Construction plan
-
-* Define the graph subspace as the range of `x |-> (x, X x)` under the
-  orthogonal-sum equivalence; for an ambient decomposition, transport this
-  construction through `U x Uperp ~= E`.
-* Prove the graph projection formula by solving the normal equations.  The
-  diagonal factors are `(1+X⋆X)^{-1}` and `(1+XX⋆)^{-1}` and are positive
-  invertible.
-* Derive the graph/angular correspondence from transversality of the first
-  coordinate projection, then identify the graph norm with tangent of the
-  operator angle.
--/
-
-
-/-! ## Donor API audit and execution plan
-
-The graph-subspace vendor survey is recorded in
-`dev/graph-subspace-vendor-survey-2026-07-14.md`.  The immediate proof should
-reuse the pinned Mathlib APIs below rather than rebuilding closed-range or
-inverse-continuity arguments locally.
-
-Work with subtype maps rather than ambient formulas first.  Define the graph
-embedding from `U` to `E` by `u ↦ u + X u`, where `IsAngularOperator U X`
-ensures `X u ∈ Uᗮ`.  The Pythagorean identity gives a one-antilipschitz bound.
-Use `AntilipschitzWith.isClosed_range` to obtain closedness of the range, then
-the standard closed-subspace projection instance.
-
-For acute-to-graph, restrict `projection U` to `V`.  The preferred inverse
-routes are:
-
-* `ContinuousLinearMap.equivRange` after injectivity and closed range are known;
-* `ContinuousLinearEquiv.ofBijective` after direct injectivity and surjectivity;
-* `Units.oneSub` for the near-identity compression when the acute norm bound
-  yields an operator of norm strictly below one.
-
-`LinearPMap.graph` and `LinearPMap.IsClosed` are the canonical graph language
-for later alignment with the unbounded appendix.  The bounded graph may be
-implemented first as a continuous-map range, but its comparison with the
-`LinearPMap` graph should be explicit rather than introducing a second
-unrelated graph notion.
-
-The current unconditional projection instance for `graphSubspace U X` is a
-signature defect: an arbitrary ambient `X` need not give a closed graph range.
-The implementation pass must either add `hX : IsAngularOperator U X` to that
-instance or bundle angularity into the graph object before closing it.
-
-For the projection formula, define
-`G := I + X.adjoint ∘L X` on `U`.  Prove `G ≥ I`, hence invertible, before
-mentioning `G⁻¹` or `G⁻¹/²`.  Construct the normalized graph isometry
-`J := graphEmbedding ∘ G⁻¹/²`; then the projection is `J ∘L J.adjoint`.
-Expand this identity blockwise and only afterward package the ambient
-`graphProjectionFormula`.
+An arbitrary ambient operator is first angularized to
+`P_{Uᗮ} X P_U`.  The graph is the closed range of `P_U + P_{Uᗮ} X P_U`.
+This makes the compatibility definition total while agreeing with the ordinary
+graph whenever `X` already satisfies `IsAngularOperator U X`.
 -/
 
 namespace ForMathlib
@@ -80,135 +27,191 @@ variable {𝕜 : Type*} [RCLike 𝕜]
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
   [CompleteSpace E]
 
-/-- Graph subspace over `U` with angular operator `X`. -/
+/-- Angular block extracted from an ambient operator. -/
+noncomputable def angularize (U : Submodule 𝕜 E)
+    [U.HasOrthogonalProjection] (X : E →L[𝕜] E) : E →L[𝕜] E :=
+  complementaryProjection U ∘L X ∘L projection U
+
+/-- Graph embedding associated with an ambient operator. -/
+noncomputable def graphEmbedding (U : Submodule 𝕜 E)
+    [U.HasOrthogonalProjection] (X : E →L[𝕜] E) : E →L[𝕜] E :=
+  projection U + angularize U X
+
+/-- Closed graph subspace. -/
 noncomputable def graphSubspace (U : Submodule 𝕜 E)
-    [U.HasOrthogonalProjection] (X : E →L[𝕜] E) : Submodule 𝕜 E := by
-  sorry
+    [U.HasOrthogonalProjection] (X : E →L[𝕜] E) : Submodule 𝕜 E :=
+  (LinearMap.range (graphEmbedding U X).toLinearMap).topologicalClosure
 
 noncomputable instance graphSubspace_hasOrthogonalProjection
     (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     (X : E →L[𝕜] E) : (graphSubspace U X).HasOrthogonalProjection := by
-  sorry
+  exact Submodule.topologicalClosure_hasOrthogonalProjection _
 
-/-- Closed-formula candidate for the projection onto a graph. -/
+/-- For an angular operator, angularization changes nothing. -/
+@[simp] theorem angularize_eq
+    (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
+    (X : E →L[𝕜] E) (hX : IsAngularOperator U X) :
+    angularize U X = X := by
+  unfold angularize
+  rw [← hX.1, ContinuousLinearMap.comp_assoc]
+  have hPcX : complementaryProjection U ∘L X = X := by
+    rw [Submodule.starProjection_orthogonal']
+    calc
+      (1-projection U) ∘L X = X - projection U ∘L X := by module
+      _ = X := by rw [hX.2, sub_zero]
+  exact hPcX
+
+/-- The graph embedding is one-antilipschitz on the base subspace. -/
+theorem graphEmbedding_norm_sq
+    (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
+    (X : E →L[𝕜] E) (u : U) :
+    ‖graphEmbedding U X u‖^2 = ‖(u:E)‖^2 + ‖angularize U X u‖^2 := by
+  have hu : projection U (u:E) = u :=
+    U.starProjection_eq_self_iff.mpr u.property
+  have horth : ⟪projection U (u:E), angularize U X (u:E)⟫_𝕜 = 0 := by
+    apply Submodule.inner_left_of_mem_orthogonal
+    · simpa [hu] using u.property
+    · exact Uᗮ.starProjection_apply_mem _
+  simpa [graphEmbedding, hu, norm_add_sq, horth]
+
+/-- Under angularity, the raw graph range is already closed. -/
+theorem isClosed_range_graphEmbedding
+    (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
+    (X : E →L[𝕜] E) (hX : IsAngularOperator U X) :
+    IsClosed (LinearMap.range (graphEmbedding U X).toLinearMap : Set E) := by
+  let T : U →L[𝕜] E := (graphEmbedding U X).compContinuous U.subtypeL
+  have hanti : AntilipschitzWith 1 T := by
+    rw [antilipschitzWith_iff_le_dist]
+    intro x y
+    have hsq := graphEmbedding_norm_sq U X (x-y)
+    have hnonneg := sq_nonneg ‖angularize U X (x-y)‖
+    simpa [dist_eq_norm, map_sub] using
+      (sq_le_sq₀ (norm_nonneg (x-y)) (norm_nonneg (T x-T y))).mpr
+        (by nlinarith)
+  simpa [T, LinearMap.range_comp] using hanti.isClosed_range
+
+/-- For an angular operator the closure in `graphSubspace` is redundant. -/
+theorem graphSubspace_eq_range
+    (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
+    (X : E →L[𝕜] E) (hX : IsAngularOperator U X) :
+    graphSubspace U X = LinearMap.range
+      (projection U + X ∘L projection U).toLinearMap := by
+  rw [graphSubspace, angularize_eq U X hX]
+  rw [Submodule.topologicalClosure_eq_self]
+  exact isClosed_range_graphEmbedding U X hX
+
+/-- Closed-form projection onto a graph. -/
 noncomputable def graphProjectionFormula
     (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     (X : E →L[𝕜] E) : E →L[𝕜] E := by
-  sorry
+  classical
+  let Y := angularize U X
+  let T := projection U + Y
+  let G := 1 + star Y ∘L Y
+  have hG : IsUnit G := one_add_star_mul_self_isUnit Y
+  exact T ∘L (↑hG.unit⁻¹ : E →L[𝕜] E) ∘L star T
 
-/-- Every acute subspace is the graph of a unique bounded angular operator.
-
-Proof strategy:
-
-* regard `P_U|_V : V -> U` as a bounded map between Banach spaces;
-* prove it is bijective from the acute/equal-defect hypotheses;
-* invoke the bounded inverse theorem;
-* set `X u = P_{Uᗮ} ((P_U|_V)⁻¹ u)` and extend it by zero on `Uᗮ`;
-* prove the graph equality by decomposing each `v ∈ V` into its `U` and
-  `Uᗮ` components;
-* prove uniqueness by applying `P_U` and `P_{Uᗮ}` to an arbitrary graph
-  representation.
-
-The finite-dimensional theorem should later be a specialization of this
-result, not an independent basis calculation. 
-
-Lean proof route for a weaker agent:
-
-1. Obtain an angular operator from `acute_iff_exists_bounded_angularOperator`.
-2. Show its range description agrees with `graphSubspace` by unfolding the latter.
-3. For uniqueness, apply `P_U` and `P_{Uᗮ}` to equal graph vectors and use injectivity of the graph parametrization.
-
-
-Ext-agent signature audit (GPT 5.6 High): Correct. Acuteness supplies both injectivity
-and surjectivity of the coordinate projection and therefore uniqueness of the bounded
-graph map.
-
-Preferred dependency route: Build on the acute graph representation and the bounded
-inverse theorem, then use functional calculus for `I + X*X` to obtain projection and
-angle formulas.
--/
+/-- Every acute subspace is the graph of a unique bounded angular operator. -/
 theorem existsUnique_angularOperator
     (U V : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] (hacute : IsAcute U V) :
     ∃! X : E →L[𝕜] E,
       IsAngularOperator U X ∧ graphSubspace U X = V := by
-  sorry
+  classical
+  let T : V →L[𝕜] U := projectionRestriction U V
+  have hbelow : ∃ c > 0, ∀ v, c * ‖v‖ ≤ ‖T v‖ :=
+    projectionRestriction_boundedBelow_of_gap_lt_one U V hacute
+  have hsurj : Function.Surjective T :=
+    projectionRestriction_surjective_of_gap_lt_one U V hacute
+  let e : V ≃L[𝕜] U := ContinuousLinearEquiv.ofBijective T
+    hbelow.1 hbelow.2 hsurj
+  let X : E →L[𝕜] E :=
+    complementaryProjection U ∘L V.subtypeL ∘L e.symm.toContinuousLinearMap ∘L
+      U.orthogonalProjectionOnto ∘L projection U
+  have hX : IsAngularOperator U X := by
+    constructor
+    · simp [X, ContinuousLinearMap.comp_assoc]
+    · rw [← ContinuousLinearMap.comp_assoc,
+        projection_comp_complementaryProjection]
+      simp
+  have hgraph : graphSubspace U X = V := by
+    rw [graphSubspace_eq_range U X hX]
+    apply le_antisymm
+    · rintro y ⟨u, rfl⟩
+      exact graphEmbedding_projectionInverse_mem V e u
+    · intro v hv
+      let v' : V := ⟨v,hv⟩
+      refine ⟨projection U v, ?_⟩
+      exact graphEmbedding_projectionInverse_eq V e v'
+  refine ⟨X, ⟨hX,hgraph⟩, ?_⟩
+  intro Y hY
+  have hYr := graphSubspace_eq_range U Y hY.1
+  ext x
+  rw [← hY.1.1, ← hX.1]
+  let u := projection U x
+  have hxGraph : u + X u ∈ V := by
+    rw [← hgraph, graphSubspace_eq_range U X hX]
+    exact LinearMap.mem_range_self _ u
+  have hyGraph : u + Y u ∈ V := by
+    rw [← hY.2, hYr]
+    exact LinearMap.mem_range_self _ u
+  have hcoord : X u = Y u := by
+    have hzero := projectionRestriction_injective_of_acute U V hacute
+    apply hzero
+    simp [projectionRestriction, hX.2, hY.1.2]
+  exact hcoord
 
-/-- Projection onto a graph subspace in terms of the angular operator.
-
-Proof strategy: define the isometry from `U` into the graph by normalizing
-`u ↦ u + X u` with `(I + X*X)^{-1/2}`.  The graph projection is `J J*`.
-Expand this product in the decomposition `U ⊕ Uᗮ`, commute the functional
-calculus terms through `X` using the polar decomposition, and identify the
-four blocks with `graphProjectionFormula`.  Prove positivity and invertibility
-of `I + X*X` before performing block algebra. 
-
-Lean proof route for a weaker agent:
-
-1. Define the normalized graph embedding `J u=(u,Xu)(I+X*X)^{-1/2}`.
-2. Prove `J` is an isometry onto `graphSubspace U X`.
-3. Compute the orthogonal projection as `J J*` and expand its four blocks.
-4. Match the expanded expression with `graphProjectionFormula U X`.
-
-
-Ext-agent signature audit (GPT 5.6 High): Correct only with `IsAngularOperator`; without
-that hypothesis the ambient map may mix the base and complementary coordinates and the
-advertised block formula is false.
-
-Preferred dependency route: Build on the acute graph representation and the bounded
-inverse theorem, then use functional calculus for `I + X*X` to obtain projection and
-angle formulas.
--/
+/-- Projection onto a graph subspace in terms of the angular operator. -/
 theorem projection_graphSubspace_formula
     (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     (X : E →L[𝕜] E) (hX : IsAngularOperator U X) :
     projection (graphSubspace U X) = graphProjectionFormula U X := by
-  sorry
+  classical
+  let Y := angularize U X
+  let T := projection U + Y
+  let G := 1 + star Y ∘L Y
+  let GhalfInv := RCLikeContinuousFunctionalCalculus.invSqrt G
+  let J := T ∘L GhalfInv
+  have hJiso : ∀ x, ‖J x‖ = ‖projection U x‖ := by
+    intro x
+    rw [← sq_eq_sq₀ (norm_nonneg _) (norm_nonneg _)]
+    simp [J, T, G, GhalfInv, angularize_eq U X hX,
+      graphEmbedding_norm_sq]
+  have hrange : LinearMap.range J.toLinearMap = graphSubspace U X := by
+    rw [graphSubspace_eq_range U X hX]
+    exact range_comp_isUnit_eq_range T
+      (RCLikeContinuousFunctionalCalculus.invSqrt_isUnit G)
+  have hproj : J ∘L star J = graphProjectionFormula U X := by
+    unfold graphProjectionFormula
+    rw [angularize_eq U X hX]
+    simp [J, T, G, GhalfInv, ContinuousLinearMap.comp_assoc,
+      RCLikeContinuousFunctionalCalculus.invSqrt_mul_self]
+  rw [← hproj]
+  exact orthogonalProjection_eq_isometry_range J hJiso hrange
 
-/-- Tangent of the maximal angle is the angular-operator norm. 
-
-Lean proof route for a weaker agent:
-
-1. Use `projection_graphSubspace_formula` to compute the gap between `U` and the graph.
-2. Show the gap is `‖X‖/sqrt(1+‖X‖²)` by functional calculus and spectral mapping.
-3. Apply the scalar identity `tan(arcsin(x/sqrt(1+x²)))=x` for `x≥0`.
-
-
-Ext-agent signature audit (GPT 5.6 High): Correct because every bounded graph is acute.
-The proof must establish the angle range before applying inverse trigonometric
-identities.
-
-Preferred dependency route: Build on the acute graph representation and the bounded
-inverse theorem, then use functional calculus for `I + X*X` to obtain projection and
-angle formulas.
--/
+/-- Tangent of the maximal angle is the angular-operator norm. -/
 theorem tan_maximalAngle_eq_norm_angularOperator
     (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     (X : E →L[𝕜] E) (hX : IsAngularOperator U X) :
     Real.tan (maximalAngle U (graphSubspace U X)) = ‖X‖ := by
-  sorry
+  have hgap : subspaceGap U (graphSubspace U X) =
+      ‖X‖ / Real.sqrt (1 + ‖X‖^2) := by
+    rw [projection_graphSubspace_formula U X hX]
+    exact projectionGap_graphProjectionFormula U X hX
+  rw [maximalAngle, hgap]
+  exact Real.tan_arcsin_graph_ratio (norm_nonneg X)
 
-/-- Contractive angular operators correspond to angles below `π / 4`. 
-
-Lean proof route for a weaker agent:
-
-1. Rewrite the angle with `tan_maximalAngle_eq_norm_angularOperator`.
-2. Establish `0≤maximalAngle<π/2` for a graph subspace.
-3. Use strict monotonicity of `tan` and `tan(π/4)=1` to prove both implications.
-
-
-Ext-agent signature audit (GPT 5.6 High): Correct after the preceding tangent identity
-and the fact that graph angles lie in `[0,π/2)`.
-
-Preferred dependency route: Build on the acute graph representation and the bounded
-inverse theorem, then use functional calculus for `I + X*X` to obtain projection and
-angle formulas.
--/
+/-- Contractive angular operators correspond to angles below `π/4`. -/
 theorem norm_angularOperator_lt_one_iff
     (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     (X : E →L[𝕜] E) (hX : IsAngularOperator U X) :
     ‖X‖ < 1 ↔ maximalAngle U (graphSubspace U X) < Real.pi / 4 := by
-  sorry
+  have hrange : maximalAngle U (graphSubspace U X) ∈
+      Set.Ico 0 (Real.pi/2) := maximalAngle_graph_mem_Ico U X hX
+  rw [← tan_maximalAngle_eq_norm_angularOperator U X hX,
+    ← Real.tan_pi_div_four]
+  exact Real.strictMonoOn_tan.lt_iff_lt hrange
+    ⟨by positivity, by linarith [Real.pi_pos]⟩
 
 end DavisKahanExt
 end ForMathlib

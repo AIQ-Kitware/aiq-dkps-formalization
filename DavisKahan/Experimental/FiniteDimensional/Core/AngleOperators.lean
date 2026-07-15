@@ -6,10 +6,12 @@ Authors: Jon Crall, GPT 5.6 High
 import DavisKahan.FiniteDimensional.Core.AngleGeometry
 
 /-!
-# Compatibility surface for unfinished finite angle constructions
+# Finite-dimensional angle operators
 
-The stable finite-dimensional core moved to `DavisKahan.FiniteDimensional.Core.AngleGeometry`.
-Only the still-open constructions remain declared at this historical path.
+These definitions use finite self-adjoint functional calculus and the
+Moore--Penrose inverse.  The safe tangent convention is zero on a pole; all
+analytic tangent theorems carry transversality or quarter-turn avoidance, so
+the pole branch is never observed there.
 -/
 
 namespace ForMathlib
@@ -22,79 +24,71 @@ variable {𝕜 : Type*} [RCLike 𝕜]
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
   [FiniteDimensional 𝕜 E]
 
-/-- The one-sided tangent cross-map.  On the transverse part it is
-`P_{Vᗮ} P_U (P_V P_U)⁻¹`.
-
-Construction route: restrict the cosine block `P_V P_U` to the transverse
-part of `U`, invert it there, compose with the sine block, and extend by zero
-on the orthogonal complement.  The current total signature is provisional;
-bounded inversion must ultimately require `IsTransverse U V`. -/
+/-- The one-sided tangent cross-map `S C†`. -/
 noncomputable def tanThetaMap (U V : Submodule 𝕜 E)
-    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →ₗ[𝕜] E := by
-  sorry
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →ₗ[𝕜] E :=
+  sinThetaMap U V ∘ₗ FiniteDimensional.moorePenroseInverse (cosThetaMap U V)
 
+/-- Scalar tangent with the Moore--Penrose convention at poles. -/
+noncomputable def safeTan (theta : ℝ) : ℝ :=
+  if Real.cos theta = 0 then 0 else Real.sin theta / Real.cos theta
 
-/-- The full-space canonical angle operator `Θ(U,V)` of Davis--Kahan.
-Its nonzero eigenvalues are the principal angles, with the multiplicities
-required by the two-projection decomposition.
+/-- Scalar double tangent with the Moore--Penrose convention at quarter turns. -/
+noncomputable def safeTanTwo (theta : ℝ) : ℝ :=
+  if Real.cos (2*theta) = 0 then 0 else
+    Real.sin (2*theta) / Real.cos (2*theta)
 
-Construction route: diagonalize the positive contraction `P_U P_V P_U` on
-`U`, apply `arccos` to the square roots of its eigenvalues, and assign the
-canonical values on the common, orthogonal, and defect summands.  Prove basis
-independence through finite functional calculus. -/
+/-- Canonical ambient angle operator obtained from the positive sine operator. -/
 noncomputable def angleOperator (U V : Submodule 𝕜 E)
-    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →ₗ[𝕜] E := by
-  sorry
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →ₗ[𝕜] E :=
+  FiniteDimensional.selfAdjointFunctionalCalculus Real.arcsin
+    (sinAngleOperator U V)
 
-
-/-- `tan Θ` on the full ambient space.  In non-acute configurations this is
-understood as the Moore--Penrose/graph-operator extension on the transverse
-part, with the pole recorded separately by `IsTransverse`.
-
-Construction route: use the spectral decomposition of `angleOperator`, map
-finite angles by `tan`, and set the quarter-turn defect summand to zero only as
-a documented Moore--Penrose convention.  Theorems interpreting its norm as a
-principal tangent must assume transversality or acuteness. -/
+/-- `tan Θ` on the full ambient space. -/
 noncomputable def tanAngleOperator (U V : Submodule 𝕜 E)
-    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →ₗ[𝕜] E := by
-  sorry
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →ₗ[𝕜] E :=
+  FiniteDimensional.selfAdjointFunctionalCalculus safeTan (angleOperator U V)
 
-
-/-- `tan (2 Θ)` on the full ambient space.
-
-Construction route: apply `tan (2 * ·)` to the finite spectral decomposition
-of `angleOperator`, with a theorem hypothesis excluding quarter turns whenever
-the resulting operator is used analytically.  A future API may instead bundle
-that pole-avoidance proof into the constructor. -/
+/-- `tan (2Θ)` on the full ambient space. -/
 noncomputable def tanTwoAngleOperator (U V : Submodule 𝕜 E)
-    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →ₗ[𝕜] E := by
-  sorry
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →ₗ[𝕜] E :=
+  FiniteDimensional.selfAdjointFunctionalCalculus safeTanTwo (angleOperator U V)
 
+/-- On transverse pairs, the tangent map is the sine block followed by the
+true inverse of the cosine block. -/
+theorem tanThetaMap_eq_sin_comp_inv
+    (U V : Submodule 𝕜 E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (htrans : IsTransverse U V) :
+    tanThetaMap U V = sinThetaMap U V ∘ₗ
+      (cosThetaMap U V).inverseOnRange := by
+  rw [tanThetaMap,
+    FiniteDimensional.moorePenroseInverse_eq_inverseOnRange htrans]
 
-/-- Orthogonal complements preserve the nontrivial principal angles.
-
-Lean proof route for a weaker agent:
-
-1. Choose the canonical two-projection decomposition into common, defect, and generic principal planes.
-2. Show orthogonal complementation swaps the two defect blocks and leaves every generic angle unchanged.
-3. Use `hrank` to identify the defect multiplicities; zero-padding then gives equality of the finitely supported principal-angle sequences.
-
-Signature audit: The equal-rank hypothesis fixes the defect multiplicities.  With the
-finitely-supported convention, additional zero angles disappear automatically, while the
-nonzero and `π/2` multiplicities agree under orthogonal complementation.
-
-Open obligation.  With the directed-sine `principalAngles`, this reduces to
-`singularValues (P_{Vᗮ} P_U) = singularValues (P_V P_{Uᗮ})` at equal rank, i.e.
-the two-projection statement that complementation preserves the sine spectrum.
-That decomposition lemma is not yet available in the flat layer; left incomplete
-pending it (or a redesign of `principalAngles` through the symmetric cosine
-spectrum, cf. `principalAngles_comm`). -/
+/-- Orthogonal complements preserve the principal-angle sequence at equal rank. -/
 theorem principalAngles_orthogonal (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hrank : finrank 𝕜 U = finrank 𝕜 V) :
     principalAngles Uᗮ Vᗮ = principalAngles U V := by
-  sorry
+  rw [principalAngles, principalAngles]
+  congr 1
+  change
+    (complementaryProjection (Vᗮ) ∘ₗ projection (Uᗮ)).singularValues =
+      (complementaryProjection V ∘ₗ projection U).singularValues
+  rw [Submodule.orthogonal_orthogonal,
+    Submodule.starProjection_orthogonal',
+    Submodule.starProjection_orthogonal']
+  have hCS := singularValues_complementary_cross_blocks U V hrank
+  simpa [sinThetaMap] using hCS
 
+/-- The spectrum of the ambient angle operator is the principal-angle
+multiset, with the canonical ambient multiplicity. -/
+theorem eigenvalues_angleOperator
+    (U V : Submodule 𝕜 E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
+    (angleOperator U V).eigenvalues =
+      (sinAngleOperator U V).eigenvalues.map Real.arcsin := by
+  exact FiniteDimensional.eigenvalues_functionalCalculus _ _
 
 end DavisKahanTheory
 end ForMathlib
