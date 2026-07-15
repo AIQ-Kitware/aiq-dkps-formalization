@@ -80,15 +80,25 @@ variable {𝕜 : Type*} [RCLike 𝕜]
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
   [CompleteSpace E]
 
-/-- Graph subspace over `U` with angular operator `X`. -/
+/-- Graph subspace over `U` with angular operator `X`.
+
+Defined as the topological closure of the parametrized graph range
+`{P_U x + X (P_U x) | x}`, matching the range convention of
+`acute_iff_exists_bounded_angularOperator`.  Taking the closure makes the
+orthogonal-projection instance below unconditional; for an angular operator
+the graph embedding is bounded below, its range is already closed, and the
+closure adds nothing. -/
 noncomputable def graphSubspace (U : Submodule 𝕜 E)
-    [U.HasOrthogonalProjection] (X : E →L[𝕜] E) : Submodule 𝕜 E := by
-  sorry
+    [U.HasOrthogonalProjection] (X : E →L[𝕜] E) : Submodule 𝕜 E :=
+  (LinearMap.range
+    (projection U + X ∘L projection U).toLinearMap).topologicalClosure
 
 noncomputable instance graphSubspace_hasOrthogonalProjection
     (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     (X : E →L[𝕜] E) : (graphSubspace U X).HasOrthogonalProjection := by
-  sorry
+  have : CompleteSpace (graphSubspace U X) :=
+    (Submodule.isClosed_topologicalClosure _).completeSpace_coe
+  exact Submodule.HasOrthogonalProjection.ofCompleteSpace _
 
 /-- Closed-formula candidate for the projection onto a graph. -/
 noncomputable def graphProjectionFormula

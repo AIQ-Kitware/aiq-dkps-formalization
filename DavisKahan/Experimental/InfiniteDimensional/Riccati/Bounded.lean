@@ -56,8 +56,11 @@ Construction route: define `(x₀,x₁) ↦ (A₀x₀+B₀₁x₁, B₁₀x₀+A
 `LinearMap.mkContinuous`. -/
 noncomputable def blockOperator
     (H : BlockOperatorData (𝕜 := 𝕜) (E0 := E0) (E1 := E1)) :
-    WithLp 2 (E0 × E1) →L[𝕜] WithLp 2 (E0 × E1) := by
-  sorry
+    WithLp 2 (E0 × E1) →L[𝕜] WithLp 2 (E0 × E1) :=
+  ((WithLp.prodContinuousLinearEquiv 2 𝕜 E0 E1).symm :
+      (E0 × E1) →L[𝕜] WithLp 2 (E0 × E1)) ∘L
+    ((H.A0 ∘L WithLp.fstL 2 𝕜 E0 E1 + H.B01 ∘L WithLp.sndL 2 𝕜 E0 E1).prod
+      (H.B10 ∘L WithLp.fstL 2 𝕜 E0 E1 + H.A1 ∘L WithLp.sndL 2 𝕜 E0 E1))
 
 /-- Graph of a bounded angular operator in the Hilbert direct sum. -/
 noncomputable def blockGraph (X : E0 →L[𝕜] E1) :
@@ -71,8 +74,11 @@ Construction route: define `(x₀,x₁) ↦ (D₀x₀,D₁x₁)` and use the `Wi
 product norm to bound it by `max ‖D₀‖ ‖D₁‖`. -/
 noncomputable def blockDiagonalOperator
     (D0 : E0 →L[𝕜] E0) (D1 : E1 →L[𝕜] E1) :
-    WithLp 2 (E0 × E1) →L[𝕜] WithLp 2 (E0 × E1) := by
-  sorry
+    WithLp 2 (E0 × E1) →L[𝕜] WithLp 2 (E0 × E1) :=
+  ((WithLp.prodContinuousLinearEquiv 2 𝕜 E0 E1).symm :
+      (E0 × E1) →L[𝕜] WithLp 2 (E0 × E1)) ∘L (D0.prodMap D1) ∘L
+    ((WithLp.prodContinuousLinearEquiv 2 𝕜 E0 E1) :
+      WithLp 2 (E0 × E1) →L[𝕜] E0 × E1)
 
 /-- Riccati defect `A₁X - XA₀ - XB₀₁X + B₁₀`. -/
 def riccatiDefect (H : BlockOperatorData (𝕜 := 𝕜) (E0 := E0) (E1 := E1))

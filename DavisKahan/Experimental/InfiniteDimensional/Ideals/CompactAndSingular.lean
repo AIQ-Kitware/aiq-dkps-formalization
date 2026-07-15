@@ -104,13 +104,17 @@ theorem schatten_sinTheta
         (sinAngleOperator U V) ∧
       d * (SymmetricNormIdeal.schatten (𝕜 := 𝕜) (E := E) p hp).gauge
         (sinAngleOperator U V) ≤
-      (SymmetricNormIdeal.schatten (𝕜 := 𝕜) (E := E) p hp).gauge (B - A) := by
-  sorry
+      (SymmetricNormIdeal.schatten (𝕜 := 𝕜) (E := E) p hp).gauge (B - A) :=
+  ideal_sinTheta (SymmetricNormIdeal.schatten p hp) hA hB hU hV hd hUV hVU hmem
 
-/-- Hermitian dilation of a rectangular bounded operator. -/
+/-- Hermitian dilation `(x, y) ↦ (T⋆ y, T x)` of a rectangular bounded
+operator on the Hilbert direct sum. -/
 noncomputable def hermitianDilation (T : E →L[𝕜] F) :
-    WithLp 2 (E × F) →L[𝕜] WithLp 2 (E × F) := by
-  sorry
+    WithLp 2 (E × F) →L[𝕜] WithLp 2 (E × F) :=
+  ((WithLp.prodContinuousLinearEquiv 2 𝕜 E F).symm :
+      (E × F) →L[𝕜] WithLp 2 (E × F)) ∘L
+    ((ContinuousLinearMap.adjoint T ∘L WithLp.sndL 2 𝕜 E F).prod
+      (T ∘L WithLp.fstL 2 𝕜 E F))
 
 /-- The Hermitian dilation is self-adjoint. 
 
@@ -131,7 +135,15 @@ correspondences.
 -/
 theorem hermitianDilation_selfAdjoint (T : E →L[𝕜] F) :
     IsSelfAdjointOperator (hermitianDilation T) := by
-  sorry
+  intro x y
+  simp only [hermitianDilation, ContinuousLinearMap.coe_comp',
+    Function.comp_apply, ContinuousLinearMap.prod_apply,
+    ContinuousLinearEquiv.coe_coe,
+    WithLp.prodContinuousLinearEquiv_symm_apply,
+    WithLp.prod_inner_apply, WithLp.ofLp_toLp,
+    WithLp.fstL_apply, WithLp.sndL_apply]
+  simp [ContinuousLinearMap.adjoint_inner_left,
+    ContinuousLinearMap.adjoint_inner_right, add_comm]
 
 /-- Hermitian-dilation spectral-projection bound underlying Wedin's theorem.
 
@@ -207,7 +219,9 @@ theorem covariance_subspace_sinTheta
     (hsepBA : IntervalExteriorSeparated B (spectralSubspace B t)
       A (spectralSubspace A s)ᗮ left' right' d) :
     d * ‖spectralProjection A s - spectralProjection B t‖ ≤ ‖B - A‖ := by
-  sorry
+  obtain ⟨hAs, hBt⟩ := id hsepAB
+  obtain ⟨hBs, hAt⟩ := id hsepBA
+  exact spectralProjection_sinTheta hA hB s t hs ht hd hAs hBt hBs hAt
 
 end DavisKahanExt
 end ForMathlib
