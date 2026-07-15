@@ -380,7 +380,7 @@ theorem spectraCanonicalPolarFactor_surjective
   refine ⟨x, ?_⟩
   rw [← coe_spectraCanonicalPolarFactorUnitary U V hacute]
   have hcoe : (e : H →L[ℂ] H) = (u : H →L[ℂ] H) := by
-    simpa [e] using Unitary.coe_linearIsometryEquiv_apply u
+    simp [e]
   exact (congrArg (fun T : H →L[ℂ] H => T x) hcoe).symm.trans hx
 
 /-- The canonical polar factor is one-to-one. -/
@@ -395,7 +395,7 @@ theorem spectraCanonicalPolarFactor_injective
   apply e.injective
   rw [← coe_spectraCanonicalPolarFactorUnitary U V hacute] at hxy
   have hcoe : (e : H →L[ℂ] H) = (u : H →L[ℂ] H) := by
-    simpa [e] using Unitary.coe_linearIsometryEquiv_apply u
+    simp [e]
   have hx : e x = (u : H →L[ℂ] H) x :=
     congrArg (fun T : H →L[ℂ] H => T x) hcoe
   have hy : e y = (u : H →L[ℂ] H) y :=
@@ -626,6 +626,254 @@ theorem spectraDirectRotation_maps_orthogonalComplement
       (spectraDirectRotation_intertwines_complementary U V hacute)
     rw [mul_apply_eq_comp, mul_apply_eq_comp,
       Vᗮ.starProjection_eq_self_iff.mpr hy] at h
+    exact h
+
+
+/-! ## Elementary unitary, adjoint, and reflection consequences -/
+
+/-- The acute Spectra direct rotation is a unitary element of the bounded
+operator algebra. -/
+theorem spectraDirectRotation_mem_unitary
+    (U V : Submodule ℂ H)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hacute : IsAcute U V) :
+    spectraDirectRotation U V hacute ∈ unitary (H →L[ℂ] H) := by
+  change spectraCanonicalPolarFactor U V ∈ unitary (H →L[ℂ] H)
+  exact (spectraCanonicalPolarFactorUnitary U V hacute).property
+
+/-- The adjoint is a left inverse of the acute Spectra direct rotation. -/
+theorem star_spectraDirectRotation_mul_self
+    (U V : Submodule ℂ H)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hacute : IsAcute U V) :
+    star (spectraDirectRotation U V hacute) *
+        spectraDirectRotation U V hacute = 1 :=
+  Unitary.star_mul_self_of_mem
+    (spectraDirectRotation_mem_unitary U V hacute)
+
+/-- The adjoint is a right inverse of the acute Spectra direct rotation. -/
+theorem spectraDirectRotation_mul_star_self
+    (U V : Submodule ℂ H)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hacute : IsAcute U V) :
+    spectraDirectRotation U V hacute *
+        star (spectraDirectRotation U V hacute) = 1 :=
+  Unitary.mul_star_self_of_mem
+    (spectraDirectRotation_mem_unitary U V hacute)
+
+/-- The adjoint of the acute Spectra direct rotation intertwines the target
+projection back to the source projection. -/
+theorem star_spectraDirectRotation_intertwines
+    (U V : Submodule ℂ H)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hacute : IsAcute U V) :
+    star (spectraDirectRotation U V hacute) * projection V =
+      projection U * star (spectraDirectRotation U V hacute) := by
+  have h := congrArg star (spectraDirectRotation_intertwines U V hacute)
+  simpa only [star_mul, star_star,
+      (isSelfAdjoint_starProjection U).star_eq,
+      (isSelfAdjoint_starProjection V).star_eq] using h.symm
+
+/-- The adjoint also intertwines the complementary target projection back to
+the complementary source projection. -/
+theorem star_spectraDirectRotation_intertwines_complementary
+    (U V : Submodule ℂ H)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hacute : IsAcute U V) :
+    star (spectraDirectRotation U V hacute) * complementaryProjection V =
+      complementaryProjection U * star (spectraDirectRotation U V hacute) := by
+  change
+    star (spectraDirectRotation U V hacute) * Vᗮ.starProjection =
+      Uᗮ.starProjection * star (spectraDirectRotation U V hacute)
+  rw [Submodule.starProjection_orthogonal',
+    Submodule.starProjection_orthogonal']
+  rw [mul_sub, mul_one, sub_mul, one_mul,
+    star_spectraDirectRotation_intertwines U V hacute]
+
+/-- Conjugation by the acute Spectra direct rotation carries the source
+projection to the target projection. -/
+theorem spectraDirectRotation_conjugates_projection
+    (U V : Submodule ℂ H)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hacute : IsAcute U V) :
+    spectraDirectRotation U V hacute * projection U *
+        star (spectraDirectRotation U V hacute) = projection V := by
+  calc
+    spectraDirectRotation U V hacute * projection U *
+        star (spectraDirectRotation U V hacute) =
+      (projection V * spectraDirectRotation U V hacute) *
+        star (spectraDirectRotation U V hacute) := by
+          rw [spectraDirectRotation_intertwines U V hacute]
+    _ = projection V *
+        (spectraDirectRotation U V hacute *
+          star (spectraDirectRotation U V hacute)) := by rw [mul_assoc]
+    _ = projection V := by
+      rw [spectraDirectRotation_mul_star_self U V hacute, mul_one]
+
+/-- Conjugation by the adjoint carries the target projection back to the
+source projection. -/
+theorem star_spectraDirectRotation_conjugates_projection
+    (U V : Submodule ℂ H)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hacute : IsAcute U V) :
+    star (spectraDirectRotation U V hacute) * projection V *
+        spectraDirectRotation U V hacute = projection U := by
+  calc
+    star (spectraDirectRotation U V hacute) * projection V *
+        spectraDirectRotation U V hacute =
+      (projection U * star (spectraDirectRotation U V hacute)) *
+        spectraDirectRotation U V hacute := by
+          rw [star_spectraDirectRotation_intertwines U V hacute]
+    _ = projection U *
+        (star (spectraDirectRotation U V hacute) *
+          spectraDirectRotation U V hacute) := by rw [mul_assoc]
+    _ = projection U := by
+      rw [star_spectraDirectRotation_mul_self U V hacute, mul_one]
+
+/-- Conjugation by the acute Spectra direct rotation carries complementary
+source projection to the complementary target projection. -/
+theorem spectraDirectRotation_conjugates_complementaryProjection
+    (U V : Submodule ℂ H)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hacute : IsAcute U V) :
+    spectraDirectRotation U V hacute * complementaryProjection U *
+        star (spectraDirectRotation U V hacute) = complementaryProjection V := by
+  calc
+    spectraDirectRotation U V hacute * complementaryProjection U *
+        star (spectraDirectRotation U V hacute) =
+      (complementaryProjection V * spectraDirectRotation U V hacute) *
+        star (spectraDirectRotation U V hacute) := by
+          rw [spectraDirectRotation_intertwines_complementary U V hacute]
+    _ = complementaryProjection V *
+        (spectraDirectRotation U V hacute *
+          star (spectraDirectRotation U V hacute)) := by rw [mul_assoc]
+    _ = complementaryProjection V := by
+      rw [spectraDirectRotation_mul_star_self U V hacute, mul_one]
+
+/-- The acute Spectra direct rotation intertwines the two reflection
+operators. -/
+theorem spectraDirectRotation_intertwines_reflection
+    (U V : Submodule ℂ H)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hacute : IsAcute U V) :
+    spectraDirectRotation U V hacute * reflectionOperator U =
+      reflectionOperator V * spectraDirectRotation U V hacute := by
+  simp only [reflectionOperator_eq_projection_add_projection_sub_one,
+    mul_sub, mul_add, mul_one, sub_mul, add_mul, one_mul,
+    spectraDirectRotation_intertwines U V hacute]
+
+/-- The adjoint intertwines the target reflection back to the source
+reflection. -/
+theorem star_spectraDirectRotation_intertwines_reflection
+    (U V : Submodule ℂ H)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hacute : IsAcute U V) :
+    star (spectraDirectRotation U V hacute) * reflectionOperator V =
+      reflectionOperator U * star (spectraDirectRotation U V hacute) := by
+  simp only [reflectionOperator_eq_projection_add_projection_sub_one,
+    mul_sub, mul_add, mul_one, sub_mul, add_mul, one_mul,
+    star_spectraDirectRotation_intertwines U V hacute]
+
+/-- Conjugation by the acute Spectra direct rotation carries the source
+reflection to the target reflection. -/
+theorem spectraDirectRotation_conjugates_reflection
+    (U V : Submodule ℂ H)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hacute : IsAcute U V) :
+    spectraDirectRotation U V hacute * reflectionOperator U *
+        star (spectraDirectRotation U V hacute) = reflectionOperator V := by
+  calc
+    spectraDirectRotation U V hacute * reflectionOperator U *
+        star (spectraDirectRotation U V hacute) =
+      (reflectionOperator V * spectraDirectRotation U V hacute) *
+        star (spectraDirectRotation U V hacute) := by
+          rw [spectraDirectRotation_intertwines_reflection U V hacute]
+    _ = reflectionOperator V *
+        (spectraDirectRotation U V hacute *
+          star (spectraDirectRotation U V hacute)) := by rw [mul_assoc]
+    _ = reflectionOperator V := by
+      rw [spectraDirectRotation_mul_star_self U V hacute, mul_one]
+
+/-- The adjoint of the acute Spectra direct rotation is onto. -/
+theorem star_spectraDirectRotation_surjective
+    (U V : Submodule ℂ H)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hacute : IsAcute U V) :
+    Function.Surjective
+      (star (spectraDirectRotation U V hacute) : H →L[ℂ] H) := by
+  intro y
+  refine ⟨spectraDirectRotation U V hacute y, ?_⟩
+  have h := congrArg (fun T : H →L[ℂ] H => T y)
+    (star_spectraDirectRotation_mul_self U V hacute)
+  simpa only [mul_apply_eq_comp, one_apply_eq_self] using h
+
+/-- The adjoint of the acute Spectra direct rotation is one-to-one. -/
+theorem star_spectraDirectRotation_injective
+    (U V : Submodule ℂ H)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hacute : IsAcute U V) :
+    Function.Injective
+      (star (spectraDirectRotation U V hacute) : H →L[ℂ] H) := by
+  intro x y hxy
+  have hmap := congrArg (fun z => spectraDirectRotation U V hacute z) hxy
+  have hx := congrArg (fun T : H →L[ℂ] H => T x)
+    (spectraDirectRotation_mul_star_self U V hacute)
+  have hy := congrArg (fun T : H →L[ℂ] H => T y)
+    (spectraDirectRotation_mul_star_self U V hacute)
+  simp only [mul_apply_eq_comp, one_apply_eq_self] at hx hy
+  exact hx.symm.trans (hmap.trans hy)
+
+/-- The adjoint carries the target subspace back onto the source subspace. -/
+theorem star_spectraDirectRotation_maps_subspace
+    (U V : Submodule ℂ H)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hacute : IsAcute U V) :
+    V.map ((star (spectraDirectRotation U V hacute) :
+      H →L[ℂ] H).toLinearMap) = U := by
+  apply le_antisymm
+  · rintro y ⟨x, hx, rfl⟩
+    apply U.starProjection_eq_self_iff.mp
+    have h := congrArg (fun T : H →L[ℂ] H => T x)
+      (star_spectraDirectRotation_intertwines U V hacute)
+    rw [mul_apply_eq_comp, mul_apply_eq_comp,
+      V.starProjection_eq_self_iff.mpr hx] at h
+    exact h.symm
+  · intro y hy
+    obtain ⟨x, rfl⟩ := star_spectraDirectRotation_surjective U V hacute y
+    refine ⟨x, ?_, rfl⟩
+    apply V.starProjection_eq_self_iff.mp
+    apply star_spectraDirectRotation_injective U V hacute
+    have h := congrArg (fun T : H →L[ℂ] H => T x)
+      (star_spectraDirectRotation_intertwines U V hacute)
+    rw [mul_apply_eq_comp, mul_apply_eq_comp,
+      U.starProjection_eq_self_iff.mpr hy] at h
+    exact h
+
+/-- The adjoint carries the target orthogonal complement back onto the source
+orthogonal complement. -/
+theorem star_spectraDirectRotation_maps_orthogonalComplement
+    (U V : Submodule ℂ H)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hacute : IsAcute U V) :
+    Vᗮ.map ((star (spectraDirectRotation U V hacute) :
+      H →L[ℂ] H).toLinearMap) = Uᗮ := by
+  apply le_antisymm
+  · rintro y ⟨x, hx, rfl⟩
+    apply Uᗮ.starProjection_eq_self_iff.mp
+    have h := congrArg (fun T : H →L[ℂ] H => T x)
+      (star_spectraDirectRotation_intertwines_complementary U V hacute)
+    rw [mul_apply_eq_comp, mul_apply_eq_comp,
+      Vᗮ.starProjection_eq_self_iff.mpr hx] at h
+    exact h.symm
+  · intro y hy
+    obtain ⟨x, rfl⟩ := star_spectraDirectRotation_surjective U V hacute y
+    refine ⟨x, ?_, rfl⟩
+    apply Vᗮ.starProjection_eq_self_iff.mp
+    apply star_spectraDirectRotation_injective U V hacute
+    have h := congrArg (fun T : H →L[ℂ] H => T x)
+      (star_spectraDirectRotation_intertwines_complementary U V hacute)
+    rw [mul_apply_eq_comp, mul_apply_eq_comp,
+      Uᗮ.starProjection_eq_self_iff.mpr hy] at h
     exact h
 
 end SpectraBridge
