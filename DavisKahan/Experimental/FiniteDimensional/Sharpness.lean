@@ -124,13 +124,22 @@ noncomputable def modelGappedOperator (a b : ℝ) :
     Plane 𝕜 →ₗ[𝕜] Plane 𝕜 :=
   Matrix.toEuclideanLin (Matrix.diagonal ![(a : 𝕜), (b : 𝕜)])
 
-/-- Perturbation producing equality in the `sin Θ` model.
+/-- Planar rotation matrix by angle `θ` with real entries cast into `𝕜`. -/
+noncomputable def planarRotationMatrix (θ : ℝ) : Matrix (Fin 2) (Fin 2) 𝕜 :=
+  !![(Real.cos θ : 𝕜), -(Real.sin θ : 𝕜);
+     (Real.sin θ : 𝕜), (Real.cos θ : 𝕜)]
 
-Construction route: conjugate the diagonal model by the planar rotation and
-subtract the original matrix; simplify entries with sine and cosine identities. -/
+/-- Perturbation producing equality in the `sin Θ` model: the rotation
+conjugate of the diagonal model minus the diagonal model,
+`R(θ) diag(a,b) R(θ)ᵀ - diag(a,b)`.  Its entries are
+`(b-a) sin²θ`, off-diagonal `(a-b) sinθ cosθ`, and `(a-b) sin²θ`, so its
+square is `((b-a) sinθ)² • 1`. -/
 noncomputable def modelSinThetaPerturbation (a b θ : ℝ) :
-    Plane 𝕜 →ₗ[𝕜] Plane 𝕜 := by
-  sorry
+    Plane 𝕜 →ₗ[𝕜] Plane 𝕜 :=
+  Matrix.toEuclideanLin
+    (planarRotationMatrix θ * Matrix.diagonal ![(a : 𝕜), (b : 𝕜)] *
+        (planarRotationMatrix θ).transpose -
+      Matrix.diagonal ![(a : 𝕜), (b : 𝕜)])
 
 /-- Perturbation/residual producing equality in the `tan Θ` model.
 
@@ -141,22 +150,26 @@ noncomputable def modelTanThetaPerturbation (a b θ : ℝ) :
     Plane 𝕜 →ₗ[𝕜] Plane 𝕜 := by
   sorry
 
-/-- Reflection-compatible perturbation producing equality in `sin (2 Θ)`.
-
-Construction route: take the reflection-compatible off-diagonal block of the
-rotated model and normalize it to realize the double-angle sine equality. -/
+/-- Reflection-compatible perturbation producing equality in `sin (2 Θ)`:
+the purely off-diagonal part of the rotated model, with entry
+`(a-b) sinθ cosθ = ((a-b)/2) sin (2θ)` in both corners.  Being purely
+off-diagonal it anticommutes with the reflection `diag(1,-1)` through the
+model subspace. -/
 noncomputable def modelSinTwoThetaPerturbation (a b θ : ℝ) :
-    Plane 𝕜 →ₗ[𝕜] Plane 𝕜 := by
-  sorry
+    Plane 𝕜 →ₗ[𝕜] Plane 𝕜 :=
+  Matrix.toEuclideanLin
+    !![0, (((a - b) / 2 * Real.sin (2 * θ) : ℝ) : 𝕜);
+       (((a - b) / 2 * Real.sin (2 * θ) : ℝ) : 𝕜), 0]
 
-/-- Off-diagonal perturbation used by the `tan (2 Θ)` extremizer.
-
-Construction route: choose the purely off-diagonal planar perturbation for
-which the Riccati denominator and numerator attain the tangent double-angle
-ratio. -/
+/-- Off-diagonal perturbation used by the `tan (2 Θ)` extremizer: the purely
+off-diagonal symmetric perturbation with entry `((b-a)/2) tan (2θ)`, chosen so
+the eigenvectors of `diag(a,b) + H` sit at angle `θ` from the coordinate axes
+(the planar Riccati rotation law `tan (2θ) = 2h/(b-a)`). -/
 noncomputable def modelTanTwoThetaPerturbation (a b θ : ℝ) :
-    Plane 𝕜 →ₗ[𝕜] Plane 𝕜 := by
-  sorry
+    Plane 𝕜 →ₗ[𝕜] Plane 𝕜 :=
+  Matrix.toEuclideanLin
+    !![0, (((b - a) / 2 * Real.tan (2 * θ) : ℝ) : 𝕜);
+       (((b - a) / 2 * Real.tan (2 * θ) : ℝ) : 𝕜), 0]
 
 /-- The model subspaces have exactly the prescribed principal angle.
 
