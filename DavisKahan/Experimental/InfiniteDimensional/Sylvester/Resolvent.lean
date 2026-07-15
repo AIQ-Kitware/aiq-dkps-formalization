@@ -77,15 +77,44 @@ variable {𝕜 : Type*} [RCLike 𝕜]
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
   [CompleteSpace E]
 
-/-- Resolvent operator `(A - zI)⁻¹`, defined on the resolvent set. -/
-noncomputable def resolventOperator (A : E →L[𝕜] E) (z : 𝕜) : E →L[𝕜] E := by
-  sorry
-
 /-- Resolvent-set predicate. -/
 def InResolventSet (A : E →L[𝕜] E) (z : 𝕜) : Prop :=
   ∃ R : E →L[𝕜] E,
     R ∘L (A - z • ContinuousLinearMap.id 𝕜 E) = ContinuousLinearMap.id 𝕜 E ∧
     (A - z • ContinuousLinearMap.id 𝕜 E) ∘L R = ContinuousLinearMap.id 𝕜 E
+
+/-- Resolvent operator `(A - zI)⁻¹`, defined on the resolvent set and extended
+by zero elsewhere.  Analytic statements must access it only through
+`resolventOperator_inverse` and its multiplicative corollaries. -/
+noncomputable def resolventOperator (A : E →L[𝕜] E) (z : 𝕜) : E →L[𝕜] E :=
+  haveI := Classical.propDecidable (InResolventSet A z)
+  if h : InResolventSet A z then h.choose else 0
+
+/-- On the resolvent set, `resolventOperator` is a two-sided inverse of
+`A - zI`. -/
+theorem resolventOperator_inverse (A : E →L[𝕜] E) {z : 𝕜}
+    (hz : InResolventSet A z) :
+    resolventOperator A z ∘L (A - z • ContinuousLinearMap.id 𝕜 E) =
+        ContinuousLinearMap.id 𝕜 E ∧
+      (A - z • ContinuousLinearMap.id 𝕜 E) ∘L resolventOperator A z =
+        ContinuousLinearMap.id 𝕜 E := by
+  simp only [resolventOperator]
+  rw [dif_pos hz]
+  exact hz.choose_spec
+
+/-- Ring-language left-inverse law for the resolvent. -/
+theorem resolventOperator_mul_cancel (A : E →L[𝕜] E) {z : 𝕜}
+    (hz : InResolventSet A z) :
+    resolventOperator A z * (A - z • 1) = 1 := by
+  rw [ContinuousLinearMap.mul_def, ContinuousLinearMap.one_def]
+  exact (resolventOperator_inverse A hz).1
+
+/-- Ring-language right-inverse law for the resolvent. -/
+theorem mul_resolventOperator_cancel (A : E →L[𝕜] E) {z : 𝕜}
+    (hz : InResolventSet A z) :
+    (A - z • 1) * resolventOperator A z = 1 := by
+  rw [ContinuousLinearMap.mul_def, ContinuousLinearMap.one_def]
+  exact (resolventOperator_inverse A hz).2
 
 /-- First resolvent identity. 
 
@@ -109,7 +138,26 @@ theorem resolvent_identity
     (hz : InResolventSet A z) (hw : InResolventSet A w) :
     resolventOperator A z - resolventOperator A w =
       (z - w) • (resolventOperator A z ∘L resolventOperator A w) := by
-  sorry
+  have h1 := resolventOperator_mul_cancel A hz
+  have h2 := mul_resolventOperator_cancel A hw
+  have hdiff : (A - w • (1 : E →L[𝕜] E)) - (A - z • (1 : E →L[𝕜] E)) =
+      (z - w) • (1 : E →L[𝕜] E) := by
+    rw [sub_smul]; abel
+  have key : resolventOperator A z - resolventOperator A w =
+      (z - w) • (resolventOperator A z * resolventOperator A w) := by
+    calc resolventOperator A z - resolventOperator A w
+        = resolventOperator A z * ((A - w • 1) * resolventOperator A w) -
+            resolventOperator A z * (A - z • 1) * resolventOperator A w := by
+          rw [h2, mul_one, h1, one_mul]
+      _ = resolventOperator A z * ((A - w • 1) - (A - z • 1)) *
+            resolventOperator A w := by
+          noncomm_ring
+      _ = resolventOperator A z * ((z - w) • (1 : E →L[𝕜] E)) *
+            resolventOperator A w := by
+          rw [hdiff]
+      _ = (z - w) • (resolventOperator A z * resolventOperator A w) := by
+          rw [mul_smul_comm, mul_one, smul_mul_assoc]
+  simpa only [ContinuousLinearMap.mul_def] using key
 
 /-- Second resolvent identity. 
 
@@ -132,7 +180,24 @@ theorem resolvent_perturbation_identity
     (hA : InResolventSet A z) (hB : InResolventSet B z) :
     resolventOperator B z - resolventOperator A z =
       resolventOperator B z ∘L (A - B) ∘L resolventOperator A z := by
-  sorry
+  have h1 := resolventOperator_mul_cancel B hB
+  have h2 := mul_resolventOperator_cancel A hA
+  have hdiff : (A - z • (1 : E →L[𝕜] E)) - (B - z • (1 : E →L[𝕜] E)) =
+      A - B := by
+    abel
+  have key : resolventOperator B z - resolventOperator A z =
+      resolventOperator B z * (A - B) * resolventOperator A z := by
+    calc resolventOperator B z - resolventOperator A z
+        = resolventOperator B z * ((A - z • 1) * resolventOperator A z) -
+            resolventOperator B z * (B - z • 1) * resolventOperator A z := by
+          rw [h2, mul_one, h1, one_mul]
+      _ = resolventOperator B z * ((A - z • 1) - (B - z • 1)) *
+            resolventOperator A z := by
+          noncomm_ring
+      _ = resolventOperator B z * (A - B) * resolventOperator A z := by
+          rw [hdiff]
+  simpa only [ContinuousLinearMap.mul_def, ContinuousLinearMap.comp_assoc]
+    using key
 
 /-- Self-adjoint resolvent norm bound by spectral distance. 
 
@@ -220,7 +285,24 @@ theorem inResolventSet_add_of_norm_lt
     (hz : InResolventSet A z)
     (hsmall : ‖H‖ * ‖resolventOperator A z‖ < 1) :
     InResolventSet (A + H) z := by
-  sorry
+  have h1 := resolventOperator_mul_cancel A hz
+  have h2 := mul_resolventOperator_cancel A hz
+  have hnorm : ‖-(H * resolventOperator A z)‖ < 1 := by
+    rw [norm_neg]
+    exact lt_of_le_of_lt (norm_mul_le _ _) hsmall
+  let M : (E →L[𝕜] E)ˣ := Units.oneSub (-(H * resolventOperator A z)) hnorm
+  have hMval : (M : E →L[𝕜] E) = 1 + H * resolventOperator A z := by
+    show 1 - -(H * resolventOperator A z) = 1 + H * resolventOperator A z
+    rw [sub_neg_eq_add]
+  have hfact : A + H - z • (1 : E →L[𝕜] E) =
+      (M : E →L[𝕜] E) * (A - z • 1) := by
+    rw [hMval, add_mul, one_mul, mul_assoc, h1, mul_one]
+    abel
+  refine ⟨resolventOperator A z * ↑M⁻¹, ?_, ?_⟩
+  · rw [← ContinuousLinearMap.one_def, ← ContinuousLinearMap.mul_def, hfact,
+      mul_assoc, ← mul_assoc (↑M⁻¹ : E →L[𝕜] E), Units.inv_mul, one_mul, h1]
+  · rw [← ContinuousLinearMap.one_def, ← ContinuousLinearMap.mul_def, hfact,
+      mul_assoc, ← mul_assoc (A - z • 1), h2, one_mul, Units.mul_inv]
 
 /-- Norm continuity of Riesz projections along a uniformly separating path. 
 
