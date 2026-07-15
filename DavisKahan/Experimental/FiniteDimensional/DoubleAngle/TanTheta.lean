@@ -197,7 +197,22 @@ theorem tanTwoTheta_spectralSubspace_le
     let V := spectralSubspace (A + H) (Set.Iic a)
     IsAcute U V ∧
       (b - a) * N (tanTwoAngleOperator U V) ≤ 2 * N H := by
-  sorry
+  intro V
+  have hB : (A + H).IsSymmetric := hA.add hH
+  have hδ : (0 : ℝ) < b - a := sub_pos.mpr hab
+  have hgap : InternalGap A U (b - a) := by
+    intro lam mu hlam hmu
+    have h1 : lam ≤ a := hUa hlam
+    have h2 : b ≤ mu := hUb hmu
+    calc b - a ≤ mu - lam := by linarith
+      _ ≤ |mu - lam| := le_abs_self _
+      _ = |lam - mu| := abs_sub_comm mu lam
+  have hoff' : IsOffDiagonal U (A + H - A) := by
+    rwa [add_sub_cancel_left]
+  have h := tanTwoTheta_perturbation_le N hA hB hU
+    (reduces_spectralSubspace (A + H) (Set.Iic a)) hoff' hδ hgap
+  rw [add_sub_cancel_left] at h
+  exact ⟨isAcute_canonical_tanTwoTheta hA hH hU hoff hab hUa hUb, h.2⟩
 
 /-! ## Davis--Kahan Theorem 8.1: spectral selection and repulsion -/
 

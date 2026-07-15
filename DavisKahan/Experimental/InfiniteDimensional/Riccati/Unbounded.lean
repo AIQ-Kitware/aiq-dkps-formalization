@@ -84,7 +84,33 @@ noncomputable def unboundedBlockGraph (X : E0 →L[𝕜] E1) :
 noncomputable instance unboundedBlockGraph_hasOrthogonalProjection
     (X : E0 →L[𝕜] E1) :
     (unboundedBlockGraph X).HasOrthogonalProjection := by
-  sorry
+  set G : E0 →L[𝕜] WithLp 2 (E0 × E1) :=
+    ((WithLp.prodContinuousLinearEquiv 2 𝕜 E0 E1).symm :
+        (E0 × E1) →L[𝕜] WithLp 2 (E0 × E1)) ∘L
+      (ContinuousLinearMap.id 𝕜 E0).prod X with hG
+  have hGmem : ∀ u : E0, G u ∈ unboundedBlockGraph X := fun u => ⟨u, rfl⟩
+  have hGfix : ∀ z ∈ unboundedBlockGraph X,
+      G (WithLp.fstL 2 𝕜 E0 E1 z) = z := by
+    intro z hz
+    obtain ⟨u, hu⟩ := LinearMap.mem_range.mp hz
+    rw [← hu]
+    rfl
+  have hclosed : IsClosed ((unboundedBlockGraph X : Submodule 𝕜 _) :
+      Set (WithLp 2 (E0 × E1))) := by
+    rw [← isSeqClosed_iff_isClosed]
+    intro seq y hseq hlim
+    have hfix : ∀ n, seq n = G (WithLp.fstL 2 𝕜 E0 E1 (seq n)) :=
+      fun n => (hGfix _ (hseq n)).symm
+    have hlim2 : Filter.Tendsto seq Filter.atTop
+        (nhds (G (WithLp.fstL 2 𝕜 E0 E1 y))) := by
+      refine Filter.Tendsto.congr (fun n => (hfix n).symm) ?_
+      exact (((G ∘L WithLp.fstL 2 𝕜 E0 E1)).continuous.tendsto y).comp hlim
+    have hy : y = G (WithLp.fstL 2 𝕜 E0 E1 y) :=
+      tendsto_nhds_unique hlim hlim2
+    rw [hy]
+    exact hGmem _
+  have : CompleteSpace (unboundedBlockGraph X) := hclosed.completeSpace_coe
+  exact Submodule.HasOrthogonalProjection.ofCompleteSpace _
 
 /-- Roadmap predicate that a closed subspace reduces a closed operator with
 domain decomposition respected. -/
