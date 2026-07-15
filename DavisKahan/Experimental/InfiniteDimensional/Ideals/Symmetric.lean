@@ -4,7 +4,6 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
 import DavisKahan.Experimental.InfiniteDimensional.Core.OperatorAngle
-import DavisKahan.Experimental.InfiniteDimensional.Ideals.Rectangular
 
 /-!
 # Symmetric norm ideals
@@ -105,82 +104,57 @@ structure SymmetricNormIdeal where
 
 namespace SymmetricNormIdeal
 
-open ForMathlib.DavisKahan.Experimental.ExactSinTheta
+/-! ### Concrete-ideal construction routes
 
-/-- Restrict a coherent rectangular family to endomorphisms of one Hilbert
-space.  Unitary invariance follows from the two-sided ideal estimate in both
-directions. -/
-noncomputable def ofRectangular
-    (N : RectangularSymmetricIdealFamily (𝕜 := 𝕜)) :
-    SymmetricNormIdeal (𝕜 := 𝕜) (E := E) := by
-  classical
-  refine
-    { mem := N.Mem
-      gauge := N.gauge
-      zero_mem := N.zero_mem
-      add_mem := N.add_mem
-      smul_mem := N.smul_mem
-      ideal_mem := fun L R A hA => N.comp_mem L R hA
-      adjoint_mem := N.adjoint_mem
-      nonneg := N.gauge_nonneg
-      gauge_zero := N.gauge_zero
-      gauge_eq_zero := N.gauge_eq_zero
-      triangle := N.gauge_add_le
-      gauge_smul := N.gauge_smul
-      gauge_adjoint := N.gauge_adjoint
-      unitary_invariant := ?_
-      ideal_bound := fun L R A hA => N.gauge_comp_le L R hA
-      gauge_complete := N.gauge_complete }
-  intro U Uinv A hU hUinv hleft hright hA
-  have hmem : N.Mem (U ∘L A ∘L Uinv) := N.comp_mem U Uinv hA
-  have hUnorm : ‖U‖ = 1 := hU.opNorm_eq_one
-  have hUinvnorm : ‖Uinv‖ = 1 := hUinv.opNorm_eq_one
-  apply le_antisymm
-  · calc
-      N.gauge (U ∘L A ∘L Uinv)
-          ≤ ‖U‖ * N.gauge A * ‖Uinv‖ := N.gauge_comp_le U Uinv hA
-      _ = N.gauge A := by rw [hUnorm, hUinvnorm, one_mul, mul_one]
-  · have hreconstruct :
-        Uinv ∘L (U ∘L A ∘L Uinv) ∘L U = A := by
-      simp only [ContinuousLinearMap.comp_assoc]
-      rw [hleft, hright]
-      simp
-    calc
-      N.gauge A
-          = N.gauge (Uinv ∘L (U ∘L A ∘L Uinv) ∘L U) := by rw [hreconstruct]
-      _ ≤ ‖Uinv‖ * N.gauge (U ∘L A ∘L Uinv) * ‖U‖ :=
-        N.gauge_comp_le Uinv U hmem
-      _ = N.gauge (U ∘L A ∘L Uinv) := by
-        rw [hUnorm, hUinvnorm, one_mul, mul_one]
+* `operatorNorm`: take membership to be all bounded operators and discharge the
+  fields with the ordinary operator norm, adjoint isometry, and composition
+  submultiplicativity.
+* `compactOperator`: restrict membership to compact operators and reuse the
+  same gauge; closure under two-sided multiplication and completeness are the
+  substantive seams.
+* Schatten, trace-class, Hilbert--Schmidt, and Ky Fan gauges: construct singular
+  values from the positive compact operator `A⋆A`, prove the ideal inequality
+  and unitary invariance once at the sequence level, then instantiate the
+  corresponding symmetric gauge.  Derive trace class and Hilbert--Schmidt from
+  Schatten `p = 1` and `p = 2` instead of reproving every structure field.
+-/
 
 /-- The operator norm ideal. -/
-noncomputable def operatorNorm : SymmetricNormIdeal (𝕜 := 𝕜) (E := E) :=
-  ofRectangular RectangularSymmetricIdealFamily.operatorNorm
+noncomputable def operatorNorm : SymmetricNormIdeal (𝕜 := 𝕜) (E := E) := by
+  sorry
 
 /-- Compact-operator ideal equipped with the operator norm. -/
 noncomputable def compactOperator :
-    SymmetricNormIdeal (𝕜 := 𝕜) (E := E) :=
-  ofRectangular RectangularSymmetricIdealFamily.compactOperatorNorm
+    SymmetricNormIdeal (𝕜 := 𝕜) (E := E) := by
+  sorry
 
 /-- Schatten `p` ideal. -/
 noncomputable def schatten (p : ℝ) (hp : 1 ≤ p) :
-    SymmetricNormIdeal (𝕜 := 𝕜) (E := E) :=
-  ofRectangular (RectangularSymmetricIdealFamily.schatten p hp)
+    SymmetricNormIdeal (𝕜 := 𝕜) (E := E) := by
+  sorry
 
 /-- Trace-class ideal. -/
-noncomputable def traceClass : SymmetricNormIdeal (𝕜 := 𝕜) (E := E) :=
-  ofRectangular RectangularSymmetricIdealFamily.traceClass
+noncomputable def traceClass : SymmetricNormIdeal (𝕜 := 𝕜) (E := E) := by
+  sorry
 
 /-- Hilbert--Schmidt ideal. -/
-noncomputable def hilbertSchmidt : SymmetricNormIdeal (𝕜 := 𝕜) (E := E) :=
-  ofRectangular RectangularSymmetricIdealFamily.hilbertSchmidt
+noncomputable def hilbertSchmidt : SymmetricNormIdeal (𝕜 := 𝕜) (E := E) := by
+  sorry
 
-/-- Ky Fan `k` ideal norm for positive `k`. -/
+/-- Ky Fan `k` ideal norm for positive `k`.  The positivity premise is
+mathematically necessary: the `k = 0` gauge vanishes on every operator and
+therefore cannot satisfy `gauge_eq_zero`. -/
 noncomputable def kyFan (k : ℕ) (hk : 0 < k) :
-    SymmetricNormIdeal (𝕜 := 𝕜) (E := E) :=
-  ofRectangular (RectangularSymmetricIdealFamily.kyFan k hk)
+    SymmetricNormIdeal (𝕜 := 𝕜) (E := E) := by
+  sorry
 
-/-- Unitary conjugation preserves both membership and gauge. -/
+/-- Unitary invariance of a symmetric ideal norm.
+
+Ext-agent signature audit (GPT 5.6 High): Correct with explicit membership and two-sided
+inverse data. The structure laws are deliberately restricted to ideal members; a real-valued
+trace or Schatten gauge cannot satisfy norm laws on every bounded operator. The eventual
+bundled ideal norm should make the equality a norm-isometry theorem.
+-/
 theorem gauge_unitary_conjugation
     (I : SymmetricNormIdeal (𝕜 := 𝕜) (E := E))
     (U Uinv A : E →L[𝕜] E) (hA : I.mem A)
@@ -189,83 +163,54 @@ theorem gauge_unitary_conjugation
     (hright : U ∘L Uinv = ContinuousLinearMap.id 𝕜 E) :
     I.mem (U ∘L A ∘L Uinv) ∧
       I.gauge (U ∘L A ∘L Uinv) = I.gauge A :=
-  ⟨I.ideal_mem U Uinv hA,
-    I.unitary_invariant U Uinv A hU hUinv hleft hright hA⟩
+  ⟨I.ideal_mem U Uinv hA, I.unitary_invariant U Uinv A hU hUinv hleft hright hA⟩
 
-private theorem reflection_unitary
-    (U : Submodule 𝕜 E) [U.HasOrthogonalProjection] :
-    IsUnitaryOperator (reflectionOperator U) := by
-  refine ⟨?_, ?_⟩
-  · simpa [ContinuousLinearMap.star_eq_adjoint,
-      (Submodule.reflectionOperator_isSelfAdjoint U).star_eq] using
-      reflectionOperator_involutive U
-  · simpa [ContinuousLinearMap.star_eq_adjoint,
-      (Submodule.reflectionOperator_isSelfAdjoint U).star_eq] using
-      reflectionOperator_involutive U
+/-- Pinching is contractive for every symmetric norm ideal. 
 
-/-- Pinching is contractive for every symmetric norm ideal. -/
+Lean proof route for a weaker agent:
+
+1. Let `J=2P-I`; show `J` is unitary and `diagonalPart U A = (A+J A J)/2`.
+2. Use ideal membership under left/right multiplication to obtain membership of `J A J` and the sum.
+3. Apply unitary invariance, homogeneity, and the triangle inequality to get the sharp contraction bound.
+
+
+Ext-agent signature audit (GPT 5.6 High): Correct for symmetric ideals. Reflection
+averaging gives both membership and the sharp constant one.
+
+Preferred dependency route: First realize ideal members as a complete normed space; then
+use reflection averaging, two-sided ideal bounds, and unitary invariance.
+-/
 theorem gauge_diagonalPart_le
     (I : SymmetricNormIdeal (𝕜 := 𝕜) (E := E))
     (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     (A : E →L[𝕜] E) (hA : I.mem A) :
     I.mem (diagonalPart U A) ∧
       I.gauge (diagonalPart U A) ≤ I.gauge A := by
-  let J := reflectionOperator U
-  have hJ : IsUnitaryOperator J := reflection_unitary U
-  have hJinv : J ∘L J = ContinuousLinearMap.id 𝕜 E :=
-    reflectionOperator_involutive U
-  have hconjMem : I.mem (J ∘L A ∘L J) := I.ideal_mem J J hA
-  have hconjGauge : I.gauge (J ∘L A ∘L J) = I.gauge A :=
-    I.unitary_invariant J J A hJ hJ hJinv hJinv hA
-  have hformula : (2 : 𝕜) • diagonalPart U A = A + J ∘L A ∘L J :=
-    two_smul_diagonalPart_eq_add_reflectionConjugate U A
-  have hsumMem : I.mem (A + J ∘L A ∘L J) := I.add_mem hA hconjMem
-  have hhalf : ((2 : 𝕜)⁻¹) • ((2 : 𝕜) • diagonalPart U A) =
-      diagonalPart U A := by module
-  have hdiagMem : I.mem (diagonalPart U A) := by
-    rw [← hhalf, hformula]
-    exact I.smul_mem _ hsumMem
-  refine ⟨hdiagMem, ?_⟩
-  have hscaled := I.gauge_smul (2 : 𝕜) hdiagMem
-  rw [hformula, norm_ofNat] at hscaled
-  have htriangle := I.triangle hA hconjMem
-  rw [hconjGauge] at htriangle
-  nlinarith
+  sorry
 
-/-- Off-diagonal extraction is contractive for every symmetric norm ideal. -/
+/-- Off-diagonal extraction has norm at most one in the sharp symmetric-ideal
+form used by the double-angle theorems. 
+
+Lean proof route for a weaker agent:
+
+1. Use `offDiagonalPart U A = (A-J A J)/2` for the reflection `J=2P-I`.
+2. Prove membership using the ideal axioms and scalar closure.
+3. Apply unitary invariance and the triangle inequality exactly as in the pinching lemma.
+
+
+Ext-agent signature audit (GPT 5.6 High): Correct for symmetric ideals. The
+difference-of-unitary-conjugates formula gives the same sharp contraction as pinching.
+
+Preferred dependency route: First realize ideal members as a complete normed space; then
+use reflection averaging, two-sided ideal bounds, and unitary invariance.
+-/
 theorem gauge_offDiagonalPart_le
     (I : SymmetricNormIdeal (𝕜 := 𝕜) (E := E))
     (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     (A : E →L[𝕜] E) (hA : I.mem A) :
     I.mem (offDiagonalPart U A) ∧
       I.gauge (offDiagonalPart U A) ≤ I.gauge A := by
-  let J := reflectionOperator U
-  have hJ : IsUnitaryOperator J := reflection_unitary U
-  have hJinv : J ∘L J = ContinuousLinearMap.id 𝕜 E :=
-    reflectionOperator_involutive U
-  have hconjMem : I.mem (J ∘L A ∘L J) := I.ideal_mem J J hA
-  have hnegConjMem : I.mem (-(J ∘L A ∘L J)) := by
-    simpa using I.smul_mem (-1 : 𝕜) hconjMem
-  have hconjGauge : I.gauge (J ∘L A ∘L J) = I.gauge A :=
-    I.unitary_invariant J J A hJ hJ hJinv hJinv hA
-  have hformula : (2 : 𝕜) • offDiagonalPart U A = A - J ∘L A ∘L J :=
-    two_smul_offDiagonalPart_eq_sub_reflectionConjugate U A
-  have hdiffMem : I.mem (A - J ∘L A ∘L J) := by
-    simpa [sub_eq_add_neg] using I.add_mem hA hnegConjMem
-  have hhalf : ((2 : 𝕜)⁻¹) • ((2 : 𝕜) • offDiagonalPart U A) =
-      offDiagonalPart U A := by module
-  have hoffMem : I.mem (offDiagonalPart U A) := by
-    rw [← hhalf, hformula]
-    exact I.smul_mem _ hdiffMem
-  refine ⟨hoffMem, ?_⟩
-  have hscaled := I.gauge_smul (2 : 𝕜) hoffMem
-  rw [hformula, norm_ofNat] at hscaled
-  have htriangle : I.gauge (A - J ∘L A ∘L J) ≤
-      I.gauge A + I.gauge (J ∘L A ∘L J) := by
-    simpa [sub_eq_add_neg, I.gauge_smul (-1 : 𝕜) hconjMem] using
-      I.triangle hA hnegConjMem
-  rw [hconjGauge] at htriangle
-  nlinarith
+  sorry
 
 end SymmetricNormIdeal
 end DavisKahanExt

@@ -4,18 +4,13 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
 import DavisKahan.Experimental.InfiniteDimensional.Sylvester.Basic
-import DavisKahan.Experimental.InfiniteDimensional.SinTheta.Bounded
-import DavisKahan.Experimental.InfiniteDimensional.Core.SpectralProjection
 
 /-!
 # Infinite-dimensional `sin Θ` theorems
 
-The proofs are all reductions to Sylvester inversion.  Ordered separation gives
-constant one, arbitrary separated spectra give the universal `π/2` multiplier,
-and interval/exterior separation is handled by the centered bound/inverse
-construction.  The symmetric-ideal endpoint uses the corresponding double
-operator integral directly, so it does not lose a factor by estimating the two
-directed blocks separately.
+Literature writeup: local TeX, Sections 12--13.  Both residual and perturbation
+forms are represented, including general separated spectra and ideal-norm
+versions.
 -/
 
 namespace ForMathlib
@@ -29,22 +24,24 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
 variable {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
   [CompleteSpace F]
 
-/-- The projected residual satisfies the restricted Sylvester equation. -/
-theorem directedResidual_sylvesterEquation
-    {A : E →L[𝕜] E} (hA : IsSelfAdjointOperator A)
-    {U : Submodule 𝕜 E} [U.HasOrthogonalProjection]
-    (hU : Reduces A U)
-    {X : F →L[𝕜] E} {M : F →L[𝕜] F} :
-    let Y := complementaryProjection U ∘L X
-    let C := complementaryProjection U ∘L residual A X M
-    (A.restrictToOrthogonal hU) ∘L Y.corestrict Uᗮ -
-      Y.corestrict Uᗮ ∘L M = C.corestrict Uᗮ := by
-  dsimp
-  ext x
-  simp [residual, ContinuousLinearMap.comp_assoc,
-    projection_apply_comm_of_reduces A U hU]
+/-- Residual `sin Θ` theorem for an isometric trial map. 
 
-/-- Residual `sin Θ` theorem for an isometric trial map. -/
+Lean proof route for a weaker agent:
+
+1. Set `Y=(I-P_U)X` and derive `A|_{Uᗮ} Y - Y M = (I-P_U) residual A X M`.
+2. Apply the ordered constant-one Sylvester theorem using `hsep`.
+3. Bound the projected residual by the full residual norm.
+4. Identify `Y` with `sinThetaEmbedding U X`.
+
+
+Ext-agent signature audit (GPT 5.6 High): Correct as a directed residual theorem. The
+isometric embedding is needed for the subspace interpretation, although the raw
+Sylvester norm estimate itself uses only boundedness.
+
+Preferred dependency route: Derive the cross-block Sylvester equation and specialize the
+strongest available Sylvester theorem; only then translate cross-block norms into
+directed or full subspace angles.
+-/
 theorem sinTheta_residual
     {A : E →L[𝕜] E} (hA : IsSelfAdjointOperator A)
     {U : Submodule 𝕜 E} [U.HasOrthogonalProjection]
@@ -54,47 +51,26 @@ theorem sinTheta_residual
     {d : ℝ} (hd : 0 < d)
     (hsep : OrderedSpectraSeparated M ⊤ A Uᗮ d) :
     d * ‖sinThetaEmbedding U X‖ ≤ ‖residual A X M‖ := by
-  let Y : F →L[𝕜] Uᗮ :=
-    (complementaryProjection U ∘L X).corestrict Uᗮ
-  let C : F →L[𝕜] Uᗮ :=
-    (complementaryProjection U ∘L residual A X M).corestrict Uᗮ
-  have hEq : sylvesterOperator (A.restrictToOrthogonal hU) M Y = C :=
-    directedResidual_sylvesterEquation hA hU
-  have hsep' : OrderedSpectraSeparated M ⊤
-      (A.restrictToOrthogonal hU) ⊤ d :=
-    restrictedSpectrum_orthogonal_eq hA hU ▸ hsep
-  have hbound := norm_sylvester_le_of_orderedSeparation
-    (hA.restrictToOrthogonal hU) hM hd hsep' hEq
-  have hY : ‖Y‖ = ‖sinThetaEmbedding U X‖ :=
-    corestrict_norm_eq_of_range _
-  have hC : ‖C‖ ≤ ‖residual A X M‖ := by
-    calc
-      ‖C‖ = ‖complementaryProjection U ∘L residual A X M‖ :=
-        corestrict_norm_eq_of_range _
-      _ ≤ ‖residual A X M‖ :=
-        projection_comp_opNorm_le Uᗮ _
-  simpa [hY] using hbound.trans hC
+  sorry
 
-/-- The directed perturbation block satisfies a Sylvester equation between the
-selected restriction of `A` and the complementary restriction of `B`. -/
-theorem directedPerturbation_sylvesterEquation
-    {A B : E →L[𝕜] E}
-    (hA : IsSelfAdjointOperator A) (hB : IsSelfAdjointOperator B)
-    {U V : Submodule 𝕜 E}
-    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hU : Reduces A U) (hV : Reduces B V) :
-    let X : U →L[𝕜] Vᗮ :=
-      (complementaryProjection V ∘L U.subtypeL).corestrict Vᗮ
-    let C : U →L[𝕜] Vᗮ :=
-      (complementaryProjection V ∘L (B - A) ∘L U.subtypeL).corestrict Vᗮ
-    (B.restrictToOrthogonal hV) ∘L X - X ∘L (A.restrict hU.1) = C := by
-  dsimp
-  ext x
-  simp [ContinuousLinearMap.comp_assoc,
-    projection_apply_comm_of_reduces A U hU,
-    projection_apply_comm_of_reduces B V hV]
+/-- One-sided perturbation theorem for spectral subspaces. 
 
-/-- One-sided perturbation theorem for spectral subspaces. -/
+Lean proof route for a weaker agent:
+
+1. Derive the off-diagonal Sylvester equation for `X=(I-P_V)P_U`.
+2. Use the interval/exterior decomposition to apply the constant-one ordered Sylvester estimate to the lower and upper pieces.
+3. Bound the right-hand residual by `‖B-A‖`.
+4. Rewrite `‖X‖` as the directed gap.
+
+
+Ext-agent signature audit (GPT 5.6 High): Correct as a one-sided directed-angle theorem.
+One mixed interval/exterior gap is intentionally insufficient for a full
+projector-difference conclusion.
+
+Preferred dependency route: Derive the cross-block Sylvester equation and specialize the
+strongest available Sylvester theorem; only then translate cross-block norms into
+directed or full subspace angles.
+-/
 theorem sinTheta_perturbation
     {A B : E →L[𝕜] E}
     (hA : IsSelfAdjointOperator A) (hB : IsSelfAdjointOperator B)
@@ -104,26 +80,23 @@ theorem sinTheta_perturbation
     {left right d : ℝ} (hd : 0 < d)
     (hgap : IntervalExteriorSeparated A U B Vᗮ left right d) :
     d * directedGap U V ≤ ‖B - A‖ := by
-  let X : U →L[𝕜] Vᗮ :=
-    (complementaryProjection V ∘L U.subtypeL).corestrict Vᗮ
-  let C : U →L[𝕜] Vᗮ :=
-    (complementaryProjection V ∘L (B - A) ∘L U.subtypeL).corestrict Vᗮ
-  have hEq := directedPerturbation_sylvesterEquation hA hB hU hV
-  have hgap' : ExactSinTheta.IntervalExteriorGap
-      (B.restrictToOrthogonal hV) (A.restrict hU.1)
-      left right d := by
-    exact intervalExteriorSeparated_restrictions hA hB hU hV hgap
-  have hsolve := ExactSinTheta.sylvester_mem_and_gauge_le_of_intervalExteriorGap
-    ExactSinTheta.RectangularSymmetricIdealFamily.operatorNorm
-    (hB.restrictToOrthogonal hV) (hA.restrict hU.1)
-    (le_of_mem_Icc hgap) hd hgap' hEq trivial
-  have hX : ‖X‖ = directedGap U V :=
-    directedGap_eq_restrictedBlock_norm U V
-  have hC : ‖C‖ ≤ ‖B - A‖ :=
-    restricted_projection_sandwich_norm_le _ _ _
-  simpa [ExactSinTheta.RectangularSymmetricIdealFamily.operatorNorm, hX]
-    using hsolve.2.trans hC
+  sorry
 
+/-- **The dimension-free operator-norm Davis--Kahan `sin Θ` theorem, coercivity
+form.**  For self-adjoint `A, B` on an arbitrary Hilbert space, `U` reducing `A`
+with quadratic form `≥ (c+g)‖·‖²` on `U`, and `V` reducing `B` with quadratic
+form `≤ c‖·‖²` on `V`,
+
+`‖P_V P_U‖ ≤ ‖B − A‖ / g`.
+
+This is the genuine infinite-dimensional `sin Θ` bound: the analytic core is the
+integral-free Sylvester estimate `norm_sylvester_le_of_coercive` (no spectral
+measure, no dimension or completeness hypothesis on the *bound* itself), and the
+block construction `A ∘L P + (c+g)(1−P)`, `B ∘L Q + c(1−Q)` uses only the
+dimension-free projection commutation `projection_apply_comm_of_reduces`.  The
+spectrum-predicate forms (`sinTheta_perturbation`, `IntervalExteriorSeparated`)
+follow from this once a bounded spectral theorem converts spectral separation to
+these coercivity bounds. -/
 theorem sinTheta_directed_coercive
     {A B : E →L[𝕜] E} (hA : IsSelfAdjointOperator A) (hB : IsSelfAdjointOperator B)
     {U V : Submodule 𝕜 E} [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
@@ -276,8 +249,22 @@ theorem sinTheta_directed_coercive
     _ = ‖X‖ := this
     _ ≤ ‖B - A‖ / g := hXbound
 
+/-- Symmetric projector-difference form requiring both mixed gaps. 
 
-/-- Symmetric projector-difference form requiring both mixed gaps. -/
+Lean proof route for a weaker agent:
+
+1. Apply `sinTheta_perturbation` to `(U,V)` and again to `(V,U)` using the reverse gap.
+2. Use the two-projection norm identity that the full gap is the maximum of the two directed gaps.
+3. Combine the two inequalities with `max_le` and simplify the perturbation sign.
+
+
+Ext-agent signature audit (GPT 5.6 High): Correct with both mixed gaps. The full
+projection gap is the maximum of the two directed gaps in operator norm.
+
+Preferred dependency route: Derive the cross-block Sylvester equation and specialize the
+strongest available Sylvester theorem; only then translate cross-block norms into
+directed or full subspace angles.
+-/
 theorem sinTheta_symmetric
     {A B : E →L[𝕜] E}
     (hA : IsSelfAdjointOperator A) (hB : IsSelfAdjointOperator B)
@@ -288,16 +275,26 @@ theorem sinTheta_symmetric
     (hUV : IntervalExteriorSeparated A U B Vᗮ left right d)
     (hVU : IntervalExteriorSeparated B V A Uᗮ left' right' d) :
     d * subspaceGap U V ≤ ‖B - A‖ := by
-  have hdirUV := sinTheta_perturbation hA hB hU hV hd hUV
-  have hdirVU := sinTheta_perturbation hB hA hV hU hd hVU
-  rw [subspaceGap, Submodule.norm_starProjection_sub_eq_max U V,
-    mul_max_of_nonneg _ hd.le]
-  apply max_le
-  · simpa [directedGap] using hdirUV
-  · simpa [directedGap, norm_neg] using hdirVU
+  sorry
 
 /-- General separated-spectrum form with the optimal universal `π / 2`
-Sylvester constant. -/
+Sylvester constant. 
+
+Lean proof route for a weaker agent:
+
+1. Derive the Sylvester equation for `(I-P_V)P_U` from the two reducing relations.
+2. Apply `norm_sylvester_le_of_generalSeparation` with the hybrid spectral gap.
+3. Bound the residual block by `‖B-A‖` using projection contractions.
+4. Rewrite the block norm as `directedGap U V`.
+
+
+Ext-agent signature audit (GPT 5.6 High): Correct as a directed theorem with the `π/2`
+constant. The hybrid gap matches the cross block `P_{Vᗮ}P_U`.
+
+Preferred dependency route: Derive the cross-block Sylvester equation and specialize the
+strongest available Sylvester theorem; only then translate cross-block norms into
+directed or full subspace angles.
+-/
 theorem sinTheta_generalSeparation
     {A B : E →L[𝕜] E}
     (hA : IsSelfAdjointOperator A) (hB : IsSelfAdjointOperator B)
@@ -306,23 +303,24 @@ theorem sinTheta_generalSeparation
     (hU : Reduces A U) (hV : Reduces B V)
     {d : ℝ} (hd : 0 < d) (hgap : HybridGap A B U V d) :
     d * directedGap U V ≤ (Real.pi / 2) * ‖B - A‖ := by
-  let X : U →L[𝕜] Vᗮ :=
-    (complementaryProjection V ∘L U.subtypeL).corestrict Vᗮ
-  let C : U →L[𝕜] Vᗮ :=
-    (complementaryProjection V ∘L (B - A) ∘L U.subtypeL).corestrict Vᗮ
-  have hEq := directedPerturbation_sylvesterEquation hA hB hU hV
-  have hsep : SpectraSeparated (B.restrictToOrthogonal hV) ⊤
-      (A.restrict hU.1) ⊤ d :=
-    hybridGap_restrictions hA hB hU hV hgap
-  have hsol := norm_sylvester_le_of_generalSeparation
-    (hB.restrictToOrthogonal hV) (hA.restrict hU.1) hd hsep hEq
-  have hX : ‖X‖ = directedGap U V :=
-    directedGap_eq_restrictedBlock_norm U V
-  have hC : ‖C‖ ≤ ‖B - A‖ :=
-    restricted_projection_sandwich_norm_le _ _ _
-  simpa [hX] using hsol.trans (mul_le_mul_of_nonneg_left hC (by positivity))
+  sorry
 
-/-- Canonical spectral-projection form. -/
+/-- Canonical spectral-projection form. 
+
+Lean proof route for a weaker agent:
+
+1. Convert the four spectral-containment hypotheses into the two `IntervalExteriorSeparated` predicates.
+2. Apply `sinTheta_symmetric` to the canonical spectral subspaces, using `reduces_spectralSubspace`.
+3. Rewrite the subspace gap as the norm of the two spectral projections.
+
+
+Ext-agent signature audit (GPT 5.6 High): Correct after the measurable-set hypotheses
+were added. The four containments encode exactly the two mixed interval/exterior gaps.
+
+Preferred dependency route: Derive the cross-block Sylvester equation and specialize the
+strongest available Sylvester theorem; only then translate cross-block norms into
+directed or full subspace angles.
+-/
 theorem spectralProjection_sinTheta
     {A B : E →L[𝕜] E}
     (hA : IsSelfAdjointOperator A) (hB : IsSelfAdjointOperator B)
@@ -336,52 +334,27 @@ theorem spectralProjection_sinTheta
       {x | x ≤ left' - d ∨ right' + d ≤ x}) :
     d * ‖spectralProjection A s - spectralProjection B t‖ ≤
       ‖B - A‖ := by
-  let U := spectralSubspace A s
-  let V := spectralSubspace B t
-  have hredA := reduces_spectralSubspace A hA s hs
-  have hredB := reduces_spectralSubspace B hB t ht
-  have hUV : IntervalExteriorSeparated A U B Vᗮ left right d :=
-    ⟨hAs, hBt⟩
-  have hVU : IntervalExteriorSeparated B V A Uᗮ left' right' d :=
-    ⟨hBs, hAt⟩
-  have h := sinTheta_symmetric hA hB hredA hredB hd hUV hVU
-  simpa [U, V, subspaceGap, projection_spectralSubspace_eq] using h
+  sorry
 
-/-- The interval/exterior divided-difference double operator integral sends the
-perturbation to the difference of the two selected spectral projections. -/
-theorem projectionDifference_ideal_intervalExterior
-    (I : SymmetricNormIdeal (𝕜 := 𝕜) (E := E))
-    {A B : E →L[𝕜] E}
-    (hA : IsSelfAdjointOperator A) (hB : IsSelfAdjointOperator B)
-    {U V : Submodule 𝕜 E}
-    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hU : Reduces A U) (hV : Reduces B V)
-    {left right left' right' d : ℝ} (hd : 0 < d)
-    (hUV : IntervalExteriorSeparated A U B Vᗮ left right d)
-    (hVU : IntervalExteriorSeparated B V A Uᗮ left' right' d)
-    (hmem : I.mem (B - A)) :
-    I.mem (projection U - projection V) ∧
-      d * I.gauge (projection U - projection V) ≤ I.gauge (B - A) := by
-  let k : ℝ → ℝ → ℝ := intervalExteriorProjectionDividedDifference
-    left right left' right' d
-  have hk : ∀ λ μ, spectralMixedSupport U V λ μ →
-      |k λ μ| ≤ d⁻¹ :=
-    intervalExteriorProjectionDividedDifference_bound hd hUV hVU
-  have hformula : projection U - projection V =
-      doubleOperatorIntegral A B k (B - A) :=
-    projectionDifference_doubleOperatorIntegral hA hB hU hV hUV hVU
-  have hdoi := symmetricIdeal_doubleOperatorIntegral_bound I hA hB k hk hmem
-  rw [hformula]
-  refine ⟨hdoi.1, ?_⟩
-  have := hdoi.2
-  have hd0 : 0 ≤ d := hd.le
-  calc
-    d * I.gauge (doubleOperatorIntegral A B k (B - A))
-        ≤ d * (d⁻¹ * I.gauge (B - A)) :=
-          mul_le_mul_of_nonneg_left this hd0
-    _ = I.gauge (B - A) := by field_simp [ne_of_gt hd]
+/-- Symmetric-ideal form. 
 
-/-- Symmetric-ideal `sin Θ` theorem. -/
+Lean proof route for a weaker agent:
+
+1. Decompose the full sine operator into the two directed off-diagonal blocks.
+2. Apply the interval/exterior ideal-valued Sylvester estimate to each block, using `hmem` for the perturbation.
+3. Recombine the blocks through the two-projection decomposition or the symmetric-angle identity.
+4. Return both ideal membership and the gauge inequality.
+
+
+Ext-agent signature audit (GPT 5.6 High): Plausible with the full ambient sine
+convention because the self-adjoint off-diagonal blocks occur as adjoint pairs. The
+proof must establish the corresponding ideal block identity; do not combine two directed
+estimates by a triangle inequality, which would lose the sharp constant.
+
+Preferred dependency route: Derive the cross-block Sylvester equation and specialize the
+strongest available Sylvester theorem; only then translate cross-block norms into
+directed or full subspace angles.
+-/
 theorem ideal_sinTheta
     (I : SymmetricNormIdeal (𝕜 := 𝕜) (E := E))
     {A B : E →L[𝕜] E}
@@ -395,11 +368,7 @@ theorem ideal_sinTheta
     (hmem : I.mem (B - A)) :
     I.mem (sinAngleOperator U V) ∧
       d * I.gauge (sinAngleOperator U V) ≤ I.gauge (B - A) := by
-  have hdiff := projectionDifference_ideal_intervalExterior
-    I hA hB hU hV hd hUV hVU hmem
-  have habs := I.operatorAbsoluteValue_mem_and_gauge_eq hdiff.1
-  simpa [sinAngleOperator, habs.2] using
-    And.intro habs.1 hdiff.2
+  sorry
 
 end DavisKahanExt
 end ForMathlib

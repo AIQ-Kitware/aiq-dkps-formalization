@@ -129,34 +129,24 @@ def OrderedInternalGap (A : E →L[𝕜] E) (U : Submodule 𝕜 E)
   OrderedSpectraSeparated A U A Uᗮ d ∨
     OrderedSpectraSeparated A Uᗮ A U d
 
-/-- Double-angle residual map for an isometric embedding.
+/-- Provisional double-angle residual map for an isometric embedding.
 
-Write `S = P_{Uᗮ} X` for the sine block and
-`C = sqrt (X⋆ P_U X)` for the positive cosine block on the coordinate space.
-Then `2 S C` has singular values `sin (2 θ)` in the principal-angle
-representation. -/
+Construction route: write `S = P_{Uᗮ} X` for the sine block and
+`C = sqrt (X⋆ P_U X)` for the positive cosine block on the coordinate space,
+and set the map to `2 S C`; in principal coordinates its singular values are
+`sin (2 θ_i)`.  The required square root is a positive-operator square root of
+`X⋆ P_U X : F →L[𝕜] F` valid for `RCLike` scalars in infinite dimension.  The
+pinned Mathlib registers the continuous-functional-calculus instances on
+`F →L[𝕜] F` only for `𝕜 = ℂ` (`CFC.sqrt`), and the local
+`LinearMap.IsPositive.sqrt` is finite-dimensional, so no such square root is
+available yet; the definition remains open pending that bridge (or a
+complexification transport).  The eventual definition should reuse the
+supported projection-block API rather than introduce an independent angle
+calculus, and should come with the identity
+`C ∘L C = X⋆ ∘L P_U ∘L X` from positivity of the compressed projection. -/
 noncomputable def sinTwoThetaEmbedding (U : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] (X : F →L[𝕜] E) : F →L[𝕜] E := by
-  classical
-  let cosineGram : F →L[𝕜] F :=
-    X.adjoint ∘L projection U ∘L X
-  let cosineBlock : F →L[𝕜] F :=
-    RCLikeContinuousFunctionalCalculus.sqrt cosineGram
-  exact (2 : 𝕜) •
-    (complementaryProjection U ∘L X ∘L cosineBlock)
-
-/-- Squaring the coordinate cosine block gives the compressed projection. -/
-theorem sinTwoThetaEmbedding_cosineBlock_sq
-    (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
-    (X : F →L[𝕜] E) :
-    let C : F →L[𝕜] F :=
-      RCLikeContinuousFunctionalCalculus.sqrt
-        (X.adjoint ∘L projection U ∘L X)
-    C ∘L C = X.adjoint ∘L projection U ∘L X := by
-  intro C
-  exact RCLikeContinuousFunctionalCalculus.sqrt_sq
-    (ContinuousLinearMap.star_mul_self_nonneg
-      (projection U ∘L X))
+  sorry
 
 end Foundation
 end Experimental

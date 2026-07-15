@@ -9,6 +9,7 @@ import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.OperatorAbsolut
 import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.SinAngle
 import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.DirectRotation
 import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.DirectRotationAPI
+import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.DirectRotationSquare
 
 /-!
 # Active shallow Spectra bridge
@@ -18,4 +19,3 @@ calculus import cone are exported here. The bounded spectral-projection bridge
 is preserved under `dev/pending/` and can be reactivated after that dependency
 cone is compatible with the root Lean/Mathlib revision.
 -/
-import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.DirectRotationSquare
