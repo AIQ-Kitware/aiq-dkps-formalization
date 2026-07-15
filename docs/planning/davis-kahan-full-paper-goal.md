@@ -123,3 +123,33 @@ double-angle endpoints. The bounded branch contains meaningful operator-norm
 foundations. The full Hilbert-space four-theorem package, infinite-dimensional
 UI-norm/ideal layer, direct-rotation extremal theory, Section 8 package, and
 unbounded source passages remain the controlling completion goals.
+
+### Progress note (2026-07-15, easy-ladder closure session)
+
+Fully proved and axiom-clean: the total resolvent interface with both
+resolvent identities and Neumann resolvent-set stability
+(`Sylvester/Resolvent`); `graphSubspace` as the closure of the parametrized
+graph range with an unconditional projection instance and
+`graphSubspace_eq_range` for angular operators (`GraphSubspace`); the bounded
+and unbounded block-operator constructions on the Hilbert direct sum with the
+unbounded block-graph projection instance (`Riccati/Bounded`,
+`Riccati/Unbounded`); the Hermitian dilation and its self-adjointness
+(`Ideals/CompactAndSingular`); and the explicit planar extremizer
+constructions for the `sin Θ`, `sin 2Θ`, and `tan 2Θ` sharpness models (both
+`Sharpness` files).
+
+Structurally assembled on top of documented open black boxes:
+`sylvester_unique`, `sinTheta_symmetric`, `existsUnique_angularOperator`,
+`continuedProjection_eq_spectralProjection`, `schatten_sinTheta`,
+`covariance_subspace_sinTheta`, and `tanTwoTheta_spectralSubspace_le`.
+
+Controlling blocker identified for the two-projection calculus at source
+scalar generality: an `RCLike`-generic positive operator square root
+(`operatorAbsoluteValue`) is unavailable in Mathlib (operator CFC is
+`ℂ`-only) and the repo's `IsPositive.sqrt` is finite-dimensional. The whole
+`Core/OperatorAngle` ladder (`sinAngleOperator`, `cosAngleOperator`,
+`angleOperator`, and their norm identities) waits on a route decision:
+norm-preserving complexification transfer versus a direct order-theoretic
+construction, or specializing the infinite-dimensional angle calculus to `ℂ`
+with a real-scalar bridge afterward. See `dev/sorry-difficulty-ranking.md`
+(2026-07-15 header) for the updated 178-item ranking.

@@ -1,6 +1,31 @@
-# Proof-obligation difficulty ranking (203 open occurrences)
+# Proof-obligation difficulty ranking (178 open occurrences)
 
-Updated 2026-07-12 after closing equal-rank principal-angle symmetry, from the original 10-way static-analysis pass. Completed obligations were removed by matching the ranking against the current Lean source tree; surviving entries retain the original 1–5 estimates and relative order.
+Updated 2026-07-15 after the easy-ladder closure session. Closed since the
+2026-07-12 pass (rows retained below for provenance; treat as done):
+resolventOperator + resolventOperator_inverse/cancel lemmas,
+resolvent_identity, resolvent_perturbation_identity,
+inResolventSet_add_of_norm_lt (Sylvester/Resolvent); graphSubspace (now the
+topological closure of the parametrized range),
+graphSubspace_hasOrthogonalProjection, graphSubspace_eq_range (new),
+existsUnique_angularOperator (GraphSubspace); blockOperator,
+blockDiagonalOperator (Riccati/Bounded);
+unboundedBlockGraph_hasOrthogonalProjection (Riccati/Unbounded);
+hermitianDilation, hermitianDilation_selfAdjoint, schatten_sinTheta,
+covariance_subspace_sinTheta (Ideals/CompactAndSingular); sylvester_unique
+(Sylvester/Basic); sinTheta_symmetric (SinTheta/General);
+continuedProjection_eq_spectralProjection (SinTheta/Continuation);
+tanTwoTheta_spectralSubspace_le (DoubleAngle/TanTheta);
+modelSinThetaPerturbation, modelSinTwoThetaPerturbation,
+modelTanTwoThetaPerturbation, planarRotationMatrix (FD Sharpness);
+planarRotation, modelProjectionTheta, modelRotatedPerturbation (InfDim
+Sharpness). Also already closed before this pass but still listed:
+sinTwoThetaEmbedding (Residual/AngleEmbeddings) and
+range_orthonormalizedEmbedding (FrameFactorization).
+
+Original framing (2026-07-12): from the 10-way static-analysis pass.
+Completed obligations were removed by matching the ranking against the
+current Lean source tree; surviving entries retain the original 1–5 estimates
+and relative order.
 
 Existing-work survey note: the newly identified `lean-stat-learning-theory/SLT/MatrixInfra/Perturb.lean` donor materially lowers implementation risk for finite-dimensional interval/set-separated spectral-projection adapters, but it does not solve the remaining infinite-dimensional Borel functional-calculus/PVM obligations. No open item was removed or re-tiered in this documentation-only pass.
 
@@ -9,12 +34,22 @@ Existing-work survey note: the newly identified `lean-stat-learning-theory/SLT/M
 | Difficulty | Count |
 |---|---|
 | 1 | 0 |
-| 2 | 7 |
-| 3 | 43 |
-| 4 | 83 |
+| 2 | 3 |
+| 3 | 27 |
+| 4 | 78 |
 | 5 | 70 |
-| **ranked** | **203** |
-| **total open occurrences** | **203** |
+| **ranked** | **178** |
+| **total open occurrences** | **178** |
+
+The three surviving difficulty-2 items (`sinAngleOperator`,
+`sinTwoAngleOperator`, `sinAngleOperator_eq_abs_projection_sub` in
+`Core/OperatorAngle.lean`) are all blocked on `operatorAbsoluteValue`, which
+needs an `RCLike`-generic positive square root of `T⋆T` on an
+infinite-dimensional space.  Mathlib's operator CFC is `ℂ`-only and the
+repo's `ForMathlib.LinearMap.IsPositive.sqrt` is finite-dimensional, so the
+real-scalar branch requires either a norm-preserving complexification
+transfer or a direct monotone/Newton construction — both research-grade.
+Route decision needed before those rows can move.
 
 `★` = flagged one-liner candidate. Within a difficulty tier, the original ordering is retained.
 
