@@ -7,12 +7,10 @@ import DavisKahan.Experimental.InfiniteDimensional.Core.Compatibility
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.General
 
 /-!
-# Infinite-dimensional `sin 2Θ` bounds
+# Infinite-dimensional `sin 2Θ` and generic double-angle bounds
 
-Reflection through the comparison subspace converts a double-angle problem
-into an ordinary `sin Θ` problem.  If `J_V` is the reflection through `V`, the
-angle between `U` and `J_V U` is twice the angle between `U` and `V`, while
-`J_V A J_V-A` is twice the off-diagonal part of `A` relative to `V`.
+Literature writeup: local TeX, Sections 14--15, including Seelmann's general
+spectral-separation form.
 -/
 
 namespace ForMathlib
@@ -31,150 +29,126 @@ noncomputable def reflectionDefect (U : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] (A : E →L[𝕜] E) : E →L[𝕜] E :=
   reflectionOperator U ∘L A ∘L reflectionOperator U - A
 
-/-- The mirror defect vanishes when the subspace reduces the operator. -/
+/-- The mirror defect vanishes when the subspace reduces the operator.
+-/
 theorem reflectionDefect_eq_zero_of_reduces
     (A : E →L[𝕜] E) (U : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] (hU : Reduces A U) :
     reflectionDefect U A = 0 := by
-  rw [reflectionDefect]
-  have hcomm := reflectionOperator_comm_of_reduces A U hU
-  calc
-    reflectionOperator U ∘L A ∘L reflectionOperator U
-        = A ∘L reflectionOperator U ∘L reflectionOperator U := by
-          rw [hcomm]
-    _ = A := by rw [← ContinuousLinearMap.comp_assoc,
-      reflectionOperator_involutive U]; simp
-    _ - A = 0 := sub_self A
+  ext x
+  have hcomm := congrArg (fun T : E →L[𝕜] E => T (reflectionOperator U x))
+    (reflectionOperator_comm_of_reduces A U hU)
+  have hinvol := congrArg (fun T : E →L[𝕜] E => T x)
+    (reflectionOperator_involutive U)
+  simp only [ContinuousLinearMap.comp_apply, ContinuousLinearMap.id_apply] at hcomm hinvol
+  simp only [reflectionDefect, ContinuousLinearMap.comp_apply, sub_apply,
+    zero_apply]
+  rw [hcomm, hinvol, sub_self]
 
-/-- Conjugating and subtracting a reducing comparison operator leaves only its perturbation. -/
+/-- Conjugating and subtracting a reducing comparison operator leaves only
+its perturbation.
+-/
 theorem reflectionDefect_eq_perturbationDefect
     (A B : E →L[𝕜] E) (V : Submodule 𝕜 E)
     [V.HasOrthogonalProjection] (hV : Reduces B V) :
     reflectionDefect V A =
       reflectionOperator V ∘L (A - B) ∘L reflectionOperator V - (A - B) := by
-  have hzero := reflectionDefect_eq_zero_of_reduces B V hV
-  unfold reflectionDefect at hzero ⊢
-  module at hzero ⊢
-  exact sub_eq_zero.mp hzero
+  have hB : reflectionDefect V B = 0 :=
+    reflectionDefect_eq_zero_of_reduces B V hV
+  unfold reflectionDefect at hB ⊢
+  calc
+    reflectionOperator V ∘L A ∘L reflectionOperator V - A =
+        (reflectionOperator V ∘L A ∘L reflectionOperator V - A) -
+          (reflectionOperator V ∘L B ∘L reflectionOperator V - B) := by
+      rw [hB, sub_zero]
+    _ = reflectionOperator V ∘L (A - B) ∘L reflectionOperator V - (A - B) := by
+      ext x
+      simp only [ContinuousLinearMap.comp_apply, sub_apply, map_sub]
+      abel
 
-/-- The reflection defect is bounded by twice the perturbation norm. -/
+/-- The reflection defect is bounded by twice the perturbation norm.
+-/
 theorem norm_reflectionDefect_le_two_mul
     (A B : E →L[𝕜] E) (V : Submodule 𝕜 E)
     [V.HasOrthogonalProjection] (hV : Reduces B V) :
     ‖reflectionDefect V A‖ ≤ 2 * ‖A - B‖ := by
   rw [reflectionDefect_eq_perturbationDefect A B V hV]
-  let J := reflectionOperator V
-  have hJ : ‖J‖ ≤ 1 := norm_reflectionOperator_le_one V
+  have hconj :
+      ‖reflectionOperator V ∘L (A - B) ∘L reflectionOperator V‖ ≤
+        ‖A - B‖ := by
+    calc
+      ‖reflectionOperator V ∘L (A - B) ∘L reflectionOperator V‖ ≤
+          ‖reflectionOperator V‖ * ‖(A - B) ∘L reflectionOperator V‖ :=
+        ContinuousLinearMap.opNorm_comp_le _ _
+      _ ≤ ‖reflectionOperator V‖ * (‖A - B‖ * ‖reflectionOperator V‖) :=
+        mul_le_mul_of_nonneg_left
+          (ContinuousLinearMap.opNorm_comp_le _ _)
+          (norm_nonneg (reflectionOperator V))
+      _ ≤ 1 * (‖A - B‖ * ‖reflectionOperator V‖) :=
+        mul_le_mul_of_nonneg_right (norm_reflectionOperator_le_one V) (by positivity)
+      _ ≤ 1 * (‖A - B‖ * 1) :=
+        mul_le_mul_of_nonneg_left
+          (mul_le_mul_of_nonneg_left (norm_reflectionOperator_le_one V)
+            (norm_nonneg (A - B)))
+          zero_le_one
+      _ = ‖A - B‖ := by ring
   calc
-    ‖J ∘L (A-B) ∘L J - (A-B)‖
-        ≤ ‖J ∘L (A-B) ∘L J‖ + ‖A-B‖ := norm_sub_le _ _
-    _ ≤ (‖J‖ * ‖A-B‖ * ‖J‖) + ‖A-B‖ := by
-      gcongr
-      exact ContinuousLinearMap.opNorm_comp_comp_le _ _ _
-    _ ≤ 2 * ‖A-B‖ := by nlinarith [norm_nonneg (A-B)]
+    ‖reflectionOperator V ∘L (A - B) ∘L reflectionOperator V - (A - B)‖ ≤
+        ‖reflectionOperator V ∘L (A - B) ∘L reflectionOperator V‖ +
+          ‖A - B‖ := norm_sub_le _ _
+    _ ≤ ‖A - B‖ + ‖A - B‖ := add_le_add hconj le_rfl
+    _ = 2 * ‖A - B‖ := by ring
 
-/-- Reflection of a subspace through `V`. -/
-noncomputable def reflectedSubspace (V U : Submodule 𝕜 E)
-    [V.HasOrthogonalProjection] : Submodule 𝕜 E :=
-  U.map (reflectionOperator V).toLinearMap
+/-- Reflection-defect `sin 2Θ` theorem.
 
-/-- Reflection transports a reducing subspace to a reducing subspace of the
-conjugated operator. -/
-theorem reduces_reflectedSubspace
-    {A : E →L[𝕜] E} {U V : Submodule 𝕜 E}
-    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hU : Reduces A U) :
-    Reduces (reflectionOperator V ∘L A ∘L reflectionOperator V)
-      (reflectedSubspace V U) := by
-  exact hU.map_unitary
-    (reflectionOperator_unitary V)
-    (reflectionOperator_involutive V)
+This is the theorem previously named `sinTwoTheta_residual`. The old name was
+misleading: its right-hand side is a mirror defect, not the residual of an
+approximate invariant pair.
 
-/-- Finite-gap data is invariant under unitary reflection. -/
-theorem finiteGap_reflected
-    {A : E →L[𝕜] E} {U V : Submodule 𝕜 E}
-    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    {d : ℝ} (hfinite : FiniteGapConfiguration A U d) :
-    FiniteGapConfiguration
-      (reflectionOperator V ∘L A ∘L reflectionOperator V)
-      (reflectedSubspace V U) d := by
-  exact hfinite.unitary_conjugate
-    (reflectionOperator_unitary V)
-    (reflectionOperator_involutive V)
+Lean proof route for a weaker agent:
 
-/-- The ordinary sine between `U` and its reflection through `V` is the double
-sine between `U` and `V`, including ambient multiplicities. -/
-theorem sinAngle_reflected_eq_sinTwoAngle
-    (U V : Submodule 𝕜 E)
-    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
-    sinAngleOperator U (reflectedSubspace V U) =
-      sinTwoAngleOperator U V := by
-  let P := projection U
-  let Q := projection V
-  have hproj : projection (reflectedSubspace V U) =
-      reflectionOperator V ∘L P ∘L reflectionOperator V :=
-    projection_map_unitary U (reflectionOperator_unitary V)
-  rw [sinAngleOperator, hproj, sinTwoAngleOperator]
-  apply positive_square_root_unique
-  · exact operatorAbsoluteValue_nonneg _
-  · exact sinTwoAngleOperator_nonneg U V
-  · rw [operatorAbsoluteValue_mul_self, sinTwoAngleOperator_sq]
-    noncomm_ring [U.isIdempotentElem_starProjection,
-      V.isIdempotentElem_starProjection]
+1. Let `J` be the reflection through `V` and compare `A` with `JAJ`.
+2. The spectral subspace `JU` reduces `JAJ` and has the same internal gap.
+3. Apply the symmetric `sinTheta` theorem to `A` and `JAJ`.
+4. Use the two-projection identity relating the angle between `U` and `JU` to `sin(2Θ(U,V))`.
 
-/-- Reflection-defect `sin 2Θ` theorem. -/
+
+Ext-agent signature audit (GPT 5.6 High): `FiniteGapConfiguration` already supplies the
+structured internal separation at positive `d`; the former separate `InternalGap`
+hypothesis was redundant. The reflection-defect target is the correct sharp residual
+form.
+
+Preferred dependency route: Use reflection conjugation to reduce to `sin Θ`; keep
+finite-gap constant-one geometry separate from generic separated-spectrum estimates.
+-/
 theorem sinTwoTheta_reflectionDefect
     {A : E →L[𝕜] E} (hA : IsSelfAdjointOperator A)
     {U V : Submodule 𝕜 E}
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hU : Reduces A U) {d : ℝ} (hd : 0 < d)
     (hfinite : FiniteGapConfiguration A U d) :
-    d * ‖sinTwoAngleOperator U V‖ ≤ ‖reflectionDefect V A‖ := by
-  let A' := reflectionOperator V ∘L A ∘L reflectionOperator V
-  let U' := reflectedSubspace V U
-  have hA' : IsSelfAdjointOperator A' :=
-    hA.unitary_conjugate (reflectionOperator_unitary V)
-  have hU' : Reduces A' U' := reduces_reflectedSubspace hU
-  have hfinite' := finiteGap_reflected (V := V) hfinite
-  have hgaps :
-      ∃ l r l' r',
-        IntervalExteriorSeparated A U A' U'ᗮ l r d ∧
-        IntervalExteriorSeparated A' U' A Uᗮ l' r' d :=
-    finiteGap_mixedIntervalExterior hfinite hfinite'
-  obtain ⟨l, r, l', r', hUU', hU'U⟩ := hgaps
-  have hsin := sinTheta_symmetric hA hA' hU hU' hd hUU' hU'U
-  simpa [A', U', reflectionDefect, subspaceGap,
-    sinAngle_reflected_eq_sinTwoAngle] using hsin
+    d * ‖sinTwoAngleOperator U V‖ ≤
+      ‖reflectionDefect V A‖ := by
+  sorry
 
-/-- The reflection defect through the range of an isometry is controlled by
-twice the residual of an approximate invariant pair. -/
-theorem reflectionDefect_range_le_residual
-    {A : E →L[𝕜] E} (hA : IsSelfAdjointOperator A)
-    (X : F →L[𝕜] E) (hX : IsometricEmbedding X)
-    {M : F →L[𝕜] F} (hM : IsSelfAdjointOperator M) :
-    ‖reflectionDefect (LinearMap.range X.toLinearMap) A‖ ≤
-      2 * ‖residual A X M‖ := by
-  let P : E →L[𝕜] E := X ∘L X.adjoint
-  have hP : P = projection (LinearMap.range X.toLinearMap) :=
-    isometry_comp_adjoint_eq_rangeProjection X hX
-  have hcross : (1-P) ∘L A ∘L P =
-      (1-P) ∘L residual A X M ∘L X.adjoint := by
-    ext x
-    simp [P, residual, ContinuousLinearMap.comp_assoc,
-      hX.adjoint_comp_self]
-  have hdefect : reflectionDefect (LinearMap.range X.toLinearMap) A =
-      -2 • ((1-P) ∘L A ∘L P +
-        P ∘L A ∘L (1-P)) := by
-    rw [← hP]
-    exact reflectionDefect_eq_neg_two_smul_offDiagonal hA P
-  have hadj : P ∘L A ∘L (1-P) =
-      ((1-P) ∘L A ∘L P).adjoint := by
-    simp [hA, ContinuousLinearMap.adjoint_comp]
-  rw [hdefect, hadj, hcross]
-  exact norm_two_smul_selfAdjointOffDiagonal_le_two_residual
-    hA hM hX
+/-- Approximate-invariant-pair residual form of `sin 2Θ`.
 
-/-- Approximate-invariant-pair residual form of `sin 2Θ`. -/
+This is the genuine residual theorem missing from the earlier scaffold.  The
+proof should reflect through the closed range of `X`, identify its mirror
+defect with twice the off-diagonal residual, and apply
+`sinTwoTheta_reflectionDefect`.
+
+Lean proof route for a weaker agent:
+
+1. Prove that an isometric embedding has closed range and construct the
+   orthogonal projection onto that range.
+2. Show that self-adjointness of `M` makes `X ∘ M ∘ X⁻¹` reduce the trial
+   range.
+3. Express the reflection defect of `A` through the trial range in terms of
+   `residual A X M` and its adjoint block.
+4. Bound that defect by twice the residual norm and invoke the
+   reflection-defect theorem.
+-/
 theorem sinTwoTheta_residual
     {A : E →L[𝕜] E} (hA : IsSelfAdjointOperator A)
     {U : Submodule 𝕜 E} [U.HasOrthogonalProjection]
@@ -182,20 +156,17 @@ theorem sinTwoTheta_residual
     {M : F →L[𝕜] F} (hM : IsSelfAdjointOperator M)
     {d : ℝ} (hd : 0 < d) (hfinite : FiniteGapConfiguration A U d) :
     d * ‖sinTwoThetaEmbedding U X‖ ≤ 2 * ‖residual A X M‖ := by
-  let V := LinearMap.range X.toLinearMap
-  have hangle : sinTwoThetaEmbedding U X = sinTwoAngleOperator U V :=
-    sinTwoThetaEmbedding_eq_rangeAngle U X hX
-  calc
-    d * ‖sinTwoThetaEmbedding U X‖
-        = d * ‖sinTwoAngleOperator U V‖ := by rw [hangle]
-    _ ≤ ‖reflectionDefect V A‖ :=
-      sinTwoTheta_reflectionDefect hA hU hd hfinite
-    _ ≤ 2 * ‖residual A X M‖ :=
-      reflectionDefect_range_le_residual hA X hX hM
+  sorry
 
-/-- Perturbation form of the `sin 2Θ` theorem. -/
+/-- Perturbation form of the `sin 2Θ` theorem.
+
+Ext-agent signature audit (GPT 5.6 High): Correct under finite-gap geometry. Reduction
+of `B` by `V` is essential for cancellation of its reflection defect. Self-adjointness
+of `B` is not needed for this reflection argument and was removed from the signature.
+-/
 theorem sinTwoTheta_perturbation
-    {A B : E →L[𝕜] E} (hA : IsSelfAdjointOperator A)
+    {A B : E →L[𝕜] E}
+    (hA : IsSelfAdjointOperator A)
     {U V : Submodule 𝕜 E}
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hU : Reduces A U) (hV : Reduces B V)
@@ -205,10 +176,27 @@ theorem sinTwoTheta_perturbation
   calc
     d * ‖sinTwoAngleOperator U V‖ ≤ ‖reflectionDefect V A‖ :=
       sinTwoTheta_reflectionDefect hA hU hd hfinite
-    _ ≤ 2 * ‖A-B‖ := norm_reflectionDefect_le_two_mul A B V hV
-    _ = 2 * ‖B-A‖ := by rw [norm_sub_rev]
+    _ ≤ 2 * ‖A - B‖ := norm_reflectionDefect_le_two_mul A B V hV
+    _ = 2 * ‖B - A‖ := by rw [norm_sub_rev]
 
-/-- General spectral-separation `sin 2Θ` theorem. -/
+/-- General spectral-separation `sin 2Θ` theorem. 
+
+Lean proof route for a weaker agent:
+
+1. Apply the general separated-spectrum Sylvester estimate to the reflection defect.
+2. Identify the resulting cross block with `sin(2Θ)` through the two-projection calculus.
+3. Bound the defect by `2‖B-A‖`; combine constants to obtain the factor `π`.
+4. Keep the result at the operator level: `sin (2·maximalAngle)` is not the
+   norm of `sinTwoAngleOperator` when the angle spectrum crosses `π/4`.
+
+
+Ext-agent signature audit (GPT 5.6 High): The corrected operator-norm conclusion is the
+meaningful generic theorem. `sin (2·maximalAngle)` alone can miss intermediate angle
+spectrum when angles cross `π/4`.
+
+Preferred dependency route: Use reflection conjugation to reduce to `sin Θ`; keep
+finite-gap constant-one geometry separate from generic separated-spectrum estimates.
+-/
 theorem sinTwoTheta_generalSeparation
     {A B : E →L[𝕜] E}
     (hA : IsSelfAdjointOperator A) (hB : IsSelfAdjointOperator B)
@@ -217,25 +205,25 @@ theorem sinTwoTheta_generalSeparation
     (hU : Reduces A U) (hV : Reduces B V)
     {d : ℝ} (hd : 0 < d) (hgap : InternalGap A U d) :
     d * ‖sinTwoAngleOperator U V‖ ≤ Real.pi * ‖B - A‖ := by
-  let A' := reflectionOperator V ∘L A ∘L reflectionOperator V
-  let U' := reflectedSubspace V U
-  have hA' : IsSelfAdjointOperator A' :=
-    hA.unitary_conjugate (reflectionOperator_unitary V)
-  have hU' : Reduces A' U' := reduces_reflectedSubspace hU
-  have hhybrid : HybridGap A A' U U' d :=
-    internalGap_reflection_transport hgap
-  have hsin := sinTheta_generalSeparation hA hA' hU hU' hd hhybrid
-  have hdefect := norm_reflectionDefect_le_two_mul A B V hV
-  calc
-    d * ‖sinTwoAngleOperator U V‖
-        = d * directedGap U U' :=
-          doubleAngle_directedGap_identity U V
-    _ ≤ (Real.pi/2) * ‖A'-A‖ := hsin
-    _ = (Real.pi/2) * ‖reflectionDefect V A‖ := rfl
-    _ ≤ (Real.pi/2) * (2 * ‖B-A‖) := by gcongr
-    _ = Real.pi * ‖B-A‖ := by ring
+  sorry
 
-/-- Ideal-norm `sin 2Θ` theorem. -/
+/-- Ideal-norm `sin 2Θ` theorem. 
+
+Lean proof route for a weaker agent:
+
+1. Use the reflection-defect form of `sinTwoTheta_reflectionDefect` in the ideal gauge.
+2. Show the reflection defect equals the off-diagonal extraction of `B-A` up to the factor two because `V` reduces `B`.
+3. Apply `gauge_offDiagonalPart_le` and `hmem`.
+4. Package ideal membership before the numerical inequality.
+
+
+Ext-agent signature audit (GPT 5.6 High): Correct roadmap target under finite-gap
+geometry and ideal membership of the perturbation. The proof must work with ambient
+reflection blocks so multiplicities match.
+
+Preferred dependency route: Use reflection conjugation to reduce to `sin Θ`; keep
+finite-gap constant-one geometry separate from generic separated-spectrum estimates.
+-/
 theorem ideal_sinTwoTheta
     (I : SymmetricNormIdeal (𝕜 := 𝕜) (E := E))
     {A B : E →L[𝕜] E}
@@ -247,40 +235,9 @@ theorem ideal_sinTwoTheta
     (hfinite : FiniteGapConfiguration A U d)
     (hmem : I.mem (B - A)) :
     I.mem (sinTwoAngleOperator U V) ∧
-      d * I.gauge (sinTwoAngleOperator U V) ≤ 2 * I.gauge (B - A) := by
-  let A' := reflectionOperator V ∘L A ∘L reflectionOperator V
-  let U' := reflectedSubspace V U
-  have hA' : IsSelfAdjointOperator A' :=
-    hA.unitary_conjugate (reflectionOperator_unitary V)
-  have hU' : Reduces A' U' := reduces_reflectedSubspace hU
-  obtain ⟨l, r, l', r', hUU', hU'U⟩ :=
-    finiteGap_mixedIntervalExterior hfinite
-      (finiteGap_reflected (V := V) hfinite)
-  have hdefMem : I.mem (A'-A) := by
-    rw [show A'-A = reflectionDefect V A by rfl,
-      reflectionDefect_eq_perturbationDefect A B V hV]
-    exact I.add_mem
-      (I.ideal_mem (reflectionOperator V) (reflectionOperator V) hmem)
-      (by simpa using I.smul_mem (-1 : 𝕜) hmem)
-  have hsin := ideal_sinTheta I hA hA' hU hU' hd hUU' hU'U hdefMem
-  have hdefGauge : I.gauge (A'-A) ≤ 2 * I.gauge (B-A) := by
-    rw [show A'-A = reflectionDefect V A by rfl,
-      reflectionDefect_eq_perturbationDefect A B V hV]
-    have hconj := I.unitary_invariant
-      (reflectionOperator V) (reflectionOperator V) (A-B)
-      (reflectionOperator_unitary V) (reflectionOperator_unitary V)
-      (reflectionOperator_involutive V) (reflectionOperator_involutive V)
-      (by simpa using hmem)
-    have htri := I.triangle
-      (I.ideal_mem (reflectionOperator V) (reflectionOperator V)
-        (by simpa using hmem))
-      (by simpa using I.smul_mem (-1 : 𝕜) (by simpa using hmem))
-    simpa [hconj, I.gauge_smul] using htri
-  have hangle : I.gauge (sinAngleOperator U U') =
-      I.gauge (sinTwoAngleOperator U V) := by
-    rw [sinAngle_reflected_eq_sinTwoAngle]
-  exact ⟨by simpa [sinAngle_reflected_eq_sinTwoAngle] using hsin.1,
-    by rw [← hangle]; exact hsin.2.trans hdefGauge⟩
+      d * I.gauge (sinTwoAngleOperator U V) ≤
+        2 * I.gauge (B - A) := by
+  sorry
 
 end DavisKahanExt
 end ForMathlib

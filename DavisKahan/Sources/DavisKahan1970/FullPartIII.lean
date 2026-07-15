@@ -105,7 +105,9 @@ alias complex_directRotation_minimal :=
 
 alias bounded_sinTwoTheta_reflectionDefect :=
   DavisKahanExt.sinTwoTheta_reflectionDefect
-alias bounded_sinTwoTheta := DavisKahanExt.sinTwoTheta
+alias bounded_sinTwoTheta_residual := DavisKahanExt.sinTwoTheta_residual
+alias bounded_sinTwoTheta_perturbation :=
+  DavisKahanExt.sinTwoTheta_perturbation
 alias bounded_sinTwoTheta_generalSeparation :=
   DavisKahanExt.sinTwoTheta_generalSeparation
 alias bounded_ideal_sinTwoTheta := DavisKahanExt.ideal_sinTwoTheta

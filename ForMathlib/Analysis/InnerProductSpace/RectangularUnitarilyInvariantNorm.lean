@@ -1671,6 +1671,26 @@ omit [FiniteDimensional 𝕜 E] [FiniteDimensional 𝕜 F] in
     zeroExtension A z = WithLp.toLp 2 (0, A (WithLp.ofLp z).1) := by
   rfl
 
+omit [FiniteDimensional 𝕜 E] [FiniteDimensional 𝕜 F] in
+/-- Zero extension is additive. -/
+theorem zeroExtension_add (A B : E →ₗ[𝕜] F) :
+    zeroExtension (A + B) = zeroExtension A + zeroExtension B := by
+  ext z
+  simp only [zeroExtension_apply, LinearMap.add_apply]
+  simpa using
+    (WithLp.toLp_add (p := 2)
+      ((0, A (WithLp.ofLp z).1) : E × F)
+      ((0, B (WithLp.ofLp z).1) : E × F))
+
+omit [FiniteDimensional 𝕜 E] [FiniteDimensional 𝕜 F] in
+/-- Zero extension commutes with scalar multiplication. -/
+theorem zeroExtension_smul (a : 𝕜) (A : E →ₗ[𝕜] F) :
+    zeroExtension (a • A) = a • zeroExtension A := by
+  ext z
+  simp only [zeroExtension_apply, LinearMap.smul_apply]
+  simpa [smul_zero] using
+    (WithLp.toLp_smul (p := 2) a ((0, A (WithLp.ofLp z).1) : E × F))
+
 /-- Isometric embedding into the first coordinate of the `L²` product. -/
 private noncomputable def zeroExtensionInl :
     E →ₗᵢ[𝕜] WithLp 2 (E × F) :=
@@ -1811,7 +1831,7 @@ noncomputable def frobenius : RectangularUnitarilyInvariantNorm 𝕜 E F where
       sum_sq_norm_apply_unitary_comp A V rfl (stdOrthonormalBasis 𝕜 E)]
 
 /-- Singular values scale by the norm of an arbitrary scalar. -/
-private theorem singularValues_smul_rect (a : 𝕜) (A : E →ₗ[𝕜] F) (i : ℕ) :
+theorem singularValues_smul_rect (a : 𝕜) (A : E →ₗ[𝕜] F) (i : ℕ) :
     (a • A).singularValues i = ‖a‖ * A.singularValues i := by
   have hgram : (a • A).adjoint ∘ₗ (a • A) =
       (((‖a‖ : ℝ) : 𝕜) • A).adjoint ∘ₗ (((‖a‖ : ℝ) : 𝕜) • A) := by

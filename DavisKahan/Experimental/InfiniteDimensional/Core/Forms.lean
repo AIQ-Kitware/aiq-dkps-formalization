@@ -79,84 +79,37 @@ def FormRelativelyBounded (a v : ClosedForm (𝕜 := 𝕜) (E := E))
       ‖v.form (hdom.symm ▸ x) (hdom.symm ▸ x)‖ ≤
         alpha * ‖(x : E)‖ ^ 2 + beta * ‖a.form x x‖
 
-/-- The hypotheses under which the KLMN form sum is defined. -/
-def AdmissibleFormSum
-    (a v : ClosedForm (𝕜 := 𝕜) (E := E)) : Prop :=
-  a.sesquilinear ∧ v.sesquilinear ∧ a.closedness ∧
-    a.lowerSemibounded ∧
-      ∃ alpha beta : ℝ,
-        0 ≤ alpha ∧ 0 ≤ beta ∧ beta < 1 ∧
-          FormRelativelyBounded a v alpha beta
+/-- Closed form sum, constructed under a relative-bound hypothesis.
 
-/-- Closed form sum.  This compatibility definition is total.  On the
-admissible branch it is the KLMN sum on the common domain; outside that branch
-it returns the reference form.  Every theorem about the sum supplies the
-admissibility data and therefore uses the first branch. -/
+Construction route: use the common form domain supplied by
+`FormRelativelyBounded`, add the two sesquilinear forms there, and transport
+closedness/lower semiboundedness from the norm-equivalence estimate.  The
+constructor should eventually take the relative-bound witness explicitly. -/
 noncomputable def formSum
     (a v : ClosedForm (𝕜 := 𝕜) (E := E)) :
     ClosedForm (𝕜 := 𝕜) (E := E) := by
-  classical
-  by_cases h : AdmissibleFormSum a v
-  · obtain ⟨ha, hv, hac, hal, alpha, beta, ha0, hb0, hb1, hrel⟩ := h
-    exact ClosedForm.klmnSum a v ha hv hac hal hrel ha0 hb0 hb1
-  · exact a
+  sorry
 
-/-- On admissible data, the total form sum is the KLMN construction. -/
-theorem formSum_eq_klmnSum
-    (a v : ClosedForm (𝕜 := 𝕜) (E := E))
-    (h : AdmissibleFormSum a v) :
-    formSum a v = ClosedForm.klmnSum a v
-      h.1 h.2.1 h.2.2.1 h.2.2.2.1
-      h.2.2.2.2.choose_spec.choose_spec.choose_spec.2.2.2
-      h.2.2.2.2.choose_spec.choose_spec.choose_spec.2.1
-      h.2.2.2.2.choose_spec.choose_spec.choose_spec.2.2.1
-      h.2.2.2.2.choose_spec.choose_spec.choose_spec.2.2.2.1 := by
-  simp [formSum, h]
+/-- Operator associated with a closed semibounded form.
 
-/-- Operator associated with a closed semibounded form.  The valid branch
-is the first representation theorem.  The invalid branch is the zero bounded
-operator viewed as closed; theorem-facing uses always prove the validity
-hypotheses. -/
+Construction route: complete the form domain in the shifted form norm, use
+Riesz representation for vectors whose form functional is ambient-norm
+bounded, and define the operator domain from exactly those vectors.  Closedness
+and self-adjointness are consequences of the representation theorem. -/
 noncomputable def ClosedForm.associatedOperator
     (a : ClosedForm (𝕜 := 𝕜) (E := E)) :
     ClosedOperator (𝕜 := 𝕜) (E := E) := by
-  classical
-  by_cases h : a.sesquilinear ∧ a.closedness ∧ a.lowerSemibounded
-  · exact ClosedForm.firstRepresentationOperator a h.1 h.2.1 h.2.2
-  · exact ClosedOperator.ofContinuousLinearMap 0
+  sorry
 
-/-- The associated operator is self-adjoint on valid form data. -/
-theorem ClosedForm.associatedOperator_isSelfAdjoint
-    (a : ClosedForm (𝕜 := 𝕜) (E := E))
-    (hs : a.sesquilinear) (hc : a.closedness)
-    (hl : a.lowerSemibounded) :
-    a.associatedOperator.IsSelfAdjoint := by
-  rw [ClosedForm.associatedOperator, dif_pos ⟨hs, hc, hl⟩]
-  exact ClosedForm.firstRepresentationOperator_isSelfAdjoint a hs hc hl
+/-- Quantitative size of a form perturbation in the form-domain norm.
 
-/-- Quantitative size of a form perturbation in the shifted form norm.
-
-The infimum ranges over all valid diagonal form bounds on the common domain.
-It is zero when no common-domain bound exists; all perturbation theorems carry
-a witness, so this fallback is never used there. -/
+Construction route: define the form-domain Hilbert norm from a coercive shift
+of `a`, bundle `v` as a bounded sesquilinear form on that space, and take its
+operator norm.  Prove independence, up to the required equivalent constants,
+of the chosen admissible shift. -/
 noncomputable def formPerturbationSize
-    (a v : ClosedForm (𝕜 := 𝕜) (E := E)) : ℝ :=
-  sInf {c : ℝ | 0 ≤ c ∧ ∃ hdom : v.domain = a.domain,
-    ∀ x : a.domain,
-      ‖v.form (hdom.symm ▸ x) (hdom.symm ▸ x)‖ ≤
-        c * ClosedForm.shiftedFormNormSq a x}
-
-/-- Evaluation bound supplied by the definition of perturbation size. -/
-theorem formPerturbationSize_bound
-    (a v : ClosedForm (𝕜 := 𝕜) (E := E))
-    (hbounded : ∃ c : ℝ, 0 ≤ c ∧ ∃ hdom : v.domain = a.domain,
-      ∀ x : a.domain,
-        ‖v.form (hdom.symm ▸ x) (hdom.symm ▸ x)‖ ≤
-          c * ClosedForm.shiftedFormNormSq a x) :
-    ∃ hdom : v.domain = a.domain, ∀ x : a.domain,
-      ‖v.form (hdom.symm ▸ x) (hdom.symm ▸ x)‖ ≤
-        formPerturbationSize a v * ClosedForm.shiftedFormNormSq a x := by
-  exact csInf_mem_closed_form_bound_set hbounded
+    (a v : ClosedForm (𝕜 := 𝕜) (E := E)) : ℝ := by
+  sorry
 
 /-- KLMN theorem.
 
@@ -193,16 +146,8 @@ theorem klmn
     (halpha : 0 ≤ alpha) (hbeta0 : 0 ≤ beta) (hbeta : beta < 1) :
     (formSum a v).closedness ∧ (formSum a v).lowerSemibounded ∧
       (formSum a v).associatedOperator.IsSelfAdjoint := by
-  classical
-  have hadm : AdmissibleFormSum a v :=
-    ⟨ha_sesq, hv_sesq, ha_closed, ha_lower,
-      ⟨alpha, beta, halpha, hbeta0, hbeta, hrel⟩⟩
-  have hsum := ClosedForm.klmnSum_properties
-    a v ha_sesq hv_sesq ha_closed ha_lower hrel halpha hbeta0 hbeta
-  rw [formSum, dif_pos hadm]
-  exact ⟨hsum.closed, hsum.lowerSemibounded,
-    ClosedForm.associatedOperator_isSelfAdjoint _
-      hsum.sesquilinear hsum.closed hsum.lowerSemibounded⟩
+  sorry
+
 /-- Form-version `sin Θ` theorem. 
 
 Lean proof route for a weaker agent:
@@ -236,32 +181,7 @@ theorem sinTheta_formPerturbation
     d * ‖a.associatedOperator.spectralProjection s -
       (formSum a v).associatedOperator.spectralProjection t‖ ≤
       (Real.pi / 2) * formPerturbationSize a v := by
-  classical
-  have hklmn := klmn a v ha_sesq hv_sesq ha_closed ha_lower
-    hrel halpha hbeta0 hbeta
-  let A := a.associatedOperator
-  let B := (formSum a v).associatedOperator
-  have hAself : A.IsSelfAdjoint :=
-    ClosedForm.associatedOperator_isSelfAdjoint a ha_sesq ha_closed ha_lower
-  have hBself : B.IsSelfAdjoint := hklmn.2.2
-  let P := A.spectralProjection s
-  let Q := B.spectralProjection t
-  have hformResidual :
-      FormSylvesterResidual A B (Q ∘L P) (P-Q) := by
-    exact formDifference_mixedProjection_residual
-      a v hrel P Q hs ht
-  have hsize :
-      formResidualGauge hformResidual ≤ formPerturbationSize a v := by
-    exact formResidual_le_formPerturbationSize a v hrel
-  have hforward := unbounded_form_sylvester_general_separation
-    A B hAself hBself s tᶜ hs ht.compl hd hsepAB
-    hformResidual.forward
-  have hbackward := unbounded_form_sylvester_general_separation
-    B A hBself hAself t sᶜ ht hs.compl hd hsepBA
-    hformResidual.backward
-  have hcombine := projection_difference_norm_le_pi_div_two_of_directed
-    P Q hforward hbackward
-  exact le_trans hcombine (by
-    nlinarith [hsize, Real.pi_pos.le])
+  sorry
+
 end DavisKahanExt
 end ForMathlib
