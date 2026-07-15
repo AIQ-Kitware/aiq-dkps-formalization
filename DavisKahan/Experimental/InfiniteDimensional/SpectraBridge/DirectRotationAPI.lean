@@ -258,5 +258,47 @@ theorem star_complexDirectRotation_maps_orthogonalComplement
   _root_.ForMathlib.DavisKahan.Experimental.SpectraBridge.star_spectraDirectRotation_maps_orthogonalComplement
     U V hacute
 
+
+/-! ## Reflection-product reduction -/
+
+/-- The ordered target/source reflection product associated with the complex
+acute pair. -/
+noncomputable abbrev complexReflectionProduct
+    (U V : Submodule ℂ H)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : H →L[ℂ] H :=
+  _root_.ForMathlib.DavisKahan.Experimental.SpectraBridge.spectraReflectionProduct U V
+
+/-- The ordered reflection product is unitary. -/
+theorem complexReflectionProduct_mem_unitary
+    (U V : Submodule ℂ H)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
+    complexReflectionProduct U V ∈ unitary (H →L[ℂ] H) :=
+  _root_.ForMathlib.DavisKahan.Experimental.SpectraBridge.spectraReflectionProduct_mem_unitary
+    U V
+
+omit [CompleteSpace H] in
+/-- Twice the canonical pre-polar intertwiner is the identity plus the ordered
+reflection product. -/
+theorem complexCanonicalIntertwiner_add_self_eq_one_add_reflectionProduct
+    (U V : Submodule ℂ H)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
+    _root_.ForMathlib.DavisKahan.Experimental.SpectraBridge.spectraCanonicalIntertwiner U V +
+        _root_.ForMathlib.DavisKahan.Experimental.SpectraBridge.spectraCanonicalIntertwiner U V =
+      1 + complexReflectionProduct U V :=
+  _root_.ForMathlib.DavisKahan.Experimental.SpectraBridge.spectraCanonicalIntertwiner_add_self_eq_one_add_reflectionProduct
+    U V
+
+/-- The complex direct rotation commutes with the ordered reflection product.
+This is the final algebraic reduction before proving that its square equals
+that product. -/
+theorem complexDirectRotation_commute_reflectionProduct
+    (U V : Submodule ℂ H)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hacute : IsAcute U V) :
+    Commute (complexDirectRotation U V hacute)
+      (complexReflectionProduct U V) :=
+  _root_.ForMathlib.DavisKahan.Experimental.SpectraBridge.spectraDirectRotation_commute_reflectionProduct
+    U V hacute
+
 end DavisKahanExt
 end ForMathlib

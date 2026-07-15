@@ -876,6 +876,175 @@ theorem star_spectraDirectRotation_maps_orthogonalComplement
       Uᗮ.starProjection_eq_self_iff.mpr hy] at h
     exact h
 
+
+/-! ## Reflection-product reduction for the square theorem -/
+
+/-- A subspace reflection is self-adjoint in the complex bounded-operator
+algebra. -/
+theorem star_reflectionOperator_complex
+    (U : Submodule ℂ H) [U.HasOrthogonalProjection] :
+    star (reflectionOperator U) = reflectionOperator U := by
+  rw [reflectionOperator_eq_projection_add_projection_sub_one]
+  simp only [star_sub, star_add, star_one,
+    (isSelfAdjoint_starProjection U).star_eq]
+
+/-- A subspace reflection is a unitary element of the complex bounded-operator
+algebra. -/
+theorem reflectionOperator_mem_unitary_complex
+    (U : Submodule ℂ H) [U.HasOrthogonalProjection] :
+    reflectionOperator U ∈ unitary (H →L[ℂ] H) := by
+  have hstar : star (reflectionOperator U) = reflectionOperator U :=
+    star_reflectionOperator_complex U
+  have hinv : reflectionOperator U * reflectionOperator U = 1 := by
+    simpa only [ContinuousLinearMap.mul_def, ContinuousLinearMap.one_def] using
+      reflectionOperator_involutive U
+  exact ⟨by rw [hstar, hinv], by rw [hstar, hinv]⟩
+
+/-- The ordered product of the target and source reflections.  The direct
+rotation square theorem identifies this operator with the square of the polar
+factor. -/
+noncomputable abbrev spectraReflectionProduct
+    (U V : Submodule ℂ H)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : H →L[ℂ] H :=
+  reflectionOperator V * reflectionOperator U
+
+/-- The ordered reflection product is unitary. -/
+theorem spectraReflectionProduct_mem_unitary
+    (U V : Submodule ℂ H)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
+    spectraReflectionProduct U V ∈ unitary (H →L[ℂ] H) :=
+  (unitary (H →L[ℂ] H)).mul_mem
+    (reflectionOperator_mem_unitary_complex V)
+    (reflectionOperator_mem_unitary_complex U)
+
+omit [CompleteSpace H] in
+/-- Twice the canonical intertwiner is the identity plus the ordered
+reflection product.  Thus the pre-polar operator is the algebraic midpoint of
+`1` and `J_V J_U`, without introducing division by two into later rewrites. -/
+theorem spectraCanonicalIntertwiner_add_self_eq_one_add_reflectionProduct
+    (U V : Submodule ℂ H)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
+    spectraCanonicalIntertwiner U V + spectraCanonicalIntertwiner U V =
+      1 + spectraReflectionProduct U V := by
+  change
+    (V.starProjection * U.starProjection +
+        Vᗮ.starProjection * Uᗮ.starProjection) +
+      (V.starProjection * U.starProjection +
+        Vᗮ.starProjection * Uᗮ.starProjection) =
+      1 + V.reflectionOperator * U.reflectionOperator
+  rw [show V.reflectionOperator =
+      V.starProjection + V.starProjection - 1 by
+        exact reflectionOperator_eq_projection_add_projection_sub_one V,
+    show U.reflectionOperator =
+      U.starProjection + U.starProjection - 1 by
+        exact reflectionOperator_eq_projection_add_projection_sub_one U,
+    Submodule.starProjection_orthogonal' U,
+    Submodule.starProjection_orthogonal' V]
+  noncomm_ring
+
+omit [CompleteSpace H] in
+/-- The canonical intertwiner commutes with the ordered reflection product. -/
+theorem spectraCanonicalIntertwiner_commute_reflectionProduct
+    (U V : Submodule ℂ H)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
+    Commute (spectraCanonicalIntertwiner U V)
+      (spectraReflectionProduct U V) := by
+  change
+    (V.starProjection * U.starProjection +
+        Vᗮ.starProjection * Uᗮ.starProjection) *
+      (V.reflectionOperator * U.reflectionOperator) =
+    (V.reflectionOperator * U.reflectionOperator) *
+      (V.starProjection * U.starProjection +
+        Vᗮ.starProjection * Uᗮ.starProjection)
+  rw [show V.reflectionOperator =
+      V.starProjection + V.starProjection - 1 by
+        exact reflectionOperator_eq_projection_add_projection_sub_one V,
+    show U.reflectionOperator =
+      U.starProjection + U.starProjection - 1 by
+        exact reflectionOperator_eq_projection_add_projection_sub_one U,
+    Submodule.starProjection_orthogonal' U,
+    Submodule.starProjection_orthogonal' V]
+  noncomm_ring
+
+/-- The canonical intertwiner also commutes with the adjoint of the ordered
+reflection product.  This follows from the midpoint identity and unitarity of
+the reflection product, avoiding a second projection-polynomial expansion. -/
+theorem spectraCanonicalIntertwiner_commute_star_reflectionProduct
+    (U V : Submodule ℂ H)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
+    Commute (spectraCanonicalIntertwiner U V)
+      (star (spectraReflectionProduct U V)) := by
+  let S : H →L[ℂ] H := spectraCanonicalIntertwiner U V
+  let R : H →L[ℂ] H := spectraReflectionProduct U V
+  have hmid : S + S = 1 + R :=
+    spectraCanonicalIntertwiner_add_self_eq_one_add_reflectionProduct U V
+  have hunit : R ∈ unitary (H →L[ℂ] H) :=
+    spectraReflectionProduct_mem_unitary U V
+  have hRstar : R * star R = 1 := hunit.2
+  have hstarR : star R * R = 1 := hunit.1
+  have hdouble : (S + S) * star R = star R * (S + S) := by
+    rw [hmid]
+    noncomm_ring [hRstar, hstarR]
+  have hscaled : (2 : ℂ) • (S * star R) = (2 : ℂ) • (star R * S) := by
+    simpa only [add_mul, mul_add, two_smul ℂ] using hdouble
+  let twoUnit : ℂˣ := Units.mk0 2 (by norm_num)
+  apply smul_left_cancel twoUnit
+  change (2 : ℂ) • (S * star R) = (2 : ℂ) • (star R * S)
+  exact hscaled
+
+/-- The absolute value of the canonical intertwiner commutes with the ordered
+reflection product.  This is the functional-calculus step that turns the
+midpoint identity into a one-variable unitary problem. -/
+theorem spectraCanonicalAbsoluteValue_commute_reflectionProduct
+    (U V : Submodule ℂ H)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
+    Commute
+      (spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V))
+      (spectraReflectionProduct U V) := by
+  change Commute (CFC.abs (spectraCanonicalIntertwiner U V))
+    (spectraReflectionProduct U V)
+  exact
+    (spectraCanonicalIntertwiner_commute_reflectionProduct U V).cfcAbs_left
+      (spectraCanonicalIntertwiner_commute_star_reflectionProduct U V)
+
+/-- The inverse absolute-value unit commutes with the ordered reflection
+product in the acute case. -/
+theorem spectraCanonicalAbsoluteValueUnit_inv_commute_reflectionProduct
+    (U V : Submodule ℂ H)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hacute : IsAcute U V) :
+    Commute
+      (↑((spectraCanonicalAbsoluteValueUnit U V hacute)⁻¹) : H →L[ℂ] H)
+      (spectraReflectionProduct U V) := by
+  have h := spectraCanonicalAbsoluteValue_commute_reflectionProduct U V
+  rw [← coe_spectraCanonicalAbsoluteValueUnit U V hacute] at h
+  exact h.units_inv_left
+
+/-- The acute canonical polar factor commutes with the ordered reflection
+product. -/
+theorem spectraCanonicalPolarFactor_commute_reflectionProduct
+    (U V : Submodule ℂ H)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hacute : IsAcute U V) :
+    Commute (spectraCanonicalPolarFactor U V)
+      (spectraReflectionProduct U V) := by
+  rw [spectraCanonicalPolarFactor_eq_intertwiner_mul_absoluteValueUnit_inv
+    U V hacute]
+  exact
+    (spectraCanonicalIntertwiner_commute_reflectionProduct U V).mul_left
+      (spectraCanonicalAbsoluteValueUnit_inv_commute_reflectionProduct
+        U V hacute)
+
+/-- The acute Spectra direct rotation commutes with the ordered reflection
+product whose preferred square root it is intended to realize. -/
+theorem spectraDirectRotation_commute_reflectionProduct
+    (U V : Submodule ℂ H)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hacute : IsAcute U V) :
+    Commute (spectraDirectRotation U V hacute)
+      (spectraReflectionProduct U V) :=
+  spectraCanonicalPolarFactor_commute_reflectionProduct U V hacute
+
 end SpectraBridge
 end Experimental
 end DavisKahan
