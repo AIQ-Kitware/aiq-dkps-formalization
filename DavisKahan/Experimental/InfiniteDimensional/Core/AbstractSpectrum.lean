@@ -4,28 +4,28 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
 import DavisKahan.BoundedOperator.Basic
+import Mathlib.Analysis.InnerProductSpace.Spectrum
 
 /-!
-# Provisional spectral and embedding interfaces
+# Restricted-operator spectra and provisional embedding interfaces
 
-This module preserves foundational interfaces that remain useful targets for
-future work but are not part of the supported bounded dependency graph.  The
-abstract spectrum definitions should eventually be replaced by spectra of
-actual restricted operators, and the double-angle embedding should eventually
-be built from the closed range of an isometric embedding.
+This module provides the theorem-facing spectrum of a bounded operator and of
+its actual restriction to an invariant subspace.  These definitions use the
+Banach-algebra spectrum, so continuous spectral components are retained in
+infinite dimension.  The double-angle embedding remains a provisional target
+and should eventually be built from the closed range of an isometric embedding.
 -/
 
 
 /-! ## Construction plan
 
-* Replace `realSpectrum` by the actual spectrum whenever the scalar field and
-  operator algebra support it.  For real Hilbert spaces, route spectral
-  inequalities through `RealSpectralBridge`; do not create a second opaque
-  spectrum once the real bridge exists.
-* Define `restrictedSpectrum` from `A.restrict hU`, which requires invariance
-  and completeness of the subspace.  The present hypothesis-free declaration
-  is only a compatibility surface and should be replaced by a theorem-facing
-  construction carrying those data.
+* Route inequalities derived from real spectra through `RealSpectralBridge`;
+  the set definitions here are exact, but the real spectral-order theorem is a
+  separate analytic obligation.
+* Keep spectral separation hypotheses tied to invariant subspaces.  For a
+  self-adjoint operator, the reduction hypotheses used by the paper supply the
+  required invariance for both the selected subspace and its orthogonal
+  complement.
 * Build `sinTwoThetaEmbedding` from the sine and cosine blocks of the isometric
   embedding.  In principal coordinates its singular values must be
   `sin (2 * theta_i)`; prove this first on the two-plane decomposition and then
@@ -57,30 +57,54 @@ def IsOffDiagonalRelativeToProjection (P H : E →L[𝕜] E) : Prop :=
     (ContinuousLinearMap.id 𝕜 E - P) ∘L H ∘L
       (ContinuousLinearMap.id 𝕜 E - P) = 0
 
-/-- Real point spectrum of an `RCLike` operator.
+/-- A subspace is invariant under a bounded operator. -/
+def InvariantFor (A : E →L[𝕜] E) (U : Submodule 𝕜 E) : Prop :=
+  ∀ x ∈ U, A x ∈ U
 
-This compatibility layer deliberately uses eigenvectors rather than the
-Banach-algebra spectrum.  In finite dimension the two agree for self-adjoint
-operators, while this definition remains meaningful without a scalar-specific
-functional-calculus bridge. -/
+/-- Real points in the Banach-algebra spectrum of an `RCLike` operator.
+
+The operator algebra is naturally an algebra over its native scalar field
+`𝕜`, not uniformly an algebra over `ℝ`.  We therefore take `spectrum 𝕜 A` and
+pull it back along the canonical embedding `ℝ → 𝕜`.  For self-adjoint
+operators this captures the full spectrum, while retaining continuous spectral
+components in infinite dimension. -/
 def realSpectrum (A : E →L[𝕜] E) : Set ℝ :=
-  {r | ∃ x : E, x ≠ 0 ∧ A x = ((r : ℝ) : 𝕜) • x}
+  {r | (r : 𝕜) ∈ spectrum 𝕜 A}
 
-/-- Point spectrum carried by vectors lying in a supplied subspace.
+/-- Real spectrum of the actual restriction of `A` to an invariant subspace.
 
-No invariance is required merely to state this set.  The definition records
-exactly the eigenpairs whose eigenvectors lie in `U`; theorem-facing uses that
-need a genuine restricted operator should additionally supply reduction or
-invariance hypotheses. -/
+The existential packages the invariance proof needed to construct
+`A.restrict`.  Proof irrelevance makes the resulting restricted operator
+independent of which proof is supplied.  If no invariance proof exists the set
+is empty, so theorem-facing containment and separation predicates below also
+record invariance explicitly rather than permitting a vacuous gap. -/
 def restrictedSpectrum (A : E →L[𝕜] E)
     (U : Submodule 𝕜 E) : Set ℝ :=
-  {r | ∃ x : E, x ∈ U ∧ x ≠ 0 ∧ A x = ((r : ℝ) : 𝕜) • x}
+  {r | ∃ hU : InvariantFor A U,
+    (r : 𝕜) ∈ spectrum 𝕜 (A.restrict hU)}
 
-/-- The spectrum carried by `U` is contained in `s`. -/
+/-- With a fixed invariance proof, `restrictedSpectrum` is exactly the real
+part of the Banach-algebra spectrum of that restriction. -/
+theorem restrictedSpectrum_eq_restrictionSpectrum
+    (A : E →L[𝕜] E) (U : Submodule 𝕜 E) (hU : InvariantFor A U) :
+    restrictedSpectrum A U = {r : ℝ | (r : 𝕜) ∈ spectrum 𝕜 (A.restrict hU)} := by
+  ext r
+  constructor
+  · rintro ⟨hU', hr⟩
+    simpa using hr
+  · intro hr
+    exact ⟨hU, hr⟩
+
+/-- The spectrum of the actual restriction to `U` is contained in `s`.
+
+Invariance is part of the predicate, preventing a containment hypothesis from
+being discharged merely because no restricted operator was available. -/
 def SpectrumIn (A : E →L[𝕜] E) (U : Submodule 𝕜 E)
-    (s : Set ℝ) : Prop := restrictedSpectrum A U ⊆ s
+    (s : Set ℝ) : Prop :=
+  InvariantFor A U ∧ restrictedSpectrum A U ⊆ s
 
-/-- A scalar function is uniformly bounded on the provisional real spectrum. -/
+/-- A scalar function is uniformly bounded on the real Banach-algebra
+spectrum. -/
 def BoundedOnSpectrum (A : E →L[𝕜] E) (f : ℝ → ℝ) : Prop :=
   ∃ C : ℝ, 0 ≤ C ∧ ∀ x ∈ realSpectrum A, |f x| ≤ C
 
@@ -88,26 +112,30 @@ def BoundedOnSpectrum (A : E →L[𝕜] E) (f : ℝ → ℝ) : Prop :=
 noncomputable def spectralDistance (s t : Set ℝ) : ℝ :=
   sInf {r | ∃ x ∈ s, ∃ y ∈ t, r = |x - y|}
 
-/-- Two restricted spectra are separated by at least `d`. -/
+/-- Two actual restricted spectra are separated by at least `d`. -/
 def SpectraSeparated (A : E →L[𝕜] E) (U : Submodule 𝕜 E)
     (B : F →L[𝕜] F) (V : Submodule 𝕜 F) (d : ℝ) : Prop :=
-  ∀ a ∈ restrictedSpectrum A U, ∀ b ∈ restrictedSpectrum B V,
-    d ≤ |a - b|
+  InvariantFor A U ∧ InvariantFor B V ∧
+    ∀ a ∈ restrictedSpectrum A U, ∀ b ∈ restrictedSpectrum B V,
+      d ≤ |a - b|
 
 /-- The selected block of `A` is separated from the complementary block of
 `B`. -/
 def HybridGap (A B : E →L[𝕜] E) (U V : Submodule 𝕜 E)
     (d : ℝ) : Prop := SpectraSeparated A U B Vᗮ d
 
-/-- Internal spectral gap of a reducing subspace. -/
+/-- Internal spectral gap of an invariant subspace and its invariant
+orthogonal complement. -/
 def InternalGap (A : E →L[𝕜] E) (U : Submodule 𝕜 E)
     (d : ℝ) : Prop := SpectraSeparated A U A Uᗮ d
 
-/-- Ordered separation, giving a constant-one Sylvester estimate. -/
+/-- Ordered separation of actual restricted spectra, giving a constant-one
+Sylvester estimate. -/
 def OrderedSpectraSeparated (A : E →L[𝕜] E) (U : Submodule 𝕜 E)
     (B : F →L[𝕜] F) (V : Submodule 𝕜 F) (d : ℝ) : Prop :=
-  ∀ a ∈ restrictedSpectrum A U, ∀ b ∈ restrictedSpectrum B V,
-    a + d ≤ b
+  InvariantFor A U ∧ InvariantFor B V ∧
+    ∀ a ∈ restrictedSpectrum A U, ∀ b ∈ restrictedSpectrum B V,
+      a + d ≤ b
 
 /-- Interval/exterior separation from the classical `sin Θ` theorem. -/
 def IntervalExteriorSeparated (A : E →L[𝕜] E) (U : Submodule 𝕜 E)
