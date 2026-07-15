@@ -95,8 +95,27 @@ theorem upperFormBoundOn_top_of_spectrum_subset_Iic
     (A : E →L[ℝ] E) (hA : A.IsSymmetric) {c : ℝ}
     (hσ : spectrum ℝ A ⊆ Set.Iic c) :
     UpperFormBoundOn A ⊤ c := by
-  sorry
-
+  classical
+  let EC := RCLikeComplexification ℝ E
+  let j : E →ₗᵢ[ℝ] EC := RCLikeComplexification.ofReal
+  let AC : EC →L[ℂ] EC := RCLikeComplexification.complexify A
+  have hAC : IsSelfAdjoint AC :=
+    RCLikeComplexification.complexify_isSelfAdjoint hA
+  have hσC : spectrum ℂ AC ⊆
+      {z : ℂ | z.im = 0 ∧ z.re ≤ c} := by
+    intro z hz
+    obtain ⟨r, hr, rfl⟩ :=
+      RCLikeComplexification.spectrum_complexify_selfAdjoint hA hz
+    exact ⟨by simp, hσ hr⟩
+  have horder : AC ≤ ((c : ℂ) • (1 : EC →L[ℂ] EC)) := by
+    apply ContinuousFunctionalCalculus.isSelfAdjoint_le_of_spectrum_le hAC
+    intro z hz
+    exact (hσC z hz).2
+  intro x hx
+  have hquad := ContinuousLinearMap.le_iff_inner_le_inner.mp horder (j x)
+  simpa [AC, j, RCLikeComplexification.inner_ofReal,
+    RCLikeComplexification.complexify_apply_ofReal] using
+    congrArg Complex.re hquad
 /-- Real spectral lower bound implies a global quadratic-form lower bound.
 
 This is derived from the upper bridge by negating the operator; it is not a

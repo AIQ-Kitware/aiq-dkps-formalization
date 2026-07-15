@@ -18,3 +18,4 @@ calculus import cone are exported here. The bounded spectral-projection bridge
 is preserved under `dev/pending/` and can be reactivated after that dependency
 cone is compatible with the root Lean/Mathlib revision.
 -/
+import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.DirectRotationSquare

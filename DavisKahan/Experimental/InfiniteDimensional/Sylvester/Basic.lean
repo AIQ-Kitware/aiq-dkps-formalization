@@ -50,7 +50,16 @@ def sylvesterOperator (A : F →L[𝕜] F) (B : E →L[𝕜] E)
 /-- Resolvent/Bochner integral candidate for the Sylvester solution. -/
 noncomputable def sylvesterResolventIntegral (A : F →L[𝕜] F)
     (B : E →L[𝕜] E) (C : E →L[𝕜] F) : E →L[𝕜] F := by
-  sorry
+  classical
+  if hsep : ∃ d : ℝ, 0 < d ∧ SpectraSeparated A ⊤ B ⊤ d then
+    let d := Classical.choose hsep
+    let hd := (Classical.choose_spec hsep).1
+    let hgap := (Classical.choose_spec hsep).2
+    let μ := separatedSylvesterMultiplier d hd
+    exact BochnerIntegral.integral fun t : ℝ =>
+      μ t • (unitaryGroup A t ∘L C ∘L unitaryGroup B (-t))
+  else
+    exact 0
 
 /-- Canonical solution selected by the resolvent integral. -/
 noncomputable def solveSylvester (A : F →L[𝕜] F)
@@ -94,7 +103,17 @@ theorem sylvester_solve
     (hsep : SpectraSeparated A ⊤ B ⊤ d)
     (C : E →L[𝕜] F) :
     sylvesterOperator A B (solveSylvester A B C) = C := by
-  sorry
+  classical
+  unfold solveSylvester sylvesterResolventIntegral
+  rw [dif_pos ⟨d, hd, hsep⟩]
+  let μ := separatedSylvesterMultiplier d hd
+  change sylvesterOperator A B
+    (BochnerIntegral.integral fun t : ℝ =>
+      μ t • (unitaryGroup A t ∘L C ∘L unitaryGroup B (-t))) = C
+  apply spectralMultiplier_ext hA hB
+  intro a ha b hb
+  have hab : d ≤ |a - b| := hsep a ha b hb
+  simpa [μ] using separatedSylvesterMultiplier_identity d hd a b hab
 
 /-- Uniqueness of the bounded Sylvester solution. 
 
@@ -120,7 +139,14 @@ theorem sylvester_unique
     {X Y : E →L[𝕜] F}
     (hX : sylvesterOperator A B X = sylvesterOperator A B Y) :
     X = Y := by
-  sorry
+  classical
+  have hhom : sylvesterOperator A B (X - Y) = 0 := by
+    unfold sylvesterOperator at hX ⊢
+    module at hX ⊢
+    exact sub_eq_zero.mpr hX
+  have hrepr := separatedSylvester_reconstruction hA hB hd hsep (X - Y)
+  rw [hrepr, hhom]
+  simp
 
 /-- Sharp constant-one estimate when one spectrum lies in a gap or the convex
 hulls are disjoint.
@@ -160,7 +186,27 @@ theorem norm_sylvester_le_of_orderedSeparation
     (hsep : OrderedSpectraSeparated B ⊤ A ⊤ d)
     (hEq : sylvesterOperator A B X = C) :
     d * ‖X‖ ≤ ‖C‖ := by
-  sorry
+  classical
+  have hrepr : X = BochnerIntegral.integral fun t : ℝ =>
+      Set.indicator (Set.Ici 0) (fun t =>
+        semigroup (-A) t ∘L C ∘L semigroup B t) t :=
+    orderedSylvester_reconstruction hA hB hd hsep hEq
+  rw [hrepr]
+  have hint : Integrable fun t : ℝ =>
+      Set.indicator (Set.Ici 0) (fun t =>
+        semigroup (-A) t ∘L C ∘L semigroup B t) t :=
+    orderedSylvester_integrable hA hB hd hsep C
+  calc
+    d * ‖BochnerIntegral.integral fun t : ℝ =>
+        Set.indicator (Set.Ici 0) (fun t =>
+          semigroup (-A) t ∘L C ∘L semigroup B t) t‖
+        ≤ d * ∫ t in Set.Ici 0, Real.exp (-d*t) * ‖C‖ := by
+          gcongr
+          exact norm_integral_le_of_norm_le hint
+            (orderedSemigroup_integrand_bound hA hB hsep C)
+    _ = ‖C‖ := by
+          rw [MeasureTheory.integral_exp_neg_mul_Ici hd]
+          field_simp
 
 omit [CompleteSpace E] [CompleteSpace F] in
 /-- **The sharp constant-one Sylvester operator-norm bound, quadratic-form
@@ -226,8 +272,23 @@ theorem norm_sylvester_le_of_generalSeparation
     (hsep : SpectraSeparated A ⊤ B ⊤ d)
     (hEq : sylvesterOperator A B X = C) :
     d * ‖X‖ ≤ (Real.pi / 2) * ‖C‖ := by
-  sorry
-
+  classical
+  let μ := separatedSylvesterMultiplier d hd
+  have hrepr : X = BochnerIntegral.integral fun t : ℝ =>
+      μ t • (unitaryGroup A t ∘L C ∘L unitaryGroup B (-t)) :=
+    separatedSylvester_reconstruction hA hB hd hsep X hEq
+  rw [hrepr]
+  have horbit : ∀ t, ‖unitaryGroup A t ∘L C ∘L unitaryGroup B (-t)‖ = ‖C‖ :=
+    fun t => norm_unitary_left_right _ _ C
+  calc
+    d * ‖BochnerIntegral.integral fun t : ℝ =>
+        μ t • (unitaryGroup A t ∘L C ∘L unitaryGroup B (-t))‖
+        ≤ d * (∫ t, |μ t|) * ‖C‖ := by
+          gcongr
+          exact norm_operatorIntegral_le_l1_mul μ C horbit
+    _ = (Real.pi / 2) * ‖C‖ := by
+          rw [l1_norm_separatedSylvesterMultiplier d hd]
+          field_simp
 
 end DavisKahanExt
 end ForMathlib

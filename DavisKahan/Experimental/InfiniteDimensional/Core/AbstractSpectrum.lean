@@ -129,16 +129,34 @@ def OrderedInternalGap (A : E →L[𝕜] E) (U : Submodule 𝕜 E)
   OrderedSpectraSeparated A U A Uᗮ d ∨
     OrderedSpectraSeparated A Uᗮ A U d
 
-/-- Provisional double-angle residual map for an isometric embedding.
+/-- Double-angle residual map for an isometric embedding.
 
-Construction route: split `X` into its `U` and `Uᗮ` projection blocks, form
-the normalized cross term `2 P_{Uᗮ} X (P_U X)⋆` on the coordinate space,
-and prove in principal coordinates that its singular values are
-`sin (2 * theta_i)`.  The eventual definition should reuse the supported
-projection-block API rather than introduce an independent angle calculus. -/
+Write `S = P_{Uᗮ} X` for the sine block and
+`C = sqrt (X⋆ P_U X)` for the positive cosine block on the coordinate space.
+Then `2 S C` has singular values `sin (2 θ)` in the principal-angle
+representation. -/
 noncomputable def sinTwoThetaEmbedding (U : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] (X : F →L[𝕜] E) : F →L[𝕜] E := by
-  sorry
+  classical
+  let cosineGram : F →L[𝕜] F :=
+    X.adjoint ∘L projection U ∘L X
+  let cosineBlock : F →L[𝕜] F :=
+    RCLikeContinuousFunctionalCalculus.sqrt cosineGram
+  exact (2 : 𝕜) •
+    (complementaryProjection U ∘L X ∘L cosineBlock)
+
+/-- Squaring the coordinate cosine block gives the compressed projection. -/
+theorem sinTwoThetaEmbedding_cosineBlock_sq
+    (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
+    (X : F →L[𝕜] E) :
+    let C : F →L[𝕜] F :=
+      RCLikeContinuousFunctionalCalculus.sqrt
+        (X.adjoint ∘L projection U ∘L X)
+    C ∘L C = X.adjoint ∘L projection U ∘L X := by
+  intro C
+  exact RCLikeContinuousFunctionalCalculus.sqrt_sq
+    (ContinuousLinearMap.star_mul_self_nonneg
+      (projection U ∘L X))
 
 end Foundation
 end Experimental

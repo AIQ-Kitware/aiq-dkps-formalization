@@ -77,15 +77,28 @@ variable {𝕜 : Type*} [RCLike 𝕜]
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
   [CompleteSpace E]
 
-/-- Resolvent operator `(A - zI)⁻¹`, defined on the resolvent set. -/
-noncomputable def resolventOperator (A : E →L[𝕜] E) (z : 𝕜) : E →L[𝕜] E := by
-  sorry
-
 /-- Resolvent-set predicate. -/
 def InResolventSet (A : E →L[𝕜] E) (z : 𝕜) : Prop :=
   ∃ R : E →L[𝕜] E,
     R ∘L (A - z • ContinuousLinearMap.id 𝕜 E) = ContinuousLinearMap.id 𝕜 E ∧
     (A - z • ContinuousLinearMap.id 𝕜 E) ∘L R = ContinuousLinearMap.id 𝕜 E
+
+/-- Resolvent operator `(A - zI)⁻¹`, totalized by zero off the resolvent set. -/
+noncomputable def resolventOperator (A : E →L[𝕜] E) (z : 𝕜) : E →L[𝕜] E := by
+  classical
+  exact if h : InResolventSet A z then Classical.choose h else 0
+
+/-- The selected resolvent has both inverse laws. -/
+theorem resolventOperator_spec (A : E →L[𝕜] E) {z : 𝕜}
+    (hz : InResolventSet A z) :
+    resolventOperator A z ∘L (A - z • ContinuousLinearMap.id 𝕜 E) =
+        ContinuousLinearMap.id 𝕜 E ∧
+      (A - z • ContinuousLinearMap.id 𝕜 E) ∘L resolventOperator A z =
+        ContinuousLinearMap.id 𝕜 E := by
+  classical
+  unfold resolventOperator
+  rw [dif_pos hz]
+  exact Classical.choose_spec hz
 
 /-- First resolvent identity. 
 
@@ -109,7 +122,19 @@ theorem resolvent_identity
     (hz : InResolventSet A z) (hw : InResolventSet A w) :
     resolventOperator A z - resolventOperator A w =
       (z - w) • (resolventOperator A z ∘L resolventOperator A w) := by
-  sorry
+  classical
+  let Rz := resolventOperator A z
+  let Rw := resolventOperator A w
+  have hzL := (resolventOperator_spec A hz).1
+  have hzR := (resolventOperator_spec A hz).2
+  have hwL := (resolventOperator_spec A hw).1
+  have hwR := (resolventOperator_spec A hw).2
+  calc
+    Rz - Rw = Rz ∘L ((A - w • 1) - (A - z • 1)) ∘L Rw := by
+      rw [ContinuousLinearMap.comp_sub, ContinuousLinearMap.sub_comp]
+      simp [ContinuousLinearMap.comp_assoc, hzL, hzR, hwL, hwR]
+    _ = Rz ∘L ((z-w) • 1) ∘L Rw := by congr 2 <;> module
+    _ = (z-w) • (Rz ∘L Rw) := by module
 
 /-- Second resolvent identity. 
 
@@ -132,7 +157,18 @@ theorem resolvent_perturbation_identity
     (hA : InResolventSet A z) (hB : InResolventSet B z) :
     resolventOperator B z - resolventOperator A z =
       resolventOperator B z ∘L (A - B) ∘L resolventOperator A z := by
-  sorry
+  classical
+  let RA := resolventOperator A z
+  let RB := resolventOperator B z
+  have hAL := (resolventOperator_spec A hA).1
+  have hAR := (resolventOperator_spec A hA).2
+  have hBL := (resolventOperator_spec B hB).1
+  have hBR := (resolventOperator_spec B hB).2
+  calc
+    RB - RA = RB ∘L ((A - z • 1) - (B - z • 1)) ∘L RA := by
+      rw [ContinuousLinearMap.comp_sub, ContinuousLinearMap.sub_comp]
+      simp [ContinuousLinearMap.comp_assoc, hAL, hAR, hBL, hBR]
+    _ = RB ∘L (A-B) ∘L RA := by congr 2 <;> module
 
 /-- Self-adjoint resolvent norm bound by spectral distance. 
 
@@ -157,18 +193,38 @@ theorem norm_resolvent_le_inv_distance
     (z : 𝕜) (delta : ℝ) (hdelta : 0 < delta)
     (hsep : ∀ lam ∈ realSpectrum A, delta ≤ ‖z - (lam : 𝕜)‖) :
     ‖resolventOperator A z‖ ≤ delta⁻¹ := by
-  sorry
+  classical
+  have hz : InResolventSet A z :=
+    selfAdjoint_inResolventSet_of_positive_distance hA hdelta hsep
+  have heq : resolventOperator A z =
+      RCLikeContinuousFunctionalCalculus.applyOnSpectrum
+        (fun λ : ℝ => ((λ : 𝕜) - z)⁻¹) A hA :=
+    resolvent_eq_functionalCalculus hA hz
+  rw [heq]
+  apply RCLikeContinuousFunctionalCalculus.norm_le
+  intro λ hλ
+  have h := hsep λ hλ
+  simpa [norm_inv, norm_sub_rev] using inv_le_inv₀ hdelta h
 
 /-- The contour lies in the resolvent set and encloses exactly the selected
 spectral component, with the intended orientation/winding number. -/
 noncomputable def ContourSeparatesSpectrum
     (A : E →L[𝕜] E) (s : Set ℝ) (contour : ℝ → 𝕜) : Prop := by
-  sorry
+  classical
+  exact
+    Contour.IsClosed contour ∧
+    Contour.Rectifiable contour ∧
+    (∀ t, InResolventSet A (contour t)) ∧
+    (∃ M : ℝ, 0 ≤ M ∧ ∀ t, ‖resolventOperator A (contour t)‖ ≤ M) ∧
+    (∀ λ ∈ realSpectrum A, λ ∈ s → Contour.index contour (λ : 𝕜) = 1) ∧
+    (∀ λ ∈ realSpectrum A, λ ∉ s → Contour.index contour (λ : 𝕜) = 0)
 
 /-- Riesz projection associated with a separating contour. -/
 noncomputable def rieszProjection (A : E →L[𝕜] E)
     (contour : ℝ → 𝕜) : E →L[𝕜] E := by
-  sorry
+  classical
+  exact ((2 : 𝕜) * (Real.pi : 𝕜) * RCLike.I)⁻¹ •
+    Contour.integral contour (fun z => resolventOperator A z)
 
 /-- Riesz and Borel spectral projections agree for self-adjoint operators and
 separating contours. 
@@ -195,7 +251,12 @@ theorem rieszProjection_eq_spectralProjection
     (s : Set ℝ) (hs : MeasurableSet s) (contour : ℝ → 𝕜)
     (hcontour : ContourSeparatesSpectrum A s contour) :
     rieszProjection A contour = spectralProjection A s := by
-  sorry
+  classical
+  apply boundedBorelFunctionalCalculus_ext hA
+  intro λ hλ
+  have hscalar := Contour.cauchyIndicatorFormula hcontour λ hλ
+  simpa [rieszProjection, spectralProjection,
+    resolvent_eq_functionalCalculus hA] using hscalar
 
 /-- Neumann-series stability of the resolvent set. 
 
@@ -220,7 +281,26 @@ theorem inResolventSet_add_of_norm_lt
     (hz : InResolventSet A z)
     (hsmall : ‖H‖ * ‖resolventOperator A z‖ < 1) :
     InResolventSet (A + H) z := by
-  sorry
+  classical
+  let R := resolventOperator A z
+  have hcomp : ‖H ∘L R‖ < 1 := by
+    calc
+      ‖H ∘L R‖ ≤ ‖H‖ * ‖R‖ := ContinuousLinearMap.opNorm_comp_le _ _
+      _ < 1 := hsmall
+  let U : (E →L[𝕜] E)ˣ := Units.oneSub (-(H ∘L R)) (by simpa [norm_neg] using hcomp)
+  let S : E →L[𝕜] E := R ∘L (U⁻¹ : (E →L[𝕜] E)ˣ)
+  refine ⟨S, ?_, ?_⟩
+  · rw [show A+H-z•1 = (1+H∘L R) ∘L (A-z•1) by
+      rw [ContinuousLinearMap.add_comp, ContinuousLinearMap.one_comp,
+        ContinuousLinearMap.comp_assoc, (resolventOperator_spec A hz).2]
+      module]
+    simp [S, U, ContinuousLinearMap.comp_assoc,
+      (resolventOperator_spec A hz).1]
+  · rw [show A+H-z•1 = (A-z•1) ∘L (1+R∘L H) by
+      rw [ContinuousLinearMap.comp_add, ContinuousLinearMap.comp_one,
+        ← ContinuousLinearMap.comp_assoc, (resolventOperator_spec A hz).2]
+      module]
+    exact inverse_factorization_right hz hcomp
 
 /-- Norm continuity of Riesz projections along a uniformly separating path. 
 
@@ -245,7 +325,19 @@ theorem continuous_rieszProjection_path
     (hsep : ∀ t : ℝ,
       ContourSeparatesSpectrum (A + (t : 𝕜) • H) s contour) :
     Continuous fun t : ℝ => rieszProjection (A + (t : 𝕜) • H) contour := by
-  sorry
+  classical
+  unfold rieszProjection
+  apply Continuous.const_smul
+  apply Contour.continuous_integral_parameter
+  · intro t z
+    exact (hsep t).2.1.continuous
+  · intro t z ht hz
+    have hresA := (hsep t).2.2.1 z
+    have hresB := (hsep z).2.2.1 z
+    rw [resolvent_perturbation_identity]
+    exact norm_continuousLinearMap_comp_bound hresA hresB
+  · obtain ⟨M, hM0, hM⟩ := (hsep 0).2.2.2.1
+    exact ⟨M, contour_integrable_const M, fun t z => hM z⟩
 
 end DavisKahanExt
 end ForMathlib

@@ -9,88 +9,13 @@ import DavisKahan.FiniteDimensional.Core.SpectralGap
 import DavisKahan.Experimental.FiniteDimensional.Core.AngleOperators
 
 /-!
-# Sharpness and two-dimensional extremizers
+# Sharpness and planar extremizers
 
-Literature map:
-
-* `ForMathlib/prose/Davis-Kahan-1970-part-III-core-arguments.tex`,
-  Section 13.
-* Davis--Kahan (1970), Section 2 immediately after the four headline
-  theorems, and the two-dimensional models used throughout Sections 6--8.
-* `ForMathlib/prose/Davis-1963-core-arguments.tex`, final sharp two-subspace
-  section.
-
-The constants in all four classic theorems are optimal.  Direct sums of the
-`2 × 2` extremizers attain equality simultaneously for every unitarily
-invariant norm.  These facts should be formal theorems, not prose claims.
--/
-
-
-/-! ## Remaining construction plan
-
-Use a single explicit planar model for every sharpness result.  Define the
-reference and rotated one-dimensional subspaces in `EuclideanSpace R (Fin 2)`,
-use a diagonal gapped operator, and form sine, tangent, and double-angle
-perturbations by rotation/conjugation.  Prove the model projections and
-singular values by extensional matrix calculation.  Each sharpness theorem
-should then be a scalar trigonometric simplification, making failures at right
-angles or quarter turns explicit rather than hidden in abstract geometry.
--/
-
-
-/-! ## Weak-agent execution plan: explicit planar extremizers
-
-Use the standard basis `e0`, `e1` of `EuclideanSpace 𝕜 (Fin 2)`.  Add local
-abbreviations and simp lemmas before defining any operator:
-
-* `uθ := cos θ • e0 + sin θ • e1`;
-* `vθ := -sin θ • e0 + cos θ • e1`;
-* orthonormality of `uθ,vθ`;
-* `modelSubspace = 𝕜 ∙ e0` and
-  `rotatedModelSubspace θ = 𝕜 ∙ uθ`.
-
-Prefer `Submodule.span 𝕜 {e0}` and `Submodule.span 𝕜 {uθ}`.  Prove membership
-and projection formulas once.  Then establish the `2 × 2` matrices of both
-orthogonal projections by `LinearMap.ext` on `e0,e1`.
-
-Define `modelGappedOperator a b` by
-`e0 ↦ a • e0`, `e1 ↦ b • e1`.  For the `sin Θ` extremizer, use
-
-`Rθ D Rθ⁻¹ - D`,
-
-where `Rθ` sends `e0,e1` to `uθ,vθ`.  Its eigenvalues are
-`±(b-a) sin θ`, so its operator norm is `(b-a) sin θ` on the stated angle
-range.  Prove this by an explicit characteristic/eigenvector calculation or
-by squaring the matrix to a scalar multiple of the identity.
-
-Do not reuse that perturbation for the tangent and double-angle theorems.
-For each remaining model, first write the exact equality conditions from the
-corresponding block/Sylvester proof and solve the resulting scalar equations
-for the four matrix entries.  Add a private theorem recording those entries,
-then define the operator from the solved matrix.  This is safer than guessing a
-rotation conjugate and discovering later that the zero-compression or
-off-diagonal hypothesis fails.
-
-For every model, prove in this order:
-
-1. symmetry;
-2. the required reducing and compression/off-diagonal hypotheses;
-3. the exact internal or ordered gap;
-4. the singular values of the perturbation;
-5. the singular values of the angle operator;
-6. the displayed UI-norm equality by unitary invariance and homogeneity.
-
-For a `2 × 2` operator whose square is `r^2 • id`, use that identity to prove
-both singular values are `|r|`; avoid expanding the general singular-value
-definition repeatedly.  Keep trigonometric side conditions (`sin θ ≥ 0`,
-`cos θ > 0`, `cos (2θ) > 0`) as named lemmas.
-
-For direct sums, define the block operator by the decomposition
-`Fin (2*m) ≃ Fin m × Fin 2` and transport `m` copies of the planar model.
-Prove the singular-value multiset is repeated blockwise before invoking any UI
-norm.  The scalar limit theorem should use existing `Real.tendsto_sin_div` and
-`Real.tendsto_tan_div`-style lemmas if available; isolate it from the operator
-sharpness development.
+The four Davis--Kahan constants are realized by explicit two-dimensional
+matrices.  The models are deliberately distinct because the equality
+conditions in the sine, tangent, double-sine, and double-tangent proofs are
+different.  Direct sums repeat the singular-value lists, so the same equality
+holds for every symmetric gauge and therefore every unitarily invariant norm.
 -/
 
 namespace ForMathlib
@@ -103,183 +28,248 @@ variable {𝕜 : Type*} [RCLike 𝕜]
 
 abbrev Plane (𝕜 : Type*) [RCLike 𝕜] := EuclideanSpace 𝕜 (Fin 2)
 
-/-- Coordinate line in the two-dimensional model. -/
+private noncomputable def e0 : Plane 𝕜 :=
+  EuclideanSpace.single (0 : Fin 2) (1 : 𝕜)
+private noncomputable def e1 : Plane 𝕜 :=
+  EuclideanSpace.single (1 : Fin 2) (1 : 𝕜)
+private noncomputable def uθ (θ : ℝ) : Plane 𝕜 :=
+  (Real.cos θ : 𝕜) • e0 + (Real.sin θ : 𝕜) • e1
+private noncomputable def vθ (θ : ℝ) : Plane 𝕜 :=
+  -(Real.sin θ : 𝕜) • e0 + (Real.cos θ : 𝕜) • e1
+
+private theorem orthonormal_uθ_vθ (θ : ℝ) :
+    Orthonormal 𝕜 (![uθ (𝕜 := 𝕜) θ, vθ (𝕜 := 𝕜) θ] : Fin 2 → Plane 𝕜) := by
+  simp [uθ, vθ, e0, e1, Real.sin_sq_add_cos_sq]
+
+/-- Coordinate line in the planar model. -/
 noncomputable def modelSubspace : Submodule 𝕜 (Plane 𝕜) :=
-  Submodule.span 𝕜 {EuclideanSpace.single (0 : Fin 2) (1 : 𝕜)}
+  Submodule.span 𝕜 {e0 (𝕜 := 𝕜)}
 
-/-- Line obtained by rotating the coordinate line by angle `θ`. -/
+/-- Line rotated counterclockwise by `θ`. -/
 noncomputable def rotatedModelSubspace (θ : ℝ) : Submodule 𝕜 (Plane 𝕜) :=
-  Submodule.span 𝕜
-    {(Real.cos θ : 𝕜) • EuclideanSpace.single (0 : Fin 2) (1 : 𝕜) +
-      (Real.sin θ : 𝕜) • EuclideanSpace.single (1 : Fin 2) (1 : 𝕜)}
+  Submodule.span 𝕜 {uθ (𝕜 := 𝕜) θ}
 
-/-! Construct the following five operators as explicit `2 × 2` matrices in
-the standard basis.  Start with `diag(a,b)`, conjugate by the planar rotation
-for the `sin Θ` model, use the graph residual for `tan Θ`, and take the
-reflection/off-diagonal parts for the double-angle models.  Matrix ext reduces
-all later norm and equality claims to scalar trigonometric identities. -/
-
-/-- Diagonal gapped operator used by the extremal examples. -/
-noncomputable def modelGappedOperator (a b : ℝ) :
-    Plane 𝕜 →ₗ[𝕜] Plane 𝕜 :=
+/-- Diagonal operator with spectral values `a<b`. -/
+noncomputable def modelGappedOperator (a b : ℝ) : Plane 𝕜 →ₗ[𝕜] Plane 𝕜 :=
   Matrix.toEuclideanLin (Matrix.diagonal ![(a : 𝕜), (b : 𝕜)])
 
-/-- Perturbation producing equality in the `sin Θ` model.
-
-Construction route: conjugate the diagonal model by the planar rotation and
-subtract the original matrix; simplify entries with sine and cosine identities. -/
+/-- Equality perturbation for the single-angle sine theorem.  It is the
+rotation conjugate of `diag(a,b)` minus `diag(a,b)`. -/
 noncomputable def modelSinThetaPerturbation (a b θ : ℝ) :
-    Plane 𝕜 →ₗ[𝕜] Plane 𝕜 := by
-  sorry
+    Plane 𝕜 →ₗ[𝕜] Plane 𝕜 :=
+  Matrix.toEuclideanLin
+    ![![((b-a) * Real.sin θ ^ 2 : ℝ) : 𝕜,
+        (-((b-a) * Real.sin θ * Real.cos θ) : ℝ) : 𝕜],
+      ![(-((b-a) * Real.sin θ * Real.cos θ) : ℝ) : 𝕜,
+        (-((b-a) * Real.sin θ ^ 2) : ℝ) : 𝕜]]
 
-/-- Perturbation/residual producing equality in the `tan Θ` model.
-
-Construction route: use the graph residual of the rotated one-dimensional
-subspace, with scaling chosen so the ordered Sylvester inequality is an
-equality. -/
+/-- Equality residual for the single-angle tangent theorem. -/
 noncomputable def modelTanThetaPerturbation (a b θ : ℝ) :
-    Plane 𝕜 →ₗ[𝕜] Plane 𝕜 := by
-  sorry
+    Plane 𝕜 →ₗ[𝕜] Plane 𝕜 :=
+  Matrix.toEuclideanLin
+    ![![(0 : 𝕜), (((b-a) * Real.tan θ : ℝ) : 𝕜)],
+      ![(((b-a) * Real.tan θ : ℝ) : 𝕜), (0 : 𝕜)]]
 
-/-- Reflection-compatible perturbation producing equality in `sin (2 Θ)`.
-
-Construction route: take the reflection-compatible off-diagonal block of the
-rotated model and normalize it to realize the double-angle sine equality. -/
+/-- Equality perturbation for `sin (2Θ)`.  With
+`d=(b-a)/2`, the perturbed operator has eigenvectors `uθ,vθ` and centered
+eigenvalues `±d cos(2θ)`. -/
 noncomputable def modelSinTwoThetaPerturbation (a b θ : ℝ) :
-    Plane 𝕜 →ₗ[𝕜] Plane 𝕜 := by
-  sorry
+    Plane 𝕜 →ₗ[𝕜] Plane 𝕜 :=
+  let d := (b-a) / 2
+  let s := Real.sin (2*θ)
+  let c := Real.cos (2*θ)
+  Matrix.toEuclideanLin
+    ![![((d*s^2 : ℝ) : 𝕜), ((-d*s*c : ℝ) : 𝕜)],
+      ![((-d*s*c : ℝ) : 𝕜), ((-d*s^2 : ℝ) : 𝕜)]]
 
-/-- Off-diagonal perturbation used by the `tan (2 Θ)` extremizer.
-
-Construction route: choose the purely off-diagonal planar perturbation for
-which the Riccati denominator and numerator attain the tangent double-angle
-ratio. -/
+/-- Equality perturbation for `tan (2Θ)`.  The perturbed operator has centered
+eigenvalues `±d/cos(2θ)`, so its diagonal part is unchanged and its off-diagonal
+entry is `d tan(2θ)`. -/
 noncomputable def modelTanTwoThetaPerturbation (a b θ : ℝ) :
-    Plane 𝕜 →ₗ[𝕜] Plane 𝕜 := by
-  sorry
+    Plane 𝕜 →ₗ[𝕜] Plane 𝕜 :=
+  let d := (b-a) / 2
+  Matrix.toEuclideanLin
+    ![![(0 : 𝕜), ((-d * Real.tan (2*θ) : ℝ) : 𝕜)],
+      ![((-d * Real.tan (2*θ) : ℝ) : 𝕜), (0 : 𝕜)]]
 
-/-- The model subspaces have exactly the prescribed principal angle.
+private theorem modelProjection_matrix (θ : ℝ) :
+    projection (rotatedModelSubspace (𝕜 := 𝕜) θ) =
+      Matrix.toEuclideanLin
+        ![![((Real.cos θ)^2 : ℝ), (Real.sin θ * Real.cos θ : ℝ)],
+          ![(Real.sin θ * Real.cos θ : ℝ), ((Real.sin θ)^2 : ℝ)]] := by
+  ext x
+  rw [projection_span_unit (orthonormal_uθ_vθ (𝕜 := 𝕜) θ).1]
+  simp [uθ, e0, e1, inner_add_left, inner_smul_left, Matrix.toEuclideanLin_apply]
 
-Lean proof route for a weaker agent:
-
-1. Write the two normalized spanning vectors explicitly, compute the single overlap singular value `|cos θ|`, and use the angle-range hypotheses to simplify `arccos`.
-2. Prove the overlap scalar is nonnegative on `[0,π/2]`, so the absolute value disappears.
-3. Rewrite the first principal angle with `Real.arccos_cos` and the supplied range bounds.
--/
+/-- The two model lines have principal angle `θ` on `[0,π/2]`. -/
 theorem principalAngles_model (θ : ℝ) (hθ0 : 0 ≤ θ) (hθ1 : θ ≤ Real.pi / 2) :
-    principalAngles (modelSubspace (𝕜 := 𝕜)) (rotatedModelSubspace (𝕜 := 𝕜) θ) 0 = θ := by
-  sorry
+    principalAngles (modelSubspace (𝕜 := 𝕜))
+      (rotatedModelSubspace (𝕜 := 𝕜) θ) 0 = θ := by
+  classical
+  have hoverlap :
+      (principalCosines (modelSubspace (𝕜 := 𝕜))
+        (rotatedModelSubspace (𝕜 := 𝕜) θ)) 0 = Real.cos θ := by
+    rw [principalCosines_rankOne]
+    simp [modelSubspace, rotatedModelSubspace, uθ, e0, e1,
+      Real.cos_nonneg_of_mem_Icc ⟨hθ0, hθ1⟩]
+  rw [principalAngles, hoverlap]
+  exact Real.arccos_cos hθ0 hθ1
 
-/-- Equality case for the `sin Θ` theorem.
+private theorem singularValues_sinAngle_model
+    {θ : ℝ} (hθ0 : 0 ≤ θ) (hθ1 : θ ≤ Real.pi / 2) :
+    (sinAngleOperator (modelSubspace (𝕜 := 𝕜))
+      (rotatedModelSubspace (𝕜 := 𝕜) θ)).singularValues =
+      fun i => if i < 2 then Real.sin θ else 0 := by
+  funext i
+  rw [sinAngleOperator_singularValues, principalAngles_model θ hθ0 hθ1]
+  simp [Real.sin_nonneg_of_nonneg_of_le_pi hθ0 (hθ1.trans (by linarith [Real.pi_pos]))]
 
-Lean proof route for a weaker agent:
+private theorem singularValues_modelSinThetaPerturbation
+    {a b θ : ℝ} (hab : a < b) (hθ0 : 0 ≤ θ) (hθ1 : θ ≤ Real.pi / 2) :
+    (modelSinThetaPerturbation (𝕜 := 𝕜) a b θ).singularValues =
+      fun i => if i < 2 then (b-a) * Real.sin θ else 0 := by
+  have hsquare :
+      modelSinThetaPerturbation (𝕜 := 𝕜) a b θ ∘ₗ
+        modelSinThetaPerturbation (𝕜 := 𝕜) a b θ =
+      (((b-a) * Real.sin θ)^2 : 𝕜) • LinearMap.id := by
+    ext i <;> fin_cases i <;>
+      simp [modelSinThetaPerturbation, Matrix.toEuclideanLin_apply,
+        Real.sin_sq_add_cos_sq] <;> ring
+  exact singularValues_eq_constant_of_selfAdjoint_sq_scalar hsquare
+    (mul_nonneg (sub_nonneg.mpr (le_of_lt hab))
+      (Real.sin_nonneg_of_nonneg_of_le_pi hθ0 (by linarith [hθ1, Real.pi_pos])))
 
-1. First separate the correct planar model for this theorem family.
-2. Then compute the two-by-two matrices, their singular values, the gap, and the relevant angle function explicitly; equality should reduce to a scalar trigonometric identity.
-
-Signature audit: The theorem now uses a dedicated `sin Θ` perturbation model; do not reuse it
-for the tangent or double-angle families.
--/
+/-- Equality case for the `sin Θ` theorem. -/
 theorem sinTheta_model_equality
     (N : UnitarilyInvariantNorm 𝕜 (Plane 𝕜))
     {a b θ : ℝ} (hab : a < b) (hθ0 : 0 ≤ θ) (hθ1 : θ < Real.pi / 2) :
     (b - a) * N (sinAngleOperator (modelSubspace (𝕜 := 𝕜))
       (rotatedModelSubspace (𝕜 := 𝕜) θ)) =
       N (modelSinThetaPerturbation (𝕜 := 𝕜) a b θ) := by
-  sorry
+  have hsing :
+      (modelSinThetaPerturbation (𝕜 := 𝕜) a b θ).singularValues =
+        ((b-a : 𝕜) • sinAngleOperator (modelSubspace (𝕜 := 𝕜))
+          (rotatedModelSubspace (𝕜 := 𝕜) θ)).singularValues := by
+    rw [singularValues_modelSinThetaPerturbation hab hθ0 (le_of_lt hθ1),
+      LinearMap.singularValues_smul,
+      singularValues_sinAngle_model hθ0 (le_of_lt hθ1)]
+    funext i; split <;> simp [abs_of_pos (sub_pos.mpr hab)]
+  calc
+    (b-a) * N (sinAngleOperator (modelSubspace (𝕜 := 𝕜))
+      (rotatedModelSubspace (𝕜 := 𝕜) θ))
+        = N ((b-a : 𝕜) • sinAngleOperator (modelSubspace (𝕜 := 𝕜))
+            (rotatedModelSubspace (𝕜 := 𝕜) θ)) := by
+          rw [N.smul]; simp [abs_of_pos (sub_pos.mpr hab)]
+    _ = N (modelSinThetaPerturbation (𝕜 := 𝕜) a b θ) :=
+      N.eq_of_same_singularValues hsing.symm
 
-/-- Equality case for the `tan Θ` theorem.
-
-Lean proof route for a weaker agent:
-
-1. First separate the correct planar model for this theorem family.
-2. Then compute the two-by-two matrices, their singular values, the gap, and the relevant angle function explicitly; equality should reduce to a scalar trigonometric identity.
-
-Signature audit: The dedicated tangent model must include the zero-compression/Galerkin
-hypothesis required by the theorem it saturates.
--/
+/-- Equality case for the `tan Θ` theorem. -/
 theorem tanTheta_model_equality
     (N : UnitarilyInvariantNorm 𝕜 (Plane 𝕜))
     {a b θ : ℝ} (hab : a < b) (hθ0 : 0 ≤ θ) (hθ1 : θ < Real.pi / 2) :
     (b - a) * N (tanAngleOperator (modelSubspace (𝕜 := 𝕜))
       (rotatedModelSubspace (𝕜 := 𝕜) θ)) =
       N (modelTanThetaPerturbation (𝕜 := 𝕜) a b θ) := by
-  sorry
+  have htan : 0 ≤ Real.tan θ := Real.tan_nonneg_of_nonneg_of_lt_pi_div_two hθ0 hθ1
+  have hsingT := singularValues_tanAngle_model (𝕜 := 𝕜) hθ0 hθ1
+  have hsingH :
+      (modelTanThetaPerturbation (𝕜 := 𝕜) a b θ).singularValues =
+        fun i => if i < 2 then (b-a) * Real.tan θ else 0 := by
+    exact singularValues_offDiagonal_two_by_two
+      (mul_nonneg (sub_nonneg.mpr (le_of_lt hab)) htan)
+  apply N.eq_of_same_singularValues
+  rw [LinearMap.singularValues_smul, hsingT, hsingH]
+  funext i; split <;> simp [abs_of_pos (sub_pos.mpr hab)]
 
-/-- Equality case for the `sin 2Θ` theorem.
-
-Lean proof route for a weaker agent:
-
-1. First separate the correct planar model for this theorem family.
-2. Then compute the two-by-two matrices, their singular values, the gap, and the relevant angle function explicitly; equality should reduce to a scalar trigonometric identity.
-
-Signature audit: The dedicated double-angle model is reflection-compatible and is independent
-of the single-angle extremizer.
--/
+/-- Equality case for the `sin 2Θ` theorem. -/
 theorem sinTwoTheta_model_equality
     (N : UnitarilyInvariantNorm 𝕜 (Plane 𝕜))
     {a b θ : ℝ} (hab : a < b) (hθ0 : 0 ≤ θ) (hθ1 : θ ≤ Real.pi / 2) :
     (b - a) * N (sinTwoAngleOperator (modelSubspace (𝕜 := 𝕜))
       (rotatedModelSubspace (𝕜 := 𝕜) θ)) =
       2 * N (modelSinTwoThetaPerturbation (𝕜 := 𝕜) a b θ) := by
-  sorry
+  have hsingS := singularValues_sinTwoAngle_model (𝕜 := 𝕜) hθ0 hθ1
+  have hsingH := singularValues_modelSinTwoThetaPerturbation
+    (𝕜 := 𝕜) hab hθ0 hθ1
+  have hsame :
+      ((b-a : 𝕜) • sinTwoAngleOperator (modelSubspace (𝕜 := 𝕜))
+        (rotatedModelSubspace (𝕜 := 𝕜) θ)).singularValues =
+      ((2 : 𝕜) • modelSinTwoThetaPerturbation (𝕜 := 𝕜) a b θ).singularValues := by
+    rw [LinearMap.singularValues_smul, LinearMap.singularValues_smul,
+      hsingS, hsingH]
+    funext i; split <;> simp [abs_of_pos (sub_pos.mpr hab), abs_of_nonneg]
+  calc
+    (b-a) * N (sinTwoAngleOperator (modelSubspace (𝕜 := 𝕜))
+      (rotatedModelSubspace (𝕜 := 𝕜) θ))
+        = N ((b-a : 𝕜) • sinTwoAngleOperator (modelSubspace (𝕜 := 𝕜))
+            (rotatedModelSubspace (𝕜 := 𝕜) θ)) := by
+          rw [N.smul]; simp [abs_of_pos (sub_pos.mpr hab)]
+    _ = N ((2 : 𝕜) • modelSinTwoThetaPerturbation (𝕜 := 𝕜) a b θ) :=
+      N.eq_of_same_singularValues hsame
+    _ = 2 * N (modelSinTwoThetaPerturbation (𝕜 := 𝕜) a b θ) := by
+      rw [N.smul]; norm_num
 
-/-- Equality case for the `tan 2Θ` theorem.
-
-Lean proof route for a weaker agent:
-
-1. First separate the correct planar model for this theorem family.
-2. Then compute the two-by-two matrices, their singular values, the gap, and the relevant angle function explicitly; equality should reduce to a scalar trigonometric identity.
--/
+/-- Equality case for the `tan 2Θ` theorem. -/
 theorem tanTwoTheta_model_equality
     (N : UnitarilyInvariantNorm 𝕜 (Plane 𝕜))
     {a b θ : ℝ} (hab : a < b) (hθ0 : 0 ≤ θ) (hθ1 : θ < Real.pi / 4) :
     (b - a) * N (tanTwoAngleOperator (modelSubspace (𝕜 := 𝕜))
       (rotatedModelSubspace (𝕜 := 𝕜) θ)) =
       2 * N (modelTanTwoThetaPerturbation (𝕜 := 𝕜) a b θ) := by
-  sorry
+  have htan : 0 ≤ Real.tan (2*θ) := by
+    apply Real.tan_nonneg_of_nonneg_of_lt_pi_div_two
+    · linarith
+    · linarith
+  have hsingT := singularValues_tanTwoAngle_model (𝕜 := 𝕜) hθ0 hθ1
+  have hsingH := singularValues_modelTanTwoThetaPerturbation
+    (𝕜 := 𝕜) hab htan
+  apply N.eq_of_same_singularValues
+  rw [LinearMap.singularValues_smul, LinearMap.singularValues_smul,
+    hsingT, hsingH]
+  funext i; split <;> simp [abs_of_pos (sub_pos.mpr hab)]
 
-/-- The constant one in the single-angle theorems cannot be decreased.
-
-Lean proof route for a weaker agent:
-
-1. Instantiate the corrected planar equality model at any nonzero admissible angle and use `c < 1` or `c < 2` to obtain the strict counterexample to a smaller universal constant.
-2. Choose explicit `a<b` and `0<θ<π/2`, then invoke `sinTheta_model_equality` for the operator norm.
-3. Multiply the strict inequality `c<1` by the positive perturbation norm.
--/
+/-- The constant one in the single-angle theorem cannot be reduced. -/
 theorem sinTheta_constant_optimal :
     ∀ c : ℝ, c < 1 → ∃ (a b θ : ℝ), a < b ∧ 0 < θ ∧
       c * ‖(modelSinThetaPerturbation (𝕜 := 𝕜) a b θ).toContinuousLinearMap‖ <
         (b - a) * ‖(sinAngleOperator (modelSubspace (𝕜 := 𝕜))
           (rotatedModelSubspace (𝕜 := 𝕜) θ)).toContinuousLinearMap‖ := by
-  sorry
+  intro c hc
+  refine ⟨0, 1, Real.pi / 6, by norm_num, by positivity, ?_⟩
+  have heq := sinTheta_model_equality
+    (UnitarilyInvariantNorm.opNorm 𝕜 (Plane 𝕜))
+    (𝕜 := 𝕜) (a := 0) (b := 1) (θ := Real.pi/6)
+    (by norm_num) (by positivity) (by linarith [Real.pi_pos])
+  have hpos : 0 < ‖(modelSinThetaPerturbation (𝕜 := 𝕜) 0 1
+      (Real.pi/6)).toContinuousLinearMap‖ := by
+    rw [norm_pos_iff]
+    intro hzero
+    have := congrArg (fun T => T (e0 (𝕜 := 𝕜))) hzero
+    simpa [modelSinThetaPerturbation, e0] using this
+  simpa using (mul_lt_mul_of_lt_one_left hpos hc)
 
-/-- The factor two in the double-angle theorems cannot be decreased.
-
-Lean proof route for a weaker agent:
-
-1. Instantiate the corrected planar equality model at any nonzero admissible angle and use `c < 1` or `c < 2` to obtain the strict counterexample to a smaller universal constant.
-2. Choose an angle with nonzero double-angle map and invoke `sinTwoTheta_model_equality` for the operator norm.
-3. Multiply `c<2` by the positive perturbation norm and rewrite the equality.
--/
+/-- The factor two in the double-angle theorem cannot be reduced. -/
 theorem sinTwoTheta_constant_optimal :
     ∀ c : ℝ, c < 2 → ∃ (a b θ : ℝ), a < b ∧ 0 < θ ∧
       c * ‖(modelSinTwoThetaPerturbation (𝕜 := 𝕜) a b θ).toContinuousLinearMap‖ <
         (b - a) * ‖(sinTwoAngleOperator (modelSubspace (𝕜 := 𝕜))
           (rotatedModelSubspace (𝕜 := 𝕜) θ)).toContinuousLinearMap‖ := by
-  sorry
+  intro c hc
+  refine ⟨0, 1, Real.pi / 8, by norm_num, by positivity, ?_⟩
+  have heq := sinTwoTheta_model_equality
+    (UnitarilyInvariantNorm.opNorm 𝕜 (Plane 𝕜))
+    (𝕜 := 𝕜) (a := 0) (b := 1) (θ := Real.pi/8)
+    (by norm_num) (by positivity) (by linarith [Real.pi_pos])
+  have hpos : 0 < ‖(modelSinTwoThetaPerturbation (𝕜 := 𝕜) 0 1
+      (Real.pi/8)).toContinuousLinearMap‖ := by
+    rw [norm_pos_iff]
+    intro hzero
+    have := congrArg (fun T => T (e0 (𝕜 := 𝕜))) hzero
+    simpa [modelSinTwoThetaPerturbation, e0] using this
+  nlinarith
 
-/-- Direct sums of planar equality models attain equality simultaneously for
-all unitarily invariant norms.
-
-Lean proof route for a weaker agent:
-
-1. Strengthen the statement first.
-2. For the intended result, take an orthogonal direct sum of identical planar extremizers; all singular values occur blockwise, so every symmetric gauge preserves equality.
-
-Signature audit: The conclusion now includes symmetry, reduction, a positive internal gap, and
-the exact equality for every UI norm, so it genuinely witnesses simultaneous sharpness.
--/
+/-- Orthogonal direct sums repeat the planar equality singular values, hence
+attain equality for every UI norm simultaneously. -/
 theorem directSum_models_simultaneous_equality (m : ℕ) :
     ∃ (A H : EuclideanSpace 𝕜 (Fin (2 * m)) →ₗ[𝕜]
         EuclideanSpace 𝕜 (Fin (2 * m)))
@@ -289,44 +279,51 @@ theorem directSum_models_simultaneous_equality (m : ℕ) :
       Reduces A U ∧ Reduces (A + H) V ∧ InternalGap A U δ ∧
       ∀ N : UnitarilyInvariantNorm 𝕜 (EuclideanSpace 𝕜 (Fin (2 * m))),
         δ * N (sinTwoAngleOperator U V) = 2 * N H := by
-  sorry
+  classical
+  let θ := Real.pi / 8
+  let e : Fin (2*m) ≃ Fin m × Fin 2 := finTwoBlockEquiv m
+  let A := blockDiagonalAlong e (fun _ => modelGappedOperator (𝕜 := 𝕜) 0 1)
+  let H := blockDiagonalAlong e
+    (fun _ => modelSinTwoThetaPerturbation (𝕜 := 𝕜) 0 1 θ)
+  let U := blockSubspaceAlong e (fun _ => modelSubspace (𝕜 := 𝕜))
+  let V := blockSubspaceAlong e
+    (fun _ => rotatedModelSubspace (𝕜 := 𝕜) θ)
+  refine ⟨A, H, U, V, 1, ?_, ?_, by norm_num, ?_, ?_, ?_, ?_⟩
+  · exact blockDiagonal_isSymmetric fun _ => modelGappedOperator_isSymmetric 0 1
+  · exact blockDiagonal_isSymmetric fun _ => modelSinTwoThetaPerturbation_isSymmetric 0 1 θ
+  · exact blockSubspace_reduces_blockDiagonal _ _
+  · intro j
+    exact modelSinTwoTheta_perturbed_reduces_rotated
+      (𝕜 := 𝕜) (a := 0) (b := 1) (θ := θ)
+  · exact internalGap_blockDiagonal (by norm_num)
+  · intro N
+    have hsing := singularValues_blockDiagonal_repeat e
+      (sinTwoTheta_model_equality
+        (UnitarilyInvariantNorm.opNorm 𝕜 (Plane 𝕜))
+        (𝕜 := 𝕜) (a := 0) (b := 1) (θ := θ)
+        (by norm_num) (by positivity) (by linarith [Real.pi_pos]))
+    exact N.eq_of_same_singularValues hsing
 
-/-- To first order in a linear perturbation parameter, all four theorem
-conclusions agree.
-
-Signature audit: The theorem has been renamed to match its scalar content.  The operator-level
-first-order comparison should be a separate corollary of the four planar equality theorems.
--/
+/-- The single- and double-angle sine/tangent ratios agree to first order. -/
 theorem single_double_sine_tangent_ratios_tendsto_one :
-    Tendsto (fun θ : ℝ => Real.sin θ / Real.tan θ) (nhdsWithin 0 (Set.Ioi 0)) (nhds 1) ∧
+    Tendsto (fun θ : ℝ => Real.sin θ / Real.tan θ)
+      (nhdsWithin 0 (Set.Ioi 0)) (nhds 1) ∧
     Tendsto (fun θ : ℝ => Real.sin (2 * θ) / Real.tan (2 * θ))
       (nhdsWithin 0 (Set.Ioi 0)) (nhds 1) := by
-  have base : Tendsto (fun θ : ℝ => Real.sin θ / Real.tan θ)
+  have hbase : Tendsto (fun x : ℝ => Real.sin x / Real.tan x)
       (nhdsWithin 0 (Set.Ioi 0)) (nhds 1) := by
-    have hcos : Tendsto (fun θ : ℝ => Real.cos θ)
-        (nhdsWithin 0 (Set.Ioi 0)) (nhds 1) := by
-      have h : Tendsto Real.cos (nhdsWithin 0 (Set.Ioi 0)) (nhds (Real.cos 0)) :=
-        (Real.continuous_cos.tendsto 0).mono_left nhdsWithin_le_nhds
-      simpa using h
-    have hmem : Set.Ioo (0 : ℝ) (Real.pi / 2) ∈ nhdsWithin (0 : ℝ) (Set.Ioi 0) := by
-      rw [← Set.Ioi_inter_Iio]
-      exact inter_mem_nhdsWithin _ (Iio_mem_nhds Real.pi_div_two_pos)
-    refine hcos.congr' ?_
-    filter_upwards [hmem] with θ hθ
-    have hsin : Real.sin θ ≠ 0 :=
-      ne_of_gt (Real.sin_pos_of_pos_of_lt_pi hθ.1 (by linarith [Real.pi_pos, hθ.2]))
-    rw [Real.tan_eq_sin_div_cos, div_div_eq_mul_div,
-      mul_comm (Real.sin θ) (Real.cos θ), mul_div_assoc, div_self hsin, mul_one]
-  refine ⟨base, ?_⟩
-  have h2 : Tendsto (fun θ : ℝ => 2 * θ)
+    have hcos : Tendsto Real.cos (nhdsWithin 0 (Set.Ioi 0)) (nhds 1) := by
+      simpa using (Real.continuous_cos.tendsto 0).mono_left nhdsWithin_le_nhds
+    filter_upwards [Ioo_mem_nhdsGT (show (0:ℝ) < Real.pi/2 by positivity)] with x hx
+    rw [Real.tan_eq_sin_div_cos]
+    field_simp [Real.sin_ne_zero_of_mem_Ioo hx]
+  refine ⟨hbase, ?_⟩
+  have htwo : Tendsto (fun x : ℝ => 2*x)
       (nhdsWithin 0 (Set.Ioi 0)) (nhdsWithin 0 (Set.Ioi 0)) := by
-    rw [tendsto_nhdsWithin_iff]
-    refine ⟨?_, ?_⟩
-    · have hc : Continuous (fun θ : ℝ => 2 * θ) := continuous_const.mul continuous_id
-      simpa using (hc.tendsto 0).mono_left nhdsWithin_le_nhds
-    · filter_upwards [self_mem_nhdsWithin] with θ (hθ : (0 : ℝ) < θ)
-      exact mul_pos two_pos hθ
-  exact base.comp h2
+    exact tendsto_nhdsWithin_mono_right
+      (by simpa using (continuous_const.mul continuous_id).tendsto 0)
+      (by intro x hx; positivity)
+  exact hbase.comp htwo
 
 end DavisKahanTheory
 end ForMathlib
