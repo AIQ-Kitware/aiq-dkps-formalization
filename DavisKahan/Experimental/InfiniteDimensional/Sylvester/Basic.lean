@@ -96,32 +96,6 @@ theorem sylvester_solve
     sylvesterOperator A B (solveSylvester A B C) = C := by
   sorry
 
-/-- Uniqueness of the bounded Sylvester solution. 
-
-Lean proof route for a weaker agent:
-
-1. Apply the general separated-spectrum norm estimate to `X-Y` with right-hand side zero.
-2. Use linearity of `sylvesterOperator` and `hX` to prove its defect is zero.
-3. Since `d>0`, conclude `‖X-Y‖=0`, then extensionality gives `X=Y`.
-
-
-Ext-agent signature audit (GPT 5.6 High): Correct and best proved from the general
-separated-spectrum estimate, not by duplicating resolvent algebra.
-
-Preferred dependency route: Prove the ordered semigroup estimate first, then the general
-Fourier-multiplier estimate; derive uniqueness and ideal variants from those inverse
-bounds.
--/
-theorem sylvester_unique
-    {A : F →L[𝕜] F} {B : E →L[𝕜] E}
-    (hA : IsSelfAdjointOperator A) (hB : IsSelfAdjointOperator B)
-    {d : ℝ} (hd : 0 < d)
-    (hsep : SpectraSeparated A ⊤ B ⊤ d)
-    {X Y : E →L[𝕜] F}
-    (hX : sylvesterOperator A B X = sylvesterOperator A B Y) :
-    X = Y := by
-  sorry
-
 /-- Sharp constant-one estimate when one spectrum lies in a gap or the convex
 hulls are disjoint.
 
@@ -228,6 +202,43 @@ theorem norm_sylvester_le_of_generalSeparation
     d * ‖X‖ ≤ (Real.pi / 2) * ‖C‖ := by
   sorry
 
+/-- Uniqueness of the bounded Sylvester solution.
+
+Lean proof route for a weaker agent:
+
+1. Apply the general separated-spectrum norm estimate to `X-Y` with right-hand side zero.
+2. Use linearity of `sylvesterOperator` and `hX` to prove its defect is zero.
+3. Since `d>0`, conclude `‖X-Y‖=0`, then extensionality gives `X=Y`.
+
+
+Ext-agent signature audit (GPT 5.6 High): Correct and best proved from the general
+separated-spectrum estimate, not by duplicating resolvent algebra.
+
+Preferred dependency route: Prove the ordered semigroup estimate first, then the general
+Fourier-multiplier estimate; derive uniqueness and ideal variants from those inverse
+bounds.
+-/
+theorem sylvester_unique
+    {A : F →L[𝕜] F} {B : E →L[𝕜] E}
+    (hA : IsSelfAdjointOperator A) (hB : IsSelfAdjointOperator B)
+    {d : ℝ} (hd : 0 < d)
+    (hsep : SpectraSeparated A ⊤ B ⊤ d)
+    {X Y : E →L[𝕜] F}
+    (hX : sylvesterOperator A B X = sylvesterOperator A B Y) :
+    X = Y := by
+  have hzero : sylvesterOperator A B (X - Y) = 0 := by
+    calc sylvesterOperator A B (X - Y)
+        = sylvesterOperator A B X - sylvesterOperator A B Y := by
+          simp only [sylvesterOperator, ContinuousLinearMap.comp_sub,
+            ContinuousLinearMap.sub_comp]
+          abel
+      _ = 0 := by rw [hX, sub_self]
+  have hle := norm_sylvester_le_of_generalSeparation hA hB hd hsep hzero
+  rw [norm_zero, mul_zero] at hle
+  have hnorm : ‖X - Y‖ = 0 := by
+    nlinarith [norm_nonneg (X - Y)]
+  rw [← sub_eq_zero]
+  exact norm_eq_zero.mp hnorm
 
 end DavisKahanExt
 end ForMathlib

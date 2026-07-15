@@ -100,6 +100,46 @@ noncomputable instance graphSubspace_hasOrthogonalProjection
     (Submodule.isClosed_topologicalClosure _).completeSpace_coe
   exact Submodule.HasOrthogonalProjection.ofCompleteSpace _
 
+/-- For an angular operator the graph embedding fixes the range pointwise
+through `T ∘ P_U = T` and `P_U ∘ T = P_U`, so the parametrized graph range is
+closed and the graph subspace is exactly that range. -/
+theorem graphSubspace_eq_range (U : Submodule 𝕜 E)
+    [U.HasOrthogonalProjection] {X : E →L[𝕜] E}
+    (hX : IsAngularOperator U X) :
+    graphSubspace U X =
+      LinearMap.range (projection U + X ∘L projection U).toLinearMap := by
+  have hPX : ∀ y, projection U (X y) = 0 := fun y => by
+    simpa using ContinuousLinearMap.ext_iff.mp hX.2 y
+  have hidem : ∀ x, projection U (projection U x) = projection U x := fun x =>
+    Submodule.starProjection_eq_self_iff.mpr (U.starProjection_apply_mem x)
+  set T : E →L[𝕜] E := projection U + X ∘L projection U with hT
+  have hPT : ∀ x, projection U (T x) = projection U x := by
+    intro x
+    simp only [hT, ContinuousLinearMap.add_apply,
+      ContinuousLinearMap.comp_apply, map_add]
+    rw [hidem, hPX, add_zero]
+  have hTP : ∀ x, T (projection U x) = T x := by
+    intro x
+    simp only [hT, ContinuousLinearMap.add_apply,
+      ContinuousLinearMap.comp_apply]
+    rw [hidem]
+  have hclosed :
+      IsClosed ((LinearMap.range T.toLinearMap : Submodule 𝕜 E) : Set E) := by
+    rw [← isSeqClosed_iff_isClosed]
+    intro seq y hseq hlim
+    have hfix : ∀ n, seq n = T (projection U (seq n)) := by
+      intro n
+      obtain ⟨x, hx⟩ := LinearMap.mem_range.mp (hseq n)
+      have hx' : T x = seq n := hx
+      rw [← hx', hPT, hTP]
+    have hlim2 : Filter.Tendsto seq Filter.atTop
+        (nhds (T (projection U y))) := by
+      refine Filter.Tendsto.congr (fun n => (hfix n).symm) ?_
+      exact ((T ∘L projection U).continuous.tendsto y).comp hlim
+    exact ⟨projection U y, (tendsto_nhds_unique hlim hlim2).symm⟩
+  refine le_antisymm ?_ (Submodule.le_topologicalClosure _)
+  exact Submodule.topologicalClosure_minimal _ le_rfl hclosed
+
 /-- Closed-formula candidate for the projection onto a graph. -/
 noncomputable def graphProjectionFormula
     (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
@@ -142,7 +182,40 @@ theorem existsUnique_angularOperator
     [V.HasOrthogonalProjection] (hacute : IsAcute U V) :
     ∃! X : E →L[𝕜] E,
       IsAngularOperator U X ∧ graphSubspace U X = V := by
-  sorry
+  obtain ⟨X, hXang, hXrange⟩ :=
+    (acute_iff_exists_bounded_angularOperator U V).mp hacute
+  have hidem : ∀ x, projection U (projection U x) = projection U x := fun x =>
+    Submodule.starProjection_eq_self_iff.mpr (U.starProjection_apply_mem x)
+  refine ⟨X, ⟨hXang, ?_⟩, ?_⟩
+  · rw [graphSubspace_eq_range U hXang]
+    exact hXrange.symm
+  · rintro Y ⟨hYang, hYgraph⟩
+    have hPX : ∀ y, projection U (X y) = 0 := fun y => by
+      simpa using ContinuousLinearMap.ext_iff.mp hXang.2 y
+    have hPY : ∀ y, projection U (Y y) = 0 := fun y => by
+      simpa using ContinuousLinearMap.ext_iff.mp hYang.2 y
+    have hranges :
+        LinearMap.range (projection U + Y ∘L projection U).toLinearMap =
+          LinearMap.range (projection U + X ∘L projection U).toLinearMap := by
+      rw [← graphSubspace_eq_range U hYang, hYgraph, hXrange]
+    have key : ∀ x, Y (projection U x) = X (projection U x) := by
+      intro x
+      have hmem : projection U x + Y (projection U x) ∈
+          LinearMap.range (projection U + X ∘L projection U).toLinearMap := by
+        rw [← hranges]
+        exact ⟨x, rfl⟩
+      obtain ⟨w, hw⟩ := hmem
+      have hw' : projection U w + X (projection U w) =
+          projection U x + Y (projection U x) := hw
+      have happ := congrArg (fun z => projection U z) hw'
+      simp only [map_add, hidem, hPX, hPY, add_zero] at happ
+      rw [happ] at hw'
+      exact (add_left_cancel hw').symm
+    ext x
+    calc Y x = Y (projection U x) := by
+          rw [← ContinuousLinearMap.comp_apply, hYang.1]
+      _ = X (projection U x) := key x
+      _ = X x := by rw [← ContinuousLinearMap.comp_apply, hXang.1]
 
 /-- Projection onto a graph subspace in terms of the angular operator.
 

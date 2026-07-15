@@ -39,9 +39,18 @@ abbrev ThresholdSpace (𝕜 : Type*) [RCLike 𝕜] := EuclideanSpace 𝕜 (Fin 4
 noncomputable def modelProjection0 : Plane 𝕜 →L[𝕜] Plane 𝕜 :=
   (Matrix.toEuclideanLin !![(1 : 𝕜), 0; 0, 0]).toContinuousLinearMap
 
+/-- Planar rotation matrix by angle `theta` with real entries cast into `𝕜`. -/
+noncomputable def planarRotation (theta : ℝ) : Matrix (Fin 2) (Fin 2) 𝕜 :=
+  !![(Real.cos theta : 𝕜), -(Real.sin theta : 𝕜);
+     (Real.sin theta : 𝕜), (Real.cos theta : 𝕜)]
+
+/-- Rank-one projection onto the line at angle `theta`, obtained by
+conjugating the coordinate projection with the planar rotation. -/
 noncomputable def modelProjectionTheta (theta : ℝ) :
-    Plane 𝕜 →L[𝕜] Plane 𝕜 := by
-  sorry
+    Plane 𝕜 →L[𝕜] Plane 𝕜 :=
+  (Matrix.toEuclideanLin
+    (planarRotation theta * !![(1 : 𝕜), 0; 0, 0] *
+      (planarRotation theta).transpose)).toContinuousLinearMap
 
 /-- Range of the coordinate projection in the planar model. -/
 noncomputable def modelSubspace0 : Submodule 𝕜 (Plane 𝕜) :=
@@ -79,8 +88,11 @@ Construction route: conjugate `modelGappedOperator d` by the planar rotation
 and subtract the original operator; retain this exact difference form so later
 norm identities reduce to a `2×2` calculation. -/
 noncomputable def modelRotatedPerturbation (d theta : ℝ) :
-    Plane 𝕜 →L[𝕜] Plane 𝕜 := by
-  sorry
+    Plane 𝕜 →L[𝕜] Plane 𝕜 :=
+  (Matrix.toEuclideanLin
+    (planarRotation theta * !![(0 : 𝕜), 0; 0, (d : 𝕜)] *
+        (planarRotation theta).transpose -
+      !![(0 : 𝕜), 0; 0, (d : 𝕜)])).toContinuousLinearMap
 
 /-- Equality model for the constant-one `sin Θ` theorem.
 

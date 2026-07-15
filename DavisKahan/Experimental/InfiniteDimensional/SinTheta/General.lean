@@ -275,7 +275,20 @@ theorem sinTheta_symmetric
     (hUV : IntervalExteriorSeparated A U B Vᗮ left right d)
     (hVU : IntervalExteriorSeparated B V A Uᗮ left' right' d) :
     d * subspaceGap U V ≤ ‖B - A‖ := by
-  sorry
+  have h1 : d * directedGap U V ≤ ‖B - A‖ :=
+    sinTheta_perturbation hA hB hU hV hd hUV
+  have h2 : d * directedGap V U ≤ ‖A - B‖ :=
+    sinTheta_perturbation hB hA hV hU hd hVU
+  rw [show A - B = -(B - A) by abel, norm_neg] at h2
+  have hmax : subspaceGap U V = max (directedGap U V) (directedGap V U) := by
+    show ‖U.starProjection - V.starProjection‖ =
+      max ‖Vᗮ.starProjection ∘L U.starProjection‖
+        ‖Uᗮ.starProjection ∘L V.starProjection‖
+    rw [Submodule.norm_starProjection_sub_eq_max,
+      Submodule.starProjection_orthogonal' V,
+      Submodule.starProjection_orthogonal' U]
+  rw [hmax, mul_max_of_nonneg _ _ hd.le]
+  exact max_le h1 h2
 
 /-- General separated-spectrum form with the optimal universal `π / 2`
 Sylvester constant. 
