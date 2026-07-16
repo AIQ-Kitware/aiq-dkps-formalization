@@ -54,6 +54,7 @@ def SemiboundedAbove
     RCLike.re ⟪A.toLinearMap x, (x : E)⟫_𝕜 ≤
       c * ‖(x : E)‖ ^ 2
 
+omit [CompleteSpace E] in
 /-- A lower semibound remains valid after decreasing the constant. -/
 theorem SemiboundedBelow.mono
     {A : ClosedOperatorE (𝕜 := 𝕜) (E := E)} {c d : ℝ}
@@ -62,6 +63,7 @@ theorem SemiboundedBelow.mono
   intro x
   exact (mul_le_mul_of_nonneg_right hdc (sq_nonneg ‖(x : E)‖)).trans (hA x)
 
+omit [CompleteSpace E] in
 /-- An upper semibound remains valid after increasing the constant. -/
 theorem SemiboundedAbove.mono
     {A : ClosedOperatorE (𝕜 := 𝕜) (E := E)} {c d : ℝ}
@@ -108,6 +110,7 @@ theorem mapsTo
     A.MapsDomainTo B X :=
   h.mapsTo_domain
 
+omit [CompleteSpace E] in
 /-- A bounded Sylvester equation is a full-domain closed Sylvester equation. -/
 theorem ofBounded
     {A : E →L[𝕜] E} {B : F →L[𝕜] F} {X C : F →L[𝕜] E}
@@ -126,6 +129,81 @@ theorem ofBounded
     change A (X (x : F)) - X (B (x : F)) = C (x : F)
     simpa only [ContinuousLinearMap.comp_apply, sub_apply] using hx
 
+/-- The zero map solves the homogeneous domain-aware equation. -/
+theorem zero
+    (A : ClosedOperatorE (𝕜 := 𝕜) (E := E))
+    (B : ClosedOperatorF (𝕜 := 𝕜) (F := F)) :
+    HasClosedSylvesterEquation A B 0 0 := by
+  refine ⟨?_, ?_⟩
+  · intro x
+    simp
+  · intro x
+    simp
+
+omit [CompleteSpace E] in
+/-- Domain-aware Sylvester equations add. -/
+theorem add
+    {A : ClosedOperatorE (𝕜 := 𝕜) (E := E)}
+    {B : ClosedOperatorF (𝕜 := 𝕜) (F := F)}
+    {X Y C D : F →L[𝕜] E}
+    (hX : HasClosedSylvesterEquation A B X C)
+    (hY : HasClosedSylvesterEquation A B Y D) :
+    HasClosedSylvesterEquation A B (X + Y) (C + D) := by
+  refine ⟨?_, ?_⟩
+  · intro x
+    exact A.domain.add_mem (hX.mapsTo_domain x) (hY.mapsTo_domain x)
+  · intro x
+    change A.toLinearMap
+        (⟨X (x : F), hX.mapsTo_domain x⟩ +
+          ⟨Y (x : F), hY.mapsTo_domain x⟩) -
+        (X (B.toLinearMap x) + Y (B.toLinearMap x)) =
+      C (x : F) + D (x : F)
+    rw [map_add, ← hX.equation x, ← hY.equation x]
+    abel
+
+omit [CompleteSpace E] in
+/-- Domain-aware Sylvester equations are preserved by negation. -/
+theorem neg
+    {A : ClosedOperatorE (𝕜 := 𝕜) (E := E)}
+    {B : ClosedOperatorF (𝕜 := 𝕜) (F := F)}
+    {X C : F →L[𝕜] E}
+    (hX : HasClosedSylvesterEquation A B X C) :
+    HasClosedSylvesterEquation A B (-X) (-C) := by
+  refine ⟨?_, ?_⟩
+  · intro x
+    exact A.domain.neg_mem (hX.mapsTo_domain x)
+  · intro x
+    change A.toLinearMap (-⟨X (x : F), hX.mapsTo_domain x⟩) -
+        (-X (B.toLinearMap x)) = -C (x : F)
+    rw [map_neg, ← hX.equation x]
+    abel
+
+/-- Domain-aware Sylvester equations subtract. -/
+theorem sub
+    {A : ClosedOperatorE (𝕜 := 𝕜) (E := E)}
+    {B : ClosedOperatorF (𝕜 := 𝕜) (F := F)}
+    {X Y C D : F →L[𝕜] E}
+    (hX : HasClosedSylvesterEquation A B X C)
+    (hY : HasClosedSylvesterEquation A B Y D) :
+    HasClosedSylvesterEquation A B (X - Y) (C - D) := by
+  simpa [sub_eq_add_neg] using hX.add hY.neg
+
+omit [CompleteSpace E] in
+/-- Domain-aware Sylvester equations commute with scalar multiplication. -/
+theorem smul
+    {A : ClosedOperatorE (𝕜 := 𝕜) (E := E)}
+    {B : ClosedOperatorF (𝕜 := 𝕜) (F := F)}
+    {X C : F →L[𝕜] E}
+    (hX : HasClosedSylvesterEquation A B X C) (c : 𝕜) :
+    HasClosedSylvesterEquation A B (c • X) (c • C) := by
+  refine ⟨?_, ?_⟩
+  · intro x
+    exact A.domain.smul_mem c (hX.mapsTo_domain x)
+  · intro x
+    change A.toLinearMap (c • ⟨X (x : F), hX.mapsTo_domain x⟩) -
+        c • X (B.toLinearMap x) = c • C (x : F)
+    rw [map_smul, ← hX.equation x, smul_sub]
+
 end ClosedSylvesterEquation
 
 /-- A closed operator whose inverse is everywhere defined and bounded. -/
@@ -139,6 +217,7 @@ structure HasBoundedEverywhereInverse
 
 namespace HasBoundedEverywhereInverse
 
+omit [CompleteSpace E] in
 /-- A closed operator with an everywhere-defined two-sided inverse is injective. -/
 theorem injective
     {A : ClosedOperatorE (𝕜 := 𝕜) (E := E)}
@@ -151,6 +230,7 @@ theorem injective
     _ = hA.inv (A.toLinearMap y) := congrArg hA.inv hxy
     _ = (y : E) := hA.inv_apply y
 
+omit [CompleteSpace E] in
 /-- The operator action is onto the ambient Hilbert space. -/
 theorem surjective
     {A : ClosedOperatorE (𝕜 := 𝕜) (E := E)}
@@ -192,6 +272,7 @@ structure ClosedResolventData
 
 namespace ClosedResolventData
 
+omit [CompleteSpace E] in
 /-- Resolvent data makes the shifted operator injective. -/
 theorem shiftedApply_injective
     {A : ClosedOperatorE (𝕜 := 𝕜) (E := E)} {z : 𝕜}
@@ -204,6 +285,7 @@ theorem shiftedApply_injective
     _ = h.resolvent (shiftedApply A z y) := congrArg h.resolvent hxy
     _ = (y : E) := h.left_inverse y
 
+omit [CompleteSpace E] in
 /-- Resolvent data makes the shifted operator surjective. -/
 theorem shiftedApply_surjective
     {A : ClosedOperatorE (𝕜 := 𝕜) (E := E)} {z : 𝕜}
@@ -212,6 +294,23 @@ theorem shiftedApply_surjective
   intro y
   refine ⟨⟨h.resolvent y, h.mapsTo_domain y⟩, ?_⟩
   exact h.right_inverse y
+
+omit [CompleteSpace E] in
+/-- Bounded inverse data for a fixed shifted operator is unique. -/
+theorem resolvent_eq
+    {A : ClosedOperatorE (𝕜 := 𝕜) (E := E)} {z : 𝕜}
+    (h k : ClosedResolventData A z) :
+    h.resolvent = k.resolvent := by
+  ext y
+  have hk : shiftedApply A z
+      ⟨k.resolvent y, k.mapsTo_domain y⟩ = y := by
+    simpa [shiftedApply] using k.right_inverse y
+  calc
+    h.resolvent y =
+        h.resolvent (shiftedApply A z
+          ⟨k.resolvent y, k.mapsTo_domain y⟩) :=
+      congrArg h.resolvent hk.symm
+    _ = k.resolvent y := h.left_inverse _
 
 end ClosedResolventData
 

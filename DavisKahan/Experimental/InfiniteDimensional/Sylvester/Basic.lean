@@ -47,11 +47,13 @@ def sylvesterOperator (A : F →L[𝕜] F) (B : E →L[𝕜] E)
     (X : E →L[𝕜] F) : E →L[𝕜] F :=
   A ∘L X - X ∘L B
 
+omit [CompleteSpace E] [CompleteSpace F] in
 @[simp] theorem sylvesterOperator_zero
     (A : F →L[𝕜] F) (B : E →L[𝕜] E) :
     sylvesterOperator A B (0 : E →L[𝕜] F) = 0 := by
   simp [sylvesterOperator]
 
+omit [CompleteSpace E] [CompleteSpace F] in
 /-- The Sylvester operator preserves addition. -/
 theorem sylvesterOperator_add
     (A : F →L[𝕜] F) (B : E →L[𝕜] E)
@@ -62,6 +64,7 @@ theorem sylvesterOperator_add
     ContinuousLinearMap.add_comp]
   abel
 
+omit [CompleteSpace E] [CompleteSpace F] in
 /-- The Sylvester operator preserves subtraction. -/
 theorem sylvesterOperator_sub
     (A : F →L[𝕜] F) (B : E →L[𝕜] E)
@@ -72,6 +75,7 @@ theorem sylvesterOperator_sub
     ContinuousLinearMap.sub_comp]
   abel
 
+omit [CompleteSpace E] [CompleteSpace F] in
 /-- The Sylvester operator commutes with scalar multiplication. -/
 theorem sylvesterOperator_smul
     (A : F →L[𝕜] F) (B : E →L[𝕜] E)
@@ -79,6 +83,60 @@ theorem sylvesterOperator_smul
     sylvesterOperator A B (c • X) = c • sylvesterOperator A B X := by
   ext x
   simp [sylvesterOperator, smul_sub]
+
+/-- The Sylvester operator preserves negation. -/
+theorem sylvesterOperator_neg
+    (A : F →L[𝕜] F) (B : E →L[𝕜] E)
+    (X : E →L[𝕜] F) :
+    sylvesterOperator A B (-X) = -sylvesterOperator A B X := by
+  simpa using sylvesterOperator_smul A B (-1 : 𝕜) X
+
+/-- The Sylvester operator as a linear endomorphism of the rectangular
+operator space. -/
+def sylvesterLinearMap (A : F →L[𝕜] F) (B : E →L[𝕜] E) :
+    (E →L[𝕜] F) →ₗ[𝕜] (E →L[𝕜] F) where
+  toFun := sylvesterOperator A B
+  map_add' := sylvesterOperator_add A B
+  map_smul' := sylvesterOperator_smul A B
+
+@[simp]
+theorem sylvesterLinearMap_apply
+    (A : F →L[𝕜] F) (B : E →L[𝕜] E) (X : E →L[𝕜] F) :
+    sylvesterLinearMap A B X = sylvesterOperator A B X := rfl
+
+omit [CompleteSpace E] [CompleteSpace F] in
+/-- Elementary operator-norm bound for the Sylvester operator. -/
+theorem norm_sylvesterOperator_le
+    (A : F →L[𝕜] F) (B : E →L[𝕜] E) (X : E →L[𝕜] F) :
+    ‖sylvesterOperator A B X‖ ≤ (‖A‖ + ‖B‖) * ‖X‖ := by
+  calc
+    ‖sylvesterOperator A B X‖
+        ≤ ‖A ∘L X‖ + ‖X ∘L B‖ := norm_sub_le _ _
+    _ ≤ ‖A‖ * ‖X‖ + ‖X‖ * ‖B‖ :=
+      add_le_add (ContinuousLinearMap.opNorm_comp_le A X)
+        (ContinuousLinearMap.opNorm_comp_le X B)
+    _ = (‖A‖ + ‖B‖) * ‖X‖ := by ring
+
+/-- The Sylvester operator as a bounded linear map on the operator space. -/
+noncomputable def sylvesterContinuousLinearMap
+    (A : F →L[𝕜] F) (B : E →L[𝕜] E) :
+    (E →L[𝕜] F) →L[𝕜] (E →L[𝕜] F) :=
+  LinearMap.mkContinuous (sylvesterLinearMap A B) (‖A‖ + ‖B‖)
+    (norm_sylvesterOperator_le A B)
+
+@[simp]
+theorem sylvesterContinuousLinearMap_apply
+    (A : F →L[𝕜] F) (B : E →L[𝕜] E) (X : E →L[𝕜] F) :
+    sylvesterContinuousLinearMap A B X = sylvesterOperator A B X := rfl
+
+/-- Operator norm of the bundled Sylvester map. -/
+theorem norm_sylvesterContinuousLinearMap_le
+    (A : F →L[𝕜] F) (B : E →L[𝕜] E) :
+    ‖sylvesterContinuousLinearMap A B‖ ≤ ‖A‖ + ‖B‖ := by
+  refine (sylvesterContinuousLinearMap A B).opNorm_le_bound
+    (add_nonneg (norm_nonneg A) (norm_nonneg B)) ?_
+  intro X
+  exact norm_sylvesterOperator_le A B X
 
 /-- Resolvent/Bochner integral candidate for the Sylvester solution. -/
 noncomputable def sylvesterResolventIntegral (A : F →L[𝕜] F)

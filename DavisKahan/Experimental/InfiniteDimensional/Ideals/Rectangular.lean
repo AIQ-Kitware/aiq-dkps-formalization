@@ -298,6 +298,40 @@ theorem gauge_finset_sum_le
         (N.finset_sum_mem s A fun i hi => hA i (Finset.mem_insert_of_mem hi))).trans
           (add_le_add le_rfl (ih fun i hi => hA i (Finset.mem_insert_of_mem hi)))
 
+/-- A member has zero gauge exactly when it is the zero operator. -/
+theorem gauge_eq_zero_iff
+    (N : RectangularSymmetricIdealFamily (𝕜 := 𝕜))
+    {E F : Type v}
+    [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+    [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
+    {A : E →L[𝕜] F} (hA : N.Mem A) :
+    N.gauge A = 0 ↔ A = 0 := by
+  constructor
+  · exact N.gauge_eq_zero hA
+  · rintro rfl
+    exact N.gauge_zero
+
+/-- Two-sided composition by contractions does not increase the gauge. -/
+theorem gauge_comp_le_of_contractions
+    (N : RectangularSymmetricIdealFamily (𝕜 := 𝕜))
+    {E F G H : Type v}
+    [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+    [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
+    [NormedAddCommGroup G] [InnerProductSpace 𝕜 G] [CompleteSpace G]
+    [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] [CompleteSpace H]
+    (L : F →L[𝕜] G) {A : E →L[𝕜] F} (R : H →L[𝕜] E)
+    (hA : N.Mem A) (hL : ‖L‖ ≤ 1) (hR : ‖R‖ ≤ 1) :
+    N.gauge (L ∘L A ∘L R) ≤ N.gauge A := by
+  calc
+    N.gauge (L ∘L A ∘L R) ≤ ‖L‖ * N.gauge A * ‖R‖ :=
+      N.gauge_comp_le L R hA
+    _ ≤ 1 * N.gauge A * 1 := by
+      exact mul_le_mul
+        (mul_le_mul_of_nonneg_right hL (N.gauge_nonneg hA)) hR
+        (norm_nonneg R)
+        (mul_nonneg zero_le_one (N.gauge_nonneg hA))
+    _ = N.gauge A := by ring
+
 /-- Ideal membership is invariant under negation. -/
 theorem neg_mem
     (N : RectangularSymmetricIdealFamily (𝕜 := 𝕜))

@@ -168,6 +168,16 @@ def OrderedSpectraSeparated (A : E →L[𝕜] E) (U : Submodule 𝕜 E)
     ∀ a ∈ restrictedSpectrum A U, ∀ b ∈ restrictedSpectrum B V,
       a + d ≤ b
 
+/-- Weakening an ordered gap preserves ordered spectral separation. -/
+theorem OrderedSpectraSeparated.mono_gap
+    {A : E →L[𝕜] E} {U : Submodule 𝕜 E}
+    {B : F →L[𝕜] F} {V : Submodule 𝕜 F} {d e : ℝ}
+    (h : OrderedSpectraSeparated A U B V d) (hed : e ≤ d) :
+    OrderedSpectraSeparated A U B V e := by
+  refine ⟨h.1, h.2.1, ?_⟩
+  intro a ha b hb
+  exact (add_le_add_right hed a).trans (h.2.2 a ha b hb)
+
 /-- Ordered separation implies absolute spectral separation. -/
 theorem OrderedSpectraSeparated.toSpectraSeparated
     {A : E →L[𝕜] E} {U : Submodule 𝕜 E}
@@ -225,11 +235,59 @@ def FiniteGapConfiguration (A : E →L[𝕜] E) (U : Submodule 𝕜 E)
     SpectrumIn A U (Set.Icc left right) ∧
     SpectrumIn A Uᗮ {x | x ≤ left - d ∨ right + d ≤ x}
 
+/-- Weakening a finite interval/exterior gap preserves the configuration. -/
+theorem FiniteGapConfiguration.mono_gap
+    {A : E →L[𝕜] E} {U : Submodule 𝕜 E} {d e : ℝ}
+    (h : FiniteGapConfiguration A U d) (hed : e ≤ d) :
+    FiniteGapConfiguration A U e := by
+  rcases h with ⟨left, right, hlr, hU, hUc⟩
+  refine ⟨left, right, hlr, hU, hUc.mono ?_⟩
+  intro x hx
+  rcases hx with hx | hx
+  · left
+    linarith
+  · right
+    linarith
+
+/-- A finite interval/exterior configuration supplies the internal absolute gap. -/
+theorem FiniteGapConfiguration.toInternalGap
+    {A : E →L[𝕜] E} {U : Submodule 𝕜 E} {d : ℝ}
+    (h : FiniteGapConfiguration A U d) : InternalGap A U d := by
+  rcases h with ⟨left, right, _hlr, hU, hUc⟩
+  exact (show IntervalExteriorSeparated A U A Uᗮ left right d from ⟨hU, hUc⟩).toSpectraSeparated
+
 /-- Ordered internal gap, in either orientation. -/
 def OrderedInternalGap (A : E →L[𝕜] E) (U : Submodule 𝕜 E)
     (d : ℝ) : Prop :=
   OrderedSpectraSeparated A U A Uᗮ d ∨
     OrderedSpectraSeparated A Uᗮ A U d
+
+/-- Weakening an ordered internal gap preserves it. -/
+theorem OrderedInternalGap.mono_gap
+    {A : E →L[𝕜] E} {U : Submodule 𝕜 E} {d e : ℝ}
+    (h : OrderedInternalGap A U d) (hed : e ≤ d) :
+    OrderedInternalGap A U e := by
+  rcases h with h | h
+  · exact Or.inl (h.mono_gap hed)
+  · exact Or.inr (h.mono_gap hed)
+
+/-- Either ordered orientation gives the internal absolute gap. -/
+theorem OrderedInternalGap.toInternalGap
+    {A : E →L[𝕜] E} {U : Submodule 𝕜 E} {d : ℝ}
+    (h : OrderedInternalGap A U d) (hd : 0 ≤ d) :
+    InternalGap A U d := by
+  rcases h with h | h
+  · exact h.toSpectraSeparated hd
+  · exact h.toSpectraSeparated_swapped hd
+
+/-- Weakening an internal gap preserves it. -/
+theorem InternalGap.mono_gap
+    {A : E →L[𝕜] E} {U : Submodule 𝕜 E} {d e : ℝ}
+    (h : InternalGap A U d) (hed : e ≤ d) :
+    InternalGap A U e := by
+  refine ⟨h.1, h.2.1, ?_⟩
+  intro a ha b hb
+  exact hed.trans (h.2.2 a ha b hb)
 
 /-- Provisional double-angle residual map for an isometric embedding.
 
