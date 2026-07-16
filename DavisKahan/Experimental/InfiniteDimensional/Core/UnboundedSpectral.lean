@@ -138,6 +138,7 @@ theorem zero
   · intro x
     simp
   · intro x
+    change A.toLinearMap (0 : A.domain) - 0 = (0 : E)
     simp
 
 omit [CompleteSpace E] in
