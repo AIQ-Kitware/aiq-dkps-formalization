@@ -8,6 +8,7 @@ import DavisKahan.Experimental.InfiniteDimensional.Core.Compatibility
 import DavisKahan.Experimental.InfiniteDimensional.Core.Complexification
 import DavisKahan.Experimental.InfiniteDimensional.Core.Forms
 import DavisKahan.Experimental.InfiniteDimensional.Core.OperatorAngle
+import DavisKahan.Experimental.InfiniteDimensional.Core.OperatorAngleComplex
 import DavisKahan.Experimental.InfiniteDimensional.Core.RealContinuousFunctionalCalculus
 import DavisKahan.Experimental.InfiniteDimensional.Core.RealSpectralBridge
 import DavisKahan.Experimental.InfiniteDimensional.Core.SpectralProjection
