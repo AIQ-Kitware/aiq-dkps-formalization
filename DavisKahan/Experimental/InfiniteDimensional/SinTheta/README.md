@@ -88,8 +88,15 @@ substantive frontier is lower in the graph:
 - the two ordered Ky Fan cutoff estimates;
 - the interval/exterior unbounded Sylvester theorem;
 - the unbounded residual block identity;
-- lower-frame factorization and exact angle identification;
+- construction of `LowerFramePolarData` from the positive continuous
+  functional calculus for the Gram operator;
 - concrete unitarily invariant ideal instances.
+
+The downstream lower-frame geometry is now concentrated behind that one
+proof-carrying existence seam. Closed range and Gram coercivity are proved
+directly; frame normalization, the factor `ε`, range preservation, the
+isometric specialization, and the exact directed-sine gauge identity are
+derived from the selected polar package.
 
 Compiler repairs should strengthen these seams rather than retreating to a
 bounded headline theorem.
