@@ -131,6 +131,54 @@ namespace RectangularSymmetricIdealFamily
 
 variable {𝕜 : Type u} [RCLike 𝕜]
 
+/-- Membership is preserved by left composition with a bounded map. -/
+theorem comp_left_mem
+    (N : RectangularSymmetricIdealFamily (𝕜 := 𝕜))
+    {E F G : Type v}
+    [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+    [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
+    [NormedAddCommGroup G] [InnerProductSpace 𝕜 G] [CompleteSpace G]
+    (L : F →L[𝕜] G) {A : E →L[𝕜] F} (hA : N.Mem A) :
+    N.Mem (L ∘L A) := by
+  simpa using N.comp_mem L (ContinuousLinearMap.id 𝕜 E) hA
+
+/-- Ideal-gauge control under left composition by a bounded map. -/
+theorem gauge_comp_left_le_mul
+    (N : RectangularSymmetricIdealFamily (𝕜 := 𝕜))
+    {E F G : Type v}
+    [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+    [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
+    [NormedAddCommGroup G] [InnerProductSpace 𝕜 G] [CompleteSpace G]
+    (L : F →L[𝕜] G) {A : E →L[𝕜] F} (hA : N.Mem A) :
+    N.gauge (L ∘L A) ≤ ‖L‖ * N.gauge A := by
+  have hraw := N.gauge_comp_le L (ContinuousLinearMap.id 𝕜 E) hA
+  calc
+    N.gauge (L ∘L A) =
+        N.gauge (L ∘L A ∘L ContinuousLinearMap.id 𝕜 E) := by simp
+    _ ≤ ‖L‖ * N.gauge A * ‖ContinuousLinearMap.id 𝕜 E‖ := hraw
+    _ ≤ ‖L‖ * N.gauge A * 1 := by
+      exact mul_le_mul_of_nonneg_left
+        (ContinuousLinearMap.norm_id_le (𝕜 := 𝕜) (E := E))
+        (mul_nonneg (norm_nonneg L) (N.gauge_nonneg hA))
+    _ = ‖L‖ * N.gauge A := by ring
+
+/-- Left composition by a contraction does not increase the ideal gauge. -/
+theorem gauge_comp_left_le
+    (N : RectangularSymmetricIdealFamily (𝕜 := 𝕜))
+    {E F G : Type v}
+    [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+    [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
+    [NormedAddCommGroup G] [InnerProductSpace 𝕜 G] [CompleteSpace G]
+    (L : F →L[𝕜] G) {A : E →L[𝕜] F}
+    (hA : N.Mem A) (hL : ‖L‖ ≤ 1) :
+    N.gauge (L ∘L A) ≤ N.gauge A := by
+  calc
+    N.gauge (L ∘L A) ≤ ‖L‖ * N.gauge A :=
+      N.gauge_comp_left_le_mul L hA
+    _ ≤ 1 * N.gauge A :=
+      mul_le_mul_of_nonneg_right hL (N.gauge_nonneg hA)
+    _ = N.gauge A := one_mul _
+
 /-- Membership is preserved by right composition with a bounded map. -/
 theorem comp_right_mem
     (N : RectangularSymmetricIdealFamily (𝕜 := 𝕜))

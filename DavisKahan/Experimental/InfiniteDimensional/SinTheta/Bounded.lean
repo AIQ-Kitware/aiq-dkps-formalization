@@ -225,7 +225,62 @@ theorem sinThetaBlock_mem_and_gauge_eq_directedSinThetaOperator
     N.Mem (directedSinThetaOperator X F₀ hX hε) ∧
       N.gauge (directedSinThetaOperator X F₀ hX hε) =
         N.gauge (sinThetaBlock X F₁ hX hε) := by
-  sorry
+  have hComplement :
+      ContinuousLinearMap.id 𝕜 E - F₀ ∘L F₀.adjoint =
+        F₁ ∘L F₁.adjoint := by
+    rw [← hdecomp.projection_sum]
+    abel
+  have hDirected :
+      directedSinThetaOperator X F₀ hX hε =
+        F₁ ∘L (sinThetaBlock X F₁ hX hε).adjoint := by
+    unfold directedSinThetaOperator sinThetaBlock
+    rw [hComplement, ContinuousLinearMap.adjoint_comp,
+      ContinuousLinearMap.adjoint_adjoint]
+    exact ContinuousLinearMap.comp_assoc _ _ _
+  have hblockAdj : N.Mem (sinThetaBlock X F₁ hX hε).adjoint :=
+    N.adjoint_mem hblock
+  have hDirectedMem :
+      N.Mem (directedSinThetaOperator X F₀ hX hε) := by
+    rw [hDirected]
+    exact N.comp_left_mem F₁ hblockAdj
+  have hF₁Norm : ‖F₁‖ ≤ 1 :=
+    opNorm_le_one_of_isometry hdecomp.isometry₁
+  have hForward :
+      N.gauge (directedSinThetaOperator X F₀ hX hε) ≤
+        N.gauge (sinThetaBlock X F₁ hX hε) := by
+    rw [hDirected]
+    calc
+      N.gauge (F₁ ∘L (sinThetaBlock X F₁ hX hε).adjoint)
+          ≤ N.gauge (sinThetaBlock X F₁ hX hε).adjoint :=
+        N.gauge_comp_left_le F₁ hblockAdj hF₁Norm
+      _ = N.gauge (sinThetaBlock X F₁ hX hε) :=
+        N.gauge_adjoint hblock
+  have hF₁LeftInverse :
+      F₁.adjoint ∘L F₁ = ContinuousLinearMap.id 𝕜 G :=
+    adjoint_comp_self_eq_id_of_isometry hdecomp.isometry₁
+  have hRecover :
+      (sinThetaBlock X F₁ hX hε).adjoint =
+        F₁.adjoint ∘L directedSinThetaOperator X F₀ hX hε := by
+    calc
+      (sinThetaBlock X F₁ hX hε).adjoint =
+          ContinuousLinearMap.id 𝕜 G ∘L
+            (sinThetaBlock X F₁ hX hε).adjoint := by simp
+      _ = (F₁.adjoint ∘L F₁) ∘L
+            (sinThetaBlock X F₁ hX hε).adjoint := by
+          rw [hF₁LeftInverse]
+      _ = F₁.adjoint ∘L
+            (F₁ ∘L (sinThetaBlock X F₁ hX hε).adjoint) :=
+          ContinuousLinearMap.comp_assoc _ _ _
+      _ = F₁.adjoint ∘L directedSinThetaOperator X F₀ hX hε := by
+          rw [hDirected]
+  have hF₁AdjNorm : ‖F₁.adjoint‖ ≤ 1 := by
+    simpa using hF₁Norm
+  have hReverse :
+      N.gauge (sinThetaBlock X F₁ hX hε) ≤
+        N.gauge (directedSinThetaOperator X F₀ hX hε) := by
+    rw [← N.gauge_adjoint hblock, hRecover]
+    exact N.gauge_comp_left_le F₁.adjoint hDirectedMem hF₁AdjNorm
+  exact ⟨hDirectedMem, le_antisymm hForward hReverse⟩
 
 /-- Exact bounded infinite-dimensional Davis--Kahan Theorem 6.1, expressed in
 terms of the full directed sine operator rather than an arbitrary invariant
