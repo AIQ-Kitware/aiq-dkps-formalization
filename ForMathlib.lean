@@ -6,6 +6,7 @@ Mathlib destination path.  See `ForMathlib/README.md` for the contribution
 workflow and `planning/mathlib-candidates.md` for the ranked candidate list.
 -/
 
+import ForMathlib.Analysis.CStarAlgebra.SelfAdjointGapInverse
 import ForMathlib.Analysis.InnerProductSpace.AlignedBasis
 import ForMathlib.Analysis.InnerProductSpace.CenteredScatter
 import ForMathlib.Analysis.InnerProductSpace.CourantFischer

@@ -190,6 +190,43 @@ problem and reserves the unqualified source role for the generalized unbounded
 result. Compiler feedback is expected to drive repair of the newly exposed
 seams.
 
+### Progress note (2026-07-16, genuine-spectrum sin Θ session)
+
+The honest layer answering the vacuity finding now exists and its headline is
+fully proved (axiom audit: `propext, Classical.choice, Quot.sound` on every
+declaration):
+
+- `ForMathlib/Analysis/CStarAlgebra/SelfAdjointGapInverse.lean`: for a
+  self-adjoint element of a unital C*-algebra, `‖a‖ ≤ r` when the real
+  spectrum lies in `[-r, r]`, and a two-sided inverse of norm at most `r⁻¹`
+  when the spectrum avoids `(-r, r)` — both by the isometric continuous
+  functional calculus.
+- `DavisKahan/Experimental/InfiniteDimensional/Sylvester/GenuineSpectrum.lean`:
+  `norm_sylvester_le_of_spectrum_intervalExterior`, the **constant-one
+  interval/exterior Sylvester estimate** with genuine Banach-algebra spectra
+  (shift-and-invert argument, no splitting, no `π/2` loss), and
+  `sinTheta_genuineSpectrum`, the **fully general bounded operator-norm
+  Davis--Kahan `sin Θ` theorem**: `U` reducing self-adjoint `A` with
+  `spectrum ℝ (A|_U) ⊆ [a, b]`, `V` reducing self-adjoint `B` with
+  `spectrum ℝ (B|_{Vᗮ})` outside `(a-d, b+d)` give
+  `d · directedGap U V ≤ ‖B - A‖`.  Supporting API: `compressOperator`
+  (honest restriction to a reducing subspace), its self-adjointness, the
+  cross-block Sylvester equation, and the norm identification of the
+  cross-block compression with the directed projection composition.
+
+Scope status: this makes the classical `sin Θ` theorem **bounded
+Hilbert-space theorem complete** (complex scalars, operator norm, genuine
+spectra).  Remaining for "paper theorem complete": the symmetric/two-sided
+form (maximum of the two directed gaps, as in `sinTheta_symmetric`), the
+UI-norm/ideal scope, real scalars via complexification, and the unbounded
+extension.  Elaboration notes for future waves: statements over
+`[CStarAlgebra A]` applied to `E →L[ℂ] E` need
+`import Mathlib.Analysis.CStarAlgebra.ContinuousLinearMap`; the
+`...ContinuousFunctionalCalculus.Basic` import is required for the base
+`ℂ`/`IsStarNormal` instance; and `norm_nonneg`/`add_le_add_left` underscores
+against CLM operator-norm goals can send the unifier into whnf timeouts —
+use `ContinuousLinearMap.opNorm_nonneg` and `add_le_add le_rfl` instead.
+
 Controlling blocker identified for the two-projection calculus at source
 scalar generality: an `RCLike`-generic positive operator square root
 (`operatorAbsoluteValue`) is unavailable in Mathlib (operator CFC is
