@@ -433,9 +433,13 @@ waiting on the Halmos decomposition, by the reflection argument:
   `bounded_sinTwoTheta_genuineSpectrum_sinAngle`.
 
 This replaces the `FiniteGapConfiguration`-gated `sinTwoTheta_perturbation`
-obligation with an honest statement.  The `sin 2Θ` family still open at:
-UI-norm scope (reflect the gauge symmetric theorem — same route, needs
-`Mem (JAJ - A)` from `Mem (B - A)` through reflection-conjugation
-invariance of the ideal), the residual (approximate-invariant-pair) form,
-and the identification with the functional-calculus `sinTwoAngleOperator`
-once the Halmos rungs exist. See `dev/sorry-difficulty-ranking.md` for the evolving proof-obligation ranking; verify its totals against the source tree before using them in status claims.
+obligation with an honest statement.  The UI-norm scope is also proved:
+`sinTwoTheta_genuineSpectrum_gauge` gives ideal membership of the directed
+cross block to the reflected image with
+`d · gauge ≤ 2 · gauge (B - A)`, using
+`reflectionDefect_eq_perturbationDefect` and reflection-conjugation
+contractivity of the gauge (alias
+`bounded_sinTwoTheta_uiNorm_genuineSpectrum`).  Still open in the `sin 2Θ`
+family: the residual (approximate-invariant-pair) form, and the
+identification with the functional-calculus `sinTwoAngleOperator` once the
+Halmos rungs exist. See `dev/sorry-difficulty-ranking.md` for the evolving proof-obligation ranking; verify its totals against the source tree before using them in status claims.

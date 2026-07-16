@@ -121,6 +121,8 @@ alias bounded_sinTwoTheta_genuineSpectrum :=
   DavisKahanExt.sinTwoTheta_genuineSpectrum
 alias bounded_sinTwoTheta_genuineSpectrum_sinAngle :=
   DavisKahanExt.sinTwoTheta_genuineSpectrum_sinAngle
+alias bounded_sinTwoTheta_uiNorm_genuineSpectrum :=
+  DavisKahanExt.sinTwoTheta_genuineSpectrum_gauge
 
 /-! ## Direct rotation -/
 
