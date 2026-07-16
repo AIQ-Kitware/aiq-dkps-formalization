@@ -404,6 +404,16 @@ Next rungs: the Halmos two-projection decomposition for
 `cosAngleOperatorC`/`sinTwoAngleOperatorC` (`2 sin cos`), then the genuine
 `sin 2Θ` theorems.
 
+### Progress note (2026-07-16, cosine rung)
+
+`Core/OperatorAngleComplex.lean` gains the second angle-ladder rung:
+`cosAngleOperatorC U V = |P_V P_U|` with nonnegativity, self-adjointness,
+`‖cos Θ‖ = ‖P_V P_U‖`, contractivity, and the pointwise Pythagoras law
+`sq_norm_sin_add_sq_norm_cos` (`‖P_{Vᗮ}x‖² + ‖P_V x‖² = ‖x‖²` on `U`) —
+the vector-level `sin² + cos² = 1`.  Remaining for the full Halmos ladder:
+the operator-level `sin² + cos² = 1` on the generic block, commutation of
+the sine and cosine operators, and `sinTwoAngleOperatorC = 2 sin cos`.
+
 ### Progress note (2026-07-16, direct-rotation scalar core)
 
 `principalHalfPhase_displacement_minimal_scalar`
