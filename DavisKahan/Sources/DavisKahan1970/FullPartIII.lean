@@ -66,21 +66,21 @@ alias bounded_sylvester_general :=
 alias bounded_sylvester_solution := DavisKahanExt.sylvester_solve
 alias bounded_sylvester_uniqueness := DavisKahanExt.sylvester_unique
 alias bounded_sylvester_neumann_solution :=
-  DavisKahanExt.sylvesterNeumannSolution_eq
+  DavisKahan.Experimental.ExactSinTheta.sylvesterNeumannSolution_eq
 alias bounded_sylvester_resolvent_solution :=
   DavisKahanExt.rieszProjection_eq_spectralProjection
 alias unbounded_sylvester_ordered :=
-  DavisKahanExt.unbounded_sylvester_mem_and_gauge_le_viaKyFan
+  DavisKahan.Experimental.ExactSinTheta.unbounded_sylvester_mem_and_gauge_le_viaKyFan
 alias unbounded_sylvester_general :=
-  DavisKahanExt.unbounded_sylvester_mem_and_gauge_le_of_gap
+  DavisKahan.Experimental.ExactSinTheta.unbounded_sylvester_mem_and_gauge_le_of_gap
 
 /-! ## Single-angle theorems -/
 
-alias bounded_generalizedSinTheta := DavisKahanExt.generalizedSinTheta_bounded
-alias bounded_sinTheta := DavisKahanExt.sinTheta_bounded
+alias bounded_generalizedSinTheta := DavisKahan.Experimental.ExactSinTheta.generalizedSinTheta_bounded
+alias bounded_sinTheta := DavisKahan.Experimental.ExactSinTheta.sinTheta_bounded
 alias bounded_generalizedSinTheta_exact :=
-  DavisKahanExt.generalizedSinTheta_bounded_exact
-alias bounded_sinTheta_exact := DavisKahanExt.sinTheta_bounded_exact
+  DavisKahan.Experimental.ExactSinTheta.generalizedSinTheta_bounded_exact
+alias bounded_sinTheta_exact := DavisKahan.Experimental.ExactSinTheta.sinTheta_bounded_exact
 alias bounded_sinTheta_residual := DavisKahanExt.sinTheta_residual
 alias bounded_sinTheta_perturbation := DavisKahanExt.sinTheta_perturbation
 alias bounded_sinTheta_symmetric := DavisKahanExt.sinTheta_symmetric
@@ -153,17 +153,17 @@ alias unbounded_riccati_blockDiagonalization :=
 alias unbounded_selfAdjoint_spectralProjection :=
   DavisKahanExt.ClosedOperator.spectralProjection
 alias unbounded_boundedPerturbation_selfAdjoint :=
-  DavisKahanExt.isSelfAdjoint_addBounded
+  DavisKahanExt.ClosedOperator.isSelfAdjoint_addBounded
 alias unbounded_relativePerturbation_selfAdjoint :=
-  DavisKahanExt.isSelfAdjoint_of_relativelyBounded
+  DavisKahanExt.ClosedOperator.isSelfAdjoint_of_relativelyBounded
 alias unbounded_sinTheta_boundedPerturbation :=
-  DavisKahanExt.sinTheta_unbounded_boundedPerturbation
+  DavisKahanExt.ClosedOperator.sinTheta_unbounded_boundedPerturbation
 alias unbounded_generalizedSinTheta :=
-  DavisKahanExt.generalizedSinTheta_unbounded
-alias unbounded_sinTheta := DavisKahanExt.sinTheta_unbounded
+  DavisKahan.Experimental.ExactSinTheta.generalizedSinTheta_unbounded
+alias unbounded_sinTheta := DavisKahan.Experimental.ExactSinTheta.sinTheta_unbounded
 alias unbounded_generalizedSinTheta_exact :=
-  DavisKahanExt.generalizedSinTheta_unbounded_exact
-alias unbounded_sinTheta_exact := DavisKahanExt.sinTheta_unbounded_exact
+  DavisKahan.Experimental.ExactSinTheta.generalizedSinTheta_unbounded_exact
+alias unbounded_sinTheta_exact := DavisKahan.Experimental.ExactSinTheta.sinTheta_unbounded_exact
 alias form_sum_selfAdjoint := DavisKahanExt.klmn
 alias form_sinTheta := DavisKahanExt.sinTheta_formPerturbation
 

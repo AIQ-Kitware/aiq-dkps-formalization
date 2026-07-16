@@ -47,6 +47,39 @@ def sylvesterOperator (A : F →L[𝕜] F) (B : E →L[𝕜] E)
     (X : E →L[𝕜] F) : E →L[𝕜] F :=
   A ∘L X - X ∘L B
 
+@[simp] theorem sylvesterOperator_zero
+    (A : F →L[𝕜] F) (B : E →L[𝕜] E) :
+    sylvesterOperator A B (0 : E →L[𝕜] F) = 0 := by
+  simp [sylvesterOperator]
+
+/-- The Sylvester operator preserves addition. -/
+theorem sylvesterOperator_add
+    (A : F →L[𝕜] F) (B : E →L[𝕜] E)
+    (X Y : E →L[𝕜] F) :
+    sylvesterOperator A B (X + Y) =
+      sylvesterOperator A B X + sylvesterOperator A B Y := by
+  simp only [sylvesterOperator, ContinuousLinearMap.comp_add,
+    ContinuousLinearMap.add_comp]
+  abel
+
+/-- The Sylvester operator preserves subtraction. -/
+theorem sylvesterOperator_sub
+    (A : F →L[𝕜] F) (B : E →L[𝕜] E)
+    (X Y : E →L[𝕜] F) :
+    sylvesterOperator A B (X - Y) =
+      sylvesterOperator A B X - sylvesterOperator A B Y := by
+  simp only [sylvesterOperator, ContinuousLinearMap.comp_sub,
+    ContinuousLinearMap.sub_comp]
+  abel
+
+/-- The Sylvester operator commutes with scalar multiplication. -/
+theorem sylvesterOperator_smul
+    (A : F →L[𝕜] F) (B : E →L[𝕜] E)
+    (c : 𝕜) (X : E →L[𝕜] F) :
+    sylvesterOperator A B (c • X) = c • sylvesterOperator A B X := by
+  ext x
+  simp [sylvesterOperator, smul_sub]
+
 /-- Resolvent/Bochner integral candidate for the Sylvester solution. -/
 noncomputable def sylvesterResolventIntegral (A : F →L[𝕜] F)
     (B : E →L[𝕜] E) (C : E →L[𝕜] F) : E →L[𝕜] F := by
@@ -70,7 +103,7 @@ theorem solveSylvester_eq_resolventIntegral
     (A : F →L[𝕜] F) (B : E →L[𝕜] E) (C : E →L[𝕜] F) :
     solveSylvester A B C = sylvesterResolventIntegral A B C := rfl
 
-/-- The resolvent solution satisfies the equation under separated spectra. 
+/-- The resolvent solution satisfies the equation under separated spectra.
 
 Lean proof route for a weaker agent:
 
@@ -109,7 +142,7 @@ bounds
 Integrating gives `‖X‖ <= ‖C‖ / (a-b)`.  For interval/exterior separation,
 solve the two orthogonal spectral pieces separately and recombine them using
 orthogonality.  This is the first analytic theorem to prove because its finite
-specialization immediately replaces duplicated operator-norm arguments. 
+specialization immediately replaces duplicated operator-norm arguments.
 
 Lean proof route for a weaker agent:
 
@@ -175,7 +208,7 @@ should isolate:
 3. evaluation of the Sylvester defect;
 4. the final `L1` estimate.
 
-This theorem belongs after the constant-one ordered theory. 
+This theorem belongs after the constant-one ordered theory.
 
 Lean proof route for a weaker agent:
 
@@ -227,12 +260,7 @@ theorem sylvester_unique
     (hX : sylvesterOperator A B X = sylvesterOperator A B Y) :
     X = Y := by
   have hzero : sylvesterOperator A B (X - Y) = 0 := by
-    calc sylvesterOperator A B (X - Y)
-        = sylvesterOperator A B X - sylvesterOperator A B Y := by
-          simp only [sylvesterOperator, ContinuousLinearMap.comp_sub,
-            ContinuousLinearMap.sub_comp]
-          abel
-      _ = 0 := by rw [hX, sub_self]
+    rw [sylvesterOperator_sub, hX, sub_self]
   have hle := norm_sylvester_le_of_generalSeparation hA hB hd hsep hzero
   rw [norm_zero, mul_zero] at hle
   have hnorm : ‖X - Y‖ = 0 := by
