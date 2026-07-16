@@ -379,4 +379,20 @@ scalar generality: an `RCLike`-generic positive operator square root
 `angleOperator`, and their norm identities) waits on a route decision:
 norm-preserving complexification transfer versus a direct order-theoretic
 construction, or specializing the infinite-dimensional angle calculus to `ℂ`
-with a real-scalar bridge afterward. See `dev/sorry-difficulty-ranking.md` for the evolving proof-obligation ranking; verify its totals against the source tree before using them in status claims.
+with a real-scalar bridge afterward.
+
+**Route decision taken (2026-07-16): specialize to `ℂ`**, consistent with
+the genuine-spectrum layer, real bridge by complexification later.  First
+rungs proved and axiom-clean:
+`ForMathlib/Analysis/InnerProductSpace/OperatorAbsoluteValue.lean` defines
+`operatorAbs T = (T⋆T)^(1/2)` via `CFC.sqrt` with the Loewner/StarOrder
+instances from `Mathlib.Analysis.InnerProductSpace.StarOrder`, proving
+nonnegativity, self-adjointness, the defining square identity, uniqueness,
+`‖|T|‖ = ‖T‖`, and the pointwise isometry `‖|T|x‖ = ‖Tx‖`.
+`Core/OperatorAngleComplex.lean` then defines
+`sinAngleOperatorC U V = |P_U - P_V|` and proves
+`‖sinAngleOperatorC U V‖ = subspaceGap U V` — the honest `ℂ` counterparts
+of the blocked `sinAngleOperator`/`norm_sinAngleOperator` obligations.
+Next rungs: the Halmos two-projection decomposition for
+`cosAngleOperatorC`/`sinTwoAngleOperatorC` (`2 sin cos`), then the genuine
+`sin 2Θ` theorems. See `dev/sorry-difficulty-ranking.md` for the evolving proof-obligation ranking; verify its totals against the source tree before using them in status claims.
