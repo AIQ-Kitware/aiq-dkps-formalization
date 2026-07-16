@@ -107,6 +107,10 @@ alias unbounded_sinTheta_opNorm_genuineSpectrum :=
   DavisKahan.Experimental.SpectraBridge.sinTheta_unbounded_opNorm_of_spectrum_gap
 alias unbounded_sinTheta_uiNorm_genuineSpectrum :=
   DavisKahan.Experimental.SpectraBridge.sinTheta_unbounded_gauge_of_spectrum_gap
+alias bounded_sylvester_intervalExterior_uiNorm_genuineSpectrum :=
+  DavisKahanExt.mem_and_gauge_sylvester_le_of_spectrum_intervalExterior
+alias bounded_sinTheta_uiNorm_genuineSpectrum :=
+  DavisKahanExt.sinTheta_genuineSpectrum_gauge
 
 /-! ## Direct rotation -/
 
