@@ -157,7 +157,7 @@ lemma borel_cauchy_vague
       rw [Real.volume_Ioo]
       simp [show (c + 1 - c : ℝ) = 1 by ring]
     have h_diff_ne : volume (Set.Ioo c (c + 1) \ (D₁ ∪ D₂)) ≠ 0 := by
-      rw [measure_diff_null hD_null]; exact h_Ioo_pos
+      rw [measure_sdiff_null hD_null]; exact h_Ioo_pos
     obtain ⟨R, hR_mem, hR_good⟩ := nonempty_of_measure_ne_zero h_diff_ne
     have hRc : c < R := hR_mem.1
     have hRcontR : ContinuousAt G R := by

@@ -50,8 +50,7 @@ lemma integral_exp_neg_Ioc (n : ℕ) : ∫ x in (0 : ℝ)..n, Real.exp (-x) = 1 
       intro x _
       have h1 : HasDerivAt (fun t => -t) (-1) x := hasDerivAt_neg x
       have h2 : HasDerivAt Real.exp (Real.exp (-x)) (-x) := Real.hasDerivAt_exp (-x)
-      convert (h2.comp x h1).neg using 1
-      ring
+      exact HasDerivAt.congr_deriv (h2.comp x h1).neg (by simp)
     convert intervalIntegral.integral_eq_sub_of_hasDerivAt_of_le (le_of_lt hn)
             ((Real.continuous_exp.comp continuous_neg).continuousOn.neg)
             (fun x hx => hderiv x hx)
@@ -90,7 +89,8 @@ lemma integrable_exp_decay_continuous
   have h_meas : AEStronglyMeasurable (fun t => Real.exp (-t) • f t)
                                       (volume.restrict (Set.Ici 0)) := by
     apply AEStronglyMeasurable.smul
-    · exact (Real.continuous_exp.comp continuous_neg).aestronglyMeasurable.restrict
+    · exact (Complex.continuous_ofReal.comp
+        (Real.continuous_exp.comp continuous_neg)).aestronglyMeasurable.restrict
     · exact hf_cont.aestronglyMeasurable.restrict
   have h_bound : ∀ᵐ t ∂(volume.restrict (Set.Ici 0)),
                   ‖Real.exp (-t) • f t‖ ≤ M * Real.exp (-t) := by
@@ -159,7 +159,8 @@ lemma hasDerivAt_integral_of_exp_decay
   case hF_meas =>
     filter_upwards with τ
     apply AEStronglyMeasurable.smul
-    · exact (Real.continuous_exp.comp continuous_neg).aestronglyMeasurable.restrict
+    · exact (Complex.continuous_ofReal.comp
+        (Real.continuous_exp.comp continuous_neg)).aestronglyMeasurable.restrict
     · exact (hf_cont.comp (continuous_const.prodMk continuous_id)).aestronglyMeasurable
   case hF_int =>
     have hf_t_cont : Continuous (fun s => f t s) :=
@@ -168,7 +169,8 @@ lemma hasDerivAt_integral_of_exp_decay
     exact integrable_exp_decay_continuous (fun s => f t s) hf_t_cont |C| hf_t_bound
   case hF'_meas =>
     apply AEStronglyMeasurable.smul
-    · exact (Real.continuous_exp.comp continuous_neg).aestronglyMeasurable
+    · exact (Complex.continuous_ofReal.comp
+        (Real.continuous_exp.comp continuous_neg)).aestronglyMeasurable
     · exact (hf'_cont t).aestronglyMeasurable
   case hF'_bound =>
     filter_upwards [ae_restrict_mem measurableSet_Ici] with s hs τ _

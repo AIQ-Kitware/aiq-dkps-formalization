@@ -27,6 +27,8 @@ open Spectra.Resolvent
 variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
 namespace Spectra.YosidaHille.Approximation
 
+noncomputable section
+
 /-! ### Skew-adjoint implies unitary exponential -/
 
 /-- If `B` is skew-adjoint (`B* = -B`), then `exp(tB)` is two-sided unitary: both composites with
@@ -126,62 +128,74 @@ theorem expBounded_yosidaApproxSym_isometry {A : H →ₗ.[ℂ] H}
 
 /-! ### Derivatives of exponential -/
 
-/-- The base case that `expBounded_hasDerivAt` bootstraps by translation-invariance
-(`expBounded B t = (expBounded B τ).comp (expBounded B (t - τ))`): at `τ = 0`, the derivative of
-`t ↦ exp(tB)` is `B` itself, since `NormedSpace.exp` has derivative `1` at `0`. -/
-lemma expBounded_hasDerivAt_zero (B : H →L[ℂ] H) :
-    HasDerivAt (fun τ : ℝ => expBounded B τ) B 0 := by
+-- Mathlib currently exposes both generic bounded-convergence structures and
+-- operator-norm structures on continuous linear maps.  The direct generic parent
+-- instances otherwise win before the normed instances can provide their parents,
+-- so select the coherent operator-norm parents explicitly for these calculus facts.
+local instance operatorNormAddCommGroup : AddCommGroup (H →L[ℂ] H) :=
+  ContinuousLinearMap.toNormedAddCommGroup.toAddCommGroup
+
+local instance operatorNormRealModule : Module ℝ (H →L[ℂ] H) :=
+  ContinuousLinearMap.toNormedSpace.toModule
+
+local instance operatorNormTopologicalSpace : TopologicalSpace (H →L[ℂ] H) :=
+  PseudoMetricSpace.toUniformSpace.toTopologicalSpace
+
+/-- Differentiate the complex exponential curve and restrict it along `ℝ ↪ ℂ`.
+This avoids installing a second real normed-algebra structure on the operator space. -/
+private lemma expBounded_hasDerivAt_left (B : H →L[ℂ] H) (τ : ℝ) :
+    HasDerivAt (fun t : ℝ => expBounded B t) ((expBounded B τ).comp B) τ := by
   haveI : IsScalarTower ℝ ℂ H := RestrictScalars.isScalarTower ℝ ℂ H
-  letI : NormedAlgebra ℝ (H →L[ℂ] H) := NormedAlgebra.restrictScalars ℝ ℂ _
   haveI : IsScalarTower ℝ ℂ (H →L[ℂ] H) :=
     ⟨fun r c f => ContinuousLinearMap.ext fun x => smul_assoc r c (f x)⟩
-  simp_rw [expBounded_eq_exp]
-  have h_path : HasDerivAt (fun t : ℝ => (t : ℂ) • B) B 0 := by
-    have h := (ofRealCLM.hasDerivAt (x := (0 : ℝ))).smul_const B
-    convert h using 1
-    exact (one_smul ℂ B).symm
-  have h_fderiv : HasFDerivAt NormedSpace.exp
-      (1 : (H →L[ℂ] H) →L[ℝ] (H →L[ℂ] H)) ((fun t : ℝ => (t : ℂ) • B) 0) := by
-    simp only [ofReal_zero, zero_smul]
-    show HasFDerivAt NormedSpace.exp (1 : (H →L[ℂ] H) →L[ℝ] (H →L[ℂ] H)) 0
-    exact hasFDerivAt_exp_zero (𝕂 := ℝ) (𝔸 := H →L[ℂ] H)
-  have h_comp := h_fderiv.comp_hasDerivAt (0 : ℝ) h_path
-  convert h_comp using 1
+  have h_complex :
+      HasDerivAt (fun z : ℂ => NormedSpace.exp (z • B))
+        (NormedSpace.exp ((τ : ℂ) • B) * B) (τ : ℂ) :=
+    hasDerivAt_exp_smul_const B (τ : ℂ)
+  have h_real_comp :
+      HasDerivAt
+        ((fun z : ℂ => NormedSpace.exp (z • B)) ∘ Complex.ofReal)
+        (NormedSpace.exp ((τ : ℂ) • B) * B) τ := by
+    unfold operatorNormAddCommGroup operatorNormRealModule operatorNormTopologicalSpace
+    simpa only [Complex.ofRealCLM_apply, Complex.ofReal_one, one_smul] using
+      h_complex.scomp τ Complex.ofRealCLM.hasDerivAt
+  have h_real :
+      HasDerivAt (fun t : ℝ => NormedSpace.exp ((t : ℂ) • B))
+        (NormedSpace.exp ((τ : ℂ) • B) * B) τ :=
+    h_real_comp.congr_of_eventuallyEq (Eventually.of_forall fun _ => rfl)
+  have h_expBounded :
+      HasDerivAt (fun t : ℝ => expBounded B t)
+        (NormedSpace.exp ((τ : ℂ) • B) * B) τ :=
+    h_real.congr_of_eventuallyEq
+      (Eventually.of_forall fun t => expBounded_eq_exp B t)
+  have h_deriv :
+      NormedSpace.exp ((τ : ℂ) • B) * B = (expBounded B τ).comp B := by
+    rw [expBounded_eq_exp]
+    ext x
+    simp only [mul_apply_eq_comp, ContinuousLinearMap.comp_apply]
+  exact h_expBounded.congr_deriv h_deriv
+
+/-- The base case that `expBounded_hasDerivAt` bootstraps from: at `τ = 0`,
+the derivative of `t ↦ exp(tB)` is `B`. -/
+lemma expBounded_hasDerivAt_zero (B : H →L[ℂ] H) :
+    HasDerivAt (fun τ : ℝ => expBounded B τ) B 0 := by
+  apply (expBounded_hasDerivAt_left B 0).congr_deriv
+  rw [expBounded_at_zero']
+  ext x
+  simp only [ContinuousLinearMap.comp_apply, one_apply_eq_self]
 
 /-- Derivative of the bounded exponential at any point. -/
 lemma expBounded_hasDerivAt (B : H →L[ℂ] H) (τ : ℝ) :
     HasDerivAt (fun t : ℝ => expBounded B t) (B.comp (expBounded B τ)) τ := by
-  haveI : IsScalarTower ℝ ℂ H := RestrictScalars.isScalarTower ℝ ℂ H
-  letI : NormedAlgebra ℝ (H →L[ℂ] H) := NormedAlgebra.restrictScalars ℝ ℂ _
-  haveI : IsScalarTower ℝ ℂ (H →L[ℂ] H) :=
-    ⟨fun r c f => ContinuousLinearMap.ext fun x => smul_assoc r c (f x)⟩
-  have h_eq : ∀ t, expBounded B t = (expBounded B τ).comp (expBounded B (t - τ)) := by
-    intro t
-    rw [← expBounded_add_smul]
-    congr 1; ring
-  have h_shift : HasDerivAt (fun t => expBounded B (t - τ)) B τ := by
-    have h0 : HasDerivAt (fun t => expBounded B t) B (τ - τ) := by
-      simp only [sub_self]
-      exact expBounded_hasDerivAt_zero B
-    exact h0.comp_sub_const τ τ
-  have _h_val : expBounded B (τ - τ) = 1 := by simp only [sub_self, expBounded_at_zero']
-  have h_post : HasDerivAt (fun t => (expBounded B τ).comp (expBounded B (t - τ)))
-                           ((expBounded B τ).comp B) τ := by
-    set A := expBounded B τ
-    have h_clm : HasFDerivAt (fun T : H →L[ℂ] H => A.comp T)
-                             ((ContinuousLinearMap.compL ℂ H H H) A)
-                             (expBounded B (τ - τ)) :=
-      ((ContinuousLinearMap.compL ℂ H H H) A).hasFDerivAt
-    have h_clm' := h_clm.restrictScalars ℝ
-    have h_comp := h_clm'.comp_hasDerivAt τ h_shift
-    convert h_comp using 1
+  have h_left := expBounded_hasDerivAt_left B τ
   have h_comm : (expBounded B τ).comp B = B.comp (expBounded B τ) := by
     ext ψ
     simp only [ContinuousLinearMap.comp_apply]
-    have := B_commute_expBounded B τ
-    unfold Commute SemiconjBy at this
-    exact congrFun (congrArg DFunLike.coe this.symm) ψ
-  rw [h_comm] at h_post
-  exact h_post.congr_of_eventuallyEq (Eventually.of_forall (fun t => (h_eq t)))
+    have h := B_commute_expBounded B τ
+    unfold Commute SemiconjBy at h
+    exact congrFun (congrArg DFunLike.coe h.symm) ψ
+  exact h_left.congr_deriv h_comm
+
+end
 
 end Spectra.YosidaHille.Approximation

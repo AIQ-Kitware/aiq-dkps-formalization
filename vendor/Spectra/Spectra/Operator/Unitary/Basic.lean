@@ -70,7 +70,7 @@ lemma Unitary.surjective {U : H →L[ℂ] H} (hU : Unitary U) : Function.Surject
   intro y
   use U.adjoint y
   have := congr_arg (· y) hU.2
-  simp only [ContinuousLinearMap.mul_apply, ContinuousLinearMap.one_apply] at this
+  simp only [mul_apply_eq_comp, one_apply_eq_self] at this
   exact this
 
 /-- Unitary operators are invertible. -/
@@ -90,21 +90,21 @@ lemma unitary_sub_scalar_isNormal {E : Type*} [NormedAddCommGroup E]
     ext x
     apply ext_inner_right ℂ
     intro y
-    simp only [ContinuousLinearMap.adjoint_inner_left, ContinuousLinearMap.sub_apply,
-               ContinuousLinearMap.smul_apply, ContinuousLinearMap.one_apply,
+    simp only [ContinuousLinearMap.adjoint_inner_left, sub_apply,
+               smul_apply, one_apply_eq_self,
                inner_sub_left, inner_sub_right, inner_smul_left, inner_smul_right]
     simp_all only [RingHomCompTriple.comp_apply, RingHom.id_apply]
   rw [h_adj]
   ext x
-  simp only [ContinuousLinearMap.mul_apply, ContinuousLinearMap.sub_apply,
-             ContinuousLinearMap.smul_apply, ContinuousLinearMap.one_apply]
+  simp only [mul_apply_eq_comp, sub_apply,
+             smul_apply, one_apply_eq_self]
   have h1 : U.adjoint (U x) = x := by
     have := congr_arg (· x) hU.1
-    simp only [ContinuousLinearMap.mul_apply, ContinuousLinearMap.one_apply] at this
+    simp only [mul_apply_eq_comp, one_apply_eq_self] at this
     exact this
   have h2 : U (U.adjoint x) = x := by
     have := congr_arg (· x) hU.2
-    simp only [ContinuousLinearMap.mul_apply, ContinuousLinearMap.one_apply] at this
+    simp only [mul_apply_eq_comp, one_apply_eq_self] at this
     exact this
   simp only [map_sub, map_smul, h1, h2]
   module
@@ -179,7 +179,7 @@ lemma isUnit_bounded_below [Nontrivial H] {T : H →L[ℂ] H} (hT : IsUnit T) :
   intro φ
   have h_eq : T_inv (T φ) = φ := by
     have := congr_arg (· φ) hT_right
-    simp only [ContinuousLinearMap.mul_apply, ContinuousLinearMap.one_apply] at this
+    simp only [mul_apply_eq_comp, one_apply_eq_self] at this
     exact this
   have h_bound : ‖φ‖ ≤ ‖T_inv‖ * ‖T φ‖ := by
     calc ‖φ‖ = ‖T_inv (T φ)‖ := by rw [h_eq]
@@ -291,10 +291,10 @@ lemma normal_bounded_below_isUnit [Nontrivial H] {T : H →L[ℂ] H}
   let e := ContinuousLinearEquiv.ofBijective T h_ker h_range
   exact ⟨⟨T, e.symm.toContinuousLinearMap,
          by ext x;
-            simp only [ContinuousLinearMap.one_apply]
+            simp only [one_apply_eq_self]
             exact ContinuousLinearEquiv.ofBijective_apply_symm_apply T h_ker h_range x,
          by ext x;
-            simp only [ContinuousLinearMap.one_apply]
+            simp only [one_apply_eq_self]
             exact ContinuousLinearEquiv.ofBijective_symm_apply_apply T h_ker h_range x⟩,
             rfl⟩
 
@@ -316,7 +316,7 @@ lemma unitary_not_isUnit_approx_eigenvalue [Nontrivial H] {U : H →L[ℂ] H} (h
         _ = ‖φ‖ * ‖‖φ‖⁻¹ • (U - w • ContinuousLinearMap.id ℂ H) φ‖ := by
             congr 1; rw [norm_smul, norm_inv, norm_norm]
         _ = ‖φ‖ * ‖(U - w • ContinuousLinearMap.id ℂ H) (‖φ‖⁻¹ • φ)‖ := by
-            congr 1; simp only [ContinuousLinearMap.coe_sub', ContinuousLinearMap.coe_smul',
+            congr 1; simp only [FunLike.coe_sub, FunLike.coe_smul,
               ContinuousLinearMap.coe_id', Pi.sub_apply, Pi.smul_apply, id_eq]
             congr 1
             have : (‖φ‖⁻¹ : ℝ) • φ = ((↑‖φ‖⁻¹ : ℂ) • φ) := by
@@ -347,7 +347,7 @@ lemma unitary_not_approx_eigenvalue_isUnit [Nontrivial H] {U : H →L[ℂ] H} (h
         _ = ‖φ‖ * ‖‖φ‖⁻¹ • (U - w • ContinuousLinearMap.id ℂ H) φ‖ := by
             congr 1; rw [norm_smul, norm_inv, norm_norm]
         _ = ‖φ‖ * ‖(U - w • ContinuousLinearMap.id ℂ H) (‖φ‖⁻¹ • φ)‖ := by
-            congr 1; simp only [ContinuousLinearMap.coe_sub', ContinuousLinearMap.coe_smul',
+            congr 1; simp only [FunLike.coe_sub, FunLike.coe_smul,
               ContinuousLinearMap.coe_id', Pi.sub_apply, Pi.smul_apply, id_eq]
             congr 1
             have : (‖φ‖⁻¹ : ℝ) • φ = ((↑‖φ‖⁻¹ : ℂ) • φ) := by

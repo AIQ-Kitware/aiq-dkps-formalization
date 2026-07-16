@@ -126,12 +126,12 @@ lemma polarPartial_absOpCorestrict (T : H →L[ℂ] H) (x : H) :
 /-- **The polar partial isometry** `U : H →L[ℂ] H`, isometric on `K = closure (range |T|)`, zero on
 `Kᗮ`, with `U |T| = T`. -/
 noncomputable def polarIsometry (T : H →L[ℂ] H) : H →L[ℂ] H :=
-  polarPartial T ∘L (polarRange T).orthogonalProjection
+  polarPartial T ∘L (polarRange T).orthogonalProjectionOnto
 
 @[simp] lemma polarIsometry_absOp (T : H →L[ℂ] H) (x : H) :
     polarIsometry T (absOp T x) = T x := by
   have hmem : absOp T x ∈ polarRange T := absOp_mem_polarRange T x
-  have hproj : (polarRange T).orthogonalProjection (absOp T x) = absOpCorestrict T x := by
+  have hproj : (polarRange T).orthogonalProjectionOnto (absOp T x) = absOpCorestrict T x := by
     apply Subtype.ext
     rw [coe_absOpCorestrict, ← Submodule.starProjection_apply]
     exact Submodule.starProjection_eq_self_iff.2 hmem

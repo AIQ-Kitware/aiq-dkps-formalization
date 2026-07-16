@@ -105,36 +105,22 @@ for the maintained scope ledger and completion standard.
 ## Spectra collaboration and dependency policy
 
 `Spectra` is the preferred external foundation for complex Hilbert-space
-projection-valued measures, spectral calculus, possibly unbounded
-self-adjoint operators, bounded polar decomposition, trace class, and
-Hilbert--Schmidt infrastructure. Davis--Kahan geometry and paper-facing
-perturbation theorems remain owned by this repository.
+spectral theory. Davis–Kahan geometry and paper-facing perturbation theorems
+remain owned by this repository.
 
-The production dependency is an exact upstream source snapshot at
-`vendor/Spectra`. Follow these rules:
-
-- Treat `vendor/Spectra` as immutable upstream source. Do not edit files in
-  that directory directly.
-- Keep `external/Spectra` as a read-only upstream reference submodule pinned
-  to the same commit as the clean vendor snapshot. The build must not depend on
-  the submodule.
-- Record the upstream repository URL and exact commit in
+- Keep `external/Spectra` as a read-only upstream reference. The build must not
+  depend on it.
+- Vendor only the Spectra files actually needed by this repository into
+  `vendor/Spectra`.
+- Import files by first copying the exact upstream version. Preserve upstream
+  module names, copyright headers, and record the source commit in
   `vendor/Spectra.UPSTREAM.md`.
-- Keep DKPS compatibility changes as a separate patch outside the snapshot.
-  Apply, refresh, or remove that patch with the dedicated vendor scripts.
-- When updating Spectra, first replace `vendor/Spectra` with a clean archive
-  of the new upstream commit, verify the snapshot, then rebase and regenerate
-  the compatibility patch.
-- Do not import the root `Spectra` module. Import the narrowest required modules
-  so unrelated physics and analysis developments do not enter the dependency
-  cone.
-- Keep a thin bridge in `DavisKahan/` for DKPS-specific names and interfaces.
-  PVM range subspaces, reducing-subspace lemmas, general graph geometry, and
-  other reusable operator theory should be proposed upstream.
-- Never fold general Spectra fixes into unrelated DKPS commits. Preserve them
-  as reviewable changes suitable for a future upstream pull request.
-- Never claim a Spectra-backed declaration is accepted without building it
-  against the pinned vendored snapshot plus the recorded compatibility patch.
+- After a file is vendored, edit it normally when necessary. Keep general
+  Spectra improvements in focused commits so they can be proposed upstream.
+- Prefer thin bridges in `DavisKahan/` for DKPS-specific APIs rather than
+  modifying Spectra.
+- Import the narrowest required Spectra modules; never import the root
+  `Spectra` module.
 
 See [`dev/spectra-integration-survey-2026-07-14.md`](dev/spectra-integration-survey-2026-07-14.md)
 for the audited capability map, ownership boundary, and contribution plan.

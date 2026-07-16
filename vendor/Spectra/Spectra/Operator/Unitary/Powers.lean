@@ -108,7 +108,7 @@ private lemma pow_unitary_inner (V : H →L[ℂ] H) (hV : Operator.Unitary V)
   induction a generalizing x y with
   | zero => simp
   | succ n ih =>
-    rw [pow_succ, ContinuousLinearMap.mul_apply]
+    rw [pow_succ, mul_apply_eq_comp]
     erw [ih (V x) (V y)]
     exact hV.inner_map_map x y
 
