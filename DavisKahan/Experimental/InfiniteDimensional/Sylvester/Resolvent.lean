@@ -103,6 +103,7 @@ theorem resolventOperator_inverse (A : E →L[𝕜] E) {z : 𝕜}
   rw [dif_pos hz]
   exact hz.choose_spec
 
+omit [CompleteSpace E] in
 /-- Ring-language left-inverse law for the resolvent. -/
 theorem resolventOperator_mul_cancel (A : E →L[𝕜] E) {z : 𝕜}
     (hz : InResolventSet A z) :
@@ -110,6 +111,7 @@ theorem resolventOperator_mul_cancel (A : E →L[𝕜] E) {z : 𝕜}
   rw [ContinuousLinearMap.mul_def, ContinuousLinearMap.one_def]
   exact (resolventOperator_inverse A hz).1
 
+omit [CompleteSpace E] in
 /-- Ring-language right-inverse law for the resolvent. -/
 theorem mul_resolventOperator_cancel (A : E →L[𝕜] E) {z : 𝕜}
     (hz : InResolventSet A z) :

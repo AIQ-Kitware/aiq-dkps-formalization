@@ -46,6 +46,7 @@ theorem reflectionDefect_eq_zero_of_reduces
     zero_apply]
   rw [hcomm, hinvol, sub_self]
 
+omit [CompleteSpace E] in
 /-- Conjugating and subtracting a reducing comparison operator leaves only
 its perturbation.
 -/

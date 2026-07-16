@@ -91,14 +91,17 @@ def toLinearPMap (A : ClosedOperator (𝕜 := 𝕜) (E := E)) : E →ₗ.[𝕜] 
   domain := A.domain
   toFun := A.toLinearMap
 
+omit [CompleteSpace E] in
 @[simp] theorem toLinearPMap_domain
     (A : ClosedOperator (𝕜 := 𝕜) (E := E)) :
     A.toLinearPMap.domain = A.domain := rfl
 
+omit [CompleteSpace E] in
 @[simp] theorem toLinearPMap_apply
     (A : ClosedOperator (𝕜 := 𝕜) (E := E)) (x : A.domain) :
     A.toLinearPMap x = A.toLinearMap x := rfl
 
+omit [CompleteSpace E] in
 /-- The partial-linear-map view retains the closed graph. -/
 theorem toLinearPMap_isClosed
     (A : ClosedOperator (𝕜 := 𝕜) (E := E)) :
@@ -118,24 +121,34 @@ theorem toLinearPMap_isClosed
   rw [hgraph]
   exact A.closed_graph
 
+omit [CompleteSpace E] in
 /-- The partial-linear-map view retains the dense domain. -/
 theorem toLinearPMap_dense
     (A : ClosedOperator (𝕜 := 𝕜) (E := E)) :
     Dense (A.toLinearPMap.domain : Set E) := by
   simpa using A.dense_domain
 
+/-- The partial-map adjoint of a densely defined closed operator is closed. -/
+theorem toLinearPMap_adjoint_isClosed
+    (A : ClosedOperator (𝕜 := 𝕜) (E := E)) :
+    A.toLinearPMap.adjoint.IsClosed :=
+  LinearPMap.adjoint_isClosed A.toLinearPMap_dense
+
 /-- Two closed operators have the same operator domain. -/
 def SameDomain (A B : ClosedOperator (𝕜 := 𝕜) (E := E)) : Prop :=
   A.domain = B.domain
 
+omit [CompleteSpace E] in
 /-- Equality of domains is reflexive. -/
 @[refl] theorem SameDomain.refl (A : ClosedOperator (𝕜 := 𝕜) (E := E)) :
     A.SameDomain A := rfl
 
+omit [CompleteSpace E] in
 /-- Equality of domains is symmetric. -/
 @[symm] theorem SameDomain.symm {A B : ClosedOperator (𝕜 := 𝕜) (E := E)}
     (h : A.SameDomain B) : B.SameDomain A := Eq.symm h
 
+omit [CompleteSpace E] in
 /-- Equality of domains is transitive. -/
 @[trans] theorem SameDomain.trans {A B C : ClosedOperator (𝕜 := 𝕜) (E := E)}
     (hAB : A.SameDomain B) (hBC : B.SameDomain C) : A.SameDomain C :=
@@ -153,8 +166,9 @@ def MapsDomainTo
 theorem MapsDomainTo.id (A : ClosedOperator (𝕜 := 𝕜) (E := E)) :
     A.MapsDomainTo A (ContinuousLinearMap.id 𝕜 E) := by
   intro x
-  simpa using x.property
+  simp
 
+omit [CompleteSpace E] in
 /-- Domain transport composes with bounded maps. -/
 theorem MapsDomainTo.comp
     {F G : Type*}
@@ -214,7 +228,7 @@ noncomputable def ofBounded (A : E →L[𝕜] E) :
     refine ⟨⟨x, Submodule.mem_top⟩, ?_⟩
     ext
     · rfl
-    · simpa [hyeq]
+    · simp [hyeq]
 
 omit [CompleteSpace E] in
 @[simp] theorem ofBounded_domain (A : E →L[𝕜] E) :
@@ -225,6 +239,7 @@ omit [CompleteSpace E] in
     (x : (ofBounded A).domain) :
     (ofBounded A) x = A (x : E) := rfl
 
+omit [CompleteSpace E] in
 /-- The bounded closed-operator embedding agrees with Mathlib's full-domain
 partial-linear-map constructor. -/
 @[simp] theorem toLinearPMap_ofBounded (A : E →L[𝕜] E) :
@@ -240,6 +255,7 @@ theorem toLinearPMap_ofBounded_isSelfAdjoint (A : E →L[𝕜] E)
   rw [A.toPMap_adjoint_eq_adjoint_toPMap_of_dense (by simp)]
   rw [hA.clm_adjoint_eq]
 
+omit [CompleteSpace E] in
 /-- Every bounded map lands in the full domain of a bounded closed operator. -/
 theorem MapsDomainTo.ofBounded_left
     {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
@@ -256,6 +272,7 @@ def Extends (A B : ClosedOperator (𝕜 := 𝕜) (E := E)) : Prop :=
     ∀ x : A.domain,
       B.toLinearMap ⟨(x : E), hdom x.property⟩ = A.toLinearMap x
 
+omit [CompleteSpace E] in
 /-- Every closed operator extends itself. -/
 @[refl] theorem Extends.refl (A : ClosedOperator (𝕜 := 𝕜) (E := E)) :
     A.Extends A := by
@@ -263,6 +280,7 @@ def Extends (A B : ClosedOperator (𝕜 := 𝕜) (E := E)) : Prop :=
   intro x
   rfl
 
+omit [CompleteSpace E] in
 /-- Extension of closed operators is transitive. -/
 @[trans] theorem Extends.trans {A B C : ClosedOperator (𝕜 := 𝕜) (E := E)}
     (hAB : A.Extends B) (hBC : B.Extends C) : A.Extends C := by
@@ -292,25 +310,78 @@ noncomputable def adjoint
     ClosedOperator (𝕜 := 𝕜) (E := E) := by
   sorry
 
-/-- A closed operator is self-adjoint when it equals its Hilbert-space adjoint.
+/-- A closed operator is self-adjoint when its canonical Mathlib partial
+operator equals its Hilbert-space adjoint.
 
-Maximal symmetry alone is not used here: a maximal symmetric operator can fail
-to be self-adjoint when its deficiency indices are unequal. -/
+This definition uses the genuine domain-aware adjoint relation already provided
+by `LinearPMap`; it does not depend on the provisional bundled-adjoint
+constructor above.  Maximal symmetry alone is intentionally insufficient. -/
 def IsSelfAdjoint (A : ClosedOperator (𝕜 := 𝕜) (E := E)) : Prop :=
-  A.adjoint = A
+  _root_.IsSelfAdjoint A.toLinearPMap
+
+/-- Unfold self-adjointness into equality with the Mathlib partial-map adjoint. -/
+theorem isSelfAdjoint_iff_toLinearPMap_adjoint_eq
+    (A : ClosedOperator (𝕜 := 𝕜) (E := E)) :
+    A.IsSelfAdjoint ↔ A.toLinearPMap.adjoint = A.toLinearPMap :=
+  LinearPMap.isSelfAdjoint_def
+
+/-- A self-adjoint closed operator equals its partial-map adjoint. -/
+theorem IsSelfAdjoint.toLinearPMap_adjoint_eq
+    {A : ClosedOperator (𝕜 := 𝕜) (E := E)}
+    (hA : A.IsSelfAdjoint) :
+    A.toLinearPMap.adjoint = A.toLinearPMap :=
+  (A.isSelfAdjoint_iff_toLinearPMap_adjoint_eq).mp hA
+
+/-- A self-adjoint closed operator is symmetric on its operator domain. -/
+theorem IsSelfAdjoint.isSymmetric
+    {A : ClosedOperator (𝕜 := 𝕜) (E := E)}
+    (hA : A.IsSelfAdjoint) : A.IsSymmetric := by
+  rw [isSelfAdjoint_iff_toLinearPMap_adjoint_eq] at hA
+  have hformal := LinearPMap.adjoint_isFormalAdjoint A.toLinearPMap_dense
+  rw [hA] at hformal
+  intro x y
+  exact hformal x y
 
 /-- A symmetric bounded operator becomes self-adjoint in the full-domain closed
 operator model.  This is the analytic bridge that makes bounded theorems true
 specializations of the canonical unbounded API. -/
 theorem ofBounded_isSelfAdjoint (A : E →L[𝕜] E)
     (hA : A.IsSymmetric) :
-    (ofBounded A).IsSelfAdjoint := by
-  sorry
+    (ofBounded A).IsSelfAdjoint :=
+  toLinearPMap_ofBounded_isSelfAdjoint A hA
 
 /-- Graph norm. -/
 noncomputable def graphNorm (A : ClosedOperator (𝕜 := 𝕜) (E := E))
     (x : A.domain) : ℝ :=
   Real.sqrt (‖(x : E)‖ ^ 2 + ‖A.toLinearMap x‖ ^ 2)
+
+omit [CompleteSpace E] in
+/-- The graph norm is nonnegative. -/
+theorem graphNorm_nonneg (A : ClosedOperator (𝕜 := 𝕜) (E := E))
+    (x : A.domain) : 0 ≤ A.graphNorm x :=
+  Real.sqrt_nonneg _
+
+omit [CompleteSpace E] in
+/-- Squaring the graph norm recovers the defining sum of squares. -/
+theorem graphNorm_sq (A : ClosedOperator (𝕜 := 𝕜) (E := E))
+    (x : A.domain) :
+    A.graphNorm x ^ 2 = ‖(x : E)‖ ^ 2 + ‖A.toLinearMap x‖ ^ 2 := by
+  unfold graphNorm
+  exact Real.sq_sqrt (by positivity)
+
+omit [CompleteSpace E] in
+/-- The ambient norm is controlled by the graph norm. -/
+theorem norm_coe_le_graphNorm (A : ClosedOperator (𝕜 := 𝕜) (E := E))
+    (x : A.domain) : ‖(x : E)‖ ≤ A.graphNorm x := by
+  rw [graphNorm]
+  exact Real.le_sqrt_of_sq_le (by nlinarith [sq_nonneg ‖A.toLinearMap x‖])
+
+omit [CompleteSpace E] in
+/-- The operator-value norm is controlled by the graph norm. -/
+theorem norm_apply_le_graphNorm (A : ClosedOperator (𝕜 := 𝕜) (E := E))
+    (x : A.domain) : ‖A.toLinearMap x‖ ≤ A.graphNorm x := by
+  rw [graphNorm]
+  exact Real.le_sqrt_of_sq_le (by nlinarith [sq_nonneg ‖(x : E)‖])
 
 /-- Sum with a bounded perturbation, on the original domain.
 
@@ -362,9 +433,11 @@ noncomputable def addBounded (A : ClosedOperator (𝕜 := 𝕜) (E := E))
       rw [hzA, hzx]
       abel
 
+omit [CompleteSpace E] in
 @[simp] theorem addBounded_domain (A : ClosedOperator (𝕜 := 𝕜) (E := E))
     (V : E →L[𝕜] E) : (A.addBounded V).domain = A.domain := rfl
 
+omit [CompleteSpace E] in
 @[simp] theorem addBounded_apply (A : ClosedOperator (𝕜 := 𝕜) (E := E))
     (V : E →L[𝕜] E) (x : (A.addBounded V).domain) :
     (A.addBounded V) x = A.toLinearMap x + V (x : E) := rfl
@@ -373,6 +446,88 @@ noncomputable def addBounded (A : ClosedOperator (𝕜 := 𝕜) (E := E))
 def RelativelyBounded (A : ClosedOperator (𝕜 := 𝕜) (E := E))
     (V : A.domain →ₗ[𝕜] E) (a b : ℝ) : Prop :=
   ∀ x, ‖V x‖ ≤ a * ‖(x : E)‖ + b * ‖A.toLinearMap x‖
+
+namespace RelativelyBounded
+
+omit [CompleteSpace E] in
+/-- The zero perturbation has zero relative bound. -/
+theorem zero (A : ClosedOperator (𝕜 := 𝕜) (E := E)) :
+    RelativelyBounded A (0 : A.domain →ₗ[𝕜] E) 0 0 := by
+  intro x
+  simp
+
+omit [CompleteSpace E] in
+/-- Relative bounds may be weakened by increasing either coefficient. -/
+theorem mono
+    {A : ClosedOperator (𝕜 := 𝕜) (E := E)}
+    {V : A.domain →ₗ[𝕜] E} {a b a' b' : ℝ}
+    (hV : RelativelyBounded A V a b)
+    (haa' : a ≤ a') (hbb' : b ≤ b') :
+    RelativelyBounded A V a' b' := by
+  intro x
+  exact (hV x).trans <| add_le_add
+    (mul_le_mul_of_nonneg_right haa' (norm_nonneg (x : E)))
+    (mul_le_mul_of_nonneg_right hbb' (norm_nonneg (A.toLinearMap x)))
+
+omit [CompleteSpace E] in
+/-- Relative bounds add under addition of perturbations. -/
+theorem add
+    {A : ClosedOperator (𝕜 := 𝕜) (E := E)}
+    {V W : A.domain →ₗ[𝕜] E} {a b c d : ℝ}
+    (hV : RelativelyBounded A V a b)
+    (hW : RelativelyBounded A W c d) :
+    RelativelyBounded A (V + W) (a + c) (b + d) := by
+  intro x
+  calc
+    ‖(V + W) x‖ ≤ ‖V x‖ + ‖W x‖ := norm_add_le _ _
+    _ ≤ (a * ‖(x : E)‖ + b * ‖A.toLinearMap x‖) +
+        (c * ‖(x : E)‖ + d * ‖A.toLinearMap x‖) :=
+      add_le_add (hV x) (hW x)
+    _ = (a + c) * ‖(x : E)‖ + (b + d) * ‖A.toLinearMap x‖ := by ring
+
+omit [CompleteSpace E] in
+/-- Relative bounds scale by the norm of the scalar. -/
+theorem smul
+    {A : ClosedOperator (𝕜 := 𝕜) (E := E)}
+    {V : A.domain →ₗ[𝕜] E} {a b : ℝ}
+    (hV : RelativelyBounded A V a b) (c : 𝕜) :
+    RelativelyBounded A (c • V) (‖c‖ * a) (‖c‖ * b) := by
+  intro x
+  rw [LinearMap.smul_apply, norm_smul]
+  calc
+    ‖c‖ * ‖V x‖ ≤ ‖c‖ *
+        (a * ‖(x : E)‖ + b * ‖A.toLinearMap x‖) :=
+      mul_le_mul_of_nonneg_left (hV x) (norm_nonneg c)
+    _ = (‖c‖ * a) * ‖(x : E)‖ +
+        (‖c‖ * b) * ‖A.toLinearMap x‖ := by ring
+
+/-- Relative bounds are preserved by negation. -/
+theorem neg
+    {A : ClosedOperator (𝕜 := 𝕜) (E := E)}
+    {V : A.domain →ₗ[𝕜] E} {a b : ℝ}
+    (hV : RelativelyBounded A V a b) :
+    RelativelyBounded A (-V) a b := by
+  simpa using hV.smul (-1 : 𝕜)
+
+/-- Relative bounds add under subtraction of perturbations. -/
+theorem sub
+    {A : ClosedOperator (𝕜 := 𝕜) (E := E)}
+    {V W : A.domain →ₗ[𝕜] E} {a b c d : ℝ}
+    (hV : RelativelyBounded A V a b)
+    (hW : RelativelyBounded A W c d) :
+    RelativelyBounded A (V - W) (a + c) (b + d) := by
+  simpa [sub_eq_add_neg] using hV.add hW.neg
+
+omit [CompleteSpace E] in
+/-- Restricting a bounded ambient operator to the domain gives relative bound
+`(‖V‖, 0)`. -/
+theorem domRestrict (A : ClosedOperator (𝕜 := 𝕜) (E := E))
+    (V : E →L[𝕜] E) :
+    RelativelyBounded A (V.toLinearMap.domRestrict A.domain) ‖V‖ 0 := by
+  intro x
+  simpa using V.le_opNorm (x : E)
+
+end RelativelyBounded
 
 /-- Real spectrum of a self-adjoint closed operator.
 
@@ -409,6 +564,7 @@ theorem SpectralSetsSeparated.symm
   intro b hb ht a ha hs
   simpa [abs_sub_comm] using h a ha hs b hb ht
 
+omit [CompleteSpace E] in
 /-- Weakening the required gap preserves spectral-set separation. -/
 theorem SpectralSetsSeparated.mono_gap
     {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
@@ -421,6 +577,7 @@ theorem SpectralSetsSeparated.mono_gap
   intro a ha hs b hb ht
   exact hed.trans (h a ha hs b hb ht)
 
+omit [CompleteSpace E] in
 /-- Restricting either selected spectral set preserves separation. -/
 theorem SpectralSetsSeparated.mono_sets
     {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]

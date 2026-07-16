@@ -34,6 +34,15 @@ def LowerFrameBound (X : F →L[𝕜] E) (ε : ℝ) : Prop :=
   ∀ x, ε * ‖x‖ ≤ ‖X x‖
 
 omit [CompleteSpace E] [CompleteSpace F] in
+/-- A lower frame bound remains valid after decreasing its constant. -/
+theorem LowerFrameBound.mono
+    {X : F →L[𝕜] E} {ε ε' : ℝ}
+    (hX : LowerFrameBound X ε) (hε'ε : ε' ≤ ε) :
+    LowerFrameBound X ε' := by
+  intro x
+  exact (mul_le_mul_of_nonneg_right hε'ε (norm_nonneg x)).trans (hX x)
+
+omit [CompleteSpace E] [CompleteSpace F] in
 /-- A positive lower frame bound implies injectivity. -/
 theorem LowerFrameBound.injective
     {X : F →L[𝕜] E} {ε : ℝ}
@@ -125,6 +134,43 @@ structure LowerFramePolarData
     LinearMap.range (X ∘L invSqrt).toLinearMap = LinearMap.range X.toLinearMap
   invSqrt_eq_id_of_isometry :
     ∀ _hIso : IsometricEmbedding X, invSqrt = ContinuousLinearMap.id 𝕜 F
+
+/-- The polar package is explicit when the trial map is already isometric. -/
+def lowerFramePolarDataOfIsometry
+    (X : F →L[𝕜] E) (hIso : IsometricEmbedding X) :
+    LowerFramePolarData X 1 (lowerFrameBound_one_of_isometry hIso) zero_lt_one := by
+  let I : F →L[𝕜] F := ContinuousLinearMap.id 𝕜 F
+  have hgram : X.adjoint ∘L X = I := adjoint_comp_self_eq_id_of_isometry hIso
+  refine {
+    sqrt := I
+    invSqrt := I
+    gramInverse := {
+      inv := I
+      left_inv := ?_
+      right_inv := ?_
+    }
+    invSqrt_sqrt := ?_
+    sqrt_invSqrt := ?_
+    sqrt_sq := ?_
+    normalized_isometry := ?_
+    factorization := ?_
+    invSqrt_norm_le := ?_
+    range_normalized := ?_
+    invSqrt_eq_id_of_isometry := ?_
+  }
+  · rw [hgram]
+    simp [I]
+  · rw [hgram]
+    simp [I]
+  · simp [I]
+  · simp [I]
+  · simpa [I] using hgram.symm
+  · simpa [I] using hIso
+  · simp [I]
+  · simpa [I] using (ContinuousLinearMap.norm_id_le (𝕜 := 𝕜) (E := F))
+  · simp [I]
+  · intro _
+    rfl
 
 /-- Existence of the bounded-below polar package.  Its eventual proof should
 come from the positive continuous functional calculus for the Gram operator. -/

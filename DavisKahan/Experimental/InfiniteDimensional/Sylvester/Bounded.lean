@@ -36,6 +36,7 @@ structure BoundedInverseData (A : E →L[𝕜] E) where
 
 namespace BoundedInverseData
 
+omit [CompleteSpace E] in
 /-- An operator carrying two-sided bounded inverse data is injective. -/
 theorem injective {A : E →L[𝕜] E} (hA : BoundedInverseData A) :
     Function.Injective A := by
@@ -49,6 +50,7 @@ theorem injective {A : E →L[𝕜] E} (hA : BoundedInverseData A) :
     _ = (ContinuousLinearMap.id 𝕜 E) y := by rw [hA.left_inv]
     _ = y := by simp
 
+omit [CompleteSpace E] in
 /-- An operator carrying two-sided bounded inverse data is surjective. -/
 theorem surjective {A : E →L[𝕜] E} (hA : BoundedInverseData A) :
     Function.Surjective A := by
@@ -58,6 +60,7 @@ theorem surjective {A : E →L[𝕜] E} (hA : BoundedInverseData A) :
   rw [hA.right_inv]
   simp
 
+omit [CompleteSpace E] in
 /-- A two-sided bounded inverse is unique. -/
 theorem inv_eq {A B : E →L[𝕜] E} (hA : BoundedInverseData A)
     (hBleft : B ∘L A = ContinuousLinearMap.id 𝕜 E) :
@@ -72,6 +75,7 @@ theorem inv_eq {A B : E →L[𝕜] E} (hA : BoundedInverseData A)
 
 end BoundedInverseData
 
+omit [CompleteSpace E] in
 /-- Powers of a continuous endomorphism satisfy the expected operator-norm bound. -/
 theorem opNorm_pow_le (T : E →L[𝕜] E) (n : ℕ) :
     ‖T ^ n‖ ≤ ‖T‖ ^ n := by
@@ -90,6 +94,73 @@ noncomputable def sylvesterNeumannTerm
     (hA : BoundedInverseData A) (B : F →L[𝕜] F)
     (C : F →L[𝕜] E) (n : ℕ) : F →L[𝕜] E :=
   (hA.inv ^ (n + 1)) ∘L C ∘L (B ^ n)
+
+omit [CompleteSpace E] [CompleteSpace F] in
+/-- The first Neumann term cancels the left block. -/
+theorem comp_sylvesterNeumannTerm_zero
+    {A : E →L[𝕜] E}
+    (hA : BoundedInverseData A) (B : F →L[𝕜] F)
+    (C : F →L[𝕜] E) :
+    A ∘L sylvesterNeumannTerm hA B C 0 = C := by
+  unfold sylvesterNeumannTerm
+  simp only [zero_add, pow_one, pow_zero]
+  rw [← ContinuousLinearMap.comp_assoc A hA.inv, hA.right_inv]
+  change C ∘L ContinuousLinearMap.id 𝕜 F = C
+  exact ContinuousLinearMap.comp_id C
+
+omit [CompleteSpace E] [CompleteSpace F] in
+/-- Consecutive Neumann terms telescope through the two diagonal blocks. -/
+theorem comp_sylvesterNeumannTerm_succ
+    {A : E →L[𝕜] E}
+    (hA : BoundedInverseData A) (B : F →L[𝕜] F)
+    (C : F →L[𝕜] E) (n : ℕ) :
+    A ∘L sylvesterNeumannTerm hA B C (n + 1) =
+      sylvesterNeumannTerm hA B C n ∘L B := by
+  have hright_apply (x : E) : A (hA.inv x) = x := by
+    have h := congrArg (fun T : E →L[𝕜] E => T x) hA.right_inv
+    simpa using h
+  ext x
+  change
+    A ((hA.inv ^ ((n + 1) + 1)) (C ((B ^ (n + 1)) x))) =
+      (hA.inv ^ (n + 1)) (C ((B ^ n) (B x)))
+  rw [pow_succ' hA.inv (n + 1), pow_succ B n]
+  change
+    A (hA.inv ((hA.inv ^ (n + 1)) (C ((B ^ n) (B x))))) =
+      (hA.inv ^ (n + 1)) (C ((B ^ n) (B x)))
+  exact hright_apply _
+
+/-- Operator-norm geometric bound for one Neumann term. -/
+theorem norm_sylvesterNeumannTerm_le
+    {A : E →L[𝕜] E}
+    (hA : BoundedInverseData A) (B : F →L[𝕜] F)
+    (C : F →L[𝕜] E) (n : ℕ) :
+    ‖sylvesterNeumannTerm hA B C n‖ ≤
+      ‖hA.inv‖ * ‖C‖ * (‖hA.inv‖ * ‖B‖) ^ n := by
+  change
+    ‖((hA.inv ^ (n + 1)) ∘L C) ∘L (B ^ n)‖ ≤
+      ‖hA.inv‖ * ‖C‖ * (‖hA.inv‖ * ‖B‖) ^ n
+  have hleft :
+      ‖(hA.inv ^ (n + 1)) ∘L C‖ ≤ ‖hA.inv ^ (n + 1)‖ * ‖C‖ :=
+    ContinuousLinearMap.opNorm_comp_le _ _
+  have houter :
+      ‖((hA.inv ^ (n + 1)) ∘L C) ∘L (B ^ n)‖ ≤
+        ‖(hA.inv ^ (n + 1)) ∘L C‖ * ‖B ^ n‖ :=
+    ContinuousLinearMap.opNorm_comp_le _ _
+  calc
+    ‖((hA.inv ^ (n + 1)) ∘L C) ∘L (B ^ n)‖
+        ≤ ‖(hA.inv ^ (n + 1)) ∘L C‖ * ‖B ^ n‖ := houter
+    _ ≤ (‖hA.inv ^ (n + 1)‖ * ‖C‖) * ‖B ^ n‖ :=
+      mul_le_mul_of_nonneg_right hleft (norm_nonneg (B ^ n))
+    _ ≤ (‖hA.inv‖ ^ (n + 1) * ‖C‖) * ‖B‖ ^ n := by
+      exact mul_le_mul
+        (mul_le_mul_of_nonneg_right (opNorm_pow_le hA.inv (n + 1))
+          (norm_nonneg C))
+        (opNorm_pow_le B n)
+        (norm_nonneg (B ^ n))
+        (mul_nonneg (pow_nonneg (norm_nonneg hA.inv) _) (norm_nonneg C))
+    _ = ‖hA.inv‖ * ‖C‖ * (‖hA.inv‖ * ‖B‖) ^ n := by
+      rw [pow_succ', mul_pow]
+      ring
 
 /-- Each Neumann term belongs to the same rectangular ideal as `C`. -/
 theorem sylvesterNeumannTerm_mem
@@ -166,6 +237,7 @@ theorem sylvesterNeumannSolution_eq
       sylvesterNeumannSolution N hA B C ∘L B = C := by
   sorry
 
+omit [CompleteSpace E] [CompleteSpace F] in
 /-- Uniqueness under the bound/inverse separation. -/
 theorem sylvester_unique_of_bound_inverse
     {A : E →L[𝕜] E}
