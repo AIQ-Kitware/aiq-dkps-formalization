@@ -111,6 +111,10 @@ alias bounded_sylvester_intervalExterior_uiNorm_genuineSpectrum :=
   DavisKahanExt.mem_and_gauge_sylvester_le_of_spectrum_intervalExterior
 alias bounded_sinTheta_uiNorm_genuineSpectrum :=
   DavisKahanExt.sinTheta_genuineSpectrum_gauge
+alias unbounded_sylvester_exteriorInterval_uiNorm :=
+  DavisKahan.Experimental.ExactSinTheta.mem_and_gauge_le_of_exteriorLeft_intervalRight
+alias unbounded_sylvester_intervalExterior_uiNorm :=
+  DavisKahan.Experimental.ExactSinTheta.mem_and_gauge_le_of_boundedLeft_exteriorRight
 
 /-! ## Direct rotation -/
 

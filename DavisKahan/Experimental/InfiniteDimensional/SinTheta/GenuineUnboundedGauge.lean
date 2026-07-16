@@ -323,6 +323,131 @@ theorem mem_and_gauge_le_of_boundedLeft_exteriorRight
   rw [← mul_assoc, mul_inv_cancel₀ hρδ.ne', one_mul] at hkey
   linarith
 
+/-- **Density transfer of the Sylvester equation to a bounded realization.**
+If the right block of a domain-aware Sylvester equation agrees on its dense
+domain with a bounded operator `T`, the equation extends to all of the
+space through the closed graph of the left block. -/
+theorem closedSylvesterEquation_boundedRealization
+    {A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := E)}
+    {B : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := F)}
+    {X C : F →L[𝕜] E} {T : F →L[𝕜] F}
+    (hEq : HasClosedSylvesterEquation A B X C)
+    (hT : ∀ y : B.domain, T (y : F) = B.toLinearMap y) :
+    HasUnboundedBoundedSylvesterEquation A T X C := by
+  have key : ∀ x : F, ∃ hx : X x ∈ A.domain,
+      A.toLinearMap ⟨X x, hx⟩ = C x + X (T x) := by
+    intro x
+    have hx_closure : x ∈ closure (B.domain : Set F) := by
+      rw [B.dense_domain.closure_eq]
+      trivial
+    obtain ⟨u, hu_mem, hu_tendsto⟩ := mem_closure_iff_seq_limit.mp hx_closure
+    have hgraph_mem : ∀ n, (X (u n), C (u n) + X (T (u n))) ∈
+        Set.range (fun z : A.domain => ((z : E), A.toLinearMap z)) := by
+      intro n
+      refine ⟨⟨X (u n), hEq.mapsTo_domain ⟨u n, hu_mem n⟩⟩, Prod.ext rfl ?_⟩
+      show A.toLinearMap ⟨X (u n), hEq.mapsTo_domain ⟨u n, hu_mem n⟩⟩ =
+        C (u n) + X (T (u n))
+      have heq := hEq.equation ⟨u n, hu_mem n⟩
+      have hval : A.toLinearMap
+          ⟨X (u n), hEq.mapsTo_domain ⟨u n, hu_mem n⟩⟩ =
+          C (u n) + X (B.toLinearMap ⟨u n, hu_mem n⟩) := by
+        rw [← heq]; abel
+      rw [hval, hT ⟨u n, hu_mem n⟩]
+    have hconv : Filter.Tendsto (fun n => (X (u n), C (u n) + X (T (u n))))
+        Filter.atTop (nhds (X x, C x + X (T x))) := by
+      refine Filter.Tendsto.prodMk_nhds ?_ ?_
+      · exact (X.continuous.tendsto x).comp hu_tendsto
+      · refine Filter.Tendsto.add ?_ ?_
+        · exact (C.continuous.tendsto x).comp hu_tendsto
+        · exact ((X.comp T).continuous.tendsto x).comp hu_tendsto
+    obtain ⟨z, hz⟩ := A.closed_graph.isSeqClosed hgraph_mem hconv
+    have hz1 : (z : E) = X x := congrArg Prod.fst hz
+    have hz2 : A.toLinearMap z = C x + X (T x) := congrArg Prod.snd hz
+    refine ⟨hz1 ▸ z.2, ?_⟩
+    have hzz : z = ⟨X x, hz1 ▸ z.2⟩ := Subtype.ext hz1
+    rw [← hzz]
+    exact hz2
+  refine ⟨fun x => (key (x : F)).choose, fun x => ?_⟩
+  have h := (key (x : F)).choose_spec
+  change A.toLinearMap ⟨X (x : F), (key (x : F)).choose⟩ - X (T (x : F)) =
+    C (x : F)
+  rw [h]
+  abel
+
+/-- **Ideal-gauge interval/exterior Sylvester estimate, exterior block on
+the left.**  The interval block `B` (quadratic form in `[β, α]`) is realized
+bounded through its shift extension and the equation transfers by density;
+the exterior block `A` carries a proof-carrying two-sided shifted inverse.
+Both closed blocks may be genuinely unbounded a priori. -/
+theorem mem_and_gauge_le_of_exteriorLeft_intervalRight
+    (N : RectangularSymmetricIdealFamily (𝕜 := 𝕜))
+    {A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := E)}
+    {B : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := F)}
+    {X C : F →L[𝕜] E} {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
+    (hBsym : B.IsSymmetric)
+    (hBlow : SemiboundedBelow B β) (hBhigh : SemiboundedAbove B α)
+    (hAres : TwoSidedShiftedInverseBound A ((α + β) / 2)
+      ((α - β) / 2 + δ))
+    (hEq : HasClosedSylvesterEquation A B X C)
+    (hC : N.Mem C) :
+    N.Mem X ∧ δ * N.gauge X ≤ N.gauge C := by
+  have hr0 : (0 : ℝ) ≤ (α - β) / 2 := by linarith
+  obtain ⟨S, hSnorm, hSeq⟩ :=
+    exists_bounded_shift_extension hBsym hβα hBlow hBhigh
+  obtain ⟨J, hdom, hleft, hright, hJnorm⟩ := hAres
+  -- the bounded realization of `B` and the transferred equation
+  set T : F →L[𝕜] F :=
+    S + (((α + β) / 2 : ℝ) : 𝕜) • ContinuousLinearMap.id 𝕜 F with hTdef
+  have hT : ∀ y : B.domain, T (y : F) = B.toLinearMap y := by
+    intro y
+    simp only [hTdef, add_apply, smul_apply, ContinuousLinearMap.id_apply]
+    rw [hSeq y]
+    abel
+  have hEqT : HasUnboundedBoundedSylvesterEquation A T X C :=
+    closedSylvesterEquation_boundedRealization hEq hT
+  -- shift both blocks by the center
+  set c𝕜 : 𝕜 := (((α + β) / 2 : ℝ) : 𝕜) with hc𝕜
+  set A' : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := E) :=
+    A.addBounded (-(c𝕜 • ContinuousLinearMap.id 𝕜 E)) with hA'def
+  have hA'domain : A'.domain = A.domain := rfl
+  have hA'apply : ∀ x : A.domain,
+      A'.toLinearMap x = A.toLinearMap x - c𝕜 • (x : E) := by
+    intro x
+    change A.toLinearMap x + (-(c𝕜 • ContinuousLinearMap.id 𝕜 E)) (x : E) =
+      A.toLinearMap x - c𝕜 • (x : E)
+    simp [sub_eq_add_neg]
+  have hEq' : HasUnboundedBoundedSylvesterEquation A' S X C := by
+    refine ⟨fun x => hEqT.mapsTo_domain x, fun x => ?_⟩
+    have h1 : A.toLinearMap ⟨X (x : F), hEqT.mapsTo_domain x⟩ -
+        X (T (x : F)) = C (x : F) := hEqT.equation x
+    have h2 : A'.toLinearMap ⟨X (x : F), hEqT.mapsTo_domain x⟩ =
+        A.toLinearMap ⟨X (x : F), hEqT.mapsTo_domain x⟩ -
+          c𝕜 • X (x : F) :=
+      hA'apply ⟨X (x : F), hEqT.mapsTo_domain x⟩
+    have h3 : X (S (x : F)) = X (T (x : F)) - c𝕜 • X (x : F) := by
+      have : S (x : F) = T (x : F) - c𝕜 • (x : F) := by
+        simp only [hTdef, add_apply, smul_apply, ContinuousLinearMap.id_apply]
+        abel
+      rw [this, map_sub, map_smul]
+    change A'.toLinearMap ⟨X (x : F), hEqT.mapsTo_domain x⟩ -
+      X (S (x : F)) = C (x : F)
+    rw [h2, h3, ← h1]
+    abel
+  -- the everywhere-defined inverse of the shifted exterior block
+  refine sylvester_mem_and_gauge_le_of_unbounded_bound_inverse N
+    (⟨J, hdom, ?_, ?_⟩ : HasBoundedEverywhereInverse A') S hr0 hδ
+    hJnorm hSnorm hEq' hC
+  · intro y
+    change A.toLinearMap ⟨J y, hdom y⟩ + -(c𝕜 • J y) = y
+    have h := hright y
+    rw [sub_eq_add_neg] at h
+    exact h
+  · intro x
+    change J (A.toLinearMap x + -(c𝕜 • (x : E))) = (x : E)
+    have h := hleft x
+    rw [sub_eq_add_neg] at h
+    exact h
+
 /-- **The unbounded Davis--Kahan `sin Θ` theorem at unitary-invariant ideal
 scope.**  For the paper-shaped `UnboundedSinThetaData` with the trial
 block's quadratic form in `[β, α]` and the complementary block's shifted
