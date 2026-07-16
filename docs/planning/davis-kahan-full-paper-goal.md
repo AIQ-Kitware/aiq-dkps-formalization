@@ -303,12 +303,43 @@ new declaration):
   `SpectraBridge.All` is now registered in the
   `Experimental/InfiniteDimensional` tree.
 
+### Progress note (2026-07-16, UI-norm unbounded sin Θ session)
+
+The paper's unitary-invariant norm scope for the unbounded `sin Θ` theorem
+is now proved (`SinTheta/GenuineUnboundedGauge.lean`, all axiom-clean,
+`RCLike`-generic):
+
+- `exists_bounded_shift_extension`: a symmetric closed operator with form
+  in `[β, α]` has a bounded extension of its centered shift with norm at
+  most the radius — `ContinuousLinearMap.extend` along the dense domain
+  embedding, with `norm_shift_apply_le_of_form_bounds` as the bound.
+- `mem_and_gauge_le_of_boundedLeft_exteriorRight`: the ideal-gauge
+  constant-one Sylvester estimate in the `sin Θ` orientation.  The key
+  observation: with the interval block realized bounded (`S`) and the
+  exterior block carried by a shifted right inverse `J`, the domain-aware
+  equation collapses to the everywhere-defined fixed point
+  `Y = S Y J - C J`, and the Neumann argument runs entirely on the bounded
+  side — no unbounded adjoints, no spectral cutoffs.
+- `sinTheta_unbounded_gauge`: `δ · gauge (X⋆F₁) ≤ gauge (R⋆F₁)` with
+  ideal membership of `X⋆F₁` — **Davis--Kahan Theorem 5.2's `sin Θ`
+  passage at the paper's unitary-invariant norm scope** over any
+  `RectangularSymmetricIdealFamily`.
+- `SpectraBridge/GapResolvent.lean` adds the genuine-spectrum versions at
+  `ℂ`: `sinTheta_unbounded_opNorm_of_spectrum_gap` and
+  `sinTheta_unbounded_gauge_of_spectrum_gap`, whose only spectral inputs
+  are form bounds and Spectra resolvent-set spectrum avoidance.
+- `FullPartIII` aliases: `bounded_sinTheta_genuineSpectrum_symmetric`,
+  `unbounded_sinTheta_uiNorm`, `unbounded_sinTheta_opNorm_genuineSpectrum`,
+  `unbounded_sinTheta_uiNorm_genuineSpectrum`.
+
 Remaining for "paper theorem complete" on the `sin Θ` family: the Ky Fan
 cutoff route for the two semibounded orientations of Theorem 5.2
 (`Sylvester/Unbounded.lean`, needs unbounded spectral cutoffs — now within
 reach through `spectralProjection`/`spectralCalculus` of the activated
-Spectra cone), wiring the interval/exterior ideal engine to a gauge-level
-`sin Θ` endpoint, and real scalars via complexification.
+Spectra cone), and real scalars via complexification.  Note the sin Θ
+endpoint no longer waits on those: the interval/exterior configuration the
+paper uses for the residual bound is fully covered at both operator-norm
+and UI-norm scope.
 
 Controlling blocker identified for the two-projection calculus at source
 scalar generality: an `RCLike`-generic positive operator square root
