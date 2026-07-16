@@ -123,6 +123,10 @@ alias bounded_sinTwoTheta_genuineSpectrum_sinAngle :=
   DavisKahanExt.sinTwoTheta_genuineSpectrum_sinAngle
 alias bounded_sinTwoTheta_uiNorm_genuineSpectrum :=
   DavisKahanExt.sinTwoTheta_genuineSpectrum_gauge
+alias real_sinTheta_symmetric_genuineSpectrum :=
+  DavisKahan.Experimental.Foundation.RealSpectralBridge.opNorm_starProjection_sub_le_of_restriction_spectra
+alias real_upperFormBound_of_spectrum :=
+  DavisKahan.Experimental.Foundation.RealSpectralBridge.upperFormBoundOn_top_of_spectrum_subset_Iic
 
 /-! ## Direct rotation -/
 

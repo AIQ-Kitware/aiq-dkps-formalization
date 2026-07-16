@@ -95,7 +95,87 @@ theorem upperFormBoundOn_top_of_spectrum_subset_Iic
     (A : E →L[ℝ] E) (hA : A.IsSymmetric) {c : ℝ}
     (hσ : spectrum ℝ A ⊆ Set.Iic c) :
     UpperFormBoundOn A ⊤ c := by
-  sorry
+  rcases subsingleton_or_nontrivial E with hE | hE
+  · intro x _
+    have hx : x = 0 := Subsingleton.elim x 0
+    simp [hx]
+  set m : ℝ := ‖A‖ + 1 with hm
+  set S : E →L[ℝ] E := A + algebraMap ℝ (E →L[ℝ] E) m with hS
+  have hsa : IsSelfAdjoint A :=
+    ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hA
+  have hSsa : IsSelfAdjoint S :=
+    hsa.add (IsSelfAdjoint.algebraMap _ (IsSelfAdjoint.all m))
+  -- the shifted operator has positive spectrum bounded by `c + m`
+  have hSspec : ∀ μ ∈ spectrum ℝ S, 0 < μ ∧ μ ≤ c + m := by
+    intro μ hμ
+    rw [hS, ← spectrum.add_singleton_eq] at hμ
+    obtain ⟨lam, hlam, r, hr, hsum⟩ := Set.mem_add.mp hμ
+    rw [Set.mem_singleton_iff] at hr
+    subst hr
+    have h1 : ‖lam‖ ≤ ‖A‖ := spectrum.norm_le_norm_of_mem hlam
+    have h2 : lam ≤ c := hσ hlam
+    rw [Real.norm_eq_abs] at h1
+    have h3 : -‖A‖ ≤ lam := (abs_le.mp h1).1
+    constructor
+    · rw [← hsum, hm]; linarith
+    · rw [← hsum]; linarith
+  have hrad : spectralRadius ℝ S = ‖S‖₊ := S.spectralRadius_eq_nnnorm hSsa
+  -- the spectrum of the shifted operator is nonempty
+  obtain ⟨μ₀, hμ₀⟩ : (spectrum ℝ S).Nonempty := by
+    by_contra hempty
+    rw [Set.not_nonempty_iff_eq_empty] at hempty
+    have h0 : spectralRadius ℝ S = 0 := by
+      show (⨆ k ∈ spectrum ℝ S, (‖k‖₊ : ENNReal)) = 0
+      rw [hempty]
+      simp
+    have hS0 : S = 0 := by
+      have h1 : ((‖S‖₊ : ENNReal)) = 0 := by rw [← hrad]; exact h0
+      rw [ENNReal.coe_eq_zero, nnnorm_eq_zero] at h1
+      exact h1
+    have h2 : (0 : ℝ) ∈ spectrum ℝ S := by
+      rw [hS0, spectrum.zero_mem_iff]
+      exact not_isUnit_zero
+    rw [hempty] at h2
+    exact h2
+  have hcm : 0 < c + m := (hSspec μ₀ hμ₀).1.trans_le (hSspec μ₀ hμ₀).2
+  -- the norm of the shifted operator is at most `c + m`
+  have hSnorm : ‖S‖ ≤ c + m := by
+    have hboundE : spectralRadius ℝ S ≤ ENNReal.ofReal (c + m) := by
+      show (⨆ k ∈ spectrum ℝ S, (‖k‖₊ : ENNReal)) ≤ ENNReal.ofReal (c + m)
+      refine iSup₂_le fun μ hμ => ?_
+      obtain ⟨hpos, hle⟩ := hSspec μ hμ
+      calc ((‖μ‖₊ : ENNReal)) = ‖μ‖ₑ := rfl
+        _ = ENNReal.ofReal μ := Real.enorm_eq_ofReal hpos.le
+        _ ≤ ENNReal.ofReal (c + m) := ENNReal.ofReal_le_ofReal hle
+    rw [hrad] at hboundE
+    have h0 : ((‖S‖₊ : ENNReal)) ≤ ((Real.toNNReal (c + m) : ENNReal)) :=
+      hboundE
+    have h1 : ‖S‖₊ ≤ Real.toNNReal (c + m) := by
+      exact_mod_cast h0
+    calc ‖S‖ = ((‖S‖₊ : ℝ)) := rfl
+      _ ≤ ((Real.toNNReal (c + m) : ℝ)) := by exact_mod_cast h1
+      _ = c + m := Real.coe_toNNReal _ hcm.le
+  -- Rayleigh estimate and shift back
+  intro x _
+  have hSx : S x = A x + m • x := by
+    rw [hS]
+    simp [Algebra.algebraMap_eq_smul_one]
+  have hinner : ⟪A x, x⟫_ℝ = ⟪S x, x⟫_ℝ - m * ‖x‖ ^ 2 := by
+    rw [hSx, inner_add_left, real_inner_smul_left,
+      real_inner_self_eq_norm_sq]
+    ring
+  have hupper : ⟪S x, x⟫_ℝ ≤ (c + m) * ‖x‖ ^ 2 := by
+    calc ⟪S x, x⟫_ℝ ≤ ‖S x‖ * ‖x‖ := real_inner_le_norm _ _
+      _ ≤ (‖S‖ * ‖x‖) * ‖x‖ :=
+          mul_le_mul_of_nonneg_right (S.le_opNorm x) (norm_nonneg x)
+      _ ≤ ((c + m) * ‖x‖) * ‖x‖ := by
+          have h := mul_le_mul_of_nonneg_right hSnorm (norm_nonneg x)
+          exact mul_le_mul_of_nonneg_right h (norm_nonneg x)
+      _ = (c + m) * ‖x‖ ^ 2 := by ring
+  show RCLike.re ⟪A x, x⟫_ℝ ≤ c * ‖x‖ ^ 2
+  have hre : RCLike.re ⟪A x, x⟫_ℝ = ⟪A x, x⟫_ℝ := rfl
+  rw [hre, hinner]
+  linarith
 
 /-- Real spectral lower bound implies a global quadratic-form lower bound.
 
