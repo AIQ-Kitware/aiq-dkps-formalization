@@ -349,6 +349,19 @@ projection composition.  `FullPartIII` aliases:
 norm + UI norm, at bounded and unbounded scope, directed and (bounded)
 symmetric two-sided forms — every combination proved and axiom-clean.
 
+The unbounded interval/exterior Sylvester estimate now also holds at ideal
+scope in **both orientations**
+(`closedSylvesterEquation_boundedRealization` +
+`mem_and_gauge_le_of_exteriorLeft_intervalRight` in
+`SinTheta/GenuineUnboundedGauge.lean`): the form-bounded block is realized
+bounded through its shift extension, the domain-aware equation extends to
+the whole space by density and the closed graph of the exterior block, and
+the shifted configuration feeds the Neumann ideal engine.  `FullPartIII`
+aliases: `unbounded_sylvester_intervalExterior_uiNorm`,
+`unbounded_sylvester_exteriorInterval_uiNorm`.  This is the honest
+replacement for the `realSpectrum`-based
+`unbounded_sylvester_mem_and_gauge_le_of_intervalExteriorGap` obligation.
+
 Remaining for "paper theorem complete" on the `sin Θ` family: the Ky Fan
 cutoff route for the two semibounded orientations of Theorem 5.2
 (`Sylvester/Unbounded.lean`, needs unbounded spectral cutoffs — now within
