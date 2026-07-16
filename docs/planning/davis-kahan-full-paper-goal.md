@@ -404,6 +404,25 @@ Next rungs: the Halmos two-projection decomposition for
 `cosAngleOperatorC`/`sinTwoAngleOperatorC` (`2 sin cos`), then the genuine
 `sin 2Θ` theorems.
 
+### Progress note (2026-07-16, real spectral bridge session)
+
+**The real-scalar gap for the bounded `sin Θ` theorem is closed** — without
+complexification, by the direct Rayleigh-shift route the bridge file
+recorded: `upperFormBoundOn_top_of_spectrum_subset_Iic`
+(`Core/RealSpectralBridge.lean`, now sorry-free and axiom-clean) shifts by
+`m = ‖A‖ + 1`, transports the spectrum with `spectrum.add_singleton_eq`,
+derives spectral positivity and the `c + m` upper bound from
+`spectrum.norm_le_norm_of_mem`, converts the spectral radius through
+`ContinuousLinearMap.spectralRadius_eq_nnnorm` (nonemptiness of the shifted
+spectrum by contradiction through the radius identity), and finishes with
+the Rayleigh estimate.  Consequently
+`opNorm_starProjection_sub_le_of_restriction_spectra` — **the real
+Hilbert-space Davis--Kahan theorem with genuine restriction spectra**
+(`‖P_U - P_W‖ ≤ ‖B - A‖ / g` from `Ici`/`Iic` spectra of the actual
+restrictions) — is fully proved.  `FullPartIII` aliases:
+`real_sinTheta_symmetric_genuineSpectrum`,
+`real_upperFormBound_of_spectrum`.
+
 ### Progress note (2026-07-16, genuine sin 2Θ session)
 
 **The genuine-spectrum `sin 2Θ` theorem is proved**
