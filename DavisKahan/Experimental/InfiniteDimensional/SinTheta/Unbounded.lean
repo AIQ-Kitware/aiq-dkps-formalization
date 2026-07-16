@@ -84,7 +84,9 @@ theorem unbounded_adjoint_residual_block_identity
         ⟪w, (x : F)⟫_𝕜 =
             ⟪D.F₁ (D.Λ₁.toLinearMap y), D.X (x : F)⟫_𝕜 -
               ⟪D.F₁ (y : G), D.residual (x : F)⟫_𝕜 := by
-          simp [w, ContinuousLinearMap.adjoint_inner_left]
+          rw [inner_sub_left,
+            D.X.adjoint_inner_left (x : F) (D.F₁ (D.Λ₁.toLinearMap y)),
+            D.residual.adjoint_inner_left (x : F) (D.F₁ (y : G))]
         _ = ⟪D.A.toLinearMap Fy, D.X (x : F)⟫_𝕜 -
               ⟪D.F₁ (y : G), D.residual (x : F)⟫_𝕜 := by
           rw [← D.intertwines y]
@@ -95,7 +97,7 @@ theorem unbounded_adjoint_residual_block_identity
           rw [← D.residual_eq x, inner_sub_right]
           abel
         _ = ⟪z, D.A₀.toLinearMap x⟫_𝕜 := by
-          simp [z, ContinuousLinearMap.adjoint_inner_left]
+          rw [← D.X.adjoint_inner_left (D.A₀.toLinearMap x) (D.F₁ (y : G))]
     have hzAdj : z ∈ D.A₀.toLinearPMap.adjoint.domain :=
       LinearPMap.mem_adjoint_domain_of_exists z ⟨w, hw⟩
     have hdom : D.A₀.toLinearPMap.adjoint.domain = D.A₀.domain :=
@@ -115,7 +117,9 @@ theorem unbounded_adjoint_residual_block_identity
         ⟪w, (x : F)⟫_𝕜 =
             ⟪D.F₁ (D.Λ₁.toLinearMap y), D.X (x : F)⟫_𝕜 -
               ⟪D.F₁ (y : G), D.residual (x : F)⟫_𝕜 := by
-          simp [w, ContinuousLinearMap.adjoint_inner_left]
+          rw [inner_sub_left,
+            D.X.adjoint_inner_left (x : F) (D.F₁ (D.Λ₁.toLinearMap y)),
+            D.residual.adjoint_inner_left (x : F) (D.F₁ (y : G))]
         _ = ⟪D.A.toLinearMap Fy, D.X (x : F)⟫_𝕜 -
               ⟪D.F₁ (y : G), D.residual (x : F)⟫_𝕜 := by
           rw [← D.intertwines y]
@@ -126,18 +130,31 @@ theorem unbounded_adjoint_residual_block_identity
           rw [← D.residual_eq x, inner_sub_right]
           abel
         _ = ⟪z, D.A₀.toLinearMap x⟫_𝕜 := by
-          simp [z, ContinuousLinearMap.adjoint_inner_left]
+          rw [← D.X.adjoint_inner_left (D.A₀.toLinearMap x) (D.F₁ (y : G))]
     have hzAdj : z ∈ D.A₀.toLinearPMap.adjoint.domain :=
       LinearPMap.mem_adjoint_domain_of_exists z ⟨w, hw⟩
-    let zAdj : D.A₀.toLinearPMap.adjoint.domain := ⟨z, hzAdj⟩
-    have hAdjApply : D.A₀.toLinearPMap.adjoint zAdj = w :=
-      LinearPMap.adjoint_apply_eq D.A₀.toLinearPMap_dense zAdj hw
     have hdom : D.A₀.toLinearPMap.adjoint.domain = D.A₀.domain :=
       congrArg LinearPMap.domain hA₀P
     have hzDom : z ∈ D.A₀.domain := hdom ▸ hzAdj
     have hA₀z : D.A₀.toLinearMap ⟨z, hzDom⟩ = w := by
-      rw [hA₀P] at hAdjApply
-      exact hAdjApply
+      have hinner :
+          (fun x : F => ⟪D.A₀.toLinearMap ⟨z, hzDom⟩, x⟫_𝕜) =
+            fun x : F => ⟪w, x⟫_𝕜 := by
+        apply Continuous.ext_on D.A₀.dense_domain
+        · exact continuous_const.inner continuous_id
+        · exact continuous_const.inner continuous_id
+        · intro x hx
+          let xDom : D.A₀.domain := ⟨x, hx⟩
+          calc
+            ⟪D.A₀.toLinearMap ⟨z, hzDom⟩, x⟫_𝕜 =
+                ⟪z, D.A₀.toLinearMap xDom⟫_𝕜 := hA₀.isSymmetric ⟨z, hzDom⟩ xDom
+            _ = ⟪w, x⟫_𝕜 := (hw xDom).symm
+      have hzero :
+          ⟪D.A₀.toLinearMap ⟨z, hzDom⟩ - w,
+            D.A₀.toLinearMap ⟨z, hzDom⟩ - w⟫_𝕜 = 0 := by
+        rw [inner_sub_left,
+          congrFun hinner (D.A₀.toLinearMap ⟨z, hzDom⟩ - w), sub_self]
+      exact sub_eq_zero.mp (inner_self_eq_zero.mp hzero)
     change D.A₀.toLinearMap ⟨z, hzDom⟩ -
         D.X.adjoint (D.F₁ (D.Λ₁.toLinearMap y)) =
       -D.residual.adjoint (D.F₁ (y : G))
