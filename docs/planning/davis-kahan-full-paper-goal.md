@@ -402,4 +402,40 @@ nonnegativity, self-adjointness, the defining square identity, uniqueness,
 of the blocked `sinAngleOperator`/`norm_sinAngleOperator` obligations.
 Next rungs: the Halmos two-projection decomposition for
 `cosAngleOperatorC`/`sinTwoAngleOperatorC` (`2 sin cos`), then the genuine
-`sin 2Θ` theorems. See `dev/sorry-difficulty-ranking.md` for the evolving proof-obligation ranking; verify its totals against the source tree before using them in status claims.
+`sin 2Θ` theorems.
+
+### Progress note (2026-07-16, genuine sin 2Θ session)
+
+**The genuine-spectrum `sin 2Θ` theorem is proved**
+(`DoubleAngleGenuine.lean`, all axiom-clean, complex scalars), without
+waiting on the Halmos decomposition, by the reflection argument:
+
+- upstream-candidate transport layer: `ContinuousLinearEquiv.conjAlgEquiv`
+  (conjugation as an algebra equivalence of endomorphism algebras),
+  `conjByIsometryEquiv` with transport of self-adjointness, reducing
+  subspaces (`Reduces.map_isometryEquiv`, via
+  `Submodule.map_orthogonal_equiv`), compressions
+  (`compressOperator_map`, via `Submodule.starProjection_map_apply` and the
+  isometric restriction `submoduleMapIsometry`), and **real spectra**
+  (`spectrum_compressOperator_map`, via `AlgEquiv.spectrum_eq` after scalar
+  restriction);
+- `sinTwoTheta_genuineSpectrum`: for self-adjoint `A` with genuine internal
+  configuration at the reducing `U` (compression to `U` in `[a, b]`,
+  compression to `Uᗮ` outside `(a-d, b+d)`) and any `B` reduced by `V`,
+  `d * subspaceGap U (J_V U) ≤ 2 ‖B - A‖` where `J_V U` is the reflected
+  image — the gap to the reflected image is `‖sin 2Θ(U, V)‖`; also phrased
+  through `sinAngleOperatorC` (`sinTwoTheta_genuineSpectrum_sinAngle`).
+  Route: apply `sinTheta_genuineSpectrum_symmetric` to the pair
+  `(A, J A J)` — the conjugate has the *same* genuine compression spectra —
+  and bound `‖J A J - A‖ = ‖reflectionDefect V A‖ ≤ 2‖B - A‖` by the
+  proved defect estimate.  `FullPartIII` aliases:
+  `bounded_sinTwoTheta_genuineSpectrum`,
+  `bounded_sinTwoTheta_genuineSpectrum_sinAngle`.
+
+This replaces the `FiniteGapConfiguration`-gated `sinTwoTheta_perturbation`
+obligation with an honest statement.  The `sin 2Θ` family still open at:
+UI-norm scope (reflect the gauge symmetric theorem — same route, needs
+`Mem (JAJ - A)` from `Mem (B - A)` through reflection-conjugation
+invariance of the ideal), the residual (approximate-invariant-pair) form,
+and the identification with the functional-calculus `sinTwoAngleOperator`
+once the Halmos rungs exist. See `dev/sorry-difficulty-ranking.md` for the evolving proof-obligation ranking; verify its totals against the source tree before using them in status claims.
