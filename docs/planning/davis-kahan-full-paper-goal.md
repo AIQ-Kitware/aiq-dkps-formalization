@@ -332,6 +332,23 @@ is now proved (`SinTheta/GenuineUnboundedGauge.lean`, all axiom-clean,
   `unbounded_sinTheta_uiNorm`, `unbounded_sinTheta_opNorm_genuineSpectrum`,
   `unbounded_sinTheta_uiNorm_genuineSpectrum`.
 
+The bounded branch received the same upgrade
+(`Sylvester/GenuineSpectrum.lean`):
+`mem_and_gauge_sylvester_le_of_spectrum_intervalExterior` (the ideal-gauge
+interval/exterior Sylvester estimate with genuine Banach-algebra spectra,
+by feeding the CFC shift-and-invert data into the Neumann ideal engine
+through `ClosedOperator.ofBounded`), and `sinTheta_genuineSpectrum_gauge`:
+**the bounded `sin Θ` theorem at unitary-invariant ideal scope with
+genuine spectra** — `B - A` in the family gives
+`d · gauge (P_{Vᗮ} P_U) ≤ gauge (B - A)` with membership of the directed
+projection composition.  `FullPartIII` aliases:
+`bounded_sylvester_intervalExterior_uiNorm_genuineSpectrum`,
+`bounded_sinTheta_uiNorm_genuineSpectrum`.
+
+**`sin Θ` scope summary after this session**: genuine spectra + operator
+norm + UI norm, at bounded and unbounded scope, directed and (bounded)
+symmetric two-sided forms — every combination proved and axiom-clean.
+
 Remaining for "paper theorem complete" on the `sin Θ` family: the Ky Fan
 cutoff route for the two semibounded orientations of Theorem 5.2
 (`Sylvester/Unbounded.lean`, needs unbounded spectral cutoffs — now within

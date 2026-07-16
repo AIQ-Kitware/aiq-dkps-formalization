@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Fable 5
 -/
 import DavisKahan.Experimental.InfiniteDimensional.Sylvester.Basic
+import DavisKahan.Experimental.InfiniteDimensional.Core.UnboundedSpectral
 import ForMathlib.Analysis.CStarAlgebra.SelfAdjointGapInverse
 import Mathlib.Analysis.CStarAlgebra.ContinuousLinearMap
 
@@ -303,6 +304,162 @@ theorem sinTheta_genuineSpectrum_symmetric
       Submodule.starProjection_orthogonal' U]
   rw [hmax, mul_max_of_nonneg _ _ hd.le]
   exact max_le h1 h2
+
+section IdealScope
+
+open ForMathlib.DavisKahan.Experimental.ExactSinTheta
+
+universe v'
+
+variable {E₁ F₁ : Type v'}
+  [NormedAddCommGroup E₁] [InnerProductSpace ℂ E₁] [CompleteSpace E₁]
+  [NormedAddCommGroup F₁] [InnerProductSpace ℂ F₁] [CompleteSpace F₁]
+
+set_option maxHeartbeats 1600000 in
+/-- **Ideal-gauge interval/exterior Sylvester estimate, genuine spectra.**
+If the spectrum of the self-adjoint `B` lies in `[a, b]` while the spectrum
+of the self-adjoint `A` avoids `(a - d, b + d)`, and `C` lies in a
+rectangular symmetric ideal family, then any solution of `A X - X B = C`
+lies in the family with `d · gauge X ≤ gauge C` — through the
+shift-and-invert data and the Neumann-iteration ideal engine. -/
+theorem mem_and_gauge_sylvester_le_of_spectrum_intervalExterior
+    (N : RectangularSymmetricIdealFamily (𝕜 := ℂ))
+    {A : F₁ →L[ℂ] F₁} {B : E₁ →L[ℂ] E₁} {X C : E₁ →L[ℂ] F₁}
+    (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
+    {a b d : ℝ} (hd : 0 < d) (hab : a ≤ b)
+    (hBspec : spectrum ℝ B ⊆ Set.Icc a b)
+    (hAspec : ∀ x ∈ spectrum ℝ A, x ≤ a - d ∨ b + d ≤ x)
+    (hEq : A ∘L X - X ∘L B = C)
+    (hC : N.Mem C) :
+    N.Mem X ∧ d * N.gauge X ≤ N.gauge C := by
+  set c : ℝ := (a + b) / 2 with hc
+  set r : ℝ := (b - a) / 2 with hrdef
+  have hr0 : 0 ≤ r := by rw [hrdef]; linarith
+  have hrd : (0 : ℝ) < r + d := by linarith
+  set A₁ : F₁ →L[ℂ] F₁ := A - algebraMap ℝ (F₁ →L[ℂ] F₁) c with hA₁
+  set B₁ : E₁ →L[ℂ] E₁ := B - algebraMap ℝ (E₁ →L[ℂ] E₁) c with hB₁
+  have hA₁sa : IsSelfAdjoint A₁ :=
+    hA.sub (IsSelfAdjoint.algebraMap _ (IsSelfAdjoint.all c))
+  have hB₁sa : IsSelfAdjoint B₁ :=
+    hB.sub (IsSelfAdjoint.algebraMap _ (IsSelfAdjoint.all c))
+  have hA₁spec : ∀ x ∈ spectrum ℝ A₁, r + d ≤ |x| := by
+    intro x hx
+    rw [hA₁, ← spectrum.sub_singleton_eq] at hx
+    obtain ⟨y, hy, z, hz, hyz⟩ := Set.mem_sub.mp hx
+    rw [Set.mem_singleton_iff] at hz
+    subst hz
+    rw [← hyz]
+    rcases hAspec y hy with h1 | h1
+    · have hle : y - c ≤ -(r + d) := by rw [hc, hrdef]; linarith
+      calc r + d ≤ -(y - c) := by linarith
+        _ ≤ |y - c| := neg_le_abs _
+    · have hge : r + d ≤ y - c := by rw [hc, hrdef]; linarith
+      exact hge.trans (le_abs_self _)
+  have hB₁spec : spectrum ℝ B₁ ⊆ Set.Icc (-r) r := by
+    intro x hx
+    rw [hB₁, ← spectrum.sub_singleton_eq] at hx
+    obtain ⟨y, hy, z, hz, hyz⟩ := Set.mem_sub.mp hx
+    rw [Set.mem_singleton_iff] at hz
+    subst hz
+    have hmem := hBspec hy
+    rw [Set.mem_Icc] at hmem
+    rw [← hyz, Set.mem_Icc]
+    constructor
+    · rw [hc, hrdef]; linarith [hmem.1]
+    · rw [hc, hrdef]; linarith [hmem.2]
+  have hB₁norm : ‖B₁‖ ≤ r :=
+    ForMathlib.IsSelfAdjoint.norm_le_of_spectrum_subset_Icc hB₁sa hr0 hB₁spec
+  obtain ⟨J, hJ1, hJ2, hJnorm⟩ :=
+    ForMathlib.IsSelfAdjoint.exists_two_sided_inverse_of_spectrum_gap hA₁sa
+      hrd hA₁spec
+  have hEq₁ : A₁ ∘L X - X ∘L B₁ = C := by
+    have h1 : algebraMap ℝ (F₁ →L[ℂ] F₁) c ∘L X =
+        X ∘L algebraMap ℝ (E₁ →L[ℂ] E₁) c := by
+      ext x
+      simp [Algebra.algebraMap_eq_smul_one]
+    calc A₁ ∘L X - X ∘L B₁
+        = (A ∘L X - X ∘L B) -
+            (algebraMap ℝ (F₁ →L[ℂ] F₁) c ∘L X -
+              X ∘L algebraMap ℝ (E₁ →L[ℂ] E₁) c) := by
+          rw [hA₁, hB₁, ContinuousLinearMap.sub_comp,
+            ContinuousLinearMap.comp_sub]
+          abel
+      _ = C := by rw [h1, sub_self, sub_zero, hEq]
+  -- package the inverse for the Neumann ideal engine
+  have hEq' : HasUnboundedBoundedSylvesterEquation
+      (ForMathlib.DavisKahanExt.ClosedOperator.ofBounded A₁) B₁ X C :=
+    ClosedSylvesterEquation.ofBounded hEq₁
+  refine sylvester_mem_and_gauge_le_of_unbounded_bound_inverse N
+    ⟨J, fun y => Submodule.mem_top, ?_, ?_⟩ B₁ hr0 hd hJnorm hB₁norm hEq' hC
+  · intro y
+    show A₁ (J y) = y
+    simpa using DFunLike.congr_fun hJ2 y
+  · intro x
+    show J (A₁ (x : F₁)) = (x : F₁)
+    simpa using DFunLike.congr_fun hJ1 (x : F₁)
+
+end IdealScope
+
+section SinThetaIdealScope
+
+open ForMathlib.DavisKahan.Experimental.ExactSinTheta
+
+/-- **The bounded Davis--Kahan `sin Θ` theorem at unitary-invariant ideal
+scope, genuine spectra.**  Under the directed spectral configuration of
+`sinTheta_genuineSpectrum`, if the perturbation `B - A` lies in a
+rectangular symmetric ideal family, then so does the directed projection
+composition `P_{Vᗮ} P_U`, with `d · gauge (P_{Vᗮ} P_U) ≤ gauge (B - A)` —
+the ideal-gauge strengthening of `d * directedGap U V ≤ ‖B - A‖`. -/
+theorem sinTheta_genuineSpectrum_gauge
+    (N : RectangularSymmetricIdealFamily (𝕜 := ℂ))
+    {A B : E →L[ℂ] E} (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
+    {U V : Submodule ℂ E}
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hU : Reduces A U) (hV : Reduces B V)
+    {a b d : ℝ} (hd : 0 < d) (hab : a ≤ b)
+    (hUspec : spectrum ℝ (compressOperator U A) ⊆ Set.Icc a b)
+    (hVspec : ∀ x ∈ spectrum ℝ (compressOperator Vᗮ B),
+      x ≤ a - d ∨ b + d ≤ x)
+    (hMem : N.Mem (B - A)) :
+    N.Mem (Vᗮ.starProjection ∘L U.starProjection) ∧
+      d * N.gauge (Vᗮ.starProjection ∘L U.starProjection) ≤
+        N.gauge (B - A) := by
+  haveI : CompleteSpace U :=
+    (U.isComplete_coe_of_hasOrthogonalProjection).completeSpace_coe
+  haveI : CompleteSpace (Vᗮ : Submodule ℂ E) :=
+    (Vᗮ.isComplete_coe_of_hasOrthogonalProjection).completeSpace_coe
+  have hsyl := compress_sylvester_of_reduces hU hV
+  have hCmem : N.Mem (Vᗮ.orthogonalProjectionOnto ∘L (B - A) ∘L U.subtypeL) :=
+    N.comp_mem _ _ hMem
+  have hmain := mem_and_gauge_sylvester_le_of_spectrum_intervalExterior N
+    (isSelfAdjoint_compressOperator hB Vᗮ)
+    (isSelfAdjoint_compressOperator hA U)
+    hd hab hUspec hVspec hsyl hCmem
+  have hfact : Vᗮ.starProjection ∘L U.starProjection =
+      Vᗮ.subtypeL ∘L (Vᗮ.orthogonalProjectionOnto ∘L U.subtypeL) ∘L
+        U.orthogonalProjectionOnto := by
+    ext x
+    rfl
+  constructor
+  · rw [hfact]
+    exact N.comp_mem _ _ hmain.1
+  · have hgle : N.gauge (Vᗮ.starProjection ∘L U.starProjection) ≤
+        N.gauge (Vᗮ.orthogonalProjectionOnto ∘L U.subtypeL) := by
+      rw [hfact]
+      exact N.gauge_comp_le_of_contractions _ _ hmain.1
+        Vᗮ.norm_subtypeL_le U.orthogonalProjectionOnto_norm_le
+    have hCle : N.gauge (Vᗮ.orthogonalProjectionOnto ∘L (B - A) ∘L U.subtypeL)
+        ≤ N.gauge (B - A) :=
+      N.gauge_comp_le_of_contractions _ _ hMem
+        Vᗮ.orthogonalProjectionOnto_norm_le U.norm_subtypeL_le
+    calc d * N.gauge (Vᗮ.starProjection ∘L U.starProjection)
+        ≤ d * N.gauge (Vᗮ.orthogonalProjectionOnto ∘L U.subtypeL) :=
+          mul_le_mul_of_nonneg_left hgle hd.le
+      _ ≤ N.gauge (Vᗮ.orthogonalProjectionOnto ∘L (B - A) ∘L U.subtypeL) :=
+          hmain.2
+      _ ≤ N.gauge (B - A) := hCle
+
+end SinThetaIdealScope
 
 end DavisKahanExt
 end ForMathlib
