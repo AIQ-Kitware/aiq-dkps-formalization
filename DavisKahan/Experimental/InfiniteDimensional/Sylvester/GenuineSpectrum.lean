@@ -270,5 +270,39 @@ theorem sinTheta_genuineSpectrum
     _ ≤ ‖Vᗮ.orthogonalProjectionOnto ∘L (B - A) ∘L U.subtypeL‖ := hest
     _ ≤ ‖B - A‖ := hCnorm
 
+/-- **Symmetric two-sided genuine-spectrum `sin Θ` theorem.**  When both
+directed spectral configurations hold — the spectrum of `A|_U` in `[a, b]`
+with `B|_{Vᗮ}` outside `(a - d, b + d)`, and the spectrum of `B|_V` in
+`[a', b']` with `A|_{Uᗮ}` outside `(a' - d, b' + d)` — the full projection
+gap (the maximum of the two directed gaps) obeys the same bound:
+`d * subspaceGap U V ≤ ‖B - A‖`. -/
+theorem sinTheta_genuineSpectrum_symmetric
+    {A B : E →L[ℂ] E} (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
+    {U V : Submodule ℂ E}
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hU : Reduces A U) (hV : Reduces B V)
+    {a b a' b' d : ℝ} (hd : 0 < d) (hab : a ≤ b) (hab' : a' ≤ b')
+    (hUspec : spectrum ℝ (compressOperator U A) ⊆ Set.Icc a b)
+    (hVspec : ∀ x ∈ spectrum ℝ (compressOperator Vᗮ B),
+      x ≤ a - d ∨ b + d ≤ x)
+    (hVspec' : spectrum ℝ (compressOperator V B) ⊆ Set.Icc a' b')
+    (hUspec' : ∀ x ∈ spectrum ℝ (compressOperator Uᗮ A),
+      x ≤ a' - d ∨ b' + d ≤ x) :
+    d * subspaceGap U V ≤ ‖B - A‖ := by
+  have h1 : d * directedGap U V ≤ ‖B - A‖ :=
+    sinTheta_genuineSpectrum hA hB hU hV hd hab hUspec hVspec
+  have h2 : d * directedGap V U ≤ ‖A - B‖ :=
+    sinTheta_genuineSpectrum hB hA hV hU hd hab' hVspec' hUspec'
+  rw [show A - B = -(B - A) by abel, norm_neg] at h2
+  have hmax : subspaceGap U V = max (directedGap U V) (directedGap V U) := by
+    show ‖U.starProjection - V.starProjection‖ =
+      max ‖Vᗮ.starProjection ∘L U.starProjection‖
+        ‖Uᗮ.starProjection ∘L V.starProjection‖
+    rw [Submodule.norm_starProjection_sub_eq_max,
+      Submodule.starProjection_orthogonal' V,
+      Submodule.starProjection_orthogonal' U]
+  rw [hmax, mul_max_of_nonneg _ _ hd.le]
+  exact max_le h1 h2
+
 end DavisKahanExt
 end ForMathlib

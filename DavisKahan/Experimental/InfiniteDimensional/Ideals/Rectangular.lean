@@ -265,7 +265,7 @@ theorem gauge_sub_le
 /-- Finite sums of ideal members remain in the ideal. -/
 theorem finset_sum_mem
     (N : RectangularSymmetricIdealFamily (𝕜 := 𝕜))
-    {E F ι : Type v}
+    {E F : Type v} {ι : Type*}
     [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
     [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
     (s : Finset ι) (A : ι → E →L[𝕜] F)
@@ -282,7 +282,7 @@ theorem finset_sum_mem
 /-- The gauge of a finite sum is bounded by the sum of the gauges. -/
 theorem gauge_finset_sum_le
     (N : RectangularSymmetricIdealFamily (𝕜 := 𝕜))
-    {E F ι : Type v}
+    {E F : Type v} {ι : Type*}
     [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
     [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
     (s : Finset ι) (A : ι → E →L[𝕜] F)

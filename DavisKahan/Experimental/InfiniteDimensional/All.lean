@@ -13,5 +13,6 @@ import DavisKahan.Experimental.InfiniteDimensional.GraphSubspace
 import DavisKahan.Experimental.InfiniteDimensional.OperatorBlocks.OffDiagonal
 import DavisKahan.Experimental.InfiniteDimensional.Riccati.All
 import DavisKahan.Experimental.InfiniteDimensional.Sharpness
+import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.All
 
 /-! # Experimental infinite-dimensional Davis--Kahan theory -/

@@ -11,12 +11,14 @@ import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.SinAngle
 import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.DirectRotation
 import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.DirectRotationAPI
 import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.DirectRotationSquare
+import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.GapResolvent
 
 /-!
-# Active shallow Spectra bridge
+# Active Spectra bridge
 
-Only Spectra modules known to avoid the currently unported Stone and spectral
-calculus import cone are exported here. The bounded spectral-projection bridge
-is preserved under `dev/pending/` and can be reactivated after that dependency
-cone is compatible with the root Lean/Mathlib revision.
+The Stone/spectral-calculus import cone of the Spectra library builds against
+the root Lean/Mathlib revision as of 2026-07-16, so the bridge now includes
+the spectral-theorem-backed gap-resolvent module alongside the shallow
+adapters. The bounded spectral-projection bridge preserved under
+`dev/pending/` remains available for reactivation.
 -/

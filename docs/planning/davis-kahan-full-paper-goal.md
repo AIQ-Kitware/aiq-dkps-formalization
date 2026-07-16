@@ -257,6 +257,59 @@ Neumann-series argument for ideal membership of the solution).  Elaboration note
 against CLM operator-norm goals can send the unifier into whnf timeouts —
 use `ContinuousLinearMap.opNorm_nonneg` and `add_le_add le_rfl` instead.
 
+### Progress note (2026-07-16, Spectra activation session)
+
+Three gaps toward "paper theorem complete" closed (axiom audit clean on every
+new declaration):
+
+- `sinTheta_genuineSpectrum_symmetric` (`Sylvester/GenuineSpectrum.lean`): the
+  **symmetric two-sided genuine-spectrum `sin Θ` theorem** — both directed
+  spectral configurations give `d * subspaceGap U V ≤ ‖B - A‖` through the
+  max-of-directed-gaps projector identity.
+- `sylvester_mem_and_gauge_le_of_unbounded_bound_inverse`
+  (`Core/UnboundedSpectral.lean`): the **one-unbounded ideal-gauge Sylvester
+  engine**.  The solution is identified as the ideal-gauge limit of the
+  Neumann iteration `X = Σ Jⁿ⁺¹ C Bⁿ` (contraction factor `ρ/(ρ+δ) < 1`),
+  membership comes from the `gauge_complete` field plus operator-norm limit
+  uniqueness, and the estimate `δ · gauge X ≤ gauge C` follows by absorption.
+  This is the first fully proved UI-norm-scope Sylvester estimate with an
+  unbounded block — the ideal-membership half of Theorem 5.2's
+  interval/exterior case at ordinary rectangular-ideal generality.
+  (The index universe of `finset_sum_mem`/`gauge_finset_sum_le` in
+  `Ideals/Rectangular.lean` was generalized to `Type*` for the ℕ-indexed
+  iteration.)
+- **Spectra activation and the spectral-theorem discharge**
+  (`SpectraBridge/GapResolvent.lean`).  The Stone/spectral-calculus import
+  cone of the `external/Spectra` library was repaired for the root
+  Lean/Mathlib pin (eight files, mechanical fixes: `map_sub`/`map_add`/
+  `map_smul` through subtype mks instead of `convert using 1/2`;
+  `convert`-generated instance-path congruence goals closed with `rfl`;
+  beta-unreduced `Pi.neg_apply` patterns normalized before `rw`;
+  ℂ-coerced scalar measurability in `AEStronglyMeasurable.smul`).  On top of
+  it, written Spectra-idiomatically for upstreaming:
+  `spectralProjection_eq_zero_of_forall_mem_resolventSet` (pointwise
+  resolvent membership kills spectral mass, by second countability),
+  `exists_norm_le_two_sided_shifted_inverse_of_spectralProjection_Ioo_eq_zero`
+  (the quantitative gap resolvent `‖(A - c)⁻¹‖ ≤ s⁻¹` via the truncated
+  symbol and the sharp calculus norm bound), and
+  `exists_norm_le_two_sided_shifted_inverse_of_spectrum_gap` for self-adjoint
+  `LinearPMap`s.  The DK-side corollaries discharge
+  `TwoSidedShiftedInverseBound` from genuine spectrum avoidance
+  (`twoSidedShiftedInverseBound_of_spectrum_gap`) and produce
+  **`sinTheta_unbounded_opNorm_of_spectrum_gap`: the unbounded `sin Θ`
+  theorem whose only spectral hypotheses are the trial block's form bounds
+  and genuine (resolvent-set) spectrum avoidance of the complementary
+  block** — the resolvent predicate is no longer an undischarged input.
+  `SpectraBridge.All` is now registered in the
+  `Experimental/InfiniteDimensional` tree.
+
+Remaining for "paper theorem complete" on the `sin Θ` family: the Ky Fan
+cutoff route for the two semibounded orientations of Theorem 5.2
+(`Sylvester/Unbounded.lean`, needs unbounded spectral cutoffs — now within
+reach through `spectralProjection`/`spectralCalculus` of the activated
+Spectra cone), wiring the interval/exterior ideal engine to a gauge-level
+`sin Θ` endpoint, and real scalars via complexification.
+
 Controlling blocker identified for the two-projection calculus at source
 scalar generality: an `RCLike`-generic positive operator square root
 (`operatorAbsoluteValue`) is unavailable in Mathlib (operator CFC is
