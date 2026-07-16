@@ -459,6 +459,82 @@ theorem sinTheta_genuineSpectrum_gauge
           hmain.2
       _ ≤ N.gauge (B - A) := hCle
 
+/-- The projector difference decomposes into the two directed cross blocks:
+`P_U - P_V = P_{Vᗮ} P_U - (P_{Uᗮ} P_V)⋆`. -/
+theorem starProjection_sub_eq_cross_sub_cross_adjoint
+    (U V : Submodule ℂ E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
+    U.starProjection - V.starProjection =
+      Vᗮ.starProjection ∘L U.starProjection -
+        (Uᗮ.starProjection ∘L V.starProjection).adjoint := by
+  have hadj : (Uᗮ.starProjection ∘L V.starProjection).adjoint =
+      V.starProjection ∘L Uᗮ.starProjection := by
+    rw [ContinuousLinearMap.adjoint_comp,
+      ← ContinuousLinearMap.star_eq_adjoint,
+      ← ContinuousLinearMap.star_eq_adjoint,
+      (isSelfAdjoint_starProjection V).star_eq,
+      (isSelfAdjoint_starProjection Uᗮ).star_eq]
+  rw [hadj, Submodule.starProjection_orthogonal' V,
+    Submodule.starProjection_orthogonal' U]
+  ext x
+  simp only [ContinuousLinearMap.comp_apply, ContinuousLinearMap.sub_apply,
+    ContinuousLinearMap.sub_apply, ContinuousLinearMap.one_apply, map_sub]
+  abel
+
+/-- **The symmetric two-sided bounded `sin Θ` theorem at unitary-invariant
+ideal scope, genuine spectra.**  Both directed spectral configurations and
+`B - A` in the family give ideal membership of the projector difference with
+`d · gauge (P_U - P_V) ≤ 2 · gauge (B - A)`, by decomposing the projector
+difference into the two directed cross blocks. -/
+theorem sinTheta_genuineSpectrum_gauge_symmetric
+    (N : RectangularSymmetricIdealFamily (𝕜 := ℂ))
+    {A B : E →L[ℂ] E} (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
+    {U V : Submodule ℂ E}
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hU : Reduces A U) (hV : Reduces B V)
+    {a b a' b' d : ℝ} (hd : 0 < d) (hab : a ≤ b) (hab' : a' ≤ b')
+    (hUspec : spectrum ℝ (compressOperator U A) ⊆ Set.Icc a b)
+    (hVspec : ∀ x ∈ spectrum ℝ (compressOperator Vᗮ B),
+      x ≤ a - d ∨ b + d ≤ x)
+    (hVspec' : spectrum ℝ (compressOperator V B) ⊆ Set.Icc a' b')
+    (hUspec' : ∀ x ∈ spectrum ℝ (compressOperator Uᗮ A),
+      x ≤ a' - d ∨ b' + d ≤ x)
+    (hMem : N.Mem (B - A)) :
+    N.Mem (U.starProjection - V.starProjection) ∧
+      d * N.gauge (U.starProjection - V.starProjection) ≤
+        2 * N.gauge (B - A) := by
+  have h1 := sinTheta_genuineSpectrum_gauge N hA hB hU hV hd hab
+    hUspec hVspec hMem
+  have hMem' : N.Mem (A - B) := by
+    rw [show A - B = -(B - A) from by abel]
+    exact N.neg_mem hMem
+  have h2 := sinTheta_genuineSpectrum_gauge N hB hA hV hU hd hab'
+    hVspec' hUspec' hMem'
+  have hgAB : N.gauge (A - B) = N.gauge (B - A) := by
+    rw [show A - B = -(B - A) from by abel]
+    exact N.gauge_neg hMem
+  rw [hgAB] at h2
+  have hdecomp := starProjection_sub_eq_cross_sub_cross_adjoint U V
+  have hMemAdj : N.Mem ((Uᗮ.starProjection ∘L V.starProjection).adjoint) :=
+    N.adjoint_mem h2.1
+  have hgAdj : N.gauge ((Uᗮ.starProjection ∘L V.starProjection).adjoint) =
+      N.gauge (Uᗮ.starProjection ∘L V.starProjection) :=
+    N.gauge_adjoint h2.1
+  constructor
+  · rw [hdecomp]
+    exact N.sub_mem h1.1 hMemAdj
+  · calc d * N.gauge (U.starProjection - V.starProjection)
+        ≤ d * (N.gauge (Vᗮ.starProjection ∘L U.starProjection) +
+            N.gauge ((Uᗮ.starProjection ∘L V.starProjection).adjoint)) := by
+          refine mul_le_mul_of_nonneg_left ?_ hd.le
+          rw [hdecomp]
+          exact N.gauge_sub_le h1.1 hMemAdj
+      _ = d * N.gauge (Vᗮ.starProjection ∘L U.starProjection) +
+            d * N.gauge (Uᗮ.starProjection ∘L V.starProjection) := by
+          rw [hgAdj]; ring
+      _ ≤ N.gauge (B - A) + N.gauge (B - A) := add_le_add h1.2 h2.2
+      _ = 2 * N.gauge (B - A) := by ring
+
 end SinThetaIdealScope
 
 end DavisKahanExt

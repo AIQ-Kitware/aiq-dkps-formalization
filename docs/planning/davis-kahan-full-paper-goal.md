@@ -348,6 +348,13 @@ projection composition.  `FullPartIII` aliases:
 **`sin Θ` scope summary after this session**: genuine spectra + operator
 norm + UI norm, at bounded and unbounded scope, directed and (bounded)
 symmetric two-sided forms — every combination proved and axiom-clean.
+The symmetric two-sided form also holds at UI scope
+(`sinTheta_genuineSpectrum_gauge_symmetric`, constant `2`, via the
+projector-difference decomposition
+`P_U - P_V = P_{Vᗮ}P_U - (P_{Uᗮ}P_V)⋆` proved in
+`starProjection_sub_eq_cross_sub_cross_adjoint`; the constant-one version
+would need UI direct-sum/singular-value-union laws not yet in the family
+API).  Alias: `bounded_sinTheta_uiNorm_genuineSpectrum_symmetric`.
 
 The unbounded interval/exterior Sylvester estimate now also holds at ideal
 scope in **both orientations**
