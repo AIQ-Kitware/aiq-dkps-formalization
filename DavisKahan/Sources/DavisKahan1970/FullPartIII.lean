@@ -73,6 +73,8 @@ alias unbounded_sylvester_ordered :=
   DavisKahan.Experimental.ExactSinTheta.unbounded_sylvester_mem_and_gauge_le_viaKyFan
 alias unbounded_sylvester_general :=
   DavisKahan.Experimental.ExactSinTheta.unbounded_sylvester_mem_and_gauge_le_of_gap
+alias bounded_sylvester_intervalExterior_genuineSpectrum :=
+  DavisKahanExt.norm_sylvester_le_of_spectrum_intervalExterior
 
 /-! ## Single-angle theorems -/
 
@@ -89,6 +91,8 @@ alias bounded_sinTheta_generalSeparation :=
 alias bounded_spectralProjection_sinTheta :=
   DavisKahanExt.spectralProjection_sinTheta
 alias bounded_ideal_sinTheta := DavisKahanExt.ideal_sinTheta
+alias bounded_sinTheta_genuineSpectrum :=
+  DavisKahanExt.sinTheta_genuineSpectrum
 
 /-! ## Direct rotation -/
 
