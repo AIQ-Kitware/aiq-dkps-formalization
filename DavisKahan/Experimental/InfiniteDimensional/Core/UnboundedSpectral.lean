@@ -54,6 +54,23 @@ def SemiboundedAbove
     RCLike.re ⟪A.toLinearMap x, (x : E)⟫_𝕜 ≤
       c * ‖(x : E)‖ ^ 2
 
+/-- A lower semibound remains valid after decreasing the constant. -/
+theorem SemiboundedBelow.mono
+    {A : ClosedOperatorE (𝕜 := 𝕜) (E := E)} {c d : ℝ}
+    (hA : SemiboundedBelow A c) (hdc : d ≤ c) :
+    SemiboundedBelow A d := by
+  intro x
+  exact (mul_le_mul_of_nonneg_right hdc (sq_nonneg ‖(x : E)‖)).trans (hA x)
+
+/-- An upper semibound remains valid after increasing the constant. -/
+theorem SemiboundedAbove.mono
+    {A : ClosedOperatorE (𝕜 := 𝕜) (E := E)} {c d : ℝ}
+    (hA : SemiboundedAbove A c) (hcd : c ≤ d) :
+    SemiboundedAbove A d := by
+  intro x
+  exact (hA x).trans
+    (mul_le_mul_of_nonneg_right hcd (sq_nonneg ‖(x : E)‖))
+
 /-- Domain-aware equation `A X - X B = C` for two closed blocks.
 
 The domain transport is a named field rather than an existential nested inside
@@ -120,6 +137,30 @@ structure HasBoundedEverywhereInverse
     A.toLinearMap ⟨inv y, inv_mapsTo_domain y⟩ = y
   inv_apply : ∀ x : A.domain, inv (A.toLinearMap x) = (x : E)
 
+namespace HasBoundedEverywhereInverse
+
+/-- A closed operator with an everywhere-defined two-sided inverse is injective. -/
+theorem injective
+    {A : ClosedOperatorE (𝕜 := 𝕜) (E := E)}
+    (hA : HasBoundedEverywhereInverse A) :
+    Function.Injective A.toLinearMap := by
+  intro x y hxy
+  apply Subtype.ext
+  calc
+    (x : E) = hA.inv (A.toLinearMap x) := (hA.inv_apply x).symm
+    _ = hA.inv (A.toLinearMap y) := congrArg hA.inv hxy
+    _ = (y : E) := hA.inv_apply y
+
+/-- The operator action is onto the ambient Hilbert space. -/
+theorem surjective
+    {A : ClosedOperatorE (𝕜 := 𝕜) (E := E)}
+    (hA : HasBoundedEverywhereInverse A) :
+    Function.Surjective A.toLinearMap := by
+  intro y
+  exact ⟨⟨hA.inv y, hA.inv_mapsTo_domain y⟩, hA.apply_inv y⟩
+
+end HasBoundedEverywhereInverse
+
 /-- The provisional adjoint has closed graph. -/
 theorem closedOperator_adjoint_closed
     (A : ClosedOperatorE (𝕜 := 𝕜) (E := E)) :
@@ -133,6 +174,12 @@ theorem closedOperator_adjoint_adjoint
     A.adjoint.adjoint = A := by
   sorry
 
+/-- Apply the shifted operator `A - z` on its natural domain. -/
+def shiftedApply
+    (A : ClosedOperatorE (𝕜 := 𝕜) (E := E)) (z : 𝕜)
+    (x : A.domain) : E :=
+  A.toLinearMap x - z • (x : E)
+
 /-- Bounded inverse data for the shifted closed operator `A - z`. -/
 structure ClosedResolventData
     (A : ClosedOperatorE (𝕜 := 𝕜) (E := E)) (z : 𝕜) where
@@ -142,6 +189,31 @@ structure ClosedResolventData
     A.toLinearMap ⟨resolvent y, mapsTo_domain y⟩ - z • resolvent y = y
   left_inverse : ∀ x : A.domain,
     resolvent (A.toLinearMap x - z • (x : E)) = (x : E)
+
+namespace ClosedResolventData
+
+/-- Resolvent data makes the shifted operator injective. -/
+theorem shiftedApply_injective
+    {A : ClosedOperatorE (𝕜 := 𝕜) (E := E)} {z : 𝕜}
+    (h : ClosedResolventData A z) :
+    Function.Injective (shiftedApply A z) := by
+  intro x y hxy
+  apply Subtype.ext
+  calc
+    (x : E) = h.resolvent (shiftedApply A z x) := (h.left_inverse x).symm
+    _ = h.resolvent (shiftedApply A z y) := congrArg h.resolvent hxy
+    _ = (y : E) := h.left_inverse y
+
+/-- Resolvent data makes the shifted operator surjective. -/
+theorem shiftedApply_surjective
+    {A : ClosedOperatorE (𝕜 := 𝕜) (E := E)} {z : 𝕜}
+    (h : ClosedResolventData A z) :
+    Function.Surjective (shiftedApply A z) := by
+  intro y
+  refine ⟨⟨h.resolvent y, h.mapsTo_domain y⟩, ?_⟩
+  exact h.right_inverse y
+
+end ClosedResolventData
 
 /-- A nonreal point belongs to the resolvent set. -/
 noncomputable def selfAdjoint_resolventData_of_im_ne_zero

@@ -190,6 +190,28 @@ theorem comp_right_mem
     N.Mem (A ∘L R) := by
   simpa using N.comp_mem (ContinuousLinearMap.id 𝕜 F) R hA
 
+/-- Ideal-gauge control under right composition by a bounded map. -/
+theorem gauge_comp_right_le_mul
+    (N : RectangularSymmetricIdealFamily (𝕜 := 𝕜))
+    {E F H : Type v}
+    [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+    [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
+    [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] [CompleteSpace H]
+    {A : E →L[𝕜] F} (R : H →L[𝕜] E) (hA : N.Mem A) :
+    N.gauge (A ∘L R) ≤ N.gauge A * ‖R‖ := by
+  have hraw := N.gauge_comp_le (ContinuousLinearMap.id 𝕜 F) R hA
+  have hid : ‖ContinuousLinearMap.id 𝕜 F‖ ≤ 1 :=
+    ContinuousLinearMap.norm_id_le (𝕜 := 𝕜) (E := F)
+  calc
+    N.gauge (A ∘L R)
+        = N.gauge ((ContinuousLinearMap.id 𝕜 F) ∘L A ∘L R) := by simp
+    _ ≤ ‖ContinuousLinearMap.id 𝕜 F‖ * N.gauge A * ‖R‖ := hraw
+    _ ≤ (1 * N.gauge A) * ‖R‖ := by
+      exact mul_le_mul_of_nonneg_right
+        (mul_le_mul_of_nonneg_right hid (N.gauge_nonneg hA))
+        (norm_nonneg R)
+    _ = N.gauge A * ‖R‖ := by ring
+
 /-- Right composition by a contraction does not increase the ideal gauge. -/
 theorem gauge_comp_right_le
     (N : RectangularSymmetricIdealFamily (𝕜 := 𝕜))
@@ -210,6 +232,71 @@ theorem gauge_comp_right_le
       gcongr
       · exact ContinuousLinearMap.norm_id_le
     _ = N.gauge A := by ring
+
+/-- Ideal membership is preserved by subtraction. -/
+theorem sub_mem
+    (N : RectangularSymmetricIdealFamily (𝕜 := 𝕜))
+    {E F : Type v}
+    [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+    [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
+    {A B : E →L[𝕜] F} (hA : N.Mem A) (hB : N.Mem B) :
+    N.Mem (A - B) := by
+  rw [sub_eq_add_neg]
+  exact N.add_mem hA (by simpa using N.smul_mem (-1 : 𝕜) hB)
+
+/-- Triangle inequality for subtraction in the ideal gauge. -/
+theorem gauge_sub_le
+    (N : RectangularSymmetricIdealFamily (𝕜 := 𝕜))
+    {E F : Type v}
+    [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+    [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
+    {A B : E →L[𝕜] F} (hA : N.Mem A) (hB : N.Mem B) :
+    N.gauge (A - B) ≤ N.gauge A + N.gauge B := by
+  rw [sub_eq_add_neg]
+  have hneg : N.Mem (-B) := by
+    simpa using N.smul_mem (-1 : 𝕜) hB
+  calc
+    N.gauge (A + -B) ≤ N.gauge A + N.gauge (-B) :=
+      N.gauge_add_le hA hneg
+    _ = N.gauge A + N.gauge B := by
+      rw [show -B = (-1 : 𝕜) • B by simp, N.gauge_smul (-1 : 𝕜) hB]
+      simp
+
+/-- Finite sums of ideal members remain in the ideal. -/
+theorem finset_sum_mem
+    (N : RectangularSymmetricIdealFamily (𝕜 := 𝕜))
+    {E F ι : Type v}
+    [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+    [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
+    (s : Finset ι) (A : ι → E →L[𝕜] F)
+    (hA : ∀ i ∈ s, N.Mem (A i)) :
+    N.Mem (∑ i ∈ s, A i) := by
+  classical
+  induction s using Finset.induction_on with
+  | empty => simpa using (N.zero_mem (E := E) (F := F))
+  | @insert a s ha ih =>
+      rw [Finset.sum_insert ha]
+      exact N.add_mem (hA a (Finset.mem_insert_self a s))
+        (ih fun i hi => hA i (Finset.mem_insert_of_mem hi))
+
+/-- The gauge of a finite sum is bounded by the sum of the gauges. -/
+theorem gauge_finset_sum_le
+    (N : RectangularSymmetricIdealFamily (𝕜 := 𝕜))
+    {E F ι : Type v}
+    [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+    [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
+    (s : Finset ι) (A : ι → E →L[𝕜] F)
+    (hA : ∀ i ∈ s, N.Mem (A i)) :
+    N.gauge (∑ i ∈ s, A i) ≤ ∑ i ∈ s, N.gauge (A i) := by
+  classical
+  induction s using Finset.induction_on with
+  | empty => simp [N.gauge_zero]
+  | @insert a s ha ih =>
+      rw [Finset.sum_insert ha, Finset.sum_insert ha]
+      exact (N.gauge_add_le
+        (hA a (Finset.mem_insert_self a s))
+        (N.finset_sum_mem s A fun i hi => hA i (Finset.mem_insert_of_mem hi))).trans
+          (add_le_add le_rfl (ih fun i hi => hA i (Finset.mem_insert_of_mem hi)))
 
 /-- Ideal membership is invariant under negation. -/
 theorem neg_mem

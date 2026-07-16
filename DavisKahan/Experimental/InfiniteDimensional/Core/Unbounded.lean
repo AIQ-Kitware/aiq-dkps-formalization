@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
 import DavisKahan.Experimental.InfiniteDimensional.DirectRotation
+import Mathlib.Analysis.InnerProductSpace.LinearPMap
 
 /-!
 # Closed and unbounded self-adjoint operators
@@ -62,6 +63,7 @@ namespace ForMathlib
 namespace DavisKahanExt
 
 open scoped InnerProductSpace
+open Filter Topology
 
 variable {𝕜 : Type*} [RCLike 𝕜]
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
@@ -84,9 +86,60 @@ instance : CoeFun (ClosedOperator (𝕜 := 𝕜) (E := E))
     (fun A => A.domain → E) where
   coe A := A.apply
 
+/-- The canonical Mathlib partial-linear-map view of a closed operator. -/
+def toLinearPMap (A : ClosedOperator (𝕜 := 𝕜) (E := E)) : E →ₗ.[𝕜] E where
+  domain := A.domain
+  toFun := A.toLinearMap
+
+@[simp] theorem toLinearPMap_domain
+    (A : ClosedOperator (𝕜 := 𝕜) (E := E)) :
+    A.toLinearPMap.domain = A.domain := rfl
+
+@[simp] theorem toLinearPMap_apply
+    (A : ClosedOperator (𝕜 := 𝕜) (E := E)) (x : A.domain) :
+    A.toLinearPMap x = A.toLinearMap x := rfl
+
+/-- The partial-linear-map view retains the closed graph. -/
+theorem toLinearPMap_isClosed
+    (A : ClosedOperator (𝕜 := 𝕜) (E := E)) :
+    A.toLinearPMap.IsClosed := by
+  change IsClosed (A.toLinearPMap.graph : Set (E × E))
+  have hgraph : (A.toLinearPMap.graph : Set (E × E)) =
+      Set.range (fun x : A.domain => ((x : E), A.toLinearMap x)) := by
+    ext p
+    change p ∈ A.toLinearPMap.graph ↔
+      ∃ x : A.domain, ((x : E), A.toLinearMap x) = p
+    rw [LinearPMap.mem_graph_iff]
+    constructor
+    · rintro ⟨x, hx, hAx⟩
+      exact ⟨x, Prod.ext hx hAx⟩
+    · rintro ⟨x, hx⟩
+      exact ⟨x, congrArg Prod.fst hx, congrArg Prod.snd hx⟩
+  rw [hgraph]
+  exact A.closed_graph
+
+/-- The partial-linear-map view retains the dense domain. -/
+theorem toLinearPMap_dense
+    (A : ClosedOperator (𝕜 := 𝕜) (E := E)) :
+    Dense (A.toLinearPMap.domain : Set E) := by
+  simpa using A.dense_domain
+
 /-- Two closed operators have the same operator domain. -/
 def SameDomain (A B : ClosedOperator (𝕜 := 𝕜) (E := E)) : Prop :=
   A.domain = B.domain
+
+/-- Equality of domains is reflexive. -/
+@[refl] theorem SameDomain.refl (A : ClosedOperator (𝕜 := 𝕜) (E := E)) :
+    A.SameDomain A := rfl
+
+/-- Equality of domains is symmetric. -/
+@[symm] theorem SameDomain.symm {A B : ClosedOperator (𝕜 := 𝕜) (E := E)}
+    (h : A.SameDomain B) : B.SameDomain A := Eq.symm h
+
+/-- Equality of domains is transitive. -/
+@[trans] theorem SameDomain.trans {A B C : ClosedOperator (𝕜 := 𝕜) (E := E)}
+    (hAB : A.SameDomain B) (hBC : B.SameDomain C) : A.SameDomain C :=
+  Eq.trans hAB hBC
 
 /-- A bounded map sends the domain of `B` into the domain of `A`. -/
 def MapsDomainTo
@@ -95,6 +148,26 @@ def MapsDomainTo
     (B : ClosedOperator (𝕜 := 𝕜) (E := F))
     (X : F →L[𝕜] E) : Prop :=
   ∀ x : B.domain, X (x : F) ∈ A.domain
+
+/-- The identity map preserves every operator domain. -/
+theorem MapsDomainTo.id (A : ClosedOperator (𝕜 := 𝕜) (E := E)) :
+    A.MapsDomainTo A (ContinuousLinearMap.id 𝕜 E) := by
+  intro x
+  simpa using x.property
+
+/-- Domain transport composes with bounded maps. -/
+theorem MapsDomainTo.comp
+    {F G : Type*}
+    [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
+    [NormedAddCommGroup G] [InnerProductSpace 𝕜 G] [CompleteSpace G]
+    {A : ClosedOperator (𝕜 := 𝕜) (E := E)}
+    {B : ClosedOperator (𝕜 := 𝕜) (E := F)}
+    {C : ClosedOperator (𝕜 := 𝕜) (E := G)}
+    {X : F →L[𝕜] E} {Y : G →L[𝕜] F}
+    (hX : A.MapsDomainTo B X) (hY : B.MapsDomainTo C Y) :
+    A.MapsDomainTo C (X ∘L Y) := by
+  intro z
+  exact hX ⟨Y (z : G), hY z⟩
 
 /-- A linear map defined on a dense operator domain has a bounded extension to
 the ambient Hilbert space. -/
@@ -115,7 +188,33 @@ noncomputable def ofBounded (A : E →L[𝕜] E) :
   toLinearMap := A.toLinearMap.domRestrict ⊤
   dense_domain := by simp
   closed_graph := by
-    sorry
+    apply IsSeqClosed.isClosed
+    rintro φ ⟨x, y⟩ hmem hlim
+    choose xn hxn using hmem
+    have hfst : (fun n => ((xn n : (⊤ : Submodule 𝕜 E)) : E)) =
+        fun n => (φ n).1 := by
+      funext n
+      exact congrArg Prod.fst (hxn n)
+    have hsnd : (fun n => A ((xn n : (⊤ : Submodule 𝕜 E)) : E)) =
+        fun n => (φ n).2 := by
+      funext n
+      exact congrArg Prod.snd (hxn n)
+    have hx : Tendsto (fun n => ((xn n : (⊤ : Submodule 𝕜 E)) : E))
+        atTop (𝓝 x) := by
+      rw [hfst]
+      exact hlim.fst_nhds
+    have hy : Tendsto (fun n => A ((xn n : (⊤ : Submodule 𝕜 E)) : E))
+        atTop (𝓝 y) := by
+      rw [hsnd]
+      exact hlim.snd_nhds
+    have hAx : Tendsto (fun n => A ((xn n : (⊤ : Submodule 𝕜 E)) : E))
+        atTop (𝓝 (A x)) :=
+      (A.continuous.tendsto x).comp hx
+    have hyeq : y = A x := tendsto_nhds_unique hy hAx
+    refine ⟨⟨x, Submodule.mem_top⟩, ?_⟩
+    ext
+    · rfl
+    · simpa [hyeq]
 
 omit [CompleteSpace E] in
 @[simp] theorem ofBounded_domain (A : E →L[𝕜] E) :
@@ -126,11 +225,56 @@ omit [CompleteSpace E] in
     (x : (ofBounded A).domain) :
     (ofBounded A) x = A (x : E) := rfl
 
+/-- The bounded closed-operator embedding agrees with Mathlib's full-domain
+partial-linear-map constructor. -/
+@[simp] theorem toLinearPMap_ofBounded (A : E →L[𝕜] E) :
+    (ofBounded A).toLinearPMap = A.toLinearMap.toPMap ⊤ := rfl
+
+/-- A bounded symmetric operator becomes self-adjoint after embedding it as a
+full-domain closed operator. -/
+theorem toLinearPMap_ofBounded_isSelfAdjoint (A : E →L[𝕜] E)
+    (hA : A.toLinearMap.IsSymmetric) :
+    IsSelfAdjoint (ofBounded A).toLinearPMap := by
+  rw [LinearPMap.isSelfAdjoint_def]
+  change (A.toLinearMap.toPMap ⊤).adjoint = A.toLinearMap.toPMap ⊤
+  rw [A.toPMap_adjoint_eq_adjoint_toPMap_of_dense (by simp)]
+  rw [hA.clm_adjoint_eq]
+
+/-- Every bounded map lands in the full domain of a bounded closed operator. -/
+theorem MapsDomainTo.ofBounded_left
+    {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
+    (A : E →L[𝕜] E)
+    (B : ClosedOperator (𝕜 := 𝕜) (E := F))
+    (X : F →L[𝕜] E) :
+    (ofBounded A).MapsDomainTo B X := by
+  intro x
+  simp
+
 /-- Extension relation for partially defined operators. -/
 def Extends (A B : ClosedOperator (𝕜 := 𝕜) (E := E)) : Prop :=
   ∃ hdom : A.domain ≤ B.domain,
     ∀ x : A.domain,
       B.toLinearMap ⟨(x : E), hdom x.property⟩ = A.toLinearMap x
+
+/-- Every closed operator extends itself. -/
+@[refl] theorem Extends.refl (A : ClosedOperator (𝕜 := 𝕜) (E := E)) :
+    A.Extends A := by
+  refine ⟨le_rfl, ?_⟩
+  intro x
+  rfl
+
+/-- Extension of closed operators is transitive. -/
+@[trans] theorem Extends.trans {A B C : ClosedOperator (𝕜 := 𝕜) (E := E)}
+    (hAB : A.Extends B) (hBC : B.Extends C) : A.Extends C := by
+  rcases hAB with ⟨hdomAB, hactAB⟩
+  rcases hBC with ⟨hdomBC, hactBC⟩
+  refine ⟨hdomAB.trans hdomBC, ?_⟩
+  intro x
+  calc
+    C.toLinearMap ⟨(x : E), hdomBC (hdomAB x.property)⟩ =
+        B.toLinearMap ⟨(x : E), hdomAB x.property⟩ :=
+      hactBC ⟨(x : E), hdomAB x.property⟩
+    _ = A.toLinearMap x := hactAB x
 
 /-- Symmetric closed operator. -/
 def IsSymmetric (A : ClosedOperator (𝕜 := 𝕜) (E := E)) : Prop :=
@@ -174,8 +318,56 @@ Construction route: retain `A.domain`, define the graph map by
 `x ↦ A x + V x`, and prove closedness by showing the new graph norm is
 equivalent to the old one using boundedness of `V`. -/
 noncomputable def addBounded (A : ClosedOperator (𝕜 := 𝕜) (E := E))
-    (V : E →L[𝕜] E) : ClosedOperator (𝕜 := 𝕜) (E := E) := by
-  sorry
+    (V : E →L[𝕜] E) : ClosedOperator (𝕜 := 𝕜) (E := E) where
+  domain := A.domain
+  toLinearMap := A.toLinearMap + V.toLinearMap.domRestrict A.domain
+  dense_domain := A.dense_domain
+  closed_graph := by
+    apply IsSeqClosed.isClosed
+    rintro φ ⟨x, y⟩ hmem hlim
+    choose xn hxn using hmem
+    have hfst : (fun n => ((xn n : A.domain) : E)) = fun n => (φ n).1 := by
+      funext n
+      exact congrArg Prod.fst (hxn n)
+    have hsnd :
+        (fun n => A.toLinearMap (xn n) + V ((xn n : A.domain) : E)) =
+          fun n => (φ n).2 := by
+      funext n
+      exact congrArg Prod.snd (hxn n)
+    have hx : Tendsto (fun n => ((xn n : A.domain) : E)) atTop (𝓝 x) := by
+      rw [hfst]
+      exact hlim.fst_nhds
+    have hsum : Tendsto
+        (fun n => A.toLinearMap (xn n) + V ((xn n : A.domain) : E))
+        atTop (𝓝 y) := by
+      rw [hsnd]
+      exact hlim.snd_nhds
+    have hV : Tendsto (fun n => V ((xn n : A.domain) : E))
+        atTop (𝓝 (V x)) :=
+      (V.continuous.tendsto x).comp hx
+    have hAseq : Tendsto (fun n => A.toLinearMap (xn n))
+        atTop (𝓝 (y - V x)) := by
+      simpa only [add_sub_cancel_right] using hsum.sub hV
+    have hgraph : (x, y - V x) ∈
+        Set.range (fun z : A.domain => ((z : E), A.toLinearMap z)) :=
+      A.closed_graph.mem_of_tendsto (hx.prodMk_nhds hAseq)
+        (Eventually.of_forall fun n => ⟨xn n, rfl⟩)
+    rcases hgraph with ⟨z, hz⟩
+    have hzx : (z : E) = x := congrArg Prod.fst hz
+    have hzA : A.toLinearMap z = y - V x := congrArg Prod.snd hz
+    refine ⟨z, ?_⟩
+    ext
+    · exact hzx
+    · change A.toLinearMap z + V (z : E) = y
+      rw [hzA, hzx]
+      abel
+
+@[simp] theorem addBounded_domain (A : ClosedOperator (𝕜 := 𝕜) (E := E))
+    (V : E →L[𝕜] E) : (A.addBounded V).domain = A.domain := rfl
+
+@[simp] theorem addBounded_apply (A : ClosedOperator (𝕜 := 𝕜) (E := E))
+    (V : E →L[𝕜] E) (x : (A.addBounded V).domain) :
+    (A.addBounded V) x = A.toLinearMap x + V (x : E) := rfl
 
 /-- Relative boundedness with respect to a closed operator. -/
 def RelativelyBounded (A : ClosedOperator (𝕜 := 𝕜) (E := E))
@@ -205,6 +397,43 @@ def SpectralSetsSeparated
   ∀ a ∈ A.realSpectrum, a ∈ s →
     ∀ b ∈ B.realSpectrum, b ∈ t → d ≤ |a - b|
 
+/-- Spectral-set separation is symmetric in the two operators. -/
+theorem SpectralSetsSeparated.symm
+    {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
+    [CompleteSpace F]
+    {A : ClosedOperator (𝕜 := 𝕜) (E := E)}
+    {B : ClosedOperator (𝕜 := 𝕜) (E := F)}
+    {s t : Set ℝ} {d : ℝ}
+    (h : SpectralSetsSeparated A B s t d) :
+    SpectralSetsSeparated B A t s d := by
+  intro b hb ht a ha hs
+  simpa [abs_sub_comm] using h a ha hs b hb ht
+
+/-- Weakening the required gap preserves spectral-set separation. -/
+theorem SpectralSetsSeparated.mono_gap
+    {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
+    [CompleteSpace F]
+    {A : ClosedOperator (𝕜 := 𝕜) (E := E)}
+    {B : ClosedOperator (𝕜 := 𝕜) (E := F)}
+    {s t : Set ℝ} {d e : ℝ}
+    (h : SpectralSetsSeparated A B s t d) (hed : e ≤ d) :
+    SpectralSetsSeparated A B s t e := by
+  intro a ha hs b hb ht
+  exact hed.trans (h a ha hs b hb ht)
+
+/-- Restricting either selected spectral set preserves separation. -/
+theorem SpectralSetsSeparated.mono_sets
+    {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
+    [CompleteSpace F]
+    {A : ClosedOperator (𝕜 := 𝕜) (E := E)}
+    {B : ClosedOperator (𝕜 := 𝕜) (E := F)}
+    {s s' t t' : Set ℝ} {d : ℝ}
+    (h : SpectralSetsSeparated A B s t d)
+    (hs : s' ⊆ s) (ht : t' ⊆ t) :
+    SpectralSetsSeparated A B s' t' d := by
+  intro a ha has' b hb hbt'
+  exact h a ha (hs has') b hb (ht hbt')
+
 /-- Sum with a relatively bounded operator on the same domain.
 
 The relative-bound hypotheses are part of the constructor because an arbitrary
@@ -223,7 +452,7 @@ noncomputable def spectralProjection
     (s : Set ℝ) : E →L[𝕜] E := by
   sorry
 
-/-- Kato--Rellich theorem for bounded perturbations. 
+/-- Kato--Rellich theorem for bounded perturbations.
 
 Lean proof route for a weaker agent:
 
@@ -260,7 +489,7 @@ of `A+B-z` for one nonreal `z` by factoring
 and applying a Neumann series after choosing `|Im z|` large enough.  Symmetry
 plus surjectivity at `z` and `conj z` yields self-adjointness.  Reconcile the
 local `ClosedOperator` structure with mathlib's partial-map adjoint API before
-attempting this proof. 
+attempting this proof.
 
 Lean proof route for a weaker agent:
 
@@ -288,7 +517,7 @@ theorem isSelfAdjoint_of_relativelyBounded
     (A.addRelative V ha hb0 hrel hb).IsSelfAdjoint := by
   sorry
 
-/-- Unbounded-operator `sin Θ` theorem with bounded difference. 
+/-- Unbounded-operator `sin Θ` theorem with bounded difference.
 
 Lean proof route for a weaker agent:
 

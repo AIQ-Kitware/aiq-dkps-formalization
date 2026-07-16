@@ -103,6 +103,20 @@ def SpectrumIn (A : E →L[𝕜] E) (U : Submodule 𝕜 E)
     (s : Set ℝ) : Prop :=
   InvariantFor A U ∧ restrictedSpectrum A U ⊆ s
 
+/-- Spectral containment remembers the invariance needed to form the restriction. -/
+theorem SpectrumIn.invariant {A : E →L[𝕜] E} {U : Submodule 𝕜 E}
+    {s : Set ℝ} (h : SpectrumIn A U s) : InvariantFor A U := h.1
+
+/-- The restricted spectrum is contained in the declared spectral set. -/
+theorem SpectrumIn.subset {A : E →L[𝕜] E} {U : Submodule 𝕜 E}
+    {s : Set ℝ} (h : SpectrumIn A U s) : restrictedSpectrum A U ⊆ s := h.2
+
+/-- Spectral containment is monotone in the containing set. -/
+theorem SpectrumIn.mono {A : E →L[𝕜] E} {U : Submodule 𝕜 E}
+    {s t : Set ℝ} (h : SpectrumIn A U s) (hst : s ⊆ t) :
+    SpectrumIn A U t :=
+  ⟨h.1, h.2.trans hst⟩
+
 /-- A scalar function is uniformly bounded on the real Banach-algebra
 spectrum. -/
 def BoundedOnSpectrum (A : E →L[𝕜] E) (f : ℝ → ℝ) : Prop :=
@@ -118,6 +132,23 @@ def SpectraSeparated (A : E →L[𝕜] E) (U : Submodule 𝕜 E)
   InvariantFor A U ∧ InvariantFor B V ∧
     ∀ a ∈ restrictedSpectrum A U, ∀ b ∈ restrictedSpectrum B V,
       d ≤ |a - b|
+
+/-- Spectral separation is symmetric after exchanging the two restricted blocks. -/
+theorem SpectraSeparated.symm {A : E →L[𝕜] E} {U : Submodule 𝕜 E}
+    {B : F →L[𝕜] F} {V : Submodule 𝕜 F} {d : ℝ}
+    (h : SpectraSeparated A U B V d) : SpectraSeparated B V A U d := by
+  refine ⟨h.2.1, h.1, ?_⟩
+  intro b hb a ha
+  simpa [abs_sub_comm] using h.2.2 a ha b hb
+
+/-- Weakening the required gap preserves spectral separation. -/
+theorem SpectraSeparated.mono_gap {A : E →L[𝕜] E} {U : Submodule 𝕜 E}
+    {B : F →L[𝕜] F} {V : Submodule 𝕜 F} {d e : ℝ}
+    (h : SpectraSeparated A U B V d) (hed : e ≤ d) :
+    SpectraSeparated A U B V e := by
+  refine ⟨h.1, h.2.1, ?_⟩
+  intro a ha b hb
+  exact hed.trans (h.2.2 a ha b hb)
 
 /-- The selected block of `A` is separated from the complementary block of
 `B`. -/
@@ -137,12 +168,55 @@ def OrderedSpectraSeparated (A : E →L[𝕜] E) (U : Submodule 𝕜 E)
     ∀ a ∈ restrictedSpectrum A U, ∀ b ∈ restrictedSpectrum B V,
       a + d ≤ b
 
+/-- Ordered separation implies absolute spectral separation. -/
+theorem OrderedSpectraSeparated.toSpectraSeparated
+    {A : E →L[𝕜] E} {U : Submodule 𝕜 E}
+    {B : F →L[𝕜] F} {V : Submodule 𝕜 F} {d : ℝ}
+    (h : OrderedSpectraSeparated A U B V d) (hd : 0 ≤ d) :
+    SpectraSeparated A U B V d := by
+  refine ⟨h.1, h.2.1, ?_⟩
+  intro a ha b hb
+  have habd := h.2.2 a ha b hb
+  have hab : a ≤ b := by linarith
+  have hgap : d ≤ b - a := by linarith
+  rw [abs_of_nonpos (sub_nonpos.mpr hab)]
+  linarith
+
+/-- The reverse ordered orientation also implies the symmetric absolute gap. -/
+theorem OrderedSpectraSeparated.toSpectraSeparated_swapped
+    {A : E →L[𝕜] E} {U : Submodule 𝕜 E}
+    {B : F →L[𝕜] F} {V : Submodule 𝕜 F} {d : ℝ}
+    (h : OrderedSpectraSeparated B V A U d) (hd : 0 ≤ d) :
+    SpectraSeparated A U B V d :=
+  (h.toSpectraSeparated hd).symm
+
 /-- Interval/exterior separation from the classical `sin Θ` theorem. -/
 def IntervalExteriorSeparated (A : E →L[𝕜] E) (U : Submodule 𝕜 E)
     (B : F →L[𝕜] F) (V : Submodule 𝕜 F)
     (left right d : ℝ) : Prop :=
   SpectrumIn A U (Set.Icc left right) ∧
     SpectrumIn B V {x | x ≤ left - d ∨ right + d ≤ x}
+
+/-- Interval/exterior placement gives the corresponding absolute spectral gap. -/
+theorem IntervalExteriorSeparated.toSpectraSeparated
+    {A : E →L[𝕜] E} {U : Submodule 𝕜 E}
+    {B : F →L[𝕜] F} {V : Submodule 𝕜 F}
+    {left right d : ℝ}
+    (h : IntervalExteriorSeparated A U B V left right d) :
+    SpectraSeparated A U B V d := by
+  refine ⟨h.1.1, h.2.1, ?_⟩
+  intro a ha b hb
+  have haI := h.1.2 ha
+  have hbE := h.2.2 hb
+  rcases haI with ⟨hla, har⟩
+  rcases hbE with hble | hrdb
+  · have hgap : d ≤ a - b := by linarith
+    exact hgap.trans (le_abs_self (a - b))
+  · have hgap : d ≤ b - a := by linarith
+    calc
+      d ≤ b - a := hgap
+      _ ≤ |b - a| := le_abs_self (b - a)
+      _ = |a - b| := abs_sub_comm b a
 
 /-- One spectral component lies in a finite gap of the other. -/
 def FiniteGapConfiguration (A : E →L[𝕜] E) (U : Submodule 𝕜 E)
