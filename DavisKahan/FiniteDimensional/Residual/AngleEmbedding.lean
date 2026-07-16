@@ -46,6 +46,7 @@ def AvoidsQuarterTurnEmbedding (U : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] (X : F →ₗᵢ[𝕜] E) : Prop :=
   AvoidsQuarterTurn U (approximateSubspace X)
 
+omit [FiniteDimensional 𝕜 E] [FiniteDimensional 𝕜 F] in
 /-- **The projected-residual (cross-block) Sylvester identity for an isometric
 trial map.**  This is the normalized specialization of
 `sylvester_complementaryTrialBlock_eq_projectedGeneralResidual`. -/

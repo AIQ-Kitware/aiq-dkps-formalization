@@ -89,6 +89,7 @@ theorem adjoint_comp_self_eq_id_of_isometry
       _ = ⟪x, y⟫_𝕜 := U.inner_map_map x y
       _ = ⟪(ContinuousLinearMap.id 𝕜 F) x, y⟫_𝕜 := by simp
 
+omit [CompleteSpace E] in
 /-- A positive lower frame bound implies closed range. -/
 theorem LowerFrameBound.closedRange
     {X : F →L[𝕜] E} {ε : ℝ}

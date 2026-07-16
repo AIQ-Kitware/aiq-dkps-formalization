@@ -84,6 +84,7 @@ theorem sylvesterOperator_smul
   ext x
   simp [sylvesterOperator, smul_sub]
 
+omit [CompleteSpace E] [CompleteSpace F] in
 /-- The Sylvester operator preserves negation. -/
 theorem sylvesterOperator_neg
     (A : F →L[𝕜] F) (B : E →L[𝕜] E)
@@ -99,6 +100,7 @@ def sylvesterLinearMap (A : F →L[𝕜] F) (B : E →L[𝕜] E) :
   map_add' := sylvesterOperator_add A B
   map_smul' := sylvesterOperator_smul A B
 
+omit [CompleteSpace E] [CompleteSpace F] in
 @[simp]
 theorem sylvesterLinearMap_apply
     (A : F →L[𝕜] F) (B : E →L[𝕜] E) (X : E →L[𝕜] F) :
@@ -124,11 +126,13 @@ noncomputable def sylvesterContinuousLinearMap
   LinearMap.mkContinuous (sylvesterLinearMap A B) (‖A‖ + ‖B‖)
     (norm_sylvesterOperator_le A B)
 
+omit [CompleteSpace E] [CompleteSpace F] in
 @[simp]
 theorem sylvesterContinuousLinearMap_apply
     (A : F →L[𝕜] F) (B : E →L[𝕜] E) (X : E →L[𝕜] F) :
     sylvesterContinuousLinearMap A B X = sylvesterOperator A B X := rfl
 
+omit [CompleteSpace E] [CompleteSpace F] in
 /-- Operator norm of the bundled Sylvester map. -/
 theorem norm_sylvesterContinuousLinearMap_le
     (A : F →L[𝕜] F) (B : E →L[𝕜] E) :

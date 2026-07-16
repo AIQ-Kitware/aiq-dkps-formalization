@@ -81,6 +81,7 @@ theorem adjoint_residual_block_identity
           A₀ ∘L (X.adjoint ∘L F₁)) y), x⟫_𝕜 := by
           simp only [ContinuousLinearMap.comp_apply, sub_apply, inner_sub_left]
 
+omit [CompleteSpace G] in
 /-- The same residual identity in the orientation consumed by the
 Sylvester estimate. -/
 theorem complementary_sylvester_equation

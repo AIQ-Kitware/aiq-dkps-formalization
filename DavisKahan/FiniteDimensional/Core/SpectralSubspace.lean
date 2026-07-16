@@ -158,6 +158,7 @@ theorem projection_apply_comm_of_reduces {A : E →ₗ[𝕜] E} (hA : A.IsSymmet
   rw [hsplit, map_add, U.starProjection_eq_self_iff.mpr hApx,
     (Submodule.starProjection_apply_eq_zero_iff U).mpr hArest, add_zero]
 
+omit [FiniteDimensional 𝕜 E] in
 /-- The complementary projection onto `Uᗮ` also commutes with `A` when `A` is
 symmetric and `U` reduces `A`. -/
 theorem complementaryProjection_apply_comm_of_reduces {A : E →ₗ[𝕜] E}

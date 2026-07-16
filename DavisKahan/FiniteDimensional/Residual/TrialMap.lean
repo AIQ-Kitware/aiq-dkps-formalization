@@ -40,6 +40,7 @@ omit [FiniteDimensional 𝕜 E] [FiniteDimensional 𝕜 F] in
     (X : F →ₗᵢ[𝕜] E) (M : F →ₗ[𝕜] F) :
     generalResidual A X.toLinearMap M = residual A X M :=
   rfl
+omit [FiniteDimensional 𝕜 E] [FiniteDimensional 𝕜 F] in
 /-- **The arbitrary-trial-map projected-residual Sylvester identity.**
 
 For a symmetric operator `A`, an `A`-reducing subspace `U`, an arbitrary trial

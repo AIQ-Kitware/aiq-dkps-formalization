@@ -129,6 +129,7 @@ theorem comp_sylvesterNeumannTerm_succ
       (hA.inv ^ (n + 1)) (C ((B ^ n) (B x)))
   exact hright_apply _
 
+omit [CompleteSpace E] [CompleteSpace F] in
 /-- Operator-norm geometric bound for one Neumann term. -/
 theorem norm_sylvesterNeumannTerm_le
     {A : E →L[𝕜] E}

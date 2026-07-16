@@ -55,6 +55,7 @@ noncomputable def basisMatrixUnit
     (j : Fin (Module.finrank 𝕜 E)) : E →ₗ[𝕜] F :=
   (InnerProductSpace.rankOne 𝕜 (eF i) (eE j)).toLinearMap
 
+omit [FiniteDimensional 𝕜 E] [FiniteDimensional 𝕜 F] in
 /-- Pointwise formula for a coordinate matrix unit. -/
 theorem basisMatrixUnit_apply
     (eF : OrthonormalBasis (Fin (Module.finrank 𝕜 F)) 𝕜 F)
@@ -64,6 +65,7 @@ theorem basisMatrixUnit_apply
     basisMatrixUnit eF eE i j x = ⟪eE j, x⟫_𝕜 • eF i := by
   rfl
 
+omit [FiniteDimensional 𝕜 E] [FiniteDimensional 𝕜 F] in
 /-- A rectangular map is the finite sum of its matrix coefficients times the
 coordinate matrix units in any pair of orthonormal bases. -/
 theorem sum_basisMatrixUnit
@@ -98,6 +100,7 @@ noncomputable def unitaryOrbitAction
     ext x
     simp only [LinearMap.comp_apply, LinearMap.smul_apply, map_smul, RingHom.id_apply]
 
+omit [FiniteDimensional 𝕜 E] [FiniteDimensional 𝕜 F] in
 @[simp]
 theorem unitaryOrbitAction_apply
     (U : F ≃ₗᵢ[𝕜] F) (V : E ≃ₗᵢ[𝕜] E) (T : E →ₗ[𝕜] F) :
@@ -134,6 +137,7 @@ theorem basisDiagonalUnitary_apply_basis {G : Type*}
   ext q
   simp [PiLp.single_apply]
 
+omit [FiniteDimensional 𝕜 E] [FiniteDimensional 𝕜 F] in
 /-- Left and right basis diagonals act on a coordinate matrix unit by the
 product of the corresponding coordinate phases.  Taking the left phase at
 frequency `α i` and the right phase at frequency `-β j` therefore realizes
@@ -296,7 +300,7 @@ private noncomputable def basisDoubledRealRotationLinearEquiv
   · intro x y
     apply Prod.ext <;> simp [C, S] <;> module
   · intro r x
-    apply Prod.ext <;> simp [C, S] <;> module
+    apply Prod.ext <;> simp [C, S, smul_sub, smul_add]
   · intro x
     have htrig (i : ι) : Real.cos (theta i) * Real.cos (theta i) +
         Real.sin (theta i) * Real.sin (theta i) = 1 := by
@@ -304,8 +308,8 @@ private noncomputable def basisDoubledRealRotationLinearEquiv
     apply Prod.ext
     · apply e.repr.injective
       ext i
-      simp only [map_add, map_sub, map_neg, C, S, basisDiagonalRealMap_repr,
-        PiLp.add_apply, PiLp.sub_apply, PiLp.neg_apply]
+      simp only [map_add, map_sub, C, S, basisDiagonalRealMap_repr,
+        PiLp.add_apply, PiLp.sub_apply]
       linear_combination (e.repr x.1 i) * htrig i
     · apply e.repr.injective
       ext i
@@ -324,8 +328,8 @@ private noncomputable def basisDoubledRealRotationLinearEquiv
       linear_combination (e.repr x.1 i) * htrig i
     · apply e.repr.injective
       ext i
-      simp only [map_add, map_sub, map_neg, C, S, basisDiagonalRealMap_repr,
-        PiLp.add_apply, PiLp.sub_apply, PiLp.neg_apply]
+      simp only [map_add, map_neg, C, S, basisDiagonalRealMap_repr,
+        PiLp.add_apply, PiLp.neg_apply]
       linear_combination (e.repr x.2 i) * htrig i
 
 /-- Coordinatewise phase rotations on two real copies of a Hilbert space. -/
@@ -485,7 +489,7 @@ theorem doubledComplexScalarAction_real_smul
   ext x
   apply WithLp.ofLp_injective 2
   apply Prod.ext <;>
-    simp [doubledComplexScalarAction_apply, smul_smul] <;> module
+    simp [doubledComplexScalarAction_apply, smul_sub, smul_add, smul_smul]
 
 /-- A real complex scalar acts as the same real scalar on two orthogonal
 copies of a real map. -/
@@ -500,7 +504,7 @@ theorem doubledComplexScalarAction_ofReal
   apply WithLp.ofLp_injective 2
   apply Prod.ext <;>
     simp [doubledComplexScalarAction_apply,
-      RectangularUnitarilyInvariantNorm.orthogonalBlockSum_apply] <;> module
+      RectangularUnitarilyInvariantNorm.orthogonalBlockSum_apply]
 
 /-- A finite sum of complex-scalar block actions is the action of the scalar
 sum. -/
@@ -542,9 +546,6 @@ theorem norm_smul_doubledPhaseAction_arg_add
   rw [doubledPhaseAction_eq_complexScalarAction,
     doubledComplexScalarAction_real_smul]
   congr 1
-  change ((‖a‖ : ℝ) : ℂ) *
-      Complex.exp (((Complex.arg a + theta : ℝ) : ℂ) * Complex.I) =
-    a * Complex.exp ((theta : ℂ) * Complex.I)
   calc
     ((‖a‖ : ℝ) : ℂ) *
         Complex.exp (((Complex.arg a + theta : ℝ) : ℂ) * Complex.I) =
@@ -605,21 +606,20 @@ theorem basisDoubledRealRotation_comp_basisMatrixUnit
       apply Prod.ext <;>
         simp [basisDoubledRealRotation_apply,
           RectangularUnitarilyInvariantNorm.orthogonalBlockSum_apply,
-          doubledPhaseAction_apply, basisMatrixUnit_apply, eE.inner_eq_ite,
-          real_inner_smul_right, Real.cos_add, Real.sin_add] <;> module
+          doubledPhaseAction_apply, basisMatrixUnit_apply,
+          Real.cos_add, Real.sin_add] <;> module
     · apply WithLp.ofLp_injective 2
       apply Prod.ext <;>
         simp [basisDoubledRealRotation_apply,
           RectangularUnitarilyInvariantNorm.orthogonalBlockSum_apply,
-          doubledPhaseAction_apply, basisMatrixUnit_apply, eE.inner_eq_ite,
-          real_inner_smul_right, hq]
+          doubledPhaseAction_apply, basisMatrixUnit_apply, eE.inner_eq_ite, hq]
   · by_cases hq : j = q
     · subst q
       apply WithLp.ofLp_injective 2
       apply Prod.ext <;>
         simp [basisDoubledRealRotation_apply,
           RectangularUnitarilyInvariantNorm.orthogonalBlockSum_apply,
-          doubledPhaseAction_apply, basisMatrixUnit_apply, eE.inner_eq_ite,
+          doubledPhaseAction_apply, basisMatrixUnit_apply,
           real_inner_smul_right, Real.cos_add, Real.sin_add] <;> module
     · apply WithLp.ofLp_injective 2
       apply Prod.ext <;>
@@ -1452,6 +1452,7 @@ private noncomputable def basisDiagonalRealCoeffMap
     (e : OrthonormalBasis ι 𝕜 G) (c : ι → ℝ) : G →ₗ[𝕜] G :=
   e.toBasis.constr 𝕜 fun i => ((c i : ℝ) : 𝕜) • e i
 
+omit [DecidableEq ι] in
 @[simp] private theorem basisDiagonalRealCoeffMap_apply_basis
     (e : OrthonormalBasis ι 𝕜 G) (c : ι → ℝ) (i : ι) :
     basisDiagonalRealCoeffMap e c (e i) = ((c i : ℝ) : 𝕜) • e i := by
@@ -1483,7 +1484,7 @@ private noncomputable def basisDoubledPhaseRotationLinearEquiv
   · intro x y
     apply Prod.ext <;> simp [C, S] <;> module
   · intro r x
-    apply Prod.ext <;> simp [C, S, smul_smul] <;> module
+    apply Prod.ext <;> simp [C, S, smul_sub, smul_add]
   · intro x
     have htrig (i : ι) : ((Real.cos (theta i) : ℝ) : 𝕜) *
         ((Real.cos (theta i) : ℝ) : 𝕜) +
@@ -1497,8 +1498,8 @@ private noncomputable def basisDoubledPhaseRotationLinearEquiv
     apply Prod.ext
     · apply e.repr.injective
       ext i
-      simp only [map_add, map_sub, map_neg, C, S, basisDiagonalRealCoeffMap_repr,
-        PiLp.add_apply, PiLp.sub_apply, PiLp.neg_apply]
+      simp only [map_add, map_sub, C, S, basisDiagonalRealCoeffMap_repr,
+        PiLp.add_apply, PiLp.sub_apply]
       linear_combination (e.repr x.1 i) * htrig i
     · apply e.repr.injective
       ext i
@@ -1523,8 +1524,8 @@ private noncomputable def basisDoubledPhaseRotationLinearEquiv
       linear_combination (e.repr x.1 i) * htrig i
     · apply e.repr.injective
       ext i
-      simp only [map_add, map_sub, map_neg, C, S, basisDiagonalRealCoeffMap_repr,
-        PiLp.add_apply, PiLp.sub_apply, PiLp.neg_apply]
+      simp only [map_add, map_neg, C, S, basisDiagonalRealCoeffMap_repr,
+        PiLp.add_apply, PiLp.neg_apply]
       linear_combination (e.repr x.2 i) * htrig i
 
 /-- Coordinatewise phase rotations on two orthogonal copies of a `𝕜`-Hilbert
@@ -1634,8 +1635,7 @@ theorem doubledComplexScalarMapAction_real_smul
   ext x
   apply WithLp.ofLp_injective 2
   apply Prod.ext <;>
-    simp [doubledComplexScalarMapAction_apply, smul_smul] <;>
-    module
+    simp [doubledComplexScalarMapAction_apply, smul_sub, smul_add, smul_smul]
 
 /-- A real complex scalar acts as the corresponding `𝕜`-scalar on the
 orthogonal block sum. -/
@@ -1714,6 +1714,7 @@ theorem sum_norm_smul_doubledPhaseMapAction_arg_add
 
 end DoubledScalarAction
 
+omit [FiniteDimensional 𝕜 E] [FiniteDimensional 𝕜 F] in
 /-- Coordinatewise doubled phase rotations realize addition of the left and
 right phase angles on a doubled coordinate matrix unit, over any `RCLike`
 field. -/
@@ -1739,22 +1740,21 @@ theorem basisDoubledPhaseRotation_comp_basisMatrixUnit
       apply Prod.ext <;>
         simp [basisDoubledPhaseRotation_apply,
           RectangularUnitarilyInvariantNorm.orthogonalBlockSum_apply,
-          doubledPhaseMapAction_apply, basisMatrixUnit_apply, eE.inner_eq_ite,
-          inner_smul_right, Real.cos_add, Real.sin_add, RCLike.ofReal_mul,
+          doubledPhaseMapAction_apply, basisMatrixUnit_apply,
+          Real.cos_add, Real.sin_add, RCLike.ofReal_mul,
           RCLike.ofReal_sub, RCLike.ofReal_add] <;> module
     · apply WithLp.ofLp_injective 2
       apply Prod.ext <;>
         simp [basisDoubledPhaseRotation_apply,
           RectangularUnitarilyInvariantNorm.orthogonalBlockSum_apply,
-          doubledPhaseMapAction_apply, basisMatrixUnit_apply, eE.inner_eq_ite,
-          inner_smul_right, hq]
+          doubledPhaseMapAction_apply, basisMatrixUnit_apply, eE.inner_eq_ite, hq]
   · by_cases hq : j = q
     · subst q
       apply WithLp.ofLp_injective 2
       apply Prod.ext <;>
         simp [basisDoubledPhaseRotation_apply,
           RectangularUnitarilyInvariantNorm.orthogonalBlockSum_apply,
-          doubledPhaseMapAction_apply, basisMatrixUnit_apply, eE.inner_eq_ite,
+          doubledPhaseMapAction_apply, basisMatrixUnit_apply,
           inner_smul_right, Real.cos_add, Real.sin_add, RCLike.ofReal_mul,
           RCLike.ofReal_sub, RCLike.ofReal_add] <;> module
     · apply WithLp.ofLp_injective 2
@@ -1786,6 +1786,7 @@ def HasDoubledReciprocalOrbitInterpolation
                   (basisMatrixUnit eF eE i j) (basisMatrixUnit eF eE i j)))) ∧
         ∑ r, |w r| ≤ mass
 
+omit [FiniteDimensional 𝕜 E] [FiniteDimensional 𝕜 F] in
 /-- A finite complex Fourier interpolation descends exactly to the doubled
 `𝕜`-spaces: the coefficient norm becomes the real orbit weight and its
 argument is absorbed into the left phase rotation.  This is the generic
@@ -1844,6 +1845,7 @@ theorem hasDoubledReciprocalOrbitInterpolation_of_finiteFourierInterpolation
     exact hscalar i j
   · simpa only [w, abs_of_nonneg (norm_nonneg _)] using hmass
 
+omit [FiniteDimensional 𝕜 E] [FiniteDimensional 𝕜 F] in
 /-- A doubled reciprocal interpolation recombines from matrix units into an
 exact finite unitary-orbit certificate for the doubled maps, over any
 `RCLike` field. -/
@@ -2328,6 +2330,7 @@ future strengthening work should consult it before touching this seam.
    exact mass `π / 2`, which is weaker than item 1 and sufficient for all
    downstream finite theory. -/
 
+omit [FiniteDimensional 𝕜 E] [FiniteDimensional 𝕜 F] in
 /-- Convert the basis orientation used by the coordinate expansion into the
 orientation used by the Sylvester coefficient equation. -/
 private theorem basisFirst_coefficient_equation
@@ -2348,6 +2351,7 @@ private theorem basisFirst_coefficient_equation
   simpa only [map_mul, map_sub, RCLike.conj_ofReal, inner_conj_symm] using
     congrArg (starRingEnd 𝕜) (hcoeff i j)
 
+omit [FiniteDimensional 𝕜 E] [FiniteDimensional 𝕜 F] in
 /-- A simultaneous reciprocal orbit interpolation turns the entrywise
 Sylvester relation into an exact finite two-sided unitary-orbit certificate. -/
 theorem finiteUnitaryOrbitCertificate_of_reciprocalInterpolation

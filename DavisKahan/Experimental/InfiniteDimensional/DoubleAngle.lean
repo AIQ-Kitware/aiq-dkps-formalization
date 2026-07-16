@@ -68,6 +68,7 @@ theorem reflectionDefect_eq_perturbationDefect
       simp only [ContinuousLinearMap.comp_apply, sub_apply, map_sub]
       abel
 
+omit [CompleteSpace E] in
 /-- The reflection defect is bounded by twice the perturbation norm.
 -/
 theorem norm_reflectionDefect_le_two_mul
@@ -181,7 +182,7 @@ theorem sinTwoTheta_perturbation
     _ ≤ 2 * ‖A - B‖ := norm_reflectionDefect_le_two_mul A B V hV
     _ = 2 * ‖B - A‖ := by rw [norm_sub_rev]
 
-/-- General spectral-separation `sin 2Θ` theorem. 
+/-- General spectral-separation `sin 2Θ` theorem.
 
 Lean proof route for a weaker agent:
 
@@ -209,7 +210,7 @@ theorem sinTwoTheta_generalSeparation
     d * ‖sinTwoAngleOperator U V‖ ≤ Real.pi * ‖B - A‖ := by
   sorry
 
-/-- Ideal-norm `sin 2Θ` theorem. 
+/-- Ideal-norm `sin 2Θ` theorem.
 
 Lean proof route for a weaker agent:
 

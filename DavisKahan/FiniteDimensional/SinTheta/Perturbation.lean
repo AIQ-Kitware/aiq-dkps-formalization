@@ -491,6 +491,7 @@ private theorem adjoint_subtype_eq_orthogonalProjectionOnto
   rw [U.inner_starProjection_left_eq_right,
     U.starProjection_eq_self_iff.mpr y.2]
 
+omit [FiniteDimensional 𝕜 E] in
 /-- The linear map underlying the canonical isometric inclusion is the
 ordinary submodule inclusion. -/
 private theorem subtypeₗᵢ_toLinearMap_eq_subtype
@@ -777,16 +778,14 @@ theorem sinAngleOperator_perturbation_le
     simp [liftBlock, Xblock, EU, EV, hEUadj, hXVUadj, XUV,
       RectangularUnitarilyInvariantNorm.orthogonalBlockSum,
       projection, Submodule.orthogonalDecomposition_apply,
-      LinearMap.comp_apply, Submodule.starProjection_orthogonal_apply] <;>
-      module
+      LinearMap.comp_apply]
   have hClift : liftBlock Cblock =
       (B - A) ∘ₗ projection U - projection V ∘ₗ (B - A) := by
     ext x
-    simp [liftBlock, Cblock, EU, EV, hEUadj, CUV, hCVUadj,
+    (simp [liftBlock, Cblock, EU, EV, hEUadj, CUV, hCVUadj,
       RectangularUnitarilyInvariantNorm.orthogonalBlockSum,
       projection, Submodule.orthogonalDecomposition_apply,
-      LinearMap.comp_apply, Submodule.starProjection_orthogonal_apply] <;>
-      module
+      LinearMap.comp_apply]; module)
   rw [hNB_apply, hNB_apply, hXlift, hClift] at hNB
   rw [uiNorm_projection_sub_eq_sinAngleOperator N U V] at hNB
 

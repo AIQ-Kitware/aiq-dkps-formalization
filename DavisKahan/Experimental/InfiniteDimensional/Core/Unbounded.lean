@@ -501,6 +501,7 @@ theorem smul
     _ = (‖c‖ * a) * ‖(x : E)‖ +
         (‖c‖ * b) * ‖A.toLinearMap x‖ := by ring
 
+omit [CompleteSpace E] in
 /-- Relative bounds are preserved by negation. -/
 theorem neg
     {A : ClosedOperator (𝕜 := 𝕜) (E := E)}
@@ -509,6 +510,7 @@ theorem neg
     RelativelyBounded A (-V) a b := by
   simpa using hV.smul (-1 : 𝕜)
 
+omit [CompleteSpace E] in
 /-- Relative bounds add under subtraction of perturbations. -/
 theorem sub
     {A : ClosedOperator (𝕜 := 𝕜) (E := E)}

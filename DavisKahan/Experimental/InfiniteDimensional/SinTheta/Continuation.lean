@@ -61,7 +61,7 @@ Use the second resolvent identity to prove uniform norm continuity of
 `z ↦ (z-A_t)⁻¹` in the path parameter, dominate the contour integrand by the
 inverse distance to the spectrum, and pass continuity through the contour
 Bochner integral.  Derive an explicit Lipschitz estimate when the contour
-margin is quantitative. 
+margin is quantitative.
 
 Lean proof route for a weaker agent:
 
@@ -109,7 +109,7 @@ theorem continuedProjection_same_component
   ⟨continuedProjection A H contour, hcontinuous, rfl, rfl, hproj⟩
 
 /-- Continued Riesz projections select the spectral component born from the
-initial component. 
+initial component.
 
 Lean proof route for a weaker agent:
 
@@ -136,7 +136,7 @@ theorem continuedProjection_eq_spectralProjection
     simp [operatorPath]
   have hA1 : IsSelfAdjointOperator (A + H) := by
     have h := hA.add hH
-    rwa [← ContinuousLinearMap.coe_add] at h
+    rwa [← ContinuousLinearMap.toLinearMap_add] at h
   have hc := hsep 1 ⟨zero_le_one, le_refl 1⟩
   rw [h1] at hc
   unfold continuedProjection
@@ -150,7 +150,7 @@ Proof strategy: for projections `P,Q` with `‖P-Q‖<1`, show `Q|Ran(P)` is
 bounded below and `P|Ran(Q)` is its inverse up to the invertible positive
 operators `PQP` and `QPQ`.  Construct the canonical range equivalence using
 the polar factor of `QP`, or equivalently `(PQP)^{-1/2}`.  This lemma replaces
-finite rank counting in the infinite branch-selection proof. 
+finite rank counting in the infinite branch-selection proof.
 
 Lean proof route for a weaker agent:
 
