@@ -99,6 +99,14 @@ alias unbounded_sylvester_intervalExterior_opNorm :=
   DavisKahan.Experimental.ExactSinTheta.norm_closedSylvester_le_of_intervalExterior
 alias unbounded_sylvester_exteriorInterval_opNorm :=
   DavisKahan.Experimental.ExactSinTheta.norm_closedSylvester_le_of_exteriorInterval
+alias bounded_sinTheta_genuineSpectrum_symmetric :=
+  DavisKahanExt.sinTheta_genuineSpectrum_symmetric
+alias unbounded_sinTheta_uiNorm :=
+  DavisKahan.Experimental.ExactSinTheta.sinTheta_unbounded_gauge
+alias unbounded_sinTheta_opNorm_genuineSpectrum :=
+  DavisKahan.Experimental.SpectraBridge.sinTheta_unbounded_opNorm_of_spectrum_gap
+alias unbounded_sinTheta_uiNorm_genuineSpectrum :=
+  DavisKahan.Experimental.SpectraBridge.sinTheta_unbounded_gauge_of_spectrum_gap
 
 /-! ## Direct rotation -/
 

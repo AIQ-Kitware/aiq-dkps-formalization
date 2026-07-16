@@ -9,6 +9,7 @@ import DavisKahan.Experimental.InfiniteDimensional.SinTheta.FrameFactorization
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.Bounded
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.Unbounded
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.GenuineUnbounded
+import DavisKahan.Experimental.InfiniteDimensional.SinTheta.GenuineUnboundedGauge
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.Canonical
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.Continuation
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.Specializations
