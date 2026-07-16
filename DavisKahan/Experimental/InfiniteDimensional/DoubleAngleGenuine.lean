@@ -283,6 +283,85 @@ theorem sinTwoTheta_genuineSpectrum_sinAngle
   rw [norm_sinAngleOperatorC]
   exact sinTwoTheta_genuineSpectrum hA hU hV hd hab hUspec hUspec'
 
+section IdealScope
+
+open ForMathlib.DavisKahan.Experimental.ExactSinTheta
+
+/-- **The genuine-spectrum `sin 2Θ` theorem at unitary-invariant ideal
+scope** (directed form).  Under the genuine internal configuration of `A`
+at `U` and with `B - A` in the rectangular symmetric ideal family, the
+directed cross block to the reflected image `J_V U` lies in the family with
+`d · gauge (P_{(J_V U)ᗮ} P_U) ≤ 2 · gauge (B - A)`. -/
+theorem sinTwoTheta_genuineSpectrum_gauge
+    (N : RectangularSymmetricIdealFamily (𝕜 := ℂ))
+    {A B : E →L[ℂ] E} (hA : IsSelfAdjoint A)
+    {U V : Submodule ℂ E}
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hU : Reduces A U) (hV : Reduces B V)
+    {a b d : ℝ} (hd : 0 < d) (hab : a ≤ b)
+    (hUspec : spectrum ℝ (compressOperator U A) ⊆ Set.Icc a b)
+    (hUspec' : ∀ x ∈ spectrum ℝ (compressOperator Uᗮ A),
+      x ≤ a - d ∨ b + d ≤ x)
+    (hMem : N.Mem (B - A)) :
+    N.Mem ((U.map (V.reflection.toLinearEquiv : E →ₗ[ℂ] E))ᗮ.starProjection
+        ∘L U.starProjection) ∧
+      d * N.gauge
+        ((U.map (V.reflection.toLinearEquiv : E →ₗ[ℂ] E))ᗮ.starProjection
+          ∘L U.starProjection) ≤
+      2 * N.gauge (B - A) := by
+  have hÃsa : IsSelfAdjoint (conjByIsometryEquiv V.reflection A) :=
+    isSelfAdjoint_conjByIsometryEquiv V.reflection hA
+  have hŨred : Reduces (conjByIsometryEquiv V.reflection A)
+      (U.map (V.reflection.toLinearEquiv : E →ₗ[ℂ] E)) :=
+    hU.map_isometryEquiv V.reflection
+  have hperp : Uᗮ.map (V.reflection.toLinearEquiv : E →ₗ[ℂ] E) =
+      (U.map (V.reflection.toLinearEquiv : E →ₗ[ℂ] E))ᗮ :=
+    Submodule.map_orthogonal_equiv U V.reflection
+  have htrans2 : spectrum ℝ (compressOperator
+      (U.map (V.reflection.toLinearEquiv : E →ₗ[ℂ] E))ᗮ
+      (conjByIsometryEquiv V.reflection A)) =
+      spectrum ℝ (compressOperator Uᗮ A) :=
+    (spectrum_compressOperator_congr hperp.symm _).trans
+      (spectrum_compressOperator_map Uᗮ A V.reflection)
+  -- the defect is in the ideal with gauge at most `2 · gauge (B - A)`
+  have hMemAB : N.Mem (A - B) := by
+    rw [show A - B = -(B - A) from by abel]
+    exact N.neg_mem hMem
+  have hdefect2 : conjByIsometryEquiv V.reflection A - A =
+      reflectionOperator V ∘L (A - B) ∘L reflectionOperator V - (A - B) := by
+    rw [conjByReflection_sub_eq_reflectionDefect,
+      reflectionDefect_eq_perturbationDefect A B V hV]
+  have hMemConj : N.Mem
+      (reflectionOperator V ∘L (A - B) ∘L reflectionOperator V) :=
+    N.comp_mem _ _ hMemAB
+  have hMemD : N.Mem (conjByIsometryEquiv V.reflection A - A) := by
+    rw [hdefect2]
+    exact N.sub_mem hMemConj hMemAB
+  have hgaugeAB : N.gauge (A - B) = N.gauge (B - A) := by
+    rw [show A - B = -(B - A) from by abel]
+    exact N.gauge_neg hMem
+  have hgaugeD : N.gauge (conjByIsometryEquiv V.reflection A - A) ≤
+      2 * N.gauge (B - A) := by
+    rw [hdefect2]
+    have h1 : N.gauge
+        (reflectionOperator V ∘L (A - B) ∘L reflectionOperator V - (A - B))
+        ≤ N.gauge
+            (reflectionOperator V ∘L (A - B) ∘L reflectionOperator V) +
+          N.gauge (A - B) := N.gauge_sub_le hMemConj hMemAB
+    have h2 : N.gauge
+        (reflectionOperator V ∘L (A - B) ∘L reflectionOperator V) ≤
+        N.gauge (A - B) :=
+      N.gauge_comp_le_of_contractions _ _ hMemAB
+        (norm_reflectionOperator_le_one V)
+        (norm_reflectionOperator_le_one V)
+    rw [hgaugeAB] at h1 h2
+    linarith
+  have hmain := sinTheta_genuineSpectrum_gauge N hA hÃsa hU hŨred hd hab
+    hUspec (by rw [htrans2]; exact hUspec') hMemD
+  exact ⟨hmain.1, hmain.2.trans hgaugeD⟩
+
+end IdealScope
+
 end SinTwoTheta
 
 end DavisKahanExt
