@@ -404,6 +404,19 @@ Next rungs: the Halmos two-projection decomposition for
 `cosAngleOperatorC`/`sinTwoAngleOperatorC` (`2 sin cos`), then the genuine
 `sin 2Θ` theorems.
 
+### Progress note (2026-07-16, direct-rotation scalar core)
+
+`principalHalfPhase_displacement_minimal_scalar`
+(`SpectraBridge/DirectRotationSquare.lean`) is proved — without the
+`Real.Angle` halving API the route note anticipated: any unit `w` with
+`w² = z` factors as `(w - phz)(w + phz) = 0` against the proved square
+identity, and the principal branch's nonnegative real part
+(`re ((1+z)/‖1+z‖) ≥ 0`) makes its displacement from `1` the smaller of
+the two roots'.  This is the per-fiber analytic core of the
+direct-rotation extremality (Section 7); the remaining two obligations in
+that file (`spectraDirectRotation_unique`, `spectraDirectRotation_minimal`)
+are the genuine two-projection-decomposition/multiplicity passages.
+
 ### Progress note (2026-07-16, real spectral bridge session)
 
 **The real-scalar gap for the bounded `sin Θ` theorem is closed** — without

@@ -496,17 +496,54 @@ theorem spectraDirectRotation_unique
     W = spectraDirectRotation U V hacute := by
   sorry
 
-/-- Scalar shorter-arc inequality on a principal two-plane.
-
-Route: write `z = exp (I θ)` and `w = exp (I φ)` with `2 φ ≡ θ [2π]`; the
-half-phase displacement is `|exp (I θ/2) - 1| = 2 |sin (θ/4)| ≤ |w - 1|`
-because the principal branch takes the shorter arc.  Needs the
-`Real.Angle` halving API, which is not yet available. -/
+/-- Scalar shorter-arc inequality on a principal two-plane.  Any unit `w`
+with `w² = z` is `±` the principal half-phase; the principal branch has
+nonnegative real part, so its displacement from `1` is the smaller of the
+two. -/
 theorem principalHalfPhase_displacement_minimal_scalar
     {z w : ℂ} (hz : ‖z‖ = 1) (hzneg : z ≠ -1)
     (hw : ‖w‖ = 1) (htransport : w * w = z) :
     ‖principalHalfPhase z - 1‖ ≤ ‖w - 1‖ := by
-  sorry
+  have hsq := principalHalfPhase_sq_of_abs_eq_one hz hzneg
+  have hfactor : (w - principalHalfPhase z) * (w + principalHalfPhase z)
+      = 0 := by
+    linear_combination htransport - hsq
+  rcases mul_eq_zero.mp hfactor with h | h
+  · rw [← sub_eq_zero.mp h]
+  · have hw_eq : w = -principalHalfPhase z := by linear_combination h
+    -- the principal branch has nonnegative real part
+    have hre : 0 ≤ (principalHalfPhase z).re := by
+      rw [principalHalfPhase, if_neg hzneg, Complex.div_ofReal_re]
+      have hz_re : -1 ≤ z.re := by
+        have habs : |z.re| ≤ ‖z‖ := Complex.abs_re_le_norm z
+        have := (abs_le.mp habs).1
+        linarith [hz ▸ this]
+      have hnum : 0 ≤ (1 + z).re := by
+        simp only [Complex.add_re, Complex.one_re]
+        linarith
+      exact div_nonneg hnum (norm_nonneg _)
+    -- displacement comparison through the real part
+    have hcmp : ‖principalHalfPhase z - 1‖ ^ 2 ≤
+        ‖principalHalfPhase z + 1‖ ^ 2 := by
+      have e1 : ‖principalHalfPhase z - 1‖ ^ 2 =
+          Complex.normSq (principalHalfPhase z - 1) := by
+        rw [Complex.normSq_eq_norm_sq]
+      have e2 : ‖principalHalfPhase z + 1‖ ^ 2 =
+          Complex.normSq (principalHalfPhase z + 1) := by
+        rw [Complex.normSq_eq_norm_sq]
+      rw [e1, e2]
+      simp only [Complex.normSq_apply, Complex.sub_re, Complex.sub_im,
+        Complex.add_re, Complex.add_im, Complex.one_re, Complex.one_im]
+      nlinarith [hre]
+    have hcmp' : ‖principalHalfPhase z - 1‖ ≤
+        ‖principalHalfPhase z + 1‖ := by
+      have hs := Real.sqrt_le_sqrt hcmp
+      rwa [Real.sqrt_sq (norm_nonneg _), Real.sqrt_sq (norm_nonneg _)] at hs
+    calc ‖principalHalfPhase z - 1‖
+        ≤ ‖principalHalfPhase z + 1‖ := hcmp'
+      _ = ‖w - 1‖ := by
+          rw [hw_eq, show -principalHalfPhase z - 1 =
+            -(principalHalfPhase z + 1) from by ring, norm_neg]
 
 /-- Operator-norm minimality of the acute direct rotation among unitaries
 transporting the source projection to the target projection.
