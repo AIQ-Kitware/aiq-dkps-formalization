@@ -129,6 +129,7 @@ theorem ofBounded
     change A (X (x : F)) - X (B (x : F)) = C (x : F)
     simpa only [ContinuousLinearMap.comp_apply, sub_apply] using hx
 
+omit [CompleteSpace E] in
 /-- The zero map solves the homogeneous domain-aware equation. -/
 theorem zero
     (A : ClosedOperatorE (𝕜 := 𝕜) (E := E))
@@ -179,6 +180,7 @@ theorem neg
     rw [map_neg, ← hX.equation x]
     abel
 
+omit [CompleteSpace E] in
 /-- Domain-aware Sylvester equations subtract. -/
 theorem sub
     {A : ClosedOperatorE (𝕜 := 𝕜) (E := E)}

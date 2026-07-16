@@ -119,7 +119,8 @@ theorem mul_resolventOperator_cancel (A : E →L[𝕜] E) {z : 𝕜}
   rw [ContinuousLinearMap.mul_def, ContinuousLinearMap.one_def]
   exact (resolventOperator_inverse A hz).2
 
-/-- First resolvent identity. 
+omit [CompleteSpace E] in
+/-- First resolvent identity.
 
 Lean proof route for a weaker agent:
 
@@ -162,7 +163,8 @@ theorem resolvent_identity
           rw [mul_smul_comm, mul_one, smul_mul_assoc]
   simpa only [ContinuousLinearMap.mul_def] using key
 
-/-- Second resolvent identity. 
+omit [CompleteSpace E] in
+/-- Second resolvent identity.
 
 Lean proof route for a weaker agent:
 
@@ -202,7 +204,7 @@ theorem resolvent_perturbation_identity
   simpa only [ContinuousLinearMap.mul_def, ContinuousLinearMap.comp_assoc]
     using key
 
-/-- Self-adjoint resolvent norm bound by spectral distance. 
+/-- Self-adjoint resolvent norm bound by spectral distance.
 
 Lean proof route for a weaker agent:
 
@@ -239,7 +241,7 @@ noncomputable def rieszProjection (A : E →L[𝕜] E)
   sorry
 
 /-- Riesz and Borel spectral projections agree for self-adjoint operators and
-separating contours. 
+separating contours.
 
 Lean proof route for a weaker agent:
 
@@ -265,7 +267,7 @@ theorem rieszProjection_eq_spectralProjection
     rieszProjection A contour = spectralProjection A s := by
   sorry
 
-/-- Neumann-series stability of the resolvent set. 
+/-- Neumann-series stability of the resolvent set.
 
 Lean proof route for a weaker agent:
 
@@ -307,7 +309,7 @@ theorem inResolventSet_add_of_norm_lt
   · rw [← ContinuousLinearMap.one_def, ← ContinuousLinearMap.mul_def, hfact,
       mul_assoc, ← mul_assoc (A - z • 1), h2, one_mul, Units.mul_inv]
 
-/-- Norm continuity of Riesz projections along a uniformly separating path. 
+/-- Norm continuity of Riesz projections along a uniformly separating path.
 
 Lean proof route for a weaker agent:
 

@@ -103,6 +103,7 @@ theorem principalTangents_approximateSubspace_apply
   simp only [principalTangents, principalAngles, Finsupp.mapRange_apply]
   rw [← singularValues_sinThetaEmbedding U X]
 
+omit [FiniteDimensional 𝕜 E] [FiniteDimensional 𝕜 F] in
 private theorem sinThetaEmbedding_contraction
     (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     (X : F →ₗᵢ[𝕜] E) (x : F) :
@@ -206,8 +207,7 @@ theorem orthonormal_tanThetaResidualWitness
     let σ := S.singularValues i
     let v := rightSingularBasis S i
     have hvv : ⟪v, v⟫_𝕜 = 1 := by
-      simpa [v] using
-        (orthonormal_iff_ite.mp (rightSingularBasis S).orthonormal i i)
+      simp [v]
     by_cases hσ : σ = 0
     · have hw : tanThetaResidualWitness U X i = X.toLinearMap v := by
         simp [tanThetaResidualWitness, S, σ, v, hσ]
@@ -280,8 +280,8 @@ theorem orthonormal_tanThetaResidualWitness
     let vi := rightSingularBasis S i
     let vj := rightSingularBasis S j
     have hvv : ⟪vi, vj⟫_𝕜 = 0 := by
-      simpa [vi, vj, hij] using
-        (orthonormal_iff_ite.mp (rightSingularBasis S).orthonormal i j)
+      simp [vi, vj, hij,
+        orthonormal_iff_ite.mp (rightSingularBasis S).orthonormal i j]
     have hXX : ⟪X.toLinearMap vi, X.toLinearMap vj⟫_𝕜 = 0 := by
       calc
         ⟪X.toLinearMap vi, X.toLinearMap vj⟫_𝕜 = ⟪vi, vj⟫_𝕜 :=
@@ -596,7 +596,7 @@ geometric/majorization seam. -/
 theorem kyFan_tanTheta0_ritzResidual_le
     {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric)
     {U : Submodule 𝕜 E} [U.HasOrthogonalProjection] (hU : Reduces A U)
-    (X : F →ₗᵢ[𝕜] E) {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
+    (X : F →ₗᵢ[𝕜] E) {β α δ : ℝ} (_hβα : β ≤ α) (hδ : 0 < δ)
     (hgap : TanThetaIntervalGap A U X β α δ)
     (tanTheta0 : F →ₗ[𝕜] E)
     (htan : tanTheta0.singularValues =

@@ -101,6 +101,7 @@ noncomputable def graphOperator (U : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] (X : F →ₗᵢ[𝕜] E) : F →ₗ[𝕜] E :=
   tanThetaEmbedding U X
 
+omit [FiniteDimensional 𝕜 E] [FiniteDimensional 𝕜 F] in
 /-- The graph operator realizes the tangent embedding.
 
 This is definitional because `graphOperator` is the public graph-geometry name
