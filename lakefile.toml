@@ -16,21 +16,14 @@ autoImplicit = false
 
 
 
-# BEGIN staged Spectra collaboration note
-# Spectra is developed in the external/Spectra Git submodule. It is not
-# enabled as a Lake dependency until its compatibility branch matches this
-# workspace's Lean and Mathlib pins. Use
-# scripts/enable_spectra_lake_dependency.py after that gate is green.
-# END staged Spectra collaboration note
-
 # Mathlib-staging library: paper-agnostic results restated in Mathlib idiom,
 # one file per proposed Mathlib destination path.  See ForMathlib/README.md.
 
-# BEGIN local Spectra development dependency
+# BEGIN vendored upstream Spectra snapshot
 [[require]]
 name = "Spectra"
-path = "external/Spectra"
-# END local Spectra development dependency
+path = "vendor/Spectra"
+# END vendored upstream Spectra snapshot
 
 # BEGIN authoritative root Mathlib dependency
 # Keep this requirement last among all [[require]] blocks. Spectra currently

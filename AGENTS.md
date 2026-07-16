@@ -110,30 +110,31 @@ self-adjoint operators, bounded polar decomposition, trace class, and
 Hilbert--Schmidt infrastructure. Davis--Kahan geometry and paper-facing
 perturbation theorems remain owned by this repository.
 
-The active collaboration checkout is a Git submodule at `external/Spectra`.
-Follow these rules:
+The production dependency is an exact upstream source snapshot at
+`vendor/Spectra`. Follow these rules:
 
-- Do not copy Spectra source into `vendor/lean/` merely to make local progress.
-  Use the submodule for coordinated development and contribute generally useful
-  changes upstream.
-- Mathlib is already a direct dependency. Never vendor excerpts from the pinned
-  Mathlib checkout as though they were third-party source.
-- Keep `.gitmodules` pointed at the public upstream Spectra repository. Use the
-  submodule's `fork` remote for contribution branches.
-- Never edit Spectra while it is on detached `HEAD`. Work on a named branch,
-  normally based on the current DKPS compatibility branch.
+- Treat `vendor/Spectra` as immutable upstream source. Do not edit files in
+  that directory directly.
+- Keep `external/Spectra` as a read-only upstream reference submodule pinned
+  to the same commit as the clean vendor snapshot. The build must not depend on
+  the submodule.
+- Record the upstream repository URL and exact commit in
+  `vendor/Spectra.UPSTREAM.md`.
+- Keep DKPS compatibility changes as a separate patch outside the snapshot.
+  Apply, refresh, or remove that patch with the dedicated vendor scripts.
+- When updating Spectra, first replace `vendor/Spectra` with a clean archive
+  of the new upstream commit, verify the snapshot, then rebase and regenerate
+  the compatibility patch.
 - Do not import the root `Spectra` module. Import the narrowest required modules
   so unrelated physics and analysis developments do not enter the dependency
   cone.
 - Keep a thin bridge in `DavisKahan/` for DKPS-specific names and interfaces.
   PVM range subspaces, reducing-subspace lemmas, general graph geometry, and
   other reusable operator theory should be proposed upstream.
-- The submodule alone does not make Spectra a production dependency. Enable the
-  Lake path dependency only after the root and submodule toolchains are aligned
-  and the narrow import smoke test is green.
-- Record the exact Spectra gitlink in every result that depends on it. Never
-  claim a Spectra-backed declaration is accepted without building it against
-  the pinned submodule commit.
+- Never fold general Spectra fixes into unrelated DKPS commits. Preserve them
+  as reviewable changes suitable for a future upstream pull request.
+- Never claim a Spectra-backed declaration is accepted without building it
+  against the pinned vendored snapshot plus the recorded compatibility patch.
 
 See [`dev/spectra-integration-survey-2026-07-14.md`](dev/spectra-integration-survey-2026-07-14.md)
 for the audited capability map, ownership boundary, and contribution plan.
