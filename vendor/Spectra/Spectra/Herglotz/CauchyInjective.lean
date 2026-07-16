@@ -191,7 +191,9 @@ theorem measure_ext_of_cauchyTransform (μ ν : Measure ℝ)
   have hz_ne : z.im ≠ 0 := hz_pos.ne'
   have hker_cont : Continuous fun x : ℝ => ((x : ℂ) - z)⁻¹ :=
     (Complex.continuous_ofReal.sub continuous_const).inv₀ fun x =>
-      sub_ne_zero.mpr fun hx => hz_ne (by rw [← hx]; exact Complex.ofReal_im x)
+      sub_ne_zero.mpr fun hx => hz_ne <| calc
+        z.im = ((x : ℂ)).im := congrArg Complex.im hx.symm
+        _ = 0 := Complex.ofReal_im x
   have hint_μ : Integrable (fun x : ℝ => ((x : ℂ) - z)⁻¹) μ :=
     integrable_of_bounded hker_cont.measurable (resolvent_integrand_bound z hz_ne)
   have hint_ν : Integrable (fun x : ℝ => ((x : ℂ) - z)⁻¹) ν :=

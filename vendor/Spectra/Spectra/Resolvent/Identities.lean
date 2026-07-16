@@ -79,8 +79,7 @@ lemma resolvent_identity {A : H →ₗ.[ℂ] H}
   have h_Rz : resolvent z hz hsym hplus hminus φ = ψ_z := rfl
   have h_Rw : resolvent w hw hsym hplus hminus φ = ψ_w := rfl
   have h_Rz_ψw : resolvent z hz hsym hplus hminus ψ_w = η := rfl
-  simp only [ContinuousLinearMap.sub_apply, ContinuousLinearMap.smul_apply,
-             ContinuousLinearMap.comp_apply]
+  simp only [sub_apply, smul_apply, ContinuousLinearMap.comp_apply]
   rw [h_Rz, h_Rw, h_Rz_ψw]
   have h_Az_ψw : A ⟨ψ_w, h_w_domain⟩ - z • ψ_w = φ + (w - z) • ψ_w := by
     have h_Aw : A ⟨ψ_w, h_w_domain⟩ = φ + w • ψ_w := by
@@ -96,11 +95,29 @@ lemma resolvent_identity {A : H →ₗ.[ℂ] H}
   have h_sum_eq : A ⟨ψ_z + (w - z) • η, h_sum_domain⟩ -
       z • (ψ_z + (w - z) • η) = φ + (w - z) • ψ_w := by
     have h_smul_mem : (w - z) • η ∈ A.domain := A.domain.smul_mem (w - z) h_η_domain
+    have h_add_domain :
+        (⟨ψ_z + (w - z) • η, h_sum_domain⟩ : A.domain) =
+          ⟨ψ_z, h_z_domain⟩ + ⟨(w - z) • η, h_smul_mem⟩ := by
+      apply Subtype.ext
+      rfl
     have op_eq : A ⟨ψ_z + (w - z) • η, h_sum_domain⟩ =
                  A ⟨ψ_z, h_z_domain⟩ + A ⟨(w - z) • η, h_smul_mem⟩ := by
-      convert A.map_add ⟨ψ_z, h_z_domain⟩ ⟨(w - z) • η, h_smul_mem⟩ using 1
+      calc
+        A ⟨ψ_z + (w - z) • η, h_sum_domain⟩ =
+            A (⟨ψ_z, h_z_domain⟩ + ⟨(w - z) • η, h_smul_mem⟩) := by
+              rw [h_add_domain]
+        _ = A ⟨ψ_z, h_z_domain⟩ + A ⟨(w - z) • η, h_smul_mem⟩ :=
+          A.map_add _ _
+    have h_smul_domain :
+        (⟨(w - z) • η, h_smul_mem⟩ : A.domain) =
+          (w - z) • (⟨η, h_η_domain⟩ : A.domain) := by
+      apply Subtype.ext
+      rfl
     have op_smul_eq : A ⟨(w - z) • η, h_smul_mem⟩ = (w - z) • A ⟨η, h_η_domain⟩ := by
-      convert A.map_smul (w - z) ⟨η, h_η_domain⟩ using 1
+      calc
+        A ⟨(w - z) • η, h_smul_mem⟩ = A ((w - z) • (⟨η, h_η_domain⟩ : A.domain)) := by
+          rw [h_smul_domain]
+        _ = (w - z) • A ⟨η, h_η_domain⟩ := A.map_smul _ _
     calc A ⟨ψ_z + (w - z) • η, h_sum_domain⟩ - z • (ψ_z + (w - z) • η)
         = (A ⟨ψ_z, h_z_domain⟩ + A ⟨(w - z) • η, h_smul_mem⟩) - z • (ψ_z + (w - z) • η) :=
             by rw [op_eq]
@@ -159,8 +176,7 @@ lemma resolvent_tendsto {A : H →ₗ.[ℂ] H} (hsym : A.IsFormalAdjoint A)
           = (zn n - z) • resolvent (zn n) (h_im_ne n) hsym hplus hminus
                             (resolvent z hz hsym hplus hminus ξ) := by
       have hh := congrArg (fun T : H →L[ℂ] H => T ξ) hid
-      simpa [ContinuousLinearMap.sub_apply, ContinuousLinearMap.smul_apply,
-             ContinuousLinearMap.comp_apply] using hh
+      simpa [sub_apply, smul_apply, ContinuousLinearMap.comp_apply] using hh
     have hop := resolvent_bound (zn n) (h_im_ne n) hsym hplus hminus
     rw [happ, norm_smul]
     calc ‖zn n - z‖ * ‖resolvent (zn n) (h_im_ne n) hsym hplus hminus

@@ -1,0 +1,390 @@
+diff --git a/vendor/Spectra/Spectra/Bochner/Borel/Identity/CauchyVague.lean b/vendor/Spectra/Spectra/Bochner/Borel/Identity/CauchyVague.lean
+index 0b9df57..62bc634 100644
+--- a/vendor/Spectra/Spectra/Bochner/Borel/Identity/CauchyVague.lean
++++ b/vendor/Spectra/Spectra/Bochner/Borel/Identity/CauchyVague.lean
+@@ -160 +160 @@ lemma borel_cauchy_vague
+-      rw [measure_diff_null hD_null]; exact h_Ioo_pos
++      rw [measure_sdiff_null hD_null]; exact h_Ioo_pos
+diff --git a/vendor/Spectra/Spectra/Herglotz/CauchyInjective.lean b/vendor/Spectra/Spectra/Herglotz/CauchyInjective.lean
+index 9d3a6f8..03217f7 100644
+--- a/vendor/Spectra/Spectra/Herglotz/CauchyInjective.lean
++++ b/vendor/Spectra/Spectra/Herglotz/CauchyInjective.lean
+@@ -194 +194,3 @@ theorem measure_ext_of_cauchyTransform (μ ν : Measure ℝ)
+-      sub_ne_zero.mpr fun hx => hz_ne (by rw [← hx]; exact Complex.ofReal_im x)
++      sub_ne_zero.mpr fun hx => hz_ne <| calc
++        z.im = ((x : ℂ)).im := congrArg Complex.im hx.symm
++        _ = 0 := Complex.ofReal_im x
+diff --git a/vendor/Spectra/Spectra/Kernel/Arctan.lean b/vendor/Spectra/Spectra/Kernel/Arctan.lean
+index 45b1e16..3ac327c 100644
+--- a/vendor/Spectra/Spectra/Kernel/Arctan.lean
++++ b/vendor/Spectra/Spectra/Kernel/Arctan.lean
+@@ -48,5 +48,7 @@ lemma lorentzian_arctan_integral (s a b ε : ℝ) (hε : ε > 0) :
+-    convert hchain using 1
+-    have : (s - t) ^ 2 + ε ^ 2 > 0 := by positivity
+-    have : 1 + ((t - s) / ε) ^ 2 > 0 := by positivity
+-    field_simp
+-    ring
++    have hderiv : (1 / (1 + ((t - s) / ε) ^ 2)) * (1 / ε) =
++        ε / ((s - t) ^ 2 + ε ^ 2) := by
++      have hden : (s - t) ^ 2 + ε ^ 2 ≠ 0 := by positivity
++      have hscaled : 1 + ((t - s) / ε) ^ 2 ≠ 0 := by positivity
++      field_simp [hε_ne, hden, hscaled]
++      ring
++    exact HasDerivAt.congr_deriv hchain hderiv
+diff --git a/vendor/Spectra/Spectra/Kernel/Poisson/Lemmas.lean b/vendor/Spectra/Spectra/Kernel/Poisson/Lemmas.lean
+index f92492f..bdfaebd 100644
+--- a/vendor/Spectra/Spectra/Kernel/Poisson/Lemmas.lean
++++ b/vendor/Spectra/Spectra/Kernel/Poisson/Lemmas.lean
+@@ -73,3 +73,8 @@ lemma poissonKernel_integrable {ε : ℝ} (hε : 0 < ε) :
+-    convert ((Real.hasDerivAt_arctan (x / ε)).comp x
+-      ((hasDerivAt_id x).div_const ε)).const_mul (1 / Real.pi) using 1
+-    unfold poissonKernel; field_simp; ring
++    have h := ((Real.hasDerivAt_arctan (x / ε)).comp x
++      ((hasDerivAt_id x).div_const ε)).const_mul (1 / Real.pi)
++    rw [show poissonKernel ε x =
++        (1 / Real.pi) * ((1 / (1 + (x / ε) ^ 2)) * (1 / ε)) by
++      unfold poissonKernel
++      field_simp [hε_ne, (sq_add_sq_pos hε x).ne']
++      ring]
++    exact h
+@@ -117 +122 @@ lemma poissonKernel_integrable {ε : ℝ} (hε : 0 < ε) :
+-    convert h_top.sub h_bot using 1
++    simpa only [Function.comp_apply] using h_top.sub h_bot
+@@ -210,4 +215,5 @@ private lemma hasDerivAt_antideriv_cexp {a : ℂ} (ha_ne : a ≠ 0) (t : ℝ) :
+-  have h2 : HasDerivAt (fun t : ℝ => -(a * ↑t)) (-a) t := by
+-    convert (h1.const_mul a).neg using 1; ring
+-  convert (h2.cexp).const_mul (-a⁻¹) using 1
+-  field_simp
++  have h2 : HasDerivAt (-(fun t : ℝ => a * (t : ℂ))) (-a) t := by
++    simpa only [mul_one] using (h1.const_mul a).neg
++  have hcoef : (-a⁻¹) * (cexp (-(a * ↑t)) * (-a)) = cexp (-(a * ↑t)) := by
++    field_simp [ha_ne]
++  exact HasDerivAt.congr_deriv ((h2.cexp).const_mul (-a⁻¹)) hcoef
+diff --git a/vendor/Spectra/Spectra/Mathlib/CharFunBridge.lean b/vendor/Spectra/Spectra/Mathlib/CharFunBridge.lean
+index 4ec5379..db2802f 100644
+--- a/vendor/Spectra/Spectra/Mathlib/CharFunBridge.lean
++++ b/vendor/Spectra/Spectra/Mathlib/CharFunBridge.lean
+@@ -222,0 +223,13 @@ private theorem combination_ext_zero_real {ι : Type*} [Fintype ι]
++    have hneg_bdd : ∀ ω, |(-(r x)) ω| ≤ Cr := by
++      intro ω
++      change |-r x ω| ≤ Cr
++      simpa only [abs_neg] using hCr ω
++    have hwd_pos := hwd (r x) (hr_meas x)
++    have hwd_neg :
++        (∫ ω, F ω ∂((M x).withDensity fun ω => ((-r x ω).toNNReal : ℝ≥0∞))) =
++          ∫ ω, (((-r x ω).toNNReal : ℝ) : ℂ) * F ω ∂(M x) := by
++      simpa only [Pi.neg_apply] using hwd (-(r x)) (hr_meas x).neg
++    have hint_pos := hint (r x) (hr_meas x) hCr
++    have hint_neg :
++        Integrable (fun ω => (((-r x ω).toNNReal : ℝ) : ℂ) * F ω) (M x) := by
++      simpa only [Pi.neg_apply] using hint (-(r x)) (hr_meas x).neg hneg_bdd
+@@ -224,3 +237 @@ private theorem combination_ext_zero_real {ι : Type*} [Fintype ι]
+-    rw [hwd _ (hr_meas x), hwd _ (hr_meas x).neg,
+-      ← integral_sub (hint _ (hr_meas x) hCr)
+-        (hint _ (hr_meas x).neg fun ω => by rw [abs_neg]; exact hCr ω)]
++    rw [hwd_pos, hwd_neg, ← integral_sub hint_pos hint_neg]
+@@ -329 +340 @@ theorem integral_combination_ext {n m : ℕ}
+-    Sum.elim (fun i ω => c i * f i ω) (fun j ω => -(d j * k j ω)) with hh_def
++    Sum.elim (fun i ω => c i * f i ω) (fun j => -(fun ω => d j * k j ω)) with hh_def
+@@ -335 +346,2 @@ theorem integral_combination_ext {n m : ℕ}
+-    · simpa only [hh_def, Sum.elim_inr] using ((hk_meas j).const_mul (d j)).neg
++    · simpa only [hh_def, Sum.elim_inr] using
++        ((hk_meas j).const_mul (d j)).neg
+@@ -345 +357 @@ theorem integral_combination_ext {n m : ℕ}
+-      simp only [hh_def, Sum.elim_inr]
++      simp only [hh_def, Sum.elim_inr, Pi.neg_apply]
+@@ -361 +373 @@ theorem integral_combination_ext {n m : ℕ}
+-      simp only [hh_def, hM_def, Sum.elim_inr]
++      simp only [hh_def, hM_def, Sum.elim_inr, Pi.neg_apply]
+diff --git a/vendor/Spectra/Spectra/Mathlib/MeasureTheory/Integral/Basic.lean b/vendor/Spectra/Spectra/Mathlib/MeasureTheory/Integral/Basic.lean
+index 4a459b2..61bf736 100644
+--- a/vendor/Spectra/Spectra/Mathlib/MeasureTheory/Integral/Basic.lean
++++ b/vendor/Spectra/Spectra/Mathlib/MeasureTheory/Integral/Basic.lean
+@@ -53,2 +53 @@ lemma integral_exp_neg_Ioc (n : ℕ) : ∫ x in (0 : ℝ)..n, Real.exp (-x) = 1
+-      convert (h2.comp x h1).neg using 1
+-      ring
++      exact HasDerivAt.congr_deriv (h2.comp x h1).neg (by simp)
+@@ -93 +92,2 @@ lemma integrable_exp_decay_continuous
+-    · exact (Real.continuous_exp.comp continuous_neg).aestronglyMeasurable.restrict
++    · exact (Complex.continuous_ofReal.comp
++        (Real.continuous_exp.comp continuous_neg)).aestronglyMeasurable.restrict
+@@ -162 +162,2 @@ lemma hasDerivAt_integral_of_exp_decay
+-    · exact (Real.continuous_exp.comp continuous_neg).aestronglyMeasurable.restrict
++    · exact (Complex.continuous_ofReal.comp
++        (Real.continuous_exp.comp continuous_neg)).aestronglyMeasurable.restrict
+@@ -171 +172,2 @@ lemma hasDerivAt_integral_of_exp_decay
+-    · exact (Real.continuous_exp.comp continuous_neg).aestronglyMeasurable
++    · exact (Complex.continuous_ofReal.comp
++        (Real.continuous_exp.comp continuous_neg)).aestronglyMeasurable
+diff --git a/vendor/Spectra/Spectra/Operator/Unitary/Basic.lean b/vendor/Spectra/Spectra/Operator/Unitary/Basic.lean
+index 6d410a8..d5e53e2 100644
+--- a/vendor/Spectra/Spectra/Operator/Unitary/Basic.lean
++++ b/vendor/Spectra/Spectra/Operator/Unitary/Basic.lean
+@@ -73 +73 @@ lemma Unitary.surjective {U : H →L[ℂ] H} (hU : Unitary U) : Function.Surject
+-  simp only [ContinuousLinearMap.mul_apply, ContinuousLinearMap.one_apply] at this
++  simp only [mul_apply_eq_comp, one_apply_eq_self] at this
+@@ -93,2 +93,2 @@ lemma unitary_sub_scalar_isNormal {E : Type*} [NormedAddCommGroup E]
+-    simp only [ContinuousLinearMap.adjoint_inner_left, ContinuousLinearMap.sub_apply,
+-               ContinuousLinearMap.smul_apply, ContinuousLinearMap.one_apply,
++    simp only [ContinuousLinearMap.adjoint_inner_left, sub_apply,
++               smul_apply, one_apply_eq_self,
+@@ -99,2 +99,2 @@ lemma unitary_sub_scalar_isNormal {E : Type*} [NormedAddCommGroup E]
+-  simp only [ContinuousLinearMap.mul_apply, ContinuousLinearMap.sub_apply,
+-             ContinuousLinearMap.smul_apply, ContinuousLinearMap.one_apply]
++  simp only [mul_apply_eq_comp, sub_apply,
++             smul_apply, one_apply_eq_self]
+@@ -103 +103 @@ lemma unitary_sub_scalar_isNormal {E : Type*} [NormedAddCommGroup E]
+-    simp only [ContinuousLinearMap.mul_apply, ContinuousLinearMap.one_apply] at this
++    simp only [mul_apply_eq_comp, one_apply_eq_self] at this
+@@ -107 +107 @@ lemma unitary_sub_scalar_isNormal {E : Type*} [NormedAddCommGroup E]
+-    simp only [ContinuousLinearMap.mul_apply, ContinuousLinearMap.one_apply] at this
++    simp only [mul_apply_eq_comp, one_apply_eq_self] at this
+@@ -182 +182 @@ lemma isUnit_bounded_below [Nontrivial H] {T : H →L[ℂ] H} (hT : IsUnit T) :
+-    simp only [ContinuousLinearMap.mul_apply, ContinuousLinearMap.one_apply] at this
++    simp only [mul_apply_eq_comp, one_apply_eq_self] at this
+@@ -294 +294 @@ lemma normal_bounded_below_isUnit [Nontrivial H] {T : H →L[ℂ] H}
+-            simp only [ContinuousLinearMap.one_apply]
++            simp only [one_apply_eq_self]
+@@ -297 +297 @@ lemma normal_bounded_below_isUnit [Nontrivial H] {T : H →L[ℂ] H}
+-            simp only [ContinuousLinearMap.one_apply]
++            simp only [one_apply_eq_self]
+@@ -319 +319 @@ lemma unitary_not_isUnit_approx_eigenvalue [Nontrivial H] {U : H →L[ℂ] H} (h
+-            congr 1; simp only [ContinuousLinearMap.coe_sub', ContinuousLinearMap.coe_smul',
++            congr 1; simp only [FunLike.coe_sub, FunLike.coe_smul,
+@@ -350 +350 @@ lemma unitary_not_approx_eigenvalue_isUnit [Nontrivial H] {U : H →L[ℂ] H} (h
+-            congr 1; simp only [ContinuousLinearMap.coe_sub', ContinuousLinearMap.coe_smul',
++            congr 1; simp only [FunLike.coe_sub, FunLike.coe_smul,
+diff --git a/vendor/Spectra/Spectra/Operator/Unitary/Powers.lean b/vendor/Spectra/Spectra/Operator/Unitary/Powers.lean
+index d246252..153d94e 100644
+--- a/vendor/Spectra/Spectra/Operator/Unitary/Powers.lean
++++ b/vendor/Spectra/Spectra/Operator/Unitary/Powers.lean
+@@ -111 +111 @@ private lemma pow_unitary_inner (V : H →L[ℂ] H) (hV : Operator.Unitary V)
+-    rw [pow_succ, ContinuousLinearMap.mul_apply]
++    rw [pow_succ, mul_apply_eq_comp]
+diff --git a/vendor/Spectra/Spectra/PositiveDefinite/Unitary.lean b/vendor/Spectra/Spectra/PositiveDefinite/Unitary.lean
+index 3857e41..9e09a7c 100644
+--- a/vendor/Spectra/Spectra/PositiveDefinite/Unitary.lean
++++ b/vendor/Spectra/Spectra/PositiveDefinite/Unitary.lean
+@@ -86 +86 @@ lemma unitaryCorrelation_neg (hU : Operator.Unitary U) (ψ : H) (n : ℤ) :
+-  simp only [unitaryZpow_zero, ContinuousLinearMap.one_apply, zero_sub] at h
++  simp only [unitaryZpow_zero, one_apply_eq_self, zero_sub] at h
+diff --git a/vendor/Spectra/Spectra/ProjValMeasure/Basic.lean b/vendor/Spectra/Spectra/ProjValMeasure/Basic.lean
+index a1e0bb8..5bd0593 100644
+--- a/vendor/Spectra/Spectra/ProjValMeasure/Basic.lean
++++ b/vendor/Spectra/Spectra/ProjValMeasure/Basic.lean
+@@ -117 +117 @@ lemma proj_empty (P : ProjValMeasure H) : P.proj ∅ MeasurableSet.empty = 0 :=
+-    rw [P.inner_proj, ContinuousLinearMap.zero_apply, inner_zero_right, measure_empty]
++    rw [P.inner_proj, zero_apply, inner_zero_right, measure_empty]
+@@ -141 +141 @@ lemma proj_union (P : ProjValMeasure H) {B₁ B₂ : Set ℝ}
+-    rw [ContinuousLinearMap.add_apply, inner_add_right, P.inner_proj, P.inner_proj,
++    rw [add_apply, inner_add_right, P.inner_proj, P.inner_proj,
+@@ -154 +154 @@ lemma norm_sq_proj_apply (P : ProjValMeasure H) (B : Set ℝ) (hB : MeasurableSe
+-      (P.isSelfAdjoint_proj B hB).adjoint_eq, ← ContinuousLinearMap.mul_apply,
++      (P.isSelfAdjoint_proj B hB).adjoint_eq, ← mul_apply_eq_comp,
+diff --git a/vendor/Spectra/Spectra/QuantumMechanics/Channels/PolarDecomp.lean b/vendor/Spectra/Spectra/QuantumMechanics/Channels/PolarDecomp.lean
+index 4de3599..6cf8ed8 100644
+--- a/vendor/Spectra/Spectra/QuantumMechanics/Channels/PolarDecomp.lean
++++ b/vendor/Spectra/Spectra/QuantumMechanics/Channels/PolarDecomp.lean
+@@ -129 +129 @@ noncomputable def polarIsometry (T : H →L[ℂ] H) : H →L[ℂ] H :=
+-  polarPartial T ∘L (polarRange T).orthogonalProjection
++  polarPartial T ∘L (polarRange T).orthogonalProjectionOnto
+@@ -134 +134 @@ noncomputable def polarIsometry (T : H →L[ℂ] H) : H →L[ℂ] H :=
+-  have hproj : (polarRange T).orthogonalProjection (absOp T x) = absOpCorestrict T x := by
++  have hproj : (polarRange T).orthogonalProjectionOnto (absOp T x) = absOpCorestrict T x := by
+diff --git a/vendor/Spectra/Spectra/Resolvent/Identities.lean b/vendor/Spectra/Spectra/Resolvent/Identities.lean
+index 76a42bf..c16beaa 100644
+--- a/vendor/Spectra/Spectra/Resolvent/Identities.lean
++++ b/vendor/Spectra/Spectra/Resolvent/Identities.lean
+@@ -82,2 +82 @@ lemma resolvent_identity {A : H →ₗ.[ℂ] H}
+-  simp only [ContinuousLinearMap.sub_apply, ContinuousLinearMap.smul_apply,
+-             ContinuousLinearMap.comp_apply]
++  simp only [sub_apply, smul_apply, ContinuousLinearMap.comp_apply]
+@@ -98,0 +98,5 @@ lemma resolvent_identity {A : H →ₗ.[ℂ] H}
++    have h_add_domain :
++        (⟨ψ_z + (w - z) • η, h_sum_domain⟩ : A.domain) =
++          ⟨ψ_z, h_z_domain⟩ + ⟨(w - z) • η, h_smul_mem⟩ := by
++      apply Subtype.ext
++      rfl
+@@ -101 +105,11 @@ lemma resolvent_identity {A : H →ₗ.[ℂ] H}
+-      convert A.map_add ⟨ψ_z, h_z_domain⟩ ⟨(w - z) • η, h_smul_mem⟩ using 1
++      calc
++        A ⟨ψ_z + (w - z) • η, h_sum_domain⟩ =
++            A (⟨ψ_z, h_z_domain⟩ + ⟨(w - z) • η, h_smul_mem⟩) := by
++              rw [h_add_domain]
++        _ = A ⟨ψ_z, h_z_domain⟩ + A ⟨(w - z) • η, h_smul_mem⟩ :=
++          A.map_add _ _
++    have h_smul_domain :
++        (⟨(w - z) • η, h_smul_mem⟩ : A.domain) =
++          (w - z) • (⟨η, h_η_domain⟩ : A.domain) := by
++      apply Subtype.ext
++      rfl
+@@ -103 +117,4 @@ lemma resolvent_identity {A : H →ₗ.[ℂ] H}
+-      convert A.map_smul (w - z) ⟨η, h_η_domain⟩ using 1
++      calc
++        A ⟨(w - z) • η, h_smul_mem⟩ = A ((w - z) • (⟨η, h_η_domain⟩ : A.domain)) := by
++          rw [h_smul_domain]
++        _ = (w - z) • A ⟨η, h_η_domain⟩ := A.map_smul _ _
+@@ -162,2 +179 @@ lemma resolvent_tendsto {A : H →ₗ.[ℂ] H} (hsym : A.IsFormalAdjoint A)
+-      simpa [ContinuousLinearMap.sub_apply, ContinuousLinearMap.smul_apply,
+-             ContinuousLinearMap.comp_apply] using hh
++      simpa [sub_apply, smul_apply, ContinuousLinearMap.comp_apply] using hh
+diff --git a/vendor/Spectra/Spectra/Resolvent/Range/Surjectivity.lean b/vendor/Spectra/Spectra/Resolvent/Range/Surjectivity.lean
+index 3da1ea3..9b57cd9 100644
+--- a/vendor/Spectra/Spectra/Resolvent/Range/Surjectivity.lean
++++ b/vendor/Spectra/Spectra/Resolvent/Range/Surjectivity.lean
+@@ -134,2 +134,5 @@ lemma solution_unique {A : H →ₗ.[ℂ] H} (hsym : A.IsFormalAdjoint A)
+-    have op_eq : A ⟨(ψ:H) - ψ', sub_mem ψ.2 ψ'.2⟩ = A ψ - A ψ' := by
+-      convert A.map_sub ψ ψ' using 1
++    have hsub_eq : (⟨(ψ : H) - ψ', sub_mem ψ.2 ψ'.2⟩ : A.domain) = ψ - ψ' := by
++      apply Subtype.ext
++      rfl
++    have op_eq : A ⟨(ψ : H) - ψ', sub_mem ψ.2 ψ'.2⟩ = A ψ - A ψ' := by
++      rw [hsub_eq, A.map_sub]
+diff --git a/vendor/Spectra/Spectra/SpectralTheory/Algebra.lean b/vendor/Spectra/Spectra/SpectralTheory/Algebra.lean
+index 0391dda..358df97 100644
+--- a/vendor/Spectra/Spectra/SpectralTheory/Algebra.lean
++++ b/vendor/Spectra/Spectra/SpectralTheory/Algebra.lean
+@@ -316 +316,5 @@ private lemma spectralProjection_re_inner_eq_integral (a b : ℝ) (φ : H)
+-    ae_iff.mpr (by convert h_supp using 1)
++    ae_iff.mpr (by
++      change (borelMeasure U_grp
++        (spectralProjection U_grp (Set.Icc a b) measurableSet_Icc φ))
++          (Set.Icc a b)ᶜ = 0
++      exact h_supp)
+diff --git a/vendor/Spectra/Spectra/YosidaHille/Approximation/ExpBounded/Unitary.lean b/vendor/Spectra/Spectra/YosidaHille/Approximation/ExpBounded/Unitary.lean
+index 86c5622..9996773 100644
+--- a/vendor/Spectra/Spectra/YosidaHille/Approximation/ExpBounded/Unitary.lean
++++ b/vendor/Spectra/Spectra/YosidaHille/Approximation/ExpBounded/Unitary.lean
+@@ -29,0 +30,2 @@ namespace Spectra.YosidaHille.Approximation
++noncomputable section
++
+@@ -129,5 +131,17 @@ theorem expBounded_yosidaApproxSym_isometry {A : H →ₗ.[ℂ] H}
+-/-- The base case that `expBounded_hasDerivAt` bootstraps by translation-invariance
+-(`expBounded B t = (expBounded B τ).comp (expBounded B (t - τ))`): at `τ = 0`, the derivative of
+-`t ↦ exp(tB)` is `B` itself, since `NormedSpace.exp` has derivative `1` at `0`. -/
+-lemma expBounded_hasDerivAt_zero (B : H →L[ℂ] H) :
+-    HasDerivAt (fun τ : ℝ => expBounded B τ) B 0 := by
++-- Mathlib currently exposes both generic bounded-convergence structures and
++-- operator-norm structures on continuous linear maps.  The direct generic parent
++-- instances otherwise win before the normed instances can provide their parents,
++-- so select the coherent operator-norm parents explicitly for these calculus facts.
++local instance operatorNormAddCommGroup : AddCommGroup (H →L[ℂ] H) :=
++  ContinuousLinearMap.toNormedAddCommGroup.toAddCommGroup
++
++local instance operatorNormRealModule : Module ℝ (H →L[ℂ] H) :=
++  ContinuousLinearMap.toNormedSpace.toModule
++
++local instance operatorNormTopologicalSpace : TopologicalSpace (H →L[ℂ] H) :=
++  PseudoMetricSpace.toUniformSpace.toTopologicalSpace
++
++/-- Differentiate the complex exponential curve and restrict it along `ℝ ↪ ℂ`.
++This avoids installing a second real normed-algebra structure on the operator space. -/
++private lemma expBounded_hasDerivAt_left (B : H →L[ℂ] H) (τ : ℝ) :
++    HasDerivAt (fun t : ℝ => expBounded B t) ((expBounded B τ).comp B) τ := by
+@@ -135 +148,0 @@ lemma expBounded_hasDerivAt_zero (B : H →L[ℂ] H) :
+-  letI : NormedAlgebra ℝ (H →L[ℂ] H) := NormedAlgebra.restrictScalars ℝ ℂ _
+@@ -138,12 +151,35 @@ lemma expBounded_hasDerivAt_zero (B : H →L[ℂ] H) :
+-  simp_rw [expBounded_eq_exp]
+-  have h_path : HasDerivAt (fun t : ℝ => (t : ℂ) • B) B 0 := by
+-    have h := (ofRealCLM.hasDerivAt (x := (0 : ℝ))).smul_const B
+-    convert h using 1
+-    exact (one_smul ℂ B).symm
+-  have h_fderiv : HasFDerivAt NormedSpace.exp
+-      (1 : (H →L[ℂ] H) →L[ℝ] (H →L[ℂ] H)) ((fun t : ℝ => (t : ℂ) • B) 0) := by
+-    simp only [ofReal_zero, zero_smul]
+-    show HasFDerivAt NormedSpace.exp (1 : (H →L[ℂ] H) →L[ℝ] (H →L[ℂ] H)) 0
+-    exact hasFDerivAt_exp_zero (𝕂 := ℝ) (𝔸 := H →L[ℂ] H)
+-  have h_comp := h_fderiv.comp_hasDerivAt (0 : ℝ) h_path
+-  convert h_comp using 1
++  have h_complex :
++      HasDerivAt (fun z : ℂ => NormedSpace.exp (z • B))
++        (NormedSpace.exp ((τ : ℂ) • B) * B) (τ : ℂ) :=
++    hasDerivAt_exp_smul_const B (τ : ℂ)
++  have h_real_comp :
++      HasDerivAt
++        ((fun z : ℂ => NormedSpace.exp (z • B)) ∘ Complex.ofReal)
++        (NormedSpace.exp ((τ : ℂ) • B) * B) τ := by
++    unfold operatorNormAddCommGroup operatorNormRealModule operatorNormTopologicalSpace
++    simpa only [Complex.ofRealCLM_apply, Complex.ofReal_one, one_smul] using
++      h_complex.scomp τ Complex.ofRealCLM.hasDerivAt
++  have h_real :
++      HasDerivAt (fun t : ℝ => NormedSpace.exp ((t : ℂ) • B))
++        (NormedSpace.exp ((τ : ℂ) • B) * B) τ :=
++    h_real_comp.congr_of_eventuallyEq (Eventually.of_forall fun _ => rfl)
++  have h_expBounded :
++      HasDerivAt (fun t : ℝ => expBounded B t)
++        (NormedSpace.exp ((τ : ℂ) • B) * B) τ :=
++    h_real.congr_of_eventuallyEq
++      (Eventually.of_forall fun t => expBounded_eq_exp B t)
++  have h_deriv :
++      NormedSpace.exp ((τ : ℂ) • B) * B = (expBounded B τ).comp B := by
++    rw [expBounded_eq_exp]
++    ext x
++    simp only [mul_apply_eq_comp, ContinuousLinearMap.comp_apply]
++  exact h_expBounded.congr_deriv h_deriv
++
++/-- The base case that `expBounded_hasDerivAt` bootstraps from: at `τ = 0`,
++the derivative of `t ↦ exp(tB)` is `B`. -/
++lemma expBounded_hasDerivAt_zero (B : H →L[ℂ] H) :
++    HasDerivAt (fun τ : ℝ => expBounded B τ) B 0 := by
++  apply (expBounded_hasDerivAt_left B 0).congr_deriv
++  rw [expBounded_at_zero']
++  ext x
++  simp only [ContinuousLinearMap.comp_apply, one_apply_eq_self]
+@@ -154,24 +190 @@ lemma expBounded_hasDerivAt (B : H →L[ℂ] H) (τ : ℝ) :
+-  haveI : IsScalarTower ℝ ℂ H := RestrictScalars.isScalarTower ℝ ℂ H
+-  letI : NormedAlgebra ℝ (H →L[ℂ] H) := NormedAlgebra.restrictScalars ℝ ℂ _
+-  haveI : IsScalarTower ℝ ℂ (H →L[ℂ] H) :=
+-    ⟨fun r c f => ContinuousLinearMap.ext fun x => smul_assoc r c (f x)⟩
+-  have h_eq : ∀ t, expBounded B t = (expBounded B τ).comp (expBounded B (t - τ)) := by
+-    intro t
+-    rw [← expBounded_add_smul]
+-    congr 1; ring
+-  have h_shift : HasDerivAt (fun t => expBounded B (t - τ)) B τ := by
+-    have h0 : HasDerivAt (fun t => expBounded B t) B (τ - τ) := by
+-      simp only [sub_self]
+-      exact expBounded_hasDerivAt_zero B
+-    exact h0.comp_sub_const τ τ
+-  have _h_val : expBounded B (τ - τ) = 1 := by simp only [sub_self, expBounded_at_zero']
+-  have h_post : HasDerivAt (fun t => (expBounded B τ).comp (expBounded B (t - τ)))
+-                           ((expBounded B τ).comp B) τ := by
+-    set A := expBounded B τ
+-    have h_clm : HasFDerivAt (fun T : H →L[ℂ] H => A.comp T)
+-                             ((ContinuousLinearMap.compL ℂ H H H) A)
+-                             (expBounded B (τ - τ)) :=
+-      ((ContinuousLinearMap.compL ℂ H H H) A).hasFDerivAt
+-    have h_clm' := h_clm.restrictScalars ℝ
+-    have h_comp := h_clm'.comp_hasDerivAt τ h_shift
+-    convert h_comp using 1
++  have h_left := expBounded_hasDerivAt_left B τ
+@@ -181,5 +194,6 @@ lemma expBounded_hasDerivAt (B : H →L[ℂ] H) (τ : ℝ) :
+-    have := B_commute_expBounded B τ
+-    unfold Commute SemiconjBy at this
+-    exact congrFun (congrArg DFunLike.coe this.symm) ψ
+-  rw [h_comm] at h_post
+-  exact h_post.congr_of_eventuallyEq (Eventually.of_forall (fun t => (h_eq t)))
++    have h := B_commute_expBounded B τ
++    unfold Commute SemiconjBy at h
++    exact congrFun (congrArg DFunLike.coe h.symm) ψ
++  exact h_left.congr_deriv h_comm
++
++end
+diff --git a/vendor/Spectra/Spectra/YosidaHille/Helpers.lean b/vendor/Spectra/Spectra/YosidaHille/Helpers.lean
+index 5c29b5f..48d6fcf 100644
+--- a/vendor/Spectra/Spectra/YosidaHille/Helpers.lean
++++ b/vendor/Spectra/Spectra/YosidaHille/Helpers.lean
+@@ -81,0 +82,3 @@ lemma op_range_isClosed {A : H →ₗ.[ℂ] H} (hsym : A.IsFormalAdjoint A)
++      have hsub_eq : (⟨↑(xn m) - ↑(xn k), hsub⟩ : A.domain) = xn m - xn k := by
++        apply Subtype.ext
++        rfl
+@@ -83 +86 @@ lemma op_range_isClosed {A : H →ₗ.[ℂ] H} (hsym : A.IsFormalAdjoint A)
+-        have := A.map_sub (xn m) (xn k); convert this using 2
++        rw [hsub_eq, A.map_sub]
+@@ -217,0 +221,4 @@ lemma IsSelfAdjoint.eq_of_le {A B : H →ₗ.[ℂ] H}
++      have hsub_eq : (⟨(v : H) - w, hsub⟩ : B.domain) =
++          ⟨(v : H), hvB⟩ - ⟨w, hw⟩ := by
++        apply Subtype.ext
++        rfl
+@@ -219 +226 @@ lemma IsSelfAdjoint.eq_of_le {A B : H →ₗ.[ℂ] H}
+-        have hms := B.map_sub ⟨(v : H), hvB⟩ ⟨w, hw⟩; convert hms using 2
++        rw [hsub_eq, B.map_sub]

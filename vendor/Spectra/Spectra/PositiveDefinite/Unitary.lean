@@ -83,7 +83,7 @@ lemma unitaryCorrelation_neg (hU : Operator.Unitary U) (ψ : H) (n : ℤ) :
   rw [inner_conj_symm]
   -- Goal: ⟪ψ, U^{-n} ψ⟫ = ⟪U^n ψ, ψ⟫
   have h := unitaryZpow_inner_shift U hU n 0 ψ
-  simp only [unitaryZpow_zero, ContinuousLinearMap.one_apply, zero_sub] at h
+  simp only [unitaryZpow_zero, one_apply_eq_self, zero_sub] at h
   -- h : ⟪U^n ψ, ψ⟫ = ⟪ψ, U^{-n} ψ⟫
   exact h.symm
 

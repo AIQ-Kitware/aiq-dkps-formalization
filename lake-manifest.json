@@ -16,7 +16,7 @@
    "name": "Spectra",
    "manifestFile": "lake-manifest.json",
    "inherited": false,
-   "dir": "external/Spectra",
+   "dir": "vendor/Spectra",
    "configFile": "lakefile.lean"},
   {"url": "https://github.com/leanprover-community/plausible",
    "type": "git",

@@ -313,7 +313,11 @@ private lemma spectralProjection_re_inner_eq_integral (a b : ℝ) (φ : H)
     measurableSet_Icc φ
   have h_ae_mem : ∀ᵐ s ∂(borelMeasure U_grp
       (spectralProjection U_grp (Set.Icc a b) measurableSet_Icc φ)), s ∈ Set.Icc a b :=
-    ae_iff.mpr (by convert h_supp using 1)
+    ae_iff.mpr (by
+      change (borelMeasure U_grp
+        (spectralProjection U_grp (Set.Icc a b) measurableSet_Icc φ))
+          (Set.Icc a b)ᶜ = 0
+      exact h_supp)
   -- absorption: Φ(λ·1_B) (E(B)φ) = Φ(λ·1_B) φ
   have habsorb : spectralCalculus U_grp
         (fun l => (l : ℂ) * Set.indicator (Set.Icc a b) (fun _ => (1 : ℂ)) l)

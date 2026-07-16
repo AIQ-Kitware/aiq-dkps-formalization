@@ -114,7 +114,7 @@ lemma proj_congr (P : ProjValMeasure H) {B₁ B₂ : Set ℝ} (h : B₁ = B₂)
 @[simp]
 lemma proj_empty (P : ProjValMeasure H) : P.proj ∅ MeasurableSet.empty = 0 :=
   op_ext_of_inner_self fun ξ => by
-    rw [P.inner_proj, ContinuousLinearMap.zero_apply, inner_zero_right, measure_empty]
+    rw [P.inner_proj, zero_apply, inner_zero_right, measure_empty]
     simp
 
 /-- Idempotence, from multiplicativity at `B ∩ B`. -/
@@ -138,7 +138,7 @@ lemma proj_union (P : ProjValMeasure H) {B₁ B₂ : Set ℝ}
     (hB₁ : MeasurableSet B₁) (hB₂ : MeasurableSet B₂) (hd : Disjoint B₁ B₂) :
     P.proj (B₁ ∪ B₂) (hB₁.union hB₂) = P.proj B₁ hB₁ + P.proj B₂ hB₂ :=
   op_ext_of_inner_self fun ξ => by
-    rw [ContinuousLinearMap.add_apply, inner_add_right, P.inner_proj, P.inner_proj,
+    rw [add_apply, inner_add_right, P.inner_proj, P.inner_proj,
       P.inner_proj, measure_union hd hB₂,
       ENNReal.toReal_add (measure_ne_top _ _) (measure_ne_top _ _)]
     push_cast
@@ -151,7 +151,7 @@ lemma norm_sq_proj_apply (P : ProjValMeasure H) (B : Set ℝ) (hB : MeasurableSe
     ‖P.proj B hB ξ‖ ^ 2 = ((P.diag ξ) B).toReal := by
   have h1 : ⟪P.proj B hB ξ, P.proj B hB ξ⟫_ℂ = ⟪ξ, P.proj B hB ξ⟫_ℂ := by
     rw [← ContinuousLinearMap.adjoint_inner_right,
-      (P.isSelfAdjoint_proj B hB).adjoint_eq, ← ContinuousLinearMap.mul_apply,
+      (P.isSelfAdjoint_proj B hB).adjoint_eq, ← mul_apply_eq_comp,
       P.proj_idem]
   rw [norm_sq_eq_re_inner (𝕜 := ℂ), h1, P.inner_proj, RCLike.re_eq_complex_re,
     Complex.ofReal_re]

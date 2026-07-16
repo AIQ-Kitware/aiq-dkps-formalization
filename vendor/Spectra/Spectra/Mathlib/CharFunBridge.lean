@@ -220,10 +220,21 @@ private theorem combination_ext_zero_real {ι : Type*} [Fintype ι]
       rw [integral_withDensity_eq_integral_smul hs.real_toNNReal F]
       refine integral_congr_ae (.of_forall fun ω => ?_)
       simp only [NNReal.smul_def, Complex.real_smul]
+    have hneg_bdd : ∀ ω, |(-(r x)) ω| ≤ Cr := by
+      intro ω
+      change |-r x ω| ≤ Cr
+      simpa only [abs_neg] using hCr ω
+    have hwd_pos := hwd (r x) (hr_meas x)
+    have hwd_neg :
+        (∫ ω, F ω ∂((M x).withDensity fun ω => ((-r x ω).toNNReal : ℝ≥0∞))) =
+          ∫ ω, (((-r x ω).toNNReal : ℝ) : ℂ) * F ω ∂(M x) := by
+      simpa only [Pi.neg_apply] using hwd (-(r x)) (hr_meas x).neg
+    have hint_pos := hint (r x) (hr_meas x) hCr
+    have hint_neg :
+        Integrable (fun ω => (((-r x ω).toNNReal : ℝ) : ℂ) * F ω) (M x) := by
+      simpa only [Pi.neg_apply] using hint (-(r x)) (hr_meas x).neg hneg_bdd
     simp only [hmp_def, hmm_def]
-    rw [hwd _ (hr_meas x), hwd _ (hr_meas x).neg,
-      ← integral_sub (hint _ (hr_meas x) hCr)
-        (hint _ (hr_meas x).neg fun ω => by rw [abs_neg]; exact hCr ω)]
+    rw [hwd_pos, hwd_neg, ← integral_sub hint_pos hint_neg]
     refine integral_congr_ae (.of_forall fun ω => ?_)
     simp only [← sub_mul, toNNReal_split]
     exact mul_comm _ _
@@ -326,13 +337,14 @@ theorem integral_combination_ext {n m : ℕ}
   -- combine both sides into one family over `Fin n ⊕ Fin m`, with signed complex densities
   set M : Fin n ⊕ Fin m → Measure ℝ := Sum.elim μ ν with hM_def
   set h : Fin n ⊕ Fin m → ℝ → ℂ :=
-    Sum.elim (fun i ω => c i * f i ω) (fun j ω => -(d j * k j ω)) with hh_def
+    Sum.elim (fun i ω => c i * f i ω) (fun j => -(fun ω => d j * k j ω)) with hh_def
   haveI hM_fin : ∀ x, IsFiniteMeasure (M x) := by
     rintro (i | j) <;> simp only [hM_def, Sum.elim_inl, Sum.elim_inr] <;> infer_instance
   have hh_meas : ∀ x, Measurable (h x) := by
     rintro (i | j)
     · simpa only [hh_def, Sum.elim_inl] using (hf_meas i).const_mul (c i)
-    · simpa only [hh_def, Sum.elim_inr] using ((hk_meas j).const_mul (d j)).neg
+    · simpa only [hh_def, Sum.elim_inr] using
+        ((hk_meas j).const_mul (d j)).neg
   have hh_bdd : ∀ x, ∃ C, ∀ ω, ‖h x ω‖ ≤ C := by
     rintro (i | j)
     · obtain ⟨C, hC⟩ := hf_bdd i
@@ -342,7 +354,7 @@ theorem integral_combination_ext {n m : ℕ}
       exact mul_le_mul_of_nonneg_left (hC ω) (norm_nonneg _)
     · obtain ⟨C, hC⟩ := hk_bdd j
       refine ⟨‖d j‖ * C, fun ω => ?_⟩
-      simp only [hh_def, Sum.elim_inr]
+      simp only [hh_def, Sum.elim_inr, Pi.neg_apply]
       rw [norm_neg, norm_mul]
       exact mul_le_mul_of_nonneg_left (hC ω) (norm_nonneg _)
   -- folding the combined family back into the two stated sums (no integrability needed)
@@ -358,7 +370,7 @@ theorem integral_combination_ext {n m : ℕ}
       rw [← integral_const_mul']
       exact integral_congr_ae (.of_forall fun ω => by ring)
     · refine Finset.sum_congr rfl fun j _ => ?_
-      simp only [hh_def, hM_def, Sum.elim_inr]
+      simp only [hh_def, hM_def, Sum.elim_inr, Pi.neg_apply]
       rw [← integral_const_mul', ← integral_neg]
       exact integral_congr_ae (.of_forall fun ω => by ring)
   -- the hypothesis, in one-sided combined form
