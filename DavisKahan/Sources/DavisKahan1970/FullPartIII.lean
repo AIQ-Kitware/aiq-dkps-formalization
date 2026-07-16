@@ -93,6 +93,12 @@ alias bounded_spectralProjection_sinTheta :=
 alias bounded_ideal_sinTheta := DavisKahanExt.ideal_sinTheta
 alias bounded_sinTheta_genuineSpectrum :=
   DavisKahanExt.sinTheta_genuineSpectrum
+alias unbounded_sinTheta_opNorm :=
+  DavisKahan.Experimental.ExactSinTheta.sinTheta_unbounded_opNorm
+alias unbounded_sylvester_intervalExterior_opNorm :=
+  DavisKahan.Experimental.ExactSinTheta.norm_closedSylvester_le_of_intervalExterior
+alias unbounded_sylvester_exteriorInterval_opNorm :=
+  DavisKahan.Experimental.ExactSinTheta.norm_closedSylvester_le_of_exteriorInterval
 
 /-! ## Direct rotation -/
 
