@@ -219,7 +219,37 @@ Hilbert-space theorem complete** (complex scalars, operator norm, genuine
 spectra).  Remaining for "paper theorem complete": the symmetric/two-sided
 form (maximum of the two directed gaps, as in `sinTheta_symmetric`), the
 UI-norm/ideal scope, real scalars via complexification, and the unbounded
-extension.  Elaboration notes for future waves: statements over
+extension.
+
+### Progress note (2026-07-16, unbounded sin Θ session)
+
+The unbounded extension now has its honest operator-norm layer, fully proved
+at `RCLike` generality (axiom audit clean on every declaration) in
+`SinTheta/GenuineUnbounded.lean`:
+
+- `ClosedOperator.norm_shift_apply_le_of_form_bounds`: a symmetric closed
+  operator with quadratic form in `[β, α]` satisfies
+  `‖B y - c y‖ ≤ r ‖y‖` on its domain (`c` center, `r` radius), by
+  polarization and density — the unbounded numerical-radius-to-norm bridge.
+- `norm_closedSylvester_le_of_intervalExterior` and
+  `norm_closedSylvester_le_of_exteriorInterval`: constant-one estimates
+  `δ ‖X‖ ≤ ‖C‖` for the domain-aware `ClosedSylvesterEquation`, in both
+  orientations, with the exterior block carried by a proof-carrying bounded
+  shifted inverse (`LeftShiftedInverseBound` /
+  `TwoSidedShiftedInverseBound` — the resolvent reformulation of spectral
+  exteriority, to be discharged later by an unbounded spectral theorem).
+- `sinTheta_unbounded_opNorm`: **the unbounded Davis--Kahan `sin Θ`
+  theorem in operator norm** — for the paper-shaped `UnboundedSinThetaData`
+  with the trial block's form in `[β, α]` and the complementary block's
+  shifted resolvent bounded by `((α-β)/2 + δ)⁻¹`, the conclusion
+  `δ ‖X⋆ ∘ F₁‖ ≤ ‖R⋆ ∘ F₁‖`, through the proved adjoint residual block
+  identity.
+
+This lands Davis--Kahan Theorem 5.2 at operator-norm scope with honest
+hypotheses.  The paper's full UI-norm scope for 5.2 remains open in
+`Sylvester/Unbounded.lean` (Ky Fan cutoff route and the ideal-gauge
+interval/exterior route, which additionally needs a gauge-closedness or
+Neumann-series argument for ideal membership of the solution).  Elaboration notes for future waves: statements over
 `[CStarAlgebra A]` applied to `E →L[ℂ] E` need
 `import Mathlib.Analysis.CStarAlgebra.ContinuousLinearMap`; the
 `...ContinuousFunctionalCalculus.Basic` import is required for the base
