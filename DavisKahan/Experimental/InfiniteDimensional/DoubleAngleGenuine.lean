@@ -590,6 +590,139 @@ theorem sinTwoTheta_genuineSpectrum_residual
 
 end ResidualSinTwoTheta
 
+section SinTwoThetaIdentification
+
+/-- The sum of the two off-diagonal blocks has exactly the norm of one
+block: `≤` is the orthogonal-splitting estimate behind the sharp defect
+bound, and `≥` holds because the sum restricts to the first block on
+`V`. -/
+theorem norm_offdiag_add_eq (V : Submodule ℂ E) [V.HasOrthogonalProjection]
+    {A : E →L[ℂ] E} (hA : IsSelfAdjoint A) :
+    ‖Vᗮ.starProjection ∘L A ∘L V.starProjection +
+        V.starProjection ∘L A ∘L Vᗮ.starProjection‖ =
+      ‖Vᗮ.starProjection ∘L A ∘L V.starProjection‖ := by
+  refine le_antisymm ?_ ?_
+  · have h1 := norm_reflectionDefect_le_two_mul_norm_cross V hA
+    have h2 : ‖reflectionDefect V A‖ =
+        2 * ‖Vᗮ.starProjection ∘L A ∘L V.starProjection +
+          V.starProjection ∘L A ∘L Vᗮ.starProjection‖ := by
+      rw [reflectionDefect_eq_neg_two_smul_offdiag, norm_smul]
+      norm_num
+    linarith
+  · refine ContinuousLinearMap.opNorm_le_bound _ (norm_nonneg _) fun z => ?_
+    have hVfix : V.starProjection (V.starProjection z) =
+        V.starProjection z :=
+      Submodule.starProjection_eq_self_iff.mpr
+        (V.starProjection_apply_mem z)
+    have hperp : Vᗮ.starProjection (V.starProjection z) = 0 := by
+      rw [Submodule.starProjection_orthogonal' V, sub_apply,
+        one_apply_eq_self, hVfix, sub_self]
+    have hfact : (Vᗮ.starProjection ∘L A ∘L V.starProjection +
+        V.starProjection ∘L A ∘L Vᗮ.starProjection)
+          (V.starProjection z) =
+        (Vᗮ.starProjection ∘L A ∘L V.starProjection) z := by
+      show Vᗮ.starProjection (A (V.starProjection (V.starProjection z))) +
+          V.starProjection (A (Vᗮ.starProjection (V.starProjection z))) =
+        Vᗮ.starProjection (A (V.starProjection z))
+      rw [hVfix, hperp, map_zero, map_zero, add_zero]
+    calc ‖(Vᗮ.starProjection ∘L A ∘L V.starProjection) z‖
+        = ‖(Vᗮ.starProjection ∘L A ∘L V.starProjection +
+            V.starProjection ∘L A ∘L Vᗮ.starProjection)
+              (V.starProjection z)‖ := by rw [hfact]
+      _ ≤ ‖Vᗮ.starProjection ∘L A ∘L V.starProjection +
+            V.starProjection ∘L A ∘L Vᗮ.starProjection‖ *
+            ‖V.starProjection z‖ := ContinuousLinearMap.le_opNorm _ _
+      _ ≤ ‖Vᗮ.starProjection ∘L A ∘L V.starProjection +
+            V.starProjection ∘L A ∘L Vᗮ.starProjection‖ * ‖z‖ :=
+          mul_le_mul_of_nonneg_left (V.norm_starProjection_apply_le z)
+            (norm_nonneg _)
+
+omit [CompleteSpace E] in
+/-- Conjugation by the reflection through `V` carries the projection onto
+`U` to the projection onto the reflected image. -/
+theorem starProjection_map_reflection (U V : Submodule ℂ E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
+    (U.map (V.reflection.toLinearEquiv : E →ₗ[ℂ] E)).starProjection =
+      conjByIsometryEquiv V.reflection U.starProjection := by
+  ext x
+  rw [Submodule.starProjection_map_apply]
+  rfl
+
+/-- The gap to the reflected image is the norm of the reflection defect
+of the projection: `subspaceGap U (J_V U) = ‖J_V P_U J_V - P_U‖`. -/
+theorem subspaceGap_map_reflection (U V : Submodule ℂ E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
+    subspaceGap U (U.map (V.reflection.toLinearEquiv : E →ₗ[ℂ] E)) =
+      ‖reflectionDefect V U.starProjection‖ := by
+  have h : U.starProjection -
+      (U.map (V.reflection.toLinearEquiv : E →ₗ[ℂ] E)).starProjection =
+      -(reflectionDefect V U.starProjection) := by
+    rw [starProjection_map_reflection,
+      ← conjByReflection_sub_eq_reflectionDefect]
+    abel
+  show ‖U.starProjection -
+      (U.map (V.reflection.toLinearEquiv : E →ₗ[ℂ] E)).starProjection‖ = _
+  rw [h, norm_neg]
+
+/-- **The double-angle identification.**  The gap to the reflected image
+is exactly the norm of the double-angle sine operator:
+`subspaceGap U (J_V U) = ‖sin 2Θ(U, V)‖`.  Both sides equal
+`2 ‖P_{Vᗮ} P_U P_V‖`: the left through the off-diagonal decomposition of
+the reflection defect of `P_U`, the right through the C⋆-composition
+norm identities. -/
+theorem subspaceGap_map_reflection_eq_norm_sinTwoAngle
+    (U V : Submodule ℂ E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
+    subspaceGap U (U.map (V.reflection.toLinearEquiv : E →ₗ[ℂ] E)) =
+      ‖sinTwoAngleOperatorC U V‖ := by
+  rw [subspaceGap_map_reflection,
+    reflectionDefect_eq_neg_two_smul_offdiag, norm_smul,
+    norm_offdiag_add_eq V (isSelfAdjoint_starProjection U),
+    norm_sinTwoAngleOperatorC]
+  norm_num
+
+/-- **The genuine-spectrum `sin 2Θ` theorem, exact operator form.**
+For self-adjoint `A` with the genuine internal spectral configuration at
+the reducing subspace `U` and any `B` reduced by `V`,
+`d * ‖sin 2Θ(U, V)‖ ≤ 2 ‖B - A‖` — the double-angle sine operator is the
+functional-calculus `2 sin Θ cos Θ` of the pair `(U, V)`. -/
+theorem sinTwoTheta_genuineSpectrum_operator
+    {A B : E →L[ℂ] E} (hA : IsSelfAdjoint A)
+    {U V : Submodule ℂ E}
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hU : Reduces A U) (hV : Reduces B V)
+    {a b d : ℝ} (hd : 0 < d) (hab : a ≤ b)
+    (hUspec : spectrum ℝ (compressOperator U A) ⊆ Set.Icc a b)
+    (hUspec' : ∀ x ∈ spectrum ℝ (compressOperator Uᗮ A),
+      x ≤ a - d ∨ b + d ≤ x) :
+    d * ‖sinTwoAngleOperatorC U V‖ ≤ 2 * ‖B - A‖ := by
+  rw [← subspaceGap_map_reflection_eq_norm_sinTwoAngle]
+  exact sinTwoTheta_genuineSpectrum hA hU hV hd hab hUspec hUspec'
+
+/-- **The residual `sin 2Θ` theorem, exact operator form.**
+`d * ‖sin 2Θ(U, V)‖ ≤ 2 ‖A X - X M‖` for the trial subspace
+`V = range X` and an arbitrary comparison operator `M` on the trial
+space. -/
+theorem sinTwoTheta_genuineSpectrum_residual_operator
+    {F : Type*} [NormedAddCommGroup F] [InnerProductSpace ℂ F]
+    {A : E →L[ℂ] E} (hA : IsSelfAdjoint A)
+    {U V : Submodule ℂ E}
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hU : Reduces A U)
+    {a b d : ℝ} (hd : 0 < d) (hab : a ≤ b)
+    (hUspec : spectrum ℝ (compressOperator U A) ⊆ Set.Icc a b)
+    (hUspec' : ∀ x ∈ spectrum ℝ (compressOperator Uᗮ A),
+      x ≤ a - d ∨ b + d ≤ x)
+    {X : F →L[ℂ] E} (hX : DavisKahan.IsometricEmbedding X)
+    (hmem : ∀ u, X u ∈ V) (hsurj : ∀ v ∈ V, ∃ u, X u = v)
+    (M : F →L[ℂ] F) :
+    d * ‖sinTwoAngleOperatorC U V‖ ≤ 2 * ‖A ∘L X - X ∘L M‖ := by
+  rw [← subspaceGap_map_reflection_eq_norm_sinTwoAngle]
+  exact sinTwoTheta_genuineSpectrum_residual hA hU hd hab hUspec hUspec'
+    hX hmem hsurj M
+
+end SinTwoThetaIdentification
+
 end SinTwoTheta
 
 end DavisKahanExt

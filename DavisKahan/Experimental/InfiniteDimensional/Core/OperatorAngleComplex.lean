@@ -287,6 +287,37 @@ theorem norm_sinTwoAngleOperatorC_le (U V : Submodule ℂ E)
         nlinarith [norm_nonneg (cosAngleOperatorC U V)]
     _ = 2 * directedGap U V := by ring
 
+/-- **Exact norm of the double-angle sine.**
+`‖sin 2Θ(U, V)‖ = 2 ‖P_{Vᗮ} P_U P_V‖`: the absolute values drop out of
+the norm of the product by the C⋆-composition identities
+`‖|S| D‖ = ‖S D‖` and `‖D |T|‖ = ‖D T⋆‖`, leaving the compressed cross
+block. -/
+theorem norm_sinTwoAngleOperatorC (U V : Submodule ℂ E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
+    ‖sinTwoAngleOperatorC U V‖ =
+      2 * ‖Vᗮ.starProjection ∘L U.starProjection ∘L V.starProjection‖ := by
+  have hstar : star (V.starProjection ∘L U.starProjection) =
+      U.starProjection ∘L V.starProjection := by
+    show star (V.starProjection * U.starProjection) =
+      U.starProjection * V.starProjection
+    rw [star_mul, (isSelfAdjoint_starProjection U).star_eq,
+      (isSelfAdjoint_starProjection V).star_eq]
+  have hcomp : (Vᗮ.starProjection ∘L U.starProjection) *
+      (U.starProjection ∘L V.starProjection) =
+      Vᗮ.starProjection ∘L U.starProjection ∘L V.starProjection := by
+    show Vᗮ.starProjection * U.starProjection *
+        (U.starProjection * V.starProjection) =
+      Vᗮ.starProjection * (U.starProjection * V.starProjection)
+    rw [mul_assoc, ← mul_assoc U.starProjection,
+      (U.isIdempotentElem_starProjection).eq]
+  have hprod : ‖sinAngleOperatorDirectedC U V * cosAngleOperatorC U V‖ =
+      ‖Vᗮ.starProjection ∘L U.starProjection ∘L V.starProjection‖ := by
+    rw [sinAngleOperatorDirectedC, cosAngleOperatorC,
+      ForMathlib.norm_operatorAbs_mul, ForMathlib.norm_mul_operatorAbs,
+      hstar, hcomp]
+  rw [sinTwoAngleOperatorC, norm_smul, hprod]
+  norm_num
+
 /-- **Pointwise Pythagoras for the directed sine and cosine.**  On vectors
 of `U`, the squared norms of the directed sine (`P_{Vᗮ} x`) and cosine
 (`P_V x`) data add to `‖x‖²` — the operator-level `sin² + cos² = 1` on the

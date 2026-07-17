@@ -75,6 +75,39 @@ theorem norm_operatorAbs (T : E →L[ℂ] E) :
     CStarRing.norm_star_mul_self]
   exact Real.sqrt_mul_self (norm_nonneg T)
 
+/-- Left composition sees only the absolute value:
+`‖|S| * D‖ = ‖S * D‖`, by the C⋆-identity applied to
+`(|S| D)⋆ (|S| D) = D⋆ (S⋆ S) D = (S D)⋆ (S D)`. -/
+theorem norm_operatorAbs_mul (S D : E →L[ℂ] E) :
+    ‖operatorAbs S * D‖ = ‖S * D‖ := by
+  have h : star (operatorAbs S * D) * (operatorAbs S * D) =
+      star (S * D) * (S * D) := by
+    calc star (operatorAbs S * D) * (operatorAbs S * D)
+        = star D * (operatorAbs S * operatorAbs S) * D := by
+          rw [star_mul, (isSelfAdjoint_operatorAbs S).star_eq]
+          simp only [mul_assoc]
+      _ = star D * (star S * S) * D := by rw [operatorAbs_mul_self]
+      _ = star (S * D) * (S * D) := by
+          rw [star_mul]
+          simp only [mul_assoc]
+  have hsq : ‖operatorAbs S * D‖ ^ 2 = ‖S * D‖ ^ 2 := by
+    rw [sq, sq, ← CStarRing.norm_star_mul_self,
+      ← CStarRing.norm_star_mul_self, h]
+  have hs := congrArg Real.sqrt hsq
+  rwa [Real.sqrt_sq (norm_nonneg _), Real.sqrt_sq (norm_nonneg _)] at hs
+
+/-- Right composition sees the absolute value as the adjoint:
+`‖D * |T|‖ = ‖D * T⋆‖`, by conjugating the left-composition identity. -/
+theorem norm_mul_operatorAbs (D T : E →L[ℂ] E) :
+    ‖D * operatorAbs T‖ = ‖D * star T‖ := by
+  calc ‖D * operatorAbs T‖
+      = ‖star (D * operatorAbs T)‖ := (norm_star _).symm
+    _ = ‖operatorAbs T * star D‖ := by
+        rw [star_mul, (isSelfAdjoint_operatorAbs T).star_eq]
+    _ = ‖T * star D‖ := norm_operatorAbs_mul T (star D)
+    _ = ‖star (T * star D)‖ := (norm_star _).symm
+    _ = ‖D * star T‖ := by rw [star_mul, star_star]
+
 /-- The pointwise isometry `‖|T| x‖ = ‖T x‖`. -/
 theorem norm_operatorAbs_apply (T : E →L[ℂ] E) (x : E) :
     ‖operatorAbs T x‖ = ‖T x‖ := by

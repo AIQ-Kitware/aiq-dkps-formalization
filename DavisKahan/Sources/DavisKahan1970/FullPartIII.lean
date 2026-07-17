@@ -165,6 +165,14 @@ alias bounded_cross_le_residual :=
   DavisKahanExt.norm_cross_le_norm_residual
 alias bounded_sinTwoTheta_genuineSpectrum_residual :=
   DavisKahanExt.sinTwoTheta_genuineSpectrum_residual
+alias bounded_sinTwoAngle_norm_eq :=
+  DavisKahanExt.norm_sinTwoAngleOperatorC
+alias bounded_sinTwoAngle_gap_identification :=
+  DavisKahanExt.subspaceGap_map_reflection_eq_norm_sinTwoAngle
+alias bounded_sinTwoTheta_genuineSpectrum_operator :=
+  DavisKahanExt.sinTwoTheta_genuineSpectrum_operator
+alias bounded_sinTwoTheta_genuineSpectrum_residual_operator :=
+  DavisKahanExt.sinTwoTheta_genuineSpectrum_residual_operator
 
 /-! ## Direct rotation -/
 
