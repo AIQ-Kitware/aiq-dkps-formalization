@@ -783,3 +783,32 @@ the star-instance defeq checks — same pattern as
 bounded-Hilbert-space complete in per-vector form with honest spectral
 hypotheses; still open are the UI-norm Ritz-residual forms and the
 `tan θ_max = ‖angular operator‖` identification.
+
+### Progress note (2026-07-17, graph projection formula)
+
+The graph projection formula is defined and proved
+(`Experimental/InfiniteDimensional/GraphSubspace.lean`, axiom-clean):
+**`graphProjectionFormula`** is now the closed operator expression
+`A N⁻¹ A⋆` with `A = P_U + X P_U` the graph parametrization and
+`N = 1 + (X P_U)⋆ (X P_U)` the normal-equation operator (`Ring.inverse`
+keeps the definition total in `X`), and
+**`projection_graphSubspace_formula`** shows it equals
+`projection (graphSubspace U X)` for every angular operator, at fully
+`RCLike`-generic scalars.  No functional-calculus square roots are
+needed: angularity gives the algebra `A⋆ A = N P_U`, `P_U N = N P_U`,
+and `A⋆ (A N⁻¹ A⋆) = A⋆`, so `A N⁻¹ A⋆ z` lies on the graph while
+`z - A N⁻¹ A⋆ z` is orthogonal to it, and
+`Submodule.eq_starProjection_of_mem_of_inner_eq_zero` closes the proof.
+Invertibility of `N` comes from a new upstreamable operator
+Lax--Milgram lemma `ForMathlib.ContinuousLinearMap.isUnit_of_coercive`
+(`ForMathlib/Analysis/InnerProductSpace/CoerciveUnit.lean`): a
+uniformly coercive bounded operator on a Hilbert space is a unit —
+coercivity alone forces injectivity, closed range (antilipschitz), and
+trivial orthogonal complement of the range, with no self-adjointness
+hypothesis.  Aliases: `graph_projection_operator`,
+`graph_projection_formula` (now proved), `bounded_coercive_isUnit`.
+Still open in the graph arc are the
+`tan θ_max = ‖angular operator‖` identification and the contractivity
+criterion `norm_angularOperator_lt_one_iff`, both of which reduce to
+the gap computation `‖P_U - P_V‖ = ‖X‖ / √(1 + ‖X‖²)` now reachable
+through the proved projection formula.

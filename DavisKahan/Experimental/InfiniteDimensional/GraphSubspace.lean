@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
 import DavisKahan.Experimental.InfiniteDimensional.Core.OperatorAngle
+import ForMathlib.Analysis.InnerProductSpace.CoerciveUnit
 import Mathlib.Analysis.Normed.Operator.Banach
 import Mathlib.Analysis.Normed.Ring.Units
 import Mathlib.Topology.Algebra.Module.LinearPMap
@@ -141,11 +142,19 @@ theorem graphSubspace_eq_range (U : Submodule 𝕜 E)
   refine le_antisymm ?_ (Submodule.le_topologicalClosure _)
   exact Submodule.topologicalClosure_minimal _ le_rfl hclosed
 
-/-- Closed-formula candidate for the projection onto a graph. -/
+/-- Closed formula for the projection onto a graph: with `A = P_U + X P_U`
+the graph parametrization and `N = 1 + (X P_U)⋆ (X P_U)` the normal-equation
+operator, the projection is `A N⁻¹ A⋆`.  The inverse is taken through
+`Ring.inverse` so the definition is total in `X`; for an angular operator `N`
+is coercive, `Ring.inverse` is a genuine inverse, and the formula is the
+orthogonal projection onto the graph subspace
+(`projection_graphSubspace_formula`). -/
 noncomputable def graphProjectionFormula
     (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
-    (X : E →L[𝕜] E) : E →L[𝕜] E := by
-  sorry
+    (X : E →L[𝕜] E) : E →L[𝕜] E :=
+  (projection U + X * projection U) *
+    Ring.inverse (1 + star (X * projection U) * (X * projection U)) *
+    star (projection U + X * projection U)
 
 /-- Every acute subspace is the graph of a unique bounded angular operator.
 
@@ -220,34 +229,87 @@ theorem existsUnique_angularOperator
 
 /-- Projection onto a graph subspace in terms of the angular operator.
 
-Proof strategy: define the isometry from `U` into the graph by normalizing
-`u ↦ u + X u` with `(I + X*X)^{-1/2}`.  The graph projection is `J J*`.
-Expand this product in the decomposition `U ⊕ Uᗮ`, commute the functional
-calculus terms through `X` using the polar decomposition, and identify the
-four blocks with `graphProjectionFormula`.  Prove positivity and invertibility
-of `I + X*X` before performing block algebra. 
-
-Lean proof route for a weaker agent:
-
-1. Define the normalized graph embedding `J u=(u,Xu)(I+X*X)^{-1/2}`.
-2. Prove `J` is an isometry onto `graphSubspace U X`.
-3. Compute the orthogonal projection as `J J*` and expand its four blocks.
-4. Match the expanded expression with `graphProjectionFormula U X`.
-
-
-Ext-agent signature audit (GPT 5.6 High): Correct only with `IsAngularOperator`; without
-that hypothesis the ambient map may mix the base and complementary coordinates and the
-advertised block formula is false.
-
-Preferred dependency route: Build on the acute graph representation and the bounded
-inverse theorem, then use functional calculus for `I + X*X` to obtain projection and
-angle formulas.
--/
+The proof avoids functional-calculus square roots entirely: with
+`A = P + X` (`P = P_U`; angularity gives `X P = X`) and `N = 1 + X⋆X`, the
+normal-equation operator `N` is coercive, hence a unit by the operator
+Lax–Milgram lemma, and it commutes with `P`.  The candidate `Q = A N⁻¹ A⋆`
+then satisfies `A⋆ A = N P` and `A⋆ Q = A⋆`, so for every `z` the vector
+`Q z` lies on the graph while `z - Q z` is orthogonal to it; the
+characterization of the orthogonal projection finishes the proof. -/
 theorem projection_graphSubspace_formula
     (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     (X : E →L[𝕜] E) (hX : IsAngularOperator U X) :
     projection (graphSubspace U X) = graphProjectionFormula U X := by
-  sorry
+  set P : E →L[𝕜] E := projection U with hPdef
+  have hXP : X * P = X := hX.1
+  have hPX : P * X = 0 := hX.2
+  have hPP : P * P = P := (U.isIdempotentElem_starProjection).eq
+  have hsP : star P = P := (isSelfAdjoint_starProjection U).star_eq
+  have hsXP : star X * P = 0 := by
+    have h := congrArg star hPX
+    rwa [star_mul, hsP, star_zero] at h
+  have hPsX : P * star X = star X := by
+    have h := congrArg star hXP
+    rwa [star_mul, hsP] at h
+  set A : E →L[𝕜] E := P + X * P with hAdef
+  set N : E →L[𝕜] E := 1 + star (X * P) * (X * P) with hNdef
+  set R : E →L[𝕜] E := Ring.inverse N with hRdef
+  have hA : A = P + X := by rw [hAdef, hXP]
+  have hN : N = 1 + star X * X := by rw [hNdef, hXP]
+  have hformula : graphProjectionFormula U X = A * R * star A := rfl
+  have hNcoer : ∀ z, (1 : ℝ) * ‖z‖ ^ 2 ≤ RCLike.re ⟪N z, z⟫_𝕜 := by
+    intro z
+    have hNz : N z = z + star X (X z) := by rw [hN]; rfl
+    have hinner : ⟪N z, z⟫_𝕜 = ⟪z, z⟫_𝕜 + ⟪X z, X z⟫_𝕜 := by
+      rw [hNz, inner_add_left, ContinuousLinearMap.star_eq_adjoint,
+        ContinuousLinearMap.adjoint_inner_left]
+    rw [hinner, map_add, inner_self_eq_norm_sq, inner_self_eq_norm_sq]
+    nlinarith [sq_nonneg ‖X z‖]
+  have hNunit : IsUnit N :=
+    ForMathlib.ContinuousLinearMap.isUnit_of_coercive one_pos hNcoer
+  have hNR : N * R = 1 := Ring.mul_inverse_cancel N hNunit
+  have hRN : R * N = 1 := Ring.inverse_mul_cancel N hNunit
+  have hPN : P * N = N * P := by
+    rw [hN, mul_add, add_mul, mul_one, one_mul]
+    congr 1
+    calc P * (star X * X) = (P * star X) * X := by rw [mul_assoc]
+      _ = star X * X := by rw [hPsX]
+      _ = star X * (X * P) := by rw [hXP]
+      _ = (star X * X) * P := by rw [mul_assoc]
+  have hPR : P * R = R * P := by
+    calc P * R = (R * N) * (P * R) := by rw [hRN, one_mul]
+      _ = R * ((N * P) * R) := by rw [mul_assoc R N (P * R), ← mul_assoc N P R]
+      _ = R * ((P * N) * R) := by rw [hPN]
+      _ = (R * P) * (N * R) := by rw [mul_assoc P N R, ← mul_assoc R P (N * R)]
+      _ = R * P := by rw [hNR, mul_one]
+  have hsA : star A = P + star X := by rw [hA, star_add, hsP]
+  have hPsA : P * star A = star A := by rw [hsA, mul_add, hPP, hPsX]
+  have hsAA : star A * A = N * P := by
+    rw [hsA, hA, add_mul, mul_add, mul_add, hPP, hPX, hsXP, hN, add_mul, one_mul,
+      mul_assoc, hXP, add_zero, zero_add]
+  have hsAQ : star A * (A * R * star A) = star A := by
+    have h1 : star A * (A * R * star A) = (star A * A) * (R * star A) := by
+      simp only [mul_assoc]
+    rw [h1, hsAA, mul_assoc N P (R * star A), ← mul_assoc P R (star A), hPR,
+      mul_assoc R P (star A), hPsA, ← mul_assoc, hNR, one_mul]
+  rw [hformula]
+  refine ContinuousLinearMap.ext fun z => ?_
+  refine Submodule.eq_starProjection_of_mem_of_inner_eq_zero ?_ ?_
+  · rw [graphSubspace_eq_range U hX]
+    exact ⟨R (star A z), rfl⟩
+  · intro w hw
+    rw [graphSubspace_eq_range U hX] at hw
+    obtain ⟨y, hy⟩ := hw
+    rw [← hy]
+    show ⟪z - (A * R * star A) z, A y⟫_𝕜 = 0
+    rw [inner_eq_zero_symm]
+    have hadj :=
+      ContinuousLinearMap.adjoint_inner_right A y (z - (A * R * star A) z)
+    rw [← hadj, ← ContinuousLinearMap.star_eq_adjoint, map_sub]
+    have happ : star A ((A * R * star A) z) = star A z := by
+      have h := congrArg (fun T : E →L[𝕜] E => T z) hsAQ
+      simpa using h
+    rw [happ, sub_self, inner_zero_right]
 
 /-- Tangent of the maximal angle is the angular-operator norm. 
 

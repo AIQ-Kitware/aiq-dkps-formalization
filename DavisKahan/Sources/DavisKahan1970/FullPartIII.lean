@@ -232,7 +232,10 @@ alias bounded_spectral_repulsion :=
 /-! ## Graph and Riccati theory -/
 
 alias graph_subspace := DavisKahanExt.graphSubspace
+alias graph_projection_operator := DavisKahanExt.graphProjectionFormula
 alias graph_projection_formula := DavisKahanExt.projection_graphSubspace_formula
+alias bounded_coercive_isUnit :=
+  ForMathlib.ContinuousLinearMap.isUnit_of_coercive
 alias graph_unique_angularOperator := DavisKahanExt.existsUnique_angularOperator
 alias bounded_riccati_graph_equivalence :=
   DavisKahanExt.graph_reduces_iff_solvesRiccati
