@@ -756,3 +756,30 @@ and norm bound, and the per-vector theorem at infinite-dimensional
 scope; still open are the UI-norm Ritz-residual forms (the
 `principalTangents` route of `FiniteDimensional/TanTheta/RitzResidual`)
 and the `tan θ_max = ‖angular operator‖` identification.
+
+### Progress note (2026-07-17, `tan Θ` with genuine spectra)
+
+The bounded genuine-spectrum `tan Θ` theorem is proved
+(`Experimental/InfiniteDimensional/TanTheta/GenuineSpectrum.lean`, all
+axiom-clean): **`tanTheta_genuineSpectrum`** — for self-adjoint `T`, a
+`T`-invariant subspace `V` with `σ(T|_{Vᗮ}) ⊆ [α, β]` (Banach-algebra
+spectrum of the compression), and a test subspace `Z` whose compression
+spectrum avoids `(α - δ, β + δ)`, a columnwise residual bound `ρ` over
+`Z` gives `δ ‖x - P_V x‖ ≤ ρ ‖P_V x‖` on `Z`.  Two reusable spectral
+bridges feed the per-vector theorem:
+`formBounds_of_compress_spectrum_subset_Icc` (interval compression
+spectrum gives the quadratic-form strip, through
+`IsSelfAdjoint.norm_le_of_spectrum_subset_Icc` on the centered
+compression) and `coercive_of_compress_spectrum_exterior` (exterior
+compression spectrum gives midpoint coercivity, through
+`IsSelfAdjoint.exists_two_sided_inverse_of_spectrum_gap`).
+Proof-engineering note: `IsSelfAdjoint.sub`/C⋆-lemma applications on
+compressions over subtype spaces need the algebra given explicitly
+(`(R := ↥W →L[ℂ] ↥W)`, `(A := ...)`) plus `maxHeartbeats 1600000` for
+the star-instance defeq checks — same pattern as
+`Sylvester/GenuineSpectrum`.  Aliases: `bounded_tanTheta_genuineSpectrum`,
+`bounded_formBounds_of_spectrum_Icc`,
+`bounded_coercive_of_spectrum_exterior`.  The `tan Θ` family is now
+bounded-Hilbert-space complete in per-vector form with honest spectral
+hypotheses; still open are the UI-norm Ritz-residual forms and the
+`tan θ_max = ‖angular operator‖` identification.
