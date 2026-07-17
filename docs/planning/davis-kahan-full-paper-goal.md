@@ -504,6 +504,35 @@ block is secretly bounded, after which the proved mixed orientations
 assembly of that reduction (transport the closed Sylvester equation
 across the bounded realization).
 
+### Progress note (2026-07-17, Theorem 5.2 interval/exterior with genuine spectra)
+
+The assembly is done (`SpectraBridge/UnboundedIntervalExterior.lean`, all
+axiom-clean).  Both orientations of the Theorem 5.2 interval/exterior
+configuration are now proved with **both blocks genuinely closed
+self-adjoint operators** and all spectral hypotheses phrased through the
+Spectra spectrum:
+
+- `semibounded_of_spectrum_subset_Icc`: spectral inclusion in `[β, α]`
+  gives the matching quadratic-form bounds, through the bounded
+  realization and the centered norm estimate (`|re ⟪(B - c)x, x⟫| ≤
+  ρ ‖x‖²`);
+- **`unbounded_sylvester_mem_and_gauge_le_of_spectra_exteriorLeft_intervalRight`**:
+  `A X - X B = C` with `σ(B) ⊆ [β, α]` and `σ(A) ∩ (β-δ, α+δ) = ∅` gives
+  `X ∈ N` and `δ · gauge X ≤ gauge C` — through the form bounds and the
+  Spectra-backed two-sided shifted inverse;
+- **`unbounded_sylvester_mem_and_gauge_le_of_spectra_intervalLeft_exteriorRight`**:
+  the opposite orientation, replacing the interval block by its bounded
+  realization and feeding the transported equation to the bounded-left
+  Neumann engine.
+
+Aliases: `unbounded_semibounded_of_spectrum_Icc`,
+`unbounded_sylvester_exteriorInterval_uiNorm_genuineSpectrum`,
+`unbounded_sylvester_intervalExterior_uiNorm_genuineSpectrum`.  With
+these, the interval/exterior branch of Theorem 5.2 is closed at
+genuine-spectrum scope; the remaining Theorem 5.2 branch is the ordered
+(two-semibounded) configuration, whose documented route is the Ky Fan
+spectral-cutoff argument.
+
 ### Progress note (2026-07-17, tangent norm bounds)
 
 Angle ladder, eighth rung (all axiom-clean): the inverse-norm estimate
