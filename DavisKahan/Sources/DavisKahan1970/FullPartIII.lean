@@ -155,6 +155,10 @@ alias bounded_tanTwoAngleOperatorC := DavisKahanExt.tanTwoAngleOperatorC
 alias bounded_tanTwoAngle_defining_identity :=
   DavisKahanExt.tanTwoAngleOperatorC_comp_cosTwoAngleExtendedC
 alias bounded_tanAngle_norm_le := DavisKahanExt.norm_tanAngleOperatorC_le
+alias bounded_reflectionDefect_offdiag :=
+  DavisKahanExt.reflectionDefect_eq_neg_two_smul_offdiag
+alias bounded_reflectionDefect_le_cross :=
+  DavisKahanExt.norm_reflectionDefect_le_two_mul_norm_cross
 
 /-! ## Direct rotation -/
 
