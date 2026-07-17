@@ -164,6 +164,12 @@ alias bounded_tanTwoAngle_defining_identity :=
   DavisKahanExt.tanTwoAngleOperatorC_comp_cosTwoAngleExtendedC
 alias bounded_tanAngle_norm_le := DavisKahanExt.norm_tanAngleOperatorC_le
 alias bounded_tanTheta_perVector := DavisKahanExt.tan_theta_le'
+alias bounded_tanTheta_genuineSpectrum :=
+  DavisKahanExt.tanTheta_genuineSpectrum
+alias bounded_formBounds_of_spectrum_Icc :=
+  DavisKahanExt.formBounds_of_compress_spectrum_subset_Icc
+alias bounded_coercive_of_spectrum_exterior :=
+  DavisKahanExt.coercive_of_compress_spectrum_exterior
 alias bounded_reflectionDefect_offdiag :=
   DavisKahanExt.reflectionDefect_eq_neg_two_smul_offdiag
 alias bounded_reflectionDefect_le_cross :=
