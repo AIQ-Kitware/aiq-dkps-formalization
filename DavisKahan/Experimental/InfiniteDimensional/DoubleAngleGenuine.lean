@@ -212,25 +212,24 @@ theorem conjByReflection_sub_eq_reflectionDefect (V : Submodule ℂ E)
   rw [reflectionOperator_eq_reflection, reflectionOperator_eq_reflection,
     Submodule.reflection_symm]
 
-/-- **The genuine-spectrum `sin 2Θ` theorem** (reflection form).  For a
+/-- **The reflection-defect core of the `sin 2Θ` theorem.**  For a
 self-adjoint `A` with a genuine internal spectral configuration at the
-reducing subspace `U` — compression to `U` in `[a, b]`, compression to
-`Uᗮ` outside `(a - d, b + d)` — and any `B` reduced by `V`,
-`d * subspaceGap U (J_V U) ≤ 2 ‖B - A‖`, where `J_V U` is the image of `U`
-under the reflection through `V`.  The gap to the reflected image is the
-operator norm of `sin 2Θ(U, V)`. -/
-theorem sinTwoTheta_genuineSpectrum
-    {A B : E →L[ℂ] E} (hA : IsSelfAdjoint A)
+reducing subspace `U` and *any* closed `V`,
+`d * subspaceGap U (J_V U) ≤ ‖J_V A J_V - A‖`.  Both the reduced-comparison
+and the residual forms of the `sin 2Θ` theorem factor through this
+estimate. -/
+theorem sinTwoTheta_genuineSpectrum_defect
+    {A : E →L[ℂ] E} (hA : IsSelfAdjoint A)
     {U V : Submodule ℂ E}
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hU : Reduces A U) (hV : Reduces B V)
+    (hU : Reduces A U)
     {a b d : ℝ} (hd : 0 < d) (hab : a ≤ b)
     (hUspec : spectrum ℝ (compressOperator U A) ⊆ Set.Icc a b)
     (hUspec' : ∀ x ∈ spectrum ℝ (compressOperator Uᗮ A),
       x ≤ a - d ∨ b + d ≤ x) :
     d * subspaceGap U
         (U.map (V.reflection.toLinearEquiv : E →ₗ[ℂ] E)) ≤
-      2 * ‖B - A‖ := by
+      ‖reflectionDefect V A‖ := by
   have hÃsa : IsSelfAdjoint (conjByIsometryEquiv V.reflection A) :=
     isSelfAdjoint_conjByIsometryEquiv V.reflection hA
   have hŨred : Reduces (conjByIsometryEquiv V.reflection A)
@@ -262,6 +261,30 @@ theorem sinTwoTheta_genuineSpectrum
         (U.map (V.reflection.toLinearEquiv : E →ₗ[ℂ] E))
       ≤ ‖conjByIsometryEquiv V.reflection A - A‖ := h
     _ = ‖reflectionDefect V A‖ := by rw [hdefect]
+
+/-- **The genuine-spectrum `sin 2Θ` theorem** (reflection form).  For a
+self-adjoint `A` with a genuine internal spectral configuration at the
+reducing subspace `U` — compression to `U` in `[a, b]`, compression to
+`Uᗮ` outside `(a - d, b + d)` — and any `B` reduced by `V`,
+`d * subspaceGap U (J_V U) ≤ 2 ‖B - A‖`, where `J_V U` is the image of `U`
+under the reflection through `V`.  The gap to the reflected image is the
+operator norm of `sin 2Θ(U, V)`. -/
+theorem sinTwoTheta_genuineSpectrum
+    {A B : E →L[ℂ] E} (hA : IsSelfAdjoint A)
+    {U V : Submodule ℂ E}
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hU : Reduces A U) (hV : Reduces B V)
+    {a b d : ℝ} (hd : 0 < d) (hab : a ≤ b)
+    (hUspec : spectrum ℝ (compressOperator U A) ⊆ Set.Icc a b)
+    (hUspec' : ∀ x ∈ spectrum ℝ (compressOperator Uᗮ A),
+      x ≤ a - d ∨ b + d ≤ x) :
+    d * subspaceGap U
+        (U.map (V.reflection.toLinearEquiv : E →ₗ[ℂ] E)) ≤
+      2 * ‖B - A‖ := by
+  calc d * subspaceGap U
+        (U.map (V.reflection.toLinearEquiv : E →ₗ[ℂ] E))
+      ≤ ‖reflectionDefect V A‖ :=
+        sinTwoTheta_genuineSpectrum_defect hA hU hd hab hUspec hUspec'
     _ ≤ 2 * ‖A - B‖ := norm_reflectionDefect_le_two_mul A B V hV
     _ = 2 * ‖B - A‖ := by rw [norm_sub_rev]
 
@@ -364,6 +387,7 @@ end IdealScope
 
 section ReflectionDefectCross
 
+omit [CompleteSpace E] in
 /-- The reflection defect is `-2` times the sum of the two off-diagonal
 blocks: `J A J - A = -2 (P_{Vᗮ} A P_V + P_V A P_{Vᗮ})`. -/
 theorem reflectionDefect_eq_neg_two_smul_offdiag (V : Submodule ℂ E)
@@ -377,8 +401,7 @@ theorem reflectionDefect_eq_neg_two_smul_offdiag (V : Submodule ℂ E)
       V.starProjection (A (Vᗮ.starProjection x)))
   rw [reflectionOperator_apply, reflectionOperator_apply,
     Submodule.starProjection_orthogonal' V]
-  simp only [map_sub, map_smul, ContinuousLinearMap.sub_apply,
-    ContinuousLinearMap.one_apply]
+  simp only [map_sub, map_smul, sub_apply, one_apply_eq_self]
   module
 
 /-- The two off-diagonal blocks are mutually adjoint for self-adjoint
@@ -425,7 +448,7 @@ theorem norm_reflectionDefect_le_two_mul_norm_cross (V : Submodule ℂ E)
       have h := norm_add_sq_eq_norm_sq_add_norm_sq_of_inner_eq_zero
         (T₂ z) (T₁ z) horth
       have hadd : (T₁ + T₂) z = T₂ z + T₁ z := by
-        rw [ContinuousLinearMap.add_apply]
+        rw [add_apply]
         abel
       rw [hadd, sq, sq, sq]
       linarith
@@ -487,6 +510,85 @@ theorem norm_reflectionDefect_le_two_mul_norm_cross (V : Submodule ℂ E)
     _ ≤ 2 * ‖T₁‖ := by linarith [hsum]
 
 end ReflectionDefectCross
+
+section ResidualSinTwoTheta
+
+variable {F : Type*} [NormedAddCommGroup F] [InnerProductSpace ℂ F]
+
+omit [CompleteSpace E] in
+/-- **The off-diagonal block is bounded by the residual.**  If the trial
+subspace `V` is the range of an isometric embedding `X` and
+`R = A X - X M` is the residual of the approximate intertwining
+relation `A X ≈ X M`, then `‖P_{Vᗮ} A P_V‖ ≤ ‖R‖`: on `v = X u ∈ V`,
+`(1 - P_V) A v = (1 - P_V) (X (M u)) + (1 - P_V) (R u) = (1 - P_V) (R u)`,
+and the isometry converts `‖u‖` back to `‖v‖`. -/
+theorem norm_cross_le_norm_residual
+    {X : F →L[ℂ] E} (hX : DavisKahan.IsometricEmbedding X)
+    (A : E →L[ℂ] E) (M : F →L[ℂ] F)
+    {V : Submodule ℂ E} [V.HasOrthogonalProjection]
+    (hmem : ∀ u, X u ∈ V) (hsurj : ∀ v ∈ V, ∃ u, X u = v) :
+    ‖Vᗮ.starProjection ∘L A ∘L V.starProjection‖ ≤
+      ‖A ∘L X - X ∘L M‖ := by
+  refine ContinuousLinearMap.opNorm_le_bound _ (norm_nonneg _) fun z => ?_
+  obtain ⟨u, hu⟩ := hsurj (V.starProjection z) (V.starProjection_apply_mem z)
+  have hunorm : ‖u‖ = ‖V.starProjection z‖ := by rw [← hX u, hu]
+  have hperp0 : Vᗮ.starProjection (X (M u)) = 0 := by
+    rw [Submodule.starProjection_orthogonal' V]
+    have hfix : V.starProjection (X (M u)) = X (M u) :=
+      Submodule.starProjection_eq_self_iff.mpr (hmem (M u))
+    rw [sub_apply, one_apply_eq_self, hfix, sub_self]
+  have hsplit : A (X u) = X (M u) + (A ∘L X - X ∘L M) u := by
+    show A (X u) = X (M u) + (A (X u) - X (M u))
+    rw [add_sub_cancel]
+  have hcalc : (Vᗮ.starProjection ∘L A ∘L V.starProjection) z =
+      Vᗮ.starProjection ((A ∘L X - X ∘L M) u) := by
+    show Vᗮ.starProjection (A (V.starProjection z)) = _
+    rw [← hu, hsplit, map_add, hperp0, zero_add]
+  rw [hcalc]
+  calc ‖Vᗮ.starProjection ((A ∘L X - X ∘L M) u)‖
+      ≤ ‖(A ∘L X - X ∘L M) u‖ :=
+        Vᗮ.norm_starProjection_apply_le _
+    _ ≤ ‖A ∘L X - X ∘L M‖ * ‖u‖ :=
+        ContinuousLinearMap.le_opNorm _ _
+    _ = ‖A ∘L X - X ∘L M‖ * ‖V.starProjection z‖ := by rw [hunorm]
+    _ ≤ ‖A ∘L X - X ∘L M‖ * ‖z‖ :=
+        mul_le_mul_of_nonneg_left (V.norm_starProjection_apply_le z)
+          (norm_nonneg _)
+
+/-- **The residual `sin 2Θ` theorem** at genuine-spectrum scope.  Let `A`
+be self-adjoint with a genuine internal spectral configuration at the
+reducing subspace `U` — compression to `U` in `[a, b]`, compression to
+`Uᗮ` outside `(a - d, b + d)` — and let the trial subspace `V` be the
+(closed) range of an isometric embedding `X` with residual
+`R = A X - X M` for an arbitrary comparison operator `M` on the trial
+space.  Then `d * subspaceGap U (J_V U) ≤ 2 ‖R‖`: the gap to the
+reflected image — the norm of `sin 2Θ(U, V)` — is controlled by the
+residual alone, with no reduction hypothesis on the comparison pair. -/
+theorem sinTwoTheta_genuineSpectrum_residual
+    {A : E →L[ℂ] E} (hA : IsSelfAdjoint A)
+    {U V : Submodule ℂ E}
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hU : Reduces A U)
+    {a b d : ℝ} (hd : 0 < d) (hab : a ≤ b)
+    (hUspec : spectrum ℝ (compressOperator U A) ⊆ Set.Icc a b)
+    (hUspec' : ∀ x ∈ spectrum ℝ (compressOperator Uᗮ A),
+      x ≤ a - d ∨ b + d ≤ x)
+    {X : F →L[ℂ] E} (hX : DavisKahan.IsometricEmbedding X)
+    (hmem : ∀ u, X u ∈ V) (hsurj : ∀ v ∈ V, ∃ u, X u = v)
+    (M : F →L[ℂ] F) :
+    d * subspaceGap U
+        (U.map (V.reflection.toLinearEquiv : E →ₗ[ℂ] E)) ≤
+      2 * ‖A ∘L X - X ∘L M‖ := by
+  have hcross := norm_cross_le_norm_residual hX A M hmem hsurj
+  calc d * subspaceGap U
+        (U.map (V.reflection.toLinearEquiv : E →ₗ[ℂ] E))
+      ≤ ‖reflectionDefect V A‖ :=
+        sinTwoTheta_genuineSpectrum_defect hA hU hd hab hUspec hUspec'
+    _ ≤ 2 * ‖Vᗮ.starProjection ∘L A ∘L V.starProjection‖ :=
+        norm_reflectionDefect_le_two_mul_norm_cross V hA
+    _ ≤ 2 * ‖A ∘L X - X ∘L M‖ := by linarith
+
+end ResidualSinTwoTheta
 
 end SinTwoTheta
 

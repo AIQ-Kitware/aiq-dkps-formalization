@@ -159,6 +159,12 @@ alias bounded_reflectionDefect_offdiag :=
   DavisKahanExt.reflectionDefect_eq_neg_two_smul_offdiag
 alias bounded_reflectionDefect_le_cross :=
   DavisKahanExt.norm_reflectionDefect_le_two_mul_norm_cross
+alias bounded_sinTwoTheta_genuineSpectrum_defect :=
+  DavisKahanExt.sinTwoTheta_genuineSpectrum_defect
+alias bounded_cross_le_residual :=
+  DavisKahanExt.norm_cross_le_norm_residual
+alias bounded_sinTwoTheta_genuineSpectrum_residual :=
+  DavisKahanExt.sinTwoTheta_genuineSpectrum_residual
 
 /-! ## Direct rotation -/
 
