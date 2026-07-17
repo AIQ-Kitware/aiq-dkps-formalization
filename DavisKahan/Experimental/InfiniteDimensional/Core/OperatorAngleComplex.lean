@@ -317,5 +317,91 @@ theorem sq_norm_sin_add_sq_norm_cos (U V : Submodule ℂ E)
   rw [hVc]
   linarith
 
+/-- The absolute value vanishes exactly where the operator does. -/
+theorem _root_.ForMathlib.operatorAbs_apply_eq_zero_iff (T : E →L[ℂ] E)
+    (x : E) : ForMathlib.operatorAbs T x = 0 ↔ T x = 0 := by
+  constructor <;> intro h
+  · have := ForMathlib.norm_operatorAbs_apply T x
+    rw [h, norm_zero] at this
+    exact norm_eq_zero.mp this.symm
+  · have := ForMathlib.norm_operatorAbs_apply T x
+    rw [h, norm_zero] at this
+    exact norm_eq_zero.mp this
+
+/-- The directed cosine vanishes on the orthogonal complement of the
+source. -/
+theorem cosAngleOperatorC_apply_eq_zero_of_mem_orthogonal
+    (U V : Submodule ℂ E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    {y : E} (hy : y ∈ Uᗮ) : cosAngleOperatorC U V y = 0 := by
+  rw [cosAngleOperatorC, ForMathlib.operatorAbs_apply_eq_zero_iff]
+  have hPU : U.starProjection y = 0 := by
+    rw [Submodule.starProjection_apply, Submodule.coe_eq_zero,
+      Submodule.orthogonalProjectionOnto_eq_zero_iff]
+    exact hy
+  simp [hPU]
+
+/-- **Acute coercivity of the directed cosine.**  On the source subspace,
+`‖cos Θ(U,V) x‖ ≥ √(1 - directedGap²) ‖x‖` — the quantitative content of
+acuteness, by the pointwise Pythagoras identity. -/
+theorem norm_cosAngleOperatorC_apply_ge (U V : Submodule ℂ E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    {x : E} (hx : x ∈ U) :
+    Real.sqrt (1 - directedGap U V ^ 2) * ‖x‖ ≤
+      ‖cosAngleOperatorC U V x‖ := by
+  have hg : directedGap U V = ‖Vᗮ.starProjection ∘L U.starProjection‖ :=
+    rfl
+  have hg1 : directedGap U V ≤ 1 := by
+    rw [hg]
+    calc ‖Vᗮ.starProjection ∘L U.starProjection‖
+        ≤ ‖Vᗮ.starProjection‖ * ‖U.starProjection‖ :=
+          ContinuousLinearMap.opNorm_comp_le _ _
+      _ ≤ 1 * 1 :=
+          mul_le_mul Vᗮ.starProjection_norm_le U.starProjection_norm_le
+            (norm_nonneg _) zero_le_one
+      _ = 1 := by ring
+  have hg0 : 0 ≤ directedGap U V := by
+    rw [hg]; exact norm_nonneg _
+  have hcos : ‖cosAngleOperatorC U V x‖ =
+      ‖(V.starProjection ∘L U.starProjection) x‖ :=
+    ForMathlib.norm_operatorAbs_apply _ x
+  have hsin_le : ‖(Vᗮ.starProjection ∘L U.starProjection) x‖ ≤
+      directedGap U V * ‖x‖ := by
+    rw [hg]
+    exact (Vᗮ.starProjection ∘L U.starProjection).le_opNorm x
+  have hpyth := sq_norm_sin_add_sq_norm_cos U V hx
+  have hsq : (1 - directedGap U V ^ 2) * ‖x‖ ^ 2 ≤
+      ‖cosAngleOperatorC U V x‖ ^ 2 := by
+    rw [hcos]
+    nlinarith [hsin_le, norm_nonneg ((Vᗮ.starProjection ∘L
+      U.starProjection) x), norm_nonneg x]
+  have hs := Real.sqrt_le_sqrt hsq
+  rwa [Real.sqrt_mul (by nlinarith : (0:ℝ) ≤ 1 - directedGap U V ^ 2),
+    Real.sqrt_sq (norm_nonneg x), Real.sqrt_sq (norm_nonneg _)] at hs
+
+/-- In the acute regime the directed cosine is injective on the source
+subspace. -/
+theorem cosAngleOperatorC_eq_zero_imp_of_acute (U V : Submodule ℂ E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hacute : IsAcute U V) {x : E} (hx : x ∈ U)
+    (h0 : cosAngleOperatorC U V x = 0) : x = 0 := by
+  have hglt : directedGap U V < 1 :=
+    lt_of_le_of_lt (directedGap_le_subspaceGap U V) hacute
+  have hg0 : 0 ≤ directedGap U V := by
+    rw [show directedGap U V =
+      ‖Vᗮ.starProjection ∘L U.starProjection‖ from rfl]
+    exact norm_nonneg _
+  have hcoer := norm_cosAngleOperatorC_apply_ge U V hx
+  rw [h0, norm_zero] at hcoer
+  have hpos : 0 < Real.sqrt (1 - directedGap U V ^ 2) := by
+    apply Real.sqrt_pos.mpr
+    nlinarith
+  have hxle : ‖x‖ ≤ 0 := by
+    by_contra hcon
+    push_neg at hcon
+    nlinarith
+  exact norm_eq_zero.mp (le_antisymm hxle (norm_nonneg x))
+
+
 end DavisKahanExt
 end ForMathlib

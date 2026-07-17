@@ -404,6 +404,23 @@ Next rungs: the Halmos two-projection decomposition for
 `cosAngleOperatorC`/`sinTwoAngleOperatorC` (`2 sin cos`), then the genuine
 `sin 2Θ` theorems.
 
+### Progress note (2026-07-17, acute coercivity of the cosine)
+
+Angle ladder, fifth rung (all axiom-clean):
+`operatorAbs_apply_eq_zero_iff` (the absolute value vanishes exactly where
+the operator does, from the pointwise isometry),
+`cosAngleOperatorC_apply_eq_zero_of_mem_orthogonal` (the directed cosine
+is supported on the source subspace), and **acute coercivity**
+`norm_cosAngleOperatorC_apply_ge`:
+`‖cos Θ(U,V) x‖ ≥ √(1 - directedGap²) ‖x‖` on `U`, by the pointwise
+Pythagoras — with the corollary that in the acute regime the cosine is
+injective on the source (`cosAngleOperatorC_eq_zero_imp_of_acute`).
+`FullPartIII` aliases: `bounded_cosAngle_coercive`,
+`bounded_cosAngle_injective_of_acute`.  This is the quantitative input for
+the bounded inverse of the cosine on `U` (hence `tanAngleOperatorC`): what
+remains for the tangent is packaging the coercive positive operator
+`cos + P_{Uᗮ}` as invertible and forming `sin · (cos + P_{Uᗮ})⁻¹`.
+
 ### Progress note (2026-07-17, commutation and the double-angle operator)
 
 Angle ladder, fourth rung (all axiom-clean): the ForMathlib absolute-value
