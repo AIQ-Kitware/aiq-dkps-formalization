@@ -812,3 +812,33 @@ Still open in the graph arc are the
 criterion `norm_angularOperator_lt_one_iff`, both of which reduce to
 the gap computation `‖P_U - P_V‖ = ‖X‖ / √(1 + ‖X‖²)` now reachable
 through the proved projection formula.
+
+### Progress note (2026-07-17, tan of the maximal angle)
+
+The graph-subspace arc is closed (`GraphSubspace.lean` now has no open
+obligations; all results axiom-clean at `RCLike`-generic scalars):
+**`norm_projection_sub_projection_graphSubspace`** /
+**`subspaceGap_graphSubspace`** give the exact gap
+`‖P_U - P_V‖ = ‖X‖ / √(1 + ‖X‖²)` for the graph `V` of an angular
+operator `X`, **`tan_maximalAngle_eq_norm_angularOperator`** derives
+`tan θ_max = ‖X‖`, and **`norm_angularOperator_lt_one_iff`** identifies
+contractive angular operators with maximal angle below `π/4`.  No
+functional calculus is used anywhere: through the wave-25 projection
+formula the blocks `P (1 - Q)` and `(1 - P) Q` satisfy
+`T T⋆ = 1 - (1 + B)⁻¹` with `B = X⋆X` and `B = X X⋆` (the latter through
+the intertwining `X (1 + X⋆X)⁻¹ = (1 + X X⋆)⁻¹ X`), and the new
+`ForMathlib` brick **`norm_one_sub_inverse_one_add`**
+(`CoerciveUnit.lean`) evaluates `‖1 - (1 + B)⁻¹‖ = ‖B‖/(1 + ‖B‖)`
+exactly for positive `B` — upper bound by the quadratic form along the
+substitution `z = (1 + B) y` with the positive-operator Cauchy–Schwarz
+inequality `norm_apply_sq_le_of_positive` (also new, proved by
+evaluating the form at `y - ‖B‖⁻¹ B y`), lower bound from
+near-maximizers of `‖B‖` and a small-`ε` limit.  A `U`-blockwise
+Pythagoras estimate pins `‖P_U - P_V‖` at the common block value.  Also
+added `isUnit_one_add_star_mul_self`.  Proof-engineering note: rewrite
+against C⋆-lemmas (`CStarRing.norm_star_mul_self`, `norm_star`) through
+locally restated `have`s — the library statements carry a different
+star-instance path and fail as `rw` patterns on `E →L[𝕜] E`.  Aliases:
+`graph_gap_value`, `graph_subspaceGap`, `graph_tan_maximalAngle`,
+`graph_contractive_iff_quarterAcute`, `bounded_inverse_defect_norm`,
+`bounded_positive_cauchy_schwarz`, `bounded_one_add_star_mul_self_isUnit`.
