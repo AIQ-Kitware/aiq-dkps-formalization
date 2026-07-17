@@ -726,3 +726,33 @@ and the identification with the functional-calculus
 (`subspaceGap_map_reflection_eq_norm_sinTwoAngle`; see the double-angle
 identification progress note) — the `sin 2Θ` family is closed at the
 operator level. See `dev/sorry-difficulty-ranking.md` for the evolving proof-obligation ranking; verify its totals against the source tree before using them in status claims.
+
+### Progress note (2026-07-17, the infinite-dimensional `tan Θ` theorem)
+
+The per-vector, pole-free Davis--Kahan `tan Θ` theorem is proved on
+infinite-dimensional Hilbert spaces
+(`Experimental/InfiniteDimensional/TanTheta/Vector.lean`, all axiom-clean):
+**`tan_theta_le'`** — `T` symmetric on a complete space, `V` a
+`T`-invariant subspace with the complementary quadratic form in the strip
+`[α, β]`, `Z` a test subspace whose compression is coercive at distance
+`(β-α)/2 + δ` from the midpoint, `ρ` a columnwise residual bound over
+`Z`; then `δ ‖x - P_V x‖ ≤ ρ ‖P_V x‖` for every `x ∈ Z` — the per-vector
+form of `tan ∠(Z, V) ≤ ρ/δ`, forcing `Z ∩ Vᗮ = 0`, with no dimension
+comparison between `Z` and `V`.  This is the infinite-dimensional form of
+the finite theorem in `FiniteDimensional/TanTheta/Vector.lean`: the
+finite proof's compact-sphere maximizer is replaced by the operator norm
+`κ` of the compressed projection `P_Z|_{Vᗮ}` and an approximate-supremum
+limit — near-maximizing vectors from
+`ContinuousLinearMap.exists_lt_apply_of_lt_opNorm` give
+`(e+δ)(κ-ε) ≤ κe + ρ√(1-(κ-ε)²)` for all small `ε > 0`, and continuity
+in `ε` (`ge_of_tendsto` along `𝓝[Ioo 0 κ] 0`) yields the exact
+`δκ ≤ ρ√(1-κ²)`; the strip bound uses Hellinger--Toeplitz
+(`IsSymmetric.continuous`) in place of finite-dimensional automatic
+continuity.  Supporting lemmas `norm_map_sub_midpoint_smul_le'` and
+`norm_starProjection_map_le_of_mem_orthogonal'` are ported at full
+generality.  Alias: `bounded_tanTheta_perVector`.  The `tan Θ` family now
+has: the constructed operator `tanAngleOperatorC` with defining identity
+and norm bound, and the per-vector theorem at infinite-dimensional
+scope; still open are the UI-norm Ritz-residual forms (the
+`principalTangents` route of `FiniteDimensional/TanTheta/RitzResidual`)
+and the `tan θ_max = ‖angular operator‖` identification.
