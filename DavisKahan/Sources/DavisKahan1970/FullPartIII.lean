@@ -237,6 +237,19 @@ alias graph_projection_formula := DavisKahanExt.projection_graphSubspace_formula
 alias bounded_coercive_isUnit :=
   ForMathlib.ContinuousLinearMap.isUnit_of_coercive
 alias graph_unique_angularOperator := DavisKahanExt.existsUnique_angularOperator
+alias graph_gap_value :=
+  DavisKahanExt.norm_projection_sub_projection_graphSubspace
+alias graph_subspaceGap := DavisKahanExt.subspaceGap_graphSubspace
+alias graph_tan_maximalAngle :=
+  DavisKahanExt.tan_maximalAngle_eq_norm_angularOperator
+alias graph_contractive_iff_quarterAcute :=
+  DavisKahanExt.norm_angularOperator_lt_one_iff
+alias bounded_one_add_star_mul_self_isUnit :=
+  ForMathlib.ContinuousLinearMap.isUnit_one_add_star_mul_self
+alias bounded_positive_cauchy_schwarz :=
+  ForMathlib.ContinuousLinearMap.norm_apply_sq_le_of_positive
+alias bounded_inverse_defect_norm :=
+  ForMathlib.ContinuousLinearMap.norm_one_sub_inverse_one_add
 alias bounded_riccati_graph_equivalence :=
   DavisKahanExt.graph_reduces_iff_solvesRiccati
 alias bounded_riccati_existence :=

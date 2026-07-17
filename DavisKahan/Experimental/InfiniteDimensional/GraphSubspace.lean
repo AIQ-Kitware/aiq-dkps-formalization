@@ -311,50 +311,394 @@ theorem projection_graphSubspace_formula
       simpa using h
     rw [happ, sub_self, inner_zero_right]
 
-/-- Tangent of the maximal angle is the angular-operator norm. 
+set_option maxHeartbeats 1600000 in
+/-- The operator-norm gap between a base subspace and the graph of an
+angular operator has the exact value `‖X‖ / √(1 + ‖X‖ ^ 2)`.
 
-Lean proof route for a weaker agent:
+Both one-sided blocks `P (1 - Q)` and `(1 - P) Q` of the projector
+difference collapse, through the projection formula, to operators of the
+shape `1 - (1 + B)⁻¹` with `B = X⋆X` respectively `B = X X⋆`, whose exact
+norm `‖B‖ / (1 + ‖B‖)` is `norm_one_sub_inverse_one_add`; the `U`-blockwise
+Pythagoras estimate then pins the full difference at the common value. -/
+theorem norm_projection_sub_projection_graphSubspace
+    (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
+    (X : E →L[𝕜] E) (hX : IsAngularOperator U X) :
+    ‖projection U - projection (graphSubspace U X)‖
+      = ‖X‖ / Real.sqrt (1 + ‖X‖ ^ 2) := by
+  set P : E →L[𝕜] E := projection U with hPdef
+  have hXP : X * P = X := hX.1
+  have hPX : P * X = 0 := hX.2
+  have hPP : P * P = P := (U.isIdempotentElem_starProjection).eq
+  have hsP : star P = P := (isSelfAdjoint_starProjection U).star_eq
+  have hsXP : star X * P = 0 := by
+    have h := congrArg star hPX
+    rwa [star_mul, hsP, star_zero] at h
+  have hPsX : P * star X = star X := by
+    have h := congrArg star hXP
+    rwa [star_mul, hsP] at h
+  set A : E →L[𝕜] E := P + X * P with hAdef
+  set N : E →L[𝕜] E := 1 + star (X * P) * (X * P) with hNdef
+  set R : E →L[𝕜] E := Ring.inverse N with hRdef
+  have hA : A = P + X := by rw [hAdef, hXP]
+  have hN : N = 1 + star X * X := by rw [hNdef, hXP]
+  set M : E →L[𝕜] E := 1 + X * star X with hMdef
+  set R' : E →L[𝕜] E := Ring.inverse M with hR'def
+  have hQF : projection (graphSubspace U X) = A * R * star A :=
+    projection_graphSubspace_formula U X hX
+  -- units and inverses
+  have hNunit : IsUnit N := by
+    rw [hN]
+    exact ForMathlib.ContinuousLinearMap.isUnit_one_add_star_mul_self X
+  have hMunit : IsUnit M := by
+    have h := ForMathlib.ContinuousLinearMap.isUnit_one_add_star_mul_self (star X)
+    rwa [star_star, ← hMdef] at h
+  have hNR : N * R = 1 := Ring.mul_inverse_cancel N hNunit
+  have hRN : R * N = 1 := Ring.inverse_mul_cancel N hNunit
+  have hMR' : M * R' = 1 := Ring.mul_inverse_cancel M hMunit
+  have hR'M : R' * M = 1 := Ring.inverse_mul_cancel M hMunit
+  -- self-adjointness of the inverse
+  have hNsa : star N = N := by
+    rw [hN, star_add, star_one, star_mul, star_star]
+  have hRsa : star R = R := by
+    have h1 : N * star R = 1 := by
+      have h := congrArg star hRN
+      rwa [star_mul, star_one, hNsa] at h
+    calc star R = (R * N) * star R := by rw [hRN, one_mul]
+      _ = R * (N * star R) := by rw [mul_assoc]
+      _ = R := by rw [h1, mul_one]
+  -- commutation of `P` with `N` and `R`
+  have hPN : P * N = N * P := by
+    rw [hN, mul_add, add_mul, mul_one, one_mul]
+    congr 1
+    calc P * (star X * X) = (P * star X) * X := by rw [mul_assoc]
+      _ = star X * X := by rw [hPsX]
+      _ = star X * (X * P) := by rw [hXP]
+      _ = (star X * X) * P := by rw [mul_assoc]
+  have hPR : P * R = R * P := by
+    calc P * R = (R * N) * (P * R) := by rw [hRN, one_mul]
+      _ = R * ((N * P) * R) := by rw [mul_assoc R N (P * R), ← mul_assoc N P R]
+      _ = R * ((P * N) * R) := by rw [hPN]
+      _ = (R * P) * (N * R) := by rw [mul_assoc P N R, ← mul_assoc R P (N * R)]
+      _ = R * P := by rw [hNR, mul_one]
+  -- graph parametrization algebra
+  have hsA : star A = P + star X := by rw [hA, star_add, hsP]
+  have hPA : P * A = P := by rw [hA, mul_add, hPP, hPX, add_zero]
+  have hPsA : P * star A = star A := by rw [hsA, mul_add, hPP, hPsX]
+  have hsAP : star A * P = P := by rw [hsA, add_mul, hPP, hsXP, add_zero]
+  have hsAA : star A * A = N * P := by
+    rw [hsA, hA, add_mul, mul_add, mul_add, hPP, hPX, hsXP, hN, add_mul, one_mul,
+      mul_assoc, hXP, add_zero, zero_add]
+  -- the two one-sided blocks
+  have hPQ : P * (A * R * star A) = R * star A := by
+    calc P * (A * R * star A) = ((P * A) * R) * star A := by
+          rw [← mul_assoc P (A * R) (star A), ← mul_assoc P A R]
+      _ = (P * R) * star A := by rw [hPA]
+      _ = (R * P) * star A := by rw [hPR]
+      _ = R * (P * star A) := by rw [mul_assoc]
+      _ = R * star A := by rw [hPsA]
+  have h1PA : (1 - P) * A = X := by
+    rw [sub_mul, one_mul, hPA, hA, add_sub_cancel_left]
+  have hT2 : (1 - P) * (A * R * star A) = X * R * star A := by
+    calc (1 - P) * (A * R * star A) = ((1 - P) * A) * (R * star A) := by
+          rw [mul_assoc A R (star A), ← mul_assoc (1 - P) A (R * star A)]
+      _ = X * (R * star A) := by rw [h1PA]
+      _ = X * R * star A := by rw [mul_assoc]
+  -- `1 - R = (X⋆X) R` absorbed on `P`, and the `T₁` square
+  have h1RP : (1 - R) * P = 1 - R := by
+    have hBR : (star X * X) * R = 1 - R := by
+      have h1 : R + (star X * X) * R = 1 := by
+        calc R + (star X * X) * R = (1 + star X * X) * R := by
+              rw [add_mul, one_mul]
+          _ = 1 := by rw [← hN, hNR]
+      calc (star X * X) * R = (R + (star X * X) * R) - R := by abel
+        _ = 1 - R := by rw [h1]
+    calc (1 - R) * P = ((star X * X) * R) * P := by rw [hBR]
+      _ = star X * (X * (R * P)) := by simp only [mul_assoc]
+      _ = star X * (X * (P * R)) := by rw [← hPR]
+      _ = star X * ((X * P) * R) := by rw [← mul_assoc X P R]
+      _ = star X * (X * R) := by rw [hXP]
+      _ = (star X * X) * R := by rw [← mul_assoc]
+      _ = 1 - R := hBR
+  have hT1sq : (P - R * star A) * star (P - R * star A) = 1 - R := by
+    have hstarT1 : star (P - R * star A) = P - A * R := by
+      rw [star_sub, hsP, star_mul, star_star, hRsa]
+    rw [hstarT1]
+    have hexp : (P - R * star A) * (P - A * R)
+        = P - (R * P + R * P) + R * (N * P) * R := by
+      rw [mul_sub, sub_mul, sub_mul]
+      have e1 : P * P = P := hPP
+      have e2 : P * (A * R) = P * R := by
+        rw [← mul_assoc, hPA]
+      have e3 : (R * star A) * P = R * P := by
+        rw [mul_assoc, hsAP]
+      have e4 : (R * star A) * (A * R) = R * (N * P) * R := by
+        rw [mul_assoc R (star A) (A * R), ← mul_assoc (star A) A R, hsAA,
+          ← mul_assoc R (N * P) R]
+      rw [e1, e2, e3, e4, hPR]
+      abel
+    rw [hexp]
+    have e5 : R * (N * P) * R = P * R := by
+      rw [← mul_assoc R N P, hRN, one_mul, hPR]
+    rw [e5, hPR]
+    calc P - (R * P + R * P) + R * P = P - R * P := by abel
+      _ = (1 - R) * P := by rw [sub_mul, one_mul]
+      _ = 1 - R := h1RP
+  -- intertwining and the `T₂` square
+  have hXN : X * N = M * X := by
+    rw [hN, hMdef, mul_add, mul_one, add_mul, one_mul, ← mul_assoc, mul_assoc]
+  have hXR : X * R = R' * X := by
+    calc X * R = (R' * M) * (X * R) := by rw [hR'M, one_mul]
+      _ = R' * ((M * X) * R) := by rw [mul_assoc R' M (X * R), ← mul_assoc M X R]
+      _ = R' * ((X * N) * R) := by rw [hXN]
+      _ = (R' * X) * (N * R) := by rw [mul_assoc X N R, ← mul_assoc R' X (N * R)]
+      _ = R' * X := by rw [hNR, mul_one]
+  have hRsAA : R * (star A * A) = P := by
+    rw [hsAA, ← mul_assoc, hRN, one_mul]
+  have hT2sq : (X * R * star A) * star (X * R * star A) = 1 - R' := by
+    have hstarT2 : star (X * R * star A) = A * (R * star X) := by
+      rw [star_mul, star_star, star_mul, hRsa]
+    rw [hstarT2]
+    have hcontract : R * (star A * (A * (R * star X))) = P * (R * star X) := by
+      calc R * (star A * (A * (R * star X)))
+          = R * ((star A * A) * (R * star X)) := by
+            rw [← mul_assoc (star A) A (R * star X)]
+        _ = (R * (star A * A)) * (R * star X) := by rw [← mul_assoc]
+        _ = P * (R * star X) := by rw [hRsAA]
+    calc (X * R * star A) * (A * (R * star X))
+        = X * (R * (star A * (A * (R * star X)))) := by simp only [mul_assoc]
+      _ = X * (P * (R * star X)) := by rw [hcontract]
+      _ = (X * P) * (R * star X) := by rw [← mul_assoc]
+      _ = X * (R * star X) := by rw [hXP]
+      _ = (X * R) * star X := by rw [← mul_assoc]
+      _ = (R' * X) * star X := by rw [hXR]
+      _ = R' * (X * star X) := by rw [mul_assoc]
+      _ = 1 - R' := by
+          have h1 : R' + R' * (X * star X) = 1 := by
+            calc R' + R' * (X * star X) = R' * (1 + X * star X) := by
+                  rw [mul_add, mul_one]
+              _ = 1 := by rw [← hMdef, hR'M]
+          calc R' * (X * star X) = (R' + R' * (X * star X)) - R' := by abel
+            _ = 1 - R' := by rw [h1]
+  -- exact norms of the two inverse defects
+  have hBsa : IsSelfAdjoint (star X * X) := by
+    show star (star X * X) = star X * X
+    rw [star_mul, star_star]
+  have hBpos : ∀ z, 0 ≤ RCLike.re ⟪(star X * X) z, z⟫_𝕜 := by
+    intro z
+    have h : (star X * X) z = star X (X z) := rfl
+    rw [h, ContinuousLinearMap.star_eq_adjoint,
+      ContinuousLinearMap.adjoint_inner_left, inner_self_eq_norm_sq]
+    positivity
+  have hB'sa : IsSelfAdjoint (X * star X) := by
+    show star (X * star X) = X * star X
+    rw [star_mul, star_star]
+  have hB'pos : ∀ z, 0 ≤ RCLike.re ⟪(X * star X) z, z⟫_𝕜 := by
+    intro z
+    have h : (X * star X) z = X (star X z) := rfl
+    rw [h, ContinuousLinearMap.star_eq_adjoint,
+      ← ContinuousLinearMap.adjoint_inner_right, inner_self_eq_norm_sq]
+    positivity
+  have hnormB : ‖star X * X‖ = ‖X‖ * ‖X‖ := CStarRing.norm_star_mul_self
+  have h1Rnorm : ‖(1 : E →L[𝕜] E) - R‖ = ‖X‖ ^ 2 / (1 + ‖X‖ ^ 2) := by
+    have h := ForMathlib.ContinuousLinearMap.norm_one_sub_inverse_one_add
+      hBsa hBpos
+    rw [← hN, ← hRdef, hnormB] at h
+    rw [h]
+    ring
+  have h1R'norm : ‖(1 : E →L[𝕜] E) - R'‖ = ‖X‖ ^ 2 / (1 + ‖X‖ ^ 2) := by
+    have h := ForMathlib.ContinuousLinearMap.norm_one_sub_inverse_one_add
+      hB'sa hB'pos
+    rw [← hMdef, ← hR'def] at h
+    have h2 : ‖star (star X) * star X‖ = ‖star X‖ * ‖star X‖ :=
+      CStarRing.norm_star_mul_self
+    have hss : star (star X) = X := star_star X
+    have hns : ‖star X‖ = ‖X‖ := norm_star X
+    rw [hss, hns] at h2
+    rw [h2] at h
+    rw [h]
+    ring
+  -- the common norm value
+  set g : ℝ := ‖X‖ / Real.sqrt (1 + ‖X‖ ^ 2) with hgdef
+  have hsq1 : (0 : ℝ) < 1 + ‖X‖ ^ 2 := by positivity
+  have hgsq : g ^ 2 = ‖X‖ ^ 2 / (1 + ‖X‖ ^ 2) := by
+    rw [hgdef, div_pow, Real.sq_sqrt hsq1.le]
+  have hg0 : 0 ≤ g := by rw [hgdef]; positivity
+  have hnorm_sq_eq : ∀ T : E →L[𝕜] E, ‖T * star T‖ = ‖T‖ ^ 2 := by
+    intro T
+    have h : ‖star (star T) * star T‖ = ‖star T‖ * ‖star T‖ :=
+      CStarRing.norm_star_mul_self
+    have hss : star (star T) = T := star_star T
+    have hns : ‖star T‖ = ‖T‖ := norm_star T
+    rw [hss, hns] at h
+    rw [h, pow_two]
+  have hT1norm : ‖P - R * star A‖ = g := by
+    have hsq : ‖P - R * star A‖ ^ 2 = g ^ 2 := by
+      rw [← hnorm_sq_eq (P - R * star A), hT1sq, h1Rnorm, hgsq]
+    exact (sq_eq_sq₀ (norm_nonneg _) hg0).mp hsq
+  have hT2norm : ‖X * R * star A‖ = g := by
+    have hsq : ‖X * R * star A‖ ^ 2 = g ^ 2 := by
+      rw [← hnorm_sq_eq (X * R * star A), hT2sq, h1R'norm, hgsq]
+    exact (sq_eq_sq₀ (norm_nonneg _) hg0).mp hsq
+  -- identify the blocks with `P (1 - Q)` and `(1 - P) Q`
+  set Q : E →L[𝕜] E := projection (graphSubspace U X) with hQdef
+  have hQQ : ∀ x, Q (Q x) = Q x := fun x =>
+    Submodule.starProjection_eq_self_iff.mpr
+      ((graphSubspace U X).starProjection_apply_mem x)
+  have hQmem : ∀ x, Q x ∈ graphSubspace U X := fun x =>
+    (graphSubspace U X).starProjection_apply_mem x
+  have hT1opQ : P * (1 - Q) = P - R * star A := by
+    rw [mul_sub, mul_one, hQF, hPQ]
+  have hT2opQ : (1 - P) * Q = X * R * star A := by
+    rw [hQF, hT2]
+  -- Pythagoras upper bound
+  have hbound : ∀ x, ‖(P - Q) x‖ ≤ g * ‖x‖ := by
+    intro x
+    have hu1mem : P (x - Q x) ∈ U := U.starProjection_apply_mem _
+    have hu2mem : Q x - P (Q x) ∈ Uᗮ :=
+      Submodule.sub_starProjection_mem_orthogonal (K := U) (Q x)
+    have hdec : (P - Q) x = P (x - Q x) - (Q x - P (Q x)) := by
+      simp only [sub_apply, map_sub]
+      abel
+    have horth : ⟪P (x - Q x), Q x - P (Q x)⟫_𝕜 = 0 :=
+      Submodule.inner_right_of_mem_orthogonal hu1mem hu2mem
+    have hpyth : ‖(P - Q) x‖ ^ 2
+        = ‖P (x - Q x)‖ ^ 2 + ‖Q x - P (Q x)‖ ^ 2 := by
+      rw [hdec, norm_sub_sq (𝕜 := 𝕜), horth]
+      simp
+    have hb1 : ‖P (x - Q x)‖ ≤ g * ‖x - Q x‖ := by
+      have hQw : Q (x - Q x) = 0 := by
+        rw [map_sub, hQQ x, sub_self]
+      have h1 : (1 - Q) (x - Q x) = x - Q x := by
+        show (x - Q x) - Q (x - Q x) = x - Q x
+        rw [hQw, sub_zero]
+      have happ : (P * (1 - Q)) (x - Q x) = P (x - Q x) := by
+        calc (P * (1 - Q)) (x - Q x) = P ((1 - Q) (x - Q x)) := rfl
+          _ = P (x - Q x) := by rw [h1]
+      calc ‖P (x - Q x)‖ = ‖(P * (1 - Q)) (x - Q x)‖ := by rw [happ]
+        _ ≤ ‖P * (1 - Q)‖ * ‖x - Q x‖ := ContinuousLinearMap.le_opNorm _ _
+        _ = g * ‖x - Q x‖ := by rw [hT1opQ, hT1norm]
+    have hb2 : ‖Q x - P (Q x)‖ ≤ g * ‖Q x‖ := by
+      have happ : ((1 - P) * Q) (Q x) = Q x - P (Q x) := by
+        show (1 - P) (Q (Q x)) = Q x - P (Q x)
+        rw [hQQ x]
+        rfl
+      calc ‖Q x - P (Q x)‖ = ‖((1 - P) * Q) (Q x)‖ := by rw [happ]
+        _ ≤ ‖(1 - P) * Q‖ * ‖Q x‖ := ContinuousLinearMap.le_opNorm _ _
+        _ = g * ‖Q x‖ := by rw [hT2opQ, hT2norm]
+    have hQorth : ⟪Q x, x - Q x⟫_𝕜 = 0 :=
+      Submodule.inner_right_of_mem_orthogonal (hQmem x)
+        (Submodule.sub_starProjection_mem_orthogonal
+          (K := graphSubspace U X) x)
+    have hxsq : ‖x‖ ^ 2 = ‖Q x‖ ^ 2 + ‖x - Q x‖ ^ 2 := by
+      have hx : x = Q x + (x - Q x) := by abel
+      calc ‖x‖ ^ 2 = ‖Q x + (x - Q x)‖ ^ 2 := by rw [← hx]
+        _ = ‖Q x‖ ^ 2 + 2 * RCLike.re ⟪Q x, x - Q x⟫_𝕜 + ‖x - Q x‖ ^ 2 :=
+            norm_add_sq (𝕜 := 𝕜) _ _
+        _ = ‖Q x‖ ^ 2 + ‖x - Q x‖ ^ 2 := by
+            rw [hQorth]
+            simp
+    have hfin : ‖(P - Q) x‖ ^ 2 ≤ (g * ‖x‖) ^ 2 := by
+      have e1 : ‖P (x - Q x)‖ ^ 2 ≤ (g * ‖x - Q x‖) ^ 2 := by
+        nlinarith [norm_nonneg (P (x - Q x)), hb1]
+      have e2 : ‖Q x - P (Q x)‖ ^ 2 ≤ (g * ‖Q x‖) ^ 2 := by
+        nlinarith [norm_nonneg (Q x - P (Q x)), hb2]
+      calc ‖(P - Q) x‖ ^ 2
+          = ‖P (x - Q x)‖ ^ 2 + ‖Q x - P (Q x)‖ ^ 2 := hpyth
+        _ ≤ (g * ‖x - Q x‖) ^ 2 + (g * ‖Q x‖) ^ 2 := by linarith
+        _ = g ^ 2 * (‖Q x‖ ^ 2 + ‖x - Q x‖ ^ 2) := by ring
+        _ = g ^ 2 * ‖x‖ ^ 2 := by rw [← hxsq]
+        _ = (g * ‖x‖) ^ 2 := by ring
+    nlinarith [hfin, norm_nonneg ((P - Q) x), mul_nonneg hg0 (norm_nonneg x)]
+  have hupper : ‖P - Q‖ ≤ g :=
+    ContinuousLinearMap.opNorm_le_bound _ hg0 hbound
+  -- lower bound through the factorization `P (1 - Q) = (P - Q)(1 - Q)`
+  have hQQop : Q * Q = Q :=
+    ((graphSubspace U X).isIdempotentElem_starProjection).eq
+  have hfactor : (P - Q) * (1 - Q) = P * (1 - Q) := by
+    rw [sub_mul, mul_sub, mul_sub, mul_one, mul_one, hQQop]
+    abel
+  have h1Qnorm : ‖(1 : E →L[𝕜] E) - Q‖ ≤ 1 := by
+    have h := (graphSubspace U X)ᗮ.starProjection_norm_le
+    rwa [Submodule.starProjection_orthogonal'] at h
+  have hlower : g ≤ ‖P - Q‖ := by
+    calc g = ‖P * (1 - Q)‖ := by rw [hT1opQ, hT1norm]
+      _ = ‖(P - Q) * (1 - Q)‖ := by rw [hfactor]
+      _ ≤ ‖P - Q‖ * ‖1 - Q‖ := norm_mul_le _ _
+      _ ≤ ‖P - Q‖ * 1 := mul_le_mul_of_nonneg_left h1Qnorm (norm_nonneg _)
+      _ = ‖P - Q‖ := mul_one _
+  exact le_antisymm hupper hlower
 
-1. Use `projection_graphSubspace_formula` to compute the gap between `U` and the graph.
-2. Show the gap is `‖X‖/sqrt(1+‖X‖²)` by functional calculus and spectral mapping.
-3. Apply the scalar identity `tan(arcsin(x/sqrt(1+x²)))=x` for `x≥0`.
+/-- The subspace gap between a base subspace and the graph of an angular
+operator is `‖X‖ / √(1 + ‖X‖ ^ 2)`. -/
+theorem subspaceGap_graphSubspace
+    (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
+    (X : E →L[𝕜] E) (hX : IsAngularOperator U X) :
+    subspaceGap U (graphSubspace U X) = ‖X‖ / Real.sqrt (1 + ‖X‖ ^ 2) :=
+  norm_projection_sub_projection_graphSubspace U X hX
 
-
-Ext-agent signature audit (GPT 5.6 High): Correct because every bounded graph is acute.
-The proof must establish the angle range before applying inverse trigonometric
-identities.
-
-Preferred dependency route: Build on the acute graph representation and the bounded
-inverse theorem, then use functional calculus for `I + X*X` to obtain projection and
-angle formulas.
--/
+/-- Tangent of the maximal angle is the angular-operator norm.  The gap to
+the graph is `‖X‖ / √(1 + ‖X‖ ^ 2)`, and `tan ∘ arcsin` recovers `‖X‖`. -/
 theorem tan_maximalAngle_eq_norm_angularOperator
     (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     (X : E →L[𝕜] E) (hX : IsAngularOperator U X) :
     Real.tan (maximalAngle U (graphSubspace U X)) = ‖X‖ := by
-  sorry
+  have hgap := subspaceGap_graphSubspace U X hX
+  have hpos : (0 : ℝ) < 1 + ‖X‖ ^ 2 := by positivity
+  have hs0 : (0 : ℝ) < Real.sqrt (1 + ‖X‖ ^ 2) := Real.sqrt_pos.mpr hpos
+  rw [maximalAngle, hgap, Real.tan_arcsin]
+  have h2 : (‖X‖ / Real.sqrt (1 + ‖X‖ ^ 2)) ^ 2 = ‖X‖ ^ 2 / (1 + ‖X‖ ^ 2) := by
+    rw [div_pow, Real.sq_sqrt hpos.le]
+  have h3 : 1 - ‖X‖ ^ 2 / (1 + ‖X‖ ^ 2) = 1 / (1 + ‖X‖ ^ 2) := by
+    field_simp
+    ring
+  rw [h2, h3, one_div, Real.sqrt_inv]
+  field_simp
 
-/-- Contractive angular operators correspond to angles below `π / 4`. 
-
-Lean proof route for a weaker agent:
-
-1. Rewrite the angle with `tan_maximalAngle_eq_norm_angularOperator`.
-2. Establish `0≤maximalAngle<π/2` for a graph subspace.
-3. Use strict monotonicity of `tan` and `tan(π/4)=1` to prove both implications.
-
-
-Ext-agent signature audit (GPT 5.6 High): Correct after the preceding tangent identity
-and the fact that graph angles lie in `[0,π/2)`.
-
-Preferred dependency route: Build on the acute graph representation and the bounded
-inverse theorem, then use functional calculus for `I + X*X` to obtain projection and
-angle formulas.
--/
+/-- Contractive angular operators correspond to maximal angles below
+`π / 4`. -/
 theorem norm_angularOperator_lt_one_iff
     (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     (X : E →L[𝕜] E) (hX : IsAngularOperator U X) :
     ‖X‖ < 1 ↔ maximalAngle U (graphSubspace U X) < Real.pi / 4 := by
-  sorry
+  have hgap := subspaceGap_graphSubspace U X hX
+  have hpos : (0 : ℝ) < 1 + ‖X‖ ^ 2 := by positivity
+  have hs0 : (0 : ℝ) < Real.sqrt (1 + ‖X‖ ^ 2) := Real.sqrt_pos.mpr hpos
+  rw [maximalAngle, hgap]
+  have hpi4 : Real.arcsin (Real.sqrt 2 / 2) = Real.pi / 4 := by
+    rw [← Real.sin_pi_div_four]
+    exact Real.arcsin_sin (by linarith [Real.pi_pos]) (by linarith [Real.pi_pos])
+  rw [← hpi4]
+  have hg0 : (0 : ℝ) ≤ ‖X‖ / Real.sqrt (1 + ‖X‖ ^ 2) := by positivity
+  have hgsq : (‖X‖ / Real.sqrt (1 + ‖X‖ ^ 2)) ^ 2 = ‖X‖ ^ 2 / (1 + ‖X‖ ^ 2) := by
+    rw [div_pow, Real.sq_sqrt hpos.le]
+  have hmem1 : ‖X‖ / Real.sqrt (1 + ‖X‖ ^ 2) ∈ Set.Icc (-1 : ℝ) 1 := by
+    constructor
+    · linarith
+    · rw [div_le_one hs0]
+      have h := Real.sqrt_le_sqrt (show ‖X‖ ^ 2 ≤ 1 + ‖X‖ ^ 2 by linarith)
+      rwa [Real.sqrt_sq (norm_nonneg X)] at h
+  have hmem2 : Real.sqrt 2 / 2 ∈ Set.Icc (-1 : ℝ) 1 := by
+    have hs2 : (0 : ℝ) ≤ Real.sqrt 2 := Real.sqrt_nonneg 2
+    have hs2sq : Real.sqrt 2 ^ 2 = 2 := Real.sq_sqrt (by norm_num)
+    constructor
+    · linarith
+    · nlinarith
+  rw [Real.strictMonoOn_arcsin.lt_iff_lt hmem1 hmem2]
+  have hhalf : (Real.sqrt 2 / 2) ^ 2 = 1 / 2 := by
+    rw [div_pow, Real.sq_sqrt (by norm_num : (0 : ℝ) ≤ 2)]
+    norm_num
+  have hs20 : (0 : ℝ) ≤ Real.sqrt 2 / 2 := by positivity
+  constructor
+  · intro h
+    have hsq : (‖X‖ / Real.sqrt (1 + ‖X‖ ^ 2)) ^ 2 < (Real.sqrt 2 / 2) ^ 2 := by
+      rw [hgsq, hhalf, div_lt_div_iff₀ hpos (by norm_num : (0 : ℝ) < 2)]
+      nlinarith [norm_nonneg X]
+    nlinarith [hg0, hs20, hsq]
+  · intro h
+    have hsq : (‖X‖ / Real.sqrt (1 + ‖X‖ ^ 2)) ^ 2 < (Real.sqrt 2 / 2) ^ 2 := by
+      nlinarith [hg0, hs20, h]
+    rw [hgsq, hhalf, div_lt_div_iff₀ hpos (by norm_num : (0 : ℝ) < 2)] at hsq
+    nlinarith [norm_nonneg X]
 
 end DavisKahanExt
 end ForMathlib

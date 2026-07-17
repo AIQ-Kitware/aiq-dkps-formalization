@@ -11,6 +11,7 @@ closed range, and a trivial orthogonal complement of the range.
 To be re-authored per Mathlib's AI-contribution policy at PR time.
 -/
 
+import ForMathlib.Analysis.InnerProductSpace.SylvesterBound
 import Mathlib.Analysis.InnerProductSpace.Adjoint
 import Mathlib.Analysis.Normed.Operator.Banach
 
@@ -90,6 +91,232 @@ theorem isUnit_of_coercive {N : E →L[𝕜] E} {c : ℝ} (hc : 0 < c)
         (pow_eq_zero_iff two_ne_zero).mp (le_antisymm h2 (sq_nonneg _))
       exact norm_eq_zero.mp h3
     exact LinearMap.range_eq_top.mp hrange
+
+/-- `1 + W⋆ W` is invertible for every bounded Hilbert-space operator `W`:
+its quadratic form dominates `‖z‖ ^ 2`, so the operator Lax–Milgram lemma
+applies. -/
+theorem isUnit_one_add_star_mul_self (W : E →L[𝕜] E) :
+    IsUnit (1 + star W * W) := by
+  refine isUnit_of_coercive one_pos fun z => ?_
+  have h : (1 + star W * W) z = z + star W (W z) := rfl
+  rw [h, inner_add_left, map_add, inner_self_eq_norm_sq,
+    ContinuousLinearMap.star_eq_adjoint, ContinuousLinearMap.adjoint_inner_left,
+    inner_self_eq_norm_sq]
+  nlinarith [sq_nonneg ‖W z‖]
+
+omit [CompleteSpace E] in
+/-- Cauchy–Schwarz for the semi-inner product induced by a positive symmetric
+operator, in operator-norm form: `‖B y‖ ^ 2 ≤ ‖B‖ * re ⟪B y, y⟫`.  The proof
+evaluates the nonnegative quadratic form at `y - ‖B‖⁻¹ • B y`; no square
+roots or functional calculus are involved. -/
+theorem norm_apply_sq_le_of_positive {B : E →L[𝕜] E}
+    (hB : (B : E →ₗ[𝕜] E).IsSymmetric)
+    (hBpos : ∀ z, 0 ≤ RCLike.re ⟪B z, z⟫_𝕜) (y : E) :
+    ‖B y‖ ^ 2 ≤ ‖B‖ * RCLike.re ⟪B y, y⟫_𝕜 := by
+  rcases eq_or_lt_of_le (norm_nonneg B) with hs | hs
+  · have hB0 : B = 0 := norm_eq_zero.mp hs.symm
+    simp [hB0]
+  · set t : ℝ := ‖B‖⁻¹ with htdef
+    have ht : 0 < t := inv_pos.mpr hs
+    have hts : t * ‖B‖ = 1 := inv_mul_cancel₀ hs.ne'
+    have hsym : ⟪B (B y), y⟫_𝕜 = ⟪B y, B y⟫_𝕜 := hB (B y) y
+    have h1 : ⟪B (y - (t : 𝕜) • B y), y - (t : 𝕜) • B y⟫_𝕜
+        = ⟪B y, y⟫_𝕜 - (t : 𝕜) * ⟪B y, B y⟫_𝕜 - (t : 𝕜) * ⟪B y, B y⟫_𝕜
+          + (t : 𝕜) * ((t : 𝕜) * ⟪B (B y), B y⟫_𝕜) := by
+      rw [map_sub, map_smul]
+      simp only [inner_sub_left, inner_sub_right, inner_smul_left,
+        inner_smul_right, RCLike.conj_ofReal]
+      rw [hsym]
+      ring
+    have h2 : (0 : ℝ) ≤ RCLike.re ⟪B y, y⟫_𝕜 - t * ‖B y‖ ^ 2 - t * ‖B y‖ ^ 2
+        + t * (t * RCLike.re ⟪B (B y), B y⟫_𝕜) := by
+      have h0 := hBpos (y - (t : 𝕜) • B y)
+      rw [h1] at h0
+      simpa [map_sub, map_add, RCLike.re_ofReal_mul, inner_self_eq_norm_sq]
+        using h0
+    have h3 : RCLike.re ⟪B (B y), B y⟫_𝕜 ≤ ‖B‖ * ‖B y‖ ^ 2 := by
+      calc RCLike.re ⟪B (B y), B y⟫_𝕜 ≤ ‖⟪B (B y), B y⟫_𝕜‖ := RCLike.re_le_norm _
+        _ ≤ ‖B (B y)‖ * ‖B y‖ := norm_inner_le_norm _ _
+        _ ≤ (‖B‖ * ‖B y‖) * ‖B y‖ :=
+            mul_le_mul_of_nonneg_right (B.le_opNorm (B y)) (norm_nonneg _)
+        _ = ‖B‖ * ‖B y‖ ^ 2 := by ring
+    have key : t * (t * RCLike.re ⟪B (B y), B y⟫_𝕜) ≤ t * ‖B y‖ ^ 2 := by
+      refine mul_le_mul_of_nonneg_left ?_ ht.le
+      calc t * RCLike.re ⟪B (B y), B y⟫_𝕜 ≤ t * (‖B‖ * ‖B y‖ ^ 2) :=
+            mul_le_mul_of_nonneg_left h3 ht.le
+        _ = ‖B y‖ ^ 2 := by rw [← mul_assoc, hts, one_mul]
+    have h7 : t * ‖B y‖ ^ 2 ≤ RCLike.re ⟪B y, y⟫_𝕜 := by linarith
+    calc ‖B y‖ ^ 2 = ‖B‖ * (t * ‖B y‖ ^ 2) := by
+          rw [← mul_assoc, mul_comm ‖B‖ t, hts, one_mul]
+      _ ≤ ‖B‖ * RCLike.re ⟪B y, y⟫_𝕜 :=
+          mul_le_mul_of_nonneg_left h7 (norm_nonneg B)
+
+/-- Exact operator norm of `1 - (1 + B)⁻¹` for a positive operator `B`:
+the value is `‖B‖ / (1 + ‖B‖)`.  The inverse is interpreted through
+`Ring.inverse`; the operator `1 + B` is coercive, so this is a genuine
+inverse.  The upper bound is the quadratic-form estimate along the
+substitution `z = (1 + B) y`; the lower bound follows from near-maximizers
+of `‖B‖` transported through the positive-operator Cauchy–Schwarz
+inequality, with a limit along small `ε`. -/
+theorem norm_one_sub_inverse_one_add {B : E →L[𝕜] E} (hB : IsSelfAdjoint B)
+    (hBpos : ∀ z, 0 ≤ RCLike.re ⟪B z, z⟫_𝕜) :
+    ‖1 - Ring.inverse (1 + B)‖ = ‖B‖ / (1 + ‖B‖) := by
+  rcases eq_or_lt_of_le (norm_nonneg B) with hs | hs
+  · have hB0 : B = 0 := norm_eq_zero.mp hs.symm
+    rw [hB0, add_zero, Ring.inverse_one, sub_self, norm_zero]
+    norm_num
+  set N : E →L[𝕜] E := 1 + B with hNdef
+  have hNcoer : ∀ z, (1 : ℝ) * ‖z‖ ^ 2 ≤ RCLike.re ⟪N z, z⟫_𝕜 := by
+    intro z
+    have hNz : N z = z + B z := rfl
+    rw [hNz, inner_add_left, map_add, inner_self_eq_norm_sq]
+    have := hBpos z
+    linarith
+  have hNunit : IsUnit N := isUnit_of_coercive one_pos hNcoer
+  set R : E →L[𝕜] E := Ring.inverse N with hRdef
+  have hNR : N * R = 1 := Ring.mul_inverse_cancel N hNunit
+  have hRN : R * N = 1 := Ring.inverse_mul_cancel N hNunit
+  have hCB : (1 - R) * N = B := by
+    calc (1 - R) * N = N - R * N := by rw [sub_mul, one_mul]
+      _ = N - 1 := by rw [hRN]
+      _ = B := by rw [hNdef, add_sub_cancel_left]
+  have hNsa : star N = N := by rw [hNdef, star_add, star_one, hB.star_eq]
+  have hRsa : star R = R := by
+    have h1 : N * star R = 1 := by
+      have h := congrArg star hRN
+      rwa [star_mul, star_one, hNsa] at h
+    calc star R = (R * N) * star R := by rw [hRN, one_mul]
+      _ = R * (N * star R) := by rw [mul_assoc]
+      _ = R := by rw [h1, mul_one]
+  have hCsa : IsSelfAdjoint (1 - R) := by
+    show star (1 - R) = 1 - R
+    rw [star_sub, star_one, hRsa]
+  have hbs : ∀ y, RCLike.re ⟪B y, y⟫_𝕜 ≤ ‖B‖ * ‖y‖ ^ 2 := by
+    intro y
+    calc RCLike.re ⟪B y, y⟫_𝕜 ≤ ‖⟪B y, y⟫_𝕜‖ := RCLike.re_le_norm _
+      _ ≤ ‖B y‖ * ‖y‖ := norm_inner_le_norm _ _
+      _ ≤ (‖B‖ * ‖y‖) * ‖y‖ :=
+          mul_le_mul_of_nonneg_right (B.le_opNorm y) (norm_nonneg _)
+      _ = ‖B‖ * ‖y‖ ^ 2 := by ring
+  have hNsq : ∀ y, ‖N y‖ ^ 2
+      = ‖y‖ ^ 2 + 2 * RCLike.re ⟪B y, y⟫_𝕜 + ‖B y‖ ^ 2 := by
+    intro y
+    have hNy : N y = y + B y := rfl
+    have hswap : RCLike.re ⟪y, B y⟫_𝕜 = RCLike.re ⟪B y, y⟫_𝕜 := by
+      rw [← inner_conj_symm, RCLike.conj_re]
+    rw [hNy, norm_add_sq (𝕜 := 𝕜), hswap]
+  have hval : ∀ y, RCLike.re ⟪(1 - R) (N y), N y⟫_𝕜
+      = RCLike.re ⟪B y, y⟫_𝕜 + ‖B y‖ ^ 2 := by
+    intro y
+    have hCNy : (1 - R) (N y) = B y := DFunLike.congr_fun hCB y
+    have hNy : N y = y + B y := rfl
+    rw [hCNy, hNy, inner_add_right, map_add, inner_self_eq_norm_sq]
+  have hupper : ‖1 - R‖ ≤ ‖B‖ / (1 + ‖B‖) := by
+    have hkey : ∀ y,
+        |RCLike.re ⟪(1 - R) (N y), N y⟫_𝕜| ≤ (‖B‖ / (1 + ‖B‖)) * ‖N y‖ ^ 2 := by
+      intro y
+      have hb0 := hBpos y
+      have hb := hbs y
+      have hc := norm_apply_sq_le_of_positive hB.isSymmetric hBpos y
+      rw [hval y, hNsq y, abs_of_nonneg (by positivity)]
+      rw [div_mul_eq_mul_div, le_div_iff₀ (by linarith : (0 : ℝ) < 1 + ‖B‖)]
+      nlinarith [hb, hc]
+    refine norm_le_of_abs_re_inner_map_self_le hCsa.isSymmetric
+      (div_nonneg hs.le (by linarith)) ?_
+    intro z
+    have h := hkey (R z)
+    have hNRz : N (R z) = z := DFunLike.congr_fun hNR z
+    rwa [hNRz] at h
+  have hlower : ‖B‖ / (1 + ‖B‖) ≤ ‖1 - R‖ := by
+    have hstep : ∀ u : E, ‖u‖ ≤ 1 →
+        RCLike.re ⟪B u, u⟫_𝕜 / (1 + RCLike.re ⟪B u, u⟫_𝕜) ≤ ‖1 - R‖ := by
+      intro u hu
+      have hb0 := hBpos u
+      have hc2 : RCLike.re ⟪B u, u⟫_𝕜 ^ 2 ≤ ‖B u‖ ^ 2 := by
+        have h1 : RCLike.re ⟪B u, u⟫_𝕜 ≤ ‖B u‖ := by
+          calc RCLike.re ⟪B u, u⟫_𝕜 ≤ ‖⟪B u, u⟫_𝕜‖ := RCLike.re_le_norm _
+            _ ≤ ‖B u‖ * ‖u‖ := norm_inner_le_norm _ _
+            _ ≤ ‖B u‖ * 1 := mul_le_mul_of_nonneg_left hu (norm_nonneg _)
+            _ = ‖B u‖ := mul_one _
+        nlinarith [norm_nonneg (B u)]
+      have hCS : RCLike.re ⟪(1 - R) (N u), N u⟫_𝕜 ≤ ‖1 - R‖ * ‖N u‖ ^ 2 := by
+        calc RCLike.re ⟪(1 - R) (N u), N u⟫_𝕜
+            ≤ ‖⟪(1 - R) (N u), N u⟫_𝕜‖ := RCLike.re_le_norm _
+          _ ≤ ‖(1 - R) (N u)‖ * ‖N u‖ := norm_inner_le_norm _ _
+          _ ≤ (‖1 - R‖ * ‖N u‖) * ‖N u‖ :=
+              mul_le_mul_of_nonneg_right ((1 - R).le_opNorm _) (norm_nonneg _)
+          _ = ‖1 - R‖ * ‖N u‖ ^ 2 := by ring
+      rw [hval u, hNsq u] at hCS
+      have husq : ‖u‖ ^ 2 ≤ 1 := by nlinarith [norm_nonneg u]
+      have hK0 : (0 : ℝ) ≤ ‖1 - R‖ := norm_nonneg _
+      rw [div_le_iff₀ (by linarith : (0 : ℝ) < 1 + RCLike.re ⟪B u, u⟫_𝕜)]
+      have hD : (0 : ℝ)
+          < 1 + 2 * RCLike.re ⟪B u, u⟫_𝕜 + ‖B u‖ ^ 2 := by nlinarith
+      have h8 : RCLike.re ⟪B u, u⟫_𝕜 + ‖B u‖ ^ 2
+          ≤ ‖1 - R‖ * (1 + 2 * RCLike.re ⟪B u, u⟫_𝕜 + ‖B u‖ ^ 2) := by
+        nlinarith [hCS]
+      have h9 : RCLike.re ⟪B u, u⟫_𝕜
+            * (1 + 2 * RCLike.re ⟪B u, u⟫_𝕜 + ‖B u‖ ^ 2)
+          ≤ (RCLike.re ⟪B u, u⟫_𝕜 + ‖B u‖ ^ 2)
+            * (1 + RCLike.re ⟪B u, u⟫_𝕜) := by nlinarith [hc2]
+      have h10 : RCLike.re ⟪B u, u⟫_𝕜
+            * (1 + 2 * RCLike.re ⟪B u, u⟫_𝕜 + ‖B u‖ ^ 2)
+          ≤ (‖1 - R‖ * (1 + RCLike.re ⟪B u, u⟫_𝕜))
+            * (1 + 2 * RCLike.re ⟪B u, u⟫_𝕜 + ‖B u‖ ^ 2) := by
+        calc RCLike.re ⟪B u, u⟫_𝕜
+              * (1 + 2 * RCLike.re ⟪B u, u⟫_𝕜 + ‖B u‖ ^ 2)
+            ≤ (RCLike.re ⟪B u, u⟫_𝕜 + ‖B u‖ ^ 2)
+              * (1 + RCLike.re ⟪B u, u⟫_𝕜) := h9
+          _ ≤ (‖1 - R‖ * (1 + 2 * RCLike.re ⟪B u, u⟫_𝕜 + ‖B u‖ ^ 2))
+              * (1 + RCLike.re ⟪B u, u⟫_𝕜) :=
+              mul_le_mul_of_nonneg_right h8 (by linarith)
+          _ = (‖1 - R‖ * (1 + RCLike.re ⟪B u, u⟫_𝕜))
+              * (1 + 2 * RCLike.re ⟪B u, u⟫_𝕜 + ‖B u‖ ^ 2) := by ring
+      exact le_of_mul_le_mul_right h10 hD
+    have hstep2 : ∀ ε ∈ Set.Ioo (0 : ℝ) ‖B‖,
+        (‖B‖ - ε) ^ 2 / (‖B‖ + (‖B‖ - ε) ^ 2) ≤ ‖1 - R‖ := by
+      intro ε hε
+      obtain ⟨u, hu1, hu2⟩ :=
+        B.exists_lt_apply_of_lt_opNorm (r := ‖B‖ - ε) (by linarith [hε.1])
+      have hb0 := hBpos u
+      have hcs := norm_apply_sq_le_of_positive hB.isSymmetric hBpos u
+      have hbge : (‖B‖ - ε) ^ 2 / ‖B‖ ≤ RCLike.re ⟪B u, u⟫_𝕜 := by
+        rw [div_le_iff₀ hs]
+        have hsq : (‖B‖ - ε) * (‖B‖ - ε) ≤ ‖B u‖ * ‖B u‖ :=
+          mul_self_le_mul_self (by linarith [hε.2]) hu2.le
+        nlinarith [hcs, hsq]
+      have hmono := hstep u hu1.le
+      have hmono2 : (‖B‖ - ε) ^ 2 / (‖B‖ + (‖B‖ - ε) ^ 2)
+          ≤ RCLike.re ⟪B u, u⟫_𝕜 / (1 + RCLike.re ⟪B u, u⟫_𝕜) := by
+        have hr2 : (‖B‖ - ε) ^ 2 ≤ RCLike.re ⟪B u, u⟫_𝕜 * ‖B‖ := by
+          rw [div_le_iff₀ hs] at hbge
+          linarith
+        rw [div_le_div_iff₀ (by nlinarith [sq_nonneg (‖B‖ - ε)]) (by linarith)]
+        nlinarith [hr2, sq_nonneg (‖B‖ - ε)]
+      linarith
+    have hcont : Filter.Tendsto
+        (fun ε : ℝ => (‖B‖ - ε) ^ 2 / (‖B‖ + (‖B‖ - ε) ^ 2))
+        (nhdsWithin 0 (Set.Ioo 0 ‖B‖)) (nhds (‖B‖ / (1 + ‖B‖))) := by
+      have hden : ‖B‖ + (‖B‖ - 0) ^ 2 ≠ 0 := by nlinarith
+      have h1 : Filter.Tendsto
+          (fun ε : ℝ => (‖B‖ - ε) ^ 2 / (‖B‖ + (‖B‖ - ε) ^ 2))
+          (nhds 0) (nhds ((‖B‖ - 0) ^ 2 / (‖B‖ + (‖B‖ - 0) ^ 2))) := by
+        refine Filter.Tendsto.div ?_ ?_ hden
+        · exact (((continuous_const.sub continuous_id).pow 2).tendsto 0)
+        · exact ((continuous_const.add
+            ((continuous_const.sub continuous_id).pow 2)).tendsto 0)
+      have h2 : (‖B‖ - 0) ^ 2 / (‖B‖ + (‖B‖ - 0) ^ 2) = ‖B‖ / (1 + ‖B‖) := by
+        rw [sub_zero, div_eq_div_iff (by nlinarith) (by linarith)]
+        ring
+      rw [← h2]
+      exact h1.mono_left nhdsWithin_le_nhds
+    haveI hNB : (nhdsWithin (0 : ℝ) (Set.Ioo 0 ‖B‖)).NeBot := by
+      apply mem_closure_iff_nhdsWithin_neBot.mp
+      rw [closure_Ioo hs.ne]
+      exact ⟨le_refl 0, hs.le⟩
+    exact le_of_tendsto hcont
+      (by filter_upwards [self_mem_nhdsWithin] with ε hε using hstep2 ε hε)
+  exact le_antisymm hupper hlower
 
 end ContinuousLinearMap
 end ForMathlib
