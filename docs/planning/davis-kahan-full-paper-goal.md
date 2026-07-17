@@ -404,6 +404,29 @@ Next rungs: the Halmos two-projection decomposition for
 `cosAngleOperatorC`/`sinTwoAngleOperatorC` (`2 sin cos`), then the genuine
 `sin 2Θ` theorems.
 
+### Progress note (2026-07-17, the tangent operator)
+
+Angle ladder, sixth rung (all axiom-clean): **`tanAngleOperatorC` exists.**
+`commute_cosAngleOperatorC_starProjection` and `cosAngleOperatorC_apply_mem`
+(the cosine commutes with `P_U` and preserves `U`, by nonneg CFC
+commutation), the extended cosine `cosAngleExtendedC = cos Θ + P_{Uᗮ}`
+with self-adjointness and **global coercivity**
+`min (√(1 - g²)) 1 · ‖x‖ ≤ ‖(cos Θ + P_{Uᗮ}) x‖` (orthogonal
+decomposition + acute coercivity on the source), and
+`cosAngleExtendedC_ker_bot_range_top`: in the acute regime the extended
+cosine is **boundedly invertible** — trivial kernel from coercivity,
+closed range by the antilipschitz bound, full range by self-adjointness
+(`orthogonal_eq_bot_iff`).  `cosAngleExtendedCEquiv` packages the
+`ContinuousLinearEquiv` (open mapping via `ofBijective`), and
+`tanAngleOperatorC := sin Θ_directed ∘ (cos Θ + P_{Uᗮ})⁻¹` with the
+defining identity `tan Θ ∘ (cos Θ + P_{Uᗮ}) = sin Θ_directed`.
+`FullPartIII` aliases: `bounded_cosAngleExtended_invertible`,
+`bounded_tanAngleOperatorC`, `bounded_tanAngle_defining_identity`.
+Next: the tan Θ theorem (`d·‖tan Θ‖ ≤ ‖R‖` under the one-sided spectral
+configuration, via the Sylvester engine against the graph/angular-operator
+representation), and `tanTwoAngleOperatorC` by the same extended-inverse
+pattern at the quarter-acute threshold.
+
 ### Progress note (2026-07-17, acute coercivity of the cosine)
 
 Angle ladder, fifth rung (all axiom-clean):

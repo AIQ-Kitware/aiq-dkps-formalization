@@ -403,5 +403,221 @@ theorem cosAngleOperatorC_eq_zero_imp_of_acute (U V : Submodule ℂ E)
   exact norm_eq_zero.mp (le_antisymm hxle (norm_nonneg x))
 
 
+section Tangent
+
+/-- The directed cosine commutes with the source projection. -/
+theorem commute_cosAngleOperatorC_starProjection (U V : Submodule ℂ E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
+    Commute (cosAngleOperatorC U V) U.starProjection := by
+  have hb : Commute (star (V.starProjection ∘L U.starProjection) *
+      (V.starProjection ∘L U.starProjection)) U.starProjection := by
+    rw [adjoint_cross_mul_cross]
+    exact commute_compress_starProjection U V.starProjection
+  exact hb.cfcₙ_nnreal _
+
+/-- The directed cosine maps the source subspace into itself. -/
+theorem cosAngleOperatorC_apply_mem (U V : Submodule ℂ E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    {x : E} (hx : x ∈ U) : cosAngleOperatorC U V x ∈ U := by
+  have h := commute_cosAngleOperatorC_starProjection U V
+  have hx' : U.starProjection x = x :=
+    Submodule.starProjection_eq_self_iff.mpr hx
+  rw [← Submodule.starProjection_eq_self_iff]
+  calc U.starProjection (cosAngleOperatorC U V x)
+      = (U.starProjection * cosAngleOperatorC U V) x := rfl
+    _ = (cosAngleOperatorC U V * U.starProjection) x := by rw [← h.eq]
+    _ = cosAngleOperatorC U V x := by
+        show cosAngleOperatorC U V (U.starProjection x) = _
+        rw [hx']
+
+/-- The extended cosine: the directed cosine on the source, the identity on
+its orthogonal complement. -/
+noncomputable def cosAngleExtendedC (U V : Submodule ℂ E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →L[ℂ] E :=
+  cosAngleOperatorC U V + Uᗮ.starProjection
+
+/-- The extended cosine is self-adjoint. -/
+theorem isSelfAdjoint_cosAngleExtendedC (U V : Submodule ℂ E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
+    IsSelfAdjoint (cosAngleExtendedC U V) :=
+  (isSelfAdjoint_cosAngleOperatorC U V).add (isSelfAdjoint_starProjection _)
+
+/-- **Global coercivity of the extended cosine in the acute regime.** -/
+theorem norm_cosAngleExtendedC_apply_ge (U V : Submodule ℂ E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] (x : E) :
+    min (Real.sqrt (1 - directedGap U V ^ 2)) 1 * ‖x‖ ≤
+      ‖cosAngleExtendedC U V x‖ := by
+  set c : ℝ := min (Real.sqrt (1 - directedGap U V ^ 2)) 1 with hc
+  have hc0 : 0 ≤ c := le_min (Real.sqrt_nonneg _) zero_le_one
+  -- decompose and compute the image
+  have hdecomp : x = U.starProjection x + Uᗮ.starProjection x :=
+    (U.starProjection_add_starProjection_orthogonal x).symm
+  have hcos0 : cosAngleOperatorC U V (Uᗮ.starProjection x) = 0 :=
+    cosAngleOperatorC_apply_eq_zero_of_mem_orthogonal U V
+      (Uᗮ.starProjection_apply_mem x)
+  have himg : cosAngleExtendedC U V x =
+      cosAngleOperatorC U V (U.starProjection x) + Uᗮ.starProjection x := by
+    calc cosAngleExtendedC U V x
+        = cosAngleOperatorC U V x + Uᗮ.starProjection x := rfl
+      _ = cosAngleOperatorC U V (U.starProjection x + Uᗮ.starProjection x) +
+            Uᗮ.starProjection x := by rw [← hdecomp]
+      _ = cosAngleOperatorC U V (U.starProjection x) + Uᗮ.starProjection x := by
+          rw [map_add, hcos0, add_zero]
+  -- orthogonality of the two summands
+  have hmemU : cosAngleOperatorC U V (U.starProjection x) ∈ U :=
+    cosAngleOperatorC_apply_mem U V (U.starProjection_apply_mem x)
+  have horth : ⟪cosAngleOperatorC U V (U.starProjection x),
+      Uᗮ.starProjection x⟫_ℂ = 0 :=
+    (Submodule.mem_orthogonal U _).mp
+      (Uᗮ.starProjection_apply_mem x) _ hmemU
+  have horth' : ⟪U.starProjection x, Uᗮ.starProjection x⟫_ℂ = 0 :=
+    (Submodule.mem_orthogonal U _).mp
+      (Uᗮ.starProjection_apply_mem x) _ (U.starProjection_apply_mem x)
+  -- squared-norm computations
+  have hsq1 : ‖cosAngleExtendedC U V x‖ ^ 2 =
+      ‖cosAngleOperatorC U V (U.starProjection x)‖ ^ 2 +
+        ‖Uᗮ.starProjection x‖ ^ 2 := by
+    have h := norm_add_sq_eq_norm_sq_add_norm_sq_of_inner_eq_zero
+      (cosAngleOperatorC U V (U.starProjection x)) (Uᗮ.starProjection x)
+      horth
+    rw [himg, sq, sq, sq]
+    linarith
+  have hsq2 : ‖x‖ ^ 2 =
+      ‖U.starProjection x‖ ^ 2 + ‖Uᗮ.starProjection x‖ ^ 2 := by
+    have h := norm_add_sq_eq_norm_sq_add_norm_sq_of_inner_eq_zero
+      (U.starProjection x) (Uᗮ.starProjection x) horth'
+    rw [U.starProjection_add_starProjection_orthogonal x] at h
+    rw [sq, sq, sq]
+    linarith
+  -- coercivity on the source component
+  have hcoer := norm_cosAngleOperatorC_apply_ge U V
+    (U.starProjection_apply_mem x)
+  have hcle : c ≤ Real.sqrt (1 - directedGap U V ^ 2) := min_le_left _ _
+  have hc1 : c ≤ 1 := min_le_right _ _
+  have hlow1 : c * ‖U.starProjection x‖ ≤
+      ‖cosAngleOperatorC U V (U.starProjection x)‖ :=
+    le_trans (mul_le_mul_of_nonneg_right hcle (norm_nonneg _)) hcoer
+  have hfinal : (c * ‖x‖) ^ 2 ≤ ‖cosAngleExtendedC U V x‖ ^ 2 := by
+    rw [hsq1]
+    have h1 : (c * ‖U.starProjection x‖) ^ 2 ≤
+        ‖cosAngleOperatorC U V (U.starProjection x)‖ ^ 2 := by
+      have h := mul_self_le_mul_self
+        (mul_nonneg hc0 (norm_nonneg _)) hlow1
+      rw [sq, sq]
+      exact h
+    have h2 : c ^ 2 ≤ 1 := by nlinarith
+    have hb2 : (0:ℝ) ≤ ‖Uᗮ.starProjection x‖ ^ 2 := sq_nonneg _
+    nlinarith [h1, h2, hb2, hsq2, sq_nonneg ‖x‖,
+      sq_nonneg ‖U.starProjection x‖]
+  have hs := Real.sqrt_le_sqrt hfinal
+  rwa [Real.sqrt_sq (mul_nonneg hc0 (norm_nonneg x)),
+    Real.sqrt_sq (norm_nonneg _)] at hs
+
+/-- **The extended cosine is invertible in the acute regime.** -/
+theorem cosAngleExtendedC_ker_bot_range_top (U V : Submodule ℂ E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hacute : IsAcute U V) :
+    (cosAngleExtendedC U V).ker = ⊥ ∧
+      (cosAngleExtendedC U V).range = ⊤ := by
+  have hglt : directedGap U V < 1 :=
+    lt_of_le_of_lt (directedGap_le_subspaceGap U V) hacute
+  have hg0 : 0 ≤ directedGap U V := by
+    rw [show directedGap U V =
+      ‖Vᗮ.starProjection ∘L U.starProjection‖ from rfl]
+    exact norm_nonneg _
+  set c : ℝ := min (Real.sqrt (1 - directedGap U V ^ 2)) 1 with hc
+  have hcpos : 0 < c := by
+    apply lt_min
+    · exact Real.sqrt_pos.mpr (by nlinarith)
+    · exact zero_lt_one
+  have hlow : ∀ x, c * ‖x‖ ≤ ‖cosAngleExtendedC U V x‖ := fun x =>
+    norm_cosAngleExtendedC_apply_ge U V x
+  have hker : (cosAngleExtendedC U V).ker = ⊥ := by
+    rw [Submodule.eq_bot_iff]
+    intro x hx
+    have hx0 : cosAngleExtendedC U V x = 0 := hx
+    have h := hlow x
+    rw [hx0, norm_zero] at h
+    have : ‖x‖ ≤ 0 := by nlinarith
+    exact norm_eq_zero.mp (le_antisymm this (norm_nonneg x))
+  refine ⟨hker, ?_⟩
+  -- closed range from the antilipschitz bound
+  have hanti : AntilipschitzWith (⟨c, hcpos.le⟩ : NNReal)⁻¹
+      (cosAngleExtendedC U V) := by
+    refine ContinuousLinearMap.antilipschitz_of_bound _ fun x => ?_
+    have h := hlow x
+    have hcoe : ((((⟨c, hcpos.le⟩ : NNReal))⁻¹ : NNReal) : ℝ) = c⁻¹ := rfl
+    rw [hcoe]
+    calc ‖x‖ = c⁻¹ * (c * ‖x‖) :=
+          (inv_mul_cancel_left₀ hcpos.ne' ‖x‖).symm
+      _ ≤ c⁻¹ * ‖cosAngleExtendedC U V x‖ :=
+          mul_le_mul_of_nonneg_left h (inv_nonneg.mpr hcpos.le)
+  have hclosed : IsClosed (Set.range (cosAngleExtendedC U V)) :=
+    hanti.isClosed_range (cosAngleExtendedC U V).uniformContinuous
+  -- dense range from self-adjointness and injectivity
+  have hclosed' : IsClosed
+      (((cosAngleExtendedC U V).range : Submodule ℂ E) : Set E) := by
+    convert hclosed using 1
+    ext y
+    simp [SetLike.mem_coe, Set.mem_range, LinearMap.mem_range]
+  haveI : CompleteSpace
+      ((cosAngleExtendedC U V).range : Submodule ℂ E) :=
+    hclosed'.completeSpace_coe
+  haveI : ((cosAngleExtendedC U V).range :
+      Submodule ℂ E).HasOrthogonalProjection :=
+    Submodule.HasOrthogonalProjection.ofCompleteSpace _
+  rw [← Submodule.orthogonal_eq_bot_iff]
+  rw [Submodule.eq_bot_iff]
+  intro y hy
+  have hy' : ∀ x : E, ⟪cosAngleExtendedC U V x, y⟫_ℂ = 0 := by
+    intro x
+    exact (Submodule.mem_orthogonal _ y).mp hy _ ⟨x, rfl⟩
+  have hTy : cosAngleExtendedC U V y = 0 := by
+    have hsym := ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
+      (isSelfAdjoint_cosAngleExtendedC U V)
+    have h := hy' (cosAngleExtendedC U V y)
+    have hstep : ⟪cosAngleExtendedC U V (cosAngleExtendedC U V y), y⟫_ℂ =
+        ⟪cosAngleExtendedC U V y, cosAngleExtendedC U V y⟫_ℂ :=
+      hsym (cosAngleExtendedC U V y) y
+    rw [hstep] at h
+    exact inner_self_eq_zero.mp h
+  have h := hlow y
+  rw [hTy, norm_zero] at h
+  have : ‖y‖ ≤ 0 := by nlinarith
+  exact norm_eq_zero.mp (le_antisymm this (norm_nonneg y))
+
+/-- The extended cosine as a continuous linear equivalence, in the acute
+regime. -/
+noncomputable def cosAngleExtendedCEquiv (U V : Submodule ℂ E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hacute : IsAcute U V) : E ≃L[ℂ] E :=
+  ContinuousLinearEquiv.ofBijective (cosAngleExtendedC U V)
+    (cosAngleExtendedC_ker_bot_range_top U V hacute).1
+    (cosAngleExtendedC_ker_bot_range_top U V hacute).2
+
+/-- **Tangent of the directed operator angle** in the acute regime:
+`tan Θ = sin Θ · (cos Θ + P_{Uᗮ})⁻¹`. -/
+noncomputable def tanAngleOperatorC (U V : Submodule ℂ E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hacute : IsAcute U V) : E →L[ℂ] E :=
+  sinAngleOperatorDirectedC U V ∘L
+    (cosAngleExtendedCEquiv U V hacute).symm.toContinuousLinearMap
+
+/-- The defining identity: the tangent composed with the extended cosine is
+the directed sine. -/
+theorem tanAngleOperatorC_comp_cosAngleExtendedC (U V : Submodule ℂ E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hacute : IsAcute U V) :
+    tanAngleOperatorC U V hacute ∘L cosAngleExtendedC U V =
+      sinAngleOperatorDirectedC U V := by
+  ext x
+  show sinAngleOperatorDirectedC U V
+    ((cosAngleExtendedCEquiv U V hacute).symm
+      (cosAngleExtendedC U V x)) = sinAngleOperatorDirectedC U V x
+  congr 1
+  exact (cosAngleExtendedCEquiv U V hacute).symm_apply_apply x
+
+end Tangent
+
 end DavisKahanExt
 end ForMathlib
