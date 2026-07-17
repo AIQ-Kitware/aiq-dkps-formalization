@@ -146,6 +146,14 @@ alias bounded_cosAngleExtended_invertible :=
 alias bounded_tanAngleOperatorC := DavisKahanExt.tanAngleOperatorC
 alias bounded_tanAngle_defining_identity :=
   DavisKahanExt.tanAngleOperatorC_comp_cosAngleExtendedC
+alias bounded_cosTwoAngleOperatorC := DavisKahanExt.cosTwoAngleOperatorC
+alias bounded_cosTwoAngle_coercive :=
+  DavisKahanExt.norm_cosTwoAngleOperatorC_apply_ge
+alias bounded_cosTwoAngleExtended_invertible :=
+  DavisKahanExt.cosTwoAngleExtendedC_ker_bot_range_top
+alias bounded_tanTwoAngleOperatorC := DavisKahanExt.tanTwoAngleOperatorC
+alias bounded_tanTwoAngle_defining_identity :=
+  DavisKahanExt.tanTwoAngleOperatorC_comp_cosTwoAngleExtendedC
 
 /-! ## Direct rotation -/
 
