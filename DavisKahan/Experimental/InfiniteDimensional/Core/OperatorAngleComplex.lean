@@ -104,6 +104,73 @@ theorem norm_cosAngleOperatorC_le_one (U V : Submodule ℂ E)
           (norm_nonneg _) zero_le_one
     _ = 1 := by ring
 
+/-- Directed sine of the operator angle at complex scalars: the absolute
+value of the cross projection composition `P_{Vᗮ} P_U`.  Its norm is the
+directed gap. -/
+noncomputable def sinAngleOperatorDirectedC (U V : Submodule ℂ E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →L[ℂ] E :=
+  ForMathlib.operatorAbs (Vᗮ.starProjection ∘L U.starProjection)
+
+/-- The directed sine operator is nonnegative. -/
+theorem sinAngleOperatorDirectedC_nonneg (U V : Submodule ℂ E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
+    0 ≤ sinAngleOperatorDirectedC U V :=
+  ForMathlib.operatorAbs_nonneg _
+
+/-- **The norm of the directed sine operator is the directed gap.** -/
+theorem norm_sinAngleOperatorDirectedC (U V : Submodule ℂ E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
+    ‖sinAngleOperatorDirectedC U V‖ = directedGap U V :=
+  ForMathlib.norm_operatorAbs _
+
+/-- Square of the compressed cross block: `(P_W P_U)⋆ (P_W P_U) = P_U P_W P_U`
+for any orthogonally complemented `W`. -/
+theorem adjoint_cross_mul_cross (U W : Submodule ℂ E)
+    [U.HasOrthogonalProjection] [W.HasOrthogonalProjection] :
+    star (W.starProjection ∘L U.starProjection) *
+        (W.starProjection ∘L U.starProjection) =
+      U.starProjection ∘L W.starProjection ∘L U.starProjection := by
+  rw [ContinuousLinearMap.star_eq_adjoint, ContinuousLinearMap.adjoint_comp,
+    ← ContinuousLinearMap.star_eq_adjoint, ← ContinuousLinearMap.star_eq_adjoint,
+    (isSelfAdjoint_starProjection U).star_eq,
+    (isSelfAdjoint_starProjection W).star_eq, ContinuousLinearMap.mul_def]
+  calc (U.starProjection ∘L W.starProjection) ∘L
+        (W.starProjection ∘L U.starProjection)
+      = U.starProjection ∘L (W.starProjection ∘L W.starProjection) ∘L
+          U.starProjection := by
+        simp only [ContinuousLinearMap.comp_assoc]
+    _ = U.starProjection ∘L W.starProjection ∘L U.starProjection := by
+        rw [show W.starProjection ∘L W.starProjection = W.starProjection from
+          W.isIdempotentElem_starProjection]
+
+/-- **Operator-level Pythagoras.**  The squares of the directed sine and
+cosine operators sum to the source projection:
+`sin Θ(U,V)² + cos Θ(U,V)² = P_U`. -/
+theorem sinAngleOperatorDirectedC_sq_add_cosAngleOperatorC_sq
+    (U V : Submodule ℂ E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
+    sinAngleOperatorDirectedC U V * sinAngleOperatorDirectedC U V +
+      cosAngleOperatorC U V * cosAngleOperatorC U V = U.starProjection := by
+  rw [sinAngleOperatorDirectedC, cosAngleOperatorC,
+    ForMathlib.operatorAbs_mul_self, ForMathlib.operatorAbs_mul_self,
+    adjoint_cross_mul_cross, adjoint_cross_mul_cross]
+  calc U.starProjection ∘L Vᗮ.starProjection ∘L U.starProjection +
+        U.starProjection ∘L V.starProjection ∘L U.starProjection
+      = U.starProjection ∘L (Vᗮ.starProjection + V.starProjection) ∘L
+          U.starProjection := by
+        rw [ContinuousLinearMap.add_comp, ContinuousLinearMap.comp_add]
+    _ = U.starProjection ∘L ContinuousLinearMap.id ℂ E ∘L
+          U.starProjection := by
+        rw [show Vᗮ.starProjection + V.starProjection =
+          ContinuousLinearMap.id ℂ E from by
+            rw [Submodule.starProjection_orthogonal' V]
+            ext x
+            simp]
+    _ = U.starProjection := by
+        rw [ContinuousLinearMap.id_comp,
+          show U.starProjection ∘L U.starProjection = U.starProjection from
+            U.isIdempotentElem_starProjection]
+
 /-- **Pointwise Pythagoras for the directed sine and cosine.**  On vectors
 of `U`, the squared norms of the directed sine (`P_{Vᗮ} x`) and cosine
 (`P_V x`) data add to `‖x‖²` — the operator-level `sin² + cos² = 1` on the

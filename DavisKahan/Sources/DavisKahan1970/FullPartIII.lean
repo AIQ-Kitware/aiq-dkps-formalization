@@ -127,6 +127,11 @@ alias real_sinTheta_symmetric_genuineSpectrum :=
   DavisKahan.Experimental.Foundation.RealSpectralBridge.opNorm_starProjection_sub_le_of_restriction_spectra
 alias real_upperFormBound_of_spectrum :=
   DavisKahan.Experimental.Foundation.RealSpectralBridge.upperFormBoundOn_top_of_spectrum_subset_Iic
+alias bounded_sinAngleOperatorC_norm := DavisKahanExt.norm_sinAngleOperatorC
+alias bounded_sinAngleOperatorDirectedC_norm :=
+  DavisKahanExt.norm_sinAngleOperatorDirectedC
+alias bounded_angle_pythagoras :=
+  DavisKahanExt.sinAngleOperatorDirectedC_sq_add_cosAngleOperatorC_sq
 
 /-! ## Direct rotation -/
 
