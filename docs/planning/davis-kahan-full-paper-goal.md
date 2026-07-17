@@ -404,6 +404,27 @@ Next rungs: the Halmos two-projection decomposition for
 `cosAngleOperatorC`/`sinTwoAngleOperatorC` (`2 sin cos`), then the genuine
 `sin 2Θ` theorems.
 
+### Progress note (2026-07-17, the double-angle tangent)
+
+Angle ladder, seventh rung (all axiom-clean): **`tanTwoAngleOperatorC`
+exists.**  Two general helpers were extracted:
+`ker_bot_range_top_of_isSelfAdjoint_of_bounded_below` (a self-adjoint
+operator bounded below in norm is boundedly invertible — kernel, closed
+range, self-adjoint density) and
+`norm_add_starProjection_orthogonal_apply_ge` (coercivity of a
+`U`-supported operator extended by the identity on `Uᗮ`).  On top:
+`cosTwoAngleOperatorC = cos² - sin²` with self-adjointness, support,
+invariance, and **quarter-acute coercivity**
+`‖cos 2Θ x‖ ≥ (1 - 2 g²)‖x‖` on `U` (quadratic form + Cauchy--Schwarz);
+the extended `cos 2Θ + P_{Uᗮ}` is invertible in the quarter-acute regime,
+and `tanTwoAngleOperatorC := sin 2Θ · (cos 2Θ + P_{Uᗮ})⁻¹` carries its
+defining identity.  `FullPartIII` aliases:
+`bounded_cosTwoAngleOperatorC`, `bounded_cosTwoAngle_coercive`,
+`bounded_cosTwoAngleExtended_invertible`, `bounded_tanTwoAngleOperatorC`,
+`bounded_tanTwoAngle_defining_identity`.  All four operator constructions
+of the paper's angle calculus (sin, cos, sin 2Θ, tan Θ, cos 2Θ, tan 2Θ)
+now exist at `ℂ` with their defining algebra proved.
+
 ### Progress note (2026-07-17, the tangent operator)
 
 Angle ladder, sixth rung (all axiom-clean): **`tanAngleOperatorC` exists.**
