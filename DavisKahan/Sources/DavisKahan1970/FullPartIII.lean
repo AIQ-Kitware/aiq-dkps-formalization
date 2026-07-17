@@ -137,6 +137,10 @@ alias bounded_angle_commute :=
 alias bounded_sinTwoAngleOperatorC := DavisKahanExt.sinTwoAngleOperatorC
 alias bounded_sinTwoAngleOperatorC_norm_le :=
   DavisKahanExt.norm_sinTwoAngleOperatorC_le
+alias bounded_cosAngle_coercive :=
+  DavisKahanExt.norm_cosAngleOperatorC_apply_ge
+alias bounded_cosAngle_injective_of_acute :=
+  DavisKahanExt.cosAngleOperatorC_eq_zero_imp_of_acute
 
 /-! ## Direct rotation -/
 
