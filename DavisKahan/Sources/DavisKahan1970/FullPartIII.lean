@@ -141,6 +141,11 @@ alias bounded_cosAngle_coercive :=
   DavisKahanExt.norm_cosAngleOperatorC_apply_ge
 alias bounded_cosAngle_injective_of_acute :=
   DavisKahanExt.cosAngleOperatorC_eq_zero_imp_of_acute
+alias bounded_cosAngleExtended_invertible :=
+  DavisKahanExt.cosAngleExtendedC_ker_bot_range_top
+alias bounded_tanAngleOperatorC := DavisKahanExt.tanAngleOperatorC
+alias bounded_tanAngle_defining_identity :=
+  DavisKahanExt.tanAngleOperatorC_comp_cosAngleExtendedC
 
 /-! ## Direct rotation -/
 
