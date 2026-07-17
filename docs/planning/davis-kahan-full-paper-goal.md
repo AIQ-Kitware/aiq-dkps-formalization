@@ -404,6 +404,24 @@ Next rungs: the Halmos two-projection decomposition for
 `cosAngleOperatorC`/`sinTwoAngleOperatorC` (`2 sin cos`), then the genuine
 `sin 2Θ` theorems.
 
+### Progress note (2026-07-17, Spectra vendoring + operator Pythagoras)
+
+Upstream integration change (pulled): Spectra is now **vendored** at
+`vendor/Spectra` (pristine upstream snapshot `8dbaaf6` plus the committed
+compatibility patch under `vendor/patches/Spectra/`); `external/Spectra`
+is a read-only reference submodule and the build must not depend on it
+(see the AGENTS.md Spectra collaboration policy).  All `Spectra.*` imports
+in this repo now resolve to the vendored snapshot; the full build is green
+against it.
+
+Angle ladder, third rung: `sinAngleOperatorDirectedC U V = |P_{Vᗮ} P_U|`
+with `‖·‖ = directedGap U V`, the cross-block square identity
+`(P_W P_U)⋆(P_W P_U) = P_U P_W P_U`, and the **operator-level Pythagoras**
+`sinAngleOperatorDirectedC² + cosAngleOperatorC² = P_U` — pure projection
+algebra through the absolute-value square law.  `FullPartIII` aliases:
+`bounded_sinAngleOperatorC_norm`, `bounded_sinAngleOperatorDirectedC_norm`,
+`bounded_angle_pythagoras`.
+
 ### Progress note (2026-07-16, cosine rung)
 
 `Core/OperatorAngleComplex.lean` gains the second angle-ladder rung:
