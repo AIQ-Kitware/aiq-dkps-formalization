@@ -479,6 +479,31 @@ Aliases: `bounded_sinTwoAngle_norm_eq`,
 `bounded_sinTwoTheta_genuineSpectrum_operator`,
 `bounded_sinTwoTheta_genuineSpectrum_residual_operator`.
 
+### Progress note (2026-07-17, boundedness from a bounded spectrum)
+
+New Spectra-backed seam for the fully unbounded Theorem 5.2
+(`SpectraBridge/BoundedFromSpectrum.lean`, axiom-clean):
+**`exists_boundedRealization_of_spectrum_subset_Icc`** — a closed densely
+defined self-adjoint operator with `Spectra.Resolvent.spectrum ⊆ [β, α]`
+admits a `BoundedRealization` on the whole space with
+`‖A - (β+α)/2‖ ≤ (α-β)/2`.  Assembled from four Spectra bricks
+transported along `generator_genToGroup`: the spectral projection
+vanishes off the spectrum (`E([β,α]ᶜ) = 0`), complementation
+(`E([β,α]) = 1`), spectrally bounded vectors lie in the generator's
+domain (so the domain is everything), and the centered norm bound
+`generator_sub_smul_norm_le_Icc`.  Alias:
+`unbounded_boundedRealization_of_spectrum_Icc`.  This discharges the
+honest content of the scaffold obligations
+`boundedRealization_of_spectrumIn_Icc`/`boundedRealization_of_spectrumIcc`
+(whose `realSpectrum` is still a placeholder definition) and is the
+missing interval-block step for the interval/exterior orientation of
+Theorem 5.2 with a genuinely unbounded exterior block: the interval
+block is secretly bounded, after which the proved mixed orientations
+(`mem_and_gauge_le_of_exteriorLeft_intervalRight`,
+`mem_and_gauge_le_of_boundedLeft_exteriorRight`) apply.  Next rung: the
+assembly of that reduction (transport the closed Sylvester equation
+across the bounded realization).
+
 ### Progress note (2026-07-17, tangent norm bounds)
 
 Angle ladder, eighth rung (all axiom-clean): the inverse-norm estimate

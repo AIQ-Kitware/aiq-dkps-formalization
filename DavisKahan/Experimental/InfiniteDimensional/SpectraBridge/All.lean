@@ -12,6 +12,7 @@ import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.DirectRotation
 import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.DirectRotationAPI
 import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.DirectRotationSquare
 import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.GapResolvent
+import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.BoundedFromSpectrum
 
 /-!
 # Active Spectra bridge

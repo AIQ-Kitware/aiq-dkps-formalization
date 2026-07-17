@@ -115,6 +115,8 @@ alias unbounded_sylvester_exteriorInterval_uiNorm :=
   DavisKahan.Experimental.ExactSinTheta.mem_and_gauge_le_of_exteriorLeft_intervalRight
 alias unbounded_sylvester_intervalExterior_uiNorm :=
   DavisKahan.Experimental.ExactSinTheta.mem_and_gauge_le_of_boundedLeft_exteriorRight
+alias unbounded_boundedRealization_of_spectrum_Icc :=
+  DavisKahan.Experimental.ExactSinTheta.exists_boundedRealization_of_spectrum_subset_Icc
 alias bounded_sinTheta_uiNorm_genuineSpectrum_symmetric :=
   DavisKahanExt.sinTheta_genuineSpectrum_gauge_symmetric
 alias bounded_sinTwoTheta_genuineSpectrum :=
