@@ -154,6 +154,7 @@ alias bounded_cosTwoAngleExtended_invertible :=
 alias bounded_tanTwoAngleOperatorC := DavisKahanExt.tanTwoAngleOperatorC
 alias bounded_tanTwoAngle_defining_identity :=
   DavisKahanExt.tanTwoAngleOperatorC_comp_cosTwoAngleExtendedC
+alias bounded_tanAngle_norm_le := DavisKahanExt.norm_tanAngleOperatorC_le
 
 /-! ## Direct rotation -/
 

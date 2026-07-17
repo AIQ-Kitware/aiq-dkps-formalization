@@ -404,6 +404,15 @@ Next rungs: the Halmos two-projection decomposition for
 `cosAngleOperatorC`/`sinTwoAngleOperatorC` (`2 sin cos`), then the genuine
 `sin 2Θ` theorems.
 
+### Progress note (2026-07-17, tangent norm bounds)
+
+Angle ladder, eighth rung (all axiom-clean): the inverse-norm estimate
+`norm_cosAngleExtendedCEquiv_symm_apply_le`
+(`‖(cos Θ + P_{Uᗮ})⁻¹ y‖ ≤ c⁻¹ ‖y‖` from coercivity) and
+**`norm_tanAngleOperatorC_le`**:
+`‖tan Θ(U,V)‖ ≤ directedGap · (min (√(1-g²)) 1)⁻¹` — the inequality half
+of `‖tan Θ‖ = tan θ_max`.  Alias: `bounded_tanAngle_norm_le`.
+
 ### Progress note (2026-07-17, the double-angle tangent)
 
 Angle ladder, seventh rung (all axiom-clean): **`tanTwoAngleOperatorC`
