@@ -445,9 +445,39 @@ The residual form is proved (all axiom-clean), closing the
 
 Aliases: `bounded_sinTwoTheta_genuineSpectrum_defect`,
 `bounded_cross_le_residual`, `bounded_sinTwoTheta_genuineSpectrum_residual`.
-Still open in the `sin 2Θ` family: the identification of
-`subspaceGap U (J_V U)` with `‖sinTwoAngleOperatorC U V‖` (the Halmos
-two-projection decomposition).
+
+### Progress note (2026-07-17, the double-angle identification)
+
+The `sin 2Θ` family is now closed at the operator level (all axiom-clean),
+without the Halmos two-projection decomposition — pure C⋆-norm algebra
+substitutes for it:
+
+- `ForMathlib.norm_operatorAbs_mul` / `norm_mul_operatorAbs`: the
+  C⋆-composition identities `‖|S| D‖ = ‖S D‖` (from
+  `(|S|D)⋆(|S|D) = D⋆(S⋆S)D = (SD)⋆(SD)`) and `‖D |T|‖ = ‖D T⋆‖`;
+- `norm_sinTwoAngleOperatorC`: the exact norm
+  `‖sin 2Θ(U, V)‖ = 2 ‖P_{Vᗮ} P_U P_V‖` — the absolute values drop out
+  of `2 ‖sin Θ_d · cos Θ‖` by the two identities, leaving the compressed
+  cross block;
+- `norm_offdiag_add_eq`: `‖P_{Vᗮ} A P_V + P_V A P_{Vᗮ}‖ = ‖P_{Vᗮ} A P_V‖`
+  for self-adjoint `A` (`≤` from the sharp defect estimate, `≥` by
+  restriction to `V`);
+- `starProjection_map_reflection` / `subspaceGap_map_reflection`:
+  `P_{J_V U} = J_V P_U J_V`, hence
+  `subspaceGap U (J_V U) = ‖reflectionDefect V P_U‖`;
+- **`subspaceGap_map_reflection_eq_norm_sinTwoAngle`**: the double-angle
+  identification `subspaceGap U (J_V U) = ‖sinTwoAngleOperatorC U V‖` —
+  both sides equal `2 ‖P_{Vᗮ} P_U P_V‖`;
+- **`sinTwoTheta_genuineSpectrum_operator`** and
+  **`sinTwoTheta_genuineSpectrum_residual_operator`**: the exact operator
+  forms `d * ‖sin 2Θ(U, V)‖ ≤ 2 ‖B - A‖` and
+  `d * ‖sin 2Θ(U, V)‖ ≤ 2 ‖A X - X M‖` — the paper's `sin 2Θ` theorems
+  stated on the functional-calculus double-angle sine operator.
+
+Aliases: `bounded_sinTwoAngle_norm_eq`,
+`bounded_sinTwoAngle_gap_identification`,
+`bounded_sinTwoTheta_genuineSpectrum_operator`,
+`bounded_sinTwoTheta_genuineSpectrum_residual_operator`.
 
 ### Progress note (2026-07-17, tangent norm bounds)
 
@@ -636,6 +666,9 @@ cross block to the reflected image with
 contractivity of the gauge (alias
 `bounded_sinTwoTheta_uiNorm_genuineSpectrum`).  The residual
 (approximate-invariant-pair) form is now proved
-(`sinTwoTheta_genuineSpectrum_residual`; see the residual progress note).
-Still open in the `sin 2Θ` family: the identification with the
-functional-calculus `sinTwoAngleOperator` once the Halmos rungs exist. See `dev/sorry-difficulty-ranking.md` for the evolving proof-obligation ranking; verify its totals against the source tree before using them in status claims.
+(`sinTwoTheta_genuineSpectrum_residual`; see the residual progress note),
+and the identification with the functional-calculus
+`sinTwoAngleOperatorC` is also proved
+(`subspaceGap_map_reflection_eq_norm_sinTwoAngle`; see the double-angle
+identification progress note) — the `sin 2Θ` family is closed at the
+operator level. See `dev/sorry-difficulty-ranking.md` for the evolving proof-obligation ranking; verify its totals against the source tree before using them in status claims.
