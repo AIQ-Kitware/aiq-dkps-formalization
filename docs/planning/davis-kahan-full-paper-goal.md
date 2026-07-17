@@ -404,6 +404,22 @@ Next rungs: the Halmos two-projection decomposition for
 `cosAngleOperatorC`/`sinTwoAngleOperatorC` (`2 sin cos`), then the genuine
 `sin 2Θ` theorems.
 
+### Progress note (2026-07-17, the sharp reflection-defect estimate)
+
+Toward the residual `sin 2Θ` form (all axiom-clean):
+`reflectionDefect_eq_neg_two_smul_offdiag`
+(`J_V A J_V - A = -2 (P_{Vᗮ} A P_V + P_V A P_{Vᗮ})`) and the **sharp
+estimate** `norm_reflectionDefect_le_two_mul_norm_cross`:
+`‖J_V A J_V - A‖ ≤ 2 ‖P_{Vᗮ} A P_V‖` for self-adjoint `A`, with **no
+reduction hypothesis on `V`** — the two off-diagonal blocks are mutually
+adjoint and have orthogonal input/output splittings, so their sum is
+bounded by the larger block.  Aliases:
+`bounded_reflectionDefect_offdiag`, `bounded_reflectionDefect_le_cross`.
+The residual `sin 2Θ` theorem now needs only: `V := closed range of the
+isometric trial embedding`, the bound `‖P_{Vᗮ} A P_V‖ ≤ ‖residual‖`
+(pointwise on the range, by the residual identity), and the reflected-pair
+`sin Θ` argument of `sinTwoTheta_genuineSpectrum`.
+
 ### Progress note (2026-07-17, tangent norm bounds)
 
 Angle ladder, eighth rung (all axiom-clean): the inverse-norm estimate
