@@ -132,6 +132,11 @@ alias bounded_sinAngleOperatorDirectedC_norm :=
   DavisKahanExt.norm_sinAngleOperatorDirectedC
 alias bounded_angle_pythagoras :=
   DavisKahanExt.sinAngleOperatorDirectedC_sq_add_cosAngleOperatorC_sq
+alias bounded_angle_commute :=
+  DavisKahanExt.commute_sinAngleOperatorDirectedC_cosAngleOperatorC
+alias bounded_sinTwoAngleOperatorC := DavisKahanExt.sinTwoAngleOperatorC
+alias bounded_sinTwoAngleOperatorC_norm_le :=
+  DavisKahanExt.norm_sinTwoAngleOperatorC_le
 
 /-! ## Direct rotation -/
 
