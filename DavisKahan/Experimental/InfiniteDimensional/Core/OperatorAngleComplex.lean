@@ -117,6 +117,12 @@ theorem sinAngleOperatorDirectedC_nonneg (U V : Submodule ℂ E)
     0 ≤ sinAngleOperatorDirectedC U V :=
   ForMathlib.operatorAbs_nonneg _
 
+/-- The directed sine operator is self-adjoint. -/
+theorem isSelfAdjoint_sinAngleOperatorDirectedC (U V : Submodule ℂ E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
+    IsSelfAdjoint (sinAngleOperatorDirectedC U V) :=
+  ForMathlib.isSelfAdjoint_operatorAbs _
+
 /-- **The norm of the directed sine operator is the directed gap.** -/
 theorem norm_sinAngleOperatorDirectedC (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
@@ -170,6 +176,116 @@ theorem sinAngleOperatorDirectedC_sq_add_cosAngleOperatorC_sq
         rw [ContinuousLinearMap.id_comp,
           show U.starProjection ∘L U.starProjection = U.starProjection from
             U.isIdempotentElem_starProjection]
+
+/-- Any two-sided compression by `P_U` commutes with `P_U`. -/
+theorem commute_compress_starProjection (U : Submodule ℂ E)
+    [U.HasOrthogonalProjection] (T : E →L[ℂ] E) :
+    Commute (U.starProjection ∘L T ∘L U.starProjection) U.starProjection := by
+  have hidem : U.starProjection ∘L U.starProjection = U.starProjection :=
+    U.isIdempotentElem_starProjection
+  show (U.starProjection ∘L T ∘L U.starProjection) * U.starProjection =
+    U.starProjection * (U.starProjection ∘L T ∘L U.starProjection)
+  rw [ContinuousLinearMap.mul_def, ContinuousLinearMap.mul_def]
+  calc (U.starProjection ∘L T ∘L U.starProjection) ∘L U.starProjection
+      = U.starProjection ∘L T ∘L
+          (U.starProjection ∘L U.starProjection) := by
+        simp only [ContinuousLinearMap.comp_assoc]
+    _ = U.starProjection ∘L T ∘L U.starProjection := by rw [hidem]
+    _ = (U.starProjection ∘L U.starProjection) ∘L T ∘L
+          U.starProjection := by rw [hidem]
+    _ = U.starProjection ∘L
+          ((U.starProjection ∘L T ∘L U.starProjection)) := by
+        simp only [ContinuousLinearMap.comp_assoc]
+
+/-- The two compressed cross squares sum to the source projection. -/
+theorem cross_sq_add_cross_sq (U V : Submodule ℂ E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
+    U.starProjection ∘L Vᗮ.starProjection ∘L U.starProjection +
+      U.starProjection ∘L V.starProjection ∘L U.starProjection =
+    U.starProjection := by
+  calc U.starProjection ∘L Vᗮ.starProjection ∘L U.starProjection +
+        U.starProjection ∘L V.starProjection ∘L U.starProjection
+      = U.starProjection ∘L (Vᗮ.starProjection + V.starProjection) ∘L
+          U.starProjection := by
+        rw [ContinuousLinearMap.add_comp, ContinuousLinearMap.comp_add]
+    _ = U.starProjection ∘L ContinuousLinearMap.id ℂ E ∘L
+          U.starProjection := by
+        rw [show Vᗮ.starProjection + V.starProjection =
+          ContinuousLinearMap.id ℂ E from by
+            rw [Submodule.starProjection_orthogonal' V]
+            ext x
+            simp]
+    _ = U.starProjection := by
+        rw [ContinuousLinearMap.id_comp,
+          show U.starProjection ∘L U.starProjection = U.starProjection from
+            U.isIdempotentElem_starProjection]
+
+/-- The two compressed cross squares commute. -/
+theorem commute_cross_sq (U V : Submodule ℂ E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
+    Commute
+      (star (Vᗮ.starProjection ∘L U.starProjection) *
+        (Vᗮ.starProjection ∘L U.starProjection))
+      (star (V.starProjection ∘L U.starProjection) *
+        (V.starProjection ∘L U.starProjection)) := by
+  rw [adjoint_cross_mul_cross, adjoint_cross_mul_cross]
+  have hb : U.starProjection ∘L V.starProjection ∘L U.starProjection =
+      U.starProjection -
+        U.starProjection ∘L Vᗮ.starProjection ∘L U.starProjection :=
+    eq_sub_of_add_eq' (cross_sq_add_cross_sq U V)
+  rw [hb]
+  exact (commute_compress_starProjection U Vᗮ.starProjection).sub_right
+    (Commute.refl _)
+
+/-- **The directed sine and cosine operators commute** — the compressed
+cross squares commute by the Pythagoras identity, and commutation passes
+to the continuous-functional-calculus square roots. -/
+theorem commute_sinAngleOperatorDirectedC_cosAngleOperatorC
+    (U V : Submodule ℂ E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
+    Commute (sinAngleOperatorDirectedC U V) (cosAngleOperatorC U V) :=
+  ForMathlib.operatorAbs_commute_operatorAbs (commute_cross_sq U V)
+
+/-- Sine of twice the directed operator angle at complex scalars:
+`2 sin Θ cos Θ` through the commuting directed sine and cosine. -/
+noncomputable def sinTwoAngleOperatorC (U V : Submodule ℂ E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →L[ℂ] E :=
+  (2 : ℝ) • (sinAngleOperatorDirectedC U V * cosAngleOperatorC U V)
+
+/-- The double-angle sine operator is self-adjoint: the commuting product
+of the self-adjoint sine and cosine is self-adjoint, and the real scalar
+preserves it. -/
+theorem isSelfAdjoint_sinTwoAngleOperatorC (U V : Submodule ℂ E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
+    IsSelfAdjoint (sinTwoAngleOperatorC U V) := by
+  have hmul : IsSelfAdjoint
+      (sinAngleOperatorDirectedC U V * cosAngleOperatorC U V) := by
+    rw [IsSelfAdjoint, star_mul,
+      (isSelfAdjoint_cosAngleOperatorC U V).star_eq,
+      (isSelfAdjoint_sinAngleOperatorDirectedC U V).star_eq]
+    exact (commute_sinAngleOperatorDirectedC_cosAngleOperatorC U V).symm
+  exact (IsSelfAdjoint.all (2 : ℝ)).smul hmul
+
+/-- Norm bound for the double-angle sine: at most twice the directed gap. -/
+theorem norm_sinTwoAngleOperatorC_le (U V : Submodule ℂ E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
+    ‖sinTwoAngleOperatorC U V‖ ≤ 2 * directedGap U V := by
+  calc ‖sinTwoAngleOperatorC U V‖
+      = 2 * ‖sinAngleOperatorDirectedC U V * cosAngleOperatorC U V‖ := by
+        rw [sinTwoAngleOperatorC, norm_smul]
+        norm_num
+    _ ≤ 2 * (‖sinAngleOperatorDirectedC U V‖ * ‖cosAngleOperatorC U V‖) := by
+        have := norm_mul_le (sinAngleOperatorDirectedC U V)
+          (cosAngleOperatorC U V)
+        linarith
+    _ ≤ 2 * (directedGap U V * 1) := by
+        have h1 : ‖sinAngleOperatorDirectedC U V‖ = directedGap U V :=
+          norm_sinAngleOperatorDirectedC U V
+        have h2 := norm_cosAngleOperatorC_le_one U V
+        have h3 : (0 : ℝ) ≤ directedGap U V := by
+          rw [← h1]; exact norm_nonneg _
+        nlinarith [norm_nonneg (cosAngleOperatorC U V)]
+    _ = 2 * directedGap U V := by ring
 
 /-- **Pointwise Pythagoras for the directed sine and cosine.**  On vectors
 of `U`, the squared norms of the directed sine (`P_{Vᗮ} x`) and cosine

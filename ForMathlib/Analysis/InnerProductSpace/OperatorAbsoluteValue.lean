@@ -58,6 +58,16 @@ theorem operatorAbs_unique {T b : E →L[ℂ] E} (hb : 0 ≤ b)
     (h : b * b = star T * T) : b = operatorAbs T :=
   (CFC.sqrt_unique h hb).symm
 
+/-- Absolute values of operators with commuting squares commute. -/
+theorem operatorAbs_commute_operatorAbs {S T : E →L[ℂ] E}
+    (h : Commute (star S * S) (star T * T)) :
+    Commute (operatorAbs S) (operatorAbs T) := by
+  have h1 : Commute (CFC.sqrt (star S * S)) (star T * T) :=
+    h.cfcₙ_nnreal _
+  have h2 : Commute (CFC.sqrt (star T * T)) (CFC.sqrt (star S * S)) :=
+    h1.symm.cfcₙ_nnreal _
+  exact h2.symm
+
 /-- `‖|T|‖ = ‖T‖`. -/
 theorem norm_operatorAbs (T : E →L[ℂ] E) :
     ‖operatorAbs T‖ = ‖T‖ := by

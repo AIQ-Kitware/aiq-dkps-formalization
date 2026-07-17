@@ -404,6 +404,26 @@ Next rungs: the Halmos two-projection decomposition for
 `cosAngleOperatorC`/`sinTwoAngleOperatorC` (`2 sin cos`), then the genuine
 `sin 2Θ` theorems.
 
+### Progress note (2026-07-17, commutation and the double-angle operator)
+
+Angle ladder, fourth rung (all axiom-clean): the ForMathlib absolute-value
+commutation law `operatorAbs_commute_operatorAbs` (commuting squares give
+commuting absolute values, through `Commute.cfcₙ_nnreal` twice), the
+compressed-square commutation `commute_cross_sq` (via the square Pythagoras
+`cross_sq_add_cross_sq` and `commute_compress_starProjection` — a
+compression by `P_U` commutes with `P_U`), hence **the directed sine and
+cosine operators commute**
+(`commute_sinAngleOperatorDirectedC_cosAngleOperatorC`).  On top of it,
+`sinTwoAngleOperatorC := 2 • (sin Θ_directed · cos Θ)` is defined with
+self-adjointness and `‖sin 2Θ‖ ≤ 2 · directedGap`.  `FullPartIII` aliases:
+`bounded_angle_commute`, `bounded_sinTwoAngleOperatorC`,
+`bounded_sinTwoAngleOperatorC_norm_le`.  The remaining Halmos content is
+now localized to spectral-mapping statements (norms and spectra of the
+commuting pair on the generic block), the tan operators (needing the
+inverse of the cosine in the acute regime), and the identification of
+`sinTwoAngleOperatorC` with the reflected-image gap proved in
+`DoubleAngleGenuine.lean`.
+
 ### Progress note (2026-07-17, Spectra vendoring + operator Pythagoras)
 
 Upstream integration change (pulled): Spectra is now **vendored** at
