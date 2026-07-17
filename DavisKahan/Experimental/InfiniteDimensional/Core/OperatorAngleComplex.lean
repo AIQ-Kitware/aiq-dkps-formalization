@@ -962,6 +962,68 @@ theorem tanTwoAngleOperatorC_comp_cosTwoAngleExtendedC
   congr 1
   exact (cosTwoAngleExtendedCEquiv U V hquarter).symm_apply_apply x
 
+section TangentNormBounds
+
+/-- Norm bound for the inverse of the extended cosine: coercivity inverts
+to `‖(cos Θ + P_{Uᗮ})⁻¹ y‖ ≤ c⁻¹ ‖y‖`. -/
+theorem norm_cosAngleExtendedCEquiv_symm_apply_le (U V : Submodule ℂ E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hacute : IsAcute U V) (y : E) :
+    ‖(cosAngleExtendedCEquiv U V hacute).symm y‖ ≤
+      (min (Real.sqrt (1 - directedGap U V ^ 2)) 1)⁻¹ * ‖y‖ := by
+  set c : ℝ := min (Real.sqrt (1 - directedGap U V ^ 2)) 1 with hc
+  have hglt : directedGap U V < 1 :=
+    lt_of_le_of_lt (directedGap_le_subspaceGap U V) hacute
+  have hg0 : 0 ≤ directedGap U V := by
+    rw [show directedGap U V =
+      ‖Vᗮ.starProjection ∘L U.starProjection‖ from rfl]
+    exact norm_nonneg _
+  have hcpos : 0 < c := lt_min (Real.sqrt_pos.mpr (by nlinarith)) one_pos
+  have hcoer := norm_cosAngleExtendedC_apply_ge U V
+    ((cosAngleExtendedCEquiv U V hacute).symm y)
+  have happ : cosAngleExtendedC U V
+      ((cosAngleExtendedCEquiv U V hacute).symm y) = y :=
+    (cosAngleExtendedCEquiv U V hacute).apply_symm_apply y
+  rw [happ] at hcoer
+  calc ‖(cosAngleExtendedCEquiv U V hacute).symm y‖
+      = c⁻¹ * (c * ‖(cosAngleExtendedCEquiv U V hacute).symm y‖) :=
+        (inv_mul_cancel_left₀ hcpos.ne' _).symm
+    _ ≤ c⁻¹ * ‖y‖ :=
+        mul_le_mul_of_nonneg_left hcoer (inv_nonneg.mpr hcpos.le)
+
+/-- **Norm bound for the tangent operator**: `‖tan Θ‖` is at most the
+directed gap over the acute coercivity constant —
+`tan θ_max = sin θ_max / cos θ_max` as an inequality. -/
+theorem norm_tanAngleOperatorC_le (U V : Submodule ℂ E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hacute : IsAcute U V) :
+    ‖tanAngleOperatorC U V hacute‖ ≤
+      directedGap U V *
+        (min (Real.sqrt (1 - directedGap U V ^ 2)) 1)⁻¹ := by
+  set c : ℝ := min (Real.sqrt (1 - directedGap U V ^ 2)) 1 with hc
+  have hglt : directedGap U V < 1 :=
+    lt_of_le_of_lt (directedGap_le_subspaceGap U V) hacute
+  have hg0 : 0 ≤ directedGap U V := by
+    rw [show directedGap U V =
+      ‖Vᗮ.starProjection ∘L U.starProjection‖ from rfl]
+    exact norm_nonneg _
+  have hcpos : 0 < c := lt_min (Real.sqrt_pos.mpr (by nlinarith)) one_pos
+  refine ContinuousLinearMap.opNorm_le_bound _
+    (mul_nonneg hg0 (inv_nonneg.mpr hcpos.le)) fun y => ?_
+  calc ‖tanAngleOperatorC U V hacute y‖
+      = ‖sinAngleOperatorDirectedC U V
+          ((cosAngleExtendedCEquiv U V hacute).symm y)‖ := rfl
+    _ ≤ ‖sinAngleOperatorDirectedC U V‖ *
+          ‖(cosAngleExtendedCEquiv U V hacute).symm y‖ :=
+        ContinuousLinearMap.le_opNorm _ _
+    _ ≤ directedGap U V * (c⁻¹ * ‖y‖) := by
+        refine mul_le_mul ?_ ?_ (norm_nonneg _) hg0
+        · rw [norm_sinAngleOperatorDirectedC]
+        · exact norm_cosAngleExtendedCEquiv_symm_apply_le U V hacute y
+    _ = directedGap U V * c⁻¹ * ‖y‖ := by ring
+
+end TangentNormBounds
+
 end DoubleAngleTangent
 
 end DavisKahanExt
