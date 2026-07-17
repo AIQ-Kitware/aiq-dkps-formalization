@@ -420,6 +420,35 @@ isometric trial embedding`, the bound `‖P_{Vᗮ} A P_V‖ ≤ ‖residual‖`
 (pointwise on the range, by the residual identity), and the reflected-pair
 `sin Θ` argument of `sinTwoTheta_genuineSpectrum`.
 
+### Progress note (2026-07-17, the residual `sin 2Θ` theorem)
+
+The residual form is proved (all axiom-clean), closing the
+"residual (approximate-invariant-pair) form" gap in the `sin 2Θ` family:
+
+- `sinTwoTheta_genuineSpectrum_defect`: the reflected-pair core
+  `d * subspaceGap U (J_V U) ≤ ‖reflectionDefect V A‖`, factored out of
+  `sinTwoTheta_genuineSpectrum` so both the reduced-comparison and the
+  residual forms consume it (the comparison form is now a three-line
+  corollary);
+- `norm_cross_le_norm_residual`: if `V` is the range of an isometric
+  embedding `X` and `R = A X - X M`, then `‖P_{Vᗮ} A P_V‖ ≤ ‖R‖` — on
+  `v = X u`, `(1 - P_V) A v = (1 - P_V) (R u)` since `X (M u) ∈ V`, and
+  the isometry converts `‖u‖` back to `‖P_V z‖`;
+- **`sinTwoTheta_genuineSpectrum_residual`**: for self-adjoint `A` with
+  the genuine internal configuration at the reducing `U`, trial subspace
+  `V = range X`, and *arbitrary* comparison operator `M` on the trial
+  space, `d * subspaceGap U (J_V U) ≤ 2 ‖A X - X M‖` — the paper's
+  residual `sin 2Θ` bound, with no reduction or self-adjointness
+  hypothesis on the comparison pair, by chaining the defect core with
+  `norm_reflectionDefect_le_two_mul_norm_cross` and the cross-residual
+  bound.
+
+Aliases: `bounded_sinTwoTheta_genuineSpectrum_defect`,
+`bounded_cross_le_residual`, `bounded_sinTwoTheta_genuineSpectrum_residual`.
+Still open in the `sin 2Θ` family: the identification of
+`subspaceGap U (J_V U)` with `‖sinTwoAngleOperatorC U V‖` (the Halmos
+two-projection decomposition).
+
 ### Progress note (2026-07-17, tangent norm bounds)
 
 Angle ladder, eighth rung (all axiom-clean): the inverse-norm estimate
@@ -605,7 +634,8 @@ cross block to the reflected image with
 `d · gauge ≤ 2 · gauge (B - A)`, using
 `reflectionDefect_eq_perturbationDefect` and reflection-conjugation
 contractivity of the gauge (alias
-`bounded_sinTwoTheta_uiNorm_genuineSpectrum`).  Still open in the `sin 2Θ`
-family: the residual (approximate-invariant-pair) form, and the
-identification with the functional-calculus `sinTwoAngleOperator` once the
-Halmos rungs exist. See `dev/sorry-difficulty-ranking.md` for the evolving proof-obligation ranking; verify its totals against the source tree before using them in status claims.
+`bounded_sinTwoTheta_uiNorm_genuineSpectrum`).  The residual
+(approximate-invariant-pair) form is now proved
+(`sinTwoTheta_genuineSpectrum_residual`; see the residual progress note).
+Still open in the `sin 2Θ` family: the identification with the
+functional-calculus `sinTwoAngleOperator` once the Halmos rungs exist. See `dev/sorry-difficulty-ranking.md` for the evolving proof-obligation ranking; verify its totals against the source tree before using them in status claims.
