@@ -14,10 +14,10 @@ unbounded Davis--Kahan cutoff proof.  Approximation numbers are no longer an
 opaque placeholder: they are the real coercions of the finite-rank infima in
 `ForMathlib.Analysis.Normed.Operator.ApproximationNumber`.
 
-The algebraic s-number laws, fixed-Ky-Fan norm construction, completeness, and
-scaled Fan-dominance assembly are proved here.  The remaining analytic seams
-are isolated as the adjoint invariance of approximation numbers, Ky Fan's
-addition inequality, and convergence under strong orthogonal cutoffs.
+The algebraic s-number laws, adjoint invariance, fixed-Ky-Fan norm construction,
+completeness, and scaled Fan-dominance assembly are proved here.  The remaining
+analytic seams are Ky Fan's addition inequality and convergence under strong
+orthogonal cutoffs.
 -/
 
 namespace ForMathlib
@@ -109,7 +109,9 @@ theorem approximationSingularValue_adjoint
     (n : ℕ) (K : E →L[𝕜] F) :
     approximationSingularValue n K.adjoint =
       approximationSingularValue n K := by
-  sorry
+  have h := congrArg (fun x : NNReal => (x : ℝ))
+    (K.approximationNumber_adjoint n)
+  simpa only [approximationSingularValue] using h
 
 /-- Ideal inequality for approximation singular values. -/
 theorem approximationSingularValue_comp_le
