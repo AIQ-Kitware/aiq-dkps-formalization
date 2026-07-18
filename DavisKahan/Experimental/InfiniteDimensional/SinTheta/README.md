@@ -105,9 +105,13 @@ The canonical directed bounded-perturbation endpoint now accepts only the
 measurable set conditions `B ⊆ [β, α]` and
 `T ∩ (β - δ, α + δ) = ∅`; all self-adjoint restriction, Kato--Rellich,
 intertwining, residual, and localization obligations are discharged internally.
-The remaining source-facing seam is geometric: identify the directed inclusion
-block with the conventional spectral-projection product and combine both
-directions into the projection-difference gap form.
+- `SpectraBridge/SpectralProjectionSinTheta.lean` identifies the raw
+  inclusion-adjoint overlap with the usual directed projection gap, proves the
+  reverse directed estimate by applying the same unbounded engine to `A + V`
+  and `-V`, and combines both directions with the sharp two-projection norm
+  identity. Its source-facing endpoint is the conventional operator-norm
+  estimate for the difference of the two canonical spectral projections,
+  stated with genuine spectra of the four selected Stone restrictions.
 
 ## Current compiler-first frontier
 

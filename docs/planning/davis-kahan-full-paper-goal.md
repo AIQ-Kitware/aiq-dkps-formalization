@@ -960,3 +960,27 @@ the second resolvent identity, and the contour parameter through the first.
 The remaining analytic continuation step is to package a piecewise `C1`
 closed contour, form the normalized curve/Bochner integral, and pass the two
 Lipschitz estimates through that integral.
+
+### Progress note (2026-07-18, canonical unbounded spectral-projection sine theorem)
+
+The independent Spectra bounded-perturbation route now reaches the conventional
+operator-norm projection-difference endpoint.  The spectral-range Stone
+restrictions and localization layer discharge domain, self-adjointness, form-bound,
+resolvent-gap, and Kato--Rellich obligations.
+
+`SpectraBridge/SpectralProjectionSinTheta.lean` then identifies the complementary
+inclusion block with the directed projection gap, proves the reverse direction by
+using `A + V` with perturbation `-V`, and combines both directions through the sharp
+two-projection norm identity.  The source-facing theorem is stated using the actual
+spectra of the four canonical Stone restrictions.
+
+The approximation-number roadmap now has accepted complex localization, strong
+cutoff convergence, and the complex infinite-dimensional Ky Fan triangle
+inequality.  The remaining scalar-generic dispatch is represented by the existing
+generic declarations and by explicit real-Hilbert-space roadmap declarations.
+
+The Section 8 continuation roadmap is represented separately by proof-carrying
+contour, normalized resolvent-integral, projection-continuity, spectral-identification,
+and global unitary-transport declarations.  These declarations preserve the accepted
+operator-path and spectral-parameter resolvent estimates while making the remaining
+construction order explicit.
