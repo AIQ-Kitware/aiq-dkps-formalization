@@ -651,18 +651,27 @@ the vector-level `sin² + cos² = 1`.  Remaining for the full Halmos ladder:
 the operator-level `sin² + cos² = 1` on the generic block, commutation of
 the sine and cosine operators, and `sinTwoAngleOperatorC = 2 sin cos`.
 
-### Progress note (2026-07-16, direct-rotation scalar core)
+### Progress note (2026-07-18, direct-rotation uniqueness)
 
-`principalHalfPhase_displacement_minimal_scalar`
-(`SpectraBridge/DirectRotationSquare.lean`) is proved — without the
-`Real.Angle` halving API the route note anticipated: any unit `w` with
-`w² = z` factors as `(w - phz)(w + phz) = 0` against the proved square
-identity, and the principal branch's nonnegative real part
-(`re ((1+z)/‖1+z‖) ≥ 0`) makes its displacement from `1` the smaller of
-the two roots'.  This is the per-fiber analytic core of the
-direct-rotation extremality (Section 7); the remaining two obligations in
-that file (`spectraDirectRotation_unique`, `spectraDirectRotation_minimal`)
-are the genuine two-projection-decomposition/multiplicity passages.
+`spectraDirectRotation_unique` and the public
+`complexDirectRotation_unique` wrapper are proved without a Halmos
+multiplicity decomposition.  The Hermitian part of the canonical direct
+rotation is identified with twice the positive invertible modulus of the
+canonical midpoint, which gives a strictly positive numerical real part on
+nonzero vectors.  For a competing nonnegative-real-part unitary square root,
+the principal functional-calculus branch commutes with the competitor; the
+difference-of-squares factorization shows that the difference vanishes on
+the range of their sum, while positivity for the sum and its adjoint makes
+that range dense.  Closedness of the difference kernel then gives equality.
+The square identity itself supplies the commutation hypothesis, recorded in
+`spectraDirectRotation_unique_of_sq`.
+
+`principalHalfPhase_displacement_minimal_scalar` remains the proved
+per-fiber shorter-arc core for Section 7 extremality.  The remaining hard
+direct-rotation obligation is now only
+`spectraDirectRotation_minimal`: lifting that scalar comparison to arbitrary
+transporting unitaries still requires the two-projection/Halmos decomposition
+or an equivalent global operator argument.
 
 ### Progress note (2026-07-16, real spectral bridge session)
 
