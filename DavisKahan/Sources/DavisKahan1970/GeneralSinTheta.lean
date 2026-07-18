@@ -8,10 +8,12 @@ import DavisKahan.Experimental.InfiniteDimensional.SinTheta.Specializations
 /-!
 # Davis--Kahan 1970 general sine-theta manuscript surface
 
-The finite interval/exterior generalized theorem is exposed separately because
-it now has a clean genuine-spectrum proof path.  The unqualified generalized
-target retains the complete 1970 statement, including the ordered half-line
-configurations whose cutoff engine is still under development.
+The unqualified generalized target now assembles the complete 1970 gap
+disjunction: finite interval/exterior separation and both ordered half-line
+orientations.  The ordered branches use double spectral cutoff and finite
+Ky Fan passage; the finite-interval theorem is also exposed separately through
+the cleaner genuine-spectrum interface.  Foundational spectrum and
+approximation-number obligations remain visible in the lower layers.
 -/
 
 namespace ForMathlib

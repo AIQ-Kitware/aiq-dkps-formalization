@@ -846,6 +846,276 @@ theorem sylvester_mem_and_gauge_le_of_unbounded_bound_inverse
   rw [← mul_assoc, mul_inv_cancel₀ hρδ.ne', one_mul] at hkey
   linarith
 
+
+
+/-- Transfer a closed Sylvester equation to a bounded realization of its
+right block.  Agreement on the dense domain extends to the whole space through
+the closed graph of the left block. -/
+theorem closedSylvesterEquation_boundedRealization
+    {A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := E)}
+    {B : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := F)}
+    {X C : F →L[𝕜] E} {T : F →L[𝕜] F}
+    (hEq : HasClosedSylvesterEquation A B X C)
+    (hT : ∀ y : B.domain, T (y : F) = B.toLinearMap y) :
+    HasUnboundedBoundedSylvesterEquation A T X C := by
+  have key : ∀ x : F, ∃ hx : X x ∈ A.domain,
+      A.toLinearMap ⟨X x, hx⟩ = C x + X (T x) := by
+    intro x
+    have hx_closure : x ∈ closure (B.domain : Set F) := by
+      rw [B.dense_domain.closure_eq]
+      trivial
+    obtain ⟨u, hu_mem, hu_tendsto⟩ := mem_closure_iff_seq_limit.mp hx_closure
+    have hgraph_mem : ∀ n, (X (u n), C (u n) + X (T (u n))) ∈
+        Set.range (fun z : A.domain => ((z : E), A.toLinearMap z)) := by
+      intro n
+      refine ⟨⟨X (u n), hEq.mapsTo_domain ⟨u n, hu_mem n⟩⟩, Prod.ext rfl ?_⟩
+      show A.toLinearMap ⟨X (u n), hEq.mapsTo_domain ⟨u n, hu_mem n⟩⟩ =
+        C (u n) + X (T (u n))
+      have heq := hEq.equation ⟨u n, hu_mem n⟩
+      have hval : A.toLinearMap
+          ⟨X (u n), hEq.mapsTo_domain ⟨u n, hu_mem n⟩⟩ =
+          C (u n) + X (B.toLinearMap ⟨u n, hu_mem n⟩) := by
+        rw [← heq]; abel
+      rw [hval, hT ⟨u n, hu_mem n⟩]
+    have hconv : Filter.Tendsto (fun n => (X (u n), C (u n) + X (T (u n))))
+        Filter.atTop (nhds (X x, C x + X (T x))) := by
+      refine Filter.Tendsto.prodMk_nhds ?_ ?_
+      · exact (X.continuous.tendsto x).comp hu_tendsto
+      · refine Filter.Tendsto.add ?_ ?_
+        · exact (C.continuous.tendsto x).comp hu_tendsto
+        · exact ((X.comp T).continuous.tendsto x).comp hu_tendsto
+    obtain ⟨z, hz⟩ := A.closed_graph.isSeqClosed hgraph_mem hconv
+    have hz1 : (z : E) = X x := congrArg Prod.fst hz
+    have hz2 : A.toLinearMap z = C x + X (T x) := congrArg Prod.snd hz
+    refine ⟨hz1 ▸ z.2, ?_⟩
+    have hzz : z = ⟨X x, hz1 ▸ z.2⟩ := Subtype.ext hz1
+    rw [← hzz]
+    exact hz2
+  refine ⟨fun x => (key (x : F)).choose, fun x => ?_⟩
+  have h := (key (x : F)).choose_spec
+  change A.toLinearMap ⟨X (x : F), (key (x : F)).choose⟩ - X (T (x : F)) =
+    C (x : F)
+  rw [h]
+  abel
+
+
+/-- **Ideal-gauge constant-one Sylvester estimate with the unbounded block on
+    the right.**  This is the right-handed companion of
+    `sylvester_mem_and_gauge_le_of_unbounded_bound_inverse`.  A bounded left
+    block and a bounded shifted right inverse yield a Neumann contraction
+    `Y ↦ S Y J`, preserving membership and the sharp constant-one gauge bound. -/
+theorem mem_and_gauge_le_of_boundedLeft_exteriorRight
+    (N : RectangularSymmetricIdealFamily (𝕜 := 𝕜))
+    {G : Type v}
+    [NormedAddCommGroup G] [InnerProductSpace 𝕜 G] [CompleteSpace G]
+    {S : F →L[𝕜] F}
+    {Λ : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := G)}
+    {Y C : G →L[𝕜] F} {c ρ δ : ℝ}
+    (hρ : 0 ≤ ρ) (hδ : 0 < δ)
+    (hSnorm : ‖S‖ ≤ ρ)
+    {J : G →L[𝕜] G} (hdom : ∀ z : G, J z ∈ Λ.domain)
+    (hres : ∀ z : G,
+      Λ.toLinearMap ⟨J z, hdom z⟩ - ((c : ℝ) : 𝕜) • J z = z)
+    (hJnorm : ‖J‖ ≤ (ρ + δ)⁻¹)
+    (hEq : ∀ y : Λ.domain,
+      S (Y (y : G)) -
+        (Y (Λ.toLinearMap y) - ((c : ℝ) : 𝕜) • Y (y : G)) = C (y : G))
+    (hC : N.Mem C) :
+    N.Mem Y ∧ δ * N.gauge Y ≤ N.gauge C := by
+  have hρδ : (0 : ℝ) < ρ + δ := by linarith
+  set q : ℝ := ρ * (ρ + δ)⁻¹ with hqdef
+  have hq0 : 0 ≤ q := mul_nonneg hρ (inv_nonneg.mpr hρδ.le)
+  have hq1 : q < 1 := by
+    rw [hqdef, ← div_eq_mul_inv]
+    exact (div_lt_one hρδ).mpr (by linarith)
+  -- the bounded fixed-point identity `Y = S Y J - C J`
+  have hfix : Y = S ∘L Y ∘L J + -(C ∘L J) := by
+    ext z
+    have hres' : Λ.toLinearMap ⟨J z, hdom z⟩ =
+        z + ((c : ℝ) : 𝕜) • J z := sub_eq_iff_eq_add.mp (hres z)
+    have h1 := hEq ⟨J z, hdom z⟩
+    rw [hres', map_add, map_smul] at h1
+    have h2 : S (Y (J z)) - Y z = C (J z) := by
+      calc S (Y (J z)) - Y z
+          = S (Y (J z)) -
+              (Y z + ((c : ℝ) : 𝕜) • Y (J z) -
+                ((c : ℝ) : 𝕜) • Y (J z)) := by abel
+        _ = C (J z) := h1
+    have h3 : S (Y (J z)) = C (J z) + Y z := sub_eq_iff_eq_add.mp h2
+    show Y z = (S ∘L Y ∘L J) z + (-(C ∘L J)) z
+    simp only [ContinuousLinearMap.comp_apply, neg_apply]
+    rw [h3]
+    abel
+  -- the Neumann contraction `W ↦ S W J`
+  set T : (G →L[𝕜] F) → (G →L[𝕜] F) := fun W => S ∘L W ∘L J with hTdef
+  have hTadd : ∀ W Z : G →L[𝕜] F, T (W + Z) = T W + T Z := by
+    intro W Z
+    simp only [hTdef]
+    simp [ContinuousLinearMap.add_comp, ContinuousLinearMap.comp_add]
+  have hTnorm : ∀ W : G →L[𝕜] F, ‖T W‖ ≤ q * ‖W‖ := by
+    intro W
+    calc ‖T W‖ ≤ ‖S‖ * ‖W‖ * ‖J‖ :=
+          RectangularSymmetricIdealFamily.opNorm_comp_comp_le S W J
+      _ ≤ ρ * ‖W‖ * (ρ + δ)⁻¹ :=
+          mul_le_mul (mul_le_mul_of_nonneg_right hSnorm (norm_nonneg W))
+            hJnorm (norm_nonneg J) (mul_nonneg hρ (norm_nonneg W))
+      _ = q * ‖W‖ := by rw [hqdef]; ring
+  have hTmem : ∀ W : G →L[𝕜] F, N.Mem W → N.Mem (T W) := fun W hW =>
+    N.comp_mem S J hW
+  have hTgauge : ∀ W : G →L[𝕜] F, N.Mem W →
+      N.gauge (T W) ≤ q * N.gauge W := by
+    intro W hW
+    calc N.gauge (T W) ≤ ‖S‖ * N.gauge W * ‖J‖ := N.gauge_comp_le S J hW
+      _ ≤ ρ * N.gauge W * (ρ + δ)⁻¹ :=
+          mul_le_mul
+            (mul_le_mul_of_nonneg_right hSnorm (N.gauge_nonneg hW))
+            hJnorm (norm_nonneg J)
+            (mul_nonneg hρ (N.gauge_nonneg hW))
+      _ = q * N.gauge W := by rw [hqdef]; ring
+  -- the Neumann iterates and their partial sums
+  have hbasemem : N.Mem (-(C ∘L J)) := N.neg_mem (N.comp_right_mem J hC)
+  set t : ℕ → G →L[𝕜] F := fun n => T^[n] (-(C ∘L J)) with htdef
+  have ht0 : t 0 = -(C ∘L J) := rfl
+  have htsucc : ∀ n, t (n + 1) = T (t n) := by
+    intro n
+    simp only [htdef, Function.iterate_succ_apply']
+  have htmem : ∀ n, N.Mem (t n) := by
+    intro n
+    induction n with
+    | zero => exact hbasemem
+    | succ n ih => rw [htsucc]; exact hTmem _ ih
+  set g₀ : ℝ := N.gauge (-(C ∘L J)) with hg₀def
+  have htgauge : ∀ n, N.gauge (t n) ≤ q ^ n * g₀ := by
+    intro n
+    induction n with
+    | zero => simp [htdef, hg₀def]
+    | succ n ih =>
+        rw [htsucc, pow_succ]
+        calc N.gauge (T (t n)) ≤ q * N.gauge (t n) := hTgauge _ (htmem n)
+          _ ≤ q * (q ^ n * g₀) := mul_le_mul_of_nonneg_left ih hq0
+          _ = q ^ n * q * g₀ := by ring
+  set P : ℕ → G →L[𝕜] F := fun n => ∑ k ∈ Finset.range n, t k with hPdef
+  have hPmem : ∀ n, N.Mem (P n) := by
+    intro n
+    simp only [hPdef]
+    exact N.finset_sum_mem (Finset.range n) t fun k _ => htmem k
+  set Gs : ℕ → ℝ := fun n => ∑ k ∈ Finset.range n, q ^ k * g₀ with hGdef
+  have hgap : ∀ {m n : ℕ}, n ≤ m → N.gauge (P m - P n) ≤ Gs m - Gs n := by
+    intro m n hnm
+    have hsum : P m - P n = ∑ k ∈ Finset.Ico n m, t k :=
+      (Finset.sum_Ico_eq_sub _ hnm).symm
+    have hG : ∑ k ∈ Finset.Ico n m, q ^ k * g₀ = Gs m - Gs n :=
+      Finset.sum_Ico_eq_sub _ hnm
+    rw [hsum, ← hG]
+    calc N.gauge (∑ k ∈ Finset.Ico n m, t k)
+        ≤ ∑ k ∈ Finset.Ico n m, N.gauge (t k) :=
+          N.gauge_finset_sum_le (Finset.Ico n m) t fun k _ => htmem k
+      _ ≤ ∑ k ∈ Finset.Ico n m, q ^ k * g₀ :=
+          Finset.sum_le_sum fun k _ => htgauge k
+  have hGcauchy : CauchySeq Gs := by
+    have hsummable : Summable fun k : ℕ => q ^ k * g₀ :=
+      (summable_geometric_of_lt_one hq0 hq1).mul_right g₀
+    exact hsummable.hasSum.tendsto_sum_nat.cauchySeq
+  have hPcauchy : ∀ ε : ℝ, 0 < ε → ∃ N₀, ∀ m n, N₀ ≤ m → N₀ ≤ n →
+      N.gauge (P m - P n) < ε := by
+    intro ε hε
+    obtain ⟨N₀, hN₀⟩ := Metric.cauchySeq_iff.mp hGcauchy ε hε
+    refine ⟨N₀, fun m n hm hn => ?_⟩
+    rcases le_total n m with h | h
+    · refine lt_of_le_of_lt (hgap h) ?_
+      calc Gs m - Gs n ≤ |Gs m - Gs n| := le_abs_self _
+        _ = dist (Gs m) (Gs n) := (Real.dist_eq _ _).symm
+        _ < ε := hN₀ m hm n hn
+    · have hswap : N.gauge (P m - P n) = N.gauge (P n - P m) := by
+        rw [show P m - P n = -(P n - P m) from by abel,
+          N.gauge_neg (N.sub_mem (hPmem n) (hPmem m))]
+      rw [hswap]
+      refine lt_of_le_of_lt (hgap h) ?_
+      calc Gs n - Gs m ≤ |Gs n - Gs m| := le_abs_self _
+        _ = dist (Gs n) (Gs m) := (Real.dist_eq _ _).symm
+        _ < ε := hN₀ n hn m hm
+  obtain ⟨L, hLmem, hLlim⟩ := N.gauge_complete P hPmem hPcauchy
+  -- the partial sums converge to `L` in operator norm
+  have hPL : Filter.Tendsto P Filter.atTop (nhds L) := by
+    rw [tendsto_iff_norm_sub_tendsto_zero]
+    refine squeeze_zero (fun n => norm_nonneg _)
+      (fun n => N.opNorm_le_gauge (N.sub_mem (hPmem n) hLmem)) ?_
+    rw [Metric.tendsto_atTop]
+    intro ε hε
+    obtain ⟨N₀, hN₀⟩ := hLlim ε hε
+    refine ⟨N₀, fun n hn => ?_⟩
+    rw [Real.dist_eq, sub_zero,
+      abs_of_nonneg (N.gauge_nonneg (N.sub_mem (hPmem n) hLmem))]
+    exact hN₀ n hn
+  -- the partial sums converge to `Y` in operator norm
+  have hfix' : Y = t 0 + T Y := by
+    conv_lhs => rw [hfix]
+    rw [ht0]
+    abel
+  have hchain : ∀ n, T^[n] Y = t n + T^[n + 1] Y := by
+    intro n
+    induction n with
+    | zero => simpa using hfix'
+    | succ n ih =>
+        rw [Function.iterate_succ_apply', ih, hTadd, ← htsucc,
+          ← Function.iterate_succ_apply' T (n + 1) Y]
+  have hYP : ∀ n, Y = P n + T^[n] Y := by
+    intro n
+    induction n with
+    | zero => simp [hPdef]
+    | succ n ih =>
+        have hPsucc : P (n + 1) = P n + t n := Finset.sum_range_succ _ _
+        rw [hPsucc]
+        calc Y = P n + T^[n] Y := ih
+          _ = P n + (t n + T^[n + 1] Y) := by rw [hchain n]
+          _ = P n + t n + T^[n + 1] Y := by abel
+  have htail : ∀ n, ‖T^[n] Y‖ ≤ q ^ n * ‖Y‖ := by
+    intro n
+    induction n with
+    | zero => simp
+    | succ n ih =>
+        rw [Function.iterate_succ_apply', pow_succ]
+        calc ‖T (T^[n] Y)‖ ≤ q * ‖T^[n] Y‖ := hTnorm _
+          _ ≤ q * (q ^ n * ‖Y‖) := mul_le_mul_of_nonneg_left ih hq0
+          _ = q ^ n * q * ‖Y‖ := by ring
+  have hPY : Filter.Tendsto P Filter.atTop (nhds Y) := by
+    rw [tendsto_iff_norm_sub_tendsto_zero]
+    have hbound : ∀ n, ‖P n - Y‖ ≤ q ^ n * ‖Y‖ := by
+      intro n
+      have hPnY : P n - Y = -(T^[n] Y) := by
+        conv_lhs => rw [hYP n]
+        abel
+      rw [hPnY, norm_neg]
+      exact htail n
+    refine squeeze_zero (fun n => norm_nonneg _) hbound ?_
+    simpa using
+      (tendsto_pow_atTop_nhds_zero_of_lt_one hq0 hq1).mul_const ‖Y‖
+  have hYL : Y = L := tendsto_nhds_unique hPY hPL
+  have hYmem : N.Mem Y := by rw [hYL]; exact hLmem
+  -- the gauge estimate by absorption through the fixed point
+  have hgauge : N.gauge Y ≤ (ρ + δ)⁻¹ * (ρ * N.gauge Y + N.gauge C) := by
+    conv_lhs => rw [hfix]
+    calc N.gauge (S ∘L Y ∘L J + -(C ∘L J))
+        ≤ N.gauge (S ∘L Y ∘L J) + N.gauge (-(C ∘L J)) :=
+          N.gauge_add_le (N.comp_mem S J hYmem) hbasemem
+      _ ≤ ‖S‖ * N.gauge Y * ‖J‖ + N.gauge (C ∘L J) :=
+          add_le_add (N.gauge_comp_le S J hYmem)
+            (le_of_eq (N.gauge_neg (N.comp_right_mem J hC)))
+      _ ≤ ρ * N.gauge Y * (ρ + δ)⁻¹ + N.gauge C * (ρ + δ)⁻¹ := by
+          refine add_le_add
+            (mul_le_mul
+              (mul_le_mul_of_nonneg_right hSnorm (N.gauge_nonneg hYmem))
+              hJnorm (norm_nonneg J)
+              (mul_nonneg hρ (N.gauge_nonneg hYmem))) ?_
+          exact (N.gauge_comp_right_le_mul J hC).trans
+            (mul_le_mul_of_nonneg_left hJnorm (N.gauge_nonneg hC))
+      _ = (ρ + δ)⁻¹ * (ρ * N.gauge Y + N.gauge C) := by ring
+  refine ⟨hYmem, ?_⟩
+  have hkey := mul_le_mul_of_nonneg_left hgauge hρδ.le
+  rw [← mul_assoc, mul_inv_cancel₀ hρδ.ne', one_mul] at hkey
+  linarith
+
+
 end ExactSinTheta
 end Experimental
 end DavisKahan
