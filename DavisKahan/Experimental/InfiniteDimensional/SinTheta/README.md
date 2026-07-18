@@ -96,12 +96,18 @@ The independent Spectra adapter now has two focused modules:
   genuine-spectrum operator-norm sine estimate with the two canonical spectral
   range inclusions.
 
-The remaining spectral-projection specialization seam is now spectral
-localization: transport interval semibounds and exterior resolvent exclusion
-from the ambient PVM sets to the two Stone generators on their spectral ranges.
-After that, identify the directed inclusion block with the conventional
-spectral-projection sine/gap expression.  The self-adjoint restriction,
-Kato--Rellich, intertwining, and residual estimates do not need to be rebuilt.
+- `SpectraBridge/SpectralRestrictionLocalization.lean` identifies the scalar
+  spectral measure of the restricted Stone group with the ambient measure
+  restricted to the selecting PVM set.  It derives interval form bounds and
+  exterior resolvent exclusion for the restricted generators.
+
+The canonical directed bounded-perturbation endpoint now accepts only the
+measurable set conditions `B ⊆ [β, α]` and
+`T ∩ (β - δ, α + δ) = ∅`; all self-adjoint restriction, Kato--Rellich,
+intertwining, residual, and localization obligations are discharged internally.
+The remaining source-facing seam is geometric: identify the directed inclusion
+block with the conventional spectral-projection product and combine both
+directions into the projection-difference gap form.
 
 ## Current compiler-first frontier
 
