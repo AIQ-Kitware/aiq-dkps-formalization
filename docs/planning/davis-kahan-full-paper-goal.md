@@ -666,12 +666,26 @@ that range dense.  Closedness of the difference kernel then gives equality.
 The square identity itself supplies the commutation hypothesis, recorded in
 `spectraDirectRotation_unique_of_sq`.
 
-`principalHalfPhase_displacement_minimal_scalar` remains the proved
-per-fiber shorter-arc core for Section 7 extremality.  The remaining hard
-direct-rotation obligation is now only
-`spectraDirectRotation_minimal`: lifting that scalar comparison to arbitrary
-transporting unitaries still requires the two-projection/Halmos decomposition
-or an equivalent global operator argument.
+### Progress note (2026-07-18, Halmos decomposition and minimality)
+
+`SpectraBridge/HalmosTwoProjections.lean` now supplies the operator-valued
+Halmos decomposition: the four elementary intersection summands, their
+orthogonal generic remainder, reduction of the generic block by both
+projections, disappearance of the two defect summands in the acute regime,
+and the exact cosine/sine-square identities
+`S² = (P - Q)²`, `C² + S² = 1`, and
+`|QP + QᗮPᗮ|² = C²`.  A scalar direct-integral presentation is treated as the
+spectral representation of the positive generic cosine rather than as a
+second primitive foundation.
+
+`spectraDirectRotation_minimal` and the public
+`complexDirectRotation_minimal` wrapper use this cosine block together with
+the already accepted Hermitian-part and uniqueness infrastructure to prove
+that the acute direct rotation minimizes operator-norm displacement from the
+identity among all unitary projection intertwiners.  Section 7 therefore has
+existence, formulas, uniqueness, and operator-norm extremality; remaining work
+is refinement and reuse of the decomposition in equality, continuation, and
+sharpness arguments rather than closure of the basic extremal theorem.
 
 ### Progress note (2026-07-16, real spectral bridge session)
 

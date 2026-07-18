@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.DirectRotation
+import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.HalmosTwoProjections
 import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Unitary
 import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Commute
 import ForMathlib.Analysis.InnerProductSpace.CoerciveUnit
@@ -795,14 +796,213 @@ theorem principalHalfPhase_displacement_minimal_scalar
           rw [hw_eq, show -principalHalfPhase z - 1 =
             -(principalHalfPhase z + 1) from by ring, norm_neg]
 
+/-- Squared displacement of a unitary from the identity. -/
+theorem norm_sub_one_apply_sq_of_mem_unitary
+    (T : H →L[ℂ] H) (hT : T ∈ unitary (H →L[ℂ] H)) (x : H) :
+    ‖(T - 1) x‖ ^ 2 =
+      2 * ‖x‖ ^ 2 - 2 * RCLike.re ⟪T x, x⟫_ℂ := by
+  let u : unitary (H →L[ℂ] H) := ⟨T, hT⟩
+  have hnorm : ‖T x‖ = ‖x‖ := Unitary.norm_map u x
+  rw [sub_apply, one_apply_eq_self, norm_sub_sq (𝕜 := ℂ), hnorm]
+  ring
+
+/-- Every acute direct rotation lies in the closed radius-`√2` ball around
+`1`. -/
+theorem norm_spectraDirectRotation_sub_one_le_sqrt_two
+    (U V : Submodule ℂ H)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hacute : IsAcute U V) :
+    ‖spectraDirectRotation U V hacute - 1‖ ≤ Real.sqrt 2 := by
+  let D : H →L[ℂ] H := spectraDirectRotation U V hacute
+  have hDunit : D ∈ unitary (H →L[ℂ] H) :=
+    spectraDirectRotation_mem_unitary U V hacute
+  refine (D - 1).opNorm_le_bound (Real.sqrt_nonneg 2) ?_
+  intro x
+  have hsq : ‖(D - 1) x‖ ^ 2 ≤ (Real.sqrt 2 * ‖x‖) ^ 2 := by
+    rw [norm_sub_one_apply_sq_of_mem_unitary D hDunit x]
+    have hre : 0 ≤ RCLike.re ⟪D x, x⟫_ℂ := by
+      rw [RCLike.re_eq_complex_re]
+      simpa only [D] using
+        spectraDirectRotation_real_inner_nonneg U V hacute x
+    have hsqrt : (Real.sqrt 2) ^ 2 = (2 : ℝ) :=
+      Real.sq_sqrt (by norm_num)
+    rw [mul_pow, hsqrt]
+    nlinarith
+  exact (sq_le_sq₀ (norm_nonneg _)
+    (mul_nonneg (Real.sqrt_nonneg 2) (norm_nonneg x))).mp hsq
+
+/-- Numerical real part of the direct rotation equals the quadratic form of
+the positive canonical modulus. -/
+theorem re_inner_spectraDirectRotation_eq_absoluteValue
+    (U V : Submodule ℂ H)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hacute : IsAcute U V) (x : H) :
+    RCLike.re ⟪spectraDirectRotation U V hacute x, x⟫_ℂ =
+      RCLike.re ⟪spectraOperatorAbsoluteValue
+        (spectraCanonicalIntertwiner U V) x, x⟫_ℂ := by
+  let D : H →L[ℂ] H := spectraDirectRotation U V hacute
+  let C : H →L[ℂ] H :=
+    spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V)
+  have hsum : D + star D = C + C := by
+    have h := spectraDirectRotation_add_star_eq_two_smul_absoluteValue
+      U V hacute
+    simpa only [two_smul] using h
+  have h := congrArg
+    (fun T : H →L[ℂ] H => RCLike.re ⟪T x, x⟫_ℂ) hsum
+  have h' :
+      RCLike.re ⟪D x, x⟫_ℂ + RCLike.re ⟪D x, x⟫_ℂ =
+        RCLike.re ⟪C x, x⟫_ℂ + RCLike.re ⟪C x, x⟫_ℂ := by
+    simpa only [add_apply, inner_add_left, map_add,
+      re_inner_star_apply] using h
+  change RCLike.re ⟪D x, x⟫_ℂ = RCLike.re ⟪C x, x⟫_ℂ
+  linarith only [h']
+
+/-- The source diagonal compression of the direct rotation is the positive
+Halmos cosine. -/
+theorem projection_mul_spectraDirectRotation_mul_projection
+    (U V : Submodule ℂ H) [U.HasOrthogonalProjection]
+    [V.HasOrthogonalProjection] (hacute : IsAcute U V) :
+    projection U * spectraDirectRotation U V hacute * projection U =
+      spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V) *
+        projection U := by
+  let B := spectraCanonicalAbsoluteValueUnit U V hacute
+  let C : H →L[ℂ] H :=
+    spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V)
+  let D : H →L[ℂ] H := spectraDirectRotation U V hacute
+  let P : H →L[ℂ] H := projection U
+  let Q : H →L[ℂ] H := projection V
+  let S : H →L[ℂ] H := spectraCanonicalIntertwiner U V
+  have hDB : D * C = S := by
+    simpa only [ContinuousLinearMap.mul_def] using
+      spectraDirectRotation_decomposition U V hacute
+  have hCP : Commute C P := spectraCanonicalAbsoluteValue_commute_projection U V
+  have hC2 : C * C = halmosCosineSq U V :=
+    spectraCanonicalAbsoluteValue_sq_eq_halmosCosineSq U V
+  have hSP : S * P = Q * P := by
+    change
+      (V.starProjection * U.starProjection +
+        Vᗮ.starProjection * Uᗮ.starProjection) * U.starProjection =
+      V.starProjection * U.starProjection
+    have hP := projection_sq U
+    have hPcP := complementaryProjection_mul_projection U
+    noncomm_ring [hP, hPcP]
+  have hCosP : halmosCosineSq U V * P = P * Q * P := by
+    change
+      (U.starProjection * V.starProjection * U.starProjection +
+        Uᗮ.starProjection * Vᗮ.starProjection * Uᗮ.starProjection) *
+        U.starProjection =
+      U.starProjection * V.starProjection * U.starProjection
+    have hP := projection_sq U
+    have hPcP := complementaryProjection_mul_projection U
+    noncomm_ring [hP, hPcP]
+  have hmul : (P * D * P) * C = (C * P) * C := by
+    calc
+      (P * D * P) * C = P * D * (P * C) := by noncomm_ring
+      _ = P * D * (C * P) := by rw [hCP.eq]
+      _ = P * (D * C) * P := by noncomm_ring
+      _ = P * S * P := by rw [hDB]
+      _ = P * Q * P := by rw [mul_assoc, hSP, ← mul_assoc]
+      _ = (C * C) * P := by rw [hC2, hCosP]
+      _ = C * (C * P) := by rw [mul_assoc]
+      _ = C * (P * C) := by rw [hCP.eq]
+      _ = (C * P) * C := by rw [← mul_assoc]
+  have hmul' :
+      (P * D * P) * (B : H →L[ℂ] H) =
+        (C * P) * (B : H →L[ℂ] H) := by
+    simpa [B, C] using hmul
+  change P * D * P = C * P
+  let Binv : H →L[ℂ] H := (↑(B⁻¹) : H →L[ℂ] H)
+  calc
+    P * D * P = (P * D * P) * 1 := (mul_one _).symm
+    _ = (P * D * P) * ((B : H →L[ℂ] H) * Binv) := by
+      rw [B.mul_inv]
+    _ = ((P * D * P) * (B : H →L[ℂ] H)) * Binv := by
+      rw [← mul_assoc]
+    _ = ((C * P) * (B : H →L[ℂ] H)) * Binv := by rw [hmul']
+    _ = (C * P) * ((B : H →L[ℂ] H) * Binv) := by rw [mul_assoc]
+    _ = C * P := by rw [B.mul_inv, mul_one]
+
+/-- The complementary diagonal compression of the direct rotation is the
+positive Halmos cosine. -/
+theorem complementaryProjection_mul_spectraDirectRotation_mul_complementaryProjection
+    (U V : Submodule ℂ H) [U.HasOrthogonalProjection]
+    [V.HasOrthogonalProjection] (hacute : IsAcute U V) :
+    complementaryProjection U * spectraDirectRotation U V hacute *
+        complementaryProjection U =
+      spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V) *
+        complementaryProjection U := by
+  let B := spectraCanonicalAbsoluteValueUnit U V hacute
+  let C : H →L[ℂ] H :=
+    spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V)
+  let D : H →L[ℂ] H := spectraDirectRotation U V hacute
+  let P : H →L[ℂ] H := complementaryProjection U
+  let Q : H →L[ℂ] H := complementaryProjection V
+  let S : H →L[ℂ] H := spectraCanonicalIntertwiner U V
+  have hDB : D * C = S := by
+    simpa only [ContinuousLinearMap.mul_def] using
+      spectraDirectRotation_decomposition U V hacute
+  have hCP : Commute C P := by
+    change Commute C Uᗮ.starProjection
+    rw [Submodule.starProjection_orthogonal']
+    rw [commute_iff_eq]
+    change C * (1 - U.starProjection) = (1 - U.starProjection) * C
+    rw [mul_sub, mul_one, sub_mul, one_mul,
+      (spectraCanonicalAbsoluteValue_commute_projection U V).eq]
+  have hSP : S * P = Q * P := by
+    change
+      (V.starProjection * U.starProjection +
+        Vᗮ.starProjection * Uᗮ.starProjection) * Uᗮ.starProjection =
+      Vᗮ.starProjection * Uᗮ.starProjection
+    have hPPc := projection_mul_complementaryProjection U
+    have hPc := complementaryProjection_sq U
+    noncomm_ring [hPPc, hPc]
+  have hC2 : C * C = halmosCosineSq U V :=
+    spectraCanonicalAbsoluteValue_sq_eq_halmosCosineSq U V
+  have hCosP : halmosCosineSq U V * P = P * Q * P := by
+    change
+      (U.starProjection * V.starProjection * U.starProjection +
+        Uᗮ.starProjection * Vᗮ.starProjection * Uᗮ.starProjection) *
+        Uᗮ.starProjection =
+      Uᗮ.starProjection * Vᗮ.starProjection * Uᗮ.starProjection
+    have hPPc := projection_mul_complementaryProjection U
+    have hPc := complementaryProjection_sq U
+    noncomm_ring [hPPc, hPc]
+  have hmul : (P * D * P) * C = (C * P) * C := by
+    calc
+      (P * D * P) * C = P * D * (P * C) := by noncomm_ring
+      _ = P * D * (C * P) := by rw [hCP.eq]
+      _ = P * (D * C) * P := by noncomm_ring
+      _ = P * S * P := by rw [hDB]
+      _ = P * Q * P := by rw [mul_assoc, hSP, ← mul_assoc]
+      _ = (C * C) * P := by rw [hC2, hCosP]
+      _ = C * (C * P) := by rw [mul_assoc]
+      _ = C * (P * C) := by rw [hCP.eq]
+      _ = (C * P) * C := by rw [← mul_assoc]
+  have hmul' :
+      (P * D * P) * (B : H →L[ℂ] H) =
+        (C * P) * (B : H →L[ℂ] H) := by
+    simpa [B, C] using hmul
+  change P * D * P = C * P
+  let Binv : H →L[ℂ] H := (↑(B⁻¹) : H →L[ℂ] H)
+  calc
+    P * D * P = (P * D * P) * 1 := (mul_one _).symm
+    _ = (P * D * P) * ((B : H →L[ℂ] H) * Binv) := by
+      rw [B.mul_inv]
+    _ = ((P * D * P) * (B : H →L[ℂ] H)) * Binv := by
+      rw [← mul_assoc]
+    _ = ((C * P) * (B : H →L[ℂ] H)) * Binv := by rw [hmul']
+    _ = (C * P) * ((B : H →L[ℂ] H) * Binv) := by rw [mul_assoc]
+    _ = C * P := by rw [B.mul_inv, mul_one]
+
 /-- Operator-norm minimality of the acute direct rotation among unitaries
 transporting the source projection to the target projection.
 
-Route: the Halmos two-projection decomposition splits `H` into the common
-subspaces and a direct integral of principal two-planes; on each plane the
-displacement of the direct rotation is the scalar shorter-arc bound against
-any transporting unitary.  The two-projection decomposition is not yet
-formalized. -/
+The proof uses the operator-valued Halmos decomposition.  After conjugating a
+competitor by the canonical rotation, its block diagonal part is tested
+against the positive Halmos cosine.  A hypothetical smaller displacement
+makes the inverse cosine uniformly bounded, hence makes the cosine quadratic
+form uniformly coercive.  The Hermitian-part identity
+`D + D⋆ = 2 C` then gives the desired displacement bound for `D`. -/
 theorem spectraDirectRotation_minimal
     (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
@@ -810,7 +1010,395 @@ theorem spectraDirectRotation_minimal
     (W : H →L[ℂ] H) (hWunit : W ∈ unitary (H →L[ℂ] H))
     (hintertwine : W * projection U = projection V * W) :
     ‖spectraDirectRotation U V hacute - 1‖ ≤ ‖W - 1‖ := by
-  sorry
+  let D : H →L[ℂ] H := spectraDirectRotation U V hacute
+  let C : H →L[ℂ] H :=
+    spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V)
+  let P : H →L[ℂ] H := projection U
+  let Pc : H →L[ℂ] H := complementaryProjection U
+  let A : H →L[ℂ] H := star D * W
+  let r : ℝ := ‖W - 1‖
+  by_cases hrlarge : Real.sqrt 2 ≤ r
+  · exact (norm_spectraDirectRotation_sub_one_le_sqrt_two U V hacute).trans hrlarge
+  have hrsmall : r < Real.sqrt 2 := lt_of_not_ge hrlarge
+  have hr0 : 0 ≤ r := norm_nonneg _
+  have hr2 : r ^ 2 < 2 := by
+    have hsq : r ^ 2 < (Real.sqrt 2) ^ 2 :=
+      (sq_lt_sq₀ hr0 (Real.sqrt_nonneg 2)).2 hrsmall
+    rw [Real.sq_sqrt (by norm_num : (0 : ℝ) ≤ 2)] at hsq
+    exact hsq
+  let c : ℝ := 1 - r ^ 2 / 2
+  have hc : 0 < c := by
+    dsimp [c]
+    linarith
+  have hDunit : D ∈ unitary (H →L[ℂ] H) :=
+    spectraDirectRotation_mem_unitary U V hacute
+  have hstarDunit : star D ∈ unitary (H →L[ℂ] H) := by
+    constructor
+    · simpa [D] using spectraDirectRotation_mul_star_self U V hacute
+    · simpa [D] using star_spectraDirectRotation_mul_self U V hacute
+  have hAunit : A ∈ unitary (H →L[ℂ] H) :=
+    (unitary (H →L[ℂ] H)).mul_mem hstarDunit hWunit
+  have hAinj : Function.Injective A := by
+    intro x y hxy
+    have hmap := congrArg (fun z => star A z) hxy
+    have hleft := Unitary.star_mul_self_of_mem hAunit
+    have hx := congrArg (fun T : H →L[ℂ] H => T x) hleft
+    have hy := congrArg (fun T : H →L[ℂ] H => T y) hleft
+    calc
+      x = star A (A x) := by
+        simpa only [mul_apply_eq_comp, one_apply_eq_self] using hx.symm
+      _ = star A (A y) := hmap
+      _ = y := by
+        simpa only [mul_apply_eq_comp, one_apply_eq_self] using hy
+  have hAsurj : Function.Surjective A := by
+    intro y
+    refine ⟨star A y, ?_⟩
+    have hright := Unitary.mul_star_self_of_mem hAunit
+    have h := congrArg (fun T : H →L[ℂ] H => T y) hright
+    simpa only [mul_apply_eq_comp, one_apply_eq_self] using h
+  have hAcomm : Commute A P := by
+    rw [commute_iff_eq]
+    show A * P = P * A
+    calc
+      A * P = star D * (W * P) := by simp only [A]; rw [mul_assoc]
+      _ = star D * (projection V * W) := by
+        change star D * (W * projection U) = _
+        rw [hintertwine]
+      _ = (P * star D) * W := by
+        change star D * (projection V * W) =
+          (projection U * star D) * W
+        rw [← mul_assoc, star_spectraDirectRotation_intertwines U V hacute]
+      _ = P * A := by simp only [A]; rw [mul_assoc]
+  have hAcommc : Commute A Pc := by
+    rw [commute_iff_eq]
+    change A * Uᗮ.starProjection = Uᗮ.starProjection * A
+    rw [Submodule.starProjection_orthogonal']
+    change A * (1 - P) = (1 - P) * A
+    rw [mul_sub, mul_one, sub_mul, one_mul, hAcomm.eq]
+  have hWeq : W = D * A := by
+    calc
+      W = 1 * W := (one_mul W).symm
+      _ = (D * star D) * W := by
+        rw [show D * star D = 1 by
+          simpa [D] using spectraDirectRotation_mul_star_self U V hacute]
+      _ = D * A := by simp only [A]; rw [mul_assoc]
+  have hWform : ∀ x : H,
+      c * ‖x‖ ^ 2 ≤ RCLike.re ⟪W x, x⟫_ℂ := by
+    intro x
+    have hop : ‖(W - 1) x‖ ≤ r * ‖x‖ := by
+      simpa only [r] using (W - 1).le_opNorm x
+    have hop2 : ‖(W - 1) x‖ ^ 2 ≤ (r * ‖x‖) ^ 2 :=
+      (sq_le_sq₀ (norm_nonneg _)
+        (mul_nonneg hr0 (norm_nonneg x))).2 hop
+    have hdisp := norm_sub_one_apply_sq_of_mem_unitary W hWunit x
+    rw [RCLike.re_eq_complex_re] at hdisp ⊢
+    dsimp [c]
+    nlinarith only [hop2, hdisp]
+  have hinnerU : ∀ {y x : H}, y ∈ U → x ∈ U →
+      RCLike.re ⟪D y, x⟫_ℂ = RCLike.re ⟪C y, x⟫_ℂ := by
+    intro y x hy hx
+    have hdiag := projection_mul_spectraDirectRotation_mul_projection
+      U V hacute
+    have happ0 : P (D (P y)) = C (P y) := by
+      simpa only [mul_apply_eq_comp] using
+        congrArg (fun T : H →L[ℂ] H => T y) hdiag
+    have hpy : P y = y := by
+      dsimp [P]
+      exact U.starProjection_eq_self_iff.mpr hy
+    have happ : P (D y) = C y := by
+      rw [hpy] at happ0
+      exact happ0
+    have hpx : U.starProjection x = x :=
+      U.starProjection_eq_self_iff.mpr hx
+    have hsym : ⟪P (D y), x⟫_ℂ = ⟪D y, x⟫_ℂ := by
+      change ⟪U.starProjection (D y), x⟫_ℂ = ⟪D y, x⟫_ℂ
+      calc
+        ⟪U.starProjection (D y), x⟫_ℂ =
+            ⟪D y, U.starProjection x⟫_ℂ :=
+          U.starProjection_isSymmetric (D y) x
+        _ = ⟪D y, x⟫_ℂ := by rw [hpx]
+    calc
+      RCLike.re ⟪D y, x⟫_ℂ = RCLike.re ⟪P (D y), x⟫_ℂ :=
+        congrArg RCLike.re hsym.symm
+      _ = RCLike.re ⟪C y, x⟫_ℂ := by rw [happ]
+  have hinnerUc : ∀ {y x : H}, y ∈ Uᗮ → x ∈ Uᗮ →
+      RCLike.re ⟪D y, x⟫_ℂ = RCLike.re ⟪C y, x⟫_ℂ := by
+    intro y x hy hx
+    have hdiag :=
+      complementaryProjection_mul_spectraDirectRotation_mul_complementaryProjection
+        U V hacute
+    have happ0 : Pc (D (Pc y)) = C (Pc y) := by
+      simpa only [mul_apply_eq_comp] using
+        congrArg (fun T : H →L[ℂ] H => T y) hdiag
+    have hpy : Pc y = y := by
+      dsimp [Pc]
+      exact Uᗮ.starProjection_eq_self_iff.mpr hy
+    have happ : Pc (D y) = C y := by
+      rw [hpy] at happ0
+      exact happ0
+    have hpx : Uᗮ.starProjection x = x :=
+      Uᗮ.starProjection_eq_self_iff.mpr hx
+    have hsym : ⟪Pc (D y), x⟫_ℂ = ⟪D y, x⟫_ℂ := by
+      change ⟪Uᗮ.starProjection (D y), x⟫_ℂ = ⟪D y, x⟫_ℂ
+      calc
+        ⟪Uᗮ.starProjection (D y), x⟫_ℂ =
+            ⟪D y, Uᗮ.starProjection x⟫_ℂ :=
+          Uᗮ.starProjection_isSymmetric (D y) x
+        _ = ⟪D y, x⟫_ℂ := by rw [hpx]
+    calc
+      RCLike.re ⟪D y, x⟫_ℂ = RCLike.re ⟪Pc (D y), x⟫_ℂ :=
+        congrArg RCLike.re hsym.symm
+      _ = RCLike.re ⟪C y, x⟫_ℂ := by rw [happ]
+  have hlowU : ∀ y ∈ U, c * ‖y‖ ≤ ‖C y‖ := by
+    intro y hy
+    obtain ⟨x, hxy⟩ := hAsurj y
+    have hcommapp : A (P x) = P (A x) := by
+      have h := congrArg (fun T : H →L[ℂ] H => T x) hAcomm.eq
+      simpa only [mul_apply_eq_comp] using h
+    have hAP : A (P x) = A x := by
+      calc
+        A (P x) = P (A x) := hcommapp
+        _ = P y := by rw [hxy]
+        _ = y := by
+          dsimp [P]
+          exact U.starProjection_eq_self_iff.mpr hy
+        _ = A x := hxy.symm
+    have hPx : P x = x := hAinj hAP
+    have hxU : x ∈ U := by
+      apply U.starProjection_eq_self_iff.mp
+      simpa only [P] using hPx
+    have hform := hWform x
+    have hWapp0 := congrArg (fun T : H →L[ℂ] H => T x) hWeq
+    have hWapp : W x = D y := by
+      simpa only [mul_apply_eq_comp, hxy] using hWapp0
+    rw [hWapp, hinnerU hy hxU] at hform
+    have hcs : RCLike.re ⟪C y, x⟫_ℂ ≤ ‖C y‖ * ‖x‖ := by
+      exact (RCLike.re_le_norm ⟪C y, x⟫_ℂ).trans
+        (norm_inner_le_norm (C y) x)
+    have hnormA : ‖A x‖ = ‖x‖ :=
+      Unitary.norm_map (⟨A, hAunit⟩ : unitary (H →L[ℂ] H)) x
+    rw [hxy] at hnormA
+    rcases eq_or_ne x 0 with rfl | hx0
+    · simp at hxy
+      subst y
+      simp
+    · have hxpos : 0 < ‖x‖ := norm_pos_iff.mpr hx0
+      have hmul : (c * ‖x‖) * ‖x‖ ≤ ‖C y‖ * ‖x‖ := by
+        calc
+          (c * ‖x‖) * ‖x‖ = c * ‖x‖ ^ 2 := by ring
+          _ ≤ RCLike.re ⟪C y, x⟫_ℂ := hform
+          _ ≤ ‖C y‖ * ‖x‖ := hcs
+      have hcx : c * ‖x‖ ≤ ‖C y‖ := by
+        nlinarith only [hmul, hxpos]
+      simpa only [hnormA] using hcx
+  have hlowUc : ∀ y ∈ Uᗮ, c * ‖y‖ ≤ ‖C y‖ := by
+    intro y hy
+    obtain ⟨x, hxy⟩ := hAsurj y
+    have hcommapp : A (Pc x) = Pc (A x) := by
+      have h := congrArg (fun T : H →L[ℂ] H => T x) hAcommc.eq
+      simpa only [mul_apply_eq_comp] using h
+    have hAP : A (Pc x) = A x := by
+      calc
+        A (Pc x) = Pc (A x) := hcommapp
+        _ = Pc y := by rw [hxy]
+        _ = y := by
+          dsimp [Pc]
+          exact Uᗮ.starProjection_eq_self_iff.mpr hy
+        _ = A x := hxy.symm
+    have hPx : Pc x = x := hAinj hAP
+    have hxU : x ∈ Uᗮ := by
+      apply Uᗮ.starProjection_eq_self_iff.mp
+      simpa only [Pc] using hPx
+    have hform := hWform x
+    have hWapp0 := congrArg (fun T : H →L[ℂ] H => T x) hWeq
+    have hWapp : W x = D y := by
+      simpa only [mul_apply_eq_comp, hxy] using hWapp0
+    rw [hWapp, hinnerUc hy hxU] at hform
+    have hcs : RCLike.re ⟪C y, x⟫_ℂ ≤ ‖C y‖ * ‖x‖ := by
+      exact (RCLike.re_le_norm ⟪C y, x⟫_ℂ).trans
+        (norm_inner_le_norm (C y) x)
+    have hnormA : ‖A x‖ = ‖x‖ :=
+      Unitary.norm_map (⟨A, hAunit⟩ : unitary (H →L[ℂ] H)) x
+    rw [hxy] at hnormA
+    rcases eq_or_ne x 0 with rfl | hx0
+    · simp at hxy
+      subst y
+      simp
+    · have hxpos : 0 < ‖x‖ := norm_pos_iff.mpr hx0
+      have hmul : (c * ‖x‖) * ‖x‖ ≤ ‖C y‖ * ‖x‖ := by
+        calc
+          (c * ‖x‖) * ‖x‖ = c * ‖x‖ ^ 2 := by ring
+          _ ≤ RCLike.re ⟪C y, x⟫_ℂ := hform
+          _ ≤ ‖C y‖ * ‖x‖ := hcs
+      have hcx : c * ‖x‖ ≤ ‖C y‖ := by
+        nlinarith only [hmul, hxpos]
+      simpa only [hnormA] using hcx
+  have hCP : Commute C P := spectraCanonicalAbsoluteValue_commute_projection U V
+  have hCPc : Commute C Pc := by
+    rw [commute_iff_eq]
+    change C * Uᗮ.starProjection = Uᗮ.starProjection * C
+    rw [Submodule.starProjection_orthogonal']
+    change C * (1 - P) = (1 - P) * C
+    rw [mul_sub, mul_one, sub_mul, one_mul, hCP.eq]
+  have hlow : ∀ z : H, c * ‖z‖ ≤ ‖C z‖ := by
+    intro z
+    let u : H := P z
+    let v : H := Pc z
+    have hu : u ∈ U := U.starProjection_apply_mem z
+    have hv : v ∈ Uᗮ := Uᗮ.starProjection_apply_mem z
+    have hCu : C u ∈ U := by
+      apply U.starProjection_eq_self_iff.mp
+      have h := congrArg (fun T : H →L[ℂ] H => T u) hCP.eq
+      rw [mul_apply_eq_comp, mul_apply_eq_comp,
+        U.starProjection_eq_self_iff.mpr hu] at h
+      exact h.symm
+    have hCv : C v ∈ Uᗮ := by
+      apply Uᗮ.starProjection_eq_self_iff.mp
+      have h := congrArg (fun T : H →L[ℂ] H => T v) hCPc.eq
+      rw [mul_apply_eq_comp, mul_apply_eq_comp,
+        Uᗮ.starProjection_eq_self_iff.mpr hv] at h
+      exact h.symm
+    have hzuv : u + v = z := by
+      change U.starProjection z + Uᗮ.starProjection z = z
+      rw [Submodule.starProjection_orthogonal_val]
+      abel
+    have hCuv : C u + C v = C z := by rw [← map_add, hzuv]
+    have huv : ⟪u, v⟫_ℂ = 0 :=
+      Submodule.inner_right_of_mem_orthogonal hu hv
+    have hCuvorth : ⟪C u, C v⟫_ℂ = 0 :=
+      Submodule.inner_right_of_mem_orthogonal hCu hCv
+    have hnormz : ‖z‖ ^ 2 = ‖u‖ ^ 2 + ‖v‖ ^ 2 := by
+      rw [← hzuv, norm_add_sq (𝕜 := ℂ), huv, map_zero]
+      ring
+    have hnormC : ‖C z‖ ^ 2 = ‖C u‖ ^ 2 + ‖C v‖ ^ 2 := by
+      rw [← hCuv, norm_add_sq (𝕜 := ℂ), hCuvorth, map_zero]
+      ring
+    have huLow := hlowU u hu
+    have hvLow := hlowUc v hv
+    have huSq0 : (c * ‖u‖) ^ 2 ≤ ‖C u‖ ^ 2 :=
+      (sq_le_sq₀ (mul_nonneg hc.le (norm_nonneg u))
+        (norm_nonneg (C u))).2 huLow
+    have hvSq0 : (c * ‖v‖) ^ 2 ≤ ‖C v‖ ^ 2 :=
+      (sq_le_sq₀ (mul_nonneg hc.le (norm_nonneg v))
+        (norm_nonneg (C v))).2 hvLow
+    have huSq : c ^ 2 * ‖u‖ ^ 2 ≤ ‖C u‖ ^ 2 := by
+      calc
+        c ^ 2 * ‖u‖ ^ 2 = (c * ‖u‖) ^ 2 := by ring
+        _ ≤ ‖C u‖ ^ 2 := huSq0
+    have hvSq : c ^ 2 * ‖v‖ ^ 2 ≤ ‖C v‖ ^ 2 := by
+      calc
+        c ^ 2 * ‖v‖ ^ 2 = (c * ‖v‖) ^ 2 := by ring
+        _ ≤ ‖C v‖ ^ 2 := hvSq0
+    have hsq : (c * ‖z‖) ^ 2 ≤ ‖C z‖ ^ 2 := by
+      rw [show (c * ‖z‖) ^ 2 = c ^ 2 * ‖z‖ ^ 2 by ring,
+        hnormz, hnormC]
+      nlinarith only [huSq, hvSq]
+    exact (sq_le_sq₀ (mul_nonneg hc.le (norm_nonneg z))
+      (norm_nonneg (C z))).mp hsq
+  let Cunit := spectraCanonicalAbsoluteValueUnit U V hacute
+  let R : H →L[ℂ] H := (↑(Cunit⁻¹) : H →L[ℂ] H)
+  have hCcoe : (Cunit : H →L[ℂ] H) = C := by
+    simpa only [Cunit, C] using
+      coe_spectraCanonicalAbsoluteValueUnit U V hacute
+  have hCR : C * R = 1 := by
+    rw [← hCcoe]
+    dsimp [R]
+    exact Cunit.mul_inv
+  have hRC : R * C = 1 := by
+    rw [← hCcoe]
+    dsimp [R]
+    exact Cunit.inv_mul
+  have hRsa : IsSelfAdjoint R := by
+    have hstarRC : star R * C = 1 := by
+      have h := congrArg star hCR
+      have hCsa : star C = C :=
+        (spectraOperatorAbsoluteValue_isSelfAdjoint
+          (spectraCanonicalIntertwiner U V)).star_eq
+      simpa only [star_mul, star_one, hCsa] using h
+    show star R = R
+    calc
+      star R = star R * 1 := (mul_one _).symm
+      _ = star R * (C * R) := by rw [hCR]
+      _ = (star R * C) * R := by rw [← mul_assoc]
+      _ = R := by rw [hstarRC, one_mul]
+  have hRpos : ∀ z : H, 0 ≤ RCLike.re ⟪R z, z⟫_ℂ := by
+    intro z
+    have hCpos :=
+      (ContinuousLinearMap.nonneg_iff_isPositive C).mp
+        (spectraOperatorAbsoluteValue_nonneg
+          (spectraCanonicalIntertwiner U V))
+    have hz : C (R z) = z := by
+      have h := congrArg (fun T : H →L[ℂ] H => T z) hCR
+      simpa only [mul_apply_eq_comp, one_apply_eq_self] using h
+    calc
+      0 ≤ RCLike.re ⟪C (R z), R z⟫_ℂ :=
+        hCpos.re_inner_nonneg_left (R z)
+      _ = RCLike.re ⟪R z, C (R z)⟫_ℂ :=
+        inner_re_symm (𝕜 := ℂ) (C (R z)) (R z)
+      _ = RCLike.re ⟪R z, z⟫_ℂ := by rw [hz]
+  have hRnorm : ‖R‖ ≤ c⁻¹ := by
+    refine R.opNorm_le_bound (inv_nonneg.mpr hc.le) ?_
+    intro z
+    have h := hlow (R z)
+    have hz : C (R z) = z := by
+      have h' := congrArg (fun T : H →L[ℂ] H => T z) hCR
+      simpa only [mul_apply_eq_comp, one_apply_eq_self] using h'
+    have h' : c * ‖R z‖ ≤ ‖z‖ := by simpa only [hz] using h
+    exact (le_inv_mul_iff₀ hc).2 h'
+  have hCcoer : ∀ z : H,
+      c * ‖z‖ ^ 2 ≤ RCLike.re ⟪C z, z⟫_ℂ := by
+    intro z
+    have hRbound := ForMathlib.ContinuousLinearMap.norm_apply_sq_le_of_positive
+      hRsa.isSymmetric hRpos (C z)
+    have hRCz : R (C z) = z := by
+      have h := congrArg (fun T : H →L[ℂ] H => T z) hRC
+      simpa only [mul_apply_eq_comp, one_apply_eq_self] using h
+    have hform : RCLike.re ⟪R (C z), C z⟫_ℂ =
+        RCLike.re ⟪C z, z⟫_ℂ := by
+      calc
+        RCLike.re ⟪R (C z), C z⟫_ℂ = RCLike.re ⟪z, C z⟫_ℂ := by
+          rw [hRCz]
+        _ = RCLike.re ⟪C z, z⟫_ℂ :=
+          inner_re_symm (𝕜 := ℂ) z (C z)
+    have hRbound' : ‖z‖ ^ 2 ≤
+        ‖R‖ * RCLike.re ⟪C z, z⟫_ℂ := by
+      calc
+        ‖z‖ ^ 2 = ‖R (C z)‖ ^ 2 := by rw [hRCz]
+        _ ≤ ‖R‖ * RCLike.re ⟪R (C z), C z⟫_ℂ := hRbound
+        _ = ‖R‖ * RCLike.re ⟪C z, z⟫_ℂ := by rw [hform]
+    have hCpos :=
+      (ContinuousLinearMap.nonneg_iff_isPositive C).mp
+        (spectraOperatorAbsoluteValue_nonneg
+          (spectraCanonicalIntertwiner U V))
+    have hz0 := hCpos.re_inner_nonneg_left z
+    have hmul := mul_le_mul_of_nonneg_right hRnorm hz0
+    have hzf : ‖z‖ ^ 2 ≤ c⁻¹ * RCLike.re ⟪C z, z⟫_ℂ :=
+      hRbound'.trans hmul
+    have hci : c * c⁻¹ = 1 := mul_inv_cancel₀ hc.ne'
+    calc
+      c * ‖z‖ ^ 2 ≤ c * (c⁻¹ * RCLike.re ⟪C z, z⟫_ℂ) :=
+        mul_le_mul_of_nonneg_left hzf hc.le
+      _ = RCLike.re ⟪C z, z⟫_ℂ := by
+        rw [← mul_assoc, hci, one_mul]
+  refine (D - 1).opNorm_le_bound (norm_nonneg (W - 1)) ?_
+  intro x
+  have hDdisp := norm_sub_one_apply_sq_of_mem_unitary D hDunit x
+  have hDform := re_inner_spectraDirectRotation_eq_absoluteValue U V hacute x
+  have hcoer := hCcoer x
+  rw [RCLike.re_eq_complex_re] at hDdisp hDform hcoer
+  have hsq : ‖(D - 1) x‖ ^ 2 ≤ (r * ‖x‖) ^ 2 := by
+    calc
+      ‖(D - 1) x‖ ^ 2 =
+          2 * ‖x‖ ^ 2 - 2 * (⟪D x, x⟫_ℂ).re := hDdisp
+      _ = 2 * ‖x‖ ^ 2 - 2 * (⟪C x, x⟫_ℂ).re := by rw [hDform]
+      _ ≤ r ^ 2 * ‖x‖ ^ 2 := by
+        dsimp [c] at hcoer
+        nlinarith only [hcoer]
+      _ = (r * ‖x‖) ^ 2 := by ring
+  have hle : ‖(D - 1) x‖ ≤ r * ‖x‖ :=
+    (sq_le_sq₀ (norm_nonneg _)
+      (mul_nonneg hr0 (norm_nonneg x))).mp hsq
+  simpa only [r] using hle
 
 end SpectraBridge
 end Experimental

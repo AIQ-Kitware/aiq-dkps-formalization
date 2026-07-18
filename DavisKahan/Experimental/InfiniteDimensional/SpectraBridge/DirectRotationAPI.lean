@@ -274,5 +274,19 @@ theorem star_complexDirectRotation_maps_orthogonalComplement
   _root_.ForMathlib.DavisKahan.Experimental.SpectraBridge.star_spectraDirectRotation_maps_orthogonalComplement
     U V hacute
 
+
+/-- The complex direct rotation minimizes operator-norm displacement from the
+identity among unitary projection intertwiners. -/
+theorem complexDirectRotation_minimal
+    (U V : Submodule ℂ H)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hacute : IsAcute U V)
+    (W : H →L[ℂ] H) (hWunit : W ∈ unitary (H →L[ℂ] H))
+    (hintertwine : W ∘L projection U = projection V ∘L W) :
+    ‖complexDirectRotation U V hacute - 1‖ ≤ ‖W - 1‖ := by
+  apply _root_.ForMathlib.DavisKahan.Experimental.SpectraBridge.spectraDirectRotation_minimal
+    U V hacute W hWunit
+  simpa only [ContinuousLinearMap.mul_def] using hintertwine
+
 end DavisKahanExt
 end ForMathlib
