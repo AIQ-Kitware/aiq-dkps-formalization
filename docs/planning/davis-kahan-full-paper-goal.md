@@ -842,3 +842,22 @@ star-instance path and fail as `rw` patterns on `E →L[𝕜] E`.  Aliases:
 `graph_gap_value`, `graph_subspaceGap`, `graph_tan_maximalAngle`,
 `graph_contractive_iff_quarterAcute`, `bounded_inverse_defect_norm`,
 `bounded_positive_cauchy_schwarz`, `bounded_one_add_star_mul_self_isUnit`.
+
+
+### Progress note (2026-07-18, real operator-angle complexification)
+
+The independent real-angle bridge is now implemented without touching the
+approximation-number or Ky Fan layers. `Core/ComplexificationSubspace.lean`
+complexifies real subspaces coordinatewise and proves exact transport of
+orthogonal complements, orthogonal projections, symmetric and directed gaps,
+acuteness thresholds, and reducing-subspace data. In particular, the
+projection onto the complexified subspace is identified exactly with
+the complexification of the original real projection.
+
+`Core/OperatorAngleReal.lean` then applies the completed complex operator-angle
+calculus to those complexified subspaces. It supplies real-subspace wrappers
+for sine, directed sine, cosine, double-angle sine, tangent, and double-angle
+tangent, with exact real gap norm identities, operator Pythagoras, commutation,
+and the acute/quarter-acute tangent defining identities. The remaining descent
+seam is narrower: prove the conjugation-invariant angle operators preserve the
+canonical real copy when an actual real-valued angle operator is required.

@@ -6,9 +6,11 @@ Authors: Jon Crall, GPT 5.6 High
 import DavisKahan.Experimental.InfiniteDimensional.Core.AbstractSpectrum
 import DavisKahan.Experimental.InfiniteDimensional.Core.Compatibility
 import DavisKahan.Experimental.InfiniteDimensional.Core.Complexification
+import DavisKahan.Experimental.InfiniteDimensional.Core.ComplexificationSubspace
 import DavisKahan.Experimental.InfiniteDimensional.Core.Forms
 import DavisKahan.Experimental.InfiniteDimensional.Core.OperatorAngle
 import DavisKahan.Experimental.InfiniteDimensional.Core.OperatorAngleComplex
+import DavisKahan.Experimental.InfiniteDimensional.Core.OperatorAngleReal
 import DavisKahan.Experimental.InfiniteDimensional.Core.RealContinuousFunctionalCalculus
 import DavisKahan.Experimental.InfiniteDimensional.Core.RealSpectralBridge
 import DavisKahan.Experimental.InfiniteDimensional.Core.SpectralProjection
