@@ -6,6 +6,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.Basic
 import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.ClosedOperator
 import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.PVMSubspace
+import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.SpectralRestriction
 import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.OperatorAbsoluteValue
 import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.ApproximationNumberMinMax
 import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.SinAngle
@@ -15,6 +16,7 @@ import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.DirectRotationS
 import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.GapResolvent
 import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.BoundedFromSpectrum
 import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.UnboundedIntervalExterior
+import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.BoundedPerturbationSinTheta
 
 /-!
 # Active Spectra bridge
