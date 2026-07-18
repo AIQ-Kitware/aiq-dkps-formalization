@@ -4,7 +4,10 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Experimental.InfiniteDimensional.Sylvester.Bounded
+import ForMathlib.Analysis.InnerProductSpace.CoerciveUnit
+import Mathlib.Analysis.InnerProductSpace.StarOrder
 import Mathlib.Analysis.Normed.Group.Uniform
+import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Rpow.Basic
 
 /-!
 # Infinite-dimensional lower-frame factorization
@@ -20,6 +23,8 @@ namespace Experimental
 namespace ExactSinTheta
 
 open scoped InnerProductSpace
+
+section Generic
 
 universe u v
 
@@ -173,46 +178,187 @@ def lowerFramePolarDataOfIsometry
   · intro _
     rfl
 
-/-- Existence of the bounded-below polar package.  Its eventual proof should
-come from the positive continuous functional calculus for the Gram operator. -/
+end Generic
+
+section Complex
+
+universe v
+
+variable {E F G : Type v}
+  [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
+  [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
+  [NormedAddCommGroup G] [InnerProductSpace ℂ G] [CompleteSpace G]
+
+/-- Existence of the bounded-below polar package over a complex Hilbert
+space.  The Gram operator is strictly positive by the lower-frame estimate;
+its real powers supply the square root and inverse square root. -/
 theorem lowerFramePolarData_nonempty
-    (X : F →L[𝕜] E) {ε : ℝ}
+    (X : F →L[ℂ] E) {ε : ℝ}
     (hX : LowerFrameBound X ε) (hε : 0 < ε) :
     Nonempty (LowerFramePolarData X ε hX hε) := by
-  sorry
+  let gram : F →L[ℂ] F := X.adjoint ∘L X
+  have hgram_nonneg : 0 ≤ gram := by
+    exact (ContinuousLinearMap.nonneg_iff_isPositive gram).2
+      (ContinuousLinearMap.isPositive_adjoint_comp_self X)
+  have hgram_unit : IsUnit gram := by
+    refine ForMathlib.ContinuousLinearMap.isUnit_of_coercive
+      (sq_pos_of_pos hε) ?_
+    simpa [gram] using gram_coercive hX hε.le
+  let sqrt : F →L[ℂ] F := gram ^ (1 / 2 : ℝ)
+  let invSqrt : F →L[ℂ] F := gram ^ (-1 / 2 : ℝ)
+  let gramInv : F →L[ℂ] F := Ring.inverse gram
+  have hinvSqrt_sqrt : invSqrt ∘L sqrt = ContinuousLinearMap.id ℂ F := by
+    change invSqrt * sqrt = 1
+    calc
+      invSqrt * sqrt = gram ^ (-1 / 2 : ℝ) * gram ^ (1 / 2 : ℝ) := by
+        rfl
+      _ = gram ^ ((-1 / 2 : ℝ) + (1 / 2 : ℝ)) :=
+        (CFC.rpow_add hgram_unit).symm
+      _ = gram ^ (0 : ℝ) := by norm_num
+      _ = 1 := CFC.rpow_zero gram hgram_nonneg
+  have hsqrt_invSqrt : sqrt ∘L invSqrt = ContinuousLinearMap.id ℂ F := by
+    change sqrt * invSqrt = 1
+    calc
+      sqrt * invSqrt = gram ^ (1 / 2 : ℝ) * gram ^ (-1 / 2 : ℝ) := by
+        rfl
+      _ = gram ^ ((1 / 2 : ℝ) + (-1 / 2 : ℝ)) :=
+        (CFC.rpow_add hgram_unit).symm
+      _ = gram ^ (0 : ℝ) := by norm_num
+      _ = 1 := CFC.rpow_zero gram hgram_nonneg
+  have hsqrt_sq : sqrt ∘L sqrt = X.adjoint ∘L X := by
+    change sqrt * sqrt = gram
+    calc
+      sqrt * sqrt = gram ^ (1 / 2 : ℝ) * gram ^ (1 / 2 : ℝ) := by
+        rfl
+      _ = gram ^ ((1 / 2 : ℝ) + (1 / 2 : ℝ)) :=
+        (CFC.rpow_add hgram_unit).symm
+      _ = gram ^ (1 : ℝ) := by norm_num
+      _ = gram := CFC.rpow_one gram hgram_nonneg
+  have hinvSqrt_adjoint : invSqrt.adjoint = invSqrt := by
+    simpa only [ContinuousLinearMap.star_eq_adjoint] using
+      (CFC.rpow_nonneg (a := gram) (y := (-1 / 2 : ℝ))).isSelfAdjoint.star_eq
+  have hinvSqrt_gram : invSqrt ∘L gram = sqrt := by
+    change invSqrt * gram = sqrt
+    calc
+      invSqrt * gram = gram ^ (-1 / 2 : ℝ) * gram ^ (1 : ℝ) := by
+        rw [CFC.rpow_one gram hgram_nonneg]
+      _ = gram ^ ((-1 / 2 : ℝ) + (1 : ℝ)) :=
+        (CFC.rpow_add hgram_unit).symm
+      _ = gram ^ (1 / 2 : ℝ) := by norm_num
+      _ = sqrt := rfl
+  have hnormalized_gram :
+      (X ∘L invSqrt).adjoint ∘L (X ∘L invSqrt) =
+        ContinuousLinearMap.id ℂ F := by
+    rw [ContinuousLinearMap.adjoint_comp, hinvSqrt_adjoint]
+    calc
+      (invSqrt ∘L X.adjoint) ∘L (X ∘L invSqrt) =
+          invSqrt ∘L ((X.adjoint ∘L X) ∘L invSqrt) := by
+        simp only [ContinuousLinearMap.comp_assoc]
+      _ = (invSqrt ∘L gram) ∘L invSqrt := by
+        simp only [gram, ContinuousLinearMap.comp_assoc]
+      _ = sqrt ∘L invSqrt := by rw [hinvSqrt_gram]
+      _ = ContinuousLinearMap.id ℂ F := hsqrt_invSqrt
+  have hnormalized : IsometricEmbedding (X ∘L invSqrt) := by
+    intro x
+    have hinner :
+        ⟪(X ∘L invSqrt) x, (X ∘L invSqrt) x⟫_ℂ = ⟪x, x⟫_ℂ := by
+      calc
+        ⟪(X ∘L invSqrt) x, (X ∘L invSqrt) x⟫_ℂ =
+            ⟪((X ∘L invSqrt).adjoint ∘L (X ∘L invSqrt)) x, x⟫_ℂ := by
+          simpa only [ContinuousLinearMap.comp_apply] using
+            ((X ∘L invSqrt).adjoint_inner_left x ((X ∘L invSqrt) x)).symm
+        _ = ⟪x, x⟫_ℂ := by rw [hnormalized_gram]; simp
+    have hsquare : ‖(X ∘L invSqrt) x‖ ^ 2 = ‖x‖ ^ 2 := by
+      rw [norm_sq_eq_re_inner (𝕜 := ℂ),
+        norm_sq_eq_re_inner (𝕜 := ℂ), hinner]
+    nlinarith [norm_nonneg ((X ∘L invSqrt) x), norm_nonneg x]
+  have hfactorization : X = (X ∘L invSqrt) ∘L sqrt := by
+    symm
+    calc
+      (X ∘L invSqrt) ∘L sqrt = X ∘L (invSqrt ∘L sqrt) :=
+        ContinuousLinearMap.comp_assoc _ _ _
+      _ = X := by rw [hinvSqrt_sqrt]; simp
+  have hinvSqrt_norm : ‖invSqrt‖ ≤ ε⁻¹ := by
+    refine invSqrt.opNorm_le_bound (inv_nonneg.mpr hε.le) ?_
+    intro x
+    rw [le_inv_mul_iff₀ hε]
+    calc
+      ε * ‖invSqrt x‖ ≤ ‖X (invSqrt x)‖ := hX (invSqrt x)
+      _ = ‖x‖ := hnormalized x
+  have hrange :
+      LinearMap.range (X ∘L invSqrt).toLinearMap =
+        LinearMap.range X.toLinearMap := by
+    apply le_antisymm
+    · rintro y ⟨x, rfl⟩
+      exact ⟨invSqrt x, rfl⟩
+    · rintro y ⟨x, rfl⟩
+      refine ⟨sqrt x, ?_⟩
+      have hx := DFunLike.congr_fun hfactorization x
+      exact hx.symm
+  have hgramInv_left :
+      gramInv ∘L gram = ContinuousLinearMap.id ℂ F := by
+    change gramInv * gram = 1
+    exact Ring.inverse_mul_cancel gram hgram_unit
+  have hgramInv_right :
+      gram ∘L gramInv = ContinuousLinearMap.id ℂ F := by
+    change gram * gramInv = 1
+    exact Ring.mul_inverse_cancel gram hgram_unit
+  refine ⟨{
+    sqrt := sqrt
+    invSqrt := invSqrt
+    gramInverse := {
+      inv := gramInv
+      left_inv := by simpa [gram] using hgramInv_left
+      right_inv := by simpa [gram] using hgramInv_right
+    }
+    invSqrt_sqrt := hinvSqrt_sqrt
+    sqrt_invSqrt := hsqrt_invSqrt
+    sqrt_sq := hsqrt_sq
+    normalized_isometry := hnormalized
+    factorization := hfactorization
+    invSqrt_norm_le := hinvSqrt_norm
+    range_normalized := hrange
+    invSqrt_eq_id_of_isometry := ?_
+  }⟩
+  intro hIso
+  have hgram_id : gram = ContinuousLinearMap.id ℂ F := by
+    simpa [gram] using adjoint_comp_self_eq_id_of_isometry hIso
+  change gram ^ (-1 / 2 : ℝ) = ContinuousLinearMap.id ℂ F
+  rw [hgram_id]
+  exact CFC.one_rpow
 
 /-- The selected proof-carrying lower-frame polar package. -/
 noncomputable def lowerFramePolarData
-    (X : F →L[𝕜] E) {ε : ℝ}
+    (X : F →L[ℂ] E) {ε : ℝ}
     (hX : LowerFrameBound X ε) (hε : 0 < ε) :
     LowerFramePolarData X ε hX hε :=
   Classical.choice (lowerFramePolarData_nonempty X hX hε)
 
 /-- Bounded inverse of the positive Gram operator. -/
 noncomputable def gramInverseData
-    (X : F →L[𝕜] E) {ε : ℝ}
+    (X : F →L[ℂ] E) {ε : ℝ}
     (hX : LowerFrameBound X ε) (hε : 0 < ε) :
     BoundedInverseData (X.adjoint ∘L X) :=
   (lowerFramePolarData X hX hε).gramInverse
 
 /-- Inverse square root of the Gram operator. -/
 noncomputable def gramInvSqrt
-    (X : F →L[𝕜] E) {ε : ℝ}
+    (X : F →L[ℂ] E) {ε : ℝ}
     (hX : LowerFrameBound X ε) (hε : 0 < ε) :
-    F →L[𝕜] F :=
+    F →L[ℂ] F :=
   (lowerFramePolarData X hX hε).invSqrt
 
 /-- Square root of the Gram operator. -/
 noncomputable def gramSqrt
-    (X : F →L[𝕜] E) {ε : ℝ}
-    (hX : LowerFrameBound X ε) (hε : 0 < ε) : F →L[𝕜] F :=
+    (X : F →L[ℂ] E) {ε : ℝ}
+    (hX : LowerFrameBound X ε) (hε : 0 < ε) : F →L[ℂ] F :=
   (lowerFramePolarData X hX hε).sqrt
 
 /-- Isometric polar factor of a bounded-below trial map. -/
 noncomputable def frameIsometry
-    (X : F →L[𝕜] E) {ε : ℝ}
+    (X : F →L[ℂ] E) {ε : ℝ}
     (hX : LowerFrameBound X ε) (hε : 0 < ε) :
-    F →L[𝕜] E :=
+    F →L[ℂ] E :=
   X ∘L gramInvSqrt X hX hε
 
 /-- For an isometric trial map, the lower-frame polar factor is the trial
@@ -220,11 +366,11 @@ map itself.  This is the bridge used to derive the isometric theorem from the
 generalized lower-frame theorem rather than maintaining two independent
 canonical proofs. -/
 theorem frameIsometry_eq_of_isometry
-    (X : F →L[𝕜] E) (hX : IsometricEmbedding X) :
+    (X : F →L[ℂ] E) (hX : IsometricEmbedding X) :
     frameIsometry X (lowerFrameBound_one_of_isometry hX) zero_lt_one = X := by
   have hinv :
       gramInvSqrt X (lowerFrameBound_one_of_isometry hX) zero_lt_one =
-        ContinuousLinearMap.id 𝕜 F :=
+        ContinuousLinearMap.id ℂ F :=
     (lowerFramePolarData X
       (lowerFrameBound_one_of_isometry hX) zero_lt_one).invSqrt_eq_id_of_isometry hX
   unfold frameIsometry
@@ -233,7 +379,7 @@ theorem frameIsometry_eq_of_isometry
 
 /-- The polar factor preserves norms. -/
 theorem frameIsometry_isometry
-    (X : F →L[𝕜] E) {ε : ℝ}
+    (X : F →L[ℂ] E) {ε : ℝ}
     (hX : LowerFrameBound X ε) (hε : 0 < ε) :
     IsometricEmbedding (frameIsometry X hX hε) := by
   simpa [frameIsometry, gramInvSqrt] using
@@ -241,7 +387,7 @@ theorem frameIsometry_isometry
 
 /-- Polar factorization of the trial map. -/
 theorem frameFactorization
-    (X : F →L[𝕜] E) {ε : ℝ}
+    (X : F →L[ℂ] E) {ε : ℝ}
     (hX : LowerFrameBound X ε) (hε : 0 < ε) :
     X = frameIsometry X hX hε ∘L gramSqrt X hX hε := by
   simpa [frameIsometry, gramInvSqrt, gramSqrt] using
@@ -249,7 +395,7 @@ theorem frameFactorization
 
 /-- Quantitative inverse-square-root estimate. -/
 theorem norm_gramInvSqrt_le
-    (X : F →L[𝕜] E) {ε : ℝ}
+    (X : F →L[ℂ] E) {ε : ℝ}
     (hX : LowerFrameBound X ε) (hε : 0 < ε) :
     ‖gramInvSqrt X hX hε‖ ≤ ε⁻¹ := by
   simpa [gramInvSqrt] using
@@ -257,7 +403,7 @@ theorem norm_gramInvSqrt_le
 
 /-- The range of the polar factor agrees with the range of the trial map. -/
 theorem range_frameIsometry_eq_range
-    (X : F →L[𝕜] E) {ε : ℝ}
+    (X : F →L[ℂ] E) {ε : ℝ}
     (hX : LowerFrameBound X ε) (hε : 0 < ε) :
     LinearMap.range (frameIsometry X hX hε).toLinearMap =
       LinearMap.range X.toLinearMap := by
@@ -266,15 +412,15 @@ theorem range_frameIsometry_eq_range
 
 /-- Directed sine block used in the paper-facing generalized theorem. -/
 noncomputable def sinThetaBlock
-    (X : F →L[𝕜] E) (F₁ : G →L[𝕜] E) {ε : ℝ}
+    (X : F →L[ℂ] E) (F₁ : G →L[ℂ] E) {ε : ℝ}
     (hX : LowerFrameBound X ε) (hε : 0 < ε) :
-    G →L[𝕜] F :=
+    G →L[ℂ] F :=
   (frameIsometry X hX hε).adjoint ∘L F₁
 
 /-- Lower-frame transport from the raw complementary block to the sine block. -/
 theorem lowerFrame_sinThetaBlock_mem_and_gauge_le
-    (N : RectangularSymmetricIdealFamily (𝕜 := 𝕜))
-    (X : F →L[𝕜] E) (F₁ : G →L[𝕜] E) {ε : ℝ}
+    (N : RectangularSymmetricIdealFamily (𝕜 := ℂ))
+    (X : F →L[ℂ] E) (F₁ : G →L[ℂ] E) {ε : ℝ}
     (hX : LowerFrameBound X ε) (hε : 0 < ε)
     (hRaw : N.Mem (X.adjoint ∘L F₁)) :
     N.Mem (sinThetaBlock X F₁ hX hε) ∧
@@ -305,6 +451,8 @@ theorem lowerFrame_sinThetaBlock_mem_and_gauge_le
       mul_le_mul_of_nonneg_left hgauge hε.le
     _ = N.gauge (X.adjoint ∘L F₁) := by
       rw [← mul_assoc, mul_inv_cancel₀ hε.ne', one_mul]
+
+end Complex
 
 end ExactSinTheta
 end Experimental
