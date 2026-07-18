@@ -4,13 +4,20 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Experimental.InfiniteDimensional.Core.UnboundedSpectral
+import ForMathlib.Analysis.Normed.Operator.ApproximationNumber
 
 /-!
 # Approximation numbers and strong spectral cutoffs
 
-Davis--Kahan Lemma 5.1 passes from bounded spectral truncations to the original
-operator one singular value at a time.  These declarations expose the required
-approximation-number and Ky Fan convergence results separately.
+This module supplies the infinite-dimensional finite-Ky-Fan layer used by the
+unbounded Davis--Kahan cutoff proof.  Approximation numbers are no longer an
+opaque placeholder: they are the real coercions of the finite-rank infima in
+`ForMathlib.Analysis.Normed.Operator.ApproximationNumber`.
+
+The algebraic s-number laws, fixed-Ky-Fan norm construction, completeness, and
+scaled Fan-dominance assembly are proved here.  The remaining analytic seams
+are isolated as the adjoint invariance of approximation numbers, Ky Fan's
+addition inequality, and convergence under strong orthogonal cutoffs.
 -/
 
 namespace ForMathlib
@@ -38,45 +45,66 @@ def StronglyTendsto {ι : Type w} (T : ι → E →L[𝕜] E)
 def IsOrthogonalProjectionMap (P : E →L[𝕜] E) : Prop :=
   P ∘L P = P ∧ P.IsSymmetric
 
-/-- Zero-based approximation singular value.  The intended definition is the
-operator-norm distance to operators of rank at most `n`; in particular index
-zero is the operator norm. -/
+/-- Zero-based approximation singular value, defined as the operator-norm
+ distance to maps of rank at most `n`. -/
 noncomputable def approximationSingularValue
-    (n : ℕ) (K : E →L[𝕜] F) : ℝ := by
-  sorry
+    (n : ℕ) (K : E →L[𝕜] F) : ℝ :=
+  K.approximationNumber n
 
 /-- Approximation singular values are nonnegative. -/
 theorem approximationSingularValue_nonneg
     (n : ℕ) (K : E →L[𝕜] F) :
     0 ≤ approximationSingularValue n K := by
-  sorry
+  exact_mod_cast K.approximationNumber_nonneg n
+
+/-- Approximation singular values of the zero map vanish. -/
+@[simp]
+theorem approximationSingularValue_zero_map (n : ℕ) :
+    approximationSingularValue n (0 : E →L[𝕜] F) = 0 := by
+  have h := congrArg (fun x : NNReal => (x : ℝ))
+    (ContinuousLinearMap.zero_approximationNumber
+      (𝕜 := 𝕜) (E := E) (F := F) n)
+  simpa only [approximationSingularValue, NNReal.coe_zero] using h
 
 /-- The zero-based first approximation singular value is the operator norm. -/
+@[simp]
 theorem approximationSingularValue_zero
     (K : E →L[𝕜] F) :
     approximationSingularValue 0 K = ‖K‖ := by
-  sorry
+  have h := congrArg (fun x : NNReal => (x : ℝ))
+    K.approximationNumber_zero
+  simpa only [approximationSingularValue, coe_nnnorm] using h
 
 /-- Approximation singular values are absolutely homogeneous. -/
 theorem approximationSingularValue_smul
     (n : ℕ) (c : 𝕜) (K : E →L[𝕜] F) :
     approximationSingularValue n (c • K) =
       ‖c‖ * approximationSingularValue n K := by
-  sorry
+  have h := congrArg (fun x : NNReal => (x : ℝ))
+    (ContinuousLinearMap.approximationNumber_smul c K n)
+  simpa only [approximationSingularValue, NNReal.coe_mul, coe_nnnorm] using h
 
 /-- Approximation singular values decrease with the index. -/
 theorem approximationSingularValue_antitone
     (K : E →L[𝕜] F) :
     Antitone (fun n => approximationSingularValue n K) := by
-  sorry
+  intro n m hnm
+  exact_mod_cast K.antitone_approximationNumber hnm
 
-/-- The first approximation singular value is controlled by operator norm. -/
+/-- Every approximation singular value is controlled by operator norm. -/
 theorem approximationSingularValue_le_opNorm
     (n : ℕ) (K : E →L[𝕜] F) :
     approximationSingularValue n K ≤ ‖K‖ := by
-  sorry
+  exact_mod_cast K.approximationNumber_le_nnnorm n
 
-/-- Adjoint invariance of approximation singular values. -/
+/-- Perturbation inequality at a fixed approximation index. -/
+theorem approximationSingularValue_add_le
+    (n : ℕ) (K L : E →L[𝕜] F) :
+    approximationSingularValue n (K + L) ≤
+      approximationSingularValue n K + ‖L‖ := by
+  exact_mod_cast K.approximationNumber_add_le L n
+
+/-- Adjoint invariance of approximation singular values on Hilbert spaces. -/
 theorem approximationSingularValue_adjoint
     (n : ℕ) (K : E →L[𝕜] F) :
     approximationSingularValue n K.adjoint =
@@ -92,9 +120,11 @@ theorem approximationSingularValue_comp_le
     (R : H →L[𝕜] E) :
     approximationSingularValue n (L ∘L K ∘L R)
       ≤ ‖L‖ * approximationSingularValue n K * ‖R‖ := by
-  sorry
+  have h := ContinuousLinearMap.approximationNumber_comp_comp_le L K R n
+  exact_mod_cast h
 
-/-- Continuity of each singular value under strong orthogonal cutoffs. -/
+/-- Continuity of each approximation number under strongly convergent
+orthogonal cutoffs. -/
 theorem approximationSingularValue_comp_strongProjection_tendsto
     {ι : Type w} {P : ι → E →L[𝕜] E} {l : Filter ι}
     (hPproj : ∀ i, IsOrthogonalProjectionMap (P i))
@@ -110,17 +140,43 @@ noncomputable def kyFanApproximationGauge
     (k : ℕ) (K : E →L[𝕜] F) : ℝ :=
   ∑ n ∈ Finset.range k, approximationSingularValue n K
 
+/-- The zero-term Ky Fan gauge vanishes. -/
+@[simp]
+theorem kyFanApproximationGauge_zero :
+    kyFanApproximationGauge 0 (0 : E →L[𝕜] F) = 0 := by
+  simp [kyFanApproximationGauge]
+
+/-- Every finite Ky Fan gauge vanishes on the zero operator. -/
+@[simp]
+theorem kyFanApproximationGauge_zero_map (k : ℕ) :
+    kyFanApproximationGauge k (0 : E →L[𝕜] F) = 0 := by
+  simp [kyFanApproximationGauge]
+
+/-- The first positive Ky Fan gauge is operator norm. -/
+@[simp]
+theorem kyFanApproximationGauge_one (K : E →L[𝕜] F) :
+    kyFanApproximationGauge 1 K = ‖K‖ := by
+  simp [kyFanApproximationGauge]
+
 /-- Ky Fan approximation gauges are absolutely homogeneous. -/
 theorem kyFanApproximationGauge_smul
     (k : ℕ) (c : 𝕜) (K : E →L[𝕜] F) :
     kyFanApproximationGauge k (c • K) =
       ‖c‖ * kyFanApproximationGauge k K := by
-  sorry
+  simp only [kyFanApproximationGauge, approximationSingularValue_smul]
+  rw [Finset.mul_sum]
 
 /-- Ky Fan approximation gauges are nonnegative. -/
 theorem kyFanApproximationGauge_nonneg
     (k : ℕ) (K : E →L[𝕜] F) :
     0 ≤ kyFanApproximationGauge k K := by
+  exact Finset.sum_nonneg fun n hn => approximationSingularValue_nonneg n K
+
+/-- Ky Fan's addition inequality for approximation numbers. -/
+theorem kyFanApproximationGauge_add_le
+    (k : ℕ) (K L : E →L[𝕜] F) :
+    kyFanApproximationGauge k (K + L) ≤
+      kyFanApproximationGauge k K + kyFanApproximationGauge k L := by
   sorry
 
 /-- Ky Fan approximation gauges are invariant under adjoint. -/
@@ -128,7 +184,47 @@ theorem kyFanApproximationGauge_adjoint
     (k : ℕ) (K : E →L[𝕜] F) :
     kyFanApproximationGauge k K.adjoint =
       kyFanApproximationGauge k K := by
-  sorry
+  simp only [kyFanApproximationGauge, approximationSingularValue_adjoint]
+
+/-- Two-sided ideal inequality for finite Ky Fan gauges. -/
+theorem kyFanApproximationGauge_comp_le
+    {G H : Type v}
+    [NormedAddCommGroup G] [InnerProductSpace 𝕜 G] [CompleteSpace G]
+    [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] [CompleteSpace H]
+    (k : ℕ) (L : F →L[𝕜] G) (K : E →L[𝕜] F)
+    (R : H →L[𝕜] E) :
+    kyFanApproximationGauge k (L ∘L K ∘L R) ≤
+      ‖L‖ * kyFanApproximationGauge k K * ‖R‖ := by
+  calc
+    kyFanApproximationGauge k (L ∘L K ∘L R)
+        ≤ ∑ n ∈ Finset.range k,
+          (‖L‖ * approximationSingularValue n K * ‖R‖) := by
+      apply Finset.sum_le_sum
+      intro n hn
+      exact approximationSingularValue_comp_le n L K R
+    _ = ‖L‖ * kyFanApproximationGauge k K * ‖R‖ := by
+      simp only [kyFanApproximationGauge, Finset.mul_sum, Finset.sum_mul]
+
+/-- The operator norm is the first term of every positive finite Ky Fan gauge. -/
+theorem opNorm_le_kyFanApproximationGauge
+    {k : ℕ} (hk : 0 < k) (K : E →L[𝕜] F) :
+    ‖K‖ ≤ kyFanApproximationGauge k K := by
+  rw [← approximationSingularValue_zero K]
+  exact Finset.single_le_sum
+    (fun n hn => approximationSingularValue_nonneg n K)
+    (Finset.mem_range.mpr hk)
+
+/-- A finite Ky Fan gauge is bounded by `k` times operator norm. -/
+theorem kyFanApproximationGauge_le_nat_mul_opNorm
+    (k : ℕ) (K : E →L[𝕜] F) :
+    kyFanApproximationGauge k K ≤ (k : ℝ) * ‖K‖ := by
+  calc
+    kyFanApproximationGauge k K
+        ≤ ∑ n ∈ Finset.range k, ‖K‖ := by
+      apply Finset.sum_le_sum
+      intro n hn
+      exact approximationSingularValue_le_opNorm n K
+    _ = (k : ℝ) * ‖K‖ := by simp
 
 /-- Ky Fan gauges converge under strong orthogonal cutoffs. -/
 theorem kyFanApproximationGauge_comp_strongProjection_tendsto
@@ -139,14 +235,13 @@ theorem kyFanApproximationGauge_comp_strongProjection_tendsto
     Tendsto
       (fun i => kyFanApproximationGauge k (K ∘L P i))
       l (𝓝 (kyFanApproximationGauge k K)) := by
-  sorry
+  simp only [kyFanApproximationGauge]
+  exact tendsto_finset_sum (Finset.range k)
+    (fun n hn => approximationSingularValue_comp_strongProjection_tendsto
+      hPproj hP n K)
 
 /-- A rectangular ideal family whose gauge is fully symmetric with respect
-    to all finite Ky Fan approximation gauges.
-
-This is intentionally stronger than `RectangularSymmetricIdealFamily`.  The
-ordinary two-sided ideal and completeness laws do not imply Fan dominance on
-nonseparable Hilbert spaces. -/
+    to all finite Ky Fan approximation gauges. -/
 structure KyFanDominantIdealFamily (𝕜 : Type u) [RCLike 𝕜] where
   toRectangularSymmetricIdealFamily :
     RectangularSymmetricIdealFamily (𝕜 := 𝕜)
@@ -163,9 +258,7 @@ structure KyFanDominantIdealFamily (𝕜 : Type u) [RCLike 𝕜] where
           toRectangularSymmetricIdealFamily.gauge B
 
 /-- Source-facing name for the infinite-dimensional unitarily invariant norm
-families supported by the Davis--Kahan cutoff proof.  The finite-Ky-Fan
-majorization law is part of the abstraction, not an extra theorem inferred from
-ordinary Banach ideal laws. -/
+families supported by the Davis--Kahan cutoff proof. -/
 abbrev UnitaryInvariantIdealFamily
     (𝕜 : Type u) [RCLike 𝕜] :=
   KyFanDominantIdealFamily (𝕜 := 𝕜)
@@ -174,72 +267,114 @@ namespace KyFanDominantIdealFamily
 
 /-- The ordinary operator norm with its finite-Ky-Fan dominance property. -/
 noncomputable def operatorNorm :
-    KyFanDominantIdealFamily (𝕜 := 𝕜) := by
-  sorry
+    KyFanDominantIdealFamily (𝕜 := 𝕜) where
+  toRectangularSymmetricIdealFamily :=
+    RectangularSymmetricIdealFamily.operatorNorm
+  majorization_mem_and_gauge_le := by
+    intro E F _ _ _ _ _ _ A B hB hmajor
+    refine ⟨trivial, ?_⟩
+    change ‖A‖ ≤ ‖B‖
+    simpa using hmajor 1
 
-/-- Compact operators with the operator norm and the induced
-finite-Ky-Fan dominance property. -/
-noncomputable def compactOperatorNorm :
-    KyFanDominantIdealFamily (𝕜 := 𝕜) := by
-  sorry
+/-- Completeness of a fixed positive finite Ky Fan gauge. -/
+theorem kyFan_gauge_complete (k : ℕ) (hk : 0 < k)
+    {E F : Type v}
+    [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+    [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
+    (A : ℕ → E →L[𝕜] F)
+    (hCauchy : ∀ ε : ℝ, 0 < ε → ∃ N, ∀ m n, N ≤ m → N ≤ n →
+      kyFanApproximationGauge k (A m - A n) < ε) :
+    ∃ L : E →L[𝕜] F, ∀ ε : ℝ, 0 < ε → ∃ N, ∀ n, N ≤ n →
+      kyFanApproximationGauge k (A n - L) < ε := by
+  have hopCauchy : ∀ ε : ℝ, 0 < ε → ∃ N, ∀ m n, N ≤ m → N ≤ n →
+      ‖A m - A n‖ < ε := by
+    intro ε hε
+    obtain ⟨N, hN⟩ := hCauchy ε hε
+    refine ⟨N, ?_⟩
+    intro m n hm hn
+    exact lt_of_le_of_lt
+      (opNorm_le_kyFanApproximationGauge hk (A m - A n))
+      (hN m n hm hn)
+  obtain ⟨L, hLmem, hL⟩ :=
+    RectangularSymmetricIdealFamily.operatorNorm.gauge_complete
+      A (fun n => trivial) hopCauchy
+  refine ⟨L, ?_⟩
+  intro ε hε
+  have hkR : 0 < (k : ℝ) := by exact_mod_cast hk
+  obtain ⟨N, hN⟩ := hL (ε / (k : ℝ)) (div_pos hε hkR)
+  refine ⟨N, ?_⟩
+  intro n hn
+  calc
+    kyFanApproximationGauge k (A n - L)
+        ≤ (k : ℝ) * ‖A n - L‖ :=
+      kyFanApproximationGauge_le_nat_mul_opNorm k (A n - L)
+    _ < (k : ℝ) * (ε / (k : ℝ)) :=
+      mul_lt_mul_of_pos_left (hN n hn) hkR
+    _ = ε := by field_simp
 
-/-- Existence of the fixed positive Ky Fan family with the intended concrete
-membership and gauge.  This is the single foundational Ky Fan package needed
-by the ordered unbounded cutoff proof. -/
-theorem exists_kyFan_family (k : ℕ) (hk : 0 < k) :
-    ∃ N : KyFanDominantIdealFamily (𝕜 := 𝕜),
-      ∀ {E F : Type v}
-        [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
-        [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
-        (A : E →L[𝕜] F),
-        N.toRectangularSymmetricIdealFamily.Mem A ∧
-          N.toRectangularSymmetricIdealFamily.gauge A =
-            kyFanApproximationGauge k A := by
-  sorry
-
-/-- A fixed positive Ky Fan gauge with its own dominance property. -/
+/-- A fixed positive finite Ky Fan gauge with its own dominance property. -/
 noncomputable def kyFan (k : ℕ) (hk : 0 < k) :
-    KyFanDominantIdealFamily (𝕜 := 𝕜) :=
-  Classical.choose (exists_kyFan_family (𝕜 := 𝕜) k hk)
+    KyFanDominantIdealFamily (𝕜 := 𝕜) where
+  toRectangularSymmetricIdealFamily := {
+    Mem := fun _ => True
+    gauge := kyFanApproximationGauge k
+    zero_mem := trivial
+    add_mem := by intros; trivial
+    smul_mem := by intros; trivial
+    adjoint_mem := by intros; trivial
+    comp_mem := by intros; trivial
+    gauge_nonneg := by
+      intro E F _ _ _ _ _ _ A hA
+      exact kyFanApproximationGauge_nonneg k A
+    gauge_zero := by
+      intro E F _ _ _ _ _ _
+      exact kyFanApproximationGauge_zero_map k
+    gauge_eq_zero := by
+      intro E F _ _ _ _ _ _ A hA hzero
+      apply norm_eq_zero.mp
+      exact le_antisymm
+        ((opNorm_le_kyFanApproximationGauge hk A).trans_eq hzero)
+        (norm_nonneg A)
+    gauge_add_le := by
+      intro E F _ _ _ _ _ _ A B hA hB
+      exact kyFanApproximationGauge_add_le k A B
+    gauge_smul := by
+      intro E F _ _ _ _ _ _ c A hA
+      exact kyFanApproximationGauge_smul k c A
+    gauge_adjoint := by
+      intro E F _ _ _ _ _ _ A hA
+      exact kyFanApproximationGauge_adjoint k A
+    gauge_comp_le := by
+      intro E F G H _ _ _ _ _ _ _ _ _ _ _ _ L A R hA
+      exact kyFanApproximationGauge_comp_le k L A R
+    opNorm_le_gauge := by
+      intro E F _ _ _ _ _ _ A hA
+      exact opNorm_le_kyFanApproximationGauge hk A
+    gauge_complete := by
+      intro E F _ _ _ _ _ _ A hmem hCauchy
+      obtain ⟨L, hL⟩ := kyFan_gauge_complete k hk A hCauchy
+      exact ⟨L, trivial, hL⟩
+  }
+  majorization_mem_and_gauge_le := by
+    intro E F _ _ _ _ _ _ A B hB hmajor
+    exact ⟨trivial, hmajor k⟩
 
 /-- Every bounded operator belongs to the fixed finite Ky Fan family. -/
-theorem kyFan_mem (k : ℕ) (hk : 0 < k)
-    {E F : Type v}
-    [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
-    [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
-    (A : E →L[𝕜] F) :
-    (kyFan (𝕜 := 𝕜) k hk).toRectangularSymmetricIdealFamily.Mem A :=
-  (Classical.choose_spec (exists_kyFan_family (𝕜 := 𝕜) k hk) A).1
+@[simp]
+theorem kyFan_mem (k : ℕ) (hk : 0 < k) (K : E →L[𝕜] F) :
+    (kyFan (𝕜 := 𝕜) k hk).toRectangularSymmetricIdealFamily.Mem K :=
+  trivial
 
-/-- The abstract fixed-family gauge is the concrete finite Ky Fan sum. -/
-theorem kyFan_gauge (k : ℕ) (hk : 0 < k)
-    {E F : Type v}
-    [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
-    [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
-    (A : E →L[𝕜] F) :
-    (kyFan (𝕜 := 𝕜) k hk).toRectangularSymmetricIdealFamily.gauge A =
-      kyFanApproximationGauge k A :=
-  (Classical.choose_spec (exists_kyFan_family (𝕜 := 𝕜) k hk) A).2
-
-/-- Hilbert--Schmidt norm with its finite-Ky-Fan dominance property. -/
-noncomputable def hilbertSchmidt :
-    KyFanDominantIdealFamily (𝕜 := 𝕜) := by
-  sorry
-
-/-- Trace norm with its finite-Ky-Fan dominance property. -/
-noncomputable def traceClass :
-    KyFanDominantIdealFamily (𝕜 := 𝕜) := by
-  sorry
-
-/-- Schatten `p` norm with its finite-Ky-Fan dominance property. -/
-noncomputable def schatten (p : ℝ) (hp : 1 ≤ p) :
-    KyFanDominantIdealFamily (𝕜 := 𝕜) := by
-  sorry
+/-- The concrete gauge of the fixed finite Ky Fan family. -/
+@[simp]
+theorem kyFan_gauge (k : ℕ) (hk : 0 < k) (K : E →L[𝕜] F) :
+    (kyFan (𝕜 := 𝕜) k hk).toRectangularSymmetricIdealFamily.gauge K =
+      kyFanApproximationGauge k K :=
+  rfl
 
 end KyFanDominantIdealFamily
 
-/-- Infinite-dimensional Fan dominance, now made an explicit field of the
-stronger family rather than incorrectly derived from ordinary ideal laws. -/
+/-- Infinite-dimensional Fan dominance, exposed from the stronger family. -/
 theorem mem_and_gauge_le_of_all_kyFanApproximationGauge_le
     (N : KyFanDominantIdealFamily (𝕜 := 𝕜))
     {A B : E →L[𝕜] F}
@@ -250,7 +385,6 @@ theorem mem_and_gauge_le_of_all_kyFanApproximationGauge_le
       N.toRectangularSymmetricIdealFamily.gauge A ≤
         N.toRectangularSymmetricIdealFamily.gauge B :=
   N.majorization_mem_and_gauge_le hB h
-
 
 /-- Scaled Fan dominance in the exact form consumed by the Sylvester theorem. -/
 theorem mem_and_scaled_gauge_le_of_all_scaled_kyFan_le
@@ -263,7 +397,25 @@ theorem mem_and_scaled_gauge_le_of_all_scaled_kyFan_le
     N.toRectangularSymmetricIdealFamily.Mem A ∧
       δ * N.toRectangularSymmetricIdealFamily.gauge A ≤
         N.toRectangularSymmetricIdealFamily.gauge B := by
-  sorry
+  let d : 𝕜 := (δ : 𝕜)
+  have hd : d ≠ 0 := RCLike.ofReal_ne_zero.mpr hδ.ne'
+  have hdnorm : ‖d‖ = δ := by
+    simp [d, RCLike.norm_ofReal, abs_of_pos hδ]
+  have hscaled : ∀ k,
+      kyFanApproximationGauge k (d • A) ≤
+        kyFanApproximationGauge k B := by
+    intro k
+    rw [kyFanApproximationGauge_smul, hdnorm]
+    exact h k
+  obtain ⟨hdA, hgauge⟩ := N.majorization_mem_and_gauge_le hB hscaled
+  have hA : N.toRectangularSymmetricIdealFamily.Mem A := by
+    have hinv := N.toRectangularSymmetricIdealFamily.smul_mem d⁻¹ hdA
+    rw [← mul_smul, inv_mul_cancel₀ hd, one_smul] at hinv
+    exact hinv
+  refine ⟨hA, ?_⟩
+  have hhom := N.toRectangularSymmetricIdealFamily.gauge_smul d hA
+  rw [hdnorm] at hhom
+  linarith
 
 end ExactSinTheta
 end Experimental

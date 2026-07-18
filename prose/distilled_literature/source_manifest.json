@@ -1,5 +1,5 @@
 {
-  "version": "2026-07-14-davis-kahan-full-scope-correction",
+  "version": "2026-07-18-approximation-number-foundation",
   "purpose": "Canonical, machine-checked inventory of works whose definitions, theorem families, or proof architecture are directly formalized, actively scaffolded, or inherited by the DKPS and raw-response Quench development.",
   "scope_rule": [
     "Include every DKPS-lineage paper whose definitions or theorems are used by a paper-facing Lean namespace.",
@@ -1399,6 +1399,58 @@
       "missing_work": "Reference-only; not an exact proof source for current core theorems.",
       "role": "reference_work",
       "bibliographic_status": "needs_verification"
+    },
+    "Ullrich2024": {
+      "title": "Inequalities between s-numbers",
+      "authors": [
+        "Mario Ullrich"
+      ],
+      "year": 2024,
+      "kind": "paper",
+      "group": "Spectral perturbation, principal angles, and matrix inequalities",
+      "tier": "primary",
+      "priority": "P0",
+      "formalization_status": "definition and elementary s-number laws actively formalized",
+      "distilled_status": "core_note",
+      "primary_url": "https://doi.org/10.1007/s43036-024-00386-x",
+      "target_note": "Ullrich2024_s_numbers.tex",
+      "repo_evidence": [
+        "ForMathlib/Analysis/Normed/Operator/ApproximationNumber.lean",
+        "DavisKahan/Experimental/InfiniteDimensional/Ideals/ApproximationNumbers.lean"
+      ],
+      "existing_assets": [
+        "prose/distilled_literature/Ullrich2024_s_numbers.tex"
+      ],
+      "scope": "Modern axiomatic reference for approximation numbers, s-number ideal laws, and the finite Ky Fan majorization layer.",
+      "missing_work": "Complete the Hilbert-space adjoint, Ky Fan addition, and strong-cutoff convergence proofs and cross-check index conventions against the paper.",
+      "role": "primary_method_source",
+      "bibliographic_status": "verified"
+    },
+    "Deepesh2024": {
+      "title": "Approximation results on s-numbers of operators",
+      "authors": [
+        "Deepesh K. P."
+      ],
+      "year": 2024,
+      "kind": "paper",
+      "group": "Spectral perturbation, principal angles, and matrix inequalities",
+      "tier": "primary",
+      "priority": "P0",
+      "formalization_status": "analytic cutoff-convergence target identified",
+      "distilled_status": "core_note",
+      "primary_url": "https://arxiv.org/abs/2401.08483",
+      "target_note": "Deepesh2024_approximation_truncations.tex",
+      "repo_evidence": [
+        "DavisKahan/Experimental/InfiniteDimensional/Ideals/ApproximationNumbers.lean",
+        "DavisKahan/Experimental/InfiniteDimensional/Sylvester/Unbounded.lean"
+      ],
+      "existing_assets": [
+        "prose/distilled_literature/Deepesh2024_approximation_truncations.tex"
+      ],
+      "scope": "Convergence of approximation numbers under contractive operator truncations, specialized here to strong orthogonal spectral cutoffs.",
+      "missing_work": "Formalize the Hilbert-space finite-dimensional compactness or min-max argument without adding separability assumptions.",
+      "role": "primary_method_source",
+      "bibliographic_status": "verified"
     }
   },
   "role_legend": {

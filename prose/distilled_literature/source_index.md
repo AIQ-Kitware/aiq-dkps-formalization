@@ -6,14 +6,14 @@ The index deliberately separates a paper's **formalization role** from the state
 
 ## Inventory summary
 
-- **53 works**: 44 papers, 8 books, and 1 monograph.
+- **55 works**: 46 papers, 8 books, and 1 monograph.
 - **4** source-order distilled reconstructions are complete.
-- **1** broad core notes remain to be upgraded.
+- **3** broad core notes remain to be upgraded.
 - **1** exact transcriptions are intentionally sufficient because a maintained discrepancy ledger supplies the theorem-level reconstruction.
 - **3** works have transcription or source text but no source-order proof reconstruction.
 - **44** works have no local distilled note at all.
 - **17** entries remain in the bibliographic verification queue.
-- Priority split: P0=10, P1=21, P2=16, P3=6.
+- Priority split: P0=12, P1=21, P2=16, P3=6.
 
 ## Interpretation
 
@@ -80,6 +80,8 @@ The index deliberately separates a paper's **formalization role** from the state
 | `GrubisicKostrykinMakarovVeselic2013` | 2013 | The Tan 2 Theta Theorem for Indefinite Quadratic Forms | primary theorem source | tan 2 Theta source | `missing` | P1 |
 | `Seelmann2014` | 2014 | Notes on the Sin 2 Theta Theorem | primary theorem source | operator-angle sin 2 Theta source | `missing` | P1 |
 | `YuWangSamworth2015` | 2015 | A Useful Variant of the Davis--Kahan Theorem for Statisticians | primary theorem source | source-order reconstruction complete; symmetric, aligned-basis, and singular-subspace theorem families formalized | `complete` | P0 |
+| `Deepesh2024` | 2024 | Approximation results on s-numbers of operators | primary method source | analytic cutoff-convergence target identified | `core_note` | P0 |
+| `Ullrich2024` | 2024 | Inequalities between s-numbers | primary method source | definition and elementary s-number laws actively formalized | `core_note` | P0 |
 
 ## Reference works and modern syntheses
 
@@ -123,6 +125,8 @@ The index deliberately separates a paper's **formalization role** from the state
 - **`GrubisicKostrykinMakarovVeselic2013` — The Tan 2 Theta Theorem for Indefinite Quadratic Forms**: Reconstruct the form-domain theorem and clearly state the finite-dimensional bounded specialization formalized here.
 - **`Seelmann2014` — Notes on the Sin 2 Theta Theorem**: Reconstruct the exact separation hypotheses and compare its angle conventions with the Lean API.
 - **`Bhatia1997` — Matrix Analysis**: Create a theorem-indexed bridge note, not a chapter summary.
+- **`Ullrich2024` — Inequalities between s-numbers**: Complete the Hilbert-space adjoint, Ky Fan addition, and strong-cutoff convergence proofs and cross-check index conventions against the paper.
+- **`Deepesh2024` — Approximation results on s-numbers of operators**: Formalize the Hilbert-space finite-dimensional compactness or min-max argument without adding separability assumptions.
 
 ## Sources missing from the repository's prior explicit source map
 
