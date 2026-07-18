@@ -68,6 +68,15 @@ theorem mem_pvmRangeSubspace_iff (P : Spectra.ProjValMeasure H)
   · intro hx
     exact ⟨x, hx⟩
 
+/-- The range of a measurable PVM projection is complete. -/
+noncomputable instance pvmRangeSubspace_completeSpace
+    (P : Spectra.ProjValMeasure H) (B : Set ℝ)
+    (hB : MeasurableSet B) :
+    CompleteSpace (pvmRangeSubspace P B hB) := by
+  change CompleteSpace (P.proj B hB).range
+  exact (ContinuousLinearMap.IsIdempotentElem.isClosed_range
+    (P.proj_idem B hB)).completeSpace_coe
+
 /-- The range of a measurable PVM projection admits an orthogonal
 projection. -/
 noncomputable instance pvmRangeSubspace_hasOrthogonalProjection

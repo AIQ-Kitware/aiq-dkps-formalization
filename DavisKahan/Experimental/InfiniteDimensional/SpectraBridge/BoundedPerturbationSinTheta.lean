@@ -3,7 +3,7 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.SpectralRestriction
+import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.SpectralRestrictionOperator
 import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.GapResolvent
 import Spectra.Operator.KatoRellich
 
@@ -180,6 +180,72 @@ theorem sinTheta_addBounded_opNorm_of_spectrum_gap_isometric
   exact sinTheta_addBounded_opNorm_of_spectrum_gap A hA V hV
     A₀ hA₀ Λ₁ hΛ₁ X F₁ hXdom hXintertwines hF₁dom hF₁intertwines
     (opNorm_le_one_of_isometry hXiso) (opNorm_le_one_of_isometry hF₁iso)
+    hβα hδ hA₀low hA₀high hΛspec
+
+
+/-- The canonical bounded-perturbation residual data built from the exact and
+perturbed spectral-range Stone generators. -/
+noncomputable def spectralBoundedPerturbationSinThetaData
+    (A : DKClosedOperator (H := H)) (hA : A.IsSelfAdjoint)
+    (V : H →L[ℂ] H) (hV : IsSelfAdjointOperator V)
+    (B T : Set ℝ) (hB : MeasurableSet B) (hT : MeasurableSet T) :
+    UnboundedSinThetaData (𝕜 := ℂ) (E := H)
+      (F := selfAdjointSpectralSubspace A hA B hB)
+      (G := selfAdjointSpectralSubspace (A.addBounded V)
+        (addBounded_isSelfAdjoint A hA V hV) T hT) :=
+  boundedPerturbationSinThetaData A V
+    (selfAdjointSpectralRestriction A hA B hB)
+    (selfAdjointSpectralRestriction (A.addBounded V)
+      (addBounded_isSelfAdjoint A hA V hV) T hT)
+    (selfAdjointSpectralSubspaceInclusion A hA B hB)
+    (selfAdjointSpectralSubspaceInclusion (A.addBounded V)
+      (addBounded_isSelfAdjoint A hA V hV) T hT)
+    (selfAdjointSpectralRestriction_inclusion_mem_domain A hA B hB)
+    (selfAdjointSpectralRestriction_inclusion_intertwines A hA B hB)
+    (selfAdjointSpectralRestriction_inclusion_mem_domain (A.addBounded V)
+      (addBounded_isSelfAdjoint A hA V hV) T hT)
+    (selfAdjointSpectralRestriction_inclusion_intertwines (A.addBounded V)
+      (addBounded_isSelfAdjoint A hA V hV) T hT)
+
+/-- Genuine spectral-subspace specialization of the unbounded
+bounded-perturbation sine-theta estimate.  The remaining hypotheses are now
+only spectral localization facts about the two canonical restricted
+operators. -/
+theorem sinTheta_addBounded_spectralSubspaces_opNorm_of_spectrum_gap
+    (A : DKClosedOperator (H := H)) (hA : A.IsSelfAdjoint)
+    (V : H →L[ℂ] H) (hV : IsSelfAdjointOperator V)
+    (B T : Set ℝ) (hB : MeasurableSet B) (hT : MeasurableSet T)
+    {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
+    (hA₀low : SemiboundedBelow
+      (selfAdjointSpectralRestriction A hA B hB) β)
+    (hA₀high : SemiboundedAbove
+      (selfAdjointSpectralRestriction A hA B hB) α)
+    (hΛspec : ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
+      lam ∉ Spectra.Resolvent.spectrum
+        (selfAdjointSpectralRestriction (A.addBounded V)
+          (addBounded_isSelfAdjoint A hA V hV) T hT).toLinearPMap) :
+    δ * ‖(selfAdjointSpectralSubspaceInclusion A hA B hB).adjoint ∘L
+      selfAdjointSpectralSubspaceInclusion (A.addBounded V)
+        (addBounded_isSelfAdjoint A hA V hV) T hT‖ ≤ ‖V‖ := by
+  exact sinTheta_addBounded_opNorm_of_spectrum_gap_isometric A hA V hV
+    (selfAdjointSpectralRestriction A hA B hB)
+    (selfAdjointSpectralRestriction_isSelfAdjoint A hA B hB)
+    (selfAdjointSpectralRestriction (A.addBounded V)
+      (addBounded_isSelfAdjoint A hA V hV) T hT)
+    (selfAdjointSpectralRestriction_isSelfAdjoint (A.addBounded V)
+      (addBounded_isSelfAdjoint A hA V hV) T hT)
+    (selfAdjointSpectralSubspaceInclusion A hA B hB)
+    (selfAdjointSpectralSubspaceInclusion (A.addBounded V)
+      (addBounded_isSelfAdjoint A hA V hV) T hT)
+    (selfAdjointSpectralRestriction_inclusion_mem_domain A hA B hB)
+    (selfAdjointSpectralRestriction_inclusion_intertwines A hA B hB)
+    (selfAdjointSpectralRestriction_inclusion_mem_domain (A.addBounded V)
+      (addBounded_isSelfAdjoint A hA V hV) T hT)
+    (selfAdjointSpectralRestriction_inclusion_intertwines (A.addBounded V)
+      (addBounded_isSelfAdjoint A hA V hV) T hT)
+    (selfAdjointSpectralSubspaceInclusion_isometric A hA B hB)
+    (selfAdjointSpectralSubspaceInclusion_isometric (A.addBounded V)
+      (addBounded_isSelfAdjoint A hA V hV) T hT)
     hβα hδ hA₀low hA₀high hΛspec
 
 end SpectraBridge
