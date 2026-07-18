@@ -6,6 +6,7 @@ Authors: Jon Crall, GPT 5.6 High
 import DavisKahan.Experimental.InfiniteDimensional.Core.SpectralProjection
 import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Basic
 import Mathlib.Analysis.CStarAlgebra.ContinuousLinearMap
+import Mathlib.Topology.MetricSpace.Lipschitz
 
 /-!
 # Resolvents, Riesz projections, and spectral continuation
@@ -250,6 +251,74 @@ theorem norm_resolventOperator_sub_le_of_bounds
         (mul_nonneg hM (norm_nonneg (A - B)))
 
 
+/-! ## Spectral-parameter continuity -/
+
+omit [CompleteSpace E] in
+/-- Quantitative first-resolvent estimate.  For one fixed operator, the
+resolvent is locally Lipschitz in the spectral parameter, with constant given
+by the product of the two endpoint resolvent norms. -/
+theorem norm_resolventOperator_sub_spectral_le
+    (A : E →L[𝕜] E) {z w : 𝕜}
+    (hz : InResolventSet A z) (hw : InResolventSet A w) :
+    ‖resolventOperator A z - resolventOperator A w‖ ≤
+      ‖z - w‖ * ‖resolventOperator A z‖ * ‖resolventOperator A w‖ := by
+  rw [resolvent_identity A hz hw, norm_smul]
+  have hcomp :
+      ‖resolventOperator A z ∘SL resolventOperator A w‖ ≤
+        ‖resolventOperator A z‖ * ‖resolventOperator A w‖ :=
+    ContinuousLinearMap.opNorm_comp_le (𝕜 := 𝕜)
+      (resolventOperator A z) (resolventOperator A w)
+  have hmul := mul_le_mul_of_nonneg_left hcomp (norm_nonneg (z - w))
+  exact hmul.trans_eq (mul_assoc _ _ _).symm
+
+omit [CompleteSpace E] in
+/-- Uniform-bound specialization of the spectral-parameter resolvent
+estimate. -/
+theorem norm_resolventOperator_sub_spectral_le_of_bounds
+    (A : E →L[𝕜] E) {z w : 𝕜} {M : ℝ}
+    (hz : InResolventSet A z) (hw : InResolventSet A w)
+    (hRz : ‖resolventOperator A z‖ ≤ M)
+    (hRw : ‖resolventOperator A w‖ ≤ M) :
+    ‖resolventOperator A z - resolventOperator A w‖ ≤
+      M ^ 2 * ‖z - w‖ := by
+  have hM : 0 ≤ M := (norm_nonneg (resolventOperator A z)).trans hRz
+  calc
+    ‖resolventOperator A z - resolventOperator A w‖ ≤
+        ‖z - w‖ * ‖resolventOperator A z‖ *
+          ‖resolventOperator A w‖ :=
+      norm_resolventOperator_sub_spectral_le A hz hw
+    _ ≤ ‖z - w‖ * M * M := by
+      exact mul_le_mul
+        (mul_le_mul_of_nonneg_left hRz (norm_nonneg (z - w)))
+        hRw (norm_nonneg (resolventOperator A w))
+        (mul_nonneg (norm_nonneg (z - w)) hM)
+    _ = M ^ 2 * ‖z - w‖ := by ring
+
+omit [CompleteSpace E] in
+/-- A uniform resolvent bound on a set upgrades the total resolvent map to a
+Lipschitz map on that set. -/
+theorem lipschitzOnWith_resolventOperator_of_uniform_bound
+    (A : E →L[𝕜] E) (S : Set 𝕜) (M : ℝ)
+    (hmem : ∀ z ∈ S, InResolventSet A z)
+    (hbound : ∀ z ∈ S, ‖resolventOperator A z‖ ≤ M) :
+    LipschitzOnWith (Real.toNNReal (M ^ 2)) (resolventOperator A) S := by
+  refine LipschitzOnWith.of_dist_le' ?_
+  intro z hz w hw
+  simpa only [dist_eq_norm] using
+    norm_resolventOperator_sub_spectral_le_of_bounds A
+      (hmem z hz) (hmem w hw) (hbound z hz) (hbound w hw)
+
+omit [CompleteSpace E] in
+/-- Continuity on a uniformly resolvent-bounded parameter set. -/
+theorem continuousOn_resolventOperator_of_uniform_bound
+    (A : E →L[𝕜] E) (S : Set 𝕜) (M : ℝ)
+    (hmem : ∀ z ∈ S, InResolventSet A z)
+    (hbound : ∀ z ∈ S, ‖resolventOperator A z‖ ≤ M) :
+    ContinuousOn (resolventOperator A) S :=
+  (lipschitzOnWith_resolventOperator_of_uniform_bound
+    A S M hmem hbound).continuousOn
+
+
 /-! ## Complex self-adjoint resolvent bounds -/
 
 section ComplexResolventDistance
@@ -364,6 +433,37 @@ theorem complex_norm_resolvent_le_inv_distance
     ‖resolventOperator A z‖ ≤ delta⁻¹ :=
   (complex_inResolventSet_and_norm_resolvent_le_inv_distance
     A hA z delta hdelta hsep).2
+
+/-- On any set of complex spectral parameters with one common positive
+distance from the real spectrum of a complex self-adjoint operator, the
+resolvent is Lipschitz with the sharp distance-squared constant. -/
+theorem complex_lipschitzOnWith_resolventOperator_of_distance
+    (A : H →L[ℂ] H) (hA : IsSelfAdjointOperator A)
+    (S : Set ℂ) (delta : ℝ) (hdelta : 0 < delta)
+    (hsep : ∀ z ∈ S, ∀ lam ∈ realSpectrum A,
+      delta ≤ ‖z - (lam : ℂ)‖) :
+    LipschitzOnWith (Real.toNNReal (delta⁻¹ ^ 2))
+      (resolventOperator A) S := by
+  apply lipschitzOnWith_resolventOperator_of_uniform_bound A S delta⁻¹
+  · intro z hz
+    exact complex_inResolventSet_of_distance A hA z delta hdelta
+      (hsep z hz)
+  · intro z hz
+    exact complex_norm_resolvent_le_inv_distance A hA z delta hdelta
+      (hsep z hz)
+
+/-- Continuity of the complex self-adjoint resolvent on a uniformly separated
+spectral-parameter set.  This is the continuity input for a Riesz contour
+integrand. -/
+theorem complex_continuousOn_resolventOperator_of_distance
+    (A : H →L[ℂ] H) (hA : IsSelfAdjointOperator A)
+    (S : Set ℂ) (delta : ℝ) (hdelta : 0 < delta)
+    (hsep : ∀ z ∈ S, ∀ lam ∈ realSpectrum A,
+      delta ≤ ‖z - (lam : ℂ)‖) :
+    ContinuousOn (resolventOperator A) S :=
+  (complex_lipschitzOnWith_resolventOperator_of_distance
+    A hA S delta hdelta hsep).continuousOn
+
 
 end ComplexResolventDistance
 
