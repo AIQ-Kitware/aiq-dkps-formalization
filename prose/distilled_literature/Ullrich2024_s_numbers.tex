@@ -1,0 +1,52 @@
+\section{Ullrich 2024: inequalities between s-numbers}
+\label{sec:ullrich-2024-s-numbers}
+
+\paragraph{Bibliographic record.}
+Mario Ullrich, ``Inequalities between s-numbers,''
+\emph{Advances in Operator Theory} 9 (2024), article 82,
+DOI \texttt{10.1007/s43036-024-00386-x}.
+The article is open access.
+
+\paragraph{Role in this repository.}
+This paper is used as a modern theorem-level reference for the axiomatic
+s-number interface underlying the approximation-number and finite Ky Fan
+layers.  It is not a substitute for the Davis--Kahan source proof.  Its role is
+to identify which properties are elementary consequences of the best
+finite-rank approximation definition and which are substantive operator-ideal
+theorems.
+
+\paragraph{Approximation numbers.}
+For a bounded operator $T:X\to Y$, the approximation numbers are the distances
+from $T$ to operators of bounded finite rank.  The repository uses a zero-based
+index convention:
+\[
+  a_n(T)=\inf\{\lVert T-R\rVert:\operatorname{rank}R\le n\}.
+\]
+Consequently $a_0(T)=\lVert T\rVert$.  This differs by one from references that
+start with $a_1$ and use rank strictly less than the index.
+
+\paragraph{Axioms used by the formalization.}
+The relevant s-number laws are monotonicity, the rank-perturbation/addition
+inequality, two-sided ideal control, normalization at the first index, and
+vanishing beyond finite rank.  The approximation-number definition gives the
+order, normalization, perturbation, homogeneity, and composition laws through
+finite-rank competitors.  Adjoint invariance is Hilbert-space-specific and
+requires a separate rank-preservation argument.
+
+\paragraph{Ky Fan passage.}
+The finite Ky Fan gauge is
+\[
+  \lVert T\rVert_{(k)}=\sum_{j=0}^{k-1} a_j(T).
+\]
+Its triangle inequality is not obtained by summing the fixed-index Lipschitz
+bound.  It uses the stronger rank-additive approximation inequality and the
+associated weak-majorization argument.  The Lean development therefore keeps
+this as a named theorem rather than hiding it inside a concrete norm-family
+constructor.
+
+\paragraph{Formalization map.}
+The best-finite-rank definition and elementary laws live in
+\texttt{ForMathlib/Analysis/Normed/Operator/ApproximationNumber.lean}.
+The Hilbert-space adjoint law, Ky Fan triangle theorem, cutoff convergence, and
+Fan-dominant ideal-family construction live in
+\texttt{DavisKahan/Experimental/InfiniteDimensional/Ideals/ApproximationNumbers.lean}.
