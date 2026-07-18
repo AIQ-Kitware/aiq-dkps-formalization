@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
 import DavisKahan.Experimental.InfiniteDimensional.DoubleAngle
+import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.DirectRotationAPI
 import DavisKahan.Experimental.InfiniteDimensional.Sylvester.Resolvent
 
 /-!
@@ -143,36 +144,94 @@ theorem continuedProjection_eq_spectralProjection
   rw [h1]
   exact rieszProjection_eq_spectralProjection (A + H) hA1 s hs contour hc
 
-/-- Norm-close projections have canonically isomorphic ranges; this is the
-local step used to propagate dimension and Fredholm-index data along a path.
+/-! ## Close complex orthogonal projections
 
-Proof strategy: for projections `P,Q` with `‖P-Q‖<1`, show `Q|Ran(P)` is
-bounded below and `P|Ran(Q)` is its inverse up to the invertible positive
-operators `PQP` and `QPQ`.  Construct the canonical range equivalence using
-the polar factor of `QP`, or equivalently `(PQP)^{-1/2}`.  This lemma replaces
-finite rank counting in the infinite branch-selection proof.
-
-Lean proof route for a weaker agent:
-
-1. Prove `Q` restricted to `Ran P` is bounded below by `1-‖P-Q‖`.
-2. Show its range is closed and its orthogonal complement is trivial, hence it is bijective onto `Ran Q`.
-3. Take the polar factor of `QP` to obtain a unitary between the ranges and extend it over complements.
-4. Verify the global intertwining equation.
-
-
-Ext-agent signature audit (GPT 5.6 High): Correct. Close orthogonal projections have
-unitarily equivalent ranges and complements; the global unitary intertwiner is stronger
-than a mere range isomorphism but standard.
-
-Preferred dependency route: Use a uniformly separating Riesz contour on `[0,1]`,
-norm-continuity of resolvents, and local equivalences of close projection ranges.
+The direct-rotation package turns the local geometric step in spectral
+continuation into a short theorem.  A projection supplied abstractly as an
+idempotent symmetric continuous linear map is first identified with the
+orthogonal projection onto its fixed-point subspace.  Norm closeness then says
+those two fixed-point subspaces are acute, so their canonical direct rotation
+is the required global unitary intertwiner.
 -/
+
+section ComplexCloseProjections
+
+variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
+  [CompleteSpace H]
+
+/-- Fixed-point subspace of a bounded operator.  For an orthogonal projection
+this is its range, but the kernel presentation gives closedness and the
+orthogonal-projection instance without a separate closed-range theorem. -/
+private noncomputable def projectionFixedSpace
+    (P : H →L[ℂ] H) : Submodule ℂ H :=
+  (P - 1).ker
+
+private noncomputable instance projectionFixedSpaceComplete
+    (P : H →L[ℂ] H) : CompleteSpace (projectionFixedSpace P) :=
+  (P - 1).isClosed_ker.completeSpace_coe
+
+private noncomputable instance projectionFixedSpaceHasOrthogonalProjection
+    (P : H →L[ℂ] H) :
+    (projectionFixedSpace P).HasOrthogonalProjection :=
+  Submodule.HasOrthogonalProjection.ofCompleteSpace _
+
+private theorem mem_projectionFixedSpace_iff
+    (P : H →L[ℂ] H) (x : H) :
+    x ∈ projectionFixedSpace P ↔ P x = x := by
+  change (P - 1) x = 0 ↔ P x = x
+  simp only [sub_apply, one_apply_eq_self, sub_eq_zero]
+
+private theorem projection_apply_idempotent
+    (P : H →L[ℂ] H) (hP : IsOrthogonalProjection P) (x : H) :
+    P (P x) = P x := by
+  have h := congrArg (fun T : H →L[ℂ] H => T x) hP.1
+  simpa only [ContinuousLinearMap.comp_apply] using h
+
+/-- An abstract orthogonal projection is the canonical orthogonal projection
+onto its fixed-point/range subspace. -/
+private theorem projection_fixedSpace_eq
+    (P : H →L[ℂ] H) (hP : IsOrthogonalProjection P) :
+    projection (projectionFixedSpace P) = P := by
+  ext x
+  apply (projectionFixedSpace P).eq_starProjection_of_mem_of_inner_eq_zero
+  · rw [mem_projectionFixedSpace_iff]
+    exact projection_apply_idempotent P hP x
+  · intro y hy
+    have hyfix : P y = y :=
+      (mem_projectionFixedSpace_iff P y).mp hy
+    have hsym : ⟪P x, y⟫_ℂ = ⟪x, P y⟫_ℂ :=
+      hP.2 x y
+    rw [inner_sub_left]
+    calc
+      ⟪x, y⟫_ℂ - ⟪P x, y⟫_ℂ = ⟪x, y⟫_ℂ - ⟪x, P y⟫_ℂ := by rw [hsym]
+      _ = 0 := by rw [hyfix, sub_self]
+
+/-- Norm-close complex orthogonal projections have unitarily equivalent ranges
+and complements.  The unitary is the canonical acute direct rotation of their
+fixed-point subspaces. -/
 theorem range_equiv_of_projection_norm_lt_one
-    (P Q : E →L[𝕜] E)
+    (P Q : H →L[ℂ] H)
     (hP : IsOrthogonalProjection P) (hQ : IsOrthogonalProjection Q)
     (hclose : ‖P - Q‖ < 1) :
-    ∃ W : E →L[𝕜] E, IsUnitaryOperator W ∧ W ∘L P = Q ∘L W := by
-  sorry
+    ∃ W : H →L[ℂ] H, IsUnitaryOperator W ∧ W ∘L P = Q ∘L W := by
+  let U : Submodule ℂ H := projectionFixedSpace P
+  let V : Submodule ℂ H := projectionFixedSpace Q
+  have hPU : projection U = P := by
+    simpa only [U] using projection_fixedSpace_eq P hP
+  have hQV : projection V = Q := by
+    simpa only [V] using projection_fixedSpace_eq Q hQ
+  have hacute : IsAcute U V := by
+    change ‖projection U - projection V‖ < 1
+    rw [hPU, hQV]
+    exact hclose
+  let W : H →L[ℂ] H := complexDirectRotation U V hacute
+  refine ⟨W, ?_, ?_⟩
+  · simpa only [W] using complexDirectRotation_unitary U V hacute
+  · have hintertwine := complexDirectRotation_intertwines U V hacute
+    rw [hPU, hQV] at hintertwine
+    simpa only [W] using hintertwine
+
+end ComplexCloseProjections
 
 end DavisKahanExt
 end ForMathlib

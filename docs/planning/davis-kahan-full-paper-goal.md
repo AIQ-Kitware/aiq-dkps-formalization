@@ -687,6 +687,25 @@ existence, formulas, uniqueness, and operator-norm extremality; remaining work
 is refinement and reuse of the decomposition in equality, continuation, and
 sharpness arguments rather than closure of the basic extremal theorem.
 
+### Progress note (2026-07-18, close-projection continuation step)
+
+`SinTheta/Continuation.lean` now proves the local infinite-dimensional
+branch-transport theorem for complex Hilbert spaces:
+`range_equiv_of_projection_norm_lt_one`.  An abstract idempotent symmetric
+continuous linear map is first identified with the canonical orthogonal
+projection onto its fixed-point subspace `(P - 1).ker`; the kernel
+presentation supplies closedness and orthogonal complementability without a
+separate closed-range argument.  Thus `‖P-Q‖ < 1` is exactly acuteness of the
+two fixed-point subspaces, and their completed Spectra direct rotation gives
+a norm-preserving surjective global intertwiner `W P = Q W`.
+
+This closes the local geometric half of Section 8.  The remaining critical
+Section 8 blocker is analytic rather than geometric: replace the provisional
+`ContourSeparatesSpectrum` and `rieszProjection` definitions by proof-carrying
+contour data and an actual contour integral, prove the local resolvent/Riesz
+projection continuity estimate, and then apply the close-projection theorem
+along a finite subdivision of `[0,1]` to transport the selected component.
+
 ### Progress note (2026-07-16, real spectral bridge session)
 
 **The real-scalar gap for the bounded `sin Θ` theorem is closed** — without
