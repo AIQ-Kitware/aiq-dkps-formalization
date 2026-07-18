@@ -4,6 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Experimental.InfiniteDimensional.Core.UnboundedSpectral
+import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.ApproximationNumberMinMax
+import Mathlib.Topology.Algebra.Module.FiniteDimension
 import ForMathlib.Analysis.Normed.Operator.ApproximationNumberHilbert
 import ForMathlib.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm
 
@@ -162,6 +164,197 @@ theorem approximationSingularValue_eq_singularValues
     A.singularValues n
   exact congrArg (fun x : NNReal => x.1) hNN
 
+/-- An orthogonal projection does not increase vector norms. -/
+theorem IsOrthogonalProjectionMap.norm_apply_le
+    {P : E →L[𝕜] E} (hP : IsOrthogonalProjectionMap P) (x : E) :
+    ‖P x‖ ≤ ‖x‖ := by
+  have hPP : P (P x) = P x := by
+    have h := congrArg (fun T : E →L[𝕜] E => T x) hP.1
+    simpa only [ContinuousLinearMap.comp_apply] using h
+  have hPQ : P (x - P x) = 0 := by
+    rw [map_sub, hPP, sub_self]
+  have horth : ⟪P x, x - P x⟫_𝕜 = 0 := by
+    calc
+      ⟪P x, x - P x⟫_𝕜 = ⟪x, P (x - P x)⟫_𝕜 :=
+        hP.2 x (x - P x)
+      _ = 0 := by simp only [hPQ, inner_zero_right]
+  have hpyth : ‖P x‖ ^ 2 + ‖x - P x‖ ^ 2 = ‖x‖ ^ 2 := by
+    have h := norm_add_sq_eq_norm_sq_add_norm_sq_of_inner_eq_zero
+      (P x) (x - P x) horth
+    rw [show P x + (x - P x) = x by abel] at h
+    rw [sq, sq, sq]
+    linarith
+  nlinarith [sq_nonneg ‖x - P x‖, norm_nonneg (P x), norm_nonneg x]
+
+/-- An orthogonal projection has operator norm at most one. -/
+theorem IsOrthogonalProjectionMap.norm_le_one
+    {P : E →L[𝕜] E} (hP : IsOrthogonalProjectionMap P) :
+    ‖P‖ ≤ 1 := by
+  apply P.opNorm_le_bound zero_le_one
+  intro x
+  simpa only [one_mul] using hP.norm_apply_le x
+
+/-- On a finite-dimensional source, pointwise convergence of bounded linear
+maps to zero upgrades to convergence in operator norm. -/
+theorem tendsto_opNorm_zero_of_finiteDimensional
+    {ι : Type w} {l : Filter ι}
+    {V G : Type v}
+    [NormedAddCommGroup V] [NormedSpace 𝕜 V]
+    [FiniteDimensional 𝕜 V]
+    [NormedAddCommGroup G] [NormedSpace 𝕜 G]
+    (T : ι → V →L[𝕜] G)
+    (hT : ∀ x, Tendsto (fun i => T i x) l (𝓝 0)) :
+    Tendsto (fun i => ‖T i‖) l (𝓝 0) := by
+  let b := Module.Basis.ofVectorSpace 𝕜 V
+  let e := b.equivFunL.toContinuousLinearMap
+  let C : ι → ℝ := fun i =>
+    ‖e‖ * ∑ j, ‖T i (b j)‖
+  have hsum : Tendsto (fun i => ∑ j, ‖T i (b j)‖) l (𝓝 0) := by
+    have hsum' := tendsto_finsetSum Finset.univ
+      (fun j _ => (hT (b j)).norm)
+    simpa only [norm_zero, Finset.sum_const_zero] using hsum'
+  have hC : Tendsto C l (𝓝 0) := by
+    simpa only [C, mul_zero] using tendsto_const_nhds.mul hsum
+  have hbound : ∀ i, ‖T i‖ ≤ C i := by
+    intro i
+    apply (T i).opNorm_le_bound
+    · exact mul_nonneg (norm_nonneg _) (Finset.sum_nonneg fun _ _ => norm_nonneg _)
+    · intro x
+      calc
+        ‖T i x‖ = ‖T i (∑ j, b.repr x j • b j)‖ := by
+          rw [b.sum_repr]
+        _ = ‖∑ j, b.repr x j • T i (b j)‖ := by
+          rw [map_sum]
+          simp only [map_smul]
+        _ ≤ ∑ j, ‖b.repr x j • T i (b j)‖ :=
+          norm_sum_le _ _
+        _ = ∑ j, ‖b.repr x j‖ * ‖T i (b j)‖ := by
+          apply Finset.sum_congr rfl
+          intro j hj
+          exact norm_smul _ _
+        _ ≤ ∑ j, (‖e‖ * ‖x‖) * ‖T i (b j)‖ := by
+          apply Finset.sum_le_sum
+          intro j hj
+          apply mul_le_mul_of_nonneg_right _ (norm_nonneg _)
+          calc
+            ‖b.repr x j‖ = ‖e x j‖ := by rfl
+            _ ≤ ‖e x‖ := norm_le_pi_norm (e x) j
+            _ ≤ ‖e‖ * ‖x‖ := e.le_opNorm x
+        _ = (‖e‖ * ‖x‖) * ∑ j, ‖T i (b j)‖ := by
+          rw [Finset.mul_sum]
+        _ = C i * ‖x‖ := by
+          dsimp only [C]
+          ring
+  exact squeeze_zero (fun i => norm_nonneg (T i)) hbound hC
+
+section ComplexStrongCutoff
+
+variable {E₀ F₀ : Type v}
+  [NormedAddCommGroup E₀] [InnerProductSpace ℂ E₀] [CompleteSpace E₀]
+  [NormedAddCommGroup F₀] [InnerProductSpace ℂ F₀] [CompleteSpace F₀]
+
+/-- Complex-Hilbert-space cutoff convergence, obtained from the generalized
+Courant--Fischer localization theorem and uniform convergence on each finite
+witness subspace. -/
+theorem approximationSingularValue_comp_strongProjection_tendsto_complex
+    {ι : Type w} {P : ι → E₀ →L[ℂ] E₀} {l : Filter ι}
+    (hPproj : ∀ i, IsOrthogonalProjectionMap (P i))
+    (hP : StronglyTendsto P l (ContinuousLinearMap.id ℂ E₀))
+    (n : ℕ) (K : E₀ →L[ℂ] F₀) :
+    Tendsto
+      (fun i => approximationSingularValue n (K ∘L P i))
+      l (𝓝 (approximationSingularValue n K)) := by
+  have hUpper : ∀ i,
+      approximationSingularValue n (K ∘L P i) ≤
+        approximationSingularValue n K := by
+    intro i
+    have hnormNN : ‖P i‖₊ ≤ (1 : NNReal) := by
+      exact_mod_cast (hPproj i).norm_le_one
+    have hNN : (K ∘L P i).approximationNumber n ≤
+        K.approximationNumber n := by
+      calc
+        (K ∘L P i).approximationNumber n
+            ≤ K.approximationNumber n * ‖P i‖₊ :=
+          K.approximationNumber_comp_right_le (P i) n
+        _ ≤ K.approximationNumber n * 1 :=
+          mul_le_mul_of_nonneg_left hnormNN bot_le
+        _ = K.approximationNumber n := by rw [mul_one]
+    exact_mod_cast hNN
+  have hLower : ∀ r : ℝ,
+      r < approximationSingularValue n K →
+      ∀ᶠ i in l, r < approximationSingularValue n (K ∘L P i) := by
+    intro r hr
+    by_cases hr0 : 0 ≤ r
+    · obtain ⟨s, hrs, v, hv, hV⟩ :=
+        SpectraBridge.exists_linearIndependent_lowerBound_of_lt_approximationNumber
+          K n hr0 hr
+      let c : ℝ := (r + s) / 2
+      have hrc : r < c := by dsimp only [c]; linarith
+      have hcs : c < s := by dsimp only [c]; linarith
+      have hc0 : 0 ≤ c := hr0.trans hrc.le
+      let V : Submodule ℂ E₀ := Submodule.span ℂ (Set.range v)
+      let b : Module.Basis (Fin (n + 1)) ℂ V := Module.Basis.span hv
+      letI : FiniteDimensional ℂ V := b.finiteDimensional_of_finite
+      let D : ι → V →L[ℂ] F₀ := fun i =>
+        (K ∘L P i ∘L V.subtypeL) - (K ∘L V.subtypeL)
+      have hDpoint : ∀ x : V, Tendsto (fun i => D i x) l (𝓝 0) := by
+        intro x
+        have hKP : Tendsto (fun i => K (P i (V.subtypeL x))) l
+            (𝓝 (K (V.subtypeL x))) :=
+          (K.continuous.tendsto (V.subtypeL x)).comp (hP (V.subtypeL x))
+        have hconst : Tendsto (fun _ : ι => K (V.subtypeL x)) l
+            (𝓝 (K (V.subtypeL x))) := tendsto_const_nhds
+        change Tendsto
+          (fun i => K (P i (V.subtypeL x)) - K (V.subtypeL x))
+          l (𝓝 0)
+        simpa only [sub_self] using hKP.sub hconst
+      have hDnorm : Tendsto (fun i => ‖D i‖) l (𝓝 0) :=
+        tendsto_opNorm_zero_of_finiteDimensional D hDpoint
+      have hsmall : ∀ᶠ i in l, ‖D i‖ < s - c :=
+        hDnorm.eventually (Iio_mem_nhds (sub_pos.mpr hcs))
+      filter_upwards [hsmall] with i hi
+      have hcNN : (⟨c, hc0⟩ : NNReal) ≤
+          (K ∘L P i).approximationNumber n := by
+        apply ContinuousLinearMap.lowerBound_le_approximationNumber_of_linearIndependent
+          (K ∘L P i) n v hv
+        intro x hxV hxNorm
+        have hDx : ‖D i ⟨x, hxV⟩‖ ≤ ‖D i‖ := by
+          have h := (D i).le_opNorm ⟨x, hxV⟩
+          change ‖D i ⟨x, hxV⟩‖ ≤ ‖D i‖ * ‖x‖ at h
+          rw [hxNorm, mul_one] at h
+          exact h
+        have hDapply : D i ⟨x, hxV⟩ = K (P i x) - K x := by
+          rfl
+        have htri : ‖K x‖ ≤ ‖K (P i x)‖ + ‖D i ⟨x, hxV⟩‖ := by
+          rw [hDapply]
+          have h := norm_sub_le (K (P i x)) (K (P i x) - K x)
+          convert h using 1 <;> abel
+        have hsx : s ≤ ‖K x‖ := by
+          have := hV x hxV
+          simpa only [hxNorm, mul_one] using this
+        apply NNReal.coe_le_coe.mpr
+        change c ≤ ‖K (P i x)‖
+        linarith
+      have hcReal : c ≤ approximationSingularValue n (K ∘L P i) := by
+        exact_mod_cast hcNN
+      exact hrc.trans_le hcReal
+    · have hrneg : r < 0 := lt_of_not_ge hr0
+      filter_upwards [] with i
+      exact hrneg.trans_le
+        (approximationSingularValue_nonneg n (K ∘L P i))
+  rw [Metric.tendsto_nhds]
+  intro ε hε
+  have hlower := hLower
+    (approximationSingularValue n K - ε) (by linarith)
+  filter_upwards [hlower] with i hi
+  rw [Real.dist_eq, abs_lt]
+  constructor
+  · linarith
+  · have := hUpper i
+    linarith
+
+end ComplexStrongCutoff
+
 /-- Continuity of each approximation number under strongly convergent
 orthogonal cutoffs. -/
 theorem approximationSingularValue_comp_strongProjection_tendsto
@@ -178,6 +371,30 @@ theorem approximationSingularValue_comp_strongProjection_tendsto
 noncomputable def kyFanApproximationGauge
     (k : ℕ) (K : E →L[𝕜] F) : ℝ :=
   ∑ n ∈ Finset.range k, approximationSingularValue n K
+
+
+section ComplexKyFanStrongCutoff
+
+variable {E₀ F₀ : Type v}
+  [NormedAddCommGroup E₀] [InnerProductSpace ℂ E₀] [CompleteSpace E₀]
+  [NormedAddCommGroup F₀] [InnerProductSpace ℂ F₀] [CompleteSpace F₀]
+
+/-- Finite Ky Fan approximation gauges converge under complex strong
+orthogonal cutoffs. -/
+theorem kyFanApproximationGauge_comp_strongProjection_tendsto_complex
+    {ι : Type w} {P : ι → E₀ →L[ℂ] E₀} {l : Filter ι}
+    (hPproj : ∀ i, IsOrthogonalProjectionMap (P i))
+    (hP : StronglyTendsto P l (ContinuousLinearMap.id ℂ E₀))
+    (k : ℕ) (K : E₀ →L[ℂ] F₀) :
+    Tendsto
+      (fun i => kyFanApproximationGauge k (K ∘L P i))
+      l (𝓝 (kyFanApproximationGauge k K)) := by
+  simp only [kyFanApproximationGauge]
+  exact tendsto_finsetSum (Finset.range k)
+    (fun n hn => approximationSingularValue_comp_strongProjection_tendsto_complex
+      hPproj hP n K)
+
+end ComplexKyFanStrongCutoff
 
 /-- Every finite-dimensional rectangular Ky Fan singular-value prefix is
 bounded by the corresponding approximation-number prefix. -/
@@ -327,7 +544,7 @@ theorem kyFanApproximationGauge_comp_strongProjection_tendsto
       (fun i => kyFanApproximationGauge k (K ∘L P i))
       l (𝓝 (kyFanApproximationGauge k K)) := by
   simp only [kyFanApproximationGauge]
-  exact tendsto_finset_sum (Finset.range k)
+  exact tendsto_finsetSum (Finset.range k)
     (fun n hn => approximationSingularValue_comp_strongProjection_tendsto
       hPproj hP n K)
 
@@ -491,7 +708,7 @@ theorem mem_and_scaled_gauge_le_of_all_scaled_kyFan_le
   let d : 𝕜 := (δ : 𝕜)
   have hd : d ≠ 0 := RCLike.ofReal_ne_zero.mpr hδ.ne'
   have hdnorm : ‖d‖ = δ := by
-    simp [d, RCLike.norm_ofReal, abs_of_pos hδ]
+    simp [d, abs_of_pos hδ]
   have hscaled : ∀ k,
       kyFanApproximationGauge k (d • A) ≤
         kyFanApproximationGauge k B := by
