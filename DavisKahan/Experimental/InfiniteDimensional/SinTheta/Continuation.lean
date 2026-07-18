@@ -163,8 +163,9 @@ margin is quantitative.
 Lean proof route for a weaker agent:
 
 1. Use `norm_resolventOperator_operatorPath_sub_le_of_uniform_bound` pointwise on the contour.  The second-resolvent operator algebra and the exact affine-path increment are now fully proved.
-2. Obtain a contour-uniform resolvent bound and an integrable bound for the path derivative/variation of the contour.
-3. Pass the resulting Lipschitz estimate through the Bochner contour integral and assemble the pointwise statements into `ContinuousOn`.
+2. Use `complex_continuousOn_resolventOperator_of_distance` for continuity in the contour parameter; the first-resolvent identity now supplies this from the same uniform spectral-distance margin.
+3. Combine that continuity with a piecewise `C1` contour to obtain curve integrability and a uniform speed bound.
+4. Pass the resulting Lipschitz estimate through the Bochner contour integral and assemble the pointwise statements into `ContinuousOn`.
 
 
 Ext-agent signature audit (GPT 5.6 High): The corrected `ContinuousOn [0,1]` signature
