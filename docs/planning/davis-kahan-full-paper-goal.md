@@ -924,3 +924,21 @@ now purely the contour layer: replace the provisional separating-contour and
 Riesz-projection definitions with proof-carrying rectifiable contour data,
 obtain one bound uniform in the contour parameter, and pass this estimate
 through the Bochner integral.
+
+### Progress note (2026-07-18, complex resolvent distance bound)
+
+The quantitative continuation layer now obtains its uniform endpoint bounds
+from spectral geometry rather than accepting them as independent hypotheses.
+`Sylvester/Resolvent.lean` constructs the complex self-adjoint resolvent through
+the continuous functional calculus and proves jointly that a positive distance
+`delta` from the real spectrum gives resolvent-set membership and the sharp
+bound `||R_A(z)|| <= delta^{-1}`.  `SinTheta/Continuation.lean` combines this
+with the accepted second-resolvent estimate to yield
+`||R_t(z)-R_u(z)|| <= delta^{-2} ||H|| |t-u|` from one spectral-distance margin
+along the affine path.
+
+The complex contour route therefore has all pointwise operator estimates it
+needs.  The next Section 8 seam is to package one rectifiable contour with a
+margin uniform in both contour and path parameters and pass the resulting
+bound through the normalized Bochner contour integral.  Real-scalar transfer
+of the resolvent-distance theorem remains a later complexification seam.

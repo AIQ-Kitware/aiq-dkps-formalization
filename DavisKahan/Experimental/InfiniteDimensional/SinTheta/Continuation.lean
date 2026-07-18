@@ -114,6 +114,38 @@ theorem norm_resolventOperator_operatorPath_sub_le_of_uniform_bound
   norm_resolventOperator_operatorPath_sub_le A H z M t u
     (hmem t ht) (hmem u hu) (hbound t ht) (hbound u hu)
 
+
+/-! ## Complex spectral-distance specialization -/
+
+section ComplexResolventDistance
+
+variable {Hc : Type*} [NormedAddCommGroup Hc] [InnerProductSpace ℂ Hc]
+  [CompleteSpace Hc]
+
+/-- Along a complex self-adjoint affine path, a common positive distance from
+one spectral parameter to every path spectrum supplies the endpoint
+resolvent-set and norm hypotheses automatically. -/
+theorem norm_resolventOperator_operatorPath_sub_le_of_spectral_distance
+    (A H : Hc →L[ℂ] Hc) (z : ℂ) (delta : ℝ) (hdelta : 0 < delta)
+    (I : Set ℝ)
+    (hself : ∀ t ∈ I, IsSelfAdjointOperator (operatorPath A H t))
+    (hsep : ∀ t ∈ I, ∀ lam ∈ realSpectrum (operatorPath A H t),
+      delta ≤ ‖z - (lam : ℂ)‖)
+    {t u : ℝ} (ht : t ∈ I) (hu : u ∈ I) :
+    ‖resolventOperator (operatorPath A H t) z -
+        resolventOperator (operatorPath A H u) z‖ ≤
+      delta⁻¹ ^ 2 * ‖H‖ * ‖t - u‖ := by
+  obtain ⟨htmem, htbound⟩ :=
+    complex_inResolventSet_and_norm_resolvent_le_inv_distance
+      (operatorPath A H t) (hself t ht) z delta hdelta (hsep t ht)
+  obtain ⟨humem, hubound⟩ :=
+    complex_inResolventSet_and_norm_resolvent_le_inv_distance
+      (operatorPath A H u) (hself u hu) z delta hdelta (hsep u hu)
+  exact norm_resolventOperator_operatorPath_sub_le A H z delta⁻¹ t u
+    htmem humem htbound hubound
+
+end ComplexResolventDistance
+
 /-- Continued spectral projection selected by a separating contour. -/
 noncomputable def continuedProjection (A H : E →L[𝕜] E)
     (contour : ℝ → 𝕜) (t : ℝ) : E →L[𝕜] E :=
