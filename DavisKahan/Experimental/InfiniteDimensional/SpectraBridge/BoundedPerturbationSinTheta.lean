@@ -3,7 +3,7 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.SpectralRestrictionOperator
+import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.SpectralRestrictionLocalization
 import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.GapResolvent
 import Spectra.Operator.KatoRellich
 
@@ -247,6 +247,31 @@ theorem sinTheta_addBounded_spectralSubspaces_opNorm_of_spectrum_gap
     (selfAdjointSpectralSubspaceInclusion_isometric (A.addBounded V)
       (addBounded_isSelfAdjoint A hA V hV) T hT)
     hβα hδ hA₀low hA₀high hΛspec
+
+
+/-- Canonical interval/exterior bounded-perturbation sine-theta theorem.
+The interval and exterior hypotheses are stated directly on the measurable
+spectral sets selecting the exact and perturbed subspaces; the spectral
+localization of their Stone generators is discharged internally. -/
+theorem sinTheta_addBounded_spectralSubspaces_opNorm_of_intervalExterior
+    (A : DKClosedOperator (H := H)) (hA : A.IsSelfAdjoint)
+    (V : H →L[ℂ] H) (hV : IsSelfAdjointOperator V)
+    (B T : Set ℝ) (hB : MeasurableSet B) (hT : MeasurableSet T)
+    {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
+    (hBsub : B ⊆ Set.Icc β α)
+    (hTdisj : T ∩ Set.Ioo (β - δ) (α + δ) = ∅) :
+    δ * ‖(selfAdjointSpectralSubspaceInclusion A hA B hB).adjoint ∘L
+      selfAdjointSpectralSubspaceInclusion (A.addBounded V)
+        (addBounded_isSelfAdjoint A hA V hV) T hT‖ ≤ ‖V‖ := by
+  obtain ⟨hA₀low, hA₀high⟩ :=
+    selfAdjointSpectralRestriction_semibounded_of_subset_Icc
+      A hA B hB hBsub
+  have hΛspec :=
+    selfAdjointSpectralRestriction_spectrum_avoids_open_of_inter_eq_empty
+      (A.addBounded V) (addBounded_isSelfAdjoint A hA V hV)
+      T hT hTdisj
+  exact sinTheta_addBounded_spectralSubspaces_opNorm_of_spectrum_gap
+    A hA V hV B T hB hT hβα hδ hA₀low hA₀high hΛspec
 
 end SpectraBridge
 end Experimental

@@ -942,3 +942,28 @@ needs.  The next Section 8 seam is to package one rectifiable contour with a
 margin uniform in both contour and path parameters and pass the resulting
 bound through the normalized Bochner contour integral.  Real-scalar transfer
 of the resolvent-distance theorem remains a later complexification seam.
+
+### Progress note (2026-07-18, spectral-range localization and bounded perturbations)
+
+The independent Spectra bounded-perturbation route now discharges the spectral
+localization hypotheses of its canonical restricted blocks.  In
+`SpectraBridge/SpectralRestrictionLocalization.lean`, Fourier uniqueness shows
+that the scalar Borel measure of the unitary group restricted to `E_A(B)H`
+is the ambient scalar measure restricted to `B`.  Consequently:
+
+- `selfAdjointSpectralRestriction_semibounded_of_subset_Icc` transports
+  `B ⊆ [β, α]` to lower and upper quadratic-form bounds for the restricted
+  Stone generator;
+- `selfAdjointSpectralRestriction_spectrum_avoids_open_of_inter_eq_empty`
+  transports disjointness from an open interval to resolvent membership for
+  every point of that interval;
+- `sinTheta_addBounded_spectralSubspaces_opNorm_of_intervalExterior` applies
+  the completed unbounded sine-theta engine directly to the exact and
+  perturbed PVM ranges under set-level interval/exterior hypotheses.
+
+This path remains independent of approximation-number/Ky-Fan ideal work and
+of the Halmos/direct-rotation development.  The remaining step on this path is
+purely geometric packaging: rewrite the inclusion-adjoint block as the usual
+spectral-projection cross block, prove the reverse directed estimate, and use
+the projection-gap identity to obtain the conventional norm of the difference
+of spectral projections.
