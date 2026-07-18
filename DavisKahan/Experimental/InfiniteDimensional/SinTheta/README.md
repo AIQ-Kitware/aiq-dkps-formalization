@@ -85,16 +85,23 @@ The independent Spectra adapter now has two focused modules:
   projection with the orthogonal projection onto its range, packages the
   isometric range inclusion, proves domain preservation, and proves that the
   self-adjoint operator commutes with the projection on its domain.
+- `SpectraBridge/SpectralRestrictionOperator.lean` restricts the generated
+  unitary flow to each measurable spectral range, takes its Stone generator,
+  and packages that generator as a self-adjoint closed operator.  The subtype
+  inclusion maps its domain into the ambient domain and intertwines the two
+  operators.
 - `SpectraBridge/BoundedPerturbationSinTheta.lean` identifies the local bounded
   sum with Spectra's Kato--Rellich perturbation, derives self-adjointness of the
-  sum, packages the perturbation residual as `V X`, and obtains the genuine-
-  spectrum operator-norm sine estimate for arbitrary invariant block
-  embeddings.
+  sum, packages the perturbation residual as `V X`, and instantiates the
+  genuine-spectrum operator-norm sine estimate with the two canonical spectral
+  range inclusions.
 
-The remaining spectral-projection specialization seam is precise: bundle the
-operator parts on the two spectral ranges as self-adjoint closed operators and
-instantiate those two embeddings with the canonical subtype inclusions.  The
-Kato--Rellich and residual estimates no longer need to be rebuilt there.
+The remaining spectral-projection specialization seam is now spectral
+localization: transport interval semibounds and exterior resolvent exclusion
+from the ambient PVM sets to the two Stone generators on their spectral ranges.
+After that, identify the directed inclusion block with the conventional
+spectral-projection sine/gap expression.  The self-adjoint restriction,
+Kato--Rellich, intertwining, and residual estimates do not need to be rebuilt.
 
 ## Current compiler-first frontier
 

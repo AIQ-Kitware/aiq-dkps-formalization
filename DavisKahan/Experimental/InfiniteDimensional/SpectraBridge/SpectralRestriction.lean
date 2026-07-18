@@ -64,6 +64,14 @@ theorem selfAdjointSpectralSubspace_eq_range
       (selfAdjointSpectralProjection A hA B hB).range :=
   rfl
 
+/-- A canonical self-adjoint spectral range is complete. -/
+noncomputable instance selfAdjointSpectralSubspace_completeSpace
+    (A : DKClosedOperator (H := H)) (hA : A.IsSelfAdjoint)
+    (B : Set ℝ) (hB : MeasurableSet B) :
+    CompleteSpace (selfAdjointSpectralSubspace A hA B hB) := by
+  unfold selfAdjointSpectralSubspace
+  infer_instance
+
 /-- A canonical self-adjoint spectral range is orthogonally complemented. -/
 noncomputable instance selfAdjointSpectralSubspace_hasOrthogonalProjection
     (A : DKClosedOperator (H := H)) (hA : A.IsSelfAdjoint)

@@ -271,8 +271,14 @@ alias unbounded_boundedPerturbation_selfAdjoint :=
   DavisKahanExt.ClosedOperator.isSelfAdjoint_addBounded
 alias unbounded_boundedPerturbation_selfAdjoint_spectra :=
   DavisKahan.Experimental.SpectraBridge.addBounded_isSelfAdjoint
+alias unbounded_spectralRestriction :=
+  DavisKahan.Experimental.SpectraBridge.selfAdjointSpectralRestriction
+alias unbounded_spectralRestriction_selfAdjoint :=
+  DavisKahan.Experimental.SpectraBridge.selfAdjointSpectralRestriction_isSelfAdjoint
 alias unbounded_sinTheta_boundedPerturbation_blockEmbeddings :=
   DavisKahan.Experimental.SpectraBridge.sinTheta_addBounded_opNorm_of_spectrum_gap_isometric
+alias unbounded_sinTheta_boundedPerturbation_spectralSubspaces :=
+  DavisKahan.Experimental.SpectraBridge.sinTheta_addBounded_spectralSubspaces_opNorm_of_spectrum_gap
 alias unbounded_relativePerturbation_selfAdjoint :=
   DavisKahanExt.ClosedOperator.isSelfAdjoint_of_relativelyBounded
 alias unbounded_sinTheta_boundedPerturbation :=

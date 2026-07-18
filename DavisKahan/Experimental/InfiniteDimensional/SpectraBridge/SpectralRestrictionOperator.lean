@@ -150,8 +150,11 @@ theorem selfAdjointSpectralSubspace_generator_tendsto_ambient
       (generator (selfAdjointSpectralSubspaceUnitaryGroup A hA B hB) x)).comp
       (generator_tendsto
         (selfAdjointSpectralSubspaceUnitaryGroup A hA B hB) x)
-  simpa only [selfAdjointSpectralSubspaceInclusion_apply,
-    coe_genDiffQuot_selfAdjointSpectralSubspaceUnitaryGroup] using h
+  exact h.congr fun t => by
+    simpa only [Function.comp_apply,
+      selfAdjointSpectralSubspaceInclusion_apply] using
+      coe_genDiffQuot_selfAdjointSpectralSubspaceUnitaryGroup
+        A hA B hB (x : selfAdjointSpectralSubspace A hA B hB) t
 
 /-- The domain of the restricted generator embeds into the ambient generator
 domain. -/
