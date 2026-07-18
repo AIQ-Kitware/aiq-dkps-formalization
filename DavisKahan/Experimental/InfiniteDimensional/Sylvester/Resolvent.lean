@@ -4,6 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
 import DavisKahan.Experimental.InfiniteDimensional.Core.SpectralProjection
+import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Basic
+import Mathlib.Analysis.CStarAlgebra.ContinuousLinearMap
 
 /-!
 # Resolvents, Riesz projections, and spectral continuation
@@ -246,6 +248,124 @@ theorem norm_resolventOperator_sub_le_of_bounds
       have hM : 0 ≤ M := (norm_nonneg (resolventOperator B z)).trans hRB
       exact mul_le_mul_of_nonneg_left hRA
         (mul_nonneg hM (norm_nonneg (A - B)))
+
+
+/-! ## Complex self-adjoint resolvent bounds -/
+
+section ComplexResolventDistance
+
+variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
+  [CompleteSpace H]
+
+/-- For a complex self-adjoint operator, positive distance from the real
+spectrum gives both resolvent-set membership and the sharp inverse-distance
+operator-norm bound.
+
+The proof constructs the inverse through the complex continuous functional
+calculus using the symbol `w ↦ (w - z)⁻¹`.  Self-adjointness restricts the
+complex spectrum to the embedded real spectrum, so the supplied distance
+hypothesis controls the symbol on the whole spectrum. -/
+theorem complex_inResolventSet_and_norm_resolvent_le_inv_distance
+    (A : H →L[ℂ] H) (hA : IsSelfAdjointOperator A)
+    (z : ℂ) (delta : ℝ) (hdelta : 0 < delta)
+    (hsep : ∀ lam ∈ realSpectrum A, delta ≤ ‖z - (lam : ℂ)‖) :
+    InResolventSet A z ∧ ‖resolventOperator A z‖ ≤ delta⁻¹ := by
+  let f : ℂ → ℂ := fun w => w - z
+  let g : ℂ → ℂ := fun w => (w - z)⁻¹
+  have hAsa : IsSelfAdjoint A :=
+    ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hA
+  have hnormal : IsStarNormal A := hAsa.isStarNormal
+  have hne : ∀ w ∈ spectrum ℂ A, f w ≠ 0 := by
+    intro w hw hzero
+    obtain ⟨lam, hlam, rfl⟩ :=
+      hAsa.spectrumRestricts.algebraMap_image.symm ▸ hw
+    have hlamC : (lam : ℂ) ∈ spectrum ℂ A := by
+      rw [← hAsa.spectrumRestricts.algebraMap_image]
+      exact ⟨lam, hlam, rfl⟩
+    have hdist := hsep lam (by exact hlamC)
+    have heq : (lam : ℂ) = z :=
+      sub_eq_zero.mp (by simpa [f] using hzero)
+    rw [← heq, sub_self, norm_zero] at hdist
+    linarith
+  have hfcont : ContinuousOn f (spectrum ℂ A) :=
+    (continuous_id.sub continuous_const).continuousOn
+  have hgcont : ContinuousOn g (spectrum ℂ A) := hfcont.inv₀ hne
+  let R : H →L[ℂ] H := cfc g A
+  have hshift : cfc f A = A - z • (1 : H →L[ℂ] H) := by
+    rw [show f = fun w : ℂ => w - z from rfl,
+      cfc_sub (fun w : ℂ => w) (fun _ : ℂ => z) A,
+      cfc_id' (R := ℂ) (a := A), cfc_const z A,
+      Algebra.algebraMap_eq_smul_one]
+  have hleft : R * (A - z • (1 : H →L[ℂ] H)) = 1 := by
+    have hmul : cfc g A * cfc f A = cfc (fun w => g w * f w) A :=
+      (cfc_mul g f A hgcont hfcont).symm
+    rw [← hshift]
+    change cfc g A * cfc f A = 1
+    rw [hmul,
+      cfc_congr (g := fun _ : ℂ => (1 : ℂ))
+        (fun w hw => by simpa [f, g] using inv_mul_cancel₀ (hne w hw)),
+      cfc_const_one ℂ A]
+  have hright : (A - z • (1 : H →L[ℂ] H)) * R = 1 := by
+    have hmul : cfc f A * cfc g A = cfc (fun w => f w * g w) A :=
+      (cfc_mul f g A hfcont hgcont).symm
+    rw [← hshift]
+    change cfc f A * cfc g A = 1
+    rw [hmul,
+      cfc_congr (g := fun _ : ℂ => (1 : ℂ))
+        (fun w hw => by simpa [f, g] using mul_inv_cancel₀ (hne w hw)),
+      cfc_const_one ℂ A]
+  have hz : InResolventSet A z := by
+    refine ⟨R, ?_, ?_⟩
+    · simpa only [ContinuousLinearMap.mul_def, ContinuousLinearMap.one_def]
+        using hleft
+    · simpa only [ContinuousLinearMap.mul_def, ContinuousLinearMap.one_def]
+        using hright
+  have hresolvent : resolventOperator A z = R := by
+    have hchosen := resolventOperator_mul_cancel A hz
+    calc
+      resolventOperator A z = resolventOperator A z * 1 := (mul_one _).symm
+      _ = resolventOperator A z *
+          ((A - z • (1 : H →L[ℂ] H)) * R) := by rw [hright]
+      _ = (resolventOperator A z *
+          (A - z • (1 : H →L[ℂ] H))) * R := by rw [mul_assoc]
+      _ = R := by rw [hchosen, one_mul]
+  have hRnorm : ‖R‖ ≤ delta⁻¹ := by
+    change ‖cfc g A‖ ≤ delta⁻¹
+    refine norm_cfc_le (inv_nonneg.mpr hdelta.le) ?_
+    intro w hw
+    obtain ⟨lam, hlam, rfl⟩ :=
+      hAsa.spectrumRestricts.algebraMap_image.symm ▸ hw
+    have hlamC : (lam : ℂ) ∈ spectrum ℂ A := by
+      rw [← hAsa.spectrumRestricts.algebraMap_image]
+      exact ⟨lam, hlam, rfl⟩
+    have hdist : delta ≤ ‖z - algebraMap ℝ ℂ lam‖ := by
+      convert hsep lam (by exact hlamC) using 1 <;> simp
+    have hdist' : delta ≤ ‖algebraMap ℝ ℂ lam - z‖ := by
+      simpa only [norm_sub_rev] using hdist
+    change ‖(algebraMap ℝ ℂ lam - z)⁻¹‖ ≤ delta⁻¹
+    rw [norm_inv]
+    exact inv_anti₀ hdelta hdist'
+  exact ⟨hz, hresolvent.symm ▸ hRnorm⟩
+
+/-- Resolvent-set membership from a positive complex spectral-distance bound. -/
+theorem complex_inResolventSet_of_distance
+    (A : H →L[ℂ] H) (hA : IsSelfAdjointOperator A)
+    (z : ℂ) (delta : ℝ) (hdelta : 0 < delta)
+    (hsep : ∀ lam ∈ realSpectrum A, delta ≤ ‖z - (lam : ℂ)‖) :
+    InResolventSet A z :=
+  (complex_inResolventSet_and_norm_resolvent_le_inv_distance
+    A hA z delta hdelta hsep).1
+
+/-- Sharp resolvent norm bound for a complex self-adjoint operator. -/
+theorem complex_norm_resolvent_le_inv_distance
+    (A : H →L[ℂ] H) (hA : IsSelfAdjointOperator A)
+    (z : ℂ) (delta : ℝ) (hdelta : 0 < delta)
+    (hsep : ∀ lam ∈ realSpectrum A, delta ≤ ‖z - (lam : ℂ)‖) :
+    ‖resolventOperator A z‖ ≤ delta⁻¹ :=
+  (complex_inResolventSet_and_norm_resolvent_le_inv_distance
+    A hA z delta hdelta hsep).2
+
+end ComplexResolventDistance
 
 /-- Self-adjoint resolvent norm bound by spectral distance.
 
