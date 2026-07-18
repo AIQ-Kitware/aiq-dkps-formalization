@@ -19,6 +19,7 @@ import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.GapResolvent
 import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.BoundedFromSpectrum
 import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.UnboundedIntervalExterior
 import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.BoundedPerturbationSinTheta
+import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.SpectralProjectionSinTheta
 
 /-!
 # Active Spectra bridge
