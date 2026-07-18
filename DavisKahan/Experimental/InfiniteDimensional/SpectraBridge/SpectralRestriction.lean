@@ -35,6 +35,7 @@ namespace DavisKahan
 namespace Experimental
 namespace SpectraBridge
 
+open Spectra.OneParameterUnitaryGroup
 open Spectra.YosidaHille
 open Spectra.QuantumMechanics.SpectralTheory
 
@@ -62,6 +63,14 @@ theorem selfAdjointSpectralSubspace_eq_range
     selfAdjointSpectralSubspace A hA B hB =
       (selfAdjointSpectralProjection A hA B hB).range :=
   rfl
+
+/-- A canonical self-adjoint spectral range is orthogonally complemented. -/
+noncomputable instance selfAdjointSpectralSubspace_hasOrthogonalProjection
+    (A : DKClosedOperator (H := H)) (hA : A.IsSelfAdjoint)
+    (B : Set ℝ) (hB : MeasurableSet B) :
+    (selfAdjointSpectralSubspace A hA B hB).HasOrthogonalProjection := by
+  unfold selfAdjointSpectralSubspace
+  infer_instance
 
 /-- The canonical inclusion of a spectral range into the ambient Hilbert
 space. -/
@@ -107,14 +116,13 @@ theorem selfAdjointSpectralProjection_mem_domain
   have hgen : generator U = A.toLinearPMap := generator_genToGroup hA
   have hdom : (generator U).domain = A.domain :=
     congrArg LinearPMap.domain hgen
-  have hxU : (x : H) ∈ (generator U).domain := by
-    rw [hdom]
-    exact x.property
-  have hx := spectralProjection_mem_generatorDomain_of_mem U hB
-    (⟨(x : H), hxU⟩ : (generator U).domain)
-  change spectralProjection U B hB (x : H) ∈ A.domain
-  rw [← hdom]
-  exact hx
+  have hxU : (x : H) ∈ (generator U).domain :=
+    (le_of_eq hdom.symm) x.property
+  have hxUproj :
+      spectralProjection U B hB (x : H) ∈ (generator U).domain :=
+    spectralProjection_mem_generatorDomain_of_mem U hB
+      (⟨(x : H), hxU⟩ : (generator U).domain)
+  exact (le_of_eq hdom) hxUproj
 
 /-- A self-adjoint operator commutes with each measurable spectral projection
 on its full operator domain. -/
@@ -129,9 +137,8 @@ theorem selfAdjoint_apply_spectralProjection
   have hgen : generator U = A.toLinearPMap := generator_genToGroup hA
   have hdom : (generator U).domain = A.domain :=
     congrArg LinearPMap.domain hgen
-  have hxU : (x : H) ∈ (generator U).domain := by
-    rw [hdom]
-    exact x.property
+  have hxU : (x : H) ∈ (generator U).domain :=
+    (le_of_eq hdom.symm) x.property
   let xU : (generator U).domain := ⟨(x : H), hxU⟩
   have hprojU : spectralProjection U B hB (x : H) ∈ (generator U).domain :=
     spectralProjection_mem_generatorDomain_of_mem U hB xU
@@ -152,8 +159,15 @@ theorem selfAdjoint_apply_spectralProjection
       ⟨spectralProjection U B hB (x : H),
         selfAdjointSpectralProjection_mem_domain A hA hB x⟩ =
     spectralProjection U B hB (A.toLinearPMap x)
-  rw [← hleft, ← hright]
-  exact hcomm
+  calc
+    A.toLinearPMap
+        ⟨spectralProjection U B hB (x : H),
+          selfAdjointSpectralProjection_mem_domain A hA hB x⟩ =
+        generator U ⟨spectralProjection U B hB (x : H), hprojU⟩ :=
+      hleft.symm
+    _ = spectralProjection U B hB (generator U xU) := hcomm
+    _ = spectralProjection U B hB (A.toLinearPMap x) :=
+      congrArg (fun z : H => spectralProjection U B hB z) hright
 
 /-- The domain-aware image of a vector in a spectral range remains in that
 spectral range. -/
@@ -165,14 +179,24 @@ theorem selfAdjoint_maps_spectralSubspace
   let P := Spectra.QuantumMechanics.SpectralTheory.PVM.spectralPVM hA
   change A.toLinearMap x ∈ pvmRangeSubspace P B hB
   rw [mem_pvmRangeSubspace_iff P B hB]
-  rw [← selfAdjoint_apply_spectralProjection A hA hB x]
-  have hfix : selfAdjointSpectralProjection A hA B hB (x : H) = (x : H) :=
+  change selfAdjointSpectralProjection A hA B hB (A.toLinearMap x) =
+    A.toLinearMap x
+  have hfixP : P.proj B hB (x : H) = (x : H) :=
     pvmProjection_eq_self_of_mem_rangeSubspace P B hB hx
+  have hfix : selfAdjointSpectralProjection A hA B hB (x : H) = (x : H) := by
+    change P.proj B hB (x : H) = (x : H)
+    exact hfixP
   have hsub :
       (⟨selfAdjointSpectralProjection A hA B hB (x : H),
         selfAdjointSpectralProjection_mem_domain A hA hB x⟩ : A.domain) = x :=
     Subtype.ext hfix
-  rw [hsub]
+  calc
+    selfAdjointSpectralProjection A hA B hB (A.toLinearMap x) =
+        A.toLinearMap
+          ⟨selfAdjointSpectralProjection A hA B hB (x : H),
+            selfAdjointSpectralProjection_mem_domain A hA hB x⟩ :=
+      (selfAdjoint_apply_spectralProjection A hA hB x).symm
+    _ = A.toLinearMap x := congrArg A.toLinearMap hsub
 
 end SpectraBridge
 end Experimental

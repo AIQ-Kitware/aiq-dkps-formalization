@@ -77,6 +77,25 @@ Do not replace these with a bounded operator plus comments about a future
 extension. A bounded theorem should be obtained from the general API by the
 full-domain constructor, or retained as a clearly named alternative proof.
 
+## Spectra-backed bounded-perturbation specialization
+
+The independent Spectra adapter now has two focused modules:
+
+- `SpectraBridge/SpectralRestriction.lean` identifies the canonical Spectra
+  projection with the orthogonal projection onto its range, packages the
+  isometric range inclusion, proves domain preservation, and proves that the
+  self-adjoint operator commutes with the projection on its domain.
+- `SpectraBridge/BoundedPerturbationSinTheta.lean` identifies the local bounded
+  sum with Spectra's Kato--Rellich perturbation, derives self-adjointness of the
+  sum, packages the perturbation residual as `V X`, and obtains the genuine-
+  spectrum operator-norm sine estimate for arbitrary invariant block
+  embeddings.
+
+The remaining spectral-projection specialization seam is precise: bundle the
+operator parts on the two spectral ranges as self-adjoint closed operators and
+instantiate those two embeddings with the canonical subtype inclusions.  The
+Kato--Rellich and residual estimates no longer need to be rebuilt there.
+
 ## Current compiler-first frontier
 
 The high-level theorem assembly now follows the intended chain. The remaining
