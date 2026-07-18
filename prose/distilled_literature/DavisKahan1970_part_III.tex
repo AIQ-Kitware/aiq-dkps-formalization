@@ -251,11 +251,31 @@ The proof proceeds through singular-vector compressions and Ky Fan variational p
 
 This is the source-faithful root for the classical interval/exterior sine estimates. It has constant one. It should not be replaced by the later arbitrary-separated-spectrum estimate with constant $\pi/2$, which solves a genuinely harder but different problem.
 
-\subsection{Theorem 5.2: non-ordered separation}
+\subsection{Theorem 5.2: the unbounded ordered extension}
 
-The paper also considers spectra separated only by distance. Its strongest general statement at this point is not the modern sharp every-UI-norm theorem. The source obtains Hilbert-space or Hilbert--Schmidt style conclusions and dimension-dependent consequences. Later Bhatia--Davis--McIntosh and Fourier-analytic work supply the general arbitrary-separated norm-ideal theory.
+The maintained transcription identifies Theorem 5.2 as the domain-aware
+extension of the ordered constant-one Sylvester estimate to self-adjoint blocks
+that may be unbounded.  The bounded rectangular maps $X$ and $C$ satisfy the
+closed equation $AX-XB=C$ on the domain of $B$, including the transport
+condition $X(\mathcal D(B))\subseteq\mathcal D(A)$.  The two diagonal blocks
+obey opposite semibounds separated by $\delta$.
 
-This source boundary is important for attribution: the modern repository may expose stronger arbitrary-separated Sylvester endpoints, but they are not part of the proof provenance of the four 1970 Part III statements.
+The source proof cuts one unbounded block down by bounded spectral projections,
+uses the ordered finite Ky Fan inequalities for the resulting bounded
+truncations, and then lets the cutoff radius tend to infinity.  Two distinct
+formal seams are therefore essential:
+\begin{enumerate}[leftmargin=2em]
+\item spectral cutoff preserves the domain-aware Sylvester equation and the
+ordered form bounds;
+\item every finite Ky Fan gauge converges under the strongly convergent
+orthogonal cutoffs, allowing the cutoff inequalities to pass to $X$ and $C$.
+\end{enumerate}
+Fan dominance then converts the family of finite Ky Fan inequalities into the
+claimed arbitrary-unitarily-invariant ideal bound.
+
+This theorem is not the later arbitrary-separated-spectrum estimate with
+constant $\pi/2$.  That Fourier-multiplier result is useful additional
+infrastructure, but it is not the source of the ordered unbounded sine theorem.
 
 \section{Section 6: the single-angle proofs}
 
