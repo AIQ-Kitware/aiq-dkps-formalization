@@ -448,6 +448,290 @@ theorem kyFanApproximationGauge_add_le_finiteDimensional
   exact (ForMathlib.DavisKahanTheory.RectangularUnitarilyInvariantNorm.kyFan
     (𝕜 := 𝕜) (E := E₀) (F := F₀) k).add_le A B
 
+
+section ComplexKyFanTriangle
+
+variable {E₀ F₀ : Type v}
+  [NormedAddCommGroup E₀] [InnerProductSpace ℂ E₀] [CompleteSpace E₀]
+  [NormedAddCommGroup F₀] [InnerProductSpace ℂ F₀] [CompleteSpace F₀]
+
+/-- Restricting a complex operator to a larger source subspace can only
+increase its approximation numbers. -/
+theorem approximationSingularValue_restrict_mono_complex
+    (T : E₀ →L[ℂ] F₀) (n : ℕ) {U V : Submodule ℂ E₀}
+    (hUV : U ≤ V) :
+    approximationSingularValue n (T ∘L U.subtypeL) ≤
+      approximationSingularValue n (T ∘L V.subtypeL) := by
+  let J : U →L[ℂ] V :=
+    (Submodule.inclusion hUV).mkContinuous 1 (fun x => by
+      change ‖((x : U) : E₀)‖ ≤ 1 * ‖x‖
+      simp)
+  have hJnorm : ‖J‖₊ ≤ (1 : NNReal) := by
+    exact_mod_cast (J.opNorm_le_bound zero_le_one fun x => by
+      change ‖((x : U) : E₀)‖ ≤ 1 * ‖x‖
+      simp)
+  have hcomp : T ∘L U.subtypeL = (T ∘L V.subtypeL) ∘L J := by
+    ext x
+    rfl
+  have hNN : (T ∘L U.subtypeL).approximationNumber n ≤
+      (T ∘L V.subtypeL).approximationNumber n := by
+    rw [hcomp]
+    calc
+      ((T ∘L V.subtypeL) ∘L J).approximationNumber n
+          ≤ (T ∘L V.subtypeL).approximationNumber n * ‖J‖₊ :=
+        (T ∘L V.subtypeL).approximationNumber_comp_right_le J n
+      _ ≤ (T ∘L V.subtypeL).approximationNumber n * 1 :=
+        mul_le_mul_of_nonneg_left hJnorm bot_le
+      _ = (T ∘L V.subtypeL).approximationNumber n := by rw [mul_one]
+  change ((T ∘L U.subtypeL).approximationNumber n : ℝ) ≤
+    ((T ∘L V.subtypeL).approximationNumber n : ℝ)
+  exact_mod_cast hNN
+
+/-- Projecting the codomain onto a subspace already containing the operator
+range preserves every approximation singular value. -/
+theorem approximationSingularValue_orthogonalProjectionOnto_comp_eq
+    {V G : Type v}
+    [NormedAddCommGroup V] [InnerProductSpace ℂ V] [CompleteSpace V]
+    [NormedAddCommGroup G] [InnerProductSpace ℂ G] [CompleteSpace G]
+    (W : Submodule ℂ G) [W.HasOrthogonalProjection]
+    (A : V →L[ℂ] G) (hA : ∀ x, A x ∈ W) (n : ℕ) :
+    approximationSingularValue n (W.orthogonalProjectionOnto ∘L A) =
+      approximationSingularValue n A := by
+  let AW : V →L[ℂ] W := W.orthogonalProjectionOnto ∘L A
+  have hfactor : W.subtypeL ∘L AW = A := by
+    ext x
+    change W.starProjection (A x) = A x
+    exact W.starProjection_eq_self_iff.mpr (hA x)
+  have hproj : ‖W.orthogonalProjectionOnto‖₊ ≤ (1 : NNReal) := by
+    exact_mod_cast W.orthogonalProjectionOnto_norm_le
+  have hsub : ‖W.subtypeL‖₊ ≤ (1 : NNReal) := by
+    exact_mod_cast W.norm_subtypeL_le
+  have hNN : AW.approximationNumber n = A.approximationNumber n := by
+    apply le_antisymm
+    · calc
+        AW.approximationNumber n
+            ≤ ‖W.orthogonalProjectionOnto‖₊ * A.approximationNumber n :=
+          ContinuousLinearMap.approximationNumber_comp_left_le
+            W.orthogonalProjectionOnto A n
+        _ ≤ 1 * A.approximationNumber n :=
+          mul_le_mul_of_nonneg_right hproj bot_le
+        _ = A.approximationNumber n := by rw [one_mul]
+    · rw [← hfactor]
+      calc
+        (W.subtypeL ∘L AW).approximationNumber n
+            ≤ ‖W.subtypeL‖₊ * AW.approximationNumber n :=
+          ContinuousLinearMap.approximationNumber_comp_left_le W.subtypeL AW n
+        _ ≤ 1 * AW.approximationNumber n :=
+          mul_le_mul_of_nonneg_right hsub bot_le
+        _ = AW.approximationNumber n := by rw [one_mul]
+  change (AW.approximationNumber n : ℝ) = (A.approximationNumber n : ℝ)
+  exact congrArg (fun x : NNReal => (x : ℝ)) hNN
+
+/-- Projecting the codomain onto a subspace containing the range preserves
+all finite Ky Fan approximation gauges. -/
+theorem kyFanApproximationGauge_orthogonalProjectionOnto_comp_eq
+    {V G : Type v}
+    [NormedAddCommGroup V] [InnerProductSpace ℂ V] [CompleteSpace V]
+    [NormedAddCommGroup G] [InnerProductSpace ℂ G] [CompleteSpace G]
+    (W : Submodule ℂ G) [W.HasOrthogonalProjection]
+    (A : V →L[ℂ] G) (hA : ∀ x, A x ∈ W) (k : ℕ) :
+    kyFanApproximationGauge k (W.orthogonalProjectionOnto ∘L A) =
+      kyFanApproximationGauge k A := by
+  unfold kyFanApproximationGauge
+  exact Finset.sum_congr rfl fun n _ =>
+    approximationSingularValue_orthogonalProjectionOnto_comp_eq W A hA n
+
+/-- The Ky Fan approximation-gauge triangle inequality when the source is
+finite-dimensional and the complex Hilbert codomain is arbitrary. -/
+theorem kyFanApproximationGauge_add_le_finiteSource_complex
+    {V G : Type v}
+    [NormedAddCommGroup V] [InnerProductSpace ℂ V]
+    [FiniteDimensional ℂ V]
+    [NormedAddCommGroup G] [InnerProductSpace ℂ G] [CompleteSpace G]
+    (k : ℕ) (A B : V →L[ℂ] G) :
+    kyFanApproximationGauge k (A + B) ≤
+      kyFanApproximationGauge k A + kyFanApproximationGauge k B := by
+  letI : CompleteSpace V := FiniteDimensional.complete ℂ V
+  let C : V × V →L[ℂ] G :=
+    A ∘L ContinuousLinearMap.fst ℂ V V +
+      B ∘L ContinuousLinearMap.snd ℂ V V
+  let W : Submodule ℂ G := C.range
+  letI : FiniteDimensional ℂ W := by
+    apply FiniteDimensional.of_surjective C.rangeRestrict.toLinearMap
+    intro y
+    rcases y.property with ⟨x, hx⟩
+    exact ⟨x, Subtype.ext hx⟩
+  letI : CompleteSpace W := FiniteDimensional.complete ℂ W
+  letI : W.HasOrthogonalProjection :=
+    Submodule.HasOrthogonalProjection.ofCompleteSpace W
+  have hA : ∀ x, A x ∈ W := by
+    intro x
+    change A x ∈ C.range
+    refine ⟨(x, 0), ?_⟩
+    simp [C]
+  have hB : ∀ x, B x ∈ W := by
+    intro x
+    change B x ∈ C.range
+    refine ⟨(0, x), ?_⟩
+    simp [C]
+  have hAB : ∀ x, (A + B) x ∈ W := by
+    intro x
+    exact W.add_mem (hA x) (hB x)
+  let AW : V →L[ℂ] W := W.orthogonalProjectionOnto ∘L A
+  let BW : V →L[ℂ] W := W.orthogonalProjectionOnto ∘L B
+  have hsum : W.orthogonalProjectionOnto ∘L (A + B) = AW + BW := by
+    ext x
+    simp [AW, BW]
+  have hAWcont : AW.toLinearMap.toContinuousLinearMap = AW := by
+    ext x
+    rfl
+  have hBWcont : BW.toLinearMap.toContinuousLinearMap = BW := by
+    ext x
+    rfl
+  have hsumcont :
+      (AW.toLinearMap + BW.toLinearMap).toContinuousLinearMap = AW + BW := by
+    ext x
+    rfl
+  have htri := kyFanApproximationGauge_add_le_finiteDimensional
+    (𝕜 := ℂ) k AW.toLinearMap BW.toLinearMap
+  rw [hsumcont, hAWcont, hBWcont] at htri
+  calc
+    kyFanApproximationGauge k (A + B) =
+        kyFanApproximationGauge k (W.orthogonalProjectionOnto ∘L (A + B)) :=
+      (kyFanApproximationGauge_orthogonalProjectionOnto_comp_eq
+        W (A + B) hAB k).symm
+    _ = kyFanApproximationGauge k (AW + BW) := by rw [hsum]
+    _ ≤ kyFanApproximationGauge k AW + kyFanApproximationGauge k BW := htri
+    _ = kyFanApproximationGauge k A + kyFanApproximationGauge k B := by
+      rw [kyFanApproximationGauge_orthogonalProjectionOnto_comp_eq W A hA k,
+        kyFanApproximationGauge_orthogonalProjectionOnto_comp_eq W B hB k]
+
+/-- Every positive tolerance admits a finite source restriction whose
+approximation number is within that tolerance of the ambient complex value. -/
+theorem exists_finiteRestrictionApproximationNumber_add_gt
+    (T : E₀ →L[ℂ] F₀) (n : ℕ) (ε : NNReal) (hε : 0 < ε) :
+    ∃ v : Fin (n + 1) → E₀,
+      T.approximationNumber n <
+        (T ∘L (Submodule.span ℂ (Set.range v)).subtypeL).approximationNumber n + ε := by
+  by_cases hsmall : T.approximationNumber n < ε
+  · refine ⟨fun _ => 0, hsmall.trans_le ?_⟩
+    exact le_add_of_nonneg_left bot_le
+  · have hεle : ε ≤ T.approximationNumber n := le_of_not_gt hsmall
+    have ha0 : 0 < T.approximationNumber n := hε.trans_le hεle
+    have hsub : T.approximationNumber n - ε < T.approximationNumber n :=
+      tsub_lt_self ha0 hε
+    obtain ⟨v, hv⟩ :=
+      SpectraBridge.exists_finiteRestrictionApproximationNumber_gt_of_lt
+        T n hsub
+    refine ⟨v, ?_⟩
+    calc
+      T.approximationNumber n =
+          (T.approximationNumber n - ε) + ε :=
+        (tsub_add_cancel_of_le hεle).symm
+      _ < (T ∘L (Submodule.span ℂ (Set.range v)).subtypeL).approximationNumber n + ε :=
+        add_lt_add_left hv ε
+
+/-- Infinite-dimensional Ky Fan addition inequality over complex Hilbert
+spaces, obtained from simultaneous finite-dimensional localization. -/
+theorem kyFanApproximationGauge_add_le_complex
+    (k : ℕ) (K L : E₀ →L[ℂ] F₀) :
+    kyFanApproximationGauge k (K + L) ≤
+      kyFanApproximationGauge k K + kyFanApproximationGauge k L := by
+  classical
+  by_cases hk : k = 0
+  · subst k
+    simp [kyFanApproximationGauge]
+  have hkpos : 0 < k := Nat.pos_of_ne_zero hk
+  apply le_of_forall_pos_le_add
+  intro ε hε
+  let δr : ℝ := ε / (k : ℝ)
+  have hkreal : 0 < (k : ℝ) := by exact_mod_cast hkpos
+  have hδr : 0 < δr := div_pos hε hkreal
+  let δ : NNReal := ⟨δr, hδr.le⟩
+  have hδ : 0 < δ := by
+    change 0 < δr
+    exact hδr
+  choose v hv using fun n =>
+    exists_finiteRestrictionApproximationNumber_add_gt (K + L) n δ hδ
+  let β : Type := Σ n : Fin k, Fin (n.1 + 1)
+  let w : β → E₀ := fun p => v p.1.1 p.2
+  let V : Submodule ℂ E₀ := Submodule.span ℂ (Set.range w)
+  letI : FiniteDimensional ℂ V :=
+    Module.Finite.span_of_finite ℂ (Set.finite_range w)
+  letI : CompleteSpace V := FiniteDimensional.complete ℂ V
+  let KV : V →L[ℂ] F₀ := K ∘L V.subtypeL
+  let LV : V →L[ℂ] F₀ := L ∘L V.subtypeL
+  have hsumRestrict : (K + L) ∘L V.subtypeL = KV + LV := by
+    ext x
+    rfl
+  have hterm : ∀ n ∈ Finset.range k,
+      approximationSingularValue n (K + L) ≤
+        approximationSingularValue n (KV + LV) + (δ : ℝ) := by
+    intro n hn
+    let U : Submodule ℂ E₀ := Submodule.span ℂ (Set.range (v n))
+    have hUV : U ≤ V := by
+      apply Submodule.span_le.mpr
+      rintro x ⟨j, rfl⟩
+      apply Submodule.subset_span
+      exact ⟨(⟨⟨n, Finset.mem_range.mp hn⟩, j⟩ : β), rfl⟩
+    have hmono := approximationSingularValue_restrict_mono_complex
+      (K + L) n hUV
+    have hvNN : (K + L).approximationNumber n <
+        ((K + L) ∘L U.subtypeL).approximationNumber n + δ := by
+      simpa only [U] using hv n
+    have hvReal : approximationSingularValue n (K + L) <
+        approximationSingularValue n ((K + L) ∘L U.subtypeL) + (δ : ℝ) := by
+      change ((K + L).approximationNumber n : ℝ) <
+        (((K + L) ∘L U.subtypeL).approximationNumber n : ℝ) + (δ : ℝ)
+      exact_mod_cast hvNN
+    calc
+      approximationSingularValue n (K + L)
+          ≤ approximationSingularValue n ((K + L) ∘L U.subtypeL) + (δ : ℝ) :=
+        le_of_lt hvReal
+      _ ≤ approximationSingularValue n ((K + L) ∘L V.subtypeL) + (δ : ℝ) :=
+        add_le_add_left hmono (δ : ℝ)
+      _ = approximationSingularValue n (KV + LV) + (δ : ℝ) := by
+        rw [hsumRestrict]
+  have hlocal : kyFanApproximationGauge k (K + L) ≤
+      kyFanApproximationGauge k (KV + LV) + ε := by
+    unfold kyFanApproximationGauge
+    calc
+      ∑ n ∈ Finset.range k, approximationSingularValue n (K + L)
+          ≤ ∑ n ∈ Finset.range k,
+              (approximationSingularValue n (KV + LV) + (δ : ℝ)) :=
+        Finset.sum_le_sum hterm
+      _ = (∑ n ∈ Finset.range k, approximationSingularValue n (KV + LV)) +
+          (k : ℝ) * (δ : ℝ) := by
+        rw [Finset.sum_add_distrib]
+        simp [nsmul_eq_mul]
+      _ = (∑ n ∈ Finset.range k, approximationSingularValue n (KV + LV)) + ε := by
+        change _ + (k : ℝ) * δr = _ + ε
+        rw [mul_div_cancel₀ ε hkreal.ne']
+  have htri := kyFanApproximationGauge_add_le_finiteSource_complex k KV LV
+  have hKrestrict : kyFanApproximationGauge k KV ≤ kyFanApproximationGauge k K := by
+    unfold kyFanApproximationGauge
+    apply Finset.sum_le_sum
+    intro n hn
+    change ((K ∘L V.subtypeL).approximationNumber n : ℝ) ≤
+      (K.approximationNumber n : ℝ)
+    exact_mod_cast SpectraBridge.approximationNumber_comp_subtypeL_le K n V
+  have hLrestrict : kyFanApproximationGauge k LV ≤ kyFanApproximationGauge k L := by
+    unfold kyFanApproximationGauge
+    apply Finset.sum_le_sum
+    intro n hn
+    change ((L ∘L V.subtypeL).approximationNumber n : ℝ) ≤
+      (L.approximationNumber n : ℝ)
+    exact_mod_cast SpectraBridge.approximationNumber_comp_subtypeL_le L n V
+  calc
+    kyFanApproximationGauge k (K + L)
+        ≤ kyFanApproximationGauge k (KV + LV) + ε := hlocal
+    _ ≤ (kyFanApproximationGauge k KV + kyFanApproximationGauge k LV) + ε :=
+      add_le_add_left htri ε
+    _ ≤ (kyFanApproximationGauge k K + kyFanApproximationGauge k L) + ε :=
+      add_le_add_left (add_le_add hKrestrict hLrestrict) ε
+
+end ComplexKyFanTriangle
+
 /-- The zero-term Ky Fan gauge vanishes. -/
 @[simp]
 theorem kyFanApproximationGauge_zero :
