@@ -761,7 +761,81 @@ theorem unbounded_sylvester_mem_and_gauge_le_of_intervalExteriorGap
     (hEq : HasClosedSylvesterEquation A B X C)
     (hC : N.Mem C) :
     N.Mem X ∧ δ * N.gauge X ≤ N.gauge C := by
-  sorry
+  let c : ℝ := (β + α) / 2
+  let ρ : ℝ := (α - β) / 2
+  let c𝕜 : 𝕜 := (c : 𝕜)
+  have hρ : 0 ≤ ρ := by
+    dsimp [ρ]
+    linarith
+  rcases hgap with hgap | hgap
+  · -- The interval block is on the left and the exterior block is on the right.
+    obtain ⟨R, hRnorm⟩ :=
+      boundedRealization_of_spectrumIn_Icc A hA hβα hgap.1
+    obtain ⟨hBinv, hBinvNorm⟩ :=
+      boundedInverse_of_spectrumOutside B hB hβα hδ hgap.2
+    let S : E →L[𝕜] E :=
+      R.operator - c𝕜 • ContinuousLinearMap.id 𝕜 E
+    have hSnorm : ‖S‖ ≤ ρ := by
+      simpa only [S, c𝕜, c, ρ] using hRnorm
+    have hdom : ∀ z : F, hBinv.inv z ∈ B.domain := by
+      intro z
+      exact hBinv.inv_mapsTo_domain z
+    have hres : ∀ z : F,
+        B.toLinearMap ⟨hBinv.inv z, hdom z⟩ - c𝕜 • hBinv.inv z = z := by
+      intro z
+      have hz := hBinv.apply_inv z
+      change B.toLinearMap ⟨hBinv.inv z, hdom z⟩ +
+          (-(c𝕜 • ContinuousLinearMap.id 𝕜 F)) (hBinv.inv z) = z at hz
+      simpa [sub_eq_add_neg] using hz
+    have hEq' : ∀ y : B.domain,
+        S (X (y : F)) -
+          (X (B.toLinearMap y) - c𝕜 • X (y : F)) = C (y : F) := by
+      intro y
+      have heq := hEq.equation y
+      have hagree := R.agrees ⟨X (y : F), hEq.mapsTo_domain y⟩
+      simp only [S, sub_apply, smul_apply, ContinuousLinearMap.id_apply]
+      rw [hagree, ← heq]
+      abel
+    exact mem_and_gauge_le_of_boundedLeft_exteriorRight
+      N hρ hδ hSnorm hdom hres hBinvNorm hEq' hC
+  · -- The exterior block is on the left and the interval block is on the right.
+    obtain ⟨R, hRnorm⟩ :=
+      boundedRealization_of_spectrumIn_Icc B hB hβα hgap.1
+    obtain ⟨hAinv, hAinvNorm⟩ :=
+      boundedInverse_of_spectrumOutside A hA hβα hδ hgap.2
+    let T : F →L[𝕜] F := R.operator
+    let S : F →L[𝕜] F :=
+      T - c𝕜 • ContinuousLinearMap.id 𝕜 F
+    have hSnorm : ‖S‖ ≤ ρ := by
+      simpa only [S, T, c𝕜, c, ρ] using hRnorm
+    have hEqT : HasUnboundedBoundedSylvesterEquation A T X C := by
+      exact closedSylvesterEquation_boundedRealization hEq R.agrees
+    let A' : ClosedOperatorOnE (𝕜 := 𝕜) (E := E) :=
+      A.addBounded (-(c𝕜 • ContinuousLinearMap.id 𝕜 E))
+    have hA'apply : ∀ x : A.domain,
+        A'.toLinearMap x = A.toLinearMap x - c𝕜 • (x : E) := by
+      intro x
+      change A.toLinearMap x +
+          (-(c𝕜 • ContinuousLinearMap.id 𝕜 E)) (x : E) =
+        A.toLinearMap x - c𝕜 • (x : E)
+      simp [sub_eq_add_neg]
+    have hEq' : HasUnboundedBoundedSylvesterEquation A' S X C := by
+      refine ⟨fun x => hEqT.mapsTo_domain x, fun x => ?_⟩
+      have h1 := hEqT.equation x
+      have h2 : A'.toLinearMap
+          ⟨X (x : F), hEqT.mapsTo_domain x⟩ =
+          A.toLinearMap ⟨X (x : F), hEqT.mapsTo_domain x⟩ -
+            c𝕜 • X (x : F) :=
+        hA'apply ⟨X (x : F), hEqT.mapsTo_domain x⟩
+      have h3 : X (S (x : F)) = X (T (x : F)) - c𝕜 • X (x : F) := by
+        simp only [S, sub_apply, smul_apply, ContinuousLinearMap.id_apply,
+          map_sub, map_smul]
+      change A'.toLinearMap ⟨X (x : F), hEqT.mapsTo_domain x⟩ -
+        X (S (x : F)) = C (x : F)
+      rw [h2, h3, ← h1]
+      abel
+    exact sylvester_mem_and_gauge_le_of_unbounded_bound_inverse
+      N hAinv S hρ hδ hAinvNorm hSnorm hEq' hC
 
 /-- All source-faithful unbounded gap configurations needed by the `sin Θ`
 endpoint.  The ordered constructors allow both diagonal blocks to be genuinely
