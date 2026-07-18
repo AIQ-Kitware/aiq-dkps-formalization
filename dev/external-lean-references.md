@@ -440,3 +440,19 @@ The earlier Schur-Horn work remains independently re-derived from the strategy i
 | `sum_re_inner_orthonormalBasis_self_eq_sum_eigenvalues` | `schur_trace_eq` | trace equality case |
 | `sum_sq_re_inner_orthonormalBasis_self_le_sum_sq_eigenvalues` | `schur_sum_sq_le` | square-function instance |
 | `schurWeight` and row/column sums | `dsWeight` and row/column sums | same weight-matrix design |
+
+## Approximation-number upstream draft
+
+- Pull request: <https://github.com/leanprover-community/mathlib4/pull/32126>
+- Audited head: `1751f75e87544fc47dc06b123922ec71ccd2d11e`
+- Status on 2026-07-18: open draft, not merged.
+- Relevant file: `Mathlib/Analysis/Normed/Operator/SingularValues.lean`.
+
+The draft defines zero-based best finite-rank approximation numbers as an
+`NNReal` infimum and proves the basic infimum API, normalization, monotonicity,
+and near-minimizer existence.  The project adapts that small stable core under
+`ForMathlib/Analysis/Normed/Operator/ApproximationNumber.lean` rather than
+pinning production code to an unmerged Mathlib branch.  The local adaptation
+adds the perturbation, composition, and scalar laws needed by the operator
+ideal layer.  The draft does not currently supply the Hilbert-space adjoint
+law, the Ky Fan triangle theorem, or the strong-cutoff convergence theorem.
