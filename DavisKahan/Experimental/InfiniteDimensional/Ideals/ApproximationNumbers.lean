@@ -183,10 +183,43 @@ noncomputable def compactOperatorNorm :
     KyFanDominantIdealFamily (𝕜 := 𝕜) := by
   sorry
 
+/-- Existence of the fixed positive Ky Fan family with the intended concrete
+membership and gauge.  This is the single foundational Ky Fan package needed
+by the ordered unbounded cutoff proof. -/
+theorem exists_kyFan_family (k : ℕ) (hk : 0 < k) :
+    ∃ N : KyFanDominantIdealFamily (𝕜 := 𝕜),
+      ∀ {E F : Type v}
+        [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+        [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
+        (A : E →L[𝕜] F),
+        N.toRectangularSymmetricIdealFamily.Mem A ∧
+          N.toRectangularSymmetricIdealFamily.gauge A =
+            kyFanApproximationGauge k A := by
+  sorry
+
 /-- A fixed positive Ky Fan gauge with its own dominance property. -/
 noncomputable def kyFan (k : ℕ) (hk : 0 < k) :
-    KyFanDominantIdealFamily (𝕜 := 𝕜) := by
-  sorry
+    KyFanDominantIdealFamily (𝕜 := 𝕜) :=
+  Classical.choose (exists_kyFan_family (𝕜 := 𝕜) k hk)
+
+/-- Every bounded operator belongs to the fixed finite Ky Fan family. -/
+theorem kyFan_mem (k : ℕ) (hk : 0 < k)
+    {E F : Type v}
+    [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+    [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
+    (A : E →L[𝕜] F) :
+    (kyFan (𝕜 := 𝕜) k hk).toRectangularSymmetricIdealFamily.Mem A :=
+  (Classical.choose_spec (exists_kyFan_family (𝕜 := 𝕜) k hk) A).1
+
+/-- The abstract fixed-family gauge is the concrete finite Ky Fan sum. -/
+theorem kyFan_gauge (k : ℕ) (hk : 0 < k)
+    {E F : Type v}
+    [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+    [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
+    (A : E →L[𝕜] F) :
+    (kyFan (𝕜 := 𝕜) k hk).toRectangularSymmetricIdealFamily.gauge A =
+      kyFanApproximationGauge k A :=
+  (Classical.choose_spec (exists_kyFan_family (𝕜 := 𝕜) k hk) A).2
 
 /-- Hilbert--Schmidt norm with its finite-Ky-Fan dominance property. -/
 noncomputable def hilbertSchmidt :
