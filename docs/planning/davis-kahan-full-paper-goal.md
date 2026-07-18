@@ -903,3 +903,24 @@ tangent, with exact real gap norm identities, operator Pythagoras, commutation,
 and the acute/quarter-acute tangent defining identities. The remaining descent
 seam is narrower: prove the conjugation-invariant angle operators preserve the
 canonical real copy when an actual real-valued angle operator is required.
+
+
+### Progress note (2026-07-18, quantitative resolvent continuation)
+
+The local operator-algebra part of Section 8 continuation is now explicit and
+proved. `Sylvester/Resolvent.lean` contains the quantitative second-resolvent
+bound
+
+`||R_B(z)-R_A(z)|| <= ||R_B(z)|| ||A-B|| ||R_A(z)||`,
+
+and `SinTheta/Continuation.lean` specializes it to the affine perturbation path
+`A+tH`, obtaining the uniform estimate
+
+`||R_t(z)-R_u(z)|| <= M^2 ||H|| |t-u|`
+
+whenever both resolvents are bounded by `M`.  This removes all remaining
+operator-algebra work from the continuity proof.  The next Section 8 task is
+now purely the contour layer: replace the provisional separating-contour and
+Riesz-projection definitions with proof-carrying rectifiable contour data,
+obtain one bound uniform in the contour parameter, and pass this estimate
+through the Bochner integral.

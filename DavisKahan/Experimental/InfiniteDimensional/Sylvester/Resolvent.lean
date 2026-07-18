@@ -204,6 +204,49 @@ theorem resolvent_perturbation_identity
   simpa only [ContinuousLinearMap.mul_def, ContinuousLinearMap.comp_assoc]
     using key
 
+
+omit [CompleteSpace E] in
+/-- Quantitative form of the second resolvent identity.  This is the local
+operator estimate needed before passing to a contour integral. -/
+theorem norm_resolventOperator_sub_le
+    (A B : E →L[𝕜] E) {z : 𝕜}
+    (hA : InResolventSet A z) (hB : InResolventSet B z) :
+    ‖resolventOperator B z - resolventOperator A z‖ ≤
+      ‖resolventOperator B z‖ * ‖A - B‖ * ‖resolventOperator A z‖ := by
+  rw [resolvent_perturbation_identity A B hA hB]
+  calc
+    ‖resolventOperator B z ∘L (A - B) ∘L resolventOperator A z‖ ≤
+        ‖resolventOperator B z‖ * ‖(A - B) ∘L resolventOperator A z‖ :=
+      ContinuousLinearMap.opNorm_comp_le _ _
+    _ ≤ ‖resolventOperator B z‖ *
+        (‖A - B‖ * ‖resolventOperator A z‖) :=
+      mul_le_mul_of_nonneg_left
+        (ContinuousLinearMap.opNorm_comp_le _ _)
+        (norm_nonneg (resolventOperator B z))
+    _ = ‖resolventOperator B z‖ * ‖A - B‖ *
+        ‖resolventOperator A z‖ := (mul_assoc _ _ _).symm
+
+omit [CompleteSpace E] in
+/-- Uniform-bound corollary of `norm_resolventOperator_sub_le`. -/
+theorem norm_resolventOperator_sub_le_of_bounds
+    (A B : E →L[𝕜] E) {z : 𝕜} {M : ℝ}
+    (hA : InResolventSet A z) (hB : InResolventSet B z)
+    (hRA : ‖resolventOperator A z‖ ≤ M)
+    (hRB : ‖resolventOperator B z‖ ≤ M) :
+    ‖resolventOperator B z - resolventOperator A z‖ ≤
+      M * ‖A - B‖ * M := by
+  calc
+    ‖resolventOperator B z - resolventOperator A z‖ ≤
+        ‖resolventOperator B z‖ * ‖A - B‖ *
+          ‖resolventOperator A z‖ :=
+      norm_resolventOperator_sub_le A B hA hB
+    _ ≤ M * ‖A - B‖ * ‖resolventOperator A z‖ := by
+      gcongr
+    _ ≤ M * ‖A - B‖ * M := by
+      have hM : 0 ≤ M := (norm_nonneg (resolventOperator B z)).trans hRB
+      exact mul_le_mul_of_nonneg_left hRA
+        (mul_nonneg hM (norm_nonneg (A - B)))
+
 /-- Self-adjoint resolvent norm bound by spectral distance.
 
 Lean proof route for a weaker agent:

@@ -50,6 +50,70 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
 def operatorPath (A H : E →L[𝕜] E) (t : ℝ) : E →L[𝕜] E :=
   A + (t : 𝕜) • H
 
+
+omit [CompleteSpace E] in
+/-- Difference of two points on the affine perturbation path. -/
+theorem operatorPath_sub
+    (A H : E →L[𝕜] E) (t u : ℝ) :
+    operatorPath A H t - operatorPath A H u =
+      ((t - u : ℝ) : 𝕜) • H := by
+  calc
+    operatorPath A H t - operatorPath A H u =
+        (t : 𝕜) • H - (u : 𝕜) • H := by
+      simp only [operatorPath]
+      abel
+    _ = ((t : 𝕜) - (u : 𝕜)) • H := by
+      rw [sub_smul]
+    _ = ((t - u : ℝ) : 𝕜) • H := by
+      rw [RCLike.ofReal_sub]
+
+omit [CompleteSpace E] in
+/-- Exact norm of an affine-path increment. -/
+theorem norm_operatorPath_sub
+    (A H : E →L[𝕜] E) (t u : ℝ) :
+    ‖operatorPath A H t - operatorPath A H u‖ = ‖t - u‖ * ‖H‖ := by
+  rw [operatorPath_sub, norm_smul, RCLike.norm_ofReal, Real.norm_eq_abs]
+
+/-- Quantitative path-parameter estimate for the resolvent at one fixed
+spectral parameter.  Under a uniform bound `M` at two path values, the
+resolvent varies at most linearly in `|t-u|`.
+
+This is the analytic operator estimate to be integrated along a separating
+contour in the proof of `continuous_continuedProjection`. -/
+theorem norm_resolventOperator_operatorPath_sub_le
+    (A H : E →L[𝕜] E) (z : 𝕜) (M : ℝ) (t u : ℝ)
+    (ht : InResolventSet (operatorPath A H t) z)
+    (hu : InResolventSet (operatorPath A H u) z)
+    (hMt : ‖resolventOperator (operatorPath A H t) z‖ ≤ M)
+    (hMu : ‖resolventOperator (operatorPath A H u) z‖ ≤ M) :
+    ‖resolventOperator (operatorPath A H t) z -
+        resolventOperator (operatorPath A H u) z‖ ≤
+      M ^ 2 * ‖H‖ * ‖t - u‖ := by
+  calc
+    ‖resolventOperator (operatorPath A H t) z -
+        resolventOperator (operatorPath A H u) z‖ ≤
+      M * ‖operatorPath A H u - operatorPath A H t‖ * M :=
+        norm_resolventOperator_sub_le_of_bounds
+          (operatorPath A H u) (operatorPath A H t) hu ht hMu hMt
+    _ = M * (‖u - t‖ * ‖H‖) * M := by
+      rw [norm_operatorPath_sub]
+    _ = M ^ 2 * ‖H‖ * ‖t - u‖ := by
+      rw [norm_sub_rev]
+      ring
+
+/-- Set-uniform version of the fixed-parameter resolvent estimate. -/
+theorem norm_resolventOperator_operatorPath_sub_le_of_uniform_bound
+    (A H : E →L[𝕜] E) (z : 𝕜) (M : ℝ) (I : Set ℝ)
+    (hmem : ∀ t ∈ I, InResolventSet (operatorPath A H t) z)
+    (hbound : ∀ t ∈ I,
+      ‖resolventOperator (operatorPath A H t) z‖ ≤ M)
+    {t u : ℝ} (ht : t ∈ I) (hu : u ∈ I) :
+    ‖resolventOperator (operatorPath A H t) z -
+        resolventOperator (operatorPath A H u) z‖ ≤
+      M ^ 2 * ‖H‖ * ‖t - u‖ :=
+  norm_resolventOperator_operatorPath_sub_le A H z M t u
+    (hmem t ht) (hmem u hu) (hbound t ht) (hbound u hu)
+
 /-- Continued spectral projection selected by a separating contour. -/
 noncomputable def continuedProjection (A H : E →L[𝕜] E)
     (contour : ℝ → 𝕜) (t : ℝ) : E →L[𝕜] E :=
@@ -66,9 +130,9 @@ margin is quantitative.
 
 Lean proof route for a weaker agent:
 
-1. Unfold `continuedProjection` and `operatorPath` and reuse the local resolvent estimates from `continuous_rieszProjection_path`.
-2. At each `t∈[0,1]`, obtain a neighborhood on which the fixed contour remains in the resolvent set; this suffices for `ContinuousWithinAt`.
-3. Pass the local resolvent continuity through the contour integral and assemble the pointwise statements into `ContinuousOn`.
+1. Use `norm_resolventOperator_operatorPath_sub_le_of_uniform_bound` pointwise on the contour.  The second-resolvent operator algebra and the exact affine-path increment are now fully proved.
+2. Obtain a contour-uniform resolvent bound and an integrable bound for the path derivative/variation of the contour.
+3. Pass the resulting Lipschitz estimate through the Bochner contour integral and assemble the pointwise statements into `ContinuousOn`.
 
 
 Ext-agent signature audit (GPT 5.6 High): The corrected `ContinuousOn [0,1]` signature
