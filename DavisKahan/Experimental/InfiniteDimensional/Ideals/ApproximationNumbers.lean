@@ -142,6 +142,26 @@ theorem singularValues_le_approximationSingularValue
     A.toContinuousLinearMap n
   exact_mod_cast h
 
+/-- On finite-dimensional Hilbert spaces, approximation singular values are
+exactly the ordinary singular values. -/
+theorem approximationSingularValue_eq_singularValues
+    {E₀ F₀ : Type v}
+    [NormedAddCommGroup E₀] [InnerProductSpace 𝕜 E₀]
+    [FiniteDimensional 𝕜 E₀]
+    [NormedAddCommGroup F₀] [InnerProductSpace 𝕜 F₀]
+    [FiniteDimensional 𝕜 F₀]
+    (A : E₀ →ₗ[𝕜] F₀) (n : ℕ) :
+    approximationSingularValue n A.toContinuousLinearMap =
+      A.singularValues n := by
+  have hNN : A.toContinuousLinearMap.approximationNumber n =
+      (⟨A.singularValues n, A.singularValues_nonneg n⟩ : NNReal) := by
+    simpa only [LinearMap.coe_toContinuousLinearMap] using
+      (ContinuousLinearMap.approximationNumber_eq_singularValues
+        A.toContinuousLinearMap n)
+  change (A.toContinuousLinearMap.approximationNumber n : ℝ) =
+    A.singularValues n
+  exact congrArg (fun x : NNReal => x.1) hNN
+
 /-- Continuity of each approximation number under strongly convergent
 orthogonal cutoffs. -/
 theorem approximationSingularValue_comp_strongProjection_tendsto
@@ -175,6 +195,41 @@ theorem rectangularKyFanSum_le_kyFanApproximationGauge
   rw [Fin.sum_univ_eq_sum_range]
   exact Finset.sum_le_sum fun n _ =>
     singularValues_le_approximationSingularValue A n
+
+/-- Finite-dimensional Ky Fan prefixes agree exactly with the corresponding
+approximation-number prefixes. -/
+theorem rectangularKyFanSum_eq_kyFanApproximationGauge
+    {E₀ F₀ : Type v}
+    [NormedAddCommGroup E₀] [InnerProductSpace 𝕜 E₀]
+    [FiniteDimensional 𝕜 E₀]
+    [NormedAddCommGroup F₀] [InnerProductSpace 𝕜 F₀]
+    [FiniteDimensional 𝕜 F₀]
+    (k : ℕ) (A : E₀ →ₗ[𝕜] F₀) :
+    ForMathlib.DavisKahanTheory.RectangularUnitarilyInvariantNorm.rectangularKyFanSum k A =
+      kyFanApproximationGauge k A.toContinuousLinearMap := by
+  unfold ForMathlib.DavisKahanTheory.RectangularUnitarilyInvariantNorm.rectangularKyFanSum
+    kyFanApproximationGauge
+  rw [Fin.sum_univ_eq_sum_range]
+  exact Finset.sum_congr rfl fun n _ =>
+    (approximationSingularValue_eq_singularValues A n).symm
+
+/-- The approximation-number Ky Fan triangle inequality on finite-dimensional
+Hilbert spaces, obtained by transporting the established rectangular theorem. -/
+theorem kyFanApproximationGauge_add_le_finiteDimensional
+    {E₀ F₀ : Type v}
+    [NormedAddCommGroup E₀] [InnerProductSpace 𝕜 E₀]
+    [FiniteDimensional 𝕜 E₀]
+    [NormedAddCommGroup F₀] [InnerProductSpace 𝕜 F₀]
+    [FiniteDimensional 𝕜 F₀]
+    (k : ℕ) (A B : E₀ →ₗ[𝕜] F₀) :
+    kyFanApproximationGauge k (A + B).toContinuousLinearMap ≤
+      kyFanApproximationGauge k A.toContinuousLinearMap +
+        kyFanApproximationGauge k B.toContinuousLinearMap := by
+  rw [← rectangularKyFanSum_eq_kyFanApproximationGauge k (A + B),
+    ← rectangularKyFanSum_eq_kyFanApproximationGauge k A,
+    ← rectangularKyFanSum_eq_kyFanApproximationGauge k B]
+  exact (ForMathlib.DavisKahanTheory.RectangularUnitarilyInvariantNorm.kyFan
+    (𝕜 := 𝕜) (E := E₀) (F := F₀) k).add_le A B
 
 /-- The zero-term Ky Fan gauge vanishes. -/
 @[simp]
