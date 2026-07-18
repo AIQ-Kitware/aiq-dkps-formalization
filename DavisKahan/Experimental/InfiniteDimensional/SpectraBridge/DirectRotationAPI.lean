@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Experimental.InfiniteDimensional.DirectRotation
-import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.DirectRotation
+import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.DirectRotationSquare
 
 /-!
 # Complex direct rotation backed by Spectra
@@ -42,6 +42,22 @@ theorem complexDirectRotation_unitary
       U V hacute,
     _root_.ForMathlib.DavisKahan.Experimental.SpectraBridge.spectraDirectRotation_surjective
       U V hacute⟩
+
+/-- The complex direct rotation is the unique unitary square root of the
+ordered reflection product whose numerical real part is nonnegative.  No
+separate commutation hypothesis is needed: it follows from the square
+identity. -/
+theorem complexDirectRotation_unique
+    (U V : Submodule ℂ H)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hacute : IsAcute U V)
+    (W : H →L[ℂ] H)
+    (hWunit : W ∈ unitary (H →L[ℂ] H))
+    (hsq : W * W = reflectionOperator V * reflectionOperator U)
+    (hre : ∀ x, 0 ≤ Complex.re ⟪W x, x⟫_ℂ) :
+    W = complexDirectRotation U V hacute :=
+  _root_.ForMathlib.DavisKahan.Experimental.SpectraBridge.spectraDirectRotation_unique_of_sq
+    U V hacute W hWunit hsq hre
 
 /-- The complex direct rotation intertwines the source and target
 projections. -/

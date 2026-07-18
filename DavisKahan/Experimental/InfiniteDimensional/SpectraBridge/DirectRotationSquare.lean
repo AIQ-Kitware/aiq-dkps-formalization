@@ -5,6 +5,8 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.DirectRotation
 import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Unitary
+import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Commute
+import ForMathlib.Analysis.InnerProductSpace.CoerciveUnit
 
 /-!
 # Principal-square-root completion of the Spectra direct rotation
@@ -477,13 +479,156 @@ theorem spectraDirectRotation_real_inner_nonneg
   have := Complex.zero_le_real.mp hx
   linarith
 
+/-- The real part of the quadratic form is unchanged by taking the
+adjoint of a bounded operator. -/
+private theorem re_inner_star_apply (T : H →L[ℂ] H) (x : H) :
+    RCLike.re ⟪star T x, x⟫_ℂ = RCLike.re ⟪T x, x⟫_ℂ := by
+  rw [ContinuousLinearMap.star_eq_adjoint,
+    ContinuousLinearMap.adjoint_inner_left]
+  exact inner_re_symm x (T x)
+
+/-- The Hermitian part of the acute direct rotation is twice the
+positive modulus of the canonical midpoint. -/
+theorem spectraDirectRotation_add_star_eq_two_smul_absoluteValue
+    (U V : Submodule ℂ H)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hacute : IsAcute U V) :
+    spectraDirectRotation U V hacute +
+        star (spectraDirectRotation U V hacute) =
+      (2 : ℂ) • spectraOperatorAbsoluteValue
+        (spectraCanonicalIntertwiner U V) := by
+  have hdecomp :
+      spectraDirectRotation U V hacute *
+          spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V) =
+        spectraCanonicalIntertwiner U V :=
+    spectraDirectRotation_decomposition U V hacute
+  have hleft :
+      star (spectraDirectRotation U V hacute) *
+          spectraCanonicalIntertwiner U V =
+        spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V) := by
+    calc
+      star (spectraDirectRotation U V hacute) *
+          spectraCanonicalIntertwiner U V =
+        star (spectraDirectRotation U V hacute) *
+          (spectraDirectRotation U V hacute *
+            spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V)) := by
+              rw [hdecomp]
+      _ = (star (spectraDirectRotation U V hacute) *
+            spectraDirectRotation U V hacute) *
+          spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V) := by
+              rw [mul_assoc]
+      _ = spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V) := by
+              rw [star_spectraDirectRotation_mul_self U V hacute, one_mul]
+  have hstarR :
+      star (spectraDirectRotation U V hacute) *
+          spectraReflectionProduct U V =
+        spectraDirectRotation U V hacute := by
+    calc
+      star (spectraDirectRotation U V hacute) *
+          spectraReflectionProduct U V =
+        star (spectraDirectRotation U V hacute) *
+          (spectraDirectRotation U V hacute *
+            spectraDirectRotation U V hacute) := by
+              rw [spectraDirectRotation_sq U V hacute]
+      _ = (star (spectraDirectRotation U V hacute) *
+            spectraDirectRotation U V hacute) *
+          spectraDirectRotation U V hacute := by
+              rw [mul_assoc]
+      _ = spectraDirectRotation U V hacute := by
+              rw [star_spectraDirectRotation_mul_self U V hacute, one_mul]
+  have hmid := spectraCanonicalIntertwiner_add_self_eq_one_add_reflectionProduct U V
+  have hmul := congrArg
+    (fun T : H →L[ℂ] H => star (spectraDirectRotation U V hacute) * T) hmid
+  have htwice :
+      spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V) +
+          spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V) =
+        star (spectraDirectRotation U V hacute) +
+          spectraDirectRotation U V hacute := by
+    simpa only [mul_add, hleft, mul_one, hstarR] using hmul
+  calc
+    spectraDirectRotation U V hacute +
+        star (spectraDirectRotation U V hacute) =
+      star (spectraDirectRotation U V hacute) +
+        spectraDirectRotation U V hacute := add_comm _ _
+    _ = spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V) +
+        spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V) := htwice.symm
+    _ = (2 : ℂ) • spectraOperatorAbsoluteValue
+        (spectraCanonicalIntertwiner U V) := by rw [two_smul]
+
+/-- The positive midpoint modulus has strictly positive quadratic form on
+nonzero vectors in the acute regime. -/
+theorem spectraCanonicalAbsoluteValue_inner_pos
+    (U V : Submodule ℂ H)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hacute : IsAcute U V) {x : H} (hx : x ≠ 0) :
+    0 < Complex.re ⟪spectraOperatorAbsoluteValue
+      (spectraCanonicalIntertwiner U V) x, x⟫_ℂ := by
+  let B := spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V)
+  change 0 < RCLike.re ⟪B x, x⟫_ℂ
+  have hBnonneg : (0 : H →L[ℂ] H) ≤ B :=
+    spectraOperatorAbsoluteValue_nonneg _
+  have hBpositive := (ContinuousLinearMap.nonneg_iff_isPositive B).mp hBnonneg
+  have hBform : ∀ z : H, 0 ≤ RCLike.re ⟪B z, z⟫_ℂ := fun z =>
+    hBpositive.re_inner_nonneg_left z
+  have hBsym : (B : H →ₗ[ℂ] H).IsSymmetric :=
+    (spectraOperatorAbsoluteValue_isSelfAdjoint _).isSymmetric
+  have hBinj : Function.Injective B :=
+    (ContinuousLinearMap.isUnit_iff_bijective.mp
+      (isUnit_spectraCanonicalAbsoluteValue U V hacute)).1
+  have hne : RCLike.re ⟪B x, x⟫_ℂ ≠ 0 := by
+    intro hzero
+    have hsq := ForMathlib.ContinuousLinearMap.norm_apply_sq_le_of_positive
+      hBsym hBform x
+    have hsq0 : ‖B x‖ ^ 2 ≤ 0 := by
+      calc
+        ‖B x‖ ^ 2 ≤ ‖B‖ * RCLike.re ⟪B x, x⟫_ℂ := hsq
+        _ = 0 := by rw [hzero, mul_zero]
+    have hBx : B x = 0 := by
+      apply norm_eq_zero.mp
+      exact sq_eq_zero_iff.mp (le_antisymm hsq0 (sq_nonneg _))
+    apply hx
+    apply hBinj
+    simpa using hBx
+  exact lt_of_le_of_ne (hBform x) (Ne.symm hne)
+
+/-- The acute direct rotation has strictly positive numerical real part on
+nonzero vectors. -/
+theorem spectraDirectRotation_real_inner_pos
+    (U V : Submodule ℂ H)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hacute : IsAcute U V) {x : H} (hx : x ≠ 0) :
+    0 < Complex.re ⟪spectraDirectRotation U V hacute x, x⟫_ℂ := by
+  let D := spectraDirectRotation U V hacute
+  let B := spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V)
+  change 0 < RCLike.re ⟪D x, x⟫_ℂ
+  have hsum : D + star D = (2 : ℂ) • B := by
+    simpa [D, B] using
+      spectraDirectRotation_add_star_eq_two_smul_absoluteValue U V hacute
+  have hsum' : D + star D = B + B := by
+    simpa only [two_smul] using hsum
+  have hreal :
+      2 * RCLike.re ⟪D x, x⟫_ℂ =
+        2 * RCLike.re ⟪B x, x⟫_ℂ := by
+    have h := congrArg
+      (fun T : H →L[ℂ] H => RCLike.re ⟪T x, x⟫_ℂ) hsum'
+    have h' :
+        RCLike.re ⟪D x, x⟫_ℂ + RCLike.re ⟪D x, x⟫_ℂ =
+          RCLike.re ⟪B x, x⟫_ℂ + RCLike.re ⟪B x, x⟫_ℂ := by
+      simpa only [add_apply, inner_add_left, map_add,
+        re_inner_star_apply] using h
+    linarith
+  have hBpos : 0 < RCLike.re ⟪B x, x⟫_ℂ := by
+    simpa [B] using spectraCanonicalAbsoluteValue_inner_pos U V hacute hx
+  nlinarith
+
 /-- Uniqueness of the acute square-root branch.
 
-Route: any unitary `W` squaring to the reflection product, commuting with it,
-and with positive-real-part inner products must agree with the principal
-half-phase on each spectral arc; this is the continuous-functional-calculus
-branch-selection argument and needs a spectral-multiplicity API that is not
-yet available. -/
+This proof avoids a spectral-multiplicity decomposition.  The canonical
+branch has strictly positive numerical real part because its Hermitian part
+is twice the positive invertible midpoint modulus.  The sum of any competing
+nonnegative-real-part unitary square root with the canonical branch therefore
+has trivial adjoint kernel and hence dense range.  The commuting quadratic
+factorization then forces the two square roots to agree. -/
 theorem spectraDirectRotation_unique
     (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
@@ -494,7 +639,112 @@ theorem spectraDirectRotation_unique
     (hcomm : Commute W (spectraReflectionProduct U V))
     (hre : ∀ x, 0 ≤ Complex.re ⟪W x, x⟫_ℂ) :
     W = spectraDirectRotation U V hacute := by
-  sorry
+  let D := spectraDirectRotation U V hacute
+  have hWstar : Commute W (star W) := by
+    rw [commute_iff_eq]
+    exact (Unitary.mul_star_self_of_mem hWunit).trans
+      (Unitary.star_mul_self_of_mem hWunit).symm
+  have hstarSq : star (spectraReflectionProduct U V) = star W * star W := by
+    symm
+    simpa only [star_mul] using congrArg star hsq
+  have hstarR_W : Commute (star (spectraReflectionProduct U V)) W := by
+    rw [hstarSq, commute_iff_eq]
+    calc
+      (star W * star W) * W = star W * (star W * W) := by rw [mul_assoc]
+      _ = star W * (W * star W) := by rw [hWstar.eq]
+      _ = (star W * W) * star W := by rw [mul_assoc]
+      _ = (W * star W) * star W := by rw [hWstar.eq]
+      _ = W * (star W * star W) := by rw [mul_assoc]
+  have hDW : Commute D W := by
+    dsimp [D]
+    rw [spectraDirectRotation_eq_reflectionProductHalfPhase U V hacute,
+      spectraReflectionProductHalfPhase]
+    exact hcomm.symm.cfc hstarR_W principalHalfPhase
+  have hWD : Commute W D := hDW.symm
+  have hDsq : D * D = spectraReflectionProduct U V := by
+    simpa [D] using spectraDirectRotation_sq U V hacute
+  have hfactor : (W - D) * (W + D) = 0 := by
+    calc
+      (W - D) * (W + D) =
+          W * W + W * D - (D * W + D * D) := by noncomm_ring
+      _ = spectraReflectionProduct U V + D * W -
+          (D * W + spectraReflectionProduct U V) := by
+            rw [hWD.eq, hsq, hDsq]
+      _ = 0 := by abel
+  have hDpos : ∀ {x : H}, x ≠ 0 → 0 < RCLike.re ⟪D x, x⟫_ℂ := by
+    intro x hx
+    simpa [D] using spectraDirectRotation_real_inner_pos U V hacute hx
+  have hstarWre : ∀ x : H, 0 ≤ RCLike.re ⟪star W x, x⟫_ℂ := by
+    intro x
+    rw [re_inner_star_apply]
+    exact hre x
+  have hstarDpos : ∀ {x : H}, x ≠ 0 →
+      0 < RCLike.re ⟪star D x, x⟫_ℂ := by
+    intro x hx
+    rw [re_inner_star_apply]
+    exact hDpos hx
+  have ker_add_eq_bot
+      (A B : H →L[ℂ] H)
+      (hAre : ∀ x, 0 ≤ RCLike.re ⟪A x, x⟫_ℂ)
+      (hBpos : ∀ {x}, x ≠ 0 → 0 < RCLike.re ⟪B x, x⟫_ℂ) :
+      (A + B).ker = ⊥ := by
+    rw [Submodule.eq_bot_iff]
+    intro x hxker
+    change (A + B) x = 0 at hxker
+    have hAB : A x = -B x := by
+      rw [eq_neg_iff_add_eq_zero]
+      simpa only [add_apply] using hxker
+    by_contra hx
+    have hA0 := hAre x
+    have hB0 := hBpos hx
+    have hreEq : RCLike.re ⟪A x, x⟫_ℂ =
+        -RCLike.re ⟪B x, x⟫_ℂ := by
+      rw [hAB, inner_neg_left]
+      simp
+    linarith
+  have hstarSumKer : (star W + star D).ker = ⊥ :=
+    ker_add_eq_bot (star W) (star D) hstarWre hstarDpos
+  have hrangeOrth : (W + D).rangeᗮ = ⊥ := by
+    calc
+      (W + D).rangeᗮ = (W + D).adjoint.ker :=
+        (W + D).orthogonal_range
+      _ = (star W + star D).ker := by
+        rw [← ContinuousLinearMap.star_eq_adjoint, star_add]
+      _ = ⊥ := hstarSumKer
+  have hdense : (W + D).range.topologicalClosure = ⊤ := by
+    calc
+      (W + D).range.topologicalClosure = (W + D).rangeᗮᗮ :=
+        (Submodule.orthogonal_orthogonal_eq_closure _).symm
+      _ = ⊤ := by rw [hrangeOrth]; simp
+  have hrange_le : (W + D).range ≤ (W - D).ker := by
+    intro y hy
+    obtain ⟨x, rfl⟩ := LinearMap.mem_range.mp hy
+    change (W - D) ((W + D) x) = 0
+    have h := congrArg (fun T : H →L[ℂ] H => T x) hfactor
+    simpa only [mul_apply_eq_comp, Function.comp_apply, zero_apply] using h
+  have hclosure_le : (W + D).range.topologicalClosure ≤ (W - D).ker :=
+    Submodule.topologicalClosure_minimal _ hrange_le (W - D).isClosed_ker
+  rw [hdense] at hclosure_le
+  rw [← sub_eq_zero]
+  ext x
+  have hxker : x ∈ (W - D).ker := hclosure_le (by simp)
+  exact LinearMap.mem_ker.mp hxker
+
+/-- The commutation hypothesis in `spectraDirectRotation_unique` follows
+formally from the square identity. -/
+theorem spectraDirectRotation_unique_of_sq
+    (U V : Submodule ℂ H)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hacute : IsAcute U V)
+    (W : H →L[ℂ] H)
+    (hWunit : W ∈ unitary (H →L[ℂ] H))
+    (hsq : W * W = spectraReflectionProduct U V)
+    (hre : ∀ x, 0 ≤ Complex.re ⟪W x, x⟫_ℂ) :
+    W = spectraDirectRotation U V hacute := by
+  apply spectraDirectRotation_unique U V hacute W hWunit hsq
+  · rw [commute_iff_eq, ← hsq]
+    exact (mul_assoc W W W).symm
+  · exact hre
 
 /-- Scalar shorter-arc inequality on a principal two-plane.  Any unit `w`
 with `w² = z` is `±` the principal half-phase; the principal branch has
