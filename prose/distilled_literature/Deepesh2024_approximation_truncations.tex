@@ -1,0 +1,46 @@
+\section{Deepesh 2024: approximation numbers under operator truncation}
+\label{sec:deepesh-2024-approximation-truncations}
+
+\paragraph{Bibliographic record.}
+Deepesh K. P., ``Approximation results on s-numbers of operators,''
+\emph{arXiv:2401.08483}, 2024.
+
+\paragraph{Role in this repository.}
+This paper is the closest modern source found for the analytic limit step in
+Davis--Kahan's unbounded cutoff argument.  It studies convergence of
+approximation numbers for truncated operators of the form $Q_\alpha T P_\alpha$
+under weak or weak-star operator convergence of contractive truncations.  The
+spectral cutoffs in the formalization are orthogonal projections and therefore
+fit a stronger, more structured special case.
+
+\paragraph{Why strong convergence is insufficient by a one-line estimate.}
+For a strongly convergent family of projections $P_\alpha\to I$, contractivity
+immediately gives
+\[
+  a_n(TP_\alpha)\le a_n(T).
+\]
+The reverse limiting inequality cannot be obtained from
+$\lVert T-TP_\alpha\rVert\to0$, because strong convergence need not be
+operator-norm convergence.  One must control near-optimal finite-rank
+competitors or use an equivalent min--max/compactness characterization.  This
+is the substantive analytic content of the cutoff theorem.
+
+\paragraph{Specialization needed here.}
+The repository only needs Hilbert spaces, right and left orthogonal spectral
+cutoffs, and each fixed finite index.  A suitable proof may therefore use:
+\begin{enumerate}
+\item contraction of the cutoff projections;
+\item uniform convergence on each fixed finite-dimensional subspace;
+\item a Hilbert-space min--max characterization of approximation numbers; and
+\item passage from individual approximation numbers to a finite Ky Fan sum.
+\end{enumerate}
+No separability assumption should be introduced, because the Davis--Kahan
+source theorem is not restricted to separable Hilbert spaces.
+
+\paragraph{Formalization map.}
+The target declaration is
+\texttt{approximationSingularValue\_comp\_strongProjection\_tendsto}.
+Its finite-sum corollary is
+\texttt{kyFanApproximationGauge\_comp\_strongProjection\_tendsto}.
+The latter should remain a short finite-sum proof once the individual-index
+limit theorem is complete.
