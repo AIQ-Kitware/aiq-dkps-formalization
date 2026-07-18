@@ -149,6 +149,36 @@ theorem approximationNumber_add_le (T S : E →L[𝕜] F) (n : ℕ) :
     _ = T.approximationNumber n + ‖S‖₊ + ε := by
       ac_rfl
 
+/-- Shifted addition inequality for approximation numbers. Two approximants
+of ranks at most `m` and `n` add to an approximant of rank at most `m + n`. -/
+theorem approximationNumber_add_le_add
+    (T S : E →L[𝕜] F) (m n : ℕ) :
+    (T + S).approximationNumber (m + n) ≤
+      T.approximationNumber m + S.approximationNumber n := by
+  apply le_of_forall_pos_le_add
+  intro ε hε
+  have hhalf : 0 < ε / 2 := div_pos hε (by norm_num)
+  obtain ⟨R, hRrank, hRdist⟩ :=
+    T.lt_approximationNumber_add_pos m hhalf
+  obtain ⟨Q, hQrank, hQdist⟩ :=
+    S.lt_approximationNumber_add_pos n hhalf
+  have hsumRank : (R + Q).rank ≤ ((m + n : ℕ) : Cardinal) := by
+    calc
+      (R + Q).rank ≤ R.rank + Q.rank := LinearMap.rank_add_le _ _
+      _ ≤ (m : Cardinal) + (n : Cardinal) := add_le_add hRrank hQrank
+      _ = ((m + n : ℕ) : Cardinal) := by norm_cast
+  exact le_of_lt <| calc
+    (T + S).approximationNumber (m + n) ≤ ‖(T + S) - (R + Q)‖₊ :=
+      (T + S).approximationNumber_le hsumRank
+    _ = ‖(T - R) + (S - Q)‖₊ := by congr 1 <;> module
+    _ ≤ ‖T - R‖₊ + ‖S - Q‖₊ := nnnorm_add_le _ _
+    _ < (T.approximationNumber m + ε / 2) +
+        (S.approximationNumber n + ε / 2) := add_lt_add hRdist hQdist
+    _ = T.approximationNumber m + S.approximationNumber n + ε := by
+      apply NNReal.eq
+      simp only [NNReal.coe_add, NNReal.coe_div, NNReal.coe_ofNat]
+      ring
+
 /-- Rank does not increase after right composition. -/
 private theorem rank_comp_right_le_rank
     {G : Type v} [SeminormedAddCommGroup G] [NormedSpace 𝕜 G]
