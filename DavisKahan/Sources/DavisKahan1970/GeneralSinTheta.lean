@@ -8,17 +8,23 @@ import DavisKahan.Experimental.InfiniteDimensional.SinTheta.Specializations
 /-!
 # Davis--Kahan 1970 general sine-theta manuscript surface
 
-This module exposes the intended source theorem order.  It is an experimental
-manuscript facade, not a proof-completion claim.  The generalized unbounded
-result owns the unqualified source role; the isometric, bounded, and finite
-forms are specializations or alternative proofs.
+The finite interval/exterior generalized theorem is exposed separately because
+it now has a clean genuine-spectrum proof path.  The unqualified generalized
+target retains the complete 1970 statement, including the ordered half-line
+configurations whose cutoff engine is still under development.
 -/
 
 namespace ForMathlib
 namespace DavisKahan1970
 
+/-- Complete generalized 1970 target, including ordered half-lines. -/
 alias GeneralSinThetaProblem :=
   DavisKahan.Experimental.ExactSinTheta.GeneralSinThetaProblem
+
+/-- Completed genuine-spectrum finite interval/exterior problem. -/
+alias FiniteIntervalGeneralSinThetaProblem :=
+  DavisKahan.Experimental.ExactSinTheta.FiniteIntervalGeneralSinThetaProblem
+
 alias IsometricSinThetaProblem :=
   DavisKahan.Experimental.ExactSinTheta.IsometricSinThetaProblem
 
@@ -26,6 +32,15 @@ alias generalizedSinTheta :=
   DavisKahan.Experimental.ExactSinTheta.GeneralSinThetaProblem.result
 alias generalizedSinTheta_complementaryBlock :=
   DavisKahan.Experimental.ExactSinTheta.GeneralSinThetaProblem.complementaryBlock_result
+
+/-- Completed generalized finite interval/exterior theorem. -/
+alias generalizedSinTheta_finiteInterval :=
+  DavisKahan.Experimental.ExactSinTheta.FiniteIntervalGeneralSinThetaProblem.result
+
+/-- Complementary-overlap form of the completed finite interval/exterior theorem. -/
+alias generalizedSinTheta_finiteInterval_complementaryBlock :=
+  DavisKahan.Experimental.ExactSinTheta.FiniteIntervalGeneralSinThetaProblem.complementaryBlock_result
+
 alias sinTheta :=
   DavisKahan.Experimental.ExactSinTheta.IsometricSinThetaProblem.result
 

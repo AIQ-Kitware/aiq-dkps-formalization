@@ -22,6 +22,8 @@ namespace ExactSinTheta
 
 open scoped InnerProductSpace
 
+section Generic
+
 universe u v
 
 variable {𝕜 : Type u} [RCLike 𝕜]
@@ -131,38 +133,6 @@ theorem complementaryBlock_mem_and_gauge_le
       N.gauge_comp_right_le F₁ hAdj (opNorm_le_one_of_isometry hF₁)
     _ = N.gauge (generalResidual A X A₀) := N.gauge_adjoint hR
 
-/-- Bounded generalized complementary-block theorem.  This is the analytic
-core of Theorem 6.1, before identifying the block with the full directed sine
-of a complete exact-space decomposition. -/
-theorem generalizedSinTheta_bounded
-    (N : RectangularSymmetricIdealFamily (𝕜 := 𝕜))
-    {A : E →L[𝕜] E} {A₀ : F →L[𝕜] F}
-    {Λ₁ : G →L[𝕜] G} {X : F →L[𝕜] E}
-    {F₁ : G →L[𝕜] E}
-    (hA : A.IsSymmetric) (hA₀ : A₀.IsSymmetric)
-    (hΛ₁ : Λ₁.IsSymmetric)
-    (hF₁ : IsometricEmbedding F₁)
-    (hIntertwine : A ∘L F₁ = F₁ ∘L Λ₁)
-    {β α δ ε : ℝ}
-    (hβα : β ≤ α) (hδ : 0 < δ) (hε : 0 < ε)
-    (hframe : LowerFrameBound X ε)
-    (hgap : IntervalExteriorGap A₀ Λ₁ β α δ)
-    (hR : N.Mem (generalResidual A X A₀)) :
-    N.Mem (sinThetaBlock X F₁ hframe hε) ∧
-      δ * ε * N.gauge (sinThetaBlock X F₁ hframe hε)
-        ≤ N.gauge (generalResidual A X A₀) := by
-  have hRaw := complementaryBlock_mem_and_gauge_le
-    N hA hA₀ hΛ₁ hF₁ hIntertwine hβα hδ hgap hR
-  have hFrame := lowerFrame_sinThetaBlock_mem_and_gauge_le
-    N X F₁ hframe hε hRaw.1
-  refine ⟨hFrame.1, ?_⟩
-  calc
-    δ * ε * N.gauge (sinThetaBlock X F₁ hframe hε)
-        = δ * (ε * N.gauge (sinThetaBlock X F₁ hframe hε)) := by ring
-    _ ≤ δ * N.gauge (X.adjoint ∘L F₁) :=
-      mul_le_mul_of_nonneg_left hFrame.2 hδ.le
-    _ ≤ N.gauge (generalResidual A X A₀) := hRaw.2
-
 /-- Isometric complementary-block specialization of the bounded theorem. -/
 theorem sinTheta_bounded
     (N : RectangularSymmetricIdealFamily (𝕜 := 𝕜))
@@ -193,33 +163,77 @@ structure OrthogonalExactDecomposition
     F₀ ∘L F₀.adjoint + F₁ ∘L F₁.adjoint =
       ContinuousLinearMap.id 𝕜 E
 
+end Generic
+
+section Complex
+
+universe v
+
+variable {E F G H : Type v}
+  [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
+  [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
+  [NormedAddCommGroup G] [InnerProductSpace ℂ G] [CompleteSpace G]
+  [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
+
+/-- Bounded generalized complementary-block theorem.  This is the analytic
+core of Theorem 6.1, before identifying the block with the full directed sine
+of a complete exact-space decomposition. -/
+theorem generalizedSinTheta_bounded
+    (N : RectangularSymmetricIdealFamily (𝕜 := ℂ))
+    {A : E →L[ℂ] E} {A₀ : F →L[ℂ] F}
+    {Λ₁ : G →L[ℂ] G} {X : F →L[ℂ] E}
+    {F₁ : G →L[ℂ] E}
+    (hA : A.IsSymmetric) (hA₀ : A₀.IsSymmetric)
+    (hΛ₁ : Λ₁.IsSymmetric)
+    (hF₁ : IsometricEmbedding F₁)
+    (hIntertwine : A ∘L F₁ = F₁ ∘L Λ₁)
+    {β α δ ε : ℝ}
+    (hβα : β ≤ α) (hδ : 0 < δ) (hε : 0 < ε)
+    (hframe : LowerFrameBound X ε)
+    (hgap : IntervalExteriorGap A₀ Λ₁ β α δ)
+    (hR : N.Mem (generalResidual A X A₀)) :
+    N.Mem (sinThetaBlock X F₁ hframe hε) ∧
+      δ * ε * N.gauge (sinThetaBlock X F₁ hframe hε)
+        ≤ N.gauge (generalResidual A X A₀) := by
+  have hRaw := complementaryBlock_mem_and_gauge_le
+    N hA hA₀ hΛ₁ hF₁ hIntertwine hβα hδ hgap hR
+  have hFrame := lowerFrame_sinThetaBlock_mem_and_gauge_le
+    N X F₁ hframe hε hRaw.1
+  refine ⟨hFrame.1, ?_⟩
+  calc
+    δ * ε * N.gauge (sinThetaBlock X F₁ hframe hε)
+        = δ * (ε * N.gauge (sinThetaBlock X F₁ hframe hε)) := by ring
+    _ ≤ δ * N.gauge (X.adjoint ∘L F₁) :=
+      mul_le_mul_of_nonneg_left hFrame.2 hδ.le
+    _ ≤ N.gauge (generalResidual A X A₀) := hRaw.2
+
 /-- Directed sine operator from the orthonormalized trial coordinates into the
 orthogonal complement of the desired exact space. -/
 noncomputable def directedSinThetaOperator
-    (X : F →L[𝕜] E) (F₀ : H →L[𝕜] E) {ε : ℝ}
-    (hX : LowerFrameBound X ε) (hε : 0 < ε) : F →L[𝕜] E :=
-  (ContinuousLinearMap.id 𝕜 E - F₀ ∘L F₀.adjoint) ∘L
+    (X : F →L[ℂ] E) (F₀ : H →L[ℂ] E) {ε : ℝ}
+    (hX : LowerFrameBound X ε) (hε : 0 < ε) : F →L[ℂ] E :=
+  (ContinuousLinearMap.id ℂ E - F₀ ∘L F₀.adjoint) ∘L
     frameIsometry X hX hε
 
 /-- The directed sine operator of an isometric trial map is the direct
 orthogonal-complement block of that map. -/
 theorem directedSinThetaOperator_eq_of_isometry
-    (X : F →L[𝕜] E) (F₀ : H →L[𝕜] E)
+    (X : F →L[ℂ] E) (F₀ : H →L[ℂ] E)
     (hX : IsometricEmbedding X) :
     directedSinThetaOperator X F₀
         (lowerFrameBound_one_of_isometry hX) zero_lt_one =
-      (ContinuousLinearMap.id 𝕜 E - F₀ ∘L F₀.adjoint) ∘L X := by
+      (ContinuousLinearMap.id ℂ E - F₀ ∘L F₀.adjoint) ∘L X := by
   unfold directedSinThetaOperator
   exact congrArg
-    (fun U : F →L[𝕜] E =>
-      (ContinuousLinearMap.id 𝕜 E - F₀ ∘L F₀.adjoint) ∘L U)
+    (fun U : F →L[ℂ] E =>
+      (ContinuousLinearMap.id ℂ E - F₀ ∘L F₀.adjoint) ∘L U)
     (frameIsometry_eq_of_isometry X hX)
 
 /-- Under a complete orthogonal exact decomposition, the complementary overlap
 block and the directed sine operator have the same ideal membership and gauge. -/
 theorem sinThetaBlock_mem_and_gauge_eq_directedSinThetaOperator
-    (N : RectangularSymmetricIdealFamily (𝕜 := 𝕜))
-    (X : F →L[𝕜] E) (F₀ : H →L[𝕜] E) (F₁ : G →L[𝕜] E)
+    (N : RectangularSymmetricIdealFamily (𝕜 := ℂ))
+    (X : F →L[ℂ] E) (F₀ : H →L[ℂ] E) (F₁ : G →L[ℂ] E)
     {ε : ℝ} (hX : LowerFrameBound X ε) (hε : 0 < ε)
     (hdecomp : OrthogonalExactDecomposition F₀ F₁)
     (hblock : N.Mem (sinThetaBlock X F₁ hX hε)) :
@@ -227,7 +241,7 @@ theorem sinThetaBlock_mem_and_gauge_eq_directedSinThetaOperator
       N.gauge (directedSinThetaOperator X F₀ hX hε) =
         N.gauge (sinThetaBlock X F₁ hX hε) := by
   have hComplement :
-      ContinuousLinearMap.id 𝕜 E - F₀ ∘L F₀.adjoint =
+      ContinuousLinearMap.id ℂ E - F₀ ∘L F₀.adjoint =
         F₁ ∘L F₁.adjoint := by
     rw [← hdecomp.projection_sum]
     abel
@@ -257,14 +271,14 @@ theorem sinThetaBlock_mem_and_gauge_eq_directedSinThetaOperator
       _ = N.gauge (sinThetaBlock X F₁ hX hε) :=
         N.gauge_adjoint hblock
   have hF₁LeftInverse :
-      F₁.adjoint ∘L F₁ = ContinuousLinearMap.id 𝕜 G :=
+      F₁.adjoint ∘L F₁ = ContinuousLinearMap.id ℂ G :=
     adjoint_comp_self_eq_id_of_isometry hdecomp.isometry₁
   have hRecover :
       (sinThetaBlock X F₁ hX hε).adjoint =
         F₁.adjoint ∘L directedSinThetaOperator X F₀ hX hε := by
     calc
       (sinThetaBlock X F₁ hX hε).adjoint =
-          ContinuousLinearMap.id 𝕜 G ∘L
+          ContinuousLinearMap.id ℂ G ∘L
             (sinThetaBlock X F₁ hX hε).adjoint := by simp
       _ = (F₁.adjoint ∘L F₁) ∘L
             (sinThetaBlock X F₁ hX hε).adjoint := by
@@ -287,10 +301,10 @@ theorem sinThetaBlock_mem_and_gauge_eq_directedSinThetaOperator
 terms of the full directed sine operator rather than an arbitrary invariant
 complementary block. -/
 theorem generalizedSinTheta_bounded_exact
-    (N : RectangularSymmetricIdealFamily (𝕜 := 𝕜))
-    {A : E →L[𝕜] E} {A₀ : F →L[𝕜] F}
-    {Λ₁ : G →L[𝕜] G} {X : F →L[𝕜] E}
-    {F₀ : H →L[𝕜] E} {F₁ : G →L[𝕜] E}
+    (N : RectangularSymmetricIdealFamily (𝕜 := ℂ))
+    {A : E →L[ℂ] E} {A₀ : F →L[ℂ] F}
+    {Λ₁ : G →L[ℂ] G} {X : F →L[ℂ] E}
+    {F₀ : H →L[ℂ] E} {F₁ : G →L[ℂ] E}
     (hA : A.IsSymmetric) (hA₀ : A₀.IsSymmetric)
     (hΛ₁ : Λ₁.IsSymmetric)
     (hdecomp : OrthogonalExactDecomposition F₀ F₁)
@@ -312,6 +326,75 @@ theorem generalizedSinTheta_bounded_exact
   rw [hAngle.2]
   exact hBlock.2
 
+end Complex
+
+section GenericExact
+
+universe u v
+
+variable {𝕜 : Type u} [RCLike 𝕜]
+variable {E F G H : Type v}
+  [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+  [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
+  [NormedAddCommGroup G] [InnerProductSpace 𝕜 G] [CompleteSpace G]
+  [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] [CompleteSpace H]
+
+/-- In the isometric case, the raw complementary overlap block and the
+orthogonal-complement projection of the trial map have the same ideal gauge. -/
+theorem isometricComplementaryBlock_mem_and_gauge_eq_directed
+    (N : RectangularSymmetricIdealFamily (𝕜 := 𝕜))
+    (X : F →L[𝕜] E) (F₀ : H →L[𝕜] E) (F₁ : G →L[𝕜] E)
+    (_hX : IsometricEmbedding X)
+    (hdecomp : OrthogonalExactDecomposition F₀ F₁)
+    (hblock : N.Mem (X.adjoint ∘L F₁)) :
+    N.Mem ((ContinuousLinearMap.id 𝕜 E - F₀ ∘L F₀.adjoint) ∘L X) ∧
+      N.gauge ((ContinuousLinearMap.id 𝕜 E - F₀ ∘L F₀.adjoint) ∘L X) =
+        N.gauge (X.adjoint ∘L F₁) := by
+  have hComplement :
+      ContinuousLinearMap.id 𝕜 E - F₀ ∘L F₀.adjoint =
+        F₁ ∘L F₁.adjoint := by
+    rw [← hdecomp.projection_sum]
+    abel
+  let D : F →L[𝕜] E :=
+    (ContinuousLinearMap.id 𝕜 E - F₀ ∘L F₀.adjoint) ∘L X
+  have hDirected : D = F₁ ∘L (X.adjoint ∘L F₁).adjoint := by
+    dsimp [D]
+    rw [hComplement, ContinuousLinearMap.adjoint_comp,
+      ContinuousLinearMap.adjoint_adjoint]
+    exact ContinuousLinearMap.comp_assoc _ _ _
+  have hblockAdj : N.Mem (X.adjoint ∘L F₁).adjoint :=
+    N.adjoint_mem hblock
+  have hDirectedMem : N.Mem D := by
+    rw [hDirected]
+    exact N.comp_left_mem F₁ hblockAdj
+  have hF₁Norm : ‖F₁‖ ≤ 1 :=
+    opNorm_le_one_of_isometry hdecomp.isometry₁
+  have hForward : N.gauge D ≤ N.gauge (X.adjoint ∘L F₁) := by
+    rw [hDirected]
+    calc
+      N.gauge (F₁ ∘L (X.adjoint ∘L F₁).adjoint)
+          ≤ N.gauge (X.adjoint ∘L F₁).adjoint :=
+        N.gauge_comp_left_le F₁ hblockAdj hF₁Norm
+      _ = N.gauge (X.adjoint ∘L F₁) := N.gauge_adjoint hblock
+  have hF₁LeftInverse :
+      F₁.adjoint ∘L F₁ = ContinuousLinearMap.id 𝕜 G :=
+    adjoint_comp_self_eq_id_of_isometry hdecomp.isometry₁
+  have hRecover :
+      (X.adjoint ∘L F₁).adjoint = F₁.adjoint ∘L D := by
+    calc
+      (X.adjoint ∘L F₁).adjoint =
+          ContinuousLinearMap.id 𝕜 G ∘L (X.adjoint ∘L F₁).adjoint := by simp
+      _ = (F₁.adjoint ∘L F₁) ∘L (X.adjoint ∘L F₁).adjoint := by
+          rw [hF₁LeftInverse]
+      _ = F₁.adjoint ∘L (F₁ ∘L (X.adjoint ∘L F₁).adjoint) :=
+          ContinuousLinearMap.comp_assoc _ _ _
+      _ = F₁.adjoint ∘L D := by rw [hDirected]
+  have hF₁AdjNorm : ‖F₁.adjoint‖ ≤ 1 := by simpa using hF₁Norm
+  have hReverse : N.gauge (X.adjoint ∘L F₁) ≤ N.gauge D := by
+    rw [← N.gauge_adjoint hblock, hRecover]
+    exact N.gauge_comp_left_le F₁.adjoint hDirectedMem hF₁AdjNorm
+  exact ⟨hDirectedMem, le_antisymm hForward hReverse⟩
+
 /-- Exact isometric headline specialization of the bounded theorem. -/
 theorem sinTheta_bounded_exact
     (N : RectangularSymmetricIdealFamily (𝕜 := 𝕜))
@@ -330,11 +413,15 @@ theorem sinTheta_bounded_exact
       δ * N.gauge
         ((ContinuousLinearMap.id 𝕜 E - F₀ ∘L F₀.adjoint) ∘L X)
         ≤ N.gauge (generalResidual A X A₀) := by
-  have hframe := lowerFrameBound_one_of_isometry hX
-  have hGeneral := generalizedSinTheta_bounded_exact
-    N hA hA₀ hΛ₁ hdecomp hIntertwine hβα hδ zero_lt_one hframe hgap hR
-  rw [directedSinThetaOperator_eq_of_isometry X F₀ hX] at hGeneral
-  simpa using hGeneral
+  have hBlock := sinTheta_bounded
+    N hA hA₀ hΛ₁ hX hdecomp.isometry₁ hIntertwine
+      hβα hδ hgap hR
+  have hAngle := isometricComplementaryBlock_mem_and_gauge_eq_directed
+    N X F₀ F₁ hX hdecomp hBlock.1
+  refine ⟨hAngle.1, ?_⟩
+  rw [hAngle.2]
+  exact hBlock.2
+end GenericExact
 
 end ExactSinTheta
 end Experimental

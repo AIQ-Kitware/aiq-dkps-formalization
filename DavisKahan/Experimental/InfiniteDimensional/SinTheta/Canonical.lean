@@ -3,22 +3,27 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.Experimental.InfiniteDimensional.SinTheta.Unbounded
+import DavisKahan.Experimental.InfiniteDimensional.SinTheta.GenuineIntervalExterior
 
 /-!
-# Canonical Davis--Kahan 1970 single-angle target
+# Canonical Davis--Kahan 1970 single-angle targets
 
-This module owns the source-facing theorem shape while the analytic dependencies
-remain experimental.  The root theorem is the generalized, domain-aware result
-for self-adjoint closed operators that may be unbounded.  The isometric theorem
-is a specialization.  Shared bounded-map geometry is reused, but the bounded
-and finite-dimensional theorem endpoints are not logical parents of these
-declarations.
+This module owns the source-facing theorem shapes while the analytic
+implementations remain experimental.
 
-The theorem is bundled as a problem structure so that compiler errors expose
-which source assumption is missing instead of producing a long anonymous list
-of arguments.  Promotion to the supported tree should preserve the theorem
-shape even if the internal closed-operator representation changes.
+There are two generalized endpoints:
+
+* `FiniteIntervalGeneralSinThetaProblem` is the completed finite
+  interval/exterior theorem.  Its spectral assumptions use the genuine
+  `Spectra` spectrum and its proof goes through the clean mixed
+  bounded--unbounded Sylvester engine.
+* `GeneralSinThetaProblem` retains the complete 1970 target, including the two
+  ordered half-line orientations.  Its abstract gap currently routes those
+  additional orientations through the spectral-cutoff development.
+
+The generalized lower-frame endpoints are stated over complex Hilbert spaces,
+where the positive continuous functional calculus constructs the inverse Gram
+square root.  The isometric endpoint remains scalar-generic over `RCLike`.
 -/
 
 namespace ForMathlib
@@ -28,14 +33,15 @@ namespace ExactSinTheta
 
 open scoped InnerProductSpace
 
-universe u v
+section ComplexGeneralized
 
-variable {𝕜 : Type u} [RCLike 𝕜]
+universe v
+
 variable {E F G H : Type v}
-  [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
-  [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
-  [NormedAddCommGroup G] [InnerProductSpace 𝕜 G] [CompleteSpace G]
-  [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] [CompleteSpace H]
+  [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
+  [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
+  [NormedAddCommGroup G] [InnerProductSpace ℂ G] [CompleteSpace G]
+  [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
 
 /-- Complete input package for the generalized Davis--Kahan 1970 sine theorem.
 
@@ -44,9 +50,9 @@ block, and `data.Λ₁` is the complementary exact block.  The residual is bound
 on the ambient Hilbert spaces even when the diagonal operators are unbounded.
 The lower frame bound permits a non-isometric trial map. -/
 structure GeneralSinThetaProblem
-    (N : UnitaryInvariantIdealFamily (𝕜 := 𝕜)) where
-  data : UnboundedSinThetaData (𝕜 := 𝕜) (E := E) (F := F) (G := G)
-  exactMap : H →L[𝕜] E
+    (N : UnitaryInvariantIdealFamily (𝕜 := ℂ)) where
+  data : UnboundedSinThetaData (𝕜 := ℂ) (E := E) (F := F) (G := G)
+  exactMap : H →L[ℂ] E
   ambient_selfAdjoint : data.A.IsSelfAdjoint
   trial_selfAdjoint : data.A₀.IsSelfAdjoint
   complement_selfAdjoint : data.Λ₁.IsSelfAdjoint
@@ -61,10 +67,10 @@ structure GeneralSinThetaProblem
 
 namespace GeneralSinThetaProblem
 
-/-- The canonical generalized source theorem. -/
+/-- The complete generalized source target. -/
 theorem result
-    (N : UnitaryInvariantIdealFamily (𝕜 := 𝕜))
-    (P : GeneralSinThetaProblem (𝕜 := 𝕜) (E := E) (F := F)
+    (N : UnitaryInvariantIdealFamily (𝕜 := ℂ))
+    (P : GeneralSinThetaProblem (E := E) (F := F)
       (G := G) (H := H) N) :
     N.toRectangularSymmetricIdealFamily.Mem
         (directedSinThetaOperator P.data.X P.exactMap
@@ -82,8 +88,8 @@ theorem result
 /-- The raw complementary-block form used before the final angle
 identification. -/
 theorem complementaryBlock_result
-    (N : UnitaryInvariantIdealFamily (𝕜 := 𝕜))
-    (P : GeneralSinThetaProblem (𝕜 := 𝕜) (E := E) (F := F)
+    (N : UnitaryInvariantIdealFamily (𝕜 := ℂ))
+    (P : GeneralSinThetaProblem (E := E) (F := F)
       (G := G) (H := H) N) :
     N.toRectangularSymmetricIdealFamily.Mem
         (sinThetaBlock P.data.X P.data.F₁
@@ -99,6 +105,86 @@ theorem complementaryBlock_result
       P.frameLowerBound_pos P.lowerFrame P.spectral_gap P.residual_mem
 
 end GeneralSinThetaProblem
+
+/-- Complete source-shaped package for the proved finite interval/exterior
+branch.  Unlike `GeneralSinThetaProblem.spectral_gap`, this uses the genuine
+`Spectra` spectrum and does not pass through the ordered half-line engine. -/
+structure FiniteIntervalGeneralSinThetaProblem
+    (N : UnitaryInvariantIdealFamily (𝕜 := ℂ)) where
+  data : UnboundedSinThetaData (𝕜 := ℂ) (E := E) (F := F) (G := G)
+  exactMap : H →L[ℂ] E
+  ambient_selfAdjoint : data.A.IsSelfAdjoint
+  trial_selfAdjoint : data.A₀.IsSelfAdjoint
+  complement_selfAdjoint : data.Λ₁.IsSelfAdjoint
+  exact_decomposition : OrthogonalExactDecomposition exactMap data.F₁
+  intervalLower : ℝ
+  intervalUpper : ℝ
+  gap : ℝ
+  frameLowerBound : ℝ
+  interval_order : intervalLower ≤ intervalUpper
+  gap_pos : 0 < gap
+  frameLowerBound_pos : 0 < frameLowerBound
+  lowerFrame : LowerFrameBound data.X frameLowerBound
+  spectral_gap : GenuineUnboundedIntervalExteriorGap data.A₀ data.Λ₁
+    intervalLower intervalUpper gap
+  residual_mem : N.toRectangularSymmetricIdealFamily.Mem data.residual
+
+namespace FiniteIntervalGeneralSinThetaProblem
+
+/-- Completed generalized finite interval/exterior theorem with the exact
+source-facing directed sine operator. -/
+theorem result
+    (N : UnitaryInvariantIdealFamily (𝕜 := ℂ))
+    (P : FiniteIntervalGeneralSinThetaProblem (E := E) (F := F)
+      (G := G) (H := H) N) :
+    N.toRectangularSymmetricIdealFamily.Mem
+        (directedSinThetaOperator P.data.X P.exactMap
+          P.lowerFrame P.frameLowerBound_pos) ∧
+      P.gap * P.frameLowerBound *
+          N.toRectangularSymmetricIdealFamily.gauge
+            (directedSinThetaOperator P.data.X P.exactMap
+              P.lowerFrame P.frameLowerBound_pos)
+        ≤ N.toRectangularSymmetricIdealFamily.gauge P.data.residual :=
+  generalizedSinTheta_unbounded_exact_of_genuineIntervalExteriorGap
+    N.toRectangularSymmetricIdealFamily P.data P.exactMap
+      P.ambient_selfAdjoint P.trial_selfAdjoint P.complement_selfAdjoint
+      P.exact_decomposition P.interval_order P.gap_pos
+      P.frameLowerBound_pos P.lowerFrame P.spectral_gap P.residual_mem
+
+/-- Complementary-overlap form of the completed finite interval/exterior
+branch. -/
+theorem complementaryBlock_result
+    (N : UnitaryInvariantIdealFamily (𝕜 := ℂ))
+    (P : FiniteIntervalGeneralSinThetaProblem (E := E) (F := F)
+      (G := G) (H := H) N) :
+    N.toRectangularSymmetricIdealFamily.Mem
+        (sinThetaBlock P.data.X P.data.F₁
+          P.lowerFrame P.frameLowerBound_pos) ∧
+      P.gap * P.frameLowerBound *
+          N.toRectangularSymmetricIdealFamily.gauge
+            (sinThetaBlock P.data.X P.data.F₁
+              P.lowerFrame P.frameLowerBound_pos)
+        ≤ N.toRectangularSymmetricIdealFamily.gauge P.data.residual :=
+  generalizedSinTheta_unbounded_of_genuineIntervalExteriorGap
+    N.toRectangularSymmetricIdealFamily P.data
+      P.ambient_selfAdjoint P.trial_selfAdjoint P.complement_selfAdjoint
+      P.exact_decomposition.isometry₁ P.interval_order P.gap_pos
+      P.frameLowerBound_pos P.lowerFrame P.spectral_gap P.residual_mem
+
+end FiniteIntervalGeneralSinThetaProblem
+
+end ComplexGeneralized
+
+section GenericIsometric
+
+universe u v
+
+variable {𝕜 : Type u} [RCLike 𝕜]
+variable {E F G H : Type v}
+  [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+  [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
+  [NormedAddCommGroup G] [InnerProductSpace 𝕜 G] [CompleteSpace G]
+  [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] [CompleteSpace H]
 
 /-- Complete input package for the isometric specialization. -/
 structure IsometricSinThetaProblem
@@ -117,7 +203,7 @@ structure IsometricSinThetaProblem
 
 namespace IsometricSinThetaProblem
 
-/-- The source isometric theorem, derived from the generalized architecture. -/
+/-- The source isometric theorem. -/
 theorem result
     (N : UnitaryInvariantIdealFamily (𝕜 := 𝕜))
     (P : IsometricSinThetaProblem (𝕜 := 𝕜) (E := E) (F := F)
@@ -134,13 +220,29 @@ theorem result
       P.complement_selfAdjoint P.trial_isometry P.exact_decomposition
       P.gap_pos P.spectral_gap P.residual_mem
 
-/-- The isometric theorem packaged as the generalized theorem with lower bound
-one. -/
+end IsometricSinThetaProblem
+
+end GenericIsometric
+
+section ComplexIsometricBridge
+
+universe v
+
+variable {E F G H : Type v}
+  [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
+  [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
+  [NormedAddCommGroup G] [InnerProductSpace ℂ G] [CompleteSpace G]
+  [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
+
+namespace IsometricSinThetaProblem
+
+/-- Package a complex isometric problem as the generalized theorem with lower
+frame bound one. -/
 noncomputable def toGeneral
-    (N : UnitaryInvariantIdealFamily (𝕜 := 𝕜))
-    (P : IsometricSinThetaProblem (𝕜 := 𝕜) (E := E) (F := F)
+    (N : UnitaryInvariantIdealFamily (𝕜 := ℂ))
+    (P : IsometricSinThetaProblem (𝕜 := ℂ) (E := E) (F := F)
       (G := G) (H := H) N) :
-    GeneralSinThetaProblem (𝕜 := 𝕜) (E := E) (F := F)
+    GeneralSinThetaProblem (E := E) (F := F)
       (G := G) (H := H) N where
   data := P.data
   exactMap := P.exactMap
@@ -157,6 +259,8 @@ noncomputable def toGeneral
   residual_mem := P.residual_mem
 
 end IsometricSinThetaProblem
+
+end ComplexIsometricBridge
 
 end ExactSinTheta
 end Experimental
