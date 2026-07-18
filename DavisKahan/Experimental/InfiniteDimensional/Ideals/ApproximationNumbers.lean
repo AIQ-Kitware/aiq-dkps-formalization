@@ -4,7 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Experimental.InfiniteDimensional.Core.UnboundedSpectral
-import ForMathlib.Analysis.Normed.Operator.ApproximationNumber
+import ForMathlib.Analysis.Normed.Operator.ApproximationNumberHilbert
+import ForMathlib.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm
 
 /-!
 # Approximation numbers and strong spectral cutoffs
@@ -125,6 +126,22 @@ theorem approximationSingularValue_comp_le
   have h := ContinuousLinearMap.approximationNumber_comp_comp_le L K R n
   exact_mod_cast h
 
+/-- On finite-dimensional Hilbert spaces, each singular value is bounded by
+the corresponding approximation singular value. This is the real-valued
+adapter for the lower Eckart--Young theorem. -/
+theorem singularValues_le_approximationSingularValue
+    {E₀ F₀ : Type v}
+    [NormedAddCommGroup E₀] [InnerProductSpace 𝕜 E₀]
+    [FiniteDimensional 𝕜 E₀]
+    [NormedAddCommGroup F₀] [InnerProductSpace 𝕜 F₀]
+    [FiniteDimensional 𝕜 F₀]
+    (A : E₀ →ₗ[𝕜] F₀) (n : ℕ) :
+    A.singularValues n ≤
+      approximationSingularValue n A.toContinuousLinearMap := by
+  have h := ContinuousLinearMap.singularValues_le_approximationNumber
+    A.toContinuousLinearMap n
+  exact_mod_cast h
+
 /-- Continuity of each approximation number under strongly convergent
 orthogonal cutoffs. -/
 theorem approximationSingularValue_comp_strongProjection_tendsto
@@ -141,6 +158,23 @@ theorem approximationSingularValue_comp_strongProjection_tendsto
 noncomputable def kyFanApproximationGauge
     (k : ℕ) (K : E →L[𝕜] F) : ℝ :=
   ∑ n ∈ Finset.range k, approximationSingularValue n K
+
+/-- Every finite-dimensional rectangular Ky Fan singular-value prefix is
+bounded by the corresponding approximation-number prefix. -/
+theorem rectangularKyFanSum_le_kyFanApproximationGauge
+    {E₀ F₀ : Type v}
+    [NormedAddCommGroup E₀] [InnerProductSpace 𝕜 E₀]
+    [FiniteDimensional 𝕜 E₀]
+    [NormedAddCommGroup F₀] [InnerProductSpace 𝕜 F₀]
+    [FiniteDimensional 𝕜 F₀]
+    (k : ℕ) (A : E₀ →ₗ[𝕜] F₀) :
+    ForMathlib.DavisKahanTheory.RectangularUnitarilyInvariantNorm.rectangularKyFanSum k A ≤
+      kyFanApproximationGauge k A.toContinuousLinearMap := by
+  unfold ForMathlib.DavisKahanTheory.RectangularUnitarilyInvariantNorm.rectangularKyFanSum
+    kyFanApproximationGauge
+  rw [Fin.sum_univ_eq_sum_range]
+  exact Finset.sum_le_sum fun n _ =>
+    singularValues_le_approximationSingularValue A n
 
 /-- The zero-term Ky Fan gauge vanishes. -/
 @[simp]
