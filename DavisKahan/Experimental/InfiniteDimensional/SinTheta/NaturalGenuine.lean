@@ -47,13 +47,17 @@ theorem spectralSubspace_orthogonalExactDecomposition
     change spectralProjection (genToGroup hA) Sᶜ hS.compl =
       ContinuousLinearMap.id ℂ E - U.starProjection
     rw [spectralProjection_compl (genToGroup hA) S hS]
+    change ContinuousLinearMap.id ℂ E -
+        SpectraBridge.selfAdjointSpectralProjection A hA S hS =
+      ContinuousLinearMap.id ℂ E - U.starProjection
     rw [selfAdjointSpectralProjection_eq_starProjection A hA S hS]
   refine
     { isometry₀ := selfAdjointSpectralSubspaceInclusion_isometric A hA S hS
       isometry₁ := selfAdjointSpectralSubspaceInclusion_isometric A hA Sᶜ hS.compl
       orthogonal := ?_
       projection_sum := ?_ }
-  · rw [Submodule.adjoint_subtypeL]
+  · show U.subtypeL.adjoint ∘L Uc.subtypeL = 0
+    rw [Submodule.adjoint_subtypeL]
     apply ContinuousLinearMap.ext
     intro x
     apply Subtype.ext
@@ -65,7 +69,9 @@ theorem spectralSubspace_orthogonalExactDecomposition
       simpa only [ContinuousLinearMap.sub_apply,
         ContinuousLinearMap.id_apply] using hfix
     exact sub_eq_self.mp hfix'
-  · rw [Submodule.adjoint_subtypeL, Submodule.adjoint_subtypeL]
+  · show U.subtypeL ∘L U.subtypeL.adjoint +
+        Uc.subtypeL ∘L Uc.subtypeL.adjoint = ContinuousLinearMap.id ℂ E
+    rw [Submodule.adjoint_subtypeL, Submodule.adjoint_subtypeL]
     change U.starProjection + Uc.starProjection = ContinuousLinearMap.id ℂ E
     rw [hUcProjection]
     abel
