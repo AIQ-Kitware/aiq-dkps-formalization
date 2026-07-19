@@ -1,0 +1,230 @@
+/-
+Copyright (c) 2026 Kitware, Inc. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Jon Crall, OpenAI GPT-5.6 Thinking
+-/
+import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.ClosedOperator
+import Spectra.Operator.Unitary.Conjugation
+import Spectra.Resolvent.Spectrum
+
+/-!
+# Unitary conjugation for DK closed operators
+
+This module exposes the vendored Spectra unitary-conjugation construction in
+terms of the DK closed-operator wrapper.  The source and target Hilbert spaces
+may differ, which is important when conjugating operators restricted to
+spectral subspaces.
+-/
+
+open scoped InnerProductSpace
+
+namespace ForMathlib
+namespace DavisKahan
+namespace Experimental
+namespace SpectraBridge
+
+open Spectra.Operator
+
+universe u v
+
+variable {H : Type u} {K : Type v}
+  [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
+  [NormedAddCommGroup K] [InnerProductSpace ℂ K] [CompleteSpace K]
+
+/-- Conjugate a self-adjoint DK closed operator by a linear isometry
+ equivalence.  The resulting DK operator is obtained by forgetting the
+ self-adjoint Spectra operator built from the conjugated partial operator. -/
+noncomputable def unitaryConjugate
+    (W : H ≃ₗᵢ[ℂ] K) (A : DKClosedOperator (H := H))
+    (hA : A.IsSelfAdjoint) : DKClosedOperator (H := K) :=
+  closedOperatorOfSpectra
+    { toLinearPMap := Spectra.Operator.unitaryConj W A.toLinearPMap
+      selfAdjoint := Spectra.Operator.unitaryConj_isSelfAdjoint W hA }
+
+@[simp] theorem unitaryConjugate_domain
+    (W : H ≃ₗᵢ[ℂ] K) (A : DKClosedOperator (H := H))
+    (hA : A.IsSelfAdjoint) :
+    (unitaryConjugate W A hA).domain =
+      A.domain.comap (W.symm.toLinearEquiv : K →ₗ[ℂ] H) := rfl
+
+/-- Membership in the transported domain is the expected inverse-image
+condition. -/
+theorem mem_unitaryConjugate_domain_iff
+    (W : H ≃ₗᵢ[ℂ] K) (A : DKClosedOperator (H := H))
+    (hA : A.IsSelfAdjoint) {x : K} :
+    x ∈ (unitaryConjugate W A hA).domain ↔ W.symm x ∈ A.domain := Iff.rfl
+
+/-- The transported domain is also the direct image of the original domain. -/
+theorem unitaryConjugate_domain_eq_map
+    (W : H ≃ₗᵢ[ℂ] K) (A : DKClosedOperator (H := H))
+    (hA : A.IsSelfAdjoint) :
+    (unitaryConjugate W A hA).domain =
+      A.domain.map (W.toLinearEquiv : H →ₗ[ℂ] K) := by
+  ext x
+  constructor
+  · intro hx
+    refine ⟨W.symm x, hx, ?_⟩
+    exact W.apply_symm_apply x
+  · rintro ⟨z, hz, rfl⟩
+    change W.symm (W z) ∈ A.domain
+    simpa using hz
+
+@[simp] theorem unitaryConjugate_apply
+    (W : H ≃ₗᵢ[ℂ] K) (A : DKClosedOperator (H := H))
+    (hA : A.IsSelfAdjoint) (x : (unitaryConjugate W A hA).domain) :
+    (unitaryConjugate W A hA).toLinearMap x =
+      W (A.toLinearMap ⟨W.symm (x : K), x.property⟩) := rfl
+
+/-- The unitary sends every original-domain vector into the transported
+ domain. -/
+theorem unitaryConjugate_map_mem_domain
+    (W : H ≃ₗᵢ[ℂ] K) (A : DKClosedOperator (H := H))
+    (hA : A.IsSelfAdjoint) (x : A.domain) :
+    W (x : H) ∈ (unitaryConjugate W A hA).domain := by
+  rw [mem_unitaryConjugate_domain_iff, W.symm_apply_apply]
+  exact x.property
+
+/-- Conjugation acts by the expected formula on transported domain vectors. -/
+theorem unitaryConjugate_apply_map
+    (W : H ≃ₗᵢ[ℂ] K) (A : DKClosedOperator (H := H))
+    (hA : A.IsSelfAdjoint) (x : A.domain) :
+    (unitaryConjugate W A hA).toLinearMap
+        ⟨W (x : H), unitaryConjugate_map_mem_domain W A hA x⟩ =
+      W (A.toLinearMap x) := by
+  rw [unitaryConjugate_apply]
+  congr 1
+  exact congrArg A.toLinearMap
+    (Subtype.ext (W.symm_apply_apply (x : H)))
+
+/-- Transport a bounded operator through a unitary equivalence. -/
+noncomputable def unitaryConjugateBounded
+    (W : H ≃ₗᵢ[ℂ] K) (R : H →L[ℂ] H) : K →L[ℂ] K :=
+  W.toLinearIsometry.toContinuousLinearMap ∘L R ∘L
+    W.symm.toLinearIsometry.toContinuousLinearMap
+
+@[simp] theorem unitaryConjugateBounded_apply
+    (W : H ≃ₗᵢ[ℂ] K) (R : H →L[ℂ] H) (x : K) :
+    unitaryConjugateBounded W R x = W (R (W.symm x)) := rfl
+
+/-- A resolvent of a partial operator transports to its unitary conjugate. -/
+theorem mem_resolventSet_unitaryConj_of_mem
+    (W : H ≃ₗᵢ[ℂ] K) (A : H →ₗ.[ℂ] H) {z : ℂ}
+    (hz : z ∈ Spectra.Resolvent.resolventSet A) :
+    z ∈ Spectra.Resolvent.resolventSet
+      (Spectra.Operator.unitaryConj W A) := by
+  obtain ⟨R, hleft, hright⟩ := hz
+  refine ⟨unitaryConjugateBounded W R, ?_, ?_⟩
+  · intro ψ
+    let x : A.domain := ⟨W.symm (ψ : K), ψ.property⟩
+    have hx := congrArg W (hleft x)
+    simpa only [x, unitaryConjugateBounded_apply,
+      Spectra.Operator.unitaryConj_apply, map_sub, map_smul,
+      W.symm_apply_apply, W.apply_symm_apply] using hx
+  · intro φ
+    obtain ⟨hmem, hrightφ⟩ := hright (W.symm φ)
+    have htransport : W (R (W.symm φ)) ∈
+        (Spectra.Operator.unitaryConj W A).domain := by
+      rw [Spectra.Operator.mem_unitaryConj_domain_iff,
+        W.symm_apply_apply]
+      exact hmem
+    refine ⟨htransport, ?_⟩
+    have hφ := congrArg W hrightφ
+    simpa only [Spectra.Operator.unitaryConj_apply,
+      unitaryConjugateBounded_apply, map_sub, map_smul,
+      W.symm_apply_apply, W.apply_symm_apply] using hφ
+
+/-- Conjugation first by `W` and then by `W⁻¹` returns the original partial
+operator. -/
+theorem unitaryConj_symm_unitaryConj
+    (W : H ≃ₗᵢ[ℂ] K) (A : H →ₗ.[ℂ] H) :
+    Spectra.Operator.unitaryConj W.symm
+        (Spectra.Operator.unitaryConj W A) = A := by
+  refine LinearPMap.ext_iff.mpr ⟨?_, ?_⟩
+  · ext x
+    simp only [Spectra.Operator.mem_unitaryConj_domain_iff,
+      LinearIsometryEquiv.symm_symm, W.symm_apply_apply]
+  · intro x hx hy
+    rw [Spectra.Operator.unitaryConj_apply,
+      Spectra.Operator.unitaryConj_apply]
+    simp only [LinearIsometryEquiv.symm_symm, W.symm_apply_apply]
+
+/-- Resolvent membership is invariant under unitary conjugation. -/
+theorem mem_resolventSet_unitaryConj_iff
+    (W : H ≃ₗᵢ[ℂ] K) (A : H →ₗ.[ℂ] H) {z : ℂ} :
+    z ∈ Spectra.Resolvent.resolventSet
+        (Spectra.Operator.unitaryConj W A) ↔
+      z ∈ Spectra.Resolvent.resolventSet A := by
+  constructor
+  · intro hz
+    have hz' := mem_resolventSet_unitaryConj_of_mem
+      W.symm (Spectra.Operator.unitaryConj W A) hz
+    rwa [unitaryConj_symm_unitaryConj W A] at hz'
+  · exact mem_resolventSet_unitaryConj_of_mem W A
+
+/-- A resolvent of the original DK operator transports to a resolvent of the
+unitarily conjugated DK operator. -/
+theorem mem_resolventSet_unitaryConjugate_iff
+    (W : H ≃ₗᵢ[ℂ] K) (A : DKClosedOperator (H := H))
+    (hA : A.IsSelfAdjoint) {z : ℂ} :
+    z ∈ Spectra.Resolvent.resolventSet
+        (unitaryConjugate W A hA).toLinearPMap ↔
+      z ∈ Spectra.Resolvent.resolventSet A.toLinearPMap := by
+  change z ∈ Spectra.Resolvent.resolventSet
+      (Spectra.Operator.unitaryConj W A.toLinearPMap) ↔
+    z ∈ Spectra.Resolvent.resolventSet A.toLinearPMap
+  exact mem_resolventSet_unitaryConj_iff W A.toLinearPMap
+
+/-- The conjugated DK operator is self-adjoint. -/
+theorem unitaryConjugate_isSelfAdjoint
+    (W : H ≃ₗᵢ[ℂ] K) (A : DKClosedOperator (H := H))
+    (hA : A.IsSelfAdjoint) : (unitaryConjugate W A hA).IsSelfAdjoint := by
+  change IsSelfAdjoint (Spectra.Operator.unitaryConj W A.toLinearPMap)
+  exact Spectra.Operator.unitaryConj_isSelfAdjoint W hA
+
+/-- The real spectrum is invariant under unitary conjugation. -/
+theorem unitaryConjugate_spectrum_eq
+    (W : H ≃ₗᵢ[ℂ] K) (A : DKClosedOperator (H := H))
+    (hA : A.IsSelfAdjoint) :
+    Spectra.Resolvent.spectrum (unitaryConjugate W A hA).toLinearPMap =
+      Spectra.Resolvent.spectrum A.toLinearPMap := by
+  ext lam
+  change ((lam : ℂ) ∉ Spectra.Resolvent.resolventSet
+      (unitaryConjugate W A hA).toLinearPMap) ↔
+    ((lam : ℂ) ∉ Spectra.Resolvent.resolventSet A.toLinearPMap)
+  exact not_congr (mem_resolventSet_unitaryConjugate_iff W A hA)
+
+/-- Restriction of an ambient unitary to a submodule and its transported
+image.  This same-ambient-space form is exactly what reflection transport
+needs; it does not impose completeness on an arbitrary submodule. -/
+noncomputable def submoduleMapIsometry
+    {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
+    (W : E ≃ₗᵢ[ℂ] E) (U : Submodule ℂ E) :
+    U ≃ₗᵢ[ℂ] U.map (W.toLinearEquiv : E →ₗ[ℂ] E) where
+  toLinearEquiv := W.toLinearEquiv.submoduleMap U
+  norm_map' x := by
+    have hcoe :
+        (((W.toLinearEquiv.submoduleMap U x :
+          U.map (W.toLinearEquiv : E →ₗ[ℂ] E)) : E)) = W (x : E) := rfl
+    rw [show ‖W.toLinearEquiv.submoduleMap U x‖ =
+        ‖((W.toLinearEquiv.submoduleMap U x :
+          U.map (W.toLinearEquiv : E →ₗ[ℂ] E)) : E)‖ from rfl,
+      hcoe, W.norm_map]
+    rfl
+
+@[simp] theorem submoduleMapIsometry_coe_apply
+    {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
+    (W : E ≃ₗᵢ[ℂ] E) (U : Submodule ℂ E) (x : U) :
+    ((submoduleMapIsometry W U x :
+      U.map (W.toLinearEquiv : E →ₗ[ℂ] E)) : E) = W (x : E) := rfl
+
+@[simp] theorem submoduleMapIsometry_symm_coe_apply
+    {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
+    (W : E ≃ₗᵢ[ℂ] E) (U : Submodule ℂ E)
+    (x : U.map (W.toLinearEquiv : E →ₗ[ℂ] E)) :
+    (((submoduleMapIsometry W U).symm x : U) : E) = W.symm (x : E) := rfl
+
+
+end SpectraBridge
+end Experimental
+end DavisKahan
+end ForMathlib
