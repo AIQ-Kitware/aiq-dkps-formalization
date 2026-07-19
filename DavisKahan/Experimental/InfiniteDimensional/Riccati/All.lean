@@ -21,5 +21,7 @@ import DavisKahan.Experimental.InfiniteDimensional.Riccati.BoundedSpectralEnclos
 import DavisKahan.Experimental.InfiniteDimensional.Riccati.Unbounded
 import DavisKahan.Experimental.InfiniteDimensional.Riccati.UnboundedCore
 import DavisKahan.Experimental.InfiniteDimensional.Riccati.UnboundedReduction
+import DavisKahan.Experimental.InfiniteDimensional.Riccati.UnboundedExistence
+import DavisKahan.Experimental.InfiniteDimensional.Riccati.UnboundedTransport
 
 /-! # Experimental Riccati theory -/
