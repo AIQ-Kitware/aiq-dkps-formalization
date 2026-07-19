@@ -41,10 +41,9 @@ noncomputable def rectangularOperatorModulus (T : E →L[ℂ] F) : E →L[ℂ] E
 
 /-- The Gram operator of a rectangular map is nonnegative. -/
 theorem rectangularGram_nonneg (T : E →L[ℂ] F) :
-    0 ≤ T.adjoint ∘L T := by
-  intro x
-  rw [ContinuousLinearMap.inner_apply_self]
-  exact inner_self_nonneg
+    0 ≤ T.adjoint ∘L T :=
+  (ContinuousLinearMap.nonneg_iff_isPositive _).mpr
+    (ContinuousLinearMap.isPositive_adjoint_comp_self T)
 
 /-- The rectangular modulus is nonnegative. -/
 theorem rectangularOperatorModulus_nonneg (T : E →L[ℂ] F) :
@@ -66,8 +65,9 @@ theorem rectangularOperatorModulus_mul_self (T : E →L[ℂ] F) :
 theorem norm_rectangularOperatorModulus_apply (T : E →L[ℂ] F) (x : E) :
     ‖rectangularOperatorModulus T x‖ = ‖T x‖ := by
   have hself : (rectangularOperatorModulus T).adjoint =
-      rectangularOperatorModulus T :=
-    (isSelfAdjoint_rectangularOperatorModulus T).adjoint_eq
+      rectangularOperatorModulus T := by
+    rw [← ContinuousLinearMap.star_eq_adjoint]
+    exact (isSelfAdjoint_rectangularOperatorModulus T).star_eq
   have hmod :
       (⟪rectangularOperatorModulus T x,
           rectangularOperatorModulus T x⟫_ℂ : ℂ) =
@@ -108,55 +108,48 @@ theorem norm_rectangularOperatorModulus (T : E →L[ℂ] F) :
     rw [← norm_rectangularOperatorModulus_apply]
     exact (rectangularOperatorModulus T).le_opNorm x
 
+/-- A pointwise lower modulus comparison transports every approximation
+singular value.  The argument is the exact Courant--Fischer localization: any
+strict lower bound for `a_n A` is realized on an `(n+1)`-dimensional subspace,
+and the pointwise estimate carries that same subspace witness over to `B`.
+
+This is rank-safe.  No averaging of `A` against a second operator is performed,
+so no rank doubling can occur. -/
+theorem approximationSingularValue_le_of_norm_apply_le
+    {G : Type v} [NormedAddCommGroup G] [InnerProductSpace ℂ G] [CompleteSpace G]
+    (A : E →L[ℂ] F) (B : E →L[ℂ] G) (h : ∀ x : E, ‖A x‖ ≤ ‖B x‖) (n : ℕ) :
+    approximationSingularValue n A ≤ approximationSingularValue n B := by
+  by_contra hnot
+  have hlt : approximationSingularValue n B <
+      approximationSingularValue n A := lt_of_not_ge hnot
+  have hB0 : 0 ≤ approximationSingularValue n B :=
+    approximationSingularValue_nonneg n B
+  obtain ⟨s, hrs, v, hv, hV⟩ :=
+    (SpectraBridge.lt_approximationNumber_iff_exists_finiteDimensional_lowerBound
+      A n hB0).mp hlt
+  have hself : approximationSingularValue n B <
+      approximationSingularValue n B :=
+    (SpectraBridge.lt_approximationNumber_iff_exists_finiteDimensional_lowerBound
+      B n hB0).mpr ⟨s, hrs, v, hv, fun x hx => (hV x hx).trans (h x)⟩
+  exact lt_irrefl _ hself
+
 /-- Pointwise equality of norms determines every approximation singular value
-on complex Hilbert spaces. -/
+on complex Hilbert spaces.  The two operators may have different targets, so
+the conclusion is the heterogeneous singular-sequence relation. -/
 theorem sameApproximationSingularValues_of_norm_apply_eq
-    (A B : E →L[ℂ] F) (h : ∀ x : E, ‖A x‖ = ‖B x‖) :
-    SameApproximationSingularValues A B := by
-  intro n
-  apply le_antisymm
-  · by_contra hnot
-    have hlt : approximationSingularValue n B <
-        approximationSingularValue n A := lt_of_not_ge hnot
-    have hcharA :=
-      ForMathlib.DavisKahan.Experimental.SpectraBridge.
-        lt_approximationNumber_iff_exists_finiteDimensional_lowerBound
-          A n (approximationSingularValue_nonneg n B)
-    obtain ⟨s, hrs, v, hv, hV⟩ := hcharA.mp hlt
-    have hcharB :=
-      ForMathlib.DavisKahan.Experimental.SpectraBridge.
-        lt_approximationNumber_iff_exists_finiteDimensional_lowerBound
-          B n (approximationSingularValue_nonneg n B)
-    have hself : approximationSingularValue n B <
-        approximationSingularValue n B := hcharB.mpr ⟨s, hrs, v, hv, by
-      intro x hx
-      rw [← h x]
-      exact hV x hx⟩
-    exact (lt_irrefl _ hself)
-  · by_contra hnot
-    have hlt : approximationSingularValue n A <
-        approximationSingularValue n B := lt_of_not_ge hnot
-    have hcharB :=
-      ForMathlib.DavisKahan.Experimental.SpectraBridge.
-        lt_approximationNumber_iff_exists_finiteDimensional_lowerBound
-          B n (approximationSingularValue_nonneg n A)
-    obtain ⟨s, hrs, v, hv, hV⟩ := hcharB.mp hlt
-    have hcharA :=
-      ForMathlib.DavisKahan.Experimental.SpectraBridge.
-        lt_approximationNumber_iff_exists_finiteDimensional_lowerBound
-          A n (approximationSingularValue_nonneg n A)
-    have hself : approximationSingularValue n A <
-        approximationSingularValue n A := hcharA.mpr ⟨s, hrs, v, hv, by
-      intro x hx
-      rw [h x]
-      exact hV x hx⟩
-    exact (lt_irrefl _ hself)
+    {G : Type v} [NormedAddCommGroup G] [InnerProductSpace ℂ G] [CompleteSpace G]
+    (A : E →L[ℂ] F) (B : E →L[ℂ] G) (h : ∀ x : E, ‖A x‖ = ‖B x‖) :
+    SameApproximationSingularSequence A B := fun n =>
+  le_antisymm
+    (approximationSingularValue_le_of_norm_apply_le A B (fun x => (h x).le) n)
+    (approximationSingularValue_le_of_norm_apply_le B A (fun x => (h x).ge) n)
 
 /-- A rectangular operator and its positive source modulus have the same
-complete singular-value sequence. -/
+complete singular-value sequence.  The modulus acts on `E` while `T` maps into
+`F`, so this is the heterogeneous relation. -/
 theorem sameApproximationSingularValues_rectangularOperatorModulus
     (T : E →L[ℂ] F) :
-    SameApproximationSingularValues (rectangularOperatorModulus T) T :=
+    SameApproximationSingularSequence (rectangularOperatorModulus T) T :=
   sameApproximationSingularValues_of_norm_apply_eq _ _
     (norm_rectangularOperatorModulus_apply T)
 
