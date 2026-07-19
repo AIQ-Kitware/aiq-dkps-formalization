@@ -18,13 +18,17 @@ import DavisKahan.Experimental.InfiniteDimensional.Riccati.BoundedGraphAcute
 import DavisKahan.Experimental.InfiniteDimensional.Riccati.BoundedSpectralTransport
 import DavisKahan.Experimental.InfiniteDimensional.Riccati.BoundedBlockSpectrum
 import DavisKahan.Experimental.InfiniteDimensional.Riccati.BoundedSpectralEnclosure
-import DavisKahan.Experimental.InfiniteDimensional.Riccati.Unbounded
+import DavisKahan.Experimental.InfiniteDimensional.Riccati.UnboundedBasic
 import DavisKahan.Experimental.InfiniteDimensional.Riccati.UnboundedCore
 import DavisKahan.Experimental.InfiniteDimensional.Riccati.UnboundedReduction
 import DavisKahan.Experimental.InfiniteDimensional.Riccati.UnboundedExistence
 import DavisKahan.Experimental.InfiniteDimensional.Riccati.UnboundedTransport
+import DavisKahan.Experimental.InfiniteDimensional.Riccati.UnboundedRotationTransport
+import DavisKahan.Experimental.InfiniteDimensional.Riccati.UnboundedReductionTransport
+import DavisKahan.Experimental.InfiniteDimensional.Riccati.UnboundedCoordinateRestrictions
+import DavisKahan.Experimental.InfiniteDimensional.Riccati.UnboundedDiagonalRestrictions
 import DavisKahan.Experimental.InfiniteDimensional.Riccati.UnboundedPublic
+import DavisKahan.Experimental.InfiniteDimensional.Riccati.UnboundedSelectedGraphBridge
+import DavisKahan.Experimental.InfiniteDimensional.Riccati.Unbounded
 
 /-! # Experimental Riccati theory -/
-
-import DavisKahan.Experimental.InfiniteDimensional.Riccati.UnboundedSelectedGraphBridge
