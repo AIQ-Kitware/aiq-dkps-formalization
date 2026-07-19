@@ -45,6 +45,7 @@ def paperDiagonalPair (U V : Submodule 𝕜 E)
   U.starProjection ∘L K ∘L V.starProjection +
     Uᗮ.starProjection ∘L K ∘L Vᗮ.starProjection
 
+omit [CompleteSpace E] in
 /-- The reflection identity displayed in the proof of Davis--Kahan Lemma 6.2. -/
 theorem two_smul_paperDiagonalPair_eq_add_reflections
     (U V : Submodule 𝕜 E)
@@ -98,11 +99,12 @@ theorem paperDiagonalPair_gauge_le
       2 * N.gauge (paperDiagonalPair U V K) := by
     rw [N.gauge_smul (2 : 𝕜) hB]
     norm_num
-  rw [two_smul_paperDiagonalPair_eq_add_reflections U V K, htwo] at hsum
+  rw [← two_smul_paperDiagonalPair_eq_add_reflections U V K, htwo] at hsum
   linarith
 
 /-- Lemma 6.2 simultaneously for every finite Ky Fan approximation gauge. -/
 theorem paperDiagonalPair_all_kyFan_le
+    [HasKyFanApproximationGaugeTriangle.{u, v} 𝕜]
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (K : E →L[𝕜] E) :
@@ -122,6 +124,7 @@ theorem paperDiagonalPair_all_kyFan_le
 
 /-- Literal source-norm form of Davis--Kahan Lemma 6.2. -/
 theorem paperDiagonalPair_paperNorm_le
+    [HasKyFanApproximationGaugeTriangle.{u, v} 𝕜]
     (N : PaperUnitaryInvariantNorm)
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
@@ -132,6 +135,7 @@ theorem paperDiagonalPair_paperNorm_le
 
 /-- Real-valued source-norm form on the canonical ideal. -/
 theorem paperDiagonalPair_paperGauge_le
+    [HasKyFanApproximationGaugeTriangle.{u, v} 𝕜]
     (N : PaperUnitaryInvariantNorm)
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
@@ -144,9 +148,9 @@ theorem paperDiagonalPair_paperGauge_le
     rw [htop] at hle
     exact hK (top_le_iff.mp hle)
   refine ⟨hB, ?_⟩
-  exact ENNReal.toReal_le_toReal hle
-    (by simpa [PaperUnitaryInvariantNorm.Mem] using hB)
-    (by simpa [PaperUnitaryInvariantNorm.Mem] using hK)
+  show (N.extendedGauge (paperDiagonalPair U V K)).toReal ≤
+    (N.extendedGauge K).toReal
+  exact (ENNReal.toReal_le_toReal hB hK).mpr hle
 
 /-- Right composition with a subspace reflection preserves every approximation
 singular value. -/
@@ -156,28 +160,30 @@ theorem sameApproximationSingularValues_comp_reflection_right
     SameApproximationSingularValues
       (A ∘L U.reflectionOperator) A := by
   intro n
+  have hnn : ‖(U.reflectionOperator : E →L[𝕜] E)‖₊ ≤ 1 := by
+    exact_mod_cast Submodule.norm_reflectionOperator_le_one U
   have hright (T : E →L[𝕜] E) :
-      approximationSingularValue n (T ∘L U.reflectionOperator) ≤
-        approximationSingularValue n T := by
-    have hraw := congrArg (fun x : NNReal => (x : ℝ))
-      (T.approximationNumber_comp_right_le U.reflectionOperator n)
-    have hle :
-        approximationSingularValue n (T ∘L U.reflectionOperator) ≤
-          approximationSingularValue n T * ‖U.reflectionOperator‖ := by
-      simpa only [approximationSingularValue, NNReal.coe_mul, coe_nnnorm]
-        using hraw
-    exact hle.trans (mul_le_of_le_one_right
-      (approximationSingularValue_nonneg n T)
-      (Submodule.norm_reflectionOperator_le_one U))
-  apply le_antisymm
-  · exact hright A
-  · have hcomp :
-        (A ∘L U.reflectionOperator) ∘L U.reflectionOperator = A := by
-      rw [← ContinuousLinearMap.comp_assoc,
-        U.reflectionOperator_involutive]
-      simp
-    rw [← hcomp]
-    exact hright (A ∘L U.reflectionOperator)
+      (T ∘L U.reflectionOperator).approximationNumber n ≤
+        T.approximationNumber n :=
+    calc (T ∘L U.reflectionOperator).approximationNumber n
+        ≤ T.approximationNumber n *
+            ‖(U.reflectionOperator : E →L[𝕜] E)‖₊ :=
+          T.approximationNumber_comp_right_le _ n
+      _ ≤ T.approximationNumber n * 1 := by gcongr
+      _ = T.approximationNumber n := mul_one _
+  have hcomp :
+      (A ∘L U.reflectionOperator) ∘L U.reflectionOperator = A := by
+    rw [ContinuousLinearMap.comp_assoc, U.reflectionOperator_involutive,
+      ContinuousLinearMap.comp_id]
+  have key : (A ∘L U.reflectionOperator).approximationNumber n
+      = A.approximationNumber n := by
+    refine le_antisymm (hright A) ?_
+    calc A.approximationNumber n
+        = ((A ∘L U.reflectionOperator) ∘L
+            U.reflectionOperator).approximationNumber n := by rw [hcomp]
+      _ ≤ (A ∘L U.reflectionOperator).approximationNumber n :=
+          hright (A ∘L U.reflectionOperator)
+  exact congrArg (fun x : NNReal => (x : ℝ)) key
 
 /-- Left composition with a subspace reflection preserves every approximation
 singular value. -/
@@ -187,28 +193,30 @@ theorem sameApproximationSingularValues_comp_reflection_left
     SameApproximationSingularValues
       (U.reflectionOperator ∘L A) A := by
   intro n
+  have hnn : ‖(U.reflectionOperator : E →L[𝕜] E)‖₊ ≤ 1 := by
+    exact_mod_cast Submodule.norm_reflectionOperator_le_one U
   have hleft (T : E →L[𝕜] E) :
-      approximationSingularValue n (U.reflectionOperator ∘L T) ≤
-        approximationSingularValue n T := by
-    have hraw := congrArg (fun x : NNReal => (x : ℝ))
-      (T.approximationNumber_comp_left_le U.reflectionOperator n)
-    have hle :
-        approximationSingularValue n (U.reflectionOperator ∘L T) ≤
-          ‖U.reflectionOperator‖ * approximationSingularValue n T := by
-      simpa only [approximationSingularValue, NNReal.coe_mul, coe_nnnorm]
-        using hraw
-    exact hle.trans (mul_le_of_le_one_left
-      (approximationSingularValue_nonneg n T)
-      (Submodule.norm_reflectionOperator_le_one U))
-  apply le_antisymm
-  · exact hleft A
-  · have hcomp :
-        U.reflectionOperator ∘L (U.reflectionOperator ∘L A) = A := by
-      rw [ContinuousLinearMap.comp_assoc,
-        U.reflectionOperator_involutive]
-      simp
-    rw [← hcomp]
-    exact hleft (U.reflectionOperator ∘L A)
+      (U.reflectionOperator ∘L T).approximationNumber n ≤
+        T.approximationNumber n :=
+    calc (U.reflectionOperator ∘L T).approximationNumber n
+        ≤ ‖(U.reflectionOperator : E →L[𝕜] E)‖₊ *
+            T.approximationNumber n :=
+          ContinuousLinearMap.approximationNumber_comp_left_le _ T n
+      _ ≤ 1 * T.approximationNumber n := by gcongr
+      _ = T.approximationNumber n := one_mul _
+  have hcomp :
+      U.reflectionOperator ∘L (U.reflectionOperator ∘L A) = A := by
+    rw [← ContinuousLinearMap.comp_assoc, U.reflectionOperator_involutive,
+      ContinuousLinearMap.id_comp]
+  have key : (U.reflectionOperator ∘L A).approximationNumber n
+      = A.approximationNumber n := by
+    refine le_antisymm (hleft A) ?_
+    calc A.approximationNumber n
+        = (U.reflectionOperator ∘L
+            (U.reflectionOperator ∘L A)).approximationNumber n := by rw [hcomp]
+      _ ≤ (U.reflectionOperator ∘L A).approximationNumber n :=
+          hleft (U.reflectionOperator ∘L A)
+  exact congrArg (fun x : NNReal => (x : ℝ)) key
 
 /-- Sum of the two cross-projection blocks appearing in Proposition 6.1. -/
 def paperCrossSineSum (U V : Submodule 𝕜 E)
@@ -216,6 +224,7 @@ def paperCrossSineSum (U V : Submodule 𝕜 E)
   Uᗮ.starProjection ∘L V.starProjection +
     U.starProjection ∘L Vᗮ.starProjection
 
+omit [CompleteSpace E] in
 /-- The cross-block sum is the projector difference followed by the target
 reflection. -/
 theorem paperCrossSineSum_eq_projectionDiff_comp_reflection
