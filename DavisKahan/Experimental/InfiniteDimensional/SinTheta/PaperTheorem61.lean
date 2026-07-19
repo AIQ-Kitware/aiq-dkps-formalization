@@ -1,0 +1,165 @@
+/-
+Copyright (c) 2026 Kitware, Inc. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Jon Crall, OpenAI GPT-5.6 Thinking
+-/
+import DavisKahan.Experimental.InfiniteDimensional.SinTheta.Canonical
+import DavisKahan.Experimental.InfiniteDimensional.SinTheta.RealCanonical
+import DavisKahan.Experimental.InfiniteDimensional.Ideals.PaperSingularValueTransport
+
+/-!
+# Literal Davis--Kahan Theorem 6.1 surface
+
+The paper does not choose a unique codomain realization of `sin Θ₀`. It permits
+any operator having the complete singular-value sequence of the cross
+projection between the trial and unwanted exact subspaces. The previously
+verified theorem uses one canonical rectangular realization. This file proves
+the literal paper statement by transporting membership and gauge along the
+complete singular-value sequence, without changing the spectral, domain,
+residual, or lower-frame hypotheses.
+-/
+
+namespace ForMathlib
+namespace DavisKahan
+namespace Experimental
+namespace ExactSinTheta
+
+open scoped InnerProductSpace
+
+noncomputable section
+
+universe v
+
+section Complex
+
+variable {E F G H : Type v}
+  [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
+  [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
+  [NormedAddCommGroup G] [InnerProductSpace ℂ G] [CompleteSpace G]
+  [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
+
+/-- The literal complex input package for Davis--Kahan Theorem 6.1. -/
+structure PaperGeneralSinThetaProblem
+    (N : UnitaryInvariantIdealFamily (𝕜 := ℂ)) where
+  problem : GeneralSinThetaProblem (E := E) (F := F) (G := G) (H := H) N
+  sinTheta₀ : PaperSinThetaRepresentative
+    (directedSinThetaOperator problem.data.X problem.exactMap
+      problem.lowerFrame problem.frameLowerBound_pos)
+
+namespace PaperGeneralSinThetaProblem
+
+/-- **Davis--Kahan 1970, Theorem 6.1, literal complex form.**
+
+The chosen `sin Θ₀` may be any rectangular operator with the complete
+singular-value sequence prescribed in the paper. -/
+theorem result
+    (N : UnitaryInvariantIdealFamily (𝕜 := ℂ))
+    (P : PaperGeneralSinThetaProblem (E := E) (F := F)
+      (G := G) (H := H) N) :
+    N.toRectangularSymmetricIdealFamily.Mem P.sinTheta₀.operator ∧
+      P.problem.gap * P.problem.frameLowerBound *
+          N.toRectangularSymmetricIdealFamily.gauge P.sinTheta₀.operator
+        ≤ N.toRectangularSymmetricIdealFamily.gauge P.problem.data.residual := by
+  have hcanonical := GeneralSinThetaProblem.result N P.problem
+  exact P.sinTheta₀.same_singular_values.mem_and_mul_gauge_le N
+    hcanonical.1 hcanonical.2
+
+end PaperGeneralSinThetaProblem
+
+/-- Literal paper representative for the complex isometric theorem. -/
+structure PaperIsometricSinThetaProblem
+    (N : UnitaryInvariantIdealFamily (𝕜 := ℂ)) where
+  problem : IsometricSinThetaProblem (𝕜 := ℂ) (E := E) (F := F)
+    (G := G) (H := H) N
+  sinTheta₀ : PaperSinThetaRepresentative
+    ((ContinuousLinearMap.id ℂ E -
+      problem.exactMap ∘L problem.exactMap.adjoint) ∘L problem.data.X)
+
+namespace PaperIsometricSinThetaProblem
+
+/-- Original isometric sine theorem with the paper's freedom to choose any
+operator realizing the same complete singular-value sequence. -/
+theorem result
+    (N : UnitaryInvariantIdealFamily (𝕜 := ℂ))
+    (P : PaperIsometricSinThetaProblem (E := E) (F := F)
+      (G := G) (H := H) N) :
+    N.toRectangularSymmetricIdealFamily.Mem P.sinTheta₀.operator ∧
+      P.problem.gap *
+          N.toRectangularSymmetricIdealFamily.gauge P.sinTheta₀.operator
+        ≤ N.toRectangularSymmetricIdealFamily.gauge P.problem.data.residual := by
+  have hcanonical := IsometricSinThetaProblem.result_complex N P.problem
+  exact P.sinTheta₀.same_singular_values.mem_and_mul_gauge_le N
+    hcanonical.1 hcanonical.2
+
+end PaperIsometricSinThetaProblem
+
+end Complex
+
+section Real
+
+variable {E F G H : Type v}
+  [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
+  [NormedAddCommGroup F] [InnerProductSpace ℝ F] [CompleteSpace F]
+  [NormedAddCommGroup G] [InnerProductSpace ℝ G] [CompleteSpace G]
+  [NormedAddCommGroup H] [InnerProductSpace ℝ H] [CompleteSpace H]
+
+/-- The literal real input package for Davis--Kahan Theorem 6.1. -/
+structure PaperRealGeneralSinThetaProblem
+    (N : UnitaryInvariantIdealFamily (𝕜 := ℝ)) where
+  problem : RealGeneralSinThetaProblem (E := E) (F := F)
+    (G := G) (H := H) N
+  sinTheta₀ : PaperSinThetaRepresentative
+    (directedSinThetaOperatorReal problem.data.X problem.exactMap
+      problem.lowerFrame problem.frameLowerBound_pos)
+
+namespace PaperRealGeneralSinThetaProblem
+
+/-- **Davis--Kahan 1970, Theorem 6.1, literal real form.** -/
+theorem result
+    (N : UnitaryInvariantIdealFamily (𝕜 := ℝ))
+    (P : PaperRealGeneralSinThetaProblem (E := E) (F := F)
+      (G := G) (H := H) N) :
+    N.toRectangularSymmetricIdealFamily.Mem P.sinTheta₀.operator ∧
+      P.problem.gap * P.problem.frameLowerBound *
+          N.toRectangularSymmetricIdealFamily.gauge P.sinTheta₀.operator
+        ≤ N.toRectangularSymmetricIdealFamily.gauge P.problem.data.residual := by
+  have hcanonical := RealGeneralSinThetaProblem.result N P.problem
+  exact P.sinTheta₀.same_singular_values.mem_and_mul_gauge_le N
+    hcanonical.1 hcanonical.2
+
+end PaperRealGeneralSinThetaProblem
+
+/-- Literal paper representative for the real isometric theorem. -/
+structure PaperRealIsometricSinThetaProblem
+    (N : UnitaryInvariantIdealFamily (𝕜 := ℝ)) where
+  problem : IsometricSinThetaProblem (𝕜 := ℝ) (E := E) (F := F)
+    (G := G) (H := H) N
+  sinTheta₀ : PaperSinThetaRepresentative
+    ((ContinuousLinearMap.id ℝ E -
+      problem.exactMap ∘L problem.exactMap.adjoint) ∘L problem.data.X)
+
+namespace PaperRealIsometricSinThetaProblem
+
+/-- Original real isometric sine theorem in the literal paper formulation. -/
+theorem result
+    (N : UnitaryInvariantIdealFamily (𝕜 := ℝ))
+    (P : PaperRealIsometricSinThetaProblem (E := E) (F := F)
+      (G := G) (H := H) N) :
+    N.toRectangularSymmetricIdealFamily.Mem P.sinTheta₀.operator ∧
+      P.problem.gap *
+          N.toRectangularSymmetricIdealFamily.gauge P.sinTheta₀.operator
+        ≤ N.toRectangularSymmetricIdealFamily.gauge P.problem.data.residual := by
+  have hcanonical := IsometricSinThetaProblem.result_real N P.problem
+  exact P.sinTheta₀.same_singular_values.mem_and_mul_gauge_le N
+    hcanonical.1 hcanonical.2
+
+end PaperRealIsometricSinThetaProblem
+
+end Real
+
+end
+
+end ExactSinTheta
+end Experimental
+end DavisKahan
+end ForMathlib
