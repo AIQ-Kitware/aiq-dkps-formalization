@@ -196,6 +196,27 @@ theorem gauge_sylvesterNeumannTerm_le
       exact mul_le_mul_of_nonneg_left hBpow
         (mul_nonneg (pow_nonneg (norm_nonneg hA.inv) _) hgauge)
 
+/-- Operator-norm summability of the Neumann terms under the strict ratio. -/
+theorem sylvesterNeumannTerm_summable
+    {A : E →L[𝕜] E}
+    (hA : BoundedInverseData A) (B : F →L[𝕜] F)
+    (C : F →L[𝕜] E)
+    (hratio : ‖hA.inv‖ * ‖B‖ < 1) :
+    Summable (fun n : ℕ => sylvesterNeumannTerm hA B C n) := by
+  let q : ℝ := ‖hA.inv‖ * ‖B‖
+  let g₀ : ℝ := ‖hA.inv‖ * ‖C‖
+  have hq0 : 0 ≤ q := mul_nonneg (norm_nonneg hA.inv) (norm_nonneg B)
+  have hmajor : Summable (fun n : ℕ => q ^ n * g₀) :=
+    (summable_geometric_of_lt_one hq0 hratio).mul_right g₀
+  refine Summable.of_norm_bounded hmajor (fun n => ?_)
+  calc
+    ‖sylvesterNeumannTerm hA B C n‖
+        ≤ ‖hA.inv‖ * ‖C‖ * (‖hA.inv‖ * ‖B‖) ^ n :=
+      norm_sylvesterNeumannTerm_le hA B C n
+    _ = q ^ n * g₀ := by
+      simp only [q, g₀]
+      ring
+
 /-- Ideal-norm Cauchy control for partial Neumann sums under the strict ratio. -/
 theorem sylvesterNeumannPartialSum_cauchy
     (N : RectangularSymmetricIdealFamily (𝕜 := 𝕜))
@@ -207,7 +228,66 @@ theorem sylvesterNeumannPartialSum_cauchy
       N.gauge
         ((∑ j ∈ Finset.range m, sylvesterNeumannTerm hA B C j) -
          (∑ j ∈ Finset.range n, sylvesterNeumannTerm hA B C j)) < ε := by
-  sorry
+  let q : ℝ := ‖hA.inv‖ * ‖B‖
+  let g₀ : ℝ := ‖hA.inv‖ * N.gauge C
+  let t : ℕ → F →L[𝕜] E := fun n => sylvesterNeumannTerm hA B C n
+  let P : ℕ → F →L[𝕜] E := fun n => ∑ j ∈ Finset.range n, t j
+  let G : ℕ → ℝ := fun n => ∑ j ∈ Finset.range n, q ^ j * g₀
+  have hq0 : 0 ≤ q := mul_nonneg (norm_nonneg hA.inv) (norm_nonneg B)
+  have htmem : ∀ n, N.Mem (t n) := fun n =>
+    sylvesterNeumannTerm_mem N hA B hC n
+  have hPmem : ∀ n, N.Mem (P n) := by
+    intro n
+    exact N.finset_sum_mem (Finset.range n) t fun j _ => htmem j
+  have htGauge : ∀ n, N.gauge (t n) ≤ q ^ n * g₀ := by
+    intro n
+    calc
+      N.gauge (t n)
+          ≤ ‖hA.inv‖ ^ (n + 1) * N.gauge C * ‖B‖ ^ n :=
+        gauge_sylvesterNeumannTerm_le N hA B hC n
+      _ = q ^ n * g₀ := by
+        simp only [t, q, g₀]
+        rw [pow_succ', mul_pow]
+        ring
+  have hgap : ∀ {m n : ℕ}, n ≤ m →
+      N.gauge (P m - P n) ≤ G m - G n := by
+    intro m n hnm
+    have hsum : P m - P n = ∑ j ∈ Finset.Ico n m, t j :=
+      (Finset.sum_Ico_eq_sub _ hnm).symm
+    have hG : ∑ j ∈ Finset.Ico n m, q ^ j * g₀ = G m - G n :=
+      Finset.sum_Ico_eq_sub _ hnm
+    rw [hsum, ← hG]
+    calc
+      N.gauge (∑ j ∈ Finset.Ico n m, t j)
+          ≤ ∑ j ∈ Finset.Ico n m, N.gauge (t j) :=
+        N.gauge_finset_sum_le (Finset.Ico n m) t fun j _ => htmem j
+      _ ≤ ∑ j ∈ Finset.Ico n m, q ^ j * g₀ :=
+        Finset.sum_le_sum fun j _ => htGauge j
+  have hGcauchy : CauchySeq G := by
+    have hsummable : Summable (fun j : ℕ => q ^ j * g₀) :=
+      (summable_geometric_of_lt_one hq0 hratio).mul_right g₀
+    exact hsummable.hasSum.tendsto_sum_nat.cauchySeq
+  have hPcauchy : ∀ ε : ℝ, 0 < ε → ∃ M, ∀ m n, M ≤ m → M ≤ n →
+      N.gauge (P m - P n) < ε := by
+    intro ε hε
+    obtain ⟨M, hM⟩ := Metric.cauchySeq_iff.mp hGcauchy ε hε
+    refine ⟨M, fun m n hm hn => ?_⟩
+    rcases le_total n m with hnm | hmn
+    · refine lt_of_le_of_lt (hgap hnm) ?_
+      calc
+        G m - G n ≤ |G m - G n| := le_abs_self _
+        _ = dist (G m) (G n) := (Real.dist_eq _ _).symm
+        _ < ε := hM m hm n hn
+    · have hswap : N.gauge (P m - P n) = N.gauge (P n - P m) := by
+        rw [show P m - P n = -(P n - P m) from by abel,
+          N.gauge_neg (N.sub_mem (hPmem n) (hPmem m))]
+      rw [hswap]
+      refine lt_of_le_of_lt (hgap hmn) ?_
+      calc
+        G n - G m ≤ |G n - G m| := le_abs_self _
+        _ = dist (G n) (G m) := (Real.dist_eq _ _).symm
+        _ < ε := hM n hn m hm
+  simpa only [P, t] using hPcauchy
 
 /-- The ideal-norm limit of the Neumann series. -/
 noncomputable def sylvesterNeumannSolution
@@ -225,7 +305,39 @@ theorem sylvesterNeumannSolution_mem
     {C : F →L[𝕜] E} (hC : N.Mem C)
     (hratio : ‖hA.inv‖ * ‖B‖ < 1) :
     N.Mem (sylvesterNeumannSolution N hA B C) := by
-  sorry
+  let t : ℕ → F →L[𝕜] E := fun n => sylvesterNeumannTerm hA B C n
+  let P : ℕ → F →L[𝕜] E := fun n => ∑ j ∈ Finset.range n, t j
+  have htmem : ∀ n, N.Mem (t n) := fun n =>
+    sylvesterNeumannTerm_mem N hA B hC n
+  have hPmem : ∀ n, N.Mem (P n) := by
+    intro n
+    exact N.finset_sum_mem (Finset.range n) t fun j _ => htmem j
+  have hPcauchy : ∀ ε : ℝ, 0 < ε → ∃ M, ∀ m n, M ≤ m → M ≤ n →
+      N.gauge (P m - P n) < ε := by
+    simpa only [P, t] using
+      sylvesterNeumannPartialSum_cauchy N hA B hC hratio
+  obtain ⟨L, hLmem, hLlim⟩ := N.gauge_complete P hPmem hPcauchy
+  have hPL : Filter.Tendsto P Filter.atTop (nhds L) := by
+    rw [tendsto_iff_norm_sub_tendsto_zero]
+    refine squeeze_zero (fun n => norm_nonneg _)
+      (fun n => N.opNorm_le_gauge (N.sub_mem (hPmem n) hLmem)) ?_
+    rw [Metric.tendsto_atTop]
+    intro ε hε
+    obtain ⟨M, hM⟩ := hLlim ε hε
+    refine ⟨M, fun n hn => ?_⟩
+    rw [Real.dist_eq, sub_zero,
+      abs_of_nonneg (N.gauge_nonneg (N.sub_mem (hPmem n) hLmem))]
+    exact hM n hn
+  have hsum : Summable t := by
+    simpa only [t] using sylvesterNeumannTerm_summable hA B C hratio
+  have hPS : Filter.Tendsto P Filter.atTop
+      (nhds (sylvesterNeumannSolution N hA B C)) := by
+    simpa only [P, t, sylvesterNeumannSolution] using
+      hsum.hasSum.tendsto_sum_nat
+  have hEq : L = sylvesterNeumannSolution N hA B C :=
+    tendsto_nhds_unique hPL hPS
+  rw [← hEq]
+  exact hLmem
 
 /-- The Neumann solution satisfies the Sylvester equation. -/
 theorem sylvesterNeumannSolution_eq
@@ -236,7 +348,63 @@ theorem sylvesterNeumannSolution_eq
     (hratio : ‖hA.inv‖ * ‖B‖ < 1) :
     A ∘L sylvesterNeumannSolution N hA B C -
       sylvesterNeumannSolution N hA B C ∘L B = C := by
-  sorry
+  let t : ℕ → F →L[𝕜] E := fun n => sylvesterNeumannTerm hA B C n
+  let P : ℕ → F →L[𝕜] E := fun n => ∑ j ∈ Finset.range n, t j
+  let S : F →L[𝕜] E := sylvesterNeumannSolution N hA B C
+  have hsum : Summable t := by
+    simpa only [t] using sylvesterNeumannTerm_summable hA B C hratio
+  have hP : Filter.Tendsto P Filter.atTop (nhds S) := by
+    simpa only [P, t, S, sylvesterNeumannSolution] using
+      hsum.hasSum.tendsto_sum_nat
+  have hPshift : Filter.Tendsto (fun n : ℕ => P (n + 1))
+      Filter.atTop (nhds S) :=
+    hP.comp (Filter.tendsto_add_atTop_nat 1)
+  have hfinite : ∀ n : ℕ,
+      A ∘L P (n + 1) - P (n + 1) ∘L B = C - t n ∘L B := by
+    intro n
+    induction n with
+    | zero =>
+        simp only [P, t, Finset.sum_range_succ, Finset.sum_range_zero,
+          zero_add, ContinuousLinearMap.comp_zero,
+          ContinuousLinearMap.zero_comp, zero_sub]
+        rw [comp_sylvesterNeumannTerm_zero hA B C]
+    | succ n ih =>
+        rw [show n + 1 + 1 = (n + 1) + 1 by omega,
+          P, Finset.sum_range_succ, ContinuousLinearMap.comp_add,
+          ContinuousLinearMap.add_comp]
+        change
+          (A ∘L P (n + 1) - P (n + 1) ∘L B) +
+              (A ∘L t (n + 1) - t (n + 1) ∘L B) =
+            C - t (n + 1) ∘L B
+        rw [ih, show A ∘L t (n + 1) = t n ∘L B by
+          simpa only [t] using comp_sylvesterNeumannTerm_succ hA B C n]
+        abel
+  ext x
+  change A (S x) - S (B x) = C x
+  have hPx : Filter.Tendsto (fun n : ℕ => P (n + 1) x)
+      Filter.atTop (nhds (S x)) :=
+    ((ContinuousLinearMap.apply 𝕜 F x).continuous.tendsto S).comp hPshift
+  have hPBx : Filter.Tendsto (fun n : ℕ => P (n + 1) (B x))
+      Filter.atTop (nhds (S (B x))) :=
+    ((ContinuousLinearMap.apply 𝕜 F (B x)).continuous.tendsto S).comp hPshift
+  have hlhs : Filter.Tendsto
+      (fun n : ℕ => A (P (n + 1) x) - P (n + 1) (B x))
+      Filter.atTop (nhds (A (S x) - S (B x))) :=
+    ((A.continuous.tendsto (S x)).comp hPx).sub hPBx
+  have htail : Filter.Tendsto (fun n : ℕ => t n (B x))
+      Filter.atTop (nhds 0) := by
+    have ht0 : Filter.Tendsto t Filter.atTop (nhds 0) := hsum.tendsto_atTop_zero
+    exact ((ContinuousLinearMap.apply 𝕜 F (B x)).continuous.tendsto 0).comp ht0
+  have hrhs : Filter.Tendsto (fun n : ℕ => C x - t n (B x))
+      Filter.atTop (nhds (C x)) := by
+    simpa using tendsto_const_nhds.sub htail
+  have hsame : (fun n : ℕ => A (P (n + 1) x) - P (n + 1) (B x)) =ᶠ[Filter.atTop]
+      (fun n : ℕ => C x - t n (B x)) :=
+    Filter.Eventually.of_forall fun n => by
+      have h := congrArg (fun T : F →L[𝕜] E => T x) (hfinite n)
+      simpa only [ContinuousLinearMap.sub_apply,
+        ContinuousLinearMap.comp_apply] using h
+  exact tendsto_nhds_unique (hlhs.congr' hsame) hrhs
 
 omit [CompleteSpace E] [CompleteSpace F] in
 /-- Uniqueness under the bound/inverse separation. -/
@@ -295,7 +463,52 @@ theorem sylvester_mem_and_gauge_le_of_bound_inverse
     (hEq : A ∘L X - X ∘L B = C)
     (hC : N.Mem C) :
     N.Mem X ∧ δ * N.gauge X ≤ N.gauge C := by
-  sorry
+  have hρδ : 0 < ρ + δ := by linarith
+  have hratio : ‖hA.inv‖ * ‖B‖ < 1 := by
+    calc
+      ‖hA.inv‖ * ‖B‖ ≤ (ρ + δ)⁻¹ * ρ := by
+        exact mul_le_mul hAinv hB (norm_nonneg B)
+          (inv_nonneg.mpr hρδ.le)
+      _ = ρ / (ρ + δ) := by rw [div_eq_mul_inv, mul_comm]
+      _ < 1 := (div_lt_one hρδ).2 (by linarith)
+  let S : F →L[𝕜] E := sylvesterNeumannSolution N hA B C
+  have hSmem : N.Mem S := by
+    exact sylvesterNeumannSolution_mem N hA B hC hratio
+  have hSEq : A ∘L S - S ∘L B = C :=
+    sylvesterNeumannSolution_eq N hA B C hratio
+  have hXS : X = S := by
+    apply sylvester_unique_of_bound_inverse hA B hratio
+    exact hEq.trans hSEq.symm
+  have hXmem : N.Mem X := by rw [hXS]; exact hSmem
+  have hAX : A ∘L X = C + X ∘L B := by
+    rw [← hEq]
+    abel
+  have hfix : X = hA.inv ∘L (C + X ∘L B) := by
+    calc
+      X = ContinuousLinearMap.id 𝕜 E ∘L X := by simp
+      _ = (hA.inv ∘L A) ∘L X := by rw [hA.left_inv]
+      _ = hA.inv ∘L (A ∘L X) := ContinuousLinearMap.comp_assoc _ _ _
+      _ = hA.inv ∘L (C + X ∘L B) := by rw [hAX]
+  have hXBmem : N.Mem (X ∘L B) := N.comp_right_mem B hXmem
+  have hgauge : N.gauge X ≤
+      (ρ + δ)⁻¹ * (N.gauge C + N.gauge X * ρ) := by
+    conv_lhs => rw [hfix]
+    calc
+      N.gauge (hA.inv ∘L (C + X ∘L B))
+          ≤ ‖hA.inv‖ * N.gauge (C + X ∘L B) :=
+        N.gauge_comp_left_le_mul hA.inv (N.add_mem hC hXBmem)
+      _ ≤ (ρ + δ)⁻¹ * N.gauge (C + X ∘L B) :=
+        mul_le_mul_of_nonneg_right hAinv
+          (N.gauge_nonneg (N.add_mem hC hXBmem))
+      _ ≤ (ρ + δ)⁻¹ * (N.gauge C + N.gauge X * ρ) := by
+        refine mul_le_mul_of_nonneg_left ?_ (inv_nonneg.mpr hρδ.le)
+        refine (N.gauge_add_le hC hXBmem).trans (add_le_add le_rfl ?_)
+        exact (N.gauge_comp_right_le_mul B hXmem).trans
+          (mul_le_mul_of_nonneg_left hB (N.gauge_nonneg hXmem))
+  refine ⟨hXmem, ?_⟩
+  have hkey := mul_le_mul_of_nonneg_left hgauge hρδ.le
+  rw [← mul_assoc, mul_inv_cancel₀ hρδ.ne', one_mul] at hkey
+  linarith
 
 /-- Reversed orientation of the bound/inverse Sylvester estimate. -/
 theorem sylvester_mem_and_gauge_le_of_bound_inverse_swapped
@@ -309,7 +522,42 @@ theorem sylvester_mem_and_gauge_le_of_bound_inverse_swapped
     (hEq : A ∘L X - X ∘L B = C)
     (hC : N.Mem C) :
     N.Mem X ∧ δ * N.gauge X ≤ N.gauge C := by
-  sorry
+  let hBadj : BoundedInverseData B.adjoint :=
+    { inv := hB.inv.adjoint
+      left_inv := by
+        rw [← ContinuousLinearMap.adjoint_comp, hB.right_inv]
+        simp
+      right_inv := by
+        rw [← ContinuousLinearMap.adjoint_comp, hB.left_inv]
+        simp }
+  have hBadjInv : ‖hBadj.inv‖ ≤ (ρ + δ)⁻¹ := by
+    change ‖hB.inv.adjoint‖ ≤ (ρ + δ)⁻¹
+    rw [ContinuousLinearMap.adjoint.norm_map]
+    exact hBinv
+  have hAadj : ‖A.adjoint‖ ≤ ρ := by
+    rw [ContinuousLinearMap.adjoint.norm_map]
+    exact hA
+  have hEqAdj :
+      B.adjoint ∘L X.adjoint - X.adjoint ∘L A.adjoint = -C.adjoint := by
+    have h := congrArg ContinuousLinearMap.adjoint hEq
+    rw [map_sub, ContinuousLinearMap.adjoint_comp,
+      ContinuousLinearMap.adjoint_comp] at h
+    calc
+      B.adjoint ∘L X.adjoint - X.adjoint ∘L A.adjoint =
+          -(X.adjoint ∘L A.adjoint - B.adjoint ∘L X.adjoint) := by abel
+      _ = -C.adjoint := by rw [h]
+  have hCadj : N.Mem C.adjoint := N.adjoint_mem hC
+  have hnegCadj : N.Mem (-C.adjoint) := N.neg_mem hCadj
+  have hmain := sylvester_mem_and_gauge_le_of_bound_inverse
+    N hBadj A.adjoint hρ hδ hBadjInv hAadj hEqAdj hnegCadj
+  have hXmem : N.Mem X := by
+    have hdouble := N.adjoint_mem hmain.1
+    simpa using hdouble
+  refine ⟨hXmem, ?_⟩
+  have hbound := hmain.2
+  rw [N.gauge_adjoint hXmem, N.gauge_neg hCadj,
+    N.gauge_adjoint hC] at hbound
+  exact hbound
 
 end ExactSinTheta
 end Experimental

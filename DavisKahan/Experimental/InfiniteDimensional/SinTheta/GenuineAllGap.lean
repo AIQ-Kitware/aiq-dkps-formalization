@@ -7,7 +7,7 @@ import DavisKahan.Experimental.InfiniteDimensional.SinTheta.Unbounded
 import DavisKahan.Experimental.InfiniteDimensional.Sylvester.GenuineAllGap
 
 /-!
-# Genuine-spectrum all-gap unbounded sine-theta scaffold
+# Genuine-spectrum all-gap unbounded sine-theta theorem
 
 This leaf exposes the complete generalized and isometric unbounded sine-theta
 statements with all three gap configurations phrased through the genuine

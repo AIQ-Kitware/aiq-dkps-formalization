@@ -7,7 +7,7 @@ import DavisKahan.Experimental.InfiniteDimensional.Sylvester.Unbounded
 import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.UnboundedIntervalExterior
 import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.OrderedHalfLine
 import DavisKahan.Experimental.InfiniteDimensional.Sylvester.GenuineCutoffInterface
-import DavisKahan.Experimental.InfiniteDimensional.Sylvester.GenuineOrderedEngine
+import DavisKahan.Experimental.InfiniteDimensional.Sylvester.GenuineOrderedEngineDirect
 
 /-!
 # Genuine-spectrum all-gap unbounded Sylvester theorem
@@ -15,8 +15,8 @@ import DavisKahan.Experimental.InfiniteDimensional.Sylvester.GenuineOrderedEngin
 This module states the source-facing all-gap predicate entirely through the
 genuine Spectra spectrum.  It covers the interval/exterior configuration and
 both ordered half-line configurations.  The capstone converts the ordered
-spectral containments to form bounds and then calls the existing finite-Ky-Fan
-engine.
+spectral containments to form bounds and then calls the direct interface-parametric finite-Ky-Fan
+engine instantiated by the vendored Spectra cutoffs.
 
 The file is intentionally independent of the continuation and Section 8 graph
 selection developments.

@@ -1,0 +1,93 @@
+/-
+Copyright (c) 2026 Kitware, Inc. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Jon Crall, OpenAI GPT-5.6 Thinking
+-/
+import DavisKahan.Experimental.InfiniteDimensional.Sylvester.GenuineOrderedEngine
+import DavisKahan.Experimental.InfiniteDimensional.Sylvester.GenuineOrderedCutoff
+
+/-!
+# Direct genuine ordered Sylvester engine
+
+This leaf instantiates the interface-parametric ordered cutoff proof with the
+direct vendored-Spectra cutoff and bounded truncation implementations.
+-/
+
+open scoped InnerProductSpace
+
+namespace ForMathlib
+namespace DavisKahan
+namespace Experimental
+namespace ExactSinTheta
+
+universe v
+
+/-- Direct lower-left/upper-right ordered branch over vendored Spectra. -/
+theorem directGenuineOrderedSylvesterEngine_lowerUpper
+    {E F : Type v}
+    [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
+    [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
+    (N : UnitaryInvariantIdealFamily (𝕜 := ℂ))
+    {A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := E)}
+    {B : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := F)}
+    (hA : A.IsSelfAdjoint) (hB : B.IsSelfAdjoint)
+    {X R : F →L[ℂ] E} {c δ : ℝ}
+    (hδ : 0 < δ)
+    (hAc : SemiboundedBelow A (c + δ))
+    (hBc : SemiboundedAbove B c)
+    (hEq : HasClosedSylvesterEquation A B X R)
+    (hR : N.toRectangularSymmetricIdealFamily.Mem R) :
+    N.toRectangularSymmetricIdealFamily.Mem X ∧
+      δ * N.toRectangularSymmetricIdealFamily.gauge X ≤
+        N.toRectangularSymmetricIdealFamily.gauge R := by
+  exact unbounded_sylvester_mem_and_gauge_le_direct
+    (N := N) (A := A) (B := B) (X := X) (C := R) (c := c) (δ := δ)
+    hA hB
+    (spectraSpectralCutoffInterface A hA)
+    (spectraBoundedTruncationInterface A hA)
+    (spectraSpectralCutoffInterface B hB)
+    (spectraBoundedTruncationInterface B hB)
+    hδ hAc hBc hEq hR
+
+/-- Direct upper-left/lower-right ordered branch over vendored Spectra. -/
+theorem directGenuineOrderedSylvesterEngine_upperLower
+    {E F : Type v}
+    [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
+    [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
+    (N : UnitaryInvariantIdealFamily (𝕜 := ℂ))
+    {A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := E)}
+    {B : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := F)}
+    (hA : A.IsSelfAdjoint) (hB : B.IsSelfAdjoint)
+    {X R : F →L[ℂ] E} {c δ : ℝ}
+    (hδ : 0 < δ)
+    (hAc : SemiboundedAbove A c)
+    (hBc : SemiboundedBelow B (c + δ))
+    (hEq : HasClosedSylvesterEquation A B X R)
+    (hR : N.toRectangularSymmetricIdealFamily.Mem R) :
+    N.toRectangularSymmetricIdealFamily.Mem X ∧
+      δ * N.toRectangularSymmetricIdealFamily.gauge X ≤
+        N.toRectangularSymmetricIdealFamily.gauge R := by
+  exact unbounded_sylvester_mem_and_gauge_le_direct_swapped
+    (N := N) (A := A) (B := B) (X := X) (C := R) (c := c) (δ := δ)
+    hA hB
+    (spectraSpectralCutoffInterface A hA)
+    (spectraBoundedTruncationInterface A hA)
+    (spectraSpectralCutoffInterface B hB)
+    (spectraBoundedTruncationInterface B hB)
+    hδ hAc hBc hEq hR
+
+/-- Direct implementation of both ordered orientations. -/
+noncomputable def directGenuineOrderedSylvesterEngine :
+    GenuineOrderedSylvesterEngine where
+  lowerUpper := directGenuineOrderedSylvesterEngine_lowerUpper
+  upperLower := directGenuineOrderedSylvesterEngine_upperLower
+
+/-- Canonical ordered engine used by the genuine all-gap capstone. -/
+noncomputable def canonicalGenuineOrderedSylvesterEngine :
+    GenuineOrderedSylvesterEngine :=
+  directGenuineOrderedSylvesterEngine
+
+end ExactSinTheta
+end Experimental
+end DavisKahan
+end ForMathlib
