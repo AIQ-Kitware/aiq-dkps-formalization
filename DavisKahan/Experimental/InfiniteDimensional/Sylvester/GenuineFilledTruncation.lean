@@ -31,11 +31,6 @@ variable {E F : Type v}
   [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
   [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
 
-abbrev ClosedOperatorOnE :=
-  ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := E)
-abbrev ClosedOperatorOnF :=
-  ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := F)
-
 /-- Fill the complement of an orthogonal spectral cutoff by a real scalar. -/
 noncomputable def genuineFilledTruncation
     {H : Type v}
