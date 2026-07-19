@@ -38,9 +38,55 @@ and prints exactly `[propext, Classical.choice, Quot.sound]`:
 | `RealGeneralSinThetaProblem.result` |
 | `RealBoundedGeneralSinThetaProblem.result` |
 
+### Source-facing surface (`ForMathlib.DavisKahan1970.*`), all clean
+
+`sinTheta`, `sinTheta_complex`, `sinTheta_real`, `sinTheta_real_spectralSubspace`,
+`generalizedSinTheta`, `generalizedSinTheta_complementaryBlock`,
+`generalizedSinTheta_finiteInterval`, `generalizedSinTheta_boundedSpecialization`,
+`generalizedSinTheta_real`, `generalizedSinTheta_real_complementaryBlock`,
+`generalizedSinTheta_real_spectralSubspace`,
+`generalizedSinTheta_boundedSpecialization_real`.
+
+### Natural real spectral inputs (the newest drop), all clean
+
+`RealSpectralRestriction.conjugatePVM_spectralPVM`,
+`RealSpectralRestriction.complexifySubmodule_realSelfAdjointSpectralSubspace`,
+`RealSpectralRestriction.realSelfAdjointSpectralRestriction_isSelfAdjoint`,
+`ClosedOperator.reducingRestriction_isSelfAdjoint`.
+
+`DavisKahan.Sources.DavisKahan1970.FullPartIII` builds with zero errors, and
+`SinTheta/FullUnboundedAudit.lean` (intentionally unimported) compiles with zero
+errors and reports no admission in any of its checks.
+
 The previous handoff prompt (`dev/real-route-completion-prompt.md`) authorized
 **retiring** the real route if it turned out to be unsound. That authorization is
 withdrawn — it is sound and it is finished. That file is superseded by this one.
+
+## What is actually left
+
+Nothing on the sine-theta critical path. Remaining admissions, none of which any
+verified endpoint depends on:
+
+| area | count | note |
+|---|---|---|
+| `DavisKahan/Experimental` | 183 | legacy, roadmap, and superseded modules |
+| — of which `Core/UnboundedSpectral.lean` | 31 | deliberately bypassed; leave alone |
+| `Challenge/**` | 18 | intentional immutable challenge placeholders |
+| `Sources`, `BoundedOperator`, `FiniteDimensional`, `Alternative`, `ForMathlib` | 0 | |
+
+Candidate next work, in rough order of value:
+
+1. **Retire or quarantine the superseded experimental modules.** The 183 figure
+   overstates real debt: much of it sits in files the verified chain no longer
+   reaches. An inventory separating "genuinely open" from "superseded" would make
+   the remaining work legible. Do this before attempting any of it.
+2. **The `Module ℝ (RealComplexification E)` instance diamond** (below). This is
+   a design ticket, not a proof task.
+3. **Four orphan files that have never been built** and are unreachable from any
+   root: `DavisKahan/Alternative/FiniteDimensional/API/{All,ProseLike,ClassicalProseLike}.lean`
+   and `ForMathlib/Analysis/InnerProductSpace/RectangularSingularValuesDkVariant.lean`
+   (imported by nothing at all). They predate this work. Decide whether to fix,
+   wire up, or delete them.
 
 ## Verification protocol — the part that actually matters
 
@@ -150,7 +196,20 @@ These were each paid for with real debugging time. Read them before starting.
     `grep -rn "theorem <name>" .lake/packages/mathlib/Mathlib/ vendor/Spectra/ DavisKahan/ ForMathlib/`.
     Existence is not the same as being *in scope* — check the namespace too. Four
     "unknown identifier" errors in this pass were real lemmas in unopened
-    namespaces (`Spectra.YosidaHille`, `Spectra.Essential`).
+    namespaces (`Spectra.YosidaHille`, `Spectra.Essential`). And existence is not
+    the same as being *built*: a vendored Spectra module with no `.olean` yields
+    an unknown namespace. Build it (`lake build Spectra.<Module>`) and import it
+    rather than restating its declarations locally.
+15. **`rw` rewrites every occurrence of a pattern.** Two "failed rewrite" errors
+    in this pass were a *second* `rw` with the same lemma, which had nothing left
+    to hit. Delete the duplicate rather than fighting the error.
+16. **`Submodule.starProjection_orthogonal_apply` does not exist.** The real names
+    are `Submodule.starProjection_orthogonal` (operator form) and
+    `starProjection_orthogonal_val` (pointwise).
+17. **Proof arguments do not get pinned by `rw` unification.** Because of proof
+    irrelevance, `rw [selfAdjointSpectralProjection_ofReal]` leaves `?hA`
+    unassigned and silently spawns a stray `case hA` goal. Pass such arguments
+    explicitly.
 
 ## Known latent design problem — read before "fixing" it
 
