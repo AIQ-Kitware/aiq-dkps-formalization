@@ -31,9 +31,24 @@ variable {E F : Type v}
   [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
   [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
 
+/-- Evidence that the scalar is literally one of Mathlib's two standard
+`RCLike` fields.  The `RCLike` class is open, so scalar-specific endpoint
+proofs must not dispatch merely by assuming that no further instances exist. -/
+inductive StandardRCLike : (𝕜 : Type u) → Prop where
+  | real : StandardRCLike ℝ
+  | complex : StandardRCLike ℂ
+
+namespace StandardRCLike
+
+instance : StandardRCLike ℝ := .real
+instance : StandardRCLike ℂ := .complex
+
+end StandardRCLike
+
 /-- Continuity of each approximation number under strongly convergent
 orthogonal cutoffs. -/
 theorem approximationSingularValue_comp_strongProjection_tendsto
+    (h𝕜 : StandardRCLike 𝕜)
     {ι : Type w} {P : ι → E →L[𝕜] E} {l : Filter ι}
     (hPproj : ∀ i, IsOrthogonalProjectionMap (P i))
     (hP : StronglyTendsto P l (ContinuousLinearMap.id 𝕜 E))
@@ -41,18 +56,28 @@ theorem approximationSingularValue_comp_strongProjection_tendsto
     Tendsto
       (fun i => approximationSingularValue n (K ∘L P i))
       l (𝓝 (approximationSingularValue n K)) := by
-  sorry
+  cases h𝕜 with
+  | real =>
+      exact approximationSingularValue_comp_strongProjection_tendsto_real
+        hPproj hP n K
+  | complex =>
+      exact approximationSingularValue_comp_strongProjection_tendsto_complex
+        hPproj hP n K
 
 /-- Ky Fan's addition inequality for approximation numbers. -/
 theorem kyFanApproximationGauge_add_le
+    (h𝕜 : StandardRCLike 𝕜)
     (k : ℕ) (K L : E →L[𝕜] F) :
     kyFanApproximationGauge k (K + L) ≤
       kyFanApproximationGauge k K + kyFanApproximationGauge k L := by
-  sorry
+  cases h𝕜 with
+  | real => exact kyFanApproximationGauge_add_le_real k K L
+  | complex => exact kyFanApproximationGauge_add_le_complex k K L
 
 
 /-- Ky Fan gauges converge under strong orthogonal cutoffs. -/
 theorem kyFanApproximationGauge_comp_strongProjection_tendsto
+    (h𝕜 : StandardRCLike 𝕜)
     {ι : Type w} {P : ι → E →L[𝕜] E} {l : Filter ι}
     (hPproj : ∀ i, IsOrthogonalProjectionMap (P i))
     (hP : StronglyTendsto P l (ContinuousLinearMap.id 𝕜 E))
@@ -63,11 +88,12 @@ theorem kyFanApproximationGauge_comp_strongProjection_tendsto
   simp only [kyFanApproximationGauge]
   exact tendsto_finsetSum (Finset.range k)
     (fun n hn => approximationSingularValue_comp_strongProjection_tendsto
-      hPproj hP n K)
+      h𝕜 hPproj hP n K)
 
 /-- A rectangular ideal family whose gauge is fully symmetric with respect
     to all finite Ky Fan approximation gauges. -/
 structure KyFanDominantIdealFamily (𝕜 : Type u) [RCLike 𝕜] where
+  standardScalar : StandardRCLike 𝕜
   toRectangularSymmetricIdealFamily :
     RectangularSymmetricIdealFamily (𝕜 := 𝕜)
   majorization_mem_and_gauge_le :
@@ -91,8 +117,9 @@ abbrev UnitaryInvariantIdealFamily
 namespace KyFanDominantIdealFamily
 
 /-- The ordinary operator norm with its finite-Ky-Fan dominance property. -/
-noncomputable def operatorNorm :
+noncomputable def operatorNorm (h𝕜 : StandardRCLike 𝕜) :
     KyFanDominantIdealFamily (𝕜 := 𝕜) where
+  standardScalar := h𝕜
   toRectangularSymmetricIdealFamily :=
     RectangularSymmetricIdealFamily.operatorNorm
   majorization_mem_and_gauge_le := by
@@ -138,8 +165,9 @@ theorem kyFan_gauge_complete (k : ℕ) (hk : 0 < k)
     _ = ε := by field_simp
 
 /-- A fixed positive finite Ky Fan gauge with its own dominance property. -/
-noncomputable def kyFan (k : ℕ) (hk : 0 < k) :
+noncomputable def kyFan (h𝕜 : StandardRCLike 𝕜) (k : ℕ) (hk : 0 < k) :
     KyFanDominantIdealFamily (𝕜 := 𝕜) where
+  standardScalar := h𝕜
   toRectangularSymmetricIdealFamily := {
     Mem := fun _ => True
     gauge := kyFanApproximationGauge k
@@ -162,7 +190,7 @@ noncomputable def kyFan (k : ℕ) (hk : 0 < k) :
         (norm_nonneg A)
     gauge_add_le := by
       intro E F _ _ _ _ _ _ A B hA hB
-      exact kyFanApproximationGauge_add_le k A B
+      exact kyFanApproximationGauge_add_le h𝕜 k A B
     gauge_smul := by
       intro E F _ _ _ _ _ _ c A hA
       exact kyFanApproximationGauge_smul k c A
@@ -186,14 +214,16 @@ noncomputable def kyFan (k : ℕ) (hk : 0 < k) :
 
 /-- Every bounded operator belongs to the fixed finite Ky Fan family. -/
 @[simp]
-theorem kyFan_mem (k : ℕ) (hk : 0 < k) (K : E →L[𝕜] F) :
-    (kyFan (𝕜 := 𝕜) k hk).toRectangularSymmetricIdealFamily.Mem K :=
+theorem kyFan_mem (h𝕜 : StandardRCLike 𝕜)
+    (k : ℕ) (hk : 0 < k) (K : E →L[𝕜] F) :
+    (kyFan (𝕜 := 𝕜) h𝕜 k hk).toRectangularSymmetricIdealFamily.Mem K :=
   trivial
 
 /-- The concrete gauge of the fixed finite Ky Fan family. -/
 @[simp]
-theorem kyFan_gauge (k : ℕ) (hk : 0 < k) (K : E →L[𝕜] F) :
-    (kyFan (𝕜 := 𝕜) k hk).toRectangularSymmetricIdealFamily.gauge K =
+theorem kyFan_gauge (h𝕜 : StandardRCLike 𝕜)
+    (k : ℕ) (hk : 0 < k) (K : E →L[𝕜] F) :
+    (kyFan (𝕜 := 𝕜) h𝕜 k hk).toRectangularSymmetricIdealFamily.gauge K =
       kyFanApproximationGauge k K :=
   rfl
 

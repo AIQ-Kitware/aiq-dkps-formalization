@@ -17,10 +17,12 @@ projection with the Mathlib orthogonal projection onto its range and records
 the exact orthogonal-projection property required by the continuation
 assembly.
 
-The remaining spectral-identification theorem will equate the sign-correct
-contour Riesz operator with this target.  Keeping the target construction in a
-separate leaf isolates the measure-theoretic projection API from the contour
-functional-calculus argument.
+The scalar half of spectral identification is also recorded here: the
+sign-correct scalar Riesz transform equals normalized winding, normalized
+winding equals the selected-set indicator on the real spectrum, and the target
+projection is the bounded spectral calculus of that indicator.  The remaining
+bridge transports the operator-valued contour integral through the spectral
+calculus.
 -/
 
 namespace ForMathlib
@@ -150,6 +152,94 @@ theorem fixedContourRieszOperator_operatorPath_isOrthogonalProjection_of_identif
   rw [hidentify t ht]
   exact boundedSelfAdjointSpectralProjection_isOrthogonalProjection
     (operatorPath A V t) (hself t ht) s hs
+
+
+/-! ## Scalar contour selector -/
+
+/-- The complex-valued indicator symbol of the selected real spectral set. -/
+noncomputable def spectralSelector (s : Set ℝ) : ℝ → ℂ :=
+  Set.indicator s (fun _ => (1 : ℂ))
+
+/-- The selected-set indicator is measurable whenever the set is measurable. -/
+theorem spectralSelector_measurable (s : Set ℝ) (hs : MeasurableSet s) :
+    Measurable (spectralSelector s) := by
+  classical
+  exact measurable_const.indicator hs
+
+/-- The selected-set indicator is uniformly bounded by one. -/
+theorem spectralSelector_bounded (s : Set ℝ) :
+    ∃ C : ℝ, ∀ lam : ℝ, ‖spectralSelector s lam‖ ≤ C := by
+  simpa only [spectralSelector] using
+    Spectra.QuantumMechanics.SpectralTheory.indicator_one_bdd s
+
+namespace PiecewiseC1ClosedContour
+
+/-- The sign-correct scalar Riesz transform associated with the project
+resolvent convention `(A - z I)⁻¹`. -/
+noncomputable def scalarRieszTransform
+    (Γ : PiecewiseC1ClosedContour) (lam : ℝ) : ℂ :=
+  rieszNormalization *
+    ∫ t in (0 : ℝ)..1,
+      (((lam : ℂ) - Γ.param t)⁻¹) *
+        derivWithin Γ.param (Set.Icc (0 : ℝ) 1) t
+
+/-- The sign-correct scalar resolvent transform is exactly the normalized
+winding value recorded by the contour. -/
+theorem scalarRieszTransform_eq_normalizedWinding
+    (Γ : PiecewiseC1ClosedContour) (lam : ℝ) :
+    Γ.scalarRieszTransform lam = Γ.normalizedWinding (lam : ℂ) := by
+  unfold scalarRieszTransform normalizedWinding
+  have hintegral :
+      (∫ t in (0 : ℝ)..1,
+        (((lam : ℂ) - Γ.param t)⁻¹) *
+          derivWithin Γ.param (Set.Icc (0 : ℝ) 1) t) =
+        -(∫ t in (0 : ℝ)..1,
+          ((Γ.param t - (lam : ℂ))⁻¹) *
+            derivWithin Γ.param (Set.Icc (0 : ℝ) 1) t) := by
+    rw [← intervalIntegral.integral_neg]
+    apply intervalIntegral.integral_congr
+    intro t ht
+    change (((lam : ℂ) - Γ.param t)⁻¹) *
+        derivWithin Γ.param (Set.Icc (0 : ℝ) 1) t =
+      -(((Γ.param t - (lam : ℂ))⁻¹) *
+        derivWithin Γ.param (Set.Icc (0 : ℝ) 1) t)
+    rw [show (lam : ℂ) - Γ.param t =
+      -(Γ.param t - (lam : ℂ)) by ring]
+    simp
+  rw [hintegral]
+  simp [rieszNormalization]
+
+end PiecewiseC1ClosedContour
+
+/-- On the real spectrum, the scalar Riesz transform is the indicator of the
+selected component. -/
+theorem SpectralSeparatingContour.scalarRieszTransform_eq_spectralSelector
+    {A : H →L[ℂ] H} {s : Set ℝ}
+    (Γ : SpectralSeparatingContour A s) {lam : ℝ}
+    (hlam : lam ∈ realSpectrum A) :
+    Γ.geometric.scalarRieszTransform lam = spectralSelector s lam := by
+  rw [Γ.geometric.scalarRieszTransform_eq_normalizedWinding]
+  classical
+  by_cases hmem : lam ∈ s
+  · rw [Γ.normalizedWinding_eq_one hlam hmem]
+    simp [spectralSelector, hmem]
+  · rw [Γ.normalizedWinding_eq_zero hlam hmem]
+    simp [spectralSelector, hmem]
+
+/-- The genuine bounded spectral projection is the Spectra bounded functional
+calculus applied to the selected-set indicator. -/
+theorem boundedSelfAdjointSpectralProjection_eq_spectralCalculus_selector
+    (A : H →L[ℂ] H) (hA : IsSelfAdjointOperator A)
+    (s : Set ℝ) (hs : MeasurableSet s) :
+    boundedSelfAdjointSpectralProjection A hA s hs =
+      Spectra.QuantumMechanics.SpectralTheory.spectralCalculus
+        (Spectra.YosidaHille.genToGroup
+          (boundedSelfAdjointOperator A hA).selfAdjoint)
+        (spectralSelector s)
+        (spectralSelector_measurable s hs)
+        (spectralSelector_bounded s) := by
+  rw [boundedSelfAdjointSpectralProjection_eq_spectralProjection]
+  rfl
 
 end BoundedSpectralProjection
 
