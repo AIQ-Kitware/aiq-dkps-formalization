@@ -439,7 +439,14 @@ theorem SpectralSeparatingContour.cfcL_contourResolventSymbol_eq_curveIntegralFu
   have hparam : Γ.geometric.param = Γ.path.extend := by
     unfold PiecewiseC1ClosedContour.param
     rfl
-  rw [hparam, Γ.path.extend_apply ht]
+  have hpoint : Γ.geometric.param t = Γ.path τ := by
+    rw [hparam]
+    exact Γ.path.extend_apply ht
+  have hderiv :
+      derivWithin Γ.geometric.param (Set.Icc (0 : ℝ) 1) t =
+        derivWithin Γ.path.extend (Set.Icc (0 : ℝ) 1) t := by
+    rw [hparam]
+  rw [hpoint, hderiv, Γ.path.extend_apply ht]
   exact
     (Γ.resolventOneForm_eq_cfc τ
       (derivWithin Γ.path.extend (Set.Icc (0 : ℝ) 1) t)).symm
