@@ -9,11 +9,13 @@ import DavisKahan.Experimental.InfiniteDimensional.SinTheta.ContinuationTranspor
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.ContinuationAssembly
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.ContinuationRotationChain
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.ContinuationSpectralIdentification
+import DavisKahan.Experimental.InfiniteDimensional.SinTheta.ContinuationSelectedSubspace
 
 /-!
 # Concrete continuation infrastructure
 
 This aggregate exposes the completed contour, Riesz-integral, transport,
-assembly, rotation-chain, and spectral-identification leaves.  The older
-`ContinuationRoadmap` scaffold is intentionally not part of this aggregate.
+assembly, rotation-chain, spectral-identification, and selected-subspace
+transport leaves. The older `ContinuationRoadmap` scaffold is intentionally not
+part of this aggregate.
 -/

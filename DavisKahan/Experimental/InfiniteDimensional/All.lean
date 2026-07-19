@@ -18,5 +18,6 @@ import DavisKahan.Experimental.InfiniteDimensional.Riccati.All
 import DavisKahan.Experimental.InfiniteDimensional.Sharpness
 import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.All
 import DavisKahan.Experimental.InfiniteDimensional.TanTheta.All
+import DavisKahan.Experimental.InfiniteDimensional.TanTwoTheta.All
 
 /-! # Experimental infinite-dimensional Davis--Kahan theory -/
