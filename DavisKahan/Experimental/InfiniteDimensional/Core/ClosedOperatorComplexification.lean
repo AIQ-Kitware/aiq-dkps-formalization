@@ -42,8 +42,21 @@ variable {E F : Type v}
   [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
   [NormedAddCommGroup F] [InnerProductSpace ℝ F] [CompleteSpace F]
 
-abbrev Eℂ := RealComplexification E
-abbrev Fℂ := RealComplexification F
+/-- Local shorthand for the complexified ambient space.  This is notation
+rather than an abbreviation so that the underlying real space is resolved from
+the ambient section variable at each use site instead of becoming an
+uninferable implicit argument. -/
+local notation "Eℂ" => RealComplexification E
+local notation "Fℂ" => RealComplexification F
+
+/-- The real coordinate is continuous: it is the first projection composed
+with the L2 coordinate homeomorphism. -/
+theorem continuous_re : Continuous (re : Eℂ → E) :=
+  continuous_fst.comp (WithLp.homeomorphProd 2 E E).continuous
+
+/-- The imaginary coordinate is continuous. -/
+theorem continuous_im : Continuous (im : Eℂ → E) :=
+  continuous_snd.comp (WithLp.homeomorphProd 2 E E).continuous
 
 /-- Each coordinate norm is bounded by the L2 norm. -/
 theorem norm_re_le (z : Eℂ) : ‖re z‖ ≤ ‖z‖ := by
@@ -85,23 +98,23 @@ def linearMap
   toFun z := mk (A.toLinearMap (domainRe A z))
     (A.toLinearMap (domainIm A z))
   map_add' z w := by
-    apply RealComplexification.ext <;> simp [domainRe, domainIm]
+    refine RealComplexification.ext ?_ ?_
+    · show A.toLinearMap (domainRe A z + domainRe A w) =
+        A.toLinearMap (domainRe A z) + A.toLinearMap (domainRe A w)
+      exact map_add _ _ _
+    · show A.toLinearMap (domainIm A z + domainIm A w) =
+        A.toLinearMap (domainIm A z) + A.toLinearMap (domainIm A w)
+      exact map_add _ _ _
   map_smul' c z := by
-    apply RealComplexification.ext
-    · change A.toLinearMap
-          ⟨c.re • re (z : Eℂ) - c.im • im (z : Eℂ), _⟩ =
+    refine RealComplexification.ext ?_ ?_
+    · show A.toLinearMap (c.re • domainRe A z - c.im • domainIm A z) =
         c.re • A.toLinearMap (domainRe A z) -
           c.im • A.toLinearMap (domainIm A z)
-      simpa [domainRe, domainIm] using
-        A.toLinearMap.map_sub
-          (c.re • domainRe A z) (c.im • domainIm A z)
-    · change A.toLinearMap
-          ⟨c.im • re (z : Eℂ) + c.re • im (z : Eℂ), _⟩ =
+      rw [map_sub, map_smul, map_smul]
+    · show A.toLinearMap (c.im • domainRe A z + c.re • domainIm A z) =
         c.im • A.toLinearMap (domainRe A z) +
           c.re • A.toLinearMap (domainIm A z)
-      simpa [domainRe, domainIm] using
-        A.toLinearMap.map_add
-          (c.im • domainRe A z) (c.re • domainIm A z)
+      rw [map_add, map_smul, map_smul]
 
 @[simp] theorem re_linearMap
     (A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E))
@@ -140,8 +153,11 @@ private theorem linearMap_closedGraph
       ((z : Eℂ), linearMap A z)) := by
   let coords : (Eℂ × Eℂ) → ((E × E) × (E × E)) :=
     fun p => ((re p.1, re p.2), (im p.1, im p.2))
-  have hcoords : Continuous coords := by
-    fun_prop
+  have hcoords : Continuous coords :=
+    ((continuous_re.comp continuous_fst).prodMk
+        (continuous_re.comp continuous_snd)).prodMk
+      ((continuous_im.comp continuous_fst).prodMk
+        (continuous_im.comp continuous_snd))
   have hclosed : IsClosed
       ((Set.range fun x : A.domain => ((x : E), A.toLinearMap x)) ×ˢ
        (Set.range fun y : A.domain => ((y : E), A.toLinearMap y))) :=
