@@ -129,10 +129,17 @@ def reducingRestrictionLinearMap
         (((x : reducingRestrictionDomain A U) : U).property)⟩
   map_add' x y := by
     apply Subtype.ext
-    exact A.toLinearMap.map_add _ _
+    simp only [Submodule.coe_add]
+    rw [show reducingRestrictionDomainToAmbient A U (x + y) =
+      reducingRestrictionDomainToAmbient A U x +
+        reducingRestrictionDomainToAmbient A U y from rfl]
+    exact map_add A.toLinearMap _ _
   map_smul' c x := by
     apply Subtype.ext
-    exact A.toLinearMap.map_smul c _
+    simp only [Submodule.coe_smul, RingHom.id_apply]
+    rw [show reducingRestrictionDomainToAmbient A U (c • x) =
+      c • reducingRestrictionDomainToAmbient A U x from rfl]
+    exact map_smul A.toLinearMap c _
 
 @[simp]
 theorem coe_reducingRestrictionLinearMap
@@ -145,7 +152,7 @@ theorem coe_reducingRestrictionLinearMap
   rfl
 
 /-- Projection of an ambient domain vector into the restricted domain. -/
-def projectDomainToReducingRestriction
+noncomputable def projectDomainToReducingRestriction
     (A : ClosedOperator (𝕜 := 𝕜) (E := E))
     (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     (hred : A.ReducesSubspace U) (x : A.domain) :
@@ -185,7 +192,7 @@ private theorem reducingRestrictionDomain_dense
       Submodule.starProjection_eq_self_iff.mpr u.property
     change Tendsto (fun n => t n) atTop (𝓝 u)
     apply tendsto_subtype_rng.mpr
-    simpa [t, hfix] using hlim
+    simpa [t, hfix, Function.comp_def] using hlim
 
 private theorem reducingRestrictionLinearMap_closedGraph
     (A : ClosedOperator (𝕜 := 𝕜) (E := E))
@@ -249,7 +256,7 @@ def reducingSubspaceInclusion (U : Submodule 𝕜 E) : U →L[𝕜] E :=
 /-- The reducing-subspace inclusion is isometric. -/
 theorem reducingSubspaceInclusion_isometric (U : Submodule 𝕜 E) :
     IsometricEmbedding (reducingSubspaceInclusion U) :=
-  U.isometry_subtype
+  fun _ => rfl
 
 /-- The inclusion maps the restricted domain into the ambient domain. -/
 theorem reducingRestriction_inclusion_mem_domain
@@ -303,26 +310,32 @@ theorem mem_reducingRestriction_adjoint_domain_iff
         ⟪y, (reducingRestriction A U hred).toLinearPMap
           (projectDomainToReducingRestriction A U hred x)⟫_𝕜 :=
       hy.comp (continuous_projectDomainToReducingRestriction A U hred)
-    convert hcomp using 1
-    funext x
-    let xu : A.domain :=
-      ⟨U.starProjection (x : E), hred.projection_mem_domain x⟩
-    let xo : A.domain :=
-      ⟨Uᗮ.starProjection (x : E), hred.orthogonalProjection_mem_domain x⟩
-    have hxsplit : x = xu + xo := by
-      apply Subtype.ext
-      exact U.starProjection_add_starProjection_orthogonal (x : E)
-    have horth : ⟪(y : E), A.toLinearMap xo⟫_𝕜 = 0 := by
-      exact Submodule.inner_right_of_mem_orthogonal y.property
-        (hred.orthogonal_invariant xo
-          (Uᗮ.starProjection_apply_mem (x : E)))
-    calc
-      ⟪(y : E), A.toLinearPMap x⟫_𝕜 =
-          ⟪(y : E), A.toLinearMap (xu + xo)⟫_𝕜 := by rw [← hxsplit]
-      _ = ⟪(y : E), A.toLinearMap xu + A.toLinearMap xo⟫_𝕜 := by rw [map_add]
-      _ = ⟪(y : E), A.toLinearMap xu⟫_𝕜 := by rw [inner_add_right, horth, add_zero]
-      _ = ⟪y, (reducingRestriction A U hred).toLinearPMap
-          (projectDomainToReducingRestriction A U hred x)⟫_𝕜 := rfl
+    have hfun : (fun x : A.domain =>
+        ⟪y, (reducingRestriction A U hred).toLinearPMap
+          (projectDomainToReducingRestriction A U hred x)⟫_𝕜) =
+        fun x : A.domain => ⟪(y : E), A.toLinearMap x⟫_𝕜 := by
+      funext x
+      let xu : A.domain :=
+        ⟨U.starProjection (x : E), hred.projection_mem_domain x⟩
+      let xo : A.domain :=
+        ⟨Uᗮ.starProjection (x : E), hred.orthogonalProjection_mem_domain x⟩
+      have hxsplit : x = xu + xo := by
+        apply Subtype.ext
+        exact (U.starProjection_add_starProjection_orthogonal (x : E)).symm
+      have horth : ⟪(y : E), A.toLinearMap xo⟫_𝕜 = 0 := by
+        exact Submodule.inner_right_of_mem_orthogonal y.property
+          (hred.orthogonal_invariant xo
+            (Uᗮ.starProjection_apply_mem (x : E)))
+      calc
+        ⟪y, (reducingRestriction A U hred).toLinearPMap
+            (projectDomainToReducingRestriction A U hred x)⟫_𝕜 =
+            ⟪(y : E), A.toLinearMap xu⟫_𝕜 := rfl
+        _ = ⟪(y : E), A.toLinearMap xu + A.toLinearMap xo⟫_𝕜 := by
+              rw [inner_add_right, horth, add_zero]
+        _ = ⟪(y : E), A.toLinearMap (xu + xo)⟫_𝕜 := by rw [map_add]
+        _ = ⟪(y : E), A.toLinearMap x⟫_𝕜 := by rw [← hxsplit]
+    rw [hfun] at hcomp
+    exact hcomp
   · intro hy
     have hincl : Continuous fun x : (reducingRestriction A U hred).domain =>
         reducingRestrictionDomainToAmbient A U x := by
@@ -332,8 +345,10 @@ theorem mem_reducingRestriction_adjoint_domain_iff
           (reducingRestriction A U hred).domain.subtypeL.continuous
       exact hcoe.subtype_mk fun x => x.property
     have hcomp := hy.comp hincl
-    simpa only [reducingRestriction_inclusion_intertwines,
-      reducingSubspaceInclusion] using hcomp
+    have hcomp' : Continuous fun x : (reducingRestriction A U hred).domain =>
+        ⟪(y : E),
+          A.toLinearMap (reducingRestrictionDomainToAmbient A U x)⟫_𝕜 := hcomp
+    exact hcomp'
 
 /-- Symmetry passes to the reducing restriction. -/
 theorem reducingRestriction_isSymmetric
@@ -343,10 +358,6 @@ theorem reducingRestriction_isSymmetric
     (hA : A.IsSymmetric) :
     (reducingRestriction A U hred).IsSymmetric := by
   intro x y
-  change ⟪A.toLinearMap (reducingRestrictionDomainToAmbient A U x),
-      (y : U)⟫_𝕜 =
-    ⟪(x : U), A.toLinearMap
-      (reducingRestrictionDomainToAmbient A U y)⟫_𝕜
   exact hA (reducingRestrictionDomainToAmbient A U x)
     (reducingRestrictionDomainToAmbient A U y)
 
@@ -383,7 +394,7 @@ theorem reducingRestriction_isSelfAdjoint
           ⟪yAdj, x⟫_𝕜 = ⟪y, R.toLinearPMap xDom⟫_𝕜 := by
             simpa [yAdj, xDom] using hformal xDom
           _ = ⟪yAct, x⟫_𝕜 := by
-            simpa [yAct, xDom] using (hsymm ⟨y, hyR⟩ xDom).symm
+            simpa [yAct, xDom, R] using (hsymm ⟨y, hyR⟩ xDom).symm
     have hzero : ⟪yAdj - yAct, yAdj - yAct⟫_𝕜 = 0 := by
       rw [inner_sub_left, congrFun hinner (yAdj - yAct), sub_self]
     exact sub_eq_zero.mp (inner_self_eq_zero.mp hzero)
