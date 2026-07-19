@@ -138,6 +138,38 @@ for the audited capability map, ownership boundary, and contribution plan.
   sources. To flag work for a stronger agent, write the explanation in the docstring using
   such wording, never the banned words.
 
+- **`omit` goes above the docstring, and needs `in`.** The
+  `linter.unusedSectionVars` warning ("automatically included section variable(s)
+  unused in theorem ...") is routine here, because the ambient `variable` blocks
+  carry instances such as `[CompleteSpace E]` that many individual lemmas do not
+  need. The repository already silences it with `omit` in roughly 240 places.
+  Two placement rules cover every correct use:
+
+  ```lean
+  omit [CompleteSpace E] in
+  /-- Docstring goes *below* the omit. -/
+  theorem foo (x : E) : ‖x‖ = ‖x‖ := rfl
+  ```
+
+  - The `omit ... in` line must come **before** the docstring. Writing the
+    docstring first is the common mistake, and it fails with the misleading
+    parse error `unexpected token 'omit'; expected 'lemma'`, which never
+    mentions docstrings.
+  - `omit ... in` applies to **exactly one** declaration — the next one. It does
+    not leak to the declaration after that. Attributes and `private` are fine
+    between it and the declaration (`omit [...] in` then `@[simp] theorem ...`).
+  - Bare `omit [...]` with **no** `in` applies to the entire rest of the section.
+    Use it only when a whole run of declarations genuinely does not need the
+    instance; a later declaration that does need it will fail with
+    `failed to synthesize instance`, not with a scoping message.
+  - Several instances may be dropped at once:
+    `omit [NormedAddCommGroup E] [CompleteSpace E] in`. Named (non-instance)
+    variables use the bare name: `omit 𝕜 in`.
+
+  This is a warning, not an error. Do not restructure a working `variable` block
+  to chase it, and do not add `set_option linter.unusedSectionVars false`; add
+  the one-line `omit`, or leave the warning if the declaration is in flux.
+
 
 ## Comparator challenge rule
 
