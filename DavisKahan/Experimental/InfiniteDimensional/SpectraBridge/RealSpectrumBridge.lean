@@ -19,7 +19,6 @@ cycle.
 namespace ForMathlib
 namespace DavisKahan
 namespace Experimental
-namespace ExactSinTheta
 namespace SpectraBridge
 
 open scoped InnerProductSpace
@@ -47,7 +46,6 @@ theorem realSpectrum_eq_spectraSpectrum
   rfl
 
 end SpectraBridge
-end ExactSinTheta
 end Experimental
 end DavisKahan
 end ForMathlib
