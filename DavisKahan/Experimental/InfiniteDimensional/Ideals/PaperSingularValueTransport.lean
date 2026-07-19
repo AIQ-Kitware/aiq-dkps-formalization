@@ -110,6 +110,60 @@ theorem kyFanApproximationGauge_eq
 
 end SameApproximationSingularSequence
 
+/-- Two-sided composition with isometric equivalences never increases an
+approximation number.  Only `‖U‖₊ ≤ 1` is used, so no nontriviality
+assumption on the coordinate spaces is required. -/
+private theorem approximationNumber_comp_isometricEquiv_le
+    {E₁ F₁ E₂ F₂ : Type v}
+    [NormedAddCommGroup E₁] [NormedSpace 𝕜 E₁]
+    [NormedAddCommGroup F₁] [NormedSpace 𝕜 F₁]
+    [NormedAddCommGroup E₂] [NormedSpace 𝕜 E₂]
+    [NormedAddCommGroup F₂] [NormedSpace 𝕜 F₂]
+    (U : F₁ ≃ₗᵢ[𝕜] F₂) (V : E₂ ≃ₗᵢ[𝕜] E₁) (A : E₁ →L[𝕜] F₁) (n : ℕ) :
+    (U.toContinuousLinearEquiv.toContinuousLinearMap ∘L A ∘L
+        V.toContinuousLinearEquiv.toContinuousLinearMap).approximationNumber n
+      ≤ A.approximationNumber n := by
+  have hU : ‖U.toContinuousLinearEquiv.toContinuousLinearMap‖₊ ≤ 1 :=
+    ContinuousLinearMap.opNNNorm_le_bound _ 1 fun x => by simp
+  have hV : ‖V.toContinuousLinearEquiv.toContinuousLinearMap‖₊ ≤ 1 :=
+    ContinuousLinearMap.opNNNorm_le_bound _ 1 fun x => by simp
+  calc
+    (U.toContinuousLinearEquiv.toContinuousLinearMap ∘L A ∘L
+          V.toContinuousLinearEquiv.toContinuousLinearMap).approximationNumber n
+        ≤ ‖U.toContinuousLinearEquiv.toContinuousLinearMap‖₊ *
+            A.approximationNumber n *
+            ‖V.toContinuousLinearEquiv.toContinuousLinearMap‖₊ :=
+      ContinuousLinearMap.approximationNumber_comp_comp_le _ _ _ n
+    _ ≤ 1 * A.approximationNumber n * 1 := by gcongr
+    _ = A.approximationNumber n := by rw [one_mul, mul_one]
+
+/-- Two-sided composition with isometric equivalences preserves every
+approximation number. -/
+private theorem approximationNumber_comp_isometricEquiv_eq
+    {E₁ F₁ E₂ F₂ : Type v}
+    [NormedAddCommGroup E₁] [NormedSpace 𝕜 E₁]
+    [NormedAddCommGroup F₁] [NormedSpace 𝕜 F₁]
+    [NormedAddCommGroup E₂] [NormedSpace 𝕜 E₂]
+    [NormedAddCommGroup F₂] [NormedSpace 𝕜 F₂]
+    (U : F₁ ≃ₗᵢ[𝕜] F₂) (V : E₂ ≃ₗᵢ[𝕜] E₁) (A : E₁ →L[𝕜] F₁) (n : ℕ) :
+    (U.toContinuousLinearEquiv.toContinuousLinearMap ∘L A ∘L
+        V.toContinuousLinearEquiv.toContinuousLinearMap).approximationNumber n
+      = A.approximationNumber n := by
+  refine le_antisymm (approximationNumber_comp_isometricEquiv_le U V A n) ?_
+  have hfac :
+      U.symm.toContinuousLinearEquiv.toContinuousLinearMap ∘L
+          (U.toContinuousLinearEquiv.toContinuousLinearMap ∘L A ∘L
+            V.toContinuousLinearEquiv.toContinuousLinearMap) ∘L
+          V.symm.toContinuousLinearEquiv.toContinuousLinearMap = A := by
+    ext x
+    simp
+  calc A.approximationNumber n
+      = (U.symm.toContinuousLinearEquiv.toContinuousLinearMap ∘L
+            (U.toContinuousLinearEquiv.toContinuousLinearMap ∘L A ∘L
+              V.toContinuousLinearEquiv.toContinuousLinearMap) ∘L
+            V.symm.toContinuousLinearEquiv.toContinuousLinearMap).approximationNumber
+          n := by rw [hfac]
+    _ ≤ _ := approximationNumber_comp_isometricEquiv_le U.symm V.symm _ n
 
 /-- Two rectangular bounded operators have the same complete singular-value
 data when all of their approximation singular values agree. -/
@@ -127,43 +181,8 @@ theorem comp_isometricEquiv
       (U.toContinuousLinearEquiv.toContinuousLinearMap ∘L A ∘L
         V.toContinuousLinearEquiv.toContinuousLinearMap) A := by
   intro n
-  apply le_antisymm
-  · have hleft := congrArg (fun x : NNReal => (x : ℝ))
-      ((A ∘L V.toContinuousLinearEquiv.toContinuousLinearMap).
-        approximationNumber_comp_left_le
-          U.toContinuousLinearEquiv.toContinuousLinearMap n)
-    have hright := congrArg (fun x : NNReal => (x : ℝ))
-      (A.approximationNumber_comp_right_le
-        V.toContinuousLinearEquiv.toContinuousLinearMap n)
-    simpa [approximationSingularValue,
-      U.toContinuousLinearEquiv.isometry.norm_toContinuousLinearMap,
-      V.toContinuousLinearEquiv.isometry.norm_toContinuousLinearMap] using
-      hleft.trans hright
-  · let Uinv := U.symm
-    let Vinv := V.symm
-    have hfactor :
-        Uinv.toContinuousLinearEquiv.toContinuousLinearMap ∘L
-          (U.toContinuousLinearEquiv.toContinuousLinearMap ∘L A ∘L
-            V.toContinuousLinearEquiv.toContinuousLinearMap) ∘L
-          Vinv.toContinuousLinearEquiv.toContinuousLinearMap = A := by
-      ext x
-      simp [Uinv, Vinv]
-    rw [← hfactor]
-    have hleft := congrArg (fun x : NNReal => (x : ℝ))
-      (((U.toContinuousLinearEquiv.toContinuousLinearMap ∘L A ∘L
-          V.toContinuousLinearEquiv.toContinuousLinearMap) ∘L
-          Vinv.toContinuousLinearEquiv.toContinuousLinearMap).
-        approximationNumber_comp_left_le
-          Uinv.toContinuousLinearEquiv.toContinuousLinearMap n)
-    have hright := congrArg (fun x : NNReal => (x : ℝ))
-      ((U.toContinuousLinearEquiv.toContinuousLinearMap ∘L A ∘L
-          V.toContinuousLinearEquiv.toContinuousLinearMap).
-        approximationNumber_comp_right_le
-          Vinv.toContinuousLinearEquiv.toContinuousLinearMap n)
-    simpa [approximationSingularValue, Uinv, Vinv,
-      U.symm.toContinuousLinearEquiv.isometry.norm_toContinuousLinearMap,
-      V.symm.toContinuousLinearEquiv.isometry.norm_toContinuousLinearMap] using
-      hleft.trans hright
+  exact congrArg (fun x : NNReal => (x : ℝ))
+    (approximationNumber_comp_isometricEquiv_eq U V A n)
 
 /-- If an operator becomes another operator after unitary coordinate changes,
 they have the same complete singular sequence. -/
@@ -177,31 +196,9 @@ theorem of_isometricEquiv_comp
       V.symm.toContinuousLinearEquiv.toContinuousLinearMap = B) :
     SameApproximationSingularSequence A B := by
   intro n
-  apply le_antisymm
-  · have hback :
-        U.symm.toContinuousLinearEquiv.toContinuousLinearMap ∘L B ∘L
-          V.toContinuousLinearEquiv.toContinuousLinearMap = A := by
-      rw [← h]
-      ext x
-      simp
-    rw [← hback]
-    have hleft := congrArg (fun x : NNReal => (x : ℝ))
-      ((B ∘L V.toContinuousLinearEquiv.toContinuousLinearMap).
-        approximationNumber_comp_left_le
-          U.symm.toContinuousLinearEquiv.toContinuousLinearMap n)
-    have hright := congrArg (fun x : NNReal => (x : ℝ))
-      (B.approximationNumber_comp_right_le
-        V.toContinuousLinearEquiv.toContinuousLinearMap n)
-    simpa [approximationSingularValue] using hleft.trans hright
-  · rw [← h]
-    have hleft := congrArg (fun x : NNReal => (x : ℝ))
-      ((A ∘L V.symm.toContinuousLinearEquiv.toContinuousLinearMap).
-        approximationNumber_comp_left_le
-          U.toContinuousLinearEquiv.toContinuousLinearMap n)
-    have hright := congrArg (fun x : NNReal => (x : ℝ))
-      (A.approximationNumber_comp_right_le
-        V.symm.toContinuousLinearEquiv.toContinuousLinearMap n)
-    simpa [approximationSingularValue] using hleft.trans hright
+  have hkey := approximationNumber_comp_isometricEquiv_eq U V.symm A n
+  rw [h] at hkey
+  exact congrArg (fun x : NNReal => (x : ℝ)) hkey.symm
 
 @[refl]
 theorem refl (A : E →L[𝕜] F) : SameApproximationSingularValues A A :=
@@ -283,7 +280,7 @@ namespace PaperSinThetaRepresentativeAcross
 
 /-- The canonical operator is an admissible representative. -/
 noncomputable def canonical (A : E →L[𝕜] F) :
-    PaperSinThetaRepresentativeAcross A where
+    PaperSinThetaRepresentativeAcross (E₀ := E) (F₀ := F) A where
   operator := A
   same_singular_sequence := .refl A
 
