@@ -39,6 +39,7 @@ variable {E F : Type v}
   [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
   [NormedAddCommGroup F] [InnerProductSpace ℝ F] [CompleteSpace F]
 
+omit [CompleteSpace E] in
 /-- The range of a complexified operator is the complexification of its real
 range. -/
 theorem range_complexify
@@ -55,49 +56,77 @@ theorem range_complexify
     rcases hz with ⟨⟨x, hx⟩, ⟨y, hy⟩⟩
     refine ⟨mk x y, ?_⟩
     apply RealComplexification.ext
-    · simpa using hx.symm
-    · simpa using hy.symm
+    · simpa using hx
+    · simpa using hy
+
+/-- The real coordinate map commutes with finite sums. -/
+theorem re_sum {V : Type*} [AddCommGroup V] {κ : Type*} (s : Finset κ)
+    (f : κ → RealComplexification V) :
+    re (∑ j ∈ s, f j) = ∑ j ∈ s, re (f j) :=
+  map_sum ({ toFun := re, map_zero' := rfl, map_add' := fun _ _ => rfl } :
+    RealComplexification V →+ V) f s
+
+/-- The imaginary coordinate map commutes with finite sums. -/
+theorem im_sum {V : Type*} [AddCommGroup V] {κ : Type*} (s : Finset κ)
+    (f : κ → RealComplexification V) :
+    im (∑ j ∈ s, f j) = ∑ j ∈ s, im (f j) :=
+  map_sum ({ toFun := im, map_zero' := rfl, map_add' := fun _ _ => rfl } :
+    RealComplexification V →+ V) f s
 
 /-- A basis of a real space gives a complex basis of its concrete
 complexification by embedding every basis vector in the real copy. -/
-noncomputable def complexificationBasis
+noncomputable def complexificationBasis {ι : Type*}
     {V : Type v} [AddCommGroup V] [Module ℝ V]
     (b : Module.Basis ι ℝ V) :
     Module.Basis ι ℂ (RealComplexification V) := by
   classical
-  refine Module.Basis.mk (v := fun i => ofReal (b i)) ?_ ?_
-  · rw [linearIndependent_iff]
-    intro l s hs i hi
-    have hre := congrArg re hs
-    have him := congrArg im hs
+  refine Module.Basis.mk (v := fun i => mk (b i) 0) ?_ ?_
+  · rw [linearIndependent_iff']
+    intro s l hs i hi
     have hre' : ∑ j ∈ s, (l j).re • b j = 0 := by
-      simpa [map_sum] using hre
+      have h := congrArg re hs
+      rw [re_sum] at h
+      simpa using h
     have him' : ∑ j ∈ s, (l j).im • b j = 0 := by
-      simpa [map_sum] using him
-    have hr := (linearIndependent_iff.mp b.linearIndependent)
-      (fun j => (l j).re) s hre' i hi
-    have hii := (linearIndependent_iff.mp b.linearIndependent)
-      (fun j => (l j).im) s him' i hi
-    apply Complex.ext <;> assumption
-  · rw [eq_top_iff]
-    intro z
+      have h := congrArg im hs
+      rw [im_sum] at h
+      simpa using h
+    have hr := (linearIndependent_iff'.mp b.linearIndependent)
+      s (fun j => (l j).re) hre' i hi
+    have hii := (linearIndependent_iff'.mp b.linearIndependent)
+      s (fun j => (l j).im) him' i hi
+    refine Complex.ext ?_ ?_
+    · simpa using hr
+    · simpa using hii
+  · intro z _
     have realCopy_mem (x : V) :
-        ofReal x ∈ Submodule.span ℂ (Set.range fun i => ofReal (b i)) := by
+        mk x (0 : V) ∈ Submodule.span ℂ (Set.range fun i => mk (b i) (0 : V)) := by
       have hx : x ∈ Submodule.span ℝ (Set.range b) := by
         rw [b.span_eq]
         exact Submodule.mem_top
-      refine Submodule.span_induction hx ?_ ?_ ?_ ?_
-      · rintro y ⟨i, rfl⟩
+      induction hx using Submodule.span_induction with
+      | mem y hy =>
+        obtain ⟨i, rfl⟩ := hy
         exact Submodule.subset_span ⟨i, rfl⟩
-      · simpa using (Submodule.zero_mem
-          (Submodule.span ℂ (Set.range fun i => ofReal (b i))))
-      · intro x y hx hy
-        simpa using Submodule.add_mem _ hx hy
-      · intro r x hx
-        have := Submodule.smul_mem
-          (Submodule.span ℂ (Set.range fun i => ofReal (b i))) (r : ℂ) hx
-        simpa using this
-    have hz : z = ofReal (re z) + Complex.I • ofReal (im z) := by
+      | zero =>
+        have hzero : mk (0 : V) (0 : V) = 0 := by
+          apply RealComplexification.ext <;> simp
+        rw [hzero]
+        exact Submodule.zero_mem _
+      | add x y _ _ ihx ihy =>
+        have hadd : mk (x + y) (0 : V) = mk x (0 : V) + mk y (0 : V) := by
+          apply RealComplexification.ext <;> simp
+        rw [hadd]
+        exact Submodule.add_mem _ ihx ihy
+      | smul r x _ ih =>
+        have hsmul : mk (r • x) (0 : V) = (r : ℂ) • mk x (0 : V) := by
+          apply RealComplexification.ext <;>
+            simp only [re_mk, im_mk, re_complex_smul, im_complex_smul,
+              Complex.ofReal_re, Complex.ofReal_im, zero_smul, smul_zero,
+              sub_zero, add_zero]
+        rw [hsmul]
+        exact Submodule.smul_mem _ _ ih
+    have hz : z = mk (re z) (0 : V) + Complex.I • mk (im z) (0 : V) := by
       apply RealComplexification.ext <;> simp
     rw [hz]
     exact Submodule.add_mem _ (realCopy_mem (re z))
@@ -112,8 +141,8 @@ theorem rank_complexification
   calc
     Module.rank ℂ (RealComplexification V) =
         Cardinal.mk (Module.Free.ChooseBasisIndex ℝ V) :=
-      (complexificationBasis b).mk_eq_rank.symm
-    _ = Module.rank ℝ V := b.mk_eq_rank
+      by simpa using (complexificationBasis b).mk_eq_rank.symm
+    _ = Module.rank ℝ V := by simpa using b.mk_eq_rank
 
 /-- Complexifying a real submodule preserves its dimension. -/
 theorem rank_complexifySubmodule
@@ -138,6 +167,7 @@ theorem rank_complexifySubmodule
         Module.rank ℂ (RealComplexification U) := e.rank_eq.symm
     _ = Module.rank ℝ U := rank_complexification
 
+omit [CompleteSpace E] in
 /-- Complexification preserves the rank of a bounded operator. -/
 theorem rank_complexify
     (T : E →L[ℝ] F) :
@@ -147,25 +177,31 @@ theorem rank_complexify
     Module.rank ℝ (LinearMap.range T.toLinearMap)
   rw [range_complexify, rank_complexifySubmodule]
 
+omit [CompleteSpace E] in
 /-- A real linearly independent family remains complex linearly independent in
 the real copy of the complexification. -/
 theorem linearIndependent_ofReal
     {ι : Type*} {v : ι → E} (hv : LinearIndependent ℝ v) :
     LinearIndependent ℂ (fun i => ofReal (v i)) := by
-  rw [linearIndependent_iff]
-  intro l s hs i hi
-  have hre := congrArg re hs
-  have him := congrArg im hs
+  rw [linearIndependent_iff']
+  intro s l hs i hi
   have hre' : ∑ j ∈ s, (l j).re • v j = 0 := by
-    simpa [map_sum] using hre
+    have h := congrArg re hs
+    rw [re_sum] at h
+    simpa using h
   have him' : ∑ j ∈ s, (l j).im • v j = 0 := by
-    simpa [map_sum] using him
-  have hr := (linearIndependent_iff.mp hv)
-    (fun j => (l j).re) s hre' i hi
-  have hii := (linearIndependent_iff.mp hv)
-    (fun j => (l j).im) s him' i hi
-  apply Complex.ext <;> assumption
+    have h := congrArg im hs
+    rw [im_sum] at h
+    simpa using h
+  have hr := (linearIndependent_iff'.mp hv)
+    s (fun j => (l j).re) hre' i hi
+  have hii := (linearIndependent_iff'.mp hv)
+    s (fun j => (l j).im) him' i hi
+  refine Complex.ext ?_ ?_
+  · simpa using hr
+  · simpa using hii
 
+omit [CompleteSpace E] in
 /-- The complex span of real copies has real and imaginary coordinates in the
 corresponding real span. -/
 theorem coordinates_mem_real_span
@@ -174,22 +210,24 @@ theorem coordinates_mem_real_span
     (hz : z ∈ Submodule.span ℂ (Set.range fun i => ofReal (v i))) :
     re z ∈ Submodule.span ℝ (Set.range v) ∧
       im z ∈ Submodule.span ℝ (Set.range v) := by
-  refine Submodule.span_induction hz ?_ ?_ ?_ ?_
-  · rintro _ ⟨i, rfl⟩
+  induction hz using Submodule.span_induction with
+  | mem w hw =>
+    obtain ⟨i, rfl⟩ := hw
     exact ⟨Submodule.subset_span ⟨i, rfl⟩, by simp⟩
-  · exact ⟨Submodule.zero_mem _, Submodule.zero_mem _⟩
-  · rintro x y hx hy
-    exact ⟨Submodule.add_mem _ hx.1 hy.1,
-      Submodule.add_mem _ hx.2 hy.2⟩
-  · rintro c z hz
+  | zero => exact ⟨Submodule.zero_mem _, Submodule.zero_mem _⟩
+  | add x y _ _ ihx ihy =>
+    exact ⟨Submodule.add_mem _ ihx.1 ihy.1,
+      Submodule.add_mem _ ihx.2 ihy.2⟩
+  | smul c x _ ih =>
     exact ⟨
       Submodule.sub_mem _
-        (Submodule.smul_mem _ c.re hz.1)
-        (Submodule.smul_mem _ c.im hz.2),
+        (Submodule.smul_mem _ c.re ih.1)
+        (Submodule.smul_mem _ c.im ih.2),
       Submodule.add_mem _
-        (Submodule.smul_mem _ c.im hz.1)
-        (Submodule.smul_mem _ c.re hz.2)⟩
+        (Submodule.smul_mem _ c.im ih.1)
+        (Submodule.smul_mem _ c.re ih.2)⟩
 
+omit [CompleteSpace E] [CompleteSpace F] in
 /-- A real lower modulus on a real span becomes the same complex lower modulus
 on the complex span. -/
 theorem lowerBound_complex_span
@@ -207,13 +245,16 @@ theorem lowerBound_complex_span
   rw [RealComplexification.norm_sq, mul_pow,
     RealComplexification.norm_sq]
   have hrsq : s ^ 2 * ‖re z‖ ^ 2 ≤ ‖T (re z)‖ ^ 2 := by
-    nlinarith [sq_nonneg (‖T (re z)‖ - s * ‖re z‖)]
+    have h := pow_le_pow_left₀ (mul_nonneg hs (norm_nonneg (re z))) hr 2
+    rwa [mul_pow] at h
   have hisq : s ^ 2 * ‖im z‖ ^ 2 ≤ ‖T (im z)‖ ^ 2 := by
-    nlinarith [sq_nonneg (‖T (im z)‖ - s * ‖im z‖)]
+    have h := pow_le_pow_left₀ (mul_nonneg hs (norm_nonneg (im z))) hi 2
+    rwa [mul_pow] at h
   change s ^ 2 * (‖re z‖ ^ 2 + ‖im z‖ ^ 2) ≤
     ‖T (re z)‖ ^ 2 + ‖T (im z)‖ ^ 2
   nlinarith
 
+omit [CompleteSpace E] in
 /-- Complexification cannot increase an approximation number: complexify a
 near-optimal real approximant and preserve both its rank and error norm. -/
 theorem approximationNumber_complexify_le
