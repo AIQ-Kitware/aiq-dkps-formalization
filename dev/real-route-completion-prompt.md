@@ -44,7 +44,7 @@ Current state (all counts from real builds):
 | module | lines | state |
 |---|---|---|
 | `Core/ClosedOperatorComplexification.lean` | 528 | **22 errors** (down from ~60) |
-| `SinTheta/RealFrameFactorization.lean` | 308 | ~31 errors, partially repaired |
+| `SinTheta/RealFrameFactorization.lean` | 329 | **done — compiles, 0 errors** |
 | `Ideals/ComplexificationApproximation.lean` | 306 | blocked |
 | `Sylvester/RealUnbounded.lean` | 98 | blocked |
 | `SinTheta/RealUnbounded.lean` | 89 | blocked |
@@ -144,6 +144,49 @@ a red build with an aspirational real one. Do not delete anyone's files.
    (domain equality + agreeing action; the other two fields are propositions).
 9. `WithLp.homeomorphProd 2 E E` is the L2↔product homeomorphism; use it (not
    `fun_prop`) to get continuity through `RealComplexification`.
+10. **The real continuous functional calculus on the complexified operator
+    algebra needs two instances reinstalled in every file that uses it.** This
+    single issue accounted for 28 of the 31 errors in `RealFrameFactorization`.
+    Any `HPow (RealComplexification F →L[ℂ] RealComplexification F) ℝ ?m`
+    failure (i.e. a real power / `rpow` / `CFC` of a complexified operator that
+    will not elaborate) is this. Add, in the file's variable section:
+    ```lean
+    noncomputable local instance :
+        Algebra ℝ (RealComplexification E →L[ℂ] RealComplexification E) :=
+      Algebra.complexToReal
+    noncomputable local instance :
+        ContinuousFunctionalCalculus ℝ
+          (RealComplexification E →L[ℂ] RealComplexification E) IsSelfAdjoint :=
+      IsSelfAdjoint.instContinuousFunctionalCalculus
+    ```
+    together with the imports
+    `Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.{Basic,Instances}`.
+    `Core/ComplexificationFunctionalCalculus.lean` already declares these, but
+    as `local instance`, which does **not** propagate to importers. Reinstalling
+    them also makes your context match the one `conjugateOperator_cfc_eq` was
+    stated under, so that lemma applies without a coercion mismatch.
+
+## Known latent design problem — read before "fixing" it
+
+`Core/Complexification.lean` creates a `Module ℝ (RealComplexification E)`
+**diamond**:
+
+- `instModuleReal` (line 71) supplies `Module ℝ` directly from `WithLp 2 (E × E)`;
+- `instModuleComplex` (line 133) supplies `Module ℂ`, whose scalar restriction
+  yields a *second, non-defeq* `Module ℝ`.
+
+So `ContinuousLinearMap.algebra` builds an `Algebra ℝ (… →L[ℂ] …)` over
+`instModuleReal`, while mathlib's `IsSelfAdjoint.instContinuousFunctionalCalculus`
+has `Algebra.complexToReal` baked into its conclusion — and unification fails.
+This is specific to `RealComplexification`: for a plain `[InnerProductSpace ℂ H]`
+the same synthesis succeeds, because there `Module ℝ H` *is* the restricted one.
+
+Item 10 above is the workaround. The principled fix — deriving `instModuleReal`
+and `instNormedSpaceReal` by restriction from the complex structure so the two
+paths are definitionally equal — is **out of scope**: `Core/Complexification.lean`
+is foundational and widely imported, and changing it would force a very large
+rebuild and could break unrelated downstream files. If you think it should be
+done, raise it as a separate ticket rather than doing it inside this task.
 
 ## Method
 
