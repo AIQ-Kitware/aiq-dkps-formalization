@@ -78,7 +78,11 @@ Formalized by Claude Fable 5 (claude-fable-5[1m]).
 **Candidate #15 -- approximation numbers and finite Ky Fan gauges: STAGED
 (2026-07-18),** in
 `ForMathlib/Analysis/Normed/Operator/ApproximationNumber.lean`,
-`ForMathlib/Analysis/Normed/Operator/ApproximationNumberHilbert.lean`, and
+`ForMathlib/Analysis/Normed/Operator/ApproximationNumberAdjoint.lean`,
+`ForMathlib/Analysis/Normed/Operator/ApproximationNumberSingularValues.lean`,
+`ForMathlib/Analysis/Normed/Operator/ApproximationNumberMinMax.lean`, and
+the compatibility aggregate
+`ForMathlib/Analysis/Normed/Operator/ApproximationNumberHilbert.lean`, plus
 `DavisKahan/Experimental/InfiniteDimensional/Ideals/ApproximationNumbers*.lean`.
 The stack defines approximation numbers as operator-norm distance to bounded
 maps of controlled finite rank, proves the elementary ideal laws, identifies
@@ -90,9 +94,11 @@ complexification, conjugation invariance, and descent back to the real Hilbert
 space. A leaderboard-only dependency audit is at
 `Challenge/MathlibPending/ApproximationNumbers/Leaderboard.lean`.
 
-This is high-value upstream mathematics, but not a single PR: the definition and
-elementary laws should land first, followed by Hilbert-space identification,
-finite-restriction localization, and finally the strong-cutoff/Ky Fan layer.
+This is high-value upstream mathematics, but not a single PR. The foundational
+files are now physically decomposed into the definition and elementary laws,
+adjoint invariance, finite-dimensional Eckart--Young identification, and the
+ambient min--max lower bound. Finite-restriction localization and the
+strong-cutoff/Ky Fan layer remain later PRs.
 The Davis--Kahan ideal-family wrappers are downstream project API and should not
 be included in the Mathlib contribution.
 
