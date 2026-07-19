@@ -13,6 +13,7 @@ import DavisKahan.Experimental.InfiniteDimensional.Core.OperatorAngleComplex
 import DavisKahan.Experimental.InfiniteDimensional.Core.OperatorAngleReal
 import DavisKahan.Experimental.InfiniteDimensional.Core.RealContinuousFunctionalCalculus
 import DavisKahan.Experimental.InfiniteDimensional.Core.RealSpectralBridge
+import DavisKahan.Experimental.InfiniteDimensional.Core.ReducingRestriction
 import DavisKahan.Experimental.InfiniteDimensional.Core.SpectralProjection
 import DavisKahan.Experimental.InfiniteDimensional.Core.Unbounded
 import DavisKahan.Experimental.InfiniteDimensional.Core.UnboundedSpectral

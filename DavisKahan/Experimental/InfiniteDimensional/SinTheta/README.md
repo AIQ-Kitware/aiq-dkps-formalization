@@ -35,7 +35,13 @@ The real route shares the scalar-generic residual and angle algebra, then uses:
    dominance;
 4. `Core/ComplexificationFunctionalCalculus.lean` and
    `RealFrameFactorization.lean` for descent of the positive Gram powers;
-5. `FrameFactorizationGeneric.lean`, `RealGeneralized.lean`,
+5. `Core/ReducingRestriction.lean` for scalar-generic restrictions of closed
+   operators to reducing subspaces;
+6. `SpectraBridge/RealSpectralRestriction.lean` for descent of the complex
+   spectral PVM, real spectral ranges, and their self-adjoint restrictions;
+7. `NaturalReal.lean` for natural-input real isometric and generalized
+   spectral-subspace endpoints;
+8. `FrameFactorizationGeneric.lean`, `RealGeneralized.lean`,
    `RealCanonical.lean`, and `RealSpecializations.lean` for the real
    lower-frame and source-shaped endpoints.
 
@@ -146,6 +152,10 @@ can proceed in dependency order.  The high-risk seams are now:
   negative real powers on an invertible positive Gram operator;
 - reflecting the complex Gram identities back through injective
   complexification;
+- compiling the conjugation-invariant spectral PVM descent and the generic
+  reducing-subspace restriction, especially the adjoint-domain equivalence;
+- checking the real spectral projection domain/intertwining descent and the
+  natural-input exact decomposition;
 - checking definitional equalities between selected real polar data and the
   source-facing real sine operators;
 - running `FullUnboundedAudit.lean` and accepting completion only after every
@@ -157,8 +167,12 @@ selects `result_complex`, and `result_real` is the parallel real endpoint.
 This avoids pretending that the complex spectral foundation automatically
 covers an arbitrary third implementation of the `RCLike` interface.
 
-A natural-input real spectral-subspace constructor remains a separate API
-project.  The source-shaped real theorem is complete at the same bookkeeping
-level as the historical complex problem record, but a canonical real spectral
-restriction package would require a dedicated real projection/restriction
-bridge or a carefully descended complex construction.
+A candidate natural-input real spectral-subspace route is developed separately from
+the source-shaped problem records.  The reusable core theorem restricts any
+self-adjoint closed operator to an orthogonally complemented reducing subspace.
+The Spectra bridge is designed to descend the canonical complex spectral PVM
+through the real structure, prove that the resulting real projections reduce
+the original operator, and instantiate the generic restriction.  `NaturalReal.lean`
+then constructs every complementary-domain and intertwining fact internally for
+both the isometric and lower-frame theorems.  This layer remains pending full
+compiler verification together with the upstream real complexification route.

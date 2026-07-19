@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.NaturalGenuine
+import DavisKahan.Experimental.InfiniteDimensional.SinTheta.NaturalReal
 import DavisKahan.Experimental.InfiniteDimensional.Sylvester.GenuineOrderedEngineDirect
 import DavisKahan.Experimental.InfiniteDimensional.Sylvester.RealUnbounded
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.RealSpecializations
@@ -40,6 +41,14 @@ namespace ExactSinTheta
 #check unboundedSinThetaDataOfSpectralSubspace
 #check spectralSubspace_orthogonalExactDecomposition
 #check sinTheta_unbounded_spectralSubspace_of_genuineSpectrumGap
+#check ForMathlib.DavisKahanExt.ClosedOperator.reducingRestriction_isSelfAdjoint
+#check SpectraBridge.RealSpectralRestriction.conjugatePVM_spectralPVM
+#check SpectraBridge.RealSpectralRestriction.realSelfAdjointSpectralRestriction_isSelfAdjoint
+#check SpectraBridge.RealSpectralRestriction.complexifySubmodule_realSelfAdjointSpectralSubspace
+#check unboundedSinThetaDataOfRealSpectralSubspace
+#check realSpectralSubspace_orthogonalExactDecomposition
+#check sinTheta_unbounded_real_spectralSubspace
+#check generalizedSinTheta_unbounded_real_spectralSubspace
 #check GenuineGeneralSinThetaProblem.result
 #check GenuineIsometricSinThetaProblem.result
 #check ForMathlib.DavisKahanExt.ClosedOperator.realResolventSet
@@ -68,6 +77,8 @@ namespace ExactSinTheta
 #check RealBoundedGeneralSinThetaProblem.result
 #check ForMathlib.DavisKahan1970.sinTheta
 #check ForMathlib.DavisKahan1970.sinTheta_real
+#check ForMathlib.DavisKahan1970.sinTheta_real_spectralSubspace
+#check ForMathlib.DavisKahan1970.generalizedSinTheta_real_spectralSubspace
 #check ForMathlib.DavisKahan1970.generalizedSinTheta
 #check ForMathlib.DavisKahan1970.generalizedSinTheta_real
 #check ForMathlib.DavisKahan1970.generalizedSinTheta_boundedSpecialization
@@ -86,6 +97,14 @@ namespace ExactSinTheta
 #print axioms generalizedSinTheta_unbounded_exact_of_genuineSpectrumGap
 #print axioms sinTheta_unbounded_exact_of_genuineSpectrumGap
 #print axioms sinTheta_unbounded_spectralSubspace_of_genuineSpectrumGap
+#print axioms ForMathlib.DavisKahanExt.ClosedOperator.reducingRestriction_isSelfAdjoint
+#print axioms SpectraBridge.RealSpectralRestriction.conjugatePVM_spectralPVM
+#print axioms SpectraBridge.RealSpectralRestriction.realSelfAdjointSpectralRestriction_isSelfAdjoint
+#print axioms SpectraBridge.RealSpectralRestriction.complexifySubmodule_realSelfAdjointSpectralSubspace
+#print axioms unboundedSinThetaDataOfRealSpectralSubspace
+#print axioms realSpectralSubspace_orthogonalExactDecomposition
+#print axioms sinTheta_unbounded_real_spectralSubspace
+#print axioms generalizedSinTheta_unbounded_real_spectralSubspace
 #print axioms GenuineGeneralSinThetaProblem.result
 #print axioms GenuineIsometricSinThetaProblem.result
 #print axioms ForMathlib.DavisKahanExt.ClosedOperator.realSpectrum
@@ -114,6 +133,8 @@ namespace ExactSinTheta
 #print axioms RealBoundedGeneralSinThetaProblem.result
 #print axioms ForMathlib.DavisKahan1970.sinTheta
 #print axioms ForMathlib.DavisKahan1970.sinTheta_real
+#print axioms ForMathlib.DavisKahan1970.sinTheta_real_spectralSubspace
+#print axioms ForMathlib.DavisKahan1970.generalizedSinTheta_real_spectralSubspace
 #print axioms ForMathlib.DavisKahan1970.generalizedSinTheta
 #print axioms ForMathlib.DavisKahan1970.generalizedSinTheta_real
 #print axioms ForMathlib.DavisKahan1970.generalizedSinTheta_boundedSpecialization

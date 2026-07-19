@@ -13,6 +13,7 @@ import DavisKahan.Experimental.InfiniteDimensional.SinTheta.GenuineUnboundedGaug
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.GenuineIntervalExterior
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.GenuineAllGap
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.NaturalGenuine
+import DavisKahan.Experimental.InfiniteDimensional.SinTheta.NaturalReal
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.Canonical
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.ContinuationAll
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.Specializations

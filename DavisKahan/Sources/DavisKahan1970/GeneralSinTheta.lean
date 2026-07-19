@@ -5,6 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.LegacyGapCompletion
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.RealSpecializations
+import DavisKahan.Experimental.InfiniteDimensional.SinTheta.NaturalReal
 
 /-!
 # Davis--Kahan 1970 general sine-theta manuscript surface
@@ -59,9 +60,17 @@ alias sinTheta_complex :=
 alias sinTheta_real :=
   DavisKahan.Experimental.ExactSinTheta.IsometricSinThetaProblem.result_real
 
+/-- Real unbounded isometric theorem from a measurable exact spectral set. -/
+alias sinTheta_real_spectralSubspace :=
+  DavisKahan.Experimental.ExactSinTheta.sinTheta_unbounded_real_spectralSubspace
+
 /-- Real source-facing generalized theorem. -/
 alias generalizedSinTheta_real :=
   DavisKahan.Experimental.ExactSinTheta.RealGeneralSinThetaProblem.result
+
+/-- Real generalized unbounded theorem from a measurable exact spectral set. -/
+alias generalizedSinTheta_real_spectralSubspace :=
+  DavisKahan.Experimental.ExactSinTheta.generalizedSinTheta_unbounded_real_spectralSubspace
 
 /-- Real complementary-overlap form of the generalized theorem. -/
 alias generalizedSinTheta_real_complementaryBlock :=
