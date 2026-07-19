@@ -10,6 +10,7 @@ import DavisKahan.Experimental.InfiniteDimensional.Core.ReducingRestriction
 import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.SpectralRestrictionOperator
 import Spectra.Resolvent.Identities
 import Spectra.SpectralTheory.ResolventForm
+import Spectra.SpectralTheory.Essential.Weyl
 
 /-!
 # Real spectral projections and restrictions by complexification
@@ -37,6 +38,8 @@ namespace RealSpectralRestriction
 
 open Spectra
 open Spectra.Resolvent
+open Spectra.YosidaHille
+open Spectra.Essential
 open Spectra.QuantumMechanics.SpectralTheory
 open ExactSinTheta
 open ExactSinTheta.ClosedOperatorComplexification
@@ -75,8 +78,8 @@ noncomputable def conjugatePVM (P : Spectra.ProjValMeasure Eℂ) :
       _ = (((P.diag (conjugation z)) B).toReal : ℂ) := by
         rw [P.inner_proj, Complex.conj_ofReal]
   proj_univ := by
-    rw [P.proj_univ, conjugateOperator_one]
-    rfl
+    rw [P.proj_univ]
+    exact conjugateOperator_one
   proj_inter B₁ B₂ hB₁ hB₂ := by
     rw [← conjugateOperator_mul, P.proj_inter]
 
@@ -116,10 +119,16 @@ theorem complexify_apply_conjugationDomain (A : RealClosedOperator)
         (conjugationDomain A z) =
       conjugation
         ((ClosedOperatorComplexification.complexify A).toLinearMap z) := by
-  apply RealComplexification.ext <;>
-    simp [conjugationDomain,
-      ClosedOperatorComplexification.complexify_apply_re,
+  refine RealComplexification.ext ?_ ?_
+  · rw [ClosedOperatorComplexification.complexify_apply_re,
+      RealComplexification.re_conj,
+      ClosedOperatorComplexification.complexify_apply_re]
+    exact ClosedOperatorComplexification.toLinearMap_congr rfl
+  · rw [ClosedOperatorComplexification.complexify_apply_im,
+      RealComplexification.im_conj,
       ClosedOperatorComplexification.complexify_apply_im]
+    refine (ClosedOperatorComplexification.toLinearMap_congr ?_).trans (map_neg _ _)
+    simp [conjugationDomain]
 
 private theorem selfAdjointResolvent_adjoint
     {A : Eℂ →ₗ.[ℂ] Eℂ} (hA : IsSelfAdjoint A)
@@ -157,18 +166,32 @@ theorem conjugateOperator_selfAdjointResolvent
     selfAdjointResolvent_mem_domain hAℂ z hz (conjugation ξ)
   let rDom : Aℂ.domain := ⟨r, hrdom⟩
   let jrDom : Aℂ.domain := conjugationDomain A rDom
-  have hsolve := selfAdjointResolvent_solves hAℂ z hz (conjugation ξ)
-  have hsolveJ := congrArg conjugation hsolve
+  have hsolve :
+      (ClosedOperatorComplexification.complexify A).toLinearPMap rDom
+          - z • (rDom : Eℂ) = conjugation ξ :=
+    selfAdjointResolvent_solves hAℂ z hz (conjugation ξ)
+  have happ :
+      (ClosedOperatorComplexification.complexify A).toLinearPMap jrDom =
+        conjugation
+          ((ClosedOperatorComplexification.complexify A).toLinearPMap rDom) :=
+    complexify_apply_conjugationDomain A rDom
   have hjsolve :
-      Aℂ.toLinearMap jrDom - zbar • (jrDom : Eℂ) = ξ := by
-    simpa [Aℂ, hAℂ, zbar, r, rDom, jrDom,
-      complexify_apply_conjugationDomain,
-      conjugation_complex_smul] using hsolveJ
+      (ClosedOperatorComplexification.complexify A).toLinearPMap jrDom
+          - zbar • (jrDom : Eℂ) = ξ := by
+    have h1 :
+        (ClosedOperatorComplexification.complexify A).toLinearPMap jrDom
+            - zbar • (jrDom : Eℂ) =
+          conjugation
+            ((ClosedOperatorComplexification.complexify A).toLinearPMap rDom
+              - z • (rDom : Eℂ)) := by
+      rw [map_sub, conjugation_complex_smul, ← happ]
+      rfl
+    rw [h1, hsolve, conjugation_involutive]
   have hleft := selfAdjointResolvent_left_inverse hAℂ zbar hzbar jrDom
   change conjugation
       (selfAdjointResolvent hAℂ z hz (conjugation ξ)) =
     selfAdjointResolvent hAℂ zbar hzbar ξ
-  rw [← hjsolve] at hleft
+  rw [hjsolve] at hleft
   exact hleft.symm
 
 /-- The spectral PVM of a complexified real self-adjoint operator is fixed by
@@ -230,7 +253,7 @@ theorem conjugateOperator_selfAdjointSpectralProjection
   let hP := conjugatePVM_spectralPVM A hA
   have hproj := congrArg
     (fun P : Spectra.ProjValMeasure Eℂ => P.proj S hS) hP
-  simpa only [conjugatePVM_proj] using hproj
+  exact hproj
 
 /-- The canonical real spectral projection, obtained by descending the complex
 spectral projection of the complexified operator. -/
@@ -280,7 +303,6 @@ theorem realSelfAdjointSpectralProjection_idem
     realSelfAdjointSpectralProjection A hA S hS
   apply RealComplexification.complexify_injective
   rw [RealComplexification.complexify_comp,
-    complexify_realSelfAdjointSpectralProjection,
     complexify_realSelfAdjointSpectralProjection]
   change selfAdjointSpectralProjection
       (ClosedOperatorComplexification.complexify A)
@@ -299,7 +321,6 @@ theorem realSelfAdjointSpectralProjection_isSelfAdjoint
   rw [ContinuousLinearMap.isSelfAdjoint_iff']
   apply RealComplexification.complexify_injective
   rw [RealComplexificationFunctionalCalculus.complexify_adjoint,
-    complexify_realSelfAdjointSpectralProjection,
     complexify_realSelfAdjointSpectralProjection]
   exact (Spectra.QuantumMechanics.SpectralTheory.PVM.spectralPVM
     (ClosedOperatorComplexification.isSelfAdjoint_complexify hA)).isSelfAdjoint_proj S hS
@@ -397,6 +418,7 @@ theorem complexifySubmodule_realSelfAdjointSpectralSubspace
   rw [← Submodule.starProjection_eq_self_iff,
     ← Submodule.starProjection_eq_self_iff]
   rw [starProjection_complexifySubmodule,
+    ← realSelfAdjointSpectralProjection_eq_starProjection,
     complexify_realSelfAdjointSpectralProjection,
     ← selfAdjointSpectralProjection_eq_starProjection]
 
@@ -428,22 +450,41 @@ theorem realSelfAdjointSpectralSubspace_compl
   rw [← Submodule.starProjection_eq_self_iff,
     ← Submodule.starProjection_eq_self_iff]
   rw [← realSelfAdjointSpectralProjection_eq_starProjection,
-    ← realSelfAdjointSpectralProjection_eq_starProjection,
     realSelfAdjointSpectralProjection_compl,
-    Submodule.starProjection_orthogonal_apply]
+    Submodule.starProjection_orthogonal,
+    ← realSelfAdjointSpectralProjection_eq_starProjection]
+
+/-- The real copy of a domain vector has the expected underlying vector. -/
+private theorem coe_ofRealDomain (A : RealClosedOperator) (x : A.domain) :
+    ((ClosedOperatorComplexification.ofRealDomain A x :
+      (ClosedOperatorComplexification.complexify A).domain) : Eℂ) =
+      ofReal (x : E) :=
+  rfl
+
+omit [CompleteSpace E] in
+/-- Orthogonal projections onto equal subspaces agree.  Stated pointwise so it
+can be used as a rewrite where a direct `rw` on the subspace would produce an
+ill-typed motive (the orthogonal-projection instance depends on it). -/
+private theorem starProjection_congr {U V : Submodule ℝ E}
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] (h : U = V) (y : E) :
+    U.starProjection y = V.starProjection y := by
+  subst h
+  rfl
 
 /-- The real spectral projection preserves the original real operator domain. -/
 theorem realSelfAdjointSpectralProjection_mem_domain
     (A : RealClosedOperator) (hA : A.IsSelfAdjoint)
     {S : Set ℝ} (hS : MeasurableSet S) (x : A.domain) :
     realSelfAdjointSpectralProjection A hA S hS (x : E) ∈ A.domain := by
-  let Aℂ := ClosedOperatorComplexification.complexify A
-  let hAℂ := ClosedOperatorComplexification.isSelfAdjoint_complexify hA
-  have hproj := selfAdjointSpectralProjection_mem_domain Aℂ hAℂ hS
+  have hproj := selfAdjointSpectralProjection_mem_domain
+    (ClosedOperatorComplexification.complexify A)
+    (ClosedOperatorComplexification.isSelfAdjoint_complexify hA) hS
     (ClosedOperatorComplexification.ofRealDomain A x)
   rw [ClosedOperatorComplexification.mem_complexify_domain_iff] at hproj
   have hre := hproj.1
-  simpa [Aℂ, hAℂ, selfAdjointSpectralProjection_ofReal] using hre
+  rw [coe_ofRealDomain A x, selfAdjointSpectralProjection_ofReal,
+    re_ofReal] at hre
+  exact hre
 
 /-- The real operator commutes with its descended spectral projections on the
 full operator domain. -/
@@ -454,13 +495,22 @@ theorem realSelfAdjoint_apply_spectralProjection
         ⟨realSelfAdjointSpectralProjection A hA S hS (x : E),
           realSelfAdjointSpectralProjection_mem_domain A hA hS x⟩ =
       realSelfAdjointSpectralProjection A hA S hS (A.toLinearMap x) := by
-  let Aℂ := ClosedOperatorComplexification.complexify A
-  let hAℂ := ClosedOperatorComplexification.isSelfAdjoint_complexify hA
-  have hcomm := selfAdjoint_apply_spectralProjection Aℂ hAℂ hS
+  have hcomm := selfAdjoint_apply_spectralProjection
+    (ClosedOperatorComplexification.complexify A)
+    (ClosedOperatorComplexification.isSelfAdjoint_complexify hA) hS
     (ClosedOperatorComplexification.ofRealDomain A x)
   have hre := congrArg re hcomm
-  simpa [Aℂ, hAℂ, selfAdjointSpectralProjection_ofReal,
-    ClosedOperatorComplexification.complexify_apply_ofReal] using hre
+  rw [ClosedOperatorComplexification.complexify_apply_re,
+    ClosedOperatorComplexification.complexify_apply_ofReal,
+    selfAdjointSpectralProjection_ofReal A hA S hS, re_ofReal] at hre
+  refine Eq.trans ?_ hre
+  refine ClosedOperatorComplexification.toLinearMap_congr ?_
+  show realSelfAdjointSpectralProjection A hA S hS (x : E) =
+    re (selfAdjointSpectralProjection
+      (ClosedOperatorComplexification.complexify A)
+      (ClosedOperatorComplexification.isSelfAdjoint_complexify hA) S hS
+      (ofReal (x : E)))
+  rw [selfAdjointSpectralProjection_ofReal A hA S hS, re_ofReal]
 
 /-- The real spectral range reduces the original real self-adjoint operator. -/
 theorem realSelfAdjointSpectralSubspace_reducing
@@ -475,8 +525,10 @@ theorem realSelfAdjointSpectralSubspace_reducing
     rw [← realSelfAdjointSpectralProjection_eq_starProjection]
     exact realSelfAdjointSpectralProjection_mem_domain A hA hS x
   · intro x
-    rw [← hUc, ← realSelfAdjointSpectralProjection_eq_starProjection]
-    exact realSelfAdjointSpectralProjection_mem_domain A hA hS.compl x
+    have hx := realSelfAdjointSpectralProjection_mem_domain A hA hS.compl x
+    rw [realSelfAdjointSpectralProjection_eq_starProjection,
+      starProjection_congr hUc] at hx
+    exact hx
   · intro x hx
     rw [← Submodule.starProjection_eq_self_iff] at hx ⊢
     rw [← realSelfAdjointSpectralProjection_eq_starProjection] at hx ⊢
