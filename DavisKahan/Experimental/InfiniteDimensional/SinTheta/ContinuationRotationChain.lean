@@ -3,7 +3,7 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.Experimental.InfiniteDimensional.SinTheta.ContinuationAssembly
+import DavisKahan.Experimental.InfiniteDimensional.SinTheta.ContinuationSpectralIdentification
 
 /-!
 # Finite composition of local direct rotations
@@ -14,9 +14,10 @@ orthogonal projections whose operator-norm distance is below one.  We compose
 those local intertwiners along a finite chain and prove that the product is a
 unitary intertwiner between the endpoint projections.
 
-The construction is independent of contour spectral identification.  The
-Riesz-path specialization therefore accepts orthogonal-projectionhood as an
-explicit input, which the spectral-identification branch can discharge later.
+The finite-chain construction is independent of contour spectral
+identification.  The lower-level Riesz-path theorem accepts
+orthogonal-projectionhood explicitly, while the final specialization discharges
+that input from a common family of spectral-separation witnesses.
 -/
 
 namespace ForMathlib
@@ -182,6 +183,34 @@ theorem exists_unitary_transport_fixedContourRieszOperator
   exact exists_unitary_transport_of_projection_uniformMesh
     (fun t => fixedContourRieszOperator Γ (operatorPath A V t))
     n hn hprojection hclose
+
+/-- A common proof-carrying separating contour along an affine operator path
+produces one unitary intertwiner between the endpoint Riesz projections.
+
+The quantitative common margin supplies the finite subdivision, while spectral
+identification supplies orthogonal-projectionhood at every path parameter. -/
+theorem exists_unitary_transport_of_spectralSeparatingContour_operatorPath
+    (Γ : PiecewiseC1ClosedContour) (A V : H →L[ℂ] H)
+    (s : Set ℝ)
+    (hseparating : ∀ t (ht : t ∈ Set.Icc (0 : ℝ) 1),
+      SpectralSeparatingContour (operatorPath A V t) s)
+    (hgeometric : ∀ t (ht : t ∈ Set.Icc (0 : ℝ) 1),
+      (hseparating t ht).geometric = Γ)
+    (delta : ℝ) (hdelta : 0 < delta)
+    (hsep : ∀ t ∈ Set.Icc (0 : ℝ) 1, ∀ x : unitInterval,
+      ∀ lam ∈ realSpectrum (operatorPath A V t),
+        delta ≤ ‖Γ.path x - (lam : ℂ)‖) :
+    ∃ W : H →L[ℂ] H,
+      IsUnitaryOperator W ∧
+      W ∘L fixedContourRieszOperator Γ (operatorPath A V 0) =
+        fixedContourRieszOperator Γ (operatorPath A V 1) ∘L W := by
+  apply exists_unitary_transport_fixedContourRieszOperator
+    Γ A V delta hdelta
+  · intro t ht
+    exact (hseparating t ht).selfAdjoint
+  · exact hsep
+  · exact fixedContourRieszOperator_operatorPath_isOrthogonalProjection
+      Γ A V s hseparating hgeometric
 
 end RieszSpecialization
 
