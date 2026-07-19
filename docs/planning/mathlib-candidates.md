@@ -75,6 +75,27 @@ proposed home `Mathlib/LinearAlgebra/Matrix/Rank.lean`.
 
 Formalized by Claude Fable 5 (claude-fable-5[1m]).
 
+**Candidate #15 -- approximation numbers and finite Ky Fan gauges: STAGED
+(2026-07-18),** in
+`ForMathlib/Analysis/Normed/Operator/ApproximationNumber.lean`,
+`ForMathlib/Analysis/Normed/Operator/ApproximationNumberHilbert.lean`, and
+`DavisKahan/Experimental/InfiniteDimensional/Ideals/ApproximationNumbers*.lean`.
+The stack defines approximation numbers as operator-norm distance to bounded
+maps of controlled finite rank, proves the elementary ideal laws, identifies
+the finite-dimensional Hilbert-space values with singular values, establishes
+infinite-dimensional finite-restriction localization, proves convergence under
+strong orthogonal cutoffs, and derives the finite Ky Fan triangle inequality.
+The complex analytic route uses spectral cutoffs directly; the real route uses
+complexification, conjugation invariance, and descent back to the real Hilbert
+space. A leaderboard-only dependency audit is at
+`Challenge/MathlibPending/ApproximationNumbers/Leaderboard.lean`.
+
+This is high-value upstream mathematics, but not a single PR: the definition and
+elementary laws should land first, followed by Hilbert-space identification,
+finite-restriction localization, and finally the strong-cutoff/Ky Fan layer.
+The Davis--Kahan ideal-family wrappers are downstream project API and should not
+be included in the Mathlib contribution.
+
 Effort grades: **S** = statement+proof port nearly verbatim; **M** = moderate
 generalization (typically ℝ → `RCLike 𝕜`, restating in Mathlib idiom);
 **L** = substantial redesign.
@@ -96,6 +117,7 @@ generalization (typically ℝ → `RCLike 𝕜`, restating in Mathlib idiom);
 | 9 | Measurability of the continuous functional calculus in the element: `ω ↦ cfc f (a ω)` measurable for fixed continuous `f`, measurable self-adjoint-valued `a` in a C⋆-algebra (continuity of `cfc` on bounded-spectrum sets + countable norm cover) | `ForMathlib/MeasureTheory/CfcMeasurable.lean` (STAGED) | S/M | `Analysis/CStarAlgebra/ContinuousFunctionalCalculus/Continuity.lean` |
 | 10 | Measurability of the spectral `h`-transform `Σₖ h(λₖ) uₖuₖᵀ` of a measurable Hermitian-matrix family, for fixed continuous `h` — via entrywise pointwise limit of matrix *polynomials* (Stone–Weierstrass on a spectral interval); **no cfc, no eigenbasis selection** | `ForMathlib/Analysis/Matrix/SpectralFunctionMeasurable.lean` (STAGED, `measurable_specTransform`) | M | `Analysis/Matrix/Spectrum.lean` |
 | 11 | Countable restrict-cover measurability: `⋃ₖ sₖ = univ`, each `sₖ` measurable, each `sₖ.restrict g` measurable ⇒ `g` measurable (countable analogue of `measurable_of_restrict_of_restrict_compl`) | `ForMathlib/MeasureTheory/CfcMeasurable.lean` (STAGED, `measurable_of_iUnion_restrict`) | S | `MeasureTheory/MeasurableSpace/Constructions.lean` |
+| 15 | Approximation numbers, Hilbert-space singular-value identification, finite-restriction localization, strong-cutoff convergence, and finite Ky Fan triangle inequalities | `ForMathlib/Analysis/Normed/Operator/ApproximationNumber*.lean`; `DavisKahan/Experimental/InfiniteDimensional/Ideals/ApproximationNumbers*.lean` | L | staged PR sequence across normed-operator and inner-product-space analysis |
 
 **Update 2026-06-12 (Opus session, `hmeas_spec` discharge):** three new
 measurability candidates (#9–#11) surfaced while discharging the DkpsQuench2026
@@ -377,3 +399,45 @@ a.e. (`tendstoInMeasure_of_tendsto_ae`) and Lp
 how concentration results are actually consumed. Generalize ℝ → pseudometric,
 general filter; drop the `MeasurableSet` hypothesis via the bundle-2
 complement lemma.
+
+### 8. Approximation numbers and finite Ky Fan gauges
+
+The project now has a complete real/complex Hilbert-space stack built around
+`ContinuousLinearMap.approximationNumber`: distance in operator norm from maps
+of rank at most `n`. The reusable layers are:
+
+- definition, monotonicity, composition, addition, scalar, adjoint, and norm
+  bounds in `ForMathlib/Analysis/Normed/Operator/ApproximationNumber.lean`;
+- Hilbert-space and finite-dimensional singular-value bridges in
+  `ForMathlib/Analysis/Normed/Operator/ApproximationNumberHilbert.lean`;
+- complex and real finite-restriction localization and Courant--Fischer-style
+  characterizations in `ApproximationNumbersCore.lean` and
+  `ApproximationNumbersReal.lean`;
+- convergence under strongly convergent orthogonal projections and the
+  infinite-dimensional finite Ky Fan triangle inequality.
+
+The real localization proof is not a cosmetic scalar specialization. Mathlib's
+continuous functional calculus is used on the complexification of the real
+Gram operator; the cutoff is shown invariant under canonical conjugation and
+then descended to a real operator. This produces the finite-dimensional witness
+needed by the approximation-number min--max argument.
+
+**Upstream value:** high. Approximation numbers are a standard operator-ideal
+invariant and the finite Ky Fan sums are canonical unitarily invariant gauges.
+Mathlib currently supplies much of the surrounding finite-dimensional spectral
+and operator infrastructure, but this assembled approximation-number API is
+project-local.
+
+**Recommended decomposition:**
+
+1. definition plus elementary norm/rank laws;
+2. Hilbert adjoint invariance and finite-dimensional singular-value bridge;
+3. complex finite-restriction localization;
+4. real complexification/descent counterpart;
+5. strong-cutoff convergence and finite Ky Fan inequalities.
+
+The capability classes and Davis--Kahan ideal-family packaging in the public
+experimental module are integration devices, not proposed Mathlib API. Before
+submission, move the analytic declarations out of the project-specific
+namespace, minimize imports, and settle whether the localization statements
+belong near approximation numbers or in a dedicated Hilbert-space file.

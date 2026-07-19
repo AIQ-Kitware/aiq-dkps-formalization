@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Experimental.InfiniteDimensional.Ideals.ApproximationNumbersCore
-import DavisKahan.Experimental.InfiniteDimensional.Ideals.ApproximationNumbersRealRoadmap
+import DavisKahan.Experimental.InfiniteDimensional.Ideals.ApproximationNumbersReal
 
 /-!
 # Scalar-generic approximation-number endpoints and ideal families
@@ -64,7 +64,7 @@ class HasKyFanApproximationGaugeTriangle
 instance realHasApproximationNumberStrongCutoff :
     HasApproximationNumberStrongCutoff.{0, v, w} ℝ where
   tendsto_comp_strongProjection :=
-    approximationSingularValue_comp_strongProjection_tendsto_real
+    ApproximationNumbersReal.approximationSingularValue_comp_strongProjection_tendsto_real
 
 instance complexHasApproximationNumberStrongCutoff :
     HasApproximationNumberStrongCutoff.{0, v, w} ℂ where
@@ -73,11 +73,53 @@ instance complexHasApproximationNumberStrongCutoff :
 
 instance realHasKyFanApproximationGaugeTriangle :
     HasKyFanApproximationGaugeTriangle.{0, v} ℝ where
-  add_le := kyFanApproximationGauge_add_le_real
+  add_le := ApproximationNumbersReal.kyFanApproximationGauge_add_le_real
 
 instance complexHasKyFanApproximationGaugeTriangle :
     HasKyFanApproximationGaugeTriangle.{0, v} ℂ where
   add_le := kyFanApproximationGauge_add_le_complex
+
+/-- Real-Hilbert-space continuity of approximation numbers under strongly
+convergent orthogonal cutoffs. -/
+theorem approximationSingularValue_comp_strongProjection_tendsto_real
+    {ER FR : Type v}
+    [NormedAddCommGroup ER] [InnerProductSpace ℝ ER] [CompleteSpace ER]
+    [NormedAddCommGroup FR] [InnerProductSpace ℝ FR] [CompleteSpace FR]
+    {ι : Type w} {P : ι → ER →L[ℝ] ER} {l : Filter ι}
+    (hPproj : ∀ i, IsOrthogonalProjectionMap (P i))
+    (hP : StronglyTendsto P l (ContinuousLinearMap.id ℝ ER))
+    (n : ℕ) (K : ER →L[ℝ] FR) :
+    Tendsto
+      (fun i => approximationSingularValue n (K ∘L P i))
+      l (𝓝 (approximationSingularValue n K)) :=
+  ApproximationNumbersReal.approximationSingularValue_comp_strongProjection_tendsto_real
+    hPproj hP n K
+
+/-- Real-Hilbert-space finite Ky Fan convergence under strongly convergent
+orthogonal cutoffs. -/
+theorem kyFanApproximationGauge_comp_strongProjection_tendsto_real
+    {ER FR : Type v}
+    [NormedAddCommGroup ER] [InnerProductSpace ℝ ER] [CompleteSpace ER]
+    [NormedAddCommGroup FR] [InnerProductSpace ℝ FR] [CompleteSpace FR]
+    {ι : Type w} {P : ι → ER →L[ℝ] ER} {l : Filter ι}
+    (hPproj : ∀ i, IsOrthogonalProjectionMap (P i))
+    (hP : StronglyTendsto P l (ContinuousLinearMap.id ℝ ER))
+    (k : ℕ) (K : ER →L[ℝ] FR) :
+    Tendsto
+      (fun i => kyFanApproximationGauge k (K ∘L P i))
+      l (𝓝 (kyFanApproximationGauge k K)) :=
+  ApproximationNumbersReal.kyFanApproximationGauge_comp_strongProjection_tendsto_real
+    hPproj hP k K
+
+/-- Real-Hilbert-space infinite-dimensional Ky Fan triangle inequality. -/
+theorem kyFanApproximationGauge_add_le_real
+    {ER FR : Type v}
+    [NormedAddCommGroup ER] [InnerProductSpace ℝ ER] [CompleteSpace ER]
+    [NormedAddCommGroup FR] [InnerProductSpace ℝ FR] [CompleteSpace FR]
+    (k : ℕ) (K L : ER →L[ℝ] FR) :
+    kyFanApproximationGauge k (K + L) ≤
+      kyFanApproximationGauge k K + kyFanApproximationGauge k L :=
+  ApproximationNumbersReal.kyFanApproximationGauge_add_le_real k K L
 
 /-- Continuity of each approximation number under strongly convergent
 orthogonal cutoffs. -/
