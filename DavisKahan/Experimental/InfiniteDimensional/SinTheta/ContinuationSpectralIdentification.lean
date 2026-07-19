@@ -241,6 +241,102 @@ theorem boundedSelfAdjointSpectralProjection_eq_spectralCalculus_selector
   rw [boundedSelfAdjointSpectralProjection_eq_spectralProjection]
   rfl
 
+
+/-! ## Resolvent through the bounded continuous functional calculus -/
+
+/-- Under a positive distance bound from the real spectrum, the project
+resolvent is the complex continuous functional calculus of the scalar
+resolvent symbol. -/
+theorem resolventOperator_eq_cfc_resolventSymbol
+    (A : H →L[ℂ] H) (hA : IsSelfAdjointOperator A)
+    (z : ℂ) (delta : ℝ) (hdelta : 0 < delta)
+    (hsep : ∀ lam ∈ realSpectrum A, delta ≤ ‖z - (lam : ℂ)‖) :
+    resolventOperator A z = cfc (fun w : ℂ => (w - z)⁻¹) A := by
+  let f : ℂ → ℂ := fun w => w - z
+  let g : ℂ → ℂ := fun w => (w - z)⁻¹
+  have hAsa : IsSelfAdjoint A :=
+    ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hA
+  have hnormal : IsStarNormal A := hAsa.isStarNormal
+  have hne : ∀ w ∈ spectrum ℂ A, f w ≠ 0 := by
+    intro w hw hzero
+    obtain ⟨lam, hlam, rfl⟩ :=
+      hAsa.spectrumRestricts.algebraMap_image.symm ▸ hw
+    have hlamC : (lam : ℂ) ∈ spectrum ℂ A := by
+      rw [← hAsa.spectrumRestricts.algebraMap_image]
+      exact ⟨lam, hlam, rfl⟩
+    have hdist := hsep lam (by exact hlamC)
+    have heq : (lam : ℂ) = z :=
+      sub_eq_zero.mp (by simpa [f] using hzero)
+    rw [← heq, sub_self, norm_zero] at hdist
+    linarith
+  have hfcont : ContinuousOn f (spectrum ℂ A) :=
+    (continuous_id.sub continuous_const).continuousOn
+  have hgcont : ContinuousOn g (spectrum ℂ A) := hfcont.inv₀ hne
+  let R : H →L[ℂ] H := cfc g A
+  have hshift : cfc f A = A - z • (1 : H →L[ℂ] H) := by
+    rw [show f = fun w : ℂ => w - z from rfl,
+      cfc_sub (fun w : ℂ => w) (fun _ : ℂ => z) A,
+      cfc_id' (R := ℂ) (a := A), cfc_const z A,
+      Algebra.algebraMap_eq_smul_one]
+  have hright : (A - z • (1 : H →L[ℂ] H)) * R = 1 := by
+    have hmul : cfc f A * cfc g A = cfc (fun w => f w * g w) A :=
+      (cfc_mul f g A hfcont hgcont).symm
+    rw [← hshift]
+    change cfc f A * cfc g A = 1
+    rw [hmul,
+      cfc_congr (g := fun _ : ℂ => (1 : ℂ))
+        (fun w hw => by simpa [f, g] using mul_inv_cancel₀ (hne w hw)),
+      cfc_const_one ℂ A]
+  have hz : InResolventSet A z :=
+    complex_inResolventSet_of_distance A hA z delta hdelta hsep
+  have hchosen := resolventOperator_mul_cancel A hz
+  change resolventOperator A z = cfc g A
+  calc
+    resolventOperator A z = resolventOperator A z * 1 := (mul_one _).symm
+    _ = resolventOperator A z *
+        ((A - z • (1 : H →L[ℂ] H)) * R) := by rw [hright]
+    _ = (resolventOperator A z *
+        (A - z • (1 : H →L[ℂ] H))) * R := by rw [mul_assoc]
+    _ = R := by rw [hchosen, one_mul]
+    _ = cfc g A := rfl
+
+/-- Along a separating contour, each project resolvent is represented by the
+bounded continuous functional calculus of its scalar symbol. -/
+theorem SpectralSeparatingContour.resolventOperator_eq_cfc
+    {A : H →L[ℂ] H} {s : Set ℝ}
+    (Γ : SpectralSeparatingContour A s) (t : unitInterval) :
+    resolventOperator A (Γ.path t) =
+      cfc (fun w : ℂ => (w - Γ.path t)⁻¹) A := by
+  exact resolventOperator_eq_cfc_resolventSymbol
+    A Γ.selfAdjoint (Γ.path t) Γ.spectralMargin Γ.spectralMargin_pos
+      (Γ.spectrum_separated t)
+
+/-- The contour resolvent one-form is the continuous functional calculus of
+its scalar one-form symbol. -/
+theorem SpectralSeparatingContour.resolventOneForm_eq_cfc
+    {A : H →L[ℂ] H} {s : Set ℝ}
+    (Γ : SpectralSeparatingContour A s) (t : unitInterval) (v : ℂ) :
+    resolventOneForm A (Γ.path t) v =
+      cfc (fun w : ℂ => v * (w - Γ.path t)⁻¹) A := by
+  have hAsa : IsSelfAdjoint A :=
+    ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr Γ.selfAdjoint
+  have hne : ∀ w ∈ spectrum ℂ A, w - Γ.path t ≠ 0 := by
+    intro w hw hzero
+    obtain ⟨lam, hlam, rfl⟩ :=
+      hAsa.spectrumRestricts.algebraMap_image.symm ▸ hw
+    have hlamC : (lam : ℂ) ∈ spectrum ℂ A := by
+      rw [← hAsa.spectrumRestricts.algebraMap_image]
+      exact ⟨lam, hlam, rfl⟩
+    have hdist := Γ.spectrum_separated t lam (by exact hlamC)
+    have heq : (lam : ℂ) = Γ.path t := sub_eq_zero.mp hzero
+    rw [← heq, sub_self, norm_zero] at hdist
+    linarith [Γ.spectralMargin_pos]
+  have hgcont : ContinuousOn (fun w : ℂ => (w - Γ.path t)⁻¹)
+      (spectrum ℂ A) :=
+    ((continuous_id.sub continuous_const).continuousOn).inv₀ hne
+  rw [resolventOneForm_apply, Γ.resolventOperator_eq_cfc t]
+  rw [← cfc_const_mul v (fun w : ℂ => (w - Γ.path t)⁻¹) A hgcont]
+
 end BoundedSpectralProjection
 
 end DavisKahanExt
