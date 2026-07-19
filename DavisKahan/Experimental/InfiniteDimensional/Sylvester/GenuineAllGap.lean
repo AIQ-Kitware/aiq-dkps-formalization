@@ -7,6 +7,7 @@ import DavisKahan.Experimental.InfiniteDimensional.Sylvester.Unbounded
 import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.UnboundedIntervalExterior
 import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.OrderedHalfLine
 import DavisKahan.Experimental.InfiniteDimensional.Sylvester.GenuineCutoffInterface
+import DavisKahan.Experimental.InfiniteDimensional.Sylvester.GenuineOrderedEngine
 
 /-!
 # Genuine-spectrum all-gap unbounded Sylvester theorem
@@ -88,14 +89,14 @@ theorem davisKahan1970_sylvester_of_genuineSpectrumGap
           N.toRectangularSymmetricIdealFamily hA hB hβα hδ
             hgap.2 hgap.1 hEq hC
   | leftAboveRightBelow c hAspec hBspec =>
-      exact unbounded_sylvester_mem_and_gauge_le_viaKyFan
-        N hA hB hδ
+      exact GenuineOrderedSylvesterEngine.lowerUpper
+        canonicalGenuineOrderedSylvesterEngine N hA hB hδ
           (SpectraBridge.semiboundedBelow_of_spectrum_subset_Ici A hA hAspec)
           (SpectraBridge.semiboundedAbove_of_spectrum_subset_Iic B hB hBspec)
           hEq hC
   | leftBelowRightAbove c hAspec hBspec =>
-      exact unbounded_sylvester_mem_and_gauge_le_swapped_viaKyFan
-        N hA hB hδ
+      exact GenuineOrderedSylvesterEngine.upperLower
+        canonicalGenuineOrderedSylvesterEngine N hA hB hδ
           (SpectraBridge.semiboundedAbove_of_spectrum_subset_Iic A hA hAspec)
           (SpectraBridge.semiboundedBelow_of_spectrum_subset_Ici B hB hBspec)
           hEq hC
