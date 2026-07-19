@@ -97,12 +97,13 @@ theorem all_kyFan_bound
   by_cases hk0 : k = 0
   · subst k
     simp only [kyFanApproximationGauge, Finset.range_zero, Finset.sum_empty,
-      mul_zero, zero_le]
+      mul_zero, le_refl]
   · have hk : 0 < k := Nat.pos_of_ne_zero hk0
     let N := KyFanDominantIdealFamily.kyFan (𝕜 := ℂ) k hk
     have hmain := GeneralSinThetaProblem.result N (P.toKyFanProblem k hk)
     have hsame := S.same_singular_values.kyFanApproximationGauge_eq k
     simpa only [N, KyFanDominantIdealFamily.kyFan_gauge,
+      PaperTheorem61Data.toKyFanProblem,
       PaperTheorem61Data.canonicalSinTheta, hsame] using hmain.2
 
 /-- **Davis--Kahan 1970, Theorem 6.1, literal universal-norm form.**
@@ -262,12 +263,13 @@ theorem all_kyFan_bound
   by_cases hk0 : k = 0
   · subst k
     simp only [kyFanApproximationGauge, Finset.range_zero, Finset.sum_empty,
-      mul_zero, zero_le]
+      mul_zero, le_refl]
   · have hk : 0 < k := Nat.pos_of_ne_zero hk0
     let N := KyFanDominantIdealFamily.kyFan (𝕜 := ℝ) k hk
     have hmain := RealGeneralSinThetaProblem.result N (P.toKyFanProblem k hk)
     have hsame := S.same_singular_values.kyFanApproximationGauge_eq k
     simpa only [N, KyFanDominantIdealFamily.kyFan_gauge,
+      PaperRealTheorem61Data.toKyFanProblem,
       PaperRealTheorem61Data.canonicalSinTheta, hsame] using hmain.2
 
 /-- Literal real Theorem 6.1 for every source-defined norm. -/
