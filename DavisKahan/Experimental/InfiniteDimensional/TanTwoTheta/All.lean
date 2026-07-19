@@ -5,12 +5,13 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Experimental.InfiniteDimensional.TanTwoTheta.BoundedOffDiagonal
 import DavisKahan.Experimental.InfiniteDimensional.TanTwoTheta.Unbounded
+import DavisKahan.Experimental.InfiniteDimensional.TanTwoTheta.UnboundedIdeal
 
 /-!
 # Experimental tangent-two-theta theory
 
-This aggregate exposes the bounded quarter-acute conversion and the first
-unbounded operator-norm tangent-two-theta specialization under an explicit
-quarter-acuteness hypothesis. Sharp selected-Riccati and ideal-gauge forms
-remain separate obligations.
+This aggregate exposes the bounded quarter-acute conversion together with
+unbounded operator-norm and ideal-gauge tangent-two-theta specializations under
+an explicit quarter-acuteness hypothesis. The sharper selected-Riccati form
+remains a separate obligation.
 -/
