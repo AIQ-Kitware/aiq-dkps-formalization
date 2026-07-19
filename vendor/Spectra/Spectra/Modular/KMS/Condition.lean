@@ -391,7 +391,11 @@ def KMSFunction.convexCombination
   holomorphic := by
     refine DifferentiableOn.add ?_ ?_
     · convert F₁.holomorphic.const_smul (t : ℂ) using 1
+      ext z
+      simp [Pi.smul_apply, smul_eq_mul]
     · convert F₂.holomorphic.const_smul ((1 - t) : ℂ) using 1
+      ext z
+      simp [Pi.smul_apply, smul_eq_mul]
 
   -- Continuous: sum of continuous functions is continuous
   continuousOn := by
