@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.LegacyGapCompletion
+import DavisKahan.Experimental.InfiniteDimensional.SinTheta.Specializations
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.RealSpecializations
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.NaturalReal
 
