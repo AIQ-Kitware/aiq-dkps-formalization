@@ -359,34 +359,36 @@ theorem sylvesterNeumannSolution_eq
   have hPshift : Filter.Tendsto (fun n : ℕ => P (n + 1))
       Filter.atTop (nhds S) :=
     hP.comp (Filter.tendsto_add_atTop_nat 1)
+  have hstep : ∀ n : ℕ, A ∘L t (n + 1) = t n ∘L B := fun n => by
+    simpa only [t] using comp_sylvesterNeumannTerm_succ hA B C n
   have hfinite : ∀ n : ℕ,
       A ∘L P (n + 1) - P (n + 1) ∘L B = C - t n ∘L B := by
     intro n
     induction n with
     | zero =>
-        simp only [P, t, Finset.sum_range_succ, Finset.sum_range_zero,
-          zero_add, ContinuousLinearMap.comp_zero,
-          ContinuousLinearMap.zero_comp, zero_sub]
-        rw [comp_sylvesterNeumannTerm_zero hA B C]
+        have hP1 : P (0 + 1) = t 0 := by
+          simp only [P, zero_add, Finset.sum_range_one]
+        rw [hP1, comp_sylvesterNeumannTerm_zero hA B C]
     | succ n ih =>
-        rw [show n + 1 + 1 = (n + 1) + 1 by omega,
-          P, Finset.sum_range_succ, ContinuousLinearMap.comp_add,
-          ContinuousLinearMap.add_comp]
-        change
-          (A ∘L P (n + 1) - P (n + 1) ∘L B) +
-              (A ∘L t (n + 1) - t (n + 1) ∘L B) =
-            C - t (n + 1) ∘L B
-        rw [ih, show A ∘L t (n + 1) = t n ∘L B by
-          simpa only [t] using comp_sylvesterNeumannTerm_succ hA B C n]
+        have hPsucc : P (n + 1 + 1) = P (n + 1) + t (n + 1) :=
+          Finset.sum_range_succ t (n + 1)
+        have hexpand :
+            A ∘L P (n + 1 + 1) - P (n + 1 + 1) ∘L B =
+              (A ∘L P (n + 1) - P (n + 1) ∘L B) +
+                (A ∘L t (n + 1) - t (n + 1) ∘L B) := by
+          rw [hPsucc, ContinuousLinearMap.comp_add,
+            ContinuousLinearMap.add_comp]
+          abel
+        rw [hexpand, ih, hstep n]
         abel
   ext x
   change A (S x) - S (B x) = C x
   have hPx : Filter.Tendsto (fun n : ℕ => P (n + 1) x)
       Filter.atTop (nhds (S x)) :=
-    ((ContinuousLinearMap.apply 𝕜 F x).continuous.tendsto S).comp hPshift
+    ((ContinuousLinearMap.apply 𝕜 E x).continuous.tendsto S).comp hPshift
   have hPBx : Filter.Tendsto (fun n : ℕ => P (n + 1) (B x))
       Filter.atTop (nhds (S (B x))) :=
-    ((ContinuousLinearMap.apply 𝕜 F (B x)).continuous.tendsto S).comp hPshift
+    ((ContinuousLinearMap.apply 𝕜 E (B x)).continuous.tendsto S).comp hPshift
   have hlhs : Filter.Tendsto
       (fun n : ℕ => A (P (n + 1) x) - P (n + 1) (B x))
       Filter.atTop (nhds (A (S x) - S (B x))) :=
@@ -394,7 +396,7 @@ theorem sylvesterNeumannSolution_eq
   have htail : Filter.Tendsto (fun n : ℕ => t n (B x))
       Filter.atTop (nhds 0) := by
     have ht0 : Filter.Tendsto t Filter.atTop (nhds 0) := hsum.tendsto_atTop_zero
-    exact ((ContinuousLinearMap.apply 𝕜 F (B x)).continuous.tendsto 0).comp ht0
+    exact ((ContinuousLinearMap.apply 𝕜 E (B x)).continuous.tendsto 0).comp ht0
   have hrhs : Filter.Tendsto (fun n : ℕ => C x - t n (B x))
       Filter.atTop (nhds (C x)) := by
     simpa using tendsto_const_nhds.sub htail
