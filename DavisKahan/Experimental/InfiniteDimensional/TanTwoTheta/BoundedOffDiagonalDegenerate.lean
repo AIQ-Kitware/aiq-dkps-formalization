@@ -49,7 +49,7 @@ theorem quarterAcuteAngularCoordinate_sharp_bound_of_orderedInternalGap
       simp
     have hXnorm : ‖quarterAcuteAngularCoordinate U V hquarter‖ = 0 := by
       rw [hXzero]
-      exact norm_zero
+      simp
     rw [hXnorm]
     nlinarith [norm_nonneg H]
   · letI : Nontrivial U := hUnt
@@ -61,7 +61,7 @@ theorem quarterAcuteAngularCoordinate_sharp_bound_of_orderedInternalGap
         exact Subsingleton.elim _ _
       have hXnorm : ‖quarterAcuteAngularCoordinate U V hquarter‖ = 0 := by
         rw [hXzero]
-        exact norm_zero
+        exact ContinuousLinearMap.opNorm_zero
       rw [hXnorm]
       nlinarith [norm_nonneg H]
     · letI : Nontrivial Uᗮ := hUcnt
