@@ -39,14 +39,21 @@ variable {E F : Type v}
 
 open ForMathlib.DavisKahanExt
 
+/-- An orthogonally complemented subspace is complete.  This repeats the
+instance carried by the reducing-restriction core, which declares it locally and
+therefore does not export it to importing modules. -/
+noncomputable local instance completeSpaceOfHasOrthogonalProjection
+    (U : Submodule 𝕜 E) [U.HasOrthogonalProjection] : CompleteSpace U :=
+  (Submodule.isComplete_coe_of_hasOrthogonalProjection U).completeSpace_coe
+
 /-- The canonical inclusions of an orthogonally complemented subspace and its
 orthogonal complement form exact Hilbert coordinates. -/
 theorem reducingSubspace_orthogonalExactDecomposition
     (U : Submodule 𝕜 E) [U.HasOrthogonalProjection] :
     OrthogonalExactDecomposition U.subtypeL Uᗮ.subtypeL := by
   refine
-    { isometry₀ := U.isometry_subtype
-      isometry₁ := Uᗮ.isometry_subtype
+    { isometry₀ := fun _ => rfl
+      isometry₁ := fun _ => rfl
       orthogonal := ?_
       projection_sum := ?_ }
   · show U.subtypeL.adjoint ∘L Uᗮ.subtypeL = 0
@@ -59,14 +66,14 @@ theorem reducingSubspace_orthogonalExactDecomposition
       Submodule.starProjection_eq_self_iff.mpr x.property
     have hsum := U.starProjection_add_starProjection_orthogonal (x : E)
     rw [hfix] at hsum
-    exact add_eq_right.mp hsum.symm
+    exact add_eq_right.mp hsum
   · show U.subtypeL ∘L U.subtypeL.adjoint +
         Uᗮ.subtypeL ∘L Uᗮ.subtypeL.adjoint =
       ContinuousLinearMap.id 𝕜 E
     rw [Submodule.adjoint_subtypeL, Submodule.adjoint_subtypeL]
     apply ContinuousLinearMap.ext
     intro x
-    exact (U.starProjection_add_starProjection_orthogonal x).symm
+    exact U.starProjection_add_starProjection_orthogonal x
 
 /-- Internal unbounded sine-theta data constructed from a reducing exact
 subspace. -/
