@@ -1,0 +1,32 @@
+{
+  "schema_version": 2,
+  "base_commit": "19e6d2fa5e5b886973128ea9ea9afa4cd9082b2f",
+  "canonical_policy": {
+    "default_scalar": "complex",
+    "default_scope": "unbounded-domain-aware-all-gap-arbitrary-ui-ideal",
+    "real_suffix": "_real",
+    "natural_spectral_suffix": "_spectralSubspace",
+    "extension_facade": "DavisKahan.Sources.DavisKahan1970.GeneralSinThetaExtensions"
+  },
+  "endpoints": [
+    {"name": "ForMathlib.DavisKahan1970.sinTheta", "scalar": "complex", "input": "source-record", "trial": "isometric", "scope": "unbounded-all-gap", "canonical": true, "status": "compiler-accepted"},
+    {"name": "ForMathlib.DavisKahan1970.generalizedSinTheta", "scalar": "complex", "input": "source-record", "trial": "lower-frame", "scope": "unbounded-all-gap", "canonical": true, "status": "compiler-accepted"},
+    {"name": "ForMathlib.DavisKahan1970.sinTheta_real", "scalar": "real", "input": "source-record", "trial": "isometric", "scope": "unbounded-all-gap", "canonical": true, "status": "compiler-accepted"},
+    {"name": "ForMathlib.DavisKahan1970.generalizedSinTheta_real", "scalar": "real", "input": "source-record", "trial": "lower-frame", "scope": "unbounded-all-gap", "canonical": true, "status": "compiler-accepted"},
+    {"name": "ForMathlib.DavisKahan1970.sinTheta_real_spectralSubspace", "scalar": "real", "input": "measurable-spectral-set", "trial": "isometric", "scope": "unbounded-all-gap", "canonical": true, "status": "compiler-accepted"},
+    {"name": "ForMathlib.DavisKahan1970.generalizedSinTheta_real_spectralSubspace", "scalar": "real", "input": "measurable-spectral-set", "trial": "lower-frame", "scope": "unbounded-all-gap", "canonical": true, "status": "compiler-accepted"},
+    {"name": "ForMathlib.DavisKahan1970.generalizedSinTheta_boundedSpecialization", "scalar": "complex", "input": "bounded-source-record", "trial": "lower-frame", "scope": "bounded-all-gap", "canonical": false, "status": "compiler-accepted"},
+    {"name": "ForMathlib.DavisKahan1970.generalizedSinTheta_boundedSpecialization_real", "scalar": "real", "input": "bounded-source-record", "trial": "lower-frame", "scope": "bounded-all-gap", "canonical": false, "status": "compiler-accepted"},
+
+    {"name": "ForMathlib.DavisKahan1970.sinTheta_spectralSubspace", "scalar": "complex", "input": "measurable-spectral-set", "trial": "isometric", "scope": "unbounded-all-gap", "canonical": true, "status": "compiler-pending"},
+    {"name": "ForMathlib.DavisKahan1970.generalizedSinTheta_spectralSubspace", "scalar": "complex", "input": "measurable-spectral-set", "trial": "lower-frame", "scope": "unbounded-all-gap", "canonical": true, "status": "compiler-pending"},
+    {"name": "ForMathlib.DavisKahan1970.sinTheta_reducingSubspace_complex", "scalar": "complex", "input": "reducing-subspace", "trial": "isometric", "scope": "unbounded-all-gap", "canonical": false, "status": "compiler-pending"},
+    {"name": "ForMathlib.DavisKahan1970.generalizedSinTheta_reducingSubspace_complex", "scalar": "complex", "input": "reducing-subspace", "trial": "lower-frame", "scope": "unbounded-all-gap", "canonical": false, "status": "compiler-pending"},
+    {"name": "ForMathlib.DavisKahan1970.sinTheta_reducingSubspace_real", "scalar": "real", "input": "reducing-subspace", "trial": "isometric", "scope": "unbounded-all-gap", "canonical": false, "status": "compiler-pending"},
+    {"name": "ForMathlib.DavisKahan1970.generalizedSinTheta_reducingSubspace_real", "scalar": "real", "input": "reducing-subspace", "trial": "lower-frame", "scope": "unbounded-all-gap", "canonical": false, "status": "compiler-pending"},
+    {"name": "ForMathlib.DavisKahan1970.sinTheta_bounded_spectralSubspace", "scalar": "complex", "input": "bounded-measurable-spectral-set", "trial": "isometric", "scope": "bounded-all-gap", "canonical": false, "status": "compiler-pending"},
+    {"name": "ForMathlib.DavisKahan1970.generalizedSinTheta_bounded_spectralSubspace", "scalar": "complex", "input": "bounded-measurable-spectral-set", "trial": "lower-frame", "scope": "bounded-all-gap", "canonical": false, "status": "compiler-pending"},
+    {"name": "ForMathlib.DavisKahan1970.sinTheta_bounded_real_spectralSubspace", "scalar": "real", "input": "bounded-measurable-spectral-set", "trial": "isometric", "scope": "bounded-all-gap", "canonical": false, "status": "compiler-pending"},
+    {"name": "ForMathlib.DavisKahan1970.generalizedSinTheta_bounded_real_spectralSubspace", "scalar": "real", "input": "bounded-measurable-spectral-set", "trial": "lower-frame", "scope": "bounded-all-gap", "canonical": false, "status": "compiler-pending"}
+  ]
+}
