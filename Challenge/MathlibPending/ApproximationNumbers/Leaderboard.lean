@@ -1,0 +1,10 @@
+/-
+# Approximation numbers and finite Ky Fan gauges -- dependency audit
+-/
+import DavisKahan.Experimental.InfiniteDimensional.Ideals.ApproximationNumbers
+
+#print axioms ForMathlib.DavisKahan.Experimental.ExactSinTheta.approximationSingularValue_comp_strongProjection_tendsto_complex
+#print axioms ForMathlib.DavisKahan.Experimental.ExactSinTheta.ApproximationNumbersReal.approximationNumber_isLUB_finiteRestrictions_real
+#print axioms ForMathlib.DavisKahan.Experimental.ExactSinTheta.ApproximationNumbersReal.approximationSingularValue_comp_strongProjection_tendsto_real
+#print axioms ForMathlib.DavisKahan.Experimental.ExactSinTheta.kyFanApproximationGauge_add_le_complex
+#print axioms ForMathlib.DavisKahan.Experimental.ExactSinTheta.ApproximationNumbersReal.kyFanApproximationGauge_add_le_real

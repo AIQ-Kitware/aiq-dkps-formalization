@@ -91,6 +91,13 @@ currently leaderboard-only because its vocabulary and implementation still
 cohabit one large staging module; a clean conformance surface should be created
 only when that code is split for an upstream PR.
 
+`ApproximationNumbers/Leaderboard.lean` audits the infinite-dimensional
+approximation-number localization, strong-cutoff convergence, and finite Ky Fan
+triangle endpoints over both real and complex Hilbert spaces. It is currently
+leaderboard-only because the underlying approximation-number vocabulary is
+project-staged rather than available in Mathlib; a conformance surface should be
+added after the foundational definitions are split into an upstream-shaped file.
+
 The legacy `DavisKahanPartIII` aggregate remains as a compatibility audit, but the
 six focused comparator configurations above are the authoritative advertising
 surfaces.  The canonical spectral-projector wrapper is printed by the projector

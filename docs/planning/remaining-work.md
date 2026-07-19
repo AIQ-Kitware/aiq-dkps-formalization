@@ -9,6 +9,16 @@ shape. Cross-refs: `mathlib-candidates.md` (candidate dossiers),
 (formalization-phase map — that phase is complete), `historical/` (archived
 completed-phase docs).
 
+## Update 2026-07-18 -- infinite-dimensional approximation numbers
+
+The real and complex Hilbert-space approximation-number stack is now complete
+and integrated through the generic Sylvester and sine-theta APIs. The accepted
+work includes finite-restriction localization, real complexification and
+conjugation descent, strong orthogonal-cutoff convergence, and finite Ky Fan
+triangle inequalities. The former real roadmap module is now only a stable
+compatibility import. Remaining work for this stack is upstream shaping rather
+than project proof closure; see candidate #15 in `mathlib-candidates.md`.
+
 ## Guiding priority (user-directed 2026-06-12)
 
 > Do **not** spend Fable effort on net-new content Mathlib reviewers may not
