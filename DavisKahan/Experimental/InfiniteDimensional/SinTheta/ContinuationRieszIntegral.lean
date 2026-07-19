@@ -195,6 +195,16 @@ noncomputable def resolventOneForm (A : H →L[ℂ] H) (z : ℂ) :
     resolventOneForm A z v = v • resolventOperator A z := by
   simp [resolventOneForm, ContinuousLinearMap.smulRight_apply]
 
+/-- Normalization compatible with `resolventOperator A z = (A - z • 1)⁻¹`.
+The standard Riesz formula uses `(z • 1 - A)⁻¹`, hence the leading minus. -/
+noncomputable def rieszNormalization : ℂ :=
+  -(((2 : ℂ) * Real.pi * Complex.I)⁻¹)
+
+/-- The sign correction does not change the normalization norm. -/
+@[simp] theorem norm_rieszNormalization :
+    ‖rieszNormalization‖ = ‖(((2 : ℂ) * Real.pi * Complex.I)⁻¹)‖ := by
+  simp only [rieszNormalization, norm_neg]
+
 namespace SpectralSeparatingContour
 
 variable [CompleteSpace H]
@@ -240,7 +250,7 @@ noncomputable def resolventCurveIntegral
 noncomputable def contourRieszProjection
     {A : H →L[ℂ] H} {s : Set ℝ}
     (Γ : SpectralSeparatingContour A s) : H →L[ℂ] H :=
-  (((2 : ℂ) * Real.pi * Complex.I)⁻¹) • Γ.resolventCurveIntegral
+  rieszNormalization • Γ.resolventCurveIntegral
 
 /-- The Riesz operator is the normalized Bochner curve integral of the
 resolvent one-form. -/
@@ -248,7 +258,7 @@ theorem contourRieszProjection_eq
     {A : H →L[ℂ] H} {s : Set ℝ}
     (Γ : SpectralSeparatingContour A s) :
     Γ.contourRieszProjection =
-      (((2 : ℂ) * Real.pi * Complex.I)⁻¹) •
+      rieszNormalization •
         ∫ᶜ z in Γ.path, resolventOneForm A z :=
   rfl
 

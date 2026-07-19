@@ -117,7 +117,7 @@ variable {H : Type v} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
 proof-carrying contour. -/
 noncomputable def fixedContourRieszOperator
     (Γ : PiecewiseC1ClosedContour) (A : H →L[ℂ] H) : H →L[ℂ] H :=
-  (((2 : ℂ) * Real.pi * Complex.I)⁻¹) •
+  rieszNormalization •
     ∫ᶜ z in Γ.path, resolventOneForm A z
 
 /-- The fixed-contour definition agrees definitionally with the Riesz operator
@@ -191,7 +191,7 @@ theorem norm_fixedContourRieszOperator_operatorPath_sub_le
     {t u : ℝ} (ht : t ∈ parameterSet) (hu : u ∈ parameterSet) :
     ‖fixedContourRieszOperator Γ (operatorPath A V t) -
         fixedContourRieszOperator Γ (operatorPath A V u)‖ ≤
-      ‖(((2 : ℂ) * Real.pi * Complex.I)⁻¹)‖ *
+      ‖rieszNormalization‖ *
         (delta⁻¹ ^ 2 * ‖V‖ * Γ.contourLength) * ‖t - u‖ := by
   let At : H →L[ℂ] H := operatorPath A V t
   let Au : H →L[ℂ] H := operatorPath A V u
@@ -217,19 +217,19 @@ theorem norm_fixedContourRieszOperator_operatorPath_sub_le
     exact Γ.norm_curveIntegral_le_mul_contourLength
       (resolventOneForm At - resolventOneForm Au) honeForm
   change ‖
-      (((2 : ℂ) * Real.pi * Complex.I)⁻¹) •
+      rieszNormalization •
           (∫ᶜ z in Γ.path, resolventOneForm At z) -
-      (((2 : ℂ) * Real.pi * Complex.I)⁻¹) •
+      rieszNormalization •
           ∫ᶜ z in Γ.path, resolventOneForm Au z‖ ≤ _
   rw [← smul_sub, norm_smul]
   calc
-    ‖(((2 : ℂ) * Real.pi * Complex.I)⁻¹)‖ *
+    ‖rieszNormalization‖ *
         ‖(∫ᶜ z in Γ.path, resolventOneForm At z) -
           ∫ᶜ z in Γ.path, resolventOneForm Au z‖ ≤
-      ‖(((2 : ℂ) * Real.pi * Complex.I)⁻¹)‖ *
+      ‖rieszNormalization‖ *
         (C * Γ.contourLength) := by
       exact mul_le_mul_of_nonneg_left hintegral (norm_nonneg _)
-    _ = ‖(((2 : ℂ) * Real.pi * Complex.I)⁻¹)‖ *
+    _ = ‖rieszNormalization‖ *
         (delta⁻¹ ^ 2 * ‖V‖ * Γ.contourLength) * ‖t - u‖ := by
       dsimp [C]
       ring
@@ -245,10 +245,10 @@ theorem lipschitzOnWith_fixedContourRieszOperator_operatorPath
         delta ≤ ‖Γ.path x - (lam : ℂ)‖) :
     LipschitzOnWith
       (Real.toNNReal
-        |‖(((2 : ℂ) * Real.pi * Complex.I)⁻¹)‖ *
+        |‖rieszNormalization‖ *
           (delta⁻¹ ^ 2 * ‖V‖ * Γ.contourLength)|)
       (fun t ↦ fixedContourRieszOperator Γ (operatorPath A V t)) parameterSet := by
-  let K : ℝ := ‖(((2 : ℂ) * Real.pi * Complex.I)⁻¹)‖ *
+  let K : ℝ := ‖rieszNormalization‖ *
     (delta⁻¹ ^ 2 * ‖V‖ * Γ.contourLength)
   change LipschitzOnWith (Real.toNNReal |K|)
     (fun t ↦ fixedContourRieszOperator Γ (operatorPath A V t)) parameterSet
