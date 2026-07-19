@@ -62,27 +62,27 @@ class HasKyFanApproximationGaugeTriangle
         kyFanApproximationGauge k K + kyFanApproximationGauge k L
 
 instance realHasApproximationNumberStrongCutoff :
-    HasApproximationNumberStrongCutoff ℝ where
+    HasApproximationNumberStrongCutoff.{0, v, w} ℝ where
   tendsto_comp_strongProjection :=
     approximationSingularValue_comp_strongProjection_tendsto_real
 
 instance complexHasApproximationNumberStrongCutoff :
-    HasApproximationNumberStrongCutoff ℂ where
+    HasApproximationNumberStrongCutoff.{0, v, w} ℂ where
   tendsto_comp_strongProjection :=
     approximationSingularValue_comp_strongProjection_tendsto_complex
 
 instance realHasKyFanApproximationGaugeTriangle :
-    HasKyFanApproximationGaugeTriangle ℝ where
+    HasKyFanApproximationGaugeTriangle.{0, v} ℝ where
   add_le := kyFanApproximationGauge_add_le_real
 
 instance complexHasKyFanApproximationGaugeTriangle :
-    HasKyFanApproximationGaugeTriangle ℂ where
+    HasKyFanApproximationGaugeTriangle.{0, v} ℂ where
   add_le := kyFanApproximationGauge_add_le_complex
 
 /-- Continuity of each approximation number under strongly convergent
 orthogonal cutoffs. -/
 theorem approximationSingularValue_comp_strongProjection_tendsto
-    [HasApproximationNumberStrongCutoff 𝕜]
+    [HasApproximationNumberStrongCutoff.{u, v, w} 𝕜]
     {ι : Type w} {P : ι → E →L[𝕜] E} {l : Filter ι}
     (hPproj : ∀ i, IsOrthogonalProjectionMap (P i))
     (hP : StronglyTendsto P l (ContinuousLinearMap.id 𝕜 E))
@@ -95,7 +95,7 @@ theorem approximationSingularValue_comp_strongProjection_tendsto
 
 /-- Ky Fan's addition inequality for approximation numbers. -/
 theorem kyFanApproximationGauge_add_le
-    [HasKyFanApproximationGaugeTriangle 𝕜]
+    [HasKyFanApproximationGaugeTriangle.{u, v} 𝕜]
     (k : ℕ) (K L : E →L[𝕜] F) :
     kyFanApproximationGauge k (K + L) ≤
       kyFanApproximationGauge k K + kyFanApproximationGauge k L :=
@@ -104,7 +104,7 @@ theorem kyFanApproximationGauge_add_le
 
 /-- Ky Fan gauges converge under strong orthogonal cutoffs. -/
 theorem kyFanApproximationGauge_comp_strongProjection_tendsto
-    [HasApproximationNumberStrongCutoff 𝕜]
+    [HasApproximationNumberStrongCutoff.{u, v, w} 𝕜]
     {ι : Type w} {P : ι → E →L[𝕜] E} {l : Filter ι}
     (hPproj : ∀ i, IsOrthogonalProjectionMap (P i))
     (hP : StronglyTendsto P l (ContinuousLinearMap.id 𝕜 E))
@@ -190,7 +190,7 @@ theorem kyFan_gauge_complete (k : ℕ) (hk : 0 < k)
     _ = ε := by field_simp
 
 /-- A fixed positive finite Ky Fan gauge with its own dominance property. -/
-noncomputable def kyFan [HasKyFanApproximationGaugeTriangle 𝕜]
+noncomputable def kyFan [HasKyFanApproximationGaugeTriangle.{u, v} 𝕜]
     (k : ℕ) (hk : 0 < k) :
     KyFanDominantIdealFamily (𝕜 := 𝕜) where
   toRectangularSymmetricIdealFamily := {
@@ -239,14 +239,14 @@ noncomputable def kyFan [HasKyFanApproximationGaugeTriangle 𝕜]
 
 /-- Every bounded operator belongs to the fixed finite Ky Fan family. -/
 @[simp]
-theorem kyFan_mem [HasKyFanApproximationGaugeTriangle 𝕜]
+theorem kyFan_mem [HasKyFanApproximationGaugeTriangle.{u, v} 𝕜]
     (k : ℕ) (hk : 0 < k) (K : E →L[𝕜] F) :
     (kyFan (𝕜 := 𝕜) k hk).toRectangularSymmetricIdealFamily.Mem K :=
   trivial
 
 /-- The concrete gauge of the fixed finite Ky Fan family. -/
 @[simp]
-theorem kyFan_gauge [HasKyFanApproximationGaugeTriangle 𝕜]
+theorem kyFan_gauge [HasKyFanApproximationGaugeTriangle.{u, v} 𝕜]
     (k : ℕ) (hk : 0 < k) (K : E →L[𝕜] F) :
     (kyFan (𝕜 := 𝕜) k hk).toRectangularSymmetricIdealFamily.gauge K =
       kyFanApproximationGauge k K :=

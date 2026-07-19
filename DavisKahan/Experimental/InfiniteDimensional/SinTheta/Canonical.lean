@@ -205,6 +205,8 @@ namespace IsometricSinThetaProblem
 
 /-- The source isometric theorem. -/
 theorem result
+    [HasApproximationNumberStrongCutoff.{u, v, 0} 𝕜]
+    [HasKyFanApproximationGaugeTriangle.{u, v} 𝕜]
     (N : UnitaryInvariantIdealFamily (𝕜 := 𝕜))
     (P : IsometricSinThetaProblem (𝕜 := 𝕜) (E := E) (F := F)
       (G := G) (H := H) N) :
