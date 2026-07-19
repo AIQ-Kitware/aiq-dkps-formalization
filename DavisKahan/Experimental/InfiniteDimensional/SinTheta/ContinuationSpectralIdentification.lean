@@ -205,7 +205,7 @@ theorem scalarRieszTransform_eq_normalizedWinding
         derivWithin Γ.param (Set.Icc (0 : ℝ) 1) t)
     rw [show (lam : ℂ) - Γ.param t =
       -(Γ.param t - (lam : ℂ)) by ring]
-    simp
+    rw [inv_neg, neg_mul]
   rw [hintegral]
   simp [rieszNormalization]
 
