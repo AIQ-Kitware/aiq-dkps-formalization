@@ -308,6 +308,7 @@ original operators.  This is the topological limit step in the two-unbounded
 ordered Sylvester argument; the remaining analytic input is the corresponding
 inequality for each bounded truncation. -/
 theorem kyFanApproximationGauge_le_of_spectralCutoff_le
+    (h𝕜 : StandardRCLike 𝕜)
     {B : ClosedOperatorOnF (𝕜 := 𝕜) (F := F)}
     (hB : B.IsSelfAdjoint)
     {X C : F →L[𝕜] E} {δ : ℝ} (k : ℕ)
@@ -328,9 +329,9 @@ theorem kyFanApproximationGauge_le_of_spectralCutoff_le
     intro x
     simpa using spectralCutoff_tendsto_identity B hB x
   have hX := kyFanApproximationGauge_comp_strongProjection_tendsto
-    hPproj hPstrong k X
+    h𝕜 hPproj hPstrong k X
   have hC := kyFanApproximationGauge_comp_strongProjection_tendsto
-    hPproj hPstrong k C
+    h𝕜 hPproj hPstrong k C
   have hcutEventually : ∀ᶠ τ : ℝ in atTop,
       δ * kyFanApproximationGauge k
           (X ∘L spectralCutoff B hB τ) ≤
@@ -344,6 +345,7 @@ theorem kyFanApproximationGauge_le_of_spectralCutoff_le
 /-- Finite Ky Fan gauges also converge under strong orthogonal cutoffs on
 the target side. -/
 theorem kyFanApproximationGauge_left_comp_strongProjection_tendsto
+    (h𝕜 : StandardRCLike 𝕜)
     {ι : Type*} {P : ι → E →L[𝕜] E} {l : Filter ι}
     (hPproj : ∀ i, IsOrthogonalProjectionMap (P i))
     (hP : StronglyTendsto P l (ContinuousLinearMap.id 𝕜 E))
@@ -352,7 +354,7 @@ theorem kyFanApproximationGauge_left_comp_strongProjection_tendsto
       (fun i => kyFanApproximationGauge k (P i ∘L K))
       l (𝓝 (kyFanApproximationGauge k K)) := by
   have hright := kyFanApproximationGauge_comp_strongProjection_tendsto
-    hPproj hP k K.adjoint
+    h𝕜 hPproj hP k K.adjoint
   have hpoint : ∀ i,
       kyFanApproximationGauge k (P i ∘L K) =
         kyFanApproximationGauge k (K.adjoint ∘L P i) := by
@@ -368,6 +370,7 @@ theorem kyFanApproximationGauge_left_comp_strongProjection_tendsto
 
 /-- Left-cutoff finite Ky Fan inequalities pass to the original operators. -/
 theorem kyFanApproximationGauge_le_of_leftSpectralCutoff_le
+    (h𝕜 : StandardRCLike 𝕜)
     {A : ClosedOperatorOnE (𝕜 := 𝕜) (E := E)}
     (hA : A.IsSelfAdjoint)
     {X C : F →L[𝕜] E} {δ : ℝ} (k : ℕ)
@@ -388,9 +391,9 @@ theorem kyFanApproximationGauge_le_of_leftSpectralCutoff_le
     intro x
     simpa using spectralCutoff_tendsto_identity A hA x
   have hX := kyFanApproximationGauge_left_comp_strongProjection_tendsto
-    hPproj hPstrong k X
+    h𝕜 hPproj hPstrong k X
   have hC := kyFanApproximationGauge_left_comp_strongProjection_tendsto
-    hPproj hPstrong k C
+    h𝕜 hPproj hPstrong k C
   have hcutEventually : ∀ᶠ τ : ℝ in atTop,
       δ * kyFanApproximationGauge k
           (spectralCutoff A hA τ ∘L X) ≤
@@ -474,6 +477,7 @@ theorem doubleCutoff_filled_sylvester_equation
 /-- Pointwise cutoff estimates for every finite Ky Fan gauge imply the full
 family of Ky Fan inequalities used by Fan dominance. -/
 theorem all_kyFanApproximationGauge_le_of_spectralCutoff_le
+    (h𝕜 : StandardRCLike 𝕜)
     {B : ClosedOperatorOnF (𝕜 := 𝕜) (F := F)}
     (hB : B.IsSelfAdjoint)
     {X C : F →L[𝕜] E} {δ : ℝ}
@@ -485,11 +489,12 @@ theorem all_kyFanApproximationGauge_le_of_spectralCutoff_le
     ∀ k, δ * kyFanApproximationGauge k X ≤
       kyFanApproximationGauge k C := by
   intro k
-  exact kyFanApproximationGauge_le_of_spectralCutoff_le hB k
+  exact kyFanApproximationGauge_le_of_spectralCutoff_le h𝕜 hB k
     (fun τ hτ => hcut τ hτ k)
 
 /-- Ky Fan estimate obtained from bounded spectral truncations. -/
 theorem kyFan_unbounded_sylvester_le_of_semibounded
+    (h𝕜 : StandardRCLike 𝕜)
     {A : ClosedOperatorOnE (𝕜 := 𝕜) (E := E)}
     {B : ClosedOperatorOnF (𝕜 := 𝕜) (F := F)}
     (hA : A.IsSelfAdjoint) (hB : B.IsSelfAdjoint)
@@ -505,9 +510,9 @@ theorem kyFan_unbounded_sylvester_le_of_semibounded
   · subst k
     simp [kyFanApproximationGauge]
   have hk : 0 < k := Nat.pos_of_ne_zero hk0
-  apply kyFanApproximationGauge_le_of_leftSpectralCutoff_le hA k
+  apply kyFanApproximationGauge_le_of_leftSpectralCutoff_le h𝕜 hA k
   intro τA hτA
-  apply kyFanApproximationGauge_le_of_spectralCutoff_le hB k
+  apply kyFanApproximationGauge_le_of_spectralCutoff_le h𝕜 hB k
   intro τB hτB
   let PA : E →L[𝕜] E := spectralCutoff A hA τA
   let PB : F →L[𝕜] F := spectralCutoff B hB τB
@@ -583,16 +588,17 @@ theorem kyFan_unbounded_sylvester_le_of_semibounded
         AF (Xc x) - Xc (BF x) := by module
       _ = Cc x := hraw
   have hmain := sylvester_mem_and_gauge_le_of_bound_inverse
-    (KyFanDominantIdealFamily.kyFan (𝕜 := 𝕜) k hk).toRectangularSymmetricIdealFamily
+    (KyFanDominantIdealFamily.kyFan (𝕜 := 𝕜) h𝕜 k hk).toRectangularSymmetricIdealFamily
     hA1inv B1 hρ hδ hA1invNorm hB1norm hEqShift
-      (KyFanDominantIdealFamily.kyFan_mem (𝕜 := 𝕜) k hk Cc)
-  rw [KyFanDominantIdealFamily.kyFan_gauge (𝕜 := 𝕜) k hk Xc,
-    KyFanDominantIdealFamily.kyFan_gauge (𝕜 := 𝕜) k hk Cc] at hmain
+      (KyFanDominantIdealFamily.kyFan_mem (𝕜 := 𝕜) h𝕜 k hk Cc)
+  rw [KyFanDominantIdealFamily.kyFan_gauge (𝕜 := 𝕜) h𝕜 k hk Xc,
+    KyFanDominantIdealFamily.kyFan_gauge (𝕜 := 𝕜) h𝕜 k hk Cc] at hmain
   simpa only [Xc, Cc, PA, PB, ContinuousLinearMap.comp_assoc] using hmain.2
 
 /-- The opposite ordered orientation, obtained by adjointing and swapping the
 two closed blocks. -/
 theorem kyFan_unbounded_sylvester_le_of_semibounded_swapped
+    (h𝕜 : StandardRCLike 𝕜)
     {A : ClosedOperatorOnE (𝕜 := 𝕜) (E := E)}
     {B : ClosedOperatorOnF (𝕜 := 𝕜) (F := F)}
     (hA : A.IsSelfAdjoint) (hB : B.IsSelfAdjoint)
@@ -608,9 +614,9 @@ theorem kyFan_unbounded_sylvester_le_of_semibounded_swapped
   · subst k
     simp [kyFanApproximationGauge]
   have hk : 0 < k := Nat.pos_of_ne_zero hk0
-  apply kyFanApproximationGauge_le_of_leftSpectralCutoff_le hA k
+  apply kyFanApproximationGauge_le_of_leftSpectralCutoff_le h𝕜 hA k
   intro τA hτA
-  apply kyFanApproximationGauge_le_of_spectralCutoff_le hB k
+  apply kyFanApproximationGauge_le_of_spectralCutoff_le h𝕜 hB k
   intro τB hτB
   let PA : E →L[𝕜] E := spectralCutoff A hA τA
   let PB : F →L[𝕜] F := spectralCutoff B hB τB
@@ -686,11 +692,11 @@ theorem kyFan_unbounded_sylvester_le_of_semibounded_swapped
         AF (Xc x) - Xc (BF x) := by module
       _ = Cc x := hraw
   have hmain := sylvester_mem_and_gauge_le_of_bound_inverse_swapped
-    (KyFanDominantIdealFamily.kyFan (𝕜 := 𝕜) k hk).toRectangularSymmetricIdealFamily
+    (KyFanDominantIdealFamily.kyFan (𝕜 := 𝕜) h𝕜 k hk).toRectangularSymmetricIdealFamily
     hB1inv A1 hρ hδ hB1invNorm hA1norm hEqShift
-      (KyFanDominantIdealFamily.kyFan_mem (𝕜 := 𝕜) k hk Cc)
-  rw [KyFanDominantIdealFamily.kyFan_gauge (𝕜 := 𝕜) k hk Xc,
-    KyFanDominantIdealFamily.kyFan_gauge (𝕜 := 𝕜) k hk Cc] at hmain
+      (KyFanDominantIdealFamily.kyFan_mem (𝕜 := 𝕜) h𝕜 k hk Cc)
+  rw [KyFanDominantIdealFamily.kyFan_gauge (𝕜 := 𝕜) h𝕜 k hk Xc,
+    KyFanDominantIdealFamily.kyFan_gauge (𝕜 := 𝕜) h𝕜 k hk Cc] at hmain
   simpa only [Xc, Cc, PA, PB, ContinuousLinearMap.comp_assoc] using hmain.2
 
 /-- Ideal membership of the Sylvester solution from ordered cutoff estimates. -/
@@ -709,7 +715,7 @@ theorem unbounded_sylvester_mem_of_semibounded_viaKyFan
   exact (mem_and_scaled_gauge_le_of_all_scaled_kyFan_le
     N hδ hC
       (kyFan_unbounded_sylvester_le_of_semibounded
-        hA hB hδ hAc hBc hEq)).1
+        N.standardScalar hA hB hδ hAc hBc hEq)).1
 
 /-- Davis--Kahan Theorem 5.2 in the lower-left/upper-right orientation. -/
 theorem unbounded_sylvester_mem_and_gauge_le_viaKyFan
@@ -727,7 +733,7 @@ theorem unbounded_sylvester_mem_and_gauge_le_viaKyFan
   exact mem_and_scaled_gauge_le_of_all_scaled_kyFan_le
     N hδ hC
       (kyFan_unbounded_sylvester_le_of_semibounded
-        hA hB hδ hAc hBc hEq)
+        N.standardScalar hA hB hδ hAc hBc hEq)
 
 /-- Davis--Kahan Theorem 5.2 in the upper-left/lower-right orientation. -/
 theorem unbounded_sylvester_mem_and_gauge_le_swapped_viaKyFan
@@ -745,7 +751,7 @@ theorem unbounded_sylvester_mem_and_gauge_le_swapped_viaKyFan
   exact mem_and_scaled_gauge_le_of_all_scaled_kyFan_le
     N hδ hC
       (kyFan_unbounded_sylvester_le_of_semibounded_swapped
-        hA hB hδ hAc hBc hEq)
+        N.standardScalar hA hB hδ hAc hBc hEq)
 
 /-- Exact interval/exterior form with one bounded spectral block and one
 possibly unbounded exterior block.  This theorem only needs the ordinary
