@@ -22,7 +22,9 @@ open scoped InnerProductSpace
 
 variable {𝕜 : Type*} [RCLike 𝕜]
 variable {E0 : Type*} [NormedAddCommGroup E0] [InnerProductSpace 𝕜 E0]
+  [CompleteSpace E0]
 variable {E1 : Type*} [NormedAddCommGroup E1] [InnerProductSpace 𝕜 E1]
+  [CompleteSpace E1]
 
 /-- A direct-sum vector belongs to the unbounded block graph exactly when its
 second coordinate is the angular operator applied to its first coordinate. -/
@@ -52,8 +54,6 @@ theorem mem_unboundedBlockGraph_iff
   change WithLp.toLp 2 (WithLp.fst z, WithLp.snd z) ∈
       unboundedBlockGraph X ↔ WithLp.snd z = X (WithLp.fst z)
   exact toLp_mem_unboundedBlockGraph_iff X (WithLp.fst z) (WithLp.snd z)
-
-variable [CompleteSpace E0] [CompleteSpace E1]
 
 /-- The graph vector associated with a vector in the first diagonal domain,
 carrying its membership witness in the full block-operator domain. -/
@@ -192,11 +192,13 @@ theorem unboundedBlockGraph_invariant_iff_strongRiccatiCore
       closedOperatorDirectSumDomainFst H.A0 H.A1 z
     have hfst : WithLp.fst (z : WithLp 2 (E0 × E1)) = (x0 : E0) := by
       rfl
+    have hsnd : WithLp.snd (z : WithLp 2 (E0 × E1)) = X (x0 : E0) := by
+      rw [hz, hfst]
     have hx1 : closedOperatorDirectSumDomainSnd H.A0 H.A1 z =
         ⟨X (x0 : E0), hdom x0⟩ := by
       apply Subtype.ext
-      exact hz.trans (congrArg X hfst)
-    rw [hx1, hz, hfst]
+      exact hsnd
+    rw [hx1, hfst, hsnd]
     exact hpoint x0
 
 end DavisKahanExt
