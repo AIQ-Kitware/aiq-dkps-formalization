@@ -1,0 +1,129 @@
+/-
+Copyright (c) 2026 Kitware, Inc. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Jon Crall, OpenAI GPT-5.6 Thinking
+-/
+import DavisKahan.Experimental.InfiniteDimensional.Sylvester.LegacyGapCompletion
+import DavisKahan.Experimental.InfiniteDimensional.Sylvester.RealUnbounded
+
+/-!
+# Bounded homogeneous Sylvester uniqueness
+
+A bounded domain-compatible intertwiner between separated self-adjoint closed
+operators vanishes.  The proof is deliberately short: every bounded operator
+belongs to the operator-norm ideal, so the already established sharp
+Davis--Kahan Sylvester estimate applies to the homogeneous equation and gives
+`delta * ‖X‖ <= 0`.
+
+This is the uniqueness seam needed by the defect-first Hilbert--Schmidt proof.
+It avoids first assuming that the unknown bounded solution belongs to the
+square ideal.
+-/
+
+namespace ForMathlib
+namespace DavisKahan
+namespace Experimental
+namespace ExactSinTheta
+
+open scoped InnerProductSpace
+
+noncomputable section
+
+universe v
+
+section Complex
+
+variable {E F : Type v}
+  [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
+  [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
+
+/-- A bounded homogeneous complex Sylvester solution vanishes under any of the
+three source gap configurations. -/
+theorem closedSylvester_homogeneous_eq_zero_complex
+    {A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := E)}
+    {B : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := F)}
+    (hA : A.IsSelfAdjoint) (hB : B.IsSelfAdjoint)
+    {X : F →L[ℂ] E} {δ : ℝ}
+    (hδ : 0 < δ)
+    (hgap : UnboundedSylvesterGap A B δ)
+    (hEq : HasClosedSylvesterEquation A B X 0) :
+    X = 0 := by
+  let N := KyFanDominantIdealFamily.operatorNorm (𝕜 := ℂ)
+  have hbound :=
+    (davisKahan1970_sylvester_complex N hA hB hδ hgap hEq (by trivial)).2
+  change δ * ‖X‖ ≤ ‖(0 : F →L[ℂ] E)‖ at hbound
+  have hle : ‖X‖ ≤ 0 := by
+    nlinarith [hbound]
+  exact norm_eq_zero.mp (le_antisymm hle (norm_nonneg X))
+
+/-- Two bounded complex solutions of the same separated closed Sylvester
+equation coincide. -/
+theorem closedSylvester_solution_unique_complex
+    {A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := E)}
+    {B : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := F)}
+    (hA : A.IsSelfAdjoint) (hB : B.IsSelfAdjoint)
+    {X Y C : F →L[ℂ] E} {δ : ℝ}
+    (hδ : 0 < δ)
+    (hgap : UnboundedSylvesterGap A B δ)
+    (hX : HasClosedSylvesterEquation A B X C)
+    (hY : HasClosedSylvesterEquation A B Y C) :
+    X = Y := by
+  have hsub : HasClosedSylvesterEquation A B (X - Y) 0 := by
+    simpa using hX.sub hY
+  have hz := closedSylvester_homogeneous_eq_zero_complex
+    hA hB hδ hgap hsub
+  exact sub_eq_zero.mp hz
+
+end Complex
+
+section Real
+
+variable {E F : Type v}
+  [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
+  [NormedAddCommGroup F] [InnerProductSpace ℝ F] [CompleteSpace F]
+
+/-- A bounded homogeneous real Sylvester solution vanishes under any of the
+three source gap configurations. -/
+theorem closedSylvester_homogeneous_eq_zero_real
+    {A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E)}
+    {B : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := F)}
+    (hA : A.IsSelfAdjoint) (hB : B.IsSelfAdjoint)
+    {X : F →L[ℝ] E} {δ : ℝ}
+    (hδ : 0 < δ)
+    (hgap : UnboundedSylvesterGap A B δ)
+    (hEq : HasClosedSylvesterEquation A B X 0) :
+    X = 0 := by
+  let N := KyFanDominantIdealFamily.operatorNorm (𝕜 := ℝ)
+  have hbound :=
+    (davisKahan1970_sylvester_real N hA hB hδ hgap hEq (by trivial)).2
+  change δ * ‖X‖ ≤ ‖(0 : F →L[ℝ] E)‖ at hbound
+  have hle : ‖X‖ ≤ 0 := by
+    nlinarith [hbound]
+  exact norm_eq_zero.mp (le_antisymm hle (norm_nonneg X))
+
+/-- Two bounded real solutions of the same separated closed Sylvester equation
+coincide. -/
+theorem closedSylvester_solution_unique_real
+    {A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E)}
+    {B : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := F)}
+    (hA : A.IsSelfAdjoint) (hB : B.IsSelfAdjoint)
+    {X Y C : F →L[ℝ] E} {δ : ℝ}
+    (hδ : 0 < δ)
+    (hgap : UnboundedSylvesterGap A B δ)
+    (hX : HasClosedSylvesterEquation A B X C)
+    (hY : HasClosedSylvesterEquation A B Y C) :
+    X = Y := by
+  have hsub : HasClosedSylvesterEquation A B (X - Y) 0 := by
+    simpa using hX.sub hY
+  have hz := closedSylvester_homogeneous_eq_zero_real
+    hA hB hδ hgap hsub
+  exact sub_eq_zero.mp hz
+
+end Real
+
+end
+
+end ExactSinTheta
+end Experimental
+end DavisKahan
+end ForMathlib

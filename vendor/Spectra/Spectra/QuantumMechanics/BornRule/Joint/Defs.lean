@@ -3,7 +3,7 @@ Copyright (c) 2026 Spectra Formalization Project. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Adam Bornemann
 -/
-import Spectra.QuantumMechanics.BornRule.POVM
+import Spectra.QuantumMechanics.BornRule.POVMCore
 import Spectra.Operator.SelfAdjoint
 import Spectra.SpectralTheory.Calculus.Bounded
 import Spectra.SpectralTheory.Measure.Convergence
@@ -12,7 +12,7 @@ import Mathlib.MeasureTheory.Measure.Prod
 /-!
 # The relational layer: joint spectral measures and the Born rule for commuting observables
 
-This file formalizes when two observables admit a *joint* outcome law, and connects that to
+This file formalizes when two observables have a *joint* outcome law, and connects that to
 commutativity and (forward) to `BellsTheorem`.
 
 ## Two corrections to the naive statement
@@ -55,7 +55,7 @@ groups commute.  This file uses spectral-projection commutation (`StronglyCommut
 The full equivalence `stronglyCommute_iff_jointPVM` (whose forward direction is the genuine
 multivariate spectral-theorem construction) and the correlation identity
 `jointBornMeasure_correlation` (`∫ xy dμ_ξ = ⟪ξ, AB ξ⟫`) live in the cross-file
-`BornRule.Joint.Forward`, where they are proved sorry-free and axiom-clean.
+`BornRule.Joint.Forward`, where they are proved completely with a clean trusted-dependency audit.
 
 ## The Bell connection (forward, to `BellsTheorem`)
 
@@ -331,11 +331,11 @@ theorem stronglyCommute_iff_groups_commute (A B : SelfAdjointOperator H) :
 
 A joint spectral measure is a PVM on `ℝ²`.  Rather than re-bundle, reuse the existing
 `POVM H (ℝ × ℝ)` and add the projectivity predicate that distinguishes a PVM from a general POVM —
-i.e. the `proj_inter` axiom that the POVM structure dropped. -/
+i.e. the `proj_inter` field that the POVM structure dropped. -/
 
 /-- A POVM is **projective** — a genuine PVM — when its effects are multiplicative:
 `M(B₁) · M(B₂) = M(B₁ ∩ B₂)`.  (Equivalently, every effect is a projection, by `proj_idem`.)
-This is exactly the `ProjValMeasure.proj_inter` axiom, reintroduced as a predicate. -/
+This is exactly the `ProjValMeasure.proj_inter` law, reintroduced as a predicate. -/
 def _root_.Spectra.POVM.IsProjective {ι : Type*} [MeasurableSpace ι] (M : POVM H ι) : Prop :=
   ∀ (B₁ B₂ : Set ι) (h₁ : MeasurableSet B₁) (h₂ : MeasurableSet B₂),
     M.effect B₁ h₁ * M.effect B₂ h₂ = M.effect (B₁ ∩ B₂) (h₁.inter h₂)
@@ -377,7 +377,7 @@ theorem stronglyCommute_of_jointPVM {A B : SelfAdjointOperator H} {M : POVM H (�
   exact M.effect_congr (Set.inter_comm _ _) _ _
 
 /- The full equivalence `stronglyCommute_iff_jointPVM` (whose **forward** direction is the genuine
-multivariate-spectral-theorem construction) lives in `BornRule.Joint.Forward`, sorry-free.  Its
+multivariate-spectral-theorem construction) lives in `BornRule.Joint.Forward`, with complete proofs.  Its
 **backward** half is the proved `stronglyCommute_of_jointPVM` above. -/
 
 /-! ## §4  The joint Born law (forward corollary)

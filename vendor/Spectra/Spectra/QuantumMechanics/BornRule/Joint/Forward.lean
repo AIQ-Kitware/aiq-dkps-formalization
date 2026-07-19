@@ -8,10 +8,10 @@ import Spectra.QuantumMechanics.BornRule.Joint.Measure
 # Joint spectral measures — the forward construction (headline results)
 
 This file completes the forward direction of the relational Born-rule layer (`Joint.Defs`,
-sorry-free, easy/backward half): the operator field `jointEffect` recovered by polarizing the
+proof-complete, easy/backward half): the operator field `jointEffect` recovered by polarizing the
 quadratic form `ξ ↦ jointScalarMeasure ξ` (G2.3), the joint POVM `jointPOVM` and its cylinder
 marginals (G2.5), and the multiplicativity that makes it a genuine PVM (G2.4, `IsProjective`).
-All `sorry`-free and axiom-clean.
+All proofs are complete with a clean trusted-dependency audit.
 
 * `stronglyCommute_iff_jointPVM` — the corrected equivalence.  Its **backward** half is the proved
   `stronglyCommute_of_jointPVM` (`Joint.Defs`); the **forward** half — the genuine new construction
@@ -1077,7 +1077,7 @@ bounded `g` by approximating with `SimpleFunc.approxOn` and dominated convergenc
 left integral over the finite `μ_ξ`; the right `spectralForm`, a fixed combination of integrals over
 the finite measures `μ^B_w`).  The operator product `Φ_A(f)Φ_B(g)` is what replaces the unavailable
 Fubini. -/
-private lemma joint_product_form (A B : Spectra.Operator.SelfAdjointOperator H)
+theorem joint_product_form (A B : Spectra.Operator.SelfAdjointOperator H)
     (hSC : StronglyCommute A B) {f g : ℝ → ℂ} (hfm : Measurable f) (hfb : ∃ C, ∀ ω, ‖f ω‖ ≤ C)
     (hgm : Measurable g) (hgb : ∃ C, ∀ ω, ‖g ω‖ ≤ C) (ξ : H) :
     ∫ p, f p.1 * g p.2 ∂(jointScalarMeasure A B hSC ξ)
