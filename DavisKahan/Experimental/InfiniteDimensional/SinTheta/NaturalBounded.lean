@@ -27,7 +27,10 @@ universe v
 
 section Complex
 
-open SpectraBridge
+-- `open SpectraBridge` would resolve to the nested
+-- `ExactSinTheta.SpectraBridge` namespace introduced by `RealSpectrumBridge`,
+-- which shadows the intended one, so the full path is spelled out here.
+open ForMathlib.DavisKahan.Experimental.SpectraBridge
 
 variable {E F : Type v}
   [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
@@ -77,15 +80,11 @@ theorem sinTheta_bounded_spectralSubspace_of_genuineSpectrumGap
       S hS (ForMathlib.DavisKahanExt.ClosedOperator.ofBounded A0)
       (ForMathlib.DavisKahanExt.ClosedOperator.ofBounded_isSelfAdjoint A0 hA0)
       X (generalResidual A X A0) hX
-  · intro x
-    simp
-  · intro x
-    change A (X (x : F)) - X (A0 (x : F)) =
-      (generalResidual A X A0) (x : F)
-    simp only [generalResidual, ContinuousLinearMap.comp_apply, sub_apply]
-  · exact hδ
-  · exact hgap
-  · exact hR
+  case hXdom => intro x; simp
+  case hReq => intro x; rfl
+  case hδ => exact hδ
+  case hgap => exact hgap
+  case hR => exact hR
 
 /-- Bounded complex lower-frame theorem with a canonical spectral subspace. -/
 theorem generalizedSinTheta_bounded_spectralSubspace_of_genuineSpectrumGap
@@ -124,14 +123,10 @@ theorem generalizedSinTheta_bounded_spectralSubspace_of_genuineSpectrumGap
       S hS (ForMathlib.DavisKahanExt.ClosedOperator.ofBounded A0)
       (ForMathlib.DavisKahanExt.ClosedOperator.ofBounded_isSelfAdjoint A0 hA0)
       X (generalResidual A X A0) hδ hε hframe
-  · intro x
-    simp
-  · intro x
-    change A (X (x : F)) - X (A0 (x : F)) =
-      (generalResidual A X A0) (x : F)
-    simp only [generalResidual, ContinuousLinearMap.comp_apply, sub_apply]
-  · exact hgap
-  · exact hR
+  case hXdom => intro x; simp
+  case hReq => intro x; rfl
+  case hgap => exact hgap
+  case hR => exact hR
 
 end Complex
 
@@ -188,15 +183,11 @@ theorem sinTheta_bounded_real_spectralSubspace
       S hS (ForMathlib.DavisKahanExt.ClosedOperator.ofBounded A0)
       (ForMathlib.DavisKahanExt.ClosedOperator.ofBounded_isSelfAdjoint A0 hA0)
       X (generalResidual A X A0) hX
-  · intro x
-    simp
-  · intro x
-    change A (X (x : F)) - X (A0 (x : F)) =
-      (generalResidual A X A0) (x : F)
-    simp only [generalResidual, ContinuousLinearMap.comp_apply, sub_apply]
-  · exact hδ
-  · exact hgap
-  · exact hR
+  case hXdom => intro x; simp
+  case hReq => intro x; rfl
+  case hδ => exact hδ
+  case hgap => exact hgap
+  case hR => exact hR
 
 /-- Bounded real lower-frame theorem with a canonical descended spectral
 subspace. -/
@@ -236,14 +227,10 @@ theorem generalizedSinTheta_bounded_real_spectralSubspace
       S hS (ForMathlib.DavisKahanExt.ClosedOperator.ofBounded A0)
       (ForMathlib.DavisKahanExt.ClosedOperator.ofBounded_isSelfAdjoint A0 hA0)
       X (generalResidual A X A0) hδ hε hframe
-  · intro x
-    simp
-  · intro x
-    change A (X (x : F)) - X (A0 (x : F)) =
-      (generalResidual A X A0) (x : F)
-    simp only [generalResidual, ContinuousLinearMap.comp_apply, sub_apply]
-  · exact hgap
-  · exact hR
+  case hXdom => intro x; simp
+  case hReq => intro x; rfl
+  case hgap => exact hgap
+  case hR => exact hR
 
 end Real
 
