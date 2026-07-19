@@ -3,7 +3,7 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.Experimental.InfiniteDimensional.Core.Unbounded
+import DavisKahan.Experimental.InfiniteDimensional.Core.ReducingRestriction
 
 /-!
 # Foundational definitions for strong unbounded Riccati theory
@@ -87,22 +87,6 @@ noncomputable instance unboundedBlockGraph_hasOrthogonalProjection
     exact hGmem _
   have : CompleteSpace (unboundedBlockGraph X) := hclosed.completeSpace_coe
   exact Submodule.HasOrthogonalProjection.ofCompleteSpace _
-
-/-- A closed subspace is invariant under a closed operator on its domain. -/
-def ClosedOperator.InvariantSubspace
-    {G : Type*} [NormedAddCommGroup G] [InnerProductSpace 𝕜 G] [CompleteSpace G]
-    (A : ClosedOperator (𝕜 := 𝕜) (E := G)) (U : Submodule 𝕜 G) : Prop :=
-  ∀ x : A.domain, (x : G) ∈ U → A.toLinearMap x ∈ U
-
-/-- A closed subspace reduces a closed operator and the domain splits under
-its two orthogonal projections. -/
-def ClosedOperator.ReducesSubspace
-    {G : Type*} [NormedAddCommGroup G] [InnerProductSpace 𝕜 G] [CompleteSpace G]
-    (A : ClosedOperator (𝕜 := 𝕜) (E := G)) (U : Submodule 𝕜 G)
-    [U.HasOrthogonalProjection] : Prop :=
-  (∀ x : A.domain, U.starProjection (x : G) ∈ A.domain) ∧
-  (∀ x : A.domain, Uᗮ.starProjection (x : G) ∈ A.domain) ∧
-  A.InvariantSubspace U ∧ A.InvariantSubspace Uᗮ
 
 /-- Two closed operators on the same Hilbert space are unitarily equivalent
 with explicit transport of domains and operator actions. -/
