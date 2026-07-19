@@ -38,7 +38,8 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
 theorem norm_sinAngleOperatorC_le_one (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     ‖sinAngleOperatorC U V‖ ≤ 1 := by
-  rw [norm_sinAngleOperatorC, subspaceGap]
+  rw [norm_sinAngleOperatorC]
+  show ‖(U.starProjection - V.starProjection : E →L[ℂ] E)‖ ≤ 1
   rw [Submodule.norm_starProjection_sub_eq_max]
   apply max_le
   · calc
@@ -48,7 +49,7 @@ theorem norm_sinAngleOperatorC_le_one (U V : Submodule ℂ E)
       _ ≤ 1 * 1 := by
         rw [show (1 - V.starProjection : E →L[ℂ] E) = Vᗮ.starProjection from
           (Submodule.starProjection_orthogonal' V).symm]
-        exact mul_le_mul Vᗮ.starProjection_norm_le V.starProjection_norm_le
+        exact mul_le_mul Vᗮ.starProjection_norm_le U.starProjection_norm_le
           (norm_nonneg _) zero_le_one
       _ = 1 := by ring
   · calc
@@ -68,9 +69,14 @@ theorem spectrum_sinAngleOperatorC_subset_Icc (U V : Submodule ℂ E)
     spectrum ℝ (sinAngleOperatorC U V) ⊆ Set.Icc 0 1 := by
   intro x hx
   refine ⟨spectrum_nonneg_of_nonneg (sinAngleOperatorC_nonneg U V) hx, ?_⟩
-  have habs : |x| ≤ ‖sinAngleOperatorC U V‖ :=
-    spectrum.norm_le_norm_of_mem hx
-  exact le_trans (le_abs_self x) (habs.trans (norm_sinAngleOperatorC_le_one U V))
+  have habs : |x| ≤ ‖sinAngleOperatorC U V‖ * ‖(1 : E →L[ℂ] E)‖ :=
+    spectrum.norm_le_norm_mul_of_mem hx
+  have hone : ‖(1 : E →L[ℂ] E)‖ ≤ 1 := ContinuousLinearMap.norm_id_le
+  refine le_trans (le_abs_self x) (habs.trans ?_)
+  calc ‖sinAngleOperatorC U V‖ * ‖(1 : E →L[ℂ] E)‖ ≤ 1 * 1 :=
+        mul_le_mul (norm_sinAngleOperatorC_le_one U V) hone (norm_nonneg _)
+          zero_le_one
+    _ = 1 := by ring
 
 /-- The literal Hermitian operator angle between two closed complex subspaces. -/
 noncomputable def paperAngleOperatorC (U V : Submodule ℂ E)
@@ -107,14 +113,14 @@ theorem cfc_sin_paperAngleOperatorC (U V : Submodule ℂ E)
     Real.continuous_sin.continuousOn
   rw [paperAngleOperatorC,
     ← cfc_comp Real.sin Real.arcsin (sinAngleOperatorC U V)
-      hsa.isStarNormal hsin harcsin]
+      hsa hsin harcsin]
   calc
     cfc (Real.sin ∘ Real.arcsin) (sinAngleOperatorC U V)
         = cfc (fun x : ℝ => x) (sinAngleOperatorC U V) := by
       apply cfc_congr
       intro x hx
       have hxi := spectrum_sinAngleOperatorC_subset_Icc U V hx
-      exact Real.sin_arcsin hxi.1 (by linarith [hxi.2])
+      exact Real.sin_arcsin (by linarith [hxi.1]) (by linarith [hxi.2])
     _ = sinAngleOperatorC U V := cfc_id' ℝ _
 
 /-- The paper's notation `sin Theta` interpreted literally by applying sine to
@@ -139,8 +145,11 @@ theorem spectrum_paperAngleOperatorC_subset_Icc (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     spectrum ℝ (paperAngleOperatorC U V) ⊆ Set.Icc 0 (Real.pi / 2) := by
   intro y hy
-  rw [paperAngleOperatorC] at hy
-  obtain ⟨x, hx, rfl⟩ := spectrum_cfc_subset_image hy
+  rw [paperAngleOperatorC,
+    cfc_map_spectrum (R := ℝ) (f := Real.arcsin)
+      (a := sinAngleOperatorC U V) (isSelfAdjoint_sinAngleOperatorC U V)
+      Real.continuous_arcsin.continuousOn] at hy
+  obtain ⟨x, hx, rfl⟩ := hy
   have hxi := spectrum_sinAngleOperatorC_subset_Icc U V hx
   exact ⟨Real.arcsin_nonneg.mpr hxi.1,
     Real.arcsin_le_pi_div_two x⟩
@@ -152,13 +161,15 @@ theorem paperSin_sq_add_paperCos_sq (U V : Submodule ℂ E)
       paperCosAngleOperatorC U V * paperCosAngleOperatorC U V =
         ContinuousLinearMap.id ℂ E := by
   rw [paperSinAngleOperatorC, paperCosAngleOperatorC,
-    ← cfc_mul _ _ _ Real.continuous_sin.continuousOn
-      Real.continuous_sin.continuousOn,
-    ← cfc_mul _ _ _ Real.continuous_cos.continuousOn
-      Real.continuous_cos.continuousOn,
-    ← cfc_add _ _ _
-      (Real.continuous_sin.mul Real.continuous_sin).continuousOn
-      (Real.continuous_cos.mul Real.continuous_cos).continuousOn]
+    ← cfc_mul Real.sin Real.sin (paperAngleOperatorC U V)
+      Real.continuous_sin.continuousOn Real.continuous_sin.continuousOn,
+    ← cfc_mul Real.cos Real.cos (paperAngleOperatorC U V)
+      Real.continuous_cos.continuousOn Real.continuous_cos.continuousOn,
+    ← cfc_add (a := paperAngleOperatorC U V)
+      (fun x : ℝ => Real.sin x * Real.sin x)
+      (fun x : ℝ => Real.cos x * Real.cos x)
+      ((Real.continuous_sin.mul Real.continuous_sin).continuousOn)
+      ((Real.continuous_cos.mul Real.continuous_cos).continuousOn)]
   calc
     cfc (fun x : ℝ => Real.sin x * Real.sin x +
         Real.cos x * Real.cos x) (paperAngleOperatorC U V)
@@ -166,12 +177,32 @@ theorem paperSin_sq_add_paperCos_sq (U V : Submodule ℂ E)
       apply cfc_congr
       intro x _
       nlinarith [Real.sin_sq_add_cos_sq x]
-    _ = ContinuousLinearMap.id ℂ E := cfc_const_one ℝ _
+    _ = ContinuousLinearMap.id ℂ E := by
+      have ha : IsSelfAdjoint (paperAngleOperatorC U V) :=
+        isSelfAdjoint_paperAngleOperatorC U V
+      exact cfc_const_one ℝ _
 
 section Real
 
+open ForMathlib.DavisKahan.Experimental.Foundation
+open ForMathlib.DavisKahan.Experimental.Foundation.RealComplexification
+open ForMathlib.DavisKahanExt.Real
+
 variable {ER : Type*} [NormedAddCommGroup ER] [InnerProductSpace ℝ ER]
   [CompleteSpace ER]
+
+/-- Scalar restriction of the complexified operator algebra to the reals.  The
+declaration installing this in the complexification files is file-local, so it
+must be reinstalled here. -/
+noncomputable local instance complexOperatorRealAlgebra :
+    Algebra ℝ (RealComplexification ER →L[ℂ] RealComplexification ER) :=
+  Algebra.complexToReal
+
+/-- Real continuous functional calculus on the complexified operator algebra. -/
+noncomputable local instance realContinuousFunctionalCalculus :
+    ContinuousFunctionalCalculus ℝ
+      (RealComplexification ER →L[ℂ] RealComplexification ER) IsSelfAdjoint :=
+  IsSelfAdjoint.instContinuousFunctionalCalculus
 
 /-- The literal real operator angle, represented canonically on the
 complexification. -/
