@@ -531,15 +531,24 @@ theorem domRestrict (A : ClosedOperator (𝕜 := 𝕜) (E := E))
 
 end RelativelyBounded
 
-/-- Real spectrum of a self-adjoint closed operator.
+/-- Real resolvent set of a closed operator.  A real parameter belongs
+to this set when the shifted operator has a bounded two-sided inverse: the
+left inverse law is imposed on the operator domain, while the right inverse
+law includes the domain witness for the image of the inverse. -/
+def realResolventSet
+    (A : ClosedOperator (𝕜 := 𝕜) (E := E)) : Set ℝ :=
+  { lam : ℝ | ∃ R : E →L[𝕜] E,
+      (∀ x : A.domain,
+        R (A.toLinearMap x - (lam : 𝕜) • (x : E)) = (x : E)) ∧
+      (∀ y : E, ∃ h : R y ∈ A.domain,
+        A.toLinearMap ⟨R y, h⟩ - (lam : 𝕜) • R y = y) }
 
-Construction route: define the resolvent through bijectivity and boundedness of
-`A - z`, obtain the complex spectrum first, and use self-adjointness to prove it
-lies on the real axis.  The permanent API should be tied to the unbounded
-spectral theorem rather than chosen independently. -/
-noncomputable def realSpectrum
-    (A : ClosedOperator (𝕜 := 𝕜) (E := E)) : Set ℝ := by
-  sorry
+/-- Real spectrum of a closed operator, defined as the complement of the real
+resolvent set.  For a self-adjoint complex operator this agrees definitionally
+with the real slice of the Spectra resolvent. -/
+def realSpectrum
+    (A : ClosedOperator (𝕜 := 𝕜) (E := E)) : Set ℝ :=
+  (realResolventSet A)ᶜ
 
 /-- Spectral-set separation for closed operators, possibly acting on
 different Hilbert spaces.  The separation condition depends only on the two

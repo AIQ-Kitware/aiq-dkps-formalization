@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.GenuineIntervalExterior
+import DavisKahan.Experimental.InfiniteDimensional.SinTheta.LegacyGapCompletion
 
 /-!
 # Canonical Davis--Kahan 1970 single-angle targets
@@ -17,13 +18,15 @@ There are two generalized endpoints:
   interval/exterior theorem.  Its spectral assumptions use the genuine
   `Spectra` spectrum and its proof goes through the clean mixed
   bounded--unbounded Sylvester engine.
-* `GeneralSinThetaProblem` retains the complete 1970 target, including the two
-  ordered half-line orientations.  Its abstract gap currently routes those
-  additional orientations through the spectral-cutoff development.
+* `GeneralSinThetaProblem` retains the historical complete 1970 statement,
+  including the two ordered half-line orientations.  Its clean complex proof
+  is supplied by `SinTheta.LegacyGapCompletion`, above the foundational import
+  cone.
 
-The generalized lower-frame endpoints are stated over complex Hilbert spaces,
-where the positive continuous functional calculus constructs the inverse Gram
-square root.  The isometric endpoint remains scalar-generic over `RCLike`.
+The generalized lower-frame package in this module is complex.  The explicit
+polar-data algebra is scalar-generic, and `RealCanonical` supplies the real
+selection and source-shaped problem.  The isometric input package remains
+generic over `RCLike`.
 -/
 
 namespace ForMathlib
@@ -80,7 +83,7 @@ theorem result
             (directedSinThetaOperator P.data.X P.exactMap
               P.lowerFrame P.frameLowerBound_pos)
         ≤ N.toRectangularSymmetricIdealFamily.gauge P.data.residual :=
-  generalizedSinTheta_unbounded_exact
+  generalizedSinTheta_unbounded_exact_complex
     N P.data P.exactMap P.ambient_selfAdjoint P.trial_selfAdjoint
       P.complement_selfAdjoint P.exact_decomposition P.gap_pos
       P.frameLowerBound_pos P.lowerFrame P.spectral_gap P.residual_mem
@@ -99,7 +102,7 @@ theorem complementaryBlock_result
             (sinThetaBlock P.data.X P.data.F₁
               P.lowerFrame P.frameLowerBound_pos)
         ≤ N.toRectangularSymmetricIdealFamily.gauge P.data.residual :=
-  generalizedSinTheta_unbounded
+  generalizedSinTheta_unbounded_complex
     N P.data P.ambient_selfAdjoint P.trial_selfAdjoint
       P.complement_selfAdjoint P.exact_decomposition.isometry₁ P.gap_pos
       P.frameLowerBound_pos P.lowerFrame P.spectral_gap P.residual_mem
@@ -203,7 +206,9 @@ structure IsometricSinThetaProblem
 
 namespace IsometricSinThetaProblem
 
-/-- The source isometric theorem. -/
+/-- Scalar-generic historical isometric theorem shape.  The manuscript
+surface selects the direct complex proof, while `RealCanonical` supplies the
+parallel real proof. -/
 theorem result
     [HasApproximationNumberStrongCutoff.{u, v, 0} 𝕜]
     [HasKyFanApproximationGaugeTriangle.{u, v} 𝕜]
@@ -237,6 +242,24 @@ variable {E F G H : Type v}
   [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
 
 namespace IsometricSinThetaProblem
+
+/-- Complex specialization of the source-shaped isometric problem, routed
+through the direct manuscript gap engine. -/
+theorem result_complex
+    (N : UnitaryInvariantIdealFamily (𝕜 := ℂ))
+    (P : IsometricSinThetaProblem (𝕜 := ℂ) (E := E) (F := F)
+      (G := G) (H := H) N) :
+    N.toRectangularSymmetricIdealFamily.Mem
+        ((ContinuousLinearMap.id ℂ E -
+          P.exactMap ∘L P.exactMap.adjoint) ∘L P.data.X) ∧
+      P.gap * N.toRectangularSymmetricIdealFamily.gauge
+          ((ContinuousLinearMap.id ℂ E -
+            P.exactMap ∘L P.exactMap.adjoint) ∘L P.data.X)
+        ≤ N.toRectangularSymmetricIdealFamily.gauge P.data.residual :=
+  sinTheta_unbounded_exact_complex
+    N P.data P.exactMap P.ambient_selfAdjoint P.trial_selfAdjoint
+      P.complement_selfAdjoint P.trial_isometry P.exact_decomposition
+      P.gap_pos P.spectral_gap P.residual_mem
 
 /-- Package a complex isometric problem as the generalized theorem with lower
 frame bound one. -/

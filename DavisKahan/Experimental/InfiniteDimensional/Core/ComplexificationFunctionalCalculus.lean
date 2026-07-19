@@ -1,0 +1,388 @@
+/-
+Copyright (c) 2026 Kitware, Inc. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Jon Crall, OpenAI GPT-5.6 Thinking
+-/
+import DavisKahan.Experimental.InfiniteDimensional.Core.Complexification
+import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Instances
+import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Isometric
+import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Order
+import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Unique
+
+/-!
+# Real descent for bounded functional calculus
+
+This module exposes the canonical conjugation action on operators over a real
+Hilbert-space complexification.  A conjugation-fixed complex operator descends
+to a bounded real operator, and real continuous functional calculus preserves
+the fixed-point subalgebra.  These are the reusable seams needed for real
+infinite-dimensional polar factorization.
+-/
+
+open scoped InnerProductSpace ComplexConjugate Topology
+
+namespace ForMathlib
+namespace DavisKahan
+namespace Experimental
+namespace ExactSinTheta
+namespace RealComplexificationFunctionalCalculus
+
+open Module (finrank)
+open Filter
+open Foundation
+open Foundation.RealComplexification
+
+noncomputable section
+
+universe v w
+
+variable {E F : Type v}
+  [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
+  [NormedAddCommGroup F] [InnerProductSpace ℝ F] [CompleteSpace F]
+
+noncomputable local instance complexOperatorRealAlgebra :
+    Algebra ℝ (RealComplexification E →L[ℂ] RealComplexification E) :=
+  Algebra.complexToReal
+
+noncomputable local instance realContinuousFunctionalCalculus :
+    ContinuousFunctionalCalculus ℝ
+      (RealComplexification E →L[ℂ] RealComplexification E) IsSelfAdjoint :=
+  IsSelfAdjoint.instContinuousFunctionalCalculus
+
+omit [CompleteSpace E] in
+theorem restrictedReal_smul_operator_eq
+    (r : ℝ) (A : RealComplexification E →L[ℂ] RealComplexification E) :
+    @SMul.smul ℝ (RealComplexification E →L[ℂ] RealComplexification E)
+        complexOperatorRealAlgebra.toSMul r A = r • A := by
+  apply ContinuousLinearMap.ext
+  intro z
+  change (r : ℂ) • A z = r • A z
+  apply RealComplexification.ext
+  · rw [RealComplexification.re_complex_smul,
+      RealComplexification.re_real_smul]
+    simp
+  · rw [RealComplexification.im_complex_smul,
+      RealComplexification.im_real_smul]
+    simp
+
+/-! ## Canonical conjugation on the complexification -/
+
+/-- Canonical conjugation, bundled as an antiunitary involution. -/
+noncomputable def canonicalConjugation :
+    RealComplexification E ≃ₗᵢ⋆[ℂ] RealComplexification E where
+  toFun := conjugation
+  invFun := conjugation
+  left_inv := conjugation_involutive
+  right_inv := conjugation_involutive
+  map_add' z w := by
+    apply RealComplexification.ext <;> simp
+  map_smul' := conjugation_complex_smul
+  norm_map' := conjugation.norm_map
+
+omit [CompleteSpace E] in
+@[simp]
+theorem canonicalConjugation_apply (z : RealComplexification E) :
+    (canonicalConjugation (E := E)) z = conjugation z := rfl
+
+omit [CompleteSpace E] in
+@[simp]
+theorem canonicalConjugation_symm_apply (z : RealComplexification E) :
+    (canonicalConjugation (E := E)).symm z = conjugation z := by
+  apply (canonicalConjugation (E := E)).injective
+  simp [canonicalConjugation]
+
+omit [CompleteSpace E] in
+/-- Conjugation reverses the two slots of the complex inner product. -/
+theorem inner_conjugation (z w : RealComplexification E) :
+    ⟪conjugation z, conjugation w⟫_ℂ = ⟪w, z⟫_ℂ := by
+  apply Complex.ext
+  · simp [inner_apply, real_inner_comm]
+  · simp [inner_apply, real_inner_comm]
+    ring
+
+omit [CompleteSpace E] in
+theorem inner_conjugation_left (z w : RealComplexification E) :
+    ⟪conjugation z, w⟫_ℂ = ⟪conjugation w, z⟫_ℂ := by
+  calc
+    ⟪conjugation z, w⟫_ℂ =
+        ⟪conjugation z, conjugation (conjugation w)⟫_ℂ := by simp
+    _ = ⟪conjugation w, z⟫_ℂ := inner_conjugation z (conjugation w)
+
+omit [CompleteSpace E] in
+theorem inner_conjugation_right (z w : RealComplexification E) :
+    ⟪z, conjugation w⟫_ℂ = ⟪w, conjugation z⟫_ℂ := by
+  calc
+    ⟪z, conjugation w⟫_ℂ =
+        ⟪conjugation (conjugation z), conjugation w⟫_ℂ := by simp
+    _ = ⟪w, conjugation z⟫_ℂ := inner_conjugation (conjugation z) w
+
+/-- Conjugation of a complexified bounded operator by canonical conjugation. -/
+noncomputable def conjugateOperator
+    (A : RealComplexification E →L[ℂ] RealComplexification E) :
+    RealComplexification E →L[ℂ] RealComplexification E :=
+  (canonicalConjugation (E := E)).toLinearIsometry.toContinuousLinearMap.comp
+    (A.comp (canonicalConjugation (E := E)).symm.toLinearIsometry.toContinuousLinearMap)
+
+omit [CompleteSpace E] in
+@[simp]
+theorem conjugateOperator_apply
+    (A : RealComplexification E →L[ℂ] RealComplexification E)
+    (z : RealComplexification E) :
+    conjugateOperator A z = conjugation (A (conjugation z)) := by
+  simp [conjugateOperator]
+
+@[simp]
+theorem conjugateOperator_zero :
+    conjugateOperator (0 : RealComplexification E →L[ℂ] RealComplexification E) = 0 := by
+  apply ContinuousLinearMap.ext
+  intro z
+  apply RealComplexification.ext <;> simp [conjugateOperator_apply]
+
+@[simp]
+theorem conjugateOperator_add (A B : RealComplexification E →L[ℂ] RealComplexification E) :
+    conjugateOperator (A + B) = conjugateOperator A + conjugateOperator B := by
+  apply ContinuousLinearMap.ext
+  intro z
+  apply RealComplexification.ext <;> simp [conjugateOperator_apply]
+
+@[simp]
+theorem conjugateOperator_neg (A : RealComplexification E →L[ℂ] RealComplexification E) :
+    conjugateOperator (-A) = -conjugateOperator A := by
+  apply ContinuousLinearMap.ext
+  intro z
+  apply RealComplexification.ext <;> simp [conjugateOperator_apply]
+
+@[simp]
+theorem conjugateOperator_sub (A B : RealComplexification E →L[ℂ] RealComplexification E) :
+    conjugateOperator (A - B) = conjugateOperator A - conjugateOperator B := by
+  apply ContinuousLinearMap.ext
+  intro z
+  apply RealComplexification.ext <;> simp [conjugateOperator_apply]
+
+@[simp]
+theorem conjugateOperator_one :
+    conjugateOperator (1 : RealComplexification E →L[ℂ] RealComplexification E) = 1 := by
+  apply ContinuousLinearMap.ext
+  intro z
+  apply RealComplexification.ext <;> simp [conjugateOperator_apply]
+
+@[simp]
+theorem conjugateOperator_mul (A B : RealComplexification E →L[ℂ] RealComplexification E) :
+    conjugateOperator (A * B) = conjugateOperator A * conjugateOperator B := by
+  apply ContinuousLinearMap.ext
+  intro z
+  apply RealComplexification.ext <;>
+    simp [conjugateOperator_apply, mul_apply_eq_comp]
+
+@[simp]
+theorem conjugateOperator_real_smul (r : ℝ) (A : RealComplexification E →L[ℂ] RealComplexification E) :
+    conjugateOperator (r • A) = r • conjugateOperator A := by
+  apply ContinuousLinearMap.ext
+  intro z
+  apply RealComplexification.ext <;> simp [conjugateOperator_apply]
+
+@[simp]
+theorem conjugateOperator_involutive (A : RealComplexification E →L[ℂ] RealComplexification E) :
+    conjugateOperator (conjugateOperator A) = A := by
+  apply ContinuousLinearMap.ext
+  intro z
+  apply RealComplexification.ext <;> simp [conjugateOperator_apply]
+
+/-- Canonical conjugation commutes with taking adjoints. -/
+theorem conjugateOperator_adjoint (A : RealComplexification E →L[ℂ] RealComplexification E) :
+    conjugateOperator A.adjoint = (conjugateOperator A).adjoint := by
+  apply (ContinuousLinearMap.eq_adjoint_iff
+    (conjugateOperator A.adjoint) (conjugateOperator A)).2
+  intro x y
+  calc
+    ⟪conjugateOperator A.adjoint x, y⟫_ℂ =
+        ⟪conjugation y, A.adjoint (conjugation x)⟫_ℂ := by
+          rw [conjugateOperator_apply, inner_conjugation_left]
+    _ = ⟪A (conjugation y), conjugation x⟫_ℂ :=
+      ContinuousLinearMap.adjoint_inner_right A (conjugation y) (conjugation x)
+    _ = ⟪x, conjugation (A (conjugation y))⟫_ℂ := by
+      rw [inner_conjugation_right]
+    _ = ⟪x, conjugateOperator A y⟫_ℂ := by rw [conjugateOperator_apply]
+
+theorem norm_conjugateOperator_le (A : RealComplexification E →L[ℂ] RealComplexification E) :
+    ‖conjugateOperator A‖ ≤ ‖A‖ := by
+  refine (conjugateOperator A).opNorm_le_bound (norm_nonneg A) ?_
+  intro z
+  calc
+    ‖conjugateOperator A z‖ = ‖A (conjugation z)‖ := by simp
+    _ ≤ ‖A‖ * ‖conjugation z‖ := A.le_opNorm _
+    _ = ‖A‖ * ‖z‖ := by rw [conjugation.norm_map]
+
+theorem norm_conjugateOperator (A : RealComplexification E →L[ℂ] RealComplexification E) :
+    ‖conjugateOperator A‖ = ‖A‖ := by
+  apply le_antisymm (norm_conjugateOperator_le A)
+  calc
+    ‖A‖ = ‖conjugateOperator (conjugateOperator A)‖ := by simp
+    _ ≤ ‖conjugateOperator A‖ := norm_conjugateOperator_le _
+
+theorem isometry_conjugateOperator :
+    Isometry (conjugateOperator :
+      (RealComplexification E →L[ℂ] RealComplexification E) →
+        (RealComplexification E →L[ℂ] RealComplexification E)) := by
+  apply Isometry.of_dist_eq
+  intro A B
+  rw [dist_eq_norm, dist_eq_norm, ← conjugateOperator_sub,
+    norm_conjugateOperator]
+
+/-- Canonical conjugation is a continuous real star-algebra automorphism of
+bounded operators on the complexification. -/
+noncomputable def conjugateOperatorHom :
+    (RealComplexification E →L[ℂ] RealComplexification E) →⋆ₐ[ℝ]
+      (RealComplexification E →L[ℂ] RealComplexification E) where
+  toFun := conjugateOperator
+  map_one' := conjugateOperator_one
+  map_zero' := conjugateOperator_zero
+  map_mul' := conjugateOperator_mul
+  map_add' := conjugateOperator_add
+  commutes' r := by
+    rw [Algebra.algebraMap_eq_smul_one]
+    change conjugateOperator
+        (@SMul.smul ℝ (RealComplexification E →L[ℂ] RealComplexification E)
+          complexOperatorRealAlgebra.toSMul r 1) =
+      @SMul.smul ℝ (RealComplexification E →L[ℂ] RealComplexification E)
+        complexOperatorRealAlgebra.toSMul r 1
+    rw [restrictedReal_smul_operator_eq,
+      conjugateOperator_real_smul, conjugateOperator_one]
+  map_star' A := by
+    simpa only [ContinuousLinearMap.star_eq_adjoint] using
+      conjugateOperator_adjoint A
+
+theorem continuous_conjugateOperatorHom :
+    Continuous (conjugateOperatorHom :
+      (RealComplexification E →L[ℂ] RealComplexification E) → (RealComplexification E →L[ℂ] RealComplexification E)) :=
+  isometry_conjugateOperator.continuous
+
+omit [CompleteSpace E] in
+/-- Every complexified real operator is fixed by canonical conjugation. -/
+theorem conjugateOperator_complexify (A : E →L[ℝ] E) :
+    conjugateOperator (complexify A) = complexify A := by
+  apply ContinuousLinearMap.ext
+  intro z
+  apply RealComplexification.ext <;> simp [conjugateOperator_apply]
+
+/-- Continuous real functional calculus of a conjugation-fixed self-adjoint
+operator remains conjugation-fixed. -/
+theorem conjugateOperator_cfc_eq
+    (C : RealComplexification E →L[ℂ] RealComplexification E) (hC : IsSelfAdjoint C)
+    (hfix : conjugateOperator C = C) (f : ℝ → ℝ)
+    (hf : ContinuousOn f (spectrum ℝ C)) :
+    conjugateOperator (cfc f C) = cfc f C := by
+  let φ : C(spectrum ℝ C, ℝ) →⋆ₐ[ℝ] (RealComplexification E →L[ℂ] RealComplexification E) :=
+    conjugateOperatorHom.comp (cfcHom hC)
+  have hφcont : Continuous φ := by
+    exact continuous_conjugateOperatorHom.comp (cfcHom_continuous hC)
+  have hφid : φ ((ContinuousMap.id ℝ).restrict (spectrum ℝ C)) = C := by
+    change conjugateOperator
+      (cfcHom hC ((ContinuousMap.id ℝ).restrict (spectrum ℝ C))) = C
+    rw [cfcHom_id hC]
+    exact hfix
+  have heq : cfcHom hC = φ :=
+    cfcHom_eq_of_continuous_of_map_id hC φ hφcont hφid
+  rw [cfc_apply f C hC hf]
+  let g : C(spectrum ℝ C, ℝ) := ⟨fun x => f x.1, hf.restrict⟩
+  change conjugateOperator (cfcHom hC g) = cfcHom hC g
+  have happ := DFunLike.congr_fun heq g
+  change cfcHom hC g = conjugateOperator (cfcHom hC g) at happ
+  exact happ.symm
+
+/-! ## Descent of conjugation-fixed operators -/
+
+omit [InnerProductSpace ℝ E] [CompleteSpace E] in
+theorem norm_re_le (z : RealComplexification E) : ‖re z‖ ≤ ‖z‖ := by
+  rw [← sq_le_sq₀ (norm_nonneg _) (norm_nonneg _), norm_sq]
+  nlinarith [sq_nonneg ‖im z‖]
+
+/-- Restrict a complex operator to the real copy and take its real coordinate. -/
+noncomputable def realPartOperator
+    (A : RealComplexification E →L[ℂ] RealComplexification E) :
+    E →L[ℝ] E := by
+  let L : E →ₗ[ℝ] E :=
+    { toFun := fun x => re (A (ofReal x))
+      map_add' := fun x y => by simp
+      map_smul' := fun r x => by simp }
+  exact L.mkContinuous ‖A‖ fun x => by
+    calc
+      ‖re (A (ofReal x))‖ ≤ ‖A (ofReal x)‖ := norm_re_le _
+      _ ≤ ‖A‖ * ‖ofReal x‖ := A.le_opNorm _
+      _ = ‖A‖ * ‖x‖ := by rw [ofReal.norm_map]
+
+omit [CompleteSpace E] in
+@[simp]
+theorem realPartOperator_apply (A : RealComplexification E →L[ℂ] RealComplexification E) (x : E) :
+    realPartOperator A x = re (A (ofReal x)) := rfl
+
+omit [CompleteSpace E] in
+theorem fixed_operator_maps_real_to_real
+    {A : RealComplexification E →L[ℂ] RealComplexification E} (hfix : conjugateOperator A = A) (x : E) :
+    im (A (ofReal x)) = 0 := by
+  have hpoint := congrArg (fun B : RealComplexification E →L[ℂ] RealComplexification E => B (ofReal x)) hfix
+  have hcoord := congrArg im hpoint
+  have hneg : -im (A (ofReal x)) = im (A (ofReal x)) := by
+    simpa only [conjugateOperator_apply, conjugation_ofReal, im_conj] using hcoord
+  have htwo : (2 : ℝ) • im (A (ofReal x)) = 0 := by
+    calc
+      (2 : ℝ) • im (A (ofReal x)) =
+          im (A (ofReal x)) + im (A (ofReal x)) := two_smul ℝ _
+      _ = -im (A (ofReal x)) + im (A (ofReal x)) :=
+        congrArg (fun y => y + im (A (ofReal x))) hneg.symm
+      _ = 0 := neg_add_cancel _
+  exact (smul_eq_zero.mp htwo).resolve_left (by norm_num)
+
+theorem fixed_operator_on_ofReal
+    {A : RealComplexification E →L[ℂ] RealComplexification E} (hfix : conjugateOperator A = A) (x : E) :
+    A (ofReal x) = ofReal (realPartOperator A x) := by
+  apply RealComplexification.ext
+  · simp
+  · simp [fixed_operator_maps_real_to_real hfix x]
+
+/-- A conjugation-fixed complex operator is exactly the complexification of its
+restriction to the real copy. -/
+theorem complexify_realPartOperator
+    {A : RealComplexification E →L[ℂ] RealComplexification E} (hfix : conjugateOperator A = A) :
+    complexify (realPartOperator A) = A := by
+  apply ContinuousLinearMap.ext
+  intro z
+  have hz : z = ofReal (re z) + Complex.I • ofReal (im z) := by
+    apply RealComplexification.ext <;> simp
+  calc
+    complexify (realPartOperator A) z =
+        ofReal (realPartOperator A (re z)) +
+          Complex.I • ofReal (realPartOperator A (im z)) := by
+      apply RealComplexification.ext <;> simp
+    _ = A (ofReal (re z)) + Complex.I • A (ofReal (im z)) := by
+      rw [fixed_operator_on_ofReal hfix, fixed_operator_on_ofReal hfix]
+    _ = A z := by
+      rw [← map_smul, ← map_add, ← hz]
+
+/-! ## Complexification and the Gram operator -/
+
+/-- Complexification commutes with the Hilbert-space adjoint. -/
+theorem complexify_adjoint (T : E →L[ℝ] F) :
+    complexify T.adjoint = (complexify T).adjoint := by
+  apply (ContinuousLinearMap.eq_adjoint_iff
+    (complexify T.adjoint) (complexify T)).2
+  intro z w
+  simp only [inner_apply, re_complexify, im_complexify]
+  rw [ContinuousLinearMap.adjoint_inner_left,
+    ContinuousLinearMap.adjoint_inner_left,
+    ContinuousLinearMap.adjoint_inner_left,
+    ContinuousLinearMap.adjoint_inner_left]
+
+theorem complexify_gram (T : E →L[ℝ] F) :
+    complexify (T.adjoint ∘L T) =
+      (complexify T).adjoint ∘L complexify T := by
+  rw [complexify_comp, complexify_adjoint]
+
+
+end
+
+end RealComplexificationFunctionalCalculus
+end ExactSinTheta
+end Experimental
+end DavisKahan
+end ForMathlib

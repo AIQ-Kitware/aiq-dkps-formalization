@@ -5,6 +5,9 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.NaturalGenuine
 import DavisKahan.Experimental.InfiniteDimensional.Sylvester.GenuineOrderedEngineDirect
+import DavisKahan.Experimental.InfiniteDimensional.Sylvester.RealUnbounded
+import DavisKahan.Experimental.InfiniteDimensional.SinTheta.RealSpecializations
+import DavisKahan.Sources.DavisKahan1970.GeneralSinTheta
 
 /-!
 # Full unbounded sine-theta trusted-dependency audit
@@ -39,6 +42,36 @@ namespace ExactSinTheta
 #check sinTheta_unbounded_spectralSubspace_of_genuineSpectrumGap
 #check GenuineGeneralSinThetaProblem.result
 #check GenuineIsometricSinThetaProblem.result
+#check ForMathlib.DavisKahanExt.ClosedOperator.realResolventSet
+#check SpectraBridge.realSpectrum_eq_spectraSpectrum
+#check ClosedOperatorComplexification.isSelfAdjoint_complexify
+#check ClosedOperatorComplexification.unboundedSylvesterGap_complexify
+#check ComplexificationApproximation.approximationNumber_complexify
+#check ComplexificationApproximation.kyFanApproximationGauge_complexify
+#check RealComplexificationFunctionalCalculus.conjugateOperator_cfc_eq
+#check genuineSylvesterIntervalExteriorGap_of_legacy
+#check davisKahan1970_sylvester_complex
+#check sinTheta_unbounded_exact_complex
+#check generalizedSinTheta_unbounded_complex
+#check generalizedSinTheta_unbounded_exact_complex
+#check real_unbounded_sylvester_kyFan
+#check davisKahan1970_sylvester_real
+#check sinTheta_unbounded_exact_real
+#check lowerFramePolarData_real_nonempty
+#check generalizedSinTheta_unbounded_exact_real
+#check directedSinThetaOperatorReal_eq_of_isometry
+#check IsometricSinThetaProblem.result_complex
+#check IsometricSinThetaProblem.result_real
+#check GeneralSinThetaProblem.result
+#check RealGeneralSinThetaProblem.result
+#check BoundedGeneralSinThetaProblem.result
+#check RealBoundedGeneralSinThetaProblem.result
+#check ForMathlib.DavisKahan1970.sinTheta
+#check ForMathlib.DavisKahan1970.sinTheta_real
+#check ForMathlib.DavisKahan1970.generalizedSinTheta
+#check ForMathlib.DavisKahan1970.generalizedSinTheta_real
+#check ForMathlib.DavisKahan1970.generalizedSinTheta_boundedSpecialization
+#check ForMathlib.DavisKahan1970.generalizedSinTheta_boundedSpecialization_real
 
 #print axioms sylvesterNeumannPartialSum_cauchy
 #print axioms sylvesterNeumannSolution_mem
@@ -55,6 +88,36 @@ namespace ExactSinTheta
 #print axioms sinTheta_unbounded_spectralSubspace_of_genuineSpectrumGap
 #print axioms GenuineGeneralSinThetaProblem.result
 #print axioms GenuineIsometricSinThetaProblem.result
+#print axioms ForMathlib.DavisKahanExt.ClosedOperator.realSpectrum
+#print axioms SpectraBridge.realSpectrum_eq_spectraSpectrum
+#print axioms ClosedOperatorComplexification.isSelfAdjoint_complexify
+#print axioms ClosedOperatorComplexification.unboundedSylvesterGap_complexify
+#print axioms ComplexificationApproximation.approximationNumber_complexify
+#print axioms ComplexificationApproximation.kyFanApproximationGauge_complexify
+#print axioms RealComplexificationFunctionalCalculus.conjugateOperator_cfc_eq
+#print axioms genuineSylvesterIntervalExteriorGap_of_legacy
+#print axioms davisKahan1970_sylvester_complex
+#print axioms sinTheta_unbounded_exact_complex
+#print axioms generalizedSinTheta_unbounded_complex
+#print axioms generalizedSinTheta_unbounded_exact_complex
+#print axioms real_unbounded_sylvester_kyFan
+#print axioms davisKahan1970_sylvester_real
+#print axioms sinTheta_unbounded_exact_real
+#print axioms lowerFramePolarData_real_nonempty
+#print axioms generalizedSinTheta_unbounded_exact_real
+#print axioms directedSinThetaOperatorReal_eq_of_isometry
+#print axioms IsometricSinThetaProblem.result_complex
+#print axioms IsometricSinThetaProblem.result_real
+#print axioms GeneralSinThetaProblem.result
+#print axioms RealGeneralSinThetaProblem.result
+#print axioms BoundedGeneralSinThetaProblem.result
+#print axioms RealBoundedGeneralSinThetaProblem.result
+#print axioms ForMathlib.DavisKahan1970.sinTheta
+#print axioms ForMathlib.DavisKahan1970.sinTheta_real
+#print axioms ForMathlib.DavisKahan1970.generalizedSinTheta
+#print axioms ForMathlib.DavisKahan1970.generalizedSinTheta_real
+#print axioms ForMathlib.DavisKahan1970.generalizedSinTheta_boundedSpecialization
+#print axioms ForMathlib.DavisKahan1970.generalizedSinTheta_boundedSpecialization_real
 
 end ExactSinTheta
 end Experimental
