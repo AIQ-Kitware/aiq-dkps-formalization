@@ -3,8 +3,8 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.Experimental.InfiniteDimensional.SinTheta.GenuineAllGap
-import DavisKahan.Experimental.InfiniteDimensional.Sylvester.GenuineOrderedEngine
+import DavisKahan.Experimental.InfiniteDimensional.SinTheta.NaturalGenuine
+import DavisKahan.Experimental.InfiniteDimensional.Sylvester.GenuineOrderedEngineDirect
 
 /-!
 # Full unbounded sine-theta trusted-dependency audit
@@ -21,18 +21,38 @@ namespace DavisKahan
 namespace Experimental
 namespace ExactSinTheta
 
+#check sylvesterNeumannPartialSum_cauchy
+#check sylvesterNeumannSolution_mem
+#check sylvesterNeumannSolution_eq
+#check sylvester_mem_and_gauge_le_of_bound_inverse
+#check sylvester_mem_and_gauge_le_of_bound_inverse_swapped
+#check unbounded_sylvester_mem_and_gauge_le_direct
+#check unbounded_sylvester_mem_and_gauge_le_direct_swapped
 #check GenuineOrderedSylvesterEngine
+#check directGenuineOrderedSylvesterEngine
 #check canonicalGenuineOrderedSylvesterEngine
 #check davisKahan1970_sylvester_of_genuineSpectrumGap
 #check generalizedSinTheta_unbounded_exact_of_genuineSpectrumGap
 #check sinTheta_unbounded_exact_of_genuineSpectrumGap
+#check unboundedSinThetaDataOfSpectralSubspace
+#check spectralSubspace_orthogonalExactDecomposition
+#check sinTheta_unbounded_spectralSubspace_of_genuineSpectrumGap
 #check GenuineGeneralSinThetaProblem.result
 #check GenuineIsometricSinThetaProblem.result
 
+#print axioms sylvesterNeumannPartialSum_cauchy
+#print axioms sylvesterNeumannSolution_mem
+#print axioms sylvesterNeumannSolution_eq
+#print axioms sylvester_mem_and_gauge_le_of_bound_inverse
+#print axioms sylvester_mem_and_gauge_le_of_bound_inverse_swapped
+#print axioms unbounded_sylvester_mem_and_gauge_le_direct
+#print axioms unbounded_sylvester_mem_and_gauge_le_direct_swapped
+#print axioms directGenuineOrderedSylvesterEngine
 #print axioms canonicalGenuineOrderedSylvesterEngine
 #print axioms davisKahan1970_sylvester_of_genuineSpectrumGap
 #print axioms generalizedSinTheta_unbounded_exact_of_genuineSpectrumGap
 #print axioms sinTheta_unbounded_exact_of_genuineSpectrumGap
+#print axioms sinTheta_unbounded_spectralSubspace_of_genuineSpectrumGap
 #print axioms GenuineGeneralSinThetaProblem.result
 #print axioms GenuineIsometricSinThetaProblem.result
 

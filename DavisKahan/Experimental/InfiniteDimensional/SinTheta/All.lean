@@ -11,6 +11,8 @@ import DavisKahan.Experimental.InfiniteDimensional.SinTheta.Unbounded
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.GenuineUnbounded
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.GenuineUnboundedGauge
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.GenuineIntervalExterior
+import DavisKahan.Experimental.InfiniteDimensional.SinTheta.GenuineAllGap
+import DavisKahan.Experimental.InfiniteDimensional.SinTheta.NaturalGenuine
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.Canonical
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.ContinuationAll
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.Specializations

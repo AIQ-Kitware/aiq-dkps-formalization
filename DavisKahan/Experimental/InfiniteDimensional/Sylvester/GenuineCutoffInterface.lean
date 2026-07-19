@@ -10,12 +10,9 @@ import DavisKahan.Experimental.InfiniteDimensional.Core.UnboundedSpectral
 
 The ordered two-unbounded argument needs a small, stable interface rather than
 an undifferentiated dependency on the legacy spectral facade.  This leaf names
-that interface explicitly.  A direct Spectra implementation can be supplied
-later without changing the downstream finite-cutoff and Ky Fan arguments.
-
-The legacy constructors at the end package the current declarations.  They are
-compatibility witnesses, not a claim that the direct Spectra implementation is
-finished.
+that interface explicitly.  Direct vendored-Spectra implementations are
+provided by `GenuineSpectralCutoff` and `GenuineBoundedTruncation`, while the
+legacy constructors at the end remain available as compatibility witnesses.
 -/
 
 open scoped InnerProductSpace Topology
