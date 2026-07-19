@@ -3,15 +3,15 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.Experimental.InfiniteDimensional.Ideals.ApproximationNumbers
+import DavisKahan.Experimental.InfiniteDimensional.Ideals.ApproximationNumbersReal
 
 /-!
-# Real-Hilbert-space approximation-number roadmap
+# Real-Hilbert-space approximation-number compatibility layer
 
-The complex localization, strong-cutoff, and infinite-dimensional Ky Fan
-triangle arguments are accepted in `ApproximationNumbers`.  This module records
-the corresponding real statements needed before the remaining scalar-generic
-wrappers can dispatch to the real and complex cases.
+The real localization, strong-cutoff, and infinite-dimensional Ky Fan triangle
+arguments are proved in `ApproximationNumbersReal`. This module exposes the
+three scalar-specific endpoints in the parent `ExactSinTheta` namespace used by
+the aggregate ideal infrastructure and earlier roadmap clients.
 -/
 
 namespace ForMathlib
@@ -39,7 +39,9 @@ theorem approximationSingularValue_comp_strongProjection_tendsto_real
     Tendsto
       (fun i => approximationSingularValue n (K ∘L P i))
       l (𝓝 (approximationSingularValue n K)) := by
-  sorry
+  exact
+    ApproximationNumbersReal.approximationSingularValue_comp_strongProjection_tendsto_real
+      hPproj hP n K
 
 /-- Real-Hilbert-space finite Ky Fan convergence under strongly convergent
 orthogonal cutoffs. -/
@@ -51,14 +53,16 @@ theorem kyFanApproximationGauge_comp_strongProjection_tendsto_real
     Tendsto
       (fun i => kyFanApproximationGauge k (K ∘L P i))
       l (𝓝 (kyFanApproximationGauge k K)) := by
-  sorry
+  exact
+    ApproximationNumbersReal.kyFanApproximationGauge_comp_strongProjection_tendsto_real
+      hPproj hP k K
 
 /-- Real-Hilbert-space infinite-dimensional Ky Fan triangle inequality. -/
 theorem kyFanApproximationGauge_add_le_real
     (k : ℕ) (K L : E →L[ℝ] F) :
     kyFanApproximationGauge k (K + L) ≤
       kyFanApproximationGauge k K + kyFanApproximationGauge k L := by
-  sorry
+  exact ApproximationNumbersReal.kyFanApproximationGauge_add_le_real k K L
 
 end ExactSinTheta
 end Experimental
