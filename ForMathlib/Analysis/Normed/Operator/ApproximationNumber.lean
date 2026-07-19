@@ -3,7 +3,6 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking, Niels Voss, Arnav Mehta, Rawad Kansoh
 -/
-import Mathlib.Analysis.InnerProductSpace.Adjoint
 import Mathlib.Analysis.Normed.Operator.NNNorm
 import Mathlib.LinearAlgebra.Dimension.LinearMap
 import Mathlib.LinearAlgebra.Dimension.Finite
@@ -16,10 +15,10 @@ PR #32126 to the project's pinned Mathlib revision.  The zero-based
 approximation number of `T` at index `n` is the operator-norm distance from
 `T` to continuous linear maps of rank at most `n`.
 
-The declarations here deliberately stop before Hilbert-space-specific adjoint
-invariance and strong-cutoff convergence.  Those results live in the
-Davis--Kahan ideal layer, where the complete-space and inner-product
-hypotheses are available.
+The declarations here deliberately stop before Hilbert-space-specific results.
+Adjoint invariance is in `ApproximationNumberAdjoint`; finite-dimensional
+singular-value identification and infinite-dimensional min--max lower bounds
+are provided by separate sibling modules.
 -/
 
 open NNReal
@@ -323,74 +322,6 @@ theorem approximationNumber_smul (c : 𝕜) (T : E →L[𝕜] F) (n : ℕ) :
       _ = (c • T).approximationNumber n := by
         rw [← mul_assoc, mul_inv_cancel₀ hnorm_ne, one_mul]
 
-
-end ContinuousLinearMap
-
-namespace ContinuousLinearMap
-
-open Cardinal
-
-variable {𝕜 : Type u} [RCLike 𝕜]
-variable {E F : Type v}
-variable [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
-variable [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
-
-/-- A finite-rank bounded operator has an adjoint of no larger rank.
-
-The proof factors the operator through its finite-dimensional range.  After
- taking adjoints, the adjoint still factors through that same range. -/
-private theorem rank_adjoint_le_rank_of_rank_le_nat
-    (R : E →L[𝕜] F) {n : ℕ} (hR : R.rank ≤ (n : Cardinal)) :
-    R.adjoint.rank ≤ R.rank := by
-  have hlt : R.rank < Cardinal.aleph0 :=
-    hR.trans_lt Cardinal.natCast_lt_aleph0
-  have hrank_eq : R.rank = (R.rank.toNat : Cardinal) := by
-    exact (Cardinal.cast_toNat_of_lt_aleph0 hlt).symm
-  letI : FiniteDimensional 𝕜 R.range :=
-    Module.finite_of_rank_eq_nat hrank_eq
-  letI : CompleteSpace R.range := FiniteDimensional.complete 𝕜 R.range
-  have hadj : R.adjoint =
-      R.rangeRestrict.adjoint ∘L R.range.subtypeL.adjoint := by
-    rw [← ContinuousLinearMap.adjoint_comp]
-    congr 1
-  rw [hadj]
-  change LinearMap.rank
-      (R.rangeRestrict.adjoint.toLinearMap.comp
-        R.range.subtypeL.adjoint.toLinearMap) ≤
-    LinearMap.rank R.toLinearMap
-  calc
-    LinearMap.rank
-        (R.rangeRestrict.adjoint.toLinearMap.comp
-          R.range.subtypeL.adjoint.toLinearMap)
-        ≤ LinearMap.rank R.rangeRestrict.adjoint.toLinearMap :=
-      LinearMap.rank_comp_le_left _ _
-    _ ≤ Module.rank 𝕜 R.range :=
-      LinearMap.rank_le_domain _
-    _ = LinearMap.rank R.toLinearMap := rfl
-
-/-- One half of adjoint invariance for approximation numbers. -/
-private theorem approximationNumber_adjoint_le
-    (T : E →L[𝕜] F) (n : ℕ) :
-    T.adjoint.approximationNumber n ≤ T.approximationNumber n := by
-  apply T.le_approximationNumber
-  intro R hR
-  calc
-    T.adjoint.approximationNumber n ≤ ‖T.adjoint - R.adjoint‖₊ :=
-      T.adjoint.approximationNumber_le
-        ((rank_adjoint_le_rank_of_rank_le_nat R hR).trans hR)
-    _ = ‖T - R‖₊ := by
-      apply NNReal.eq
-      simpa only [coe_nnnorm, ← map_sub] using
-        (ContinuousLinearMap.adjoint.norm_map (T - R))
-
-/-- Approximation numbers of bounded operators between Hilbert spaces are
- invariant under adjoint. -/
-theorem approximationNumber_adjoint (T : E →L[𝕜] F) (n : ℕ) :
-    T.adjoint.approximationNumber n = T.approximationNumber n := by
-  apply le_antisymm
-  · exact approximationNumber_adjoint_le T n
-  · simpa only [ContinuousLinearMap.adjoint_adjoint] using
-      (approximationNumber_adjoint_le T.adjoint n)
 
 end ContinuousLinearMap
 

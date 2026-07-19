@@ -7,6 +7,7 @@ import DavisKahan.Experimental.InfiniteDimensional.SinTheta.ContinuationAssembly
 import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.Basic
 import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.PVMSubspace
 import Spectra.SpectralTheory.ResolventForm
+import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Integral
 
 /-!
 # Spectral-projection target for contour continuation
@@ -336,6 +337,45 @@ theorem SpectralSeparatingContour.resolventOneForm_eq_cfc
     ((continuous_id.sub continuous_const).continuousOn).inv₀ hne
   rw [resolventOneForm_apply, Γ.resolventOperator_eq_cfc t]
   rw [← cfc_const_mul v (fun w : ℂ => (w - Γ.path t)⁻¹) A hgcont]
+
+
+/-! ## Interval-integral calculus bridge -/
+
+/-- The bundled continuous functional calculus commutes with an oriented
+interval integral of continuous spectrum-valued symbols. -/
+theorem cfcL_intervalIntegral
+    (A : H →L[ℂ] H) (hA : IsStarNormal A)
+    (f : ℝ → C(spectrum ℂ A, ℂ)) {a b : ℝ}
+    (hf : IntervalIntegrable f volume a b) :
+    (∫ t in a..b, cfcL (a := A) hA (f t)) =
+      cfcL (a := A) hA (∫ t in a..b, f t) := by
+  change
+    (∫ t in Set.Ioc a b, cfcL (a := A) hA (f t)) -
+        (∫ t in Set.Ioc b a, cfcL (a := A) hA (f t)) =
+      cfcL (a := A) hA
+        ((∫ t in Set.Ioc a b, f t) - (∫ t in Set.Ioc b a, f t))
+  rw [map_sub]
+  congr 1
+  · exact cfcL_integral A f hf.1 hA
+  · exact cfcL_integral A f hf.2 hA
+
+/-- On an ordered real interval, the unbundled continuous functional calculus
+commutes with integration once the restricted scalar symbols form an
+integrable continuous-map-valued function. -/
+theorem cfc_intervalIntegral_of_le'
+    (A : H →L[ℂ] H) (hA : IsStarNormal A)
+    (f : ℝ → ℂ → ℂ) {a b : ℝ} (hab : a ≤ b)
+    (hf_cont : ∀ᵐ t ∂(volume.restrict (Set.Ioc a b)),
+      ContinuousOn (f t) (spectrum ℂ A))
+    (hf_int : IntegrableOn
+      (fun t : ℝ =>
+        ContinuousMap.mkD ((spectrum ℂ A).restrict (f t)) 0)
+      (Set.Ioc a b) volume) :
+    cfc (fun z => ∫ t in a..b, f t z) A =
+      ∫ t in a..b, cfc (f t) A := by
+  rw [intervalIntegral.integral_of_le hab,
+    intervalIntegral.integral_of_le hab]
+  exact cfc_integral' f A hf_cont hf_int hA
 
 end BoundedSpectralProjection
 

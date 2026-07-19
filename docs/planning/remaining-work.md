@@ -17,7 +17,10 @@ work includes finite-restriction localization, real complexification and
 conjugation descent, strong orthogonal-cutoff convergence, and finite Ky Fan
 triangle inequalities. The former real roadmap module is now only a stable
 compatibility import. Remaining work for this stack is upstream shaping rather
-than project proof closure; see candidate #15 in `mathlib-candidates.md`.
+than project proof closure; see candidate #15 in `mathlib-candidates.md`. The foundational upstream layer is now physically split into
+`ApproximationNumber`, `ApproximationNumberAdjoint`,
+`ApproximationNumberSingularValues`, and `ApproximationNumberMinMax`;
+`ApproximationNumberHilbert` remains a compatibility aggregate.
 
 ## Guiding priority (user-directed 2026-06-12)
 
