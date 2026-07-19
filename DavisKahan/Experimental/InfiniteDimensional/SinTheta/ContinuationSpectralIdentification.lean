@@ -30,6 +30,7 @@ namespace ForMathlib
 namespace DavisKahanExt
 
 open Set
+open MeasureTheory
 open scoped InnerProductSpace
 open Spectra.QuantumMechanics.SpectralTheory
 open DavisKahan.Experimental.Foundation
@@ -373,9 +374,8 @@ theorem cfc_intervalIntegral_of_le'
       (Set.Ioc a b) volume) :
     cfc (fun z => ∫ t in a..b, f t z) A =
       ∫ t in a..b, cfc (f t) A := by
-  rw [intervalIntegral.integral_of_le hab,
-    intervalIntegral.integral_of_le hab]
-  exact cfc_integral' f A hf_cont hf_int hA
+  simpa only [intervalIntegral.integral_of_le hab] using
+    (cfc_integral' f A hf_cont hf_int hA)
 
 end BoundedSpectralProjection
 
