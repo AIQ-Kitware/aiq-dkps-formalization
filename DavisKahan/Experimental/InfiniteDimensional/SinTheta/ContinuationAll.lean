@@ -13,13 +13,15 @@ import DavisKahan.Experimental.InfiniteDimensional.SinTheta.ContinuationSelected
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.ContinuationSelectedBranch
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.ContinuationQuarterAcute
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.ContinuationSelectedGraph
+import DavisKahan.Experimental.InfiniteDimensional.SinTheta.ContinuationWitnessGraph
 
 /-!
 # Concrete continuation infrastructure
 
 This aggregate exposes the completed contour, Riesz-integral, transport,
 assembly, rotation-chain, spectral-identification, selected-subspace transport,
-selected-branch, quantitative quarter-acuteness, and selected-graph leaves.
+selected-branch, quantitative quarter-acuteness, selected-graph, selected-reduction,
+and witness-native canonical graph leaves.
 The older
 `ContinuationRoadmap` scaffold is intentionally not part of this aggregate.
 -/
