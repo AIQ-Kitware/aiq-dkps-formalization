@@ -305,8 +305,8 @@ theorem spectralCutoff_sylvester_equation
 
 section ApproximationNumberEndpointAssumptions
 
-variable [HasApproximationNumberStrongCutoff 𝕜]
-variable [HasKyFanApproximationGaugeTriangle 𝕜]
+variable [HasApproximationNumberStrongCutoff.{u, v, 0} 𝕜]
+variable [HasKyFanApproximationGaugeTriangle.{u, v} 𝕜]
 
 /-- Finite Ky Fan inequalities for all right spectral cutoffs pass to the
 original operators.  This is the topological limit step in the two-unbounded
@@ -349,7 +349,7 @@ theorem kyFanApproximationGauge_le_of_spectralCutoff_le
 /-- Finite Ky Fan gauges also converge under strong orthogonal cutoffs on
 the target side. -/
 theorem kyFanApproximationGauge_left_comp_strongProjection_tendsto
-    {ι : Type*} {P : ι → E →L[𝕜] E} {l : Filter ι}
+    {ι : Type} {P : ι → E →L[𝕜] E} {l : Filter ι}
     (hPproj : ∀ i, IsOrthogonalProjectionMap (P i))
     (hP : StronglyTendsto P l (ContinuousLinearMap.id 𝕜 E))
     (k : ℕ) (K : F →L[𝕜] E) :
