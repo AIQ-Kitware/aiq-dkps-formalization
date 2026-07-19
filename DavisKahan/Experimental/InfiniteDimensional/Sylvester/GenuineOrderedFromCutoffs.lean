@@ -152,8 +152,11 @@ theorem interfaceFilledTruncation_lowerBound
   change a * ‖x‖ ^ 2 ≤
     RCLike.re ⟪T.truncation τ x +
       (a : ℂ) • (x - P.cutoff τ x), x⟫_ℂ
-  rw [inner_add_left, map_add, inner_smul_left, starRingEnd_apply,
-    RCLike.conj_ofReal, RCLike.re_ofReal_mul, hTinner, hQinner]
+  have hre : ∀ w : ℂ, RCLike.re ((a : ℂ) * w) = a * RCLike.re w := by
+    intro w
+    simp [RCLike.re_to_complex, Complex.mul_re]
+  rw [inner_add_left, map_add, inner_smul_left, Complex.conj_ofReal,
+    hre, hTinner, hQinner]
   rw [← hproj.2]
   linarith
 
@@ -217,8 +220,11 @@ theorem interfaceFilledTruncation_upperBound
   have hcut := T.upperBound ha hτ x
   change RCLike.re ⟪T.truncation τ x +
       (a : ℂ) • (x - P.cutoff τ x), x⟫_ℂ ≤ a * ‖x‖ ^ 2
-  rw [inner_add_left, map_add, inner_smul_left, starRingEnd_apply,
-    RCLike.conj_ofReal, RCLike.re_ofReal_mul, hTinner, hQinner]
+  have hre : ∀ w : ℂ, RCLike.re ((a : ℂ) * w) = a * RCLike.re w := by
+    intro w
+    simp [RCLike.re_to_complex, Complex.mul_re]
+  rw [inner_add_left, map_add, inner_smul_left, Complex.conj_ofReal,
+    hre, hTinner, hQinner]
   rw [← hproj.2]
   linarith
 
