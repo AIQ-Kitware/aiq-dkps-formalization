@@ -17,12 +17,24 @@ majorization of two pairs of operators remains true after the pairs are put in
 orthogonal blocks.  A triangle inequality loses the theorem's constant and is
 not an acceptable substitute.
 
-This file develops the infinite-dimensional version.  The proof localizes a
-finite Ky Fan prefix to finite-dimensional source and target subspaces, applies
-the already proved finite-dimensional block-sum Fan theorem, and sends the
-compressions to the identity.  The result is deliberately stated directly for
-approximation numbers, so it applies to both real and complex Hilbert spaces
-and to every Ky-Fan-dominant ideal.
+This file develops the infinite-dimensional version.  The exact Ky Fan prefix of
+an orthogonal block sum is identified with the largest split
+`Fan r A + Fan (k - r) B`, which is the merge formula for two decreasing
+singular-value lists.  No compactness is assumed: the proof rests on three
+approximation-number estimates that hold for arbitrary bounded operators,
+
+* `a n A ≤ a n (A ⊕ B)`, by isometric compression to a summand;
+* `a (r + s) (A ⊕ B) ≤ max (a r A) (a s B)`, by taking a block-diagonal
+  approximant, whose rank is at most `r + s` and whose error norm is the larger
+  of the two block errors;
+* `min (a i A) (a j B) ≤ a (i + j + 1) (A ⊕ B)`, by the rank-safe min--max
+  principle: two independent lower witnesses of dimensions `i + 1` and `j + 1`
+  span an `(i + j + 2)`-dimensional witness for the block sum,
+
+together with two elementary greedy interleaving arguments on real sequences.
+The third estimate uses the complex Courant--Fischer bridge, so the exact
+prefix formula is stated over `ℂ`.  The result is phrased directly for
+approximation numbers, hence applies to every Ky-Fan-dominant ideal.
 -/
 
 namespace ForMathlib
@@ -82,6 +94,425 @@ theorem continuousOrthogonalBlockSum_zero_left
         WithLp 2 (E₀ × E₁) →L[𝕜] E₀ × E₁) :=
   rfl
 
+section Aux
+
+variable {E₀ E₁ F₀ F₁ : Type v}
+  [NormedAddCommGroup E₀] [InnerProductSpace 𝕜 E₀] [CompleteSpace E₀]
+  [NormedAddCommGroup E₁] [InnerProductSpace 𝕜 E₁] [CompleteSpace E₁]
+  [NormedAddCommGroup F₀] [InnerProductSpace 𝕜 F₀] [CompleteSpace F₀]
+  [NormedAddCommGroup F₁] [InnerProductSpace 𝕜 F₁] [CompleteSpace F₁]
+
+/-- Isometric inclusion of the first summand into the `L²` sum. -/
+def blockInl : E₀ →L[𝕜] WithLp 2 (E₀ × E₁) :=
+  ((WithLp.prodContinuousLinearEquiv 2 𝕜 E₀ E₁).symm :
+      (E₀ × E₁) →L[𝕜] WithLp 2 (E₀ × E₁)) ∘L ContinuousLinearMap.inl 𝕜 E₀ E₁
+
+/-- Isometric inclusion of the second summand into the `L²` sum. -/
+def blockInr : E₁ →L[𝕜] WithLp 2 (E₀ × E₁) :=
+  ((WithLp.prodContinuousLinearEquiv 2 𝕜 E₀ E₁).symm :
+      (E₀ × E₁) →L[𝕜] WithLp 2 (E₀ × E₁)) ∘L ContinuousLinearMap.inr 𝕜 E₀ E₁
+
+omit [CompleteSpace E₀] [CompleteSpace E₁] in
+@[simp]
+theorem blockInl_apply (x : E₀) :
+    (blockInl (E₁ := E₁) (𝕜 := 𝕜) x) = WithLp.toLp 2 (x, (0 : E₁)) := rfl
+
+omit [CompleteSpace E₀] [CompleteSpace E₁] in
+@[simp]
+theorem blockInr_apply (y : E₁) :
+    (blockInr (E₀ := E₀) (𝕜 := 𝕜) y) = WithLp.toLp 2 ((0 : E₀), y) := rfl
+
+omit [CompleteSpace E₀] [CompleteSpace E₁] in
+theorem nnnorm_blockInl_le : ‖(blockInl : E₀ →L[𝕜] WithLp 2 (E₀ × E₁))‖₊ ≤ 1 := by
+  apply ContinuousLinearMap.opNNNorm_le_bound
+  intro x
+  simp
+
+omit [CompleteSpace E₀] [CompleteSpace E₁] in
+theorem nnnorm_blockInr_le : ‖(blockInr : E₁ →L[𝕜] WithLp 2 (E₀ × E₁))‖₊ ≤ 1 := by
+  apply ContinuousLinearMap.opNNNorm_le_bound
+  intro x
+  simp
+
+omit [CompleteSpace F₀] [CompleteSpace F₁] in
+theorem nnnorm_fstL_le : ‖(WithLp.fstL 2 𝕜 F₀ F₁)‖₊ ≤ 1 := by
+  apply ContinuousLinearMap.opNNNorm_le_bound
+  intro x
+  have h := WithLp.prod_norm_sq_eq_of_L2 x
+  have h1 : ‖x.fst‖ ^ 2 ≤ ‖x‖ ^ 2 := by nlinarith [sq_nonneg ‖x.snd‖]
+  have h2 : ‖x.fst‖₊ ≤ ‖x‖₊ := by
+    exact_mod_cast le_of_sq_le_sq h1 (norm_nonneg x)
+  simpa using h2
+
+omit [CompleteSpace F₀] [CompleteSpace F₁] in
+theorem nnnorm_sndL_le : ‖(WithLp.sndL 2 𝕜 F₀ F₁)‖₊ ≤ 1 := by
+  apply ContinuousLinearMap.opNNNorm_le_bound
+  intro x
+  have h := WithLp.prod_norm_sq_eq_of_L2 x
+  have h1 : ‖x.snd‖ ^ 2 ≤ ‖x‖ ^ 2 := by nlinarith [sq_nonneg ‖x.fst‖]
+  have h2 : ‖x.snd‖₊ ≤ ‖x‖₊ := by
+    exact_mod_cast le_of_sq_le_sq h1 (norm_nonneg x)
+  simpa using h2
+
+/-- The first component is recovered from the block sum by an isometric
+compression. -/
+theorem fstL_comp_blockSum_comp_blockInl (A : E₀ →L[𝕜] F₀) (B : E₁ →L[𝕜] F₁) :
+    (WithLp.fstL 2 𝕜 F₀ F₁) ∘L continuousOrthogonalBlockSum A B ∘L
+        (blockInl : E₀ →L[𝕜] WithLp 2 (E₀ × E₁)) = A := by
+  ext x
+  simp
+
+/-- The second component is recovered from the block sum by an isometric
+compression. -/
+theorem sndL_comp_blockSum_comp_blockInr (A : E₀ →L[𝕜] F₀) (B : E₁ →L[𝕜] F₁) :
+    (WithLp.sndL 2 𝕜 F₀ F₁) ∘L continuousOrthogonalBlockSum A B ∘L
+        (blockInr : E₁ →L[𝕜] WithLp 2 (E₀ × E₁)) = B := by
+  ext x
+  simp
+
+/-- Every approximation number of a summand is dominated by the corresponding
+approximation number of the block sum. -/
+theorem approximationNumber_le_blockSum_left
+    (A : E₀ →L[𝕜] F₀) (B : E₁ →L[𝕜] F₁) (n : ℕ) :
+    A.approximationNumber n ≤
+      (continuousOrthogonalBlockSum A B).approximationNumber n := by
+  have h := ContinuousLinearMap.approximationNumber_comp_comp_le
+    (WithLp.fstL 2 𝕜 F₀ F₁) (continuousOrthogonalBlockSum A B)
+    (blockInl : E₀ →L[𝕜] WithLp 2 (E₀ × E₁)) n
+  rw [fstL_comp_blockSum_comp_blockInl] at h
+  refine h.trans ?_
+  calc ‖(WithLp.fstL 2 𝕜 F₀ F₁)‖₊ *
+        (continuousOrthogonalBlockSum A B).approximationNumber n *
+        ‖(blockInl : E₀ →L[𝕜] WithLp 2 (E₀ × E₁))‖₊
+      ≤ 1 * (continuousOrthogonalBlockSum A B).approximationNumber n * 1 := by
+        gcongr
+        · exact nnnorm_fstL_le
+        · exact nnnorm_blockInl_le
+    _ = _ := by rw [one_mul, mul_one]
+
+/-- Every approximation number of the second summand is dominated by the
+corresponding approximation number of the block sum. -/
+theorem approximationNumber_le_blockSum_right
+    (A : E₀ →L[𝕜] F₀) (B : E₁ →L[𝕜] F₁) (n : ℕ) :
+    B.approximationNumber n ≤
+      (continuousOrthogonalBlockSum A B).approximationNumber n := by
+  have h := ContinuousLinearMap.approximationNumber_comp_comp_le
+    (WithLp.sndL 2 𝕜 F₀ F₁) (continuousOrthogonalBlockSum A B)
+    (blockInr : E₁ →L[𝕜] WithLp 2 (E₀ × E₁)) n
+  rw [sndL_comp_blockSum_comp_blockInr] at h
+  refine h.trans ?_
+  calc ‖(WithLp.sndL 2 𝕜 F₀ F₁)‖₊ *
+        (continuousOrthogonalBlockSum A B).approximationNumber n *
+        ‖(blockInr : E₁ →L[𝕜] WithLp 2 (E₀ × E₁))‖₊
+      ≤ 1 * (continuousOrthogonalBlockSum A B).approximationNumber n * 1 := by
+        gcongr
+        · exact nnnorm_sndL_le
+        · exact nnnorm_blockInr_le
+    _ = _ := by rw [one_mul, mul_one]
+
+/-- The operator norm of a block sum is the larger of the two block norms;
+only the upper bound is needed here. -/
+theorem nnnorm_continuousOrthogonalBlockSum_le
+    (A : E₀ →L[𝕜] F₀) (B : E₁ →L[𝕜] F₁) :
+    ‖continuousOrthogonalBlockSum A B‖₊ ≤ max ‖A‖₊ ‖B‖₊ := by
+  apply ContinuousLinearMap.opNNNorm_le_bound
+  intro x
+  have hgoal : ‖continuousOrthogonalBlockSum A B x‖ ≤ (max ‖A‖ ‖B‖) * ‖x‖ := by
+    have hM : (0 : ℝ) ≤ max ‖A‖ ‖B‖ := le_trans (norm_nonneg A) (le_max_left _ _)
+    have hx := WithLp.prod_norm_sq_eq_of_L2 x
+    have hy := WithLp.prod_norm_sq_eq_of_L2 (continuousOrthogonalBlockSum A B x)
+    have hfst : ‖(continuousOrthogonalBlockSum A B x).fst‖ ≤ max ‖A‖ ‖B‖ * ‖x.fst‖ := by
+      have : ‖A x.fst‖ ≤ ‖A‖ * ‖x.fst‖ := A.le_opNorm _
+      have h2 : ‖A‖ * ‖x.fst‖ ≤ max ‖A‖ ‖B‖ * ‖x.fst‖ :=
+        mul_le_mul_of_nonneg_right (le_max_left _ _) (norm_nonneg _)
+      simpa using this.trans h2
+    have hsnd : ‖(continuousOrthogonalBlockSum A B x).snd‖ ≤ max ‖A‖ ‖B‖ * ‖x.snd‖ := by
+      have : ‖B x.snd‖ ≤ ‖B‖ * ‖x.snd‖ := B.le_opNorm _
+      have h2 : ‖B‖ * ‖x.snd‖ ≤ max ‖A‖ ‖B‖ * ‖x.snd‖ :=
+        mul_le_mul_of_nonneg_right (le_max_right _ _) (norm_nonneg _)
+      simpa using this.trans h2
+    have hsq : ‖continuousOrthogonalBlockSum A B x‖ ^ 2 ≤ (max ‖A‖ ‖B‖ * ‖x‖) ^ 2 := by
+      rw [hy, mul_pow, hx]
+      have h1 : ‖(continuousOrthogonalBlockSum A B x).fst‖ ^ 2 ≤
+          (max ‖A‖ ‖B‖) ^ 2 * ‖x.fst‖ ^ 2 := by
+        have := mul_pow (max ‖A‖ ‖B‖) ‖x.fst‖ 2
+        nlinarith [norm_nonneg ((continuousOrthogonalBlockSum A B x).fst),
+          norm_nonneg x.fst, hfst, hM]
+      have h2 : ‖(continuousOrthogonalBlockSum A B x).snd‖ ^ 2 ≤
+          (max ‖A‖ ‖B‖) ^ 2 * ‖x.snd‖ ^ 2 := by
+        nlinarith [norm_nonneg ((continuousOrthogonalBlockSum A B x).snd),
+          norm_nonneg x.snd, hsnd, hM]
+      nlinarith [h1, h2]
+    exact le_of_sq_le_sq hsq (mul_nonneg hM (norm_nonneg x))
+  exact_mod_cast hgoal
+
+/-- A block sum splits as a sum of two compressions, one per summand. -/
+theorem continuousOrthogonalBlockSum_eq_add
+    (R : E₀ →L[𝕜] F₀) (Q : E₁ →L[𝕜] F₁) :
+    continuousOrthogonalBlockSum R Q =
+      ((blockInl : F₀ →L[𝕜] WithLp 2 (F₀ × F₁)) ∘L R ∘L WithLp.fstL 2 𝕜 E₀ E₁) +
+        ((blockInr : F₁ →L[𝕜] WithLp 2 (F₀ × F₁)) ∘L Q ∘L WithLp.sndL 2 𝕜 E₀ E₁) := by
+  ext x
+  apply WithLp.ofLp_injective 2
+  simp
+
+/-- Difference of block sums is the block sum of the differences. -/
+theorem continuousOrthogonalBlockSum_sub
+    (A R : E₀ →L[𝕜] F₀) (B Q : E₁ →L[𝕜] F₁) :
+    continuousOrthogonalBlockSum A B - continuousOrthogonalBlockSum R Q =
+      continuousOrthogonalBlockSum (A - R) (B - Q) := by
+  ext x
+  apply WithLp.ofLp_injective 2
+  simp
+
+/-- Ranks add across an orthogonal block sum. -/
+theorem rank_continuousOrthogonalBlockSum_le
+    (R : E₀ →L[𝕜] F₀) (Q : E₁ →L[𝕜] F₁) :
+    (continuousOrthogonalBlockSum R Q).rank ≤ R.rank + Q.rank := by
+  have hcomp : ∀ {G H : Type v} [NormedAddCommGroup G] [NormedSpace 𝕜 G]
+      [NormedAddCommGroup H] [NormedSpace 𝕜 H]
+      {X Y : Type v} [NormedAddCommGroup X] [NormedSpace 𝕜 X]
+      [NormedAddCommGroup Y] [NormedSpace 𝕜 Y]
+      (L : H →L[𝕜] Y) (T : G →L[𝕜] H) (M : X →L[𝕜] G),
+      (L ∘L T ∘L M).rank ≤ T.rank := by
+    intro G H _ _ _ _ X Y _ _ _ _ L T M
+    change LinearMap.rank (L.toLinearMap ∘ₗ (T.toLinearMap ∘ₗ M.toLinearMap)) ≤
+      LinearMap.rank T.toLinearMap
+    exact (LinearMap.rank_comp_le_right _ _).trans (LinearMap.rank_comp_le_left _ _)
+  rw [continuousOrthogonalBlockSum_eq_add]
+  refine (LinearMap.rank_add_le _ _).trans ?_
+  exact add_le_add (hcomp _ _ _) (hcomp _ _ _)
+
+/-- Sharp interleaving bound: an allocation of `r` ranks to the first block and
+`s` to the second bounds the `(r + s)`-th approximation number of the block sum
+by the larger of the two block approximation numbers. -/
+theorem approximationNumber_continuousOrthogonalBlockSum_le_max
+    (A : E₀ →L[𝕜] F₀) (B : E₁ →L[𝕜] F₁) (r s : ℕ) :
+    (continuousOrthogonalBlockSum A B).approximationNumber (r + s) ≤
+      max (A.approximationNumber r) (B.approximationNumber s) := by
+  apply le_of_forall_pos_le_add
+  intro ε hε
+  obtain ⟨R, hRrank, hRdist⟩ := A.lt_approximationNumber_add_pos r hε
+  obtain ⟨Q, hQrank, hQdist⟩ := B.lt_approximationNumber_add_pos s hε
+  have hrank : (continuousOrthogonalBlockSum R Q).rank ≤ ((r + s : ℕ) : Cardinal) := by
+    calc (continuousOrthogonalBlockSum R Q).rank ≤ R.rank + Q.rank :=
+          rank_continuousOrthogonalBlockSum_le R Q
+      _ ≤ (r : Cardinal) + (s : Cardinal) := add_le_add hRrank hQrank
+      _ = ((r + s : ℕ) : Cardinal) := by norm_cast
+  refine le_trans
+    ((continuousOrthogonalBlockSum A B).approximationNumber_le hrank) ?_
+  rw [continuousOrthogonalBlockSum_sub]
+  refine le_trans (nnnorm_continuousOrthogonalBlockSum_le (A - R) (B - Q)) ?_
+  refine max_le ?_ ?_
+  · exact le_trans hRdist.le (add_le_add (le_max_left _ _) le_rfl)
+  · exact le_trans hQdist.le (add_le_add (le_max_right _ _) le_rfl)
+
+section ComplexMinMax
+
+variable {E₀ E₁ F₀ F₁ : Type v}
+  [NormedAddCommGroup E₀] [InnerProductSpace ℂ E₀] [CompleteSpace E₀]
+  [NormedAddCommGroup E₁] [InnerProductSpace ℂ E₁] [CompleteSpace E₁]
+  [NormedAddCommGroup F₀] [InnerProductSpace ℂ F₀] [CompleteSpace F₀]
+  [NormedAddCommGroup F₁] [InnerProductSpace ℂ F₁] [CompleteSpace F₁]
+
+/-- Sharp interleaving lower bound: two independent lower witnesses of sizes
+`i + 1` and `j + 1` combine into an `(i + j + 2)`-dimensional witness for the
+block sum. -/
+theorem min_le_approximationNumber_continuousOrthogonalBlockSum
+    (A : E₀ →L[ℂ] F₀) (B : E₁ →L[ℂ] F₁) (i j : ℕ) :
+    min (A.approximationNumber i) (B.approximationNumber j) ≤
+      (continuousOrthogonalBlockSum A B).approximationNumber (i + j + 1) := by
+  classical
+  by_contra hcon
+  push Not at hcon
+  set T := continuousOrthogonalBlockSum A B with hT
+  set m : ℝ := (T.approximationNumber (i + j + 1) : ℝ) with hm
+  have hm0 : 0 ≤ m := (T.approximationNumber (i + j + 1)).coe_nonneg
+  have hmA : m < (A.approximationNumber i : ℝ) := by
+    have := lt_of_lt_of_le hcon (min_le_left _ _)
+    exact_mod_cast this
+  have hmB : m < (B.approximationNumber j : ℝ) := by
+    have := lt_of_lt_of_le hcon (min_le_right _ _)
+    exact_mod_cast this
+  obtain ⟨s, hms, v, hv, hV⟩ :=
+    SpectraBridge.exists_linearIndependent_lowerBound_of_lt_approximationNumber
+      A i hm0 hmA
+  obtain ⟨t, hmt, w, hw, hW⟩ :=
+    SpectraBridge.exists_linearIndependent_lowerBound_of_lt_approximationNumber
+      B j hm0 hmB
+  -- the combined witness family
+  set f : Fin (i + 1) → WithLp 2 (E₀ × E₁) := fun k => WithLp.toLp 2 (v k, 0) with hf
+  set g : Fin (j + 1) → WithLp 2 (E₀ × E₁) := fun l => WithLp.toLp 2 (0, w l) with hg
+  set e : Fin (i + j + 1 + 1) ≃ (Fin (i + 1) ⊕ Fin (j + 1)) :=
+    (finCongr (by omega)).trans finSumFinEquiv.symm with he
+  set V : Submodule ℂ E₀ := Submodule.span ℂ (Set.range v) with hVdef
+  set W : Submodule ℂ E₁ := Submodule.span ℂ (Set.range w) with hWdef
+  set P : Submodule ℂ (WithLp 2 (E₀ × E₁)) :=
+    (V.comap (WithLp.fstL 2 ℂ E₀ E₁).toLinearMap) ⊓
+      (W.comap (WithLp.sndL 2 ℂ E₀ E₁).toLinearMap) with hP
+  -- linear independence of the two embedded families
+  have hfindep : LinearIndependent ℂ f :=
+    hv.map' (blockInl : E₀ →L[ℂ] WithLp 2 (E₀ × E₁)).toLinearMap
+      (by
+        rw [LinearMap.ker_eq_bot]
+        intro a b hab
+        have : WithLp.toLp 2 (a, (0 : E₁)) = WithLp.toLp 2 (b, (0 : E₁)) := hab
+        simpa using congrArg (fun z => (WithLp.ofLp z).1) this)
+  have hgindep : LinearIndependent ℂ g :=
+    hw.map' (blockInr : E₁ →L[ℂ] WithLp 2 (E₀ × E₁)).toLinearMap
+      (by
+        rw [LinearMap.ker_eq_bot]
+        intro a b hab
+        have : WithLp.toLp 2 ((0 : E₀), a) = WithLp.toLp 2 ((0 : E₀), b) := hab
+        simpa using congrArg (fun z => (WithLp.ofLp z).2) this)
+  have hfker : Submodule.span ℂ (Set.range f) ≤
+      LinearMap.ker (WithLp.sndL 2 ℂ E₀ E₁).toLinearMap := by
+    rw [Submodule.span_le]
+    rintro _ ⟨k, rfl⟩
+    simp [hf, LinearMap.mem_ker]
+  have hgker : Submodule.span ℂ (Set.range g) ≤
+      LinearMap.ker (WithLp.fstL 2 ℂ E₀ E₁).toLinearMap := by
+    rw [Submodule.span_le]
+    rintro _ ⟨l, rfl⟩
+    simp [hg, LinearMap.mem_ker]
+  have hdisj : Disjoint (Submodule.span ℂ (Set.range f))
+      (Submodule.span ℂ (Set.range g)) := by
+    rw [Submodule.disjoint_def]
+    intro x hx1 hx2
+    have h1 : (WithLp.ofLp x).2 = 0 := hfker hx1
+    have h2 : (WithLp.ofLp x).1 = 0 := hgker hx2
+    apply WithLp.ofLp_injective 2
+    exact Prod.ext (by simpa using h2) (by simpa using h1)
+  have hsum : LinearIndependent ℂ (Sum.elim f g) := hfindep.sum_type hgindep hdisj
+  have hu : LinearIndependent ℂ (fun k => Sum.elim f g (e k)) :=
+    hsum.comp e e.injective
+  -- the span of the combined family lies in the product subspace
+  have hrange : Set.range (fun k => Sum.elim f g (e k)) = Set.range (Sum.elim f g) :=
+    e.surjective.range_comp _
+  have hspan : Submodule.span ℂ (Set.range (fun k => Sum.elim f g (e k))) ≤ P := by
+    rw [hrange, Set.Sum.elim_range, Submodule.span_union]
+    refine sup_le ?_ ?_
+    · rw [Submodule.span_le]
+      rintro _ ⟨k, rfl⟩
+      refine ⟨?_, ?_⟩
+      · simpa [hf, hVdef] using Submodule.subset_span (Set.mem_range_self k)
+      · simp [hf]
+    · rw [Submodule.span_le]
+      rintro _ ⟨l, rfl⟩
+      refine ⟨?_, ?_⟩
+      · simp [hg]
+      · simpa [hg, hWdef] using Submodule.subset_span (Set.mem_range_self l)
+  -- uniform lower modulus on that span
+  set μ : ℝ := min s t with hμ
+  have hmμ : m < μ := lt_min hms hmt
+  have hμ0 : 0 ≤ μ := hm0.trans hmμ.le
+  have hlower : ∀ x ∈ Submodule.span ℂ (Set.range (fun k => Sum.elim f g (e k))),
+      μ * ‖x‖ ≤ ‖T x‖ := by
+    intro x hx
+    obtain ⟨hx1, hx2⟩ := hspan hx
+    have hxV : (WithLp.ofLp x).1 ∈ V := hx1
+    have hxW : (WithLp.ofLp x).2 ∈ W := hx2
+    have hA1 : s * ‖(WithLp.ofLp x).1‖ ≤ ‖A (WithLp.ofLp x).1‖ := hV _ hxV
+    have hB1 : t * ‖(WithLp.ofLp x).2‖ ≤ ‖B (WithLp.ofLp x).2‖ := hW _ hxW
+    have hμs : μ ≤ s := min_le_left _ _
+    have hμt : μ ≤ t := min_le_right _ _
+    have hA2 : μ * ‖(WithLp.ofLp x).1‖ ≤ ‖A (WithLp.ofLp x).1‖ :=
+      le_trans (mul_le_mul_of_nonneg_right hμs (norm_nonneg _)) hA1
+    have hB2 : μ * ‖(WithLp.ofLp x).2‖ ≤ ‖B (WithLp.ofLp x).2‖ :=
+      le_trans (mul_le_mul_of_nonneg_right hμt (norm_nonneg _)) hB1
+    have hxsq := WithLp.prod_norm_sq_eq_of_L2 x
+    have hysq := WithLp.prod_norm_sq_eq_of_L2 (T x)
+    have hTfst : (T x).fst = A (WithLp.ofLp x).1 := rfl
+    have hTsnd : (T x).snd = B (WithLp.ofLp x).2 := rfl
+    have hsq : (μ * ‖x‖) ^ 2 ≤ ‖T x‖ ^ 2 := by
+      rw [hysq, hTfst, hTsnd, mul_pow, hxsq]
+      have e1 : (μ * ‖(WithLp.ofLp x).1‖) ^ 2 ≤ ‖A (WithLp.ofLp x).1‖ ^ 2 := by
+        apply pow_le_pow_left₀ (mul_nonneg hμ0 (norm_nonneg _)) hA2
+      have e2 : (μ * ‖(WithLp.ofLp x).2‖) ^ 2 ≤ ‖B (WithLp.ofLp x).2‖ ^ 2 := by
+        apply pow_le_pow_left₀ (mul_nonneg hμ0 (norm_nonneg _)) hB2
+      have hx1n : ‖x.fst‖ = ‖(WithLp.ofLp x).1‖ := rfl
+      have hx2n : ‖x.snd‖ = ‖(WithLp.ofLp x).2‖ := rfl
+      rw [hx1n, hx2n]
+      nlinarith [e1, e2, mul_pow μ ‖(WithLp.ofLp x).1‖ 2,
+        mul_pow μ ‖(WithLp.ofLp x).2‖ 2]
+    exact le_of_sq_le_sq hsq (norm_nonneg _)
+  have hfinal : m < (T.approximationNumber (i + j + 1) : ℝ) :=
+    (SpectraBridge.lt_approximationNumber_iff_exists_finiteDimensional_lowerBound
+      T (i + j + 1) hm0).mpr ⟨μ, hmμ, _, hu, hlower⟩
+  exact absurd hfinal (by rw [← hm]; exact lt_irrefl m)
+
+end ComplexMinMax
+
+section MergeCombinatorics
+
+/-- Greedy interleaving: a `k`-term prefix of the merged sequence is dominated
+by some split of the two source prefixes. -/
+theorem exists_split_prefix_sum_le (a b c : ℕ → ℝ)
+    (hc : ∀ r s, c (r + s) ≤ max (a r) (b s)) (k : ℕ) :
+    ∃ r ≤ k, ∑ n ∈ Finset.range k, c n ≤
+      (∑ n ∈ Finset.range r, a n) + ∑ n ∈ Finset.range (k - r), b n := by
+  induction k with
+  | zero => exact ⟨0, le_rfl, by simp⟩
+  | succ k ih =>
+    obtain ⟨r, hrk, hle⟩ := ih
+    have hsplit := hc r (k - r)
+    rw [Nat.add_sub_cancel' hrk] at hsplit
+    rcases le_total (a r) (b (k - r)) with h | h
+    · refine ⟨r, hrk.trans (Nat.le_succ k), ?_⟩
+      have hck : c k ≤ b (k - r) := hsplit.trans_eq (max_eq_right h)
+      have hks : k + 1 - r = (k - r) + 1 := by omega
+      rw [Finset.sum_range_succ, hks, Finset.sum_range_succ]
+      linarith
+    · refine ⟨r + 1, by omega, ?_⟩
+      have hck : c k ≤ a r := hsplit.trans_eq (max_eq_left h)
+      have hks : k + 1 - (r + 1) = k - r := by omega
+      rw [Finset.sum_range_succ, hks, Finset.sum_range_succ]
+      linarith
+
+/-- Every split of the two source prefixes is dominated by the merged prefix. -/
+theorem split_prefix_sum_le (a b c : ℕ → ℝ)
+    (ha : ∀ n, a n ≤ c n) (hb : ∀ n, b n ≤ c n)
+    (hmin : ∀ i j, min (a i) (b j) ≤ c (i + j + 1)) :
+    ∀ k r s, r + s = k →
+      (∑ n ∈ Finset.range r, a n) + ∑ n ∈ Finset.range s, b n ≤
+        ∑ n ∈ Finset.range k, c n := by
+  intro k
+  induction k with
+  | zero =>
+    intro r s hrs
+    obtain ⟨rfl, rfl⟩ := Nat.add_eq_zero_iff.mp hrs
+    simp
+  | succ k ih =>
+    intro r s hrs
+    match r, s with
+    | 0, s =>
+      have hsk : s = k + 1 := by omega
+      subst hsk
+      simp only [Finset.range_zero, Finset.sum_empty, zero_add]
+      exact Finset.sum_le_sum fun n _ => hb n
+    | (r + 1), 0 =>
+      have hrk : r + 1 = k + 1 := by omega
+      rw [hrk]
+      simp only [Finset.range_zero, Finset.sum_empty, add_zero]
+      exact Finset.sum_le_sum fun n _ => ha n
+    | (r + 1), (s + 1) =>
+      have hk : k = r + s + 1 := by omega
+      have hmm := hmin r s
+      rw [← hk] at hmm
+      rcases le_total (a r) (b s) with h | h
+      · have hck : a r ≤ c k := (min_eq_left h).symm.trans_le hmm
+        have hIH := ih r (s + 1) (by omega)
+        rw [Finset.sum_range_succ (f := a) (n := r), Finset.sum_range_succ (f := c) (n := k)]
+        linarith
+      · have hck : b s ≤ c k := (min_eq_right h).symm.trans_le hmm
+        have hIH := ih (r + 1) s (by omega)
+        rw [Finset.sum_range_succ (f := b) (n := s), Finset.sum_range_succ (f := c) (n := k)]
+        linarith
+
+end MergeCombinatorics
+
+end Aux
+
 /-- The split-prefix functional for two singular-value sequences. -/
 def splitKyFanGauge
     {E₀ E₁ F₀ F₁ : Type v}
@@ -94,14 +525,21 @@ def splitKyFanGauge
     (fun r => kyFanApproximationGauge r A +
       kyFanApproximationGauge (k - r) B)
 
-/-- Monotonicity of the split-prefix functional. -/
+/-- Monotonicity of the split-prefix functional.  The two pairs are allowed to
+live in different coordinate spaces, since only the two scalar Ky Fan
+sequences enter the definition. -/
 theorem splitKyFanGauge_mono
-    {E₀ E₁ F₀ F₁ : Type v}
+    {E₀ E₁ F₀ F₁ E₀' E₁' F₀' F₁' : Type v}
     [NormedAddCommGroup E₀] [InnerProductSpace 𝕜 E₀] [CompleteSpace E₀]
     [NormedAddCommGroup E₁] [InnerProductSpace 𝕜 E₁] [CompleteSpace E₁]
     [NormedAddCommGroup F₀] [InnerProductSpace 𝕜 F₀] [CompleteSpace F₀]
     [NormedAddCommGroup F₁] [InnerProductSpace 𝕜 F₁] [CompleteSpace F₁]
-    {A C : E₀ →L[𝕜] F₀} {B D : E₁ →L[𝕜] F₁}
+    [NormedAddCommGroup E₀'] [InnerProductSpace 𝕜 E₀'] [CompleteSpace E₀']
+    [NormedAddCommGroup E₁'] [InnerProductSpace 𝕜 E₁'] [CompleteSpace E₁']
+    [NormedAddCommGroup F₀'] [InnerProductSpace 𝕜 F₀'] [CompleteSpace F₀']
+    [NormedAddCommGroup F₁'] [InnerProductSpace 𝕜 F₁'] [CompleteSpace F₁']
+    {A : E₀ →L[𝕜] F₀} {C : E₀' →L[𝕜] F₀'}
+    {B : E₁ →L[𝕜] F₁} {D : E₁' →L[𝕜] F₁'}
     (hA : ∀ k, kyFanApproximationGauge k A ≤ kyFanApproximationGauge k C)
     (hB : ∀ k, kyFanApproximationGauge k B ≤ kyFanApproximationGauge k D)
     (k : ℕ) : splitKyFanGauge k A B ≤ splitKyFanGauge k C D := by
@@ -109,9 +547,9 @@ theorem splitKyFanGauge_mono
   apply Finset.sup'_le
   intro r hr
   refine le_trans (add_le_add (hA r) (hB (k - r))) ?_
-  exact Finset.le_sup' (Finset.range (k + 1))
-    (fun s => kyFanApproximationGauge s C +
-      kyFanApproximationGauge (k - s) D) r hr
+  exact Finset.le_sup'
+    (f := fun s => kyFanApproximationGauge s C +
+      kyFanApproximationGauge (k - s) D) hr
 
 /-- Exact Ky Fan prefix formula for an orthogonal block sum.
 
@@ -129,59 +567,38 @@ theorem kyFanApproximationGauge_continuousOrthogonalBlockSum
     kyFanApproximationGauge k (continuousOrthogonalBlockSum A B) =
       splitKyFanGauge k A B := by
   classical
-  by_cases hk : k = 0
-  · subst k
-    simp [kyFanApproximationGauge, splitKyFanGauge]
-  · have hkpos : 0 < k := Nat.pos_of_ne_zero hk
-    apply le_antisymm
-    · -- Upper bound: every rank allocation between the two source summands
-      -- gives one candidate split.  The approximation-number min--max
-      -- characterization and the dimension formula for projections of a
-      -- finite-dimensional witness force one of those candidates.
-      rw [kyFanApproximationGauge]
-      apply Finset.sum_le_of_forall_sum_range_le
-      intro m hm
-      let W : Submodule ℂ (WithLp 2 (E₀ × E₁)) :=
-        ForMathlib.DavisKahan.Experimental.SpectraBridge.
-          kyFanWitnessSubspace (continuousOrthogonalBlockSum A B) m
-      let W₀ : Submodule ℂ E₀ :=
-        Submodule.map (WithLp.fstL 2 ℂ E₀ E₁).toLinearMap W
-      let W₁ : Submodule ℂ E₁ :=
-        Submodule.map (WithLp.sndL 2 ℂ E₀ E₁).toLinearMap W
-      have hdim : Module.finrank ℂ W₀ + Module.finrank ℂ W₁ ≥ m := by
-        exact Submodule.finrank_le_finrank_map_fst_add_map_snd W
-      obtain ⟨r, hrk, hsplit⟩ := Nat.exists_add_eq_of_le hdim
-      refine le_trans
-        (ForMathlib.DavisKahan.Experimental.SpectraBridge.
-          kyFanGauge_le_of_finiteWitness W
-            (continuousOrthogonalBlockSum A B) m) ?_
-      have hfinite :=
-        ForMathlib.DavisKahanTheory.
-          orthogonalBlockSum_apply_le_of_kyFanSum_le
-            (ForMathlib.DavisKahanTheory.rectangularKyFanNorm ℂ
-              (WithLp 2 (W₀ × W₁))
-              (WithLp 2 (F₀ × F₁)) m)
-            (fun j => ForMathlib.DavisKahan.Experimental.SpectraBridge.
-              restricted_kyFan_le A W₀ j)
-            (fun j => ForMathlib.DavisKahan.Experimental.SpectraBridge.
-              restricted_kyFan_le B W₁ j)
-      exact hfinite.trans
-        (Finset.le_sup' (Finset.range (m + 1)) _ r hrk)
-    · -- Lower bound: for each split, choose finite-dimensional witnesses for
-      -- the two component prefixes.  Their Hilbert direct sum is a witness
-      -- for the block prefix.  Taking the largest split gives the result.
-      unfold splitKyFanGauge
-      apply Finset.sup'_le
-      intro r hr
-      have hrle : r ≤ k := Nat.lt_succ_iff.mp (Finset.mem_range.mp hr)
-      have hleft :=
-        ForMathlib.DavisKahan.Experimental.SpectraBridge.
-          kyFanApproximationGauge_le_blockSum_left A B r
-      have hright :=
-        ForMathlib.DavisKahan.Experimental.SpectraBridge.
-          kyFanApproximationGauge_le_blockSum_right A B (k - r)
-      exact add_le_of_orthogonal_kyFan_witnesses
-        (continuousOrthogonalBlockSum A B) hleft hright hrle
+  set a : ℕ → ℝ := fun n => approximationSingularValue n A with ha
+  set b : ℕ → ℝ := fun n => approximationSingularValue n B with hb
+  set c : ℕ → ℝ := fun n =>
+    approximationSingularValue n (continuousOrthogonalBlockSum A B) with hcdef
+  have hac : ∀ n, a n ≤ c n := fun n => by
+    have := approximationNumber_le_blockSum_left A B n
+    exact_mod_cast this
+  have hbc : ∀ n, b n ≤ c n := fun n => by
+    have := approximationNumber_le_blockSum_right A B n
+    exact_mod_cast this
+  have hmax : ∀ r s, c (r + s) ≤ max (a r) (b s) := fun r s => by
+    have := approximationNumber_continuousOrthogonalBlockSum_le_max A B r s
+    exact_mod_cast this
+  have hmin : ∀ i j, min (a i) (b j) ≤ c (i + j + 1) := fun i j => by
+    have := min_le_approximationNumber_continuousOrthogonalBlockSum A B i j
+    exact_mod_cast this
+  apply le_antisymm
+  · -- Upper bound: greedily allocate each merged singular value to whichever
+    -- block currently supplies the larger one.  The resulting allocation is a
+    -- split of `k` into `r` and `k - r`, hence one of the candidates.
+    obtain ⟨r, hrk, hle⟩ := exists_split_prefix_sum_le a b c hmax k
+    refine le_trans hle ?_
+    exact Finset.le_sup'
+      (f := fun r => kyFanApproximationGauge r A + kyFanApproximationGauge (k - r) B)
+      (Finset.mem_range.mpr (by omega))
+  · -- Lower bound: for each split, the two component witnesses combine into an
+    -- orthogonal witness for the block prefix.
+    unfold splitKyFanGauge
+    apply Finset.sup'_le
+    intro r hr
+    have hrle : r ≤ k := Nat.lt_succ_iff.mp (Finset.mem_range.mp hr)
+    exact split_prefix_sum_le a b c hac hbc hmin k r (k - r) (by omega)
 
 /-- Weak majorization is stable under orthogonal block sum.  This is the
 infinite-dimensional singular-value content of Davis--Kahan Lemma 6.1. -/
@@ -277,17 +694,17 @@ theorem sameApproximationSingularSequence_continuousOrthogonalBlockSum
     kyFanApproximationGauge_continuousOrthogonalBlockSum]
   congr 1 <;> apply le_antisymm
   · exact splitKyFanGauge_mono
-      (fun k => le_of_eq (congrArg (fun x => x) (hA k)))
-      (fun k => le_of_eq (congrArg (fun x => x) (hB k))) _
+      (fun k => le_of_eq (hA.kyFanApproximationGauge_eq k))
+      (fun k => le_of_eq (hB.kyFanApproximationGauge_eq k)) _
   · exact splitKyFanGauge_mono
-      (fun k => le_of_eq (hA k).symm)
-      (fun k => le_of_eq (hB k).symm) _
+      (fun k => le_of_eq (hA.kyFanApproximationGauge_eq k).symm)
+      (fun k => le_of_eq (hB.kyFanApproximationGauge_eq k).symm) _
   · exact splitKyFanGauge_mono
-      (fun k => le_of_eq (hA k))
-      (fun k => le_of_eq (hB k)) _
+      (fun k => le_of_eq (hA.kyFanApproximationGauge_eq k))
+      (fun k => le_of_eq (hB.kyFanApproximationGauge_eq k)) _
   · exact splitKyFanGauge_mono
-      (fun k => le_of_eq (hA k).symm)
-      (fun k => le_of_eq (hB k).symm) _
+      (fun k => le_of_eq (hA.kyFanApproximationGauge_eq k).symm)
+      (fun k => le_of_eq (hB.kyFanApproximationGauge_eq k).symm) _
 
 
 end
