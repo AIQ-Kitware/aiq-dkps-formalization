@@ -221,6 +221,14 @@ def complexify
       A.toLinearMap ⟨im (z : Eℂ), (mem_complexify_domain_iff A z).mp z.property |>.2⟩ :=
   rfl
 
+/-- Applying a closed operator depends only on the underlying vector, not on
+the domain-membership witness. -/
+theorem toLinearMap_congr
+    {A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E)}
+    {u v : A.domain} (h : (u : E) = (v : E)) :
+    A.toLinearMap u = A.toLinearMap v :=
+  congrArg A.toLinearMap (Subtype.ext h)
+
 /-- The real copy of a domain vector lies in the complexified domain. -/
 def ofRealDomain
     (A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E))
@@ -232,7 +240,14 @@ def ofRealDomain
     (x : A.domain) :
     (complexify A).toLinearMap (ofRealDomain A x) =
       ofReal (A.toLinearMap x) := by
-  apply RealComplexification.ext <;> simp [ofRealDomain]
+  refine RealComplexification.ext ?_ ?_
+  · have hR : re (ofReal (A.toLinearMap x)) = A.toLinearMap x := re_ofReal _
+    rw [complexify_apply_re, hR]
+    exact toLinearMap_congr (by simp [ofRealDomain])
+  · have hR : im (ofReal (A.toLinearMap x)) = 0 := im_ofReal _
+    rw [complexify_apply_im, hR]
+    exact (toLinearMap_congr (v := (0 : A.domain))
+      (by simp [ofRealDomain])).trans (map_zero _)
 
 /-- The imaginary copy of a domain vector lies in the complexified domain. -/
 def ofImaginaryDomain
@@ -248,7 +263,38 @@ def ofImaginaryDomain
     (x : A.domain) :
     (complexify A).toLinearMap (ofImaginaryDomain A x) =
       Complex.I • ofReal (A.toLinearMap x) := by
-  apply RealComplexification.ext <;> simp [ofImaginaryDomain]
+  refine RealComplexification.ext ?_ ?_
+  · have hR : re (Complex.I • ofReal (A.toLinearMap x)) = 0 := by
+      rw [I_smul_ofReal, re_mk]
+    rw [complexify_apply_re, hR]
+    exact (toLinearMap_congr (v := (0 : A.domain))
+      (by simp [ofImaginaryDomain])).trans (map_zero _)
+  · have hR : im (Complex.I • ofReal (A.toLinearMap x)) = A.toLinearMap x := by
+      rw [I_smul_ofReal, im_mk]
+    rw [complexify_apply_im, hR]
+    exact toLinearMap_congr (by simp [ofImaginaryDomain])
+
+/-- Two closed operators coincide when their domains coincide and their
+actions agree on corresponding domain vectors.  The remaining structure
+fields are propositions, so they are settled by proof irrelevance. -/
+theorem closedOperator_ext
+    {𝕜 : Type*} [RCLike 𝕜] {H : Type*}
+    [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] [CompleteSpace H]
+    {A B : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := H)}
+    (hdom : A.domain = B.domain)
+    (haction : ∀ (x : A.domain) (y : B.domain),
+      (x : H) = (y : H) → A.toLinearMap x = B.toLinearMap y) :
+    A = B := by
+  cases A with
+  | mk dA fA hdA hcA =>
+    cases B with
+    | mk dB fB hdB hcB =>
+      cases hdom
+      have hf : fA = fB := by
+        ext x
+        exact haction x x rfl
+      cases hf
+      rfl
 
 /-- Complexification commutes with embedding a bounded operator as a closed
 operator. -/
@@ -257,11 +303,19 @@ theorem complexify_ofBounded
     complexify (ForMathlib.DavisKahanExt.ClosedOperator.ofBounded T) =
       ForMathlib.DavisKahanExt.ClosedOperator.ofBounded
         (RealComplexification.complexify T) := by
-  apply ForMathlib.DavisKahanExt.ClosedOperator.ext
+  refine closedOperator_ext ?_ ?_
   · ext z
-    simp [domain, complexifySubmodule]
-  · intro z
-    apply RealComplexification.ext <;> simp [complexify, linearMap, domainRe, domainIm]
+    simp [complexify, domain, complexifySubmodule]
+  · intro x y hxy
+    refine RealComplexification.ext ?_ ?_
+    · rw [complexify_apply_re]
+      show T (re (x : Eℂ)) =
+        re (RealComplexification.complexify T (y : Eℂ))
+      rw [re_complexify, hxy]
+    · rw [complexify_apply_im]
+      show T (im (x : Eℂ)) =
+        im (RealComplexification.complexify T (y : Eℂ))
+      rw [im_complexify, hxy]
 
 /-- A real domain map complexifies to a complex domain map. -/
 theorem mapsDomainTo_complexify
@@ -304,13 +358,15 @@ theorem semiboundedBelow_complexify
     {c : ℝ} (hA : SemiboundedBelow A c) :
     SemiboundedBelow (complexify A) c := by
   intro z
-  have hr := hA (domainRe A z)
-  have hi := hA (domainIm A z)
+  have hr : c * ‖re (z : Eℂ)‖ ^ 2 ≤
+      ⟪A.toLinearMap (domainRe A z), re (z : Eℂ)⟫_ℝ := hA (domainRe A z)
+  have hi : c * ‖im (z : Eℂ)‖ ^ 2 ≤
+      ⟪A.toLinearMap (domainIm A z), im (z : Eℂ)⟫_ℝ := hA (domainIm A z)
   rw [RealComplexification.norm_sq]
   change c * (‖re (z : Eℂ)‖ ^ 2 + ‖im (z : Eℂ)‖ ^ 2) ≤
     ⟪A.toLinearMap (domainRe A z), re (z : Eℂ)⟫_ℝ +
       ⟪A.toLinearMap (domainIm A z), im (z : Eℂ)⟫_ℝ
-  nlinarith
+  nlinarith [hr, hi]
 
 /-- An upper quadratic-form bound is preserved exactly by complexification. -/
 theorem semiboundedAbove_complexify
@@ -318,14 +374,16 @@ theorem semiboundedAbove_complexify
     {c : ℝ} (hA : SemiboundedAbove A c) :
     SemiboundedAbove (complexify A) c := by
   intro z
-  have hr := hA (domainRe A z)
-  have hi := hA (domainIm A z)
+  have hr : ⟪A.toLinearMap (domainRe A z), re (z : Eℂ)⟫_ℝ ≤
+      c * ‖re (z : Eℂ)‖ ^ 2 := hA (domainRe A z)
+  have hi : ⟪A.toLinearMap (domainIm A z), im (z : Eℂ)⟫_ℝ ≤
+      c * ‖im (z : Eℂ)‖ ^ 2 := hA (domainIm A z)
   rw [RealComplexification.norm_sq]
   change
     ⟪A.toLinearMap (domainRe A z), re (z : Eℂ)⟫_ℝ +
       ⟪A.toLinearMap (domainIm A z), im (z : Eℂ)⟫_ℝ ≤
       c * (‖re (z : Eℂ)‖ ^ 2 + ‖im (z : Eℂ)‖ ^ 2)
-  nlinarith
+  nlinarith [hr, hi]
 
 /-- Symmetry is preserved by coordinatewise complexification. -/
 theorem isSymmetric_complexify
