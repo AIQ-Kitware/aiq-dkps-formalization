@@ -50,6 +50,7 @@ theorem blockCoordinate0_eq_zeroGraph_starProjection
     (z : WithLp 2 (E0 × E1)) :
     blockCoordinate0 (𝕜 := 𝕜) (E0 := E0) (E1 := E1) (WithLp.fst z) =
       (blockGraph (0 : E0 →L[𝕜] E1)).starProjection z := by
+  symm
   apply Submodule.eq_starProjection_of_mem_of_inner_eq_zero
   · exact blockCoordinate0_mem_zeroGraph
       (𝕜 := 𝕜) (E0 := E0) (E1 := E1) (WithLp.fst z)
@@ -99,7 +100,8 @@ theorem zeroGraph_angularParam_apply (X : E0 →L[𝕜] E1)
       WithLp.toLp 2 (WithLp.fst z, X (WithLp.fst z)) := by
   rw [add_apply, ContinuousLinearMap.comp_apply,
     zeroGraph_starProjection_apply]
-  simp [blockAngularOperator]
+  apply WithLp.ofLp_injective 2
+  apply Prod.ext <;> simp [blockAngularOperator]
 
 /-- The graph range of the ambient block angular operator is exactly the
 bounded block graph. -/
@@ -115,12 +117,20 @@ theorem blockGraph_eq_range_zeroGraph_angularParam (X : E0 →L[𝕜] E1) :
       change WithLp.toLp 2 (WithLp.fst z, WithLp.snd z) ∈ blockGraph X at hz
       exact (toLp_mem_blockGraph_iff X (WithLp.fst z) (WithLp.snd z)).mp hz
     refine ⟨z, ?_⟩
+    change
+      (projection (blockGraph (0 : E0 →L[𝕜] E1)) +
+        blockAngularOperator X ∘L
+          projection (blockGraph (0 : E0 →L[𝕜] E1))) z = z
     rw [zeroGraph_angularParam_apply]
     apply WithLp.ofLp_injective 2
     apply Prod.ext
     · simp
-    · simpa using hzrel
+    · simpa using hzrel.symm
   · rintro ⟨w, rfl⟩
+    change
+      (projection (blockGraph (0 : E0 →L[𝕜] E1)) +
+        blockAngularOperator X ∘L
+          projection (blockGraph (0 : E0 →L[𝕜] E1))) w ∈ blockGraph X
     rw [zeroGraph_angularParam_apply]
     exact (toLp_mem_blockGraph_iff X (WithLp.fst w)
       (X (WithLp.fst w))).mpr rfl
