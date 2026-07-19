@@ -10,6 +10,8 @@ import DavisKahan.Experimental.InfiniteDimensional.SinTheta.All
 import DavisKahan.Experimental.InfiniteDimensional.DirectRotation
 import DavisKahan.Experimental.InfiniteDimensional.DoubleAngle
 import DavisKahan.Experimental.InfiniteDimensional.DoubleAngleGenuine
+import DavisKahan.Experimental.InfiniteDimensional.DoubleAngleUnbounded
+import DavisKahan.Experimental.InfiniteDimensional.DoubleAngleUnboundedIdeal
 import DavisKahan.Experimental.InfiniteDimensional.GraphSubspace
 import DavisKahan.Experimental.InfiniteDimensional.OperatorBlocks.OffDiagonal
 import DavisKahan.Experimental.InfiniteDimensional.Riccati.All
