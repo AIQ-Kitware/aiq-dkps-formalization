@@ -175,13 +175,26 @@ theorem genuineFilledTruncation_tendsto_on_domain
   have hP := Pcut.tendsto_identity (x : H)
   have hQ : Tendsto (fun τ : ℝ => (x : H) - Pcut.cutoff τ (x : H))
       atTop (𝓝 0) := by
-    convert tendsto_const_nhds.sub hP using 1 <;> simp
+    have h := (tendsto_const_nhds (x := (x : H)) (f := atTop (α := ℝ))).sub hP
+    simpa only [sub_self] using h
   have ha : Tendsto (fun _ : ℝ => ((a : ℝ) : 𝕜)) atTop
       (𝓝 ((a : ℝ) : 𝕜)) := tendsto_const_nhds
-  have hfill := hT.add (ha.smul hQ)
-  convert hfill using 1 <;>
-    simp only [genuineFilledTruncation, add_apply, smul_apply, sub_apply,
-      ContinuousLinearMap.id_apply, add_zero]
+  have hfill : Tendsto
+      (fun τ : ℝ => Tcut.truncation τ (x : H) +
+        ((a : ℝ) : 𝕜) • ((x : H) - Pcut.cutoff τ (x : H)))
+      atTop (𝓝 (A.toLinearMap x)) := by
+    have h := hT.add (ha.smul hQ)
+    simpa only [smul_zero, add_zero] using h
+  have hfun :
+      (fun τ : ℝ => genuineFilledTruncation A hA Pcut Tcut a τ (x : H)) =
+        fun τ : ℝ => Tcut.truncation τ (x : H) +
+          ((a : ℝ) : 𝕜) • ((x : H) - Pcut.cutoff τ (x : H)) := by
+    funext τ
+    simp only [genuineFilledTruncation, ContinuousLinearMap.add_apply,
+      ContinuousLinearMap.coe_smul', Pi.smul_apply,
+      ContinuousLinearMap.sub_apply, ContinuousLinearMap.id_apply]
+  rw [hfun]
+  exact hfill
 
 /-- A lower form bound on a cutoff range becomes a global lower bound after
 filling the orthogonal complement by the same scalar. -/
