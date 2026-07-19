@@ -15,6 +15,7 @@ import DavisKahan.Experimental.InfiniteDimensional.SinTheta.ContinuationQuarterA
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.ContinuationSelectedGraph
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.ContinuationWitnessGraph
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.ContinuationWitnessRiccati
+import DavisKahan.Experimental.InfiniteDimensional.SinTheta.ContinuationWitnessOffDiagonal
 
 /-!
 # Concrete continuation infrastructure
@@ -22,7 +23,7 @@ import DavisKahan.Experimental.InfiniteDimensional.SinTheta.ContinuationWitnessR
 This aggregate exposes the completed contour, Riesz-integral, transport,
 assembly, rotation-chain, spectral-identification, selected-subspace transport,
 selected-branch, quantitative quarter-acuteness, selected-graph, selected-reduction,
-witness-native canonical graph, and selected Riccati-coordinate leaves.
+witness-native canonical graph, selected Riccati-coordinate, and off-diagonal block leaves.
 The older
 `ContinuationRoadmap` scaffold is intentionally not part of this aggregate.
 -/
