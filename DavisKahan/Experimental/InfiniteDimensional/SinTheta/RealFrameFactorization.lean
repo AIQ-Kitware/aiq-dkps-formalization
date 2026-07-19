@@ -6,6 +6,8 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.FrameFactorizationGeneric
 import DavisKahan.Experimental.InfiniteDimensional.Core.ComplexificationFunctionalCalculus
 import ForMathlib.Analysis.InnerProductSpace.CoerciveUnit
+import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Basic
+import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Instances
 import Mathlib.Analysis.InnerProductSpace.StarOrder
 import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Rpow.Basic
 
@@ -37,6 +39,20 @@ variable {E F G : Type v}
   [NormedAddCommGroup F] [InnerProductSpace ℝ F] [CompleteSpace F]
   [NormedAddCommGroup G] [InnerProductSpace ℝ G] [CompleteSpace G]
 
+/-- Scalar restriction of the complex operator algebra to the reals.  This is the
+same real algebra structure that `RealComplexificationFunctionalCalculus` uses,
+and it must be reinstalled here because that declaration is file-local. -/
+noncomputable local instance complexOperatorRealAlgebra :
+    Algebra ℝ (RealComplexification E →L[ℂ] RealComplexification E) :=
+  Algebra.complexToReal
+
+/-- Real continuous functional calculus on the complexified operator algebra. -/
+noncomputable local instance realContinuousFunctionalCalculus :
+    ContinuousFunctionalCalculus ℝ
+      (RealComplexification E →L[ℂ] RealComplexification E) IsSelfAdjoint :=
+  IsSelfAdjoint.instContinuousFunctionalCalculus
+
+omit [CompleteSpace E] [CompleteSpace F] in
 /-- A positive real lower-frame estimate survives coordinatewise
 complexification with the same constant. -/
 theorem lowerFrameBound_complexify
@@ -78,10 +94,11 @@ theorem conjugateOperator_rpow_eq
   rw [CFC.rpow_eq_cfc_real hC]
   refine conjugateOperator_cfc_eq C hC.isSelfAdjoint hfix
     (fun x : ℝ => x ^ r) ?_
-  exact continuousOn_id.rpow_const fun x hx => Or.inl <| by
-    intro hx0
-    subst x
-    exact (spectrum.zero_notMem ℝ hunit) hx
+  refine continuousOn_id.rpow_const fun x hx => Or.inl ?_
+  intro hx0
+  rw [id_eq] at hx0
+  subst hx0
+  exact (spectrum.zero_notMem ℝ hunit) hx
 
 /-- Existence of the real lower-frame polar package. -/
 theorem lowerFramePolarData_real_nonempty
@@ -210,8 +227,7 @@ theorem lowerFramePolarData_real_nonempty
       _ = ‖(XC ∘L invSqrtC) (ofReal x)‖ := by
         congr 1
         simp only [ContinuousLinearMap.comp_apply, XC,
-          ← complexify_ofReal, ← hinvSqrt_complexify,
-          complexify_ofReal]
+          ← hinvSqrt_complexify, complexify_ofReal]
       _ = ‖ofReal x‖ := hnormalizedC (ofReal x)
       _ = ‖x‖ := ofReal.norm_map x
   have hfactorizationR : X = (X ∘L invSqrtR) ∘L sqrtR := by
@@ -242,8 +258,13 @@ theorem lowerFramePolarData_real_nonempty
       gramInvR ∘L (X.adjoint ∘L X) = ContinuousLinearMap.id ℝ F := by
     rw [← hsqrt_sqR]
     simp only [gramInvR, ContinuousLinearMap.comp_assoc]
-    rw [hinvSqrt_sqrtR]
-    simp [ContinuousLinearMap.comp_assoc]
+    calc
+      invSqrtR ∘L (invSqrtR ∘L (sqrtR ∘L sqrtR)) =
+          invSqrtR ∘L ((invSqrtR ∘L sqrtR) ∘L sqrtR) := by
+        simp only [ContinuousLinearMap.comp_assoc]
+      _ = ContinuousLinearMap.id ℝ F := by
+        rw [hinvSqrt_sqrtR, ContinuousLinearMap.id_comp]
+        exact hinvSqrt_sqrtR
   have hgramInv_right :
       (X.adjoint ∘L X) ∘L gramInvR = ContinuousLinearMap.id ℝ F := by
     rw [← hsqrt_sqR]
@@ -253,8 +274,8 @@ theorem lowerFramePolarData_real_nonempty
           sqrtR ∘L ((sqrtR ∘L invSqrtR) ∘L invSqrtR) := by
         simp only [ContinuousLinearMap.comp_assoc]
       _ = ContinuousLinearMap.id ℝ F := by
-        rw [hsqrt_invSqrtR]
-        simp
+        rw [hsqrt_invSqrtR, ContinuousLinearMap.id_comp]
+        exact hsqrt_invSqrtR
   refine ⟨{
     sqrt := sqrtR
     invSqrt := invSqrtR
