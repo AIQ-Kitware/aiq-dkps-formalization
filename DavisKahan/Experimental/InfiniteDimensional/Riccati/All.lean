@@ -19,5 +19,7 @@ import DavisKahan.Experimental.InfiniteDimensional.Riccati.BoundedSpectralTransp
 import DavisKahan.Experimental.InfiniteDimensional.Riccati.BoundedBlockSpectrum
 import DavisKahan.Experimental.InfiniteDimensional.Riccati.BoundedSpectralEnclosure
 import DavisKahan.Experimental.InfiniteDimensional.Riccati.Unbounded
+import DavisKahan.Experimental.InfiniteDimensional.Riccati.UnboundedCore
+import DavisKahan.Experimental.InfiniteDimensional.Riccati.UnboundedReduction
 
 /-! # Experimental Riccati theory -/

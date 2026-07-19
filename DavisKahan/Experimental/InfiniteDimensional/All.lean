@@ -15,7 +15,6 @@ import DavisKahan.Experimental.InfiniteDimensional.OperatorBlocks.OffDiagonal
 import DavisKahan.Experimental.InfiniteDimensional.Riccati.All
 import DavisKahan.Experimental.InfiniteDimensional.Sharpness
 import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.All
-import DavisKahan.Experimental.InfiniteDimensional.TanTheta.Vector
-import DavisKahan.Experimental.InfiniteDimensional.TanTheta.GenuineSpectrum
+import DavisKahan.Experimental.InfiniteDimensional.TanTheta.All
 
 /-! # Experimental infinite-dimensional Davis--Kahan theory -/
