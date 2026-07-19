@@ -166,8 +166,9 @@ theorem sum_approximationPrefix
     (n : ℕ) (A : E →L[𝕜] F) :
     ∑ i : Fin n, approximationPrefix n A i =
       kyFanApproximationGauge n A := by
-  rw [kyFanApproximationGauge, Fin.sum_univ_eq_sum_range]
-  rfl
+  rw [kyFanApproximationGauge]
+  simp only [approximationPrefix]
+  exact Fin.sum_univ_eq_sum_range (fun m => approximationSingularValue m A) n
 
 /-- Finite Fan dominance for the paper gauge, obtained from the repository's
 proved T-transform theorem rather than postulated as extra norm data. -/
@@ -193,18 +194,21 @@ theorem prefixGauge_le_of_all_kyFan_le
     exact approximationSingularValue_nonneg _ _
   · intro m
     rcases le_or_gt m n with hm | hm
-    · rw [sum_filter_lt_eq_sum_fin hm
+    · simp only [approximationPrefix]
+      rw [sum_filter_lt_eq_sum_fin hm
           (fun k => approximationSingularValue k A),
         sum_filter_lt_eq_sum_fin hm
           (fun k => approximationSingularValue k B),
-        ← sum_approximationPrefix m A,
-        ← sum_approximationPrefix m B]
+        Fin.sum_univ_eq_sum_range
+          (fun k => approximationSingularValue k A) m,
+        Fin.sum_univ_eq_sum_range
+          (fun k => approximationSingularValue k B) m]
       exact h m
     · have huniv :
           (Finset.univ.filter fun i : Fin n => (i : ℕ) < m) =
             Finset.univ :=
         Finset.filter_true_of_mem fun i _ => lt_trans i.isLt hm
-      rw [huniv, huniv, sum_approximationPrefix n A,
+      rw [huniv, sum_approximationPrefix n A,
         sum_approximationPrefix n B]
       exact h n
 
@@ -234,18 +238,24 @@ theorem mul_prefixGauge_le_of_all_mul_kyFan_le
       exact approximationSingularValue_nonneg _ _
     · intro m
       rcases le_or_gt m n with hm | hm
-      · rw [sum_filter_lt_eq_sum_fin hm
+      · simp only [Pi.smul_apply, smul_eq_mul, approximationPrefix]
+        rw [sum_filter_lt_eq_sum_fin hm
             (fun k => c * approximationSingularValue k A),
           sum_filter_lt_eq_sum_fin hm
             (fun k => approximationSingularValue k B),
-          ← Finset.mul_sum, sum_approximationPrefix m A,
-          sum_approximationPrefix m B]
+          ← Finset.mul_sum,
+          Fin.sum_univ_eq_sum_range
+            (fun k => approximationSingularValue k A) m,
+          Fin.sum_univ_eq_sum_range
+            (fun k => approximationSingularValue k B) m]
         exact h m
       · have huniv :
             (Finset.univ.filter fun i : Fin n => (i : ℕ) < m) =
               Finset.univ :=
           Finset.filter_true_of_mem fun i _ => lt_trans i.isLt hm
-        rw [huniv, huniv, ← Finset.mul_sum,
+        rw [huniv]
+        simp only [Pi.smul_apply, smul_eq_mul]
+        rw [← Finset.mul_sum,
           sum_approximationPrefix n A, sum_approximationPrefix n B]
         exact h n
   rw [NA.gauge_real_smul b c (approximationPrefix n A),
@@ -305,7 +315,7 @@ theorem mem_of_all_mul_kyFan_le
       kyFanApproximationGauge k B) : N.Mem A := by
   have hle := N.mul_extendedGauge_le_of_all_mul_kyFan_le hc.le h
   intro htop
-  have hc0 : ENNReal.ofReal c ≠ 0 := ENNReal.ofReal_ne_zero.mpr hc.ne'
+  have hc0 : ENNReal.ofReal c ≠ 0 := ENNReal.ofReal_ne_zero_iff.mpr hc
   rw [htop, ENNReal.mul_top hc0] at hle
   exact hB (top_le_iff.mp hle)
 
@@ -323,8 +333,8 @@ theorem mul_gauge_le_of_all_mul_kyFan_le
   have hA := N.mem_of_all_mul_kyFan_le hc hB h
   refine ⟨hA, ?_⟩
   have hle := N.mul_extendedGauge_le_of_all_mul_kyFan_le hc.le h
-  have hto := ENNReal.toReal_le_toReal hle
-    (by simpa [Mem] using hA) (by simpa [Mem] using hB)
+  have hto := (ENNReal.toReal_le_toReal
+    (ENNReal.mul_ne_top ENNReal.ofReal_ne_top hA) hB).mpr hle
   rw [ENNReal.toReal_mul, ENNReal.toReal_ofReal hc.le] at hto
   exact hto
 
