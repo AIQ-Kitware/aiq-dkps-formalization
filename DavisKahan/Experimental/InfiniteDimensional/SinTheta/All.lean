@@ -16,5 +16,12 @@ import DavisKahan.Experimental.InfiniteDimensional.SinTheta.NaturalGenuine
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.Canonical
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.ContinuationAll
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.Specializations
+import DavisKahan.Experimental.InfiniteDimensional.SinTheta.LegacyGapCompletion
+import DavisKahan.Experimental.InfiniteDimensional.SinTheta.FrameFactorizationGeneric
+import DavisKahan.Experimental.InfiniteDimensional.SinTheta.RealFrameFactorization
+import DavisKahan.Experimental.InfiniteDimensional.SinTheta.RealUnbounded
+import DavisKahan.Experimental.InfiniteDimensional.SinTheta.RealGeneralized
+import DavisKahan.Experimental.InfiniteDimensional.SinTheta.RealCanonical
+import DavisKahan.Experimental.InfiniteDimensional.SinTheta.RealSpecializations
 
 /-! # Experimental infinite-dimensional sine-theta theory -/

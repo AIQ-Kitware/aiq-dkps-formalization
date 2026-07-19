@@ -6,24 +6,42 @@ source-faithful, domain-aware result for self-adjoint closed operators that may
 be unbounded, with a bounded residual block and an applicable unitarily
 invariant ideal gauge.
 
-The canonical dependency chain is:
+The canonical complex dependency chain is:
 
-1. `Core/Unbounded.lean`: densely defined closed operators and full-domain
-   embeddings of bounded operators;
-2. `Core/UnboundedSpectral.lean`: self-adjoint spectral projections,
-   semibounds, cutoffs, truncations, and domain-aware Sylvester equations;
-3. `Sylvester/Unbounded.lean`: Davis--Kahan Section 5, including the genuinely
-   two-unbounded ordered theorem and the interval/exterior theorem;
-4. `FrameFactorization.lean`: the lower-frame polar factor needed by the
-   generalized theorem;
-5. `Unbounded.lean`: the residual block identity and transport from the
-   Sylvester estimate to the directed sine;
-6. `Canonical.lean`: bundled, source-facing generalized and isometric theorem
-   statements.
+1. `Core/Unbounded.lean`: densely defined closed operators, the real
+   resolvent/spectrum surface, and full-domain embeddings of bounded operators;
+2. `SpectraBridge/RealSpectrumBridge.lean`: identification of the manuscript
+   real spectrum with the vendored Spectra spectrum over `ℂ`;
+3. `Sylvester/Genuine*`: direct Spectra cutoffs, filled truncations, both
+   ordered two-unbounded engines, and the genuine all-gap theorem;
+4. `Sylvester/LegacyGapCompletion.lean`: conversion of the historical
+   interval/exterior predicate and direct dispatch of its ordered form-bound
+   constructors;
+5. `SinTheta/Unbounded.lean` and `SinTheta/LegacyGapCompletion.lean`: the
+   residual block identity and transport from the clean complex Sylvester
+   theorem to the historical sine-theta statement;
+6. `FrameFactorization.lean`: complex lower-frame polar selection;
+7. `Canonical.lean`, `Specializations.lean`, and
+   `Sources/DavisKahan1970/GeneralSinTheta.lean`: source-shaped generalized,
+   isometric, and bounded endpoints.
 
-`Canonical.lean` owns the theorem shape that should eventually move into the
-supported source tree. Its generalized theorem comes first. The isometric
-result is derived by setting the lower frame bound to one.
+The real route shares the scalar-generic residual and angle algebra, then uses:
+
+1. `Core/ClosedOperatorComplexification.lean` for domains, graph closure,
+   self-adjointness, form bounds, resolvents, gaps, and Sylvester equations;
+2. `Ideals/ComplexificationApproximation.lean` for exact approximation-number
+   and finite Ky Fan invariance;
+3. `Sylvester/RealUnbounded.lean` for finite-Ky-Fan descent and real Fan
+   dominance;
+4. `Core/ComplexificationFunctionalCalculus.lean` and
+   `RealFrameFactorization.lean` for descent of the positive Gram powers;
+5. `FrameFactorizationGeneric.lean`, `RealGeneralized.lean`,
+   `RealCanonical.lean`, and `RealSpecializations.lean` for the real
+   lower-frame and source-shaped endpoints.
+
+`Core/UnboundedSpectral.lean` and the legacy ordered theorem remain historical
+infrastructure. They are not intended theorem dependencies of either repaired
+source route.
 
 ## Status of bounded and finite proofs
 
@@ -115,24 +133,32 @@ intertwining, residual, and localization obligations are discharged internally.
 
 ## Current compiler-first frontier
 
-The high-level theorem assembly now follows the intended chain. The remaining
-substantive frontier is lower in the graph:
+The implementation leaves above are intentionally decomposed so compiler work
+can proceed in dependency order.  The high-risk seams are now:
 
-- closed graph for the full-domain bounded constructor;
-- adjoint and spectral calculus for the closed-operator model;
-- cutoff-domain inclusion, cutoff commutation, and strong convergence;
-- the two ordered Ky Fan cutoff estimates;
-- the interval/exterior unbounded Sylvester theorem;
-- the unbounded residual block identity;
-- construction of `LowerFramePolarData` from the positive continuous
-  functional calculus for the Gram operator;
-- concrete unitarily invariant ideal instances.
+- elaborating the closed graph and adjoint-domain proofs for unbounded real
+  complexification;
+- reconciling the exact `LinearPMap` self-adjointness and resolvent APIs;
+- compiling rank preservation and the min--max proof of exact approximation
+  numbers under real complexification;
+- checking the finite Ky Fan family coercions in the real Sylvester descent;
+- compiling the conjugation-fixed real functional-calculus descent, especially
+  negative real powers on an invertible positive Gram operator;
+- reflecting the complex Gram identities back through injective
+  complexification;
+- checking definitional equalities between selected real polar data and the
+  source-facing real sine operators;
+- running `FullUnboundedAudit.lean` and accepting completion only after every
+  complex and real capstone has the expected trusted dependency list.
 
-The downstream lower-frame geometry is now concentrated behind that one
-proof-carrying existence seam. Closed range and Gram coercivity are proved
-directly; frame normalization, the factor `ε`, range preservation, the
-isometric specialization, and the exact directed-sine gauge identity are
-derived from the selected polar package.
+The generic `IsometricSinThetaProblem.result` remains the historical theorem
+over an arbitrary `RCLike` implementation.  The source manuscript surface now
+selects `result_complex`, and `result_real` is the parallel real endpoint.
+This avoids pretending that the complex spectral foundation automatically
+covers an arbitrary third implementation of the `RCLike` interface.
 
-Compiler repairs should strengthen these seams rather than retreating to a
-bounded headline theorem.
+A natural-input real spectral-subspace constructor remains a separate API
+project.  The source-shaped real theorem is complete at the same bookkeeping
+level as the historical complex problem record, but a canonical real spectral
+restriction package would require a dedicated real projection/restriction
+bridge or a carefully descended complex construction.

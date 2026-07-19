@@ -14,5 +14,7 @@ import DavisKahan.Experimental.InfiniteDimensional.Sylvester.GenuineFilledTrunca
 import DavisKahan.Experimental.InfiniteDimensional.Sylvester.GenuineOrderedCutoff
 import DavisKahan.Experimental.InfiniteDimensional.Sylvester.GenuineOrderedEngineDirect
 import DavisKahan.Experimental.InfiniteDimensional.Sylvester.GenuineAllGap
+import DavisKahan.Experimental.InfiniteDimensional.Sylvester.LegacyGapCompletion
+import DavisKahan.Experimental.InfiniteDimensional.Sylvester.RealUnbounded
 
 /-! # Experimental infinite-dimensional Sylvester theory -/
