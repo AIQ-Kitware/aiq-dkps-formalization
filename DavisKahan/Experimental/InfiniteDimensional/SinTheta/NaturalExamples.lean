@@ -178,6 +178,7 @@ theorem realPlane_zeroResidual_model :
   have hred : A.ReducesSubspace U := by
     simp [A, U, ClosedOperator.ReducesSubspace,
       ClosedOperator.InvariantSubspace]
+    rfl
   have hA : A.IsSelfAdjoint := by
     exact ClosedOperator.ofBounded_isSelfAdjoint
       (0 : RealPlane →L[ℝ] RealPlane) (by intro x y; simp)
@@ -186,15 +187,18 @@ theorem realPlane_zeroResidual_model :
       (0 : RealPlane →L[ℝ] RealPlane) (by intro x y; simp)
   have hA0upper : SemiboundedAbove A0 0 := by
     intro x
-    simp [A0, SemiboundedAbove]
+    show RCLike.re
+      ⟪(0 : RealPlane →L[ℝ] RealPlane) (x : RealPlane), (x : RealPlane)⟫_ℝ ≤ _
+    simp
   have hcompLower : SemiboundedBelow
       (ClosedOperator.reducingRestriction A Uᗮ hred.orthogonal) 1 := by
     intro x
-    have hx : (x : Uᗮ) = 0 := Subsingleton.elim _ _
-    change 1 * ‖(x : Uᗮ)‖ ^ 2 ≤
-      RCLike.re ⟪(ClosedOperator.reducingRestriction A Uᗮ hred.orthogonal).toLinearMap x,
-        (x : Uᗮ)⟫_ℝ
-    simp [hx]
+    have hzero : ((x.1 : RealPlane)) = 0 :=
+      inner_self_eq_zero.mp
+        (Submodule.inner_right_of_mem_orthogonal (K := U) Submodule.mem_top x.1.2)
+    have hx : x = 0 := Subtype.ext (Subtype.ext hzero)
+    rw [hx]
+    simp
   have hgap : UnboundedSylvesterGap A0
       (ClosedOperator.reducingRestriction A Uᗮ hred.orthogonal) 1 := by
     exact UnboundedSylvesterGap.trialBelow_complementAbove hA0upper
@@ -202,14 +206,15 @@ theorem realPlane_zeroResidual_model :
   apply sinTheta_unbounded_real_reducingSubspace
     (KyFanDominantIdealFamily.operatorNorm (𝕜 := ℝ))
       A hA U hred A0 hA0
-      (ContinuousLinearMap.id ℝ RealPlane) 0 isometry_id
-  · intro x
-    simp [A]
-  · intro x
-    simp [A, A0]
-  · exact zero_lt_one
-  · exact hgap
-  · trivial
+      (ContinuousLinearMap.id ℝ RealPlane) 0 (fun _ => rfl)
+  case hXdom => exact fun x => Submodule.mem_top
+  case hReq =>
+    intro x
+    show (0 : RealPlane) - (0 : RealPlane) = (0 : RealPlane)
+    simp
+  case hδ => exact zero_lt_one
+  case hgap => exact hgap
+  case hR => trivial
 
 end FiniteRealModel
 
