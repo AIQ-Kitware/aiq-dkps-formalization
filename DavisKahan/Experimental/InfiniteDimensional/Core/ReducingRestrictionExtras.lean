@@ -36,8 +36,8 @@ theorem orthogonal
     simpa only [Submodule.orthogonal_orthogonal] using
       h.projection_mem_domain x
   · intro x hx
-    simpa only [Submodule.orthogonal_orthogonal] using
-      h.invariant x hx
+    rw [Submodule.orthogonal_orthogonal] at hx ⊢
+    exact h.invariant x hx
 
 end ReducesSubspace
 
@@ -52,9 +52,11 @@ theorem ofBounded_reducesSubspace
   · intro x
     simp
   · intro x hx
-    simpa [InvariantSubspace] using hred.1 (x : E) hx
+    show A (x : E) ∈ U
+    exact hred.1 (x : E) hx
   · intro x hx
-    simpa [InvariantSubspace] using hred.2 (x : E) hx
+    show A (x : E) ∈ Uᗮ
+    exact hred.2 (x : E) hx
 
 /-- For a bounded operator, the closed reducing restriction has the same
 pointwise action as the ordinary bounded restriction. -/
