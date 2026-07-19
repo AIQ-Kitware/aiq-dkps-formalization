@@ -137,42 +137,45 @@ intertwining, residual, and localization obligations are discharged internally.
   estimate for the difference of the two canonical spectral projections,
   stated with genuine spectra of the four selected Stone restrictions.
 
-## Current compiler-first frontier
+## Current status and optional extension frontier
 
-The implementation leaves above are intentionally decomposed so compiler work
-can proceed in dependency order.  The high-risk seams are now:
+At commit `19e6d2fa5e5b`, the full general sine-theta source surface is
+compiler-accepted for complex and real scalars.  This includes all three gap
+configurations, arbitrary source-facing unitary-invariant ideal families,
+bounded specializations, and natural real spectral-subspace inputs.  The
+explicit `FullPartIII` target and `FullUnboundedAudit.lean` must still be built
+directly because the default library root does not cover them.
 
-- elaborating the closed graph and adjoint-domain proofs for unbounded real
-  complexification;
-- reconciling the exact `LinearPMap` self-adjointness and resolvent APIs;
-- compiling rank preservation and the min--max proof of exact approximation
-  numbers under real complexification;
-- checking the finite Ky Fan family coercions in the real Sylvester descent;
-- compiling the conjugation-fixed real functional-calculus descent, especially
-  negative real powers on an invertible positive Gram operator;
-- reflecting the complex Gram identities back through injective
-  complexification;
-- compiling the conjugation-invariant spectral PVM descent and the generic
-  reducing-subspace restriction, especially the adjoint-domain equivalence;
-- checking the real spectral projection domain/intertwining descent and the
-  natural-input exact decomposition;
-- checking definitional equalities between selected real polar data and the
-  source-facing real sine operators;
-- running `FullUnboundedAudit.lean` and accepting completion only after every
-  complex and real capstone has the expected trusted dependency list.
+The accepted theorem chain must not be reopened or retired.  Optional API work
+is isolated in separate leaves:
 
-The generic `IsometricSinThetaProblem.result` remains the historical theorem
-over an arbitrary `RCLike` implementation.  The source manuscript surface now
-selects `result_complex`, and `result_real` is the parallel real endpoint.
-This avoids pretending that the complex spectral foundation automatically
-covers an arbitrary third implementation of the `RCLike` interface.
+- `NaturalGenuineGeneralized.lean` adds the complex lower-frame theorem from a
+  measurable spectral set;
+- `NaturalReducing.lean` adds shared real/complex records when a reducing
+  subspace is supplied directly;
+- `NaturalBounded.lean` derives full-domain bounded natural-input forms;
+- `NaturalGapConvenience.lean` names all three gap orientations at the source
+  level;
+- `NaturalTwoSubspace.lean` combines two directed estimates into the sharp
+  symmetric projector gap;
+- `NaturalExamples.lean` tests operator norm, a nontrivial Ky Fan gauge,
+  bounded inputs, and a finite-dimensional real model.
 
-A candidate natural-input real spectral-subspace route is developed separately from
-the source-shaped problem records.  The reusable core theorem restricts any
-self-adjoint closed operator to an orthogonally complemented reducing subspace.
-The Spectra bridge is designed to descend the canonical complex spectral PVM
-through the real structure, prove that the resulting real projections reduce
-the original operator, and instantiate the generic restriction.  `NaturalReal.lean`
-then constructs every complementary-domain and intertwining fact internally for
-both the isometric and lower-frame theorems.  This layer remains pending full
-compiler verification together with the upstream real complexification route.
+These additions are intentionally exposed through
+`Sources/DavisKahan1970/GeneralSinThetaExtensions.lean` until a compiler pass
+and trusted-dependency audit accepts them.  The verified
+`GeneralSinTheta.lean` facade remains unchanged.
+
+Two mathematical cautions from the completed repair should guide further work:
+
+- projection-decomposition lemmas must be checked for orientation rather than
+  rewritten speculatively;
+- conjugation averaging of a finite-rank approximant can double its rank and
+  cannot prove exact approximation-number preservation at the same index.
+
+The full-paper goal remains larger than sine-theta.  After the optional API
+layer settles, use `dev/davis-kahan-open-debt-inventory-2026-07-19.md` to triage
+direct rotation, tangent and double-angle results, sharpness/equality content,
+and the remaining genuinely live unbounded obligations.  Do not treat the raw
+textual open-term count as a roadmap: it includes immutable challenges and
+superseded experimental infrastructure.
