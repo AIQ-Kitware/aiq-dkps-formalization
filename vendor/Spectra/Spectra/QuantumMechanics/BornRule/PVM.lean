@@ -8,7 +8,6 @@ import Spectra.ProjValMeasure.Basic
 import Spectra.SpectralTheory.Measure.Polarized
 import Spectra.SpectralTheory.Measure.PVM
 import Spectra.Resolvent.SpectralRepresentation
-import Spectra.QuantumMechanics.Unitarity.Basic
 /-!
 # The Born rule
 
@@ -38,8 +37,8 @@ the names that make the physical content explicit.
 * `born_rule_le` — Born probabilities are bounded by `‖ψ‖²` (by `1` for a unit vector).
 
 All four results are one-line consequences of already-proved `ProjValMeasure` lemmas
-(`norm_sq_proj_apply`, `diag_univ_toReal`, `norm_proj_apply_le`); there is no `sorry` and no
-new analysis here.
+(`norm_sq_proj_apply`, `diag_univ_toReal`, `norm_proj_apply_le`); all declarations are complete and no
+new analysis is needed here.
 
 ## Implementation notes
 
@@ -100,7 +99,7 @@ namespace PVM
 These statements need only a `ProjValMeasure`; they are immediate from the existing
 `ProjValMeasure` lemmas.  They are the Born rule for a *sharp measurement of a single
 observable on a pure state*, with the observable presented through its PVM.  Every
-declaration here is fully proved (no `sorry`). -/
+declaration here is fully proved. -/
 
 /-- The **Born measure** of a state `ψ` against a resolution of the identity `P`: the
 probability law of the measurement outcomes.  Definitionally the diagonal scalar measure
