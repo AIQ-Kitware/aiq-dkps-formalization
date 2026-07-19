@@ -38,16 +38,24 @@ variable {E F G : Type v}
   [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
   [NormedAddCommGroup G] [InnerProductSpace 𝕜 G] [CompleteSpace G]
 
+/-- Every finite gauge kills the zero vector. -/
+theorem finiteGauge_zero (N : PaperUnitaryInvariantNorm) (n : ℕ) :
+    N.finiteGauge n (0 : Fin n → ℝ) = 0 := by
+  have h := N.finiteGauge_smul (n := n) 0 (0 : Fin n → ℝ)
+  simpa only [smul_zero, abs_zero, zero_mul] using h
+
 /-- The source norm of the zero operator is zero. -/
 @[simp]
 theorem extendedGauge_zero (N : PaperUnitaryInvariantNorm) :
     N.extendedGauge (0 : E →L[𝕜] F) = 0 := by
-  apply le_antisymm
-  · apply iSup_le
+  have hzero : ∀ n : ℕ, N.prefixGauge n (0 : E →L[𝕜] F) = 0 := by
     intro n
-    simp [extendedGauge, prefixGauge, approximationPrefix,
-      approximationSingularValue_zero_map, finiteGauge_def]
-  · exact bot_le
+    have hx : approximationPrefix n (0 : E →L[𝕜] F) = (0 : Fin n → ℝ) := by
+      funext i
+      simp only [approximationPrefix, approximationSingularValue_zero_map,
+        Pi.zero_apply]
+    simp only [prefixGauge, hx, N.finiteGauge_zero n]
+  simp only [extendedGauge, hzero, ENNReal.ofReal_zero, iSup_const]
 
 /-- Absolute homogeneity of the extended source norm. -/
 theorem extendedGauge_smul (N : PaperUnitaryInvariantNorm)
@@ -72,14 +80,19 @@ theorem extendedGauge_smul (N : PaperUnitaryInvariantNorm)
     rw [hprefix, N.finiteGauge_smul]
     simp [abs_of_nonneg (norm_nonneg c)]
 
-/-- Triangle inequality for each finite prefix gauge. -/
-theorem prefixGauge_add_le (N : PaperUnitaryInvariantNorm)
+/-- Triangle inequality for each finite prefix gauge.
+
+The Ky Fan triangle inequality in infinite dimensions is an analytic input of
+the repository, supplied by `HasKyFanApproximationGaugeTriangle` (instantiated
+for `ℝ` and `ℂ`), so it is carried as a class assumption here. -/
+theorem prefixGauge_add_le [HasKyFanApproximationGaugeTriangle.{u, v} 𝕜]
+    (N : PaperUnitaryInvariantNorm)
     (n : ℕ) (A B : E →L[𝕜] F) :
     N.prefixGauge n (A + B) ≤ N.prefixGauge n A + N.prefixGauge n B := by
-  let x : Fin n → ℝ := N.approximationPrefix n (A + B)
-  let y : Fin n → ℝ :=
-    N.approximationPrefix n A + N.approximationPrefix n B
-  have hmajor : N.finiteGauge n x ≤ N.finiteGauge n y := by
+  have hmajor :
+      N.finiteGauge n (approximationPrefix n (A + B)) ≤
+        N.finiteGauge n
+          (approximationPrefix n A + approximationPrefix n B) := by
     apply (N.finiteNorm n).gauge_le_gauge_of_prefix_sums_le
       (EuclideanSpace.basisFun (Fin n) ℂ)
     · intro i j hij
@@ -91,21 +104,33 @@ theorem prefixGauge_add_le (N : PaperUnitaryInvariantNorm)
         (approximationSingularValue_nonneg _ _)
     · intro m
       rcases le_or_gt m n with hm | hm
-      · simpa [x, y, approximationPrefix, Finset.sum_add_distrib,
-          sum_filter_lt_eq_sum_fin hm,
-          PaperUnitaryInvariantNorm.sum_approximationPrefix] using
-          kyFanApproximationGauge_add_le m A B
+      · simp only [approximationPrefix, Pi.add_apply]
+        rw [sum_filter_lt_eq_sum_fin hm
+            (fun k => approximationSingularValue k (A + B)),
+          sum_filter_lt_eq_sum_fin hm
+            (fun k => approximationSingularValue k A +
+              approximationSingularValue k B),
+          Fin.sum_univ_eq_sum_range
+            (fun k => approximationSingularValue k (A + B)) m,
+          Fin.sum_univ_eq_sum_range
+            (fun k => approximationSingularValue k A +
+              approximationSingularValue k B) m,
+          Finset.sum_add_distrib]
+        exact kyFanApproximationGauge_add_le m A B
       · have huniv :
           (Finset.univ.filter fun i : Fin n => (i : ℕ) < m) = Finset.univ :=
           Finset.filter_true_of_mem fun i _ => lt_trans i.isLt hm
-        rw [huniv, huniv]
-        simpa [x, y, Finset.sum_add_distrib,
-          PaperUnitaryInvariantNorm.sum_approximationPrefix] using
-          kyFanApproximationGauge_add_le n A B
+        rw [huniv]
+        simp only [Pi.add_apply]
+        rw [Finset.sum_add_distrib,
+          sum_approximationPrefix n (A + B),
+          sum_approximationPrefix n A, sum_approximationPrefix n B]
+        exact kyFanApproximationGauge_add_le n A B
   exact hmajor.trans (N.finiteGauge_add_le _ _)
 
 /-- Triangle inequality of the canonical infinite-dimensional extension. -/
-theorem extendedGauge_add_le (N : PaperUnitaryInvariantNorm)
+theorem extendedGauge_add_le [HasKyFanApproximationGaugeTriangle.{u, v} 𝕜]
+    (N : PaperUnitaryInvariantNorm)
     (A B : E →L[𝕜] F) :
     N.extendedGauge (A + B) ≤ N.extendedGauge A + N.extendedGauge B := by
   apply iSup_le
@@ -115,19 +140,32 @@ theorem extendedGauge_add_le (N : PaperUnitaryInvariantNorm)
         ENNReal.ofReal (N.prefixGauge n A + N.prefixGauge n B) :=
       ENNReal.ofReal_le_ofReal (N.prefixGauge_add_le n A B)
     _ = ENNReal.ofReal (N.prefixGauge n A) +
-        ENNReal.ofReal (N.prefixGauge n B) := by
-      rw [ENNReal.ofReal_add (N.finiteGauge_nonneg _) (N.finiteGauge_nonneg _)]
+        ENNReal.ofReal (N.prefixGauge n B) :=
+      ENNReal.ofReal_add (N.finiteGauge_nonneg _) (N.finiteGauge_nonneg _)
     _ ≤ N.extendedGauge A + N.extendedGauge B :=
       add_le_add
         (le_iSup (fun m => ENNReal.ofReal (N.prefixGauge m A)) n)
         (le_iSup (fun m => ENNReal.ofReal (N.prefixGauge m B)) n)
 
-/-- Adjoint invariance of the source norm. -/
+/-- Adjoint invariance of the source norm.
+
+This is a genuinely *heterogeneous* statement: `A.adjoint : F →L[𝕜] E` while
+`A : E →L[𝕜] F`, so it cannot be routed through
+`gauge_eq_of_sameApproximationSingularValues`, which compares two operators
+between the *same* pair of spaces.  It is proved directly from the equality of
+the two approximation singular-value prefixes, which live in the same real
+vector space `Fin n → ℝ` regardless of the operators' domains. -/
 theorem extendedGauge_adjoint (N : PaperUnitaryInvariantNorm)
     (A : E →L[𝕜] F) :
     N.extendedGauge A.adjoint = N.extendedGauge A := by
-  exact N.gauge_eq_of_sameApproximationSingularValues
-    (fun n => approximationSingularValue_adjoint A n)
+  have hprefix : ∀ n : ℕ,
+      N.prefixGauge n A.adjoint = N.prefixGauge n A := by
+    intro n
+    have hx : approximationPrefix n A.adjoint = approximationPrefix n A := by
+      funext i
+      exact approximationSingularValue_adjoint (i : ℕ) A
+    simp only [prefixGauge, hx]
+  simp only [extendedGauge, hprefix]
 
 /-- Unitary equivalences on either side preserve the complete source norm. -/
 theorem extendedGauge_unitary
@@ -138,23 +176,87 @@ theorem extendedGauge_unitary
         V.toContinuousLinearEquiv.toContinuousLinearMap) =
       N.extendedGauge A := by
   exact N.gauge_eq_of_sameApproximationSingularValues
-    (SameApproximationSingularValues.comp_isometricEquiv U V A)
+    (SameApproximationSingularValues.comp_isometricEquiv (A := A) U V)
+
+/-- Finite Fan dominance between operators with **different codomains**.
+
+`PaperUnitaryInvariantNorm.prefixGauge_le_of_all_kyFan_le` compares two
+operators between the same pair of spaces.  A two-sided ideal estimate
+inherently compares `L ∘L A ∘L R : E →L[𝕜] G` with a rescaling of
+`A : E →L[𝕜] F`, so the homogeneous form is not applicable.  Only the real
+singular-value prefixes are compared, and those live in `Fin n → ℝ` whatever
+the operators' codomains are, so the statement generalizes verbatim. -/
+theorem prefixGauge_le_of_all_kyFan_le_hetero (N : PaperUnitaryInvariantNorm)
+    {A : E →L[𝕜] G} {B : E →L[𝕜] F}
+    (h : ∀ k : ℕ, kyFanApproximationGauge k A ≤
+      kyFanApproximationGauge k B) (n : ℕ) :
+    N.prefixGauge n A ≤ N.prefixGauge n B := by
+  change (N.finiteNorm n).gauge (EuclideanSpace.basisFun (Fin n) ℂ)
+      (approximationPrefix n A) ≤
+    (N.finiteNorm n).gauge (EuclideanSpace.basisFun (Fin n) ℂ)
+      (approximationPrefix n B)
+  apply (N.finiteNorm n).gauge_le_gauge_of_prefix_sums_le
+  · intro i j hij
+    exact approximationSingularValue_antitone A (Fin.le_def.mp hij)
+  · intro i
+    exact approximationSingularValue_nonneg _ _
+  · intro i
+    exact approximationSingularValue_nonneg _ _
+  · intro m
+    rcases le_or_gt m n with hm | hm
+    · simp only [approximationPrefix]
+      rw [sum_filter_lt_eq_sum_fin hm
+          (fun k => approximationSingularValue k A),
+        sum_filter_lt_eq_sum_fin hm
+          (fun k => approximationSingularValue k B),
+        Fin.sum_univ_eq_sum_range
+          (fun k => approximationSingularValue k A) m,
+        Fin.sum_univ_eq_sum_range
+          (fun k => approximationSingularValue k B) m]
+      exact h m
+    · have huniv :
+        (Finset.univ.filter fun i : Fin n => (i : ℕ) < m) = Finset.univ :=
+        Finset.filter_true_of_mem fun i _ => lt_trans i.isLt hm
+      rw [huniv, sum_approximationPrefix n A, sum_approximationPrefix n B]
+      exact h n
+
+/-- Universal Fan dominance between operators with different codomains. -/
+theorem extendedGauge_le_of_all_kyFan_le_hetero
+    (N : PaperUnitaryInvariantNorm)
+    {A : E →L[𝕜] G} {B : E →L[𝕜] F}
+    (h : ∀ k : ℕ, kyFanApproximationGauge k A ≤
+      kyFanApproximationGauge k B) :
+    N.extendedGauge A ≤ N.extendedGauge B := by
+  apply iSup_le
+  intro n
+  exact le_trans
+    (ENNReal.ofReal_le_ofReal
+      (N.prefixGauge_le_of_all_kyFan_le_hetero h n))
+    (le_iSup (fun m : ℕ => ENNReal.ofReal (N.prefixGauge m B)) n)
 
 /-- The two-sided ideal estimate at the extended-value level. -/
 theorem extendedGauge_comp_le (N : PaperUnitaryInvariantNorm)
     (L : F →L[𝕜] G) (A : E →L[𝕜] F) (R : E →L[𝕜] E) :
     N.extendedGauge (L ∘L A ∘L R) ≤
       ENNReal.ofReal ‖L‖ * N.extendedGauge A * ENNReal.ofReal ‖R‖ := by
-  apply N.extendedGauge_le_of_all_kyFan_le
-  intro k
-  calc
-    kyFanApproximationGauge k (L ∘L A ∘L R)
-        ≤ ‖L‖ * kyFanApproximationGauge k A * ‖R‖ :=
-      kyFanApproximationGauge_comp_le k L A R
-    _ = kyFanApproximationGauge k
-        (((‖L‖ * ‖R‖ : ℝ) : 𝕜) • A) := by
-      rw [kyFanApproximationGauge_smul]
-      simp [abs_of_nonneg, norm_nonneg, mul_assoc, mul_left_comm]
+  have hLR : (0 : ℝ) ≤ ‖L‖ * ‖R‖ := mul_nonneg (norm_nonneg L) (norm_nonneg R)
+  have hcnorm : ‖((‖L‖ * ‖R‖ : ℝ) : 𝕜)‖ = ‖L‖ * ‖R‖ := by
+    rw [RCLike.norm_ofReal, abs_of_nonneg hLR]
+  have hkey : ∀ k : ℕ,
+      kyFanApproximationGauge k (L ∘L A ∘L R) ≤
+        kyFanApproximationGauge k (((‖L‖ * ‖R‖ : ℝ) : 𝕜) • A) := by
+    intro k
+    rw [kyFanApproximationGauge_smul, hcnorm]
+    calc
+      kyFanApproximationGauge k (L ∘L A ∘L R)
+          ≤ ‖L‖ * kyFanApproximationGauge k A * ‖R‖ :=
+        kyFanApproximationGauge_comp_le k L A R
+      _ = ‖L‖ * ‖R‖ * kyFanApproximationGauge k A := by ring
+  have hle := N.extendedGauge_le_of_all_kyFan_le_hetero hkey
+  rw [N.extendedGauge_smul, hcnorm,
+    ENNReal.ofReal_mul (norm_nonneg L)] at hle
+  refine hle.trans_eq ?_
+  ring
 
 /-- Membership is a two-sided operator ideal. -/
 theorem comp_mem (N : PaperUnitaryInvariantNorm)
@@ -177,20 +279,26 @@ theorem comp_mem (N : PaperUnitaryInvariantNorm)
 theorem gauge_smul (N : PaperUnitaryInvariantNorm)
     (c : 𝕜) {A : E →L[𝕜] F} (hA : N.Mem A) :
     N.gauge (c • A) = ‖c‖ * N.gauge A := by
-  rw [gauge, N.extendedGauge_smul, ENNReal.toReal_mul,
+  simp only [gauge]
+  rw [N.extendedGauge_smul, ENNReal.toReal_mul,
     ENNReal.toReal_ofReal (norm_nonneg c)]
 
 /-- The real gauge is subadditive on its canonical ideal. -/
-theorem gauge_add_le (N : PaperUnitaryInvariantNorm)
+theorem gauge_add_le [HasKyFanApproximationGaugeTriangle.{u, v} 𝕜]
+    (N : PaperUnitaryInvariantNorm)
     {A B : E →L[𝕜] F} (hA : N.Mem A) (hB : N.Mem B) :
     N.gauge (A + B) ≤ N.gauge A + N.gauge B := by
+  have hsum : N.extendedGauge A + N.extendedGauge B ≠ ⊤ :=
+    ENNReal.add_ne_top.mpr ⟨hA, hB⟩
   have hAB : N.Mem (A + B) := by
     intro htop
     have hle := N.extendedGauge_add_le A B
     rw [htop] at hle
-    exact ENNReal.add_ne_top.mpr ⟨hA, hB⟩ (top_le_iff.mp hle)
-  exact ENNReal.toReal_le_toReal (N.extendedGauge_add_le A B)
-    hAB (ENNReal.add_ne_top.mpr ⟨hA, hB⟩)
+    exact hsum (top_le_iff.mp hle)
+  have hto := (ENNReal.toReal_le_toReal hAB hsum).mpr
+    (N.extendedGauge_add_le A B)
+  rw [ENNReal.toReal_add hA hB] at hto
+  exact hto
 
 /-- Exact ideal inequality for the real-valued source norm. -/
 theorem gauge_comp_le (N : PaperUnitaryInvariantNorm)
@@ -199,14 +307,15 @@ theorem gauge_comp_le (N : PaperUnitaryInvariantNorm)
     N.gauge (L ∘L A ∘L R) ≤ ‖L‖ * N.gauge A * ‖R‖ := by
   have hcomp := N.comp_mem hA L R
   have hle := N.extendedGauge_comp_le L A R
-  have hto := ENNReal.toReal_le_toReal hle hcomp (by
-    apply ENNReal.mul_ne_top
-    · apply ENNReal.mul_ne_top
-      · exact ENNReal.ofReal_ne_top
-      · exact hA
-    · exact ENNReal.ofReal_ne_top)
-  simpa [gauge, ENNReal.toReal_mul,
-    ENNReal.toReal_ofReal (norm_nonneg _)] using hto
+  have hfin :
+      ENNReal.ofReal ‖L‖ * N.extendedGauge A * ENNReal.ofReal ‖R‖ ≠ ⊤ :=
+    ENNReal.mul_ne_top
+      (ENNReal.mul_ne_top ENNReal.ofReal_ne_top hA) ENNReal.ofReal_ne_top
+  have hto := (ENNReal.toReal_le_toReal hcomp hfin).mpr hle
+  rw [ENNReal.toReal_mul, ENNReal.toReal_mul,
+    ENNReal.toReal_ofReal (norm_nonneg L),
+    ENNReal.toReal_ofReal (norm_nonneg R)] at hto
+  exact hto
 
 /-- The canonical source norm satisfies the contraction-compatibility law
 used in the paper. -/
@@ -216,9 +325,12 @@ theorem gauge_comp_le_of_contractions (N : PaperUnitaryInvariantNorm)
     (hL : ‖L‖ ≤ 1) (hR : ‖R‖ ≤ 1) :
     N.gauge (L ∘L A ∘L R) ≤ N.gauge A := by
   refine (N.gauge_comp_le hA L R).trans ?_
-  have hnonneg := ENNReal.toReal_nonneg
-  nlinarith [norm_nonneg L, norm_nonneg R,
-    N.finiteGauge_nonneg (N.approximationPrefix 1 A)]
+  have hnonneg : 0 ≤ N.gauge A := ENNReal.toReal_nonneg
+  calc ‖L‖ * N.gauge A * ‖R‖ ≤ ‖L‖ * N.gauge A * 1 :=
+        mul_le_mul_of_nonneg_left hR (mul_nonneg (norm_nonneg L) hnonneg)
+    _ = ‖L‖ * N.gauge A := mul_one _
+    _ ≤ 1 * N.gauge A := mul_le_mul_of_nonneg_right hL hnonneg
+    _ = N.gauge A := one_mul _
 
 end PaperUnitaryInvariantNorm
 
