@@ -132,17 +132,13 @@ noncomputable def inverseCayleyOp (U : H →L[ℂ] H)
         rw [← hψ₁, ← hψ₂]
         simp only [ContinuousLinearMap.sub_apply, ContinuousLinearMap.id_apply]
       have h_sub : (ContinuousLinearMap.id ℂ H - U) (ψ₁₂ - (ψ₁ + ψ₂)) = 0 := by
-        simp only [ContinuousLinearMap.sub_apply, ContinuousLinearMap.id_apply,
-                   map_sub, map_add]
-        rw [sub_eq_zero]
-        convert h_eq using 1
-        simp only [ContinuousLinearMap.sub_apply, ContinuousLinearMap.id_apply]
-        rw [map_add]
-        abel
+        rw [map_sub, h_eq, sub_self]
       have h_fixed : U (ψ₁₂ - (ψ₁ + ψ₂)) = ψ₁₂ - (ψ₁ + ψ₂) := by
-        have : ψ₁₂ - (ψ₁ + ψ₂) - U (ψ₁₂ - (ψ₁ + ψ₂)) = 0 := by
-          convert h_sub using 1
-        exact (sub_eq_zero.mp this).symm
+        have hexpanded :
+            ψ₁₂ - (ψ₁ + ψ₂) - U (ψ₁₂ - (ψ₁ + ψ₂)) = 0 := by
+          simpa only [ContinuousLinearMap.sub_apply,
+            ContinuousLinearMap.id_apply] using h_sub
+        exact (sub_eq_zero.mp hexpanded).symm
       exact eq_of_sub_eq_zero (h_one _ h_fixed)
     rw [h_diff, map_add]
     simp only [smul_add]
@@ -165,9 +161,10 @@ noncomputable def inverseCayleyOp (U : H →L[ℂ] H)
         simp only [map_sub, map_smul, eq1, eq2]
         abel
       have h_fixed : U (ψ' - c • ψ) = ψ' - c • ψ := by
-        have : ψ' - c • ψ - U (ψ' - c • ψ) = 0 := by
-          convert h_sub using 1
-        exact (sub_eq_zero.mp this).symm
+        have hexpanded : ψ' - c • ψ - U (ψ' - c • ψ) = 0 := by
+          simpa only [ContinuousLinearMap.sub_apply,
+            ContinuousLinearMap.id_apply] using h_sub
+        exact (sub_eq_zero.mp hexpanded).symm
       exact eq_of_sub_eq_zero (h_one _ h_fixed)
     rw [h_diff, map_smul, smul_comm c I (U ψ), smul_comm c I ψ]
 
