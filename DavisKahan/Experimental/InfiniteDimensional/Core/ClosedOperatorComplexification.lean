@@ -347,10 +347,10 @@ theorem closedSylvesterEquation_complexify
   apply RealComplexification.ext
   · have h := hEq.equation
         ⟨re (z : Fℂ), (mem_complexify_domain_iff B z).mp z.property |>.1⟩
-    simpa [mapsDomainTo_complexify] using h
+    exact h
   · have h := hEq.equation
         ⟨im (z : Fℂ), (mem_complexify_domain_iff B z).mp z.property |>.2⟩
-    simpa [mapsDomainTo_complexify] using h
+    exact h
 
 /-- A lower quadratic-form bound is preserved exactly by complexification. -/
 theorem semiboundedBelow_complexify
@@ -395,15 +395,53 @@ theorem isSymmetric_complexify
   · change
       ⟪A.toLinearMap (domainRe A z), domainRe A w⟫_ℝ +
         ⟪A.toLinearMap (domainIm A z), domainIm A w⟫_ℝ =
-      ⟪domainRe A z, A.toLinearMap (domainRe A w)⟫_ℝ +
-        ⟪domainIm A z, A.toLinearMap (domainIm A w)⟫_ℝ
+      ⟪(domainRe A z : E), A.toLinearMap (domainRe A w)⟫_ℝ +
+        ⟪(domainIm A z : E), A.toLinearMap (domainIm A w)⟫_ℝ
     rw [hA, hA]
   · change
       ⟪A.toLinearMap (domainRe A z), domainIm A w⟫_ℝ -
         ⟪A.toLinearMap (domainIm A z), domainRe A w⟫_ℝ =
-      ⟪domainRe A z, A.toLinearMap (domainIm A w)⟫_ℝ -
-        ⟪domainIm A z, A.toLinearMap (domainRe A w)⟫_ℝ
+      ⟪(domainRe A z : E), A.toLinearMap (domainIm A w)⟫_ℝ -
+        ⟪(domainIm A z : E), A.toLinearMap (domainRe A w)⟫_ℝ
     rw [hA, hA]
+
+/-- The real embedding of the domain is continuous.  `fun_prop` cannot see
+through the `WithLp` wrapper or the subtype, so this is proved by hand. -/
+private theorem continuous_ofRealDomain
+    (A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E)) :
+    Continuous (ofRealDomain A) :=
+  ((ofReal (E := E)).continuous.comp continuous_subtype_val).subtype_mk _
+
+/-- The imaginary embedding of the domain is continuous. -/
+private theorem continuous_ofImaginaryDomain
+    (A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E)) :
+    Continuous (ofImaginaryDomain A) := by
+  have h : Continuous fun x : A.domain => Complex.I • (ofReal (x : E) : Eℂ) :=
+    (continuous_const_smul (Complex.I : ℂ)).comp
+      ((ofReal (E := E)).continuous.comp continuous_subtype_val)
+  exact h.subtype_mk _
+
+/-- The real coordinate of the complexified domain is continuous. -/
+private theorem continuous_domainRe
+    (A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E)) :
+    Continuous (domainRe A) :=
+  (continuous_re.comp continuous_subtype_val).subtype_mk _
+
+/-- The imaginary coordinate of the complexified domain is continuous. -/
+private theorem continuous_domainIm
+    (A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E)) :
+    Continuous (domainIm A) :=
+  (continuous_im.comp continuous_subtype_val).subtype_mk _
+
+/-- Real part of a complex inner product against a real-copy vector. -/
+private theorem inner_ofReal_right_re (z : Eℂ) (v : E) :
+    (⟪z, ofReal v⟫_ℂ).re = ⟪re z, v⟫_ℝ := by
+  simp [inner_apply]
+
+/-- Real part of a complex inner product against an imaginary-copy vector. -/
+private theorem inner_I_ofReal_right_re (z : Eℂ) (v : E) :
+    (⟪z, Complex.I • ofReal v⟫_ℂ).re = ⟪im z, v⟫_ℝ := by
+  simp [inner_apply]
 
 /-- Membership in the adjoint domain separates into the two real adjoint-domain
 conditions.  This is the maximality step in the real-to-complex self-adjoint
@@ -417,34 +455,49 @@ theorem mem_complexify_adjoint_domain_iff
   rw [LinearPMap.mem_adjoint_domain_iff]
   constructor
   · intro hz
-    have hofReal : Continuous (ofRealDomain A) := by fun_prop
-    have hofImaginary : Continuous (ofImaginaryDomain A) := by fun_prop
+    have hofReal : Continuous (ofRealDomain A) := continuous_ofRealDomain A
+    have hofImaginary : Continuous (ofImaginaryDomain A) :=
+      continuous_ofImaginaryDomain A
     constructor
     · rw [LinearPMap.mem_adjoint_domain_iff]
+      show Continuous fun x : A.domain => ⟪re z, A.toLinearMap x⟫_ℝ
       have hrestrict : Continuous fun x : A.domain =>
           ⟪z, (complexify A).toLinearPMap (ofRealDomain A x)⟫_ℂ :=
         hz.comp hofReal
-      exact (by
-        have hre := hrestrict.cl.re
-        simpa [complexify_apply_ofReal, inner_apply] using hre)
+      have hre := Complex.continuous_re.comp hrestrict
+      simp only [Function.comp_def,
+        ForMathlib.DavisKahanExt.ClosedOperator.toLinearPMap_apply,
+        complexify_apply_ofReal, inner_ofReal_right_re] at hre
+      exact hre
     · rw [LinearPMap.mem_adjoint_domain_iff]
+      show Continuous fun x : A.domain => ⟪im z, A.toLinearMap x⟫_ℝ
       have hrestrict : Continuous fun x : A.domain =>
           ⟪z, (complexify A).toLinearPMap (ofImaginaryDomain A x)⟫_ℂ :=
         hz.comp hofImaginary
-      exact (by
-        have hre := hrestrict.cl.re
-        simpa [complexify_apply_ofImaginary, inner_apply] using hre)
+      have hre := Complex.continuous_re.comp hrestrict
+      simp only [Function.comp_def,
+        ForMathlib.DavisKahanExt.ClosedOperator.toLinearPMap_apply,
+        complexify_apply_ofImaginary, inner_I_ofReal_right_re] at hre
+      exact hre
   · rintro ⟨hr, hi⟩
     rw [LinearPMap.mem_adjoint_domain_iff] at hr hi
-    have hdomainRe : Continuous (domainRe A) := by fun_prop
-    have hdomainIm : Continuous (domainIm A) := by fun_prop
+    replace hr : Continuous fun x : A.domain => ⟪re z, A.toLinearMap x⟫_ℝ := hr
+    replace hi : Continuous fun x : A.domain => ⟪im z, A.toLinearMap x⟫_ℝ := hi
+    have hdomainRe : Continuous (domainRe A) := continuous_domainRe A
+    have hdomainIm : Continuous (domainIm A) := continuous_domainIm A
     change Continuous fun w : domain A => ⟪z, linearMap A w⟫_ℂ
-    apply Complex.continuous_iff.mpr
-    constructor
-    · simpa [inner_apply, domainRe, domainIm] using
-        (hr.comp hdomainRe).add (hi.comp hdomainIm)
-    · simpa [inner_apply, domainRe, domainIm] using
-        (hr.comp hdomainIm).sub (hi.comp hdomainRe)
+    have hre : Continuous fun w : domain A => (⟪z, linearMap A w⟫_ℂ).re :=
+      (hr.comp hdomainRe).add (hi.comp hdomainIm)
+    have him : Continuous fun w : domain A => (⟪z, linearMap A w⟫_ℂ).im :=
+      (hr.comp hdomainIm).sub (hi.comp hdomainRe)
+    have hsplit : (fun w : domain A => ⟪z, linearMap A w⟫_ℂ) =
+        fun w : domain A => (((⟪z, linearMap A w⟫_ℂ).re : ℂ) +
+          ((⟪z, linearMap A w⟫_ℂ).im : ℂ) * Complex.I) := by
+      funext w
+      exact (Complex.re_add_im _).symm
+    rw [hsplit]
+    exact (Complex.continuous_ofReal.comp hre).add
+      ((Complex.continuous_ofReal.comp him).mul continuous_const)
 
 /-- Self-adjointness of a real closed operator is preserved by
 complexification. -/
@@ -491,15 +544,19 @@ theorem realResolvent_mem_complexify
   refine ⟨RealComplexification.complexify R, ?_, ?_⟩
   · intro z
     apply RealComplexification.ext
-    · exact hleft (domainRe A z)
-    · exact hleft (domainIm A z)
+    · rw [re_complexify, re_sub, complexify_apply_re, re_complex_smul]
+      simpa [domainRe] using hleft (domainRe A z)
+    · rw [im_complexify, im_sub, complexify_apply_im, im_complex_smul]
+      simpa [domainIm] using hleft (domainIm A z)
   · intro w
     obtain ⟨hrdom, hr⟩ := hright (re w)
     obtain ⟨hidom, hi⟩ := hright (im w)
     refine ⟨(mem_complexify_domain_iff A _).2 ⟨hrdom, hidom⟩, ?_⟩
     apply RealComplexification.ext
-    · exact hr
-    · exact hi
+    · rw [re_sub, complexify_apply_re, re_complex_smul]
+      simpa using hr
+    · rw [im_sub, complexify_apply_im, im_complex_smul]
+      simpa using hi
 
 /-- A complex resolvent of the coordinatewise complexification descends to a
 real resolvent by restricting to the real copy and taking real coordinates. -/
@@ -521,11 +578,14 @@ theorem complexify_realResolvent_mem
   refine ⟨Rr, ?_, ?_⟩
   · intro x
     have hx := hleft (ofRealDomain A x)
-    exact congrArg re hx
+    rw [complexify_apply_ofReal] at hx
+    simpa [Rr, RrLinear, ofRealDomain] using congrArg re hx
   · intro y
     obtain ⟨hdom, hy⟩ := hright (ofReal y)
     refine ⟨(mem_complexify_domain_iff A (R (ofReal y))).mp hdom |>.1, ?_⟩
-    exact congrArg re hy
+    have hre := congrArg re hy
+    rw [re_sub, complexify_apply_re, re_complex_smul] at hre
+    simpa [Rr, RrLinear] using hre
 
 /-- Real resolvent membership is exactly preserved by closed-operator
 complexification. -/
