@@ -26,3 +26,5 @@ import DavisKahan.Experimental.InfiniteDimensional.Riccati.UnboundedTransport
 import DavisKahan.Experimental.InfiniteDimensional.Riccati.UnboundedPublic
 
 /-! # Experimental Riccati theory -/
+
+import DavisKahan.Experimental.InfiniteDimensional.Riccati.UnboundedSelectedGraphBridge
