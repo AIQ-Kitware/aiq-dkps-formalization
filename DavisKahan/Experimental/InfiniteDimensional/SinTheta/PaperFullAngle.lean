@@ -33,6 +33,14 @@ universe v
 variable {E : Type v}
   [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
 
+/-- A subspace admitting an orthogonal projection inside a complete ambient
+space is itself complete.  `local instance` does not propagate through imports,
+so it is reinstalled here. -/
+local instance instCompleteSpaceCoeOfHasOrthogonalProjectionFullAngle
+    {G : Type v} [NormedAddCommGroup G] [InnerProductSpace ℂ G] [CompleteSpace G]
+    (U : Submodule ℂ G) [U.HasOrthogonalProjection] : CompleteSpace U :=
+  (Submodule.isComplete_coe_of_hasOrthogonalProjection U).completeSpace_coe
+
 /-- `Theta = diag(Theta_0,Theta_1)` on the source orthogonal coordinates. -/
 noncomputable def paperSourceFullAngleC
     (U V : Submodule ℂ E)
@@ -78,18 +86,45 @@ theorem paperSourceCrossBlockSum_same_ambientCrossSum
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     SameApproximationSingularSequence
       (paperSourceCrossBlockSumC U V) (paperCrossSineSum V U) := by
-  let Udom := U.orthogonalDecompositionContinuousLinearEquiv
-  let Vcod := Vᗮ.orthogonalDecompositionContinuousLinearEquiv
+  let Udom : E ≃ₗᵢ[ℂ] WithLp 2 (U × Uᗮ) := U.orthogonalDecomposition
+  let Vcod : E ≃ₗᵢ[ℂ] WithLp 2 (Vᗮ × (Vᗮ)ᗮ) := Vᗮ.orthogonalDecomposition
   have hfactor :
-      (Vcod : E →L[ℂ] WithLp 2 (Vᗮ × (Vᗮ)ᗮ)) ∘L
+      Vcod.toContinuousLinearEquiv.toContinuousLinearMap ∘L
           paperCrossSineSum V U ∘L
-          (Udom.symm : WithLp 2 (U × Uᗮ) →L[ℂ] E) =
+          Udom.symm.toContinuousLinearEquiv.toContinuousLinearMap =
         paperSourceCrossBlockSumC U V := by
     ext x
     apply WithLp.ofLp_injective 2
+    -- `orthogonalDecomposition` carries its own `simp` lemmas for application
+    -- and inverse application; unfolding the definition would defeat them and
+    -- expose the raw `prodEquivOfIsCompl`.
+    -- The second coordinate lies in `Uᗮ`, so its `U`-projection vanishes, and
+    -- anything already in `V` has vanishing `Vᗮ`-projection.
+    have hUb : U.orthogonalProjectionOnto (↑x.snd : E) = 0 :=
+      Submodule.orthogonalProjectionOnto_apply_of_mem_orthogonal x.snd.2
+    have hUbStar : U.starProjection (↑x.snd : E) = 0 := by
+      rw [Submodule.starProjection_apply, hUb, Submodule.coe_zero]
+    -- Anything already in `V` is annihilated by the projection onto `Vᗮ`.
+    have hV1 : ∀ z : E, Vᗮ.orthogonalProjectionOnto (V.starProjection z) = 0 := by
+      intro z
+      refine Submodule.orthogonalProjectionOnto_apply_of_mem_orthogonal ?_
+      rw [Submodule.orthogonal_orthogonal]
+      exact V.starProjection_apply_mem z
+    -- On `Vᗮᗮ` the `V`-projection is invisible: the discarded part lies in `Vᗮ`.
+    have hV2 : ∀ z : E,
+        Vᗮᗮ.orthogonalProjectionOnto (V.starProjection z) =
+          Vᗮᗮ.orthogonalProjectionOnto z := by
+      intro z
+      have hmem : z - V.starProjection z ∈ Vᗮᗮᗮ := by
+        rw [Submodule.orthogonal_orthogonal]
+        exact Submodule.sub_starProjection_mem_orthogonal z
+      have hzero :=
+        Submodule.orthogonalProjectionOnto_apply_of_mem_orthogonal (K := Vᗮᗮ) hmem
+      rw [map_sub] at hzero
+      exact (sub_eq_zero.mp hzero).symm
     simp [paperSourceCrossBlockSumC, paperSineBlockC,
-      paperCrossSineSum, Udom, Vcod,
-      Submodule.orthogonalDecompositionContinuousLinearEquiv]
+      paperCrossSineSum, Udom, Vcod, Submodule.adjoint_subtypeL,
+      hUb, hUbStar, hV1, hV2]
   exact (SameApproximationSingularValues.of_isometricEquiv_comp
     Vcod Udom hfactor).symm
 
@@ -114,8 +149,7 @@ theorem paperSourceFullSin_mem_iff_and_gauge_eq
       N.Mem (U.starProjection - V.starProjection)) ∧
     N.gauge (paperSourceFullSinC U V) =
       N.gauge (U.starProjection - V.starProjection) :=
-  (paperSourceFullSin_same_projectionDifference U V).
-    paperMem_iff_and_gauge_eq N
+  (paperSourceFullSin_same_projectionDifference U V).paperMem_iff_and_gauge_eq N
 
 end
 
