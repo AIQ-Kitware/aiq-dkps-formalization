@@ -15,9 +15,12 @@ dependencies in every result.
 -/
 
 #print axioms ForMathlib.DavisKahan1970.unitaryInvariantNorm_equiv_symmetricNormingFunction
+#print axioms ForMathlib.DavisKahan1970.unitaryInvariantNorm_nonempty
 #print axioms ForMathlib.DavisKahan1970.directedCosAngle_eq_modulus
 #print axioms ForMathlib.DavisKahan1970.directedSinAngle_eq_modulus
 #print axioms ForMathlib.DavisKahan1970.directedSinAngle_singularValues
+#print axioms ForMathlib.DavisKahan1970.directedAngle_eq_arcsin_sineModulus
+#print axioms ForMathlib.DavisKahan1970.directedAngle_real_eq_arcsin_sineModulus
 #print axioms ForMathlib.DavisKahan1970.fullSinAngle_singularValues_projectionDifference
 #print axioms ForMathlib.DavisKahan1970.fullSinAngle_norm_projectionDifference
 #print axioms ForMathlib.DavisKahan1970.directedCosAngle_real
@@ -39,6 +42,13 @@ dependencies in every result.
 #print axioms ForMathlib.DavisKahan1970.Theorem6_2_commonDomain
 #print axioms ForMathlib.DavisKahan1970.Theorem6_1_real_commonDomain
 #print axioms ForMathlib.DavisKahan1970.Theorem6_2_real_commonDomain
+#print axioms ForMathlib.DavisKahan1970.commonCoreResidual_extends_to_domain
+#print axioms ForMathlib.DavisKahan1970.Theorem6_1_commonCore
+#print axioms ForMathlib.DavisKahan1970.Theorem6_2_commonCore
+#print axioms ForMathlib.DavisKahan1970.Theorem6_1_real_commonCore
+#print axioms ForMathlib.DavisKahan1970.Theorem6_2_real_commonCore
 #print axioms ForMathlib.DavisKahan1970.Theorem6_1_equality_every_norm
 #print axioms ForMathlib.DavisKahan1970.sineTheta_constant_one_optimal
+#print axioms ForMathlib.DavisKahan1970.oneGap_counterexample_sine_squareNorm
+#print axioms ForMathlib.DavisKahan1970.oneGap_counterexample_perturbation_squareNorm
 #print axioms ForMathlib.DavisKahan1970.oneGap_does_not_imply_Proposition6_1
