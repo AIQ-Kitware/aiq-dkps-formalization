@@ -133,7 +133,7 @@ theorem tanTwoTheta_residual_le
     AvoidsQuarterTurnEmbedding U X ∧
       δ * N (tanTwoThetaEmbedding U X) ≤ 2 * N (residual A X M) := by
   classical
-  let C₂ := FiniteDimensional.cosTwoThetaEmbedding U X
+  let C₂ := cosTwoThetaSourceOperator U X
   let S₂ := sinTwoThetaEmbedding U X
   let R := residual A X M
   have hriccati :
@@ -151,9 +151,9 @@ theorem tanTwoTheta_residual_le
       (LinearMap.ker_eq_bot.mp hker)
   have htan : tanTwoThetaEmbedding U X =
       S₂ ∘ₗ inverseOnRange C₂ (LinearMap.ker_eq_bot.mp hker) := by
-    ext x
-    simp [tanTwoThetaEmbedding, C₂, S₂,
-      moorePenroseInverse_eq_inverse_of_injective]
+    simpa [C₂, S₂] using
+      tanTwoThetaEmbedding_eq_inverseOnRange U X
+        (LinearMap.ker_eq_bot.mp hker)
   have hsolve := internalGap_doubleAngleTangent_uiNorm_le
     N hA hU hδ hgap hriccati hker
   have hres : N (doubleAngleResidual U X R) ≤ 2 * N R :=

@@ -1,8 +1,8 @@
-FEAT add rectangular Schatten and weak majorization infrastructure
+FIX correct source coordinate angle embeddings
 
-Build finite lp gauges with Minkowski and symmetric gauge monotonicity.
-Connect rectangular Ky Fan subadditivity to singular value weak majorization.
-Define rectangular Schatten norms with norm, adjoint, ideal, S1, S2, and infinity bridges.
-Preserve the historical rectangular compatibility declarations.
+Build source side cosine and sine Gram operators and the positive cosine factor.
+Define tangent and double angle maps with the correct coordinate denominators.
+Add kernel, singular value, transversality, and inverse on range bridges.
+Remove the stale double angle namespace and fictional inverse rewrite.
 
 Co-authored-by: GPT-5.6 Thinking <noreply@openai.com>
