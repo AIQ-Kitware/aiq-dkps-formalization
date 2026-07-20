@@ -172,3 +172,18 @@ The final report must distinguish:
 - source-paper endpoints newly closed;
 - general reusable infrastructure newly closed;
 - remaining Experimental modules and why they remain.
+
+## Superseded completion contract
+
+The original version of this handoff treated absence of unfinished proof tokens
+as sufficient evidence that the restored batch was ready for compiler repair.
+That was incorrect: most restored modules do not compile, and several bodies
+refer to abstractions that never existed.
+
+The authoritative continuation is now:
+
+`dev/full-part-iii-staged-repair-plan-2026-07-20.md`
+
+The default math-ahead checker is compiler-gated.  Do not use the earlier
+static-only acceptance language or the original 28-module all-at-once repair
+order.

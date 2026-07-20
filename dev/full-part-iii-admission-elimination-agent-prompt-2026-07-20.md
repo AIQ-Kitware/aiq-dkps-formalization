@@ -81,3 +81,10 @@ Acceptance requires:
 Report every changed file, each genuine mathematical defect found, which
 historical bodies were replaced rather than repaired, all removals and their
 justification, command results, and the final commit hash.
+
+## Superseded prompt
+
+Do not execute the all-at-once instructions above.  Use
+`dev/full-part-iii-staged-repair-agent-prompt-2026-07-20.md`, which corrects the
+false-clean checker and authorizes the minimal general infrastructure actually
+missing from the pinned libraries.
