@@ -869,14 +869,14 @@ theorem jointElem_inner_compact (A B : Spectra.Operator.SelfAdjointOperator H)
               ≤ (jointContent A B hSC ξ).supClosure isSetSemiring_jointRectangles
                   (((S ×ˢ T) \ KR) ∪ (⋃₀ ↑J \ KJ)) :=
                 addContent_mono hRing.isSetSemiring
-                  (hRing.diff_mem (hRing.union_mem hSTmem hB'mem) (hRing.union_mem hKRring hKJmem))
-                  (hRing.union_mem (hRing.diff_mem hSTmem hKRring) (hRing.diff_mem hB'mem hKJmem))
+                  (hRing.sdiff_mem (hRing.union_mem hSTmem hB'mem) (hRing.union_mem hKRring hKJmem))
+                  (hRing.union_mem (hRing.sdiff_mem hSTmem hKRring) (hRing.sdiff_mem hB'mem hKJmem))
                   hsub
             _ ≤ (jointContent A B hSC ξ).supClosure isSetSemiring_jointRectangles ((S ×ˢ T) \ KR)
                   + (jointContent A B hSC ξ).supClosure isSetSemiring_jointRectangles
                     (⋃₀ ↑J \ KJ) :=
-                addContent_union_le hRing (hRing.diff_mem hSTmem hKRring)
-                  (hRing.diff_mem hB'mem hKJmem)
+                addContent_union_le hRing (hRing.sdiff_mem hSTmem hKRring)
+                  (hRing.sdiff_mem hB'mem hKJmem)
             _ ≤ δ / 2 + δ / 2 := add_le_add hKRlt.le hKJle
             _ = δ := ENNReal.add_halves δ
   -- apply `aux` to a chosen rectangle partition of `s`
@@ -930,7 +930,7 @@ theorem jointContentRing_tendsto_empty (A B : Spectra.Operator.SelfAdjointOperat
       a n - a m = ‖jointVectorContent A B ξ (s n \ s m)‖ ^ 2 := by
     intro n m hnm
     have hsm_sub : s m ⊆ s n := hanti hnm
-    have hdmem : (s n \ s m) ∈ supClosure jointRectangles := hRing.diff_mem (hs n) (hs m)
+    have hdmem : (s n \ s m) ∈ supClosure jointRectangles := hRing.sdiff_mem (hs n) (hs m)
     -- decompose `s n = s m ∪ (s n \ s m)` (disjoint)
     have hunion : s n = s m ∪ (s n \ s m) := (Set.union_diff_cancel hsm_sub).symm
     have hdisj : Disjoint (s m) (s n \ s m) := disjoint_sdiff_self_right
@@ -1048,10 +1048,10 @@ theorem jointContentRing_tendsto_empty (A B : Spectra.Operator.SelfAdjointOperat
         exact Set.mem_biUnion (Finset.mem_range.mpr hj) ⟨hanti (Nat.lt_succ_iff.mp hj) hxsn, hxCj⟩
       calc mR (s n \ K n)
           ≤ mR (⋃ j ∈ Finset.range (n + 1), (s j \ C j)) :=
-            addContent_mono hRing.isSetSemiring (hRing.diff_mem (hs n) (hKmem n))
-              (hRing.biUnion_mem _ fun j _ => hRing.diff_mem (hs j) (hCmem j)) hsub
+            addContent_mono hRing.isSetSemiring (hRing.sdiff_mem (hs n) (hKmem n))
+              (hRing.biUnion_mem _ fun j _ => hRing.sdiff_mem (hs j) (hCmem j)) hsub
         _ ≤ ∑ j ∈ Finset.range (n + 1), mR (s j \ C j) :=
-            addContent_biUnion_le hRing fun j _ => hRing.diff_mem (hs j) (hCmem j)
+            addContent_biUnion_le hRing fun j _ => hRing.sdiff_mem (hs j) (hCmem j)
         _ ≤ ∑ j ∈ Finset.range (n + 1), ENNReal.ofReal (L / 4 * (1 / 2) ^ j) :=
             Finset.sum_le_sum fun j _ => hCle j
         _ = ENNReal.ofReal (∑ j ∈ Finset.range (n + 1), L / 4 * (1 / 2) ^ j) :=
@@ -1071,13 +1071,13 @@ theorem jointContentRing_tendsto_empty (A B : Spectra.Operator.SelfAdjointOperat
       rw [Set.nonempty_iff_ne_empty]
       intro hKempty
       have hdnetop : mR (s n \ K n) ≠ ⊤ :=
-        jointContentRing_ne_top A B hSC ξ (hRing.diff_mem (hs n) (hKmem n))
+        jointContentRing_ne_top A B hSC ξ (hRing.sdiff_mem (hs n) (hKmem n))
       have hKnetop : mR (K n) ≠ ⊤ :=
         ne_top_of_le_ne_top (hmR_ne_top n)
           (addContent_mono hRing.isSetSemiring (hKmem n) (hs n) (hKsubs n))
       have hadd : mR (s n) = mR (K n) + mR (s n \ K n) := by
         conv_lhs => rw [(Set.union_diff_cancel (hKsubs n)).symm]
-        exact addContent_union hRing (hKmem n) (hRing.diff_mem (hs n) (hKmem n))
+        exact addContent_union hRing (hKmem n) (hRing.sdiff_mem (hs n) (hKmem n))
           disjoint_sdiff_self_right
       have hareal : a n = (mR (K n)).toReal + (mR (s n \ K n)).toReal := by
         rw [hadef]; dsimp only; rw [hadd, ENNReal.toReal_add hKnetop hdnetop]

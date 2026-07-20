@@ -311,7 +311,7 @@ lemma isSetSemiring_jointRectangles : MeasureTheory.IsSetSemiring jointRectangle
   inter_mem := by
     rintro _ ⟨S₁, T₁, hS₁, hT₁, rfl⟩ _ ⟨S₂, T₂, hS₂, hT₂, rfl⟩
     exact ⟨S₁ ∩ S₂, T₁ ∩ T₂, hS₁.inter hS₂, hT₁.inter hT₂, Set.prod_inter_prod⟩
-  diff_eq_sUnion' := by
+  sdiff_eq_sUnion' := by
     classical
     rintro _ ⟨S₁, T₁, hS₁, hT₁, rfl⟩ _ ⟨S₂, T₂, hS₂, hT₂, rfl⟩
     refine ⟨{(S₁ \ S₂) ×ˢ T₁, (S₁ ∩ S₂) ×ˢ (T₁ \ T₂)}, ?_, ?_, ?_⟩
