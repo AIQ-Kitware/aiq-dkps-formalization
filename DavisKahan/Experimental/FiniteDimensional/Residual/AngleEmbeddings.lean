@@ -7,26 +7,24 @@ import DavisKahan.FiniteDimensional.Residual.AngleEmbedding
 import ForMathlib.Analysis.InnerProductSpace.MoorePenroseInverse
 
 /-!
-# Compatibility surface for unfinished coordinate angle maps
+# Coordinate tangent and double-angle embeddings
 
-The proved compression, residual, and sine-embedding API moved to
-`DavisKahan.FiniteDimensional.Residual.AngleEmbedding`.
+For an isometric trial map `X : F → E`, write
 
-For an isometric trial map `X : F → E`, the cosine and sine blocks are
-`P_U X` and `P_{Uᗮ} X`.  The tangent is the sine block composed with the
-Moore--Penrose inverse of the cosine block; that inverse is not yet available
-in this development or the pinned Mathlib, so the tangent maps below remain
-open constructions.  Two intended theorems are recorded here rather than
-stated because their statements require the missing transverse-embedding
-predicate and the simultaneous (CS) singular value decomposition of the
-cosine/sine blocks:
+* `C = P_U X : F → E`,
+* `S = P_{Uᗮ} X : F → E`,
+* `|C| = (C⋆C)^(1/2) : F → F`.
 
-* `singularValues_tanThetaEmbedding`: under transversality, the singular
-  values of the trial-coordinate tangent are the tangents of the principal
-  angles between `U` and the trial range.
-* `singularValues_tanTwoThetaEmbedding`: under quarter-turn avoidance, the
-  singular values of the totalized double-angle tangent are
-  `|tan (2 θ_i)|`.
+The coordinate tangent is `S |C|⁺`.  The double-angle source cosine is
+`C⋆C - S⋆S`, while the rectangular double-angle sine is `2 S |C|`.  These
+choices put every denominator on the trial-coordinate space and avoid the
+extra cosine factor produced by the former ambient pseudoinverse formulas.
+
+The definitions below are totalized by Moore--Penrose inverses.  Under the
+corresponding injectivity assumptions, the compatibility lemmas identify them
+with the proof-carrying `inverseOnRange` construction.  Singular-value
+identifications still require a simultaneous CS decomposition and are not
+asserted here merely from these definitions.
 -/
 
 namespace ForMathlib
@@ -41,53 +39,69 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
 variable {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
   [FiniteDimensional 𝕜 F]
 
-/-! Construction route: build the two remaining coordinate maps from the
-cosine/sine blocks.  Under transversality, invert `cosThetaEmbedding` on its
-range and define tangent as sine after that inverse (equivalently, compose
-with the Moore--Penrose inverse once it exists).  Define double-angle tangent
-only after quarter-turn avoidance makes the corresponding cosine block
-invertible.  Each definition should come with a singular-value identification
-before it is used in a norm theorem. -/
+/-- Trial-coordinate tangent map `S |C|⁺`.
 
-/-- Provisional tangent map in approximate coordinates.
-
-Angle semantics are open.  Postcomposing `S C⁺` with `X` makes the declared
-signature elaborate, but the result carries an extra sine factor rather than a
-tangent: the trial-coordinate quotient has to divide by the source-side cosine
-`(C⋆C)^(1/2)`, not by an ambient pseudoinverse read back through `X`.  Do not
-use this body to prove a singular-value identification. -/
+Its nonzero singular values are intended to be the tangents of the principal
+angles.  That identification is a separate CS-decomposition theorem; this
+definition only fixes the canonical coordinate semantics. -/
 noncomputable def tanThetaEmbedding (U : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] (X : F →ₗᵢ[𝕜] E) : F →ₗ[𝕜] E :=
   sinThetaEmbedding U X ∘ₗ
-    FiniteDimensional.moorePenroseInverse (cosThetaEmbedding U X) ∘ₗ
-      X.toLinearMap
+    FiniteDimensional.moorePenroseInverse (cosThetaMagnitude U X)
 
-/-- Provisional double-angle sine block in trial coordinates.
+/-- Under transversality, the totalized tangent agrees with composition by the
+proof-carrying inverse of the positive coordinate cosine. -/
+theorem tanThetaEmbedding_eq_inverseOnRange
+    (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
+    (X : F →ₗᵢ[𝕜] E)
+    (hC : Function.Injective (cosThetaEmbedding U X)) :
+    tanThetaEmbedding U X =
+      sinThetaEmbedding U X ∘ₗ
+        FiniteDimensional.inverseOnRange (cosThetaMagnitude U X)
+          (cosThetaMagnitude_injective U X hC) := by
+  rw [tanThetaEmbedding,
+    FiniteDimensional.moorePenroseInverse_eq_inverseOnRange]
 
-Angle semantics are open.  `2 S C⋆` is the exact *ambient* double-angle sine,
-but `C⋆ ∘ X = C⋆C`, so the body below is `2 S (C⋆C)`, whose singular values are
-`2 sin θᵢ cos²θᵢ` rather than `sin 2θᵢ`.  The correct trial-coordinate sine
-uses the positive square root
+/-- Transversality supplies the inverse required by the coordinate tangent. -/
+theorem tanThetaEmbedding_eq_inverseOnRange_of_isTransverse
+    (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
+    (X : F →ₗᵢ[𝕜] E)
+    (htrans : IsTransverse (approximateSubspace X) U) :
+    tanThetaEmbedding U X =
+      sinThetaEmbedding U X ∘ₗ
+        FiniteDimensional.inverseOnRange (cosThetaMagnitude U X)
+          (cosThetaMagnitude_injective U X
+            (LinearMap.ker_eq_bot.mp
+              ((tanThetaEmbedding_defined_iff U X).mp htrans))) := by
+  exact tanThetaEmbedding_eq_inverseOnRange U X _
 
-  `2 S |C|`,  `|C| = (C⋆C)^(1/2)`   (singular values `sin 2θᵢ`).
+/-- Trial-coordinate double-angle sine `2 S |C|`.
 
-Do not use this body to prove a singular-value identification. -/
+On a simultaneous principal-angle basis this has singular values
+`2 sin θᵢ cos θᵢ = sin (2 θᵢ)`. -/
 noncomputable def sinTwoThetaEmbedding (U : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] (X : F →ₗᵢ[𝕜] E) : F →ₗ[𝕜] E :=
-  (2 : 𝕜) •
-    (sinThetaEmbedding U X ∘ₗ
-      LinearMap.adjoint (cosThetaEmbedding U X)) ∘ₗ X.toLinearMap
+  (2 : 𝕜) • (sinThetaEmbedding U X ∘ₗ cosThetaMagnitude U X)
 
-/-- Provisional double-angle tangent map in approximate coordinates.
-
-Angle semantics are open: it inherits the open sine and cosine conventions of
-`sinTwoThetaEmbedding` and `cosTwoThetaEmbedding`.  Do not use this body to
-prove a singular-value identification. -/
+/-- Totalized double-angle tangent
+`(2 S |C|) (C⋆C - S⋆S)⁺`. -/
 noncomputable def tanTwoThetaEmbedding (U : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] (X : F →ₗᵢ[𝕜] E) : F →ₗ[𝕜] E :=
   sinTwoThetaEmbedding U X ∘ₗ
-    FiniteDimensional.moorePenroseInverse (cosTwoThetaEmbedding U X) ∘ₗ
-      X.toLinearMap
+    FiniteDimensional.moorePenroseInverse
+      (cosTwoThetaSourceOperator U X)
+
+/-- Under quarter-turn avoidance expressed as injectivity of the source
+cosine, the totalized double-angle tangent agrees with `inverseOnRange`. -/
+theorem tanTwoThetaEmbedding_eq_inverseOnRange
+    (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
+    (X : F →ₗᵢ[𝕜] E)
+    (hC₂ : Function.Injective (cosTwoThetaSourceOperator U X)) :
+    tanTwoThetaEmbedding U X =
+      sinTwoThetaEmbedding U X ∘ₗ
+        FiniteDimensional.inverseOnRange (cosTwoThetaSourceOperator U X) hC₂ := by
+  rw [tanTwoThetaEmbedding,
+    FiniteDimensional.moorePenroseInverse_eq_inverseOnRange]
 
 end DavisKahanTheory
 end ForMathlib
