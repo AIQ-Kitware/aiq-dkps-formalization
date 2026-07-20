@@ -25,11 +25,27 @@ because `GeneratorIntertwines.group` cited the density of the generator domain
 without importing the module that proves it, so the theorem the whole
 rectangular chain rests on did not exist. Do not redesign this argument.
 
-### The rectangular Hilbert--Schmidt tensor package is complete
+### The tensor/operator dictionary is complete; the flow layer above it is not
 
 `Spectra.Spaces.Tensor.HilbertSchmidt` builds, and all ten endpoints are
 admission-free, including `hasSum_columnTensor`, `norm_sq_eq_tsum_column_norm_sq`,
 `existsUnique_tensor_iff_summable_columns` and the `ofOperator` inverse.
+
+**Scope of that claim, stated precisely.** It covers `HilbertSchmidt.lean` only.
+Measured serially on a quiet tree:
+
+| Module | Errors |
+| --- | --- |
+| `Spectra.Spaces.Tensor.HilbertSchmidt` | 0 |
+| `Spectra.Spaces.Tensor.HilbertSchmidtFlow` | 13 |
+| `Spectra.Spaces.Tensor.HilbertSchmidtGeneratorBridge` | 13 |
+| `Spectra.Spaces.Tensor.HilbertSchmidtSpectralGap` | 13 |
+
+The last three all fail inside `HilbertSchmidtFlow.lean`; the counts are that
+one module's errors propagating. **Your second obligation, pairwise tensor
+spectral support, is blocked by `HilbertSchmidtFlow`, not by the dictionary.**
+That module is the next thing to repair and nothing is known about the spectral
+gap candidate until it elaborates.
 
 The column expansion had to be rebuilt: it rested on five lemmas that do not
 exist in Mathlib under any name. It now goes through `OrthogonalFamily`, with a
@@ -56,14 +72,35 @@ definitionally, so the theorem asserts exactly what it did before.
 | `Sylvester.PairwiseHomogeneousUniqueness` | 11 | 0 |
 | `Sylvester.HomogeneousUniqueness` | 2 | 0 |
 
+### A universe restriction you should sign off on
+
+`Ideals/PaperHilbertSchmidtBasis.lean` had `variable {E : Type u} {F : Type v}`.
+That is now `variable {E F : Type v}`.
+
+This is a correction, not a weakening. `paperHilbertSchmidtEnergy`,
+`IsPaperHilbertSchmidt`, `paperHilbertSchmidtNorm` and
+`SameApproximationSingularSequence` are all declared over a **single** universe
+`{E F : Type v}`, so with `E` and `F` in different universes not one theorem in
+that file could be stated at all. The apparent extra generality was never
+well-typed. Roughly eleven of its twenty six errors were that one mismatch.
+
+If you want the generality for real, the fix is to universe-polymorphise
+`Ideals/PaperHilbertSchmidt.lean` first; it was deliberately not attempted here.
+This is the same defect class as the earlier heterogeneous singular-sequence
+statements.
+
 ## Still open
 
-- `Ideals.PaperHilbertSchmidtBasis` --- 5 errors, partial repair from 26.
+- `Spectra.Spaces.Tensor.HilbertSchmidtFlow` --- 13 errors. **Highest priority:
+  it blocks your second obligation.**
 - `Sylvester.PaperHilbertSchmidtPairwise` --- 7 errors, provisional count.
 - `SinTheta.PaperTheorem62` --- not yet measured under quiet conditions.
 - Your second obligation, **pairwise tensor spectral support**, lives in
-  `Spectra.Spaces.Tensor.HilbertSchmidtSpectralGap`, which has still not
-  elaborated. Nothing is known about whether that candidate works.
+  `Spectra.Spaces.Tensor.HilbertSchmidtSpectralGap`. It has still not elaborated,
+  and nothing is known about whether that candidate works.
+
+`Ideals.PaperHilbertSchmidtBasis` is **closed**: 0 errors, all twenty
+declarations admission-free.
 
 ## Lean mechanics that cost the most time this round
 
@@ -108,6 +145,10 @@ recurring ones, in descending cost:
    `BornRule.PVM`, `bornMeasure_support_subset_spectrum` under
    `BornRule.Observable`, `borelMeasure` under `Spectra.Borel`, and `generator`
    under `Spectra.OneParameterUnitaryGroup`.
+
+9. **Two toolchains are live in this checkout.** The root pins `v4.32.0`, but
+   `vendor/Spectra` is also opened as its own project under `v4.31.0-rc1`, and
+   both write `vendor/Spectra/.lake/build`. Build from the repository root.
 
 ## How to measure a build
 
