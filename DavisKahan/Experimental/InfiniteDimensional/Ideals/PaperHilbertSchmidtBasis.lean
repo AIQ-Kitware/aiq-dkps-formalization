@@ -302,11 +302,16 @@ theorem paperHilbertSchmidtEnergy_comp_paperBasisProjection
       Submodule.span ℂ (Set.range (fun k : Fin s.card =>
         (⟨b ((s.equivFin.symm k : ι)), hmem k⟩ :
           Submodule.span ℂ (b '' (s : Set ι))))) := by
+    have himg : (Submodule.span ℂ (b '' (s : Set ι))).subtype ''
+        Set.range (fun k : Fin s.card =>
+          (⟨b ((s.equivFin.symm k : ι)), hmem k⟩ :
+            Submodule.span ℂ (b '' (s : Set ι))))
+        = b '' (s : Set ι) := by
+      rw [← Set.range_comp]
+      exact hrange
     refine le_of_eq (Submodule.map_injective_of_injective
       (Submodule.span ℂ (b '' (s : Set ι))).injective_subtype ?_).symm
-    rw [Submodule.map_span, Submodule.map_subtype_top,
-      ← Set.range_comp, ← hrange]
-    rfl
+    rw [Submodule.map_span, Submodule.map_subtype_top, himg]
   let c : OrthonormalBasis (Fin s.card) ℂ
       (Submodule.span ℂ (b '' (s : Set ι))) := OrthonormalBasis.mk hon hsp
   have hc : ∀ k, ((c k : F)) = b ((s.equivFin.symm k : ι)) := by
