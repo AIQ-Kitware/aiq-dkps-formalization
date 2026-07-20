@@ -35,12 +35,14 @@ namespace Experimental
 namespace ExactSinTheta
 
 open scoped InnerProductSpace BigOperators ENNReal
+open scoped Topology
+open Filter
 
 noncomputable section
 
 universe u v
 
-variable {E : Type u} {F : Type v}
+variable {E F : Type v}
 variable [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
 variable [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
 
@@ -86,6 +88,12 @@ theorem paperHilbertSchmidtBasisEnergy_indep
   rw [paperHilbertSchmidtBasisEnergy_adjoint_swap b d A,
     ← paperHilbertSchmidtBasisEnergy_adjoint_swap c d A]
 
+/-- The span of finitely many basis vectors is finite dimensional. -/
+instance paperBasisSpan_finiteDimensional {ι : Type*}
+    (b : HilbertBasis ι ℂ F) (s : Finset ι) :
+    FiniteDimensional ℂ (Submodule.span ℂ (b '' (s : Set ι))) :=
+  FiniteDimensional.span_of_finite ℂ (s.finite_toSet.image b)
+
 /-- Projection onto the span of a finite set of Hilbert-basis vectors. -/
 noncomputable def paperBasisProjection {ι : Type*}
     (b : HilbertBasis ι ℂ F) (s : Finset ι) : F →L[ℂ] F :=
@@ -94,22 +102,54 @@ noncomputable def paperBasisProjection {ι : Type*}
 /-- The finite basis projection is an orthogonal projection. -/
 theorem paperBasisProjection_isOrthogonalProjection {ι : Type*}
     (b : HilbertBasis ι ℂ F) (s : Finset ι) :
-    IsOrthogonalProjectionMap (paperBasisProjection b s) := by
-  exact ⟨(Submodule.span ℂ (b '' (s : Set ι))).starProjection_isIdempotent,
-    (Submodule.span ℂ (b '' (s : Set ι))).starProjection_isSymmetric.adjoint_eq⟩
+    IsOrthogonalProjectionMap (paperBasisProjection b s) :=
+  ⟨Submodule.isIdempotentElem_starProjection _,
+    fun x y => Submodule.starProjection_isSymmetric _ x y⟩
 
 /-- The finite cutoff has rank at most the number of selected basis vectors. -/
 theorem rank_paperBasisProjection_le {ι : Type*}
     (b : HilbertBasis ι ℂ F) (s : Finset ι) :
     (paperBasisProjection b s).rank ≤ (s.card : Cardinal) := by
+  classical
+  have hle : LinearMap.range (paperBasisProjection b s).toLinearMap ≤
+      Submodule.span ℂ ((s.image b : Finset F) : Set F) := by
+    rw [Finset.coe_image]
+    exact (Submodule.range_starProjection _).le
   calc
     (paperBasisProjection b s).rank
-        ≤ Module.rank ℂ (Submodule.span ℂ (b '' (s : Set ι))) := by
-          exact LinearMap.rank_le_of_range_le
-            (Submodule.starProjection_range _).le
+        ≤ Module.rank ℂ (Submodule.span ℂ ((s.image b : Finset F) : Set F)) :=
+          Submodule.rank_mono hle
+    _ ≤ ((s.image b).card : Cardinal) := rank_span_finset_le _
     _ ≤ (s.card : Cardinal) := by
-          simpa using Submodule.rank_span_le_card (R := ℂ)
-            (s.image b)
+          exact_mod_cast Finset.card_image_le (s := s) (f := b)
+
+/-- The finite basis projection is the finite Fourier partial sum. -/
+theorem paperBasisProjection_apply {ι : Type*}
+    (b : HilbertBasis ι ℂ F) (s : Finset ι) (x : F) :
+    paperBasisProjection b s x = ∑ i ∈ s, ⟪b i, x⟫_ℂ • b i := by
+  classical
+  have hb := orthonormal_iff_ite.mp b.orthonormal
+  have hmem : ∀ i ∈ s, b i ∈ Submodule.span ℂ (b '' (s : Set ι)) := fun i hi =>
+    Submodule.subset_span ⟨i, Finset.mem_coe.mpr hi, rfl⟩
+  show (Submodule.span ℂ (b '' (s : Set ι))).starProjection x = _
+  refine Submodule.eq_starProjection_of_mem_of_inner_eq_zero ?_ ?_
+  · exact Submodule.sum_mem _ fun i hi => Submodule.smul_mem _ _ (hmem i hi)
+  · intro w hw
+    induction hw using Submodule.span_induction with
+    | mem w hw =>
+        obtain ⟨j, hj, rfl⟩ := hw
+        have hjs : j ∈ s := Finset.mem_coe.mp hj
+        rw [inner_sub_left, sum_inner]
+        have hkey : ∀ i ∈ s, ⟪(⟪b i, x⟫_ℂ) • b i, b j⟫_ℂ =
+            if i = j then (starRingEnd ℂ) ⟪b j, x⟫_ℂ else 0 := by
+          intro i _
+          rw [inner_smul_left, hb i j]
+          by_cases hij : i = j <;> simp [hij]
+        rw [Finset.sum_congr rfl hkey, Finset.sum_ite_eq' s j, if_pos hjs,
+          inner_conj_symm, sub_self]
+    | zero => simp
+    | add u v _ _ hu hv => rw [inner_add_right, hu, hv, add_zero]
+    | smul c u _ hu => rw [inner_smul_right, hu, mul_zero]
 
 /-- The cutoff operator is the finite column expansion. -/
 theorem comp_paperBasisProjection_apply {ι : Type*}
@@ -117,13 +157,116 @@ theorem comp_paperBasisProjection_apply {ι : Type*}
     (A : F →L[ℂ] E) (x : F) :
     (A ∘L paperBasisProjection b s) x =
       ∑ i ∈ s, ⟪b i, x⟫_ℂ • A (b i) := by
-  rw [ContinuousLinearMap.comp_apply]
-  have hproj : paperBasisProjection b s x =
-      ∑ i ∈ s, ⟪b i, x⟫_ℂ • b i := by
-    exact Submodule.starProjection_eq_sum_orthonormal
-      b.orthonormal (s := s) x
-  rw [hproj, map_sum]
+  rw [ContinuousLinearMap.comp_apply, paperBasisProjection_apply, map_sum]
   simp only [map_smul]
+
+/-- Finite-dimensional cutoff Frobenius identity: the approximation-number
+energy of the compression of `A` to a finite-dimensional subspace `K` of the
+domain is the sum of the squared column norms over any orthonormal basis
+of `K`. -/
+theorem paperHilbertSchmidtEnergy_comp_starProjection
+    (A : F →L[ℂ] E) (K : Submodule ℂ F) [FiniteDimensional ℂ K]
+    {n : ℕ} (c : OrthonormalBasis (Fin n) ℂ K) :
+    paperHilbertSchmidtEnergy (A ∘L K.starProjection) =
+      ∑ k : Fin n, ENNReal.ofReal (‖A ((c k : F))‖ ^ 2) := by
+  classical
+  have hn : Module.finrank ℂ K = n := by
+    rw [Module.finrank_eq_card_basis c.toBasis, Fintype.card_fin]
+  -- the compression of `A` to `K`, together with its finite-dimensional range
+  let T₀ : K →L[ℂ] E := A ∘L K.subtypeL
+  let L : Submodule ℂ E := LinearMap.range T₀.toLinearMap
+  haveI hLfd : FiniteDimensional ℂ L := inferInstance
+  let T : K →L[ℂ] L :=
+    T₀.codRestrict L fun x => LinearMap.mem_range_self T₀.toLinearMap x
+  -- the three factorisations relating the cutoff and the compression
+  have hfac1 : A ∘L K.starProjection = T₀ ∘L K.orthogonalProjectionOnto :=
+    ContinuousLinearMap.ext fun x => rfl
+  have hfac2 : L.subtypeL ∘L T = T₀ := ContinuousLinearMap.ext fun x => rfl
+  have hfac3 : T = L.orthogonalProjectionOnto ∘L T₀ :=
+    ContinuousLinearMap.ext fun x => Subtype.ext
+      (Submodule.starProjection_eq_self_iff.mpr
+        (LinearMap.mem_range_self T₀.toLinearMap x)).symm
+  have hfac4 : T₀ = (A ∘L K.starProjection) ∘L K.subtypeL :=
+    ContinuousLinearMap.ext fun x =>
+      congrArg A (Submodule.starProjection_eq_self_iff.mpr x.2).symm
+  -- all four structural maps are contractions
+  have hsubL : ‖L.subtypeL‖₊ ≤ 1 := by
+    have h : ‖L.subtypeL‖ ≤ 1 :=
+      ContinuousLinearMap.opNorm_le_bound _ zero_le_one fun x => by
+        simpa using le_rfl
+    exact_mod_cast h
+  have hsubK : ‖K.subtypeL‖₊ ≤ 1 := by
+    have h : ‖K.subtypeL‖ ≤ 1 :=
+      ContinuousLinearMap.opNorm_le_bound _ zero_le_one fun x => by
+        simpa using le_rfl
+    exact_mod_cast h
+  have hprojK : ‖K.orthogonalProjectionOnto‖₊ ≤ 1 := by
+    exact_mod_cast K.orthogonalProjectionOnto_norm_le
+  have hprojL : ‖L.orthogonalProjectionOnto‖₊ ≤ 1 := by
+    exact_mod_cast L.orthogonalProjectionOnto_norm_le
+  -- hence the cutoff and the compression have the same singular sequence
+  have hsame : SameApproximationSingularSequence (A ∘L K.starProjection) T := by
+    intro m
+    have h1 : (A ∘L K.starProjection).approximationNumber m ≤
+        T.approximationNumber m := by
+      calc (A ∘L K.starProjection).approximationNumber m
+          = (T₀ ∘L K.orthogonalProjectionOnto).approximationNumber m := by
+            rw [hfac1]
+        _ ≤ T₀.approximationNumber m * ‖K.orthogonalProjectionOnto‖₊ :=
+            T₀.approximationNumber_comp_right_le _ m
+        _ ≤ T₀.approximationNumber m * 1 :=
+            mul_le_mul_of_nonneg_left hprojK bot_le
+        _ = (L.subtypeL ∘L T).approximationNumber m := by rw [mul_one, hfac2]
+        _ ≤ ‖L.subtypeL‖₊ * T.approximationNumber m :=
+            ContinuousLinearMap.approximationNumber_comp_left_le _ _ m
+        _ ≤ 1 * T.approximationNumber m :=
+            mul_le_mul_of_nonneg_right hsubL bot_le
+        _ = T.approximationNumber m := one_mul _
+    have h2 : T.approximationNumber m ≤
+        (A ∘L K.starProjection).approximationNumber m := by
+      calc T.approximationNumber m
+          = (L.orthogonalProjectionOnto ∘L T₀).approximationNumber m := by
+            rw [← hfac3]
+        _ ≤ ‖L.orthogonalProjectionOnto‖₊ * T₀.approximationNumber m :=
+            ContinuousLinearMap.approximationNumber_comp_left_le _ _ m
+        _ ≤ 1 * T₀.approximationNumber m :=
+            mul_le_mul_of_nonneg_right hprojL bot_le
+        _ = ((A ∘L K.starProjection) ∘L K.subtypeL).approximationNumber m := by
+            rw [one_mul, ← hfac4]
+        _ ≤ (A ∘L K.starProjection).approximationNumber m * ‖K.subtypeL‖₊ :=
+            ContinuousLinearMap.approximationNumber_comp_right_le _ _ m
+        _ ≤ (A ∘L K.starProjection).approximationNumber m * 1 :=
+            mul_le_mul_of_nonneg_left hsubK bot_le
+        _ = (A ∘L K.starProjection).approximationNumber m := mul_one _
+    show approximationSingularValue m _ = approximationSingularValue m _
+    unfold approximationSingularValue
+    exact_mod_cast le_antisymm h1 h2
+  -- the compression has rank at most `n`
+  have hTrank : T.rank ≤ (n : Cardinal) := by
+    calc T.rank ≤ Module.rank ℂ K := LinearMap.rank_le_domain T.toLinearMap
+      _ = (n : Cardinal) := by rw [← Module.finrank_eq_rank' ℂ K, hn]
+  -- singular values of the compression, and the finite Frobenius identity
+  have hsv : ∀ m : ℕ,
+      approximationSingularValue m T = T.toLinearMap.singularValues m := by
+    intro m
+    show ((T.approximationNumber m : NNReal) : ℝ) = _
+    rw [ContinuousLinearMap.approximationNumber_eq_singularValues T m]
+    rfl
+  have hfrob : ∑ k : Fin n, T.toLinearMap.singularValues (k : ℕ) ^ 2
+      = ∑ k : Fin n, ‖T (c k)‖ ^ 2 :=
+    ForMathlib.sum_sq_singularValues T.toLinearMap hn c
+  rw [hsame.paperHilbertSchmidtEnergy_eq,
+    paperHilbertSchmidtEnergy_eq_sum_range_of_rank_le hTrank,
+    ← Fin.sum_univ_eq_sum_range
+      (fun m => ENNReal.ofReal ((approximationSingularValue m T) ^ 2)) n,
+    ← ENNReal.ofReal_sum_of_nonneg fun k _ => sq_nonneg _,
+    ← ENNReal.ofReal_sum_of_nonneg fun k _ => sq_nonneg _]
+  congr 1
+  calc ∑ k : Fin n, (approximationSingularValue (k : ℕ) T) ^ 2
+      = ∑ k : Fin n, T.toLinearMap.singularValues (k : ℕ) ^ 2 :=
+        Finset.sum_congr rfl fun k _ => by rw [hsv (k : ℕ)]
+    _ = ∑ k : Fin n, ‖T (c k)‖ ^ 2 := hfrob
+    _ = ∑ k : Fin n, ‖A ((c k : F))‖ ^ 2 := rfl
 
 /-- Finite-cutoff Frobenius identity in approximation-number form. -/
 theorem paperHilbertSchmidtEnergy_comp_paperBasisProjection
@@ -131,40 +274,56 @@ theorem paperHilbertSchmidtEnergy_comp_paperBasisProjection
     (A : F →L[ℂ] E) :
     paperHilbertSchmidtEnergy (A ∘L paperBasisProjection b s) =
       ∑ i ∈ s, ENNReal.ofReal (‖A (b i)‖ ^ 2) := by
-  let U : EuclideanSpace ℂ s →ₗᵢ[ℂ] F :=
-    LinearIsometry.ofOrthonormal
-      (fun i : s => b i.1) (b.orthonormal.comp_subtype s)
-  let T : EuclideanSpace ℂ s →L[ℂ] E := A ∘L U.toContinuousLinearMap
-  have hsame : SameApproximationSingularSequence
-      (A ∘L paperBasisProjection b s) T := by
-    intro n
-    apply le_antisymm
-    · exact approximationSingularValue_comp_isometry_le n A
-        U.toContinuousLinearMap
-    · have hrange : Set.range U =
-          Submodule.span ℂ (b '' (s : Set ι)) := by
-        exact LinearIsometry.range_ofOrthonormal_eq_span _ _
-      exact approximationSingularValue_le_of_isometricRangeRestriction
-        n A U hrange
-  rw [hsame.paperHilbertSchmidtEnergy_eq]
-  have hTrank : T.rank ≤ (s.card : Cardinal) := by
-    calc T.rank ≤ Module.rank ℂ (EuclideanSpace ℂ s) :=
-      LinearMap.rank_le_domain T.toLinearMap
-    _ = (s.card : Cardinal) := by simp
-  rw [paperHilbertSchmidtEnergy_eq_sum_range_of_rank_le hTrank]
-  have hfinite : ∀ n < s.card,
-      approximationSingularValue n T = T.toLinearMap.singularValues n := by
-    intro n hn
-    exact approximationSingularValue_eq_singularValues T.toLinearMap n
-  rw [Finset.sum_congr rfl fun n hn => congrArg ENNReal.ofReal
-    (congrArg (· ^ 2) (hfinite n (Finset.mem_range.mp hn)))]
-  rw [← Fin.sum_univ_eq_sum_range]
-  have hsq := ForMathlib.sum_sq_singularValues T.toLinearMap rfl
-    (EuclideanSpace.basisFun s ℂ)
-  rw [hsq]
-  apply Finset.sum_congr rfl
-  intro i hi
-  simp [T, U, ENNReal.ofReal_pow, LinearIsometry.ofOrthonormal_apply]
+  classical
+  -- enumerate the selected basis vectors
+  have hinj : Function.Injective
+      (fun k : Fin s.card => ((s.equivFin.symm k : ι))) := fun k l hkl =>
+    s.equivFin.symm.injective (Subtype.ext hkl)
+  have hw : Orthonormal ℂ (fun k : Fin s.card => b ((s.equivFin.symm k : ι))) :=
+    b.orthonormal.comp _ hinj
+  have hrange : Set.range (fun k : Fin s.card => b ((s.equivFin.symm k : ι)))
+      = b '' (s : Set ι) := by
+    ext y
+    constructor
+    · rintro ⟨k, rfl⟩
+      exact ⟨_, Finset.mem_coe.mpr (s.equivFin.symm k).2, rfl⟩
+    · rintro ⟨i, hi, rfl⟩
+      exact ⟨s.equivFin ⟨i, Finset.mem_coe.mp hi⟩, by simp⟩
+  -- the selected vectors, viewed inside the cutoff subspace
+  have hmem : ∀ k : Fin s.card,
+      b ((s.equivFin.symm k : ι)) ∈ Submodule.span ℂ (b '' (s : Set ι)) := by
+    intro k
+    exact Submodule.subset_span
+      ⟨_, Finset.mem_coe.mpr (s.equivFin.symm k).2, rfl⟩
+  have hon : Orthonormal ℂ (fun k : Fin s.card =>
+      (⟨b ((s.equivFin.symm k : ι)), hmem k⟩ :
+        Submodule.span ℂ (b '' (s : Set ι)))) := hw
+  have hsp : (⊤ : Submodule ℂ (Submodule.span ℂ (b '' (s : Set ι)))) ≤
+      Submodule.span ℂ (Set.range (fun k : Fin s.card =>
+        (⟨b ((s.equivFin.symm k : ι)), hmem k⟩ :
+          Submodule.span ℂ (b '' (s : Set ι))))) := by
+    refine le_of_eq (Submodule.map_injective_of_injective
+      (Submodule.span ℂ (b '' (s : Set ι))).injective_subtype ?_).symm
+    rw [Submodule.map_span, Submodule.map_subtype_top,
+      ← Set.range_comp, ← hrange]
+    rfl
+  let c : OrthonormalBasis (Fin s.card) ℂ
+      (Submodule.span ℂ (b '' (s : Set ι))) := OrthonormalBasis.mk hon hsp
+  have hc : ∀ k, ((c k : F)) = b ((s.equivFin.symm k : ι)) := by
+    intro k
+    rw [show ⇑c = _ from OrthonormalBasis.coe_mk hon hsp]
+  have hP : paperBasisProjection b s
+      = (Submodule.span ℂ (b '' (s : Set ι))).starProjection := rfl
+  rw [hP, paperHilbertSchmidtEnergy_comp_starProjection A _ c]
+  calc ∑ k : Fin s.card, ENNReal.ofReal (‖A ((c k : F))‖ ^ 2)
+      = ∑ k : Fin s.card,
+          ENNReal.ofReal (‖A (b ((s.equivFin.symm k : ι)))‖ ^ 2) :=
+        Finset.sum_congr rfl fun k _ => by rw [hc k]
+    _ = ∑ j : (s : Finset ι), ENNReal.ofReal (‖A (b (j : ι))‖ ^ 2) :=
+        Equiv.sum_comp s.equivFin.symm
+          (fun j : (s : Finset ι) => ENNReal.ofReal (‖A (b (j : ι))‖ ^ 2))
+    _ = ∑ i ∈ s, ENNReal.ofReal (‖A (b i)‖ ^ 2) :=
+        Finset.sum_coe_sort s (fun i => ENNReal.ofReal (‖A (b i)‖ ^ 2))
 
 /-- Finite basis projections converge strongly to the identity. -/
 theorem paperBasisProjection_stronglyTendsto {ι : Type*}
@@ -173,11 +332,11 @@ theorem paperBasisProjection_stronglyTendsto {ι : Type*}
       atTop (ContinuousLinearMap.id ℂ F) := by
   intro x
   have hsum := b.hasSum_repr x
+  simp only [HilbertBasis.repr_apply_apply] at hsum
   have hpartial : Tendsto
       (fun s : Finset ι => ∑ i ∈ s, ⟪b i, x⟫_ℂ • b i)
-      atTop (𝓝 x) := hsum.tendsto_sum_nat
-  simpa [paperBasisProjection,
-    Submodule.starProjection_eq_sum_orthonormal b.orthonormal] using hpartial
+      atTop (𝓝 x) := hsum
+  exact Tendsto.congr (fun s => (paperBasisProjection_apply b s x).symm) hpartial
 
 /-- Approximation singular values of finite basis cutoffs converge pointwise. -/
 theorem approximationSingularValue_cutoff_tendsto {ι : Type*}
@@ -197,44 +356,50 @@ theorem paperHilbertSchmidtEnergy_eq_iSup_cutoff {ι : Type*}
     paperHilbertSchmidtEnergy A =
       ⨆ s : Finset ι,
         paperHilbertSchmidtEnergy (A ∘L paperBasisProjection b s) := by
+  have hle : ∀ (s : Finset ι) (n : ℕ),
+      approximationSingularValue n (A ∘L paperBasisProjection b s) ≤
+        approximationSingularValue n A := by
+    intro s n
+    have hnormNN : ‖paperBasisProjection b s‖₊ ≤ (1 : NNReal) := by
+      exact_mod_cast (paperBasisProjection_isOrthogonalProjection b s).norm_le_one
+    have hNN : (A ∘L paperBasisProjection b s).approximationNumber n ≤
+        A.approximationNumber n := by
+      calc
+        (A ∘L paperBasisProjection b s).approximationNumber n
+            ≤ A.approximationNumber n * ‖paperBasisProjection b s‖₊ :=
+          A.approximationNumber_comp_right_le (paperBasisProjection b s) n
+        _ ≤ A.approximationNumber n * 1 :=
+          mul_le_mul_of_nonneg_left hnormNN bot_le
+        _ = A.approximationNumber n := by rw [mul_one]
+    exact_mod_cast hNN
   apply le_antisymm
   · unfold paperHilbertSchmidtEnergy
     rw [ENNReal.tsum_eq_iSup_sum]
-    apply iSup_le
-    intro t
-    obtain ⟨s, hs⟩ : ∃ s : Finset ι,
-        ∀ n ∈ t, ENNReal.ofReal ((approximationSingularValue n A) ^ 2) ≤
-          paperHilbertSchmidtEnergy (A ∘L paperBasisProjection b s) := by
-      classical
-      choose s hs using fun n : ℕ =>
-        (approximationSingularValue_cutoff_tendsto b A n).eventually
-          (eventually_ge_atTop
-            (approximationSingularValue n A - (1 : ℝ) / (t.card + 1)))
-      exact ⟨t.biUnion s, fun n hn => by
-        exact le_trans (ENNReal.ofReal_mono (pow_le_pow_left₀
-          (approximationSingularValue_nonneg n A) (hs n) 2))
-          (ENNReal.le_tsum n)⟩
+    refine iSup_le fun t => ?_
+    have hten : Tendsto
+        (fun s : Finset ι => ∑ n ∈ t, ENNReal.ofReal
+          ((approximationSingularValue n (A ∘L paperBasisProjection b s)) ^ 2))
+        atTop (𝓝 (∑ n ∈ t, ENNReal.ofReal
+          ((approximationSingularValue n A) ^ 2))) := by
+      refine tendsto_finset_sum _ fun n _ => ?_
+      exact ENNReal.tendsto_ofReal
+        ((approximationSingularValue_cutoff_tendsto b A n).pow 2)
+    refine le_of_tendsto hten (Filter.Eventually.of_forall fun s => ?_)
     calc
-      ∑ n ∈ t, ENNReal.ofReal ((approximationSingularValue n A) ^ 2)
-          ≤ ∑ n ∈ t,
-              paperHilbertSchmidtEnergy
-                (A ∘L paperBasisProjection b s) :=
-            Finset.sum_le_sum fun n hn => hs n hn
-      _ ≤ paperHilbertSchmidtEnergy
-            (A ∘L paperBasisProjection b s) := by
-          simpa using ENNReal.sum_const_le_self
-      _ ≤ ⨆ s : Finset ι,
+      ∑ n ∈ t, ENNReal.ofReal
+          ((approximationSingularValue n (A ∘L paperBasisProjection b s)) ^ 2)
+          ≤ paperHilbertSchmidtEnergy (A ∘L paperBasisProjection b s) :=
+            ENNReal.sum_le_tsum t
+      _ ≤ ⨆ t : Finset ι,
             paperHilbertSchmidtEnergy
-              (A ∘L paperBasisProjection b s) := le_iSup _ s
-  · apply iSup_le
-    intro s
+              (A ∘L paperBasisProjection b t) :=
+            le_iSup (fun t : Finset ι =>
+              paperHilbertSchmidtEnergy (A ∘L paperBasisProjection b t)) s
+  · refine iSup_le fun s => ?_
     unfold paperHilbertSchmidtEnergy
-    apply ENNReal.tsum_le_tsum
-    intro n
-    exact ENNReal.ofReal_mono (pow_le_pow_left₀
-      (approximationSingularValue_nonneg n _)
-      (approximationSingularValue_comp_le n A
-        (paperBasisProjection b s)) 2)
+    refine ENNReal.tsum_le_tsum fun n => ?_
+    exact ENNReal.ofReal_le_ofReal (pow_le_pow_left₀
+      (approximationSingularValue_nonneg n _) (hle s n) 2)
 
 /-- A nonnegative series is the supremum of its finite partial subsums. -/
 theorem paperHilbertSchmidtBasisEnergy_eq_iSup_finset {ι : Type*}
@@ -243,11 +408,8 @@ theorem paperHilbertSchmidtBasisEnergy_eq_iSup_finset {ι : Type*}
       ⨆ s : Finset ι, ∑ i ∈ s, ENNReal.ofReal (‖A (b i)‖ ^ 2) := by
   unfold paperHilbertSchmidtBasisEnergy
   rw [ENNReal.tsum_eq_iSup_sum]
-  congr 1
-  funext s
-  apply Finset.sum_congr rfl
-  intro i hi
-  simp [ENNReal.coe_pow, ENNReal.ofReal_pow]
+  refine iSup_congr fun s => Finset.sum_congr rfl fun i _ => ?_
+  rw [ENNReal.ofReal_pow (norm_nonneg _), ofReal_norm, enorm_eq_nnnorm]
 
 /-- The approximation-number and basis definitions of rectangular
 Hilbert--Schmidt energy agree exactly. -/
@@ -256,31 +418,40 @@ theorem paperHilbertSchmidtEnergy_eq_basisEnergy {ι : Type*}
     paperHilbertSchmidtEnergy A = paperHilbertSchmidtBasisEnergy b A := by
   rw [paperHilbertSchmidtEnergy_eq_iSup_cutoff b A,
     paperHilbertSchmidtBasisEnergy_eq_iSup_finset b A]
-  congr 1
-  funext s
-  exact paperHilbertSchmidtEnergy_comp_paperBasisProjection b s A
+  exact iSup_congr fun s =>
+    paperHilbertSchmidtEnergy_comp_paperBasisProjection b s A
 
 /-- Paper square membership is equivalent to square-summable columns in any
 Hilbert basis. -/
 theorem isPaperHilbertSchmidt_iff_summable_basis {ι : Type*}
     (b : HilbertBasis ι ℂ F) (A : F →L[ℂ] E) :
     IsPaperHilbertSchmidt A ↔ Summable (fun i => ‖A (b i)‖ ^ 2) := by
+  have hE : paperHilbertSchmidtBasisEnergy b A
+      = ∑' i, ((‖A (b i)‖₊ ^ 2 : NNReal) : ENNReal) := by
+    simp only [paperHilbertSchmidtBasisEnergy, ENNReal.coe_pow]
   unfold IsPaperHilbertSchmidt
-  rw [paperHilbertSchmidtEnergy_eq_basisEnergy b A,
-    ← ENNReal.tsum_coe_ne_top_iff_summable]
-  simp only [paperHilbertSchmidtBasisEnergy, ENNReal.coe_pow,
-    coe_nnnorm]
+  rw [paperHilbertSchmidtEnergy_eq_basisEnergy b A, hE,
+    ENNReal.tsum_coe_ne_top_iff_summable, ← NNReal.summable_coe]
+  simp only [NNReal.coe_pow, coe_nnnorm]
 
 /-- The paper square norm is the ordinary basis Hilbert--Schmidt norm. -/
 theorem paperHilbertSchmidtNorm_eq_sqrt_tsum_basis {ι : Type*}
     (b : HilbertBasis ι ℂ F) (A : F →L[ℂ] E)
     (hA : IsPaperHilbertSchmidt A) :
     paperHilbertSchmidtNorm A = Real.sqrt (∑' i, ‖A (b i)‖ ^ 2) := by
-  rw [paperHilbertSchmidtNorm, paperHilbertSchmidtEnergy_eq_basisEnergy b A]
   have hsummable := (isPaperHilbertSchmidt_iff_summable_basis b A).1 hA
-  rw [ENNReal.toReal_tsum]
-  simp [paperHilbertSchmidtBasisEnergy, hsummable,
-    ENNReal.toReal_ofReal (sq_nonneg _)]
+  have hnn : Summable (fun i => ‖A (b i)‖₊ ^ 2) := by
+    rw [← NNReal.summable_coe]
+    simpa only [NNReal.coe_pow, coe_nnnorm] using hsummable
+  have hE : paperHilbertSchmidtBasisEnergy b A
+      = ((∑' i, (‖A (b i)‖₊ ^ 2 : NNReal) : NNReal) : ENNReal) := by
+    simp only [paperHilbertSchmidtBasisEnergy, ENNReal.coe_pow]
+    exact (ENNReal.coe_tsum hnn).symm
+  rw [paperHilbertSchmidtNorm, paperHilbertSchmidtEnergy_eq_basisEnergy b A,
+    hE, ENNReal.coe_toReal]
+  congr 1
+  rw [NNReal.coe_tsum]
+  simp only [NNReal.coe_pow, coe_nnnorm]
 
 /-- Finite paper square energy is equivalent to representation by a unique
 Hilbert tensor. -/
@@ -289,10 +460,10 @@ theorem isPaperHilbertSchmidt_iff_existsUnique_tensor
     IsPaperHilbertSchmidt A ↔
       ∃! z : Spectra.HilbertSchmidtTensor.Space E F,
         Spectra.HilbertSchmidtTensor.toOperator z = A := by
-  let b := stdHilbertBasis F
+  obtain ⟨w, b, -⟩ := exists_hilbertBasis ℂ F
   rw [isPaperHilbertSchmidt_iff_summable_basis b A]
-  exact (Spectra.HilbertSchmidtTensor.
-    existsUnique_tensor_iff_summable_columns b A).symm
+  exact
+    (Spectra.HilbertSchmidtTensor.existsUnique_tensor_iff_summable_columns b A).symm
 
 /-- The canonical tensor representing a paper Hilbert--Schmidt operator. -/
 noncomputable def paperHilbertSchmidtTensor (A : F →L[ℂ] E)
@@ -312,14 +483,12 @@ theorem toOperator_paperHilbertSchmidtTensor (A : F →L[ℂ] E)
 theorem norm_paperHilbertSchmidtTensor (A : F →L[ℂ] E)
     (hA : IsPaperHilbertSchmidt A) :
     ‖paperHilbertSchmidtTensor A hA‖ = paperHilbertSchmidtNorm A := by
-  let b := stdHilbertBasis F
+  obtain ⟨w, b, -⟩ := exists_hilbertBasis ℂ F
   have hsq := Spectra.HilbertSchmidtTensor.norm_sq_eq_tsum_column_norm_sq
     b (paperHilbertSchmidtTensor A hA)
   rw [toOperator_paperHilbertSchmidtTensor] at hsq
-  have hnorm := paperHilbertSchmidtNorm_eq_sqrt_tsum_basis b A hA
-  rw [hnorm]
-  nlinarith [norm_nonneg (paperHilbertSchmidtTensor A hA),
-    Real.sqrt_nonneg (∑' i, ‖A (b i)‖ ^ 2)]
+  rw [paperHilbertSchmidtNorm_eq_sqrt_tsum_basis b A hA, ← hsq,
+    Real.sqrt_sq (norm_nonneg _)]
 
 /-- Every Hilbert tensor represents a paper Hilbert--Schmidt operator. -/
 theorem isPaperHilbertSchmidt_toOperator
