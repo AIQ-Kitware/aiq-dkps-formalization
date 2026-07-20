@@ -22,6 +22,7 @@ namespace Experimental
 namespace ExactSinTheta
 
 open scoped InnerProductSpace
+open Foundation RealComplexification
 
 noncomputable section
 
@@ -29,6 +30,25 @@ universe v
 
 variable {E : Type v}
   [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
+
+/-- A subspace admitting an orthogonal projection inside a complete ambient
+space is itself complete.  `local instance` does not propagate through imports,
+so it is reinstalled here. -/
+local instance instCompleteSpaceCoeOfHasOrthogonalProjectionAngleIdentity
+    {G : Type v} [NormedAddCommGroup G] [InnerProductSpace ℂ G] [CompleteSpace G]
+    (U : Submodule ℂ G) [U.HasOrthogonalProjection] : CompleteSpace U :=
+  (Submodule.isComplete_coe_of_hasOrthogonalProjection U).completeSpace_coe
+
+/-- The bounded operators on a subspace coordinate space, as a C⋆-algebra.
+
+Recording this in the submodule shape is load-bearing: the functional-calculus
+search does not find the C⋆-algebra structure on `↥U →L[ℂ] ↥U` by itself.  See
+the companion instance in `PaperCosineAngle`. -/
+noncomputable local instance instCStarAlgebraSubspaceCoordinateAngleIdentity
+    {G : Type v} [NormedAddCommGroup G] [InnerProductSpace ℂ G] [CompleteSpace G]
+    (U : Submodule ℂ G) [U.HasOrthogonalProjection] :
+    CStarAlgebra (↥U →L[ℂ] ↥U) :=
+  inferInstance
 
 /-- The source cosine-defined directed angle has spectrum in `[0, pi/2]`. -/
 theorem spectrum_paperSourceDirectedAngleC_subset_Icc
@@ -91,16 +111,22 @@ variable {F : Type v}
   [NormedAddCommGroup F] [InnerProductSpace ℝ F] [CompleteSpace F]
 
 /-- For real subspaces, the sine-reconstructed angle on the canonical
-complexification equals the source cosine-defined angle. -/
+complexification equals the source cosine-defined angle.
+
+The right-hand side is written through `paperSineDefinedDirectedAngleC`, which
+is *by definition* `cfc Real.arcsin (paperSineModulusC ..)`, so this is the same
+statement as the spelled-out functional calculus.  Writing it out here would not
+elaborate: in statement position there is no way to pin the C⋆-algebra instance
+on the complexified subspace coordinates, and the functional-calculus search
+does not find it unaided even though the C⋆-algebra structure itself resolves. -/
 theorem paperSourceDirectedAngleR_eq_arcsin_sineModulus
     (U V : Submodule ℝ F)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     paperSourceDirectedAngleR U V =
-      cfc Real.arcsin
-        (paperSineModulusC
-          (Foundation.complexifySubmodule U)
-          (Foundation.complexifySubmodule V)) :=
-  paperSourceDirectedAngleC_eq_arcsin_sineModulus _ _
+      paperSineDefinedDirectedAngleC
+        (complexifySubmodule U)
+        (complexifySubmodule V) :=
+  (paperSineDefinedDirectedAngleC_eq_source _ _).symm
 
 end Real
 
