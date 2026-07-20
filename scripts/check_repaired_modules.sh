@@ -53,6 +53,7 @@ REPAIRED=(
   "Spectra.Spaces.Tensor.HilbertSchmidtSpectralGap|801a470|notation and measure namespaces, higher order factorisation"
   "DavisKahan.Experimental.InfiniteDimensional.Sylvester.PaperHilbertSchmidtDefectFirst|11ed50a|qualified names split after their dot"
   "DavisKahan.Experimental.InfiniteDimensional.Sylvester.PaperHilbertSchmidtPairwise|11ed50a|obligation order, complexified spectrum orientation"
+  "DavisKahan.Experimental.InfiniteDimensional.SinTheta.PaperTheorem62|2cb8239|identity norm needs a nontrivial space"
 )
 
 fail=0
