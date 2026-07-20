@@ -4,6 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Adam Bornemann
 -/
 import Spectra.QuantumMechanics.BornRule.POVMCore
+import Spectra.QuantumMechanics.BornRule.PVM
+import Spectra.QuantumMechanics.BornRule.Observable
 import Spectra.Operator.SelfAdjoint
 import Spectra.SpectralTheory.Calculus.Bounded
 import Spectra.SpectralTheory.Measure.Convergence
