@@ -52,6 +52,14 @@ theorem mathAhead_norm_sum_columnTensor_le
     {ι : Type*} (b : HilbertBasis ι ℂ F)
     (z : Space E F) (s : Finset ι) :
     ‖∑ i ∈ s, columnTensor b z i‖ ≤ ‖z‖ := by
+  -- The finite span is finite-dimensional, hence complete, hence carries an
+  -- orthogonal projection.  None of that is found automatically: Mathlib
+  -- withholds `FiniteDimensional.complete` as an instance because the scalar
+  -- field would be an unknown metavariable.
+  haveI : FiniteDimensional ℂ (Submodule.span ℂ (b '' (s : Set ι))) :=
+    FiniteDimensional.span_of_finite ℂ (s.finite_toSet.image (⇑b))
+  haveI : CompleteSpace (Submodule.span ℂ (b '' (s : Set ι))) :=
+    FiniteDimensional.complete ℂ _
   let P : F →L[ℂ] F :=
     (Submodule.span ℂ (b '' (s : Set ι))).starProjection
   have hPadj : P.adjoint = P := by
@@ -64,24 +72,37 @@ theorem mathAhead_norm_sum_columnTensor_le
     rw [← hPadj, toOperator_mapL_right (B := P)]
     ext x
     rw [toOperator_sum]
-    simp_rw [columnTensor, toOperator_tmul,
+    -- `x` must be pushed inside the finite sum first, otherwise the rank-one
+    -- operators are never applied and `rankOne_apply` cannot fire.
+    simp_rw [ContinuousLinearMap.sum_apply, columnTensor, toOperator_tmul,
       InnerProductSpace.rankOne_apply]
-    rw [show P x = ∑ i ∈ s, ⟪b i, x⟫_ℂ • b i by
-      simpa [P] using
-        Orthonormal.starProjection_span_image_apply b.orthonormal s x]
-    simp only [ContinuousLinearMap.comp_apply, map_sum, map_smul]
+    -- The composition has to be unfolded before `P x` occurs syntactically.
+    rw [ContinuousLinearMap.comp_apply,
+      show P x = ∑ i ∈ s, ⟪b i, x⟫_ℂ • b i from
+        ForMathlib.Orthonormal.starProjection_span_image_apply b.orthonormal s x]
+    simp only [map_sum, map_smul]
   rw [hproj]
   have hP : ‖P‖ ≤ 1 := by
     simpa [P] using
-      (Submodule.span ℂ (b '' (s : Set ι))).norm_starProjection_le_one
+      (Submodule.span ℂ (b '' (s : Set ι))).starProjection_norm_le
   have hmap :
       ‖HilbertTensor.mapL (ContinuousLinearMap.id ℂ E) (Conj.map P)‖ ≤ 1 := by
-    rw [HilbertTensor.norm_mapL, norm_id, one_mul, Conj.norm_map]
-    exact hP
+    -- `‖id‖ = 1` would need `E` nontrivial, which is not assumed here; the
+    -- inequality `‖id‖ ≤ 1` carries the estimate just as well.
+    rw [HilbertTensor.norm_mapL, Conj.norm_map]
+    calc ‖ContinuousLinearMap.id ℂ E‖ * ‖P‖
+        ≤ 1 * 1 :=
+          mul_le_mul ContinuousLinearMap.norm_id_le hP (norm_nonneg P)
+            zero_le_one
+      _ = 1 := one_mul 1
+  -- Spelling the operator out keeps `le_opNorm` from elaborating against
+  -- metavariables, which otherwise blows the `whnf` heartbeat budget.
+  have hle :=
+    (HilbertTensor.mapL (ContinuousLinearMap.id ℂ E) (Conj.map P)).le_opNorm z
   calc
     ‖HilbertTensor.mapL (ContinuousLinearMap.id ℂ E) (Conj.map P) z‖
         ≤ ‖HilbertTensor.mapL (ContinuousLinearMap.id ℂ E) (Conj.map P)‖ * ‖z‖ :=
-      (HilbertTensor.mapL _ _).le_opNorm z
+      hle
     _ ≤ 1 * ‖z‖ :=
       mul_le_mul_of_nonneg_right hmap (norm_nonneg z)
     _ = ‖z‖ := one_mul _
@@ -91,7 +112,9 @@ finite-projection contraction estimate. -/
 theorem mathAhead_summable_columnTensor
     {ι : Type*} (b : HilbertBasis ι ℂ F) (z : Space E F) :
     Summable (columnTensor b z) := by
-  apply summable_of_pairwise_inner_eq_zero_of_partial_sum_norm_le
+  -- The scalar field occurs only in the orthogonality hypothesis, never in the
+  -- `Summable` goal, so it has to be supplied.
+  apply summable_of_pairwise_inner_eq_zero_of_partial_sum_norm_le (𝕜 := ℂ)
     (columnTensor b z)
   · intro i j hij
     exact inner_columnTensor_eq_zero b z hij
@@ -133,8 +156,10 @@ theorem mathAhead_hasSum_columnTensor
   have htsum : (∑' i, columnTensor b z i) = z := by
     apply toOperator_injective
     exact mathAhead_toOperator_tsum_columnTensor b z
-  rw [← htsum]
-  exact hsum.hasSum
+  -- Rewriting the goal backwards would also fold `z` inside `columnTensor b z`;
+  -- rewrite the summed value in the hypothesis instead.
+  have hres := hsum.hasSum
+  rwa [htsum] at hres
 
 /-- Parseval for the replacement column decomposition. -/
 theorem mathAhead_norm_sq_eq_tsum_column_norm_sq
@@ -151,13 +176,16 @@ theorem mathAhead_summable_columnSeries
     {ι : Type*} (b : HilbertBasis ι ℂ F)
     (A : F →L[ℂ] E) (hA : Summable fun i => ‖A (b i)‖ ^ 2) :
     Summable fun i => A (b i) ⊗̂ₜ[ℂ] Conj.toConj (b i) := by
-  apply (summable_iff_norm_sq_summable_of_pairwise_inner_eq_zero
-    (fun i => A (b i) ⊗̂ₜ[ℂ] Conj.toConj (b i)) ?_).2
-  · intro i j hij
+  have horth : Pairwise fun i j =>
+      ⟪A (b i) ⊗̂ₜ[ℂ] Conj.toConj (b i),
+        A (b j) ⊗̂ₜ[ℂ] Conj.toConj (b j)⟫_ℂ = 0 := by
+    intro i j hij
     simp [HilbertTensor.inner_tmul_tmul, Conj.inner_def,
       b.orthonormal.inner_eq_zero hij.symm]
-  · simpa [HilbertTensor.norm_tmul, b.orthonormal.norm_eq_one,
-      mul_one, one_pow] using hA
+  refine (summable_iff_norm_sq_summable_of_pairwise_inner_eq_zero (𝕜 := ℂ)
+    _ horth).2 ?_
+  simpa [HilbertTensor.norm_tmul, Conj.norm_toConj,
+    b.orthonormal.norm_eq_one, mul_one, one_pow] using hA
 
 /-- The column-series tensor represents the original operator, using the
 same basis reconstruction but the independent orthogonal-series summability

@@ -31,8 +31,10 @@ DEV_ROOT = "DavisKahan.All"
 FORMATHLIB_ROOT = "ForMathlib"
 AUDIT_SCRIPT = ROOT / "scripts/audit_full_paper_sine_theta.py"
 AUDIT_MODULE = ROOT / "DavisKahan/Experimental/InfiniteDimensional/SinTheta/FullPaperSineThetaAudit.lean"
-# Number of audited endpoints when the audit first reported CLEAN (commit cc7a7fc).
-AUDITED_TARGET_FLOOR = 38
+# Audited endpoints: 38 at the first clean run (cc7a7fc), plus the five
+# finite-multiplicity reports. Raise this whenever endpoints are added; never
+# lower it.
+AUDITED_TARGET_FLOOR = 43
 
 # Modules deliberately kept out of every root, with the reason. These are not
 # claimed proofs: each one documents its own exclusion in its file header.

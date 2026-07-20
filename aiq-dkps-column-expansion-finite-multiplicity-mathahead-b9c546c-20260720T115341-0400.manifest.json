@@ -1,0 +1,40 @@
+{
+  "name": "aiq-dkps-column-expansion-finite-multiplicity-mathahead-b9c546c-20260720T115341-0400",
+  "base_commit": "b9c546cc9eb0f36068960ac25d07adf1a0994c01",
+  "generated_at": "2026-07-20T11:54:05-04:00",
+  "timezone": "America/New_York",
+  "compiled": false,
+  "compile_note": "Lean and Lake were unavailable in the artifact environment.",
+  "files": [
+    {
+      "path": "DavisKahan/Alternative/OperatorIdeal/HilbertSchmidt/ColumnExpansion.lean",
+      "size": 10059,
+      "sha256": "3c88d3270a2e1d014cea4b9c2e529edc82955adf3834990aae36b7a51c25b95e",
+      "mtime": "2026-07-20T11:54:05-04:00"
+    },
+    {
+      "path": "DavisKahan/Experimental/InfiniteDimensional/SinTheta/FullPaperSineThetaAudit.lean",
+      "size": 3568,
+      "sha256": "fb8bee2c379ab257e73cbbfd4542f2d98f3b6b24f8edeee332e9a89b345ca1ea",
+      "mtime": "2026-07-20T11:54:05-04:00"
+    },
+    {
+      "path": "DavisKahan/Sources/DavisKahan1970/FullSineTheta.lean",
+      "size": 8178,
+      "sha256": "92414cf9a43a817ed3361a4d529ea8d9d0e34a6a125f14d72527364a6ab38ec9",
+      "mtime": "2026-07-20T11:54:05-04:00"
+    },
+    {
+      "path": "DavisKahan/Sources/DavisKahan1970/SineTheta/FiniteMultiplicity.lean",
+      "size": 13737,
+      "sha256": "f382188015b612912df969c399e1dbfb408b916c2e546776df768d376b73eaf9",
+      "mtime": "2026-07-20T11:54:05-04:00"
+    },
+    {
+      "path": "dev/column-expansion-and-finite-multiplicity-math-ahead-2026-07-20.md",
+      "size": 5447,
+      "sha256": "c5657c8b128e60b55e90e14ce70527dede9138592f295707f4c71d5aa69b7539",
+      "mtime": "2026-07-20T11:54:05-04:00"
+    }
+  ]
+}

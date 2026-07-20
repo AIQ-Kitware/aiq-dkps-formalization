@@ -29,6 +29,8 @@ namespace DavisKahan1970
 
 open scoped InnerProductSpace BigOperators ENNReal
 open DavisKahan.Experimental.ExactSinTheta
+-- `IsometricEmbedding` is re-exported here from the bounded-operator layer.
+open DavisKahanExt
 
 noncomputable section
 
@@ -105,20 +107,25 @@ theorem finiteMultiplicityComplementMap_apply (m : ℕ)
 theorem finiteMultiplicityTrialMap_isometry (m : ℕ) (theta : ℝ) :
     IsometricEmbedding (finiteMultiplicityTrialMap (𝕜 := 𝕜) m theta) := by
   intro x
-  simp only [finiteMultiplicityTrialMap, add_apply, smul_apply,
-    finiteMultiplicityExactMap_apply, finiteMultiplicityComplementMap_apply]
-  rw [← WithLp.toLp_add, ← WithLp.toLp_smul, ← WithLp.toLp_smul]
-  simp only [Prod.smul_mk, smul_zero, Prod.fst_add, Prod.snd_add,
-    zero_add, add_zero]
-  rw [WithLp.norm_toLp, Prod.norm_def, norm_smul, norm_smul,
-    RCLike.norm_ofReal, RCLike.norm_ofReal]
-  have htrig : |Real.cos theta| ^ 2 + |Real.sin theta| ^ 2 = 1 := by
-    rw [sq_abs, sq_abs, Real.cos_sq_add_sin_sq]
-  have hx : ‖x‖ = 0 ∨ 0 < ‖x‖ := (norm_nonneg x).eq_or_lt
-  rcases hx with hx | hx
-  · simp [hx]
-  · apply sq_eq_sq₀ (norm_nonneg _) (norm_nonneg x)
-    rw [Real.sq_sqrt (by positivity), mul_pow, mul_pow, htrig, one_mul]
+  -- The rotated column is the single `L²` pair with the two scaled copies.
+  have hval : finiteMultiplicityTrialMap (𝕜 := 𝕜) m theta x =
+      WithLp.toLp 2 (((Real.cos theta : ℝ) : 𝕜) • x,
+        ((Real.sin theta : ℝ) : 𝕜) • x) := by
+    simp only [finiteMultiplicityTrialMap, ContinuousLinearMap.add_apply,
+      ContinuousLinearMap.smul_apply, finiteMultiplicityExactMap_apply,
+      finiteMultiplicityComplementMap_apply, ← WithLp.toLp_smul,
+      ← WithLp.toLp_add]
+    simp
+  rw [hval]
+  -- Compare squares: both sides are nonnegative and the `L²` product norm is
+  -- stated for the square.
+  have hsq : ‖WithLp.toLp 2 (((Real.cos theta : ℝ) : 𝕜) • x,
+      ((Real.sin theta : ℝ) : 𝕜) • x)‖ ^ 2 = ‖x‖ ^ 2 := by
+    rw [WithLp.prod_norm_sq_eq_of_L2]
+    simp only [WithLp.toLp_fst, WithLp.toLp_snd, norm_smul, RCLike.norm_ofReal,
+      mul_pow, sq_abs]
+    rw [← add_mul, Real.cos_sq_add_sin_sq, one_mul]
+  exact (sq_eq_sq₀ (norm_nonneg _) (norm_nonneg x)).mp hsq
 
 /-- Direct calculation of the residual identity in every multiplicity. -/
 theorem finiteMultiplicity_residual_identity (m : ℕ) (delta theta : ℝ) :
@@ -131,8 +138,9 @@ theorem finiteMultiplicity_residual_identity (m : ℕ) (delta theta : ℝ) :
   apply WithLp.ofLp_injective 2
   simp [finiteMultiplicityAmbientOperator, finiteMultiplicityTrialMap,
     finiteMultiplicityTrialOperator, finiteMultiplicityResidual]
-  push_cast
-  ring
+  -- The two sides scale by the same real number but through different actions:
+  -- iterated real scalars on the left, one coerced product on the right.
+  rw [← map_mul, algebraMap_smul, smul_smul, mul_comm]
 
 /-- The exact projection removes the first block and leaves exactly the
 multiplicity-`m` sine block. -/
@@ -142,14 +150,16 @@ theorem finiteMultiplicity_directedSine_identity (m : ℕ) (theta : ℝ) :
           (finiteMultiplicityExactMap (𝕜 := 𝕜) m).adjoint) ∘L
       finiteMultiplicityTrialMap (𝕜 := 𝕜) m theta =
         finiteMultiplicitySineBlock (𝕜 := 𝕜) m theta := by
-  rw [ContinuousLinearMap.eq_iff]
-  intro x
+  ext x
   -- The adjoint of the first block inclusion is the first coordinate map.
   have hadj :
       (finiteMultiplicityExactMap (𝕜 := 𝕜) m).adjoint =
         WithLp.fstL 2 𝕜
           (FiniteMultiplicitySpace 𝕜 m)
           (FiniteMultiplicitySpace 𝕜 m) := by
+    -- `eq_adjoint_iff` characterises `A = adjoint B`, so the equation has to be
+    -- turned around first.
+    symm
     rw [ContinuousLinearMap.eq_adjoint_iff]
     intro y z
     simp [finiteMultiplicityExactMap]
@@ -184,8 +194,26 @@ theorem finiteMultiplicityCoordinateColumn_norm_rank (m : ℕ) (i : Fin m) :
     rw [finiteMultiplicityScalarColumn,
       ContinuousLinearMap.norm_smulRight_apply,
       ContinuousLinearMap.norm_id, one_mul, hv]
+  -- The coordinate functional is the inner product against a unit coordinate
+  -- vector, so Cauchy--Schwarz bounds it.  Only the upper bound is needed here;
+  -- the matching lower bound is established separately below, so the stated
+  -- equality is unaffected.
   have hproj : ‖(EuclideanSpace.proj i :
-      FiniteMultiplicitySpace 𝕜 m →L[𝕜] 𝕜)‖ = 1 := by simp
+      FiniteMultiplicitySpace 𝕜 m →L[𝕜] 𝕜)‖ ≤ 1 := by
+    refine ContinuousLinearMap.opNorm_le_bound _ zero_le_one fun x => ?_
+    have hx : (EuclideanSpace.proj i :
+        FiniteMultiplicitySpace 𝕜 m →L[𝕜] 𝕜) x =
+        ⟪(EuclideanSpace.single i (1 : 𝕜) :
+          FiniteMultiplicitySpace 𝕜 m), x⟫_𝕜 := by
+      simp [EuclideanSpace.inner_single_left]
+    rw [hx, one_mul]
+    calc
+      ‖⟪(EuclideanSpace.single i (1 : 𝕜) :
+          FiniteMultiplicitySpace 𝕜 m), x⟫_𝕜‖
+          ≤ ‖(EuclideanSpace.single i (1 : 𝕜) :
+              FiniteMultiplicitySpace 𝕜 m)‖ * ‖x‖ :=
+        norm_inner_le_norm _ _
+      _ = ‖x‖ := by simp
   constructor
   · apply le_antisymm
     · calc
@@ -194,7 +222,9 @@ theorem finiteMultiplicityCoordinateColumn_norm_rank (m : ℕ) (i : Fin m) :
               ‖(EuclideanSpace.proj i :
                 FiniteMultiplicitySpace 𝕜 m →L[𝕜] 𝕜)‖ :=
           ContinuousLinearMap.opNorm_comp_le _ _
-        _ = 1 := by rw [hscalar, hproj, one_mul]
+        _ ≤ 1 * 1 :=
+          mul_le_mul hscalar.le hproj (norm_nonneg _) zero_le_one
+        _ = 1 := one_mul 1
     · have hlower :=
         (finiteMultiplicityCoordinateColumn (𝕜 := 𝕜) m i).le_opNorm (b i)
       simpa [finiteMultiplicityCoordinateColumn,
@@ -223,8 +253,13 @@ theorem finiteMultiplicityComplementMap_eq_sum_coordinateColumn (m : ℕ) :
   simp [finiteMultiplicityCoordinateColumn, finiteMultiplicityScalarColumn,
     b, map_sum]
 
-/-- Membership in a source ideal is closed under addition. -/
+/-- Membership in a source ideal is closed under addition.
+
+The gauge triangle inequality is what makes this true, and it is available for
+the real and complex scalar fields; it is a property of the field, not an
+assumption about the operators involved. -/
 theorem PaperUnitaryInvariantNorm.mem_add
+    [HasKyFanApproximationGaugeTriangle.{u, u} 𝕜]
     (N : PaperUnitaryInvariantNorm)
     {E F : Type u}
     [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
@@ -238,6 +273,7 @@ theorem PaperUnitaryInvariantNorm.mem_add
 
 /-- Membership in a source ideal is closed under finite sums. -/
 theorem PaperUnitaryInvariantNorm.mem_finset_sum
+    [HasKyFanApproximationGaugeTriangle.{u, u} 𝕜]
     (N : PaperUnitaryInvariantNorm)
     {E F : Type u}
     [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
@@ -249,21 +285,26 @@ theorem PaperUnitaryInvariantNorm.mem_finset_sum
   induction s using Finset.induction_on with
   | empty =>
       intro htop
-      rw [N.extendedGauge_zero] at htop
+      rw [Finset.sum_empty, N.extendedGauge_zero] at htop
       simp at htop
   | @insert i s hi ih =>
       rw [Finset.sum_insert hi]
-      exact N.mem_add (hA i (Finset.mem_insert_self i s))
+      -- These live in the source-facade namespace, not the implementation
+      -- namespace of `PaperUnitaryInvariantNorm`, so dot notation cannot find
+      -- them.
+      exact PaperUnitaryInvariantNorm.mem_add N
+        (hA i (Finset.mem_insert_self i s))
         (ih fun j hj => hA j (Finset.mem_insert_of_mem hj))
 
 /-- The multiplicity-`m` complementary inclusion belongs to every source
 unitarily invariant ideal. -/
 theorem finiteMultiplicityComplementMap_mem
+    [HasKyFanApproximationGaugeTriangle.{u, u} 𝕜]
     (m : ℕ) (N : PaperUnitaryInvariantNorm) :
     N.Mem (finiteMultiplicityComplementMap (𝕜 := 𝕜) m) := by
   rw [finiteMultiplicityComplementMap_eq_sum_coordinateColumn]
   simpa using
-    N.mem_finset_sum
+    PaperUnitaryInvariantNorm.mem_finset_sum N
       (s := Finset.univ)
       (A := fun i => finiteMultiplicityCoordinateColumn (𝕜 := 𝕜) m i)
       (fun i _ => N.mem_rankOne
@@ -274,6 +315,7 @@ theorem finiteMultiplicityComplementMap_mem
 
 /-- The sine block belongs to every source ideal. -/
 theorem finiteMultiplicitySineBlock_mem
+    [HasKyFanApproximationGaugeTriangle.{u, u} 𝕜]
     (m : ℕ) (theta : ℝ) (N : PaperUnitaryInvariantNorm) :
     N.Mem (finiteMultiplicitySineBlock (𝕜 := 𝕜) m theta) := by
   unfold finiteMultiplicitySineBlock PaperUnitaryInvariantNorm.Mem
@@ -284,6 +326,7 @@ theorem finiteMultiplicitySineBlock_mem
 /-- Equality in Theorem 6.1 at every finite multiplicity and simultaneously
 for every normalized source norm. -/
 theorem Theorem6_1_finiteMultiplicity_equality_every_norm
+    [HasKyFanApproximationGaugeTriangle.{u, u} 𝕜]
     (m : ℕ) (N : PaperUnitaryInvariantNorm)
     {delta theta : ℝ} (hdelta : 0 ≤ delta) :
     N.gauge (finiteMultiplicityResidual (𝕜 := 𝕜) m delta theta) =
@@ -306,7 +349,12 @@ theorem finiteMultiplicitySineBlock_injective
   apply_fun WithLp.sndL 2 𝕜
       (FiniteMultiplicitySpace 𝕜 m)
       (FiniteMultiplicitySpace 𝕜 m) at hxy
-  simpa [finiteMultiplicitySineBlock, hc] using hxy
+  simp only [finiteMultiplicitySineBlock, ContinuousLinearMap.smul_apply,
+    finiteMultiplicityComplementMap_apply, map_smul, WithLp.sndL_apply,
+    WithLp.toLp_snd] at hxy
+  -- Cancel in `𝕜`.  Letting the scalar normalise to the real action instead
+  -- would need a separate no-zero-smul-divisors instance over `ℝ`.
+  exact smul_right_injective _ hc hxy
 
 end
 
