@@ -58,7 +58,7 @@ namespace IsGraphCore
 omit [CompleteSpace E] in
 /-- The full operator domain is a graph core. -/
 theorem top (A : ClosedOperator (𝕜 := 𝕜) (E := E)) :
-    A.IsGraphCore ⊤ := by
+    ClosedOperator.IsGraphCore A ⊤ := by
   intro x
   refine ⟨fun _ => ⟨x, Submodule.mem_top⟩, ?_, ?_⟩
   · simpa using tendsto_const_nhds
@@ -69,7 +69,7 @@ omit [CompleteSpace E] in
 is an ambient-norm limit of vectors from the core. -/
 theorem ambient_approximation
     {A : ClosedOperator (𝕜 := 𝕜) (E := E)}
-    {D : Submodule 𝕜 A.domain} (hD : A.IsGraphCore D)
+    {D : Submodule 𝕜 A.domain} (hD : ClosedOperator.IsGraphCore A D)
     (x : A.domain) :
     ∃ u : ℕ → D,
       Tendsto (fun n => ((((u n : D) : A.domain) : E))) atTop (𝓝 (x : E)) := by
@@ -85,7 +85,7 @@ structure PaperCommonCoreResidualData
     (A₀ : ClosedOperator (𝕜 := 𝕜) (E := F))
     (X : F →L[𝕜] E) (R : F →L[𝕜] E) where
   core : Submodule 𝕜 A₀.domain
-  graph_core : A₀.IsGraphCore core
+  graph_core : ClosedOperator.IsGraphCore A₀ core
   maps_core : ∀ x : core, X (((x : core) : A₀.domain) : F) ∈ A.domain
   residual_on_core : ∀ x : core,
     A.toLinearMap
