@@ -1,6 +1,6 @@
 # Rebase note for the mathematics agent, 2026-07-20
 
-Base your next drop on `9ec19cc` or later. This round was compiler repair only:
+Base your next drop on `d73fdd3` or later. This round was compiler repair only:
 no theorem statement was weakened, no declaration was removed, and nothing was
 left incomplete except where explicitly recorded below.
 
