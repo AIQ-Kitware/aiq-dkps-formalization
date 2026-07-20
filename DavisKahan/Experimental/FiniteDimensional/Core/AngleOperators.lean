@@ -4,6 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
 import DavisKahan.FiniteDimensional.Core.AngleGeometry
+import ForMathlib.Analysis.InnerProductSpace.SelfAdjointFunctionalCalculus
+import ForMathlib.Analysis.InnerProductSpace.MoorePenroseInverse
 
 /-!
 # Compatibility surface for unfinished finite angle constructions
@@ -68,8 +70,9 @@ independence through finite functional calculus (equivalently, apply
 `Real.arcsin` to `sinAngleOperator U V` through that calculus). -/
 noncomputable def angleOperator (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →ₗ[𝕜] E :=
-  FiniteDimensional.selfAdjointFunctionalCalculus Real.arcsin
-    (sinAngleOperator U V)
+  FiniteDimensional.selfAdjointFunctionalCalculus
+    (ForMathlib.isPositive_abs (projection U - projection V)).isSymmetric
+    Real.arcsin
 
 /-- `tan Θ` on the full ambient space.  In non-acute configurations this is
 understood as the Moore--Penrose/graph-operator extension on the transverse
@@ -81,7 +84,10 @@ only as a documented Moore--Penrose convention.  Theorems interpreting its
 norm as a principal tangent must assume transversality or acuteness. -/
 noncomputable def tanAngleOperator (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →ₗ[𝕜] E :=
-  FiniteDimensional.selfAdjointFunctionalCalculus safeTan (angleOperator U V)
+  FiniteDimensional.selfAdjointFunctionalCalculus
+    (FiniteDimensional.selfAdjointFunctionalCalculus_isSymmetric
+      (ForMathlib.isPositive_abs (projection U - projection V)).isSymmetric Real.arcsin)
+    safeTan
 
 /-- `tan (2 Θ)` on the full ambient space.
 
@@ -91,7 +97,12 @@ the resulting operator is used analytically.  A future API may instead bundle
 that pole-avoidance proof into the constructor. -/
 noncomputable def tanTwoAngleOperator (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →ₗ[𝕜] E :=
-  FiniteDimensional.selfAdjointFunctionalCalculus safeTanTwo (angleOperator U V)
+  FiniteDimensional.selfAdjointFunctionalCalculus
+    (FiniteDimensional.selfAdjointFunctionalCalculus_isSymmetric
+      (FiniteDimensional.selfAdjointFunctionalCalculus_isSymmetric
+        (ForMathlib.isPositive_abs (projection U - projection V)).isSymmetric Real.arcsin)
+      safeTan)
+    safeTanTwo
 
 /-- Orthogonal complements preserve the nontrivial principal angles.
 
