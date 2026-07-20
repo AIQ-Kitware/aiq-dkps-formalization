@@ -5,9 +5,9 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Experimental.InfiniteDimensional.Core.ClosedOperatorComplexification
 import DavisKahan.SpectralTheory.Complexification.FunctionalCalculus
-import DavisKahan.Experimental.InfiniteDimensional.Core.ComplexificationSubspace
-import DavisKahan.Experimental.InfiniteDimensional.Core.ReducingRestriction
-import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.SpectralRestrictionOperator
+import DavisKahan.SpectralTheory.Complexification.Subspace
+import DavisKahan.SpectralTheory.ReducingSubspace.Restriction
+import DavisKahan.Interop.Spectra.SpectralRestrictionOperator
 import Spectra.Resolvent.Identities
 import Spectra.SpectralTheory.ResolventForm
 import Spectra.SpectralTheory.Essential.Weyl

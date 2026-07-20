@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Experimental.InfiniteDimensional.DoubleAngleUnbounded
-import DavisKahan.Experimental.InfiniteDimensional.TanTwoTheta.BoundedOffDiagonal
+import DavisKahan.TanTwoTheta.BoundedOffDiagonal
 
 /-!
 # Unbounded tangent two theta at operator-norm scope

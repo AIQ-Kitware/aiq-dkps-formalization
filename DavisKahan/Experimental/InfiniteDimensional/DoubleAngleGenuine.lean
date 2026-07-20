@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Fable 5
 -/
 import DavisKahan.Experimental.InfiniteDimensional.Sylvester.GenuineSpectrum
-import DavisKahan.Experimental.InfiniteDimensional.Core.OperatorAngleComplex
+import DavisKahan.Geometry.Angle.OperatorAngleComplex
 import DavisKahan.Experimental.InfiniteDimensional.DoubleAngle
 
 /-!

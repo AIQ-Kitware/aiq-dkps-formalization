@@ -6,7 +6,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.PaperLemma61
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.PaperOperatorAngleBridge
 import DavisKahan.Experimental.InfiniteDimensional.Ideals.PaperSubspaceSingularTransport
-import DavisKahan.Experimental.InfiniteDimensional.Core.ReducingRestrictionExtras
+import DavisKahan.SpectralTheory.ReducingSubspace.RestrictionExtras
 import DavisKahan.Experimental.InfiniteDimensional.Sylvester.LegacyGapCompletion
 
 /-!

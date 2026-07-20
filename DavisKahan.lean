@@ -5,7 +5,7 @@ Authors: Jon Crall, GPT 5.6 High
 -/
 import DavisKahan.BoundedOperator.All
 import DavisKahan.FiniteDimensional.All
-import DavisKahan.Sources.DavisKahan1970.PartIII
+import DavisKahan.Sources.All
 
 /-!
 # Davis--Kahan perturbation theory

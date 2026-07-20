@@ -3,9 +3,9 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.UnitaryConjugation
+import DavisKahan.Interop.Spectra.UnitaryConjugation
 import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.SpectralProjectionSinTheta
-import DavisKahan.Experimental.InfiniteDimensional.Core.OperatorAngleComplex
+import DavisKahan.Geometry.Angle.OperatorAngleComplex
 import ForMathlib.Analysis.InnerProductSpace.ProjectionGap
 
 /-!
