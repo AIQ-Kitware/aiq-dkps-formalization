@@ -45,6 +45,9 @@ REPAIRED=(
   "DavisKahan.Experimental.InfiniteDimensional.Sylvester.PairwiseSpectrumGap|879aa7d|lambda token used as a spectral variable"
   "DavisKahan.Experimental.InfiniteDimensional.Sylvester.PairwiseHomogeneousUniqueness|b1b66a0|generator namespace, split qualified name"
   "DavisKahan.Experimental.InfiniteDimensional.Sylvester.HomogeneousUniqueness|dbd7b76|norm of zero and a nonlinear product"
+  "Spectra.OneParameterUnitaryGroup.Product|4ee5e89|pipeline operator binds looser than equality"
+  "Spectra.SpectralTheory.Calculus.SpectralGapInverse|4ee5e89|spectral measure namespace, antitone inverse"
+  "DavisKahan.Experimental.InfiniteDimensional.Ideals.PaperHilbertSchmidtBasis|HEAD|span image closed by reflexivity"
 )
 
 fail=0
