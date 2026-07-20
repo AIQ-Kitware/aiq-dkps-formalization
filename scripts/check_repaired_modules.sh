@@ -34,6 +34,10 @@ REPAIRED=(
   "DavisKahan.Experimental.InfiniteDimensional.Ideals.PaperSubspaceSingularTransport|3966a84|heterogeneous singular sequence"
   "DavisKahan.Experimental.InfiniteDimensional.Ideals.PaperUnitaryInvariantNorm|3966a84|prefix rewrites and finiteness"
   "DavisKahan.Experimental.InfiniteDimensional.Ideals.ApproximationBlockSum|d307141|direct sum majorization, proof written"
+  "DavisKahan.Experimental.InfiniteDimensional.SinTheta.PaperTheorem61Universal|73872e1|trivial branch and projection unfolding"
+  "DavisKahan.Experimental.InfiniteDimensional.Ideals.OperatorModulusApproximation|74c563c|rectangular Gram positivity"
+  "DavisKahan.Experimental.InfiniteDimensional.SinTheta.PaperProjectionBlocks|8b88b93|rewrite directions and over-rewrite"
+  "DavisKahan.Experimental.InfiniteDimensional.Ideals.PaperUnitaryInvariantNormLaws|8b88b93|Ky Fan triangle capability, heterogeneous estimate"
 )
 
 fail=0
