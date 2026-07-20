@@ -19,8 +19,8 @@ partial sums therefore gives summability directly, without a separate
 closedness theorem for a parameterized family of series.
 -/
 
-open Filter
-open scoped BigOperators
+open Filter Topology
+open scoped BigOperators InnerProductSpace
 
 namespace ForMathlib.OrthogonalSeries
 
@@ -86,14 +86,15 @@ theorem norm_sq_sdiff_sum_of_pairwise_inner_eq_zero
     disjoint_sdiff_sdiff
   have hpyth := norm_sq_finset_sum_of_pairwise_inner_eq_zero
     g hgorth (s₁ \ s₂ ∪ s₂ \ s₁)
-  rw [Finset.sum_union hdisj] at hpyth
-  convert! hpyth using 4
-  · refine Finset.sum_congr rfl fun i hi => ?_
-    simp only [hg₁ i hi]
-  · refine Finset.sum_congr rfl fun i hi => ?_
-    simp only [hg₂ i hi]
-  · simp only [hgnorm]
-  · simp only [hgnorm]
+  -- Both sides of `hpyth` sum over the union, so the splitting rewrite is
+  -- needed twice: the two summands are different functions of `i`.
+  rw [Finset.sum_union hdisj, Finset.sum_union hdisj] at hpyth
+  rw [Finset.sum_congr rfl hg₁, Finset.sum_congr rfl hg₂,
+    Finset.sum_congr rfl (fun i _ => by rw [hgnorm] :
+      ∀ i ∈ s₁ \ s₂, ‖g i‖ ^ 2 = ‖f i‖ ^ 2),
+    Finset.sum_congr rfl (fun i _ => by rw [hgnorm] :
+      ∀ i ∈ s₂ \ s₁, ‖g i‖ ^ 2 = ‖f i‖ ^ 2)] at hpyth
+  exact hpyth
 
 /-- For a pairwise orthogonal family in a complete Hilbert space,
 unconditional summability is equivalent to summability of the square norms. -/
@@ -154,13 +155,12 @@ theorem summable_of_pairwise_inner_eq_zero_of_partial_sum_norm_le
     {C : ℝ} (hC : 0 ≤ C)
     (hbound : ∀ s : Finset ι, ‖∑ i ∈ s, f i‖ ≤ C) :
     Summable f := by
-  apply (summable_iff_norm_sq_summable_of_pairwise_inner_eq_zero f horth).2
-  apply summable_of_sum_le
-  · intro i
-    exact sq_nonneg _
-  · intro s
-    rw [← norm_sq_finset_sum_of_pairwise_inner_eq_zero f horth]
-    nlinarith [hbound s, norm_nonneg (∑ i ∈ s, f i)]
+  refine (summable_iff_norm_sq_summable_of_pairwise_inner_eq_zero f horth).2 ?_
+  -- The uniform bound on the partial sums is `C`, so the bound on the partial
+  -- sums of the squares is `C ^ 2`; it has to be supplied explicitly.
+  refine summable_of_sum_le (c := C ^ 2) (fun i => sq_nonneg _) fun s => ?_
+  rw [← norm_sq_finset_sum_of_pairwise_inner_eq_zero f horth]
+  nlinarith [hbound s, norm_nonneg (∑ i ∈ s, f i)]
 
 /-- Parseval for any pairwise orthogonal family with a specified sum. -/
 theorem HasSum.norm_sq_eq_tsum_of_pairwise_inner_eq_zero
