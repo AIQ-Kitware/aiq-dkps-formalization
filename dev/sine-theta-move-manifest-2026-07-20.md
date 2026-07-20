@@ -92,10 +92,12 @@ and last admission within each file:
 
 Only `AbstractSpectrum` has a genuine tail. `Resolvent` and `Rectangular` are
 tail-heavy. The rest interleave admitted and clean declarations throughout, so
-each split needs a real declaration-level dependency partition: extract the
-declarations the paper closure actually reaches into a clean module, and leave
-the admitted remainder behind. This is the dominant cost of the whole
-reorganization and must not be attempted as a bulk edit.
+no textual cut splits them and each needs a declaration-level partition.
+
+That was the picture from file positions alone, and taken by itself it makes
+the split look like the dominant cost of the reorganization. Measuring which
+declarations the audited surface *actually reaches* shows otherwise; see
+batch 4. Do not size this work from the table above.
 
 ## Ordered move manifest
 
@@ -147,17 +149,70 @@ Step 3 cannot land before the split, because `DavisKahan/Sources/DavisKahan1970/
 Add `scripts/check_library_structure.py` covering the plan's five checks. It is
 expected to report violations until the split lands; that is its purpose.
 
-### Batch 4 — the split (dominant cost)
+### Batch 4 — the split
 
-Order by leverage, lowest risk first: `AbstractSpectrum` (true tail), then
-`Resolvent` and `Rectangular` (tail-heavy), then `SpectralBridge`,
-`DoubleAngle`, `Sylvester/Basic`, `DirectRotation`, `Ideals/Symmetric`,
-`SinTheta/General`, `Core/Unbounded`, then the three foundational modules
-`OperatorAngle`, `SpectralProjection`, `UnboundedSpectral` last.
+**This batch is far smaller than the module-level counts suggest.** Measuring
+the *declaration* closure instead of the import closure changes the job.
 
-For each: compute the declarations the paper closure actually reaches, extract
-them into a clean sibling module, leave the admitted remainder in Experimental,
-repoint imports, and keep one canonical declaration — never copy.
+A Lean traversal of the constants reachable from every `ForMathlib.DavisKahan1970`
+facade declaration (7438 constants) shows the audited surface needs exactly
+**11 declarations** from the 13 admission-bearing modules:
+
+| module | declarations actually needed |
+| --- | --- |
+| `Core/Unbounded` | `ClosedOperator`, `.mk`, `.domain`, `.toLinearMap`, `.toLinearPMap`, `.IsSelfAdjoint`, `.realResolventSet`, `.realSpectrum` |
+| `Ideals/Rectangular` | `RectangularSymmetricIdealFamily`, `.Mem`, `.gauge` |
+| the other 11 modules | **none** |
+
+All three large ones — `UnboundedSpectral` (31 admissions),
+`SpectralProjection` (15), `OperatorAngle` (14) — contribute nothing. They are
+in the closure only because something imports them, not because anything uses
+them. Both needed structures are declared at the top of their files
+(`Unbounded.lean:73`, `Rectangular.lean:35`), well before the first admission
+(line 311 and line 439).
+
+Shortest import paths from the facade show a single chokepoint. Eight of the
+thirteen are reached only through `Core/Unbounded`:
+
+```
+PaperSymmetric
+  -> Core.ReducingRestrictionExtras -> Core.ReducingRestriction -> Core.Unbounded
+       -> DirectRotation -> DoubleAngle -> SinTheta.General -> Sylvester.Basic
+            -> Ideals.Symmetric
+            -> Sylvester.Resolvent -> Core.SpectralProjection
+       -> DirectRotation -> GraphSubspace -> Core.OperatorAngle
+```
+
+`Core/Unbounded.lean` imports only `DirectRotation` and Mathlib's `LinearPMap`,
+and its clean prefix never references `DirectRotation`. Extracting
+`ClosedOperator` into a base module that imports Mathlib only therefore severs
+nine of the thirteen at once.
+
+Ordered plan, highest leverage first:
+
+1. Extract `ClosedOperator` and its clean API into
+   `DavisKahan/SpectralTheory/ClosedOperator/Basic.lean`, importing Mathlib
+   only. `Core/Unbounded.lean` then imports it and keeps the admitted `adjoint`
+   plus the five later admitted declarations. `IsSelfAdjoint` sits *after* the
+   admitted `adjoint` but, as its own docstring states, does not depend on it,
+   so this is not a plain prefix slice.
+   Severs: `Unbounded`, `DirectRotation`, `DoubleAngle`, `SinTheta/General`,
+   `Sylvester/Basic`, `Ideals/Symmetric`, `Sylvester/Resolvent`,
+   `Core/SpectralProjection`, `Core/OperatorAngle`.
+2. Extract `RectangularSymmetricIdealFamily` into
+   `DavisKahan/OperatorIdeal/UnitarilyInvariant/RectangularFamily.lean`
+   (clean prefix cut at `Rectangular.lean:439`). Severs `Ideals/Rectangular`.
+3. `Core/AbstractSpectrum` reaches the facade through `Core/Compatibility`; its
+   single admission is a true tail at 98%.
+4. `Core/UnboundedSpectral` reaches it through `Ideals/ApproximationNumbersCore`.
+5. `SinTheta/SpectralBridge` reaches it through the `GeneralSinTheta` chain, not
+   through the paper layer.
+
+Keep one canonical declaration throughout: extract and repoint imports, never
+copy.
+
+Reproduce the declaration-closure measurement with the traversal described
+above; it is the measurement that decides this batch's true size.
 
 ### Batch 5 — the literal paper layer
 
