@@ -64,9 +64,17 @@ theorem spectrum_sinAngleOperatorDirectedC_subset_Icc
   intro x hx
   refine ⟨spectrum_nonneg_of_nonneg
     (ForMathlib.DavisKahanExt.sinAngleOperatorDirectedC_nonneg U V) hx, ?_⟩
+  -- `NormOneClass (E →L[ℂ] E)` fails for possibly trivial `E`, so the spectral
+  -- radius bound is used in its `‖1‖`-corrected form.
+  have hone : ‖(1 : E →L[ℂ] E)‖ ≤ 1 := ContinuousLinearMap.norm_id_le
   have habs : |x| ≤
       ‖ForMathlib.DavisKahanExt.sinAngleOperatorDirectedC U V‖ :=
-    spectrum.norm_le_norm_of_mem hx
+    calc |x| = ‖x‖ := (Real.norm_eq_abs x).symm
+      _ ≤ ‖ForMathlib.DavisKahanExt.sinAngleOperatorDirectedC U V‖ *
+            ‖(1 : E →L[ℂ] E)‖ := spectrum.norm_le_norm_mul_of_mem hx
+      _ ≤ ‖ForMathlib.DavisKahanExt.sinAngleOperatorDirectedC U V‖ * 1 :=
+          mul_le_mul_of_nonneg_left hone (norm_nonneg _)
+      _ = ‖ForMathlib.DavisKahanExt.sinAngleOperatorDirectedC U V‖ := mul_one _
   exact (le_abs_self x).trans
     (habs.trans (norm_sinAngleOperatorDirectedC_le_one U V))
 
@@ -116,7 +124,7 @@ theorem cfc_sin_paperDirectedAngleOperatorC
   rw [paperDirectedAngleOperatorC,
     ← cfc_comp Real.sin Real.arcsin
       (ForMathlib.DavisKahanExt.sinAngleOperatorDirectedC U V)
-      hsa.isStarNormal hsin harcsin]
+      hsa hsin harcsin]
   calc
     cfc (Real.sin ∘ Real.arcsin)
         (ForMathlib.DavisKahanExt.sinAngleOperatorDirectedC U V) =
@@ -125,7 +133,7 @@ theorem cfc_sin_paperDirectedAngleOperatorC
       apply cfc_congr
       intro x hx
       have hxi := spectrum_sinAngleOperatorDirectedC_subset_Icc U V hx
-      exact Real.sin_arcsin hxi.1 (by linarith [hxi.2])
+      exact Real.sin_arcsin (by linarith [hxi.1]) hxi.2
     _ = ForMathlib.DavisKahanExt.sinAngleOperatorDirectedC U V :=
       cfc_id' ℝ _
 
@@ -167,6 +175,16 @@ theorem paperSin_same_projectionDiff
     ForMathlib.DavisKahanExt.sinAngleOperatorC]
   exact operatorAbs_sameApproximationSingularValues _
 
+/-- Negation changes no approximation singular value. -/
+theorem sameApproximationSingularValues_neg (A : E →L[ℂ] E) :
+    SameApproximationSingularValues (-A) A := by
+  intro n
+  have h : ((-1 : ℂ) • A).approximationNumber n =
+      ‖(-1 : ℂ)‖₊ * A.approximationNumber n :=
+    ContinuousLinearMap.approximationNumber_smul (-1 : ℂ) A n
+  simp only [neg_smul, one_smul, nnnorm_neg, nnnorm_one, one_mul] at h
+  exact congrArg (fun x : NNReal => (x : ℝ)) h
+
 /-- The cross-block sum in Proposition 6.1 realizes the singular values of the
 literal whole-space sine. -/
 theorem paperCrossSineSum_same_literalSin
@@ -175,8 +193,11 @@ theorem paperCrossSineSum_same_literalSin
     SameApproximationSingularValues
       (paperCrossSineSum U V)
       (ForMathlib.DavisKahanExt.paperSinAngleOperatorC U V) := by
-  exact (paperCrossSineSum_same_projectionDiff U V).trans
-    (paperSin_same_projectionDiff U V).symm
+  refine (paperCrossSineSum_same_projectionDiff U V).trans
+    (SameApproximationSingularValues.trans ?_
+      (paperSin_same_projectionDiff U V).symm)
+  rw [← neg_sub U.starProjection V.starProjection]
+  exact sameApproximationSingularValues_neg _
 
 /-- The literal directed angle has spectrum in `[0, pi/2]`. -/
 theorem spectrum_paperDirectedAngleOperatorC_subset_Icc
@@ -184,9 +205,18 @@ theorem spectrum_paperDirectedAngleOperatorC_subset_Icc
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     spectrum ℝ (paperDirectedAngleOperatorC U V) ⊆
       Set.Icc 0 (Real.pi / 2) := by
+  have hsa : IsSelfAdjoint
+      (ForMathlib.DavisKahanExt.sinAngleOperatorDirectedC U V) :=
+    ForMathlib.DavisKahanExt.isSelfAdjoint_sinAngleOperatorDirectedC U V
+  have harcsin : ContinuousOn Real.arcsin
+      (spectrum ℝ
+        (ForMathlib.DavisKahanExt.sinAngleOperatorDirectedC U V)) :=
+    Real.continuous_arcsin.continuousOn
   intro y hy
-  rw [paperDirectedAngleOperatorC] at hy
-  obtain ⟨x, hx, rfl⟩ := spectrum_cfc_subset_image hy
+  rw [paperDirectedAngleOperatorC,
+    cfc_map_spectrum (R := ℝ) Real.arcsin
+      (ForMathlib.DavisKahanExt.sinAngleOperatorDirectedC U V) hsa harcsin] at hy
+  obtain ⟨x, hx, rfl⟩ := hy
   have hxi := spectrum_sinAngleOperatorDirectedC_subset_Icc U V hx
   exact ⟨Real.arcsin_nonneg.mpr hxi.1,
     Real.arcsin_le_pi_div_two x⟩
