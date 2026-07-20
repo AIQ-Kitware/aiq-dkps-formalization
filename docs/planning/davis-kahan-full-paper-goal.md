@@ -1001,3 +1001,22 @@ contour, normalized resolvent-integral, projection-continuity, spectral-identifi
 and global unitary-transport declarations.  These declarations preserve the accepted
 operator-path and spectral-parameter resolvent estimates while making the remaining
 construction order explicit.
+
+## Full Part III math-ahead closure batch (2026-07-20)
+
+The next proof campaign restores exact-signature candidate bodies for all 174
+remaining declarations that had earlier non-placeholder implementations in Git
+history.  The bodies come from work-in-progress commit `2244e7c6bd7f`; they are
+not considered complete until repaired and compiled against the current pinned
+APIs.  A signature manifest and checker prevent theorem weakening during that
+repair.
+
+The only removed declarations are the unused speculative duplicates in
+`SinTheta/ContinuationRoadmap.lean`.  They are superseded by the completed
+proof-carrying continuation stack ending in `ContinuationTheorem`.
+
+This batch does not change the accepted completion status of source Section 6.
+Its purpose is to close direct rotation, tangent and double-angle theory,
+continuation and spectral selection, sharpness, general operator-ideal
+infrastructure, and remaining unbounded full-paper support.  See
+`dev/full-part-iii-admission-elimination-math-ahead-2026-07-20.md`.

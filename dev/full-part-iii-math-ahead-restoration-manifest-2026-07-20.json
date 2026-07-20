@@ -1,0 +1,897 @@
+{
+  "base_commit": "7463ca25c64a46c48411a2769b47714889974a97",
+  "continuation_replacement_modules": [
+    "DavisKahan.Experimental.InfiniteDimensional.SinTheta.ContinuationContour",
+    "DavisKahan.Experimental.InfiniteDimensional.SinTheta.ContinuationTransport",
+    "DavisKahan.Experimental.InfiniteDimensional.SinTheta.ContinuationSpectralIdentification",
+    "DavisKahan.Experimental.InfiniteDimensional.SinTheta.ContinuationRotationChain",
+    "DavisKahan.Experimental.InfiniteDimensional.SinTheta.ContinuationTheorem"
+  ],
+  "obsolete_continuation_roadmap_api": [
+    "IsPiecewiseC1ClosedContour",
+    "ContourSelectsSpectralComponent",
+    "ProofCarryingSeparatingContour",
+    "ResolventCurveIntegrable",
+    "proofCarryingContour_resolventCurveIntegrable",
+    "normalizedRieszProjection",
+    "continuousOn_normalizedRieszProjection_operatorPath",
+    "normalizedRieszProjection_eq_spectralProjection",
+    "unitary_transport_of_continuous_projection_path",
+    "continuedSpectralProjection_unitary_transport"
+  ],
+  "proof_body_source_commit": "2244e7c6bd7f",
+  "restored_declaration_count": 174,
+  "restored_declarations": [
+    {
+      "name": "tanThetaMap",
+      "path": "DavisKahan/Experimental/FiniteDimensional/Core/AngleOperators.lean",
+      "signature_sha256": "a8ca0d15ea3f0c886fb2c5a3978e2dc256d21b4899e0927335aa322de4e04c30"
+    },
+    {
+      "name": "angleOperator",
+      "path": "DavisKahan/Experimental/FiniteDimensional/Core/AngleOperators.lean",
+      "signature_sha256": "2c8b148eaee8a66f20a3eab5c5b44802d840c6a305487178a657b3821908dfb1"
+    },
+    {
+      "name": "tanAngleOperator",
+      "path": "DavisKahan/Experimental/FiniteDimensional/Core/AngleOperators.lean",
+      "signature_sha256": "423f8f9e842cf139808186dd492560b455e4dd7bf0b8109993ef34c13e6f4b36"
+    },
+    {
+      "name": "tanTwoAngleOperator",
+      "path": "DavisKahan/Experimental/FiniteDimensional/Core/AngleOperators.lean",
+      "signature_sha256": "62fcb59b3fe556b0a16de9e44e24c153f014866546104233b1299d4831a6ae0c"
+    },
+    {
+      "name": "principalAngles_orthogonal",
+      "path": "DavisKahan/Experimental/FiniteDimensional/Core/AngleOperators.lean",
+      "signature_sha256": "dd5dfe2560bf46f8030cfc76425b35838ccd42470fae77f3b21e6ebf57123337"
+    },
+    {
+      "name": "angleComplexStructure",
+      "path": "DavisKahan/Experimental/FiniteDimensional/DirectRotation.lean",
+      "signature_sha256": "f12dbb953b2c9e50053b99448a870bab37bc0faceca90559c418b99b327879e2"
+    },
+    {
+      "name": "directRotation_symm",
+      "path": "DavisKahan/Experimental/FiniteDimensional/DirectRotation.lean",
+      "signature_sha256": "d176101ed142bf3e08620a168d1874f1e129c83204798bfc8f77d5118b368a7c"
+    },
+    {
+      "name": "directRotation_apply_eq_self_of_mem_common",
+      "path": "DavisKahan/Experimental/FiniteDimensional/DirectRotation.lean",
+      "signature_sha256": "5b780779cda0b52d6d3d7ce4f07f191b28ad9be99b036600e221a929c56b089b"
+    },
+    {
+      "name": "directRotation_eq_polarFactor",
+      "path": "DavisKahan/Experimental/FiniteDimensional/DirectRotation.lean",
+      "signature_sha256": "9951d4db284595bbe01631de155d34c283ef413cb9e2f18f0802022899021ea5"
+    },
+    {
+      "name": "directRotation_eq_cos_add_J_sin",
+      "path": "DavisKahan/Experimental/FiniteDimensional/DirectRotation.lean",
+      "signature_sha256": "a25cd36e89e8da0eddbc794c67b78477f319fc90ade27adc070d9ba729d20498"
+    },
+    {
+      "name": "directRotation_sq",
+      "path": "DavisKahan/Experimental/FiniteDimensional/DirectRotation.lean",
+      "signature_sha256": "a586c78878da6c39d9d1b450a5dba435622093b20cb62c3ae06e759ee4ee8d68"
+    },
+    {
+      "name": "directRotation_comm_angleOperator",
+      "path": "DavisKahan/Experimental/FiniteDimensional/DirectRotation.lean",
+      "signature_sha256": "07e84c8f1cf87e5d92a829d392f47c3a9eb24d4b56ac976b5cedf9273ce426ad"
+    },
+    {
+      "name": "directRotation_unique",
+      "path": "DavisKahan/Experimental/FiniteDimensional/DirectRotation.lean",
+      "signature_sha256": "9797bca7eafe4bb726b946fd3a07926bc72a895dc2cc5eeabc0d178ad579cd24"
+    },
+    {
+      "name": "directRotation_minimizes_displacementSquare_uiNorm",
+      "path": "DavisKahan/Experimental/FiniteDimensional/DirectRotation.lean",
+      "signature_sha256": "6e920d39973d3df01c417c6fa0516c996c8579c30df4a6a6945230d95f30721c"
+    },
+    {
+      "name": "directRotation_minimizes_uiNorm_of_largestAngle_le_pi_div_three",
+      "path": "DavisKahan/Experimental/FiniteDimensional/DirectRotation.lean",
+      "signature_sha256": "9b64e032a0a0141a6d34b2b757b6b425e531dbb98c3ea6a5df612dbf49a5f4ba"
+    },
+    {
+      "name": "directRotation_minimizes_max_displacement",
+      "path": "DavisKahan/Experimental/FiniteDimensional/DirectRotation.lean",
+      "signature_sha256": "cbcb7a5641fac713352d8dccef9a0ac4c3a251890843a36720c07c490359c5e9"
+    },
+    {
+      "name": "directRotation_minimizes_sum_sq_basis_angles",
+      "path": "DavisKahan/Experimental/FiniteDimensional/DirectRotation.lean",
+      "signature_sha256": "b3d99748f90396b00536f490f94e346987cdf08e61ded4592833029e41052364"
+    },
+    {
+      "name": "sinTwoTheta_residual_le",
+      "path": "DavisKahan/Experimental/FiniteDimensional/DoubleAngle/SinTheta.lean",
+      "signature_sha256": "bb67d59c41d6dde7e5b377b45cb0ea6c84cb3917dc310048ceebeb466d44b610"
+    },
+    {
+      "name": "tanTwoTheta_residual_le",
+      "path": "DavisKahan/Experimental/FiniteDimensional/DoubleAngle/TanTheta.lean",
+      "signature_sha256": "0381de0abb926a129575c5308eaf682de12a74e5cb65199379c45f39b82cdc18"
+    },
+    {
+      "name": "tanTwoTheta_perturbation_le",
+      "path": "DavisKahan/Experimental/FiniteDimensional/DoubleAngle/TanTheta.lean",
+      "signature_sha256": "d9d3182d41cfc81fc2e3d9ebb1a321ea6af6e9e0855d2cf120fce15791b013ac"
+    },
+    {
+      "name": "isAcute_canonical_tanTwoTheta",
+      "path": "DavisKahan/Experimental/FiniteDimensional/DoubleAngle/TanTheta.lean",
+      "signature_sha256": "7923ddca46d9b20eb8e77c1a2acfcd8f765dccd1da439860a8f32bbd10dc42fa"
+    },
+    {
+      "name": "existsUnique_reducingSubspace_preserving_gap",
+      "path": "DavisKahan/Experimental/FiniteDimensional/DoubleAngle/TanTheta.lean",
+      "signature_sha256": "1a1b119704a5d672e97ea3e7448a439186c50419faf496381005a9f62de7d320"
+    },
+    {
+      "name": "spectral_repulsion_compression",
+      "path": "DavisKahan/Experimental/FiniteDimensional/DoubleAngle/TanTheta.lean",
+      "signature_sha256": "a1053e03201637fce363cc8ce9bbd28d6a5b558134ca179a23091cbcd2c57439"
+    },
+    {
+      "name": "spectral_repulsion_uiNorm",
+      "path": "DavisKahan/Experimental/FiniteDimensional/DoubleAngle/TanTheta.lean",
+      "signature_sha256": "732240ed4ab2d59c0f7bd147ae640c04d9c88a6cf4bb7ba9f0787fbcb7667b47"
+    },
+    {
+      "name": "largestPrincipalAngle_lt_pi_div_four",
+      "path": "DavisKahan/Experimental/FiniteDimensional/DoubleAngle/TanTheta.lean",
+      "signature_sha256": "060a29590a6fff35c0d9d4a9997ede388aeda24123dcacd20f818e8b46c78e9d"
+    },
+    {
+      "name": "generalizedSinTheta_frobenius_le_of_spectralDistance",
+      "path": "DavisKahan/Experimental/FiniteDimensional/Generalized.lean",
+      "signature_sha256": "2445ee2c7032b24337ef909d8a823c5984c3df69257a79cc99ddf6234a4e0cf3"
+    },
+    {
+      "name": "generalizedSinTheta_nuclear_le_of_spectralDistance",
+      "path": "DavisKahan/Experimental/FiniteDimensional/Generalized.lean",
+      "signature_sha256": "770384e54312778f92801efb3d9cd7abd977d817a741d626a1042807869be902"
+    },
+    {
+      "name": "spectralSubspace_path_continuous",
+      "path": "DavisKahan/Experimental/FiniteDimensional/Generalized.lean",
+      "signature_sha256": "8364c03bf070a5d55d28b55ef9f4b19fbd8ebff381c3eaf07b325c95920286cd"
+    },
+    {
+      "name": "sinTwoTheta_acute_of_small_perturbation",
+      "path": "DavisKahan/Experimental/FiniteDimensional/Generalized.lean",
+      "signature_sha256": "ffbd70c81657f2d5b0a00e607262fa0ea41376677b79f47df5e2466c92360944"
+    },
+    {
+      "name": "schatten",
+      "path": "DavisKahan/Experimental/FiniteDimensional/Norms/Rectangular.lean",
+      "signature_sha256": "c5237f6c040f60bfd86941c2081054a2bc21afc0dd19de2855cb19ef28358476"
+    },
+    {
+      "name": "tanThetaEmbedding",
+      "path": "DavisKahan/Experimental/FiniteDimensional/Residual/AngleEmbeddings.lean",
+      "signature_sha256": "024d9ab4f5d6298a3c81bd54851d46dd20a7b5cb33693d31a9c068ad69d53c1e"
+    },
+    {
+      "name": "tanTwoThetaEmbedding",
+      "path": "DavisKahan/Experimental/FiniteDimensional/Residual/AngleEmbeddings.lean",
+      "signature_sha256": "024ae49f98dd4714ed4f426014e9b0aa073851d376c59d0a0825f2d4372058d9"
+    },
+    {
+      "name": "modelTanThetaPerturbation",
+      "path": "DavisKahan/Experimental/FiniteDimensional/Sharpness.lean",
+      "signature_sha256": "f78fb6a0a482de6338a8fa9f6975c738cd17590888439c8056b88938664f330f"
+    },
+    {
+      "name": "principalAngles_model",
+      "path": "DavisKahan/Experimental/FiniteDimensional/Sharpness.lean",
+      "signature_sha256": "a15d42ddc1b80eaed395192d64901a7ebaddcdef67c7031c81c54b31dbbf2060"
+    },
+    {
+      "name": "sinTheta_model_equality",
+      "path": "DavisKahan/Experimental/FiniteDimensional/Sharpness.lean",
+      "signature_sha256": "66f02f7523f8fe4fe4dabad4d79b53280a8e7f1237c1ca9dc8f7909fd799695e"
+    },
+    {
+      "name": "tanTheta_model_equality",
+      "path": "DavisKahan/Experimental/FiniteDimensional/Sharpness.lean",
+      "signature_sha256": "2040bafe9218c74c2f0b56e3fd40ae53df4be095db965dfe471a11be0c0a0e05"
+    },
+    {
+      "name": "sinTwoTheta_model_equality",
+      "path": "DavisKahan/Experimental/FiniteDimensional/Sharpness.lean",
+      "signature_sha256": "0c9893e2296958c9bec9de191befc593de8ef873f6690c5155ea8791c31876ed"
+    },
+    {
+      "name": "tanTwoTheta_model_equality",
+      "path": "DavisKahan/Experimental/FiniteDimensional/Sharpness.lean",
+      "signature_sha256": "aa3885c2b21d45dd056dfed10e2626a6f284c3b106f3e33da815ef66190e3d16"
+    },
+    {
+      "name": "sinTheta_constant_optimal",
+      "path": "DavisKahan/Experimental/FiniteDimensional/Sharpness.lean",
+      "signature_sha256": "c98bc4ec7e152faaa8671c798c863f177f38aaf99dfa0e87444190cde43bd730"
+    },
+    {
+      "name": "sinTwoTheta_constant_optimal",
+      "path": "DavisKahan/Experimental/FiniteDimensional/Sharpness.lean",
+      "signature_sha256": "85e188be3605525b1ea366ad9fddc0ea9d4235a8c8b410be20bd46f02e0b4594"
+    },
+    {
+      "name": "directSum_models_simultaneous_equality",
+      "path": "DavisKahan/Experimental/FiniteDimensional/Sharpness.lean",
+      "signature_sha256": "152be6119bf953189a37311c6b0ef795adebc70fa64659befd721a431e65d706"
+    },
+    {
+      "name": "singularValues_graphOperator",
+      "path": "DavisKahan/Experimental/FiniteDimensional/TanTheta/GraphOperator.lean",
+      "signature_sha256": "6d87cfda9586aa23d0d9d779d7e7fefc0940fe05f9430bf9e21cd1c8c6d0ffc6"
+    },
+    {
+      "name": "tanTheta_residual_le",
+      "path": "DavisKahan/Experimental/FiniteDimensional/TanTheta/GraphOperator.lean",
+      "signature_sha256": "03b3f8b5ecda7e45167790ba7cb2e1e13cf149b981cd2c9cb8651a9ea7a8bbe4"
+    },
+    {
+      "name": "isTransverse_of_tanTheta_residual_gap",
+      "path": "DavisKahan/Experimental/FiniteDimensional/TanTheta/GraphOperator.lean",
+      "signature_sha256": "5b8c034b36d8eaa6fbb2e4d683f5c8a802e0d6dd7214f25d363fc394e0ede0f7"
+    },
+    {
+      "name": "tanTheta_perturbation_le",
+      "path": "DavisKahan/Experimental/FiniteDimensional/TanTheta/GraphOperator.lean",
+      "signature_sha256": "d81e28d772b553f39de352704326061fd1e03967f86cb41df99f43914057c17c"
+    },
+    {
+      "name": "tanThetaMap_perturbation_le",
+      "path": "DavisKahan/Experimental/FiniteDimensional/TanTheta/GraphOperator.lean",
+      "signature_sha256": "2a1b94fa454433d8ce690fe3bec0a945d7cc71f73c5e131f7b49b8a56e1d750e"
+    },
+    {
+      "name": "tanTheta_vector_le",
+      "path": "DavisKahan/Experimental/FiniteDimensional/TanTheta/GraphOperator.lean",
+      "signature_sha256": "c22b6e3dc4aa3011942a5088afb9d9490ffc19b6e909cb19b09eaac0fd71f92b"
+    },
+    {
+      "name": "sinTwoThetaEmbedding",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/Core/AbstractSpectrum.lean",
+      "signature_sha256": "d4ac5edcb39b606fad4a143f62644e752f4ce1c60c438bed4495816cbb75cb5f"
+    },
+    {
+      "name": "formSum",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/Core/Forms.lean",
+      "signature_sha256": "5826636e8b2088181f6f49c93faf822f0b25cf5059ae5a6c0c2a6f44f4d27d4f"
+    },
+    {
+      "name": "ClosedForm.associatedOperator",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/Core/Forms.lean",
+      "signature_sha256": "336a301718a93bf544a043dad23500c1787b6f6546e7a1121478af31a029e5c9"
+    },
+    {
+      "name": "formPerturbationSize",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/Core/Forms.lean",
+      "signature_sha256": "07ba38ba86cd17f0f6aef20ce50b768ebe7a0d7155050a64aed6558e9ae13feb"
+    },
+    {
+      "name": "klmn",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/Core/Forms.lean",
+      "signature_sha256": "3f4591a6778220f96dad9cb56b82d9cac64ddbf05e9cf8ec1f704997e5a59f53"
+    },
+    {
+      "name": "sinTheta_formPerturbation",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/Core/Forms.lean",
+      "signature_sha256": "04998b88626f4c3782cda83914091c68291ca132f2236931657e4aad0fe377a8"
+    },
+    {
+      "name": "operatorAbsoluteValue",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/Core/OperatorAngle.lean",
+      "signature_sha256": "bc5530af958eaa4ca8e5bb1652debaaf63a4908f2d23dfa6b0024334233ef1d2"
+    },
+    {
+      "name": "angleOperator",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/Core/OperatorAngle.lean",
+      "signature_sha256": "161467cec9b37e9f9ac13d92e12edfc850117e12d4a5862e04126daba1870d5b"
+    },
+    {
+      "name": "sinAngleOperator",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/Core/OperatorAngle.lean",
+      "signature_sha256": "841c7d8eb53eae2479af6f45386d41e99338514464bdaee440bbcf6f89ba7f4c"
+    },
+    {
+      "name": "cosAngleOperator",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/Core/OperatorAngle.lean",
+      "signature_sha256": "8310783510f8f864fadb51b5a2270dac0591e183219a38e4f178a6952fd88664"
+    },
+    {
+      "name": "tanAngleOperator",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/Core/OperatorAngle.lean",
+      "signature_sha256": "88bb88a24b8eb9f0de604dc3e6102f82bb62aa89f10a66fae9eb6920d20aee50"
+    },
+    {
+      "name": "sinTwoAngleOperator",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/Core/OperatorAngle.lean",
+      "signature_sha256": "6077a156bdf2e48e4e65c09158df9fd0429f2fdbeec02f5cc90a582ac92d49e7"
+    },
+    {
+      "name": "tanTwoAngleOperator",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/Core/OperatorAngle.lean",
+      "signature_sha256": "5c9ff571944c8a2b164b84c1b136ad252f0dc2927eb6811132fb803dc5777404"
+    },
+    {
+      "name": "sinAngleOperator_eq_abs_projection_sub",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/Core/OperatorAngle.lean",
+      "signature_sha256": "76a56a969459533eaef1f8b5999199badbac6d8d7a81a4592ff491a60ef38f4e"
+    },
+    {
+      "name": "norm_sinAngleOperator",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/Core/OperatorAngle.lean",
+      "signature_sha256": "387a4a7c418e1025a538435ad2bbb3bc24965c479574bbac1f948cef813de279"
+    },
+    {
+      "name": "directedGap_eq_subspaceGap_of_acute",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/Core/OperatorAngle.lean",
+      "signature_sha256": "67a8be13cff8536e0b6061424d5ccfd982a04a03e05b4ac8771673caf7f5c0fb"
+    },
+    {
+      "name": "acute_iff_exists_bounded_angularOperator",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/Core/OperatorAngle.lean",
+      "signature_sha256": "805f0fe839b1ab43e96f482bbe7b35f44e8be971455c406f01c176bb8c7e0baf"
+    },
+    {
+      "name": "norm_angularOperator_eq_tan_maximalAngle",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/Core/OperatorAngle.lean",
+      "signature_sha256": "5c8076e167c879bd319d7c4723ff664a1aa11bd3aa0a82f23d5f59276e53332f"
+    },
+    {
+      "name": "angleOperator_orthogonalComplement",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/Core/OperatorAngle.lean",
+      "signature_sha256": "80ee90b08f66a83de1f0e956c932c067215904ce974f49278b4e1b05516e57c5"
+    },
+    {
+      "name": "maximalAngle_triangle",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/Core/OperatorAngle.lean",
+      "signature_sha256": "981d3bb53efc8b1a564ea93f0cb3ccc857b4af444c09dc09c99ec301125b6c0a"
+    },
+    {
+      "name": "spectralProjection",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/Core/SpectralProjection.lean",
+      "signature_sha256": "c2817d89bf5267d8dded9836b94af87b9657cad57e9c4e18c9ae06528555783e"
+    },
+    {
+      "name": "spectralSubspace_hasOrthogonalProjection",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/Core/SpectralProjection.lean",
+      "signature_sha256": "affbebf6198c4369a2b8946e9f01b3e3e46ee480101296538d255c20c665e88b"
+    },
+    {
+      "name": "boundedBorelFunctionalCalculus",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/Core/SpectralProjection.lean",
+      "signature_sha256": "e89169ccc7e8a28da142eb010c8b45bc58525c63f7dd157e9f88d89bc88d8c47"
+    },
+    {
+      "name": "spectralProjection_empty",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/Core/SpectralProjection.lean",
+      "signature_sha256": "4980d1b61cbaca2454f167453194c05660321e6dd8eb3e00e64495667ec12b09"
+    },
+    {
+      "name": "spectralProjection_univ",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/Core/SpectralProjection.lean",
+      "signature_sha256": "f71b87cd0fea7b0238f35b48f537ef01d18dd16356ebeafa4490a8993d676f63"
+    },
+    {
+      "name": "spectralProjection_comp",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/Core/SpectralProjection.lean",
+      "signature_sha256": "080569f8ae5c79dd45bb5f3113b59a9173c2aa2073761214be96ac1aebfb9614"
+    },
+    {
+      "name": "spectralProjection_isOrthogonalProjection",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/Core/SpectralProjection.lean",
+      "signature_sha256": "239e233ac84293113b55e7bde7e074e9e279008404be90e84628e8722dc753f3"
+    },
+    {
+      "name": "spectralProjection_comm",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/Core/SpectralProjection.lean",
+      "signature_sha256": "98393a72bf3047413ed719405b8b53caac0acb23b426a1ed398a6beceb141bab"
+    },
+    {
+      "name": "reduces_spectralSubspace",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/Core/SpectralProjection.lean",
+      "signature_sha256": "6f2b6f56c728cafddac77a2b0cbf4acff8c817109dd048c03bda8876958e0461"
+    },
+    {
+      "name": "spectralProjection_compl",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/Core/SpectralProjection.lean",
+      "signature_sha256": "1b7b7a8abd650ecdd15f867dd381a3e8cfb0901ddf31a06757ae4de0cfc31a66"
+    },
+    {
+      "name": "spectralProjection_stronglyCountablyAdditive",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/Core/SpectralProjection.lean",
+      "signature_sha256": "c08fb406a10c29b5d0ed3bc40d6394cd8a0ed0faf9f886dd7f755a962491024b"
+    },
+    {
+      "name": "spectralProjection_eq_zero_of_disjoint_spectrum",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/Core/SpectralProjection.lean",
+      "signature_sha256": "a8351a7e7001296f44ef972c8915c0329f35c0fb3e4426e5cd7024dd08f23a55"
+    },
+    {
+      "name": "boundedBorelFunctionalCalculus_indicator",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/Core/SpectralProjection.lean",
+      "signature_sha256": "bd052cafc1435f798df073ad6ac1de0a95f25a5919e5ae65aa387f2ba7e23ecb"
+    },
+    {
+      "name": "boundedBorelFunctionalCalculus_mul",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/Core/SpectralProjection.lean",
+      "signature_sha256": "6537537dd87a120aff9a7f67b747cdf78e3b44b2fdbd304de06aff0fbbe209ba"
+    },
+    {
+      "name": "norm_boundedBorelFunctionalCalculus_le",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/Core/SpectralProjection.lean",
+      "signature_sha256": "f731391e474462572d04e5322d647f255106d3a8a3eec59cf05cc251579325a0"
+    },
+    {
+      "name": "adjoint",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/Core/Unbounded.lean",
+      "signature_sha256": "48f9dedb3acea3b6787d3fe053aba18246f30f93256481e46ef0b8ec3ec88034"
+    },
+    {
+      "name": "addRelative",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/Core/Unbounded.lean",
+      "signature_sha256": "2b550ae43b2722c257876b7472973b7fd7c34937bb3c0d5aee2a68298a3ff778"
+    },
+    {
+      "name": "spectralProjection",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/Core/Unbounded.lean",
+      "signature_sha256": "cd99b2d47534969cddda5c99a6f4a0c54a4bbf58c5588e2e68618ac702c9b424"
+    },
+    {
+      "name": "isSelfAdjoint_addBounded",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/Core/Unbounded.lean",
+      "signature_sha256": "fc00b0da341c02ffa1c797a5842774830bad1aedbf3e6d96da46a1ac6abf0e95"
+    },
+    {
+      "name": "isSelfAdjoint_of_relativelyBounded",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/Core/Unbounded.lean",
+      "signature_sha256": "ecb8dc37d8b0c15cc34cdf649aade25ed4ea27411f472a32799cbfa3b4ff1c55"
+    },
+    {
+      "name": "sinTheta_unbounded_boundedPerturbation",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/Core/Unbounded.lean",
+      "signature_sha256": "347326968eabeb9ecb476eff2e53479019b8fa75565de5f0de0dc1293184706a"
+    },
+    {
+      "name": "closedOperator_adjoint_closed",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/Core/UnboundedSpectral.lean",
+      "signature_sha256": "966e7bc92557faef69ddc43abc246647789c80663166de001c49c1bc317e7efc"
+    },
+    {
+      "name": "closedOperator_adjoint_adjoint",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/Core/UnboundedSpectral.lean",
+      "signature_sha256": "b51a3e0518f1a3d4461078869561d0a790059dc19eaaa1af9df5a0ea208ce87a"
+    },
+    {
+      "name": "selfAdjoint_resolventData_of_im_ne_zero",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/Core/UnboundedSpectral.lean",
+      "signature_sha256": "2a622e421f4b3f54e3a646662c611a4d13db6141ac403146decacaa81aa125d6"
+    },
+    {
+      "name": "norm_closedOperatorResolvent_le_inv_abs_im",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/Core/UnboundedSpectral.lean",
+      "signature_sha256": "1475f18a3da3881a86099181ef0f15adb860281f526ad60bd0d26a58d5fd69cc"
+    },
+    {
+      "name": "closedOperatorCayleyTransform",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/Core/UnboundedSpectral.lean",
+      "signature_sha256": "9493b48ece3814a0e59805ede5576d0e70b0a53c1d18af00eb7f04ac15bc27fd"
+    },
+    {
+      "name": "closedOperatorCayleyTransform_unitary",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/Core/UnboundedSpectral.lean",
+      "signature_sha256": "2b60d6e570c3791625f28b69c5dfa8b4b71e732b1c6288636f0e1bcb351eea02"
+    },
+    {
+      "name": "selfAdjointSpectralProjection",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/Core/UnboundedSpectral.lean",
+      "signature_sha256": "27ad46bc1ae0ee90da2b67ac6f57d0c06667827c4ba6550f65f5cd97bdd68e4e"
+    },
+    {
+      "name": "selfAdjointSpectralProjection_idempotent",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/Core/UnboundedSpectral.lean",
+      "signature_sha256": "13f46753cd03a39a677e0a952965349080465d4d9af61493ece653d50584b414"
+    },
+    {
+      "name": "selfAdjointSpectralProjection_symmetric",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/Core/UnboundedSpectral.lean",
+      "signature_sha256": "b4c3d45123bd2db6d6c16dca093783c0932e1d55e6207d3c3cbcd54a12623964"
+    },
+    {
+      "name": "selfAdjointSpectralProjection_empty",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/Core/UnboundedSpectral.lean",
+      "signature_sha256": "ed8158de5aeb47920538bd87e4a4a1e3fc27cd8d4d3be0d566b773fbf75318c8"
+    },
+    {
+      "name": "selfAdjointSpectralProjection_univ",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/Core/UnboundedSpectral.lean",
+      "signature_sha256": "7d3803e3ddab501cfc8f67402dd36e20e8898cb93427f0d912e5b9dfcf60e8c7"
+    },
+    {
+      "name": "selfAdjointSpectralProjection_inter",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/Core/UnboundedSpectral.lean",
+      "signature_sha256": "adf2e7f4c5f8db1b8d6148601d1a35dc37b684ccec64b5ea482289bc86446013"
+    },
+    {
+      "name": "selfAdjointSpectralProjection_disjoint_additive",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/Core/UnboundedSpectral.lean",
+      "signature_sha256": "6018c5dc5ee15893fd5b328bb58c45d723e235179d8d9647f38fd5c9da5eb922"
+    },
+    {
+      "name": "selfAdjointSpectralProjection_iUnion_tendsto",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/Core/UnboundedSpectral.lean",
+      "signature_sha256": "fec3e1f3301bec6332075e01b173cbe962405e5b742bb1d4ad46537da96024ba"
+    },
+    {
+      "name": "selfAdjointSpectralProjection_eq_zero_of_disjoint_spectrum",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/Core/UnboundedSpectral.lean",
+      "signature_sha256": "495ba051d29105e1f42c3ce6b328cc43ae774710cda5aa62ae35214cf9ca1aba"
+    },
+    {
+      "name": "selfAdjointSpectralProjection_Icc_range_le_domain",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/Core/UnboundedSpectral.lean",
+      "signature_sha256": "b79b16a2fb5808047ca183855a9562d5cfe45550e40f469492f46c1da685c450"
+    },
+    {
+      "name": "spectralCutoff_isOrthogonalProjection",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/Core/UnboundedSpectral.lean",
+      "signature_sha256": "7072e28410e6fd0cff339984906614904122e27bb84686de0cbd6a14e1d603f3"
+    },
+    {
+      "name": "spectralCutoff_range_le_domain",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/Core/UnboundedSpectral.lean",
+      "signature_sha256": "c5eaea7f715688ec6fa7f1840fcdb2ba19c7f7c40c3c602389bc0940b38336c8"
+    },
+    {
+      "name": "spectralCutoff_commutes_on_domain",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/Core/UnboundedSpectral.lean",
+      "signature_sha256": "31284b74a4023d7357f89eef86102ea73e59bb48e53a1ce178f3e0bb62f7b4bc"
+    },
+    {
+      "name": "spectralCutoff_tendsto_identity",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/Core/UnboundedSpectral.lean",
+      "signature_sha256": "f3c28cbe856122cd4787e802e96c9979cb83f32d5d7e6cccded12dc978968873"
+    },
+    {
+      "name": "boundedSpectralTruncation",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/Core/UnboundedSpectral.lean",
+      "signature_sha256": "6840dfd5c45d564c7e19a6cfec3a4882e85b49e8e7dc2f706976c56f059363a9"
+    },
+    {
+      "name": "boundedSpectralTruncation_isSymmetric",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/Core/UnboundedSpectral.lean",
+      "signature_sha256": "817df2c3754fc54dc04876ead463b35247ceb3fa86c52446bca7afa3963b3dc2"
+    },
+    {
+      "name": "boundedSpectralTruncation_eq_on_cutoff",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/Core/UnboundedSpectral.lean",
+      "signature_sha256": "295d0b0f1e2c8fd2cc701967da4c055d4eb277b41b39cf4ff9202ef669317a84"
+    },
+    {
+      "name": "boundedSpectralTruncation_tendsto_on_domain",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/Core/UnboundedSpectral.lean",
+      "signature_sha256": "dd0f9f516cee1232cae0297ec53d5304bbbcfe77e40264f33687ed2c5b487d98"
+    },
+    {
+      "name": "mem_domain_iff_boundedSpectralTruncation_norm_bounded",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/Core/UnboundedSpectral.lean",
+      "signature_sha256": "4e1f56aacf87eaed6132ab4b16b9cdff58d50bd4ca0f52b678963d4900bb1ace"
+    },
+    {
+      "name": "boundedSpectralTruncation_lowerBound",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/Core/UnboundedSpectral.lean",
+      "signature_sha256": "25993500ed6602686fa8e5861822f33c1c7b8aad36c9816e0c68151ef119ede8"
+    },
+    {
+      "name": "boundedSpectralTruncation_upperBound",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/Core/UnboundedSpectral.lean",
+      "signature_sha256": "7c97ff0c40f8d92f4c9914903c0c1bf2053b59180888259b9b07df4a18aae033"
+    },
+    {
+      "name": "boundedSpectralTruncation_commutes_cutoff",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/Core/UnboundedSpectral.lean",
+      "signature_sha256": "0ffd21cff36851f1ea0d1d243f7785b208048d67632b982f0cca41709f930a3a"
+    },
+    {
+      "name": "domain_eq_top_of_spectrumIn_Icc",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/Core/UnboundedSpectral.lean",
+      "signature_sha256": "ace66f0e7174c9c82d84ed8b3e6a3a545877f0544d38e8a139a9cdc484268f6e"
+    },
+    {
+      "name": "boundedRealization_of_spectrumIn_Icc",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/Core/UnboundedSpectral.lean",
+      "signature_sha256": "724af290aeb904ea32ea94357375a5da6dc46d1348f4bfbedb07147ccc8bd94b"
+    },
+    {
+      "name": "boundedInverse_of_spectrumOutside",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/Core/UnboundedSpectral.lean",
+      "signature_sha256": "58f816ac4ba90165b1cd2e9a746de639d1c7a7a3dc04933266ce1c180433f013"
+    },
+    {
+      "name": "directRotation",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/DirectRotation.lean",
+      "signature_sha256": "5406059a2992b0d634e0e592ef5cf47af7537c00bbbecb465733b65ca54a9644"
+    },
+    {
+      "name": "directRotation_unitary",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/DirectRotation.lean",
+      "signature_sha256": "4c40e536d5cea704b03160e90f14265f363182b6e4c6d70e6ff02bd54d3fd6db"
+    },
+    {
+      "name": "directRotation_maps_subspace",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/DirectRotation.lean",
+      "signature_sha256": "2592e01bb18aae9ee3bb53264616646b1ac11cd0715861840f8130c7f45df6cd"
+    },
+    {
+      "name": "directRotation_intertwines",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/DirectRotation.lean",
+      "signature_sha256": "cf12c901fd716d925469702913eb5076f4983a4fae994dee246f074d25b9e8b0"
+    },
+    {
+      "name": "directRotation_sq",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/DirectRotation.lean",
+      "signature_sha256": "e9c900234fe5d31ab76f15a576d1df638a0a1fdf06a1617fc6e0f0ed908cb8cf"
+    },
+    {
+      "name": "directRotation_minimal",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/DirectRotation.lean",
+      "signature_sha256": "a106fbfc2cfdc8aaeacd544c3d0678825a2a8831e5608aabf0872c55d631edfe"
+    },
+    {
+      "name": "sinTwoTheta_reflectionDefect",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/DoubleAngle.lean",
+      "signature_sha256": "889b5ade428b4b7b2d6274b8c76772df66af65b434e391e7c052e19db1bdfde7"
+    },
+    {
+      "name": "sinTwoTheta_residual",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/DoubleAngle.lean",
+      "signature_sha256": "d455a46eb36ff8eedf7a6855b6b7a616e0c15c157ad40fc90e16122f674b4c92"
+    },
+    {
+      "name": "sinTwoTheta_generalSeparation",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/DoubleAngle.lean",
+      "signature_sha256": "8ebc9c3e72eff9e3383467b44a6fbf703a76cc247cdfd8e46c8c128fe1ed8c7c"
+    },
+    {
+      "name": "ideal_sinTwoTheta",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/DoubleAngle.lean",
+      "signature_sha256": "005814dd37d819ce7b52ca4ac31ee7165a2eda7ea5715290203f3aa1189f2ecd"
+    },
+    {
+      "name": "compactSpectralSubspace",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/Ideals/CompactAndSingular.lean",
+      "signature_sha256": "4adab354a3340ff0bc07578eb32249b731a5a3a56af644c96b4d163e16ba98b4"
+    },
+    {
+      "name": "compact_projection_difference",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/Ideals/CompactAndSingular.lean",
+      "signature_sha256": "a8583bbf2e1cdd0d5aaaaf08f02a37656502d3d14d0844ece8871e1b5bc79ab2"
+    },
+    {
+      "name": "hermitianDilation_spectralProjection_sinTheta",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/Ideals/CompactAndSingular.lean",
+      "signature_sha256": "c46af43acf8988b2c25c6e5742649f3845765397ac996fec60cc4bd6b92727eb"
+    },
+    {
+      "name": "compactOperatorNorm",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/Ideals/Rectangular.lean",
+      "signature_sha256": "c375c0c5539bdbf9f769a0851a68f5921662abd50ebf5b1f83fd8a34c9ebd5cb"
+    },
+    {
+      "name": "hilbertSchmidt",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/Ideals/Rectangular.lean",
+      "signature_sha256": "4086bc7c90079055c6b5bb71b40336b2f47af1f5917a415b222336657bce928d"
+    },
+    {
+      "name": "traceClass",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/Ideals/Rectangular.lean",
+      "signature_sha256": "7a2d5d234ed0e85e7dcb523040664aec2bd710184da443b27398ad770221ab37"
+    },
+    {
+      "name": "schatten",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/Ideals/Rectangular.lean",
+      "signature_sha256": "d89ecbaddbb948c66402355d4cdf0c4fc261fd9b57eb03dfcc6c1be536488df3"
+    },
+    {
+      "name": "kyFan",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/Ideals/Rectangular.lean",
+      "signature_sha256": "5c8f56c75ba60fae0f32253765a69317748f525546784be2ec9c18ad94f3eb47"
+    },
+    {
+      "name": "operatorNorm",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/Ideals/Symmetric.lean",
+      "signature_sha256": "1cf992d526bfc36d34c4bd3250b627ffeec5e63228ed5bec8eb8f323d9d2340c"
+    },
+    {
+      "name": "compactOperator",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/Ideals/Symmetric.lean",
+      "signature_sha256": "f59ae08aeff0c76b83ee9d6105538a9fb17032926368683fed3ea244bff67547"
+    },
+    {
+      "name": "schatten",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/Ideals/Symmetric.lean",
+      "signature_sha256": "2b90cd99ec0b55487f8043758c43bd00d3f189f472d37e0fa0216e0b31eef37c"
+    },
+    {
+      "name": "traceClass",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/Ideals/Symmetric.lean",
+      "signature_sha256": "baf408501b7cd8f278207a9c69cf30c8e1b2ad6e20e0b382073b6c9619f85908"
+    },
+    {
+      "name": "hilbertSchmidt",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/Ideals/Symmetric.lean",
+      "signature_sha256": "7951bc3d2f1be9805e3a513d55e7da31ab5834d6b132e4d97473869a2a95cef4"
+    },
+    {
+      "name": "kyFan",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/Ideals/Symmetric.lean",
+      "signature_sha256": "363afda7b58746ed96b7bbc4a443452ffa4dfb549046c5888097829636ab7f5c"
+    },
+    {
+      "name": "gauge_diagonalPart_le",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/Ideals/Symmetric.lean",
+      "signature_sha256": "bcf53c1839f68c5daa8f58c3d5e1dcdfe8056a3f8b0684efebd8f1c60f10dc0f"
+    },
+    {
+      "name": "gauge_offDiagonalPart_le",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/Ideals/Symmetric.lean",
+      "signature_sha256": "ce51b08baf3a032738c9bf618efa1a5ce4eb99f8ec2992d990479ce821e37a42"
+    },
+    {
+      "name": "continuedSpectralSubspace",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/OperatorBlocks/OffDiagonal.lean",
+      "signature_sha256": "6d293d082faf278f2fa27913a47c2c14c73259f42b4fd60680e173683af2adb0"
+    },
+    {
+      "name": "continuedSpectralSubspace_hasOrthogonalProjection",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/OperatorBlocks/OffDiagonal.lean",
+      "signature_sha256": "03fb655fd2be3619ae58a8ffcabf1631c8a2af337e8c78ed845b305e25aa15df"
+    },
+    {
+      "name": "gap_preserved_of_offDiagonal",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/OperatorBlocks/OffDiagonal.lean",
+      "signature_sha256": "5bf6431b51f0a5c1bcaf850e645d9aa1fd9d6279db498088f250de86fd1ce008"
+    },
+    {
+      "name": "tanTwoTheta_offDiagonal",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/OperatorBlocks/OffDiagonal.lean",
+      "signature_sha256": "75a9650d204dad0c757b7af77e02aacd9060188921a05ffed2bbc0ebca5b4be6"
+    },
+    {
+      "name": "aPrioriTanTheta",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/OperatorBlocks/OffDiagonal.lean",
+      "signature_sha256": "ebb4d75124501c3ee88d54531215be0ba2633eb390994fa63abe4c5c954d8059"
+    },
+    {
+      "name": "spectral_repulsion_offDiagonal",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/OperatorBlocks/OffDiagonal.lean",
+      "signature_sha256": "39891b9341c626f82b6b8983f4d8fa3a35b5dc180fd1b6ac8463a4519de88f58"
+    },
+    {
+      "name": "sinTheta_planar_equality",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/Sharpness.lean",
+      "signature_sha256": "80ea1b41a9612a0c68627f495401649371838eaf2350253a61a9de87e13d151b"
+    },
+    {
+      "name": "sinTwoTheta_planar_asymptotically_sharp",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/Sharpness.lean",
+      "signature_sha256": "25a7cd4a65f7c67e7efd8d798d6c27d6aefb544c864860521a59f6fc7e6aac69"
+    },
+    {
+      "name": "sqrtTwo_threshold_sharp",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/Sharpness.lean",
+      "signature_sha256": "ec4b01285b3ba75d9d75f58b8cb65b34d4726a3a5bdc2e4081f59387b3c38c99"
+    },
+    {
+      "name": "ideal_planar_extremizer",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/Sharpness.lean",
+      "signature_sha256": "30dda60942e9d918beeacfb1cbdef1c907a8c581f107b205f9fab2678baa5715"
+    },
+    {
+      "name": "continuous_continuedProjection",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/SinTheta/Continuation.lean",
+      "signature_sha256": "54f53d4bb181cf6707d932739dff7724c0f0ecd58c51c6e877bfdd6b182b2a91"
+    },
+    {
+      "name": "sinTheta_residual",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/SinTheta/General.lean",
+      "signature_sha256": "3898dd4b3fe396191db024a54495a7ec7788b42e5169cd7f59e36214e4221de1"
+    },
+    {
+      "name": "sinTheta_perturbation",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/SinTheta/General.lean",
+      "signature_sha256": "5bd20725dcf9aeb301074a43997b51b8dd28316febdc9e82fca67eb77724602b"
+    },
+    {
+      "name": "sinTheta_generalSeparation",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/SinTheta/General.lean",
+      "signature_sha256": "3964c4c6f7e9b629574918e32b3bb65a12069cc9f23ca8bc49931b7a4dd185c6"
+    },
+    {
+      "name": "spectralProjection_sinTheta",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/SinTheta/General.lean",
+      "signature_sha256": "8f83b9d2daac6e1742574e977929f20ed8668bc64cbde3d92f53fd6c9f4d1e67"
+    },
+    {
+      "name": "ideal_sinTheta",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/SinTheta/General.lean",
+      "signature_sha256": "6a726313eec618d7d89749d2a8b450c3193a5d6c9021ea10c295b734fe9b540e"
+    },
+    {
+      "name": "norm_sub_midpoint_le_of_spectrumIn_Icc",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/SinTheta/SpectralBridge.lean",
+      "signature_sha256": "eb7b91ded0f417791e28f0893dea7fb2f5d33379f3df77221538bbb07720d5bf"
+    },
+    {
+      "name": "centered_isUnit_of_spectrumOutside",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/SinTheta/SpectralBridge.lean",
+      "signature_sha256": "271d36f91c7f0c6846afdcba634025e2dff93fe986dcbe48f50dfc3ed2f7ff9c"
+    },
+    {
+      "name": "centeredIntervalExteriorWitness_of_gap",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/SinTheta/SpectralBridge.lean",
+      "signature_sha256": "518f2e824f366d4bc406ead988d6286f53efc3e530497c191f49313739c8809c"
+    },
+    {
+      "name": "sylvester_mem_and_gauge_le_of_intervalExteriorGap",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/SinTheta/SpectralBridge.lean",
+      "signature_sha256": "f1468f595305b3829a16b89f164fd4c7c3436741d5980669e13244047a0c5937"
+    },
+    {
+      "name": "sylvesterResolventIntegral",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/Sylvester/Basic.lean",
+      "signature_sha256": "8f4b13a3c9c49a98a57dd89a5c969e89458b69c317deb339aa367215e5167eb6"
+    },
+    {
+      "name": "sylvester_solve",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/Sylvester/Basic.lean",
+      "signature_sha256": "10c734ff68589faa9f1bf5a753dd125c498cfff1fa0391a1139ba7564a45d775"
+    },
+    {
+      "name": "norm_sylvester_le_of_orderedSeparation",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/Sylvester/Basic.lean",
+      "signature_sha256": "7d4a9737dc2b780a928358bfaa5bd4f278791f87fd73dfca8f5b56f1b9560af0"
+    },
+    {
+      "name": "norm_sylvester_le_of_generalSeparation",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/Sylvester/Basic.lean",
+      "signature_sha256": "7a8171db509ea8bfdb1d992ebd8d3e214e40c5cdb4994503f02dd3f05de969b7"
+    },
+    {
+      "name": "norm_resolvent_le_inv_distance",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/Sylvester/Resolvent.lean",
+      "signature_sha256": "3db5c7db912da42c9cbb6134c32670dc509885ea7c450d8d18424ac597fbe7ae"
+    },
+    {
+      "name": "ContourSeparatesSpectrum",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/Sylvester/Resolvent.lean",
+      "signature_sha256": "efd2fbc47cb99a0e3aa65e8565f7cb04fbd92da99eebdc715b90ecb2ebd382ff"
+    },
+    {
+      "name": "rieszProjection",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/Sylvester/Resolvent.lean",
+      "signature_sha256": "ebca9f8f4e3433c2a3a6e37cc6cd0c6889fb5498bb3d43e881ec12dd5df712eb"
+    },
+    {
+      "name": "rieszProjection_eq_spectralProjection",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/Sylvester/Resolvent.lean",
+      "signature_sha256": "5cb084806ca796dd992f2db4016a7502ce1c476c7aada5e3824f925a6906e05e"
+    },
+    {
+      "name": "continuous_rieszProjection_path",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/Sylvester/Resolvent.lean",
+      "signature_sha256": "44367f07f0c37b92c9f530714eaa6bf54d7dc1f74410275549256e947b2e9e34"
+    }
+  ],
+  "schema_version": 1
+}

@@ -120,33 +120,33 @@ namespace SymmetricNormIdeal
 -/
 
 /-- The operator norm ideal. -/
-noncomputable def operatorNorm : SymmetricNormIdeal (𝕜 := 𝕜) (E := E) := by
-  sorry
+noncomputable def operatorNorm : SymmetricNormIdeal (𝕜 := 𝕜) (E := E) :=
+  ofRectangular RectangularSymmetricIdealFamily.operatorNorm
 
 /-- Compact-operator ideal equipped with the operator norm. -/
 noncomputable def compactOperator :
-    SymmetricNormIdeal (𝕜 := 𝕜) (E := E) := by
-  sorry
+    SymmetricNormIdeal (𝕜 := 𝕜) (E := E) :=
+  ofRectangular RectangularSymmetricIdealFamily.compactOperatorNorm
 
 /-- Schatten `p` ideal. -/
 noncomputable def schatten (p : ℝ) (hp : 1 ≤ p) :
-    SymmetricNormIdeal (𝕜 := 𝕜) (E := E) := by
-  sorry
+    SymmetricNormIdeal (𝕜 := 𝕜) (E := E) :=
+  ofRectangular (RectangularSymmetricIdealFamily.schatten p hp)
 
 /-- Trace-class ideal. -/
-noncomputable def traceClass : SymmetricNormIdeal (𝕜 := 𝕜) (E := E) := by
-  sorry
+noncomputable def traceClass : SymmetricNormIdeal (𝕜 := 𝕜) (E := E) :=
+  ofRectangular RectangularSymmetricIdealFamily.traceClass
 
 /-- Hilbert--Schmidt ideal. -/
-noncomputable def hilbertSchmidt : SymmetricNormIdeal (𝕜 := 𝕜) (E := E) := by
-  sorry
+noncomputable def hilbertSchmidt : SymmetricNormIdeal (𝕜 := 𝕜) (E := E) :=
+  ofRectangular RectangularSymmetricIdealFamily.hilbertSchmidt
 
 /-- Ky Fan `k` ideal norm for positive `k`.  The positivity premise is
 mathematically necessary: the `k = 0` gauge vanishes on every operator and
 therefore cannot satisfy `gauge_eq_zero`. -/
 noncomputable def kyFan (k : ℕ) (hk : 0 < k) :
-    SymmetricNormIdeal (𝕜 := 𝕜) (E := E) := by
-  sorry
+    SymmetricNormIdeal (𝕜 := 𝕜) (E := E) :=
+  ofRectangular (RectangularSymmetricIdealFamily.kyFan k hk)
 
 /-- Unitary invariance of a symmetric ideal norm.
 
@@ -186,7 +186,27 @@ theorem gauge_diagonalPart_le
     (A : E →L[𝕜] E) (hA : I.mem A) :
     I.mem (diagonalPart U A) ∧
       I.gauge (diagonalPart U A) ≤ I.gauge A := by
-  sorry
+  let J := reflectionOperator U
+  have hJ : IsUnitaryOperator J := reflection_unitary U
+  have hJinv : J ∘L J = ContinuousLinearMap.id 𝕜 E :=
+    reflectionOperator_involutive U
+  have hconjMem : I.mem (J ∘L A ∘L J) := I.ideal_mem J J hA
+  have hconjGauge : I.gauge (J ∘L A ∘L J) = I.gauge A :=
+    I.unitary_invariant J J A hJ hJ hJinv hJinv hA
+  have hformula : (2 : 𝕜) • diagonalPart U A = A + J ∘L A ∘L J :=
+    two_smul_diagonalPart_eq_add_reflectionConjugate U A
+  have hsumMem : I.mem (A + J ∘L A ∘L J) := I.add_mem hA hconjMem
+  have hhalf : ((2 : 𝕜)⁻¹) • ((2 : 𝕜) • diagonalPart U A) =
+      diagonalPart U A := by module
+  have hdiagMem : I.mem (diagonalPart U A) := by
+    rw [← hhalf, hformula]
+    exact I.smul_mem _ hsumMem
+  refine ⟨hdiagMem, ?_⟩
+  have hscaled := I.gauge_smul (2 : 𝕜) hdiagMem
+  rw [hformula, norm_ofNat] at hscaled
+  have htriangle := I.triangle hA hconjMem
+  rw [hconjGauge] at htriangle
+  nlinarith
 
 /-- Off-diagonal extraction has norm at most one in the sharp symmetric-ideal
 form used by the double-angle theorems. 
@@ -210,7 +230,33 @@ theorem gauge_offDiagonalPart_le
     (A : E →L[𝕜] E) (hA : I.mem A) :
     I.mem (offDiagonalPart U A) ∧
       I.gauge (offDiagonalPart U A) ≤ I.gauge A := by
-  sorry
+  let J := reflectionOperator U
+  have hJ : IsUnitaryOperator J := reflection_unitary U
+  have hJinv : J ∘L J = ContinuousLinearMap.id 𝕜 E :=
+    reflectionOperator_involutive U
+  have hconjMem : I.mem (J ∘L A ∘L J) := I.ideal_mem J J hA
+  have hnegConjMem : I.mem (-(J ∘L A ∘L J)) := by
+    simpa using I.smul_mem (-1 : 𝕜) hconjMem
+  have hconjGauge : I.gauge (J ∘L A ∘L J) = I.gauge A :=
+    I.unitary_invariant J J A hJ hJ hJinv hJinv hA
+  have hformula : (2 : 𝕜) • offDiagonalPart U A = A - J ∘L A ∘L J :=
+    two_smul_offDiagonalPart_eq_sub_reflectionConjugate U A
+  have hdiffMem : I.mem (A - J ∘L A ∘L J) := by
+    simpa [sub_eq_add_neg] using I.add_mem hA hnegConjMem
+  have hhalf : ((2 : 𝕜)⁻¹) • ((2 : 𝕜) • offDiagonalPart U A) =
+      offDiagonalPart U A := by module
+  have hoffMem : I.mem (offDiagonalPart U A) := by
+    rw [← hhalf, hformula]
+    exact I.smul_mem _ hdiffMem
+  refine ⟨hoffMem, ?_⟩
+  have hscaled := I.gauge_smul (2 : 𝕜) hoffMem
+  rw [hformula, norm_ofNat] at hscaled
+  have htriangle : I.gauge (A - J ∘L A ∘L J) ≤
+      I.gauge A + I.gauge (J ∘L A ∘L J) := by
+    simpa [sub_eq_add_neg, I.gauge_smul (-1 : 𝕜) hconjMem] using
+      I.triangle hA hnegConjMem
+  rw [hconjGauge] at htriangle
+  nlinarith
 
 end SymmetricNormIdeal
 end DavisKahanExt

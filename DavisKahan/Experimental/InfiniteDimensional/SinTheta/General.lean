@@ -51,7 +51,26 @@ theorem sinTheta_residual
     {d : ℝ} (hd : 0 < d)
     (hsep : OrderedSpectraSeparated M ⊤ A Uᗮ d) :
     d * ‖sinThetaEmbedding U X‖ ≤ ‖residual A X M‖ := by
-  sorry
+  let Y : F →L[𝕜] Uᗮ :=
+    (complementaryProjection U ∘L X).corestrict Uᗮ
+  let C : F →L[𝕜] Uᗮ :=
+    (complementaryProjection U ∘L residual A X M).corestrict Uᗮ
+  have hEq : sylvesterOperator (A.restrictToOrthogonal hU) M Y = C :=
+    directedResidual_sylvesterEquation hA hU
+  have hsep' : OrderedSpectraSeparated M ⊤
+      (A.restrictToOrthogonal hU) ⊤ d :=
+    restrictedSpectrum_orthogonal_eq hA hU ▸ hsep
+  have hbound := norm_sylvester_le_of_orderedSeparation
+    (hA.restrictToOrthogonal hU) hM hd hsep' hEq
+  have hY : ‖Y‖ = ‖sinThetaEmbedding U X‖ :=
+    corestrict_norm_eq_of_range _
+  have hC : ‖C‖ ≤ ‖residual A X M‖ := by
+    calc
+      ‖C‖ = ‖complementaryProjection U ∘L residual A X M‖ :=
+        corestrict_norm_eq_of_range _
+      _ ≤ ‖residual A X M‖ :=
+        projection_comp_opNorm_le Uᗮ _
+  simpa [hY] using hbound.trans hC
 
 /-- One-sided perturbation theorem for spectral subspaces. 
 
@@ -80,7 +99,25 @@ theorem sinTheta_perturbation
     {left right d : ℝ} (hd : 0 < d)
     (hgap : IntervalExteriorSeparated A U B Vᗮ left right d) :
     d * directedGap U V ≤ ‖B - A‖ := by
-  sorry
+  let X : U →L[𝕜] Vᗮ :=
+    (complementaryProjection V ∘L U.subtypeL).corestrict Vᗮ
+  let C : U →L[𝕜] Vᗮ :=
+    (complementaryProjection V ∘L (B - A) ∘L U.subtypeL).corestrict Vᗮ
+  have hEq := directedPerturbation_sylvesterEquation hA hB hU hV
+  have hgap' : ExactSinTheta.IntervalExteriorGap
+      (B.restrictToOrthogonal hV) (A.restrict hU.1)
+      left right d := by
+    exact intervalExteriorSeparated_restrictions hA hB hU hV hgap
+  have hsolve := ExactSinTheta.sylvester_mem_and_gauge_le_of_intervalExteriorGap
+    ExactSinTheta.RectangularSymmetricIdealFamily.operatorNorm
+    (hB.restrictToOrthogonal hV) (hA.restrict hU.1)
+    (le_of_mem_Icc hgap) hd hgap' hEq trivial
+  have hX : ‖X‖ = directedGap U V :=
+    directedGap_eq_restrictedBlock_norm U V
+  have hC : ‖C‖ ≤ ‖B - A‖ :=
+    restricted_projection_sandwich_norm_le _ _ _
+  simpa [ExactSinTheta.RectangularSymmetricIdealFamily.operatorNorm, hX]
+    using hsolve.2.trans hC
 
 /-- **The dimension-free operator-norm Davis--Kahan `sin Θ` theorem, coercivity
 form.**  For self-adjoint `A, B` on an arbitrary Hilbert space, `U` reducing `A`
@@ -316,7 +353,21 @@ theorem sinTheta_generalSeparation
     (hU : Reduces A U) (hV : Reduces B V)
     {d : ℝ} (hd : 0 < d) (hgap : HybridGap A B U V d) :
     d * directedGap U V ≤ (Real.pi / 2) * ‖B - A‖ := by
-  sorry
+  let X : U →L[𝕜] Vᗮ :=
+    (complementaryProjection V ∘L U.subtypeL).corestrict Vᗮ
+  let C : U →L[𝕜] Vᗮ :=
+    (complementaryProjection V ∘L (B - A) ∘L U.subtypeL).corestrict Vᗮ
+  have hEq := directedPerturbation_sylvesterEquation hA hB hU hV
+  have hsep : SpectraSeparated (B.restrictToOrthogonal hV) ⊤
+      (A.restrict hU.1) ⊤ d :=
+    hybridGap_restrictions hA hB hU hV hgap
+  have hsol := norm_sylvester_le_of_generalSeparation
+    (hB.restrictToOrthogonal hV) (hA.restrict hU.1) hd hsep hEq
+  have hX : ‖X‖ = directedGap U V :=
+    directedGap_eq_restrictedBlock_norm U V
+  have hC : ‖C‖ ≤ ‖B - A‖ :=
+    restricted_projection_sandwich_norm_le _ _ _
+  simpa [hX] using hsol.trans (mul_le_mul_of_nonneg_left hC (by positivity))
 
 /-- Canonical spectral-projection form. 
 
@@ -347,7 +398,16 @@ theorem spectralProjection_sinTheta
       {x | x ≤ left' - d ∨ right' + d ≤ x}) :
     d * ‖spectralProjection A s - spectralProjection B t‖ ≤
       ‖B - A‖ := by
-  sorry
+  let U := spectralSubspace A s
+  let V := spectralSubspace B t
+  have hredA := reduces_spectralSubspace A hA s hs
+  have hredB := reduces_spectralSubspace B hB t ht
+  have hUV : IntervalExteriorSeparated A U B Vᗮ left right d :=
+    ⟨hAs, hBt⟩
+  have hVU : IntervalExteriorSeparated B V A Uᗮ left' right' d :=
+    ⟨hBs, hAt⟩
+  have h := sinTheta_symmetric hA hB hredA hredB hd hUV hVU
+  simpa [U, V, subspaceGap, projection_spectralSubspace_eq] using h
 
 /-- Symmetric-ideal form. 
 
@@ -381,7 +441,11 @@ theorem ideal_sinTheta
     (hmem : I.mem (B - A)) :
     I.mem (sinAngleOperator U V) ∧
       d * I.gauge (sinAngleOperator U V) ≤ I.gauge (B - A) := by
-  sorry
+  have hdiff := projectionDifference_ideal_intervalExterior
+    I hA hB hU hV hd hUV hVU hmem
+  have habs := I.operatorAbsoluteValue_mem_and_gauge_eq hdiff.1
+  simpa [sinAngleOperator, habs.2] using
+    And.intro habs.1 hdiff.2
 
 end DavisKahanExt
 end ForMathlib

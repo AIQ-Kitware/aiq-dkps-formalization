@@ -54,8 +54,8 @@ Moore--Penrose inverse of the cosine block once that inverse exists).  The
 current total signature is provisional; bounded inversion must ultimately
 require `IsTransverse U V`. -/
 noncomputable def tanThetaMap (U V : Submodule 𝕜 E)
-    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →ₗ[𝕜] E := by
-  sorry
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →ₗ[𝕜] E :=
+  sinThetaMap U V ∘ₗ FiniteDimensional.moorePenroseInverse (cosThetaMap U V)
 
 /-- The full-space canonical angle operator `Θ(U,V)` of Davis--Kahan.
 Its nonzero eigenvalues are the principal angles, with the multiplicities
@@ -67,8 +67,9 @@ canonical values on the common, orthogonal, and defect summands.  Prove basis
 independence through finite functional calculus (equivalently, apply
 `Real.arcsin` to `sinAngleOperator U V` through that calculus). -/
 noncomputable def angleOperator (U V : Submodule 𝕜 E)
-    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →ₗ[𝕜] E := by
-  sorry
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →ₗ[𝕜] E :=
+  FiniteDimensional.selfAdjointFunctionalCalculus Real.arcsin
+    (sinAngleOperator U V)
 
 /-- `tan Θ` on the full ambient space.  In non-acute configurations this is
 understood as the Moore--Penrose/graph-operator extension on the transverse
@@ -79,8 +80,8 @@ finite angles by `safeTan`, and set the quarter-turn defect summand to zero
 only as a documented Moore--Penrose convention.  Theorems interpreting its
 norm as a principal tangent must assume transversality or acuteness. -/
 noncomputable def tanAngleOperator (U V : Submodule 𝕜 E)
-    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →ₗ[𝕜] E := by
-  sorry
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →ₗ[𝕜] E :=
+  FiniteDimensional.selfAdjointFunctionalCalculus safeTan (angleOperator U V)
 
 /-- `tan (2 Θ)` on the full ambient space.
 
@@ -89,8 +90,8 @@ of `angleOperator`, with a theorem hypothesis excluding quarter turns whenever
 the resulting operator is used analytically.  A future API may instead bundle
 that pole-avoidance proof into the constructor. -/
 noncomputable def tanTwoAngleOperator (U V : Submodule 𝕜 E)
-    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →ₗ[𝕜] E := by
-  sorry
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →ₗ[𝕜] E :=
+  FiniteDimensional.selfAdjointFunctionalCalculus safeTanTwo (angleOperator U V)
 
 /-- Orthogonal complements preserve the nontrivial principal angles.
 
@@ -114,7 +115,16 @@ theorem principalAngles_orthogonal (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hrank : finrank 𝕜 U = finrank 𝕜 V) :
     principalAngles Uᗮ Vᗮ = principalAngles U V := by
-  sorry
+  rw [principalAngles, principalAngles]
+  congr 1
+  change
+    (complementaryProjection (Vᗮ) ∘ₗ projection (Uᗮ)).singularValues =
+      (complementaryProjection V ∘ₗ projection U).singularValues
+  rw [Submodule.orthogonal_orthogonal,
+    Submodule.starProjection_orthogonal',
+    Submodule.starProjection_orthogonal']
+  have hCS := singularValues_complementary_cross_blocks U V hrank
+  simpa [sinThetaMap] using hCS
 
 end DavisKahanTheory
 end ForMathlib

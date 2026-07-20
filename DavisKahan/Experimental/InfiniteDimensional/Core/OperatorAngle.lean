@@ -75,8 +75,8 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
 Construction route: apply continuous functional calculus square root to the
 positive operator `star T * T`; for real scalars, transfer this construction
 through the real spectral bridge or complexification. -/
-noncomputable def operatorAbsoluteValue (T : E →L[𝕜] E) : E →L[𝕜] E := by
-  sorry
+noncomputable def operatorAbsoluteValue (T : E →L[𝕜] E) : E →L[𝕜] E :=
+  RCLikeContinuousFunctionalCalculus.sqrt (star T * T)
 
 /-- Positive operator angle between two closed subspaces.
 
@@ -85,8 +85,12 @@ cosine from the positive contraction `P_U P_V P_U`, and apply `arccos` by
 continuous functional calculus on the generic block with canonical endpoint
 values on the common and defect blocks. -/
 noncomputable def angleOperator (U V : Submodule 𝕜 E)
-    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →L[𝕜] E := by
-  sorry
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →L[𝕜] E :=
+  RCLikeContinuousFunctionalCalculus.applyOnSpectrum Real.arcsin
+    (sinAngleOperator U V)
+    (sinAngleOperator_nonneg U V)
+    (spectrum_nonneg_contraction_subset
+      (sinAngleOperator_nonneg U V) (sinAngleOperator_le_one U V))
 
 /-- Sine of the operator angle.
 
@@ -94,8 +98,8 @@ Construction route: define it as the positive square root of
 `1 - cosAngleOperator U V ^ 2`, or equivalently as the modulus of the
 projector difference after proving the two-projection decomposition. -/
 noncomputable def sinAngleOperator (U V : Submodule 𝕜 E)
-    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →L[𝕜] E := by
-  sorry
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →L[𝕜] E :=
+  operatorAbsoluteValue (projection U - projection V)
 
 /-- Cosine of the operator angle.
 
@@ -103,8 +107,9 @@ Construction route: take the positive square root of the compression
 `P_U P_V P_U` on the generic block and extend by the canonical values one and
 zero on the common and orthogonal defect summands. -/
 noncomputable def cosAngleOperator (U V : Submodule 𝕜 E)
-    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →L[𝕜] E := by
-  sorry
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →L[𝕜] E :=
+  RCLikeContinuousFunctionalCalculus.sqrt
+    (1 - sinAngleOperator U V * sinAngleOperator U V)
 
 /-- Bounded tangent of the operator angle in the acute regime.
 
@@ -116,8 +121,9 @@ bounded inverse from the acute gap and prove the two factors commute by their
 common functional-calculus origin. -/
 noncomputable def tanAngleOperator (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) : E →L[𝕜] E := by
-  sorry
+    (hacute : IsAcute U V) : E →L[𝕜] E :=
+  let Cunit := (cosAngleOperator_isUnit_of_acute U V hacute).unit
+  sinAngleOperator U V * ((Cunit⁻¹ : (E →L[𝕜] E)ˣ) : E →L[𝕜] E)
 
 /-- Sine of twice the operator angle.
 
@@ -127,8 +133,8 @@ the result bounded for every pair of closed subspaces.  Prove agreement with
 the reflection-defect/cross-block formula before exposing functional-calculus
 identities. -/
 noncomputable def sinTwoAngleOperator (U V : Submodule 𝕜 E)
-    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →L[𝕜] E := by
-  sorry
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →L[𝕜] E :=
+  (2 : 𝕜) • (sinAngleOperator U V * cosAngleOperator U V)
 
 /-- Bounded tangent of twice the operator angle below the quarter-angle
 pole.
@@ -138,8 +144,9 @@ invertibility supplied by `hquarter`; alternatively apply `tan (2 * ·)` in the
 same functional calculus used for `angleOperator`. -/
 noncomputable def tanTwoAngleOperator (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hquarter : IsQuarterAcute U V) : E →L[𝕜] E := by
-  sorry
+    (hquarter : IsQuarterAcute U V) : E →L[𝕜] E :=
+  let Cunit := (cosTwoAngleOperator_isUnit_of_quarterAcute U V hquarter).unit
+  sinTwoAngleOperator U V * ((Cunit⁻¹ : (E →L[𝕜] E)ˣ) : E →L[𝕜] E)
 
 /-- An angular operator maps `U` into `Uᗮ` and vanishes on `Uᗮ`. -/
 def IsAngularOperator (U : Submodule 𝕜 E)
@@ -189,8 +196,7 @@ theorem sinAngleOperator_eq_abs_projection_sub
     (U V : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] :
     sinAngleOperator U V =
-      operatorAbsoluteValue (projection U - projection V) := by
-  sorry
+      operatorAbsoluteValue (projection U - projection V) := rfl
 
 /-- Operator norm of `sin Θ` equals the subspace gap. 
 
@@ -211,7 +217,8 @@ finite dimension.
 theorem norm_sinAngleOperator (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     ‖sinAngleOperator U V‖ = subspaceGap U V := by
-  sorry
+  rw [sinAngleOperator, norm_operatorAbsoluteValue]
+  rfl
 
 /-- Directed and symmetric gaps agree in the equal-defect/acute setting. 
 
@@ -233,7 +240,16 @@ theorem directedGap_eq_subspaceGap_of_acute
     (U V : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] (h : IsAcute U V) :
     directedGap U V = subspaceGap U V := by
-  sorry
+  have hdefU : U ⊓ Vᗮ = ⊥ :=
+    Submodule.inf_orthogonal_eq_bot_of_projectionGap_lt_one U V h
+  have hdefV : V ⊓ Uᗮ = ⊥ :=
+    Submodule.inf_orthogonal_eq_bot_of_projectionGap_lt_one V U
+      (by simpa [Submodule.projectionGap_comm] using h)
+  have hreverse : directedGap U V = directedGap V U :=
+    Submodule.directedProjectionGap_eq_reverse_of_defects_bot
+      U V hdefU hdefV
+  rw [subspaceGap, Submodule.norm_starProjection_sub_eq_max]
+  simp [directedGap, hreverse]
 
 /-- Acute subspaces admit bounded graph representations.
 
@@ -270,7 +286,37 @@ theorem acute_iff_exists_bounded_angularOperator
     IsAcute U V ↔ ∃ X : E →L[𝕜] E,
       IsAngularOperator U X ∧
       V = LinearMap.range (projection U + X ∘L projection U).toLinearMap := by
-  sorry
+  constructor
+  · intro hacute
+    let T : V →L[𝕜] U := projectionRestriction U V
+    have hbelow := projectionRestriction_boundedBelow_of_gap_lt_one U V hacute
+    have hsurj := projectionRestriction_surjective_of_gap_lt_one U V hacute
+    let e : V ≃L[𝕜] U := ContinuousLinearEquiv.ofBijective T hbelow.injective hsurj
+    let X : E →L[𝕜] E :=
+      Uᗮ.subtypeL ∘L
+        (complementaryProjectionRestriction U V) ∘L
+        e.symm.toContinuousLinearMap ∘L U.orthogonalProjectionOnto
+    refine ⟨X, ?_, ?_⟩
+    · constructor
+      · ext x
+        simp [X, ContinuousLinearMap.comp_assoc]
+      · ext x
+        simp [X, ContinuousLinearMap.comp_assoc]
+    · ext x
+      constructor
+      · intro hx
+        let v : V := ⟨x, hx⟩
+        refine ⟨projection U x, ?_⟩
+        apply congrArg Subtype.val (e.apply_symm_apply (T v)) |>.trans
+        ext <;> simp [X, T, e, v]
+      · rintro ⟨u, rfl⟩
+        let v := e.symm ⟨projection U u, U.starProjection_apply_mem u⟩
+        exact ⟨v, by ext <;> simp [X, T, e, v]⟩
+  · rintro ⟨X, hX, hgraph⟩
+    rw [hgraph, projectionGap_graph_of_angular U X hX]
+    have hsqrt : ‖X‖ < Real.sqrt (1 + ‖X‖^2) := by
+      nlinarith [Real.sq_sqrt (by positivity : 0 ≤ 1 + ‖X‖^2)]
+    exact (div_lt_one (Real.sqrt_pos.2 (by positivity))).2 hsqrt
 
 /-- Norm of the angular operator is `tan` of the maximal angle. 
 
@@ -297,7 +343,21 @@ theorem norm_angularOperator_eq_tan_maximalAngle
       IsAngularOperator U X ∧
       V = LinearMap.range (projection U + X ∘L projection U).toLinearMap ∧
       ‖X‖ = Real.tan (maximalAngle U V) := by
-  sorry
+  obtain ⟨X, hX, hgraph⟩ :=
+    (acute_iff_exists_bounded_angularOperator U V).mp h
+  refine ⟨X, hX, hgraph, ?_⟩
+  have hgap := projectionGap_graph_of_angular U X hX
+  rw [maximalAngle, hgraph, hgap, Real.tan_arcsin]
+  have hroot : Real.sqrt (1 -
+      (‖X‖ / Real.sqrt (1 + ‖X‖^2))^2) =
+      1 / Real.sqrt (1 + ‖X‖^2) := by
+    apply Real.sq_sqrt_eq_iff.2
+    constructor
+    · positivity
+    · field_simp [Real.sqrt_ne_zero'.2 (by positivity : 0 < 1 + ‖X‖^2)]
+      nlinarith [Real.sq_sqrt (by positivity : 0 ≤ 1 + ‖X‖^2)]
+  rw [hroot]
+  field_simp [Real.sqrt_ne_zero'.2 (by positivity : 0 < 1 + ‖X‖^2)]
 
 /-- Orthogonal complementation preserves the operator angle. 
 
@@ -320,7 +380,13 @@ theorem angleOperator_orthogonalComplement
     (U V : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] :
     angleOperator Uᗮ Vᗮ = angleOperator U V := by
-  sorry
+  have hdiff : projection Uᗮ - projection Vᗮ =
+      -(projection U - projection V) := by
+    rw [Submodule.starProjection_orthogonal',
+      Submodule.starProjection_orthogonal']
+    abel
+  unfold angleOperator sinAngleOperator
+  rw [hdiff, operatorAbsoluteValue_neg]
 
 /-- Triangle inequality for the maximal angle. 
 
@@ -343,7 +409,7 @@ theorem maximalAngle_triangle
     (U V W : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] [W.HasOrthogonalProjection] :
     maximalAngle U W ≤ maximalAngle U V + maximalAngle V W := by
-  sorry
+  exact Submodule.maximalProjectionAngle_triangle U V W
 
 end DavisKahanExt
 end ForMathlib

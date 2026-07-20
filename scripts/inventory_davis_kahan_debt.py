@@ -16,6 +16,16 @@ from collections import Counter, deque
 
 IMPORT_RE = re.compile(r"^import\s+([A-Za-z0-9_'.]+)\s*$", re.MULTILINE)
 INCOMPLETE_RE = re.compile(r"\b(?:sorry|admit)\b")
+BLOCK_COMMENT_RE = re.compile(r"/-.*?-/", re.DOTALL)
+LINE_COMMENT_RE = re.compile(r"--[^\n]*")
+
+
+def strip_comments_preserving_lines(text: str) -> str:
+    def blank_block(match: re.Match[str]) -> str:
+        value = match.group(0)
+        return "\n" * value.count("\n")
+
+    return LINE_COMMENT_RE.sub("", BLOCK_COMMENT_RE.sub(blank_block, text))
 
 SOURCE_ROOTS = (
     "DavisKahan.Sources.DavisKahan1970.FullPartIII",
@@ -103,8 +113,14 @@ def main() -> int:
 
     records: list[dict[str, object]] = []
     for module, source in sorted(modules.items()):
-        lines = source.read_text(encoding="utf8").splitlines()
-        locations = [number for number, line in enumerate(lines, 1) if INCOMPLETE_RE.search(line)]
+        stripped = strip_comments_preserving_lines(
+            source.read_text(encoding="utf8", errors="replace")
+        )
+        locations = [
+            number
+            for number, line in enumerate(stripped.splitlines(), 1)
+            if INCOMPLETE_RE.search(line)
+        ]
         if not locations:
             continue
         rel = source.relative_to(root).as_posix()

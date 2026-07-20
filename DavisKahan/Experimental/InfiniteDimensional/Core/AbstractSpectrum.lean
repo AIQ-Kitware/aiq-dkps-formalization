@@ -42,7 +42,14 @@ calculus, and should come with the identity
 `C ∘L C = X⋆ ∘L P_U ∘L X` from positivity of the compressed projection. -/
 noncomputable def sinTwoThetaEmbedding (U : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] (X : F →L[𝕜] E) : F →L[𝕜] E := by
-  sorry
+  classical
+  let cosineGram : F →L[𝕜] F :=
+    X.adjoint ∘L projection U ∘L X
+  let cosineBlock : F →L[𝕜] F :=
+    RCLikeContinuousFunctionalCalculus.sqrt cosineGram
+  exact (2 : 𝕜) •
+    (complementaryProjection U ∘L X ∘L cosineBlock)
+
 end Foundation
 end Experimental
 end DavisKahan

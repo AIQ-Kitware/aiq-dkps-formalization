@@ -132,7 +132,34 @@ theorem tanTwoTheta_residual_le
     {δ : ℝ} (hδ : 0 < δ) (hgap : InternalGap A U δ) :
     AvoidsQuarterTurnEmbedding U X ∧
       δ * N (tanTwoThetaEmbedding U X) ≤ 2 * N (residual A X M) := by
-  sorry
+  classical
+  let C₂ := FiniteDimensional.cosTwoThetaEmbedding U X
+  let S₂ := sinTwoThetaEmbedding U X
+  let R := residual A X M
+  have hriccati :
+      doubleAngleSylvesterOperator A U S₂ =
+        doubleAngleResidual U X R :=
+    doubleAngleRiccatiIdentity hA hB hM hU hBX hoff
+  have hker : LinearMap.ker C₂ = ⊥ := by
+    rw [LinearMap.ker_eq_bot]
+    intro x hx
+    have hhom := doubleAngleHomogeneousEquation_of_cosTwo_apply_eq_zero
+      hriccati hx
+    exact internalGap_homogeneous_doubleAngle_injective hA hU hδ hgap hhom
+  have havoid : AvoidsQuarterTurnEmbedding U X :=
+    avoidsQuarterTurnEmbedding_iff_cosTwo_injective.mpr
+      (LinearMap.ker_eq_bot.mp hker)
+  have htan : tanTwoThetaEmbedding U X =
+      S₂ ∘ₗ inverseOnRange C₂ (LinearMap.ker_eq_bot.mp hker) := by
+    ext x
+    simp [tanTwoThetaEmbedding, C₂, S₂,
+      moorePenroseInverse_eq_inverse_of_injective]
+  have hsolve := internalGap_doubleAngleTangent_uiNorm_le
+    N hA hU hδ hgap hriccati hker
+  have hres : N (doubleAngleResidual U X R) ≤ 2 * N R :=
+    doubleAngleResidual_uiNorm_le N U X R
+  refine ⟨havoid, ?_⟩
+  simpa [htan, R] using (hsolve.trans hres)
 
 /-- **Davis--Kahan `tan 2Θ`, perturbation form, every UI norm.**
 
@@ -155,7 +182,25 @@ theorem tanTwoTheta_perturbation_le
     {δ : ℝ} (hδ : 0 < δ) (hgap : InternalGap A U δ) :
     AvoidsQuarterTurn U V ∧
       δ * N (tanTwoAngleOperator U V) ≤ 2 * N (B - A) := by
-  sorry
+  classical
+  let X := V.orthonormalBasis.isometryEquiv.rangeIsometry
+  let M := compression B V
+  have hBX : B ∘ₗ X.toLinearMap = X.toLinearMap ∘ₗ M :=
+    reduces_compression_intertwines hB hV
+  have hM : M.IsSymmetric := compression_isSymmetric hB
+  have hraw := tanTwoTheta_residual_le
+    (N.rectangularRestriction X) hA hB hU X hM hBX hoff hδ hgap
+  have hR : residual A X M = (B - A) ∘ₗ X.toLinearMap := by
+    ext x
+    simp [residual, hBX, LinearMap.comp_apply]
+  have hN : (N.rectangularRestriction X) ((B - A) ∘ₗ X.toLinearMap) ≤ N (B - A) :=
+    N.comp_isometry_le _ X
+  refine ⟨?_, ?_⟩
+  · simpa [X, AvoidsQuarterTurnEmbedding, approximateSubspace_rangeIsometry] using hraw.1
+  · have hident := tanTwoThetaEmbedding_identifies_angleOperator U V X
+    rw [hident, hR] at hraw
+    exact hraw.2.trans (mul_le_mul_of_nonneg_left (mul_le_mul_of_nonneg_left hN zero_le_two)
+      (le_of_lt hδ))
 
 /-- The off-diagonal hypotheses and the canonical same-cut spectral choice
 imply the acute-angle condition.  This is the branch selection in
@@ -175,7 +220,34 @@ theorem isAcute_canonical_tanTwoTheta
     (hUa : SpectrumIn A U (Set.Iic a))
     (hUb : SpectrumIn A Uᗮ (Set.Ici b)) :
     IsAcute U (spectralSubspace (A + H) (Set.Iic a)) := by
-  sorry
+  classical
+  let Apath : ℝ → E →ₗ[𝕜] E := fun t => A + (t : 𝕜) • H
+  let P : ℝ → E →ₗ[𝕜] E := fun t =>
+    projection (spectralSubspace (Apath t) (Set.Iic a))
+  have hsymm : ∀ t, (Apath t).IsSymmetric := fun t =>
+    hA.add (hH.smul_ofReal t)
+  have hgap : ∀ t ∈ Set.Icc (0 : ℝ) 1,
+      spectrum 𝕜 (Apath t) ∩ ((Set.Ioo a b : Set ℝ) : Set 𝕜) = ∅ := by
+    intro t ht
+    exact offDiagonal_gap_repulsion_along_segment hA hH hU hoff hab hUa hUb ht
+  have hcont : ContinuousOn P (Set.Icc (0 : ℝ) 1) :=
+    spectralProjection_continuousOn_fixedGap hsymm hgap
+  have hP0 : P 0 = projection U := by
+    simp [P, Apath, spectralSubspace_eq_of_spectrum_split hA hU hUa hUb]
+  let G := {t : ℝ | t ∈ Set.Icc (0 : ℝ) 1 ∧ ‖P t - projection U‖ < 1}
+  have hGopen : IsOpenIn G (Set.Icc (0 : ℝ) 1) := by
+    exact relativeOpen_norm_lt_one hcont
+  have hGclosed : IsClosedIn G (Set.Icc (0 : ℝ) 1) := by
+    intro t ht htn
+    have hquarter := avoidsQuarterTurn_along_segment hA hH hU hoff hab hUa hUb ht
+    exact projectionGap_component_closed hquarter htn
+  have h0 : (0 : ℝ) ∈ G := by simp [G, hP0]
+  have hG : G = Set.Icc (0 : ℝ) 1 :=
+    connected_Icc.clopen_eq_univ hGopen hGclosed h0
+  have h1 : ‖P 1 - projection U‖ < 1 := by
+    have : (1 : ℝ) ∈ G := by rw [hG]; simp
+    exact this.2
+  simpa [P, Apath, IsAcute, subspaceGap, norm_sub_rev] using h1
 
 /-- Canonical spectral-subspace `tan 2Θ` theorem, with the acute conclusion
 built in and the same spectral cut used for `A` and `A+H`.
@@ -237,7 +309,20 @@ theorem existsUnique_reducingSubspace_preserving_gap
       SpectrumIn (A + H) V (Set.Iic a) ∧
       SpectrumIn (A + H) Vᗮ (Set.Ici b) ∧
       IsAcute U V := by
-  sorry
+  classical
+  let V := spectralSubspace (A + H) (Set.Iic a)
+  have hrep := offDiagonal_spectral_repulsion hA hH hU hoff hab hUa hUb
+  have hred : Reduces (A + H) V := reduces_spectralSubspace (hA.add hH) _
+  have hlow : SpectrumIn (A + H) V (Set.Iic a) :=
+    spectralSubspace_spectrumIn (hA.add hH) _
+  have hupp : SpectrumIn (A + H) Vᗮ (Set.Ici b) := hrep.upper
+  have hacute := isAcute_canonical_tanTwoTheta hA hH hU hoff hab hUa hUb
+  refine ⟨V, ⟨hred, hlow, hupp, hacute⟩, ?_⟩
+  intro W hW
+  have hWspec : W = spectralSubspace (A + H) (Set.Iic a) :=
+    reducingSubspace_eq_spectralSubspace_of_split
+      (hA.add hH) hW.1 hW.2.1 hW.2.2.1 hab
+  simpa [V] using hWspec
 
 /-- Theorem 8.1(i): compression comparison through the cosine block.
 
@@ -259,7 +344,22 @@ theorem spectral_repulsion_compression
     {δ : ℝ} (hδ : 0 < δ) (horder : OrderedGap A U A Uᗮ δ) :
     SpectrumIn (A + H) Vᗮ
       {lam | ∃ μ ∈ restrictedSpectrum A Uᗮ, μ ≤ lam} := by
-  sorry
+  classical
+  let X := angularOperator U V hacute
+  let C := positiveCosineEquiv U V hacute
+  have hgraph : Vᗮ = graphSubspace Uᗮ (-LinearMap.adjoint X) :=
+    orthogonal_graph_angularOperator U V hacute
+  have hriccati := offDiagonal_Riccati_equation hA hH hU hV hoff hacute
+  have hcompression :
+      compression (A + H) Vᗮ =
+        C.symm.toLinearMap ∘ₗ
+          (compression A Uᗮ + positiveGraphCorrection A H U X) ∘ₗ
+        C.toLinearMap :=
+    graph_compression_formula hA hH hU hoff hriccati
+  have hcorr : (positiveGraphCorrection A H U X).IsPositive :=
+    graphCorrection_positive_of_orderedGap horder hriccati
+  rw [hgraph, hcompression]
+  exact spectrum_congruence_add_positive_above hA.compression hcorr
 
 /-- Theorem 8.1(ii): ordered eigenvalues move away from the gap.
 
@@ -299,7 +399,17 @@ theorem spectral_repulsion_uiNorm
     N (projection Vᗮ ∘ₗ ((A + H) - (c : 𝕜) • LinearMap.id) ∘ₗ projection Vᗮ) ≥
       N (cosThetaMap Uᗮ Vᗮ ∘ₗ
         (projection Uᗮ ∘ₗ (A - (c : 𝕜) • LinearMap.id) ∘ₗ projection Uᗮ)) := by
-  sorry
+  classical
+  have heig := spectral_repulsion_eigenvalues hA hH hU hV hoff hacute hδ horder
+  have hprefix : ∀ k,
+      kyFanSingularValueSum 𝕜
+        (cosThetaMap Uᗮ Vᗮ ∘ₗ
+          (projection Uᗮ ∘ₗ (A - (c : 𝕜) • LinearMap.id) ∘ₗ projection Uᗮ)) k ≤
+      kyFanSingularValueSum 𝕜
+        (projection Vᗮ ∘ₗ ((A + H) - (c : 𝕜) • LinearMap.id) ∘ₗ projection Vᗮ) k := by
+    intro k
+    exact minmax_cosine_compression_kyFan_dominance hA hH hU hV hacute heig k c
+  exact N.le_of_kyFan_singular_dominance hprefix
 
 /-- Largest-angle consequence: the selected subspaces differ by less than
 `π/4`.
@@ -319,7 +429,20 @@ theorem largestPrincipalAngle_lt_pi_div_four
     (hUb : SpectrumIn A Uᗮ (Set.Ici b)) :
     principalAngles U (spectralSubspace (A + H) (Set.Iic a)) 0 <
       Real.pi / 4 := by
-  sorry
+  classical
+  let V := spectralSubspace (A + H) (Set.Iic a)
+  have hacute := isAcute_canonical_tanTwoTheta hA hH hU hoff hab hUa hUb
+  have hδ : 0 < b - a := sub_pos.mpr hab
+  have hgap : InternalGap A U (b - a) :=
+    internalGap_of_spectrumIn_interval_sides hA hU hUa hUb hab
+  have hV : Reduces (A + H) V := reduces_spectralSubspace (hA.add hH) _
+  have havoid := (tanTwoTheta_perturbation_le
+    (UnitarilyInvariantNorm.opNorm 𝕜 E) hA (hA.add hH) hU hV
+    (by simpa using hoff) hδ hgap).1
+  have hconnected := principalAngles_continuous_along_offDiagonal_path
+    hA hH hU hoff hab hUa hUb
+  exact acute_avoidsQuarterTurn_continuation_selects_lower_branch
+    hacute havoid hconnected
 
 /-- Operator-norm endpoint already represented by `TanTwoTheta.lean`.
 -/

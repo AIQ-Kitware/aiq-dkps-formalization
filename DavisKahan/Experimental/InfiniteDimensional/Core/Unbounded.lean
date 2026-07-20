@@ -36,8 +36,20 @@ representation for the representing vector, and prove the resulting graph is
 closed. -/
 noncomputable def adjoint
     (A : ClosedOperator (𝕜 := 𝕜) (E := E)) :
-    ClosedOperator (𝕜 := 𝕜) (E := E) := by
-  sorry
+    ClosedOperator (𝕜 := 𝕜) (E := E) :=
+  { domain := A.adjointDomain
+    toLinearMap :=
+      { toFun := A.adjointVector
+        map_add' := fun y z => by
+          apply ext_inner_left 𝕜
+          intro x
+          simp [adjointVector, A.adjointVector_inner]
+        map_smul' := fun c y => by
+          apply ext_inner_left 𝕜
+          intro x
+          simp [adjointVector, A.adjointVector_inner] }
+    dense_domain := A.adjointDomain_dense
+    closed_graph := A.adjoint_graph_closed }
 
 /-- Sum with a relatively bounded operator on the same domain.
 
@@ -48,14 +60,20 @@ noncomputable def addRelative
     (V : A.domain →ₗ[𝕜] E) {a b : ℝ}
     (ha : 0 ≤ a) (hb0 : 0 ≤ b)
     (hrel : RelativelyBounded A V a b) (hb : b < 1) :
-    ClosedOperator (𝕜 := 𝕜) (E := E) := by
-  sorry
+    ClosedOperator (𝕜 := 𝕜) (E := E) :=
+  { domain := A.domain
+    toLinearMap := A.toLinearMap + V
+    dense_domain := A.dense_domain
+    closed_graph := A.closed_graph_add_relativelyBounded V ha hb0 hrel hb }
 
 /-- Unbounded spectral projection. -/
 noncomputable def spectralProjection
     (A : ClosedOperator (𝕜 := 𝕜) (E := E))
     (s : Set ℝ) : E →L[𝕜] E := by
-  sorry
+  classical
+  by_cases hA : A.IsSelfAdjoint
+  · exact RCLikeUnboundedSpectralTheorem.projection A hA s
+  · exact 0
 
 /-- Kato--Rellich theorem for bounded perturbations.
 
@@ -79,7 +97,32 @@ theorem isSelfAdjoint_addBounded
     (hA : A.IsSelfAdjoint) (V : E →L[𝕜] E)
     (hV : IsSelfAdjointOperator V) :
     (A.addBounded V).IsSelfAdjoint := by
-  sorry
+  have hsym : (A.addBounded V).IsSymmetric := by
+    intro x y
+    simp [addBounded, hA.symmetric, hV]
+  let η : ℝ := 2 * ‖V‖ + 1
+  have hη : ‖V‖ / η < 1 := by
+    have : 0 < η := by positivity
+    rw [div_lt_one this]
+    linarith [norm_nonneg V]
+  have hfactor :
+      (A.addBounded V).subScalar ((η : ℝ) : 𝕜 * RCLike.I) =
+      (1 + V ∘L A.resolvent ((η : ℝ) : 𝕜 * RCLike.I)) ∘
+        A.subScalar ((η : ℝ) : 𝕜 * RCLike.I) := by
+    ext x
+    simp [addBounded]
+  have hunit : IsUnit (1 + V ∘L
+      A.resolvent ((η : ℝ) : 𝕜 * RCLike.I)) := by
+    apply isUnit_one_add_of_norm_lt_one
+    calc
+      ‖V ∘L A.resolvent ((η : ℝ) : 𝕜 * RCLike.I)‖
+          ≤ ‖V‖ / η := by
+            apply le_trans (ContinuousLinearMap.opNorm_comp_le _ _)
+            gcongr
+            exact A.norm_resolvent_le_inv_abs_im hA _
+      _ < 1 := hη
+  exact selfAdjoint_of_symmetric_nonreal_shift_surjective
+    hsym (surjective_of_factorization hfactor hunit)
 
 /-- Kato--Rellich theorem for relatively bounded perturbations with relative
 bound below one.
@@ -120,7 +163,17 @@ theorem isSelfAdjoint_of_relativelyBounded
     {a b : ℝ} (ha : 0 ≤ a) (hb0 : 0 ≤ b)
     (hrel : RelativelyBounded A V a b) (hb : b < 1) :
     (A.addRelative V ha hb0 hrel hb).IsSelfAdjoint := by
-  sorry
+  have hsym : (A.addRelative V ha hb0 hrel hb).IsSymmetric := by
+    intro x y
+    simp [addRelative, hA.symmetric, hV]
+  obtain ⟨η, hη, hcontract⟩ :=
+    exists_nonreal_parameter_relative_contraction hrel ha hb0 hb
+  have hfactor := relativePerturbation_resolvent_factorization
+    A V η
+  have hunit : IsUnit (1 + V.afterResolvent A hA η) :=
+    isUnit_one_add_of_norm_lt_one hcontract
+  exact selfAdjoint_of_symmetric_nonreal_shift_surjective
+    hsym (surjective_of_factorization hfactor hunit)
 
 /-- Unbounded-operator `sin Θ` theorem with bounded difference.
 
@@ -150,7 +203,31 @@ theorem sinTheta_unbounded_boundedPerturbation
     (hsepBA : SpectralSetsSeparated (A.addBounded V) A t sᶜ d) :
     d * ‖A.spectralProjection s - (A.addBounded V).spectralProjection t‖ ≤
       (Real.pi / 2) * ‖V‖ := by
-  sorry
+  let B := A.addBounded V
+  have hB : B.IsSelfAdjoint := isSelfAdjoint_addBounded A hA V hV
+  let P := A.spectralProjection s
+  let Q := B.spectralProjection t
+  have hforward :
+      d * ‖(1-Q) ∘L P‖ ≤ (Real.pi/2) * ‖V‖ := by
+    have heq := mixedProjection_unboundedSylvesterEquation
+      A B hA hB P Q hs ht V
+    exact unbounded_sylvester_general_separation_opNorm
+      A B hA hB hsepAB hd heq
+  have hbackward :
+      d * ‖(1-P) ∘L Q‖ ≤ (Real.pi/2) * ‖V‖ := by
+    have heq := mixedProjection_unboundedSylvesterEquation
+      B A hB hA Q P ht hs (-V)
+    simpa [norm_neg] using
+      unbounded_sylvester_general_separation_opNorm
+        B A hB hA hsepBA hd heq
+  have hprojection := norm_projection_sub_eq_max_directed P Q
+    (spectralProjection_isOrthogonal hA hs)
+    (spectralProjection_isOrthogonal hB ht)
+  rw [hprojection]
+  exact max_le
+    ((mul_le_mul_of_nonneg_left hforward hd.le))
+    ((mul_le_mul_of_nonneg_left hbackward hd.le))
+
 end ClosedOperator
 end DavisKahanExt
 end ForMathlib

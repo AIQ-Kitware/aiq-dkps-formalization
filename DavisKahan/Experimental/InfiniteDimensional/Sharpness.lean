@@ -121,9 +121,21 @@ theorem sinTheta_planar_equality
     let V := modelSubspaceTheta (𝕜 := 𝕜) theta
     IsSelfAdjointOperator A ∧ IsSelfAdjointOperator H ∧
       Reduces A U ∧ Reduces (A + H) V ∧
-      InternalGap A U d ∧
-      d * subspaceGap U V = ‖H‖ := by
-  sorry
+      InternalGap A U d ∧ d * subspaceGap U V = ‖H‖ := by
+  dsimp
+  refine ⟨?_, ?_, ?_, ?_, ?_, ?_⟩
+  · exact (isSelfAdjoint_starProjection _).one_sub.smul_ofReal d
+  · exact ((isSelfAdjoint_starProjection _).sub
+      (isSelfAdjoint_starProjection _)).smul_ofReal d
+  · exact reduces_scalar_one_sub_projection _ _
+  · rw [modelGappedOperator_add_perturbation]
+    exact reduces_scalar_one_sub_projection _ _
+  · exact internalGap_twoPointProjection hd
+  · rw [subspaceGap, projection_modelSubspace0,
+      projection_modelSubspaceTheta,
+      norm_modelProjection_sub theta htheta htheta'.le]
+    unfold modelRotatedPerturbation
+    rw [norm_smul, RCLike.norm_ofReal, Real.norm_of_nonneg hd.le]
 
 /-- The factor two in the `sin 2Θ` theorem is attained asymptotically by
 planar models as the angle tends to zero.
@@ -151,7 +163,17 @@ theorem sinTwoTheta_planar_asymptotically_sharp
           (modelSubspaceTheta (𝕜 := 𝕜) theta)‖) /
         (2 * ‖modelRotatedPerturbation (𝕜 := 𝕜) d theta‖))
       (nhdsWithin 0 (Set.Ioi 0)) (nhds 1) := by
-  sorry
+  filter_upwards [eventually_lt_nhds 0 (Real.pi/2) Real.pi_pos,
+    self_mem_nhdsWithin] with theta htheta htheta0
+  rw [norm_sinTwoAngle_planar theta htheta0.le htheta.le,
+    modelRotatedPerturbation, norm_smul, RCLike.norm_ofReal,
+    Real.norm_of_nonneg hd.le,
+    norm_modelProjection_sub theta htheta0.le htheta.le,
+    abs_of_nonneg (Real.sin_nonneg_of_nonneg_of_le_pi
+      (by positivity) (by linarith)), Real.sin_two_mul]
+  field_simp [hd.ne', Real.sin_pos_of_pos_of_lt_pi htheta0 (by linarith)]
+  ring
+  simpa using Real.continuousAt_cos.tendsto
 
 /-- The `√2 d` a priori threshold cannot be increased universally.
 
@@ -187,7 +209,17 @@ theorem sqrtTwo_threshold_sharp :
         ‖H‖ < c * d ∧
         subspaceGap U
           (continuedSpectralSubspace A H (restrictedSpectrum A U)) = 1 := by
-  sorry
+  intro c hc
+  choose t ht2 htc using exists_between hc
+  refine ⟨1, zero_lt_one,
+    thresholdModelA (𝕜 := 𝕜) 1,
+    thresholdModelH (𝕜 := 𝕜) 1 t,
+    thresholdModelSubspace (𝕜 := 𝕜), ?_⟩
+  obtain ⟨hA, hH, hred, hoff, hgap, hfinite, hneU, hneC,
+    hnorm, horth⟩ := thresholdModel_calculation (𝕜 := 𝕜) zero_lt_one ht2
+  refine ⟨hA, hH, hred, hoff, hgap, hfinite, hneU, hneC, ?_, horth⟩
+  rw [hnorm, mul_one]
+  nlinarith [Real.sq_sqrt (show 0 ≤ (2:ℝ) by positivity)]
 
 /-- The planar equality model is already sufficient to prove optimality for
 any symmetric ideal that contains the model perturbation.
@@ -217,7 +249,16 @@ theorem ideal_planar_extremizer
     d * I.gauge (projection (modelSubspace0 (𝕜 := 𝕜)) -
       projection (modelSubspaceTheta (𝕜 := 𝕜) theta)) =
       I.gauge (modelRotatedPerturbation (𝕜 := 𝕜) d theta) := by
-  sorry
+  let T := projection (modelSubspace0 (𝕜 := 𝕜)) -
+      projection (modelSubspaceTheta (𝕜 := 𝕜) theta)
+  have hH : modelRotatedPerturbation (𝕜 := 𝕜) d theta = (d : 𝕜) • T := by
+    simp [T, modelRotatedPerturbation]
+  have hTmem : I.mem T := by
+    rw [hH] at hmem
+    exact I.mem_of_nonzero_smul (RCLike.ofReal_ne_zero.mpr hd.ne') hmem
+  refine ⟨hTmem, ?_⟩
+  rw [hH, I.gauge_smul (d : 𝕜) hTmem,
+    RCLike.norm_ofReal, Real.norm_of_nonneg hd.le]
 
 end DavisKahanExt
 end ForMathlib

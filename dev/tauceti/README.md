@@ -31,3 +31,12 @@ scope and placement questions.  They should not be submitted as if the current
 repository layout were already the desired Tau Ceti layout.  The source-general
 Section 6 theorem is complete; the broader roadmap concerns full-paper completion,
 production extraction, and library integration rather than reopening that proof.
+
+## Full Part III math-ahead batch
+
+The repository now also carries a candidate full-Part-III proof-closure batch.
+It restores 174 exact-signature historical bodies and replaces an unused
+speculative continuation roadmap API with the completed proof-carrying
+continuation stack.  These candidates are not part of the Tau Ceti-ready
+accepted surface until compiled and structurally promoted.  See
+`dev/full-part-iii-admission-elimination-math-ahead-2026-07-20.md`.

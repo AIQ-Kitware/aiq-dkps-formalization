@@ -127,3 +127,15 @@ than a continuation module.
 - the five structural checks remain clean;
 - the full sine-theta source audit remains unchanged;
 - split PRs remain single-topic and preserve attribution.
+
+## Math-ahead update
+
+The full-Part-III repair batch restores candidate bodies for the formerly open
+foundation and endpoint declarations while preserving their exact statements.
+This does not retire the 33-item extraction queue.  Instead, after the restored
+bodies compile, the queue should be recomputed: some mixed files may become
+wholly production-ready, making a larger canonical promotion preferable to the
+original declaration-by-declaration split.
+
+See `dev/full-part-iii-admission-elimination-math-ahead-2026-07-20.md` and the
+machine-checked signature manifest for the candidate scope.

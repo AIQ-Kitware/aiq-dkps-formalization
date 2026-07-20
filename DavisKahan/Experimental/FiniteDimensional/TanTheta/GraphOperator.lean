@@ -128,7 +128,11 @@ theorem singularValues_graphOperator (U : Submodule 𝕜 E)
     (htrans : IsTransverse (approximateSubspace X) U) :
     (graphOperator U X).singularValues =
       principalTangents (approximateSubspace X) U := by
-  sorry
+  classical
+  funext i
+  rw [graphOperator, singularValues_tanThetaEmbedding]
+  · exact principalTangents_comm_index (approximateSubspace X) U i
+  · simpa [IsTransverseEmbedding] using htrans
 
 /-- **Davis--Kahan `tan Θ`, residual form, every UI norm.**
 
@@ -149,7 +153,38 @@ theorem tanTheta_residual_le
     (hGalerkin : M = compression A X)
     {δ : ℝ} (hδ : 0 < δ) (hgap : OrderedGap M ⊤ A Uᗮ δ) :
     δ * N (tanThetaEmbedding U X) ≤ N (residual A X M) := by
-  sorry
+  classical
+  have htrans := isTransverse_of_tanTheta_residual_gap
+    hA hU X hM hGalerkin hδ hgap
+  let C := cosThetaEmbedding U X
+  let S := sinThetaEmbedding U X
+  let T := tanThetaEmbedding U X
+  let R := residual A X M
+  have hCinverse : C ∘ₗ inverseOnRange C htrans.cos_injective = LinearMap.id :=
+    cosThetaEmbedding_inverseOnRange htrans
+  have hgraph : S = T ∘ₗ C := by
+    ext y
+    simp [T, tanThetaEmbedding, C, S,
+      moorePenroseInverse_eq_inverseOnRange htrans.cos_injective,
+      LinearMap.comp_apply, hCinverse]
+  have hsylv :
+      compression A Uᗮ ∘ₗ T - T ∘ₗ M =
+        complementaryProjection U ∘ₗ R ∘ₗ
+          inverseOnRange C htrans.cos_injective := by
+    ext y
+    have hblock := projectedResidual_sine_equation hA hU X M
+      (inverseOnRange C htrans.cos_injective y)
+    simpa [T, R, C, S, hgraph, LinearMap.comp_apply, LinearMap.comp_assoc]
+      using hblock
+  have hsolve := rectangular_uiNorm_sylvester_le_of_orderedGap
+    N hM (compression_isSymmetric hA) hδ hgap T
+      (complementaryProjection U ∘ₗ R ∘ₗ
+        inverseOnRange C htrans.cos_injective) hsylv
+  have hrhs :
+      N (complementaryProjection U ∘ₗ R ∘ₗ
+        inverseOnRange C htrans.cos_injective) ≤ N R := by
+    exact N.projection_comp_inverseCos_le htrans R
+  exact hsolve.trans hrhs
 
 /-- The residual hypotheses force transversality; the tangent has no pole.
 
@@ -171,7 +206,27 @@ theorem isTransverse_of_tanTheta_residual_gap
     (hGalerkin : M = compression A X)
     {δ : ℝ} (hδ : 0 < δ) (hgap : OrderedGap M ⊤ A Uᗮ δ) :
     IsTransverse (approximateSubspace X) U := by
-  sorry
+  classical
+  rw [isTransverse_iff_cosThetaEmbedding_injective]
+  intro y hy
+  have hCy : cosThetaEmbedding U X y = 0 := hy
+  have hSy : sinThetaEmbedding U X y = X y := by
+    rw [← X.cos_add_sin U y, hCy, zero_add]
+  have hresU : projection U (residual A X M y) = 0 := by
+    rw [hGalerkin]
+    exact galerkin_residual_orthogonal X A y
+  have hhom :
+      compression A Uᗮ (sinThetaEmbedding U X y) =
+        sinThetaEmbedding U X (M y) := by
+    have hblock := projectedResidual_sine_equation hA hU X M y
+    simpa [hresU] using hblock
+  have hy0 : y = 0 := by
+    have hsep := orderedGap_vector_coercive hgap hδ y
+      (sinThetaEmbedding U X y) hhom
+    have hnormX : ‖X y‖ = ‖y‖ := X.norm_map y
+    rw [hSy, hnormX] at hsep
+    nlinarith [norm_nonneg y]
+  exact hy0
 
 /-- **Davis--Kahan `tan Θ`, perturbation form, every UI norm.**
 
@@ -192,7 +247,24 @@ theorem tanTheta_perturbation_le
     (hacute : IsAcute U V)
     {δ : ℝ} (hδ : 0 < δ) (hgap : OrderedGap A U B Vᗮ δ) :
     δ * N (tanAngleOperator U V) ≤ N (B - A) := by
-  sorry
+  classical
+  let T := angularOperator U V hacute
+  have hgraph : V = graphSubspace U T := graphSubspace_angularOperator U V hacute
+  have hriccati :
+      compression B Vᗮ ∘ₗ T - T ∘ₗ compression A U =
+        complementaryProjection V ∘ₗ (B - A) ∘ₗ projection U := by
+    exact tangentSylvesterEquation_of_reduces_zeroCompression
+      hA hB hU hV hzero hacute
+  have hsolve := uiNorm_sylvester_le_of_orderedGap
+    N hA hB hδ hgap T
+      (complementaryProjection V ∘ₗ (B - A) ∘ₗ projection U) hriccati
+  have hrhs :
+      N (complementaryProjection V ∘ₗ (B - A) ∘ₗ projection U) ≤ N (B - A) :=
+    N.projection_comp_projection_le _
+  have hsing : N T = N (tanAngleOperator U V) := by
+    exact N.eq_of_same_singularValues
+      (singularValues_angularOperator_eq_tanAngleOperator U V hacute)
+  simpa [hsing] using hsolve.trans hrhs
 
 /-- Cross/graph form of the perturbation theorem.
 
@@ -210,7 +282,18 @@ theorem tanThetaMap_perturbation_le
     (htrans : IsTransverse U V)
     {δ : ℝ} (hδ : 0 < δ) (hgap : OrderedGap A U B Vᗮ δ) :
     δ * N (tanThetaMap U V) ≤ N (B - A) := by
-  sorry
+  classical
+  let T := graphMapOfTransverse U V htrans
+  have hriccati := tangentSylvesterEquation_of_transverse
+    hA hB hU hV hzero htrans
+  have hsolve := uiNorm_sylvester_le_of_orderedGap
+    N hA hB hδ hgap T
+      (complementaryProjection V ∘ₗ (B - A) ∘ₗ projection U) hriccati
+  have hrhs := N.projection_comp_projection_le (B - A) Vᗮ U
+  have hsame : N T = N (tanThetaMap U V) := by
+    exact N.eq_of_same_singularValues
+      (singularValues_graphMap_eq_tanThetaMap U V htrans)
+  simpa [T, hsame] using hsolve.trans hrhs
 
 /-- Canonical spectral-subspace version.
 
@@ -255,7 +338,22 @@ theorem tanTheta_vector_le
     (hres : ∀ y, ‖residual A X M y‖ ≤ ρ * ‖y‖) :
     ∀ y, δ * ‖sinThetaEmbedding U X y‖ ≤
       ρ * ‖cosThetaEmbedding U X y‖ := by
-  sorry
+  intro y
+  have hblock := projectedResidual_sine_equation hA hU X M y
+  have hsep := orderedGap_vector_tanTheta hM hA hδ hgap
+    (cosThetaEmbedding U X y) (sinThetaEmbedding U X y) hblock
+  have hproj : ‖complementaryProjection U (residual A X M y)‖ ≤
+      ‖residual A X M y‖ := Uᗮ.norm_starProjection_apply_le _
+  calc
+    δ * ‖sinThetaEmbedding U X y‖
+        ≤ ‖complementaryProjection U (residual A X M y)‖ *
+            ‖cosThetaEmbedding U X y‖ := hsep
+    _ ≤ (ρ * ‖y‖) * ‖cosThetaEmbedding U X y‖ := by
+      gcongr
+      exact hproj.trans (hres y)
+    _ ≤ ρ * ‖cosThetaEmbedding U X y‖ := by
+      have hC := cosThetaEmbedding_contraction U X y
+      nlinarith [norm_nonneg y, norm_nonneg (cosThetaEmbedding U X y)]
 
 /-- Operator-norm largest-angle form.
 

@@ -35,7 +35,26 @@ theorem norm_sub_midpoint_le_of_spectrumIn_Icc
     (hσ : SpectrumInRealSet A (Set.Icc β α)) :
     ‖A - (((β + α) / 2 : ℝ) : 𝕜) • ContinuousLinearMap.id 𝕜 E‖
       ≤ (α - β) / 2 := by
-  sorry
+  let c : ℝ := (β + α) / 2
+  let ρ : ℝ := (α - β) / 2
+  have hρ : 0 ≤ ρ := by dsimp [ρ]; linarith
+  have hspectrum :
+      spectrum 𝕜
+          (A - ((c : ℝ) : 𝕜) • ContinuousLinearMap.id 𝕜 E) ⊆
+        Metric.closedBall 0 ρ := by
+    intro z hz
+    obtain ⟨r, hrA, rfl⟩ :=
+      RCLikeSpectralBridge.mem_spectrum_sub_real_scalar_iff hA hz
+    have hrI : r ∈ Set.Icc β α := hσ hrA
+    change ‖(((r - c : ℝ) : 𝕜))‖ ≤ ρ
+    rw [RCLike.norm_ofReal]
+    exact abs_le.mpr ⟨by dsimp [c, ρ] at *; linarith,
+      by dsimp [c, ρ] at *; linarith⟩
+  have hcenterSelf :
+      (A - ((c : ℝ) : 𝕜) • ContinuousLinearMap.id 𝕜 E).IsSymmetric :=
+    hA.sub (ContinuousLinearMap.isSymmetric_id.smul ((c : ℝ) : 𝕜))
+  exact RCLikeSpectralBridge.norm_le_of_selfAdjoint_spectrum_subset_closedBall
+    hcenterSelf hρ hspectrum
 
 /-- Exterior spectral inclusion makes the centered operator invertible. -/
 theorem centered_isUnit_of_spectrumOutside
@@ -45,7 +64,48 @@ theorem centered_isUnit_of_spectrumOutside
     ∃ hInv : BoundedInverseData
       (A - (((β + α) / 2 : ℝ) : 𝕜) • ContinuousLinearMap.id 𝕜 E),
       ‖hInv.inv‖ ≤ ((α - β) / 2 + δ)⁻¹ := by
-  sorry
+  let c : ℝ := (β + α) / 2
+  let γ : ℝ := (α - β) / 2 + δ
+  have hγ : 0 < γ := by dsimp [γ]; linarith
+  let T : E →L[𝕜] E :=
+    A - ((c : ℝ) : 𝕜) • ContinuousLinearMap.id 𝕜 E
+  have hTself : T.IsSymmetric :=
+    hA.sub (ContinuousLinearMap.isSymmetric_id.smul ((c : ℝ) : 𝕜))
+  have hdist : ∀ z ∈ spectrum 𝕜 T, γ ≤ ‖z‖ := by
+    intro z hz
+    obtain ⟨r, hrA, rfl⟩ :=
+      RCLikeSpectralBridge.mem_spectrum_sub_real_scalar_iff hA hz
+    have hr := hσ hrA
+    change γ ≤ |r - c|
+    rcases hr with hr | hr
+    · rw [abs_of_nonpos (by dsimp [c]; linarith)]
+      dsimp [γ, c]
+      linarith
+    · rw [abs_of_nonneg (by dsimp [c]; linarith)]
+      dsimp [γ, c]
+      linarith
+  have hzero : (0 : 𝕜) ∉ spectrum 𝕜 T := by
+    intro h0
+    have := hdist 0 h0
+    simpa using (not_le_of_gt hγ this)
+  have hunit : IsUnit T :=
+    (isUnit_iff_zero_not_mem_spectrum T).2 hzero
+  let hInv := boundedInverseDataOfIsUnit hunit
+  refine ⟨hInv, ?_⟩
+  have hinvSpectrum :
+      spectrum 𝕜 hInv.inv =
+        (fun z : 𝕜 => z⁻¹) '' spectrum 𝕜 T :=
+    RCLikeSpectralBridge.spectrum_inverse_of_isUnit hunit
+  have hinvBound : ∀ z ∈ spectrum 𝕜 hInv.inv, ‖z‖ ≤ γ⁻¹ := by
+    intro z hz
+    obtain ⟨w, hwT, rfl⟩ := hinvSpectrum ▸ hz
+    rw [norm_inv]
+    exact inv_le_inv₀ hγ (hdist w hwT)
+  have hInvNormal : IsStarNormal hInv.inv :=
+    RCLikeSpectralBridge.inverse_isNormal hTself hunit
+  simpa [γ] using
+    RCLikeSpectralBridge.norm_le_of_normal_spectrum_norm_le
+      hInvNormal (inv_nonneg.mpr hγ.le) hinvBound
 
 /-- The bounded spectral theorem supplies centered norm/inverse data. -/
 noncomputable def centeredIntervalExteriorWitness_of_gap
@@ -54,7 +114,15 @@ noncomputable def centeredIntervalExteriorWitness_of_gap
     {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
     (hgap : IntervalExteriorGap A B β α δ) :
     CenteredIntervalExteriorWitness A B β α δ := by
-  sorry
+  rcases hgap with ⟨hAin, hBout⟩ | ⟨hBin, hAout⟩
+  · exact .intervalOnLeft
+      (norm_sub_midpoint_le_of_spectrumIn_Icc hA hβα hAin)
+      (centered_isUnit_of_spectrumOutside hB hβα hδ hBout).choose
+      (centered_isUnit_of_spectrumOutside hB hβα hδ hBout).choose_spec
+  · exact .intervalOnRight
+      (norm_sub_midpoint_le_of_spectrumIn_Icc hB hβα hBin)
+      (centered_isUnit_of_spectrumOutside hA hβα hδ hAout).choose
+      (centered_isUnit_of_spectrumOutside hA hβα hδ hAout).choose_spec
 
 /-- Interval/exterior Sylvester estimate in every rectangular ideal family. -/
 theorem sylvester_mem_and_gauge_le_of_intervalExteriorGap
@@ -67,7 +135,26 @@ theorem sylvester_mem_and_gauge_le_of_intervalExteriorGap
     (hEq : A ∘L X - X ∘L B = C)
     (hC : N.Mem C) :
     N.Mem X ∧ δ * N.gauge X ≤ N.gauge C := by
-  sorry
+  let c : ℝ := (β + α) / 2
+  let ρ : ℝ := (α - β) / 2
+  have hρ : 0 ≤ ρ := by dsimp [ρ]; linarith
+  have hcenter := centered_sylvester_equation A B X C c hEq
+  cases centeredIntervalExteriorWitness_of_gap hA hB hβα hδ hgap with
+  | intervalOnLeft hAbound hBinv hBinvBound =>
+      exact sylvester_mem_and_gauge_le_of_bound_inverse_swapped
+        N hBinv
+        (A - ((c : ℝ) : 𝕜) • ContinuousLinearMap.id 𝕜 E)
+        hρ hδ (by simpa [c, ρ] using hBinvBound)
+        (by simpa [c, ρ] using hAbound)
+        (by simpa [c] using hcenter) hC
+  | intervalOnRight hBbound hAinv hAinvBound =>
+      exact sylvester_mem_and_gauge_le_of_bound_inverse
+        N hAinv
+        (B - ((c : ℝ) : 𝕜) • ContinuousLinearMap.id 𝕜 F)
+        hρ hδ (by simpa [c, ρ] using hAinvBound)
+        (by simpa [c, ρ] using hBbound)
+        (by simpa [c] using hcenter) hC
+
 end ExactSinTheta
 end Experimental
 end DavisKahan
