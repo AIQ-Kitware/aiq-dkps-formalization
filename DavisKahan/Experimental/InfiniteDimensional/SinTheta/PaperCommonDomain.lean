@@ -124,6 +124,27 @@ noncomputable def unboundedSinThetaDataOfPaperCommonDomain
   intertwines := hintertwines
 
 omit [CompleteSpace E] [CompleteSpace F] [CompleteSpace G] in
+/-- The constructed data carries the supplied residual unchanged.
+
+Downstream statements quote the source residual `R`, while the accepted engine
+returns the residual field of the constructed package; without this projection
+the two do not match syntactically. -/
+@[simp]
+theorem unboundedSinThetaDataOfPaperCommonDomain_residual
+    (A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := E))
+    (A₀ : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := F))
+    (Λ₁ : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := G))
+    (X : F →L[𝕜] E) (F₁ : G →L[𝕜] E) (R : F →L[𝕜] E)
+    (hcommon : HasPaperCommonDomain A A₀ X)
+    (hF₁ : ∀ y : Λ₁.domain, F₁ (y : G) ∈ A.domain)
+    (hR : ∀ x : F, (hx : X x ∈ A.domain) → (hx₀ : x ∈ A₀.domain) →
+      A.toLinearMap ⟨X x, hx⟩ - X (A₀.toLinearMap ⟨x, hx₀⟩) = R x)
+    (hintertwines : ∀ y : Λ₁.domain,
+      A.toLinearMap ⟨F₁ (y : G), hF₁ y⟩ = F₁ (Λ₁.toLinearMap y)) :
+    (unboundedSinThetaDataOfPaperCommonDomain A A₀ Λ₁ X F₁ R
+      hcommon hF₁ hR hintertwines).residual = R := rfl
+
+omit [CompleteSpace E] [CompleteSpace F] [CompleteSpace G] in
 /-- The constructed data remembers the exact paper common-domain equality. -/
 theorem unboundedSinThetaDataOfPaperCommonDomain_hasCommonDomain
     (A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := E))
