@@ -5,6 +5,7 @@ Authors: Adam Bornemann, Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import Spectra.QuantumMechanics.BornRule.Joint.Defs
 import Spectra.YosidaHille.Basic
+import Spectra.Resolvent.Integral.Domain
 
 /-!
 # Rectangular intertwining for Stone groups and spectral calculi
@@ -64,6 +65,7 @@ lemma equation_orbit
         = X (generator V xs) := h.equation xs
     _ = X (V.U s (generator V x)) := by rw [generator_comm]
 
+open Spectra.Resolvent in
 /-- **Rectangular Stone intertwining.**  A bounded generator intertwiner
 intertwines the full one-parameter unitary groups. -/
 theorem group
@@ -88,7 +90,8 @@ theorem group
       have hXderiv : HasDerivAt (fun r => X (V.U r x))
           (I • X (V.U s (generator V xd))) s := by
         have hcomp := ((X.restrictScalars ℝ).hasFDerivAt.comp_hasDerivAt s hVderiv)
-        simpa only [ContinuousLinearMap.coe_restrictScalars', map_smul] using hcomp
+        simpa only [ContinuousLinearMap.coe_restrictScalars', map_smul,
+          Function.comp_def, xd] using hcomp
       have hcurve := group_apply_curve_hasDerivAt U
         (v := fun r => X (V.U r x))
         (v' := I • X (V.U s (generator V xd)))
@@ -102,7 +105,7 @@ theorem group
             (I • U.U (t - s)
               (generator U ⟨X (V.U s x), h.mapsTo_domain xs⟩))
             + U.U (t - s) (I • X (V.U s (generator V xd))) = 0 by
-          rw [hkey, map_smul, map_smul, neg_one_smul, neg_add_cancel]] at hcurve
+          rw [hkey, map_smul, neg_one_smul, neg_add_cancel]] at hcurve
       exact hcurve
     have hconst : g 0 = g t :=
       is_const_of_deriv_eq_zero
