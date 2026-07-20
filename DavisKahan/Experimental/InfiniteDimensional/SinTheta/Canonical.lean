@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.GenuineIntervalExterior
-import DavisKahan.Experimental.InfiniteDimensional.SinTheta.LegacyGapCompletion
+import DavisKahan.SinTheta.Unbounded.LegacyGap
 
 /-!
 # Canonical Davis--Kahan 1970 single-angle targets

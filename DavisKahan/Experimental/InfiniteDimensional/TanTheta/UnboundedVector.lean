@@ -5,7 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.TanTheta.Vector
 import DavisKahan.Interop.Spectra.SpectralRestriction
-import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.BoundedFromSpectrum
+import DavisKahan.Interop.Spectra.BoundedFromSpectrum
 
 /-!
 # The unbounded Davis--Kahan tangent theorem, per-vector form

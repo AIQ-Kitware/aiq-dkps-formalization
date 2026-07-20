@@ -1,44 +1,24 @@
 /-
 Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
-Authors: Jon Crall, Claude Fable 5
+Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.Experimental.InfiniteDimensional.SinTheta.GenuineUnbounded
+import DavisKahan.Sylvester.ShiftedInverse
+import DavisKahan.Sylvester.Unbounded.Neumann
 import Mathlib.Analysis.Normed.Operator.Extend
 
 /-!
-# The honest unbounded `sin Θ` layer: unitary-invariant ideal scope
+# Ideal-gauge shifted-inverse estimates
 
-Ideal-gauge companion to `SinTheta/GenuineUnbounded.lean`, lifting the
-operator-norm unbounded `sin Θ` endpoint to the paper's unitary-invariant
-norm scope over any `RectangularSymmetricIdealFamily`.
-
-Main results, all fully proved:
-
-* `exists_bounded_shift_extension`: a symmetric closed operator whose
-  quadratic form lies in `[β, α]` admits a bounded extension of its shift
-  by the center `c = (α+β)/2`, of norm at most the radius `r = (α-β)/2` —
-  the continuous extension along the dense domain embedding of the shifted
-  graph map.
-* `mem_and_gauge_le_of_boundedLeft_exteriorRight`: the ideal-gauge
-  constant-one Sylvester estimate in the `sin Θ` orientation — bounded
-  interval block on the left (through its shift extension), exterior closed
-  block on the right through a proof-carrying bounded shifted right inverse.
-  The solution is exhibited as the ideal-gauge limit of the Neumann
-  iteration `Y = S Y J - C J`, membership coming from the family's
-  `gauge_complete` field and operator-norm limit uniqueness.
-* `sinTheta_unbounded_gauge`: **the unbounded Davis--Kahan `sin Θ` theorem
-  at unitary-invariant ideal scope** — for the paper-shaped
-  `UnboundedSinThetaData` with the trial block's form in `[β, α]`, the
-  complementary block's shifted resolvent bounded by `((α-β)/2 + δ)⁻¹`,
-  and the projected residual in the ideal, the projected angle operator is
-  in the ideal with `δ ‖X⋆ F₁‖_N ≤ ‖R⋆ F₁‖_N`.
+The bounded shift extension and the exterior-left/interval-right ideal-gauge
+Sylvester estimate built from it.
 -/
 
 namespace ForMathlib
 namespace DavisKahan
 namespace Experimental
 namespace ExactSinTheta
+
 
 open scoped InnerProductSpace
 
@@ -183,57 +163,6 @@ theorem mem_and_gauge_le_of_exteriorLeft_intervalRight
     have h := hleft x
     rw [sub_eq_add_neg] at h
     exact h
-
-/-- **The unbounded Davis--Kahan `sin Θ` theorem at unitary-invariant ideal
-scope.**  For the paper-shaped `UnboundedSinThetaData` with the trial
-block's quadratic form in `[β, α]` and the complementary block's shifted
-resolvent bounded by `((α-β)/2 + δ)⁻¹`, if the projected residual
-`R⋆ ∘ F₁` lies in the rectangular symmetric ideal family `N`, then so does
-`X⋆ ∘ F₁`, with `δ · gauge (X⋆ ∘ F₁) ≤ gauge (R⋆ ∘ F₁)`. -/
-theorem sinTheta_unbounded_gauge
-    (N : RectangularSymmetricIdealFamily (𝕜 := 𝕜))
-    (D : UnboundedSinThetaData (𝕜 := 𝕜) (E := E) (F := F) (G := G))
-    (hA : D.A.IsSelfAdjoint) (hA₀ : D.A₀.IsSelfAdjoint)
-    (hΛ₁ : D.Λ₁.IsSelfAdjoint)
-    {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
-    (hA₀low : SemiboundedBelow D.A₀ β) (hA₀high : SemiboundedAbove D.A₀ α)
-    (hΛres : TwoSidedShiftedInverseBound D.Λ₁ ((α + β) / 2)
-      ((α - β) / 2 + δ))
-    (hC : N.Mem (D.residual.adjoint ∘L D.F₁)) :
-    N.Mem (D.X.adjoint ∘L D.F₁) ∧
-      δ * N.gauge (D.X.adjoint ∘L D.F₁) ≤
-        N.gauge (D.residual.adjoint ∘L D.F₁) := by
-  obtain ⟨S, hSnorm, hSeq⟩ :=
-    exists_bounded_shift_extension hA₀.isSymmetric hβα hA₀low hA₀high
-  obtain ⟨J, hdom, _hleft, hright, hJnorm⟩ := hΛres
-  have hEqu := unbounded_adjoint_residual_block_identity D hA hA₀ hΛ₁
-  have hρ : (0 : ℝ) ≤ (α - β) / 2 := by linarith
-  have hEq' : ∀ y : D.Λ₁.domain,
-      S ((D.X.adjoint ∘L D.F₁) (y : G)) -
-        ((D.X.adjoint ∘L D.F₁) (D.Λ₁.toLinearMap y) -
-          (((α + β) / 2 : ℝ) : 𝕜) • (D.X.adjoint ∘L D.F₁) (y : G)) =
-      (-(D.residual.adjoint ∘L D.F₁)) (y : G) := by
-    intro y
-    have h1 := hEqu.equation y
-    have h2 := hSeq ⟨(D.X.adjoint ∘L D.F₁) (y : G), hEqu.mapsTo_domain y⟩
-    rw [h2]
-    calc D.A₀.toLinearMap
-          ⟨(D.X.adjoint ∘L D.F₁) (y : G), hEqu.mapsTo_domain y⟩ -
-            (((α + β) / 2 : ℝ) : 𝕜) • (D.X.adjoint ∘L D.F₁) (y : G) -
-          ((D.X.adjoint ∘L D.F₁) (D.Λ₁.toLinearMap y) -
-            (((α + β) / 2 : ℝ) : 𝕜) • (D.X.adjoint ∘L D.F₁) (y : G))
-        = D.A₀.toLinearMap
-            ⟨(D.X.adjoint ∘L D.F₁) (y : G), hEqu.mapsTo_domain y⟩ -
-          (D.X.adjoint ∘L D.F₁) (D.Λ₁.toLinearMap y) := by abel
-      _ = (-(D.residual.adjoint ∘L D.F₁)) (y : G) := h1
-  have hmain := mem_and_gauge_le_of_boundedLeft_exteriorRight N hρ hδ
-    hSnorm hdom hright hJnorm hEq' (N.neg_mem hC)
-  refine ⟨hmain.1, ?_⟩
-  have hgC : N.gauge (-(D.residual.adjoint ∘L D.F₁)) =
-      N.gauge (D.residual.adjoint ∘L D.F₁) := N.gauge_neg hC
-  calc δ * N.gauge (D.X.adjoint ∘L D.F₁)
-      ≤ N.gauge (-(D.residual.adjoint ∘L D.F₁)) := hmain.2
-    _ = N.gauge (D.residual.adjoint ∘L D.F₁) := hgC
 
 end ExactSinTheta
 end Experimental

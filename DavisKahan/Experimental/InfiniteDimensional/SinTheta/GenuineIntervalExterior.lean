@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.Unbounded
-import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.UnboundedIntervalExterior
+import DavisKahan.Sylvester.Unbounded.IntervalExterior
 
 /-!
 # Source-shaped finite-interval unbounded sine-theta theorem
