@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
 import DavisKahan.BoundedOperator.Basic
-import DavisKahan.Experimental.InfiniteDimensional.Core.AbstractSpectrum
+import DavisKahan.SpectralTheory.AbstractSpectrum
 
 /-!
 # Compatibility layer for the former `DavisKahanExt.Basic`
@@ -88,10 +88,6 @@ noncomputable abbrev sinThetaEmbedding (U : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] (X : F →L[𝕜] E) := DavisKahan.sinThetaEmbedding U X
 noncomputable abbrev reflectionOperator (U : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] := DavisKahan.reflectionOperator U
-noncomputable abbrev sinTwoThetaEmbedding (U : Submodule 𝕜 E)
-    [U.HasOrthogonalProjection] (X : F →L[𝕜] E) :=
-  DavisKahan.Experimental.Foundation.sinTwoThetaEmbedding U X
-
 theorem reduces_orthogonalComplement {A : E →L[𝕜] E}
     (hA : IsSelfAdjointOperator A) {U : Submodule 𝕜 E}
     (hU : ∀ x ∈ U, A x ∈ U) : Reduces A U :=

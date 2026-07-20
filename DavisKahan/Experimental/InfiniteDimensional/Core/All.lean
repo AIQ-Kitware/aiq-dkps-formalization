@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
 import DavisKahan.Experimental.InfiniteDimensional.Core.AbstractSpectrum
-import DavisKahan.Experimental.InfiniteDimensional.Core.Compatibility
+import DavisKahan.SpectralTheory.Compatibility
 import DavisKahan.SpectralTheory.Complexification.Basic
 import DavisKahan.Experimental.InfiniteDimensional.Core.ComplexificationSubspace
 import DavisKahan.Experimental.InfiniteDimensional.Core.Forms
