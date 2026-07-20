@@ -9,7 +9,7 @@ import DavisKahan.Interop.Spectra.PVMSubspace
 import DavisKahan.Interop.Spectra.SpectralRestriction
 import DavisKahan.Interop.Spectra.SpectralRestrictionOperator
 import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.RealSpectralRestriction
-import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.SpectralRestrictionLocalization
+import DavisKahan.Interop.Spectra.SpectralRestrictionLocalization
 import DavisKahan.Interop.Spectra.OperatorAbsoluteValue
 import DavisKahan.Interop.Spectra.ApproximationNumberMinMax
 import DavisKahan.Interop.Spectra.SinAngle

@@ -1,7 +1,9 @@
 name = "aiq_dkps_formalization"
 version = "0.1.0"
 keywords = ["math", "formalization", "DKPS", "MDS", "spectral-perturbation"]
-defaultTargets = ["ForMathlib", "DavisKahan", "Acharyya2024", "Acharyya2025", "DkpsQuench2026", "Helm2025"]
+# The ordinary build is the complete claimed-mathematics build.  Admission-
+# dependent API experiments are available explicitly as DavisKahan.Experimental.
+defaultTargets = ["ForMathlib", "DavisKahan.All", "Acharyya2024", "Acharyya2025", "DkpsQuench2026", "Helm2025"]
 
 # Standalone Lean workspace for Davis--Kahan and four DKPS paper developments.
 # The libraries share one Mathlib checkout/build and are intentionally kept as

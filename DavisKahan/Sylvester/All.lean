@@ -5,5 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Sylvester.ClosedSylvesterEquation
 import DavisKahan.Sylvester.PairwiseSpectrumGap
+import DavisKahan.Sylvester.Bounded
+import DavisKahan.Sylvester.PairwiseHomogeneousUniqueness
 
 /-! # Sylvester theory -/

@@ -3,8 +3,8 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.Experimental.InfiniteDimensional.Ideals.OperatorModulusApproximation
-import DavisKahan.Experimental.InfiniteDimensional.SinTheta.PaperOperatorAngleBridge
+import DavisKahan.OperatorIdeal.ApproximationNumbers.OperatorModulus
+import DavisKahan.Sources.DavisKahan1970.SineTheta.OperatorAngleBridge
 import Mathlib.Analysis.SpecialFunctions.Trigonometric.Inverse
 import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Instances
 

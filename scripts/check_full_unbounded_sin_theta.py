@@ -11,7 +11,7 @@ import sys
 
 
 TARGETS = [
-    "DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.OrderedHalfLine",
+    "DavisKahan.Interop.Spectra.OrderedHalfLine",
     "DavisKahan.Experimental.InfiniteDimensional.Sylvester.GenuineCutoffInterface",
     "DavisKahan.Experimental.InfiniteDimensional.Sylvester.GenuineSpectralCutoff",
     "DavisKahan.Experimental.InfiniteDimensional.Sylvester.GenuineBoundedTruncation",

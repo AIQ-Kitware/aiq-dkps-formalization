@@ -5,7 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Experimental.InfiniteDimensional.Sylvester.Unbounded
 import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.UnboundedIntervalExterior
-import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.OrderedHalfLine
+import DavisKahan.Interop.Spectra.OrderedHalfLine
 import DavisKahan.Experimental.InfiniteDimensional.Sylvester.GenuineCutoffInterface
 import DavisKahan.Experimental.InfiniteDimensional.Sylvester.GenuineOrderedEngineDirect
 

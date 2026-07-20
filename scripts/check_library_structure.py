@@ -26,6 +26,7 @@ import sys
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 LIB_DIRS = ("DavisKahan", "ForMathlib")
 EXPERIMENTAL = ".Experimental."
+EXPERIMENTAL_ROOT = "DavisKahan.Experimental"
 CURATED_ROOT = "DavisKahan"
 DEV_ROOT = "DavisKahan.All"
 FORMATHLIB_ROOT = "ForMathlib"
@@ -49,6 +50,10 @@ BLOCK_COMMENT = re.compile(r"/-.*?-/", re.S)
 LINE_COMMENT = re.compile(r"--.*?$", re.M)
 ADMISSION = re.compile(r"\b(?:sorry|admit)\b")
 
+
+
+def is_experimental(module: str) -> bool:
+    return module == EXPERIMENTAL_ROOT or EXPERIMENTAL in module
 
 def load() -> tuple[dict[str, pathlib.Path], dict[str, list[str]], dict[str, bool]]:
     files: dict[str, pathlib.Path] = {}
@@ -110,7 +115,7 @@ def report(name: str, violations: list[str], limit: int = 12) -> bool:
 
 def main() -> None:
     files, imports, admitted = load()
-    production = [m for m in files if EXPERIMENTAL not in m]
+    production = [m for m in files if not is_experimental(m)]
     memo: dict[str, bool] = {}
 
     print(f"Library structure check over {len(files)} modules "
@@ -131,7 +136,7 @@ def main() -> None:
         f"{m} -> {dep}"
         for m in production
         for dep in imports.get(m, [])
-        if EXPERIMENTAL in dep
+        if is_experimental(dep)
     )
     check2 = report("2. no production module imports Experimental", crossing)
 
@@ -139,7 +144,7 @@ def main() -> None:
         "3. every Experimental module has an admission in its closure",
         sorted(
             m for m in files
-            if EXPERIMENTAL in m
+            if is_experimental(m)
             and not in_admission_closure(m, imports, admitted, memo)
         ),
     )

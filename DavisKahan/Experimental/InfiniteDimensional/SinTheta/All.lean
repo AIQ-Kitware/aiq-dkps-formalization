@@ -5,7 +5,7 @@ Authors: Jon Crall, GPT 5.6 High
 -/
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.General
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.SpectralBridge
-import DavisKahan.Experimental.InfiniteDimensional.SinTheta.FrameFactorization
+import DavisKahan.SinTheta.FrameFactorization
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.Bounded
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.Unbounded
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.GenuineUnbounded

@@ -5,7 +5,7 @@ Authors: Jon Crall, GPT 5.6 High
 -/
 import DavisKahan.Experimental.InfiniteDimensional.Ideals.Symmetric
 import DavisKahan.OperatorIdeal.UnitarilyInvariant.RectangularFamily
-import DavisKahan.Experimental.InfiniteDimensional.Ideals.ApproximationNumbers
+import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
 import DavisKahan.Experimental.InfiniteDimensional.Ideals.CompactAndSingular
 
 /-! # Experimental operator-ideal infrastructure -/

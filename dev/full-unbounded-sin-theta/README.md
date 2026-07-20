@@ -60,7 +60,7 @@ Run:
 
 ```bash
 lake build \
-  DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.OrderedHalfLine \
+  DavisKahan.Interop.Spectra.OrderedHalfLine \
   DavisKahan.Experimental.InfiniteDimensional.Sylvester.GenuineCutoffInterface \
   DavisKahan.Experimental.InfiniteDimensional.Sylvester.GenuineOrderedEngine \
   DavisKahan.Experimental.InfiniteDimensional.Sylvester.GenuineAllGap \

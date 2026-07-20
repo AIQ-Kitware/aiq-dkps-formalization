@@ -16,6 +16,8 @@ import DavisKahan.Interop.Spectra.HalmosTwoProjections
 import DavisKahan.Interop.Spectra.OperatorAbsoluteValue
 import DavisKahan.Interop.Spectra.PVMSubspace
 import DavisKahan.Interop.Spectra.SinAngle
+import DavisKahan.Interop.Spectra.OrderedHalfLine
+import DavisKahan.Interop.Spectra.SpectralRestrictionLocalization
 
 /-!
 # Spectra interoperability layer
