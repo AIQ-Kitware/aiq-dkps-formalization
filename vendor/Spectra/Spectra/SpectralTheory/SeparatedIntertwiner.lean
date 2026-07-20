@@ -27,6 +27,13 @@ open scoped InnerProductSpace
 open Spectra.Operator
 open Spectra.YosidaHille
 open Spectra.Resolvent
+-- The spectral (Borel) measure lives in `Spectra.Borel`, which is not opened by
+-- any of the namespaces above.
+open Spectra.Borel
+-- The Born measure and its support estimate sit one namespace deeper than they are
+-- cited below: under `BornRule.PVM` and `BornRule.Observable`, not under `BornRule`.
+open Spectra.QuantumMechanics.BornRule.PVM
+open Spectra.QuantumMechanics.BornRule.Observable
 
 namespace Spectra.QuantumMechanics.SpectralTheory
 
@@ -60,10 +67,8 @@ private theorem spectralProjection_eq_zero_of_disjoint_spectrum
     spectralProjection_eq_zero_iff_measure_zero]
   let μ := borelMeasure (genToGroup A.selfAdjoint) ψ
   have hsupp : μ.support ⊆ spectrum A.toLinearPMap := by
-    simpa [μ, Spectra.QuantumMechanics.BornRule.bornMeasure,
-      SelfAdjointOperator.spectralPVM] using
-      Spectra.QuantumMechanics.BornRule.
-        bornMeasure_support_subset_spectrum A ψ
+    simpa [μ, bornMeasure, SelfAdjointOperator.spectralPVM] using
+      bornMeasure_support_subset_spectrum A ψ
   have hsubset : S ⊆ μ.supportᶜ := by
     intro lam hlam hlsupp
     exact Set.disjoint_left.mp hdisj hlam (hsupp hlsupp)
@@ -87,10 +92,8 @@ theorem spectralProjection_spectrum_eq_id
       spectralProjection_eq_zero_iff_measure_zero]
     let μ := borelMeasure (genToGroup A.selfAdjoint) ψ
     have hsupp : μ.support ⊆ S := by
-      simpa [μ, S, Spectra.QuantumMechanics.BornRule.bornMeasure,
-        SelfAdjointOperator.spectralPVM] using
-        Spectra.QuantumMechanics.BornRule.
-          bornMeasure_support_subset_spectrum A ψ
+      simpa [μ, S, bornMeasure, SelfAdjointOperator.spectralPVM] using
+        bornMeasure_support_subset_spectrum A ψ
     have hsubset : Sᶜ ⊆ μ.supportᶜ := by
       intro lam hlam hlsupp
       exact hlam (hsupp hlsupp)
