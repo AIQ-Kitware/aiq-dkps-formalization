@@ -5,14 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.TanTwoTheta.BoundedOffDiagonal
 import DavisKahan.TanTwoTheta.Unbounded
-import DavisKahan.TanTwoTheta.UnboundedVector
 import DavisKahan.TanTwoTheta.UnboundedIdeal
+import DavisKahan.TanTwoTheta.UnboundedVector
 
-/-!
-# Tangent-two-theta theory
-
-The bounded quarter-acute conversion together with the unbounded
-operator-norm, per-vector, and ideal-gauge tangent-two-theta specializations
-under an explicit quarter-acuteness hypothesis.  The sharper selected-Riccati
-form remains a separate open obligation.
--/
+/-! # `DavisKahan/TanTwoTheta` -/

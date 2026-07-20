@@ -11,7 +11,7 @@ import tempfile
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 TARGET = "DavisKahan.Sources.DavisKahan1970.FullSineTheta"
-AUDIT = ROOT / "DavisKahan/Experimental/InfiniteDimensional/SinTheta/FullPaperSineThetaAudit.lean"
+AUDIT = ROOT / "DavisKahan/Sources/DavisKahan1970/Audits/FullPaperSineTheta.lean"
 EXPECTED_AXIOMS = ("propext", "Classical.choice", "Quot.sound")
 AXIOM_REPORT = re.compile(r"'(?P<name>[^']+)' depends on axioms: \[(?P<axioms>[^\]]*)\]")
 

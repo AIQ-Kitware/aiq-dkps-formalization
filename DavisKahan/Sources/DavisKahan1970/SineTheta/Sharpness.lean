@@ -5,7 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Sources.DavisKahan1970.Ideals.RankOneNormalization
 import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtFrobenius
-import DavisKahan.Experimental.InfiniteDimensional.SinTheta.PaperTheorem61Universal
+import DavisKahan.Sources.DavisKahan1970.SineTheta.Theorem61Universal
 import DavisKahan.Geometry.Angle.OperatorAngleReal
 import ForMathlib.Analysis.InnerProductSpace.UnitarilyInvariantNorm
 

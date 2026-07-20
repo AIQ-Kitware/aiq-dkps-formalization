@@ -24,7 +24,7 @@ AUDITS = [
     ROOT / "DavisKahan/Experimental/InfiniteDimensional/Sylvester/"
     "PaperHilbertSchmidtMathAheadAudit.lean",
     ROOT / "DavisKahan/Experimental/InfiniteDimensional/SinTheta/"
-    "FullPaperSineThetaAudit.lean",
+    "FullPaperSineTheta.lean",
 ]
 EXPECTED = "[propext, Classical.choice, Quot.sound]"
 

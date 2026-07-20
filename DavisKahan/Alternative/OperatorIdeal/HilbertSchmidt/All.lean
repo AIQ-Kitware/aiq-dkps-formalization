@@ -5,4 +5,4 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Alternative.OperatorIdeal.HilbertSchmidt.ColumnExpansion
 
-/-! # Alternative Hilbert--Schmidt proofs -/
+/-! # `DavisKahan/Alternative/OperatorIdeal/HilbertSchmidt` -/

@@ -9,4 +9,4 @@ import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SubspaceSingularTranspo
 import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.UnitaryInvariantNorm
 import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.UnitaryInvariantNormLaws
 
-/-! # Source norm infrastructure for Davis--Kahan 1970 Section 6 -/
+/-! # `DavisKahan/Sources/DavisKahan1970/SineTheta/Norms` -/

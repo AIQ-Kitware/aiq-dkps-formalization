@@ -6,4 +6,4 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 import DavisKahan.SpectralTheory.ReducingSubspace.Restriction
 import DavisKahan.SpectralTheory.ReducingSubspace.RestrictionExtras
 
-/-! # Reducing subspaces and operator restrictions -/
+/-! # `DavisKahan/SpectralTheory/ReducingSubspace` -/
