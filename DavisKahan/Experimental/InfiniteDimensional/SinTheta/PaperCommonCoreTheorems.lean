@@ -5,7 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.PaperCommonCore
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.PaperTheorem61Universal
-import DavisKahan.Experimental.InfiniteDimensional.SinTheta.PaperTheorem62
+import DavisKahan.Sources.DavisKahan1970.SineTheta.Theorem62
 
 /-!
 # Literal graph-core forms of the generalized sine theorems

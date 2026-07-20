@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.PaperCommonDomain
-import DavisKahan.Experimental.InfiniteDimensional.SinTheta.PaperTheorem62
+import DavisKahan.Sources.DavisKahan1970.SineTheta.Theorem62
 
 /-!
 # Literal common-domain source forms of Theorems 6.1 and 6.2

@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Interop.Spectra.UnitaryConjugation
-import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.SpectralProjectionSinTheta
+import DavisKahan.Interop.Spectra.SpectralProjectionSinTheta
 import DavisKahan.Geometry.Angle.OperatorAngleComplex
 import ForMathlib.Analysis.InnerProductSpace.ProjectionGap
 

@@ -19,8 +19,8 @@ import DavisKahan.Interop.Spectra.DirectRotationSquare
 import DavisKahan.Interop.Spectra.GapResolvent
 import DavisKahan.Interop.Spectra.BoundedFromSpectrum
 import DavisKahan.Sylvester.Unbounded.IntervalExterior
-import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.BoundedPerturbationSinTheta
-import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.SpectralProjectionSinTheta
+import DavisKahan.Interop.Spectra.BoundedPerturbationSinTheta
+import DavisKahan.Interop.Spectra.SpectralProjectionSinTheta
 
 /-!
 # Active Spectra bridge

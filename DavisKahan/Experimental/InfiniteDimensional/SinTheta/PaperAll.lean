@@ -3,15 +3,15 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.Experimental.InfiniteDimensional.Ideals.PaperNormCorrespondence
-import DavisKahan.Experimental.InfiniteDimensional.Ideals.PaperUnitaryInvariantNormInstances
+import DavisKahan.Sources.DavisKahan1970.Ideals.NormCorrespondence
+import DavisKahan.Sources.DavisKahan1970.Ideals.UnitaryInvariantNormInstances
 import DavisKahan.Sources.DavisKahan1970.SineTheta.CosineAngle
 import DavisKahan.Sources.DavisKahan1970.SineTheta.AngleIdentity
 import DavisKahan.Sources.DavisKahan1970.SineTheta.FullAngle
 import DavisKahan.Sources.DavisKahan1970.SineTheta.FullAngleReal
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.PaperCommonDomainTheorems
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.PaperCommonCoreTheorems
-import DavisKahan.Experimental.InfiniteDimensional.SinTheta.PaperSymmetric
+import DavisKahan.Sources.DavisKahan1970.SineTheta.Symmetric
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.PaperSharpness
 
 /-!

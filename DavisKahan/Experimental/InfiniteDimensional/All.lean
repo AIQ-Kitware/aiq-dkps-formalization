@@ -10,14 +10,14 @@ import DavisKahan.Experimental.InfiniteDimensional.SinTheta.All
 import DavisKahan.Experimental.InfiniteDimensional.DirectRotation
 import DavisKahan.Experimental.InfiniteDimensional.DoubleAngle
 import DavisKahan.Experimental.InfiniteDimensional.DoubleAngleGenuine
-import DavisKahan.Experimental.InfiniteDimensional.DoubleAngleUnbounded
-import DavisKahan.Experimental.InfiniteDimensional.DoubleAngleUnboundedIdeal
+import DavisKahan.DoubleAngle.Unbounded
+import DavisKahan.DoubleAngle.UnboundedIdeal
 import DavisKahan.Experimental.InfiniteDimensional.GraphSubspace
 import DavisKahan.Experimental.InfiniteDimensional.OperatorBlocks.OffDiagonal
 import DavisKahan.Experimental.InfiniteDimensional.Riccati.All
 import DavisKahan.Experimental.InfiniteDimensional.Sharpness
 import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.All
 import DavisKahan.Experimental.InfiniteDimensional.TanTheta.All
-import DavisKahan.Experimental.InfiniteDimensional.TanTwoTheta.All
+import DavisKahan.TanTwoTheta.All
 
 /-! # Experimental infinite-dimensional Davis--Kahan theory -/

@@ -5,7 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.TanTheta.Vector
 import DavisKahan.Experimental.InfiniteDimensional.TanTheta.GenuineSpectrum
-import DavisKahan.Experimental.InfiniteDimensional.TanTheta.UnboundedVector
+import DavisKahan.TanTheta.UnboundedVector
 import DavisKahan.Experimental.InfiniteDimensional.TanTheta.UnboundedGenuineSpectrum
 import DavisKahan.Experimental.InfiniteDimensional.TanTheta.UnboundedGraphAngle
 
