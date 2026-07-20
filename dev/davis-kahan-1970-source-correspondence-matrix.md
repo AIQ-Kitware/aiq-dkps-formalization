@@ -67,8 +67,17 @@ appendix forms are specializations rather than parallel proofs.
 ## Theorem 6.1
 
 Conclusion: membership of the directed sine block in the ideal, and
-`gap * ‖sin Θ‖ ≤ ‖residual‖` in **every** unitarily invariant norm
-(`_across` = across the whole norm family, not one fixed gauge).
+
+```
+P.gap * P.frameLowerBound * N.gauge S.operator ≤ N.gauge P.data.residual
+```
+
+in **every** unitarily invariant norm — that is `δ ε ‖sin Θ₀‖ ≤ ‖R‖`, matching
+the paper's Theorem 6.1 conclusion including the frame factor `ε` from
+`E₀* E₀ ≥ ε²`.  (`_across` = across the whole norm family, not one fixed gauge,
+and with the representative allowed to act between arbitrary coordinate spaces,
+matching "let `sin Θ₀` be **any** operator with the same singular values as
+`P Q̃`".)
 
 | paper item | source name | target |
 | --- | --- | --- |
