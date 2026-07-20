@@ -54,7 +54,7 @@ structure HasGeneratorSylvesterEquation
 private theorem tendsto_neg_punctured :
     Tendsto (fun t : ℝ => -t) (𝓝[≠] (0 : ℝ)) (𝓝[≠] (0 : ℝ)) := by
   apply tendsto_nhdsWithin_of_tendsto_nhds_of_eventually_within
-  · simpa using (continuous_neg.tendsto (0 : ℝ)).mono_left nhdsWithin_le_iff_eventually
+  · simpa using (continuous_neg.tendsto (0 : ℝ)).mono_left nhdsWithin_le_nhds
   · filter_upwards [self_mem_nhdsWithin] with t ht
     simpa using ht
 
@@ -69,8 +69,12 @@ theorem genDiffQuot_toOperator_decomposition
         U.U t
           (toOperator z
             (OneParameterUnitaryGroup.genDiffQuot V x (-t))) := by
+  -- `toOperator` is the unbundled map, so `map_smul`/`map_sub` do not reach it;
+  -- without its own linearity lemmas the difference quotient never splits and
+  -- the flow rewrite has nothing to fire on.
   simp only [OneParameterUnitaryGroup.genDiffQuot_apply,
-    map_smul, map_sub, toOperator_sylvesterGroup,
+    map_smul, map_sub, toOperator_smul, toOperator_sub,
+    toOperator_sylvesterGroup, smul_apply, sub_apply,
     ContinuousLinearMap.comp_apply]
   by_cases ht : t = 0
   · subst t
@@ -133,7 +137,10 @@ theorem toOperator_maps_generatorDomain
       (𝓝 (toOperator z (OneParameterUnitaryGroup.generator V x))) := by
     simpa [U.identity] using hsecondRaw
 
-  rw [OneParameterUnitaryGroup.mem_generatorDomain]
+  -- The goal names the partial operator's domain; the membership lemma is
+  -- stated for the generator domain, and the two are bridged definitionally.
+  rw [OneParameterUnitaryGroup.generator_domain,
+    OneParameterUnitaryGroup.mem_generatorDomain]
   refine ⟨toOperator c (x : F) +
     toOperator z (OneParameterUnitaryGroup.generator V x), ?_⟩
   have hsum := hfirst.add hsecond
