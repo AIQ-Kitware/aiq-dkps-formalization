@@ -244,6 +244,11 @@ theorem toOperator_add (z w : Space E F) :
   simpa only [toOperatorL_apply] using map_add toOperatorL z w
 
 @[simp]
+theorem toOperator_sub (z w : Space E F) :
+    toOperator (z - w) = toOperator z - toOperator w := by
+  simpa only [toOperatorL_apply] using map_sub toOperatorL z w
+
+@[simp]
 theorem toOperator_smul (c : ℂ) (z : Space E F) :
     toOperator (c • z) = c • toOperator z := by
   simpa only [toOperatorL_apply] using map_smul toOperatorL c z
