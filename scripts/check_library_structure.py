@@ -12,10 +12,15 @@ These are the five checks required by
 5. the full-paper audit still points at existing paths and has not silently
    dropped audited targets.
 
-Checks 1 and 2 are expected to fail until the admitted foundational modules are
-split; see `dev/sine-theta-move-manifest-2026-07-20.md`. Reporting those
-violations precisely is the point of this script, so it exits nonzero while they
-stand.
+All five checks pass as of the direct-Spectra production closure. Check 2 in
+particular is now green: the production interval/exterior estimate comes from
+the vendored Spectra calculus, so no production module needs the admitted
+generic truncation API. See
+`dev/davis-kahan-1970-source-correspondence-matrix.md` for what the audited
+surface does and does not claim.
+
+Reporting violations precisely is the point of this script, so it exits nonzero
+whenever any check fails.
 """
 from __future__ import annotations
 
@@ -177,7 +182,7 @@ def main() -> None:
         print("Library structure: CLEAN")
         return
     print("Library structure: violations remain "
-          "(see dev/sine-theta-move-manifest-2026-07-20.md)")
+          "(see dev/davis-kahan-1970-source-correspondence-matrix.md)")
     raise SystemExit(1)
 
 
