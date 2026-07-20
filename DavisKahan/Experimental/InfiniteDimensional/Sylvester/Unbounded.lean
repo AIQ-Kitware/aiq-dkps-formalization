@@ -6,6 +6,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
 import DavisKahan.Experimental.InfiniteDimensional.Core.UnboundedSpectral
 import DavisKahan.Sylvester.Bounded
+import DavisKahan.Sylvester.Gap
 import ForMathlib.Analysis.InnerProductSpace.CoerciveUnit
 
 /-!
@@ -843,25 +844,6 @@ theorem unbounded_sylvester_mem_and_gauge_le_of_intervalExteriorGap
     exact sylvester_mem_and_gauge_le_of_unbounded_bound_inverse
       N hAinv S hρ hδ hAinvNorm hSnorm hEq' hC
 
-/-- All source-faithful unbounded gap configurations needed by the `sin Θ`
-endpoint.  The ordered constructors allow both diagonal blocks to be genuinely
-unbounded; the interval/exterior constructor has a bounded spectral block. -/
-inductive UnboundedSylvesterGap
-    (A : ClosedOperatorOnE (𝕜 := 𝕜) (E := E))
-    (B : ClosedOperatorOnF (𝕜 := 𝕜) (F := F))
-    (δ : ℝ) : Prop where
-  | intervalExterior
-      {β α : ℝ}
-      (hβα : β ≤ α)
-      (hgap : UnboundedIntervalExteriorGap A B β α δ)
-  | leftAboveRightBelow
-      (c : ℝ)
-      (hA : SemiboundedBelow A (c + δ))
-      (hB : SemiboundedAbove B c)
-  | leftBelowRightAbove
-      (c : ℝ)
-      (hA : SemiboundedAbove A c)
-      (hB : SemiboundedBelow B (c + δ))
 
 /-- Complete unified unbounded Sylvester estimate.  The finite-interval branch
 uses the one-unbounded theorem; the two ordered branches use the paper's

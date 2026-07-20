@@ -1,0 +1,44 @@
+/-
+Copyright (c) 2026 Kitware, Inc. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Jon Crall, OpenAI GPT-5.6 Thinking
+-/
+import DavisKahan.SpectralTheory.ClosedOperator.Basic
+
+/-!
+# Bounded realizations of closed operators
+
+A closed operator whose domain is the whole space is the restriction of a
+bounded operator.  `BoundedRealization` packages that bounded operator together
+with the domain identity and the agreement statement.
+
+This file is deliberately independent of the spectral hypotheses that usually
+produce such a realization: the structure is pure bookkeeping, so it belongs
+with the closed-operator basics rather than with any particular criterion.
+-/
+
+namespace ForMathlib
+namespace DavisKahan
+namespace Experimental
+namespace ExactSinTheta
+
+open scoped InnerProductSpace
+
+universe u v
+
+variable {𝕜 : Type u} [RCLike 𝕜]
+variable {E F : Type v}
+  [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+  [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
+
+/-- Bounded realization of a closed operator on its full domain. -/
+structure BoundedRealization
+    (A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := E)) where
+  operator : E →L[𝕜] E
+  domain_eq_top : A.domain = ⊤
+  agrees : ∀ x : A.domain, operator (x : E) = A.toLinearMap x
+
+end ExactSinTheta
+end Experimental
+end DavisKahan
+end ForMathlib
