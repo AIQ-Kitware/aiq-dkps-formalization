@@ -33,10 +33,10 @@ open scoped InnerProductSpace
 open scoped Topology
 open Filter
 
-universe u v w
+universe u v vF vG vH w
 
 variable {𝕜 : Type u} [RCLike 𝕜]
-variable {E F : Type v}
+variable {E : Type v} {F : Type vF}
   [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
   [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
 

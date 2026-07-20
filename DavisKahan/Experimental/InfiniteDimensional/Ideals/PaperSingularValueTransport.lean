@@ -23,7 +23,7 @@ namespace ExactSinTheta
 
 open scoped InnerProductSpace
 
-universe u vE vF vE1 vF1 vE2 vF2 vE3 vF3 vE0 vF0
+universe u vE vF vE1 vF1 vE2 vF2 vE3 vF3 vE0 vF0 vS
 
 variable {𝕜 : Type u} [RCLike 𝕜]
 variable {E : Type vE} {F : Type vF}
@@ -232,11 +232,32 @@ theorem kyFanApproximationGauge_eq {A B : E →L[𝕜] F}
   unfold kyFanApproximationGauge
   exact Finset.sum_congr rfl fun n _ => h n
 
+section IdealGauge
+
+/-! ### Gauge transport
+
+An `UnitaryInvariantIdealFamily` assigns a gauge to rectangular operators
+between Hilbert spaces drawn from a *single* universe: that is how
+`RectangularSymmetricIdealFamily` quantifies its fields, and it is not an
+incidental restriction.  A two-universe variant would be a strictly weaker
+object, since a family built for the pair `(v, v)` would no longer apply to the
+pair `(v, w)`; there is no single Lean structure carrying one gauge for all
+universe pairs at once.
+
+So the results below are stated for a shared universe, which is their natural
+generality, while `SameApproximationSingularSequence` and
+`PaperSinThetaRepresentativeAcross` above remain genuinely cross-universe:
+those are exactly the statements that do not mention a gauge. -/
+
+variable {G H : Type vS}
+  [NormedAddCommGroup G] [InnerProductSpace 𝕜 G] [CompleteSpace G]
+  [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] [CompleteSpace H]
+
 /-- Transport ideal membership and exact gauge equality along complete
 singular-value equality. -/
 theorem mem_and_gauge_eq
     (N : UnitaryInvariantIdealFamily (𝕜 := 𝕜))
-    {A B : E →L[𝕜] F}
+    {A B : G →L[𝕜] H}
     (h : SameApproximationSingularValues A B)
     (hB : N.toRectangularSymmetricIdealFamily.Mem B) :
     N.toRectangularSymmetricIdealFamily.Mem A ∧
@@ -257,7 +278,7 @@ theorem mem_and_gauge_eq
 complete singular-value sequence. -/
 theorem mem_and_mul_gauge_le
     (N : UnitaryInvariantIdealFamily (𝕜 := 𝕜))
-    {A B C : E →L[𝕜] F} {c : ℝ}
+    {A B C : G →L[𝕜] H} {c : ℝ}
     (h : SameApproximationSingularValues A B)
     (hB : N.toRectangularSymmetricIdealFamily.Mem B)
     (hbound : c * N.toRectangularSymmetricIdealFamily.gauge B ≤
@@ -269,6 +290,8 @@ theorem mem_and_mul_gauge_le
   refine ⟨hA, ?_⟩
   rw [hgauge]
   exact hbound
+
+end IdealGauge
 
 end SameApproximationSingularValues
 
@@ -310,10 +333,17 @@ noncomputable def canonical (A : E →L[𝕜] F) :
   same_singular_values := .refl A
 
 /-- Every paper representative has exactly the same ideal membership and
-gauge as the canonical block. -/
+gauge as the canonical block.
+
+Stated for a shared universe, for the reason recorded in the gauge-transport
+section above: an ideal-family gauge is defined on operators drawn from one
+universe. -/
 theorem mem_and_gauge_eq
+    {G H : Type vS}
+    [NormedAddCommGroup G] [InnerProductSpace 𝕜 G] [CompleteSpace G]
+    [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] [CompleteSpace H]
     (N : UnitaryInvariantIdealFamily (𝕜 := 𝕜))
-    {canonical : E →L[𝕜] F}
+    {canonical : G →L[𝕜] H}
     (S : PaperSinThetaRepresentative canonical)
     (hcanonical : N.toRectangularSymmetricIdealFamily.Mem canonical) :
     N.toRectangularSymmetricIdealFamily.Mem S.operator ∧

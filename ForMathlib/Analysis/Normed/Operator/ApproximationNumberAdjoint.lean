@@ -19,24 +19,29 @@ open NNReal
 
 noncomputable section
 
-universe u v
+universe u v w
 
 namespace ContinuousLinearMap
 
 open Cardinal
 
 variable {𝕜 : Type u} [RCLike 𝕜]
-variable {E F : Type v}
+variable {E : Type v} {F : Type w}
 variable [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
 variable [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
 
-/-- A finite-rank bounded operator has an adjoint of no larger rank.
+/-- A finite-rank bounded operator has an adjoint obeying the same
+natural-number rank bound.
 
 The proof factors the operator through its finite-dimensional range.  After
- taking adjoints, the adjoint still factors through that same range. -/
-private theorem rank_adjoint_le_rank_of_rank_le_nat
+ taking adjoints, the adjoint still factors through that same range.
+
+The two ranks live in different universes once the domain and codomain are
+allowed to move independently, so the conclusion is stated against the
+natural-number bound, which `Cardinal.lift` fixes. -/
+private theorem rank_adjoint_le_natCast_of_rank_le
     (R : E →L[𝕜] F) {n : ℕ} (hR : R.rank ≤ (n : Cardinal)) :
-    R.adjoint.rank ≤ R.rank := by
+    R.adjoint.rank ≤ (n : Cardinal) := by
   have hlt : R.rank < Cardinal.aleph0 :=
     hR.trans_lt Cardinal.natCast_lt_aleph0
   have hrank_eq : R.rank = (R.rank.toNat : Cardinal) := by
@@ -48,20 +53,23 @@ private theorem rank_adjoint_le_rank_of_rank_le_nat
       R.rangeRestrict.adjoint ∘L R.range.subtypeL.adjoint := by
     rw [← ContinuousLinearMap.adjoint_comp]
     congr 1
+  have hrestrict :
+      LinearMap.rank R.rangeRestrict.adjoint.toLinearMap ≤ (n : Cardinal) := by
+    have hlift := lift_rank_range_le R.rangeRestrict.adjoint.toLinearMap
+    have hbound :
+        Cardinal.lift.{v} (Module.rank 𝕜 R.range) ≤ (n : Cardinal) := by
+      calc
+        Cardinal.lift.{v} (Module.rank 𝕜 R.range)
+            ≤ Cardinal.lift.{v} ((n : Cardinal)) := Cardinal.lift_le.mpr hR
+        _ = (n : Cardinal) := Cardinal.lift_natCast n
+    exact Cardinal.le_natCast_of_lift_le (hlift.trans hbound)
   rw [hadj]
+  refine le_trans ?_ hrestrict
   change LinearMap.rank
       (R.rangeRestrict.adjoint.toLinearMap.comp
         R.range.subtypeL.adjoint.toLinearMap) ≤
-    LinearMap.rank R.toLinearMap
-  calc
-    LinearMap.rank
-        (R.rangeRestrict.adjoint.toLinearMap.comp
-          R.range.subtypeL.adjoint.toLinearMap)
-        ≤ LinearMap.rank R.rangeRestrict.adjoint.toLinearMap :=
-      LinearMap.rank_comp_le_left _ _
-    _ ≤ Module.rank 𝕜 R.range :=
-      LinearMap.rank_le_domain _
-    _ = LinearMap.rank R.toLinearMap := rfl
+    LinearMap.rank R.rangeRestrict.adjoint.toLinearMap
+  exact LinearMap.rank_comp_le_left _ _
 
 /-- One half of adjoint invariance for approximation numbers. -/
 private theorem approximationNumber_adjoint_le
@@ -72,7 +80,7 @@ private theorem approximationNumber_adjoint_le
   calc
     T.adjoint.approximationNumber n ≤ ‖T.adjoint - R.adjoint‖₊ :=
       T.adjoint.approximationNumber_le
-        ((rank_adjoint_le_rank_of_rank_le_nat R hR).trans hR)
+        (rank_adjoint_le_natCast_of_rank_le R hR)
     _ = ‖T - R‖₊ := by
       apply NNReal.eq
       simpa only [coe_nnnorm, ← map_sub] using
