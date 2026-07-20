@@ -8,6 +8,12 @@ import DavisKahan.Sources.All
 import DavisKahan.Specialized.All
 import DavisKahan.Alternative.All
 import DavisKahan.Interop.Spectra.All
+import DavisKahan.Geometry.All
+import DavisKahan.OperatorIdeal.All
+import DavisKahan.Riccati.All
+import DavisKahan.SinTheta.All
+import DavisKahan.Sylvester.All
+import DavisKahan.TanTwoTheta.All
 import DavisKahan.SpectralTheory.All
 import DavisKahan.TanTheta.All
 

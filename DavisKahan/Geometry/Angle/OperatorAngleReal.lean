@@ -3,8 +3,8 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-5.6 Thinking
 -/
-import DavisKahan.Experimental.InfiniteDimensional.Core.ComplexificationSubspace
-import DavisKahan.Experimental.InfiniteDimensional.Core.OperatorAngleComplex
+import DavisKahan.SpectralTheory.Complexification.Subspace
+import DavisKahan.Geometry.Angle.OperatorAngleComplex
 
 /-!
 # Real operator angles through complexification

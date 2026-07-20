@@ -4,10 +4,10 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Interop.Spectra.Basic
-import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.ClosedOperator
+import DavisKahan.Interop.Spectra.ClosedOperator
 import DavisKahan.Interop.Spectra.PVMSubspace
-import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.SpectralRestriction
-import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.SpectralRestrictionOperator
+import DavisKahan.Interop.Spectra.SpectralRestriction
+import DavisKahan.Interop.Spectra.SpectralRestrictionOperator
 import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.RealSpectralRestriction
 import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.SpectralRestrictionLocalization
 import DavisKahan.Interop.Spectra.OperatorAbsoluteValue

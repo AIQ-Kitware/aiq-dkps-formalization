@@ -3,7 +3,7 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Fable 5
 -/
-import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.ClosedOperator
+import DavisKahan.Interop.Spectra.ClosedOperator
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.GenuineUnbounded
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.GenuineUnboundedGauge
 import Spectra.SpectralTheory.Spectrum

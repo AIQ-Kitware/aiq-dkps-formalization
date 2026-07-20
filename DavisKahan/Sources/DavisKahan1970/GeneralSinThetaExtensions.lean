@@ -8,7 +8,7 @@ import DavisKahan.Experimental.InfiniteDimensional.SinTheta.NaturalReducing
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.NaturalGenuineGeneralized
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.NaturalBounded
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.NaturalGapConvenience
-import DavisKahan.Experimental.InfiniteDimensional.SinTheta.NaturalTwoSubspace
+import DavisKahan.SinTheta.NaturalTwoSubspace
 
 /-!
 # Optional natural-input extensions to the general sine-theta surface
