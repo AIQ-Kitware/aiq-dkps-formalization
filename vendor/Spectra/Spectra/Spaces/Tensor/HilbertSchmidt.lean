@@ -95,9 +95,14 @@ theorem Conj.map_adjoint (A : E →L[ℂ] F) :
   apply (ContinuousLinearMap.eq_adjoint_iff
     (Conj.map A.adjoint) (Conj.map A)).2
   intro x y
-  change ⟪A.adjoint (Conj.ofConj x), Conj.ofConj y⟫_ℂ =
-    ⟪Conj.ofConj x, A (Conj.ofConj y)⟫_ℂ
-  exact ContinuousLinearMap.adjoint_inner_left A _ _
+  -- The inner product on `Conj E` is the *swapped* one, `⟪x, y⟫ = ⟪ofConj y, ofConj x⟫`,
+  -- so the obligation is the `adjoint_inner_right` orientation, not `adjoint_inner_left`.
+  simp only [Conj.inner_def, Conj.map_apply, Conj.ofConj_toConj]
+  exact ContinuousLinearMap.adjoint_inner_right A _ _
+
+/-- The norm on `Conj E` is the norm on `E`; `toConj` is the identity on vectors. -/
+@[simp]
+theorem Conj.norm_toConj (x : E) : ‖Conj.toConj x‖ = ‖x‖ := rfl
 
 private theorem Conj.norm_map_le (A : E →L[ℂ] F) : ‖Conj.map A‖ ≤ ‖A‖ := by
   apply (Conj.map A).opNorm_le_bound (norm_nonneg A)
@@ -107,14 +112,14 @@ private theorem Conj.norm_map_le (A : E →L[ℂ] F) : ‖Conj.map A‖ ≤ ‖A
 
 @[simp]
 theorem Conj.norm_map (A : E →L[ℂ] F) : ‖Conj.map A‖ = ‖A‖ := by
-  apply le_antisymm
-  · exact Conj.norm_map_le A
-  · calc
-      ‖A‖ = ‖Conj.map (Conj.map A)‖ := by
-        congr 1
-        ext x
-        rfl
-      _ ≤ ‖Conj.map A‖ := Conj.norm_map_le (Conj.map A)
+  refine le_antisymm (Conj.norm_map_le A) ?_
+  -- The reverse bound is proved directly.  Passing through `Conj.map (Conj.map A)` is
+  -- not available: that operator has type `Conj (Conj E) →L[ℂ] Conj (Conj F)`, which is
+  -- not the type of `A`, so no congruence relates their norms.
+  apply A.opNorm_le_bound (norm_nonneg _)
+  intro x
+  simpa only [Conj.map_apply, Conj.ofConj_toConj, Conj.norm_toConj]
+    using (Conj.map A).le_opNorm (Conj.toConj x)
 
 /-- Fixing the second factor of the pure tensor gives a bounded map in the
 first factor. -/
@@ -132,7 +137,10 @@ theorem rightTensor_add (x y : F) :
     rightTensor (E := E) (x + y) =
       rightTensor (E := E) x + rightTensor (E := E) y := by
   ext u
-  simp [rightTensor_apply, HilbertTensor.tmul_add]
+  simp only [rightTensor_apply, ContinuousLinearMap.add_apply]
+  -- `Conj.toConj` is the identity on vectors, so `toConj (x + y)` is already
+  -- `toConj x + toConj y`; `simp` cannot see this and leaves the sum unsplit.
+  exact HilbertTensor.tmul_add u (Conj.toConj x) (Conj.toConj y)
 
 private theorem toConj_smul (c : ℂ) (x : F) :
     Conj.toConj (c • x) = starRingEnd ℂ c • Conj.toConj x := by
@@ -150,7 +158,8 @@ theorem rightTensor_smul (c : ℂ) (x : F) :
 theorem norm_rightTensor_le (x : F) : ‖rightTensor (E := E) x‖ ≤ ‖x‖ := by
   apply (rightTensor x).opNorm_le_bound (norm_nonneg x)
   intro u
-  simp [rightTensor_apply, HilbertTensor.norm_tmul, mul_comm]
+  rw [rightTensor_apply, HilbertTensor.norm_tmul, Conj.norm_toConj]
+  exact le_of_eq (mul_comm _ _)
 
 /-- The operator represented by a Hilbert tensor. -/
 def toOperatorLinear (z : Space E F) : F →ₗ[ℂ] E where
@@ -162,28 +171,39 @@ def toOperatorLinear (z : Space E F) : F →ₗ[ℂ] E where
   map_smul' := by
     intro c x
     rw [rightTensor_smul (E := E)]
+    -- `adjoint` is conjugate-linear, so the conjugated scalar comes back unconjugated.
+    rw [map_smulₛₗ ContinuousLinearMap.adjoint]
     simp
+
+/-- The defining estimate for the tensor/operator map, stated on the underlying
+linear map so that both the bundled operator and its norm bound can cite it. -/
+private theorem norm_toOperatorLinear_le (z : Space E F) (x : F) :
+    ‖toOperatorLinear z x‖ ≤ ‖z‖ * ‖x‖ :=
+  calc
+    ‖(rightTensor x).adjoint z‖
+        ≤ ‖(rightTensor x).adjoint‖ * ‖z‖ :=
+      (rightTensor x).adjoint.le_opNorm z
+    _ = ‖rightTensor x‖ * ‖z‖ := by
+      rw [ContinuousLinearMap.adjoint.norm_map]
+    _ ≤ ‖x‖ * ‖z‖ :=
+      mul_le_mul_of_nonneg_right (norm_rightTensor_le (E := E) x)
+        (norm_nonneg z)
+    _ = ‖z‖ * ‖x‖ := mul_comm _ _
 
 /-- The tensor/operator map is bounded from the Hilbert tensor norm to the
 ordinary operator norm. -/
 def toOperator (z : Space E F) : F →L[ℂ] E :=
-  LinearMap.mkContinuous (toOperatorLinear z) ‖z‖ (by
-    intro x
-    calc
-      ‖(rightTensor x).adjoint z‖
-          ≤ ‖(rightTensor x).adjoint‖ * ‖z‖ :=
-        (rightTensor x).adjoint.le_opNorm z
-      _ = ‖rightTensor x‖ * ‖z‖ := by
-        rw [ContinuousLinearMap.adjoint.norm_map]
-      _ ≤ ‖x‖ * ‖z‖ :=
-        mul_le_mul_of_nonneg_right (norm_rightTensor_le (E := E) x)
-          (norm_nonneg z)
-      _ = ‖z‖ * ‖x‖ := mul_comm _ _)
+  LinearMap.mkContinuous (toOperatorLinear z) ‖z‖ (norm_toOperatorLinear_le z)
 
 @[simp]
 theorem toOperator_apply (z : Space E F) (x : F) :
     toOperator z x = (rightTensor x).adjoint z :=
   rfl
+
+/-- The represented operator has operator norm at most the tensor norm. -/
+theorem norm_toOperator_le (z : Space E F) : ‖toOperator z‖ ≤ ‖z‖ :=
+  LinearMap.mkContinuous_norm_le (toOperatorLinear z) (norm_nonneg z)
+    (norm_toOperatorLinear_le z)
 
 /-- The tensor/operator map, bundled as a contraction. -/
 def toOperatorL : Space E F →L[ℂ] (F →L[ℂ] E) :=
@@ -200,29 +220,15 @@ def toOperatorL : Space E F →L[ℂ] (F →L[ℂ] E) :=
     1
     (by
       intro z
-      apply (toOperator z).opNorm_le_bound (norm_nonneg z)
-      intro x
-      exact (toOperator z).le_opNorm x)
+      rw [one_mul]
+      -- Bounding by `‖toOperator z‖` here would assume the conclusion; the honest
+      -- bound is the `mkContinuous` constant `‖z‖`.
+      exact norm_toOperator_le z)
 
 @[simp]
 theorem toOperatorL_apply (z : Space E F) :
     toOperatorL z = toOperator z :=
   rfl
-
-/-- The represented operator has operator norm at most the tensor norm. -/
-theorem norm_toOperator_le (z : Space E F) : ‖toOperator z‖ ≤ ‖z‖ := by
-  apply (toOperator z).opNorm_le_bound (norm_nonneg z)
-  intro x
-  calc
-    ‖(rightTensor x).adjoint z‖
-        ≤ ‖(rightTensor x).adjoint‖ * ‖z‖ :=
-      (rightTensor x).adjoint.le_opNorm z
-    _ = ‖rightTensor x‖ * ‖z‖ := by
-      rw [ContinuousLinearMap.adjoint.norm_map]
-    _ ≤ ‖x‖ * ‖z‖ :=
-      mul_le_mul_of_nonneg_right (norm_rightTensor_le (E := E) x)
-        (norm_nonneg z)
-    _ = ‖z‖ * ‖x‖ := mul_comm _ _
 
 /-- Pure tensors represent the corresponding rank-one operators. -/
 theorem toOperator_tmul (u : E) (v : F) :
