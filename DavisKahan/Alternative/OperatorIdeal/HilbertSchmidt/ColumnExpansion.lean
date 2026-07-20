@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import ForMathlib.Analysis.InnerProductSpace.OrthogonalSeries
+import ForMathlib.Analysis.InnerProductSpace.ProjectionGeometry
 import Spectra.Spaces.Tensor.HilbertSchmidt
 
 /-!
@@ -51,25 +52,39 @@ theorem mathAhead_norm_sum_columnTensor_le
     {ι : Type*} (b : HilbertBasis ι ℂ F)
     (z : Space E F) (s : Finset ι) :
     ‖∑ i ∈ s, columnTensor b z i‖ ≤ ‖z‖ := by
+  let P : F →L[ℂ] F :=
+    (Submodule.span ℂ (b '' (s : Set ι))).starProjection
+  have hPadj : P.adjoint = P := by
+    exact (isSelfAdjoint_starProjection
+      (Submodule.span ℂ (b '' (s : Set ι)))).adjoint_eq
   have hproj :
       ∑ i ∈ s, columnTensor b z i =
-        HilbertTensor.mapL (ContinuousLinearMap.id ℂ E)
-          ((Submodule.span ℂ (b '' (s : Set ι))).starProjection) z := by
+        HilbertTensor.mapL (ContinuousLinearMap.id ℂ E) (Conj.map P) z := by
     apply toOperator_injective
+    rw [← hPadj, toOperator_mapL_right (B := P)]
     ext x
-    simp [columnTensor, toOperator_mapL_right, HilbertBasis.sum_repr]
+    rw [toOperator_sum]
+    simp_rw [columnTensor, toOperator_tmul,
+      InnerProductSpace.rankOne_apply]
+    rw [show P x = ∑ i ∈ s, ⟪b i, x⟫_ℂ • b i by
+      simpa [P] using
+        Orthonormal.starProjection_span_image_apply b.orthonormal s x]
+    simp only [ContinuousLinearMap.comp_apply, map_sum, map_smul]
   rw [hproj]
+  have hP : ‖P‖ ≤ 1 := by
+    simpa [P] using
+      (Submodule.span ℂ (b '' (s : Set ι))).norm_starProjection_le_one
+  have hmap :
+      ‖HilbertTensor.mapL (ContinuousLinearMap.id ℂ E) (Conj.map P)‖ ≤ 1 := by
+    rw [HilbertTensor.norm_mapL, norm_id, one_mul, Conj.norm_map]
+    exact hP
   calc
-    ‖HilbertTensor.mapL (ContinuousLinearMap.id ℂ E)
-        ((Submodule.span ℂ (b '' (s : Set ι))).starProjection) z‖
-        ≤ ‖HilbertTensor.mapL (ContinuousLinearMap.id ℂ E)
-            ((Submodule.span ℂ (b '' (s : Set ι))).starProjection)‖ * ‖z‖ :=
+    ‖HilbertTensor.mapL (ContinuousLinearMap.id ℂ E) (Conj.map P) z‖
+        ≤ ‖HilbertTensor.mapL (ContinuousLinearMap.id ℂ E) (Conj.map P)‖ * ‖z‖ :=
       (HilbertTensor.mapL _ _).le_opNorm z
-    _ ≤ ‖z‖ := by
-      rw [HilbertTensor.norm_mapL, norm_id]
-      have hp :=
-        (Submodule.span ℂ (b '' (s : Set ι))).norm_starProjection_le_one
-      nlinarith [norm_nonneg z]
+    _ ≤ 1 * ‖z‖ :=
+      mul_le_mul_of_nonneg_right hmap (norm_nonneg z)
+    _ = ‖z‖ := one_mul _
 
 /-- The column family is summable, obtained directly from orthogonality and the
 finite-projection contraction estimate. -/
@@ -88,13 +103,26 @@ represented operator. -/
 theorem mathAhead_toOperator_tsum_columnTensor
     {ι : Type*} (b : HilbertBasis ι ℂ F) (z : Space E F) :
     toOperator (∑' i, columnTensor b z i) = toOperator z := by
-  have hsum := mathAhead_summable_columnTensor b z
-  rw [← toOperatorL_apply, toOperatorL.map_tsum hsum]
+  have hseries := mathAhead_summable_columnTensor b z
   ext x
-  simp_rw [columnTensor, toOperator_tmul,
-    InnerProductSpace.rankOne_apply]
-  have hrepr := (toOperator z).hasSum (b.hasSum_repr x)
-  simpa only [map_smul, b.repr_apply_apply] using hrepr.tsum_eq
+  have hcol : ∀ i : ι,
+      (rightTensor x).adjoint (columnTensor b z i) =
+        ⟪b i, x⟫_ℂ • toOperator z (b i) := by
+    intro i
+    rw [columnTensor, ← toOperator_apply, toOperator_tmul,
+      InnerProductSpace.rankOne_apply]
+  have hval :
+      (rightTensor x).adjoint (∑' i, columnTensor b z i) =
+        toOperator (∑' i, columnTensor b z i) x := rfl
+  have h1 : HasSum (fun i => ⟪b i, x⟫_ℂ • toOperator z (b i))
+      (toOperator (∑' i, columnTensor b z i) x) := by
+    simpa only [hcol, hval] using
+      hseries.hasSum.mapL ((rightTensor x).adjoint)
+  have h2 : HasSum (fun i => ⟪b i, x⟫_ℂ • toOperator z (b i))
+      (toOperator z x) := by
+    simpa only [map_smul, b.repr_apply_apply] using
+      (b.hasSum_repr x).mapL (toOperator z)
+  exact h1.unique h2
 
 /-- The column tensors resolve the identity without a parameterized-series
 closedness argument. -/
@@ -102,9 +130,11 @@ theorem mathAhead_hasSum_columnTensor
     {ι : Type*} (b : HilbertBasis ι ℂ F) (z : Space E F) :
     HasSum (columnTensor b z) z := by
   have hsum := mathAhead_summable_columnTensor b z
-  apply hsum.hasSum_iff.mpr
-  apply toOperator_injective
-  exact mathAhead_toOperator_tsum_columnTensor b z
+  have htsum : (∑' i, columnTensor b z i) = z := by
+    apply toOperator_injective
+    exact mathAhead_toOperator_tsum_columnTensor b z
+  rw [← htsum]
+  exact hsum.hasSum
 
 /-- Parseval for the replacement column decomposition. -/
 theorem mathAhead_norm_sq_eq_tsum_column_norm_sq
@@ -125,22 +155,38 @@ theorem mathAhead_summable_columnSeries
     (fun i => A (b i) ⊗̂ₜ[ℂ] Conj.toConj (b i)) ?_).2
   · intro i j hij
     simp [HilbertTensor.inner_tmul_tmul, Conj.inner_def,
-      b.orthonormal.inner_right hij]
+      b.orthonormal.inner_eq_zero hij.symm]
   · simpa [HilbertTensor.norm_tmul, b.orthonormal.norm_eq_one,
       mul_one, one_pow] using hA
 
 /-- The column-series tensor represents the original operator, using the
-protected continuous-linear-map theorem for infinite sums. -/
+same basis reconstruction but the independent orthogonal-series summability
+proof above. -/
 theorem mathAhead_toOperator_ofOperator
     {ι : Type*} (b : HilbertBasis ι ℂ F)
     (A : F →L[ℂ] E) (hA : Summable fun i => ‖A (b i)‖ ^ 2) :
     toOperator (ofOperator b A hA) = A := by
-  ext x
   have hseries := mathAhead_summable_columnSeries b A hA
-  rw [ofOperator, ← toOperatorL_apply, toOperatorL.map_tsum hseries]
-  simp_rw [toOperator_tmul, InnerProductSpace.rankOne_apply]
-  have hrepr := A.hasSum (b.hasSum_repr x)
-  simpa only [map_smul, b.repr_apply_apply] using hrepr.tsum_eq
+  ext x
+  have hcol : ∀ i : ι,
+      (rightTensor x).adjoint
+          (A (b i) ⊗̂ₜ[ℂ] Conj.toConj (b i)) =
+        ⟪b i, x⟫_ℂ • A (b i) := by
+    intro i
+    rw [← toOperator_apply, toOperator_tmul,
+      InnerProductSpace.rankOne_apply]
+  have hval :
+      (rightTensor x).adjoint
+          (∑' i, A (b i) ⊗̂ₜ[ℂ] Conj.toConj (b i)) =
+        toOperator (ofOperator b A hA) x := rfl
+  have h1 : HasSum (fun i => ⟪b i, x⟫_ℂ • A (b i))
+      (toOperator (ofOperator b A hA) x) := by
+    simpa only [hcol, hval] using
+      hseries.hasSum.mapL ((rightTensor x).adjoint)
+  have h2 : HasSum (fun i => ⟪b i, x⟫_ℂ • A (b i)) (A x) := by
+    simpa only [map_smul, b.repr_apply_apply] using
+      A.hasSum (b.hasSum_repr x)
+  exact h1.unique h2
 
 
 /-- The square norms of the represented operator columns are summable. -/
