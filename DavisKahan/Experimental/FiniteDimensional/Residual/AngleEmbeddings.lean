@@ -72,8 +72,11 @@ theorem tanThetaEmbedding_eq_inverseOnRange_of_isTransverse
         FiniteDimensional.inverseOnRange (cosThetaMagnitude U X)
           (cosThetaMagnitude_injective U X
             (LinearMap.ker_eq_bot.mp
-              ((tanThetaEmbedding_defined_iff U X).mp htrans))) := by
-  exact tanThetaEmbedding_eq_inverseOnRange U X _
+              ((tanThetaEmbedding_defined_iff U X).mp htrans))) :=
+  -- the injectivity witness occurs only in a proof position, so unification
+  -- cannot recover it; it has to be supplied explicitly
+  tanThetaEmbedding_eq_inverseOnRange U X
+    (LinearMap.ker_eq_bot.mp ((tanThetaEmbedding_defined_iff U X).mp htrans))
 
 /-- Trial-coordinate double-angle sine `2 S |C|`.
 
