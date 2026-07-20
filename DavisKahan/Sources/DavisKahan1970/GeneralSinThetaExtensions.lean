@@ -4,10 +4,10 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Sources.DavisKahan1970.GeneralSinTheta
-import DavisKahan.Experimental.InfiniteDimensional.SinTheta.NaturalReducing
-import DavisKahan.Experimental.InfiniteDimensional.SinTheta.NaturalGenuineGeneralized
-import DavisKahan.Experimental.InfiniteDimensional.SinTheta.NaturalBounded
-import DavisKahan.Experimental.InfiniteDimensional.SinTheta.NaturalGapConvenience
+import DavisKahan.SinTheta.Natural.Reducing
+import DavisKahan.SinTheta.Natural.GenuineGeneralized
+import DavisKahan.SinTheta.Natural.Bounded
+import DavisKahan.SinTheta.Natural.GapConvenience
 import DavisKahan.SinTheta.NaturalTwoSubspace
 
 /-!

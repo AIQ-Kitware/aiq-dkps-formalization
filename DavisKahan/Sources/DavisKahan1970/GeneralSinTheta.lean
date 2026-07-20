@@ -4,9 +4,9 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.SinTheta.Unbounded.LegacyGap
-import DavisKahan.Experimental.InfiniteDimensional.SinTheta.Specializations
-import DavisKahan.Experimental.InfiniteDimensional.SinTheta.RealSpecializations
-import DavisKahan.Experimental.InfiniteDimensional.SinTheta.NaturalReal
+import DavisKahan.SinTheta.Specializations
+import DavisKahan.SinTheta.Real.Specializations
+import DavisKahan.SinTheta.Natural.Real
 
 /-!
 # Davis--Kahan 1970 general sine-theta manuscript surface

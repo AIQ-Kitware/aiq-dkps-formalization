@@ -5,7 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Experimental.InfiniteDimensional.Ideals.PaperHilbertSchmidt
 import DavisKahan.Sylvester.PairwiseSpectrumGap
-import DavisKahan.Experimental.InfiniteDimensional.Core.ClosedOperatorComplexification
+import DavisKahan.SpectralTheory.ClosedOperator.Complexification
 import Spectra.QuantumMechanics.BornRule.Joint.Forward
 import Spectra.Spaces.Tensor.Map
 

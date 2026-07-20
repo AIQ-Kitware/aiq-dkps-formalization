@@ -5,7 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SingularValueTransport
 import DavisKahan.OperatorIdeal.ApproximationNumbers.OperatorModulus
-import DavisKahan.Experimental.InfiniteDimensional.Ideals.ComplexificationApproximation
+import DavisKahan.OperatorIdeal.ComplexificationApproximation
 import Mathlib.Analysis.SpecialFunctions.Pow.Real
 import Mathlib.Data.ENNReal.Inv
 
