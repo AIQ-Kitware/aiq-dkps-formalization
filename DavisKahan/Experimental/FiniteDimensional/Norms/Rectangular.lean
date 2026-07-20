@@ -73,25 +73,19 @@ noncomputable def schatten (p : ℝ) (hp : 1 ≤ p) :
   toFun A :=
     (∑ i : Fin (min (finrank 𝕜 E) (finrank 𝕜 F)),
       (A.singularValues i) ^ p) ^ (1 / p)
-  add_le' A B := sorry
+  add_le' A B := by
+    let sA := fun i : Fin (min (finrank 𝕜 E) (finrank 𝕜 F)) =>
+      A.singularValues i
+    let sB := fun i : Fin (min (finrank 𝕜 E) (finrank 𝕜 F)) =>
+      B.singularValues i
+    have hmaj := singularValues_add_weaklyMajorized A B
+    exact lpGauge_triangle_of_weakMajorization hp hmaj
   smul' a A := by
-    have hp0 : p ≠ 0 := by linarith
-    have hterm : ∀ i : Fin (min (finrank 𝕜 E) (finrank 𝕜 F)),
-        ((a • A).singularValues (i : ℕ)) ^ p =
-          ‖a‖ ^ p * (A.singularValues (i : ℕ)) ^ p := by
-      intro i
-      rw [singularValues_smul_rect,
-        Real.mul_rpow (norm_nonneg a) (A.singularValues_nonneg _)]
-    have hsum : (0 : ℝ) ≤ ∑ i : Fin (min (finrank 𝕜 E) (finrank 𝕜 F)),
-        (A.singularValues (i : ℕ)) ^ p :=
-      Finset.sum_nonneg fun i _ =>
-        Real.rpow_nonneg (A.singularValues_nonneg _) p
-    rw [Finset.sum_congr rfl fun i _ => hterm i, ← Finset.mul_sum,
-      Real.mul_rpow (Real.rpow_nonneg (norm_nonneg a) p) hsum,
-      ← Real.rpow_mul (norm_nonneg a), mul_one_div_cancel hp0,
-      Real.rpow_one]
+    simp [LinearMap.singularValues_smul, Finset.mul_sum, Real.mul_rpow,
+      hp.trans_lt one_lt_top]
   invariant' U V A := by
-    rw [singularValues_unitary_comp, singularValues_comp_unitary]
+    simp [LinearMap.singularValues_unitary_comp,
+      LinearMap.singularValues_comp_unitary]
 
 /-- Schatten values are nonnegative in finite dimensions. -/
 theorem mem_schatten (p : ℝ) (hp : 1 ≤ p) (A : E →ₗ[𝕜] F) :

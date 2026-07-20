@@ -38,8 +38,8 @@ variable {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
 
 /-- Compact self-adjoint spectral block. -/
 noncomputable def compactSpectralSubspace (A : E →L[𝕜] E)
-    (s : Set ℝ) : Submodule 𝕜 E := by
-  sorry
+    (s : Set ℝ) : Submodule 𝕜 E :=
+  spectralSubspace A s
 
 /-- Compact perturbations produce compact differences of isolated spectral
 projections. 
@@ -71,7 +71,44 @@ theorem compact_projection_difference
     (hcompact : (SymmetricNormIdeal.compactOperator (𝕜 := 𝕜) (E := E)).mem (B - A)) :
     (SymmetricNormIdeal.compactOperator (𝕜 := 𝕜) (E := E)).mem
       (spectralProjection A s - spectralProjection B t) := by
-  sorry
+  let I := SymmetricNormIdeal.compactOperator (𝕜 := 𝕜) (E := E)
+  let P := spectralProjection A s
+  let Q := spectralProjection B t
+  let X := (1 - Q) ∘L P
+  let Y := (1 - P) ∘L Q
+  have hXeq : sylvesterOperator
+      (B.restrictTo (spectralSubspace B t)ᗮ)
+      (A.restrictTo (spectralSubspace A s)) X =
+      (1-Q) ∘L (B-A) ∘L P :=
+    mixedProjection_sylvesterEquation hA hB hs ht
+  have hYeq : sylvesterOperator
+      (A.restrictTo (spectralSubspace A s)ᗮ)
+      (B.restrictTo (spectralSubspace B t)) Y =
+      (1-P) ∘L (A-B) ∘L Q :=
+    mixedProjection_sylvesterEquation hB hA ht hs
+  have hCX : I.mem ((1-Q) ∘L (B-A) ∘L P) :=
+    I.ideal_mem (1-Q) P hcompact
+  have hCY : I.mem ((1-P) ∘L (A-B) ∘L Q) := by
+    have hneg : I.mem (A-B) := by
+      simpa [sub_eq_neg_sub] using I.smul_mem (-1 : 𝕜) hcompact
+    exact I.ideal_mem (1-P) Q hneg
+  have hXcompact : I.mem X := by
+    -- The separated Sylvester inverse is a Bochner integral of unitary
+    -- conjugates.  Compact operators are stable under the integrand and closed
+    -- in operator norm, hence its value is compact.
+    exact compact_mem_of_separatedSylvester_solution
+      I hA hB hd hsepAB hXeq hCX
+  have hYcompact : I.mem Y :=
+    compact_mem_of_separatedSylvester_solution
+      I hB hA hd hsepBA hYeq hCY
+  have hblock : P - Q = P ∘L (1-Q) - (1-P) ∘L Q := by
+    module
+  rw [hblock]
+  have hPX : I.mem (P ∘L (1-Q)) := by
+    have : I.mem X.adjoint := I.adjoint_mem hXcompact
+    simpa [X, ContinuousLinearMap.adjoint_comp, hA, hB] using this
+  have hYneg : I.mem (-Y) := by simpa using I.smul_mem (-1 : 𝕜) hYcompact
+  exact I.add_mem hPX hYneg
 
 /-- Schatten-class perturbation implies Schatten-class angle operator. 
 
@@ -185,7 +222,27 @@ theorem hermitianDilation_spectralProjection_sinTheta
     d * ‖spectralProjection (hermitianDilation S) s -
       spectralProjection (hermitianDilation T) t‖ ≤
       (Real.pi / 2) * ‖hermitianDilation (T - S)‖ := by
-  sorry
+  let A := hermitianDilation S
+  let B := hermitianDilation T
+  let P := spectralProjection A s
+  let Q := spectralProjection B t
+  have hA := hermitianDilation_selfAdjoint S
+  have hB := hermitianDilation_selfAdjoint T
+  have hredP := reduces_spectralSubspace A hA s hs
+  have hredQ := reduces_spectralSubspace B hB t ht
+  have hforward := sinTheta_generalSeparation hA hB hredP hredQ hd
+    (HybridGap.general hsepST)
+  have hbackward := sinTheta_generalSeparation hB hA hredQ hredP hd
+    (HybridGap.general hsepTS)
+  have hgap : ‖P-Q‖ = max (directedGap (spectralSubspace A s)
+      (spectralSubspace B t))
+      (directedGap (spectralSubspace B t) (spectralSubspace A s)) :=
+    Submodule.norm_starProjection_sub_eq_max _ _
+  rw [hgap]
+  have hdiff : B-A = hermitianDilation (T-S) := by
+    rw [hermitianDilation_sub]
+  rw [hdiff] at hforward hbackward
+  exact max_scaled_le hforward hbackward (Real.pi_div_two_nonneg)
 
 /-- Covariance-operator principal-subspace perturbation. 
 

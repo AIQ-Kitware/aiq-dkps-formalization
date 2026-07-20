@@ -133,7 +133,21 @@ theorem sinTwoTheta_reflectionDefect
     (hfinite : FiniteGapConfiguration A U d) :
     d * ‖sinTwoAngleOperator U V‖ ≤
       ‖reflectionDefect V A‖ := by
-  sorry
+  let A' := reflectionOperator V ∘L A ∘L reflectionOperator V
+  let U' := reflectedSubspace V U
+  have hA' : IsSelfAdjointOperator A' :=
+    hA.unitary_conjugate (reflectionOperator_unitary V)
+  have hU' : Reduces A' U' := reduces_reflectedSubspace hU
+  have hfinite' := finiteGap_reflected (V := V) hfinite
+  have hgaps :
+      ∃ l r l' r',
+        IntervalExteriorSeparated A U A' U'ᗮ l r d ∧
+        IntervalExteriorSeparated A' U' A Uᗮ l' r' d :=
+    finiteGap_mixedIntervalExterior hfinite hfinite'
+  obtain ⟨l, r, l', r', hUU', hU'U⟩ := hgaps
+  have hsin := sinTheta_symmetric hA hA' hU hU' hd hUU' hU'U
+  simpa [A', U', reflectionDefect, subspaceGap,
+    sinAngle_reflected_eq_sinTwoAngle] using hsin
 
 /-- Approximate-invariant-pair residual form of `sin 2Θ`.
 
@@ -160,7 +174,16 @@ theorem sinTwoTheta_residual
     {M : F →L[𝕜] F} (hM : IsSelfAdjointOperator M)
     {d : ℝ} (hd : 0 < d) (hfinite : FiniteGapConfiguration A U d) :
     d * ‖sinTwoThetaEmbedding U X‖ ≤ 2 * ‖residual A X M‖ := by
-  sorry
+  let V := LinearMap.range X.toLinearMap
+  have hangle : sinTwoThetaEmbedding U X = sinTwoAngleOperator U V :=
+    sinTwoThetaEmbedding_eq_rangeAngle U X hX
+  calc
+    d * ‖sinTwoThetaEmbedding U X‖
+        = d * ‖sinTwoAngleOperator U V‖ := by rw [hangle]
+    _ ≤ ‖reflectionDefect V A‖ :=
+      sinTwoTheta_reflectionDefect hA hU hd hfinite
+    _ ≤ 2 * ‖residual A X M‖ :=
+      reflectionDefect_range_le_residual hA X hX hM
 
 /-- Perturbation form of the `sin 2Θ` theorem.
 
@@ -209,7 +232,23 @@ theorem sinTwoTheta_generalSeparation
     (hU : Reduces A U) (hV : Reduces B V)
     {d : ℝ} (hd : 0 < d) (hgap : InternalGap A U d) :
     d * ‖sinTwoAngleOperator U V‖ ≤ Real.pi * ‖B - A‖ := by
-  sorry
+  let A' := reflectionOperator V ∘L A ∘L reflectionOperator V
+  let U' := reflectedSubspace V U
+  have hA' : IsSelfAdjointOperator A' :=
+    hA.unitary_conjugate (reflectionOperator_unitary V)
+  have hU' : Reduces A' U' := reduces_reflectedSubspace hU
+  have hhybrid : HybridGap A A' U U' d :=
+    internalGap_reflection_transport hgap
+  have hsin := sinTheta_generalSeparation hA hA' hU hU' hd hhybrid
+  have hdefect := norm_reflectionDefect_le_two_mul A B V hV
+  calc
+    d * ‖sinTwoAngleOperator U V‖
+        = d * directedGap U U' :=
+          doubleAngle_directedGap_identity U V
+    _ ≤ (Real.pi/2) * ‖A'-A‖ := hsin
+    _ = (Real.pi/2) * ‖reflectionDefect V A‖ := rfl
+    _ ≤ (Real.pi/2) * (2 * ‖B-A‖) := by gcongr
+    _ = Real.pi * ‖B-A‖ := by ring
 
 /-- Ideal-norm `sin 2Θ` theorem.
 
@@ -239,9 +278,40 @@ theorem ideal_sinTwoTheta
     (hfinite : FiniteGapConfiguration A U d)
     (hmem : I.mem (B - A)) :
     I.mem (sinTwoAngleOperator U V) ∧
-      d * I.gauge (sinTwoAngleOperator U V) ≤
-        2 * I.gauge (B - A) := by
-  sorry
+      d * I.gauge (sinTwoAngleOperator U V) ≤ 2 * I.gauge (B - A) := by
+  let A' := reflectionOperator V ∘L A ∘L reflectionOperator V
+  let U' := reflectedSubspace V U
+  have hA' : IsSelfAdjointOperator A' :=
+    hA.unitary_conjugate (reflectionOperator_unitary V)
+  have hU' : Reduces A' U' := reduces_reflectedSubspace hU
+  obtain ⟨l, r, l', r', hUU', hU'U⟩ :=
+    finiteGap_mixedIntervalExterior hfinite
+      (finiteGap_reflected (V := V) hfinite)
+  have hdefMem : I.mem (A'-A) := by
+    rw [show A'-A = reflectionDefect V A by rfl,
+      reflectionDefect_eq_perturbationDefect A B V hV]
+    exact I.add_mem
+      (I.ideal_mem (reflectionOperator V) (reflectionOperator V) hmem)
+      (by simpa using I.smul_mem (-1 : 𝕜) hmem)
+  have hsin := ideal_sinTheta I hA hA' hU hU' hd hUU' hU'U hdefMem
+  have hdefGauge : I.gauge (A'-A) ≤ 2 * I.gauge (B-A) := by
+    rw [show A'-A = reflectionDefect V A by rfl,
+      reflectionDefect_eq_perturbationDefect A B V hV]
+    have hconj := I.unitary_invariant
+      (reflectionOperator V) (reflectionOperator V) (A-B)
+      (reflectionOperator_unitary V) (reflectionOperator_unitary V)
+      (reflectionOperator_involutive V) (reflectionOperator_involutive V)
+      (by simpa using hmem)
+    have htri := I.triangle
+      (I.ideal_mem (reflectionOperator V) (reflectionOperator V)
+        (by simpa using hmem))
+      (by simpa using I.smul_mem (-1 : 𝕜) (by simpa using hmem))
+    simpa [hconj, I.gauge_smul] using htri
+  have hangle : I.gauge (sinAngleOperator U U') =
+      I.gauge (sinTwoAngleOperator U V) := by
+    rw [sinAngle_reflected_eq_sinTwoAngle]
+  exact ⟨by simpa [sinAngle_reflected_eq_sinTwoAngle] using hsin.1,
+    by rw [← hangle]; exact hsin.2.trans hdefGauge⟩
 
 end DavisKahanExt
 end ForMathlib

@@ -147,8 +147,10 @@ Construction route: use the graph residual of the rotated one-dimensional
 subspace, with scaling chosen so the ordered Sylvester inequality is an
 equality. -/
 noncomputable def modelTanThetaPerturbation (a b θ : ℝ) :
-    Plane 𝕜 →ₗ[𝕜] Plane 𝕜 := by
-  sorry
+    Plane 𝕜 →ₗ[𝕜] Plane 𝕜 :=
+  Matrix.toEuclideanLin
+    ![![(0 : 𝕜), (((b-a) * Real.tan θ : ℝ) : 𝕜)],
+      ![(((b-a) * Real.tan θ : ℝ) : 𝕜), (0 : 𝕜)]]
 
 /-- Reflection-compatible perturbation producing equality in `sin (2 Θ)`:
 the purely off-diagonal part of the rotated model, with entry
@@ -180,8 +182,17 @@ Lean proof route for a weaker agent:
 3. Rewrite the first principal angle with `Real.arccos_cos` and the supplied range bounds.
 -/
 theorem principalAngles_model (θ : ℝ) (hθ0 : 0 ≤ θ) (hθ1 : θ ≤ Real.pi / 2) :
-    principalAngles (modelSubspace (𝕜 := 𝕜)) (rotatedModelSubspace (𝕜 := 𝕜) θ) 0 = θ := by
-  sorry
+    principalAngles (modelSubspace (𝕜 := 𝕜))
+      (rotatedModelSubspace (𝕜 := 𝕜) θ) 0 = θ := by
+  classical
+  have hoverlap :
+      (principalCosines (modelSubspace (𝕜 := 𝕜))
+        (rotatedModelSubspace (𝕜 := 𝕜) θ)) 0 = Real.cos θ := by
+    rw [principalCosines_rankOne]
+    simp [modelSubspace, rotatedModelSubspace, uθ, e0, e1,
+      Real.cos_nonneg_of_mem_Icc ⟨hθ0, hθ1⟩]
+  rw [principalAngles, hoverlap]
+  exact Real.arccos_cos hθ0 hθ1
 
 /-- Equality case for the `sin Θ` theorem.
 
@@ -199,7 +210,22 @@ theorem sinTheta_model_equality
     (b - a) * N (sinAngleOperator (modelSubspace (𝕜 := 𝕜))
       (rotatedModelSubspace (𝕜 := 𝕜) θ)) =
       N (modelSinThetaPerturbation (𝕜 := 𝕜) a b θ) := by
-  sorry
+  have hsing :
+      (modelSinThetaPerturbation (𝕜 := 𝕜) a b θ).singularValues =
+        ((b-a : 𝕜) • sinAngleOperator (modelSubspace (𝕜 := 𝕜))
+          (rotatedModelSubspace (𝕜 := 𝕜) θ)).singularValues := by
+    rw [singularValues_modelSinThetaPerturbation hab hθ0 (le_of_lt hθ1),
+      LinearMap.singularValues_smul,
+      singularValues_sinAngle_model hθ0 (le_of_lt hθ1)]
+    funext i; split <;> simp [abs_of_pos (sub_pos.mpr hab)]
+  calc
+    (b-a) * N (sinAngleOperator (modelSubspace (𝕜 := 𝕜))
+      (rotatedModelSubspace (𝕜 := 𝕜) θ))
+        = N ((b-a : 𝕜) • sinAngleOperator (modelSubspace (𝕜 := 𝕜))
+            (rotatedModelSubspace (𝕜 := 𝕜) θ)) := by
+          rw [N.smul]; simp [abs_of_pos (sub_pos.mpr hab)]
+    _ = N (modelSinThetaPerturbation (𝕜 := 𝕜) a b θ) :=
+      N.eq_of_same_singularValues hsing.symm
 
 /-- Equality case for the `tan Θ` theorem.
 
@@ -217,7 +243,16 @@ theorem tanTheta_model_equality
     (b - a) * N (tanAngleOperator (modelSubspace (𝕜 := 𝕜))
       (rotatedModelSubspace (𝕜 := 𝕜) θ)) =
       N (modelTanThetaPerturbation (𝕜 := 𝕜) a b θ) := by
-  sorry
+  have htan : 0 ≤ Real.tan θ := Real.tan_nonneg_of_nonneg_of_lt_pi_div_two hθ0 hθ1
+  have hsingT := singularValues_tanAngle_model (𝕜 := 𝕜) hθ0 hθ1
+  have hsingH :
+      (modelTanThetaPerturbation (𝕜 := 𝕜) a b θ).singularValues =
+        fun i => if i < 2 then (b-a) * Real.tan θ else 0 := by
+    exact singularValues_offDiagonal_two_by_two
+      (mul_nonneg (sub_nonneg.mpr (le_of_lt hab)) htan)
+  apply N.eq_of_same_singularValues
+  rw [LinearMap.singularValues_smul, hsingT, hsingH]
+  funext i; split <;> simp [abs_of_pos (sub_pos.mpr hab)]
 
 /-- Equality case for the `sin 2Θ` theorem.
 
@@ -235,7 +270,26 @@ theorem sinTwoTheta_model_equality
     (b - a) * N (sinTwoAngleOperator (modelSubspace (𝕜 := 𝕜))
       (rotatedModelSubspace (𝕜 := 𝕜) θ)) =
       2 * N (modelSinTwoThetaPerturbation (𝕜 := 𝕜) a b θ) := by
-  sorry
+  have hsingS := singularValues_sinTwoAngle_model (𝕜 := 𝕜) hθ0 hθ1
+  have hsingH := singularValues_modelSinTwoThetaPerturbation
+    (𝕜 := 𝕜) hab hθ0 hθ1
+  have hsame :
+      ((b-a : 𝕜) • sinTwoAngleOperator (modelSubspace (𝕜 := 𝕜))
+        (rotatedModelSubspace (𝕜 := 𝕜) θ)).singularValues =
+      ((2 : 𝕜) • modelSinTwoThetaPerturbation (𝕜 := 𝕜) a b θ).singularValues := by
+    rw [LinearMap.singularValues_smul, LinearMap.singularValues_smul,
+      hsingS, hsingH]
+    funext i; split <;> simp [abs_of_pos (sub_pos.mpr hab), abs_of_nonneg]
+  calc
+    (b-a) * N (sinTwoAngleOperator (modelSubspace (𝕜 := 𝕜))
+      (rotatedModelSubspace (𝕜 := 𝕜) θ))
+        = N ((b-a : 𝕜) • sinTwoAngleOperator (modelSubspace (𝕜 := 𝕜))
+            (rotatedModelSubspace (𝕜 := 𝕜) θ)) := by
+          rw [N.smul]; simp [abs_of_pos (sub_pos.mpr hab)]
+    _ = N ((2 : 𝕜) • modelSinTwoThetaPerturbation (𝕜 := 𝕜) a b θ) :=
+      N.eq_of_same_singularValues hsame
+    _ = 2 * N (modelSinTwoThetaPerturbation (𝕜 := 𝕜) a b θ) := by
+      rw [N.smul]; norm_num
 
 /-- Equality case for the `tan 2Θ` theorem.
 
@@ -250,7 +304,17 @@ theorem tanTwoTheta_model_equality
     (b - a) * N (tanTwoAngleOperator (modelSubspace (𝕜 := 𝕜))
       (rotatedModelSubspace (𝕜 := 𝕜) θ)) =
       2 * N (modelTanTwoThetaPerturbation (𝕜 := 𝕜) a b θ) := by
-  sorry
+  have htan : 0 ≤ Real.tan (2*θ) := by
+    apply Real.tan_nonneg_of_nonneg_of_lt_pi_div_two
+    · linarith
+    · linarith
+  have hsingT := singularValues_tanTwoAngle_model (𝕜 := 𝕜) hθ0 hθ1
+  have hsingH := singularValues_modelTanTwoThetaPerturbation
+    (𝕜 := 𝕜) hab htan
+  apply N.eq_of_same_singularValues
+  rw [LinearMap.singularValues_smul, LinearMap.singularValues_smul,
+    hsingT, hsingH]
+  funext i; split <;> simp [abs_of_pos (sub_pos.mpr hab)]
 
 /-- The constant one in the single-angle theorems cannot be decreased.
 
@@ -265,7 +329,19 @@ theorem sinTheta_constant_optimal :
       c * ‖(modelSinThetaPerturbation (𝕜 := 𝕜) a b θ).toContinuousLinearMap‖ <
         (b - a) * ‖(sinAngleOperator (modelSubspace (𝕜 := 𝕜))
           (rotatedModelSubspace (𝕜 := 𝕜) θ)).toContinuousLinearMap‖ := by
-  sorry
+  intro c hc
+  refine ⟨0, 1, Real.pi / 6, by norm_num, by positivity, ?_⟩
+  have heq := sinTheta_model_equality
+    (UnitarilyInvariantNorm.opNorm 𝕜 (Plane 𝕜))
+    (𝕜 := 𝕜) (a := 0) (b := 1) (θ := Real.pi/6)
+    (by norm_num) (by positivity) (by linarith [Real.pi_pos])
+  have hpos : 0 < ‖(modelSinThetaPerturbation (𝕜 := 𝕜) 0 1
+      (Real.pi/6)).toContinuousLinearMap‖ := by
+    rw [norm_pos_iff]
+    intro hzero
+    have := congrArg (fun T => T (e0 (𝕜 := 𝕜))) hzero
+    simpa [modelSinThetaPerturbation, e0] using this
+  simpa using (mul_lt_mul_of_lt_one_left hpos hc)
 
 /-- The factor two in the double-angle theorems cannot be decreased.
 
@@ -280,7 +356,19 @@ theorem sinTwoTheta_constant_optimal :
       c * ‖(modelSinTwoThetaPerturbation (𝕜 := 𝕜) a b θ).toContinuousLinearMap‖ <
         (b - a) * ‖(sinTwoAngleOperator (modelSubspace (𝕜 := 𝕜))
           (rotatedModelSubspace (𝕜 := 𝕜) θ)).toContinuousLinearMap‖ := by
-  sorry
+  intro c hc
+  refine ⟨0, 1, Real.pi / 8, by norm_num, by positivity, ?_⟩
+  have heq := sinTwoTheta_model_equality
+    (UnitarilyInvariantNorm.opNorm 𝕜 (Plane 𝕜))
+    (𝕜 := 𝕜) (a := 0) (b := 1) (θ := Real.pi/8)
+    (by norm_num) (by positivity) (by linarith [Real.pi_pos])
+  have hpos : 0 < ‖(modelSinTwoThetaPerturbation (𝕜 := 𝕜) 0 1
+      (Real.pi/8)).toContinuousLinearMap‖ := by
+    rw [norm_pos_iff]
+    intro hzero
+    have := congrArg (fun T => T (e0 (𝕜 := 𝕜))) hzero
+    simpa [modelSinTwoThetaPerturbation, e0] using this
+  nlinarith
 
 /-- Direct sums of planar equality models attain equality simultaneously for
 all unitarily invariant norms.
@@ -302,7 +390,30 @@ theorem directSum_models_simultaneous_equality (m : ℕ) :
       Reduces A U ∧ Reduces (A + H) V ∧ InternalGap A U δ ∧
       ∀ N : UnitarilyInvariantNorm 𝕜 (EuclideanSpace 𝕜 (Fin (2 * m))),
         δ * N (sinTwoAngleOperator U V) = 2 * N H := by
-  sorry
+  classical
+  let θ := Real.pi / 8
+  let e : Fin (2*m) ≃ Fin m × Fin 2 := finTwoBlockEquiv m
+  let A := blockDiagonalAlong e (fun _ => modelGappedOperator (𝕜 := 𝕜) 0 1)
+  let H := blockDiagonalAlong e
+    (fun _ => modelSinTwoThetaPerturbation (𝕜 := 𝕜) 0 1 θ)
+  let U := blockSubspaceAlong e (fun _ => modelSubspace (𝕜 := 𝕜))
+  let V := blockSubspaceAlong e
+    (fun _ => rotatedModelSubspace (𝕜 := 𝕜) θ)
+  refine ⟨A, H, U, V, 1, ?_, ?_, by norm_num, ?_, ?_, ?_, ?_⟩
+  · exact blockDiagonal_isSymmetric fun _ => modelGappedOperator_isSymmetric 0 1
+  · exact blockDiagonal_isSymmetric fun _ => modelSinTwoThetaPerturbation_isSymmetric 0 1 θ
+  · exact blockSubspace_reduces_blockDiagonal _ _
+  · intro j
+    exact modelSinTwoTheta_perturbed_reduces_rotated
+      (𝕜 := 𝕜) (a := 0) (b := 1) (θ := θ)
+  · exact internalGap_blockDiagonal (by norm_num)
+  · intro N
+    have hsing := singularValues_blockDiagonal_repeat e
+      (sinTwoTheta_model_equality
+        (UnitarilyInvariantNorm.opNorm 𝕜 (Plane 𝕜))
+        (𝕜 := 𝕜) (a := 0) (b := 1) (θ := θ)
+        (by norm_num) (by positivity) (by linarith [Real.pi_pos]))
+    exact N.eq_of_same_singularValues hsing
 
 /-- To first order in a linear perturbation parameter, all four theorem
 conclusions agree.

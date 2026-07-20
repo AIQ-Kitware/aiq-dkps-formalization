@@ -490,18 +490,38 @@ theorem norm_resolvent_le_inv_distance
     (z : 𝕜) (delta : ℝ) (hdelta : 0 < delta)
     (hsep : ∀ lam ∈ realSpectrum A, delta ≤ ‖z - (lam : 𝕜)‖) :
     ‖resolventOperator A z‖ ≤ delta⁻¹ := by
-  sorry
+  classical
+  have hz : InResolventSet A z :=
+    selfAdjoint_inResolventSet_of_positive_distance hA hdelta hsep
+  have heq : resolventOperator A z =
+      RCLikeContinuousFunctionalCalculus.applyOnSpectrum
+        (fun λ : ℝ => ((λ : 𝕜) - z)⁻¹) A hA :=
+    resolvent_eq_functionalCalculus hA hz
+  rw [heq]
+  apply RCLikeContinuousFunctionalCalculus.norm_le
+  intro λ hλ
+  have h := hsep λ hλ
+  simpa [norm_inv, norm_sub_rev] using inv_le_inv₀ hdelta h
 
 /-- The contour lies in the resolvent set and encloses exactly the selected
 spectral component, with the intended orientation/winding number. -/
 noncomputable def ContourSeparatesSpectrum
     (A : E →L[𝕜] E) (s : Set ℝ) (contour : ℝ → 𝕜) : Prop := by
-  sorry
+  classical
+  exact
+    Contour.IsClosed contour ∧
+    Contour.Rectifiable contour ∧
+    (∀ t, InResolventSet A (contour t)) ∧
+    (∃ M : ℝ, 0 ≤ M ∧ ∀ t, ‖resolventOperator A (contour t)‖ ≤ M) ∧
+    (∀ λ ∈ realSpectrum A, λ ∈ s → Contour.index contour (λ : 𝕜) = 1) ∧
+    (∀ λ ∈ realSpectrum A, λ ∉ s → Contour.index contour (λ : 𝕜) = 0)
 
 /-- Riesz projection associated with a separating contour. -/
 noncomputable def rieszProjection (A : E →L[𝕜] E)
     (contour : ℝ → 𝕜) : E →L[𝕜] E := by
-  sorry
+  classical
+  exact ((2 : 𝕜) * (Real.pi : 𝕜) * RCLike.I)⁻¹ •
+    Contour.integral contour (fun z => resolventOperator A z)
 
 /-- Riesz and Borel spectral projections agree for self-adjoint operators and
 separating contours.
@@ -528,7 +548,12 @@ theorem rieszProjection_eq_spectralProjection
     (s : Set ℝ) (hs : MeasurableSet s) (contour : ℝ → 𝕜)
     (hcontour : ContourSeparatesSpectrum A s contour) :
     rieszProjection A contour = spectralProjection A s := by
-  sorry
+  classical
+  apply boundedBorelFunctionalCalculus_ext hA
+  intro λ hλ
+  have hscalar := Contour.cauchyIndicatorFormula hcontour λ hλ
+  simpa [rieszProjection, spectralProjection,
+    resolvent_eq_functionalCalculus hA] using hscalar
 
 /-- Neumann-series stability of the resolvent set.
 
@@ -595,7 +620,19 @@ theorem continuous_rieszProjection_path
     (hsep : ∀ t : ℝ,
       ContourSeparatesSpectrum (A + (t : 𝕜) • H) s contour) :
     Continuous fun t : ℝ => rieszProjection (A + (t : 𝕜) • H) contour := by
-  sorry
+  classical
+  unfold rieszProjection
+  apply Continuous.const_smul
+  apply Contour.continuous_integral_parameter
+  · intro t z
+    exact (hsep t).2.1.continuous
+  · intro t z ht hz
+    have hresA := (hsep t).2.2.1 z
+    have hresB := (hsep z).2.2.1 z
+    rw [resolvent_perturbation_identity]
+    exact norm_continuousLinearMap_comp_bound hresA hresB
+  · obtain ⟨M, hM0, hM⟩ := (hsep 0).2.2.2.1
+    exact ⟨M, contour_integrable_const M, fun t z => hM z⟩
 
 end DavisKahanExt
 end ForMathlib

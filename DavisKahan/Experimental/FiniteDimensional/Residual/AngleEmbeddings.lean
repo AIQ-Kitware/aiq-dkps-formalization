@@ -50,8 +50,9 @@ before it is used in a norm theorem. -/
 
 /-- Tangent map in approximate coordinates. -/
 noncomputable def tanThetaEmbedding (U : Submodule 𝕜 E)
-    [U.HasOrthogonalProjection] (X : F →ₗᵢ[𝕜] E) : F →ₗ[𝕜] E := by
-  sorry
+    [U.HasOrthogonalProjection] (X : F →ₗᵢ[𝕜] E) : F →ₗ[𝕜] E :=
+  sinThetaEmbedding U X ∘ₗ
+    FiniteDimensional.moorePenroseInverse (cosThetaEmbedding U X)
 
 /-- Double-angle sine block `2 S C⋆`, written in trial coordinates. -/
 noncomputable def sinTwoThetaEmbedding (U : Submodule 𝕜 E)
@@ -62,8 +63,10 @@ noncomputable def sinTwoThetaEmbedding (U : Submodule 𝕜 E)
 
 /-- Double-angle tangent map in approximate coordinates. -/
 noncomputable def tanTwoThetaEmbedding (U : Submodule 𝕜 E)
-    [U.HasOrthogonalProjection] (X : F →ₗᵢ[𝕜] E) : F →ₗ[𝕜] E := by
-  sorry
+    [U.HasOrthogonalProjection] (X : F →ₗᵢ[𝕜] E) : F →ₗ[𝕜] E :=
+  sinTwoThetaEmbedding U X ∘ₗ
+    FiniteDimensional.moorePenroseInverse
+      (FiniteDimensional.cosTwoThetaEmbedding U X)
 
 end DavisKahanTheory
 end ForMathlib

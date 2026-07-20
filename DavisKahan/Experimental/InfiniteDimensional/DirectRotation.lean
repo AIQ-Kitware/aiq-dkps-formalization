@@ -65,8 +65,9 @@ functional calculus.  This construction automatically yields a unitary that
 intertwines the two projections and is stable under finite specialization. -/
 noncomputable def directRotation (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) : E →L[𝕜] E := by
-  sorry
+    (hacute : IsAcute U V) : E →L[𝕜] E :=
+  canonicalIntertwiner U V ∘L
+    (↑(canonicalAbsoluteValueUnit U V hacute)⁻¹ : E →L[𝕜] E)
 
 /-- The direct rotation is unitary. 
 
@@ -89,7 +90,30 @@ theorem directRotation_unitary
     (U V : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] (hacute : IsAcute U V) :
     IsUnitaryOperator (directRotation U V hacute) := by
-  sorry
+  classical
+  let S := canonicalIntertwiner U V
+  let A := operatorAbsoluteValue S
+  let Au := canonicalAbsoluteValueUnit U V hacute
+  have hsq : A ∘L A = star S ∘L S :=
+    operatorAbsoluteValue_sq S
+  have hAself : star A = A :=
+    (operatorAbsoluteValue_isSelfAdjoint S).star_eq
+  have hleft : star (directRotation U V hacute) ∘L
+      directRotation U V hacute = 1 := by
+    unfold directRotation
+    rw [star_mul, ← coe_canonicalAbsoluteValueUnit]
+    change (↑Au⁻¹ : E →L[𝕜] E) ∘L star S ∘L S ∘L
+      (↑Au⁻¹ : E →L[𝕜] E) = 1
+    rw [← hsq]
+    simp [ContinuousLinearMap.comp_assoc, hAself]
+  have hright : directRotation U V hacute ∘L
+      star (directRotation U V hacute) = 1 := by
+    have hunit : IsUnit (directRotation U V hacute) := by
+      exact IsUnit.mul
+        (canonicalIntertwinerUnit U V hacute).isUnit
+        (canonicalAbsoluteValueUnit U V hacute).isUnit.inv
+    exact left_inv_eq_right_inv hleft hunit.unit.mul_inv
+  exact isUnitaryOperator_of_star_mul_self_and_mul_star_self hleft hright
 
 /-- The direct rotation maps one subspace onto the other. 
 
@@ -111,7 +135,21 @@ theorem directRotation_maps_subspace
     (U V : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] (hacute : IsAcute U V) :
     U.map (directRotation U V hacute).toLinearMap = V := by
-  sorry
+  let W := directRotation U V hacute
+  have hW := directRotation_unitary U V hacute
+  have hint := directRotation_intertwines U V hacute
+  apply le_antisymm
+  · rintro y ⟨x, hx, rfl⟩
+    apply V.starProjection_eq_self_iff.mp
+    have h := congrArg (fun T : E →L[𝕜] E => T x) hint
+    simpa [U.starProjection_eq_self_iff.mpr hx] using h.symm
+  · intro y hy
+    obtain ⟨x, rfl⟩ := hW.2 y
+    have hx : projection U x ∈ U := U.starProjection_apply_mem x
+    refine ⟨projection U x, hx, ?_⟩
+    apply hW.1.injective
+    have h := congrArg (fun T : E →L[𝕜] E => T x) hint
+    simpa [V.starProjection_eq_self_iff.mpr hy] using h
 
 /-- Intertwining of orthogonal projections. 
 
@@ -135,7 +173,27 @@ theorem directRotation_intertwines
     [V.HasOrthogonalProjection] (hacute : IsAcute U V) :
     directRotation U V hacute ∘L projection U =
       projection V ∘L directRotation U V hacute := by
-  sorry
+  have hS := canonicalIntertwiner_intertwines U V
+  have hA := canonicalAbsoluteValue_commutes_projection U V
+  have hAinv : Commute
+      (↑(canonicalAbsoluteValueUnit U V hacute)⁻¹ : E →L[𝕜] E)
+      (projection U) := by
+    exact IsUnit.commute_inv_left hA
+      (canonicalAbsoluteValueUnit U V hacute).isUnit
+  unfold directRotation
+  calc
+    (canonicalIntertwiner U V ∘L
+        (↑(canonicalAbsoluteValueUnit U V hacute)⁻¹ : E →L[𝕜] E)) ∘L
+        projection U
+        = canonicalIntertwiner U V ∘L projection U ∘L
+            (↑(canonicalAbsoluteValueUnit U V hacute)⁻¹ : E →L[𝕜] E) := by
+              rw [ContinuousLinearMap.comp_assoc, hAinv.eq,
+                ← ContinuousLinearMap.comp_assoc]
+    _ = projection V ∘L canonicalIntertwiner U V ∘L
+          (↑(canonicalAbsoluteValueUnit U V hacute)⁻¹ : E →L[𝕜] E) := by
+            rw [hS]
+    _ = projection V ∘L directRotation U V hacute := by
+          simp [directRotation, ContinuousLinearMap.comp_assoc]
 
 /-- Square of the direct rotation is the product of reflections. 
 
@@ -159,7 +217,17 @@ theorem directRotation_sq
     [V.HasOrthogonalProjection] (hacute : IsAcute U V) :
     directRotation U V hacute ∘L directRotation U V hacute =
       reflectionOperator V ∘L reflectionOperator U := by
-  sorry
+  obtain ⟨D, hreduce, hP, hQ, hW⟩ :=
+    halmosTwoProjectionDecomposition U V
+  apply D.ext_reducingSummands
+  · simp [directRotation, canonicalIntertwiner, hP, hQ]
+  · simp [directRotation, canonicalIntertwiner, hP, hQ]
+  · exact defectSummands_bot_of_acute hacute
+  · intro ξ
+    let θ := D.angle ξ
+    have hθ : 0 ≤ θ ∧ θ < Real.pi/2 := D.angle_mem_acute ξ hacute
+    rw [hW ξ, D.reflectionProduct_on_generic ξ]
+    exact scalar_rotation_sq_eq_reflectionProduct θ
 
 /-- Direct rotation minimizes maximal displacement from the identity.
 
@@ -193,7 +261,15 @@ theorem directRotation_minimal
     (hmap : U.map W.toLinearMap = V) :
     ‖directRotation U V hacute - ContinuousLinearMap.id 𝕜 E‖ ≤
       ‖W - ContinuousLinearMap.id 𝕜 E‖ := by
-  sorry
+  obtain ⟨D, hreduce, hP, hQ, hcanonical⟩ :=
+    halmosTwoProjectionDecomposition U V
+  rw [D.opNorm_eq_iSup_fiberNorm]
+  apply iSup_le
+  intro ξ
+  have htransport := D.unitary_transport_constraint W hW hmap ξ
+  have hshort := scalar_shorter_rotation_minimizes_displacement
+    (D.angle ξ) (D.angle_mem_acute ξ hacute) htransport
+  exact le_trans hshort (D.fiberNorm_le_opNorm (W-1) ξ)
 
 end DavisKahanExt
 end ForMathlib

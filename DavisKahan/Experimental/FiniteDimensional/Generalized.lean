@@ -47,7 +47,48 @@ theorem generalizedSinTheta_frobenius_le_of_spectralDistance
         (sinThetaEmbedding V (orthonormalizedEmbedding X hX)) ≤
       RectangularUnitarilyInvariantNorm.frobenius
         (generalResidual A X M) := by
-  sorry
+  classical
+  let G := LinearMap.adjoint X ∘ₗ X
+  let Gmhalf := positiveInverseSqrt G hX
+  let Q := orthonormalizedEmbedding X hX
+  have hQ : Q.toLinearMap = X ∘ₗ Gmhalf := orthonormalizedEmbedding_eq X hX
+  have hQiso : LinearMap.adjoint Q.toLinearMap ∘ₗ Q.toLinearMap = LinearMap.id :=
+    orthonormalizedEmbedding_adjoint_comp_self X hX
+  have hres : residual A Q M = generalResidual A X M ∘ₗ Gmhalf := by
+    ext y
+    simp [residual, generalResidual, hQ, LinearMap.comp_apply, LinearMap.comp_assoc]
+  have hsylv :
+      compression A Vᗮ ∘ₗ sinThetaEmbedding V Q -
+        sinThetaEmbedding V Q ∘ₗ M =
+      complementaryProjection V ∘ₗ residual A Q M :=
+    projectedResidual_sylvester hA hM hV Q
+  have hHS := rectangular_frobenius_sylvester_le_of_spectraSeparated
+    hA.compression hM hδ hgap (sinThetaEmbedding V Q)
+      (complementaryProjection V ∘ₗ residual A Q M) hsylv
+  have hGmhalf : ‖Gmhalf.toContinuousLinearMap‖ ≤ ε⁻¹ :=
+    positiveInverseSqrt_norm_le_of_lowerFrameBound hframe hε
+  have hR :
+      RectangularUnitarilyInvariantNorm.frobenius (residual A Q M) ≤
+        ε⁻¹ * RectangularUnitarilyInvariantNorm.frobenius
+          (generalResidual A X M) := by
+    rw [hres]
+    exact RectangularUnitarilyInvariantNorm.frobenius_comp_le _ hGmhalf
+  have hproj :
+      RectangularUnitarilyInvariantNorm.frobenius
+          (complementaryProjection V ∘ₗ residual A Q M) ≤
+        RectangularUnitarilyInvariantNorm.frobenius (residual A Q M) :=
+    RectangularUnitarilyInvariantNorm.frobenius_projection_comp_le _ _
+  calc
+    δ * ε * RectangularUnitarilyInvariantNorm.frobenius
+        (sinThetaEmbedding V Q)
+        ≤ ε * RectangularUnitarilyInvariantNorm.frobenius
+            (complementaryProjection V ∘ₗ residual A Q M) := by
+          nlinarith [hHS]
+    _ ≤ ε * (ε⁻¹ * RectangularUnitarilyInvariantNorm.frobenius
+          (generalResidual A X M)) := by gcongr; exact hproj.trans hR
+    _ = RectangularUnitarilyInvariantNorm.frobenius
+          (generalResidual A X M) := by
+          field_simp [ne_of_gt hε]
 
 /-- Trace/nuclear fallback obtained from the square-norm estimate and rank.
 
@@ -70,7 +111,26 @@ theorem generalizedSinTheta_nuclear_le_of_spectralDistance
       Real.sqrt (finrank 𝕜 F) *
         RectangularUnitarilyInvariantNorm.frobenius
           (generalResidual A X M) := by
-  sorry
+  classical
+  let S := sinThetaEmbedding V (orthonormalizedEmbedding X hX)
+  have hHS := generalizedSinTheta_frobenius_le_of_spectralDistance
+    hA hV X hX hM hδ hε hframe hgap
+  have hrank : LinearMap.rank S ≤ finrank 𝕜 F := LinearMap.rank_le_domain S
+  have hnuc : RectangularUnitarilyInvariantNorm.nuclear S ≤
+      Real.sqrt (finrank 𝕜 F) *
+        RectangularUnitarilyInvariantNorm.frobenius S := by
+    exact nuclear_le_sqrt_rank_mul_frobenius S hrank
+  have hδε : 0 ≤ δ * ε := mul_nonneg (le_of_lt hδ) (le_of_lt hε)
+  calc
+    δ * ε * RectangularUnitarilyInvariantNorm.nuclear S
+        ≤ δ * ε * (Real.sqrt (finrank 𝕜 F) *
+          RectangularUnitarilyInvariantNorm.frobenius S) :=
+      mul_le_mul_of_nonneg_left hnuc hδε
+    _ = Real.sqrt (finrank 𝕜 F) *
+        (δ * ε * RectangularUnitarilyInvariantNorm.frobenius S) := by ring
+    _ ≤ Real.sqrt (finrank 𝕜 F) *
+        RectangularUnitarilyInvariantNorm.frobenius (generalResidual A X M) := by
+      gcongr
 
 /-- Davis--Kahan Theorem 6.3: generalized `tan Θ`, allowing the exact target
 subspace to have larger dimension than the trial space.
@@ -135,7 +195,20 @@ theorem spectralSubspace_path_continuous
     ContinuousOn (fun t : ℝ =>
       (spectralProjection (A + (t : 𝕜) • H) (Set.Icc a b)).toContinuousLinearMap)
       (Set.Icc 0 1) := by
-  sorry
+  classical
+  let Γ := rectangleContour (a - δ / 2) (b + δ / 2)
+    (uniformSpectralRadius A H)
+  have hsep : ∀ t ∈ Set.Icc (0 : ℝ) 1,
+      ContourSeparatesSpectrum Γ (A + (t : 𝕜) • H) := by
+    intro t ht
+    exact contourSeparatesSpectrum_of_interval_buffer
+      hδ (hselected t ht) (houtside t ht)
+  have hpath : Continuous fun t : ℝ =>
+      (A + (t : 𝕜) • H).toContinuousLinearMap := by
+    fun_prop
+  have hRiesz := continuousOn_rieszProjection hpath hsep
+  simpa [rieszProjection_eq_spectralProjection hA hH hselected houtside]
+    using hRiesz
 
 /-- Davis--Kahan Theorem 8.2: a quantitative half-gap bound selects the acute
 branch of the `sin 2Θ` conclusion.
@@ -154,7 +227,28 @@ theorem sinTwoTheta_acute_of_small_perturbation
       {lam | lam ∉ Set.Ioo (a - δ) (b + δ)})
     (hsmall : ‖H.toContinuousLinearMap‖ < δ / 2) :
     IsAcute U (spectralSubspace (A + H) (Set.Icc (a - δ / 2) (b + δ / 2))) := by
-  sorry
+  classical
+  let I := Set.Icc (a - δ / 2) (b + δ / 2)
+  let P := fun t : ℝ => spectralProjection (A + (t : 𝕜) • H) I
+  have hselected : ∀ t ∈ Set.Icc (0 : ℝ) 1,
+      SpectrumIn (A + (t : 𝕜) • H)
+        (spectralSubspace (A + (t : 𝕜) • H) I) I := by
+    intro t ht
+    exact spectralSubspace_spectrumIn (hA.add (hH.smul_ofReal t)) I
+  have houtside : ∀ t ∈ Set.Icc (0 : ℝ) 1,
+      SpectrumIn (A + (t : 𝕜) • H)
+        (spectralSubspace (A + (t : 𝕜) • H) I)ᗮ
+        {lam | lam ∉ Set.Ioo (a - δ) (b + δ)} := by
+    intro t ht
+    exact spectral_stability_outside_buffer hA hH hU hUcentral hUoutside hsmall ht
+  have hcont := spectralSubspace_path_continuous hA hH hδ hselected houtside
+  have hP0 : P 0 = projection U := by
+    simp [P, I, spectralProjection_eq_of_spectrum_split hA hU hUcentral hUoutside]
+  have hcomponent : ∀ t ∈ Set.Icc (0 : ℝ) 1, ‖P t - P 0‖ < 1 := by
+    exact continuous_projector_stays_in_component hcont
+      (uniform_projector_boundary_exclusion hδ hsmall houtside)
+  have h1 := hcomponent 1 (by simp)
+  simpa [P, I, hP0, IsAcute, subspaceGap, norm_sub_rev] using h1
 
 end DavisKahanTheory
 end ForMathlib

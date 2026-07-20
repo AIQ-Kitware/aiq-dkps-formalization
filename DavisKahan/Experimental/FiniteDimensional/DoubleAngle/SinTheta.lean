@@ -35,7 +35,32 @@ theorem sinTwoTheta_residual_le
     (X : F →ₗᵢ[𝕜] E) {M : F →ₗ[𝕜] F} (hM : M.IsSymmetric)
     {δ : ℝ} (hδ : 0 < δ) (hgap : InternalGap A U δ) :
     δ * N (sinTwoThetaEmbedding U X) ≤ 2 * N (residual A X M) := by
-  sorry
+  classical
+  let C := cosThetaEmbedding U X
+  let S := sinThetaEmbedding U X
+  let R := residual A X M
+  have hblocks := projectedResidualEquations hA hM hU X
+  have hdouble :
+      doubleAngleSylvesterOperator A U (sinTwoThetaEmbedding U X) =
+        (2 : 𝕜) •
+          (complementaryProjection U ∘ₗ R ∘ₗ LinearMap.adjoint C -
+            projection U ∘ₗ R ∘ₗ LinearMap.adjoint S) := by
+    ext x
+    simp [sinTwoThetaEmbedding, C, S, R, hblocks.1, hblocks.2,
+      LinearMap.comp_apply, LinearMap.adjoint_comp]
+    module
+  have hrhs :
+      N ((2 : 𝕜) •
+          (complementaryProjection U ∘ₗ R ∘ₗ LinearMap.adjoint C -
+            projection U ∘ₗ R ∘ₗ LinearMap.adjoint S)) ≤
+        2 * N R := by
+    rw [N.smul]
+    have hC : ‖C.toContinuousLinearMap‖ ≤ 1 := cosThetaEmbedding_contraction U X
+    have hS : ‖S.toContinuousLinearMap‖ ≤ 1 := sinThetaEmbedding_contraction U X
+    exact doubleAngleResidual_rhs_uiNorm_le N R hC hS
+  have hsolve := internalGap_doubleAngleSylvester_uiNorm_le
+    N hA hU hδ hgap (sinTwoThetaEmbedding U X) hdouble
+  exact (mul_le_mul_of_nonneg_left hsolve (le_of_lt hδ)).trans hrhs
 
 end DavisKahanTheory
 end ForMathlib

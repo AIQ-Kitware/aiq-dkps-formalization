@@ -180,7 +180,30 @@ theorem continuous_continuedProjection
     (hsep : ∀ t ∈ Set.Icc (0 : ℝ) 1,
       ContourSeparatesSpectrum (operatorPath A H t) s contour) :
     ContinuousOn (continuedProjection A H contour) (Set.Icc (0 : ℝ) 1) := by
-  sorry
+  classical
+  intro t ht
+  obtain ⟨hclosed, hrect, hres, M, hM0, hM, hinside, houtside⟩ := hsep t ht
+  have hlocal : ∃ ε > 0, ∀ u ∈ Set.Icc (0 : ℝ) 1,
+      |u-t| < ε → ∀ z ∈ Set.range contour,
+        InResolventSet (operatorPath A H u) z ∧
+          ‖resolventOperator (operatorPath A H u) z‖ ≤ 2 * max M 1 := by
+    exact uniform_resolvent_neighborhood_along_linear_path
+      A H contour t ht hres hrect hM
+  obtain ⟨ε, hε, hlocal⟩ := hlocal
+  refine continuousWithinAt_of_dist_le
+    (C := (Contour.length contour / (2 * Real.pi)) *
+      (2 * max M 1)^2 * ‖H‖) hε ?_
+  intro u hu hut
+  have hsegment : Set.uIcc t u ⊆ Set.Icc (0 : ℝ) 1 :=
+    Set.uIcc_subset_Icc hu ht
+  have hbound : ∀ r ∈ Set.uIcc t u, ∀ z ∈ Set.range contour,
+      InResolventSet (operatorPath A H r) z ∧
+        ‖resolventOperator (operatorPath A H r) z‖ ≤ 2 * max M 1 := by
+    intro r hr z hz
+    exact hlocal r (hsegment hr) z hz (by
+      exact lt_of_le_of_lt (abs_sub_le_of_mem_uIcc hr) hut)
+  simpa [dist_eq, abs_sub_comm, mul_assoc] using
+    norm_continuedProjection_sub_le A H contour hrect le_rfl hbound
 
 /-- Two orthogonal projections belong to the same norm-continuous component. -/
 def SameProjectionComponent (P Q : E →L[𝕜] E) : Prop :=

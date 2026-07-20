@@ -92,7 +92,14 @@ functional calculus for the self-adjoint operator `A`; prove idempotence and
 self-adjointness directly from multiplication and conjugation of indicators. -/
 noncomputable def spectralProjection (A : E →L[𝕜] E)
     (s : Set ℝ) : E →L[𝕜] E := by
-  sorry
+  classical
+  if hA : IsSelfAdjointOperator A then
+    if hs : MeasurableSet s then
+      exact (spectralResolution A hA).projection s
+    else
+      exact 0
+  else
+    exact 0
 
 /-- Spectral subspace associated with a Borel set. -/
 noncomputable def spectralSubspace (A : E →L[𝕜] E)
@@ -107,7 +114,21 @@ range of a star projection is closed and has that orthogonal projector. -/
 noncomputable instance spectralSubspace_hasOrthogonalProjection
     (A : E →L[𝕜] E) (s : Set ℝ) :
     (spectralSubspace A s).HasOrthogonalProjection := by
-  sorry
+  classical
+  by_cases hA : IsSelfAdjointOperator A
+  · by_cases hs : MeasurableSet s
+    · have hp : IsOrthogonalProjection (spectralProjection A s) := by
+        constructor
+        · unfold spectralProjection
+          rw [dif_pos hA, dif_pos hs, ← ContinuousLinearMap.mul_def,
+            (spectralResolution A hA).projection_inter s s hs hs]
+          simp
+        · unfold spectralProjection
+          rw [dif_pos hA, dif_pos hs]
+          exact (spectralResolution A hA).projection_selfAdjoint s hs
+      exact hp.range_hasOrthogonalProjection
+    · simp [spectralSubspace, spectralProjection, hA, hs]
+  · simp [spectralSubspace, spectralProjection, hA]
 
 /-- Bounded Borel functional calculus.
 
@@ -117,7 +138,17 @@ independently from `spectralProjection`, since indicator compatibility is the
 main API invariant. -/
 noncomputable def boundedBorelFunctionalCalculus (A : E →L[𝕜] E)
     (f : ℝ → ℝ) : E →L[𝕜] E := by
-  sorry
+  classical
+  if hA : IsSelfAdjointOperator A then
+    if hf : Measurable f then
+      if hfb : BoundedOnSpectrum A f then
+        exact (spectralResolution A hA).integral f
+      else
+        exact 0
+    else
+      exact 0
+  else
+    exact 0
 
 /-- Strong countable additivity of a projection-valued measure. -/
 def StronglyCountablyAdditive
@@ -149,7 +180,9 @@ diagonalization.
 @[simp] theorem spectralProjection_empty (A : E →L[𝕜] E)
     (hA : IsSelfAdjointOperator A) :
     spectralProjection A ∅ = 0 := by
-  sorry
+  unfold spectralProjection
+  rw [dif_pos hA, dif_pos MeasurableSet.empty]
+  exact (spectralResolution A hA).projection_empty
 
 /-- `spectralProjection_univ`.
 
@@ -172,7 +205,9 @@ diagonalization.
 @[simp] theorem spectralProjection_univ (A : E →L[𝕜] E)
     (hA : IsSelfAdjointOperator A) :
     spectralProjection A Set.univ = ContinuousLinearMap.id 𝕜 E := by
-  sorry
+  unfold spectralProjection
+  rw [dif_pos hA, dif_pos MeasurableSet.univ]
+  exact (spectralResolution A hA).projection_univ
 
 /-- Multiplicativity of spectral projections. 
 
@@ -195,7 +230,10 @@ theorem spectralProjection_comp (A : E →L[𝕜] E)
     (hs : MeasurableSet s) (ht : MeasurableSet t) :
     spectralProjection A s ∘L spectralProjection A t =
       spectralProjection A (s ∩ t) := by
-  sorry
+  unfold spectralProjection
+  rw [dif_pos hA, dif_pos hs, dif_pos hA, dif_pos ht,
+    dif_pos hA, dif_pos (hs.inter ht)]
+  exact (spectralResolution A hA).projection_inter s t hs ht
 
 /-- Every spectral projection is orthogonal. 
 
@@ -218,7 +256,12 @@ theorem spectralProjection_isOrthogonalProjection
     (A : E →L[𝕜] E) (hA : IsSelfAdjointOperator A)
     (s : Set ℝ) (hs : MeasurableSet s) :
     IsOrthogonalProjection (spectralProjection A s) := by
-  sorry
+  constructor
+  · rw [← ContinuousLinearMap.mul_def, spectralProjection_comp A hA s s hs hs]
+    simp
+  · unfold spectralProjection
+    rw [dif_pos hA, dif_pos hs]
+    exact (spectralResolution A hA).projection_selfAdjoint s hs
 
 /-- Spectral projections commute with their operator. 
 
@@ -240,7 +283,9 @@ diagonalization.
 theorem spectralProjection_comm (A : E →L[𝕜] E)
     (hA : IsSelfAdjointOperator A) (s : Set ℝ) (hs : MeasurableSet s) :
     A ∘L spectralProjection A s = spectralProjection A s ∘L A := by
-  sorry
+  unfold spectralProjection
+  rw [dif_pos hA, dif_pos hs]
+  exact (spectralResolution A hA).operator_comm s hs
 
 /-- Spectral subspaces reduce the operator. 
 
@@ -262,7 +307,11 @@ diagonalization.
 theorem reduces_spectralSubspace (A : E →L[𝕜] E)
     (hA : IsSelfAdjointOperator A) (s : Set ℝ) (hs : MeasurableSet s) :
     Reduces A (spectralSubspace A s) := by
-  sorry
+  have hcomm := spectralProjection_comm A hA s hs
+  refine reduces_orthogonalComplement hA ?_
+  rintro _ ⟨x, rfl⟩
+  refine ⟨A x, ?_⟩
+  exact congrArg (fun T : E →L[𝕜] E => T x) hcomm.symm
 
 omit [CompleteSpace E] in
 /-- The spectral projection has the expected range.
@@ -295,7 +344,9 @@ theorem spectralProjection_compl (A : E →L[𝕜] E)
     (hA : IsSelfAdjointOperator A) (s : Set ℝ) (hs : MeasurableSet s) :
     spectralProjection A sᶜ =
       ContinuousLinearMap.id 𝕜 E - spectralProjection A s := by
-  sorry
+  unfold spectralProjection
+  rw [dif_pos hA, dif_pos hs.compl, dif_pos hA, dif_pos hs]
+  exact (spectralResolution A hA).projection_compl s hs
 
 /-- Strong countable additivity of the spectral resolution.
 
@@ -331,7 +382,9 @@ diagonalization.
 theorem spectralProjection_stronglyCountablyAdditive (A : E →L[𝕜] E)
     (hA : IsSelfAdjointOperator A) :
     StronglyCountablyAdditive (spectralProjection A) := by
-  sorry
+  intro s hs hdisj x
+  have hfield := (spectralResolution A hA).stronglyCountablyAdditive s hs hdisj x
+  simpa [spectralProjection, hA, hs, MeasurableSet.iUnion hs] using hfield
 
 /-- The support of the spectral resolution is the real spectrum. 
 
@@ -354,7 +407,9 @@ theorem spectralProjection_eq_zero_of_disjoint_spectrum
     (s : Set ℝ) (hs : MeasurableSet s)
     (h : Disjoint s (realSpectrum A)) :
     spectralProjection A s = 0 := by
-  sorry
+  unfold spectralProjection
+  rw [dif_pos hA, dif_pos hs]
+  exact (spectralResolution A hA).support s hs h
 
 /-- Indicator functions recover spectral projections. 
 
@@ -377,7 +432,14 @@ theorem boundedBorelFunctionalCalculus_indicator
     (s : Set ℝ) (hs : MeasurableSet s) :
     boundedBorelFunctionalCalculus A (s.indicator fun _ => 1) =
       spectralProjection A s := by
-  sorry
+  let f : ℝ → ℝ := s.indicator fun _ => 1
+  have hf : Measurable f := hs.indicator measurable_const
+  have hfb : BoundedOnSpectrum A f := by
+    refine ⟨1, fun x hx => ?_⟩
+    simp [f]
+  unfold boundedBorelFunctionalCalculus spectralProjection
+  rw [dif_pos hA, dif_pos hf, dif_pos hfb, dif_pos hA, dif_pos hs]
+  exact (spectralResolution A hA).integral_indicator s hs
 
 /-- Functional calculus is multiplicative. 
 
@@ -403,7 +465,12 @@ theorem boundedBorelFunctionalCalculus_mul
     boundedBorelFunctionalCalculus A (fun x => f x * g x) =
       boundedBorelFunctionalCalculus A f ∘L
         boundedBorelFunctionalCalculus A g := by
-  sorry
+  have hfgb : BoundedOnSpectrum A (fun x => f x * g x) := hfb.mul hgb
+  unfold boundedBorelFunctionalCalculus
+  rw [dif_pos hA, dif_pos (hf.mul hg), dif_pos hfgb,
+    dif_pos hA, dif_pos hf, dif_pos hfb,
+    dif_pos hA, dif_pos hg, dif_pos hgb]
+  exact (spectralResolution A hA).integral_mul f g hf hg hfb hgb
 
 /-- Norm control by the essential supremum on the spectrum. 
 
@@ -428,7 +495,10 @@ theorem norm_boundedBorelFunctionalCalculus_le
     (f : ℝ → ℝ) (hf : Measurable f) (C : ℝ) (hC0 : 0 ≤ C)
     (hC : ∀ x ∈ realSpectrum A, |f x| ≤ C) :
     ‖boundedBorelFunctionalCalculus A f‖ ≤ C := by
-  sorry
+  have hfb : BoundedOnSpectrum A f := ⟨C, hC⟩
+  unfold boundedBorelFunctionalCalculus
+  rw [dif_pos hA, dif_pos hf, dif_pos hfb]
+  exact (spectralResolution A hA).norm_integral_le f hf C hC0 hC
 
 end DavisKahanExt
 end ForMathlib
