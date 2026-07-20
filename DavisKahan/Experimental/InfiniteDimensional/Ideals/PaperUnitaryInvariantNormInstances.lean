@@ -28,6 +28,8 @@ open scoped InnerProductSpace BigOperators
 
 noncomputable section
 
+universe u v
+
 /-- The finite `l1` symmetric gauge. -/
 def paperL1Gauge (n : ℕ) (x : Fin n → ℝ) : ℝ :=
   ∑ i, |x i|
@@ -65,7 +67,7 @@ theorem add_le {n : ℕ} (x y : Fin n → ℝ) :
         = ∑ i, |x i + y i| := by
           simp [paperL1Gauge]
     _ ≤ ∑ i, (|x i| + |y i|) :=
-      Finset.sum_le_sum fun i _ => abs_add (x i) (y i)
+      Finset.sum_le_sum fun i _ => abs_add_le (x i) (y i)
     _ = paperL1Gauge n x + paperL1Gauge n y := by
       simp [paperL1Gauge, Finset.sum_add_distrib]
 
@@ -94,7 +96,7 @@ theorem normalized : paperL1Gauge 1 (fun _ => 1) = 1 := by
   simp [paperL1Gauge]
 
 theorem weak_majorization {n : ℕ} {x y : Fin n → ℝ}
-    (hx : Antitone x) (h0x : ∀ i, 0 ≤ x i) (h0y : ∀ i, 0 ≤ y i)
+    (_hx : Antitone x) (h0x : ∀ i, 0 ≤ x i) (h0y : ∀ i, 0 ≤ y i)
     (hpre : ∀ m : ℕ,
       (∑ i ∈ Finset.univ.filter (fun i : Fin n => (i : ℕ) < m), x i) ≤
       (∑ i ∈ Finset.univ.filter (fun i : Fin n => (i : ℕ) < m), y i)) :
@@ -103,7 +105,7 @@ theorem weak_majorization {n : ℕ} {x y : Fin n → ℝ}
       (Finset.univ.filter fun i : Fin n => (i : ℕ) < n) = Finset.univ :=
     Finset.filter_true_of_mem fun i _ => i.isLt
   have hfull := hpre n
-  rw [hall, hall] at hfull
+  rw [hall] at hfull
   simpa [paperL1Gauge, abs_of_nonneg, h0x, h0y] using hfull
 
 end PaperL1Gauge
@@ -133,20 +135,25 @@ theorem paperUnitaryInvariantNorm_nonempty :
 
 /-- The finite gauge of the concrete nuclear witness is exactly the `l1` gauge. -/
 theorem paperNuclearNorm_finiteGauge (n : ℕ) (x : Fin n → ℝ) :
-    paperNuclearNorm.finiteGauge n x = paperL1Gauge n x := by
-  change (PaperSymmetricNormingFunction.ofPaperNorm
-    paperNuclearSymmetricNormingFunction.toPaperNorm).gauge n x = _
-  rw [PaperSymmetricNormingFunction.ofPaperNorm_toPaperNorm]
+    paperNuclearNorm.finiteGauge n x = paperL1Gauge n x :=
+  PaperSymmetricNormingFunction.toPaperNorm_finiteGauge
+    paperNuclearSymmetricNormingFunction n x
 
 /-- The finite-prefix value of the nuclear witness is the Ky Fan prefix sum. -/
 theorem paperNuclearNorm_prefixGauge
-    {𝕜 E F : Type*} [RCLike 𝕜]
+    {𝕜 : Type u} [RCLike 𝕜]
+    {E F : Type v}
     [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
     [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
     (n : ℕ) (A : E →L[𝕜] F) :
     paperNuclearNorm.prefixGauge n A = kyFanApproximationGauge n A := by
+  have habs : ∀ i : Fin n,
+      |PaperUnitaryInvariantNorm.approximationPrefix n A i| =
+        PaperUnitaryInvariantNorm.approximationPrefix n A i := fun _ =>
+    abs_of_nonneg (approximationSingularValue_nonneg _ _)
   rw [PaperUnitaryInvariantNorm.prefixGauge,
     paperNuclearNorm_finiteGauge, paperL1Gauge,
+    Finset.sum_congr rfl fun i _ => habs i,
     PaperUnitaryInvariantNorm.sum_approximationPrefix]
 
 end

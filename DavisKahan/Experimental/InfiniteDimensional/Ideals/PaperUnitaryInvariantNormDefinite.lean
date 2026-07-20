@@ -57,7 +57,7 @@ theorem opNorm_le_gauge
   have hprefix : ENNReal.ofReal ‖A‖ ≤ N.extendedGauge A := by
     rw [← N.prefixGauge_one_eq_opNorm A]
     exact le_iSup (fun n : ℕ => ENNReal.ofReal (N.prefixGauge n A)) 1
-  have hreal := ENNReal.toReal_mono ENNReal.ofReal_ne_top hA hprefix
+  have hreal := ENNReal.toReal_mono hA hprefix
   simpa [gauge, ENNReal.toReal_ofReal (norm_nonneg A)] using hreal
 
 /-- The source extension is positive definite. -/
@@ -65,6 +65,7 @@ theorem gauge_eq_zero_iff
     {𝕜 : Type u} [RCLike 𝕜]
     {E F : Type v}
     [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+    [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
     (N : PaperUnitaryInvariantNorm) {A : E →L[𝕜] F} (hA : N.Mem A) :
     N.gauge A = 0 ↔ A = 0 := by
   constructor
@@ -80,6 +81,7 @@ theorem gauge_pos
     {𝕜 : Type u} [RCLike 𝕜]
     {E F : Type v}
     [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+    [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
     (N : PaperUnitaryInvariantNorm) {A : E →L[𝕜] F}
     (hA : N.Mem A) (hA0 : A ≠ 0) :
     0 < N.gauge A := by

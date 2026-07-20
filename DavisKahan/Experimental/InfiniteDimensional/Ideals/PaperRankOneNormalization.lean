@@ -103,12 +103,20 @@ theorem extendedGauge_rankOne
   · apply iSup_le
     intro n
     rcases n with _ | n
-    · simp [extendedGauge, prefixGauge, approximationPrefix, finiteGauge_def]
+    · have hx : approximationPrefix (𝕜 := 𝕜) (E := E) (F := F) 0 V = 0 :=
+        Subsingleton.elim _ _
+      have hz : N.prefixGauge 0 V = 0 := by
+        rw [prefixGauge, hx]
+        simpa using N.finiteGauge_smul (n := 0) 0 (0 : Fin 0 → ℝ)
+      rw [hz]
+      simp
     · rw [N.prefixGauge_rankOne hVnorm hVrank n]
       simp
-  · have h := le_iSup
-      (fun n : ℕ => ENNReal.ofReal (N.prefixGauge n V)) 1
-    simpa [N.prefixGauge_rankOne hVnorm hVrank 0] using h
+  · rw [extendedGauge]
+    refine le_trans ?_
+      (le_iSup (fun n : ℕ => ENNReal.ofReal (N.prefixGauge n V)) 1)
+    rw [N.prefixGauge_rankOne hVnorm hVrank 0]
+    simp
 
 /-- A norm-one rank-one operator belongs to every source ideal. -/
 theorem mem_rankOne

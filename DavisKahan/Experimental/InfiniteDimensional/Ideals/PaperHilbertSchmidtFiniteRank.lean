@@ -42,10 +42,12 @@ theorem approximationSingularValue_eq_zero_of_rank_le
     {A : E →L[𝕜] F} {n : ℕ}
     (hA : A.rank ≤ (n : Cardinal)) :
     approximationSingularValue n A = 0 := by
-  apply le_antisymm
-  · have h := A.approximationNumber_le (R := A) hA
-    exact_mod_cast (h.trans_eq (by simp))
-  · exact approximationSingularValue_nonneg n A
+  have h : A.approximationNumber n ≤ ‖A - A‖₊ :=
+    A.approximationNumber_le (R := A) hA
+  rw [sub_self, nnnorm_zero] at h
+  have h0 : A.approximationNumber n = 0 := le_antisymm h bot_le
+  show (A.approximationNumber n : ℝ) = 0
+  rw [h0, NNReal.coe_zero]
 
 /-- If `A` has rank at most `r`, every term after the first `r` terms of its
 approximation singular-value sequence vanishes. -/
@@ -89,7 +91,7 @@ theorem isPaperHilbertSchmidt_of_rank_le
     IsPaperHilbertSchmidt A := by
   unfold IsPaperHilbertSchmidt
   rw [paperHilbertSchmidtEnergy_eq_sum_range_of_rank_le hA]
-  exact ENNReal.sum_ne_top
+  exact ENNReal.sum_ne_top.mpr fun _ _ => ENNReal.ofReal_ne_top
 
 /-- Finite-rank square energy is bounded by rank times squared operator norm. -/
 theorem paperHilbertSchmidtEnergy_le_rank_mul_opNorm_sq
@@ -128,16 +130,18 @@ theorem paperHilbertSchmidtNorm_le_sqrt_rank_mul_opNorm
   have henergy := paperHilbertSchmidtEnergy_le_rank_mul_opNorm_sq hA
   have hreal :
       (paperHilbertSchmidtEnergy A).toReal ≤ (r : ℝ) * ‖A‖ ^ 2 := by
-    have := ENNReal.toReal_mono hmem
-      (ENNReal.mul_ne_top (by simp) ENNReal.ofReal_ne_top) henergy
+    have := ENNReal.toReal_mono
+      (ENNReal.mul_ne_top (ENNReal.natCast_ne_top r) ENNReal.ofReal_ne_top)
+      henergy
     simpa [ENNReal.toReal_mul, ENNReal.toReal_ofReal (sq_nonneg ‖A‖)] using this
   have hsq : paperHilbertSchmidtNorm A ^ 2 ≤
       (Real.sqrt r * ‖A‖) ^ 2 := by
     rw [sq_paperHilbertSchmidtNorm hmem]
     rw [mul_pow, Real.sq_sqrt (Nat.cast_nonneg r)]
     simpa [pow_two] using hreal
-  nlinarith [paperHilbertSchmidtNorm_nonneg A,
-    Real.sqrt_nonneg (r : ℝ), norm_nonneg A]
+  have hb : (0 : ℝ) ≤ Real.sqrt r * ‖A‖ :=
+    mul_nonneg (Real.sqrt_nonneg _) (norm_nonneg A)
+  nlinarith [hsq, paperHilbertSchmidtNorm_nonneg A, hb]
 
 /-- Operator norm is the first square-summable singular value. -/
 theorem opNorm_le_paperHilbertSchmidtNorm
@@ -153,7 +157,7 @@ theorem opNorm_le_paperHilbertSchmidtNorm
       ENNReal.ofReal ((approximationSingularValue 0 A) ^ 2) ≤
         ∑' n : ℕ, ENNReal.ofReal ((approximationSingularValue n A) ^ 2))
   have hreal : ‖A‖ ^ 2 ≤ (paperHilbertSchmidtEnergy A).toReal := by
-    have := ENNReal.toReal_mono ENNReal.ofReal_ne_top hA hterm
+    have := ENNReal.toReal_mono hA hterm
     simpa [ENNReal.toReal_ofReal (sq_nonneg ‖A‖)] using this
   rw [← sq_paperHilbertSchmidtNorm hA] at hreal
   nlinarith [norm_nonneg A, paperHilbertSchmidtNorm_nonneg A]
