@@ -25,27 +25,33 @@ because `GeneratorIntertwines.group` cited the density of the generator domain
 without importing the module that proves it, so the theorem the whole
 rectangular chain rests on did not exist. Do not redesign this argument.
 
-### The tensor/operator dictionary is complete; the flow layer above it is not
+### Both of your open obligations are now closed
+
+The second one, **pairwise tensor spectral support**, is proved and free of
+admissions. `Spectra.Spaces.Tensor.HilbertSchmidtSpectralGap` builds, and
+`borelMeasure_sylvesterGroup_tmul`, `hasVectorSpectralGap_tmul`,
+`spectralProjection_gap_eq_zero` and `hasVectorSpectralGap` all print exactly
+`[propext, Classical.choice, Quot.sound]`.
+
+As with the first obligation, the mathematics of your candidate was sound. It
+failed on namespace and notation scoping, a dense induction applied rather than
+eliminated, an integrand written in the source variable rather than the mapped
+one, and a higher-order product factorisation that needed its factors named.
+Nothing about the argument was redesigned.
+
+### The tensor/operator dictionary and the flow layer above it
 
 `Spectra.Spaces.Tensor.HilbertSchmidt` builds, and all ten endpoints are
 admission-free, including `hasSum_columnTensor`, `norm_sq_eq_tsum_column_norm_sq`,
 `existsUnique_tensor_iff_summable_columns` and the `ofOperator` inverse.
 
-**Scope of that claim, stated precisely.** It covers `HilbertSchmidt.lean` only.
-Measured serially on a quiet tree:
+The whole subtree now builds. Measured serially on a quiet tree, every one of
+`HilbertSchmidt`, `HilbertSchmidtFlow`, `HilbertSchmidtGeneratorBridge` and
+`HilbertSchmidtSpectralGap` is at zero errors.
 
-| Module | Errors |
-| --- | --- |
-| `Spectra.Spaces.Tensor.HilbertSchmidt` | 0 |
-| `Spectra.Spaces.Tensor.HilbertSchmidtFlow` | 13 |
-| `Spectra.Spaces.Tensor.HilbertSchmidtGeneratorBridge` | 13 |
-| `Spectra.Spaces.Tensor.HilbertSchmidtSpectralGap` | 13 |
-
-The last three all fail inside `HilbertSchmidtFlow.lean`; the counts are that
-one module's errors propagating. **Your second obligation, pairwise tensor
-spectral support, is blocked by `HilbertSchmidtFlow`, not by the dictionary.**
-That module is the next thing to repair and nothing is known about the spectral
-gap candidate until it elaborates.
+An earlier version of this note reported the dictionary alone as "the package",
+which overstated it: at that point the flow layer still had thirteen errors and
+the three modules above it were showing that one module's failures propagating.
 
 The column expansion had to be rebuilt: it rested on five lemmas that do not
 exist in Mathlib under any name. It now goes through `OrthogonalFamily`, with a
@@ -91,16 +97,22 @@ statements.
 
 ## Still open
 
-- `Spectra.Spaces.Tensor.HilbertSchmidtFlow` --- 13 errors. **Highest priority:
-  it blocks your second obligation.**
-- `Sylvester.PaperHilbertSchmidtPairwise` --- 7 errors, provisional count.
-- `SinTheta.PaperTheorem62` --- not yet measured under quiet conditions.
-- Your second obligation, **pairwise tensor spectral support**, lives in
-  `Spectra.Spaces.Tensor.HilbertSchmidtSpectralGap`. It has still not elaborated,
-  and nothing is known about whether that candidate works.
+- `SinTheta.PaperTheorem62` --- 17 errors, under repair at the time of writing.
+  It is the only module in the chain not yet green.
 
-`Ideals.PaperHilbertSchmidtBasis` is **closed**: 0 errors, all twenty
-declarations admission-free.
+Everything below it is closed: `Ideals.PaperHilbertSchmidtBasis`, the four
+tensor modules, `Sylvester.PaperHilbertSchmidtDefectFirst`,
+`Sylvester.PaperHilbertSchmidtPairwise`, `Sylvester.PairwiseSpectrumGap`,
+`Sylvester.PairwiseHomogeneousUniqueness` and `Sylvester.HomogeneousUniqueness`
+all build with no errors and are free of admissions.
+
+**No genuine mathematical gap was found anywhere in this drop.** Every one of
+roughly a hundred and twenty errors repaired was Lean mechanics. Two candidates
+that looked like real gaps were not: the arithmetic failures in homogeneous
+uniqueness were a norm that never reduced together with a nonlinear product,
+and the difference quotient decomposition that a ring tactic rejected was true
+as stated and failed only because the unbundled tensor operator map has no
+linearity lemmas in a restricted simp set.
 
 ## Lean mechanics that cost the most time this round
 
