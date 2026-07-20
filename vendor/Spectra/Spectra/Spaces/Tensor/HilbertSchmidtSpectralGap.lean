@@ -55,9 +55,9 @@ private theorem conj_orbit_inner
   rw [V.inverse_eq_adjoint]
   exact (ContinuousLinearMap.adjoint_inner_right (V.U t) v v).symm
 
-private theorem char_difference_factor (t λ α : ℝ) :
-    cexp (I * ((spectralDifference (λ, α) : ℝ) : ℂ) * (t : ℂ)) =
-      cexp (I * (λ : ℂ) * (t : ℂ)) *
+private theorem char_difference_factor (t lam α : ℝ) :
+    cexp (I * ((spectralDifference (lam, α) : ℝ) : ℂ) * (t : ℂ)) =
+      cexp (I * (lam : ℂ) * (t : ℂ)) *
         cexp (I * (α : ℂ) * ((-t : ℝ) : ℂ)) := by
   rw [← Complex.exp_add]
   congr 1
@@ -111,9 +111,9 @@ def PairwiseScalarSupportGap
     (V : OneParameterUnitaryGroup (H := F))
     (δ : ℝ) : Prop :=
   ∀ u : E, ∀ v : F,
-    ∀ λ ∈ (borelMeasure U u).support,
+    ∀ lam ∈ (borelMeasure U u).support,
     ∀ α ∈ (borelMeasure V v).support,
-      δ ≤ |λ - α|
+      δ ≤ |lam - α|
 
 /-- Pairwise support separation gives the vector gap for every pure tensor. -/
 theorem hasVectorSpectralGap_tmul
@@ -133,9 +133,9 @@ theorem hasVectorSpectralGap_tmul
       measurableSet_le measurable_const
         (measurable_spectralDifference.abs)
     rw [ae_prod_iff_ae_ae hmeas]
-    filter_upwards [μ.support_mem_ae] with λ hλ
+    filter_upwards [μ.support_mem_ae] with lam hlam
     filter_upwards [ν.support_mem_ae] with α hα
-    exact hgap u v λ hλ α hα
+    exact hgap u v lam hlam α hα
   exact (ae_map_iff measurable_spectralDifference.aemeasurable
     (measurableSet_le measurable_const measurable_abs)).2 hprod
 
