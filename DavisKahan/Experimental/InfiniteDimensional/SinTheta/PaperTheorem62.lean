@@ -5,9 +5,9 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Experimental.InfiniteDimensional.Sylvester.PaperHilbertSchmidtPairwise
 import DavisKahan.Experimental.InfiniteDimensional.Ideals.PaperHilbertSchmidtFiniteRank
-import DavisKahan.Experimental.InfiniteDimensional.SinTheta.FrameFactorization
+import DavisKahan.SinTheta.FrameFactorization
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.RealFrameFactorization
-import DavisKahan.Experimental.InfiniteDimensional.SinTheta.PaperOperatorAngleBridge
+import DavisKahan.Sources.DavisKahan1970.SineTheta.OperatorAngleBridge
 
 /-!
 # Davis--Kahan Theorem 6.2: the second generalized sine theorem

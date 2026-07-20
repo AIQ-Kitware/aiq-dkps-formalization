@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Geometry.Angle.PaperOperatorAngle
-import DavisKahan.Experimental.InfiniteDimensional.Ideals.OperatorModulusApproximation
-import DavisKahan.Experimental.InfiniteDimensional.SinTheta.PaperProjectionBlocks
+import DavisKahan.OperatorIdeal.ApproximationNumbers.OperatorModulus
+import DavisKahan.Sources.DavisKahan1970.SineTheta.ProjectionBlocks
 
 /-!
 # Literal paper angles and the accepted sine blocks

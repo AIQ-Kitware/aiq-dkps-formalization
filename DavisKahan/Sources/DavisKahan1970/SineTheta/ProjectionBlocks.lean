@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import ForMathlib.Analysis.InnerProductSpace.ProjectionBlocks
-import DavisKahan.Experimental.InfiniteDimensional.Ideals.PaperUnitaryInvariantNorm
+import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.UnitaryInvariantNorm
 
 /-!
 # Projection-block lemmas from Davis--Kahan section 6

@@ -6,7 +6,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.NaturalBounded
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.NaturalReducing
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.NaturalGapConvenience
-import DavisKahan.Experimental.InfiniteDimensional.Ideals.ApproximationNumbers
+import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
 
 /-!
 # Compile-only usage examples for the natural sine-theta API

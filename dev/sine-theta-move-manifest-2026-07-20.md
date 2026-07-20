@@ -280,3 +280,16 @@ results. It should stay red until that is no longer true.
 Note that this does not affect the audited surface: all 43 endpoints of
 `FullSineTheta` are axiom-clean. The facade's *other* declarations, inherited
 from `GeneralSinTheta`, are what still reach the admissions.
+
+## 2026-07-20 correction: the direct Spectra route avoids the legacy truncation debt
+
+The preceding conclusion that structural check 2 necessarily requires proving
+all generic spectral-cutoff and bounded-truncation declarations was too strong.
+Those declarations remain open, but the repository already contains a complete
+direct Spectra implementation of the interval/exterior estimate.  It is tainted
+by coarse imports, not by logical use of the admissions.
+
+The authoritative continuation plan is now
+`dev/general-sine-theta-direct-spectra-production-plan-2026-07-20.md`.  Extract
+the complete Neumann and problem-data declarations, promote the direct Spectra
+engine, and leave the unresolved generic truncation API in Experimental.

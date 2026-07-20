@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.SinTheta.SpectralBridge
-import DavisKahan.Experimental.InfiniteDimensional.Sylvester.Bounded
+import DavisKahan.Sylvester.Bounded
 import DavisKahan.Experimental.InfiniteDimensional.Core.Unbounded
 
 /-!

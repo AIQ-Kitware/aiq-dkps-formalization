@@ -1,7 +1,7 @@
 /-
 # Approximation numbers and finite Ky Fan gauges -- dependency audit
 -/
-import DavisKahan.Experimental.InfiniteDimensional.Ideals.ApproximationNumbers
+import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
 
 #print axioms ForMathlib.DavisKahan.Experimental.ExactSinTheta.approximationSingularValue_comp_strongProjection_tendsto_complex
 #print axioms ForMathlib.DavisKahan.Experimental.ExactSinTheta.ApproximationNumbersReal.approximationNumber_isLUB_finiteRestrictions_real

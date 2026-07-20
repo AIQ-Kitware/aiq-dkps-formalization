@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.PaperTheorem61
-import DavisKahan.Experimental.InfiniteDimensional.Ideals.PaperUnitaryInvariantNorm
-import DavisKahan.Experimental.InfiniteDimensional.Ideals.PaperHeterogeneousRepresentative
+import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.UnitaryInvariantNorm
+import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.HeterogeneousRepresentative
 
 /-!
 # Davis--Kahan Theorem 6.1 for every source-defined norm

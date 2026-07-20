@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.PaperSharpness
-import DavisKahan.Experimental.InfiniteDimensional.Ideals.ApproximationBlockSum
-import DavisKahan.Experimental.InfiniteDimensional.Ideals.PaperUnitaryInvariantNormLaws
+import DavisKahan.OperatorIdeal.ApproximationNumbers.BlockSum
+import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.UnitaryInvariantNormLaws
 
 /-!
 # Finite-multiplicity equality models for Davis--Kahan Theorem 6.1

@@ -5,7 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.Canonical
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.RealCanonical
-import DavisKahan.Experimental.InfiniteDimensional.Ideals.PaperSingularValueTransport
+import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SingularValueTransport
 
 /-!
 # Literal Davis--Kahan Theorem 6.1 surface

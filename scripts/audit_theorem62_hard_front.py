@@ -14,7 +14,7 @@ MODULES = [
     "Spectra.YosidaHille.RectangularIntertwining",
     "Spectra.SpectralTheory.SeparatedIntertwiner",
     "DavisKahan.Experimental.InfiniteDimensional.Sylvester.PairwiseSpectrumGap",
-    "DavisKahan.Experimental.InfiniteDimensional.Sylvester.PairwiseHomogeneousUniqueness",
+    "DavisKahan.Sylvester.PairwiseHomogeneousUniqueness",
     "Spectra.Spaces.Tensor.HilbertSchmidtSpectralGap",
     "DavisKahan.Experimental.InfiniteDimensional.Sylvester.PaperHilbertSchmidtPairwise",
     "DavisKahan.Experimental.InfiniteDimensional.SinTheta.PaperTheorem62",
@@ -45,7 +45,7 @@ def static_check() -> None:
         ROOT / "vendor/Spectra/Spectra/SpectralTheory/SeparatedIntertwiner.lean",
         ROOT / "vendor/Spectra/Spectra/Spaces/Tensor/HilbertSchmidtSpectralGap.lean",
         ROOT / "DavisKahan/Experimental/InfiniteDimensional/Sylvester/PairwiseSpectrumGap.lean",
-        ROOT / "DavisKahan/Experimental/InfiniteDimensional/Sylvester/PairwiseHomogeneousUniqueness.lean",
+        ROOT / "DavisKahan/Sylvester/PairwiseHomogeneousUniqueness.lean",
         ROOT / "DavisKahan/Experimental/InfiniteDimensional/Sylvester/PaperHilbertSchmidtPairwise.lean",
     ]
     forbidden = re.compile(r"\b(?:sorry|admit|native_decide)\b")

@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.SpectralBridge
-import DavisKahan.Experimental.InfiniteDimensional.SinTheta.FrameFactorization
+import DavisKahan.SinTheta.FrameFactorization
 
 /-!
 # Exact bounded infinite-dimensional `sin Θ` endpoints

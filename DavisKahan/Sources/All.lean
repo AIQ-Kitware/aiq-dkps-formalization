@@ -12,5 +12,6 @@ import DavisKahan.Sources.DavisKahan1970.FullPartIII
 import DavisKahan.Sources.DavisKahan1970.FullPartIIIExtensions
 import DavisKahan.Sources.DavisKahan1970.GeneralSinThetaExtensions
 import DavisKahan.Sources.YuWangSamworth2015
+import DavisKahan.Sources.DavisKahan1970.SineTheta.All
 
 /-! # Source-facing theorem facades -/

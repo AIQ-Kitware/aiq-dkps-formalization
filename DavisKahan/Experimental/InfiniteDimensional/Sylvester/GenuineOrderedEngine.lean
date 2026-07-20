@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Experimental.InfiniteDimensional.Sylvester.GenuineCutoffInterface
-import DavisKahan.Experimental.InfiniteDimensional.Ideals.ApproximationNumbers
+import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
 
 /-!
 # Replaceable ordered two-unbounded Sylvester engine

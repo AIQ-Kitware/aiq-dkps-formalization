@@ -3,8 +3,8 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.Experimental.InfiniteDimensional.Ideals.PaperSingularValueTransport
-import DavisKahan.Experimental.InfiniteDimensional.Ideals.OperatorModulusApproximation
+import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SingularValueTransport
+import DavisKahan.OperatorIdeal.ApproximationNumbers.OperatorModulus
 import DavisKahan.Experimental.InfiniteDimensional.Ideals.ComplexificationApproximation
 import Mathlib.Analysis.SpecialFunctions.Pow.Real
 import Mathlib.Data.ENNReal.Inv

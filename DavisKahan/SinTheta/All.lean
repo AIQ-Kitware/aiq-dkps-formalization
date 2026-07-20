@@ -5,5 +5,6 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.SinTheta.NaturalTwoSubspace
 import DavisKahan.SinTheta.SpectralBridge
+import DavisKahan.SinTheta.FrameFactorization
 
 /-! # Sine-theta theory -/

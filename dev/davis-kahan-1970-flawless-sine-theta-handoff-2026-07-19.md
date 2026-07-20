@@ -63,20 +63,20 @@ Run each command to a zero-error result before proceeding.  The first six
 leaves isolate the foundational API risks.
 
 ```bash
-lake build DavisKahan.Experimental.InfiniteDimensional.Ideals.PaperSingularValueTransport
-lake build DavisKahan.Experimental.InfiniteDimensional.Ideals.PaperUnitaryInvariantNorm
-lake build DavisKahan.Experimental.InfiniteDimensional.Ideals.PaperUnitaryInvariantNormLaws
+lake build DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SingularValueTransport
+lake build DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.UnitaryInvariantNorm
+lake build DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.UnitaryInvariantNormLaws
 lake build DavisKahan.Experimental.InfiniteDimensional.Ideals.PaperUnitaryInvariantNormDefinite
 lake build DavisKahan.Experimental.InfiniteDimensional.Ideals.PaperNormCorrespondence
-lake build DavisKahan.Experimental.InfiniteDimensional.Ideals.PaperHeterogeneousRepresentative
-lake build DavisKahan.Experimental.InfiniteDimensional.Ideals.OperatorModulusApproximation
-lake build DavisKahan.Experimental.InfiniteDimensional.Ideals.ApproximationBlockSum
-lake build DavisKahan.Experimental.InfiniteDimensional.SinTheta.PaperCosineAngle
-lake build DavisKahan.Experimental.InfiniteDimensional.SinTheta.PaperCosineAngleReal
-lake build DavisKahan.Experimental.InfiniteDimensional.SinTheta.PaperFullAngle
-lake build DavisKahan.Experimental.InfiniteDimensional.SinTheta.PaperFullAngleReal
-lake build DavisKahan.Experimental.InfiniteDimensional.SinTheta.PaperProjectionBlocks
-lake build DavisKahan.Experimental.InfiniteDimensional.SinTheta.PaperLemma61
+lake build DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.HeterogeneousRepresentative
+lake build DavisKahan.OperatorIdeal.ApproximationNumbers.OperatorModulus
+lake build DavisKahan.OperatorIdeal.ApproximationNumbers.BlockSum
+lake build DavisKahan.Sources.DavisKahan1970.SineTheta.CosineAngle
+lake build DavisKahan.Sources.DavisKahan1970.SineTheta.CosineAngleReal
+lake build DavisKahan.Sources.DavisKahan1970.SineTheta.FullAngle
+lake build DavisKahan.Sources.DavisKahan1970.SineTheta.FullAngleReal
+lake build DavisKahan.Sources.DavisKahan1970.SineTheta.ProjectionBlocks
+lake build DavisKahan.Sources.DavisKahan1970.SineTheta.Lemma61
 lake build DavisKahan.Experimental.InfiniteDimensional.SinTheta.PaperTheorem61Universal
 lake build DavisKahan.Experimental.InfiniteDimensional.SinTheta.PaperSymmetric
 lake build DavisKahan.Experimental.InfiniteDimensional.Ideals.PaperHilbertSchmidt
