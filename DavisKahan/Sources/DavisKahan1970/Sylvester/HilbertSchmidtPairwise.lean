@@ -4,7 +4,7 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.Released under Apache 2.0 l
 import DavisKahan.Sylvester.PairwiseSpectrumGap
 import DavisKahan.SpectralTheory.ClosedOperator.Complexification
 import DavisKahan.Sylvester.PairwiseHomogeneousUniqueness
-import DavisKahan.Experimental.InfiniteDimensional.Sylvester.PaperHilbertSchmidtDefectFirst
+import DavisKahan.Sources.DavisKahan1970.Sylvester.HilbertSchmidtDefectFirst
 import Spectra.Spaces.Tensor.HilbertSchmidtSpectralGap
 import Spectra.QuantumMechanics.BornRule.Observable
 

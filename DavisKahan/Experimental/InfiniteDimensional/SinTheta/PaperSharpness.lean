@@ -3,8 +3,8 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.Experimental.InfiniteDimensional.Ideals.PaperRankOneNormalization
-import DavisKahan.Experimental.InfiniteDimensional.Ideals.PaperHilbertSchmidtFrobenius
+import DavisKahan.Sources.DavisKahan1970.Ideals.RankOneNormalization
+import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtFrobenius
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.PaperTheorem61Universal
 import DavisKahan.Geometry.Angle.OperatorAngleReal
 import ForMathlib.Analysis.InnerProductSpace.UnitarilyInvariantNorm

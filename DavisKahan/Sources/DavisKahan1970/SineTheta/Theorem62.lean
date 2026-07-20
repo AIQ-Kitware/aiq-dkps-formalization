@@ -3,8 +3,8 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.Experimental.InfiniteDimensional.Sylvester.PaperHilbertSchmidtPairwise
-import DavisKahan.Experimental.InfiniteDimensional.Ideals.PaperHilbertSchmidtFiniteRank
+import DavisKahan.Sources.DavisKahan1970.Sylvester.HilbertSchmidtPairwise
+import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtFiniteRank
 import DavisKahan.SinTheta.FrameFactorization
 import DavisKahan.SinTheta.Real.FrameFactorization
 import DavisKahan.Sources.DavisKahan1970.SineTheta.OperatorAngleBridge
