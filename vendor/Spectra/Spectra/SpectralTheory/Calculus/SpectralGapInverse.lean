@@ -23,6 +23,7 @@ assumption on the generator is needed.
 -/
 
 open InnerProductSpace Complex MeasureTheory
+open Spectra.Borel
 open scoped InnerProductSpace
 
 namespace Spectra.QuantumMechanics.SpectralTheory
@@ -55,7 +56,7 @@ theorem norm_spectralGapInverseSymbol_le {δ : ℝ} (hδ : 0 < δ) (s : ℝ) :
   unfold spectralGapInverseSymbol
   split_ifs with hs
   · rw [norm_inv, Complex.norm_real, Real.norm_eq_abs]
-    exact inv_le_inv₀ hδ hs
+    exact inv_anti₀ hδ hs
   · simp [inv_nonneg.mpr hδ.le]
 
 /-- The product of the identity and cut-off reciprocal is bounded by one. -/
@@ -65,7 +66,7 @@ theorem norm_mul_spectralGapInverseSymbol_le_one {δ : ℝ}
   unfold spectralGapInverseSymbol
   split_ifs with hs
   · have hs0 : (s : ℂ) ≠ 0 := by
-      exact_mod_cast (abs_pos.mp (hδ.trans_le hs)).ne'
+      exact_mod_cast abs_pos.mp (hδ.trans_le hs)
     rw [mul_inv_cancel₀ hs0, norm_one]
   · simp
 
@@ -85,7 +86,7 @@ theorem norm_spectralGapSolution_le
   unfold spectralGapSolution
   exact (spectralCalculus U (spectralGapInverseSymbol δ)
     (measurable_spectralGapInverseSymbol δ)
-    ⟨δ⁻¹, fun s => norm_spectralGapInverseSymbol_le hδ s⟩).le_opNorm_of_bound
+    ⟨δ⁻¹, fun s => norm_spectralGapInverseSymbol_le hδ s⟩).le_of_opNorm_le
       (norm_spectralCalculus_le U _ _ _
         (fun s => norm_spectralGapInverseSymbol_le hδ s)) ξ
 
@@ -105,6 +106,38 @@ theorem spectralGapSolution_mem_generatorDomain
     (Complex.measurable_ofReal.mul
       (measurable_spectralGapInverseSymbol δ))
     ⟨1, fun s => norm_mul_spectralGapInverseSymbol_le_one hδ s⟩ ξ
+
+/-- If two bounded symbols agree `μ_ξ`-a.e. then the bounded calculus agrees at
+`ξ`, because `‖Φ(g)ξ − Φ(g')ξ‖² = ∫ ‖g − g'‖² dμ_ξ = 0`.
+
+This duplicates `Spectra.Modular.Cocycle.ModularSqrtSquare.spectralCalculus_congr_ae`.
+Importing that module would not create a cycle -- it does not reach this file -- but
+it would pull the whole modular-theory subtree into a basic calculus file and invert
+the dependency direction. The statement is generic and every ingredient of its proof
+(`spectralCalculus_sub`, `bounded_sub`, `norm_sq_spectralCalculus_apply`) already lives
+in this subtree, so the standing fix is to move the general form down here and have the
+modular layer use it; that refactor is deliberately not done in this repair. -/
+private theorem spectralCalculus_eq_of_ae
+    (U : OneParameterUnitaryGroup (H := H)) (g g' : ℝ → ℂ)
+    (hg_meas : Measurable g) (hg_bdd : ∃ C, ∀ ω, ‖g ω‖ ≤ C)
+    (hg'_meas : Measurable g') (hg'_bdd : ∃ C, ∀ ω, ‖g' ω‖ ≤ C) (ξ : H)
+    (hae : g =ᵐ[borelMeasure U ξ] g') :
+    spectralCalculus U g hg_meas hg_bdd ξ
+      = spectralCalculus U g' hg'_meas hg'_bdd ξ := by
+  have hzero : ‖spectralCalculus U g hg_meas hg_bdd ξ
+      - spectralCalculus U g' hg'_meas hg'_bdd ξ‖ ^ 2 = 0 := by
+    rw [← ContinuousLinearMap.sub_apply,
+      ← spectralCalculus_sub U g g' hg_meas hg_bdd hg'_meas hg'_bdd
+        (hg_meas.sub hg'_meas) (bounded_sub hg_bdd hg'_bdd),
+      norm_sq_spectralCalculus_apply]
+    refine integral_eq_zero_of_ae ?_
+    filter_upwards [hae] with s hs
+    rw [hs, sub_self, norm_zero]
+    simp
+  have hsub : spectralCalculus U g hg_meas hg_bdd ξ
+      - spectralCalculus U g' hg'_meas hg'_bdd ξ = 0 :=
+    norm_eq_zero.mp (pow_eq_zero_iff (n := 2) (by norm_num) |>.mp hzero)
+  exact sub_eq_zero.mp hsub
 
 /-- On a vector spectrally supported outside the gap, the generator sends the
 inverse-calculus vector back to the original vector. -/
@@ -128,9 +161,9 @@ theorem generator_spectralGapSolution
     unfold spectralGapInverseSymbol
     rw [if_pos hs]
     have hs0 : (s : ℂ) ≠ 0 := by
-      exact_mod_cast (abs_pos.mp (hδ.trans_le hs)).ne'
+      exact_mod_cast abs_pos.mp (hδ.trans_le hs)
     exact mul_inv_cancel₀ hs0
-  rw [spectralCalculus_congr_ae U
+  rw [spectralCalculus_eq_of_ae U
     (fun s : ℝ => (s : ℂ) * spectralGapInverseSymbol δ s)
     (fun _ => (1 : ℂ))
     (Complex.measurable_ofReal.mul
@@ -161,27 +194,28 @@ theorem pmapOfPVM_id_spectralGapSolution
     pmapOfPVM U (fun s : ℝ => (s : ℂ)) Complex.measurable_ofReal
       ⟨spectralGapSolution U δ hδ ξ,
         spectralGapSolution_mem_pmapDomain U hδ ξ⟩ = ξ := by
-  rw [pmapOfPVM_spectralCalculus_of_mul_bounded U
+  have hmix := pmapOfPVM_spectralCalculus_of_mul_bounded U
     (fun s : ℝ => (s : ℂ)) (spectralGapInverseSymbol δ)
     Complex.measurable_ofReal (measurable_spectralGapInverseSymbol δ)
     ⟨δ⁻¹, fun s => norm_spectralGapInverseSymbol_le hδ s⟩
     (Complex.measurable_ofReal.mul (measurable_spectralGapInverseSymbol δ))
     ⟨1, fun s => norm_mul_spectralGapInverseSymbol_le_one hδ s⟩ ξ
-    (spectralGapSolution_mem_pmapDomain U hδ ξ)]
+    (spectralGapSolution_mem_pmapDomain U hδ ξ)
+  refine hmix.trans ?_
   have hae : (fun s : ℝ => (s : ℂ) * spectralGapInverseSymbol δ s)
       =ᵐ[borelMeasure U ξ] (fun _ => (1 : ℂ)) := by
     filter_upwards [hgap] with s hs
     unfold spectralGapInverseSymbol
     rw [if_pos hs]
     have hs0 : (s : ℂ) ≠ 0 := by
-      exact_mod_cast (abs_pos.mp (hδ.trans_le hs)).ne'
+      exact_mod_cast abs_pos.mp (hδ.trans_le hs)
     exact mul_inv_cancel₀ hs0
-  rw [spectralCalculus_congr_ae U
+  rw [spectralCalculus_eq_of_ae U
     (fun s : ℝ => (s : ℂ) * spectralGapInverseSymbol δ s)
     (fun _ => (1 : ℂ))
     (Complex.measurable_ofReal.mul (measurable_spectralGapInverseSymbol δ))
-    measurable_const
     ⟨1, fun s => norm_mul_spectralGapInverseSymbol_le_one hδ s⟩
+    measurable_const
     ⟨1, fun _ => norm_one.le⟩ ξ hae,
     spectralCalculus_one]
   rfl

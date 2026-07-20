@@ -37,15 +37,20 @@ theorem tendsto_apply_unitary_family
     Tendsto (fun a => W (t a) (x a)) l (𝓝 (W t₀ x₀)) := by
   have hvanish : Tendsto (fun a => W (t a) (x a - x₀)) l (𝓝 0) := by
     rw [tendsto_zero_iff_norm_tendsto_zero]
-    simpa only [hW] using (hx.sub_const x₀).norm
+    simpa only [hW, sub_self, norm_zero] using (hx.sub_const x₀).norm
   have hfixed : Tendsto (fun a => W (t a) x₀ - W t₀ x₀) l (𝓝 0) := by
-    exact (((hWstrong x₀).tendsto t₀).comp ht).sub_const (W t₀ x₀)
+    have h := (((hWstrong x₀).tendsto t₀).comp ht).sub_const (W t₀ x₀)
+    rw [sub_self] at h
+    exact h
   have hadd := hvanish.add hfixed
-  convert hadd using 1
-  · funext a
+  rw [zero_add] at hadd
+  have hfun : (fun a => W (t a) (x a - x₀) + (W (t a) x₀ - W t₀ x₀))
+      = fun a => W (t a) (x a) - W t₀ x₀ := by
+    funext a
     rw [map_sub]
     abel
-  · simp
+  rw [hfun] at hadd
+  exact tendsto_sub_nhds_zero_iff.mp hadd
 
 theorem continuous_apply_unitary_family
     (W : ℝ → H →L[ℂ] H)
@@ -55,19 +60,7 @@ theorem continuous_apply_unitary_family
     Continuous fun t => W t (x t) := by
   rw [continuous_iff_continuousAt]
   intro t₀
-  have hvanish : Tendsto (fun t => W t (x t - x t₀)) (𝓝 t₀) (𝓝 0) := by
-    rw [tendsto_zero_iff_norm_tendsto_zero]
-    simpa only [hW] using
-      ((hx.continuousAt.sub continuousAt_const).norm)
-  have hfixed : Tendsto (fun t => W t (x t₀) - W t₀ (x t₀))
-      (𝓝 t₀) (𝓝 0) := by
-    simpa using (hWstrong (x t₀)).continuousAt.sub_const (W t₀ (x t₀))
-  have hadd := hvanish.add hfixed
-  convert hadd using 1
-  · funext t
-    rw [map_sub]
-    abel
-  · simp
+  exact tendsto_apply_unitary_family W hW hWstrong tendsto_id hx.continuousAt
 
 /-- The pointwise product of two strongly commuting unitary groups. -/
 noncomputable def mul (U V : OneParameterUnitaryGroup (H := H))
@@ -98,7 +91,7 @@ noncomputable def mul (U V : OneParameterUnitaryGroup (H := H))
 theorem mul_apply (U V : OneParameterUnitaryGroup (H := H))
     (hcomm : ∀ s t : ℝ, Commute (U.U s) (V.U t))
     (t : ℝ) (x : H) :
-    mul U V hcomm |>.U t x = U.U t (V.U t x) :=
+    (mul U V hcomm).U t x = U.U t (V.U t x) :=
   rfl
 
 end
