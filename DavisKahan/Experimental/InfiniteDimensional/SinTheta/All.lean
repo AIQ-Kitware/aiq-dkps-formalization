@@ -8,8 +8,8 @@ import DavisKahan.Experimental.InfiniteDimensional.SinTheta.SpectralBridge
 import DavisKahan.SinTheta.FrameFactorization
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.Bounded
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.Unbounded
-import DavisKahan.Experimental.InfiniteDimensional.SinTheta.GenuineUnbounded
-import DavisKahan.Experimental.InfiniteDimensional.SinTheta.GenuineUnboundedGauge
+import DavisKahan.SinTheta.Unbounded.GenuineOpNorm
+import DavisKahan.SinTheta.Unbounded.GenuineGauge
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.GenuineIntervalExterior
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.GenuineAllGap
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.NaturalGenuine
@@ -17,7 +17,7 @@ import DavisKahan.Experimental.InfiniteDimensional.SinTheta.NaturalReal
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.Canonical
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.ContinuationAll
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.Specializations
-import DavisKahan.Experimental.InfiniteDimensional.SinTheta.LegacyGapCompletion
+import DavisKahan.SinTheta.Unbounded.LegacyGap
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.FrameFactorizationGeneric
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.RealFrameFactorization
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.RealUnbounded

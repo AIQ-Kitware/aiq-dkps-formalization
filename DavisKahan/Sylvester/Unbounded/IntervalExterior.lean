@@ -3,8 +3,8 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Fable 5
 -/
-import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.BoundedFromSpectrum
-import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.GapResolvent
+import DavisKahan.Interop.Spectra.BoundedFromSpectrum
+import DavisKahan.Interop.Spectra.GapResolvent
 
 /-!
 # Theorem 5.2, interval/exterior orientation, with genuine spectra

@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Fable 5
 -/
 import DavisKahan.Interop.Spectra.ClosedOperator
-import DavisKahan.Experimental.InfiniteDimensional.Core.UnboundedSpectral
+import DavisKahan.SpectralTheory.ClosedOperator.BoundedRealization
 import Spectra.SpectralTheory.Essential.Discrete
 import Spectra.SpectralTheory.Measure.GeneratorLink
 

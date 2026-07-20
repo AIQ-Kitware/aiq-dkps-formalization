@@ -5,7 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.NaturalGenuine
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.NaturalReal
-import DavisKahan.Experimental.InfiniteDimensional.Sylvester.GenuineOrderedEngineDirect
+import DavisKahan.Sylvester.Unbounded.OrderedEngineDirect
 import DavisKahan.Experimental.InfiniteDimensional.Sylvester.RealUnbounded
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.RealSpecializations
 import DavisKahan.Sources.DavisKahan1970.GeneralSinTheta

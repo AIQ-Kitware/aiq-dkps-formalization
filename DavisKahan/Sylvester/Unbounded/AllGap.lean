@@ -3,11 +3,11 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.Experimental.InfiniteDimensional.Sylvester.Unbounded
-import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.UnboundedIntervalExterior
+import DavisKahan.Sylvester.Gap
+import DavisKahan.Sylvester.Unbounded.IntervalExterior
 import DavisKahan.Interop.Spectra.OrderedHalfLine
-import DavisKahan.Experimental.InfiniteDimensional.Sylvester.GenuineCutoffInterface
-import DavisKahan.Experimental.InfiniteDimensional.Sylvester.GenuineOrderedEngineDirect
+import DavisKahan.Sylvester.CutoffInterface
+import DavisKahan.Sylvester.Unbounded.OrderedEngineDirect
 
 /-!
 # Genuine-spectrum all-gap unbounded Sylvester theorem

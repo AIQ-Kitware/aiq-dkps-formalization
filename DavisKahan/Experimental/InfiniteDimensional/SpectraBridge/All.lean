@@ -16,9 +16,9 @@ import DavisKahan.Interop.Spectra.SinAngle
 import DavisKahan.Interop.Spectra.DirectRotation
 import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.DirectRotationAPI
 import DavisKahan.Interop.Spectra.DirectRotationSquare
-import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.GapResolvent
-import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.BoundedFromSpectrum
-import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.UnboundedIntervalExterior
+import DavisKahan.Interop.Spectra.GapResolvent
+import DavisKahan.Interop.Spectra.BoundedFromSpectrum
+import DavisKahan.Sylvester.Unbounded.IntervalExterior
 import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.BoundedPerturbationSinTheta
 import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.SpectralProjectionSinTheta
 

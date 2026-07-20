@@ -1,45 +1,23 @@
 /-
 Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
-Authors: Jon Crall, Claude Fable 5
+Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.Experimental.InfiniteDimensional.SinTheta.Unbounded
+import DavisKahan.SinTheta.Unbounded.Core
 
 /-!
-# The honest unbounded `sin Θ` layer: operator-norm endpoints
+# Shifted-inverse bounds for closed operators
 
-Unbounded companion to `Sylvester/GenuineSpectrum.lean`.  The spectral
-hypotheses are phrased in two honest, proof-carrying forms:
-
-* interval position through quadratic-form semibounds
-  (`SemiboundedBelow`/`SemiboundedAbove`), which for a symmetric block is
-  the faithful reading of the spectral inclusion; and
-* exterior position through a bounded shifted inverse
-  (`LeftShiftedInverseBound`/`TwoSidedShiftedInverseBound`), the resolvent
-  reformulation of "the spectrum avoids `(c - s, c + s)`" for a self-adjoint
-  block.  Discharging these from a genuine unbounded spectral theorem is the
-  designated future bridge; no point-spectrum predicate appears.
-
-Main results, all fully proved:
-
-* `ClosedOperator.norm_shift_apply_le_of_form_bounds`: a symmetric closed
-  operator whose quadratic form lies in `[β, α]` satisfies the shifted norm
-  bound `‖B y - c y‖ ≤ r ‖y‖` on its domain, with `c = (α+β)/2` and
-  `r = (α-β)/2` (polarization plus density of the domain).
-* `norm_closedSylvester_le_of_intervalExterior`: the constant-one estimate
-  `δ ‖X‖ ≤ ‖C‖` for `A X - X B = C` with interval block `B` and exterior
-  block `A`.
-* `norm_closedSylvester_le_of_exteriorInterval`: the swapped orientation,
-  interval block `A` and exterior block `B`.
-* `sinTheta_unbounded_opNorm`: the unbounded Davis--Kahan `sin Θ` theorem in
-  operator norm, obtained from `UnboundedSinThetaData` through the proved
-  adjoint residual block identity.
+The one- and two-sided shifted-inverse predicates, the form-bound estimate for a
+shifted closed operator, and the resulting operator-norm bounds on the solution
+of a closed Sylvester equation in both interval/exterior orientations.
 -/
 
 namespace ForMathlib
 namespace DavisKahan
 namespace Experimental
 namespace ExactSinTheta
+
 
 open scoped InnerProductSpace
 
@@ -50,8 +28,6 @@ variable {E F G : Type v}
   [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
   [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
   [NormedAddCommGroup G] [InnerProductSpace 𝕜 G] [CompleteSpace G]
-
-/-! ## Proof-carrying resolvent bounds -/
 
 /-- Bounded left inverse of the shifted operator `A - c` with norm at most
 `s⁻¹`: the one-sided resolvent surrogate for "the spectrum of the
@@ -238,8 +214,8 @@ theorem _root_.ForMathlib.DavisKahanExt.ClosedOperator.norm_shift_apply_le_of_fo
 (quadratic form in `[β, α]`) and the exterior block `A` (bounded shifted left
 inverse at distance `δ` beyond the interval). -/
 theorem norm_closedSylvester_le_of_intervalExterior
-    {A : ClosedOperatorOnE (𝕜 := 𝕜) (E := E)}
-    {B : ClosedOperatorOnF (𝕜 := 𝕜) (F := F)}
+    {A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := E)}
+    {B : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := F)}
     (hBsym : B.IsSymmetric)
     {X C : F →L[𝕜] E} {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
     (hBlow : SemiboundedBelow B β) (hBhigh : SemiboundedAbove B α)
@@ -318,8 +294,8 @@ theorem norm_closedSylvester_le_of_intervalExterior
 interval block `A` (quadratic form in `[β, α]`) and exterior block `B`
 (bounded shifted two-sided inverse at distance `δ` beyond the interval). -/
 theorem norm_closedSylvester_le_of_exteriorInterval
-    {A : ClosedOperatorOnE (𝕜 := 𝕜) (E := E)}
-    {B : ClosedOperatorOnF (𝕜 := 𝕜) (F := F)}
+    {A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := E)}
+    {B : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := F)}
     (hAsym : A.IsSymmetric)
     {X C : F →L[𝕜] E} {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
     (hAlow : SemiboundedBelow A β) (hAhigh : SemiboundedAbove A α)
@@ -384,26 +360,6 @@ theorem norm_closedSylvester_le_of_exteriorInterval
   nlinarith [norm_nonneg X]
 
 /-! ## The unbounded `sin Θ` theorem, operator norm -/
-
-/-- **The unbounded Davis--Kahan `sin Θ` theorem, operator norm, honest
-hypotheses.**  For the paper-shaped data `D` (self-adjoint ambient operator,
-trial block `A₀`, complementary block `Λ₁`, isometric-into embeddings and the
-residual identity), if the quadratic form of `A₀` lies in `[β, α]` while
-`Λ₁ - (α+β)/2` has a bounded two-sided inverse of norm at most
-`((α-β)/2 + δ)⁻¹`, then `δ ‖X⋆ ∘ F₁‖ ≤ ‖R⋆ ∘ F₁‖`. -/
-theorem sinTheta_unbounded_opNorm
-    (D : UnboundedSinThetaData (𝕜 := 𝕜) (E := E) (F := F) (G := G))
-    (hA : D.A.IsSelfAdjoint) (hA₀ : D.A₀.IsSelfAdjoint)
-    (hΛ₁ : D.Λ₁.IsSelfAdjoint)
-    {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
-    (hA₀low : SemiboundedBelow D.A₀ β) (hA₀high : SemiboundedAbove D.A₀ α)
-    (hΛres : TwoSidedShiftedInverseBound D.Λ₁ ((α + β) / 2)
-      ((α - β) / 2 + δ)) :
-    δ * ‖D.X.adjoint ∘L D.F₁‖ ≤ ‖D.residual.adjoint ∘L D.F₁‖ := by
-  have hEq := unbounded_adjoint_residual_block_identity D hA hA₀ hΛ₁
-  have h := norm_closedSylvester_le_of_exteriorInterval hA₀.isSymmetric
-    hβα hδ hA₀low hA₀high hΛres hEq
-  simpa [norm_neg] using h
 
 end ExactSinTheta
 end Experimental

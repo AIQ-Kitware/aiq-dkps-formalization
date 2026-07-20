@@ -8,13 +8,13 @@ import DavisKahan.Experimental.InfiniteDimensional.Sylvester.GenuineSpectrum
 import DavisKahan.Experimental.InfiniteDimensional.Sylvester.Resolvent
 import DavisKahan.Sylvester.Bounded
 import DavisKahan.Experimental.InfiniteDimensional.Sylvester.Unbounded
-import DavisKahan.Experimental.InfiniteDimensional.Sylvester.GenuineSpectralCutoff
-import DavisKahan.Experimental.InfiniteDimensional.Sylvester.GenuineBoundedTruncation
-import DavisKahan.Experimental.InfiniteDimensional.Sylvester.GenuineFilledTruncation
-import DavisKahan.Experimental.InfiniteDimensional.Sylvester.GenuineOrderedCutoff
-import DavisKahan.Experimental.InfiniteDimensional.Sylvester.GenuineOrderedEngineDirect
-import DavisKahan.Experimental.InfiniteDimensional.Sylvester.GenuineAllGap
-import DavisKahan.Experimental.InfiniteDimensional.Sylvester.LegacyGapCompletion
+import DavisKahan.Interop.Spectra.SpectralCutoff
+import DavisKahan.Interop.Spectra.BoundedTruncation
+import DavisKahan.Sylvester.FilledTruncation
+import DavisKahan.Sylvester.Unbounded.OrderedCutoff
+import DavisKahan.Sylvester.Unbounded.OrderedEngineDirect
+import DavisKahan.Sylvester.Unbounded.AllGap
+import DavisKahan.Sylvester.Unbounded.LegacyGap
 import DavisKahan.Experimental.InfiniteDimensional.Sylvester.RealUnbounded
 
 /-! # Experimental infinite-dimensional Sylvester theory -/

@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Sylvester.ClosedSylvesterEquation
+import DavisKahan.SpectralTheory.ClosedOperator.Complex
 import DavisKahan.SpectralTheory.ClosedOperator.BoundedRealization
 import DavisKahan.Sylvester.Gap
 import DavisKahan.Sylvester.Unbounded.Neumann
@@ -142,9 +143,6 @@ section ComplexCayley
 
 variable {H : Type v}
   [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
-
-abbrev ComplexClosedOperatorH :=
-  ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := H)
 
 /-- Cayley transform of a complex self-adjoint closed operator. -/
 noncomputable def closedOperatorCayleyTransform
