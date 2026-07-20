@@ -35,7 +35,7 @@ claim.
 | Common-domain representatives | Arbitrary coordinate realization of `sin Theta_0` | `result_every_unitarilyInvariantNorm_across`, `result_across` in the common-domain namespaces | compiler-pending |
 | Sharpness | Equality for every normalized norm in a planar model | `paperTheorem61_planar_equality_every_norm` | compiler-pending |
 | Optimal constant | No constant below one works universally | `paperSinTheta_constant_one_optimal` | compiler-pending |
-| Finite multiplicity | Orthogonal sums retain simultaneous equality | `paperFiniteMultiplicity_equality` | compiler-pending |
+| Finite multiplicity | Orthogonal sums retain simultaneous equality | no complete declaration yet; `paperFiniteDimensional_scalar_homogeneity` is only a supporting identity | open |
 | Pre-Proposition counterexample | One directional gap does not imply the symmetric square estimate | `paperOneGap_does_not_imply_symmetric_square_estimate` | compiler-pending |
 
 ## Already accepted dependency
