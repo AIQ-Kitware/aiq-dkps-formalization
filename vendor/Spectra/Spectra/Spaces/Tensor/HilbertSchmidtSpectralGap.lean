@@ -25,6 +25,11 @@ spectral gap.
 
 open MeasureTheory Complex Spectra
 open scoped InnerProductSpace
+-- The pure-tensor notation is scoped to `Spectra.HilbertTensor`, and the
+-- spectral measure lives in `Spectra.Borel`; neither is reached by the above.
+open scoped Spectra.HilbertTensor
+open Spectra.Borel
+open Spectra.Borel.SpectralMeasure
 
 namespace Spectra.HilbertSchmidtTensor
 
@@ -41,6 +46,8 @@ def spectralDifference (p : ℝ × ℝ) : ℝ := p.1 - p.2
 
 @[fun_prop]
 theorem continuous_spectralDifference : Continuous spectralDifference := by
+  -- `fun_prop` does not unfold the definition on its own.
+  unfold spectralDifference
   fun_prop
 
 @[fun_prop]
@@ -84,11 +91,13 @@ theorem borelMeasure_sylvesterGroup_tmul
   intro t
   rw [← borelMeasure_fourier (sylvesterGroup U V)
     (u ⊗̂ₜ[ℂ] Conj.toConj v) t]
+  -- State the integrand as a lambda in the target variable: built from `comp`
+  -- and pointwise products it does not match the shape `integral_map` expects,
+  -- and it was written in the source variable rather than the mapped one.
+  have hcont : Continuous fun ω : ℝ =>
+      Complex.exp (Complex.I * (ω : ℂ) * (t : ℂ)) := by fun_prop
   rw [integral_map measurable_spectralDifference.aemeasurable
-    (Complex.continuous_exp.comp
-      (Complex.continuous_const.mul
-        ((Complex.continuous_ofReal.comp continuous_spectralDifference).mul
-          Complex.continuous_const))).aestronglyMeasurable]
+    hcont.aestronglyMeasurable]
   change
     ⟪u ⊗̂ₜ[ℂ] Conj.toConj v,
       (sylvesterGroup U V).U t (u ⊗̂ₜ[ℂ] Conj.toConj v)⟫_ℂ =
@@ -101,7 +110,10 @@ theorem borelMeasure_sylvesterGroup_tmul
         cexp (I * (p.2 : ℂ) * ((-t : ℝ) : ℂ)) by
       funext p
       exact char_difference_factor t p.1 p.2]
-  rw [integral_prod_mul]
+  -- The factorisation is higher order, so the two factors are given explicitly.
+  rw [integral_prod_mul (μ := μ) (ν := ν)
+    (f := fun x : ℝ => cexp (I * (x : ℂ) * (t : ℂ)))
+    (g := fun y : ℝ => cexp (I * (y : ℂ) * ((-t : ℝ) : ℂ)))]
   rw [← borelMeasure_fourier U u t, ← borelMeasure_fourier V v (-t)]
   exact congrArg₂ (· * ·) rfl (conj_orbit_inner V t v)
 
@@ -127,12 +139,13 @@ theorem hasVectorSpectralGap_tmul
   let ν := borelMeasure V v
   haveI : IsFiniteMeasure μ := borelMeasure_isFiniteMeasure U u
   haveI : IsFiniteMeasure ν := borelMeasure_isFiniteMeasure V v
+  unfold Spectra.QuantumMechanics.SpectralTheory.HasVectorSpectralGap
   rw [borelMeasure_sylvesterGroup_tmul]
   have hprod : ∀ᵐ p ∂μ.prod ν, δ ≤ |spectralDifference p| := by
     have hmeas : MeasurableSet {p : ℝ × ℝ | δ ≤ |spectralDifference p|} :=
       measurableSet_le measurable_const
         (measurable_spectralDifference.abs)
-    rw [ae_prod_iff_ae_ae hmeas]
+    rw [MeasureTheory.Measure.ae_prod_iff_ae_ae hmeas]
     filter_upwards [μ.support_mem_ae] with lam hlam
     filter_upwards [ν.support_mem_ae] with α hα
     exact hgap u v lam hlam α hα
@@ -148,14 +161,13 @@ private theorem gap_projection_tmul_eq_zero
     Spectra.QuantumMechanics.SpectralTheory.spectralProjection
       (sylvesterGroup U V) (Set.Ioo (-δ) δ) measurableSet_Ioo
       (u ⊗̂ₜ[ℂ] Conj.toConj v) = 0 := by
-  rw [Spectra.QuantumMechanics.SpectralTheory.
-    spectralProjection_eq_zero_iff_measure_zero]
+  rw [Spectra.QuantumMechanics.SpectralTheory.spectralProjection_eq_zero_iff_measure_zero]
   have hae := hasVectorSpectralGap_tmul U V hgap u v
   refine measure_mono_null ?_ (ae_iff.mp hae)
   intro s hs
   change s ∈ {s : ℝ | δ ≤ |s|}ᶜ
   simp only [Set.mem_compl_iff, Set.mem_setOf_eq, not_le]
-  exact not_le.mpr ((abs_lt).2 hs)
+  exact abs_lt.2 hs
 
 /-- Pairwise scalar support separation opens a global gap in the
 left-minus-right Hilbert--Schmidt tensor flow. -/
@@ -166,9 +178,10 @@ theorem spectralProjection_gap_eq_zero
     (hgap : PairwiseScalarSupportGap U V δ) :
     Spectra.QuantumMechanics.SpectralTheory.spectralProjection
       (sylvesterGroup U V) (Set.Ioo (-δ) δ) measurableSet_Ioo = 0 := by
-  apply ContinuousLinearMap.ext
-  intro z
-  apply HilbertTensor.dense_span_tmul.induction z
+  refine ContinuousLinearMap.ext fun z₀ => ?_
+  refine HilbertTensor.dense_span_tmul.induction
+    (P := fun t => Spectra.QuantumMechanics.SpectralTheory.spectralProjection
+      (sylvesterGroup U V) (Set.Ioo (-δ) δ) measurableSet_Ioo t = 0) ?_ ?_ z₀
   · intro z hz
     induction hz using Submodule.span_induction with
     | mem z hz =>
@@ -176,8 +189,8 @@ theorem spectralProjection_gap_eq_zero
         simpa using gap_projection_tmul_eq_zero U V hδ hgap
           u (Conj.ofConj cv)
     | zero => simp
-    | add x y hx hy => simpa using congrArg₂ (· + ·) hx hy
-    | smul c x hx => simpa using congrArg (fun q => c • q) hx
+    | add x y _ _ hx hy => simp [hx, hy]
+    | smul c x _ hx => simp [hx]
   · exact isClosed_eq
       ((Spectra.QuantumMechanics.SpectralTheory.spectralProjection
         (sylvesterGroup U V) (Set.Ioo (-δ) δ) measurableSet_Ioo).continuous)
@@ -198,8 +211,7 @@ theorem hasVectorSpectralGap
     (spectralProjection_gap_eq_zero U V hδ hgap)
   have hnull : borelMeasure (sylvesterGroup U V) z
       (Set.Ioo (-δ) δ) = 0 := by
-    rw [← Spectra.QuantumMechanics.SpectralTheory.
-      spectralProjection_eq_zero_iff_measure_zero]
+    rw [← Spectra.QuantumMechanics.SpectralTheory.spectralProjection_eq_zero_iff_measure_zero]
     simpa using hproj
   refine ae_iff.mpr ?_
   refine measure_mono_null ?_ hnull
