@@ -47,7 +47,7 @@ REPAIRED=(
   "DavisKahan.Experimental.InfiniteDimensional.Sylvester.HomogeneousUniqueness|dbd7b76|norm of zero and a nonlinear product"
   "Spectra.OneParameterUnitaryGroup.Product|4ee5e89|pipeline operator binds looser than equality"
   "Spectra.SpectralTheory.Calculus.SpectralGapInverse|4ee5e89|spectral measure namespace, antitone inverse"
-  "DavisKahan.Experimental.InfiniteDimensional.Ideals.PaperHilbertSchmidtBasis|HEAD|span image closed by reflexivity"
+  "DavisKahan.Experimental.InfiniteDimensional.Ideals.PaperHilbertSchmidtBasis|6eeb643|span image closed by reflexivity"
 )
 
 fail=0
