@@ -1,7 +1,5 @@
 /-
-Copyright (c) 2026 Kitware, Inc. All rights reserved.
-Released under Apache 2.0 license as described in the file LICENSE.
-Authors: Jon Crall, OpenAI GPT-5.6 Thinking
+Copyright (c) 2026 Kitware, Inc. All rights reserved.Released under Apache 2.0 license as described in the file LICENSE.Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Experimental.InfiniteDimensional.Ideals.PaperHilbertSchmidtBasis
 import DavisKahan.Experimental.InfiniteDimensional.Sylvester.HomogeneousUniqueness
@@ -22,9 +20,7 @@ bounded reciprocal functional calculus produces a tensor `z0` with
 The generator graph bridge turns `z0` into a bounded operator `X0` satisfying
 the original closed Sylvester equation.  Operator-norm homogeneous uniqueness
 then identifies every supplied bounded solution `X` with `X0`.  In particular,
-no Hilbert--Schmidt membership of `X` is assumed before it is proved.
-
-The remaining spectral task is therefore precise: derive the vector spectral
+no Hilbert--Schmidt membership of `X` is assumed before it is proved.The remaining spectral task is therefore precise: derive the vector spectral
 gap of the defect tensor from pairwise separation of the two operator spectra.
 -/
 
@@ -61,8 +57,7 @@ private theorem hasClosedSylvesterEquation_of_tensorGenerator
       (Spectra.HilbertSchmidtTensor.toOperator c) := by
   let U := genToGroup hA
   let V := genToGroup hB
-  have hgen := Spectra.HilbertSchmidtTensor.
-    toOperator_hasGeneratorSylvesterEquation U V hz hzc
+  have hgen := Spectra.HilbertSchmidtTensor.toOperator_hasGeneratorSylvesterEquation U V hz hzc
   have hAU : Spectra.OneParameterUnitaryGroup.generator U = A.toLinearPMap :=
     generator_genToGroup hA
   have hBV : Spectra.OneParameterUnitaryGroup.generator V = B.toLinearPMap :=
@@ -104,6 +99,9 @@ private theorem hasClosedSylvesterEquation_of_tensorGenerator
             Spectra.HilbertSchmidtTensor.toOperator z
               (Spectra.OneParameterUnitaryGroup.generator V xV) := by
                 rw [hAapply, hBapply]
+                -- The two domain elements carry the same vector under
+                -- different membership proofs.
+                congr 2
       _ = Spectra.HilbertSchmidtTensor.toOperator c (x : F) := heq
 
 /-- Defect-first square-norm estimate, reduced to the vector spectral gap of
@@ -130,8 +128,7 @@ theorem paperHilbertSchmidt_sylvester_defectFirst
   let z0 := Spectra.QuantumMechanics.SpectralTheory.spectralGapSolution
     W δ hδ c
   have hz0 : z0 ∈ (Spectra.OneParameterUnitaryGroup.generator W).domain :=
-    Spectra.QuantumMechanics.SpectralTheory.
-      spectralGapSolution_mem_generatorDomain W hδ c
+    Spectra.QuantumMechanics.SpectralTheory.spectralGapSolution_mem_generatorDomain W hδ c
   have hgen : Spectra.OneParameterUnitaryGroup.generator W ⟨z0, hz0⟩ = c :=
     Spectra.QuantumMechanics.SpectralTheory.generator_spectralGapSolution
       W hδ c hCgap
@@ -148,12 +145,15 @@ theorem paperHilbertSchmidt_sylvester_defectFirst
   have hX0 : IsPaperHilbertSchmidt X0 :=
     isPaperHilbertSchmidt_toOperator z0
   refine ⟨hXX0 ▸ hX0, ?_⟩
-  rw [hXX0, X0, paperHilbertSchmidtNorm_toOperator]
+  -- `X0` is a local definition, not an equation, so it is unfolded rather
+  -- than rewritten with.
+  rw [hXX0]
+  simp only [X0]
+  rw [paperHilbertSchmidtNorm_toOperator]
   calc
     δ * ‖z0‖ ≤ δ * (δ⁻¹ * ‖c‖) :=
       mul_le_mul_of_nonneg_left
-        (Spectra.QuantumMechanics.SpectralTheory.
-          norm_spectralGapSolution_le W hδ c) hδ.le
+        (Spectra.QuantumMechanics.SpectralTheory.norm_spectralGapSolution_le W hδ c) hδ.le
     _ = ‖c‖ := by field_simp
     _ = paperHilbertSchmidtNorm C :=
       norm_paperHilbertSchmidtTensor C hC

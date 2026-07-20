@@ -1,7 +1,5 @@
 /-
-Copyright (c) 2026 Kitware, Inc. All rights reserved.
-Released under Apache 2.0 license as described in the file LICENSE.
-Authors: Jon Crall, OpenAI GPT-5.6 Thinking
+Copyright (c) 2026 Kitware, Inc. All rights reserved.Released under Apache 2.0 license as described in the file LICENSE.Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Experimental.InfiniteDimensional.Sylvester.PairwiseSpectrumGap
 import DavisKahan.Experimental.InfiniteDimensional.Core.ClosedOperatorComplexification
@@ -13,15 +11,12 @@ import Spectra.QuantumMechanics.BornRule.Observable
 /-!
 # Pairwise-gap square-norm Sylvester theorem
 
-This file discharges the two hypotheses left by the defect-first reduction.
-Positive pairwise separation of the original self-adjoint spectra:
+This file discharges the two hypotheses left by the defect-first reduction.Positive pairwise separation of the original self-adjoint spectra:
 
 * gives bounded homogeneous uniqueness through rectangular spectral
   intertwining; and
 * gives a global spectral gap for the left-minus-right Hilbert--Schmidt tensor
-  flow through the pure-tensor product-measure formula.
-
-The resulting theorem has the exact hypothesis and constant of the
+  flow through the pure-tensor product-measure formula.The resulting theorem has the exact hypothesis and constant of the
 square-norm Sylvester estimate used in Davis--Kahan Theorem 6.2.
 -/
 
@@ -34,6 +29,11 @@ open scoped InnerProductSpace
 open ForMathlib.DavisKahanExt
 open Spectra.Operator
 open Spectra.YosidaHille
+-- The support estimate sits under the observable namespace, and the
+-- complexification of a bounded operator under the foundation namespace.
+open Spectra.QuantumMechanics.BornRule.PVM
+open Spectra.QuantumMechanics.BornRule.Observable
+open Foundation
 
 noncomputable section
 
@@ -54,16 +54,14 @@ private theorem pairwiseScalarSupportGap_of_spectra
   let AO : SelfAdjointOperator E := ⟨A.toLinearPMap, hA⟩
   let BO : SelfAdjointOperator F := ⟨B.toLinearPMap, hB⟩
   have hlamSpec : lam ∈ Spectra.Resolvent.spectrum A.toLinearPMap := by
-    have hsupp := Spectra.QuantumMechanics.BornRule.
-      bornMeasure_support_subset_spectrum AO u
+    have hsupp := bornMeasure_support_subset_spectrum AO u
     exact hsupp (by
-      simpa [AO, Spectra.QuantumMechanics.BornRule.bornMeasure,
+      simpa [AO, bornMeasure,
         SelfAdjointOperator.spectralPVM] using hlam)
   have halphaSpec : alpha ∈ Spectra.Resolvent.spectrum B.toLinearPMap := by
-    have hsupp := Spectra.QuantumMechanics.BornRule.
-      bornMeasure_support_subset_spectrum BO v
+    have hsupp := bornMeasure_support_subset_spectrum BO v
     exact hsupp (by
-      simpa [BO, Spectra.QuantumMechanics.BornRule.bornMeasure,
+      simpa [BO, bornMeasure,
         SelfAdjointOperator.spectralPVM] using halpha)
   exact hgap lam hlamSpec alpha halphaSpec
 
@@ -106,7 +104,8 @@ theorem paperHilbertSchmidt_sylvester_le_of_pairwiseSpectrumGap_direct
   · intro Y hY
     exact closedSylvester_homogeneous_eq_zero_of_pairwiseSpectrumGap
       hA hB hδ hgap hY
-  · exact hC
+  -- Supplying the gap instantiates the tensor's own membership argument, so
+  -- there is no further obligation.
   · exact paperHilbertSchmidtTensor_hasVectorSpectralGap
       hA hB hδ hgap hC
 
@@ -133,8 +132,8 @@ theorem paperHilbertSchmidt_sylvester_real_le_of_pairwiseSpectrumGap_direct
       (ClosedOperatorComplexification.complexify B) δ := by
     intro lam hlam α hα
     apply hgap lam _ α _
-    · rwa [ClosedOperatorComplexification.closed_realSpectrum_complexify A]
-    · rwa [ClosedOperatorComplexification.closed_realSpectrum_complexify B]
+    · rwa [ClosedOperatorComplexification.realSpectrum_complexify A]
+    · rwa [ClosedOperatorComplexification.realSpectrum_complexify B]
   have hCcomplex : IsPaperHilbertSchmidt
       (RealComplexification.complexify C) :=
     (isPaperHilbertSchmidt_complexify_iff C).2 hC
