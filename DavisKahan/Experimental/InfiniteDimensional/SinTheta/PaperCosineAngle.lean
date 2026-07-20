@@ -38,6 +38,32 @@ universe v
 variable {E : Type v}
   [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
 
+/-- A subspace admitting an orthogonal projection inside a complete ambient
+space is itself complete.  `local instance` does not propagate through imports,
+so it is reinstalled here.
+
+Every adjoint below is taken on a subspace coordinate space, so without this
+the whole module fails to elaborate. -/
+local instance instCompleteSpaceCoeOfHasOrthogonalProjectionCosineAngle
+    {G : Type v} [NormedAddCommGroup G] [InnerProductSpace ℂ G] [CompleteSpace G]
+    (U : Submodule ℂ G) [U.HasOrthogonalProjection] : CompleteSpace U :=
+  (Submodule.isComplete_coe_of_hasOrthogonalProjection U).completeSpace_coe
+
+/-- The bounded operators on a subspace coordinate space, as a C⋆-algebra.
+
+This is `inferInstance`, but stating it in the submodule shape is load-bearing.
+Searching for `ContinuousFunctionalCalculus` on `↥U →L[ℂ] ↥U` does not find the
+C⋆-algebra structure on its own, even though the very same search succeeds for
+an abstract complete complex inner-product space and the C⋆-algebra instance is
+found when requested directly.  Recording it here as a local instance lets the
+functional calculus below elaborate; without it every `cfc` in this module
+fails. -/
+noncomputable local instance instCStarAlgebraSubspaceCoordinateCosineAngle
+    {G : Type v} [NormedAddCommGroup G] [InnerProductSpace ℂ G] [CompleteSpace G]
+    (U : Submodule ℂ G) [U.HasOrthogonalProjection] :
+    CStarAlgebra (↥U →L[ℂ] ↥U) :=
+  inferInstance
+
 /-- The overlap block whose singular values are the principal cosines. -/
 noncomputable def paperCosineBlockC
     (U V : Submodule ℂ E)
@@ -75,10 +101,11 @@ theorem norm_paperCosineModulusC_le_one
     _ ≤ ‖V.subtypeL.adjoint‖ * ‖U.subtypeL‖ :=
       ContinuousLinearMap.opNorm_comp_le _ _
     _ ≤ 1 * 1 := by
-      gcongr
-      · rw [ContinuousLinearMap.norm_adjoint]
-        exact opNorm_le_one_of_isometry V.isometry_subtype
-      · exact opNorm_le_one_of_isometry U.isometry_subtype
+      have hV : ‖V.subtypeL.adjoint‖ ≤ 1 := by
+        rw [Submodule.adjoint_subtypeL]
+        exact V.orthogonalProjectionOnto_norm_le
+      exact mul_le_mul hV U.norm_subtypeL_le
+        (norm_nonneg U.subtypeL) zero_le_one
     _ = 1 := by ring
 
 /-- The real spectrum of the cosine modulus lies in `[0,1]`. -/
@@ -89,10 +116,19 @@ theorem spectrum_paperCosineModulusC_subset_Icc
   intro x hx
   refine ⟨spectrum_nonneg_of_nonneg
     (rectangularOperatorModulus_nonneg (paperCosineBlockC U V)) hx, ?_⟩
-  have habs : |x| ≤ ‖paperCosineModulusC U V‖ :=
-    spectrum.norm_le_norm_of_mem hx
-  exact (le_abs_self x).trans
-    (habs.trans (norm_paperCosineModulusC_le_one U V))
+  -- `spectrum.norm_le_norm_of_mem` would need `NormOneClass`, i.e. `‖id‖ = 1`,
+  -- which fails when `U` is the zero subspace.  The `mul` form carries no such
+  -- instance, and `norm_id_le` bounds the unit without nontriviality.
+  have hone : ‖(1 : ↥U →L[ℂ] ↥U)‖ ≤ 1 := ContinuousLinearMap.norm_id_le
+  have habs : ‖x‖ ≤ ‖paperCosineModulusC U V‖ * ‖(1 : ↥U →L[ℂ] ↥U)‖ :=
+    spectrum.norm_le_norm_mul_of_mem hx
+  rw [Real.norm_eq_abs] at habs
+  refine (le_abs_self x).trans (habs.trans ?_)
+  calc
+    ‖paperCosineModulusC U V‖ * ‖(1 : ↥U →L[ℂ] ↥U)‖ ≤ 1 * 1 :=
+      mul_le_mul (norm_paperCosineModulusC_le_one U V) hone
+        (norm_nonneg _) zero_le_one
+    _ = 1 := by ring
 
 /-- The literal directed angle of Section 1 and Section 6 of the paper. -/
 noncomputable def paperSourceDirectedAngleC
@@ -121,7 +157,7 @@ theorem paperSourceDirectedCosC_eq
     isSelfAdjoint_rectangularOperatorModulus _
   rw [paperSourceDirectedCosC, paperSourceDirectedAngleC,
     ← cfc_comp Real.cos Real.arccos (paperCosineModulusC U V)
-      hsa.isStarNormal Real.continuous_cos.continuousOn
+      hsa Real.continuous_cos.continuousOn
       Real.continuous_arccos.continuousOn]
   calc
     cfc (Real.cos ∘ Real.arccos) (paperCosineModulusC U V) =
@@ -129,7 +165,7 @@ theorem paperSourceDirectedCosC_eq
       apply cfc_congr
       intro x hx
       have hxi := spectrum_paperCosineModulusC_subset_Icc U V hx
-      exact Real.cos_arccos hxi.1 hxi.2
+      exact Real.cos_arccos (by linarith [hxi.1]) hxi.2
     _ = paperCosineModulusC U V := cfc_id' ℝ _
 
 /-- Operator Pythagoras on the trial coordinate space. -/
@@ -143,27 +179,49 @@ theorem paperSineModulus_sq_add_paperCosineModulus_sq
     rectangularOperatorModulus_mul_self,
     rectangularOperatorModulus_mul_self]
   ext x
-  apply Subtype.ext
-  change Vᗮ.starProjection (x : E) + V.starProjection (x : E) = (x : E)
-  simpa [add_comm] using Submodule.starProjection_add_starProjection_orthogonal V (x : E)
+  -- The adjoint of a projection onto the subtype is the inclusion.
+  have hadjPerp : (Vᗮ.orthogonalProjectionOnto).adjoint = Vᗮ.subtypeL := by
+    rw [← Submodule.adjoint_subtypeL, ContinuousLinearMap.adjoint_adjoint]
+  have hadjV : (V.orthogonalProjectionOnto).adjoint = V.subtypeL := by
+    rw [← Submodule.adjoint_subtypeL, ContinuousLinearMap.adjoint_adjoint]
+  have hsplit : Vᗮ.starProjection (x : E) + V.starProjection (x : E) = (x : E) := by
+    simpa [add_comm] using
+      Submodule.starProjection_add_starProjection_orthogonal V (x : E)
+  have hUx : U.starProjection (x : E) = (x : E) :=
+    Submodule.starProjection_eq_self_iff.mpr x.2
+  simp only [paperSineBlockC, paperCosineBlockC, add_apply,
+    ContinuousLinearMap.comp_apply, ContinuousLinearMap.adjoint_comp,
+    ContinuousLinearMap.id_apply, Submodule.adjoint_subtypeL,
+    hadjPerp, hadjV, Submodule.coe_add]
+  -- Both summands are `U`'s projection of a piece of the `V`/`Vᗮ` splitting.
+  change U.starProjection (Vᗮ.starProjection (x : E)) +
+      U.starProjection (V.starProjection (x : E)) = (x : E)
+  rw [← map_add, hsplit, hUx]
 
+set_option maxHeartbeats 1000000 in
 /-- The source-defined sine is the positive square root complementary to the
 cosine modulus. -/
 theorem paperSourceDirectedSinC_eq_paperSineModulusC
     (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     paperSourceDirectedSinC U V = paperSineModulusC U V := by
+  have hsaCos : IsSelfAdjoint (paperCosineModulusC U V) :=
+    isSelfAdjoint_rectangularOperatorModulus _
+  -- The spectrum of the angle is the arccosine image of the modulus spectrum,
+  -- by the spectral mapping theorem.
+  have hspec : spectrum ℝ (paperSourceDirectedAngleC U V) =
+      Real.arccos '' spectrum ℝ (paperCosineModulusC U V) := by
+    rw [paperSourceDirectedAngleC]
+    exact cfc_map_spectrum Real.arccos (paperCosineModulusC U V) hsaCos
+      Real.continuous_arccos.continuousOn
   have hnonneg : 0 ≤ paperSourceDirectedSinC U V := by
     rw [paperSourceDirectedSinC]
     apply cfc_nonneg
     intro x hx
+    rw [hspec] at hx
+    obtain ⟨y, _, rfl⟩ := hx
     exact Real.sin_nonneg_of_nonneg_of_le_pi
-      (by
-        obtain ⟨y, hy, rfl⟩ := spectrum_cfc_subset_image hx
-        exact Real.arccos_nonneg y)
-      (by
-        obtain ⟨y, hy, rfl⟩ := spectrum_cfc_subset_image hx
-        exact Real.arccos_le_pi y)
+      (Real.arccos_nonneg y) (Real.arccos_le_pi y)
   have hsquare :
       paperSourceDirectedSinC U V * paperSourceDirectedSinC U V =
         (paperSineBlockC U V).adjoint ∘L paperSineBlockC U V := by
@@ -174,11 +232,34 @@ theorem paperSourceDirectedSinC_eq_paperSineModulusC
             (paperSourceDirectedAngleC U V) =
           ContinuousLinearMap.id ℂ U -
             paperCosineModulusC U V * paperCosineModulusC U V := by
-      rw [← paperSourceDirectedCosC_eq U V,
-        paperSourceDirectedCosC, ← cfc_mul _ _ _
-          Real.continuous_cos.continuousOn Real.continuous_cos.continuousOn,
-        ← cfc_sub _ _ _ continuous_const.continuousOn
-          (Real.continuous_cos.mul Real.continuous_cos).continuousOn]
+      have hangle : IsSelfAdjoint (paperSourceDirectedAngleC U V) :=
+        cfc_predicate Real.arccos (paperCosineModulusC U V)
+      -- Name both functions in eta-expanded form: supplying only the
+      -- continuity proofs would pin `g` to `Real.cos * Real.cos`, which does
+      -- not match the eta-expanded `fun x => Real.cos x * Real.cos x` in the
+      -- goal, and the rewrite would not fire.
+      have hcos : paperCosineModulusC U V * paperCosineModulusC U V =
+          cfc (fun x : ℝ => Real.cos x * Real.cos x)
+            (paperSourceDirectedAngleC U V) := by
+        rw [← paperSourceDirectedCosC_eq U V, paperSourceDirectedCosC]
+        exact (cfc_mul Real.cos Real.cos (paperSourceDirectedAngleC U V)
+          Real.continuous_cos.continuousOn
+          Real.continuous_cos.continuousOn).symm
+      have hone : (ContinuousLinearMap.id ℂ U) =
+          cfc (fun _ : ℝ => (1 : ℝ)) (paperSourceDirectedAngleC U V) :=
+        (cfc_const_one ℝ (paperSourceDirectedAngleC U V) hangle).symm
+      have hsplit :
+          cfc (fun x : ℝ => (1 : ℝ) - Real.cos x * Real.cos x)
+              (paperSourceDirectedAngleC U V) =
+            cfc (fun _ : ℝ => (1 : ℝ)) (paperSourceDirectedAngleC U V) -
+              cfc (fun x : ℝ => Real.cos x * Real.cos x)
+                (paperSourceDirectedAngleC U V) :=
+        cfc_sub (fun _ : ℝ => (1 : ℝ))
+          (fun x : ℝ => Real.cos x * Real.cos x)
+          (paperSourceDirectedAngleC U V)
+          continuous_const.continuousOn
+          (Real.continuous_cos.mul Real.continuous_cos).continuousOn
+      rw [hcos, hone, ← hsplit]
       apply cfc_congr
       intro x _
       nlinarith [Real.sin_sq_add_cos_sq x]
@@ -186,17 +267,22 @@ theorem paperSourceDirectedSinC_eq_paperSineModulusC
     have hp := paperSineModulus_sq_add_paperCosineModulus_sq U V
     have hs := rectangularOperatorModulus_mul_self (paperSineBlockC U V)
     rw [← hs]
-    exact eq_sub_of_add_eq hp
+    exact (eq_sub_of_add_eq hp).symm
   show paperSourceDirectedSinC U V =
     CFC.sqrt ((paperSineBlockC U V).adjoint ∘L paperSineBlockC U V)
   exact (CFC.sqrt_unique hsquare hnonneg).symm
 
 /-- The literal source `sin Theta_0` has exactly the singular values of the
-cross projection printed in the paper. -/
+cross projection printed in the paper.
+
+The source sine acts on the trial coordinate space `U` while the cross block
+maps `U` into `Vᗮ`, so this is the heterogeneous singular-sequence relation;
+`SameApproximationSingularValues` is the special case of it in which the two
+operators happen to share a codomain, and cannot be stated here. -/
 theorem paperSourceDirectedSin_same_paperSineBlock
     (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
-    SameApproximationSingularValues
+    SameApproximationSingularSequence
       (paperSourceDirectedSinC U V) (paperSineBlockC U V) := by
   rw [paperSourceDirectedSinC_eq_paperSineModulusC]
   exact sameApproximationSingularValues_rectangularOperatorModulus _
