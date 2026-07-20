@@ -441,3 +441,14 @@ Preserve Spectra provenance, extract Mathlib-only general results into ForMathli
 
 Co-authored-by: GPT-5.6 Thinking <noreply@openai.com>
 ```
+
+## Continuation update at `7b9d230f50ad`
+
+The compiler agent completed the angle, common-domain, graph-core, symmetric,
+and universe-polymorphism work.  The only remaining full-paper audit failure is
+the counterexample section of `PaperSharpness.lean`.  Read
+`dev/paper-sharpness-frobenius-repair-note-2026-07-20.md` before continuing.
+The new finite-dimensional Frobenius bridge and real-complexification reduction
+in that patch are the preferred repair.  Do not revive the old direct unfolding
+of the infinite square-energy definition, and do not restore the overclaiming
+finite-multiplicity theorem name.

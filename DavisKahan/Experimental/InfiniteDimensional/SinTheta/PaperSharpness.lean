@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Experimental.InfiniteDimensional.Ideals.PaperRankOneNormalization
-import DavisKahan.Experimental.InfiniteDimensional.Ideals.PaperHilbertSchmidtFiniteRank
+import DavisKahan.Experimental.InfiniteDimensional.Ideals.PaperHilbertSchmidtFrobenius
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.PaperTheorem61Universal
 import DavisKahan.Experimental.InfiniteDimensional.Core.OperatorAngleReal
 import ForMathlib.Analysis.InnerProductSpace.UnitarilyInvariantNorm
@@ -28,6 +28,9 @@ namespace Experimental
 namespace ExactSinTheta
 
 open scoped InnerProductSpace BigOperators
+
+open ForMathlib.DavisKahan.Experimental.Foundation
+open ForMathlib.DavisKahan.Experimental.Foundation.RealComplexification
 
 noncomputable section
 
@@ -265,9 +268,11 @@ theorem paperSinTheta_constant_one_optimal
     hpi4 (by linarith [Real.pi_pos])
   nlinarith
 
-/-- Scalar operator identity behind equality for every finite orthogonal direct
-sum of the planar model. -/
-theorem paperFiniteMultiplicity_equality
+/-- Scalar homogeneity of the paper gauge on a finite-dimensional operator.
+
+This is a supporting identity for a future finite-multiplicity extremal model;
+it is not itself that model. -/
+theorem paperFiniteDimensional_scalar_homogeneity
     {m : ℕ} (N : PaperUnitaryInvariantNorm)
     (S : EuclideanSpace 𝕜 (Fin m) →L[𝕜] EuclideanSpace 𝕜 (Fin m))
     {delta : ℝ} (hdelta : 0 ≤ delta) (hS : N.Mem S) :
@@ -290,13 +295,15 @@ noncomputable def paperCounterexampleH :
   (Matrix.toEuclideanLin !![(1 : ℝ), 1; 1, 0]).toContinuousLinearMap
 
 noncomputable def paperCounterexampleExact : Submodule ℝ PaperRealPlane :=
-  Submodule.span ℝ {EuclideanSpace.single (0 : Fin 2) 1}
+  Submodule.span ℝ {paperPlaneE0 (𝕜 := ℝ)}
+
+/-- Unit vector spanning the trial line in the printed counterexample. -/
+noncomputable def paperCounterexampleTrialVector : PaperRealPlane :=
+  (1 / Real.sqrt 2) •
+    (paperPlaneE0 (𝕜 := ℝ) - paperPlaneE1 (𝕜 := ℝ))
 
 noncomputable def paperCounterexampleTrial : Submodule ℝ PaperRealPlane :=
-  Submodule.span ℝ
-    {(1 / Real.sqrt 2) •
-      (EuclideanSpace.single (0 : Fin 2) 1 -
-        EuclideanSpace.single (1 : Fin 2) 1)}
+  Submodule.span ℝ {paperCounterexampleTrialVector}
 
 noncomputable instance paperCounterexampleExact_projection :
     paperCounterexampleExact.HasOrthogonalProjection := inferInstance
@@ -304,29 +311,180 @@ noncomputable instance paperCounterexampleExact_projection :
 noncomputable instance paperCounterexampleTrial_projection :
     paperCounterexampleTrial.HasOrthogonalProjection := inferInstance
 
+/-- Orthogonal projection onto a unit-generated real line. -/
+private theorem starProjection_span_singleton_apply_of_norm_one
+    {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+    [CompleteSpace E] (v x : E) (hv : ‖v‖ = 1) :
+    (Submodule.span ℝ {v}).starProjection x = ⟪v, x⟫_ℝ • v := by
+  classical
+  refine Submodule.eq_starProjection_of_mem_of_inner_eq_zero ?_ ?_
+  · exact Submodule.smul_mem _ _
+      (Submodule.subset_span (by simp))
+  · intro y hy
+    induction hy using Submodule.span_induction with
+    | mem y hy =>
+        have hyv : y = v := by simpa using hy
+        subst y
+        simp [inner_sub_left, inner_smul_left,
+          inner_self_eq_norm_sq, hv, real_inner_comm]
+    | zero => simp
+    | add a b _ _ ha hb => rw [inner_add_right, ha, hb, add_zero]
+    | smul c a _ ha => rw [inner_smul_right, ha, mul_zero]
+
+/-- The trial generator in the printed counterexample is a unit vector. -/
+theorem norm_paperCounterexampleTrialVector :
+    ‖paperCounterexampleTrialVector‖ = 1 := by
+  have hsqrt2 : 0 < Real.sqrt 2 := Real.sqrt_pos.2 (by norm_num)
+  have hdiffsq : ‖paperPlaneE0 (𝕜 := ℝ) - paperPlaneE1‖ ^ 2 = 2 := by
+    rw [norm_sq_eq_re_inner (𝕜 := ℝ)]
+    norm_num [paperPlaneE0, paperPlaneE1,
+      EuclideanSpace.inner_single_left, PiLp.single_apply]
+  have hdiff : ‖paperPlaneE0 (𝕜 := ℝ) - paperPlaneE1‖ = Real.sqrt 2 := by
+    calc
+      ‖paperPlaneE0 (𝕜 := ℝ) - paperPlaneE1‖ =
+          Real.sqrt (‖paperPlaneE0 (𝕜 := ℝ) - paperPlaneE1‖ ^ 2) :=
+        (Real.sqrt_sq (norm_nonneg _)).symm
+      _ = Real.sqrt 2 := by rw [hdiffsq]
+  rw [paperCounterexampleTrialVector, norm_smul, hdiff,
+    Real.norm_eq_abs, abs_of_pos (one_div_pos.mpr hsqrt2)]
+  field_simp [ne_of_gt hsqrt2]
+
+@[simp]
+theorem paperCounterexampleExact_starProjection_e0 :
+    paperCounterexampleExact.starProjection (paperPlaneE0 (𝕜 := ℝ)) =
+      paperPlaneE0 := by
+  rw [paperCounterexampleExact,
+    starProjection_span_singleton_apply_of_norm_one]
+  · simp [paperPlaneE0, EuclideanSpace.inner_single_left]
+  · exact norm_paperPlaneE0
+
+@[simp]
+theorem paperCounterexampleExact_starProjection_e1 :
+    paperCounterexampleExact.starProjection (paperPlaneE1 (𝕜 := ℝ)) = 0 := by
+  rw [paperCounterexampleExact,
+    starProjection_span_singleton_apply_of_norm_one]
+  · simp [paperPlaneE0, paperPlaneE1, EuclideanSpace.inner_single_left]
+  · exact norm_paperPlaneE0
+
+@[simp]
+theorem paperCounterexampleTrial_starProjection_apply (x : PaperRealPlane) :
+    paperCounterexampleTrial.starProjection x =
+      ⟪paperCounterexampleTrialVector, x⟫_ℝ •
+        paperCounterexampleTrialVector := by
+  rw [paperCounterexampleTrial,
+    starProjection_span_singleton_apply_of_norm_one]
+  exact norm_paperCounterexampleTrialVector
+
+@[simp]
+theorem paperCounterexampleTrial_starProjection_e0 :
+    paperCounterexampleTrial.starProjection (paperPlaneE0 (𝕜 := ℝ)) =
+      (1 / 2 : ℝ) •
+        (paperPlaneE0 (𝕜 := ℝ) - paperPlaneE1 (𝕜 := ℝ)) := by
+  have hsqrt2 : 0 < Real.sqrt 2 := Real.sqrt_pos.2 (by norm_num)
+  have hsqrt2sq : Real.sqrt 2 ^ 2 = 2 :=
+    Real.sq_sqrt (by norm_num)
+  rw [paperCounterexampleTrial_starProjection_apply]
+  have hinner :
+      ⟪paperCounterexampleTrialVector, paperPlaneE0 (𝕜 := ℝ)⟫_ℝ =
+        1 / Real.sqrt 2 := by
+    simp [paperCounterexampleTrialVector, paperPlaneE0, paperPlaneE1,
+      inner_smul_left, EuclideanSpace.inner_single_left, PiLp.single_apply]
+  rw [hinner, paperCounterexampleTrialVector, smul_smul]
+  have hcoeff :
+      (1 / Real.sqrt 2 : ℝ) * (1 / Real.sqrt 2) = 1 / 2 := by
+    field_simp [ne_of_gt hsqrt2]
+    nlinarith
+  rw [hcoeff]
+
+@[simp]
+theorem paperCounterexampleTrial_starProjection_e1 :
+    paperCounterexampleTrial.starProjection (paperPlaneE1 (𝕜 := ℝ)) =
+      (-1 / 2 : ℝ) •
+        (paperPlaneE0 (𝕜 := ℝ) - paperPlaneE1 (𝕜 := ℝ)) := by
+  have hsqrt2 : 0 < Real.sqrt 2 := Real.sqrt_pos.2 (by norm_num)
+  have hsqrt2sq : Real.sqrt 2 ^ 2 = 2 :=
+    Real.sq_sqrt (by norm_num)
+  rw [paperCounterexampleTrial_starProjection_apply]
+  have hinner :
+      ⟪paperCounterexampleTrialVector, paperPlaneE1 (𝕜 := ℝ)⟫_ℝ =
+        -1 / Real.sqrt 2 := by
+    simp [paperCounterexampleTrialVector, paperPlaneE0, paperPlaneE1,
+      inner_smul_left, EuclideanSpace.inner_single_left, PiLp.single_apply]
+  rw [hinner, paperCounterexampleTrialVector, smul_smul]
+  have hcoeff :
+      (-1 / Real.sqrt 2 : ℝ) * (1 / Real.sqrt 2) = -1 / 2 := by
+    field_simp [ne_of_gt hsqrt2]
+    nlinarith
+  rw [hcoeff]
+
+/-- The real complexified sine operator has the same paper square norm as the
+real projection difference from which it is constructed. -/
+theorem paperHilbertSchmidtNorm_sinAngleOperatorRC_eq_projectionDifference
+    {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+    [CompleteSpace E]
+    (U V : Submodule ℝ E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
+    paperHilbertSchmidtNorm
+        (ForMathlib.DavisKahanExt.Real.sinAngleOperatorRC U V) =
+      paperHilbertSchmidtNorm (U.starProjection - V.starProjection) := by
+  rw [ForMathlib.DavisKahanExt.Real.sinAngleOperatorRC,
+    ForMathlib.DavisKahanExt.sinAngleOperatorC]
+  calc
+    paperHilbertSchmidtNorm
+        (ForMathlib.operatorAbs
+          ((complexifySubmodule U).starProjection -
+            (complexifySubmodule V).starProjection)) =
+        paperHilbertSchmidtNorm
+          ((complexifySubmodule U).starProjection -
+            (complexifySubmodule V).starProjection) :=
+      SameApproximationSingularSequence.paperHilbertSchmidtNorm_eq
+        (operatorAbs_sameApproximationSingularValues _)
+    _ = paperHilbertSchmidtNorm
+        (complexify (U.starProjection - V.starProjection)) := by
+      rw [starProjection_complexifySubmodule,
+        starProjection_complexifySubmodule, complexify_sub]
+    _ = paperHilbertSchmidtNorm
+        (U.starProjection - V.starProjection) :=
+      paperHilbertSchmidtNorm_complexify _
+
 /-- The source counterexample has angle `pi/4`, hence square sine norm one. -/
 theorem paperCounterexample_sine_square_norm :
     paperHilbertSchmidtNorm
       (ForMathlib.DavisKahanExt.Real.sinAngleOperatorRC
         paperCounterexampleExact paperCounterexampleTrial) = 1 := by
-  rw [← ForMathlib.UnitarilyInvariantNorm.frobenius_apply
+  rw [paperHilbertSchmidtNorm_sinAngleOperatorRC_eq_projectionDifference,
+    paperHilbertSchmidtNorm_eq_frobenius,
+    ForMathlib.UnitarilyInvariantNorm.frobenius_apply
     ℝ PaperRealPlane
-    (ForMathlib.DavisKahanExt.Real.sinAngleOperatorRC
-      paperCounterexampleExact paperCounterexampleTrial).toLinearMap
+    (paperCounterexampleExact.starProjection -
+      paperCounterexampleTrial.starProjection).toLinearMap
     paperRealPlane_finrank (EuclideanSpace.basisFun (Fin 2) ℝ)]
-  norm_num [paperCounterexampleExact, paperCounterexampleTrial,
-    ForMathlib.DavisKahanExt.Real.sinAngleOperatorRC,
-    ForMathlib.DavisKahanExt.sinAngleOperatorC,
-    paperHilbertSchmidtNorm, paperHilbertSchmidtEnergy]
+  rw [Fin.sum_univ_two]
+  simp only [EuclideanSpace.basisFun_apply]
+  change Real.sqrt
+    (‖(paperCounterexampleExact.starProjection -
+          paperCounterexampleTrial.starProjection) (paperPlaneE0 (𝕜 := ℝ))‖ ^ 2 +
+      ‖(paperCounterexampleExact.starProjection -
+          paperCounterexampleTrial.starProjection) (paperPlaneE1 (𝕜 := ℝ))‖ ^ 2) = 1
+  rw [norm_sq_eq_re_inner (𝕜 := ℝ), norm_sq_eq_re_inner (𝕜 := ℝ)]
+  norm_num [paperPlaneE0, paperPlaneE1,
+    EuclideanSpace.inner_single_left, PiLp.single_apply]
 
 /-- The perturbation in the printed counterexample has square norm `sqrt 3`. -/
 theorem paperCounterexample_perturbation_square_norm :
     paperHilbertSchmidtNorm paperCounterexampleH = Real.sqrt 3 := by
-  rw [← ForMathlib.UnitarilyInvariantNorm.frobenius_apply
+  rw [paperHilbertSchmidtNorm_eq_frobenius,
+    ForMathlib.UnitarilyInvariantNorm.frobenius_apply
     ℝ PaperRealPlane paperCounterexampleH.toLinearMap
     paperRealPlane_finrank (EuclideanSpace.basisFun (Fin 2) ℝ)]
-  norm_num [paperCounterexampleH, paperHilbertSchmidtNorm,
-    paperHilbertSchmidtEnergy]
+  rw [Fin.sum_univ_two]
+  simp only [EuclideanSpace.basisFun_apply]
+  change Real.sqrt
+    (‖paperCounterexampleH (paperPlaneE0 (𝕜 := ℝ))‖ ^ 2 +
+      ‖paperCounterexampleH (paperPlaneE1 (𝕜 := ℝ))‖ ^ 2) = Real.sqrt 3
+  rw [norm_sq_eq_re_inner (𝕜 := ℝ), norm_sq_eq_re_inner (𝕜 := ℝ)]
+  norm_num [paperCounterexampleH, EuclideanSpace.basisFun_apply,
+    Matrix.toEuclideanLin_apply, PiLp.single_apply]
 
 /-- The single directional gap `delta=2` does not imply the symmetric
 square-norm estimate. -/
