@@ -43,39 +43,44 @@ private theorem mapL_id_id :
     HilbertTensor.mapL (ContinuousLinearMap.id ℂ E)
       (ContinuousLinearMap.id ℂ (Conj F)) =
       ContinuousLinearMap.id ℂ (Space E F) := by
-  apply ContinuousLinearMap.ext
-  apply HilbertTensor.dense_span_tmul.induction
+  refine ContinuousLinearMap.ext fun z₀ => ?_
+  -- `Dense.induction` eliminates, so the motive cannot be inferred by `apply`.
+  refine HilbertTensor.dense_span_tmul.induction
+    (P := fun t => HilbertTensor.mapL (ContinuousLinearMap.id ℂ E)
+      (ContinuousLinearMap.id ℂ (Conj F)) t =
+      ContinuousLinearMap.id ℂ (Space E F) t) ?_ ?_ z₀
   · intro z hz
     induction hz using Submodule.span_induction with
     | mem z hz =>
         rcases hz with ⟨⟨x, y⟩, rfl⟩
         simp [HilbertTensor.mapL_tmul]
     | zero => simp
-    | add x y hx hy => simpa using congrArg₂ (· + ·) hx hy
-    | smul c x hx => simpa using congrArg (fun q => c • q) hx
+    | add x y _ _ hx hy => simp [hx, hy]
+    | smul c x _ hx => simp [hx]
   · exact isClosed_eq
-      ((HilbertTensor.mapL (ContinuousLinearMap.id ℂ E)
-        (ContinuousLinearMap.id ℂ (Conj F))).continuous.sub
-        (ContinuousLinearMap.id ℂ (Space E F)).continuous)
+      (HilbertTensor.mapL (ContinuousLinearMap.id ℂ E)
+        (ContinuousLinearMap.id ℂ (Conj F))).continuous
+      (ContinuousLinearMap.id ℂ (Space E F)).continuous
 
 private theorem mapL_comp
     (A₁ A₂ : E →L[ℂ] E) (B₁ B₂ : Conj F →L[ℂ] Conj F) :
     HilbertTensor.mapL (A₁ ∘L A₂) (B₁ ∘L B₂) =
       (HilbertTensor.mapL A₁ B₁) ∘L (HilbertTensor.mapL A₂ B₂) := by
-  apply ContinuousLinearMap.ext
-  apply HilbertTensor.dense_span_tmul.induction
+  refine ContinuousLinearMap.ext fun z₀ => ?_
+  refine HilbertTensor.dense_span_tmul.induction
+    (P := fun t => HilbertTensor.mapL (A₁ ∘L A₂) (B₁ ∘L B₂) t =
+      ((HilbertTensor.mapL A₁ B₁) ∘L (HilbertTensor.mapL A₂ B₂)) t) ?_ ?_ z₀
   · intro z hz
     induction hz using Submodule.span_induction with
     | mem z hz =>
         rcases hz with ⟨⟨x, y⟩, rfl⟩
         simp [HilbertTensor.mapL_tmul]
     | zero => simp
-    | add x y hx hy => simpa using congrArg₂ (· + ·) hx hy
-    | smul c x hx => simpa using congrArg (fun q => c • q) hx
+    | add x y _ _ hx hy => simp [hx, hy]
+    | smul c x _ hx => simp [hx]
   · exact isClosed_eq
-      ((HilbertTensor.mapL (A₁ ∘L A₂) (B₁ ∘L B₂)).continuous.sub
-        (((HilbertTensor.mapL A₁ B₁) ∘L
-          (HilbertTensor.mapL A₂ B₂)).continuous))
+      (HilbertTensor.mapL (A₁ ∘L A₂) (B₁ ∘L B₂)).continuous
+      ((HilbertTensor.mapL A₁ B₁) ∘L (HilbertTensor.mapL A₂ B₂)).continuous
 
 private theorem mapL_unitary
     (A : E →L[ℂ] E) (B : Conj F →L[ℂ] Conj F)
@@ -85,13 +90,19 @@ private theorem mapL_unitary
       ⟪HilbertTensor.mapL A B z, HilbertTensor.mapL A B w⟫_ℂ =
         ⟪z, w⟫_ℂ := by
   intro z
-  apply HilbertTensor.dense_span_tmul.induction
+  refine HilbertTensor.dense_span_tmul.induction
+    (P := fun z => ∀ w : Space E F,
+      ⟪HilbertTensor.mapL A B z, HilbertTensor.mapL A B w⟫_ℂ = ⟪z, w⟫_ℂ) ?_ ?_ z
   · intro z hz
     induction hz using Submodule.span_induction with
     | mem z hz =>
         rcases hz with ⟨⟨x, y⟩, rfl⟩
         intro w
-        apply HilbertTensor.dense_span_tmul.induction
+        refine HilbertTensor.dense_span_tmul.induction
+          (P := fun w =>
+            ⟪HilbertTensor.mapL A B (HilbertTensor.tmul x y),
+              HilbertTensor.mapL A B w⟫_ℂ
+              = ⟪HilbertTensor.tmul x y, w⟫_ℂ) ?_ ?_ w
         · intro w hw
           induction hw using Submodule.span_induction with
           | mem w hw =>
@@ -99,23 +110,28 @@ private theorem mapL_unitary
               simp [HilbertTensor.mapL_tmul, HilbertTensor.inner_tmul_tmul,
                 hA, hB]
           | zero => simp
-          | add p q hp hq => simpa [inner_add_right] using congrArg₂ (· + ·) hp hq
-          | smul c p hp => simpa [inner_smul_right] using congrArg (fun q => c • q) hp
+          -- Restrict the simp set: the default one rewrites the fixed pure
+          -- tensor through `mapL_tmul`, after which the induction hypotheses
+          -- no longer match the goal.
+          | add p q _ _ hp hq =>
+              simp only [map_add, inner_add_right, hp, hq]
+          | smul c p _ hp =>
+              simp only [map_smul, inner_smul_right, hp]
         · exact isClosed_eq
-            (((continuous_const.inner
-              (HilbertTensor.mapL A B).continuous).sub
-              (continuous_const.inner continuous_id)))
+            (continuous_const.inner (HilbertTensor.mapL A B).continuous)
+            (continuous_const.inner continuous_id)
     | zero => simp
-    | add p q hp hq =>
+    | add p q _ _ hp hq =>
         intro w
-        simpa [inner_add_left] using congrArg₂ (· + ·) (hp w) (hq w)
-    | smul c p hp =>
+        simp [inner_add_left, hp w, hq w]
+    | smul c p _ hp =>
         intro w
-        simpa [inner_smul_left] using congrArg (fun q => starRingEnd ℂ c * q) (hp w)
-  · exact isClosed_eq
-      (((continuous_id.inner
-        ((HilbertTensor.mapL A B).continuous.comp continuous_id)).sub
-        (continuous_id.inner continuous_const)))
+        simp [inner_smul_left, hp w]
+  · -- The property is a `forall` over `w`, hence an intersection of closed sets.
+    simp only [Set.setOf_forall]
+    exact isClosed_iInter fun w => isClosed_eq
+      ((HilbertTensor.mapL A B).continuous.inner continuous_const)
+      (continuous_id.inner continuous_const)
 
 private theorem continuous_mapL_orbit
     (U : OneParameterUnitaryGroup (H := E))
@@ -123,30 +139,78 @@ private theorem continuous_mapL_orbit
     (z : Space E F) :
     Continuous fun t : ℝ =>
       HilbertTensor.mapL (U.U t) (Conj.map (V.U t)) z := by
-  apply HilbertTensor.dense_span_tmul.induction z
-  · intro z hz
-    induction hz using Submodule.span_induction with
-    | mem z hz =>
-        rcases hz with ⟨⟨x, cy⟩, rfl⟩
+  -- The orbit map is a contraction uniformly in the parameter.
+  have hnorm : ∀ t : ℝ,
+      ‖HilbertTensor.mapL (U.U t) (Conj.map (V.U t))‖ ≤ 1 := by
+    intro t
+    rw [HilbertTensor.norm_mapL, Conj.norm_map]
+    have hU : ‖U.U t‖ ≤ 1 := by
+      refine (U.U t).opNorm_le_bound zero_le_one fun x => ?_
+      rw [one_mul, U.norm_preserving t x]
+    have hV : ‖V.U t‖ ≤ 1 := by
+      refine (V.U t).opNorm_le_bound zero_le_one fun x => ?_
+      rw [one_mul, V.norm_preserving t x]
+    calc ‖U.U t‖ * ‖V.U t‖ ≤ 1 * 1 :=
+          mul_le_mul hU hV (norm_nonneg _) zero_le_one
+      _ = 1 := one_mul 1
+  -- Continuity holds on the span of pure tensors.
+  have hspan : ∀ y ∈ Submodule.span ℂ
+      (Set.range fun p : E × Conj F => HilbertTensor.tmul p.1 p.2),
+      Continuous fun t : ℝ =>
+        HilbertTensor.mapL (U.U t) (Conj.map (V.U t)) y := by
+    intro y hy
+    induction hy using Submodule.span_induction with
+    | mem y hymem =>
+        rcases hymem with ⟨⟨x, cy⟩, rfl⟩
         have hx := U.strong_continuous x
-        have hy := V.strong_continuous (Conj.ofConj cy)
+        have hvy := V.strong_continuous (Conj.ofConj cy)
         have hcy : Continuous fun t => Conj.map (V.U t) cy := by
-          simpa [Conj.map_apply] using hy.comp continuous_id
-        simpa [HilbertTensor.mapL_tmul] using
-          (HilbertTensor.tmulL ℂ E (Conj F)).continuous₂.comp hx hcy
+          -- `Conj F` is a type synonym carrying the same topology and
+          -- `Conj.map` acts as the underlying operator, so this is that map.
+          exact hvy
+        -- `continuous₂` is continuity of the uncurried map, so the two
+        -- coordinates must be paired before composing.
+        simpa [HilbertTensor.mapL_tmul, Function.comp_def] using
+          (HilbertTensor.tmulL ℂ E (Conj F)).continuous₂.comp (hx.prodMk hcy)
     | zero => simpa using continuous_const
-    | add p q hp hq => simpa [map_add] using hp.add hq
-    | smul c p hp => simpa [map_smul] using hp.const_smul c
-  · have hnorm : ∀ t : ℝ,
-        ‖HilbertTensor.mapL (U.U t) (Conj.map (V.U t))‖ ≤ 1 := by
-      intro t
-      rw [HilbertTensor.norm_mapL, Conj.norm_map]
-      have hU := U.norm_preserving t
-      have hV := V.norm_preserving t
-      exact ContinuousLinearMap.norm_le_one_of_norm_le_one
-        (fun x => by simpa [hU x, hV (Conj.ofConj x)])
-    exact Continuous.isClosed_property_of_uniform_operator_bound
-      (C := 1) hnorm
+    -- State the target shape explicitly: otherwise the pointwise operation is
+    -- read at the function level and the two forms do not match syntactically.
+    | add p q _ _ hp hq =>
+        have hsum : Continuous fun t : ℝ =>
+            HilbertTensor.mapL (U.U t) (Conj.map (V.U t)) p
+              + HilbertTensor.mapL (U.U t) (Conj.map (V.U t)) q := hp.add hq
+        simpa [map_add] using hsum
+    | smul c p _ hp =>
+        have hsmul : Continuous fun t : ℝ =>
+            c • HilbertTensor.mapL (U.U t) (Conj.map (V.U t)) p :=
+          hp.const_smul c
+        simpa [map_smul] using hsmul
+  -- A vector of the whole space is approximated by one of the span, and the
+  -- uniform contraction bound turns that into a uniform approximation of the
+  -- orbit maps.  Closedness of the continuity locus is not available as a
+  -- lemma, so it is obtained this way instead.
+  refine continuous_of_uniform_approx_of_continuous fun u hu => ?_
+  obtain ⟨ε, hε, hsub⟩ := Metric.mem_uniformity_dist.mp hu
+  obtain ⟨y, hy, hdist⟩ :=
+    Metric.mem_closure_iff.mp (HilbertTensor.dense_span_tmul z) ε hε
+  refine ⟨fun t => HilbertTensor.mapL (U.U t) (Conj.map (V.U t)) y,
+    hspan y hy, fun t => hsub ?_⟩
+  have hle : ‖HilbertTensor.mapL (U.U t) (Conj.map (V.U t)) z
+      - HilbertTensor.mapL (U.U t) (Conj.map (V.U t)) y‖ ≤ ‖z - y‖ := by
+    rw [← map_sub]
+    calc ‖HilbertTensor.mapL (U.U t) (Conj.map (V.U t)) (z - y)‖
+        ≤ ‖HilbertTensor.mapL (U.U t) (Conj.map (V.U t))‖ * ‖z - y‖ :=
+          ContinuousLinearMap.le_opNorm _ _
+      _ ≤ 1 * ‖z - y‖ :=
+          mul_le_mul_of_nonneg_right (hnorm t) (norm_nonneg _)
+      _ = ‖z - y‖ := one_mul _
+  calc dist (HilbertTensor.mapL (U.U t) (Conj.map (V.U t)) z)
+        (HilbertTensor.mapL (U.U t) (Conj.map (V.U t)) y)
+      = ‖HilbertTensor.mapL (U.U t) (Conj.map (V.U t)) z
+        - HilbertTensor.mapL (U.U t) (Conj.map (V.U t)) y‖ := dist_eq_norm _ _
+    _ ≤ ‖z - y‖ := hle
+    _ = dist z y := (dist_eq_norm _ _).symm
+    _ < ε := hdist
 
 /-- The canonical left-minus-right flow on rectangular Hilbert--Schmidt tensors. -/
 noncomputable def sylvesterGroup
@@ -157,9 +221,10 @@ noncomputable def sylvesterGroup
   unitary t := mapL_unitary (U.U t) (Conj.map (V.U t))
     (U.unitary t) (by
       intro x y
-      change ⟪V.U t (Conj.ofConj x), V.U t (Conj.ofConj y)⟫_ℂ = _
-      simpa [Conj.inner_def] using congrArg (starRingEnd ℂ)
-        (V.unitary t (Conj.ofConj x) (Conj.ofConj y)))
+      -- The conjugate inner product is the swapped one, so the obligation is
+      -- unitarity at the arguments in the opposite order.
+      simp only [Conj.inner_def, Conj.map_apply, Conj.ofConj_toConj]
+      exact V.unitary t (Conj.ofConj y) (Conj.ofConj x))
   group_law s t := by
     rw [U.group_law, V.group_law, Conj.map_comp, mapL_comp]
   identity := by
@@ -189,13 +254,22 @@ theorem toOperator_sylvesterGroup
         = U.U t ∘L
             toOperator (HilbertTensor.mapL
               (ContinuousLinearMap.id ℂ E) (Conj.map (V.U t)) z) := by
-          rw [← mapL_comp]
-          simpa using toOperator_mapL_left (U.U t)
-            (HilbertTensor.mapL (ContinuousLinearMap.id ℂ E)
-              (Conj.map (V.U t)) z)
+          have hsplit : HilbertTensor.mapL (U.U t) (Conj.map (V.U t))
+              = HilbertTensor.mapL (U.U t) (ContinuousLinearMap.id ℂ (Conj F))
+                ∘L HilbertTensor.mapL (ContinuousLinearMap.id ℂ E)
+                  (Conj.map (V.U t)) := by
+            rw [← mapL_comp]
+            simp
+          rw [hsplit]
+          exact toOperator_mapL_left (U.U t) _
     _ = U.U t ∘L (toOperator z ∘L V.U (-t)) := by
-          rw [toOperator_mapL_right (B := V.U (-t))]
-          rw [V.inverse_eq_adjoint]
+          -- `toOperator_mapL_right` expects the conjugate factor as an adjoint,
+          -- so the reversed-time identity has to be applied before it, not after.
+          have hadj : (V.U (-t)).adjoint = V.U t := by
+            have h := V.inverse_eq_adjoint (-t)
+            rw [neg_neg] at h
+            exact h.symm
+          rw [← hadj, toOperator_mapL_right (B := V.U (-t))]
     _ = U.U t ∘L toOperator z ∘L V.U (-t) := by
           ext x
           rfl
