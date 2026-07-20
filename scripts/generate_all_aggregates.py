@@ -33,7 +33,12 @@ def is_skipped(d: pathlib.Path) -> bool:
     return any(part in SKIP_DIRS for part in d.relative_to(ROOT).parts)
 
 
-def regenerate(d: pathlib.Path) -> str | None:
+def regenerate(d: pathlib.Path, check: bool = False) -> str | None:
+    """Rewrite `d/All.lean` if it differs from the generated form.
+
+    With `check`, report the difference without writing, so that CI can fail on
+    an aggregate that a module addition left stale.
+    """
     modules = sorted(module_of(p) for p in d.glob("*.lean")
                      if p.name not in ("All.lean", "Experimental.lean"))
     subs = sorted(module_of(s / "All.lean") for s in d.iterdir()
@@ -49,26 +54,35 @@ def regenerate(d: pathlib.Path) -> str | None:
             + f"\n/-! # `{title}` -/\n")
     out = d / "All.lean"
     if not out.exists() or out.read_text() != text:
-        out.write_text(text)
+        if not check:
+            out.write_text(text)
         return module_of(out)
     return None
 
 
 def main() -> None:
+    check = "--check" in sys.argv[1:]
     changed = []
     # a directory needs an aggregate whenever anything beneath it is a module,
     # even if it holds no `.lean` file of its own
     dirs = [d for d in BASE.rglob("*")
             if d.is_dir() and not is_skipped(d) and any(d.rglob("*.lean"))]
     for d in sorted(dirs, key=lambda p: -len(p.parts)):
-        c = regenerate(d)
+        c = regenerate(d, check)
         if c:
             changed.append(c)
-    c = regenerate(BASE)
+    c = regenerate(BASE, check)
     if c:
         changed.append(c)
+    verb = "stale" if check else "regenerated"
     for m in changed:
-        print(f"  regenerated {m}")
+        print(f"  {verb} {m}")
+    if check:
+        if changed:
+            print(f"{len(changed)} aggregate(s) stale; run without --check")
+            raise SystemExit(1)
+        print("aggregates up to date")
+        return
     print(f"{len(changed)} aggregate(s) regenerated")
 
 
