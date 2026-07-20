@@ -4,15 +4,15 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Experimental.InfiniteDimensional.Ideals.PaperUnitaryInvariantNormInstances
-import DavisKahan.Experimental.InfiniteDimensional.Sylvester.PaperHilbertSchmidtDefectFirst
+import DavisKahan.Experimental.InfiniteDimensional.Sylvester.PaperHilbertSchmidtPairwise
 import Spectra.QuantumMechanics.BornRule.Joint.ProjectivePVM
 
 /-!
-# Audit surface for the paper norm witness and defect-first square theorem
+# Audit surface for the literal square-norm Sylvester theorem
 
-This module is intentionally excluded from ordinary aggregates.  Compile it
+This module is intentionally excluded from ordinary aggregates. Compile it
 directly after repairing the new infrastructure, then inspect the trusted
-assumptions of the listed declarations.
+assumptions of every declaration below.
 -/
 
 namespace ForMathlib
@@ -28,16 +28,32 @@ namespace ExactSinTheta
 #check Spectra.HilbertSchmidtTensor.sylvesterGroup
 #check Spectra.HilbertSchmidtTensor.toOperator_hasGeneratorSylvesterEquation
 #check Spectra.QuantumMechanics.SpectralTheory.generator_spectralGapSolution
-#check closedSylvester_solution_unique_complex
+#check Spectra.YosidaHille.GeneratorIntertwines.group
+#check Spectra.QuantumMechanics.SpectralTheory.spectralProjection_intertwines_of_generator
+#check Spectra.QuantumMechanics.SpectralTheory.generatorIntertwiner_eq_zero_of_disjoint_spectrum
+#check closedSylvester_homogeneous_eq_zero_of_pairwiseSpectrumGap
+#check Spectra.HilbertSchmidtTensor.borelMeasure_sylvesterGroup_tmul
+#check Spectra.HilbertSchmidtTensor.spectralProjection_gap_eq_zero
+#check paperHilbertSchmidtTensor_hasVectorSpectralGap
 #check paperHilbertSchmidt_sylvester_defectFirst
+#check paperHilbertSchmidt_sylvester_le_of_pairwiseSpectrumGap_direct
+#check paperHilbertSchmidt_sylvester_real_le_of_pairwiseSpectrumGap_direct
 
 #print axioms paperUnitaryInvariantNorm_nonempty
 #print axioms isPaperHilbertSchmidt_iff_existsUnique_tensor
 #print axioms paperHilbertSchmidtNorm_toOperator
 #print axioms Spectra.HilbertSchmidtTensor.toOperator_hasGeneratorSylvesterEquation
 #print axioms Spectra.QuantumMechanics.SpectralTheory.generator_spectralGapSolution
-#print axioms closedSylvester_solution_unique_complex
+#print axioms Spectra.YosidaHille.GeneratorIntertwines.group
+#print axioms Spectra.QuantumMechanics.SpectralTheory.spectralProjection_intertwines_of_generator
+#print axioms Spectra.QuantumMechanics.SpectralTheory.generatorIntertwiner_eq_zero_of_disjoint_spectrum
+#print axioms closedSylvester_homogeneous_eq_zero_of_pairwiseSpectrumGap
+#print axioms Spectra.HilbertSchmidtTensor.borelMeasure_sylvesterGroup_tmul
+#print axioms Spectra.HilbertSchmidtTensor.spectralProjection_gap_eq_zero
+#print axioms paperHilbertSchmidtTensor_hasVectorSpectralGap
 #print axioms paperHilbertSchmidt_sylvester_defectFirst
+#print axioms paperHilbertSchmidt_sylvester_le_of_pairwiseSpectrumGap_direct
+#print axioms paperHilbertSchmidt_sylvester_real_le_of_pairwiseSpectrumGap_direct
 
 end ExactSinTheta
 end Experimental

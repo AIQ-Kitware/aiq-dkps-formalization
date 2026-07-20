@@ -94,20 +94,22 @@ theorem Conj.map_adjoint (A : E →L[ℂ] F) :
     ⟪Conj.ofConj x, A (Conj.ofConj y)⟫_ℂ
   exact ContinuousLinearMap.adjoint_inner_left A _ _
 
+private theorem Conj.norm_map_le (A : E →L[ℂ] F) : ‖Conj.map A‖ ≤ ‖A‖ := by
+  apply (Conj.map A).opNorm_le_bound (norm_nonneg A)
+  intro x
+  change ‖A (Conj.ofConj x)‖ ≤ ‖A‖ * ‖x‖
+  simpa only [Conj.norm_ofConj] using A.le_opNorm (Conj.ofConj x)
+
 @[simp]
 theorem Conj.norm_map (A : E →L[ℂ] F) : ‖Conj.map A‖ = ‖A‖ := by
   apply le_antisymm
-  · apply (Conj.map A).opNorm_le_bound (norm_nonneg A)
-    intro x
-    change ‖A (Conj.ofConj x)‖ ≤ ‖A‖ * ‖x‖
-    simpa only [Conj.norm_ofConj] using A.le_opNorm (Conj.ofConj x)
+  · exact Conj.norm_map_le A
   · calc
       ‖A‖ = ‖Conj.map (Conj.map A)‖ := by
         congr 1
         ext x
         rfl
-      _ ≤ ‖Conj.map A‖ := by
-        exact norm_noninc _
+      _ ≤ ‖Conj.map A‖ := Conj.norm_map_le (Conj.map A)
 
 /-- Fixing the second factor of the pure tensor gives a bounded map in the
 first factor. -/
@@ -122,7 +124,8 @@ theorem rightTensor_apply (x : F) (u : E) :
 
 @[simp]
 theorem rightTensor_add (x y : F) :
-    rightTensor (x + y) = rightTensor x + rightTensor y := by
+    rightTensor (E := E) (x + y) =
+      rightTensor (E := E) x + rightTensor (E := E) y := by
   ext u
   simp [rightTensor_apply, HilbertTensor.tmul_add]
 
@@ -133,7 +136,8 @@ private theorem toConj_smul (c : ℂ) (x : F) :
 
 @[simp]
 theorem rightTensor_smul (c : ℂ) (x : F) :
-    rightTensor (c • x) = starRingEnd ℂ c • rightTensor x := by
+    rightTensor (E := E) (c • x) =
+      starRingEnd ℂ c • rightTensor (E := E) x := by
   ext u
   simp [rightTensor_apply, toConj_smul, HilbertTensor.tmul_smul]
 
@@ -148,11 +152,11 @@ def toOperatorLinear (z : Space E F) : F →ₗ[ℂ] E where
   toFun := fun x => (rightTensor x).adjoint z
   map_add' := by
     intro x y
-    rw [rightTensor_add]
+    rw [rightTensor_add (E := E)]
     simp
   map_smul' := by
     intro c x
-    rw [rightTensor_smul]
+    rw [rightTensor_smul (E := E)]
     simp
 
 /-- The tensor/operator map is bounded from the Hilbert tensor norm to the
@@ -202,7 +206,18 @@ theorem toOperatorL_apply (z : Space E F) :
 
 /-- The represented operator has operator norm at most the tensor norm. -/
 theorem norm_toOperator_le (z : Space E F) : ‖toOperator z‖ ≤ ‖z‖ := by
-  simpa using toOperatorL.le_opNorm z
+  apply (toOperator z).opNorm_le_bound (norm_nonneg z)
+  intro x
+  calc
+    ‖(rightTensor x).adjoint z‖
+        ≤ ‖(rightTensor x).adjoint‖ * ‖z‖ :=
+      (rightTensor x).adjoint.le_opNorm z
+    _ = ‖rightTensor x‖ * ‖z‖ := by
+      rw [ContinuousLinearMap.adjoint.norm_map]
+    _ ≤ ‖x‖ * ‖z‖ :=
+      mul_le_mul_of_nonneg_right (norm_rightTensor_le (E := E) x)
+        (norm_nonneg z)
+    _ = ‖z‖ * ‖x‖ := mul_comm _ _
 
 /-- Pure tensors represent the corresponding rank-one operators. -/
 theorem toOperator_tmul (u : E) (v : F) :
@@ -219,7 +234,7 @@ theorem toOperator_tmul (u : E) (v : F) :
 private theorem inner_tmul_eq_zero_of_toOperator_eq_zero
     {z : Space E F} (hz : toOperator z = 0) (u : E) (v : F) :
     ⟪u ⊗̂ₜ[ℂ] Conj.toConj v, z⟫_ℂ = 0 := by
-  have hx := ContinuousLinearMap.congr_fun hz v
+  have hx := congrArg (fun T : F →L[ℂ] E => T v) hz
   have hw := congrArg (fun y : E => ⟪y, u⟫_ℂ) hx
   simpa [toOperator_apply, ContinuousLinearMap.adjoint_inner_left] using hw
 
@@ -259,7 +274,6 @@ theorem toOperator_mapL_left
     (A : E →L[ℂ] G) (z : Space E F) :
     toOperator (HilbertTensor.mapL A (ContinuousLinearMap.id ℂ (Conj F)) z) =
       A ∘L toOperator z := by
-  apply toOperator_injective
   apply HilbertTensor.dense_span_tmul.induction_on
   · intro t ht
     induction ht using Submodule.span_induction with
@@ -284,7 +298,6 @@ theorem toOperator_mapL_right
     toOperator (HilbertTensor.mapL (ContinuousLinearMap.id ℂ E)
       (Conj.map B.adjoint) z) =
       toOperator z ∘L B := by
-  apply toOperator_injective
   apply HilbertTensor.dense_span_tmul.induction_on
   · intro t ht
     induction ht using Submodule.span_induction with
@@ -307,7 +320,20 @@ theorem rank_toOperator_sum_tmul_le
     {ι : Type*} (s : Finset ι) (u : ι → E) (v : ι → F) :
     (toOperator (∑ i ∈ s, u i ⊗̂ₜ[ℂ] Conj.toConj (v i))).rank ≤ s.card := by
   simp_rw [map_sum, toOperator_tmul]
-  exact LinearMap.rank_sum_rankOne_le _ _ _
+  let T : F →L[ℂ] E := ∑ i ∈ s, InnerProductSpace.rankOne ℂ (u i) (v i)
+  change T.rank ≤ (s.card : Cardinal)
+  calc
+    T.rank ≤ Module.rank ℂ (Submodule.span ℂ (u '' (s : Set ι))) := by
+      exact LinearMap.rank_le_of_range_le (by
+        rintro y ⟨x, rfl⟩
+        change (∑ i ∈ s, InnerProductSpace.rankOne ℂ (u i) (v i)) x ∈
+          Submodule.span ℂ (u '' (s : Set ι))
+        simp only [Finset.sum_apply, InnerProductSpace.rankOne_apply]
+        exact Submodule.sum_mem _ fun i hi =>
+          Submodule.smul_mem _ _
+            (Submodule.subset_span ⟨i, hi, rfl⟩))
+    _ ≤ (s.card : Cardinal) := by
+      simpa using Submodule.rank_span_le_card (R := ℂ) (s.image u)
 
 
 /-! ## Column expansion in an arbitrary Hilbert basis -/
