@@ -6,6 +6,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 import DavisKahan.Experimental.InfiniteDimensional.Ideals.PaperRankOneNormalization
 import DavisKahan.Experimental.InfiniteDimensional.Ideals.PaperHilbertSchmidtFiniteRank
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.PaperTheorem61Universal
+import DavisKahan.Experimental.InfiniteDimensional.Core.OperatorAngleReal
 import ForMathlib.Analysis.InnerProductSpace.UnitarilyInvariantNorm
 
 /-!
@@ -278,6 +279,8 @@ section Counterexample
 
 abbrev PaperRealPlane := EuclideanSpace ℝ (Fin 2)
 
+theorem paperRealPlane_finrank : Module.finrank ℝ PaperRealPlane = 2 := by simp
+
 noncomputable def paperCounterexampleA :
     PaperRealPlane →L[ℝ] PaperRealPlane :=
   (Matrix.toEuclideanLin !![(0 : ℝ), 0; 0, 1]).toContinuousLinearMap
@@ -309,8 +312,8 @@ theorem paperCounterexample_sine_square_norm :
   rw [← ForMathlib.UnitarilyInvariantNorm.frobenius_apply
     ℝ PaperRealPlane
     (ForMathlib.DavisKahanExt.Real.sinAngleOperatorRC
-      paperCounterexampleExact paperCounterexampleTrial).toLinearMap rfl
-    (EuclideanSpace.basisFun (Fin 2) ℝ)]
+      paperCounterexampleExact paperCounterexampleTrial).toLinearMap
+    paperRealPlane_finrank (EuclideanSpace.basisFun (Fin 2) ℝ)]
   norm_num [paperCounterexampleExact, paperCounterexampleTrial,
     ForMathlib.DavisKahanExt.Real.sinAngleOperatorRC,
     ForMathlib.DavisKahanExt.sinAngleOperatorC,
@@ -320,8 +323,8 @@ theorem paperCounterexample_sine_square_norm :
 theorem paperCounterexample_perturbation_square_norm :
     paperHilbertSchmidtNorm paperCounterexampleH = Real.sqrt 3 := by
   rw [← ForMathlib.UnitarilyInvariantNorm.frobenius_apply
-    ℝ PaperRealPlane paperCounterexampleH.toLinearMap rfl
-    (EuclideanSpace.basisFun (Fin 2) ℝ)]
+    ℝ PaperRealPlane paperCounterexampleH.toLinearMap
+    paperRealPlane_finrank (EuclideanSpace.basisFun (Fin 2) ℝ)]
   norm_num [paperCounterexampleH, paperHilbertSchmidtNorm,
     paperHilbertSchmidtEnergy]
 
