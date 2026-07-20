@@ -158,12 +158,32 @@ theorem paperPlanarTrialMap_isometry (theta : ℝ) :
   have horth :
       ⟪paperPlaneE0 (𝕜 := 𝕜), paperPlaneE1 (𝕜 := 𝕜)⟫_𝕜 = 0 := by
     simp [paperPlaneE0, paperPlaneE1, EuclideanSpace.inner_single_left]
+  have horthSmul :
+      ⟪(Real.cos theta : 𝕜) • paperPlaneE0 (𝕜 := 𝕜),
+        (Real.sin theta : 𝕜) • paperPlaneE1 (𝕜 := 𝕜)⟫_𝕜 = 0 := by
+    rw [inner_smul_left, inner_smul_right, horth]
+    ring
+  have hunitSq :
+      ‖(Real.cos theta : 𝕜) • paperPlaneE0 (𝕜 := 𝕜) +
+          (Real.sin theta : 𝕜) • paperPlaneE1 (𝕜 := 𝕜)‖ ^ 2 = 1 := by
+    -- Pythagoras is stated in `mul_self` form, so the square is opened first.
+    have hpyth :=
+      norm_add_sq_eq_norm_sq_add_norm_sq_of_inner_eq_zero _ _ horthSmul
+    rw [norm_smul, norm_smul, norm_paperPlaneE0, norm_paperPlaneE1, mul_one,
+      mul_one, RCLike.norm_ofReal, RCLike.norm_ofReal] at hpyth
+    rw [sq, hpyth, ← sq, ← sq, sq_abs, sq_abs]
+    exact Real.cos_sq_add_sin_sq theta
   have hunit :
-      ‖(Real.cos theta : 𝕜) • paperPlaneE0 +
-          (Real.sin theta : 𝕜) • paperPlaneE1‖ = 1 := by
-    rw [norm_eq_one_iff]
-    simp [inner_add_left, inner_add_right, horth,
-      RCLike.norm_ofReal, Real.sin_sq_add_cos_sq]
+      ‖(Real.cos theta : 𝕜) • paperPlaneE0 (𝕜 := 𝕜) +
+          (Real.sin theta : 𝕜) • paperPlaneE1 (𝕜 := 𝕜)‖ = 1 := by
+    calc
+      ‖(Real.cos theta : 𝕜) • paperPlaneE0 (𝕜 := 𝕜) +
+            (Real.sin theta : 𝕜) • paperPlaneE1 (𝕜 := 𝕜)‖ =
+          Real.sqrt
+            (‖(Real.cos theta : 𝕜) • paperPlaneE0 (𝕜 := 𝕜) +
+              (Real.sin theta : 𝕜) • paperPlaneE1 (𝕜 := 𝕜)‖ ^ 2) :=
+        (Real.sqrt_sq (norm_nonneg _)).symm
+      _ = 1 := by rw [hunitSq, Real.sqrt_one]
   rw [hunit, mul_one]
 
 /-- Exact and complementary columns form the coordinate orthogonal
@@ -286,6 +306,51 @@ abbrev PaperRealPlane := EuclideanSpace ℝ (Fin 2)
 
 theorem paperRealPlane_finrank : Module.finrank ℝ PaperRealPlane = 2 := by simp
 
+/-!
+### The real coordinate frame
+
+Every quantity in the printed counterexample is a combination of the two
+coordinate vectors, so the whole calculation reduces to one orthonormality fact
+and one Pythagoras step.  Deriving those once keeps the individual proofs from
+having to unfold `EuclideanSpace` coordinates, where the simp set rewrites
+`⟪x, x⟫_ℝ` back into `‖x‖ ^ 2` and stalls.
+-/
+
+private theorem paperReal_inner_e0_e1 :
+    ⟪paperPlaneE0 (𝕜 := ℝ), paperPlaneE1 (𝕜 := ℝ)⟫_ℝ = 0 := by
+  simp [paperPlaneE0, paperPlaneE1, EuclideanSpace.inner_single_left]
+
+/-- Squared length of a combination of the two coordinate vectors. -/
+private theorem paperReal_norm_sq_combo (a b : ℝ) :
+    ‖a • paperPlaneE0 (𝕜 := ℝ) + b • paperPlaneE1 (𝕜 := ℝ)‖ ^ 2 =
+      a ^ 2 + b ^ 2 := by
+  have horth :
+      ⟪a • paperPlaneE0 (𝕜 := ℝ), b • paperPlaneE1 (𝕜 := ℝ)⟫_ℝ = 0 := by
+    rw [real_inner_smul_left, real_inner_smul_right, paperReal_inner_e0_e1]
+    ring
+  have hpyth := norm_add_sq_eq_norm_sq_add_norm_sq_real horth
+  rw [norm_smul, norm_smul, norm_paperPlaneE0, norm_paperPlaneE1, mul_one,
+    mul_one, Real.norm_eq_abs, Real.norm_eq_abs] at hpyth
+  rw [sq, hpyth, ← sq, ← sq, sq_abs, sq_abs]
+
+/-- The trial direction written in the coordinate frame. -/
+private theorem paperReal_diff_eq_combo :
+    paperPlaneE0 (𝕜 := ℝ) - paperPlaneE1 (𝕜 := ℝ) =
+      (1 : ℝ) • paperPlaneE0 (𝕜 := ℝ) + (-1 : ℝ) • paperPlaneE1 (𝕜 := ℝ) := by
+  rw [one_smul, neg_one_smul, sub_eq_add_neg]
+
+private theorem paperReal_inner_diff_e0 :
+    ⟪paperPlaneE0 (𝕜 := ℝ) - paperPlaneE1 (𝕜 := ℝ),
+      paperPlaneE0 (𝕜 := ℝ)⟫_ℝ = 1 := by
+  rw [inner_sub_left]
+  simp [paperPlaneE0, paperPlaneE1, EuclideanSpace.inner_single_left]
+
+private theorem paperReal_inner_diff_e1 :
+    ⟪paperPlaneE0 (𝕜 := ℝ) - paperPlaneE1 (𝕜 := ℝ),
+      paperPlaneE1 (𝕜 := ℝ)⟫_ℝ = -1 := by
+  rw [inner_sub_left]
+  simp [paperPlaneE0, paperPlaneE1, EuclideanSpace.inner_single_left]
+
 noncomputable def paperCounterexampleA :
     PaperRealPlane →L[ℝ] PaperRealPlane :=
   (Matrix.toEuclideanLin !![(0 : ℝ), 0; 0, 1]).toContinuousLinearMap
@@ -336,9 +401,8 @@ theorem norm_paperCounterexampleTrialVector :
     ‖paperCounterexampleTrialVector‖ = 1 := by
   have hsqrt2 : 0 < Real.sqrt 2 := Real.sqrt_pos.2 (by norm_num)
   have hdiffsq : ‖paperPlaneE0 (𝕜 := ℝ) - paperPlaneE1‖ ^ 2 = 2 := by
-    rw [norm_sq_eq_re_inner (𝕜 := ℝ)]
-    norm_num [paperPlaneE0, paperPlaneE1,
-      EuclideanSpace.inner_single_left, PiLp.single_apply]
+    rw [paperReal_diff_eq_combo, paperReal_norm_sq_combo]
+    norm_num
   have hdiff : ‖paperPlaneE0 (𝕜 := ℝ) - paperPlaneE1‖ = Real.sqrt 2 := by
     calc
       ‖paperPlaneE0 (𝕜 := ℝ) - paperPlaneE1‖ =
@@ -353,27 +417,32 @@ theorem norm_paperCounterexampleTrialVector :
 theorem paperCounterexampleExact_starProjection_e0 :
     paperCounterexampleExact.starProjection (paperPlaneE0 (𝕜 := ℝ)) =
       paperPlaneE0 := by
-  rw [paperCounterexampleExact,
-    starProjection_span_singleton_apply_of_norm_one]
-  · simp [paperPlaneE0, EuclideanSpace.inner_single_left]
-  · exact norm_paperPlaneE0
+  -- The orthogonal-projection instance is indexed by the submodule itself, so
+  -- rewriting the submodule has no type-correct motive.  Instantiate the
+  -- general lemma at the definitional unfolding instead.
+  have h : paperCounterexampleExact.starProjection (paperPlaneE0 (𝕜 := ℝ)) =
+      ⟪paperPlaneE0 (𝕜 := ℝ), paperPlaneE0 (𝕜 := ℝ)⟫_ℝ •
+        paperPlaneE0 (𝕜 := ℝ) :=
+    starProjection_span_singleton_apply_of_norm_one _ _ norm_paperPlaneE0
+  rw [h]
+  simp [paperPlaneE0, EuclideanSpace.inner_single_left]
 
 @[simp]
 theorem paperCounterexampleExact_starProjection_e1 :
     paperCounterexampleExact.starProjection (paperPlaneE1 (𝕜 := ℝ)) = 0 := by
-  rw [paperCounterexampleExact,
-    starProjection_span_singleton_apply_of_norm_one]
-  · simp [paperPlaneE0, paperPlaneE1, EuclideanSpace.inner_single_left]
-  · exact norm_paperPlaneE0
+  have h : paperCounterexampleExact.starProjection (paperPlaneE1 (𝕜 := ℝ)) =
+      ⟪paperPlaneE0 (𝕜 := ℝ), paperPlaneE1 (𝕜 := ℝ)⟫_ℝ •
+        paperPlaneE0 (𝕜 := ℝ) :=
+    starProjection_span_singleton_apply_of_norm_one _ _ norm_paperPlaneE0
+  rw [h, paperReal_inner_e0_e1, zero_smul]
 
 @[simp]
 theorem paperCounterexampleTrial_starProjection_apply (x : PaperRealPlane) :
     paperCounterexampleTrial.starProjection x =
       ⟪paperCounterexampleTrialVector, x⟫_ℝ •
-        paperCounterexampleTrialVector := by
-  rw [paperCounterexampleTrial,
-    starProjection_span_singleton_apply_of_norm_one]
-  exact norm_paperCounterexampleTrialVector
+        paperCounterexampleTrialVector :=
+  starProjection_span_singleton_apply_of_norm_one _ _
+    norm_paperCounterexampleTrialVector
 
 @[simp]
 theorem paperCounterexampleTrial_starProjection_e0 :
@@ -387,8 +456,8 @@ theorem paperCounterexampleTrial_starProjection_e0 :
   have hinner :
       ⟪paperCounterexampleTrialVector, paperPlaneE0 (𝕜 := ℝ)⟫_ℝ =
         1 / Real.sqrt 2 := by
-    simp [paperCounterexampleTrialVector, paperPlaneE0, paperPlaneE1,
-      inner_smul_left, EuclideanSpace.inner_single_left, PiLp.single_apply]
+    rw [paperCounterexampleTrialVector, real_inner_smul_left,
+      paperReal_inner_diff_e0, mul_one]
   rw [hinner, paperCounterexampleTrialVector, smul_smul]
   have hcoeff :
       (1 / Real.sqrt 2 : ℝ) * (1 / Real.sqrt 2) = 1 / 2 := by
@@ -408,14 +477,55 @@ theorem paperCounterexampleTrial_starProjection_e1 :
   have hinner :
       ⟪paperCounterexampleTrialVector, paperPlaneE1 (𝕜 := ℝ)⟫_ℝ =
         -1 / Real.sqrt 2 := by
-    simp [paperCounterexampleTrialVector, paperPlaneE0, paperPlaneE1,
-      inner_smul_left, EuclideanSpace.inner_single_left, PiLp.single_apply]
+    rw [paperCounterexampleTrialVector, real_inner_smul_left,
+      paperReal_inner_diff_e1]
+    ring
   rw [hinner, paperCounterexampleTrialVector, smul_smul]
   have hcoeff :
       (-1 / Real.sqrt 2 : ℝ) * (1 / Real.sqrt 2) = -1 / 2 := by
     field_simp [ne_of_gt hsqrt2]
     nlinarith
   rw [hcoeff]
+
+/-- The projection difference on the first coordinate vector. -/
+theorem paperCounterexample_projectionDifference_e0 :
+    (paperCounterexampleExact.starProjection -
+        paperCounterexampleTrial.starProjection) (paperPlaneE0 (𝕜 := ℝ)) =
+      (1 / 2 : ℝ) • paperPlaneE0 (𝕜 := ℝ) +
+        (1 / 2 : ℝ) • paperPlaneE1 (𝕜 := ℝ) := by
+  rw [ContinuousLinearMap.sub_apply,
+    paperCounterexampleExact_starProjection_e0,
+    paperCounterexampleTrial_starProjection_e0]
+  module
+
+/-- The projection difference on the second coordinate vector. -/
+theorem paperCounterexample_projectionDifference_e1 :
+    (paperCounterexampleExact.starProjection -
+        paperCounterexampleTrial.starProjection) (paperPlaneE1 (𝕜 := ℝ)) =
+      (1 / 2 : ℝ) • paperPlaneE0 (𝕜 := ℝ) +
+        (-(1 / 2) : ℝ) • paperPlaneE1 (𝕜 := ℝ) := by
+  rw [ContinuousLinearMap.sub_apply,
+    paperCounterexampleExact_starProjection_e1,
+    paperCounterexampleTrial_starProjection_e1]
+  module
+
+/-- The printed perturbation on the first coordinate vector. -/
+theorem paperCounterexampleH_e0 :
+    paperCounterexampleH (paperPlaneE0 (𝕜 := ℝ)) =
+      (1 : ℝ) • paperPlaneE0 (𝕜 := ℝ) + (1 : ℝ) • paperPlaneE1 (𝕜 := ℝ) := by
+  ext i
+  fin_cases i <;>
+    simp [paperCounterexampleH, paperPlaneE0, paperPlaneE1,
+      Matrix.toEuclideanLin_apply, PiLp.single_apply]
+
+/-- The printed perturbation on the second coordinate vector. -/
+theorem paperCounterexampleH_e1 :
+    paperCounterexampleH (paperPlaneE1 (𝕜 := ℝ)) =
+      (1 : ℝ) • paperPlaneE0 (𝕜 := ℝ) + (0 : ℝ) • paperPlaneE1 (𝕜 := ℝ) := by
+  ext i
+  fin_cases i <;>
+    simp [paperCounterexampleH, paperPlaneE0, paperPlaneE1,
+      Matrix.toEuclideanLin_apply, PiLp.single_apply]
 
 /-- The real complexified sine operator has the same paper square norm as the
 real projection difference from which it is constructed. -/
@@ -466,9 +576,10 @@ theorem paperCounterexample_sine_square_norm :
           paperCounterexampleTrial.starProjection) (paperPlaneE0 (𝕜 := ℝ))‖ ^ 2 +
       ‖(paperCounterexampleExact.starProjection -
           paperCounterexampleTrial.starProjection) (paperPlaneE1 (𝕜 := ℝ))‖ ^ 2) = 1
-  rw [norm_sq_eq_re_inner (𝕜 := ℝ), norm_sq_eq_re_inner (𝕜 := ℝ)]
-  norm_num [paperPlaneE0, paperPlaneE1,
-    EuclideanSpace.inner_single_left, PiLp.single_apply]
+  rw [paperCounterexample_projectionDifference_e0,
+    paperCounterexample_projectionDifference_e1,
+    paperReal_norm_sq_combo, paperReal_norm_sq_combo]
+  norm_num
 
 /-- The perturbation in the printed counterexample has square norm `sqrt 3`. -/
 theorem paperCounterexample_perturbation_square_norm :
@@ -482,9 +593,9 @@ theorem paperCounterexample_perturbation_square_norm :
   change Real.sqrt
     (‖paperCounterexampleH (paperPlaneE0 (𝕜 := ℝ))‖ ^ 2 +
       ‖paperCounterexampleH (paperPlaneE1 (𝕜 := ℝ))‖ ^ 2) = Real.sqrt 3
-  rw [norm_sq_eq_re_inner (𝕜 := ℝ), norm_sq_eq_re_inner (𝕜 := ℝ)]
-  norm_num [paperCounterexampleH, EuclideanSpace.basisFun_apply,
-    Matrix.toEuclideanLin_apply, PiLp.single_apply]
+  rw [paperCounterexampleH_e0, paperCounterexampleH_e1,
+    paperReal_norm_sq_combo, paperReal_norm_sq_combo]
+  norm_num
 
 /-- The single directional gap `delta=2` does not imply the symmetric
 square-norm estimate. -/

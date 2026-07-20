@@ -12,7 +12,8 @@ import tempfile
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 TARGET = "DavisKahan.Sources.DavisKahan1970.FullSineTheta"
 AUDIT = ROOT / "DavisKahan/Experimental/InfiniteDimensional/SinTheta/FullPaperSineThetaAudit.lean"
-EXPECTED = "[propext, Classical.choice, Quot.sound]"
+EXPECTED_AXIOMS = ("propext", "Classical.choice", "Quot.sound")
+AXIOM_REPORT = re.compile(r"'(?P<name>[^']+)' depends on axioms: \[(?P<axioms>[^\]]*)\]")
 
 
 def run(cmd: list[str]) -> str:
@@ -42,16 +43,50 @@ def static_check() -> None:
         raise SystemExit(1)
 
 
+def expected_report_count() -> int:
+    """Number of dependency reports the audit file is required to emit."""
+    return sum(
+        1
+        for line in AUDIT.read_text().splitlines()
+        if line.strip().startswith("#print axioms")
+    )
+
+
 def audit_output(output: str) -> None:
-    bad = []
-    for line in output.splitlines():
-        if "depends on axioms:" in line and EXPECTED not in line:
-            bad.append(line)
-        if "sorryAx" in line:
-            bad.append(line)
+    # Lean wraps long axiom lists over several lines, so a report has to be
+    # matched against whitespace-normalized output rather than line by line.
+    # Matching per line silently mistakes a correct wrapped report for a
+    # failure, and would equally hide a bad one whose offending axiom landed on
+    # a continuation line.
+    normalized = " ".join(output.split())
+    if "sorryAx" in normalized:
+        print("Audit output depends on sorryAx:")
+        print(output, end="")
+        raise SystemExit(1)
+    reports = list(AXIOM_REPORT.finditer(normalized))
+    bad = [
+        match.group(0)
+        for match in reports
+        if tuple(a.strip() for a in match.group("axioms").split(","))
+        != EXPECTED_AXIOMS
+    ]
     if bad:
         print("Unexpected dependency output:")
         print("\n".join(bad))
+        raise SystemExit(1)
+    # Every `#print axioms` command must actually have produced a report; a
+    # missing one would otherwise pass vacuously.
+    expected = expected_report_count()
+    if len(reports) != expected:
+        print(f"Audit emitted {len(reports)} dependency reports, expected {expected}.")
+        print(output, end="")
+        raise SystemExit(1)
+    # The reports must be the whole output: any warning or error left over means
+    # the audited surface did not elaborate cleanly.
+    leftover = AXIOM_REPORT.sub("", normalized).strip()
+    if leftover:
+        print("Unexpected extra audit output:")
+        print(leftover)
         raise SystemExit(1)
 
 
