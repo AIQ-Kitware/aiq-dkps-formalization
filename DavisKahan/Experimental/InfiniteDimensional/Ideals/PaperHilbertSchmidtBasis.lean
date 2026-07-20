@@ -40,9 +40,9 @@ open Filter
 
 noncomputable section
 
-universe u v
+universe vE vF
 
-variable {E F : Type v}
+variable {E : Type vE} {F : Type vF}
 variable [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
 variable [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
 

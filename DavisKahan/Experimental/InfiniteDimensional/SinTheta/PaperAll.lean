@@ -4,10 +4,13 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Experimental.InfiniteDimensional.Ideals.PaperNormCorrespondence
+import DavisKahan.Experimental.InfiniteDimensional.Ideals.PaperUnitaryInvariantNormInstances
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.PaperCosineAngle
+import DavisKahan.Experimental.InfiniteDimensional.SinTheta.PaperAngleIdentity
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.PaperFullAngle
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.PaperFullAngleReal
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.PaperCommonDomainTheorems
+import DavisKahan.Experimental.InfiniteDimensional.SinTheta.PaperCommonCoreTheorems
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.PaperSymmetric
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.PaperSharpness
 

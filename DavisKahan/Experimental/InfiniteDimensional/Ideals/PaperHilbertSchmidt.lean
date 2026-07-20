@@ -34,13 +34,13 @@ open Foundation
 
 noncomputable section
 
-universe u v
+universe u vE vF vG vH vE1 vF1 vE2 vF2
 
 /-- Extended Hilbert--Schmidt energy, defined by the squared approximation
 singular-value sequence. -/
 def paperHilbertSchmidtEnergy
     {𝕜 : Type u} [RCLike 𝕜]
-    {E F : Type v}
+    {E : Type vE} {F : Type vF}
     [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
     [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
     (A : E →L[𝕜] F) : ENNReal :=
@@ -49,7 +49,7 @@ def paperHilbertSchmidtEnergy
 /-- Canonical Hilbert--Schmidt membership. -/
 def IsPaperHilbertSchmidt
     {𝕜 : Type u} [RCLike 𝕜]
-    {E F : Type v}
+    {E : Type vE} {F : Type vF}
     [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
     [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
     (A : E →L[𝕜] F) : Prop :=
@@ -58,7 +58,7 @@ def IsPaperHilbertSchmidt
 /-- Basis-free rectangular Hilbert--Schmidt norm. -/
 def paperHilbertSchmidtNorm
     {𝕜 : Type u} [RCLike 𝕜]
-    {E F : Type v}
+    {E : Type vE} {F : Type vF}
     [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
     [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
     (A : E →L[𝕜] F) : ℝ :=
@@ -67,7 +67,7 @@ def paperHilbertSchmidtNorm
 @[simp]
 theorem paperHilbertSchmidtEnergy_zero
     {𝕜 : Type u} [RCLike 𝕜]
-    {E F : Type v}
+    {E : Type vE} {F : Type vF}
     [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
     [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F] :
     paperHilbertSchmidtEnergy (0 : E →L[𝕜] F) = 0 := by
@@ -77,7 +77,7 @@ theorem paperHilbertSchmidtEnergy_zero
 @[simp]
 theorem paperHilbertSchmidtNorm_zero
     {𝕜 : Type u} [RCLike 𝕜]
-    {E F : Type v}
+    {E : Type vE} {F : Type vF}
     [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
     [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F] :
     paperHilbertSchmidtNorm (0 : E →L[𝕜] F) = 0 := by
@@ -86,7 +86,7 @@ theorem paperHilbertSchmidtNorm_zero
 /-- The square norm is nonnegative. -/
 theorem paperHilbertSchmidtNorm_nonneg
     {𝕜 : Type u} [RCLike 𝕜]
-    {E F : Type v}
+    {E : Type vE} {F : Type vF}
     [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
     [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
     (A : E →L[𝕜] F) :
@@ -96,7 +96,8 @@ theorem paperHilbertSchmidtNorm_nonneg
 /-- Complete singular-value equality preserves Hilbert--Schmidt energy. -/
 theorem SameApproximationSingularSequence.paperHilbertSchmidtEnergy_eq
     {𝕜 : Type u} [RCLike 𝕜]
-    {E₁ F₁ E₂ F₂ : Type v}
+    {E₁ : Type vE1} {F₁ : Type vF1}
+    {E₂ : Type vE2} {F₂ : Type vF2}
     [NormedAddCommGroup E₁] [InnerProductSpace 𝕜 E₁] [CompleteSpace E₁]
     [NormedAddCommGroup F₁] [InnerProductSpace 𝕜 F₁] [CompleteSpace F₁]
     [NormedAddCommGroup E₂] [InnerProductSpace 𝕜 E₂] [CompleteSpace E₂]
@@ -112,7 +113,8 @@ theorem SameApproximationSingularSequence.paperHilbertSchmidtEnergy_eq
 /-- Complete singular-value equality preserves Hilbert--Schmidt membership. -/
 theorem SameApproximationSingularSequence.isPaperHilbertSchmidt_iff
     {𝕜 : Type u} [RCLike 𝕜]
-    {E₁ F₁ E₂ F₂ : Type v}
+    {E₁ : Type vE1} {F₁ : Type vF1}
+    {E₂ : Type vE2} {F₂ : Type vF2}
     [NormedAddCommGroup E₁] [InnerProductSpace 𝕜 E₁] [CompleteSpace E₁]
     [NormedAddCommGroup F₁] [InnerProductSpace 𝕜 F₁] [CompleteSpace F₁]
     [NormedAddCommGroup E₂] [InnerProductSpace 𝕜 E₂] [CompleteSpace E₂]
@@ -126,7 +128,8 @@ theorem SameApproximationSingularSequence.isPaperHilbertSchmidt_iff
 /-- Complete singular-value equality preserves the square norm. -/
 theorem SameApproximationSingularSequence.paperHilbertSchmidtNorm_eq
     {𝕜 : Type u} [RCLike 𝕜]
-    {E₁ F₁ E₂ F₂ : Type v}
+    {E₁ : Type vE1} {F₁ : Type vF1}
+    {E₂ : Type vE2} {F₂ : Type vF2}
     [NormedAddCommGroup E₁] [InnerProductSpace 𝕜 E₁] [CompleteSpace E₁]
     [NormedAddCommGroup F₁] [InnerProductSpace 𝕜 F₁] [CompleteSpace F₁]
     [NormedAddCommGroup E₂] [InnerProductSpace 𝕜 E₂] [CompleteSpace E₂]
@@ -141,7 +144,7 @@ theorem SameApproximationSingularSequence.paperHilbertSchmidtNorm_eq
 /-- Adjoint invariance of Hilbert--Schmidt membership. -/
 theorem isPaperHilbertSchmidt_adjoint_iff
     {𝕜 : Type u} [RCLike 𝕜]
-    {E F : Type v}
+    {E : Type vE} {F : Type vF}
     [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
     [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
     (A : E →L[𝕜] F) :
@@ -153,7 +156,7 @@ theorem isPaperHilbertSchmidt_adjoint_iff
 /-- Adjoint invariance of the square norm. -/
 theorem paperHilbertSchmidtNorm_adjoint
     {𝕜 : Type u} [RCLike 𝕜]
-    {E F : Type v}
+    {E : Type vE} {F : Type vF}
     [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
     [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
     (A : E →L[𝕜] F) :
@@ -164,7 +167,7 @@ theorem paperHilbertSchmidtNorm_adjoint
 
 /-- The modulus has the same square norm as the original rectangular map. -/
 theorem paperHilbertSchmidtNorm_operatorModulus
-    {E F : Type v}
+    {E : Type vE} {F : Type vF}
     [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
     [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
     (A : E →L[ℂ] F) :
@@ -175,7 +178,7 @@ theorem paperHilbertSchmidtNorm_operatorModulus
 
 /-- Real complexification preserves Hilbert--Schmidt energy exactly. -/
 theorem paperHilbertSchmidtEnergy_complexify
-    {E F : Type v}
+    {E : Type vE} {F : Type vF}
     [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
     [NormedAddCommGroup F] [InnerProductSpace ℝ F] [CompleteSpace F]
     (A : E →L[ℝ] F) :
@@ -188,7 +191,7 @@ theorem paperHilbertSchmidtEnergy_complexify
 
 /-- Real complexification preserves square-norm membership. -/
 theorem isPaperHilbertSchmidt_complexify_iff
-    {E F : Type v}
+    {E : Type vE} {F : Type vF}
     [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
     [NormedAddCommGroup F] [InnerProductSpace ℝ F] [CompleteSpace F]
     (A : E →L[ℝ] F) :
@@ -199,7 +202,7 @@ theorem isPaperHilbertSchmidt_complexify_iff
 
 /-- Real complexification preserves the square norm. -/
 theorem paperHilbertSchmidtNorm_complexify
-    {E F : Type v}
+    {E : Type vE} {F : Type vF}
     [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
     [NormedAddCommGroup F] [InnerProductSpace ℝ F] [CompleteSpace F]
     (A : E →L[ℝ] F) :
@@ -211,7 +214,7 @@ theorem paperHilbertSchmidtNorm_complexify
 /-- Scaling law for Hilbert--Schmidt energy. -/
 theorem paperHilbertSchmidtEnergy_smul
     {𝕜 : Type u} [RCLike 𝕜]
-    {E F : Type v}
+    {E : Type vE} {F : Type vF}
     [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
     [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
     (c : 𝕜) (A : E →L[𝕜] F) :
@@ -227,7 +230,7 @@ theorem paperHilbertSchmidtEnergy_smul
 /-- Absolute homogeneity of the square norm on finite-energy operators. -/
 theorem paperHilbertSchmidtNorm_smul
     {𝕜 : Type u} [RCLike 𝕜]
-    {E F : Type v}
+    {E : Type vE} {F : Type vF}
     [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
     [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
     (c : 𝕜) (A : E →L[𝕜] F)
@@ -242,7 +245,7 @@ theorem paperHilbertSchmidtNorm_smul
 /-- Nonzero scalar multiplication preserves Hilbert--Schmidt membership. -/
 theorem isPaperHilbertSchmidt_smul_iff
     {𝕜 : Type u} [RCLike 𝕜]
-    {E F : Type v}
+    {E : Type vE} {F : Type vF}
     [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
     [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
     (c : 𝕜) (hc : c ≠ 0) (A : E →L[𝕜] F) :
@@ -263,7 +266,7 @@ theorem isPaperHilbertSchmidt_smul_iff
 @[simp]
 theorem isPaperHilbertSchmidt_neg_iff
     {𝕜 : Type u} [RCLike 𝕜]
-    {E F : Type v}
+    {E : Type vE} {F : Type vF}
     [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
     [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
     (A : E →L[𝕜] F) :
@@ -276,7 +279,7 @@ theorem isPaperHilbertSchmidt_neg_iff
 @[simp]
 theorem paperHilbertSchmidtNorm_neg
     {𝕜 : Type u} [RCLike 𝕜]
-    {E F : Type v}
+    {E : Type vE} {F : Type vF}
     [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
     [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
     (A : E →L[𝕜] F) :
@@ -290,7 +293,8 @@ theorem paperHilbertSchmidtNorm_neg
 /-- Two-sided ideal control of the extended Hilbert--Schmidt energy. -/
 theorem paperHilbertSchmidtEnergy_comp_le
     {𝕜 : Type u} [RCLike 𝕜]
-    {E F G H : Type v}
+    {E : Type vE} {F : Type vF}
+    {G : Type vG} {H : Type vH}
     [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
     [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
     [NormedAddCommGroup G] [InnerProductSpace 𝕜 G] [CompleteSpace G]
@@ -320,7 +324,8 @@ theorem paperHilbertSchmidtEnergy_comp_le
 /-- The two-sided ideal property for canonical Hilbert--Schmidt membership. -/
 theorem IsPaperHilbertSchmidt.comp
     {𝕜 : Type u} [RCLike 𝕜]
-    {E F G H : Type v}
+    {E : Type vE} {F : Type vF}
+    {G : Type vG} {H : Type vH}
     [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
     [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
     [NormedAddCommGroup G] [InnerProductSpace 𝕜 G] [CompleteSpace G]
@@ -335,7 +340,8 @@ theorem IsPaperHilbertSchmidt.comp
 /-- Sharp two-sided ideal norm estimate. -/
 theorem paperHilbertSchmidtNorm_comp_le
     {𝕜 : Type u} [RCLike 𝕜]
-    {E F G H : Type v}
+    {E : Type vE} {F : Type vF}
+    {G : Type vG} {H : Type vH}
     [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
     [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
     [NormedAddCommGroup G] [InnerProductSpace 𝕜 G] [CompleteSpace G]
@@ -367,7 +373,8 @@ theorem paperHilbertSchmidtNorm_comp_le
 square norm. -/
 theorem paperHilbertSchmidtNorm_comp_isometries_le
     {𝕜 : Type u} [RCLike 𝕜]
-    {E F G H : Type v}
+    {E : Type vE} {F : Type vF}
+    {G : Type vG} {H : Type vH}
     [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
     [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
     [NormedAddCommGroup G] [InnerProductSpace 𝕜 G] [CompleteSpace G]
@@ -388,7 +395,7 @@ theorem paperHilbertSchmidtNorm_comp_isometries_le
 /-- Squared norm identity on the canonical ideal. -/
 theorem sq_paperHilbertSchmidtNorm
     {𝕜 : Type u} [RCLike 𝕜]
-    {E F : Type v}
+    {E : Type vE} {F : Type vF}
     [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
     [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
     {A : E →L[𝕜] F} (hA : IsPaperHilbertSchmidt A) :

@@ -23,10 +23,10 @@ namespace ExactSinTheta
 
 open scoped InnerProductSpace
 
-universe u v
+universe u vE vF vE1 vF1 vE2 vF2 vE3 vF3 vE0 vF0
 
 variable {𝕜 : Type u} [RCLike 𝕜]
-variable {E F : Type v}
+variable {E : Type vE} {F : Type vF}
   [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
   [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
 
@@ -34,7 +34,8 @@ variable {E F : Type v}
 singular-value sequence.  This is the relation used literally in the paper. -/
 def SameApproximationSingularSequence
     {𝕜 : Type u} [RCLike 𝕜]
-    {E₁ F₁ E₂ F₂ : Type v}
+    {E₁ : Type vE1} {F₁ : Type vF1}
+    {E₂ : Type vE2} {F₂ : Type vF2}
     [NormedAddCommGroup E₁] [InnerProductSpace 𝕜 E₁] [CompleteSpace E₁]
     [NormedAddCommGroup F₁] [InnerProductSpace 𝕜 F₁] [CompleteSpace F₁]
     [NormedAddCommGroup E₂] [InnerProductSpace 𝕜 E₂] [CompleteSpace E₂]
@@ -47,7 +48,7 @@ namespace SameApproximationSingularSequence
 @[refl]
 theorem refl
     {𝕜 : Type u} [RCLike 𝕜]
-    {E F : Type v}
+    {E : Type vE} {F : Type vF}
     [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
     [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
     (A : E →L[𝕜] F) : SameApproximationSingularSequence A A := fun _ => rfl
@@ -55,7 +56,8 @@ theorem refl
 @[symm]
 theorem symm
     {𝕜 : Type u} [RCLike 𝕜]
-    {E₁ F₁ E₂ F₂ : Type v}
+    {E₁ : Type vE1} {F₁ : Type vF1}
+    {E₂ : Type vE2} {F₂ : Type vF2}
     [NormedAddCommGroup E₁] [InnerProductSpace 𝕜 E₁] [CompleteSpace E₁]
     [NormedAddCommGroup F₁] [InnerProductSpace 𝕜 F₁] [CompleteSpace F₁]
     [NormedAddCommGroup E₂] [InnerProductSpace 𝕜 E₂] [CompleteSpace E₂]
@@ -67,7 +69,9 @@ theorem symm
 @[trans]
 theorem trans
     {𝕜 : Type u} [RCLike 𝕜]
-    {E₁ F₁ E₂ F₂ E₃ F₃ : Type v}
+    {E₁ : Type vE1} {F₁ : Type vF1}
+    {E₂ : Type vE2} {F₂ : Type vF2}
+    {E₃ : Type vE3} {F₃ : Type vF3}
     [NormedAddCommGroup E₁] [InnerProductSpace 𝕜 E₁] [CompleteSpace E₁]
     [NormedAddCommGroup F₁] [InnerProductSpace 𝕜 F₁] [CompleteSpace F₁]
     [NormedAddCommGroup E₂] [InnerProductSpace 𝕜 E₂] [CompleteSpace E₂]
@@ -82,7 +86,8 @@ theorem trans
 /-- Equal complete singular data gives equal operator norms. -/
 theorem opNorm_eq
     {𝕜 : Type u} [RCLike 𝕜]
-    {E₁ F₁ E₂ F₂ : Type v}
+    {E₁ : Type vE1} {F₁ : Type vF1}
+    {E₂ : Type vE2} {F₂ : Type vF2}
     [NormedAddCommGroup E₁] [InnerProductSpace 𝕜 E₁] [CompleteSpace E₁]
     [NormedAddCommGroup F₁] [InnerProductSpace 𝕜 F₁] [CompleteSpace F₁]
     [NormedAddCommGroup E₂] [InnerProductSpace 𝕜 E₂] [CompleteSpace E₂]
@@ -95,7 +100,8 @@ theorem opNorm_eq
 /-- Equal complete singular data gives equal finite Ky Fan sums. -/
 theorem kyFanApproximationGauge_eq
     {𝕜 : Type u} [RCLike 𝕜]
-    {E₁ F₁ E₂ F₂ : Type v}
+    {E₁ : Type vE1} {F₁ : Type vF1}
+    {E₂ : Type vE2} {F₂ : Type vF2}
     [NormedAddCommGroup E₁] [InnerProductSpace 𝕜 E₁] [CompleteSpace E₁]
     [NormedAddCommGroup F₁] [InnerProductSpace 𝕜 F₁] [CompleteSpace F₁]
     [NormedAddCommGroup E₂] [InnerProductSpace 𝕜 E₂] [CompleteSpace E₂]
@@ -114,7 +120,8 @@ end SameApproximationSingularSequence
 approximation number.  Only `‖U‖₊ ≤ 1` is used, so no nontriviality
 assumption on the coordinate spaces is required. -/
 private theorem approximationNumber_comp_isometricEquiv_le
-    {E₁ F₁ E₂ F₂ : Type v}
+    {E₁ : Type vE1} {F₁ : Type vF1}
+    {E₂ : Type vE2} {F₂ : Type vF2}
     [NormedAddCommGroup E₁] [NormedSpace 𝕜 E₁]
     [NormedAddCommGroup F₁] [NormedSpace 𝕜 F₁]
     [NormedAddCommGroup E₂] [NormedSpace 𝕜 E₂]
@@ -140,7 +147,8 @@ private theorem approximationNumber_comp_isometricEquiv_le
 /-- Two-sided composition with isometric equivalences preserves every
 approximation number. -/
 private theorem approximationNumber_comp_isometricEquiv_eq
-    {E₁ F₁ E₂ F₂ : Type v}
+    {E₁ : Type vE1} {F₁ : Type vF1}
+    {E₂ : Type vE2} {F₂ : Type vF2}
     [NormedAddCommGroup E₁] [NormedSpace 𝕜 E₁]
     [NormedAddCommGroup F₁] [NormedSpace 𝕜 F₁]
     [NormedAddCommGroup E₂] [NormedSpace 𝕜 E₂]
@@ -187,7 +195,7 @@ theorem comp_isometricEquiv
 /-- If an operator becomes another operator after unitary coordinate changes,
 they have the same complete singular sequence. -/
 theorem of_isometricEquiv_comp
-    {E' F' : Type v}
+    {E' : Type vE1} {F' : Type vF1}
     [NormedAddCommGroup E'] [InnerProductSpace 𝕜 E'] [CompleteSpace E']
     [NormedAddCommGroup F'] [InnerProductSpace 𝕜 F'] [CompleteSpace F']
     (U : F ≃ₗᵢ[𝕜] F') (V : E ≃ₗᵢ[𝕜] E')
@@ -268,7 +276,7 @@ end SameApproximationSingularValues
 representative may act between different Hilbert coordinate spaces, exactly as
 in the paper; only its complete singular-value sequence is prescribed. -/
 structure PaperSinThetaRepresentativeAcross
-    {E₀ F₀ : Type v}
+    {E₀ : Type vE0} {F₀ : Type vF0}
     [NormedAddCommGroup E₀] [InnerProductSpace 𝕜 E₀] [CompleteSpace E₀]
     [NormedAddCommGroup F₀] [InnerProductSpace 𝕜 F₀] [CompleteSpace F₀]
     (canonical : E →L[𝕜] F) where

@@ -31,6 +31,8 @@ alias unitaryInvariantNorm_operator_laws :=
   Exact.PaperUnitaryInvariantNorm.gauge_comp_le
 alias unitaryInvariantNorm_definite :=
   Exact.PaperUnitaryInvariantNorm.gauge_eq_zero_iff
+alias nuclearNorm := Exact.paperNuclearNorm
+alias unitaryInvariantNorm_nonempty := Exact.paperUnitaryInvariantNorm_nonempty
 
 /-! ## Literal angle objects -/
 
@@ -45,6 +47,10 @@ alias directedSinAngle_eq_modulus :=
   Exact.paperSourceDirectedSinC_eq_paperSineModulusC
 alias directedSinAngle_singularValues :=
   Exact.paperSourceDirectedSin_same_paperSineBlock
+alias directedAngle_eq_arcsin_sineModulus :=
+  Exact.paperSourceDirectedAngleC_eq_arcsin_sineModulus
+alias directedAngle_real_eq_arcsin_sineModulus :=
+  Exact.paperSourceDirectedAngleR_eq_arcsin_sineModulus
 alias directedAngle_real := Exact.paperSourceDirectedAngleR
 alias directedSinAngle_real := Exact.paperSourceDirectedSinR
 alias directedCosAngle_real := Exact.paperSourceDirectedCosR
@@ -138,6 +144,24 @@ alias Theorem6_2_real_commonDomain :=
   Exact.PaperRealCommonDomainTheorem62Data.result_across
 alias Theorem6_2_real_commonDomain_boundNorm_of_finiteRank :=
   Exact.PaperRealCommonDomainTheorem62Data.operatorNorm_result_of_rank_le
+
+/-! ## Graph-core appendix forms -/
+
+alias IsGraphCore := Exact.ClosedOperator.IsGraphCore
+alias CommonCoreResidualData := Exact.PaperCommonCoreResidualData
+alias commonCoreResidual_extends_to_domain :=
+  Exact.PaperCommonCoreResidualData.extends_to_domain
+alias CommonCoreTheorem6_1Data := Exact.PaperCommonCoreTheorem61Data
+alias Theorem6_1_commonCore :=
+  Exact.PaperCommonCoreTheorem61Data.result_every_unitarilyInvariantNorm_across
+alias CommonCoreTheorem6_2Data := Exact.PaperCommonCoreTheorem62Data
+alias Theorem6_2_commonCore := Exact.PaperCommonCoreTheorem62Data.result_across
+alias RealCommonCoreTheorem6_1Data := Exact.PaperRealCommonCoreTheorem61Data
+alias Theorem6_1_real_commonCore :=
+  Exact.PaperRealCommonCoreTheorem61Data.result_every_unitarilyInvariantNorm_across
+alias RealCommonCoreTheorem6_2Data := Exact.PaperRealCommonCoreTheorem62Data
+alias Theorem6_2_real_commonCore :=
+  Exact.PaperRealCommonCoreTheorem62Data.result_across
 
 /-! ## Sharpness and necessity -/
 
