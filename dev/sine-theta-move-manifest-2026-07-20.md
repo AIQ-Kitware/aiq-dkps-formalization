@@ -239,3 +239,44 @@ open. The former `paperFiniteMultiplicity_equality` has been renamed to
 `paperFiniteDimensional_scalar_homogeneity` and now documents exactly what it
 proves. The correspondence matrix must carry this as an explicitly open row
 until the direct-sum extremizer is built.
+
+
+## Structural check 2 is blocked on mathematics, not on layout
+
+Measured after the `RectangularFamily`, `ClosedSylvesterEquation` and
+`SpectralBridge` splits.
+
+Every remaining route from the audited facade to an admitted module runs
+through one chain:
+
+```
+FullSineTheta -> GeneralSinTheta -> SinTheta.LegacyGapCompletion
+  -> SinTheta.Unbounded -> SinTheta.Bounded   -> SinTheta.SpectralBridge
+  -> SinTheta.Unbounded -> Sylvester.Unbounded -> Core.UnboundedSpectral
+```
+
+Both ends are genuine uses, not stale imports:
+
+- `SinTheta.Bounded` uses `sylvester_mem_and_gauge_le_of_intervalExteriorGap`,
+  which is unproved;
+- `Sylvester.Unbounded` uses `spectralCutoff`, `boundedSpectralTruncation`,
+  `boundedRealization_of_spectrumIn_Icc` and `boundedInverse_of_spectrumOutside`,
+  all unproved.
+
+`GeneralSinTheta` is a source facade and therefore production, so structural
+check 2 -- no production module imports Experimental -- cannot be satisfied by
+moving files. It requires one of:
+
+1. proving the interval/exterior Sylvester estimate and the unbounded spectral
+   truncation theory, which is the remaining hard mathematics of this
+   development; or
+2. reclassifying `GeneralSinTheta` as Experimental, which contradicts its being
+   a source facade.
+
+Do not resolve this by weakening the check or by exempting the facade. The
+check is correctly reporting that a production facade rests on unproved
+results. It should stay red until that is no longer true.
+
+Note that this does not affect the audited surface: all 43 endpoints of
+`FullSineTheta` are axiom-clean. The facade's *other* declarations, inherited
+from `GeneralSinTheta`, are what still reach the admissions.
