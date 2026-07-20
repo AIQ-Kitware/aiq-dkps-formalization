@@ -5,7 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Experimental.InfiniteDimensional.Ideals.ApproximationNumbers
 import DavisKahan.Experimental.InfiniteDimensional.Ideals.PaperSingularValueTransport
-import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.ApproximationNumberMinMax
+import DavisKahan.Interop.Spectra.ApproximationNumberMinMax
 import ForMathlib.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm
 import Mathlib.Analysis.InnerProductSpace.ProdL2
 

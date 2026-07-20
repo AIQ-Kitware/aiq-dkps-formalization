@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Experimental.InfiniteDimensional.Core.ClosedOperatorComplexification
-import DavisKahan.Experimental.InfiniteDimensional.Core.ComplexificationFunctionalCalculus
+import DavisKahan.SpectralTheory.Complexification.FunctionalCalculus
 import DavisKahan.Experimental.InfiniteDimensional.Core.ComplexificationSubspace
 import DavisKahan.Experimental.InfiniteDimensional.Core.ReducingRestriction
 import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.SpectralRestrictionOperator

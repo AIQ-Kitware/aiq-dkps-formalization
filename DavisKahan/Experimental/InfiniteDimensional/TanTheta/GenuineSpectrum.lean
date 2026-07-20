@@ -3,7 +3,7 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Fable 5
 -/
-import DavisKahan.Experimental.InfiniteDimensional.TanTheta.Vector
+import DavisKahan.TanTheta.Vector
 import DavisKahan.Experimental.InfiniteDimensional.Sylvester.GenuineSpectrum
 import ForMathlib.Analysis.CStarAlgebra.SelfAdjointGapInverse
 

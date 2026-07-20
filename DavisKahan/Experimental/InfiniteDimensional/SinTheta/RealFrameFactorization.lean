@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.FrameFactorizationGeneric
-import DavisKahan.Experimental.InfiniteDimensional.Core.ComplexificationFunctionalCalculus
+import DavisKahan.SpectralTheory.Complexification.FunctionalCalculus
 import ForMathlib.Analysis.InnerProductSpace.CoerciveUnit
 import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Basic
 import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Instances

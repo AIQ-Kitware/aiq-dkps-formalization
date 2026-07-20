@@ -28,9 +28,12 @@ series converges to the original tensor.  Instead it proceeds as follows:
 -/
 
 open scoped InnerProductSpace ComplexConjugate BigOperators
-open scoped HilbertTensor
 
 namespace Spectra.HilbertSchmidtTensor
+
+-- `HilbertTensor` is `Spectra.HilbertTensor`, so its scoped notation can only be
+-- opened once the `Spectra` namespace is entered.
+open scoped Spectra.HilbertTensor
 
 noncomputable section
 
@@ -110,7 +113,7 @@ theorem mathAhead_norm_sq_eq_tsum_column_norm_sq
   have hpyth :=
     (mathAhead_hasSum_columnTensor b z).norm_sq_eq_tsum_of_pairwise_inner_eq_zero
       (fun i j hij => inner_columnTensor_eq_zero b z hij)
-  simpa [columnTensor, HilbertTensor.norm_tmul, b.norm_apply,
+  simpa [columnTensor, HilbertTensor.norm_tmul, b.orthonormal.norm_eq_one,
     mul_one, one_pow] using hpyth
 
 /-- Square-summable operator columns give a summable tensor column series. -/
@@ -123,7 +126,7 @@ theorem mathAhead_summable_columnSeries
   · intro i j hij
     simp [HilbertTensor.inner_tmul_tmul, Conj.inner_def,
       b.orthonormal.inner_right hij]
-  · simpa [HilbertTensor.norm_tmul, b.norm_apply,
+  · simpa [HilbertTensor.norm_tmul, b.orthonormal.norm_eq_one,
       mul_one, one_pow] using hA
 
 /-- The column-series tensor represents the original operator, using the
@@ -151,7 +154,7 @@ theorem mathAhead_summable_column_norm_sq
     (summable_iff_norm_sq_summable_of_pairwise_inner_eq_zero
       (columnTensor b z) horth).1
       (mathAhead_summable_columnTensor b z)
-  simpa [columnTensor, HilbertTensor.norm_tmul, b.norm_apply,
+  simpa [columnTensor, HilbertTensor.norm_tmul, b.orthonormal.norm_eq_one,
     mul_one, one_pow] using hnorm
 
 /-- Reconstructing from the columns of a represented operator recovers the

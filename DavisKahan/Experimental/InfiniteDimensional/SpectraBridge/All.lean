@@ -3,19 +3,19 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.Basic
+import DavisKahan.Interop.Spectra.Basic
 import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.ClosedOperator
-import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.PVMSubspace
+import DavisKahan.Interop.Spectra.PVMSubspace
 import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.SpectralRestriction
 import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.SpectralRestrictionOperator
 import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.RealSpectralRestriction
 import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.SpectralRestrictionLocalization
-import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.OperatorAbsoluteValue
-import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.ApproximationNumberMinMax
-import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.SinAngle
-import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.DirectRotation
+import DavisKahan.Interop.Spectra.OperatorAbsoluteValue
+import DavisKahan.Interop.Spectra.ApproximationNumberMinMax
+import DavisKahan.Interop.Spectra.SinAngle
+import DavisKahan.Interop.Spectra.DirectRotation
 import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.DirectRotationAPI
-import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.DirectRotationSquare
+import DavisKahan.Interop.Spectra.DirectRotationSquare
 import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.GapResolvent
 import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.BoundedFromSpectrum
 import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.UnboundedIntervalExterior
