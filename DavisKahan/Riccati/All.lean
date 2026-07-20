@@ -9,4 +9,4 @@ import DavisKahan.Riccati.UnboundedExistence
 import DavisKahan.Riccati.UnboundedReduction
 import DavisKahan.Riccati.UnboundedTransport
 
-/-! # Unbounded Riccati theory -/
+/-! # `DavisKahan/Riccati` -/

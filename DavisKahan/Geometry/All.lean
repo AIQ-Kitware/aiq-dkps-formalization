@@ -5,4 +5,4 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Geometry.Angle.All
 
-/-! # Subspace geometry -/
+/-! # `DavisKahan/Geometry` -/

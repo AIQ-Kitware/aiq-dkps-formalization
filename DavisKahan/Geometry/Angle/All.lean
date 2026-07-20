@@ -7,4 +7,4 @@ import DavisKahan.Geometry.Angle.OperatorAngleComplex
 import DavisKahan.Geometry.Angle.OperatorAngleReal
 import DavisKahan.Geometry.Angle.PaperOperatorAngle
 
-/-! # Operator angles -/
+/-! # `DavisKahan/Geometry/Angle` -/

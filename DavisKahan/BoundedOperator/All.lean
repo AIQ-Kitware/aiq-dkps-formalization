@@ -1,16 +1,12 @@
 /-
 Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
-Authors: Jon Crall, GPT 5.6 High
+Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
+import DavisKahan.BoundedOperator.Spectral.All
 import DavisKahan.BoundedOperator.Basic
-import DavisKahan.BoundedOperator.SinTheta
 import DavisKahan.BoundedOperator.Projector
 import DavisKahan.BoundedOperator.Reflection
-import DavisKahan.BoundedOperator.Spectral.Complex
+import DavisKahan.BoundedOperator.SinTheta
 
-/-!
-# Supported bounded-operator Davis--Kahan theory
-
-Stable scalar-generic bounded-operator results and the complex spectral leaf.
--/
+/-! # `DavisKahan/BoundedOperator` -/
