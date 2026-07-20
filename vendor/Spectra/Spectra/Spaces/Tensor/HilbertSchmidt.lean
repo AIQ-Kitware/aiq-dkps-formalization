@@ -391,109 +391,169 @@ theorem toOperator_mapL_right
 theorem rank_toOperator_sum_tmul_le
     {ι : Type*} (s : Finset ι) (u : ι → E) (v : ι → F) :
     (toOperator (∑ i ∈ s, u i ⊗̂ₜ[ℂ] Conj.toConj (v i))).rank ≤ s.card := by
-  simp_rw [toOperator_sum, toOperator_tmul]
-  let T : F →L[ℂ] E := ∑ i ∈ s, InnerProductSpace.rankOne ℂ (u i) (v i)
-  change T.rank ≤ (s.card : Cardinal)
-  calc
-    T.rank ≤ Module.rank ℂ (Submodule.span ℂ (u '' (s : Set ι))) := by
-      exact LinearMap.rank_le_of_range_le (by
-        rintro y ⟨x, rfl⟩
-        change (∑ i ∈ s, InnerProductSpace.rankOne ℂ (u i) (v i)) x ∈
-          Submodule.span ℂ (u '' (s : Set ι))
-        simp only [Finset.sum_apply, InnerProductSpace.rankOne_apply]
-        exact Submodule.sum_mem _ fun i hi =>
-          Submodule.smul_mem _ _
-            (Submodule.subset_span ⟨i, hi, rfl⟩))
-    _ ≤ (s.card : Cardinal) := by
-      simpa using Submodule.rank_span_le_card (R := ℂ) (s.image u)
+  classical
+  have happly : ∀ x : F,
+      toOperator (∑ i ∈ s, u i ⊗̂ₜ[ℂ] Conj.toConj (v i)) x
+        = ∑ i ∈ s, ⟪v i, x⟫_ℂ • u i := by
+    intro x
+    rw [toOperator_sum]
+    simp
+  have hrange :
+      LinearMap.range
+          (toOperator (∑ i ∈ s, u i ⊗̂ₜ[ℂ] Conj.toConj (v i))).toLinearMap ≤
+        Submodule.span ℂ ((s.image u : Finset E) : Set E) := by
+    rintro _ ⟨x, rfl⟩
+    change toOperator (∑ i ∈ s, u i ⊗̂ₜ[ℂ] Conj.toConj (v i)) x ∈ _
+    rw [happly]
+    exact Submodule.sum_mem _ fun i hi =>
+      Submodule.smul_mem _ _
+        (Submodule.subset_span (Finset.mem_coe.2 (Finset.mem_image_of_mem u hi)))
+  calc (toOperator (∑ i ∈ s, u i ⊗̂ₜ[ℂ] Conj.toConj (v i))).rank
+      ≤ Module.rank ℂ (Submodule.span ℂ ((s.image u : Finset E) : Set E)) :=
+        Submodule.rank_mono hrange
+    _ ≤ ((s.image u).card : Cardinal) := rank_span_finset_le _
+    _ ≤ (s.card : Cardinal) := by exact_mod_cast Finset.card_image_le
 
 
 /-! ## Column expansion in an arbitrary Hilbert basis -/
+
+/-- Tensoring on the right with a fixed unit vector of the conjugate space is a
+linear isometry.  Packaging the columns this way makes them an
+`OrthogonalFamily`, which is the interface Mathlib offers for Pythagoras and for
+square-summability. -/
+private def tmulRightₗᵢ (w : Conj F) (hw : ‖w‖ = 1) : E →ₗᵢ[ℂ] Space E F where
+  toFun u := u ⊗̂ₜ[ℂ] w
+  map_add' u u' := HilbertTensor.add_tmul u u' w
+  map_smul' c u := HilbertTensor.smul_tmul c u w
+  norm_map' u := by
+    -- The structure-instance field is still the raw anonymous constructor here, so
+    -- the pure-tensor norm lemma has to be exposed by a definitional change first.
+    change ‖u ⊗̂ₜ[ℂ] w‖ = ‖u‖
+    rw [HilbertTensor.norm_tmul, hw, mul_one]
+
+@[simp]
+private theorem tmulRightₗᵢ_apply (w : Conj F) (hw : ‖w‖ = 1) (u : E) :
+    tmulRightₗᵢ (E := E) w hw u = u ⊗̂ₜ[ℂ] w :=
+  rfl
+
+/-- The `i`th column embedding of a Hilbert basis: tensoring on the right with
+the `i`th conjugate basis vector. -/
+private def columnEmbedding {ι : Type*} (b : HilbertBasis ι ℂ F) (i : ι) :
+    E →ₗᵢ[ℂ] Space E F :=
+  tmulRightₗᵢ (Conj.toConj (b i)) (by rw [Conj.norm_toConj]; exact b.orthonormal.1 i)
+
+private theorem orthogonalFamily_columnEmbedding {ι : Type*} (b : HilbertBasis ι ℂ F) :
+    OrthogonalFamily ℂ (fun _ : ι => E) (columnEmbedding (E := E) b) := by
+  intro i j hij x y
+  -- The inner product on `Conj F` is the swapped one, so the surviving factor is
+  -- `⟪b j, b i⟫`, not `⟪b i, b j⟫`.
+  simp [columnEmbedding, HilbertTensor.inner_tmul_tmul, Conj.inner_def,
+    b.orthonormal.inner_eq_zero hij.symm]
 
 /-- The `i`th orthogonal column tensor of `z`. -/
 def columnTensor {ι : Type*} (b : HilbertBasis ι ℂ F)
     (z : Space E F) (i : ι) : Space E F :=
   toOperator z (b i) ⊗̂ₜ[ℂ] Conj.toConj (b i)
 
+private theorem columnTensor_eq {ι : Type*} (b : HilbertBasis ι ℂ F)
+    (z : Space E F) (i : ι) :
+    columnTensor b z i = columnEmbedding b i (toOperator z (b i)) :=
+  rfl
+
 /-- Distinct column tensors are orthogonal. -/
 theorem inner_columnTensor_eq_zero {ι : Type*} (b : HilbertBasis ι ℂ F)
     (z : Space E F) {i j : ι} (hij : i ≠ j) :
     ⟪columnTensor b z i, columnTensor b z j⟫_ℂ = 0 := by
   simp [columnTensor, HilbertTensor.inner_tmul_tmul, Conj.inner_def,
-    b.orthonormal.inner_eq_zero hij]
+    b.orthonormal.inner_eq_zero hij.symm]
+
+/-- Pythagoras for the finite partial sums of the column expansion. -/
+theorem norm_sum_columnTensor_sq {ι : Type*} (b : HilbertBasis ι ℂ F)
+    (z : Space E F) (s : Finset ι) :
+    ‖∑ i ∈ s, columnTensor b z i‖ ^ 2 = ∑ i ∈ s, ‖toOperator z (b i)‖ ^ 2 := by
+  simpa only [← columnTensor_eq] using
+    (orthogonalFamily_columnEmbedding (E := E) b).norm_sum
+      (fun i => toOperator z (b i)) s
+
+/-- Pairing a pure tensor against `z` on the left evaluates the represented
+operator. -/
+private theorem inner_tmul_left_eq (u : E) (v : F) (z : Space E F) :
+    ⟪u ⊗̂ₜ[ℂ] Conj.toConj v, z⟫_ℂ = ⟪u, toOperator z v⟫_ℂ := by
+  rw [toOperator_apply]
+  exact (ContinuousLinearMap.adjoint_inner_right (rightTensor v) u z).symm
+
+/-- Bessel's inequality for the column expansion: every finite partial sum of
+column norms is bounded by the tensor norm. -/
+theorem sum_column_norm_sq_le {ι : Type*} (b : HilbertBasis ι ℂ F)
+    (z : Space E F) (s : Finset ι) :
+    ∑ i ∈ s, ‖toOperator z (b i)‖ ^ 2 ≤ ‖z‖ ^ 2 := by
+  have hpy := norm_sum_columnTensor_sq b z s
+  have hnonneg : (0 : ℝ) ≤ ∑ i ∈ s, ‖toOperator z (b i)‖ ^ 2 :=
+    Finset.sum_nonneg fun _ _ => sq_nonneg _
+  -- The partial sum pairs with `z` to exactly its own squared norm.
+  have hinner : ⟪∑ i ∈ s, columnTensor b z i, z⟫_ℂ
+      = ((∑ i ∈ s, ‖toOperator z (b i)‖ ^ 2 : ℝ) : ℂ) := by
+    rw [sum_inner]
+    push_cast
+    refine Finset.sum_congr rfl fun i _ => ?_
+    rw [columnTensor, inner_tmul_left_eq]
+    exact inner_self_eq_norm_sq_to_K (𝕜 := ℂ) (toOperator z (b i))
+  have hcs : ‖⟪∑ i ∈ s, columnTensor b z i, z⟫_ℂ‖
+      ≤ ‖∑ i ∈ s, columnTensor b z i‖ * ‖z‖ := norm_inner_le_norm (𝕜 := ℂ) _ _
+  rw [hinner, Complex.norm_real, Real.norm_eq_abs, abs_of_nonneg hnonneg] at hcs
+  -- Cauchy--Schwarz plus Pythagoras bounds the partial sum by `‖z‖`.
+  have hle : ‖∑ i ∈ s, columnTensor b z i‖ ≤ ‖z‖ := by
+    rcases eq_or_lt_of_le (norm_nonneg (∑ i ∈ s, columnTensor b z i)) with h | h
+    · rw [← h]; exact norm_nonneg z
+    · nlinarith [hcs, hpy, h]
+  nlinarith [hpy, hle, norm_nonneg (∑ i ∈ s, columnTensor b z i), norm_nonneg z]
+
+/-- The columns of a Hilbert tensor are square-summable. -/
+theorem summable_column_norm_sq {ι : Type*} (b : HilbertBasis ι ℂ F)
+    (z : Space E F) : Summable fun i => ‖toOperator z (b i)‖ ^ 2 :=
+  summable_of_sum_le (fun _ => sq_nonneg _) (sum_column_norm_sq_le b z)
 
 /-- The column tensors resolve the identity on `E tensor Conj F`. -/
 theorem hasSum_columnTensor {ι : Type*} (b : HilbertBasis ι ℂ F)
     (z : Space E F) :
     HasSum (columnTensor b z) z := by
-  let S : Space E F →L[ℂ] Space E F :=
-    ContinuousLinearMap.id ℂ (Space E F)
-  have hpure : ∀ u : E, ∀ v : F,
-      HasSum (columnTensor b (u ⊗̂ₜ[ℂ] Conj.toConj v))
-        (u ⊗̂ₜ[ℂ] Conj.toConj v) := by
-    intro u v
-    have hv := (b.hasSum_repr v)
-    have hmap := (HilbertTensor.tmulL ℂ E (Conj F) u).hasSum
-      ((Conj.toConjₗᵢ F).toContinuousLinearEquiv.hasSum hv)
-    simpa [columnTensor, toOperator_tmul, InnerProductSpace.rankOne_apply,
-      HilbertTensor.tmul_smul, Conj.inner_def, inner_conj_symm] using hmap
-  have hspan : ∀ t ∈ Submodule.span ℂ
-      (Set.range fun p : E × F => p.1 ⊗̂ₜ[ℂ] Conj.toConj p.2),
-      HasSum (columnTensor b t) t := by
-    intro t ht
-    induction ht using Submodule.span_induction with
-    | mem t ht =>
-        rcases ht with ⟨⟨u, v⟩, rfl⟩
-        exact hpure u v
-    | zero => simpa [columnTensor]
-    | add x y _ _ hx hy =>
-        simpa [columnTensor, map_add, HilbertTensor.add_tmul] using hx.add hy
-    | smul c x _ hx =>
-        simpa [columnTensor, map_smul, HilbertTensor.smul_tmul] using hx.smul c
-  have hclosed : IsClosed {t : Space E F | HasSum (columnTensor b t) t} := by
-    rw [isClosed_iff_clusterPt]
-    intro t ht
-    have hpartial : ∀ s : Finset ι,
-        ‖∑ i ∈ s, columnTensor b t i‖ ≤ ‖t‖ := by
-      intro s
-      have hproj : ∑ i ∈ s, columnTensor b t i =
-          HilbertTensor.mapL (ContinuousLinearMap.id ℂ E)
-            ((Submodule.span ℂ (b '' (s : Set ι))).starProjection) t := by
-        apply toOperator_injective
-        ext x
-        simp [columnTensor, toOperator_mapL_right, HilbertBasis.sum_repr]
-      rw [hproj]
-      calc
-        ‖HilbertTensor.mapL (ContinuousLinearMap.id ℂ E)
-            ((Submodule.span ℂ (b '' (s : Set ι))).starProjection) t‖
-            ≤ ‖HilbertTensor.mapL (ContinuousLinearMap.id ℂ E)
-                ((Submodule.span ℂ (b '' (s : Set ι))).starProjection)‖ * ‖t‖ :=
-              (HilbertTensor.mapL _ _).le_opNorm t
-        _ ≤ ‖t‖ := by
-          rw [HilbertTensor.norm_mapL, norm_id]
-          have hp := (Submodule.span ℂ (b '' (s : Set ι))).norm_starProjection_le_one
-          nlinarith [norm_nonneg t]
-    exact HasSum.isClosed_of_uniformly_bounded_partialSums
-      (f := columnTensor b) (C := 1) hpartial ht
-  exact hclosed.mem_of_superset
-    (HilbertTensor.dense_span_tmul.mono fun t ht => by
-      change t ∈ Submodule.span ℂ
-        (Set.range fun p : E × F => p.1 ⊗̂ₜ[ℂ] Conj.toConj p.2)
-      simpa only [Set.range_comp] using ht)
-    (hspan z)
+  have hsummable : Summable (columnTensor b z) := by
+    simpa only [← columnTensor_eq] using
+      ((orthogonalFamily_columnEmbedding (E := E) b).summable_iff_norm_sq_summable
+        (fun i => toOperator z (b i))).2 (summable_column_norm_sq b z)
+  obtain ⟨w, hw⟩ := hsummable
+  -- The limit is forced to be `z` because the two represented operators agree on
+  -- the basis, hence everywhere.
+  have hkey : toOperator w = toOperator z := by
+    ext x
+    have hcol : ∀ i : ι,
+        (rightTensor x).adjoint (columnTensor b z i)
+          = ⟪b i, x⟫_ℂ • toOperator z (b i) := by
+      intro i
+      rw [columnTensor, ← toOperator_apply, toOperator_tmul,
+        InnerProductSpace.rankOne_apply]
+    -- The limit of the mapped net is `(rightTensor x).adjoint w`, which is the
+    -- unfolded form of `toOperator w x`; naming it keeps `simp` from rewriting
+    -- the summands and the limit with the same rule in different directions.
+    have hval : (rightTensor x).adjoint w = toOperator w x := rfl
+    have h1 : HasSum (fun i => ⟪b i, x⟫_ℂ • toOperator z (b i))
+        (toOperator w x) := by
+      simpa only [hcol, hval] using hw.mapL ((rightTensor x).adjoint)
+    have h2 : HasSum (fun i => ⟪b i, x⟫_ℂ • toOperator z (b i))
+        (toOperator z x) := by
+      simpa only [map_smul, b.repr_apply_apply] using
+        (b.hasSum_repr x).mapL (toOperator z)
+    exact h1.unique h2
+  rwa [toOperator_injective hkey] at hw
 
 /-- Parseval for the column decomposition of a tensor. -/
 theorem norm_sq_eq_tsum_column_norm_sq {ι : Type*}
     (b : HilbertBasis ι ℂ F) (z : Space E F) :
     ‖z‖ ^ 2 = ∑' i, ‖toOperator z (b i)‖ ^ 2 := by
-  have hsum := hasSum_columnTensor b z
-  have hortho : Pairwise fun i j =>
-      ⟪columnTensor b z i, columnTensor b z j⟫_ℂ = 0 := by
-    intro i j hij
-    exact inner_columnTensor_eq_zero b z hij
-  have hpyth := hsum.norm_sq_eq_tsum_of_orthogonal hortho
-  simpa [columnTensor, HilbertTensor.norm_tmul, b.norm_apply,
-    mul_one, one_pow] using hpyth
+  have hlim := ((continuous_norm.pow 2).tendsto z).comp (hasSum_columnTensor b z)
+  have h : HasSum (fun i => ‖toOperator z (b i)‖ ^ 2) (‖z‖ ^ 2) :=
+    hlim.congr fun s => norm_sum_columnTensor_sq b z s
+  exact h.tsum_eq.symm
 
 /-- A basis-square-summable operator determines a tensor by its column series. -/
 noncomputable def ofOperator {ι : Type*} (b : HilbertBasis ι ℂ F)
@@ -502,30 +562,35 @@ noncomputable def ofOperator {ι : Type*} (b : HilbertBasis ι ℂ F)
 
 private theorem summable_columnSeries {ι : Type*} (b : HilbertBasis ι ℂ F)
     (A : F →L[ℂ] E) (hA : Summable fun i => ‖A (b i)‖ ^ 2) :
-    Summable fun i => A (b i) ⊗̂ₜ[ℂ] Conj.toConj (b i) := by
-  apply summable_of_pairwise_orthogonal_of_summable_norm_sq
-  · intro i j hij
-    simp [HilbertTensor.inner_tmul_tmul, Conj.inner_def,
-      b.orthonormal.inner_eq_zero hij]
-  · simpa [HilbertTensor.norm_tmul, b.norm_apply, mul_one, one_pow] using hA
+    Summable fun i => A (b i) ⊗̂ₜ[ℂ] Conj.toConj (b i) :=
+  ((orthogonalFamily_columnEmbedding (E := E) b).summable_iff_norm_sq_summable
+    (fun i => A (b i))).2 hA
 
 /-- The column-series tensor represents the original operator. -/
 theorem toOperator_ofOperator {ι : Type*} (b : HilbertBasis ι ℂ F)
     (A : F →L[ℂ] E) (hA : Summable fun i => ‖A (b i)‖ ^ 2) :
     toOperator (ofOperator b A hA) = A := by
-  ext x
   have hseries := summable_columnSeries b A hA
-  rw [ofOperator, ← toOperatorL_apply, ContinuousLinearMap.map_tsum _ hseries]
-  simp_rw [toOperator_tmul, InnerProductSpace.rankOne_apply]
-  have hrepr := A.hasSum (b.hasSum_repr x)
-  simpa only [map_smul, b.repr_apply_apply] using hrepr.tsum_eq
+  ext x
+  have hcol : ∀ i : ι,
+      (rightTensor x).adjoint (A (b i) ⊗̂ₜ[ℂ] Conj.toConj (b i))
+        = ⟪b i, x⟫_ℂ • A (b i) := by
+    intro i
+    rw [← toOperator_apply, toOperator_tmul, InnerProductSpace.rankOne_apply]
+  have hval : (rightTensor x).adjoint (∑' i, A (b i) ⊗̂ₜ[ℂ] Conj.toConj (b i))
+      = toOperator (ofOperator b A hA) x := rfl
+  have h1 : HasSum (fun i => ⟪b i, x⟫_ℂ • A (b i))
+      (toOperator (ofOperator b A hA) x) := by
+    simpa only [hcol, hval] using hseries.hasSum.mapL ((rightTensor x).adjoint)
+  have h2 : HasSum (fun i => ⟪b i, x⟫_ℂ • A (b i)) (A x) := by
+    simpa only [map_smul, b.repr_apply_apply] using A.hasSum (b.hasSum_repr x)
+  exact h1.unique h2
 
 /-- The tensor reconstructed from the columns of a represented operator is the
 original tensor. -/
 theorem ofOperator_toOperator {ι : Type*} (b : HilbertBasis ι ℂ F)
     (z : Space E F) :
-    ofOperator b (toOperator z)
-      ((hasSum_columnTensor b z).summable.norm_sq) = z := by
+    ofOperator b (toOperator z) (summable_column_norm_sq b z) = z := by
   apply toOperator_injective
   rw [toOperator_ofOperator]
 
@@ -533,8 +598,7 @@ theorem ofOperator_toOperator {ι : Type*} (b : HilbertBasis ι ℂ F)
 theorem norm_ofOperator_sq {ι : Type*} (b : HilbertBasis ι ℂ F)
     (A : F →L[ℂ] E) (hA : Summable fun i => ‖A (b i)‖ ^ 2) :
     ‖ofOperator b A hA‖ ^ 2 = ∑' i, ‖A (b i)‖ ^ 2 := by
-  rw [norm_sq_eq_tsum_column_norm_sq b]
-  simp [toOperator_ofOperator b A hA]
+  rw [norm_sq_eq_tsum_column_norm_sq b, toOperator_ofOperator]
 
 /-- Basis-square-summability is equivalent to representability by a unique
 Hilbert tensor. -/
@@ -544,7 +608,7 @@ theorem existsUnique_tensor_iff_summable_columns {ι : Type*}
       Summable (fun i => ‖A (b i)‖ ^ 2) := by
   constructor
   · rintro ⟨z, rfl, _⟩
-    exact (hasSum_columnTensor b z).summable.norm_sq
+    exact summable_column_norm_sq b z
   · intro hA
     refine ⟨ofOperator b A hA, toOperator_ofOperator b A hA, ?_⟩
     intro z hz
