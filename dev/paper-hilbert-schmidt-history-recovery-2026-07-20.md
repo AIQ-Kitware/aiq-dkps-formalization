@@ -72,6 +72,7 @@ Hilbert-tensor proof.
 
 ```bash
 lake env lean DavisKahan/Sources/DavisKahan1970/Sylvester/PaperHilbertSchmidt.lean
+python3 scripts/generate_all_aggregates.py --check
 lake build
 lake build DavisKahan.All
 lake build DavisKahan.Experimental

@@ -135,14 +135,31 @@ they may quote only short anchors and should record:
 
 ## Current high-level status
 
-The finite-dimensional library contains a strong and valuable package,
-including arbitrary rectangular UI-norm sine and tangent results and stable
-double-angle endpoints. The bounded branch contains meaningful operator-norm
-foundations. Neither is the canonical completion boundary. The immediate
-controlling goal is the generalized unbounded single-angle theorem in
-`Experimental/InfiniteDimensional/SinTheta/Canonical.lean`; the remaining
-four-theorem package, direct-rotation extremal theory, Section 8 package, and
-full source audit follow from that foundation.
+At commit `7463ca25c64a`, the source-faithful Section 6 sine-theta surface is
+complete for complex and real closed self-adjoint operators.  Theorem 6.1 is
+available in the full source norm scope, Theorem 6.2 has the sharp pairwise-gap
+Hilbert--Schmidt estimate, the common-domain and graph-core appendix forms are
+proved, and the equality, optimality, counterexample, and finite-multiplicity
+content is represented.  The restored paper Hilbert--Schmidt Sylvester module
+compiles through the defect-first pairwise-gap proof.
+
+The full 1970 paper is not complete.  The active roadmap is now:
+
+1. harden the source audit so every theorem-valued public alias intended as part
+   of the exact surface is checked, especially the Lemma 6.1 converse;
+2. extract the 33 proved Part III declarations still trapped in mixed
+   Experimental files;
+3. discharge the 78 genuinely open Part III aliases, grouped by direct rotation,
+   tangent/double-angle theory, graph/Riccati theory, continuation and Section 8,
+   sharpness, and the remaining unbounded passages;
+4. maintain the theorem-by-theorem correspondence ledger and explicit
+   nonclaims;
+5. integrate the reusable mathematics through a human-approved Tau Ceti roadmap
+   without preserving repository-local namespace accidents.
+
+The detailed single-angle status is now maintained in
+`docs/planning/davis-kahan-general-sin-theta-roadmap.md`.  The progress notes
+below are historical development records.
 
 ### Progress note (2026-07-15, easy-ladder closure session)
 

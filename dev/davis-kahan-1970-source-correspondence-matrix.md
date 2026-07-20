@@ -139,6 +139,16 @@ homogeneity.
 | Theorem 6.1 equality in every norm | `Theorem6_1_finiteMultiplicity_equality_every_norm` |
 | the sine block is injective | `finiteMultiplicitySineBlock_injective` |
 
+## Audit selection note
+
+The 43-target executable audit covers the principal endpoints above, not every
+theorem-valued alias exported by `FullSineTheta.lean`.  In particular, the
+converse direction of Lemma 6.1 is proved as `lemma6_1_converse` but is not yet
+printed as a separate audit target.  The same is true of several finite-Ky-Fan
+forms, source-norm law aliases, and common-domain finite-rank corollaries.
+Expanding or generating the target list is acceptance hardening, not a missing
+mathematical step in Theorems 6.1 or 6.2.
+
 ## What is *not* claimed
 
 The audit covers the 43 endpoints above.  It does not cover:

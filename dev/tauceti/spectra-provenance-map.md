@@ -1,0 +1,107 @@
+# Spectra provenance and integration map
+
+## Upstream identity
+
+- Repository: `https://github.com/adambornemann-glitch/Spectra`
+- Upstream revision: `8dbaaf6728d1342ae16acf79fd7eef7c59b37e63`
+- License: Apache-2.0
+- Pristine snapshot metadata: `vendor/Spectra.UPSTREAM.md`
+- Snapshot digest list: `vendor/Spectra.SHA256SUMS`
+
+The root build uses `vendor/Spectra`; `external/Spectra` is a read-only upstream
+reference and is not a build dependency.
+
+## Recorded compatibility fork
+
+The vendored tree differs from the pristine snapshot only by:
+
+`vendor/patches/Spectra/0001-dkps-lean-v4.32-mathlib-compatibility.patch`.
+
+The patch is managed by `scripts/spectra_compatibility_patch.py` and is limited
+to Lean/Mathlib compatibility repairs.  It is not the place for
+Davis--Kahan-specific mathematical APIs.
+
+## Production dependency footprint
+
+The `DavisKahan.All` import closure currently reaches 119 Spectra modules.  The
+large transitive closure is entered through a much smaller set of direct DKPS
+bridges.
+
+### Closed operators and spectral calculus
+
+Direct bridge modules include:
+
+- `Interop/Spectra/ClosedOperator.lean` -> `Spectra.Operator.SelfAdjoint`;
+- `Interop/Spectra/SpectralRestriction*.lean` -> PVM, generator-link,
+  square-root, and spectrum modules;
+- `Interop/Spectra/BoundedFromSpectrum.lean` -> essential-discrete and generator
+  infrastructure;
+- `Interop/Spectra/GapResolvent.lean` -> spectrum and spectral algebra;
+- `Interop/Spectra/RealSpectrumBridge.lean` and
+  `RealSpectralRestriction.lean` -> resolvent and real-descent infrastructure.
+
+### Projection geometry and perturbation
+
+- `Interop/Spectra/PVMSubspace.lean` -> projection-valued measures;
+- `Interop/Spectra/OperatorAbsoluteValue.lean` -> polar decomposition;
+- `Interop/Spectra/UnitaryConjugation.lean` -> unitary conjugation and spectral
+  invariance;
+- bounded-perturbation sine-theta bridges -> Kato--Rellich and related spectral
+  machinery.
+
+### Hilbert--Schmidt and tensor theory
+
+- `Sources/.../Ideals/HilbertSchmidtBasis.lean` ->
+  `Spectra.Spaces.Tensor.HilbertSchmidt` and trace-class basics;
+- `Sources/.../Sylvester/HilbertSchmidtDefectFirst.lean` -> Hilbert--Schmidt
+  generator bridge, spectral-gap inverse, and Yosida--Hille basics;
+- `Sources/.../Sylvester/HilbertSchmidtPairwise.lean` -> Hilbert--Schmidt
+  spectral-gap flow and observable spectral data;
+- the independent column-expansion proof imports only the base
+  Hilbert--Schmidt tensor module.
+
+### Pairwise separation
+
+- `Sylvester/PairwiseSpectrumGap.lean` -> resolvent spectrum;
+- `Sylvester/PairwiseHomogeneousUniqueness.lean` -> separated intertwiners.
+
+## Attribution classes for a Tau Ceti port
+
+Each ported declaration should be assigned one of these classes:
+
+1. **Direct upstream dependency.** The declaration remains in Tau Ceti's normal
+   dependency closure and no source is copied.  Cite Spectra in roadmap
+   provenance when it is central to the construction.
+2. **Copied or closely adapted Spectra declaration.** Preserve copyright and
+   license headers, name the exact upstream file and revision, and state the
+   nature of the adaptation in the module documentation.
+3. **DKPS bridge over Spectra.** Keep the bridge in a canonical Tau Ceti topic
+   module, credit the specific Spectra declarations it translates, and avoid
+   presenting the bridge as an independent spectral theorem.
+4. **New DKPS theorem using Spectra.** Cite the mathematical source and the
+   central Spectra infrastructure, while making clear that the theorem and
+   proof assembly are new.
+5. **Compatibility-only edit.** Keep separate from mathematical changes and
+   link to the recorded compatibility patch.
+
+## Recommended Tau Ceti treatment
+
+Do not propose importing the entire 464-file snapshot into Tau Ceti as one
+Davis--Kahan contribution.  Instead:
+
+- audit which Spectra modules Tau Ceti already contains or supersedes;
+- coordinate with the Spectra author and Tau Ceti maintainers;
+- integrate missing general results into canonical Tau Ceti topic modules in
+  focused prerequisite PRs;
+- keep Davis--Kahan-specific translations in thin perturbation bridges;
+- retain exact declaration-level provenance in each PR and module;
+- avoid parallel private APIs for semigroups, resolvents, PVMs, or closed
+  operators when Tau Ceti has selected a canonical vocabulary.
+
+## Information still needed before submission
+
+- the public URL of the DKPS repository;
+- confirmation from the Spectra author or a public coordination record;
+- a declaration-level copied/adapted/new classification for the small subset
+  actually proposed in the first Tau Ceti milestone;
+- a fresh comparison against Tau Ceti and current Mathlib master.
