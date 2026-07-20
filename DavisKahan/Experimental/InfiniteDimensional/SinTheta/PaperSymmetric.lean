@@ -42,6 +42,17 @@ open ForMathlib.DavisKahanExt
 variable {E : Type v}
   [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
 
+/-- A subspace admitting an orthogonal projection inside a complete ambient
+space is itself complete.  `local instance` does not propagate through imports,
+so it is reinstalled here.
+
+Proposition 6.1 works throughout in the coordinate spaces of `U`, `V` and their
+complements, so every adjoint and every reducing restriction below needs it. -/
+local instance instCompleteSpaceCoeOfHasOrthogonalProjectionSymmetric
+    {G : Type v} [NormedAddCommGroup G] [InnerProductSpace ℂ G] [CompleteSpace G]
+    (U : Submodule ℂ G) [U.HasOrthogonalProjection] : CompleteSpace U :=
+  (Submodule.isComplete_coe_of_hasOrthogonalProjection U).completeSpace_coe
+
 /-- Exact bounded inputs of Proposition 6.1.  The two gap hypotheses are the
 paper's two applications of the original sine theorem. -/
 structure PaperSymmetricSinThetaProblem where
@@ -95,9 +106,7 @@ noncomputable def forwardData
   F₁_maps_domain := by intro x; simp
   residual_eq := by
     intro x
-    apply Subtype.ext
-    simp [perturbation, ContinuousLinearMap.comp_apply,
-      ClosedOperator.reducingRestriction_ofBounded_apply]
+    rfl
   intertwines :=
     ClosedOperator.reducingRestriction_inclusion_intertwines
       (ClosedOperator.ofBounded P.B) P.Vᗮ
@@ -119,9 +128,8 @@ noncomputable def reverseData
   F₁_maps_domain := by intro x; simp
   residual_eq := by
     intro x
-    apply Subtype.ext
-    simp [perturbation, ContinuousLinearMap.comp_apply,
-      ClosedOperator.reducingRestriction_ofBounded_apply]
+    simp [perturbation]
+    rfl
   intertwines :=
     ClosedOperator.reducingRestriction_inclusion_intertwines
       (ClosedOperator.ofBounded P.A) P.Uᗮ
@@ -176,23 +184,43 @@ theorem forward_all_kyFan
       P.gap_U_to_Vperp hEq
       (KyFanDominantIdealFamily.kyFan_mem (𝕜 := ℂ) k hk
         (-(D.residual.adjoint ∘L D.F₁)))
-    have hsine : SameApproximationSingularValues
-        P.forwardSineBlock (D.X.adjoint ∘L D.F₁) := by
-      simpa [D, forwardData, forwardSineBlock,
-        Submodule.adjoint_subtypeL] using
-        (sameApproximationSingularValues_ambientSubspaceBlock
-          P.U P.Vᗮ (D.X.adjoint ∘L D.F₁)).symm
-    have hres : SameApproximationSingularValues
-        P.forwardResidualBlock (-(D.residual.adjoint ∘L D.F₁)) := by
-      have hadj : SameApproximationSingularValues
-          P.forwardResidualBlock.adjoint P.forwardResidualBlock :=
-        fun n => approximationSingularValue_adjoint _ n
+    -- The ambient transport lemma produces the *adjoint* orientation of each
+    -- block, so both comparisons are heterogeneous and both pick up one
+    -- adjoint step.  Ky Fan gauges are adjoint-invariant, so nothing is lost.
+    have hsine : SameApproximationSingularSequence
+        (P.U.starProjection ∘L P.Vᗮ.starProjection)
+        (D.X.adjoint ∘L D.F₁) := by
+      simpa [D, forwardData, Submodule.adjoint_subtypeL,
+        Submodule.starProjection, ContinuousLinearMap.comp_assoc] using
+        sameApproximationSingularValues_ambientSubspaceBlock
+          P.Vᗮ P.U (D.X.adjoint ∘L D.F₁)
+    have hsineAdj : P.forwardSineBlock =
+        (P.U.starProjection ∘L P.Vᗮ.starProjection).adjoint := by
+      rw [ContinuousLinearMap.adjoint_comp,
+        (isSelfAdjoint_starProjection P.U).adjoint_eq,
+        (isSelfAdjoint_starProjection P.Vᗮ).adjoint_eq]
+      rfl
+    have hres : SameApproximationSingularSequence
+        (-P.forwardResidualBlock.adjoint)
+        (-(D.residual.adjoint ∘L D.F₁)) := by
       simpa [D, forwardData, forwardResidualBlock, perturbation,
-        Submodule.adjoint_subtypeL, ContinuousLinearMap.adjoint_comp,
-        ContinuousLinearMap.adjoint_sub, map_neg] using hadj.symm
+        Submodule.adjoint_subtypeL, Submodule.adjoint_orthogonalProjectionOnto,
+        Submodule.starProjection,
+        ContinuousLinearMap.adjoint_comp, ContinuousLinearMap.comp_assoc,
+        map_sub, map_neg] using
+        sameApproximationSingularValues_ambientSubspaceBlock
+          P.Vᗮ P.U (-(D.residual.adjoint ∘L D.F₁))
+    have hgaugeSine : kyFanApproximationGauge k P.forwardSineBlock =
+        kyFanApproximationGauge k (D.X.adjoint ∘L D.F₁) := by
+      rw [hsineAdj, kyFanApproximationGauge_adjoint,
+        hsine.kyFanApproximationGauge_eq k]
+    have hgaugeRes : kyFanApproximationGauge k P.forwardResidualBlock =
+        kyFanApproximationGauge k (-(D.residual.adjoint ∘L D.F₁)) := by
+      rw [← kyFanApproximationGauge_adjoint k P.forwardResidualBlock,
+        ← kyFanApproximationGauge_neg k P.forwardResidualBlock.adjoint,
+        hres.kyFanApproximationGauge_eq k]
     simpa [N, KyFanDominantIdealFamily.kyFan_gauge,
-      hsine.kyFanApproximationGauge_eq k,
-      hres.kyFanApproximationGauge_eq k] using hraw.2
+      hgaugeSine, hgaugeRes] using hraw.2
 
 /-- Reversed one-sided estimate simultaneously for every finite Ky Fan gauge. -/
 theorem reverse_all_kyFan
@@ -223,23 +251,44 @@ theorem reverse_all_kyFan
       P.gap_V_to_Uperp hEq
       (KyFanDominantIdealFamily.kyFan_mem (𝕜 := ℂ) k hk
         (-(D.residual.adjoint ∘L D.F₁)))
-    have hsine : SameApproximationSingularValues
-        P.reverseSineBlock (D.X.adjoint ∘L D.F₁) := by
-      simpa [D, reverseData, reverseSineBlock,
-        Submodule.adjoint_subtypeL] using
-        (sameApproximationSingularValues_ambientSubspaceBlock
-          P.V P.Uᗮ (D.X.adjoint ∘L D.F₁)).symm
-    have hres : SameApproximationSingularValues
-        P.reverseResidualBlock (-(D.residual.adjoint ∘L D.F₁)) := by
-      have hadj : SameApproximationSingularValues
-          P.reverseResidualBlock.adjoint P.reverseResidualBlock :=
-        fun n => approximationSingularValue_adjoint _ n
-      simpa [D, reverseData, reverseResidualBlock, perturbation,
-        Submodule.adjoint_subtypeL, ContinuousLinearMap.adjoint_comp,
-        ContinuousLinearMap.adjoint_sub, map_neg] using hadj.symm
+    -- Mirror of the forward case: the ambient transport lemma again produces
+    -- the adjoint orientation, and Ky Fan gauges are adjoint-invariant.
+    have hsine : SameApproximationSingularSequence
+        (P.V.starProjection ∘L P.Uᗮ.starProjection)
+        (D.X.adjoint ∘L D.F₁) := by
+      simpa [D, reverseData, Submodule.adjoint_subtypeL,
+        Submodule.starProjection, ContinuousLinearMap.comp_assoc] using
+        sameApproximationSingularValues_ambientSubspaceBlock
+          P.Uᗮ P.V (D.X.adjoint ∘L D.F₁)
+    have hsineAdj : P.reverseSineBlock =
+        (P.V.starProjection ∘L P.Uᗮ.starProjection).adjoint := by
+      rw [ContinuousLinearMap.adjoint_comp,
+        (isSelfAdjoint_starProjection P.V).adjoint_eq,
+        (isSelfAdjoint_starProjection P.Uᗮ).adjoint_eq]
+      rfl
+    -- Here `A` and `B` are symmetric, so the ambient block comes out in the
+    -- original orientation rather than the adjoint one.
+    have hadjA : P.A.adjoint = P.A := P.selfAdjoint_A.isSelfAdjoint.adjoint_eq
+    have hadjB : P.B.adjoint = P.B := P.selfAdjoint_B.isSelfAdjoint.adjoint_eq
+    have hres : SameApproximationSingularSequence
+        P.reverseResidualBlock
+        (-(D.residual.adjoint ∘L D.F₁)) := by
+      simpa [D, reverseData, reverseResidualBlock, perturbation, hadjA, hadjB,
+        Submodule.adjoint_subtypeL, Submodule.adjoint_orthogonalProjectionOnto,
+        Submodule.starProjection,
+        ContinuousLinearMap.adjoint_comp, ContinuousLinearMap.comp_assoc,
+        map_sub, map_neg] using
+        sameApproximationSingularValues_ambientSubspaceBlock
+          P.Uᗮ P.V (-(D.residual.adjoint ∘L D.F₁))
+    have hgaugeSine : kyFanApproximationGauge k P.reverseSineBlock =
+        kyFanApproximationGauge k (D.X.adjoint ∘L D.F₁) := by
+      rw [hsineAdj, kyFanApproximationGauge_adjoint,
+        hsine.kyFanApproximationGauge_eq k]
+    have hgaugeRes : kyFanApproximationGauge k P.reverseResidualBlock =
+        kyFanApproximationGauge k (-(D.residual.adjoint ∘L D.F₁)) :=
+      hres.kyFanApproximationGauge_eq k
     simpa [N, KyFanDominantIdealFamily.kyFan_gauge,
-      hsine.kyFanApproximationGauge_eq k,
-      hres.kyFanApproximationGauge_eq k] using hraw.2
+      hgaugeSine, hgaugeRes] using hraw.2
 
 /-- Ky Fan form of the symmetric sine theorem, before universal Fan
  dominance. -/
@@ -250,28 +299,82 @@ theorem symmetric_all_kyFan
           (ForMathlib.DavisKahanExt.paperSinAngleOperatorC P.U P.V) ≤
         kyFanApproximationGauge k P.perturbation := by
   intro k
-  have hcombine := paperLemma61_all_kyFan P.Vᗮ P.U
-    (P.gap • P.perturbation) (P.gap • P.perturbation)
+  have hadjA : P.A.adjoint = P.A := P.selfAdjoint_A.isSelfAdjoint.adjoint_eq
+  have hadjB : P.B.adjoint = P.B := P.selfAdjoint_B.isSelfAdjoint.adjoint_eq
+  have hadjH : P.perturbation.adjoint = P.perturbation := by
+    simp [perturbation, map_sub, hadjA, hadjB]
+  have hUperp : P.Uᗮᗮ = P.U := Submodule.orthogonal_orthogonal P.U
+  have hgapNorm : ‖((P.gap : ℝ) : ℂ)‖ = P.gap := by
+    simp [abs_of_pos P.gap_pos]
+  -- Lemma 6.1 is applied to the *scaled identity*, not to a scaled
+  -- perturbation: the two one-sided estimates bound `gap` times a pure
+  -- projection product, and `paperProjectionBlock Ω Γ (gap • id)` is exactly
+  -- `gap` times that product.  Feeding it `gap • H` would instead demand
+  -- `gap * gauge (block H) ≤ gauge (block H)`, which is false for `gap > 1`.
+  have hcombine := paperLemma61_all_kyFan P.Uᗮ P.V
+    (((P.gap : ℝ) : ℂ) • ContinuousLinearMap.id ℂ E) (((P.gap : ℝ) : ℂ) • ContinuousLinearMap.id ℂ E)
     P.perturbation P.perturbation
     (fun j => by
-      simpa [paperProjectionBlock, forwardSineBlock, forwardResidualBlock,
-        kyFanApproximationGauge_smul, abs_of_pos P.gap_pos] using
-        P.forward_all_kyFan j)
+      have hrev := P.reverse_all_kyFan j
+      have hblockSine :
+          paperProjectionBlock P.Uᗮ P.V (((P.gap : ℝ) : ℂ) • ContinuousLinearMap.id ℂ E) =
+            ((P.gap : ℝ) : ℂ) • P.reverseSineBlock := by
+        ext x; simp [paperProjectionBlock, reverseSineBlock]
+      have hblockRes :
+          paperProjectionBlock P.Uᗮ P.V P.perturbation =
+            P.reverseResidualBlock.adjoint := by
+        simp [paperProjectionBlock, reverseResidualBlock,
+          ContinuousLinearMap.adjoint_comp, hadjH,
+          (isSelfAdjoint_starProjection P.V).adjoint_eq,
+          (isSelfAdjoint_starProjection P.Uᗮ).adjoint_eq,
+          ContinuousLinearMap.comp_assoc]
+      rw [hblockSine, hblockRes, kyFanApproximationGauge_smul,
+        hgapNorm, kyFanApproximationGauge_adjoint]
+      exact hrev)
     (fun j => by
-      simpa [paperProjectionBlock, reverseSineBlock, reverseResidualBlock,
-        kyFanApproximationGauge_smul, abs_of_pos P.gap_pos] using
-        P.reverse_all_kyFan j) k
+      have hfwd := P.forward_all_kyFan j
+      have hblockSine :
+          paperProjectionBlock P.Uᗮᗮ P.Vᗮ (((P.gap : ℝ) : ℂ) • ContinuousLinearMap.id ℂ E) =
+            ((P.gap : ℝ) : ℂ) • P.forwardSineBlock.adjoint := by
+        simp only [hUperp]
+        ext x
+        simp [paperProjectionBlock, forwardSineBlock,
+          ContinuousLinearMap.adjoint_comp,
+          (isSelfAdjoint_starProjection P.U).adjoint_eq,
+          (isSelfAdjoint_starProjection P.Vᗮ).adjoint_eq]
+      have hblockRes :
+          paperProjectionBlock P.Uᗮᗮ P.Vᗮ P.perturbation =
+            P.forwardResidualBlock.adjoint := by
+        simp only [hUperp]
+        simp [paperProjectionBlock, forwardResidualBlock,
+          ContinuousLinearMap.adjoint_comp, hadjH,
+          (isSelfAdjoint_starProjection P.U).adjoint_eq,
+          (isSelfAdjoint_starProjection P.Vᗮ).adjoint_eq,
+          ContinuousLinearMap.comp_assoc]
+      rw [hblockSine, hblockRes, kyFanApproximationGauge_smul,
+        hgapNorm, kyFanApproximationGauge_adjoint,
+        kyFanApproximationGauge_adjoint]
+      exact hfwd) k
   have hsine := paperCrossSineSum_same_literalSin P.U P.V
-  have hres := paperDiagonalPair_all_kyFan_le P.Vᗮ P.U P.perturbation k
+  have hres := paperDiagonalPair_all_kyFan_le P.Uᗮ P.V P.perturbation k
+  have hcross :
+      paperProjectionBlock P.Uᗮ P.V (((P.gap : ℝ) : ℂ) • ContinuousLinearMap.id ℂ E) +
+          paperProjectionBlock P.Uᗮᗮ P.Vᗮ
+            (((P.gap : ℝ) : ℂ) • ContinuousLinearMap.id ℂ E) =
+        ((P.gap : ℝ) : ℂ) • paperCrossSineSum P.U P.V := by
+    simp only [hUperp]
+    ext x
+    simp [paperProjectionBlock, paperCrossSineSum, smul_add]
+  rw [hcross] at hcombine
   calc
     P.gap * kyFanApproximationGauge k
         (ForMathlib.DavisKahanExt.paperSinAngleOperatorC P.U P.V) =
       kyFanApproximationGauge k
-        (P.gap • paperCrossSineSum P.U P.V) := by
-      rw [kyFanApproximationGauge_smul, abs_of_pos P.gap_pos,
+        (((P.gap : ℝ) : ℂ) • paperCrossSineSum P.U P.V) := by
+      rw [kyFanApproximationGauge_smul, hgapNorm,
         hsine.kyFanApproximationGauge_eq]
     _ ≤ kyFanApproximationGauge k
-        (paperDiagonalPair P.Vᗮ P.U P.perturbation) := hcombine
+        (paperDiagonalPair P.Uᗮ P.V P.perturbation) := hcombine
     _ ≤ kyFanApproximationGauge k P.perturbation := hres
 
 /-- **Davis--Kahan 1970, Proposition 6.1**, for every normalized unitarily
