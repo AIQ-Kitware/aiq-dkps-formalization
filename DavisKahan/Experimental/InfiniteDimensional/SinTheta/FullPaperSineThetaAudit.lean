@@ -52,3 +52,9 @@ dependencies in every result.
 #print axioms ForMathlib.DavisKahan1970.oneGap_counterexample_sine_squareNorm
 #print axioms ForMathlib.DavisKahan1970.oneGap_counterexample_perturbation_squareNorm
 #print axioms ForMathlib.DavisKahan1970.oneGap_does_not_imply_Proposition6_1
+
+#print axioms ForMathlib.DavisKahan1970.finiteMultiplicity_residual_identity
+#print axioms ForMathlib.DavisKahan1970.finiteMultiplicity_directedSine_identity
+#print axioms ForMathlib.DavisKahan1970.finiteMultiplicityComplementMap_mem
+#print axioms ForMathlib.DavisKahan1970.Theorem6_1_finiteMultiplicity_equality_every_norm
+#print axioms ForMathlib.DavisKahan1970.finiteMultiplicitySineBlock_injective
