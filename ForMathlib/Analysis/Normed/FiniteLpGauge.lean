@@ -162,14 +162,15 @@ theorem antitone_zeroPadRight {x : Fin n → ℝ}
     (hxanti : Antitone x) (hx0 : ∀ i, 0 ≤ x i) :
     Antitone (zeroPadRight (m := m) x) := by
   intro i j hij
+  have hijv : (i : ℕ) ≤ (j : ℕ) := Fin.le_def.mp hij
   unfold zeroPadRight
-  split_ifs with hi hj
+  -- the antitonicity goal is `pad j ≤ pad i`, so the outer split is on `j`
+  split_ifs with hj hi
   · apply hxanti
-    exact Fin.le_def.mpr (Fin.le_def.mp hij)
+    exact Fin.le_def.mpr hijv
+  · -- `i` sits below `j < n`, so this branch is vacuous
+    exact absurd hijv (by omega)
   · exact hx0 _
-  · exfalso
-    have hijv : (i : ℕ) ≤ (j : ℕ) := Fin.le_def.mp hij
-    omega
   · exact le_rfl
 
 /-- Zero padding preserves nonnegativity. -/
@@ -638,7 +639,7 @@ theorem lpGauge_nonneg (p : ℝ) (x : Fin n → ℝ) :
 
 @[simp] theorem lpGauge_zero {p : ℝ} (hp : 0 < p) :
     lpGauge p (0 : Fin n → ℝ) = 0 := by
-  simp [lpGauge, Real.zero_rpow hp.ne', one_div_ne_zero hp.ne']
+  simp [lpGauge, Real.zero_rpow hp.ne', Real.zero_rpow (inv_ne_zero hp.ne')]
 
 /-- The finite `ℓᵖ` gauge vanishes exactly on the zero vector. -/
 theorem lpGauge_eq_zero_iff {p : ℝ} (hp : 0 < p) (x : Fin n → ℝ) :
@@ -677,7 +678,7 @@ theorem lpGauge_smul {p : ℝ} (hp : 0 < p) (c : ℝ) (x : Fin n → ℝ) :
     exacts [abs_nonneg c, abs_nonneg (x i)]
   unfold lpGauge
   rw [hsum, Real.mul_rpow]
-  · rw [← Real.rpow_mul]
+  · rw [← Real.rpow_mul (abs_nonneg c)]
     have hpinv : p * (1 / p) = 1 := by
       field_simp
     rw [hpinv, Real.rpow_one]
@@ -689,7 +690,7 @@ theorem lpGauge_perm (p : ℝ) (x : Fin n → ℝ) (π : Equiv.Perm (Fin n)) :
     lpGauge p (x ∘ π) = lpGauge p x := by
   unfold lpGauge
   congr 1
-  exact π.sum_comp (fun i => |x i| ^ p)
+  exact Equiv.sum_comp π (fun i => |x i| ^ p)
 
 /-- A single coordinate sign flip does not change the finite `ℓᵖ` gauge. -/
 theorem lpGauge_neg_single (p : ℝ) (x : Fin n → ℝ) (j : Fin n) :
@@ -731,9 +732,12 @@ theorem lpGauge_mono {p : ℝ} (hp : 1 ≤ p) {x y : Fin n → ℝ}
 /-- Right zero-padding does not change the finite `ℓᵖ` gauge. -/
 theorem lpGauge_zeroPadRight (p : ℝ) (x : Fin n → ℝ) :
     lpGauge p (zeroPadRight (m := m) x) = lpGauge p x := by
-  unfold lpGauge zeroPadRight
-  rw [Fin.sum_univ_add]
-  simp
+  rcases eq_or_ne p 0 with rfl | hp
+  · -- the outer exponent `1 / 0` is zero, so both gauges collapse to `1`
+    simp [lpGauge]
+  · unfold lpGauge zeroPadRight
+    rw [Fin.sum_univ_add]
+    simp [Real.zero_rpow hp]
 
 /-- The finite `ℓ∞` gauge. -/
 noncomputable def linftyGauge (x : Fin n → ℝ) : ℝ :=
@@ -753,14 +757,17 @@ theorem linftyGauge_nonneg (x : Fin n → ℝ) : 0 ≤ linftyGauge x := by
 theorem linftyGauge_mono {x y : Fin n → ℝ}
     (hxy : ∀ i, |x i| ≤ |y i|) : linftyGauge x ≤ linftyGauge y := by
   unfold linftyGauge
-  exact ciSup_mono (Finite.bddAbove_range (fun i => |x i|)) hxy
+  exact ciSup_mono (Finite.bddAbove_range (fun i => |y i|)) hxy
 
 /-- Triangle inequality for the finite `ℓ∞` gauge. -/
 theorem linftyGauge_add_le (x y : Fin n → ℝ) :
     linftyGauge (x + y) ≤ linftyGauge x + linftyGauge y := by
+  -- `ciSup_le` needs a nonempty index type; the empty gauge is zero
+  rcases n with _ | n
+  · simp [linftyGauge]
   unfold linftyGauge
   refine ciSup_le fun i => ?_
-  exact (abs_add (x i) (y i)).trans
+  exact (abs_add_le (x i) (y i)).trans
     (add_le_add (le_ciSup (Finite.bddAbove_range (fun j => |x j|)) i)
       (le_ciSup (Finite.bddAbove_range (fun j => |y j|)) i))
 
@@ -768,10 +775,8 @@ theorem linftyGauge_add_le (x y : Fin n → ℝ) :
 theorem linftyGauge_smul (c : ℝ) (x : Fin n → ℝ) :
     linftyGauge (c • x) = |c| * linftyGauge x := by
   unfold linftyGauge
-  by_cases hc : c = 0
-  · subst c
-    simp
-  rw [← ciSup_const_mul (abs_nonneg c)]
+  -- `Real.mul_iSup_of_nonneg` is already total in `c`, including `c = 0`
+  rw [Real.mul_iSup_of_nonneg (abs_nonneg c)]
   apply congrArg iSup
   funext i
   simp [abs_mul, Pi.smul_apply, smul_eq_mul]
@@ -779,6 +784,8 @@ theorem linftyGauge_smul (c : ℝ) (x : Fin n → ℝ) :
 /-- Permutation invariance of the finite `ℓ∞` gauge. -/
 theorem linftyGauge_perm (x : Fin n → ℝ) (π : Equiv.Perm (Fin n)) :
     linftyGauge (x ∘ π) = linftyGauge x := by
+  rcases n with _ | n
+  · simp [linftyGauge]
   unfold linftyGauge
   apply le_antisymm
   · refine ciSup_le fun i => ?_
@@ -792,7 +799,9 @@ theorem linftyGauge_neg_single (x : Fin n → ℝ) (j : Fin n) :
   unfold linftyGauge
   congr 1
   funext i
-  rcases eq_or_ne i j with rfl | hij <;> simp [hij]
+  rcases eq_or_ne i j with rfl | hij
+  · simp
+  · simp [Function.update_of_ne hij]
 
 /-- The `ℓ∞` gauge as a finite symmetric gauge. -/
 noncomputable def linftySymmetricGauge : FiniteSymmetricGauge n where
@@ -810,15 +819,25 @@ theorem linftyGauge_mono_weaklyMajorized {x y : Fin n → ℝ}
 /-- Right zero-padding does not change the finite `ℓ∞` gauge. -/
 theorem linftyGauge_zeroPadRight (x : Fin n → ℝ) :
     linftyGauge (zeroPadRight (m := m) x) = linftyGauge x := by
+  rcases n with _ | n
+  · -- nothing to pad: the padded vector is identically zero
+    have hz : zeroPadRight (m := m) x = 0 := by
+      funext i
+      simp [zeroPadRight]
+    rw [hz]
+    simp [linftyGauge]
+  haveI : Nonempty (Fin (n + 1 + m)) := ⟨⟨0, by omega⟩⟩
   apply le_antisymm
   · unfold linftyGauge
     refine ciSup_le fun i => ?_
     refine Fin.addCases (motive := fun i =>
-      |zeroPadRight (m := m) x i| ≤ linftyGauge x) ?_ ?_ i
+      |zeroPadRight (m := m) x i| ≤ ⨆ q, |x q|) ?_ ?_ i
     · intro j
-      simpa using le_ciSup (Finite.bddAbove_range (fun q => |x q|)) j
+      rw [zeroPadRight_left]
+      exact le_ciSup (Finite.bddAbove_range (fun q => |x q|)) j
     · intro j
-      simp [linftyGauge_nonneg]
+      rw [zeroPadRight_right, abs_zero]
+      exact linftyGauge_nonneg x
   · unfold linftyGauge
     refine ciSup_le fun i => ?_
     simpa using le_ciSup

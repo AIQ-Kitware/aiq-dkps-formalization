@@ -163,13 +163,15 @@ theorem singularValueVector_unitary_comp
     (U : F ≃ₗᵢ[𝕜] F) (A : E →ₗ[𝕜] F) :
     singularValueVector (U.toLinearMap ∘ₗ A) = singularValueVector A := by
   funext i
-  exact congrFun (singularValues_unitary_comp U A) (i : ℕ)
+  -- `singularValues` is bundled, so the equality has to be rewritten under the
+  -- coercion rather than applied with `congrFun`
+  simp only [singularValueVector, singularValues_unitary_comp U A]
 
 theorem singularValueVector_comp_unitary
     (A : E →ₗ[𝕜] F) (V : E ≃ₗᵢ[𝕜] E) :
     singularValueVector (A ∘ₗ V.toLinearMap) = singularValueVector A := by
   funext i
-  exact congrFun (singularValues_comp_unitary A V) (i : ℕ)
+  simp only [singularValueVector, singularValues_comp_unitary A V]
 
 /-- Rectangular Schatten `p` norm for a real exponent `p ≥ 1`. -/
 noncomputable def schattenNorm (p : ℝ) (hp : 1 ≤ p) :
@@ -246,7 +248,12 @@ theorem schattenNorm_eq_zero_iff (p : ℝ) (hp : 1 ≤ p) (A : E →ₗ[𝕜] F)
       A.singularValues_pos_iff_lt_finrank_range.mpr hrankpos
     exact hpos.ne' hzero
   · rintro rfl
-    simp
+    funext i
+    simp only [singularValueVector]
+    refine (0 : E →ₗ[𝕜] F).singularValues_eq_zero_iff_le_finrank_range.mpr ?_
+    rw [show LinearMap.range (0 : E →ₗ[𝕜] F) = ⊥ from LinearMap.range_zero,
+      finrank_bot]
+    exact Nat.zero_le _
 
 /-- Adjoint invariance.  The minimum-dimension indexing makes this a direct
 consequence of the zero-padded singular-value equality. -/
@@ -296,7 +303,9 @@ theorem sum_pow_singularValueVector_eq_sum_domain
         singularValueVector A i ^ q) =
       ∑ i : Fin (finrank 𝕜 E), A.singularValues (i : ℕ) ^ q := by
   simp only [singularValueVector]
-  rw [Fin.sum_univ_eq_sum_range, Fin.sum_univ_eq_sum_range]
+  -- the summand is not syntactically of the form `?f ↑i`, so `f` is supplied
+  rw [Fin.sum_univ_eq_sum_range (fun j => A.singularValues j ^ q),
+    Fin.sum_univ_eq_sum_range (fun j => A.singularValues j ^ q)]
   apply Finset.sum_subset (Finset.range_mono (min_le_left _ _))
   intro i hiDomain hiMin
   have hi : finrank 𝕜 A.range ≤ i :=
@@ -315,7 +324,7 @@ theorem sum_sq_singularValueVector_eq_sum_domain (A : E →ₗ[𝕜] F) :
 theorem schattenNorm_one_apply (A : E →ₗ[𝕜] F) :
     schattenNorm (𝕜 := 𝕜) (E := E) (F := F) 1 le_rfl A = nuclear A := by
   rw [schattenNorm_apply]
-  simp only [FiniteVector.lpGauge, one_div, Real.rpow_one]
+  simp only [FiniteVector.lpGauge, one_div, inv_one, Real.rpow_one]
   simp_rw [abs_of_nonneg (singularValueVector_nonneg A _)]
   change rectangularKyFanSum (min (finrank 𝕜 E) (finrank 𝕜 F)) A =
     rectangularKyFanSum (finrank 𝕜 E) A
