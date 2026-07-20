@@ -1,0 +1,1577 @@
+diff --git a/DavisKahan/Experimental/FiniteDimensional/Norms/Rectangular.lean b/DavisKahan/Experimental/FiniteDimensional/Norms/Rectangular.lean
+index 42ad2fb..bfa8ff1 100644
+--- a/DavisKahan/Experimental/FiniteDimensional/Norms/Rectangular.lean
++++ b/DavisKahan/Experimental/FiniteDimensional/Norms/Rectangular.lean
+@@ -1,21 +1,26 @@
+ /-
+ Copyright (c) 2026 Kitware, Inc. All rights reserved.
+ Released under Apache 2.0 license as described in the file LICENSE.
+-Authors: Jon Crall, GPT 5.6 High
++Authors: Jon Crall, GPT-5.6 Thinking
+ -/
+-import ForMathlib.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm
++import ForMathlib.Analysis.InnerProductSpace.SchattenNorm
+ import Mathlib.Analysis.Normed.Lp.ProdLp
+ 
+ /-!
+-# Rectangular unitarily invariant norms
++# Rectangular Schatten compatibility module
+ 
+-A square UI norm family determines a rectangular norm by the standard zero
+-extension into the orthogonal sum of domain and codomain.  Schatten norms are
+-obtained by applying the `ℓᵖ` gauge to the singular-value vector.
++The finite-dimensional rectangular Schatten construction has moved to the
++canonical reusable module
++`ForMathlib.Analysis.InnerProductSpace.SchattenNorm`.
++
++This import preserves the historical experimental module path while exposing
++the same `RectangularUnitarilyInvariantNorm.schatten` and `mem_schatten`
++interface to downstream files.
+ -/
+ 
+ namespace ForMathlib
+ namespace DavisKahanTheory
++namespace RectangularUnitarilyInvariantNorm
+ 
+ open scoped InnerProductSpace BigOperators
+ open Module (finrank)
+@@ -24,10 +29,9 @@ universe uE uF
+ 
+ variable {𝕜 : Type*} [RCLike 𝕜]
+ 
+-namespace RectangularUnitarilyInvariantNorm
+-
+-/-- Extend a coherent square UI-norm family to rectangular maps by zero
+-extension on `E ⊕ F`. -/
++/-- Extend a coherent square UI-norm family to rectangular maps by the
++standard orthogonal zero extension.  This useful historical bridge is retained
++alongside the intrinsic singular-value construction. -/
+ noncomputable def ofSquareFamily
+     {E : Type uE} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
+     [FiniteDimensional 𝕜 E]
+@@ -55,42 +59,24 @@ noncomputable def ofSquareFamily
+     rw [hzero]
+     exact (Ns (WithLp 2 (E × F))).invariant UV UV.symm _
+ 
+-variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
+-  [FiniteDimensional 𝕜 E]
+-variable {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
+-  [FiniteDimensional 𝕜 F]
++variable {E F : Type*}
++  [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [FiniteDimensional 𝕜 E]
++  [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [FiniteDimensional 𝕜 F]
+ 
+-/-- Schatten `p` seminorm of a rectangular map, for `1 ≤ p`.
+-
+-The triangle inequality is the Tomić--Weyl route: the singular values of a
+-sum are weakly majorized by the sum of singular values (Ky Fan), and the
+-`ℓᵖ` gauge is monotone under weak majorization of nonnegative decreasing
+-vectors, then finite-dimensional Minkowski applies.  The majorization
+-monotonicity lemma is not yet available in this development, so that field
+-is an open obligation. -/
++/-- Historical finite-dimensional rectangular Schatten declaration.  Its
++implementation is the canonical production construction. -/
+ noncomputable def schatten (p : ℝ) (hp : 1 ≤ p) :
+     RectangularUnitarilyInvariantNorm 𝕜 E F where
+-  toFun A :=
+-    (∑ i : Fin (min (finrank 𝕜 E) (finrank 𝕜 F)),
+-      (A.singularValues i) ^ p) ^ (1 / p)
+-  add_le' A B := by
+-    let sA := fun i : Fin (min (finrank 𝕜 E) (finrank 𝕜 F)) =>
+-      A.singularValues i
+-    let sB := fun i : Fin (min (finrank 𝕜 E) (finrank 𝕜 F)) =>
+-      B.singularValues i
+-    have hmaj := singularValues_add_weaklyMajorized A B
+-    exact lpGauge_triangle_of_weakMajorization hp hmaj
+-  smul' a A := by
+-    simp [LinearMap.singularValues_smul, Finset.mul_sum, Real.mul_rpow,
+-      hp.trans_lt one_lt_top]
+-  invariant' U V A := by
+-    simp [LinearMap.singularValues_unitary_comp,
+-      LinearMap.singularValues_comp_unitary]
++  toFun A := schattenNorm (𝕜 := 𝕜) (E := E) (F := F) p hp A
++  add_le' A B := schattenNorm_add_le p hp A B
++  smul' a A := schattenNorm_smul p hp a A
++  invariant' U V A := schattenNorm_invariant p hp U V A
+ 
+-/-- Schatten values are nonnegative in finite dimensions. -/
++/-- Historical name retained for the gated rectangular-norm target. -/
+ theorem mem_schatten (p : ℝ) (hp : 1 ≤ p) (A : E →ₗ[𝕜] F) :
+-    0 ≤ schatten (𝕜 := 𝕜) (E := E) (F := F) p hp A :=
+-  (schatten (𝕜 := 𝕜) (E := E) (F := F) p hp).nonneg A
++    0 ≤ schatten (𝕜 := 𝕜) (E := E) (F := F) p hp A := by
++  change 0 ≤ schattenNorm (𝕜 := 𝕜) (E := E) (F := F) p hp A
++  exact schattenNorm_nonneg p hp A
+ 
+ end RectangularUnitarilyInvariantNorm
+ end DavisKahanTheory
+diff --git a/ForMathlib.lean b/ForMathlib.lean
+index bc0c78e..6639577 100644
+--- a/ForMathlib.lean
++++ b/ForMathlib.lean
+@@ -29,6 +29,7 @@ import ForMathlib.Analysis.InnerProductSpace.ProjectionGeometry
+ import ForMathlib.Analysis.InnerProductSpace.MoorePenroseInverse
+ import ForMathlib.Analysis.InnerProductSpace.RectangularSingularValues
+ import ForMathlib.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm
++import ForMathlib.Analysis.InnerProductSpace.SchattenNorm
+ import ForMathlib.Analysis.InnerProductSpace.SchurHorn
+ import ForMathlib.Analysis.InnerProductSpace.SelfAdjointFunctionalCalculus
+ import ForMathlib.Analysis.InnerProductSpace.SingularSubspace
+@@ -39,6 +40,7 @@ import ForMathlib.Analysis.Matrix.EntrywiseEigenvalue
+ import ForMathlib.Analysis.Matrix.EntrywiseOpNorm
+ import ForMathlib.Analysis.Matrix.SpectralFunctionMeasurable
+ import ForMathlib.Analysis.Matrix.Spectrum
++import ForMathlib.Analysis.Normed.FiniteLpGauge
+ import ForMathlib.Analysis.Normed.Operator.ApproximationNumber
+ import ForMathlib.Analysis.Normed.Operator.ApproximationNumberAdjoint
+ import ForMathlib.Analysis.Normed.Operator.ApproximationNumberHilbert
+diff --git a/ForMathlib/Analysis/InnerProductSpace/SchattenNorm.lean b/ForMathlib/Analysis/InnerProductSpace/SchattenNorm.lean
+new file mode 100644
+index 0000000..0c7c077
+--- /dev/null
++++ b/ForMathlib/Analysis/InnerProductSpace/SchattenNorm.lean
+@@ -0,0 +1,344 @@
++/-
++Copyright (c) 2026 Kitware, Inc. All rights reserved.
++Released under Apache 2.0 license as described in the file LICENSE.
++Authors: Jon Crall, GPT-5.6 Thinking
++-/
++import ForMathlib.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm
++import ForMathlib.Analysis.Normed.FiniteLpGauge
++
++/-!
++# Rectangular Schatten norms
++
++For a finite-dimensional rectangular map `A : E →ₗ[𝕜] F`, this file defines
++
++`‖A‖_{S_p} = (∑ᵢ σᵢ(A)^p)^(1/p)`
++
++for real `p ≥ 1`, using the singular-value vector of length
++`min (finrank 𝕜 E) (finrank 𝕜 F)`.  This indexing convention is symmetric in
++domain and codomain and discards only the automatic zero tail.
++
++The triangle inequality is factored into the two canonical ingredients:
++
++1. Ky Fan subadditivity gives
++   `σ(A + B) ≺w σ(A) + σ(B)`;
++2. finite `ℓᵖ` gauges are monotone under weak majorization and satisfy
++   Minkowski's inequality.
++
++The resulting object is a `RectangularUnitarilyInvariantNorm`, so it inherits
++the existing two-sided unitary invariance, orbit-certificate bounds, Fan
++dominance bridges, and operator-ideal inequalities.
++-/
++
++namespace ForMathlib
++namespace DavisKahanTheory
++
++open scoped InnerProductSpace BigOperators
++open Module (finrank)
++
++universe uE uF
++
++variable {𝕜 : Type*} [RCLike 𝕜]
++variable {E : Type uE} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
++  [FiniteDimensional 𝕜 E]
++variable {F : Type uF} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
++  [FiniteDimensional 𝕜 F]
++namespace RectangularUnitarilyInvariantNorm
++
++/-- The canonical finite singular-value vector for a rectangular map. -/
++noncomputable def singularValueVector (A : E →ₗ[𝕜] F) :
++    Fin (min (finrank 𝕜 E) (finrank 𝕜 F)) → ℝ :=
++  fun i => A.singularValues (i : ℕ)
++
++theorem singularValueVector_nonneg (A : E →ₗ[𝕜] F) (i) :
++    0 ≤ singularValueVector A i :=
++  A.singularValues_nonneg _
++
++theorem singularValueVector_antitone (A : E →ₗ[𝕜] F) :
++    Antitone (singularValueVector A) := by
++  intro i j hij
++  exact A.singularValues_antitone (Fin.le_def.mp hij)
++
++/-- The range rank is bounded by the minimum of the domain and codomain
++finranks. -/
++theorem finrank_range_le_min (A : E →ₗ[𝕜] F) :
++    finrank 𝕜 A.range ≤ min (finrank 𝕜 E) (finrank 𝕜 F) := by
++  apply le_min
++  · have hranknull := A.finrank_range_add_finrank_ker
++    omega
++  · exact Submodule.finrank_le _
++
++/-- Rectangular Ky Fan sums stabilize once the prefix reaches the minimum of
++the domain and codomain dimensions. -/
++theorem rectangularKyFanSum_eq_minFinrank_of_minFinrank_le
++    (A : E →ₗ[𝕜] F) {k : ℕ}
++    (hk : min (finrank 𝕜 E) (finrank 𝕜 F) ≤ k) :
++    rectangularKyFanSum k A =
++      rectangularKyFanSum (min (finrank 𝕜 E) (finrank 𝕜 F)) A := by
++  unfold rectangularKyFanSum
++  rw [Fin.sum_univ_eq_sum_range, Fin.sum_univ_eq_sum_range]
++  symm
++  apply Finset.sum_subset (Finset.range_mono hk)
++  intro i hi hiMin
++  rw [A.singularValues_eq_zero_iff_le_finrank_range.mpr]
++  exact (finrank_range_le_min A).trans
++    (Nat.le_of_not_gt (by simpa only [Finset.mem_range] using hiMin))
++
++/-- Prefix sums of the canonical singular-value vector are exactly rectangular
++Ky Fan sums. -/
++theorem prefixSum_singularValueVector
++    (k : ℕ) (A : E →ₗ[𝕜] F) :
++    FiniteVector.prefixSum k (singularValueVector A) =
++      rectangularKyFanSum k A := by
++  let d := min (finrank 𝕜 E) (finrank 𝕜 F)
++  change FiniteVector.prefixSum k
++      (fun i : Fin d => A.singularValues (i : ℕ)) =
++    rectangularKyFanSum k A
++  rcases le_or_gt k d with hk | hk
++  · unfold FiniteVector.prefixSum rectangularKyFanSum
++    rw [sum_filter_lt_eq_sum_fin hk (fun j => A.singularValues j)]
++  · have hdk : d ≤ k := Nat.le_of_lt hk
++    rw [FiniteVector.prefixSum_eq_full_sum_of_le _ hdk]
++    change rectangularKyFanSum d A = rectangularKyFanSum k A
++    exact (rectangularKyFanSum_eq_minFinrank_of_minFinrank_le A hdk).symm
++
++/-- Ky Fan prefix inequalities characterize weak majorization of two canonical
++singular-value vectors. -/
++theorem singularValueVector_weaklyMajorized_iff (A B : E →ₗ[𝕜] F) :
++    FiniteVector.WeaklyMajorized (singularValueVector A)
++      (singularValueVector B) ↔
++      ∀ k, rectangularKyFanSum k A ≤ rectangularKyFanSum k B := by
++  constructor
++  · intro h k
++    simpa only [prefixSum_singularValueVector] using h.prefix_le k
++  · intro h
++    exact ⟨singularValueVector_antitone A, singularValueVector_antitone B,
++      singularValueVector_nonneg A, singularValueVector_nonneg B, fun k => by
++        simpa only [prefixSum_singularValueVector] using h k⟩
++
++/-- Public rectangular Ky Fan subadditivity. -/
++theorem rectangularKyFanSum_add_le (k : ℕ) (A B : E →ₗ[𝕜] F) :
++    rectangularKyFanSum k (A + B) ≤
++      rectangularKyFanSum k A + rectangularKyFanSum k B :=
++  (kyFan k).add_le A B
++
++/-- The singular-value vector of a sum is weakly majorized by the sum of the
++singular-value vectors.  This is the correct simultaneous singular-value
++subadditivity statement; no coordinatewise inequality is asserted. -/
++theorem singularValueVector_add_weaklyMajorized (A B : E →ₗ[𝕜] F) :
++    FiniteVector.WeaklyMajorized
++      (singularValueVector (A + B))
++      (singularValueVector A + singularValueVector B) := by
++  refine ⟨singularValueVector_antitone (A + B), ?_,
++    singularValueVector_nonneg (A + B), ?_, fun k => ?_⟩
++  · intro i j hij
++    exact add_le_add
++      (singularValueVector_antitone A hij)
++      (singularValueVector_antitone B hij)
++  · intro i
++    exact add_nonneg
++      (singularValueVector_nonneg A i)
++      (singularValueVector_nonneg B i)
++  · rw [FiniteVector.prefixSum_add,
++      prefixSum_singularValueVector,
++      prefixSum_singularValueVector,
++      prefixSum_singularValueVector]
++    exact rectangularKyFanSum_add_le k A B
++
++/-- Historical spelling of singular-value weak subadditivity retained for
++downstream candidate modules. -/
++theorem singularValues_add_weaklyMajorized (A B : E →ₗ[𝕜] F) :
++    FiniteVector.WeaklyMajorized
++      (singularValueVector (A + B))
++      (singularValueVector A + singularValueVector B) :=
++  singularValueVector_add_weaklyMajorized A B
++
++/-- Singular-value vectors scale by the norm of the scalar. -/
++theorem singularValueVector_smul (a : 𝕜) (A : E →ₗ[𝕜] F) :
++    singularValueVector (a • A) = ‖a‖ • singularValueVector A := by
++  funext i
++  exact singularValues_smul_rect a A (i : ℕ)
++
++/-- Singular-value vectors are invariant under compatible unitary factors. -/
++theorem singularValueVector_unitary_comp
++    (U : F ≃ₗᵢ[𝕜] F) (A : E →ₗ[𝕜] F) :
++    singularValueVector (U.toLinearMap ∘ₗ A) = singularValueVector A := by
++  funext i
++  exact congrFun (singularValues_unitary_comp U A) (i : ℕ)
++
++theorem singularValueVector_comp_unitary
++    (A : E →ₗ[𝕜] F) (V : E ≃ₗᵢ[𝕜] E) :
++    singularValueVector (A ∘ₗ V.toLinearMap) = singularValueVector A := by
++  funext i
++  exact congrFun (singularValues_comp_unitary A V) (i : ℕ)
++
++/-- Rectangular Schatten `p` norm for a real exponent `p ≥ 1`. -/
++noncomputable def schattenNorm (p : ℝ) (hp : 1 ≤ p) :
++    RectangularUnitarilyInvariantNorm 𝕜 E F where
++  toFun A := FiniteVector.lpGauge p (singularValueVector A)
++  add_le' A B :=
++    calc
++      FiniteVector.lpGauge p (singularValueVector (A + B))
++          ≤ FiniteVector.lpGauge p
++              (singularValueVector A + singularValueVector B) :=
++        FiniteVector.lpGauge_mono_weaklyMajorized hp
++          (singularValueVector_add_weaklyMajorized A B)
++      _ ≤ FiniteVector.lpGauge p (singularValueVector A) +
++          FiniteVector.lpGauge p (singularValueVector B) :=
++        FiniteVector.lpGauge_add_le hp _ _
++  smul' a A := by
++    rw [singularValueVector_smul,
++      FiniteVector.lpGauge_smul (zero_lt_one.trans_le hp),
++      abs_of_nonneg (norm_nonneg a)]
++  invariant' U V A := by
++    rw [show singularValueVector
++          (U.toLinearMap ∘ₗ A ∘ₗ V.toLinearMap) = singularValueVector A by
++      rw [singularValueVector_unitary_comp,
++        singularValueVector_comp_unitary]]
++
++@[simp] theorem schattenNorm_apply (p : ℝ) (hp : 1 ≤ p) (A : E →ₗ[𝕜] F) :
++    schattenNorm p hp A = FiniteVector.lpGauge p (singularValueVector A) :=
++  rfl
++
++theorem schattenNorm_nonneg (p : ℝ) (hp : 1 ≤ p) (A : E →ₗ[𝕜] F) :
++    0 ≤ schattenNorm p hp A :=
++  (schattenNorm p hp).nonneg A
++
++@[simp] theorem schattenNorm_zero (p : ℝ) (hp : 1 ≤ p) :
++    schattenNorm (𝕜 := 𝕜) (E := E) (F := F) p hp 0 = 0 :=
++  (schattenNorm p hp).apply_zero
++
++theorem schattenNorm_add_le (p : ℝ) (hp : 1 ≤ p) (A B : E →ₗ[𝕜] F) :
++    schattenNorm p hp (A + B) ≤ schattenNorm p hp A + schattenNorm p hp B :=
++  (schattenNorm p hp).add_le A B
++
++theorem schattenNorm_smul (p : ℝ) (hp : 1 ≤ p) (a : 𝕜)
++    (A : E →ₗ[𝕜] F) :
++    schattenNorm p hp (a • A) = ‖a‖ * schattenNorm p hp A :=
++  (schattenNorm p hp).smul_eq a A
++
++theorem schattenNorm_invariant (p : ℝ) (hp : 1 ≤ p)
++    (U : F ≃ₗᵢ[𝕜] F) (V : E ≃ₗᵢ[𝕜] E) (A : E →ₗ[𝕜] F) :
++    schattenNorm p hp (U.toLinearMap ∘ₗ A ∘ₗ V.toLinearMap) =
++      schattenNorm p hp A :=
++  (schattenNorm p hp).invariant U V A
++
++/-- Definiteness of the rectangular Schatten norm. -/
++theorem schattenNorm_eq_zero_iff (p : ℝ) (hp : 1 ≤ p) (A : E →ₗ[𝕜] F) :
++    schattenNorm p hp A = 0 ↔ A = 0 := by
++  rw [schattenNorm_apply,
++    FiniteVector.lpGauge_eq_zero_iff (zero_lt_one.trans_le hp)]
++  constructor
++  · intro hσ
++    by_contra hA
++    have hrange : A.range ≠ ⊥ := by
++      simpa [LinearMap.range_eq_bot] using hA
++    have hrankpos : 0 < finrank 𝕜 A.range := by
++      apply Nat.pos_of_ne_zero
++      intro hrank
++      exact hrange (Submodule.finrank_eq_zero.mp hrank)
++    have hdpos : 0 < min (finrank 𝕜 E) (finrank 𝕜 F) :=
++      hrankpos.trans_le (finrank_range_le_min A)
++    let i : Fin (min (finrank 𝕜 E) (finrank 𝕜 F)) := ⟨0, hdpos⟩
++    have hzero : A.singularValues 0 = 0 := by
++      have := congrFun hσ i
++      simpa [singularValueVector, i] using this
++    have hpos : 0 < A.singularValues 0 :=
++      A.singularValues_pos_iff_lt_finrank_range.mpr hrankpos
++    exact hpos.ne' hzero
++  · rintro rfl
++    simp
++
++/-- Adjoint invariance.  The minimum-dimension indexing makes this a direct
++consequence of the zero-padded singular-value equality. -/
++theorem schattenNorm_adjoint (p : ℝ) (hp : 1 ≤ p) (A : E →ₗ[𝕜] F) :
++    schattenNorm (𝕜 := 𝕜) (E := F) (F := E) p hp A.adjoint =
++      schattenNorm (𝕜 := 𝕜) (E := E) (F := F) p hp A := by
++  simp only [schattenNorm_apply, FiniteVector.lpGauge, singularValueVector]
++  rw [min_comm]
++  simp_rw [A.singularValues_adjoint_apply]
++
++/-- Left ideal inequality for Schatten norms. -/
++theorem schattenNorm_comp_le_opNorm_mul (p : ℝ) (hp : 1 ≤ p)
++    (C : F →ₗ[𝕜] F) (A : E →ₗ[𝕜] F) :
++    schattenNorm p hp (C ∘ₗ A) ≤
++      ‖C.toContinuousLinearMap‖ * schattenNorm p hp A :=
++  (schattenNorm p hp).comp_le_opNorm_mul C A
++
++/-- Right ideal inequality for Schatten norms. -/
++theorem schattenNorm_comp_le_mul_opNorm (p : ℝ) (hp : 1 ≤ p)
++    (A : E →ₗ[𝕜] F) (C : E →ₗ[𝕜] E) :
++    schattenNorm p hp (A ∘ₗ C) ≤
++      schattenNorm p hp A * ‖C.toContinuousLinearMap‖ :=
++  (schattenNorm p hp).comp_le_mul_opNorm A C
++
++/-- Two-sided ideal inequality for endomorphism factors on the source and
++ target spaces. -/
++theorem schattenNorm_comp_comp_le (p : ℝ) (hp : 1 ≤ p)
++    (B : F →ₗ[𝕜] F) (A : E →ₗ[𝕜] F) (C : E →ₗ[𝕜] E) :
++    schattenNorm p hp (B ∘ₗ A ∘ₗ C) ≤
++      ‖B.toContinuousLinearMap‖ * schattenNorm p hp A *
++        ‖C.toContinuousLinearMap‖ := by
++  calc
++    schattenNorm p hp (B ∘ₗ A ∘ₗ C)
++        ≤ schattenNorm p hp (B ∘ₗ A) * ‖C.toContinuousLinearMap‖ :=
++      schattenNorm_comp_le_mul_opNorm p hp (B ∘ₗ A) C
++    _ ≤ (‖B.toContinuousLinearMap‖ * schattenNorm p hp A) *
++            ‖C.toContinuousLinearMap‖ :=
++      mul_le_mul_of_nonneg_right
++        (schattenNorm_comp_le_opNorm_mul p hp B A)
++        (norm_nonneg _)
++
++/-- Powers of singular values may be summed over the minimum dimension or
++over the whole domain dimension: the omitted tail is zero. -/
++theorem sum_pow_singularValueVector_eq_sum_domain
++    (A : E →ₗ[𝕜] F) (q : ℕ) (hq : q ≠ 0) :
++    (∑ i : Fin (min (finrank 𝕜 E) (finrank 𝕜 F)),
++        singularValueVector A i ^ q) =
++      ∑ i : Fin (finrank 𝕜 E), A.singularValues (i : ℕ) ^ q := by
++  simp only [singularValueVector]
++  rw [Fin.sum_univ_eq_sum_range, Fin.sum_univ_eq_sum_range]
++  apply Finset.sum_subset (Finset.range_mono (min_le_left _ _))
++  intro i hiDomain hiMin
++  have hi : finrank 𝕜 A.range ≤ i :=
++    (finrank_range_le_min A).trans
++      (Nat.le_of_not_gt (by simpa only [Finset.mem_range] using hiMin))
++  rw [A.singularValues_eq_zero_iff_le_finrank_range.mpr hi, zero_pow hq]
++
++/-- Squares of the canonical singular-value vector recover the complete
++domain-indexed singular-value energy. -/
++theorem sum_sq_singularValueVector_eq_sum_domain (A : E →ₗ[𝕜] F) :
++    (∑ i, singularValueVector A i ^ 2) =
++      ∑ i : Fin (finrank 𝕜 E), A.singularValues (i : ℕ) ^ 2 :=
++  sum_pow_singularValueVector_eq_sum_domain A 2 (by norm_num)
++
++/-- The `S₁` norm is the nuclear norm. -/
++theorem schattenNorm_one_apply (A : E →ₗ[𝕜] F) :
++    schattenNorm (𝕜 := 𝕜) (E := E) (F := F) 1 le_rfl A = nuclear A := by
++  rw [schattenNorm_apply]
++  simp only [FiniteVector.lpGauge, one_div, Real.rpow_one]
++  simp_rw [abs_of_nonneg (singularValueVector_nonneg A _)]
++  change rectangularKyFanSum (min (finrank 𝕜 E) (finrank 𝕜 F)) A =
++    rectangularKyFanSum (finrank 𝕜 E) A
++  exact (rectangularKyFanSum_eq_minFinrank_of_minFinrank_le A
++    (min_le_left _ _)).symm
++
++/-- The `S₂` norm is the existing rectangular Frobenius norm. -/
++theorem schattenNorm_two_apply (A : E →ₗ[𝕜] F) :
++    schattenNorm (𝕜 := 𝕜) (E := E) (F := F) 2 (by norm_num) A =
++      frobenius A := by
++  rw [schattenNorm_apply, frobenius_eq_sqrt_sum_sq_singularValues]
++  simp only [FiniteVector.lpGauge]
++  simp_rw [abs_of_nonneg (singularValueVector_nonneg A _), Real.rpow_two]
++  rw [sum_sq_singularValueVector_eq_sum_domain, ← Real.sqrt_eq_rpow]
++
++/-- Schatten infinity norm is the existing rectangular operator norm. -/
++noncomputable def schattenNormInf : RectangularUnitarilyInvariantNorm 𝕜 E F :=
++  opNorm
++
++@[simp] theorem schattenNormInf_apply (A : E →ₗ[𝕜] F) :
++    schattenNormInf A = ‖A.toContinuousLinearMap‖ :=
++  rfl
++
++end RectangularUnitarilyInvariantNorm
++end DavisKahanTheory
++end ForMathlib
+diff --git a/ForMathlib/Analysis/Normed/FiniteLpGauge.lean b/ForMathlib/Analysis/Normed/FiniteLpGauge.lean
+new file mode 100644
+index 0000000..8bcd7e9
+--- /dev/null
++++ b/ForMathlib/Analysis/Normed/FiniteLpGauge.lean
+@@ -0,0 +1,829 @@
++/-
++Copyright (c) 2026 Kitware, Inc. All rights reserved.
++Released under Apache 2.0 license as described in the file LICENSE.
++Authors: Jon Crall, GPT-5.6 Thinking
++-/
++import Mathlib.Analysis.MeanInequalities
++import Mathlib.Algebra.BigOperators.Fin
++
++/-!
++# Finite symmetric gauges and weak majorization
++
++This file provides the finite-vector analytic layer used by rectangular
++Schatten norms.
++
++The central objects are:
++
++* `FiniteVector.prefixSum`, the prefix sum of a vector indexed by `Fin n`;
++* `FiniteVector.WeaklyMajorized`, weak majorization of the canonical decreasing
++  nonnegative representatives;
++* `FiniteSymmetricGauge`, the algebraic interface needed by the finite
++  T-transform proof;
++* `FiniteVector.lpGauge`, the real `ℓᵖ` gauge for `1 ≤ p < ∞`;
++* monotonicity of every finite symmetric gauge, hence every `ℓᵖ` gauge, under
++  weak majorization;
++* the finite Minkowski inequality and zero-padding bridges.
++
++The weak-majorization representation deliberately records antitonicity and
++nonnegativity.  Singular values already arrive in exactly this canonical form,
++so no second sorting implementation is introduced.
++-/
++
++namespace ForMathlib
++
++open scoped BigOperators
++
++namespace FiniteVector
++
++variable {n m : ℕ}
++
++/-- Sum of the first `k` coordinates of a finite vector.  For `k ≥ n` this is
++its full sum. -/
++def prefixSum (k : ℕ) (x : Fin n → ℝ) : ℝ :=
++  ∑ i ∈ Finset.univ.filter (fun i : Fin n => (i : ℕ) < k), x i
++
++@[simp] theorem prefixSum_zero (k : ℕ) :
++    prefixSum k (0 : Fin n → ℝ) = 0 := by
++  simp [prefixSum]
++
++@[simp] theorem prefixSum_add (k : ℕ) (x y : Fin n → ℝ) :
++    prefixSum k (x + y) = prefixSum k x + prefixSum k y := by
++  simp [prefixSum, Finset.sum_add_distrib]
++
++@[simp] theorem prefixSum_smul (k : ℕ) (c : ℝ) (x : Fin n → ℝ) :
++    prefixSum k (c • x) = c * prefixSum k x := by
++  simp [prefixSum, Finset.mul_sum]
++
++/-- Prefix sums stabilize after the vector length. -/
++theorem prefixSum_eq_full_sum_of_le (x : Fin n → ℝ) {k : ℕ} (hk : n ≤ k) :
++    prefixSum k x = ∑ i, x i := by
++  unfold prefixSum
++  have hfilter : Finset.univ.filter (fun i : Fin n => (i : ℕ) < k) =
++      Finset.univ :=
++    Finset.filter_true_of_mem fun i _ => lt_of_lt_of_le i.isLt hk
++  rw [hfilter]
++
++/-- Weak majorization for vectors already presented in decreasing,
++nonnegative order. -/
++structure WeaklyMajorized (x y : Fin n → ℝ) : Prop where
++  left_antitone : Antitone x
++  right_antitone : Antitone y
++  left_nonneg : ∀ i, 0 ≤ x i
++  right_nonneg : ∀ i, 0 ≤ y i
++  prefix_le : ∀ k, prefixSum k x ≤ prefixSum k y
++
++local infix:50 " ≺w " => WeaklyMajorized
++
++namespace WeaklyMajorized
++
++/-- Weak majorization is reflexive on decreasing nonnegative vectors. -/
++theorem refl {x : Fin n → ℝ} (hxanti : Antitone x) (hx0 : ∀ i, 0 ≤ x i) :
++    x ≺w x :=
++  ⟨hxanti, hxanti, hx0, hx0, fun _ => le_rfl⟩
++
++/-- Weak majorization is transitive. -/
++theorem trans {x y z : Fin n → ℝ} (hxy : x ≺w y) (hyz : y ≺w z) :
++    x ≺w z :=
++  ⟨hxy.left_antitone, hyz.right_antitone,
++    hxy.left_nonneg, hyz.right_nonneg,
++    fun k => (hxy.prefix_le k).trans (hyz.prefix_le k)⟩
++
++/-- Coordinatewise domination implies weak majorization when both vectors are
++already decreasing and nonnegative. -/
++theorem of_pointwise {x y : Fin n → ℝ}
++    (hxanti : Antitone x) (hyanti : Antitone y)
++    (hx0 : ∀ i, 0 ≤ x i) (hy0 : ∀ i, 0 ≤ y i)
++    (hxy : ∀ i, x i ≤ y i) : x ≺w y := by
++  refine ⟨hxanti, hyanti, hx0, hy0, fun k => ?_⟩
++  exact Finset.sum_le_sum fun i _ => hxy i
++
++/-- Weak majorization is compatible with vector addition. -/
++theorem add {x₁ x₂ y₁ y₂ : Fin n → ℝ}
++    (h₁ : x₁ ≺w y₁) (h₂ : x₂ ≺w y₂) :
++    x₁ + x₂ ≺w y₁ + y₂ := by
++  refine ⟨?_, ?_, ?_, ?_, fun k => ?_⟩
++  · intro i j hij
++    exact add_le_add (h₁.left_antitone hij) (h₂.left_antitone hij)
++  · intro i j hij
++    exact add_le_add (h₁.right_antitone hij) (h₂.right_antitone hij)
++  · intro i
++    exact add_nonneg (h₁.left_nonneg i) (h₂.left_nonneg i)
++  · intro i
++    exact add_nonneg (h₁.right_nonneg i) (h₂.right_nonneg i)
++  · rw [prefixSum_add, prefixSum_add]
++    exact add_le_add (h₁.prefix_le k) (h₂.prefix_le k)
++
++/-- Nonnegative scaling preserves weak majorization. -/
++theorem nonneg_smul {x y : Fin n → ℝ} (h : x ≺w y)
++    {c : ℝ} (hc : 0 ≤ c) : c • x ≺w c • y := by
++  refine ⟨?_, ?_, ?_, ?_, fun k => ?_⟩
++  · intro i j hij
++    exact mul_le_mul_of_nonneg_left (h.left_antitone hij) hc
++  · intro i j hij
++    exact mul_le_mul_of_nonneg_left (h.right_antitone hij) hc
++  · intro i
++    exact mul_nonneg hc (h.left_nonneg i)
++  · intro i
++    exact mul_nonneg hc (h.right_nonneg i)
++  · rw [prefixSum_smul, prefixSum_smul]
++    exact mul_le_mul_of_nonneg_left (h.prefix_le k) hc
++
++/-- The full-sum consequence of weak majorization. -/
++theorem sum_le {x y : Fin n → ℝ} (h : x ≺w y) :
++    ∑ i, x i ≤ ∑ i, y i := by
++  have hfull := h.prefix_le n
++  rw [prefixSum_eq_full_sum_of_le x le_rfl,
++    prefixSum_eq_full_sum_of_le y le_rfl] at hfull
++  exact hfull
++
++end WeaklyMajorized
++
++/-- Right zero-padding from length `n` to length `n + m`. -/
++def zeroPadRight (x : Fin n → ℝ) : Fin (n + m) → ℝ :=
++  fun i => if hi : (i : ℕ) < n then x ⟨i, hi⟩ else 0
++
++@[simp] theorem zeroPadRight_left (x : Fin n → ℝ) (i : Fin n) :
++    zeroPadRight (m := m) x (Fin.castAdd m i) = x i := by
++  simp [zeroPadRight]
++
++@[simp] theorem zeroPadRight_right (x : Fin n → ℝ) (i : Fin m) :
++    zeroPadRight (m := m) x (Fin.natAdd n i) = 0 := by
++  simp [zeroPadRight]
++
++/-- Zero padding preserves every prefix sum. -/
++theorem prefixSum_zeroPadRight (k : ℕ) (x : Fin n → ℝ) :
++    prefixSum k (zeroPadRight (m := m) x) = prefixSum k x := by
++  unfold prefixSum
++  rw [Finset.sum_filter, Fin.sum_univ_add, Finset.sum_filter]
++  simp [zeroPadRight]
++
++/-- A decreasing nonnegative vector remains decreasing after appending zeros. -/
++theorem antitone_zeroPadRight {x : Fin n → ℝ}
++    (hxanti : Antitone x) (hx0 : ∀ i, 0 ≤ x i) :
++    Antitone (zeroPadRight (m := m) x) := by
++  intro i j hij
++  unfold zeroPadRight
++  split_ifs with hi hj
++  · apply hxanti
++    exact Fin.le_def.mpr (Fin.le_def.mp hij)
++  · exact hx0 _
++  · exfalso
++    have hijv : (i : ℕ) ≤ (j : ℕ) := Fin.le_def.mp hij
++    omega
++  · exact le_rfl
++
++/-- Zero padding preserves nonnegativity. -/
++theorem zeroPadRight_nonneg {x : Fin n → ℝ} (hx0 : ∀ i, 0 ≤ x i) :
++    ∀ i, 0 ≤ zeroPadRight (m := m) x i := by
++  intro i
++  unfold zeroPadRight
++  split_ifs
++  · exact hx0 _
++  · exact le_rfl
++
++/-- Appending a common zero tail preserves weak majorization. -/
++theorem WeaklyMajorized.zeroPadRight {x y : Fin n → ℝ}
++    (h : WeaklyMajorized x y) :
++    WeaklyMajorized (zeroPadRight (m := m) x)
++      (zeroPadRight (m := m) y) := by
++  exact ⟨antitone_zeroPadRight h.left_antitone h.left_nonneg,
++    antitone_zeroPadRight h.right_antitone h.right_nonneg,
++    zeroPadRight_nonneg h.left_nonneg,
++    zeroPadRight_nonneg h.right_nonneg, fun k => by
++      simpa only [prefixSum_zeroPadRight] using h.prefix_le k⟩
++
++end FiniteVector
++
++/-- Algebraic interface for a finite symmetric gauge.  These are precisely the
++properties used by the T-transform proof of weak-majorization monotonicity. -/
++structure FiniteSymmetricGauge (n : ℕ) where
++  toFun : (Fin n → ℝ) → ℝ
++  add_le' : ∀ x y, toFun (x + y) ≤ toFun x + toFun y
++  real_smul' : ∀ c x, toFun (c • x) = |c| * toFun x
++  perm' : ∀ x (π : Equiv.Perm (Fin n)), toFun (x ∘ π) = toFun x
++  neg_single' : ∀ x j, toFun (Function.update x j (-(x j))) = toFun x
++
++namespace FiniteSymmetricGauge
++
++variable {n : ℕ}
++
++instance : CoeFun (FiniteSymmetricGauge n) fun _ => (Fin n → ℝ) → ℝ :=
++  ⟨FiniteSymmetricGauge.toFun⟩
++
++variable (Φ : FiniteSymmetricGauge n)
++
++theorem add_le (x y : Fin n → ℝ) : Φ (x + y) ≤ Φ x + Φ y :=
++  Φ.add_le' x y
++
++theorem real_smul (c : ℝ) (x : Fin n → ℝ) :
++    Φ (c • x) = |c| * Φ x :=
++  Φ.real_smul' c x
++
++theorem perm (x : Fin n → ℝ) (π : Equiv.Perm (Fin n)) :
++    Φ (x ∘ π) = Φ x :=
++  Φ.perm' x π
++
++theorem neg_single (x : Fin n → ℝ) (j : Fin n) :
++    Φ (Function.update x j (-(x j))) = Φ x :=
++  Φ.neg_single' x j
++
++/-- Shrinking one coordinate of `y` (in absolute value) does not increase the
++gauge: `update y j t` with `|t| ≤ y j` is a convex combination of `y` and its
++`j`-th sign flip. -/
++theorem update_le {y : Fin n → ℝ}
++    {j : Fin n} {t : ℝ} (ht : |t| ≤ y j) :
++    Φ (Function.update y j t) ≤ Φ y := by
++  have hyj : 0 ≤ y j := le_trans (abs_nonneg t) ht
++  rcases hyj.eq_or_lt with h0 | hpos
++  · -- `y j = 0` forces `t = 0`: the update is trivial.
++    have ht0 : t = 0 := by
++      have h1 : |t| ≤ 0 := by rw [h0]; exact ht
++      exact abs_eq_zero.mp (le_antisymm h1 (abs_nonneg t))
++    have hupd : Function.update y j t = y := by
++      funext i
++      rcases eq_or_ne i j with rfl | hij
++      · rw [Function.update_self, ht0, ← h0]
++      · rw [Function.update_of_ne hij]
++    rw [hupd]
++  · set c₁ : ℝ := (y j + t) / (2 * y j) with hc₁
++    set c₂ : ℝ := (y j - t) / (2 * y j) with hc₂
++    obtain ⟨ht₁, ht₂⟩ := abs_le.mp ht
++    have h2yj : 0 < 2 * y j := by linarith
++    have hyj0 : (2 : ℝ) * y j ≠ 0 := ne_of_gt h2yj
++    have hc₁0 : 0 ≤ c₁ := div_nonneg (by linarith) h2yj.le
++    have hc₂0 : 0 ≤ c₂ := div_nonneg (by linarith) h2yj.le
++    have hsum : c₁ + c₂ = 1 := by
++      rw [hc₁, hc₂]
++      field_simp
++      ring
++    have hdecomp : Function.update y j t
++        = c₁ • y + c₂ • Function.update y j (-(y j)) := by
++      funext i
++      simp only [Pi.add_apply, Pi.smul_apply, smul_eq_mul]
++      rcases eq_or_ne i j with rfl | hij
++      · rw [Function.update_self, Function.update_self, hc₁, hc₂]
++        field_simp
++        ring
++      · rw [Function.update_of_ne hij, Function.update_of_ne hij, ← add_mul,
++          hsum, one_mul]
++    calc Φ (Function.update y j t)
++        = Φ (c₁ • y + c₂ • Function.update y j (-(y j))) := by
++          rw [hdecomp]
++      _ ≤ Φ (c₁ • y) + Φ (c₂ • Function.update y j (-(y j))) :=
++          Φ.add_le _ _
++      _ = c₁ * Φ y
++          + c₂ * Φ (Function.update y j (-(y j))) := by
++          rw [Φ.real_smul, Φ.real_smul, abs_of_nonneg hc₁0,
++            abs_of_nonneg hc₂0]
++      _ = c₁ * Φ y + c₂ * Φ y := by
++          rw [Φ.neg_single]
++      _ = Φ y := by
++          rw [← add_mul, hsum, one_mul]
++
++/-- **Coordinatewise monotonicity of the gauge** on nonnegative vectors. -/
++theorem mono {x y : Fin n → ℝ}
++    (hx0 : ∀ i, 0 ≤ x i) (hxy : ∀ i, x i ≤ y i) :
++    Φ x ≤ Φ y := by
++  -- Induct on the number of coordinates where `x` and `y` disagree.
++  have H : ∀ d (y : Fin n → ℝ),
++      (Finset.univ.filter fun i => x i ≠ y i).card ≤ d → (∀ i, x i ≤ y i) →
++      Φ x ≤ Φ y := by
++    intro d
++    induction d with
++    | zero =>
++      intro y hcard _
++      have hemp : (Finset.univ.filter fun i => x i ≠ y i) = ∅ :=
++        Finset.card_eq_zero.mp (Nat.le_zero.mp hcard)
++      have hxy_eq : x = y := funext fun i => by
++        by_contra hne
++        have hi : i ∈ Finset.univ.filter fun i => x i ≠ y i :=
++          Finset.mem_filter.mpr ⟨Finset.mem_univ _, hne⟩
++        rw [hemp] at hi
++        simp at hi
++      rw [hxy_eq]
++    | succ d ih =>
++      intro y hcard hxy
++      by_cases hx_eq : x = y
++      · rw [hx_eq]
++      · have hne : (Finset.univ.filter fun i => x i ≠ y i).Nonempty := by
++          rw [Finset.nonempty_iff_ne_empty]
++          intro hemp
++          refine hx_eq (funext fun i => ?_)
++          by_contra hne
++          have hi : i ∈ Finset.univ.filter fun i => x i ≠ y i :=
++            Finset.mem_filter.mpr ⟨Finset.mem_univ _, hne⟩
++          rw [hemp] at hi
++          simp at hi
++        obtain ⟨j, hj⟩ := hne
++        set y' := Function.update y j (x j) with hy'def
++        have hstep : Φ y' ≤ Φ y := by
++          refine Φ.update_le ?_
++          rw [abs_of_nonneg (hx0 j)]
++          exact hxy j
++        have hxy' : ∀ i, x i ≤ y' i := fun i => by
++          rcases eq_or_ne i j with rfl | hij
++          · rw [hy'def, Function.update_self]
++          · rw [hy'def, Function.update_of_ne hij]
++            exact hxy i
++        have hsub : (Finset.univ.filter fun i => x i ≠ y' i)
++            ⊆ (Finset.univ.filter fun i => x i ≠ y i).erase j := by
++          intro i hi
++          obtain ⟨-, hine⟩ := Finset.mem_filter.mp hi
++          have hij : i ≠ j := by
++            rintro rfl
++            exact hine (by rw [hy'def, Function.update_self])
++          refine Finset.mem_erase.mpr
++            ⟨hij, Finset.mem_filter.mpr ⟨Finset.mem_univ _, ?_⟩⟩
++          rw [hy'def, Function.update_of_ne hij] at hine
++          exact hine
++        have hcard' : (Finset.univ.filter fun i => x i ≠ y' i).card ≤ d := by
++          have h1 := Finset.card_le_card hsub
++          have h2 := Finset.card_erase_of_mem hj
++          omega
++        exact le_trans (ih y' hcard' hxy') hstep
++  exact H _ y le_rfl hxy
++
++/-! ### The T-transform descent -/
++
++/-- **The T-transform descent on the gauge** — the engine of Fan dominance.
++If `z` is antitone and nonnegative, `y` is nonnegative, and every prefix sum
++of `z` is dominated by the corresponding prefix sum of `y`, then
++`Φ_N(z) ≤ Φ_N(y)`.
++
++No total-sum equality is assumed, no majorization completion and no
++Hardy–Littlewood–Pólya theorem is used: each descent step averages `y` with a
++transposition of itself, which costs one triangle inequality, one
++homogeneity, and one swap invariance of the gauge. -/
++theorem le_of_prefixSum_le
++    {z y : Fin n → ℝ} (hz_anti : Antitone z) (hz0 : ∀ i, 0 ≤ z i)
++    (hy0 : ∀ i, 0 ≤ y i)
++    (hpre : ∀ m : ℕ,
++      ∑ i ∈ Finset.univ.filter fun i : Fin n => (i : ℕ) < m, z i
++        ≤ ∑ i ∈ Finset.univ.filter fun i : Fin n => (i : ℕ) < m, y i) :
++    Φ z ≤ Φ y := by
++  -- Induct on the number of coordinates where `z` and `y` disagree.
++  have H : ∀ d (y : Fin n → ℝ),
++      (Finset.univ.filter fun i => z i ≠ y i).card ≤ d → (∀ i, 0 ≤ y i) →
++      (∀ m : ℕ,
++        ∑ i ∈ Finset.univ.filter fun i : Fin n => (i : ℕ) < m, z i
++          ≤ ∑ i ∈ Finset.univ.filter fun i : Fin n => (i : ℕ) < m, y i) →
++      Φ z ≤ Φ y := by
++    intro d
++    induction d with
++    | zero =>
++      intro y hcard _ _
++      have hemp : (Finset.univ.filter fun i => z i ≠ y i) = ∅ :=
++        Finset.card_eq_zero.mp (Nat.le_zero.mp hcard)
++      have hzy : z = y := funext fun i => by
++        by_contra hne
++        have hi : i ∈ Finset.univ.filter fun i => z i ≠ y i :=
++          Finset.mem_filter.mpr ⟨Finset.mem_univ _, hne⟩
++        rw [hemp] at hi
++        simp at hi
++      rw [hzy]
++    | succ d ih =>
++      intro y hcard hy0 hpre
++      by_cases hall : ∀ i, z i ≤ y i
++      · exact Φ.mono hz0 hall
++      push Not at hall
++      -- `l`: the least index where `y` drops below `z`.
++      have hSne : (Finset.univ.filter fun i : Fin n => y i < z i).Nonempty :=
++        hall.imp fun i hi => Finset.mem_filter.mpr ⟨Finset.mem_univ _, hi⟩
++      set l := (Finset.univ.filter fun i : Fin n => y i < z i).min' hSne
++        with hldef
++      have hlS : y l < z l :=
++        (Finset.mem_filter.mp
++          ((Finset.univ.filter fun i : Fin n => y i < z i).min'_mem hSne)).2
++      have hlmin : ∀ i, i < l → z i ≤ y i := by
++        intro i hil
++        by_contra hzy
++        push Not at hzy
++        exact absurd
++          (Finset.min'_le _ i (Finset.mem_filter.mpr ⟨Finset.mem_univ _, hzy⟩))
++          (not_le.mpr hil)
++      -- Prefix domination at `l + 1` produces `j < l` with `z j < y j`.
++      have hexj : ∃ j, j < l ∧ z j < y j := by
++        by_contra h
++        push Not at h
++        have heq : ∀ i, i < l → z i = y i := fun i hi =>
++          le_antisymm (hlmin i hi) (h i hi)
++        have hp := hpre ((l : ℕ) + 1)
++        have hset : (Finset.univ.filter fun i : Fin n => (i : ℕ) < (l : ℕ) + 1)
++            = insert l (Finset.univ.filter fun i : Fin n => (i : ℕ) < (l : ℕ))
++            := by
++          ext i
++          simp only [Finset.mem_filter, Finset.mem_univ, true_and,
++            Finset.mem_insert]
++          constructor
++          · intro hi
++            rcases eq_or_lt_of_le (Nat.lt_succ_iff.mp hi) with heq' | hlt
++            · exact Or.inl (Fin.ext heq')
++            · exact Or.inr hlt
++          · rintro (rfl | hi)
++            · omega
++            · omega
++        have hlnot :
++            l ∉ Finset.univ.filter fun i : Fin n => (i : ℕ) < (l : ℕ) := by
++          simp
++        rw [hset, Finset.sum_insert hlnot, Finset.sum_insert hlnot] at hp
++        have hsum_eq :
++            ∑ i ∈ Finset.univ.filter fun i : Fin n => (i : ℕ) < (l : ℕ), z i
++              = ∑ i ∈ Finset.univ.filter fun i : Fin n => (i : ℕ) < (l : ℕ),
++                  y i := by
++          refine Finset.sum_congr rfl fun i hi => heq i ?_
++          exact Fin.lt_def.mpr (Finset.mem_filter.mp hi).2
++        rw [hsum_eq] at hp
++        linarith
++      obtain ⟨j, hjl, hzj⟩ := hexj
++      have hjl_ne : j ≠ l := ne_of_lt hjl
++      have hjl_nat : (j : ℕ) < (l : ℕ) := Fin.lt_def.mp hjl
++      have hzlj : z l ≤ z j := hz_anti hjl.le
++      have hylj : y l < y j := by linarith
++      -- The transform: move `δ` from coordinate `j` to coordinate `l`.
++      set δ : ℝ := min (y j - z j) (z l - y l) with hδdef
++      have hδpos : 0 < δ := lt_min (by linarith) (by linarith)
++      have hδ₁ : δ ≤ y j - z j := min_le_left _ _
++      have hδ₂ : δ ≤ z l - y l := min_le_right _ _
++      have hδlt : δ < y j - y l := lt_of_le_of_lt hδ₁ (by linarith)
++      have hyjl_pos : 0 < y j - y l := by linarith
++      set c₂ : ℝ := δ / (y j - y l) with hc₂def
++      have hc₂pos : 0 < c₂ := div_pos hδpos hyjl_pos
++      have hc₂lt : c₂ < 1 := (div_lt_one hyjl_pos).mpr hδlt
++      have hc₂mul : c₂ * (y j - y l) = δ :=
++        div_mul_cancel₀ δ (ne_of_gt hyjl_pos)
++      set y' : Fin n → ℝ :=
++        Function.update (Function.update y j (y j - δ)) l (y l + δ)
++        with hy'def
++      have hy'j : y' j = y j - δ := by
++        rw [hy'def, Function.update_of_ne hjl_ne, Function.update_self]
++      have hy'l : y' l = y l + δ := by rw [hy'def, Function.update_self]
++      have hy'i : ∀ i, i ≠ j → i ≠ l → y' i = y i := fun i hij hil => by
++        rw [hy'def, Function.update_of_ne hil, Function.update_of_ne hij]
++      -- (i) `y'` is a convex combination of `y` and its `(j l)`-swap.
++      have hcomb : y' = (1 - c₂) • y + c₂ • (y ∘ Equiv.swap j l) := by
++        funext i
++        simp only [Pi.add_apply, Pi.smul_apply, smul_eq_mul,
++          Function.comp_apply]
++        rcases eq_or_ne i j with rfl | hij
++        · rw [hy'j, Equiv.swap_apply_left]
++          linear_combination hc₂mul
++        rcases eq_or_ne i l with rfl | hil
++        · rw [hy'l, Equiv.swap_apply_right]
++          linear_combination -hc₂mul
++        · rw [hy'i i hij hil, Equiv.swap_apply_of_ne_of_ne hij hil]
++          ring
++      -- (ii) `y'` stays nonnegative.
++      have hy'0 : ∀ i, 0 ≤ y' i := by
++        intro i
++        rcases eq_or_ne i j with heq | hij
++        · rw [heq, hy'j]
++          linarith [hz0 j]
++        rcases eq_or_ne i l with heq | hil
++        · rw [heq, hy'l]
++          linarith [hy0 l]
++        · rw [hy'i i hij hil]
++          exact hy0 i
++      -- (iii) prefix domination survives the transform.
++      have hpre' : ∀ m : ℕ,
++          ∑ i ∈ Finset.univ.filter fun i : Fin n => (i : ℕ) < m, z i
++            ≤ ∑ i ∈ Finset.univ.filter fun i : Fin n => (i : ℕ) < m, y' i := by
++        intro m
++        rcases le_or_gt m (j : ℕ) with hmj | hmj
++        · -- Neither `j` nor `l` lies in the prefix: sums unchanged.
++          have hcong : ∀ i ∈ (Finset.univ.filter
++              fun i : Fin n => (i : ℕ) < m), y' i = y i := by
++            intro i hi
++            have hivm : (i : ℕ) < m := (Finset.mem_filter.mp hi).2
++            have hij : i ≠ j := fun h => by subst h; omega
++            have hil : i ≠ l := fun h => by subst h; omega
++            exact hy'i i hij hil
++          rw [Finset.sum_congr rfl hcong]
++          exact hpre m
++        rcases le_or_gt m (l : ℕ) with hml | hml
++        · -- `j` in, `l` out: the prefix of `y'` lost exactly `δ`, but the
++          -- prefix gap was already at least `y j − z j ≥ δ`.
++          have hcong : ∀ i ∈ (Finset.univ.filter
++              fun i : Fin n => (i : ℕ) < m),
++              y' i = Function.update y j (y j - δ) i := by
++            intro i hi
++            have hivm : (i : ℕ) < m := (Finset.mem_filter.mp hi).2
++            have hil : i ≠ l := fun h => by subst h; omega
++            rw [hy'def, Function.update_of_ne hil]
++          have hjmem : j ∈ Finset.univ.filter
++              fun i : Fin n => (i : ℕ) < m :=
++            Finset.mem_filter.mpr ⟨Finset.mem_univ _, hmj⟩
++          rw [Finset.sum_congr rfl hcong, Finset.sum_update_of_mem hjmem]
++          have hysplit : ∑ i ∈ Finset.univ.filter
++                fun i : Fin n => (i : ℕ) < m, y i
++              = y j + ∑ i ∈ (Finset.univ.filter
++                  fun i : Fin n => (i : ℕ) < m) \ {j}, y i := by
++            rw [← Finset.erase_eq]
++            exact (Finset.add_sum_erase _ y hjmem).symm
++          have hterm : y j - z j ≤ ∑ i ∈ Finset.univ.filter
++              (fun i : Fin n => (i : ℕ) < m), (y i - z i) := by
++            refine Finset.single_le_sum (f := fun i => y i - z i) ?_ hjmem
++            intro i hi
++            have hivm : (i : ℕ) < m := (Finset.mem_filter.mp hi).2
++            have hil : i < l := Fin.lt_def.mpr (by omega)
++            linarith [hlmin i hil]
++          rw [Finset.sum_sub_distrib] at hterm
++          linarith [hpre m]
++        · -- Both `j` and `l` in the prefix: the transform is sum-preserving.
++          have hjmem : j ∈ Finset.univ.filter
++              fun i : Fin n => (i : ℕ) < m :=
++            Finset.mem_filter.mpr ⟨Finset.mem_univ _, by omega⟩
++          have hlmem : l ∈ Finset.univ.filter
++              fun i : Fin n => (i : ℕ) < m :=
++            Finset.mem_filter.mpr ⟨Finset.mem_univ _, hml⟩
++          have hjmem' : j ∈ (Finset.univ.filter
++              fun i : Fin n => (i : ℕ) < m) \ {l} :=
++            Finset.mem_sdiff.mpr ⟨hjmem, by simp [hjl_ne]⟩
++          have hEq : ∑ i ∈ Finset.univ.filter
++                fun i : Fin n => (i : ℕ) < m, y' i
++              = ∑ i ∈ Finset.univ.filter
++                fun i : Fin n => (i : ℕ) < m, y i := by
++            have h1 : ∑ i ∈ Finset.univ.filter
++                  fun i : Fin n => (i : ℕ) < m, y' i
++                = (y l + δ) + ∑ i ∈ (Finset.univ.filter
++                    fun i : Fin n => (i : ℕ) < m) \ {l},
++                    Function.update y j (y j - δ) i := by
++              rw [hy'def]
++              exact Finset.sum_update_of_mem hlmem _ _
++            have h2 : ∑ i ∈ (Finset.univ.filter
++                  fun i : Fin n => (i : ℕ) < m) \ {l},
++                  Function.update y j (y j - δ) i
++                = (y j - δ) + ∑ i ∈ ((Finset.univ.filter
++                    fun i : Fin n => (i : ℕ) < m) \ {l}) \ {j}, y i :=
++              Finset.sum_update_of_mem hjmem' _ _
++            have h3 : ∑ i ∈ Finset.univ.filter
++                  fun i : Fin n => (i : ℕ) < m, y i
++                = y l + ∑ i ∈ (Finset.univ.filter
++                    fun i : Fin n => (i : ℕ) < m) \ {l}, y i := by
++              rw [← Finset.erase_eq]
++              exact (Finset.add_sum_erase _ y hlmem).symm
++            have h4 : ∑ i ∈ (Finset.univ.filter
++                  fun i : Fin n => (i : ℕ) < m) \ {l}, y i
++                = y j + ∑ i ∈ ((Finset.univ.filter
++                    fun i : Fin n => (i : ℕ) < m) \ {l}) \ {j}, y i := by
++              rw [← Finset.erase_eq, ← Finset.erase_eq]
++              exact (Finset.add_sum_erase _ y (by rwa [Finset.erase_eq])).symm
++            rw [h1, h2, h3, h4]
++            ring
++          rw [hEq]
++          exact hpre m
++      -- (iv) the transform kills at least one disagreement.
++      have hsub : (Finset.univ.filter fun i => z i ≠ y' i)
++          ⊆ Finset.univ.filter fun i => z i ≠ y i := by
++        intro i hi
++        obtain ⟨-, hine⟩ := Finset.mem_filter.mp hi
++        refine Finset.mem_filter.mpr ⟨Finset.mem_univ _, fun heq => ?_⟩
++        have hij : i ≠ j := by
++          rintro rfl
++          exact absurd heq hzj.ne
++        have hil : i ≠ l := by
++          rintro rfl
++          exact absurd heq hlS.ne'
++        exact hine (by rw [hy'i i hij hil]; exact heq)
++      have hwitness : ∃ w ∈ Finset.univ.filter fun i => z i ≠ y i,
++          w ∉ Finset.univ.filter fun i => z i ≠ y' i := by
++        rcases min_choice (y j - z j) (z l - y l) with hmin | hmin
++        · refine ⟨j, Finset.mem_filter.mpr ⟨Finset.mem_univ _, hzj.ne⟩, ?_⟩
++          have hj' : y' j = z j := by
++            rw [hy'j, hδdef, hmin]
++            ring
++          simp [hj']
++        · refine ⟨l, Finset.mem_filter.mpr ⟨Finset.mem_univ _, hlS.ne'⟩, ?_⟩
++          have hl' : y' l = z l := by
++            rw [hy'l, hδdef, hmin]
++            ring
++          simp [hl']
++      have hcard' : (Finset.univ.filter fun i => z i ≠ y' i).card ≤ d := by
++        have hlt := Finset.card_lt_card
++          ((Finset.ssubset_iff_of_subset hsub).mpr hwitness)
++        omega
++      -- (v) one descent step does not increase the gauge; recurse.
++      have hstep : Φ y' ≤ Φ y := by
++        rw [hcomb]
++        calc Φ ((1 - c₂) • y + c₂ • (y ∘ Equiv.swap j l))
++            ≤ Φ ((1 - c₂) • y)
++              + Φ (c₂ • (y ∘ Equiv.swap j l)) :=
++              Φ.add_le _ _
++          _ = (1 - c₂) * Φ y + c₂ * Φ y := by
++              rw [Φ.real_smul, Φ.real_smul,
++                abs_of_nonneg (by linarith : (0:ℝ) ≤ 1 - c₂),
++                abs_of_nonneg hc₂pos.le, Φ.perm]
++          _ = Φ y := by ring
++      exact le_trans (ih y' hcard' hy'0 hpre') hstep
++  exact H _ y le_rfl hy0 hpre
++
++
++/-- Every finite symmetric gauge is monotone under weak majorization. -/
++theorem mono_weaklyMajorized {x y : Fin n → ℝ}
++    (h : FiniteVector.WeaklyMajorized x y) : Φ x ≤ Φ y :=
++  Φ.le_of_prefixSum_le h.left_antitone h.left_nonneg h.right_nonneg h.prefix_le
++
++end FiniteSymmetricGauge
++
++namespace FiniteVector
++
++variable {n m : ℕ}
++
++/-- The finite real `ℓᵖ` gauge. -/
++noncomputable def lpGauge (p : ℝ) (x : Fin n → ℝ) : ℝ :=
++  (∑ i, |x i| ^ p) ^ (1 / p)
++
++theorem lpGauge_nonneg (p : ℝ) (x : Fin n → ℝ) :
++    0 ≤ lpGauge p x := by
++  exact Real.rpow_nonneg (Finset.sum_nonneg fun _ _ => Real.rpow_nonneg (abs_nonneg _) _) _
++
++@[simp] theorem lpGauge_zero {p : ℝ} (hp : 0 < p) :
++    lpGauge p (0 : Fin n → ℝ) = 0 := by
++  simp [lpGauge, Real.zero_rpow hp.ne', one_div_ne_zero hp.ne']
++
++/-- The finite `ℓᵖ` gauge vanishes exactly on the zero vector. -/
++theorem lpGauge_eq_zero_iff {p : ℝ} (hp : 0 < p) (x : Fin n → ℝ) :
++    lpGauge p x = 0 ↔ x = 0 := by
++  have hsum0 : 0 ≤ ∑ i, |x i| ^ p :=
++    Finset.sum_nonneg fun _ _ => Real.rpow_nonneg (abs_nonneg _) _
++  rw [lpGauge, Real.rpow_eq_zero_iff_of_nonneg hsum0]
++  constructor
++  · rintro ⟨hsum, -⟩
++    funext i
++    have hi : |x i| ^ p = 0 :=
++      (Finset.sum_eq_zero_iff_of_nonneg
++        (fun j _ => Real.rpow_nonneg (abs_nonneg (x j)) _)).mp hsum
++          i (Finset.mem_univ i)
++    have habs : |x i| = 0 :=
++      ((Real.rpow_eq_zero_iff_of_nonneg (abs_nonneg (x i))).mp hi).1
++    exact abs_eq_zero.mp habs
++  · rintro rfl
++    constructor
++    · simp [Real.zero_rpow hp.ne']
++    · exact one_div_ne_zero hp.ne'
++
++/-- Positive homogeneity of the finite `ℓᵖ` gauge. -/
++theorem lpGauge_smul {p : ℝ} (hp : 0 < p) (c : ℝ) (x : Fin n → ℝ) :
++    lpGauge p (c • x) = |c| * lpGauge p x := by
++  by_cases hc : c = 0
++  · subst c
++    simp [lpGauge_zero (n := n) hp]
++  have habspos : 0 < |c| := abs_pos.mpr hc
++  have hsum : (∑ i, |(c • x) i| ^ p) =
++      |c| ^ p * ∑ i, |x i| ^ p := by
++    rw [Finset.mul_sum]
++    apply Finset.sum_congr rfl
++    intro i _
++    rw [Pi.smul_apply, smul_eq_mul, abs_mul, Real.mul_rpow]
++    exacts [abs_nonneg c, abs_nonneg (x i)]
++  unfold lpGauge
++  rw [hsum, Real.mul_rpow]
++  · rw [← Real.rpow_mul]
++    have hpinv : p * (1 / p) = 1 := by
++      field_simp
++    rw [hpinv, Real.rpow_one]
++  · exact Real.rpow_nonneg (abs_nonneg c) p
++  · exact Finset.sum_nonneg fun _ _ => Real.rpow_nonneg (abs_nonneg _) _
++
++/-- Permutation invariance of the finite `ℓᵖ` gauge. -/
++theorem lpGauge_perm (p : ℝ) (x : Fin n → ℝ) (π : Equiv.Perm (Fin n)) :
++    lpGauge p (x ∘ π) = lpGauge p x := by
++  unfold lpGauge
++  congr 1
++  exact π.sum_comp (fun i => |x i| ^ p)
++
++/-- A single coordinate sign flip does not change the finite `ℓᵖ` gauge. -/
++theorem lpGauge_neg_single (p : ℝ) (x : Fin n → ℝ) (j : Fin n) :
++    lpGauge p (Function.update x j (-(x j))) = lpGauge p x := by
++  unfold lpGauge
++  congr 1
++  apply Finset.sum_congr rfl
++  intro i _
++  rcases eq_or_ne i j with rfl | hij
++  · simp
++  · rw [Function.update_of_ne hij]
++
++/-- Finite-dimensional Minkowski inequality. -/
++theorem lpGauge_add_le {p : ℝ} (hp : 1 ≤ p) (x y : Fin n → ℝ) :
++    lpGauge p (x + y) ≤ lpGauge p x + lpGauge p y := by
++  simpa [lpGauge] using Real.Lp_add_le Finset.univ x y hp
++
++/-- The `ℓᵖ` gauge as a finite symmetric gauge. -/
++noncomputable def lpSymmetricGauge (p : ℝ) (hp : 1 ≤ p) :
++    FiniteSymmetricGauge n where
++  toFun := lpGauge p
++  add_le' := lpGauge_add_le hp
++  real_smul' := lpGauge_smul (zero_lt_one.trans_le hp)
++  perm' := lpGauge_perm p
++  neg_single' := lpGauge_neg_single p
++
++/-- `ℓᵖ` gauge monotonicity under weak majorization. -/
++theorem lpGauge_mono_weaklyMajorized {p : ℝ} (hp : 1 ≤ p)
++    {x y : Fin n → ℝ} (h : WeaklyMajorized x y) :
++    lpGauge p x ≤ lpGauge p y :=
++  (lpSymmetricGauge (n := n) p hp).mono_weaklyMajorized h
++
++/-- Coordinatewise monotonicity of the `ℓᵖ` gauge on nonnegative vectors. -/
++theorem lpGauge_mono {p : ℝ} (hp : 1 ≤ p) {x y : Fin n → ℝ}
++    (hx0 : ∀ i, 0 ≤ x i) (hxy : ∀ i, x i ≤ y i) :
++    lpGauge p x ≤ lpGauge p y :=
++  (lpSymmetricGauge (n := n) p hp).mono hx0 hxy
++
++/-- Right zero-padding does not change the finite `ℓᵖ` gauge. -/
++theorem lpGauge_zeroPadRight (p : ℝ) (x : Fin n → ℝ) :
++    lpGauge p (zeroPadRight (m := m) x) = lpGauge p x := by
++  unfold lpGauge zeroPadRight
++  rw [Fin.sum_univ_add]
++  simp
++
++/-- The finite `ℓ∞` gauge. -/
++noncomputable def linftyGauge (x : Fin n → ℝ) : ℝ :=
++  ⨆ i, |x i|
++
++theorem linftyGauge_nonneg (x : Fin n → ℝ) : 0 ≤ linftyGauge x := by
++  rcases n with _ | n
++  · simp [linftyGauge]
++  · exact (abs_nonneg (x 0)).trans
++      (le_ciSup (Finite.bddAbove_range (fun j : Fin (n + 1) => |x j|)) 0)
++
++@[simp] theorem linftyGauge_zero :
++    linftyGauge (0 : Fin n → ℝ) = 0 := by
++  simp [linftyGauge]
++
++/-- Coordinatewise domination of absolute values implies `ℓ∞` domination. -/
++theorem linftyGauge_mono {x y : Fin n → ℝ}
++    (hxy : ∀ i, |x i| ≤ |y i|) : linftyGauge x ≤ linftyGauge y := by
++  unfold linftyGauge
++  exact ciSup_mono (Finite.bddAbove_range (fun i => |x i|)) hxy
++
++/-- Triangle inequality for the finite `ℓ∞` gauge. -/
++theorem linftyGauge_add_le (x y : Fin n → ℝ) :
++    linftyGauge (x + y) ≤ linftyGauge x + linftyGauge y := by
++  unfold linftyGauge
++  refine ciSup_le fun i => ?_
++  exact (abs_add (x i) (y i)).trans
++    (add_le_add (le_ciSup (Finite.bddAbove_range (fun j => |x j|)) i)
++      (le_ciSup (Finite.bddAbove_range (fun j => |y j|)) i))
++
++/-- Positive homogeneity of the finite `ℓ∞` gauge. -/
++theorem linftyGauge_smul (c : ℝ) (x : Fin n → ℝ) :
++    linftyGauge (c • x) = |c| * linftyGauge x := by
++  unfold linftyGauge
++  by_cases hc : c = 0
++  · subst c
++    simp
++  rw [← ciSup_const_mul (abs_nonneg c)]
++  apply congrArg iSup
++  funext i
++  simp [abs_mul, Pi.smul_apply, smul_eq_mul]
++
++/-- Permutation invariance of the finite `ℓ∞` gauge. -/
++theorem linftyGauge_perm (x : Fin n → ℝ) (π : Equiv.Perm (Fin n)) :
++    linftyGauge (x ∘ π) = linftyGauge x := by
++  unfold linftyGauge
++  apply le_antisymm
++  · refine ciSup_le fun i => ?_
++    exact le_ciSup (Finite.bddAbove_range (fun j => |x j|)) (π i)
++  · refine ciSup_le fun i => ?_
++    simpa using le_ciSup (Finite.bddAbove_range (fun j => |x (π j)|)) (π.symm i)
++
++/-- A single sign flip does not change the finite `ℓ∞` gauge. -/
++theorem linftyGauge_neg_single (x : Fin n → ℝ) (j : Fin n) :
++    linftyGauge (Function.update x j (-(x j))) = linftyGauge x := by
++  unfold linftyGauge
++  congr 1
++  funext i
++  rcases eq_or_ne i j with rfl | hij <;> simp [hij]
++
++/-- The `ℓ∞` gauge as a finite symmetric gauge. -/
++noncomputable def linftySymmetricGauge : FiniteSymmetricGauge n where
++  toFun := linftyGauge
++  add_le' := linftyGauge_add_le
++  real_smul' := linftyGauge_smul
++  perm' := linftyGauge_perm
++  neg_single' := linftyGauge_neg_single
++
++/-- `ℓ∞` gauge monotonicity under weak majorization. -/
++theorem linftyGauge_mono_weaklyMajorized {x y : Fin n → ℝ}
++    (h : WeaklyMajorized x y) : linftyGauge x ≤ linftyGauge y :=
++  (linftySymmetricGauge (n := n)).mono_weaklyMajorized h
++
++/-- Right zero-padding does not change the finite `ℓ∞` gauge. -/
++theorem linftyGauge_zeroPadRight (x : Fin n → ℝ) :
++    linftyGauge (zeroPadRight (m := m) x) = linftyGauge x := by
++  apply le_antisymm
++  · unfold linftyGauge
++    refine ciSup_le fun i => ?_
++    refine Fin.addCases (motive := fun i =>
++      |zeroPadRight (m := m) x i| ≤ linftyGauge x) ?_ ?_ i
++    · intro j
++      simpa using le_ciSup (Finite.bddAbove_range (fun q => |x q|)) j
++    · intro j
++      simp [linftyGauge_nonneg]
++  · unfold linftyGauge
++    refine ciSup_le fun i => ?_
++    simpa using le_ciSup
++      (Finite.bddAbove_range (fun q => |zeroPadRight (m := m) x q|))
++      (Fin.castAdd m i)
++
++end FiniteVector
++end ForMathlib
+diff --git a/dev/rectangular-schatten-compiler-handoff-2026-07-20.md b/dev/rectangular-schatten-compiler-handoff-2026-07-20.md
+new file mode 100644
+index 0000000..fbf402f
+--- /dev/null
++++ b/dev/rectangular-schatten-compiler-handoff-2026-07-20.md
+@@ -0,0 +1,259 @@
++# Rectangular Schatten compiler handoff — rebased on 48b436e
++
++## Exact base
++
++This candidate batch is rebased on the user-supplied archive at
++
++`48b436e512f535cb360958945b52a8aca3c76b20`
++
++The archive had a clean detached working tree with `main`, `origin/main`, and
++`origin/HEAD` at that commit.  The Stage 1 compiler repairs are present.  The
++new Schatten payload does not modify any of the seven files changed by commit
++`48b436e`; the only shared integration surface is `ForMathlib.lean`, where the
++new imports were merged while retaining both
++`SelfAdjointFunctionalCalculus` and `MoorePenroseInverse`.
++
++## Response to the Stage 1 compiler report
++
++The functional-calculus and Moore--Penrose repairs preserve the intended
++mathematics.  In particular, retaining the explicit symmetry witness and the
++one-sided identity `A⁺ A = I` under injectivity is correct; no `A A⁺ = I`
++claim should be added without surjectivity.
++
++The repaired proof of `principalAngles_orthogonal` is also mathematically the
++right route.  The equal-rank hypothesis is essential because it controls the
++directed defect multiplicities.  Passing to the adjoint complementary cross
++block and then using `principalSines_comm` is preferable to inventing the
++missing historical lemma.
++
++The coordinate-angle definition repairs need a mathematical warning before
++module 14 is attempted:
++
++* Postcomposing the ambient map `S C⁺ : E → E` with `X : F → E` makes
++  `tanThetaEmbedding` type-correct, but it does not generally preserve the
++  tangent singular values.  On a principal line it gives a sine factor rather
++  than a tangent factor.
++* Likewise, `(2 S C⋆) X` has coefficient `2 sin θ cos² θ` on a principal
++  coordinate, not `sin (2 θ) = 2 sin θ cos θ`.
++* The proposed `(C C⋆ - S S⋆) X` is therefore not a matching coordinate
++  `cos (2Θ)` companion.  A canonical trial-coordinate cosine is instead
++  obtained from `C⋆ C - S⋆ S` on `F` and then, if an `F → E` target is truly
++  required, postcomposing that `F → F` operator with `X`.  A canonical
++  trial-coordinate sine requires the positive square root `|C| = (C⋆ C)¹ᐟ²`,
++  for example `2 S |C|`; the ambient exact map remains `2 S C⋆`.
++
++Consequently, do not use the current `tanThetaEmbedding`,
++`sinTwoThetaEmbedding`, `cosTwoThetaEmbedding`, or `tanTwoThetaEmbedding` as
++singular-value-identifying definitions in `DoubleAngle/TanTheta.lean` yet.
++They are type-correct placeholders after `48b436e`, but their intended angle
++semantics require a separate redesign.  The immediate rectangular Schatten
++batch below is independent of them.
++
++There are also two straightforward module-14 API issues already visible:
++
++* `FiniteDimensional.cosTwoThetaEmbedding` is a namespace error; the current
++  declaration is `DavisKahanTheory.cosTwoThetaEmbedding`.
++* `moorePenroseInverse_eq_inverse_of_injective` does not exist.  The repaired
++  Stage 1 API exposes `moorePenroseInverse_eq_inverseOnRange` and
++  `inverseOnRange_eq_moorePenroseInverse`.
++
++Do not paper over those errors until the embedding semantics are corrected.
++
++## Scope of this batch
++
++This batch implements one coherent finite-dimensional rectangular norm stack:
++
++1. finite real `ℓᵖ` and `ℓ∞` gauges;
++2. canonical decreasing nonnegative weak majorization;
++3. finite symmetric-gauge monotonicity via a T-transform descent;
++4. finite Minkowski inequalities;
++5. rectangular Ky Fan prefix bridges;
++6. singular-value weak majorization for sums;
++7. rectangular Schatten norms for every real `p ≥ 1`;
++8. definiteness, homogeneity, triangle inequality, adjoint and unitary
++   invariance, supported ideal inequalities, and `S₁`/`S₂`/`S∞` bridges;
++9. preservation of the historical experimental `schatten`, `mem_schatten`,
++   and `ofSquareFamily` declarations.
++
++No coordinatewise singular-value subadditivity is asserted.  The sum theorem
++is correctly stated as Ky Fan partial-sum subadditivity and weak majorization.
++
++This is the finite-dimensional batch.  It does **not** repair
++`DavisKahan/Experimental/InfiniteDimensional/Ideals/Rectangular.lean`.  The
++missing `HilbertSchmidt`, `SchattenClass`, and `TraceClass` types reported there
++belong to a separate infinite-dimensional operator-ideal architecture.  Do
++not redirect this compiler pass to that file.
++
++## Files in the batch
++
++### New production modules
++
++* `ForMathlib/Analysis/Normed/FiniteLpGauge.lean`
++* `ForMathlib/Analysis/InnerProductSpace/SchattenNorm.lean`
++
++### Updated production aggregate
++
++* `ForMathlib.lean`
++
++### Updated guarded compatibility module
++
++* `DavisKahan/Experimental/FiniteDimensional/Norms/Rectangular.lean`
++
++## Existing APIs reused
++
++The implementation extends the accepted rectangular UI-norm architecture
++rather than creating a parallel matrix theory.  It reuses:
++
++* `LinearMap.singularValues`, antitonicity, nonnegativity, rank cutoff,
++  adjoint equality, scalar invariance, and unitary invariance;
++* `rectangularKyFanSum` and the existing rectangular `kyFan` seminorm;
++* `RectangularUnitarilyInvariantNorm`, including Fan dominance and its
++  endomorphism-factor ideal inequalities;
++* the existing rectangular `nuclear`, `frobenius`, and `opNorm` families;
++* Mathlib's finite real Minkowski theorem;
++* the same finite T-transform descent principle used by Fan dominance.
++
++## Canonical choices
++
++### Dimension convention
++
++The intrinsic singular-value vector is indexed by
++
++`Fin (min (finrank 𝕜 E) (finrank 𝕜 F))`.
++
++This is symmetric under adjoints and omits only the forced zero tail.  Explicit
++lemmas bridge it to the domain-indexed sums used by the current Frobenius API.
++
++### Weak majorization
++
++`FiniteVector.WeaklyMajorized x y` stores canonical representatives: both
++vectors are antitone and nonnegative and every prefix sum of `x` is bounded by
++the corresponding prefix sum of `y`.  Singular values already use this order,
++so this batch deliberately does not introduce a second sorting implementation.
++
++### Exponents
++
++Finite Schatten norms use a real exponent `p` with `1 ≤ p`, matching the
++historical guarded signature and the available finite Minkowski API.
++`S∞` is represented separately as the existing rectangular operator norm.
++
++## Main declarations
++
++### Finite-vector layer
++
++* `FiniteVector.prefixSum`
++* `FiniteVector.WeaklyMajorized`
++* `WeaklyMajorized.refl`, `.trans`, `.of_pointwise`, `.add`,
++  `.nonneg_smul`, `.sum_le`, `.zeroPadRight`
++* `FiniteSymmetricGauge`
++* `FiniteSymmetricGauge.le_of_prefixSum_le`
++* `FiniteSymmetricGauge.mono_weaklyMajorized`
++* `FiniteVector.lpGauge`
++* `FiniteVector.lpGauge_add_le`
++* `FiniteVector.lpGauge_mono_weaklyMajorized`
++* `FiniteVector.lpGauge_zeroPadRight`
++* `FiniteVector.linftyGauge`
++* `FiniteVector.linftyGauge_add_le`
++* `FiniteVector.linftyGauge_mono_weaklyMajorized`
++* `FiniteVector.linftyGauge_zeroPadRight`
++
++### Rectangular layer
++
++* `RectangularUnitarilyInvariantNorm.singularValueVector`
++* `prefixSum_singularValueVector`
++* `singularValueVector_weaklyMajorized_iff`
++* public `rectangularKyFanSum_add_le`
++* `singularValueVector_add_weaklyMajorized`
++* compatibility spelling `singularValues_add_weaklyMajorized`
++* `schattenNorm`
++* `schattenNorm_eq_zero_iff`
++* `schattenNorm_adjoint`
++* left, right, and two-sided supported ideal inequalities
++* `schattenNorm_one_apply`
++* `schattenNorm_two_apply`
++* `schattenNormInf`
++
++## Proof architecture
++
++The Schatten triangle inequality is the composition of:
++
++1. the existing rectangular Ky Fan triangle inequality;
++2. conversion of all Ky Fan inequalities into
++   `s(A+B) ≺w s(A)+s(B)`;
++3. finite symmetric-gauge monotonicity under weak majorization;
++4. finite Minkowski for the `ℓᵖ` gauge.
++
++The monotonicity proof is a complete finite descent.  Each step transfers mass
++between two coordinates by averaging with a transposition, preserves all
++prefix inequalities, strictly reduces the disagreement count, and cannot
++increase a signed-permutation-invariant sublinear gauge.
++
++## Compiler order
++
++Compile only the dependency chain first:
++
++```text
++lake env lean ForMathlib/Analysis/Normed/FiniteLpGauge.lean
++lake env lean ForMathlib/Analysis/InnerProductSpace/SchattenNorm.lean
++lake env lean DavisKahan/Experimental/FiniteDimensional/Norms/Rectangular.lean
++```
++
++Do not start with the root import.  Repair the leaf fully before moving to the
++next file.
++
++Likely elaboration hotspots:
++
++1. exact names and argument order for `Real.Lp_add_le` and real `rpow` lemmas;
++2. `Finset.sum_update_of_mem`, `Fin.sum_univ_add`, and dependent `Fin`
++   coercions in the T-transform and zero-padding proofs;
++3. finite `iSup` signatures in the `linftyGauge` endpoint;
++4. rank-tail `Finset.sum_subset` arguments;
++5. exact singular-value adjoint/rank-cutoff theorem orientations;
++6. simplifier normal forms in the `S₁` and `S₂` bridges;
++7. definitional unfolding in the guarded `mem_schatten` wrapper.
++
++Repair API names, coercions, imports, and tactic details without weakening the
++theorem statements or replacing weak majorization with a false pointwise
++singular-value inequality.  If the T-transform descent contains a genuine
++mathematical defect, report the smallest failing statement and counterexample
++rather than bypassing it.
++
++## Validation already performed after rebasing
++
++Successful in the math-ahead environment:
++
++* `python3 scripts/check_full_part_iii_math_ahead.py --static-only`
++  reports all 174 guarded signatures preserved and no unfinished executable
++  proof terms outside Challenge;
++* `python3 scripts/generate_all_aggregates.py --check`;
++* `python3 scripts/inventory_davis_kahan_debt.py --json`, still exactly 18
++  intentional challenge occurrences;
++* `git diff --check`.
++
++Lean is not installed in this environment, so none of the new declarations is
++compiler-certified here.
++
++## Full validation after the focused files compile
++
++Run sequentially:
++
++```text
++python3 scripts/check_full_part_iii_math_ahead.py --static-only
++python3 scripts/check_full_part_iii_math_ahead.py
++python3 scripts/generate_all_aggregates.py --check
++lake build
++lake build DavisKahan.All
++lake build DavisKahan.Experimental
++python3 scripts/audit_full_paper_sine_theta.py
++python3 scripts/inventory_davis_kahan_debt.py --json
++python3 scripts/check_library_structure.py
++lake env lean DavisKahan/Alternative/OperatorIdeal/HilbertSchmidt/ColumnExpansion.lean
++lake env lean DavisKahan/Sources/DavisKahan1970/SineTheta/FiniteMultiplicity.lean
++lake env lean DavisKahan/Sources/DavisKahan1970/Sylvester/PaperHilbertSchmidt.lean
++```
++
++The immutable targets remain 43 clean Section 6 endpoints, the three
++independent Hilbert--Schmidt checks, unchanged guarded signatures, and only the
++18 intentional challenge placeholders.  Criterion 3 of the structural checker
++may remain inherited-red because the restored Experimental candidates have not
++all been compiler-certified; do not weaken the checker to hide that state.

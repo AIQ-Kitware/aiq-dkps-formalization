@@ -1,0 +1,8 @@
+FEAT add rectangular Schatten and weak majorization infrastructure
+
+Build finite lp gauges with Minkowski and symmetric gauge monotonicity.
+Connect rectangular Ky Fan subadditivity to singular value weak majorization.
+Define rectangular Schatten norms with norm, adjoint, ideal, S1, S2, and infinity bridges.
+Preserve the historical rectangular compatibility declarations.
+
+Co-authored-by: GPT-5.6 Thinking <noreply@openai.com>

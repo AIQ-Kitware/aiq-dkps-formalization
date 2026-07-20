@@ -41,11 +41,23 @@ noncomputable def cosThetaEmbedding (U : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] (X : F →ₗᵢ[𝕜] E) : F →ₗ[𝕜] E :=
   projection U ∘ₗ X.toLinearMap
 
-/-- Double-angle cosine block `C C⋆ - S S⋆`, written in trial coordinates.
+/-- Provisional double-angle cosine block in trial coordinates.
 
-This is the companion of the double-angle sine block `2 S C⋆`: together they are
-the standard two-projection double-angle pair.  Writing an ambient operator in
-trial coordinates postcomposes with `X`, as the sine block does. -/
+Angle semantics are open: this body is **not** the trial-coordinate `cos 2Θ`
+map and must not be used to prove a singular-value identification.  The blocks
+`C = cosThetaEmbedding` and `S = sinThetaEmbedding` go `F →ₗ E`, so it is the
+*source-side* Gram blocks that carry the principal angles: `C⋆C` and `S⋆S` act
+on `F` with eigenvalues `cos²θᵢ` and `sin²θᵢ`.  The correct trial-coordinate
+double-angle cosine is therefore built from
+
+  `C⋆C - S⋆S`   (eigenvalues `cos 2θᵢ`),
+
+optionally embedded into `E` by `X`.  The ambient combination `C C⋆ - S S⋆`
+used below pads with zeros on the orthogonal complement of `range X`, and
+postcomposing that with `X` does not recover the source-side map.
+
+Retained only so that the guarded double-angle signatures elaborate; see the
+companion note on `sinTwoThetaEmbedding`. -/
 noncomputable def cosTwoThetaEmbedding (U : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] (X : F →ₗᵢ[𝕜] E) : F →ₗ[𝕜] E :=
   (cosThetaEmbedding U X ∘ₗ LinearMap.adjoint (cosThetaEmbedding U X) -

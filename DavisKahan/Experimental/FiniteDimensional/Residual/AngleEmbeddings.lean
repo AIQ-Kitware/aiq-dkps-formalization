@@ -49,24 +49,40 @@ only after quarter-turn avoidance makes the corresponding cosine block
 invertible.  Each definition should come with a singular-value identification
 before it is used in a norm theorem. -/
 
-/-- Tangent map in approximate coordinates.
+/-- Provisional tangent map in approximate coordinates.
 
-`S C⁺` is an operator on the ambient space; writing it in trial coordinates
-postcomposes with `X`, exactly as `sinTwoThetaEmbedding` writes `2 S C⋆`. -/
+Angle semantics are open.  Postcomposing `S C⁺` with `X` makes the declared
+signature elaborate, but the result carries an extra sine factor rather than a
+tangent: the trial-coordinate quotient has to divide by the source-side cosine
+`(C⋆C)^(1/2)`, not by an ambient pseudoinverse read back through `X`.  Do not
+use this body to prove a singular-value identification. -/
 noncomputable def tanThetaEmbedding (U : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] (X : F →ₗᵢ[𝕜] E) : F →ₗ[𝕜] E :=
   sinThetaEmbedding U X ∘ₗ
     FiniteDimensional.moorePenroseInverse (cosThetaEmbedding U X) ∘ₗ
       X.toLinearMap
 
-/-- Double-angle sine block `2 S C⋆`, written in trial coordinates. -/
+/-- Provisional double-angle sine block in trial coordinates.
+
+Angle semantics are open.  `2 S C⋆` is the exact *ambient* double-angle sine,
+but `C⋆ ∘ X = C⋆C`, so the body below is `2 S (C⋆C)`, whose singular values are
+`2 sin θᵢ cos²θᵢ` rather than `sin 2θᵢ`.  The correct trial-coordinate sine
+uses the positive square root
+
+  `2 S |C|`,  `|C| = (C⋆C)^(1/2)`   (singular values `sin 2θᵢ`).
+
+Do not use this body to prove a singular-value identification. -/
 noncomputable def sinTwoThetaEmbedding (U : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] (X : F →ₗᵢ[𝕜] E) : F →ₗ[𝕜] E :=
   (2 : 𝕜) •
     (sinThetaEmbedding U X ∘ₗ
       LinearMap.adjoint (cosThetaEmbedding U X)) ∘ₗ X.toLinearMap
 
-/-- Double-angle tangent map in approximate coordinates. -/
+/-- Provisional double-angle tangent map in approximate coordinates.
+
+Angle semantics are open: it inherits the open sine and cosine conventions of
+`sinTwoThetaEmbedding` and `cosTwoThetaEmbedding`.  Do not use this body to
+prove a singular-value identification. -/
 noncomputable def tanTwoThetaEmbedding (U : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] (X : F →ₗᵢ[𝕜] E) : F →ₗ[𝕜] E :=
   sinTwoThetaEmbedding U X ∘ₗ
