@@ -26,9 +26,11 @@ import ForMathlib.Analysis.InnerProductSpace.PolarDecomposition
 import ForMathlib.Analysis.InnerProductSpace.PositiveSqrt
 import ForMathlib.Analysis.InnerProductSpace.PrincipalAngles
 import ForMathlib.Analysis.InnerProductSpace.ProjectionGeometry
+import ForMathlib.Analysis.InnerProductSpace.MoorePenroseInverse
 import ForMathlib.Analysis.InnerProductSpace.RectangularSingularValues
 import ForMathlib.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm
 import ForMathlib.Analysis.InnerProductSpace.SchurHorn
+import ForMathlib.Analysis.InnerProductSpace.SelfAdjointFunctionalCalculus
 import ForMathlib.Analysis.InnerProductSpace.SingularSubspace
 import ForMathlib.Analysis.InnerProductSpace.SingularSystem
 import ForMathlib.Analysis.InnerProductSpace.Spectrum

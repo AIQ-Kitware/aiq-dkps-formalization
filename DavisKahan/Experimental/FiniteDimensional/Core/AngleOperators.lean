@@ -131,11 +131,16 @@ theorem principalAngles_orthogonal (U V : Submodule 𝕜 E)
   change
     (complementaryProjection (Vᗮ) ∘ₗ projection (Uᗮ)).singularValues =
       (complementaryProjection V ∘ₗ projection U).singularValues
-  rw [Submodule.orthogonal_orthogonal,
-    Submodule.starProjection_orthogonal',
-    Submodule.starProjection_orthogonal']
-  have hCS := singularValues_complementary_cross_blocks U V hrank
-  simpa [sinThetaMap] using hCS
+  -- `Vᗮᗮ = V`, but `projection` is indexed by an instance on the submodule, so
+  -- the rewrite has to go through `simp only`
+  simp only [complementaryProjection, Submodule.orthogonal_orthogonal]
+  -- the complemented cross block is the adjoint of the cross block with the two
+  -- subspaces exchanged, and adjoints have the same singular values
+  have hadj : projection V ∘ₗ projection Uᗮ = (sinThetaMap V U).adjoint := by
+    rw [sinThetaMap, complementaryProjection, LinearMap.adjoint_comp,
+      projection_adjoint, projection_adjoint]
+  rw [hadj, LinearMap.singularValues_adjoint]
+  exact (principalSines_comm U V hrank).symm
 
 end DavisKahanTheory
 end ForMathlib

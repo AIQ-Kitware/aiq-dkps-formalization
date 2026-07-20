@@ -66,6 +66,18 @@ noncomputable def complementaryProjection (U : Submodule 𝕜 E)
   projection Uᗮ
 
 omit [FiniteDimensional 𝕜 E] in
+/-- An orthogonal projector is symmetric. -/
+theorem projection_isSymmetric (U : Submodule 𝕜 E)
+    [U.HasOrthogonalProjection] : (projection U).IsSymmetric :=
+  U.starProjection_isSymmetric
+
+/-- An orthogonal projector is its own adjoint. -/
+@[simp] theorem projection_adjoint (U : Submodule 𝕜 E)
+    [U.HasOrthogonalProjection] :
+    (projection U).adjoint = projection U :=
+  (projection_isSymmetric U).adjoint_eq
+
+omit [FiniteDimensional 𝕜 E] in
 /-- A symmetric operator leaves the orthogonal complement of an invariant
 subspace invariant.
 -/

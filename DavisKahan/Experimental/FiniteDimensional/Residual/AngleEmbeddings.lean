@@ -49,11 +49,15 @@ only after quarter-turn avoidance makes the corresponding cosine block
 invertible.  Each definition should come with a singular-value identification
 before it is used in a norm theorem. -/
 
-/-- Tangent map in approximate coordinates. -/
+/-- Tangent map in approximate coordinates.
+
+`S C⁺` is an operator on the ambient space; writing it in trial coordinates
+postcomposes with `X`, exactly as `sinTwoThetaEmbedding` writes `2 S C⋆`. -/
 noncomputable def tanThetaEmbedding (U : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] (X : F →ₗᵢ[𝕜] E) : F →ₗ[𝕜] E :=
   sinThetaEmbedding U X ∘ₗ
-    FiniteDimensional.moorePenroseInverse (cosThetaEmbedding U X)
+    FiniteDimensional.moorePenroseInverse (cosThetaEmbedding U X) ∘ₗ
+      X.toLinearMap
 
 /-- Double-angle sine block `2 S C⋆`, written in trial coordinates. -/
 noncomputable def sinTwoThetaEmbedding (U : Submodule 𝕜 E)
@@ -66,8 +70,8 @@ noncomputable def sinTwoThetaEmbedding (U : Submodule 𝕜 E)
 noncomputable def tanTwoThetaEmbedding (U : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] (X : F →ₗᵢ[𝕜] E) : F →ₗ[𝕜] E :=
   sinTwoThetaEmbedding U X ∘ₗ
-    FiniteDimensional.moorePenroseInverse
-      (FiniteDimensional.cosTwoThetaEmbedding U X)
+    FiniteDimensional.moorePenroseInverse (cosTwoThetaEmbedding U X) ∘ₗ
+      X.toLinearMap
 
 end DavisKahanTheory
 end ForMathlib
