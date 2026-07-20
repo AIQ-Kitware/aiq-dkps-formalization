@@ -48,6 +48,11 @@ REPAIRED=(
   "Spectra.OneParameterUnitaryGroup.Product|4ee5e89|pipeline operator binds looser than equality"
   "Spectra.SpectralTheory.Calculus.SpectralGapInverse|4ee5e89|spectral measure namespace, antitone inverse"
   "DavisKahan.Experimental.InfiniteDimensional.Ideals.PaperHilbertSchmidtBasis|6eeb643|span image closed by reflexivity"
+  "Spectra.Spaces.Tensor.HilbertSchmidtFlow|1e3e924|dense inductions applied, invented closedness lemma"
+  "Spectra.Spaces.Tensor.HilbertSchmidtGeneratorBridge|13e3357|unbundled linearity absent from the restricted simp set"
+  "Spectra.Spaces.Tensor.HilbertSchmidtSpectralGap|801a470|notation and measure namespaces, higher order factorisation"
+  "DavisKahan.Experimental.InfiniteDimensional.Sylvester.PaperHilbertSchmidtDefectFirst|11ed50a|qualified names split after their dot"
+  "DavisKahan.Experimental.InfiniteDimensional.Sylvester.PaperHilbertSchmidtPairwise|11ed50a|obligation order, complexified spectrum orientation"
 )
 
 fail=0
