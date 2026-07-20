@@ -93,25 +93,74 @@ theorem norm_paperPlaneE0 : ‖paperPlaneE0 (𝕜 := 𝕜)‖ = 1 := by
 theorem norm_paperPlaneE1 : ‖paperPlaneE1 (𝕜 := 𝕜)‖ = 1 := by
   simp [paperPlaneE1]
 
+/-- The adjoint of a scalar column reads off the corresponding coordinate.
+
+Every block identity below needs this; without it the adjoint stays an opaque
+term and no component computation closes. -/
+theorem adjoint_paperScalarColumn_apply (i : Fin 2) (x : PaperPlane 𝕜) :
+    (paperScalarColumn (EuclideanSpace.single i (1 : 𝕜))).adjoint x =
+      x.ofLp i := by
+  -- Identify the adjoint by the defining inner-product identity, evaluated on
+  -- the coordinate functional `x ↦ x i`.
+  have hadj :
+      (ContinuousLinearMap.id 𝕜 𝕜).smulRight
+            (EuclideanSpace.single i (1 : 𝕜)) =
+          ((EuclideanSpace.proj i : PaperPlane 𝕜 →L[𝕜] 𝕜)).adjoint := by
+    rw [ContinuousLinearMap.eq_adjoint_iff]
+    intro z y
+    rw [ContinuousLinearMap.smulRight_apply, ContinuousLinearMap.id_apply,
+      inner_smul_left, EuclideanSpace.inner_single_left]
+    simp [RCLike.inner_apply, mul_comm]
+  have := congrArg (fun T : 𝕜 →L[𝕜] PaperPlane 𝕜 => T.adjoint) hadj
+  simp only [ContinuousLinearMap.adjoint_adjoint] at this
+  rw [paperScalarColumn, this]
+  rfl
+
+@[simp]
+theorem paperScalarColumn_apply (v : PaperPlane 𝕜) (z : 𝕜) :
+    paperScalarColumn v z = z • v := rfl
+
+@[simp]
+theorem paperPlanarExactMap_apply (z : 𝕜) :
+    paperPlanarExactMap (𝕜 := 𝕜) z = z • paperPlaneE0 := rfl
+
+@[simp]
+theorem paperPlanarComplementMap_apply (z : 𝕜) :
+    paperPlanarComplementMap (𝕜 := 𝕜) z = z • paperPlaneE1 := rfl
+
+@[simp]
+theorem paperPlanarTrialMap_apply (theta : ℝ) (z : 𝕜) :
+    paperPlanarTrialMap (𝕜 := 𝕜) theta z =
+      z • ((Real.cos theta : 𝕜) • paperPlaneE0 +
+        (Real.sin theta : 𝕜) • paperPlaneE1) := rfl
+
+@[simp]
+theorem adjoint_paperPlanarExactMap_apply (x : PaperPlane 𝕜) :
+    (paperPlanarExactMap (𝕜 := 𝕜)).adjoint x = x.ofLp 0 :=
+  adjoint_paperScalarColumn_apply 0 x
+
+@[simp]
+theorem adjoint_paperPlanarComplementMap_apply (x : PaperPlane 𝕜) :
+    (paperPlanarComplementMap (𝕜 := 𝕜)).adjoint x = x.ofLp 1 :=
+  adjoint_paperScalarColumn_apply 1 x
+
 /-- The trial column is isometric for every real angle. -/
 theorem paperPlanarTrialMap_isometry (theta : ℝ) :
     IsometricEmbedding (paperPlanarTrialMap (𝕜 := 𝕜) theta) := by
-  intro z w
+  intro z
   simp only [paperPlanarTrialMap, paperScalarColumn,
-    ContinuousLinearMap.smulRight_apply, ContinuousLinearMap.id_apply,
-    dist_eq_norm, map_sub]
-  rw [← smul_sub]
+    ContinuousLinearMap.smulRight_apply, ContinuousLinearMap.id_apply]
   rw [norm_smul]
   have horth :
       ⟪paperPlaneE0 (𝕜 := 𝕜), paperPlaneE1 (𝕜 := 𝕜)⟫_𝕜 = 0 := by
-    simp [paperPlaneE0, paperPlaneE1]
+    simp [paperPlaneE0, paperPlaneE1, EuclideanSpace.inner_single_left]
   have hunit :
       ‖(Real.cos theta : 𝕜) • paperPlaneE0 +
           (Real.sin theta : 𝕜) • paperPlaneE1‖ = 1 := by
     rw [norm_eq_one_iff]
     simp [inner_add_left, inner_add_right, horth,
       RCLike.norm_ofReal, Real.sin_sq_add_cos_sq]
-  rw [hunit, one_mul]
+  rw [hunit, mul_one]
 
 /-- Exact and complementary columns form the coordinate orthogonal
 decomposition. -/
@@ -123,17 +172,16 @@ theorem paperPlanar_exact_decomposition :
     isometry₀ := ?_
     isometry₁ := ?_
     orthogonal := ?_
-    complete := ?_ }
-  · intro z w
-    simp [paperPlanarExactMap, paperScalarColumn, dist_eq_norm]
-  · intro z w
-    simp [paperPlanarComplementMap, paperScalarColumn, dist_eq_norm]
-  · intro x y
-    simp [paperPlanarExactMap, paperPlanarComplementMap, paperScalarColumn,
-      paperPlaneE0, paperPlaneE1]
-  · ext x <;>
-      simp [paperPlanarExactMap, paperPlanarComplementMap, paperScalarColumn,
-        paperPlaneE0, paperPlaneE1]
+    projection_sum := ?_ }
+  · intro z
+    simp [paperPlanarExactMap, paperScalarColumn, norm_smul]
+  · intro z
+    simp [paperPlanarComplementMap, paperScalarColumn, norm_smul]
+  · ext
+    simp [paperPlaneE0, paperPlaneE1, PiLp.single_apply]
+  · ext x i
+    fin_cases i <;>
+      simp [paperPlaneE0, paperPlaneE1, PiLp.single_apply]
 
 /-- Direct matrix calculation of the planar residual identity. -/
 theorem paperPlanar_residual_identity (delta theta : ℝ) :
@@ -142,12 +190,12 @@ theorem paperPlanar_residual_identity (delta theta : ℝ) :
       paperPlanarTrialMap (𝕜 := 𝕜) theta ∘L
         paperPlanarTrialOperator (𝕜 := 𝕜) =
       paperPlanarResidual (𝕜 := 𝕜) delta theta := by
-  ext z i
+  ext i
   fin_cases i <;>
-    simp [paperPlanarAmbient, paperPlanarTrialMap,
-      paperPlanarTrialOperator, paperPlanarResidual,
-      paperPlanarComplementMap, paperScalarColumn,
-      paperPlaneE0, paperPlaneE1, Matrix.toEuclideanLin_apply]
+    simp [paperPlanarAmbient, paperPlanarTrialOperator, paperPlanarResidual,
+      paperPlaneE0, paperPlaneE1, Matrix.toEuclideanLin_apply,
+      PiLp.single_apply, mul_comm] <;>
+    push_cast <;> ring
 
 /-- The projection residual is literally the rank-one sine block. -/
 theorem paperPlanar_directedSine_identity (theta : ℝ) :
@@ -156,11 +204,10 @@ theorem paperPlanar_directedSine_identity (theta : ℝ) :
           (paperPlanarExactMap (𝕜 := 𝕜)).adjoint) ∘L
       paperPlanarTrialMap (𝕜 := 𝕜) theta =
         paperPlanarSineBlock (𝕜 := 𝕜) theta := by
-  ext z i
+  ext i
   fin_cases i <;>
-    simp [paperPlanarExactMap, paperPlanarTrialMap,
-      paperPlanarSineBlock, paperPlanarComplementMap, paperScalarColumn,
-      paperPlaneE0, paperPlaneE1, ContinuousLinearMap.adjoint_apply_inner]
+    simp [paperPlanarSineBlock, paperPlaneE0, paperPlaneE1,
+      PiLp.single_apply]
 
 /-- The complement inclusion is a norm-one rank-one map. -/
 theorem paperPlanarComplementMap_norm_rank :
@@ -197,7 +244,7 @@ theorem paperPlanarSineBlock_gauge_pos
   have hVmem := N.mem_rankOne hV.1 hV.2
   rw [paperPlanarSineBlock, N.gauge_smul _ hVmem,
     N.gauge_rankOne hV.1 hV.2, mul_one, RCLike.norm_ofReal]
-  exact abs_pos.mpr (Real.sin_ne_zero_of_mem_Ioo ⟨h0, h1⟩)
+  exact abs_pos.mpr (Real.sin_pos_of_pos_of_lt_pi h0 h1).ne'
 
 /-- No constant strictly below one can replace the source constant in the
 single-angle theorem. -/
@@ -209,11 +256,12 @@ theorem paperSinTheta_constant_one_optimal
         c * N.gauge (paperPlanarResidual (𝕜 := 𝕜) delta theta) <
           delta * N.gauge (paperPlanarSineBlock (𝕜 := 𝕜) theta) := by
   intro c hc
-  refine ⟨1, Real.pi / 4, zero_lt_one, Real.pi_div_four_pos,
-    Real.pi_div_four_lt_pi_div_two, ?_⟩
+  have hpi4 : (0 : ℝ) < Real.pi / 4 := by linarith [Real.pi_pos]
+  have hpi42 : Real.pi / 4 < Real.pi / 2 := by linarith [Real.pi_pos]
+  refine ⟨1, Real.pi / 4, zero_lt_one, hpi4, hpi42, ?_⟩
   rw [paperTheorem61_planar_equality_every_norm N zero_le_one]
   have hpos := paperPlanarSineBlock_gauge_pos (𝕜 := 𝕜) N
-    Real.pi_div_four_pos (by linarith [Real.pi_pos])
+    hpi4 (by linarith [Real.pi_pos])
   nlinarith
 
 /-- Scalar operator identity behind equality for every finite orthogonal direct
