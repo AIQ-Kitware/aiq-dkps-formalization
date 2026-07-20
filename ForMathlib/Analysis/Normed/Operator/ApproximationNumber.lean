@@ -25,12 +25,25 @@ open NNReal
 
 noncomputable section
 
-universe u v
+universe u v w x y
+
+namespace Cardinal
+
+/-- A natural-number bound on a cardinal is invariant under universe lifting.
+
+Ranks of maps between spaces in different universes are not directly
+comparable, but every bound used by the approximation-number API is a natural
+number, and natural numbers are fixed by `Cardinal.lift`. -/
+theorem le_natCast_of_lift_le {c : Cardinal.{v}} {n : ℕ}
+    (h : Cardinal.lift.{w} c ≤ (n : Cardinal)) : c ≤ (n : Cardinal) := by
+  rwa [← Cardinal.lift_natCast.{w} n, Cardinal.lift_le] at h
+
+end Cardinal
 
 namespace ContinuousLinearMap
 
 variable {𝕜 : Type u} [NontriviallyNormedField 𝕜]
-variable {E F : Type v}
+variable {E : Type v} {F : Type w}
 variable [SeminormedAddCommGroup E] [NormedSpace 𝕜 E]
 variable [SeminormedAddCommGroup F] [NormedSpace 𝕜 F]
 
@@ -180,25 +193,38 @@ theorem approximationNumber_add_le_add
 
 /-- Rank does not increase after right composition. -/
 private theorem rank_comp_right_le_rank
-    {G : Type v} [SeminormedAddCommGroup G] [NormedSpace 𝕜 G]
+    {G : Type x} [SeminormedAddCommGroup G] [NormedSpace 𝕜 G]
     (R : E →L[𝕜] F) (A : G →L[𝕜] E) :
     (R ∘L A).rank ≤ R.rank := by
   change LinearMap.rank (R.toLinearMap.comp A.toLinearMap) ≤
     LinearMap.rank R.toLinearMap
   exact LinearMap.rank_comp_le_left A.toLinearMap R.toLinearMap
 
-/-- Rank does not increase after left composition. -/
-private theorem rank_comp_left_le_rank
-    {G : Type v} [SeminormedAddCommGroup G] [NormedSpace 𝕜 G]
-    (B : F →L[𝕜] G) (R : E →L[𝕜] F) :
-    (B ∘L R).rank ≤ R.rank := by
-  change LinearMap.rank (B.toLinearMap.comp R.toLinearMap) ≤
-    LinearMap.rank R.toLinearMap
-  exact LinearMap.rank_comp_le_right R.toLinearMap B.toLinearMap
+/-- Left composition does not raise the rank past a natural-number bound.
+
+The two ranks live in different universes once the codomain is allowed to move
+independently, so the comparison is made through `Cardinal.lift`; a
+natural-number bound is invariant under lifting, which is all the ideal
+inequalities need. -/
+private theorem rank_comp_left_le_of_rank_le
+    {G : Type x} [SeminormedAddCommGroup G] [NormedSpace 𝕜 G]
+    (B : F →L[𝕜] G) (R : E →L[𝕜] F) {n : ℕ} (hR : R.rank ≤ (n : Cardinal)) :
+    (B ∘L R).rank ≤ (n : Cardinal) := by
+  have hcomp :
+      Cardinal.lift.{w} (LinearMap.rank (B.toLinearMap.comp R.toLinearMap)) ≤
+        Cardinal.lift.{x} (LinearMap.rank R.toLinearMap) :=
+    LinearMap.lift_rank_comp_le_right R.toLinearMap B.toLinearMap
+  have hbound :
+      Cardinal.lift.{x} (LinearMap.rank R.toLinearMap) ≤ (n : Cardinal) := by
+    calc
+      Cardinal.lift.{x} (LinearMap.rank R.toLinearMap)
+          ≤ Cardinal.lift.{x} ((n : Cardinal)) := Cardinal.lift_le.mpr hR
+      _ = (n : Cardinal) := Cardinal.lift_natCast n
+  exact Cardinal.le_natCast_of_lift_le (hcomp.trans hbound)
 
 /-- Right ideal inequality for approximation numbers. -/
 theorem approximationNumber_comp_right_le
-    {G : Type v} [SeminormedAddCommGroup G] [NormedSpace 𝕜 G]
+    {G : Type x} [SeminormedAddCommGroup G] [NormedSpace 𝕜 G]
     (T : E →L[𝕜] F) (A : G →L[𝕜] E) (n : ℕ) :
     (T ∘L A).approximationNumber n ≤
       T.approximationNumber n * ‖A‖₊ := by
@@ -227,7 +253,7 @@ theorem approximationNumber_comp_right_le
 
 /-- Left ideal inequality for approximation numbers. -/
 theorem approximationNumber_comp_left_le
-    {G : Type v} [SeminormedAddCommGroup G] [NormedSpace 𝕜 G]
+    {G : Type x} [SeminormedAddCommGroup G] [NormedSpace 𝕜 G]
     (B : F →L[𝕜] G) (T : E →L[𝕜] F) (n : ℕ) :
     (B ∘L T).approximationNumber n ≤
       ‖B‖₊ * T.approximationNumber n := by
@@ -243,7 +269,7 @@ theorem approximationNumber_comp_left_le
     obtain ⟨R, hRrank, hRdist⟩ :=
       T.lt_approximationNumber_add_pos n hεB
     have hcompRank : (B ∘L R).rank ≤ (n : Cardinal) :=
-      (rank_comp_left_le_rank B R).trans hRrank
+      rank_comp_left_le_of_rank_le B R hRrank
     exact le_of_lt <| calc
       (B ∘L T).approximationNumber n ≤ ‖(B ∘L T) - (B ∘L R)‖₊ :=
         (B ∘L T).approximationNumber_le hcompRank
@@ -256,7 +282,7 @@ theorem approximationNumber_comp_left_le
 
 /-- Two-sided ideal inequality for approximation numbers. -/
 theorem approximationNumber_comp_comp_le
-    {G H : Type v}
+    {G : Type x} {H : Type y}
     [SeminormedAddCommGroup G] [NormedSpace 𝕜 G]
     [SeminormedAddCommGroup H] [NormedSpace 𝕜 H]
     (L : F →L[𝕜] G) (T : E →L[𝕜] F) (R : H →L[𝕜] E)
