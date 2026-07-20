@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.ClosedOperator
-import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.PVMSubspace
+import DavisKahan.Interop.Spectra.PVMSubspace
 import Spectra.SpectralTheory.Measure.GeneratorLink
 import Spectra.SpectralTheory.Measure.PVM
 

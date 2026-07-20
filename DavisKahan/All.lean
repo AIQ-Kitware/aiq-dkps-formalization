@@ -7,6 +7,9 @@ import DavisKahan
 import DavisKahan.Sources.All
 import DavisKahan.Specialized.All
 import DavisKahan.Alternative.All
+import DavisKahan.Interop.Spectra.All
+import DavisKahan.SpectralTheory.All
+import DavisKahan.TanTheta.All
 
 /-!
 # Complete proof-finished Davis--Kahan library

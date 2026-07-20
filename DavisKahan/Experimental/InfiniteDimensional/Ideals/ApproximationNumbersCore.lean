@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Experimental.InfiniteDimensional.Core.UnboundedSpectral
-import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.ApproximationNumberMinMax
+import DavisKahan.Interop.Spectra.ApproximationNumberMinMax
 import Mathlib.Topology.Algebra.Module.FiniteDimension
 import ForMathlib.Analysis.Normed.Operator.ApproximationNumberAdjoint
 import ForMathlib.Analysis.Normed.Operator.ApproximationNumberSingularValues
