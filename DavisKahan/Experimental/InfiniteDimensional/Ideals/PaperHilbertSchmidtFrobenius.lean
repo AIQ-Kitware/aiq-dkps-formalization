@@ -13,6 +13,17 @@ On finite-dimensional real or complex Hilbert spaces, the paper square norm
 built from approximation singular values is exactly the usual rectangular
 Frobenius norm.  This is the missing bridge needed to evaluate the printed
 Section 6 counterexample by an ordinary finite column calculation.
+
+## Completeness binders
+
+The paper square energy is defined only for complete spaces, so every statement
+below must have `CompleteSpace` available merely to typecheck.  Completeness is
+a consequence of finite-dimensionality, but `FiniteDimensional.complete` is
+deliberately not an instance in Mathlib, since the scalar field would be an
+unknown metavariable during instance resolution.  The binders are therefore
+written out.  They cost the caller nothing: `CompleteSpace` is a `Prop` class,
+so proof irrelevance identifies whatever instance a call site already carries
+with one produced by `letI : CompleteSpace E := FiniteDimensional.complete 𝕜 E`.
 -/
 
 namespace ForMathlib
@@ -21,6 +32,8 @@ namespace Experimental
 namespace ExactSinTheta
 
 open scoped InnerProductSpace BigOperators ENNReal
+
+open DavisKahanTheory
 
 noncomputable section
 
@@ -32,26 +45,30 @@ theorem paperHilbertSchmidtEnergy_eq_ofReal_sum_sq_singularValues
     {𝕜 : Type u} [RCLike 𝕜]
     {E : Type vE} {F : Type vF}
     [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
-    [FiniteDimensional 𝕜 E]
+    [FiniteDimensional 𝕜 E] [CompleteSpace E]
     [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
-    [FiniteDimensional 𝕜 F]
+    [FiniteDimensional 𝕜 F] [CompleteSpace F]
     (A : E →L[𝕜] F) :
     paperHilbertSchmidtEnergy A =
       ENNReal.ofReal
         (∑ i : Fin (Module.finrank 𝕜 E),
           A.toLinearMap.singularValues (i : ℕ) ^ 2) := by
+  -- The accepted equality is phrased on the continuous map built from a linear
+  -- map; a continuous map is definitionally rebuilt from its own underlying
+  -- linear map, so it transfers to `A` without any further hypothesis.
+  have hsv : ∀ n : ℕ,
+      approximationSingularValue n A = A.toLinearMap.singularValues n := fun n =>
+    approximationSingularValue_eq_singularValues A.toLinearMap n
   unfold paperHilbertSchmidtEnergy
   rw [tsum_eq_sum (s := Finset.range (Module.finrank 𝕜 E))]
   · rw [← Fin.sum_univ_eq_sum_range,
       ← ENNReal.ofReal_sum_of_nonneg fun i _ => sq_nonneg _]
     congr 1
-    exact Finset.sum_congr rfl fun i _ => by
-      rw [approximationSingularValue_eq_singularValues]
+    exact Finset.sum_congr rfl fun i _ => by rw [hsv]
   · intro n hn
     have hfinrank : Module.finrank 𝕜 E ≤ n := by
       simpa only [Finset.mem_range, not_lt] using hn
-    rw [approximationSingularValue_eq_singularValues,
-      A.toLinearMap.singularValues_of_finrank_le hfinrank]
+    rw [hsv, A.toLinearMap.singularValues_of_finrank_le hfinrank]
     simp
 
 /-- In finite dimensions, the basis-free paper square norm is exactly the
@@ -60,25 +77,24 @@ theorem paperHilbertSchmidtNorm_eq_rectangularFrobenius
     {𝕜 : Type u} [RCLike 𝕜]
     {E : Type vE} {F : Type vF}
     [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
-    [FiniteDimensional 𝕜 E]
+    [FiniteDimensional 𝕜 E] [CompleteSpace E]
     [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
-    [FiniteDimensional 𝕜 F]
+    [FiniteDimensional 𝕜 F] [CompleteSpace F]
     (A : E →L[𝕜] F) :
     paperHilbertSchmidtNorm A =
-      ForMathlib.DavisKahanTheory.RectangularUnitarilyInvariantNorm.frobenius
-        A.toLinearMap := by
+      RectangularUnitarilyInvariantNorm.frobenius A.toLinearMap := by
   unfold paperHilbertSchmidtNorm
   rw [paperHilbertSchmidtEnergy_eq_ofReal_sum_sq_singularValues,
     ENNReal.toReal_ofReal (Finset.sum_nonneg fun i _ => sq_nonneg _)]
-  exact (ForMathlib.DavisKahanTheory.RectangularUnitarilyInvariantNorm
-    .frobenius_eq_sqrt_sum_sq_singularValues A.toLinearMap).symm
+  exact (RectangularUnitarilyInvariantNorm.frobenius_eq_sqrt_sum_sq_singularValues
+    A.toLinearMap).symm
 
 /-- Square-operator spelling of the finite-dimensional Frobenius bridge. -/
 theorem paperHilbertSchmidtNorm_eq_frobenius
     {𝕜 : Type u} [RCLike 𝕜]
     {E : Type vE}
     [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
-    [FiniteDimensional 𝕜 E]
+    [FiniteDimensional 𝕜 E] [CompleteSpace E]
     (A : E →L[𝕜] E) :
     paperHilbertSchmidtNorm A =
       ForMathlib.UnitarilyInvariantNorm.frobenius 𝕜 E A.toLinearMap := by
