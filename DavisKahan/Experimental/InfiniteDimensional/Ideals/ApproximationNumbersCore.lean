@@ -88,6 +88,14 @@ theorem approximationSingularValue_smul
     (ContinuousLinearMap.approximationNumber_smul c K n)
   simpa only [approximationSingularValue, NNReal.coe_mul, coe_nnnorm] using h
 
+/-- Approximation singular values are unchanged by negation. -/
+@[simp]
+theorem approximationSingularValue_neg
+    (n : ℕ) (K : E →L[𝕜] F) :
+    approximationSingularValue n (-K) = approximationSingularValue n K := by
+  have h := approximationSingularValue_smul n (-1 : 𝕜) K
+  simpa using h
+
 /-- Approximation singular values decrease with the index. -/
 theorem approximationSingularValue_antitone
     (K : E →L[𝕜] F) :
@@ -360,6 +368,12 @@ end ComplexStrongCutoff
 noncomputable def kyFanApproximationGauge
     (k : ℕ) (K : E →L[𝕜] F) : ℝ :=
   ∑ n ∈ Finset.range k, approximationSingularValue n K
+
+/-- Finite Ky Fan gauges are unchanged by negation. -/
+@[simp]
+theorem kyFanApproximationGauge_neg (k : ℕ) (K : E →L[𝕜] F) :
+    kyFanApproximationGauge k (-K) = kyFanApproximationGauge k K :=
+  Finset.sum_congr rfl fun n _ => approximationSingularValue_neg n K
 
 
 section ComplexKyFanStrongCutoff
