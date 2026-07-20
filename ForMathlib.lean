@@ -29,6 +29,7 @@ import ForMathlib.Analysis.InnerProductSpace.ProjectionGeometry
 import ForMathlib.Analysis.InnerProductSpace.MoorePenroseInverse
 import ForMathlib.Analysis.InnerProductSpace.RectangularSingularValues
 import ForMathlib.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm
+import ForMathlib.Analysis.InnerProductSpace.SchattenNorm
 import ForMathlib.Analysis.InnerProductSpace.SchurHorn
 import ForMathlib.Analysis.InnerProductSpace.SelfAdjointFunctionalCalculus
 import ForMathlib.Analysis.InnerProductSpace.SingularSubspace
@@ -39,6 +40,7 @@ import ForMathlib.Analysis.Matrix.EntrywiseEigenvalue
 import ForMathlib.Analysis.Matrix.EntrywiseOpNorm
 import ForMathlib.Analysis.Matrix.SpectralFunctionMeasurable
 import ForMathlib.Analysis.Matrix.Spectrum
+import ForMathlib.Analysis.Normed.FiniteLpGauge
 import ForMathlib.Analysis.Normed.Operator.ApproximationNumber
 import ForMathlib.Analysis.Normed.Operator.ApproximationNumberAdjoint
 import ForMathlib.Analysis.Normed.Operator.ApproximationNumberHilbert
