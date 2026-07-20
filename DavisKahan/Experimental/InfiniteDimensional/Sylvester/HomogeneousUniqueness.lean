@@ -53,7 +53,12 @@ theorem closedSylvester_homogeneous_eq_zero_complex
     (davisKahan1970_sylvester_complex N hA hB hδ hgap hEq (by trivial)).2
   change δ * ‖X‖ ≤ ‖(0 : F →L[ℂ] E)‖ at hbound
   have hle : ‖X‖ ≤ 0 := by
-    nlinarith [hbound]
+    -- The bound is against the norm of zero, which the arithmetic tactics do not
+    -- reduce, and the product of the gap with the norm is nonlinear in any case.
+    rw [norm_zero] at hbound
+    by_contra hpos
+    push_neg at hpos
+    exact absurd hbound (not_le.mpr (mul_pos hδ hpos))
   exact norm_eq_zero.mp (le_antisymm hle (norm_nonneg X))
 
 /-- Two bounded complex solutions of the same separated closed Sylvester
@@ -98,7 +103,12 @@ theorem closedSylvester_homogeneous_eq_zero_real
     (davisKahan1970_sylvester_real N hA hB hδ hgap hEq (by trivial)).2
   change δ * ‖X‖ ≤ ‖(0 : F →L[ℝ] E)‖ at hbound
   have hle : ‖X‖ ≤ 0 := by
-    nlinarith [hbound]
+    -- The bound is against the norm of zero, which the arithmetic tactics do not
+    -- reduce, and the product of the gap with the norm is nonlinear in any case.
+    rw [norm_zero] at hbound
+    by_contra hpos
+    push_neg at hpos
+    exact absurd hbound (not_le.mpr (mul_pos hδ hpos))
   exact norm_eq_zero.mp (le_antisymm hle (norm_nonneg X))
 
 /-- Two bounded real solutions of the same separated closed Sylvester equation
