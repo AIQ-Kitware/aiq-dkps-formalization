@@ -31,10 +31,10 @@ open scoped InnerProductSpace
 
 noncomputable section
 
-universe u v
+universe u v w
 
 variable {𝕜 : Type u} [RCLike 𝕜]
-variable {E F : Type v}
+variable {E : Type v} {F : Type w}
   [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [FiniteDimensional 𝕜 E]
   [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [FiniteDimensional 𝕜 F]
 
@@ -139,10 +139,16 @@ theorem approximationNumber_le_singularValues
         T.toLinearMap.singularValues_nonneg n⟩ : NNReal) := by
   classical
   by_cases hn : finrank 𝕜 E ≤ n
-  · have hTrank : T.rank ≤ (n : Cardinal) := by
+  · -- The rank of `T` lives in the codomain universe and `Module.rank 𝕜 E` in
+    -- the domain universe, so compare them through `Cardinal.lift`.
+    have hTrank : T.rank ≤ (n : Cardinal) := by
+      refine Cardinal.le_natCast_of_lift_le
+        ((lift_rank_range_le T.toLinearMap).trans ?_)
       calc
-        T.rank ≤ Module.rank 𝕜 E := LinearMap.rank_le_domain T.toLinearMap
-        _ = (finrank 𝕜 E : Cardinal) := (Module.finrank_eq_rank' 𝕜 E).symm
+        Cardinal.lift.{w} (Module.rank 𝕜 E)
+            = Cardinal.lift.{w} ((finrank 𝕜 E : Cardinal)) := by
+          rw [← Module.finrank_eq_rank' 𝕜 E]
+        _ = ((finrank 𝕜 E : ℕ) : Cardinal) := Cardinal.lift_natCast _
         _ ≤ (n : Cardinal) := by exact_mod_cast hn
     have hle : T.approximationNumber n ≤ (0 : NNReal) := by
       have h := T.approximationNumber_le (R := T) hTrank
@@ -166,13 +172,11 @@ theorem approximationNumber_le_singularValues
       change Module.rank 𝕜 W.starProjection.range = (n : Cardinal)
       rw [Submodule.range_starProjection, ← Module.finrank_eq_rank' 𝕜 W, hWdim]
     let R : E →L[𝕜] F := T ∘L W.starProjection
-    have hRrank : R.rank ≤ (n : Cardinal) := by
-      calc
-        R.rank ≤ W.starProjection.rank := by
-          change LinearMap.rank (T.toLinearMap.comp W.starProjection.toLinearMap) ≤
-            LinearMap.rank W.starProjection.toLinearMap
-          exact LinearMap.rank_comp_le_right W.starProjection.toLinearMap T.toLinearMap
-        _ = (n : Cardinal) := hPrank
+    -- Cross-universe once the codomain is independent, so route the bound
+    -- through the natural-number rank estimate.
+    have hRrank : R.rank ≤ (n : Cardinal) :=
+      ContinuousLinearMap.rank_comp_left_le_of_rank_le T W.starProjection
+        hPrank.le
     have htail : Wᗮ = ForMathlib.specSubspace b
         (fun i : Fin (finrank 𝕜 E) => ¬ (i : ℕ) < n) := by
       exact ForMathlib.orthogonal_specSubspace b
