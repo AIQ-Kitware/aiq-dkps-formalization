@@ -15,8 +15,8 @@ The production manuscript surface is `FullPartIII`, every alias of which is
 proved and reachable from production modules alone.  The aliases here are the
 remainder, and they are of two kinds:
 
-* components whose declarations still depend on an open obligation, which is
-  exactly the set whose `#print axioms` reports `sorryAx`; and
+* components whose declarations still depend on an open obligation, as
+  reported by the dependency probe over the manuscript surface; and
 * components that are already proved but whose proofs still live inside a
   module that carries unrelated open obligations, so extracting them is a
   matter of splitting a file rather than of mathematics.

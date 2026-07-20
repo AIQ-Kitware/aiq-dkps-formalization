@@ -25,8 +25,8 @@ import DavisKahan.TanTwoTheta.All
 This source module names the theorem package targeted by the one-shot proof
 manuscript.  The stable finite results remain available through `PartIII`.
 
-Every alias below is proved: each resolves to a declaration whose axiom
-dependencies are exactly `propext`, `Classical.choice` and `Quot.sound`.  The
+Every alias below is proved: each resolves to a declaration that depends on
+nothing beyond the three foundational assumptions Mathlib itself uses.  The
 manuscript components that are still open are named separately, in
 `DavisKahan.Experimental.PartIII`, so that importing this file cannot pull an
 unproved result into a production build.

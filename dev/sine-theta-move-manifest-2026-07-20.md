@@ -1,3 +1,16 @@
+> **Superseded.** This manifest concluded that structural check 2 was blocked
+> on unproved mathematics.  That conclusion was wrong, and the error is worth
+> recording: it measured *module* dependencies and inferred a *declaration*
+> dependency.  The production route to the interval/exterior estimate never
+> needed the admitted generic truncation API — it goes through the vendored
+> Spectra calculus, which proves the statement outright.  The chain was only
+> module-tainted, by coarse imports and by shared files.
+>
+> All five structural checks are green as of the direct-Spectra production
+> closure.  See `dev/davis-kahan-1970-source-correspondence-matrix.md`.
+> The inventory below is kept for its module-by-module measurements, which
+> remain accurate as a snapshot of the layout before the split.
+
 # Move manifest for the sine-theta reorganization
 
 Written for step 8 of `dev/flawless-sine-theta-reorganization-overnight-plan-2026-07-20.md`,
