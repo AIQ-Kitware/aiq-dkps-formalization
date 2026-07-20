@@ -33,7 +33,7 @@ open scoped InnerProductSpace
 open scoped Topology
 open Filter
 
-universe u v vF vG vH w
+universe u v vF vG vH vE0 vF0 w
 
 variable {𝕜 : Type u} [RCLike 𝕜]
 variable {E : Type v} {F : Type vF}
@@ -133,7 +133,7 @@ theorem approximationSingularValue_comp_le
 the corresponding approximation singular value. This is the real-valued
 adapter for the lower Eckart--Young theorem. -/
 theorem singularValues_le_approximationSingularValue
-    {E₀ F₀ : Type v}
+    {E₀ : Type vE0} {F₀ : Type vF0}
     [NormedAddCommGroup E₀] [InnerProductSpace 𝕜 E₀]
     [FiniteDimensional 𝕜 E₀]
     [NormedAddCommGroup F₀] [InnerProductSpace 𝕜 F₀]
@@ -148,7 +148,7 @@ theorem singularValues_le_approximationSingularValue
 /-- On finite-dimensional Hilbert spaces, approximation singular values are
 exactly the ordinary singular values. -/
 theorem approximationSingularValue_eq_singularValues
-    {E₀ F₀ : Type v}
+    {E₀ : Type vE0} {F₀ : Type vF0}
     [NormedAddCommGroup E₀] [InnerProductSpace 𝕜 E₀]
     [FiniteDimensional 𝕜 E₀]
     [NormedAddCommGroup F₀] [InnerProductSpace 𝕜 F₀]
@@ -199,7 +199,7 @@ theorem IsOrthogonalProjectionMap.norm_le_one
 maps to zero upgrades to convergence in operator norm. -/
 theorem tendsto_opNorm_zero_of_finiteDimensional
     {ι : Type w} {l : Filter ι}
-    {V G : Type v}
+    {V : Type vG} {G : Type vH}
     [NormedAddCommGroup V] [NormedSpace 𝕜 V]
     [FiniteDimensional 𝕜 V]
     [NormedAddCommGroup G] [NormedSpace 𝕜 G]
@@ -250,7 +250,7 @@ theorem tendsto_opNorm_zero_of_finiteDimensional
 
 section ComplexStrongCutoff
 
-variable {E₀ F₀ : Type v}
+variable {E₀ : Type vE0} {F₀ : Type vF0}
   [NormedAddCommGroup E₀] [InnerProductSpace ℂ E₀] [CompleteSpace E₀]
   [NormedAddCommGroup F₀] [InnerProductSpace ℂ F₀] [CompleteSpace F₀]
 
@@ -364,7 +364,7 @@ noncomputable def kyFanApproximationGauge
 
 section ComplexKyFanStrongCutoff
 
-variable {E₀ F₀ : Type v}
+variable {E₀ : Type vE0} {F₀ : Type vF0}
   [NormedAddCommGroup E₀] [InnerProductSpace ℂ E₀] [CompleteSpace E₀]
   [NormedAddCommGroup F₀] [InnerProductSpace ℂ F₀] [CompleteSpace F₀]
 
@@ -388,7 +388,7 @@ end ComplexKyFanStrongCutoff
 /-- Every finite-dimensional rectangular Ky Fan singular-value prefix is
 bounded by the corresponding approximation-number prefix. -/
 theorem rectangularKyFanSum_le_kyFanApproximationGauge
-    {E₀ F₀ : Type v}
+    {E₀ : Type vE0} {F₀ : Type vF0}
     [NormedAddCommGroup E₀] [InnerProductSpace 𝕜 E₀]
     [FiniteDimensional 𝕜 E₀]
     [NormedAddCommGroup F₀] [InnerProductSpace 𝕜 F₀]
@@ -405,7 +405,7 @@ theorem rectangularKyFanSum_le_kyFanApproximationGauge
 /-- Finite-dimensional Ky Fan prefixes agree exactly with the corresponding
 approximation-number prefixes. -/
 theorem rectangularKyFanSum_eq_kyFanApproximationGauge
-    {E₀ F₀ : Type v}
+    {E₀ : Type vE0} {F₀ : Type vF0}
     [NormedAddCommGroup E₀] [InnerProductSpace 𝕜 E₀]
     [FiniteDimensional 𝕜 E₀]
     [NormedAddCommGroup F₀] [InnerProductSpace 𝕜 F₀]
@@ -422,7 +422,7 @@ theorem rectangularKyFanSum_eq_kyFanApproximationGauge
 /-- The approximation-number Ky Fan triangle inequality on finite-dimensional
 Hilbert spaces, obtained by transporting the established rectangular theorem. -/
 theorem kyFanApproximationGauge_add_le_finiteDimensional
-    {E₀ F₀ : Type v}
+    {E₀ : Type vE0} {F₀ : Type vF0}
     [NormedAddCommGroup E₀] [InnerProductSpace 𝕜 E₀]
     [FiniteDimensional 𝕜 E₀]
     [NormedAddCommGroup F₀] [InnerProductSpace 𝕜 F₀]
@@ -440,7 +440,7 @@ theorem kyFanApproximationGauge_add_le_finiteDimensional
 
 section ComplexKyFanTriangle
 
-variable {E₀ F₀ : Type v}
+variable {E₀ : Type vE0} {F₀ : Type vF0}
   [NormedAddCommGroup E₀] [InnerProductSpace ℂ E₀] [CompleteSpace E₀]
   [NormedAddCommGroup F₀] [InnerProductSpace ℂ F₀] [CompleteSpace F₀]
 
@@ -479,7 +479,7 @@ theorem approximationSingularValue_restrict_mono_complex
 /-- Projecting the codomain onto a subspace already containing the operator
 range preserves every approximation singular value. -/
 theorem approximationSingularValue_orthogonalProjectionOnto_comp_eq
-    {V G : Type v}
+    {V : Type vG} {G : Type vH}
     [NormedAddCommGroup V] [InnerProductSpace ℂ V] [CompleteSpace V]
     [NormedAddCommGroup G] [InnerProductSpace ℂ G] [CompleteSpace G]
     (W : Submodule ℂ G) [W.HasOrthogonalProjection]
@@ -519,7 +519,7 @@ theorem approximationSingularValue_orthogonalProjectionOnto_comp_eq
 /-- Projecting the codomain onto a subspace containing the range preserves
 all finite Ky Fan approximation gauges. -/
 theorem kyFanApproximationGauge_orthogonalProjectionOnto_comp_eq
-    {V G : Type v}
+    {V : Type vG} {G : Type vH}
     [NormedAddCommGroup V] [InnerProductSpace ℂ V] [CompleteSpace V]
     [NormedAddCommGroup G] [InnerProductSpace ℂ G] [CompleteSpace G]
     (W : Submodule ℂ G) [W.HasOrthogonalProjection]
@@ -533,7 +533,7 @@ theorem kyFanApproximationGauge_orthogonalProjectionOnto_comp_eq
 /-- The Ky Fan approximation-gauge triangle inequality when the source is
 finite-dimensional and the complex Hilbert codomain is arbitrary. -/
 theorem kyFanApproximationGauge_add_le_finiteSource_complex
-    {V G : Type v}
+    {V : Type vG} {G : Type vH}
     [NormedAddCommGroup V] [InnerProductSpace ℂ V]
     [FiniteDimensional ℂ V]
     [NormedAddCommGroup G] [InnerProductSpace ℂ G] [CompleteSpace G]

@@ -50,9 +50,9 @@ open Foundation.RealComplexification
 
 noncomputable section
 
-universe v w
+universe v vF vG vH w
 
-variable {E F : Type v}
+variable {E : Type v} {F : Type vF}
   [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
   [NormedAddCommGroup F] [InnerProductSpace ℝ F] [CompleteSpace F]
 
@@ -707,12 +707,10 @@ theorem exists_linearIndependent_lowerBound_of_lt_approximationNumber_real
   have hPrank : ¬ P.rank ≤ (n : Cardinal) := by
     intro hP
     let R : E →L[ℝ] F := T ∘L P
-    have hRrank : R.rank ≤ (n : Cardinal) := by
-      calc
-        R.rank ≤ P.rank := by
-          change LinearMap.rank (T.toLinearMap.comp P.toLinearMap) ≤ P.rank
-          exact LinearMap.rank_comp_le_right P.toLinearMap T.toLinearMap
-        _ ≤ (n : Cardinal) := hP
+    -- `R.rank` and `P.rank` live in different universes once the codomain is
+    -- independent, so the comparison goes through the natural-number bound.
+    have hRrank : R.rank ≤ (n : Cardinal) :=
+      ContinuousLinearMap.rank_comp_left_le_of_rank_le T P hP
     have herr : T - R = T ∘L Q := by
       ext x
       change T x - T (P x) = T (Q x)
@@ -986,7 +984,7 @@ theorem approximationSingularValue_restrict_mono_real
 /-- Projecting the codomain onto a real subspace containing the operator range
 preserves every approximation singular value. -/
 theorem approximationSingularValue_orthogonalProjectionOnto_comp_eq_real
-    {V G : Type v}
+    {V : Type vG} {G : Type vH}
     [NormedAddCommGroup V] [InnerProductSpace ℝ V] [CompleteSpace V]
     [NormedAddCommGroup G] [InnerProductSpace ℝ G] [CompleteSpace G]
     (W : Submodule ℝ G) [W.HasOrthogonalProjection]
@@ -1026,7 +1024,7 @@ theorem approximationSingularValue_orthogonalProjectionOnto_comp_eq_real
 /-- Projecting the codomain onto a real subspace containing the range preserves
 all finite Ky Fan approximation gauges. -/
 theorem kyFanApproximationGauge_orthogonalProjectionOnto_comp_eq_real
-    {V G : Type v}
+    {V : Type vG} {G : Type vH}
     [NormedAddCommGroup V] [InnerProductSpace ℝ V] [CompleteSpace V]
     [NormedAddCommGroup G] [InnerProductSpace ℝ G] [CompleteSpace G]
     (W : Submodule ℝ G) [W.HasOrthogonalProjection]
@@ -1040,7 +1038,7 @@ theorem kyFanApproximationGauge_orthogonalProjectionOnto_comp_eq_real
 /-- The Ky Fan approximation-gauge triangle inequality when the real source is
 finite-dimensional and the codomain is arbitrary. -/
 theorem kyFanApproximationGauge_add_le_finiteSource_real
-    {V G : Type v}
+    {V : Type vG} {G : Type vH}
     [NormedAddCommGroup V] [InnerProductSpace ℝ V]
     [FiniteDimensional ℝ V]
     [NormedAddCommGroup G] [InnerProductSpace ℝ G] [CompleteSpace G]

@@ -33,9 +33,9 @@ open Foundation.RealComplexification
 
 noncomputable section
 
-universe v
+universe v vF
 
-variable {E F : Type v}
+variable {E : Type v} {F : Type vF}
   [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
   [NormedAddCommGroup F] [InnerProductSpace ℝ F] [CompleteSpace F]
 
