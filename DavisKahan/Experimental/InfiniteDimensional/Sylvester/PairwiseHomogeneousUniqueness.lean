@@ -25,6 +25,9 @@ open scoped InnerProductSpace
 open ForMathlib.DavisKahanExt
 open Spectra.YosidaHille
 open Spectra.Operator
+-- `generator` belongs to the one-parameter unitary group namespace, which none of
+-- the namespaces above re-exports.
+open Spectra.OneParameterUnitaryGroup
 
 noncomputable section
 
@@ -74,7 +77,11 @@ private theorem generatorIntertwines_of_closedHomogeneous
           = A.toLinearPMap ⟨X (x : F), hmapA⟩ := hAapply
       _ = X (B.toLinearPMap xb) := by
           simpa using sub_eq_zero.mp heq
-      _ = X (generator (genToGroup hB) x) := by rw [hBapply]
+      _ = X (generator (genToGroup hB) x) := by
+          rw [hBapply]
+          -- The two domain elements carry the same vector with different
+          -- membership proofs, so they agree by extensionality.
+          congr 2
 
 /-- A bounded homogeneous closed Sylvester solution vanishes whenever the two
 self-adjoint spectra are disjoint. -/
@@ -90,9 +97,8 @@ theorem closedSylvester_homogeneous_eq_zero_of_disjoint_spectrum
     X = 0 := by
   let AO : SelfAdjointOperator E := ⟨A.toLinearPMap, hA⟩
   let BO : SelfAdjointOperator F := ⟨B.toLinearPMap, hB⟩
-  exact Spectra.QuantumMechanics.SpectralTheory.
-    generatorIntertwiner_eq_zero_of_disjoint_spectrum
-      AO BO X (generatorIntertwines_of_closedHomogeneous hA hB hEq) hdisj
+  exact Spectra.QuantumMechanics.SpectralTheory.generatorIntertwiner_eq_zero_of_disjoint_spectrum
+    AO BO X (generatorIntertwines_of_closedHomogeneous hA hB hEq) hdisj
 
 /-- Positive pairwise spectral distance implies homogeneous uniqueness. -/
 theorem closedSylvester_homogeneous_eq_zero_of_pairwiseSpectrumGap
