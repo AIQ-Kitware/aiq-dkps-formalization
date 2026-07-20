@@ -204,6 +204,24 @@ noncomputable def unboundedSinThetaDataOfPaperCommonCore
   residual_eq := C.residual_eq
   intertwines := hintertwines
 
+/-- The constructed data carries the supplied residual unchanged.
+
+Downstream statements quote the source residual `R`, while the accepted engine
+returns the residual field of the constructed package; without this projection
+the two do not match syntactically. -/
+@[simp]
+theorem unboundedSinThetaDataOfPaperCommonCore_residual
+    (A : ClosedOperator (𝕜 := 𝕜) (E := E))
+    (A₀ : ClosedOperator (𝕜 := 𝕜) (E := F))
+    (Λ₁ : ClosedOperator (𝕜 := 𝕜) (E := G))
+    (X : F →L[𝕜] E) (F₁ : G →L[𝕜] E) (R : F →L[𝕜] E)
+    (C : PaperCommonCoreResidualData A A₀ X R)
+    (hF₁ : ∀ y : Λ₁.domain, F₁ (y : G) ∈ A.domain)
+    (hintertwines : ∀ y : Λ₁.domain,
+      A.toLinearMap ⟨F₁ (y : G), hF₁ y⟩ = F₁ (Λ₁.toLinearMap y)) :
+    (unboundedSinThetaDataOfPaperCommonCore A A₀ Λ₁ X F₁ R C hF₁
+      hintertwines).residual = R := rfl
+
 end ExactSinTheta
 end Experimental
 end DavisKahan

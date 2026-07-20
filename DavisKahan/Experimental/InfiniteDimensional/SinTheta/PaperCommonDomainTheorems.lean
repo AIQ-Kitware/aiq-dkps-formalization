@@ -306,8 +306,8 @@ structure PaperRealCommonDomainTheorem62Data where
   epsilon_pos : 0 < epsilon
   lower_frame : LowerFrameBound source.E₀ epsilon
   spectral_distance :
-    ∀ λ ∈ source.A₀.realSpectrum, ∀ α ∈ source.Λ₁.realSpectrum,
-      gap ≤ |λ - α|
+    ∀ lam ∈ source.A₀.realSpectrum, ∀ α ∈ source.Λ₁.realSpectrum,
+      gap ≤ |lam - α|
 
 namespace PaperRealCommonDomainTheorem62Data
 

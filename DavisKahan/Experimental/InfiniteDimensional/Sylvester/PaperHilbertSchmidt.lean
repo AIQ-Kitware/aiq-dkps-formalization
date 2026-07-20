@@ -179,8 +179,8 @@ theorem paperHilbertSchmidt_sylvester_real_le_of_pairwiseSpectrumGap
     {X C : F →L[ℝ] E}
     (hA : A.IsSelfAdjoint) (hB : B.IsSelfAdjoint)
     {δ : ℝ} (hδ : 0 < δ)
-    (hgap : ∀ λ ∈ A.realSpectrum, ∀ α ∈ B.realSpectrum,
-      δ ≤ |λ - α|)
+    (hgap : ∀ lam ∈ A.realSpectrum, ∀ α ∈ B.realSpectrum,
+      δ ≤ |lam - α|)
     (hEq : HasClosedSylvesterEquation A B X C)
     (hC : IsPaperHilbertSchmidt C) :
     IsPaperHilbertSchmidt X ∧
@@ -188,8 +188,8 @@ theorem paperHilbertSchmidt_sylvester_real_le_of_pairwiseSpectrumGap
   have hgapC : GenuinePairwiseSpectrumGap
       (ClosedOperatorComplexification.complexify A)
       (ClosedOperatorComplexification.complexify B) δ := by
-    intro λ hλ α hα
-    apply hgap λ _ α _
+    intro lam hlam α hα
+    apply hgap lam _ α _
     · rwa [ClosedOperatorComplexification.closed_realSpectrum_complexify A]
     · rwa [ClosedOperatorComplexification.closed_realSpectrum_complexify B]
   have hCcomplex : IsPaperHilbertSchmidt
