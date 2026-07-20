@@ -154,8 +154,14 @@ variable {𝕜 E F G H}
 `x ⊗ₜ[𝕜] y` under the isometric dense coercion into the completion. -/
 def tmul (x : E) (y : F) : E ⊗̂[𝕜] F := ((x ⊗ₜ[𝕜] y : E ⊗[𝕜] F) : E ⊗̂[𝕜] F)
 
-@[inherit_doc]
-scoped notation:100 x " ⊗̂ₜ[" 𝕜 "] " y:100 => HilbertTensor.tmul (𝕜 := 𝕜) x y
+/- The scalar field is pinned by a type ascription rather than by a named argument.
+A `notation` body substitutes the parsed parameter into *every* occurrence of `𝕜`,
+including the label of a named argument, so `HilbertTensor.tmul (𝕜 := 𝕜) x y` expands
+under `x ⊗̂ₜ[ℂ] y` to `tmul (ℂ := ℂ) x y` -- an invalid parameter name.  The named-argument
+form therefore only elaborates when the scalar is literally the identifier `𝕜`. -/
+@[inherit_doc HilbertTensor.tmul]
+scoped notation:100 x " ⊗̂ₜ[" 𝕜 "] " y:100 =>
+  (HilbertTensor.tmul x y : HilbertTensor 𝕜 _ _)
 
 theorem tmul_def (x : E) (y : F) :
     x ⊗̂ₜ[𝕜] y = ((x ⊗ₜ[𝕜] y : E ⊗[𝕜] F) : E ⊗̂[𝕜] F) := rfl

@@ -44,7 +44,7 @@ private theorem mapL_id_id :
       (ContinuousLinearMap.id ℂ (Conj F)) =
       ContinuousLinearMap.id ℂ (Space E F) := by
   apply ContinuousLinearMap.ext
-  apply HilbertTensor.dense_span_tmul.induction_on
+  apply HilbertTensor.dense_span_tmul.induction
   · intro z hz
     induction hz using Submodule.span_induction with
     | mem z hz =>
@@ -63,7 +63,7 @@ private theorem mapL_comp
     HilbertTensor.mapL (A₁ ∘L A₂) (B₁ ∘L B₂) =
       (HilbertTensor.mapL A₁ B₁) ∘L (HilbertTensor.mapL A₂ B₂) := by
   apply ContinuousLinearMap.ext
-  apply HilbertTensor.dense_span_tmul.induction_on
+  apply HilbertTensor.dense_span_tmul.induction
   · intro z hz
     induction hz using Submodule.span_induction with
     | mem z hz =>
@@ -85,13 +85,13 @@ private theorem mapL_unitary
       ⟪HilbertTensor.mapL A B z, HilbertTensor.mapL A B w⟫_ℂ =
         ⟪z, w⟫_ℂ := by
   intro z
-  apply HilbertTensor.dense_span_tmul.induction_on
+  apply HilbertTensor.dense_span_tmul.induction
   · intro z hz
     induction hz using Submodule.span_induction with
     | mem z hz =>
         rcases hz with ⟨⟨x, y⟩, rfl⟩
         intro w
-        apply HilbertTensor.dense_span_tmul.induction_on
+        apply HilbertTensor.dense_span_tmul.induction
         · intro w hw
           induction hw using Submodule.span_induction with
           | mem w hw =>
@@ -123,7 +123,7 @@ private theorem continuous_mapL_orbit
     (z : Space E F) :
     Continuous fun t : ℝ =>
       HilbertTensor.mapL (U.U t) (Conj.map (V.U t)) z := by
-  apply HilbertTensor.dense_span_tmul.induction_on z
+  apply HilbertTensor.dense_span_tmul.induction z
   · intro z hz
     induction hz using Submodule.span_induction with
     | mem z hz =>

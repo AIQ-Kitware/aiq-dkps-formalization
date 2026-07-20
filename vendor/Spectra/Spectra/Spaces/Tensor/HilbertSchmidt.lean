@@ -30,6 +30,11 @@ joint spectral model can be built in a higher module without choosing bases.
 open scoped InnerProductSpace ComplexConjugate BigOperators
 
 namespace Spectra
+
+/- The pure-tensor notation `x ⊗̂ₜ[𝕜] y` is scoped to `Spectra.HilbertTensor`, not to
+`Spectra`, so being inside `namespace Spectra` activates `⊗̂[𝕜]` but not `⊗̂ₜ[𝕜]`. -/
+open scoped HilbertTensor
+
 namespace HilbertSchmidtTensor
 
 noncomputable section
@@ -274,7 +279,7 @@ theorem toOperator_mapL_left
     (A : E →L[ℂ] G) (z : Space E F) :
     toOperator (HilbertTensor.mapL A (ContinuousLinearMap.id ℂ (Conj F)) z) =
       A ∘L toOperator z := by
-  apply HilbertTensor.dense_span_tmul.induction_on
+  apply HilbertTensor.dense_span_tmul.induction
   · intro t ht
     induction ht using Submodule.span_induction with
     | mem t ht =>
@@ -298,7 +303,7 @@ theorem toOperator_mapL_right
     toOperator (HilbertTensor.mapL (ContinuousLinearMap.id ℂ E)
       (Conj.map B.adjoint) z) =
       toOperator z ∘L B := by
-  apply HilbertTensor.dense_span_tmul.induction_on
+  apply HilbertTensor.dense_span_tmul.induction
   · intro t ht
     induction ht using Submodule.span_induction with
     | mem t ht =>

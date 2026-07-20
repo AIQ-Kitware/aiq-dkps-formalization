@@ -168,7 +168,7 @@ theorem spectralProjection_gap_eq_zero
       (sylvesterGroup U V) (Set.Ioo (-δ) δ) measurableSet_Ioo = 0 := by
   apply ContinuousLinearMap.ext
   intro z
-  apply HilbertTensor.dense_span_tmul.induction_on z
+  apply HilbertTensor.dense_span_tmul.induction z
   · intro z hz
     induction hz using Submodule.span_induction with
     | mem z hz =>
