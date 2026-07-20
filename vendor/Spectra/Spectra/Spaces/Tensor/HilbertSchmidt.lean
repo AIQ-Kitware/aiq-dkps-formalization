@@ -248,6 +248,11 @@ theorem toOperator_smul (c : ℂ) (z : Space E F) :
     toOperator (c • z) = c • toOperator z := by
   simpa only [toOperatorL_apply] using map_smul toOperatorL c z
 
+@[simp]
+theorem toOperator_sum {ι : Type*} (s : Finset ι) (f : ι → Space E F) :
+    toOperator (∑ i ∈ s, f i) = ∑ i ∈ s, toOperator (f i) := by
+  simpa only [toOperatorL_apply] using map_sum toOperatorL f s
+
 /-- Pure tensors represent the corresponding rank-one operators. -/
 theorem toOperator_tmul (u : E) (v : F) :
     toOperator (u ⊗̂ₜ[ℂ] Conj.toConj v) =
@@ -386,7 +391,7 @@ theorem toOperator_mapL_right
 theorem rank_toOperator_sum_tmul_le
     {ι : Type*} (s : Finset ι) (u : ι → E) (v : ι → F) :
     (toOperator (∑ i ∈ s, u i ⊗̂ₜ[ℂ] Conj.toConj (v i))).rank ≤ s.card := by
-  simp_rw [map_sum, toOperator_tmul]
+  simp_rw [toOperator_sum, toOperator_tmul]
   let T : F →L[ℂ] E := ∑ i ∈ s, InnerProductSpace.rankOne ℂ (u i) (v i)
   change T.rank ≤ (s.card : Cardinal)
   calc
@@ -415,7 +420,7 @@ theorem inner_columnTensor_eq_zero {ι : Type*} (b : HilbertBasis ι ℂ F)
     (z : Space E F) {i j : ι} (hij : i ≠ j) :
     ⟪columnTensor b z i, columnTensor b z j⟫_ℂ = 0 := by
   simp [columnTensor, HilbertTensor.inner_tmul_tmul, Conj.inner_def,
-    b.orthonormal.inner_right hij]
+    b.orthonormal.inner_eq_zero hij]
 
 /-- The column tensors resolve the identity on `E tensor Conj F`. -/
 theorem hasSum_columnTensor {ι : Type*} (b : HilbertBasis ι ℂ F)
@@ -441,9 +446,9 @@ theorem hasSum_columnTensor {ι : Type*} (b : HilbertBasis ι ℂ F)
         rcases ht with ⟨⟨u, v⟩, rfl⟩
         exact hpure u v
     | zero => simpa [columnTensor]
-    | add x y hx hy =>
+    | add x y _ _ hx hy =>
         simpa [columnTensor, map_add, HilbertTensor.add_tmul] using hx.add hy
-    | smul c x hx =>
+    | smul c x _ hx =>
         simpa [columnTensor, map_smul, HilbertTensor.smul_tmul] using hx.smul c
   have hclosed : IsClosed {t : Space E F | HasSum (columnTensor b t) t} := by
     rw [isClosed_iff_clusterPt]
@@ -501,7 +506,7 @@ private theorem summable_columnSeries {ι : Type*} (b : HilbertBasis ι ℂ F)
   apply summable_of_pairwise_orthogonal_of_summable_norm_sq
   · intro i j hij
     simp [HilbertTensor.inner_tmul_tmul, Conj.inner_def,
-      b.orthonormal.inner_right hij]
+      b.orthonormal.inner_eq_zero hij]
   · simpa [HilbertTensor.norm_tmul, b.norm_apply, mul_one, one_pow] using hA
 
 /-- The column-series tensor represents the original operator. -/
@@ -510,7 +515,7 @@ theorem toOperator_ofOperator {ι : Type*} (b : HilbertBasis ι ℂ F)
     toOperator (ofOperator b A hA) = A := by
   ext x
   have hseries := summable_columnSeries b A hA
-  rw [ofOperator, ← toOperatorL_apply, map_tsum hseries]
+  rw [ofOperator, ← toOperatorL_apply, ContinuousLinearMap.map_tsum _ hseries]
   simp_rw [toOperator_tmul, InnerProductSpace.rankOne_apply]
   have hrepr := A.hasSum (b.hasSum_repr x)
   simpa only [map_smul, b.repr_apply_apply] using hrepr.tsum_eq
