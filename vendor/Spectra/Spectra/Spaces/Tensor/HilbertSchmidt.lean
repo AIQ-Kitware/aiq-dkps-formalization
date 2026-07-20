@@ -230,6 +230,24 @@ theorem toOperatorL_apply (z : Space E F) :
     toOperatorL z = toOperator z :=
   rfl
 
+/-! The tensor/operator map is linear.  These are stated separately because
+`toOperator` is the unbundled map, so `map_add` and friends do not apply to it
+directly; the span inductions below need them as `simp` lemmas. -/
+
+@[simp]
+theorem toOperator_zero : toOperator (0 : Space E F) = 0 := by
+  simpa only [toOperatorL_apply] using map_zero (toOperatorL (E := E) (F := F))
+
+@[simp]
+theorem toOperator_add (z w : Space E F) :
+    toOperator (z + w) = toOperator z + toOperator w := by
+  simpa only [toOperatorL_apply] using map_add toOperatorL z w
+
+@[simp]
+theorem toOperator_smul (c : ℂ) (z : Space E F) :
+    toOperator (c • z) = c • toOperator z := by
+  simpa only [toOperatorL_apply] using map_smul toOperatorL c z
+
 /-- Pure tensors represent the corresponding rank-one operators. -/
 theorem toOperator_tmul (u : E) (v : F) :
     toOperator (u ⊗̂ₜ[ℂ] Conj.toConj v) =
@@ -242,12 +260,35 @@ theorem toOperator_tmul (u : E) (v : F) :
     inner_smul_left, inner_conj_symm]
   ring
 
+/-- The pure-tensor formula with the second factor left in the conjugate space.
+The span inductions below produce this shape, and substituting the conjugate
+variable is not stable: `Conj.toConj_ofConj` is a `simp` lemma, so any rewrite
+introducing `toConj (ofConj _)` is immediately undone. -/
+@[simp]
+theorem toOperator_tmul' (u : E) (cv : Conj F) :
+    toOperator (u ⊗̂ₜ[ℂ] cv) =
+      InnerProductSpace.rankOne ℂ u (Conj.ofConj cv) :=
+  toOperator_tmul u (Conj.ofConj cv)
+
+/-- The conjugate transport commutes with taking adjoints, in the form the
+span inductions need: `simp` normalises towards `(Conj.map B).adjoint`, so the
+`Conj.map B.adjoint` orientation is not available to it. -/
+@[simp]
+theorem Conj.ofConj_adjoint_map (B : E →L[ℂ] F) (cv : Conj F) :
+    Conj.ofConj ((Conj.map B).adjoint cv) = B.adjoint (Conj.ofConj cv) := by
+  rw [← Conj.map_adjoint]
+  rfl
+
 private theorem inner_tmul_eq_zero_of_toOperator_eq_zero
     {z : Space E F} (hz : toOperator z = 0) (u : E) (v : F) :
     ⟪u ⊗̂ₜ[ℂ] Conj.toConj v, z⟫_ℂ = 0 := by
-  have hx := congrArg (fun T : F →L[ℂ] E => T v) hz
-  have hw := congrArg (fun y : E => ⟪y, u⟫_ℂ) hx
-  simpa [toOperator_apply, ContinuousLinearMap.adjoint_inner_left] using hw
+  have hx : toOperator z v = 0 := by rw [hz]; rfl
+  calc ⟪u ⊗̂ₜ[ℂ] Conj.toConj v, z⟫_ℂ
+      = ⟪rightTensor v u, z⟫_ℂ := rfl
+    _ = ⟪u, (rightTensor v).adjoint z⟫_ℂ :=
+        (ContinuousLinearMap.adjoint_inner_right _ _ _).symm
+    _ = ⟪u, toOperator z v⟫_ℂ := rfl
+    _ = 0 := by rw [hx, inner_zero_right]
 
 /-- The tensor/operator representation is faithful. -/
 theorem toOperator_injective :
@@ -255,7 +296,9 @@ theorem toOperator_injective :
   intro z w hzw
   apply sub_eq_zero.mp
   have hzero : toOperator (z - w) = 0 := by
-    simpa using sub_eq_zero.mpr hzw
+    have h : toOperatorL (z - w) = 0 := by
+      rw [map_sub, toOperatorL_apply, toOperatorL_apply, hzw, sub_self]
+    simpa only [toOperatorL_apply] using h
   let K : Submodule ℂ (Space E F) :=
     Submodule.span ℂ (Set.range fun p : E × Conj F => p.1 ⊗̂ₜ[ℂ] p.2)
   have hzorth : z - w ∈ Kᗮ := by
@@ -267,10 +310,13 @@ theorem toOperator_injective :
         rw [← Conj.toConj_ofConj cv]
         exact inner_tmul_eq_zero_of_toOperator_eq_zero hzero u (Conj.ofConj cv)
     | zero => simp
-    | add x y hx hy => simp [inner_add_left, hx, hy]
-    | smul c x hx => simp [inner_smul_left, hx]
+    -- `span_induction` binds the *membership* proofs before the induction
+    -- hypotheses; naming only two binders captures the memberships and leaves
+    -- the hypotheses inaccessible.
+    | add x y _ _ hx hy => simp [inner_add_left, hx, hy]
+    | smul c x _ hx => simp [inner_smul_left, hx]
   have hzclosure : z - w ∈ K.topologicalClosureᗮ := by
-    rwa [orthogonal_topologicalClosure_eq]
+    rwa [Submodule.orthogonal_closure]
   have hKtop : K.topologicalClosure = ⊤ :=
     HilbertTensor.span_tmul_topologicalClosure
   rw [hKtop, Submodule.top_orthogonal_eq_bot] at hzclosure
@@ -285,22 +331,28 @@ theorem toOperator_mapL_left
     (A : E →L[ℂ] G) (z : Space E F) :
     toOperator (HilbertTensor.mapL A (ContinuousLinearMap.id ℂ (Conj F)) z) =
       A ∘L toOperator z := by
-  apply HilbertTensor.dense_span_tmul.induction
+  -- `Dense.induction` is `elab_as_elim`, so the motive has to be supplied explicitly;
+  -- `apply` cannot abstract `z` out of the goal on its own.
+  refine HilbertTensor.dense_span_tmul.induction
+    (P := fun t => toOperator (HilbertTensor.mapL A
+      (ContinuousLinearMap.id ℂ (Conj F)) t) = A ∘L toOperator t) ?_ ?_ z
   · intro t ht
     induction ht using Submodule.span_induction with
     | mem t ht =>
         rcases ht with ⟨⟨u, cv⟩, rfl⟩
-        rw [← Conj.toConj_ofConj cv]
-        simp [HilbertTensor.mapL_tmul, toOperator_tmul,
+        -- Substitute rather than rewrite: `Conj.toConj_ofConj` is itself a `simp`
+        -- lemma, so `rw [← Conj.toConj_ofConj cv]` is undone by the `simp` below.
+        simp [HilbertTensor.mapL_tmul, toOperator_tmul',
           InnerProductSpace.comp_rankOne]
     | zero => simp
-    | add x y hx hy => simpa using congrArg₂ (· + ·) hx hy
-    | smul c x hx => simpa using congrArg (fun q => c • q) hx
-  · exact isClosed_eq (continuous_const.sub
-      ((toOperatorL.comp (HilbertTensor.mapL A
-        (ContinuousLinearMap.id ℂ (Conj F)))).continuous.sub
-        ((ContinuousLinearMap.compL ℂ F E G A).comp toOperatorL).continuous))
-  · exact z
+    | add x y _ _ hx hy =>
+        simp only [map_add, toOperator_add, hx, hy, ContinuousLinearMap.comp_add]
+    | smul c x _ hx =>
+        simp only [map_smul, toOperator_smul, hx, ContinuousLinearMap.comp_smul]
+  · exact isClosed_eq
+      (toOperatorL.comp
+        (HilbertTensor.mapL A (ContinuousLinearMap.id ℂ (Conj F)))).continuous
+      ((ContinuousLinearMap.compL ℂ F E G A).comp toOperatorL).continuous
 
 /-- Right tensor action by the conjugate adjoint is right composition of
 represented operators. -/
@@ -309,22 +361,26 @@ theorem toOperator_mapL_right
     toOperator (HilbertTensor.mapL (ContinuousLinearMap.id ℂ E)
       (Conj.map B.adjoint) z) =
       toOperator z ∘L B := by
-  apply HilbertTensor.dense_span_tmul.induction
+  refine HilbertTensor.dense_span_tmul.induction
+    (P := fun t => toOperator (HilbertTensor.mapL (ContinuousLinearMap.id ℂ E)
+      (Conj.map B.adjoint) t) = toOperator t ∘L B) ?_ ?_ z
   · intro t ht
     induction ht using Submodule.span_induction with
     | mem t ht =>
         rcases ht with ⟨⟨u, cv⟩, rfl⟩
-        rw [← Conj.toConj_ofConj cv]
-        simp [HilbertTensor.mapL_tmul, toOperator_tmul,
+        simp [HilbertTensor.mapL_tmul, toOperator_tmul',
           InnerProductSpace.rankOne_comp, Conj.inner_def]
     | zero => simp
-    | add x y hx hy => simpa using congrArg₂ (· + ·) hx hy
-    | smul c x hx => simpa using congrArg (fun q => c • q) hx
-  · exact isClosed_eq (continuous_const.sub
-      ((toOperatorL.comp (HilbertTensor.mapL
-        (ContinuousLinearMap.id ℂ E) (Conj.map B.adjoint))).continuous.sub
-        ((ContinuousLinearMap.compRightL ℂ G F E B).comp toOperatorL).continuous))
-  · exact z
+    | add x y _ _ hx hy =>
+        simp only [map_add, toOperator_add, hx, hy, ContinuousLinearMap.add_comp]
+    | smul c x _ hx =>
+        simp only [map_smul, toOperator_smul, hx, ContinuousLinearMap.smul_comp]
+  · -- Right composition by `B` as a bounded operator: `compL` composes on the left,
+    -- so the flipped form is what sends `T` to `T ∘L B`.
+    exact isClosed_eq
+      (toOperatorL.comp (HilbertTensor.mapL
+        (ContinuousLinearMap.id ℂ E) (Conj.map B.adjoint))).continuous
+      (((ContinuousLinearMap.compL ℂ G F E).flip B).comp toOperatorL).continuous
 
 /-- A finite sum of pure tensors represents a finite-rank operator. -/
 theorem rank_toOperator_sum_tmul_le
