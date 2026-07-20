@@ -43,6 +43,7 @@ def boundedPullbackDomain
     (X : F →L[𝕜] E) : Set F :=
   {x | X x ∈ A.domain}
 
+omit [CompleteSpace E] [CompleteSpace F] in
 @[simp]
 theorem mem_boundedPullbackDomain
     (A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := E))
@@ -59,6 +60,7 @@ def HasPaperCommonDomain
 
 namespace HasPaperCommonDomain
 
+omit [CompleteSpace E] [CompleteSpace F] in
 /-- Pointwise form of the common-domain equality. -/
 theorem mem_iff
     {A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := E)}
@@ -67,7 +69,9 @@ theorem mem_iff
     X x ∈ A.domain ↔ x ∈ A₀.domain := by
   change x ∈ boundedPullbackDomain A X ↔ x ∈ A₀.domain
   rw [h]
+  exact SetLike.mem_coe
 
+omit [CompleteSpace E] [CompleteSpace F] in
 /-- The exact source condition implies the forward domain compatibility used
 by the accepted theorem. -/
 theorem maps_domain
@@ -78,6 +82,7 @@ theorem maps_domain
   intro x
   exact (h.mem_iff (x : F)).2 x.property
 
+omit [CompleteSpace E] [CompleteSpace F] in
 /-- The common domain is dense because it is the domain of the densely defined
 trial operator. -/
 theorem dense
@@ -118,6 +123,7 @@ noncomputable def unboundedSinThetaDataOfPaperCommonDomain
     exact hR (x : F) (hcommon.maps_domain x) x.property
   intertwines := hintertwines
 
+omit [CompleteSpace E] [CompleteSpace F] [CompleteSpace G] in
 /-- The constructed data remembers the exact paper common-domain equality. -/
 theorem unboundedSinThetaDataOfPaperCommonDomain_hasCommonDomain
     (A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := E))
