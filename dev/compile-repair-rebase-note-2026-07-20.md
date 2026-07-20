@@ -1,6 +1,6 @@
 # Rebase note for the mathematics agent, 2026-07-20
 
-Base your next drop on `d73fdd3` or later. This round was compiler repair only:
+Base your next drop on `a33cf4d` or later. This round was compiler repair only:
 no theorem statement was weakened, no declaration was removed, and nothing was
 left incomplete except where explicitly recorded below.
 
@@ -97,10 +97,17 @@ statements.
 
 ## Still open
 
-- `SinTheta.PaperTheorem62` --- 17 errors, under repair at the time of writing.
-  It is the only module in the chain not yet green.
+**Nothing in this chain.** `SinTheta.PaperTheorem62` is closed: both
+`PaperTheorem62Data.result` and `PaperRealTheorem62Data.result` build and print
+exactly `[propext, Classical.choice, Quot.sound]`.
 
-Everything below it is closed: `Ideals.PaperHilbertSchmidtBasis`, the four
+Its last defect is worth recording, because it is a trap this repository has
+now hit twice: the identity operator's norm is one only on a *nontrivial*
+space, and the spaces here may be trivial, so any step rewriting it to one
+fails to elaborate and every calc step below it fails in turn. Bound it by the
+lemma that carries no instance requirement instead.
+
+Everything below it is likewise closed: `Ideals.PaperHilbertSchmidtBasis`, the four
 tensor modules, `Sylvester.PaperHilbertSchmidtDefectFirst`,
 `Sylvester.PaperHilbertSchmidtPairwise`, `Sylvester.PairwiseSpectrumGap`,
 `Sylvester.PairwiseHomogeneousUniqueness` and `Sylvester.HomogeneousUniqueness`
