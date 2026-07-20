@@ -16,6 +16,6 @@ import DavisKahan.SpectralTheory.Real.SpectralBridge
 import DavisKahan.SpectralTheory.ReducingSubspace.Restriction
 import DavisKahan.Experimental.InfiniteDimensional.Core.SpectralProjection
 import DavisKahan.Experimental.InfiniteDimensional.Core.Unbounded
-import DavisKahan.Experimental.InfiniteDimensional.Core.UnboundedSpectral
+import DavisKahan.Sylvester.ClosedSylvesterEquation
 
 /-! # Experimental infinite-dimensional foundations -/
