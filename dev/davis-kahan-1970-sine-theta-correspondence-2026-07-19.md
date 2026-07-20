@@ -1,3 +1,11 @@
+# Historical status notice
+
+This file is a pre-compilation planning snapshot and its `compiler-pending` and
+open-status cells are no longer current.  Use
+`dev/davis-kahan-1970-source-correspondence-matrix.md` for the authoritative
+compiled correspondence and
+`docs/planning/davis-kahan-general-sin-theta-roadmap.md` for current status.
+
 # Davis--Kahan 1970 sine-theta correspondence matrix
 
 Date: 2026-07-19

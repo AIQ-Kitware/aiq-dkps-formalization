@@ -139,12 +139,17 @@ intertwining, residual, and localization obligations are discharged internally.
 
 ## Current status and optional extension frontier
 
-At commit `19e6d2fa5e5b`, the full general sine-theta source surface is
-compiler-accepted for complex and real scalars.  This includes all three gap
-configurations, arbitrary source-facing unitary-invariant ideal families,
-bounded specializations, and natural real spectral-subspace inputs.  The
-explicit `FullPartIII` target and `FullUnboundedAudit.lean` must still be built
-directly because the default library root does not cover them.
+At commit `7463ca25c64a`, the full source-faithful Section 6 sine-theta surface
+is compiler-accepted for complex and real scalars.  It includes the three gap
+configurations, every source-facing unitarily invariant norm, common-domain and
+graph-core forms, pairwise-gap Hilbert--Schmidt Theorem 6.2, sharpness, the
+one-gap counterexample, and finite-multiplicity equality models.
+
+Ordinary `lake build` now builds the production `DavisKahan.All` surface by
+default.  The explicit nondefault `DavisKahan.Experimental` target builds the
+quarantined API test bed.  The literal source facade is additionally checked by
+`scripts/audit_full_paper_sine_theta.py`, and repository boundaries are checked
+by `scripts/check_library_structure.py`.
 
 The accepted theorem chain must not be reopened or retired.  Optional API work
 is isolated in separate leaves:
