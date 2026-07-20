@@ -30,6 +30,8 @@ namespace ExactSinTheta
 
 open scoped InnerProductSpace BigOperators ENNReal
 
+open Foundation
+
 noncomputable section
 
 universe u v
@@ -146,7 +148,7 @@ theorem isPaperHilbertSchmidt_adjoint_iff
     IsPaperHilbertSchmidt A.adjoint ↔ IsPaperHilbertSchmidt A := by
   apply SameApproximationSingularSequence.isPaperHilbertSchmidt_iff
   intro n
-  exact approximationSingularValue_adjoint A n
+  exact approximationSingularValue_adjoint n A
 
 /-- Adjoint invariance of the square norm. -/
 theorem paperHilbertSchmidtNorm_adjoint
@@ -158,7 +160,7 @@ theorem paperHilbertSchmidtNorm_adjoint
     paperHilbertSchmidtNorm A.adjoint = paperHilbertSchmidtNorm A := by
   apply SameApproximationSingularSequence.paperHilbertSchmidtNorm_eq
   intro n
-  exact approximationSingularValue_adjoint A n
+  exact approximationSingularValue_adjoint n A
 
 /-- The modulus has the same square norm as the original rectangular map. -/
 theorem paperHilbertSchmidtNorm_operatorModulus
@@ -182,7 +184,7 @@ theorem paperHilbertSchmidtEnergy_complexify
   unfold paperHilbertSchmidtEnergy
   congr 1
   funext n
-  rw [approximationSingularValue_complexify]
+  rw [ComplexificationApproximation.approximationSingularValue_complexify]
 
 /-- Real complexification preserves square-norm membership. -/
 theorem isPaperHilbertSchmidt_complexify_iff
@@ -216,12 +218,11 @@ theorem paperHilbertSchmidtEnergy_smul
     paperHilbertSchmidtEnergy (c • A) =
       ENNReal.ofReal (‖c‖ ^ 2) * paperHilbertSchmidtEnergy A := by
   unfold paperHilbertSchmidtEnergy
-  rw [ENNReal.mul_tsum]
+  rw [← ENNReal.tsum_mul_left]
   congr 1
   funext n
-  rw [approximationSingularValue_smul]
-  rw [mul_pow]
-  simp [ENNReal.ofReal_mul, sq_nonneg]
+  rw [approximationSingularValue_smul, mul_pow,
+    ENNReal.ofReal_mul (sq_nonneg _)]
 
 /-- Absolute homogeneity of the square norm on finite-energy operators. -/
 theorem paperHilbertSchmidtNorm_smul
@@ -233,11 +234,9 @@ theorem paperHilbertSchmidtNorm_smul
     (hA : IsPaperHilbertSchmidt A) :
     paperHilbertSchmidtNorm (c • A) = ‖c‖ * paperHilbertSchmidtNorm A := by
   rw [paperHilbertSchmidtNorm, paperHilbertSchmidtEnergy_smul,
-    ENNReal.toReal_mul]
-  · rw [Real.sqrt_mul (sq_nonneg ‖c‖), Real.sqrt_sq (norm_nonneg c)]
-    simp [paperHilbertSchmidtNorm]
-  · simp
-  · exact hA
+    ENNReal.toReal_mul, ENNReal.toReal_ofReal (sq_nonneg _),
+    Real.sqrt_mul (sq_nonneg ‖c‖), Real.sqrt_sq (norm_nonneg c),
+    paperHilbertSchmidtNorm]
 
 
 /-- Nonzero scalar multiplication preserves Hilbert--Schmidt membership. -/
@@ -256,7 +255,7 @@ theorem isPaperHilbertSchmidt_smul_iff
     have htop : paperHilbertSchmidtEnergy A = ⊤ := by simpa using hA
     rw [htop, ENNReal.mul_top] at h
     · exact h rfl
-    · simpa [ENNReal.ofReal_eq_zero, sq_eq_zero_iff, hc]
+    · simp [hc]
   · intro hA
     exact ENNReal.mul_ne_top ENNReal.ofReal_ne_top hA
 
@@ -269,8 +268,8 @@ theorem isPaperHilbertSchmidt_neg_iff
     [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
     (A : E →L[𝕜] F) :
     IsPaperHilbertSchmidt (-A) ↔ IsPaperHilbertSchmidt A := by
-  simpa only [neg_eq_neg_one_smul] using
-    isPaperHilbertSchmidt_smul_iff (-1 : 𝕜) (by simp) A
+  have h := isPaperHilbertSchmidt_smul_iff (-1 : 𝕜) (by simp) A
+  rwa [neg_one_smul] at h
 
 
 /-- Negation preserves the square norm. -/
@@ -284,8 +283,8 @@ theorem paperHilbertSchmidtNorm_neg
     paperHilbertSchmidtNorm (-A) = paperHilbertSchmidtNorm A := by
   apply SameApproximationSingularSequence.paperHilbertSchmidtNorm_eq
   intro n
-  simpa only [neg_eq_neg_one_smul, approximationSingularValue_smul, norm_neg,
-    norm_one, one_mul]
+  rw [← neg_one_smul 𝕜 A, approximationSingularValue_smul]
+  simp
 
 
 /-- Two-sided ideal control of the extended Hilbert--Schmidt energy. -/
@@ -301,7 +300,7 @@ theorem paperHilbertSchmidtEnergy_comp_le
       ENNReal.ofReal ((‖L‖ * ‖R‖) ^ 2) *
         paperHilbertSchmidtEnergy A := by
   unfold paperHilbertSchmidtEnergy
-  rw [ENNReal.mul_tsum]
+  rw [← ENNReal.tsum_mul_left]
   apply ENNReal.tsum_le_tsum
   intro n
   have hsing := approximationSingularValue_comp_le n L A R
@@ -330,9 +329,8 @@ theorem IsPaperHilbertSchmidt.comp
     (L : F →L[𝕜] G) (R : H →L[𝕜] E) :
     IsPaperHilbertSchmidt (L ∘L A ∘L R) := by
   unfold IsPaperHilbertSchmidt at hA ⊢
-  refine ne_top_of_le_ne_top ?_ hA
-  exact (paperHilbertSchmidtEnergy_comp_le L A R).trans
-    (ENNReal.mul_le_mul_left' le_rfl _)
+  refine ne_top_of_le_ne_top ?_ (paperHilbertSchmidtEnergy_comp_le L A R)
+  exact ENNReal.mul_ne_top ENNReal.ofReal_ne_top hA
 
 /-- Sharp two-sided ideal norm estimate. -/
 theorem paperHilbertSchmidtNorm_comp_le
@@ -351,8 +349,8 @@ theorem paperHilbertSchmidtNorm_comp_le
       paperHilbertSchmidtEnergy (L ∘L A ∘L R) ≠ ⊤ :=
     hA.comp L R
   rw [paperHilbertSchmidtNorm, paperHilbertSchmidtNorm]
-  have hreal := ENNReal.toReal_mono hfinite
-    (mul_ne_top (by simp) hA) henergy
+  have hreal := ENNReal.toReal_mono
+    (ENNReal.mul_ne_top ENNReal.ofReal_ne_top hA) henergy
   calc
     Real.sqrt (paperHilbertSchmidtEnergy (L ∘L A ∘L R)).toReal
         ≤ Real.sqrt
@@ -383,8 +381,8 @@ theorem paperHilbertSchmidtNorm_comp_isometries_le
         ≤ ‖L‖ * paperHilbertSchmidtNorm A * ‖R‖ :=
       paperHilbertSchmidtNorm_comp_le L hA R
     _ ≤ 1 * paperHilbertSchmidtNorm A * 1 := by
-      gcongr
-      exact paperHilbertSchmidtNorm_nonneg A
+      gcongr <;>
+        simpa using paperHilbertSchmidtNorm_nonneg A
     _ = paperHilbertSchmidtNorm A := by ring
 
 /-- Squared norm identity on the canonical ideal. -/
