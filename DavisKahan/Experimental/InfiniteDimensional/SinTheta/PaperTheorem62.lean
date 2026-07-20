@@ -3,7 +3,7 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.Experimental.InfiniteDimensional.Sylvester.PaperHilbertSchmidt
+import DavisKahan.Experimental.InfiniteDimensional.Sylvester.PaperHilbertSchmidtPairwise
 import DavisKahan.Experimental.InfiniteDimensional.Ideals.PaperHilbertSchmidtFiniteRank
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.FrameFactorization
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.RealFrameFactorization
@@ -129,7 +129,7 @@ theorem rawOverlap_bound
         paperHilbertSchmidtNorm P.projectedResidual := by
   have hEq := unbounded_adjoint_residual_block_identity P.data
     P.ambient_selfAdjoint P.trial_selfAdjoint P.complement_selfAdjoint
-  exact paperHilbertSchmidt_sylvester_le_of_pairwiseSpectrumGap
+  exact paperHilbertSchmidt_sylvester_le_of_pairwiseSpectrumGap_direct
     P.trial_selfAdjoint P.complement_selfAdjoint P.gap_pos
     P.spectral_distance hEq (P.projectedResidual_isPaperHilbertSchmidt hR)
 
@@ -325,7 +325,7 @@ theorem result
         (P.data.residual.adjoint ∘L P.data.F₁)).2 (by simpa using hcomp)
   have hEq := unbounded_adjoint_residual_block_identity P.data
     P.ambient_selfAdjoint P.trial_selfAdjoint P.complement_selfAdjoint
-  have hraw := paperHilbertSchmidt_sylvester_real_le_of_pairwiseSpectrumGap
+  have hraw := paperHilbertSchmidt_sylvester_real_le_of_pairwiseSpectrumGap_direct
     P.trial_selfAdjoint P.complement_selfAdjoint P.gap_pos
     P.spectral_distance hEq hProjected
   let Q := lowerFramePolarDataReal P.data.X P.lowerFrame P.frameLowerBound_pos

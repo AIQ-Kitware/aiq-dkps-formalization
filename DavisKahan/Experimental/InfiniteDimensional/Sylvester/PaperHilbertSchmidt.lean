@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Experimental.InfiniteDimensional.Ideals.PaperHilbertSchmidt
+import DavisKahan.Experimental.InfiniteDimensional.Sylvester.PairwiseSpectrumGap
 import DavisKahan.Experimental.InfiniteDimensional.Core.ClosedOperatorComplexification
 import Spectra.QuantumMechanics.BornRule.Joint.Forward
 import Spectra.Spaces.Tensor.Map
@@ -34,46 +35,6 @@ noncomputable section
 universe v
 
 open ForMathlib.DavisKahanExt
-
-/-- The exact weak spectral hypothesis in Theorem 6.2. -/
-def GenuinePairwiseSpectrumGap
-    {E F : Type v}
-    [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
-    [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
-    (A : ClosedOperator (𝕜 := ℂ) (E := E))
-    (B : ClosedOperator (𝕜 := ℂ) (E := F))
-    (δ : ℝ) : Prop :=
-  ∀ λ ∈ Spectra.Resolvent.spectrum A.toLinearPMap,
-    ∀ α ∈ Spectra.Resolvent.spectrum B.toLinearPMap,
-      δ ≤ |λ - α|
-
-namespace GenuinePairwiseSpectrumGap
-
-/-- Pairwise spectral distance is symmetric. -/
-theorem symm
-    {E F : Type v}
-    [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
-    [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
-    {A : ClosedOperator (𝕜 := ℂ) (E := E)}
-    {B : ClosedOperator (𝕜 := ℂ) (E := F)} {δ : ℝ}
-    (h : GenuinePairwiseSpectrumGap A B δ) :
-    GenuinePairwiseSpectrumGap B A δ := by
-  intro α hα λ hλ
-  simpa [abs_sub_comm] using h λ hλ α hα
-
-/-- Decreasing the requested gap preserves the hypothesis. -/
-theorem mono
-    {E F : Type v}
-    [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
-    [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
-    {A : ClosedOperator (𝕜 := ℂ) (E := E)}
-    {B : ClosedOperator (𝕜 := ℂ) (E := F)} {δ ε : ℝ}
-    (h : GenuinePairwiseSpectrumGap A B δ) (hεδ : ε ≤ δ) :
-    GenuinePairwiseSpectrumGap A B ε := by
-  intro λ hλ α hα
-  exact hεδ.trans (h λ hλ α hα)
-
-end GenuinePairwiseSpectrumGap
 
 /-- Spectral-measure model of one rectangular Sylvester equation.
 
