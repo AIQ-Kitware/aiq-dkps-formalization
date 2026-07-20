@@ -90,7 +90,7 @@ theorem moorePenroseInverse_apply_apply_rightSingularBasis
           (ForMathlib.rightSingularBasis A).orthonormal k k
     rw [hinner, mul_one, smul_smul]
     have hσ : ((((A.singularValues k) ^ 2 : ℝ) : 𝕜)) ≠ 0 := by
-      exact RCLike.ofReal_ne_zero.mpr (sq_ne_zero.mpr hk)
+      exact RCLike.ofReal_ne_zero.mpr (pow_ne_zero 2 hk)
     rw [inv_mul_cancel₀ hσ, one_smul]
 
 /-- The first Penrose identity `A A⁺ A = A`. -/
@@ -99,9 +99,10 @@ theorem comp_moorePenroseInverse_comp (A : E →ₗ[𝕜] F) :
   apply (ForMathlib.rightSingularBasis A).toBasis.ext
   intro i
   by_cases hi : A.singularValues i = 0
-  · rw [OrthonormalBasis.coe_toBasis,
-      ForMathlib.apply_rightSingularBasis_eq_zero_of_singularValue_eq_zero A hi]
-    simp
+  · -- on a zero singular direction both sides vanish; the composite has to be
+    -- unfolded before the vanishing rewrite reaches the inner occurrence
+    rw [OrthonormalBasis.coe_toBasis]
+    simp [ForMathlib.apply_rightSingularBasis_eq_zero_of_singularValue_eq_zero A hi]
   · rw [OrthonormalBasis.coe_toBasis]
     change A (moorePenroseInverse A (A (ForMathlib.rightSingularBasis A i))) =
       A (ForMathlib.rightSingularBasis A i)
@@ -113,11 +114,15 @@ theorem moorePenroseInverse_comp_eq_id_of_injective
     moorePenroseInverse A ∘ₗ A = LinearMap.id := by
   apply (ForMathlib.rightSingularBasis A).toBasis.ext
   intro i
+  -- injectivity rules out a zero singular direction: a right singular vector is
+  -- a unit vector, so `A v = 0 = A 0` would force `v = 0`
   have hi : A.singularValues i ≠ 0 := by
     intro hi
     have hz := ForMathlib.apply_rightSingularBasis_eq_zero_of_singularValue_eq_zero A hi
-    have he := hA hz
-    exact (ForMathlib.rightSingularBasis A).toBasis.ne_zero i he
+    have he : ForMathlib.rightSingularBasis A i = 0 := hA (by rw [hz, map_zero])
+    have hne : ForMathlib.rightSingularBasis A i ≠ 0 := by
+      simpa using (ForMathlib.rightSingularBasis A).toBasis.ne_zero i
+    exact hne he
   rw [OrthonormalBasis.coe_toBasis, LinearMap.comp_apply,
     moorePenroseInverse_apply_apply_rightSingularBasis A hi,
     LinearMap.id_apply]

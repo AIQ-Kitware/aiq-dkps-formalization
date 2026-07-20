@@ -68,9 +68,9 @@ theorem selfAdjointFunctionalCalculus_isSymmetric
   | @insert i s hi hs =>
       rw [Finset.sum_insert hi]
       exact
-        (((InnerProductSpace.isPositive_rankOne_self
-          (hT.eigenvectorBasis rfl i)).toLinearMap.isSymmetric).smul_ofReal
-            (f (hT.eigenvalues rfl i))).add hs
+        ((InnerProductSpace.isSymmetric_rankOne_self
+          (hT.eigenvectorBasis rfl i)).smul
+            (RCLike.conj_ofReal (f (hT.eigenvalues rfl i)))).add hs
 
 /-- The identity function recovers the original symmetric operator. -/
 theorem selfAdjointFunctionalCalculus_id
@@ -106,7 +106,7 @@ theorem selfAdjointFunctionalCalculus_comp
   intro i
   simp only [OrthonormalBasis.coe_toBasis, LinearMap.comp_apply,
     selfAdjointFunctionalCalculus_apply_eigenvectorBasis, map_smul, smul_smul,
-    RCLike.ofReal_mul]
+    RCLike.ofReal_mul, mul_comm]
 
 /-- Constant zero gives the zero operator. -/
 @[simp] theorem selfAdjointFunctionalCalculus_zero

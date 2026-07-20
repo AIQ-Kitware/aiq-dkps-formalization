@@ -41,6 +41,17 @@ noncomputable def cosThetaEmbedding (U : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] (X : F →ₗᵢ[𝕜] E) : F →ₗ[𝕜] E :=
   projection U ∘ₗ X.toLinearMap
 
+/-- Double-angle cosine block `C C⋆ - S S⋆`, written in trial coordinates.
+
+This is the companion of the double-angle sine block `2 S C⋆`: together they are
+the standard two-projection double-angle pair.  Writing an ambient operator in
+trial coordinates postcomposes with `X`, as the sine block does. -/
+noncomputable def cosTwoThetaEmbedding (U : Submodule 𝕜 E)
+    [U.HasOrthogonalProjection] (X : F →ₗᵢ[𝕜] E) : F →ₗ[𝕜] E :=
+  (cosThetaEmbedding U X ∘ₗ LinearMap.adjoint (cosThetaEmbedding U X) -
+      sinThetaEmbedding U X ∘ₗ LinearMap.adjoint (sinThetaEmbedding U X)) ∘ₗ
+    X.toLinearMap
+
 /-- No principal angle between `U` and `range X` is `π/4`. -/
 def AvoidsQuarterTurnEmbedding (U : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] (X : F →ₗᵢ[𝕜] E) : Prop :=
