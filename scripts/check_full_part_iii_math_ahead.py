@@ -1,23 +1,27 @@
 #!/usr/bin/env python3
-"""Protect the full Part III math-ahead batch from statement weakening.
+"""Compile-gated contract for the full Part III math-ahead batch.
 
-The checker verifies two independent properties:
+Static checks protect declaration signatures and reject unfinished proof terms,
+but they do not establish that Lean accepts a declaration.  Therefore the
+default mode also elaborates every changed module with ``lake env lean`` and
+returns success only when both the static and compiler checks pass.
 
-* no executable Davis--Kahan source outside the immutable challenge tree uses
-  an unfinished proof term; and
-* every declaration restored by the math-ahead batch retains the exact
-  normalized signature recorded in the batch manifest.
-
-Proof bodies may change freely while an agent repairs them against the pinned
-Lean and Mathlib APIs.
+Use ``--module PATH`` while repairing one dependency root.  Use
+``--static-only`` only for artifact construction in an environment without
+Lean; its success message is deliberately labelled STATIC and must never be
+reported as proof completion.
 """
 
 from __future__ import annotations
 
+import argparse
 import hashlib
 import json
 import pathlib
 import re
+import shutil
+import subprocess
+import sys
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 MANIFEST = ROOT / "dev/full-part-iii-math-ahead-restoration-manifest-2026-07-20.json"
@@ -66,8 +70,7 @@ def normalized_signature(block: str) -> str:
     return re.sub(r"\s+", " ", block[: min(positions)]).strip()
 
 
-def main() -> int:
-    manifest = json.loads(MANIFEST.read_text(encoding="utf8"))
+def static_errors(manifest: dict[str, object]) -> list[str]:
     errors: list[str] = []
 
     for source in sorted((ROOT / "DavisKahan").rglob("*.lean")):
@@ -105,15 +108,93 @@ def main() -> int:
         if digest != record["signature_sha256"]:
             errors.append(f"statement changed: {path}:{record['name']}")
 
+    return errors
+
+
+def manifest_modules(manifest: dict[str, object]) -> list[str]:
+    modules = {record["path"] for record in manifest["restored_declarations"]}
+    modules.update(manifest.get("additional_compilation_modules", ()))
+    return sorted(modules)
+
+
+def compile_modules(modules: list[str]) -> list[str]:
+    if shutil.which("lake") is None:
+        return ["lake executable is unavailable; compiler certification was not run"]
+
+    errors: list[str] = []
+    for index, module in enumerate(modules, 1):
+        print(f"[{index}/{len(modules)}] lake env lean {module}", flush=True)
+        completed = subprocess.run(
+            ["lake", "env", "lean", module],
+            cwd=ROOT,
+            check=False,
+        )
+        if completed.returncode != 0:
+            errors.append(f"compiler failure ({completed.returncode}): {module}")
+    return errors
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--static-only",
+        action="store_true",
+        help="check signatures and proof markers without invoking Lean",
+    )
+    parser.add_argument(
+        "--module",
+        action="append",
+        default=[],
+        help="compile only this restored module; may be repeated",
+    )
+    args = parser.parse_args()
+
+    manifest = json.loads(MANIFEST.read_text(encoding="utf8"))
+    errors = static_errors(manifest)
     if errors:
-        print("Full Part III math-ahead contract: FAILED")
+        print("Full Part III math-ahead static contract: FAILED")
         for error in errors:
             print(f"  - {error}")
         return 1
 
+    count = manifest["restored_declaration_count"]
+    if args.static_only:
+        print(
+            "Full Part III math-ahead static contract: STATIC CLEAN -- "
+            f"{count} signatures preserved; no unfinished proof terms outside Challenge; "
+            "Lean compilation not checked"
+        )
+        return 0
+
+    available = manifest_modules(manifest)
+    if args.module:
+        requested = []
+        for module in args.module:
+            candidate = pathlib.Path(module)
+            if candidate.is_absolute() or ".." in candidate.parts:
+                print(f"module path must be repository-relative: {module}")
+                return 2
+            normalized = candidate.as_posix()
+            source = ROOT / normalized
+            if source.suffix != ".lean" or not source.is_file():
+                print(f"Lean source does not exist: {normalized}")
+                return 2
+            if normalized not in requested:
+                requested.append(normalized)
+        modules = requested
+    else:
+        modules = available
+
+    compile_failures = compile_modules(modules)
+    if compile_failures:
+        print("Full Part III math-ahead compiler contract: FAILED")
+        for error in compile_failures:
+            print(f"  - {error}")
+        return 1
+
     print(
-        "Full Part III math-ahead contract: CLEAN -- "
-        f"{manifest['restored_declaration_count']} signatures preserved; "
+        "Full Part III math-ahead compiler contract: CLEAN -- "
+        f"{count} signatures preserved; {len(modules)} restored modules compile; "
         "no unfinished proof terms outside Challenge"
     )
     return 0

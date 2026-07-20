@@ -159,3 +159,23 @@ code *built green and looked correct* but a downstream check (comparator,
 `#print axioms`, kernel) still rejected it — those are the non-obvious,
 transferable traps. If unsure whether something belongs, write it in scratch
 first; if a week later you still think the lesson is durable, move it in.
+
+---
+
+## Davis--Kahan 1970 full source census
+
+The full-paper theorem-by-theorem source ledger is maintained in:
+
+- `davis-kahan-1970-full-source-census.json` -- authoritative structured data;
+- `davis-kahan-1970-full-source-census.md` -- generated human-readable view;
+- `davis-kahan-1970-missing-statements-math-ahead-2026-07-20.md` -- exact
+  missing-statement and Section 9 work plan;
+- `davis-kahan-1970-private-source-workflow.md` -- rules for using the local
+  transcription without redistributing it.
+
+Validate with:
+
+```bash
+python3 scripts/render_davis_kahan_1970_source_census.py --check
+python3 scripts/check_davis_kahan_1970_source_census.py
+```

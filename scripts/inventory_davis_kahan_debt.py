@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 """Inventory incomplete Lean declarations by roadmap role and import reachability.
 
-This is a planning tool, not a trusted-dependency checker. A file can contain
-open declarations while a particular theorem in that file remains clean. Use
-printed dependency information for theorem-level claims.
+This is a textual admission inventory, not a compilation or trusted-dependency
+checker.  Zero recorded terms does not mean that Lean accepts the source: an
+unknown identifier, malformed declaration, or failed tactic can leave a module
+uncompiled without appearing here.  Pair this tool with actual Lake/Lean exit
+statuses and printed dependency information.
 """
 
 from __future__ import annotations
@@ -147,7 +149,7 @@ def main() -> int:
         "file_count": len(records),
         "category_counts": dict(sorted(category_counts.items())),
         "records": records,
-        "caution": "Import reachability is not theorem dependency. Use the trusted dependency audit for endpoint claims.",
+        "caution": "This counts textual unfinished terms only. It does not compile modules and cannot detect dangling references or failed proofs. Import reachability is not theorem dependency.",
     }
 
     if args.write_json:
