@@ -30,13 +30,13 @@ open scoped InnerProductSpace BigOperators ENNReal
 
 noncomputable section
 
-universe u v
+universe u v vF
 
 /-- Approximation singular values vanish once the admissible approximation
 rank reaches the rank of the operator itself. -/
 theorem approximationSingularValue_eq_zero_of_rank_le
     {𝕜 : Type u} [RCLike 𝕜]
-    {E F : Type v}
+    {E : Type v} {F : Type vF}
     [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
     [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
     {A : E →L[𝕜] F} {n : ℕ}
@@ -53,7 +53,7 @@ theorem approximationSingularValue_eq_zero_of_rank_le
 approximation singular-value sequence vanishes. -/
 theorem approximationSingularValue_eq_zero_of_rank_le_nat
     {𝕜 : Type u} [RCLike 𝕜]
-    {E F : Type v}
+    {E : Type v} {F : Type vF}
     [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
     [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
     {A : E →L[𝕜] F} {r n : ℕ}
@@ -65,7 +65,7 @@ theorem approximationSingularValue_eq_zero_of_rank_le_nat
 /-- The extended square energy of a rank-at-most-`r` operator is a finite sum. -/
 theorem paperHilbertSchmidtEnergy_eq_sum_range_of_rank_le
     {𝕜 : Type u} [RCLike 𝕜]
-    {E F : Type v}
+    {E : Type v} {F : Type vF}
     [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
     [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
     {A : E →L[𝕜] F} {r : ℕ}
@@ -83,7 +83,7 @@ theorem paperHilbertSchmidtEnergy_eq_sum_range_of_rank_le
 /-- A finite-rank operator belongs to the canonical square ideal. -/
 theorem isPaperHilbertSchmidt_of_rank_le
     {𝕜 : Type u} [RCLike 𝕜]
-    {E F : Type v}
+    {E : Type v} {F : Type vF}
     [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
     [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
     {A : E →L[𝕜] F} {r : ℕ}
@@ -96,7 +96,7 @@ theorem isPaperHilbertSchmidt_of_rank_le
 /-- Finite-rank square energy is bounded by rank times squared operator norm. -/
 theorem paperHilbertSchmidtEnergy_le_rank_mul_opNorm_sq
     {𝕜 : Type u} [RCLike 𝕜]
-    {E F : Type v}
+    {E : Type v} {F : Type vF}
     [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
     [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
     {A : E →L[𝕜] F} {r : ℕ}
@@ -120,7 +120,7 @@ theorem paperHilbertSchmidtEnergy_le_rank_mul_opNorm_sq
 /-- The paper square norm is bounded by `sqrt rank` times operator norm. -/
 theorem paperHilbertSchmidtNorm_le_sqrt_rank_mul_opNorm
     {𝕜 : Type u} [RCLike 𝕜]
-    {E F : Type v}
+    {E : Type v} {F : Type vF}
     [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
     [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
     {A : E →L[𝕜] F} {r : ℕ}
@@ -146,7 +146,7 @@ theorem paperHilbertSchmidtNorm_le_sqrt_rank_mul_opNorm
 /-- Operator norm is the first square-summable singular value. -/
 theorem opNorm_le_paperHilbertSchmidtNorm
     {𝕜 : Type u} [RCLike 𝕜]
-    {E F : Type v}
+    {E : Type v} {F : Type vF}
     [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
     [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
     {A : E →L[𝕜] F} (hA : IsPaperHilbertSchmidt A) :

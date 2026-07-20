@@ -242,9 +242,18 @@ theorem paperHilbertSchmidtEnergy_comp_starProjection
     unfold approximationSingularValue
     exact_mod_cast le_antisymm h1 h2
   -- the compression has rank at most `n`
+  -- The rank of `T` lives in the codomain universe and `Module.rank ℂ K` in the
+  -- domain universe, so compare them through `Cardinal.lift`.
   have hTrank : T.rank ≤ (n : Cardinal) := by
-    calc T.rank ≤ Module.rank ℂ K := LinearMap.rank_le_domain T.toLinearMap
-      _ = (n : Cardinal) := by rw [← Module.finrank_eq_rank' ℂ K, hn]
+    have hK : Module.rank ℂ K = (n : Cardinal) := by
+      rw [← Module.finrank_eq_rank' ℂ K, hn]
+    refine Cardinal.le_natCast_of_lift_le
+      ((lift_rank_range_le T.toLinearMap).trans ?_)
+    calc
+      Cardinal.lift.{vE} (Module.rank ℂ K)
+          = Cardinal.lift.{vE} ((n : Cardinal)) := by rw [hK]
+      _ = (n : Cardinal) := Cardinal.lift_natCast n
+      _ ≤ (n : Cardinal) := le_rfl
   -- singular values of the compression, and the finite Frobenius identity
   have hsv : ∀ m : ℕ,
       approximationSingularValue m T = T.toLinearMap.singularValues m := by
