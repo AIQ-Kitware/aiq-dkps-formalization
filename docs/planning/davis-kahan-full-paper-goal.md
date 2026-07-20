@@ -135,31 +135,14 @@ they may quote only short anchors and should record:
 
 ## Current high-level status
 
-At commit `7463ca25c64a`, the source-faithful Section 6 sine-theta surface is
-complete for complex and real closed self-adjoint operators.  Theorem 6.1 is
-available in the full source norm scope, Theorem 6.2 has the sharp pairwise-gap
-Hilbert--Schmidt estimate, the common-domain and graph-core appendix forms are
-proved, and the equality, optimality, counterexample, and finite-multiplicity
-content is represented.  The restored paper Hilbert--Schmidt Sylvester module
-compiles through the defect-first pairwise-gap proof.
-
-The full 1970 paper is not complete.  The active roadmap is now:
-
-1. harden the source audit so every theorem-valued public alias intended as part
-   of the exact surface is checked, especially the Lemma 6.1 converse;
-2. extract the 33 proved Part III declarations still trapped in mixed
-   Experimental files;
-3. discharge the 78 genuinely open Part III aliases, grouped by direct rotation,
-   tangent/double-angle theory, graph/Riccati theory, continuation and Section 8,
-   sharpness, and the remaining unbounded passages;
-4. maintain the theorem-by-theorem correspondence ledger and explicit
-   nonclaims;
-5. integrate the reusable mathematics through a human-approved Tau Ceti roadmap
-   without preserving repository-local namespace accidents.
-
-The detailed single-angle status is now maintained in
-`docs/planning/davis-kahan-general-sin-theta-roadmap.md`.  The progress notes
-below are historical development records.
+The finite-dimensional library contains a strong and valuable package,
+including arbitrary rectangular UI-norm sine and tangent results and stable
+double-angle endpoints. The bounded branch contains meaningful operator-norm
+foundations. Neither is the canonical completion boundary. The immediate
+controlling goal is the generalized unbounded single-angle theorem in
+`Experimental/InfiniteDimensional/SinTheta/Canonical.lean`; the remaining
+four-theorem package, direct-rotation extremal theory, Section 8 package, and
+full source audit follow from that foundation.
 
 ### Progress note (2026-07-15, easy-ladder closure session)
 
@@ -1002,21 +985,21 @@ and global unitary-transport declarations.  These declarations preserve the acce
 operator-path and spectral-parameter resolvent estimates while making the remaining
 construction order explicit.
 
-## Full Part III math-ahead closure batch (2026-07-20)
+## Theorem-by-theorem source census
 
-The next proof campaign restores exact-signature candidate bodies for all 174
-remaining declarations that had earlier non-placeholder implementations in Git
-history.  The bodies come from work-in-progress commit `2244e7c6bd7f`; they are
-not considered complete until repaired and compiled against the current pinned
-APIs.  A signature manifest and checker prevent theorem weakening during that
-repair.
+The completion standard above is now backed by the structured 48-item ledger
+in `dev/davis-kahan-1970-full-source-census.json`, rendered as
+`dev/davis-kahan-1970-full-source-census.md`.
 
-The only removed declarations are the unused speculative duplicates in
-`SinTheta/ContinuationRoadmap.lean`.  They are superseded by the completed
-proof-carrying continuation stack ending in `ContinuationTheorem`.
+The ledger distinguishes:
 
-This batch does not change the accepted completion status of source Section 6.
-Its purpose is to close direct rotation, tangent and double-angle theory,
-continuation and spectral selection, sharpness, general operator-ideal
-infrastructure, and remaining unbounded full-paper support.  See
-`dev/full-part-iii-admission-elimination-math-ahead-2026-07-20.md`.
+- exact compiled source results;
+- compiled specializations and general infrastructure;
+- declarations in the concurrent full-Part-III repair campaign;
+- source statements with only partial implementation or missing wrappers;
+- genuinely unrepresented Section 3 results;
+- the entirely unstarted Section 9 numerical example;
+- Section 10 research questions, which are source content but not proof debt.
+
+The detailed next-proof plan is
+`dev/davis-kahan-1970-missing-statements-math-ahead-2026-07-20.md`.
