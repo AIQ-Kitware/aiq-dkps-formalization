@@ -1,178 +1,216 @@
 # Rebase note for the mathematics agent, 2026-07-20
 
-Base your next drop on `39bb27a` or later. This round was compiler repair only:
-no theorem statement was weakened, no declaration was removed, and nothing was
-left incomplete except where explicitly recorded below.
+Base your next drop on `88e32a8` or later.
 
-## What changed under you
+This round was compiler repair only. **No theorem statement was weakened, no
+hypothesis was added, no declaration was removed, and nothing was left
+incomplete.** The two exceptions to "nothing changed but proofs" are recorded
+explicitly below, under *Universe restriction* and *One signature argument*.
 
-### One of your two open obligations is closed
+---
 
-**Arbitrary-spectrum homogeneous uniqueness is proved and free of admissions.**
+## 1. Both of your open obligations are closed
+
+### Arbitrary-spectrum homogeneous uniqueness
 
 ```
 Spectra.QuantumMechanics.SpectralTheory.generatorIntertwiner_eq_zero_of_disjoint_spectrum
 Spectra.QuantumMechanics.SpectralTheory.spectralProjection_spectrum_eq_id
 Spectra.YosidaHille.GeneratorIntertwines.group
-ForMathlib...ExactSinTheta.closedSylvester_homogeneous_eq_zero_complex
-ForMathlib...ExactSinTheta.closedSylvester_homogeneous_eq_zero_real
+ForMathlib…ExactSinTheta.closedSylvester_homogeneous_eq_zero_complex
+ForMathlib…ExactSinTheta.closedSylvester_homogeneous_eq_zero_real
 ```
 
-all print exactly `[propext, Classical.choice, Quot.sound]`.
+All print exactly `[propext, Classical.choice, Quot.sound]`.
 
-Your proof candidate was mathematically correct throughout. It failed only
-because `GeneratorIntertwines.group` cited the density of the generator domain
-without importing the module that proves it, so the theorem the whole
-rectangular chain rests on did not exist. Do not redesign this argument.
+Your argument was mathematically correct throughout. It failed because
+`GeneratorIntertwines.group` cited the density of the generator domain without
+importing the module that proves it — so the theorem the entire rectangular
+chain rests on **did not exist**. Three one-line fixes. Do not redesign it.
 
-### Both of your open obligations are now closed
+### Pairwise tensor spectral support
 
-The second one, **pairwise tensor spectral support**, is proved and free of
-admissions. `Spectra.Spaces.Tensor.HilbertSchmidtSpectralGap` builds, and
-`borelMeasure_sylvesterGroup_tmul`, `hasVectorSpectralGap_tmul`,
-`spectralProjection_gap_eq_zero` and `hasVectorSpectralGap` all print exactly
-`[propext, Classical.choice, Quot.sound]`.
+```
+Spectra.HilbertSchmidtTensor.borelMeasure_sylvesterGroup_tmul
+Spectra.HilbertSchmidtTensor.hasVectorSpectralGap_tmul
+Spectra.HilbertSchmidtTensor.spectralProjection_gap_eq_zero
+Spectra.HilbertSchmidtTensor.hasVectorSpectralGap
+```
 
-As with the first obligation, the mathematics of your candidate was sound. It
-failed on namespace and notation scoping, a dense induction applied rather than
-eliminated, an integrand written in the source variable rather than the mapped
-one, and a higher-order product factorisation that needed its factors named.
-Nothing about the argument was redesigned.
+All axiom-clean. Again the mathematics was sound; the failures were namespace
+and notation scoping, a dense induction applied rather than eliminated, an
+integrand written in the source variable instead of the mapped one, and a
+higher-order product factorisation needing its factors named. Nothing about the
+argument was redesigned.
 
-### The tensor/operator dictionary and the flow layer above it
+---
 
-`Spectra.Spaces.Tensor.HilbertSchmidt` builds, and all ten endpoints are
-admission-free, including `hasSum_columnTensor`, `norm_sq_eq_tsum_column_norm_sq`,
-`existsUnique_tensor_iff_summable_columns` and the `ofOperator` inverse.
+## 2. Theorem 6.2 is closed
 
-The whole subtree now builds. Measured serially on a quiet tree, every one of
-`HilbertSchmidt`, `HilbertSchmidtFlow`, `HilbertSchmidtGeneratorBridge` and
-`HilbertSchmidtSpectralGap` is at zero errors.
+```
+ForMathlib…ExactSinTheta.PaperTheorem62Data.result      → [propext, Classical.choice, Quot.sound]
+ForMathlib…ExactSinTheta.PaperRealTheorem62Data.result  → [propext, Classical.choice, Quot.sound]
+```
 
-An earlier version of this note reported the dictionary alone as "the package",
-which overstated it: at that point the flow layer still had thirteen errors and
-the three modules above it were showing that one module's failures propagating.
+Both the complex and the real endpoint.
 
-The column expansion had to be rebuilt: it rested on five lemmas that do not
-exist in Mathlib under any name. It now goes through `OrthogonalFamily`, with a
-Bessel estimate proved from the Pythagoras identity and Cauchy--Schwarz. New
-public lemmas you may cite: `norm_sum_columnTensor_sq`, `sum_column_norm_sq_le`,
-`summable_column_norm_sq`, plus `toOperator_tmul'` (pure tensor with the second
-factor left in the conjugate space) and `Conj.ofConj_adjoint_map`.
+---
 
-`ofOperator_toOperator`'s summability argument now reads
-`summable_column_norm_sq b z`. `ofOperator` discards that argument
-definitionally, so the theorem asserts exactly what it did before.
-
-### Modules that went from red to green
+## 3. Modules that went from red to green
 
 | Module | Was | Now |
 | --- | --- | --- |
 | `Spectra.Spaces.Tensor.Hilbert` | latent notation bug | fixed |
 | `Spectra.Spaces.Tensor.HilbertSchmidt` | 39 | 0 |
+| `Spectra.Spaces.Tensor.HilbertSchmidtFlow` | 13 | 0 |
+| `Spectra.Spaces.Tensor.HilbertSchmidtGeneratorBridge` | 13 | 0 |
+| `Spectra.Spaces.Tensor.HilbertSchmidtSpectralGap` | 13 | 0 |
 | `Spectra.YosidaHille.RectangularIntertwining` | 5 | 0 |
 | `Spectra.SpectralTheory.SeparatedIntertwiner` | 5 | 0 |
 | `Spectra.OneParameterUnitaryGroup.Product` | 9 | 0 |
 | `Spectra.SpectralTheory.Calculus.SpectralGapInverse` | 7 | 0 |
+| `Ideals.PaperHilbertSchmidtBasis` | 26 | 0 |
 | `Sylvester.PairwiseSpectrumGap` | 7 | 0 |
 | `Sylvester.PairwiseHomogeneousUniqueness` | 11 | 0 |
 | `Sylvester.HomogeneousUniqueness` | 2 | 0 |
+| `Sylvester.PaperHilbertSchmidtDefectFirst` | 6 | 0 |
+| `Sylvester.PaperHilbertSchmidtPairwise` | 8 | 0 |
+| `SinTheta.PaperTheorem62` | 17 | 0 |
 
-### A universe restriction you should sign off on
+`scripts/check_repaired_modules.sh` now covers 37 modules and passes serially.
+The source-facing gate `scripts/check_full_unbounded_sin_theta.py` re-runs
+CLEAN with zero `sorryAx`.
 
-`Ideals/PaperHilbertSchmidtBasis.lean` had `variable {E : Type u} {F : Type v}`.
-That is now `variable {E F : Type v}`.
+**Nothing in this chain is open.**
 
-This is a correction, not a weakening. `paperHilbertSchmidtEnergy`,
+---
+
+## 4. No genuine mathematical gap was found
+
+Roughly a hundred and twenty errors were repaired. **Every one was Lean
+mechanics.** Three separate things looked like real mathematical gaps and were
+not — worth stating because each cost time to disprove:
+
+- The arithmetic failures in homogeneous uniqueness: a norm that never reduced,
+  together with a product that is not linear.
+- A difference-quotient decomposition that a ring tactic rejected with the false
+  residual `-(I⁻¹·t⁻¹) = 0`. **The identity is true as stated.** It failed
+  because the unbundled tensor operator map has no linearity lemmas in a
+  restricted `simp only` set, so the quotient never split.
+- The Theorem 6.2 cascade, which traced to `‖id‖ = 1` requiring a *nontrivial*
+  space.
+
+---
+
+## 5. Two changes that are not merely proofs
+
+### Universe restriction — please sign off
+
+`Ideals/PaperHilbertSchmidtBasis.lean` had `variable {E : Type u} {F : Type v}`;
+it is now `variable {E F : Type v}`.
+
+This is a **correction, not a weakening**. `paperHilbertSchmidtEnergy`,
 `IsPaperHilbertSchmidt`, `paperHilbertSchmidtNorm` and
-`SameApproximationSingularSequence` are all declared over a **single** universe
-`{E F : Type v}`, so with `E` and `F` in different universes not one theorem in
-that file could be stated at all. The apparent extra generality was never
-well-typed. Roughly eleven of its twenty six errors were that one mismatch.
+`SameApproximationSingularSequence` are all declared over a single universe, so
+with `E` and `F` in different universes not one theorem in that file could be
+*stated*. The apparent generality was never well-typed; eleven of its twenty-six
+errors were that one mismatch.
 
-If you want the generality for real, the fix is to universe-polymorphise
-`Ideals/PaperHilbertSchmidt.lean` first; it was deliberately not attempted here.
-This is the same defect class as the earlier heterogeneous singular-sequence
-statements.
+To have the generality for real, universe-polymorphise
+`Ideals/PaperHilbertSchmidt.lean` first. Deliberately not attempted here. Same
+defect class as the earlier heterogeneous singular-sequence statements.
 
-## Still open
+### One signature argument
 
-**Nothing in this chain.** `SinTheta.PaperTheorem62` is closed: both
-`PaperTheorem62Data.result` and `PaperRealTheorem62Data.result` build and print
-exactly `[propext, Classical.choice, Quot.sound]`.
+`ofOperator_toOperator`'s summability argument now reads
+`summable_column_norm_sq b z`. `ofOperator` discards that argument
+definitionally, so the theorem asserts exactly what it did before.
 
-Its last defect is worth recording, because it is a trap this repository has
-now hit twice: the identity operator's norm is one only on a *nontrivial*
-space, and the spaces here may be trivial, so any step rewriting it to one
-fails to elaborate and every calc step below it fails in turn. Bound it by the
-lemma that carries no instance requirement instead.
+---
 
-Everything below it is likewise closed: `Ideals.PaperHilbertSchmidtBasis`, the four
-tensor modules, `Sylvester.PaperHilbertSchmidtDefectFirst`,
-`Sylvester.PaperHilbertSchmidtPairwise`, `Sylvester.PairwiseSpectrumGap`,
-`Sylvester.PairwiseHomogeneousUniqueness` and `Sylvester.HomogeneousUniqueness`
-all build with no errors and are free of admissions.
+## 6. New API you may cite
 
-**No genuine mathematical gap was found anywhere in this drop.** Every one of
-roughly a hundred and twenty errors repaired was Lean mechanics. Two candidates
-that looked like real gaps were not: the arithmetic failures in homogeneous
-uniqueness were a norm that never reduced together with a nonlinear product,
-and the difference quotient decomposition that a ring tactic rejected was true
-as stated and failed only because the unbundled tensor operator map has no
-linearity lemmas in a restricted simp set.
+The column expansion rested on five lemmas that **do not exist in Mathlib under
+any name**. It was rebuilt on `OrthogonalFamily`, with a Bessel estimate proved
+from the Pythagoras identity and Cauchy–Schwarz. Now available:
 
-## Lean mechanics that cost the most time this round
+- `norm_sum_columnTensor_sq`, `sum_column_norm_sq_le`, `summable_column_norm_sq`
+- `toOperator_tmul'` — pure tensor with the second factor left in `Conj F`
+- `Conj.ofConj_adjoint_map`
+- `toOperator_add`, `toOperator_sub`, `toOperator_smul`, `toOperator_zero`,
+  `toOperator_sum` — **`toOperator` is unbundled**, so `map_add` and friends do
+  not reach it
 
-Every one of roughly seventy errors was mechanics, not mathematics. The
-recurring ones, in descending cost:
+---
+
+## 7. Lean mechanics that cost the most time
+
+In descending cost:
 
 1. **The lambda character cannot appear in an identifier**, not even inside a
    longer name such as `hλ`. It lexes as an identifier followed by the start of
-   a function abstraction, which then consumes following lines. In
-   `PairwiseSpectrumGap` the resulting parse error fell inside the body of the
-   central definition, so that definition did not exist, which is what blocked
-   the modules above it. Use `lam`.
+   a function abstraction, which then consumes the following lines. Twice the
+   resulting parse error fell *inside a definition body*, so that definition did
+   not exist and every module above it was blocked. Use `lam`.
 
-2. **A `notation` body substitutes its parameter into every occurrence of that
-   identifier, including the label of a named argument.** The vendored pure
-   tensor notation was written as `HilbertTensor.tmul (𝕜 := 𝕜) x y`, so
-   `x ⊗̂ₜ[ℂ] y` expanded to `tmul (ℂ := ℂ) x y`. It had been broken since it was
-   written and worked only because every prior call site passed a scalar
-   literally named `𝕜`. Pin the scalar with a type ascription instead.
+2. **A qualified name may not be split across a line break after its dot.**
+   Eighteen occurrences across four files.
 
 3. **`Submodule.span_induction` binds the two membership proofs before the two
-   induction hypotheses.** Write `| add x y _ _ hx hy =>` and `| smul c x _ hx =>`.
-   Naming only two binders captures the memberships and leaves the hypotheses
-   inaccessible, and every branch then reports an unrelated failure. This cost
-   time four separate times.
+   induction hypotheses.** Write `| add x y _ _ hx hy =>` and
+   `| smul c x _ hx =>`. Naming only two binders captures the memberships and
+   leaves the hypotheses inaccessible; every branch then reports an unrelated
+   failure. Cost time six separate times.
 
-4. **A heartbeat timeout here is usually a disguised type error**, not slowness.
-   Both timeouts in the tensor package were an operator on the base space handed
-   to a slot expecting an operator on the conjugate space. Check argument types
-   before raising limits.
+4. **`Dense.induction` is `elab_as_elim`.** Supply the motive `(P := …)` and use
+   `refine … ?_ ?_ point`, never `apply`. The point goes in the *last* slot.
+   There is no `Dense.induction_on`.
 
-5. **A rewrite is undone by a following `simp` when the rewriting lemma is
-   itself a `simp` lemma.** `rw [← Conj.toConj_ofConj cv]` followed by `simp`
-   is a no-op. Substitute, or state the lemma in the shape `simp` normalizes to.
+5. **A heartbeat timeout here is usually a disguised type error**, not slowness.
+   Confirmed six times. Check argument types before raising limits.
 
-6. **A modifier such as `open X in` must precede a declaration's docstring**,
-   not sit between the docstring and the declaration. Same rule as `omit ... in`.
+6. **`‖id‖ = 1` requires a nontrivial space.** `ContinuousLinearMap.norm_id`
+   carries an instance requirement that does not hold when the space may be
+   trivial. Use `ContinuousLinearMap.norm_id_le`, which carries none.
 
-7. **A qualified name may not be split across a line break after its dot.**
+7. **A `notation` body substitutes its parameter into every occurrence of that
+   identifier, including the label of a named argument.** The vendored pure
+   tensor notation read `HilbertTensor.tmul (𝕜 := 𝕜) x y`, so `x ⊗̂ₜ[ℂ] y`
+   expanded to `tmul (ℂ := ℂ) x y`. Broken since written; it worked only because
+   every prior call site passed a scalar literally named `𝕜`.
 
-8. **Namespace drift after the POVM split**: `bornMeasure` is under
-   `BornRule.PVM`, `bornMeasure_support_subset_spectrum` under
-   `BornRule.Observable`, `borelMeasure` under `Spectra.Borel`, and `generator`
-   under `Spectra.OneParameterUnitaryGroup`.
+8. **A rewrite is undone by a following `simp`** when the rewriting lemma is
+   itself a `simp` lemma. `rw [← Conj.toConj_ofConj cv]` then `simp` is a no-op.
 
-9. **Two toolchains are live in this checkout.** The root pins `v4.32.0`, but
-   `vendor/Spectra` is also opened as its own project under `v4.31.0-rc1`, and
-   both write `vendor/Spectra/.lake/build`. Build from the repository root.
+9. **A restricted `simp only` cannot see `@[simp]` lemmas** you are relying on —
+   list them explicitly.
 
-## How to measure a build
+10. **A modifier such as `open X in` must precede a declaration's docstring**,
+    not sit between the docstring and the declaration. Same rule as `omit … in`.
 
-**Do not run two `lake build` processes against the same build tree.** Doing so
-produces spurious errors: a serial rebuild of two files that reported forty
-three errors under concurrency reported zero. Any count taken while another
-build is running is worthless. This is the same hazard as judging a module by a
-stale `.olean`, and it wasted real time this round.
+11. **Namespace drift after the POVM split**: `bornMeasure` under
+    `BornRule.PVM`; `bornMeasure_support_subset_spectrum` under
+    `BornRule.Observable`; `borelMeasure` under `Spectra.Borel`;
+    `borelMeasure_fourier` under `Spectra.Borel.SpectralMeasure`; `generator`
+    under `Spectra.OneParameterUnitaryGroup`; `RealComplexification.complexify`
+    under `Foundation`.
+
+12. **`gcongr` goal count and ordering are not what you expect.** Prefer the
+    explicit monotonicity lemmas, which are order-deterministic.
+
+---
+
+## 8. How to measure a build — read this before reporting any count
+
+**Never run two `lake build` processes against the same build tree.** Doing so
+produces entirely spurious errors. This round, two files that reported forty
+three errors under concurrency reported **zero** when rebuilt serially, and one
+run reported sixteen thousand bogus Mathlib errors from file-descriptor
+exhaustion. A count taken while another build is running is worthless.
+
+Two toolchains are live in this checkout: the root pins `v4.32.0`, but
+`vendor/Spectra` is also opened as its own project under `v4.31.0-rc1`, and both
+write `vendor/Spectra/.lake/build`. **Build from the repository root.**
+
+This is the same class of hazard as judging a module by a stale `.olean`, and it
+cost real time twice.
