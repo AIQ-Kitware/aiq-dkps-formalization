@@ -38,6 +38,13 @@ REPAIRED=(
   "DavisKahan.Experimental.InfiniteDimensional.Ideals.OperatorModulusApproximation|74c563c|rectangular Gram positivity"
   "DavisKahan.Experimental.InfiniteDimensional.SinTheta.PaperProjectionBlocks|8b88b93|rewrite directions and over-rewrite"
   "DavisKahan.Experimental.InfiniteDimensional.Ideals.PaperUnitaryInvariantNormLaws|8b88b93|Ky Fan triangle capability, heterogeneous estimate"
+  "Spectra.Spaces.Tensor.Hilbert|454ff8b|pure tensor notation pinned the scalar by a named argument"
+  "Spectra.Spaces.Tensor.HilbertSchmidt|b1b66a0|conjugate foundation, transport, column expansion"
+  "Spectra.YosidaHille.RectangularIntertwining|6dbaf5a|generator domain density import, orbit derivative"
+  "Spectra.SpectralTheory.SeparatedIntertwiner|2b37194|spectral and Born measure namespaces"
+  "DavisKahan.Experimental.InfiniteDimensional.Sylvester.PairwiseSpectrumGap|879aa7d|lambda token used as a spectral variable"
+  "DavisKahan.Experimental.InfiniteDimensional.Sylvester.PairwiseHomogeneousUniqueness|b1b66a0|generator namespace, split qualified name"
+  "DavisKahan.Experimental.InfiniteDimensional.Sylvester.HomogeneousUniqueness|dbd7b76|norm of zero and a nonlinear product"
 )
 
 fail=0
