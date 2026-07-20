@@ -110,15 +110,12 @@ theorem projectedResidual_norm_le
     _ = paperHilbertSchmidtNorm
           (ContinuousLinearMap.id ℂ F ∘L P.data.residual.adjoint ∘L
             P.data.F₁) := by simp
-    _ ≤ ‖ContinuousLinearMap.id ℂ F‖ *
-          paperHilbertSchmidtNorm P.data.residual.adjoint * ‖P.data.F₁‖ :=
-      paperHilbertSchmidtNorm_comp_le
+    _ ≤ paperHilbertSchmidtNorm P.data.residual.adjoint :=
+      paperHilbertSchmidtNorm_comp_isometries_le
         (ContinuousLinearMap.id ℂ F) hRadj P.data.F₁
-    _ ≤ paperHilbertSchmidtNorm P.data.residual := by
-      rw [ContinuousLinearMap.norm_id,
-        paperHilbertSchmidtNorm_adjoint, one_mul]
-      exact mul_le_of_le_one_right
-        (paperHilbertSchmidtNorm_nonneg P.data.residual) hF₁
+        ContinuousLinearMap.norm_id_le hF₁
+    _ = paperHilbertSchmidtNorm P.data.residual :=
+      paperHilbertSchmidtNorm_adjoint P.data.residual
 
 /-- The weaker spectral hypothesis gives the raw square-norm estimate. -/
 theorem rawOverlap_bound
@@ -152,26 +149,30 @@ theorem canonicalSinTheta_frame_bound
     simpa using this
   have hnorm : ‖Q.invSqrt.adjoint‖ ≤ P.frameLowerBound⁻¹ := by
     simpa using Q.invSqrt_norm_le
+  have hcomp : paperHilbertSchmidtNorm P.canonicalSinTheta ≤
+      ‖Q.invSqrt.adjoint‖ * paperHilbertSchmidtNorm P.rawOverlap := by
+    have h := paperHilbertSchmidtNorm_comp_le
+      Q.invSqrt.adjoint hraw (ContinuousLinearMap.id ℂ G)
+    rw [ContinuousLinearMap.comp_id] at h
+    rw [hblock]
+    exact h.trans (mul_le_of_le_one_right
+      (mul_nonneg (norm_nonneg _) (paperHilbertSchmidtNorm_nonneg _))
+      ContinuousLinearMap.norm_id_le)
   refine ⟨hmem, ?_⟩
   calc
     P.frameLowerBound * paperHilbertSchmidtNorm P.canonicalSinTheta
-        = P.frameLowerBound *
-            paperHilbertSchmidtNorm
-              (Q.invSqrt.adjoint ∘L P.rawOverlap ∘L
-                ContinuousLinearMap.id ℂ G) := by simp [hblock]
-    _ ≤ P.frameLowerBound *
-          (‖Q.invSqrt.adjoint‖ *
-            paperHilbertSchmidtNorm P.rawOverlap * 1) := by
-      gcongr
-      exact paperHilbertSchmidtNorm_comp_le
-        Q.invSqrt.adjoint hraw (ContinuousLinearMap.id ℂ G)
+        ≤ P.frameLowerBound *
+            (‖Q.invSqrt.adjoint‖ * paperHilbertSchmidtNorm P.rawOverlap) :=
+      mul_le_mul_of_nonneg_left hcomp P.frameLowerBound_pos.le
     _ ≤ P.frameLowerBound *
           (P.frameLowerBound⁻¹ *
-            paperHilbertSchmidtNorm P.rawOverlap) := by
-      gcongr
-      exact paperHilbertSchmidtNorm_nonneg P.rawOverlap
+            paperHilbertSchmidtNorm P.rawOverlap) :=
+      mul_le_mul_of_nonneg_left
+        (mul_le_mul_of_nonneg_right hnorm
+          (paperHilbertSchmidtNorm_nonneg P.rawOverlap))
+        P.frameLowerBound_pos.le
     _ = paperHilbertSchmidtNorm P.rawOverlap := by
-      field_simp [P.frameLowerBound_pos.ne']
+      rw [← mul_assoc, mul_inv_cancel₀ P.frameLowerBound_pos.ne', one_mul]
 
 /-- **Davis--Kahan 1970, Theorem 6.2, complex square-norm form.** -/
 theorem result
@@ -213,11 +214,10 @@ theorem operatorNorm_result_of_rank_le
   calc
     P.gap * P.frameLowerBound * ‖S.operator‖
         ≤ P.gap * P.frameLowerBound *
-            paperHilbertSchmidtNorm S.operator := by
-      gcongr
-      · exact P.gap_pos.le
-      · exact P.frameLowerBound_pos.le
-      · exact opNorm_le_paperHilbertSchmidtNorm hmain.1
+            paperHilbertSchmidtNorm S.operator :=
+      mul_le_mul_of_nonneg_left
+        (opNorm_le_paperHilbertSchmidtNorm hmain.1)
+        (mul_nonneg P.gap_pos.le P.frameLowerBound_pos.le)
     _ ≤ paperHilbertSchmidtNorm P.data.residual := hmain.2
     _ ≤ Real.sqrt r * ‖P.data.residual‖ :=
       paperHilbertSchmidtNorm_le_sqrt_rank_mul_opNorm hRank
@@ -287,8 +287,8 @@ structure PaperRealTheorem62Data where
   frameLowerBound_pos : 0 < frameLowerBound
   lowerFrame : LowerFrameBound data.X frameLowerBound
   spectral_distance :
-    ∀ λ ∈ data.A₀.realSpectrum, ∀ α ∈ data.Λ₁.realSpectrum,
-      gap ≤ |λ - α|
+    ∀ lam ∈ data.A₀.realSpectrum, ∀ α ∈ data.Λ₁.realSpectrum,
+      gap ≤ |lam - α|
 
 namespace PaperRealTheorem62Data
 
@@ -328,6 +328,7 @@ theorem result
   have hraw := paperHilbertSchmidt_sylvester_real_le_of_pairwiseSpectrumGap_direct
     P.trial_selfAdjoint P.complement_selfAdjoint P.gap_pos
     P.spectral_distance hEq hProjected
+  have hrawHS : IsPaperHilbertSchmidt P.rawOverlap := hraw.1
   let Q := lowerFramePolarDataReal P.data.X P.lowerFrame P.frameLowerBound_pos
   have hcanonical : P.canonicalSinTheta = Q.invSqrt.adjoint ∘L P.rawOverlap := by
     simp [canonicalSinTheta, rawOverlap, sinThetaBlockOfPolarData,
@@ -335,27 +336,35 @@ theorem result
       ContinuousLinearMap.comp_assoc]
   have hcanonmem : IsPaperHilbertSchmidt P.canonicalSinTheta := by
     rw [hcanonical]
-    simpa using hraw.1.comp Q.invSqrt.adjoint (ContinuousLinearMap.id ℝ G)
+    have h := hrawHS.comp Q.invSqrt.adjoint (ContinuousLinearMap.id ℝ G)
+    rwa [ContinuousLinearMap.comp_id] at h
   have hframe :
       P.frameLowerBound * paperHilbertSchmidtNorm P.canonicalSinTheta ≤
         paperHilbertSchmidtNorm P.rawOverlap := by
     have hnorm : ‖Q.invSqrt.adjoint‖ ≤ P.frameLowerBound⁻¹ := by
       simpa using Q.invSqrt_norm_le
-    rw [hcanonical]
+    have hcomp : paperHilbertSchmidtNorm P.canonicalSinTheta ≤
+        ‖Q.invSqrt.adjoint‖ * paperHilbertSchmidtNorm P.rawOverlap := by
+      have h := paperHilbertSchmidtNorm_comp_le
+        Q.invSqrt.adjoint hrawHS (ContinuousLinearMap.id ℝ G)
+      rw [ContinuousLinearMap.comp_id] at h
+      rw [hcanonical]
+      exact h.trans (mul_le_of_le_one_right
+        (mul_nonneg (norm_nonneg _) (paperHilbertSchmidtNorm_nonneg _))
+        ContinuousLinearMap.norm_id_le)
     calc
-      P.frameLowerBound *
-          paperHilbertSchmidtNorm (Q.invSqrt.adjoint ∘L P.rawOverlap)
+      P.frameLowerBound * paperHilbertSchmidtNorm P.canonicalSinTheta
           ≤ P.frameLowerBound *
-            (‖Q.invSqrt.adjoint‖ * paperHilbertSchmidtNorm P.rawOverlap) := by
-        gcongr
-        simpa using paperHilbertSchmidtNorm_comp_le Q.invSqrt.adjoint hraw.1
-          (ContinuousLinearMap.id ℝ G)
+            (‖Q.invSqrt.adjoint‖ * paperHilbertSchmidtNorm P.rawOverlap) :=
+        mul_le_mul_of_nonneg_left hcomp P.frameLowerBound_pos.le
       _ ≤ P.frameLowerBound *
-          (P.frameLowerBound⁻¹ * paperHilbertSchmidtNorm P.rawOverlap) := by
-        gcongr
-        exact paperHilbertSchmidtNorm_nonneg P.rawOverlap
+          (P.frameLowerBound⁻¹ * paperHilbertSchmidtNorm P.rawOverlap) :=
+        mul_le_mul_of_nonneg_left
+          (mul_le_mul_of_nonneg_right hnorm
+            (paperHilbertSchmidtNorm_nonneg P.rawOverlap))
+          P.frameLowerBound_pos.le
       _ = paperHilbertSchmidtNorm P.rawOverlap := by
-        field_simp [P.frameLowerBound_pos.ne']
+        rw [← mul_assoc, mul_inv_cancel₀ P.frameLowerBound_pos.ne', one_mul]
   have hprojNorm : paperHilbertSchmidtNorm P.projectedResidual ≤
       paperHilbertSchmidtNorm P.data.residual := by
     have hF₁ : ‖P.data.F₁‖ ≤ 1 :=
@@ -364,14 +373,15 @@ theorem result
       paperHilbertSchmidtNorm P.projectedResidual =
           paperHilbertSchmidtNorm (P.data.residual.adjoint ∘L P.data.F₁) := by
         simp [projectedResidual]
-      _ ≤ paperHilbertSchmidtNorm P.data.residual := by
-        have hcomp := paperHilbertSchmidtNorm_comp_le
+      _ = paperHilbertSchmidtNorm
+            (ContinuousLinearMap.id ℝ F ∘L P.data.residual.adjoint ∘L
+              P.data.F₁) := by simp
+      _ ≤ paperHilbertSchmidtNorm P.data.residual.adjoint :=
+        paperHilbertSchmidtNorm_comp_isometries_le
           (ContinuousLinearMap.id ℝ F) hRadj P.data.F₁
-        simpa [paperHilbertSchmidtNorm_adjoint] using
-          hcomp.trans (by
-            rw [ContinuousLinearMap.norm_id, one_mul]
-            exact mul_le_of_le_one_right
-              (paperHilbertSchmidtNorm_nonneg P.data.residual) hF₁)
+          ContinuousLinearMap.norm_id_le hF₁
+      _ = paperHilbertSchmidtNorm P.data.residual :=
+        paperHilbertSchmidtNorm_adjoint P.data.residual
   have hS : IsPaperHilbertSchmidt S.operator :=
     (S.same_singular_values.isPaperHilbertSchmidt_iff).2 hcanonmem
   refine ⟨hS, ?_⟩
@@ -398,11 +408,10 @@ theorem operatorNorm_result_of_rank_le
   calc
     P.gap * P.frameLowerBound * ‖S.operator‖
         ≤ P.gap * P.frameLowerBound *
-            paperHilbertSchmidtNorm S.operator := by
-      gcongr
-      · exact P.gap_pos.le
-      · exact P.frameLowerBound_pos.le
-      · exact opNorm_le_paperHilbertSchmidtNorm hmain.1
+            paperHilbertSchmidtNorm S.operator :=
+      mul_le_mul_of_nonneg_left
+        (opNorm_le_paperHilbertSchmidtNorm hmain.1)
+        (mul_nonneg P.gap_pos.le P.frameLowerBound_pos.le)
     _ ≤ paperHilbertSchmidtNorm P.data.residual := hmain.2
     _ ≤ Real.sqrt r * ‖P.data.residual‖ :=
       paperHilbertSchmidtNorm_le_sqrt_rank_mul_opNorm hRank
