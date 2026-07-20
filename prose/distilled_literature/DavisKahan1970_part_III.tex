@@ -9,9 +9,9 @@
 \begin{sourceguide}
 \item[Primary source] Chandler Davis and W. M. Kahan, \emph{The Rotation of Eigenvectors by a Perturbation. III}, SIAM Journal on Numerical Analysis 7(1) (1970), 1--46, DOI \href{https://doi.org/10.1137/0707001}{10.1137/0707001}.
 \item[Source order] Introduction; Sections 1--3 on block notation and subspace geometry; Section 4 on the direct rotation; Section 5 on $AX-XB=C$; Section 6 on the single-angle theorems; the unbounded-operator appendix; Section 7 on the double-angle theorems; Section 8 on interpretation and spectral selection; Section 9 on the numerical example; Section 10 on open questions.
-\item[Current proved specialization] The source-facing finite API exposed through \code{DavisKahanTheory.PartIII}: the ordered and interval Sylvester roots; residual, generalized-trial-map, and perturbation \code{sin Theta}; the arbitrary-unitarily-invariant-norm Ritz-residual \code{tan Theta} theorem in both equal-rank and strict-lower-rank forms; \code{sin 2 Theta} for every unitarily invariant norm; and the sharp operator-norm \code{tan 2 Theta} theorem.  The elementary \code{partIII_tanTheta_vector} theorem remains as a low-dependency companion rather than the canonical source-facing tangent endpoint.
+\item[Current proved surface] The source-faithful Section 6 sine-theta package is complete in its intended Hilbert-space scope: real and complex scalars, closed possibly unbounded self-adjoint operators, the paper norm class, arbitrary equisingular representatives, common-domain and graph-core formulations, sharpness, the printed planar counterexample, and finite-multiplicity equality models. The finite \code{DavisKahanTheory.PartIII} package remains a separately useful specialization for all four headline families. Other sections are undergoing compiler repair and source-wrapper audit.
 \item[Formalization target] The repository target is the full source scope: separable Hilbert spaces; all four theorem families in infinite and finite dimensions; arbitrary unitary-invariant norms with correct domains of finiteness; and the unbounded self-adjoint extensions with their domain assumptions. For the single-angle family, the canonical Lean API is the generalized unbounded theorem. The bounded Hermitian statement is a full-domain specialization, not the terminal target.
-\item[Current boundary] The strongest proof-complete package is presently finite-dimensional over an arbitrary \code{RCLike} scalar field, with a partial bounded-operator branch. The finite package is a valuable specialization and weaker-foundation alternative, not the completion criterion for this paper.
+\item[Current boundary] Completion of Section 6 is not completion of the paper. The remaining source work includes the classification and nonacute geometry of Section 3, direct-rotation extremality in Section 4, exact source wrappers for Sections 5, 7, and 8, and the Section 9 numerical example. The structured status authority is \code{dev/davis-kahan-1970-full-source-census.json}.
 \item[Transcription audit] This committed note is an independent distillation. Its scope and source anchors have been checked against the maintained modernized local transcription, which is excluded from distributable source archives.
 \item[Terminology] The source writes $\sin\theta$, $\tan\theta$, $\sin 2\theta$, and $\tan 2\theta$. We use $\Theta$ for the principal-angle operator or its finite list of principal angles.
 \end{sourceguide}
@@ -366,6 +366,89 @@ Each constant is already sharp in a two-dimensional principal plane. A typical m
 and rotates or perturbs its eigenspaces by an angle $\theta$. Direct sums of such planes can make several singular-angle coordinates simultaneously extremal. This explains why equality is meaningful for arbitrary unitarily invariant norms, not only for the operator norm.
 
 The formalization should retain small explicit equality models as regression tests. They catch errors in the factor two, in the orientation of the residual, and in the definition of the directed sine map.
+
+
+\section{Audited numbered-result ledger}
+
+\sourceanchor{Definitions 3.1--3.2; Propositions 3.1--3.5 and 4.1--4.4; Theorems 3.1, 5.1--5.2, 6.1--6.3, and 8.1--8.2; Corollaries 3.1--3.2 and 4.1; Lemmas 5.1, 6.1--6.3.}
+
+The complete machine-readable ledger is
+\code{dev/davis-kahan-1970-full-source-census.json}.  The following summary
+records the mathematical gaps which are not visible from the four headline
+inequalities alone.
+
+\begin{itemize}[leftmargin=2em]
+\item Section 3 includes a nonacute existence criterion for direct rotations,
+  a spectral-multiplicity classification of pairs of subspaces, its compact
+  eigenvalue-list corollary, and a maximal reducing-eigenspace characterization
+  of the angle operator.  These are independent geometric results, not proof
+  decorations for the sine theorem.
+\item Section 4 proves singular-value-by-singular-value extremality of the
+  direct rotation before deriving its several UI-norm corollaries.  A source
+  formalization should preserve the stronger singular-value statement rather
+  than exposing only one operator-norm minimum.
+\item Theorem 5.1 is a Banach-space geometric-series result with norm and
+  inverse-norm hypotheses.  It is distinct from the self-adjoint spectral-gap
+  theorem 5.2 and deserves an exact source wrapper.
+\item Lemma 6.3 is a finite-rank near-maximizer leakage estimate used in the
+  unbounded appendix.  It is a reusable approximation-number statement even
+  when a modern proof of the headline theorem bypasses it.
+\item Theorems 8.1 and 8.2 contain branch-selection and spectral-repulsion
+  conclusions beyond the bare double-angle inequalities.
+\end{itemize}
+
+\section{Section 9: exact structure of the numerical example}
+
+\sourceanchor{Section 9, equations (9.1)--(9.11).}
+
+The example starts from the self-adjoint closure of the fourth derivative on
+$L^2(0,1)$ with free-end boundary conditions
+$u''(0)=u'''(0)=u''(1)=u'''(1)=0$, perturbed by multiplication by
+$\varepsilon t$, where $0<\varepsilon<100$.  The two-dimensional trial space is
+the null eigenspace of the unperturbed operator, spanned by two explicit
+orthonormal linear functions.  The third unperturbed eigenvalue is greater
+than $500$, providing the comparison gap.
+
+For the zero comparison matrix the residual Gram matrix is
+\[
+  R^*R=\frac{\varepsilon^2}{30}
+  \begin{pmatrix}11-\sqrt{75}&-1\\-1&11+\sqrt{75}\end{pmatrix},
+\]
+with eigenvalues $\varepsilon^2(11\pm\sqrt{76})/30$.  The source derives the
+operator-norm and two-singular-value consequences (9.1)--(9.4) by applying the
+sine and sine-double-angle theorems.
+
+The Rayleigh--Ritz comparison matrix is diagonal:
+\[
+  \widehat A_0=\frac{\varepsilon}{2}
+  \begin{pmatrix}1-1/\sqrt3&0\\0&1+1/\sqrt3\end{pmatrix}.
+\]
+The orthogonal residual satisfies
+\[
+  \widehat R^*\widehat R=\frac{\varepsilon^2}{30}
+  \begin{pmatrix}1&-1\\-1&1\end{pmatrix},
+  \qquad
+  \|\widehat R\|_{\op}=\|\widehat R\|_{(2)}=\varepsilon/\sqrt{15}.
+\]
+Equations (9.5)--(9.7) then follow from the tangent and tangent-double-angle
+theorems.  The decimal bounds in the paper should be formalized as corollaries
+of exact radical and rational inequalities.
+
+The second half of the example has three logically separate components:
+\begin{enumerate}[leftmargin=2em]
+\item a comparison with Weinberger's lower-bound method through a concrete
+  $3\times3$ matrix and equation (9.8);
+\item an infinite-dimensional example showing that a good Rayleigh quotient
+  need not give a finite residual when the trial vector is outside the
+  operator domain;
+\item a Schur-complement reduction, equations (9.9)--(9.11), followed by
+  tangent and double-angle bounds for identifying individual eigenvectors
+  inside the two-eigenvalue cluster.
+\end{enumerate}
+
+No current Lean module formalizes this example.  A robust implementation should
+first prove a finite block-operator theorem carrying the exact matrices and
+constants, and only then instantiate it with the fourth-derivative operator.
 
 \section{Current finite specialization and full source target}
 
