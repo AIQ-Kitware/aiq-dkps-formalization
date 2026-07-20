@@ -5,5 +5,6 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Sources.DavisKahan1970.Sylvester.HilbertSchmidtDefectFirst
 import DavisKahan.Sources.DavisKahan1970.Sylvester.HilbertSchmidtPairwise
+import DavisKahan.Sources.DavisKahan1970.Sylvester.PaperHilbertSchmidt
 
 /-! # `DavisKahan/Sources/DavisKahan1970/Sylvester` -/
