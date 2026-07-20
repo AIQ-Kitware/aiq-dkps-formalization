@@ -5,5 +5,6 @@ Authors: Jon Crall, GPT 5.6 High
 -/
 import DavisKahan.Experimental.FiniteDimensional.All
 import DavisKahan.Experimental.InfiniteDimensional.All
+import DavisKahan.Experimental.PartIII
 
 /-! # Experimental Davis--Kahan theory -/
