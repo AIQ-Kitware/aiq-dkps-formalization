@@ -29,9 +29,9 @@ open scoped InnerProductSpace
 
 noncomputable section
 
-universe v
+universe v vF vG
 
-variable {E F : Type v}
+variable {E : Type v} {F : Type vF}
   [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
   [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
 
@@ -116,7 +116,7 @@ and the pointwise estimate carries that same subspace witness over to `B`.
 This is rank-safe.  No averaging of `A` against a second operator is performed,
 so no rank doubling can occur. -/
 theorem approximationSingularValue_le_of_norm_apply_le
-    {G : Type v} [NormedAddCommGroup G] [InnerProductSpace ℂ G] [CompleteSpace G]
+    {G : Type vG} [NormedAddCommGroup G] [InnerProductSpace ℂ G] [CompleteSpace G]
     (A : E →L[ℂ] F) (B : E →L[ℂ] G) (h : ∀ x : E, ‖A x‖ ≤ ‖B x‖) (n : ℕ) :
     approximationSingularValue n A ≤ approximationSingularValue n B := by
   by_contra hnot
@@ -137,7 +137,7 @@ theorem approximationSingularValue_le_of_norm_apply_le
 on complex Hilbert spaces.  The two operators may have different targets, so
 the conclusion is the heterogeneous singular-sequence relation. -/
 theorem sameApproximationSingularValues_of_norm_apply_eq
-    {G : Type v} [NormedAddCommGroup G] [InnerProductSpace ℂ G] [CompleteSpace G]
+    {G : Type vG} [NormedAddCommGroup G] [InnerProductSpace ℂ G] [CompleteSpace G]
     (A : E →L[ℂ] F) (B : E →L[ℂ] G) (h : ∀ x : E, ‖A x‖ = ‖B x‖) :
     SameApproximationSingularSequence A B := fun n =>
   le_antisymm

@@ -119,7 +119,7 @@ theorem approximationSingularValue_adjoint
 
 /-- Ideal inequality for approximation singular values. -/
 theorem approximationSingularValue_comp_le
-    {G H : Type v}
+    {G : Type vG} {H : Type vH}
     [NormedAddCommGroup G] [InnerProductSpace 𝕜 G] [CompleteSpace G]
     [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] [CompleteSpace H]
     (n : ℕ) (L : F →L[𝕜] G) (K : E →L[𝕜] F)

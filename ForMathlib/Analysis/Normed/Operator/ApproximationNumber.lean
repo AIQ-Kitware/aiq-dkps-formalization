@@ -206,7 +206,7 @@ The two ranks live in different universes once the codomain is allowed to move
 independently, so the comparison is made through `Cardinal.lift`; a
 natural-number bound is invariant under lifting, which is all the ideal
 inequalities need. -/
-private theorem rank_comp_left_le_of_rank_le
+theorem rank_comp_left_le_of_rank_le
     {G : Type x} [SeminormedAddCommGroup G] [NormedSpace 𝕜 G]
     (B : F →L[𝕜] G) (R : E →L[𝕜] F) {n : ℕ} (hR : R.rank ≤ (n : Cardinal)) :
     (B ∘L R).rank ≤ (n : Cardinal) := by

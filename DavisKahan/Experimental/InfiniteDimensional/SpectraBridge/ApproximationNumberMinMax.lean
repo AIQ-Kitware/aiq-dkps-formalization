@@ -39,9 +39,9 @@ open Spectra.QuantumMechanics.SpectralTheory
 
 noncomputable section
 
-universe v
+universe v vF
 
-variable {E F : Type v}
+variable {E : Type v} {F : Type vF}
   [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
   [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
 
@@ -193,12 +193,10 @@ theorem exists_linearIndependent_lowerBound_of_lt_approximationNumber
   have hPrank : ¬ P.rank ≤ (n : Cardinal) := by
     intro hP
     let R : E →L[ℂ] F := T ∘L P
-    have hRrank : R.rank ≤ (n : Cardinal) := by
-      calc
-        R.rank ≤ P.rank := by
-          change LinearMap.rank (T.toLinearMap.comp P.toLinearMap) ≤ P.rank
-          exact LinearMap.rank_comp_le_right P.toLinearMap T.toLinearMap
-        _ ≤ (n : Cardinal) := hP
+    -- `R.rank` and `P.rank` live in different universes once the codomain is
+    -- independent, so the comparison goes through the natural-number bound.
+    have hRrank : R.rank ≤ (n : Cardinal) :=
+      ContinuousLinearMap.rank_comp_left_le_of_rank_le T P hP
     have herr : T - R = T ∘L Q := by
       ext x
       change T x - T (P x) = T (Q x)

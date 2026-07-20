@@ -25,13 +25,13 @@ open scoped InnerProductSpace
 
 noncomputable section
 
-universe u v
+universe u v w
 
 variable {𝕜 : Type u} [RCLike 𝕜]
 
 section InfiniteDimensionalMinMaxLower
 
-variable {E₁ F₁ : Type v}
+variable {E₁ : Type v} {F₁ : Type w}
   [NormedAddCommGroup E₁] [InnerProductSpace 𝕜 E₁]
   [NormedAddCommGroup F₁] [InnerProductSpace 𝕜 F₁]
 
@@ -59,15 +59,31 @@ theorem lowerBound_le_approximationNumber_of_finrank
       _ ≤ (n : Cardinal) := hR
   have hker : RV.ker ≠ ⊥ := by
     intro hkerbot
-    have hnull := RV.toLinearMap.rank_range_add_rank_ker
+    -- The rank-nullity identity compares the rank of the range, which lives in
+    -- the codomain universe, with the rank of the domain.  Those universes are
+    -- now independent, so argue through injectivity and `Cardinal.lift`
+    -- instead: an injective map identifies the domain with its range.
+    have hinj : Function.Injective RV.toLinearMap :=
+      LinearMap.ker_eq_bot.mp hkerbot
+    have hequiv :
+        Cardinal.lift.{w} (Module.rank 𝕜 V) =
+          Cardinal.lift.{v}
+            (Module.rank 𝕜 (LinearMap.range RV.toLinearMap)) :=
+      (LinearEquiv.ofInjective RV.toLinearMap hinj).lift_rank_eq
     have hVrank : Module.rank 𝕜 V = ((n + 1 : ℕ) : Cardinal) := by
       calc
         Module.rank 𝕜 V = (finrank 𝕜 V : Cardinal) :=
           (Module.finrank_eq_rank' 𝕜 V).symm
         _ = ((n + 1 : ℕ) : Cardinal) := by rw [hVdim]
-    rw [hkerbot, rank_bot, add_zero, hVrank] at hnull
-    have hbad : ((n + 1 : ℕ) : Cardinal) ≤ (n : Cardinal) :=
-      hnull ▸ hRVrank
+    have hbad : ((n + 1 : ℕ) : Cardinal.{max v w}) ≤ ((n : ℕ) : Cardinal) := by
+      calc
+        ((n + 1 : ℕ) : Cardinal.{max v w})
+            = Cardinal.lift.{w} (Module.rank 𝕜 V) := by
+          rw [hVrank, Cardinal.lift_natCast]
+        _ = Cardinal.lift.{v} (LinearMap.rank RV.toLinearMap) := hequiv
+        _ ≤ Cardinal.lift.{v} ((n : ℕ) : Cardinal) :=
+          Cardinal.lift_le.mpr hRVrank
+        _ = ((n : ℕ) : Cardinal) := Cardinal.lift_natCast n
     have hbad' : n + 1 ≤ n := by exact_mod_cast hbad
     omega
   obtain ⟨z, hzker, hz0⟩ := Submodule.exists_mem_ne_zero_of_ne_bot hker
