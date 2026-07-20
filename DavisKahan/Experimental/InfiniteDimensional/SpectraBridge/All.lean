@@ -8,7 +8,7 @@ import DavisKahan.Interop.Spectra.ClosedOperator
 import DavisKahan.Interop.Spectra.PVMSubspace
 import DavisKahan.Interop.Spectra.SpectralRestriction
 import DavisKahan.Interop.Spectra.SpectralRestrictionOperator
-import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.RealSpectralRestriction
+import DavisKahan.Interop.Spectra.RealSpectralRestriction
 import DavisKahan.Interop.Spectra.SpectralRestrictionLocalization
 import DavisKahan.Interop.Spectra.OperatorAbsoluteValue
 import DavisKahan.Interop.Spectra.ApproximationNumberMinMax

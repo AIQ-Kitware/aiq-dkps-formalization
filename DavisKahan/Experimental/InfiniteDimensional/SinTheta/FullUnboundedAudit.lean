@@ -3,11 +3,11 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.Experimental.InfiniteDimensional.SinTheta.NaturalGenuine
-import DavisKahan.Experimental.InfiniteDimensional.SinTheta.NaturalReal
+import DavisKahan.SinTheta.Natural.Genuine
+import DavisKahan.SinTheta.Natural.Real
 import DavisKahan.Sylvester.Unbounded.OrderedEngineDirect
-import DavisKahan.Experimental.InfiniteDimensional.Sylvester.RealUnbounded
-import DavisKahan.Experimental.InfiniteDimensional.SinTheta.RealSpecializations
+import DavisKahan.Sylvester.RealUnbounded
+import DavisKahan.SinTheta.Real.Specializations
 import DavisKahan.Sources.DavisKahan1970.GeneralSinTheta
 
 /-!

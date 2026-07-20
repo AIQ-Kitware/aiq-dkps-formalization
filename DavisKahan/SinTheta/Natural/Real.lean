@@ -3,8 +3,8 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.Experimental.InfiniteDimensional.SinTheta.RealGeneralized
-import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.RealSpectralRestriction
+import DavisKahan.SinTheta.Real.Generalized
+import DavisKahan.Interop.Spectra.RealSpectralRestriction
 
 /-!
 # Natural real spectral inputs for the unbounded sine-theta theorem

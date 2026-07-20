@@ -10,19 +10,19 @@ import DavisKahan.Experimental.InfiniteDimensional.SinTheta.Bounded
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.Unbounded
 import DavisKahan.SinTheta.Unbounded.GenuineOpNorm
 import DavisKahan.SinTheta.Unbounded.GenuineGauge
-import DavisKahan.Experimental.InfiniteDimensional.SinTheta.GenuineIntervalExterior
-import DavisKahan.Experimental.InfiniteDimensional.SinTheta.GenuineAllGap
-import DavisKahan.Experimental.InfiniteDimensional.SinTheta.NaturalGenuine
-import DavisKahan.Experimental.InfiniteDimensional.SinTheta.NaturalReal
+import DavisKahan.SinTheta.Unbounded.IntervalExterior
+import DavisKahan.SinTheta.Unbounded.AllGap
+import DavisKahan.SinTheta.Natural.Genuine
+import DavisKahan.SinTheta.Natural.Real
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.Canonical
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.ContinuationAll
-import DavisKahan.Experimental.InfiniteDimensional.SinTheta.Specializations
+import DavisKahan.SinTheta.Specializations
 import DavisKahan.SinTheta.Unbounded.LegacyGap
-import DavisKahan.Experimental.InfiniteDimensional.SinTheta.FrameFactorizationGeneric
-import DavisKahan.Experimental.InfiniteDimensional.SinTheta.RealFrameFactorization
-import DavisKahan.Experimental.InfiniteDimensional.SinTheta.RealUnbounded
-import DavisKahan.Experimental.InfiniteDimensional.SinTheta.RealGeneralized
-import DavisKahan.Experimental.InfiniteDimensional.SinTheta.RealCanonical
-import DavisKahan.Experimental.InfiniteDimensional.SinTheta.RealSpecializations
+import DavisKahan.SinTheta.FrameFactorizationGeneric
+import DavisKahan.SinTheta.Real.FrameFactorization
+import DavisKahan.SinTheta.Real.Unbounded
+import DavisKahan.SinTheta.Real.Generalized
+import DavisKahan.SinTheta.Real.Canonical
+import DavisKahan.SinTheta.Real.Specializations
 
 /-! # Experimental infinite-dimensional sine-theta theory -/

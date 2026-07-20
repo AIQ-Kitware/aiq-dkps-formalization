@@ -6,7 +6,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 import DavisKahan.Experimental.InfiniteDimensional.Sylvester.PaperHilbertSchmidtPairwise
 import DavisKahan.Experimental.InfiniteDimensional.Ideals.PaperHilbertSchmidtFiniteRank
 import DavisKahan.SinTheta.FrameFactorization
-import DavisKahan.Experimental.InfiniteDimensional.SinTheta.RealFrameFactorization
+import DavisKahan.SinTheta.Real.FrameFactorization
 import DavisKahan.Sources.DavisKahan1970.SineTheta.OperatorAngleBridge
 
 /-!

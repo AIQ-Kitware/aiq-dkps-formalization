@@ -3,8 +3,8 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.Experimental.InfiniteDimensional.SinTheta.Canonical
-import DavisKahan.Experimental.InfiniteDimensional.SinTheta.RealGeneralized
+import DavisKahan.SinTheta.Canonical
+import DavisKahan.SinTheta.Real.Generalized
 
 /-!
 # Real source-shaped unbounded sine-theta problems

@@ -15,6 +15,6 @@ import DavisKahan.Sylvester.Unbounded.OrderedCutoff
 import DavisKahan.Sylvester.Unbounded.OrderedEngineDirect
 import DavisKahan.Sylvester.Unbounded.AllGap
 import DavisKahan.Sylvester.Unbounded.LegacyGap
-import DavisKahan.Experimental.InfiniteDimensional.Sylvester.RealUnbounded
+import DavisKahan.Sylvester.RealUnbounded
 
 /-! # Experimental infinite-dimensional Sylvester theory -/

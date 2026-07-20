@@ -2,7 +2,7 @@
 Copyright (c) 2026 Kitware, Inc. All rights reserved.Released under Apache 2.0 license as described in the file LICENSE.Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Sylvester.PairwiseSpectrumGap
-import DavisKahan.Experimental.InfiniteDimensional.Core.ClosedOperatorComplexification
+import DavisKahan.SpectralTheory.ClosedOperator.Complexification
 import DavisKahan.Sylvester.PairwiseHomogeneousUniqueness
 import DavisKahan.Experimental.InfiniteDimensional.Sylvester.PaperHilbertSchmidtDefectFirst
 import Spectra.Spaces.Tensor.HilbertSchmidtSpectralGap

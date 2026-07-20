@@ -5,7 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.SpectralTheory.ReducingSubspace.RestrictionExtras
 import DavisKahan.SinTheta.Unbounded.LegacyGap
-import DavisKahan.Experimental.InfiniteDimensional.SinTheta.RealCanonical
+import DavisKahan.SinTheta.Real.Canonical
 
 /-!
 # Natural reducing-subspace inputs for the unbounded sine-theta theorem

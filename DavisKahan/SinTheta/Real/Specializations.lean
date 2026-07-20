@@ -3,15 +3,13 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.Experimental.InfiniteDimensional.SinTheta.Canonical
+import DavisKahan.SinTheta.Real.Canonical
 
 /-!
-# Specialization bridges from the canonical unbounded sine theorem
+# Real bounded specialization of the generalized theorem
 
-This module records how bounded problems enter the canonical API.  The
-lower-frame bridge is complex because it uses the positive continuous
-functional calculus.  The independent scalar-generic isometric theorem in
-`Bounded.lean` remains available.
+Bounded real data is embedded as full-domain closed-operator data and then
+sent through the real canonical unbounded theorem.
 -/
 
 namespace ForMathlib
@@ -21,26 +19,25 @@ namespace ExactSinTheta
 
 open scoped InnerProductSpace
 
-section Complex
+noncomputable section
 
 universe v
 
 variable {E F G H : Type v}
-  [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
-  [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
-  [NormedAddCommGroup G] [InnerProductSpace ℂ G] [CompleteSpace G]
-  [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
+  [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
+  [NormedAddCommGroup F] [InnerProductSpace ℝ F] [CompleteSpace F]
+  [NormedAddCommGroup G] [InnerProductSpace ℝ G] [CompleteSpace G]
+  [NormedAddCommGroup H] [InnerProductSpace ℝ H] [CompleteSpace H]
 
-/-- Bounded data packaged for derivation from the canonical generalized
-unbounded theorem. -/
-structure BoundedGeneralSinThetaProblem
-    (N : UnitaryInvariantIdealFamily (𝕜 := ℂ)) where
-  A : E →L[ℂ] E
-  A₀ : F →L[ℂ] F
-  Λ₁ : G →L[ℂ] G
-  X : F →L[ℂ] E
-  F₀ : H →L[ℂ] E
-  F₁ : G →L[ℂ] E
+/-- Bounded real source package for the generalized sine theorem. -/
+structure RealBoundedGeneralSinThetaProblem
+    (N : UnitaryInvariantIdealFamily (𝕜 := ℝ)) where
+  A : E →L[ℝ] E
+  A₀ : F →L[ℝ] F
+  Λ₁ : G →L[ℝ] G
+  X : F →L[ℝ] E
+  F₀ : H →L[ℝ] E
+  F₁ : G →L[ℝ] E
   ambient_symmetric : A.IsSymmetric
   trial_symmetric : A₀.IsSymmetric
   complement_symmetric : Λ₁.IsSymmetric
@@ -57,17 +54,16 @@ structure BoundedGeneralSinThetaProblem
   residual_mem : N.toRectangularSymmetricIdealFamily.Mem
     (generalResidual A X A₀)
 
-namespace BoundedGeneralSinThetaProblem
+namespace RealBoundedGeneralSinThetaProblem
 
-/-- Embed a bounded problem into the full-domain closed-operator problem used
-by the canonical theorem. -/
+/-- Embed bounded real data into the real canonical unbounded package. -/
 noncomputable def toGeneral
-    (N : UnitaryInvariantIdealFamily (𝕜 := ℂ))
-    (P : BoundedGeneralSinThetaProblem (E := E) (F := F)
+    (N : UnitaryInvariantIdealFamily (𝕜 := ℝ))
+    (P : RealBoundedGeneralSinThetaProblem (E := E) (F := F)
       (G := G) (H := H) N) :
-    GeneralSinThetaProblem (E := E) (F := F)
+    RealGeneralSinThetaProblem (E := E) (F := F)
       (G := G) (H := H) N := by
-  let D : UnboundedSinThetaData (𝕜 := ℂ) (E := E) (F := F) (G := G) := {
+  let D : UnboundedSinThetaData (𝕜 := ℝ) (E := E) (F := F) (G := G) := {
     A := ForMathlib.DavisKahanExt.ClosedOperator.ofBounded P.A
     A₀ := ForMathlib.DavisKahanExt.ClosedOperator.ofBounded P.A₀
     Λ₁ := ForMathlib.DavisKahanExt.ClosedOperator.ofBounded P.Λ₁
@@ -83,7 +79,7 @@ noncomputable def toGeneral
       simp only [generalResidual, ContinuousLinearMap.comp_apply, sub_apply]
     intertwines := by
       intro y
-      have hy := congrArg (fun T : G →L[ℂ] E => T (y : G)) P.intertwines
+      have hy := congrArg (fun T : G →L[ℝ] E => T (y : G)) P.intertwines
       change P.A (P.F₁ (y : G)) = P.F₁ (P.Λ₁ (y : G))
       simpa only [ContinuousLinearMap.comp_apply] using hy
   }
@@ -109,50 +105,26 @@ noncomputable def toGeneral
     residual_mem := P.residual_mem
   }
 
-/-- Bounded generalized sine theorem derived from the canonical theorem. -/
+/-- Bounded real generalized theorem derived through the canonical real
+unbounded theorem. -/
 theorem result
-    (N : UnitaryInvariantIdealFamily (𝕜 := ℂ))
-    (P : BoundedGeneralSinThetaProblem (E := E) (F := F)
+    (N : UnitaryInvariantIdealFamily (𝕜 := ℝ))
+    (P : RealBoundedGeneralSinThetaProblem (E := E) (F := F)
       (G := G) (H := H) N) :
     N.toRectangularSymmetricIdealFamily.Mem
-        (directedSinThetaOperator P.X P.F₀ P.lowerFrame
+        (directedSinThetaOperatorReal P.X P.F₀ P.lowerFrame
           P.frameLowerBound_pos) ∧
       P.gap * P.frameLowerBound *
           N.toRectangularSymmetricIdealFamily.gauge
-            (directedSinThetaOperator P.X P.F₀ P.lowerFrame
+            (directedSinThetaOperatorReal P.X P.F₀ P.lowerFrame
               P.frameLowerBound_pos)
         ≤ N.toRectangularSymmetricIdealFamily.gauge
             (generalResidual P.A P.X P.A₀) :=
-  GeneralSinThetaProblem.result N (P.toGeneral N)
+  RealGeneralSinThetaProblem.result N (P.toGeneral N)
 
-end BoundedGeneralSinThetaProblem
+end RealBoundedGeneralSinThetaProblem
 
-end Complex
-
-section Generic
-
-universe u v
-
-variable {𝕜 : Type u} [RCLike 𝕜]
-variable {E F : Type v}
-  [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
-  [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
-
-omit [CompleteSpace E] [CompleteSpace F] in
-/-- Convert the bounded interval/exterior predicate to the legacy
-closed-operator gap predicate.  Both predicates use the same legacy spectrum
-by definition. -/
-theorem intervalExteriorGap_to_unbounded
-    {A : E →L[𝕜] E} {B : F →L[𝕜] F}
-    {β α δ : ℝ}
-    (hgap : IntervalExteriorGap A B β α δ) :
-    UnboundedIntervalExteriorGap
-      (ForMathlib.DavisKahanExt.ClosedOperator.ofBounded A)
-      (ForMathlib.DavisKahanExt.ClosedOperator.ofBounded B)
-      β α δ := by
-  exact hgap
-
-end Generic
+end
 
 end ExactSinTheta
 end Experimental
