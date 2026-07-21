@@ -265,3 +265,13 @@ Replacement modules:
 - `DavisKahan.Experimental.InfiniteDimensional.SinTheta.ContinuationSpectralIdentification`
 - `DavisKahan.Experimental.InfiniteDimensional.SinTheta.ContinuationRotationChain`
 - `DavisKahan.Experimental.InfiniteDimensional.SinTheta.ContinuationTheorem`
+
+### Intentional finite tangent split
+
+The completed coordinate tangent singular-value, graph, ordered residual, and
+pointwise declarations are colocated with the canonical coordinate embeddings
+in `DavisKahan/Experimental/FiniteDimensional/Residual/AngleEmbeddings.lean`.
+The guarded ambient declarations `tanTheta_perturbation_le` and
+`tanThetaMap_perturbation_le` remain in the historical
+`DavisKahan/Experimental/FiniteDimensional/TanTheta/GraphOperator.lean` root so
+unresolved graph/Riccati geometry does not block coordinate results.
