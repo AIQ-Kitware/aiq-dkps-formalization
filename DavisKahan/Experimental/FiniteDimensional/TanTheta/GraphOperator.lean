@@ -352,7 +352,7 @@ theorem tanTheta_vector_le
       gcongr
       exact hproj.trans (hres y)
     _ ≤ ρ * ‖cosThetaEmbedding U X y‖ := by
-      have hC := cosThetaEmbedding_contraction U X y
+      have hC := cosThetaEmbedding_apply_norm_le U X y
       nlinarith [norm_nonneg y, norm_nonneg (cosThetaEmbedding U X y)]
 
 /-- Operator-norm largest-angle form.

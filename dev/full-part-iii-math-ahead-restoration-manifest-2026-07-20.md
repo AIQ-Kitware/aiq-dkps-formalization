@@ -9,6 +9,11 @@ This human-readable manifest accompanies the machine-readable JSON file of the s
   `tanTwoTheta_residual_le` and `tanTwoTheta_perturbation_le` now require
   `OrderedInternalGap`. See
   `dev/tan-two-theta-ordered-gap-correction-2026-07-20.md`.
+- The finite residual `sinTwoTheta_residual_le` signature was corrected on
+  2026-07-20.  It now uses the source-complete interval/exterior gap between
+  the coordinate operator and the unwanted exact spectrum; ordered and
+  general separated-spectrum variants are supplied alongside it. See
+  `dev/sin-two-theta-residual-gap-correction-2026-07-20.md`.
 
 ## `DavisKahan/Experimental/FiniteDimensional/Core/AngleOperators.lean` — 5
 - `tanThetaMap`

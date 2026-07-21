@@ -1,19 +1,28 @@
 /-
 Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
-Authors: Jon Crall, GPT 5.6 High
+Authors: Jon Crall, GPT-5.6 Thinking
 -/
 import DavisKahan.FiniteDimensional.DoubleAngle.SinTheta
-import DavisKahan.FiniteDimensional.Residual.Ritz
+import DavisKahan.FiniteDimensional.SinTheta.Perturbation
 import DavisKahan.Experimental.FiniteDimensional.Residual.AngleEmbeddings
 
 /-!
 # Experimental residual `sin (2 Theta)` interface
 
-The proof-complete perturbation, mirror-defect, spectral-subspace, and concrete
-norm wrappers now live in `DavisKahan.FiniteDimensional.DoubleAngle.SinTheta`.
-This module retains only the coordinate residual formulation, whose canonical
-double-angle embedding and proof are not yet complete.
+The coordinate double-angle sine satisfies
+
+`N (sinTwoThetaEmbedding U X) <= 2 * N (sinThetaEmbedding U X)`
+
+for every rectangular unitarily invariant norm.  Consequently every proven
+single-angle residual estimate immediately gives a double-angle residual
+estimate with twice the constant.
+
+The residual gap belongs between the coordinate operator `M` and the unwanted
+spectrum of `A` on `Uᗮ`.  A bare internal gap between the two reducing blocks
+of `A` does not control an arbitrary trial pair `(X,M)`, and the former direct
+Sylvester body was not type-correct: its displayed right-hand side consisted
+of ambient endomorphisms while the norm had rectangular type `F -> E`.
 -/
 
 namespace ForMathlib
@@ -27,40 +36,68 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
 variable {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
   [FiniteDimensional 𝕜 F]
 
-/-- The residual `sin 2 Theta` formulation for an isometric trial map. -/
+/-- The interval/exterior residual `sin 2 Theta` theorem for an isometric trial
+map.  This is the complete rectangular UI-norm family obtained from the sharp
+single-angle residual theorem and `sin (2 t) <= 2 sin t`. -/
 theorem sinTwoTheta_residual_le
     (N : RectangularUnitarilyInvariantNorm 𝕜 F E)
     {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric) {U : Submodule 𝕜 E}
     [U.HasOrthogonalProjection] (hU : Reduces A U)
     (X : F →ₗᵢ[𝕜] E) {M : F →ₗ[𝕜] F} (hM : M.IsSymmetric)
-    {δ : ℝ} (hδ : 0 < δ) (hgap : InternalGap A U δ) :
+    {a b δ : ℝ} (hδ : 0 < δ)
+    (hMspec : SpectrumIn M ⊤ (Set.Icc a b))
+    (hAspec : SpectrumIn A Uᗮ {lam | lam ∉ Set.Ioo (a - δ) (b + δ)}) :
     δ * N (sinTwoThetaEmbedding U X) ≤ 2 * N (residual A X M) := by
-  classical
-  let C := cosThetaEmbedding U X
-  let S := sinThetaEmbedding U X
-  let R := residual A X M
-  have hblocks := projectedResidualEquations hA hM hU X
-  have hdouble :
-      doubleAngleSylvesterOperator A U (sinTwoThetaEmbedding U X) =
-        (2 : 𝕜) •
-          (complementaryProjection U ∘ₗ R ∘ₗ LinearMap.adjoint C -
-            projection U ∘ₗ R ∘ₗ LinearMap.adjoint S) := by
-    ext x
-    simp [sinTwoThetaEmbedding, C, S, R, hblocks.1, hblocks.2,
-      LinearMap.comp_apply, LinearMap.adjoint_comp]
-    module
-  have hrhs :
-      N ((2 : 𝕜) •
-          (complementaryProjection U ∘ₗ R ∘ₗ LinearMap.adjoint C -
-            projection U ∘ₗ R ∘ₗ LinearMap.adjoint S)) ≤
-        2 * N R := by
-    rw [N.smul]
-    have hC : ‖C.toContinuousLinearMap‖ ≤ 1 := cosThetaEmbedding_contraction U X
-    have hS : ‖S.toContinuousLinearMap‖ ≤ 1 := sinThetaEmbedding_contraction U X
-    exact doubleAngleResidual_rhs_uiNorm_le N R hC hS
-  have hsolve := internalGap_doubleAngleSylvester_uiNorm_le
-    N hA hU hδ hgap (sinTwoThetaEmbedding U X) hdouble
-  exact (mul_le_mul_of_nonneg_left hsolve (le_of_lt hδ)).trans hrhs
+  have hdouble := sinTwoThetaEmbedding_uiNorm_le_two_mul N U X
+  have hsingle := sinTheta_residual_le N hA hU X hM hδ hMspec hAspec
+  calc
+    δ * N (sinTwoThetaEmbedding U X)
+        ≤ δ * (2 * N (sinThetaEmbedding U X)) :=
+      mul_le_mul_of_nonneg_left hdouble hδ.le
+    _ = 2 * (δ * N (sinThetaEmbedding U X)) := by ring
+    _ ≤ 2 * N (residual A X M) :=
+      mul_le_mul_of_nonneg_left hsingle (by positivity)
+
+/-- Ordered half-line residual `sin 2 Theta` theorem. -/
+theorem sinTwoTheta_residual_le_of_orderedGap
+    (N : RectangularUnitarilyInvariantNorm 𝕜 F E)
+    {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric) {U : Submodule 𝕜 E}
+    [U.HasOrthogonalProjection] (hU : Reduces A U)
+    (X : F →ₗᵢ[𝕜] E) {M : F →ₗ[𝕜] F} (hM : M.IsSymmetric)
+    {δ : ℝ} (hδ : 0 < δ) (hgap : OrderedGap M ⊤ A Uᗮ δ) :
+    δ * N (sinTwoThetaEmbedding U X) ≤ 2 * N (residual A X M) := by
+  have hdouble := sinTwoThetaEmbedding_uiNorm_le_two_mul N U X
+  have hsingle := sinTheta_residual_le_of_orderedGap N hA hU X hM hδ hgap
+  calc
+    δ * N (sinTwoThetaEmbedding U X)
+        ≤ δ * (2 * N (sinThetaEmbedding U X)) :=
+      mul_le_mul_of_nonneg_left hdouble hδ.le
+    _ = 2 * (δ * N (sinThetaEmbedding U X)) := by ring
+    _ ≤ 2 * N (residual A X M) :=
+      mul_le_mul_of_nonneg_left hsingle (by positivity)
+
+/-- General separated-spectrum residual form.  The single-angle `pi / 2`
+Sylvester loss becomes the expected factor `pi` after the elementary
+`sin (2 t) <= 2 sin t` comparison. -/
+theorem sinTwoTheta_residual_le_of_spectralDistance
+    (N : RectangularUnitarilyInvariantNorm 𝕜 F E)
+    {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric) {U : Submodule 𝕜 E}
+    [U.HasOrthogonalProjection] (hU : Reduces A U)
+    (X : F →ₗᵢ[𝕜] E) {M : F →ₗ[𝕜] F} (hM : M.IsSymmetric)
+    {δ : ℝ} (hδ : 0 < δ) (hgap : SpectraSeparated M ⊤ A Uᗮ δ) :
+    δ * N (sinTwoThetaEmbedding U X) ≤
+      Real.pi * N (residual A X M) := by
+  have hdouble := sinTwoThetaEmbedding_uiNorm_le_two_mul N U X
+  have hsingle := sinTheta_residual_le_of_spectralDistance
+    N hA hU X hM hδ hgap
+  calc
+    δ * N (sinTwoThetaEmbedding U X)
+        ≤ δ * (2 * N (sinThetaEmbedding U X)) :=
+      mul_le_mul_of_nonneg_left hdouble hδ.le
+    _ = 2 * (δ * N (sinThetaEmbedding U X)) := by ring
+    _ ≤ 2 * ((Real.pi / 2) * N (residual A X M)) :=
+      mul_le_mul_of_nonneg_left hsingle (by positivity)
+    _ = Real.pi * N (residual A X M) := by ring
 
 end DavisKahanTheory
 end ForMathlib

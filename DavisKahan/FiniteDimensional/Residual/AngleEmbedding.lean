@@ -42,6 +42,42 @@ noncomputable def cosThetaEmbedding (U : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] (X : F →ₗᵢ[𝕜] E) : F →ₗ[𝕜] E :=
   projection U ∘ₗ X.toLinearMap
 
+omit [FiniteDimensional 𝕜 E] [FiniteDimensional 𝕜 F] in
+/-- The cosine embedding is pointwise contractive. -/
+theorem cosThetaEmbedding_apply_norm_le (U : Submodule 𝕜 E)
+    [U.HasOrthogonalProjection] (X : F →ₗᵢ[𝕜] E) (x : F) :
+    ‖cosThetaEmbedding U X x‖ ≤ ‖x‖ := by
+  change ‖U.starProjection (X x)‖ ≤ ‖x‖
+  calc
+    ‖U.starProjection (X x)‖ ≤ ‖X x‖ := U.norm_starProjection_apply_le _
+    _ = ‖x‖ := X.norm_map x
+
+omit [FiniteDimensional 𝕜 E] [FiniteDimensional 𝕜 F] in
+/-- The sine embedding is pointwise contractive. -/
+theorem sinThetaEmbedding_apply_norm_le (U : Submodule 𝕜 E)
+    [U.HasOrthogonalProjection] (X : F →ₗᵢ[𝕜] E) (x : F) :
+    ‖sinThetaEmbedding U X x‖ ≤ ‖x‖ := by
+  change ‖Uᗮ.starProjection (X x)‖ ≤ ‖x‖
+  calc
+    ‖Uᗮ.starProjection (X x)‖ ≤ ‖X x‖ := Uᗮ.norm_starProjection_apply_le _
+    _ = ‖x‖ := X.norm_map x
+
+/-- The operator norm of the cosine embedding is at most one. -/
+theorem cosThetaEmbedding_opNorm_le_one (U : Submodule 𝕜 E)
+    [U.HasOrthogonalProjection] (X : F →ₗᵢ[𝕜] E) :
+    ‖(cosThetaEmbedding U X).toContinuousLinearMap‖ ≤ 1 := by
+  refine (cosThetaEmbedding U X).toContinuousLinearMap.opNorm_le_bound
+    zero_le_one fun x => ?_
+  simpa using cosThetaEmbedding_apply_norm_le U X x
+
+/-- The operator norm of the sine embedding is at most one. -/
+theorem sinThetaEmbedding_opNorm_le_one (U : Submodule 𝕜 E)
+    [U.HasOrthogonalProjection] (X : F →ₗᵢ[𝕜] E) :
+    ‖(sinThetaEmbedding U X).toContinuousLinearMap‖ ≤ 1 := by
+  refine (sinThetaEmbedding U X).toContinuousLinearMap.opNorm_le_bound
+    zero_le_one fun x => ?_
+  simpa using sinThetaEmbedding_apply_norm_le U X x
+
 /-- Source-side cosine Gram block `C⋆C`, where `C = P_U X`. -/
 noncomputable def cosThetaGram (U : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] (X : F →ₗᵢ[𝕜] E) : F →ₗ[𝕜] F :=
@@ -60,6 +96,21 @@ it is the denominator used by the coordinate tangent map. -/
 noncomputable def cosThetaMagnitude (U : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] (X : F →ₗᵢ[𝕜] E) : F →ₗ[𝕜] F :=
   trialGramSqrt (cosThetaEmbedding U X)
+
+/-- The positive source cosine is pointwise contractive. -/
+theorem cosThetaMagnitude_apply_norm_le (U : Submodule 𝕜 E)
+    [U.HasOrthogonalProjection] (X : F →ₗᵢ[𝕜] E) (x : F) :
+    ‖cosThetaMagnitude U X x‖ ≤ ‖x‖ := by
+  rw [cosThetaMagnitude, norm_trialGramSqrt_apply]
+  exact cosThetaEmbedding_apply_norm_le U X x
+
+/-- The operator norm of the positive source cosine is at most one. -/
+theorem cosThetaMagnitude_opNorm_le_one (U : Submodule 𝕜 E)
+    [U.HasOrthogonalProjection] (X : F →ₗᵢ[𝕜] E) :
+    ‖(cosThetaMagnitude U X).toContinuousLinearMap‖ ≤ 1 := by
+  refine (cosThetaMagnitude U X).toContinuousLinearMap.opNorm_le_bound
+    zero_le_one fun x => ?_
+  simpa using cosThetaMagnitude_apply_norm_le U X x
 
 /-- The cosine and sine Gram blocks partition the identity on trial
 coordinates: `C⋆C + S⋆S = I`. -/

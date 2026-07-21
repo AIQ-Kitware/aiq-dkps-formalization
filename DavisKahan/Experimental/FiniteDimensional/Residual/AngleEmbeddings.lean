@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
 import DavisKahan.FiniteDimensional.Residual.AngleEmbedding
+import ForMathlib.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm
 import ForMathlib.Analysis.InnerProductSpace.MoorePenroseInverse
 
 /-!
@@ -85,6 +86,28 @@ On a simultaneous principal-angle basis this has singular values
 noncomputable def sinTwoThetaEmbedding (U : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] (X : F →ₗᵢ[𝕜] E) : F →ₗ[𝕜] E :=
   (2 : 𝕜) • (sinThetaEmbedding U X ∘ₗ cosThetaMagnitude U X)
+
+/-- Every rectangular unitarily invariant norm of the coordinate double-angle
+sine is at most twice the corresponding single-angle sine norm. -/
+theorem sinTwoThetaEmbedding_uiNorm_le_two_mul
+    (N : RectangularUnitarilyInvariantNorm 𝕜 F E)
+    (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
+    (X : F →ₗᵢ[𝕜] E) :
+    N (sinTwoThetaEmbedding U X) ≤ 2 * N (sinThetaEmbedding U X) := by
+  rw [sinTwoThetaEmbedding, N.smul_eq, RCLike.norm_ofNat]
+  have hcomp := N.comp_le_mul_opNorm
+    (sinThetaEmbedding U X) (cosThetaMagnitude U X)
+  calc
+    2 * N (sinThetaEmbedding U X ∘ₗ cosThetaMagnitude U X)
+        ≤ 2 * (N (sinThetaEmbedding U X) *
+          ‖(cosThetaMagnitude U X).toContinuousLinearMap‖) :=
+      mul_le_mul_of_nonneg_left hcomp (by positivity)
+    _ ≤ 2 * (N (sinThetaEmbedding U X) * 1) :=
+      mul_le_mul_of_nonneg_left
+        (mul_le_mul_of_nonneg_left
+          (cosThetaMagnitude_opNorm_le_one U X) (N.nonneg _))
+        (by positivity)
+    _ = 2 * N (sinThetaEmbedding U X) := by ring
 
 /-- Totalized double-angle tangent
 `(2 S |C|) (C⋆C - S⋆S)⁺`. -/

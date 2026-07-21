@@ -113,7 +113,7 @@
     {
       "name": "sinTwoTheta_residual_le",
       "path": "DavisKahan/Experimental/FiniteDimensional/DoubleAngle/SinTheta.lean",
-      "signature_sha256": "bb67d59c41d6dde7e5b377b45cb0ea6c84cb3917dc310048ceebeb466d44b610"
+      "signature_sha256": "232abc91b0b055169c9cc99cb22128cdc91c957f785c953ea1810796617f9c5e"
     },
     {
       "name": "tanTwoTheta_residual_le",
@@ -899,13 +899,21 @@
   "schema_version": 1,
   "source_corrections": [
     {
+      "correction": "Replace absolute InternalGap by OrderedInternalGap. The old statements were false for interlacing diagonal-block spectra; an explicit three-dimensional quarter-turn counterexample is recorded in dev/tan-two-theta-ordered-gap-correction-2026-07-20.md.",
       "date": "2026-07-20",
-      "path": "DavisKahan/Experimental/FiniteDimensional/DoubleAngle/TanTheta.lean",
       "declarations": [
         "tanTwoTheta_perturbation_le",
         "tanTwoTheta_residual_le"
       ],
-      "correction": "Replace absolute InternalGap by OrderedInternalGap. The old statements were false for interlacing diagonal-block spectra; an explicit three-dimensional quarter-turn counterexample is recorded in dev/tan-two-theta-ordered-gap-correction-2026-07-20.md."
+      "path": "DavisKahan/Experimental/FiniteDimensional/DoubleAngle/TanTheta.lean"
+    },
+    {
+      "correction": "Replace the ill-typed InternalGap body by the source-complete interval/exterior residual signature. The residual separation is between M and the unwanted spectrum of A on U orthogonal; ordered and general separated-spectrum variants are supplied alongside it. See dev/sin-two-theta-residual-gap-correction-2026-07-20.md.",
+      "date": "2026-07-20",
+      "declarations": [
+        "sinTwoTheta_residual_le"
+      ],
+      "path": "DavisKahan/Experimental/FiniteDimensional/DoubleAngle/SinTheta.lean"
     }
   ]
 }
