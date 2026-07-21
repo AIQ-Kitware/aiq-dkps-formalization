@@ -1,37 +1,6 @@
 {
-  "schema_version": 1,
-  "as_of_commit": "b89b4379c7eb09961467bd81643ef457720ede7f",
-  "policy": "Experimental roots are classified independently of the historical aggregate. Parked roots remain preserved but are excluded from active proof-debt counts until explicitly reactivated.",
-  "roots": [
-    {
-      "module": "DavisKahan/Experimental/InfiniteDimensional/Core/AbstractSpectrum.lean",
-      "status": "parked",
-      "reason": "Ambient RCLike functional calculus requires a future complete complex and real-complexification architecture."
-    },
-    {
-      "module": "DavisKahan/Experimental/InfiniteDimensional/Core/OperatorAngle.lean",
-      "status": "parked",
-      "reason": "Depends on the parked ambient functional-calculus route and has no uniform incomplete RCLike construction in pinned Mathlib."
-    },
-    {
-      "module": "DavisKahan/Experimental/InfiniteDimensional/Core/SpectralProjection.lean",
-      "status": "parked",
-      "reason": "Requires projection-valued spectral measures or an equivalent ambient spectral-resolution development absent from pinned Mathlib."
-    },
-    {
-      "module": "DavisKahan/Experimental/FiniteDimensional/TanTheta/GraphOperator.lean",
-      "status": "parked",
-      "reason": "Historical bodies mix finite coordinate maps, subtype graph maps, and ambient continuous graph subspaces."
-    },
-    {
-      "module": "DavisKahan/Experimental/FiniteDimensional/DoubleAngle/TanTheta.lean",
-      "status": "parked",
-      "reason": "Finite algebra and contour-dependent branch selection must be redesigned in separate coherent operator spaces."
-    },
-    {
-      "module": "DavisKahan/Experimental/FiniteDimensional/Sharpness.lean",
-      "status": "active",
-      "reason": "Finite planar singular-value computations and corrected sharpness endpoints are tractable without ambient PVM infrastructure."
-    }
-  ]
+  "schema_version": 2,
+  "as_of_commit": "cb1d6ab1b3db43ccc26823677be5969bec0498ab",
+  "policy": "No active or parked roots remain. Unsupported historical ambient facades are retired and preserved under dev; active Experimental imports only canonical implementations.",
+  "roots": []
 }
