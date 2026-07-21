@@ -5,6 +5,7 @@ Authors: Jon Crall, GPT-5.6 Thinking
 -/
 import DavisKahan.Experimental.FiniteDimensional.Residual.AngleEmbeddings
 import DavisKahan.FiniteDimensional.Core.OperatorBlocks
+import DavisKahan.FiniteDimensional.SinTheta.UnitarilyInvariant
 import DavisKahan.Experimental.FiniteDimensional.Core.AngleOperators
 
 /-!

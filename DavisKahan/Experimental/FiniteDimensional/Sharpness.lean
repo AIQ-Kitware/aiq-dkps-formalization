@@ -6,6 +6,7 @@ Authors: Jon Crall, GPT 5.6 High
 import DavisKahan.Sources.Davis1963.RotationEnergy
 import DavisKahan.FiniteDimensional.Core.AngleGeometry
 import DavisKahan.FiniteDimensional.Core.SpectralGap
+import DavisKahan.FiniteDimensional.SinTheta.UnitarilyInvariant
 import DavisKahan.Experimental.FiniteDimensional.Core.AngleOperators
 
 /-!
@@ -223,7 +224,7 @@ theorem sinTheta_model_equality
       (rotatedModelSubspace (𝕜 := 𝕜) θ))
         = N ((b-a : 𝕜) • sinAngleOperator (modelSubspace (𝕜 := 𝕜))
             (rotatedModelSubspace (𝕜 := 𝕜) θ)) := by
-          rw [N.smul]; simp [abs_of_pos (sub_pos.mpr hab)]
+          rw [N.smul_eq]; simp [abs_of_pos (sub_pos.mpr hab)]
     _ = N (modelSinThetaPerturbation (𝕜 := 𝕜) a b θ) :=
       N.eq_of_same_singularValues hsing.symm
 
@@ -243,7 +244,8 @@ theorem tanTheta_model_equality
     (b - a) * N (tanAngleOperator (modelSubspace (𝕜 := 𝕜))
       (rotatedModelSubspace (𝕜 := 𝕜) θ)) =
       N (modelTanThetaPerturbation (𝕜 := 𝕜) a b θ) := by
-  have htan : 0 ≤ Real.tan θ := Real.tan_nonneg_of_nonneg_of_lt_pi_div_two hθ0 hθ1
+  have htan : 0 ≤ Real.tan θ :=
+    Real.tan_nonneg_of_nonneg_of_le_pi_div_two hθ0 hθ1.le
   have hsingT := singularValues_tanAngle_model (𝕜 := 𝕜) hθ0 hθ1
   have hsingH :
       (modelTanThetaPerturbation (𝕜 := 𝕜) a b θ).singularValues =
@@ -285,11 +287,11 @@ theorem sinTwoTheta_model_equality
       (rotatedModelSubspace (𝕜 := 𝕜) θ))
         = N ((b-a : 𝕜) • sinTwoAngleOperator (modelSubspace (𝕜 := 𝕜))
             (rotatedModelSubspace (𝕜 := 𝕜) θ)) := by
-          rw [N.smul]; simp [abs_of_pos (sub_pos.mpr hab)]
+          rw [N.smul_eq]; simp [abs_of_pos (sub_pos.mpr hab)]
     _ = N ((2 : 𝕜) • modelSinTwoThetaPerturbation (𝕜 := 𝕜) a b θ) :=
       N.eq_of_same_singularValues hsame
     _ = 2 * N (modelSinTwoThetaPerturbation (𝕜 := 𝕜) a b θ) := by
-      rw [N.smul]; norm_num
+      rw [N.smul_eq]; norm_num
 
 /-- Equality case for the `tan 2Θ` theorem.
 
@@ -305,7 +307,7 @@ theorem tanTwoTheta_model_equality
       (rotatedModelSubspace (𝕜 := 𝕜) θ)) =
       2 * N (modelTanTwoThetaPerturbation (𝕜 := 𝕜) a b θ) := by
   have htan : 0 ≤ Real.tan (2*θ) := by
-    apply Real.tan_nonneg_of_nonneg_of_lt_pi_div_two
+    apply Real.tan_nonneg_of_nonneg_of_le_pi_div_two
     · linarith
     · linarith
   have hsingT := singularValues_tanTwoAngle_model (𝕜 := 𝕜) hθ0 hθ1
@@ -341,7 +343,7 @@ theorem sinTheta_constant_optimal :
     intro hzero
     have := congrArg (fun T => T (e0 (𝕜 := 𝕜))) hzero
     simpa [modelSinThetaPerturbation, e0] using this
-  simpa using (mul_lt_mul_of_lt_one_left hpos hc)
+  simpa using (mul_lt_of_lt_one_left hpos hc)
 
 /-- The factor two in the double-angle theorems cannot be decreased.
 
