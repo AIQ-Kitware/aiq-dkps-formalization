@@ -155,16 +155,20 @@ theorem generalizedTanTheta_residual_le
   tanTheta_residual_le N hA hV (orthonormalizedEmbedding X hX)
     (isSymmetric_generalizedCompression hA X hX) rfl hδ hgap
 
-/-- The unequal-dimensional `sin 2Θ` extension mentioned after Theorem 8.2.
--/
+/-- The unequal-dimensional ordered-gap `sin 2Θ` residual extension.
+
+The spectral separation is between the trial coordinate operator `M` and the
+unwanted exact spectrum on `Uᗮ`, as in the source-complete residual theorem.
+An internal gap between the two blocks of `A` alone does not locate the trial
+spectrum. -/
 theorem generalizedSinTwoTheta_unequalFinrank
     (N : RectangularUnitarilyInvariantNorm 𝕜 F E)
     {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric)
     {U : Submodule 𝕜 E} [U.HasOrthogonalProjection] (hU : Reduces A U)
     (X : F →ₗᵢ[𝕜] E) {M : F →ₗ[𝕜] F} (hM : M.IsSymmetric)
-    {δ : ℝ} (hδ : 0 < δ) (hgap : InternalGap A U δ) :
+    {δ : ℝ} (hδ : 0 < δ) (hgap : OrderedGap M ⊤ A Uᗮ δ) :
     δ * N (sinTwoThetaEmbedding U X) ≤ 2 * N (residual A X M) :=
-  sinTwoTheta_residual_le N hA hU X hM hδ hgap
+  sinTwoTheta_residual_le_of_orderedGap N hA hU X hM hδ hgap
 
 /-- Spectral projectors along the homotopy `A+tH` stay on one isolated branch.
 
