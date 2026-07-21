@@ -74,6 +74,7 @@ argument to the elementary ordered Sylvester theorem. -/
 def OrderedInternalGap (A : E →ₗ[𝕜] E) (U : Submodule 𝕜 E) (δ : ℝ) : Prop :=
   OrderedGap A U A Uᗮ δ ∨ OrderedGap A Uᗮ A U δ
 
+omit [FiniteDimensional 𝕜 E] in
 /-- Spectral inclusion on opposite sides of a cut gives the corresponding
 ordered internal gap. -/
 theorem orderedInternalGap_of_spectrumIn_Iic_Ici

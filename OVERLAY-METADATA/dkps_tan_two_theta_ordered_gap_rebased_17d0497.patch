@@ -1,0 +1,358 @@
+diff --git a/DavisKahan/Experimental/FiniteDimensional/Core/AngleOperators.lean b/DavisKahan/Experimental/FiniteDimensional/Core/AngleOperators.lean
+index 1a9bc5d..f091b79 100644
+--- a/DavisKahan/Experimental/FiniteDimensional/Core/AngleOperators.lean
++++ b/DavisKahan/Experimental/FiniteDimensional/Core/AngleOperators.lean
+@@ -13,13 +13,13 @@ import ForMathlib.Analysis.InnerProductSpace.MoorePenroseInverse
+ The stable finite-dimensional core moved to `DavisKahan.FiniteDimensional.Core.AngleGeometry`.
+ Only the still-open constructions remain declared at this historical path.
+ 
+-The intended definitions use a finite self-adjoint functional calculus and the
+-Moore--Penrose inverse; neither is available yet in this development or the
+-pinned Mathlib.  The safe tangent convention is zero on a pole; all analytic
+-tangent theorems carry transversality or quarter-turn avoidance, so the pole
+-branch is never observed there.  Two intended theorems are recorded in
+-docstrings rather than stated because their statements themselves require the
+-missing Moore--Penrose and multiset-eigenvalue API:
++The remaining definitions use the repository's finite self-adjoint functional
++calculus and Moore--Penrose inverse.  The safe tangent convention is zero on a
++pole; all analytic tangent theorems carry transversality or quarter-turn
++avoidance, so the pole branch is never observed there.  Two intended
++dictionary theorems remain recorded in docstrings rather than stated because
++the simultaneous CS-decomposition and multiset-eigenvalue bridge is still
++missing:
+ 
+ * `tanThetaMap_eq_sin_comp_inv`: on transverse pairs, the tangent map is the
+   sine block composed with the true inverse of the cosine block on its range.
+@@ -99,9 +99,7 @@ noncomputable def tanTwoAngleOperator (U V : Submodule 𝕜 E)
+     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →ₗ[𝕜] E :=
+   FiniteDimensional.selfAdjointFunctionalCalculus
+     (FiniteDimensional.selfAdjointFunctionalCalculus_isSymmetric
+-      (FiniteDimensional.selfAdjointFunctionalCalculus_isSymmetric
+-        (ForMathlib.isPositive_abs (projection U - projection V)).isSymmetric Real.arcsin)
+-      safeTan)
++      (ForMathlib.isPositive_abs (projection U - projection V)).isSymmetric Real.arcsin)
+     safeTanTwo
+ 
+ /-- Orthogonal complements preserve the nontrivial principal angles.
+diff --git a/DavisKahan/Experimental/FiniteDimensional/DoubleAngle/TanTheta.lean b/DavisKahan/Experimental/FiniteDimensional/DoubleAngle/TanTheta.lean
+index 20afc6a..3b69a9d 100644
+--- a/DavisKahan/Experimental/FiniteDimensional/DoubleAngle/TanTheta.lean
++++ b/DavisKahan/Experimental/FiniteDimensional/DoubleAngle/TanTheta.lean
+@@ -43,7 +43,7 @@ whose left side is exactly the operator used by `tanTwoThetaEmbedding`; this
+ prevents repeated block algebra in every norm specialization.
+ 
+ Quarter-turn avoidance should be proved from injectivity of the denominator
+-operator, not assumed through a total inverse.  Use `InternalGap A U δ` to
++operator, not assumed through a total inverse.  Use `OrderedInternalGap A U δ` to
+ show a vector in the denominator kernel would solve a homogeneous separated
+ Sylvester equation, hence vanish.  Only then rewrite the totalized
+ `tanTwoThetaEmbedding` to its proof-carrying branch and apply the ordered
+@@ -116,10 +116,14 @@ perturbation `B-A` is fully off diagonal relative to the unperturbed splitting
+ `U ⊕ Uᗮ`.  The theorem itself excludes quarter-turn angles; acuteness is not a
+ hypothesis for the raw double-angle theorem.
+ 
++The ordered internal gap is essential.  Absolute pairwise separation alone
++allows the two block spectra to interlace and does not exclude a quarter-turn
++reducing subspace.
++
+ Lean proof route for a weaker agent:
+ 
+ 1. Use `hoff` and the reducing decompositions of `A` and `B` to derive the finite Riccati equation for the angular operator from `U` to `V`.
+-2. Prove the cosine-difference denominator is nonzero from `InternalGap A U δ`; this yields `AvoidsQuarterTurn U V` and legitimizes `tanTwoAngleOperator`.
++2. Prove the cosine-difference denominator is nonzero from `OrderedInternalGap A U δ`; this yields `AvoidsQuarterTurn U V` and legitimizes `tanTwoAngleOperator`.
+ 3. Apply the ordered Sylvester/Ky Fan estimate to the Riccati identity and use finite Fan dominance to obtain the arbitrary UI-norm inequality.
+ -/
+ theorem tanTwoTheta_residual_le
+@@ -129,7 +133,7 @@ theorem tanTwoTheta_residual_le
+     (X : F →ₗᵢ[𝕜] E) {M : F →ₗ[𝕜] F} (hM : M.IsSymmetric)
+     (hBX : B ∘ₗ X.toLinearMap = X.toLinearMap ∘ₗ M)
+     (hoff : IsOffDiagonal U (B - A))
+-    {δ : ℝ} (hδ : 0 < δ) (hgap : InternalGap A U δ) :
++    {δ : ℝ} (hδ : 0 < δ) (hgap : OrderedInternalGap A U δ) :
+     AvoidsQuarterTurnEmbedding U X ∧
+       δ * N (tanTwoThetaEmbedding U X) ≤ 2 * N (residual A X M) := by
+   classical
+@@ -166,11 +170,13 @@ theorem tanTwoTheta_residual_le
+ For an arbitrary reducing subspace `V`, angles may lie on either side of
+ `π/4`.  The theorem proves that no angle equals `π/4` and bounds the norm of
+ `tan (2Θ)`; the later spectral-selection theorem chooses the acute branch.
++The ordered internal gap cannot be weakened to absolute separation because
++interlacing block spectra admit explicit quarter-turn counterexamples.
+ 
+ Lean proof route for a weaker agent:
+ 
+ 1. Use `hoff` and the reducing decompositions of `A` and `B` to derive the finite Riccati equation for the angular operator from `U` to `V`.
+-2. Prove the cosine-difference denominator is nonzero from `InternalGap A U δ`; this yields `AvoidsQuarterTurn U V` and legitimizes `tanTwoAngleOperator`.
++2. Prove the cosine-difference denominator is nonzero from `OrderedInternalGap A U δ`; this yields `AvoidsQuarterTurn U V` and legitimizes `tanTwoAngleOperator`.
+ 3. Apply the ordered Sylvester/Ky Fan estimate to the Riccati identity and use finite Fan dominance to obtain the arbitrary UI-norm inequality.
+ -/
+ theorem tanTwoTheta_perturbation_le
+@@ -179,7 +185,7 @@ theorem tanTwoTheta_perturbation_le
+     {U V : Submodule 𝕜 E} [U.HasOrthogonalProjection]
+     [V.HasOrthogonalProjection] (hU : Reduces A U) (hV : Reduces B V)
+     (hoff : IsOffDiagonal U (B - A))
+-    {δ : ℝ} (hδ : 0 < δ) (hgap : InternalGap A U δ) :
++    {δ : ℝ} (hδ : 0 < δ) (hgap : OrderedInternalGap A U δ) :
+     AvoidsQuarterTurn U V ∧
+       δ * N (tanTwoAngleOperator U V) ≤ 2 * N (B - A) := by
+   classical
+@@ -272,13 +278,8 @@ theorem tanTwoTheta_spectralSubspace_le
+   intro V
+   have hB : (A + H).IsSymmetric := hA.add hH
+   have hδ : (0 : ℝ) < b - a := sub_pos.mpr hab
+-  have hgap : InternalGap A U (b - a) := by
+-    intro lam mu hlam hmu
+-    have h1 : lam ≤ a := hUa hlam
+-    have h2 : b ≤ mu := hUb hmu
+-    calc b - a ≤ mu - lam := by linarith
+-      _ ≤ |mu - lam| := le_abs_self _
+-      _ = |lam - mu| := abs_sub_comm mu lam
++  have hgap : OrderedInternalGap A U (b - a) :=
++    orderedInternalGap_of_spectrumIn_Iic_Ici hUa hUb
+   have hoff' : IsOffDiagonal U (A + H - A) := by
+     rwa [add_sub_cancel_left]
+   have h := tanTwoTheta_perturbation_le N hA hB hU
+@@ -433,8 +434,8 @@ theorem largestPrincipalAngle_lt_pi_div_four
+   let V := spectralSubspace (A + H) (Set.Iic a)
+   have hacute := isAcute_canonical_tanTwoTheta hA hH hU hoff hab hUa hUb
+   have hδ : 0 < b - a := sub_pos.mpr hab
+-  have hgap : InternalGap A U (b - a) :=
+-    internalGap_of_spectrumIn_interval_sides hA hU hUa hUb hab
++  have hgap : OrderedInternalGap A U (b - a) :=
++    orderedInternalGap_of_spectrumIn_Iic_Ici hUa hUb
+   have hV : Reduces (A + H) V := reduces_spectralSubspace (hA.add hH) _
+   have havoid := (tanTwoTheta_perturbation_le
+     (UnitarilyInvariantNorm.opNorm 𝕜 E) hA (hA.add hH) hU hV
+@@ -451,7 +452,7 @@ theorem opNorm_tanTwoTheta_le
+     {U V : Submodule 𝕜 E} [U.HasOrthogonalProjection]
+     [V.HasOrthogonalProjection] (hU : Reduces A U) (hV : Reduces B V)
+     (hoff : IsOffDiagonal U (B - A))
+-    {δ : ℝ} (hδ : 0 < δ) (hgap : InternalGap A U δ) :
++    {δ : ℝ} (hδ : 0 < δ) (hgap : OrderedInternalGap A U δ) :
+     AvoidsQuarterTurn U V ∧
+       δ * ‖(tanTwoAngleOperator U V).toContinuousLinearMap‖ ≤
+         2 * ‖(B - A).toContinuousLinearMap‖ := by
+@@ -465,7 +466,7 @@ theorem frobenius_tanTwoTheta_le
+     {U V : Submodule 𝕜 E} [U.HasOrthogonalProjection]
+     [V.HasOrthogonalProjection] (hU : Reduces A U) (hV : Reduces B V)
+     (hoff : IsOffDiagonal U (B - A))
+-    {δ : ℝ} (hδ : 0 < δ) (hgap : InternalGap A U δ) :
++    {δ : ℝ} (hδ : 0 < δ) (hgap : OrderedInternalGap A U δ) :
+     AvoidsQuarterTurn U V ∧
+       δ * UnitarilyInvariantNorm.frobenius 𝕜 E (tanTwoAngleOperator U V) ≤
+         2 * UnitarilyInvariantNorm.frobenius 𝕜 E (B - A) := by
+@@ -479,7 +480,7 @@ theorem kyFan_tanTwoTheta_le
+     {U V : Submodule 𝕜 E} [U.HasOrthogonalProjection]
+     [V.HasOrthogonalProjection] (hU : Reduces A U) (hV : Reduces B V)
+     (hoff : IsOffDiagonal U (B - A))
+-    {δ : ℝ} (hδ : 0 < δ) (hgap : InternalGap A U δ)
++    {δ : ℝ} (hδ : 0 < δ) (hgap : OrderedInternalGap A U δ)
+     (k : ℕ) :
+     AvoidsQuarterTurn U V ∧
+       δ * kyFanSum k (tanTwoAngleOperator U V) ≤ 2 * kyFanSum k (B - A) := by
+diff --git a/DavisKahan/FiniteDimensional/Core/SpectralGap.lean b/DavisKahan/FiniteDimensional/Core/SpectralGap.lean
+index 1db545d..c627ffc 100644
+--- a/DavisKahan/FiniteDimensional/Core/SpectralGap.lean
++++ b/DavisKahan/FiniteDimensional/Core/SpectralGap.lean
+@@ -37,9 +37,12 @@ def HybridGap (A B : E →ₗ[𝕜] E) (U V : Submodule 𝕜 E) (δ : ℝ) : Pro
+ 
+ /-- Absolute separation between the two diagonal blocks of `A`.
+ 
+-This is the internal-gap hypothesis used by the structured double-angle
+-Davis--Kahan theorems.  For a general unstructured Sylvester equation,
+-absolute separation alone instead leads to the separate `π/2` estimate. -/
++This predicate is appropriate for the `sin Θ` and `sin (2Θ)` families and for
++the general disjoint-spectrum Sylvester estimate.  It is not sufficient for
++the sharp `tan (2Θ)` theorem: interlacing spectra can satisfy absolute
++separation while an off-diagonal perturbation produces a quarter-turn angle.
++That theorem requires `OrderedInternalGap` (or an equivalent two-sided form
++ordering). -/
+ def InternalGap (A : E →ₗ[𝕜] E) (U : Submodule 𝕜 E) (δ : ℝ) : Prop :=
+   SpectraSeparated A U A Uᗮ δ
+ 
+@@ -71,6 +74,19 @@ argument to the elementary ordered Sylvester theorem. -/
+ def OrderedInternalGap (A : E →ₗ[𝕜] E) (U : Submodule 𝕜 E) (δ : ℝ) : Prop :=
+   OrderedGap A U A Uᗮ δ ∨ OrderedGap A Uᗮ A U δ
+ 
++/-- Spectral inclusion on opposite sides of a cut gives the corresponding
++ordered internal gap. -/
++theorem orderedInternalGap_of_spectrumIn_Iic_Ici
++    {A : E →ₗ[𝕜] E} {U : Submodule 𝕜 E} {a b : ℝ}
++    (hUa : SpectrumIn A U (Set.Iic a))
++    (hUb : SpectrumIn A Uᗮ (Set.Ici b)) :
++    OrderedInternalGap A U (b - a) := by
++  left
++  intro lam μ hlam hμ
++  have hlam_le : lam ≤ a := hUa hlam
++  have hb_le_hμ : b ≤ μ := hUb hμ
++  linarith
++
+ omit [FiniteDimensional 𝕜 E] in
+ /-- Ordered block separation implies absolute block separation.
+ -/
+diff --git a/dev/full-part-iii-math-ahead-restoration-manifest-2026-07-20.json b/dev/full-part-iii-math-ahead-restoration-manifest-2026-07-20.json
+index b64822b..38ec4ed 100644
+--- a/dev/full-part-iii-math-ahead-restoration-manifest-2026-07-20.json
++++ b/dev/full-part-iii-math-ahead-restoration-manifest-2026-07-20.json
+@@ -118,12 +118,12 @@
+     {
+       "name": "tanTwoTheta_residual_le",
+       "path": "DavisKahan/Experimental/FiniteDimensional/DoubleAngle/TanTheta.lean",
+-      "signature_sha256": "0381de0abb926a129575c5308eaf682de12a74e5cb65199379c45f39b82cdc18"
++      "signature_sha256": "ab4fa9c29c54cdc373a49529c2b7e872dc48ad1b7b9379262e3444d0e1ca5163"
+     },
+     {
+       "name": "tanTwoTheta_perturbation_le",
+       "path": "DavisKahan/Experimental/FiniteDimensional/DoubleAngle/TanTheta.lean",
+-      "signature_sha256": "d9d3182d41cfc81fc2e3d9ebb1a321ea6af6e9e0855d2cf120fce15791b013ac"
++      "signature_sha256": "ba5082969c44b1c9b178a3a05e1a2671d5aed134f8db5e730c94f3e549094bc6"
+     },
+     {
+       "name": "isAcute_canonical_tanTwoTheta",
+@@ -896,5 +896,16 @@
+       "signature_sha256": "44367f07f0c37b92c9f530714eaa6bf54d7dc1f74410275549256e947b2e9e34"
+     }
+   ],
+-  "schema_version": 1
++  "schema_version": 1,
++  "source_corrections": [
++    {
++      "date": "2026-07-20",
++      "path": "DavisKahan/Experimental/FiniteDimensional/DoubleAngle/TanTheta.lean",
++      "declarations": [
++        "tanTwoTheta_perturbation_le",
++        "tanTwoTheta_residual_le"
++      ],
++      "correction": "Replace absolute InternalGap by OrderedInternalGap. The old statements were false for interlacing diagonal-block spectra; an explicit three-dimensional quarter-turn counterexample is recorded in dev/tan-two-theta-ordered-gap-correction-2026-07-20.md."
++    }
++  ]
+ }
+diff --git a/dev/full-part-iii-math-ahead-restoration-manifest-2026-07-20.md b/dev/full-part-iii-math-ahead-restoration-manifest-2026-07-20.md
+index fa3fda6..05d2b09 100644
+--- a/dev/full-part-iii-math-ahead-restoration-manifest-2026-07-20.md
++++ b/dev/full-part-iii-math-ahead-restoration-manifest-2026-07-20.md
+@@ -5,7 +5,10 @@ This human-readable manifest accompanies the machine-readable JSON file of the s
+ - Base commit: `7463ca25c64a46c48411a2769b47714889974a97`
+ - Historical proof-body source: `2244e7c6bd7f`
+ - Exact-signature candidate bodies restored: **174**
+-- Current theorem statements were not changed.
++- Two false tan 2Theta statements were source-corrected on 2026-07-20:
++  `tanTwoTheta_residual_le` and `tanTwoTheta_perturbation_le` now require
++  `OrderedInternalGap`. See
++  `dev/tan-two-theta-ordered-gap-correction-2026-07-20.md`.
+ 
+ ## `DavisKahan/Experimental/FiniteDimensional/Core/AngleOperators.lean` — 5
+ - `tanThetaMap`
+diff --git a/dev/sorry-difficulty-ranking.md b/dev/sorry-difficulty-ranking.md
+index 24d2c7e..f6412dc 100644
+--- a/dev/sorry-difficulty-ranking.md
++++ b/dev/sorry-difficulty-ranking.md
+@@ -226,7 +226,7 @@ Route decision needed before those rows can move.
+ | 112 | 4 | low |  | `DavisKahan/Experimental/FiniteDimensional/TanTheta/GraphOperator.lean:122` | `singularValues_graphOperator` | (graphOperator U X).singularValues = principalTangents U (approximateSubspace X) | Choose principal-vector bases, compute each 2-plane block as sin θ/cos θ = tan θ, transport by unitary invariance, sort, and check zero-padding of pri |
+ | 113 | 4 | low |  | `DavisKahan/Experimental/FiniteDimensional/TanTheta/GraphOperator.lean:163` | `isTransverse_of_tanTheta_residual_gap` | IsTransverse (approximateSubspace X) U (one-sided: P_U-kernel on range X is trivial) | Take x=X y with projection U x=0; hGalerkin gives a homogeneous ordered Sylvester equation for the sine vector; use hgap/hδ to force y=0, hence x=0. |
+ | 114 | 4 | low |  | `DavisKahan/Experimental/FiniteDimensional/TanTheta/GraphOperator.lean:200` | `tanThetaMap_perturbation_le` | δ * N (tanThetaMap U V) ≤ N (B - A) with zero-compression + transversality + ordered gap | Same graph/Sylvester route as tanTheta_perturbation_le but for tanThetaMap under IsTransverse U V; reduce to tanTheta_residual_le. |
+-| 115 | 4 | low |  | `DavisKahan/Experimental/FiniteDimensional/DoubleAngle/TanTheta.lean:123` | `tanTwoTheta_residual_le` | AvoidsQuarterTurnEmbedding U X ∧ δ * N (tanTwoThetaEmbedding U X) ≤ 2 * N (residual A X M) | Derive the double-angle Riccati/Sylvester identity from hBX+hoff+reducing blocks; get quarter-turn avoidance from InternalGap (denominator injective); |
++| 115 | 4 | low |  | `DavisKahan/Experimental/FiniteDimensional/DoubleAngle/TanTheta.lean:123` | `tanTwoTheta_residual_le` | AvoidsQuarterTurnEmbedding U X ∧ δ * N (tanTwoThetaEmbedding U X) ≤ 2 * N (residual A X M) | Derive the double-angle Riccati/Sylvester identity from hBX+hoff+reducing blocks; get quarter-turn avoidance from OrderedInternalGap (absolute separation is false here; denominator injective); |
+ | 116 | 4 | low |  | `DavisKahan/Experimental/FiniteDimensional/DoubleAngle/TanTheta.lean:147` | `tanTwoTheta_perturbation_le` | AvoidsQuarterTurn U V ∧ δ * N (tanTwoAngleOperator U V) ≤ 2 * N (B - A) | Parameterize V (reducing B) by an isometry X with residual = (B-A)∘X, then reduce to tanTwoTheta_residual_le; transport AvoidsQuarterTurnEmbedding to |
+ | 117 | 4 | low |  | `DavisKahan/Experimental/FiniteDimensional/DoubleAngle/TanTheta.lean:211` | `existsUnique_reducingSubspace_preserving_gap` | ∃! V, Reduces (A+H) V ∧ SpectrumIn V (Iic a) ∧ SpectrumIn Vᗮ (Ici b) ∧ IsAcute U V | Existence: V := spectralSubspace (A+H) (Iic a) with reduces_spectralSubspace, SpectrumIn lemmas, isAcute_canonical_tanTwoTheta. Uniqueness: two such s |
+ | 118 | 4 | low |  | `DavisKahan/Experimental/FiniteDimensional/DoubleAngle/TanTheta.lean:273` | `spectral_repulsion_uiNorm` | N (P_Vᗮ (A+H-c) P_Vᗮ) ≥ N (cosThetaMap Uᗮ Vᗮ ∘ P_Uᗮ (A-c) P_Uᗮ) (Thm 8.1(iii)) | Order both compressions in compatible eigenbases, use spectral_repulsion_eigenvalues for coordinatewise domination of shifted eigenvalues, prove singu |
+diff --git a/dev/tan-two-theta-ordered-gap-correction-2026-07-20.md b/dev/tan-two-theta-ordered-gap-correction-2026-07-20.md
+new file mode 100644
+index 0000000..7218b4d
+--- /dev/null
++++ b/dev/tan-two-theta-ordered-gap-correction-2026-07-20.md
+@@ -0,0 +1,70 @@
++# Tan 2 Theta requires an ordered internal gap
++
++## Defect
++
++The restored experimental declarations `tanTwoTheta_residual_le` and
++`tanTwoTheta_perturbation_le` used `InternalGap A U δ`, meaning only absolute
++pairwise separation of the spectra of the two diagonal blocks. That hypothesis
++is too weak: it permits the two spectra to interlace. Under interlacing, a
++symmetric off-diagonal perturbation can produce a reducing subspace at exactly
++a quarter turn, so the claimed `AvoidsQuarterTurn` conclusion is false.
++
++The source theorem uses an ordered block separation. The finite API must use
++`OrderedInternalGap A U δ`, or the equivalent interval/form hypothesis that one
++block lies entirely below the other by at least `δ`.
++
++## Explicit finite counterexample to the old statement
++
++Work over `R^3` with the orthogonal splitting
++
++- `U = span(e1, e2)`,
++- `U^perp = span(e3)`.
++
++Let
++
++    A = diag(-1, 1, 0).
++
++The spectra of the two diagonal blocks are `{-1, 1}` and `{0}`. They are
++absolutely separated by one, so `InternalGap A U 1` holds, but they are not
++ordered.
++
++Set
++
++    x = (e1 + e2) / sqrt(2),
++    z = (e1 - e2) / sqrt(2),
++    y = e3.
++
++Then `A x = -z`. Define the symmetric off-diagonal map `H` by
++
++    H y = z,
++    H x = 0,
++    H z = y.
++
++It has zero diagonal blocks relative to `U + U^perp`. For `B = A + H`,
++
++    B (x + y) = 0.
++
++Consequently `V = span(x + y)` reduces `B`, and its unique principal angle
++with `U` is `pi / 4`. This contradicts the quarter-turn conclusion of the old
++experimental theorem while satisfying its absolute-gap assumptions.
++
++## Corrections in this batch
++
++1. `InternalGap` documentation no longer claims it supports the sharp
++   `tan (2 Theta)` theorem.
++2. The experimental tan-two-theta declarations and concrete endpoint wrappers
++   now require `OrderedInternalGap`.
++3. A reusable bridge constructs `OrderedInternalGap A U (b-a)` from spectral
++   inclusions `spectrum(A|U) <= a` and `spectrum(A|U^perp) >= b`.
++4. `tanTwoAngleOperator` now applies `safeTanTwo` directly to the angle
++   operator. The old body first applied `safeTan`, and therefore computed
++   `safeTanTwo(tan theta)` instead of `tan(2 theta)`.
++
++## Remaining proof work
++
++The fictional helper names in the historical body are not to be recreated.
++The correct arbitrary-unitarily-invariant-norm proof should follow the ordered
++principal-plane/Ky-Fan argument of Davis--Kahan Section 7, or an equivalent
++ordered Sylvester reduction. It must prove the tangent-double-angle singular
++value dictionary and quarter-turn exclusion from the ordered gap before using
++the Moore--Penrose inverse branch.
+diff --git a/scripts/check_full_part_iii_math_ahead.py b/scripts/check_full_part_iii_math_ahead.py
+index 43ff4be..a355780 100755
+--- a/scripts/check_full_part_iii_math_ahead.py
++++ b/scripts/check_full_part_iii_math_ahead.py
+@@ -161,7 +161,8 @@ def main() -> int:
+     if args.static_only:
+         print(
+             "Full Part III math-ahead static contract: STATIC CLEAN -- "
+-            f"{count} signatures preserved; no unfinished proof terms outside Challenge; "
++            f"{count} guarded signatures match the manifest; "
++            "no unfinished proof terms outside Challenge; "
+             "Lean compilation not checked"
+         )
+         return 0
+@@ -194,7 +195,8 @@ def main() -> int:
+ 
+     print(
+         "Full Part III math-ahead compiler contract: CLEAN -- "
+-        f"{count} signatures preserved; {len(modules)} restored modules compile; "
++        f"{count} guarded signatures match the manifest; "
++        f"{len(modules)} restored modules compile; "
+         "no unfinished proof terms outside Challenge"
+     )
+     return 0

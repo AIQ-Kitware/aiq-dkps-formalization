@@ -1,0 +1,1 @@
+Inspect the latest commit and compile/fix it. The two tan two theta declarations intentionally now require OrderedInternalGap, and tanTwoAngleOperator now applies safeTanTwo directly; do not restore the old formulas or hypotheses.
