@@ -161,7 +161,8 @@ def main() -> int:
     if args.static_only:
         print(
             "Full Part III math-ahead static contract: STATIC CLEAN -- "
-            f"{count} signatures preserved; no unfinished proof terms outside Challenge; "
+            f"{count} guarded signatures match the manifest; "
+            "no unfinished proof terms outside Challenge; "
             "Lean compilation not checked"
         )
         return 0
@@ -194,7 +195,8 @@ def main() -> int:
 
     print(
         "Full Part III math-ahead compiler contract: CLEAN -- "
-        f"{count} signatures preserved; {len(modules)} restored modules compile; "
+        f"{count} guarded signatures match the manifest; "
+        f"{len(modules)} restored modules compile; "
         "no unfinished proof terms outside Challenge"
     )
     return 0

@@ -43,7 +43,7 @@ whose left side is exactly the operator used by `tanTwoThetaEmbedding`; this
 prevents repeated block algebra in every norm specialization.
 
 Quarter-turn avoidance should be proved from injectivity of the denominator
-operator, not assumed through a total inverse.  Use `InternalGap A U δ` to
+operator, not assumed through a total inverse.  Use `OrderedInternalGap A U δ` to
 show a vector in the denominator kernel would solve a homogeneous separated
 Sylvester equation, hence vanish.  Only then rewrite the totalized
 `tanTwoThetaEmbedding` to its proof-carrying branch and apply the ordered
@@ -116,10 +116,14 @@ perturbation `B-A` is fully off diagonal relative to the unperturbed splitting
 `U ⊕ Uᗮ`.  The theorem itself excludes quarter-turn angles; acuteness is not a
 hypothesis for the raw double-angle theorem.
 
+The ordered internal gap is essential.  Absolute pairwise separation alone
+allows the two block spectra to interlace and does not exclude a quarter-turn
+reducing subspace.
+
 Lean proof route for a weaker agent:
 
 1. Use `hoff` and the reducing decompositions of `A` and `B` to derive the finite Riccati equation for the angular operator from `U` to `V`.
-2. Prove the cosine-difference denominator is nonzero from `InternalGap A U δ`; this yields `AvoidsQuarterTurn U V` and legitimizes `tanTwoAngleOperator`.
+2. Prove the cosine-difference denominator is nonzero from `OrderedInternalGap A U δ`; this yields `AvoidsQuarterTurn U V` and legitimizes `tanTwoAngleOperator`.
 3. Apply the ordered Sylvester/Ky Fan estimate to the Riccati identity and use finite Fan dominance to obtain the arbitrary UI-norm inequality.
 -/
 theorem tanTwoTheta_residual_le
@@ -129,7 +133,7 @@ theorem tanTwoTheta_residual_le
     (X : F →ₗᵢ[𝕜] E) {M : F →ₗ[𝕜] F} (hM : M.IsSymmetric)
     (hBX : B ∘ₗ X.toLinearMap = X.toLinearMap ∘ₗ M)
     (hoff : IsOffDiagonal U (B - A))
-    {δ : ℝ} (hδ : 0 < δ) (hgap : InternalGap A U δ) :
+    {δ : ℝ} (hδ : 0 < δ) (hgap : OrderedInternalGap A U δ) :
     AvoidsQuarterTurnEmbedding U X ∧
       δ * N (tanTwoThetaEmbedding U X) ≤ 2 * N (residual A X M) := by
   classical
@@ -166,11 +170,13 @@ theorem tanTwoTheta_residual_le
 For an arbitrary reducing subspace `V`, angles may lie on either side of
 `π/4`.  The theorem proves that no angle equals `π/4` and bounds the norm of
 `tan (2Θ)`; the later spectral-selection theorem chooses the acute branch.
+The ordered internal gap cannot be weakened to absolute separation because
+interlacing block spectra admit explicit quarter-turn counterexamples.
 
 Lean proof route for a weaker agent:
 
 1. Use `hoff` and the reducing decompositions of `A` and `B` to derive the finite Riccati equation for the angular operator from `U` to `V`.
-2. Prove the cosine-difference denominator is nonzero from `InternalGap A U δ`; this yields `AvoidsQuarterTurn U V` and legitimizes `tanTwoAngleOperator`.
+2. Prove the cosine-difference denominator is nonzero from `OrderedInternalGap A U δ`; this yields `AvoidsQuarterTurn U V` and legitimizes `tanTwoAngleOperator`.
 3. Apply the ordered Sylvester/Ky Fan estimate to the Riccati identity and use finite Fan dominance to obtain the arbitrary UI-norm inequality.
 -/
 theorem tanTwoTheta_perturbation_le
@@ -179,7 +185,7 @@ theorem tanTwoTheta_perturbation_le
     {U V : Submodule 𝕜 E} [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] (hU : Reduces A U) (hV : Reduces B V)
     (hoff : IsOffDiagonal U (B - A))
-    {δ : ℝ} (hδ : 0 < δ) (hgap : InternalGap A U δ) :
+    {δ : ℝ} (hδ : 0 < δ) (hgap : OrderedInternalGap A U δ) :
     AvoidsQuarterTurn U V ∧
       δ * N (tanTwoAngleOperator U V) ≤ 2 * N (B - A) := by
   classical
@@ -272,13 +278,8 @@ theorem tanTwoTheta_spectralSubspace_le
   intro V
   have hB : (A + H).IsSymmetric := hA.add hH
   have hδ : (0 : ℝ) < b - a := sub_pos.mpr hab
-  have hgap : InternalGap A U (b - a) := by
-    intro lam mu hlam hmu
-    have h1 : lam ≤ a := hUa hlam
-    have h2 : b ≤ mu := hUb hmu
-    calc b - a ≤ mu - lam := by linarith
-      _ ≤ |mu - lam| := le_abs_self _
-      _ = |lam - mu| := abs_sub_comm mu lam
+  have hgap : OrderedInternalGap A U (b - a) :=
+    orderedInternalGap_of_spectrumIn_Iic_Ici hUa hUb
   have hoff' : IsOffDiagonal U (A + H - A) := by
     rwa [add_sub_cancel_left]
   have h := tanTwoTheta_perturbation_le N hA hB hU
@@ -433,8 +434,8 @@ theorem largestPrincipalAngle_lt_pi_div_four
   let V := spectralSubspace (A + H) (Set.Iic a)
   have hacute := isAcute_canonical_tanTwoTheta hA hH hU hoff hab hUa hUb
   have hδ : 0 < b - a := sub_pos.mpr hab
-  have hgap : InternalGap A U (b - a) :=
-    internalGap_of_spectrumIn_interval_sides hA hU hUa hUb hab
+  have hgap : OrderedInternalGap A U (b - a) :=
+    orderedInternalGap_of_spectrumIn_Iic_Ici hUa hUb
   have hV : Reduces (A + H) V := reduces_spectralSubspace (hA.add hH) _
   have havoid := (tanTwoTheta_perturbation_le
     (UnitarilyInvariantNorm.opNorm 𝕜 E) hA (hA.add hH) hU hV
@@ -451,7 +452,7 @@ theorem opNorm_tanTwoTheta_le
     {U V : Submodule 𝕜 E} [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] (hU : Reduces A U) (hV : Reduces B V)
     (hoff : IsOffDiagonal U (B - A))
-    {δ : ℝ} (hδ : 0 < δ) (hgap : InternalGap A U δ) :
+    {δ : ℝ} (hδ : 0 < δ) (hgap : OrderedInternalGap A U δ) :
     AvoidsQuarterTurn U V ∧
       δ * ‖(tanTwoAngleOperator U V).toContinuousLinearMap‖ ≤
         2 * ‖(B - A).toContinuousLinearMap‖ := by
@@ -465,7 +466,7 @@ theorem frobenius_tanTwoTheta_le
     {U V : Submodule 𝕜 E} [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] (hU : Reduces A U) (hV : Reduces B V)
     (hoff : IsOffDiagonal U (B - A))
-    {δ : ℝ} (hδ : 0 < δ) (hgap : InternalGap A U δ) :
+    {δ : ℝ} (hδ : 0 < δ) (hgap : OrderedInternalGap A U δ) :
     AvoidsQuarterTurn U V ∧
       δ * UnitarilyInvariantNorm.frobenius 𝕜 E (tanTwoAngleOperator U V) ≤
         2 * UnitarilyInvariantNorm.frobenius 𝕜 E (B - A) := by
@@ -479,7 +480,7 @@ theorem kyFan_tanTwoTheta_le
     {U V : Submodule 𝕜 E} [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] (hU : Reduces A U) (hV : Reduces B V)
     (hoff : IsOffDiagonal U (B - A))
-    {δ : ℝ} (hδ : 0 < δ) (hgap : InternalGap A U δ)
+    {δ : ℝ} (hδ : 0 < δ) (hgap : OrderedInternalGap A U δ)
     (k : ℕ) :
     AvoidsQuarterTurn U V ∧
       δ * kyFanSum k (tanTwoAngleOperator U V) ≤ 2 * kyFanSum k (B - A) := by

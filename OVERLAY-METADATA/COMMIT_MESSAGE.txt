@@ -1,8 +1,8 @@
-FIX correct source coordinate angle embeddings
+FIX correct tan two theta gap and operator semantics
 
-Build source side cosine and sine Gram operators and the positive cosine factor.
-Define tangent and double angle maps with the correct coordinate denominators.
-Add kernel, singular value, transversality, and inverse on range bridges.
-Remove the stale double angle namespace and fictional inverse rewrite.
+Apply the double angle tangent function directly to the angle operator.
+Require ordered internal separation for the raw tan two theta estimates.
+Document the interlacing counterexample and intentional signature correction.
+Keep the guarded checker accurate after source-level theorem repairs.
 
 Co-authored-by: GPT-5.6 Thinking <noreply@openai.com>

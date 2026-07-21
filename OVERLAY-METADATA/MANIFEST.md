@@ -1,75 +1,37 @@
-# Source-coordinate angle redesign overlay manifest
+# Tan two theta source correction overlay
 
-## Base
+Base Git HEAD:
 
-- Git commit: `90ef32fcc534de8204d7e71d793810f4142561c4`
-- Source archive: `aiq-dkps-formalization-source-2026-07-20T174820-5-90ef32fcc534.tar.gz`
-- Base working tree: clean, detached HEAD
-- The compiler-clean rectangular Schatten and weak-majorization commits
-  `a8d4ea3` and `90ef32f` are already present and are not replayed.
+17d0497a3abcd1b9d648a5dd1cb84a1885d3c930
 
-## Payload
+## Mathematical corrections
 
-- `DavisKahan/FiniteDimensional/Residual/AngleEmbedding.lean`
-  - defines source-side cosine and sine Gram blocks;
-  - defines the positive coordinate cosine `|C|`;
-  - proves the Gram partition, square, kernel, injectivity, and singular-value bridges;
-  - replaces the provisional double-angle cosine with
-    `X (C⋆C - S⋆S)` and adds source/rectangular bridges;
-  - adds the rectangular cosine/principal-cosine singular-value bridge.
-- `DavisKahan/Experimental/FiniteDimensional/Residual/AngleEmbeddings.lean`
-  - defines tangent as `S |C|⁺`;
-  - defines double-angle sine as `2 S |C|`;
-  - defines double-angle tangent using the source cosine pseudoinverse;
-  - connects both totalized pseudoinverses to `inverseOnRange`.
-- `DavisKahan/Experimental/FiniteDimensional/DoubleAngle/TanTheta.lean`
-  - uses the source double-angle cosine;
-  - removes the stale `FiniteDimensional.cosTwoThetaEmbedding` reference;
-  - replaces a fictional inverse lemma with the canonical compatibility theorem.
-- `dev/angle-coordinate-redesign-compiler-handoff-2026-07-20.md`
-  - records the mathematical correction, likely elaboration seams, and sequential checks.
+- `tanTwoAngleOperator` now applies `safeTanTwo` directly to the canonical angle operator. The old nested functional calculus computed `safeTanTwo (safeTan theta)` rather than `tan (2 theta)`.
+- `tanTwoTheta_residual_le` and `tanTwoTheta_perturbation_le` now require `OrderedInternalGap`.
+- The operator-norm, Frobenius, and Ky Fan wrappers use the same corrected hypothesis.
+- Spectral-side corollaries construct the ordered gap directly from the lower/upper spectral inclusions.
+- `InternalGap` documentation now states its actual scope.
+- The guarded-signature manifest records the two intentional source corrections.
+- The checker now reports that guarded signatures match the manifest rather than claiming every historical signature was preserved.
 
-No change is made to
-`DavisKahan/Experimental/InfiniteDimensional/Ideals/Rectangular.lean`.
+## Why the hypothesis changed
 
-## Mathematical correction
+Absolute separation permits interlacing diagonal-block spectra. An explicit real three-dimensional example satisfies `InternalGap A U 1` and the off-diagonal hypothesis while producing a reducing subspace at exactly angle `pi / 4`. The old quarter-turn conclusion was therefore false. The full construction is recorded in:
 
-For `C = P_U X` and `S = P_{Uᗮ} X`, the principal-angle data lives in the
-source Gram blocks. The correct positive cosine is
-`|C| = (C⋆C)^(1/2)`. Consequently:
+`dev/tan-two-theta-ordered-gap-correction-2026-07-20.md`
 
-- tangent is `S |C|⁺`;
-- double-angle sine is `2 S |C|`;
-- double-angle cosine is `C⋆C - S⋆S` on source coordinates;
-- double-angle tangent divides by that source cosine.
+## Scope
 
-The former ambient formulas introduced an extra cosine factor even though
-their types elaborated.
+This overlay does not modify the compiler-clean rectangular Schatten, finite lp, weak-majorization, Ky Fan, Moore-Penrose, or angle-embedding implementations. It also does not touch `DavisKahan/Experimental/InfiniteDimensional/Ideals/Rectangular.lean`.
 
-## Validation performed
+The historical proof bodies of the two experimental arbitrary-UI tan two theta declarations still contain pre-existing fictional helper names. This overlay corrects the mathematical targets before a new proof is written; it does not claim those declarations compile.
 
-Successful in the math-ahead environment:
+## Static validation
 
-- `python3 scripts/check_full_part_iii_math_ahead.py --static-only`:
-  STATIC CLEAN, all 174 guarded signatures preserved;
-- `python3 scripts/generate_all_aggregates.py --check`;
-- `python3 scripts/inventory_davis_kahan_debt.py --json`:
-  exactly 18 intentional Challenge occurrences;
-- `git diff --check`;
-- structural checker checks 1, 2, 4, and 5 remain clean, while check 3 has the
-  same 116 inherited Experimental violations reported at the base commit;
-- unified patch and ZIP independently applied to fresh base extractions;
-- resulting payload files compared byte-for-byte;
-- internal SHA-256 manifest verified.
+- `python3 scripts/check_full_part_iii_math_ahead.py --static-only`: exit 0
+- `python3 scripts/generate_all_aggregates.py --check`: exit 0
+- `python3 scripts/inventory_davis_kahan_debt.py --json`: 18 intentional Challenge occurrences
+- `git diff --check`: exit 0
+- `python3 scripts/check_library_structure.py`: inherited check 3 remains at 116 violations; checks 1, 2, 4, and 5 pass
 
-Lean is not installed in the math-ahead environment. The new angle declarations
-are complete candidate code, not compiler-certified code. The compiler handoff
-lists the focused modules and likely elaboration seams. The already repaired
-Schatten modules remain compiler-clean in the supplied base and were untouched.
-
-## Deliberate boundary
-
-The definitions now have the correct angle semantics. This overlay does not
-assert the still-unproved simultaneous CS-decomposition results identifying the
-singular values of the tangent and double-angle maps with scalar tangent
-sequences. Those are separate mathematical theorems, not definitional facts.
+Lean and Lake are unavailable in the packaging environment. Compiler certification is intentionally left to the compiler agent.
