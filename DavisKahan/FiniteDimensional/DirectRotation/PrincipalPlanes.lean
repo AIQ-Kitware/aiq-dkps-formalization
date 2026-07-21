@@ -1,12 +1,13 @@
 /-
 Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
-Authors: Jon Crall, OpenAI GPT-5.6 Thinking
+Authors: Jon Crall, OpenAI GPT-5.6 Thinking, Claude Fable 5
 -/
 import DavisKahan.FiniteDimensional.DirectRotation.Basic
-import DavisKahan.FiniteDimensional.Residual.Ritz
 import ForMathlib.Analysis.InnerProductSpace.SingularSystem
-import ForMathlib.Analysis.InnerProductSpace.TwoDimensionalSingularValues
+import ForMathlib.Analysis.InnerProductSpace.CourantFischer
+import ForMathlib.Analysis.InnerProductSpace.KyFan
+import ForMathlib.Analysis.InnerProductSpace.UnitarilyInvariantNorm
 
 /-!
 # Principal planes of an acute pair
@@ -27,8 +28,41 @@ polar identities give
 
 The family `(u_i,j_i)` is orthonormal, the `s_i` are decreasing, and the
 singular values of `I-R` are the duplicated chord lengths
-`d_i = sqrt (2(1-c_i))`.  These are exactly the finite principal-plane facts
-used in the source proof of Propositions 4.1--4.4.
+`d_i = sqrt (2(1-c_i))`.
+
+## The sound Section 4 package
+
+* `singularValues_directRotation_displacement`: the singular values of `I - R`
+  are the principal chords, each occurring twice
+  (`sigma_k (I-R) = 2 sin (theta_{k/2} / 2)`).
+* `kyFanSum_directRotation_displacement_eq_principalChords`: closed Ky Fan
+  formula for `I - R`.
+* `principalPlaneChord_le_singularValues_restrictedDisplacement` (Davis 1958
+  Theorem 7.2 / Davis--Kahan Proposition 4.1): for every unitary `W` carrying
+  `U` onto `V`, the `k`-th singular value of the restricted displacement
+  `(I - W) P_U` is at least the `k`-th principal chord.  Combined with the
+  closed form `singularValues_restrictedDisplacement_directRotation`, the
+  direct rotation minimizes every singular value of the restricted
+  displacement pointwise — with no angle restriction and over any `RCLike`
+  field.
+* `kyFanSum_restrictedDisplacement_le` and
+  `uiNorm_restrictedDisplacement_le` (Davis--Kahan Corollary 4.1): Ky Fan and
+  unitarily-invariant-norm minimality of the restricted displacement.
+
+## What is deliberately absent
+
+The historical candidate for Proposition 4.4 — "if the largest principal angle
+is at most `pi/3`, the direct rotation minimizes every UI norm of the full
+displacement `I - W` over real scalars" — is **false**: rotating by `2 theta`
+in a single plane spanned across two equal principal angles `theta` carries
+`U` onto `V` with a strictly smaller trace norm than the direct rotation, for
+every `theta` in `(0, pi/2)`.  See
+`DavisKahan.FiniteDimensional.DirectRotation.ShortRotationCounterexample`.
+The per-plane compression route sketched in the source-derived draft is
+likewise unsound: a competitor may leak mass out of a principal plane, so the
+compression of `I - W` to a principal plane need not dominate the chord.  Only
+the restricted-displacement statements above survive, and they need no angle
+hypothesis at all.
 -/
 
 namespace ForMathlib
@@ -173,6 +207,17 @@ theorem principalPlaneCosine_sq_add_sine_sq
   · nlinarith [principalPlaneSine_pos U V i,
       principalPlaneSine_le_one U V i]
 
+/-- Principal cosines are at most one. -/
+theorem principalPlaneCosine_le_one
+    (U V : Submodule 𝕜 E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (i : Fin (nontrivialAngleCount U V)) :
+    principalPlaneCosine U V i ≤ 1 := by
+  nlinarith [principalPlaneCosine_sq_add_sine_sq U V i,
+    principalPlaneSine_pos U V i, Real.sqrt_nonneg (1 - principalPlaneSine U V i ^ 2),
+    principalPlaneCosine, sq_nonneg (principalPlaneCosine U V i - 1),
+    sq_nonneg (principalPlaneCosine U V i + 1)]
+
 /-- Acuteness makes every principal-plane cosine strictly positive. -/
 theorem principalPlaneCosine_pos
     (U V : Submodule 𝕜 E)
@@ -271,7 +316,6 @@ theorem abs_canonicalIntertwiner_apply_principalSourceVector
   rw [FiniteDimensional.selfAdjointFunctionalCalculus_sqrt hpos,
     Real.sqrt_sq hc0] at hfc
   exact hfc
-
 
 /-- Every principal-plane cosine occurs in the singular-value multiset of the
 canonical intertwiner.  The index is not the original sine index: principal
@@ -390,6 +434,47 @@ theorem principalOrthogonalVector_mem
             rw [inner_smul_left, RCLike.conj_ofReal]
   rw [hkey]; ring
 
+/-- The `V`-projection of a principal source vector is the cosine multiple of
+its direct-rotation image. -/
+theorem projection_apply_principalSourceVector
+    (U V : Submodule 𝕜 E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hacute : IsAcute U V)
+    (i : Fin (nontrivialAngleCount U V)) :
+    projection V (principalSourceVector U V i) =
+      (principalPlaneCosine U V i : 𝕜) •
+        directRotation U V hacute (principalSourceVector U V i) := by
+  have hu := principalSourceVector_mem U V hacute i
+  have hC := abs_canonicalIntertwiner_apply_principalSourceVector U V hacute i
+  have hcompUu : complementaryProjection U (principalSourceVector U V i) = 0 :=
+    (Submodule.starProjection_apply_eq_zero_iff Uᗮ).mpr
+      (U.le_orthogonal_orthogonal hu)
+  have hSpsv : canonicalIntertwiner U V (principalSourceVector U V i) =
+      projection V (principalSourceVector U V i) := by
+    simp only [canonicalIntertwiner, LinearMap.add_apply, LinearMap.comp_apply,
+      projection_apply_of_mem hu, hcompUu, map_zero, add_zero]
+  have hpolar : canonicalIntertwiner U V =
+      (directRotation U V hacute).toLinearMap ∘ₗ
+        ForMathlib.abs (canonicalIntertwiner U V) := by
+    rw [directRotation_toLinearMap]; exact polar_decomposition (canonicalIntertwiner U V)
+  have h := LinearMap.congr_fun hpolar (principalSourceVector U V i)
+  simp only [LinearMap.comp_apply] at h
+  rw [hC, map_smul, hSpsv] at h
+  exact h
+
+/-- The `U`-projection of the rotated source vector. -/
+theorem projection_apply_directRotation_principalSourceVector
+    (U V : Submodule 𝕜 E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hacute : IsAcute U V)
+    (i : Fin (nontrivialAngleCount U V)) :
+    projection U (directRotation U V hacute (principalSourceVector U V i)) =
+      (principalPlaneCosine U V i : 𝕜) • principalSourceVector U V i := by
+  rw [directRotation_apply_principalSourceVector U V hacute i, map_add, map_smul, map_smul,
+    projection_apply_of_mem (principalSourceVector_mem U V hacute i),
+    projection_apply_of_mem_orthogonal (principalOrthogonalVector_mem U V hacute i),
+    smul_zero, add_zero]
+
 /-- Principal orthogonal partners are orthonormal. -/
 theorem orthonormal_principalOrthogonalVector
     (U V : Submodule 𝕜 E)
@@ -398,39 +483,65 @@ theorem orthonormal_principalOrthogonalVector
     Orthonormal 𝕜 (principalOrthogonalVector U V hacute) := by
   rw [orthonormal_iff_ite]
   intro i j
-  let R := directRotation U V hacute
-  let ui := principalSourceVector U V i
-  let uj := principalSourceVector U V j
-  let ci := principalPlaneCosine U V i
-  let cj := principalPlaneCosine U V j
-  let si := principalPlaneSine U V i
-  let sj := principalPlaneSine U V j
-  have hsi : si ≠ 0 := ne_of_gt (principalPlaneSine_pos U V i)
-  have hsj : sj ≠ 0 := ne_of_gt (principalPlaneSine_pos U V j)
   have hu := orthonormal_iff_ite.mp (orthonormal_principalSourceVector U V) i j
-  have hdiag : ⟪R ui, uj⟫_𝕜 = (ci : 𝕜) * (if i = j then 1 else 0) := by
-    rw [← projection_inner_left_eq_right,
-      show projection U (R ui) = (ci : 𝕜) • ui by
-        have hmem := principalOrthogonalVector_mem U V hacute i
-        rw [directRotation_apply_principalSourceVector U V hacute i]
-        simp [projection_apply_of_mem (principalSourceVector_mem U V hacute i),
-          projection_apply_of_mem_orthogonal hmem]]
-    rw [inner_smul_left, RCLike.conj_ofReal, hu]
-  rw [principalOrthogonalVector, principalOrthogonalVector,
-    inner_smul_left, inner_smul_right, inner_sub_left, inner_sub_right,
-    inner_sub_left, inner_sub_right, R.inner_map_map, hdiag, hu]
-  have hdiag' : ⟪ui, R uj⟫_𝕜 = (cj : 𝕜) * (if i = j then 1 else 0) := by
-    rw [inner_conj_symm, hdiag]
-    simp [RCLike.conj_ofReal]
-  rw [hdiag']
+  have hsi : principalPlaneSine U V i ≠ 0 := ne_of_gt (principalPlaneSine_pos U V i)
+  have hsj : principalPlaneSine U V j ≠ 0 := ne_of_gt (principalPlaneSine_pos U V j)
+  -- `⟪R uₐ, u_b⟫ = cₐ ⟪uₐ, u_b⟫` because the `U`-component of `R uₐ` is `cₐ uₐ`.
+  have hdiag : ∀ a b : Fin (nontrivialAngleCount U V),
+      ⟪directRotation U V hacute (principalSourceVector U V a),
+        principalSourceVector U V b⟫_𝕜 =
+      (principalPlaneCosine U V a : 𝕜) *
+        ⟪principalSourceVector U V a, principalSourceVector U V b⟫_𝕜 := by
+    intro a b
+    calc ⟪directRotation U V hacute (principalSourceVector U V a),
+          principalSourceVector U V b⟫_𝕜
+        = ⟪directRotation U V hacute (principalSourceVector U V a),
+            projection U (principalSourceVector U V b)⟫_𝕜 := by
+          rw [projection_apply_of_mem (principalSourceVector_mem U V hacute b)]
+      _ = ⟪projection U (directRotation U V hacute (principalSourceVector U V a)),
+            principalSourceVector U V b⟫_𝕜 :=
+          (projection_inner_left_eq_right U _ _).symm
+      _ = _ := by
+          rw [projection_apply_directRotation_principalSourceVector U V hacute a,
+            inner_smul_left, RCLike.conj_ofReal]
+  have hdiag' : ∀ a b : Fin (nontrivialAngleCount U V),
+      ⟪principalSourceVector U V a,
+        directRotation U V hacute (principalSourceVector U V b)⟫_𝕜 =
+      (principalPlaneCosine U V b : 𝕜) *
+        ⟪principalSourceVector U V a, principalSourceVector U V b⟫_𝕜 := by
+    intro a b
+    rw [← inner_conj_symm, hdiag b a, map_mul, RCLike.conj_ofReal, inner_conj_symm,
+      ← inner_conj_symm (principalSourceVector U V b), hu]
+    rw [← inner_conj_symm (principalSourceVector U V a), hu]
+    split_ifs with hab
+    · subst hab; simp
+    · have : ¬ b = a := fun hba => hab hba.symm
+      simp [this, hab]
+  have hRR : ⟪directRotation U V hacute (principalSourceVector U V i),
+      directRotation U V hacute (principalSourceVector U V j)⟫_𝕜 =
+      ⟪principalSourceVector U V i, principalSourceVector U V j⟫_𝕜 :=
+    (directRotation U V hacute).inner_map_map _ _
+  rw [principalOrthogonalVector, principalOrthogonalVector, inner_smul_left,
+    inner_smul_right, RCLike.conj_ofReal, inner_sub_left, inner_sub_right,
+    inner_sub_right, inner_smul_left, inner_smul_right, inner_smul_left,
+    inner_smul_right, RCLike.conj_ofReal, RCLike.conj_ofReal, hRR, hdiag i j,
+    hdiag' i j, hu]
   split_ifs with hij
-  · subst hij
-    simp only [if_pos, mul_one]
-    rw [← RCLike.ofReal_mul, ← RCLike.ofReal_sub, ← RCLike.ofReal_add]
+  · rw [mul_one, mul_one, mul_one]
+    subst hij
+    rw [← RCLike.ofReal_mul, ← RCLike.ofReal_mul, ← RCLike.ofReal_mul]
+    have hpyth := principalPlaneCosine_sq_add_sine_sq U V i
+    have : ((principalPlaneSine U V i)⁻¹ : ℝ) * ((principalPlaneSine U V i)⁻¹ : ℝ) *
+        (1 - principalPlaneCosine U V i * principalPlaneCosine U V i -
+          (principalPlaneCosine U V i * principalPlaneCosine U V i -
+            principalPlaneCosine U V i * (principalPlaneCosine U V i * 1))) = 1 := by
+      field_simp
+      nlinarith [hpyth]
     push_cast
-    field_simp
-    nlinarith [principalPlaneCosine_sq_add_sine_sq U V i]
-  · simp [hij]
+    rw [show ((1 : ℝ) : 𝕜) = (1 : 𝕜) from rfl] at *
+    push_cast [← this]
+    ring
+  · simp [mul_comm]
 
 /-- The two vectors in distinct principal planes are mutually orthogonal. -/
 theorem orthonormal_principalPlaneFamily
@@ -441,17 +552,49 @@ theorem orthonormal_principalPlaneFamily
       if p.2 = 0 then principalSourceVector U V p.1
       else principalOrthogonalVector U V hacute p.1) := by
   rw [orthonormal_iff_ite]
-  intro p q
-  fin_cases p.2 <;> fin_cases q.2
-  · simpa using orthonormal_iff_ite.mp (orthonormal_principalSourceVector U V) p.1 q.1
-  · have hp := principalSourceVector_mem U V hacute p.1
-    have hq := principalOrthogonalVector_mem U V hacute q.1
-    simp [Submodule.inner_right_of_mem_orthogonal hp hq]
-  · have hp := principalOrthogonalVector_mem U V hacute p.1
-    have hq := principalSourceVector_mem U V hacute q.1
-    simp [Submodule.inner_right_of_mem_orthogonal hq hp, inner_conj_symm]
-  · simpa using orthonormal_iff_ite.mp
-      (orthonormal_principalOrthogonalVector U V hacute) p.1 q.1
+  rintro ⟨p1, p2⟩ ⟨q1, q2⟩
+  fin_cases p2 <;> fin_cases q2
+  · simpa [Prod.ext_iff] using
+      orthonormal_iff_ite.mp (orthonormal_principalSourceVector U V) p1 q1
+  · have hp := principalSourceVector_mem U V hacute p1
+    have hq := principalOrthogonalVector_mem U V hacute q1
+    simp [Submodule.inner_right_of_mem_orthogonal hp hq, Prod.ext_iff]
+  · have hp := principalOrthogonalVector_mem U V hacute p1
+    have hq := principalSourceVector_mem U V hacute q1
+    rw [if_neg (by simp), if_pos rfl]
+    have h0 : ⟪principalSourceVector U V q1,
+        principalOrthogonalVector U V hacute p1⟫_𝕜 = 0 :=
+      Submodule.inner_right_of_mem_orthogonal hq hp
+    rw [← inner_conj_symm, h0]
+    simp [Prod.ext_iff]
+  · simpa [Prod.ext_iff] using orthonormal_iff_ite.mp
+      (orthonormal_principalOrthogonalVector U V hacute) p1 q1
+
+/-- The inverse direct rotation acts on a source vector by the transposed
+rotation block. -/
+theorem directRotation_symm_apply_principalSourceVector
+    (U V : Submodule 𝕜 E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hacute : IsAcute U V)
+    (i : Fin (nontrivialAngleCount U V)) :
+    (directRotation U V hacute).symm (principalSourceVector U V i) =
+      (principalPlaneCosine U V i : 𝕜) • principalSourceVector U V i -
+        (principalPlaneSine U V i : 𝕜) • principalOrthogonalVector U V hacute i := by
+  have htwo := LinearMap.congr_fun (two_smul_abs_canonicalIntertwiner U V hacute)
+    (principalSourceVector U V i)
+  have habs := abs_canonicalIntertwiner_apply_principalSourceVector U V hacute i
+  have hRu := directRotation_apply_principalSourceVector U V hacute i
+  simp only [LinearMap.smul_apply, LinearMap.add_apply, LinearEquiv.coe_coe,
+    LinearIsometryEquiv.coe_toLinearEquiv] at htwo
+  rw [habs, hRu] at htwo
+  -- `htwo : 2 • (c • u) = (c • u + s • j) + R.symm u`
+  have h2 : (directRotation U V hacute).symm (principalSourceVector U V i) =
+      (2 : 𝕜) • ((principalPlaneCosine U V i : 𝕜) • principalSourceVector U V i) -
+        ((principalPlaneCosine U V i : 𝕜) • principalSourceVector U V i +
+          (principalPlaneSine U V i : 𝕜) • principalOrthogonalVector U V hacute i) :=
+    eq_sub_of_add_eq' htwo.symm
+  rw [h2]
+  module
 
 /-- The direct rotation acts on the orthogonal partner by the second column of
 its principal rotation block. -/
@@ -464,28 +607,90 @@ theorem directRotation_apply_principalOrthogonalVector
       -(principalPlaneSine U V i : 𝕜) • principalSourceVector U V i +
         (principalPlaneCosine U V i : 𝕜) •
           principalOrthogonalVector U V hacute i := by
-  let R := directRotation U V hacute
-  let u := principalSourceVector U V i
-  let j := principalOrthogonalVector U V hacute i
-  let c := principalPlaneCosine U V i
-  let s := principalPlaneSine U V i
-  have hs : s ≠ 0 := ne_of_gt (principalPlaneSine_pos U V i)
-  have hRu := directRotation_apply_principalSourceVector U V hacute i
-  have hRe : (R.toLinearMap + R.symm.toLinearMap) u = (2 * c : ℝ) • u := by
-    have htwo := LinearMap.congr_fun
-      (two_smul_abs_canonicalIntertwiner U V hacute) u
-    rw [abs_canonicalIntertwiner_apply_principalSourceVector U V hacute i] at htwo
-    simpa [R, c, LinearMap.add_apply, LinearMap.smul_apply, ← RCLike.ofReal_mul]
-      using htwo.symm
-  have hRstaru : R.symm u = (c : 𝕜) • u - (s : 𝕜) • j := by
-    have := hRe
-    simp only [LinearMap.add_apply] at this
-    rw [hRu] at this
+  have hsymm := directRotation_symm_apply_principalSourceVector U V hacute i
+  have happ := congrArg (directRotation U V hacute) hsymm
+  rw [LinearIsometryEquiv.apply_symm_apply, map_sub, map_smul, map_smul,
+    directRotation_apply_principalSourceVector U V hacute i] at happ
+  -- `happ : u = c • (c • u + s • j) - s • R j`
+  have hs : ((principalPlaneSine U V i : ℝ) : 𝕜) ≠ 0 :=
+    RCLike.ofReal_ne_zero.mpr (ne_of_gt (principalPlaneSine_pos U V i))
+  apply smul_right_injective E hs
+  have h2 : (principalPlaneSine U V i : 𝕜) •
+      directRotation U V hacute (principalOrthogonalVector U V hacute i) =
+      (principalPlaneCosine U V i : 𝕜) •
+        ((principalPlaneCosine U V i : 𝕜) • principalSourceVector U V i +
+          (principalPlaneSine U V i : 𝕜) • principalOrthogonalVector U V hacute i) -
+        principalSourceVector U V i := by
+    rw [eq_sub_iff_add_eq, add_comm, ← eq_sub_iff_add_eq]
+    exact happ.symm
+  rw [h2]
+  have hpyth := principalPlaneCosine_sq_add_sine_sq U V i
+  match_scalars
+  · push_cast
+    nlinarith [hpyth]
+  · push_cast
+    ring
+
+/-- The inverse direct rotation acts on the orthogonal partner by the second
+column of the transposed rotation block. -/
+theorem directRotation_symm_apply_principalOrthogonalVector
+    (U V : Submodule 𝕜 E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hacute : IsAcute U V)
+    (i : Fin (nontrivialAngleCount U V)) :
+    (directRotation U V hacute).symm (principalOrthogonalVector U V hacute i) =
+      (principalPlaneSine U V i : 𝕜) • principalSourceVector U V i +
+        (principalPlaneCosine U V i : 𝕜) •
+          principalOrthogonalVector U V hacute i := by
+  have hRj := directRotation_apply_principalOrthogonalVector U V hacute i
+  have happ := congrArg (directRotation U V hacute).symm hRj
+  rw [LinearIsometryEquiv.symm_apply_apply, map_add, map_smul, map_smul,
+    directRotation_symm_apply_principalSourceVector U V hacute i] at happ
+  -- `happ : j = -s • (c • u - s • j) + c • R.symm j`
+  have hc : ((principalPlaneCosine U V i : ℝ) : 𝕜) ≠ 0 :=
+    RCLike.ofReal_ne_zero.mpr (ne_of_gt (principalPlaneCosine_pos U V hacute i))
+  apply smul_right_injective E hc
+  have h2 : (principalPlaneCosine U V i : 𝕜) •
+      (directRotation U V hacute).symm (principalOrthogonalVector U V hacute i) =
+      principalOrthogonalVector U V hacute i -
+        -(principalPlaneSine U V i : 𝕜) •
+          ((principalPlaneCosine U V i : 𝕜) • principalSourceVector U V i -
+            (principalPlaneSine U V i : 𝕜) •
+              principalOrthogonalVector U V hacute i) := by
+    rw [eq_sub_iff_add_eq, add_comm, ← eq_sub_iff_add_eq] at happ ⊢
+    exact happ.symm
+  rw [h2]
+  have hpyth := principalPlaneCosine_sq_add_sine_sq U V i
+  match_scalars
+  · push_cast
+    ring
+  · push_cast
+    nlinarith [hpyth]
+
+/-- The positive modulus of the canonical intertwiner acts by the principal
+cosine on the orthogonal partner as well. -/
+theorem abs_canonicalIntertwiner_apply_principalOrthogonalVector
+    (U V : Submodule 𝕜 E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hacute : IsAcute U V)
+    (i : Fin (nontrivialAngleCount U V)) :
+    ForMathlib.abs (canonicalIntertwiner U V)
+        (principalOrthogonalVector U V hacute i) =
+      (principalPlaneCosine U V i : 𝕜) •
+        principalOrthogonalVector U V hacute i := by
+  have htwo := LinearMap.congr_fun (two_smul_abs_canonicalIntertwiner U V hacute)
+    (principalOrthogonalVector U V hacute i)
+  simp only [LinearMap.smul_apply, LinearMap.add_apply, LinearEquiv.coe_coe,
+    LinearIsometryEquiv.coe_toLinearEquiv] at htwo
+  rw [directRotation_apply_principalOrthogonalVector U V hacute i,
+    directRotation_symm_apply_principalOrthogonalVector U V hacute i] at htwo
+  have h2 : (2 : 𝕜) • ForMathlib.abs (canonicalIntertwiner U V)
+      (principalOrthogonalVector U V hacute i) =
+      (2 : 𝕜) • ((principalPlaneCosine U V i : 𝕜) •
+        principalOrthogonalVector U V hacute i) := by
+    rw [htwo]
     module
-  apply R.injective
-  rw [R.map_add, R.map_smul, R.map_smul, R.apply_symm_apply]
-  rw [hRstaru]
-  module
+  exact smul_right_injective E (by norm_num : (2 : 𝕜) ≠ 0) h2
 
 /-- Principal sines decrease with the index. -/
 theorem principalPlaneSine_antitone
@@ -495,500 +700,276 @@ theorem principalPlaneSine_antitone
   intro i j hij
   exact (sinThetaMap U V).singularValues_antitone hij
 
-/-- Principal cosines increase, so chord lengths decrease. -/
+/-- Principal cosines increase with the index. -/
+theorem principalPlaneCosine_monotone
+    (U V : Submodule 𝕜 E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
+    Monotone (principalPlaneCosine U V) := by
+  intro i j hij
+  have hs : principalPlaneSine U V j ≤ principalPlaneSine U V i :=
+    principalPlaneSine_antitone U V hij
+  rw [principalPlaneCosine, principalPlaneCosine]
+  apply Real.sqrt_le_sqrt
+  nlinarith [principalPlaneSine_pos U V i, principalPlaneSine_pos U V j]
+
+/-- Chord lengths decrease with the index. -/
 theorem principalPlaneChord_antitone
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     Antitone (principalPlaneChord U V) := by
   intro i j hij
-  have hs := principalPlaneSine_antitone U V hij
-  have hci : 0 ≤ principalPlaneCosine U V i := Real.sqrt_nonneg _
-  have hcj : 0 ≤ principalPlaneCosine U V j := Real.sqrt_nonneg _
-  have hc : principalPlaneCosine U V i ≥ principalPlaneCosine U V j := by
-    apply (sq_le_sq₀ hcj hci).mp
-    rw [principalPlaneCosine_sq_add_sine_sq U V i,
-      principalPlaneCosine_sq_add_sine_sq U V j]
-    nlinarith [principalPlaneSine_pos U V i, principalPlaneSine_pos U V j]
-  exact Real.sqrt_le_sqrt (by nlinarith)
+  have hc : principalPlaneCosine U V i ≤ principalPlaneCosine U V j :=
+    principalPlaneCosine_monotone U V hij
+  rw [principalPlaneChord, principalPlaneChord]
+  apply Real.sqrt_le_sqrt
+  linarith
 
-/-- Explicit isometric embedding of the `i`th principal plane. -/
-noncomputable def principalPlaneEmbedding
+/-- Chord lengths are nonnegative. -/
+theorem principalPlaneChord_nonneg
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V)
     (i : Fin (nontrivialAngleCount U V)) :
-    EuclideanSpace 𝕜 (Fin 2) →ₗᵢ[𝕜] E where
-  toLinearMap :=
-    { toFun := fun x => x 0 • principalSourceVector U V i +
-        x 1 • principalOrthogonalVector U V hacute i
-      map_add' := by intro x y; module
-      map_smul' := by intro a x; module }
-  norm_map' := by
-    intro x
-    rw [show ‖x 0 • principalSourceVector U V i +
-          x 1 • principalOrthogonalVector U V hacute i‖ ^ 2 =
-        ‖x 0‖ ^ 2 + ‖x 1‖ ^ 2 by
-      rw [(orthonormal_principalPlaneFamily U V hacute).pairwise
-        (by simp) |>.norm_add_sq]
-      simp [(orthonormal_principalSourceVector U V).norm_eq_one,
-        (orthonormal_principalOrthogonalVector U V hacute).norm_eq_one]
-    rw [EuclideanSpace.norm_sq_eq_sum]
-    simp [Fin.sum_univ_two]
+    0 ≤ principalPlaneChord U V i :=
+  Real.sqrt_nonneg _
 
-/-- Compression of the direct displacement to a principal plane. -/
-theorem compression_directRotation_displacement_eq
+/-- The squared chord is `2 (1 - cos)`. -/
+theorem principalPlaneChord_sq
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V)
     (i : Fin (nontrivialAngleCount U V)) :
-    compression (LinearMap.id - (directRotation U V hacute).toLinearMap)
-      (principalPlaneEmbedding U V hacute i) =
-      Matrix.toEuclideanLin
-        !![((1 - principalPlaneCosine U V i : ℝ) : 𝕜),
-           ((principalPlaneSine U V i : ℝ) : 𝕜);
-           ((-principalPlaneSine U V i : ℝ) : 𝕜),
-           ((1 - principalPlaneCosine U V i : ℝ) : 𝕜)] := by
-  apply (EuclideanSpace.basisFun (Fin 2) 𝕜).toBasis.ext
-  intro a
-  rw [OrthonormalBasis.coe_toBasis]
-  fin_cases a <;>
-    ext b <;> fin_cases b <;>
-    simp [compression, principalPlaneEmbedding, LinearMap.comp_apply,
-      directRotation_apply_principalSourceVector,
-      directRotation_apply_principalOrthogonalVector,
-      orthonormal_iff_ite.mp (orthonormal_principalSourceVector U V),
-      orthonormal_iff_ite.mp (orthonormal_principalOrthogonalVector U V hacute),
-      principalSourceVector_mem, principalOrthogonalVector_mem,
-      EuclideanSpace.basisFun_apply, Matrix.toEuclideanLin_apply,
-      PiLp.single_apply]
+    principalPlaneChord U V i ^ 2 = 2 * (1 - principalPlaneCosine U V i) := by
+  rw [principalPlaneChord, Real.sq_sqrt]
+  have := principalPlaneCosine_le_one U V i
+  linarith
 
-/-- The direct displacement has two equal singular values on every nontrivial
-principal plane. -/
-theorem singularValues_compression_directRotation_displacement
+/-! ## Vanishing directions
+
+A vector orthogonal to every principal source vector is annihilated by the
+sine map; a vector orthogonal to the whole principal-plane family lies in the
+common fixed part, where the two projections agree.  These descent lemmas are
+the finite two-projection structure theory needed to compute the spectrum of
+`I - R`. -/
+
+/-- The sine map vanishes on vectors orthogonal to every principal source
+vector. -/
+theorem sinThetaMap_apply_eq_zero_of_orthogonal_sources
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V)
-    (i : Fin (nontrivialAngleCount U V)) :
-    (compression (LinearMap.id - (directRotation U V hacute).toLinearMap)
-      (principalPlaneEmbedding U V hacute i)).singularValues =
-      pairSingularValues (principalPlaneChord U V i)
-        (principalPlaneChord U V i) := by
-  rw [compression_directRotation_displacement_eq U V hacute i]
-  let c := principalPlaneCosine U V i
-  let s := principalPlaneSine U V i
-  let d := principalPlaneChord U V i
-  let A : EuclideanSpace 𝕜 (Fin 2) →ₗ[𝕜] EuclideanSpace 𝕜 (Fin 2) :=
-    Matrix.toEuclideanLin !![((1-c : ℝ) : 𝕜), (s : 𝕜); (-s : 𝕜), ((1-c : ℝ) : 𝕜)]
-  have hgram : A.adjoint ∘ₗ A = (((d ^ 2 : ℝ) : 𝕜) • LinearMap.id) := by
-    ext x a
-    fin_cases a <;>
-      simp [A, LinearMap.comp_apply, Matrix.toEuclideanLin_apply,
-        Fin.sum_univ_two, d, principalPlaneChord] <;>
-      push_cast <;>
-      nlinarith [principalPlaneCosine_sq_add_sine_sq U V i]
-  have hsymGram : A.adjoint ∘ₗ A =
-      diagOp (EuclideanSpace.basisFun (Fin 2) 𝕜) ![d^2,d^2] := by
-    rw [hgram]
-    apply (EuclideanSpace.basisFun (Fin 2) 𝕜).toBasis.ext
-    intro a
-    rw [OrthonormalBasis.coe_toBasis]
-    fin_cases a <;> simp [diagOp_apply_basis]
-  exact singularValues_eq_pair_of_gram_eq finrank_euclideanSpace_fin
-    (EuclideanSpace.basisFun (Fin 2) 𝕜) A (Real.sqrt_nonneg _)
-    (Real.sqrt_nonneg _) le_rfl hsymGram
-
-
-/-! ## Davis's local two-plane comparison -/
-
-/-- The restriction of a displacement to the `i`th source principal plane. -/
-noncomputable def principalPlaneDisplacementRestriction
-    (U V : Submodule 𝕜 E)
-    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) (W : E →ₗ[𝕜] E)
-    (i : Fin (nontrivialAngleCount U V)) :
-    EuclideanSpace 𝕜 (Fin 2) →ₗ[𝕜] EuclideanSpace 𝕜 (Fin 2) :=
-  compression (LinearMap.id - W) (principalPlaneEmbedding U V hacute i)
-
-/-- The two real diagonal coefficients used in Davis--Kahan (4.5). -/
-noncomputable def principalPlaneCoefficient0
-    {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
-    [FiniteDimensional ℝ E]
-    (U V : Submodule ℝ E)
-    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) (W : E ≃ₗᵢ[ℝ] E)
-    (i : Fin (nontrivialAngleCount U V)) : ℝ :=
-  ⟪directRotation U V hacute (principalSourceVector U V i),
-    W (principalSourceVector U V i)⟫_ℝ
-
-noncomputable def principalPlaneCoefficient1
-    {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
-    [FiniteDimensional ℝ E]
-    (U V : Submodule ℝ E)
-    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) (W : E ≃ₗᵢ[ℝ] E)
-    (i : Fin (nontrivialAngleCount U V)) : ℝ :=
-  ⟪directRotation U V hacute (principalOrthogonalVector U V hacute i),
-    W (principalOrthogonalVector U V hacute i)⟫_ℝ
-
-/-- Average and half-difference of the two coefficients. -/
-noncomputable def principalPlaneAverage
-    {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
-    [FiniteDimensional ℝ E]
-    (U V : Submodule ℝ E)
-    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) (W : E ≃ₗᵢ[ℝ] E)
-    (i : Fin (nontrivialAngleCount U V)) : ℝ :=
-  (principalPlaneCoefficient0 U V hacute W i +
-    principalPlaneCoefficient1 U V hacute W i) / 2
-
-noncomputable def principalPlaneHalfDifference
-    {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
-    [FiniteDimensional ℝ E]
-    (U V : Submodule ℝ E)
-    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) (W : E ≃ₗᵢ[ℝ] E)
-    (i : Fin (nontrivialAngleCount U V)) : ℝ :=
-  (principalPlaneCoefficient0 U V hacute W i -
-    principalPlaneCoefficient1 U V hacute W i) / 2
-
-/-- The squared singular values of the restricted competitor displacement,
-written in the form of Davis--Kahan equation (4.5), in the real case. -/
-noncomputable def davisPlanarLambdaPlus (c s p q : ℝ) : ℝ :=
-  2 * (1 - p * c + |q| * s)
-
-noncomputable def davisPlanarLambdaMinus (c s p q : ℝ) : ℝ :=
-  2 * (1 - p * c - |q| * s)
-
-/-- Elementary coefficient constraints coming from two unit vectors. -/
-theorem principalPlane_coefficients_constraints
-    {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
-    [FiniteDimensional ℝ E]
-    (U V : Submodule ℝ E)
-    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) (W : E ≃ₗᵢ[ℝ] E)
-    (i : Fin (nontrivialAngleCount U V)) :
-    |principalPlaneCoefficient0 U V hacute W i| ≤ 1 ∧
-      |principalPlaneCoefficient1 U V hacute W i| ≤ 1 := by
-  constructor
-  · exact (abs_real_inner_le_norm _ _).trans_eq (by
-      rw [(directRotation U V hacute).norm_map, W.norm_map,
-        (orthonormal_principalSourceVector U V).norm_eq_one, mul_one])
-  · exact (abs_real_inner_le_norm _ _).trans_eq (by
-      rw [(directRotation U V hacute).norm_map, W.norm_map,
-        (orthonormal_principalOrthogonalVector U V hacute).norm_eq_one, mul_one])
-
-/-- The average/half-difference constraints used in (4.6). -/
-theorem principalPlane_average_halfDifference_constraints
-    {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
-    [FiniteDimensional ℝ E]
-    (U V : Submodule ℝ E)
-    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) (W : E ≃ₗᵢ[ℝ] E)
-    (i : Fin (nontrivialAngleCount U V)) :
-    (principalPlaneAverage U V hacute W i +
-        principalPlaneHalfDifference U V hacute W i) ^ 2 ≤ 1 ∧
-      (principalPlaneAverage U V hacute W i -
-        principalPlaneHalfDifference U V hacute W i) ^ 2 ≤ 1 := by
-  have h := principalPlane_coefficients_constraints U V hacute W i
-  dsimp [principalPlaneAverage, principalPlaneHalfDifference]
-  constructor <;> nlinarith [sq_le_sq₀ (abs_nonneg _) h.1,
-    sq_le_sq₀ (abs_nonneg _) h.2]
-
-/-- The scalar heart of Proposition 4.4.  It is deliberately stated over the
-reals: the paper gives a complex counterexample, so no RCLike generalization is
-valid. -/
-theorem davis_planar_short_rotation_scalar
-    {c s p q : ℝ}
-    (hc0 : 0 ≤ c) (hc1 : c ≤ 1) (hhalf : 1 / 2 ≤ c)
-    (hs0 : 0 ≤ s) (hpyth : c ^ 2 + s ^ 2 = 1)
-    (hpq0 : (p + q) ^ 2 ≤ 1) (hpq1 : (p - q) ^ 2 ≤ 1) :
-    Real.sqrt (2 * (1 - c)) ≤
-        Real.sqrt (davisPlanarLambdaPlus c s p q) ∧
-      2 * Real.sqrt (2 * (1 - c)) ≤
-        Real.sqrt (davisPlanarLambdaPlus c s p q) +
-          Real.sqrt (davisPlanarLambdaMinus c s p q) := by
-  have hp_le : p ≤ 1 := by nlinarith [sq_nonneg q, hpq0, hpq1]
-  have hp_ge : -1 ≤ p := by nlinarith [sq_nonneg q, hpq0, hpq1]
-  have hpq : p ^ 2 + q ^ 2 ≤ 1 := by nlinarith [hpq0, hpq1]
-  have hcs : p * c + |q| * s ≤ 1 := by
-    have hsq : (p * c + |q| * s) ^ 2 ≤ 1 := by
-      have hcross : 2 * p * c * (|q| * s) ≤
-          p ^ 2 * s ^ 2 + q ^ 2 * c ^ 2 := by
-        nlinarith [sq_nonneg (p * s - |q| * c), sq_abs q]
-      nlinarith [hpq, hpyth, sq_abs q]
-    rcases le_total (p * c + |q| * s) 0 with hneg | hpos
-    · linarith
-    · nlinarith
-  have hminus0 : 0 ≤ davisPlanarLambdaMinus c s p q := by
-    dsimp [davisPlanarLambdaMinus]
-    nlinarith
-  have hplus0 : 0 ≤ davisPlanarLambdaPlus c s p q := by
-    dsimp [davisPlanarLambdaPlus]
-    nlinarith [hminus0, abs_nonneg q, hs0]
-  have hchord0 : 0 ≤ 2 * (1 - c) := by linarith
-  constructor
-  · apply Real.sqrt_le_sqrt
-    dsimp [davisPlanarLambdaPlus]
-    nlinarith [abs_nonneg q, hs0]
-  · let a := 1 - p * c
-    let b := |q| * s
-    have hab0 : 0 ≤ a - b := by
-      dsimp [a, b]
-      exact hcs
-    have hab1 : 0 ≤ a + b := by
-      dsimp [a, b]
-      nlinarith [hcs, abs_nonneg q, hs0]
-    have hqbound : q ^ 2 * (1 + c) ≤ 4 * c * (1 - p) := by
-      rcases le_total 0 p with hp | hp
-      · have hq2 : q ^ 2 ≤ (1 - p) ^ 2 := by
-          nlinarith [hpq0, hpq1]
-        have hcaux : (1 + c) * (1 - p) ≤ 4 * c := by
-          nlinarith
-        nlinarith
-      · have hq2 : q ^ 2 ≤ (1 + p) ^ 2 := by
-          nlinarith [hpq0, hpq1]
-        have hpaux : (1 + p) ^ 2 ≤ 1 - p := by
-          nlinarith
-        have hcaux : 1 + c ≤ 4 * c := by nlinarith
-        nlinarith
-    have hdisc :
-        (2 * (1 - c) - a) ^ 2 ≤ a ^ 2 - b ^ 2 := by
-      dsimp [a, b]
-      rw [sq_abs]
-      nlinarith [hpyth, hqbound]
-    have hsqrt_disc :
-        2 * (1 - c) - a ≤ Real.sqrt (a ^ 2 - b ^ 2) := by
-      rcases le_total (2 * (1 - c) - a) 0 with hnonpos | hpos
-      · exact hnonpos.trans (Real.sqrt_nonneg _)
-      · exact (sq_le_sq₀ hpos (Real.sqrt_nonneg _)).mp (by
-          rw [Real.sq_sqrt]
-          · exact hdisc
-          · nlinarith [mul_nonneg hab0 hab1])
-    have hsquare :
-        (Real.sqrt (2 * (a + b)) + Real.sqrt (2 * (a - b))) ^ 2 ≥
-          (2 * Real.sqrt (2 * (1 - c))) ^ 2 := by
-      rw [add_sq, Real.sq_sqrt (by positivity), Real.sq_sqrt (by positivity),
-        mul_pow, Real.sq_sqrt hchord0]
-      have hprod : Real.sqrt (2 * (a + b)) * Real.sqrt (2 * (a - b)) =
-          2 * Real.sqrt (a ^ 2 - b ^ 2) := by
-        rw [← Real.sqrt_mul (by positivity), show
-          (2 * (a + b)) * (2 * (a - b)) = 4 * (a ^ 2 - b ^ 2) by ring,
-          Real.sqrt_mul (by positivity), Real.sqrt_sq_eq_abs, abs_of_nonneg (by norm_num)]
-      rw [hprod]
-      nlinarith
-    have hleft0 : 0 ≤ 2 * Real.sqrt (2 * (1 - c)) := by positivity
-    have hright0 : 0 ≤ Real.sqrt (2 * (a + b)) + Real.sqrt (2 * (a - b)) :=
-      add_nonneg (Real.sqrt_nonneg _) (Real.sqrt_nonneg _)
-    have := (sq_le_sq₀ hleft0 hright0).mp hsquare
-    simpa [a, b, davisPlanarLambdaPlus, davisPlanarLambdaMinus] using this
-
-/-- Exact two-plane Gram eigenvalues for a competing unitary.  This is the
-finite-dimensional operator form of equation (4.5). -/
-theorem singularValues_principalPlaneDisplacementRestriction_real
-    {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
-    [FiniteDimensional ℝ E]
-    (U V : Submodule ℝ E)
-    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) (W : E ≃ₗᵢ[ℝ] E)
-    (hmap : U.map W.toLinearMap = V)
-    (i : Fin (nontrivialAngleCount U V)) :
-    (principalPlaneDisplacementRestriction U V hacute W.toLinearMap i).singularValues =
-      pairSingularValues
-        (Real.sqrt (davisPlanarLambdaPlus
-          (principalPlaneCosine U V i) (principalPlaneSine U V i)
-          (principalPlaneAverage U V hacute W i)
-          (principalPlaneHalfDifference U V hacute W i)))
-        (Real.sqrt (davisPlanarLambdaMinus
-          (principalPlaneCosine U V i) (principalPlaneSine U V i)
-          (principalPlaneAverage U V hacute W i)
-          (principalPlaneHalfDifference U V hacute W i))) := by
+    {x : E} (hx : ∀ i, ⟪principalSourceVector U V i, x⟫_𝕜 = 0) :
+    sinThetaMap U V x = 0 := by
   classical
-  let A := principalPlaneDisplacementRestriction U V hacute W.toLinearMap i
-  let c := principalPlaneCosine U V i
-  let s := principalPlaneSine U V i
-  let p := principalPlaneAverage U V hacute W i
-  let q := principalPlaneHalfDifference U V hacute W i
-  let lp := davisPlanarLambdaPlus c s p q
-  let lm := davisPlanarLambdaMinus c s p q
-  have hconstraints := principalPlane_average_halfDifference_constraints U V hacute W i
-  have hnonneg := davis_planar_short_rotation_scalar
-    (Real.sqrt_nonneg _) (by
-      nlinarith [principalPlaneCosine_sq_add_sine_sq U V i,
-        principalPlaneSine_pos U V i]) (by
-      have hσ := principalPlaneCosine_pos U V hacute i
-      have hfull := principalPlaneCosine_sq_add_sine_sq U V i
-      nlinarith)
-    (principalPlaneSine_pos U V i).le
-    (principalPlaneCosine_sq_add_sine_sq U V i)
-    hconstraints.1 hconstraints.2
-  have hgramTrace :
-      gramTraceFinTwo A = lp + lm := by
-    -- Expand `A star A`; the off-plane pieces disappear from the trace because
-    -- `W` and the direct rotation carry `U,U orthogonal` onto `V,V orthogonal`.
-    simp [A, principalPlaneDisplacementRestriction, gramTraceFinTwo,
-      principalPlaneEmbedding, lp, lm, c, s, p, q,
-      principalPlaneAverage, principalPlaneHalfDifference,
-      principalPlaneCoefficient0, principalPlaneCoefficient1,
-      directRotation_apply_principalSourceVector,
-      directRotation_apply_principalOrthogonalVector,
-      projection_intertwines_of_map_eq U V W hmap,
-      principalPlaneCosine_sq_add_sine_sq]
-    ring
-  have hgramDet :
-      gramDetFinTwo A = lp * lm := by
-    simp [A, principalPlaneDisplacementRestriction, gramDetFinTwo,
-      principalPlaneEmbedding, lp, lm, c, s, p, q,
-      principalPlaneAverage, principalPlaneHalfDifference,
-      principalPlaneCoefficient0, principalPlaneCoefficient1,
-      directRotation_apply_principalSourceVector,
-      directRotation_apply_principalOrthogonalVector,
-      projection_intertwines_of_map_eq U V W hmap,
-      principalPlaneCosine_sq_add_sine_sq]
-    ring
-  have hc0 : 0 ≤ c := Real.sqrt_nonneg _
-  have hc1 : c ≤ 1 := by
-    nlinarith [principalPlaneCosine_sq_add_sine_sq U V i,
-      principalPlaneSine_pos U V i]
-  have hs0 : 0 ≤ s := (principalPlaneSine_pos U V i).le
-  have hpq : p ^ 2 + q ^ 2 ≤ 1 := by
-    dsimp [p, q]
-    nlinarith [hconstraints.1, hconstraints.2]
-  have hcs : p * c + |q| * s ≤ 1 := by
-    have hsq : (p * c + |q| * s) ^ 2 ≤ 1 := by
-      have hcross : 2 * p * c * (|q| * s) ≤
-          p ^ 2 * s ^ 2 + q ^ 2 * c ^ 2 := by
-        nlinarith [sq_nonneg (p * s - |q| * c), sq_abs q]
-      nlinarith [hpq, principalPlaneCosine_sq_add_sine_sq U V i, sq_abs q]
-    rcases le_total (p * c + |q| * s) 0 with hneg | hpos
-    · linarith
-    · nlinarith
-  have hlm : 0 ≤ lm := by
-    dsimp [lm, davisPlanarLambdaMinus]
-    nlinarith
-  have hlp0 : 0 ≤ lp := by
-    dsimp [lp, lm, davisPlanarLambdaPlus, davisPlanarLambdaMinus] at *
-    nlinarith [abs_nonneg q]
-  have hlp : lm ≤ lp := by
-    dsimp [lp, lm, davisPlanarLambdaPlus, davisPlanarLambdaMinus]
-    nlinarith [abs_nonneg q]
-  exact singularValues_eq_pair_of_gram_trace_det_fin_two A
-    (Real.sqrt_nonneg _) (Real.sqrt_nonneg _)
-    (Real.sqrt_le_sqrt hlp) hgramTrace hgramDet
+  set b := rightSingularBasis (sinThetaMap U V) with hb
+  have hxdecomp := b.sum_repr x
+  calc sinThetaMap U V x
+      = sinThetaMap U V (∑ j, b.repr x j • b j) := by rw [hxdecomp]
+    _ = ∑ j, b.repr x j • sinThetaMap U V (b j) := by
+        rw [map_sum]
+        exact Finset.sum_congr rfl fun j _ => by rw [map_smul]
+    _ = 0 := by
+        apply Finset.sum_eq_zero
+        intro j _
+        by_cases hj : (j : ℕ) < nontrivialAngleCount U V
+        · have hcoeff : b.repr x j = 0 := by
+            rw [b.repr_apply_apply]
+            have hidx : b j = principalSourceVector U V ⟨(j : ℕ), hj⟩ := by
+              rw [principalSourceVector]
+              congr 1
+              ext
+              simp [nontrivialAngleIndex]
+            rw [hidx]
+            exact hx ⟨(j : ℕ), hj⟩
+          rw [hcoeff, zero_smul]
+        · have hσ : (sinThetaMap U V).singularValues (j : ℕ) = 0 :=
+            (sinThetaMap U V).singularValues_eq_zero_iff_le_finrank_range.mpr
+              (Nat.le_of_not_lt hj)
+          rw [apply_rightSingularBasis_eq_zero_of_singularValue_eq_zero
+            (sinThetaMap U V) hσ, smul_zero]
 
-/-- Local operator and nuclear Ky Fan bounds on every principal plane. -/
-theorem principalPlane_shortRotation_local_bounds
-    {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
-    [FiniteDimensional ℝ E]
-    (U V : Submodule ℝ E)
+/-- A vector of `U` orthogonal to every principal source vector lies in `V`. -/
+theorem mem_of_mem_orthogonal_sources
+    (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V)
-    (hhalf : ∀ j : Fin (finrank ℝ E),
-      (1 / 2 : ℝ) ≤ (canonicalIntertwiner U V).singularValues (j : ℕ))
-    (W : E ≃ₗᵢ[ℝ] E) (hmap : U.map W.toLinearMap = V)
-    (i : Fin (nontrivialAngleCount U V)) :
-    principalPlaneChord U V i ≤
-        kyFanSum 1
-          (principalPlaneDisplacementRestriction U V hacute W.toLinearMap i) ∧
-      2 * principalPlaneChord U V i ≤
-        kyFanSum 2
-          (principalPlaneDisplacementRestriction U V hacute W.toLinearMap i) := by
-  have hconstraints := principalPlane_average_halfDifference_constraints U V hacute W i
-  have hcHalf : 1 / 2 ≤ principalPlaneCosine U V i := by
-    obtain ⟨j, hj⟩ :=
-      exists_canonicalIntertwiner_singularValue_eq_principalPlaneCosine
-        U V hacute i
-    simpa [hj] using hhalf j
-  have hscalar := davis_planar_short_rotation_scalar
-    (Real.sqrt_nonneg _)
-    (by nlinarith [principalPlaneCosine_sq_add_sine_sq U V i,
-      principalPlaneSine_pos U V i]) hcHalf
-    (principalPlaneSine_pos U V i).le
-    (principalPlaneCosine_sq_add_sine_sq U V i)
-    hconstraints.1 hconstraints.2
-  rw [singularValues_principalPlaneDisplacementRestriction_real
-    U V hacute W hmap i]
-  constructor
-  · simpa [kyFanSum, principalPlaneChord,
-      pairSingularValues] using hscalar.1
-  · simpa [kyFanSum, principalPlaneChord,
-      pairSingularValues] using hscalar.2
+    {x : E} (hxU : x ∈ U)
+    (hx : ∀ i, ⟪principalSourceVector U V i, x⟫_𝕜 = 0) :
+    x ∈ V := by
+  have hsin := sinThetaMap_apply_eq_zero_of_orthogonal_sources U V hx
+  rw [sinThetaMap, LinearMap.comp_apply, projection_apply_of_mem hxU] at hsin
+  have hmem : x ∈ Vᗮᗮ :=
+    (Submodule.starProjection_apply_eq_zero_iff Vᗮ).mp hsin
+  rwa [Submodule.orthogonal_orthogonal] at hmem
 
+/-- The positive cosine fixes every vector of `U` orthogonal to the principal
+source vectors. -/
+theorem abs_canonicalIntertwiner_apply_eq_self_of_orthogonal_sources
+    (U V : Submodule 𝕜 E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    {x : E} (hxU : x ∈ U)
+    (hx : ∀ i, ⟪principalSourceVector U V i, x⟫_𝕜 = 0) :
+    ForMathlib.abs (canonicalIntertwiner U V) x = x := by
+  have hxV := mem_of_mem_orthogonal_sources U V hxU hx
+  exact abs_canonicalIntertwiner_apply_eq_self_of_projection_eq U V
+    (by rw [projection_apply_of_mem hxU, projection_apply_of_mem hxV])
 
-/-- Different principal-plane embeddings have orthogonal ranges. -/
-theorem principalPlaneEmbedding_inner_eq_zero
+/-- Inner products against the sine map vanish on vectors orthogonal to the
+principal-plane family. -/
+theorem inner_sinThetaMap_apply_eq_zero_of_orthogonal_family
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hacute : IsAcute U V)
-    {i j : Fin (nontrivialAngleCount U V)} (hij : i ≠ j)
-    (x y : EuclideanSpace 𝕜 (Fin 2)) :
-    ⟪principalPlaneEmbedding U V hacute i x,
-      principalPlaneEmbedding U V hacute j y⟫_𝕜 = 0 := by
-  simp [principalPlaneEmbedding, inner_add_left, inner_add_right,
-    inner_smul_left, inner_smul_right,
-    orthonormal_iff_ite.mp (orthonormal_principalSourceVector U V),
-    orthonormal_iff_ite.mp (orthonormal_principalOrthogonalVector U V hacute),
-    Submodule.inner_right_of_mem_orthogonal
-      (principalSourceVector_mem U V hacute i)
-      (principalOrthogonalVector_mem U V hacute j),
-    Submodule.inner_right_of_mem_orthogonal
-      (principalSourceVector_mem U V hacute j)
-      (principalOrthogonalVector_mem U V hacute i), hij]
-
-/-- Simultaneous Ky Fan lower bound for compressions to mutually orthogonal
-finite-dimensional ranges.  This is the finite variational statement used in
-Davis--Kahan equations (4.3)--(4.4). -/
-theorem sum_kyFanSum_compression_le
-    {ι : Type*} [Fintype ι] [DecidableEq ι]
-    (J : ι → EuclideanSpace 𝕜 (Fin 2) →ₗᵢ[𝕜] E)
-    (horth : ∀ {i j : ι}, i ≠ j → ∀ x y, ⟪J i x, J j y⟫_𝕜 = 0)
-    (A : E →ₗ[𝕜] E) (r : ι → ℕ)
-    (hr : ∀ i, r i ≤ 2)
-    (hcard : (∑ i, r i) ≤ finrank 𝕜 E) :
-    (∑ i, kyFanSum (r i) (compression A (J i))) ≤
-      kyFanSum (∑ i, r i) A := by
+    {z : E} (hzu : ∀ i, ⟪principalSourceVector U V i, z⟫_𝕜 = 0)
+    (hzj : ∀ i, ⟪principalOrthogonalVector U V hacute i, z⟫_𝕜 = 0)
+    (w : E) :
+    ⟪sinThetaMap U V w, z⟫_𝕜 = 0 := by
   classical
-  choose u v hu hv heq using fun i =>
-    exists_orthonormal_re_sum_inner_map_eq (compression A (J i))
-      (by simpa [finrank_euclideanSpace_fin] using hr i)
-  let σ := Σ i : ι, Fin (r i)
-  let e : Fin (Fintype.card σ) ≃ σ := (Fintype.equivFin σ).symm
-  let u' : Fin (Fintype.card σ) → E := fun a =>
-    J (e a).1 (u (e a).1 (e a).2)
-  let v' : Fin (Fintype.card σ) → E := fun a =>
-    J (e a).1 (v (e a).1 (e a).2)
-  have hu' : Orthonormal 𝕜 u' := by
-    rw [orthonormal_iff_ite]
-    intro a b
-    by_cases hab : (e a).1 = (e b).1
-    · subst hab
-      rw [(J (e b).1).inner_map_map]
-      simpa [u'] using orthonormal_iff_ite.mp (hu (e b).1) (e a).2 (e b).2
-    · simpa [u', hab] using horth hab (u (e a).1 (e a).2) (u (e b).1 (e b).2)
-  have hv' : Orthonormal 𝕜 v' := by
-    rw [orthonormal_iff_ite]
-    intro a b
-    by_cases hab : (e a).1 = (e b).1
-    · subst hab
-      rw [(J (e b).1).inner_map_map]
-      simpa [v'] using orthonormal_iff_ite.mp (hv (e b).1) (e a).2 (e b).2
-    · simpa [v', hab] using horth hab (v (e a).1 (e a).2) (v (e b).1 (e b).2)
-  have hcardσ : Fintype.card σ = ∑ i, r i := by
-    simp [σ, Fintype.card_sigma]
-  have hvar := re_sum_inner_map_le_sum_singularValues
-    (A := A) (k := Fintype.card σ) (hcardσ.symm ▸ hcard) hu' hv'
-  rw [← kyFanSum_eq_sum_fin, hcardσ] at hvar
-  calc
-    ∑ i, kyFanSum (r i) (compression A (J i))
-        = RCLike.re (∑ a : Fin (Fintype.card σ),
-            ⟪u' a, A (v' a)⟫_𝕜) := by
-          rw [e.sum_comp]
-          simp only [u', v', compression, LinearMap.comp_apply,
-            LinearIsometry.adjoint_inner_left]
-          rw [Fintype.sum_sigma]
-          exact Finset.sum_congr rfl fun i _ => by
-            simpa [kyFanSum_eq_sum_fin] using (heq i).symm
-    _ ≤ kyFanSum (∑ i, r i) A := hvar
+  set b := rightSingularBasis (sinThetaMap U V) with hb
+  have hwdecomp := b.sum_repr w
+  have hsinu : ∀ i : Fin (nontrivialAngleCount U V),
+      ⟪sinThetaMap U V (principalSourceVector U V i), z⟫_𝕜 = 0 := by
+    intro i
+    have hu := principalSourceVector_mem U V hacute i
+    have hsin : sinThetaMap U V (principalSourceVector U V i) =
+        principalSourceVector U V i -
+          projection V (principalSourceVector U V i) := by
+      rw [sinThetaMap, LinearMap.comp_apply, projection_apply_of_mem hu]
+      exact Submodule.starProjection_orthogonal_val _
+    rw [hsin, projection_apply_principalSourceVector U V hacute i,
+      directRotation_apply_principalSourceVector U V hacute i, inner_sub_left,
+      inner_smul_left, inner_add_left, inner_smul_left, inner_smul_left,
+      hzu i, hzj i]
+    ring
+  calc ⟪sinThetaMap U V w, z⟫_𝕜
+      = ⟪sinThetaMap U V (∑ j, b.repr w j • b j), z⟫_𝕜 := by rw [hwdecomp]
+    _ = ∑ j, (starRingEnd 𝕜) (b.repr w j) * ⟪sinThetaMap U V (b j), z⟫_𝕜 := by
+        rw [map_sum, sum_inner]
+        exact Finset.sum_congr rfl fun j _ => by
+          rw [map_smul, inner_smul_left]
+    _ = 0 := by
+        apply Finset.sum_eq_zero
+        intro j _
+        by_cases hj : (j : ℕ) < nontrivialAngleCount U V
+        · have hidx : b j = principalSourceVector U V ⟨(j : ℕ), hj⟩ := by
+            rw [principalSourceVector]
+            congr 1
+            ext
+            simp [nontrivialAngleIndex]
+          rw [hidx, hsinu ⟨(j : ℕ), hj⟩, mul_zero]
+        · have hσ : (sinThetaMap U V).singularValues (j : ℕ) = 0 :=
+            (sinThetaMap U V).singularValues_eq_zero_iff_le_finrank_range.mpr
+              (Nat.le_of_not_lt hj)
+          rw [apply_rightSingularBasis_eq_zero_of_singularValue_eq_zero
+            (sinThetaMap U V) hσ, inner_zero_left, mul_zero]
 
+/-- **Descent to the fixed part.**  On the orthogonal complement of the
+principal-plane family the two projections agree. -/
+theorem projection_eq_projection_of_orthogonal_family
+    (U V : Submodule 𝕜 E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hacute : IsAcute U V)
+    {x : E} (hxu : ∀ i, ⟪principalSourceVector U V i, x⟫_𝕜 = 0)
+    (hxj : ∀ i, ⟪principalOrthogonalVector U V hacute i, x⟫_𝕜 = 0) :
+    projection U x = projection V x := by
+  set y := projection U x with hy
+  set z := complementaryProjection U x with hz
+  have hxyz : y + z = x := U.starProjection_add_starProjection_orthogonal x
+  have hyU : y ∈ U := U.starProjection_apply_mem x
+  have hzUperp : z ∈ Uᗮ := Uᗮ.starProjection_apply_mem x
+  -- `y` is orthogonal to the source vectors.
+  have hyu : ∀ i, ⟪principalSourceVector U V i, y⟫_𝕜 = 0 := by
+    intro i
+    have := projection_inner_left_eq_right U (principalSourceVector U V i) x
+    rw [projection_apply_of_mem (principalSourceVector_mem U V hacute i)] at this
+    rw [hy, ← this, hxu i]
+  -- Hence `y ∈ V`.
+  have hyV : y ∈ V := mem_of_mem_orthogonal_sources U V hyU hyu
+  -- `z` is orthogonal to the whole family.
+  have hzu : ∀ i, ⟪principalSourceVector U V i, z⟫_𝕜 = 0 := by
+    intro i
+    have hsplit : ⟪principalSourceVector U V i, x⟫_𝕜 =
+        ⟪principalSourceVector U V i, y⟫_𝕜 +
+          ⟪principalSourceVector U V i, z⟫_𝕜 := by
+      rw [← inner_add_right, hxyz]
+    rw [hxu i, hyu i] at hsplit
+    linarith [congrArg RCLike.re hsplit, congrArg RCLike.im hsplit,
+      (RCLike.ext_iff (z := ⟪principalSourceVector U V i, z⟫_𝕜) (w := 0))]
+  have hzj : ∀ i, ⟪principalOrthogonalVector U V hacute i, z⟫_𝕜 = 0 := by
+    intro i
+    have hjy : ⟪principalOrthogonalVector U V hacute i, y⟫_𝕜 = 0 := by
+      have := projection_inner_left_eq_right U
+        (principalOrthogonalVector U V hacute i) x
+      rw [projection_apply_of_mem_orthogonal
+        (principalOrthogonalVector_mem U V hacute i), inner_zero_left] at this
+      rw [hy, ← this]
+    have hsplit : ⟪principalOrthogonalVector U V hacute i, x⟫_𝕜 =
+        ⟪principalOrthogonalVector U V hacute i, y⟫_𝕜 +
+          ⟪principalOrthogonalVector U V hacute i, z⟫_𝕜 := by
+      rw [← inner_add_right, hxyz]
+    rw [hxj i, hjy] at hsplit
+    linarith [congrArg RCLike.re hsplit, congrArg RCLike.im hsplit,
+      (RCLike.ext_iff (z := ⟪principalOrthogonalVector U V hacute i, z⟫_𝕜) (w := 0))]
+  -- The `V`-projection of `z` vanishes: it is a vector of `V` orthogonal to `U`.
+  have hvzero : projection V z = 0 := by
+    set v := projection V z with hv
+    have hvV : v ∈ V := V.starProjection_apply_mem z
+    have hvUperp : ∀ u ∈ U, ⟪u, v⟫_𝕜 = 0 := by
+      intro u huU
+      have h1 : ⟪u, v⟫_𝕜 = ⟪projection V u, z⟫_𝕜 := by
+        rw [hv, projection_inner_left_eq_right]
+      have h2 : projection V u = u - sinThetaMap U V u := by
+        rw [sinThetaMap, LinearMap.comp_apply, projection_apply_of_mem huU,
+          Submodule.starProjection_orthogonal_val]
+        abel
+      rw [h1, h2, inner_sub_left,
+        Submodule.inner_right_of_mem_orthogonal huU hzUperp,
+        inner_sinThetaMap_apply_eq_zero_of_orthogonal_family U V hacute hzu hzj u,
+        sub_zero]
+    have hvmem : v ∈ Uᗮ := by
+      rw [Submodule.mem_orthogonal]
+      exact hvUperp
+    have hproj0 : U.starProjection v = 0 :=
+      projection_apply_of_mem_orthogonal hvmem
+    exact hacute.2 v hvV hproj0
+  -- Conclude.
+  have hyproj : projection V y = y := projection_apply_of_mem hyV
+  calc projection U x = y := hy.symm
+    _ = projection V y + projection V z := by rw [hyproj, hvzero, add_zero]
+    _ = projection V x := by rw [← map_add, hxyz]
+
+/-! ## The spectrum of the direct displacement -/
+
+/-- The Gram operator of the displacement `I - R` is twice the defect of the
+positive cosine: `(I-R)⋆(I-R) = 2 (I - |S|)`. -/
+theorem adjoint_comp_displacement_directRotation
+    (U V : Submodule 𝕜 E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hacute : IsAcute U V) :
+    (LinearMap.id - (directRotation U V hacute).toLinearMap).adjoint ∘ₗ
+        (LinearMap.id - (directRotation U V hacute).toLinearMap) =
+      (2 : 𝕜) • (LinearMap.id -
+        ForMathlib.abs (canonicalIntertwiner U V)) := by
+  have htwo := two_smul_abs_canonicalIntertwiner U V hacute
+  have hadj : (directRotation U V hacute).toLinearMap.adjoint =
+      (directRotation U V hacute).symm.toLinearMap :=
+    (directRotation U V hacute).adjoint_toLinearMap_eq_symm
+  have hcomp : (directRotation U V hacute).symm.toLinearMap ∘ₗ
+      (directRotation U V hacute).toLinearMap = LinearMap.id := by
+    ext x
+    simp [LinearMap.comp_apply]
+  rw [map_sub, LinearMap.adjoint_id, hadj]
+  have hexpand : (LinearMap.id - (directRotation U V hacute).symm.toLinearMap) ∘ₗ
+      (LinearMap.id - (directRotation U V hacute).toLinearMap) =
+      (2 : 𝕜) • LinearMap.id -
+        ((directRotation U V hacute).toLinearMap +
+          (directRotation U V hacute).symm.toLinearMap) := by
+    rw [LinearMap.sub_comp, LinearMap.comp_sub, LinearMap.comp_sub,
+      LinearMap.id_comp, LinearMap.comp_id, LinearMap.comp_id, hcomp]
+    ext x
+    simp only [LinearMap.sub_apply, LinearMap.add_apply, LinearMap.smul_apply,
+      LinearMap.id_apply]
+    module
+  rw [hexpand, ← htwo]
+  ext x
+  simp only [LinearMap.sub_apply, LinearMap.smul_apply, LinearMap.id_apply,
+    smul_sub]
 
 /-- The mutually orthogonal nontrivial principal planes fit in the ambient
 space. -/
@@ -1005,34 +986,21 @@ theorem twice_nontrivialAngleCount_le_finrank_of_acute
   have hspan := finrank_span_eq_card hf
   have hle := Submodule.finrank_le (Submodule.span 𝕜 (Set.range f))
   rw [hspan, Fintype.card_prod, Fintype.card_fin, Fintype.card_fin] at hle
-  simpa [mul_comm] using hle
-
-/-- Dimension bound for a selection of complete principal planes. -/
-theorem selected_principal_plane_even_dimension_le
-    (U V : Submodule 𝕜 E)
-    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) (k : ℕ) :
-    2 * min (k / 2) (nontrivialAngleCount U V) ≤ finrank 𝕜 E := by
-  exact (Nat.mul_le_mul_left 2 (min_le_right _ _)).trans
-    (twice_nontrivialAngleCount_le_finrank_of_acute U V hacute)
-
-/-- Dimension bound when the next single principal direction is appended. -/
-theorem selected_principal_plane_dimension_le
-    (U V : Submodule 𝕜 E)
-    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) (k : ℕ)
-    (hodd : k % 2 = 1 ∧ k / 2 < nontrivialAngleCount U V) :
-    2 * min (k / 2) (nontrivialAngleCount U V) + 1 ≤ finrank 𝕜 E := by
-  rw [min_eq_left hodd.2.le]
-  have hplanes := twice_nontrivialAngleCount_le_finrank_of_acute U V hacute
   omega
+
+/-- The angle count is bounded by the ambient dimension. -/
+theorem nontrivialAngleCount_le_finrank
+    (U V : Submodule 𝕜 E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
+    nontrivialAngleCount U V ≤ finrank 𝕜 E :=
+  LinearMap.finrank_range_le (sinThetaMap U V)
 
 /-- Elementary pairing identity for a sequence whose entries occur twice. -/
 theorem sum_repeated_pair_prefix {m : ℕ}
     (d : Fin m → ℝ) (k : ℕ) :
     (∑ n : Fin k, if hn : (n : ℕ) < 2 * m then
         d ⟨(n : ℕ) / 2,
-          (Nat.div_lt_iff_lt_mul (by omega)).2 (by simpa [two_mul] using hn)⟩
+          (Nat.div_lt_iff_lt_mul (by omega)).2 (by omega)⟩
       else 0) =
       (∑ i : Fin (min (k / 2) m), 2 * d (Fin.castLE (min_le_right _ _) i)) +
         if hodd : k % 2 = 1 ∧ k / 2 < m then d ⟨k / 2, hodd.2⟩ else 0 := by
@@ -1046,18 +1014,33 @@ theorem sum_repeated_pair_prefix {m : ℕ}
       · simp only [dif_pos hkm]
         rcases Nat.even_or_odd k with heven | hodd
         · obtain ⟨q, rfl⟩ := heven
-          simp [Nat.add_mod, Nat.mul_div_cancel_left, min_eq_left,
-            Nat.lt_of_succ_le (Nat.succ_le_iff.mp hkm)]
-          ring
-        · obtain ⟨q, rfl⟩ := hodd
-          simp [Nat.add_mod, Nat.mul_add_div, min_eq_left,
-            Nat.lt_of_succ_le (Nat.succ_le_iff.mp hkm)]
-          ring
+          have hq : q < m := by omega
+          have h1 : (q + q) / 2 = q := by omega
+          have h2 : (q + q) % 2 = 0 := by omega
+          have h3 : (q + q + 1) % 2 = 1 := by omega
+          have h4 : (q + q + 1) / 2 = q := by omega
+          simp only [h1, h2, h3, h4]
+          rw [dif_neg (by omega), dif_pos ⟨rfl, hq⟩]
+          have hmin : min ((q + q) / 2) m = q := by omega
+          have hmin' : min ((q + q + 1) / 2) m = q := by omega
+          rw [show ((q+q)/2) = q from h1, show ((q+q+1)/2) = q from h4]
+          simp
       · have hkm' : 2 * m ≤ k := Nat.le_of_not_gt hkm
-        simp [dif_neg hkm, min_eq_right, hkm']
+        have h1 : min (k / 2) m = m := by omega
+        have h2 : min ((k+1) / 2) m = m := by omega
+        rw [dif_neg (by omega)]
+        have h3 : ¬ (k % 2 = 1 ∧ k / 2 < m) := by omega
+        have h4 : ¬ ((k+1) % 2 = 1 ∧ (k+1) / 2 < m) := by omega
+        rw [dif_neg h3, dif_neg h4, add_zero, add_zero, add_zero]
+        apply Finset.sum_congr
+        · congr 1
+          omega
+        · intro i _
+          rfl
 
-/-- The singular values of the direct displacement are the principal chord
-lengths, each repeated twice, followed by zeros. -/
+/-- **The singular values of the direct displacement** are the principal chord
+lengths, each repeated twice, followed by zeros.  This is the quantitative
+heart of Davis--Kahan Proposition 4.1: `sigma_k (I - R) = 2 sin(theta_{k/2}/2)`. -/
 theorem singularValues_directRotation_displacement
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
@@ -1065,102 +1048,181 @@ theorem singularValues_directRotation_displacement
     (LinearMap.id - (directRotation U V hacute).toLinearMap).singularValues n =
       if hn : n < 2 * nontrivialAngleCount U V then
         principalPlaneChord U V
-          ⟨n / 2, (Nat.div_lt_iff_lt_mul (by omega)).2 (by simpa [two_mul] using hn)⟩
+          ⟨n / 2, (Nat.div_lt_iff_lt_mul (by omega)).2 (by omega)⟩
       else 0 := by
   classical
-  let A := LinearMap.id - (directRotation U V hacute).toLinearMap
-  let f : Fin (nontrivialAngleCount U V) × Fin 2 → E := fun p =>
-    if p.2 = 0 then principalSourceVector U V p.1
-    else principalOrthogonalVector U V hacute p.1
-  have hf : Orthonormal 𝕜 f := orthonormal_principalPlaneFamily U V hacute
-  let P := Submodule.span 𝕜 (Set.range f)
-  have hreduce : ∀ p, A (f p) =
-      ((principalPlaneChord U V p.1 : ℝ) : 𝕜) •
-        ((polarUnitary (compression A (principalPlaneEmbedding U V hacute p.1)))
-          (EuclideanSpace.basisFun (Fin 2) 𝕜 p.2)) := by
-    intro p
-    -- On each principal plane `A` is the normal block
-    -- `[[1-c,s],[-s,1-c]]`; its modulus is the scalar chord.
-    have hblock := compression_directRotation_displacement_eq U V hacute p.1
-    have hpolar := polar_decomposition_unitary
-      (compression A (principalPlaneEmbedding U V hacute p.1))
-    fin_cases p.2 <;>
-      simpa [A, f, hblock, principalPlaneEmbedding,
-        LinearMap.comp_apply, Matrix.toEuclideanLin_apply,
-        principalPlaneChord] using
-        congrArg (fun T => T (EuclideanSpace.basisFun (Fin 2) 𝕜 p.2)) hpolar
-  have hzero : ∀ x ∈ Pᗮ, A x = 0 := by
-    intro x hx
-    have hkerSine : sinThetaMap U V x = 0 := by
-      apply (rightSingularBasis (sinThetaMap U V)).ext
-      intro j
-      by_cases hj : j < nontrivialAngleCount U V
-      · let i : Fin (nontrivialAngleCount U V) := ⟨j, hj⟩
-        have hxu : ⟪principalSourceVector U V i, x⟫_𝕜 = 0 := by
-          exact hx (Submodule.subset_span ⟨(i, 0), rfl⟩)
-        simpa [principalSourceVector, i] using hxu
-      · rw [(sinThetaMap U V).singularValues_of_finrank_range_le
-          (by simpa [nontrivialAngleCount] using hj)]
-        simp
-    have hproj : projection U x = projection V x := by
-      have := congrArg (projection V) hkerSine
-      simp [sinThetaMap, complementaryProjection, LinearMap.comp_apply] at this
-      exact projection_eq_of_complementaryProjection_eq_zero this
-    have hS : canonicalIntertwiner U V x = x := by
-      simp [canonicalIntertwiner, LinearMap.comp_apply, hproj,
-        complementaryProjection]
-    have hpolar := polar_decomposition_of_isUnit
-      (canonicalIntertwiner_isUnit_of_acute U V hacute)
-    have hCx : ForMathlib.abs (canonicalIntertwiner U V) x = x := by
-      apply (isPositive_abs (canonicalIntertwiner U V)).sqrt_eq_self_of_sq_eq_self
-      simpa [canonicalIntertwiner_adjoint_comp_self, hproj,
-        complementaryProjection]
-    have := LinearMap.congr_fun hpolar x
-    simpa [A, hS, hCx, LinearMap.comp_apply] using this.symm
-  -- Extend the orthonormal principal-plane family to an orthonormal basis.
-  obtain ⟨b, hb⟩ := hf.exists_orthonormalBasis_extension
-  let G := A.adjoint ∘ₗ A
-  have hdiag : ∀ j : Fin (finrank 𝕜 E), G (b j) =
-      (((if h : (j : ℕ) < 2 * nontrivialAngleCount U V then
-          principalPlaneChord U V
-            ⟨(j : ℕ) / 2, (Nat.div_lt_iff_lt_mul (by omega)).2
-              (by simpa [two_mul] using h)⟩ ^ 2 else 0 : ℝ)) : 𝕜) • b j := by
-    intro j
-    by_cases hj : (j : ℕ) < 2 * nontrivialAngleCount U V
-    · obtain ⟨p, hp⟩ := hb.of_lt_card_range hj
-      subst hp
-      have hσ := singularValues_compression_directRotation_displacement
-        U V hacute p.1
-      have hnorm := congrFun hσ p.2
-      simpa [G, A, f, LinearMap.comp_apply, hreduce, hnorm]
-    · have hbperp : b j ∈ Pᗮ := hb.mem_orthogonal_of_not_mem_range hj
-      rw [hzero (b j) hbperp]
-      simp [G, LinearMap.comp_apply]
-  have hanti : Antitone (fun j : Fin (finrank 𝕜 E) =>
-      if h : (j : ℕ) < 2 * nontrivialAngleCount U V then
-        principalPlaneChord U V
-          ⟨(j : ℕ) / 2, (Nat.div_lt_iff_lt_mul (by omega)).2
-            (by simpa [two_mul] using h)⟩ ^ 2 else 0) := by
-    intro i j hij
+  set m := nontrivialAngleCount U V with hm
+  set A := LinearMap.id - (directRotation U V hacute).toLinearMap with hA
+  set S := canonicalIntertwiner U V with hS
+  have h2m : 2 * m ≤ finrank 𝕜 E :=
+    twice_nontrivialAngleCount_le_finrank_of_acute U V hacute
+  -- The candidate eigenvector family on `Fin (finrank 𝕜 E)`.
+  set v : Fin (finrank 𝕜 E) → E := fun k =>
+    if hk : (k : ℕ) < 2 * m then
+      (if (k : ℕ) % 2 = 0
+        then principalSourceVector U V
+          ⟨(k : ℕ) / 2, (Nat.div_lt_iff_lt_mul (by omega)).2 (by omega)⟩
+        else principalOrthogonalVector U V hacute
+          ⟨(k : ℕ) / 2, (Nat.div_lt_iff_lt_mul (by omega)).2 (by omega)⟩)
+    else 0 with hv
+  set s : Set (Fin (finrank 𝕜 E)) := {k | (k : ℕ) < 2 * m} with hs
+  -- The family restricted to `s` is orthonormal.
+  have hfam := orthonormal_principalPlaneFamily U V hacute
+  have hres : Orthonormal 𝕜 (s.restrict v) := by
+    rw [orthonormal_iff_ite]
+    rintro ⟨a, ha⟩ ⟨b, hb⟩
+    have ha' : (a : ℕ) < 2 * m := ha
+    have hb' : (b : ℕ) < 2 * m := hb
+    have hva : v a = (fun p : Fin m × Fin 2 =>
+        if p.2 = 0 then principalSourceVector U V p.1
+        else principalOrthogonalVector U V hacute p.1)
+        (⟨⟨(a : ℕ) / 2, by omega⟩, ⟨(a : ℕ) % 2, by omega⟩⟩) := by
+      rw [hv]
+      simp only [dif_pos ha']
+      by_cases hpar : (a : ℕ) % 2 = 0
+      · simp [hpar, show (⟨(a:ℕ) % 2, by omega⟩ : Fin 2) = 0 from by
+          ext; simp [hpar]]
+      · have : (a : ℕ) % 2 = 1 := by omega
+        simp [hpar, show (⟨(a:ℕ) % 2, by omega⟩ : Fin 2) ≠ 0 from by
+          intro h; apply hpar; simpa [Fin.ext_iff] using h]
+    have hvb : v b = (fun p : Fin m × Fin 2 =>
+        if p.2 = 0 then principalSourceVector U V p.1
+        else principalOrthogonalVector U V hacute p.1)
+        (⟨⟨(b : ℕ) / 2, by omega⟩, ⟨(b : ℕ) % 2, by omega⟩⟩) := by
+      rw [hv]
+      simp only [dif_pos hb']
+      by_cases hpar : (b : ℕ) % 2 = 0
+      · simp [hpar, show (⟨(b:ℕ) % 2, by omega⟩ : Fin 2) = 0 from by
+          ext; simp [hpar]]
+      · have : (b : ℕ) % 2 = 1 := by omega
+        simp [hpar, show (⟨(b:ℕ) % 2, by omega⟩ : Fin 2) ≠ 0 from by
+          intro h; apply hpar; simpa [Fin.ext_iff] using h]
+    have hij := orthonormal_iff_ite.mp hfam
+      ⟨⟨(a : ℕ) / 2, by omega⟩, ⟨(a : ℕ) % 2, by omega⟩⟩
+      ⟨⟨(b : ℕ) / 2, by omega⟩, ⟨(b : ℕ) % 2, by omega⟩⟩
+    simp only [Set.restrict_apply]
+    rw [hva, hvb, hij]
+    congr 1
+    simp only [Prod.mk.injEq, Fin.mk.injEq, Subtype.mk.injEq, eq_iff_iff]
+    constructor
+    · rintro ⟨h1, h2⟩
+      apply Fin.ext
+      omega
+    · intro h
+      have : (a : ℕ) = (b : ℕ) := by exact_mod_cast congrArg Fin.val h
+      omega
+  obtain ⟨b, hb⟩ := hres.exists_orthonormalBasis_extension_of_card_eq
+    (by simp) (v := v)
+  -- The eigenvalue list.
+  set μ : Fin (finrank 𝕜 E) → ℝ := fun k =>
+    if hk : (k : ℕ) < 2 * m then
+      principalPlaneChord U V
+        ⟨(k : ℕ) / 2, (Nat.div_lt_iff_lt_mul (by omega)).2 (by omega)⟩ ^ 2
+    else 0 with hμ
+  have hμanti : Antitone μ := by
+    intro a c hac
+    rw [hμ]
     simp only
-    split_ifs with hi hj
-    · exact sq_le_sq₀ (Real.sqrt_nonneg _) (Real.sqrt_nonneg _)
-        (principalPlaneChord_antitone U V (Nat.div_le_div_right hij))
+    split_ifs with h1 h2 h2
+    · have hchord := principalPlaneChord_antitone U V
+        (show (⟨(a : ℕ)/2, _⟩ : Fin m) ≤ ⟨(c : ℕ)/2, _⟩ from by
+          simp only [Fin.mk_le_mk]
+          omega)
+      have h0a := principalPlaneChord_nonneg U V
+        ⟨(a : ℕ)/2, (Nat.div_lt_iff_lt_mul (by omega)).2 (by omega)⟩
+      have h0c := principalPlaneChord_nonneg U V
+        ⟨(c : ℕ)/2, (Nat.div_lt_iff_lt_mul (by omega)).2 (by omega)⟩
+      nlinarith
     · positivity
     · omega
     · exact le_rfl
-  have heig := eigenvalues_eq_of_eigenbasis A.isSymmetric_adjoint_comp_self
-    rfl b hanti hdiag
+  -- The Gram operator is diagonal in the extended basis.
+  have hgram := adjoint_comp_displacement_directRotation U V hacute
+  have habs_u := abs_canonicalIntertwiner_apply_principalSourceVector U V hacute
+  have habs_j := abs_canonicalIntertwiner_apply_principalOrthogonalVector U V hacute
+  have hdiag : ∀ k, (A.adjoint ∘ₗ A) (b k) = ((μ k : ℝ) : 𝕜) • b k := by
+    intro k
+    rw [← hA]
+    by_cases hk : (k : ℕ) < 2 * m
+    · have hbk : b k = v k := hb k hk
+      rw [hgram, hbk, hv]
+      simp only [dif_pos hk]
+      by_cases hpar : (k : ℕ) % 2 = 0
+      · rw [if_pos hpar]
+        rw [LinearMap.smul_apply, LinearMap.sub_apply, LinearMap.id_apply,
+          habs_u ⟨(k : ℕ) / 2, (Nat.div_lt_iff_lt_mul (by omega)).2 (by omega)⟩]
+        rw [hμ]
+        simp only [dif_pos hk]
+        rw [principalPlaneChord_sq]
+        match_scalars
+        push_cast
+        ring
+      · rw [if_neg hpar]
+        rw [LinearMap.smul_apply, LinearMap.sub_apply, LinearMap.id_apply,
+          habs_j ⟨(k : ℕ) / 2, (Nat.div_lt_iff_lt_mul (by omega)).2 (by omega)⟩]
+        rw [hμ]
+        simp only [dif_pos hk]
+        rw [principalPlaneChord_sq]
+        match_scalars
+        push_cast
+        ring
+    · -- `b k` is orthogonal to the whole family, so `|S|` fixes it.
+      have hperp_u : ∀ i, ⟪principalSourceVector U V i, b k⟫_𝕜 = 0 := by
+        intro i
+        have hpos : 2 * (i : ℕ) < 2 * m := by omega
+        have hval : ((⟨2 * (i : ℕ), by omega⟩ : Fin (finrank 𝕜 E)) : ℕ) < 2 * m := hpos
+        have hbu : b ⟨2 * (i : ℕ), by omega⟩ = principalSourceVector U V i := by
+          rw [hb _ hval, hv]
+          simp only [dif_pos hval]
+          rw [if_pos (by omega)]
+          congr 1
+          ext
+          simp
+          omega
+        have hne : (⟨2 * (i : ℕ), by omega⟩ : Fin (finrank 𝕜 E)) ≠ k := by
+          intro h
+          rw [← h] at hk
+          exact hk hpos
+        rw [← hbu]
+        exact b.orthonormal.inner_eq_zero hne
+      have hperp_j : ∀ i, ⟪principalOrthogonalVector U V hacute i, b k⟫_𝕜 = 0 := by
+        intro i
+        have hpos : 2 * (i : ℕ) + 1 < 2 * m := by omega
+        have hval : ((⟨2 * (i : ℕ) + 1, by omega⟩ : Fin (finrank 𝕜 E)) : ℕ) < 2 * m := hpos
+        have hbj : b ⟨2 * (i : ℕ) + 1, by omega⟩ =
+            principalOrthogonalVector U V hacute i := by
+          rw [hb _ hval, hv]
+          simp only [dif_pos hval]
+          rw [if_neg (by omega)]
+          congr 1
+          ext
+          simp
+          omega
+        have hne : (⟨2 * (i : ℕ) + 1, by omega⟩ : Fin (finrank 𝕜 E)) ≠ k := by
+          intro h
+          rw [← h] at hk
+          exact hk hpos
+        rw [← hbj]
+        exact b.orthonormal.inner_eq_zero hne
+      have hproj := projection_eq_projection_of_orthogonal_family U V hacute
+        hperp_u hperp_j
+      have habs := abs_canonicalIntertwiner_apply_eq_self_of_projection_eq U V hproj
+      rw [hgram]
+      rw [LinearMap.smul_apply, LinearMap.sub_apply, LinearMap.id_apply, habs,
+        sub_self, smul_zero, hμ]
+      simp [dif_neg hk]
+  -- Identify the sorted eigenvalues.
+  have heig := eigenvalues_eq_of_eigenbasis A.isSymmetric_adjoint_comp_self rfl b
+    hμanti hdiag
   rcases lt_or_ge n (finrank 𝕜 E) with hnE | hnE
-  · rw [A.singularValues_of_lt rfl hnE, congrFun heig ⟨n, hnE⟩]
+  · rw [A.singularValues_of_lt rfl hnE, heig]
+    rw [hμ]
+    simp only
     split_ifs with hn
-    · exact Real.sqrt_sq (Real.sqrt_nonneg _)
-    · simp
+    · exact Real.sqrt_sq (principalPlaneChord_nonneg U V _)
+    · exact Real.sqrt_zero
   · rw [A.singularValues_of_finrank_le hnE]
-    simp [show ¬ n < 2 * nontrivialAngleCount U V by
-      intro h; exact hnE.not_lt (lt_of_lt_of_le h (by
-        simpa [nontrivialAngleCount] using
-          twice_finrank_range_le_finrank_of_acute U V hacute))]
+    rw [dif_neg (by omega)]
 
 /-- Closed Ky Fan formula for the direct displacement. -/
 theorem kyFanSum_directRotation_displacement_eq_principalChords
@@ -1175,151 +1237,337 @@ theorem kyFanSum_directRotation_displacement_eq_principalChords
         principalPlaneChord U V ⟨k / 2, hodd.2⟩ else 0 := by
   rw [kyFanSum_eq_sum_fin]
   simp_rw [singularValues_directRotation_displacement U V hacute]
-  -- Pair the terms `2i,2i+1`; a final odd term remains exactly when stated.
-  exact sum_repeated_pair_prefix
-    (fun i => principalPlaneChord U V i) k
+  exact sum_repeated_pair_prefix (fun i => principalPlaneChord U V i) k
 
-/-- Equations (4.3)--(4.4): the selected principal-plane compressions of a
-competitor are bounded by the corresponding global Ky Fan prefix. -/
-theorem kyFanSum_ge_sum_principalPlane_restrictions
-    (U V : Submodule ℝ E)
-    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) (W : E ≃ₗᵢ[ℝ] E)
-    (hmap : U.map W.toLinearMap = V) (k : ℕ) :
-    (∑ i : Fin (min (k / 2) (nontrivialAngleCount U V)), kyFanSum 2
-      (principalPlaneDisplacementRestriction U V hacute W.toLinearMap
-        (Fin.castLE (min_le_right _ _) i))) +
-      (if hodd : k % 2 = 1 ∧ k / 2 < nontrivialAngleCount U V then
-        kyFanSum 1 (principalPlaneDisplacementRestriction U V hacute W.toLinearMap
-          ⟨k / 2, hodd.2⟩) else 0) ≤
-      kyFanSum k (LinearMap.id - W.toLinearMap) := by
+/-! ## Davis's variational theorem for the restricted displacement
+
+Davis 1958, Theorem 7.2 (= Davis--Kahan 1970, Proposition 4.1): among all
+unitaries `W` carrying `U` onto `V`, the direct rotation minimizes every
+singular value of the restricted displacement `(I - W) P_U` — pointwise, over
+any `RCLike` field, with no angle restriction.  The proof is the minimax
+argument: for a unit vector `x ∈ U`, the image `W x` is a *unit* vector of
+`V`, so `‖x - W x‖² ≥ 2 - 2 ‖P_V x‖`, and on the span of the top source
+vectors the cosine bound `‖P_V x‖ ≤ c_j` is uniform. -/
+
+/-- Squared norms of orthonormal combinations. -/
+private theorem norm_sq_sum_smul_orthonormal
+    {ι : Type*} [Fintype ι] {w : ι → E} (hw : Orthonormal 𝕜 w) (β : ι → 𝕜) :
+    ‖∑ a, β a • w a‖ ^ 2 = ∑ a, ‖β a‖ ^ 2 := by
   classical
-  let q := min (k / 2) (nontrivialAngleCount U V)
-  let A := LinearMap.id - W.toLinearMap
-  by_cases hodd : k % 2 = 1 ∧ k / 2 < nontrivialAngleCount U V
-  · let ι := Fin q ⊕ Fin 1
-    let J : ι → EuclideanSpace ℝ (Fin 2) →ₗᵢ[ℝ] E := fun z =>
-      Sum.elim (fun i => principalPlaneEmbedding U V hacute
-        (Fin.castLE (min_le_right _ _) i))
-        (fun _ => principalPlaneEmbedding U V hacute ⟨k / 2, hodd.2⟩) z
-    let r : ι → ℕ := Sum.elim (fun _ => 2) (fun _ => 1)
-    have horth : ∀ {i j : ι}, i ≠ j → ∀ x y, ⟪J i x, J j y⟫_ℝ = 0 := by
-      intro i j hij x y
-      cases i <;> cases j
-      · exact principalPlaneEmbedding_inner_eq_zero U V hacute
-          (by simpa using hij) x y
-      · exact principalPlaneEmbedding_inner_eq_zero U V hacute
-          (by simp [q, hodd]) x y
-      · rw [inner_conj_symm]
-        simpa using congrArg star
-          (principalPlaneEmbedding_inner_eq_zero U V hacute
-            (by simp [q, hodd]) y x)
-      · simp at hij
-    have hcard : (∑ i : ι, r i) ≤ finrank ℝ E := by
-      simp [ι, r, q]
-      exact selected_principal_plane_dimension_le U V hacute k hodd
-    have h := sum_kyFanSum_compression_le J horth A r
-      (by intro i; cases i <;> simp [r]) hcard
-    simpa [A, J, r, ι, q, hodd, principalPlaneDisplacementRestriction] using h
-  · let ι := Fin q
-    let J : ι → EuclideanSpace ℝ (Fin 2) →ₗᵢ[ℝ] E := fun i =>
-      principalPlaneEmbedding U V hacute (Fin.castLE (min_le_right _ _) i)
-    have horth : ∀ {i j : ι}, i ≠ j → ∀ x y, ⟪J i x, J j y⟫_ℝ = 0 := by
-      intro i j hij
-      exact principalPlaneEmbedding_inner_eq_zero U V hacute
-        (Fin.castLE_injective (min_le_right _ _) hij)
-    have hcard : 2 * q ≤ finrank ℝ E := by
-      exact selected_principal_plane_even_dimension_le U V hacute k
-    have h := sum_kyFanSum_compression_le J horth A (fun _ => 2)
-      (by simp) (by simpa [q, mul_comm] using hcard)
-    simpa [A, J, q, hodd, principalPlaneDisplacementRestriction] using h
+  have hinner : ⟪∑ a, β a • w a, ∑ a, β a • w a⟫_𝕜 =
+      ((∑ a, ‖β a‖ ^ 2 : ℝ) : 𝕜) := by
+    rw [sum_inner]
+    push_cast
+    refine Finset.sum_congr rfl fun a _ => ?_
+    rw [inner_smul_left, inner_sum]
+    rw [Finset.sum_eq_single a]
+    · rw [inner_smul_right, orthonormal_iff_ite.mp hw a a, if_pos rfl, mul_one,
+        RCLike.conj_mul]
+      norm_cast
+    · intro c _ hca
+      rw [inner_smul_right, orthonormal_iff_ite.mp hw a c,
+        if_neg (fun h => hca h.symm), mul_zero, mul_zero]
+    · intro ha
+      exact absurd (Finset.mem_univ a) ha
+  have := congrArg RCLike.re hinner
+  rwa [← norm_sq_eq_re_inner, RCLike.ofReal_re] at this
 
-/-- Davis's finite Ky Fan reassembly lemma.  It combines the restrictions to
-successive mutually orthogonal principal planes.  Even prefixes use complete
-planes; odd prefixes use complete planes plus the largest singular direction
-of the next restriction. -/
-theorem principalPlane_kyFan_reassembly
-    {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
-    [FiniteDimensional ℝ E]
-    (U V : Submodule ℝ E)
-    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) (W : E ≃ₗᵢ[ℝ] E)
-    (hmap : U.map W.toLinearMap = V)
-    (hop : ∀ i : Fin (nontrivialAngleCount U V),
-      principalPlaneChord U V i ≤ kyFanSum 1
-        (principalPlaneDisplacementRestriction U V hacute W.toLinearMap i))
-    (hnuc : ∀ i : Fin (nontrivialAngleCount U V),
-      2 * principalPlaneChord U V i ≤ kyFanSum 2
-        (principalPlaneDisplacementRestriction U V hacute W.toLinearMap i))
-    (k : ℕ) :
-    kyFanSum k (LinearMap.id - (directRotation U V hacute).toLinearMap) ≤
-      kyFanSum k (LinearMap.id - W.toLinearMap) := by
-  classical
-  let m := nontrivialAngleCount U V
-  let q := min (k / 2) m
-  let odd := k % 2
-  have hdirect :
-      kyFanSum k (LinearMap.id - (directRotation U V hacute).toLinearMap) =
-        (∑ i : Fin q, 2 * principalPlaneChord U V (Fin.castLE (min_le_right _ _) i)) +
-          if hodd : odd = 1 ∧ q < m then
-            principalPlaneChord U V ⟨q, hodd.2⟩ else 0 := by
-    exact kyFanSum_directRotation_displacement_eq_principalChords
-      U V hacute k
-  have hcompetitor :
-      (∑ i : Fin q, kyFanSum 2
-        (principalPlaneDisplacementRestriction U V hacute W.toLinearMap
-          (Fin.castLE (min_le_right _ _) i))) +
-        (if hodd : odd = 1 ∧ q < m then
-          kyFanSum 1
-            (principalPlaneDisplacementRestriction U V hacute W.toLinearMap
-              ⟨q, hodd.2⟩) else 0) ≤
-        kyFanSum k (LinearMap.id - W.toLinearMap) := by
-    -- This is equations (1.12)--(1.13) with the right test projector equal to
-    -- the sum of the first principal-plane projectors.  Choose singular pairs
-    -- for every two-dimensional restriction and interleave them through
-    -- `finTwoBlockEquiv`; the lifted right vectors lie in mutually orthogonal
-    -- planes.  For an odd prefix append the top singular pair of the next
-    -- restriction.  The left family is orthonormalized inside the corresponding
-    -- range test space, exactly as in the finite Ky Fan variational principle.
-    exact kyFanSum_ge_sum_principalPlane_restrictions
-      U V hacute W hmap k
-  rw [hdirect]
-  calc
-    (∑ i : Fin q, 2 * principalPlaneChord U V (Fin.castLE (min_le_right _ _) i)) +
-          (if hodd : odd = 1 ∧ q < m then
-            principalPlaneChord U V ⟨q, hodd.2⟩ else 0)
-        ≤ (∑ i : Fin q, kyFanSum 2
-            (principalPlaneDisplacementRestriction U V hacute W.toLinearMap
-              (Fin.castLE (min_le_right _ _) i))) +
-          (if hodd : odd = 1 ∧ q < m then
-            kyFanSum 1
-              (principalPlaneDisplacementRestriction U V hacute W.toLinearMap
-                ⟨q, hodd.2⟩) else 0) := by
-      apply add_le_add
-      · exact Finset.sum_le_sum fun i _ => hnuc _
-      · split_ifs with hodd
-        · exact hop _
-        · exact le_rfl
-    _ ≤ kyFanSum k (LinearMap.id - W.toLinearMap) := hcompetitor
-
-/-- Full real short-rotation Ky Fan theorem from the local scalar inequality. -/
-theorem principalPlane_shortRotation_kyFan
-    {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
-    [FiniteDimensional ℝ E]
-    (U V : Submodule ℝ E)
+/-- **Davis 1958 Theorem 7.2 / Davis--Kahan Proposition 4.1** (lower bound):
+for every unitary `W` carrying `U` onto `V`, the `i`-th singular value of the
+restricted displacement `(I - W) ∘ P_U` is at least the `i`-th principal
+chord. -/
+theorem principalPlaneChord_le_singularValues_restrictedDisplacement
+    (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hacute : IsAcute U V)
-    (hhalf : ∀ i : Fin (finrank ℝ E),
-      (1 / 2 : ℝ) ≤ (canonicalIntertwiner U V).singularValues (i : ℕ))
-    (W : E ≃ₗᵢ[ℝ] E) (hmap : U.map W.toLinearMap = V) (k : ℕ) :
-    kyFanSum k (LinearMap.id - (directRotation U V hacute).toLinearMap) ≤
-      kyFanSum k (LinearMap.id - W.toLinearMap) := by
-  apply principalPlane_kyFan_reassembly U V hacute W hmap
-  · intro i
-    exact (principalPlane_shortRotation_local_bounds U V hacute hhalf W hmap i).1
-  · intro i
-    exact (principalPlane_shortRotation_local_bounds U V hacute hhalf W hmap i).2
-  · exact k
+    (W : E ≃ₗᵢ[𝕜] E) (hmap : U.map W.toLinearMap = V)
+    (i : Fin (nontrivialAngleCount U V)) :
+    principalPlaneChord U V i ≤
+      ((LinearMap.id - W.toLinearMap) ∘ₗ projection U).singularValues (i : ℕ) := by
+  classical
+  set m := nontrivialAngleCount U V with hm
+  set AW := (LinearMap.id - W.toLinearMap) ∘ₗ projection U with hAW
+  have hiE : (i : ℕ) < finrank 𝕜 E :=
+    lt_of_lt_of_le i.isLt (nontrivialAngleCount_le_finrank U V)
+  -- The span of the top `i+1` source vectors.
+  set u' : Fin ((i : ℕ) + 1) → E := fun a =>
+    principalSourceVector U V (Fin.castLE (by omega) a) with hu'
+  have hu'on : Orthonormal 𝕜 u' :=
+    (orthonormal_principalSourceVector U V).comp _
+      (Fin.castLE_injective (by omega))
+  set L : Submodule 𝕜 E := Submodule.span 𝕜 (Set.range u') with hL
+  have hLdim : finrank 𝕜 L = (i : ℕ) + 1 := by
+    rw [hL, finrank_span_eq_card hu'on.linearIndependent, Fintype.card_fin]
+  have hLU : L ≤ U := by
+    rw [hL, Submodule.span_le]
+    rintro _ ⟨a, rfl⟩
+    exact principalSourceVector_mem U V hacute _
+  -- Courant–Fischer gives a unit test vector in `L`.
+  obtain ⟨x, hxL, hxnorm, hxbound⟩ :=
+    exists_unit_vector_re_inner_le_eigenvalue
+      AW.isSymmetric_adjoint_comp_self rfl ⟨(i : ℕ), hiE⟩ L hLdim
+  -- The quadratic form at `x` is the squared displacement of `x`.
+  have hform : RCLike.re ⟪(AW.adjoint ∘ₗ AW) x, x⟫_𝕜 = ‖x - W x‖ ^ 2 := by
+    have hxU : x ∈ U := hLU hxL
+    rw [LinearMap.comp_apply, LinearMap.adjoint_inner_left]
+    rw [← norm_sq_eq_re_inner]
+    congr 2
+    rw [hAW, LinearMap.comp_apply, projection_apply_of_mem hxU,
+      LinearMap.sub_apply, LinearMap.id_apply]
+    rfl
+  -- Lower bound for the displacement on `L`.
+  have hdisp : principalPlaneChord U V i ^ 2 ≤ ‖x - W x‖ ^ 2 := by
+    have hxU : x ∈ U := hLU hxL
+    -- Coefficients of `x` in the orthonormal family.
+    obtain ⟨β, hβ⟩ := (mem_span_range_iff_exists_fun 𝕜).mp hxL
+    -- Norm of `x`.
+    have hxnorm2 : ∑ a, ‖β a‖ ^ 2 = 1 := by
+      have := norm_sq_sum_smul_orthonormal hu'on β
+      rw [hβ, hxnorm] at this
+      simpa using this.symm
+    -- `P_V x` in the rotated orthonormal family.
+    have hPV : projection V x = ∑ a,
+        (β a * (principalPlaneCosine U V (Fin.castLE (by omega) a) : 𝕜)) •
+          directRotation U V hacute (u' a) := by
+      rw [← hβ, map_sum]
+      refine Finset.sum_congr rfl fun a _ => ?_
+      rw [map_smul, hu',
+        projection_apply_principalSourceVector U V hacute _, smul_smul]
+    have hRon : Orthonormal 𝕜 (fun a => directRotation U V hacute (u' a)) := by
+      rw [orthonormal_iff_ite]
+      intro a c
+      rw [(directRotation U V hacute).inner_map_map]
+      exact orthonormal_iff_ite.mp hu'on a c
+    have hPVnorm : ‖projection V x‖ ^ 2 = ∑ a,
+        ‖β a * (principalPlaneCosine U V (Fin.castLE (by omega) a) : 𝕜)‖ ^ 2 := by
+      rw [hPV]
+      exact norm_sq_sum_smul_orthonormal hRon _
+    -- Uniform cosine bound on the span.
+    have hcos : ‖projection V x‖ ^ 2 ≤ principalPlaneCosine U V i ^ 2 := by
+      rw [hPVnorm]
+      calc ∑ a, ‖β a * (principalPlaneCosine U V (Fin.castLE (by omega) a) : 𝕜)‖ ^ 2
+          ≤ ∑ a, principalPlaneCosine U V i ^ 2 * ‖β a‖ ^ 2 := by
+            refine Finset.sum_le_sum fun a _ => ?_
+            rw [norm_mul, mul_pow, RCLike.norm_ofReal]
+            have hmono : principalPlaneCosine U V (Fin.castLE (by omega) a) ≤
+                principalPlaneCosine U V i := by
+              apply principalPlaneCosine_monotone
+              simp only [Fin.le_def, Fin.coe_castLE]
+              omega
+            have h0 : 0 ≤ principalPlaneCosine U V (Fin.castLE (by omega) a) :=
+              Real.sqrt_nonneg _
+            have := sq_nonneg (β a)
+            calc ‖β a‖ ^ 2 * |principalPlaneCosine U V (Fin.castLE (by omega) a)| ^ 2
+                = |principalPlaneCosine U V (Fin.castLE (by omega) a)| ^ 2 * ‖β a‖ ^ 2 := by
+                  ring
+              _ ≤ principalPlaneCosine U V i ^ 2 * ‖β a‖ ^ 2 := by
+                  apply mul_le_mul_of_nonneg_right _ (sq_nonneg _)
+                  rw [abs_of_nonneg h0]
+                  exact pow_le_pow_left₀ h0 hmono 2
+        _ = principalPlaneCosine U V i ^ 2 := by
+            rw [← Finset.mul_sum, hxnorm2, mul_one]
+    have hPVle : ‖projection V x‖ ≤ principalPlaneCosine U V i := by
+      have h0 : 0 ≤ principalPlaneCosine U V i := Real.sqrt_nonneg _
+      nlinarith [norm_nonneg (projection V x)]
+    -- `W x` is a unit vector of `V`.
+    have hWxV : W x ∈ V := by
+      rw [← hmap]
+      exact ⟨x, hxU, rfl⟩
+    have hWxnorm : ‖W x‖ = 1 := by rw [W.norm_map, hxnorm]
+    -- Expand the squared displacement.
+    have hre : RCLike.re ⟪x, W x⟫_𝕜 ≤ principalPlaneCosine U V i := by
+      have h1 : ⟪x, W x⟫_𝕜 = ⟪projection V x, W x⟫_𝕜 := by
+        rw [projection_inner_left_eq_right, projection_apply_of_mem hWxV]
+      calc RCLike.re ⟪x, W x⟫_𝕜 = RCLike.re ⟪projection V x, W x⟫_𝕜 := by rw [h1]
+        _ ≤ ‖⟪projection V x, W x⟫_𝕜‖ := RCLike.re_le_norm _
+        _ ≤ ‖projection V x‖ * ‖W x‖ := norm_inner_le_norm _ _
+        _ = ‖projection V x‖ := by rw [hWxnorm, mul_one]
+        _ ≤ principalPlaneCosine U V i := hPVle
+    have hexpand : ‖x - W x‖ ^ 2 = 2 - 2 * RCLike.re ⟪x, W x⟫_𝕜 := by
+      rw [@norm_sub_sq 𝕜, hxnorm, hWxnorm]
+      norm_num
+      ring
+    rw [hexpand, principalPlaneChord_sq]
+    linarith
+  -- Assemble.
+  have hσ := AW.singularValues_of_lt rfl hiE
+  rw [hσ]
+  have hbound : principalPlaneChord U V i ^ 2 ≤
+      AW.isSymmetric_adjoint_comp_self.eigenvalues rfl ⟨(i : ℕ), hiE⟩ := by
+    calc principalPlaneChord U V i ^ 2 ≤ ‖x - W x‖ ^ 2 := hdisp
+      _ = RCLike.re ⟪(AW.adjoint ∘ₗ AW) x, x⟫_𝕜 := hform.symm
+      _ ≤ _ := hxbound
+  calc principalPlaneChord U V i
+      = Real.sqrt (principalPlaneChord U V i ^ 2) :=
+        (Real.sqrt_sq (principalPlaneChord_nonneg U V i)).symm
+    _ ≤ _ := Real.sqrt_le_sqrt hbound
+
+/-- Closed form for the singular values of the restricted direct displacement:
+the principal chords, then zeros. -/
+theorem singularValues_restrictedDisplacement_directRotation
+    (U V : Submodule 𝕜 E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hacute : IsAcute U V) (n : ℕ) :
+    ((LinearMap.id - (directRotation U V hacute).toLinearMap) ∘ₗ
+        projection U).singularValues n =
+      if hn : n < nontrivialAngleCount U V then
+        principalPlaneChord U V ⟨n, hn⟩ else 0 := by
+  classical
+  set m := nontrivialAngleCount U V with hm
+  set AR := (LinearMap.id - (directRotation U V hacute).toLinearMap) ∘ₗ
+    projection U with hAR
+  have hmE : m ≤ finrank 𝕜 E := nontrivialAngleCount_le_finrank U V
+  -- Eigenvector family: the source vectors, then an orthonormal completion.
+  set v : Fin (finrank 𝕜 E) → E := fun k =>
+    if hk : (k : ℕ) < m then principalSourceVector U V ⟨(k : ℕ), hk⟩ else 0
+    with hv
+  set s : Set (Fin (finrank 𝕜 E)) := {k | (k : ℕ) < m} with hs
+  have hres : Orthonormal 𝕜 (s.restrict v) := by
+    rw [orthonormal_iff_ite]
+    rintro ⟨a, ha⟩ ⟨b, hb⟩
+    have ha' : (a : ℕ) < m := ha
+    have hb' : (b : ℕ) < m := hb
+    simp only [Set.restrict_apply, hv, dif_pos ha', dif_pos hb']
+    rw [orthonormal_iff_ite.mp (orthonormal_principalSourceVector U V)
+      ⟨(a : ℕ), ha'⟩ ⟨(b : ℕ), hb'⟩]
+    congr 1
+    simp only [Fin.mk.injEq, Subtype.mk.injEq, eq_iff_iff]
+    constructor
+    · intro h; exact Fin.ext h
+    · intro h; exact_mod_cast congrArg Fin.val h
+  obtain ⟨b, hb⟩ := hres.exists_orthonormalBasis_extension_of_card_eq
+    (by simp) (v := v)
+  set μ : Fin (finrank 𝕜 E) → ℝ := fun k =>
+    if hk : (k : ℕ) < m then principalPlaneChord U V ⟨(k : ℕ), hk⟩ ^ 2 else 0
+    with hμ
+  have hμanti : Antitone μ := by
+    intro a c hac
+    rw [hμ]
+    simp only
+    split_ifs with h1 h2 h2
+    · have hchord := principalPlaneChord_antitone U V
+        (show (⟨(a : ℕ), h2⟩ : Fin m) ≤ ⟨(c : ℕ), h1⟩ from hac)
+      have h0a := principalPlaneChord_nonneg U V ⟨(a : ℕ), h2⟩
+      have h0c := principalPlaneChord_nonneg U V ⟨(c : ℕ), h1⟩
+      nlinarith
+    · positivity
+    · omega
+    · exact le_rfl
+  -- The Gram operator of the restricted displacement.
+  have hgramfull := adjoint_comp_displacement_directRotation U V hacute
+  have hgram : AR.adjoint ∘ₗ AR =
+      projection U ∘ₗ ((2 : 𝕜) • (LinearMap.id -
+        ForMathlib.abs (canonicalIntertwiner U V))) ∘ₗ projection U := by
+    rw [hAR, LinearMap.adjoint_comp, projection_adjoint, ← hgramfull]
+    ext x
+    simp only [LinearMap.comp_apply]
+  have hdiag : ∀ k, (AR.adjoint ∘ₗ AR) (b k) = ((μ k : ℝ) : 𝕜) • b k := by
+    intro k
+    by_cases hk : (k : ℕ) < m
+    · have hbk : b k = v k := hb k hk
+      have hsrc : b k = principalSourceVector U V ⟨(k : ℕ), hk⟩ := by
+        rw [hbk, hv]; simp [dif_pos hk]
+      rw [hgram, hsrc]
+      have hu := principalSourceVector_mem U V hacute ⟨(k : ℕ), hk⟩
+      rw [LinearMap.comp_apply, LinearMap.comp_apply,
+        projection_apply_of_mem hu, LinearMap.smul_apply, LinearMap.sub_apply,
+        LinearMap.id_apply,
+        abs_canonicalIntertwiner_apply_principalSourceVector U V hacute
+          ⟨(k : ℕ), hk⟩]
+      rw [smul_sub, map_sub, map_smul, map_smul, projection_apply_of_mem hu,
+        projection_apply_of_mem hu, hμ]
+      simp only [dif_pos hk]
+      rw [principalPlaneChord_sq]
+      match_scalars
+      push_cast
+      ring
+    · -- `b k` is orthogonal to the sources; `P_U (b k)` is fixed by `|S|`.
+      have hperp_u : ∀ i, ⟪principalSourceVector U V i, b k⟫_𝕜 = 0 := by
+        intro i
+        have hval : ((⟨(i : ℕ), lt_of_lt_of_le i.isLt hmE⟩ :
+            Fin (finrank 𝕜 E)) : ℕ) < m := i.isLt
+        have hbu : b ⟨(i : ℕ), lt_of_lt_of_le i.isLt hmE⟩ =
+            principalSourceVector U V i := by
+          rw [hb _ hval, hv]
+          simp only [dif_pos hval]
+          congr 1
+          ext
+          simp
+        have hne : (⟨(i : ℕ), lt_of_lt_of_le i.isLt hmE⟩ :
+            Fin (finrank 𝕜 E)) ≠ k := by
+          intro h
+          rw [← h] at hk
+          exact hk hval
+        rw [← hbu]
+        exact b.orthonormal.inner_eq_zero hne
+      have hPmem : projection U (b k) ∈ U := U.starProjection_apply_mem _
+      have hPperp : ∀ i, ⟪principalSourceVector U V i, projection U (b k)⟫_𝕜 = 0 := by
+        intro i
+        have := projection_inner_left_eq_right U (principalSourceVector U V i) (b k)
+        rw [projection_apply_of_mem (principalSourceVector_mem U V hacute i)] at this
+        rw [← this, hperp_u i]
+      have habs := abs_canonicalIntertwiner_apply_eq_self_of_orthogonal_sources
+        U V hPmem hPperp
+      rw [hgram, LinearMap.comp_apply, LinearMap.comp_apply,
+        LinearMap.smul_apply, LinearMap.sub_apply, LinearMap.id_apply, habs,
+        sub_self, smul_zero, map_zero, hμ]
+      simp [dif_neg hk]
+  have heig := eigenvalues_eq_of_eigenbasis AR.isSymmetric_adjoint_comp_self rfl b
+    hμanti hdiag
+  rcases lt_or_ge n (finrank 𝕜 E) with hnE | hnE
+  · rw [AR.singularValues_of_lt rfl hnE, heig]
+    rw [hμ]
+    simp only
+    split_ifs with hn
+    · exact Real.sqrt_sq (principalPlaneChord_nonneg U V _)
+    · exact Real.sqrt_zero
+  · rw [AR.singularValues_of_finrank_le hnE, dif_neg (by omega)]
+
+/-- **Pointwise singular-value minimality of the restricted displacement**
+(Davis--Kahan Proposition 4.1): every singular value of `(I - R) P_U` is
+dominated by the corresponding singular value of `(I - W) P_U` for any
+unitary `W` carrying `U` onto `V`. -/
+theorem singularValues_restrictedDisplacement_le
+    (U V : Submodule 𝕜 E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hacute : IsAcute U V)
+    (W : E ≃ₗᵢ[𝕜] E) (hmap : U.map W.toLinearMap = V) (n : ℕ) :
+    ((LinearMap.id - (directRotation U V hacute).toLinearMap) ∘ₗ
+        projection U).singularValues n ≤
+      ((LinearMap.id - W.toLinearMap) ∘ₗ projection U).singularValues n := by
+  rw [singularValues_restrictedDisplacement_directRotation U V hacute n]
+  split_ifs with hn
+  · exact principalPlaneChord_le_singularValues_restrictedDisplacement
+      U V hacute W hmap ⟨n, hn⟩
+  · exact LinearMap.singularValues_nonneg _ n
+
+/-- **Ky Fan minimality of the restricted displacement** (Davis--Kahan
+Corollary 4.1, Ky Fan form). -/
+theorem kyFanSum_restrictedDisplacement_le
+    (U V : Submodule 𝕜 E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hacute : IsAcute U V)
+    (W : E ≃ₗᵢ[𝕜] E) (hmap : U.map W.toLinearMap = V) (k : ℕ) :
+    kyFanSum k ((LinearMap.id - (directRotation U V hacute).toLinearMap) ∘ₗ
+        projection U) ≤
+      kyFanSum k ((LinearMap.id - W.toLinearMap) ∘ₗ projection U) :=
+  kyFanSum_le_of_singularValues_le
+    (singularValues_restrictedDisplacement_le U V hacute W hmap) k
+
+/-- **Unitarily-invariant-norm minimality of the restricted displacement**
+(Davis--Kahan Corollary 4.1): the direct rotation minimizes `N ((I - W) P_U)`
+for every UI norm `N`, with no angle restriction, over any `RCLike` field. -/
+theorem uiNorm_restrictedDisplacement_le
+    (N : UnitarilyInvariantNorm 𝕜 E)
+    (U V : Submodule 𝕜 E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hacute : IsAcute U V)
+    (W : E ≃ₗᵢ[𝕜] E) (hmap : U.map W.toLinearMap = V) :
+    N ((LinearMap.id - (directRotation U V hacute).toLinearMap) ∘ₗ
+        projection U) ≤
+      N ((LinearMap.id - W.toLinearMap) ∘ₗ projection U) :=
+  N.apply_le_of_kyFanSum_le
+    (kyFanSum_restrictedDisplacement_le U V hacute W hmap)
 
 end DavisKahanTheory
 end ForMathlib
