@@ -228,29 +228,33 @@ theorem gramDetFinTwo_eq_mul_sq_singularValues
   let G := A.adjoint ∘ₗ A
   let M : Matrix (Fin 2) (Fin 2) 𝕜 :=
     LinearMap.toMatrix e.toBasis e.toBasis G
-  have hM00 : M 0 0 = ⟪A (e 0), A (e 0)⟫_𝕜 := by
-    simp [M, G, LinearMap.toMatrix_apply, LinearMap.comp_apply,
-      LinearMap.adjoint_inner_left]
-  have hM01 : M 0 1 = ⟪A (e 0), A (e 1)⟫_𝕜 := by
-    simp [M, G, LinearMap.toMatrix_apply, LinearMap.comp_apply,
-      LinearMap.adjoint_inner_left]
-  have hM10 : M 1 0 = ⟪A (e 1), A (e 0)⟫_𝕜 := by
-    simp [M, G, LinearMap.toMatrix_apply, LinearMap.comp_apply,
-      LinearMap.adjoint_inner_left]
-  have hM11 : M 1 1 = ⟪A (e 1), A (e 1)⟫_𝕜 := by
-    simp [M, G, LinearMap.toMatrix_apply, LinearMap.comp_apply,
-      LinearMap.adjoint_inner_left]
+  have hM : ∀ i j : Fin 2, M i j = ⟪A (e i), A (e j)⟫_𝕜 := by
+    intro i j
+    simp only [M, LinearMap.toMatrix_apply, OrthonormalBasis.coe_toBasis,
+      OrthonormalBasis.coe_toBasis_repr_apply, OrthonormalBasis.repr_apply_apply,
+      G, LinearMap.comp_apply, LinearMap.adjoint_inner_right]
   have hdet : RCLike.re M.det = gramDetFinTwo A := by
-    rw [Matrix.det_fin_two, hM00, hM01, hM10, hM11]
-    simp [gramDetFinTwo, e, inner_self_eq_norm_sq, inner_conj_symm,
-      map_sub, map_mul, RCLike.re_ofReal_mul, norm_sq_eq_def]
+    show RCLike.re M.det
+      = ‖A (e 0)‖ ^ 2 * ‖A (e 1)‖ ^ 2 - ‖⟪A (e 0), A (e 1)⟫_𝕜‖ ^ 2
+    have key : M.det = ((‖A (e 0)‖ ^ 2 * ‖A (e 1)‖ ^ 2
+        - ‖⟪A (e 0), A (e 1)⟫_𝕜‖ ^ 2 : ℝ) : 𝕜) := by
+      rw [Matrix.det_fin_two, hM 0 0, hM 0 1, hM 1 0, hM 1 1,
+        inner_self_eq_norm_sq_to_K, inner_self_eq_norm_sq_to_K,
+        ← inner_conj_symm (A (e 1)) (A (e 0)), RCLike.mul_conj]
+      push_cast
+      ring
+    rw [key, RCLike.ofReal_re]
   have heigdet : M.det =
       (((A.singularValues 0 ^ 2 * A.singularValues 1 ^ 2 : ℝ)) : 𝕜) := by
     -- `G` is positive and its eigenvalues are the squared singular values.
-    rw [← Matrix.det_toMatrix_eq_det G e.toBasis]
-    rw [LinearMap.det_eq_prod_eigenvalues
-      (LinearMap.isPositive_adjoint_comp_self A).isSymmetric rfl]
-    simp [Fin.prod_univ_two, A.sq_singularValues_fin finrank_euclideanSpace_fin]
+    have hMeq : M = LinearMap.toMatrix e.toBasis e.toBasis G := rfl
+    rw [hMeq, LinearMap.det_toMatrix,
+      (LinearMap.isPositive_adjoint_comp_self A).isSymmetric.det_eq_prod_eigenvalues
+        finrank_euclideanSpace_fin, Fin.prod_univ_two,
+      ← A.sq_singularValues_fin finrank_euclideanSpace_fin 0,
+      ← A.sq_singularValues_fin finrank_euclideanSpace_fin 1]
+    push_cast [Fin.val_zero, Fin.val_one]
+    ring
   rw [← hdet, heigdet, RCLike.ofReal_re]
 
 /-- A nonnegative ordered pair is uniquely recovered from the trace and

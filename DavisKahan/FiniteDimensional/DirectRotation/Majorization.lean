@@ -315,7 +315,7 @@ theorem singularValues_pos_of_isUnit
   have hrange : A.range = ⊤ := by
     rw [LinearMap.range_eq_top]
     exact LinearMap.injective_iff_surjective.mp
-      (LinearMap.ker_eq_bot.mp (LinearMap.isUnit_iff_ker_eq_bot.mp hA))
+      (LinearMap.ker_eq_bot.mp ((LinearMap.isUnit_iff_ker_eq_bot _).mp hA))
   rw [hrange, finrank_top]
   exact i.isLt
 

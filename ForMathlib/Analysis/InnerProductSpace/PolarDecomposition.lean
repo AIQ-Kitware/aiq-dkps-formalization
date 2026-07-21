@@ -238,9 +238,7 @@ theorem abs_comm_of_normal {A : E →ₗ[𝕜] E}
     A ∘ₗ abs A = abs A ∘ₗ A := by
   have hcomm : A ∘ₗ (A.adjoint ∘ₗ A) =
       (A.adjoint ∘ₗ A) ∘ₗ A := by
-    rw [hnormal]
-    ext x
-    rfl
+    rw [← LinearMap.comp_assoc, ← hnormal]
   exact FiniteDimensional.sqrt_comm
     (LinearMap.isPositive_adjoint_comp_self A) hcomm
 
@@ -256,13 +254,12 @@ theorem polarFactor_eq_of_isUnit_eq_comp_positive
     rw [hdecomp, LinearMap.adjoint_comp, U.adjoint_toLinearMap_eq_symm,
       hH.adjoint_eq]
     ext x
-    simp only [LinearMap.comp_apply]
-    rw [U.symm_apply_apply]
+    simp [LinearMap.comp_apply]
   have hHabs : H = abs A := by
     exact (LinearMap.isPositive_adjoint_comp_self A).sqrt_unique hH hgram
   have habsinj : Function.Injective (abs A) := by
     rw [← LinearMap.ker_eq_bot, ker_abs,
-      LinearMap.isUnit_iff_ker_eq_bot.mp hA]
+      (LinearMap.isUnit_iff_ker_eq_bot _).mp hA]
   have habssurj : Function.Surjective (abs A) :=
     LinearMap.injective_iff_surjective.mp habsinj
   apply LinearMap.ext

@@ -153,12 +153,11 @@ theorem selfAdjointFunctionalCalculus_apply_of_apply_eq_smul
       ((f lam : ℝ) : 𝕜) • x := by
   classical
   let b := hT.eigenvectorBasis rfl
-  rw [← b.sum_repr x, map_sum, map_sum]
+  rw [← b.sum_repr x, map_sum, Finset.smul_sum]
   refine Finset.sum_congr rfl fun i _ => ?_
-  rw [map_smul, map_smul,
-    selfAdjointFunctionalCalculus_apply_eigenvectorBasis, smul_smul]
+  rw [map_smul, selfAdjointFunctionalCalculus_apply_eigenvectorBasis]
   by_cases hi : hT.eigenvalues rfl i = lam
-  · rw [hi]
+  · rw [hi]; exact smul_comm _ _ _
   · have hcoeff : b.repr x i = 0 := by
       rw [b.repr_apply_apply]
       have heig := hT.apply_eigenvectorBasis rfl i
