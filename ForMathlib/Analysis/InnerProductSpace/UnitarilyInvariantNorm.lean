@@ -343,6 +343,15 @@ theorem apply_eq_gauge (hn : finrank 𝕜 E = n)
   conv_lhs => rw [hUV]
   exact N.invariant' U V _
 
+/-- A unitarily invariant norm is determined by the singular-value sequence.
+
+Immediate from the gauge representation: both sides are the same gauge applied
+to the same sequence. -/
+theorem eq_of_same_singularValues {A B : E →ₗ[𝕜] E}
+    (h : A.singularValues = B.singularValues) : N A = N B := by
+  rw [N.apply_eq_gauge rfl (stdOrthonormalBasis 𝕜 E) A,
+    N.apply_eq_gauge rfl (stdOrthonormalBasis 𝕜 E) B, h]
+
 /-! ### Coordinatewise monotonicity of the gauge -/
 
 /-- Shrinking one coordinate of `y` (in absolute value) does not increase the

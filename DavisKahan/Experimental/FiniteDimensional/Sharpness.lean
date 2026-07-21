@@ -104,6 +104,16 @@ variable {𝕜 : Type*} [RCLike 𝕜]
 
 abbrev Plane (𝕜 : Type*) [RCLike 𝕜] := EuclideanSpace 𝕜 (Fin 2)
 
+/-- First standard basis vector of the planar model. -/
+noncomputable def e0 : Plane 𝕜 := EuclideanSpace.single 0 1
+
+/-- Second standard basis vector of the planar model. -/
+noncomputable def e1 : Plane 𝕜 := EuclideanSpace.single 1 1
+
+/-- Unit vector at angle `θ` from the coordinate line. -/
+noncomputable def uθ (θ : ℝ) : Plane 𝕜 :=
+  (Real.cos θ : 𝕜) • e0 + (Real.sin θ : 𝕜) • e1
+
 /-- Coordinate line in the two-dimensional model. -/
 noncomputable def modelSubspace : Submodule 𝕜 (Plane 𝕜) :=
   Submodule.span 𝕜 {EuclideanSpace.single (0 : Fin 2) (1 : 𝕜)}
