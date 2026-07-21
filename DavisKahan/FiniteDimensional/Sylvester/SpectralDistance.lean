@@ -401,5 +401,71 @@ theorem uiNorm_sylvester_le_of_spectralDistance_real
       rw [N.smul_eq, Real.norm_eq_abs, abs_of_nonneg hp0]
     _ = (Real.pi / 2) * N C := by rfl
 
+/-! ## Arbitrary disjoint spectra: the sharp Hilbert--Schmidt estimate
+
+The `π/2` loss above is unavoidable for a general unitarily invariant norm, but
+the Frobenius norm loses nothing under arbitrary positive separation.  The
+coordinate equation `(αᵢ-βⱼ) Xᵢⱼ = Cᵢⱼ` divides entrywise, and Parseval in the
+two eigenbases sums the squares.  This is the estimate behind the
+Hilbert--Schmidt form of Davis--Kahan Theorem 6.2.
+-/
+
+/-- **Frobenius Sylvester estimate, constant one.**  Under arbitrary positive
+spectral separation the Hilbert--Schmidt norm of a Sylvester solution is
+controlled by the residual with no dimensional or analytic loss. -/
+theorem frobenius_sylvester_le_of_spectraSeparated
+    {A : F →ₗ[𝕜] F} {B : E →ₗ[𝕜] E} {X C : E →ₗ[𝕜] F}
+    (hA : A.IsSymmetric) (hB : B.IsSymmetric)
+    {δ : ℝ} (hδ : 0 < δ) (hgap : SpectraSeparated A ⊤ B ⊤ δ)
+    (hEq : A ∘ₗ X - X ∘ₗ B = C) :
+    δ * RectangularUnitarilyInvariantNorm.frobenius X ≤
+      RectangularUnitarilyInvariantNorm.frobenius C := by
+  classical
+  set bA := hA.eigenvectorBasis rfl with hbA
+  set bB := hB.eigenvectorBasis rfl with hbB
+  -- the coordinate equation divides by a denominator of size at least `δ`
+  have hentry : ∀ (i : Fin (Module.finrank 𝕜 F)) (j : Fin (Module.finrank 𝕜 E)),
+      δ * ‖⟪X (bB j), bA i⟫_𝕜‖ ≤ ‖⟪C (bB j), bA i⟫_𝕜‖ := by
+    intro i j
+    have hcoef := sylvester_eigenbasis_coefficient_equation hA hB hEq i j
+    have hsep : δ ≤ |hA.eigenvalues rfl i - hB.eigenvalues rfl j| :=
+      hgap _ _ (eigenvalue_mem_restrictedSpectrum_top hA i)
+        (eigenvalue_mem_restrictedSpectrum_top hB j)
+    have hnorm :
+        ‖((hA.eigenvalues rfl i : 𝕜) - (hB.eigenvalues rfl j : 𝕜))‖ =
+          |hA.eigenvalues rfl i - hB.eigenvalues rfl j| := by
+      rw [show ((hA.eigenvalues rfl i : 𝕜) - (hB.eigenvalues rfl j : 𝕜)) =
+        ((hA.eigenvalues rfl i - hB.eigenvalues rfl j : ℝ) : 𝕜) by push_cast; ring]
+      exact RCLike.norm_ofReal _
+    calc
+      δ * ‖⟪X (bB j), bA i⟫_𝕜‖
+          ≤ |hA.eigenvalues rfl i - hB.eigenvalues rfl j| *
+              ‖⟪X (bB j), bA i⟫_𝕜‖ := by
+            gcongr
+      _ = ‖((hA.eigenvalues rfl i : 𝕜) - (hB.eigenvalues rfl j : 𝕜))‖ *
+              ‖⟪X (bB j), bA i⟫_𝕜‖ := by rw [hnorm]
+      _ = ‖((hA.eigenvalues rfl i : 𝕜) - (hB.eigenvalues rfl j : 𝕜)) *
+              ⟪X (bB j), bA i⟫_𝕜‖ := (norm_mul _ _).symm
+      _ = ‖⟪C (bB j), bA i⟫_𝕜‖ := by rw [hcoef]
+  -- Parseval in the codomain eigenbasis turns the entry bound into a column bound
+  have hcol : ∀ j : Fin (Module.finrank 𝕜 E),
+      δ ^ 2 * ‖X (bB j)‖ ^ 2 ≤ ‖C (bB j)‖ ^ 2 := by
+    intro j
+    rw [← bA.sum_sq_norm_inner_left (X (bB j)),
+      ← bA.sum_sq_norm_inner_left (C (bB j)), Finset.mul_sum]
+    refine Finset.sum_le_sum fun i _ => ?_
+    calc
+      δ ^ 2 * ‖⟪X (bB j), bA i⟫_𝕜‖ ^ 2
+          = (δ * ‖⟪X (bB j), bA i⟫_𝕜‖) ^ 2 := by ring
+      _ ≤ ‖⟪C (bB j), bA i⟫_𝕜‖ ^ 2 :=
+          pow_le_pow_left₀ (by positivity) (hentry i j) 2
+  have htot : δ ^ 2 * (∑ j, ‖X (bB j)‖ ^ 2) ≤ ∑ j, ‖C (bB j)‖ ^ 2 := by
+    rw [Finset.mul_sum]
+    exact Finset.sum_le_sum fun j _ => hcol j
+  rw [RectangularUnitarilyInvariantNorm.frobenius_apply X bB,
+    RectangularUnitarilyInvariantNorm.frobenius_apply C bB,
+    ← Real.sqrt_sq hδ.le, ← Real.sqrt_mul (by positivity)]
+  exact Real.sqrt_le_sqrt htot
+
 end DavisKahanTheory
 end ForMathlib

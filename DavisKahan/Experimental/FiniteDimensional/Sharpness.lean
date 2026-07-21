@@ -221,9 +221,14 @@ noncomputable def modelTanTwoThetaPerturbation (a b θ : ℝ) :
 
 @[simp] theorem norm_uθ (θ : ℝ) : ‖uθ (𝕜 := 𝕜) θ‖ = 1 := by
   have hsq : ‖uθ (𝕜 := 𝕜) θ‖ ^ 2 = 1 := by
-    rw [norm_sq_eq_re_inner (𝕜 := 𝕜)]
-    simp [uθ, inner_add_left, inner_add_right, inner_smul_left,
-      inner_smul_right, RCLike.conj_ofReal]
+    rw [norm_sq_eq_re_inner (𝕜 := 𝕜), uθ]
+    simp only [inner_add_left, inner_add_right, inner_smul_left,
+      inner_smul_right, inner_e0_e0, inner_e1_e1, inner_e0_e1, inner_e1_e0,
+      RCLike.conj_ofReal]
+    -- the residual goal is `RCLike.re` of a real cast; `nlinarith` cannot see
+    -- through the cast until it is pushed outwards
+    simp only [mul_one, mul_zero, add_zero, zero_add, ← RCLike.ofReal_mul,
+      ← RCLike.ofReal_add, RCLike.ofReal_re]
     nlinarith [Real.sin_sq_add_cos_sq θ]
   nlinarith [norm_nonneg (uθ (𝕜 := 𝕜) θ)]
 
