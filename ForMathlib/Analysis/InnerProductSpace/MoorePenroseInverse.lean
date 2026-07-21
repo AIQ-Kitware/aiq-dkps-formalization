@@ -127,6 +127,32 @@ theorem moorePenroseInverse_comp_eq_id_of_injective
     moorePenroseInverse_apply_apply_rightSingularBasis A hi,
     LinearMap.id_apply]
 
+
+/-- A map that vanishes on `ker A` factors through the initial projection
+`A⁺ A`.  This is the finite-dimensional form of the universal property of the
+Moore--Penrose initial projection and is the useful orientation for angular
+factorizations. -/
+theorem comp_moorePenroseInverse_comp_eq_of_ker_le
+    {G : Type*} [NormedAddCommGroup G] [InnerProductSpace 𝕜 G]
+    [FiniteDimensional 𝕜 G]
+    (A : E →ₗ[𝕜] F) (B : E →ₗ[𝕜] G) (hker : A.ker ≤ B.ker) :
+    B ∘ₗ moorePenroseInverse A ∘ₗ A = B := by
+  apply (ForMathlib.rightSingularBasis A).toBasis.ext
+  intro i
+  rw [OrthonormalBasis.coe_toBasis]
+  by_cases hi : A.singularValues i = 0
+  · have hAi : A (ForMathlib.rightSingularBasis A i) = 0 :=
+      ForMathlib.apply_rightSingularBasis_eq_zero_of_singularValue_eq_zero A hi
+    have hBi : B (ForMathlib.rightSingularBasis A i) = 0 := by
+      apply LinearMap.mem_ker.mp
+      apply hker
+      exact LinearMap.mem_ker.mpr hAi
+    simp [LinearMap.comp_apply, hAi, hBi]
+  · change B (moorePenroseInverse A
+        (A (ForMathlib.rightSingularBasis A i))) =
+      B (ForMathlib.rightSingularBasis A i)
+    rw [moorePenroseInverse_apply_apply_rightSingularBasis A hi]
+
 /-- The hypothesis-carrying inverse is definitionally the pseudoinverse. -/
 @[simp] theorem inverseOnRange_eq_moorePenroseInverse
     (A : E →ₗ[𝕜] F) (hA : Function.Injective A) :

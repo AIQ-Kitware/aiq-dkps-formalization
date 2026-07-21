@@ -1852,6 +1852,15 @@ theorem singularValues_smul_rect (a : 𝕜) (A : E →ₗ[𝕜] F) (i : ℕ) :
     _ = ‖a‖ * A.singularValues i :=
       singularValues_real_smul A (norm_nonneg a) i
 
+
+/-- Bundled singular-value sequence of a scalar multiple.  This is the
+Finsupp-level companion to `singularValues_smul_rect`; it is convenient when
+a unitarily invariant norm is compared through its complete gauge sequence. -/
+theorem singularValues_smul (a : 𝕜) (A : E →ₗ[𝕜] F) :
+    (a • A).singularValues = ‖a‖ • A.singularValues := by
+  ext i
+  simp [singularValues_smul_rect]
+
 /-- Prefix sums stabilize once the prefix length reaches the domain dimension. -/
 theorem rectangularKyFanSum_eq_finrank_of_finrank_le
     (A : E →ₗ[𝕜] F) {k : ℕ} (hk : finrank 𝕜 E ≤ k) :
@@ -1967,6 +1976,33 @@ theorem frobenius_apply (A : E →ₗ[𝕜] F)
   rw [← sum_sq_singularValues A rfl (stdOrthonormalBasis 𝕜 E),
     ← sum_sq_singularValues A rfl b]
 
+/-- Postcomposition by a linear isometry preserves the Frobenius norm. -/
+theorem frobenius_linearIsometry_comp
+    (ι : F →ₗᵢ[𝕜] G) (A : E →ₗ[𝕜] F) :
+    frobenius (ι.toLinearMap ∘ₗ A) = frobenius A := by
+  rw [frobenius_apply _ (stdOrthonormalBasis 𝕜 E),
+    frobenius_apply _ (stdOrthonormalBasis 𝕜 E)]
+  congr 1
+  exact Finset.sum_congr rfl fun i _ => by
+    rw [LinearMap.comp_apply, ι.norm_map]
+
+/-- Orthogonal projection on the codomain is contractive for the Frobenius norm. -/
+theorem frobenius_projection_comp_le
+    (U : Submodule 𝕜 F) [U.HasOrthogonalProjection] (A : E →ₗ[𝕜] F) :
+    frobenius (projection U ∘ₗ A) ≤ frobenius A := by
+  rw [frobenius_apply _ (stdOrthonormalBasis 𝕜 E),
+    frobenius_apply _ (stdOrthonormalBasis 𝕜 E)]
+  apply Real.sqrt_le_sqrt
+  refine Finset.sum_le_sum fun i _ => ?_
+  exact pow_le_pow_left₀ (norm_nonneg _) (U.norm_starProjection_apply_le _) 2
+
+/-- Passing from a subtype-valued map to its ambient inclusion preserves the
+Frobenius norm. -/
+theorem frobenius_subtype_comp
+    (U : Submodule 𝕜 F) (A : E →ₗ[𝕜] U) :
+    frobenius (U.subtypeₗᵢ.toLinearMap ∘ₗ A) = frobenius A :=
+  frobenius_linearIsometry_comp U.subtypeₗᵢ A
+
 /-- The Ky Fan norm evaluates to the prefix sum of singular values.
 -/
 theorem kyFan_apply (k : ℕ) (A : E →ₗ[𝕜] F) :
@@ -1997,6 +2033,40 @@ theorem frobenius_eq_sqrt_sum_sq_singularValues (A : E →ₗ[𝕜] F) :
       (∑ i : Fin (finrank 𝕜 E), A.singularValues (i : ℕ) ^ 2) := by
   rw [frobenius_apply A (stdOrthonormalBasis 𝕜 E),
     sum_sq_singularValues A rfl (stdOrthonormalBasis 𝕜 E)]
+
+
+
+/-- The nuclear norm of a Gram operator is the squared Frobenius energy, written
+as a column-norm sum in any orthonormal basis. -/
+theorem nuclear_adjoint_comp_self_eq_sum_sq_norm
+    (A : E →ₗ[𝕜] E)
+    (b : OrthonormalBasis (Fin (finrank 𝕜 E)) 𝕜 E) :
+    nuclear (A.adjoint ∘ₗ A) = ∑ i, ‖A (b i)‖ ^ 2 := by
+  let G := A.adjoint ∘ₗ A
+  have hG : G.IsPositive := LinearMap.isPositive_adjoint_comp_self A
+  have hGabs : ForMathlib.abs G = G := by
+    symm
+    exact (LinearMap.isPositive_adjoint_comp_self G).sqrt_unique hG (by
+      rw [hG.adjoint_eq])
+  rw [nuclear_apply,
+    ← sum_re_inner_abs_self_eq_sum_singularValues G rfl b,
+    hGabs]
+  apply Finset.sum_congr rfl
+  intro i hi
+  rw [G, LinearMap.comp_apply, LinearMap.adjoint_inner_left,
+    inner_self_eq_norm_sq]
+
+/-- The nuclear norm is bounded by the square root of the domain dimension
+times the Frobenius norm.  This is the finite Cauchy--Schwarz inequality for
+the complete singular-value list, including its trailing zeros. -/
+theorem nuclear_le_sqrt_finrank_mul_frobenius (A : E →ₗ[𝕜] F) :
+    nuclear A ≤ Real.sqrt (finrank 𝕜 E) * frobenius A := by
+  rw [nuclear_apply, frobenius_eq_sqrt_sum_sq_singularValues]
+  have hcs := Real.sum_mul_le_sqrt_mul_sqrt
+    (s := Finset.univ)
+    (f := fun _ : Fin (finrank 𝕜 E) => (1 : ℝ))
+    (g := fun i : Fin (finrank 𝕜 E) => A.singularValues (i : ℕ))
+  simpa [Real.sqrt_eq_iff_sq_eq, Finset.card_fin] using hcs
 
 end RectangularUnitarilyInvariantNorm
 

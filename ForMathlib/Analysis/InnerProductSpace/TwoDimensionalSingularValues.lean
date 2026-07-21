@@ -187,4 +187,119 @@ theorem singularValues_lowerLeft_two_by_two (r : ℝ) :
     (abs_nonneg r) ?_
   simpa using hgram
 
+
+/-! ### Trace--determinant recovery on a two-dimensional source -/
+
+/-- The trace of the Gram operator, written in the standard planar basis.
+This is the squared Frobenius norm and is independent of the chosen
+orthonormal basis. -/
+noncomputable def gramTraceFinTwo
+    {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
+    (A : EuclideanSpace 𝕜 (Fin 2) →ₗ[𝕜] F) : ℝ :=
+  ∑ i : Fin 2, ‖A (EuclideanSpace.basisFun (Fin 2) 𝕜 i)‖ ^ 2
+
+/-- The determinant of the planar Gram matrix.  The formula is the Gram
+determinant of the images of the standard orthonormal basis. -/
+noncomputable def gramDetFinTwo
+    {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
+    (A : EuclideanSpace 𝕜 (Fin 2) →ₗ[𝕜] F) : ℝ :=
+  let e := EuclideanSpace.basisFun (Fin 2) 𝕜
+  ‖A (e 0)‖ ^ 2 * ‖A (e 1)‖ ^ 2 - ‖⟪A (e 0), A (e 1)⟫_𝕜‖ ^ 2
+
+/-- The planar Gram trace is the sum of the two squared singular values. -/
+theorem gramTraceFinTwo_eq_sum_sq_singularValues
+    {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
+    [FiniteDimensional 𝕜 F]
+    (A : EuclideanSpace 𝕜 (Fin 2) →ₗ[𝕜] F) :
+    gramTraceFinTwo A = A.singularValues 0 ^ 2 + A.singularValues 1 ^ 2 := by
+  rw [gramTraceFinTwo, ← sum_sq_singularValues A finrank_euclideanSpace_fin
+    (EuclideanSpace.basisFun (Fin 2) 𝕜)]
+  simp [Fin.sum_univ_two]
+
+/-- The planar Gram determinant is the product of the two squared singular
+values.  This is the determinant identity for `A star A`; the Gram-determinant
+form avoids choosing coordinates in the target. -/
+theorem gramDetFinTwo_eq_mul_sq_singularValues
+    {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
+    [FiniteDimensional 𝕜 F]
+    (A : EuclideanSpace 𝕜 (Fin 2) →ₗ[𝕜] F) :
+    gramDetFinTwo A = A.singularValues 0 ^ 2 * A.singularValues 1 ^ 2 := by
+  let e := EuclideanSpace.basisFun (Fin 2) 𝕜
+  let G := A.adjoint ∘ₗ A
+  let M : Matrix (Fin 2) (Fin 2) 𝕜 :=
+    LinearMap.toMatrix e.toBasis e.toBasis G
+  have hM00 : M 0 0 = ⟪A (e 0), A (e 0)⟫_𝕜 := by
+    simp [M, G, LinearMap.toMatrix_apply, LinearMap.comp_apply,
+      LinearMap.adjoint_inner_left]
+  have hM01 : M 0 1 = ⟪A (e 0), A (e 1)⟫_𝕜 := by
+    simp [M, G, LinearMap.toMatrix_apply, LinearMap.comp_apply,
+      LinearMap.adjoint_inner_left]
+  have hM10 : M 1 0 = ⟪A (e 1), A (e 0)⟫_𝕜 := by
+    simp [M, G, LinearMap.toMatrix_apply, LinearMap.comp_apply,
+      LinearMap.adjoint_inner_left]
+  have hM11 : M 1 1 = ⟪A (e 1), A (e 1)⟫_𝕜 := by
+    simp [M, G, LinearMap.toMatrix_apply, LinearMap.comp_apply,
+      LinearMap.adjoint_inner_left]
+  have hdet : RCLike.re M.det = gramDetFinTwo A := by
+    rw [Matrix.det_fin_two, hM00, hM01, hM10, hM11]
+    simp [gramDetFinTwo, e, inner_self_eq_norm_sq, inner_conj_symm,
+      map_sub, map_mul, RCLike.re_ofReal_mul, norm_sq_eq_def]
+  have heigdet : M.det =
+      (((A.singularValues 0 ^ 2 * A.singularValues 1 ^ 2 : ℝ)) : 𝕜) := by
+    -- `G` is positive and its eigenvalues are the squared singular values.
+    rw [← Matrix.det_toMatrix_eq_det G e.toBasis]
+    rw [LinearMap.det_eq_prod_eigenvalues
+      (LinearMap.isPositive_adjoint_comp_self A).isSymmetric rfl]
+    simp [Fin.prod_univ_two, A.sq_singularValues_fin finrank_euclideanSpace_fin]
+  rw [← hdet, heigdet, RCLike.ofReal_re]
+
+/-- A nonnegative ordered pair is uniquely recovered from the trace and
+determinant of a planar Gram operator. -/
+theorem singularValues_eq_pair_of_gram_trace_det_fin_two
+    {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
+    [FiniteDimensional 𝕜 F]
+    (A : EuclideanSpace 𝕜 (Fin 2) →ₗ[𝕜] F)
+    {s0 s1 : ℝ} (hs0 : 0 ≤ s0) (hs1 : 0 ≤ s1) (hord : s1 ≤ s0)
+    (htrace : gramTraceFinTwo A = s0 ^ 2 + s1 ^ 2)
+    (hdet : gramDetFinTwo A = s0 ^ 2 * s1 ^ 2) :
+    A.singularValues = pairSingularValues s0 s1 := by
+  let a := A.singularValues 0
+  let b := A.singularValues 1
+  have ha0 : 0 ≤ a := A.singularValues_nonneg 0
+  have hb0 : 0 ≤ b := A.singularValues_nonneg 1
+  have hba : b ≤ a := A.singularValues_antitone (by omega)
+  have hsum : a ^ 2 + b ^ 2 = s0 ^ 2 + s1 ^ 2 := by
+    rw [← htrace, gramTraceFinTwo_eq_sum_sq_singularValues]
+  have hprod : a ^ 2 * b ^ 2 = s0 ^ 2 * s1 ^ 2 := by
+    rw [← hdet, gramDetFinTwo_eq_mul_sq_singularValues]
+  have hroots : (a ^ 2 = s0 ^ 2 ∧ b ^ 2 = s1 ^ 2) ∨
+      (a ^ 2 = s1 ^ 2 ∧ b ^ 2 = s0 ^ 2) := by
+    have hfactor : (a ^ 2 - s0 ^ 2) * (a ^ 2 - s1 ^ 2) = 0 := by
+      nlinarith
+    rcases mul_eq_zero.mp hfactor with h | h
+    · left; constructor
+      · linarith
+      · nlinarith
+    · right; constructor
+      · linarith
+      · nlinarith
+  have ha : a = s0 := by
+    rcases hroots with h | h
+    · exact (sq_eq_sq₀ ha0 hs0).mp h.1
+    · have ha' : a = s1 := (sq_eq_sq₀ ha0 hs1).mp h.1
+      have hb' : b = s0 := (sq_eq_sq₀ hb0 hs0).mp h.2
+      rw [ha', hb'] at hba
+      have : s0 = s1 := le_antisymm hba hord
+      simpa [this] using ha'
+  have hb : b = s1 := by
+    nlinarith [hsum]
+  ext i
+  rcases lt_or_ge i 2 with hi | hi
+  · interval_cases i
+    · simpa [a, ha]
+    · simpa [b, hb]
+  · rw [A.singularValues_of_finrank_le]
+    · exact (pairSingularValues_of_two_le s0 s1 hi).symm
+    · simpa using hi
+
 end ForMathlib

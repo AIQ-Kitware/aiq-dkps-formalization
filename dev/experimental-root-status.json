@@ -1,6 +1,22 @@
 {
-  "schema_version": 2,
-  "as_of_commit": "cb1d6ab1b3db43ccc26823677be5969bec0498ab",
-  "policy": "No active or parked roots remain. Unsupported historical ambient facades are retired and preserved under dev; active Experimental imports only canonical implementations.",
-  "roots": []
+  "schema_version": 3,
+  "as_of_commit": "3aeeefa0c26e5fa1292223a4257ea60ebddf4e4a",
+  "policy": "This registry records compiler status only. The default checker independently runs lake build DavisKahan.Experimental and cannot certify an omitted root. Candidate math-ahead files remain active until the compiler agent produces a clean Experimental build.",
+  "roots": [
+    {
+      "module": "DavisKahan/Experimental/FiniteDimensional/Generalized.lean",
+      "status": "active",
+      "reason": "Complete candidate whitening and arbitrary-separation residual proofs require compiler elaboration repair."
+    },
+    {
+      "module": "DavisKahan/Experimental/FiniteDimensional/Sharpness.lean",
+      "status": "active",
+      "reason": "Complete candidate planar singular-value and equality calculations require compiler elaboration repair."
+    },
+    {
+      "module": "DavisKahan/Experimental/FiniteDimensional/DirectRotation.lean",
+      "status": "active",
+      "reason": "Complete candidate direct-rotation identities and Davis--Kahan Fan-majorization proofs require compiler elaboration repair."
+    }
+  ]
 }

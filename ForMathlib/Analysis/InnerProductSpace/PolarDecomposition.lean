@@ -6,6 +6,7 @@ Sub-dev III of the operator polar decomposition project — COMPLETE (proof-comp
 -/
 
 import ForMathlib.Analysis.InnerProductSpace.PositiveSqrt
+import ForMathlib.Analysis.InnerProductSpace.SelfAdjointFunctionalCalculus
 import ForMathlib.Analysis.InnerProductSpace.PartialIsometry
 import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Abs
 import Mathlib.Analysis.CStarAlgebra.ContinuousLinearMap
@@ -228,6 +229,48 @@ theorem polar_decomposition_unitary (A : E →ₗ[𝕜] E) :
   ext x
   simp only [LinearMap.comp_apply]
   exact (polarUnitary_apply_abs_apply A x).symm
+
+/-- The modulus of a normal finite-dimensional operator commutes with the
+operator.  This is the finite `RCLike` substitute for the corresponding CFC
+commutation theorem. -/
+theorem abs_comm_of_normal {A : E →ₗ[𝕜] E}
+    (hnormal : A.adjoint ∘ₗ A = A ∘ₗ A.adjoint) :
+    A ∘ₗ abs A = abs A ∘ₗ A := by
+  have hcomm : A ∘ₗ (A.adjoint ∘ₗ A) =
+      (A.adjoint ∘ₗ A) ∘ₗ A := by
+    rw [hnormal]
+    ext x
+    rfl
+  exact FiniteDimensional.sqrt_comm
+    (LinearMap.isPositive_adjoint_comp_self A) hcomm
+
+/-- Uniqueness of the unitary factor in an invertible polar decomposition.
+If `A = U H` with `U` unitary and `H` positive, then the canonical polar factor
+of `A` is `U`. -/
+theorem polarFactor_eq_of_isUnit_eq_comp_positive
+    {A H : E →ₗ[𝕜] E} (hA : IsUnit A)
+    (U : E ≃ₗᵢ[𝕜] E) (hH : H.IsPositive)
+    (hdecomp : A = U.toLinearMap ∘ₗ H) :
+    polarFactor A = U.toLinearMap := by
+  have hgram : H ∘ₗ H = A.adjoint ∘ₗ A := by
+    rw [hdecomp, LinearMap.adjoint_comp, U.adjoint_toLinearMap_eq_symm,
+      hH.adjoint_eq]
+    ext x
+    simp only [LinearMap.comp_apply]
+    rw [U.symm_apply_apply]
+  have hHabs : H = abs A := by
+    exact (LinearMap.isPositive_adjoint_comp_self A).sqrt_unique hH hgram
+  have habsinj : Function.Injective (abs A) := by
+    rw [← LinearMap.ker_eq_bot, ker_abs,
+      LinearMap.isUnit_iff_ker_eq_bot.mp hA]
+  have habssurj : Function.Surjective (abs A) :=
+    LinearMap.injective_iff_surjective.mp habsinj
+  apply LinearMap.ext
+  intro x
+  obtain ⟨y, rfl⟩ := habssurj x
+  rw [polarFactor_apply_abs_apply]
+  have hy := LinearMap.congr_fun hdecomp y
+  simpa [LinearMap.comp_apply, hHabs] using hy
 
 /-! ### CFC bridge — the ℂ / ContinuousLinearMap headline (`|A| = CFC.abs A`) -/
 
