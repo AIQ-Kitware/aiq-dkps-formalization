@@ -205,19 +205,23 @@ noncomputable def modelTanTwoThetaPerturbation (a b θ : ℝ) :
   simp [e0, e1, EuclideanSpace.inner_single_left]
 
 @[simp] theorem inner_e1_e0 : ⟪e1 (𝕜 := 𝕜), e0⟫_𝕜 = 0 := by
-  rw [inner_conj_symm, inner_e0_e1, map_zero]
+  simp [e0, e1, EuclideanSpace.inner_single_left]
 
 @[simp] theorem inner_uθ_e0 (θ : ℝ) :
     ⟪uθ (𝕜 := 𝕜) θ, e0⟫_𝕜 = (Real.cos θ : 𝕜) := by
-  simp [uθ, inner_add_left, inner_smul_left, RCLike.conj_ofReal]
+  rw [uθ, inner_add_left, inner_smul_left, inner_smul_left,
+    inner_e0_e0, inner_e1_e0, RCLike.conj_ofReal, RCLike.conj_ofReal]
+  ring
 
 @[simp] theorem inner_uθ_e1 (θ : ℝ) :
     ⟪uθ (𝕜 := 𝕜) θ, e1⟫_𝕜 = (Real.sin θ : 𝕜) := by
-  simp [uθ, inner_add_left, inner_smul_left, RCLike.conj_ofReal]
+  rw [uθ, inner_add_left, inner_smul_left, inner_smul_left,
+    inner_e0_e1, inner_e1_e1, RCLike.conj_ofReal, RCLike.conj_ofReal]
+  ring
 
 @[simp] theorem norm_uθ (θ : ℝ) : ‖uθ (𝕜 := 𝕜) θ‖ = 1 := by
   have hsq : ‖uθ (𝕜 := 𝕜) θ‖ ^ 2 = 1 := by
-    rw [norm_sq_eq_re_inner]
+    rw [norm_sq_eq_re_inner (𝕜 := 𝕜)]
     simp [uθ, inner_add_left, inner_add_right, inner_smul_left,
       inner_smul_right, RCLike.conj_ofReal]
     nlinarith [Real.sin_sq_add_cos_sq θ]
@@ -244,27 +248,27 @@ private theorem starProjection_span_singleton_apply_of_norm_one
 
 @[simp] theorem modelSubspace_starProjection_e0 :
     (modelSubspace (𝕜 := 𝕜)).starProjection (e0 (𝕜 := 𝕜)) = e0 := by
-  have h := starProjection_span_singleton_apply_of_norm_one
+  have h := starProjection_span_singleton_apply_of_norm_one (𝕜 := 𝕜)
     (e0 (𝕜 := 𝕜)) (e0 (𝕜 := 𝕜)) norm_e0
   simpa [modelSubspace] using h
 
 @[simp] theorem modelSubspace_starProjection_e1 :
     (modelSubspace (𝕜 := 𝕜)).starProjection (e1 (𝕜 := 𝕜)) = 0 := by
-  have h := starProjection_span_singleton_apply_of_norm_one
+  have h := starProjection_span_singleton_apply_of_norm_one (𝕜 := 𝕜)
     (e0 (𝕜 := 𝕜)) (e1 (𝕜 := 𝕜)) norm_e0
   simpa [modelSubspace] using h
 
 @[simp] theorem rotatedModelSubspace_starProjection_e0 (θ : ℝ) :
     (rotatedModelSubspace (𝕜 := 𝕜) θ).starProjection (e0 (𝕜 := 𝕜)) =
       (Real.cos θ : 𝕜) • uθ θ := by
-  have h := starProjection_span_singleton_apply_of_norm_one
+  have h := starProjection_span_singleton_apply_of_norm_one (𝕜 := 𝕜)
     (uθ (𝕜 := 𝕜) θ) (e0 (𝕜 := 𝕜)) (norm_uθ θ)
   simpa [rotatedModelSubspace] using h
 
 @[simp] theorem rotatedModelSubspace_starProjection_e1 (θ : ℝ) :
     (rotatedModelSubspace (𝕜 := 𝕜) θ).starProjection (e1 (𝕜 := 𝕜)) =
       (Real.sin θ : 𝕜) • uθ θ := by
-  have h := starProjection_span_singleton_apply_of_norm_one
+  have h := starProjection_span_singleton_apply_of_norm_one (𝕜 := 𝕜)
     (uθ (𝕜 := 𝕜) θ) (e1 (𝕜 := 𝕜)) (norm_uθ θ)
   simpa [rotatedModelSubspace] using h
 

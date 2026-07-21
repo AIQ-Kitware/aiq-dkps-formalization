@@ -362,7 +362,10 @@ theorem principalCosines_rankOne {u v : E} (hu : ‖u‖ = 1) (hv : ‖v‖ = 1)
     congr 1
     ext x
     simp [vf]
-  rw [← hspanU, ← hspanV, principalCosines_span_eq_cosPrincipalAngles huf hvf]
+  -- `principalCosines` is indexed by a projection instance on each submodule,
+  -- so a plain `rw` produces an ill-typed motive
+  simp only [← hspanU, ← hspanV]
+  rw [principalCosines_span_eq_cosPrincipalAngles huf hvf]
   ext i
   by_cases hi : i = 0
   · subst i
@@ -370,8 +373,10 @@ theorem principalCosines_rankOne {u v : E} (hu : ‖u‖ = 1) (hv : ‖v‖ = 1)
     have hnonneg := cosPrincipalAngles_nonneg huf hvf 0
     have hnorm : 0 ≤ ‖⟪u, v⟫_𝕜‖ := norm_nonneg _
     have heq : cosPrincipalAngles huf hvf 0 = ‖⟪u, v⟫_𝕜‖ := by
+      -- put the goal and both bounds on the same atom as `hsq`
+      simp only [cosPrincipalAngles] at hnonneg ⊢
       simp [cosPrincipalAngles, uf, vf] at hsq
-      nlinarith
+      nlinarith [hsq, hnonneg, hnorm]
     simpa [heq]
   · have hle : 1 ≤ i := Nat.one_le_iff_ne_zero.mpr hi
     rw [cosPrincipalAngles,

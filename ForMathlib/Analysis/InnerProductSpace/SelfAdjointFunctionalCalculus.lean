@@ -6,6 +6,7 @@ Authors: Jon Crall, GPT-5.6 Thinking
 
 import Mathlib.Analysis.InnerProductSpace.Positive
 import Mathlib.Analysis.InnerProductSpace.Spectrum
+import ForMathlib.Analysis.InnerProductSpace.CourantFischer
 
 /-!
 # Finite-dimensional self-adjoint functional calculus
@@ -125,7 +126,6 @@ theorem selfAdjointFunctionalCalculus_real_smul_id
       intro x y
       simp only [LinearMap.smul_apply, LinearMap.id_apply, inner_smul_left,
         inner_smul_right, RCLike.conj_ofReal]
-      rw [inner_conj_symm]
     selfAdjointFunctionalCalculus hS f =
       (((f r : ℝ) : 𝕜) • LinearMap.id) := by
   dsimp only
@@ -133,9 +133,8 @@ theorem selfAdjointFunctionalCalculus_real_smul_id
     intro x y
     simp only [LinearMap.smul_apply, LinearMap.id_apply, inner_smul_left,
       inner_smul_right, RCLike.conj_ofReal]
-    rw [inner_conj_symm]
   have heig : hS.eigenvalues rfl = fun _ => r := by
-    apply eigenvalues_eq_of_eigenbasis hS rfl (stdOrthonormalBasis 𝕜 E)
+    apply ForMathlib.eigenvalues_eq_of_eigenbasis hS rfl (stdOrthonormalBasis 𝕜 E)
     · exact antitone_const
     · intro i
       simp
