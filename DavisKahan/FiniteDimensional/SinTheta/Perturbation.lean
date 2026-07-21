@@ -940,6 +940,53 @@ theorem opNorm_sinThetaMap_le_of_intervalGap
   rw [hXnorm] at hSylvester
   exact hSylvester.trans hCnorm
 
+/-- General disjoint-spectrum residual form for the Frobenius norm, with
+the sharp constant one.  Unlike a general symmetric gauge, the square norm
+can be estimated entrywise in eigenbases of the two compressed operators. -/
+theorem frobenius_sinTheta_residual_le_of_spectralDistance
+    {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric) {U : Submodule 𝕜 E}
+    [U.HasOrthogonalProjection] (hU : Reduces A U)
+    (X : F →ₗᵢ[𝕜] E) {M : F →ₗ[𝕜] F} (hM : M.IsSymmetric)
+    {δ : ℝ} (hδ : 0 < δ)
+    (hgap : SpectraSeparated M ⊤ A Uᗮ δ) :
+    δ * RectangularUnitarilyInvariantNorm.frobenius
+        (sinThetaEmbedding U X) ≤
+      RectangularUnitarilyInvariantNorm.frobenius (residual A X M) := by
+  have hUperp : Reduces A Uᗮ := reduces_orthogonal_of_isSymmetric hA hU
+  let AU : Uᗮ →ₗ[𝕜] Uᗮ := A.restrict hUperp
+  let Y : F →ₗ[𝕜] Uᗮ :=
+    Uᗮ.orthogonalProjectionOnto.toLinearMap ∘ₗ X.toLinearMap
+  let C : F →ₗ[𝕜] Uᗮ :=
+    Uᗮ.orthogonalProjectionOnto.toLinearMap ∘ₗ residual A X M
+  have hAU : AU.IsSymmetric := isSymmetric_restrict hA hUperp
+  have hgap' : SpectraSeparated AU ⊤ M ⊤ δ := by
+    intro lam mu hlam hmu
+    have hlam' : lam ∈ restrictedSpectrum A Uᗮ := by
+      rw [← restrictedSpectrum_restrict A hUperp]
+      exact hlam
+    have hsep := hgap mu lam hmu hlam'
+    simpa [abs_sub_comm] using hsep
+  have hEq : AU ∘ₗ Y - Y ∘ₗ M = C := by
+    ext x
+    have hx := LinearMap.congr_fun
+      (sylvester_sinThetaEmbedding_eq_projectedResidual hA hU X M) x
+    simpa [AU, Y, C, sinThetaEmbedding, complementaryProjection, projection,
+      LinearMap.comp_apply] using hx
+  have hSylv := frobenius_sylvester_le_of_spectraSeparated
+    hAU hM hδ hgap' hEq
+  have hY : RectangularUnitarilyInvariantNorm.frobenius Y =
+      RectangularUnitarilyInvariantNorm.frobenius (sinThetaEmbedding U X) := by
+    rw [← RectangularUnitarilyInvariantNorm.frobenius_subtype_comp Uᗮ Y]
+    congr 1
+    ext x
+    rfl
+  have hC : RectangularUnitarilyInvariantNorm.frobenius C ≤
+      RectangularUnitarilyInvariantNorm.frobenius (residual A X M) := by
+    exact RectangularUnitarilyInvariantNorm.frobenius_projection_comp_le
+      Uᗮ (residual A X M)
+  rw [hY] at hSylv
+  exact hSylv.trans hC
+
 /-- Difference-of-projectors operator-norm form.
 -/
 theorem opNorm_projection_sub_projection_le

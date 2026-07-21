@@ -12,7 +12,7 @@
     "DavisKahan/Experimental/PartIII.lean",
     "DavisKahan/Experimental/All.lean"
   ],
-  "base_commit": "7463ca25c64a46c48411a2769b47714889974a97",
+  "base_commit": "3aeeefa0c26e5fa1292223a4257ea60ebddf4e4a6",
   "continuation_replacement_modules": [
     "DavisKahan.Experimental.InfiniteDimensional.SinTheta.ContinuationContour",
     "DavisKahan.Experimental.InfiniteDimensional.SinTheta.ContinuationTransport",
@@ -63,7 +63,7 @@
     {
       "name": "angleComplexStructure",
       "path": "DavisKahan/Experimental/FiniteDimensional/DirectRotation.lean",
-      "signature_sha256": "f12dbb953b2c9e50053b99448a870bab37bc0faceca90559c418b99b327879e2"
+      "signature_sha256": "b0f63b4a131de11b0b679e2488fc78d969fd582f423fe37ecc42da798183d354"
     },
     {
       "name": "directRotation_apply_eq_self_of_mem_common",
@@ -71,24 +71,24 @@
       "signature_sha256": "5b780779cda0b52d6d3d7ce4f07f191b28ad9be99b036600e221a929c56b089b"
     },
     {
-      "name": "directRotation_comm_angleOperator",
+      "name": "directRotation_comm_cosine",
       "path": "DavisKahan/Experimental/FiniteDimensional/DirectRotation.lean",
-      "signature_sha256": "07e84c8f1cf87e5d92a829d392f47c3a9eb24d4b56ac976b5cedf9273ce426ad"
+      "signature_sha256": "aa5c6363b29ad73660a364816fa1be1c0b9f03a65b5c39e0859dfa359f95bfee"
     },
     {
       "name": "directRotation_eq_cos_add_J_sin",
       "path": "DavisKahan/Experimental/FiniteDimensional/DirectRotation.lean",
-      "signature_sha256": "a25cd36e89e8da0eddbc794c67b78477f319fc90ade27adc070d9ba729d20498"
+      "signature_sha256": "b90bd07002f460f1d8d7647a8e560d0f4e90f4170c3015799ccfdc14cbd5263e"
     },
     {
       "name": "directRotation_eq_polarFactor",
       "path": "DavisKahan/Experimental/FiniteDimensional/DirectRotation.lean",
-      "signature_sha256": "9951d4db284595bbe01631de155d34c283ef413cb9e2f18f0802022899021ea5"
+      "signature_sha256": "0e903e8e53de2d092a43051b513d103156257ad41d711202b665384007996132"
     },
     {
       "name": "directRotation_minimizes_displacementSquare_uiNorm",
       "path": "DavisKahan/Experimental/FiniteDimensional/DirectRotation.lean",
-      "signature_sha256": "6e920d39973d3df01c417c6fa0516c996c8579c30df4a6a6945230d95f30721c"
+      "signature_sha256": "b05418a2f84628bb5e0610a3e7fd2936a4f07c46117e0240b080c9bf6e5093a8"
     },
     {
       "name": "directRotation_minimizes_max_displacement",
@@ -103,12 +103,12 @@
     {
       "name": "directRotation_minimizes_uiNorm_of_largestAngle_le_pi_div_three",
       "path": "DavisKahan/Experimental/FiniteDimensional/DirectRotation.lean",
-      "signature_sha256": "9b64e032a0a0141a6d34b2b757b6b425e531dbb98c3ea6a5df612dbf49a5f4ba"
+      "signature_sha256": "9e9450064dfa453ea85b7e1b0f33a7a39ce776244f1a53d0b1fefbcac75b9ffa"
     },
     {
-      "name": "directRotation_sq",
+      "name": "directRotationCosine",
       "path": "DavisKahan/Experimental/FiniteDimensional/DirectRotation.lean",
-      "signature_sha256": "a586c78878da6c39d9d1b450a5dba435622093b20cb62c3ae06e759ee4ee8d68"
+      "signature_sha256": "fa96644a77eb569c0269a6db3b99a9d25ef508d0231c46bdb3304173236da2eb"
     },
     {
       "name": "directRotation_symm",
@@ -118,7 +118,7 @@
     {
       "name": "directRotation_unique",
       "path": "DavisKahan/Experimental/FiniteDimensional/DirectRotation.lean",
-      "signature_sha256": "9797bca7eafe4bb726b946fd3a07926bc72a895dc2cc5eeabc0d178ad579cd24"
+      "signature_sha256": "5b404b97255566854bd0fdc1434b539fdc3b5312553bcfd8fcd5e8e8eeb36c33"
     },
     {
       "name": "sinTwoTheta_residual_le",
@@ -128,22 +128,22 @@
     {
       "name": "generalizedSinTheta_frobenius_le_of_spectralDistance",
       "path": "DavisKahan/Experimental/FiniteDimensional/Generalized.lean",
-      "signature_sha256": "2445ee2c7032b24337ef909d8a823c5984c3df69257a79cc99ddf6234a4e0cf3"
+      "signature_sha256": "ef4f6c1f8c5938c677e8c1986784a7e65443b0948159da0aef5587a59d0373f2"
     },
     {
       "name": "generalizedSinTheta_nuclear_le_of_spectralDistance",
       "path": "DavisKahan/Experimental/FiniteDimensional/Generalized.lean",
-      "signature_sha256": "770384e54312778f92801efb3d9cd7abd977d817a741d626a1042807869be902"
+      "signature_sha256": "e3c4955aab4f5cb3cf67a80b158183e248f1f1812c0435c32cec7f88be9e6a96"
     },
     {
       "name": "sinTwoTheta_acute_of_small_perturbation",
       "path": "DavisKahan/Experimental/FiniteDimensional/Generalized.lean",
-      "signature_sha256": "ffbd70c81657f2d5b0a00e607262fa0ea41376677b79f47df5e2466c92360944"
+      "signature_sha256": "15aeaac9eb043e24cf061d4a771fb60a28a8155c39e797466730f84b9be4c634"
     },
     {
       "name": "spectralSubspace_path_continuous",
       "path": "DavisKahan/Experimental/FiniteDimensional/Generalized.lean",
-      "signature_sha256": "8364c03bf070a5d55d28b55ef9f4b19fbd8ebff381c3eaf07b325c95920286cd"
+      "signature_sha256": "09c22ea6d585f79263fa2e737f86e2346e851f8ededcce16fe5259d6b292543d"
     },
     {
       "name": "schatten",
@@ -276,6 +276,9 @@
       "correction": "Retire the false arbitrary-UI and contour-mixed family; retain the canonical finite coordinate definition and production bounded complex operator-norm theory.",
       "date": "2026-07-21",
       "path": "DavisKahan/Experimental/FiniteDimensional/DoubleAngle/TanTheta.lean"
-    }
+    },
+    "Finite direct rotation uses the global polar cosine |P_V P_U + P_Vperp P_Uperp|; the one-sided |P_V P_U| cannot appear in a full-space trigonometric identity.",
+    "Davis--Kahan Proposition 4.4 is retained only over real inner-product spaces; the paper gives a complex counterexample.",
+    "The direct-rotation uniqueness endpoint is polar-factor uniqueness for a unitary-positive factorization, replacing the fictional principal-plane square-root proof."
   ]
 }

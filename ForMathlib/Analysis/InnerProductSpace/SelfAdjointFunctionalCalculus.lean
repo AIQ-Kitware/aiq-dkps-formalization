@@ -7,6 +7,7 @@ Authors: Jon Crall, GPT-5.6 Thinking
 import Mathlib.Analysis.InnerProductSpace.Positive
 import Mathlib.Analysis.InnerProductSpace.Spectrum
 import ForMathlib.Analysis.InnerProductSpace.CourantFischer
+import ForMathlib.Analysis.InnerProductSpace.PositiveSqrt
 
 /-!
 # Finite-dimensional self-adjoint functional calculus
@@ -142,5 +143,73 @@ theorem selfAdjointFunctionalCalculus_real_smul_id
   rw [OrthonormalBasis.coe_toBasis,
     selfAdjointFunctionalCalculus_apply_eigenvectorBasis, heig]
   simp
+
+/-- Functional calculus on an arbitrary eigenvector.  Unlike the basis lemma,
+this form is stable on repeated eigenspaces and is the key commutant property. -/
+theorem selfAdjointFunctionalCalculus_apply_of_apply_eq_smul
+    {T : E →ₗ[𝕜] E} (hT : T.IsSymmetric) (f : ℝ → ℝ)
+    {x : E} {lam : ℝ} (hx : T x = ((lam : ℝ) : 𝕜) • x) :
+    selfAdjointFunctionalCalculus hT f x =
+      ((f lam : ℝ) : 𝕜) • x := by
+  classical
+  let b := hT.eigenvectorBasis rfl
+  rw [← b.sum_repr x, map_sum, map_sum]
+  refine Finset.sum_congr rfl fun i _ => ?_
+  rw [map_smul, map_smul,
+    selfAdjointFunctionalCalculus_apply_eigenvectorBasis, smul_smul]
+  by_cases hi : hT.eigenvalues rfl i = lam
+  · rw [hi]
+  · have hcoeff : b.repr x i = 0 := by
+      rw [b.repr_apply_apply]
+      have heig := hT.apply_eigenvectorBasis rfl i
+      have hinner :
+          ((hT.eigenvalues rfl i : ℝ) : 𝕜) * ⟪b i, x⟫_𝕜 =
+            ((lam : ℝ) : 𝕜) * ⟪b i, x⟫_𝕜 := by
+        calc
+          ((hT.eigenvalues rfl i : ℝ) : 𝕜) * ⟪b i, x⟫_𝕜
+              = ⟪T (b i), x⟫_𝕜 := by
+                  rw [heig, inner_smul_left, RCLike.conj_ofReal]
+          _ = ⟪b i, T x⟫_𝕜 := hT _ _
+          _ = ((lam : ℝ) : 𝕜) * ⟪b i, x⟫_𝕜 := by
+                  rw [hx, inner_smul_right]
+      have hscalar : (((hT.eigenvalues rfl i - lam : ℝ) : 𝕜)) ≠ 0 :=
+        RCLike.ofReal_ne_zero.mpr (sub_ne_zero.mpr hi)
+      apply (mul_eq_zero.mp ?_).resolve_left hscalar
+      simpa [RCLike.ofReal_sub, sub_mul] using sub_eq_zero.mpr hinner
+    rw [hcoeff]
+    simp
+
+/-- Every operator commuting with a symmetric map commutes with its finite
+real functional calculus.  This includes repeated eigenvalues: the proof uses
+that the commuting operator preserves each eigenspace. -/
+theorem selfAdjointFunctionalCalculus_comm
+    {T B : E →ₗ[𝕜] E} (hT : T.IsSymmetric) (f : ℝ → ℝ)
+    (hBT : B ∘ₗ T = T ∘ₗ B) :
+    B ∘ₗ selfAdjointFunctionalCalculus hT f =
+      selfAdjointFunctionalCalculus hT f ∘ₗ B := by
+  apply (hT.eigenvectorBasis rfl).toBasis.ext
+  intro i
+  rw [OrthonormalBasis.coe_toBasis, LinearMap.comp_apply, LinearMap.comp_apply,
+    selfAdjointFunctionalCalculus_apply_eigenvectorBasis, map_smul]
+  have hBeig : T (B (hT.eigenvectorBasis rfl i)) =
+      ((hT.eigenvalues rfl i : ℝ) : 𝕜) • B (hT.eigenvectorBasis rfl i) := by
+    have h := LinearMap.congr_fun hBT (hT.eigenvectorBasis rfl i)
+    simpa [LinearMap.comp_apply, hT.apply_eigenvectorBasis, map_smul] using h.symm
+  rw [selfAdjointFunctionalCalculus_apply_of_apply_eq_smul hT f hBeig]
+
+/-- The spectral square root is the finite self-adjoint functional calculus of
+`Real.sqrt`. -/
+theorem selfAdjointFunctionalCalculus_sqrt
+    {T : E →ₗ[𝕜] E} (hT : T.IsPositive) :
+    selfAdjointFunctionalCalculus hT.isSymmetric Real.sqrt = hT.sqrt := by
+  rfl
+
+/-- Commutation passes from a positive operator to its positive square root. -/
+theorem sqrt_comm
+    {T B : E →ₗ[𝕜] E} (hT : T.IsPositive)
+    (hBT : B ∘ₗ T = T ∘ₗ B) :
+    B ∘ₗ hT.sqrt = hT.sqrt ∘ₗ B := by
+  rw [← selfAdjointFunctionalCalculus_sqrt hT]
+  exact selfAdjointFunctionalCalculus_comm hT.isSymmetric Real.sqrt hBT
 
 end FiniteDimensional
