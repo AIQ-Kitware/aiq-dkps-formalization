@@ -83,8 +83,10 @@ theorem kyFan_tanTheta_le
     (X : F →ₗᵢ[𝕜] E) {M : F →ₗ[𝕜] F} (hM : M.IsSymmetric)
     (hGalerkin : M = compression A X)
     {δ : ℝ} (hδ : 0 < δ) (hgap : OrderedGap M ⊤ A Uᗮ δ) (k : ℕ) :
-    δ * rectangularKyFanSum k (tanThetaEmbedding U X) ≤
-      rectangularKyFanSum k (residual A X M) := by
+    δ * RectangularUnitarilyInvariantNorm.rectangularKyFanSum k
+        (tanThetaEmbedding U X) ≤
+      RectangularUnitarilyInvariantNorm.rectangularKyFanSum k
+        (residual A X M) := by
   simpa [RectangularUnitarilyInvariantNorm.kyFan_apply] using
     tanTheta_perturbation_le
       (RectangularUnitarilyInvariantNorm.kyFan

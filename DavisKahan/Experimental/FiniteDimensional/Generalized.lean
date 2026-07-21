@@ -5,6 +5,7 @@ Authors: Jon Crall, GPT 5.6 High
 -/
 import DavisKahan.FiniteDimensional.SinTheta.TrialMap
 import DavisKahan.Experimental.FiniteDimensional.Residual.AngleEmbeddings
+import DavisKahan.Experimental.FiniteDimensional.DoubleAngle.SinTheta
 
 /-!
 # Compatibility surface for unfinished generalized extensions
