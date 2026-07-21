@@ -3,6 +3,7 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
+import DavisKahan.FiniteDimensional.Core.SpectralGap
 import DavisKahan.FiniteDimensional.Residual.AngleEmbedding
 import DavisKahan.FiniteDimensional.TanTheta.RitzResidual
 import DavisKahan.FiniteDimensional.Sylvester.Internal.SpectralBounds
@@ -181,13 +182,16 @@ private theorem cosThetaMagnitude_apply_rightSingularBasis
   have hCgram : cosThetaGram U X v = (((1 - σ ^ 2 : ℝ) : 𝕜)) • v := by
     change cosThetaGram U X v + sinThetaGram U X v = v at hpartition
     rw [hSgram] at hpartition
-    rw [← hpartition]
-    module
+    -- rewriting backwards would also hit the `v` inside the Gram block
+    have hsub : cosThetaGram U X v = v - ((σ ^ 2 : ℝ) : 𝕜) • v :=
+      eq_sub_of_add_eq hpartition
+    rw [hsub, RCLike.ofReal_sub, RCLike.ofReal_one, sub_smul, one_smul]
   have hsq := LinearMap.congr_fun (cosThetaMagnitude_sq U X) v
   change C (C v) = cosThetaGram U X v at hsq
   rw [hCgram] at hsq
   have hcSq : c * c = 1 - σ ^ 2 := by
-    rw [c, Real.mul_self_sqrt]
+    show Real.sqrt (1 - σ ^ 2) * Real.sqrt (1 - σ ^ 2) = 1 - σ ^ 2
+    rw [Real.mul_self_sqrt]
     nlinarith
   have hsq' : C (C v) = (((c : ℝ) : 𝕜) * ((c : ℝ) : 𝕜)) • v := by
     rw [hsq, ← RCLike.ofReal_mul, hcSq]
@@ -245,7 +249,7 @@ private theorem tanThetaEmbedding_apply_rightSingularBasis
       ((((Real.sqrt
         (1 - (sinThetaEmbedding U X).singularValues i ^ 2) : ℝ) : 𝕜)⁻¹) •
         sinThetaEmbedding U X
-          (rightSingularBasis (sinThetaEmbedding U X) i) := by
+          (rightSingularBasis (sinThetaEmbedding U X) i)) := by
   rw [tanThetaEmbedding, LinearMap.comp_apply,
     moorePenroseInverse_cosThetaMagnitude_apply_rightSingularBasis U X htrans i,
     map_smul]
@@ -278,13 +282,19 @@ theorem singularValues_tanThetaEmbedding
     intro i
     apply b.repr.injective
     ext j
-    simp only [OrthonormalBasis.repr_apply_apply, LinearMap.comp_apply]
+    -- the `i` side still reads `T (b.toBasis i)`; both the `let` and the
+    -- `toBasis` coercion have to go before the rewrite can match it
+    simp only [OrthonormalBasis.repr_apply_apply, LinearMap.comp_apply,
+      OrthonormalBasis.coe_toBasis, T, b]
     rw [LinearMap.adjoint_inner_right]
     rw [tanThetaEmbedding_apply_rightSingularBasis U X htrans j,
       tanThetaEmbedding_apply_rightSingularBasis U X htrans i,
       inner_smul_left, inner_smul_right, map_inv₀, RCLike.conj_ofReal,
       FiniteDimensional.inner_apply_rightSingularBasis]
-    rw [adjoint_diagOp, diagOp_comp, diagOp_apply_basis]
+    -- the goal is an application, not a composition, so `diagOp_comp` cannot
+    -- fire; apply the diagonal action twice instead
+    rw [adjoint_diagOp]
+    simp only [D, b, S, diagOp_apply_basis, map_smul, smul_smul]
     rw [inner_smul_right]
     by_cases hji : j = i
     · subst j
@@ -294,9 +304,10 @@ theorem singularValues_tanThetaEmbedding
         Real.sqrt_pos.2 (by nlinarith)
       have hcK : ((((Real.sqrt (1 - S.singularValues i ^ 2) : ℝ) : 𝕜))) ≠ 0 :=
         RCLike.ofReal_ne_zero.mpr hc.ne'
-      simp only [orthonormal_iff_ite.mp b.orthonormal i i, if_pos rfl,
-        mul_one, d]
-      field_simp [hcK]
+      simp only [if_pos rfl, mul_one, d, S]
+      -- both sides are the same real quotient pushed through `ofReal`
+      push_cast
+      ring
     · have hbji : ⟪b j, b i⟫_𝕜 = 0 := by
         simpa [orthonormal_iff_ite.mp b.orthonormal j i, if_neg hji]
       rw [hbji, mul_zero]
@@ -312,7 +323,6 @@ theorem singularValues_tanThetaEmbedding
           (E := F) (n := finrank 𝕜 F) rfl b hdanti hd0 i
       _ = Real.tan (Real.arcsin (S.singularValues k)) := by
         rw [Real.tan_arcsin]
-        rfl
       _ = principalTangents (approximateSubspace X) U k := by
         simpa [S] using
           (principalTangents_approximateSubspace_apply U X k).symm
@@ -322,15 +332,17 @@ theorem singularValues_tanThetaEmbedding
     simp
 
 
+-- the top eigenvalue only exists on a nonzero coordinate space; every caller
+-- splits on `subsingleton_or_nontrivial F` before reaching here
 private theorem exists_intervalGap_of_orderedGap
     {A : E →ₗ[𝕜] E} {U : Submodule 𝕜 E}
-    [U.HasOrthogonalProjection]
+    [U.HasOrthogonalProjection] [Nontrivial F]
     {M : F →ₗ[𝕜] F} (hM : M.IsSymmetric)
     {δ : ℝ} (hgap : OrderedGap M ⊤ A Uᗮ δ) :
     ∃ β α, β ≤ α ∧ SpectrumIn M ⊤ (Set.Icc β α) ∧
       SpectrumIn A Uᗮ (Set.Ici (α + δ)) := by
-  letI : NeZero (finrank 𝕜 F) := ⟨Nat.ne_of_gt finrank_pos⟩
-  let iTop : Fin (finrank 𝕜 F) := ⟨0, finrank_pos⟩
+  letI : NeZero (finrank 𝕜 F) := ⟨Nat.ne_of_gt Module.finrank_pos⟩
+  let iTop : Fin (finrank 𝕜 F) := ⟨0, Module.finrank_pos⟩
   let α : ℝ := hM.eigenvalues rfl iTop
   let β : ℝ := -‖M.toContinuousLinearMap‖
   have hupper : ∀ x : F, RCLike.re ⟪M x, x⟫_𝕜 ≤ α * ‖x‖ ^ 2 :=
@@ -343,8 +355,11 @@ private theorem exists_intervalGap_of_orderedGap
     have hbound := M.toContinuousLinearMap.le_opNorm x
     change ‖M x‖ ≤ ‖M.toContinuousLinearMap‖ * ‖x‖ at hbound
     rw [hxEig, norm_smul, RCLike.norm_ofReal] at hbound
+    -- cancel the strictly positive norm factor before comparing
+    have habs : |lam| ≤ ‖M.toContinuousLinearMap‖ :=
+      le_of_mul_le_mul_right hbound hxnorm
     dsimp [β]
-    nlinarith [le_abs_self lam]
+    linarith [neg_abs_le lam]
   have hβα : β ≤ α :=
     hlowerSpec α (eigenvalue_mem_restrictedSpectrum_top hM iTop)
   have hMspec : SpectrumIn M ⊤ (Set.Icc β α) := by
@@ -395,7 +410,9 @@ theorem tanThetaEmbedding_residual_le_of_orderedGap
   rcases subsingleton_or_nontrivial F with _ | _
   · have hT : tanThetaEmbedding U X = 0 := by
       ext x
-      exact Subsingleton.elim _ _
+      -- `F` is the subsingleton here, not `E`
+      have hx : x = 0 := Subsingleton.elim _ _
+      simp [hx]
     rw [hT, N.apply_zero, mul_zero]
     exact N.nonneg _
   · obtain ⟨β, α, hβα, hMspec, hAspec⟩ :=
@@ -488,7 +505,8 @@ theorem tanTheta_vector_le
     have hfactor :
         tanThetaEmbedding U X ∘ₗ cosThetaMagnitude U X =
           sinThetaEmbedding U X := by
-      rw [tanThetaEmbedding, ← LinearMap.comp_assoc, hleft]
+      -- the goal is already left-associated, so `comp_assoc` applies forwards
+      rw [tanThetaEmbedding, LinearMap.comp_assoc, hleft]
       ext y
       simp
     have hRop :
