@@ -62,6 +62,7 @@ theorem sinThetaEmbedding_apply_norm_le (U : Submodule 𝕜 E)
     ‖Uᗮ.starProjection (X x)‖ ≤ ‖X x‖ := Uᗮ.norm_starProjection_apply_le _
     _ = ‖x‖ := X.norm_map x
 
+omit [FiniteDimensional 𝕜 E] in
 /-- The operator norm of the cosine embedding is at most one. -/
 theorem cosThetaEmbedding_opNorm_le_one (U : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] (X : F →ₗᵢ[𝕜] E) :
@@ -70,6 +71,7 @@ theorem cosThetaEmbedding_opNorm_le_one (U : Submodule 𝕜 E)
     zero_le_one fun x => ?_
   simpa using cosThetaEmbedding_apply_norm_le U X x
 
+omit [FiniteDimensional 𝕜 E] in
 /-- The operator norm of the sine embedding is at most one. -/
 theorem sinThetaEmbedding_opNorm_le_one (U : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] (X : F →ₗᵢ[𝕜] E) :
