@@ -81,7 +81,7 @@ noncomputable def principalOrthogonalVector (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hacute : IsAcute U V)
     (i : Fin (nontrivialAngleCount U V)) : E :=
-  ((principalPlaneSine U V i)⁻¹ : ℝ) •
+  (((principalPlaneSine U V i)⁻¹ : ℝ) : 𝕜) •
     (directRotation U V hacute (principalSourceVector U V i) -
       (principalPlaneCosine U V i : 𝕜) • principalSourceVector U V i)
 
@@ -101,9 +101,11 @@ theorem principalPlaneSine_le_one
     (i : Fin (nontrivialAngleCount U V)) :
     principalPlaneSine U V i ≤ 1 := by
   rw [principalPlaneSine]
-  exact (singularValues_comp_le (c := 1) (by norm_num)
-    (fun x => Vᗮ.norm_starProjection_apply_le x)
-    (projection U) (nontrivialAngleIndex U V i)).trans_eq (one_mul _)
+  refine singularValues_le_one_of_contraction ?_ rfl (nontrivialAngleIndex U V i)
+  intro x
+  have h1 : ‖sinThetaMap U V x‖ ≤ ‖projection U x‖ :=
+    Vᗮ.norm_starProjection_apply_le (projection U x)
+  exact h1.trans (U.norm_starProjection_apply_le x)
 
 /-- The source singular vector belongs to `U`. -/
 theorem principalSourceVector_mem
@@ -117,20 +119,38 @@ theorem principalSourceVector_mem
   let s := principalPlaneSine U V i
   have hs : s ≠ 0 := ne_of_gt (principalPlaneSine_pos U V i)
   have heig := adjointCompSelf_apply_rightSingularBasis A p
+  have hUidem : ∀ y : E, projection U (projection U y) = projection U y := fun y =>
+    Submodule.starProjection_eq_self_iff.mpr (U.starProjection_apply_mem y)
+  have hcVidem : ∀ y : E, complementaryProjection V (complementaryProjection V y)
+      = complementaryProjection V y := fun y =>
+    Submodule.starProjection_eq_self_iff.mpr (Vᗮ.starProjection_apply_mem y)
+  have hcV : ∀ y : E, complementaryProjection V y = y - projection V y := fun y =>
+    Submodule.starProjection_orthogonal_val y
   have hgram : A.adjoint ∘ₗ A =
       projection U - projection U ∘ₗ projection V ∘ₗ projection U := by
+    have hAadj : A.adjoint = projection U ∘ₗ complementaryProjection V := by
+      show (complementaryProjection V ∘ₗ projection U).adjoint
+          = projection U ∘ₗ complementaryProjection V
+      rw [LinearMap.adjoint_comp, projection_adjoint]
+      congr 1
+      simpa [complementaryProjection] using projection_adjoint (𝕜 := 𝕜) Vᗮ
+    rw [hAadj]
+    show (projection U ∘ₗ complementaryProjection V) ∘ₗ
+        (complementaryProjection V ∘ₗ projection U) =
+        projection U - projection U ∘ₗ projection V ∘ₗ projection U
     ext x
-    simp [A, sinThetaMap, complementaryProjection, LinearMap.adjoint_comp,
-      projection_adjoint]
-    module
+    simp only [LinearMap.comp_apply, LinearMap.sub_apply]
+    rw [hcVidem (projection U x), hcV (projection U x), map_sub, hUidem x]
   rw [hgram] at heig
+  simp only [LinearMap.sub_apply, LinearMap.comp_apply] at heig
   have hproj : projection U (principalSourceVector U V i) =
       principalSourceVector U V i := by
-    apply (smul_left_cancel₀ (((s ^ 2 : ℝ) : 𝕜)))
-    · exact RCLike.ofReal_ne_zero.mpr (sq_ne_zero.mpr hs)
-    · simpa [A, p, s, principalSourceVector, principalPlaneSine,
-        LinearMap.sub_apply, LinearMap.comp_apply] using
-        congrArg (projection U) heig
+    have hc : ((s ^ 2 : ℝ) : 𝕜) ≠ 0 :=
+      RCLike.ofReal_ne_zero.mpr (pow_ne_zero 2 hs)
+    have key := congrArg (projection U) heig
+    simp only [map_sub, map_smul, hUidem] at key
+    rw [heig] at key
+    exact (smul_right_injective E hc key).symm
   exact Submodule.starProjection_eq_self_iff.mp hproj
 
 /-- The source principal vectors are orthonormal. -/
@@ -160,7 +180,7 @@ theorem principalPlaneCosine_pos
     (hacute : IsAcute U V)
     (i : Fin (nontrivialAngleCount U V)) :
     0 < principalPlaneCosine U V i := by
-  rw [principalPlaneCosine, Real.sqrt_pos.iff]
+  rw [principalPlaneCosine, Real.sqrt_pos]
   have hu := principalSourceVector_mem U V hacute i
   have hnot : principalPlaneSine U V i ≠ 1 := by
     intro hs
@@ -169,20 +189,21 @@ theorem principalPlaneCosine_pos
     have hnorm := norm_apply_rightSingularBasis
       (sinThetaMap U V) (nontrivialAngleIndex U V i)
     have hzero : projection V u = 0 := by
-      have hsquare := principalPlaneCosine_sq_add_sine_sq U V i
-      rw [hs] at hsquare
-      have hcos0 : principalPlaneCosine U V i = 0 := by nlinarith
-      have hdecomp := V.norm_starProjection_sq_add_norm_starProjection_orthogonal_sq u
-      have hsinNorm : ‖complementaryProjection V u‖ = 1 := by
-        simpa [sinThetaMap, LinearMap.comp_apply,
-          projection_apply_of_mem hu, principalPlaneSine, u] using hnorm
-      rw [hsinNorm, hu1] at hdecomp
-      nlinarith [norm_nonneg (projection V u)]
+      have hdecomp := Submodule.norm_sq_eq_add_norm_sq_starProjection u V
+      have hsinNorm : ‖Vᗮ.starProjection u‖ = 1 := by
+        have h : ‖sinThetaMap U V u‖ = principalPlaneSine U V i := hnorm
+        rw [hs] at h
+        rwa [sinThetaMap, LinearMap.comp_apply, projection_apply_of_mem hu] at h
+      rw [hu1, hsinNorm] at hdecomp
+      have hVsq : ‖V.starProjection u‖ ^ 2 = 0 := by nlinarith
+      show V.starProjection u = 0
+      exact norm_eq_zero.mp ((pow_eq_zero_iff (by norm_num)).mp hVsq)
     exact (by
       have := hacute.1 u hu hzero
       exact one_ne_zero (hu1.symm.trans (by rw [this, norm_zero])))
-  nlinarith [principalPlaneSine_pos U V i,
-    principalPlaneSine_le_one U V i]
+  have hlt : principalPlaneSine U V i < 1 :=
+    lt_of_le_of_ne (principalPlaneSine_le_one U V i) hnot
+  nlinarith [principalPlaneSine_pos U V i, hlt]
 
 /-- The positive modulus of the canonical intertwiner acts by the principal
 cosine on the source vector. -/
@@ -193,28 +214,63 @@ theorem abs_canonicalIntertwiner_apply_principalSourceVector
     (i : Fin (nontrivialAngleCount U V)) :
     ForMathlib.abs (canonicalIntertwiner U V) (principalSourceVector U V i) =
       (principalPlaneCosine U V i : 𝕜) • principalSourceVector U V i := by
-  let A := sinThetaMap U V
-  let u := principalSourceVector U V i
-  let s := principalPlaneSine U V i
-  let c := principalPlaneCosine U V i
   have hu := principalSourceVector_mem U V hacute i
-  have heig := adjointCompSelf_apply_rightSingularBasis A
+  have heig := adjointCompSelf_apply_rightSingularBasis (sinThetaMap U V)
     (nontrivialAngleIndex U V i)
-  have hgram :
-      (canonicalIntertwiner U V).adjoint ∘ₗ canonicalIntertwiner U V =
-        LinearMap.id - A.adjoint ∘ₗ A := by
+  have hProjUu : projection U (principalSourceVector U V i) =
+      principalSourceVector U V i := Submodule.starProjection_eq_self_iff.mpr hu
+  have hcompUu : complementaryProjection U (principalSourceVector U V i) = 0 :=
+    (Submodule.starProjection_apply_eq_zero_iff Uᗮ).mpr
+      (U.le_orthogonal_orthogonal hu)
+  have hUidem : ∀ y : E, projection U (projection U y) = projection U y := fun y =>
+    Submodule.starProjection_eq_self_iff.mpr (U.starProjection_apply_mem y)
+  have hcVidem : ∀ y : E, complementaryProjection V (complementaryProjection V y)
+      = complementaryProjection V y := fun y =>
+    Submodule.starProjection_eq_self_iff.mpr (Vᗮ.starProjection_apply_mem y)
+  have hcV : ∀ y : E, complementaryProjection V y = y - projection V y := fun y =>
+    Submodule.starProjection_orthogonal_val y
+  have hAgram : (sinThetaMap U V).adjoint ∘ₗ sinThetaMap U V =
+      projection U - projection U ∘ₗ projection V ∘ₗ projection U := by
+    have hAadj : (sinThetaMap U V).adjoint = projection U ∘ₗ complementaryProjection V := by
+      rw [sinThetaMap, LinearMap.adjoint_comp, projection_adjoint]
+      congr 1
+      simpa [complementaryProjection] using projection_adjoint (𝕜 := 𝕜) Vᗮ
+    rw [hAadj, sinThetaMap]
     ext x
-    simp [A, canonicalIntertwiner_adjoint_comp_self, sinThetaMap,
-      complementaryProjection]
-    module
-  have hsq :
-      ((canonicalIntertwiner U V).adjoint ∘ₗ canonicalIntertwiner U V) u =
-        (((c ^ 2 : ℝ) : 𝕜) • u) := by
-    rw [hgram, LinearMap.sub_apply, LinearMap.id_apply, heig]
-    rw [← RCLike.ofReal_sub, show 1 - s ^ 2 = c ^ 2 by
-      nlinarith [principalPlaneCosine_sq_add_sine_sq U V i]]
-  exact (LinearMap.isPositive_adjoint_comp_self (canonicalIntertwiner U V)).sqrt_apply_eq_of_sq
-    (principalPlaneCosine_pos U V hacute i).le hsq
+    simp only [LinearMap.comp_apply, LinearMap.sub_apply]
+    rw [hcVidem (projection U x), hcV (projection U x), map_sub, hUidem x]
+  have hSu : ((canonicalIntertwiner U V).adjoint ∘ₗ canonicalIntertwiner U V)
+        (principalSourceVector U V i) =
+      projection U (projection V (principalSourceVector U V i)) := by
+    rw [canonicalIntertwiner_adjoint_comp_self]
+    simp only [LinearMap.add_apply, LinearMap.comp_apply, hProjUu, hcompUu,
+      map_zero, add_zero]
+  have hAu : ((sinThetaMap U V).adjoint ∘ₗ sinThetaMap U V)
+        (principalSourceVector U V i) =
+      principalSourceVector U V i -
+        projection U (projection V (principalSourceVector U V i)) := by
+    rw [hAgram]
+    simp only [LinearMap.sub_apply, LinearMap.comp_apply, hProjUu]
+  rw [show rightSingularBasis (sinThetaMap U V) (nontrivialAngleIndex U V i) =
+    principalSourceVector U V i from rfl, hAu] at heig
+  have hc0 : (0 : ℝ) ≤ principalPlaneCosine U V i := Real.sqrt_nonneg _
+  have hsq : ((canonicalIntertwiner U V).adjoint ∘ₗ canonicalIntertwiner U V)
+        (principalSourceVector U V i) =
+      ((principalPlaneCosine U V i ^ 2 : ℝ) : 𝕜) • principalSourceVector U V i := by
+    rw [hSu]
+    have hcossq : (principalPlaneCosine U V i ^ 2 : ℝ) =
+        1 - (sinThetaMap U V).singularValues (nontrivialAngleIndex U V i : ℕ) ^ 2 := by
+      have hp := principalPlaneCosine_sq_add_sine_sq U V i
+      simp only [principalPlaneSine] at hp
+      linarith
+    rw [hcossq, RCLike.ofReal_sub, RCLike.ofReal_one, sub_smul, one_smul, ← heig]
+    abel
+  have hpos := LinearMap.isPositive_adjoint_comp_self (canonicalIntertwiner U V)
+  have hfc := FiniteDimensional.selfAdjointFunctionalCalculus_apply_of_apply_eq_smul
+    hpos.isSymmetric Real.sqrt hsq
+  rw [FiniteDimensional.selfAdjointFunctionalCalculus_sqrt hpos,
+    Real.sqrt_sq hc0] at hfc
+  exact hfc
 
 
 /-- Every principal-plane cosine occurs in the singular-value multiset of the
@@ -228,21 +284,23 @@ theorem exists_canonicalIntertwiner_singularValue_eq_principalPlaneCosine
     ∃ j : Fin (finrank 𝕜 E),
       (canonicalIntertwiner U V).singularValues (j : ℕ) =
         principalPlaneCosine U V i := by
-  let S := canonicalIntertwiner U V
-  let u := principalSourceVector U V i
-  let c := principalPlaneCosine U V i
-  have hu1 : ‖u‖ = 1 := (orthonormal_principalSourceVector U V).norm_eq_one i
-  have heigAbs : ForMathlib.abs S u = (c : 𝕜) • u := by
-    simpa [S, u, c] using
-      abs_canonicalIntertwiner_apply_principalSourceVector U V hacute i
-  have hc0 : 0 ≤ c := Real.sqrt_nonneg _
-  have heig : (isPositive_abs S).isSymmetric.HasEigenvalue c := by
-    refine ⟨u, ?_, ?_⟩
-    · exact fun h => by simpa [h] using hu1
-    · simpa [S, u, c] using heigAbs
-  obtain ⟨j, hj⟩ := (isPositive_abs S).isSymmetric.exists_eigenvalue_eq rfl heig
+  have hu1 : ‖principalSourceVector U V i‖ = 1 :=
+    (orthonormal_principalSourceVector U V).norm_eq_one i
+  have heigAbs := abs_canonicalIntertwiner_apply_principalSourceVector U V hacute i
+  have hev : Module.End.HasEigenvalue (ForMathlib.abs (canonicalIntertwiner U V))
+      ((principalPlaneCosine U V i : ℝ) : 𝕜) := by
+    apply Module.End.hasEigenvalue_of_hasEigenvector
+      (x := principalSourceVector U V i)
+    refine ⟨?_, ?_⟩
+    · rw [Module.End.mem_eigenspace_iff]; exact heigAbs
+    · exact fun h => by simp [h] at hu1
+  obtain ⟨j, hj⟩ :=
+    (isPositive_abs (canonicalIntertwiner U V)).isSymmetric.exists_eigenvalues_eq rfl hev
   refine ⟨j, ?_⟩
-  rw [← congrFun (eigenvalues_abs S) j, hj]
+  have hj' : (isPositive_abs (canonicalIntertwiner U V)).isSymmetric.eigenvalues rfl j
+      = principalPlaneCosine U V i := by exact_mod_cast hj
+  rw [← congrFun (eigenvalues_abs (canonicalIntertwiner U V)) j]
+  exact hj'
 
 /-- The direct rotation has the canonical cosine-sine action on a source
 principal vector. -/
@@ -255,12 +313,10 @@ theorem directRotation_apply_principalSourceVector
       (principalPlaneCosine U V i : 𝕜) • principalSourceVector U V i +
         (principalPlaneSine U V i : 𝕜) •
           principalOrthogonalVector U V hacute i := by
-  rw [principalOrthogonalVector]
-  have hs : principalPlaneSine U V i ≠ 0 :=
-    ne_of_gt (principalPlaneSine_pos U V i)
-  push_cast
-  field_simp
-  module
+  rw [principalOrthogonalVector, smul_smul, ← RCLike.ofReal_mul,
+    mul_inv_cancel₀ (ne_of_gt (principalPlaneSine_pos U V i)),
+    RCLike.ofReal_one, one_smul]
+  abel
 
 /-- The orthogonal partner belongs to `U orthogonal`. -/
 theorem principalOrthogonalVector_mem
@@ -271,25 +327,68 @@ theorem principalOrthogonalVector_mem
     principalOrthogonalVector U V hacute i ∈ Uᗮ := by
   rw [Submodule.mem_orthogonal']
   intro x hx
-  rw [principalOrthogonalVector, inner_smul_right, inner_sub_right,
-    inner_smul_right]
+  have hu := principalSourceVector_mem U V hacute i
+  have hcpos := principalPlaneCosine_pos U V hacute i
+  have hcne : (principalPlaneCosine U V i : 𝕜) ≠ 0 := by exact_mod_cast ne_of_gt hcpos
+  have hC := abs_canonicalIntertwiner_apply_principalSourceVector U V hacute i
+  have hcompUu : complementaryProjection U (principalSourceVector U V i) = 0 :=
+    (Submodule.starProjection_apply_eq_zero_iff Uᗮ).mpr
+      (U.le_orthogonal_orthogonal hu)
+  have hSpsv : canonicalIntertwiner U V (principalSourceVector U V i) =
+      projection V (principalSourceVector U V i) := by
+    simp only [canonicalIntertwiner, LinearMap.add_apply, LinearMap.comp_apply,
+      projection_apply_of_mem hu, hcompUu, map_zero, add_zero]
+  have hprojUprojV : projection U (projection V (principalSourceVector U V i)) =
+      ((principalPlaneCosine U V i ^ 2 : ℝ) : 𝕜) • principalSourceVector U V i := by
+    have h1 : ((canonicalIntertwiner U V).adjoint ∘ₗ canonicalIntertwiner U V)
+          (principalSourceVector U V i) =
+        projection U (projection V (principalSourceVector U V i)) := by
+      rw [canonicalIntertwiner_adjoint_comp_self]
+      simp only [LinearMap.add_apply, LinearMap.comp_apply,
+        projection_apply_of_mem hu, hcompUu, map_zero, add_zero]
+    have h2 : ((canonicalIntertwiner U V).adjoint ∘ₗ canonicalIntertwiner U V)
+          (principalSourceVector U V i) =
+        ((principalPlaneCosine U V i ^ 2 : ℝ) : 𝕜) • principalSourceVector U V i := by
+      rw [← abs_mul_self, LinearMap.comp_apply, hC, map_smul, hC, smul_smul,
+        ← RCLike.ofReal_mul, ← sq]
+    rw [← h1, h2]
+  have hpolar : canonicalIntertwiner U V =
+      (directRotation U V hacute).toLinearMap ∘ₗ
+        ForMathlib.abs (canonicalIntertwiner U V) := by
+    rw [directRotation_toLinearMap]; exact polar_decomposition (canonicalIntertwiner U V)
+  have hWpsv : projection V (principalSourceVector U V i) =
+      (principalPlaneCosine U V i : 𝕜) •
+        directRotation U V hacute (principalSourceVector U V i) := by
+    have h := LinearMap.congr_fun hpolar (principalSourceVector U V i)
+    simp only [LinearMap.comp_apply] at h
+    rw [hC, map_smul, hSpsv] at h
+    exact h
   have hdiag : projection U
       (directRotation U V hacute (principalSourceVector U V i)) =
       (principalPlaneCosine U V i : 𝕜) • principalSourceVector U V i := by
-    have hpolar := polar_decomposition_of_isUnit
-      (canonicalIntertwiner_isUnit_of_acute U V hacute)
-    have hsource := canonicalIntertwiner_comp_projection U V
-    have hu := principalSourceVector_mem U V hacute i
-    have hC := abs_canonicalIntertwiner_apply_principalSourceVector U V hacute i
-    refine ext_inner_right 𝕜 fun y => ?_
-    rw [projection_inner_left_eq_right]
-    have hy := LinearMap.congr_fun (directRotation_comp_projection U V hacute) y
-    simp only [LinearMap.comp_apply] at hy
-    rw [← hy, (directRotation U V hacute).inner_map_map]
-    simpa [projection_apply_of_mem hu, hC]
-  rw [← projection_inner_left_eq_right, hdiag,
-    inner_smul_right, projection_apply_of_mem hx]
-  ring
+    have key := congrArg (projection U) hWpsv
+    rw [map_smul, hprojUprojV] at key
+    have key2 : (principalPlaneCosine U V i : 𝕜) •
+          projection U (directRotation U V hacute (principalSourceVector U V i)) =
+        (principalPlaneCosine U V i : 𝕜) •
+          ((principalPlaneCosine U V i : 𝕜) • principalSourceVector U V i) := by
+      rw [← key, smul_smul, ← RCLike.ofReal_mul, ← sq]
+    exact smul_right_injective E hcne key2
+  rw [principalOrthogonalVector, inner_smul_left, inner_sub_left, inner_smul_left,
+    RCLike.conj_ofReal, RCLike.conj_ofReal]
+  have hkey : ⟪directRotation U V hacute (principalSourceVector U V i), x⟫_𝕜 =
+      (principalPlaneCosine U V i : 𝕜) * ⟪principalSourceVector U V i, x⟫_𝕜 := by
+    have hx' : projection U x = x := projection_apply_of_mem hx
+    calc ⟪directRotation U V hacute (principalSourceVector U V i), x⟫_𝕜
+        = ⟪directRotation U V hacute (principalSourceVector U V i),
+            projection U x⟫_𝕜 := by rw [hx']
+      _ = ⟪projection U (directRotation U V hacute (principalSourceVector U V i)),
+            x⟫_𝕜 := (projection_inner_left_eq_right U _ x).symm
+      _ = ⟪(principalPlaneCosine U V i : 𝕜) • principalSourceVector U V i, x⟫_𝕜 := by
+            rw [hdiag]
+      _ = (principalPlaneCosine U V i : 𝕜) * ⟪principalSourceVector U V i, x⟫_𝕜 := by
+            rw [inner_smul_left, RCLike.conj_ofReal]
+  rw [hkey]; ring
 
 /-- Principal orthogonal partners are orthonormal. -/
 theorem orthonormal_principalOrthogonalVector
@@ -394,8 +493,7 @@ theorem principalPlaneSine_antitone
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     Antitone (principalPlaneSine U V) := by
   intro i j hij
-  exact (sinThetaMap U V).singularValues_antitone
-    (Fin.castLE_mono (LinearMap.finrank_range_le (sinThetaMap U V)) hij)
+  exact (sinThetaMap U V).singularValues_antitone hij
 
 /-- Principal cosines increase, so chord lengths decrease. -/
 theorem principalPlaneChord_antitone
@@ -930,7 +1028,7 @@ theorem selected_principal_plane_dimension_le
   omega
 
 /-- Elementary pairing identity for a sequence whose entries occur twice. -/
-theorem sum_repeated_pair_prefix
+theorem sum_repeated_pair_prefix {m : ℕ}
     (d : Fin m → ℝ) (k : ℕ) :
     (∑ n : Fin k, if hn : (n : ℕ) < 2 * m then
         d ⟨(n : ℕ) / 2,

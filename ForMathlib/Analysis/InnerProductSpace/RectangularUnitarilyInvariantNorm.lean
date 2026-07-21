@@ -1984,12 +1984,12 @@ theorem frobenius_linearIsometry_comp
     frobenius_apply _ (stdOrthonormalBasis 𝕜 E)]
   congr 1
   exact Finset.sum_congr rfl fun i _ => by
-    rw [LinearMap.comp_apply, ι.norm_map]
+    rw [LinearMap.comp_apply, LinearIsometry.coe_toLinearMap, ι.norm_map]
 
 /-- Orthogonal projection on the codomain is contractive for the Frobenius norm. -/
 theorem frobenius_projection_comp_le
     (U : Submodule 𝕜 F) [U.HasOrthogonalProjection] (A : E →ₗ[𝕜] F) :
-    frobenius (projection U ∘ₗ A) ≤ frobenius A := by
+    frobenius (((U.starProjection : F →L[𝕜] F) : F →ₗ[𝕜] F) ∘ₗ A) ≤ frobenius A := by
   rw [frobenius_apply _ (stdOrthonormalBasis 𝕜 E),
     frobenius_apply _ (stdOrthonormalBasis 𝕜 E)]
   apply Real.sqrt_le_sqrt
@@ -2053,8 +2053,8 @@ theorem nuclear_adjoint_comp_self_eq_sum_sq_norm
     hGabs]
   apply Finset.sum_congr rfl
   intro i hi
-  rw [G, LinearMap.comp_apply, LinearMap.adjoint_inner_left,
-    inner_self_eq_norm_sq]
+  simp only [G, LinearMap.comp_apply, LinearMap.adjoint_inner_left,
+    LinearMap.adjoint_inner_right, inner_self_eq_norm_sq]
 
 /-- The nuclear norm is bounded by the square root of the domain dimension
 times the Frobenius norm.  This is the finite Cauchy--Schwarz inequality for
@@ -2066,7 +2066,8 @@ theorem nuclear_le_sqrt_finrank_mul_frobenius (A : E →ₗ[𝕜] F) :
     (s := Finset.univ)
     (f := fun _ : Fin (finrank 𝕜 E) => (1 : ℝ))
     (g := fun i : Fin (finrank 𝕜 E) => A.singularValues (i : ℕ))
-  simpa [Real.sqrt_eq_iff_sq_eq, Finset.card_fin] using hcs
+  simpa [one_mul, one_pow, Finset.sum_const, Finset.card_fin, nsmul_eq_mul]
+    using hcs
 
 end RectangularUnitarilyInvariantNorm
 

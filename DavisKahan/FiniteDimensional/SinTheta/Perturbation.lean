@@ -978,8 +978,6 @@ theorem frobenius_sinTheta_residual_le_of_spectralDistance
       RectangularUnitarilyInvariantNorm.frobenius (sinThetaEmbedding U X) := by
     rw [← RectangularUnitarilyInvariantNorm.frobenius_subtype_comp Uᗮ Y]
     congr 1
-    ext x
-    rfl
   have hC : RectangularUnitarilyInvariantNorm.frobenius C ≤
       RectangularUnitarilyInvariantNorm.frobenius (residual A X M) := by
     exact RectangularUnitarilyInvariantNorm.frobenius_projection_comp_le
