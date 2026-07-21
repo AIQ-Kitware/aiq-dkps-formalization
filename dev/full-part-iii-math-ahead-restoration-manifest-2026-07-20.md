@@ -5,7 +5,10 @@ This human-readable manifest accompanies the machine-readable JSON file of the s
 - Base commit: `7463ca25c64a46c48411a2769b47714889974a97`
 - Historical proof-body source: `2244e7c6bd7f`
 - Exact-signature candidate bodies restored: **174**
-- Current theorem statements were not changed.
+- Two false tan 2Theta statements were source-corrected on 2026-07-20:
+  `tanTwoTheta_residual_le` and `tanTwoTheta_perturbation_le` now require
+  `OrderedInternalGap`. See
+  `dev/tan-two-theta-ordered-gap-correction-2026-07-20.md`.
 
 ## `DavisKahan/Experimental/FiniteDimensional/Core/AngleOperators.lean` — 5
 - `tanThetaMap`

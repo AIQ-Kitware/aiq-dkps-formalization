@@ -118,12 +118,12 @@
     {
       "name": "tanTwoTheta_residual_le",
       "path": "DavisKahan/Experimental/FiniteDimensional/DoubleAngle/TanTheta.lean",
-      "signature_sha256": "0381de0abb926a129575c5308eaf682de12a74e5cb65199379c45f39b82cdc18"
+      "signature_sha256": "ab4fa9c29c54cdc373a49529c2b7e872dc48ad1b7b9379262e3444d0e1ca5163"
     },
     {
       "name": "tanTwoTheta_perturbation_le",
       "path": "DavisKahan/Experimental/FiniteDimensional/DoubleAngle/TanTheta.lean",
-      "signature_sha256": "d9d3182d41cfc81fc2e3d9ebb1a321ea6af6e9e0855d2cf120fce15791b013ac"
+      "signature_sha256": "ba5082969c44b1c9b178a3a05e1a2671d5aed134f8db5e730c94f3e549094bc6"
     },
     {
       "name": "isAcute_canonical_tanTwoTheta",
@@ -896,5 +896,16 @@
       "signature_sha256": "44367f07f0c37b92c9f530714eaa6bf54d7dc1f74410275549256e947b2e9e34"
     }
   ],
-  "schema_version": 1
+  "schema_version": 1,
+  "source_corrections": [
+    {
+      "date": "2026-07-20",
+      "path": "DavisKahan/Experimental/FiniteDimensional/DoubleAngle/TanTheta.lean",
+      "declarations": [
+        "tanTwoTheta_perturbation_le",
+        "tanTwoTheta_residual_le"
+      ],
+      "correction": "Replace absolute InternalGap by OrderedInternalGap. The old statements were false for interlacing diagonal-block spectra; an explicit three-dimensional quarter-turn counterexample is recorded in dev/tan-two-theta-ordered-gap-correction-2026-07-20.md."
+    }
+  ]
 }
