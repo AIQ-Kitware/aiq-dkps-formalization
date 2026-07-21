@@ -232,17 +232,17 @@
     },
     {
       "name": "singularValues_graphOperator",
-      "path": "DavisKahan/Experimental/FiniteDimensional/TanTheta/GraphOperator.lean",
+      "path": "DavisKahan/Experimental/FiniteDimensional/Residual/AngleEmbeddings.lean",
       "signature_sha256": "6d87cfda9586aa23d0d9d779d7e7fefc0940fe05f9430bf9e21cd1c8c6d0ffc6"
     },
     {
       "name": "tanTheta_residual_le",
-      "path": "DavisKahan/Experimental/FiniteDimensional/TanTheta/GraphOperator.lean",
+      "path": "DavisKahan/Experimental/FiniteDimensional/Residual/AngleEmbeddings.lean",
       "signature_sha256": "03b3f8b5ecda7e45167790ba7cb2e1e13cf149b981cd2c9cb8651a9ea7a8bbe4"
     },
     {
       "name": "isTransverse_of_tanTheta_residual_gap",
-      "path": "DavisKahan/Experimental/FiniteDimensional/TanTheta/GraphOperator.lean",
+      "path": "DavisKahan/Experimental/FiniteDimensional/Residual/AngleEmbeddings.lean",
       "signature_sha256": "5b8c034b36d8eaa6fbb2e4d683f5c8a802e0d6dd7214f25d363fc394e0ede0f7"
     },
     {
@@ -257,7 +257,7 @@
     },
     {
       "name": "tanTheta_vector_le",
-      "path": "DavisKahan/Experimental/FiniteDimensional/TanTheta/GraphOperator.lean",
+      "path": "DavisKahan/Experimental/FiniteDimensional/Residual/AngleEmbeddings.lean",
       "signature_sha256": "c22b6e3dc4aa3011942a5088afb9d9490ffc19b6e909cb19b09eaac0fd71f92b"
     },
     {
