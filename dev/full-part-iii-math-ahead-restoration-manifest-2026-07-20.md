@@ -1,280 +1,89 @@
-# Full Part III math-ahead restoration manifest
+# Full Part III math-ahead executable manifest
 
-This human-readable manifest accompanies the machine-readable JSON file of the same stem.
+This human-readable file accompanies the machine-readable JSON manifest.
 
-- Base commit: `7463ca25c64a46c48411a2769b47714889974a97`
+- Historical restoration base: `7463ca25c64a46c48411a2769b47714889974a97`
 - Historical proof-body source: `2244e7c6bd7f`
-- Exact-signature candidate bodies restored: **173**
-- Two false tan 2Theta statements were source-corrected on 2026-07-20:
-  `tanTwoTheta_residual_le` and `tanTwoTheta_perturbation_le` now require
-  `OrderedInternalGap`. See
-  `dev/tan-two-theta-ordered-gap-correction-2026-07-20.md`.
-- The finite residual `sinTwoTheta_residual_le` signature was corrected on
-  2026-07-20.  It now uses the source-complete interval/exterior gap between
-  the coordinate operator and the unwanted exact spectrum; ordered and
-  general separated-spectrum variants are supplied alongside it. See
-  `dev/sin-two-theta-residual-gap-correction-2026-07-20.md`.
+- Executable guarded declarations: **39**
+- Active Experimental repair roots: **0**
+- Parked Experimental repair roots: **0**
+
+The historical restoration count is no longer treated as executable proof debt. Unsupported or false declarations from the abandoned ambient route were retired on 2026-07-21; their exact source is preserved under `dev/retired-full-part-iii-ambient-route-2026-07-21/`. See `dev/full-part-iii-experimental-closure-2026-07-21.md`.
 
 ## `DavisKahan/Experimental/FiniteDimensional/Core/AngleOperators.lean` — 5
-- `tanThetaMap`
 - `angleOperator`
-- `tanAngleOperator`
-- `tanTwoAngleOperator`
 - `principalAngles_orthogonal`
+- `tanAngleOperator`
+- `tanThetaMap`
+- `tanTwoAngleOperator`
 
 ## `DavisKahan/Experimental/FiniteDimensional/DirectRotation.lean` — 12
 - `angleComplexStructure`
-- `directRotation_symm`
 - `directRotation_apply_eq_self_of_mem_common`
-- `directRotation_eq_polarFactor`
-- `directRotation_eq_cos_add_J_sin`
-- `directRotation_sq`
 - `directRotation_comm_angleOperator`
-- `directRotation_unique`
+- `directRotation_eq_cos_add_J_sin`
+- `directRotation_eq_polarFactor`
 - `directRotation_minimizes_displacementSquare_uiNorm`
-- `directRotation_minimizes_uiNorm_of_largestAngle_le_pi_div_three`
 - `directRotation_minimizes_max_displacement`
 - `directRotation_minimizes_sum_sq_basis_angles`
+- `directRotation_minimizes_uiNorm_of_largestAngle_le_pi_div_three`
+- `directRotation_sq`
+- `directRotation_symm`
+- `directRotation_unique`
 
 ## `DavisKahan/Experimental/FiniteDimensional/DoubleAngle/SinTheta.lean` — 1
 - `sinTwoTheta_residual_le`
 
-## `DavisKahan/Experimental/FiniteDimensional/DoubleAngle/TanTheta.lean` — 7
-- `tanTwoTheta_residual_le`
-- `tanTwoTheta_perturbation_le`
-- `isAcute_canonical_tanTwoTheta`
-- `existsUnique_reducingSubspace_preserving_gap`
-- `spectral_repulsion_compression`
-- `spectral_repulsion_uiNorm`
-- `largestPrincipalAngle_lt_pi_div_four`
-
 ## `DavisKahan/Experimental/FiniteDimensional/Generalized.lean` — 4
 - `generalizedSinTheta_frobenius_le_of_spectralDistance`
 - `generalizedSinTheta_nuclear_le_of_spectralDistance`
-- `spectralSubspace_path_continuous`
 - `sinTwoTheta_acute_of_small_perturbation`
+- `spectralSubspace_path_continuous`
 
 ## `DavisKahan/Experimental/FiniteDimensional/Norms/Rectangular.lean` — 1
 - `schatten`
 
-## `DavisKahan/Experimental/FiniteDimensional/Residual/AngleEmbeddings.lean` — 2
+## `DavisKahan/Experimental/FiniteDimensional/Residual/AngleEmbeddings.lean` — 6
+- `isTransverse_of_tanTheta_residual_gap`
+- `singularValues_graphOperator`
 - `tanThetaEmbedding`
+- `tanTheta_residual_le`
+- `tanTheta_vector_le`
 - `tanTwoThetaEmbedding`
 
-## `DavisKahan/Experimental/FiniteDimensional/Sharpness.lean` — 9
+## `DavisKahan/Experimental/FiniteDimensional/Sharpness.lean` — 8
 - `modelTanThetaPerturbation`
 - `principalAngles_model`
-- `sinTheta_model_equality`
-- `tanTheta_model_equality`
-- `sinTwoTheta_model_operatorNorm_equality`
-- `tanTwoTheta_model_equality`
 - `sinTheta_constant_optimal`
+- `sinTheta_model_equality`
 - `sinTwoTheta_constant_optimal`
+- `sinTwoTheta_model_operatorNorm_equality`
+- `tanTheta_model_equality`
+- `tanTwoTheta_model_equality`
 
-## `DavisKahan/Experimental/FiniteDimensional/TanTheta/GraphOperator.lean` — 6
-- `singularValues_graphOperator`
-- `tanTheta_residual_le`
-- `isTransverse_of_tanTheta_residual_gap`
-- `tanTheta_perturbation_le`
+## `DavisKahan/Experimental/FiniteDimensional/TanTheta/GraphOperator.lean` — 2
 - `tanThetaMap_perturbation_le`
-- `tanTheta_vector_le`
+- `tanTheta_perturbation_le`
 
-## `DavisKahan/Experimental/InfiniteDimensional/Core/AbstractSpectrum.lean` — 1
-- `sinTwoThetaEmbedding`
+## Additional compilation modules
 
-## `DavisKahan/Experimental/InfiniteDimensional/Core/Forms.lean` — 5
-- `formSum`
-- `ClosedForm.associatedOperator`
-- `formPerturbationSize`
-- `klmn`
-- `sinTheta_formPerturbation`
+- `DavisKahan/Experimental/FiniteDimensional/TanTheta/GraphOperator.lean`
+- `DavisKahan/Experimental/FiniteDimensional/DoubleAngle/TanTheta.lean`
+- `DavisKahan/Experimental/FiniteDimensional/Generalized.lean`
+- `DavisKahan/Experimental/FiniteDimensional/DirectRotation.lean`
+- `DavisKahan/Experimental/FiniteDimensional/All.lean`
+- `DavisKahan/Experimental/InfiniteDimensional/Core/AbstractSpectrum.lean`
+- `DavisKahan/Experimental/InfiniteDimensional/Core/OperatorAngle.lean`
+- `DavisKahan/Experimental/InfiniteDimensional/Core/SpectralProjection.lean`
+- `DavisKahan/Experimental/InfiniteDimensional/All.lean`
+- `DavisKahan/Experimental/PartIII.lean`
+- `DavisKahan/Experimental/All.lean`
 
-## `DavisKahan/Experimental/InfiniteDimensional/Core/OperatorAngle.lean` — 14
-- `operatorAbsoluteValue`
-- `angleOperator`
-- `sinAngleOperator`
-- `cosAngleOperator`
-- `tanAngleOperator`
-- `sinTwoAngleOperator`
-- `tanTwoAngleOperator`
-- `sinAngleOperator_eq_abs_projection_sub`
-- `norm_sinAngleOperator`
-- `directedGap_eq_subspaceGap_of_acute`
-- `acute_iff_exists_bounded_angularOperator`
-- `norm_angularOperator_eq_tan_maximalAngle`
-- `angleOperator_orthogonalComplement`
-- `maximalAngle_triangle`
+## Source corrections
 
-## `DavisKahan/Experimental/InfiniteDimensional/Core/SpectralProjection.lean` — 15
-- `spectralProjection`
-- `spectralSubspace_hasOrthogonalProjection`
-- `boundedBorelFunctionalCalculus`
-- `spectralProjection_empty`
-- `spectralProjection_univ`
-- `spectralProjection_comp`
-- `spectralProjection_isOrthogonalProjection`
-- `spectralProjection_comm`
-- `reduces_spectralSubspace`
-- `spectralProjection_compl`
-- `spectralProjection_stronglyCountablyAdditive`
-- `spectralProjection_eq_zero_of_disjoint_spectrum`
-- `boundedBorelFunctionalCalculus_indicator`
-- `boundedBorelFunctionalCalculus_mul`
-- `norm_boundedBorelFunctionalCalculus_le`
-
-## `DavisKahan/Experimental/InfiniteDimensional/Core/Unbounded.lean` — 6
-- `adjoint`
-- `addRelative`
-- `spectralProjection`
-- `isSelfAdjoint_addBounded`
-- `isSelfAdjoint_of_relativelyBounded`
-- `sinTheta_unbounded_boundedPerturbation`
-
-## `DavisKahan/Experimental/InfiniteDimensional/Core/UnboundedSpectral.lean` — 31
-- `closedOperator_adjoint_closed`
-- `closedOperator_adjoint_adjoint`
-- `selfAdjoint_resolventData_of_im_ne_zero`
-- `norm_closedOperatorResolvent_le_inv_abs_im`
-- `closedOperatorCayleyTransform`
-- `closedOperatorCayleyTransform_unitary`
-- `selfAdjointSpectralProjection`
-- `selfAdjointSpectralProjection_idempotent`
-- `selfAdjointSpectralProjection_symmetric`
-- `selfAdjointSpectralProjection_empty`
-- `selfAdjointSpectralProjection_univ`
-- `selfAdjointSpectralProjection_inter`
-- `selfAdjointSpectralProjection_disjoint_additive`
-- `selfAdjointSpectralProjection_iUnion_tendsto`
-- `selfAdjointSpectralProjection_eq_zero_of_disjoint_spectrum`
-- `selfAdjointSpectralProjection_Icc_range_le_domain`
-- `spectralCutoff_isOrthogonalProjection`
-- `spectralCutoff_range_le_domain`
-- `spectralCutoff_commutes_on_domain`
-- `spectralCutoff_tendsto_identity`
-- `boundedSpectralTruncation`
-- `boundedSpectralTruncation_isSymmetric`
-- `boundedSpectralTruncation_eq_on_cutoff`
-- `boundedSpectralTruncation_tendsto_on_domain`
-- `mem_domain_iff_boundedSpectralTruncation_norm_bounded`
-- `boundedSpectralTruncation_lowerBound`
-- `boundedSpectralTruncation_upperBound`
-- `boundedSpectralTruncation_commutes_cutoff`
-- `domain_eq_top_of_spectrumIn_Icc`
-- `boundedRealization_of_spectrumIn_Icc`
-- `boundedInverse_of_spectrumOutside`
-
-## `DavisKahan/Experimental/InfiniteDimensional/DirectRotation.lean` — 6
-- `directRotation`
-- `directRotation_unitary`
-- `directRotation_maps_subspace`
-- `directRotation_intertwines`
-- `directRotation_sq`
-- `directRotation_minimal`
-
-## `DavisKahan/Experimental/InfiniteDimensional/DoubleAngle.lean` — 4
-- `sinTwoTheta_reflectionDefect`
-- `sinTwoTheta_residual`
-- `sinTwoTheta_generalSeparation`
-- `ideal_sinTwoTheta`
-
-## `DavisKahan/Experimental/InfiniteDimensional/Ideals/CompactAndSingular.lean` — 3
-- `compactSpectralSubspace`
-- `compact_projection_difference`
-- `hermitianDilation_spectralProjection_sinTheta`
-
-## `DavisKahan/Experimental/InfiniteDimensional/Ideals/Rectangular.lean` — 5
-- `compactOperatorNorm`
-- `hilbertSchmidt`
-- `traceClass`
-- `schatten`
-- `kyFan`
-
-## `DavisKahan/Experimental/InfiniteDimensional/Ideals/Symmetric.lean` — 8
-- `operatorNorm`
-- `compactOperator`
-- `schatten`
-- `traceClass`
-- `hilbertSchmidt`
-- `kyFan`
-- `gauge_diagonalPart_le`
-- `gauge_offDiagonalPart_le`
-
-## `DavisKahan/Experimental/InfiniteDimensional/OperatorBlocks/OffDiagonal.lean` — 6
-- `continuedSpectralSubspace`
-- `continuedSpectralSubspace_hasOrthogonalProjection`
-- `gap_preserved_of_offDiagonal`
-- `tanTwoTheta_offDiagonal`
-- `aPrioriTanTheta`
-- `spectral_repulsion_offDiagonal`
-
-## `DavisKahan/Experimental/InfiniteDimensional/Sharpness.lean` — 4
-- `sinTheta_planar_equality`
-- `sinTwoTheta_planar_asymptotically_sharp`
-- `sqrtTwo_threshold_sharp`
-- `ideal_planar_extremizer`
-
-## `DavisKahan/Experimental/InfiniteDimensional/SinTheta/Continuation.lean` — 1
-- `continuous_continuedProjection`
-
-## `DavisKahan/Experimental/InfiniteDimensional/SinTheta/General.lean` — 5
-- `sinTheta_residual`
-- `sinTheta_perturbation`
-- `sinTheta_generalSeparation`
-- `spectralProjection_sinTheta`
-- `ideal_sinTheta`
-
-## `DavisKahan/Experimental/InfiniteDimensional/SinTheta/SpectralBridge.lean` — 4
-- `norm_sub_midpoint_le_of_spectrumIn_Icc`
-- `centered_isUnit_of_spectrumOutside`
-- `centeredIntervalExteriorWitness_of_gap`
-- `sylvester_mem_and_gauge_le_of_intervalExteriorGap`
-
-## `DavisKahan/Experimental/InfiniteDimensional/Sylvester/Basic.lean` — 4
-- `sylvesterResolventIntegral`
-- `sylvester_solve`
-- `norm_sylvester_le_of_orderedSeparation`
-- `norm_sylvester_le_of_generalSeparation`
-
-## `DavisKahan/Experimental/InfiniteDimensional/Sylvester/Resolvent.lean` — 5
-- `norm_resolvent_le_inv_distance`
-- `ContourSeparatesSpectrum`
-- `rieszProjection`
-- `rieszProjection_eq_spectralProjection`
-- `continuous_rieszProjection_path`
-
-## Retired duplicate continuation roadmap API
-
-The following unused speculative names were removed with the obsolete duplicate API; the module path now imports the completed proof-carrying continuation stack:
-
-- `IsPiecewiseC1ClosedContour`
-- `ContourSelectsSpectralComponent`
-- `ProofCarryingSeparatingContour`
-- `ResolventCurveIntegrable`
-- `proofCarryingContour_resolventCurveIntegrable`
-- `normalizedRieszProjection`
-- `continuousOn_normalizedRieszProjection_operatorPath`
-- `normalizedRieszProjection_eq_spectralProjection`
-- `unitary_transport_of_continuous_projection_path`
-- `continuedSpectralProjection_unitary_transport`
-
-Replacement modules:
-
-- `DavisKahan.Experimental.InfiniteDimensional.SinTheta.ContinuationContour`
-- `DavisKahan.Experimental.InfiniteDimensional.SinTheta.ContinuationTransport`
-- `DavisKahan.Experimental.InfiniteDimensional.SinTheta.ContinuationSpectralIdentification`
-- `DavisKahan.Experimental.InfiniteDimensional.SinTheta.ContinuationRotationChain`
-- `DavisKahan.Experimental.InfiniteDimensional.SinTheta.ContinuationTheorem`
-
-### Intentional finite tangent split
-
-The completed coordinate tangent singular-value, graph, ordered residual, and
-pointwise declarations are colocated with the canonical coordinate embeddings
-in `DavisKahan/Experimental/FiniteDimensional/Residual/AngleEmbeddings.lean`.
-The guarded ambient declarations `tanTheta_perturbation_le` and
-`tanThetaMap_perturbation_le` remain in the historical
-`DavisKahan/Experimental/FiniteDimensional/TanTheta/GraphOperator.lean` root so
-unresolved graph/Riccati geometry does not block coordinate results.
-
-## 2026-07-20 sharpness correction
-
-The guarded set now contains 173 declarations. The false arbitrary-UI `sin 2Θ` planar equality was replaced by an operator-norm equality, and the false simultaneous direct-sum endpoint was removed. See `dev/finite-sharpness-correction-2026-07-20.md`.
+- `DavisKahan/Experimental/FiniteDimensional/DoubleAngle/TanTheta.lean`: Replace absolute InternalGap by OrderedInternalGap. The old statements were false for interlacing diagonal-block spectra; an explicit three-dimensional quarter-turn counterexample is recorded in dev/tan-two-theta-ordered-gap-correction-2026-07-20.md.
+- `DavisKahan/Experimental/FiniteDimensional/DoubleAngle/SinTheta.lean`: Replace the ill-typed InternalGap body by the source-complete interval/exterior residual signature. The residual separation is between M and the unwanted spectrum of A on U orthogonal; ordered and general separated-spectrum variants are supplied alongside it. See dev/sin-two-theta-residual-gap-correction-2026-07-20.md.
+- `DavisKahan/Experimental/FiniteDimensional/Sharpness.lean`: The one-sided sinTwoAngleOperator has one nonzero singular value per principal plane, while the historical symmetric perturbation has two; arbitrary UI-norm equality is false. The retained operator-norm theorem is rank-insensitive and correct.
+- `DavisKahan/Experimental/InfiniteDimensional`: Retire the unsupported incomplete-RCLike ambient facade and use the canonical complete-complex, real-complexified, vendored-Spectra, and production unbounded routes. Historical source is preserved under dev.
+- `DavisKahan/Experimental/FiniteDimensional/TanTheta/GraphOperator.lean`: Replace mixed ambient/subtype graph statements by the canonical rectangular trial-coordinate tangent perturbation theorem.
+- `DavisKahan/Experimental/FiniteDimensional/DoubleAngle/TanTheta.lean`: Retire the false arbitrary-UI and contour-mixed family; retain the canonical finite coordinate definition and production bounded complex operator-norm theory.
