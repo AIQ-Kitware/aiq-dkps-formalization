@@ -37,9 +37,12 @@ def HybridGap (A B : E →ₗ[𝕜] E) (U V : Submodule 𝕜 E) (δ : ℝ) : Pro
 
 /-- Absolute separation between the two diagonal blocks of `A`.
 
-This is the internal-gap hypothesis used by the structured double-angle
-Davis--Kahan theorems.  For a general unstructured Sylvester equation,
-absolute separation alone instead leads to the separate `π/2` estimate. -/
+This predicate is appropriate for the `sin Θ` and `sin (2Θ)` families and for
+the general disjoint-spectrum Sylvester estimate.  It is not sufficient for
+the sharp `tan (2Θ)` theorem: interlacing spectra can satisfy absolute
+separation while an off-diagonal perturbation produces a quarter-turn angle.
+That theorem requires `OrderedInternalGap` (or an equivalent two-sided form
+ordering). -/
 def InternalGap (A : E →ₗ[𝕜] E) (U : Submodule 𝕜 E) (δ : ℝ) : Prop :=
   SpectraSeparated A U A Uᗮ δ
 
@@ -70,6 +73,19 @@ orientation.  This stronger predicate is useful when reducing a double-angle
 argument to the elementary ordered Sylvester theorem. -/
 def OrderedInternalGap (A : E →ₗ[𝕜] E) (U : Submodule 𝕜 E) (δ : ℝ) : Prop :=
   OrderedGap A U A Uᗮ δ ∨ OrderedGap A Uᗮ A U δ
+
+/-- Spectral inclusion on opposite sides of a cut gives the corresponding
+ordered internal gap. -/
+theorem orderedInternalGap_of_spectrumIn_Iic_Ici
+    {A : E →ₗ[𝕜] E} {U : Submodule 𝕜 E} {a b : ℝ}
+    (hUa : SpectrumIn A U (Set.Iic a))
+    (hUb : SpectrumIn A Uᗮ (Set.Ici b)) :
+    OrderedInternalGap A U (b - a) := by
+  left
+  intro lam μ hlam hμ
+  have hlam_le : lam ≤ a := hUa hlam
+  have hb_le_hμ : b ≤ μ := hUb hμ
+  linarith
 
 omit [FiniteDimensional 𝕜 E] in
 /-- Ordered block separation implies absolute block separation.

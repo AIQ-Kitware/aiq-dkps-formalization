@@ -13,13 +13,13 @@ import ForMathlib.Analysis.InnerProductSpace.MoorePenroseInverse
 The stable finite-dimensional core moved to `DavisKahan.FiniteDimensional.Core.AngleGeometry`.
 Only the still-open constructions remain declared at this historical path.
 
-The intended definitions use a finite self-adjoint functional calculus and the
-Moore--Penrose inverse; neither is available yet in this development or the
-pinned Mathlib.  The safe tangent convention is zero on a pole; all analytic
-tangent theorems carry transversality or quarter-turn avoidance, so the pole
-branch is never observed there.  Two intended theorems are recorded in
-docstrings rather than stated because their statements themselves require the
-missing Moore--Penrose and multiset-eigenvalue API:
+The remaining definitions use the repository's finite self-adjoint functional
+calculus and Moore--Penrose inverse.  The safe tangent convention is zero on a
+pole; all analytic tangent theorems carry transversality or quarter-turn
+avoidance, so the pole branch is never observed there.  Two intended
+dictionary theorems remain recorded in docstrings rather than stated because
+the simultaneous CS-decomposition and multiset-eigenvalue bridge is still
+missing:
 
 * `tanThetaMap_eq_sin_comp_inv`: on transverse pairs, the tangent map is the
   sine block composed with the true inverse of the cosine block on its range.
@@ -99,9 +99,7 @@ noncomputable def tanTwoAngleOperator (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →ₗ[𝕜] E :=
   FiniteDimensional.selfAdjointFunctionalCalculus
     (FiniteDimensional.selfAdjointFunctionalCalculus_isSymmetric
-      (FiniteDimensional.selfAdjointFunctionalCalculus_isSymmetric
-        (ForMathlib.isPositive_abs (projection U - projection V)).isSymmetric Real.arcsin)
-      safeTan)
+      (ForMathlib.isPositive_abs (projection U - projection V)).isSymmetric Real.arcsin)
     safeTanTwo
 
 /-- Orthogonal complements preserve the nontrivial principal angles.
