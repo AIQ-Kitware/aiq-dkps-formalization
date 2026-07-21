@@ -4,7 +4,7 @@ This human-readable manifest accompanies the machine-readable JSON file of the s
 
 - Base commit: `7463ca25c64a46c48411a2769b47714889974a97`
 - Historical proof-body source: `2244e7c6bd7f`
-- Exact-signature candidate bodies restored: **174**
+- Exact-signature candidate bodies restored: **173**
 - Two false tan 2Theta statements were source-corrected on 2026-07-20:
   `tanTwoTheta_residual_le` and `tanTwoTheta_perturbation_le` now require
   `OrderedInternalGap`. See
@@ -66,11 +66,10 @@ This human-readable manifest accompanies the machine-readable JSON file of the s
 - `principalAngles_model`
 - `sinTheta_model_equality`
 - `tanTheta_model_equality`
-- `sinTwoTheta_model_equality`
+- `sinTwoTheta_model_operatorNorm_equality`
 - `tanTwoTheta_model_equality`
 - `sinTheta_constant_optimal`
 - `sinTwoTheta_constant_optimal`
-- `directSum_models_simultaneous_equality`
 
 ## `DavisKahan/Experimental/FiniteDimensional/TanTheta/GraphOperator.lean` — 6
 - `singularValues_graphOperator`
@@ -275,3 +274,7 @@ The guarded ambient declarations `tanTheta_perturbation_le` and
 `tanThetaMap_perturbation_le` remain in the historical
 `DavisKahan/Experimental/FiniteDimensional/TanTheta/GraphOperator.lean` root so
 unresolved graph/Riccati geometry does not block coordinate results.
+
+## 2026-07-20 sharpness correction
+
+The guarded set now contains 173 declarations. The false arbitrary-UI `sin 2Θ` planar equality was replaced by an operator-norm equality, and the false simultaneous direct-sum endpoint was removed. See `dev/finite-sharpness-correction-2026-07-20.md`.

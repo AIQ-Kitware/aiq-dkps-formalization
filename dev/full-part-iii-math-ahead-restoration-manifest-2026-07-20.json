@@ -23,7 +23,7 @@
     "continuedSpectralProjection_unitary_transport"
   ],
   "proof_body_source_commit": "2244e7c6bd7f",
-  "restored_declaration_count": 174,
+  "restored_declaration_count": 173,
   "restored_declarations": [
     {
       "name": "tanThetaMap",
@@ -206,9 +206,9 @@
       "signature_sha256": "2040bafe9218c74c2f0b56e3fd40ae53df4be095db965dfe471a11be0c0a0e05"
     },
     {
-      "name": "sinTwoTheta_model_equality",
+      "name": "sinTwoTheta_model_operatorNorm_equality",
       "path": "DavisKahan/Experimental/FiniteDimensional/Sharpness.lean",
-      "signature_sha256": "0c9893e2296958c9bec9de191befc593de8ef873f6690c5155ea8791c31876ed"
+      "signature_sha256": "f35025fdb37811347fb3e26da0a9fdf4bf13c2f4233a866e21059e32b15c4253"
     },
     {
       "name": "tanTwoTheta_model_equality",
@@ -224,11 +224,6 @@
       "name": "sinTwoTheta_constant_optimal",
       "path": "DavisKahan/Experimental/FiniteDimensional/Sharpness.lean",
       "signature_sha256": "85e188be3605525b1ea366ad9fddc0ea9d4235a8c8b410be20bd46f02e0b4594"
-    },
-    {
-      "name": "directSum_models_simultaneous_equality",
-      "path": "DavisKahan/Experimental/FiniteDimensional/Sharpness.lean",
-      "signature_sha256": "152be6119bf953189a37311c6b0ef795adebc70fa64659befd721a431e65d706"
     },
     {
       "name": "singularValues_graphOperator",
@@ -914,6 +909,12 @@
         "sinTwoTheta_residual_le"
       ],
       "path": "DavisKahan/Experimental/FiniteDimensional/DoubleAngle/SinTheta.lean"
+    },
+    {
+      "path": "DavisKahan/Experimental/FiniteDimensional/Sharpness.lean",
+      "reason": "The one-sided sinTwoAngleOperator has one nonzero singular value per principal plane, while the historical symmetric perturbation has two; arbitrary UI-norm equality is false. The retained operator-norm theorem is rank-insensitive and correct.",
+      "removed_declaration": "directSum_models_simultaneous_equality",
+      "replacement": "sinTwoTheta_model_operatorNorm_equality"
     }
   ]
 }

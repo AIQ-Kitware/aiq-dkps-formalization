@@ -163,8 +163,6 @@ alias finite_sinTheta_constant_optimal :=
   DavisKahanTheory.sinTheta_constant_optimal
 alias finite_sinTwoTheta_constant_optimal :=
   DavisKahanTheory.sinTwoTheta_constant_optimal
-alias finite_simultaneous_equality_models :=
-  DavisKahanTheory.directSum_models_simultaneous_equality
 
 alias bounded_sylvester_intervalExterior_genuineSpectrum :=
   DavisKahanExt.norm_sylvester_le_of_spectrum_intervalExterior

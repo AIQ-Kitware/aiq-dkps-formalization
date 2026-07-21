@@ -334,6 +334,51 @@ theorem principalCosines_span_eq_cosPrincipalAngles {d : ℕ}
     ForMathlib.singularValues_starProjection_comp_starProjection hu hv,
     cosPrincipalAngles_comm hv hu]
 
+/-- The principal-cosine sequence of two unit-generated lines has one entry,
+the absolute overlap of their generators. -/
+theorem principalCosines_rankOne {u v : E} (hu : ‖u‖ = 1) (hv : ‖v‖ = 1) :
+    principalCosines (Submodule.span 𝕜 {u}) (Submodule.span 𝕜 {v}) =
+      Finsupp.single 0 ‖⟪u, v⟫_𝕜‖ := by
+  classical
+  let uf : Fin 1 → E := fun _ => u
+  let vf : Fin 1 → E := fun _ => v
+  have huf : Orthonormal 𝕜 uf := by
+    rw [orthonormal_iff_ite]
+    intro i j
+    have hij : i = j := Subsingleton.elim _ _
+    subst j
+    simp [uf, inner_self_eq_norm_sq, hu]
+  have hvf : Orthonormal 𝕜 vf := by
+    rw [orthonormal_iff_ite]
+    intro i j
+    have hij : i = j := Subsingleton.elim _ _
+    subst j
+    simp [vf, inner_self_eq_norm_sq, hv]
+  have hspanU : Submodule.span 𝕜 (Set.range uf) = Submodule.span 𝕜 {u} := by
+    congr 1
+    ext x
+    simp [uf]
+  have hspanV : Submodule.span 𝕜 (Set.range vf) = Submodule.span 𝕜 {v} := by
+    congr 1
+    ext x
+    simp [vf]
+  rw [← hspanU, ← hspanV, principalCosines_span_eq_cosPrincipalAngles huf hvf]
+  ext i
+  by_cases hi : i = 0
+  · subst i
+    have hsq := sum_sq_singularValues_overlapOp huf hvf
+    have hnonneg := cosPrincipalAngles_nonneg huf hvf 0
+    have hnorm : 0 ≤ ‖⟪u, v⟫_𝕜‖ := norm_nonneg _
+    have heq : cosPrincipalAngles huf hvf 0 = ‖⟪u, v⟫_𝕜‖ := by
+      simp [cosPrincipalAngles, uf, vf] at hsq
+      nlinarith
+    simpa [heq]
+  · have hle : 1 ≤ i := Nat.one_le_iff_ne_zero.mpr hi
+    rw [cosPrincipalAngles,
+      (overlapOp huf hvf).singularValues_of_finrank_le]
+    · simp [Finsupp.single_apply, hi]
+    · simpa using hle
+
 
 end DavisKahanTheory
 end ForMathlib

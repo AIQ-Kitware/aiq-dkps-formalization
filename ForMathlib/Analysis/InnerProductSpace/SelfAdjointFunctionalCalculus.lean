@@ -116,4 +116,32 @@ theorem selfAdjointFunctionalCalculus_comp
   intro i
   simp [selfAdjointFunctionalCalculus_apply_eigenvectorBasis]
 
+
+/-- Functional calculus of a real scalar multiple of the identity is scalar
+evaluation.  This is the finite `RCLike` bridge used by planar angle models. -/
+theorem selfAdjointFunctionalCalculus_real_smul_id
+    (r : ℝ) (f : ℝ → ℝ) :
+    let hS : (((r : ℝ) : 𝕜) • LinearMap.id : E →ₗ[𝕜] E).IsSymmetric := by
+      intro x y
+      simp only [LinearMap.smul_apply, LinearMap.id_apply, inner_smul_left,
+        inner_smul_right, RCLike.conj_ofReal]
+      rw [inner_conj_symm]
+    selfAdjointFunctionalCalculus hS f =
+      (((f r : ℝ) : 𝕜) • LinearMap.id) := by
+  dsimp only
+  let hS : (((r : ℝ) : 𝕜) • LinearMap.id : E →ₗ[𝕜] E).IsSymmetric := by
+    intro x y
+    simp only [LinearMap.smul_apply, LinearMap.id_apply, inner_smul_left,
+      inner_smul_right, RCLike.conj_ofReal]
+    rw [inner_conj_symm]
+  have heig : hS.eigenvalues rfl = fun _ => r := by
+    apply eigenvalues_eq_of_eigenbasis hS rfl (stdOrthonormalBasis 𝕜 E)
+    · exact antitone_const
+    · intro i
+      simp
+  refine (hS.eigenvectorBasis rfl).toBasis.ext fun i => ?_
+  rw [OrthonormalBasis.coe_toBasis,
+    selfAdjointFunctionalCalculus_apply_eigenvectorBasis, heig]
+  simp
+
 end FiniteDimensional

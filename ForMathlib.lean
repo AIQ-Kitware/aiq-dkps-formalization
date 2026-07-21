@@ -35,6 +35,7 @@ import ForMathlib.Analysis.InnerProductSpace.SelfAdjointFunctionalCalculus
 import ForMathlib.Analysis.InnerProductSpace.SingularSubspace
 import ForMathlib.Analysis.InnerProductSpace.SingularSystem
 import ForMathlib.Analysis.InnerProductSpace.Spectrum
+import ForMathlib.Analysis.InnerProductSpace.TwoDimensionalSingularValues
 import ForMathlib.Analysis.InnerProductSpace.SylvesterBound
 import ForMathlib.Analysis.Matrix.EntrywiseEigenvalue
 import ForMathlib.Analysis.Matrix.EntrywiseOpNorm
