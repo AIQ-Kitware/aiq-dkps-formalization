@@ -1,23 +1,22 @@
 /-
 Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
-Authors: Jon Crall, GPT 5.6 High
+Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.Experimental.InfiniteDimensional.Core.All
-import DavisKahan.Experimental.InfiniteDimensional.Sylvester.All
-import DavisKahan.Experimental.InfiniteDimensional.Ideals.All
-import DavisKahan.Experimental.InfiniteDimensional.SinTheta.All
-import DavisKahan.Experimental.InfiniteDimensional.DirectRotation
-import DavisKahan.Experimental.InfiniteDimensional.DoubleAngle
-import DavisKahan.Experimental.InfiniteDimensional.DoubleAngleGenuine
+import DavisKahan.All
+import DavisKahan.Geometry.Angle.OperatorAngleComplex
+import DavisKahan.Geometry.Angle.OperatorAngleReal
+import DavisKahan.Geometry.Angle.PaperOperatorAngle
+import DavisKahan.Interop.Spectra.RealSpectralRestriction
+import DavisKahan.TanTwoTheta.All
 import DavisKahan.DoubleAngle.Unbounded
 import DavisKahan.DoubleAngle.UnboundedIdeal
-import DavisKahan.Experimental.InfiniteDimensional.GraphSubspace
-import DavisKahan.Experimental.InfiniteDimensional.OperatorBlocks.OffDiagonal
-import DavisKahan.Experimental.InfiniteDimensional.Riccati.All
-import DavisKahan.Experimental.InfiniteDimensional.Sharpness
-import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.All
-import DavisKahan.Experimental.InfiniteDimensional.TanTheta.All
-import DavisKahan.TanTwoTheta.All
 
-/-! # Experimental infinite-dimensional Davis--Kahan theory -/
+/-!
+# Canonical infinite-dimensional Davis--Kahan integration
+
+The active infinite-dimensional route is the compiler-clean production and
+vendored-Spectra development imported above.  The older duplicate ambient
+facades remain in the source tree for historical reference but are no longer
+part of the executable Experimental aggregate.
+-/
