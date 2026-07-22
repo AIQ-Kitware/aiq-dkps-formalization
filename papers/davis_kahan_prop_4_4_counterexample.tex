@@ -226,10 +226,10 @@ $\Theta\leq\pi/3$ is actually consumed, do hold in this example.
 
 No angle threshold repairs the statement — it fails at arbitrarily small angles
 — but weakening the class of norms does, and gives a cleaner theorem than the
-original: for every $Q$-norm the direct rotation minimizes the full
+original: for every $Q$-norm and every acute pair, the direct rotation minimizes the full
 displacement, with neither the quantitative $\pi/3$ bound nor the restriction
 to a real space.  This follows from the source's valid Proposition 4.3, and the
-trace norm lies outside the $Q$-class, exactly where the counterexample sits.
+four-dimensional trace norm lies outside the $Q$-class, exactly where the counterexample sits.
 The counterexample, the repair, and the trace-norm consequence are all certified
 in Lean 4.  Because a machine-checked result about formal definitions does not
 by itself refute a prose statement, we also record an explicit
@@ -665,7 +665,7 @@ invariant norm $M$ with
 \]
 The Schatten norms with $2\leq p\leq\infty$ are $Q$-norms, since
 $\lVert A\rVert_p^2=\lVert A^*A\rVert_{p/2}$; the class contains the operator
-and Frobenius norms and excludes the trace norm.
+and Frobenius norms; in dimension four it excludes the trace norm.
 
 \begin{theorem}[$Q$-norm repair]
 \label{thm:qnorm}
@@ -755,32 +755,25 @@ none of these three claims is formalized.
 \section{Lean formulation}
 \label{sec:lean}
 
-The formal development used for this note is the repository state at commit
-\texttt{03af6ab}.  The counterexample is in the file
+The formal development is the repository state at commit \texttt{03af6ab}; the
+counterexample is in
 \begin{center}
 \small\path{DavisKahan/FiniteDimensional/DirectRotation/ShortRotationCounterexample.lean}
 \end{center}
-The full commit hash is recorded in the appendix.  The code below is reproduced
-in a form suitable for semantic review.  Line breaks are reflowed to fit this
-page width; otherwise every excerpt is verbatim.  Proofs are reproduced in full
-for the two refutations, \code{shortRotation\_\allowbreak fullDisplacement\_\allowbreak refuted} and
-\code{not\_davisKahanProposition4\_\allowbreak 4\_\allowbreak Finite}, so that the
-reader can see exactly how the counterexample discharges the claim.  The
-remaining excerpts are \emph{statements only}, with proof bodies elided: the two
-exact-value lemmas of \cref{sec:leanvalues}, whose proofs are routine rewriting
-by the singular-value lemmas followed by \texttt{ring}, and the two results of
-\cref{sec:leanrepair}.  The definitions
-\code{DavisKahanProposition4\_\allowbreak 4\_\allowbreak Finite} and
-\code{IsQNorm} are shown in full.  Lean's
-notational symbols are typeset here from the mathematics font rather than the
-monospace font, so that glyphs such as $\Bbbk$ and $\simeq_{\ell\mathrm{i}}$
-render correctly; the underlying source characters are the usual Lean ones.
+and the repair in the neighbouring \path{QNorm.lean}.  We display
+\emph{statements only}: what matters for semantic review is the theorem type,
+not the tactic script, and the repository is the place for executable detail.
+Line breaks are reflowed to fit the page; otherwise the statements are
+verbatim.  Lean's notational symbols are typeset from the mathematics font
+rather than the monospace font, so that glyphs such as $\Bbbk$ and
+$\simeq_{\ell\mathrm{i}}$ render correctly; the source characters are the usual
+Lean ones.
 
-\subsection{A Lean statement corresponding to the published positive claim}
+\subsection{The published positive claim, formalized}
 
 The following is a finite-dimensional formal statement corresponding to
-Proposition 4.4.  It is displayed as a proposition-valued definition rather than
-as a theorem, because the assertion is false.
+Proposition 4.4.  It is a proposition-valued definition rather than a theorem,
+because the assertion is false.
 
 \begin{LeanCode}
 def DavisKahanProposition4_4_Finite : Prop :=
@@ -797,20 +790,20 @@ def DavisKahanProposition4_4_Finite : Prop :=
         N (LinearMap.id - W.toLinearMap)
 \end{LeanCode}
 
-This is the natural finite-dimensional specialization needed for refutation.
 The explicit \code{hacute} argument is not an additional mathematical
 restriction.  The existence of a unitary $W$ with $W\mathcal U=\mathcal V$
 forces $\mathcal U$ and $\mathcal V$ to have equal dimension; together with
 $\theta_{\max}\leq\pi/3<\pi/2$ this excludes a right principal angle in either
-direction, which is exactly acuteness.  The Lean constructor for the canonical
-direct rotation requests that proof.  The underscores on \code{\_hshort} and \code{\_hmap} are a linter
-convention marking binders that the statement quantifies over but whose proofs
-the conclusion does not mention; they carry no mathematical content.
+direction, which is exactly acuteness, and is what the constructor for the
+canonical direct rotation requires.  The underscores on \code{\_hshort} and
+\code{\_hmap} are a linter convention marking binders whose proofs the
+conclusion does not mention; they carry no mathematical content.
 
-\subsection{The machine-checked counterexample theorem}
+\subsection{The two refutations}
 \label{sec:leanvalues}
 
-The repository contains the following theorem.
+The first theorem exhibits a competitor beating the direct rotation in one
+particular Ky Fan sum --- in dimension four, the trace norm.
 
 \begin{LeanCode}
 theorem shortRotation_fullDisplacement_refuted :
@@ -823,75 +816,30 @@ theorem shortRotation_fullDisplacement_refuted :
       kyFanSum 4 (LinearMap.id - W.toLinearMap) <
         kyFanSum 4
           (LinearMap.id -
-            (directRotation U V hacute).toLinearMap) :=
-  \langleU4, V4, acute, Wequiv, rfl,
-    principalAngle_le, kyFanSum_lt\rangle
+            (directRotation U V hacute).toLinearMap)
 \end{LeanCode}
 
-The key exact-value lemmas are:
+Supporting lemmas \code{kyFanSum\_displacement\_W} and
+\code{kyFanSum\_displacement\_R} establish the two exact values
+$\trnorm{I-W}=2\sqrt2$ and $\trnorm{I-R}=4\sqrt{2-\sqrt2}$ of
+\cref{sec:counterexample}; the file also certifies orthogonality of $W$,
+acuteness of the pair, the principal angle bound, and the singular values of
+both displacements.
 
-\begin{LeanCode}
-theorem kyFanSum_displacement_W :
-    kyFanSum 4 (LinearMap.id - Wlin) = 2 * Real.sqrt 2
-
-theorem kyFanSum_displacement_R :
-    kyFanSum 4 (LinearMap.id -
-        (directRotation U4 V4 acute).toLinearMap) =
-      4 * Real.sqrt (2 - Real.sqrt 2)
-\end{LeanCode}
-
-The file also certifies orthogonality of $W$, acuteness of the pair, the principal
-angle bound, the singular values of both displacements, and the final strict
-inequality.
-
-\subsection{Refutation in the ``every unitarily invariant norm'' form}
-\label{sec:leanrefutation}
-
-The theorem above exhibits a competitor beating the direct rotation in one
-particular Ky Fan sum.  To refute the source claim \emph{as stated} — for
-\emph{every} unitarily invariant norm — that Ky Fan sum must be presented as an
-inhabitant of the \code{UnitarilyInvariantNorm} structure.  The repository's
-rectangular Ky Fan norm, restricted to the square case, supplies exactly this,
-and the refutation is then immediate.
+To refute the source claim \emph{as stated} --- for \emph{every} unitarily
+invariant norm --- that Ky Fan sum must be presented as an inhabitant of the
+\code{UnitarilyInvariantNorm} structure, which the repository's rectangular Ky
+Fan norm supplies on restriction to the square case.
 
 \begin{LeanCode}
 theorem not_davisKahanProposition4_4_Finite :
-    \not DavisKahanProposition4_4_Finite.{0} := by
-  intro h
-  have hN := h E4 U4 V4 acute principalAngle_le Wequiv rfl
-    (RectangularUnitarilyInvariantNorm.kyFan
-      (\Field := \Real) (E := E4) (F := E4) 4).toSquare
-  have hle : kyFanSum 4 (LinearMap.id -
-        (directRotation U4 V4 acute).toLinearMap) \le
-      kyFanSum 4 (LinearMap.id - Wequiv.toLinearMap) := by
-    simpa [RectangularUnitarilyInvariantNorm.toSquare,
-      RectangularUnitarilyInvariantNorm.kyFan_apply,
-      RectangularUnitarilyInvariantNorm.rectangularKyFanSum,
-      kyFanSum_eq_sum_fin] using hN
-  exact absurd hle (not_le.mpr kyFanSum_lt)
+    \not DavisKahanProposition4_4_Finite.{0}
 \end{LeanCode}
 
-Two presentational points.  First, \code{.toSquare} is a field-for-field coercion
-from the rectangular norm structure to the square one, and
-\code{Rectangular\allowbreak UnitarilyInvariantNorm.\allowbreak kyFan 4} is the bundled Ky Fan $4$-norm;
-composing them yields a genuine \code{Unitarily\allowbreak InvariantNorm $\mathbb{R}$ E4} whose underlying
-function is definitionally the \code{kyFanSum 4} appearing in the previous theorem.
-The \code{simpa} step only unfolds that chain of definitions.
-
-Second, \code{DavisKahanProposition4\_4\_Finite} is universe-polymorphic, whereas the
-witness \code{EuclideanSpace $\mathbb{R}$ (Fin 4)} inhabits universe $0$; the refutation is
-therefore stated as a refutation of \code{P.\{0\}}.  Lean cannot quantify over universes, so
-this is the strongest formulation available, and it suffices: a
-universe-polymorphic proposition holds only if it holds at every universe, so
-refuting it at universe $0$ refutes it.  This is itself a small instance of the
-alignment issue catalogued in \cref{sec:alignment} — a formal artifact with no
-counterpart in the prose, which a reader must be told how to discount.
-
-\subsection{The repair, machine-checked}
+\subsection{The repair}
 \label{sec:leanrepair}
 
-\Cref{thm:qnorm} and the trace-norm consequence are formalized in
-\path{DavisKahan/FiniteDimensional/DirectRotation/QNorm.lean}.
+\Cref{thm:qnorm} and the trace-norm consequence are in \path{QNorm.lean}.
 
 \begin{LeanCode}
 def IsQNorm (N : UnitarilyInvariantNorm \Field E) : Prop :=
@@ -907,26 +855,21 @@ theorem directRotation_fullDisplacement_qnorm
     (hmap : U.map W.toLinearMap = V) :
     N (LinearMap.id - (directRotation U V hacute).toLinearMap) \le
       N (LinearMap.id - W.toLinearMap)
-\end{LeanCode}
 
-The only surviving angle hypothesis is \code{hacute}: no principal angle is a
-quarter turn.  This singles out the unique canonical direct rotation and is
-what the formal constructor requires; it is not needed for a direct rotation to
-exist.  The quantitative bound $\Theta\leq\pi/3$ is gone, and the
-scalar field is an arbitrary \code{RCLike} field rather than $\R$.  Turning the counterexample
-around shows that the trace norm used here is not a $Q$-norm:
-
-\begin{LeanCode}
 theorem kyFan_not_isQNorm :
     \not IsQNorm (RectangularUnitarilyInvariantNorm.kyFan
       (\Field := \Real) (E := E4) (F := E4) 4).toSquare
 \end{LeanCode}
 
-All four declarations above depend only on Lean's three standard axioms
-(\code{propext}, \code{Classical.choice}, \code{Quot.sound}); in particular
-none depends on \code{sorryAx}, so no step is admitted.  We record this because
-it is the one provenance claim in this note that a reader can check
-mechanically, by running \code{\#print axioms} on the four names.
+The only surviving angle hypothesis is \code{hacute}; the quantitative bound
+$\Theta\leq\pi/3$ is gone, and the scalar field is $\R$ or $\mathbb C$ rather
+than $\R$ alone.
+
+All four declarations depend only on Lean's three standard axioms
+(\code{propext}, \code{Classical.choice}, \code{Quot.sound}); none depends on
+\code{sorryAx}, so no step is admitted.  We record this because it is the one
+provenance claim in this note that a reader can check mechanically, by running
+\code{\#print axioms} on the four names.
 
 \section{Semantic alignment between prose and Lean}
 \label{sec:alignment}
