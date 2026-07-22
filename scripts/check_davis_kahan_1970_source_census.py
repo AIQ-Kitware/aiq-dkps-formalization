@@ -67,6 +67,47 @@ def main() -> int:
             short = ref.rsplit(".", 1)[-1]
             if short not in declared:
                 fail(f"unresolved Lean declaration reference for {item['id']}: {ref}")
+        # `planned_declarations` records names the census wants but nobody has
+        # written.  If one starts existing it must be promoted, or the census
+        # keeps under-reporting progress.
+        for ref in item.get("planned_declarations", []):
+            short = ref.rsplit(".", 1)[-1]
+            if short in declared:
+                fail(f"{item['id']} lists {ref} as planned, but it now exists; "
+                     f"move it into lean_declarations")
+
+    # --- schema 4: the compile-backed verification axis --------------------
+    # Note this check is deliberately weak: it matches only the short name
+    # after the last dot, so a reference in the wrong namespace passes.  The
+    # authoritative check is scripts/probe_census_declarations.py --verify,
+    # which resolves every name against the real build.
+    verifications = set(data.get("verification_definitions", {}))
+    if not verifications:
+        fail("schema 4 requires verification_definitions")
+    blockers = data.get("blockers", {})
+    if not isinstance(blockers, dict) or not blockers:
+        fail("schema 4 requires a nonempty blockers table")
+    for key, blocker in blockers.items():
+        if blocker.get("kind") not in {"hard_math", "mechanical", "mixed"}:
+            fail(f"blocker {key} has invalid kind: {blocker.get('kind')!r}")
+        for field in ("title", "detail"):
+            if not isinstance(blocker.get(field), str) or not blocker[field].strip():
+                fail(f"blocker {key} has empty {field}")
+    referenced: set[str] = set()
+    for item in items:
+        if item.get("verification") not in verifications:
+            fail(f"invalid verification for {item['id']}: "
+                 f"{item.get('verification')!r}")
+        blocked = item.get("blocked_by")
+        if not isinstance(blocked, list):
+            fail(f"{item['id']} must carry a blocked_by list")
+        for key in blocked:
+            if key not in blockers:
+                fail(f"{item['id']} is blocked_by {key!r}, absent from blockers")
+            referenced.add(key)
+    orphan = sorted(set(blockers) - referenced)
+    if orphan:
+        fail("blockers referenced by no item: " + ", ".join(orphan))
 
     private_names = ("modernized-transcription", "DavisKahan1970.pdf", "davis-kahan-1970-modernized")
     git_dir = ROOT / ".git"
