@@ -255,11 +255,8 @@ substantially to the mathematics, the formalization, and the writing;
 responsibility for the claims rests with the human authors.  Nothing here
 requires trusting those systems, or Lean, or the surrounding library: the
 counterexample is four explicit $4\times4$ matrices, and every claim about them
-can be checked by hand in a few minutes (\cref{sec:counterexample} and
-Appendix~A).
+can be checked by hand in a few minutes (\cref{sec:counterexample}).
 \end{statusbox}
-
-\tableofcontents
 
 \section{Statement of the issue}
 
@@ -456,6 +453,15 @@ with $W\mathcal U=\mathcal V$, such that
 Consequently Proposition 4.4 is false for the trace norm, despite the strict
 angle bound $\theta_{\max}<\pi/3$.
 \end{theorem}
+
+Independent verification needs nothing beyond this section: confirm
+$W^TW=I$ for \cref{eq:W}; that the two singular values of the cross-Gram
+$E_{\mathcal U}^TWE_{\mathcal U}$ are both $1/\sqrt2$; that the canonical
+intertwiner satisfies $S^TS=\frac12I$, so that $R=\sqrt2\,S$ is the matrix
+\cref{eq:R}; that $(I-R)^T(I-R)=(2-\sqrt2)I$; and that $W$ is conjugate to
+$Q_{\pi/2}\oplus I_2$, so $\svals(I-W)=(\sqrt2,\sqrt2,0,0)$.  Comparing
+$4\sqrt{2-\sqrt2}$ with $2\sqrt2$ then finishes it.  No step requires Lean, the
+surrounding library, or trusting the systems that produced this note.
 
 \section{Concentration, and why no angle threshold helps}
 \label{sec:family}
@@ -727,6 +733,21 @@ falls inside the advertised $\pi/3$ regime exactly when
 so for such $p$ the source's conclusion already fails within its own stated
 angle bound.
 
+\subsection{What survives}
+
+The counterexample separates three superficially similar extremal claims, and
+only one of them falls.  The direct rotation still minimizes the
+\emph{restricted} displacement $(I-W)P_{\mathcal U}$ in every unitarily
+invariant norm, with no angle hypothesis: the competitor cannot exploit
+arbitrary behaviour on $\mathcal U^\perp$ in that problem.  It still minimizes
+the positive displacement square $(I-W)^*(I-W)$ in every unitarily invariant
+norm --- Proposition 4.3, from which \cref{thm:qnorm} descends.  And
+operator-norm full-displacement minimality is untouched, since the competitor
+has the \emph{larger} top singular value even though its singular values sum to
+less.  What fails is precisely the simultaneous full-displacement minimality
+for \emph{every} unitarily invariant norm; narrowing that quantifier to the
+$Q$-norms restores it.
+
 \subsection{The diagnosis, and what is left open}
 
 The distinction is one of majorization.  The original claim needs
@@ -878,7 +899,8 @@ A formal theorem is only as relevant to a historical claim as the interpretation
 connecting the two.  Lean certifies implications among formal definitions; it
 does not certify that those definitions are the intended meanings of prose,
 notation, or a scanned source.  Establishing that correspondence is a distinct
-mathematical and historiographic obligation.
+mathematical and historiographic obligation.  The load-bearing correspondences
+are these.
 
 \begin{longtable}{>{\raggedright\arraybackslash\strut}p{0.22\textwidth}
                   >{\raggedright\arraybackslash\strut\small}p{0.31\textwidth}
@@ -891,427 +913,106 @@ mathematical and historiographic obligation.
 \textbf{Published concept} & \textbf{Lean representation} & \textbf{Alignment argument}\\
 \midrule
 \endhead
-Real Hilbert space
-& \code{EuclideanSpace $\mathbb{R}$ (Fin 4)}
-& $\R^4$ is a real Hilbert space.  A finite-dimensional counterexample refutes a theorem stated for arbitrary real Hilbert spaces.\\
-\addlinespace
-Subspaces $P\Hh$ and $Q\Hh$
-& \code{U V : Submodule $\mathbb{R}$ E}
-& In finite dimension, closed subspaces and linear submodules coincide for the purposes at issue; orthogonal projections exist automatically.\\
+The direct rotation $U$ of Davis--Kahan
+& \code{directRotation U V hacute}
+& The unitary polar factor of the canonical intertwiner $P_VP_U+P_{V^\perp}P_{U^\perp}$.  In the example this is the explicit matrix $R$ of \cref{eq:R}: it has the expected principal-plane action and carries $\mathcal U$ onto $\mathcal V$.  Several inequivalent definitions of ``direct rotation'' circulate, so this must be checked against the source's characterization, not merely trusted to a name.\\
 \addlinespace
 Unitary in a real space
 & \code{E \lisoSym[$\mathbb{R}$] E}
-& A surjective real linear isometry is exactly an orthogonal operator.  The matrix $W$ is proved to preserve inner products and have an inverse.\\
-\addlinespace
-$V(P\Hh)=Q\Hh$
-& \code{U.map W.toLinearMap = V}
-& \code{Submodule.map} is the image of the source subspace under the underlying linear map.  Equality is stronger than mere inclusion.\\
-\addlinespace
-The direct rotation $U$ of Davis--Kahan
-& \code{directRotation U V hacute}
-& The Lean object is the unitary polar factor of the canonical intertwiner $P_VP_U+P_{V^\perp}P_{U^\perp}$.  In the example this polar factor is the explicit matrix $R$ in \cref{eq:R}; it has the expected principal-plane action and carries $\mathcal U$ onto $\mathcal V$.\\
+& A surjective real linear isometry is exactly an orthogonal operator; $W$ is proved to preserve inner products and to have an inverse.\\
 \addlinespace
 Angle condition $\Theta\leq\pi/3$
 & \code{principalAngles U V 0 $\leq$ Real.pi / 3}
-& \code{principalAngles} is formed from the singular values of the directed sine map and sorted in decreasing order.  Index $0$ is the largest angle.  Independently, the cross-Gram calculation shows both angles equal $\pi/4$, so the conclusion does not depend on a delicate indexing convention.\\
+& \code{principalAngles} is built from the singular values of the directed sine map, sorted decreasingly, so index $0$ is the largest.  Davis--Kahan's ambient angle operator duplicates nonzero angles where the Lean list is one-sided, but the maximum agrees.  Here the independent cross-Gram computation gives both angles as $\pi/4$, so nothing rests on the indexing convention.\\
 \addlinespace
 Every unitarily invariant norm
 & \code{N : UnitarilyInvariantNorm $\mathbb{R}$ E}
-& The formal structure permits seminorm-level objects, so it is slightly broader than the paper's class of norms.  This does not affect the refutation, which instantiates \code{N} at an explicit witness: \code{(Rectangular\allowbreak UnitarilyInvariantNorm.\allowbreak kyFan 4).\allowbreak toSquare}, whose underlying function is \code{kyFanSum 4}, in dimension four the genuine trace/nuclear norm.\\
-\addlinespace
-Implicit universe quantification
-& \code{DavisKahanProposition4\_4\_\allowbreak Finite.\allowbreak\{0\}}
-& An artifact of the formal system with no counterpart in the prose.  Lean cannot quantify over universes; refuting the claim at universe $0$, where the $\R^4$ witness lives, refutes the polymorphic claim, since the latter holds only if it holds at every universe.\\
+& The formal structure admits seminorms, so it is slightly broader than the source's class --- which cannot be the source of the counterexample, since the refutation instantiates \code{N} at an explicit witness: \code{(Rectangular\allowbreak UnitarilyInvariantNorm.\allowbreak kyFan 4).\allowbreak toSquare}, whose underlying function is \code{kyFanSum 4}, in dimension four the genuine trace norm.  The source's subscripted $\lVert\cdot\rVert_\nu$ are Ky Fan norms, matching this.\\
 \addlinespace
 Full displacement $I-V$
 & \code{LinearMap.id - W.toLinearMap}
-& This is the full ambient displacement.  It is not the restricted displacement $(I-W)P_U$ and not the positive square $(I-W)^*(I-W)$.  Those nearby statements have different validity.\\
+& The full ambient displacement: not the restricted $(I-W)P_{\mathcal U}$, and not the square $(I-W)^*(I-W)$.  Those nearby statements have different validity, and the whole point is which one fails.\\
+\addlinespace
+Implicit universe quantification
+& \code{DavisKahanProposition4\_4\_\allowbreak Finite.\allowbreak\{0\}}
+& An artifact of the formal system with no counterpart in the prose.  Lean cannot quantify over universes; refuting the claim at universe $0$, where the $\R^4$ witness lives, refutes the polymorphic claim, which holds only if it holds at every universe.\\
 \bottomrule
 \end{longtable}
 
-\subsection{Why human semantic review is necessary}
+The remaining correspondences are routine: $\R^4$ is a real Hilbert space and a
+finite-dimensional counterexample refutes a theorem asserted for all of them;
+in finite dimension submodules and closed subspaces coincide for present
+purposes; and \code{Submodule.map} is the image of the source subspace, so
+\code{U.map W.toLinearMap = V} is the equality $V(P\Hh)=Q\Hh$ rather than an
+inclusion.  One reading hazard is worth flagging: Davis--Kahan write $U$ for
+the direct rotation and $V$ for a competitor, whereas the formalization uses
+\code{U}, \code{V} for the two subspaces and \code{W} for the competitor.  The
+names are semantically inert, but the symbols collide.
 
-The central alignment risks are the following.
+The one link in the chain that no machine verifies is source fidelity, and we
+have checked it against the original article and our transcription.
+Proposition 4.4 reads, in full: ``Assume $V$ a unitary taking $P\Hh$ onto
+$Q\Hh$ in a real space $\Hh$; assume also that $\Theta\leq\pi/3$.  Then
+$\lVert1-V\rVert$ is minimized, for every unitary-invariant norm, when $V=U$.''
+There is no further hypothesis --- none excluding multiplicity mixing, none
+restricting the competitor class, none replacing the full displacement by a
+restricted or squared one.  A reviewer should nevertheless repeat that check;
+it is the step on which the whole interpretation rests, and it is the one step
+we cannot delegate.
 
-\begin{enumerate}[leftmargin=2.2em]
-\item \textbf{Source fidelity.}  One must inspect the original printed paper,
-not merely a modern transcription, to verify the quantifiers, the real-space
-restriction, the angle threshold, the competitor class, and the use of the full
-displacement.  We have carried out this check against the original article and
-against our modernized transcription of it.  Proposition 4.4 reads, in full:
-``Assume $V$ a unitary taking $P\Hh$ onto $Q\Hh$ in a real space $\Hh$; assume
-also that $\Theta\leq\pi/3$.  Then $\lVert1-V\rVert$ is minimized, for every
-unitary-invariant norm, when $V=U$.''  There is no additional hypothesis — in
-particular none excluding multiplicity mixing, restricting the competitor
-class, or replacing the full displacement by a restricted or squared one.  A
-reviewer should nevertheless repeat this check independently; it is the one
-link in the chain that no machine verifies.
-
-\item \textbf{Notation overload.}  The paper uses $U$ for the direct rotation
-and $V$ for a general competitor.  The formalization uses submodule variables
-\code{U}, \code{V} and a competitor \code{W}.  Variable names are semantically irrelevant, but
-a human must avoid mistaking the symbols.
-
-\item \textbf{Angle conventions.}  Davis--Kahan's angle operator on the full
-ambient decomposition duplicates nonzero principal angles, whereas the finite
-Lean list is one-sided.  The maximum angle is nevertheless the same.  In this
-example the independent cross-Gram computation removes any possible doubt.
-
-\item \textbf{Norm conventions.}  The paper's subscripted norms
-$\lVert\cdot\rVert_\nu$ are Ky Fan norms, while its square norm uses separate
-notation.  The Lean \code{UnitarilyInvariantNorm} structure is formulated at the
-seminorm level, but the witness is the genuine full Ky Fan $4$-sum, exactly the
-trace norm in $\R^4$.  Thus the slightly broader formal class cannot be the
-source of the counterexample.
-
-\item \textbf{Canonical-rotation conventions.}  Several equivalent definitions
-of direct rotation occur in the literature.  The formal object must be checked
-against the paper's positivity/principal-square-root characterization, not merely
-called a \code{directRotation}.  The polar-factor computation and explicit matrix
-$R$ provide this check in the example.
-\end{enumerate}
-
-Thus the formal theorem establishes a rigorous counterexample to the Lean
-statement.  The conclusion that it refutes the published Proposition 4.4 rests on
-the preceding human-verified interpretation.  That interpretation is unusually
-strong here because every ingredient can be represented by explicit $4\times4$
-matrices and checked independently of the formal library.
-
-\section{What remains valid}
-
-The counterexample distinguishes three superficially similar extremal claims.
-
-\begin{enumerate}[leftmargin=2.2em]
-\item The direct rotation minimizes the \emph{restricted} displacement
-$(I-W)P_{\mathcal U}$ in the relevant singular-value and unitarily invariant
-norm senses.  The competitor cannot exploit arbitrary behavior on
-$\mathcal U^\perp$ in that problem.
-
-\item The positive displacement square
-$(I-W)^*(I-W)$ satisfies a different majorization/minimality theorem.  Applying
-a norm after squaring is not equivalent to applying the trace norm before
-squaring.
-
-\item The operator-norm full-displacement minimality is compatible with the
-counterexample.  The competitor has a larger largest displacement singular
-value, even though the sum of its singular values is smaller.
-\end{enumerate}
-
-The false claim is therefore specifically the simultaneous full-displacement
-minimality for \emph{every} unitarily invariant norm.  Narrowing that
-quantifier to the $Q$-norms restores it, and more cheaply than the source
-hoped: see \cref{sec:repairs}.
-
-\section{Related work and historical positioning}
+\section{Related work}
 \label{sec:related}
 
-The present result should be distinguished from the previously known fact that
-canonical or direct rotations need not solve every global unitary-completion
-problem for every unitarily invariant norm.  The new point asserted here is
-narrower: the published Davis--Kahan conclusion fails \emph{inside} its stated
-real short-angle regime.  Our present historical assessment is:
+That direct rotations need not solve every unitary-completion problem in every
+unitarily invariant norm was known.  Bolotnikov, Li, and Rodman studied exactly
+this minimization over chains of subspaces, introduced the class of $Q$-norms,
+proved canonical minimization for that class, and showed it generally fails
+outside it --- in particular for Schatten $p$ with $1\leq p<2$
+\cite{BolotnikovLiRodman2001}.  The repair of \cref{sec:repairs} is their
+$Q$-norm condition applied to the one-subspace case.
 
-\begin{statusbox}
-General failures of direct-rotation optimality for Schatten $p<2$ norms were
-known by 2001, but the published examples lie outside the Davis--Kahan
-short-angle regime.  To our knowledge, Proposition~4.4 has not previously been
-observed to fail under its stated hypothesis
-$\theta_{\max}\leq\pi/3$.
-\end{statusbox}
+Their explicit negative example, however, sets the cosine parameter of its CS
+block to $a=\cos\theta=0$.  That is the orthogonal-subspace endpoint
+$\theta=\pi/2$, entirely outside the Davis--Kahan range $\theta\leq\pi/3$.  They
+conclude that the canonical result fails for non-$Q$-norms, but do not ask
+whether a short-angle hypothesis restores it.  The present note does not claim
+to discover that trace-like norms can favor a noncanonical completion; it shows
+that the particular $\pi/3$ repair proposed by Davis and Kahan also fails.
 
-This is deliberately not an unconditional priority claim.  Bibliographic
-absence is difficult to prove, particularly for older, non-digitized material,
-private correspondence, and subscriber-only citation databases.  The evidence
-nevertheless supports the more precise statement that no widely recognized or
-indexed correction of the short-angle claim has been found.
+Qiu, Zhang, and Li later revisited unitarily invariant geometry on Grassmann
+spaces \cite{QiuZhangLi2006}.  Discussing extremal properties of the direct
+rotation they repeat three conclusions attributed to Davis--Kahan: minimal
+restricted displacement, minimal squared displacement, and minimal full
+displacement when the largest canonical angle is at most $\pi/3$.  The third is
+the claim refuted here.  They describe the $\pi/3$ restriction as undesirable
+but do not question it, proving instead the different, globally valid statement
+that a direct rotation minimizes a geodesic displacement
+$\lVert\log Z\rVert_\Phi$.
 
-\subsection{The original claim and its advertised repair}
+That paper contains a close near miss.  In a majorization example it compares
+the angle vectors $(\pi/4,\pi/4)$ and $(\pi/2,0)$ and observes the reversal
+$\sin(\pi/4)+\sin(\pi/4)=\sqrt2>1=\sin(\pi/2)+\sin 0$.  This is the same
+spread-versus-concentrate mechanism as our counterexample: two equal moderate
+rotations can cost more in an additive trace-like norm than one larger rotation
+together with one fixed plane.  The authors apply it to a Grassmann metric and
+do not connect it to the ambient problem $\min\lVert I-Z\rVert_1$.  The
+historical picture is sharpened by Chi-Kwong Li having coauthored both papers,
+and by the 2006 paper acknowledging discussions with Chandler Davis: the
+general norm-class obstruction was understood while the short-angle claim was
+still believed.
 
-The 1970 paper does not merely assert a bound for the operator norm, the square
-norm, or the restriction of the displacement to the source subspace.  It claims
-that, in a real Hilbert space and under $\Theta\leq\pi/3$, the direct rotation
-minimizes $\lVert I-V\rVert$ for \emph{every} unitarily invariant norm
-\cite{DavisKahan1970}.  The trace norm is therefore explicitly included.  The
-surrounding discussion contrasts Proposition~4.4 with two preceding examples:
-one showing failure for a sufficiently large real angle, and another showing
-failure in a complex space.  The reality assumption and the $\pi/3$ bound are
-presented as repairing those failures.  There is no hypothesis of a single
-principal plane, distinct principal angles, or a competitor preserving the
-principal-plane decomposition.
-
-\subsection{Historical treatments of the CS decomposition and direct rotation}
-
-Paige and Wei's historical account of the cosine--sine decomposition reviews
-the contributions of Davis and Kahan and explains the relation between the CS
-decomposition and the direct rotations of Davis and Kato
-\cite{PaigeWei1994}.  It is a natural place where a known error in the geometric
-extremal theory might have been mentioned, but it does not flag
-Proposition~4.4.  This is not proof that the error was unknown in 1994; it is
-supporting evidence that no correction had become part of the standard history.
-
-\subsection{The norm-class divide in Bolotnikov--Li--Rodman}
-
-Bolotnikov, Li, and Rodman studied the minimization problem
-\[
- \min\{\lVert Z-I\rVert_\Phi:
-       Z\text{ unitary and }Z\mathcal M_j=\mathcal N_j\}
-\]
-for chains of subspaces and unitarily invariant norms
-\cite{BolotnikovLiRodman2001}.  Their formulation includes, as the one-subspace
-case, the ambient completion problem considered in Davis--Kahan Section~4.
-They introduce the class of \emph{$Q$-norms} and prove canonical minimization
-for that class.  For Schatten norms, the $Q$-norm condition holds exactly for
-\[
-  \lVert\cdot\rVert_p,\qquad 2\leq p\leq\infty,
-\]
-because $\lVert A\rVert_p^2=\lVert A^*A\rVert_{p/2}$.  This encompasses the
-Frobenius norm and the operator norm and parallels the passage from the valid
-squared-displacement theorem of Davis--Kahan Proposition~4.3.
-
-The same paper explicitly shows that the canonical result is generally false
-for Schatten norms $1\leq p<2$; see its Lemma~3.3.  Thus failure for the trace
-norm was known in substance by 2001.  However, the explicit negative example is
-obtained by setting the cosine parameter in its CS block to $a=0$.
-Geometrically,
-\[
- a=\cos\theta=0,
- \qquad \theta=\frac\pi2,
-\]
-so the example is the orthogonal-subspace endpoint and lies completely outside
-the Davis--Kahan range $\theta\leq\pi/3$.  The authors conclude that the
-canonical theorem is generally false for non-$Q$-norms, but do not investigate
-whether a short-angle hypothesis restores it.
-
-This distinction is essential.  The present note does not claim to discover
-that trace-like norms can favor a noncanonical completion.  It supplies an
-explicit example showing that the particular $\pi/3$ repair proposed by Davis
-and Kahan also fails.
-
-\subsection{The 2006 near miss}
-
-Qiu, Zhang, and Li revisited unitarily invariant geometry on Grassmann spaces
-\cite{QiuZhangLi2006}.  In their discussion of extremal properties of the
-direct rotation, they repeat three conclusions attributed to Davis--Kahan:
-minimal restricted displacement, minimal squared displacement, and minimal
-full displacement when the largest canonical angle is at most $\pi/3$.  The
-third is precisely the claim refuted here.  They describe the $\pi/3$
-restriction as undesirable, but do not question its correctness, and instead
-prove the different, globally valid statement that a direct rotation minimizes
-a logarithmic or geodesic displacement $\lVert\log Z\rVert_\Phi$.
-
-The paper contains an especially close near miss.  In a majorization example it
-compares the angle vectors
-\[
- \left(\frac\pi4,\frac\pi4\right)
- \quad\text{and}\quad
- \left(\frac\pi2,0\right)
-\]
-and observes the reversal
-\[
- \sin\frac\pi4+\sin\frac\pi4
-   =\sqrt2
-   >1
-   =\sin\frac\pi2+\sin0.
-\]
-This is essentially the same ``spread versus concentrate'' mechanism used in
-our counterexample: two equal moderate rotations can cost more in an additive
-trace-like norm than one larger rotation together with one fixed plane.  The
-2006 authors apply the observation to a Grassmann metric and do not connect it
-to the ambient completion problem $\min\lVert I-Z\rVert_1$.
-
-The historical evidence is stronger because Chi-Kwong Li coauthored both the
-2001 paper establishing general failures for non-$Q$-norms and the 2006 paper
-repeating the $\pi/3$ assertion.  The 2006 paper also acknowledges helpful
-discussions with Chandler Davis.  The natural interpretation is that the
-general norm-class obstruction was understood, while the short-angle claim was
-still believed to be correct.  This is evidence rather than proof of what the
-authors knew.
-
-\subsection{Later structural and norm-dependent literature}
-
-Dou, Shi, Cui, and Du give general explicit descriptions of intertwining
-operators and direct rotations of two orthogonal projections
-\cite{DouShiCuiDu2017}.  Their work improves structural existence and
-representation results associated with Kato, Avron--Seiler--Simon, and
-Davis--Kahan, but it does not report a correction to the Section~4 extremal
-statement.
-
-Norm-dependent optimality also appears in orthogonal Procrustes problems.  Cape
-studies how an optimizer depends on the chosen norm
-\cite{Cape2020}.  Such problems optimize frame alignments of the form
-$\inf_Z\lVert X-YZ\rVert$ and reinforce the general lesson that a canonical
-optimizer may depend on the norm.  They are nevertheless different from the
-ambient orthogonal-extension problem
-\[
- \inf\{\lVert I-Z\rVert:Z\mathcal U=\mathcal V\}
-\]
-and do not identify a Davis--Kahan error.
-
-Books, surveys, and later applications found in this review tend to rely on the
-safer neighboring statements: minimization of $(I-Z)P$, minimization of the
-squared displacement $(I-Z)^*(I-Z)$ in arbitrary unitarily invariant norms, or
-minimality for the operator and Frobenius norms.  These claims remain compatible
-with both the $Q$-norm theory and the present counterexample.
-
-\subsection{Errata search and the official publication record}
-
-SIAM's current author guidance states that an accepted author erratum is
-published as a separate item and attached to the original article's PDF; a
-production correction is likewise appended to the original PDF
-\cite{SIAMErrataPolicy}.  We found no erratum, correction, expression of
-concern, or attached notice on the official article record for DOI
-\texttt{10.1137/0707001}, and targeted searches did not locate a SIAM-recorded
-correction of Proposition~4.4.  This supports the narrow statement:
-
-\begin{quote}
-There is no SIAM-recorded correction of Proposition~4.4 that we could locate.
-\end{quote}
-
-It does not exclude an unpublished observation, correspondence, or a correction
-buried in unrelated literature.
-
-\subsection{Search limitations and archival route}
-
-The literature search included the exact $\pi/3$ assertion, ``Proposition 4.4''
-with Davis--Kahan, direct rotation combined with trace, nuclear, and Schatten
-norms, the angle pattern $(\pi/4,\pi/4)$ versus $(\pi/2,0)$, the exact algebraic
-costs in the example, and terms such as \emph{erratum}, \emph{correction},
-\emph{false}, and \emph{counterexample}.  The only directly relevant hits were
-the general $p<2$ failure in 2001 and the 2006 repetition of the short-angle
-claim.
-
-The main unresolved bibliographic limitations are subscriber-only forward
-citation lists, MathSciNet and zbMATH reviews that were not exhaustively
-exported, dissertations and non-digitized notes, and private correspondence.
-The University of Toronto holds the Chandler Davis fonds, comprising 59 boxes
-of research material and extensive correspondence, with most files open to
-researchers \cite{ChandlerDavisFonds}.  The most promising archival targets are
-correspondence and drafts from approximately 1967--1971, exchanges with Kahan,
-notes for \emph{The Rotation of Eigenvectors by a Perturbation. III}, and later
-correspondence concerning unitary-invariant norms and direct rotations.  An
-archival request is a genuinely independent historical route that could alter
-the priority assessment.
-
-\subsection{Chronology and confidence assessment}
-
-\begin{center}
-\begin{tabularx}{0.97\textwidth}{>{\raggedright\arraybackslash}p{0.17\textwidth}
-                                  >{\raggedright\arraybackslash}p{0.29\textwidth}
-                                  >{\raggedright\arraybackslash}X}
-\toprule
-\textbf{Source} & \textbf{What it establishes} & \textbf{Relation to this counterexample}\\
-\midrule
-Davis--Kahan (1970) & All-UI-norm minimization in real spaces for $\Theta\leq\pi/3$ & The false statement itself.\\
-Paige--Wei (1994) & History of the CS decomposition and direct rotation & Does not flag Proposition~4.4.\\
-Bolotnikov--Li--Rodman (2001) & Positive theory for $Q$-norms; failure for Schatten $p<2$ & Explicit negative example is at $\theta=\pi/2$, not in the short-angle regime.\\
-Qiu--Zhang--Li (2006) & Repeats the $\pi/3$ assertion; proves logarithmic metric optimality & Strong evidence that the precise error was still unnoticed; contains a closely related majorization example.\\
-Dou--Shi--Cui--Du (2017) & General formulas for direct rotations and intertwining operators & Structural theory, with no correction of the extremal statement.\\
-Cape (2020) & Norm-dependent behavior in a Procrustes problem & Different feasible-set geometry; no Davis--Kahan correction.\\
-Present note & Real $\R^4$ counterexample with angles $(\pi/4,\pi/4)$ & Refutes Proposition~4.4 inside its advertised regime.\\
-\bottomrule
-\end{tabularx}
-\end{center}
-
-Our confidence levels are as follows:
-\begin{itemize}
-\item \textbf{High confidence:} there is no widely recognized or mainstream
-  published correction of Proposition~4.4.
-\item \textbf{Moderately high confidence:} no indexed paper gives an explicit
-  counterexample under $\theta_{\max}\leq\pi/3$.
-\item \textbf{Moderate confidence:} the real $\R^4$, $(\pi/4,\pi/4)$,
-  trace-norm counterexample is mathematically new.
-\item \textbf{Low confidence:} no mathematician ever noticed the error
-  privately, in obscure literature, or in correspondence.
-\end{itemize}
-
-The strongest responsible novelty language is therefore:
-
-\begin{statusbox}
-General failures of direct-rotation optimality for Schatten $p<2$ norms were
-previously known, but the published examples lie outside the Davis--Kahan
-short-angle regime.  To our knowledge, Proposition~4.4 has not previously been
-observed to fail under its stated hypothesis
-$\theta_{\max}\leq\pi/3$.
-\end{statusbox}
-
-Before submission, the highest-value remaining due diligence is an
-institutional MathSciNet/zbMATH/Scopus citation export, an archival request to
-the Chandler Davis fonds, and direct outreach to experts or surviving authors.
-Further ordinary web searching is unlikely to change the assessment as much as
-those three routes.
-
-
-\section{Status and suggested independent checks}
-
-\begin{statusbox}
-The counterexample and its supporting algebra are machine-checked.  The
-literature reviewed in \cref{sec:related} establishes that the general
-$p<2$ failure was already known, while no earlier short-angle refutation was
-found.  We therefore use ``apparently new'' and ``to our knowledge'' rather
-than asserting unconditional priority.  Before publication, the remaining due
-diligence should include MathSciNet and zbMATH citation-chain searches,
-inspection of reviews and dissertations, and direct consultation with experts
-in matrix nearness and Grassmann geometry.
-\end{statusbox}
-
-An expert reviewer can verify the mathematical claim with the following short
-checklist.
-
-\begin{enumerate}[leftmargin=2.2em]
-\item Confirm $W^TW=I$ for \cref{eq:W}.
-\item Compute $E_{\mathcal U}^TWE_{\mathcal U}$ and verify its two singular
-values are $1/\sqrt2$.
-\item Compute $P_{\mathcal V}$, the canonical intertwiner $S$, and verify
-$S^TS=\frac12I$ and $R=\sqrt2S$.
-\item Verify \cref{eq:Rgram}, hence
-$\trnorm{I-R}=4\sqrt{2-\sqrt2}$.
-\item Change to the $m$-basis and verify
-$W\simeq Q_{\pi/2}\oplus I_2$, hence
-$\trnorm{I-W}=2\sqrt2$.
-\item Compare the two exact values.
-\item Verify that $\Omega_1,\Omega_2$ are of the source's form $[u_k,Ju_k]$,
-and that the right-hand side of (4.3) equals $4$ for every choice of
-orthonormal eigenbasis of the degenerate angle eigenspace.
-\item Inspect printed pages 20--23 of \cite{DavisKahan1970}, especially
-Proposition 4.4 and equation (4.3), to confirm source alignment.  We have done
-this, but it is the only link no machine checks, and it carries the whole
-interpretive weight of the claim.
-\end{enumerate}
+We found no erratum, correction, or notice attached to the article record for
+DOI \texttt{10.1137/0707001}, and no indexed counterexample within the stated
+$\theta_{\max}\leq\pi/3$ regime.  Bibliographic absence is hard to establish,
+particularly for older non-digitized material and correspondence, so we claim
+only this: general failures for Schatten $p<2$ were known by 2001, the
+published examples lie outside the short-angle regime, and to our knowledge
+Proposition~4.4 has not previously been observed to fail under its stated
+hypothesis.  The full search record --- databases, terms, errata procedures,
+and the archival routes that remain open, including the Chandler Davis fonds
+\cite{ChandlerDavisFonds} --- is in a companion supplement rather than here.
 
 \appendix
-
-\section{Compact matrix certificate}
-
-For ease of independent reproduction, the entire counterexample can be reduced
-to the following identities:
-\[
- \mathcal U=\spanof\{e_0,e_1\},\qquad \mathcal V=W\mathcal U,
-\]
-with $W$ as in \cref{eq:W}, and
-\[
- W^TW=I,
- \qquad
- \svals(E_{\mathcal U}^TWE_{\mathcal U})=\left(\frac1{\sqrt2},\frac1{\sqrt2}\right),
-\]
-\[
- R=\frac1{\sqrt2}
- \begin{pmatrix}
-  1& 0& 0&-1\\
-  0& 1& 1& 0\\
-  0&-1& 1& 0\\
-  1& 0& 0& 1
- \end{pmatrix},
- \qquad
- (I-R)^T(I-R)=(2-\sqrt2)I,
-\]
-\[
- \svals(I-W)=(\sqrt2,\sqrt2,0,0),
- \qquad
- \svals(I-R)=
- (\sqrt{2-\sqrt2},\sqrt{2-\sqrt2},
-  \sqrt{2-\sqrt2},\sqrt{2-\sqrt2}).
-\]
-These identities imply the contradiction immediately.
 
 \section{Repository provenance}
 
@@ -1337,36 +1038,12 @@ V. Bolotnikov, C.-K. Li, and L. Rodman,
 \newblock \emph{Electronic Journal of Linear Algebra}, 8:26--46, 2001.
 \newblock \href{https://doi.org/10.13001/1081-3810.1058}{doi:10.13001/1081-3810.1058}.
 
-\bibitem{Cape2020}
-J. Cape,
-\newblock Orthogonal Procrustes and norm-dependent optimality,
-\newblock \emph{Electronic Journal of Linear Algebra}, 36:158--168, 2020.
-\newblock \href{https://doi.org/10.13001/ela.2020.5009}{doi:10.13001/ela.2020.5009}.
-
 \bibitem{DavisKahan1970}
 C. Davis and W. M. Kahan,
 \newblock The rotation of eigenvectors by a perturbation. III,
 \newblock \emph{SIAM Journal on Numerical Analysis}, 7(1):1--46, 1970.
 \newblock \href{https://doi.org/10.1137/0707001}{doi:10.1137/0707001}.
 
-
-\bibitem{PaigeWei1994}
-C. C. Paige and M. Wei,
-\newblock History and generality of the CS decomposition,
-\newblock \emph{Linear Algebra and its Applications}, 208--209:303--326, 1994.
-\newblock \href{https://doi.org/10.1016/0024-3795(94)90446-4}{doi:10.1016/0024-3795(94)90446-4}.
-
-\bibitem{DouShiCuiDu2017}
-Y.-N. Dou, W.-J. Shi, M.-M. Cui, and H.-K. Du,
-\newblock General explicit descriptions for intertwining operators and direct rotations of two orthogonal projections,
-\newblock \emph{Linear Algebra and its Applications}, 531:575--591, 2017.
-\newblock \href{https://doi.org/10.1016/j.laa.2017.06.036}{doi:10.1016/j.laa.2017.06.036}.
-
-\bibitem{SIAMErrataPolicy}
-Society for Industrial and Applied Mathematics,
-\newblock Information for journal authors: Errors in published articles and publication of errata,
-\newblock accessed 22 July 2026.
-\newblock \url{https://epubs.siam.org/journal-authors}.
 
 \bibitem{ChandlerDavisFonds}
 University of Toronto Archives and Records Management Services,
