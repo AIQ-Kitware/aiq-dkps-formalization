@@ -46,17 +46,77 @@
 \newcommand{\DK}{Davis--Kahan}
 \newcommand{\lean}{\textsc{Lean}}
 
-\DefineVerbatimEnvironment{LeanCode}{Verbatim}{
-  fontsize=\footnotesize,
-  breaklines=true,
-  breakanywhere=true,
+%% Lean listings.
+%%
+%% Lean's notation uses characters that monospace text fonts generally do not
+%% carry (𝕜, ₗ, ᵢ, ⟨⟩, …), so setting the code verbatim leaves gaps or tofu.
+%% Instead the source below writes each such symbol as an ASCII token — \Real,
+%% \Field, \liso, … — and the `literate' table maps those tokens back to
+%% LaTeX math.  The symbols are then typeset from the math font, independently
+%% of whatever the monospace font happens to contain.
+%%
+%% Two constraints on the `literate' table below, both easy to trip over:
+%%   * listings reads the trailing length as a SINGLE digit, so every ASCII
+%%     token must be at most 9 characters long;
+%%   * a replacement containing a subscript (or other catcode-sensitive
+%%     material) must be wrapped in a preamble macro, since inside a listing
+%%     the catcode regime has already changed.  Hence \lisoSym.
+\usepackage{listings}
+
+\newcommand{\lisoSym}{\ensuremath{\simeq_{\ell\mathrm{i}}}}
+
+\lstdefinelanguage{lean}{%
+  sensitive=true,
+  morecomment=[l]{--},
+  morecomment=[s]{/-}{-/},
+  morekeywords=[1]{import,open,namespace,section,end,noncomputable,variable,
+    theorem,lemma,def,abbrev,example,instance,structure,class,inductive,
+    by,where,let,have,show,fun,match,with,if,then,else,do,return,in,
+    Prop,Type},
+  morekeywords=[2]{simp,simpa,rw,unfold,nlinarith,linarith,positivity,
+    norm_num,exact,refine,apply,intro,intros,ext,cases,rcases,obtain,
+    constructor,absurd,using},
+}
+
+\lstdefinestyle{leanpretty}{%
+  language=lean,
+  columns=fullflexible,
+  basicstyle=\ttfamily\footnotesize,
+  keywordstyle=\color{dkblue},
+  commentstyle=\color{dkred!70!black}\itshape,
+  backgroundcolor=\color{dkgray},
   frame=single,
   rulecolor=\color{dkline},
   framesep=3mm,
   xleftmargin=2mm,
   xrightmargin=2mm,
-  baselinestretch=1.05
+  breaklines=true,
+  breakatwhitespace=false,
+  keepspaces=true,
+  showspaces=false,
+  showstringspaces=false,
+  showtabs=false,
+  tabsize=2,
+  numbers=none,
+  % Longer tokens first: several share the "\l" prefix.
+  literate=
+    {\\liso}{\lisoSym}5
+    {\\langle}{$\langle$}7
+    {\\rangle}{$\rangle$}7
+    {\\forall}{$\forall$}7
+    {\\exists}{$\exists$}7
+    {\\Field}{$\Bbbk$}6
+    {\\Real}{$\mathbb{R}$}5
+    {\\not}{$\neg$}4
+    {\\and}{$\wedge$}4
+    {\\le}{$\le$}3
 }
+
+%% Set the style globally, not in the environment's begin-code: inside an
+%% lstlisting the catcode regime has already changed, and re-parsing the
+%% `literate' list there breaks on the backslashes.
+\lstset{style=leanpretty}
+\lstnewenvironment{LeanCode}{}{}
 
 \newtcolorbox{claimbox}{
   colback=dkred!4,
@@ -749,7 +809,15 @@ The formal development used for this note is the repository state at commit
 \small\path{DavisKahan/FiniteDimensional/DirectRotation/ShortRotationCounterexample.lean}
 \end{center}
 The full commit hash is recorded in the appendix.  The code below is reproduced
-in a form suitable for semantic review.
+in a form suitable for semantic review, with two deliberate departures from the
+source file, both purely presentational.  First, line breaks are reflowed to fit
+this page width.  Second, in \cref{sec:leanvalues} the two exact-value lemmas
+are shown as statements only, their proof bodies — routine rewriting by the
+singular-value lemmas followed by \texttt{ring} — being elided.  Everything
+else, including both refutation theorems in full, is verbatim.  Lean's
+notational symbols are typeset here from the mathematics font rather than the
+monospace font, so that glyphs such as $\Bbbk$ and $\simeq_{\ell\mathrm{i}}$
+render correctly; the underlying source characters are the usual Lean ones.
 
 \subsection{A Lean statement corresponding to the published positive claim}
 
@@ -759,16 +827,16 @@ as a theorem, because the assertion is false.
 
 \begin{LeanCode}
 def DavisKahanProposition4_4_Finite : Prop :=
-  ∀ (E : Type*) [NormedAddCommGroup E] [InnerProductSpace ℝ E]
-    [FiniteDimensional ℝ E]
-    (U V : Submodule ℝ E)
+  \forall (E : Type*) [NormedAddCommGroup E] [InnerProductSpace \Real E]
+    [FiniteDimensional \Real E]
+    (U V : Submodule \Real E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hacute : IsAcute U V)
-    (_hshort : principalAngles U V 0 ≤ Real.pi / 3)
-    (W : E ≃ₗᵢ[ℝ] E)
+    (_hshort : principalAngles U V 0 \le Real.pi / 3)
+    (W : E \liso[\Real] E)
     (_hmap : U.map W.toLinearMap = V)
-    (N : UnitarilyInvariantNorm ℝ E),
-      N (LinearMap.id - (directRotation U V hacute).toLinearMap) ≤
+    (N : UnitarilyInvariantNorm \Real E),
+      N (LinearMap.id - (directRotation U V hacute).toLinearMap) \le
         N (LinearMap.id - W.toLinearMap)
 \end{LeanCode}
 
@@ -781,35 +849,34 @@ convention marking binders that the statement quantifies over but whose proofs
 the conclusion does not mention; they carry no mathematical content.
 
 \subsection{The machine-checked counterexample theorem}
+\label{sec:leanvalues}
 
 The repository contains the following theorem.
 
 \begin{LeanCode}
 theorem shortRotation_fullDisplacement_refuted :
-    ∃ (U V : Submodule ℝ (EuclideanSpace ℝ (Fin 4)))
+    \exists (U V : Submodule \Real (EuclideanSpace \Real (Fin 4)))
       (hacute : IsAcute U V)
-      (W : EuclideanSpace ℝ (Fin 4) ≃ₗᵢ[ℝ]
-        EuclideanSpace ℝ (Fin 4)),
-      U.map W.toLinearMap = V ∧
-      principalAngles U V 0 ≤ Real.pi / 3 ∧
+      (W : EuclideanSpace \Real (Fin 4) \liso[\Real]
+        EuclideanSpace \Real (Fin 4)),
+      U.map W.toLinearMap = V \and
+      principalAngles U V 0 \le Real.pi / 3 \and
       kyFanSum 4 (LinearMap.id - W.toLinearMap) <
         kyFanSum 4
           (LinearMap.id -
             (directRotation U V hacute).toLinearMap) :=
-  ⟨U4, V4, acute, Wequiv, rfl,
-    principalAngle_le, kyFanSum_lt⟩
+  \langleU4, V4, acute, Wequiv, rfl,
+    principalAngle_le, kyFanSum_lt\rangle
 \end{LeanCode}
 
 The key exact-value lemmas are:
 
 \begin{LeanCode}
 theorem kyFanSum_displacement_W :
-    kyFanSum 4 (LinearMap.id - Wlin) =
-      2 * Real.sqrt 2
+    kyFanSum 4 (LinearMap.id - Wlin) = 2 * Real.sqrt 2
 
- theorem kyFanSum_displacement_R :
-    kyFanSum 4
-      (LinearMap.id -
+theorem kyFanSum_displacement_R :
+    kyFanSum 4 (LinearMap.id -
         (directRotation U4 V4 acute).toLinearMap) =
       4 * Real.sqrt (2 - Real.sqrt 2)
 \end{LeanCode}
@@ -830,13 +897,13 @@ and the refutation is then immediate.
 
 \begin{LeanCode}
 theorem not_davisKahanProposition4_4_Finite :
-    ¬ DavisKahanProposition4_4_Finite.{0} := by
+    \not DavisKahanProposition4_4_Finite.{0} := by
   intro h
   have hN := h E4 U4 V4 acute principalAngle_le Wequiv rfl
     (RectangularUnitarilyInvariantNorm.kyFan
-      (𝕜 := ℝ) (E := E4) (F := E4) 4).toSquare
+      (\Field := \Real) (E := E4) (F := E4) 4).toSquare
   have hle : kyFanSum 4 (LinearMap.id -
-        (directRotation U4 V4 acute).toLinearMap) ≤
+        (directRotation U4 V4 acute).toLinearMap) \le
       kyFanSum 4 (LinearMap.id - Wequiv.toLinearMap) := by
     simpa [RectangularUnitarilyInvariantNorm.toSquare,
       RectangularUnitarilyInvariantNorm.kyFan_apply,
@@ -848,12 +915,12 @@ theorem not_davisKahanProposition4_4_Finite :
 Two presentational points.  First, `.toSquare` is a field-for-field coercion
 from the rectangular norm structure to the square one, and
 `RectangularUnitarilyInvariantNorm.kyFan 4` is the bundled Ky Fan $4$-norm;
-composing them yields a genuine `UnitarilyInvariantNorm ℝ E4` whose underlying
+composing them yields a genuine `UnitarilyInvariantNorm $\mathbb{R}$ E4` whose underlying
 function is definitionally the `kyFanSum 4` appearing in the previous theorem.
 The `simpa` step only unfolds that chain of definitions.
 
 Second, `DavisKahanProposition4\_4\_Finite` is universe-polymorphic, whereas the
-witness `EuclideanSpace ℝ (Fin 4)` inhabits universe $0$; the refutation is
+witness `EuclideanSpace $\mathbb{R}$ (Fin 4)` inhabits universe $0$; the refutation is
 therefore stated as a refutation of `P.\{0\}`.  Lean cannot quantify over universes, so
 this is the strongest formulation available, and it suffices: a
 universe-polymorphic proposition holds only if it holds at every universe, so
@@ -890,15 +957,15 @@ mathematical and historiographic obligation.
 \midrule
 \endhead
 Real Hilbert space
-& `EuclideanSpace ℝ (Fin 4)`
+& `EuclideanSpace $\mathbb{R}$ (Fin 4)`
 & $\R^4$ is a real Hilbert space.  A finite-dimensional counterexample refutes a theorem stated for arbitrary real Hilbert spaces.\\
 \addlinespace
 Subspaces $P\Hh$ and $Q\Hh$
-& `U V : Submodule ℝ E`
+& `U V : Submodule $\mathbb{R}$ E`
 & In finite dimension, closed subspaces and linear submodules coincide for the purposes at issue; orthogonal projections exist automatically.\\
 \addlinespace
 Unitary in a real space
-& `E ≃ₗᵢ[ℝ] E`
+& `E \lisoSym[$\mathbb{R}$] E`
 & A surjective real linear isometry is exactly an orthogonal operator.  The matrix $W$ is proved to preserve inner products and have an inverse.\\
 \addlinespace
 $V(P\Hh)=Q\Hh$
@@ -910,11 +977,11 @@ The direct rotation $U$ of Davis--Kahan
 & The Lean object is the unitary polar factor of the canonical intertwiner $P_VP_U+P_{V^\perp}P_{U^\perp}$.  In the example this polar factor is the explicit matrix $R$ in \cref{eq:R}; it has the expected principal-plane action and carries $\mathcal U$ onto $\mathcal V$.\\
 \addlinespace
 Angle condition $\Theta\leq\pi/3$
-& `principalAngles U V 0 ≤ Real.pi / 3`
+& `principalAngles U V 0 $\leq$ Real.pi / 3`
 & `principalAngles` is formed from the singular values of the directed sine map and sorted in decreasing order.  Index $0$ is the largest angle.  Independently, the cross-Gram calculation shows both angles equal $\pi/4$, so the conclusion does not depend on a delicate indexing convention.\\
 \addlinespace
 Every unitarily invariant norm
-& `N : UnitarilyInvariantNorm ℝ E`
+& `N : UnitarilyInvariantNorm $\mathbb{R}$ E`
 & The formal structure permits seminorm-level objects, so it is slightly broader than the paper's class of norms.  This does not affect the refutation, which instantiates `N` at an explicit witness: `(RectangularUnitarilyInvariantNorm.kyFan 4).toSquare`, whose underlying function is `kyFanSum 4`, in dimension four the genuine trace/nuclear norm.\\
 \addlinespace
 Implicit universe quantification
