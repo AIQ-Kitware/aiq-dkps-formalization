@@ -290,6 +290,25 @@ private theorem starProjection_span_singleton_apply_of_norm_one
     (uθ (𝕜 := 𝕜) θ) (e1 (𝕜 := 𝕜)) (norm_uθ θ)
   simpa [rotatedModelSubspace] using h
 
+/-- The rotated line is invariant, so its projector fixes its own generator.
+The double-angle operators nest the two projectors, so this is needed. -/
+@[simp] theorem rotatedModelSubspace_starProjection_uθ (θ : ℝ) :
+    (rotatedModelSubspace (𝕜 := 𝕜) θ).starProjection (uθ (𝕜 := 𝕜) θ) =
+      uθ θ := by
+  have h := starProjection_span_singleton_apply_of_norm_one (𝕜 := 𝕜)
+    (uθ (𝕜 := 𝕜) θ) (uθ (𝕜 := 𝕜) θ) (norm_uθ θ)
+  rw [rotatedModelSubspace, h, inner_self_eq_norm_sq_to_K, norm_uθ]
+  simp
+
+/-- Coordinate projection of the rotated generator, in the same nested
+position. -/
+@[simp] theorem modelSubspace_starProjection_uθ (θ : ℝ) :
+    (modelSubspace (𝕜 := 𝕜)).starProjection (uθ (𝕜 := 𝕜) θ) =
+      (Real.cos θ : 𝕜) • e0 := by
+  rw [uθ, map_add, map_smul, map_smul, modelSubspace_starProjection_e0,
+    modelSubspace_starProjection_e1]
+  simp
+
 private theorem projection_sub_model_eq_matrix (θ : ℝ) :
     projection (modelSubspace (𝕜 := 𝕜)) -
         projection (rotatedModelSubspace (𝕜 := 𝕜) θ) =
@@ -298,17 +317,44 @@ private theorem projection_sub_model_eq_matrix (θ : ℝ) :
            ((-Real.sin θ * Real.cos θ : ℝ) : 𝕜);
            ((-Real.sin θ * Real.cos θ : ℝ) : 𝕜),
            ((-Real.sin θ ^ 2 : ℝ) : 𝕜)] := by
+  have hpy : ((Real.sin θ : 𝕜)) ^ 2 + ((Real.cos θ : 𝕜)) ^ 2 = 1 := by
+    have h := congrArg (fun r : ℝ => (r : 𝕜)) (Real.sin_sq_add_cos_sq θ)
+    push_cast at h
+    exact h
   apply plane_linearMap_ext
-  · ext i
+  · -- reduce the projections *before* `e0`/`e1` are unfolded into coordinates
+    simp only [LinearMap.sub_apply, projection, ContinuousLinearMap.coe_coe,
+      modelSubspace_starProjection_e0, modelSubspace_starProjection_e1,
+      rotatedModelSubspace_starProjection_e0,
+      rotatedModelSubspace_starProjection_e1]
+    ext i
     fin_cases i <;>
-      simp [projection, uθ, Matrix.toEuclideanLin_apply, e0, e1,
-        PiLp.single_apply] <;>
-      push_cast <;> nlinarith [Real.sin_sq_add_cos_sq θ]
-  · ext i
+      simp [uθ, e0, e1, Matrix.toEuclideanLin_apply, PiLp.single_apply] <;>
+      (try push_cast) <;>
+      (try simp only [RCLike.real_smul_eq_coe_mul, RCLike.algebraMap_eq_ofReal,
+        smul_eq_mul, mul_one, RCLike.ofReal_mul, RCLike.ofReal_one]) <;>
+      -- `ring` degrades to `ring_nf` and *succeeds*, so `first` would never
+      -- reach the Pythagorean alternatives; `ring1` fails properly
+      first
+        | ring1
+        | linear_combination (-1 : 𝕜) * hpy
+        | linear_combination hpy
+  · simp only [LinearMap.sub_apply, projection, ContinuousLinearMap.coe_coe,
+      modelSubspace_starProjection_e0, modelSubspace_starProjection_e1,
+      rotatedModelSubspace_starProjection_e0,
+      rotatedModelSubspace_starProjection_e1]
+    ext i
     fin_cases i <;>
-      simp [projection, uθ, Matrix.toEuclideanLin_apply, e0, e1,
-        PiLp.single_apply] <;>
-      push_cast <;> nlinarith [Real.sin_sq_add_cos_sq θ]
+      simp [uθ, e0, e1, Matrix.toEuclideanLin_apply, PiLp.single_apply] <;>
+      (try push_cast) <;>
+      (try simp only [RCLike.real_smul_eq_coe_mul, RCLike.algebraMap_eq_ofReal,
+        smul_eq_mul, mul_one, RCLike.ofReal_mul, RCLike.ofReal_one]) <;>
+      -- `ring` degrades to `ring_nf` and *succeeds*, so `first` would never
+      -- reach the Pythagorean alternatives; `ring1` fails properly
+      first
+        | ring1
+        | linear_combination (-1 : 𝕜) * hpy
+        | linear_combination hpy
 
 private theorem sinThetaMap_model_eq_matrix (θ : ℝ) :
     sinThetaMap (modelSubspace (𝕜 := 𝕜))
@@ -316,17 +362,50 @@ private theorem sinThetaMap_model_eq_matrix (θ : ℝ) :
       Matrix.toEuclideanLin
         !![((Real.sin θ ^ 2 : ℝ) : 𝕜), 0;
            ((-Real.sin θ * Real.cos θ : ℝ) : 𝕜), 0] := by
+  have hpy : ((Real.sin θ : 𝕜)) ^ 2 + ((Real.cos θ : 𝕜)) ^ 2 = 1 := by
+    have h := congrArg (fun r : ℝ => (r : 𝕜)) (Real.sin_sq_add_cos_sq θ)
+    push_cast at h
+    exact h
   apply plane_linearMap_ext
-  · ext i
+  · -- reduce the projections *before* `e0`/`e1` are unfolded into coordinates
+    simp only [sinThetaMap, complementaryProjection, projection,
+      ContinuousLinearMap.coe_coe, LinearMap.comp_apply, LinearMap.sub_apply,
+      modelSubspace_starProjection_e0, modelSubspace_starProjection_e1,
+      rotatedModelSubspace_starProjection_e0,
+      rotatedModelSubspace_starProjection_e1, map_smul, map_add,
+      modelSubspace_starProjection_uθ, rotatedModelSubspace_starProjection_uθ,
+      Submodule.starProjection_orthogonal_val]
+    ext i
     fin_cases i <;>
-      simp [sinThetaMap, complementaryProjection, projection, uθ,
-        Matrix.toEuclideanLin_apply, e0, e1, PiLp.single_apply] <;>
-      push_cast <;> nlinarith [Real.sin_sq_add_cos_sq θ]
-  · ext i
+      simp [uθ, e0, e1, Matrix.toEuclideanLin_apply, PiLp.single_apply] <;>
+      (try push_cast) <;>
+      (try simp only [RCLike.real_smul_eq_coe_mul, RCLike.algebraMap_eq_ofReal,
+        smul_eq_mul, mul_one, RCLike.ofReal_mul, RCLike.ofReal_one]) <;>
+      -- `ring` degrades to `ring_nf` and *succeeds*, so `first` would never
+      -- reach the Pythagorean alternatives; `ring1` fails properly
+      first
+        | ring1
+        | linear_combination (-1 : 𝕜) * hpy
+        | linear_combination hpy
+  · simp only [sinThetaMap, complementaryProjection, projection,
+      ContinuousLinearMap.coe_coe, LinearMap.comp_apply, LinearMap.sub_apply,
+      modelSubspace_starProjection_e0, modelSubspace_starProjection_e1,
+      rotatedModelSubspace_starProjection_e0,
+      rotatedModelSubspace_starProjection_e1, map_smul, map_add,
+      modelSubspace_starProjection_uθ, rotatedModelSubspace_starProjection_uθ,
+      Submodule.starProjection_orthogonal_val]
+    ext i
     fin_cases i <;>
-      simp [sinThetaMap, complementaryProjection, projection, uθ,
-        Matrix.toEuclideanLin_apply, e0, e1, PiLp.single_apply] <;>
-      push_cast <;> nlinarith [Real.sin_sq_add_cos_sq θ]
+      simp [uθ, e0, e1, Matrix.toEuclideanLin_apply, PiLp.single_apply] <;>
+      (try push_cast) <;>
+      (try simp only [RCLike.real_smul_eq_coe_mul, RCLike.algebraMap_eq_ofReal,
+        smul_eq_mul, mul_one, RCLike.ofReal_mul, RCLike.ofReal_one]) <;>
+      -- `ring` degrades to `ring_nf` and *succeeds*, so `first` would never
+      -- reach the Pythagorean alternatives; `ring1` fails properly
+      first
+        | ring1
+        | linear_combination (-1 : 𝕜) * hpy
+        | linear_combination hpy
 
 private theorem sinTwoAngleOperator_model_eq_matrix (θ : ℝ) :
     sinTwoAngleOperator (modelSubspace (𝕜 := 𝕜))
