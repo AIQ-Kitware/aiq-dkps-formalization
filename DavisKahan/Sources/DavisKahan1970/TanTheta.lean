@@ -5,7 +5,6 @@ Authors: Jon Crall, Claude Fable 5
 -/
 import DavisKahan.FiniteDimensional.TanTheta.RitzResidual
 import DavisKahan.TanTheta.All
-import DavisKahan.Experimental.InfiniteDimensional.TanTheta.All
 
 /-!
 # Literal Davis--Kahan 1970 Theorem 6.3 surface
