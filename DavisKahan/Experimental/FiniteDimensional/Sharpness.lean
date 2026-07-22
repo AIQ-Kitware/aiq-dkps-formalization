@@ -914,6 +914,7 @@ theorem tanTwoTheta_model_equality
       rw [N.smul_eq]
       norm_num
 
+set_option maxHeartbeats 1000000 in
 /-- The constant one in the single-angle theorems cannot be decreased.
 
 Lean proof route for a weaker agent:
@@ -933,13 +934,22 @@ theorem sinTheta_constant_optimal :
     (UnitarilyInvariantNorm.opNorm 𝕜 (Plane 𝕜))
     (𝕜 := 𝕜) (a := 0) (b := 1) (θ := Real.pi/6)
     (by norm_num) (by positivity) (by linarith [Real.pi_pos])
+  -- read the norm off the singular values rather than off a component
   have hpos : 0 < ‖(modelSinThetaPerturbation (𝕜 := 𝕜) 0 1
       (Real.pi/6)).toContinuousLinearMap‖ := by
-    rw [norm_pos_iff]
-    intro hzero
-    have := congrArg (fun T => T (e0 (𝕜 := 𝕜))) hzero
-    simpa [modelSinThetaPerturbation, e0] using this
-  simpa using (mul_lt_of_lt_one_left hpos hc)
+    rw [opNorm_eq_singularValues_zero _ finrank_euclideanSpace_fin
+        (by norm_num),
+      singularValues_modelSinThetaPerturbation (𝕜 := 𝕜) (by norm_num)
+        (by positivity) (by linarith [Real.pi_pos]),
+      pairSingularValues_zero, Real.sin_pi_div_six]
+    norm_num
+  -- `opNorm` is definitionally the continuous-map norm
+  have hgoal : (1 - 0 : ℝ) * ‖(sinAngleOperator (modelSubspace (𝕜 := 𝕜))
+      (rotatedModelSubspace (𝕜 := 𝕜) (Real.pi/6))).toContinuousLinearMap‖
+      = ‖(modelSinThetaPerturbation (𝕜 := 𝕜) 0 1
+        (Real.pi/6)).toContinuousLinearMap‖ := heq
+  rw [hgoal]
+  exact mul_lt_of_lt_one_left hpos hc
 
 /-- The factor two in the double-angle theorems cannot be decreased.
 
