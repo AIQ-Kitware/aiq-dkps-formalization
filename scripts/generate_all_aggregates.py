@@ -39,12 +39,8 @@ def regenerate(d: pathlib.Path, check: bool = False) -> str | None:
     With `check`, report the difference without writing, so that CI can fail on
     an aggregate that a module addition left stale.
     """
-    # `Audit.lean` imports its directory's aggregate in order to `#check` and
-    # `#print axioms` the whole surface, so it can never be a member of that
-    # aggregate without creating an import cycle.
     modules = sorted(module_of(p) for p in d.glob("*.lean")
-                     if p.name not in ("All.lean", "Experimental.lean",
-                                       "Audit.lean"))
+                     if p.name not in ("All.lean", "Experimental.lean"))
     subs = sorted(module_of(s / "All.lean") for s in d.iterdir()
                   if s.is_dir() and not is_skipped(s)
                   and any(s.rglob("*.lean")))

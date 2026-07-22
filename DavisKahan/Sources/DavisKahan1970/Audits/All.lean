@@ -7,6 +7,7 @@ import DavisKahan.Sources.DavisKahan1970.Audits.Correspondence
 import DavisKahan.Sources.DavisKahan1970.Audits.DoubleAngleTangent
 import DavisKahan.Sources.DavisKahan1970.Audits.FullPaperSineTheta
 import DavisKahan.Sources.DavisKahan1970.Audits.GeneralSinThetaExtensions
+import DavisKahan.Sources.DavisKahan1970.Audits.Section9
 import DavisKahan.Sources.DavisKahan1970.Audits.SylvesterHilbertSchmidt
 import DavisKahan.Sources.DavisKahan1970.Audits.Unbounded
 
