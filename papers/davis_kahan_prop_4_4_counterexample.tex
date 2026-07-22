@@ -213,45 +213,33 @@ and the semantic alignment required to interpret the formal result}
 \begin{abstract}
 We claim that Proposition 4.4 of Chandler Davis and W. M. Kahan's 1970 paper
 \emph{The Rotation of Eigenvectors by a Perturbation. III} is false as printed.
-The proposition asserts, in a real Hilbert space and under the angle bound
-$\Theta\leq \pi/3$, that the direct rotation minimizes
-$\lVert I-V\rVert$ among all orthogonal operators carrying one subspace onto
-another, simultaneously for every unitarily invariant norm.  We give an
-explicit counterexample in $\R^4$ for the trace norm.  The two principal angles
-are both $\pi/4$, but an admissible orthogonal competitor has trace displacement
-$2\sqrt2$, whereas the direct rotation has trace displacement
-$4\sqrt{2-\sqrt2}>2\sqrt2$.  The example has been certified in Lean 4.
+It asserts that in a real Hilbert space, under the angle bound
+$\Theta\leq\pi/3$, the direct rotation minimizes $\lVert I-V\rVert$ over all
+orthogonal operators carrying one subspace onto another, simultaneously for
+every unitarily invariant norm.  We give an explicit counterexample in $\R^4$
+for the trace norm: both principal angles are $\pi/4$, an admissible competitor
+has trace displacement $2\sqrt2$, and the direct rotation has
+$4\sqrt{2-\sqrt2}>2\sqrt2$.  We localize the defect to equation (4.3) of the
+published proof, whose left-hand side is $2\sqrt2$ here against an asserted
+lower bound of $4$; the later block estimates, which are where
+$\Theta\leq\pi/3$ is actually consumed, do hold in this example.
 
-A machine-checked counterexample to a formal statement does not by itself prove
-that a historical prose statement has been refuted: a human must establish the
-semantic correspondence between the source notation and the formal objects.
-Accordingly, this note records both the mathematical counterexample and an
-explicit semantic-alignment audit.  It also localizes the defect in the
-published proof to equation (4.3): for the present example, its left-hand side
-is $2\sqrt2$ while its asserted lower bound is $4$.  Notably, the part of the
-argument that consumes the $\pi/3$ hypothesis — the block-level trigonometric
-computation — does hold in this example.  What fails is the earlier,
-routine-looking reduction that licenses summing the blocks.
+No angle threshold repairs the statement — it fails at arbitrarily small angles
+— but weakening the class of norms does, and gives a cleaner theorem than the
+original: for every $Q$-norm the direct rotation minimizes the full
+displacement, with neither the quantitative $\pi/3$ bound nor the restriction
+to a real space.  This follows from the source's valid Proposition 4.3, and the
+trace norm lies outside the $Q$-class, exactly where the counterexample sits.
+The counterexample, the repair, and the trace-norm consequence are all certified
+in Lean 4.  Because a machine-checked result about formal definitions does not
+by itself refute a prose statement, we also record an explicit
+semantic-alignment audit.
 
-We then ask how far the proposition can be repaired.  No angle threshold
-suffices: the claim fails at arbitrarily small angles.  Weakening the class of
-norms does suffice, and yields a cleaner statement than the original: for every
-$Q$-norm the direct rotation minimizes the full displacement, with neither the
-quantitative $\pi/3$ bound nor the restriction to a real space --- only
-acuteness of the pair, which singles out the unique canonical direct rotation.
-This repair follows from the source's valid Proposition 4.3, and the trace
-norm, which lies outside the $Q$-class, is exactly where our counterexample
-sits.  The repair, and the fact that the trace norm is not a $Q$-norm, are
-also certified in Lean.
-
-The broader norm-dependent phenomenon was partly known: Bolotnikov, Li, and
-Rodman showed in 2001 that canonical minimization can fail for Schatten
-$p$-norms with $1\leq p<2$.  Their explicit obstruction, however, occurs at the
-right-angle endpoint and does not refute the Davis--Kahan short-angle claim.
-Moreover, Qiu, Zhang, and Li repeated the $\pi/3$ assertion in 2006.  We are
-unaware of an earlier published counterexample within the advertised
-$\theta_{\max}\leq\pi/3$ regime; the historical priority claim is therefore
-stated cautiously.
+General failure for Schatten $p<2$ was known to Bolotnikov, Li, and Rodman in
+2001, but their obstruction sits at the right-angle endpoint, and Qiu, Zhang,
+and Li repeated the $\pi/3$ assertion in 2006.  We are unaware of an earlier
+counterexample inside the advertised $\theta_{\max}\leq\pi/3$ regime, and state
+the priority claim cautiously.
 \end{abstract}
 
 \begin{claimbox}
