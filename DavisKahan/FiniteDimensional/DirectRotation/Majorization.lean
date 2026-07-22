@@ -8,7 +8,6 @@ import DavisKahan.FiniteDimensional.Core.OperatorBlocks
 import ForMathlib.Analysis.InnerProductSpace.CourantFischer
 import ForMathlib.Analysis.InnerProductSpace.KyFan
 import ForMathlib.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm
-import ForMathlib.Analysis.InnerProductSpace.TwoDimensionalSingularValues
 
 /-!
 # Fan dominance for the finite direct rotation
@@ -21,13 +20,18 @@ The argument has two distinct parts.
   carrying `U` onto `V`.  The proof writes the canonical intertwiner as the
   competitor times a two-block pinching, applies the Fan--Hoffman inequality
   `lambda_i (Re A) <= sigma_i A`, and then uses pinching contraction.
-* Over `ℝ`, Davis's short-rotation lemma upgrades the squared-displacement
-  majorization to displacement majorization when the largest principal angle
-  is at most `pi / 3`.
 
-Unlike the historical candidate, no principal-plane namespace is assumed.
-All spectral data are obtained from the modulus of the canonical intertwiner
-and ordinary finite-dimensional Courant--Fischer theory.
+The historical full-displacement short-rotation claim is not part of this
+module.  As stated for arbitrary orthogonal competitors it is false even over
+`ℝ`: with two equal principal angles, a multiplicity-space rotation combines
+one zero rotation and one `2θ` rotation and has smaller trace displacement than
+the plane-by-plane direct rotation.  The sound replacement is the unrestricted
+pointwise and UI-norm minimality of the restricted displacement `(I-W)P_U`,
+proved in `DirectRotation.PrincipalPlanes`.
+
+No fictional principal-plane namespace is assumed.  All spectral data are
+obtained from the modulus of the canonical intertwiner and ordinary
+finite-dimensional Courant--Fischer theory.
 -/
 
 namespace ForMathlib
@@ -450,22 +454,6 @@ theorem cosine_ge_half_of_principalAngle_le_pi_div_three
         rw [← Real.cos_pi_div_six, Real.cos_pi_div_six]]
       nlinarith [Real.sq_sqrt (show 0 ≤ (3 : ℝ) by norm_num)]
 
-/-- Davis's finite real short-rotation majorization theorem, reconstructed from
-its principal-plane proof.  The local `2 × 2` inequality and the even/odd Ky
-Fan reassembly are provided by `principalPlane_shortRotation_kyFan`. -/
-theorem davis_short_rotation_kyFan
-    {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
-    [FiniteDimensional ℝ E]
-    (U V : Submodule ℝ E)
-    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V)
-    (hhalf : ∀ i : Fin (finrank ℝ E),
-      (1 / 2 : ℝ) ≤ (canonicalIntertwiner U V).singularValues (i : ℕ))
-    (W : E ≃ₗᵢ[ℝ] E) (hmap : U.map W.toLinearMap = V) (k : ℕ) :
-    kyFanSum k (LinearMap.id - (directRotation U V hacute).toLinearMap) ≤
-      kyFanSum k (LinearMap.id - W.toLinearMap) := by
-  exact principalPlane_shortRotation_kyFan U V hacute hhalf W hmap k
-
 /-- Weak majorization of the positive displacement squares.  This is the
 operator-theoretic core of Davis--Kahan Proposition 4.3. -/
 theorem directRotation_displacementSquare_kyFan
@@ -531,25 +519,6 @@ theorem directRotation_displacementSquare_kyFan
       linarith
   exact (hprefix k).trans (kyFanSum_pinch_le U A1 k)
 
-/-- Davis's real short-rotation Ky Fan theorem. -/
-theorem directRotation_displacement_kyFan_real
-    {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
-    [FiniteDimensional ℝ E]
-    (U V : Submodule ℝ E)
-    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V)
-    (hangle : principalAngles U V 0 ≤ Real.pi / 3)
-    (W : E ≃ₗᵢ[ℝ] E) (hmap : U.map W.toLinearMap = V) (k : ℕ) :
-    kyFanSum k (LinearMap.id - (directRotation U V hacute).toLinearMap) ≤
-      kyFanSum k (LinearMap.id - W.toLinearMap) := by
-  apply davis_short_rotation_kyFan U V hacute
-  · intro i
-    exact cosine_ge_half_of_principalAngle_le_pi_div_three
-      U V hacute hangle i
-  · exact W
-  · exact hmap
-  · exact k
-
 /-- Every UI norm inherits the squared-displacement extremum. -/
 theorem directRotation_displacementSquare_uiNorm
     (N : UnitarilyInvariantNorm 𝕜 E)
@@ -562,20 +531,10 @@ theorem directRotation_displacementSquare_uiNorm
   N.apply_le_of_kyFanSum_le
     (directRotation_displacementSquare_kyFan U V hacute W hmap)
 
-/-- Every real UI norm inherits Davis's short-rotation displacement extremum. -/
-theorem directRotation_displacement_uiNorm_real
-    {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
-    [FiniteDimensional ℝ E]
-    (N : UnitarilyInvariantNorm ℝ E)
-    (U V : Submodule ℝ E)
-    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V)
-    (hangle : principalAngles U V 0 ≤ Real.pi / 3)
-    (W : E ≃ₗᵢ[ℝ] E) (hmap : U.map W.toLinearMap = V) :
-    N (LinearMap.id - (directRotation U V hacute).toLinearMap) ≤
-      N (LinearMap.id - W.toLinearMap) :=
-  N.apply_le_of_kyFanSum_le
-    (directRotation_displacement_kyFan_real U V hacute hangle W hmap)
+/-!
+The corresponding full-displacement theorem is intentionally absent.  The
+valid arbitrary-UI endpoint is `uiNorm_restrictedDisplacement_le`.
+-/
 
 end DavisKahanTheory
 end ForMathlib

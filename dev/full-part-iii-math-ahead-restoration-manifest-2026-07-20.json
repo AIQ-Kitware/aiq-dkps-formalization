@@ -1,18 +1,23 @@
 {
   "additional_compilation_modules": [
-    "DavisKahan/Experimental/FiniteDimensional/TanTheta/GraphOperator.lean",
+    "DavisKahan/Experimental/All.lean",
+    "DavisKahan/Experimental/FiniteDimensional/All.lean",
+    "DavisKahan/Experimental/FiniteDimensional/DirectRotation.lean",
     "DavisKahan/Experimental/FiniteDimensional/DoubleAngle/TanTheta.lean",
     "DavisKahan/Experimental/FiniteDimensional/Generalized.lean",
-    "DavisKahan/Experimental/FiniteDimensional/DirectRotation.lean",
-    "DavisKahan/Experimental/FiniteDimensional/All.lean",
+    "DavisKahan/Experimental/FiniteDimensional/TanTheta/GraphOperator.lean",
+    "DavisKahan/Experimental/InfiniteDimensional/All.lean",
     "DavisKahan/Experimental/InfiniteDimensional/Core/AbstractSpectrum.lean",
     "DavisKahan/Experimental/InfiniteDimensional/Core/OperatorAngle.lean",
     "DavisKahan/Experimental/InfiniteDimensional/Core/SpectralProjection.lean",
-    "DavisKahan/Experimental/InfiniteDimensional/All.lean",
+    "DavisKahan/Experimental/InfiniteDimensional/SinTheta/ContinuationSpectralIdentification.lean",
+    "DavisKahan/Experimental/InfiniteDimensional/SinTheta/ContinuationWitnessGraph.lean",
     "DavisKahan/Experimental/PartIII.lean",
-    "DavisKahan/Experimental/All.lean"
+    "DavisKahan/FiniteDimensional/DirectRotation/All.lean",
+    "DavisKahan/FiniteDimensional/DirectRotation/Majorization.lean",
+    "DavisKahan/FiniteDimensional/DirectRotation/PrincipalPlanes.lean"
   ],
-  "base_commit": "3aeeefa0c26e5fa1292223a4257ea60ebddf4e4a6",
+  "base_commit": "d5e54a708c014d97c4124036d332c6d7caa2a10e",
   "continuation_replacement_modules": [
     "DavisKahan.Experimental.InfiniteDimensional.SinTheta.ContinuationContour",
     "DavisKahan.Experimental.InfiniteDimensional.SinTheta.ContinuationTransport",
@@ -101,9 +106,9 @@
       "signature_sha256": "b3d99748f90396b00536f490f94e346987cdf08e61ded4592833029e41052364"
     },
     {
-      "name": "directRotation_minimizes_uiNorm_of_largestAngle_le_pi_div_three",
+      "name": "directRotation_minimizes_restrictedDisplacement_uiNorm",
       "path": "DavisKahan/Experimental/FiniteDimensional/DirectRotation.lean",
-      "signature_sha256": "9e9450064dfa453ea85b7e1b0f33a7a39ce776244f1a53d0b1fefbcac75b9ffa"
+      "signature_sha256": "ced59543ae843374ad99259f96f0858f21aec06167b3063757f8b46132a1a6c0"
     },
     {
       "name": "directRotationCosine",
@@ -137,12 +142,12 @@
     },
     {
       "name": "sinTwoTheta_acute_of_small_perturbation",
-      "path": "DavisKahan/Experimental/FiniteDimensional/Generalized.lean",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/SinTheta/ContinuationWitnessGraph.lean",
       "signature_sha256": "15aeaac9eb043e24cf061d4a771fb60a28a8155c39e797466730f84b9be4c634"
     },
     {
       "name": "spectralSubspace_path_continuous",
-      "path": "DavisKahan/Experimental/FiniteDimensional/Generalized.lean",
+      "path": "DavisKahan/Experimental/InfiniteDimensional/SinTheta/ContinuationWitnessGraph.lean",
       "signature_sha256": "09c22ea6d585f79263fa2e737f86e2346e851f8ededcce16fe5259d6b292543d"
     },
     {
@@ -234,7 +239,6 @@
   "retired_historical_modules": [
     "DavisKahan/Experimental/InfiniteDimensional/Core/AbstractSpectrum.lean",
     "DavisKahan/Experimental/InfiniteDimensional/Core/OperatorAngle.lean",
-    "DavisKahan/Experimental/InfiniteDimensional/Core/SpectralProjection.lean",
     "DavisKahan/Experimental/FiniteDimensional/DoubleAngle/TanTheta.lean"
   ],
   "schema_version": 1,
@@ -263,11 +267,6 @@
       "replacement": "sinTwoTheta_model_operatorNorm_equality"
     },
     {
-      "correction": "Retire the unsupported incomplete-RCLike ambient facade and use the canonical complete-complex, real-complexified, vendored-Spectra, and production unbounded routes. Historical source is preserved under dev.",
-      "date": "2026-07-21",
-      "path": "DavisKahan/Experimental/InfiniteDimensional"
-    },
-    {
       "correction": "Replace mixed ambient/subtype graph statements by the canonical rectangular trial-coordinate tangent perturbation theorem.",
       "date": "2026-07-21",
       "path": "DavisKahan/Experimental/FiniteDimensional/TanTheta/GraphOperator.lean"
@@ -279,6 +278,33 @@
     },
     "Finite direct rotation uses the global polar cosine |P_V P_U + P_Vperp P_Uperp|; the one-sided |P_V P_U| cannot appear in a full-space trigonometric identity.",
     "Davis--Kahan Proposition 4.4 is retained only over real inner-product spaces; the paper gives a complex counterexample.",
-    "The direct-rotation uniqueness endpoint is polar-factor uniqueness for a unitary-positive factorization, replacing the fictional principal-plane square-root proof."
+    "The direct-rotation uniqueness endpoint is polar-factor uniqueness for a unitary-positive factorization, replacing the fictional principal-plane square-root proof.",
+    {
+      "correction": "Replace the nonexistent Spectra.SpectralTheory.SpectralTheorem import by the actual vendored PVM and calculus modules, and place the genuine bounded complex spectral-projection core at the dependency root.",
+      "date": "2026-07-21",
+      "declarations": [
+        "boundedSelfAdjointSpectralPVM",
+        "boundedSelfAdjointSpectralProjection",
+        "boundedSelfAdjointSpectralSubspace"
+      ],
+      "path": "DavisKahan/Experimental/InfiniteDimensional/Core/SpectralProjection.lean"
+    },
+    {
+      "correction": "Move the two complete-space complex continuation wrappers to ContinuationWitnessGraph. Their statements are unchanged, but finite residual theory no longer imports the full contour continuation hierarchy.",
+      "date": "2026-07-21",
+      "declarations": [
+        "spectralSubspace_path_continuous",
+        "sinTwoTheta_acute_of_small_perturbation"
+      ],
+      "path": "DavisKahan/Experimental/FiniteDimensional/Generalized.lean"
+    },
+    {
+      "correction": "Replace the false real pi-over-three full-displacement UI-norm endpoint by the field-generic unrestricted source-restricted displacement theorem. Multiplicity-space mixing gives counterexamples to the historical full-displacement claim.",
+      "date": "2026-07-21",
+      "declarations": [
+        "directRotation_minimizes_restrictedDisplacement_uiNorm"
+      ],
+      "path": "DavisKahan/Experimental/FiniteDimensional/DirectRotation.lean"
+    }
   ]
 }

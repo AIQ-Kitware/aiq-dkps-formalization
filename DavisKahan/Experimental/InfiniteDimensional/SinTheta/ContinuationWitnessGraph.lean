@@ -169,3 +169,43 @@ end WitnessSelectedGraph
 
 end DavisKahanExt
 end ForMathlib
+
+namespace ForMathlib
+namespace DavisKahanTheory
+
+open scoped InnerProductSpace Topology
+
+namespace ComplexContinuation
+
+open ForMathlib.DavisKahanExt
+
+variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
+  [CompleteSpace H]
+
+/-- The selected Riesz projector of a common-contour witness is norm-continuous
+along the affine path. -/
+theorem spectralSubspace_path_continuous
+    {A V : H →L[ℂ] H} {s : Set ℝ}
+    (C : SpectralContinuationWitness A V s) :
+    ContinuousOn
+      (fun t : ℝ => fixedContourRieszOperator C.contour (operatorPath A V t))
+      (Set.Icc 0 1) :=
+  continuousOn_fixedContourRieszOperator_operatorPath
+    C.contour A V (Set.Icc 0 1) C.margin C.margin_pos
+    (fun t ht => (C.separating t ht).selfAdjoint) C.spectrum_separated
+
+/-- A quantitatively small selected branch is acute; the stronger conclusion
+provided by the continuation layer is quarter-acuteness. -/
+theorem sinTwoTheta_acute_of_small_perturbation
+    {A V : H →L[ℂ] H} {s : Set ℝ}
+    (C : SpectralContinuationWitness A V s)
+    (hsmall : selectedBranchProjectionLipschitzConstant
+      C.contour V C.margin < Real.sqrt 2 / 2) :
+    IsAcute C.sourceSelectedSpectralSubspace C.targetSelectedSpectralSubspace :=
+  isAcute_of_isQuarterAcute _ _
+    (C.selectedSpectralSubspaces_isQuarterAcute_of_contour_bound hsmall)
+
+end ComplexContinuation
+
+end DavisKahanTheory
+end ForMathlib

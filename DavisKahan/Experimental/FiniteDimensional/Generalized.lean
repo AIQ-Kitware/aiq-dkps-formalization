@@ -6,16 +6,15 @@ Authors: Jon Crall, GPT 5.6 High, OpenAI GPT-5.6 Thinking
 import DavisKahan.FiniteDimensional.SinTheta.TrialMap
 import DavisKahan.Experimental.FiniteDimensional.Residual.AngleEmbeddings
 import DavisKahan.Experimental.FiniteDimensional.DoubleAngle.SinTheta
-import DavisKahan.Experimental.InfiniteDimensional.SinTheta.ContinuationWitnessGraph
 
 /-!
-# Generalized finite-dimensional residual and continuation theorems
+# Generalized finite-dimensional residual theorems
 
-This module contains the remaining source-level extensions after the canonical
-finite trial-map theorem.  The arbitrary-separation square-norm theorem uses
-the correctly whitened coordinate operator.  The continuation endpoints use
-the repository's genuine common-contour witness rather than reconstructing a
-Riesz calculus from fictional helper names.
+This module contains the remaining source-level finite extensions after the
+canonical trial-map theorem.  The arbitrary-separation square-norm theorem
+uses the correctly whitened coordinate operator.  Infinite-dimensional
+contour continuation belongs to the concrete `Continuation*` hierarchy and is
+not imported through this finite module.
 -/
 
 namespace ForMathlib
@@ -165,45 +164,6 @@ theorem generalizedSinTwoTheta_unequalFinrank
     δ * N (sinTwoThetaEmbedding U X) ≤ 2 * N (residual A X M) :=
   sinTwoTheta_residual_le_of_orderedGap N hA hU X hM hδ hgap
 
-/-! ## Witness-based spectral continuation
-
-The finite historical statements attempted to manufacture a common Riesz
-contour from endpoint set-membership facts.  The analytic continuation layer
-correctly packages the missing uniform information in
-`SpectralContinuationWitness`; these two endpoints expose that canonical API.
--/
-
-namespace ComplexContinuation
-
-open ForMathlib.DavisKahanExt
-
-variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
-  [CompleteSpace H]
-
-/-- The selected Riesz projector of a common-contour witness is norm-continuous
-along the affine path. -/
-theorem spectralSubspace_path_continuous
-    {A V : H →L[ℂ] H} {s : Set ℝ}
-    (C : SpectralContinuationWitness A V s) :
-    ContinuousOn
-      (fun t : ℝ => fixedContourRieszOperator C.contour (operatorPath A V t))
-      (Set.Icc 0 1) :=
-  continuousOn_fixedContourRieszOperator_operatorPath
-    C.contour A V (Set.Icc 0 1) C.margin C.margin_pos
-    (fun t ht => (C.separating t ht).selfAdjoint) C.spectrum_separated
-
-/-- A quantitatively small selected branch is acute; the stronger conclusion
-provided by the continuation layer is quarter-acuteness. -/
-theorem sinTwoTheta_acute_of_small_perturbation
-    {A V : H →L[ℂ] H} {s : Set ℝ}
-    (C : SpectralContinuationWitness A V s)
-    (hsmall : selectedBranchProjectionLipschitzConstant
-      C.contour V C.margin < Real.sqrt 2 / 2) :
-    IsAcute C.sourceSelectedSpectralSubspace C.targetSelectedSpectralSubspace :=
-  isAcute_of_isQuarterAcute _ _
-    (C.selectedSpectralSubspaces_isQuarterAcute_of_contour_bound hsmall)
-
-end ComplexContinuation
 
 end DavisKahanTheory
 end ForMathlib

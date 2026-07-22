@@ -82,6 +82,23 @@ def main() -> int:
         print_records(records)
         return 0
 
+    for record in records:
+        if record["status"] != "active":
+            continue
+        module = str(record["module"])
+        result = subprocess.run(
+            ["lake", "env", "lean", module],
+            cwd=ROOT,
+            check=False,
+        )
+        if result.returncode != 0:
+            print(
+                "Experimental root registry: FAILED -- "
+                f"active root did not compile: {module}"
+            )
+            print_records(records)
+            return result.returncode or 1
+
     result = subprocess.run(
         ["lake", "build", "DavisKahan.Experimental"],
         cwd=ROOT,

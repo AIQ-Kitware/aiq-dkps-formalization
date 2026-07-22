@@ -13,8 +13,12 @@ This module completes the finite Section 4 route from the canonical polar
 intertwiner.  It deliberately does not reintroduce the historical
 `FiniteTwoProjection` namespace: the trigonometric factorization is obtained
 from the positive cosine `|S|`, the full sine `|P_U-P_V|`, and the
-Moore--Penrose initial projection.  The extremal results are the finite
-Fan-dominance theorems proved in `DirectRotation.Majorization`.
+Moore--Penrose initial projection.
+
+The valid extremal endpoints are the full displacement-square majorization
+and the unrestricted source-restricted displacement theorem.  The historical
+real `pi / 3` claim for the full displacement is false when principal-angle
+multiplicity spaces are mixed by the competitor; it is not reintroduced.
 -/
 
 namespace ForMathlib
@@ -156,19 +160,19 @@ theorem directRotation_minimizes_displacementSquare_uiNorm
       N (displacementSquare W.toLinearMap) :=
   directRotation_displacementSquare_uiNorm N U V hacute W hmap
 
-/-- Davis--Kahan Proposition 4.4.  The all-UI short-rotation theorem is real
-only; the paper gives a complex counterexample. -/
-theorem directRotation_minimizes_uiNorm_of_largestAngle_le_pi_div_three
-    {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
-    [FiniteDimensional ℝ E]
-    (N : UnitarilyInvariantNorm ℝ E) (U V : Submodule ℝ E)
+/-- Davis--Kahan Corollary 4.1: without any angle restriction, the
+direct rotation minimizes every unitarily invariant norm of the displacement
+restricted to the source subspace.  This is the sound replacement for the
+historical full-displacement `pi / 3` candidate. -/
+theorem directRotation_minimizes_restrictedDisplacement_uiNorm
+    (N : UnitarilyInvariantNorm 𝕜 E) (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V)
-    (hangle : principalAngles U V 0 ≤ Real.pi / 3)
-    (W : E ≃ₗᵢ[ℝ] E) (hmap : U.map W.toLinearMap = V) :
-    N (LinearMap.id - (directRotation U V hacute).toLinearMap) ≤
-      N (LinearMap.id - W.toLinearMap) :=
-  directRotation_displacement_uiNorm_real N U V hacute hangle W hmap
+    (hacute : IsAcute U V) (W : E ≃ₗᵢ[𝕜] E)
+    (hmap : U.map W.toLinearMap = V) :
+    N ((LinearMap.id - (directRotation U V hacute).toLinearMap) ∘ₗ
+        projection U) ≤
+      N ((LinearMap.id - W.toLinearMap) ∘ₗ projection U) :=
+  uiNorm_restrictedDisplacement_le N U V hacute W hmap
 
 /-- Pointwise maximum-displacement extremality, obtained from Proposition 4.3
 with the operator norm and `‖A⋆A‖ = ‖A‖²`. -/

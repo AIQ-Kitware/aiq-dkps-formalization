@@ -1,37 +1,43 @@
-# Tan two theta source correction overlay
+# Targeted Davis--Kahan mathematical repair overlay
 
-Base Git HEAD:
+Base commit: `d5e54a708c014d97c4124036d332c6d7caa2a10e`
 
-17d0497a3abcd1b9d648a5dd1cb84a1885d3c930
+This overlay is the narrow replacement for the reverted bulk-facade patch.
+It preserves the existing infinite-dimensional source tree and changes only
+specific declarations or dependency placements justified by the mathematics.
 
-## Mathematical corrections
+## Mathematical changes
 
-- `tanTwoAngleOperator` now applies `safeTanTwo` directly to the canonical angle operator. The old nested functional calculus computed `safeTanTwo (safeTan theta)` rather than `tan (2 theta)`.
-- `tanTwoTheta_residual_le` and `tanTwoTheta_perturbation_le` now require `OrderedInternalGap`.
-- The operator-norm, Frobenius, and Ky Fan wrappers use the same corrected hypothesis.
-- Spectral-side corollaries construct the ordered gap directly from the lower/upper spectral inclusions.
-- `InternalGap` documentation now states its actual scope.
-- The guarded-signature manifest records the two intentional source corrections.
-- The checker now reports that guarded signatures match the manifest rather than claiming every historical signature was preserved.
-
-## Why the hypothesis changed
-
-Absolute separation permits interlacing diagonal-block spectra. An explicit real three-dimensional example satisfies `InternalGap A U 1` and the off-diagonal hypothesis while producing a reducing subspace at exactly angle `pi / 4`. The old quarter-turn conclusion was therefore false. The full construction is recorded in:
-
-`dev/tan-two-theta-ordered-gap-correction-2026-07-20.md`
-
-## Scope
-
-This overlay does not modify the compiler-clean rectangular Schatten, finite lp, weak-majorization, Ky Fan, Moore-Penrose, or angle-embedding implementations. It also does not touch `DavisKahan/Experimental/InfiniteDimensional/Ideals/Rectangular.lean`.
-
-The historical proof bodies of the two experimental arbitrary-UI tan two theta declarations still contain pre-existing fictional helper names. This overlay corrects the mathematical targets before a new proof is written; it does not claim those declarations compile.
+- Replace the nonexistent vendored import
+  `Spectra.SpectralTheory.SpectralTheorem` with the actual Spectra PVM and
+  bounded-calculus infrastructure.
+- Move the genuine bounded complex spectral PVM/projection/subspace API to
+  `Core/SpectralProjection.lean`; the contour-identification module now reuses
+  that core instead of defining it again.
+- Remove the full infinite continuation hierarchy from the finite
+  `Generalized.lean` dependency closure. Its two complex continuation wrappers
+  retain the same names and statements in `ContinuationWitnessGraph.lean`.
+- Retain the valid field-generic displacement-square direct-rotation
+  majorization.
+- Remove the false real `pi / 3` arbitrary-UI full-displacement theorem family.
+  Equal principal-angle multiplicities admit mixing competitors with smaller
+  trace displacement.
+- Replace that endpoint with the valid unrestricted theorem
+  `N ((I - R) P_U) <= N ((I - W) P_U)` for every unitarily invariant norm.
+- Restore the `DirectRotation.All` imports for `PrincipalPlanes` and
+  `Majorization`.
+- Make the Experimental status checker compile each registered active root
+  before the full aggregate.
 
 ## Static validation
 
-- `python3 scripts/check_full_part_iii_math_ahead.py --static-only`: exit 0
-- `python3 scripts/generate_all_aggregates.py --check`: exit 0
-- `python3 scripts/inventory_davis_kahan_debt.py --json`: 18 intentional Challenge occurrences
-- `git diff --check`: exit 0
-- `python3 scripts/check_library_structure.py`: inherited check 3 remains at 116 violations; checks 1, 2, 4, and 5 pass
+- Full Part III static contract: 39 guarded declarations match the manifest.
+- No unfinished proof terms outside the 18 intentional Challenge placeholders.
+- Generated aggregates are current.
+- Experimental registry: 4 active roots, 0 parked.
+- `git diff --check` is clean.
+- Structural check 3 remains at the inherited 116 violations; checks 1, 2, 4,
+  and 5 remain clean.
 
-Lean and Lake are unavailable in the packaging environment. Compiler certification is intentionally left to the compiler agent.
+Lean compilation was not available in the mathematics-ahead environment. The
+four registered roots remain candidate code for compiler elaboration repair.
