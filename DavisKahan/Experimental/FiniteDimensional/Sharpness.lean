@@ -413,17 +413,51 @@ private theorem sinTwoAngleOperator_model_eq_matrix (θ : ℝ) :
         (rotatedModelSubspace (𝕜 := 𝕜) θ) =
       Matrix.toEuclideanLin
         !![0, 0; ((Real.sin (2 * θ) : ℝ) : 𝕜), 0] := by
+  have hpy : ((Real.sin θ : 𝕜)) ^ 2 + ((Real.cos θ : 𝕜)) ^ 2 = 1 := by
+    have h := congrArg (fun r : ℝ => (r : 𝕜)) (Real.sin_sq_add_cos_sq θ)
+    push_cast at h
+    exact h
   apply plane_linearMap_ext
-  · ext i
+  · -- reduce the projections before `e0`/`e1` become coordinates
+    simp only [sinTwoAngleOperator, complementaryProjection, projection,
+      ContinuousLinearMap.coe_coe, LinearMap.comp_apply, LinearMap.sub_apply,
+      LinearMap.smul_apply,
+      modelSubspace_starProjection_e0, modelSubspace_starProjection_e1,
+      rotatedModelSubspace_starProjection_e0,
+      rotatedModelSubspace_starProjection_e1, map_smul, map_add, map_zero,
+      modelSubspace_starProjection_uθ, rotatedModelSubspace_starProjection_uθ,
+      Submodule.starProjection_orthogonal_val]
+    ext i
     fin_cases i <;>
-      simp [sinTwoAngleOperator, complementaryProjection, projection, uθ,
-        Matrix.toEuclideanLin_apply, e0, e1, PiLp.single_apply,
-        Real.sin_two_mul] <;> push_cast <;> ring
-  · ext i
+      simp [uθ, e0, e1, Matrix.toEuclideanLin_apply, PiLp.single_apply,
+        Real.sin_two_mul] <;>
+      (try push_cast) <;>
+      (try simp only [RCLike.real_smul_eq_coe_mul, RCLike.algebraMap_eq_ofReal,
+        smul_eq_mul, mul_one, RCLike.ofReal_mul, RCLike.ofReal_one]) <;>
+      first
+        | ring1
+        | linear_combination (-1 : 𝕜) * hpy
+        | linear_combination hpy
+  ·
+    simp only [sinTwoAngleOperator, complementaryProjection, projection,
+      ContinuousLinearMap.coe_coe, LinearMap.comp_apply, LinearMap.sub_apply,
+      LinearMap.smul_apply,
+      modelSubspace_starProjection_e0, modelSubspace_starProjection_e1,
+      rotatedModelSubspace_starProjection_e0,
+      rotatedModelSubspace_starProjection_e1, map_smul, map_add, map_zero,
+      modelSubspace_starProjection_uθ, rotatedModelSubspace_starProjection_uθ,
+      Submodule.starProjection_orthogonal_val]
+    ext i
     fin_cases i <;>
-      simp [sinTwoAngleOperator, complementaryProjection, projection, uθ,
-        Matrix.toEuclideanLin_apply, e0, e1, PiLp.single_apply,
-        Real.sin_two_mul] <;> push_cast <;> ring
+      simp [uθ, e0, e1, Matrix.toEuclideanLin_apply, PiLp.single_apply,
+        Real.sin_two_mul] <;>
+      (try push_cast) <;>
+      (try simp only [RCLike.real_smul_eq_coe_mul, RCLike.algebraMap_eq_ofReal,
+        smul_eq_mul, mul_one, RCLike.ofReal_mul, RCLike.ofReal_one]) <;>
+      first
+        | ring1
+        | linear_combination (-1 : 𝕜) * hpy
+        | linear_combination hpy
 
 private theorem projection_sub_model_isSymmetric (θ : ℝ) :
     (projection (modelSubspace (𝕜 := 𝕜)) -
