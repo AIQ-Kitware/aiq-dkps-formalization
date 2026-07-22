@@ -30,7 +30,7 @@ refined.  The mathematical content is supplied by the canonical theorem
 declarations underlying the proved Part III facade.
 
 The definitions in this file avoid the speculative angle-operator constructors
-from `DavisKahan.Experimental.FiniteDimensional.Core.AngleOperators`
+from `DavisKahan.FiniteDimensional.Core.AngleOperators`
 whose full spectral-functional-calculus interpretations remain open work.
 For the two sine theorems we name the actual projection products used by the
 proved theorems.

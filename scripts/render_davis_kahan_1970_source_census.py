@@ -57,18 +57,23 @@ def _render_frontier(data: dict, items: list) -> list[str]:
         "",
         "## Frontier",
         "",
-        "Every row that is not already `proved_in_build`, grouped by the",
-        "obstruction standing in front of it. Work items marked `mechanical`",
-        "are already proved and need only wiring; `hard_math` needs new",
+        "Every row that still owes work, grouped by the obstruction standing",
+        "in front of it. This includes rows that are already",
+        "`proved_in_build`: the mathematics can be proved and CI-guarded while",
+        "the source-numbered wrapper is still missing. Obstructions marked",
+        "`mechanical` need only wiring or a restatement; `hard_math` needs new",
         "mathematics.",
         "",
     ]
     by_blocker: dict[str, list] = {}
     unblocked: list = []
     for item in items:
-        if item["verification"] not in NEEDS_WORK:
-            continue
         keys = item.get("blocked_by") or []
+        # A row can be `proved_in_build` and still owe work -- the mathematics
+        # is proved and guarded, but the source-numbered wrapper is missing.
+        # Filtering on verification alone would hide exactly those.
+        if item["verification"] not in NEEDS_WORK and not keys:
+            continue
         if not keys:
             unblocked.append(item)
         for key in keys:

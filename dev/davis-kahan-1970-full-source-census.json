@@ -54,21 +54,6 @@
       "kind": "mixed",
       "detail": "Section 9 compiles, but every source conclusion is stated relative to FreeBeamFiniteDataCertificate (Section9/ExactData.lean) or TheoremOutputCertificate (Section9/FullExample.lean), and no value of either type is ever constructed. The certificate fields are the paper's numerical claims. Discharging the analytic ones needs free-beam-closed-operator and free-beam-third-eigenvalue; the rest is instantiating theorems the repository already proves."
     },
-    "promote-direct-rotation-from-experimental": {
-      "title": "Promote the direct-rotation minimality results into the build",
-      "kind": "mechanical",
-      "detail": "DavisKahan/Experimental/FiniteDimensional/DirectRotation.lean compiles and is sorry-free, so these results are proved; they are simply not reachable from any default target. Moving them into DavisKahan/FiniteDimensional puts them under CI."
-    },
-    "promote-sharpness-from-experimental": {
-      "title": "Promote the sharpness/optimality witnesses into the build",
-      "kind": "mechanical",
-      "detail": "DavisKahan/Experimental/FiniteDimensional/Sharpness.lean compiles and is sorry-free. The constant-optimality and ratio-limit witnesses are proved but outside every default target."
-    },
-    "promote-tan-theta-genuine-from-experimental": {
-      "title": "Promote the genuine-spectrum tan Theta theorem into the build",
-      "kind": "mechanical",
-      "detail": "DavisKahan/Experimental/InfiniteDimensional/TanTheta/GenuineSpectrum.lean compiles and is sorry-free."
-    },
     "exact-source-wrappers": {
       "title": "Source-numbered wrappers over already-proved general theorems",
       "kind": "mechanical",
@@ -138,9 +123,7 @@
       "summary": "One-sided spectral separation plus the Rayleigh–Ritz/off-diagonal condition gives residual and perturbation tangent bounds in every unitary-invariant norm.",
       "status": "candidate_under_repair",
       "verification": "proved_in_build",
-      "blocked_by": [
-        "promote-tan-theta-genuine-from-experimental"
-      ],
+      "blocked_by": [],
       "lean_declarations": [
         "ForMathlib.DavisKahanTheory.partIII_tanTheta_ritzResidual_uiNorm",
         "ForMathlib.DavisKahanExt.tanTheta_genuineSpectrum"
@@ -194,22 +177,15 @@
       "title": "Best constants and simultaneous equality",
       "summary": "All four constants are optimal in two dimensions, and finite direct sums realize equality simultaneously for all unitary-invariant norms.",
       "status": "candidate_under_repair",
-      "verification": "proved_outside_build",
-      "blocked_by": [
-        "promote-sharpness-from-experimental"
-      ],
+      "verification": "proved_in_build",
+      "blocked_by": [],
       "lean_declarations": [
         "ForMathlib.DavisKahanTheory.sinTheta_constant_optimal",
         "ForMathlib.DavisKahanTheory.sinTwoTheta_constant_optimal",
         "ForMathlib.DavisKahanTheory.single_double_sine_tangent_ratios_tendsto_one"
       ],
       "notes": "Sine sharpness and finite multiplicity are compiled; full quartet simultaneous equality remains in the Part III campaign.",
-      "next_action": "Proved. The constant-optimality and ratio-limit witnesses compile under DavisKahan/Experimental/FiniteDimensional/Sharpness.lean; promote them into the build, then audit the equality models against the exact source claim.",
-      "declarations_outside_build": [
-        "ForMathlib.DavisKahanTheory.sinTheta_constant_optimal",
-        "ForMathlib.DavisKahanTheory.sinTwoTheta_constant_optimal",
-        "ForMathlib.DavisKahanTheory.single_double_sine_tangent_ratios_tendsto_one"
-      ]
+      "next_action": "Proved. The constant-optimality and ratio-limit witnesses compile under DavisKahan/Experimental/FiniteDimensional/Sharpness.lean; promote them into the build, then audit the equality models against the exact source claim."
     },
     {
       "id": "S2-unbounded-scope",
@@ -398,19 +374,14 @@
       "title": "Reversal symmetry",
       "summary": "Swapping P and Q leaves the angle operator unchanged and reverses the quarter-turn operator.",
       "status": "candidate_under_repair",
-      "verification": "partially_in_build",
-      "blocked_by": [
-        "promote-direct-rotation-from-experimental"
-      ],
+      "verification": "proved_in_build",
+      "blocked_by": [],
       "lean_declarations": [
         "ForMathlib.DavisKahan1970.complex_directRotation_reversal",
         "ForMathlib.DavisKahanTheory.directRotation_symm"
       ],
       "notes": "Direct-rotation reversal is represented; the exact angle/J statement needs a source wrapper.",
-      "next_action": "The reversal theorem compiles under DavisKahan/Experimental/FiniteDimensional/DirectRotation.lean. Promote it into DavisKahan/FiniteDimensional so CI guards it, then add the source-facing angle and quarter-turn statement.",
-      "declarations_outside_build": [
-        "ForMathlib.DavisKahanTheory.directRotation_symm"
-      ]
+      "next_action": "The reversal theorem compiles under DavisKahan/Experimental/FiniteDimensional/DirectRotation.lean. Promote it into DavisKahan/FiniteDimensional so CI guards it, then add the source-facing angle and quarter-turn statement."
     },
     {
       "id": "DK-4.1-prop",
@@ -439,19 +410,14 @@
       "title": "UI-norm minimality of direct rotation displacement",
       "summary": "The direct rotation minimizes the norm of (1-V)P for every unitary-invariant norm.",
       "status": "compiled_general_infrastructure",
-      "verification": "partially_in_build",
-      "blocked_by": [
-        "promote-direct-rotation-from-experimental"
-      ],
+      "verification": "proved_in_build",
+      "blocked_by": [],
       "lean_declarations": [
         "ForMathlib.DavisKahanTheory.uiNorm_restrictedDisplacement_le",
         "ForMathlib.DavisKahanTheory.directRotation_minimizes_restrictedDisplacement_uiNorm"
       ],
       "notes": "Compiled without any angle restriction, for every unitarily invariant norm, over every RCLike field (finite dimension).  The earlier note conflating this row with Proposition 4.4 is resolved: the corollary concerns the restricted displacement and needs no angle hypothesis.",
-      "next_action": "Proved. directRotation_minimizes_restrictedDisplacement_uiNorm compiles but only under DavisKahan/Experimental; promote it into the build, then add a DavisKahan1970 source wrapper and audit the infinite-dimensional statement.",
-      "declarations_outside_build": [
-        "ForMathlib.DavisKahanTheory.directRotation_minimizes_restrictedDisplacement_uiNorm"
-      ]
+      "next_action": "Proved. directRotation_minimizes_restrictedDisplacement_uiNorm compiles but only under DavisKahan/Experimental; promote it into the build, then add a DavisKahan1970 source wrapper and audit the infinite-dimensional statement."
     },
     {
       "id": "DK-4.2-prop",
@@ -461,18 +427,13 @@
       "title": "Basis-angle square-sum extremality",
       "summary": "For every orthonormal basis of P, the sum of squared displacement sines under V dominates the sum of squared principal sines.",
       "status": "compiled_specialization",
-      "verification": "proved_outside_build",
-      "blocked_by": [
-        "promote-direct-rotation-from-experimental"
-      ],
+      "verification": "proved_in_build",
+      "blocked_by": [],
       "lean_declarations": [
         "ForMathlib.DavisKahanTheory.directRotation_minimizes_sum_sq_basis_angles"
       ],
       "notes": "The finite orthonormal-basis displacement-energy extremality is compiled via the nuclear-norm specialization of the displacement-square majorization.",
-      "next_action": "Proved. directRotation_minimizes_sum_sq_basis_angles compiles but only under DavisKahan/Experimental; promote it into the build, then settle the exact infinite-dimensional summability convention of the source statement.",
-      "declarations_outside_build": [
-        "ForMathlib.DavisKahanTheory.directRotation_minimizes_sum_sq_basis_angles"
-      ]
+      "next_action": "Proved. directRotation_minimizes_sum_sq_basis_angles compiles but only under DavisKahan/Experimental; promote it into the build, then settle the exact infinite-dimensional summability convention of the source statement."
     },
     {
       "id": "DK-4.3-prop",
@@ -482,20 +443,15 @@
       "title": "Squared displacement UI-norm minimality",
       "summary": "The direct rotation minimizes the UI norm of (1-V*) (1-V).",
       "status": "compiled_general_infrastructure",
-      "verification": "partially_in_build",
-      "blocked_by": [
-        "promote-direct-rotation-from-experimental"
-      ],
+      "verification": "proved_in_build",
+      "blocked_by": [],
       "lean_declarations": [
         "ForMathlib.DavisKahanTheory.directRotation_displacementSquare_kyFan",
         "ForMathlib.DavisKahanTheory.directRotation_displacementSquare_uiNorm",
         "ForMathlib.DavisKahanTheory.directRotation_minimizes_displacementSquare_uiNorm"
       ],
       "notes": "Compiled for every unitarily invariant norm over every RCLike field (finite dimension), via Fan-Hoffman majorization of the pinched competitor and two-block pinching contraction.",
-      "next_action": "Proved. directRotation_minimizes_displacementSquare_uiNorm compiles but only under DavisKahan/Experimental; promote it into the build, then add a DavisKahan1970 source wrapper.",
-      "declarations_outside_build": [
-        "ForMathlib.DavisKahanTheory.directRotation_minimizes_displacementSquare_uiNorm"
-      ]
+      "next_action": "Proved. directRotation_minimizes_displacementSquare_uiNorm compiles but only under DavisKahan/Experimental; promote it into the build, then add a DavisKahan1970 source wrapper."
     },
     {
       "id": "DK-4.4-prop",
