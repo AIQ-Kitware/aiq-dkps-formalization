@@ -52,45 +52,45 @@ noncomputable def hermitianPart (A : E →ₗ[𝕜] E) : E →ₗ[𝕜] E :=
 noncomputable def displacementSquare (W : E →ₗ[𝕜] E) : E →ₗ[𝕜] E :=
   (LinearMap.id - W.adjoint) ∘ₗ (LinearMap.id - W)
 
-omit [FiniteDimensional 𝕜 E] in
 @[simp] theorem hermitianPart_apply (A : E →ₗ[𝕜] E) (x : E) :
     hermitianPart A x = (((2 : ℝ)⁻¹ : ℝ) : 𝕜) • (A x + A.adjoint x) := by
   simp [hermitianPart]
 
-omit [FiniteDimensional 𝕜 E] in
 theorem hermitianPart_isSymmetric (A : E →ₗ[𝕜] E) :
     (hermitianPart A).IsSymmetric := by
-  rw [LinearMap.isSymmetric_iff_adjoint_eq]
-  simp [hermitianPart, LinearMap.adjoint_add, LinearMap.adjoint_adjoint,
-    add_comm]
+  intro x y
+  simp only [hermitianPart_apply, inner_smul_left, inner_smul_right,
+    RCLike.conj_ofReal, inner_add_left, inner_add_right,
+    LinearMap.adjoint_inner_left, LinearMap.adjoint_inner_right]
+  ring
 
-omit [FiniteDimensional 𝕜 E] in
 theorem re_inner_hermitianPart (A : E →ₗ[𝕜] E) (x : E) :
     RCLike.re ⟪hermitianPart A x, x⟫_𝕜 = RCLike.re ⟪A x, x⟫_𝕜 := by
-  rw [hermitianPart_apply, inner_smul_left, RCLike.conj_ofReal,
-    inner_add_left, map_mul, map_add]
-  rw [LinearMap.adjoint_inner_left]
   have hconj : RCLike.re ⟪x, A x⟫_𝕜 = RCLike.re ⟪A x, x⟫_𝕜 := by
-    rw [← inner_conj_symm, map_star, RCLike.star_def, RCLike.re_conj]
-  rw [hconj]
-  norm_num
+    rw [← inner_conj_symm (A x) x, RCLike.conj_re]
+  rw [hermitianPart_apply, inner_smul_left, RCLike.conj_ofReal,
+    inner_add_left, LinearMap.adjoint_inner_left, RCLike.re_ofReal_mul,
+    map_add, hconj]
+  ring
 
-omit [FiniteDimensional 𝕜 E] in
 theorem displacementSquare_positive (W : E →ₗ[𝕜] E) :
     (displacementSquare W).IsPositive := by
-  simpa [displacementSquare, LinearMap.adjoint_sub, LinearMap.adjoint_id] using
-    LinearMap.isPositive_adjoint_comp_self (LinearMap.id - W)
+  have h := LinearMap.isPositive_adjoint_comp_self (LinearMap.id - W)
+  have he : LinearMap.adjoint (LinearMap.id - W) =
+      LinearMap.id - W.adjoint := by
+    rw [map_sub, LinearMap.adjoint_id]
+  rwa [he] at h
 
-omit [FiniteDimensional 𝕜 E] in
 theorem displacementSquare_apply_inner (W : E →ₗ[𝕜] E) (x : E) :
     RCLike.re ⟪displacementSquare W x, x⟫_𝕜 = ‖W x - x‖ ^ 2 := by
-  rw [displacementSquare, LinearMap.comp_apply, LinearMap.adjoint_sub,
-    LinearMap.adjoint_id, LinearMap.adjoint_inner_left,
-    inner_self_eq_norm_sq]
-  congr 2
-  rw [LinearMap.sub_apply, LinearMap.id_apply, norm_sub_rev]
+  have he : (LinearMap.id : E →ₗ[𝕜] E) - W.adjoint =
+      LinearMap.adjoint (LinearMap.id - W) := by
+    rw [map_sub, LinearMap.adjoint_id]
+  -- `congr 2` peels past the norm and leaves the false `x - W x = W x - x`
+  rw [displacementSquare, LinearMap.comp_apply, he,
+    LinearMap.adjoint_inner_left, inner_self_eq_norm_sq,
+    LinearMap.sub_apply, LinearMap.id_apply, norm_sub_rev]
 
-omit [FiniteDimensional 𝕜 E] in
 theorem displacementSquare_unitary (W : E ≃ₗᵢ[𝕜] E) :
     displacementSquare W.toLinearMap =
       (2 : 𝕜) • (LinearMap.id - hermitianPart W.toLinearMap) := by
@@ -100,7 +100,8 @@ theorem displacementSquare_unitary (W : E ≃ₗᵢ[𝕜] E) :
     LinearMap.id_apply, W.adjoint_toLinearMap_eq_symm,
     LinearIsometryEquiv.coe_toLinearEquiv, LinearEquiv.coe_coe,
     LinearIsometryEquiv.symm_apply_apply]
-  module
+  -- the two sides carry `2` and `(2 : ℝ)⁻¹` as unrelated scalar atoms
+  match_scalars <;> push_cast <;> ring
 
 /-- A unitary carrying `U` onto `V` intertwines their orthogonal projections. -/
 theorem projection_intertwines_of_map_eq
@@ -397,7 +398,7 @@ theorem eigenvalue_id_sub_sq_lower_bound
   let B := LinearMap.id - T ∘ₗ T
   have hB : B.IsSymmetric := by
     rw [LinearMap.isSymmetric_iff_adjoint_eq]
-    simp [B, LinearMap.adjoint_sub, LinearMap.adjoint_comp, hT.adjoint_eq]
+    simp [B, map_sub, LinearMap.adjoint_comp, hT.adjoint_eq]
   let b := hB.eigenvectorBasis rfl
   let x := b i
   have hx : ‖x‖ = 1 := b.orthonormal.norm_eq_one i
