@@ -406,141 +406,71 @@ theorem singularValues_pos_of_isUnit
   rw [hrange, finrank_top]
   exact i.isLt
 
-/-- Ky Fan sums of `2(I-C)` are the reversed affine eigenvalue sums of a
-positive contraction `C`.  This packages the index reversal caused by the
-map `t |-> 2(1-t)`. -/
+/-- Ky Fan sums of a positive `A = 2(I-C)` are the reversed affine eigenvalue
+sums of the symmetric operator `C`.  This packages the index reversal caused by
+the decreasing map `t |-> 2(1-t)`: the `i`th largest eigenvalue of `A` is
+`2(1 - lambda_{n-1-i}(C))`. -/
 theorem positive_affine_reverse_kyFanSum
-    {C A : E →ₗ[𝕜] E} (hA : A.IsPositive) (hC : C.IsPositive)
+    {C A : E →ₗ[𝕜] E} (hA : A.IsPositive) (hC : C.IsSymmetric)
     (hAC : A = (2 : 𝕜) • (LinearMap.id - C))
     (k : ℕ) :
     kyFanSum k A =
       ∑ i : Fin (min k (finrank 𝕜 E)),
-        2 * (1 - hC.isSymmetric.eigenvalues rfl
-          (Fin.rev ⟨(i : ℕ) + (finrank 𝕜 E - min k (finrank 𝕜 E)), by
-            have := i.isLt
-            omega⟩)) := by
+        2 * (1 - hC.eigenvalues rfl
+          (Fin.rev (Fin.castLE (min_le_right k (finrank 𝕜 E)) i))) := by
   classical
   let n := finrank 𝕜 E
-  let b := hC.isSymmetric.eigenvectorBasis rfl
+  let b := hC.eigenvectorBasis rfl
   let br : OrthonormalBasis (Fin n) 𝕜 E := b.reindex Fin.revPerm
   have heig : ∀ i : Fin n, A (br i) =
-      (((2 * (1 - hC.isSymmetric.eigenvalues rfl (Fin.rev i)) : ℝ)) : 𝕜) • br i := by
+      (((2 * (1 - hC.eigenvalues rfl (Fin.rev i)) : ℝ)) : 𝕜) • br i := by
     intro i
     rw [hAC]
-    simp [br, b, hC.isSymmetric.apply_eigenvectorBasis]
+    simp [br, b, hC.apply_eigenvectorBasis]
     -- the left carries an `ℕ`-smul and the right a scalar-field one
     match_scalars <;> push_cast <;> ring
   have hanti : Antitone (fun i : Fin n =>
-      2 * (1 - hC.isSymmetric.eigenvalues rfl (Fin.rev i))) := by
+      2 * (1 - hC.eigenvalues rfl (Fin.rev i))) := by
     intro i j hij
     have hrev : Fin.rev j ≤ Fin.rev i := Fin.rev_le_rev.mpr hij
-    have hlam := hC.isSymmetric.eigenvalues_antitone rfl hrev
+    have hlam := hC.eigenvalues_antitone rfl hrev
     linarith
-  have hnonneg : ∀ i : Fin n,
-      0 ≤ 2 * (1 - hC.isSymmetric.eigenvalues rfl (Fin.rev i)) := by
+  have hAeig := eigenvalues_eq_of_eigenbasis hA.isSymmetric rfl br hanti heig
+  have hrange : kyFanSum k A
+      = ∑ i ∈ Finset.range (min k (finrank 𝕜 E)), A.singularValues i := by
+    refine (Finset.sum_subset
+      (fun i hi => Finset.mem_range.mpr
+        (lt_of_lt_of_le (Finset.mem_range.mp hi) (min_le_left _ _)))
+      fun i hik hi => ?_).symm
+    have h1 := Finset.mem_range.mp hik
+    have h2 : ¬ i < min k (finrank 𝕜 E) := fun h => hi (Finset.mem_range.mpr h)
+    exact A.singularValues_of_finrank_le (by omega)
+  have hfun : ∀ i : Fin (min k (finrank 𝕜 E)),
+      A.singularValues (i : ℕ) =
+        2 * (1 - hC.eigenvalues rfl
+          (Fin.rev (Fin.castLE (min_le_right k (finrank 𝕜 E)) i))) := by
     intro i
-    have hAi := hA.nonneg_eigenvalues rfl i
-    have hAeig := eigenvalues_eq_of_eigenbasis hA.isSymmetric rfl br hanti heig
-    simpa [hAeig] using hAi
-  have hσ : A.singularValues = fun j =>
-      if hj : j < n then
-        2 * (1 - hC.isSymmetric.eigenvalues rfl (Fin.rev ⟨j, hj⟩))
-      else 0 := by
-    ext j
-    rcases lt_or_ge j n with hj | hj
-    · -- `A` is positive, so its singular values are its own eigenvalues
-      rw [show A.singularValues j = hA.isSymmetric.eigenvalues rfl ⟨j, hj⟩ from
-        singularValues_of_isPositive hA ⟨j, hj⟩]
-      have hAeig := eigenvalues_eq_of_eigenbasis hA.isSymmetric rfl br hanti heig
-      rw [hAeig, dif_pos hj]
-    · rw [A.singularValues_of_finrank_le hj, dif_neg (not_lt.mpr hj)]
-  rw [kyFanSum_eq_sum_fin]
-  simp only [hσ]
-  rw [Fin.sum_univ_eq_sum_range]
-  rw [Fin.sum_univ_eq_sum_range]
-  apply Finset.sum_congr
-  · ext j
-    simp
-    omega
-  · intro j hj
-    simp only [Finset.mem_range] at hj
-    simp [hj, n]
+    have hi : (i : ℕ) < finrank 𝕜 E := lt_of_lt_of_le i.isLt (min_le_right _ _)
+    rw [show A.singularValues (i : ℕ) =
+        hA.isSymmetric.eigenvalues rfl ⟨(i : ℕ), hi⟩ from
+      singularValues_of_isPositive hA ⟨(i : ℕ), hi⟩, hAeig]
+    exact rfl
+  rw [hrange, ← Fin.sum_univ_eq_sum_range
+    (fun i => A.singularValues i) (min k (finrank 𝕜 E))]
+  exact Fintype.sum_congr _ _ hfun
 
-/-- If a symmetric contraction has operator norm at most `r`, every
-sorted eigenvalue of `I - T^2` is at least `1-r^2`. -/
-theorem eigenvalue_id_sub_sq_lower_bound
-    (T : E →ₗ[𝕜] E) (hT : T.IsSymmetric) {r : ℝ} (hr0 : 0 ≤ r)
-    (hr : ‖T.toContinuousLinearMap‖ ≤ r)
-    (i : Fin (finrank 𝕜 E)) :
-    1 - r ^ 2 ≤
-      (hT.sub (LinearMap.IsSymmetric.id (𝕜 := 𝕜) (E := E))).eigenvalues
-        (by
-          apply LinearMap.ext
-          intro x
-          simp [LinearMap.comp_apply, hT.adjoint_eq]
-          module)
-        i := by
-  let B := LinearMap.id - T ∘ₗ T
-  have hB : B.IsSymmetric := by
-    intro x y
-    simp only [B, LinearMap.sub_apply, LinearMap.id_apply,
-      LinearMap.comp_apply, inner_sub_left, inner_sub_right]
-    rw [hT (T x) y, ← hT x (T y)]
-  let b := hB.eigenvectorBasis rfl
-  let x := b i
-  have hx : ‖x‖ = 1 := b.orthonormal.norm_eq_one i
-  have hTx : ‖T x‖ ≤ r := by
-    calc
-      ‖T x‖ ≤ ‖T.toContinuousLinearMap‖ * ‖x‖ := T.toContinuousLinearMap.le_opNorm x
-      _ ≤ r * 1 := mul_le_mul_of_nonneg_right hr (norm_nonneg x)
-      _ = r := by rw [hx, mul_one]
-  have heig := hB.apply_eigenvectorBasis rfl i
-  have hinner := congrArg (fun y => RCLike.re ⟪y, x⟫_𝕜) heig
-  simp only [B, LinearMap.sub_apply, LinearMap.id_apply, LinearMap.comp_apply,
-    inner_sub_left, map_sub, inner_smul_left, RCLike.conj_ofReal,
-    inner_self_eq_norm_sq, hx, one_pow, mul_one] at hinner
-  rw [hT] at hinner
-  nlinarith [sq_nonneg (r - ‖T x‖), norm_nonneg (T x)]
-
-/-- The least cosine is the cosine of the largest principal angle.  Hence the
-`pi / 3` bound gives a uniform lower bound `1/2` for the spectrum of the
-canonical modulus. -/
-theorem cosine_ge_half_of_principalAngle_le_pi_div_three
-    (U V : Submodule 𝕜 E)
-    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V)
-    (hangle : principalAngles U V 0 ≤ Real.pi / 3)
-    (i : Fin (finrank 𝕜 E)) :
-    (1 / 2 : ℝ) ≤ (canonicalIntertwiner U V).singularValues (i : ℕ) := by
-  have hgap : ‖(projection U - projection V).toContinuousLinearMap‖ ≤
-      Real.sin (Real.pi / 3) := by
-    rw [opNorm_projection_sub_eq_sin_largestAngle U V]
-    exact Real.sin_le_sin_of_le
-      (principalAngles_nonneg U V 0)
-      (by positivity) hangle
-  have hsym : (projection U - projection V).IsSymmetric :=
-    projection_isSymmetric U |>.sub (projection_isSymmetric V)
-  have hgram :
-      (canonicalIntertwiner U V).adjoint ∘ₗ canonicalIntertwiner U V =
-        LinearMap.id - (projection U - projection V) ∘ₗ
-          (projection U - projection V) := by
-    ext x
-    simp [canonicalIntertwiner_adjoint_comp_self,
-      complementaryProjection]
-    module
-  have hlam := eigenvalue_id_sub_sq_lower_bound
-    (projection U - projection V) hsym
-    (Real.sin_nonneg_of_nonneg_of_le_pi (by positivity) (by linarith [Real.pi_pos]))
-    hgap i
-  rw [(canonicalIntertwiner U V).singularValues_of_lt rfl i.isLt, hgram]
-  calc
-    Real.sqrt ((canonicalIntertwiner U V).isSymmetric_adjoint_comp_self.eigenvalues rfl i)
-        ≥ Real.sqrt (1 - Real.sin (Real.pi / 3) ^ 2) :=
-      Real.sqrt_le_sqrt hlam
-    _ = 1 / 2 := by
-      rw [show Real.sin (Real.pi / 3) = Real.sqrt 3 / 2 by
-        rw [← Real.cos_pi_div_six, Real.cos_pi_div_six]]
-      nlinarith [Real.sq_sqrt (show 0 ≤ (3 : ℝ) by norm_num)]
+/-!
+The historical short-rotation corollary (a `pi / 3` largest-angle bound forcing
+UI-norm minimality of the full displacement `I - W`) is intentionally absent:
+it is false for arbitrary competitors carrying `U` onto `V` (see
+`dev/targeted-mathematical-repair-2026-07-21.md`; a competitor may mix an
+equal-angle multiplicity space and beat the direct rotation in trace norm at
+every angle).  The valid arbitrary-UI endpoint is the restricted-displacement
+theorem `uiNorm_restrictedDisplacement_le`, which needs no angle hypothesis.
+The spectral-floor lemma that fed the historical corollary also relied on the
+two-projection identity `‖P_U - P_V‖ = sin theta_max`, which is not yet in the
+tree; both were removed with the corollary since nothing else consumes them.
+-/
 
 /-- Weak majorization of the positive displacement squares.  This is the
 operator-theoretic core of Davis--Kahan Proposition 4.3. -/
@@ -562,31 +492,88 @@ theorem directRotation_displacementSquare_kyFan
   have hCeq : ForMathlib.abs B = C := by
     simpa [B, C, S] using
       abs_pinch_competitor_eq_abs_canonicalIntertwiner U V W hmap
-  have hA0 : A0 = (2 : 𝕜) • (LinearMap.id - C) := by
-    simp only [A0]
-    rw [displacementSquare_unitary]
-    have hre := two_smul_abs_canonicalIntertwiner U V hacute
+  have hherm : hermitianPart (directRotation U V hacute).toLinearMap = C := by
+    have htwo := two_smul_abs_canonicalIntertwiner U V hacute
     apply LinearMap.ext
     intro x
-    have hx := LinearMap.congr_fun hre x
-    simp only [LinearMap.smul_apply, LinearMap.sub_apply, LinearMap.id_apply,
-      LinearMap.add_apply] at hx ⊢
-    rw [hx]
-    module
-  have hP1 : P1 = (2 : 𝕜) • (LinearMap.id - H) := by
-    simp only [P1, A1]
-    rw [displacementSquare_unitary]
-    ext x
-    simp [pinch, hermitianPart, LinearMap.comp_apply,
-      complementaryProjection]
-    module
-  have hpositive0 : A0.IsPositive := displacementSquare_positive _
-  have hpositiveP : P1.IsPositive := by
+    have htwox := LinearMap.congr_fun htwo x
+    simp only [LinearMap.smul_apply, LinearMap.add_apply] at htwox
+    rw [hermitianPart_apply,
+      (directRotation U V hacute).adjoint_toLinearMap_eq_symm, ← htwox,
+      smul_smul]
+    have h12 : ((((2 : ℝ)⁻¹ : ℝ)) : 𝕜) * (2 : 𝕜) = 1 := by
+      push_cast
+      norm_num
+    rw [h12, one_smul]
+  have hA0 : A0 = (2 : 𝕜) • (LinearMap.id - C) := by
+    simp only [A0]
+    rw [displacementSquare_unitary, hherm]
+  have hBadj : (pinch U W.symm.toLinearMap).adjoint = pinch U W.toLinearMap := by
+    rw [pinch, pinch, map_add]
+    simp only [LinearMap.adjoint_comp, projection_adjoint, complementaryProjection,
+      W.symm.adjoint_toLinearMap_eq_symm, LinearIsometryEquiv.symm_symm,
+      LinearMap.comp_assoc]
+  have hpinch_add : ∀ M N : E →ₗ[𝕜] E,
+      pinch U (M + N) = pinch U M + pinch U N := by
+    intro M N
+    apply LinearMap.ext
     intro x
-    rw [P1, pinch, LinearMap.add_apply, LinearMap.comp_apply,
-      LinearMap.adjoint_inner_left, LinearMap.adjoint_inner_left]
-    exact add_nonneg (displacementSquare_positive W.toLinearMap).nonneg_inner
-      (displacementSquare_positive W.toLinearMap).nonneg_inner
+    simp only [pinch, LinearMap.add_apply, LinearMap.comp_apply, map_add]
+    abel
+  have hpinch_sub : ∀ M N : E →ₗ[𝕜] E,
+      pinch U (M - N) = pinch U M - pinch U N := by
+    intro M N
+    apply LinearMap.ext
+    intro x
+    simp only [pinch, LinearMap.add_apply, LinearMap.sub_apply,
+      LinearMap.comp_apply, map_sub]
+    abel
+  have hpinch_smul : ∀ (c : 𝕜) (M : E →ₗ[𝕜] E),
+      pinch U (c • M) = c • pinch U M := by
+    intro c M
+    apply LinearMap.ext
+    intro x
+    simp only [pinch, LinearMap.add_apply, LinearMap.smul_apply,
+      LinearMap.comp_apply, map_smul, smul_add]
+  have hpinch_id : pinch U (LinearMap.id : E →ₗ[𝕜] E) = LinearMap.id := by
+    apply LinearMap.ext
+    intro x
+    simp only [pinch, complementaryProjection, LinearMap.add_apply,
+      LinearMap.comp_apply, LinearMap.id_apply]
+    have h1 : projection U (projection U x) = projection U x :=
+      projection_apply_of_mem (U.starProjection_apply_mem x)
+    have h2 : projection Uᗮ (projection Uᗮ x) = projection Uᗮ x :=
+      projection_apply_of_mem (Uᗮ.starProjection_apply_mem x)
+    rw [h1, h2]
+    exact U.starProjection_add_starProjection_orthogonal x
+  have hP1 : P1 = (2 : 𝕜) • (LinearMap.id - H) := by
+    have hA1' : A1 = (2 : 𝕜) • (LinearMap.id - hermitianPart W.toLinearMap) := by
+      simp only [A1]
+      rw [displacementSquare_unitary]
+    have hW2 : hermitianPart W.toLinearMap =
+        (((2 : ℝ)⁻¹ : ℝ) : 𝕜) • (W.toLinearMap + W.symm.toLinearMap) := by
+      simp only [hermitianPart, W.adjoint_toLinearMap_eq_symm]
+    have hHalf : H = (((2 : ℝ)⁻¹ : ℝ) : 𝕜) •
+        (pinch U W.symm.toLinearMap + pinch U W.toLinearMap) := by
+      simp only [H, B, hermitianPart, hBadj]
+    simp only [P1]
+    rw [hA1', hpinch_smul, hpinch_sub, hpinch_id, hW2, hpinch_smul,
+      hpinch_add, hHalf, add_comm (pinch U W.toLinearMap)]
+  have hpositive0 : A0.IsPositive := displacementSquare_positive _
+  have hA1pos : A1.IsPositive := displacementSquare_positive W.toLinearMap
+  have hpositiveP : P1.IsPositive := by
+    refine ⟨fun x y => ?_, fun x => ?_⟩
+    · simp only [P1, pinch, complementaryProjection, LinearMap.add_apply,
+        LinearMap.comp_apply, inner_add_left, inner_add_right,
+        projection_inner_left_eq_right]
+      rw [hA1pos.isSymmetric (projection U x),
+        hA1pos.isSymmetric (projection Uᗮ x),
+        projection_inner_left_eq_right, projection_inner_left_eq_right]
+    · simp only [P1, pinch, complementaryProjection, LinearMap.add_apply,
+        LinearMap.comp_apply, inner_add_left, map_add,
+        projection_inner_left_eq_right]
+      exact add_nonneg (hA1pos.re_inner_nonneg_left _)
+        (hA1pos.re_inner_nonneg_left _)
   have hprefix : ∀ j, kyFanSum j A0 ≤ kyFanSum j P1 := by
     intro j
     -- Diagonalize `C` and `H`.  The Fan--Hoffman inequality gives
@@ -600,12 +587,12 @@ theorem directRotation_displacementSquare_kyFan
       rw [congrFun (eigenvalues_abs B) i]
       exact eigenvalues_hermitianPart_le_singularValues B i
     have hA0eig := positive_affine_reverse_kyFanSum
-      hpositive0 (isPositive_abs B) (by rw [hA0, hCeq]) j
+      hpositive0 (isPositive_abs B).isSymmetric (by rw [hA0, hCeq]) j
     have hP1eig := positive_affine_reverse_kyFanSum
-      hpositiveP (LinearMap.IsPositive.of_hermitianPart_contraction W.symm U) hP1 j
+      hpositiveP (hermitianPart_isSymmetric B) hP1 j
     rw [hA0eig, hP1eig]
     exact Finset.sum_le_sum fun i _ => by
-      have hi := hlam (Fin.rev i)
+      have hi := hlam (Fin.rev (Fin.castLE (min_le_right j (finrank 𝕜 E)) i))
       linarith
   exact (hprefix k).trans (kyFanSum_pinch_le U A1 k)
 
