@@ -202,7 +202,7 @@
 \large A finite-dimensional trace-norm obstruction, its Lean certification,\\
 and the semantic alignment required to interpret the formal result}
 
-\author{Jonathan Crall \and Edward Wang\\[0.5em]
+\author{Jonathan Crall \and Edward Wang \and 
 \normalsize with GPT-5.5, GPT-5.6, Opus 4.8, and Fable 5}
 
 \date{22 July 2026}
@@ -238,7 +238,7 @@ suffices: the claim fails at arbitrarily small angles.  Weakening the class of
 norms does suffice, and yields a cleaner statement than the original: for every
 $Q$-norm the direct rotation minimizes the full displacement, with neither the
 quantitative $\pi/3$ bound nor the restriction to a real space --- only
-acuteness of the pair, which the direct rotation needs in order to be defined.
+acuteness of the pair, which singles out the unique canonical direct rotation.
 This repair follows from the source's valid Proposition 4.3, and the trace
 norm, which lies outside the $Q$-class, is exactly where our counterexample
 sits.  The repair, and the fact that the trace norm is not a $Q$-norm, are
@@ -268,11 +268,14 @@ literature review, and the drafting of this note — was done by the AI systems
 GPT-5.5, GPT-5.6, Opus 4.8, and Fable 5, working under human direction over an
 extended project.  Their contributions were intellectual and substantial, not
 editorial, and we name them for that reason.  We do not attempt to divide the
-credit between them: the repository records enough provenance to establish that
-all four contributed materially, but not enough to partition the work
-reliably, and we prefer to say so rather than invent an attribution.  They are
-not listed in the author field because responsibility for the claims must rest
-with parties who can be held to it, and that is the human authors.
+credit between them.  The surviving project record is incomplete and does not
+permit a reliable partition of the work: commit trailers document some systems
+far more heavily than others, and that metadata is not an activity log.  The
+human collaborators attest that all four contributed materially, and we
+therefore credit them jointly rather than invent a finer attribution.  They are
+credited prominently on the title page, but are not designated as accountable
+authors, because responsibility for the claims must rest with parties who can
+be held to it.
 
 Readers should weight the document accordingly.  Its central feature is that
 nothing here requires trusting those systems, or Lean, or the surrounding
@@ -606,13 +609,14 @@ $u_2=e_1$ one has $Ju_1=e_3$, $Ju_2=-e_2$ and
  \Omega_2E=\spanof\{e_1,e_2\},
 \]
 which are the direct-rotation principal planes of \cref{sec:counterexample}.
-A direct calculation gives
+A direct calculation gives, as operators on $E$,
 \[
- (K\Omega_1)^T(K\Omega_1)=I_2,
+ (K\Omega_1)^T(K\Omega_1)=\Omega_1,
  \qquad
- (K\Omega_2)^T(K\Omega_2)=I_2,
+ (K\Omega_2)^T(K\Omega_2)=\Omega_2 :
 \]
-so each $K\Omega_k$ has singular values $(1,1)$, whence
+that is, $K$ restricted to each principal plane is an isometry onto its image.
+Hence each $K\Omega_k$ has singular values $(1,1,0,0)$, whence
 \[
  \lVert K\Omega_1\rVert_2+\lVert K\Omega_2\rVert_2=2+2=4
  \qquad\text{while}\qquad
@@ -645,9 +649,9 @@ Second, the block estimates that the proof then performs also hold in this
 example.  The body of the printed
 proof of Proposition 4.4 — the computation with $\mu_1+\mu_2$, the constraint
 $\lvert d\rvert\leq1-c$, and the reduction to
-$2-\sec\theta\geq(2\cos\theta-1)^2$ on $\theta\leq\pi/3$ — establishes that each
-block quantity $\lVert K\Omega_k\rVert_2$ is minimized at $V=U$.  In our
-example this is true:
+$2-\sec\theta\geq(2\cos\theta-1)^2$ on $\theta\leq\pi/3$ — is directed at showing
+that each block quantity $\lVert K\Omega_k\rVert_2$ is minimized at $V=U$.  In
+our example that conclusion does hold:
 \[
  \lVert(I-R)\Omega_k\rVert_2=2\sqrt{2-\sqrt2}\approx1.531
  \quad<\quad
@@ -662,7 +666,7 @@ general.
 
 This is worth stating plainly, because it explains how the error survived.  A
 reader checking Proposition 4.4 is drawn to the $\pi/3$ computation, which is
-where the hypothesis enters and which is correct.  The defective step is the
+where the hypothesis enters, and which behaves as claimed in this example.  The defective step is the
 passage from \cref{eq:paper112} to \cref{eq:paper43}, which reads like
 bookkeeping.  The counterexample thus pinpoints a concrete logical failure in
 the printed proof rather than merely exhibiting a theorem whose proof resists
@@ -692,7 +696,7 @@ and Frobenius norms and excludes the trace norm.
 \begin{theorem}[$Q$-norm repair]
 \label{thm:qnorm}
 Let $\mathcal U,\mathcal V$ be an acute pair of subspaces of a finite-dimensional
-inner-product space over any $\mathrm{RCLike}$ field, $R_{\mathcal U,\mathcal V}$
+inner-product space over $\R$ or $\mathbb C$, $R_{\mathcal U,\mathcal V}$
 the direct rotation, and $W$ any unitary with $W\mathcal U=\mathcal V$.  Then
 for every $Q$-norm $N$,
 \[
@@ -711,10 +715,13 @@ that is $N(I-R)^2\leq N(I-W)^2$.  Both sides are nonnegative.
 
 Two features are worth emphasizing.  The repair drops the source's
 quantitative hypotheses: neither $\Theta\leq\pi/3$ nor the restriction to a
-real space is needed.  Acuteness remains --- it is what makes the direct
-rotation well defined --- but it is a non-degeneracy condition rather than a
-smallness condition, and $\Theta\leq\pi/3$ implies it anyway.  And this
-is not a weakening dressed up as a theorem — it is
+real space is needed.  Acuteness remains: it guarantees the \emph{unique}
+canonical direct rotation used here, and is required by the formal constructor.
+It is not an existence condition --- Proposition 3.2 of \cite{DavisKahan1970}
+gives a direct rotation in nonacute cases too, though not a unique one --- and
+it is a non-degeneracy rather than a smallness condition, implied by
+$\Theta\leq\pi/3$ in any case.  And this is not a weakening dressed up as a
+theorem — it is
 exactly the content of the valid Proposition 4.3, correctly transported through
 the square root.  The natural corrigendum is therefore not to patch the angle
 bound but to delete Proposition 4.4 and record its $Q$-norm consequence.
@@ -817,10 +824,12 @@ def DavisKahanProposition4_4_Finite : Prop :=
 \end{LeanCode}
 
 This is the natural finite-dimensional specialization needed for refutation.
-The explicit \code{hacute} argument is not an additional mathematical restriction:
-the source hypothesis $\Theta\leq\pi/3$ already excludes a principal angle
-$\pi/2$, and the Lean constructor for the canonical direct rotation requests a
-proof of acuteness.  The underscores on \code{\_hshort} and \code{\_hmap} are a linter
+The explicit \code{hacute} argument is not an additional mathematical
+restriction.  The existence of a unitary $W$ with $W\mathcal U=\mathcal V$
+forces $\mathcal U$ and $\mathcal V$ to have equal dimension; together with
+$\theta_{\max}\leq\pi/3<\pi/2$ this excludes a right principal angle in either
+direction, which is exactly acuteness.  The Lean constructor for the canonical
+direct rotation requests that proof.  The underscores on \code{\_hshort} and \code{\_hmap} are a linter
 convention marking binders that the statement quantifies over but whose proofs
 the conclusion does not mention; they carry no mathematical content.
 
@@ -907,7 +916,7 @@ counterpart in the prose, which a reader must be told how to discount.
 \subsection{The repair, machine-checked}
 \label{sec:leanrepair}
 
-\Cref{thm:qnorm} and its sharpness are formalized in
+\Cref{thm:qnorm} and the trace-norm consequence are formalized in
 \path{DavisKahan/FiniteDimensional/DirectRotation/QNorm.lean}.
 
 \begin{LeanCode}
@@ -927,10 +936,11 @@ theorem directRotation_fullDisplacement_qnorm
 \end{LeanCode}
 
 The only surviving angle hypothesis is \code{hacute}: no principal angle is a
-quarter turn, which is what the direct-rotation constructor needs in order to
-be defined at all.  The quantitative bound $\Theta\leq\pi/3$ is gone, and the
+quarter turn.  This singles out the unique canonical direct rotation and is
+what the formal constructor requires; it is not needed for a direct rotation to
+exist.  The quantitative bound $\Theta\leq\pi/3$ is gone, and the
 scalar field is an arbitrary \code{RCLike} field rather than $\R$.  Turning the counterexample
-around gives the sharpness statement, in the same file:
+around shows that the trace norm used here is not a $Q$-norm:
 
 \begin{LeanCode}
 theorem kyFan_not_isQNorm :
