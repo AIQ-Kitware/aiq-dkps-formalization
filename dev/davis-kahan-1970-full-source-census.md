@@ -46,10 +46,10 @@ no `sorry` and no `axiom`, so a declaration reachable from
 
 | Verification | Count |
 | --- | ---: |
-| `proved_in_build` | 29 |
+| `proved_in_build` | 34 |
 | `proved_conditional` | 5 |
-| `partially_in_build` | 3 |
-| `proved_outside_build` | 2 |
+| `partially_in_build` | 0 |
+| `proved_outside_build` | 0 |
 | `not_compiling` | 2 |
 | `absent` | 4 |
 | `not_applicable` | 3 |
@@ -66,9 +66,11 @@ no `sorry` and no `axiom`, so a declaration reachable from
 
 ## Frontier
 
-Every row that is not already `proved_in_build`, grouped by the
-obstruction standing in front of it. Work items marked `mechanical`
-are already proved and need only wiring; `hard_math` needs new
+Every row that still owes work, grouped by the obstruction standing
+in front of it. This includes rows that are already
+`proved_in_build`: the mathematics can be proved and CI-guarded while
+the source-numbered wrapper is still missing. Obstructions marked
+`mechanical` need only wiring or a restatement; `hard_math` needs new
 mathematics.
 
 ### `contour-integration-library` -- hard_math
@@ -111,21 +113,13 @@ Section 9 compiles, but every source conclusion is stated relative to FreeBeamFi
 
 Gates: DK-9-model (proved_conditional), DK-9.1-9.4 (proved_conditional), DK-9.5-9.7 (proved_conditional), DK-9.8 (proved_conditional), DK-9.9-9.11 (proved_conditional)
 
-### `promote-direct-rotation-from-experimental` -- mechanical
+### `exact-source-wrappers` -- mechanical
 
-**Promote the direct-rotation minimality results into the build**
+**Source-numbered wrappers over already-proved general theorems**
 
-DavisKahan/Experimental/FiniteDimensional/DirectRotation.lean compiles and is sorry-free, so these results are proved; they are simply not reachable from any default target. Moving them into DavisKahan/FiniteDimensional puts them under CI.
+The mathematics is in the build in a more general form; what is missing is a statement carrying the paper's numbering, scope and hypotheses, so the facade can cite it.
 
-Gates: DK-3.2-cor (partially_in_build), DK-4.1-cor (partially_in_build), DK-4.2-prop (proved_outside_build), DK-4.3-prop (partially_in_build)
-
-### `promote-sharpness-from-experimental` -- mechanical
-
-**Promote the sharpness/optimality witnesses into the build**
-
-DavisKahan/Experimental/FiniteDimensional/Sharpness.lean compiles and is sorry-free. The constant-optimality and ratio-limit witnesses are proved but outside every default target.
-
-Gates: S2-sharpness (proved_outside_build)
+Gates: S1-block-residual (proved_in_build), S2-sin-two-theta (proved_in_build), S2-tan-two-theta (proved_in_build), S2-unbounded-scope (proved_in_build), DK-3.1-def (proved_in_build), DK-3.2-def (proved_in_build), DK-3.1-prop (proved_in_build), DK-3.3-prop (proved_in_build), DK-3.4-prop (proved_in_build), DK-3.5-prop (proved_in_build), DK-4.1-prop (proved_in_build), DK-5.1-thm (proved_in_build), DK-5.2-thm (proved_in_build), DK-5.1-lem (proved_in_build), DK-6.3-thm (proved_in_build), DK-7-sin2-proof (proved_in_build), DK-7-tan2-proof (proved_in_build)
 
 ### Not attributed to a blocker
 
@@ -175,7 +169,6 @@ DK-6.3-lem (absent)
 - **Status:** `candidate_under_repair`
 - **Verification:** `proved_in_build`
 - **Mathematics:** One-sided spectral separation plus the Rayleigh–Ritz/off-diagonal condition gives residual and perturbation tangent bounds in every unitary-invariant norm.
-- **Blocked by:** `promote-tan-theta-genuine-from-experimental`
 - **Current Lean references:** `ForMathlib.DavisKahanTheory.partIII_tanTheta_ritzResidual_uiNorm`, `ForMathlib.DavisKahanExt.tanTheta_genuineSpectrum`
 - **Assessment:** The finite arbitrary-UI-norm theorem is compiled. General Hilbert-space and exact source wrappers are in the Part III repair campaign.
 - **Next action:** Certify the Hilbert-space source wrapper and exact perturbation companion.
@@ -206,11 +199,9 @@ DK-6.3-lem (absent)
 
 - **Kind:** `source_claim`
 - **Status:** `candidate_under_repair`
-- **Verification:** `proved_outside_build`
+- **Verification:** `proved_in_build`
 - **Mathematics:** All four constants are optimal in two dimensions, and finite direct sums realize equality simultaneously for all unitary-invariant norms.
-- **Blocked by:** `promote-sharpness-from-experimental`
 - **Current Lean references:** `ForMathlib.DavisKahanTheory.sinTheta_constant_optimal`, `ForMathlib.DavisKahanTheory.sinTwoTheta_constant_optimal`, `ForMathlib.DavisKahanTheory.single_double_sine_tangent_ratios_tendsto_one`
-- **Not reachable from `DavisKahan.All`:** `ForMathlib.DavisKahanTheory.sinTheta_constant_optimal`, `ForMathlib.DavisKahanTheory.sinTwoTheta_constant_optimal`, `ForMathlib.DavisKahanTheory.single_double_sine_tangent_ratios_tendsto_one`
 - **Assessment:** Sine sharpness and finite multiplicity are compiled; full quartet simultaneous equality remains in the Part III campaign.
 - **Next action:** Proved. The constant-optimality and ratio-limit witnesses compile under DavisKahan/Experimental/FiniteDimensional/Sharpness.lean; promote them into the build, then audit the equality models against the exact source claim.
 
@@ -330,11 +321,9 @@ DK-6.3-lem (absent)
 
 - **Kind:** `corollary`
 - **Status:** `candidate_under_repair`
-- **Verification:** `partially_in_build`
+- **Verification:** `proved_in_build`
 - **Mathematics:** Swapping P and Q leaves the angle operator unchanged and reverses the quarter-turn operator.
-- **Blocked by:** `promote-direct-rotation-from-experimental`
 - **Current Lean references:** `ForMathlib.DavisKahan1970.complex_directRotation_reversal`, `ForMathlib.DavisKahanTheory.directRotation_symm`
-- **Not reachable from `DavisKahan.All`:** `ForMathlib.DavisKahanTheory.directRotation_symm`
 - **Assessment:** Direct-rotation reversal is represented; the exact angle/J statement needs a source wrapper.
 - **Next action:** The reversal theorem compiles under DavisKahan/Experimental/FiniteDimensional/DirectRotation.lean. Promote it into DavisKahan/FiniteDimensional so CI guards it, then add the source-facing angle and quarter-turn statement.
 
@@ -355,11 +344,9 @@ DK-6.3-lem (absent)
 
 - **Kind:** `corollary`
 - **Status:** `compiled_general_infrastructure`
-- **Verification:** `partially_in_build`
+- **Verification:** `proved_in_build`
 - **Mathematics:** The direct rotation minimizes the norm of (1-V)P for every unitary-invariant norm.
-- **Blocked by:** `promote-direct-rotation-from-experimental`
 - **Current Lean references:** `ForMathlib.DavisKahanTheory.uiNorm_restrictedDisplacement_le`, `ForMathlib.DavisKahanTheory.directRotation_minimizes_restrictedDisplacement_uiNorm`
-- **Not reachable from `DavisKahan.All`:** `ForMathlib.DavisKahanTheory.directRotation_minimizes_restrictedDisplacement_uiNorm`
 - **Assessment:** Compiled without any angle restriction, for every unitarily invariant norm, over every RCLike field (finite dimension).  The earlier note conflating this row with Proposition 4.4 is resolved: the corollary concerns the restricted displacement and needs no angle hypothesis.
 - **Next action:** Proved. directRotation_minimizes_restrictedDisplacement_uiNorm compiles but only under DavisKahan/Experimental; promote it into the build, then add a DavisKahan1970 source wrapper and audit the infinite-dimensional statement.
 
@@ -367,11 +354,9 @@ DK-6.3-lem (absent)
 
 - **Kind:** `proposition`
 - **Status:** `compiled_specialization`
-- **Verification:** `proved_outside_build`
+- **Verification:** `proved_in_build`
 - **Mathematics:** For every orthonormal basis of P, the sum of squared displacement sines under V dominates the sum of squared principal sines.
-- **Blocked by:** `promote-direct-rotation-from-experimental`
 - **Current Lean references:** `ForMathlib.DavisKahanTheory.directRotation_minimizes_sum_sq_basis_angles`
-- **Not reachable from `DavisKahan.All`:** `ForMathlib.DavisKahanTheory.directRotation_minimizes_sum_sq_basis_angles`
 - **Assessment:** The finite orthonormal-basis displacement-energy extremality is compiled via the nuclear-norm specialization of the displacement-square majorization.
 - **Next action:** Proved. directRotation_minimizes_sum_sq_basis_angles compiles but only under DavisKahan/Experimental; promote it into the build, then settle the exact infinite-dimensional summability convention of the source statement.
 
@@ -379,11 +364,9 @@ DK-6.3-lem (absent)
 
 - **Kind:** `proposition`
 - **Status:** `compiled_general_infrastructure`
-- **Verification:** `partially_in_build`
+- **Verification:** `proved_in_build`
 - **Mathematics:** The direct rotation minimizes the UI norm of (1-V*) (1-V).
-- **Blocked by:** `promote-direct-rotation-from-experimental`
 - **Current Lean references:** `ForMathlib.DavisKahanTheory.directRotation_displacementSquare_kyFan`, `ForMathlib.DavisKahanTheory.directRotation_displacementSquare_uiNorm`, `ForMathlib.DavisKahanTheory.directRotation_minimizes_displacementSquare_uiNorm`
-- **Not reachable from `DavisKahan.All`:** `ForMathlib.DavisKahanTheory.directRotation_minimizes_displacementSquare_uiNorm`
 - **Assessment:** Compiled for every unitarily invariant norm over every RCLike field (finite dimension), via Fan-Hoffman majorization of the pinched competitor and two-block pinching contraction.
 - **Next action:** Proved. directRotation_minimizes_displacementSquare_uiNorm compiles but only under DavisKahan/Experimental; promote it into the build, then add a DavisKahan1970 source wrapper.
 
