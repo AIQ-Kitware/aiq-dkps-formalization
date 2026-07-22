@@ -588,8 +588,9 @@ private theorem sinAngleOperator_model_eq_smul_id
     rw [show A.adjoint = A from (projection_sub_model_isSymmetric θ).adjoint_eq,
       show A ∘ₗ A = ((((Real.sin θ) ^ 2 : ℝ) : 𝕜) • LinearMap.id) from
         projection_sub_model_sq θ]
-    ext x
-    -- `← RCLike.ofReal_mul` loops as a simp lemma; settle the scalars directly
+    -- plain `ext` also splits the coordinate, leaving `match_scalars` a
+    -- scalar goal it cannot use
+    refine LinearMap.ext fun x => ?_
     simp only [LinearMap.comp_apply, LinearMap.smul_apply, LinearMap.id_apply]
     match_scalars <;> push_cast <;> (try ring)
   change ForMathlib.abs A = _
