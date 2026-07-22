@@ -454,9 +454,12 @@ private theorem projection_sub_model_sq (θ : ℝ) :
 
 private theorem modelSinThetaPerturbation_isSymmetric (a b θ : ℝ) :
     (modelSinThetaPerturbation (𝕜 := 𝕜) a b θ).IsSymmetric := by
-  intro x y
-  simp [modelSinThetaPerturbation, Matrix.toEuclideanLin_apply, Fin.sum_univ_two]
-  ring
+  -- symmetry is exactly hermitianness of the underlying real matrix
+  simp only [modelSinThetaPerturbation]
+  refine Matrix.isSymmetric_toEuclideanLin_iff.mpr ?_
+  ext i j
+  fin_cases i <;> fin_cases j <;>
+    simp [Matrix.conjTranspose_apply, RCLike.conj_ofReal] <;> ring
 
 private theorem modelSinThetaPerturbation_sq (a b θ : ℝ) :
     modelSinThetaPerturbation (𝕜 := 𝕜) a b θ ∘ₗ
@@ -575,7 +578,6 @@ private theorem sinAngleOperator_model_eq_smul_id
     · intro x y
       simp only [LinearMap.smul_apply, LinearMap.id_apply, inner_smul_left,
         inner_smul_right, RCLike.conj_ofReal]
-      rw [inner_conj_symm]
     · intro x
       rw [LinearMap.smul_apply, LinearMap.id_apply, inner_smul_left,
         RCLike.conj_ofReal, RCLike.re_ofReal_mul, ← norm_sq_eq_re_inner]
@@ -583,9 +585,15 @@ private theorem sinAngleOperator_model_eq_smul_id
   have hsquare :
       ((((Real.sin θ : ℝ) : 𝕜) • LinearMap.id) : Plane 𝕜 →ₗ[𝕜] Plane 𝕜) ∘ₗ
           (((Real.sin θ : ℝ) : 𝕜) • LinearMap.id) = A.adjoint ∘ₗ A := by
-    rw [show A.adjoint = A from (projection_sub_model_isSymmetric θ).adjoint_eq]
-    simpa [A, smul_smul, ← RCLike.ofReal_mul, pow_two] using
-      (projection_sub_model_sq (𝕜 := 𝕜) θ).symm
+    rw [show A.adjoint = A from (projection_sub_model_isSymmetric θ).adjoint_eq,
+      show A ∘ₗ A = ((((Real.sin θ) ^ 2 : ℝ) : 𝕜) • LinearMap.id) from
+        projection_sub_model_sq θ]
+    ext x
+    -- `← RCLike.ofReal_mul` loops as a simp lemma; settle the scalars directly
+    simp only [LinearMap.comp_apply, LinearMap.smul_apply, LinearMap.id_apply]
+    match_scalars
+    push_cast
+    ring
   change ForMathlib.abs A = _
   exact (LinearMap.IsPositive.sqrt_unique A.isPositive_adjoint_comp_self hpos hsquare).symm
 
@@ -698,6 +706,13 @@ theorem principalAngles_model (θ : ℝ) (hθ0 : 0 ≤ θ) (hθ1 : θ ≤ Real.p
   simp only [pairSingularValues_zero]
   exact Real.arcsin_sin (by linarith [Real.pi_pos]) hθ1
 
+/-- The scalar gap is a positive real, so its field norm is itself.  The
+singular-value comparisons need this to discharge the `‖b - a‖` that
+`singularValues_smul` introduces. -/
+private theorem norm_ofReal_sub_of_lt {a b : ℝ} (hab : a < b) :
+    ‖((b : 𝕜) - (a : 𝕜))‖ = b - a := by
+  rw [← RCLike.ofReal_sub, RCLike.norm_ofReal, abs_of_pos (sub_pos.mpr hab)]
+
 /-- Equality case for the `sin Θ` theorem.
 
 Lean proof route for a weaker agent:
@@ -708,13 +723,6 @@ Lean proof route for a weaker agent:
 Signature audit: The theorem now uses a dedicated `sin Θ` perturbation model; do not reuse it
 for the tangent or double-angle families.
 -/
-/-- The scalar gap is a positive real, so its field norm is itself.  The
-singular-value comparisons need this to discharge the `‖b - a‖` that
-`singularValues_smul` introduces. -/
-private theorem norm_ofReal_sub_of_lt {a b : ℝ} (hab : a < b) :
-    ‖((b : 𝕜) - (a : 𝕜))‖ = b - a := by
-  rw [← RCLike.ofReal_sub, RCLike.norm_ofReal, abs_of_pos (sub_pos.mpr hab)]
-
 theorem sinTheta_model_equality
     (N : UnitarilyInvariantNorm 𝕜 (Plane 𝕜))
     {a b θ : ℝ} (hab : a < b) (hθ0 : 0 ≤ θ) (hθ1 : θ < Real.pi / 2) :
