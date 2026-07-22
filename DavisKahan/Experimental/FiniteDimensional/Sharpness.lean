@@ -163,8 +163,8 @@ equality. -/
 noncomputable def modelTanThetaPerturbation (a b θ : ℝ) :
     Plane 𝕜 →ₗ[𝕜] Plane 𝕜 :=
   Matrix.toEuclideanLin
-    ![![(0 : 𝕜), (((b-a) * Real.tan θ : ℝ) : 𝕜)],
-      ![(((b-a) * Real.tan θ : ℝ) : 𝕜), (0 : 𝕜)]]
+    !![(0 : 𝕜), (((b-a) * Real.tan θ : ℝ) : 𝕜);
+       (((b-a) * Real.tan θ : ℝ) : 𝕜), (0 : 𝕜)]
 
 /-- Reflection-compatible perturbation producing equality in `sin (2 Θ)`:
 the purely off-diagonal part of the rotated model, with entry
@@ -711,8 +711,12 @@ private theorem singularValues_modelSinTwoThetaPerturbation
     Real.sin_nonneg_of_nonneg_of_le_pi (by linarith) (by linarith [Real.pi_pos])
   have hprod : 0 ≤ ((b-a)/2) * Real.sin (2*θ) :=
     mul_nonneg (div_nonneg (sub_nonneg.mpr hab.le) (by norm_num)) hsin
-  simpa [modelSinTwoThetaPerturbation, abs_of_nonneg hprod, abs_neg,
-    neg_sub] using
+  have habs1 : |(a - b) / 2| = (b - a) / 2 := by
+    rw [abs_of_nonpos (by linarith : (a - b) / 2 ≤ 0)]
+    ring
+  have habs2 : |Real.sin (2 * θ)| = Real.sin (2 * θ) := abs_of_nonneg hsin
+  simpa [modelSinTwoThetaPerturbation, habs1, habs2, abs_of_nonneg hprod]
+    using
     singularValues_offDiagonal_two_by_two (𝕜 := 𝕜)
       (((a-b)/2) * Real.sin (2*θ))
 
