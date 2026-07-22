@@ -3,7 +3,7 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Claude Fable 5, Jon Crall
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.Majorization
+import DavisKahan.FiniteDimensional.DirectRotation.QNorm
 
 /-!
 # The short-rotation full-displacement claim is false
@@ -674,6 +674,27 @@ theorem not_davisKahanProposition4_4_Finite :
       RectangularUnitarilyInvariantNorm.rectangularKyFanSum,
       kyFanSum_eq_sum_fin] using hN
   exact absurd hle (not_le.mpr kyFanSum_lt)
+
+open ShortRotationCounterexample in
+/-- **The trace norm is not a `Q`-norm.**  Read in the other direction, the
+counterexample separates the two norm classes: `directRotation_fullDisplacement_qnorm`
+holds for every `Q`-norm with no angle hypothesis, so any norm violating
+full-displacement minimality — as `kyFanSum 4` does on `ℝ⁴` — cannot be one.
+
+This is the formal counterpart of the classical fact that the Schatten `Q`-norms
+are exactly those with `2 ≤ p ≤ ∞`: the trace norm is the `p = 1` endpoint. -/
+theorem kyFan_not_isQNorm :
+    ¬ IsQNorm (RectangularUnitarilyInvariantNorm.kyFan
+      (𝕜 := ℝ) (E := E4) (F := E4) 4).toSquare := by
+  intro hQ
+  have hle := directRotation_fullDisplacement_qnorm _ hQ U4 V4 acute Wequiv rfl
+  have hle' : kyFanSum 4 (LinearMap.id - (directRotation U4 V4 acute).toLinearMap) ≤
+      kyFanSum 4 (LinearMap.id - Wequiv.toLinearMap) := by
+    simpa [RectangularUnitarilyInvariantNorm.toSquare,
+      RectangularUnitarilyInvariantNorm.kyFan_apply,
+      RectangularUnitarilyInvariantNorm.rectangularKyFanSum,
+      kyFanSum_eq_sum_fin] using hle
+  exact absurd hle' (not_le.mpr kyFanSum_lt)
 
 end DavisKahanTheory
 end ForMathlib
