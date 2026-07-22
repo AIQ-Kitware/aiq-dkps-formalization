@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Fable 5
 -/
 import DavisKahan.DoubleAngle.TanTwoThetaKyFan
+import DavisKahan.DoubleAngle.TanTwoThetaKyFanInfinite
 import DavisKahan.FiniteDimensional.DoubleAngle.TanTheta
 import DavisKahan.TanTwoTheta.UnboundedIdeal
 import DavisKahan.TanTwoTheta.Unbounded
@@ -51,12 +52,25 @@ vectors, claiming every unitary-invariant norm.
   subspaces, under an explicit quarter-acuteness hypothesis and with the
   non-sharp extended-cosine denominator `1 - 2 g²`.
 
+* `tanTwoTheta_uiIdeal_infinite` — **the infinite-dimensional sharp
+  ideal form**: on an arbitrary `RCLike` Hilbert space with a
+  finite-dimensional invariant configuration (finite-dimensional `U`,
+  graph coordinate supported on `U`), every Fan-dominant unitary-invariant
+  ideal family transports membership of the off-diagonal perturbation to
+  the `tan 2Θ₀` representative with the sharp constant:
+  `(b - a) · N(tan 2Θ₀) ≤ 2 · N(H)`.  The Ky Fan approximation-number
+  root `tanTwoTheta_kyFan_infinite` holds with no ideal hypothesis at
+  all.  Proof: compression to the finite carrier `U ⊔ T''U` and
+  approximation-number transport.
+
 ## What remains open (recorded, not claimed)
 
-1. The **infinite-dimensional** arbitrary-UI-ideal form of the sharp
-   `tan 2Θ` estimate: the compiled UI-norm theorem is finite-dimensional
-   (it consumes the intrinsic singular-system layer); the unbounded
-   companions above carry the non-sharp extended-cosine denominator.
+1. The infinite-dimensional ideal form with an
+   **infinite-dimensional invariant subspace** `U`: the compiled sharp
+   theorem requires the graph coordinate to be supported on a
+   finite-dimensional `U` (so that principal angles are attained); the
+   unbounded companions below cover genuine spectral subspaces at the
+   non-sharp extended-cosine denominator.
 2. The sharp Riccati route
    (`quarterAcuteAngularCoordinate_sharp_bound_of_orderedInternalGap` and its
    family under `Experimental/InfiniteDimensional/TanTwoTheta/`) currently
@@ -91,6 +105,33 @@ alias tanTwoTheta_kyFan := DavisKahanTheory.kyFan_tanTwoTheta0_offDiagonal_le
 argument. -/
 alias tanTwoTheta_pairedSingularVector_scalar :=
   DavisKahanTheory.doubleAngleTangent_scalar
+
+/-! ## The infinite-dimensional sharp ideal form -/
+
+/-- **Davis--Kahan 1970, `tan 2Θ` theorem on an arbitrary Hilbert space,
+every Fan-dominant unitary-invariant ideal** (finite-dimensional invariant
+configuration): membership of the off-diagonal perturbation in the ideal
+transports to any `tan 2Θ₀` representative, with
+`(b - a) · N(tan 2Θ₀) ≤ 2 · N(H)`. -/
+alias tanTwoTheta_uiIdeal_infinite :=
+  DavisKahanTheory.tanTwoTheta0_offDiagonal_mem_and_gauge_le_infinite
+
+/-- The Ky Fan approximation-number root of the infinite-dimensional sharp
+form; holds for every `k` with no ideal hypothesis. -/
+alias tanTwoTheta_kyFan_infinite :=
+  DavisKahanTheory.kyFan_tanTwoTheta0_offDiagonal_le_infinite
+
+/-- Representative-free infinite-dimensional Ky Fan root, phrased directly
+in the double-angle tangents of the graph-coordinate approximation
+numbers. -/
+alias tanTwoTheta_kyFan_doubleAngleTangent_infinite :=
+  DavisKahanTheory.kyFan_doubleAngleTangent_offDiagonal_le_infinite
+
+/-- The Ky Fan variational bound for approximation-number prefixes: the
+infinite-dimensional max--min principle used alongside the compression
+argument. -/
+alias kyFanApproximationGauge_orthonormal_bound :=
+  DavisKahan.Experimental.ExactSinTheta.re_sum_inner_map_le_kyFanApproximationGauge
 
 /-! ## The sharp subspace theorem with the acute branch -/
 
