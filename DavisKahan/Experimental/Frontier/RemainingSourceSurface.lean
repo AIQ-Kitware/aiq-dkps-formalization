@@ -88,7 +88,10 @@ space into the selected exact space, rather than finite rank. -/
 theorem theorem6_3_generalizedTanTheta_ideal
     (N : RectangularSymmetricIdealFamily (𝕜 := ℂ))
     (T : H →L[ℂ] H) (hT : IsSelfAdjoint T)
-    (Z V : Submodule ℂ H) [Z.HasOrthogonalProjection]
+    -- `compressOperator Z T` needs the trial subspace to be a Hilbert space in
+    -- its own right; the source's trial space is closed, so this is a
+    -- faithful hypothesis rather than a restriction
+    (Z V : Submodule ℂ H) [Z.HasOrthogonalProjection] [CompleteSpace Z]
     [V.HasOrthogonalProjection]
     (hdim : Nonempty (Z →ₗᵢ[ℂ] V))
     (hVinv : ∀ x ∈ V, T x ∈ V)

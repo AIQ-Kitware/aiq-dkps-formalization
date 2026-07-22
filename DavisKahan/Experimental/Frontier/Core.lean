@@ -94,21 +94,26 @@ variable {H₁ : Type u} [NormedAddCommGroup H₁] [InnerProductSpace ℂ H₁]
 variable {H₂ : Type v} [NormedAddCommGroup H₂] [InnerProductSpace ℂ H₂]
   [CompleteSpace H₂]
 
-/-- Unitary equivalence of two ordered pairs of subspaces. -/
-structure PairOfSubspacesUnitaryEquivalent
-    (U₁ V₁ : Submodule ℂ H₁) (U₂ V₂ : Submodule ℂ H₂) : Prop where
-  equivalence : H₁ ≃ₗᵢ[ℂ] H₂
-  maps_source : U₁.map equivalence.toLinearMap = U₂
-  maps_target : V₁.map equivalence.toLinearMap = V₂
+/-- Unitary equivalence of two ordered pairs of subspaces.
+
+Stated as existential quantification over the unitary rather than as a
+`Prop`-valued structure carrying it: the intended notion is a proposition, and
+a `Prop` structure cannot hold the datum `H₁ ≃ₗᵢ[ℂ] H₂`. -/
+def PairOfSubspacesUnitaryEquivalent
+    (U₁ V₁ : Submodule ℂ H₁) (U₂ V₂ : Submodule ℂ H₂) : Prop :=
+  ∃ e : H₁ ≃ₗᵢ[ℂ] H₂,
+    U₁.map e.toLinearMap = U₂ ∧ V₁.map e.toLinearMap = V₂
 
 /-- Unitary equivalence of bounded operators acting on possibly different
-Hilbert spaces. -/
-structure BoundedOperatorsUnitaryEquivalent
-    (A : H₁ →L[ℂ] H₁) (B : H₂ →L[ℂ] H₂) : Prop where
-  equivalence : H₁ ≃ₗᵢ[ℂ] H₂
-  intertwines :
-    equivalence.toContinuousLinearMap ∘L A =
-      B ∘L equivalence.toContinuousLinearMap
+Hilbert spaces.
+
+The intertwining is stated pointwise.  Writing it as a composition of
+continuous linear maps forces `e` through `LinearMap.toContinuousLinearMap`,
+which carries a `FiniteDimensional` hypothesis that the source statement does
+not have. -/
+def BoundedOperatorsUnitaryEquivalent
+    (A : H₁ →L[ℂ] H₁) (B : H₂ →L[ℂ] H₂) : Prop :=
+  ∃ e : H₁ ≃ₗᵢ[ℂ] H₂, ∀ x : H₁, e (A x) = B (e x)
 
 /-- Abstract equality of spectral multiplicity data.  A concrete definition
 must encode the measure class and the cardinal-valued multiplicity function,
@@ -137,15 +142,15 @@ variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
 /-- A circle separates a chosen measurable subset of the real spectrum of a
 self-adjoint closed operator. -/
 structure CircleSeparatesRealSpectrum
-    (A : H →L[ℂ] H) (hA : IsSelfAdjoint A)
+    (A : H →L[ℂ] H) (hA : IsSelfAdjointOperator A)
     (B : Set ℝ) (center radius : ℝ) : Prop where
   radius_pos : 0 < radius
   contour_resolvent :
-    ∀ z : ℂ, Complex.abs (z - center) = radius →
+    ∀ z : ℂ, ‖z - (center : ℂ)‖ = radius →
       z ∉ spectrum ℂ A
   inside_iff_mem :
     ∀ x : ℝ, (x : ℂ) ∈ spectrum ℂ A →
-      (Complex.abs ((x : ℂ) - center) < radius ↔ x ∈ B)
+      (‖(x : ℂ) - (center : ℂ)‖ < radius ↔ x ∈ B)
 
 /-- Circle-integral Riesz projection for a closed operator.  The implementation
 should use Mathlib's circle integral rather than a new general contour API. -/
