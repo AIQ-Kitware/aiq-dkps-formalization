@@ -798,7 +798,7 @@ theorem sinTheta_model_equality
       (rotatedModelSubspace (𝕜 := 𝕜) θ))
         = N ((b-a : 𝕜) • sinAngleOperator (modelSubspace (𝕜 := 𝕜))
             (rotatedModelSubspace (𝕜 := 𝕜) θ)) := by
-          rw [N.smul_eq]; simp [abs_of_pos (sub_pos.mpr hab)]
+          rw [N.smul_eq, norm_ofReal_sub_of_lt hab]
     _ = N (modelSinThetaPerturbation (𝕜 := 𝕜) a b θ) :=
       N.eq_of_same_singularValues hsing.symm
 
@@ -837,8 +837,7 @@ theorem tanTheta_model_equality
         N (((b - a : ℝ) : 𝕜) • tanAngleOperator
           (modelSubspace (𝕜 := 𝕜))
           (rotatedModelSubspace (𝕜 := 𝕜) θ)) := by
-      rw [N.smul_eq]
-      simp [abs_of_pos (sub_pos.mpr hab)]
+      rw [N.smul_eq, RCLike.norm_ofReal, abs_of_pos (sub_pos.mpr hab)]
     _ = N (modelTanThetaPerturbation (𝕜 := 𝕜) a b θ) :=
       N.eq_of_same_singularValues hsing
 
@@ -900,8 +899,7 @@ theorem tanTwoTheta_model_equality
         N (((b - a : ℝ) : 𝕜) • tanTwoAngleOperator
           (modelSubspace (𝕜 := 𝕜))
           (rotatedModelSubspace (𝕜 := 𝕜) θ)) := by
-      rw [N.smul_eq]
-      simp [abs_of_pos (sub_pos.mpr hab)]
+      rw [N.smul_eq, RCLike.norm_ofReal, abs_of_pos (sub_pos.mpr hab)]
     _ = N (((2 : ℝ) : 𝕜) • modelTanTwoThetaPerturbation
           (𝕜 := 𝕜) a b θ) :=
       N.eq_of_same_singularValues hsing
