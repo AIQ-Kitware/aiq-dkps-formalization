@@ -226,9 +226,9 @@ $\Theta\leq\pi/3$ is actually consumed, do hold in this example.
 
 No angle threshold repairs the statement — it fails at arbitrarily small angles
 — but weakening the class of norms does, and gives a cleaner theorem than the
-original: for every $Q$-norm and every acute pair, the direct rotation minimizes the full
-displacement, with neither the quantitative $\pi/3$ bound nor the restriction
-to a real space.  This follows from the source's valid Proposition 4.3, and the
+original: for every $Q$-norm and every acute pair in finite dimension, the
+direct rotation minimizes the full displacement, with neither the quantitative
+$\pi/3$ bound nor the restriction to a real space.  This follows from the source's valid Proposition 4.3, and the
 four-dimensional trace norm lies outside the $Q$-class, exactly where the counterexample sits.
 The counterexample, the repair, and the trace-norm consequence are all certified
 in Lean 4.  Because a machine-checked result about formal definitions does not
@@ -720,8 +720,18 @@ it is a non-degeneracy rather than a smallness condition, implied by
 $\Theta\leq\pi/3$ in any case.  And this is not a weakening dressed up as a
 theorem — it is
 exactly the content of the valid Proposition 4.3, correctly transported through
-the square root.  The natural corrected replacement is therefore the corresponding $Q$-norm
-theorem; no positive angle bound restores the original all-norm assertion.
+the square root.  The natural corrected replacement is therefore the corresponding
+finite-dimensional $Q$-norm theorem; no positive angle bound restores the
+original all-norm assertion.
+
+A word on scope, since the two directions are not symmetric.  The refutation is
+insensitive to it: a counterexample in $\R^4$ refutes a claim asserted for all
+real Hilbert spaces.  The repair is not.  \Cref{thm:qnorm}, and its Lean
+certification, are finite-dimensional, and we do not claim the
+infinite-dimensional statement here.  We expect it to hold --- the $Q$-norm
+argument is formal, and Proposition 4.3 is stated in the source for Hilbert
+spaces --- but the supporting majorization theory in our development is
+finite-dimensional, and we have not audited the general case.
 
 \subsection{How much the repair covers}
 
