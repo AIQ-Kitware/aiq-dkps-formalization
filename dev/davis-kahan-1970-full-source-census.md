@@ -246,11 +246,11 @@ authoritative; this Markdown file is generated from it.
 #### Proposition 4.4: Real-space full displacement minimality below pi/3
 
 - **Kind:** `proposition`
-- **Status:** `refuted_as_transcribed`
+- **Status:** `refuted`
 - **Mathematics:** In a real Hilbert space, if the maximal angle is at most pi/3, the direct rotation minimizes every UI norm of 1-V.
-- **Current Lean references:** `ForMathlib.DavisKahanTheory.shortRotation_fullDisplacement_refuted`
+- **Current Lean references:** `ForMathlib.DavisKahanTheory.shortRotation_fullDisplacement_refuted`, `ForMathlib.DavisKahanTheory.DavisKahanProposition4_4_Finite`, `ForMathlib.DavisKahanTheory.not_davisKahanProposition4_4_Finite`
 - **Assessment:** The transcribed claim is false: a compiled R^4 counterexample exhibits an acute pair with both principal angles pi/4 and a competitor unitary carrying P to Q whose full displacement 1-V has trace norm 2 sqrt 2, strictly below the direct rotation value 4 sqrt(2 - sqrt 2).  The competitor mixes the equal-angle multiplicity space (rotation angles 0 and pi/2), an obstruction available at every angle threshold; the same family refutes the closing conjecture of Davis 1958.  Operator-norm and squared-displacement consequences survive via 4.1/4.3.
-- **Next action:** Re-audit the printed source text of Proposition 4.4 against the modernized transcription to determine the intended competitor class or displacement operator.
+- **Next action:** None outstanding.  The source re-audit is done: the printed Proposition 4.4 carries no hypothesis restricting the competitor class, excluding multiplicity mixing, or replacing the full displacement, so the refutation applies to the claim as printed.  The defect is localized to equation (4.3), whose derivation from (1.12) needs superadditivity of the Ky Fan sum across an orthogonal decomposition of the domain; range orthogonality fails.  The block-level claim the printed proof body establishes (each `||K Omega_k||_2` minimized at V=U, via the pi/3 trigonometry) remains true in the counterexample.  `not_davisKahanProposition4_4_Finite` now refutes the claim in its "every UI norm" form, instantiating N at `(RectangularUnitarilyInvariantNorm.kyFan 4).toSquare`.
 
 ### Section 5
 
