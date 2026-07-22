@@ -1,5 +1,7 @@
 \documentclass[11pt]{article}
 
+\usepackage[T1]{fontenc}    % use 8-bit T1 fonts
+
 \usepackage[letterpaper,margin=1in]{geometry}
 \usepackage{fontspec}
 \setmainfont{DejaVu Serif}
@@ -20,6 +22,17 @@
 \definecolor{dkred}{HTML}{8B1E2D}
 \definecolor{dkgray}{HTML}{F3F5F7}
 \definecolor{dkline}{HTML}{CBD3DA}
+
+%% Syntax-highlighting palette.  Muted enough to stay legible in greyscale
+%% print, and keyed to the document's blue/red identity.
+\definecolor{kwdecl}{HTML}{0B5394}   % def, theorem, instance
+\definecolor{kwterm}{HTML}{1F6F8B}   % by, have, show, fun
+\definecolor{kwtac}{HTML}{7B3F9E}    % simp, exact, intro
+\definecolor{kwsort}{HTML}{2E7D32}   % Prop, Type, Sort
+\definecolor{kwcomment}{HTML}{5F7161}
+\definecolor{kwnum}{HTML}{8A8F98}
+\definecolor{kwcode}{HTML}{243B53}   % inline \code{...}
+\definecolor{kwcodebg}{HTML}{EEF1F5}
 \hypersetup{
   colorlinks=true,
   linkcolor=dkblue,
@@ -65,39 +78,64 @@
 
 \newcommand{\lisoSym}{\ensuremath{\simeq_{\ell\mathrm{i}}}}
 
+%% Four keyword classes, coloured separately: declarations, term-level
+%% keywords, tactics, and sorts.  Lean's tactic blocks read very differently
+%% from its declaration headers, and colouring them alike loses that.
 \lstdefinelanguage{lean}{%
   sensitive=true,
   morecomment=[l]{--},
   morecomment=[s]{/-}{-/},
+  morestring=[b]",
+  % 1: declaration and module structure
   morekeywords=[1]{import,open,namespace,section,end,noncomputable,variable,
-    theorem,lemma,def,abbrev,example,instance,structure,class,inductive,
-    by,where,let,have,show,fun,match,with,if,then,else,do,return,in,
-    Prop,Type},
-  morekeywords=[2]{simp,simpa,rw,unfold,nlinarith,linarith,positivity,
-    norm_num,exact,refine,apply,intro,intros,ext,cases,rcases,obtain,
-    constructor,absurd,using},
+    universe,theorem,lemma,def,abbrev,example,instance,structure,class,
+    inductive,axiom,attribute,deriving},
+  % 2: term-level keywords and binders
+  morekeywords=[2]{by,where,let,have,show,from,fun,match,with,if,then,else,
+    do,return,in,at,calc},
+  % 3: tactics
+  morekeywords=[3]{simp,simpa,rw,erw,dsimp,unfold,ring,ring_nf,nlinarith,
+    linarith,positivity,norm_num,field_simp,omega,exact,refine,apply,intro,
+    intros,ext,funext,cases,rcases,obtain,constructor,absurd,using,
+    assumption,rfl,trivial},
+  % 4: sorts
+  morekeywords=[4]{Prop,Type,Sort},
 }
 
 \lstdefinestyle{leanpretty}{%
   language=lean,
   columns=fullflexible,
   basicstyle=\ttfamily\footnotesize,
-  keywordstyle=\color{dkblue},
-  commentstyle=\color{dkred!70!black}\itshape,
+  keywordstyle=[1]\bfseries\color{kwdecl},
+  keywordstyle=[2]\color{kwterm},
+  keywordstyle=[3]\color{kwtac},
+  keywordstyle=[4]\color{kwsort},
+  commentstyle=\itshape\color{kwcomment},
+  stringstyle=\color{kwtac},
   backgroundcolor=\color{dkgray},
-  frame=single,
-  rulecolor=\color{dkline},
+  % A rule on the left only: lighter than a full box, and it lets the
+  % listings sit closer to the surrounding text.
+  frame=leftline,
+  framerule=1.1pt,
+  rulecolor=\color{dkblue!55},
   framesep=3mm,
-  xleftmargin=2mm,
+  xleftmargin=6mm,
   xrightmargin=2mm,
+  aboveskip=1.1\baselineskip,
+  belowskip=1.1\baselineskip,
   breaklines=true,
   breakatwhitespace=false,
+  breakindent=2em,
+  % Mark a continued line so wrapped code is not mistaken for a new line.
+  prebreak=\mbox{\textcolor{kwnum}{$\hookrightarrow$}},
   keepspaces=true,
   showspaces=false,
   showstringspaces=false,
   showtabs=false,
   tabsize=2,
-  numbers=none,
+  numbers=left,
+  numberstyle=\tiny\color{kwnum},
+  numbersep=9pt,
   % Longer tokens first: several share the "\l" prefix.
   literate=
     {\\liso}{\lisoSym}5
@@ -116,7 +154,30 @@
 %% lstlisting the catcode regime has already changed, and re-parsing the
 %% `literate' list there breaks on the backslashes.
 \lstset{style=leanpretty}
+
+%% Lean source: numbered, so a reviewer can cite a line.
 \lstnewenvironment{LeanCode}{}{}
+
+%% Short non-code fragments (a commit hash, an axiom list).  Same frame, but
+%% no line numbers or keyword colouring, which would be noise on one line.
+\lstnewenvironment{PlainCode}{%
+  \lstset{numbers=none,language=,keywordstyle={},basicstyle=\ttfamily\small}%
+}{}
+
+%% Inline code.  Deliberately unboxed: several spans appear inside the narrow
+%% columns of the alignment table and must be able to break across lines,
+%% which a \colorbox cannot do.  Monospace text has no hyphenation points, so
+%% a long Lean identifier in a narrow column needs an explicit \allowbreak
+%% after a dot or underscore; grep the alignment table for examples.
+%% No size change: the monospace face is already set at Scale=0.86, so
+%% \small on top of that reads as too small next to 11pt serif, and the
+%% size switch also shifts the first baseline inside a p-column.
+\newcommand{\code}[1]{{\ttfamily\color{kwcode}#1}}
+
+%% Long monospace identifiers cannot hyphenate, so a line holding one has
+%% little glue to stretch and TeX prefers an overfull box to a loose line.
+%% Let it take the loose line instead.
+\setlength{\emergencystretch}{2.5em}
 
 \newtcolorbox{claimbox}{
   colback=dkred!4,
@@ -841,10 +902,10 @@ def DavisKahanProposition4_4_Finite : Prop :=
 \end{LeanCode}
 
 This is the natural finite-dimensional specialization needed for refutation.
-The explicit `hacute` argument is not an additional mathematical restriction:
+The explicit \code{hacute} argument is not an additional mathematical restriction:
 the source hypothesis $\Theta\leq\pi/3$ already excludes a principal angle
 $\pi/2$, and the Lean constructor for the canonical direct rotation requests a
-proof of acuteness.  The underscores on `\_hshort` and `\_hmap` are a linter
+proof of acuteness.  The underscores on \code{\_hshort} and \code{\_hmap} are a linter
 convention marking binders that the statement quantifies over but whose proofs
 the conclusion does not mention; they carry no mathematical content.
 
@@ -891,7 +952,7 @@ inequality.
 The theorem above exhibits a competitor beating the direct rotation in one
 particular Ky Fan sum.  To refute the source claim \emph{as stated} — for
 \emph{every} unitarily invariant norm — that Ky Fan sum must be presented as an
-inhabitant of the `UnitarilyInvariantNorm` structure.  The repository's
+inhabitant of the \code{UnitarilyInvariantNorm} structure.  The repository's
 rectangular Ky Fan norm, restricted to the square case, supplies exactly this,
 and the refutation is then immediate.
 
@@ -912,29 +973,29 @@ theorem not_davisKahanProposition4_4_Finite :
   exact absurd hle (not_le.mpr kyFanSum_lt)
 \end{LeanCode}
 
-Two presentational points.  First, `.toSquare` is a field-for-field coercion
+Two presentational points.  First, \code{.toSquare} is a field-for-field coercion
 from the rectangular norm structure to the square one, and
-`RectangularUnitarilyInvariantNorm.kyFan 4` is the bundled Ky Fan $4$-norm;
-composing them yields a genuine `UnitarilyInvariantNorm $\mathbb{R}$ E4` whose underlying
-function is definitionally the `kyFanSum 4` appearing in the previous theorem.
-The `simpa` step only unfolds that chain of definitions.
+\code{Rectangular\allowbreak UnitarilyInvariantNorm.\allowbreak kyFan 4} is the bundled Ky Fan $4$-norm;
+composing them yields a genuine \code{Unitarily\allowbreak InvariantNorm $\mathbb{R}$ E4} whose underlying
+function is definitionally the \code{kyFanSum 4} appearing in the previous theorem.
+The \code{simpa} step only unfolds that chain of definitions.
 
-Second, `DavisKahanProposition4\_4\_Finite` is universe-polymorphic, whereas the
-witness `EuclideanSpace $\mathbb{R}$ (Fin 4)` inhabits universe $0$; the refutation is
-therefore stated as a refutation of `P.\{0\}`.  Lean cannot quantify over universes, so
+Second, \code{DavisKahanProposition4\_4\_Finite} is universe-polymorphic, whereas the
+witness \code{EuclideanSpace $\mathbb{R}$ (Fin 4)} inhabits universe $0$; the refutation is
+therefore stated as a refutation of \code{P.\{0\}}.  Lean cannot quantify over universes, so
 this is the strongest formulation available, and it suffices: a
 universe-polymorphic proposition holds only if it holds at every universe, so
 refuting it at universe $0$ refutes it.  This is itself a small instance of the
 alignment issue catalogued in \cref{sec:alignment} — a formal artifact with no
 counterpart in the prose, which a reader must be told how to discount.
 
-Both `shortRotation\_fullDisplacement\_refuted` and
-`not\_davisKahanProposition4\_4\_Finite` depend only on Lean's three standard
+Both \code{shortRotation\_\allowbreak fullDisplacement\_\allowbreak refuted} and
+\code{not\_davisKahanProposition4\_\allowbreak 4\_\allowbreak Finite} depend only on Lean's three standard
 axioms:
-\begin{LeanCode}
+\begin{PlainCode}
 [propext, Classical.choice, Quot.sound]
-\end{LeanCode}
-In particular neither depends on `sorryAx`, so no step is admitted.
+\end{PlainCode}
+In particular neither depends on \code{sorryAx}, so no step is admitted.
 
 \section{Semantic alignment between prose and Lean}
 \label{sec:alignment}
@@ -945,9 +1006,9 @@ does not certify that those definitions are the intended meanings of prose,
 notation, or a scanned source.  Establishing that correspondence is a distinct
 mathematical and historiographic obligation.
 
-\begin{longtable}{>{\raggedright\arraybackslash}p{0.22\textwidth}
-                  >{\raggedright\arraybackslash}p{0.31\textwidth}
-                  >{\raggedright\arraybackslash}p{0.37\textwidth}}
+\begin{longtable}{>{\raggedright\arraybackslash\strut}p{0.22\textwidth}
+                  >{\raggedright\arraybackslash\strut\small}p{0.31\textwidth}
+                  >{\raggedright\arraybackslash\strut}p{0.37\textwidth}}
 \toprule
 \textbf{Published concept} & \textbf{Lean representation} & \textbf{Alignment argument}\\
 \midrule
@@ -957,39 +1018,39 @@ mathematical and historiographic obligation.
 \midrule
 \endhead
 Real Hilbert space
-& `EuclideanSpace $\mathbb{R}$ (Fin 4)`
+& \code{EuclideanSpace $\mathbb{R}$ (Fin 4)}
 & $\R^4$ is a real Hilbert space.  A finite-dimensional counterexample refutes a theorem stated for arbitrary real Hilbert spaces.\\
 \addlinespace
 Subspaces $P\Hh$ and $Q\Hh$
-& `U V : Submodule $\mathbb{R}$ E`
+& \code{U V : Submodule $\mathbb{R}$ E}
 & In finite dimension, closed subspaces and linear submodules coincide for the purposes at issue; orthogonal projections exist automatically.\\
 \addlinespace
 Unitary in a real space
-& `E \lisoSym[$\mathbb{R}$] E`
+& \code{E \lisoSym[$\mathbb{R}$] E}
 & A surjective real linear isometry is exactly an orthogonal operator.  The matrix $W$ is proved to preserve inner products and have an inverse.\\
 \addlinespace
 $V(P\Hh)=Q\Hh$
-& `U.map W.toLinearMap = V`
-& `Submodule.map` is the image of the source subspace under the underlying linear map.  Equality is stronger than mere inclusion.\\
+& \code{U.map W.toLinearMap = V}
+& \code{Submodule.map} is the image of the source subspace under the underlying linear map.  Equality is stronger than mere inclusion.\\
 \addlinespace
 The direct rotation $U$ of Davis--Kahan
-& `directRotation U V hacute`
+& \code{directRotation U V hacute}
 & The Lean object is the unitary polar factor of the canonical intertwiner $P_VP_U+P_{V^\perp}P_{U^\perp}$.  In the example this polar factor is the explicit matrix $R$ in \cref{eq:R}; it has the expected principal-plane action and carries $\mathcal U$ onto $\mathcal V$.\\
 \addlinespace
 Angle condition $\Theta\leq\pi/3$
-& `principalAngles U V 0 $\leq$ Real.pi / 3`
-& `principalAngles` is formed from the singular values of the directed sine map and sorted in decreasing order.  Index $0$ is the largest angle.  Independently, the cross-Gram calculation shows both angles equal $\pi/4$, so the conclusion does not depend on a delicate indexing convention.\\
+& \code{principalAngles U V 0 $\leq$ Real.pi / 3}
+& \code{principalAngles} is formed from the singular values of the directed sine map and sorted in decreasing order.  Index $0$ is the largest angle.  Independently, the cross-Gram calculation shows both angles equal $\pi/4$, so the conclusion does not depend on a delicate indexing convention.\\
 \addlinespace
 Every unitarily invariant norm
-& `N : UnitarilyInvariantNorm $\mathbb{R}$ E`
-& The formal structure permits seminorm-level objects, so it is slightly broader than the paper's class of norms.  This does not affect the refutation, which instantiates `N` at an explicit witness: `(RectangularUnitarilyInvariantNorm.kyFan 4).toSquare`, whose underlying function is `kyFanSum 4`, in dimension four the genuine trace/nuclear norm.\\
+& \code{N : UnitarilyInvariantNorm $\mathbb{R}$ E}
+& The formal structure permits seminorm-level objects, so it is slightly broader than the paper's class of norms.  This does not affect the refutation, which instantiates \code{N} at an explicit witness: \code{(Rectangular\allowbreak UnitarilyInvariantNorm.\allowbreak kyFan 4).\allowbreak toSquare}, whose underlying function is \code{kyFanSum 4}, in dimension four the genuine trace/nuclear norm.\\
 \addlinespace
 Implicit universe quantification
-& `DavisKahanProposition4\_4\_Finite.\{0\}`
+& \code{DavisKahanProposition4\_4\_\allowbreak Finite.\allowbreak\{0\}}
 & An artifact of the formal system with no counterpart in the prose.  Lean cannot quantify over universes; refuting the claim at universe $0$, where the $\R^4$ witness lives, refutes the polymorphic claim, since the latter holds only if it holds at every universe.\\
 \addlinespace
 Full displacement $I-V$
-& `LinearMap.id - W.toLinearMap`
+& \code{LinearMap.id - W.toLinearMap}
 & This is the full ambient displacement.  It is not the restricted displacement $(I-W)P_U$ and not the positive square $(I-W)^*(I-W)$.  Those nearby statements have different validity.\\
 \bottomrule
 \end{longtable}
@@ -1014,7 +1075,7 @@ link in the chain that no machine verifies.
 
 \item \textbf{Notation overload.}  The paper uses $U$ for the direct rotation
 and $V$ for a general competitor.  The formalization uses submodule variables
-`U`, `V` and a competitor `W`.  Variable names are semantically irrelevant, but
+\code{U}, \code{V} and a competitor \code{W}.  Variable names are semantically irrelevant, but
 a human must avoid mistaking the symbols.
 
 \item \textbf{Angle conventions.}  Davis--Kahan's angle operator on the full
@@ -1024,7 +1085,7 @@ example the independent cross-Gram computation removes any possible doubt.
 
 \item \textbf{Norm conventions.}  The paper's subscripted norms
 $\lVert\cdot\rVert_\nu$ are Ky Fan norms, while its square norm uses separate
-notation.  The Lean `UnitarilyInvariantNorm` structure is formulated at the
+notation.  The Lean \code{UnitarilyInvariantNorm} structure is formulated at the
 seminorm level, but the witness is the genuine full Ky Fan $4$-sum, exactly the
 trace norm in $\R^4$.  Thus the slightly broader formal class cannot be the
 source of the counterexample.
@@ -1032,7 +1093,7 @@ source of the counterexample.
 \item \textbf{Canonical-rotation conventions.}  Several equivalent definitions
 of direct rotation occur in the literature.  The formal object must be checked
 against the paper's positivity/principal-square-root characterization, not merely
-called a `directRotation`.  The polar-factor computation and explicit matrix
+called a \code{directRotation}.  The polar-factor computation and explicit matrix
 $R$ provide this check in the example.
 \end{enumerate}
 
@@ -1141,9 +1202,9 @@ These identities imply the contradiction immediately.
 
 The formal result was inspected in the source archive corresponding to the
 following commit:
-\begin{LeanCode}
+\begin{PlainCode}
 816e91a1193c0b3ece24d4ad68ae35059297e521
-\end{LeanCode}
+\end{PlainCode}
 The principal declaration is
 \[
  \texttt{ForMathlib.DavisKahanTheory.
