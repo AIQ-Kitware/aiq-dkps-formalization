@@ -230,7 +230,7 @@ explicit semantic-alignment audit.  It also localizes the defect in the
 published proof to equation (4.3): for the present example, its left-hand side
 is $2\sqrt2$ while its asserted lower bound is $4$.  Notably, the part of the
 argument that consumes the $\pi/3$ hypothesis — the block-level trigonometric
-computation — remains valid in our configuration.  What fails is the earlier,
+computation — does hold in this example.  What fails is the earlier,
 routine-looking reduction that licenses summing the blocks.
 
 We then ask how far the proposition can be repaired.  No angle threshold
@@ -261,28 +261,14 @@ paper.}
 \end{claimbox}
 
 \begin{statusbox}
-\textbf{Contributions and AI disclosure.}  This is an unpublished draft
-circulated for expert review; it is not a submission.  Substantially all of the
-work reported here — finding the counterexample, the Lean formalization, the
-literature review, and the drafting of this note — was done by the AI systems
-GPT-5.5, GPT-5.6, Opus 4.8, and Fable 5, working under human direction over an
-extended project.  Their contributions were intellectual and substantial, not
-editorial, and we name them for that reason.  We do not attempt to divide the
-credit between them.  The surviving project record is incomplete and does not
-permit a reliable partition of the work: commit trailers document some systems
-far more heavily than others, and that metadata is not an activity log.  The
-human collaborators attest that all four contributed materially, and we
-therefore credit them jointly rather than invent a finer attribution.  They are
-credited prominently on the title page, but are not designated as accountable
-authors, because responsibility for the claims must rest with parties who can
-be held to it.
-
-Readers should weight the document accordingly.  Its central feature is that
-nothing here requires trusting those systems, or Lean, or the surrounding
-library: the counterexample is four explicit $4\times4$ matrices, and every
-claim about them can be checked by hand in a few minutes
-(\cref{sec:counterexample} and Appendix~A).  We ask that it be checked rather
-than taken on trust.
+\textbf{Contributions.}  This is an unpublished draft circulated for expert
+review, not a submission.  The AI systems named on the title page contributed
+substantially to the mathematics, the formalization, and the writing;
+responsibility for the claims rests with the human authors.  Nothing here
+requires trusting those systems, or Lean, or the surrounding library: the
+counterexample is four explicit $4\times4$ matrices, and every claim about them
+can be checked by hand in a few minutes (\cref{sec:counterexample} and
+Appendix~A).
 \end{statusbox}
 
 \tableofcontents
