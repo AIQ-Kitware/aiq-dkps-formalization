@@ -53,8 +53,13 @@ advertised with an exact theorem or proposition number, its ambient Hilbert
 space, bounded or unbounded status, domain assumptions, hypotheses, direction,
 norm scope, and conclusion must be checked against the transcription.
 
-The new `Section8/` package is a math-ahead source surface for spectral
-continuation and branch selection.  It assembles the continuation-selected
+The `Section8/` package is a math-ahead source surface for spectral
+continuation and branch selection.  It lives under
+`DavisKahan/Experimental/Sources/DavisKahan1970/Section8`, not here, because it
+imports `DavisKahan.Experimental.InfiniteDimensional`; four modules on that
+import path have never compiled, so the package does not build and is kept out
+of the default build target.  Promote it back into this directory once its
+dependencies compile.  It assembles the continuation-selected
 reducing endpoint, unitary transport, strict quarter-acuteness, genuine gap
 exclusion, and restricted-spectrum separation.  The exact Theorem 8.1
 construction from unrestricted off-diagonal hypotheses, the concrete

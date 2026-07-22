@@ -822,8 +822,8 @@
         "DavisKahan/Sources/DavisKahan1970/Section9/All.lean",
         "DavisKahan/Sources/DavisKahan1970/Section9/FullExample.lean",
         "prose/distilled_literature/DavisKahan1970_section9_numerical_example.tex",
-        "DavisKahan/Sources/DavisKahan1970/Section8/All.lean",
-        "DavisKahan/Sources/DavisKahan1970/Section8/SourceSurface.lean",
+        "DavisKahan/Experimental/Sources/DavisKahan1970/Section8/All.lean",
+        "DavisKahan/Experimental/Sources/DavisKahan1970/Section8/SourceSurface.lean",
         "prose/distilled_literature/DavisKahan1970_section8_branch_selection.tex"
       ],
       "existing_assets": [
