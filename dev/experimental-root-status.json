@@ -1,27 +1,12 @@
 {
   "schema_version": 3,
-  "as_of_commit": "d5e54a708c014d97c4124036d332c6d7caa2a10e",
+  "as_of_commit": "d79404ab368d08dc3ae36e8d17bb894ca10cc1f7",
   "policy": "This registry records compiler status only. The checker compiles every active root and then runs lake build DavisKahan.Experimental, so omitted failures cannot be certified by an empty registry.",
   "roots": [
     {
-      "module": "DavisKahan/FiniteDimensional/DirectRotation/PrincipalPlanes.lean",
+      "module": "DavisKahan/Experimental/FiniteDimensional/DirectRotation.lean",
       "status": "active",
-      "reason": "The principal-plane and restricted-displacement mathematics is complete candidate code requiring elaboration and API repair."
-    },
-    {
-      "module": "DavisKahan/FiniteDimensional/DirectRotation/Majorization.lean",
-      "status": "active",
-      "reason": "The valid displacement-square Fan-majorization layer depends on the principal-plane candidate and requires compiler repair."
-    },
-    {
-      "module": "DavisKahan/Experimental/FiniteDimensional/Generalized.lean",
-      "status": "active",
-      "reason": "The finite whitening and arbitrary-separation residual proofs require compiler elaboration repair."
-    },
-    {
-      "module": "DavisKahan/Experimental/FiniteDimensional/Sharpness.lean",
-      "status": "active",
-      "reason": "The explicit planar singular-value and equality calculations require compiler elaboration repair."
+      "reason": "The Section 4 wrap-up layer (trigonometric factorization, reversal, uniqueness, operator-norm and basis-energy endpoints) cites the absent polarFactor_adjoint_of_isUnit and UnitarilyInvariantNorm.opNorm and needs elaboration repair."
     }
   ]
 }
