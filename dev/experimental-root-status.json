@@ -1,12 +1,6 @@
 {
   "schema_version": 3,
-  "as_of_commit": "d79404ab368d08dc3ae36e8d17bb894ca10cc1f7",
+  "as_of_commit": "dbc1919ba008e61a84f6897fac999abce8bbb74e",
   "policy": "This registry records compiler status only. The checker compiles every active root and then runs lake build DavisKahan.Experimental, so omitted failures cannot be certified by an empty registry.",
-  "roots": [
-    {
-      "module": "DavisKahan/Experimental/FiniteDimensional/DirectRotation.lean",
-      "status": "active",
-      "reason": "The Section 4 wrap-up layer (trigonometric factorization, reversal, uniqueness, operator-norm and basis-energy endpoints) cites the absent polarFactor_adjoint_of_isUnit and UnitarilyInvariantNorm.opNorm and needs elaboration repair."
-    }
-  ]
+  "roots": []
 }
