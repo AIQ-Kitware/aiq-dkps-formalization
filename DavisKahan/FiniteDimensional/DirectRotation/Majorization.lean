@@ -274,12 +274,16 @@ theorem uiNorm_pinch_le
     ext x
     -- with `Q = I - P` the identity is linear in the remaining atoms, so no
     -- idempotence is needed and `module` can finish
-    have hQ : ∀ y : E, complementaryProjection U y = y - projection U y :=
+    -- both sides have to reach the same atom: the left keeps `projection U`
+    -- while the reflection expands to `U.starProjection`
+    have hQ : ∀ y : E, Uᗮ.starProjection y = y - U.starProjection y :=
       fun y => eq_sub_of_add_eq'
         (Submodule.starProjection_add_starProjection_orthogonal (K := U) y)
-    simp only [pinch, LinearMap.add_apply, LinearMap.comp_apply,
-      LinearMap.smul_apply, hQ, LinearIsometryEquiv.coe_toLinearEquiv, LinearEquiv.coe_coe,
-      Submodule.reflection_apply, two_smul, map_add, map_sub, map_smul]
+    simp only [pinch, complementaryProjection, projection,
+      ContinuousLinearMap.coe_coe, LinearMap.add_apply, LinearMap.comp_apply,
+      LinearMap.smul_apply, hQ, LinearIsometryEquiv.coe_toLinearEquiv,
+      LinearEquiv.coe_coe, Submodule.reflection_apply, two_smul,
+      map_add, map_sub, map_smul]
     module
   have htri := N.add_le A
     (U.reflection.toLinearMap ∘ₗ A ∘ₗ U.reflection.toLinearMap)
@@ -296,18 +300,49 @@ theorem LinearMap.IsPositive.of_hermitianPart_contraction
     (W : E ≃ₗᵢ[𝕜] E) (U : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] :
     (LinearMap.id - hermitianPart (pinch U W.toLinearMap)).IsPositive := by
-  intro x
+  -- `IsPositive` is a conjunction, so the quadratic-form part must be opened
+  refine ⟨(LinearMap.IsSymmetric.id (𝕜 := 𝕜) (E := E)).sub
+    (hermitianPart_isSymmetric _), fun x => ?_⟩
+  -- every orthogonal projector is a contraction
+  have hcon : ∀ (K : Submodule 𝕜 E) [K.HasOrthogonalProjection] (y : E),
+      ‖K.starProjection y‖ ≤ ‖y‖ := by
+    intro K _ y
+    calc ‖K.starProjection y‖ ≤ ‖K.starProjection‖ * ‖y‖ :=
+          K.starProjection.le_opNorm y
+      _ ≤ 1 * ‖y‖ :=
+          mul_le_mul_of_nonneg_right K.starProjection_norm_le (norm_nonneg y)
+      _ = ‖y‖ := one_mul _
   have hpinch : ‖pinch U W.toLinearMap x‖ ≤ ‖x‖ := by
-    have horth : IsOrtho
-        (projection U (W (projection U x)))
-        (complementaryProjection U (W (complementaryProjection U x))) := by
-      exact Submodule.isOrtho_starProjection_starProjection_orthogonal _ _
-    rw [pinch, LinearMap.add_apply, LinearMap.comp_apply, LinearMap.comp_apply,
-      LinearMap.comp_apply, LinearMap.comp_apply, horth.norm_add_sq,
-      W.norm_map, W.norm_map]
-    rw [← U.norm_starProjection_sq_add_norm_starProjection_orthogonal_sq x]
+    -- the two blocks land in `U` and `Uᗮ`, so both cross terms vanish
+    have horthP : ⟪U.starProjection (W (U.starProjection x)),
+        Uᗮ.starProjection (W (Uᗮ.starProjection x))⟫_𝕜 = 0 :=
+      Submodule.inner_right_of_mem_orthogonal
+        (U.starProjection_apply_mem _) (Uᗮ.starProjection_apply_mem _)
+    have hsplit : ⟪U.starProjection x, Uᗮ.starProjection x⟫_𝕜 = 0 :=
+      Submodule.inner_right_of_mem_orthogonal
+        (U.starProjection_apply_mem _) (Uᗮ.starProjection_apply_mem _)
+    have hx : ‖x‖ * ‖x‖ =
+        ‖U.starProjection x‖ * ‖U.starProjection x‖ +
+          ‖Uᗮ.starProjection x‖ * ‖Uᗮ.starProjection x‖ := by
+      conv_lhs =>
+        rw [← Submodule.starProjection_add_starProjection_orthogonal (K := U) x]
+      exact norm_add_sq_eq_norm_sq_add_norm_sq_of_inner_eq_zero _ _ hsplit
+    have hpe : pinch U W.toLinearMap x =
+        U.starProjection (W (U.starProjection x)) +
+          Uᗮ.starProjection (W (Uᗮ.starProjection x)) := rfl
+    have h1 := hcon U (W (U.starProjection x))
+    have h2 := hcon Uᗮ (W (Uᗮ.starProjection x))
+    rw [W.norm_map] at h1 h2
+    have hsq : ‖pinch U W.toLinearMap x‖ * ‖pinch U W.toLinearMap x‖ ≤
+        ‖x‖ * ‖x‖ := by
+      rw [hpe, norm_add_sq_eq_norm_sq_add_norm_sq_of_inner_eq_zero _ _ horthP,
+        hx]
+      have hn1 := norm_nonneg (U.starProjection (W (U.starProjection x)))
+      have hn2 := norm_nonneg (Uᗮ.starProjection (W (Uᗮ.starProjection x)))
+      nlinarith [hn1, hn2, h1, h2]
+    nlinarith [norm_nonneg (pinch U W.toLinearMap x), norm_nonneg x, hsq]
   have hre : RCLike.re ⟪hermitianPart (pinch U W.toLinearMap) x, x⟫_𝕜 ≤ ‖x‖ ^ 2 := by
-    rw [re_inner_hermitianPart]
+    rw [re_inner_hermitianPart, sq]
     exact (RCLike.re_le_norm _).trans
       ((norm_inner_le_norm _ _).trans
         (mul_le_mul_of_nonneg_right hpinch (norm_nonneg x)))
@@ -320,10 +355,18 @@ theorem kyFanSum_pinch_le
     (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     (A : E →ₗ[𝕜] E) (k : ℕ) :
     kyFanSum k (pinch U A) ≤ kyFanSum k A := by
-  have hpinch : (2 : 𝕜) • pinch U A =
+  have hpinch : (((2 : ℝ) : 𝕜)) • pinch U A =
       A + U.reflection.toLinearMap ∘ₗ A ∘ₗ U.reflection.toLinearMap := by
     ext x
-    simp [pinch, Submodule.reflection_apply, complementaryProjection]
+    have hQ : ∀ y : E, Uᗮ.starProjection y = y - U.starProjection y :=
+      fun y => eq_sub_of_add_eq'
+        (Submodule.starProjection_add_starProjection_orthogonal (K := U) y)
+    simp only [pinch, complementaryProjection, projection,
+      ContinuousLinearMap.coe_coe, LinearMap.add_apply, LinearMap.comp_apply,
+      LinearMap.smul_apply, hQ, LinearIsometryEquiv.coe_toLinearEquiv,
+      LinearEquiv.coe_coe, Submodule.reflection_apply, two_smul,
+      map_add, map_sub, map_smul]
+    push_cast
     module
   have htri := kyFanSum_add_le k A
     (U.reflection.toLinearMap ∘ₗ A ∘ₗ U.reflection.toLinearMap)
