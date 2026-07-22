@@ -383,6 +383,23 @@ This is the direct rotation from $\mathcal U$ to $\mathcal V$.  It rotates the
 principal plane $\spanof\{e_0,e_3\}$ through $\pi/4$ and the principal plane
 $\spanof\{e_1,e_2\}$ through $\pi/4$ (up to orientation).
 
+Because several inequivalent objects are called ``direct rotation'' in the
+literature, it is worth checking $R$ against the source's own definition rather
+than against a name.  Proposition 3.3 of \cite{DavisKahan1970} characterizes
+direct rotations as the principal square roots of
+$(Q-\tilde Q)(P-\tilde P)=(2P_{\mathcal V}-I)(2P_{\mathcal U}-I)$ --- unitary
+square roots with spectrum in the open right half-plane --- subject to a
+proviso on $P\Hh\cap\tilde Q\Hh$ and $\tilde P\Hh\cap Q\Hh$ that is vacuous in
+the acute case, which is ours.  One checks directly that
+\begin{equation}
+\label{eq:sqrt}
+ R^2=(2P_{\mathcal V}-I)(2P_{\mathcal U}-I),
+\end{equation}
+and that the eigenvalues of $R$ are $(1\pm i)/\sqrt2$, all with positive real
+part.  So $R$ is the Davis--Kahan direct rotation, not merely some canonical
+rotation of our own choosing; by Proposition 3.1 of the source it is also the
+unique one.  The competitor $W$ does not satisfy \cref{eq:sqrt}.
+
 For later use, one obtains the particularly simple displacement identity
 \begin{equation}
 \label{eq:Rgram}
@@ -703,8 +720,8 @@ it is a non-degeneracy rather than a smallness condition, implied by
 $\Theta\leq\pi/3$ in any case.  And this is not a weakening dressed up as a
 theorem — it is
 exactly the content of the valid Proposition 4.3, correctly transported through
-the square root.  The natural corrigendum is therefore not to patch the angle
-bound but to delete Proposition 4.4 and record its $Q$-norm consequence.
+the square root.  The natural corrected replacement is therefore the corresponding $Q$-norm
+theorem; no positive angle bound restores the original all-norm assertion.
 
 \subsection{How much the repair covers}
 
@@ -766,12 +783,9 @@ published plane-by-plane argument, at the cost of no longer solving the ambient
 problem, and with the decomposition non-canonical exactly when angles repeat.
 Second, the conclusion plausibly survives when only one principal plane is
 active, where the $\pi/3$ threshold is sharp and is what Example 4.1 of the
-source detects.  We note also that requiring \emph{distinct} principal angles
-does not appear to repair the statement: the strict inequality of
-\cref{thm:counterexample} is an open condition and the whole configuration
-varies continuously, so it persists under small perturbations that split the
-repeated angle.  We have confirmed this numerically but have not proved it, and
-none of these three claims is formalized.
+source detects.  Neither is formalized.  A third question we leave open is
+whether requiring \emph{distinct} principal angles repairs the statement; our
+numerical evidence says it does not, but we have no proof.
 
 \section{Lean formulation}
 \label{sec:lean}
@@ -1026,6 +1040,11 @@ The principal declaration is
  \texttt{ForMathlib.DavisKahanTheory.
  shortRotation\_fullDisplacement\_refuted}.
 \]
+The literature and archival record behind \cref{sec:related} is preserved in
+the same repository and commit as
+\path{papers/historical-search-supplement.tex}, a standalone document intended
+to accompany this note whenever the historical claim is at issue.
+
 The proof file contains no admitted proof in the counterexample chain and
 records exact singular-value and Ky Fan-sum computations for both the competitor
 and the direct rotation.
