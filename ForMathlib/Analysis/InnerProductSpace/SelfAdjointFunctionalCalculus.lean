@@ -85,6 +85,15 @@ theorem selfAdjointFunctionalCalculus_id
     hT.apply_eigenvectorBasis]
   rfl
 
+/-- The calculus depends only on the operator, not on the symmetry witness.
+The operator occurs solely inside that witness's type, so a plain rewrite
+cannot reach it; this is the bridge that lets callers replace it. -/
+theorem selfAdjointFunctionalCalculus_congr_op {T S : E →ₗ[𝕜] E}
+    (hT : T.IsSymmetric) (hS : S.IsSymmetric) (h : T = S) (f : ℝ → ℝ) :
+    selfAdjointFunctionalCalculus hT f = selfAdjointFunctionalCalculus hS f := by
+  subst h
+  rfl
+
 /-- Functions agreeing on every eigenvalue produce the same operator. -/
 theorem selfAdjointFunctionalCalculus_congr
     {T : E →ₗ[𝕜] E} (hT : T.IsSymmetric) {f g : ℝ → ℝ}

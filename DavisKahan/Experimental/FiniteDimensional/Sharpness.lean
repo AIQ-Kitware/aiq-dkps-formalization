@@ -591,7 +591,7 @@ private theorem sinAngleOperator_model_eq_smul_id
     ext x
     -- `← RCLike.ofReal_mul` loops as a simp lemma; settle the scalars directly
     simp only [LinearMap.comp_apply, LinearMap.smul_apply, LinearMap.id_apply]
-    match_scalars <;> push_cast
+    match_scalars <;> push_cast <;> (try ring)
   change ForMathlib.abs A = _
   exact (LinearMap.IsPositive.sqrt_unique A.isPositive_adjoint_comp_self hpos hsquare).symm
 
@@ -607,12 +607,40 @@ private theorem singularValues_tanAngle_model
   have hcos : Real.cos θ ≠ 0 := ne_of_gt (Real.cos_pos_of_mem_Ioo ⟨by linarith [Real.pi_pos], hθ1⟩)
   have htan : 0 ≤ Real.tan θ :=
     Real.tan_nonneg_of_nonneg_of_le_pi_div_two hθ0 hθle
-  rw [tanAngleOperator, hsinEq]
-  have hfc := FiniteDimensional.selfAdjointFunctionalCalculus_real_smul_id
-    (𝕜 := 𝕜) (E := Plane 𝕜) (Real.sin θ) Real.arcsin
-  rw [hfc, harcsin,
+  -- the operator sits inside the symmetry witness, so it can only be
+  -- replaced through the congruence bridge
+  -- `sinAngleOperator` is *defined* as this modulus, so the equation has to
+  -- be restated in the form the goal actually carries
+  have hsinEq' : ForMathlib.abs (projection (modelSubspace (𝕜 := 𝕜)) -
+      projection (rotatedModelSubspace (𝕜 := 𝕜) θ)) =
+      (((Real.sin θ : ℝ) : 𝕜) • LinearMap.id) := hsinEq
+  have hinner : FiniteDimensional.selfAdjointFunctionalCalculus
+      (ForMathlib.isPositive_abs (projection (modelSubspace (𝕜 := 𝕜)) -
+        projection (rotatedModelSubspace (𝕜 := 𝕜) θ))).isSymmetric
+      Real.arcsin = (((θ : ℝ) : 𝕜) • LinearMap.id) := by
+    rw [FiniteDimensional.selfAdjointFunctionalCalculus_congr_op _
+      (show ((((Real.sin θ : ℝ) : 𝕜) • LinearMap.id) :
+          Plane 𝕜 →ₗ[𝕜] Plane 𝕜).IsSymmetric by
+        intro x y
+        simp only [LinearMap.smul_apply, LinearMap.id_apply, inner_smul_left,
+          inner_smul_right, RCLike.conj_ofReal])
+      hsinEq' Real.arcsin]
+    rw [FiniteDimensional.selfAdjointFunctionalCalculus_real_smul_id,
+      harcsin]
+  rw [tanAngleOperator,
+    FiniteDimensional.selfAdjointFunctionalCalculus_congr_op _
+      (show ((((θ : ℝ) : 𝕜) • LinearMap.id) :
+          Plane 𝕜 →ₗ[𝕜] Plane 𝕜).IsSymmetric by
+        intro x y
+        simp only [LinearMap.smul_apply, LinearMap.id_apply, inner_smul_left,
+          inner_smul_right, RCLike.conj_ofReal])
+      hinner safeTan,
     FiniteDimensional.selfAdjointFunctionalCalculus_real_smul_id]
-  simp [safeTan, hcos]
+  simp only [safeTan, if_neg hcos]
+  rw [show Real.sin θ / Real.cos θ = Real.tan θ from (Real.tan_eq_sin_div_cos θ).symm]
+  -- restate the scalar operator as a constant diagonal so the planar
+  -- singular-value lemma applies
+  rw [← diagOp_const_pair (EuclideanSpace.basisFun (Fin 2) 𝕜) (Real.tan θ)]
   simpa [abs_of_nonneg htan] using
     singularValues_diagOp_fin_two (𝕜 := 𝕜) finrank_euclideanSpace_fin
       (EuclideanSpace.basisFun (Fin 2) 𝕜) htan htan le_rfl
