@@ -591,9 +591,7 @@ private theorem sinAngleOperator_model_eq_smul_id
     ext x
     -- `← RCLike.ofReal_mul` loops as a simp lemma; settle the scalars directly
     simp only [LinearMap.comp_apply, LinearMap.smul_apply, LinearMap.id_apply]
-    match_scalars
-    push_cast
-    ring
+    match_scalars <;> push_cast
   change ForMathlib.abs A = _
   exact (LinearMap.IsPositive.sqrt_unique A.isPositive_adjoint_comp_self hpos hsquare).symm
 
