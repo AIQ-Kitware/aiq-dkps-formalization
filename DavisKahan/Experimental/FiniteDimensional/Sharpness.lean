@@ -951,6 +951,7 @@ theorem sinTheta_constant_optimal :
   rw [hgoal]
   exact mul_lt_of_lt_one_left hpos hc
 
+set_option maxHeartbeats 1000000 in
 /-- The factor two in the double-angle theorems cannot be decreased.
 
 Lean proof route for a weaker agent:
@@ -971,10 +972,14 @@ theorem sinTwoTheta_constant_optimal :
     (by norm_num) (by positivity) (by linarith [Real.pi_pos])
   have hpos : 0 < ‖(modelSinTwoThetaPerturbation (𝕜 := 𝕜) 0 1
       (Real.pi/8)).toContinuousLinearMap‖ := by
-    rw [norm_pos_iff]
-    intro hzero
-    have := congrArg (fun T => T (e0 (𝕜 := 𝕜))) hzero
-    simpa [modelSinTwoThetaPerturbation, e0] using this
+    rw [opNorm_eq_singularValues_zero _ finrank_euclideanSpace_fin
+        (by norm_num),
+      singularValues_modelSinTwoThetaPerturbation (𝕜 := 𝕜) (by norm_num)
+        (by positivity) (by linarith [Real.pi_pos]),
+      pairSingularValues_zero]
+    have hs : 0 < Real.sin (2 * (Real.pi / 8)) := by
+      apply Real.sin_pos_of_pos_of_lt_pi <;> nlinarith [Real.pi_pos]
+    nlinarith
   nlinarith
 
 /-!
