@@ -350,6 +350,26 @@ theorem LinearMap.IsPositive.of_hermitianPart_contraction
     inner_self_eq_norm_sq]
   linarith
 
+/-- For a positive operator the singular values are exactly the sorted
+eigenvalues: the Gram operator is the square, so its eigenvalues are the
+squares and the square root undoes them. -/
+theorem singularValues_of_isPositive {A : E →ₗ[𝕜] E} (hA : A.IsPositive)
+    (j : Fin (finrank 𝕜 E)) :
+    A.singularValues (j : ℕ) = hA.isSymmetric.eigenvalues rfl j := by
+  have hgram : A.isSymmetric_adjoint_comp_self.eigenvalues rfl =
+      fun i => (hA.isSymmetric.eigenvalues rfl i) ^ 2 :=
+    eigenvalues_eq_of_eigenbasis A.isSymmetric_adjoint_comp_self rfl
+      (hA.isSymmetric.eigenvectorBasis rfl)
+      (fun a b hab => pow_le_pow_left₀ (hA.nonneg_eigenvalues rfl b)
+        (hA.isSymmetric.eigenvalues_antitone rfl hab) 2)
+      (fun i => by
+        rw [LinearMap.comp_apply, hA.isSymmetric.apply_eigenvectorBasis,
+          map_smul, hA.isSymmetric.adjoint_eq,
+          hA.isSymmetric.apply_eigenvectorBasis, smul_smul,
+          ← RCLike.ofReal_mul, ← sq])
+  rw [A.singularValues_of_lt rfl j.isLt, hgram]
+  simpa using Real.sqrt_sq (hA.nonneg_eigenvalues rfl j)
+
 /-- Ky Fan sums contract under two-block pinching. -/
 theorem kyFanSum_pinch_le
     (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
@@ -408,6 +428,8 @@ theorem positive_affine_reverse_kyFanSum
     intro i
     rw [hAC]
     simp [br, b, hC.isSymmetric.apply_eigenvectorBasis]
+    -- the left carries an `ℕ`-smul and the right a scalar-field one
+    match_scalars <;> push_cast <;> ring
   have hanti : Antitone (fun i : Fin n =>
       2 * (1 - hC.isSymmetric.eigenvalues rfl (Fin.rev i))) := by
     intro i j hij
@@ -426,10 +448,11 @@ theorem positive_affine_reverse_kyFanSum
       else 0 := by
     ext j
     rcases lt_or_ge j n with hj | hj
-    · rw [A.singularValues_of_lt rfl hj]
+    · -- `A` is positive, so its singular values are its own eigenvalues
+      rw [show A.singularValues j = hA.isSymmetric.eigenvalues rfl ⟨j, hj⟩ from
+        singularValues_of_isPositive hA ⟨j, hj⟩]
       have hAeig := eigenvalues_eq_of_eigenbasis hA.isSymmetric rfl br hanti heig
-      rw [hAeig]
-      simp only [dif_pos hj, Real.sqrt_sq (hnonneg ⟨j, hj⟩)]
+      rw [hAeig, dif_pos hj]
     · rw [A.singularValues_of_finrank_le hj, dif_neg (not_lt.mpr hj)]
   rw [kyFanSum_eq_sum_fin]
   simp only [hσ]
