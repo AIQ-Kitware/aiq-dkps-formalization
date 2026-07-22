@@ -14,10 +14,10 @@ authoritative; this Markdown file is generated from it.
 | `compiled_exact` | 7 |
 | `compiled_specialization` | 2 |
 | `compiled_general_infrastructure` | 7 |
-| `candidate_under_repair` | 13 |
+| `candidate_under_repair` | 19 |
 | `partial_or_wrapper_missing` | 5 |
 | `not_represented` | 3 |
-| `not_started` | 6 |
+| `not_started` | 0 |
 | `resolved_by_modern_development` | 1 |
 | `not_a_completion_obligation` | 3 |
 | `refuted_as_transcribed` | 1 |
@@ -246,7 +246,7 @@ authoritative; this Markdown file is generated from it.
 #### Proposition 4.4: Real-space full displacement minimality below pi/3
 
 - **Kind:** `proposition`
-- **Status:** `refuted`
+- **Status:** `refuted_as_transcribed`
 - **Mathematics:** In a real Hilbert space, if the maximal angle is at most pi/3, the direct rotation minimizes every UI norm of 1-V.
 - **Current Lean references:** `ForMathlib.DavisKahanTheory.shortRotation_fullDisplacement_refuted`, `ForMathlib.DavisKahanTheory.DavisKahanProposition4_4_Finite`, `ForMathlib.DavisKahanTheory.not_davisKahanProposition4_4_Finite`
 - **Assessment:** The transcribed claim is false: a compiled R^4 counterexample exhibits an acute pair with both principal angles pi/4 and a competitor unitary carrying P to Q whose full displacement 1-V has trace norm 2 sqrt 2, strictly below the direct rotation value 4 sqrt(2 - sqrt 2).  The competitor mixes the equal-angle multiplicity space (rotation angles 0 and pi/2), an obstruction available at every angle threshold; the same family refutes the closing conjecture of Davis 1958.  Operator-norm and squared-displacement consequences survive via 4.1/4.3.
@@ -384,74 +384,74 @@ authoritative; this Markdown file is generated from it.
 - **Kind:** `theorem`
 - **Status:** `candidate_under_repair`
 - **Mathematics:** Under tan(2 Theta) hypotheses, the acute branch is equivalent to the selected spectral ordering; a canonical reducing subspace exists and satisfies operator, eigenvalue, and symmetric-gauge repulsion inequalities.
-- **Current Lean references:** `ForMathlib.DavisKahanExt.quarterAcuteAngularCoordinate_sharp_bound_of_orderedSpectraSeparated`
-- **Assessment:** Several finite and continuation components exist, but all three source conclusions are not yet source-audited together.
-- **Next action:** Compile the continuation-selected branch and separate parts (i), (ii), and (iii) into explicit source declarations.
+- **Current Lean references:** `ForMathlib.DavisKahan1970.Section8.theorem8_1_selectedBranch_and_spectralRepulsion`, `ForMathlib.DavisKahan1970.Section8.maximalAngle_selectedSpectralSubspaces_lt_pi_div_four`, `ForMathlib.DavisKahan1970.Section8.orientedSpectralRepulsionConclusion`, `ForMathlib.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_of_rotatedBlockData`, `ForMathlib.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_of_rotatedBlockData`
+- **Assessment:** A source-facing candidate assembles the continuation-selected reducing branch, unitary transport, strict quarter-acuteness, full-spectrum gap exclusion, and restricted-spectrum separation.  The exact quadratic-form algebra behind part (i) is also proved from an abstract rotated-block decomposition and sine/cosine Pythagoras certificate.  The unrestricted construction from the exact tan(2 Theta) hypotheses, the converse branch characterization, the concrete direct-rotation instantiation of part (i), and parts (ii)--(iii) remain open.
+- **Next action:** Instantiate the compression certificates with the concrete direct-rotation blocks, construct the canonical branch from the unrestricted off-diagonal hypotheses, and then formalize the finite ordered-eigenvalue and symmetric-gauge refinements.
 
 #### Theorem 8.2: Smallness selects the acute branch
 
 - **Kind:** `theorem`
 - **Status:** `candidate_under_repair`
 - **Mathematics:** If the perturbation or residual norm is below half the gap, the sine double-angle estimate is accompanied by Theta < pi/4.
-- **Current Lean references:** `ForMathlib.DavisKahanExt.norm_selectedEndpointAngularOperator_le_div`
-- **Assessment:** A priori angle bounds and continuation machinery exist; exact source hypotheses and both alternatives require audit.
-- **Next action:** Add the exact two-alternative source theorem.
+- **Current Lean references:** `ForMathlib.DavisKahan1970.Section8.theorem8_2_perturbationHalfGap_selectedBranch`, `ForMathlib.DavisKahan1970.Section8.theorem82_branch_of_residualHalfGapBridge`, `ForMathlib.DavisKahan1970.Section8.PerturbationHalfGapBridge`, `ForMathlib.DavisKahan1970.Section8.ResidualHalfGapBridge`
+- **Assessment:** The strict selected-branch conclusion is now exposed under explicit perturbation and residual half-gap bridge records. The general continuation machinery behind the conclusion is admission-free. Constructing those bridges from the exact printed half-gap hypotheses, and the Krein replacement step for the residual alternative, remain open.
+- **Next action:** Prove the half-gap spectral enclosure/common-contour constructor and formalize the Krein residual-to-perturbation replacement theorem.
 
 ### Section 9
 
 #### Section 9, problem setup: Fourth-derivative Rayleigh–Ritz model
 
 - **Kind:** `numerical_model`
-- **Status:** `not_started`
+- **Status:** `candidate_under_repair`
 - **Mathematics:** The free-beam fourth derivative on L2(0,1), perturbed by multiplication by epsilon t, with the two-dimensional linear trial eigenspace.
-- **Current Lean references:** none identified
-- **Assessment:** No source module formalizes the differential operator, boundary conditions, trial basis, or spectral gap alpha3 > 500.
-- **Next action:** Choose whether to formalize the analytic operator or a certified finite-data surrogate reproducing the paper computations.
+- **Current Lean references:** `ForMathlib.DavisKahan1970.Section9.CenteredAffine`, `ForMathlib.DavisKahan1970.Section9.ritz_matrix_from_affine_moments`, `ForMathlib.DavisKahan1970.Section9.FreeBeamFiniteDataCertificate`
+- **Assessment:** A source-facing candidate now reconstructs the affine trial basis through exact unit-interval moments and packages the remaining free-beam analytic facts behind an explicit certificate. The closed fourth-derivative operator and the bound alpha_3 > 500 are not yet proved.
+- **Next action:** Compile the finite-moment layer, then construct the free-beam closed operator and discharge the spectral certificate without adding axioms.
 
 #### Equations (9.1)–(9.4): Initial sine and sine-double-angle bounds
 
 - **Kind:** `numerical_claims`
-- **Status:** `not_started`
+- **Status:** `candidate_under_repair`
 - **Mathematics:** Compute R*R and derive the operator- and two-singular-value bounds for sin Theta and sin(2 Theta).
-- **Current Lean references:** none identified
-- **Assessment:** The general theorems exist, but the concrete residual matrix and numerical constants are not formalized.
-- **Next action:** Formalize exact radical inequalities first, with decimals as derived corollaries.
+- **Current Lean references:** `ForMathlib.DavisKahan1970.Section9.initial_residual_gram_from_affine_moments`, `ForMathlib.DavisKahan1970.Section9.residualGram_eigenvalueHigh_charAt`, `ForMathlib.DavisKahan1970.Section9.equation_9_1`, `ForMathlib.DavisKahan1970.Section9.equation_9_4`
+- **Assessment:** The residual Gram matrix, its two characteristic roots, exact radical bounds, and the printed rational relaxations are represented. The actual sine and double-angle theorem outputs are still bridge hypotheses pending integration with the maintained theorem APIs.
+- **Next action:** Repair compilation and replace the theorem-output fields by applications of the source-facing sine and sin-two-theta declarations.
 
 #### Equations (9.5)–(9.7): Rayleigh–Ritz tangent refinements
 
 - **Kind:** `numerical_claims`
-- **Status:** `not_started`
+- **Status:** `candidate_under_repair`
 - **Mathematics:** Use the compressed trial operator and orthogonal residual to obtain sharper tan Theta and tan(2 Theta) bounds.
-- **Current Lean references:** none identified
-- **Assessment:** Requires exact 2x2 matrix computations and application of Theorems 6.3 and the tan-double-angle theorem.
-- **Next action:** Build a finite-dimensional exact arithmetic model independent of the unbounded differential-operator construction.
+- **Current Lean references:** `ForMathlib.DavisKahan1970.Section9.recentered_residual_gram_from_affine_moments`, `ForMathlib.DavisKahan1970.Section9.equation_9_5_low`, `ForMathlib.DavisKahan1970.Section9.equation_9_6`, `ForMathlib.DavisKahan1970.Section9.equation_9_7`
+- **Assessment:** The Ritz compression, rank-one recentered residual, singular-value scalars, exact tangent envelopes, and decimal corollaries are present as a candidate. The unbounded tan-theta and tan-two-theta instantiations remain to be connected.
+- **Next action:** Compile the exact arithmetic, then instantiate the strongest correct tangent and double-angle theorem surfaces with the certified free-beam data.
 
 #### Equation (9.8): Comparison with Weinberger bounds
 
 - **Kind:** `comparison_claim`
-- **Status:** `not_started`
+- **Status:** `candidate_under_repair`
 - **Mathematics:** Derive lower-eigenvalue estimates from a 3x3 comparison matrix and compare individual-vector angle bounds.
-- **Current Lean references:** none identified
-- **Assessment:** This imports an external theorem and asymptotic O(epsilon^4) discussion not currently distilled into Lean-ready statements.
-- **Next action:** Separate exact matrix eigenvalue inequalities from the historical comparison narrative.
+- **Current Lean references:** `ForMathlib.DavisKahan1970.Section9.ArrowheadThreeByThree`, `ForMathlib.DavisKahan1970.Section9.tangent_sq_le_of_weinberger_sine_sq`, `ForMathlib.DavisKahan1970.Section9.equation_9_8_lower`, `ForMathlib.DavisKahan1970.Section9.equation_9_8_upper`
+- **Assessment:** The exact arrowhead characteristic polynomial and the algebraic conversion of Weinberger sine-square bounds to tangent bounds are represented. The historical lower-root theorem is deliberately an explicit certificate rather than an informal O(epsilon^4) assertion.
+- **Next action:** Compile the arrowhead algebra and either prove the required root inequalities directly or state a precise imported Weinberger-Lehmann theorem.
 
 #### Section 9, l2 example after (9.8): Residual-infinite limitation example
 
 - **Kind:** `example`
-- **Status:** `not_started`
+- **Status:** `candidate_under_repair`
 - **Mathematics:** An l2 trial vector has a useful Rayleigh quotient but lies outside the perturbed operator domain, so residual-based theorems do not apply while lower-bound methods still do.
-- **Current Lean references:** none identified
-- **Assessment:** This is an instructive domain counterexample and independently useful.
-- **Next action:** Formalize a corrected nearby domain example rather than the intentionally non-domain vector itself.
+- **Current Lean references:** `ForMathlib.DavisKahan1970.Section9.rawDiagonalImage_eq_one`, `ForMathlib.DavisKahan1970.Section9.rawDiagonalImage_partial_energy`, `ForMathlib.DavisKahan1970.Section9.truncatedDiagonalImage_energy`
+- **Assessment:** The pointwise constant image and divergent finite partial energies are formalized algebraically, together with an explicit finite-support truncation repair that agrees on arbitrary prescribed prefixes.
+- **Next action:** Compile the sequence lemmas and, if worthwhile, lift them from coordinate functions to Mathlib l2 and an unbounded diagonal operator domain.
 
 #### Equations (9.9)–(9.11) and final bounds: Individual eigenvector identification inside a cluster
 
 - **Kind:** `numerical_claims`
-- **Status:** `not_started`
+- **Status:** `candidate_under_repair`
 - **Mathematics:** Reduce the full eigenproblem to a two-dimensional Schur complement, then combine tan(2 Theta) and tan Theta bounds to control each eigenvector angle omega_k.
-- **Current Lean references:** none identified
-- **Assessment:** No current module represents the Schur-complement reduction or final constants.
-- **Next action:** Formalize as a standalone finite block-operator theorem, then instantiate the numerical data.
+- **Current Lean references:** `ForMathlib.DavisKahan1970.Section9.half_tanTwoPsi_ratio_lt_of_eigenvalue_upper`, `ForMathlib.DavisKahan1970.Section9.block_eigenproblem_iff`, `ForMathlib.DavisKahan1970.Section9.schur_complement_reduction`, `ForMathlib.DavisKahan1970.Section9.individual_angle_le_exact_envelope`, `ForMathlib.DavisKahan1970.Section9.final_lower_individual_angle_bound`, `ForMathlib.DavisKahan1970.Section9.NumericalExampleCertificate`
+- **Assessment:** Equation (9.9) is represented as an explicit block linear map, and equations (9.10)-(9.11) by a generic Schur reduction. The rank-one correction is decomposed into its shifted diagonal and off-diagonal parts, with the exact sqrt(3)/30 coefficient. The final scalar combination producing sqrt(7)/10 and the printed bounds is present. The operator-order resolvent sandwich and actual angle identifications remain certificate fields.
+- **Next action:** Compile the block reduction, formalize the rank-one resolvent order argument, and replace the final scalar hypotheses by the Section 7 and Section 8 theorem applications.
 
 ### Section 10
 
