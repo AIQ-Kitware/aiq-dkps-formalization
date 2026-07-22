@@ -9,6 +9,7 @@ import DavisKahan.FiniteDimensional.Core.SpectralGap
 import DavisKahan.FiniteDimensional.SinTheta.UnitarilyInvariant
 import DavisKahan.Experimental.FiniteDimensional.Core.AngleOperators
 import ForMathlib.Analysis.InnerProductSpace.TwoDimensionalSingularValues
+import ForMathlib.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm
 
 /-!
 # Sharpness and two-dimensional extremizers
@@ -607,7 +608,7 @@ private theorem singularValues_modelSinTwoThetaPerturbation
   have hprod : 0 ≤ ((b-a)/2) * Real.sin (2*θ) :=
     mul_nonneg (div_nonneg (sub_nonneg.mpr hab.le) (by norm_num)) hsin
   simpa [modelSinTwoThetaPerturbation, abs_of_nonneg hprod, abs_neg,
-    sub_eq_neg_sub] using
+    neg_sub] using
     singularValues_offDiagonal_two_by_two (𝕜 := 𝕜)
       (((a-b)/2) * Real.sin (2*θ))
 
@@ -660,6 +661,13 @@ Lean proof route for a weaker agent:
 Signature audit: The theorem now uses a dedicated `sin Θ` perturbation model; do not reuse it
 for the tangent or double-angle families.
 -/
+/-- The scalar gap is a positive real, so its field norm is itself.  The
+singular-value comparisons need this to discharge the `‖b - a‖` that
+`singularValues_smul` introduces. -/
+private theorem norm_ofReal_sub_of_lt {a b : ℝ} (hab : a < b) :
+    ‖((b : 𝕜) - (a : 𝕜))‖ = b - a := by
+  rw [← RCLike.ofReal_sub, RCLike.norm_ofReal, abs_of_pos (sub_pos.mpr hab)]
+
 theorem sinTheta_model_equality
     (N : UnitarilyInvariantNorm 𝕜 (Plane 𝕜))
     {a b θ : ℝ} (hab : a < b) (hθ0 : 0 ≤ θ) (hθ1 : θ < Real.pi / 2) :
@@ -671,10 +679,11 @@ theorem sinTheta_model_equality
         ((b-a : 𝕜) • sinAngleOperator (modelSubspace (𝕜 := 𝕜))
           (rotatedModelSubspace (𝕜 := 𝕜) θ)).singularValues := by
     rw [singularValues_modelSinThetaPerturbation hab hθ0 (le_of_lt hθ1),
-      LinearMap.singularValues_smul,
+      RectangularUnitarilyInvariantNorm.singularValues_smul,
       singularValues_sinAngle_model hθ0 (le_of_lt hθ1)]
     ext i
     simp [pairSingularValues, abs_of_pos (sub_pos.mpr hab),
+      norm_ofReal_sub_of_lt hab,
       mul_assoc, mul_left_comm, mul_comm]
   calc
     (b-a) * N (sinAngleOperator (modelSubspace (𝕜 := 𝕜))
@@ -712,6 +721,7 @@ theorem tanTheta_model_equality
       singularValues_modelTanThetaPerturbation hab htan]
     ext i
     simp [pairSingularValues, abs_of_pos (sub_pos.mpr hab),
+      norm_ofReal_sub_of_lt hab,
       mul_assoc, mul_left_comm, mul_comm]
   calc
     (b - a) * N (tanAngleOperator (modelSubspace (𝕜 := 𝕜))
@@ -773,6 +783,7 @@ theorem tanTwoTheta_model_equality
       singularValues_modelTanTwoThetaPerturbation hab htan]
     ext i
     simp [pairSingularValues, abs_of_pos (sub_pos.mpr hab),
+      norm_ofReal_sub_of_lt hab,
       mul_assoc, mul_left_comm, mul_comm]
     ring
   calc
