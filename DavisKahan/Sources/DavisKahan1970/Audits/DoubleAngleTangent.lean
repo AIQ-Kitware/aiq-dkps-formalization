@@ -60,11 +60,18 @@ namespace DavisKahan1970
 #check @tanTwoTheta_spectral_repulsion
 #check @unbounded_tanTwoTheta_opNorm
 #check @unbounded_tanTwoTheta_uiNorm
+#check @tanTwoTheta_uiIdeal_infinite
+#check @tanTwoTheta_kyFan_infinite
+#check @tanTwoTheta_kyFan_doubleAngleTangent_infinite
+#check @kyFanApproximationGauge_orthonormal_bound
 
 #print axioms tanTwoTheta_uiNorm
 #print axioms tanTwoTheta_kyFan
 #print axioms tanTwoTheta_sharp_opNorm
 #print axioms unbounded_tanTwoTheta_uiNorm
+#print axioms tanTwoTheta_uiIdeal_infinite
+#print axioms tanTwoTheta_kyFan_infinite
+#print axioms kyFanApproximationGauge_orthonormal_bound
 
 end DavisKahan1970
 end ForMathlib

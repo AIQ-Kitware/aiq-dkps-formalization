@@ -351,6 +351,96 @@ private theorem kyFan_tanTwoTheta0_offDiagonal_le_of_le_finrank
   rw [hLHS]
   linarith
 
+/-- Representative-free form of the Ky Fan root: the prefix sums of the
+double-angle tangents of the graph-coordinate singular values are controlled
+by the singular-value prefixes of the off-diagonal perturbation.  This is the
+form consumed by the infinite-dimensional compression argument. -/
+theorem kyFan_doubleAngleTangent_offDiagonal_le
+    (hA : A.IsSymmetric) (hH : H.IsSymmetric)
+    (hAU : ∀ x ∈ U, A x ∈ U)
+    (hHU : ∀ x ∈ U, H x ∈ Uᗮ) (hHUperp : ∀ x ∈ Uᗮ, H x ∈ U)
+    (hTmem : ∀ x, T x ∈ Uᗮ) (hTzero : ∀ x ∈ Uᗮ, T x = 0)
+    (hUb : ∀ x ∈ U, b * ‖x‖ ^ 2 ≤ RCLike.re ⟪A x, x⟫_𝕜)
+    (hUa : ∀ x ∈ Uᗮ, RCLike.re ⟪A x, x⟫_𝕜 ≤ a * ‖x‖ ^ 2)
+    (hinv : ∀ x ∈ U, ∃ y ∈ U, (A + H) (x + T x) = y + T y)
+    (hT1 : T.singularValues 0 < 1)
+    (k : ℕ) :
+    (b - a) * ∑ j ∈ Finset.range k,
+        doubleAngleTangent (T.singularValues j) ≤
+      2 * rectangularKyFanSum k H := by
+  classical
+  -- reduce to `k ≤ finrank` since both sides freeze past the dimension
+  suffices hcase : ∀ m : ℕ, m ≤ finrank 𝕜 E →
+      (b - a) * ∑ j ∈ Finset.range m,
+          doubleAngleTangent (T.singularValues j) ≤
+        2 * rectangularKyFanSum m H by
+    by_cases hk : k ≤ finrank 𝕜 E
+    · exact hcase k hk
+    · have hk' : finrank 𝕜 E ≤ k := Nat.le_of_not_ge hk
+      have hsum : ∑ j ∈ Finset.range k,
+          doubleAngleTangent (T.singularValues j) =
+            ∑ j ∈ Finset.range (finrank 𝕜 E),
+              doubleAngleTangent (T.singularValues j) := by
+        refine (Finset.sum_subset
+          (fun x hx => Finset.mem_range.mpr
+            (lt_of_lt_of_le (Finset.mem_range.mp hx) hk')) ?_).symm
+        intro j _ hj
+        have hjge : finrank 𝕜 E ≤ j := by
+          by_contra hlt
+          exact hj (Finset.mem_range.mpr (Nat.lt_of_not_ge hlt))
+        rw [T.singularValues_of_finrank_le hjge, doubleAngleTangent_zero]
+      rw [hsum, rectangularKyFanSum_eq_finrank_of_finrank_le H hk']
+      exact hcase (finrank 𝕜 E) le_rfl
+  intro m hm
+  set S : Finset (Fin (finrank 𝕜 E)) := Finset.univ.filter
+    (fun j : Fin (finrank 𝕜 E) =>
+      (j : ℕ) < m ∧ T.singularValues (j : ℕ) ≠ 0) with hS
+  have hSne : ∀ x ∈ S, T.singularValues (x : ℕ) ≠ 0 := by
+    intro x hx
+    rw [hS, Finset.mem_filter] at hx
+    exact hx.2.2
+  have hcard_le : S.card ≤ m := by
+    have hmaps : ∀ x ∈ S, (x : ℕ) ∈ Finset.range m := by
+      intro x hx
+      rw [hS, Finset.mem_filter] at hx
+      exact Finset.mem_range.mpr hx.2.1
+    calc S.card ≤ (Finset.range m).card :=
+        Finset.card_le_card_of_injOn (fun x => (x : ℕ)) hmaps
+          fun x _ y _ h => Fin.val_injective h
+      _ = m := Finset.card_range m
+  have hLHS : ∑ j ∈ Finset.range m,
+      doubleAngleTangent (T.singularValues j) =
+        ∑ x ∈ S, doubleAngleTangent (T.singularValues (x : ℕ)) := by
+    have h1 : ∑ j ∈ Finset.range m,
+        doubleAngleTangent (T.singularValues j) =
+          ∑ i : Fin m, doubleAngleTangent (T.singularValues (i : ℕ)) :=
+      (Fin.sum_univ_eq_sum_range
+        (fun j => doubleAngleTangent (T.singularValues j)) m).symm
+    have h2 := sum_filter_lt_eq_sum_fin (n := finrank 𝕜 E) hm
+      (fun j => doubleAngleTangent (T.singularValues j))
+    have h3 : ∑ x ∈ S, doubleAngleTangent (T.singularValues (x : ℕ)) =
+        ∑ x ∈ Finset.univ.filter
+            (fun j : Fin (finrank 𝕜 E) => (j : ℕ) < m),
+          doubleAngleTangent (T.singularValues (x : ℕ)) := by
+      rw [hS, ← Finset.filter_filter]
+      refine Finset.sum_filter_of_ne ?_
+      intro x _ hx hzero
+      rw [hzero, doubleAngleTangent_zero] at hx
+      exact hx rfl
+    rw [h1, ← h2, h3]
+  have hmono : rectangularKyFanSum S.card H ≤ rectangularKyFanSum m H := by
+    unfold rectangularKyFanSum
+    rw [Fin.sum_univ_eq_sum_range (fun i => H.singularValues i) S.card,
+      Fin.sum_univ_eq_sum_range (fun i => H.singularValues i) m]
+    exact Finset.sum_le_sum_of_subset_of_nonneg
+      (fun x hx => Finset.mem_range.mpr
+        (lt_of_lt_of_le (Finset.mem_range.mp hx) hcard_le))
+      fun i _ _ => H.singularValues_nonneg i
+  have hcore := sum_doubleAngleTangent_le_of_ne_zero hA hH hAU hHU hHUperp
+    hTmem hTzero hUb hUa hinv hT1 S hSne
+  rw [hLHS]
+  linarith
+
 /-- **The Ky Fan root of the `tan 2Θ` theorem** (Davis--Kahan 1970,
 Section 7, equation (7.6) and the following paired-singular-vector
 argument): every prefix sum of double-angle tangents is controlled by the
