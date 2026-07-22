@@ -212,5 +212,68 @@ theorem tanTheta_genuineSpectrum
   have hZcoer := coercive_of_compress_spectrum_exterior hT hαβ hδ hZspec
   exact tan_theta_le' hT.isSymmetric hVinv hαβ hδ hρ0 hZcoer hVa hVb hρ
 
+section OneSided
+
+/- The two local instances below are load-bearing, exactly as in
+`Sources/DavisKahan1970/SineTheta/CosineAngle.lean`: without the
+`CompleteSpace` coercion instance and the C⋆-algebra instance recorded in
+the submodule shape, any statement mixing `spectrum ℝ C` with `‖C‖` for a
+compression `C : ↥W →L[ℂ] ↥W` sends `isDefEq` into a deterministic
+heartbeat blow-up (pending instance syntheses fail, so definitional
+unfolding of the `Submodule` algebra structures takes over).  With them in
+scope the same statements elaborate at ordinary heartbeats. -/
+
+local instance instCompleteSpaceCoeOfHasOrthogonalProjectionGenuineTanTheta
+    {G : Type*} [NormedAddCommGroup G] [InnerProductSpace ℂ G]
+    [CompleteSpace G]
+    (U : Submodule ℂ G) [U.HasOrthogonalProjection] : CompleteSpace U :=
+  (Submodule.isComplete_coe_of_hasOrthogonalProjection U).completeSpace_coe
+
+noncomputable local instance instCStarAlgebraSubspaceCoordinateGenuineTanTheta
+    {G : Type*} [NormedAddCommGroup G] [InnerProductSpace ℂ G]
+    [CompleteSpace G]
+    (U : Submodule ℂ G) [U.HasOrthogonalProjection] :
+    CStarAlgebra (↥U →L[ℂ] ↥U) :=
+  inferInstance
+
+/-- **The bounded `tan Θ` theorem in the source's one-sided orientation.**
+Theorem 6.3 of Davis--Kahan 1970 places the two spectra on one axis: the
+test compression spectrum lies below `α₀` and the unwanted compression
+spectrum lies in `[α₀ + δ, ∞)`.  A bounded self-adjoint compression is
+norm-bounded, so its spectrum is automatically capped; this reduces the
+one-sided placement to the interval/exterior form
+`tanTheta_genuineSpectrum` with `[α, β] = [α₀ + δ, max ‖T|_{Vᗮ}‖ (α₀ + δ)]`. -/
+theorem tanTheta_genuineSpectrum_oneSided
+    {T : E →L[ℂ] E} (hT : IsSelfAdjoint T)
+    {Z V : Submodule ℂ E} [Z.HasOrthogonalProjection]
+    [V.HasOrthogonalProjection]
+    (hVinv : ∀ x ∈ V, T x ∈ V)
+    {α₀ δ ρ : ℝ} (hδ : 0 < δ) (hρ0 : 0 ≤ ρ)
+    (hZspec : ∀ x ∈ spectrum ℝ (compressOperator Z T), x ≤ α₀)
+    (hVspec : ∀ x ∈ spectrum ℝ (compressOperator Vᗮ T), α₀ + δ ≤ x)
+    (hρ : ∀ x ∈ Z, ‖T x - Z.starProjection (T x)‖ ≤ ρ * ‖x‖) :
+    ∀ x ∈ Z, δ * ‖x - V.starProjection x‖ ≤ ρ * ‖V.starProjection x‖ := by
+  have hcap : ∀ y ∈ spectrum ℝ (compressOperator Vᗮ T),
+      y ≤ max ‖compressOperator Vᗮ T‖ (α₀ + δ) := by
+    intro y hy
+    have hone : ‖(1 : ↥Vᗮ →L[ℂ] ↥Vᗮ)‖ ≤ 1 := ContinuousLinearMap.norm_id_le
+    have habs : ‖y‖ ≤ ‖compressOperator Vᗮ T‖ * ‖(1 : ↥Vᗮ →L[ℂ] ↥Vᗮ)‖ :=
+      spectrum.norm_le_norm_mul_of_mem hy
+    rw [Real.norm_eq_abs] at habs
+    refine le_max_of_le_left ((le_abs_self y).trans (habs.trans ?_))
+    calc ‖compressOperator Vᗮ T‖ * ‖(1 : ↥Vᗮ →L[ℂ] ↥Vᗮ)‖
+        ≤ ‖compressOperator Vᗮ T‖ * 1 :=
+          mul_le_mul_of_nonneg_left hone (norm_nonneg _)
+      _ = ‖compressOperator Vᗮ T‖ := mul_one _
+  refine tanTheta_genuineSpectrum hT hVinv (α := α₀ + δ)
+    (β := max ‖compressOperator Vᗮ T‖ (α₀ + δ))
+    (le_max_right _ _) hδ hρ0
+    (fun y hy => Set.mem_Icc.mpr ⟨hVspec y hy, hcap y hy⟩)
+    (fun x hx => Or.inl ?_) hρ
+  have := hZspec x hx
+  linarith
+
+end OneSided
+
 end DavisKahanExt
 end ForMathlib
