@@ -51,11 +51,16 @@ namespace DavisKahan1970
 
 /-! ## Section 7, equation (7.6): tangent double angle -/
 
+#check @tanTwoTheta_uiNorm
+#check @tanTwoTheta_kyFan
+#check @tanTwoTheta_pairedSingularVector_scalar
 #check @tanTwoTheta_sharp_opNorm
 #check @tanTwoTheta_spectral_repulsion
 #check @unbounded_tanTwoTheta_opNorm
 #check @unbounded_tanTwoTheta_uiNorm
 
+#print axioms tanTwoTheta_uiNorm
+#print axioms tanTwoTheta_kyFan
 #print axioms tanTwoTheta_sharp_opNorm
 #print axioms unbounded_tanTwoTheta_uiNorm
 

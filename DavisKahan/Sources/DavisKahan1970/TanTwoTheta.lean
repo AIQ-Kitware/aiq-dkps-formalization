@@ -3,6 +3,7 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Fable 5
 -/
+import DavisKahan.DoubleAngle.TanTwoThetaKyFan
 import DavisKahan.FiniteDimensional.DoubleAngle.TanTheta
 import DavisKahan.TanTwoTheta.UnboundedIdeal
 import DavisKahan.TanTwoTheta.Unbounded
@@ -25,6 +26,16 @@ vectors, claiming every unitary-invariant norm.
 
 ## What is compiled, at which scope
 
+* `tanTwoTheta_uiNorm` — **the source norm scope of equation (7.6)**: for
+  every rectangular unitarily invariant norm,
+  `(b - a) · N(tan 2Θ₀) ≤ 2 · N(H)`, in the finite-dimensional
+  graph-coordinate formulation, proved by the paper's paired-singular-vector
+  argument (`kyFan_tanTwoTheta0_offDiagonal_le` is the Ky Fan prefix root).
+  The `tan 2Θ₀` representative freedom matches the paper: any operator with
+  the double-angle-tangent singular values is admissible.  Quarter-acuteness
+  enters as the hypothesis that the graph coordinate is a strict
+  contraction; for spectral subspaces it is discharged by the acute-branch
+  conclusion of `tanTwoTheta_sharp_opNorm`.
 * `tanTwoTheta_sharp_opNorm` — the sharp subspace-level theorem at operator
   norm, on an **arbitrary inner-product space over any `RCLike` field** (no
   finite-dimensionality, no completeness): form gap `[a, b]`-split on the
@@ -42,13 +53,10 @@ vectors, claiming every unitary-invariant norm.
 
 ## What remains open (recorded, not claimed)
 
-1. The **arbitrary unitary-invariant norm** form
-   `δ · N(tan 2Θ) ≤ 2 N(H)` is not certified at any scope.  A numerical Ky
-   Fan sweep (40000 randomized finite configurations, all prefix sums, true
-   spectral gap) found no violation and located equality only at the sharp
-   `2×2` model, so the source claim is plausible; certifying it requires the
-   source's paired-singular-vector argument for equation (7.6), which is not
-   yet formalized.  It must not be advertised until compiled.
+1. The **infinite-dimensional** arbitrary-UI-ideal form of the sharp
+   `tan 2Θ` estimate: the compiled UI-norm theorem is finite-dimensional
+   (it consumes the intrinsic singular-system layer); the unbounded
+   companions above carry the non-sharp extended-cosine denominator.
 2. The sharp Riccati route
    (`quarterAcuteAngularCoordinate_sharp_bound_of_orderedInternalGap` and its
    family under `Experimental/InfiniteDimensional/TanTwoTheta/`) currently
@@ -60,6 +68,29 @@ vectors, claiming every unitary-invariant norm.
 
 namespace ForMathlib
 namespace DavisKahan1970
+
+/-! ## The source norm scope: every unitarily invariant norm -/
+
+/-- The double-angle tangent scalar function `t ↦ 2t/(1 - t²)`. -/
+alias tanTwoTheta_doubleAngleTangent := DavisKahanTheory.doubleAngleTangent
+
+/-- **Davis--Kahan 1970, `tan 2Θ` theorem, every rectangular unitarily
+invariant norm** (Section 7, equation (7.6), paired-singular-vector proof;
+finite-dimensional graph-coordinate form): `(b - a) · N(tan 2Θ₀) ≤ 2 · N(H)`
+for a fully off-diagonal symmetric perturbation `H` across the form gap
+`[a, b]`, where `tan 2Θ₀` is any operator whose singular values are the
+double-angle tangents of the principal angles between `U` and the perturbed
+invariant graph subspace. -/
+alias tanTwoTheta_uiNorm := DavisKahanTheory.tanTwoTheta0_offDiagonal_le
+
+/-- The Ky Fan prefix root of `tanTwoTheta_uiNorm`: equation (7.6) summed
+over paired singular vectors. -/
+alias tanTwoTheta_kyFan := DavisKahanTheory.kyFan_tanTwoTheta0_offDiagonal_le
+
+/-- The paired-singular-vector scalar inequality at the heart of the source
+argument. -/
+alias tanTwoTheta_pairedSingularVector_scalar :=
+  DavisKahanTheory.doubleAngleTangent_scalar
 
 /-! ## The sharp subspace theorem with the acute branch -/
 
