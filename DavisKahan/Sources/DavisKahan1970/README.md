@@ -41,7 +41,7 @@ and must not be described as proof-complete until its dependency audit is clean.
 | Canonical direct rotation construction and projection intertwining | `directRotation`, `partIII_directRotation_map_eq`, `partIII_directRotation_intertwines_projection` |
 | Unbounded Hilbert-space `sin 2 Theta`, perturbation and reflection-residual, every source UI ideal family | `unbounded_sinTwoTheta_uiNorm`, `unbounded_sinTwoTheta_uiNorm_representative`, `unbounded_sinTwoTheta_residual_uiNorm_representative`, `unbounded_sinTwoTheta_opNorm` |
 | Theorem 6.3 finite form (strict-lower-rank, every rectangular UI norm) and Hilbert-space graph-angle form | `Theorem6_3`, `Theorem6_3_kyFan`, `Theorem6_3_unbounded_graphAngle_opNorm` |
-| Sharp ambient-Hilbert `tan 2 Theta` with acute branch; unbounded quarter-acute companions | `tanTwoTheta_sharp_opNorm`, `tanTwoTheta_spectral_repulsion`, `unbounded_tanTwoTheta_uiNorm` |
+| `tan 2 Theta` in every rectangular UI norm (finite graph-coordinate form); sharp ambient-Hilbert operator-norm form with acute branch; unbounded quarter-acute companions | `tanTwoTheta_uiNorm`, `tanTwoTheta_kyFan`, `tanTwoTheta_sharp_opNorm`, `tanTwoTheta_spectral_repulsion`, `unbounded_tanTwoTheta_uiNorm` |
 
 The tangent direction is from the Ritz or trial subspace toward the exact
 invariant subspace. The public tangent statements do not assume
