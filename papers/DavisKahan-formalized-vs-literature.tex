@@ -956,6 +956,38 @@ spectral theorem for unitaries, and equality on the $2\times2$ model.  A
 Rayleigh bound ties $t^2$ to $\mu_0$ and monotonicity of
 $\tau\mapsto4\tau(1-\tau)$ on $[0,\tfrac12]$ finishes.
 
+\paragraph{The direct-rotation extremal theory (DK~III \S4), and a refutation.}
+The finite Section~4 package is now fully compiled.  With
+$S=P_VP_U+P_{V^\perp}P_{U^\perp}$ the canonical intertwiner of an acute pair
+and $R$ its unitary polar factor (the \emph{direct rotation}), the following
+hold over every RCLike field, for every unitary $W$ carrying $U$ onto $V$:
+every singular value of the \emph{restricted} displacement $(I-W)P_U$ is
+minimized by $R$, whose values are the doubled half-angle sines
+$2\sin(\theta_k/2)$ (Proposition~4.1), with Ky Fan and arbitrary-UI-norm
+corollaries requiring \emph{no angle hypothesis} (Corollary~4.1); the
+positive displacement square $(I-W)^{*}(I-W)$ is weakly majorized by that of
+every competitor via Fan--Hoffman majorization of the pinched competitor
+(Proposition~4.3), with the operator-norm maximum-displacement and
+orthonormal-basis energy consequences (Proposition~4.2) as specializations;
+and the trigonometric factorization $R=|S|+J\sin\Theta$, reversal
+$R(V,U)=R(U,V)^{-1}$, and polar uniqueness complete the structural layer.
+
+By contrast, the transcribed Proposition~4.4 --- over a real space with all
+principal angles at most $\pi/3$, the direct rotation minimizes every
+unitarily invariant norm of the \emph{full} displacement $I-W$ --- is
+\emph{false}, and the repository now contains a machine-checked refutation.
+In $\mathbb R^4$ with $U=\mathrm{span}\{e_0,e_1\}$ and the competitor
+$W=\tfrac12H$ (a Hadamard-type sign matrix), $V=W(U)$ forms an acute pair
+with both principal angles $\pi/4$, yet
+$\norm{I-W}_1=2\sqrt2<4\sqrt{2-\sqrt2}=\norm{I-R}_1$.  The competitor mixes
+the equal-angle multiplicity space --- rotating by $0$ and $2\theta$ across
+two equal angles $\theta$ costs trace displacement $4\sin\theta$ against the
+direct rotation's $8\sin(\theta/2)$ --- so no angle threshold rescues the
+claim; the same family refutes the closing conjecture of Davis (1958).  The
+operator-norm and squared-displacement consequences survive through
+Propositions~4.1/4.3.  The census marks the row
+\emph{refuted-as-transcribed} pending a re-audit of the printed source.
+
 
 \section{Related Lean formalizations and reusable proof donors}
 

@@ -13,6 +13,20 @@ difficulty grade.
 
 ## Revision log
 
+- **v5 (2026-07-22, Fable):** finite Part III Section 4 closed and certified.
+  Green and axiom-clean: the restricted-displacement package (Prop 4.1 pointwise
+  singular values `2 sin(θ_k/2)`, Cor 4.1 arbitrary-UI, no angle hypothesis),
+  the displacement-square Fan majorization (Prop 4.3, with the corrected
+  reversed affine Ky Fan index — the committed index selected the smallest
+  eigenvalues and was false for `k < n`), Prop 4.2 basis energy, the wrap-up
+  layer (`R = C + J sinΘ`, reversal via new `polarFactor_adjoint_of_isUnit`,
+  uniqueness, op-norm max displacement), and a **machine-checked refutation of
+  the transcribed Prop 4.4** (`shortRotation_fullDisplacement_refuted`, ℝ⁴,
+  both angles π/4, competitor trace norm `2√2 < 4√(2−√2)`); the π/3 spectral
+  floor chain was removed as dead code pending the two-projection identity
+  `‖P_U − P_V‖ = sin θ_max`.  Census Section 4 rows updated
+  (4.4 → `refuted_as_transcribed`); census checker CLEAN (48 items); root
+  registry empty — the whole Experimental tree compiles.
 - **v1 (2026-07-07, Fable):** initial plan.
 - **v2 (2026-07-07, Opus review):** added `## Opus review notes` R1–R8;
   rerated W2.4 to 4/5; added statement-first gate to Definition of done.

@@ -12,14 +12,15 @@ authoritative; this Markdown file is generated from it.
 | Status | Count |
 | --- | ---: |
 | `compiled_exact` | 7 |
-| `compiled_specialization` | 1 |
-| `compiled_general_infrastructure` | 4 |
-| `candidate_under_repair` | 18 |
+| `compiled_specialization` | 2 |
+| `compiled_general_infrastructure` | 7 |
+| `candidate_under_repair` | 13 |
 | `partial_or_wrapper_missing` | 5 |
 | `not_represented` | 3 |
 | `not_started` | 6 |
 | `resolved_by_modern_development` | 1 |
 | `not_a_completion_obligation` | 3 |
+| `refuted_as_transcribed` | 1 |
 
 ## Status meanings
 
@@ -32,6 +33,7 @@ authoritative; this Markdown file is generated from it.
 - **`not_started`** -- The source artifact has no formalization campaign yet.
 - **`resolved_by_modern_development`** -- An open source question has a partial or norm-specific modern resolution in the repository.
 - **`not_a_completion_obligation`** -- An open question or exposition item should be documented but is not proof debt.
+- **`refuted_as_transcribed`** -- The transcribed statement is disproved by a compiled Lean counterexample; the census row records the refutation pending a re-audit of the printed source text.
 
 ## Source ledger
 
@@ -71,7 +73,7 @@ authoritative; this Markdown file is generated from it.
 - **Kind:** `unnumbered_theorem`
 - **Status:** `candidate_under_repair`
 - **Mathematics:** One-sided spectral separation plus the Rayleigh–Ritz/off-diagonal condition gives residual and perturbation tangent bounds in every unitary-invariant norm.
-- **Current Lean references:** `ForMathlib.DavisKahanTheory.partIII_tanTheta_ritzResidual_uiNorm`, `ForMathlib.DavisKahan1970.bounded_tanTheta_genuineSpectrum`
+- **Current Lean references:** `ForMathlib.DavisKahanTheory.partIII_tanTheta_ritzResidual_uiNorm`, `ForMathlib.DavisKahanTheory.tanTheta_genuineSpectrum`
 - **Assessment:** The finite arbitrary-UI-norm theorem is compiled. General Hilbert-space and exact source wrappers are in the Part III repair campaign.
 - **Next action:** Certify the Hilbert-space source wrapper and exact perturbation companion.
 
@@ -80,7 +82,7 @@ authoritative; this Markdown file is generated from it.
 - **Kind:** `unnumbered_theorem`
 - **Status:** `candidate_under_repair`
 - **Mathematics:** A spectral gap between the two exact blocks yields residual and perturbation bounds for sin(2 Theta), with sharp factor two.
-- **Current Lean references:** `ForMathlib.DavisKahanTheory.partIII_sinTwoTheta_uiNorm`, `ForMathlib.DavisKahan1970.bounded_sinTwoTheta_genuineSpectrum_operator`
+- **Current Lean references:** `ForMathlib.DavisKahanTheory.partIII_sinTwoTheta_uiNorm`, `ForMathlib.DavisKahan.sinTwoTheta_addBounded_of_spectrum_gap`
 - **Assessment:** Finite arbitrary-UI-norm forms are compiled; general Hilbert-space source forms are under repair.
 - **Next action:** Certify source-general residual and perturbation forms.
 
@@ -89,7 +91,7 @@ authoritative; this Markdown file is generated from it.
 - **Kind:** `unnumbered_theorem`
 - **Status:** `candidate_under_repair`
 - **Mathematics:** Fully off-diagonal perturbations across an ordered gap give residual and perturbation tan(2 Theta) bounds with factor two.
-- **Current Lean references:** `ForMathlib.DavisKahanTheory.partIII_tanTwoTheta_opNorm`, `ForMathlib.DavisKahan1970.bounded_tanTwoTheta_offDiagonal`
+- **Current Lean references:** `ForMathlib.DavisKahanTheory.partIII_tanTwoTheta_opNorm`, `ForMathlib.DavisKahanExt.tanTwoTheta_offDiagonalC_of_weighted_sine`
 - **Assessment:** The finite operator-norm theorem is compiled. The source arbitrary-UI-norm Hilbert-space endpoint and branch selection are not yet certified.
 - **Next action:** Complete the general UI-norm source theorem and its selected acute branch.
 
@@ -98,7 +100,7 @@ authoritative; this Markdown file is generated from it.
 - **Kind:** `source_claim`
 - **Status:** `candidate_under_repair`
 - **Mathematics:** All four constants are optimal in two dimensions, and finite direct sums realize equality simultaneously for all unitary-invariant norms.
-- **Current Lean references:** `ForMathlib.DavisKahan1970.finite_sinTheta_constant_optimal`, `ForMathlib.DavisKahan1970.finite_sinTwoTheta_constant_optimal`, `ForMathlib.DavisKahan1970.finite_simultaneous_equality_models`
+- **Current Lean references:** `ForMathlib.DavisKahanTheory.sinTheta_constant_optimal`, `ForMathlib.DavisKahanTheory.sinTwoTheta_constant_optimal`, `ForMathlib.DavisKahanTheory.single_double_sine_tangent_ratios_tendsto_one`
 - **Assessment:** Sine sharpness and finite multiplicity are compiled; full quartet simultaneous equality remains in the Part III campaign.
 - **Next action:** Audit tangent and double-angle equality models against the exact source claim.
 
@@ -118,7 +120,7 @@ authoritative; this Markdown file is generated from it.
 - **Kind:** `definition`
 - **Status:** `candidate_under_repair`
 - **Mathematics:** A unitary intertwining the two projections whose diagonal cosine blocks are positive and whose off-diagonal sine blocks are adjoints.
-- **Current Lean references:** `ForMathlib.DavisKahan1970.complex_directRotation`, `ForMathlib.DavisKahan1970.bounded_directRotation`
+- **Current Lean references:** `ForMathlib.DavisKahan1970.complex_directRotation`, `ForMathlib.DavisKahan.spectraCanonicalIntertwiner`
 - **Assessment:** Acute complex and finite constructions exist; exact nonacute source scope is not yet unified.
 - **Next action:** Add a source-facing definition covering the source existence regimes.
 
@@ -163,7 +165,7 @@ authoritative; this Markdown file is generated from it.
 - **Kind:** `proposition`
 - **Status:** `candidate_under_repair`
 - **Mathematics:** When the cosine block squared is at least one half, U squared is the direct rotation from the reflected subspace to the target subspace.
-- **Current Lean references:** `ForMathlib.DavisKahan1970.finite_directRotation_sq`, `ForMathlib.DavisKahan1970.complex_directRotation_sq`
+- **Current Lean references:** `ForMathlib.DavisKahanTheory.directRotation_sq`, `ForMathlib.DavisKahan1970.complex_directRotation_sq`
 - **Assessment:** Square identities exist; exact source mapping between Q-minus and Q needs verification.
 - **Next action:** Add an exact source wrapper after the direct-rotation repair lands.
 
@@ -199,7 +201,7 @@ authoritative; this Markdown file is generated from it.
 - **Kind:** `corollary`
 - **Status:** `candidate_under_repair`
 - **Mathematics:** Swapping P and Q leaves the angle operator unchanged and reverses the quarter-turn operator.
-- **Current Lean references:** `ForMathlib.DavisKahan1970.complex_directRotation_reversal`, `ForMathlib.DavisKahan1970.finite_directRotation_reversal`
+- **Current Lean references:** `ForMathlib.DavisKahan1970.complex_directRotation_reversal`, `ForMathlib.DavisKahanTheory.directRotation_symm`
 - **Assessment:** Direct-rotation reversal is represented; the exact angle/J statement needs a source wrapper.
 - **Next action:** Add the source-facing angle and quarter-turn reversal theorem.
 
@@ -208,47 +210,47 @@ authoritative; this Markdown file is generated from it.
 #### Proposition 4.1: Pointwise and singular-value extremality of the direct rotation
 
 - **Kind:** `proposition`
-- **Status:** `candidate_under_repair`
+- **Status:** `compiled_general_infrastructure`
 - **Mathematics:** For any unitary carrying P to Q, an orthonormal sequence experiences angles at least the principal angles; equivalently the singular values of (1-V)|P are minimized by the direct rotation and equal 2 sin(theta_k/2).
-- **Current Lean references:** `ForMathlib.DavisKahan1970.finite_directRotation_opNorm_minimal`
-- **Assessment:** Only weaker/finite extremal endpoints are currently named; the full singular-value-by-singular-value source claim is not explicit.
-- **Next action:** State the weak-majorization or pointwise singular-value theorem that implies all norm corollaries.
+- **Current Lean references:** `ForMathlib.DavisKahanTheory.singularValues_restrictedDisplacement_le`, `ForMathlib.DavisKahanTheory.singularValues_restrictedDisplacement_directRotation`
+- **Assessment:** The finite pointwise singular-value theorem is compiled: every singular value of the restricted displacement (1-V)P is minimized by the direct rotation, whose values are the doubled half-angle sines 2 sin(theta_k/2).  A source-numbered wrapper and the infinite-dimensional scope remain open.
+- **Next action:** Add a DavisKahan1970 source wrapper and audit the infinite-dimensional statement.
 
 #### Corollary 4.1: UI-norm minimality of direct rotation displacement
 
 - **Kind:** `corollary`
-- **Status:** `candidate_under_repair`
+- **Status:** `compiled_general_infrastructure`
 - **Mathematics:** The direct rotation minimizes the norm of (1-V)P for every unitary-invariant norm.
-- **Current Lean references:** `ForMathlib.DavisKahan1970.finite_directRotation_uiNorm_minimal`
-- **Assessment:** The current named theorem includes an angle restriction and may correspond more closely to Proposition 4.4.
-- **Next action:** Verify whether a general Corollary 4.1 endpoint exists; add it if the singular-value theorem is proved.
+- **Current Lean references:** `ForMathlib.DavisKahanTheory.uiNorm_restrictedDisplacement_le`, `ForMathlib.DavisKahanTheory.directRotation_minimizes_restrictedDisplacement_uiNorm`
+- **Assessment:** Compiled without any angle restriction, for every unitarily invariant norm, over every RCLike field (finite dimension).  The earlier note conflating this row with Proposition 4.4 is resolved: the corollary concerns the restricted displacement and needs no angle hypothesis.
+- **Next action:** Add a DavisKahan1970 source wrapper and audit the infinite-dimensional statement.
 
 #### Proposition 4.2: Basis-angle square-sum extremality
 
 - **Kind:** `proposition`
-- **Status:** `candidate_under_repair`
+- **Status:** `compiled_specialization`
 - **Mathematics:** For every orthonormal basis of P, the sum of squared displacement sines under V dominates the sum of squared principal sines.
-- **Current Lean references:** `ForMathlib.DavisKahan1970.finite_directRotation_basisDisplacement_minimal`
-- **Assessment:** Finite candidate exists; infinite series/source scope requires audit.
-- **Next action:** Certify the finite proof and determine the exact infinite-dimensional summability convention.
+- **Current Lean references:** `ForMathlib.DavisKahanTheory.directRotation_minimizes_sum_sq_basis_angles`
+- **Assessment:** The finite orthonormal-basis displacement-energy extremality is compiled via the nuclear-norm specialization of the displacement-square majorization.
+- **Next action:** Determine the exact infinite-dimensional summability convention of the source statement.
 
 #### Proposition 4.3: Squared displacement UI-norm minimality
 
 - **Kind:** `proposition`
-- **Status:** `candidate_under_repair`
+- **Status:** `compiled_general_infrastructure`
 - **Mathematics:** The direct rotation minimizes the UI norm of (1-V*) (1-V).
-- **Current Lean references:** `ForMathlib.DavisKahan1970.finite_directRotation_displacementSquare_minimal`
-- **Assessment:** Finite candidate maps directly to the source formula.
-- **Next action:** Compile, promote, and add a source-numbered wrapper.
+- **Current Lean references:** `ForMathlib.DavisKahanTheory.directRotation_displacementSquare_kyFan`, `ForMathlib.DavisKahanTheory.directRotation_displacementSquare_uiNorm`, `ForMathlib.DavisKahanTheory.directRotation_minimizes_displacementSquare_uiNorm`
+- **Assessment:** Compiled for every unitarily invariant norm over every RCLike field (finite dimension), via Fan-Hoffman majorization of the pinched competitor and two-block pinching contraction.
+- **Next action:** Add a DavisKahan1970 source wrapper and audit the infinite-dimensional statement.
 
 #### Proposition 4.4: Real-space full displacement minimality below pi/3
 
 - **Kind:** `proposition`
-- **Status:** `candidate_under_repair`
+- **Status:** `refuted_as_transcribed`
 - **Mathematics:** In a real Hilbert space, if the maximal angle is at most pi/3, the direct rotation minimizes every UI norm of 1-V.
-- **Current Lean references:** `ForMathlib.DavisKahan1970.finite_directRotation_uiNorm_minimal`
-- **Assessment:** Finite candidate is present; source-general real Hilbert-space scope is not certified.
-- **Next action:** Audit the angle threshold, real scalar restriction, and infinite-dimensional norm domain.
+- **Current Lean references:** `ForMathlib.DavisKahanTheory.shortRotation_fullDisplacement_refuted`
+- **Assessment:** The transcribed claim is false: a compiled R^4 counterexample exhibits an acute pair with both principal angles pi/4 and a competitor unitary carrying P to Q whose full displacement 1-V has trace norm 2 sqrt 2, strictly below the direct rotation value 4 sqrt(2 - sqrt 2).  The competitor mixes the equal-angle multiplicity space (rotation angles 0 and pi/2), an obstruction available at every angle threshold; the same family refutes the closing conjecture of Davis 1958.  Operator-norm and squared-displacement consequences survive via 4.1/4.3.
+- **Next action:** Re-audit the printed source text of Proposition 4.4 against the modernized transcription to determine the intended competitor class or displacement operator.
 
 ### Section 5
 
@@ -266,7 +268,7 @@ authoritative; this Markdown file is generated from it.
 - **Kind:** `theorem`
 - **Status:** `candidate_under_repair`
 - **Mathematics:** For A >= gamma+delta > gamma >= B, a bounded solution of AX=XB+C satisfies the sharp UI-norm inequality.
-- **Current Lean references:** `ForMathlib.DavisKahan1970.unbounded_sylvester_ordered`, `ForMathlib.DavisKahan1970.unbounded_sylvester_intervalExterior_uiNorm_genuineSpectrum`
+- **Current Lean references:** `ForMathlib.DavisKahan.directGenuineOrderedSylvesterEngine_lowerUpper`, `ForMathlib.DavisKahan1970.unbounded_sylvester_intervalExterior_uiNorm_genuineSpectrum`
 - **Assessment:** The completed Section 6 route contains the needed constant-one engines, while the exact source theorem alias is still in the full Part III repair campaign.
 - **Next action:** Expose an exact Theorem 5.2 wrapper and include it in the full-paper audit.
 
@@ -362,7 +364,7 @@ authoritative; this Markdown file is generated from it.
 - **Kind:** `proof_package`
 - **Status:** `candidate_under_repair`
 - **Mathematics:** Reflect the perturbation by 2P-1, identify U squared and sin(2 Theta), and reduce the result to the symmetric sine theorem.
-- **Current Lean references:** `ForMathlib.DavisKahan1970.bounded_sinTwoTheta_reflectionDefect`, `ForMathlib.DavisKahan1970.bounded_sinTwoTheta_genuineSpectrum_operator`
+- **Current Lean references:** `ForMathlib.DavisKahan.reflectionDefect_eq_perturbationDefect`, `ForMathlib.DavisKahan.sinTwoTheta_reflectionResidual_of_spectrum_gap`
 - **Assessment:** The reflection identities and finite theorem exist; the exact full proof package is under repair.
 - **Next action:** Add a source wrapper preserving both residual and perturbation conclusions.
 
@@ -371,7 +373,7 @@ authoritative; this Markdown file is generated from it.
 - **Kind:** `proof_package`
 - **Status:** `candidate_under_repair`
 - **Mathematics:** The off-diagonal block equation and paired singular vectors yield Ky Fan and UI-norm bounds for tan(2 Theta).
-- **Current Lean references:** `ForMathlib.DavisKahan1970.bounded_tanTwoTheta_offDiagonal`
+- **Current Lean references:** `ForMathlib.DavisKahanExt.tanTwoTheta_offDiagonalC_of_weighted_sine`
 - **Assessment:** The operator-norm theorem is compiled in finite dimensions; the arbitrary UI-norm singular-vector argument remains uncertified.
 - **Next action:** Complete the exact source norm scope and infinite-dimensional approximation passage.
 
@@ -382,7 +384,7 @@ authoritative; this Markdown file is generated from it.
 - **Kind:** `theorem`
 - **Status:** `candidate_under_repair`
 - **Mathematics:** Under tan(2 Theta) hypotheses, the acute branch is equivalent to the selected spectral ordering; a canonical reducing subspace exists and satisfies operator, eigenvalue, and symmetric-gauge repulsion inequalities.
-- **Current Lean references:** `ForMathlib.DavisKahan1970.bounded_offDiagonal_gap_preservation`, `ForMathlib.DavisKahan1970.bounded_spectral_repulsion`
+- **Current Lean references:** `ForMathlib.DavisKahanExt.quarterAcuteAngularCoordinate_sharp_bound_of_orderedSpectraSeparated`
 - **Assessment:** Several finite and continuation components exist, but all three source conclusions are not yet source-audited together.
 - **Next action:** Compile the continuation-selected branch and separate parts (i), (ii), and (iii) into explicit source declarations.
 
@@ -391,7 +393,7 @@ authoritative; this Markdown file is generated from it.
 - **Kind:** `theorem`
 - **Status:** `candidate_under_repair`
 - **Mathematics:** If the perturbation or residual norm is below half the gap, the sine double-angle estimate is accompanied by Theta < pi/4.
-- **Current Lean references:** `ForMathlib.DavisKahan1970.bounded_aPrioriTanTheta`
+- **Current Lean references:** `ForMathlib.DavisKahanExt.norm_selectedEndpointAngularOperator_le_div`
 - **Assessment:** A priori angle bounds and continuation machinery exist; exact source hypotheses and both alternatives require audit.
 - **Next action:** Add the exact two-alternative source theorem.
 
