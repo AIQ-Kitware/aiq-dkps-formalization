@@ -669,12 +669,34 @@ private theorem singularValues_tanTwoAngle_model
     exact ne_of_gt (Real.cos_pos_of_mem_Ioo ⟨by linarith [Real.pi_pos], by linarith⟩)
   have htan : 0 ≤ Real.tan (2 * θ) :=
     Real.tan_nonneg_of_nonneg_of_le_pi_div_two (by linarith) (by linarith)
-  rw [tanTwoAngleOperator, hsinEq]
-  have hfc := FiniteDimensional.selfAdjointFunctionalCalculus_real_smul_id
-    (𝕜 := 𝕜) (E := Plane 𝕜) (Real.sin θ) Real.arcsin
-  rw [hfc, harcsin,
+  have hsinEq' : ForMathlib.abs (projection (modelSubspace (𝕜 := 𝕜)) -
+      projection (rotatedModelSubspace (𝕜 := 𝕜) θ)) =
+      (((Real.sin θ : ℝ) : 𝕜) • LinearMap.id) := hsinEq
+  have hsymSin : ((((Real.sin θ : ℝ) : 𝕜) • LinearMap.id) :
+      Plane 𝕜 →ₗ[𝕜] Plane 𝕜).IsSymmetric := by
+    intro x y
+    simp only [LinearMap.smul_apply, LinearMap.id_apply, inner_smul_left,
+      inner_smul_right, RCLike.conj_ofReal]
+  have hsymTheta : ((((θ : ℝ) : 𝕜) • LinearMap.id) :
+      Plane 𝕜 →ₗ[𝕜] Plane 𝕜).IsSymmetric := by
+    intro x y
+    simp only [LinearMap.smul_apply, LinearMap.id_apply, inner_smul_left,
+      inner_smul_right, RCLike.conj_ofReal]
+  have hinner : FiniteDimensional.selfAdjointFunctionalCalculus
+      (ForMathlib.isPositive_abs (projection (modelSubspace (𝕜 := 𝕜)) -
+        projection (rotatedModelSubspace (𝕜 := 𝕜) θ))).isSymmetric
+      Real.arcsin = (((θ : ℝ) : 𝕜) • LinearMap.id) := by
+    rw [FiniteDimensional.selfAdjointFunctionalCalculus_congr_op _ hsymSin
+      hsinEq' Real.arcsin,
+      FiniteDimensional.selfAdjointFunctionalCalculus_real_smul_id, harcsin]
+  rw [tanTwoAngleOperator,
+    FiniteDimensional.selfAdjointFunctionalCalculus_congr_op _ hsymTheta
+      hinner safeTanTwo,
     FiniteDimensional.selfAdjointFunctionalCalculus_real_smul_id]
-  simp [safeTanTwo, hcos]
+  simp only [safeTanTwo, if_neg hcos]
+  rw [show Real.sin (2 * θ) / Real.cos (2 * θ) = Real.tan (2 * θ) from
+    (Real.tan_eq_sin_div_cos (2 * θ)).symm,
+    ← diagOp_const_pair (EuclideanSpace.basisFun (Fin 2) 𝕜) (Real.tan (2 * θ))]
   simpa [abs_of_nonneg htan] using
     singularValues_diagOp_fin_two (𝕜 := 𝕜) finrank_euclideanSpace_fin
       (EuclideanSpace.basisFun (Fin 2) 𝕜) htan htan le_rfl
