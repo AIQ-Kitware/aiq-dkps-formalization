@@ -39,7 +39,11 @@ not a hypothesis.
   interval/exterior dual (unwanted spectral interval, Ritz spectrum exterior
   by `δ`), which contains the source's one-sided placement.
 * per-vector Hilbert-space forms (`Theorem6_3_unbounded_vector`,
-  `Theorem6_3_bounded_vector`) feeding the graph-angle form.
+  `Theorem6_3_bounded_vector`) feeding the graph-angle form.  The bounded
+  per-vector form is also available in the source's literal one-sided
+  orientation (`Theorem6_3_bounded_vector_oneSided`): test compression
+  spectrum below `α₀`, unwanted compression spectrum in `[α₀ + δ, ∞)`,
+  with the interval cap recovered from boundedness of the compression.
 
 ## What remains open (recorded, not claimed)
 
@@ -134,6 +138,14 @@ alias Theorem6_3_unbounded_vector_of_coercivity :=
 
 /-- Per-vector bounded form with genuine compression spectra. -/
 alias Theorem6_3_bounded_vector := DavisKahanExt.tanTheta_genuineSpectrum
+
+/-- Per-vector bounded form in the source's literal **one-sided**
+orientation: test compression spectrum below `α₀`, unwanted compression
+spectrum in `[α₀ + δ, ∞)`.  The interval cap of the interval/exterior form
+is recovered from boundedness of the compression, so no upper bound is
+assumed. -/
+alias Theorem6_3_bounded_vector_oneSided :=
+  DavisKahanExt.tanTheta_genuineSpectrum_oneSided
 
 /-- Per-vector bounded form from quadratic-form bounds alone; the
 low-dependency Hilbert-space companion. -/
