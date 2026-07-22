@@ -47,6 +47,35 @@ The tangent direction is from the Ritz or trial subspace toward the exact
 invariant subspace. The public tangent statements do not assume
 transversality.
 
+## Where the frontier is
+
+The machine-readable ledger is `dev/davis-kahan-1970-full-source-census.json`,
+rendered to `dev/davis-kahan-1970-full-source-census.md`. Since schema 4 it
+carries two independent axes, and reading only the first is what previously
+made this directory look both better and worse than it is:
+
+- `status` -- the mathematical judgement against the printed source;
+- `verification` -- what the Lean build actually certifies.
+
+Read the census's **Frontier** section to see every outstanding row grouped
+under the obstruction that gates it, each marked `hard_math` or `mechanical`.
+A `mechanical` blocker means the result is already proved and only needs wiring
+into the default build target.
+
+`verification` is checkable rather than asserted:
+
+    python3 scripts/probe_census_declarations.py --verify
+
+resolves every recorded declaration against `DavisKahan.All` by compiling a
+generated `#check` file, so a name in the wrong namespace cannot pass. Because
+the default build contains no `sorry` and no `axiom`, a declaration reachable
+from `DavisKahan.All` is genuinely proved.
+
+Note that a zero `sorry` count does **not** mean the paper is done. Unfinished
+work cannot appear as a `sorry` in a sorry-free, axiom-free tree; it appears as
+a package that does not compile, a conclusion stated relative to a hypothesis
+record nobody constructs, or a statement nobody wrote.
+
 ## Work still required for complete paper coverage
 
 A modernized transcription is maintained locally outside the distributable

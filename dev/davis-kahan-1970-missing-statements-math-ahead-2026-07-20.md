@@ -83,9 +83,23 @@ lemma. It should not be removed.
 
 ### 6. Section 9 numerical example
 
-No part of the source numerical example has a dedicated formal module. The
-formalization should be split rather than attempting the full analytic model
-in one proof.
+**Superseded in part.** Batches 9A--9E below are now formalized:
+`DavisKahan/Sources/DavisKahan1970/Section9/` holds ten modules that compile in
+the default build, covering the affine-moment calculations, exact radical
+arithmetic, the Schur-complement reduction, the truncation repair for the
+domain example, the Weinberger comparison algebra, and all decimal corollaries.
+
+What remains is not compilation but discharge. Every source conclusion is
+stated relative to `FreeBeamFiniteDataCertificate` (`Section9/ExactData.lean`)
+or `TheoremOutputCertificate` (`Section9/FullExample.lean`), and no value of
+either type is ever constructed, so the certificate fields -- which are the
+paper's numerical claims -- are assumed rather than derived. Closing this needs
+the analytic model: the free-beam closed fourth-derivative operator on
+`L2(0,1)` and the bound `alpha_3 > 500`. The remaining fields are then
+instantiations of theorems the repository already proves.
+
+The original split is kept below because it still describes the intended
+decomposition.
 
 #### Batch 9A: exact finite data
 
@@ -144,8 +158,16 @@ need exact wrappers and audits:
   than one operator-norm minimality theorem;
 - Corollary 4.1 without accidentally importing Proposition 4.4's `pi / 3`
   restriction;
+
+  (Proposition 4.4 itself is no longer a target. As printed it is **false**:
+  `DavisKahan/FiniteDimensional/DirectRotation/ShortRotationCounterexample.lean`
+  refutes it over the reals in its own "every unitarily invariant norm" form,
+  and no angle threshold repairs it. The repair that *is* true for every
+  Q-norm, with neither the `pi / 3` hypothesis nor the real-space restriction,
+  is `directRotation_fullDisplacement_qnorm` in
+  `DavisKahan/FiniteDimensional/DirectRotation/QNorm.lean`. Do not reintroduce
+  the printed statement as an obligation.)
 - Proposition 4.2 in the source infinite-series scope;
-- Proposition 4.4 in a real Hilbert space rather than only a finite model;
 - Theorem 5.2 as a numbered source theorem;
 - Theorem 6.3 in general Hilbert-space scope;
 - Theorems 8.1(i)--(iii) as three explicit conclusions tied to the canonical
