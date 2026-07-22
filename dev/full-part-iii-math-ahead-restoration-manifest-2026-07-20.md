@@ -2,12 +2,12 @@
 
 This human-readable file accompanies the machine-readable JSON manifest.
 
-- Mathematics-ahead base: `3aeeefa0c26e5fa1292223a4257ea60ebddf4e4a`
+- Mathematics-ahead base: `d5e54a708c014d97c4124036d332c6d7caa2a10e`
 - Executable guarded declarations: **39**
-- Active Experimental compiler roots: **3**
+- Active Experimental compiler roots: **4**
 - Parked Experimental roots: **0**
 
-The three active entries are complete candidate mathematics awaiting Lean elaboration repair: `Generalized.lean`, `Sharpness.lean`, and `DirectRotation.lean`. The registry is not compilation evidence; its default checker runs `lake build DavisKahan.Experimental`.
+The active entries are complete candidate mathematics awaiting Lean elaboration repair: the finite principal-plane construction, direct-rotation majorization, generalized residual theory, and planar sharpness. The registry is not compilation evidence; its checker compiles each active root and then runs `lake build DavisKahan.Experimental`.
 
 ## `DavisKahan/Experimental/FiniteDimensional/Core/AngleOperators.lean` — 5
 - `angleOperator`
@@ -25,19 +25,17 @@ The three active entries are complete candidate mathematics awaiting Lean elabor
 - `directRotation_eq_polarFactor`
 - `directRotation_minimizes_displacementSquare_uiNorm`
 - `directRotation_minimizes_max_displacement`
+- `directRotation_minimizes_restrictedDisplacement_uiNorm`
 - `directRotation_minimizes_sum_sq_basis_angles`
-- `directRotation_minimizes_uiNorm_of_largestAngle_le_pi_div_three`
 - `directRotation_symm`
 - `directRotation_unique`
 
 ## `DavisKahan/Experimental/FiniteDimensional/DoubleAngle/SinTheta.lean` — 1
 - `sinTwoTheta_residual_le`
 
-## `DavisKahan/Experimental/FiniteDimensional/Generalized.lean` — 4
+## `DavisKahan/Experimental/FiniteDimensional/Generalized.lean` — 2
 - `generalizedSinTheta_frobenius_le_of_spectralDistance`
 - `generalizedSinTheta_nuclear_le_of_spectralDistance`
-- `sinTwoTheta_acute_of_small_perturbation`
-- `spectralSubspace_path_continuous`
 
 ## `DavisKahan/Experimental/FiniteDimensional/Norms/Rectangular.lean` — 1
 - `schatten`
@@ -64,14 +62,14 @@ The three active entries are complete candidate mathematics awaiting Lean elabor
 - `tanThetaMap_perturbation_le`
 - `tanTheta_perturbation_le`
 
+## `DavisKahan/Experimental/InfiniteDimensional/SinTheta/ContinuationWitnessGraph.lean` — 2
+- `sinTwoTheta_acute_of_small_perturbation`
+- `spectralSubspace_path_continuous`
+
 ## Source corrections
 
-- `DavisKahan/Experimental/FiniteDimensional/DoubleAngle/TanTheta.lean`: Replace absolute InternalGap by OrderedInternalGap. The old statements were false for interlacing diagonal-block spectra; an explicit three-dimensional quarter-turn counterexample is recorded in dev/tan-two-theta-ordered-gap-correction-2026-07-20.md.
-- `DavisKahan/Experimental/FiniteDimensional/DoubleAngle/SinTheta.lean`: Replace the ill-typed InternalGap body by the source-complete interval/exterior residual signature. The residual separation is between M and the unwanted spectrum of A on U orthogonal; ordered and general separated-spectrum variants are supplied alongside it. See dev/sin-two-theta-residual-gap-correction-2026-07-20.md.
-- `DavisKahan/Experimental/FiniteDimensional/Sharpness.lean`: The one-sided sinTwoAngleOperator has one nonzero singular value per principal plane, while the historical symmetric perturbation has two; arbitrary UI-norm equality is false. The retained operator-norm theorem is rank-insensitive and correct.
-- `DavisKahan/Experimental/InfiniteDimensional`: Retire the unsupported incomplete-RCLike ambient facade and use the canonical complete-complex, real-complexified, vendored-Spectra, and production unbounded routes. Historical source is preserved under dev.
-- `DavisKahan/Experimental/FiniteDimensional/TanTheta/GraphOperator.lean`: Replace mixed ambient/subtype graph statements by the canonical rectangular trial-coordinate tangent perturbation theorem.
-- `DavisKahan/Experimental/FiniteDimensional/DoubleAngle/TanTheta.lean`: Retire the false arbitrary-UI and contour-mixed family; retain the canonical finite coordinate definition and production bounded complex operator-norm theory.
-- Finite direct rotation uses the global polar cosine |P_V P_U + P_Vperp P_Uperp|; the one-sided |P_V P_U| cannot appear in a full-space trigonometric identity.
-- Davis--Kahan Proposition 4.4 is retained only over real inner-product spaces; the paper gives a complex counterexample.
-- The direct-rotation uniqueness endpoint is polar-factor uniqueness for a unitary-positive factorization, replacing the fictional principal-plane square-root proof.
+- The finite `Generalized` module no longer imports the infinite contour hierarchy. Its two complete-space complex continuation wrappers retain the same statements in `ContinuationWitnessGraph.lean`.
+- `Core/SpectralProjection.lean` now uses the actual vendored Spectra PVM and calculus modules; the nonexistent `Spectra.SpectralTheory.SpectralTheorem` import is removed.
+- The historical real `pi / 3` full-displacement UI-norm theorem is removed because multiplicity-space mixing gives counterexamples. The valid replacement is unrestricted UI-norm minimality of `(I - W) P_U`.
+- Full displacement-square majorization and its operator-norm and basis-energy consequences remain active.
+- Earlier tan 2 theta, sin 2 theta, and planar sharpness source corrections recorded in the JSON manifest remain in force.

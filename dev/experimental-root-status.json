@@ -1,22 +1,27 @@
 {
   "schema_version": 3,
-  "as_of_commit": "3aeeefa0c26e5fa1292223a4257ea60ebddf4e4a",
-  "policy": "This registry records compiler status only. The default checker independently runs lake build DavisKahan.Experimental and cannot certify an omitted root. Candidate math-ahead files remain active until the compiler agent produces a clean Experimental build.",
+  "as_of_commit": "d5e54a708c014d97c4124036d332c6d7caa2a10e",
+  "policy": "This registry records compiler status only. The checker compiles every active root and then runs lake build DavisKahan.Experimental, so omitted failures cannot be certified by an empty registry.",
   "roots": [
+    {
+      "module": "DavisKahan/FiniteDimensional/DirectRotation/PrincipalPlanes.lean",
+      "status": "active",
+      "reason": "The principal-plane and restricted-displacement mathematics is complete candidate code requiring elaboration and API repair."
+    },
+    {
+      "module": "DavisKahan/FiniteDimensional/DirectRotation/Majorization.lean",
+      "status": "active",
+      "reason": "The valid displacement-square Fan-majorization layer depends on the principal-plane candidate and requires compiler repair."
+    },
     {
       "module": "DavisKahan/Experimental/FiniteDimensional/Generalized.lean",
       "status": "active",
-      "reason": "Complete candidate whitening and arbitrary-separation residual proofs require compiler elaboration repair."
+      "reason": "The finite whitening and arbitrary-separation residual proofs require compiler elaboration repair."
     },
     {
       "module": "DavisKahan/Experimental/FiniteDimensional/Sharpness.lean",
       "status": "active",
-      "reason": "Complete candidate planar singular-value and equality calculations require compiler elaboration repair."
-    },
-    {
-      "module": "DavisKahan/Experimental/FiniteDimensional/DirectRotation.lean",
-      "status": "active",
-      "reason": "Complete candidate direct-rotation identities and Davis--Kahan Fan-majorization proofs require compiler elaboration repair."
+      "reason": "The explicit planar singular-value and equality calculations require compiler elaboration repair."
     }
   ]
 }
