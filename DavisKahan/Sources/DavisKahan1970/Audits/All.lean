@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Sources.DavisKahan1970.Audits.Correspondence
+import DavisKahan.Sources.DavisKahan1970.Audits.DoubleAngleTangent
 import DavisKahan.Sources.DavisKahan1970.Audits.FullPaperSineTheta
 import DavisKahan.Sources.DavisKahan1970.Audits.GeneralSinThetaExtensions
 import DavisKahan.Sources.DavisKahan1970.Audits.SylvesterHilbertSchmidt

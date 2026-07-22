@@ -13,5 +13,8 @@ import DavisKahan.Sources.DavisKahan1970.FullSineTheta
 import DavisKahan.Sources.DavisKahan1970.GeneralSinTheta
 import DavisKahan.Sources.DavisKahan1970.GeneralSinThetaExtensions
 import DavisKahan.Sources.DavisKahan1970.PartIII
+import DavisKahan.Sources.DavisKahan1970.SinTwoTheta
+import DavisKahan.Sources.DavisKahan1970.TanTheta
+import DavisKahan.Sources.DavisKahan1970.TanTwoTheta
 
 /-! # `DavisKahan/Sources/DavisKahan1970` -/
