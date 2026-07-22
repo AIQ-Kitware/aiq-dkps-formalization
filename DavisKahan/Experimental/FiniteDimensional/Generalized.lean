@@ -51,10 +51,15 @@ theorem residual_orthonormalizedEmbedding_whitenedCoordinateOperator
   ext y
   simp only [residual, generalResidual, whitenedCoordinateOperator,
     LinearMap.sub_apply, LinearMap.comp_apply]
-  rw [show (orthonormalizedEmbedding X hX : F → E) y =
-      X ((trialGramSqrtEquiv X hX).symm y) from rfl]
-  rw [(trialGramSqrtEquiv X hX).symm_apply_apply]
-  rfl
+  -- the goal carries `.toLinearMap`, not the isometry's function coercion,
+  -- and both occurrences have to be unfolded before the inverse cancels
+  simp only [show ∀ z : F, (orthonormalizedEmbedding X hX).toLinearMap z =
+    X ((trialGramSqrtEquiv X hX).symm z) from fun _ => rfl]
+  -- the inner application arrives through the linear-map coercion, so the
+  -- equiv cancellation lemma needs `simp` rather than a bare rewrite
+  simp
+  congr 1
+  exact (trialGramSqrtEquiv X hX).symm_apply_apply _
 
 /-- Davis--Kahan Theorem 6.2 for an injective nonorthonormal trial map.
 
