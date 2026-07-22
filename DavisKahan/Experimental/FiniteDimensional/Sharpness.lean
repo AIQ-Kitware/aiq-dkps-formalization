@@ -436,11 +436,21 @@ private theorem projection_sub_model_sq (θ : ℝ) :
       (projection (modelSubspace (𝕜 := 𝕜)) -
         projection (rotatedModelSubspace (𝕜 := 𝕜) θ)) =
       ((((Real.sin θ) ^ 2 : ℝ) : 𝕜) • LinearMap.id) := by
+  have hpy : ((Real.sin θ : 𝕜)) ^ 2 + ((Real.cos θ : 𝕜)) ^ 2 = 1 := by
+    have h := congrArg (fun r : ℝ => (r : 𝕜)) (Real.sin_sq_add_cos_sq θ)
+    push_cast at h
+    exact h
   rw [projection_sub_model_eq_matrix]
   ext x i
   fin_cases i <;>
     simp [Matrix.toEuclideanLin_apply, Fin.sum_univ_two] <;>
-    push_cast <;> nlinarith [Real.sin_sq_add_cos_sq θ]
+    (try push_cast) <;>
+    (try simp only [RCLike.algebraMap_eq_ofReal, Matrix.vecHead,
+      Matrix.vecTail, Function.comp_apply, Fin.succ_zero_eq_one]) <;>
+    first
+      | ring1
+      | linear_combination (((Real.sin θ : 𝕜)) ^ 2 * x.ofLp 0) * hpy
+      | linear_combination (((Real.sin θ : 𝕜)) ^ 2 * x.ofLp 1) * hpy
 
 private theorem modelSinThetaPerturbation_isSymmetric (a b θ : ℝ) :
     (modelSinThetaPerturbation (𝕜 := 𝕜) a b θ).IsSymmetric := by
@@ -452,11 +462,25 @@ private theorem modelSinThetaPerturbation_sq (a b θ : ℝ) :
     modelSinThetaPerturbation (𝕜 := 𝕜) a b θ ∘ₗ
       modelSinThetaPerturbation (𝕜 := 𝕜) a b θ =
       (((((b - a) * Real.sin θ) ^ 2 : ℝ) : 𝕜) • LinearMap.id) := by
+  have hpy : ((Real.sin θ : 𝕜)) ^ 2 + ((Real.cos θ : 𝕜)) ^ 2 = 1 := by
+    have h := congrArg (fun r : ℝ => (r : 𝕜)) (Real.sin_sq_add_cos_sq θ)
+    push_cast at h
+    exact h
   ext x i
   fin_cases i <;>
     simp [modelSinThetaPerturbation, Matrix.toEuclideanLin_apply,
       Fin.sum_univ_two] <;>
-    push_cast <;> nlinarith [Real.sin_sq_add_cos_sq θ]
+    (try push_cast) <;>
+    (try simp only [RCLike.algebraMap_eq_ofReal, Matrix.vecHead,
+      Matrix.vecTail, Function.comp_apply, Fin.succ_zero_eq_one]) <;>
+    first
+      | ring1
+      | linear_combination ((((b : 𝕜) - (a : 𝕜)) ^ 2 *
+          ((Real.sin θ : 𝕜)) ^ 2 * x.ofLp 0) * hpy)
+      | linear_combination ((((b : 𝕜) - (a : 𝕜)) ^ 2 *
+          ((Real.sin θ : 𝕜)) ^ 2 * x.ofLp 1) * hpy)
+      | linear_combination (((Real.sin θ : 𝕜)) ^ 2 * x.ofLp 0) * hpy
+      | linear_combination (((Real.sin θ : 𝕜)) ^ 2 * x.ofLp 1) * hpy
 
 private theorem singularValues_sinThetaMap_model
     {θ : ℝ} (hθ0 : 0 ≤ θ) (hθ1 : θ ≤ Real.pi / 2) :
@@ -464,17 +488,40 @@ private theorem singularValues_sinThetaMap_model
       (rotatedModelSubspace (𝕜 := 𝕜) θ)).singularValues =
       pairSingularValues (Real.sin θ) 0 := by
   have hsin : 0 ≤ Real.sin θ := Real.sin_nonneg_of_nonneg_of_le_pi hθ0 (by linarith)
+  have hpy : ((Real.sin θ : 𝕜)) ^ 2 + ((Real.cos θ : 𝕜)) ^ 2 = 1 := by
+    have h := congrArg (fun r : ℝ => (r : 𝕜)) (Real.sin_sq_add_cos_sq θ)
+    push_cast at h
+    exact h
   rw [sinThetaMap_model_eq_matrix]
   apply singularValues_eq_pair_of_gram_eq finrank_euclideanSpace_fin
     (EuclideanSpace.basisFun (Fin 2) 𝕜) _ hsin (by norm_num) hsin
+  -- compute the adjoint as a matrix; `adjoint_inner_left` cannot reduce an
+  -- adjoint *composition* into matrix form
+  have hadj : (Matrix.toEuclideanLin
+      !![((Real.sin θ ^ 2 : ℝ) : 𝕜), 0;
+         ((-Real.sin θ * Real.cos θ : ℝ) : 𝕜), 0]).adjoint =
+      Matrix.toEuclideanLin
+      !![((Real.sin θ ^ 2 : ℝ) : 𝕜), ((-Real.sin θ * Real.cos θ : ℝ) : 𝕜);
+         0, 0] := by
+    rw [← Matrix.toEuclideanLin_conjTranspose_eq_adjoint]
+    congr 1
+    ext i j
+    fin_cases i <;> fin_cases j <;>
+      simp [Matrix.conjTranspose_apply, RCLike.conj_ofReal]
+  rw [hadj]
   refine (EuclideanSpace.basisFun (Fin 2) 𝕜).toBasis.ext fun i => ?_
   rw [OrthonormalBasis.coe_toBasis]
   fin_cases i <;>
+    rw [diagOp_apply_basis] <;>
     ext j <;> fin_cases j <;>
-    simp [LinearMap.comp_apply, LinearMap.adjoint_inner_left,
-      Matrix.toEuclideanLin_apply, EuclideanSpace.basisFun_apply,
-      PiLp.single_apply, diagOp_apply_basis] <;>
-    push_cast <;> nlinarith [Real.sin_sq_add_cos_sq θ]
+    simp [LinearMap.comp_apply, Matrix.toEuclideanLin_apply,
+      Matrix.vecHead, Matrix.vecTail, EuclideanSpace.basisFun_apply,
+      PiLp.single_apply] <;>
+    (try push_cast) <;>
+    first
+      | ring1
+      | linear_combination (((Real.sin θ : 𝕜)) ^ 2) * hpy
+      | linear_combination (-((Real.sin θ : 𝕜)) ^ 2) * hpy
 
 private theorem singularValues_projection_sub_model
     {θ : ℝ} (hθ0 : 0 ≤ θ) (hθ1 : θ ≤ Real.pi / 2) :
