@@ -53,6 +53,22 @@ advertised with an exact theorem or proposition number, its ambient Hilbert
 space, bounded or unbounded status, domain assumptions, hypotheses, direction,
 norm scope, and conclusion must be checked against the transcription.
 
+The new `Section8/` package is a math-ahead source surface for spectral
+continuation and branch selection.  It assembles the continuation-selected
+reducing endpoint, unitary transport, strict quarter-acuteness, genuine gap
+exclusion, and restricted-spectrum separation.  The exact Theorem 8.1
+construction from unrestricted off-diagonal hypotheses, the concrete
+direct-rotation instantiation of the now-proved compression algebra, the
+eigenvalue and symmetric-gauge refinements, and the two Theorem 8.2 half-gap
+constructors are still explicit obligations.
+
+The new `Section9/` package is a math-ahead candidate for the numerical
+example.  It proves the affine-moment calculations, exact radical arithmetic,
+Schur-complement reduction, explicit truncation repair for the domain example,
+and all decimal corollaries behind a certificate boundary.  It does not yet
+construct the free-beam closed operator or prove the `alpha_3 > 500` spectral
+fact, and it must pass a fresh Lean build before its census status is promoted.
+
 The following paper components are not yet represented by a proof-complete
 source module:
 
@@ -63,9 +79,10 @@ source module:
 - any source tangent or double-angle variants not implied by the stable aliases
   above;
 - the unbounded-operator appendix;
-- the canonical spectral-continuation, branch-selection, uniqueness, and
-  spectral-repulsion results of Section 8;
-- the Section 9 numerical model and the planar equality/optimality statements;
+- the unrestricted source constructors and the compression/eigenvalue/
+  symmetric-gauge refinements needed to complete the Section 8 candidate;
+- the analytic free-beam realization and spectral-gap discharge for the Section 9 candidate package;
+- the planar equality/optimality statements;
 - any auxiliary numbered lemmas or propositions not subsumed by the source
   aliases above.
 
