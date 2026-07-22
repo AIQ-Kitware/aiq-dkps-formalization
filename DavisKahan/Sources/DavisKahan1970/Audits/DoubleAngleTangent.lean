@@ -44,10 +44,12 @@ namespace DavisKahan1970
 #check @Theorem6_3_unbounded_graphAngle_opNorm
 #check @Theorem6_3_unbounded_vector
 #check @Theorem6_3_bounded_vector
+#check @Theorem6_3_bounded_vector_oneSided
 
 #print axioms Theorem6_3
 #print axioms Theorem6_3_unbounded_graphAngle_opNorm
 #print axioms Theorem6_3_bounded_vector
+#print axioms Theorem6_3_bounded_vector_oneSided
 
 /-! ## Section 7, equation (7.6): tangent double angle -/
 
