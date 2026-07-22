@@ -77,6 +77,8 @@
 \usepackage{listings}
 
 \newcommand{\lisoSym}{\ensuremath{\simeq_{\ell\mathrm{i}}}}
+\newcommand{\toLinSym}{\ensuremath{\to_{\ell}}}
+\newcommand{\compSym}{\ensuremath{\circ_{\ell}}}
 
 %% Four keyword classes, coloured separately: declarations, term-level
 %% keywords, tactics, and sorts.  Lean's tactic blocks read very differently
@@ -139,6 +141,8 @@
   % Longer tokens first: several share the "\l" prefix.
   literate=
     {\\liso}{\lisoSym}5
+    {\\toLin}{\toLinSym}6
+    {\\comp}{\compSym}5
     {\\langle}{$\langle$}7
     {\\rangle}{$\rangle$}7
     {\\forall}{$\forall$}7
@@ -227,6 +231,15 @@ is $2\sqrt2$ while its asserted lower bound is $4$.  Notably, the part of the
 argument that consumes the $\pi/3$ hypothesis — the block-level trigonometric
 computation — remains valid in our configuration.  What fails is the earlier,
 routine-looking reduction that licenses summing the blocks.
+
+We then ask how far the proposition can be repaired.  No angle threshold
+suffices: the claim fails at arbitrarily small angles.  Weakening the class of
+norms does suffice, and yields a cleaner statement than the original: for every
+$Q$-norm the direct rotation minimizes the full displacement, with neither the
+angle hypothesis nor the restriction to a real space.  This repair follows from
+the source's valid Proposition 4.3, and the counterexample shows it is sharp,
+the trace norm lying just outside the $Q$-class.  Both the repair and its
+sharpness are also certified in Lean.
 
 The broader norm-dependent phenomenon was partly known: Bolotnikov, Li, and
 Rodman showed in 2001 that canonical minimization can fail for Schatten
@@ -696,10 +709,14 @@ Consequently Proposition 4.4 is false for the trace norm, despite the strict
 angle bound $\theta_{\max}<\pi/3$.
 \end{theorem}
 
-\section{Multiplicity concentration at a repeated angle}
+\section{Concentration, and why no angle threshold helps}
+\label{sec:family}
 
-The example is not an isolated numerical accident.  It is a manifestation of
-multiplicity mixing.  A convenient coordinate-free family is obtained in
+The example is not an isolated numerical accident.  The mechanism is
+\emph{concentration}: the direct rotation spreads the required movement evenly
+over both principal planes, while an admissible competitor can pile it into one
+plane and leave the other fixed.  A convenient coordinate-free family is
+obtained in
 $\R^2\oplus\R^2$ by setting
 \[
  \mathcal U_\theta
@@ -729,12 +746,29 @@ $2\sin(\alpha/2)$.  Consequently
  =8\sin(\theta/2)\cos(\theta/2).
 \]
 Since $\cos(\theta/2)<1$, the competitor is strictly cheaper in trace norm for
-every $0<\theta<\pi/2$.  Thus no positive upper-angle threshold can rescue the
-unrestricted trace-norm claim when repeated principal angles permit mixing of
-the multiplicity space.  The choice $\theta=\pi/4$ yields the exact matrix
+every $0<\theta<\pi/2$.  The choice $\theta=\pi/4$ yields the exact matrix
 model in \cref{sec:counterexample}, up to an orthogonal change of coordinates;
 only that instance is formalized, the rest of this section being an ordinary
 hand computation offered as explanation rather than as certified content.
+
+Letting $\theta\to0$ gives the first and most important corollary for anyone
+hoping to save the proposition by weakening its hypothesis.
+
+\begin{proposition}[No angle threshold repairs the claim]
+\label{prop:nothreshold}
+For every constant $c>0$ there is an acute pair of subspaces of $\R^4$ whose
+principal angles are both smaller than $c$, together with an admissible
+orthogonal competitor that is strictly cheaper in trace norm.  Consequently
+replacing $\pi/3$ by any smaller positive constant — or by any hypothesis of
+the form ``the subspaces are sufficiently close'' — leaves the statement false.
+\end{proposition}
+
+\begin{proof}
+Choose $0<\theta<\min(c,\pi/2)$ in the family above.
+\end{proof}
+
+The proposition therefore fails infinitesimally, not merely beyond some
+threshold.  The angle bound is not where the difficulty lies.
 
 The same construction also explains why the operator-norm statement behaves
 differently.  The direct rotation has largest displacement singular value
@@ -860,6 +894,97 @@ passage from \cref{eq:paper112} to \cref{eq:paper43}, which reads like
 bookkeeping.  The counterexample thus pinpoints a concrete logical failure in
 the printed proof rather than merely exhibiting a theorem whose proof resists
 formalization.
+
+\section{To what extent is Proposition 4.4 repairable?}
+\label{sec:repairs}
+
+The proposition binds three quantifiers: the angle bound, the class of norms,
+and the class of competitors.  A repair must weaken one of them.
+\Cref{prop:nothreshold} rules out the first: the claim fails at arbitrarily
+small angles, so no threshold works.  Weakening the norm class does work, and
+gives a cleaner statement than the original.
+
+\subsection{The repair: \texorpdfstring{$Q$}{Q}-norms}
+
+Following Bolotnikov, Li, and Rodman \cite{BolotnikovLiRodman2001}, call a
+unitarily invariant norm $N$ a \emph{$Q$-norm} if there is a unitarily
+invariant norm $M$ with
+\[
+ N(A)^2=M(A^*A).
+\]
+The Schatten norms with $2\leq p\leq\infty$ are $Q$-norms, since
+$\lVert A\rVert_p^2=\lVert A^*A\rVert_{p/2}$; the class contains the operator
+and Frobenius norms and excludes the trace norm.
+
+\begin{theorem}[$Q$-norm repair]
+\label{thm:qnorm}
+Let $\mathcal U,\mathcal V$ be an acute pair of subspaces of a finite-dimensional
+inner-product space over any $\mathrm{RCLike}$ field, $R_{\mathcal U,\mathcal V}$
+the direct rotation, and $W$ any unitary with $W\mathcal U=\mathcal V$.  Then
+for every $Q$-norm $N$,
+\[
+ N(I-R_{\mathcal U,\mathcal V})\leq N(I-W).
+\]
+\end{theorem}
+
+\begin{proof}
+Let $M$ witness the $Q$-property.  Proposition 4.3 of \cite{DavisKahan1970} —
+which is valid, and holds for \emph{every} unitarily invariant norm — gives
+\[
+ M\bigl((I-R)^*(I-R)\bigr)\leq M\bigl((I-W)^*(I-W)\bigr),
+\]
+that is $N(I-R)^2\leq N(I-W)^2$.  Both sides are nonnegative.
+\end{proof}
+
+Two features are worth emphasizing.  The repair \emph{drops} both of the
+source's hypotheses: neither $\Theta\leq\pi/3$ nor the restriction to a real
+space is needed.  And it is not a weakening dressed up as a theorem — it is
+exactly the content of the valid Proposition 4.3, correctly transported through
+the square root.  The natural corrigendum is therefore not to patch the angle
+bound but to delete Proposition 4.4 and record its $Q$-norm consequence.
+
+\subsection{The repair is sharp}
+
+The counterexample delimits it exactly.  Were the trace norm a $Q$-norm,
+\cref{thm:qnorm} would contradict \cref{thm:counterexample}; so it is not.
+Both the theorem and this consequence are machine-checked
+(\cref{sec:leanrepair}).  The boundary is thus not an artifact of the proof:
+the failure occurs precisely at norms outside the $Q$-class, and within the
+Schatten scale the transition is quantitative.  For the family of
+\cref{sec:family},
+\[
+ \frac{\lVert I-W_\theta\rVert_p}{\lVert I-R_\theta\rVert_p}
+ =2^{1-1/p}\cos\frac\theta2 ,
+\]
+so this competitor wins exactly when $\cos(\theta/2)<2^{1/p-1}$: always for
+$p=1$, never in the acute range for $p=2$, and beyond an angle
+$\theta_p=2\arccos(2^{1/p-1})$ for $1<p<2$ — which itself drops inside the
+advertised $\pi/3$ regime once $p\lesssim1.24$.
+
+\subsection{The diagnosis, and what is left open}
+
+The distinction is one of majorization.  The original claim needs
+$s(I-R)\prec_w s(I-W)$ for the singular-value sequences, which is false; what
+Proposition 4.3 supplies is $s(I-R)^2\prec_w s(I-W)^2$.  Norms controlled
+monotonically through the \emph{squares} behave; norms applied directly to the
+singular values need not.  In the counterexample
+$s(I-R)=(a,a,a,a)$ and $s(I-W)=(b,b,0,0)$ with $a=2\sin(\pi/8)$ and
+$b=2\sin(\pi/4)$: the operator norm prefers the spread vector because $a<b$,
+the trace norm prefers the concentrated one because $4a>2b$.
+
+Two further repairs are plausible but \emph{not} established here, and we flag
+them as conjectural rather than assert them.  First, restricting competitors to
+those preserving a fixed principal-plane decomposition would validate the
+published plane-by-plane argument, at the cost of no longer solving the ambient
+problem, and with the decomposition non-canonical exactly when angles repeat.
+Second, the conclusion plausibly survives when only one principal plane is
+active, where the $\pi/3$ threshold is sharp and is what Example 4.1 of the
+source detects.  We note also that requiring \emph{distinct} principal angles
+does not appear to repair the statement: the strict inequality of
+\cref{thm:counterexample} is an open condition and the whole configuration
+varies continuously, so it persists under small perturbations that split the
+repeated angle.  We have confirmed this numerically but have not proved it, and
+none of these three claims is formalized.
 
 \section{Lean formulation}
 \label{sec:lean}
@@ -989,9 +1114,40 @@ refuting it at universe $0$ refutes it.  This is itself a small instance of the
 alignment issue catalogued in \cref{sec:alignment} — a formal artifact with no
 counterpart in the prose, which a reader must be told how to discount.
 
-Both \code{shortRotation\_\allowbreak fullDisplacement\_\allowbreak refuted} and
-\code{not\_davisKahanProposition4\_\allowbreak 4\_\allowbreak Finite} depend only on Lean's three standard
-axioms:
+\subsection{The repair, machine-checked}
+\label{sec:leanrepair}
+
+\Cref{thm:qnorm} and its sharpness are formalized in
+\path{DavisKahan/FiniteDimensional/DirectRotation/QNorm.lean}.
+
+\begin{LeanCode}
+def IsQNorm (N : UnitarilyInvariantNorm \Field E) : Prop :=
+  \exists M : UnitarilyInvariantNorm \Field E,
+    \forall A : E \toLin[\Field] E,
+      N A ^ 2 = M (LinearMap.adjoint A \comp A)
+
+theorem directRotation_fullDisplacement_qnorm
+    (N : UnitarilyInvariantNorm \Field E) (hN : IsQNorm N)
+    (U V : Submodule \Field E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hacute : IsAcute U V) (W : E \liso[\Field] E)
+    (hmap : U.map W.toLinearMap = V) :
+    N (LinearMap.id - (directRotation U V hacute).toLinearMap) \le
+      N (LinearMap.id - W.toLinearMap)
+\end{LeanCode}
+
+Note the absence of any angle hypothesis, and that the scalar field is an
+arbitrary \code{RCLike} field rather than $\R$.  Turning the counterexample
+around gives the sharpness statement, in the same file:
+
+\begin{LeanCode}
+theorem kyFan_not_isQNorm :
+    \not IsQNorm (RectangularUnitarilyInvariantNorm.kyFan
+      (\Field := \Real) (E := E4) (F := E4) 4).toSquare
+\end{LeanCode}
+
+All four principal declarations above — the two refutations, the $Q$-norm
+repair, and its sharpness — depend only on Lean's three standard axioms:
 \begin{PlainCode}
 [propext, Classical.choice, Quot.sound]
 \end{PlainCode}
@@ -1124,7 +1280,9 @@ value, even though the sum of its singular values is smaller.
 \end{enumerate}
 
 The false claim is therefore specifically the simultaneous full-displacement
-minimality for \emph{every} unitarily invariant norm.
+minimality for \emph{every} unitarily invariant norm.  Narrowing that
+quantifier to the $Q$-norms restores it, and more cheaply than the source
+hoped: see \cref{sec:repairs}.
 
 \section{Status and suggested independent checks}
 
