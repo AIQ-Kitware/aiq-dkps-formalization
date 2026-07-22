@@ -472,6 +472,35 @@ two-projection identity `‖P_U - P_V‖ = sin theta_max`, which is not yet in t
 tree; both were removed with the corollary since nothing else consumes them.
 -/
 
+/-- The Hermitian part of the direct rotation is the canonical modulus:
+`Re R = |S|`, the operator cosine. -/
+theorem hermitianPart_directRotation (U V : Submodule 𝕜 E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hacute : IsAcute U V) :
+    hermitianPart (directRotation U V hacute).toLinearMap =
+      ForMathlib.abs (canonicalIntertwiner U V) := by
+  have htwo := two_smul_abs_canonicalIntertwiner U V hacute
+  apply LinearMap.ext
+  intro x
+  have htwox := LinearMap.congr_fun htwo x
+  simp only [LinearMap.smul_apply, LinearMap.add_apply] at htwox
+  rw [hermitianPart_apply,
+    (directRotation U V hacute).adjoint_toLinearMap_eq_symm, ← htwox,
+    smul_smul]
+  have h12 : ((((2 : ℝ)⁻¹ : ℝ)) : 𝕜) * (2 : 𝕜) = 1 := by
+    push_cast
+    norm_num
+  rw [h12, one_smul]
+
+/-- The positive displacement square of the direct rotation is the affine
+image `2(I - |S|)` of the operator cosine. -/
+theorem displacementSquare_directRotation (U V : Submodule 𝕜 E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hacute : IsAcute U V) :
+    displacementSquare (directRotation U V hacute).toLinearMap =
+      (2 : 𝕜) • (LinearMap.id - ForMathlib.abs (canonicalIntertwiner U V)) := by
+  rw [displacementSquare_unitary, hermitianPart_directRotation]
+
 /-- Weak majorization of the positive displacement squares.  This is the
 operator-theoretic core of Davis--Kahan Proposition 4.3. -/
 theorem directRotation_displacementSquare_kyFan
@@ -492,22 +521,9 @@ theorem directRotation_displacementSquare_kyFan
   have hCeq : ForMathlib.abs B = C := by
     simpa [B, C, S] using
       abs_pinch_competitor_eq_abs_canonicalIntertwiner U V W hmap
-  have hherm : hermitianPart (directRotation U V hacute).toLinearMap = C := by
-    have htwo := two_smul_abs_canonicalIntertwiner U V hacute
-    apply LinearMap.ext
-    intro x
-    have htwox := LinearMap.congr_fun htwo x
-    simp only [LinearMap.smul_apply, LinearMap.add_apply] at htwox
-    rw [hermitianPart_apply,
-      (directRotation U V hacute).adjoint_toLinearMap_eq_symm, ← htwox,
-      smul_smul]
-    have h12 : ((((2 : ℝ)⁻¹ : ℝ)) : 𝕜) * (2 : 𝕜) = 1 := by
-      push_cast
-      norm_num
-    rw [h12, one_smul]
   have hA0 : A0 = (2 : 𝕜) • (LinearMap.id - C) := by
     simp only [A0]
-    rw [displacementSquare_unitary, hherm]
+    exact displacementSquare_directRotation U V hacute
   have hBadj : (pinch U W.symm.toLinearMap).adjoint = pinch U W.toLinearMap := by
     rw [pinch, pinch, map_add]
     simp only [LinearMap.adjoint_comp, projection_adjoint, complementaryProjection,

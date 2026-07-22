@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-5.6 Thinking
 -/
 import DavisKahan.FiniteDimensional.DirectRotation.Majorization
+import DavisKahan.FiniteDimensional.SinTheta.UnitarilyInvariant
 import ForMathlib.Analysis.InnerProductSpace.MoorePenroseInverse
 
 /-!
@@ -58,13 +59,14 @@ theorem ker_sinAngleOperator_le_ker_directRotation_sub_cosine
   intro x hx
   have hxD : x ∈ (projection U - projection V).ker := by
     simpa [sinAngleOperator, ker_abs] using hx
-  have hproj : projection U x = projection V x := by
-    have := LinearMap.mem_ker.mp hxD
-    simpa [LinearMap.sub_apply] using this
+  have hproj : projection U x = projection V x :=
+    sub_eq_zero.mp (by
+      simpa [LinearMap.sub_apply] using LinearMap.mem_ker.mp hxD)
   have hR := directRotation_apply_eq_self_of_projection_eq U V hacute hproj
   have hC := abs_canonicalIntertwiner_apply_eq_self_of_projection_eq U V hproj
   apply LinearMap.mem_ker.mpr
-  simp [LinearMap.sub_apply, directRotationCosine, hR, hC]
+  have hRx : polarFactor (canonicalIntertwiner U V) x = x := hR
+  simp [LinearMap.sub_apply, directRotationCosine, hRx, hC]
 
 /-- Reversing the pair gives the inverse rotation. -/
 theorem directRotation_symm (U V : Submodule 𝕜 E)
@@ -77,8 +79,13 @@ theorem directRotation_symm (U V : Submodule 𝕜 E)
     (canonicalIntertwiner_isUnit_of_acute U V hacute)
   apply LinearIsometryEquiv.ext
   intro x
-  simpa [directRotation, hstar] using
-    LinearMap.congr_fun hpolar x
+  have h1 : directRotation V U hacute.symm x
+      = polarFactor (canonicalIntertwiner V U) x := rfl
+  have h2 : (directRotation U V hacute).symm x
+      = LinearMap.adjoint (polarFactor (canonicalIntertwiner U V)) x :=
+    (LinearMap.congr_fun
+      (directRotation U V hacute).adjoint_toLinearMap_eq_symm x).symm
+  rw [h1, h2, ← hstar, hpolar]
 
 /-- The direct rotation is the identity on the common and doubly-orthogonal
 parts. -/
@@ -90,8 +97,8 @@ theorem directRotation_apply_eq_self_of_mem_common (U V : Submodule 𝕜 E)
   obtain ⟨x₀, hx₀, x₁, hx₁, rfl⟩ := Submodule.mem_sup.mp hx
   have hproj0 : projection U x₀ = projection V x₀ := by
     simp [projection_apply_of_mem hx₀.1, projection_apply_of_mem hx₀.2]
-  have hx₁U : x₁ ∈ Uᗮ := fun u hu => hx₁ (Submodule.mem_sup_left hu)
-  have hx₁V : x₁ ∈ Vᗮ := fun v hv => hx₁ (Submodule.mem_sup_right hv)
+  have hx₁U : x₁ ∈ Uᗮ := Submodule.orthogonal_le le_sup_left hx₁
+  have hx₁V : x₁ ∈ Vᗮ := Submodule.orthogonal_le le_sup_right hx₁
   have hproj1 : projection U x₁ = projection V x₁ := by
     simp [projection_apply_of_mem_orthogonal hx₁U,
       projection_apply_of_mem_orthogonal hx₁V]
@@ -147,7 +154,7 @@ theorem directRotation_unique (U V : Submodule 𝕜 E)
     (canonicalIntertwiner_isUnit_of_acute U V hacute) W hH hdecomp
   apply LinearIsometryEquiv.ext
   intro x
-  simpa [directRotation] using LinearMap.congr_fun hpolar.symm x
+  exact LinearMap.congr_fun hpolar.symm x
 
 /-- Davis--Kahan Proposition 4.3: the direct rotation minimizes every UI norm
 of the positive displacement square. -/
@@ -184,22 +191,28 @@ theorem directRotation_minimizes_max_displacement
       ‖(W.toLinearMap - LinearMap.id).toContinuousLinearMap‖ := by
   have h := directRotation_minimizes_displacementSquare_uiNorm
     (UnitarilyInvariantNorm.opNorm 𝕜 E) U V hacute W hmap
-  have hR :
-      (UnitarilyInvariantNorm.opNorm 𝕜 E)
-          (displacementSquare (directRotation U V hacute).toLinearMap) =
-        ‖((directRotation U V hacute).toLinearMap - LinearMap.id).toContinuousLinearMap‖ ^ 2 := by
-    simpa [UnitarilyInvariantNorm.opNorm, displacementSquare,
-      LinearMap.adjoint_sub, LinearMap.adjoint_id, sub_eq_add_neg,
-      norm_neg] using ContinuousLinearMap.norm_adjoint_comp_self
-        (((directRotation U V hacute).toLinearMap - LinearMap.id).toContinuousLinearMap)
-  have hW :
-      (UnitarilyInvariantNorm.opNorm 𝕜 E) (displacementSquare W.toLinearMap) =
-        ‖(W.toLinearMap - LinearMap.id).toContinuousLinearMap‖ ^ 2 := by
-    simpa [UnitarilyInvariantNorm.opNorm, displacementSquare,
-      LinearMap.adjoint_sub, LinearMap.adjoint_id, sub_eq_add_neg,
-      norm_neg] using ContinuousLinearMap.norm_adjoint_comp_self
-        ((W.toLinearMap - LinearMap.id).toContinuousLinearMap)
-  rw [hR, hW] at h
+  have key : ∀ X : E →ₗ[𝕜] E,
+      UnitarilyInvariantNorm.opNorm 𝕜 E (displacementSquare X) =
+        ‖(X - LinearMap.id).toContinuousLinearMap‖ ^ 2 := by
+    intro X
+    haveI : CompleteSpace E := FiniteDimensional.complete 𝕜 E
+    have hD : displacementSquare X =
+        LinearMap.adjoint (LinearMap.id - X) ∘ₗ (LinearMap.id - X) := by
+      simp only [displacementSquare, map_sub, LinearMap.adjoint_id]
+    have hCLM : (LinearMap.adjoint (LinearMap.id - X) ∘ₗ
+          (LinearMap.id - X)).toContinuousLinearMap =
+        ContinuousLinearMap.adjoint
+            (LinearMap.id - X).toContinuousLinearMap ∘L
+          (LinearMap.id - X).toContinuousLinearMap := by
+      ext x
+      rfl
+    have hneg : (X - LinearMap.id).toContinuousLinearMap
+        = -((LinearMap.id - X).toContinuousLinearMap) := by
+      ext x
+      simp
+    show ‖(displacementSquare X).toContinuousLinearMap‖ = _
+    rw [hD, hCLM, ContinuousLinearMap.norm_adjoint_comp_self, hneg, norm_neg, sq]
+  rw [key, key] at h
   exact (sq_le_sq₀ (norm_nonneg _) (norm_nonneg _)).mp h
 
 /-- Orthonormal-basis displacement energy is minimized by the direct rotation.
@@ -212,7 +225,9 @@ theorem directRotation_minimizes_sum_sq_basis_angles
     (hmap : U.map W.toLinearMap = V) :
     ∑ i, ‖directRotation U V hacute (b i) - b i‖ ^ 2 ≤
       ∑ i, ‖W (b i) - b i‖ ^ 2 := by
-  subst n
+  have hn : n = finrank 𝕜 E := by
+    simpa using (Module.finrank_eq_card_basis b.toBasis).symm
+  subst hn
   let R := (directRotation U V hacute).toLinearMap
   let AR := LinearMap.id - R
   let AW := LinearMap.id - W.toLinearMap
@@ -223,11 +238,11 @@ theorem directRotation_minimizes_sum_sq_basis_angles
     N U V hacute W hmap
   have hdispR : displacementSquare R = AR.adjoint ∘ₗ AR := by
     ext x
-    simp [displacementSquare, AR, R, LinearMap.adjoint_sub,
+    simp [displacementSquare, AR, R, map_sub,
       LinearMap.adjoint_id, LinearMap.comp_apply]
   have hdispW : displacementSquare W.toLinearMap = AW.adjoint ∘ₗ AW := by
     ext x
-    simp [displacementSquare, AW, LinearMap.adjoint_sub,
+    simp [displacementSquare, AW, map_sub,
       LinearMap.adjoint_id, LinearMap.comp_apply]
   change RectangularUnitarilyInvariantNorm.nuclear (displacementSquare R) ≤
     RectangularUnitarilyInvariantNorm.nuclear
@@ -235,7 +250,9 @@ theorem directRotation_minimizes_sum_sq_basis_angles
   rw [hdispR, hdispW,
     RectangularUnitarilyInvariantNorm.nuclear_adjoint_comp_self_eq_sum_sq_norm AR b,
     RectangularUnitarilyInvariantNorm.nuclear_adjoint_comp_self_eq_sum_sq_norm AW b] at h
-  simpa [AR, AW, R, LinearMap.sub_apply, norm_sub_rev] using h
+  have h' : (∑ i, ‖b i - directRotation U V hacute (b i)‖ ^ 2)
+      ≤ ∑ i, ‖b i - W (b i)‖ ^ 2 := h
+  simpa [norm_sub_rev] using h'
 
 end DavisKahanTheory
 end ForMathlib

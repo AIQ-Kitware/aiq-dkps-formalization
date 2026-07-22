@@ -269,6 +269,60 @@ theorem polarFactor_eq_of_isUnit_eq_comp_positive
   have hy := LinearMap.congr_fun hdecomp y
   simpa [LinearMap.comp_apply, hHabs] using hy
 
+/-- For an invertible operator the polar factor of the adjoint is the adjoint
+of the polar factor: from `A = U|A|` one gets `A⋆ = U⋆ ∘ (U|A|U⋆)` with the
+conjugated modulus positive, and polar uniqueness identifies the factors. -/
+theorem polarFactor_adjoint_of_isUnit {A : E →ₗ[𝕜] E} (hA : IsUnit A) :
+    polarFactor (LinearMap.adjoint A) = LinearMap.adjoint (polarFactor A) := by
+  have hA' : IsUnit (LinearMap.adjoint A) := by
+    obtain ⟨B, hAB, hBA⟩ := isUnit_iff_exists.mp hA
+    refine isUnit_iff_exists.mpr ⟨LinearMap.adjoint B, ?_, ?_⟩
+    · rw [show LinearMap.adjoint A * LinearMap.adjoint B
+          = LinearMap.adjoint (B ∘ₗ A) from (LinearMap.adjoint_comp B A).symm,
+        show B ∘ₗ A = (1 : E →ₗ[𝕜] E) from hBA]
+      exact LinearMap.adjoint_id
+    · rw [show LinearMap.adjoint B * LinearMap.adjoint A
+          = LinearMap.adjoint (A ∘ₗ B) from (LinearMap.adjoint_comp A B).symm,
+        show A ∘ₗ B = (1 : E →ₗ[𝕜] E) from hAB]
+      exact LinearMap.adjoint_id
+  set R := polarUnitaryEquiv hA with hRdef
+  have hpos : (R.toLinearMap ∘ₗ abs A ∘ₗ R.symm.toLinearMap).IsPositive := by
+    refine ⟨fun x y => ?_, fun x => ?_⟩
+    · simp only [LinearMap.comp_apply, LinearEquiv.coe_coe,
+        LinearIsometryEquiv.coe_toLinearEquiv]
+      calc ⟪R (abs A (R.symm x)), y⟫_𝕜
+          = ⟪R (abs A (R.symm x)), R (R.symm y)⟫_𝕜 := by
+            rw [R.apply_symm_apply]
+        _ = ⟪abs A (R.symm x), R.symm y⟫_𝕜 := R.inner_map_map _ _
+        _ = ⟪R.symm x, abs A (R.symm y)⟫_𝕜 :=
+            (isPositive_abs A).isSymmetric _ _
+        _ = ⟪R (R.symm x), R (abs A (R.symm y))⟫_𝕜 :=
+            (R.inner_map_map _ _).symm
+        _ = ⟪x, R (abs A (R.symm y))⟫_𝕜 := by rw [R.apply_symm_apply]
+    · simp only [LinearMap.comp_apply, LinearEquiv.coe_coe,
+        LinearIsometryEquiv.coe_toLinearEquiv]
+      calc (0 : ℝ)
+          ≤ RCLike.re ⟪abs A (R.symm x), R.symm x⟫_𝕜 :=
+            (isPositive_abs A).re_inner_nonneg_left _
+        _ = RCLike.re ⟪R (abs A (R.symm x)), R (R.symm x)⟫_𝕜 := by
+            rw [R.inner_map_map]
+        _ = RCLike.re ⟪R (abs A (R.symm x)), x⟫_𝕜 := by
+            rw [R.apply_symm_apply]
+  have hdecomp : LinearMap.adjoint A =
+      R.symm.toLinearMap ∘ₗ (R.toLinearMap ∘ₗ abs A ∘ₗ R.symm.toLinearMap) := by
+    conv_lhs => rw [polar_decomposition_of_isUnit hA]
+    rw [LinearMap.adjoint_comp, (isPositive_abs A).adjoint_eq]
+    apply LinearMap.ext
+    intro x
+    simp only [LinearMap.comp_apply, LinearEquiv.coe_coe,
+      LinearIsometryEquiv.coe_toLinearEquiv]
+    rw [show LinearMap.adjoint ((polarUnitaryEquiv hA : E →ₗ[𝕜] E)) x
+        = R.symm x from LinearMap.congr_fun R.adjoint_toLinearMap_eq_symm x,
+      R.symm_apply_apply]
+  have hfac := polarFactor_eq_of_isUnit_eq_comp_positive hA' R.symm hpos hdecomp
+  rw [hfac, ← R.adjoint_toLinearMap_eq_symm]
+  exact congrArg LinearMap.adjoint (coe_polarUnitaryEquiv hA)
+
 /-! ### CFC bridge — the ℂ / ContinuousLinearMap headline (`|A| = CFC.abs A`) -/
 
 section CFCBridge
