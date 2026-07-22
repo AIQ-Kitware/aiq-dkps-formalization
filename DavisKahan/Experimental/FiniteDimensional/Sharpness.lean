@@ -841,6 +841,7 @@ theorem tanTheta_model_equality
     _ = N (modelTanThetaPerturbation (𝕜 := 𝕜) a b θ) :=
       N.eq_of_same_singularValues hsing
 
+set_option maxHeartbeats 800000 in
 /-- Equality case for the `sin 2Θ` theorem.
 
 Lean proof route for a weaker agent:
