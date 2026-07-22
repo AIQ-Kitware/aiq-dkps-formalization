@@ -893,12 +893,13 @@ theorem tanTwoTheta_model_equality
       rw [RCLike.norm_ofReal]; norm_num
     have hba : ‖((b - a : ℝ) : 𝕜)‖ = b - a := by
       rw [RCLike.norm_ofReal, abs_of_pos (sub_pos.mpr hab)]
-    have htcomm : Real.tan (θ * 2) = Real.tan (2 * θ) := by rw [mul_comm]
+    -- simp normalizes to `θ * 2`, so orient the rewrite that way
+    have htcomm : Real.tan (2 * θ) = Real.tan (θ * 2) := by rw [mul_comm]
     ext i
     simp only [pairSingularValues, h2, hba, RCLike.algebraMap_eq_ofReal,
       norm_ofReal_sub_of_lt hab, htcomm, Finsupp.smul_apply,
       Finsupp.add_apply, Finsupp.single_apply, smul_eq_mul]
-    ring
+    split_ifs <;> ring
   calc
     (b - a) * N (tanTwoAngleOperator (modelSubspace (𝕜 := 𝕜))
         (rotatedModelSubspace (𝕜 := 𝕜) θ)) =
