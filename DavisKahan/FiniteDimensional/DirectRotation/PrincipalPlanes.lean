@@ -213,9 +213,11 @@ theorem principalPlaneCosine_le_one
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (i : Fin (nontrivialAngleCount U V)) :
     principalPlaneCosine U V i ≤ 1 := by
+  -- `principalPlaneCosine` is a function, not a fact; passing it as a hint
+  -- leaves `nlinarith` with an unresolvable instance metavariable
   nlinarith [principalPlaneCosine_sq_add_sine_sq U V i,
     principalPlaneSine_pos U V i, Real.sqrt_nonneg (1 - principalPlaneSine U V i ^ 2),
-    principalPlaneCosine, sq_nonneg (principalPlaneCosine U V i - 1),
+    sq_nonneg (principalPlaneCosine U V i - 1),
     sq_nonneg (principalPlaneCosine U V i + 1)]
 
 /-- Acuteness makes every principal-plane cosine strictly positive. -/
@@ -510,13 +512,8 @@ theorem orthonormal_principalOrthogonalVector
       (principalPlaneCosine U V b : 𝕜) *
         ⟪principalSourceVector U V a, principalSourceVector U V b⟫_𝕜 := by
     intro a b
-    rw [← inner_conj_symm, hdiag b a, map_mul, RCLike.conj_ofReal, inner_conj_symm,
-      ← inner_conj_symm (principalSourceVector U V b), hu]
-    rw [← inner_conj_symm (principalSourceVector U V a), hu]
-    split_ifs with hab
-    · subst hab; simp
-    · have : ¬ b = a := fun hba => hab hba.symm
-      simp [this, hab]
+    -- this chain already closes the goal by reflexivity
+    rw [← inner_conj_symm, hdiag b a, map_mul, RCLike.conj_ofReal, inner_conj_symm]
   have hRR : ⟪directRotation U V hacute (principalSourceVector U V i),
       directRotation U V hacute (principalSourceVector U V j)⟫_𝕜 =
       ⟪principalSourceVector U V i, principalSourceVector U V j⟫_𝕜 :=
@@ -524,23 +521,23 @@ theorem orthonormal_principalOrthogonalVector
   rw [principalOrthogonalVector, principalOrthogonalVector, inner_smul_left,
     inner_smul_right, RCLike.conj_ofReal, inner_sub_left, inner_sub_right,
     inner_sub_right, inner_smul_left, inner_smul_right, inner_smul_left,
-    inner_smul_right, RCLike.conj_ofReal, RCLike.conj_ofReal, hRR, hdiag i j,
+    inner_smul_right, RCLike.conj_ofReal, hRR, hdiag i j,
     hdiag' i j, hu]
   split_ifs with hij
-  · rw [mul_one, mul_one, mul_one]
-    subst hij
-    rw [← RCLike.ofReal_mul, ← RCLike.ofReal_mul, ← RCLike.ofReal_mul]
-    have hpyth := principalPlaneCosine_sq_add_sine_sq U V i
-    have : ((principalPlaneSine U V i)⁻¹ : ℝ) * ((principalPlaneSine U V i)⁻¹ : ℝ) *
-        (1 - principalPlaneCosine U V i * principalPlaneCosine U V i -
-          (principalPlaneCosine U V i * principalPlaneCosine U V i -
-            principalPlaneCosine U V i * (principalPlaneCosine U V i * 1))) = 1 := by
-      field_simp
-      nlinarith [hpyth]
+  · subst hij
+    -- the surviving goal lives in `𝕜`; transport the Pythagorean identity
+    -- across the cast and clear the nonzero sine
+    have hpythK : ((principalPlaneCosine U V i : ℝ) : 𝕜) ^ 2 +
+        ((principalPlaneSine U V i : ℝ) : 𝕜) ^ 2 = 1 := by
+      have h := congrArg (fun r : ℝ => (r : 𝕜))
+        (principalPlaneCosine_sq_add_sine_sq U V i)
+      push_cast at h
+      exact h
+    have hsK : ((principalPlaneSine U V i : ℝ) : 𝕜) ≠ 0 :=
+      RCLike.ofReal_ne_zero.mpr hsi
     push_cast
-    rw [show ((1 : ℝ) : 𝕜) = (1 : 𝕜) from rfl] at *
-    push_cast [← this]
-    ring
+    field_simp
+    linear_combination -hpythK
   · simp [mul_comm]
 
 /-- The two vectors in distinct principal planes are mutually orthogonal. -/
@@ -561,12 +558,15 @@ theorem orthonormal_principalPlaneFamily
     simp [Submodule.inner_right_of_mem_orthogonal hp hq, Prod.ext_iff]
   · have hp := principalOrthogonalVector_mem U V hacute p1
     have hq := principalSourceVector_mem U V hacute q1
-    rw [if_neg (by simp), if_pos rfl]
+    -- `fin_cases` leaves the index unreduced, so the `if` cannot be rewritten
+    -- directly; discharge the inner product and let `simp` settle the branch
     have h0 : ⟪principalSourceVector U V q1,
         principalOrthogonalVector U V hacute p1⟫_𝕜 = 0 :=
       Submodule.inner_right_of_mem_orthogonal hq hp
-    rw [← inner_conj_symm, h0]
-    simp [Prod.ext_iff]
+    have h1 : ⟪principalOrthogonalVector U V hacute p1,
+        principalSourceVector U V q1⟫_𝕜 = 0 := by
+      rw [← inner_conj_symm, h0, map_zero]
+    simp [h1, Prod.ext_iff]
   · simpa [Prod.ext_iff] using orthonormal_iff_ite.mp
       (orthonormal_principalOrthogonalVector U V hacute) p1 q1
 
@@ -622,12 +622,21 @@ theorem directRotation_apply_principalOrthogonalVector
           (principalPlaneSine U V i : 𝕜) • principalOrthogonalVector U V hacute i) -
         principalSourceVector U V i := by
     rw [eq_sub_iff_add_eq, add_comm, ← eq_sub_iff_add_eq]
-    exact happ.symm
+    exact happ
+  -- `smul_right_injective` leaves both sides under an unreduced lambda
+  beta_reduce
   rw [h2]
   have hpyth := principalPlaneCosine_sq_add_sine_sq U V i
+  -- `match_scalars` leaves goals in `𝕜`, where no ordered-field tactic applies;
+  -- the Pythagorean identity has to be transported across the cast
+  have hpythK : ((principalPlaneCosine U V i : ℝ) : 𝕜) ^ 2 +
+      ((principalPlaneSine U V i : ℝ) : 𝕜) ^ 2 = 1 := by
+    have h := congrArg (fun r : ℝ => (r : 𝕜)) hpyth
+    push_cast at h
+    exact h
   match_scalars
   · push_cast
-    nlinarith [hpyth]
+    linear_combination hpythK
   · push_cast
     ring
 
@@ -657,15 +666,22 @@ theorem directRotation_symm_apply_principalOrthogonalVector
           ((principalPlaneCosine U V i : 𝕜) • principalSourceVector U V i -
             (principalPlaneSine U V i : 𝕜) •
               principalOrthogonalVector U V hacute i) := by
-    rw [eq_sub_iff_add_eq, add_comm, ← eq_sub_iff_add_eq] at happ ⊢
+    -- `happ` is already in additive form; only the goal needs reshaping
+    rw [eq_sub_iff_add_eq, add_comm]
     exact happ.symm
+  beta_reduce
   rw [h2]
   have hpyth := principalPlaneCosine_sq_add_sine_sq U V i
+  have hpythK : ((principalPlaneCosine U V i : ℝ) : 𝕜) ^ 2 +
+      ((principalPlaneSine U V i : ℝ) : 𝕜) ^ 2 = 1 := by
+    have h := congrArg (fun r : ℝ => (r : 𝕜)) hpyth
+    push_cast at h
+    exact h
   match_scalars
   · push_cast
-    ring
+    linear_combination -hpythK
   · push_cast
-    nlinarith [hpyth]
+    ring
 
 /-- The positive modulus of the canonical intertwiner acts by the principal
 cosine on the orthogonal partner as well. -/
@@ -774,8 +790,6 @@ theorem sinThetaMap_apply_eq_zero_of_orthogonal_sources
             have hidx : b j = principalSourceVector U V ⟨(j : ℕ), hj⟩ := by
               rw [principalSourceVector]
               congr 1
-              ext
-              simp [nontrivialAngleIndex]
             rw [hidx]
             exact hx ⟨(j : ℕ), hj⟩
           rw [hcoeff, zero_smul]
@@ -850,8 +864,6 @@ theorem inner_sinThetaMap_apply_eq_zero_of_orthogonal_family
         · have hidx : b j = principalSourceVector U V ⟨(j : ℕ), hj⟩ := by
             rw [principalSourceVector]
             congr 1
-            ext
-            simp [nontrivialAngleIndex]
           rw [hidx, hsinu ⟨(j : ℕ), hj⟩, mul_zero]
         · have hσ : (sinThetaMap U V).singularValues (j : ℕ) = 0 :=
             (sinThetaMap U V).singularValues_eq_zero_iff_le_finrank_range.mpr
@@ -889,8 +901,8 @@ theorem projection_eq_projection_of_orthogonal_family
           ⟪principalSourceVector U V i, z⟫_𝕜 := by
       rw [← inner_add_right, hxyz]
     rw [hxu i, hyu i] at hsplit
-    linarith [congrArg RCLike.re hsplit, congrArg RCLike.im hsplit,
-      (RCLike.ext_iff (z := ⟪principalSourceVector U V i, z⟫_𝕜) (w := 0))]
+    -- `hsplit : 0 = 0 + w` in `𝕜`; no ordered-field reasoning is needed
+    simpa using hsplit.symm
   have hzj : ∀ i, ⟪principalOrthogonalVector U V hacute i, z⟫_𝕜 = 0 := by
     intro i
     have hjy : ⟪principalOrthogonalVector U V hacute i, y⟫_𝕜 = 0 := by
@@ -904,8 +916,7 @@ theorem projection_eq_projection_of_orthogonal_family
           ⟪principalOrthogonalVector U V hacute i, z⟫_𝕜 := by
       rw [← inner_add_right, hxyz]
     rw [hxj i, hjy] at hsplit
-    linarith [congrArg RCLike.re hsplit, congrArg RCLike.im hsplit,
-      (RCLike.ext_iff (z := ⟪principalOrthogonalVector U V hacute i, z⟫_𝕜) (w := 0))]
+    simpa using hsplit.symm
   -- The `V`-projection of `z` vanishes: it is a vector of `V` orthogonal to `U`.
   have hvzero : projection V z = 0 := by
     set v := projection V z with hv
@@ -915,9 +926,11 @@ theorem projection_eq_projection_of_orthogonal_family
       have h1 : ⟪u, v⟫_𝕜 = ⟪projection V u, z⟫_𝕜 := by
         rw [hv, projection_inner_left_eq_right]
       have h2 : projection V u = u - sinThetaMap U V u := by
-        rw [sinThetaMap, LinearMap.comp_apply, projection_apply_of_mem huU,
-          Submodule.starProjection_orthogonal_val]
-        abel
+        rw [sinThetaMap, LinearMap.comp_apply, projection_apply_of_mem huU]
+        -- `complementaryProjection` hides the `starProjection` the orthogonal
+        -- splitting lemma matches on, so finish by the splitting identity
+        exact (eq_sub_of_add_eq
+          (Submodule.starProjection_add_starProjection_orthogonal (K := V) u))
       rw [h1, h2, inner_sub_left,
         Submodule.inner_right_of_mem_orthogonal huU hzUperp,
         inner_sinThetaMap_apply_eq_zero_of_orthogonal_family U V hacute hzu hzj u,
@@ -953,15 +966,20 @@ theorem adjoint_comp_displacement_directRotation
   have hcomp : (directRotation U V hacute).symm.toLinearMap ∘ₗ
       (directRotation U V hacute).toLinearMap = LinearMap.id := by
     ext x
-    simp [LinearMap.comp_apply]
+    -- `simp` unfolds `directRotation` into its polar factor, after which
+    -- `symm_apply_apply` no longer matches; state the goal instead
+    show (directRotation U V hacute).symm ((directRotation U V hacute) x) = x
+    exact (directRotation U V hacute).symm_apply_apply x
   rw [map_sub, LinearMap.adjoint_id, hadj]
   have hexpand : (LinearMap.id - (directRotation U V hacute).symm.toLinearMap) ∘ₗ
       (LinearMap.id - (directRotation U V hacute).toLinearMap) =
       (2 : 𝕜) • LinearMap.id -
         ((directRotation U V hacute).toLinearMap +
           (directRotation U V hacute).symm.toLinearMap) := by
-    rw [LinearMap.sub_comp, LinearMap.comp_sub, LinearMap.comp_sub,
-      LinearMap.id_comp, LinearMap.comp_id, LinearMap.comp_id, hcomp]
+    -- `simp only` applies each identity as often as it occurs; the fixed `rw`
+    -- sequence assumed a multiplicity the goal does not have
+    simp only [LinearMap.sub_comp, LinearMap.comp_sub, LinearMap.id_comp,
+      LinearMap.comp_id, hcomp]
     ext x
     simp only [LinearMap.sub_apply, LinearMap.add_apply, LinearMap.smul_apply,
       LinearMap.id_apply]
@@ -1005,38 +1023,60 @@ theorem sum_repeated_pair_prefix {m : ℕ}
       (∑ i : Fin (min (k / 2) m), 2 * d (Fin.castLE (min_le_right _ _) i)) +
         if hodd : k % 2 = 1 ∧ k / 2 < m then d ⟨k / 2, hodd.2⟩ else 0 := by
   classical
-  rw [Fin.sum_univ_eq_sum_range]
+  -- Replace every `Fin`-indexed value by a total `ℕ`-indexed one.  The index
+  -- type on the right changes size with `k`, which no rewrite can follow, and
+  -- the embedded bound proofs block congruence.
+  set D : ℕ → ℝ := fun j => if h : j < m then d ⟨j, h⟩ else 0 with hD
+  have hDval : ∀ (j : ℕ) (h : j < m), D j = d ⟨j, h⟩ := fun _ h => dif_pos h
+  have hleft : (∑ n : Fin k, if hn : (n : ℕ) < 2 * m then
+        d ⟨(n : ℕ) / 2, (Nat.div_lt_iff_lt_mul (by omega)).2 (by omega)⟩
+      else 0) = ∑ j ∈ Finset.range k, (if j < 2 * m then D (j / 2) else 0) := by
+    rw [← Fin.sum_univ_eq_sum_range
+      (fun j : ℕ => if j < 2 * m then D (j / 2) else 0) k]
+    refine Finset.sum_congr rfl fun n _ => ?_
+    by_cases hn : (n : ℕ) < 2 * m
+    · rw [dif_pos hn, if_pos hn, hDval _ (by omega)]
+    · rw [dif_neg hn, if_neg hn]
+  have hright : ∀ (p : ℕ) (hp : p ≤ m),
+      (∑ i : Fin p, 2 * d (Fin.castLE hp i)) = ∑ j ∈ Finset.range p, 2 * D j := by
+    intro p hp
+    rw [← Fin.sum_univ_eq_sum_range (fun j : ℕ => 2 * D j) p]
+    refine Finset.sum_congr rfl fun i _ => ?_
+    rw [hDval _ (lt_of_lt_of_le i.isLt hp)]
+    rfl
+  have hextra : ∀ n : ℕ,
+      (if hodd : n % 2 = 1 ∧ n / 2 < m then d ⟨n / 2, hodd.2⟩ else 0) =
+        (if n % 2 = 1 ∧ n / 2 < m then D (n / 2) else 0) := by
+    intro n
+    by_cases h : n % 2 = 1 ∧ n / 2 < m
+    · rw [dif_pos h, if_pos h, hDval _ h.2]
+    · rw [dif_neg h, if_neg h]
+  rw [hleft, hright _ (min_le_right _ _), hextra]
+  clear hleft
   induction k with
   | zero => simp
   | succ k ih =>
       rw [Finset.sum_range_succ, ih]
       by_cases hkm : k < 2 * m
-      · simp only [dif_pos hkm]
+      · rw [if_pos hkm]
         rcases Nat.even_or_odd k with heven | hodd
         · obtain ⟨q, rfl⟩ := heven
-          have hq : q < m := by omega
-          have h1 : (q + q) / 2 = q := by omega
-          have h2 : (q + q) % 2 = 0 := by omega
-          have h3 : (q + q + 1) % 2 = 1 := by omega
-          have h4 : (q + q + 1) / 2 = q := by omega
-          simp only [h1, h2, h3, h4]
-          rw [dif_neg (by omega), dif_pos ⟨rfl, hq⟩]
-          have hmin : min ((q + q) / 2) m = q := by omega
-          have hmin' : min ((q + q + 1) / 2) m = q := by omega
-          rw [show ((q+q)/2) = q from h1, show ((q+q+1)/2) = q from h4]
-          simp
-      · have hkm' : 2 * m ≤ k := Nat.le_of_not_gt hkm
-        have h1 : min (k / 2) m = m := by omega
-        have h2 : min ((k+1) / 2) m = m := by omega
-        rw [dif_neg (by omega)]
-        have h3 : ¬ (k % 2 = 1 ∧ k / 2 < m) := by omega
-        have h4 : ¬ ((k+1) % 2 = 1 ∧ (k+1) / 2 < m) := by omega
-        rw [dif_neg h3, dif_neg h4, add_zero, add_zero, add_zero]
-        apply Finset.sum_congr
-        · congr 1
-          omega
-        · intro i _
-          rfl
+          rw [if_neg (by omega), if_pos (by omega),
+            show min ((q + q) / 2) m = min ((q + q + 1) / 2) m from by omega,
+            show (q + q) / 2 = (q + q + 1) / 2 from by omega]
+          ring
+        · obtain ⟨q, rfl⟩ := hodd
+          rw [if_pos (show (2 * q + 1) % 2 = 1 ∧ (2 * q + 1) / 2 < m from
+              by omega),
+            if_neg (by omega),
+            show min ((2 * q + 1 + 1) / 2) m = min ((2 * q + 1) / 2) m + 1 from
+              by omega,
+            Finset.sum_range_succ,
+            show min ((2 * q + 1) / 2) m = (2 * q + 1) / 2 from by omega]
+          ring
+      · rw [if_neg hkm, if_neg (by omega), if_neg (by omega),
+          show min ((k + 1) / 2) m = min (k / 2) m from by omega]
+        ring
 
 /-- **The singular values of the direct displacement** are the principal chord
 lengths, each repeated twice, followed by zeros.  This is the quantitative
@@ -1121,20 +1161,23 @@ theorem singularValues_directRotation_displacement
     else 0 with hμ
   have hμanti : Antitone μ := by
     intro a c hac
+    -- `omega` cannot see through `Fin` order or through `Fin.val` of a `mk`
+    have hac' : (a : ℕ) ≤ (c : ℕ) := hac
     rw [hμ]
     simp only
     split_ifs with h1 h2 h2
-    · have hchord := principalPlaneChord_antitone U V
-        (show (⟨(a : ℕ)/2, _⟩ : Fin m) ≤ ⟨(c : ℕ)/2, _⟩ from by
-          simp only [Fin.mk_le_mk]
-          omega)
-      have h0a := principalPlaneChord_nonneg U V
-        ⟨(a : ℕ)/2, (Nat.div_lt_iff_lt_mul (by omega)).2 (by omega)⟩
-      have h0c := principalPlaneChord_nonneg U V
-        ⟨(c : ℕ)/2, (Nat.div_lt_iff_lt_mul (by omega)).2 (by omega)⟩
+    · have hba : (a : ℕ)/2 < m := (Nat.div_lt_iff_lt_mul (by omega)).2 (by omega)
+      have hbc : (c : ℕ)/2 < m := (Nat.div_lt_iff_lt_mul (by omega)).2 (by omega)
+      have hchord := principalPlaneChord_antitone U V
+        (show (⟨(a : ℕ)/2, hba⟩ : Fin m) ≤ ⟨(c : ℕ)/2, hbc⟩ from
+          Fin.le_def.mpr (Nat.div_le_div_right hac'))
+      have h0a := principalPlaneChord_nonneg U V ⟨(a : ℕ)/2, hba⟩
+      have h0c := principalPlaneChord_nonneg U V ⟨(c : ℕ)/2, hbc⟩
       nlinarith
-    · positivity
+    -- `a ≤ c < 2m` makes this branch vacuous; the next one is the genuine
+    -- nonnegativity of a squared chord
     · omega
+    · positivity
     · exact le_rfl
   -- The Gram operator is diagonal in the extended basis.
   have hgram := adjoint_comp_displacement_directRotation U V hacute
@@ -1142,7 +1185,8 @@ theorem singularValues_directRotation_displacement
   have habs_j := abs_canonicalIntertwiner_apply_principalOrthogonalVector U V hacute
   have hdiag : ∀ k, (A.adjoint ∘ₗ A) (b k) = ((μ k : ℝ) : 𝕜) • b k := by
     intro k
-    rw [← hA]
+    -- `hgram` is stated in the unfolded form, so `A` has to be expanded here
+    rw [hA]
     by_cases hk : (k : ℕ) < 2 * m
     · have hbk : b k = v k := hb k hk
       rw [hgram, hbk, hv]
@@ -1178,7 +1222,6 @@ theorem singularValues_directRotation_displacement
           congr 1
           ext
           simp
-          omega
         have hne : (⟨2 * (i : ℕ), by omega⟩ : Fin (finrank 𝕜 E)) ≠ k := by
           intro h
           rw [← h] at hk
@@ -1263,10 +1306,9 @@ private theorem norm_sq_sum_smul_orthonormal
     rw [Finset.sum_eq_single a]
     · rw [inner_smul_right, orthonormal_iff_ite.mp hw a a, if_pos rfl, mul_one,
         RCLike.conj_mul]
-      norm_cast
     · intro c _ hca
       rw [inner_smul_right, orthonormal_iff_ite.mp hw a c,
-        if_neg (fun h => hca h.symm), mul_zero, mul_zero]
+        if_neg (fun h => hca h.symm), mul_zero]
     · intro ha
       exact absurd (Finset.mem_univ a) ha
   have := congrArg RCLike.re hinner
@@ -1285,7 +1327,6 @@ theorem principalPlaneChord_le_singularValues_restrictedDisplacement
     principalPlaneChord U V i ≤
       ((LinearMap.id - W.toLinearMap) ∘ₗ projection U).singularValues (i : ℕ) := by
   classical
-  set m := nontrivialAngleCount U V with hm
   set AW := (LinearMap.id - W.toLinearMap) ∘ₗ projection U with hAW
   have hiE : (i : ℕ) < finrank 𝕜 E :=
     lt_of_lt_of_le i.isLt (nontrivialAngleCount_le_finrank U V)
@@ -1319,7 +1360,7 @@ theorem principalPlaneChord_le_singularValues_restrictedDisplacement
   have hdisp : principalPlaneChord U V i ^ 2 ≤ ‖x - W x‖ ^ 2 := by
     have hxU : x ∈ U := hLU hxL
     -- Coefficients of `x` in the orthonormal family.
-    obtain ⟨β, hβ⟩ := (mem_span_range_iff_exists_fun 𝕜).mp hxL
+    obtain ⟨β, hβ⟩ := (Submodule.mem_span_range_iff_exists_fun 𝕜).mp hxL
     -- Norm of `x`.
     have hxnorm2 : ∑ a, ‖β a‖ ^ 2 = 1 := by
       have := norm_sq_sum_smul_orthonormal hu'on β
@@ -1356,7 +1397,6 @@ theorem principalPlaneChord_le_singularValues_restrictedDisplacement
               omega
             have h0 : 0 ≤ principalPlaneCosine U V (Fin.castLE (by omega) a) :=
               Real.sqrt_nonneg _
-            have := sq_nonneg (β a)
             calc ‖β a‖ ^ 2 * |principalPlaneCosine U V (Fin.castLE (by omega) a)| ^ 2
                 = |principalPlaneCosine U V (Fin.castLE (by omega) a)| ^ 2 * ‖β a‖ ^ 2 := by
                   ring
@@ -1450,8 +1490,10 @@ theorem singularValues_restrictedDisplacement_directRotation
       have h0a := principalPlaneChord_nonneg U V ⟨(a : ℕ), h2⟩
       have h0c := principalPlaneChord_nonneg U V ⟨(c : ℕ), h1⟩
       nlinarith
-    · positivity
+    -- `a ≤ c < 2m` makes this branch vacuous; the next one is the genuine
+    -- nonnegativity of a squared chord
     · omega
+    · positivity
     · exact le_rfl
   -- The Gram operator of the restricted displacement.
   have hgramfull := adjoint_comp_displacement_directRotation U V hacute
@@ -1474,8 +1516,10 @@ theorem singularValues_restrictedDisplacement_directRotation
         LinearMap.id_apply,
         abs_canonicalIntertwiner_apply_principalSourceVector U V hacute
           ⟨(k : ℕ), hk⟩]
-      rw [smul_sub, map_sub, map_smul, map_smul, projection_apply_of_mem hu,
-        projection_apply_of_mem hu, hμ]
+      rw [smul_sub, map_sub]
+      -- push the projector through every scalar before using its fixed point
+      simp only [map_smul, projection_apply_of_mem hu]
+      rw [hμ]
       simp only [dif_pos hk]
       rw [principalPlaneChord_sq]
       match_scalars
@@ -1490,9 +1534,6 @@ theorem singularValues_restrictedDisplacement_directRotation
             principalSourceVector U V i := by
           rw [hb _ hval, hv]
           simp only [dif_pos hval]
-          congr 1
-          ext
-          simp
         have hne : (⟨(i : ℕ), lt_of_lt_of_le i.isLt hmE⟩ :
             Fin (finrank 𝕜 E)) ≠ k := by
           intro h
