@@ -14,3 +14,4 @@ __pycache__
 
 # Local reference clones of external Lean repos (not vendored; see dev/external-lean-references.md)
 dev/reference-repos/
+*.toc
