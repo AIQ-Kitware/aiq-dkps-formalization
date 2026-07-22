@@ -619,5 +619,61 @@ theorem shortRotation_fullDisplacement_refuted :
         kyFanSum 4 (LinearMap.id - (directRotation U V hacute).toLinearMap) :=
   ⟨U4, V4, acute, Wequiv, rfl, principalAngle_le, kyFanSum_lt⟩
 
+/-! ### The source claim as a single proposition
+
+`shortRotation_fullDisplacement_refuted` exhibits a competitor beating the
+direct rotation in one particular unitarily invariant norm.  To refute the
+source claim *as stated* — "for every unitarily invariant norm" — that Ky Fan
+sum must be presented as an inhabitant of `UnitarilyInvariantNorm`, which is
+what `RectangularUnitarilyInvariantNorm.kyFan _ |>.toSquare` supplies. -/
+
+/-- **The transcribed Davis--Kahan Proposition 4.4**, in the finite-dimensional
+specialization: over a real inner-product space, if the largest principal angle
+is at most `π/3`, then the direct rotation minimizes *every* unitarily
+invariant norm of the full displacement `1 - V`, over unitaries `V` carrying
+`U` onto `V`.
+
+This is a `Prop`-valued definition rather than a theorem because the assertion
+is false; see `not_davisKahanProposition4_4_Finite`.  The `IsAcute` hypothesis
+is not an extra mathematical restriction: `Θ ≤ π/3` already excludes a right
+principal angle, and acuteness is what the direct-rotation constructor
+consumes. -/
+def DavisKahanProposition4_4_Finite : Prop :=
+  ∀ (E : Type*) [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+    [FiniteDimensional ℝ E]
+    (U V : Submodule ℝ E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hacute : IsAcute U V)
+    (_hshort : principalAngles U V 0 ≤ Real.pi / 3)
+    (W : E ≃ₗᵢ[ℝ] E)
+    (_hmap : U.map W.toLinearMap = V)
+    (N : UnitarilyInvariantNorm ℝ E),
+      N (LinearMap.id - (directRotation U V hacute).toLinearMap) ≤
+        N (LinearMap.id - W.toLinearMap)
+
+open ShortRotationCounterexample in
+/-- **The transcribed Proposition 4.4 is false**, in the "every unitarily
+invariant norm" form in which the source states it.  The witnessing norm is the
+trace norm of `ℝ⁴`, presented as the bundled unitarily invariant norm
+`(RectangularUnitarilyInvariantNorm.kyFan 4).toSquare`, whose underlying
+function is `kyFanSum 4`.
+
+Stated at universe `0`, where the witness `EuclideanSpace ℝ (Fin 4)` lives.
+Lean cannot quantify over universes, so `¬ P.{0}` is the strongest available
+refutation of the universe-polymorphic `P`; and since a polymorphic `P` holds
+only if it holds at every universe, refuting `P.{0}` refutes `P`. -/
+theorem not_davisKahanProposition4_4_Finite :
+    ¬ DavisKahanProposition4_4_Finite.{0} := by
+  intro h
+  have hN := h E4 U4 V4 acute principalAngle_le Wequiv rfl
+    (RectangularUnitarilyInvariantNorm.kyFan (𝕜 := ℝ) (E := E4) (F := E4) 4).toSquare
+  have hle : kyFanSum 4 (LinearMap.id - (directRotation U4 V4 acute).toLinearMap) ≤
+      kyFanSum 4 (LinearMap.id - Wequiv.toLinearMap) := by
+    simpa [RectangularUnitarilyInvariantNorm.toSquare,
+      RectangularUnitarilyInvariantNorm.kyFan_apply,
+      RectangularUnitarilyInvariantNorm.rectangularKyFanSum,
+      kyFanSum_eq_sum_fin] using hN
+  exact absurd hle (not_le.mpr kyFanSum_lt)
+
 end DavisKahanTheory
 end ForMathlib
