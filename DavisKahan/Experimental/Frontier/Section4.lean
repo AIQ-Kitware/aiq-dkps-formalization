@@ -17,7 +17,6 @@ partial sums, and rectangular ideal gauges.
 -/
 
 open scoped InnerProductSpace BigOperators
-open SpectraBridge
 
 namespace ForMathlib
 namespace DavisKahan
@@ -25,6 +24,9 @@ namespace Experimental
 namespace Frontier
 namespace Section4
 
+-- `SpectraBridge` is `ForMathlib.DavisKahan.Experimental.SpectraBridge`, so it
+-- can only be opened once those namespaces are entered
+open SpectraBridge
 open ExactSinTheta
 
 universe u
@@ -41,9 +43,12 @@ theorem proposition4_1_restrictedDisplacement_approximationNumbers
     (hWunitary : W ∈ unitary (H →L[ℂ] H))
     (hWmap : W * projection U = projection V * W)
     (n : ℕ) :
-    ((1 - spectraDirectRotation U V hacute) ∘L projection U)
-        .approximationNumber n ≤
-      ((1 - W) ∘L projection U).approximationNumber n := by
+    -- spelled out rather than by dot notation: the projection coercion makes
+    -- `.approximationNumber` on the following line resolve against `H`
+    ContinuousLinearMap.approximationNumber
+        ((1 - spectraDirectRotation U V hacute) ∘L projection U) n ≤
+      ContinuousLinearMap.approximationNumber
+        ((1 - W) ∘L projection U) n := by
   sorry
 
 /-- Davis--Kahan 1970, Corollary 4.1 at rectangular ideal-gauge scope. -/
@@ -59,7 +64,7 @@ theorem corollary4_1_restrictedDisplacement_idealGauge
   sorry
 
 /-- Squared sine cost of one unit source vector under a unitary competitor. -/
-def basisAngleSquareCost (W : H →L[ℂ] H) (x : H) : ℝ :=
+noncomputable def basisAngleSquareCost (W : H →L[ℂ] H) (x : H) : ℝ :=
   1 - (RCLike.re ⟪x, W x⟫_ℂ) ^ 2
 
 /-- Davis--Kahan 1970, Proposition 4.2: every finite partial sum along an

@@ -6,6 +6,8 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 
 import DavisKahan.Experimental.Frontier.Core
 import DavisKahan.Interop.Spectra.DirectRotation
+-- supplies `spectraReflectionProduct` and `IsAcute.symm`
+import DavisKahan.Interop.Spectra.DirectRotationSquare
 
 /-!
 # Section 3 frontier: separation and classification of two subspaces
@@ -87,7 +89,7 @@ minus-one spectral subspace. -/
 theorem proposition3_3_principalSquareRoot_converse
     (T : H →L[ℂ] H)
     (hroot : IsPrincipalUnitarySquareRoot
-      (reflectionProduct U V) T)
+      (spectraReflectionProduct U V) T)
     (hcross : T '' (halmosSourceDefect U V : Set H) =
       (halmosTargetDefect U V : Set H)) :
     IsPaperDirectRotation U V T := by
@@ -102,7 +104,13 @@ theorem proposition3_4_square_is_reflected_directRotation
       0 ≤ RCLike.re
         ⟪x, (spectraOperatorAbsoluteValue
           (spectraCanonicalIntertwiner U V)) x⟫_ℂ - ‖x‖ ^ 2 / 2) :
-    ∃ Uref Vref : Submodule ℂ H,
+    -- the reflected pair is existentially quantified, so its orthogonal
+    -- projections cannot be found by instance search; they are bound here and
+    -- reinstated with `haveI` inside the body
+    ∃ (Uref Vref : Submodule ℂ H) (iU : Uref.HasOrthogonalProjection)
+        (iV : Vref.HasOrthogonalProjection),
+      haveI : Uref.HasOrthogonalProjection := iU
+      haveI : Vref.HasOrthogonalProjection := iV
       ∃ hacuteRef : IsAcute Uref Vref,
         spectraDirectRotation U V hacute *
             spectraDirectRotation U V hacute =
@@ -118,8 +126,14 @@ def IsFixedCosineReducingSubspace
   (∀ x : H, x ∈ M → x ∈ U → ‖projection V x‖ = c * ‖x‖) ∧
   (∀ x : H, x ∈ M → x ∈ V → ‖projection U x‖ = c * ‖x‖)
 
-/-- The fixed-cosine spectral subspace on the generic Halmos summand. -/
-noncomputable def fixedCosineSubspace (c : ℝ) : Submodule ℂ H := by
+/-- The fixed-cosine spectral subspace on the generic Halmos summand.
+
+The pair is bound explicitly rather than taken from the section: the body is
+still an open obligation, so auto-inclusion would not fire and the subspace
+would spuriously fail to depend on the pair it is defined from. -/
+noncomputable def fixedCosineSubspace (U V : Submodule ℂ H)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (c : ℝ) : Submodule ℂ H := by
   sorry
 
 /-- Davis--Kahan 1970, Proposition 3.5: in the acute case each fixed-angle
@@ -136,7 +150,8 @@ theorem proposition3_5_fixedAngle_maximal
 angle data and reverses the canonical quarter-turn. -/
 theorem corollary3_2_reversal_source_form
     (hacute : IsAcute U V) :
-    spectraDirectRotation V U hacute.symm =
+    spectraDirectRotation V U
+        (_root_.ForMathlib.DavisKahan.IsAcute.symm hacute) =
       star (spectraDirectRotation U V hacute) := by
   sorry
 

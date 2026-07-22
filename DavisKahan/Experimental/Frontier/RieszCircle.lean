@@ -83,10 +83,10 @@ theorem circleRieszProjection_eq_boundedSelfAdjointSpectralProjection
 theorem norm_circleRieszProjection_sub_le
     (A E : H →L[ℂ] H) (center radius margin : ℝ)
     (hmargin : 0 < margin)
-    (hAres : ∀ z : ℂ, Complex.abs (z - center) = radius →
-      ‖(z • (1 : H →L[ℂ] H) - A)⁻¹‖ ≤ margin⁻¹)
-    (hAEres : ∀ z : ℂ, Complex.abs (z - center) = radius →
-      ‖(z • (1 : H →L[ℂ] H) - (A + E))⁻¹‖ ≤ margin⁻¹) :
+    (hAres : ∀ z : ℂ, ‖z - (center : ℂ)‖ = radius →
+      ‖Ring.inverse (z • (1 : H →L[ℂ] H) - A)‖ ≤ margin⁻¹)
+    (hAEres : ∀ z : ℂ, ‖z - (center : ℂ)‖ = radius →
+      ‖Ring.inverse (z • (1 : H →L[ℂ] H) - (A + E))‖ ≤ margin⁻¹) :
     ‖Frontier.circleRieszProjection (A + E) center radius -
         Frontier.circleRieszProjection A center radius‖ ≤
       radius * ‖E‖ / margin ^ 2 := by
@@ -97,7 +97,7 @@ self-adjoint path. -/
 theorem continuous_circleRieszProjection_path
     (A E : H →L[ℂ] H) (center radius : ℝ)
     (hres : ∀ t ∈ Set.Icc (0 : ℝ) 1,
-      ∀ z : ℂ, Complex.abs (z - center) = radius →
+      ∀ z : ℂ, ‖z - (center : ℂ)‖ = radius →
         IsUnit (z • (1 : H →L[ℂ] H) - (A + t • E))) :
     ContinuousOn
       (fun t : ℝ => Frontier.circleRieszProjection (A + t • E) center radius)
