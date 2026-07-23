@@ -28,6 +28,7 @@ namespace ExactSinTheta
 namespace HiddenFoundations
 
 open scoped InnerProductSpace
+open Filter
 
 noncomputable section
 
@@ -92,9 +93,9 @@ theorem paperHilbertSchmidtNorm_eq_zero
   have hzNorm : ‖z‖ = 0 := by
     rw [norm_paperHilbertSchmidtTensor]
     exact hzero
-  have hz : z = 0 := norm_eq_zero.mp hzNorm
+  have hz : paperHilbertSchmidtTensor A hA = 0 := norm_eq_zero.mp hzNorm
   have hrepr := toOperator_paperHilbertSchmidtTensor A hA
-  rw [show z = 0 from hz, Spectra.HilbertSchmidtTensor.toOperator_zero] at hrepr
+  rw [hz, Spectra.HilbertSchmidtTensor.toOperator_zero] at hrepr
   exact hrepr.symm
 
 /-- The operator norm is bounded by the paper Hilbert--Schmidt norm. -/
@@ -108,14 +109,21 @@ theorem opNorm_le_paperHilbertSchmidtNorm
     _ ≤ ‖z‖ := Spectra.HilbertSchmidtTensor.norm_toOperator_le z
     _ = paperHilbertSchmidtNorm A := norm_paperHilbertSchmidtTensor A hA
 
+/-- Subtraction preserves the paper Hilbert--Schmidt class. -/
+theorem isPaperHilbertSchmidt_sub
+    {A B : E →L[ℂ] F}
+    (hA : IsPaperHilbertSchmidt A)
+    (hB : IsPaperHilbertSchmidt B) :
+    IsPaperHilbertSchmidt (A - B) := by
+  rw [sub_eq_add_neg]
+  exact isPaperHilbertSchmidt_add hA ((isPaperHilbertSchmidt_neg_iff B).2 hB)
+
 /-- The canonical tensor respects subtraction. -/
 theorem paperHilbertSchmidtTensor_sub
     {A B : E →L[ℂ] F}
     (hA : IsPaperHilbertSchmidt A)
     (hB : IsPaperHilbertSchmidt B) :
-    paperHilbertSchmidtTensor (A - B)
-        (isPaperHilbertSchmidt_add hA
-          ((isPaperHilbertSchmidt_neg_iff B).2 hB)) =
+    paperHilbertSchmidtTensor (A - B) (isPaperHilbertSchmidt_sub hA hB) =
       paperHilbertSchmidtTensor A hA -
         paperHilbertSchmidtTensor B hB := by
   apply Spectra.HilbertSchmidtTensor.toOperator_injective
@@ -138,14 +146,13 @@ theorem paperHilbertSchmidt_complete
   let z : ℕ → Spectra.HilbertSchmidtTensor.Space F E :=
     fun n => paperHilbertSchmidtTensor (A n) (hA n)
   have hzCauchy : CauchySeq z := by
-    rw [Metric.cauchy_iff]
+    rw [Metric.cauchySeq_iff]
     intro ε hε
     obtain ⟨N, hN⟩ := hcauchy ε hε
     refine ⟨N, ?_⟩
     intro m hm n hn
     have hsub : IsPaperHilbertSchmidt (A m - A n) :=
-      isPaperHilbertSchmidt_add (hA m)
-        ((isPaperHilbertSchmidt_neg_iff (A n)).2 (hA n))
+      isPaperHilbertSchmidt_sub (hA m) (hA n)
     have hcanon : paperHilbertSchmidtTensor (A m - A n) hsub = z m - z n := by
       apply Spectra.HilbertSchmidtTensor.toOperator_injective
       rw [toOperator_paperHilbertSchmidtTensor,
@@ -162,21 +169,16 @@ theorem paperHilbertSchmidt_complete
     isPaperHilbertSchmidt_toOperator zlim
   refine ⟨L, hL, ?_⟩
   intro ε hε
-  have hevent : ∀ᶠ n in atTop, dist (z n) zlim < ε :=
-    (Metric.tendsto_atTop.1 hzlim) ε hε
-  obtain ⟨N, hN⟩ := eventually_atTop.1 hevent
+  obtain ⟨N, hN⟩ := (Metric.tendsto_atTop.1 hzlim) ε hε
   refine ⟨N, ?_⟩
   intro n hn
   have hsub : IsPaperHilbertSchmidt (A n - L) :=
-    isPaperHilbertSchmidt_add (hA n)
-      ((isPaperHilbertSchmidt_neg_iff L).2 hL)
+    isPaperHilbertSchmidt_sub (hA n) hL
   have hcanon : paperHilbertSchmidtTensor (A n - L) hsub = z n - zlim := by
     apply Spectra.HilbertSchmidtTensor.toOperator_injective
     rw [toOperator_paperHilbertSchmidtTensor,
       Spectra.HilbertSchmidtTensor.toOperator_sub,
-      toOperator_paperHilbertSchmidtTensor,
-      Spectra.HilbertSchmidtTensor.toOperatorL_apply]
-    rfl
+      toOperator_paperHilbertSchmidtTensor]
   have hnorm : paperHilbertSchmidtNorm (A n - L) = ‖z n - zlim‖ := by
     rw [← norm_paperHilbertSchmidtTensor (A n - L) hsub, hcanon]
   rw [hnorm, ← dist_eq_norm]
@@ -190,15 +192,15 @@ noncomputable def hilbertSchmidtComplex :
     { Mem := fun T => IsPaperHilbertSchmidt T
       gauge := fun T => paperHilbertSchmidtNorm T
       zero_mem := by
-        intro E F _ _ _ _
+        intro E F _ _ _ _ _ _
         unfold IsPaperHilbertSchmidt
         rw [paperHilbertSchmidtEnergy_zero]
         exact ENNReal.zero_ne_top
       add_mem := by
-        intro E F _ _ _ _ A B hA hB
+        intro E F _ _ _ _ _ _ A B hA hB
         exact isPaperHilbertSchmidt_add hA hB
       smul_mem := by
-        intro E F _ _ _ _ c A hA
+        intro E F _ _ _ _ _ _ c A hA
         by_cases hc : c = 0
         · subst c
           simpa using (show IsPaperHilbertSchmidt (0 : E →L[ℂ] F) from by
@@ -207,37 +209,37 @@ noncomputable def hilbertSchmidtComplex :
             exact ENNReal.zero_ne_top)
         · exact (isPaperHilbertSchmidt_smul_iff c hc A).2 hA
       adjoint_mem := by
-        intro E F _ _ _ _ A hA
+        intro E F _ _ _ _ _ _ A hA
         exact (isPaperHilbertSchmidt_adjoint_iff A).2 hA
       comp_mem := by
-        intro E F G H _ _ _ _ _ _ _ _ L A R hA
+        intro E F G H _ _ _ _ _ _ _ _ _ _ _ _ L A R hA
         exact hA.comp L R
       gauge_nonneg := by
-        intro E F _ _ _ _ A hA
+        intro E F _ _ _ _ _ _ A hA
         exact paperHilbertSchmidtNorm_nonneg A
       gauge_zero := by
-        intro E F _ _ _ _
+        intro E F _ _ _ _ _ _
         exact paperHilbertSchmidtNorm_zero
       gauge_eq_zero := by
-        intro E F _ _ _ _ A hA hzero
+        intro E F _ _ _ _ _ _ A hA hzero
         exact paperHilbertSchmidtNorm_eq_zero hA hzero
       gauge_add_le := by
-        intro E F _ _ _ _ A B hA hB
+        intro E F _ _ _ _ _ _ A B hA hB
         exact paperHilbertSchmidtNorm_add_le hA hB
       gauge_smul := by
-        intro E F _ _ _ _ c A hA
+        intro E F _ _ _ _ _ _ c A hA
         exact paperHilbertSchmidtNorm_smul c A hA
       gauge_adjoint := by
-        intro E F _ _ _ _ A hA
+        intro E F _ _ _ _ _ _ A hA
         exact paperHilbertSchmidtNorm_adjoint A
       gauge_comp_le := by
-        intro E F G H _ _ _ _ _ _ _ _ L A R hA
+        intro E F G H _ _ _ _ _ _ _ _ _ _ _ _ L A R hA
         exact paperHilbertSchmidtNorm_comp_le L hA R
       opNorm_le_gauge := by
-        intro E F _ _ _ _ A hA
+        intro E F _ _ _ _ _ _ A hA
         exact opNorm_le_paperHilbertSchmidtNorm hA
       gauge_complete := by
-        intro E F _ _ _ _ A hA hcauchy
+        intro E F _ _ _ _ _ _ A hA hcauchy
         exact paperHilbertSchmidt_complete A hA hcauchy }
 
 end
