@@ -284,11 +284,48 @@ theorem orderedSylvester_reconstruction
     (hEq : A ∘L X - X ∘L B = C) :
     X = ∫ t : ℝ, Set.indicator (Set.Ici 0)
       (fun t => semigroup (-A) t ∘L C ∘L semigroup B t) t := by
-  -- Open obligation: assemble the truncated-integral limit (endpoint decay via
-  -- `tendsto_ordered_solution_orbit_zero`, `Ici`-integral as the limit of
-  -- `Icc 0 T` integrals) into the reconstruction; handed to the mathematics
-  -- agent.
-  sorry
+  have hcontA : Continuous (semigroup (-A)) :=
+    continuous_iff_continuousAt.mpr fun t => (hasDerivAt_semigroup (-A) t).continuousAt
+  have hcontB : Continuous (semigroup B) :=
+    continuous_iff_continuousAt.mpr fun t => (hasDerivAt_semigroup B t).continuousAt
+  have hcont : Continuous (fun t : ℝ => semigroup (-A) t ∘L C ∘L semigroup B t) :=
+    (hcontA.clm_comp continuous_const).clm_comp hcontB
+  have hmajor : IntegrableOn (fun t : ℝ => Real.exp (-d * t) * ‖C‖) (Set.Ici 0) :=
+    ((exp_neg_integrableOn_Ioi 0 hd).congr_set_ae Ioi_ae_eq_Ici.symm).mul_const ‖C‖
+  have hIntIci : IntegrableOn
+      (fun t : ℝ => semigroup (-A) t ∘L C ∘L semigroup B t) (Set.Ici 0) := by
+    refine hmajor.mono' hcont.aestronglyMeasurable.restrict ?_
+    filter_upwards [ae_restrict_mem measurableSet_Ici] with t ht
+    exact orderedSemigroup_integrand_bound hA hB hd hsep C t ht
+  have hmono : Monotone (fun n : ℕ => Set.Icc (0 : ℝ) (n : ℝ)) :=
+    fun a b hab => Set.Icc_subset_Icc_right (by exact_mod_cast hab)
+  have hunion : ⋃ n : ℕ, Set.Icc (0 : ℝ) (n : ℝ) = Set.Ici 0 := by
+    ext x
+    simp only [Set.mem_iUnion, Set.mem_Icc, Set.mem_Ici]
+    constructor
+    · rintro ⟨n, hx0, -⟩; exact hx0
+    · intro hx0
+      obtain ⟨n, hn⟩ := exists_nat_ge x
+      exact ⟨n, hx0, hn⟩
+  -- The truncated integrals converge to the improper `Ici 0` integral.
+  have hlim2 : Tendsto (fun n : ℕ => ∫ t in Set.Icc (0 : ℝ) (n : ℝ),
+      semigroup (-A) t ∘L C ∘L semigroup B t) atTop
+      (nhds (∫ t in Set.Ici (0 : ℝ), semigroup (-A) t ∘L C ∘L semigroup B t)) := by
+    have h := MeasureTheory.tendsto_setIntegral_of_monotone
+      (s := fun n : ℕ => Set.Icc (0 : ℝ) (n : ℝ))
+      (fun n => measurableSet_Icc) hmono (by rw [hunion]; exact hIntIci)
+    rwa [hunion] at h
+  -- The truncated left-hand sides converge to `X` (endpoint decay).
+  have hlim1 : Tendsto (fun n : ℕ =>
+      X - semigroup (-A) (n : ℝ) ∘L X ∘L semigroup B (n : ℝ)) atTop (nhds X) := by
+    have h0 := (tendsto_ordered_solution_orbit_zero hA hB hd hsep X).comp
+      tendsto_natCast_atTop_atTop
+    simpa [Function.comp_def] using tendsto_const_nhds.sub h0
+  have heq : ∀ n : ℕ, X - semigroup (-A) (n : ℝ) ∘L X ∘L semigroup B (n : ℝ)
+      = ∫ t in Set.Icc (0 : ℝ) (n : ℝ), semigroup (-A) t ∘L C ∘L semigroup B t :=
+    fun n => ordered_orbit_sub_eq_integral A B X C hEq (Nat.cast_nonneg n)
+  rw [MeasureTheory.integral_indicator measurableSet_Ici]
+  exact tendsto_nhds_unique (hlim1.congr heq) hlim2
 
 end
 
