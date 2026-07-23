@@ -13,6 +13,10 @@ import DavisKahan.Interop.Spectra.DirectRotationSquare
 -- construction depends on the polar and acute machinery under `MathAhead`, which
 -- itself never imports this module, so the dependency is acyclic.
 import DavisKahan.Experimental.MathAhead.HiddenFoundations.Section3Nonacute
+-- supplies the forward direction of the operator-level Halmos classification
+-- (`sameHalmosInvariant_of_pairEquiv`).  This module imports only Frontier/Core,
+-- so the dependency is acyclic.
+import DavisKahan.Experimental.MathAhead.HiddenFoundations.HalmosClassification
 
 /-!
 # Section 3 frontier: separation and classification of two subspaces
@@ -195,11 +199,38 @@ structure SameHalmosOperatorInvariant : Prop where
     (genericHalmosCosineSq U₁ V₁)
     (genericHalmosCosineSq U₂ V₂)
 
+/-- Forward direction of the operator-level Halmos classification: a unitary
+equivalence of the ordered pairs induces the complete operator invariant.  The
+restriction of the equivalence to each elementary Halmos summand is a linear
+isometric equivalence, and on the generic remainder it intertwines the
+cosine-square operator.  Proved axiom-clean in
+`MathAhead.HiddenFoundations.sameHalmosInvariant_of_pairEquiv`. -/
+theorem sameHalmosOperatorInvariant_of_pairEquiv
+    (h : PairOfSubspacesUnitaryEquivalent U₁ V₁ U₂ V₂) :
+    SameHalmosOperatorInvariant U₁ V₁ U₂ V₂ := by
+  obtain ⟨hc, hs, ht, he, hg⟩ :=
+    MathAhead.HiddenFoundations.sameHalmosInvariant_of_pairEquiv U₁ V₁ U₂ V₂ h
+  exact ⟨⟨hc, hs, ht, he⟩, hg⟩
+
 /-- Operator-level Halmos classification.  This is the constructive spine of
-Davis--Kahan Theorem 3.1 and does not require a direct-integral presentation. -/
+Davis--Kahan Theorem 3.1 and does not require a direct-integral presentation.
+
+The forward direction is proved (`sameHalmosOperatorInvariant_of_pairEquiv`).
+The converse — reconstructing a pair-equivalence from the operator invariant —
+still needs two bricks, neither yet available: (1) the generic 2×2 Halmos model,
+which upgrades a bare unitary equivalence of the two generic cosine-square
+operators to a unitary of the generic subspaces intertwining *both* projections
+(equivalently, the reconstruction of the reducing angle pair from `cos²Θ`); and
+(2) the block-diagonal orthogonal assembly gluing the four elementary summand
+isometries and the generic-part unitary into a global `H₁ ≃ₗᵢ[ℂ] H₂` carrying
+`U₁, V₁` to `U₂, V₂`.  On the four elementary summands the assembled map
+automatically intertwines both projections, so brick (2) reduces to a
+Hilbert-sum gluing and brick (1) is the sole genuinely missing mathematics. -/
 theorem twoProjection_operator_classification :
     PairOfSubspacesUnitaryEquivalent U₁ V₁ U₂ V₂ ↔
       SameHalmosOperatorInvariant U₁ V₁ U₂ V₂ := by
+  refine ⟨sameHalmosOperatorInvariant_of_pairEquiv U₁ V₁ U₂ V₂, ?_⟩
+  intro _hinv
   sorry
 
 /-- Davis--Kahan 1970, Theorem 3.1: spectral multiplicity data of the two angle
