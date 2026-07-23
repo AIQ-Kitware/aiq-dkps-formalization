@@ -175,14 +175,156 @@ theorem polarIsometry_comp_adjoint_self (T : H →L[ℂ] H) :
   rw [heq]
   congr 1
 
-/-- The adjoint polar isometry is the polar isometry of the adjoint. -/
+/-- The adjoint polar isometry is the polar isometry of the adjoint.
+
+The proof is polar-decomposition uniqueness.  Writing `U = polarIsometry T` and
+`W = polarIsometry T†`, we prove `U† = W` by showing they agree on the closed
+range `L = closure (range T)` and vanish together on `Lᗮ = ker T†`.  The load
+-bearing new identity is the abs-adjoint conjugation `|T†| = U |T| U†`, obtained
+from square-root uniqueness in the C⋆-algebra `H →L[ℂ] H`: the conjugate is
+nonnegative and squares to `T T†`.  From it, `T = |T†| U`, so on `range T` both
+`U†` and `W` send `T x` to `|T| x`; the complement is handled by the two initial
+/final projection identities. -/
 theorem adjoint_polarIsometry (T : H →L[ℂ] H) :
     (polarIsometry T)† = polarIsometry (T†) := by
-  -- Open obligation: the adjoint polar isometry equals the polar isometry of
-  -- the adjoint, requiring `closure_range_abs_adjoint_eq_closure_range` and the
-  -- partial-adjoint formula (deep polar-decomposition theory not yet in
-  -- Spectra); handed to the mathematics agent.
-  sorry
+  -- Self-adjointness of the modulus and the initial projection, as adjoint
+  -- identities usable by `rw`.
+  have hSA_abs : (absOp T)† = absOp T := (absOp_isSelfAdjoint T).adjoint_eq
+  -- Basic factorization identities for the polar decomposition of `T`.
+  have hUS : polarIsometry T ∘L absOp T = T := polar_decomposition T
+  have hUadjU : (polarIsometry T)† ∘L polarIsometry T = (polarRange T).starProjection :=
+    polarIsometry_adjoint_comp_self T
+  -- `|T| U† = T†` (adjoint of `U |T| = T`).
+  have hSU : absOp T ∘L (polarIsometry T)† = T† := by
+    have h := congrArg ContinuousLinearMap.adjoint hUS
+    rwa [ContinuousLinearMap.adjoint_comp, hSA_abs] at h
+  -- `T† U = |T|` (adjoint of `U† T = |T|`).
+  have hTadjU : T† ∘L polarIsometry T = absOp T := by
+    have h := congrArg ContinuousLinearMap.adjoint (polarIsometry_adjoint_comp T)
+    rwa [ContinuousLinearMap.adjoint_comp, ContinuousLinearMap.adjoint_adjoint, hSA_abs] at h
+  -- `P_K |T| = |T|` and `|T| P_K = |T|`, where `K = polarRange T`.
+  have hPS : (polarRange T).starProjection ∘L absOp T = absOp T := by
+    ext x
+    simp only [ContinuousLinearMap.comp_apply]
+    exact Submodule.starProjection_eq_self_iff.2 (absOp_mem_polarRange T x)
+  have hSP : absOp T ∘L (polarRange T).starProjection = absOp T := by
+    have h := congrArg ContinuousLinearMap.adjoint hPS
+    simp only [ContinuousLinearMap.adjoint_comp, hSA_abs,
+      (isSelfAdjoint_starProjection (polarRange T)).adjoint_eq] at h
+    exact h
+  -- **The abs-adjoint conjugation identity** `|T†| = U |T| U†`.
+  have habs : absOp (T†) = polarIsometry T ∘L absOp T ∘L (polarIsometry T)† := by
+    -- The conjugate is nonnegative.
+    have hnonneg : 0 ≤ polarIsometry T ∘L absOp T ∘L (polarIsometry T)† := by
+      have h := star_right_conjugate_nonneg (absOp_nonneg T) (polarIsometry T)
+      simpa only [ContinuousLinearMap.star_eq_adjoint, ContinuousLinearMap.mul_def,
+        ContinuousLinearMap.comp_assoc] using h
+    -- The conjugate squares to `T ∘L T†`.
+    have hAA : (polarIsometry T ∘L absOp T ∘L (polarIsometry T)†) ∘L
+        (polarIsometry T ∘L absOp T ∘L (polarIsometry T)†) = T ∘L T† := by
+      ext x
+      simp only [ContinuousLinearMap.comp_apply]
+      -- Collapse the inner `U† U` to `P_K`, which fixes `|T| (U† x)`.
+      have e1 : ((polarIsometry T)†) (polarIsometry T (absOp T (((polarIsometry T)†) x))) = absOp T (((polarIsometry T)†) x) := by
+        rw [← ContinuousLinearMap.comp_apply, hUadjU]
+        exact Submodule.starProjection_eq_self_iff.2 (absOp_mem_polarRange T _)
+      have e2 : polarIsometry T (absOp T (absOp T (((polarIsometry T)†) x))) = T (absOp T (((polarIsometry T)†) x)) := by
+        rw [← ContinuousLinearMap.comp_apply, hUS]
+      have e3 : absOp T (((polarIsometry T)†) x) = (T†) x := by
+        rw [← ContinuousLinearMap.comp_apply, hSU]
+      rw [e1, e2, e3]
+    -- `star T† = T`, so the square target is `star T† * T†`.
+    have hstar : star (T†) = T := by
+      rw [ContinuousLinearMap.star_eq_adjoint, ContinuousLinearMap.adjoint_adjoint]
+    have hgoal : (polarIsometry T ∘L absOp T ∘L (polarIsometry T)†)
+        * (polarIsometry T ∘L absOp T ∘L (polarIsometry T)†) = star (T†) * (T†) := by
+      rw [ContinuousLinearMap.mul_def, hAA, hstar, ← ContinuousLinearMap.mul_def]
+    -- Conclude by square-root uniqueness.
+    rw [show absOp (T†) = CFC.abs (T†) from rfl, CFC.abs]
+    exact CFC.sqrt_unique hgoal hnonneg
+  -- `T = |T†| U`, the left polar decomposition.
+  have hT_left : absOp (T†) ∘L polarIsometry T = T := by
+    ext x
+    rw [ContinuousLinearMap.comp_apply, habs]
+    simp only [ContinuousLinearMap.comp_apply]
+    rw [show ((polarIsometry T)†) (polarIsometry T x) = (polarRange T).starProjection x from by
+          rw [← ContinuousLinearMap.comp_apply, hUadjU]]
+    rw [show absOp T ((polarRange T).starProjection x) = absOp T x from by
+          rw [← ContinuousLinearMap.comp_apply, hSP]]
+    rw [← ContinuousLinearMap.comp_apply, hUS]
+  -- `W ∘L T = |T|`.
+  have hWT : polarIsometry (T†) ∘L T = absOp T := by
+    calc polarIsometry (T†) ∘L T
+        = polarIsometry (T†) ∘L (absOp (T†) ∘L polarIsometry T) := by rw [hT_left]
+      _ = (polarIsometry (T†) ∘L absOp (T†)) ∘L polarIsometry T := by
+          rw [← ContinuousLinearMap.comp_assoc]
+      _ = T† ∘L polarIsometry T := by rw [polar_decomposition]
+      _ = absOp T := hTadjU
+  -- The carrier of the final space is `closure (range T)`.
+  have hFRcoe : (polarFinalRange T : Set H) = closure (Set.range (T : H → H)) := by
+    rw [polarFinalRange, Submodule.topologicalClosure_coe, LinearMap.coe_range,
+      ContinuousLinearMap.range_toLinearMap]
+  -- Agreement on `L = polarFinalRange T`.
+  have hL : ∀ y ∈ polarFinalRange T, ((polarIsometry T)†) y = polarIsometry (T†) y := by
+    have hclosed : IsClosed {y : H | ((polarIsometry T)†) y = polarIsometry (T†) y} :=
+      isClosed_eq ((polarIsometry T)†).continuous (polarIsometry (T†)).continuous
+    have hsub : Set.range (T : H → H) ⊆
+        {y : H | ((polarIsometry T)†) y = polarIsometry (T†) y} := by
+      rintro _ ⟨x, rfl⟩
+      show ((polarIsometry T)†) (T x) = polarIsometry (T†) (T x)
+      rw [← ContinuousLinearMap.comp_apply, ← ContinuousLinearMap.comp_apply,
+        polarIsometry_adjoint_comp T, hWT]
+    intro y hy
+    have hyc : (y : H) ∈ closure (Set.range (T : H → H)) := by rw [← hFRcoe]; exact hy
+    exact (closure_minimal hsub hclosed) hyc
+  -- Common vanishing on `Lᗮ`.
+  have hLperp : ∀ y ∈ (polarFinalRange T)ᗮ,
+      ((polarIsometry T)†) y = polarIsometry (T†) y := by
+    intro y hy
+    have hUy : ((polarIsometry T)†) y = 0 := by
+      have hproj : polarIsometry T (((polarIsometry T)†) y) = 0 := by
+        rw [← ContinuousLinearMap.comp_apply, polarIsometry_comp_adjoint_self T]
+        exact (polarFinalRange T).starProjection_apply_eq_zero_iff.2 hy
+      have hzero : ⟪((polarIsometry T)†) y, ((polarIsometry T)†) y⟫_ℂ = 0 := by
+        rw [ContinuousLinearMap.adjoint_inner_left, hproj, inner_zero_right]
+      exact inner_self_eq_zero.1 hzero
+    have hWy : polarIsometry (T†) y = 0 := by
+      have hTy : (T†) y = 0 := by
+        have hmem : y ∈ (LinearMap.range T.toLinearMap)ᗮ := by
+          have h := hy
+          rwa [polarFinalRange, Submodule.orthogonal_closure] at h
+        have hzero : ⟪(T†) y, (T†) y⟫_ℂ = 0 := by
+          rw [ContinuousLinearMap.adjoint_inner_left]
+          exact (Submodule.mem_orthogonal' _ _).1 hmem (T ((T†) y)) ⟨(T†) y, rfl⟩
+        exact inner_self_eq_zero.1 hzero
+      have hAbsy : absOp (T†) y = 0 := by
+        have hn : ‖absOp (T†) y‖ = 0 := by rw [norm_absOp_apply, hTy, norm_zero]
+        exact norm_eq_zero.1 hn
+      have hyperp : (polarRange (T†)).starProjection y = 0 := by
+        rw [Submodule.starProjection_apply_eq_zero_iff, polarRange,
+          Submodule.orthogonal_closure, Submodule.mem_orthogonal]
+        rintro u ⟨w, rfl⟩
+        have hsym := (absOp_isSelfAdjoint (T†)).isSymmetric
+        rw [hsym w y]
+        show ⟪w, absOp (T†) y⟫_ℂ = 0
+        rw [hAbsy, inner_zero_right]
+      have hWadj : ((polarIsometry (T†))†) (polarIsometry (T†) y) = 0 := by
+        rw [← ContinuousLinearMap.comp_apply, polarIsometry_adjoint_comp_self, hyperp]
+      have hzero : ⟪polarIsometry (T†) y, polarIsometry (T†) y⟫_ℂ = 0 := by
+        rw [← ContinuousLinearMap.adjoint_inner_left, hWadj, inner_zero_left]
+      exact inner_self_eq_zero.1 hzero
+    rw [hUy, hWy]
+  -- Assemble via the orthogonal decomposition `x = P_L x + (x - P_L x)`.
+  ext x
+  have hPx : (polarFinalRange T).starProjection x ∈ polarFinalRange T :=
+    Submodule.starProjection_apply_mem _ _
+  have hrem : x - (polarFinalRange T).starProjection x ∈ (polarFinalRange T)ᗮ :=
+    Submodule.sub_starProjection_mem_orthogonal x
+  have hxadd : (polarFinalRange T).starProjection x
+      + (x - (polarFinalRange T).starProjection x) = x := by abel
+  conv_lhs => rw [← hxadd]
+  conv_rhs => rw [← hxadd]
+  rw [ContinuousLinearMap.map_add, ContinuousLinearMap.map_add, hL _ hPx, hLperp _ hrem]
 
 end
 end Channels
