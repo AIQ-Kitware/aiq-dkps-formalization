@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Experimental.InfiniteDimensional.Core.SpectralProjection
+import DavisKahan.Experimental.InfiniteDimensional.Sylvester.FiniteBlockReconstruction
 import ForMathlib.Analysis.Fourier.HaagerupZsidoKernel
 import Spectra.YosidaHille.Approximation.ExpBounded.Unitary
 import Spectra.CayleyTransform.BorelCalculus
@@ -294,11 +295,9 @@ theorem FiniteSpectralStep.sum_projection_eq_one
     {A : H →L[ℂ] H} {hA : IsSelfAdjointOperator A}
     (S : FiniteSpectralStep A hA) :
     ∑ i, boundedSelfAdjointSpectralProjection A hA (S.cell i)
-      (S.measurable_cell i) = 1 := by
-  -- Open obligation: finite pairwise-disjoint PVM union plus support congruence
-  -- (`proj_iUnion_finite`, `spectralPVM_proj_congr_of_inter_spectrum_eq`),
-  -- handed to the mathematics agent.
-  sorry
+      (S.measurable_cell i) = 1 :=
+  (spectralProjection_finset_sum_eq_id A hA S.cell S.measurable_cell
+    S.pairwise_disjoint S.covers_spectrum).trans rfl
 
 /-- A spectral step approximates its generator in operator norm by the cell
 radius. -/
@@ -306,10 +305,51 @@ theorem FiniteSpectralStep.norm_operator_sub_le
     {A : H →L[ℂ] H} {hA : IsSelfAdjointOperator A}
     (S : FiniteSpectralStep A hA) :
     ‖S.operator - A‖ ≤ S.diameter_le := by
-  -- Open obligation: the bounded self-adjoint Borel functional calculus
-  -- (`boundedSelfAdjointBorelCalculus` with its identity and spectral norm
-  -- bound) and finite piecewise measurability, handed to the mathematics agent.
-  sorry
+  rcases subsingleton_or_nontrivial H with hsub | hnon
+  · -- On a trivial space every operator is zero, so the estimate is `0 ≤ diam`.
+    have : S.operator - A = 0 := Subsingleton.elim _ _
+    rw [this, norm_zero]
+    exact S.diameter_nonneg
+  · haveI := hnon
+    have hf := measurable_chosenFiniteStepSymbol S.cell S.measurable_cell
+      S.pairwise_disjoint S.representative
+    have hfb : BoundedOnSpectrum A (chosenFiniteStepSymbol S.cell S.representative) := by
+      refine ⟨∑ i, |S.representative i|,
+        Finset.sum_nonneg fun i _ => abs_nonneg _, fun x hx => ?_⟩
+      obtain ⟨i, hxi⟩ := Set.mem_iUnion.mp (S.covers_spectrum hx)
+      have hex : ∃ j, x ∈ S.cell j := ⟨i, hxi⟩
+      rw [chosenFiniteStepSymbol, dif_pos hex]
+      exact Finset.single_le_sum (fun j _ => abs_nonneg (S.representative j))
+        (Finset.mem_univ _)
+    have hclose : ∀ x ∈ realSpectrum A,
+        |chosenFiniteStepSymbol S.cell S.representative x - x| ≤ S.diameter_le := by
+      intro x hx
+      obtain ⟨i, hxi⟩ := Set.mem_iUnion.mp (S.covers_spectrum hx)
+      have hex : ∃ j, x ∈ S.cell j := ⟨i, hxi⟩
+      rw [chosenFiniteStepSymbol, dif_pos hex]
+      have hxj : x ∈ S.cell (Classical.choose hex) := Classical.choose_spec hex
+      have hsame : Classical.choose hex = i := by
+        by_contra hne
+        exact Set.disjoint_left.mp
+          (S.pairwise_disjoint (Set.mem_univ (Classical.choose hex))
+            (Set.mem_univ i) hne) hxj hxi
+      rw [hsame]
+      simpa [abs_sub_comm] using S.cell_close i x ⟨hxi, hx⟩
+    have hcalc : S.operator = boundedSelfAdjointBorelCalculus A hA
+        (chosenFiniteStepSymbol S.cell S.representative) hf hfb := by
+      rw [FiniteSpectralStep.operator]
+      exact (boundedSelfAdjointBorelCalculus_eq_finset_sum_indicator A hA S.cell
+        S.measurable_cell S.pairwise_disjoint S.representative S.covers_spectrum).symm
+    calc
+      ‖S.operator - A‖
+          = ‖boundedSelfAdjointBorelCalculus A hA
+                (chosenFiniteStepSymbol S.cell S.representative) hf hfb -
+              boundedSelfAdjointBorelCalculus A hA (fun x => x) measurable_id
+                (identity_boundedOnSpectrum A)‖ := by
+            rw [hcalc, boundedSelfAdjointBorelCalculus_id A hA]
+      _ ≤ S.diameter_le :=
+            boundedSelfAdjointBorelCalculus_norm_sub_le A hA hf measurable_id hfb
+              (identity_boundedOnSpectrum A) S.diameter_nonneg hclose
 
 /-- Every bounded self-adjoint operator has finite spectral steps with
 arbitrarily small cells and representatives in its own spectrum. -/
@@ -356,10 +396,13 @@ theorem unitaryGroup_finiteSpectralStep
       ∑ i, Complex.exp (((t * S.representative i : ℝ) : ℂ) * Complex.I) •
         boundedSelfAdjointSpectralProjection A hA (S.cell i)
           (S.measurable_cell i) := by
-  -- Open obligation: exponential of a finite orthogonal-idempotent spectral
-  -- decomposition acts coefficientwise (`exp_finset_orthogonal_idempotents`,
-  -- `spectralProjection_pairwise_orthogonal`), handed to the mathematics agent.
-  sorry
+  rw [unitaryGroup, expBounded_eq_exp, smul_smul]
+  exact unitaryGroup_finiteDiagonal
+    (fun i => boundedSelfAdjointSpectralProjection A hA (S.cell i) (S.measurable_cell i))
+    S.representative
+    (fun i => (boundedSelfAdjointSpectralPVM A hA).proj_idem (S.cell i) (S.measurable_cell i))
+    (spectralProjection_pairwise_orthogonal A hA S.cell S.measurable_cell S.pairwise_disjoint)
+    S.sum_projection_eq_one t
 
 /-- The reciprocal integral reconstructs a Sylvester solution for finite
 spectral steps. -/
@@ -373,12 +416,38 @@ theorem finiteSpectralStep_reconstruction
       (unitaryGroup SA.operator t ∘L
         (SA.operator ∘L X - X ∘L SB.operator) ∘L
         unitaryGroup SB.operator (-t)) := by
-  -- Open obligation: the blockwise Fourier identity for finite spectral steps
-  -- (uses `unitaryGroup_finiteSpectralStep`, `spectralProjection_select_left`/
-  -- `_right`, and the finite-sum/Bochner interchange), handed to the
-  -- mathematics agent.  The scalar per-rectangle identity is
-  -- `separatedSylvesterMultiplier_identity`, already proved.
-  sorry
+  have hUA : ∀ s : ℝ, unitaryGroup SA.operator s =
+      NormedSpace.exp (((s : ℂ) * Complex.I) • SA.operator) := fun s => by
+    rw [unitaryGroup, expBounded_eq_exp, smul_smul]
+  have hUB : ∀ s : ℝ, unitaryGroup SB.operator s =
+      NormedSpace.exp (((s : ℂ) * Complex.I) • SB.operator) := fun s => by
+    rw [unitaryGroup, expBounded_eq_exp, smul_smul]
+  have hSAop : SA.operator = finiteDiagonalOperator
+      (fun i => boundedSelfAdjointSpectralProjection A hA (SA.cell i) (SA.measurable_cell i))
+      SA.representative := rfl
+  have hSBop : SB.operator = finiteDiagonalOperator
+      (fun j => boundedSelfAdjointSpectralProjection B hB (SB.cell j) (SB.measurable_cell j))
+      SB.representative := rfl
+  simp only [hUA, hUB]
+  simp only [hSAop, hSBop]
+  exact finiteDiagonal_sylvester_reconstruction
+    (fun i => boundedSelfAdjointSpectralProjection A hA (SA.cell i) (SA.measurable_cell i))
+    (fun j => boundedSelfAdjointSpectralProjection B hB (SB.cell j) (SB.measurable_cell j))
+    SA.representative SB.representative
+    (fun i => (boundedSelfAdjointSpectralPVM A hA).proj_idem (SA.cell i) (SA.measurable_cell i))
+    (spectralProjection_pairwise_orthogonal A hA SA.cell SA.measurable_cell SA.pairwise_disjoint)
+    SA.sum_projection_eq_one
+    (fun j => (boundedSelfAdjointSpectralPVM B hB).proj_idem (SB.cell j) (SB.measurable_cell j))
+    (spectralProjection_pairwise_orthogonal B hB SB.cell SB.measurable_cell SB.pairwise_disjoint)
+    SB.sum_projection_eq_one
+    (separatedSylvesterMultiplier d hd)
+    (integrable_separatedSylvesterMultiplier d hd)
+    (fun i j => separatedSylvesterMultiplier_identity d hd
+      (SA.representative i) (SB.representative j)
+      (finiteSpectralStep_representatives_separated hsep SA SB i j))
+    (fun i j => abs_pos.mp
+      (lt_of_lt_of_le hd (finiteSpectralStep_representatives_separated hsep SA SB i j)))
+    X
 
 end FiniteStepReconstruction
 

@@ -9,6 +9,7 @@ import DavisKahan.Interop.Spectra.RealSpectrumBridge
 import Spectra.SpectralTheory.Calculus.Bounded
 import Spectra.SpectralTheory.Calculus.PMapBounded
 import Spectra.SpectralTheory.Calculus.SquareBridge
+import Spectra.SpectralTheory.SeparatedIntertwiner
 import Spectra.Modular.Cocycle.ModularSqrtSquare
 import Spectra.Modular.Tomita.BoundedPicture
 import Spectra.QuantumMechanics.BornRule.Observable
@@ -63,14 +64,51 @@ noncomputable def boundedSelfAdjointBorelCalculusC
     (hfb : ∃ C : ℝ, ∀ x : ℝ, ‖f x‖ ≤ C) : H →L[ℂ] H :=
   spectralCalculus (boundedSelfAdjointGroup A hA) f hf hfb
 
+/-- Application of the bridged full-domain self-adjoint pmap is the original map. -/
+theorem boundedSelfAdjointOperator_toLinearPMap_apply
+    (A : H →L[ℂ] H) (hA : IsSelfAdjointOperator A) (y : H)
+    (hy : y ∈ (boundedSelfAdjointOperator A hA).toLinearPMap.domain) :
+    (boundedSelfAdjointOperator A hA).toLinearPMap ⟨y, hy⟩ = A y := rfl
+
+/-- The Spectra resolvent set of the bridged full-domain realization is exactly the
+invertibility locus of `A - z` in the bounded operator algebra. -/
+theorem mem_resolventSet_toLinearPMap_iff
+    (A : H →L[ℂ] H) (hA : IsSelfAdjointOperator A) (z : ℂ) :
+    z ∈ Spectra.Resolvent.resolventSet (boundedSelfAdjointOperator A hA).toLinearPMap ↔
+      IsUnit (A - z • (1 : H →L[ℂ] H)) := by
+  constructor
+  · rintro ⟨R, hleft, hright⟩
+    refine ⟨⟨A - z • (1 : H →L[ℂ] H), R, ?_, ?_⟩, rfl⟩
+    · apply ContinuousLinearMap.ext
+      intro φ
+      obtain ⟨h, hφ⟩ := hright φ
+      exact hφ
+    · apply ContinuousLinearMap.ext
+      intro x
+      exact hleft ⟨x, Submodule.mem_top⟩
+  · rintro ⟨u, hu⟩
+    have hval : (u : H →L[ℂ] H) = A - z • (1 : H →L[ℂ] H) := hu
+    refine ⟨↑u⁻¹, ?_, ?_⟩
+    · intro ψ
+      have hinv : (↑u⁻¹ : H →L[ℂ] H) * (A - z • (1 : H →L[ℂ] H)) = 1 := by
+        rw [← hval]; exact u.inv_mul
+      exact ContinuousLinearMap.ext_iff.mp hinv (ψ : H)
+    · intro φ
+      refine ⟨Submodule.mem_top, ?_⟩
+      have hinv : (A - z • (1 : H →L[ℂ] H)) * (↑u⁻¹ : H →L[ℂ] H) = 1 := by
+        rw [← hval]; exact u.mul_inv
+      exact ContinuousLinearMap.ext_iff.mp hinv φ
+
 /-- The real spectrum of the bounded map agrees with the Spectra spectrum of
 its full-domain self-adjoint realization. -/
 theorem realSpectrum_eq_boundedSelfAdjoint_spectrum
     (A : H →L[ℂ] H) (hA : IsSelfAdjointOperator A) :
     realSpectrum A =
       Spectra.Resolvent.spectrum (boundedSelfAdjointOperator A hA).toLinearPMap := by
-  ext x
-  rfl
+  ext r
+  show (r : ℂ) ∈ spectrum ℂ A ↔ (r : ℂ) ∉ Spectra.Resolvent.resolventSet _
+  rw [spectrum.mem_iff, Algebra.algebraMap_eq_smul_one,
+    ← IsUnit.neg_iff, neg_sub, mem_resolventSet_toLinearPMap_iff A hA (r : ℂ)]
 
 /-- The real spectrum of a bounded self-adjoint operator is closed. -/
 theorem isClosed_realSpectrum_boundedSelfAdjoint
@@ -139,8 +177,7 @@ theorem boundedSelfAdjoint_borelMeasure_support
     (A : H →L[ℂ] H) (hA : IsSelfAdjointOperator A) (x : H) :
     (borelMeasure (boundedSelfAdjointGroup A hA) x).support ⊆ realSpectrum A := by
   rw [realSpectrum_eq_boundedSelfAdjoint_spectrum A hA]
-  simpa [boundedSelfAdjointGroup, bornMeasure, SelfAdjointOperator.spectralPVM] using
-    bornMeasure_support_subset_spectrum (boundedSelfAdjointOperator A hA) x
+  exact bornMeasure_support_subset_spectrum (boundedSelfAdjointOperator A hA) x
 
 /-- Symbols agreeing on the real spectrum have the same bounded calculus. -/
 theorem boundedSelfAdjointBorelCalculusC_congr_on_spectrum
@@ -155,7 +192,7 @@ theorem boundedSelfAdjointBorelCalculusC_congr_on_spectrum
   apply spectralCalculus_congr_ae_forall
   intro x
   have hsupp := boundedSelfAdjoint_borelMeasure_support A hA x
-  filter_upwards [ae_mem_support (borelMeasure (boundedSelfAdjointGroup A hA) x)] with l hl
+  filter_upwards [Measure.support_mem_ae (μ := borelMeasure (boundedSelfAdjointGroup A hA) x)] with l hl
   exact hfg l (hsupp hl)
 
 /-- Operator norm is bounded by a global pointwise symbol bound. -/
@@ -177,7 +214,7 @@ theorem boundedSelfAdjointBorelCalculusC_norm_sub_le
     (h : ∀ x ∈ realSpectrum A, ‖f x - g x‖ ≤ C) :
     ‖boundedSelfAdjointBorelCalculusC A hA f hf hfb -
       boundedSelfAdjointBorelCalculusC A hA g hg hgb‖ ≤ C := by
-  let q : ℝ → ℂ := Set.indicator (realSpectrum A) fun x => f x - g x
+  set q : ℝ → ℂ := Set.indicator (realSpectrum A) fun x => f x - g x with hq
   have hqm : Measurable q :=
     (hf.sub hg).indicator (measurableSet_realSpectrum_boundedSelfAdjoint A hA)
   have hqb : ∃ D : ℝ, ∀ x, ‖q x‖ ≤ D := by
@@ -185,18 +222,18 @@ theorem boundedSelfAdjointBorelCalculusC_norm_sub_le
     obtain ⟨Cg, hCg⟩ := hgb
     refine ⟨Cf + Cg, fun x => ?_⟩
     by_cases hx : x ∈ realSpectrum A
-    · rw [q, Set.indicator_of_mem hx]
+    · rw [hq, Set.indicator_of_mem hx]
       exact (norm_sub_le _ _).trans (add_le_add (hCf x) (hCg x))
-    · rw [q, Set.indicator_of_notMem hx, norm_zero]
+    · rw [hq, Set.indicator_of_notMem hx, norm_zero]
       have hCf0 : 0 ≤ Cf := le_trans (norm_nonneg (f x)) (hCf x)
       have hCg0 : 0 ≤ Cg := le_trans (norm_nonneg (g x)) (hCg x)
       linarith
   have hqC : ∀ x, ‖q x‖ ≤ C := by
     intro x
     by_cases hx : x ∈ realSpectrum A
-    · rw [q, Set.indicator_of_mem hx]
+    · rw [hq, Set.indicator_of_mem hx]
       exact h x hx
-    · rw [q, Set.indicator_of_notMem hx, norm_zero]
+    · rw [hq, Set.indicator_of_notMem hx, norm_zero]
       exact hC0
   have hsub : boundedSelfAdjointBorelCalculusC A hA f hf hfb -
       boundedSelfAdjointBorelCalculusC A hA g hg hgb =
@@ -207,8 +244,8 @@ theorem boundedSelfAdjointBorelCalculusC_norm_sub_le
     apply spectralCalculus_congr_ae_forall
     intro x
     have hsupp := boundedSelfAdjoint_borelMeasure_support A hA x
-    filter_upwards [ae_mem_support (borelMeasure (boundedSelfAdjointGroup A hA) x)] with l hl
-    rw [q, Set.indicator_of_mem (hsupp hl)]
+    filter_upwards [Measure.support_mem_ae (μ := borelMeasure (boundedSelfAdjointGroup A hA) x)] with l hl
+    rw [hq, Set.indicator_of_mem (hsupp hl)]
   rw [hsub]
   exact norm_boundedSelfAdjointBorelCalculusC_le A hA q hqm hqb hqC
 
@@ -260,9 +297,9 @@ theorem boundedSelfAdjointBorelCalculusC_id [Nontrivial H]
   have hxdomT : x ∈ T.domain := by
     rw [boundedSelfAdjointOperator_domain A hA]
     exact Submodule.mem_top
-  have hgen : generator U = T.toLinearPMap := by
+  have hgen : U.generator = T.toLinearPMap := by
     simpa [U, boundedSelfAdjointGroup] using generator_genToGroup T.selfAdjoint
-  have hxdomU : x ∈ (generator U).domain := by
+  have hxdomU : x ∈ U.generator.domain := by
     rw [hgen]
     exact hxdomT
   have hidmem := mem_pmapDomain_id_of_mem_generator U ⟨x, hxdomU⟩
@@ -271,7 +308,7 @@ theorem boundedSelfAdjointBorelCalculusC_id [Nontrivial H]
       (measurable_boundedIdentitySymbol A) (bounded_boundedIdentitySymbol A) x
   have hae : boundedIdentitySymbol A =ᵐ[borelMeasure U x] fun s => (s : ℂ) := by
     have hsupp := boundedSelfAdjoint_borelMeasure_support A hA x
-    filter_upwards [ae_mem_support (borelMeasure U x)] with s hs
+    filter_upwards [Measure.support_mem_ae (μ := borelMeasure U x)] with s hs
     exact boundedIdentitySymbol_eq A (hsupp hs)
   have hcongr := pmapOfPVM_congr_ae U
     (boundedIdentitySymbol A) (fun s => (s : ℂ))
@@ -282,7 +319,7 @@ theorem boundedSelfAdjointBorelCalculusC_id [Nontrivial H]
     (boundedIdentitySymbol A) (measurable_boundedIdentitySymbol A)
     (bounded_boundedIdentitySymbol A) x hcutmem
   have hid := pmapOfPVM_id_eq_generator U ⟨x, hxdomU⟩ hidmem
-  have hgenA : generator U ⟨x, hxdomU⟩ = A x := by
+  have hgenA : U.generator ⟨x, hxdomU⟩ = A x := by
     have happly := (LinearPMap.ext_iff.mp hgen).2
     have hT : T.toLinearPMap ⟨x, hxdomT⟩ = A x := rfl
     exact (happly (x := x) (hf := hxdomU) (hg := hxdomT)).trans hT
@@ -311,9 +348,8 @@ theorem boundedSelfAdjointBorelCalculus_norm_sub_le
   apply boundedSelfAdjointBorelCalculusC_norm_sub_le A hA
   · exact hC0
   · intro x hx
-    rw [spectrumRestrictedSymbol, Set.indicator_of_mem hx,
-      Set.indicator_of_mem hx, ← Complex.ofReal_sub, Complex.norm_real,
-      Real.norm_eq_abs]
+    simp only [spectrumRestrictedSymbol, Set.indicator_of_mem hx]
+    rw [← Complex.ofReal_sub, Complex.norm_real, Real.norm_eq_abs]
     exact h x hx
 
 /-- The real Borel calculus of the identity is the original operator. -/
