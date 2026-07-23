@@ -7,9 +7,9 @@ duplicated-effort collisions that occurred on the Sylvester analytic lane
 **Identity note (2026-07-23):** agents are identified by their *human*, not by
 the model running them (models change mid-session). Rows previously labeled
 `opus` were jon's agent; rows labeled `fable` were edward's agent. Edward's
-agent has stopped; all its lanes are released. Jon's agent (currently running
-the Fable 5 model) is the sole active agent and inherits/owns the active lanes
-below.
+agent stopped after the circle-Riesz definitional layer; jon's agent (also
+running Fable 5) inherited and completed that lane. Edward's agent has since
+RESUMED (2026-07-23) and claims lanes under `edward (resumed)` below.
 
 ## Rules
 
@@ -38,6 +38,7 @@ below.
 | jon | SinTheta/General.lean | make it elaborate — needs spectralSubspace/spectralProjection/sinAngleOperator defs + projectionDifference_ideal_intervalExterior + proof/timeout repair | 2026-07-23 | claimed (queued after RieszCircle) |
 | jon | SinTheta/RestrictionCompat.lean | restrictedSpectrum_top_eq_realSpectrum_general, boundedRealSpectrum_eq_realSpectrum, mem_realResolventSet_ofBounded_iff | 2026-07-23 | done |
 | jon | Frontier/Core.lean, Frontier/RieszCircle.lean | circle Riesz lane: all 9 obligations closed (RieszCircle sorry-free, incl. the projection identity via the new contour-free SinTheta/CayleySelectorBridge.lean); signatures 4 and 5 gained the necessary `0 ≤ radius` | 2026-07-23 | done |
+| edward (resumed) | Frontier/Section8.lean (ContinuationBridge section), Frontier/CircleContour.lean (new) | spectralContinuationWitness_of_circle, spectralContinuationWitness_of_circle_endpoints, selectedBranchProjectionLipschitzConstant_of_circle + the circle instantiation of PiecewiseC1ClosedContour/SpectralSeparatingContour (winding via scalar Cauchy). SinTheta touched read-only (imports). | 2026-07-23 | claimed |
 
 ## Spectral lane — claimed by jon (2026-07-23)
 
