@@ -60,6 +60,9 @@ variable {E F : Type v}
 @[simp] theorem complex_norm_def (A : ComplexOperator E F) :
     ‖A‖ = paperHilbertSchmidtNorm A.toOp := rfl
 
+@[simp] theorem hilbertSchmidtComplex_gauge_eq (A : E →L[ℂ] F) :
+    hilbertSchmidtComplex.gauge A = paperHilbertSchmidtNorm A := rfl
+
 /-- A complex Hilbert--Schmidt-valued Bochner integral remains
 Hilbert--Schmidt. -/
 theorem complex_integral_mem
@@ -76,8 +79,8 @@ theorem complex_norm_integral_le
     (hf : Integrable f μ) :
     paperHilbertSchmidtNorm (∫ a, (f a).toOp ∂μ) ≤
       ∫ a, paperHilbertSchmidtNorm (f a).toOp ∂μ := by
-  simpa only [complex_norm_def] using
-    gauge_integral_toOp_le hilbertSchmidtComplex f hf
+  have h := gauge_integral_toOp_le hilbertSchmidtComplex f hf
+  simpa only [hilbertSchmidtComplex_gauge_eq, norm_def] using h
 
 /-- Raw-field form of the complex integration theorem. -/
 theorem complex_integral_mem_of_lift
@@ -85,7 +88,7 @@ theorem complex_integral_mem_of_lift
     (f : α → E →L[ℂ] F)
     (hmem : ∀ a, IsPaperHilbertSchmidt (f a))
     (hlift : Integrable
-      (fun a => (⟨f a, hmem a⟩ : ComplexOperator E F)) μ) :
+      (fun a => ofMem hilbertSchmidtComplex (f a) (hmem a)) μ) :
     IsPaperHilbertSchmidt (∫ a, f a ∂μ) := by
   exact mem_integral_of_integrable_lift hilbertSchmidtComplex f hmem hlift
 
@@ -95,7 +98,7 @@ theorem complex_norm_integral_of_lift_le
     (f : α → E →L[ℂ] F)
     (hmem : ∀ a, IsPaperHilbertSchmidt (f a))
     (hlift : Integrable
-      (fun a => (⟨f a, hmem a⟩ : ComplexOperator E F)) μ) :
+      (fun a => ofMem hilbertSchmidtComplex (f a) (hmem a)) μ) :
     paperHilbertSchmidtNorm (∫ a, f a ∂μ) ≤
       ∫ a, paperHilbertSchmidtNorm (f a) ∂μ := by
   exact gauge_integral_of_integrable_lift_le
@@ -111,6 +114,9 @@ variable {E F : Type v}
 
 @[simp] theorem real_norm_def (A : RealOperator E F) :
     ‖A‖ = paperHilbertSchmidtNorm A.toOp := rfl
+
+@[simp] theorem hilbertSchmidtReal_gauge_eq (A : E →L[ℝ] F) :
+    hilbertSchmidtReal.gauge A = paperHilbertSchmidtNorm A := rfl
 
 /-- A real Hilbert--Schmidt-valued Bochner integral remains
 Hilbert--Schmidt. -/
@@ -128,8 +134,8 @@ theorem real_norm_integral_le
     (hf : Integrable f μ) :
     paperHilbertSchmidtNorm (∫ a, (f a).toOp ∂μ) ≤
       ∫ a, paperHilbertSchmidtNorm (f a).toOp ∂μ := by
-  simpa only [real_norm_def] using
-    gauge_integral_toOp_le hilbertSchmidtReal f hf
+  have h := gauge_integral_toOp_le hilbertSchmidtReal f hf
+  simpa only [hilbertSchmidtReal_gauge_eq, norm_def] using h
 
 /-- Raw-field form of the real integration theorem. -/
 theorem real_integral_mem_of_lift
@@ -137,7 +143,7 @@ theorem real_integral_mem_of_lift
     (f : α → E →L[ℝ] F)
     (hmem : ∀ a, IsPaperHilbertSchmidt (f a))
     (hlift : Integrable
-      (fun a => (⟨f a, hmem a⟩ : RealOperator E F)) μ) :
+      (fun a => ofMem hilbertSchmidtReal (f a) (hmem a)) μ) :
     IsPaperHilbertSchmidt (∫ a, f a ∂μ) := by
   exact mem_integral_of_integrable_lift hilbertSchmidtReal f hmem hlift
 
@@ -147,7 +153,7 @@ theorem real_norm_integral_of_lift_le
     (f : α → E →L[ℝ] F)
     (hmem : ∀ a, IsPaperHilbertSchmidt (f a))
     (hlift : Integrable
-      (fun a => (⟨f a, hmem a⟩ : RealOperator E F)) μ) :
+      (fun a => ofMem hilbertSchmidtReal (f a) (hmem a)) μ) :
     paperHilbertSchmidtNorm (∫ a, f a ∂μ) ≤
       ∫ a, paperHilbertSchmidtNorm (f a) ∂μ := by
   exact gauge_integral_of_integrable_lift_le

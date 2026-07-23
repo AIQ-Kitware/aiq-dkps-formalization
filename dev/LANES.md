@@ -34,7 +34,7 @@ RESUMED (2026-07-23) and claims lanes under `edward (resumed)` below.
 | edward (stopped) | InfiniteDimensional/GraphSubspace.lean | acuteAngularOperator, acuteAngularOperator_spec, acute_iff_exists_bounded_angularOperator | 2026-07-23 | done |
 | jon | MathAhead/HiddenFoundations/PolarIsometryFinal.lean | polarIsometry_comp_adjoint_self | 2026-07-23 | done |
 | jon | MathAhead/HiddenFoundations/{Section3Nonacute,PolarIsometryFinal}.lean | remaining 5 polar leaves | 2026-07-23 | blocked (missing infra) |
-| jon | SinTheta/RCLikeSpectralBridge.lean (new), SinTheta/SpectralBridge.lean (Experimental) | phantom machinery + estimate repair — SpectralBridge now COMPILES | 2026-07-23 | done (3 RCLike leaf sorries) |
+| jon | SinTheta/RCLikeSpectralBridge.lean (new), SinTheta/SpectralBridge.lean (Experimental) | phantom machinery + estimate repair; ALL RCLike leaves now closed (pencil invertibility at non-real parameters proved directly, inverse spectral mapping via spectrum.map_inv, false normal-norm leaf removed) — both files sorry-free | 2026-07-23 | done |
 | jon | SinTheta/General.lean, DoubleAngle.lean, DirectRotation.lean | Continuation-chain repair: all three elaborate (documented leaf obligations); ContinuationCore → ContinuationSpectralIdentification builds green | 2026-07-23 | done |
 | jon | SinTheta/RestrictionCompat.lean | restrictedSpectrum_top_eq_realSpectrum_general, boundedRealSpectrum_eq_realSpectrum, mem_realResolventSet_ofBounded_iff | 2026-07-23 | done |
 | jon | Frontier/Core.lean, Frontier/RieszCircle.lean | circle Riesz lane: all 9 obligations closed (RieszCircle sorry-free, incl. the projection identity via the new contour-free SinTheta/CayleySelectorBridge.lean); signatures 4 and 5 gained the necessary `0 ≤ radius` | 2026-07-23 | done |
@@ -75,3 +75,14 @@ instance hypotheses.
   `IsPaperDirectRotation`. None exist in Mathlib/Spectra/repo yet — a real multi-session
   campaign. `polarIsometry_comp_adjoint_self` (final-projection identity) was the one leaf
   whose supporting infra was already present; now proved (5c7b13c).
+
+## Scratch overlay (external GPT-5.6 drop) — repaired by jon (2026-07-23)
+
+The never-compiled `DavisKahan/Experimental/Scratch/` drop (ideal Banach
+spaces, Hilbert–Schmidt Bochner layer incl. the `HilbertSchmidtComplexFamily`
+dependency, free-beam Green identities and smooth kernel) now builds:
+`lake build DavisKahan.Experimental.Scratch.All` — zero errors, zero sorries.
+Key API decision: `IdealOperator.ofMem` must be used instead of anonymous
+constructors in statements (the type-synonym unfolding otherwise leaks the
+subtype topology into `Integrable` hypotheses), and the generic Bochner
+theorems take `[NormedSpace ℝ (E →L[𝕜] F)]` as an instance argument.

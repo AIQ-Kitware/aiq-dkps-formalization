@@ -78,13 +78,18 @@ theorem hasDerivAt_greenBoundary
     (u v : FourthOrderData) (x : ℝ) :
     HasDerivAt (greenBoundary u v)
       (u.f0 x * v.f4 x - u.f4 x * v.f0 x) x := by
-  unfold greenBoundary
-  convert
+  have h :=
     ((((u.deriv0 x).mul (v.deriv3 x)).sub
       ((u.deriv1 x).mul (v.deriv2 x))).add
       ((u.deriv2 x).mul (v.deriv1 x))).sub
       ((u.deriv3 x).mul (v.deriv0 x))
-    using 1 <;> ring
+  have heq : u.f0 x * v.f4 x - u.f4 x * v.f0 x =
+      u.f1 x * v.f3 x + u.f0 x * v.f4 x -
+          (u.f2 x * v.f2 x + u.f1 x * v.f3 x) +
+          (u.f3 x * v.f1 x + u.f2 x * v.f2 x) -
+        (u.f4 x * v.f0 x + u.f3 x * v.f1 x) := by ring
+  rw [heq]
+  exact h
 
 /-- The Green integrand is continuous. -/
 theorem continuous_greenIntegrand (u v : FourthOrderData) :
@@ -98,8 +103,8 @@ theorem integral_green_formula (u v : FourthOrderData) :
         (u.f0 x * v.f4 x - u.f4 x * v.f0 x)) =
       greenBoundary u v 1 - greenBoundary u v 0 := by
   exact intervalIntegral.integral_eq_sub_of_hasDerivAt
-    (hasDerivAt_greenBoundary u v)
-    (continuous_greenIntegrand u v).intervalIntegrable
+    (fun x _ => hasDerivAt_greenBoundary u v x)
+    ((continuous_greenIntegrand u v).intervalIntegrable _ _)
 
 /-- The Green concomitant vanishes at either free endpoint. -/
 theorem greenBoundary_eq_zero_of_freeEndpoint
@@ -125,9 +130,13 @@ theorem integral_free_green_symmetry
   have h1 : greenBoundary u v 1 = 0 :=
     greenBoundary_eq_zero_of_freeEndpoint u v hu21 hu31 hv21 hv31
   rw [h0, h1, sub_zero] at hgreen
+  have hc1 : Continuous fun x : ℝ => u.f0 x * v.f4 x :=
+    u.continuous0.mul v.continuous4
+  have hc2 : Continuous fun x : ℝ => u.f4 x * v.f0 x :=
+    u.continuous4.mul v.continuous0
   have hsplit := intervalIntegral.integral_sub
-    (u.continuous0.mul v.continuous4).intervalIntegrable
-    (u.continuous4.mul v.continuous0).intervalIntegrable
+    (hc1.intervalIntegrable (μ := MeasureTheory.volume) (0 : ℝ) 1)
+    (hc2.intervalIntegrable (μ := MeasureTheory.volume) (0 : ℝ) 1)
   rw [hsplit] at hgreen
   linarith
 
@@ -141,11 +150,13 @@ theorem hasDerivAt_energyBoundary
     (u : FourthOrderData) (x : ℝ) :
     HasDerivAt (energyBoundary u)
       (u.f0 x * u.f4 x - u.f2 x ^ 2) x := by
-  unfold energyBoundary
-  convert
-    ((u.deriv0 x).mul (u.deriv3 x)).sub
-      ((u.deriv1 x).mul (u.deriv2 x))
-    using 1 <;> ring
+  have h := ((u.deriv0 x).mul (u.deriv3 x)).sub
+    ((u.deriv1 x).mul (u.deriv2 x))
+  have heq : u.f0 x * u.f4 x - u.f2 x ^ 2 =
+      u.f1 x * u.f3 x + u.f0 x * u.f4 x -
+        (u.f2 x * u.f2 x + u.f1 x * u.f3 x) := by ring
+  rw [heq]
+  exact h
 
 /-- The free-beam energy integrand is continuous. -/
 theorem continuous_energyIntegrand (u : FourthOrderData) :
@@ -158,8 +169,8 @@ theorem integral_energy_formula (u : FourthOrderData) :
     (∫ x in (0 : ℝ)..1, (u.f0 x * u.f4 x - u.f2 x ^ 2)) =
       energyBoundary u 1 - energyBoundary u 0 := by
   exact intervalIntegral.integral_eq_sub_of_hasDerivAt
-    (hasDerivAt_energyBoundary u)
-    (continuous_energyIntegrand u).intervalIntegrable
+    (fun x _ => hasDerivAt_energyBoundary u x)
+    ((continuous_energyIntegrand u).intervalIntegrable _ _)
 
 /-- The energy boundary term vanishes when the second and third derivatives
 vanish at the endpoint. -/
@@ -183,9 +194,12 @@ theorem integral_free_energy
   have h1 : energyBoundary u 1 = 0 :=
     energyBoundary_eq_zero_of_freeEndpoint u hu21 hu31
   rw [h0, h1, sub_zero] at henergy
+  have hc1 : Continuous fun x : ℝ => u.f0 x * u.f4 x :=
+    u.continuous0.mul u.continuous4
+  have hc2 : Continuous fun x : ℝ => u.f2 x ^ 2 := u.continuous2.pow 2
   have hsplit := intervalIntegral.integral_sub
-    (u.continuous0.mul u.continuous4).intervalIntegrable
-    (u.continuous2.pow 2).intervalIntegrable
+    (hc1.intervalIntegrable (μ := MeasureTheory.volume) (0 : ℝ) 1)
+    (hc2.intervalIntegrable (μ := MeasureTheory.volume) (0 : ℝ) 1)
   rw [hsplit] at henergy
   linarith
 
