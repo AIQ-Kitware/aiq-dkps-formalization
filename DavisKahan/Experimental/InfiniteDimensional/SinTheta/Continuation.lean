@@ -146,64 +146,38 @@ theorem norm_resolventOperator_operatorPath_sub_le_of_spectral_distance
 
 end ComplexResolventDistance
 
-/-- Continued spectral projection selected by a separating contour. -/
-noncomputable def continuedProjection (A H : E →L[𝕜] E)
-    (contour : ℝ → 𝕜) (t : ℝ) : E →L[𝕜] E :=
-  rieszProjection (operatorPath A H t) contour
 
-/-- Norm continuity of the selected projection path.
+/-!
+## Continued spectral projection (open obligation)
 
-Proof strategy: fix a contour that remains uniformly inside the resolvent set.
-Use the second resolvent identity to prove uniform norm continuity of
-`z ↦ (z-A_t)⁻¹` in the path parameter, dominate the contour integrand by the
-inverse distance to the spectrum, and pass continuity through the contour
-Bochner integral.  Derive an explicit Lipschitz estimate when the contour
-margin is quantitative.
+The contour-integral continued projection that lived here was written against a
+`Contour.integral` / `Contour.length` / `Contour.index` API that exists nowhere
+in this repository, in Mathlib, or in vendored Spectra, so it never compiled.
 
-Lean proof route for a weaker agent:
-
-1. Use `norm_resolventOperator_operatorPath_sub_le_of_uniform_bound` pointwise on the contour.  The second-resolvent operator algebra and the exact affine-path increment are now fully proved.
-2. Use `complex_continuousOn_resolventOperator_of_distance` for continuity in the contour parameter; the first-resolvent identity now supplies this from the same uniform spectral-distance margin.
-3. Combine that continuity with a piecewise `C1` contour to obtain curve integrability and a uniform speed bound.
-4. Pass the resulting Lipschitz estimate through the Bochner contour integral and assemble the pointwise statements into `ContinuousOn`.
-
-
-Ext-agent signature audit (GPT 5.6 High): The corrected `ContinuousOn [0,1]` signature
-asks only for separation on the path segment actually used. A global continuity theorem
-remains available in the resolvent module.
-
-Preferred dependency route: Use a uniformly separating Riesz contour on `[0,1]`,
-norm-continuity of resolvents, and local equivalences of close projection ranges.
+The honest, circle-only replacement is
+`DavisKahan.Experimental.Frontier.RieszCircle`, which builds the Riesz
+projection from Mathlib's `circleIntegral` and identifies it with the existing
+`boundedSelfAdjointSpectralProjection`.  It cannot be imported here because it is
+downstream of this module.  The names below are retained as open obligations for
+the one off-path consumer (`OperatorBlocks/OffDiagonal`); the separation
+hypothesis records the resolvent-set and uniform-bound data honestly and leaves
+the orientation/selection content to the circle construction.
 -/
-theorem continuous_continuedProjection
-    (A H : E →L[𝕜] E) (s : Set ℝ) (contour : ℝ → 𝕜)
-    (hsep : ∀ t ∈ Set.Icc (0 : ℝ) 1,
-      ContourSeparatesSpectrum (operatorPath A H t) s contour) :
-    ContinuousOn (continuedProjection A H contour) (Set.Icc (0 : ℝ) 1) := by
-  classical
-  intro t ht
-  obtain ⟨hclosed, hrect, hres, M, hM0, hM, hinside, houtside⟩ := hsep t ht
-  have hlocal : ∃ ε > 0, ∀ u ∈ Set.Icc (0 : ℝ) 1,
-      |u-t| < ε → ∀ z ∈ Set.range contour,
-        InResolventSet (operatorPath A H u) z ∧
-          ‖resolventOperator (operatorPath A H u) z‖ ≤ 2 * max M 1 := by
-    exact uniform_resolvent_neighborhood_along_linear_path
-      A H contour t ht hres hrect hM
-  obtain ⟨ε, hε, hlocal⟩ := hlocal
-  refine continuousWithinAt_of_dist_le
-    (C := (Contour.length contour / (2 * Real.pi)) *
-      (2 * max M 1)^2 * ‖H‖) hε ?_
-  intro u hu hut
-  have hsegment : Set.uIcc t u ⊆ Set.Icc (0 : ℝ) 1 :=
-    Set.uIcc_subset_Icc hu ht
-  have hbound : ∀ r ∈ Set.uIcc t u, ∀ z ∈ Set.range contour,
-      InResolventSet (operatorPath A H r) z ∧
-        ‖resolventOperator (operatorPath A H r) z‖ ≤ 2 * max M 1 := by
-    intro r hr z hz
-    exact hlocal r (hsegment hr) z hz (by
-      exact lt_of_le_of_lt (abs_sub_le_of_mem_uIcc hr) hut)
-  simpa [dist_eq, abs_sub_comm, mul_assoc] using
-    norm_continuedProjection_sub_le A H contour hrect le_rfl hbound
+
+/-- Honest separation data along a contour: the contour avoids the spectrum and
+the resolvent stays uniformly bounded on it.  The winding/orientation selection
+that pins the enclosed spectral component is deferred to the circle Riesz
+construction in the frontier. -/
+def ContourSeparatesSpectrum (A : E →L[𝕜] E) (_s : Set ℝ) (contour : ℝ → 𝕜) :
+    Prop :=
+  (∀ t, InResolventSet A (contour t)) ∧
+    ∃ M : ℝ, 0 ≤ M ∧ ∀ t, ‖resolventOperator A (contour t)‖ ≤ M
+
+/-- Continued spectral projection selected by a separating contour.  Open
+obligation pending the circle Riesz construction. -/
+noncomputable def continuedProjection (A H : E →L[𝕜] E)
+    (_contour : ℝ → 𝕜) (_t : ℝ) : E →L[𝕜] E :=
+  sorry
 
 /-- Two orthogonal projections belong to the same norm-continuous component. -/
 def SameProjectionComponent (P Q : E →L[𝕜] E) : Prop :=
@@ -211,58 +185,24 @@ def SameProjectionComponent (P Q : E →L[𝕜] E) : Prop :=
     ContinuousOn path (Set.Icc (0 : ℝ) 1) ∧ path 0 = P ∧ path 1 = Q ∧
       ∀ t ∈ Set.Icc (0 : ℝ) 1, IsOrthogonalProjection (path t)
 
-omit [CompleteSpace E] in
-/-- The continued projection remains in the component selected at `t = 0`.
-
-Ext-agent signature audit (GPT 5.6 High): Correct after `SameProjectionComponent` was
-localized to continuity on `[0,1]`; global continuity would be unnecessary
-overstrengthening.
--/
-theorem continuedProjection_same_component
-    (A H : E →L[𝕜] E) (contour : ℝ → 𝕜)
-    (hcontinuous : ContinuousOn (continuedProjection A H contour)
-      (Set.Icc (0 : ℝ) 1))
-    (hproj : ∀ t ∈ Set.Icc (0 : ℝ) 1,
-      IsOrthogonalProjection (continuedProjection A H contour t)) :
-    SameProjectionComponent
-      (continuedProjection A H contour 0)
-      (continuedProjection A H contour 1) :=
-  ⟨continuedProjection A H contour, hcontinuous, rfl, rfl, hproj⟩
+/-- Norm continuity of the selected projection path.  Open obligation. -/
+theorem continuous_continuedProjection
+    (A H : E →L[𝕜] E) (s : Set ℝ) (contour : ℝ → 𝕜)
+    (_hsep : ∀ t ∈ Set.Icc (0 : ℝ) 1,
+      ContourSeparatesSpectrum (operatorPath A H t) s contour) :
+    ContinuousOn (continuedProjection A H contour) (Set.Icc (0 : ℝ) 1) := by
+  sorry
 
 /-- Continued Riesz projections select the spectral component born from the
-initial component.
-
-Lean proof route for a weaker agent:
-
-1. Use `rieszProjection_eq_spectralProjection` at `t=1`, passing `hs`.
-2. Verify that `operatorPath A H 1 = A+H` by `simp [operatorPath]`.
-3. Specialize the uniformly separating-contour hypothesis at `1 ∈ [0,1]`.
-
-
-Ext-agent signature audit (GPT 5.6 High): Correct with the explicit measurability
-premise if the fixed contour encloses the same Borel spectral component throughout the
-path. At `t=1`, self-adjointness follows from `hA` and `hH`.
-
-Preferred dependency route: Use a uniformly separating Riesz contour on `[0,1]`,
-norm-continuity of resolvents, and local equivalences of close projection ranges.
--/
+initial component.  Open obligation. -/
 theorem continuedProjection_eq_spectralProjection
     (A H : E →L[𝕜] E) (hA : IsSelfAdjointOperator A)
     (hH : IsSelfAdjointOperator H) (s : Set ℝ) (hs : MeasurableSet s)
     (contour : ℝ → 𝕜)
-    (hsep : ∀ t ∈ Set.Icc (0 : ℝ) 1,
+    (_hsep : ∀ t ∈ Set.Icc (0 : ℝ) 1,
       ContourSeparatesSpectrum (operatorPath A H t) s contour) :
     continuedProjection A H contour 1 = spectralProjection (A + H) s := by
-  have h1 : operatorPath A H 1 = A + H := by
-    simp [operatorPath]
-  have hA1 : IsSelfAdjointOperator (A + H) := by
-    have h := hA.add hH
-    rwa [← ContinuousLinearMap.toLinearMap_add] at h
-  have hc := hsep 1 ⟨zero_le_one, le_refl 1⟩
-  rw [h1] at hc
-  unfold continuedProjection
-  rw [h1]
-  exact rieszProjection_eq_spectralProjection (A + H) hA1 s hs contour hc
+  sorry
 
 /-! ## Close complex orthogonal projections
 
