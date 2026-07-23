@@ -257,7 +257,73 @@ theorem norm_semigroup_le_exp_norm (A : H →L[ℂ] H) (t : ℝ) :
     ‖semigroup A t‖ ≤ Real.exp (|t| * ‖A‖) := by
   exact expBounded_norm_bound A t
 
+/-- The real exponential group is norm continuous in time. -/
+theorem continuous_semigroup (A : H →L[ℂ] H) :
+    Continuous fun t : ℝ => semigroup A t :=
+  continuous_iff_continuousAt.mpr fun t => (hasDerivAt_semigroup A t).continuousAt
+
+/-- The unitary group is norm continuous in time. -/
+theorem continuous_unitaryGroup (A : H →L[ℂ] H) :
+    Continuous fun t : ℝ => unitaryGroup A t :=
+  continuous_iff_continuousAt.mpr fun t => (hasDerivAt_unitaryGroup A t).continuousAt
+
 end Exponentials
+
+section SpectrumBridge
+
+variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
+  [CompleteSpace H]
+
+/-- The identification of the ambient space with the top submodule, as a
+continuous linear map. -/
+noncomputable def topInclusion : H →L[ℂ] (⊤ : Submodule ℂ H) :=
+  (ContinuousLinearMap.id ℂ H).codRestrict ⊤ fun _ => Submodule.mem_top
+
+/-- Conjugation by the top-submodule identification is an algebra
+equivalence between endomorphisms of `⊤` and of the ambient space. -/
+noncomputable def topConjAlgEquiv :
+    ((⊤ : Submodule ℂ H) →L[ℂ] (⊤ : Submodule ℂ H)) ≃ₐ[ℂ] (H →L[ℂ] H) where
+  toFun S := (⊤ : Submodule ℂ H).subtypeL ∘L S ∘L topInclusion
+  invFun T := topInclusion ∘L T ∘L (⊤ : Submodule ℂ H).subtypeL
+  left_inv S := by ext x; rfl
+  right_inv T := by ext x; rfl
+  map_add' S₁ S₂ := by ext x; rfl
+  map_mul' S₁ S₂ := by ext x; rfl
+  commutes' c := by ext x; rfl
+
+@[simp] theorem topConjAlgEquiv_restrict (T : H →L[ℂ] H)
+    (hU : InvariantFor T ⊤) :
+    topConjAlgEquiv (T.restrict hU) = T := by
+  ext x
+  rfl
+
+/-- The actual restriction to the top submodule has the original
+Banach-algebra spectrum. -/
+theorem spectrum_restrict_top (T : H →L[ℂ] H) (hU : InvariantFor T ⊤) :
+    spectrum ℂ (T.restrict hU) = spectrum ℂ T := by
+  conv_rhs => rw [← topConjAlgEquiv_restrict T hU]
+  exact (AlgEquiv.spectrum_eq topConjAlgEquiv (T.restrict hU)).symm
+
+/-- The restricted spectrum at the top submodule is the real spectrum. -/
+theorem restrictedSpectrum_top_eq (T : H →L[ℂ] H) :
+    restrictedSpectrum T ⊤ = realSpectrum T := by
+  ext r
+  constructor
+  · rintro ⟨hU, hr⟩
+    exact (spectrum_restrict_top T hU).subset hr
+  · intro hr
+    exact ⟨fun x _ => Submodule.mem_top,
+      (spectrum_restrict_top T fun x _ => Submodule.mem_top).symm.subset hr⟩
+
+/-- The real spectrum of a bounded complex operator is compact. -/
+theorem realSpectrum_isCompact (T : H →L[ℂ] H) :
+    IsCompact (realSpectrum T) := by
+  have h : realSpectrum T = Complex.ofReal ⁻¹' spectrum ℂ T := rfl
+  rw [h]
+  exact Complex.isometry_ofReal.isClosedEmbedding.isProperMap.isCompact_preimage
+    (spectrum.isCompact T)
+
+end SpectrumBridge
 
 section SpectralStepApproximation
 
@@ -357,11 +423,40 @@ theorem exists_finiteSpectralStep
     (A : H →L[ℂ] H) (hA : IsSelfAdjointOperator A)
     {ε : ℝ} (hε : 0 < ε) :
     ∃ S : FiniteSpectralStep A hA, S.diameter_le ≤ ε := by
-  -- Open obligation: compactness of the real spectrum and the finite
-  -- ε-ball-cover construction with representatives in the spectrum
-  -- (`realSpectrum_isCompact`, successive-difference disjointness/cover,
-  -- active-ball spectrum choice), handed to the mathematics agent.
-  sorry
+  classical
+  obtain ⟨t, hts, htfin, hcov⟩ :=
+    finite_cover_balls_of_compact (realSpectrum_isCompact A) hε
+  let s : Finset ℝ := htfin.toFinset
+  let y : Fin s.card → ℝ := fun i => (s.equivFin.symm i : ℝ)
+  have hy_mem : ∀ i, y i ∈ realSpectrum A := fun i =>
+    hts (htfin.mem_toFinset.mp (s.equivFin.symm i).2)
+  let g : Fin s.card → Set ℝ := fun i => Metric.ball (y i) ε
+  have hg_cover : realSpectrum A ⊆ ⋃ i, g i := by
+    intro x hx
+    obtain ⟨c, hc, hxc⟩ := Set.mem_iUnion₂.mp (hcov hx)
+    have hcs : c ∈ s := htfin.mem_toFinset.mpr hc
+    refine Set.mem_iUnion.mpr ⟨s.equivFin ⟨c, hcs⟩, ?_⟩
+    have hyc : y (s.equivFin ⟨c, hcs⟩) = c := by
+      show ((s.equivFin.symm (s.equivFin ⟨c, hcs⟩) : ℝ)) = c
+      rw [Equiv.symm_apply_apply]
+    show x ∈ Metric.ball (y (s.equivFin ⟨c, hcs⟩)) ε
+    rwa [hyc]
+  have hcell_meas : ∀ i, MeasurableSet (disjointed g i) := by
+    intro i
+    rw [disjointed_apply]
+    refine measurableSet_ball.diff ?_
+    rw [Finset.sup_eq_iSup]
+    exact (Finset.Iio i).measurableSet_biUnion fun j _ => measurableSet_ball
+  refine ⟨⟨s.card, disjointed g, hcell_meas, ?_, ?_, y, hy_mem, ε, hε.le, ?_⟩, le_rfl⟩
+  · intro i _ j _ hij
+    exact disjoint_disjointed g hij
+  · rw [iUnion_disjointed]
+    exact hg_cover
+  · intro i x hx
+    have hxg : x ∈ g i := disjointed_le g i hx.1
+    have : dist x (y i) < ε := Metric.mem_ball.mp hxg
+    rw [Real.dist_eq] at this
+    exact this.le
 
 /-- Two finite steps whose representatives come from separated original
 spectra inherit exactly the same separation. -/
@@ -374,10 +469,10 @@ theorem finiteSpectralStep_representatives_separated
     (SA : FiniteSpectralStep A hA) (SB : FiniteSpectralStep B hB)
     (i : Fin SA.n) (j : Fin SB.n) :
     d ≤ |SA.representative i - SB.representative j| := by
-  -- Open obligation: transport `SpectraSeparated`'s separation clause (stated on
-  -- `restrictedSpectrum _ ⊤`) to `realSpectrum` via
-  -- `restrictedSpectrum_top_eq_realSpectrum`, handed to the mathematics agent.
-  sorry
+  obtain ⟨hInvA, hInvB, hgap⟩ := hsep
+  exact hgap _
+    ⟨hInvA, (spectrum_restrict_top A hInvA).symm.subset (SA.representative_mem i)⟩ _
+    ⟨hInvB, (spectrum_restrict_top B hInvB).symm.subset (SB.representative_mem j)⟩
 
 end SpectralStepApproximation
 
