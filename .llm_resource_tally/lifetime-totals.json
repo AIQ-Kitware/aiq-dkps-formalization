@@ -1,30 +1,30 @@
 {
-  "generated_at": "2026-07-23T16:23:14.193467+00:00",
+  "generated_at": "2026-07-23T16:30:25.206019+00:00",
   "schema": "llm-resource-tally/v3",
   "ledger_rows": 435,
   "commits_accounted": 372,
-  "turns": 11987,
+  "turns": 11965,
   "tokens": {
-    "input": 4320310,
-    "cache_write": 67333166,
-    "cache_read": 4196041901,
-    "output": 18022215,
-    "billable_input": 4267695377
+    "input": 4320268,
+    "cache_write": 67243607,
+    "cache_read": 4193479791,
+    "output": 17978703,
+    "billable_input": 4265043666
   },
   "output_tokens_by_model": {
     "<synthetic>": 0,
-    "claude-fable-5": 4826426,
+    "claude-fable-5": 4782914,
     "claude-opus-4-8": 12877276,
     "gpt-5.6-sol": 318513
   },
   "output_tokens_by_activity": {
     "backfill": 6478724,
-    "unlabeled": 10975987,
+    "unlabeled": 10932475,
     "implementation": 246754,
     "planning": 320750
   },
   "output_tokens_by_agent": {
-    "claude-code": 17703702,
+    "claude-code": 17660190,
     "codex": 318513
   },
   "server_tool_calls": {
@@ -32,7 +32,7 @@
     "web_fetch": 0
   },
   "time": {
-    "wall_clock_s": 1703123.3
+    "wall_clock_s": 1699991.6
   },
   "compaction_signals": {
     "events": 33,
