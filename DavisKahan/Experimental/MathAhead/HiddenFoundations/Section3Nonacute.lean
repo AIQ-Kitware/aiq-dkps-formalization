@@ -867,41 +867,149 @@ theorem exists_paperDirectRotation_of_crossedDefectsEquivalent
   exact ⟨nonacuteDirectRotation U V J,
     nonacuteDirectRotation_isPaperDirectRotation U V J⟩
 
-/-- A paper direct rotation restricts to a linear isometric equivalence between
-the two crossed defects.
+/-- A positive operator that has vanishing quadratic form at a vector
+annihilates that vector: write `S = √S · √S`, so `⟪x, S x⟫ = ‖√S x‖²`. -/
+private theorem apply_eq_zero_of_nonneg_inner_self_eq_zero
+    {S : H →L[ℂ] H} (hS : (0 : H →L[ℂ] H) ≤ S) {x : H} (hx : ⟪x, S x⟫_ℂ = 0) :
+    S x = 0 := by
+  have hRR : CFC.sqrt S * CFC.sqrt S = S := CFC.sqrt_mul_sqrt_self S hS
+  have hRnn : (0 : H →L[ℂ] H) ≤ CFC.sqrt S := CFC.sqrt_nonneg S
+  have hRsa : IsSelfAdjoint (CFC.sqrt S) :=
+    ((ContinuousLinearMap.nonneg_iff_isPositive _).mp hRnn).isSelfAdjoint
+  have hkey : ⟪CFC.sqrt S x, CFC.sqrt S x⟫_ℂ = ⟪x, S x⟫_ℂ := by
+    rw [← ContinuousLinearMap.adjoint_inner_right, ← ContinuousLinearMap.star_eq_adjoint,
+      hRsa.star_eq, ← ContinuousLinearMap.mul_apply, hRR]
+  have hRx : CFC.sqrt S x = 0 := inner_self_eq_zero.mp (hkey.trans hx)
+  rw [← hRR, ContinuousLinearMap.mul_apply, hRx, map_zero]
 
-Two of the four membership obligations below are handed to the mathematics
-agent: that a paper direct rotation maps the source defect `U ⊓ Vᗮ` into `Uᗮ`
-(and dually its adjoint maps the target defect into `Vᗮ`).  These require the
-crossed-block/compression structure of `IsPaperDirectRotation`, not merely the
-intertwining relation `T * P U = P V * T`, and are not derivable from the API
-mechanically available here. -/
+/-- The adjoint of an intertwiner intertwines the swapped projections. -/
+private theorem starIntertwines_of_intertwines
+    {T : H →L[ℂ] H} (hint : T * projection U = projection V * T) :
+    projection U * star T = star T * projection V := by
+  have h := congrArg star hint
+  rwa [star_mul, star_mul, (isSelfAdjoint_starProjection U).star_eq,
+    (isSelfAdjoint_starProjection V).star_eq] at h
+
+/-- A paper direct rotation is **accretive**: `re⟪z, T z⟫ ≥ 0`.  The two diagonal
+`U`-blocks are the nonnegative compressions; the two off-diagonal blocks are
+adjoint-negatives of each other (crossed blocks), so their real parts cancel. -/
+theorem re_inner_paperDirectRotation_nonneg
+    (T : H →L[ℂ] H) (hT : IsPaperDirectRotation U V T) (z : H) :
+    0 ≤ RCLike.re ⟪z, T z⟫_ℂ := by
+  have hsplit : T = projection U * T * projection U
+      + projection U * T * complementaryProjection U
+      + complementaryProjection U * T * projection U
+      + complementaryProjection U * T * complementaryProjection U := by
+    have hPP : projection U + complementaryProjection U = 1 := by
+      rw [show complementaryProjection U = 1 - projection U from
+        Submodule.starProjection_orthogonal' U]; abel
+    calc T = (projection U + complementaryProjection U) * T *
+          (projection U + complementaryProjection U) := by rw [hPP, one_mul, mul_one]
+      _ = _ := by noncomm_ring
+  have key : ⟪z, T z⟫_ℂ = ⟪z, (projection U * T * projection U) z⟫_ℂ
+      + ⟪z, (projection U * T * complementaryProjection U) z⟫_ℂ
+      + ⟪z, (complementaryProjection U * T * projection U) z⟫_ℂ
+      + ⟪z, (complementaryProjection U * T * complementaryProjection U) z⟫_ℂ := by
+    conv_lhs => rw [hsplit]
+    simp only [ContinuousLinearMap.add_apply, inner_add_right]
+  have h2 : RCLike.re ⟪z, (complementaryProjection U * T * projection U) z⟫_ℂ
+      = - RCLike.re ⟪z, (projection U * T * complementaryProjection U) z⟫_ℂ := by
+    rw [hT.crossed_blocks, ContinuousLinearMap.neg_apply, inner_neg_right, map_neg]
+    congr 1
+    rw [ContinuousLinearMap.star_eq_adjoint, ContinuousLinearMap.adjoint_inner_right]
+    exact inner_re_symm (𝕜 := ℂ) _ _
+  rw [key, map_add, map_add, map_add, h2]
+  have hd1 := hT.source_compression_nonnegative z
+  have hd2 := hT.complement_compression_nonnegative z
+  linarith
+
+/-- The Hermitian part of a paper direct rotation is a positive operator. -/
+theorem paperDirectRotation_add_star_nonneg
+    (T : H →L[ℂ] H) (hT : IsPaperDirectRotation U V T) :
+    (0 : H →L[ℂ] H) ≤ T + star T := by
+  have hSA : IsSelfAdjoint (T + star T) := by
+    rw [isSelfAdjoint_iff, star_add, star_star]; abel
+  rw [ContinuousLinearMap.nonneg_iff_isPositive]
+  refine ⟨ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hSA, fun x => ?_⟩
+  rw [ContinuousLinearMap.reApplyInnerSelf_apply, ContinuousLinearMap.add_apply,
+    inner_add_left, map_add]
+  have e1 : RCLike.re ⟪T x, x⟫_ℂ = RCLike.re ⟪x, T x⟫_ℂ := inner_re_symm (𝕜 := ℂ) (T x) x
+  have e2 : RCLike.re ⟪star T x, x⟫_ℂ = RCLike.re ⟪x, T x⟫_ℂ := by
+    rw [ContinuousLinearMap.star_eq_adjoint, ContinuousLinearMap.adjoint_inner_left]
+  rw [e1, e2]
+  have := re_inner_paperDirectRotation_nonneg U V T hT x
+  linarith
+
+/-- A paper direct rotation maps the source defect into the target defect.
+Both `⟪x, T x⟫` and `⟪x, T⋆ x⟫` vanish (by intertwining), so `(T + T⋆) x = 0` by
+positivity; hence `T x = -T⋆ x ∈ Uᗮ`. -/
+theorem paperDirectRotation_mapsto_targetDefect
+    (T : H →L[ℂ] H) (hT : IsPaperDirectRotation U V T) {x : H}
+    (hx : x ∈ halmosSourceDefect U V) :
+    T x ∈ halmosTargetDefect U V := by
+  obtain ⟨hxU, hxVp⟩ := mem_halmosSourceDefect.mp hx
+  have hTxV : T x ∈ V := by
+    have hPx : projection U x = x := Submodule.starProjection_eq_self_iff.mpr hxU
+    have h := congrArg (fun f : H →L[ℂ] H => f x) hT.intertwines
+    simp only [ContinuousLinearMap.mul_apply, hPx] at h
+    exact Submodule.starProjection_eq_self_iff.mp h.symm
+  have hsTxUp : star T x ∈ Uᗮ := by
+    have h := congrArg (fun f : H →L[ℂ] H => f x)
+      (starIntertwines_of_intertwines U V hT.intertwines)
+    simp only [ContinuousLinearMap.mul_apply,
+      (Submodule.starProjection_apply_eq_zero_iff _).mpr hxVp, map_zero] at h
+    exact (Submodule.starProjection_apply_eq_zero_iff _).mp h
+  have hHx : (T + star T) x = 0 := by
+    refine apply_eq_zero_of_nonneg_inner_self_eq_zero
+      (paperDirectRotation_add_star_nonneg U V T hT) ?_
+    rw [ContinuousLinearMap.add_apply, inner_add_right,
+      Submodule.inner_left_of_mem_orthogonal hTxV hxVp,
+      Submodule.inner_right_of_mem_orthogonal hxU hsTxUp, add_zero]
+  rw [mem_halmosTargetDefect]
+  refine ⟨?_, hTxV⟩
+  have hTx : T x = - star T x :=
+    eq_neg_of_add_eq_zero_left (by rw [← ContinuousLinearMap.add_apply]; exact hHx)
+  rw [hTx]
+  exact Submodule.neg_mem _ hsTxUp
+
+/-- Dually, the adjoint of a paper direct rotation maps the target defect into
+the source defect. -/
+theorem paperDirectRotation_star_mapsto_sourceDefect
+    (T : H →L[ℂ] H) (hT : IsPaperDirectRotation U V T) {y : H}
+    (hy : y ∈ halmosTargetDefect U V) :
+    star T y ∈ halmosSourceDefect U V := by
+  obtain ⟨hyUp, hyV⟩ := mem_halmosTargetDefect.mp hy
+  have hsTyU : star T y ∈ U := by
+    have h := congrArg (fun f : H →L[ℂ] H => f y)
+      (starIntertwines_of_intertwines U V hT.intertwines)
+    simp only [ContinuousLinearMap.mul_apply,
+      Submodule.starProjection_eq_self_iff.mpr hyV] at h
+    exact Submodule.starProjection_eq_self_iff.mp h
+  have hTyVp : T y ∈ Vᗮ := by
+    have h := congrArg (fun f : H →L[ℂ] H => f y) hT.intertwines
+    simp only [ContinuousLinearMap.mul_apply,
+      (Submodule.starProjection_apply_eq_zero_iff _).mpr hyUp, map_zero] at h
+    exact (Submodule.starProjection_apply_eq_zero_iff _).mp h.symm
+  have hHy : (T + star T) y = 0 := by
+    refine apply_eq_zero_of_nonneg_inner_self_eq_zero
+      (paperDirectRotation_add_star_nonneg U V T hT) ?_
+    rw [ContinuousLinearMap.add_apply, inner_add_right,
+      Submodule.inner_right_of_mem_orthogonal hyV hTyVp,
+      Submodule.inner_left_of_mem_orthogonal hsTyU hyUp, add_zero]
+  rw [mem_halmosSourceDefect]
+  refine ⟨hsTyU, ?_⟩
+  have hsTy : star T y = - T y :=
+    eq_neg_of_add_eq_zero_right (by rw [← ContinuousLinearMap.add_apply]; exact hHy)
+  rw [hsTy]
+  exact Submodule.neg_mem _ hTyVp
+
+/-- A paper direct rotation restricts to a linear isometric equivalence between
+the two crossed defects. -/
 noncomputable def crossedDefectEquivOfPaperDirectRotation
     (T : H →L[ℂ] H) (hT : IsPaperDirectRotation U V T) :
     halmosSourceDefect U V ≃ₗᵢ[ℂ] halmosTargetDefect U V where
-  toFun x := ⟨T x, by
-    rw [mem_halmosTargetDefect]
-    constructor
-    · sorry
-    · have hPx : projection U (x : H) = x :=
-        Submodule.starProjection_eq_self_iff.mpr x.property.1
-      have h := DFunLike.congr_fun hT.intertwines (x : H)
-      rw [ContinuousLinearMap.mul_apply, ContinuousLinearMap.mul_apply, hPx] at h
-      exact Submodule.starProjection_eq_self_iff.mp h.symm⟩
-  invFun y := ⟨star T y, by
-    rw [mem_halmosSourceDefect]
-    constructor
-    · have hstar := congrArg star hT.intertwines
-      have hrel : projection U * star T = star T * projection V := by
-        simpa [star_mul,
-          (isSelfAdjoint_starProjection U).star_eq,
-          (isSelfAdjoint_starProjection V).star_eq] using hstar
-      have hQy : projection V (y : H) = y :=
-        Submodule.starProjection_eq_self_iff.mpr y.property.2
-      have h := DFunLike.congr_fun hrel (y : H)
-      rw [ContinuousLinearMap.mul_apply, ContinuousLinearMap.mul_apply, hQy] at h
-      exact Submodule.starProjection_eq_self_iff.mp h
-    · sorry⟩
+  toFun x := ⟨T x, paperDirectRotation_mapsto_targetDefect U V T hT x.property⟩
+  invFun y := ⟨star T y, paperDirectRotation_star_mapsto_sourceDefect U V T hT y.property⟩
   left_inv x := by
     apply Subtype.ext
     have hunit := hT.unitary_mem
