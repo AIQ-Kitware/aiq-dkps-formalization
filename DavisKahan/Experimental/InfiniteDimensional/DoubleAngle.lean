@@ -19,6 +19,8 @@ namespace DavisKahanExt
 
 open scoped InnerProductSpace
 
+set_option maxHeartbeats 1000000
+
 variable {𝕜 : Type*} [RCLike 𝕜]
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
   [CompleteSpace E]
@@ -103,6 +105,160 @@ theorem norm_reflectionDefect_le_two_mul
     _ ≤ ‖A - B‖ + ‖A - B‖ := add_le_add hconj le_rfl
     _ = 2 * ‖A - B‖ := by ring
 
+/-! ## Reflected subspaces and the double-angle operator
+
+The one-sided ambient double-angle operator, the mirror image of a subspace,
+and the reflection-transport lemmas the `sin 2Θ` theorems consume.  The
+transports whose proofs require restricted-spectrum invariance under unitary
+conjugation or the two-projection double-angle calculus are isolated as leaf
+obligations.
+-/
+
+/-- The ambient one-sided double-angle sine operator `2 P_{Uᗮ} P_V P_U`,
+matching the finite-dimensional normalization. -/
+noncomputable def sinTwoAngleOperator (U V : Submodule 𝕜 E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →L[𝕜] E :=
+  (2 : 𝕜) • (complementaryProjection U ∘L projection V ∘L projection U)
+
+/-- The mirror image of a subspace under the reflection through another. -/
+noncomputable def reflectedSubspace (V U : Submodule 𝕜 E)
+    [V.HasOrthogonalProjection] : Submodule 𝕜 E :=
+  U.map (reflectionOperator V : E →L[𝕜] E).toLinearMap
+
+/-- **Leaf obligation.** The mirror image of a subspace with an orthogonal
+projection has one: the conjugated projection is a self-adjoint idempotent
+with the reflected range. -/
+noncomputable instance reflectedSubspace_hasOrthogonalProjection
+    (V U : Submodule 𝕜 E) [V.HasOrthogonalProjection]
+    [U.HasOrthogonalProjection] :
+    (reflectedSubspace V U).HasOrthogonalProjection :=
+  sorry
+
+/-- The reflection through a subspace is self-adjoint: it is `2 P - 1`. -/
+theorem isSelfAdjoint_reflectionOperator
+    (V : Submodule 𝕜 E) [V.HasOrthogonalProjection] :
+    IsSelfAdjoint (reflectionOperator V : E →L[𝕜] E) := by
+  have hP : IsSelfAdjoint (V.starProjection : E →L[𝕜] E) :=
+    isSelfAdjoint_starProjection V
+  have hform : (reflectionOperator V : E →L[𝕜] E) =
+      (2 : 𝕜) • V.starProjection - 1 := by
+    ext x
+    simp [Submodule.reflectionOperator_apply]
+  rw [hform, IsSelfAdjoint, star_sub, star_smul, star_ofNat, hP.star_eq,
+    star_one]
+
+/-- Conjugation by the reflection preserves self-adjointness. -/
+theorem IsSelfAdjointOperator.reflection_conjugate
+    {A : E →L[𝕜] E} (hA : IsSelfAdjointOperator A)
+    (V : Submodule 𝕜 E) [V.HasOrthogonalProjection] :
+    IsSelfAdjointOperator
+      (reflectionOperator V ∘L A ∘L reflectionOperator V) := by
+  have hAsa : IsSelfAdjoint A :=
+    ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hA
+  have hJsa : IsSelfAdjoint (reflectionOperator V : E →L[𝕜] E) :=
+    isSelfAdjoint_reflectionOperator V
+  have hstar : IsSelfAdjoint
+      (reflectionOperator V ∘L A ∘L reflectionOperator V) := by
+    show star (reflectionOperator V * A * reflectionOperator V) =
+      reflectionOperator V * A * reflectionOperator V
+    rw [star_mul, star_mul, hJsa.star_eq, hAsa.star_eq, mul_assoc]
+  exact ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hstar
+
+/-- **Leaf obligation.** The mirror image of a reducing subspace reduces the
+conjugated operator (needs `(J '' U)ᗮ = J '' Uᗮ` for the self-adjoint unitary
+reflection). -/
+theorem reduces_reflectedSubspace
+    {A : E →L[𝕜] E} {U : Submodule 𝕜 E} {V : Submodule 𝕜 E}
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hU : Reduces A U) :
+    Reduces (reflectionOperator V ∘L A ∘L reflectionOperator V)
+      (reflectedSubspace V U) :=
+  sorry
+
+/-- **Leaf obligation.** A finite-gap configuration yields both mixed
+interval/exterior separations against its own reflection through `V`, with
+ordered interval endpoints: conjugation by the reflection preserves every
+restricted spectrum. -/
+theorem finiteGap_mixedIntervalExterior
+    {A : E →L[𝕜] E} {U : Submodule 𝕜 E} (V : Submodule 𝕜 E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] {d : ℝ}
+    (hfinite : FiniteGapConfiguration A U d) :
+    ∃ l r l' r', l ≤ r ∧ l' ≤ r' ∧
+      IntervalExteriorSeparated A U
+        (reflectionOperator V ∘L A ∘L reflectionOperator V)
+        (reflectedSubspace V U)ᗮ l r d ∧
+      IntervalExteriorSeparated
+        (reflectionOperator V ∘L A ∘L reflectionOperator V)
+        (reflectedSubspace V U) A Uᗮ l' r' d :=
+  sorry
+
+/-- **Leaf obligation.** The internal gap transports to the hybrid gap against
+the reflected configuration. -/
+theorem internalGap_reflection_transport
+    {A : E →L[𝕜] E} {U : Submodule 𝕜 E} {V : Submodule 𝕜 E}
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] {d : ℝ}
+    (hgap : InternalGap A U d) :
+    HybridGap A (reflectionOperator V ∘L A ∘L reflectionOperator V)
+      U (reflectedSubspace V U) d :=
+  sorry
+
+/-- **Leaf obligation.** The two-projection double-angle identity: the gap to
+the mirror image is the norm of the one-sided double-angle operator. -/
+theorem sinAngle_reflected_eq_sinTwoAngle
+    (U V : Submodule 𝕜 E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
+    subspaceGap U (reflectedSubspace V U) = ‖sinTwoAngleOperator U V‖ :=
+  sorry
+
+/-- **Leaf obligation.** The directed form of the double-angle identity. -/
+theorem doubleAngle_directedGap_identity
+    (U V : Submodule 𝕜 E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
+    ‖sinTwoAngleOperator U V‖ = directedGap U (reflectedSubspace V U) :=
+  sorry
+
+/-- **Leaf obligation.** In every symmetric norm ideal, the full sine of the
+angle to the mirror image carries the same membership and gauge as the
+one-sided double-angle operator: their singular values agree. -/
+theorem SymmetricNormIdeal.sinAngle_reflected_mem_gauge_eq
+    (I : SymmetricNormIdeal (𝕜 := 𝕜) (E := E)) (U V : Submodule 𝕜 E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
+    (I.mem (sinAngleOperator U (reflectedSubspace V U)) ↔
+      I.mem (sinTwoAngleOperator U V)) ∧
+    I.gauge (sinAngleOperator U (reflectedSubspace V U)) =
+      I.gauge (sinTwoAngleOperator U V) :=
+  sorry
+
+/-- **Leaf obligation.** The reflection defect through the closed trial range
+is at most twice the residual: the defect is twice the off-diagonal block of
+`A`, which the residual dominates. -/
+theorem reflectionDefect_range_le_residual
+    {A : E →L[𝕜] E} (hA : IsSelfAdjointOperator A)
+    (X : F →L[𝕜] E) (hX : IsometricEmbedding X)
+    [(LinearMap.range X.toLinearMap).HasOrthogonalProjection]
+    {M : F →L[𝕜] F} (hM : IsSelfAdjointOperator M) :
+    ‖reflectionDefect (LinearMap.range X.toLinearMap) A‖ ≤
+      2 * ‖residual A X M‖ :=
+  sorry
+
+/-- The range of an isometric embedding of a complete space is closed, hence
+admits an orthogonal projection. -/
+theorem hasOrthogonalProjection_range_of_isometric
+    (X : F →L[𝕜] E) (hX : IsometricEmbedding X) :
+    (LinearMap.range X.toLinearMap).HasOrthogonalProjection := by
+  have hiso : Isometry X := AddMonoidHomClass.isometry_of_norm X hX
+  have hclosed : IsClosed ((LinearMap.range X.toLinearMap : Submodule 𝕜 E) :
+      Set E) := by
+    have hr : ((LinearMap.range X.toLinearMap : Submodule 𝕜 E) : Set E) =
+        Set.range X := by
+      ext y
+      simp [LinearMap.mem_range]
+    rw [hr]
+    exact hiso.isClosedEmbedding.isClosed_range
+  haveI : CompleteSpace (LinearMap.range X.toLinearMap) :=
+    hclosed.completeSpace_coe
+  infer_instance
+
 /-- Reflection-defect `sin 2Θ` theorem.
 
 This is the theorem previously named `sinTwoTheta_residual`. The old name was
@@ -135,19 +291,17 @@ theorem sinTwoTheta_reflectionDefect
       ‖reflectionDefect V A‖ := by
   let A' := reflectionOperator V ∘L A ∘L reflectionOperator V
   let U' := reflectedSubspace V U
-  have hA' : IsSelfAdjointOperator A' :=
-    hA.unitary_conjugate (reflectionOperator_unitary V)
+  have hA' : IsSelfAdjointOperator A' := hA.reflection_conjugate V
   have hU' : Reduces A' U' := reduces_reflectedSubspace hU
-  have hfinite' := finiteGap_reflected (V := V) hfinite
-  have hgaps :
-      ∃ l r l' r',
-        IntervalExteriorSeparated A U A' U'ᗮ l r d ∧
-        IntervalExteriorSeparated A' U' A Uᗮ l' r' d :=
-    finiteGap_mixedIntervalExterior hfinite hfinite'
-  obtain ⟨l, r, l', r', hUU', hU'U⟩ := hgaps
-  have hsin := sinTheta_symmetric hA hA' hU hU' hd hUU' hU'U
-  simpa [A', U', reflectionDefect, subspaceGap,
-    sinAngle_reflected_eq_sinTwoAngle] using hsin
+  obtain ⟨l, r, l', r', hlr, hlr', hUU', hU'U⟩ :=
+    finiteGap_mixedIntervalExterior V hfinite
+  have hsin := sinTheta_symmetric hA hA' hU hU' hlr hlr' hd hUU' hU'U
+  have hgapid : subspaceGap U U' = ‖sinTwoAngleOperator U V‖ :=
+    sinAngle_reflected_eq_sinTwoAngle U V
+  calc d * ‖sinTwoAngleOperator U V‖
+      = d * subspaceGap U U' := by rw [hgapid]
+    _ ≤ ‖A' - A‖ := hsin
+    _ = ‖reflectionDefect V A‖ := rfl
 
 /-- Approximate-invariant-pair residual form of `sin 2Θ`.
 
@@ -171,6 +325,7 @@ theorem sinTwoTheta_residual
     {A : E →L[𝕜] E} (hA : IsSelfAdjointOperator A)
     {U : Submodule 𝕜 E} [U.HasOrthogonalProjection]
     (hU : Reduces A U) (X : F →L[𝕜] E) (hX : IsometricEmbedding X)
+    [(LinearMap.range X.toLinearMap).HasOrthogonalProjection]
     {M : F →L[𝕜] F} (hM : IsSelfAdjointOperator M)
     {d : ℝ} (hd : 0 < d) (hfinite : FiniteGapConfiguration A U d) :
     d * ‖sinTwoThetaEmbedding U X‖ ≤ 2 * ‖residual A X M‖ := by
@@ -234,17 +389,18 @@ theorem sinTwoTheta_generalSeparation
     d * ‖sinTwoAngleOperator U V‖ ≤ Real.pi * ‖B - A‖ := by
   let A' := reflectionOperator V ∘L A ∘L reflectionOperator V
   let U' := reflectedSubspace V U
-  have hA' : IsSelfAdjointOperator A' :=
-    hA.unitary_conjugate (reflectionOperator_unitary V)
+  have hA' : IsSelfAdjointOperator A' := hA.reflection_conjugate V
   have hU' : Reduces A' U' := reduces_reflectedSubspace hU
   have hhybrid : HybridGap A A' U U' d :=
     internalGap_reflection_transport hgap
   have hsin := sinTheta_generalSeparation hA hA' hU hU' hd hhybrid
-  have hdefect := norm_reflectionDefect_le_two_mul A B V hV
+  have hdefect : ‖reflectionDefect V A‖ ≤ 2 * ‖B - A‖ := by
+    rw [norm_sub_rev B A]
+    exact norm_reflectionDefect_le_two_mul A B V hV
   calc
     d * ‖sinTwoAngleOperator U V‖
-        = d * directedGap U U' :=
-          doubleAngle_directedGap_identity U V
+        = d * directedGap U U' := by
+          rw [doubleAngle_directedGap_identity U V]
     _ ≤ (Real.pi/2) * ‖A'-A‖ := hsin
     _ = (Real.pi/2) * ‖reflectionDefect V A‖ := rfl
     _ ≤ (Real.pi/2) * (2 * ‖B-A‖) := by gcongr
@@ -281,37 +437,46 @@ theorem ideal_sinTwoTheta
       d * I.gauge (sinTwoAngleOperator U V) ≤ 2 * I.gauge (B - A) := by
   let A' := reflectionOperator V ∘L A ∘L reflectionOperator V
   let U' := reflectedSubspace V U
-  have hA' : IsSelfAdjointOperator A' :=
-    hA.unitary_conjugate (reflectionOperator_unitary V)
+  have hA' : IsSelfAdjointOperator A' := hA.reflection_conjugate V
   have hU' : Reduces A' U' := reduces_reflectedSubspace hU
-  obtain ⟨l, r, l', r', hUU', hU'U⟩ :=
-    finiteGap_mixedIntervalExterior hfinite
-      (finiteGap_reflected (V := V) hfinite)
+  obtain ⟨l, r, l', r', hlr, hlr', hUU', hU'U⟩ :=
+    finiteGap_mixedIntervalExterior V hfinite
+  have hAB : I.mem (A - B) := by
+    simpa [neg_sub] using I.smul_mem (-1 : 𝕜) hmem
+  have hnegAB : I.mem (-(A - B)) := by
+    simpa using I.smul_mem (-1 : 𝕜) hAB
   have hdefMem : I.mem (A'-A) := by
     rw [show A'-A = reflectionDefect V A by rfl,
       reflectionDefect_eq_perturbationDefect A B V hV]
-    exact I.add_mem
-      (I.ideal_mem (reflectionOperator V) (reflectionOperator V) hmem)
-      (by simpa using I.smul_mem (-1 : 𝕜) hmem)
-  have hsin := ideal_sinTheta I hA hA' hU hU' hd hUU' hU'U hdefMem
+    have h := I.add_mem
+      (I.ideal_mem (reflectionOperator V) (reflectionOperator V) hAB) hnegAB
+    simpa [sub_eq_add_neg] using h
+  have hsin := ideal_sinTheta I hA hA' hU hU' hlr hlr' hd hUU' hU'U hdefMem
   have hdefGauge : I.gauge (A'-A) ≤ 2 * I.gauge (B-A) := by
     rw [show A'-A = reflectionDefect V A by rfl,
       reflectionDefect_eq_perturbationDefect A B V hV]
-    have hconj := I.unitary_invariant
-      (reflectionOperator V) (reflectionOperator V) (A-B)
-      (reflectionOperator_unitary V) (reflectionOperator_unitary V)
-      (reflectionOperator_involutive V) (reflectionOperator_involutive V)
-      (by simpa using hmem)
+    have hconj : I.gauge (reflectionOperator V ∘L (A-B) ∘L reflectionOperator V) =
+        I.gauge (A-B) :=
+      I.unitary_invariant
+        (reflectionOperator V) (reflectionOperator V) (A-B)
+        (reflectionOperator_isUnitary V) (reflectionOperator_isUnitary V)
+        (reflectionOperator_involutive V) (reflectionOperator_involutive V) hAB
     have htri := I.triangle
-      (I.ideal_mem (reflectionOperator V) (reflectionOperator V)
-        (by simpa using hmem))
-      (by simpa using I.smul_mem (-1 : 𝕜) (by simpa using hmem))
-    simpa [hconj, I.gauge_smul] using htri
-  have hangle : I.gauge (sinAngleOperator U U') =
-      I.gauge (sinTwoAngleOperator U V) := by
-    rw [sinAngle_reflected_eq_sinTwoAngle]
-  exact ⟨by simpa [sinAngle_reflected_eq_sinTwoAngle] using hsin.1,
-    by rw [← hangle]; exact hsin.2.trans hdefGauge⟩
+      (I.ideal_mem (reflectionOperator V) (reflectionOperator V) hAB) hnegAB
+    have hgneg : I.gauge (-(A - B)) = I.gauge (A - B) := by
+      simpa using I.gauge_smul (-1 : 𝕜) hAB
+    have hgBA : I.gauge (A - B) = I.gauge (B - A) := by
+      simpa [neg_sub] using I.gauge_smul (-1 : 𝕜) hmem
+    calc I.gauge (reflectionOperator V ∘L (A-B) ∘L reflectionOperator V - (A-B))
+        = I.gauge (reflectionOperator V ∘L (A-B) ∘L reflectionOperator V +
+            -(A-B)) := by rw [sub_eq_add_neg]
+      _ ≤ I.gauge (reflectionOperator V ∘L (A-B) ∘L reflectionOperator V) +
+            I.gauge (-(A-B)) := htri
+      _ = I.gauge (A-B) + I.gauge (A-B) := by rw [hconj, hgneg]
+      _ = 2 * I.gauge (B-A) := by rw [hgBA]; ring
+  obtain ⟨hmemiff, hgaugeeq⟩ := I.sinAngle_reflected_mem_gauge_eq U V
+  exact ⟨hmemiff.mp hsin.1,
+    by rw [← hgaugeeq]; exact hsin.2.trans hdefGauge⟩
 
 end DavisKahanExt
 end ForMathlib
