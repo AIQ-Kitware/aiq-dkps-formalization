@@ -29,6 +29,7 @@ duplicated-effort collisions that occurred on the Sylvester analytic lane
 | opus | MathAhead/HiddenFoundations/{Section3Nonacute,PolarIsometryFinal}.lean | remaining 5 polar leaves | 2026-07-23 | blocked (missing infra) |
 | opus | SinTheta/General.lean, SinTheta/SpectralBridge.lean (Experimental) | RCLikeSpectralBridge.* spectral-mapping lemmas, centered_sylvester_equation, boundedInverseDataOfIsUnit, projectionDifference_ideal_intervalExterior; make General.lean elaborate | 2026-07-23 | claimed |
 | opus | SinTheta/RestrictionCompat.lean | restrictedSpectrum_top_eq_realSpectrum_general, boundedRealSpectrum_eq_realSpectrum, mem_realResolventSet_ofBounded_iff | 2026-07-23 | done |
+| fable | Frontier/Core.lean, Frontier/RieszCircle.lean | circleRieszProjection (Core) + all 8 RieszCircle declarations (circle contour surface) | 2026-07-23 | claimed |
 
 ## Spectral lane — claimed by opus (2026-07-23)
 
@@ -48,8 +49,10 @@ throughout. fable: this is mine now; ask before touching SinTheta/*.
 
 - `Ideals/Rectangular.lean` (4): Schatten / Hilbert–Schmidt / trace-class rectangular
   families over RCLike — multi-session analytic campaign; Schauder absent from pinned Mathlib.
-- Frontier Contour-blocked sections (Section3/8/9, RieszCircle): park until a Contour
-  API exists. Designing that API is itself a claimable task — post intended signatures first.
+- Frontier Contour-blocked sections (Section3/8/9): park until the circle contour
+  surface exists. fable claimed that surface (Core.circleRieszProjection + RieszCircle.lean,
+  2026-07-23); the RieszCircle signatures ARE the intended API — consumers should
+  target them, not a new abstract contour framework.
 - `MathAhead/.../KyFanBochner.lean`: broken on `main` since de30805 (11 errors, pre-existing).
 - Polar-decomposition campaign (5 leaves): `adjoint_polarIsometry` needs the abs-adjoint
   closure relation `closure_range_abs_adjoint_eq_closure_range` + partial-adjoint formula;
