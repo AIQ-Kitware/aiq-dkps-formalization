@@ -41,6 +41,49 @@ The highest-value operating rules are:
   coordinate proof;
 - never claim a declaration is complete until Lean has accepted it.
 
+## Milestone ordering and dependency policy
+
+The first non-negotiable milestone is a complete standalone `DavisKahan`
+formalization of the 1970 Davis--Kahan paper in the source scope described
+below. Major Tau Ceti integration and broad dependency restructuring are
+post-paper work.
+
+During this first milestone, the intended build graph is:
+
+```text
+Mathlib
+   ↑
+vendor/Spectra
+   ↑
+DavisKahan
+```
+
+Apply these rules until the full-paper completion gate is met:
+
+- `DavisKahan` remains its own package and the paper-facing home of the work.
+- `vendor/Spectra` is an accepted temporary production dependency. Use it when
+  it materially helps close a paper obligation. Do not begin a broad rewrite
+  merely to remove it before the paper is complete.
+- `external/Spectra` and `external/TauCeti` are read-only provenance and design
+  references. The ordinary build must not depend on either checkout.
+- Do not reorganize the repository around Tau Ceti, add Tau Ceti as a required
+  production dependency, or bulk-migrate namespaces before the paper milestone.
+- Reusable mathematics should still be written with future extraction in mind:
+  keep paper-specific wrappers downstream, avoid unnecessary Spectra coupling,
+  and record exact provenance for anything adapted from Spectra.
+- A source claim shown false is completed by a machine-checked counterexample,
+  an explanation of the failure, and a corrected theorem when one is justified.
+  Proposition 4.4 is the known example; do not restore it as a theorem.
+- After the paper is recursively grounded, generic foundations may be migrated
+  cluster-by-cluster into Tau Ceti while `DavisKahan` remains a downstream
+  package. The final migration target removes Spectra from the normal build,
+  but that is the second milestone, not the current task.
+
+The operational plan is in
+[`docs/planning/tauceti-adaptation-and-spectra-extraction.md`](docs/planning/tauceti-adaptation-and-spectra-extraction.md).
+The current Opus campaign is in
+[`docs/planning/opus-next-paper-completion-campaign.md`](docs/planning/opus-next-paper-completion-campaign.md).
+
 ## Davis--Kahan project goal and completion discipline
 
 The default Davis--Kahan objective is a source-faithful formalization of the
