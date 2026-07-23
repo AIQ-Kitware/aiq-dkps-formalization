@@ -1,8 +1,10 @@
-Overlay: Sylvester semigroup mathematics pass
-Target repository: /home/joncrall/code/aiq-dkps-formalization
-Base archive commit: 9e2557409aa7
-Scope: Experimental infinite-dimensional Sylvester, ideal, graph, double-angle,
-and continuation files, plus the compiler handoff ledger.
+Overlay: aiq_dkps_namek_lake_build_report_b2ea942_gpt56_20260723.zip
+Base: b2ea942eabea
+Target: /home/joncrall/code/aiq-dkps-namek
 
-Apply from the repository root with:
-  unzip -o ~/Downloads/aiq_dkps_sylvester_semigroup_mathpass_overlay_gpt56_20260722.zip -d .
+Added:
+- scripts/lake_build_report.py
+- scripts/tests/test_lake_build_report.py
+- dev/overlays/namek-lake-build-report-b2ea942-gpt56.md
+- dev/namek-lake-build-report-compiler-prompt.md
+- OVERLAY_MANIFEST.txt

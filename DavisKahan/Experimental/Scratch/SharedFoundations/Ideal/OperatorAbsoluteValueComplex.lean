@@ -45,24 +45,26 @@ theorem spectra_absOp_eq_operatorAbs (T : E →L[ℂ] E) :
 theorem polarIsometry_comp_operatorAbs (T : E →L[ℂ] E) :
     polarIsometry T ∘L ForMathlib.operatorAbs T = T := by
   rw [← spectra_absOp_eq_operatorAbs]
-  exact polar_decomposition T
+  exact Spectra.QuantumMechanics.Channels.polar_decomposition T
 
 /-- The adjoint polar factor recovers the local absolute value. -/
 theorem polarIsometry_adjoint_comp_operator (T : E →L[ℂ] E) :
     (polarIsometry T).adjoint ∘L T = ForMathlib.operatorAbs T := by
   rw [← spectra_absOp_eq_operatorAbs]
-  exact polarIsometry_adjoint_comp T
+  exact Spectra.QuantumMechanics.Channels.polarIsometry_adjoint_comp T
 
 /-- The polar factor and its adjoint are contractions. -/
 theorem polarIsometry_and_adjoint_norm_le_one (T : E →L[ℂ] E) :
     ‖polarIsometry T‖ ≤ 1 ∧ ‖(polarIsometry T).adjoint‖ ≤ 1 := by
   refine ⟨norm_polarIsometry_le_one T, ?_⟩
-  rw [ContinuousLinearMap.norm_adjoint]
-  exact norm_polarIsometry_le_one T
+  calc
+    ‖(polarIsometry T).adjoint‖ = ‖polarIsometry T‖ :=
+      ContinuousLinearMap.adjoint.norm_map _
+    _ ≤ 1 := norm_polarIsometry_le_one T
 
 /-- Every square symmetric ideal contains `|T|` exactly when it contains `T`,
 and assigns them equal gauge. -/
-theorem DavisKahanExt.SymmetricNormIdeal.operatorAbs_mem_iff_and_gauge_eq
+theorem SymmetricNormIdeal.operatorAbs_mem_iff_and_gauge_eq
     (I : DavisKahanExt.SymmetricNormIdeal (𝕜 := ℂ) (E := E))
     (T : E →L[ℂ] E) :
     (I.mem (ForMathlib.operatorAbs T) ↔ I.mem T) ∧
@@ -81,23 +83,23 @@ theorem DavisKahanExt.SymmetricNormIdeal.operatorAbs_mem_iff_and_gauge_eq
   constructor
   · constructor
     · intro hAbs
-      exact I.mem_of_eq_comp_comp hAbs hTfactor
+      exact SymmetricNormIdeal.mem_of_eq_comp_comp I hAbs hTfactor
     · intro hT
-      exact I.mem_of_eq_comp_comp hT hAbsfactor
+      exact SymmetricNormIdeal.mem_of_eq_comp_comp I hT hAbsfactor
   · intro hT
     have hAbs : I.mem (ForMathlib.operatorAbs T) :=
-      I.mem_of_eq_comp_comp hT hAbsfactor
+      SymmetricNormIdeal.mem_of_eq_comp_comp I hT hAbsfactor
     apply le_antisymm
-    · exact I.gauge_le_of_contraction_factorization hT hAbsfactor hUa hJ
-    · exact I.gauge_le_of_contraction_factorization hAbs hTfactor hU hJ
+    · exact SymmetricNormIdeal.gauge_le_of_contraction_factorization I hT hAbsfactor hUa hJ
+    · exact SymmetricNormIdeal.gauge_le_of_contraction_factorization I hAbs hTfactor hU hJ
 
 /-- Direct form used by the `sin Θ` ideal layer. -/
-theorem DavisKahanExt.SymmetricNormIdeal.operatorAbs_mem_and_gauge_eq
+theorem SymmetricNormIdeal.operatorAbs_mem_and_gauge_eq
     (I : DavisKahanExt.SymmetricNormIdeal (𝕜 := ℂ) (E := E))
     {T : E →L[ℂ] E} (hT : I.mem T) :
     I.mem (ForMathlib.operatorAbs T) ∧
       I.gauge (ForMathlib.operatorAbs T) = I.gauge T := by
-  have h := I.operatorAbs_mem_iff_and_gauge_eq T
+  have h := SymmetricNormIdeal.operatorAbs_mem_iff_and_gauge_eq I T
   exact ⟨h.1.mpr hT, h.2 hT⟩
 
 /-- Rectangular-family square specialization. -/
@@ -108,7 +110,8 @@ theorem RectangularSymmetricIdealFamily.operatorAbs_mem_and_gauge_eq
       N.gauge (ForMathlib.operatorAbs T) = N.gauge T := by
   let I : DavisKahanExt.SymmetricNormIdeal (𝕜 := ℂ) (E := E) :=
     DavisKahanExt.SymmetricNormIdeal.ofRectangular N
-  exact I.operatorAbs_mem_and_gauge_eq hT
+  have h := SymmetricNormIdeal.operatorAbs_mem_iff_and_gauge_eq I T
+  exact ⟨h.1.mpr hT, h.2 hT⟩
 
 /-- The approximation-number proof and the polar-factor proof agree on the
 current family abstraction. -/
