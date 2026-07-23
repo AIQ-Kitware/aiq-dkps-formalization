@@ -9,6 +9,7 @@ import DavisKahan.Sylvester.ClosedSylvesterEquation
 import DavisKahan.Sylvester.CutoffInterface
 import DavisKahan.Sylvester.FilledTruncation
 import DavisKahan.Sylvester.Gap
+import DavisKahan.Sylvester.GenuineSpectrum
 import DavisKahan.Sylvester.HomogeneousUniqueness
 import DavisKahan.Sylvester.PairwiseHomogeneousUniqueness
 import DavisKahan.Sylvester.PairwiseSpectrumGap

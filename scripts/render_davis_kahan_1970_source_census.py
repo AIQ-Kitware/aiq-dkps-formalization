@@ -12,6 +12,98 @@ JSON_PATH = ROOT / "dev/davis-kahan-1970-full-source-census.json"
 MD_PATH = ROOT / "dev/davis-kahan-1970-full-source-census.md"
 
 
+# Ordered so the ledger reads from "done" to "needs work"; a fresh reader
+# should be able to find the frontier by scanning downward.
+VERIFICATION_ORDER = [
+    "proved_in_build", "proved_conditional", "partially_in_build",
+    "proved_outside_build", "not_compiling", "absent", "not_applicable",
+]
+NEEDS_WORK = ["absent", "not_compiling", "proved_conditional",
+              "partially_in_build", "proved_outside_build"]
+
+
+def _render_verification(data: dict, items: list) -> list[str]:
+    """The compile-backed axis: what the Lean build actually certifies."""
+    counts = Counter(item["verification"] for item in items)
+    lines = [
+        "",
+        "## Verification summary",
+        "",
+        "`status` above is the mathematical judgement against the printed",
+        "source. `verification` below is what the Lean build certifies, and is",
+        "checkable: run `python3 scripts/probe_census_declarations.py --verify`",
+        "to confirm every row still matches the build. The default build carries",
+        "no `sorry` and no `axiom`, so a declaration reachable from",
+        "`DavisKahan.All` is genuinely proved.",
+        "",
+        "| Verification | Count |",
+        "| --- | ---: |",
+    ]
+    for key in VERIFICATION_ORDER:
+        if key in data.get("verification_definitions", {}):
+            lines.append(f"| `{key}` | {counts.get(key, 0)} |")
+    lines += ["", "## Verification meanings", ""]
+    for key in VERIFICATION_ORDER:
+        meaning = data.get("verification_definitions", {}).get(key)
+        if meaning:
+            lines.append(f"- **`{key}`** -- {meaning}")
+    return lines
+
+
+def _render_frontier(data: dict, items: list) -> list[str]:
+    """Group everything still outstanding under the obstruction that gates it."""
+    blockers = data.get("blockers", {})
+    lines = [
+        "",
+        "## Frontier",
+        "",
+        "Every row that still owes work, grouped by the obstruction standing",
+        "in front of it. This includes rows that are already",
+        "`proved_in_build`: the mathematics can be proved and CI-guarded while",
+        "the source-numbered wrapper is still missing. Obstructions marked",
+        "`mechanical` need only wiring or a restatement; `hard_math` needs new",
+        "mathematics.",
+        "",
+    ]
+    by_blocker: dict[str, list] = {}
+    unblocked: list = []
+    for item in items:
+        keys = item.get("blocked_by") or []
+        # A row can be `proved_in_build` and still owe work -- the mathematics
+        # is proved and guarded, but the source-numbered wrapper is missing.
+        # Filtering on verification alone would hide exactly those.
+        if item["verification"] not in NEEDS_WORK and not keys:
+            continue
+        if not keys:
+            unblocked.append(item)
+        for key in keys:
+            by_blocker.setdefault(key, []).append(item)
+
+    for key in sorted(by_blocker, key=lambda k: (
+            {"hard_math": 0, "mixed": 1, "mechanical": 2}.get(
+                blockers.get(k, {}).get("kind"), 3), k)):
+        blocker = blockers.get(key, {})
+        lines += [
+            f"### `{key}` -- {blocker.get('kind', '?')}",
+            "",
+            f"**{blocker.get('title', key)}**",
+            "",
+            blocker.get("detail", ""),
+            "",
+            "Gates: " + ", ".join(
+                f"{i['id']} ({i['verification']})" for i in by_blocker[key]),
+            "",
+        ]
+    if unblocked:
+        lines += [
+            "### Not attributed to a blocker",
+            "",
+            ", ".join(f"{i['id']} ({i['verification']})" for i in unblocked),
+            "",
+        ]
+    return lines
+
+
 def render(data: dict) -> str:
     items = data["items"]
     counts = Counter(item["status"] for item in items)
@@ -35,6 +127,9 @@ def render(data: dict) -> str:
     lines += ["", "## Status meanings", ""]
     for status, meaning in data["status_definitions"].items():
         lines.append(f"- **`{status}`** -- {meaning}")
+
+    lines += _render_verification(data, items)
+    lines += _render_frontier(data, items)
     lines += ["", "## Source ledger", ""]
 
     current_section = None
@@ -47,13 +142,22 @@ def render(data: dict) -> str:
             "",
             f"- **Kind:** `{item['source_kind']}`",
             f"- **Status:** `{item['status']}`",
+            f"- **Verification:** `{item['verification']}`",
             f"- **Mathematics:** {item['summary']}",
         ]
+        blocked = item.get("blocked_by") or []
+        if blocked:
+            lines.append("- **Blocked by:** " + ", ".join(f"`{x}`" for x in blocked))
         refs = item.get("lean_declarations", [])
         if refs:
             lines.append("- **Current Lean references:** " + ", ".join(f"`{x}`" for x in refs))
         else:
             lines.append("- **Current Lean references:** none identified")
+        outside = item.get("declarations_outside_build") or []
+        if outside:
+            lines.append(
+                "- **Not reachable from `DavisKahan.All`:** "
+                + ", ".join(f"`{x}`" for x in outside))
         lines += [
             f"- **Assessment:** {item['notes']}",
             f"- **Next action:** {item['next_action']}",
@@ -64,11 +168,23 @@ def render(data: dict) -> str:
         "## Completion interpretation",
         "",
         "The completed Section 6 sine-theta surface is not the same as completion of",
-        "the whole paper. The largest definite source gaps are the Section 3",
-        "classification and nonacute direct-rotation results, exact source wrappers",
-        "for Sections 4--5 and 7--8, and the complete Section 9 numerical example.",
-        "The Section 10 questions are part of the source record but are not proof",
-        "obligations for a faithful formalization of what the paper proves.",
+        "the whole paper, but the remaining distance is smaller than a raw count of",
+        "outstanding rows suggests, and it is not uniform.",
+        "",
+        "A zero `sorry` count is not evidence of completion here. Because the tree is",
+        "both sorry-free and axiom-free, unfinished work cannot show up as a `sorry`;",
+        "it shows up in exactly three places, which the `verification` axis separates:",
+        "a package that does not compile (`not_compiling`), a conclusion stated",
+        "relative to a hypothesis record nobody constructs (`proved_conditional`), and",
+        "a statement nobody wrote (`absent`). Rows marked `proved_outside_build` and",
+        "`partially_in_build` are a fourth, much cheaper case: the mathematics is",
+        "already proved and merely sits outside the default build target.",
+        "",
+        "The genuinely hard remainder is Section 8, which is blocked on an",
+        "operator-valued contour-integration API that exists nowhere, the Section 9",
+        "analytic model, and the Section 3 classification results. The Section 10",
+        "questions are part of the source record but are not proof obligations for a",
+        "faithful formalization of what the paper proves.",
         "",
     ]
     return "\n".join(lines)

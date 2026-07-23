@@ -6,6 +6,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 import DavisKahan.FiniteDimensional.DirectRotation.Basic
 import DavisKahan.FiniteDimensional.DirectRotation.Majorization
 import DavisKahan.FiniteDimensional.DirectRotation.PrincipalPlanes
+import DavisKahan.FiniteDimensional.DirectRotation.QNorm
 import DavisKahan.FiniteDimensional.DirectRotation.ShortRotationCounterexample
 
 /-! # `DavisKahan/FiniteDimensional/DirectRotation` -/

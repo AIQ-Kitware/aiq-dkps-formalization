@@ -5,7 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.ContinuationWitnessGraph
 import DavisKahan.Experimental.InfiniteDimensional.Riccati.BoundedReduction
-import DavisKahan.Experimental.InfiniteDimensional.Sylvester.GenuineSpectrum
+import DavisKahan.Sylvester.GenuineSpectrum
 
 /-!
 # Riccati coordinates of the continuation-selected graph

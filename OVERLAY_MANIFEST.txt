@@ -1,0 +1,8 @@
+Overlay: Sylvester semigroup mathematics pass
+Target repository: /home/joncrall/code/aiq-dkps-formalization
+Base archive commit: 9e2557409aa7
+Scope: Experimental infinite-dimensional Sylvester, ideal, graph, double-angle,
+and continuation files, plus the compiler handoff ledger.
+
+Apply from the repository root with:
+  unzip -o ~/Downloads/aiq_dkps_sylvester_semigroup_mathpass_overlay_gpt56_20260722.zip -d .

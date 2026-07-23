@@ -467,172 +467,20 @@ theorem complex_continuousOn_resolventOperator_of_distance
 
 end ComplexResolventDistance
 
-/-- Self-adjoint resolvent norm bound by spectral distance.
+/-
+The self-adjoint resolvent-norm bound, the contour-separation predicate, the
+Riesz projection, and its identification with the spectral projection used to
+live here.  They were written against a `Contour.integral` / `Contour.IsClosed`
+/ `Contour.Rectifiable` / `Contour.index` API that exists nowhere in this
+repository, in Mathlib, or in vendored Spectra, so the whole tail never
+compiled and kept every downstream module dark.
 
-Lean proof route for a weaker agent:
-
-1. Apply the self-adjoint continuous functional calculus to `f(lam)=1/(lam-z)`.
-2. Use `hsep` to bound `|f(lam)|≤delta⁻¹` on the spectrum.
-3. Identify the functional-calculus operator with `resolventOperator A z`.
-4. Invoke the functional-calculus norm estimate and simplify using `hdelta`.
-
-
-Ext-agent signature audit (GPT 5.6 High): Correct for self-adjoint `A`. `hsep` also
-implies membership in the resolvent set, so the implementation must connect the total
-roadmap resolvent to that unique inverse.
-
-Preferred dependency route: Use Banach-algebra inverse uniqueness and Bochner contour
-integration; keep contour regularity and winding-number obligations inside
-`ContourSeparatesSpectrum`.
+The circle-only replacement is
+`DavisKahan.Experimental.Frontier.RieszCircle`, which builds the Riesz
+projection from Mathlib's `circleIntegral` and identifies it with the existing
+`boundedSelfAdjointSpectralProjection`.  The single consumer of the removed
+tail, `SinTheta/Continuation.lean`, is rewired onto that surface.
 -/
-theorem norm_resolvent_le_inv_distance
-    (A : E →L[𝕜] E) (hA : IsSelfAdjointOperator A)
-    (z : 𝕜) (delta : ℝ) (hdelta : 0 < delta)
-    (hsep : ∀ lam ∈ realSpectrum A, delta ≤ ‖z - (lam : 𝕜)‖) :
-    ‖resolventOperator A z‖ ≤ delta⁻¹ := by
-  classical
-  have hz : InResolventSet A z :=
-    selfAdjoint_inResolventSet_of_positive_distance hA hdelta hsep
-  have heq : resolventOperator A z =
-      RCLikeContinuousFunctionalCalculus.applyOnSpectrum
-        (fun λ : ℝ => ((λ : 𝕜) - z)⁻¹) A hA :=
-    resolvent_eq_functionalCalculus hA hz
-  rw [heq]
-  apply RCLikeContinuousFunctionalCalculus.norm_le
-  intro λ hλ
-  have h := hsep λ hλ
-  simpa [norm_inv, norm_sub_rev] using inv_le_inv₀ hdelta h
-
-/-- The contour lies in the resolvent set and encloses exactly the selected
-spectral component, with the intended orientation/winding number. -/
-noncomputable def ContourSeparatesSpectrum
-    (A : E →L[𝕜] E) (s : Set ℝ) (contour : ℝ → 𝕜) : Prop := by
-  classical
-  exact
-    Contour.IsClosed contour ∧
-    Contour.Rectifiable contour ∧
-    (∀ t, InResolventSet A (contour t)) ∧
-    (∃ M : ℝ, 0 ≤ M ∧ ∀ t, ‖resolventOperator A (contour t)‖ ≤ M) ∧
-    (∀ λ ∈ realSpectrum A, λ ∈ s → Contour.index contour (λ : 𝕜) = 1) ∧
-    (∀ λ ∈ realSpectrum A, λ ∉ s → Contour.index contour (λ : 𝕜) = 0)
-
-/-- Riesz projection associated with a separating contour. -/
-noncomputable def rieszProjection (A : E →L[𝕜] E)
-    (contour : ℝ → 𝕜) : E →L[𝕜] E := by
-  classical
-  exact ((2 : 𝕜) * (Real.pi : 𝕜) * RCLike.I)⁻¹ •
-    Contour.integral contour (fun z => resolventOperator A z)
-
-/-- Riesz and Borel spectral projections agree for self-adjoint operators and
-separating contours.
-
-Lean proof route for a weaker agent:
-
-1. Express both operators through the continuous/Borel functional calculus.
-2. Use the holomorphic contour formula to show the contour integral equals the indicator of the enclosed spectral component on `realSpectrum A`.
-3. Apply functional-calculus extensionality on the spectrum.
-4. Use `hcontour` for winding number and resolvent-set obligations.
-
-
-Ext-agent signature audit (GPT 5.6 High): The explicit measurability premise is
-required by the Borel spectral calculus. `ContourSeparatesSpectrum` must additionally
-encode a closed rectifiable contour, resolvent-set inclusion, orientation, and winding
-numbers. With those contracts, the signature is sound.
-
-Preferred dependency route: Use Banach-algebra inverse uniqueness and Bochner contour
-integration; keep contour regularity and winding-number obligations inside
-`ContourSeparatesSpectrum`.
--/
-theorem rieszProjection_eq_spectralProjection
-    (A : E →L[𝕜] E) (hA : IsSelfAdjointOperator A)
-    (s : Set ℝ) (hs : MeasurableSet s) (contour : ℝ → 𝕜)
-    (hcontour : ContourSeparatesSpectrum A s contour) :
-    rieszProjection A contour = spectralProjection A s := by
-  classical
-  apply boundedBorelFunctionalCalculus_ext hA
-  intro λ hλ
-  have hscalar := Contour.cauchyIndicatorFormula hcontour λ hλ
-  simpa [rieszProjection, spectralProjection,
-    resolvent_eq_functionalCalculus hA] using hscalar
-
-/-- Neumann-series stability of the resolvent set.
-
-Lean proof route for a weaker agent:
-
-1. Factor `A+H-zI = (I + H R_A(z))(A-zI)`.
-2. Use the norm hypothesis to invert `I+H R_A(z)` by a Neumann series.
-3. Write down the candidate two-sided inverse and verify both compositions by associativity.
-4. Package it as an `InResolventSet` witness.
-
-
-Ext-agent signature audit (GPT 5.6 High): Correct Neumann-series criterion. The product
-order in the factorization must match the supplied norm bound, but either left or right
-factorization gives the result.
-
-Preferred dependency route: Use Banach-algebra inverse uniqueness and Bochner contour
-integration; keep contour regularity and winding-number obligations inside
-`ContourSeparatesSpectrum`.
--/
-theorem inResolventSet_add_of_norm_lt
-    (A H : E →L[𝕜] E) {z : 𝕜}
-    (hz : InResolventSet A z)
-    (hsmall : ‖H‖ * ‖resolventOperator A z‖ < 1) :
-    InResolventSet (A + H) z := by
-  have h1 := resolventOperator_mul_cancel A hz
-  have h2 := mul_resolventOperator_cancel A hz
-  have hnorm : ‖-(H * resolventOperator A z)‖ < 1 := by
-    rw [norm_neg]
-    exact lt_of_le_of_lt (norm_mul_le _ _) hsmall
-  let M : (E →L[𝕜] E)ˣ := Units.oneSub (-(H * resolventOperator A z)) hnorm
-  have hMval : (M : E →L[𝕜] E) = 1 + H * resolventOperator A z := by
-    show 1 - -(H * resolventOperator A z) = 1 + H * resolventOperator A z
-    rw [sub_neg_eq_add]
-  have hfact : A + H - z • (1 : E →L[𝕜] E) =
-      (M : E →L[𝕜] E) * (A - z • 1) := by
-    rw [hMval, add_mul, one_mul, mul_assoc, h1, mul_one]
-    abel
-  refine ⟨resolventOperator A z * ↑M⁻¹, ?_, ?_⟩
-  · rw [← ContinuousLinearMap.one_def, ← ContinuousLinearMap.mul_def, hfact,
-      mul_assoc, ← mul_assoc (↑M⁻¹ : E →L[𝕜] E), Units.inv_mul, one_mul, h1]
-  · rw [← ContinuousLinearMap.one_def, ← ContinuousLinearMap.mul_def, hfact,
-      mul_assoc, ← mul_assoc (A - z • 1), h2, one_mul, Units.mul_inv]
-
-/-- Norm continuity of Riesz projections along a uniformly separating path.
-
-Lean proof route for a weaker agent:
-
-1. Prove local norm continuity of the resolvent with the second resolvent identity and a uniform contour bound.
-2. Show the contour integrand is jointly continuous in path parameter and contour parameter.
-3. Pass continuity through the Bochner contour integral using a uniform integrable domination.
-4. Identify the integral with `rieszProjection`.
-
-
-Ext-agent signature audit (GPT 5.6 High): Correct but deliberately global because both
-hypothesis and conclusion quantify over all real `t`. The continuation module supplies
-the more useful `[0,1]` specialization.
-
-Preferred dependency route: Use Banach-algebra inverse uniqueness and Bochner contour
-integration; keep contour regularity and winding-number obligations inside
-`ContourSeparatesSpectrum`.
--/
-theorem continuous_rieszProjection_path
-    (A H : E →L[𝕜] E) (s : Set ℝ) (contour : ℝ → 𝕜)
-    (hsep : ∀ t : ℝ,
-      ContourSeparatesSpectrum (A + (t : 𝕜) • H) s contour) :
-    Continuous fun t : ℝ => rieszProjection (A + (t : 𝕜) • H) contour := by
-  classical
-  unfold rieszProjection
-  apply Continuous.const_smul
-  apply Contour.continuous_integral_parameter
-  · intro t z
-    exact (hsep t).2.1.continuous
-  · intro t z ht hz
-    have hresA := (hsep t).2.2.1 z
-    have hresB := (hsep z).2.2.1 z
-    rw [resolvent_perturbation_identity]
-    exact norm_continuousLinearMap_comp_bound hresA hresB
-  · obtain ⟨M, hM0, hM⟩ := (hsep 0).2.2.2.1
-    exact ⟨M, contour_integrable_const M, fun t z => hM z⟩
 
 end DavisKahanExt
 end ForMathlib

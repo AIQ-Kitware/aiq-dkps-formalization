@@ -1,0 +1,141 @@
+% Transformative mathematical distillation prepared from a privately supplied
+% transcription.  This file reconstructs the argument and formalization
+% obligations without reproducing the source narrative.
+
+\section{Section 8: selecting the physical branch of a double-angle estimate}
+
+The sine and tangent double-angle inequalities control a function of
+$2\Theta$.  Such a bound does not by itself distinguish a small angle from an
+angle close to a right angle.  Section 8 resolves this ambiguity by attaching
+the perturbed invariant subspace to a specified spectral component and then
+showing that the continuation-selected component remains on the side
+$\Theta<\pi/4$.
+
+\subsection{Canonical spectral component}
+
+Let $P$ reduce a bounded self-adjoint operator $A$, and suppose the spectrum on
+$P\mathcal H$ lies below a cut $\alpha$ while the complementary spectrum lies
+above $\alpha+\delta$.  Let $H$ be self-adjoint and off diagonal relative to
+$P\mathcal H\oplus P^\perp\mathcal H$.  The canonical comparison subspace for
+$A+H$ is not an arbitrary reducing subspace.  It is the spectral subspace on
+the same side of the cut, equivalently the endpoint of the Riesz-projection
+path continued from the original component.
+
+If $Q$ denotes this selected projection, the crossed intersections
+$P\mathcal H\cap Q^\perp\mathcal H$ and
+$P^\perp\mathcal H\cap Q\mathcal H$ vanish.  The first follows because a vector
+in the lower unperturbed component but the upper perturbed component would
+have contradictory quadratic-form inequalities, while the off-diagonal
+identity $PHP=0$ makes the two quadratic forms agree on that vector.  The
+second intersection is excluded symmetrically.  Thus the selected pair is
+acute and admits its canonical graph/direct-rotation description.
+
+The modern Lean route represents the same selection by a common separating
+contour along the affine path
+\[
+ A_t=A+tH,\qquad 0\le t\le1.
+\]
+The contour integral is identified with the genuine self-adjoint spectral
+projection at every parameter.  Quantitative resolvent control makes the
+projection path norm-continuous, finite subdivision gives locally close
+orthogonal projections, and the local direct rotations compose to a unitary
+transport between the endpoint spectral subspaces.
+
+\subsection{The quarter-turn conclusion}
+
+A selected endpoint that is a graph over the source component has an angular
+coordinate $X$.  The projection gap satisfies
+\[
+ \|P-Q\|=\frac{\|X\|}{\sqrt{1+\|X\|^2}},
+ \qquad
+ \tan\theta_{\max}=\|X\|.
+\]
+Consequently $\|X\|<1$ is equivalent to
+$\theta_{\max}<\pi/4$.  The continuation implementation currently derives
+this contractive graph whenever its explicit common-contour Lipschitz
+coefficient is below $\sqrt2/2$.
+
+For the off-diagonal tangent theorem the historical argument is stronger: the
+canonical branch stays below a quarter turn without imposing a small
+perturbation norm.  Its scalar principal-plane calculation compares two ways
+of writing the same perturbed block expectation.  If an angle crossed
+$\pi/4$, the sign forced by the unperturbed gap would reverse the selected
+spectral ordering.  The present repository has the Riccati and ordered-gap
+pieces of this argument, but still needs their source-level assembly for the
+unrestricted Theorem 8.1 hypotheses.
+
+\subsection{Spectral repulsion}
+
+Once the selected branch is known to occupy the lower half-line and its
+orthogonal complement the upper half-line, exact block diagonalization gives
+\[
+ \operatorname{spec}(A+H)
+ \subset(-\infty,\alpha]\cup[\alpha+\delta,\infty).
+\]
+This is genuine gap preservation, not merely an angle estimate.  Restricting
+to the two endpoint subspaces yields pointwise separation of their spectra by
+at least $\delta$.
+
+The source proves finer statements.  In the direct-rotation coordinates, the
+unperturbed upper compression is dominated by the perturbed upper compression
+sandwiched by the cosine block, after shifting by the cut.  Finite-dimensional
+min--max then gives ordered-eigenvalue repulsion, and a rearrangement/Ky Fan
+argument yields a symmetric-gauge inequality with factors $\cos^2\theta_j$.
+The quadratic-form algebra giving the compression inequality has now been
+isolated and proved from an abstract rotated-block decomposition and the
+sine/cosine Pythagorean identity.  Connecting that certificate to the
+concrete direct-rotation blocks is still required.  The ordered-eigenvalue
+and gauge refinements have not yet been assembled into stable source-facing
+Lean declarations.
+
+\subsection{The half-gap continuation theorem}
+
+The second theorem begins with the general sine double-angle assumptions and
+adds one of two strict half-gap conditions:
+\[
+ \|H\|<\frac\delta2
+ \quad\hbox{or}\quad
+ \|R\|<\frac\delta2.
+\]
+The original spectral component is assumed to lie in a central interval whose
+endpoints are half a gap from the surrounding spectrum.  Along the reverse
+path from $A+H$ to $A$, ordinary spectral enclosure leaves open intervals on
+both sides of that central cluster.  The corresponding spectral projector is
+therefore norm-continuous.  Starting at angle zero, the sine double-angle
+estimate prevents a parameter value on the closed branch
+$\theta\le\pi/4$ from reaching the boundary.  A connectedness argument then
+keeps the entire path strictly below $\pi/4$.
+
+For the residual alternative, the source invokes a replacement theorem that
+changes the unused diagonal block of the perturbation without changing the
+selected residual data or the perturbed restricted operators, and chooses the
+replacement with norm equal to the residual norm.  This reduces the residual
+case to the perturbation-norm case.  A source-complete formalization therefore
+needs both the spectral-continuation construction from the half-gap hypothesis
+and this replacement theorem.
+
+\subsection{Current formal boundary}
+
+The repository already proves the following reusable components without
+admissions:
+
+\begin{itemize}
+\item common-contour Riesz projection construction and spectral-calculus
+identification;
+\item norm-continuity and quantitative Lipschitz control of the selected
+projection path;
+\item endpoint unitary transport;
+\item strict quarter-acuteness from an explicit contour coefficient;
+\item a unique contractive graph coordinate and its Riccati equation;
+\item exact spectral union and gap exclusion once oriented branch placement is
+supplied;
+\item witness-level tangent estimates under ordered form bounds.
+\end{itemize}
+
+The Section 8 source package exposes these conclusions and records two narrow
+bridges.  The first must construct the canonical contour and oriented branch
+from the full off-diagonal hypotheses of Theorem 8.1.  The second must derive
+the contour coefficient from either half-gap condition in Theorem 8.2, with a
+separate Krein replacement argument for the residual alternative.  The
+operator-order and symmetric-gauge repulsion refinements remain a subsequent
+finite/infinite-dimensional promotion task.

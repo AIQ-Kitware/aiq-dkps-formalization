@@ -1,0 +1,167 @@
+% Transformative mathematical distillation prepared from a privately supplied
+% transcription.  This file does not reproduce the source narrative.
+
+\section{The Section 9 free-beam example: formalization specification}
+
+The numerical example studies the two-dimensional zero-mode space of a
+free-end fourth-derivative operator on the unit interval after adding the
+bounded multiplication perturbation $u(t) \mapsto \varepsilon t u(t)$, with
+$0<\varepsilon<100$.  The formal development is divided into a finite-moment
+calculation and an analytic spectral certificate.  Only the latter requires a
+construction of the closed differential operator and a proof that its third
+eigenvalue exceeds $500$.
+
+\subsection{Centered affine coordinates}
+
+Put $x=2t-1$.  An affine function is represented by a pair $(a,b)$ denoting
+$a+bx$.  The unit-interval moments needed by the example are
+\[
+ \langle(a,b),(c,d)\rangle=ac+\frac{bd}{3},
+\]
+\[
+ \langle(a,b),t(c,d)\rangle
+ =\frac{ac}{2}+\frac{ad+bc}{6}+\frac{bd}{6},
+\]
+and
+\[
+ \langle(a,b),t^2(c,d)\rangle
+ =\frac{ac}{3}+\frac{ad+bc}{6}+\frac{2bd}{15}.
+\]
+The normalized zero modes correspond to
+\[
+ e_1=\left(\frac{\sqrt2}{2},-\frac{\sqrt2\sqrt3}{2}\right),
+ \qquad
+ e_2=\left(\frac{\sqrt2}{2}, \frac{\sqrt2\sqrt3}{2}\right).
+\]
+The first bilinear form proves that these vectors are orthonormal.  The second
+gives the diagonal Ritz compression
+\[
+ \widehat A_0=\operatorname{diag}(\widehat\alpha_1,
+ \widehat\alpha_2),\qquad
+ \widehat\alpha_{1,2}
+ =\frac{\varepsilon}{2}\left(1\mp\frac1{\sqrt3}\right).
+\]
+The third gives the initial residual Gram data
+\[
+ R^*R=\frac{\varepsilon^2}{30}
+ \begin{pmatrix}11-\sqrt{75}&-1\\-1&11+\sqrt{75}\end{pmatrix}.
+\]
+Its characteristic roots are
+\[
+ \rho_{\pm}=\frac{\varepsilon^2}{30}(11\pm\sqrt{76}).
+\]
+After subtracting the Ritz compression, the orthogonal residual satisfies
+\[
+ \widehat R^*\widehat R=
+ \frac{\varepsilon^2}{30}
+ \begin{pmatrix}1&-1\\-1&1\end{pmatrix},
+\]
+so its only nonzero singular value is $\varepsilon/\sqrt{15}$ and each column
+has norm $\varepsilon/\sqrt{30}$.
+
+\subsection{Exact envelopes and printed decimals}
+
+The formal statements retain exact radicals.  The decimal forms are rational
+corollaries.  In particular,
+\[
+ \frac{1}{500}\sqrt{\frac{11+\sqrt{76}}{30}}<0.001622,
+\]
+\[
+ \frac{1}{500}\left(
+ \sqrt{\frac{11+\sqrt{76}}{30}}+
+ \sqrt{\frac{11-\sqrt{76}}{30}}\right)<0.00218.
+\]
+These are the arithmetic components of the initial sine and Ky Fan two-norm
+bounds.  The double-angle perturbation estimates use the exact coefficients
+$2/500$ and $4/500$.
+
+For the recentered residual, define
+\[
+ c_1=\frac12\left(1-\frac1{\sqrt3}\right),\qquad
+ c_2=\frac12\left(1+\frac1{\sqrt3}\right).
+\]
+The exact tangent envelopes are
+\[
+ \frac{\varepsilon/(500\sqrt{15})}{1-(c_2/500)\varepsilon}
+ \quad\hbox{and}\quad
+ \frac{2\varepsilon/(500\sqrt{15})}{1-(c_2/500)\varepsilon}.
+\]
+Rational upper approximations produce the coefficients printed in the paper:
+$0.0005164$, $0.0010328$, and $0.0015774$.
+For a single Ritz vector the numerator improves to
+$1/(500\sqrt{30})<0.0003652$, with denominator coefficient $c_1/500$ or
+$c_2/500$.
+
+\subsection{Historical lower-bound comparison}
+
+The comparison method uses the two low roots of the symmetric arrowhead matrix
+\[
+ \begin{pmatrix}
+ \widehat\alpha_1&0&\varepsilon/\sqrt{30}\\
+ 0&\widehat\alpha_2&\varepsilon/\sqrt{30}\\
+ \varepsilon/\sqrt{30}&\varepsilon/\sqrt{30}&500
+ \end{pmatrix}.
+\]
+Rather than formalizing an informal asymptotic remainder, the Lean interface
+asks for certified roots of its exact characteristic polynomial.  Given a
+sine-square estimate
+\[
+ s^2\leq\frac{\widehat\alpha-\check\alpha}
+ {g-\check\alpha},
+\]
+a purely algebraic lemma yields
+\[
+ \frac{s^2}{1-s^2}\leq
+ \frac{\widehat\alpha-\check\alpha}{g-\widehat\alpha}.
+\]
+This isolates the historical comparison from the Davis--Kahan perturbation
+bounds.
+
+\subsection{Domain limitation and explicit repair}
+
+For the diagonal multiplier with entries $\mu^{-n}$, the geometric trial
+sequence $\mu^n$ is mapped pointwise to the constant sequence.  Its first $N$
+output coordinates therefore have squared energy exactly $N$, making the
+domain failure visible through finite partial sums.  A concrete repair is to
+truncate the trial sequence after $N$ coordinates.  The modified trial vector
+has finite support, its image has finite support, and it agrees with the
+original sequence on every prescribed finite prefix once $N$ is large enough.
+This replaces the source's informal ``small modification'' by an explicit
+family.
+
+\subsection{Schur reduction and individual vectors}
+
+For a block eigenproblem
+\[
+ \begin{pmatrix}A_0&B^*\\B&A_1\end{pmatrix}
+ \binom{x}{y}=\lambda\binom{x}{y},
+\]
+any left inverse $C$ of $\lambda I-A_1$ gives
+\[
+ y=C(Bx),\qquad
+ [A_0+B^*CB]x=\lambda x.
+\]
+This is formalized for arbitrary modules and linear maps.  In the numerical
+example, the in-plane angle contribution has coefficient
+$1/(2\sqrt{75})=\sqrt3/30$, while the complementary-coordinate contribution
+has coefficient $1/\sqrt{15}=\sqrt{15}/15$.  Their Euclidean combination is
+exactly
+\[
+ \sqrt{\left(\frac{\sqrt3}{30}\right)^2+
+       \left(\frac{\sqrt{15}}{15}\right)^2}
+ =\frac{\sqrt7}{10}.
+\]
+After division by the spectral denominator this gives the exact envelope whose
+rational relaxation has numerator $0.00053$ and the two printed denominator
+coefficients.
+
+\subsection{Remaining analytic obligation}
+
+The finite calculations do not prove that the free-end fourth derivative has a
+self-adjoint closure with two-dimensional zero eigenspace and third eigenvalue
+above $500$.  A complete analytic instantiation must construct that operator,
+identify the two affine zero modes, establish positivity of multiplication by
+$\varepsilon t$, transport the third-eigenvalue lower bound to the perturbed
+operator, and connect the general Davis--Kahan theorem outputs to the exact
+certificate fields.  The current Section 9 package makes every downstream
+obligation explicit and proves the rest independently.
