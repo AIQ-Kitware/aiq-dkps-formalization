@@ -1,0 +1,42 @@
+{
+  "base_commit": "7f9f562b50443bb4e66c4bc7b32413c2ae019a6a",
+  "lane": "Section 4 finite promotion and infinite ideal dominance",
+  "status": "scratch_complete_uncompiled",
+  "collision_check": {
+    "dev_lanes_claim": "unlisted",
+    "active_files_modified": false,
+    "new_namespace": "ForMathlib.DavisKahan.Experimental.Scratch.Section4"
+  },
+  "candidates": [
+    {
+      "declaration": "ForMathlib.DavisKahan.Experimental.Scratch.Section4.finite_proposition4_1_approximationSingularValue",
+      "target": "finite source-facing Proposition 4.1 wrapper",
+      "scope": "finite-dimensional"
+    },
+    {
+      "declaration": "ForMathlib.DavisKahan.Experimental.Scratch.Section4.mem_and_gauge_le_of_approximationSingularValue_le",
+      "target": "corrected infinite Corollary 4.1 dominance bridge",
+      "scope": "arbitrary Hilbert spaces; KyFanDominantIdealFamily"
+    },
+    {
+      "declaration": "ForMathlib.DavisKahan.Experimental.Scratch.Section4.finite_corollary4_1_uiNorm",
+      "target": "finite source-facing Corollary 4.1 wrapper",
+      "scope": "finite-dimensional"
+    },
+    {
+      "declaration": "ForMathlib.DavisKahan.Experimental.Scratch.Section4.finite_proposition4_2_fullBasisEnergy",
+      "target": "corrected finite Proposition 4.2 surface",
+      "scope": "full orthonormal basis, finite-dimensional"
+    },
+    {
+      "declaration": "ForMathlib.DavisKahan.Experimental.Scratch.Section4.finite_proposition4_3_uiNorm",
+      "target": "finite source-facing Proposition 4.3 wrapper",
+      "scope": "finite-dimensional"
+    }
+  ],
+  "statement_findings": [
+    "The infinite ideal-gauge conclusion needs KyFanDominantIdealFamily, not only RectangularSymmetricIdealFamily.",
+    "The current frontier Proposition 4.2 uses an arbitrary finite source family and a squared real-inner-product cost; it is stronger than the compiled source theorem and should be audited before promotion.",
+    "The finite wrappers do not establish the infinite-dimensional approximation-number theorem."
+  ]
+}
