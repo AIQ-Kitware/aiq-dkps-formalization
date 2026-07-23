@@ -79,6 +79,13 @@ def toOp (A : IdealOperator (E := E) (F := F) N) : E →L[𝕜] F :=
 theorem mem (A : IdealOperator (E := E) (F := F) N) : N.Mem A.toOp :=
   (A : ↥(idealSubmodule (E := E) (F := F) N)).2
 
+/-- Bundle a member of the ideal. -/
+def ofMem (A : E →L[𝕜] F) (hA : N.Mem A) :
+    IdealOperator (E := E) (F := F) N := ⟨A, hA⟩
+
+@[simp] theorem toOp_ofMem (A : E →L[𝕜] F) (hA : N.Mem A) :
+    (ofMem N A hA).toOp = A := rfl
+
 @[simp] theorem toOp_zero :
     (0 : IdealOperator (E := E) (F := F) N).toOp = 0 := rfl
 
@@ -132,9 +139,10 @@ theorem core : NormedSpace.Core 𝕜 (IdealOperator (E := E) (F := F) N) where
     constructor
     · intro hzero
       apply IdealOperator.ext N
-      exact (N.gauge_eq_zero A.mem hzero).trans toOp_zero.symm
+      exact N.gauge_eq_zero A.mem hzero
     · intro hzero
-      rw [hzero, toOp_zero, N.gauge_zero]
+      rw [hzero]
+      exact N.gauge_zero
 
 noncomputable instance instNormedAddCommGroup :
     NormedAddCommGroup (IdealOperator (E := E) (F := F) N) :=
@@ -153,13 +161,14 @@ theorem norm_toOp_le
 
 /-- The forgetful linear map from the ideal Banach space to bounded operators. -/
 noncomputable def toOpL :
-    IdealOperator (E := E) (F := F) N →L[𝕜] (E →L[𝕜] F) := by
-  let L : IdealOperator (E := E) (F := F) N →ₗ[𝕜] (E →L[𝕜] F) :=
+    IdealOperator (E := E) (F := F) N →L[𝕜] (E →L[𝕜] F) :=
+  LinearMap.mkContinuous
     { toFun := toOp N
       map_add' := fun A B => toOp_add N A B
       map_smul' := fun c A => toOp_smul N c A }
-  exact L.mkContinuous 1 fun A => by
-    simpa only [one_mul] using norm_toOp_le N A
+    1 (fun A => by
+      rw [one_mul]
+      exact norm_toOp_le N A)
 
 @[simp] theorem toOpL_apply
     (A : IdealOperator (E := E) (F := F) N) :
@@ -175,9 +184,7 @@ noncomputable def compLeftL
       IdealOperator (E := E) (F := G) N := by
   let M : IdealOperator (E := E) (F := F) N →ₗ[𝕜]
       IdealOperator (E := E) (F := G) N :=
-    { toFun := fun A =>
-        (⟨L ∘L A.toOp, N.comp_left_mem L A.mem⟩ :
-          IdealOperator (E := E) (F := G) N)
+    { toFun := fun A => ofMem N (L ∘L A.toOp) (N.comp_left_mem L A.mem)
       map_add' := by
         intro A B
         apply IdealOperator.ext N
@@ -207,9 +214,7 @@ noncomputable def compRightL
       IdealOperator (E := H) (F := F) N := by
   let M : IdealOperator (E := E) (F := F) N →ₗ[𝕜]
       IdealOperator (E := H) (F := F) N :=
-    { toFun := fun A =>
-        (⟨A.toOp ∘L R, N.comp_right_mem R A.mem⟩ :
-          IdealOperator (E := H) (F := F) N)
+    { toFun := fun A => ofMem N (A.toOp ∘L R) (N.comp_right_mem R A.mem)
       map_add' := by
         intro A B
         apply IdealOperator.ext N
@@ -241,19 +246,15 @@ noncomputable def compBothL
       IdealOperator (E := H) (F := G) N := by
   let M : IdealOperator (E := E) (F := F) N →ₗ[𝕜]
       IdealOperator (E := H) (F := G) N :=
-    { toFun := fun A =>
-        (⟨L ∘L A.toOp ∘L R, N.comp_mem L R A.mem⟩ :
-          IdealOperator (E := H) (F := G) N)
+    { toFun := fun A => ofMem N (L ∘L A.toOp ∘L R) (N.comp_mem L R A.mem)
       map_add' := by
         intro A B
         apply IdealOperator.ext N
-        ext x
-        simp only [ContinuousLinearMap.comp_apply, map_add]
+        simp [ContinuousLinearMap.comp_add, ContinuousLinearMap.add_comp]
       map_smul' := by
         intro c A
         apply IdealOperator.ext N
-        ext x
-        simp only [ContinuousLinearMap.comp_apply, map_smul] }
+        simp [ContinuousLinearMap.comp_smul, ContinuousLinearMap.smul_comp] }
   exact M.mkContinuous (‖L‖ * ‖R‖) fun A => by
     change N.gauge (L ∘L A.toOp ∘L R) ≤
       (‖L‖ * ‖R‖) * N.gauge A.toOp
@@ -285,27 +286,40 @@ noncomputable instance instCompleteSpace :
     simpa only [dist_eq_norm, norm_def, toOp_sub] using hdist
   obtain ⟨L, hL, hconv⟩ := N.gauge_complete
     (fun n => (A n).toOp) (fun n => (A n).mem) hcauchy
-  refine ⟨(⟨L, hL⟩ : IdealOperator (E := E) (F := F) N), ?_⟩
+  refine ⟨ofMem N L hL, ?_⟩
   rw [Metric.tendsto_atTop]
   intro ε hε
   obtain ⟨M, hM⟩ := hconv ε hε
   refine ⟨M, ?_⟩
   intro n hn
   have h := hM n hn
-  simpa only [dist_eq_norm, norm_def, toOp_sub, toOp_mk] using h
+  simpa only [dist_eq_norm, norm_def, toOp_sub, toOp_ofMem] using h
 
-/-- The forgetful map commutes with Bochner integration in the ideal norm. -/
+/-- Real scalars act on the ideal Banach space by restriction along
+`ℝ → 𝕜`; this is what Bochner integration needs. -/
+noncomputable instance instNormedSpaceReal :
+    NormedSpace ℝ (IdealOperator (E := E) (F := F) N) :=
+  NormedSpace.restrictScalars ℝ 𝕜 _
+
+/-- The forgetful map commutes with Bochner integration in the ideal norm.
+
+The ambient operator space of a general `RCLike` scalar has no canonical real
+normed-space structure, so it is taken as an instance argument; at `ℝ` and `ℂ`
+it is found automatically. -/
 theorem toOp_integral
     {α : Type*} [MeasurableSpace α] {μ : Measure α}
+    [NormedSpace ℝ (E →L[𝕜] F)]
     (f : α → IdealOperator (E := E) (F := F) N)
     (hf : Integrable f μ) :
     (∫ a, f a ∂μ).toOp = ∫ a, (f a).toOp ∂μ := by
-  exact (toOpL (E := E) (F := F) N).integral_comp_comm hf
+  have h := (toOpL (E := E) (F := F) N).integral_comp_comm hf
+  simpa only [toOpL_apply] using h.symm
 
 /-- The Bochner integral of an ideal-valued integrable function is an ideal
 member after forgetting to bounded operators. -/
 theorem mem_integral_toOp
     {α : Type*} [MeasurableSpace α] {μ : Measure α}
+    [NormedSpace ℝ (E →L[𝕜] F)]
     (f : α → IdealOperator (E := E) (F := F) N)
     (hf : Integrable f μ) :
     N.Mem (∫ a, (f a).toOp ∂μ) := by
@@ -316,6 +330,7 @@ theorem mem_integral_toOp
 pointwise ideal norms. -/
 theorem gauge_integral_toOp_le
     {α : Type*} [MeasurableSpace α] {μ : Measure α}
+    [NormedSpace ℝ (E →L[𝕜] F)]
     (f : α → IdealOperator (E := E) (F := F) N)
     (hf : Integrable f μ) :
     N.gauge (∫ a, (f a).toOp ∂μ) ≤ ∫ a, ‖f a‖ ∂μ := by
@@ -327,25 +342,24 @@ theorem gauge_integral_toOp_le
 its membership witnesses. -/
 theorem mem_integral_of_integrable_lift
     {α : Type*} [MeasurableSpace α] {μ : Measure α}
+    [NormedSpace ℝ (E →L[𝕜] F)]
     (f : α → E →L[𝕜] F)
     (hmem : ∀ a, N.Mem (f a))
-    (hlift : Integrable
-      (fun a => (⟨f a, hmem a⟩ : IdealOperator (E := E) (F := F) N)) μ) :
+    (hlift : Integrable (fun a => ofMem N (f a) (hmem a)) μ) :
     N.Mem (∫ a, f a ∂μ) := by
-  simpa using mem_integral_toOp N
-    (fun a => (⟨f a, hmem a⟩ : IdealOperator (E := E) (F := F) N)) hlift
+  simpa using mem_integral_toOp N (fun a => ofMem N (f a) (hmem a)) hlift
 
 /-- Gauge estimate for a raw operator field with an integrable ideal-valued
 lift. -/
 theorem gauge_integral_of_integrable_lift_le
     {α : Type*} [MeasurableSpace α] {μ : Measure α}
+    [NormedSpace ℝ (E →L[𝕜] F)]
     (f : α → E →L[𝕜] F)
     (hmem : ∀ a, N.Mem (f a))
-    (hlift : Integrable
-      (fun a => (⟨f a, hmem a⟩ : IdealOperator (E := E) (F := F) N)) μ) :
+    (hlift : Integrable (fun a => ofMem N (f a) (hmem a)) μ) :
     N.gauge (∫ a, f a ∂μ) ≤ ∫ a, N.gauge (f a) ∂μ := by
-  simpa only [norm_def] using gauge_integral_toOp_le N
-    (fun a => (⟨f a, hmem a⟩ : IdealOperator (E := E) (F := F) N)) hlift
+  simpa only [norm_def, toOp_ofMem] using
+    gauge_integral_toOp_le N (fun a => ofMem N (f a) (hmem a)) hlift
 
 end IdealOperator
 
