@@ -171,6 +171,42 @@ for the audited capability map, ownership boundary, and contribution plan.
   the one-line `omit`, or leave the warning if the declaration is in flux.
 
 
+## Scratch overlays are proof sketches to be promoted, not fixed in place
+
+Files under `DavisKahan/Experimental/Scratch/**` (and analogous overlay drops)
+are **proof sketches**, usually authored by an external agent without a
+compiler. Their only job is to give a compiler-equipped agent a good
+first-guess at proof *structure* so the real work is easier. A scratch file is
+**not required to build**, and making the scratch file itself compile is not the
+task.
+
+The task is to **promote** the sketch:
+
+1. Read the sketch and its manifest in `dev/overlays/*.md` (and the paired
+   `*-candidates-*.json`). The manifest states what each declaration proves,
+   where it should land, and the likely elaboration seams.
+2. Take the proof **out** of the scratch file and put it in its correct home
+   module — the source-facing location the statement actually belongs to — then
+   fix it *there* until it compiles. Do not repair it inside `Scratch/`.
+3. The source-facing home is the `Frontier/**` statement (often a documented
+   open obligation). "Mathematics ahead" of the frontier lives in `MathAhead/**`;
+   *promotion* means lifting that proof up so the `Frontier` statement is proved
+   directly. Because `MathAhead` imports `Frontier`, the proof and its helper
+   lemmas must be moved **up** into the frontier module (import graph permitting;
+   the underlying `Sources/**` lemmas are upstream of both and cycle-safe).
+4. Prefer the **source-faithful** signature over whatever the scratch happened to
+   state. A sketch may carry an accidentally overstrong hypothesis that
+   trivializes the conclusion; correct the statement to match the paper before
+   grounding it (retain the paper's hypotheses even if the Lean proof does not
+   consume all of them, for source correspondence).
+5. After promotion, slim the staging module (`MathAhead/**`) to a thin
+   re-export of the promoted names so there is a single source of truth, and
+   record the promotion in the overlay manifest.
+
+Scratch directories are excluded from the default `DavisKahan.All` build. Do not
+wire them into it, and do not treat a non-building scratch overlay as a
+regression.
+
 ## Comparator challenge rule
 
 Files named `Challenge/**/Conformance.lean` intentionally contain open proof
