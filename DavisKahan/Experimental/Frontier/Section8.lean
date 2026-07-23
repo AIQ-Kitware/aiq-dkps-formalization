@@ -5,6 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
 import DavisKahan.Experimental.Frontier.RieszCircle
+import DavisKahan.Experimental.Frontier.CircleContour
 import DavisKahan.Experimental.Sources.DavisKahan1970.Section8.All
 
 /-!
@@ -36,8 +37,17 @@ variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
   [CompleteSpace H]
 variable {A E : H →L[ℂ] H} {s : Set ℝ}
 
+/-- Every point of the affine self-adjoint path is self-adjoint: the real
+parameter is conjugation-fixed. -/
+theorem operatorPath_isSelfAdjointOperator
+    {A E : H →L[ℂ] H} (hA : IsSelfAdjointOperator A)
+    (hE : IsSelfAdjointOperator E) (t : ℝ) :
+    IsSelfAdjointOperator (operatorPath A E t) :=
+  hA.add (hE.smul (Complex.conj_ofReal t))
+
 /-- Circle data sufficient to construct the continuation witness used by the
-existing Section 8 development. -/
+existing Section 8 development.  The pencil inverse is taken through the total
+`Ring.inverse`, matching the RieszCircle surface. -/
 structure CircleContinuationData
     (A E : H →L[ℂ] H) (s : Set ℝ) where
   hA : IsSelfAdjointOperator A
@@ -47,30 +57,67 @@ structure CircleContinuationData
   radius : ℝ
   margin : ℝ
   margin_pos : 0 < margin
-  separates : ∀ t ∈ Set.Icc (0 : ℝ) 1,
-    CircleSeparatesRealSpectrum (A + t • E)
-      (hA.add (hE.smul t)) s center radius
+  separates : ∀ t (_ht : t ∈ Set.Icc (0 : ℝ) 1),
+    CircleSeparatesRealSpectrum (operatorPath A E t)
+      (operatorPath_isSelfAdjointOperator hA hE t) s center radius
   inverse_bound : ∀ t ∈ Set.Icc (0 : ℝ) 1,
-    ∀ z : ℂ, Complex.abs (z - center) = radius →
-      ‖(z • (1 : H →L[ℂ] H) - (A + t • E))⁻¹‖ ≤ margin⁻¹
+    ∀ z : ℂ, ‖z - (center : ℂ)‖ = radius →
+      ‖Ring.inverse (z • (1 : H →L[ℂ] H) - operatorPath A E t)‖ ≤ margin⁻¹
+
+/-- Every circle point lies on the sphere of the circle contour. -/
+theorem circleContour_path_norm_sub_center
+    (D : CircleContinuationData A E s) (x : unitInterval) :
+    ‖(CircleContour.circleContour (D.center : ℂ) D.radius).path x -
+        (D.center : ℂ)‖ = D.radius := by
+  show ‖circleMap (D.center : ℂ) D.radius (2 * Real.pi * (x : ℝ)) -
+      (D.center : ℂ)‖ = D.radius
+  simpa [mem_sphere_iff_norm] using
+    circleMap_mem_sphere (D.center : ℂ)
+      (D.separates 0 ⟨le_rfl, zero_le_one⟩).radius_pos.le
+      (2 * Real.pi * (x : ℝ))
 
 /-- A common separating circle constructs the canonical spectral continuation
-witness consumed by the Section 8 branch-selection stack. -/
+witness consumed by the Section 8 branch-selection stack.  The pathwise
+separating contours are the circle contours of `CircleContour`, and the
+uniform margin comes from the common resolvent bound through the
+Neumann-series estimate. -/
 noncomputable def spectralContinuationWitness_of_circle
     (D : CircleContinuationData A E s) :
-    SpectralContinuationWitness A E s := by
-  sorry
+    SpectralContinuationWitness A E s where
+  contour := CircleContour.circleContour (D.center : ℂ) D.radius
+  separating := fun t ht =>
+    CircleContour.circleSeparatingContour (operatorPath A E t)
+      (operatorPath_isSelfAdjointOperator D.hA D.hE t) D.hs
+      (D.separates t ht)
+  geometric_eq := fun _t _ht => rfl
+  margin := D.margin
+  margin_pos := D.margin_pos
+  spectrum_separated := by
+    intro t ht x lam hlam
+    have hzc := circleContour_path_norm_sub_center D x
+    have hznot : (CircleContour.circleContour (D.center : ℂ) D.radius).path x ∉
+        spectrum ℂ (operatorPath A E t) :=
+      (D.separates t ht).contour_resolvent _ hzc
+    have hb := D.inverse_bound t ht _ hzc
+    exact CircleContour.margin_le_norm_sub_of_inverse_bound
+      D.margin_pos hznot hb hlam
 
-/-- The source and endpoint selected projections of the witness are the genuine
+/-- The source and target selected projections of the witness are the genuine
 bounded self-adjoint spectral projections. -/
 theorem spectralContinuationWitness_of_circle_endpoints
     (D : CircleContinuationData A E s) :
-    (spectralContinuationWitness_of_circle D).sourceSelectedProjection =
+    (spectralContinuationWitness_of_circle
+        D).sourceSelectedSpectralSubspace.starProjection =
         boundedSelfAdjointSpectralProjection A D.hA s D.hs ∧
-      (spectralContinuationWitness_of_circle D).targetSelectedProjection =
+      (spectralContinuationWitness_of_circle
+          D).targetSelectedSpectralSubspace.starProjection =
         boundedSelfAdjointSpectralProjection (A + E)
           (D.hA.add D.hE) s D.hs := by
-  sorry
+  constructor
+  · exact (boundedSelfAdjointSpectralProjection_eq_starProjection
+      A D.hA s D.hs).symm
+  · exact (boundedSelfAdjointSpectralProjection_eq_starProjection
+      (A + E) (D.hA.add D.hE) s D.hs).symm
 
 /-- Quantitative projection variation obtained from the common-circle
 resolvent bound. -/
@@ -79,7 +126,22 @@ theorem selectedBranchProjectionLipschitzConstant_of_circle
     selectedBranchProjectionLipschitzConstant
       (spectralContinuationWitness_of_circle D).contour E D.margin ≤
         D.radius * ‖E‖ / D.margin ^ 2 := by
-  sorry
+  have hr : (0 : ℝ) ≤ D.radius :=
+    (D.separates 0 ⟨le_rfl, zero_le_one⟩).radius_pos.le
+  apply le_of_eq
+  unfold selectedBranchProjectionLipschitzConstant
+  have hlen : (spectralContinuationWitness_of_circle D).contour.contourLength =
+      2 * Real.pi * D.radius :=
+    CircleContour.circleContour_contourLength _ hr
+  have hnorm : ‖rieszNormalization‖ = (2 * Real.pi)⁻¹ := by
+    rw [norm_rieszNormalization, norm_inv]
+    have h2pi : ‖((2 : ℂ) * Real.pi * Complex.I)‖ = 2 * Real.pi := by
+      simp [norm_mul, Complex.norm_real, Real.norm_eq_abs,
+        abs_of_pos Real.pi_pos]
+    rw [h2pi]
+  rw [hlen, hnorm]
+  have hm : (D.margin : ℝ) ≠ 0 := D.margin_pos.ne'
+  field_simp
 
 end ContinuationBridge
 
@@ -95,11 +157,11 @@ noncomputable def directRotationUpperCompressionData
     (C : SpectralContinuationWitness A E s) (alpha : ℝ) :
     DavisKahan1970.Section8.UpperCompressionRepulsionData
       (fun x : C.sourceSelectedSpectralSubspaceᗮ =>
-        RCLike.re ⟪x, A x⟫_ℂ)
+        RCLike.re ⟪(x : H), A x⟫_ℂ)
       (fun x : C.sourceSelectedSpectralSubspaceᗮ =>
-        RCLike.re ⟪x, (A + E) x⟫_ℂ)
+        RCLike.re ⟪(x : H), (A + E) x⟫_ℂ)
       (fun x : C.sourceSelectedSpectralSubspaceᗮ =>
-        RCLike.re ⟪x, (A + E) x⟫_ℂ)
+        RCLike.re ⟪(x : H), (A + E) x⟫_ℂ)
       id id := by
   sorry
 
@@ -109,11 +171,11 @@ noncomputable def directRotationLowerCompressionData
     (C : SpectralContinuationWitness A E s) (alpha : ℝ) :
     DavisKahan1970.Section8.LowerCompressionRepulsionData
       (fun x : C.sourceSelectedSpectralSubspace =>
-        RCLike.re ⟪x, A x⟫_ℂ)
+        RCLike.re ⟪(x : H), A x⟫_ℂ)
       (fun x : C.sourceSelectedSpectralSubspace =>
-        RCLike.re ⟪x, (A + E) x⟫_ℂ)
+        RCLike.re ⟪(x : H), (A + E) x⟫_ℂ)
       (fun x : C.sourceSelectedSpectralSubspace =>
-        RCLike.re ⟪x, (A + E) x⟫_ℂ)
+        RCLike.re ⟪(x : H), (A + E) x⟫_ℂ)
       id id := by
   sorry
 
@@ -123,8 +185,8 @@ theorem theorem8_1_upperCompressionRepulsion_of_directRotation
     (C : SpectralContinuationWitness A E s) (alpha : ℝ)
     (hbranch : DavisKahan1970.Section8.SelectedBranchConclusion C) :
     ∀ x : C.sourceSelectedSpectralSubspaceᗮ,
-      RCLike.re ⟪x, A x⟫_ℂ - alpha * ‖x‖ ^ 2 ≤
-        RCLike.re ⟪x, (A + E) x⟫_ℂ - alpha * ‖x‖ ^ 2 := by
+      RCLike.re ⟪(x : H), A x⟫_ℂ - alpha * ‖x‖ ^ 2 ≤
+        RCLike.re ⟪(x : H), (A + E) x⟫_ℂ - alpha * ‖x‖ ^ 2 := by
   sorry
 
 /-- Davis--Kahan 1970, Theorem 8.1(i), lower compression companion. -/
@@ -132,8 +194,8 @@ theorem theorem8_1_lowerCompressionRepulsion_of_directRotation
     (C : SpectralContinuationWitness A E s) (alpha : ℝ)
     (hbranch : DavisKahan1970.Section8.SelectedBranchConclusion C) :
     ∀ x : C.sourceSelectedSpectralSubspace,
-      alpha * ‖x‖ ^ 2 - RCLike.re ⟪x, A x⟫_ℂ ≤
-        alpha * ‖x‖ ^ 2 - RCLike.re ⟪x, (A + E) x⟫_ℂ := by
+      alpha * ‖x‖ ^ 2 - RCLike.re ⟪(x : H), A x⟫_ℂ ≤
+        alpha * ‖x‖ ^ 2 - RCLike.re ⟪(x : H), (A + E) x⟫_ℂ := by
   sorry
 
 end DirectRotationCompression
@@ -153,12 +215,12 @@ structure Theorem81SourceConclusion
   core : DavisKahan1970.Section8.Theorem81CoreConclusion C a b delta
   upper_compression :
     ∀ x : C.sourceSelectedSpectralSubspaceᗮ,
-      RCLike.re ⟪x, A x⟫_ℂ - a * ‖x‖ ^ 2 ≤
-        RCLike.re ⟪x, (A + E) x⟫_ℂ - a * ‖x‖ ^ 2
+      RCLike.re ⟪(x : H), A x⟫_ℂ - a * ‖x‖ ^ 2 ≤
+        RCLike.re ⟪(x : H), (A + E) x⟫_ℂ - a * ‖x‖ ^ 2
   lower_compression :
     ∀ x : C.sourceSelectedSpectralSubspace,
-      b * ‖x‖ ^ 2 - RCLike.re ⟪x, A x⟫_ℂ ≤
-        b * ‖x‖ ^ 2 - RCLike.re ⟪x, (A + E) x⟫_ℂ
+      b * ‖x‖ ^ 2 - RCLike.re ⟪(x : H), A x⟫_ℂ ≤
+        b * ‖x‖ ^ 2 - RCLike.re ⟪(x : H), (A + E) x⟫_ℂ
 
 /-- Davis--Kahan 1970, Theorem 8.1 assembled from a common-circle
 continuation, oriented spectral placement, and direct-rotation compression

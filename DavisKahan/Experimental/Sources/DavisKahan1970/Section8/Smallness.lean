@@ -79,7 +79,7 @@ theorem theorem82_branch_of_residualHalfGapBridge
   selectedBranchConclusion_of_contour_bound C
     B.contour_selects_quarter_branch
 
-/-- The current Section 8 package stops here: the Section 7 theorem family
+/-! The current Section 8 package stops here: the Section 7 theorem family
 supplies the corresponding `sin(2 Theta)` inequalities, while these bridge
 theorems add the strict selected-branch conclusion.  Keeping the two layers
 separate prevents a generic proposition parameter from masquerading as the
