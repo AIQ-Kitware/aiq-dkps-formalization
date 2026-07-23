@@ -141,3 +141,19 @@ Section3/8/9 should target these signatures. The two signature amendments
 (nonnegative radius on 4 and 5) are strictly necessary (statements false as
 given); `CircleSeparatesRealSpectrum.radius_pos` already supplies positivity
 at every intended call site (e.g. `Section8.CircleContinuationData.separates`).
+
+## COMPLETION UPDATE (2026-07-23, jon's agent)
+
+All 9 obligations are closed; `RieszCircle.lean` is sorry-free. Sorries 1/2/4/5
+went through per the plan above (with `Units.val_add` for the geometric-series
+mixed case and an indicator decomposition for pencil integrability). The big
+projection identity (plan item 3) followed the cfc route with one structural
+change: `ContinuationSpectralIdentification` transitively imports the BROKEN
+`SinTheta/General` (via ContinuationAssembly → ContinuationTransport →
+ContinuationCore → DoubleAngle), so it cannot be imported. Its contour-free
+half (spectral selector, projection = selector calculus, resolvent-as-cfc,
+cfcL_intervalIntegral, the bounded Cayley/Möbius subsection) was split into
+`SinTheta/CayleySelectorBridge.lean` together with the new Γ-free
+generalizations `continuous_cayleySelectorPullback_of_agrees` and
+`spectralCalculus_selector_eq_cfcL_of_agrees` (item 3f); RieszCircle imports
+only that file. Section3/8/9 are now unblocked on this surface.
