@@ -23,8 +23,8 @@ duplicated-effort collisions that occurred on the Sylvester analytic lane
 | agent | file(s) | declarations | date | status |
 |-------|---------|-------------|------|--------|
 | fable | Sylvester/{FourierSemigroup,OrderedSemigroup,CompactIntegral,FiniteBlockReconstruction}.lean | whole Sylvester analytic lane (now sorry-free) | 2026-07-23 | owned |
-| fable | Sylvester/Basic.lean | leaves at lines 117, 236 | 2026-07-23 | claimed |
-| fable | InfiniteDimensional/GraphSubspace.lean | acuteAngularOperator, acuteAngularOperator_spec, acute_iff_exists_bounded_angularOperator | 2026-07-23 | claimed |
+| fable | Sylvester/Basic.lean | norm_sylvester_le_of_orderedSeparation, compact_mem_of_separatedSylvester_solution | 2026-07-23 | done |
+| fable | InfiniteDimensional/GraphSubspace.lean | acuteAngularOperator, acuteAngularOperator_spec, acute_iff_exists_bounded_angularOperator | 2026-07-23 | done |
 | opus | MathAhead/HiddenFoundations/PolarIsometryFinal.lean | polarIsometry_comp_adjoint_self | 2026-07-23 | done |
 | opus | MathAhead/HiddenFoundations/{Section3Nonacute,PolarIsometryFinal}.lean | remaining 5 polar leaves | 2026-07-23 | blocked (missing infra) |
 | opus | SinTheta/General.lean, SinTheta/SpectralBridge.lean (Experimental) | RCLikeSpectralBridge.* spectral-mapping lemmas, centered_sylvester_equation, boundedInverseDataOfIsUnit, projectionDifference_ideal_intervalExterior; make General.lean elaborate | 2026-07-23 | claimed |
