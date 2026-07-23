@@ -177,10 +177,14 @@ theorem hasDerivAt_ordered_solution_orbit
     HasDerivAt
       (fun s => semigroup (-A) s ∘L X ∘L semigroup B s)
       (-(semigroup (-A) t ∘L C ∘L semigroup B t)) t := by
-  -- Open obligation: the product rule for the conjugated orbit
-  -- `s ↦ e^{-sA} X e^{sB}` (bilinear-composition Fréchet derivative plus the
-  -- generator commutation `B_commute_expBounded`), handed to the mathematics
-  -- agent.
+  -- Open obligation: the *operator*-valued product rule.  The generator
+  -- commutation is available (`commute_exp A (-A) t (Commute.refl A).neg_right`),
+  -- but `HasDerivAt.clm_comp` requires the composed maps to be linear over the
+  -- derivation field `ℝ`, whereas the semigroups are `ℂ`-linear; bridging that
+  -- needs the `ℝ`-bilinear composition Fréchet derivative (restrictScalars +
+  -- `IsBoundedBilinearMap.hasFDerivAt`).  The downstream finite-interval FTC
+  -- `ordered_orbit_sub_eq_integral` is proved directly by the vector-valued
+  -- route, so this operator form is not on its critical path.
   sorry
 
 /-- Finite-interval fundamental theorem for the ordered orbit. -/
@@ -190,10 +194,65 @@ theorem ordered_orbit_sub_eq_integral
     X - semigroup (-A) T ∘L X ∘L semigroup B T =
       ∫ t in Set.Icc (0 : ℝ) T,
         semigroup (-A) t ∘L C ∘L semigroup B t := by
-  -- Open obligation: the finite-interval fundamental theorem of calculus for
-  -- the ordered orbit, depending on `hasDerivAt_ordered_solution_orbit`; handed
-  -- to the mathematics agent.
-  sorry
+  have hcontA : Continuous (semigroup (-A)) :=
+    continuous_iff_continuousAt.mpr fun t => (hasDerivAt_semigroup (-A) t).continuousAt
+  have hcontB : Continuous (semigroup B) :=
+    continuous_iff_continuousAt.mpr fun t => (hasDerivAt_semigroup B t).continuousAt
+  have hcont : Continuous (fun t : ℝ => semigroup (-A) t ∘L C ∘L semigroup B t) :=
+    (hcontA.clm_comp continuous_const).clm_comp hcontB
+  have hInt : IntegrableOn
+      (fun t : ℝ => semigroup (-A) t ∘L C ∘L semigroup B t) (Set.Icc 0 T) :=
+    hcont.continuousOn.integrableOn_compact isCompact_Icc
+  have hcomm_pt : ∀ (s : ℝ) (y : F),
+      semigroup (-A) s (A y) = A (semigroup (-A) s y) := by
+    intro s y
+    have hcomm : Commute A (semigroup (-A) s) :=
+      commute_exp A (-A) s ((Commute.refl A).neg_right)
+    exact (ContinuousLinearMap.ext_iff.mp hcomm.eq y).symm
+  ext ψ
+  -- Vector-valued antiderivative `Ψ(s) = e^{-sA} X e^{sB} ψ` and its derivative.
+  have hΨ : ∀ s : ℝ, HasDerivAt
+      (fun s => semigroup (-A) s (X (semigroup B s ψ)))
+      (-(semigroup (-A) s (C (semigroup B s ψ)))) s := by
+    intro s
+    have hg_apply : HasDerivAt (fun s => semigroup B s ψ)
+        (B (semigroup B s ψ)) s := by
+      simpa [Function.comp_def] using
+        ((ContinuousLinearMap.apply ℂ E ψ).restrictScalars ℝ).hasFDerivAt.comp_hasDerivAt s
+          (hasDerivAt_semigroup B s)
+    have hu : HasDerivAt (fun s => X (semigroup B s ψ))
+        (X (B (semigroup B s ψ))) s :=
+      (X.restrictScalars ℝ).hasFDerivAt.comp_hasDerivAt s hg_apply
+    have hf' : HasDerivAt (fun s => (semigroup (-A) s).restrictScalars ℝ)
+        (((-A) ∘L semigroup (-A) s).restrictScalars ℝ) s :=
+      (ContinuousLinearMap.restrictScalarsL ℂ F F ℝ ℝ).hasFDerivAt.comp_hasDerivAt s
+        (hasDerivAt_semigroup (-A) s)
+    refine (hf'.clm_apply hu).congr_deriv ?_
+    show (((-A) ∘L semigroup (-A) s).restrictScalars ℝ) (X (semigroup B s ψ))
+        + ((semigroup (-A) s).restrictScalars ℝ) (X (B (semigroup B s ψ)))
+      = -(semigroup (-A) s (C (semigroup B s ψ)))
+    rw [← hEq]
+    simp only [ContinuousLinearMap.coe_restrictScalars', ContinuousLinearMap.comp_apply,
+      ContinuousLinearMap.neg_apply, ContinuousLinearMap.sub_apply, map_sub]
+    rw [hcomm_pt s (X (semigroup B s ψ))]
+    abel
+  have hcont_hψ : Continuous
+      (fun s : ℝ => semigroup (-A) s (C (semigroup B s ψ))) :=
+    hcont.clm_apply continuous_const
+  -- Finite-interval fundamental theorem of calculus for the vector orbit.
+  have hftc := intervalIntegral.integral_eq_sub_of_hasDerivAt (a := (0 : ℝ)) (b := T)
+    (fun s _ => hΨ s) (hcont_hψ.neg.intervalIntegrable 0 T)
+  rw [intervalIntegral.integral_neg] at hftc
+  have hkey : (∫ t in (0 : ℝ)..T, semigroup (-A) t (C (semigroup B t ψ)))
+      = semigroup (-A) 0 (X (semigroup B 0 ψ))
+        - semigroup (-A) T (X (semigroup B T ψ)) := by
+    have h := congrArg Neg.neg hftc
+    simpa [neg_neg, neg_sub] using h
+  simp only [ContinuousLinearMap.sub_apply, ContinuousLinearMap.comp_apply]
+  rw [ContinuousLinearMap.integral_apply hInt ψ, MeasureTheory.integral_Icc_eq_integral_Ioc,
+    ← intervalIntegral.integral_of_le hT]
+  simp only [ContinuousLinearMap.comp_apply, hkey, semigroup_zero,
+    ContinuousLinearMap.one_apply]
 
 /-- The conjugated endpoint tends to zero under an ordered gap. -/
 theorem tendsto_ordered_solution_orbit_zero
