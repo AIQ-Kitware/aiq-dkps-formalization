@@ -5,7 +5,6 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
 import DavisKahan.Experimental.MathAhead.Section3Elementary
-import DavisKahan.Experimental.Frontier.Section3
 import DavisKahan.Experimental.MathAhead.HiddenFoundations.PolarIsometryFinal
 import DavisKahan.Experimental.MathAhead.HiddenFoundations.PolarIntertwining
 import Spectra.QuantumMechanics.Channels.TraceClass.PartialIsometry

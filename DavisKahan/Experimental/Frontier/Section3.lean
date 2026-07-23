@@ -8,6 +8,11 @@ import DavisKahan.Experimental.Frontier.Core
 import DavisKahan.Interop.Spectra.DirectRotation
 -- supplies `spectraReflectionProduct` and `IsAcute.symm`
 import DavisKahan.Interop.Spectra.DirectRotationSquare
+-- supplies the completed nonacute construction and acute characterizations used
+-- to ground the Proposition 3.2 and Corollary 3.2 source statements below.  The
+-- construction depends on the polar and acute machinery under `MathAhead`, which
+-- itself never imports this module, so the dependency is acyclic.
+import DavisKahan.Experimental.MathAhead.HiddenFoundations.Section3Nonacute
 
 /-!
 # Section 3 frontier: separation and classification of two subspaces
@@ -62,8 +67,8 @@ exactly when the crossed defect spaces have equal Hilbert dimension, expressed
 constructively by a linear isometric equivalence. -/
 theorem proposition3_2_exists_iff_crossedDefectsEquivalent :
     (∃ T : H →L[ℂ] H, IsPaperDirectRotation U V T) ↔
-      CrossedDefectsEquivalent U V := by
-  sorry
+      CrossedDefectsEquivalent U V :=
+  MathAhead.HiddenFoundations.proposition3_2_completed U V
 
 /-- Explicit parameterization of the freedom in Proposition 3.2.  Distinct
 unitaries between the crossed defect spaces must produce distinct direct
@@ -74,8 +79,8 @@ theorem proposition3_2_parameterized_nonuniqueness
         (halmosSourceDefect U V ≃ₗᵢ[ℂ] halmosTargetDefect U V) →
           (H →L[ℂ] H),
       (∀ J, IsPaperDirectRotation U V (build J)) ∧
-      Function.Injective build := by
-  sorry
+      Function.Injective build :=
+  MathAhead.HiddenFoundations.proposition3_2_parameterization_completed U V hdefect
 
 /-- A unitary principal square root of the reflection product. -/
 structure IsPrincipalUnitarySquareRoot
@@ -154,8 +159,8 @@ theorem corollary3_2_reversal_source_form
     (hacute : IsAcute U V) :
     spectraDirectRotation V U
         (_root_.ForMathlib.DavisKahan.IsAcute.symm hacute) =
-      star (spectraDirectRotation U V hacute) := by
-  sorry
+      star (spectraDirectRotation U V hacute) :=
+  MathAhead.Section3.corollary3_2_reversal_completed U V hacute
 
 end OneSpace
 
