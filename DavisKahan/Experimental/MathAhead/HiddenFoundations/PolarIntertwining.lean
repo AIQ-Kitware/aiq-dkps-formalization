@@ -6,6 +6,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 
 import DavisKahan.Experimental.MathAhead.HiddenFoundations.PolarIsometryFinal
 import DavisKahan.Interop.Spectra.DirectRotation
+import DavisKahan.SpectralTheory.AbstractSpectrum
 
 /-!
 # Polar factors and reducing projections
@@ -18,7 +19,7 @@ then on its closure, and finally on the orthogonal complement, where the polar
 factor vanishes.
 -/
 
-open scoped InnerProductSpace
+open scoped InnerProductSpace InnerProduct
 
 namespace ForMathlib
 namespace DavisKahan
@@ -28,6 +29,7 @@ namespace HiddenFoundations
 
 open SpectraBridge
 open Spectra.QuantumMechanics.Channels
+open DavisKahan.Experimental.Foundation
 
 noncomputable section
 
@@ -42,9 +44,11 @@ theorem polarRange_invariant_of_commute_abs
     (T P : H →L[ℂ] H)
     (hcomm : absOp T ∘L P = P ∘L absOp T)
     {x : H} (hx : x ∈ polarRange T) : P x ∈ polarRange T := by
-  let M : Submodule ℂ H := {x | P x ∈ polarRange T}
+  let M : Submodule ℂ H := Submodule.comap (P : H →ₗ[ℂ] H) (polarRange T)
   have hMclosed : IsClosed (M : Set H) := by
-    exact (polarRange T).isClosed.preimage P.continuous
+    have hcl : IsClosed ((polarRange T : Set H)) := by
+      rw [polarRange]; exact Submodule.isClosed_topologicalClosure _
+    exact hcl.preimage P.continuous
   have hrange : LinearMap.range (absOp T).toLinearMap ≤ M := by
     rintro y ⟨z, rfl⟩
     change P (absOp T z) ∈ polarRange T
@@ -54,7 +58,7 @@ theorem polarRange_invariant_of_commute_abs
     exact absOp_mem_polarRange T (P z)
   have hclosure : polarRange T ≤ M := by
     rw [polarRange]
-    exact Submodule.topologicalClosure_minimal hrange hMclosed
+    exact Submodule.topologicalClosure_minimal _ hrange hMclosed
   exact hclosure hx
 
 /-- If a self-adjoint projection preserves the initial polar space, it also
@@ -66,7 +70,9 @@ theorem polarRange_orthogonal_invariant_of_selfAdjoint
   rw [Submodule.mem_orthogonal'] at hx ⊢
   intro y hy
   rw [← ContinuousLinearMap.adjoint_inner_right]
-  rw [hP.star_eq]
+  have hPadj : ContinuousLinearMap.adjoint P = P :=
+    (ContinuousLinearMap.star_eq_adjoint P).symm.trans hP.star_eq
+  rw [hPadj]
   exact hx (P y) (hpres y hy)
 
 /-- The absolute value commutes with the initial projection whenever `T`
@@ -76,10 +82,17 @@ theorem absOp_commutes_of_projection_intertwining
     (hP : IsOrthogonalProjection P) (hQ : IsOrthogonalProjection Q)
     (hTP : T ∘L P = Q ∘L T) :
     absOp T ∘L P = P ∘L absOp T := by
+  have hPsa : IsSelfAdjoint P := LinearMap.IsSymmetric.isSelfAdjoint hP.2
+  have hQsa : IsSelfAdjoint Q := LinearMap.IsSymmetric.isSelfAdjoint hQ.2
+  have hPadj : ContinuousLinearMap.adjoint P = P :=
+    (ContinuousLinearMap.star_eq_adjoint P).symm.trans hPsa.star_eq
+  have hQadj : ContinuousLinearMap.adjoint Q = Q :=
+    (ContinuousLinearMap.star_eq_adjoint Q).symm.trans hQsa.star_eq
   have hstar : P ∘L T† = T† ∘L Q := by
-    have h := congrArg star hTP
-    simpa [star_mul, hP.2.star_eq, hQ.2.star_eq,
-      ContinuousLinearMap.mul_def] using h
+    have h := congrArg ContinuousLinearMap.adjoint hTP
+    rw [ContinuousLinearMap.adjoint_comp, ContinuousLinearMap.adjoint_comp,
+      hPadj, hQadj] at h
+    exact h
   have hgram : (T† ∘L T) ∘L P = P ∘L (T† ∘L T) := by
     calc
       (T† ∘L T) ∘L P = T† ∘L (T ∘L P) := by
@@ -93,7 +106,15 @@ theorem absOp_commutes_of_projection_intertwining
       _ = P ∘L (T† ∘L T) := by
         ext x
         rfl
-  exact absOp_commutes_of_gram_commutes T P hgram
+  -- `|T| = √(T⋆T)` via the continuous functional calculus, so `P` commuting with
+  -- `T⋆T` (the Gram operator) passes to the modulus by `Commute.cfcₙ_nnreal`.
+  have hcomm : Commute (star T * T) P := by
+    have hmul : (star T * T) * P = P * (star T * T) := by
+      simp only [ContinuousLinearMap.star_eq_adjoint, ContinuousLinearMap.mul_def]
+      exact hgram
+    exact hmul
+  have h2 : Commute (absOp T) P := Commute.cfcₙ_nnreal hcomm NNReal.sqrt
+  simpa [ContinuousLinearMap.mul_def] using h2.eq
 
 /-- The polar partial isometry intertwines the same two projections as the
 original operator. -/
@@ -106,12 +127,15 @@ theorem polarIsometry_intertwines_of_projection_intertwining
     absOp_commutes_of_projection_intertwining T P Q hP hQ hTP
   have hpres : ∀ x ∈ polarRange T, P x ∈ polarRange T :=
     fun x hx => polarRange_invariant_of_commute_abs T P habs hx
+  have hPsa : IsSelfAdjoint P := LinearMap.IsSymmetric.isSelfAdjoint hP.2
   have hpresOrth : ∀ x ∈ (polarRange T)ᗮ, P x ∈ (polarRange T)ᗮ :=
-    fun x hx => polarRange_orthogonal_invariant_of_selfAdjoint T P hP.2 hpres hx
+    fun x hx => polarRange_orthogonal_invariant_of_selfAdjoint T P hPsa hpres hx
   refine ContinuousLinearMap.ext fun x => ?_
-  obtain ⟨m, hm, k, hk, rfl⟩ :=
+  obtain ⟨m, hm, hmk⟩ :=
     Submodule.HasOrthogonalProjection.exists_orthogonal
       (K := polarRange T) x
+  obtain ⟨k, hk, rfl⟩ : ∃ k ∈ (polarRange T)ᗮ, x = m + k :=
+    ⟨x - m, hmk, by abel⟩
   have hUk : polarIsometry T k = 0 := by
     rw [polarIsometry_apply_eq]
     rw [Submodule.orthogonalProjection_eq_zero_iff.mpr hk]
@@ -120,8 +144,8 @@ theorem polarIsometry_intertwines_of_projection_intertwining
     rw [polarIsometry_apply_eq]
     rw [Submodule.orthogonalProjection_eq_zero_iff.mpr (hpresOrth k hk)]
     simp
-  rw [map_add, map_add, hUk, hUPk, add_zero, add_zero,
-    ContinuousLinearMap.comp_apply, ContinuousLinearMap.comp_apply]
+  simp only [ContinuousLinearMap.comp_apply, map_add, hUk, hUPk, map_zero,
+    add_zero]
   have heqOnDense :
       polarPartial T ((polarRange T).orthogonalProjection (P m)) =
         Q (polarPartial T ((polarRange T).orthogonalProjection m)) := by
@@ -131,6 +155,7 @@ theorem polarIsometry_intertwines_of_projection_intertwining
           (polarRange T) (fun z => hpres z z.property)
     let g : polarRange T →L[ℂ] H := Q ∘L polarPartial T
     have hfg : f = g := by
+      apply DFunLike.coe_injective
       apply DenseRange.equalizer (denseRange_absOpCorestrict T)
         f.continuous g.continuous
       funext z
@@ -153,13 +178,21 @@ theorem polarIsometry_intertwines_of_projection_intertwining
     have hPmproj : (polarRange T).orthogonalProjection (P m) = ⟨P m, hPm⟩ := by
       apply Subtype.ext
       exact Submodule.starProjection_eq_self_iff.mpr hPm
-    simpa [f, g, hmproj, hPmproj] using
-      DFunLike.congr_fun hfg ⟨m, hm⟩
+    have hcodeq :
+        ((P ∘L (polarRange T).subtypeL).codRestrict (polarRange T)
+            (fun z => hpres z z.property)) ⟨m, hm⟩ = (⟨P m, hPm⟩ : polarRange T) := by
+      apply Subtype.ext
+      simp
+    have hkey := DFunLike.congr_fun hfg ⟨m, hm⟩
+    simp only [f, g, ContinuousLinearMap.comp_apply, hcodeq] at hkey
+    rw [hmproj, hPmproj]
+    exact hkey
   simpa [polarIsometry_apply_eq] using heqOnDense
 
 /-- The polar factor of the canonical two-projection intertwiner intertwines
 both projections without an acuteness assumption. -/
-theorem canonicalPolarFactor_intertwines_from_polar :
+theorem canonicalPolarFactor_intertwines_from_polar
+    (U V : Submodule ℂ H) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     spectraCanonicalPolarFactor U V ∘L projection U =
       projection V ∘L spectraCanonicalPolarFactor U V := by
   rw [spectraCanonicalPolarFactor, spectraPolarIsometry]
@@ -173,14 +206,15 @@ theorem canonicalPolarFactor_intertwines_from_polar :
 
 /-- Taking adjoints exchanges the ordered pair of subspaces in the canonical
 polar factor. -/
-theorem canonicalPolarFactor_adjoint_swap_from_polar :
+theorem canonicalPolarFactor_adjoint_swap_from_polar
+    (U V : Submodule ℂ H) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     star (spectraCanonicalPolarFactor U V) =
       spectraCanonicalPolarFactor V U := by
   rw [spectraCanonicalPolarFactor, spectraCanonicalPolarFactor,
-    spectraPolarIsometry, spectraPolarIsometry]
-  rw [← Spectra.QuantumMechanics.Channels.adjoint_polarIsometry]
-  congr 1
-  exact star_spectraCanonicalIntertwiner U V
+    spectraPolarIsometry, spectraPolarIsometry,
+    ContinuousLinearMap.star_eq_adjoint,
+    Spectra.QuantumMechanics.Channels.adjoint_polarIsometry,
+    ← ContinuousLinearMap.star_eq_adjoint, star_spectraCanonicalIntertwiner]
 
 end
 
