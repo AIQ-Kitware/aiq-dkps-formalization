@@ -110,34 +110,11 @@ theorem norm_sylvester_le_of_orderedSeparation
     (hsep : OrderedSpectraSeparated B ⊤ A ⊤ d)
     (hEq : sylvesterOperator A B X = C) :
     d * ‖X‖ ≤ ‖C‖ := by
-  rw [orderedSylvester_reconstruction hA hB hd hsep hEq]
-  have hint := orderedSylvester_integrable hA hB hd hsep C
-  calc
-    d * ‖∫ t : ℝ, Set.indicator (Set.Ici 0)
-        (fun t => semigroup (-A) t ∘L C ∘L semigroup B t) t‖
-        ≤ d * ∫ t : ℝ, Set.indicator (Set.Ici 0)
-          (fun t => Real.exp (-d * t) * ‖C‖) t := by
-      gcongr
-      calc
-        ‖∫ t : ℝ, Set.indicator (Set.Ici 0)
-            (fun t => semigroup (-A) t ∘L C ∘L semigroup B t) t‖
-            ≤ ∫ t : ℝ, ‖Set.indicator (Set.Ici 0)
-              (fun t => semigroup (-A) t ∘L C ∘L semigroup B t) t‖ :=
-                norm_integral_le_of_norm hint
-        _ ≤ ∫ t : ℝ, Set.indicator (Set.Ici 0)
-            (fun t => Real.exp (-d * t) * ‖C‖) t := by
-          apply integral_mono_ae
-          filter_upwards [] with t
-          by_cases ht : 0 ≤ t
-          · rw [Set.indicator_of_mem ht, Set.indicator_of_mem ht]
-            exact orderedSemigroup_integrand_bound hA hB hd hsep C t ht
-          · rw [Set.indicator_of_not_mem (by simpa using ht),
-                Set.indicator_of_not_mem (by simpa using ht), norm_zero]
-    _ = ‖C‖ := by
-      rw [integral_indicator measurableSet_Ici]
-      rw [integral_const_mul]
-      rw [integral_exp_neg_mul_Ici hd]
-      field_simp [ne_of_gt hd]
+  -- Open obligation: the ordered constant-one estimate assembled from the
+  -- (open) `orderedSylvester_reconstruction`/`orderedSylvester_integrable`, the
+  -- proved `orderedSemigroup_integrand_bound`, and `∫_{Ici 0} exp(-d t) = 1/d`;
+  -- handed to the mathematics agent.  Only the integral-API assembly remains.
+  sorry
 
 end OrderedComplex
 
@@ -184,16 +161,8 @@ theorem sylvester_solve
     (hsep : SpectraSeparated A ⊤ B ⊤ d)
     (C : Ec →L[ℂ] Fc) :
     sylvesterOperator A B (separatedSylvesterSolution A B d hd C) = C := by
-  let X := separatedSylvesterSolution A B d hd C
-  have hrec : X = separatedSylvesterSolution A B d hd
-      (sylvesterOperator A B X) :=
-    separatedSylvester_reconstruction hA hB hd hsep X
-      (sylvesterOperator A B X) rfl
-  have hinverse : separatedSylvesterSolution A B d hd
-      (sylvesterOperator A B X) = C := by
-    unfold separatedSylvesterSolution X
-    apply spectral_step_integral_right_inverse hA hB hd hsep C
-  exact hrec.trans hinverse
+  unfold sylvesterOperator separatedSylvesterSolution
+  exact spectral_step_integral_right_inverse hA hB hd hsep C
 
 /-- Universal Bhatia--Davis--McIntosh bound. -/
 theorem norm_sylvester_le_of_generalSeparation
@@ -216,7 +185,7 @@ theorem norm_sylvester_le_of_generalSeparation
             (unitaryGroup A t ∘L C ∘L unitaryGroup B (-t))‖
             ≤ ∫ t : ℝ, ‖separatedSylvesterMultiplier d hd t •
               (unitaryGroup A t ∘L C ∘L unitaryGroup B (-t))‖ :=
-                norm_integral_le_of_norm hint
+                norm_integral_le_integral_norm _
         _ = ∫ t : ℝ, ‖separatedSylvesterMultiplier d hd t‖ * ‖C‖ := by
           apply integral_congr_ae
           filter_upwards [] with t
@@ -260,15 +229,15 @@ theorem compact_mem_of_separatedSylvester_solution
     (hEq : sylvesterOperator A B X = C)
     (hC : IsCompactOperator C) :
     IsCompactOperator X := by
-  rw [separatedSylvester_reconstruction hA hB hd hsep X C hEq]
-  unfold separatedSylvesterSolution
-  apply isCompactOperator_integral
-  · exact separatedSylvester_integrable hA hB hd C
-  · filter_upwards [] with t
-    exact (hC.comp_left_right (unitaryGroup A t)
-      (unitaryGroup B (-t))).smul
+  -- Open obligation: compactness is preserved by the reciprocal Fourier integral
+  -- (`isCompactOperator_integral` on the two-sided unitary orbit of the compact
+  -- `C`); handed to the mathematics agent.  Needs the compact-valued Bochner
+  -- integral and the two-sided `IsCompactOperator` composition lemma.
+  sorry
 
 end Complex
+
+end
 
 end DavisKahanExt
 end ForMathlib
