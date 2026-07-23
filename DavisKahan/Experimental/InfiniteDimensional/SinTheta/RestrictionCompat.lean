@@ -5,7 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Experimental.InfiniteDimensional.Sylvester.Basic
 import DavisKahan.Experimental.InfiniteDimensional.Ideals.Rectangular
-import DavisKahan.Experimental.InfiniteDimensional.SinTheta.SpectralBridge
+import DavisKahan.SpectralTheory.AbstractSpectrum
 import DavisKahan.SpectralTheory.Compatibility
 import DavisKahan.SinTheta.SpectralBridge
 
@@ -52,8 +52,10 @@ theorem coe_codRestrictTo_apply
     ((codRestrictTo T M hT x : M) : F) = T x :=
   rfl
 
+omit [CompleteSpace E] [CompleteSpace F] in
 /-- Codomain restriction to a subspace containing the range preserves the
-operator norm. -/
+operator norm.  Completeness of the domain is not used, so the lemma also
+applies when the domain is a bare subspace carrier. -/
 theorem norm_codRestrictTo_eq
     (T : E →L[𝕜] F) (M : Submodule 𝕜 F)
     (hT : ∀ x, T x ∈ M) :
@@ -86,8 +88,8 @@ theorem restrictToReducingSubspace_apply
 theorem IsSelfAdjointOperator.restrictToReducingSubspace
     {A : E →L[𝕜] E} (hA : IsSelfAdjointOperator A)
     (U : Submodule 𝕜 E) (hU : Reduces A U) :
-    IsSelfAdjointOperator (restrictToReducingSubspace A U hU) := by
-  simpa [restrictToReducingSubspace] using hA.restrict_of_invariant hU.1
+    IsSelfAdjointOperator (restrictToReducingSubspace A U hU) :=
+  LinearMap.IsSymmetric.restrict_invariant hA hU.1
 
 /-- The theorem-facing restricted spectrum of the selected summand is the real
 spectrum of the explicit restriction. -/
@@ -120,8 +122,8 @@ theorem restrictToOrthogonal_apply
 theorem IsSelfAdjointOperator.restrictToOrthogonal
     {A : E →L[𝕜] E} (hA : IsSelfAdjointOperator A)
     (U : Submodule 𝕜 E) (hU : Reduces A U) :
-    IsSelfAdjointOperator (restrictToOrthogonal A U hU) := by
-  simpa [restrictToOrthogonal] using hA.restrict_of_invariant hU.2
+    IsSelfAdjointOperator (restrictToOrthogonal A U hU) :=
+  LinearMap.IsSymmetric.restrict_invariant hA hU.2
 
 /-- The theorem-facing restricted spectrum of the orthogonal summand is the
 real spectrum of the explicit restriction. -/
@@ -134,6 +136,98 @@ theorem restrictedSpectrum_orthogonal_eq
   rw [ForMathlib.DavisKahan.Experimental.Foundation.restrictedSpectrum_eq_restrictionSpectrum
     A Uᗮ hU.2]
   rfl
+
+omit [CompleteSpace E] in
+/-- The restriction to the full space carries the original real spectrum.  This
+is the `RCLike`-general companion of the `ℂ`-only lemma of the same name in
+`OrderedSemigroup`; it is proved here by conjugating the top-restriction through
+`Submodule.topContEquiv` and invoking spectral invariance of an algebra
+equivalence.  Completeness of the ambient space is not required, so the lemma
+also applies to the restricted operators living on non-`CompleteSpace`
+subspace carriers. -/
+theorem restrictedSpectrum_top_eq_realSpectrum_general (A : E →L[𝕜] E) :
+    ForMathlib.DavisKahan.Experimental.Foundation.restrictedSpectrum A
+        (⊤ : Submodule 𝕜 E) =
+      ForMathlib.DavisKahan.Experimental.Foundation.realSpectrum A := by
+  have hInv :
+      ForMathlib.DavisKahan.Experimental.Foundation.InvariantFor A (⊤ : Submodule 𝕜 E) :=
+    fun x _ => Submodule.mem_top
+  have hbridge :=
+    ForMathlib.DavisKahan.Experimental.Foundation.restrictedSpectrum_eq_restrictionSpectrum
+      A ⊤ hInv
+  have hconj :
+      (Submodule.topContEquiv : (⊤ : Submodule 𝕜 E) ≃L[𝕜] E).conjContinuousAlgEquiv
+        (A.restrict hInv) = A := by
+    ext x
+    rw [ContinuousLinearEquiv.conjContinuousAlgEquiv_apply_apply]
+    show ((A.restrict hInv) ((Submodule.topContEquiv :
+      (⊤ : Submodule 𝕜 E) ≃L[𝕜] E).symm x) : E) = A x
+    rw [ContinuousLinearMap.coe_restrict_apply]
+    rfl
+  have hspec : spectrum 𝕜 (A.restrict hInv) = spectrum 𝕜 A := by
+    conv_rhs => rw [← hconj]
+    exact (AlgEquiv.spectrum_eq
+      ((Submodule.topContEquiv : (⊤ : Submodule 𝕜 E) ≃L[𝕜] E).conjContinuousAlgEquiv)
+      (A.restrict hInv)).symm
+  rw [hbridge]
+  ext r
+  simp only [ForMathlib.DavisKahan.Experimental.Foundation.realSpectrum,
+    Set.mem_setOf_eq, hspec]
+
+omit [CompleteSpace E] in
+/-- The closed-operator real resolvent set of a bounded operator's full-domain
+realization is exactly the invertibility locus of `X - lam` in the bounded
+operator algebra. -/
+theorem mem_realResolventSet_ofBounded_iff (X : E →L[𝕜] E) (lam : ℝ) :
+    lam ∈ ForMathlib.DavisKahanExt.ClosedOperator.realResolventSet
+        (ForMathlib.DavisKahanExt.ClosedOperator.ofBounded X) ↔
+      IsUnit (X - (lam : 𝕜) • (1 : E →L[𝕜] E)) := by
+  constructor
+  · rintro ⟨R, hleft, hright⟩
+    refine ⟨⟨X - (lam : 𝕜) • (1 : E →L[𝕜] E), R, ?_, ?_⟩, rfl⟩
+    · apply ContinuousLinearMap.ext
+      intro y
+      obtain ⟨h, hy⟩ := hright y
+      have hy' : X (R y) - (lam : 𝕜) • R y = y := hy
+      simpa [ContinuousLinearMap.mul_apply, ContinuousLinearMap.sub_apply,
+        ContinuousLinearMap.smul_apply, ContinuousLinearMap.one_apply] using hy'
+    · apply ContinuousLinearMap.ext
+      intro x
+      have hx' : R (X x - (lam : 𝕜) • x) = x := hleft ⟨x, Submodule.mem_top⟩
+      simpa [ContinuousLinearMap.mul_apply, ContinuousLinearMap.sub_apply,
+        ContinuousLinearMap.smul_apply, ContinuousLinearMap.one_apply] using hx'
+  · rintro ⟨u, hu⟩
+    have hval : (↑u : E →L[𝕜] E) = X - (lam : 𝕜) • (1 : E →L[𝕜] E) := hu
+    refine ⟨↑u⁻¹, ?_, ?_⟩
+    · intro x
+      show (↑u⁻¹ : E →L[𝕜] E) (X (x : E) - (lam : 𝕜) • (x : E)) = (x : E)
+      have hinv : (↑u⁻¹ : E →L[𝕜] E) * (X - (lam : 𝕜) • (1 : E →L[𝕜] E)) = 1 := by
+        rw [← hval]; exact u.inv_mul
+      have hpt := ContinuousLinearMap.ext_iff.mp hinv (x : E)
+      simpa [ContinuousLinearMap.mul_apply, ContinuousLinearMap.sub_apply,
+        ContinuousLinearMap.smul_apply, ContinuousLinearMap.one_apply] using hpt
+    · intro y
+      refine ⟨Submodule.mem_top, ?_⟩
+      show X ((↑u⁻¹ : E →L[𝕜] E) y) - (lam : 𝕜) • ((↑u⁻¹ : E →L[𝕜] E) y) = y
+      have hinv : (X - (lam : 𝕜) • (1 : E →L[𝕜] E)) * (↑u⁻¹ : E →L[𝕜] E) = 1 := by
+        rw [← hval]; exact u.mul_inv
+      have hpt := ContinuousLinearMap.ext_iff.mp hinv y
+      simpa [ContinuousLinearMap.mul_apply, ContinuousLinearMap.sub_apply,
+        ContinuousLinearMap.smul_apply, ContinuousLinearMap.one_apply] using hpt
+
+omit [CompleteSpace E] in
+/-- The bounded-realization real spectrum used by the `sin Θ` interval/exterior
+bridge coincides with the Banach-algebra real spectrum used by the abstract
+separation predicates. -/
+theorem boundedRealSpectrum_eq_realSpectrum (X : E →L[𝕜] E) :
+    ForMathlib.DavisKahan.Experimental.ExactSinTheta.boundedRealSpectrum X =
+      ForMathlib.DavisKahan.Experimental.Foundation.realSpectrum X := by
+  ext lam
+  show lam ∈ (ForMathlib.DavisKahanExt.ClosedOperator.realResolventSet
+      (ForMathlib.DavisKahanExt.ClosedOperator.ofBounded X))ᶜ ↔
+    (lam : 𝕜) ∈ spectrum 𝕜 X
+  rw [Set.mem_compl_iff, mem_realResolventSet_ofBounded_iff, spectrum.mem_iff,
+    Algebra.algebraMap_eq_smul_one, ← IsUnit.neg_iff, neg_sub]
 
 /-- Orthogonal projection on the left is contractive in operator norm. -/
 theorem projection_comp_opNorm_le
@@ -268,12 +362,12 @@ theorem hybridGap_restrictions
   refine ⟨by intro x hx; trivial, by intro x hx; trivial, ?_⟩
   intro b hb a ha
   have hb' : b ∈ restrictedSpectrum B Vᗮ := by
-    rw [restrictedSpectrum_top_eq_realSpectrum,
-      ← restrictedSpectrum_orthogonal_eq B V hV] at hb
+    rw [restrictedSpectrum_orthogonal_eq B V hV]
+    rw [restrictedSpectrum_top_eq_realSpectrum_general] at hb
     exact hb
   have ha' : a ∈ restrictedSpectrum A U := by
-    rw [restrictedSpectrum_top_eq_realSpectrum,
-      ← restrictedSpectrum_eq_realSpectrum_restrictToReducingSubspace A U hU] at ha
+    rw [restrictedSpectrum_eq_realSpectrum_restrictToReducingSubspace A U hU]
+    rw [restrictedSpectrum_top_eq_realSpectrum_general] at ha
     exact ha
   simpa [abs_sub_comm] using hgap.2.2 a ha' b hb'
 
@@ -294,14 +388,14 @@ theorem intervalExteriorSeparated_restrictions
   constructor
   · intro a ha
     have ha' : a ∈ restrictedSpectrum A U := by
-      rw [restrictedSpectrum_top_eq_realSpectrum,
-        ← restrictedSpectrum_eq_realSpectrum_restrictToReducingSubspace A U hU] at ha
+      rw [restrictedSpectrum_eq_realSpectrum_restrictToReducingSubspace A U hU]
+      rw [boundedRealSpectrum_eq_realSpectrum] at ha
       exact ha
     exact hgap.1.2 ha'
   · intro b hb
     have hb' : b ∈ restrictedSpectrum B Vᗮ := by
-      rw [restrictedSpectrum_top_eq_realSpectrum,
-        ← restrictedSpectrum_orthogonal_eq B V hV] at hb
+      rw [restrictedSpectrum_orthogonal_eq B V hV]
+      rw [boundedRealSpectrum_eq_realSpectrum] at hb
       exact hb
     exact hgap.2.2 hb'
 
