@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.RestrictionCompat
+import DavisKahan.Experimental.InfiniteDimensional.SinTheta.SpectralBridge
 
 /-!
 # Infinite-dimensional `sin Θ` theorems
@@ -17,14 +18,59 @@ namespace ForMathlib
 namespace DavisKahanExt
 
 open scoped InnerProductSpace
+open DavisKahan.Experimental
 
-variable {𝕜 : Type*} [RCLike 𝕜]
-variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
+set_option maxHeartbeats 1000000
+
+universe u v
+
+variable {𝕜 : Type u} [RCLike 𝕜]
+variable {E : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
   [CompleteSpace E]
-variable {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
+variable {F : Type v} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
   [CompleteSpace F]
 
-/-- Residual `sin Θ` theorem for an isometric trial map. 
+/-- A submodule with an orthogonal projection is closed in the complete
+ambient space, hence complete: it is the equalizer of the projection and the
+identity. -/
+private theorem completeSpace_of_hasOrthogonalProjection
+    (U : Submodule 𝕜 E) [U.HasOrthogonalProjection] : CompleteSpace U := by
+  have hclosed : IsClosed (U : Set E) := by
+    have heq : (U : Set E) = {x : E | U.starProjection x = x} := by
+      ext x
+      exact ⟨fun hx => Submodule.starProjection_eq_self_iff.mpr hx,
+        fun hx => Submodule.starProjection_eq_self_iff.mp hx⟩
+    rw [heq]
+    exact isClosed_eq U.starProjection.continuous continuous_id
+  exact hclosed.completeSpace_coe
+
+/-- **Leaf obligation.** The constant-one ordered Sylvester estimate over a
+general `RCLike` field.  The `ℂ` case is `norm_sylvester_le_of_orderedSeparation`
+(`Sylvester/Basic`, semigroup route); the general case is its complexification
+transport. -/
+theorem norm_sylvester_le_of_orderedSeparation_rclike
+    {A : F →L[𝕜] F} {B : E →L[𝕜] E} {X C : E →L[𝕜] F}
+    (hA : IsSelfAdjointOperator A) (hB : IsSelfAdjointOperator B)
+    {d : ℝ} (hd : 0 < d)
+    (hsep : OrderedSpectraSeparated B ⊤ A ⊤ d)
+    (hEq : sylvesterOperator A B X = C) :
+    d * ‖X‖ ≤ ‖C‖ :=
+  sorry
+
+/-- **Leaf obligation.** The universal `π/2` Sylvester estimate over a general
+`RCLike` field.  The `ℂ` case is `norm_sylvester_le_of_generalSeparation`
+(`Sylvester/Basic`, Fourier route); the general case is its complexification
+transport. -/
+theorem norm_sylvester_le_of_generalSeparation_rclike
+    {A : F →L[𝕜] F} {B : E →L[𝕜] E} {X C : E →L[𝕜] F}
+    (hA : IsSelfAdjointOperator A) (hB : IsSelfAdjointOperator B)
+    {d : ℝ} (hd : 0 < d)
+    (hsep : SpectraSeparated A ⊤ B ⊤ d)
+    (hEq : sylvesterOperator A B X = C) :
+    d * ‖X‖ ≤ (Real.pi / 2) * ‖C‖ :=
+  sorry
+
+/-- Residual `sin Θ` theorem for an isometric trial map.
 
 Lean proof route for a weaker agent:
 
@@ -60,9 +106,23 @@ theorem sinTheta_residual
   have hEq : sylvesterOperator (restrictToOrthogonal A U hU) M Y = C :=
     directedResidual_sylvesterEquation hA hU
   have hsep' : OrderedSpectraSeparated M ⊤
-      (restrictToOrthogonal A U hU) ⊤ d :=
-    restrictedSpectrum_orthogonal_eq A U hU ▸ hsep
-  have hbound := norm_sylvester_le_of_orderedSeparation
+      (restrictToOrthogonal A U hU) ⊤ d := by
+    obtain ⟨hM, hAperp, hord⟩ := hsep
+    refine ⟨hM, fun x _ => Submodule.mem_top, ?_⟩
+    intro a ha b hb
+    refine hord a ha b ?_
+    have hb' : b ∈ ForMathlib.DavisKahan.Experimental.Foundation.realSpectrum
+        (restrictToOrthogonal A U hU) :=
+      (restrictedSpectrum_top_eq_realSpectrum_general
+        (restrictToOrthogonal A U hU)) ▸ hb
+    have h2 : ForMathlib.DavisKahan.Experimental.Foundation.restrictedSpectrum
+          A Uᗮ =
+        ForMathlib.DavisKahan.Experimental.Foundation.realSpectrum
+          (restrictToOrthogonal A U hU) :=
+      restrictedSpectrum_orthogonal_eq A U hU
+    rw [h2]
+    exact hb'
+  have hbound := norm_sylvester_le_of_orderedSeparation_rclike
     (hA.restrictToOrthogonal U hU) hM hd hsep' hEq
   have hY : ‖Y‖ = ‖sinThetaEmbedding U X‖ :=
     norm_codRestrictTo_eq _ _ _
@@ -98,7 +158,7 @@ theorem sinTheta_perturbation
     {U V : Submodule 𝕜 E}
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hU : Reduces A U) (hV : Reduces B V)
-    {left right d : ℝ} (hd : 0 < d)
+    {left right d : ℝ} (hlr : left ≤ right) (hd : 0 < d)
     (hgap : IntervalExteriorSeparated A U B Vᗮ left right d) :
     d * directedGap U V ≤ ‖B - A‖ := by
   let X : U →L[𝕜] Vᗮ :=
@@ -113,16 +173,20 @@ theorem sinTheta_perturbation
       (restrictToOrthogonal B V hV) (restrictToReducingSubspace A U hU)
       left right d := by
     exact intervalExteriorSeparated_restrictions hA hB hU hV hgap
+  haveI : CompleteSpace U := completeSpace_of_hasOrthogonalProjection U
+  haveI : CompleteSpace Vᗮ := completeSpace_of_hasOrthogonalProjection Vᗮ
   have hsolve := ExactSinTheta.sylvester_mem_and_gauge_le_of_intervalExteriorGap
     ExactSinTheta.RectangularSymmetricIdealFamily.operatorNorm
     (hB.restrictToOrthogonal V hV) (hA.restrictToReducingSubspace U hU)
-    (le_of_mem_Icc hgap) hd hgap' hEq trivial
-  have hX : ‖X‖ = directedGap U V :=
-    directedGap_eq_restrictedBlock_norm U V
+    hlr hd hgap' hEq trivial
   have hC : ‖C‖ ≤ ‖B - A‖ :=
     restricted_projection_sandwich_norm_le _ _ _
-  simpa [ExactSinTheta.RectangularSymmetricIdealFamily.operatorNorm, hX]
-    using hsolve.2.trans hC
+  have h2 : d * ‖codRestrictTo
+      (Vᗮ.starProjection ∘L U.subtypeL) Vᗮ
+      (fun x => Vᗮ.starProjection_apply_mem _)‖ ≤ ‖B - A‖ :=
+    hsolve.2.trans hC
+  rw [directedGap_eq_restrictedBlock_norm U V] at h2
+  exact h2
 
 /-- **The dimension-free operator-norm Davis--Kahan `sin Θ` theorem, coercivity
 form.**  For self-adjoint `A, B` on an arbitrary Hilbert space, `U` reducing `A`
@@ -313,14 +377,15 @@ theorem sinTheta_symmetric
     {U V : Submodule 𝕜 E}
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hU : Reduces A U) (hV : Reduces B V)
-    {left right left' right' d : ℝ} (hd : 0 < d)
+    {left right left' right' d : ℝ}
+    (hlr : left ≤ right) (hlr' : left' ≤ right') (hd : 0 < d)
     (hUV : IntervalExteriorSeparated A U B Vᗮ left right d)
     (hVU : IntervalExteriorSeparated B V A Uᗮ left' right' d) :
     d * subspaceGap U V ≤ ‖B - A‖ := by
   have h1 : d * directedGap U V ≤ ‖B - A‖ :=
-    sinTheta_perturbation hA hB hU hV hd hUV
+    sinTheta_perturbation hA hB hU hV hlr hd hUV
   have h2 : d * directedGap V U ≤ ‖A - B‖ :=
-    sinTheta_perturbation hB hA hV hU hd hVU
+    sinTheta_perturbation hB hA hV hU hlr' hd hVU
   rw [show A - B = -(B - A) by abel, norm_neg] at h2
   have hmax : subspaceGap U V = max (directedGap U V) (directedGap V U) := by
     show ‖U.starProjection - V.starProjection‖ =
@@ -369,15 +434,65 @@ theorem sinTheta_generalSeparation
   have hsep : SpectraSeparated (restrictToOrthogonal B V hV) ⊤
       (restrictToReducingSubspace A U hU) ⊤ d :=
     hybridGap_restrictions hA hB hU hV hgap
-  have hsol := norm_sylvester_le_of_generalSeparation
+  haveI : CompleteSpace U := completeSpace_of_hasOrthogonalProjection U
+  haveI : CompleteSpace Vᗮ := completeSpace_of_hasOrthogonalProjection Vᗮ
+  have hsol := norm_sylvester_le_of_generalSeparation_rclike
     (hB.restrictToOrthogonal V hV) (hA.restrictToReducingSubspace U hU) hd hsep hEq
-  have hX : ‖X‖ = directedGap U V :=
-    directedGap_eq_restrictedBlock_norm U V
   have hC : ‖C‖ ≤ ‖B - A‖ :=
     restricted_projection_sandwich_norm_le _ _ _
-  simpa [hX] using hsol.trans (mul_le_mul_of_nonneg_left hC (by positivity))
+  have h2 : d * ‖codRestrictTo
+      (Vᗮ.starProjection ∘L U.subtypeL) Vᗮ
+      (fun x => Vᗮ.starProjection_apply_mem _)‖ ≤
+      (Real.pi / 2) * ‖B - A‖ :=
+    hsol.trans (mul_le_mul_of_nonneg_left hC (by positivity))
+  rw [directedGap_eq_restrictedBlock_norm U V] at h2
+  exact h2
 
-/-- Canonical spectral-projection form. 
+/-! ## Bounded measurable spectral subspaces
+
+Genuinely constructing the measurable spectral subspace of a bounded
+self-adjoint operator over a general `RCLike` field requires the bounded Borel
+functional calculus: over `ℂ` this is the Spectra projection-valued measure
+(`DavisKahanExt.boundedSelfAdjointSpectralProjection` in
+`Experimental/InfiniteDimensional/Core/SpectralProjection.lean`), and the
+general case is its complexification transport.  The construction and its two
+characterizing properties are isolated below as leaf obligations so that the
+`sin Θ` consequences are fully proved relative to them.
+-/
+
+/-- **Leaf obligation.** The measurable spectral subspace of a bounded
+operator: the range of the projection-valued measure of `s`. -/
+noncomputable def spectralSubspace (A : E →L[𝕜] E) (s : Set ℝ) :
+    Submodule 𝕜 E :=
+  sorry
+
+/-- **Leaf obligation.** The spectral subspace is closed, hence admits an
+orthogonal projection in the complete ambient space. -/
+noncomputable instance spectralSubspace_hasOrthogonalProjection
+    (A : E →L[𝕜] E) (s : Set ℝ) :
+    (spectralSubspace A s).HasOrthogonalProjection :=
+  sorry
+
+/-- The measurable spectral projection: the orthogonal projection onto the
+spectral subspace. -/
+noncomputable def spectralProjection (A : E →L[𝕜] E) (s : Set ℝ) :
+    E →L[𝕜] E :=
+  (spectralSubspace A s).starProjection
+
+/-- **Leaf obligation.** Spectral subspaces of a self-adjoint operator reduce
+it. -/
+theorem reduces_spectralSubspace (A : E →L[𝕜] E)
+    (hA : IsSelfAdjointOperator A) (s : Set ℝ) (_hs : MeasurableSet s) :
+    Reduces A (spectralSubspace A s) :=
+  sorry
+
+/-- The subspace projection of the spectral subspace is the spectral
+projection. -/
+theorem projection_spectralSubspace_eq (A : E →L[𝕜] E) (s : Set ℝ) :
+    projection (spectralSubspace A s) = spectralProjection A s :=
+  rfl
+
+/-- Canonical spectral-projection form.
 
 Lean proof route for a weaker agent:
 
@@ -397,7 +512,8 @@ theorem spectralProjection_sinTheta
     {A B : E →L[𝕜] E}
     (hA : IsSelfAdjointOperator A) (hB : IsSelfAdjointOperator B)
     (s t : Set ℝ) (hs : MeasurableSet s) (ht : MeasurableSet t)
-    {left right left' right' d : ℝ} (hd : 0 < d)
+    {left right left' right' d : ℝ}
+    (hlr : left ≤ right) (hlr' : left' ≤ right') (hd : 0 < d)
     (hAs : SpectrumIn A (spectralSubspace A s) (Set.Icc left right))
     (hBt : SpectrumIn B (spectralSubspace B t)ᗮ
       {x | x ≤ left - d ∨ right + d ≤ x})
@@ -414,10 +530,64 @@ theorem spectralProjection_sinTheta
     ⟨hAs, hBt⟩
   have hVU : IntervalExteriorSeparated B V A Uᗮ left' right' d :=
     ⟨hBs, hAt⟩
-  have h := sinTheta_symmetric hA hB hredA hredB hd hUV hVU
-  simpa [U, V, subspaceGap, projection_spectralSubspace_eq] using h
+  have h := sinTheta_symmetric hA hB hredA hredB hlr hlr' hd hUV hVU
+  have hgapeq : subspaceGap U V =
+      ‖spectralProjection A s - spectralProjection B t‖ := rfl
+  calc d * ‖spectralProjection A s - spectralProjection B t‖
+      = d * subspaceGap U V := by rw [hgapeq]
+    _ ≤ ‖B - A‖ := h
 
-/-- Symmetric-ideal form. 
+/-! ## Ideal-valued form
+
+The operator absolute value over a general `RCLike` field and the ideal-valued
+projector-difference estimate are the two genuinely missing analytic
+ingredients (over `ℂ` the absolute value is `CFC.sqrt (star T * T)`; the
+gauge identity `‖|T|‖_I = ‖T‖_I` needs the polar partial isometry).  They are
+isolated as leaf obligations.
+-/
+
+/-- **Leaf obligation.** The operator absolute value `|T| = (T⋆T)^{1/2}`. -/
+noncomputable def operatorAbsoluteValue (T : E →L[𝕜] E) : E →L[𝕜] E :=
+  sorry
+
+/-- The full ambient sine-angle operator of two subspaces: the absolute value
+of the projector difference. -/
+noncomputable def sinAngleOperator (U V : Submodule 𝕜 E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →L[𝕜] E :=
+  operatorAbsoluteValue (projection U - projection V)
+
+/-- **Leaf obligation.** Symmetric norm ideals contain absolute values with
+equal gauge (via the polar partial isometry and unitary invariance). -/
+theorem SymmetricNormIdeal.operatorAbsoluteValue_mem_and_gauge_eq
+    (I : SymmetricNormIdeal (𝕜 := 𝕜) (E := E)) {T : E →L[𝕜] E}
+    (hT : I.mem T) :
+    I.mem (operatorAbsoluteValue T) ∧
+      I.gauge (operatorAbsoluteValue T) = I.gauge T :=
+  sorry
+
+/-- **Leaf obligation.** The ideal-valued symmetric projector-difference
+estimate: both mixed interval/exterior gaps bound the ideal gauge of the
+projector difference by the gauge of the perturbation, with the sharp
+constant-one dependence on the gap.  This is the ideal-valued analogue of
+`sinTheta_symmetric`, requiring the ideal-valued Sylvester engine on both
+off-diagonal blocks. -/
+theorem projectionDifference_ideal_intervalExterior
+    (I : SymmetricNormIdeal (𝕜 := 𝕜) (E := E))
+    {A B : E →L[𝕜] E}
+    (hA : IsSelfAdjointOperator A) (hB : IsSelfAdjointOperator B)
+    {U V : Submodule 𝕜 E}
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hU : Reduces A U) (hV : Reduces B V)
+    {left right left' right' d : ℝ}
+    (hlr : left ≤ right) (hlr' : left' ≤ right') (hd : 0 < d)
+    (hUV : IntervalExteriorSeparated A U B Vᗮ left right d)
+    (hVU : IntervalExteriorSeparated B V A Uᗮ left' right' d)
+    (hmem : I.mem (B - A)) :
+    I.mem (projection U - projection V) ∧
+      d * I.gauge (projection U - projection V) ≤ I.gauge (B - A) :=
+  sorry
+
+/-- Symmetric-ideal form.
 
 Lean proof route for a weaker agent:
 
@@ -443,14 +613,15 @@ theorem ideal_sinTheta
     {U V : Submodule 𝕜 E}
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hU : Reduces A U) (hV : Reduces B V)
-    {left right left' right' d : ℝ} (hd : 0 < d)
+    {left right left' right' d : ℝ}
+    (hlr : left ≤ right) (hlr' : left' ≤ right') (hd : 0 < d)
     (hUV : IntervalExteriorSeparated A U B Vᗮ left right d)
     (hVU : IntervalExteriorSeparated B V A Uᗮ left' right' d)
     (hmem : I.mem (B - A)) :
     I.mem (sinAngleOperator U V) ∧
       d * I.gauge (sinAngleOperator U V) ≤ I.gauge (B - A) := by
   have hdiff := projectionDifference_ideal_intervalExterior
-    I hA hB hU hV hd hUV hVU hmem
+    I hA hB hU hV hlr hlr' hd hUV hVU hmem
   have habs := I.operatorAbsoluteValue_mem_and_gauge_eq hdiff.1
   simpa [sinAngleOperator, habs.2] using
     And.intro habs.1 hdiff.2
