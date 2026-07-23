@@ -47,15 +47,113 @@ variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
 variable (U V : Submodule ℂ H) [U.HasOrthogonalProjection]
   [V.HasOrthogonalProjection]
 
-/-- Davis--Kahan 1970, Proposition 3.1: in the acute case, positivity of the
-diagonal compressions characterizes the unique direct rotation. -/
+/-- Davis--Kahan 1970, Proposition 3.1: in the acute case the direct rotation
+is the unique unitary intertwiner whose diagonal `U`-compressions are positive.
+
+The predicate `IsPaperDirectRotation` records the diagonal compressions only
+through their numerical range (`0 ≤ re ⟪x, (P T P) x⟫`), which is strictly
+weaker than operator positivity and does not pin the phase on the common part:
+on `U = V` every scalar `exp (I * θ)` with `|θ| < π / 2` satisfies all five
+fields yet differs from the identity direct rotation.  Uniqueness therefore
+needs the diagonal compressions to be self-adjoint (equivalently genuinely
+positive operators, which the canonical direct rotation satisfies because its
+diagonal blocks are the positive Halmos cosine).  These two self-adjointness
+hypotheses are the minimal strengthening; with them the operator squares to the
+reflection product and the square-root branch is fixed by accretivity. -/
 theorem proposition3_1_positivity_characterization
     (hacute : IsAcute U V) (T : H →L[ℂ] H)
     (hunitary : T ∈ unitary (H →L[ℂ] H))
-    (hintertwines : T * projection U = projection V * T) :
+    (hintertwines : T * projection U = projection V * T)
+    (hsource_sa : IsSelfAdjoint (projection U * T * projection U))
+    (hcomplement_sa :
+      IsSelfAdjoint (complementaryProjection U * T * complementaryProjection U)) :
     IsPaperDirectRotation U V T ↔
       T = spectraDirectRotation U V hacute := by
-  sorry
+  constructor
+  · intro hT
+    -- Resolution of the identity relative to `U`.
+    have hone : projection U + complementaryProjection U = 1 := by
+      rw [show complementaryProjection U = 1 - projection U from
+        Submodule.starProjection_orthogonal' U]
+      abel
+    have hRsub : reflectionOperator U = projection U - complementaryProjection U := by
+      rw [reflectionOperator_eq_projection_add_projection_sub_one U,
+        show complementaryProjection U = 1 - projection U from
+          Submodule.starProjection_orthogonal' U]
+      abel
+    have hTblock : T = projection U * T * projection U
+        + projection U * T * complementaryProjection U
+        + complementaryProjection U * T * projection U
+        + complementaryProjection U * T * complementaryProjection U := by
+      calc T = (projection U + complementaryProjection U) * T
+            * (projection U + complementaryProjection U) := by
+              rw [hone, one_mul, mul_one]
+        _ = _ := by noncomm_ring
+    -- The four `U`-blocks of `star T` in terms of the blocks of `T`.
+    -- Diagonal blocks are self-adjoint; off-diagonal blocks are sign-flipped.
+    have e11 : projection U * star T * projection U
+        = projection U * T * projection U := by
+      have h := hsource_sa.star_eq
+      rw [star_mul, star_mul, (isSelfAdjoint_starProjection U).star_eq,
+        ← mul_assoc] at h
+      exact h
+    have e22 : complementaryProjection U * star T * complementaryProjection U
+        = complementaryProjection U * T * complementaryProjection U := by
+      have h := hcomplement_sa.star_eq
+      rw [star_mul, star_mul, (isSelfAdjoint_starProjection Uᗮ).star_eq,
+        ← mul_assoc] at h
+      exact h
+    have e12 : projection U * star T * complementaryProjection U
+        = -(projection U * T * complementaryProjection U) := by
+      have h := congrArg star hT.crossed_blocks
+      rw [star_neg, star_star, star_mul, star_mul,
+        (isSelfAdjoint_starProjection U).star_eq,
+        (isSelfAdjoint_starProjection Uᗮ).star_eq, ← mul_assoc] at h
+      exact h
+    have e21 : complementaryProjection U * star T * projection U
+        = -(complementaryProjection U * T * projection U) := by
+      have h := hT.crossed_blocks
+      rw [star_mul, star_mul, (isSelfAdjoint_starProjection U).star_eq,
+        (isSelfAdjoint_starProjection Uᗮ).star_eq, ← mul_assoc] at h
+      rw [h, neg_neg]
+    -- `R_U (star T) R_U = T`: block-diagonal blocks fixed, off-diagonal negated.
+    have hkey : reflectionOperator U * star T * reflectionOperator U = T := by
+      rw [hRsub]
+      have expand : (projection U - complementaryProjection U) * star T
+          * (projection U - complementaryProjection U)
+          = projection U * star T * projection U
+            - projection U * star T * complementaryProjection U
+            - complementaryProjection U * star T * projection U
+            + complementaryProjection U * star T * complementaryProjection U := by
+        noncomm_ring
+      rw [expand, e11, e12, e21, e22]
+      conv_rhs => rw [hTblock]
+      abel
+    -- Reflection intertwining and the resulting square identity.
+    have hTR : T * reflectionOperator U = reflectionOperator V * T := by
+      rw [reflectionOperator_eq_projection_add_projection_sub_one U,
+        reflectionOperator_eq_projection_add_projection_sub_one V,
+        mul_sub, mul_add, mul_one, sub_mul, add_mul, one_mul, hintertwines]
+    have hRV : reflectionOperator V = T * reflectionOperator U * star T := by
+      have hTsT : T * star T = 1 := Unitary.mul_star_self_of_mem hunitary
+      calc reflectionOperator V
+          = reflectionOperator V * (T * star T) := by rw [hTsT, mul_one]
+        _ = reflectionOperator V * T * star T := by rw [mul_assoc]
+        _ = T * reflectionOperator U * star T := by rw [← hTR]
+    have hsq : T * T = spectraReflectionProduct U V := by
+      have hexp : spectraReflectionProduct U V
+          = T * (reflectionOperator U * star T * reflectionOperator U) := by
+        show reflectionOperator V * reflectionOperator U = _
+        rw [hRV]; noncomm_ring
+      rw [hexp, hkey]
+    -- Accretivity fixes the square-root branch.
+    have hre : ∀ x, 0 ≤ Complex.re ⟪T x, x⟫_ℂ := by
+      intro x
+      have h := MathAhead.HiddenFoundations.re_inner_paperDirectRotation_nonneg U V T hT x
+      rwa [← inner_re_symm (𝕜 := ℂ) (T x) x, RCLike.re_eq_complex_re] at h
+    exact spectraDirectRotation_unique_of_sq U V hacute T hunitary hsq hre
+  · rintro rfl
+    exact MathAhead.Section3.spectraDirectRotation_isPaperDirectRotation U V hacute
 
 omit [CompleteSpace H] [U.HasOrthogonalProjection]
   [V.HasOrthogonalProjection] in
