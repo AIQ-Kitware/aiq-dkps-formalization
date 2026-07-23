@@ -5,7 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.SinTheta.SpectralBridge
 import DavisKahan.Sylvester.Bounded
-import DavisKahan.Experimental.InfiniteDimensional.Core.Unbounded
+import DavisKahan.Experimental.InfiniteDimensional.SinTheta.RCLikeSpectralBridge
 
 /-!
 # Open obligations of the bounded spectral bridge
