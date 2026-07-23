@@ -135,8 +135,9 @@ theorem genericHalmosCosineSqCompleted_add_sineSq
     (fun T : H →L[ℂ] H => T (x : H))
     (halmosCosineSq_add_sineSq U V)
   simpa only [genericHalmosCosineSqCompleted,
-    genericHalmosSineSqCompleted,
-    coe_restrictToInvariantSubspace_apply, add_apply, one_apply] using h
+    genericHalmosSineSqCompleted, add_apply, Submodule.coe_add,
+    coe_restrictToInvariantSubspace_apply, ContinuousLinearMap.one_def,
+    ContinuousLinearMap.id_apply] using h
 
 /-- The paper's two crossed intersections are definitionally the two Halmos
 defect subspaces. -/
@@ -164,8 +165,8 @@ theorem re_inner_projection_compression
         ⟪x, (projection U * A * projection U) x⟫_ℂ =
       RCLike.re
         ⟪projection U (A (projection U x)), x⟫_ℂ := by
-          simp only [mul_apply_eq_comp, Function.comp_apply]
-          rw [inner_conj_symm, RCLike.re_conj]
+          simp only [mul_apply_eq_comp]
+          exact inner_re_symm x _
     _ = RCLike.re ⟪A (projection U x), projection U x⟫_ℂ :=
       congrArg RCLike.re h1
 
@@ -191,8 +192,7 @@ theorem spectraDirectRotation_sourceCompression_nonnegative
       RCLike.re ⟪x, (C * projection U) x⟫_ℂ =
           RCLike.re
             ⟪x, (projection U * C * projection U) x⟫_ℂ := by
-              simp only [mul_apply_eq_comp, Function.comp_apply]
-              rw [hcomm.eq]
+              simp only [mul_apply_eq_comp]
               have hfix :
                   projection U (C (projection U x)) =
                     C (projection U x) := by
@@ -204,7 +204,9 @@ theorem spectraDirectRotation_sourceCompression_nonnegative
                             (fun T : H →L[ℂ] H => T (projection U x))
                             hcomm.eq.symm
                   _ = C (projection U x) := by
-                    rw [U.isIdempotentElem_starProjection_apply]
+                    have hidem : projection U (projection U x) = projection U x :=
+                      U.starProjection_eq_self_iff.mpr (U.starProjection_apply_mem x)
+                    rw [hidem]
               rw [hfix]
       _ = RCLike.re ⟪C (projection U x), projection U x⟫_ℂ :=
         re_inner_projection_compression U C x
@@ -238,17 +240,16 @@ theorem spectraDirectRotation_complementCompression_nonnegative
             complementaryProjection U x⟫_ℂ := by
     rw [hdiag]
     have hcomm : Commute C (complementaryProjection U) := by
-      rw [commute_iff_eq]
-      change C * (1 - projection U) = (1 - projection U) * C
-      rw [mul_sub, mul_one, sub_mul, one_mul,
+      have hcomp : complementaryProjection U = 1 - projection U :=
+        Submodule.starProjection_orthogonal' U
+      rw [commute_iff_eq, hcomp, mul_sub, mul_one, sub_mul, one_mul,
         (spectraCanonicalAbsoluteValue_commute_projection U V).eq]
     calc
       RCLike.re ⟪x, (C * complementaryProjection U) x⟫_ℂ =
           RCLike.re
             ⟪x, (complementaryProjection U * C *
               complementaryProjection U) x⟫_ℂ := by
-              simp only [mul_apply_eq_comp, Function.comp_apply]
-              rw [hcomm.eq]
+              simp only [mul_apply_eq_comp]
               have hfix :
                   complementaryProjection U
                       (C (complementaryProjection U x)) =
@@ -264,8 +265,13 @@ theorem spectraDirectRotation_complementCompression_nonnegative
                               T (complementaryProjection U x))
                             hcomm.eq.symm
                   _ = C (complementaryProjection U x) := by
-                    exact congrArg C
-                      (Uᗮ.isIdempotentElem_starProjection_apply x)
+                    have hidem :
+                        complementaryProjection U
+                            (complementaryProjection U x) =
+                          complementaryProjection U x :=
+                      Uᗮ.starProjection_eq_self_iff.mpr
+                        (Uᗮ.starProjection_apply_mem x)
+                    rw [hidem]
               rw [hfix]
       _ = RCLike.re
           ⟪C (complementaryProjection U x),
@@ -304,12 +310,14 @@ theorem spectraDirectRotation_crossed_blocks
   have hcompressed := congrArg (fun T : H →L[ℂ] H => Pc * T * P) hsum
   have hzero : Pc * D * P + Pc * star D * P = 0 := by
     simpa only [mul_add, add_mul, hPcCP, add_zero] using hcompressed
+  have hP : star P = P := (isSelfAdjoint_starProjection U).star_eq
+  have hPc : star Pc = Pc := (isSelfAdjoint_starProjection Uᗮ).star_eq
   have hstar :
       star (P * D * Pc) = Pc * star D * P := by
-    simp only [star_mul, star_star, star_projection,
-      star_complementaryProjection]
-  rw [hstar]
-  exact eq_neg_of_add_eq_zero_left hzero
+    rw [star_mul, star_mul, hP, hPc, mul_assoc]
+  calc
+    Pc * D * P = -(Pc * star D * P) := eq_neg_of_add_eq_zero_left hzero
+    _ = -star (P * D * Pc) := by rw [hstar]
 
 /-- The acute Spectra direct rotation satisfies the paper's block definition. -/
 theorem spectraDirectRotation_isPaperDirectRotation

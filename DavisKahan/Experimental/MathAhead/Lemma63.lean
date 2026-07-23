@@ -138,7 +138,7 @@ theorem rank_starProjection_comp_le
     (Q : Submodule ℂ F) [Q.HasOrthogonalProjection] :
     (Q.starProjection ∘L K).rank ≤ Q.starProjection.rank := by
   exact LinearMap.rank_comp_le_left
-    Q.starProjection.toLinearMap K.toLinearMap
+    K.toLinearMap Q.starProjection.toLinearMap
 
 /-- The paper square energy splits over an orthogonal decomposition of the
 domain.  This is the basis-free Pythagorean identity used in Lemma 6.3. -/
@@ -151,37 +151,42 @@ theorem paperHilbertSchmidtEnergy_domain_projection_add
       paperHilbertSchmidtEnergy
         (L ∘L (1 - P.starProjection)) := by
   classical
-  obtain ⟨ιP, bP, hbP⟩ := exists_hilbertBasis ℂ P
-  obtain ⟨ιC, bC, hbC⟩ := exists_hilbertBasis ℂ Pᗮ
-  let b : HilbertBasis (ιP ⊕ ιC) ℂ E :=
-    HilbertBasis.orthogonalSumSubmodule bP bC P
-  rw [paperHilbertSchmidtEnergy_eq_basisEnergy b L,
-    paperHilbertSchmidtEnergy_eq_basisEnergy b
-      (L ∘L P.starProjection),
-    paperHilbertSchmidtEnergy_eq_basisEnergy b
-      (L ∘L (1 - P.starProjection))]
+  obtain ⟨ι, b, -⟩ := exists_hilbertBasis ℂ F
+  -- Rectangular Hilbert--Schmidt energy of any `M : E → F` equals the summed
+  -- squared columns of its adjoint over the fixed basis `b` of `F`.
+  have hswap : ∀ M : E →L[ℂ] F,
+      paperHilbertSchmidtEnergy M =
+        paperHilbertSchmidtBasisEnergy b M.adjoint := by
+    intro M
+    obtain ⟨κ, bE, -⟩ := exists_hilbertBasis ℂ E
+    rw [paperHilbertSchmidtEnergy_eq_basisEnergy bE M,
+      paperHilbertSchmidtBasisEnergy_adjoint_swap bE b M]
+  -- The adjoints of the two compressed operators are the projected columns.
+  have hPadj :
+      (L ∘L P.starProjection).adjoint = P.starProjection ∘L L.adjoint := by
+    rw [ContinuousLinearMap.adjoint_comp,
+      (isSelfAdjoint_starProjection P).adjoint_eq]
+  have hPcadj :
+      (L ∘L (1 - P.starProjection)).adjoint =
+        (1 - P.starProjection) ∘L L.adjoint := by
+    have hsa : (1 - P.starProjection).adjoint = 1 - P.starProjection := by
+      rw [← Submodule.starProjection_orthogonal' P]
+      exact (isSelfAdjoint_starProjection Pᗮ).adjoint_eq
+    rw [ContinuousLinearMap.adjoint_comp, hsa]
+  rw [hswap L, hswap (L ∘L P.starProjection),
+    hswap (L ∘L (1 - P.starProjection)), hPadj, hPcadj]
   unfold paperHilbertSchmidtBasisEnergy
-  rw [Equiv.tsum_sum]
-  apply congrArg₂ (· + ·)
-  · apply tsum_congr
-    intro i
-    have hbi : b (Sum.inl i) ∈ P :=
-      HilbertBasis.orthogonalSumSubmodule_inl_mem bP bC P i
-    have hPfix : P.starProjection (b (Sum.inl i)) = b (Sum.inl i) :=
-      P.starProjection_eq_self_iff.mpr hbi
-    have hPc0 : (1 - P.starProjection) (b (Sum.inl i)) = 0 := by
-      simp [hPfix]
-    simp [ContinuousLinearMap.comp_apply, hPfix, hPc0]
-  · apply tsum_congr
-    intro i
-    have hbi : b (Sum.inr i) ∈ Pᗮ :=
-      HilbertBasis.orthogonalSumSubmodule_inr_mem bP bC P i
-    have hP0 : P.starProjection (b (Sum.inr i)) = 0 :=
-      (Submodule.starProjection_apply_eq_zero_iff P).mpr hbi
-    have hPcfix : (1 - P.starProjection) (b (Sum.inr i)) =
-        b (Sum.inr i) := by
-      simp [hP0]
-    simp [ContinuousLinearMap.comp_apply, hP0, hPcfix]
+  rw [← ENNReal.tsum_add]
+  apply tsum_congr
+  intro i
+  simp only [ContinuousLinearMap.comp_apply]
+  -- Pointwise this is the Pythagorean identity for the orthogonal projection.
+  have hpyth := P.norm_sq_eq_add_norm_sq_starProjection (L.adjoint (b i))
+  rw [Submodule.starProjection_orthogonal' P] at hpyth
+  simp only [← ENNReal.coe_pow, ← ENNReal.coe_add, ENNReal.coe_inj]
+  apply NNReal.coe_injective
+  push_cast
+  exact hpyth
 
 /-- Under the paper's block-invariance hypothesis the selected source block
 is exactly the source restriction of the left-compressed operator. -/
@@ -222,15 +227,18 @@ theorem lemma6_3_approximationNumber_leakage_completed
     isPaperHilbertSchmidt_of_rank_le hrankL
   have hrankA : A.rank ≤ (n : Cardinal) := by
     have hAeq :
-        A = Q.starProjection ∘L K ∘L P.starProjection := by
-      dsimp [A]
+        A = Q.starProjection ∘L (K ∘L P.starProjection) := by
+      show K ∘L P.starProjection = Q.starProjection ∘L (K ∘L P.starProjection)
+      rw [← ContinuousLinearMap.comp_assoc]
       exact hKP
     rw [hAeq]
     exact
       (rank_starProjection_comp_le
         (K ∘L P.starProjection) Q).trans hrankQ
   have hrankB : B.rank ≤ (n : Cardinal) := by
-    dsimp [B]
+    have hBeq :
+        B = Q.starProjection ∘L (K ∘L (1 - P.starProjection)) := rfl
+    rw [hBeq]
     exact
       (rank_starProjection_comp_le
         (K ∘L (1 - P.starProjection)) Q).trans hrankQ
@@ -252,9 +260,9 @@ theorem lemma6_3_approximationNumber_leakage_completed
       isPaperHilbertSchmidt_of_rank_le hrankB
     have hreal := congrArg ENNReal.toReal henergy
     rw [hLP, hLB, ENNReal.toReal_add hAfinite hBfinite,
-      ← approximationSquareEnergy_eq_paperEnergy_toReal_of_rank_le hrankL,
-      ← approximationSquareEnergy_eq_paperEnergy_toReal_of_rank_le hrankA,
-      ← approximationSquareEnergy_eq_paperEnergy_toReal_of_rank_le hrankB] at hreal
+      ← approximationSquareEnergy_eq_paperEnergy_toReal_of_rank_le L hrankL,
+      ← approximationSquareEnergy_eq_paperEnergy_toReal_of_rank_le A hrankA,
+      ← approximationSquareEnergy_eq_paperEnergy_toReal_of_rank_le B hrankB] at hreal
     exact hreal
   have hLle :
       approximationSquareEnergy L n ≤
@@ -263,8 +271,10 @@ theorem lemma6_3_approximationNumber_leakage_completed
     exact approximationSquareEnergy_starProjection_comp_le K Q n
   have hBenergy : approximationSquareEnergy B n < η ^ 2 := by
     rw [hsplitE] at hLle
-    dsimp [A] at hnear
-    nlinarith
+    have hnear' :
+        approximationSquareEnergy A n >
+          approximationSquareEnergy K n - η ^ 2 := hnear
+    nlinarith [hLle, hnear']
   have hnormsq : ‖B‖ ^ 2 ≤ approximationSquareEnergy B n :=
     opNorm_sq_le_approximationSquareEnergy B hn
   have hsq : ‖B‖ ^ 2 < η ^ 2 :=

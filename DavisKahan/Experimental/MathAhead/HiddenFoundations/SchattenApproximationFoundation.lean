@@ -166,7 +166,7 @@ the exact rectangular Davis--Kahan theory. -/
 noncomputable def SchattenApproximationFoundation.toFamily
     {p : ℝ} {hp : 1 ≤ p}
     (D : SchattenApproximationFoundation (k := k) p hp) :
-    RectangularSymmetricIdealFamily (k := k) :=
+    RectangularSymmetricIdealFamily (𝕜 := k) :=
   { Mem := fun T => IsSchatten p T
     gauge := fun T => schattenGauge p T
     zero_mem := D.zero_mem
@@ -186,13 +186,13 @@ noncomputable def SchattenApproximationFoundation.toFamily
 
 /-- The trace-class campaign is the `p=1` specialization. -/
 abbrev TraceClassApproximationFoundation :=
-  SchattenApproximationFoundation (k := k) (1 : ℝ) le_rfl
+  SchattenApproximationFoundation.{u, v} (k := k) (1 : ℝ) le_rfl
 
 /-- The Hilbert--Schmidt campaign is the `p=2` specialization.  Over complex
 scalars this can be discharged by the canonical Hilbert-tensor construction
 in `HilbertSchmidtComplexFamily`. -/
 abbrev HilbertSchmidtApproximationFoundation :=
-  SchattenApproximationFoundation (k := k) (2 : ℝ) (by norm_num)
+  SchattenApproximationFoundation.{u, v} (k := k) (2 : ℝ) (by norm_num)
 
 end
 end HiddenFoundations
