@@ -48,13 +48,26 @@ theorem isCompactOperator_integral
     (hf : Integrable f μ)
     (hcompact : ∀ᵐ a ∂μ, IsCompactOperator (f a)) :
     IsCompactOperator (∫ a, f a ∂μ : E →L[ℂ] F) := by
-  -- Open obligation: lift the integrand into the closed compact-operator
-  -- submodule `K` (complete via `IsClosed.completeSpace_coe`), transport
-  -- integrability through `K.subtypeL`, and read off `(∫ g).property`.  The
-  -- construction is sound; the remaining work is naming the subtype
-  -- strong-measurability and `integral_comp_comm` lemmas in the pinned Mathlib.
-  -- Handed to the mathematics agent.
-  sorry
+  haveI hKcl : IsClosed
+      ((compactOperatorSubmodule (E := E) (F := F)) : Set (E →L[ℂ] F)) :=
+    isClosed_compactOperatorSubmodule
+  let π := (compactOperatorSubmodule (E := E) (F := F)).mkQL
+  have hπ : ∀ x, π x = Submodule.Quotient.mk x := fun _ => rfl
+  have hπ0 : π (∫ a, f a ∂μ) = 0 := by
+    have hcomm := ContinuousLinearMap.integral_comp_comm (𝕜 := ℂ)
+      (E := E →L[ℂ] F)
+      (Fₗ := (E →L[ℂ] F) ⧸ compactOperatorSubmodule (E := E) (F := F)) π hf
+    rw [← hcomm]
+    have hzero : (fun a => π (f a)) =ᵐ[μ] fun _ =>
+        (0 : (E →L[ℂ] F) ⧸ compactOperatorSubmodule (E := E) (F := F)) := by
+      filter_upwards [hcompact] with a ha
+      rw [hπ]
+      exact (Submodule.Quotient.mk_eq_zero
+        (compactOperatorSubmodule (E := E) (F := F))).mpr ha
+    rw [integral_congr_ae hzero, integral_zero]
+  exact (Submodule.Quotient.mk_eq_zero
+    (compactOperatorSubmodule (E := E) (F := F))).mp
+    ((hπ (∫ a, f a ∂μ)).symm.trans hπ0)
 
 end
 
