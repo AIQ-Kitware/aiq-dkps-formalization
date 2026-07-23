@@ -101,11 +101,15 @@ theorem centered_isUnit_of_spectrumOutside
     obtain ⟨w, hwT, rfl⟩ := hinvSpectrum ▸ hz
     rw [norm_inv]
     simpa only [one_div] using one_div_le_one_div_of_le hγ (hdist w hwT)
-  have hInvNormal : IsStarNormal hInv.inv :=
-    RCLikeSpectralBridge.inverse_isNormal hTself hunit
+  have hInvSelf : (hInv.inv).IsSymmetric :=
+    RCLikeSpectralBridge.inverse_isSymmetric hTself hunit
+  have hinvBall : spectrum 𝕜 hInv.inv ⊆ Metric.closedBall 0 γ⁻¹ := by
+    intro w hw
+    rw [Metric.mem_closedBall, dist_zero_right]
+    exact hinvBound w hw
   simpa [γ] using
-    RCLikeSpectralBridge.norm_le_of_normal_spectrum_norm_le
-      hInvNormal (inv_nonneg.mpr hγ.le) hinvBound
+    RCLikeSpectralBridge.norm_le_of_selfAdjoint_spectrum_subset_closedBall
+      hInvSelf (inv_nonneg.mpr hγ.le) hinvBall
 
 /-- The bounded spectral theorem supplies centered norm/inverse data. -/
 noncomputable def centeredIntervalExteriorWitness_of_gap
