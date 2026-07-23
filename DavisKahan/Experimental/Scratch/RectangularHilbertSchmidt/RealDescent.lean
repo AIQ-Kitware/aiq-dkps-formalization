@@ -142,8 +142,7 @@ theorem tendsto_opNorm_of_paperHilbertSchmidt
   refine ⟨N, ?_⟩
   intro n hn
   have hsub : IsPaperHilbertSchmidt (T n - L) :=
-    HiddenFoundations.isPaperHilbertSchmidt_add (hT n)
-      ((isPaperHilbertSchmidt_neg_iff L).2 hL)
+    HiddenFoundations.isPaperHilbertSchmidt_sub (hT n) hL
   have hop : ‖T n - L‖ ≤ paperHilbertSchmidtNorm (T n - L) :=
     opNorm_le_paperHilbertSchmidtNorm hsub
   simpa only [dist_eq_norm] using lt_of_le_of_lt hop (hN n hn)
@@ -198,7 +197,6 @@ theorem paperHilbertSchmidt_complete_real
           rw [paperHilbertSchmidtNorm_complexify]
     _ = paperHilbertSchmidtNorm (Ac n - Lc) := by
           rw [complexify_sub, hLc_eq]
-          rfl
     _ < ε := hN n hn
 
 /-- Addition closure of the real paper Hilbert--Schmidt class, transported from
@@ -244,15 +242,15 @@ noncomputable def hilbertSchmidtReal :
     { Mem := fun T => IsPaperHilbertSchmidt T
       gauge := fun T => paperHilbertSchmidtNorm T
       zero_mem := by
-        intro E F _ _ _ _
+        intro E F _ _ _ _ _ _
         unfold IsPaperHilbertSchmidt
         rw [paperHilbertSchmidtEnergy_zero]
         exact ENNReal.zero_ne_top
       add_mem := by
-        intro E F _ _ _ _ A B hA hB
+        intro E F _ _ _ _ _ _ A B hA hB
         exact isPaperHilbertSchmidt_add_real hA hB
       smul_mem := by
-        intro E F _ _ _ _ c A hA
+        intro E F _ _ _ _ _ _ c A hA
         by_cases hc : c = 0
         · subst c
           simpa using (show IsPaperHilbertSchmidt (0 : E →L[ℝ] F) from by
@@ -261,40 +259,40 @@ noncomputable def hilbertSchmidtReal :
             exact ENNReal.zero_ne_top)
         · exact (isPaperHilbertSchmidt_smul_iff c hc A).2 hA
       adjoint_mem := by
-        intro E F _ _ _ _ A hA
+        intro E F _ _ _ _ _ _ A hA
         exact (isPaperHilbertSchmidt_adjoint_iff A).2 hA
       comp_mem := by
-        intro E F G H _ _ _ _ _ _ _ _ L A R hA
+        intro E F G H _ _ _ _ _ _ _ _ _ _ _ _ L A R hA
         exact hA.comp L R
       gauge_nonneg := by
-        intro E F _ _ _ _ A hA
+        intro E F _ _ _ _ _ _ A hA
         exact paperHilbertSchmidtNorm_nonneg A
       gauge_zero := by
-        intro E F _ _ _ _
+        intro E F _ _ _ _ _ _
         exact paperHilbertSchmidtNorm_zero
       gauge_eq_zero := by
-        intro E F _ _ _ _ A hA hzero
+        intro E F _ _ _ _ _ _ A hA hzero
         apply norm_eq_zero.mp
         have hop := opNorm_le_paperHilbertSchmidtNorm hA
         rw [hzero] at hop
         exact le_antisymm hop (norm_nonneg A)
       gauge_add_le := by
-        intro E F _ _ _ _ A B hA hB
+        intro E F _ _ _ _ _ _ A B hA hB
         exact paperHilbertSchmidtNorm_add_le_real hA hB
       gauge_smul := by
-        intro E F _ _ _ _ c A hA
+        intro E F _ _ _ _ _ _ c A hA
         exact paperHilbertSchmidtNorm_smul c A hA
       gauge_adjoint := by
-        intro E F _ _ _ _ A hA
+        intro E F _ _ _ _ _ _ A hA
         exact paperHilbertSchmidtNorm_adjoint A
       gauge_comp_le := by
-        intro E F G H _ _ _ _ _ _ _ _ L A R hA
+        intro E F G H _ _ _ _ _ _ _ _ _ _ _ _ L A R hA
         exact paperHilbertSchmidtNorm_comp_le L hA R
       opNorm_le_gauge := by
-        intro E F _ _ _ _ A hA
+        intro E F _ _ _ _ _ _ A hA
         exact opNorm_le_paperHilbertSchmidtNorm hA
       gauge_complete := by
-        intro E F _ _ _ _ A hA hcauchy
+        intro E F _ _ _ _ _ _ A hA hcauchy
         exact paperHilbertSchmidt_complete_real A hA hcauchy }
 
 end
