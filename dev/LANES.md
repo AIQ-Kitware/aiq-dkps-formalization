@@ -73,3 +73,14 @@ instance hypotheses.
   `IsPaperDirectRotation`. None exist in Mathlib/Spectra/repo yet — a real multi-session
   campaign. `polarIsometry_comp_adjoint_self` (final-projection identity) was the one leaf
   whose supporting infra was already present; now proved (5c7b13c).
+
+## Scratch overlay (external GPT-5.6 drop) — repaired by jon (2026-07-23)
+
+The never-compiled `DavisKahan/Experimental/Scratch/` drop (ideal Banach
+spaces, Hilbert–Schmidt Bochner layer incl. the `HilbertSchmidtComplexFamily`
+dependency, free-beam Green identities and smooth kernel) now builds:
+`lake build DavisKahan.Experimental.Scratch.All` — zero errors, zero sorries.
+Key API decision: `IdealOperator.ofMem` must be used instead of anonymous
+constructors in statements (the type-synonym unfolding otherwise leaks the
+subtype topology into `Integrable` hypotheses), and the generic Bochner
+theorems take `[NormedSpace ℝ (E →L[𝕜] F)]` as an instance argument.
