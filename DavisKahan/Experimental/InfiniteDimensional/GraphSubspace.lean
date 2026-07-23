@@ -591,11 +591,10 @@ private theorem acute_coordinate_injective
 near-identity compression `P_U P_V P_U + P_{U^perp}`. -/
 private noncomputable def acuteAngularOperator
     (U V : Submodule 𝕜 E) [U.HasOrthogonalProjection]
-    [V.HasOrthogonalProjection] (hacute : IsAcute U V) : E →L[𝕜] E := by
-  -- Open obligation: invert the near-identity compression P(1-Q)P + P^perp to
-  -- build the bounded angular/Riccati graph operator (uses `Units.oneSub`);
-  -- handed to the mathematics agent.
-  sorry
+    [V.HasOrthogonalProjection] (_hacute : IsAcute U V) : E →L[𝕜] E :=
+  (1 - projection U) * projection V *
+    Ring.inverse (projection U * projection V * projection U + (1 - projection U)) *
+    projection U
 
 /-- Algebraic properties of the acute angular operator. -/
 private theorem acuteAngularOperator_spec
@@ -604,9 +603,109 @@ private theorem acuteAngularOperator_spec
     IsAngularOperator U (acuteAngularOperator U V hacute) ∧
       V = LinearMap.range
         (projection U + acuteAngularOperator U V hacute ∘L projection U).toLinearMap := by
-  -- Open obligation: the angular operator is a Riccati solution whose graph is V
-  -- (idempotency-driven operator algebra); handed to the mathematics agent.
-  sorry
+  set P : E →L[𝕜] E := projection U with hPdef
+  set Q : E →L[𝕜] E := projection V with hQdef
+  have hPP : P * P = P := (U.isIdempotentElem_starProjection).eq
+  set T : E →L[𝕜] E := P * Q * P + (1 - P) with hTdef
+  set R : E →L[𝕜] E := Ring.inverse T with hRdef
+  have hXdef : acuteAngularOperator U V hacute = (1 - P) * Q * R * P := rfl
+  have hP1P : P * (1 - P) = 0 := by rw [mul_one_sub, hPP, sub_self]
+  have h1PP : (1 - P) * P = 0 := by rw [one_sub_mul, hPP, sub_self]
+  -- the compression is a unit: it is within distance `< 1` of the identity
+  have hgap : ‖P - Q‖ < 1 := hacute
+  have hPnorm : ‖P‖ ≤ 1 := U.starProjection_norm_le
+  have hfact : P * (P - Q) * P = P - P * Q * P := by
+    rw [mul_sub, sub_mul, hPP, hPP]
+  have hnorm : ‖P - P * Q * P‖ < 1 := by
+    rw [← hfact]
+    have h1 : ‖P * (P - Q) * P‖ ≤ ‖P - Q‖ := by
+      calc ‖P * (P - Q) * P‖ ≤ ‖P * (P - Q)‖ * ‖P‖ := norm_mul_le _ _
+        _ ≤ ‖P‖ * ‖P - Q‖ * ‖P‖ :=
+            mul_le_mul_of_nonneg_right (norm_mul_le _ _) (norm_nonneg _)
+        _ ≤ 1 * ‖P - Q‖ * 1 := by
+            have h1 : ‖P‖ * ‖P - Q‖ ≤ 1 * ‖P - Q‖ :=
+              mul_le_mul_of_nonneg_right hPnorm (norm_nonneg _)
+            exact mul_le_mul h1 hPnorm (norm_nonneg _) (by positivity)
+        _ = ‖P - Q‖ := by ring
+    linarith
+  have hone : T = 1 - (P - P * Q * P) := by rw [hTdef]; abel
+  have hTunit : IsUnit T := by
+    rw [hone]
+    exact (Units.oneSub _ hnorm).isUnit
+  have hTR : T * R = 1 := Ring.mul_inverse_cancel T hTunit
+  have hRT : R * T = 1 := Ring.inverse_mul_cancel T hTunit
+  -- `P` commutes with `T`, hence with `R`
+  have hPPQP : P * (P * Q * P) = P * Q * P := by
+    rw [← mul_assoc, ← mul_assoc, hPP]
+  have hPQPP : P * Q * P * P = P * Q * P := by
+    rw [mul_assoc, hPP]
+  have hPT : P * T = T * P := by
+    rw [hTdef, mul_add, add_mul, hPPQP, hPQPP, hP1P, h1PP, add_zero]
+  have hPR : P * R = R * P := by
+    calc P * R = (R * T) * (P * R) := by rw [hRT, one_mul]
+      _ = R * ((T * P) * R) := by rw [mul_assoc R T (P * R), ← mul_assoc T P R]
+      _ = R * ((P * T) * R) := by rw [← hPT]
+      _ = (R * P) * (T * R) := by rw [mul_assoc P T R, ← mul_assoc R P (T * R)]
+      _ = R * P := by rw [hTR, mul_one]
+  -- `R` is the identity on `Uᗮ`, and the compressed inverse satisfies `PQRP = P`
+  have h1PT : (1 - P) * T = 1 - P := by
+    have e1 : (1 - P) * (P * Q * P) = 0 := by
+      rw [← mul_assoc, ← mul_assoc, h1PP, zero_mul, zero_mul]
+    have e2 : (1 - P) * (1 - P) = 1 - P := by
+      rw [mul_one_sub, h1PP, sub_zero]
+    rw [hTdef, mul_add, e1, e2, zero_add]
+  have h1PR : (1 - P) * R = 1 - P := by
+    calc (1 - P) * R = ((1 - P) * T) * R := by rw [h1PT]
+      _ = (1 - P) * (T * R) := by rw [mul_assoc]
+      _ = 1 - P := by rw [hTR, mul_one]
+  have hPQPR : P * Q * P * R = P := by
+    have h := hTR
+    rw [hTdef, add_mul, h1PR] at h
+    have h2 : P * Q * P * R = 1 - (1 - P) := eq_sub_of_add_eq h
+    rwa [sub_sub_cancel] at h2
+  have hPQRP : P * Q * R * P = P := by
+    calc P * Q * R * P = P * Q * (R * P) := by rw [mul_assoc]
+      _ = P * Q * (P * R) := by rw [← hPR]
+      _ = P * Q * P * R := by rw [← mul_assoc]
+      _ = P := hPQPR
+  -- angularity of the constructed operator
+  have hXP : ((1 - P) * Q * R * P) * P = (1 - P) * Q * R * P := by
+    rw [mul_assoc, hPP]
+  have hPX : P * ((1 - P) * Q * R * P) = 0 := by
+    rw [← mul_assoc, ← mul_assoc, ← mul_assoc, hP1P, zero_mul, zero_mul, zero_mul]
+  -- the parametrized graph map collapses to `Q R P`
+  have hsum : P + (1 - P) * Q * R * P = Q * R * P := by
+    rw [one_sub_mul, sub_mul, sub_mul, hPQRP]
+    abel
+  refine ⟨⟨?_, ?_⟩, ?_⟩
+  · rw [hXdef]
+    exact hXP
+  · rw [hXdef]
+    exact hPX
+  · have hop : P + acuteAngularOperator U V hacute ∘L P = Q * R * P := by
+      have h1 : acuteAngularOperator U V hacute ∘L P = (1 - P) * Q * R * P := by
+        rw [hXdef]
+        exact hXP
+      rw [h1]
+      exact hsum
+    rw [hop]
+    refine le_antisymm ?_ ?_
+    · intro v hv
+      have hPv : P ((Q * R * P) v - v) = 0 := by
+        have h : P (Q (R (P v))) = P v :=
+          congrArg (fun S : E →L[𝕜] E => S v) hPQRP
+        rw [map_sub]
+        show P (Q (R (P v))) - P v = 0
+        rw [h, sub_self]
+      have hmem : (Q * R * P) v - v ∈ V := by
+        refine V.sub_mem ?_ hv
+        show Q (R (P v)) ∈ V
+        exact V.starProjection_apply_mem _
+      have hzero := acute_coordinate_injective U V hacute _ hmem hPv
+      exact ⟨v, sub_eq_zero.mp hzero⟩
+    · rintro x ⟨y, rfl⟩
+      show Q (R (P y)) ∈ V
+      exact V.starProjection_apply_mem _
 
 /-- A pair is acute exactly when it is the graph of a bounded angular operator. -/
 theorem acute_iff_exists_bounded_angularOperator (U V : Submodule 𝕜 E)
@@ -614,10 +713,26 @@ theorem acute_iff_exists_bounded_angularOperator (U V : Submodule 𝕜 E)
     IsAcute U V ↔
       ∃ X : E →L[𝕜] E, IsAngularOperator U X ∧
         V = LinearMap.range (projection U + X ∘L projection U).toLinearMap := by
-  -- Open obligation: the acute <-> bounded-angular-graph equivalence, from the
-  -- angular-operator construction (forward) and the graph-gap identity
-  -- `subspaceGap_graphSubspace` (reverse); handed to the mathematics agent.
-  sorry
+  constructor
+  · intro hacute
+    obtain ⟨hang, hrange⟩ := acuteAngularOperator_spec U V hacute
+    exact ⟨acuteAngularOperator U V hacute, hang, hrange⟩
+  · rintro ⟨X, hXang, hV⟩
+    have hVg : V = graphSubspace U X := by
+      rw [hV]
+      exact (graphSubspace_eq_range U hXang).symm
+    subst hVg
+    have hlt : ‖X‖ / Real.sqrt (1 + ‖X‖ ^ 2) < 1 := by
+      have hpos : (0 : ℝ) < Real.sqrt (1 + ‖X‖ ^ 2) :=
+        Real.sqrt_pos.mpr (by positivity)
+      rw [div_lt_one hpos]
+      calc ‖X‖ = Real.sqrt (‖X‖ ^ 2) := (Real.sqrt_sq (norm_nonneg X)).symm
+        _ < Real.sqrt (1 + ‖X‖ ^ 2) :=
+            Real.sqrt_lt_sqrt (by positivity) (by linarith)
+    have hkey : subspaceGap U (graphSubspace U X) < 1 := by
+      rw [subspaceGap_graphSubspace U X hXang]
+      exact hlt
+    exact hkey
 
 /-- Every acute subspace is the graph of a unique bounded angular operator. -/
 theorem existsUnique_angularOperator
