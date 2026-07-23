@@ -6,6 +6,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 
 import Mathlib.Analysis.Calculus.IteratedDeriv.Defs
 import Mathlib.Analysis.SpecialFunctions.Trigonometric.Deriv
+import Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp
 import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
 import Mathlib.Tactic
 
@@ -71,7 +72,7 @@ theorem hasDerivAt_mode (beta a b c d x : ℝ) :
           ((hasDerivAt_const x beta).mul (hasDerivAt_id x))).const_mul c)).add
       (((Real.hasDerivAt_sinh (beta * x)).comp x
           ((hasDerivAt_const x beta).mul (hasDerivAt_id x))).const_mul d)
-    using 1 <;> ring
+    using 1 <;> (try rfl) <;> (try funext y) <;> (try simp only [Function.comp_apply, Pi.add_apply]) <;> ring
 
 /-- The displayed second derivative is the derivative of `modeD1`. -/
 theorem hasDerivAt_modeD1 (beta a b c d x : ℝ) :
@@ -86,7 +87,7 @@ theorem hasDerivAt_modeD1 (beta a b c d x : ℝ) :
           ((hasDerivAt_const x beta).mul (hasDerivAt_id x))).const_mul c)).add
       (((Real.hasDerivAt_cosh (beta * x)).comp x
           ((hasDerivAt_const x beta).mul (hasDerivAt_id x))).const_mul d)).const_mul beta
-    using 1 <;> ring
+    using 1 <;> (try rfl) <;> (try funext y) <;> (try simp only [Function.comp_apply, Pi.add_apply]) <;> ring
 
 /-- The displayed third derivative is the derivative of `modeD2`. -/
 theorem hasDerivAt_modeD2 (beta a b c d x : ℝ) :
@@ -101,7 +102,7 @@ theorem hasDerivAt_modeD2 (beta a b c d x : ℝ) :
           ((hasDerivAt_const x beta).mul (hasDerivAt_id x))).const_mul c)).add
       (((Real.hasDerivAt_sinh (beta * x)).comp x
           ((hasDerivAt_const x beta).mul (hasDerivAt_id x))).const_mul d)).const_mul (beta ^ 2)
-    using 1 <;> ring
+    using 1 <;> (try rfl) <;> (try funext y) <;> (try simp only [Function.comp_apply, Pi.add_apply]) <;> ring
 
 /-- The displayed fourth derivative is the derivative of `modeD3`. -/
 theorem hasDerivAt_modeD3 (beta a b c d x : ℝ) :
@@ -116,7 +117,7 @@ theorem hasDerivAt_modeD3 (beta a b c d x : ℝ) :
           ((hasDerivAt_const x beta).mul (hasDerivAt_id x))).const_mul c)).add
       (((Real.hasDerivAt_cosh (beta * x)).comp x
           ((hasDerivAt_const x beta).mul (hasDerivAt_id x))).const_mul d)).const_mul (beta ^ 3)
-    using 1 <;> ring
+    using 1 <;> (try rfl) <;> (try funext y) <;> (try simp only [Function.comp_apply, Pi.add_apply]) <;> ring
 
 /-- The mode solves the fourth-order eigenvalue equation. -/
 theorem mode_fourth_derivative (beta a b c d x : ℝ) :
@@ -180,11 +181,11 @@ theorem right_boundary_reduced
   have hb3 : beta ^ 3 ≠ 0 := pow_ne_zero _ hbeta
   constructor
   · apply (mul_eq_zero.mp ?_).resolve_left hb2
-    simpa [modeD2, boundaryA, boundaryB, add_comm, add_left_comm,
-      add_assoc, sub_eq_add_neg] using h2
+    simp only [modeD2, boundaryA, boundaryB, mul_one] at h2 ⊢
+    linear_combination h2
   · apply (mul_eq_zero.mp ?_).resolve_left hb3
-    simpa [modeD3, boundaryA, boundaryC, add_comm, add_left_comm,
-      add_assoc, sub_eq_add_neg] using h3
+    simp only [modeD3, boundaryA, boundaryC, mul_one] at h3 ⊢
+    linear_combination h3
 
 /-- A nonzero vector in the kernel of a two by two matrix forces its
 determinant to vanish. -/
@@ -224,10 +225,11 @@ theorem characteristic_eq_zero_of_freeBoundary
   subst c
   subst d
   have hab : a ≠ 0 ∨ b ≠ 0 := by
-    simpa using hnonzero
+    tauto
   obtain ⟨hr1, hr2⟩ := right_boundary_reduced hbeta h21 h31
   have hdet := two_by_two_det_eq_zero_of_nontrivial_kernel hr1 hr2 hab
-  rw [boundaryDet_eq] at hdet
+  have hdet' : boundaryDet beta = 0 := hdet
+  rw [boundaryDet_eq] at hdet'
   unfold characteristic
   linarith
 
@@ -257,7 +259,7 @@ theorem positive_root_fourth_power_gt_five_hundred
     lt_of_lt_of_le L.lower_bound (L.minimal beta hbeta hroot)
   have hnonneg : 0 ≤ (473 : ℝ) / 100 := by norm_num
   have hpow : ((473 : ℝ) / 100) ^ 4 < beta ^ 4 := by
-    exact pow_lt_pow_left₀ hnonneg h473 (by norm_num)
+    exact pow_lt_pow_left₀ h473 hnonneg (by norm_num)
   exact four_seventy_three_pow_four_gt_five_hundred.trans hpow
 
 end

@@ -24,6 +24,8 @@ needs to invent direct-integral machinery once these interfaces are available.
 
 open scoped InnerProductSpace
 
+open ForMathlib.DavisKahan.Experimental.ExactSinTheta.HiddenFoundations
+
 namespace ForMathlib
 namespace DavisKahan
 namespace Experimental
@@ -74,7 +76,7 @@ namespace SpectralMultiplicityFoundation
 /-- Equality of multiplicity data is equivalent to unitary equivalence for
 bounded self-adjoint operators. -/
 theorem multiplicity_eq_iff
-    (M : SpectralMultiplicityFoundation (v := v) (w := w))
+    (M : SpectralMultiplicityFoundation.{v, w})
     {H K : Type v}
     [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
     [NormedAddCommGroup K] [InnerProductSpace ℂ K] [CompleteSpace K]
@@ -117,7 +119,7 @@ namespace CompactPositiveListFoundation
 
 /-- Exact compact specialization used by Davis--Kahan Corollary 3.1. -/
 theorem list_eq_iff_unitarilyEquivalent
-    (M : CompactPositiveListFoundation (v := v))
+    (M : CompactPositiveListFoundation.{v})
     {H K : Type v}
     [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
     [NormedAddCommGroup K] [InnerProductSpace ℂ K] [CompleteSpace K]
