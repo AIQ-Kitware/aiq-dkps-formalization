@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.FiniteDimensional.SinTheta.TrialMap
-import DavisKahan.Experimental.FiniteDimensional.Residual.AngleEmbeddings
+import DavisKahan.FiniteDimensional.Residual.AngleEmbeddings
 import DavisKahan.Experimental.FiniteDimensional.DoubleAngle.SinTheta
 
 /-!

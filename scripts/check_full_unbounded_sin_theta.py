@@ -28,7 +28,7 @@ AUDIT_FILE = pathlib.Path(
 PROTECTED_PREFIXES = [
     pathlib.Path("DavisKahan/Experimental/InfiniteDimensional/SinTheta/Continuation"),
     pathlib.Path("DavisKahan/Experimental/InfiniteDimensional/Riccati"),
-    pathlib.Path("DavisKahan/Sources/DavisKahan1970/Section8.lean"),
+    pathlib.Path("DavisKahan/Experimental/Sources/DavisKahan1970/Section8"),
 ]
 
 

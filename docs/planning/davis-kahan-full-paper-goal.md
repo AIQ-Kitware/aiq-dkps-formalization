@@ -998,8 +998,23 @@ The ledger distinguishes:
 - declarations in the concurrent full-Part-III repair campaign;
 - source statements with only partial implementation or missing wrappers;
 - genuinely unrepresented Section 3 results;
-- the entirely unstarted Section 9 numerical example;
+- the Section 9 numerical example, which now compiles in full but states every
+  source conclusion relative to a certificate record that nobody constructs;
 - Section 10 research questions, which are source content but not proof debt.
+
+Since schema 4 the census carries a second, compile-backed axis alongside
+`status`. `verification` records what the Lean build actually certifies, and
+`blocked_by` names the specific obstruction from the census `blockers` table.
+To find the frontier, read the "Frontier" section of
+`dev/davis-kahan-1970-full-source-census.md`: it groups every outstanding row
+under the obstruction that gates it and marks each obstruction `hard_math` or
+`mechanical`. Confirm the census still matches the build with
+
+    python3 scripts/probe_census_declarations.py --verify
+
+which resolves every recorded declaration against `DavisKahan.All` rather than
+grepping for short names. Note that a `mechanical` blocker means the result is
+already proved and only needs wiring into the default build target.
 
 The detailed next-proof plan is
 `dev/davis-kahan-1970-missing-statements-math-ahead-2026-07-20.md`.

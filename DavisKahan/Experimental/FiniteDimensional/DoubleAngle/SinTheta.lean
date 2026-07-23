@@ -5,7 +5,7 @@ Authors: Jon Crall, GPT-5.6 Thinking
 -/
 import DavisKahan.FiniteDimensional.DoubleAngle.SinTheta
 import DavisKahan.FiniteDimensional.SinTheta.Perturbation
-import DavisKahan.Experimental.FiniteDimensional.Residual.AngleEmbeddings
+import DavisKahan.FiniteDimensional.Residual.AngleEmbeddings
 
 /-!
 # Experimental residual `sin (2 Theta)` interface

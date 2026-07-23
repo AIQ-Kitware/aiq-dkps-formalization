@@ -47,6 +47,35 @@ The tangent direction is from the Ritz or trial subspace toward the exact
 invariant subspace. The public tangent statements do not assume
 transversality.
 
+## Where the frontier is
+
+The machine-readable ledger is `dev/davis-kahan-1970-full-source-census.json`,
+rendered to `dev/davis-kahan-1970-full-source-census.md`. Since schema 4 it
+carries two independent axes, and reading only the first is what previously
+made this directory look both better and worse than it is:
+
+- `status` -- the mathematical judgement against the printed source;
+- `verification` -- what the Lean build actually certifies.
+
+Read the census's **Frontier** section to see every outstanding row grouped
+under the obstruction that gates it, each marked `hard_math` or `mechanical`.
+A `mechanical` blocker means the result is already proved and only needs wiring
+into the default build target.
+
+`verification` is checkable rather than asserted:
+
+    python3 scripts/probe_census_declarations.py --verify
+
+resolves every recorded declaration against `DavisKahan.All` by compiling a
+generated `#check` file, so a name in the wrong namespace cannot pass. Because
+the default build contains no `sorry` and no `axiom`, a declaration reachable
+from `DavisKahan.All` is genuinely proved.
+
+Note that a zero `sorry` count does **not** mean the paper is done. Unfinished
+work cannot appear as a `sorry` in a sorry-free, axiom-free tree; it appears as
+a package that does not compile, a conclusion stated relative to a hypothesis
+record nobody constructs, or a statement nobody wrote.
+
 ## Work still required for complete paper coverage
 
 A modernized transcription is maintained locally outside the distributable
@@ -55,6 +84,27 @@ distillations audited against that transcription. Before a result is
 advertised with an exact theorem or proposition number, its ambient Hilbert
 space, bounded or unbounded status, domain assumptions, hypotheses, direction,
 norm scope, and conclusion must be checked against the transcription.
+
+The `Section8/` package is a math-ahead source surface for spectral
+continuation and branch selection.  It lives under
+`DavisKahan/Experimental/Sources/DavisKahan1970/Section8`, not here, because it
+imports `DavisKahan.Experimental.InfiniteDimensional`; four modules on that
+import path have never compiled, so the package does not build and is kept out
+of the default build target.  Promote it back into this directory once its
+dependencies compile.  It assembles the continuation-selected
+reducing endpoint, unitary transport, strict quarter-acuteness, genuine gap
+exclusion, and restricted-spectrum separation.  The exact Theorem 8.1
+construction from unrestricted off-diagonal hypotheses, the concrete
+direct-rotation instantiation of the now-proved compression algebra, the
+eigenvalue and symmetric-gauge refinements, and the two Theorem 8.2 half-gap
+constructors are still explicit obligations.
+
+The new `Section9/` package is a math-ahead candidate for the numerical
+example.  It proves the affine-moment calculations, exact radical arithmetic,
+Schur-complement reduction, explicit truncation repair for the domain example,
+and all decimal corollaries behind a certificate boundary.  It does not yet
+construct the free-beam closed operator or prove the `alpha_3 > 500` spectral
+fact, and it must pass a fresh Lean build before its census status is promoted.
 
 The following paper components are not yet represented by a proof-complete
 source module:
@@ -66,9 +116,10 @@ source module:
 - any source tangent or double-angle variants not implied by the stable aliases
   above;
 - the unbounded-operator appendix;
-- the canonical spectral-continuation, branch-selection, uniqueness, and
-  spectral-repulsion results of Section 8;
-- the Section 9 numerical model and the planar equality/optimality statements;
+- the unrestricted source constructors and the compression/eigenvalue/
+  symmetric-gauge refinements needed to complete the Section 8 candidate;
+- the analytic free-beam realization and spectral-gap discharge for the Section 9 candidate package;
+- the planar equality/optimality statements;
 - any auxiliary numbered lemmas or propositions not subsumed by the source
   aliases above.
 

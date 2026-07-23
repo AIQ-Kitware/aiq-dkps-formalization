@@ -7,7 +7,7 @@ import DavisKahan.Sources.Davis1963.RotationEnergy
 import DavisKahan.FiniteDimensional.Core.AngleGeometry
 import DavisKahan.FiniteDimensional.Core.SpectralGap
 import DavisKahan.FiniteDimensional.SinTheta.UnitarilyInvariant
-import DavisKahan.Experimental.FiniteDimensional.Core.AngleOperators
+import DavisKahan.FiniteDimensional.Core.AngleOperators
 import ForMathlib.Analysis.InnerProductSpace.TwoDimensionalSingularValues
 import ForMathlib.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm
 

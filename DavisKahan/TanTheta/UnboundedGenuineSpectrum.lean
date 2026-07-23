@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.TanTheta.UnboundedVector
-import DavisKahan.Experimental.InfiniteDimensional.TanTheta.GenuineSpectrum
+import DavisKahan.TanTheta.GenuineSpectrum
 
 /-!
 # The unbounded tangent theorem with a genuine trial spectrum

@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
 import DavisKahan.FiniteDimensional.TanTheta.RitzResidual
-import DavisKahan.Experimental.FiniteDimensional.Residual.AngleEmbeddings
+import DavisKahan.FiniteDimensional.Residual.AngleEmbeddings
 
 /-!
 # Compatibility surface for the unfinished canonical tangent-map corollary
