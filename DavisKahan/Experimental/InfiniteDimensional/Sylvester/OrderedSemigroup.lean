@@ -70,7 +70,81 @@ theorem restrictedSpectrum_top_eq_realSpectrum
   simp only [ForMathlib.DavisKahan.Experimental.Foundation.realSpectrum,
     Set.mem_setOf_eq, hspec]
 
-/-- A common cut between two compact ordered spectra. -/
+/-- The real spectrum of a bounded operator is bounded above by its norm.
+(Local copy of the `TanTwoTheta` lemma, kept private to avoid importing the
+heavy continuation chain that its home file drags in.) -/
+private theorem realSpectrum_bddAbove' [Nontrivial E] (T : E →L[ℂ] E) :
+    BddAbove (realSpectrum T) := by
+  refine ⟨‖T‖, ?_⟩
+  intro r hr
+  have hr' : (r : ℂ) ∈ spectrum ℂ T := hr
+  have hnorm : ‖(r : ℂ)‖ ≤ ‖T‖ := spectrum.norm_le_norm_of_mem hr'
+  calc
+    r ≤ |r| := le_abs_self r
+    _ = ‖(r : ℂ)‖ := by simp
+    _ ≤ ‖T‖ := hnorm
+
+/-- The real spectrum of a bounded operator is bounded below by minus its norm.
+(Local private copy; see `realSpectrum_bddAbove'`.) -/
+private theorem realSpectrum_bddBelow' [Nontrivial E] (T : E →L[ℂ] E) :
+    BddBelow (realSpectrum T) := by
+  refine ⟨-‖T‖, ?_⟩
+  intro r hr
+  have hr' : (r : ℂ) ∈ spectrum ℂ T := hr
+  have hnorm : ‖(r : ℂ)‖ ≤ ‖T‖ := spectrum.norm_le_norm_of_mem hr'
+  have habs : |r| ≤ ‖T‖ := by simpa using hnorm
+  exact neg_le_of_abs_le habs
+
+/-- A bounded self-adjoint operator on a nontrivial complex Hilbert space has a
+nonempty native real spectrum.  (Local private copy; see `realSpectrum_bddAbove'`.) -/
+private theorem realSpectrum_nonempty_of_selfAdjoint' [Nontrivial E]
+    (T : E →L[ℂ] E) (hT : IsSelfAdjointOperator T) :
+    (realSpectrum T).Nonempty := by
+  have hTsa : IsSelfAdjoint T :=
+    ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hT
+  have hrad : spectralRadius ℂ T = ‖T‖₊ :=
+    T.spectralRadius_eq_nnnorm hTsa
+  obtain ⟨z, hz⟩ : (spectrum ℂ T).Nonempty := by
+    by_contra hempty
+    rw [Set.not_nonempty_iff_eq_empty] at hempty
+    have hzeroRadius : spectralRadius ℂ T = 0 := by
+      show (⨆ k ∈ spectrum ℂ T, (‖k‖₊ : ENNReal)) = 0
+      rw [hempty]
+      simp
+    have hTzero : T = 0 := by
+      have hnormZero : ((‖T‖₊ : ENNReal)) = 0 := by
+        rw [← hrad]
+        exact hzeroRadius
+      rw [ENNReal.coe_eq_zero, nnnorm_eq_zero] at hnormZero
+      exact hnormZero
+    have hzeroMem : (0 : ℂ) ∈ spectrum ℂ T := by
+      rw [hTzero, spectrum.zero_mem_iff]
+      exact not_isUnit_zero
+    rw [hempty] at hzeroMem
+    exact hzeroMem
+  obtain ⟨lam, _hlam, rfl⟩ :=
+    hTsa.spectrumRestricts.algebraMap_image.symm ▸ hz
+  refine ⟨lam, ?_⟩
+  change (lam : ℂ) ∈ spectrum ℂ T
+  exact hz
+
+/-- On a trivial space every operator is a unit, so the real spectrum is empty. -/
+theorem realSpectrum_eq_empty_of_subsingleton
+    {G : Type*} [NormedAddCommGroup G] [InnerProductSpace ℂ G] [CompleteSpace G]
+    [Subsingleton G] (T : G →L[ℂ] G) : realSpectrum T = ∅ := by
+  haveI : Subsingleton (G →L[ℂ] G) :=
+    ⟨fun a b => by ext x; exact Subsingleton.elim _ _⟩
+  ext r
+  simp only [Set.mem_empty_iff_false, iff_false]
+  intro hr
+  have hr' : (r : ℂ) ∈ spectrum ℂ T := hr
+  rw [spectrum.mem_iff] at hr'
+  exact hr' (isUnit_of_subsingleton _)
+
+/-- A common cut between two compact ordered spectra.  When `A` acts on a
+nontrivial space its spectrum is a nonempty compact real set, so `c := inf σ(A) −
+d` separates the two spectra; the degenerate trivial-space cases are handled by
+`realSpectrum_eq_empty_of_subsingleton`. -/
 theorem exists_common_cut_of_orderedSeparation
     {A : F →L[ℂ] F} {B : E →L[ℂ] E}
     (hA : IsSelfAdjointOperator A) (hB : IsSelfAdjointOperator B)
@@ -79,10 +153,37 @@ theorem exists_common_cut_of_orderedSeparation
     ∃ c : ℝ,
       realSpectrum B ⊆ Set.Iic c ∧
       realSpectrum A ⊆ Set.Ici (c + d) := by
-  -- Open obligation: compactness and nonemptiness of the real spectrum
-  -- (`realSpectrum_isCompact`, `realSpectrum_nonempty_of_selfAdjoint`) plus the
-  -- restricted-spectrum bridge, handed to the mathematics agent.
-  sorry
+  have hsep0 := hsep.2.2
+  simp only [restrictedSpectrum_top_eq_realSpectrum] at hsep0
+  -- `hsep0 : ∀ a ∈ realSpectrum B, ∀ b ∈ realSpectrum A, a + d ≤ b`
+  rcases subsingleton_or_nontrivial F with hFs | hFn
+  · -- `A` acts on a trivial space, so `realSpectrum A = ∅`.
+    haveI := hFs
+    have hAe : realSpectrum A = ∅ := realSpectrum_eq_empty_of_subsingleton A
+    rcases subsingleton_or_nontrivial E with hEs | hEn
+    · -- both spectra empty
+      haveI := hEs
+      refine ⟨0, ?_, ?_⟩
+      · rw [realSpectrum_eq_empty_of_subsingleton B]; exact Set.empty_subset _
+      · rw [hAe]; exact Set.empty_subset _
+    · -- cut at `sup σ(B)`
+      haveI := hEn
+      refine ⟨sSup (realSpectrum B), fun a ha => ?_, ?_⟩
+      · exact Set.mem_Iic.mpr (le_csSup (realSpectrum_bddAbove' B) ha)
+      · rw [hAe]; exact Set.empty_subset _
+  · -- `A` acts on a nontrivial space: cut at `inf σ(A) − d`.
+    haveI := hFn
+    have hAne : (realSpectrum A).Nonempty :=
+      realSpectrum_nonempty_of_selfAdjoint' A hA
+    have hAbb : BddBelow (realSpectrum A) := realSpectrum_bddBelow' A
+    refine ⟨sInf (realSpectrum A) - d, fun a ha => ?_, fun b hb => ?_⟩
+    · refine Set.mem_Iic.mpr ?_
+      have hlb : a + d ≤ sInf (realSpectrum A) :=
+        le_csInf hAne (fun b hb => hsep0 a ha b hb)
+      linarith
+    · refine Set.mem_Ici.mpr ?_
+      have := csInf_le hAbb hb
+      linarith
 
 /-- Functional-calculus formula for the bounded exponential group. -/
 theorem semigroup_eq_cfc
