@@ -132,11 +132,48 @@ noncomputable def polarPartialFinalEquiv (T : H →L[ℂ] H) :
 theorem polarIsometry_comp_adjoint_self (T : H →L[ℂ] H) :
     polarIsometry T ∘L (polarIsometry T)† =
       (polarFinalRange T).starProjection := by
-  -- Open obligation: the polar-isometry final-projection identity, requiring
-  -- deep polar-decomposition adjoint facts (partial-adjoint formula, closure of
-  -- range |T*|) absent from the pinned Spectra/Mathlib; handed to the
-  -- mathematics agent.
-  sorry
+  set U := polarIsometry T with hU
+  -- `U` fixes the initial projection: `U ∘L P_K = U`.
+  have hUP : U ∘L (polarRange T).starProjection = U := by
+    ext w
+    simp only [ContinuousLinearMap.comp_apply, hU, polarIsometry_apply_eq]
+    congr 1
+    have hsp : (polarRange T).starProjection w
+        = ((polarRange T).orthogonalProjection w : H) := rfl
+    rw [hsp]
+    exact (polarRange T).orthogonalProjection_mem_subspace_eq_self _
+  have hUadjU : U† ∘L U = (polarRange T).starProjection := polarIsometry_adjoint_comp_self T
+  -- `(U U†) U = U`, so `U U†` is idempotent (and self-adjoint), a star projection.
+  have hUUadjU : (U ∘L U†) ∘L U = U := by
+    rw [ContinuousLinearMap.comp_assoc, hUadjU, hUP]
+  have hsa : IsSelfAdjoint (U ∘L U†) := by
+    rw [isSelfAdjoint_iff, ContinuousLinearMap.star_eq_adjoint,
+      ContinuousLinearMap.adjoint_comp, ContinuousLinearMap.adjoint_adjoint]
+  have hidem : IsIdempotentElem (U ∘L U†) := by
+    change (U ∘L U†) ∘L (U ∘L U†) = U ∘L U†
+    rw [← ContinuousLinearMap.comp_assoc, hUUadjU]
+  have hSP : IsStarProjection (U ∘L U†) := ⟨hidem, hsa⟩
+  -- The range of `U U†` is exactly the final polar space.
+  have hrange : (U ∘L U†).range = polarFinalRange T := by
+    apply le_antisymm
+    · rintro _ ⟨x, rfl⟩
+      show (U ∘L U†) x ∈ polarFinalRange T
+      rw [ContinuousLinearMap.comp_apply, hU, polarIsometry_apply_eq]
+      exact polarPartial_mem_finalRange T _
+    · intro y hy
+      obtain ⟨x, hx⟩ := polarPartial_final_surjective T ⟨y, hy⟩
+      have hxy : (polarPartial T x : H) = y := congrArg Subtype.val hx
+      have hUx : U (↑x : H) = y := by
+        rw [hU, polarIsometry_apply_eq,
+          (polarRange T).orthogonalProjection_mem_subspace_eq_self x, coe_polarPartialₗᵢ]
+        exact hxy
+      refine ⟨y, ?_⟩
+      show (U ∘L U†) y = y
+      conv_lhs => rw [← hUx]
+      rw [← ContinuousLinearMap.comp_apply, hUUadjU, hUx]
+  obtain ⟨_, heq⟩ := isStarProjection_iff_eq_starProjection_range.mp hSP
+  rw [heq]
+  congr 1
 
 /-- The adjoint polar isometry is the polar isometry of the adjoint. -/
 theorem adjoint_polarIsometry (T : H →L[ℂ] H) :
