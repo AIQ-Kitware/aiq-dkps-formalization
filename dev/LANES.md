@@ -29,7 +29,7 @@ duplicated-effort collisions that occurred on the Sylvester analytic lane
 | opus | MathAhead/HiddenFoundations/{Section3Nonacute,PolarIsometryFinal}.lean | remaining 5 polar leaves | 2026-07-23 | blocked (missing infra) |
 | opus | SinTheta/General.lean, SinTheta/SpectralBridge.lean (Experimental) | RCLikeSpectralBridge.* spectral-mapping lemmas, centered_sylvester_equation, boundedInverseDataOfIsUnit, projectionDifference_ideal_intervalExterior; make General.lean elaborate | 2026-07-23 | claimed |
 | opus | SinTheta/RestrictionCompat.lean | restrictedSpectrum_top_eq_realSpectrum_general, boundedRealSpectrum_eq_realSpectrum, mem_realResolventSet_ofBounded_iff | 2026-07-23 | done |
-| fable | Frontier/Core.lean, Frontier/RieszCircle.lean | circleRieszProjection (Core) + all 8 RieszCircle declarations (circle contour surface) | 2026-07-23 | claimed |
+| fable | Frontier/Core.lean, Frontier/RieszCircle.lean | circleRieszProjection (Core) + all 8 RieszCircle declarations (circle contour surface) | 2026-07-23 | in progress — defs + eq landed (4/9), proof plan in dev/circle-riesz-lane-status-2026-07-23.md |
 
 ## Spectral lane — claimed by opus (2026-07-23)
 
