@@ -12,6 +12,7 @@ import Mathlib.MeasureTheory.Integral.Bochner.Basic
 import Mathlib.MeasureTheory.Integral.DominatedConvergence
 import Mathlib.MeasureTheory.Integral.ExpDecay
 import Mathlib.Topology.MetricSpace.ProperSpace.Real
+import Mathlib.Topology.MetricSpace.Bounded
 
 /-!
 # Fourier and semigroup formulas for bounded Sylvester equations
@@ -357,11 +358,108 @@ theorem exists_finiteSpectralStep
     (A : H →L[ℂ] H) (hA : IsSelfAdjointOperator A)
     {ε : ℝ} (hε : 0 < ε) :
     ∃ S : FiniteSpectralStep A hA, S.diameter_le ≤ ε := by
-  -- Open obligation: compactness of the real spectrum and the finite
-  -- ε-ball-cover construction with representatives in the spectrum
-  -- (`realSpectrum_isCompact`, successive-difference disjointness/cover,
-  -- active-ball spectrum choice), handed to the mathematics agent.
-  sorry
+  classical
+  rcases subsingleton_or_nontrivial H with hss | hnt
+  · -- Trivial space: the spectrum is empty, so a zero-cell step suffices.
+    haveI := hss
+    have hempty : realSpectrum A = ∅ := by
+      haveI : Subsingleton (H →L[ℂ] H) := ⟨fun a b => by ext x; exact Subsingleton.elim _ _⟩
+      ext r
+      simp only [Set.mem_empty_iff_false, iff_false]
+      intro hr
+      have hr' : (r : ℂ) ∈ spectrum ℂ A := hr
+      rw [spectrum.mem_iff] at hr'
+      exact hr' (isUnit_of_subsingleton _)
+    refine ⟨{
+      n := 0
+      cell := Fin.elim0
+      measurable_cell := fun i => i.elim0
+      pairwise_disjoint := fun i _ => i.elim0
+      covers_spectrum := hempty.subset.trans (Set.empty_subset _)
+      representative := Fin.elim0
+      representative_mem := fun i => i.elim0
+      diameter_le := ε
+      diameter_nonneg := le_of_lt hε
+      cell_close := fun i => i.elim0 }, le_refl ε⟩
+  haveI := hnt
+  have hε2 : (0 : ℝ) < ε / 2 := by positivity
+  -- The real spectrum is compact (closed and bounded by `‖A‖`).
+  have hbdd_mem : ∀ r ∈ realSpectrum A, |r| ≤ ‖A‖ := by
+    intro r hr
+    have hr' : (r : ℂ) ∈ spectrum ℂ A := hr
+    simpa using spectrum.norm_le_norm_of_mem hr'
+  have hsub : realSpectrum A ⊆ Set.Icc (-‖A‖) ‖A‖ := by
+    intro r hr
+    have h := abs_le.mp (hbdd_mem r hr)
+    exact ⟨h.1, h.2⟩
+  have hclosed : IsClosed (realSpectrum A) := by
+    have hpre : realSpectrum A = Complex.ofReal ⁻¹' (spectrum ℂ A) := rfl
+    rw [hpre]
+    exact (spectrum.isClosed A).preimage Complex.continuous_ofReal
+  have hcompact : IsCompact (realSpectrum A) :=
+    Metric.isCompact_of_isClosed_isBounded hclosed
+      ((Metric.isBounded_Icc _ _).subset hsub)
+  -- Finite subcover by `ε/2`-balls centered in the spectrum.
+  have hcover : realSpectrum A ⊆ ⋃ p ∈ realSpectrum A, Metric.ball p (ε / 2) := fun r hr =>
+    Set.mem_biUnion hr (Metric.mem_ball_self hε2)
+  obtain ⟨t, htsub, htfin, htcover⟩ :=
+    hcompact.elim_finite_subcover_image (fun p _ => Metric.isOpen_ball) hcover
+  -- Enumerate the finite net inside the spectrum.
+  let htf : Finset ℝ := htfin.toFinset
+  let rep : Fin htf.card → ℝ := fun i => htf.orderEmbOfFin rfl i
+  have hrep_mem : ∀ i, rep i ∈ realSpectrum A := by
+    intro i
+    apply htsub
+    rw [← htfin.mem_toFinset]
+    exact htf.orderEmbOfFin_mem rfl i
+  -- Ball function indexed over `ℕ` for disjointification into measurable cells.
+  let f : ℕ → Set ℝ := fun k =>
+    if h : k < htf.card then Metric.ball (rep ⟨k, h⟩) (ε / 2) else ∅
+  have hfmeas : ∀ k, MeasurableSet (f k) := by
+    intro k
+    by_cases h : k < htf.card
+    · simp only [f, dif_pos h]; exact Metric.isOpen_ball.measurableSet
+    · simp only [f, dif_neg h]; exact MeasurableSet.empty
+  have hf_i : ∀ i : Fin htf.card, f i.val = Metric.ball (rep i) (ε / 2) := by
+    intro i
+    simp only [f, dif_pos i.isLt, Fin.eta]
+  refine ⟨{
+    n := htf.card
+    cell := fun i => disjointed f i.val
+    measurable_cell := fun i => MeasurableSet.disjointed hfmeas i.val
+    pairwise_disjoint := fun i _ j _ hij =>
+      disjoint_disjointed f (Fin.val_ne_of_ne hij)
+    covers_spectrum := ?_
+    representative := rep
+    representative_mem := hrep_mem
+    diameter_le := ε
+    diameter_nonneg := le_of_lt hε
+    cell_close := ?_ }, le_refl ε⟩
+  · -- Every spectral point lies in a ball, hence in the disjointified cell.
+    intro r hr
+    obtain ⟨p, hp, hrp⟩ := Set.mem_iUnion₂.mp (htcover hr)
+    have hpf : p ∈ htf := htfin.mem_toFinset.mpr hp
+    obtain ⟨i, hi⟩ : ∃ i : Fin htf.card, rep i = p := by
+      have hmem : p ∈ Set.range (htf.orderEmbOfFin rfl) := by
+        rw [Finset.range_orderEmbOfFin]; exact hpf
+      obtain ⟨i, hi⟩ := hmem
+      exact ⟨i, hi⟩
+    have hrf : r ∈ f i.val := by rw [hf_i i, hi]; exact hrp
+    have hru : r ∈ ⋃ k, f k := Set.mem_iUnion.mpr ⟨i.val, hrf⟩
+    rw [← iUnion_disjointed (f := f)] at hru
+    obtain ⟨k, hk⟩ := Set.mem_iUnion.mp hru
+    have hkn : k < htf.card := by
+      by_contra hc
+      have hfk : f k = ∅ := by simp only [f, dif_neg hc]
+      have hsub' : disjointed f k ⊆ f k := disjointed_le f k
+      rw [hfk] at hsub'
+      exact absurd (hsub' hk) (Set.notMem_empty r)
+    exact Set.mem_iUnion.mpr ⟨⟨k, hkn⟩, hk⟩
+  · -- Each cell sits inside its ball, so points are within `ε/2 ≤ ε` of the rep.
+    intro i x hx
+    have hxf : x ∈ f i.val := disjointed_le f i.val hx.1
+    rw [hf_i i, Metric.mem_ball, Real.dist_eq] at hxf
+    exact le_of_lt (lt_of_lt_of_le hxf (by linarith))
 
 /-- The restriction to the full space has the original real spectrum.  Proved by
 conjugating the top-restriction through `Submodule.topContEquiv` and invoking
