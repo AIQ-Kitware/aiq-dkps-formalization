@@ -267,6 +267,20 @@ theorem continuous_unitaryGroup (A : H →L[ℂ] H) :
     Continuous fun t : ℝ => unitaryGroup A t :=
   continuous_iff_continuousAt.mpr fun t => (hasDerivAt_unitaryGroup A t).continuousAt
 
+/-- The unitary group is norm continuous in its generator. -/
+theorem continuous_unitaryGroup_generator (t : ℝ) :
+    Continuous fun M : H →L[ℂ] H => unitaryGroup M t := by
+  have heq : (fun M : H →L[ℂ] H => unitaryGroup M t) =
+      fun M => NormedSpace.exp ((t : ℂ) • (Complex.I • M)) := by
+    funext M
+    exact expBounded_eq_exp (Complex.I • M) t
+  rw [heq]
+  have hexp : Continuous (NormedSpace.exp : (H →L[ℂ] H) → H →L[ℂ] H) :=
+    continuous_iff_continuousAt.mpr fun x =>
+      (NormedSpace.exp_analytic (𝕂 := ℂ) x).continuousAt
+  exact hexp.comp ((continuous_const_smul ((t : ℂ))).comp
+    (continuous_const_smul Complex.I))
+
 end Exponentials
 
 section SpectrumBridge
@@ -417,6 +431,32 @@ theorem FiniteSpectralStep.norm_operator_sub_le
             boundedSelfAdjointBorelCalculus_norm_sub_le A hA hf measurable_id hfb
               (identity_boundedOnSpectrum A) S.diameter_nonneg hclose
 
+/-- Finite spectral steps are self-adjoint operators. -/
+theorem FiniteSpectralStep.operator_isSelfAdjoint
+    {A : H →L[ℂ] H} {hA : IsSelfAdjointOperator A}
+    (S : FiniteSpectralStep A hA) : IsSelfAdjointOperator S.operator := by
+  apply ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
+  show star S.operator = S.operator
+  rw [FiniteSpectralStep.operator, star_sum]
+  refine Finset.sum_congr rfl fun i _ => ?_
+  rw [star_smul, Complex.star_def, Complex.conj_ofReal]
+  congr 1
+  exact (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr
+    (boundedSelfAdjointSpectralProjection_isOrthogonalProjection A hA
+      (S.cell i) (S.measurable_cell i)).2).star_eq
+
+/-- Norm bound for a finite spectral step in terms of its generator. -/
+theorem FiniteSpectralStep.norm_operator_le
+    {A : H →L[ℂ] H} {hA : IsSelfAdjointOperator A}
+    (S : FiniteSpectralStep A hA) :
+    ‖S.operator‖ ≤ ‖A‖ + S.diameter_le := by
+  have hsub := S.norm_operator_sub_le
+  have hsplit : S.operator = A + (S.operator - A) := by abel
+  calc
+    ‖S.operator‖ = ‖A + (S.operator - A)‖ := by rw [← hsplit]
+    _ ≤ ‖A‖ + ‖S.operator - A‖ := norm_add_le _ _
+    _ ≤ ‖A‖ + S.diameter_le := by gcongr
+
 /-- Every bounded self-adjoint operator has finite spectral steps with
 arbitrarily small cells and representatives in its own spectrum. -/
 theorem exists_finiteSpectralStep
@@ -564,10 +604,70 @@ theorem tendsto_unitary_orbit
     (hC : Tendsto C atTop (nhds C0)) (t : ℝ) :
     Tendsto (fun n => unitaryGroup (A n) t ∘L C n ∘L unitaryGroup (B n) (-t))
       atTop (nhds (unitaryGroup A0 t ∘L C0 ∘L unitaryGroup B0 (-t))) := by
-  -- Open obligation: norm continuity of the bounded exponential in its
-  -- generator (`tendsto_expBounded_of_tendsto`), handed to the mathematics
-  -- agent; the composition is then continuous.
-  sorry
+  have hUA : Tendsto (fun n => unitaryGroup (A n) t) atTop
+      (nhds (unitaryGroup A0 t)) :=
+    ((continuous_unitaryGroup_generator t).tendsto A0).comp hA
+  have hUB : Tendsto (fun n => unitaryGroup (B n) (-t)) atTop
+      (nhds (unitaryGroup B0 (-t))) :=
+    ((continuous_unitaryGroup_generator (-t)).tendsto B0).comp hB
+  have hCB : Tendsto (fun n => C n ∘L unitaryGroup (B n) (-t)) atTop
+      (nhds (C0 ∘L unitaryGroup B0 (-t))) := by
+    have hcont : Continuous fun p : (E →L[ℂ] F) × (E →L[ℂ] E) => p.1 ∘L p.2 :=
+      isBoundedBilinearMap_comp.continuous
+    exact (hcont.tendsto (C0, unitaryGroup B0 (-t))).comp (hC.prodMk_nhds hUB)
+  have hcont2 : Continuous fun p : (F →L[ℂ] F) × (E →L[ℂ] F) => p.1 ∘L p.2 :=
+    isBoundedBilinearMap_comp.continuous
+  exact (hcont2.tendsto (unitaryGroup A0 t, C0 ∘L unitaryGroup B0 (-t))).comp
+    (hUA.prodMk_nhds hCB)
+
+/-- Dominated-convergence passage for the separated reciprocal integral. -/
+theorem tendsto_separated_integral
+    {An : ℕ → F →L[ℂ] F} {Bn : ℕ → E →L[ℂ] E} {Cn : ℕ → E →L[ℂ] F}
+    {A0 : F →L[ℂ] F} {B0 : E →L[ℂ] E} {C0 : E →L[ℂ] F}
+    (hAn : ∀ n, IsSelfAdjointOperator (An n))
+    (hBn : ∀ n, IsSelfAdjointOperator (Bn n))
+    {M : ℝ} (hM : ∀ n, ‖Cn n‖ ≤ M)
+    (hA : Tendsto An atTop (nhds A0)) (hB : Tendsto Bn atTop (nhds B0))
+    (hC : Tendsto Cn atTop (nhds C0))
+    {d : ℝ} (hd : 0 < d) :
+    Tendsto (fun n => ∫ t : ℝ, separatedSylvesterMultiplier d hd t •
+        (unitaryGroup (An n) t ∘L Cn n ∘L unitaryGroup (Bn n) (-t))) atTop
+      (nhds (∫ t : ℝ, separatedSylvesterMultiplier d hd t •
+        (unitaryGroup A0 t ∘L C0 ∘L unitaryGroup B0 (-t)))) := by
+  have hμ := integrable_separatedSylvesterMultiplier d hd
+  refine MeasureTheory.tendsto_integral_of_dominated_convergence
+    (fun t => ‖separatedSylvesterMultiplier d hd t‖ * M) ?_ ?_ ?_ ?_
+  · intro n
+    have hcont : Continuous fun t : ℝ =>
+        unitaryGroup (An n) t ∘L Cn n ∘L unitaryGroup (Bn n) (-t) :=
+      (continuous_unitaryGroup (An n)).clm_comp (continuous_const.clm_comp
+        ((continuous_unitaryGroup (Bn n)).comp continuous_neg))
+    exact hμ.aestronglyMeasurable.smul hcont.aestronglyMeasurable
+  · exact hμ.norm.mul_const M
+  · intro n
+    filter_upwards with t
+    rw [norm_smul]
+    have horbit : ‖unitaryGroup (An n) t ∘L Cn n ∘L unitaryGroup (Bn n) (-t)‖ ≤
+        M := by
+      calc
+        ‖unitaryGroup (An n) t ∘L Cn n ∘L unitaryGroup (Bn n) (-t)‖
+            ≤ ‖unitaryGroup (An n) t‖ *
+              ‖Cn n ∘L unitaryGroup (Bn n) (-t)‖ :=
+          (unitaryGroup (An n) t).opNorm_comp_le _
+        _ ≤ 1 * (‖Cn n‖ * ‖unitaryGroup (Bn n) (-t)‖) := by
+          gcongr
+          · exact norm_unitaryGroup_le_one (An n) (hAn n) t
+          · exact (Cn n).opNorm_comp_le _
+        _ ≤ M := by
+          have hB1 := norm_unitaryGroup_le_one (Bn n) (hBn n) (-t)
+          have hCle := hM n
+          have h0C : (0 : ℝ) ≤ ‖Cn n‖ := norm_nonneg _
+          have h0B : (0 : ℝ) ≤ ‖unitaryGroup (Bn n) (-t)‖ := norm_nonneg _
+          nlinarith
+    exact mul_le_mul_of_nonneg_left horbit (norm_nonneg _)
+  · filter_upwards with t
+    exact (tendsto_unitary_orbit hA hB hC t).const_smul
+      (separatedSylvesterMultiplier d hd t)
 
 /-- Exact separated-spectrum reconstruction on complex Hilbert spaces. -/
 theorem separatedSylvester_reconstruction_complex
@@ -578,14 +678,63 @@ theorem separatedSylvester_reconstruction_complex
     (hEq : A ∘L X - X ∘L B = C) :
     X = ∫ t : ℝ, separatedSylvesterMultiplier d hd t •
       (unitaryGroup A t ∘L C ∘L unitaryGroup B (-t)) := by
-  -- Open obligation: the dominated-convergence limit passing the finite
-  -- spectral-step reconstruction to the general operator.  Depends on
-  -- `finiteSpectralStep_reconstruction`, `exists_finiteSpectralStep`,
-  -- `FiniteSpectralStep.norm_operator_sub_le`, `norm_bounded_of_tendsto`, and
-  -- `FiniteSpectralStep.operator_isSelfAdjoint`, handed to the mathematics
-  -- agent.  The uniform bound is `‖μ_d‖_{L¹} · ‖C‖` from the (proved)
-  -- `l1_norm_separatedSylvesterMultiplier`.
-  sorry
+  have hpos : ∀ n : ℕ, (0 : ℝ) < 1 / (n + 1) := fun n => by positivity
+  choose SA hSA using fun n : ℕ => exists_finiteSpectralStep A hA (hpos n)
+  choose SB hSB using fun n : ℕ => exists_finiteSpectralStep B hB (hpos n)
+  have hone : ∀ n : ℕ, (1 : ℝ) / (n + 1) ≤ 1 := fun n => by
+    rw [div_le_one (by positivity)]
+    have : (0 : ℝ) ≤ (n : ℝ) := Nat.cast_nonneg n
+    linarith
+  have honeover : Tendsto (fun n : ℕ => 1 / ((n : ℝ) + 1)) atTop (nhds 0) :=
+    tendsto_one_div_add_atTop_nhds_zero_nat
+  have hAop : Tendsto (fun n => (SA n).operator) atTop (nhds A) := by
+    rw [tendsto_iff_norm_sub_tendsto_zero]
+    exact squeeze_zero (fun n => norm_nonneg _)
+      (fun n => (SA n).norm_operator_sub_le.trans (hSA n)) honeover
+  have hBop : Tendsto (fun n => (SB n).operator) atTop (nhds B) := by
+    rw [tendsto_iff_norm_sub_tendsto_zero]
+    exact squeeze_zero (fun n => norm_nonneg _)
+      (fun n => (SB n).norm_operator_sub_le.trans (hSB n)) honeover
+  have hCn : Tendsto
+      (fun n => (SA n).operator ∘L X - X ∘L (SB n).operator) atTop (nhds C) := by
+    have hcomp1 : Continuous fun M : F →L[ℂ] F => M ∘L X :=
+      continuous_id.clm_comp continuous_const
+    have hcomp2 : Continuous fun M : E →L[ℂ] E => X ∘L M :=
+      continuous_const.clm_comp continuous_id
+    have h1 : Tendsto (fun n => (SA n).operator ∘L X) atTop (nhds (A ∘L X)) :=
+      ((hcomp1.tendsto A).comp hAop)
+    have h2 : Tendsto (fun n => X ∘L (SB n).operator) atTop (nhds (X ∘L B)) :=
+      ((hcomp2.tendsto B).comp hBop)
+    have := h1.sub h2
+    rwa [hEq] at this
+  have hM : ∀ n, ‖(SA n).operator ∘L X - X ∘L (SB n).operator‖ ≤
+      (‖A‖ + 1) * ‖X‖ + ‖X‖ * (‖B‖ + 1) := by
+    intro n
+    have hnormA : ‖(SA n).operator‖ ≤ ‖A‖ + 1 := by
+      have h1 := (SA n).norm_operator_le
+      have h2 : (SA n).diameter_le ≤ 1 := (hSA n).trans (hone n)
+      linarith
+    have hnormB : ‖(SB n).operator‖ ≤ ‖B‖ + 1 := by
+      have h1 := (SB n).norm_operator_le
+      have h2 : (SB n).diameter_le ≤ 1 := (hSB n).trans (hone n)
+      linarith
+    calc
+      ‖(SA n).operator ∘L X - X ∘L (SB n).operator‖
+          ≤ ‖(SA n).operator ∘L X‖ + ‖X ∘L (SB n).operator‖ := norm_sub_le _ _
+      _ ≤ ‖(SA n).operator‖ * ‖X‖ + ‖X‖ * ‖(SB n).operator‖ :=
+          add_le_add ((SA n).operator.opNorm_comp_le X) (X.opNorm_comp_le _)
+      _ ≤ (‖A‖ + 1) * ‖X‖ + ‖X‖ * (‖B‖ + 1) := by gcongr
+  have hlim := tendsto_separated_integral
+    (fun n => (SA n).operator_isSelfAdjoint)
+    (fun n => (SB n).operator_isSelfAdjoint) hM hAop hBop hCn hd
+  have hconst : (fun n => ∫ t : ℝ, separatedSylvesterMultiplier d hd t •
+      (unitaryGroup (SA n).operator t ∘L
+        ((SA n).operator ∘L X - X ∘L (SB n).operator) ∘L
+        unitaryGroup (SB n).operator (-t))) = fun _ => X := by
+    funext n
+    exact (finiteSpectralStep_reconstruction hd hsep (SA n) (SB n) X).symm
+  rw [hconst] at hlim
+  exact tendsto_nhds_unique tendsto_const_nhds hlim
 
 /-- The integral in the separated reconstruction is integrable. -/
 theorem separatedSylvester_integrable_complex
@@ -594,11 +743,15 @@ theorem separatedSylvester_integrable_complex
     {d : ℝ} (hd : 0 < d) (C : E →L[ℂ] F) :
     Integrable fun t : ℝ => separatedSylvesterMultiplier d hd t •
       (unitaryGroup A t ∘L C ∘L unitaryGroup B (-t)) := by
-  -- Open obligation: strong measurability of the two-sided unitary orbit
-  -- (`continuous_unitary_orbit`, `measurable_separatedSylvesterMultiplier`),
-  -- handed to the mathematics agent.  The pointwise majorant is
-  -- `‖μ_d(t)‖·‖C‖` via the (proved) `norm_unitary_left_right`.
-  sorry
+  have hμ := integrable_separatedSylvesterMultiplier d hd
+  have hcont : Continuous fun t : ℝ =>
+      unitaryGroup A t ∘L C ∘L unitaryGroup B (-t) :=
+    (continuous_unitaryGroup A).clm_comp (continuous_const.clm_comp
+      ((continuous_unitaryGroup B).comp continuous_neg))
+  refine Integrable.mono' (hμ.norm.mul_const ‖C‖)
+    (hμ.aestronglyMeasurable.smul hcont.aestronglyMeasurable) ?_
+  filter_upwards with t
+  rw [norm_smul, norm_unitary_left_right A hA B hB t C]
 
 
 /-- The reciprocal integral is a right inverse of the Sylvester operator.
@@ -617,12 +770,88 @@ theorem spectral_step_integral_right_inverse
       (unitaryGroup A t ∘L C ∘L unitaryGroup B (-t))) -
       (∫ t : ℝ, separatedSylvesterMultiplier d hd t •
         (unitaryGroup A t ∘L C ∘L unitaryGroup B (-t))) ∘L B = C := by
-  -- Open obligation: the right-inverse form of the reconstruction, proved by
-  -- the same finite spectral-step limit (`finiteSpectralStep_reconstruction`
-  -- transported to `sylvesterOperator`, `integral_finset_sylvester_blocks`,
-  -- dominated convergence), handed to the mathematics agent.  The scalar
-  -- premise on each spectral rectangle is `separatedSylvesterMultiplier_identity`.
-  sorry
+  have hpos : ∀ n : ℕ, (0 : ℝ) < 1 / (n + 1) := fun n => by positivity
+  choose SA hSA using fun n : ℕ => exists_finiteSpectralStep A hA (hpos n)
+  choose SB hSB using fun n : ℕ => exists_finiteSpectralStep B hB (hpos n)
+  have honeover : Tendsto (fun n : ℕ => 1 / ((n : ℝ) + 1)) atTop (nhds 0) :=
+    tendsto_one_div_add_atTop_nhds_zero_nat
+  have hAop : Tendsto (fun n => (SA n).operator) atTop (nhds A) := by
+    rw [tendsto_iff_norm_sub_tendsto_zero]
+    exact squeeze_zero (fun n => norm_nonneg _)
+      (fun n => (SA n).norm_operator_sub_le.trans (hSA n)) honeover
+  have hBop : Tendsto (fun n => (SB n).operator) atTop (nhds B) := by
+    rw [tendsto_iff_norm_sub_tendsto_zero]
+    exact squeeze_zero (fun n => norm_nonneg _)
+      (fun n => (SB n).norm_operator_sub_le.trans (hSB n)) honeover
+  -- each finite reciprocal integral solves the finite Sylvester equation
+  have hsolve : ∀ n, (SA n).operator ∘L
+      (∫ t : ℝ, separatedSylvesterMultiplier d hd t •
+        (unitaryGroup (SA n).operator t ∘L C ∘L
+          unitaryGroup (SB n).operator (-t))) -
+      (∫ t : ℝ, separatedSylvesterMultiplier d hd t •
+        (unitaryGroup (SA n).operator t ∘L C ∘L
+          unitaryGroup (SB n).operator (-t))) ∘L (SB n).operator = C := by
+    intro n
+    have hne : ∀ (i : Fin (SA n).n) (j : Fin (SB n).n),
+        (SA n).representative i - (SB n).representative j ≠ 0 := fun i j =>
+      abs_pos.mp (lt_of_lt_of_le hd
+        (finiteSpectralStep_representatives_separated hsep (SA n) (SB n) i j))
+    set Xn : E →L[ℂ] F := ∑ i, ∑ j,
+      ((((SA n).representative i - (SB n).representative j)⁻¹ : ℝ) : ℂ) •
+        (boundedSelfAdjointSpectralProjection A hA ((SA n).cell i)
+            ((SA n).measurable_cell i) ∘L C ∘L
+          boundedSelfAdjointSpectralProjection B hB ((SB n).cell j)
+            ((SB n).measurable_cell j)) with hXn
+    have hdefect : (SA n).operator ∘L Xn - Xn ∘L (SB n).operator = C :=
+      finiteDiagonal_sylvester_solution
+        (fun i => boundedSelfAdjointSpectralProjection A hA ((SA n).cell i)
+          ((SA n).measurable_cell i))
+        (fun j => boundedSelfAdjointSpectralProjection B hB ((SB n).cell j)
+          ((SB n).measurable_cell j))
+        (SA n).representative (SB n).representative
+        (fun i => (boundedSelfAdjointSpectralPVM A hA).proj_idem
+          ((SA n).cell i) ((SA n).measurable_cell i))
+        (spectralProjection_pairwise_orthogonal A hA (SA n).cell
+          (SA n).measurable_cell (SA n).pairwise_disjoint)
+        (SA n).sum_projection_eq_one
+        (fun j => (boundedSelfAdjointSpectralPVM B hB).proj_idem
+          ((SB n).cell j) ((SB n).measurable_cell j))
+        (spectralProjection_pairwise_orthogonal B hB (SB n).cell
+          (SB n).measurable_cell (SB n).pairwise_disjoint)
+        (SB n).sum_projection_eq_one
+        hne C
+    have hXrec := finiteSpectralStep_reconstruction hd hsep (SA n) (SB n) Xn
+    simp only [hdefect] at hXrec
+    rw [← hXrec]
+    exact hdefect
+  -- the finite reciprocal integrals converge to the limit integral
+  have hIlim := tendsto_separated_integral
+    (fun n => (SA n).operator_isSelfAdjoint)
+    (fun n => (SB n).operator_isSelfAdjoint)
+    (M := ‖C‖) (fun n => le_rfl) hAop hBop
+    (tendsto_const_nhds (x := C)) hd
+  -- limit of the finite Sylvester identities
+  have hcomp : Continuous fun p : (F →L[ℂ] F) × (E →L[ℂ] F) => p.1 ∘L p.2 :=
+    isBoundedBilinearMap_comp.continuous
+  have hcomp' : Continuous fun p : (E →L[ℂ] F) × (E →L[ℂ] E) => p.1 ∘L p.2 :=
+    isBoundedBilinearMap_comp.continuous
+  have h1 : Tendsto (fun n => (SA n).operator ∘L
+      (∫ t : ℝ, separatedSylvesterMultiplier d hd t •
+        (unitaryGroup (SA n).operator t ∘L C ∘L
+          unitaryGroup (SB n).operator (-t)))) atTop
+      (nhds (A ∘L (∫ t : ℝ, separatedSylvesterMultiplier d hd t •
+        (unitaryGroup A t ∘L C ∘L unitaryGroup B (-t))))) :=
+    (hcomp.tendsto _).comp (hAop.prodMk_nhds hIlim)
+  have h2 : Tendsto (fun n =>
+      (∫ t : ℝ, separatedSylvesterMultiplier d hd t •
+        (unitaryGroup (SA n).operator t ∘L C ∘L
+          unitaryGroup (SB n).operator (-t))) ∘L (SB n).operator) atTop
+      (nhds ((∫ t : ℝ, separatedSylvesterMultiplier d hd t •
+        (unitaryGroup A t ∘L C ∘L unitaryGroup B (-t))) ∘L B)) :=
+    (hcomp'.tendsto _).comp (hIlim.prodMk_nhds hBop)
+  have hL := h1.sub h2
+  rw [funext hsolve] at hL
+  exact (tendsto_nhds_unique hL tendsto_const_nhds).symm.symm
 
 
 /-- Spectral-multiplier extensionality for the reciprocal kernel.
