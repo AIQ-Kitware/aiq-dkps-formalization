@@ -38,13 +38,37 @@ variable {E : Type u} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
 variable {F : Type v} [NormedAddCommGroup F] [InnerProductSpace ℂ F]
   [CompleteSpace F]
 
-/-- The restriction to the full space has the original real spectrum. -/
+/-- The restriction to the full space has the original real spectrum.  Proved by
+conjugating the top-restriction through `Submodule.topContEquiv` and invoking
+spectral invariance of the induced endomorphism-algebra equivalence. -/
 theorem restrictedSpectrum_top_eq_realSpectrum
     (T : E →L[ℂ] E) : restrictedSpectrum T ⊤ = realSpectrum T := by
-  -- Open obligation: spectrum invariance under the top-restriction similarity
-  -- (`spectrum_eq_of_similarity` via `Submodule.topEquiv`), handed to the
-  -- mathematics agent.
-  sorry
+  have hInv :
+      ForMathlib.DavisKahan.Experimental.Foundation.InvariantFor T (⊤ : Submodule ℂ E) :=
+    fun x _ => Submodule.mem_top
+  have hbridge :=
+    ForMathlib.DavisKahan.Experimental.Foundation.restrictedSpectrum_eq_restrictionSpectrum
+      T ⊤ hInv
+  have hconj :
+      (Submodule.topContEquiv : (⊤ : Submodule ℂ E) ≃L[ℂ] E).conjContinuousAlgEquiv
+        (T.restrict hInv) = T := by
+    ext x
+    rw [ContinuousLinearEquiv.conjContinuousAlgEquiv_apply_apply]
+    show ((T.restrict hInv) ((Submodule.topContEquiv :
+      (⊤ : Submodule ℂ E) ≃L[ℂ] E).symm x) : E) = T x
+    rw [ContinuousLinearMap.coe_restrict_apply]
+    rfl
+  have hspec : spectrum ℂ (T.restrict hInv) = spectrum ℂ T := by
+    conv_rhs => rw [← hconj]
+    exact (AlgEquiv.spectrum_eq
+      ((Submodule.topContEquiv : (⊤ : Submodule ℂ E) ≃L[ℂ] E).conjContinuousAlgEquiv)
+      (T.restrict hInv)).symm
+  show ForMathlib.DavisKahan.Experimental.Foundation.restrictedSpectrum T ⊤ =
+    ForMathlib.DavisKahan.Experimental.Foundation.realSpectrum T
+  rw [hbridge]
+  ext r
+  simp only [ForMathlib.DavisKahan.Experimental.Foundation.realSpectrum,
+    Set.mem_setOf_eq, hspec]
 
 /-- A common cut between two compact ordered spectra. -/
 theorem exists_common_cut_of_orderedSeparation
@@ -128,11 +152,23 @@ theorem orderedSylvester_integrable
     (C : E →L[ℂ] F) :
     Integrable fun t : ℝ => Set.indicator (Set.Ici 0)
       (fun t => semigroup (-A) t ∘L C ∘L semigroup B t) t := by
-  -- Open obligation: strong measurability of the semigroup orbit
-  -- (`continuous_expBounded`) and integrability of `exp (-d t)` on `Ici 0`,
-  -- handed to the mathematics agent.  The pointwise majorant is the (proved)
-  -- `orderedSemigroup_integrand_bound`.
-  sorry
+  have hcontA : Continuous (semigroup (-A)) :=
+    continuous_iff_continuousAt.mpr fun t => (hasDerivAt_semigroup (-A) t).continuousAt
+  have hcontB : Continuous (semigroup B) :=
+    continuous_iff_continuousAt.mpr fun t => (hasDerivAt_semigroup B t).continuousAt
+  have hcont : Continuous (fun t : ℝ => semigroup (-A) t ∘L C ∘L semigroup B t) :=
+    (hcontA.clm_comp continuous_const).clm_comp hcontB
+  have hmajor : IntegrableOn (fun t : ℝ => Real.exp (-d * t) * ‖C‖) (Set.Ici 0) :=
+    ((exp_neg_integrableOn_Ioi 0 hd).congr_set_ae Ioi_ae_eq_Ici.symm).mul_const ‖C‖
+  -- Dominate the operator-valued indicator by the `ℝ`-valued exponential
+  -- indicator, sidestepping the continuous-linear-map `enorm` instance diamond.
+  refine (hmajor.integrable_indicator measurableSet_Ici).mono'
+    (hcont.aestronglyMeasurable.indicator measurableSet_Ici) ?_
+  filter_upwards with t
+  by_cases ht : t ∈ Set.Ici 0
+  · simp only [Set.indicator_of_mem ht]
+    exact orderedSemigroup_integrand_bound hA hB hd hsep C t ht
+  · simp only [Set.indicator_of_notMem ht, norm_zero, le_refl]
 
 /-- Derivative of the conjugated solution orbit. -/
 theorem hasDerivAt_ordered_solution_orbit
@@ -168,11 +204,16 @@ theorem tendsto_ordered_solution_orbit_zero
     (X : E →L[ℂ] F) :
     Tendsto (fun t : ℝ => semigroup (-A) t ∘L X ∘L semigroup B t)
       atTop (nhds 0) := by
-  -- Open obligation: squeeze the operator norm by the (proved)
-  -- `orderedSemigroup_integrand_bound` against `exp (-d t) → 0`; handed to the
-  -- mathematics agent (elementary once the exponential-decay filter lemma is
-  -- named).
-  sorry
+  rw [tendsto_zero_iff_norm_tendsto_zero]
+  have hbound := orderedSemigroup_integrand_bound hA hB hd hsep X
+  have hexp : Tendsto (fun t : ℝ => Real.exp (-d * t) * ‖X‖) atTop (nhds 0) := by
+    have h : Tendsto (fun t : ℝ => Real.exp (-d * t)) atTop (nhds 0) :=
+      Real.tendsto_exp_atBot.comp
+        ((tendsto_const_mul_atBot_of_neg (by linarith : -d < 0)).mpr tendsto_id)
+    simpa using h.mul_const ‖X‖
+  refine squeeze_zero' ?_ ?_ hexp
+  · filter_upwards with t using norm_nonneg _
+  · filter_upwards [eventually_ge_atTop (0 : ℝ)] with t ht using hbound t ht
 
 /-- Exact ordered-spectrum reconstruction. -/
 theorem orderedSylvester_reconstruction
