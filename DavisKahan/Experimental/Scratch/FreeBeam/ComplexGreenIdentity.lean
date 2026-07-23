@@ -6,6 +6,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 
 import Mathlib.MeasureTheory.Integral.IntervalIntegral.FundThmCalculus
 import Mathlib.Analysis.Calculus.Deriv.Mul
+import Mathlib.Analysis.Calculus.Deriv.Star
 import Mathlib.Analysis.Complex.Basic
 import Mathlib.Tactic
 
@@ -68,10 +69,7 @@ theorem hasDerivAt_conj
     {f : ℝ → ℂ} {f' : ℂ} {x : ℝ}
     (hf : HasDerivAt f f' x) :
     HasDerivAt (fun y => conj (f y)) (conj f') x := by
-  have hcomp :=
-    Complex.conjCLE.toContinuousLinearMap.hasFDerivAt.comp
-      x hf.hasFDerivAt
-  simpa only [Function.comp_def, Complex.conjCLE_apply] using hcomp.hasDerivAt
+  simpa only [starRingEnd_apply] using hf.star
 
 /-- Hermitian fourth-order Green boundary concomitant. -/
 def greenBoundary (u v : ComplexFourthOrderData) (x : ℝ) : ℂ :=
@@ -83,13 +81,18 @@ theorem hasDerivAt_greenBoundary
     (u v : ComplexFourthOrderData) (x : ℝ) :
     HasDerivAt (greenBoundary u v)
       (conj (u.f0 x) * v.f4 x - conj (u.f4 x) * v.f0 x) x := by
-  unfold greenBoundary
-  convert
+  have h :=
     ((((hasDerivAt_conj (u.deriv0 x)).mul (v.deriv3 x)).sub
       ((hasDerivAt_conj (u.deriv1 x)).mul (v.deriv2 x))).add
       ((hasDerivAt_conj (u.deriv2 x)).mul (v.deriv1 x))).sub
       ((hasDerivAt_conj (u.deriv3 x)).mul (v.deriv0 x))
-    using 1 <;> ring
+  have heq : conj (u.f0 x) * v.f4 x - conj (u.f4 x) * v.f0 x =
+      conj (u.f1 x) * v.f3 x + conj (u.f0 x) * v.f4 x -
+          (conj (u.f2 x) * v.f2 x + conj (u.f1 x) * v.f3 x) +
+          (conj (u.f3 x) * v.f1 x + conj (u.f2 x) * v.f2 x) -
+        (conj (u.f4 x) * v.f0 x + conj (u.f3 x) * v.f1 x) := by ring
+  rw [heq]
+  exact h
 
 /-- Continuity of the complex Green integrand. -/
 theorem continuous_greenIntegrand (u v : ComplexFourthOrderData) :
@@ -105,8 +108,8 @@ theorem integral_green_formula (u v : ComplexFourthOrderData) :
       (conj (u.f0 x) * v.f4 x - conj (u.f4 x) * v.f0 x)) =
       greenBoundary u v 1 - greenBoundary u v 0 := by
   exact intervalIntegral.integral_eq_sub_of_hasDerivAt
-    (hasDerivAt_greenBoundary u v)
-    (continuous_greenIntegrand u v).intervalIntegrable
+    (fun x _ => hasDerivAt_greenBoundary u v x)
+    ((continuous_greenIntegrand u v).intervalIntegrable _ _)
 
 /-- The complex Green boundary term vanishes at a free endpoint. -/
 theorem greenBoundary_eq_zero_of_freeEndpoint
@@ -115,8 +118,7 @@ theorem greenBoundary_eq_zero_of_freeEndpoint
     (hv2 : v.f2 x = 0) (hv3 : v.f3 x = 0) :
     greenBoundary u v x = 0 := by
   unfold greenBoundary
-  rw [hu2, hu3, hv2, hv3]
-  ring
+  simp [hu2, hu3, hv2, hv3]
 
 /-- Hermitian Green symmetry on the smooth free--free core. -/
 theorem integral_free_green_symmetry
@@ -132,11 +134,13 @@ theorem integral_free_green_symmetry
   have h1 : greenBoundary u v 1 = 0 :=
     greenBoundary_eq_zero_of_freeEndpoint u v hu21 hu31 hv21 hv31
   rw [h0, h1, sub_zero] at hgreen
+  have hc1 : Continuous fun x : ℝ => conj (u.f0 x) * v.f4 x :=
+    (Complex.continuous_conj.comp u.continuous0).mul v.continuous4
+  have hc2 : Continuous fun x : ℝ => conj (u.f4 x) * v.f0 x :=
+    (Complex.continuous_conj.comp u.continuous4).mul v.continuous0
   have hsplit := intervalIntegral.integral_sub
-    ((Complex.continuous_conj.comp u.continuous0).mul
-      v.continuous4).intervalIntegrable
-    ((Complex.continuous_conj.comp u.continuous4).mul
-      v.continuous0).intervalIntegrable
+    (hc1.intervalIntegrable (μ := MeasureTheory.volume) (0 : ℝ) 1)
+    (hc2.intervalIntegrable (μ := MeasureTheory.volume) (0 : ℝ) 1)
   rw [hsplit] at hgreen
   exact sub_eq_zero.mp hgreen
 
@@ -149,11 +153,13 @@ theorem hasDerivAt_energyBoundary
     (u : ComplexFourthOrderData) (x : ℝ) :
     HasDerivAt (energyBoundary u)
       (conj (u.f0 x) * u.f4 x - conj (u.f2 x) * u.f2 x) x := by
-  unfold energyBoundary
-  convert
-    ((hasDerivAt_conj (u.deriv0 x)).mul (u.deriv3 x)).sub
-      ((hasDerivAt_conj (u.deriv1 x)).mul (u.deriv2 x))
-    using 1 <;> ring
+  have h := ((hasDerivAt_conj (u.deriv0 x)).mul (u.deriv3 x)).sub
+    ((hasDerivAt_conj (u.deriv1 x)).mul (u.deriv2 x))
+  have heq : conj (u.f0 x) * u.f4 x - conj (u.f2 x) * u.f2 x =
+      conj (u.f1 x) * u.f3 x + conj (u.f0 x) * u.f4 x -
+        (conj (u.f2 x) * u.f2 x + conj (u.f1 x) * u.f3 x) := by ring
+  rw [heq]
+  exact h
 
 /-- Continuity of the complex energy integrand. -/
 theorem continuous_energyIntegrand (u : ComplexFourthOrderData) :
@@ -169,8 +175,8 @@ theorem integral_energy_formula (u : ComplexFourthOrderData) :
       (conj (u.f0 x) * u.f4 x - conj (u.f2 x) * u.f2 x)) =
       energyBoundary u 1 - energyBoundary u 0 := by
   exact intervalIntegral.integral_eq_sub_of_hasDerivAt
-    (hasDerivAt_energyBoundary u)
-    (continuous_energyIntegrand u).intervalIntegrable
+    (fun x _ => hasDerivAt_energyBoundary u x)
+    ((continuous_energyIntegrand u).intervalIntegrable _ _)
 
 /-- The complex energy boundary term vanishes at a free endpoint. -/
 theorem energyBoundary_eq_zero_of_freeEndpoint
@@ -178,8 +184,7 @@ theorem energyBoundary_eq_zero_of_freeEndpoint
     (hu2 : u.f2 x = 0) (hu3 : u.f3 x = 0) :
     energyBoundary u x = 0 := by
   unfold energyBoundary
-  rw [hu2, hu3]
-  ring
+  simp [hu2, hu3]
 
 /-- Positivity identity on the complex smooth free--free beam core. -/
 theorem integral_free_energy
@@ -193,11 +198,13 @@ theorem integral_free_energy
   have h1 : energyBoundary u 1 = 0 :=
     energyBoundary_eq_zero_of_freeEndpoint u hu21 hu31
   rw [h0, h1, sub_zero] at henergy
+  have hc1 : Continuous fun x : ℝ => conj (u.f0 x) * u.f4 x :=
+    (Complex.continuous_conj.comp u.continuous0).mul u.continuous4
+  have hc2 : Continuous fun x : ℝ => conj (u.f2 x) * u.f2 x :=
+    (Complex.continuous_conj.comp u.continuous2).mul u.continuous2
   have hsplit := intervalIntegral.integral_sub
-    ((Complex.continuous_conj.comp u.continuous0).mul
-      u.continuous4).intervalIntegrable
-    ((Complex.continuous_conj.comp u.continuous2).mul
-      u.continuous2).intervalIntegrable
+    (hc1.intervalIntegrable (μ := MeasureTheory.volume) (0 : ℝ) 1)
+    (hc2.intervalIntegrable (μ := MeasureTheory.volume) (0 : ℝ) 1)
   rw [hsplit] at henergy
   have hnorm :
       (fun x => conj (u.f2 x) * u.f2 x) =
@@ -210,15 +217,17 @@ theorem integral_free_energy
 /-- The real part of the complex beam energy is nonnegative. -/
 theorem re_integral_free_energy_nonneg
     (u : ComplexFourthOrderData) (hu : u.FreeBoundary) :
-    0 ≤ re (∫ x in (0 : ℝ)..1, conj (u.f0 x) * u.f4 x) := by
+    0 ≤ (∫ x in (0 : ℝ)..1, conj (u.f0 x) * u.f4 x).re := by
   rw [integral_free_energy u hu]
+  have hc : Continuous fun x : ℝ => ((Complex.normSq (u.f2 x) : ℝ) : ℂ) :=
+    Complex.continuous_ofReal.comp (Complex.continuous_normSq.comp u.continuous2)
   have hint : IntervalIntegrable
-      (fun x => ((Complex.normSq (u.f2 x) : ℝ) : ℂ)) volume 0 1 := by
-    exact ((u.continuous2.normSq).ofReal).intervalIntegrable
-  rw [← Complex.reCLM_apply]
-  rw [Complex.reCLM.integral_comp_comm hint]
-  exact intervalIntegral.integral_nonneg (le_of_lt zero_lt_one) fun x _ =>
-    Complex.normSq_nonneg (u.f2 x)
+      (fun x => ((Complex.normSq (u.f2 x) : ℝ) : ℂ))
+      MeasureTheory.volume 0 1 := hc.intervalIntegrable _ _
+  rw [← Complex.reCLM_apply,
+    ← ContinuousLinearMap.intervalIntegral_comp_comm Complex.reCLM hint]
+  refine intervalIntegral.integral_nonneg (le_of_lt zero_lt_one) fun x _ => ?_
+  simpa using Complex.normSq_nonneg (u.f2 x)
 
 end ComplexFourthOrderData
 
