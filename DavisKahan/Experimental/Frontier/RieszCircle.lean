@@ -6,6 +6,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 
 import DavisKahan.Experimental.Frontier.Core
 import DavisKahan.Experimental.InfiniteDimensional.Core.SpectralProjection
+import DavisKahan.Experimental.InfiniteDimensional.SinTheta.CayleySelectorBridge
 import Mathlib.MeasureTheory.Integral.CircleIntegral
 import Mathlib.Analysis.Complex.CauchyIntegral
 
@@ -119,6 +120,128 @@ theorem scalar_circleIntegral_resolvent_indicator
       exact (hd.inv hzx).differentiableWithinAt
     rw [DiffContOnCl.circleIntegral_eq_zero hr.le hdiff, zero_div]
 
+/-- Off the spectrum, the total `Ring.inverse` of the pencil is the continuous
+functional calculus of the scalar resolvent symbol `(z - ·)⁻¹`. -/
+private theorem ringInverse_eq_cfc_of_notMem_spectrum
+    (A : H →L[ℂ] H) (hA : IsSelfAdjointOperator A) {z : ℂ}
+    (hz : z ∉ spectrum ℂ A) :
+    Ring.inverse (z • (1 : H →L[ℂ] H) - A) =
+      cfc (fun w : ℂ => (z - w)⁻¹) A := by
+  have hnormal : IsStarNormal A :=
+    (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hA).isStarNormal
+  have hne : ∀ w ∈ spectrum ℂ A, z - w ≠ 0 := by
+    intro w hw h0
+    exact hz (sub_eq_zero.mp h0 ▸ hw)
+  have hfcont : ContinuousOn (fun w : ℂ => z - w) (spectrum ℂ A) :=
+    (continuous_const.sub continuous_id).continuousOn
+  have hgcont : ContinuousOn (fun w : ℂ => (z - w)⁻¹) (spectrum ℂ A) :=
+    hfcont.inv₀ hne
+  have hshift : cfc (fun w : ℂ => z - w) A = z • (1 : H →L[ℂ] H) - A := by
+    rw [cfc_sub (fun _ : ℂ => z) (fun w : ℂ => w) A,
+      cfc_id' (R := ℂ) (a := A), cfc_const z A,
+      Algebra.algebraMap_eq_smul_one]
+  have hright : (z • (1 : H →L[ℂ] H) - A) *
+      cfc (fun w : ℂ => (z - w)⁻¹) A = 1 := by
+    rw [← hshift, ← cfc_mul _ _ A hfcont hgcont,
+      cfc_congr (g := fun _ : ℂ => (1 : ℂ))
+        (fun w hw => mul_inv_cancel₀ (hne w hw)),
+      cfc_const_one ℂ A]
+  have hleft : cfc (fun w : ℂ => (z - w)⁻¹) A *
+      (z • (1 : H →L[ℂ] H) - A) = 1 := by
+    rw [← hshift, ← cfc_mul _ _ A hgcont hfcont,
+      cfc_congr (g := fun _ : ℂ => (1 : ℂ))
+        (fun w hw => inv_mul_cancel₀ (hne w hw)),
+      cfc_const_one ℂ A]
+  let u : (H →L[ℂ] H)ˣ :=
+    ⟨z • (1 : H →L[ℂ] H) - A, cfc (fun w : ℂ => (z - w)⁻¹) A, hright, hleft⟩
+  exact Ring.inverse_unit u
+
+/-- The circle resolvent integrand as a continuous scalar symbol on the
+complex spectrum.  `mkD` keeps the definition total; on a separating circle it
+takes the intended value. -/
+private noncomputable def circleSpectrumSymbol
+    (A : H →L[ℂ] H) (center radius θ : ℝ) : C(spectrum ℂ A, ℂ) :=
+  ContinuousMap.mkD
+    ((spectrum ℂ A).restrict (fun w : ℂ =>
+      deriv (circleMap (center : ℂ) radius) θ *
+        (circleMap (center : ℂ) radius θ - w)⁻¹)) 0
+
+/-- On a separating circle, every contour point avoids the spectrum. -/
+private theorem circleMap_notMem_spectrum
+    {A : H →L[ℂ] H} {hA : IsSelfAdjointOperator A}
+    {B : Set ℝ} {center radius : ℝ}
+    (hsep : CircleSeparatesRealSpectrum A hA B center radius) (θ : ℝ) :
+    circleMap (center : ℂ) radius θ ∉ spectrum ℂ A :=
+  hsep.contour_resolvent _ (by
+    simpa [mem_sphere_iff_norm] using
+      circleMap_mem_sphere (center : ℂ) hsep.radius_pos.le θ)
+
+/-- Applying the bounded continuous functional calculus to the circle symbol
+recovers the operator-valued circle integrand. -/
+private theorem cfcL_circleSpectrumSymbol
+    (A : H →L[ℂ] H) (hA : IsSelfAdjointOperator A)
+    {B : Set ℝ} {center radius : ℝ}
+    (hsep : CircleSeparatesRealSpectrum A hA B center radius) (θ : ℝ) :
+    cfcL (a := A)
+        (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr
+          hA).isStarNormal
+        (circleSpectrumSymbol A center radius θ) =
+      circleResolventIntegrand A center radius θ := by
+  have hnormal : IsStarNormal A :=
+    (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hA).isStarNormal
+  have hz := circleMap_notMem_spectrum hsep θ
+  have hne : ∀ w ∈ spectrum ℂ A,
+      circleMap (center : ℂ) radius θ - w ≠ 0 := by
+    intro w hw h0
+    exact hz (sub_eq_zero.mp h0 ▸ hw)
+  have hgcont : ContinuousOn
+      (fun w : ℂ => (circleMap (center : ℂ) radius θ - w)⁻¹)
+      (spectrum ℂ A) :=
+    ((continuous_const.sub continuous_id).continuousOn).inv₀ hne
+  unfold circleSpectrumSymbol
+  rw [← cfc_eq_cfcL_mkD
+    (f := fun w : ℂ => deriv (circleMap (center : ℂ) radius) θ *
+      (circleMap (center : ℂ) radius θ - w)⁻¹) (a := A)]
+  rw [cfc_const_mul _ _ A hgcont,
+    ← ringInverse_eq_cfc_of_notMem_spectrum A hA hz]
+  rfl
+
+/-- The circle symbol is interval integrable, by pulling integrability of the
+already-continuous operator integrand back through the isometric calculus. -/
+private theorem intervalIntegrable_circleSpectrumSymbol
+    (A : H →L[ℂ] H) (hA : IsSelfAdjointOperator A)
+    {B : Set ℝ} {center radius : ℝ}
+    (hsep : CircleSeparatesRealSpectrum A hA B center radius) :
+    IntervalIntegrable (circleSpectrumSymbol A center radius)
+      MeasureTheory.volume 0 (2 * Real.pi) := by
+  let hnormal : IsStarNormal A :=
+    (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hA).isStarNormal
+  let L : C(spectrum ℂ A, ℂ) →L[ℂ] (H →L[ℂ] H) := cfcL (a := A) hnormal
+  have hfun : (fun θ => L (circleSpectrumSymbol A center radius θ)) =
+      circleResolventIntegrand A center radius := by
+    funext θ
+    exact cfcL_circleSpectrumSymbol A hA hsep θ
+  have hmapped : IntervalIntegrable
+      (fun θ => L (circleSpectrumSymbol A center radius θ))
+      MeasureTheory.volume 0 (2 * Real.pi) := by
+    rw [hfun]
+    exact (continuous_circleResolventIntegrand A hA B center radius
+      hsep).intervalIntegrable _ _
+  have hIso : Isometry L := by
+    simpa [L, cfcL] using (isometry_cfcHom A hnormal)
+  have hpull {μ : MeasureTheory.Measure ℝ}
+      {f : ℝ → C(spectrum ℂ A, ℂ)}
+      (hf : MeasureTheory.Integrable (fun t => L (f t)) μ) :
+      MeasureTheory.Integrable f μ := by
+    have hiff :
+        MeasureTheory.Integrable ((fun g : C(spectrum ℂ A, ℂ) => L g) ∘ f) μ ↔
+          MeasureTheory.Integrable f μ :=
+      MeasureTheory.LipschitzWith.integrable_comp_iff_of_antilipschitz
+        (μ := μ) (f := f) (g := fun g : C(spectrum ℂ A, ℂ) => L g)
+        hIso.lipschitz hIso.antilipschitz (by simp)
+    exact hiff.mp (by simpa only [Function.comp_def] using hf)
+  exact ⟨hpull hmapped.1, hpull hmapped.2⟩
+
 /-- The circle Riesz projection equals the genuine measurable spectral
 projection selected by the inside of the circle. -/
 theorem circleRieszProjection_eq_boundedSelfAdjointSpectralProjection
@@ -127,7 +250,88 @@ theorem circleRieszProjection_eq_boundedSelfAdjointSpectralProjection
     (hsep : CircleSeparatesRealSpectrum A hA B center radius) :
     Frontier.circleRieszProjection A center radius =
       boundedSelfAdjointSpectralProjection A hA B hB := by
-  sorry
+  classical
+  have hnormal : IsStarNormal A :=
+    (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hA).isStarNormal
+  set g : C(spectrum ℂ A, ℂ) :=
+    (2 * Real.pi * Complex.I)⁻¹ •
+      ∫ θ in (0 : ℝ)..2 * Real.pi, circleSpectrumSymbol A center radius θ
+    with hg
+  have hint := intervalIntegrable_circleSpectrumSymbol A hA hsep
+  have hproj : Frontier.circleRieszProjection A center radius =
+      cfcL (a := A) hnormal g := by
+    have h1 : Frontier.circleRieszProjection A center radius =
+        (2 * Real.pi * Complex.I)⁻¹ •
+          ∫ θ in (0 : ℝ)..2 * Real.pi,
+            cfcL (a := A) hnormal (circleSpectrumSymbol A center radius θ) := by
+      rw [circleRieszProjection_eq_integral]
+      unfold circleRieszProjectionIntegral
+      congr 1
+      apply intervalIntegral.integral_congr
+      intro θ _
+      exact (cfcL_circleSpectrumSymbol A hA hsep θ).symm
+    rw [h1, cfcL_intervalIntegral A hnormal _ hint, hg, map_smul]
+  have hagree : ∀ (lam : ℝ) (hlam : (lam : ℂ) ∈ spectrum ℂ A),
+      g ⟨(lam : ℂ), hlam⟩ = spectralSelector B lam := by
+    intro lam hlam
+    set x : spectrum ℂ A := ⟨(lam : ℂ), hlam⟩ with hx
+    have heval : (∫ θ in (0 : ℝ)..2 * Real.pi,
+        circleSpectrumSymbol A center radius θ) x =
+        ∫ θ in (0 : ℝ)..2 * Real.pi,
+          circleSpectrumSymbol A center radius θ x := by
+      simpa only [intervalIntegral.integral_of_le Real.two_pi_pos.le] using
+        (ContinuousMap.integral_apply hint.1 x)
+    have hint_congr : (∫ θ in (0 : ℝ)..2 * Real.pi,
+        circleSpectrumSymbol A center radius θ x) =
+        circleIntegral (fun z : ℂ => (z - (lam : ℂ))⁻¹) center radius := by
+      unfold circleIntegral
+      apply intervalIntegral.integral_congr
+      intro θ _
+      have hz := circleMap_notMem_spectrum hsep θ
+      have hne : ∀ w ∈ spectrum ℂ A,
+          circleMap (center : ℂ) radius θ - w ≠ 0 := by
+        intro w hw h0
+        exact hz (sub_eq_zero.mp h0 ▸ hw)
+      have hcont : ContinuousOn (fun w : ℂ =>
+          deriv (circleMap (center : ℂ) radius) θ *
+            (circleMap (center : ℂ) radius θ - w)⁻¹) (spectrum ℂ A) :=
+        continuousOn_const.mul
+          (((continuous_const.sub continuous_id).continuousOn).inv₀ hne)
+      show circleSpectrumSymbol A center radius θ x = _
+      unfold circleSpectrumSymbol
+      rw [ContinuousMap.mkD_apply_of_continuousOn hcont]
+      rfl
+    have hnorm : ‖(lam : ℂ) - (center : ℂ)‖ = |lam - center| := by
+      rw [← Complex.ofReal_sub, Complex.norm_real, Real.norm_eq_abs]
+    have hboundary : |lam - center| ≠ radius := by
+      intro habs
+      exact hsep.contour_resolvent (lam : ℂ) (hnorm.trans habs) hlam
+    have hiff : |lam - center| < radius ↔ lam ∈ B := by
+      rw [← hnorm]
+      exact hsep.inside_iff_mem lam hlam
+    calc g x = (2 * Real.pi * Complex.I)⁻¹ *
+        ((∫ θ in (0 : ℝ)..2 * Real.pi,
+          circleSpectrumSymbol A center radius θ) x) := by
+          rw [hg]
+          rfl
+      _ = (2 * Real.pi * Complex.I)⁻¹ *
+          circleIntegral (fun z : ℂ => (z - (lam : ℂ))⁻¹) center radius := by
+          rw [heval, hint_congr]
+      _ = circleIntegral (fun z : ℂ => (z - (lam : ℂ))⁻¹) center radius /
+          (2 * Real.pi * Complex.I) := by
+          rw [inv_mul_eq_div]
+      _ = (if |lam - center| < radius then 1 else 0) :=
+          scalar_circleIntegral_resolvent_indicator lam center radius
+            hsep.radius_pos hboundary
+      _ = spectralSelector B lam := by
+          unfold spectralSelector
+          by_cases hmem : lam ∈ B
+          · rw [if_pos (hiff.mpr hmem), Set.indicator_of_mem hmem]
+          · rw [if_neg (fun h => hmem (hiff.mp h)),
+              Set.indicator_of_notMem hmem]
+  rw [hproj,
+    boundedSelfAdjointSpectralProjection_eq_spectralCalculus_selector A hA B hB,
+    spectralCalculus_selector_eq_cfcL_of_agrees A hA B hB g hagree]
 
 /-- The second resolvent identity for the total `Ring.inverse` at two units. -/
 private theorem ringInverse_sub_ringInverse (T T' : H →L[ℂ] H)
