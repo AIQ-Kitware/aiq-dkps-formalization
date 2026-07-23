@@ -1,0 +1,12 @@
+DavisKahan/Experimental/Scratch/All.lean
+DavisKahan/Experimental/Scratch/IdealBanach/All.lean
+DavisKahan/Experimental/Scratch/IdealBanach/Basic.lean
+DavisKahan/Experimental/Scratch/RectangularHilbertSchmidt/All.lean
+DavisKahan/Experimental/Scratch/RectangularHilbertSchmidt/BochnerIntegral.lean
+DavisKahan/Experimental/Scratch/FreeBeam/All.lean
+DavisKahan/Experimental/Scratch/FreeBeam/ComplexGreenIdentity.lean
+DavisKahan/Experimental/Scratch/FreeBeam/SmoothKernel.lean
+dev/independent-scratch-continuation-candidates-4080ec3.json
+dev/overlays/independent-scratch-continuation-4080ec3-gpt56.md
+dev/overlays/independent-scratch-continuation-4080ec3-gpt56.manifest.txt
+SCRATCH_CONTINUATION_OVERLAY_MANIFEST.txt
