@@ -3,7 +3,7 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.Experimental.MathAhead.Sylvester.OrthogonalIdempotentExp
+import DavisKahan.Experimental.InfiniteDimensional.Sylvester.OrthogonalIdempotentExp
 import Mathlib.MeasureTheory.Integral.Bochner.Basic
 
 /-!
@@ -50,8 +50,9 @@ theorem unitaryGroup_finiteDiagonal
       ((t : ℂ) • ∑ i, ((a i : ℂ) * Complex.I) • P i) := by
     rw [Finset.smul_sum, Finset.smul_sum]
     apply Finset.sum_congr rfl
-    intro i hi
-    simp [smul_smul]
+    intro i _
+    rw [smul_smul, smul_smul]
+    congr 1
     ring
   rw [hscale]
   simpa [mul_assoc, mul_comm, mul_left_comm] using
@@ -66,17 +67,15 @@ theorem finiteDiagonal_select_left
     (i : Fin m) :
     P i ∘L finiteDiagonalOperator P a = (a i : ℂ) • P i := by
   unfold finiteDiagonalOperator
-  rw [ContinuousLinearMap.comp_finset_sum]
-  apply Finset.sum_eq_single i
-  · intro j hj hji
-    rw [ContinuousLinearMap.comp_smul]
-    change (a j : ℂ) • (P i * P j) = 0
-    rw [horth i j hji, smul_zero]
-  · intro hi
-    exact absurd (Finset.mem_univ i) hi
+  rw [ContinuousLinearMap.comp_finset_sum,
+    Finset.sum_eq_single_of_mem i (Finset.mem_univ i)]
   · rw [ContinuousLinearMap.comp_smul]
     change (a i : ℂ) • (P i * P i) = _
     rw [hidem i]
+  · intro j _ hji
+    rw [ContinuousLinearMap.comp_smul]
+    change (a j : ℂ) • (P i * P j) = 0
+    rw [horth i j hji.symm, smul_zero]
 
 /-- A diagonal block selects the corresponding coefficient on the right. -/
 theorem finiteDiagonal_select_right
@@ -86,17 +85,15 @@ theorem finiteDiagonal_select_right
     (i : Fin m) :
     finiteDiagonalOperator P a ∘L P i = (a i : ℂ) • P i := by
   unfold finiteDiagonalOperator
-  rw [ContinuousLinearMap.finset_sum_comp]
-  apply Finset.sum_eq_single i
-  · intro j hj hji
-    rw [ContinuousLinearMap.smul_comp]
-    change (a j : ℂ) • (P j * P i) = 0
-    rw [horth j i hji, smul_zero]
-  · intro hi
-    exact absurd (Finset.mem_univ i) hi
+  rw [ContinuousLinearMap.finset_sum_comp,
+    Finset.sum_eq_single_of_mem i (Finset.mem_univ i)]
   · rw [ContinuousLinearMap.smul_comp]
     change (a i : ℂ) • (P i * P i) = _
     rw [hidem i]
+  · intro j _ hji
+    rw [ContinuousLinearMap.smul_comp]
+    change (a j : ℂ) • (P j * P i) = 0
+    rw [horth j i hji, smul_zero]
 
 /-- The Sylvester defect restricted to one spectral rectangle is scalar. -/
 theorem finiteDiagonal_sylvester_block
@@ -111,16 +108,15 @@ theorem finiteDiagonal_sylvester_block
     P i ∘L (finiteDiagonalOperator P a ∘L X -
       X ∘L finiteDiagonalOperator Q b) ∘L Q j =
       (((a i - b j : ℝ) : ℂ)) • (P i ∘L X ∘L Q j) := by
-  rw [ContinuousLinearMap.comp_sub, ContinuousLinearMap.sub_comp]
-  rw [← ContinuousLinearMap.comp_assoc,
-    finiteDiagonal_select_left P a hPid hPorth i,
-    ContinuousLinearMap.smul_comp]
-  rw [ContinuousLinearMap.comp_assoc X,
-    finiteDiagonal_select_right Q b hQid hQorth j,
-    ContinuousLinearMap.comp_smul]
-  ext x
-  simp [sub_smul, ContinuousLinearMap.comp_apply]
-  module
+  apply ContinuousLinearMap.ext
+  intro v
+  have hL := ContinuousLinearMap.ext_iff.mp
+    (finiteDiagonal_select_left P a hPid hPorth i) (X (Q j v))
+  have hR := ContinuousLinearMap.ext_iff.mp
+    (finiteDiagonal_select_right Q b hQid hQorth j) v
+  simp only [ContinuousLinearMap.comp_apply, ContinuousLinearMap.sub_apply,
+    map_sub, ContinuousLinearMap.smul_apply] at hL hR ⊢
+  rw [hL, hR, map_smul, map_smul, Complex.ofReal_sub, sub_smul]
 
 /-- The full operator is the sum of all rectangular blocks. -/
 theorem eq_sum_rectangular_blocks
@@ -133,10 +129,12 @@ theorem eq_sum_rectangular_blocks
   calc
     X = (∑ i, P i) ∘L X ∘L (∑ j, Q j) := by
       rw [hPsum, hQsum]
+      ext v
       simp
     _ = ∑ i, ∑ j, P i ∘L X ∘L Q j := by
-      simp [ContinuousLinearMap.finset_sum_comp,
+      simp only [ContinuousLinearMap.finset_sum_comp,
         ContinuousLinearMap.comp_finset_sum]
+      rw [Finset.sum_comm]
 
 /-- Expansion of the conjugated Sylvester defect into scalar spectral blocks. -/
 theorem finiteDiagonal_orbit_expansion
@@ -160,16 +158,16 @@ theorem finiteDiagonal_orbit_expansion
     unitaryGroup_finiteDiagonal Q b hQid hQorth hQsum (-t)]
   simp only [ContinuousLinearMap.finset_sum_comp,
     ContinuousLinearMap.comp_finset_sum, ContinuousLinearMap.smul_comp,
-    ContinuousLinearMap.comp_smul]
+    ContinuousLinearMap.comp_smul, Finset.smul_sum]
+  rw [Finset.sum_comm]
   apply Finset.sum_congr rfl
-  intro i hi
+  intro i _
   apply Finset.sum_congr rfl
-  intro j hj
-  rw [finiteDiagonal_sylvester_block P Q a b hPid hPorth hQid hQorth X i j]
-  rw [smul_smul, smul_smul]
+  intro j _
+  rw [finiteDiagonal_sylvester_block P Q a b hPid hPorth hQid hQorth X i j, smul_smul]
   congr 1
-  rw [Complex.exp_mul, ← Complex.exp_add]
-  congr 2
+  rw [← Complex.exp_add]
+  congr 1
   push_cast
   ring
 
@@ -179,21 +177,19 @@ theorem integrable_scalar_oscillatory_block
     (r : ℝ) (T : E →L[ℂ] F) :
     Integrable fun t : ℝ =>
       (μ t * Complex.exp ((((t * r : ℝ) : ℂ) * Complex.I))) • T := by
-  have hnorm : ∀ t : ℝ,
-      ‖(μ t * Complex.exp ((((t * r : ℝ) : ℂ) * Complex.I))) • T‖ =
-        ‖μ t‖ * ‖T‖ := by
-    intro t
-    rw [norm_smul, norm_mul, Complex.norm_exp]
-    have hre : ((((t * r : ℝ) : ℂ) * Complex.I)).re = 0 := by simp
-    rw [hre, Real.exp_zero, one_mul]
-  apply Integrable.mono' (hμ.norm.const_mul ‖T‖)
-  · exact (hμ.aestronglyMeasurable.mul
-      (Complex.continuous_exp.comp
-        (Complex.continuous_ofReal.comp
-          (continuous_const.mul continuous_id) |>.mul continuous_const)).aestronglyMeasurable).smul
-      stronglyMeasurable_const
-  · filter_upwards [] with t
-    rw [hnorm]
+  have hf : Integrable fun t : ℝ =>
+      μ t * Complex.exp ((((t * r : ℝ) : ℂ) * Complex.I)) := by
+    apply Integrable.mono' hμ.norm
+    · exact hμ.aestronglyMeasurable.mul
+        (Complex.continuous_exp.comp
+          (Complex.continuous_ofReal.comp
+            (continuous_id.mul continuous_const) |>.mul continuous_const)).aestronglyMeasurable
+    · filter_upwards [] with t
+      apply le_of_eq
+      rw [norm_mul, Complex.norm_exp]
+      have hre : ((((t * r : ℝ) : ℂ) * Complex.I)).re = 0 := by simp
+      rw [hre, Real.exp_zero, mul_one]
+  exact hf.smul_const T
 
 /-- Finite blockwise reconstruction from the scalar reciprocal identity. -/
 theorem finiteDiagonal_sylvester_reconstruction
@@ -238,9 +234,15 @@ theorem finiteDiagonal_sylvester_reconstruction
       intro i hi
       apply Finset.sum_congr rfl
       intro j hj
-      rw [← integral_smul_const]
-      rw [smul_smul]
-      rw [hscalar i j]
+      have hrw : (fun t : ℝ => μ t •
+            (Complex.exp ((((t * (a i - b j) : ℝ) : ℂ) * Complex.I)) •
+              ((((a i - b j : ℝ) : ℂ)) • (P i ∘L X ∘L Q j)))) =
+          fun t : ℝ =>
+            (μ t * Complex.exp ((((t * (a i - b j) : ℝ) : ℂ) * Complex.I))) •
+              ((((a i - b j : ℝ) : ℂ)) • (P i ∘L X ∘L Q j)) := by
+        funext t
+        rw [smul_smul]
+      rw [hrw, integral_smul_const, hscalar i j, smul_smul]
       have hc : (((a i - b j)⁻¹ : ℝ) : ℂ) *
           (((a i - b j : ℝ) : ℂ)) = 1 := by
         norm_cast
@@ -256,7 +258,7 @@ theorem finiteDiagonal_sylvester_reconstruction
         rw [integral_finset_sum]
         exact fun j hj => hintegrable i j
       · intro i hi
-        exact (Finset.integrable_finset_sum _ fun j hj => hintegrable i j)
+        exact (integrable_finsetSum _ fun j hj => hintegrable i j)
     _ = ∫ t : ℝ, μ t •
       (NormedSpace.exp ((((t : ℂ) * Complex.I) • finiteDiagonalOperator P a)) ∘L
         (finiteDiagonalOperator P a ∘L X - X ∘L finiteDiagonalOperator Q b) ∘L

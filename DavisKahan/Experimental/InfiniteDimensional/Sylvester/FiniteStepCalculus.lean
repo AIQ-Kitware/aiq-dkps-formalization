@@ -3,7 +3,7 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.Experimental.MathAhead.Sylvester.SelfAdjointBorelCalculus
+import DavisKahan.Experimental.InfiniteDimensional.Sylvester.SelfAdjointBorelCalculus
 
 /-!
 # Finite spectral-step calculus
@@ -59,6 +59,52 @@ theorem bounded_finiteStepSymbol {n : ℕ}
       · rw [Set.indicator_of_notMem hx, norm_zero]
         exact abs_nonneg _
 
+/-- A scaled indicator symbol is globally bounded by the scale's norm. -/
+theorem bounded_indicator_const (s : Set ℝ) (c : ℂ) :
+    ∃ C : ℝ, ∀ x, ‖Set.indicator s (fun _ => c) x‖ ≤ C := by
+  refine ⟨‖c‖, fun x => ?_⟩
+  by_cases hx : x ∈ s
+  · rw [Set.indicator_of_mem hx]
+  · rw [Set.indicator_of_notMem hx, norm_zero]
+    exact norm_nonneg c
+
+/-- The calculus of the zero symbol is the zero operator. -/
+theorem spectralCalculus_zero
+    (U : OneParameterUnitaryGroup (H := H))
+    (hm : Measurable (fun _ : ℝ => (0 : ℂ)))
+    (hb : ∃ C : ℝ, ∀ x, ‖(fun _ : ℝ => (0 : ℂ)) x‖ ≤ C) :
+    spectralCalculus U (fun _ => (0 : ℂ)) hm hb = 0 := by
+  rw [← norm_le_zero_iff]
+  exact norm_spectralCalculus_le U (fun _ => (0 : ℂ)) hm hb (fun _ => by simp)
+
+/-- The calculus of a single scaled indicator is the scaled spectral projection. -/
+theorem spectralCalculus_indicator_smul
+    (A : H →L[ℂ] H) (hA : IsSelfAdjointOperator A)
+    (s : Set ℝ) (hs : MeasurableSet s) (c : ℂ)
+    (hm : Measurable (Set.indicator s fun _ => c))
+    (hb : ∃ C : ℝ, ∀ x, ‖Set.indicator s (fun _ => c) x‖ ≤ C) :
+    spectralCalculus (boundedSelfAdjointGroup A hA) (Set.indicator s fun _ => c) hm hb
+      = c • boundedSelfAdjointSpectralProjection A hA s hs := by
+  have hfun : (Set.indicator s fun _ => c) =
+      fun x => c * Set.indicator s (fun _ => (1 : ℂ)) x := by
+    funext x
+    by_cases hx : x ∈ s <;>
+      simp [Set.indicator_of_mem, Set.indicator_of_notMem, hx]
+  have hcm : Measurable (fun x => c * Set.indicator s (fun _ => (1 : ℂ)) x) :=
+    measurable_const.mul (measurable_const.indicator hs)
+  have hcb : ∃ C : ℝ, ∀ x, ‖c * Set.indicator s (fun _ => (1 : ℂ)) x‖ ≤ C := by
+    refine ⟨‖c‖, fun x => ?_⟩
+    rw [norm_mul]
+    by_cases hx : x ∈ s
+    · rw [Set.indicator_of_mem hx, norm_one, mul_one]
+    · rw [Set.indicator_of_notMem hx, norm_zero, mul_zero]
+      exact norm_nonneg c
+  rw [spectralCalculus_congr (boundedSelfAdjointGroup A hA) hfun hm hb hcm hcb,
+    spectralCalculus_smul (boundedSelfAdjointGroup A hA) c
+      (Set.indicator s fun _ => (1 : ℂ)) (measurable_const.indicator hs)
+      (indicator_one_bdd s) hcm hcb]
+  rfl
+
 /-- The bounded calculus is additive over a finite step function. -/
 theorem boundedSelfAdjointBorelCalculusC_finiteStep
     (A : H →L[ℂ] H) (hA : IsSelfAdjointOperator A)
@@ -71,70 +117,40 @@ theorem boundedSelfAdjointBorelCalculusC_finiteStep
       ∑ i, (rep i : ℂ) •
         boundedSelfAdjointSpectralProjection A hA (cell i) (hcell i) := by
   classical
-  unfold boundedSelfAdjointBorelCalculusC finiteStepSymbol
+  unfold boundedSelfAdjointBorelCalculusC
   induction n with
   | zero =>
-      simp [spectralCalculus_congr]
+      rw [Finset.univ_eq_empty, Finset.sum_empty]
+      have h0 : finiteStepSymbol cell rep = fun _ => (0 : ℂ) := by
+        funext x; simp [finiteStepSymbol]
+      rw [spectralCalculus_congr (boundedSelfAdjointGroup A hA) h0
+        (measurable_finiteStepSymbol cell hcell rep) (bounded_finiteStepSymbol cell rep)
+        measurable_const ⟨0, fun _ => by simp⟩]
+      exact spectralCalculus_zero (boundedSelfAdjointGroup A hA) _ _
   | succ n ih =>
-      let i0 : Fin (n + 1) := ⟨0, Nat.succ_pos _⟩
-      let tailCell : Fin n → Set ℝ := fun i => cell i.succ
-      let tailRep : Fin n → ℝ := fun i => rep i.succ
-      have htailm : Measurable (finiteStepSymbol tailCell tailRep) :=
-        measurable_finiteStepSymbol tailCell (fun i => hcell i.succ) tailRep
-      have htailb := bounded_finiteStepSymbol tailCell tailRep
-      have hheadm : Measurable
-          (Set.indicator (cell i0) fun _ => (rep i0 : ℂ)) :=
-        measurable_const.indicator (hcell i0)
-      have hheadb : ∃ C : ℝ, ∀ x,
-          ‖Set.indicator (cell i0) (fun _ => (rep i0 : ℂ)) x‖ ≤ C := by
-        refine ⟨|rep i0|, fun x => ?_⟩
-        by_cases hx : x ∈ cell i0
-        · rw [Set.indicator_of_mem hx, Complex.norm_real, Real.norm_eq_abs]
-        · rw [Set.indicator_of_notMem hx, norm_zero]
-          exact abs_nonneg _
+      rw [Fin.sum_univ_succ]
+      have hHm : Measurable (Set.indicator (cell 0) fun _ => (rep 0 : ℂ)) :=
+        measurable_const.indicator (hcell 0)
+      have hHb := bounded_indicator_const (cell 0) (rep 0 : ℂ)
+      have hTm : Measurable
+          (finiteStepSymbol (fun i => cell i.succ) (fun i => rep i.succ)) :=
+        measurable_finiteStepSymbol (fun i => cell i.succ) (fun i => hcell i.succ)
+          (fun i => rep i.succ)
+      have hTb := bounded_finiteStepSymbol (fun i => cell i.succ) (fun i => rep i.succ)
       have hsplit : finiteStepSymbol cell rep = fun x =>
-          Set.indicator (cell i0) (fun _ => (rep i0 : ℂ)) x +
-            finiteStepSymbol tailCell tailRep x := by
+          Set.indicator (cell 0) (fun _ => (rep 0 : ℂ)) x +
+            finiteStepSymbol (fun i => cell i.succ) (fun i => rep i.succ) x := by
         funext x
-        rw [finiteStepSymbol]
-        simpa [i0, tailCell, tailRep, Fin.sum_univ_succ]
+        simp only [finiteStepSymbol, Fin.sum_univ_succ]
       rw [spectralCalculus_congr (boundedSelfAdjointGroup A hA) hsplit
-        (measurable_finiteStepSymbol cell hcell rep)
-        (bounded_finiteStepSymbol cell rep)
-        (hheadm.add htailm) (bounded_add hheadb htailb)]
-      rw [spectralCalculus_add (boundedSelfAdjointGroup A hA)
-        _ _ hheadm hheadb htailm htailb
-        (hheadm.add htailm) (bounded_add hheadb htailb)]
-      have hhead : spectralCalculus (boundedSelfAdjointGroup A hA)
-          (Set.indicator (cell i0) fun _ => (rep i0 : ℂ)) hheadm hheadb =
-          (rep i0 : ℂ) • boundedSelfAdjointSpectralProjection A hA
-            (cell i0) (hcell i0) := by
-        have hfun : (Set.indicator (cell i0) fun _ => (rep i0 : ℂ)) =
-            fun x => (rep i0 : ℂ) *
-              Set.indicator (cell i0) (fun _ => (1 : ℂ)) x := by
-          funext x
-          by_cases hx : x ∈ cell i0 <;>
-            simp [Set.indicator_of_mem, Set.indicator_of_notMem, hx]
-        rw [spectralCalculus_congr (boundedSelfAdjointGroup A hA) hfun
-          hheadm hheadb
-          (measurable_const.mul (measurable_const.indicator (hcell i0)))
-          ⟨|rep i0|, fun x => by
-            rw [norm_mul]
-            by_cases hx : x ∈ cell i0
-            · rw [Set.indicator_of_mem hx, norm_one, mul_one, Complex.norm_real,
-                Real.norm_eq_abs]
-            · rw [Set.indicator_of_notMem hx, norm_zero, mul_zero]
-              exact abs_nonneg _⟩]
-        rw [spectralCalculus_smul (boundedSelfAdjointGroup A hA)
-          (rep i0 : ℂ) (Set.indicator (cell i0) fun _ => (1 : ℂ))
-          (measurable_const.indicator (hcell i0)) (indicator_one_bdd (cell i0))]
-        rfl
-      rw [hhead]
-      have ihtail := boundedSelfAdjointBorelCalculusC_finiteStep
-        A hA tailCell (fun i => hcell i.succ) tailRep
-      unfold boundedSelfAdjointBorelCalculusC at ihtail
-      rw [ihtail]
-      simp [i0, tailCell, tailRep, Fin.sum_univ_succ]
+          (measurable_finiteStepSymbol cell hcell rep) (bounded_finiteStepSymbol cell rep)
+          (hHm.add hTm) (bounded_add hHb hTb),
+        spectralCalculus_add (boundedSelfAdjointGroup A hA)
+          (Set.indicator (cell 0) fun _ => (rep 0 : ℂ))
+          (finiteStepSymbol (fun i => cell i.succ) (fun i => rep i.succ))
+          hHm hHb hTm hTb (hHm.add hTm) (bounded_add hHb hTb),
+        spectralCalculus_indicator_smul A hA (cell 0) (hcell 0) (rep 0 : ℂ) hHm hHb,
+        ih (fun i => cell i.succ) (fun i => hcell i.succ) (fun i => rep i.succ)]
 
 /-- Two measurable spectral projections depend only on the intersection of the
 sets with the real spectrum. -/
@@ -176,6 +192,38 @@ theorem spectralProjection_pairwise_orthogonal
   exact (P.proj_congr hinter (hcell i |>.inter (hcell j)) MeasurableSet.empty).trans
     P.proj_empty
 
+/-- Finite additivity of a projection-valued measure over a pairwise disjoint
+family: the projection of the union is the sum of the projections. -/
+theorem pvm_proj_iUnion_fin
+    (P : Spectra.ProjValMeasure H) {n : ℕ} (cell : Fin n → Set ℝ)
+    (hcell : ∀ i, MeasurableSet (cell i))
+    (hdisj : Set.PairwiseDisjoint Set.univ cell) :
+    ∑ i, P.proj (cell i) (hcell i) =
+      P.proj (⋃ i, cell i) (MeasurableSet.iUnion hcell) := by
+  induction n with
+  | zero =>
+      rw [Finset.univ_eq_empty, Finset.sum_empty,
+        P.proj_congr (show (⋃ i : Fin 0, cell i) = ∅ by simp)
+          (MeasurableSet.iUnion hcell) MeasurableSet.empty, P.proj_empty]
+  | succ n ih =>
+      rw [Fin.sum_univ_succ]
+      have htaildisj : Set.PairwiseDisjoint Set.univ (fun i : Fin n => cell i.succ) := by
+        intro i _ j _ hij
+        exact hdisj (Set.mem_univ i.succ) (Set.mem_univ j.succ)
+          (fun h => hij (Fin.succ_injective _ h))
+      have hdisjHT : Disjoint (cell 0) (⋃ i : Fin n, cell i.succ) := by
+        rw [Set.disjoint_iUnion_right]
+        intro i
+        exact hdisj (Set.mem_univ 0) (Set.mem_univ i.succ)
+          (Ne.symm (Fin.succ_ne_zero i))
+      have hset : (⋃ i : Fin (n + 1), cell i) = cell 0 ∪ ⋃ i : Fin n, cell i.succ := by
+        ext x
+        simp only [Set.mem_iUnion, Set.mem_union, Fin.exists_fin_succ]
+      rw [ih (fun i : Fin n => cell i.succ) (fun i : Fin n => hcell i.succ) htaildisj,
+        P.proj_congr hset (MeasurableSet.iUnion hcell)
+          ((hcell 0).union (MeasurableSet.iUnion fun i : Fin n => hcell i.succ)),
+        P.proj_union (hcell 0) (MeasurableSet.iUnion fun i : Fin n => hcell i.succ) hdisjHT]
+
 /-- A finite disjoint spectral cover sums to the identity. -/
 theorem spectralProjection_finset_sum_eq_id
     (A : H →L[ℂ] H) (hA : IsSelfAdjointOperator A)
@@ -196,26 +244,7 @@ theorem spectralProjection_finset_sum_eq_id
     · intro hx
       exact ⟨hcover hx.2, hx.2⟩
   rw [← P.proj_univ, ← hunion]
-  induction n with
-  | zero =>
-      simp
-  | succ n ih =>
-      let i0 : Fin (n + 1) := ⟨0, Nat.succ_pos _⟩
-      let tail : Fin n → Set ℝ := fun i => cell i.succ
-      have htaildisj : Set.PairwiseDisjoint Set.univ tail := by
-        intro i hi j hj hij
-        exact hdisj (Set.mem_univ i.succ) (Set.mem_univ j.succ)
-          (fun h => hij (Fin.succ_injective h))
-      have hheadtail : Disjoint (cell i0) (⋃ i, tail i) := by
-        rw [Set.disjoint_iUnion_right]
-        intro i
-        exact hdisj (Set.mem_univ i0) (Set.mem_univ i.succ) (by simp [i0])
-      rw [show (⋃ i : Fin (n + 1), cell i) = cell i0 ∪ ⋃ i : Fin n, tail i by
-        ext x
-        simp [i0, tail, Fin.exists_fin_succ]]
-      rw [P.proj_union (hcell i0) (MeasurableSet.iUnion fun i => hcell i.succ) hheadtail]
-      simp [i0, tail, Fin.sum_univ_succ]
-      exact congrArg (fun T => P.proj (cell i0) (hcell i0) + T) ih
+  exact pvm_proj_iUnion_fin P cell hcell hdisj
 
 /-- Left multiplication by a spectral block selects its own coefficient from a
 finite spectral step. -/
@@ -228,18 +257,17 @@ theorem spectralProjection_select_left
     boundedSelfAdjointSpectralProjection A hA (cell i) (hcell i) ∘L
       (∑ j, rep j • boundedSelfAdjointSpectralProjection A hA (cell j) (hcell j)) =
       rep i • boundedSelfAdjointSpectralProjection A hA (cell i) (hcell i) := by
-  rw [ContinuousLinearMap.comp_finset_sum]
-  apply Finset.sum_eq_single i
-  · intro j hj hji
-    rw [ContinuousLinearMap.comp_smul,
-      spectralProjection_pairwise_orthogonal A hA cell hcell hdisj i j hji]
-    simp
-  · intro hi
-    exact absurd (Finset.mem_univ i) hi
+  rw [ContinuousLinearMap.comp_finset_sum,
+    Finset.sum_eq_single_of_mem i (Finset.mem_univ i)]
   · rw [ContinuousLinearMap.comp_smul]
     let P := boundedSelfAdjointSpectralPVM A hA
-    change rep i • (P.proj (cell i) (hcell i) * P.proj (cell i) (hcell i)) = _
+    change rep i • (P.proj (cell i) (hcell i) * P.proj (cell i) (hcell i)) =
+      rep i • P.proj (cell i) (hcell i)
     rw [P.proj_idem]
+  · intro j _ hji
+    rw [ContinuousLinearMap.comp_smul,
+      spectralProjection_pairwise_orthogonal A hA cell hcell hdisj i j hji.symm]
+    simp
 
 /-- Right multiplication by a spectral block selects its own coefficient. -/
 theorem spectralProjection_select_right
@@ -251,20 +279,20 @@ theorem spectralProjection_select_right
     (∑ j, rep j • boundedSelfAdjointSpectralProjection A hA (cell j) (hcell j)) ∘L
       boundedSelfAdjointSpectralProjection A hA (cell i) (hcell i) =
       rep i • boundedSelfAdjointSpectralProjection A hA (cell i) (hcell i) := by
-  rw [ContinuousLinearMap.finset_sum_comp]
-  apply Finset.sum_eq_single i
-  · intro j hj hji
+  rw [ContinuousLinearMap.finset_sum_comp,
+    Finset.sum_eq_single_of_mem i (Finset.mem_univ i)]
+  · rw [ContinuousLinearMap.smul_comp]
+    let P := boundedSelfAdjointSpectralPVM A hA
+    change rep i • (P.proj (cell i) (hcell i) * P.proj (cell i) (hcell i)) =
+      rep i • P.proj (cell i) (hcell i)
+    rw [P.proj_idem]
+  · intro j _ hji
     rw [ContinuousLinearMap.smul_comp]
     have hzero := spectralProjection_pairwise_orthogonal A hA cell hcell hdisj j i hji
     rw [hzero]
     simp
-  · intro hi
-    exact absurd (Finset.mem_univ i) hi
-  · rw [ContinuousLinearMap.smul_comp]
-    let P := boundedSelfAdjointSpectralPVM A hA
-    change rep i • (P.proj (cell i) (hcell i) * P.proj (cell i) (hcell i)) = _
-    rw [P.proj_idem]
 
+open Classical in
 /-- The choice-based real step symbol used by the original finite-step file. -/
 noncomputable def chosenFiniteStepSymbol {n : ℕ}
     (cell : Fin n → Set ℝ) (rep : Fin n → ℝ) (x : ℝ) : ℝ :=
@@ -280,17 +308,14 @@ theorem chosenFiniteStepSymbol_eq {n : ℕ}
       finiteStepSymbol cell rep x := by
   obtain ⟨i, hxi⟩ := Set.mem_iUnion.mp hcover
   have hex : ∃ j, x ∈ cell j := ⟨i, hxi⟩
-  let j := Classical.choose hex
-  have hxj : x ∈ cell j := Classical.choose_spec hex
-  have hji : j = i := by
+  have hxj : x ∈ cell (Classical.choose hex) := Classical.choose_spec hex
+  have hji : Classical.choose hex = i := by
     by_contra hne
     exact Set.disjoint_left.mp
-      (hdisj (Set.mem_univ j) (Set.mem_univ i) hne) hxj hxi
-  subst j
-  rw [chosenFiniteStepSymbol, dif_pos hex, finiteStepSymbol]
-  rw [Finset.sum_eq_single i]
+      (hdisj (Set.mem_univ (Classical.choose hex)) (Set.mem_univ i) hne) hxj hxi
+  rw [chosenFiniteStepSymbol, dif_pos hex, hji, finiteStepSymbol, Finset.sum_eq_single i]
   · rw [Set.indicator_of_mem hxi]
-  · intro k hk hki
+  · intro k _ hki
     have hxk : x ∉ cell k := by
       intro hxk
       exact Set.disjoint_left.mp
@@ -298,6 +323,45 @@ theorem chosenFiniteStepSymbol_eq {n : ℕ}
     rw [Set.indicator_of_notMem hxk]
   · intro hi
     exact absurd (Finset.mem_univ i) hi
+
+/-- The choice-based real step symbol is measurable: it is the piecewise
+combination of a finite measurable step function on the cover and the identity
+off it. -/
+theorem measurable_chosenFiniteStepSymbol {n : ℕ}
+    (cell : Fin n → Set ℝ) (hcell : ∀ i, MeasurableSet (cell i))
+    (hdisj : Set.PairwiseDisjoint Set.univ cell) (rep : Fin n → ℝ) :
+    Measurable (chosenFiniteStepSymbol cell rep) := by
+  classical
+  have hstep : Measurable (fun x : ℝ => ∑ i, (cell i).indicator (fun _ => rep i) x) :=
+    Finset.measurable_sum _ fun i _ => measurable_const.indicator (hcell i)
+  have heq : chosenFiniteStepSymbol cell rep =
+      (⋃ i, cell i).piecewise
+        (fun x => ∑ i, (cell i).indicator (fun _ => rep i) x) (fun x => x) := by
+    funext x
+    by_cases hx : x ∈ ⋃ i, cell i
+    · rw [Set.piecewise_eq_of_mem _ _ _ hx]
+      obtain ⟨i, hxi⟩ := Set.mem_iUnion.mp hx
+      have hex : ∃ j, x ∈ cell j := ⟨i, hxi⟩
+      have hxj : x ∈ cell (Classical.choose hex) := Classical.choose_spec hex
+      have hji : Classical.choose hex = i := by
+        by_contra hne
+        exact Set.disjoint_left.mp
+          (hdisj (Set.mem_univ (Classical.choose hex)) (Set.mem_univ i) hne) hxj hxi
+      rw [chosenFiniteStepSymbol, dif_pos hex, hji, Finset.sum_eq_single i]
+      · rw [Set.indicator_of_mem hxi]
+      · intro k _ hki
+        have hxk : x ∉ cell k := fun hxk =>
+          Set.disjoint_left.mp
+            (hdisj (Set.mem_univ k) (Set.mem_univ i) hki) hxk hxi
+        rw [Set.indicator_of_notMem hxk]
+      · intro hi
+        exact absurd (Finset.mem_univ i) hi
+    · rw [Set.piecewise_eq_of_notMem _ _ _ hx]
+      have hnex : ¬ ∃ i, x ∈ cell i := fun ⟨i, hxi⟩ =>
+        hx (Set.mem_iUnion.mpr ⟨i, hxi⟩)
+      rw [chosenFiniteStepSymbol, dif_neg hnex]
+  rw [heq]
+  exact Measurable.piecewise (MeasurableSet.iUnion hcell) hstep measurable_id
 
 /-- The exact finite-step Borel identity required by the Sylvester file. -/
 theorem boundedSelfAdjointBorelCalculus_eq_finset_sum_indicator [Nontrivial H]
@@ -309,14 +373,7 @@ theorem boundedSelfAdjointBorelCalculus_eq_finset_sum_indicator [Nontrivial H]
     (hcover : realSpectrum A ⊆ ⋃ i, cell i) :
     boundedSelfAdjointBorelCalculus A hA
       (chosenFiniteStepSymbol cell rep)
-      (by
-        classical
-        apply Measurable.dite
-        · exact measurableSet_iUnion fun i => hcell i
-        · intro x hx
-          exact measurable_const
-        · intro x hx
-          exact measurable_id)
+      (measurable_chosenFiniteStepSymbol cell hcell hdisj rep)
       (by
         refine ⟨∑ i, |rep i|, Finset.sum_nonneg fun i _ => abs_nonneg _, fun x hx => ?_⟩
         have hcov := hcover hx
@@ -334,19 +391,21 @@ theorem boundedSelfAdjointBorelCalculus_eq_finset_sum_indicator [Nontrivial H]
     have hex : ∃ j, x ∈ cell j := ⟨i, hxi⟩
     rw [chosenFiniteStepSymbol, dif_pos hex]
     exact Finset.single_le_sum (fun j _ => abs_nonneg (rep j)) (Finset.mem_univ _)
-  unfold boundedSelfAdjointBorelCalculus
-  have hcongr : boundedSelfAdjointBorelCalculusC A hA
+  change boundedSelfAdjointBorelCalculusC A hA
       (spectrumRestrictedSymbol A (chosenFiniteStepSymbol cell rep))
-      _ _ =
-      boundedSelfAdjointBorelCalculusC A hA
-        (finiteStepSymbol cell rep)
-        (measurable_finiteStepSymbol cell hcell rep)
-        (bounded_finiteStepSymbol cell rep) := by
-    apply boundedSelfAdjointBorelCalculusC_congr_on_spectrum A hA
-    intro x hx
-    rw [spectrumRestrictedSymbol, Set.indicator_of_mem hx]
-    exact chosenFiniteStepSymbol_eq cell rep hdisj (hcover hx)
-  rw [hcongr, boundedSelfAdjointBorelCalculusC_finiteStep A hA cell hcell rep]
+      (measurable_spectrumRestrictedSymbol A hA (chosenFiniteStepSymbol cell rep)
+        (measurable_chosenFiniteStepSymbol cell hcell hdisj rep))
+      (bounded_spectrumRestrictedSymbol A (chosenFiniteStepSymbol cell rep) hbounded) = _
+  rw [boundedSelfAdjointBorelCalculusC_congr_on_spectrum A hA
+      (measurable_spectrumRestrictedSymbol A hA (chosenFiniteStepSymbol cell rep)
+        (measurable_chosenFiniteStepSymbol cell hcell hdisj rep))
+      (bounded_spectrumRestrictedSymbol A (chosenFiniteStepSymbol cell rep) hbounded)
+      (measurable_finiteStepSymbol cell hcell rep) (bounded_finiteStepSymbol cell rep)
+      (by
+        intro x hx
+        rw [spectrumRestrictedSymbol, Set.indicator_of_mem hx]
+        exact chosenFiniteStepSymbol_eq cell rep hdisj (hcover hx)),
+    boundedSelfAdjointBorelCalculusC_finiteStep A hA cell hcell rep]
 
 end
 end DavisKahanExt

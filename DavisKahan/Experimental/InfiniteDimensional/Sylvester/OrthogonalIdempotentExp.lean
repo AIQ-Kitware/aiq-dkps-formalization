@@ -3,7 +3,7 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.Experimental.MathAhead.Sylvester.FiniteStepCalculus
+import DavisKahan.Experimental.InfiniteDimensional.Sylvester.FiniteStepCalculus
 import Spectra.YosidaHille.Approximation.ExpBounded.Helpers
 
 /-!
@@ -46,13 +46,11 @@ theorem exp_smul_idempotent
     NormedSpace.exp (c • P) =
       (1 : H →L[ℂ] H) + (Complex.exp c - 1) • P := by
   rw [NormedSpace.exp_eq_tsum ℂ]
+  simp only [← one_div]
   have hseries : Summable fun n : ℕ =>
-      (1 / n.factorial : ℂ) • (c • P) ^ n :=
-    NormedSpace.summable_exp ℂ (c • P)
-  have htail : Summable fun n : ℕ =>
-      (1 / (n + 1).factorial : ℂ) • (c • P) ^ (n + 1) :=
-    hseries.comp_injective Nat.succ_injective
-  rw [← tsum_zero_add' htail]
+      (1 / n.factorial : ℂ) • (c • P) ^ n := by
+    simpa only [← one_div] using NormedSpace.expSeries_summable' (𝕂 := ℂ) (c • P)
+  rw [hseries.tsum_eq_zero_add]
   have hzero : (1 / Nat.factorial 0 : ℂ) • (c • P) ^ 0 = 1 := by simp
   rw [hzero]
   congr 1
@@ -64,13 +62,19 @@ theorem exp_smul_idempotent
           intro n
           rw [smul_idempotent_pow P hP c (n + 1) (Nat.succ_ne_zero n), smul_smul]
     _ = (∑' n : ℕ, (1 / (n + 1).factorial : ℂ) * c ^ (n + 1)) • P := by
-          rw [tsum_smul]
+          have hf : Summable fun n : ℕ => (1 / (n + 1).factorial : ℂ) * c ^ (n + 1) :=
+            ((NormedSpace.expSeries_div_summable c).comp_injective Nat.succ_injective).congr
+              (fun n => by simp only [Function.comp_apply, Nat.succ_eq_add_one]; rw [div_eq_mul_inv, one_div, mul_comm])
+          rw [hf.tsum_smul_const]
     _ = (Complex.exp c - 1) • P := by
           congr 1
-          rw [Complex.exp_eq_tsum_div]
+          have hexp : Complex.exp c = ∑' n : ℕ, c ^ n / n.factorial := by
+            rw [Complex.exp_eq_exp_ℂ]
+            exact congr_fun NormedSpace.exp_eq_tsum_div c
+          rw [hexp]
           have hcexp : Summable fun n : ℕ => c ^ n / n.factorial :=
-            Complex.summable_pow_div_factorial c
-          rw [← tsum_zero_add' (hcexp.comp_injective Nat.succ_injective)]
+            NormedSpace.expSeries_div_summable c
+          rw [hcexp.tsum_eq_zero_add]
           simp [div_eq_mul_inv, mul_comm, mul_left_comm]
 
 /-- Powers of a finite sum of pairwise orthogonal idempotents are taken
@@ -88,18 +92,16 @@ theorem finset_orthogonal_idempotents_pow
       by_cases hm0 : m = 0
       · subst m
         simp
-      · rw [pow_succ, ih hm0, Finset.sum_mul, Finset.mul_sum]
+      · rw [pow_succ, ih hm0, Finset.sum_mul]
+        simp only [Finset.mul_sum]
         calc
           ∑ i, ∑ j, (c i ^ m • P i) * (c j • P j)
               = ∑ i, c i ^ m • P i * (c i • P i) := by
                 apply Finset.sum_congr rfl
                 intro i hi
-                rw [Finset.sum_eq_single i]
-                · rfl
-                · intro j hj hji
-                  rw [smul_mul_smul, horth i j hji, smul_zero]
-                · intro hi'
-                  exact absurd (Finset.mem_univ i) hi'
+                rw [Finset.sum_eq_single_of_mem i (Finset.mem_univ i)]
+                · intro j _ hji
+                  rw [smul_mul_smul, horth i j hji.symm, smul_zero]
           _ = ∑ i, c i ^ (m + 1) • P i := by
                 apply Finset.sum_congr rfl
                 intro i hi
@@ -121,16 +123,17 @@ theorem exp_finset_orthogonal_idempotents
     intro i hi
     rw [smul_smul]
   rw [hscale, NormedSpace.exp_eq_tsum ℂ]
+  simp only [← one_div]
   have hsumexp : ∀ m : ℕ, m ≠ 0 →
       (∑ i, ((t : ℂ) * c i) • P i) ^ m =
         ∑ i, (((t : ℂ) * c i) ^ m) • P i :=
     finset_orthogonal_idempotents_pow P (fun i => (t : ℂ) * c i) hidem horth
   have hseries : Summable fun m : ℕ =>
       (1 / m.factorial : ℂ) •
-        (∑ i, ((t : ℂ) * c i) • P i) ^ m :=
-    NormedSpace.summable_exp ℂ _
-  have htail := hseries.comp_injective Nat.succ_injective
-  rw [← tsum_zero_add' htail]
+        (∑ i, ((t : ℂ) * c i) • P i) ^ m := by
+    simpa only [← one_div] using
+      NormedSpace.expSeries_summable' (𝕂 := ℂ) (∑ i, ((t : ℂ) * c i) • P i)
+  rw [hseries.tsum_eq_zero_add]
   have hzero : (1 / Nat.factorial 0 : ℂ) •
       (∑ i, ((t : ℂ) * c i) • P i) ^ 0 =
       ∑ i, P i := by
@@ -157,18 +160,35 @@ theorem exp_finset_orthogonal_idempotents
             (((t : ℂ) * c i) ^ (m + 1))) • P i) := by
           rw [Finset.sum_add_distrib]
           congr 1
-          rw [tsum_finsetSum]
+          have hsum_i : ∀ i : Fin n, Summable
+              (fun m : ℕ => ((1 / (m + 1).factorial : ℂ) *
+                (((t : ℂ) * c i) ^ (m + 1))) • P i) := by
+            intro i
+            refine Summable.smul_const ?_ (P i)
+            exact ((NormedSpace.expSeries_div_summable ((t : ℂ) * c i)).comp_injective
+              Nat.succ_injective).congr (fun m => by simp only [Function.comp_apply, Nat.succ_eq_add_one]; rw [div_eq_mul_inv, one_div, mul_comm])
+          rw [Summable.tsum_finsetSum (fun i _ => hsum_i i)]
     _ = ∑ i, Complex.exp ((t : ℂ) * c i) • P i := by
           apply Finset.sum_congr rfl
           intro i hi
-          rw [← one_smul ℂ (P i), ← add_smul]
-          congr 1
-          rw [Complex.exp_eq_tsum_div]
-          have hcexp : Summable fun m : ℕ =>
-              (((t : ℂ) * c i) ^ m) / m.factorial :=
-            Complex.summable_pow_div_factorial ((t : ℂ) * c i)
-          rw [← tsum_zero_add' (hcexp.comp_injective Nat.succ_injective)]
-          simp [div_eq_mul_inv, mul_comm, mul_left_comm]
+          have hf : Summable fun m : ℕ =>
+              (1 / (m + 1).factorial : ℂ) * (((t : ℂ) * c i) ^ (m + 1)) :=
+            ((NormedSpace.expSeries_div_summable ((t : ℂ) * c i)).comp_injective
+              Nat.succ_injective).congr (fun m => by simp only [Function.comp_apply, Nat.succ_eq_add_one]; rw [div_eq_mul_inv, one_div, mul_comm])
+          have hscalar : (1 : ℂ) +
+              ∑' m : ℕ, (1 / (m + 1).factorial : ℂ) * (((t : ℂ) * c i) ^ (m + 1)) =
+              Complex.exp ((t : ℂ) * c i) := by
+            have hexp : Complex.exp ((t : ℂ) * c i) =
+                ∑' m : ℕ, ((t : ℂ) * c i) ^ m / m.factorial := by
+              rw [Complex.exp_eq_exp_ℂ]
+              exact congr_fun NormedSpace.exp_eq_tsum_div ((t : ℂ) * c i)
+            rw [hexp]
+            have hcexp : Summable fun m : ℕ =>
+                (((t : ℂ) * c i) ^ m) / m.factorial :=
+              NormedSpace.expSeries_div_summable ((t : ℂ) * c i)
+            rw [hcexp.tsum_eq_zero_add]
+            simp [div_eq_mul_inv, mul_comm, mul_left_comm]
+          rw [hf.tsum_smul_const, ← hscalar, add_smul, one_smul]
 
 end
 end DavisKahanExt
