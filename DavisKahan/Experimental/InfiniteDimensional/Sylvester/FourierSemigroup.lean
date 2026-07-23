@@ -363,6 +363,38 @@ theorem exists_finiteSpectralStep
   -- active-ball spectrum choice), handed to the mathematics agent.
   sorry
 
+/-- The restriction to the full space has the original real spectrum.  Proved by
+conjugating the top-restriction through `Submodule.topContEquiv` and invoking
+spectral invariance of the induced endomorphism-algebra equivalence. -/
+theorem restrictedSpectrum_top_eq_realSpectrum
+    (T : H →L[ℂ] H) : restrictedSpectrum T ⊤ = realSpectrum T := by
+  have hInv :
+      ForMathlib.DavisKahan.Experimental.Foundation.InvariantFor T (⊤ : Submodule ℂ H) :=
+    fun x _ => Submodule.mem_top
+  have hbridge :=
+    ForMathlib.DavisKahan.Experimental.Foundation.restrictedSpectrum_eq_restrictionSpectrum
+      T ⊤ hInv
+  have hconj :
+      (Submodule.topContEquiv : (⊤ : Submodule ℂ H) ≃L[ℂ] H).conjContinuousAlgEquiv
+        (T.restrict hInv) = T := by
+    ext x
+    rw [ContinuousLinearEquiv.conjContinuousAlgEquiv_apply_apply]
+    show ((T.restrict hInv) ((Submodule.topContEquiv :
+      (⊤ : Submodule ℂ H) ≃L[ℂ] H).symm x) : H) = T x
+    rw [ContinuousLinearMap.coe_restrict_apply]
+    rfl
+  have hspec : spectrum ℂ (T.restrict hInv) = spectrum ℂ T := by
+    conv_rhs => rw [← hconj]
+    exact (AlgEquiv.spectrum_eq
+      ((Submodule.topContEquiv : (⊤ : Submodule ℂ H) ≃L[ℂ] H).conjContinuousAlgEquiv)
+      (T.restrict hInv)).symm
+  show ForMathlib.DavisKahan.Experimental.Foundation.restrictedSpectrum T ⊤ =
+    ForMathlib.DavisKahan.Experimental.Foundation.realSpectrum T
+  rw [hbridge]
+  ext r
+  simp only [ForMathlib.DavisKahan.Experimental.Foundation.realSpectrum,
+    Set.mem_setOf_eq, hspec]
+
 /-- Two finite steps whose representatives come from separated original
 spectra inherit exactly the same separation. -/
 theorem finiteSpectralStep_representatives_separated
@@ -374,10 +406,13 @@ theorem finiteSpectralStep_representatives_separated
     (SA : FiniteSpectralStep A hA) (SB : FiniteSpectralStep B hB)
     (i : Fin SA.n) (j : Fin SB.n) :
     d ≤ |SA.representative i - SB.representative j| := by
-  -- Open obligation: transport `SpectraSeparated`'s separation clause (stated on
-  -- `restrictedSpectrum _ ⊤`) to `realSpectrum` via
-  -- `restrictedSpectrum_top_eq_realSpectrum`, handed to the mathematics agent.
-  sorry
+  -- Transport `SpectraSeparated`'s clause on `restrictedSpectrum _ ⊤` to the
+  -- native `realSpectrum`, where the representatives live by construction.
+  have hai : SA.representative i ∈ restrictedSpectrum A ⊤ := by
+    rw [restrictedSpectrum_top_eq_realSpectrum]; exact SA.representative_mem i
+  have hbj : SB.representative j ∈ restrictedSpectrum B ⊤ := by
+    rw [restrictedSpectrum_top_eq_realSpectrum]; exact SB.representative_mem j
+  exact hsep.2.2 _ hai _ hbj
 
 end SpectralStepApproximation
 
