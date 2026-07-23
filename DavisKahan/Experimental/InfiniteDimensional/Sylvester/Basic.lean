@@ -110,11 +110,41 @@ theorem norm_sylvester_le_of_orderedSeparation
     (hsep : OrderedSpectraSeparated B ⊤ A ⊤ d)
     (hEq : sylvesterOperator A B X = C) :
     d * ‖X‖ ≤ ‖C‖ := by
-  -- Open obligation: the ordered constant-one estimate assembled from the
-  -- (open) `orderedSylvester_reconstruction`/`orderedSylvester_integrable`, the
-  -- proved `orderedSemigroup_integrand_bound`, and `∫_{Ici 0} exp(-d t) = 1/d`;
-  -- handed to the mathematics agent.  Only the integral-API assembly remains.
-  sorry
+  have hrep := orderedSylvester_reconstruction hA hB hd hsep hEq
+  have hgint : Integrable (Set.indicator (Set.Ici 0)
+      (fun t => ‖C‖ * Real.exp (-d * t))) := by
+    have hexp : IntegrableOn (fun t : ℝ => ‖C‖ * Real.exp (-d * t))
+        (Set.Ici 0) := by
+      rw [integrableOn_Ici_iff_integrableOn_Ioi]
+      exact (exp_neg_integrableOn_Ioi 0 hd).const_mul ‖C‖
+    exact hexp.integrable_indicator measurableSet_Ici
+  have hbound : ∀ t : ℝ, ‖Set.indicator (Set.Ici 0)
+      (fun t => semigroup (-A) t ∘L C ∘L semigroup B t) t‖ ≤
+      Set.indicator (Set.Ici 0) (fun t => ‖C‖ * Real.exp (-d * t)) t := by
+    intro t
+    by_cases ht : t ∈ Set.Ici 0
+    · rw [Set.indicator_of_mem ht, Set.indicator_of_mem ht, mul_comm]
+      exact orderedSemigroup_integrand_bound hA hB hd hsep C t ht
+    · simp [Set.indicator_of_notMem ht]
+  have hXle : ‖X‖ ≤ ∫ t, Set.indicator (Set.Ici 0)
+      (fun t => ‖C‖ * Real.exp (-d * t)) t := by
+    rw [hrep]
+    exact norm_integral_le_of_norm_le hgint (Filter.Eventually.of_forall hbound)
+  have hexp_val : (∫ t in Set.Ioi (0 : ℝ), Real.exp (-d * t)) = d⁻¹ := by
+    have h := integral_comp_mul_left_Ioi (fun x => Real.exp (-x)) 0 hd
+    simp only [mul_zero, integral_exp_neg_Ioi, neg_zero, Real.exp_zero,
+      smul_eq_mul, mul_one] at h
+    simp only [neg_mul]
+    exact h
+  have hval : (∫ t, Set.indicator (Set.Ici 0)
+      (fun t => ‖C‖ * Real.exp (-d * t)) t) = ‖C‖ / d := by
+    rw [integral_indicator measurableSet_Ici, integral_Ici_eq_integral_Ioi,
+      integral_const_mul, hexp_val, div_eq_mul_inv]
+  have hfin : ‖X‖ ≤ ‖C‖ / d := by
+    rw [← hval]
+    exact hXle
+  rw [mul_comm]
+  exact (le_div_iff₀ hd).mp hfin
 
 end OrderedComplex
 
@@ -229,11 +259,16 @@ theorem compact_mem_of_separatedSylvester_solution
     (hEq : sylvesterOperator A B X = C)
     (hC : IsCompactOperator C) :
     IsCompactOperator X := by
-  -- Open obligation: compactness is preserved by the reciprocal Fourier integral
-  -- (`isCompactOperator_integral` on the two-sided unitary orbit of the compact
-  -- `C`); handed to the mathematics agent.  Needs the compact-valued Bochner
-  -- integral and the two-sided `IsCompactOperator` composition lemma.
-  sorry
+  have hrep := separatedSylvester_reconstruction_complex hA hB hd hsep X C hEq
+  have hint := separatedSylvester_integrable_complex hA hB hd C
+  rw [hrep]
+  refine isCompactOperator_integral hint (Filter.Eventually.of_forall fun t => ?_)
+  have h1 : IsCompactOperator (⇑C ∘ ⇑(unitaryGroup B (-t))) :=
+    hC.comp_clm (unitaryGroup B (-t))
+  have h2 : IsCompactOperator
+      (⇑(unitaryGroup A t) ∘ (⇑C ∘ ⇑(unitaryGroup B (-t)))) :=
+    h1.continuous_comp (unitaryGroup A t).continuous
+  exact h2.smul (separatedSylvesterMultiplier d hd t)
 
 end Complex
 
