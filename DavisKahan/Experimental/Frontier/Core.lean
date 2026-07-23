@@ -6,6 +6,8 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 
 import DavisKahan.Interop.Spectra.HalmosTwoProjections
 import DavisKahan.Interop.Spectra.SpectralRestriction
+-- supplies `compressOperator`
+import DavisKahan.Sylvester.GenuineSpectrum
 import ForMathlib.Analysis.Normed.Operator.ApproximationNumber
 import Mathlib.MeasureTheory.Integral.CircleIntegral
 
@@ -64,19 +66,22 @@ def CrossedDefectsEquivalent
   Nonempty
     (halmosSourceDefect U V ≃ₗᵢ[ℂ] halmosTargetDefect U V)
 
-/-- Restriction of the Halmos cosine square to the reducing generic summand. -/
+/-- Restriction of the Halmos cosine square to the reducing generic summand,
+realized as the compression to the generic part.  The generic part reduces
+both projections, hence every word in them, so the compression is the honest
+restriction. -/
 noncomputable def genericHalmosCosineSq
     (U V : Submodule ℂ H) [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] :
-    halmosGenericPart U V →L[ℂ] halmosGenericPart U V := by
-  sorry
+    halmosGenericPart U V →L[ℂ] halmosGenericPart U V :=
+  DavisKahanExt.compressOperator (halmosGenericPart U V) (halmosCosineSq U V)
 
 /-- Restriction of the Halmos sine square to the reducing generic summand. -/
 noncomputable def genericHalmosSineSq
     (U V : Submodule ℂ H) [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] :
-    halmosGenericPart U V →L[ℂ] halmosGenericPart U V := by
-  sorry
+    halmosGenericPart U V →L[ℂ] halmosGenericPart U V :=
+  DavisKahanExt.compressOperator (halmosGenericPart U V) (halmosSineSq U V)
 
 /-- The restricted generic cosine and sine squares retain the Pythagorean
 identity. -/
@@ -84,7 +89,17 @@ theorem genericHalmosCosineSq_add_sineSq
     (U V : Submodule ℂ H) [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] :
     genericHalmosCosineSq U V + genericHalmosSineSq U V = 1 := by
-  sorry
+  ext x
+  have hsum : halmosCosineSq U V (x : H) + halmosSineSq U V (x : H) =
+      (x : H) := by
+    have h := congrArg
+      (fun T : H →L[ℂ] H => T (x : H)) (halmosCosineSq_add_sineSq U V)
+    simpa using h
+  simp only [ContinuousLinearMap.add_apply, ContinuousLinearMap.one_apply,
+    genericHalmosCosineSq, genericHalmosSineSq, DavisKahanExt.compressOperator,
+    ContinuousLinearMap.comp_apply, Submodule.subtypeL_apply]
+  simp only [Submodule.coe_add, Submodule.coe_orthogonalProjectionOnto_apply]
+  rw [← map_add, hsum, Submodule.starProjection_eq_self_iff.mpr x.2]
 
 end UnitaryGeometry
 
