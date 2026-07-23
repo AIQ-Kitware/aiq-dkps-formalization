@@ -1,0 +1,5 @@
+Overlay: pending-mathahead-rebased-53297a4-gpt56
+Base commit: 53297a486170
+Target repository: ~/code/aiq-dkps-formalization
+Scope: additive Experimental/MathAhead files and audit metadata only
+Excluded as already integrated: frontier scaffold and Sylvester semigroup pass
