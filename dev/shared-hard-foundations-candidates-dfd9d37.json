@@ -1,0 +1,75 @@
+{
+  "base_commit": "dfd9d37ebc86421eea50ee79e71e2420d507878d",
+  "campaign": "shared-hard-foundations",
+  "compile_status": "static-only",
+  "active_lane_exclusions": [
+    "DavisKahan/Experimental/MathAhead/HiddenFoundations/PolarIsometryFinal.lean",
+    "DavisKahan/Experimental/MathAhead/HiddenFoundations/Section3Nonacute.lean"
+  ],
+  "modules": [
+    {
+      "module": "DavisKahan.Experimental.Scratch.SharedFoundations.Ideal.TwoWayFactorization",
+      "campaigns": ["sin-theta", "double-angle", "operator-ideals", "section4"],
+      "promotion": "generic ideal helper"
+    },
+    {
+      "module": "DavisKahan.Experimental.Scratch.SharedFoundations.Ideal.OperatorAbsoluteValueComplex",
+      "campaigns": ["sin-theta", "operator-modulus", "operator-ideals"],
+      "promotion": "complex operatorAbsoluteValue leaf"
+    },
+    {
+      "module": "DavisKahan.Experimental.Scratch.SharedFoundations.Ideal.ReflectionTransport",
+      "campaigns": ["double-angle", "sin-two-theta", "operator-ideals"],
+      "promotion": "corrected directed mirror-angle statement",
+      "statement_audit": "current full-sine arbitrary-gauge equality has singular-value multiplicity mismatch"
+    },
+    {
+      "module": "DavisKahan.Experimental.Scratch.SharedFoundations.Residual.IsometricRangeProjection",
+      "campaigns": ["generalized-tangent", "section6", "section7", "section4"],
+      "promotion": "shared range-projection foundation"
+    },
+    {
+      "module": "DavisKahan.Experimental.Scratch.SharedFoundations.Residual.TrialResidual",
+      "campaigns": ["generalized-tangent", "ritz", "reflection-residual"],
+      "promotion": "trialResidual definition and cross-block factorization"
+    },
+    {
+      "module": "DavisKahan.Experimental.Scratch.SharedFoundations.Residual.IsometricRitzPair",
+      "campaigns": ["generalized-tangent", "ritz", "section6"],
+      "promotion": "Galerkin orthogonality foundation"
+    },
+    {
+      "module": "DavisKahan.Experimental.Scratch.SharedFoundations.Residual.ReflectionDefect",
+      "campaigns": ["double-angle", "section7", "residual"],
+      "promotion": "complex reflectionDefect_range_le_residual"
+    },
+    {
+      "module": "DavisKahan.Experimental.Scratch.SharedFoundations.Residual.ReflectionDefectIdeal",
+      "campaigns": ["double-angle", "section7", "operator-ideals"],
+      "promotion": "basic family factor-four ideal residual theorem"
+    },
+    {
+      "module": "DavisKahan.Experimental.Scratch.SharedFoundations.Sylvester.BoundedLeftInverse",
+      "campaigns": ["section5", "sylvester", "closed-operator"],
+      "promotion": "quantitative complemented-range interface"
+    },
+    {
+      "module": "DavisKahan.Experimental.Scratch.SharedFoundations.Sylvester.CompatibleNorm",
+      "campaigns": ["section5", "sylvester", "operator-ideals"],
+      "promotion": "corrected Theorem 5.1",
+      "statement_audit": "bounded below is insufficient for a bounded left inverse in arbitrary Banach spaces"
+    },
+    {
+      "module": "DavisKahan.Experimental.Scratch.SharedFoundations.Spectral.BoundedSelection",
+      "campaigns": ["sin-theta", "continuation", "riesz", "spectral-subspace"],
+      "promotion": "replace malformed generic spectralSubspace API",
+      "statement_audit": "self-adjointness and measurability must be explicit"
+    },
+    {
+      "module": "DavisKahan.Experimental.Scratch.SharedFoundations.Source.Section7Wrappers",
+      "campaigns": ["section7", "source-surface"],
+      "promotion": "exact sine wrapper and corrected tangent wrapper",
+      "statement_audit": "current tangent wrapper drops the double-cosine denominator"
+    }
+  ]
+}

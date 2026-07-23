@@ -1,0 +1,49 @@
+{
+  "base_commit": "dfd9d37ebc86421eea50ee79e71e2420d507878d",
+  "license": "Apache-2.0",
+  "entries": [
+    {
+      "local_module": "DavisKahan.Experimental.Scratch.SharedFoundations.Ideal.OperatorAbsoluteValueComplex",
+      "origin_repository": "adambornemann-glitch/Spectra",
+      "origin_commit": "8dbaaf6728d1342ae16acf79fd7eef7c59b37e63",
+      "origin_files": [
+        "Spectra/QuantumMechanics/Channels/PolarDecomp.lean",
+        "Spectra/QuantumMechanics/Channels/TraceClass/PartialIsometry.lean"
+      ],
+      "origin_declarations": [
+        "Spectra.QuantumMechanics.Channels.absOp",
+        "Spectra.QuantumMechanics.Channels.polarIsometry",
+        "Spectra.QuantumMechanics.Channels.polar_decomposition",
+        "Spectra.QuantumMechanics.Channels.polarIsometry_adjoint_comp",
+        "Spectra.QuantumMechanics.Channels.norm_polarIsometry_le_one"
+      ],
+      "original_author": "Adam Bornemann",
+      "adaptation": "new two-way contraction proof over DavisKahan ideal abstractions",
+      "future_destination": "TauCeti operator ideals and bounded polar decomposition"
+    },
+    {
+      "local_module": "DavisKahan.Experimental.Scratch.SharedFoundations.Spectral.BoundedSelection",
+      "origin_repository": "aiq-dkps-formalization",
+      "origin_commit": "dfd9d37ebc86421eea50ee79e71e2420d507878d",
+      "origin_files": [
+        "DavisKahan/Experimental/InfiniteDimensional/Core/SpectralProjection.lean",
+        "DavisKahan/Experimental/InfiniteDimensional/SinTheta/ContinuationSelectedReduction.lean"
+      ],
+      "adaptation": "packaging of existing genuine PVM and reduction results",
+      "future_destination": "possible TauCeti bounded spectral-selection API"
+    },
+    {
+      "local_module": "DavisKahan.Experimental.Scratch.SharedFoundations.Residual.ReflectionDefect",
+      "origin_repository": "aiq-dkps-formalization",
+      "origin_commit": "dfd9d37ebc86421eea50ee79e71e2420d507878d",
+      "origin_files": [
+        "DavisKahan/Experimental/InfiniteDimensional/DoubleAngleGenuine.lean"
+      ],
+      "origin_declarations": [
+        "ForMathlib.DavisKahanExt.norm_reflectionDefect_le_two_mul_norm_cross"
+      ],
+      "adaptation": "new residual factorization through an isometric range projection",
+      "future_destination": "DavisKahan shared residual foundation"
+    }
+  ]
+}
