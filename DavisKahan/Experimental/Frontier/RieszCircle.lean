@@ -7,6 +7,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 import DavisKahan.Experimental.Frontier.Core
 import DavisKahan.Experimental.InfiniteDimensional.Core.SpectralProjection
 import Mathlib.MeasureTheory.Integral.CircleIntegral
+import Mathlib.Analysis.Complex.CauchyIntegral
 
 /-!
 # Circle Riesz projections for the Section 8 continuation argument
@@ -61,7 +62,30 @@ theorem continuous_circleResolventIntegrand
     (B : Set ℝ) (center radius : ℝ)
     (hsep : CircleSeparatesRealSpectrum A hA B center radius) :
     Continuous (circleResolventIntegrand A center radius) := by
-  sorry
+  have hr : (0 : ℝ) ≤ radius := hsep.radius_pos.le
+  have hderiv : Continuous fun θ : ℝ => deriv (circleMap (center : ℂ) radius) θ := by
+    simp only [deriv_circleMap]
+    exact (continuous_circleMap 0 radius).mul continuous_const
+  have haff : Continuous fun θ : ℝ =>
+      circleMap (center : ℂ) radius θ • (1 : H →L[ℂ] H) - A :=
+    ((continuous_circleMap _ _).smul continuous_const).sub continuous_const
+  have hinv : Continuous fun θ : ℝ =>
+      Ring.inverse (circleMap (center : ℂ) radius θ • (1 : H →L[ℂ] H) - A) := by
+    rw [continuous_iff_continuousAt]
+    intro θ
+    have hz : circleMap (center : ℂ) radius θ ∉ spectrum ℂ A :=
+      hsep.contour_resolvent _ (by
+        simpa [mem_sphere_iff_norm] using circleMap_mem_sphere (center : ℂ) hr θ)
+    have hu : IsUnit (circleMap (center : ℂ) radius θ • (1 : H →L[ℂ] H) - A) := by
+      have h := spectrum.notMem_iff.mp hz
+      rwa [Algebra.algebraMap_eq_smul_one] at h
+    have hcont : ContinuousAt Ring.inverse
+        (circleMap (center : ℂ) radius θ • (1 : H →L[ℂ] H) - A) := by
+      have h := NormedRing.inverse_continuousAt hu.unit
+      rwa [IsUnit.unit_spec] at h
+    exact hcont.comp (f := fun θ' : ℝ =>
+      circleMap (center : ℂ) radius θ' • (1 : H →L[ℂ] H) - A) haff.continuousAt
+  exact hderiv.smul hinv
 
 /-- Cauchy's formula identifies the scalar circle integral with the indicator
 of being inside the circle on the real spectrum. -/
@@ -71,7 +95,29 @@ theorem scalar_circleIntegral_resolvent_indicator
     (circleIntegral (fun z : ℂ => (z - x)⁻¹) center radius) /
         (2 * Real.pi * Complex.I) =
       if |x - center| < radius then 1 else 0 := by
-  sorry
+  split_ifs with hin
+  · have hmem : (x : ℂ) ∈ Metric.ball (center : ℂ) radius := by
+      rw [Metric.mem_ball, dist_eq_norm, ← Complex.ofReal_sub, Complex.norm_real,
+        Real.norm_eq_abs]
+      exact hin
+    rw [circleIntegral.integral_sub_inv_of_mem_ball hmem]
+    exact div_self Complex.two_pi_I_ne_zero
+  · have hout : (x : ℂ) ∉ Metric.closedBall (center : ℂ) radius := by
+      rw [Metric.mem_closedBall, dist_eq_norm, ← Complex.ofReal_sub, Complex.norm_real,
+        Real.norm_eq_abs]
+      exact not_le.mpr (lt_of_le_of_ne (not_lt.mp hin) (Ne.symm hboundary))
+    have hdiff : DiffContOnCl ℂ (fun z : ℂ => (z - (x : ℂ))⁻¹)
+        (Metric.ball (center : ℂ) radius) := by
+      apply DifferentiableOn.diffContOnCl
+      rw [closure_ball _ hr.ne']
+      intro z hz
+      have hzx : z - (x : ℂ) ≠ 0 := by
+        intro h0
+        exact hout (sub_eq_zero.mp h0 ▸ hz)
+      have hd : DifferentiableAt ℂ (fun w : ℂ => w - (x : ℂ)) z :=
+        differentiableAt_id.sub_const _
+      exact (hd.inv hzx).differentiableWithinAt
+    rw [DiffContOnCl.circleIntegral_eq_zero hr.le hdiff, zero_div]
 
 /-- The circle Riesz projection equals the genuine measurable spectral
 projection selected by the inside of the circle. -/
