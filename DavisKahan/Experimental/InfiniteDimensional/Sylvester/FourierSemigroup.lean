@@ -504,10 +504,34 @@ theorem tendsto_unitary_orbit
     (hC : Tendsto C atTop (nhds C0)) (t : ℝ) :
     Tendsto (fun n => unitaryGroup (A n) t ∘L C n ∘L unitaryGroup (B n) (-t))
       atTop (nhds (unitaryGroup A0 t ∘L C0 ∘L unitaryGroup B0 (-t))) := by
-  -- Open obligation: norm continuity of the bounded exponential in its
-  -- generator (`tendsto_expBounded_of_tendsto`), handed to the mathematics
-  -- agent; the composition is then continuous.
-  sorry
+  -- `unitaryGroup A t = exp ((t·i)·A)` is continuous in the generator `A`.
+  have hUAn : Tendsto (fun n => unitaryGroup (A n) t)
+      atTop (nhds (unitaryGroup A0 t)) := by
+    have hgen : Tendsto (fun n => ((t : ℂ) • (Complex.I • A n)))
+        atTop (nhds ((t : ℂ) • (Complex.I • A0))) :=
+      (((continuous_const_smul (t : ℂ)).comp
+        (continuous_const_smul Complex.I)).tendsto A0).comp hA
+    simp only [unitaryGroup, expBounded_eq_exp]
+    exact (NormedSpace.exp_continuous.tendsto _).comp hgen
+  have hUBn : Tendsto (fun n => unitaryGroup (B n) (-t))
+      atTop (nhds (unitaryGroup B0 (-t))) := by
+    have hgen : Tendsto (fun n => (((-t : ℝ) : ℂ) • (Complex.I • B n)))
+        atTop (nhds (((-t : ℝ) : ℂ) • (Complex.I • B0))) :=
+      (((continuous_const_smul ((-t : ℝ) : ℂ)).comp
+        (continuous_const_smul Complex.I)).tendsto B0).comp hB
+    simp only [unitaryGroup, expBounded_eq_exp]
+    exact (NormedSpace.exp_continuous.tendsto _).comp hgen
+  -- Joint continuity of the two-sided composition in all three arguments.
+  have hΦ : Continuous (fun p : (F →L[ℂ] F) × (E →L[ℂ] F) × (E →L[ℂ] E) =>
+      p.1 ∘L p.2.1 ∘L p.2.2) :=
+    continuous_fst.clm_comp
+      ((continuous_fst.comp continuous_snd).clm_comp
+        (continuous_snd.comp continuous_snd))
+  have htriple :
+      Tendsto (fun n => (unitaryGroup (A n) t, C n, unitaryGroup (B n) (-t)))
+        atTop (nhds (unitaryGroup A0 t, C0, unitaryGroup B0 (-t))) :=
+    hUAn.prodMk_nhds (hC.prodMk_nhds hUBn)
+  exact (hΦ.tendsto _).comp htriple
 
 /-- Exact separated-spectrum reconstruction on complex Hilbert spaces. -/
 theorem separatedSylvester_reconstruction_complex
@@ -534,11 +558,25 @@ theorem separatedSylvester_integrable_complex
     {d : ℝ} (hd : 0 < d) (C : E →L[ℂ] F) :
     Integrable fun t : ℝ => separatedSylvesterMultiplier d hd t •
       (unitaryGroup A t ∘L C ∘L unitaryGroup B (-t)) := by
-  -- Open obligation: strong measurability of the two-sided unitary orbit
-  -- (`continuous_unitary_orbit`, `measurable_separatedSylvesterMultiplier`),
-  -- handed to the mathematics agent.  The pointwise majorant is
-  -- `‖μ_d(t)‖·‖C‖` via the (proved) `norm_unitary_left_right`.
-  sorry
+  have hcontA : Continuous (unitaryGroup A) :=
+    continuous_iff_continuousAt.mpr fun t => (hasDerivAt_unitaryGroup A t).continuousAt
+  have hcontB : Continuous (unitaryGroup B) :=
+    continuous_iff_continuousAt.mpr fun t => (hasDerivAt_unitaryGroup B t).continuousAt
+  have hUBneg : Continuous (fun t : ℝ => unitaryGroup B (-t)) :=
+    hcontB.comp continuous_neg
+  have horbit : Continuous
+      (fun t : ℝ => unitaryGroup A t ∘L C ∘L unitaryGroup B (-t)) :=
+    hcontA.clm_comp (continuous_const.clm_comp hUBneg)
+  have hμ : AEStronglyMeasurable (separatedSylvesterMultiplier d hd) volume :=
+    (integrable_separatedSylvesterMultiplier d hd).aestronglyMeasurable
+  have hmajor : Integrable (fun t : ℝ => ‖separatedSylvesterMultiplier d hd t‖ * ‖C‖) :=
+    (integrable_separatedSylvesterMultiplier d hd).norm.mul_const ‖C‖
+  -- Dominate the operator-valued integrand by the integrable scalar majorant
+  -- `‖μ_d(t)‖ · ‖C‖`; the orbit norm is exactly `‖C‖` by two-sided unitarity.
+  refine hmajor.mono' (hμ.smul horbit.aestronglyMeasurable) ?_
+  filter_upwards with t
+  refine le_of_eq ?_
+  rw [norm_smul, norm_unitary_left_right A hA B hB t C]
 
 
 /-- The reciprocal integral is a right inverse of the Sylvester operator.
