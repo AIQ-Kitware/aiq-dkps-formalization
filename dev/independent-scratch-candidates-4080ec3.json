@@ -1,0 +1,42 @@
+{
+  "base_commit": "4080ec31786f",
+  "active_agent_exclusions": [
+    "DavisKahan/Experimental/InfiniteDimensional/SinTheta/General.lean",
+    "DavisKahan/Experimental/InfiniteDimensional/Continuation*",
+    "DavisKahan/Experimental/Frontier/RieszCircle.lean",
+    "DavisKahan/Experimental/MathAhead/HiddenFoundations/PolarIsometryFinal.lean",
+    "DavisKahan/Experimental/MathAhead/HiddenFoundations/Section3Nonacute.lean"
+  ],
+  "lanes": [
+    {
+      "id": "rectangular-hilbert-schmidt-real",
+      "aggregate": "DavisKahan.Experimental.Scratch.RectangularHilbertSchmidt.All",
+      "promotion_targets": [
+        "ForMathlib.DavisKahan.Experimental.ExactSinTheta.RectangularSymmetricIdealFamily.hilbertSchmidt",
+        "ForMathlib.DavisKahanExt.SymmetricNormIdeal.hilbertSchmidt"
+      ],
+      "candidate_declarations": [
+        "ForMathlib.DavisKahan.Experimental.ExactSinTheta.Scratch.RectangularHilbertSchmidt.realPartOperator",
+        "ForMathlib.DavisKahan.Experimental.ExactSinTheta.Scratch.RectangularHilbertSchmidt.complexify_realPartOperator_eq",
+        "ForMathlib.DavisKahan.Experimental.ExactSinTheta.Scratch.RectangularHilbertSchmidt.paperHilbertSchmidt_complete_real",
+        "ForMathlib.DavisKahan.Experimental.ExactSinTheta.Scratch.RectangularHilbertSchmidt.hilbertSchmidtReal",
+        "ForMathlib.DavisKahan.Experimental.ExactSinTheta.HiddenFoundations.hilbertSchmidtComplex"
+      ]
+    },
+    {
+      "id": "free-beam-smooth-green-core",
+      "aggregate": "DavisKahan.Experimental.Scratch.FreeBeam.All",
+      "promotion_targets": [
+        "FreeBeam Sobolev trace foundation green_identity field",
+        "FreeBeam positivity and semiboundedness lemmas",
+        "FreeBeam adjoint-domain campaign boundary calculations"
+      ],
+      "candidate_declarations": [
+        "ForMathlib.DavisKahan.Experimental.Scratch.FreeBeam.FourthOrderData.integral_green_formula",
+        "ForMathlib.DavisKahan.Experimental.Scratch.FreeBeam.FourthOrderData.integral_free_green_symmetry",
+        "ForMathlib.DavisKahan.Experimental.Scratch.FreeBeam.FourthOrderData.integral_free_energy",
+        "ForMathlib.DavisKahan.Experimental.Scratch.FreeBeam.FourthOrderData.integral_free_energy_nonneg"
+      ]
+    }
+  ]
+}
