@@ -4,7 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
 import DavisKahan.Experimental.InfiniteDimensional.Core.OperatorAngle
-import DavisKahan.OperatorIdeal.UnitarilyInvariant.RectangularFamily
+import DavisKahan.Experimental.InfiniteDimensional.Ideals.Rectangular
+import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
 
 /-!
 # Symmetric norm ideals
@@ -99,6 +100,7 @@ structure SymmetricNormIdeal where
     mem A → gauge (U ∘L A ∘L Uinv) = gauge A
   ideal_bound : ∀ (L R : E →L[𝕜] E) {A}, mem A →
     gauge (L ∘L A ∘L R) ≤ ‖L‖ * gauge A * ‖R‖
+  opNorm_le_gauge : ∀ {A}, mem A → ‖A‖ ≤ gauge A
   gauge_complete : ∀ u : ℕ → (E →L[𝕜] E),
     (∀ n, mem (u n)) →
     (∀ ε : ℝ, 0 < ε → ∃ N, ∀ m n, N ≤ m → N ≤ n →
@@ -185,52 +187,37 @@ noncomputable def ofRectangular
           (N.gauge_nonneg (N.comp_mem U Uinv hA)))
     exact le_antisymm hforward hbackward
   ideal_bound := fun L R => N.gauge_comp_le L R
+  opNorm_le_gauge := N.opNorm_le_gauge
   gauge_complete := N.gauge_complete
 
 /-- The operator norm ideal. -/
 noncomputable def operatorNorm : SymmetricNormIdeal (𝕜 := 𝕜) (E := E) :=
   ofRectangular RectangularSymmetricIdealFamily.operatorNorm
 
-/-!
-The compact, Schatten, trace-class, Hilbert--Schmidt and Ky Fan ideals below are
-open obligations.  `ofRectangular` (above) reduces each to the corresponding
-*rectangular* symmetric-ideal-family instance, but only
-`RectangularSymmetricIdealFamily.operatorNorm` is currently constructed; the
-compact and singular-value families are not built yet.  Once the rectangular
-instances exist, each body becomes `ofRectangular <rectangular instance>` with
-no further work.  Kept as declarations so the abstract ideal theorems in this
-file and its dependents elaborate against them.
--/
+/-! Concrete square ideals obtained from the rectangular families. -/
 
-/-- Compact-operator ideal equipped with the operator norm.  Open obligation:
-awaits the rectangular compact family. -/
+/-- Compact operators with the ordinary operator norm. -/
 noncomputable def compactOperator :
     SymmetricNormIdeal (𝕜 := 𝕜) (E := E) :=
-  sorry
+  ofRectangular RectangularSymmetricIdealFamily.compactOperatorNorm
 
-/-- Schatten `p` ideal.  Open obligation: awaits the rectangular Schatten
-family. -/
-noncomputable def schatten (_p : ℝ) (_hp : 1 ≤ _p) :
+/-- Schatten `p` ideal. -/
+noncomputable def schatten (p : ℝ) (hp : 1 ≤ p) :
     SymmetricNormIdeal (𝕜 := 𝕜) (E := E) :=
-  sorry
+  ofRectangular (RectangularSymmetricIdealFamily.schatten p hp)
 
-/-- Trace-class ideal.  Open obligation: awaits the rectangular trace-class
-family. -/
+/-- Trace-class ideal. -/
 noncomputable def traceClass : SymmetricNormIdeal (𝕜 := 𝕜) (E := E) :=
-  sorry
+  ofRectangular RectangularSymmetricIdealFamily.traceClass
 
-/-- Hilbert--Schmidt ideal.  Open obligation: awaits the rectangular
-Hilbert--Schmidt family. -/
+/-- Hilbert--Schmidt ideal. -/
 noncomputable def hilbertSchmidt : SymmetricNormIdeal (𝕜 := 𝕜) (E := E) :=
-  sorry
+  ofRectangular RectangularSymmetricIdealFamily.hilbertSchmidt
 
-/-- Ky Fan `k` ideal norm for positive `k`.  The positivity premise is
-mathematically necessary: the `k = 0` gauge vanishes on every operator and
-therefore cannot satisfy `gauge_eq_zero`.  Open obligation: awaits the
-rectangular Ky Fan family. -/
-noncomputable def kyFan (_k : ℕ) (_hk : 0 < _k) :
+/-- Ky Fan `k` gauge for positive `k`. -/
+noncomputable def kyFan (k : ℕ) (hk : 0 < k) :
     SymmetricNormIdeal (𝕜 := 𝕜) (E := E) :=
-  sorry
+  ofRectangular (RectangularSymmetricIdealFamily.kyFan k hk)
 
 /-- Unitary invariance of a symmetric ideal norm.
 

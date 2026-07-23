@@ -156,89 +156,6 @@ noncomputable def graphProjectionFormula
     Ring.inverse (1 + star (X * projection U) * (X * projection U)) *
     star (projection U + X * projection U)
 
-/-- An acute pair `(U, V)` admits a bounded angular operator over `U` whose
-graph range is `V`.  Open obligation: only the quarter-acute contractive
-version is constructed so far
-(`existsUnique_contractiveAngularOperator_of_isQuarterAcute`); the full acute
-case is the bounded-Riccati existence step. -/
-theorem acute_iff_exists_bounded_angularOperator (U V : Submodule 𝕜 E)
-    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
-    IsAcute U V ↔
-      ∃ X : E →L[𝕜] E, IsAngularOperator U X ∧
-        V = LinearMap.range (projection U + X ∘L projection U).toLinearMap :=
-  sorry
-
-/-- Every acute subspace is the graph of a unique bounded angular operator.
-
-Proof strategy:
-
-* regard `P_U|_V : V -> U` as a bounded map between Banach spaces;
-* prove it is bijective from the acute/equal-defect hypotheses;
-* invoke the bounded inverse theorem;
-* set `X u = P_{Uᗮ} ((P_U|_V)⁻¹ u)` and extend it by zero on `Uᗮ`;
-* prove the graph equality by decomposing each `v ∈ V` into its `U` and
-  `Uᗮ` components;
-* prove uniqueness by applying `P_U` and `P_{Uᗮ}` to an arbitrary graph
-  representation.
-
-The finite-dimensional theorem should later be a specialization of this
-result, not an independent basis calculation. 
-
-Lean proof route for a weaker agent:
-
-1. Obtain an angular operator from `acute_iff_exists_bounded_angularOperator`.
-2. Show its range description agrees with `graphSubspace` by unfolding the latter.
-3. For uniqueness, apply `P_U` and `P_{Uᗮ}` to equal graph vectors and use injectivity of the graph parametrization.
-
-
-Ext-agent signature audit (GPT 5.6 High): Correct. Acuteness supplies both injectivity
-and surjectivity of the coordinate projection and therefore uniqueness of the bounded
-graph map.
-
-Preferred dependency route: Build on the acute graph representation and the bounded
-inverse theorem, then use functional calculus for `I + X*X` to obtain projection and
-angle formulas.
--/
-theorem existsUnique_angularOperator
-    (U V : Submodule 𝕜 E) [U.HasOrthogonalProjection]
-    [V.HasOrthogonalProjection] (hacute : IsAcute U V) :
-    ∃! X : E →L[𝕜] E,
-      IsAngularOperator U X ∧ graphSubspace U X = V := by
-  obtain ⟨X, hXang, hXrange⟩ :=
-    (acute_iff_exists_bounded_angularOperator U V).mp hacute
-  have hidem : ∀ x, projection U (projection U x) = projection U x := fun x =>
-    Submodule.starProjection_eq_self_iff.mpr (U.starProjection_apply_mem x)
-  refine ⟨X, ⟨hXang, ?_⟩, ?_⟩
-  · rw [graphSubspace_eq_range U hXang]
-    exact hXrange.symm
-  · rintro Y ⟨hYang, hYgraph⟩
-    have hPX : ∀ y, projection U (X y) = 0 := fun y => by
-      simpa using ContinuousLinearMap.ext_iff.mp hXang.2 y
-    have hPY : ∀ y, projection U (Y y) = 0 := fun y => by
-      simpa using ContinuousLinearMap.ext_iff.mp hYang.2 y
-    have hranges :
-        LinearMap.range (projection U + Y ∘L projection U).toLinearMap =
-          LinearMap.range (projection U + X ∘L projection U).toLinearMap := by
-      rw [← graphSubspace_eq_range U hYang, hYgraph, hXrange]
-    have key : ∀ x, Y (projection U x) = X (projection U x) := by
-      intro x
-      have hmem : projection U x + Y (projection U x) ∈
-          LinearMap.range (projection U + X ∘L projection U).toLinearMap := by
-        rw [← hranges]
-        exact ⟨x, rfl⟩
-      obtain ⟨w, hw⟩ := hmem
-      have hw' : projection U w + X (projection U w) =
-          projection U x + Y (projection U x) := hw
-      have happ := congrArg (fun z => projection U z) hw'
-      simp only [map_add, hidem, hPX, hPY, add_zero] at happ
-      rw [happ] at hw'
-      exact (add_left_cancel hw').symm
-    ext x
-    calc Y x = Y (projection U x) := by
-          rw [← ContinuousLinearMap.comp_apply, hYang.1]
-      _ = X (projection U x) := key x
-      _ = X x := by rw [← ContinuousLinearMap.comp_apply, hXang.1]
-
 /-- Projection onto a graph subspace in terms of the angular operator.
 
 The proof avoids functional-calculus square roots entirely: with
@@ -647,6 +564,239 @@ theorem subspaceGap_graphSubspace
     (X : E →L[𝕜] E) (hX : IsAngularOperator U X) :
     subspaceGap U (graphSubspace U X) = ‖X‖ / Real.sqrt (1 + ‖X‖ ^ 2) :=
   norm_projection_sub_projection_graphSubspace U X hX
+
+
+/-- The coordinate projection from an acute subspace onto the base is
+injective.  The estimate is the elementary gap argument
+`norm v <= norm(P_U-P_V) * norm v`. -/
+private theorem acute_coordinate_injective
+    (U V : Submodule 𝕜 E) [U.HasOrthogonalProjection]
+    [V.HasOrthogonalProjection] (hacute : IsAcute U V) :
+    ∀ v, v ∈ V → projection U v = 0 → v = 0 := by
+  intro v hv hPv
+  have hQv : projection V v = v :=
+    Submodule.starProjection_eq_self_iff.mpr hv
+  have hgap : ‖projection U - projection V‖ < 1 := hacute
+  have hpoint : ‖v‖ ≤ ‖projection U - projection V‖ * ‖v‖ := by
+    have heq : (projection U - projection V) v = -v := by
+      rw [sub_apply, hPv, hQv, zero_sub]
+    rw [← norm_neg v, ← heq]
+    exact ContinuousLinearMap.le_opNorm _ _
+  by_contra hv0
+  have hnv : 0 < ‖v‖ := norm_pos_iff.mpr hv0
+  nlinarith
+
+/-- Construct the angular graph operator from an acute pair by inverting the
+near-identity compression `P_U P_V P_U + P_{U^perp}`. -/
+private noncomputable def acuteAngularOperator
+    (U V : Submodule 𝕜 E) [U.HasOrthogonalProjection]
+    [V.HasOrthogonalProjection] (hacute : IsAcute U V) : E →L[𝕜] E := by
+  let P : E →L[𝕜] E := projection U
+  let Q : E →L[𝕜] E := projection V
+  let K : E →L[𝕜] E := P * (1 - Q) * P
+  have hPP : P * P = P := (U.isIdempotentElem_starProjection).eq
+  have hKrewrite : K = P * (P - Q) * P := by
+    dsimp [K]
+    module
+  have hPnorm : ‖P‖ ≤ 1 := U.starProjection_norm_le
+  have hK : ‖K‖ < 1 := by
+    rw [hKrewrite]
+    calc
+      ‖P * (P - Q) * P‖ ≤ ‖P‖ * ‖P - Q‖ * ‖P‖ :=
+        ContinuousLinearMap.opNorm_comp_comp_le _ _ _
+      _ ≤ 1 * ‖P - Q‖ * 1 := by gcongr
+      _ = ‖P - Q‖ := by ring
+      _ < 1 := hacute
+  let R : E →L[𝕜] E := ↑(Units.oneSub K hK)⁻¹
+  exact (1 - P) * Q * P * R
+
+/-- Algebraic properties of the acute angular operator. -/
+private theorem acuteAngularOperator_spec
+    (U V : Submodule 𝕜 E) [U.HasOrthogonalProjection]
+    [V.HasOrthogonalProjection] (hacute : IsAcute U V) :
+    IsAngularOperator U (acuteAngularOperator U V hacute) ∧
+      V = LinearMap.range
+        (projection U + acuteAngularOperator U V hacute ∘L projection U).toLinearMap := by
+  let P : E →L[𝕜] E := projection U
+  let Q : E →L[𝕜] E := projection V
+  let K : E →L[𝕜] E := P * (1 - Q) * P
+  have hPP : P * P = P := (U.isIdempotentElem_starProjection).eq
+  have hQQ : Q * Q = Q := (V.isIdempotentElem_starProjection).eq
+  have hKrewrite : K = P * (P - Q) * P := by
+    dsimp [K]
+    module
+  have hPnorm : ‖P‖ ≤ 1 := U.starProjection_norm_le
+  have hK : ‖K‖ < 1 := by
+    rw [hKrewrite]
+    calc
+      ‖P * (P - Q) * P‖ ≤ ‖P‖ * ‖P - Q‖ * ‖P‖ :=
+        ContinuousLinearMap.opNorm_comp_comp_le _ _ _
+      _ ≤ 1 * ‖P - Q‖ * 1 := by gcongr
+      _ = ‖P - Q‖ := by ring
+      _ < 1 := hacute
+  let T : E →L[𝕜] E := 1 - K
+  let R : E →L[𝕜] E := ↑(Units.oneSub K hK)⁻¹
+  let X : E →L[𝕜] E := (1 - P) * Q * P * R
+  have hTR : T * R = 1 := by
+    exact (Units.oneSub K hK).val_inv
+  have hRT : R * T = 1 := by
+    exact (Units.oneSub K hK).inv_val
+  have hKP : K * P = K := by
+    dsimp [K]
+    rw [mul_assoc, hPP]
+  have hPK : P * K = K := by
+    dsimp [K]
+    rw [← mul_assoc, hPP]
+  have hTP : T * P = P * T := by
+    dsimp [T]
+    rw [sub_mul, mul_sub, one_mul, mul_one, hKP, hPK]
+  have hRP : R * P = P * R := by
+    calc
+      R * P = R * P * (T * R) := by rw [hTR, mul_one]
+      _ = R * (P * T) * R := by noncomm_ring
+      _ = R * (T * P) * R := by rw [hTP]
+      _ = (R * T) * P * R := by noncomm_ring
+      _ = P * R := by rw [hRT, one_mul]
+  have hPX : P * X = 0 := by
+    dsimp [X]
+    module
+  have hXP : X * P = X := by
+    dsimp [X]
+    rw [mul_assoc, hRP, ← mul_assoc, hPP]
+  have hangular : IsAngularOperator U X := ⟨hXP, hPX⟩
+  have hTblock : T = P * Q * P + (1 - P) := by
+    dsimp [T, K]
+    module
+  have hRmaps : P * R = R * P := hRP.symm
+  have hgraph_in_V :
+      LinearMap.range (P + X * P).toLinearMap ≤ V := by
+    rintro z ⟨x, rfl⟩
+    let y : E := R (P x)
+    have hyU : P y = y := by
+      change (P * R) (P x) = R (P x)
+      rw [hRmaps, ContinuousLinearMap.comp_apply,
+        ContinuousLinearMap.comp_apply]
+      simpa only [hPP, ContinuousLinearMap.comp_apply]
+    have hTy : T y = P x := by
+      change (T * R) (P x) = P x
+      rw [hTR]
+      rfl
+    have hPQP : P (Q (P y)) = P x := by
+      have hb := congrArg (fun z => z) hTy
+      rw [hTblock] at hb
+      simpa [hyU] using hb
+    have hgraph_eq : (P + X * P) x = Q (P y) := by
+      apply (show P ((P + X * P) x) = P (Q (P y)) ∧
+          (1 - P) ((P + X * P) x) = (1 - P) (Q (P y)) by
+        constructor
+        · simp [hPX, hPP, hPQP]
+        · dsimp [X]
+          rw [hRP]
+          simp [hPP, y]) |>.elim
+      intro hbase hperp
+      have hdecomp (w : E) : w = P w + (1 - P) w := by
+        simp
+      rw [hdecomp ((P + X * P) x), hdecomp (Q (P y)), hbase, hperp]
+    rw [hgraph_eq]
+    exact V.starProjection_apply_mem (P y)
+  have hV_in_graph : V ≤ LinearMap.range (P + X * P).toLinearMap := by
+    intro v hv
+    let y : E := R (P v)
+    let w : E := Q (P y)
+    have hyU : P y = y := by
+      change (P * R) (P v) = R (P v)
+      rw [hRmaps]
+      simpa only [ContinuousLinearMap.comp_apply, hPP]
+    have hTy : T y = P v := by
+      change (T * R) (P v) = P v
+      rw [hTR]
+      rfl
+    have hPw : P w = P v := by
+      rw [hTblock] at hTy
+      simpa [w, hyU] using hTy
+    have hwV : w ∈ V := V.starProjection_apply_mem (P y)
+    have hwv : w = v := by
+      apply sub_eq_zero.mp
+      apply acute_coordinate_injective U V hacute (w - v)
+      · exact V.sub_mem hwV hv
+      · rw [map_sub, hPw, sub_self]
+    refine ⟨v, ?_⟩
+    have hgraph_eq : (P + X * P) v = w := by
+      have hbase : P ((P + X * P) v) = P w := by
+        simp [hPX, hPP, hPw]
+      have hperp : (1 - P) ((P + X * P) v) = (1 - P) w := by
+        dsimp [X, w, y]
+        rw [hRP]
+        simp [hPP]
+      have hdecomp (z : E) : z = P z + (1 - P) z := by simp
+      rw [hdecomp ((P + X * P) v), hdecomp w, hbase, hperp]
+    simpa [hwv] using hgraph_eq
+  have hrange : V = LinearMap.range (P + X * P).toLinearMap :=
+    le_antisymm hV_in_graph hgraph_in_V
+  simpa [P, Q, K, T, R, X, acuteAngularOperator] using
+    And.intro hangular hrange
+
+/-- A pair is acute exactly when it is the graph of a bounded angular operator. -/
+theorem acute_iff_exists_bounded_angularOperator (U V : Submodule 𝕜 E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
+    IsAcute U V ↔
+      ∃ X : E →L[𝕜] E, IsAngularOperator U X ∧
+        V = LinearMap.range (projection U + X ∘L projection U).toLinearMap := by
+  constructor
+  · intro hacute
+    exact ⟨acuteAngularOperator U V hacute,
+      acuteAngularOperator_spec U V hacute⟩
+  · rintro ⟨X, hX, rfl⟩
+    rw [← graphSubspace_eq_range U hX]
+    change subspaceGap U (graphSubspace U X) < 1
+    rw [subspaceGap_graphSubspace U X hX]
+    have hpos : 0 < 1 + ‖X‖ ^ 2 := by positivity
+    have hsqrt : 0 < Real.sqrt (1 + ‖X‖ ^ 2) := Real.sqrt_pos.mpr hpos
+    rw [div_lt_one hsqrt]
+    have hsquare : ‖X‖ ^ 2 < 1 + ‖X‖ ^ 2 := by linarith
+    nlinarith [Real.sq_sqrt hpos.le, norm_nonneg X]
+
+/-- Every acute subspace is the graph of a unique bounded angular operator. -/
+theorem existsUnique_angularOperator
+    (U V : Submodule 𝕜 E) [U.HasOrthogonalProjection]
+    [V.HasOrthogonalProjection] (hacute : IsAcute U V) :
+    ∃! X : E →L[𝕜] E,
+      IsAngularOperator U X ∧ graphSubspace U X = V := by
+  obtain ⟨X, hXang, hXrange⟩ :=
+    (acute_iff_exists_bounded_angularOperator U V).mp hacute
+  have hidem : ∀ x, projection U (projection U x) = projection U x := fun x =>
+    Submodule.starProjection_eq_self_iff.mpr (U.starProjection_apply_mem x)
+  refine ⟨X, ⟨hXang, ?_⟩, ?_⟩
+  · rw [graphSubspace_eq_range U hXang]
+    exact hXrange.symm
+  · rintro Y ⟨hYang, hYgraph⟩
+    have hPX : ∀ y, projection U (X y) = 0 := fun y => by
+      simpa using ContinuousLinearMap.ext_iff.mp hXang.2 y
+    have hPY : ∀ y, projection U (Y y) = 0 := fun y => by
+      simpa using ContinuousLinearMap.ext_iff.mp hYang.2 y
+    have hranges :
+        LinearMap.range (projection U + Y ∘L projection U).toLinearMap =
+          LinearMap.range (projection U + X ∘L projection U).toLinearMap := by
+      rw [← graphSubspace_eq_range U hYang, hYgraph, hXrange]
+    have key : ∀ x, Y (projection U x) = X (projection U x) := by
+      intro x
+      have hmem : projection U x + Y (projection U x) ∈
+          LinearMap.range (projection U + X ∘L projection U).toLinearMap := by
+        rw [← hranges]
+        exact ⟨x, rfl⟩
+      obtain ⟨w, hw⟩ := hmem
+      have hw' : projection U w + X (projection U w) =
+          projection U x + Y (projection U x) := hw
+      have happ := congrArg (fun z => projection U z) hw'
+      simp only [map_add, hidem, hPX, hPY, add_zero] at happ
+      rw [happ] at hw'
+      exact (add_left_cancel hw').symm
+    ext x
+    calc
+      Y x = Y (projection U x) := by
+        rw [← ContinuousLinearMap.comp_apply, hYang.1]
+      _ = X (projection U x) := key x
+      _ = X x := by rw [← ContinuousLinearMap.comp_apply, hXang.1]
 
 /-- Tangent of the maximal angle is the angular-operator norm.  The gap to
 the graph is `‖X‖ / √(1 + ‖X‖ ^ 2)`, and `tan ∘ arcsin` recovers `‖X‖`. -/
