@@ -4,14 +4,15 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.OperatorIdeal.UnitarilyInvariant.RectangularFamily
+import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
 
 /-!
 # Open obligations of the rectangular ideal families
 
 The family structure and its proved theory now live in
 `DavisKahan.OperatorIdeal.UnitarilyInvariant.RectangularFamily`.  The concrete
-Hilbert-Schmidt, trace-class, Schatten and Ky Fan families remain unresolved
-and stay here.
+Hilbert-Schmidt, trace-class, and Schatten families remain unresolved
+and stay here.  The Ky Fan family reuses the proved approximation-number package.
 -/
 
 namespace ForMathlib
@@ -156,46 +157,13 @@ noncomputable def schatten (p : ℝ) (hp : 1 ≤ p) :
         intros E F _ _ _ _ A hA hcauchy
         exact SchattenClass.complete_in_schattenNorm hp A hA hcauchy }
 
-/-- Ky Fan `k` gauges, with positive `k`.
-
-Construction route: the gauge is the sum of the first `k` approximation
-numbers; subadditivity is Ky Fan's inequality, adjoint invariance is the
-equality of approximation numbers of `A` and `A⋆`, and completeness reduces
-to the operator norm through `opNorm_le_kyFanGauge` since all members are
-bounded.  The infinite-dimensional approximation-number development in
-`ApproximationNumbers.lean` must land first. -/
-noncomputable def kyFan (k : ℕ) (hk : 0 < k) :
-    RectangularSymmetricIdealFamily (𝕜 := 𝕜) := by
-  classical
-  refine
-    { Mem := fun _ => True
-      gauge := fun T => kyFanGauge k T
-      zero_mem := by intros; trivial
-      add_mem := by intros; trivial
-      smul_mem := by intros; trivial
-      adjoint_mem := by intros; trivial
-      comp_mem := by intros; trivial
-      gauge_nonneg := by intros; exact kyFanGauge_nonneg _ _
-      gauge_zero := by intros; exact kyFanGauge_zero k
-      gauge_eq_zero := by
-        intro E F _ _ _ _ A _ h
-        exact kyFanGauge_eq_zero hk |>.mp h
-      gauge_add_le := by intros; exact kyFanGauge_add_le k _ _
-      gauge_smul := by intros; exact kyFanGauge_smul k _ _
-      gauge_adjoint := by intros; exact kyFanGauge_adjoint k _
-      gauge_comp_le := by intros; exact kyFanGauge_comp_left_right_le k _ _ _
-      opNorm_le_gauge := by intros; exact opNorm_le_kyFanGauge hk _
-      gauge_complete := by
-        intro E F _ _ _ _ A hA hcauchy
-        have hopCauchy : ∀ ε : ℝ, 0 < ε → ∃ N, ∀ m n,
-            N ≤ m → N ≤ n → ‖A m - A n‖ < ε := by
-          intro ε hε
-          obtain ⟨N, hN⟩ := hcauchy ε hε
-          exact ⟨N, fun m n hm hn =>
-            lt_of_le_of_lt (opNorm_le_kyFanGauge hk _) (hN m n hm hn)⟩
-        obtain ⟨L, hL⟩ := continuousLinearMap_complete_limit A hopCauchy
-        refine ⟨L, trivial, ?_⟩
-        exact kyFanGauge_tendsto_of_opNorm_tendsto k hL }
+/-- Ky Fan `k` gauges, with positive `k`, obtained from the already-proved
+approximation-number family. -/
+noncomputable def kyFan [HasKyFanApproximationGaugeTriangle.{u, v} 𝕜]
+    (k : ℕ) (hk : 0 < k) :
+    RectangularSymmetricIdealFamily (𝕜 := 𝕜) :=
+  (KyFanDominantIdealFamily.kyFan (𝕜 := 𝕜) k hk).
+    toRectangularSymmetricIdealFamily
 
 end RectangularSymmetricIdealFamily
 end ExactSinTheta
