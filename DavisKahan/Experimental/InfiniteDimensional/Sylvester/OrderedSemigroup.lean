@@ -38,38 +38,6 @@ variable {E : Type u} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
 variable {F : Type v} [NormedAddCommGroup F] [InnerProductSpace ℂ F]
   [CompleteSpace F]
 
-/-- The restriction to the full space has the original real spectrum.  Proved by
-conjugating the top-restriction through `Submodule.topContEquiv` and invoking
-spectral invariance of the induced endomorphism-algebra equivalence. -/
-theorem restrictedSpectrum_top_eq_realSpectrum
-    (T : E →L[ℂ] E) : restrictedSpectrum T ⊤ = realSpectrum T := by
-  have hInv :
-      ForMathlib.DavisKahan.Experimental.Foundation.InvariantFor T (⊤ : Submodule ℂ E) :=
-    fun x _ => Submodule.mem_top
-  have hbridge :=
-    ForMathlib.DavisKahan.Experimental.Foundation.restrictedSpectrum_eq_restrictionSpectrum
-      T ⊤ hInv
-  have hconj :
-      (Submodule.topContEquiv : (⊤ : Submodule ℂ E) ≃L[ℂ] E).conjContinuousAlgEquiv
-        (T.restrict hInv) = T := by
-    ext x
-    rw [ContinuousLinearEquiv.conjContinuousAlgEquiv_apply_apply]
-    show ((T.restrict hInv) ((Submodule.topContEquiv :
-      (⊤ : Submodule ℂ E) ≃L[ℂ] E).symm x) : E) = T x
-    rw [ContinuousLinearMap.coe_restrict_apply]
-    rfl
-  have hspec : spectrum ℂ (T.restrict hInv) = spectrum ℂ T := by
-    conv_rhs => rw [← hconj]
-    exact (AlgEquiv.spectrum_eq
-      ((Submodule.topContEquiv : (⊤ : Submodule ℂ E) ≃L[ℂ] E).conjContinuousAlgEquiv)
-      (T.restrict hInv)).symm
-  show ForMathlib.DavisKahan.Experimental.Foundation.restrictedSpectrum T ⊤ =
-    ForMathlib.DavisKahan.Experimental.Foundation.realSpectrum T
-  rw [hbridge]
-  ext r
-  simp only [ForMathlib.DavisKahan.Experimental.Foundation.realSpectrum,
-    Set.mem_setOf_eq, hspec]
-
 /-- The real spectrum of a bounded operator is bounded above by its norm.
 (Local copy of the `TanTwoTheta` lemma, kept private to avoid importing the
 heavy continuation chain that its home file drags in.) -/
