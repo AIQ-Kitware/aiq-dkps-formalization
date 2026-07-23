@@ -6,6 +6,7 @@ Authors: Jon Crall, Claude Fable 5
 
 import DavisKahan.Experimental.Frontier.RieszCircle
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.ContinuationContour
+import DavisKahan.Experimental.InfiniteDimensional.SinTheta.ContinuationTransport
 
 /-!
 # The circle as a proof-carrying continuation contour
@@ -239,6 +240,63 @@ noncomputable def circleSeparatingContour
       rwa [← Complex.ofReal_sub, Complex.norm_real, Real.norm_eq_abs]
     rw [circleContour_normalizedWinding c lam r hsep.radius_pos
       (abs_sub_ne_radius_of_mem_realSpectrum hsep hlam), if_neg hnotin]
+
+/-! ## Contour length and the uniform Neumann margin -/
+
+/-- The circle contour has length `2 π r`. -/
+theorem circleContour_contourLength (c : ℂ) {r : ℝ} (hr : 0 ≤ r) :
+    (circleContour c r).contourLength = 2 * Real.pi * r := by
+  unfold PiecewiseC1ClosedContour.contourLength
+    PiecewiseC1ClosedContour.contourSpeed
+  have hcongr : (∫ t in (0 : ℝ)..1,
+      ‖derivWithin (circleContour c r).path.extend (Set.Icc (0 : ℝ) 1) t‖) =
+      ∫ _t in (0 : ℝ)..1, 2 * Real.pi * r := by
+    apply intervalIntegral.integral_congr
+    intro t ht
+    rw [Set.uIcc_of_le zero_le_one] at ht
+    show ‖derivWithin (circleContour c r).param (Set.Icc (0 : ℝ) 1) t‖ =
+      2 * Real.pi * r
+    rw [circleContour_derivWithin c r ht, norm_smul, Real.norm_eq_abs,
+      abs_of_pos (by positivity : (0 : ℝ) < 2 * Real.pi), norm_mul,
+      Complex.norm_I, mul_one, norm_circleMap_zero, abs_of_nonneg hr]
+  rw [hcongr, intervalIntegral.integral_const, sub_zero, one_smul]
+
+/-- A norm bound on the total inverse of the pencil pushes the spectrum a
+uniform distance away: the quantitative Neumann-series margin. -/
+theorem margin_le_norm_sub_of_inverse_bound
+    {T : H →L[ℂ] H} {z : ℂ} {m : ℝ} (hm : 0 < m)
+    (hz : z ∉ spectrum ℂ T)
+    (hbound : ‖Ring.inverse (z • (1 : H →L[ℂ] H) - T)‖ ≤ m⁻¹)
+    {w : ℂ} (hw : w ∈ spectrum ℂ T) : m ≤ ‖z - w‖ := by
+  by_contra hlt
+  push_neg at hlt
+  have hu : IsUnit (z • (1 : H →L[ℂ] H) - T) := by
+    have h := spectrum.notMem_iff.mp hz
+    rwa [Algebra.algebraMap_eq_smul_one] at h
+  have hRz : (z • (1 : H →L[ℂ] H) - T) *
+      Ring.inverse (z • (1 : H →L[ℂ] H) - T) = 1 :=
+    Ring.mul_inverse_cancel _ hu
+  have hfac : w • (1 : H →L[ℂ] H) - T =
+      (z • (1 : H →L[ℂ] H) - T) *
+        (1 - (z - w) • Ring.inverse (z • (1 : H →L[ℂ] H) - T)) := by
+    rw [mul_sub, mul_one, mul_smul_comm, hRz, sub_smul]
+    abel
+  have hsmall : ‖(z - w) • Ring.inverse (z • (1 : H →L[ℂ] H) - T)‖ < 1 := by
+    rw [norm_smul]
+    calc ‖z - w‖ * ‖Ring.inverse (z • (1 : H →L[ℂ] H) - T)‖ ≤
+        ‖z - w‖ * m⁻¹ :=
+          mul_le_mul_of_nonneg_left hbound (norm_nonneg _)
+      _ < m * m⁻¹ := by
+          exact mul_lt_mul_of_pos_right hlt (inv_pos.mpr hm)
+      _ = 1 := mul_inv_cancel₀ hm.ne'
+  have hunit2 : IsUnit
+      ((1 : H →L[ℂ] H) - (z - w) • Ring.inverse (z • (1 : H →L[ℂ] H) - T)) :=
+    (Units.oneSub _ hsmall).isUnit
+  have hwunit : IsUnit (w • (1 : H →L[ℂ] H) - T) := by
+    rw [hfac]
+    exact hu.mul hunit2
+  refine spectrum.notMem_iff.mpr ?_ hw
+  rwa [Algebra.algebraMap_eq_smul_one]
 
 /-- The circle separating contour rides on the circle contour. -/
 @[simp] theorem circleSeparatingContour_geometric
