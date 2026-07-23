@@ -67,6 +67,16 @@ theorem norm_spectraOperatorAbsoluteValue (T : H →L[ℂ] H) :
     rw [← norm_spectraOperatorAbsoluteValue_apply T x]
     exact (spectraOperatorAbsoluteValue T).le_opNorm x
 
+/-- Anything commuting with the Gram operator `T⋆T` commutes with the modulus
+`|T|`.  Since `|T| = CFC.sqrt (T⋆T)` is a continuous function of `T⋆T`, this is
+the non-unital `nnreal` continuous-functional-calculus commutation lemma. -/
+theorem commute_spectraOperatorAbsoluteValue_of_commute_star_mul_self
+    (T b : H →L[ℂ] H) (h : Commute (star T * T) b) :
+    Commute (spectraOperatorAbsoluteValue T) b := by
+  have : spectraOperatorAbsoluteValue T = CFC.sqrt (star T * T) := rfl
+  rw [this, CFC.sqrt]
+  exact Commute.cfcₙ_nnreal h NNReal.sqrt
+
 /-- Spectra's partial isometry in the bounded polar decomposition. -/
 noncomputable def spectraPolarIsometry (T : H →L[ℂ] H) : H →L[ℂ] H :=
   Spectra.QuantumMechanics.Channels.polarIsometry T
