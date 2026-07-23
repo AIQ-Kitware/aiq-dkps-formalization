@@ -12,7 +12,6 @@ import Mathlib.MeasureTheory.Integral.Bochner.Basic
 import Mathlib.MeasureTheory.Integral.DominatedConvergence
 import Mathlib.MeasureTheory.Integral.ExpDecay
 import Mathlib.Topology.MetricSpace.ProperSpace.Real
-import Mathlib.Topology.MetricSpace.Bounded
 
 /-!
 # Fourier and semigroup formulas for bounded Sylvester equations
@@ -258,7 +257,87 @@ theorem norm_semigroup_le_exp_norm (A : H →L[ℂ] H) (t : ℝ) :
     ‖semigroup A t‖ ≤ Real.exp (|t| * ‖A‖) := by
   exact expBounded_norm_bound A t
 
+/-- The real exponential group is norm continuous in time. -/
+theorem continuous_semigroup (A : H →L[ℂ] H) :
+    Continuous fun t : ℝ => semigroup A t :=
+  continuous_iff_continuousAt.mpr fun t => (hasDerivAt_semigroup A t).continuousAt
+
+/-- The unitary group is norm continuous in time. -/
+theorem continuous_unitaryGroup (A : H →L[ℂ] H) :
+    Continuous fun t : ℝ => unitaryGroup A t :=
+  continuous_iff_continuousAt.mpr fun t => (hasDerivAt_unitaryGroup A t).continuousAt
+
+/-- The unitary group is norm continuous in its generator. -/
+theorem continuous_unitaryGroup_generator (t : ℝ) :
+    Continuous fun M : H →L[ℂ] H => unitaryGroup M t := by
+  have heq : (fun M : H →L[ℂ] H => unitaryGroup M t) =
+      fun M => NormedSpace.exp ((t : ℂ) • (Complex.I • M)) := by
+    funext M
+    exact expBounded_eq_exp (Complex.I • M) t
+  rw [heq]
+  have hexp : Continuous (NormedSpace.exp : (H →L[ℂ] H) → H →L[ℂ] H) :=
+    continuous_iff_continuousAt.mpr fun x =>
+      (NormedSpace.exp_analytic (𝕂 := ℂ) x).continuousAt
+  exact hexp.comp ((continuous_const_smul ((t : ℂ))).comp
+    (continuous_const_smul Complex.I))
+
 end Exponentials
+
+section SpectrumBridge
+
+variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
+  [CompleteSpace H]
+
+/-- The identification of the ambient space with the top submodule, as a
+continuous linear map. -/
+noncomputable def topInclusion : H →L[ℂ] (⊤ : Submodule ℂ H) :=
+  (ContinuousLinearMap.id ℂ H).codRestrict ⊤ fun _ => Submodule.mem_top
+
+/-- Conjugation by the top-submodule identification is an algebra
+equivalence between endomorphisms of `⊤` and of the ambient space. -/
+noncomputable def topConjAlgEquiv :
+    ((⊤ : Submodule ℂ H) →L[ℂ] (⊤ : Submodule ℂ H)) ≃ₐ[ℂ] (H →L[ℂ] H) where
+  toFun S := (⊤ : Submodule ℂ H).subtypeL ∘L S ∘L topInclusion
+  invFun T := topInclusion ∘L T ∘L (⊤ : Submodule ℂ H).subtypeL
+  left_inv S := by ext x; rfl
+  right_inv T := by ext x; rfl
+  map_add' S₁ S₂ := by ext x; rfl
+  map_mul' S₁ S₂ := by ext x; rfl
+  commutes' c := by ext x; rfl
+
+@[simp] theorem topConjAlgEquiv_restrict (T : H →L[ℂ] H)
+    (hU : InvariantFor T ⊤) :
+    topConjAlgEquiv (T.restrict hU) = T := by
+  ext x
+  rfl
+
+/-- The actual restriction to the top submodule has the original
+Banach-algebra spectrum. -/
+theorem spectrum_restrict_top (T : H →L[ℂ] H) (hU : InvariantFor T ⊤) :
+    spectrum ℂ (T.restrict hU) = spectrum ℂ T := by
+  conv_rhs => rw [← topConjAlgEquiv_restrict T hU]
+  exact (AlgEquiv.spectrum_eq topConjAlgEquiv (T.restrict hU)).symm
+
+/-- The restricted spectrum at the top submodule is the real spectrum. -/
+theorem restrictedSpectrum_top_eq (T : H →L[ℂ] H) :
+    restrictedSpectrum T ⊤ = realSpectrum T := by
+  ext r
+  constructor
+  · rintro ⟨hU, hr⟩
+    exact (spectrum_restrict_top T hU).subset hr
+  · intro hr
+    exact ⟨fun x _ => Submodule.mem_top,
+      (spectrum_restrict_top T fun x _ => Submodule.mem_top).symm.subset hr⟩
+
+/-- The real spectrum of a bounded complex operator is compact. -/
+theorem realSpectrum_isCompact (T : H →L[ℂ] H) :
+    IsCompact (realSpectrum T) := by
+  have h : realSpectrum T = Complex.ofReal ⁻¹' spectrum ℂ T := rfl
+  rw [h]
+  exact Complex.isometry_ofReal.isClosedEmbedding.isProperMap.isCompact_preimage
+    (spectrum.isCompact T)
+
+end SpectrumBridge
 
 section SpectralStepApproximation
 
@@ -352,6 +431,32 @@ theorem FiniteSpectralStep.norm_operator_sub_le
             boundedSelfAdjointBorelCalculus_norm_sub_le A hA hf measurable_id hfb
               (identity_boundedOnSpectrum A) S.diameter_nonneg hclose
 
+/-- Finite spectral steps are self-adjoint operators. -/
+theorem FiniteSpectralStep.operator_isSelfAdjoint
+    {A : H →L[ℂ] H} {hA : IsSelfAdjointOperator A}
+    (S : FiniteSpectralStep A hA) : IsSelfAdjointOperator S.operator := by
+  apply ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
+  show star S.operator = S.operator
+  rw [FiniteSpectralStep.operator, star_sum]
+  refine Finset.sum_congr rfl fun i _ => ?_
+  rw [star_smul, Complex.star_def, Complex.conj_ofReal]
+  congr 1
+  exact (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr
+    (boundedSelfAdjointSpectralProjection_isOrthogonalProjection A hA
+      (S.cell i) (S.measurable_cell i)).2).star_eq
+
+/-- Norm bound for a finite spectral step in terms of its generator. -/
+theorem FiniteSpectralStep.norm_operator_le
+    {A : H →L[ℂ] H} {hA : IsSelfAdjointOperator A}
+    (S : FiniteSpectralStep A hA) :
+    ‖S.operator‖ ≤ ‖A‖ + S.diameter_le := by
+  have hsub := S.norm_operator_sub_le
+  have hsplit : S.operator = A + (S.operator - A) := by abel
+  calc
+    ‖S.operator‖ = ‖A + (S.operator - A)‖ := by rw [← hsplit]
+    _ ≤ ‖A‖ + ‖S.operator - A‖ := norm_add_le _ _
+    _ ≤ ‖A‖ + S.diameter_le := by gcongr
+
 /-- Every bounded self-adjoint operator has finite spectral steps with
 arbitrarily small cells and representatives in its own spectrum. -/
 theorem exists_finiteSpectralStep
@@ -359,139 +464,39 @@ theorem exists_finiteSpectralStep
     {ε : ℝ} (hε : 0 < ε) :
     ∃ S : FiniteSpectralStep A hA, S.diameter_le ≤ ε := by
   classical
-  rcases subsingleton_or_nontrivial H with hss | hnt
-  · -- Trivial space: the spectrum is empty, so a zero-cell step suffices.
-    haveI := hss
-    have hempty : realSpectrum A = ∅ := by
-      haveI : Subsingleton (H →L[ℂ] H) := ⟨fun a b => by ext x; exact Subsingleton.elim _ _⟩
-      ext r
-      simp only [Set.mem_empty_iff_false, iff_false]
-      intro hr
-      have hr' : (r : ℂ) ∈ spectrum ℂ A := hr
-      rw [spectrum.mem_iff] at hr'
-      exact hr' (isUnit_of_subsingleton _)
-    refine ⟨{
-      n := 0
-      cell := Fin.elim0
-      measurable_cell := fun i => i.elim0
-      pairwise_disjoint := fun i _ => i.elim0
-      covers_spectrum := hempty.subset.trans (Set.empty_subset _)
-      representative := Fin.elim0
-      representative_mem := fun i => i.elim0
-      diameter_le := ε
-      diameter_nonneg := le_of_lt hε
-      cell_close := fun i => i.elim0 }, le_refl ε⟩
-  haveI := hnt
-  have hε2 : (0 : ℝ) < ε / 2 := by positivity
-  -- The real spectrum is compact (closed and bounded by `‖A‖`).
-  have hbdd_mem : ∀ r ∈ realSpectrum A, |r| ≤ ‖A‖ := by
-    intro r hr
-    have hr' : (r : ℂ) ∈ spectrum ℂ A := hr
-    simpa using spectrum.norm_le_norm_of_mem hr'
-  have hsub : realSpectrum A ⊆ Set.Icc (-‖A‖) ‖A‖ := by
-    intro r hr
-    have h := abs_le.mp (hbdd_mem r hr)
-    exact ⟨h.1, h.2⟩
-  have hclosed : IsClosed (realSpectrum A) := by
-    have hpre : realSpectrum A = Complex.ofReal ⁻¹' (spectrum ℂ A) := rfl
-    rw [hpre]
-    exact (spectrum.isClosed A).preimage Complex.continuous_ofReal
-  have hcompact : IsCompact (realSpectrum A) :=
-    Metric.isCompact_of_isClosed_isBounded hclosed
-      ((Metric.isBounded_Icc _ _).subset hsub)
-  -- Finite subcover by `ε/2`-balls centered in the spectrum.
-  have hcover : realSpectrum A ⊆ ⋃ p ∈ realSpectrum A, Metric.ball p (ε / 2) := fun r hr =>
-    Set.mem_biUnion hr (Metric.mem_ball_self hε2)
-  obtain ⟨t, htsub, htfin, htcover⟩ :=
-    hcompact.elim_finite_subcover_image (fun p _ => Metric.isOpen_ball) hcover
-  -- Enumerate the finite net inside the spectrum.
-  let htf : Finset ℝ := htfin.toFinset
-  let rep : Fin htf.card → ℝ := fun i => htf.orderEmbOfFin rfl i
-  have hrep_mem : ∀ i, rep i ∈ realSpectrum A := by
+  obtain ⟨t, hts, htfin, hcov⟩ :=
+    finite_cover_balls_of_compact (realSpectrum_isCompact A) hε
+  let s : Finset ℝ := htfin.toFinset
+  let y : Fin s.card → ℝ := fun i => (s.equivFin.symm i : ℝ)
+  have hy_mem : ∀ i, y i ∈ realSpectrum A := fun i =>
+    hts (htfin.mem_toFinset.mp (s.equivFin.symm i).2)
+  let g : Fin s.card → Set ℝ := fun i => Metric.ball (y i) ε
+  have hg_cover : realSpectrum A ⊆ ⋃ i, g i := by
+    intro x hx
+    obtain ⟨c, hc, hxc⟩ := Set.mem_iUnion₂.mp (hcov hx)
+    have hcs : c ∈ s := htfin.mem_toFinset.mpr hc
+    refine Set.mem_iUnion.mpr ⟨s.equivFin ⟨c, hcs⟩, ?_⟩
+    have hyc : y (s.equivFin ⟨c, hcs⟩) = c := by
+      show ((s.equivFin.symm (s.equivFin ⟨c, hcs⟩) : ℝ)) = c
+      rw [Equiv.symm_apply_apply]
+    show x ∈ Metric.ball (y (s.equivFin ⟨c, hcs⟩)) ε
+    rwa [hyc]
+  have hcell_meas : ∀ i, MeasurableSet (disjointed g i) := by
     intro i
-    apply htsub
-    rw [← htfin.mem_toFinset]
-    exact htf.orderEmbOfFin_mem rfl i
-  -- Ball function indexed over `ℕ` for disjointification into measurable cells.
-  let f : ℕ → Set ℝ := fun k =>
-    if h : k < htf.card then Metric.ball (rep ⟨k, h⟩) (ε / 2) else ∅
-  have hfmeas : ∀ k, MeasurableSet (f k) := by
-    intro k
-    by_cases h : k < htf.card
-    · simp only [f, dif_pos h]; exact Metric.isOpen_ball.measurableSet
-    · simp only [f, dif_neg h]; exact MeasurableSet.empty
-  have hf_i : ∀ i : Fin htf.card, f i.val = Metric.ball (rep i) (ε / 2) := by
-    intro i
-    simp only [f, dif_pos i.isLt, Fin.eta]
-  refine ⟨{
-    n := htf.card
-    cell := fun i => disjointed f i.val
-    measurable_cell := fun i => MeasurableSet.disjointed hfmeas i.val
-    pairwise_disjoint := fun i _ j _ hij =>
-      disjoint_disjointed f (Fin.val_ne_of_ne hij)
-    covers_spectrum := ?_
-    representative := rep
-    representative_mem := hrep_mem
-    diameter_le := ε
-    diameter_nonneg := le_of_lt hε
-    cell_close := ?_ }, le_refl ε⟩
-  · -- Every spectral point lies in a ball, hence in the disjointified cell.
-    intro r hr
-    obtain ⟨p, hp, hrp⟩ := Set.mem_iUnion₂.mp (htcover hr)
-    have hpf : p ∈ htf := htfin.mem_toFinset.mpr hp
-    obtain ⟨i, hi⟩ : ∃ i : Fin htf.card, rep i = p := by
-      have hmem : p ∈ Set.range (htf.orderEmbOfFin rfl) := by
-        rw [Finset.range_orderEmbOfFin]; exact hpf
-      obtain ⟨i, hi⟩ := hmem
-      exact ⟨i, hi⟩
-    have hrf : r ∈ f i.val := by rw [hf_i i, hi]; exact hrp
-    have hru : r ∈ ⋃ k, f k := Set.mem_iUnion.mpr ⟨i.val, hrf⟩
-    rw [← iUnion_disjointed (f := f)] at hru
-    obtain ⟨k, hk⟩ := Set.mem_iUnion.mp hru
-    have hkn : k < htf.card := by
-      by_contra hc
-      have hfk : f k = ∅ := by simp only [f, dif_neg hc]
-      have hsub' : disjointed f k ⊆ f k := disjointed_le f k
-      rw [hfk] at hsub'
-      exact absurd (hsub' hk) (Set.notMem_empty r)
-    exact Set.mem_iUnion.mpr ⟨⟨k, hkn⟩, hk⟩
-  · -- Each cell sits inside its ball, so points are within `ε/2 ≤ ε` of the rep.
-    intro i x hx
-    have hxf : x ∈ f i.val := disjointed_le f i.val hx.1
-    rw [hf_i i, Metric.mem_ball, Real.dist_eq] at hxf
-    exact le_of_lt (lt_of_lt_of_le hxf (by linarith))
-
-/-- The restriction to the full space has the original real spectrum.  Proved by
-conjugating the top-restriction through `Submodule.topContEquiv` and invoking
-spectral invariance of the induced endomorphism-algebra equivalence. -/
-theorem restrictedSpectrum_top_eq_realSpectrum
-    (T : H →L[ℂ] H) : restrictedSpectrum T ⊤ = realSpectrum T := by
-  have hInv :
-      ForMathlib.DavisKahan.Experimental.Foundation.InvariantFor T (⊤ : Submodule ℂ H) :=
-    fun x _ => Submodule.mem_top
-  have hbridge :=
-    ForMathlib.DavisKahan.Experimental.Foundation.restrictedSpectrum_eq_restrictionSpectrum
-      T ⊤ hInv
-  have hconj :
-      (Submodule.topContEquiv : (⊤ : Submodule ℂ H) ≃L[ℂ] H).conjContinuousAlgEquiv
-        (T.restrict hInv) = T := by
-    ext x
-    rw [ContinuousLinearEquiv.conjContinuousAlgEquiv_apply_apply]
-    show ((T.restrict hInv) ((Submodule.topContEquiv :
-      (⊤ : Submodule ℂ H) ≃L[ℂ] H).symm x) : H) = T x
-    rw [ContinuousLinearMap.coe_restrict_apply]
-    rfl
-  have hspec : spectrum ℂ (T.restrict hInv) = spectrum ℂ T := by
-    conv_rhs => rw [← hconj]
-    exact (AlgEquiv.spectrum_eq
-      ((Submodule.topContEquiv : (⊤ : Submodule ℂ H) ≃L[ℂ] H).conjContinuousAlgEquiv)
-      (T.restrict hInv)).symm
-  show ForMathlib.DavisKahan.Experimental.Foundation.restrictedSpectrum T ⊤ =
-    ForMathlib.DavisKahan.Experimental.Foundation.realSpectrum T
-  rw [hbridge]
-  ext r
-  simp only [ForMathlib.DavisKahan.Experimental.Foundation.realSpectrum,
-    Set.mem_setOf_eq, hspec]
+    rw [disjointed_apply]
+    refine measurableSet_ball.diff ?_
+    rw [Finset.sup_eq_iSup]
+    exact (Finset.Iio i).measurableSet_biUnion fun j _ => measurableSet_ball
+  refine ⟨⟨s.card, disjointed g, hcell_meas, ?_, ?_, y, hy_mem, ε, hε.le, ?_⟩, le_rfl⟩
+  · intro i _ j _ hij
+    exact disjoint_disjointed g hij
+  · rw [iUnion_disjointed]
+    exact hg_cover
+  · intro i x hx
+    have hxg : x ∈ g i := disjointed_le g i hx.1
+    have : dist x (y i) < ε := Metric.mem_ball.mp hxg
+    rw [Real.dist_eq] at this
+    exact this.le
 
 /-- Two finite steps whose representatives come from separated original
 spectra inherit exactly the same separation. -/
@@ -504,13 +509,10 @@ theorem finiteSpectralStep_representatives_separated
     (SA : FiniteSpectralStep A hA) (SB : FiniteSpectralStep B hB)
     (i : Fin SA.n) (j : Fin SB.n) :
     d ≤ |SA.representative i - SB.representative j| := by
-  -- Transport `SpectraSeparated`'s clause on `restrictedSpectrum _ ⊤` to the
-  -- native `realSpectrum`, where the representatives live by construction.
-  have hai : SA.representative i ∈ restrictedSpectrum A ⊤ := by
-    rw [restrictedSpectrum_top_eq_realSpectrum]; exact SA.representative_mem i
-  have hbj : SB.representative j ∈ restrictedSpectrum B ⊤ := by
-    rw [restrictedSpectrum_top_eq_realSpectrum]; exact SB.representative_mem j
-  exact hsep.2.2 _ hai _ hbj
+  obtain ⟨hInvA, hInvB, hgap⟩ := hsep
+  exact hgap _
+    ⟨hInvA, (spectrum_restrict_top A hInvA).symm.subset (SA.representative_mem i)⟩ _
+    ⟨hInvB, (spectrum_restrict_top B hInvB).symm.subset (SB.representative_mem j)⟩
 
 end SpectralStepApproximation
 
@@ -602,34 +604,70 @@ theorem tendsto_unitary_orbit
     (hC : Tendsto C atTop (nhds C0)) (t : ℝ) :
     Tendsto (fun n => unitaryGroup (A n) t ∘L C n ∘L unitaryGroup (B n) (-t))
       atTop (nhds (unitaryGroup A0 t ∘L C0 ∘L unitaryGroup B0 (-t))) := by
-  -- `unitaryGroup A t = exp ((t·i)·A)` is continuous in the generator `A`.
-  have hUAn : Tendsto (fun n => unitaryGroup (A n) t)
-      atTop (nhds (unitaryGroup A0 t)) := by
-    have hgen : Tendsto (fun n => ((t : ℂ) • (Complex.I • A n)))
-        atTop (nhds ((t : ℂ) • (Complex.I • A0))) :=
-      (((continuous_const_smul (t : ℂ)).comp
-        (continuous_const_smul Complex.I)).tendsto A0).comp hA
-    simp only [unitaryGroup, expBounded_eq_exp]
-    exact (NormedSpace.exp_continuous.tendsto _).comp hgen
-  have hUBn : Tendsto (fun n => unitaryGroup (B n) (-t))
-      atTop (nhds (unitaryGroup B0 (-t))) := by
-    have hgen : Tendsto (fun n => (((-t : ℝ) : ℂ) • (Complex.I • B n)))
-        atTop (nhds (((-t : ℝ) : ℂ) • (Complex.I • B0))) :=
-      (((continuous_const_smul ((-t : ℝ) : ℂ)).comp
-        (continuous_const_smul Complex.I)).tendsto B0).comp hB
-    simp only [unitaryGroup, expBounded_eq_exp]
-    exact (NormedSpace.exp_continuous.tendsto _).comp hgen
-  -- Joint continuity of the two-sided composition in all three arguments.
-  have hΦ : Continuous (fun p : (F →L[ℂ] F) × (E →L[ℂ] F) × (E →L[ℂ] E) =>
-      p.1 ∘L p.2.1 ∘L p.2.2) :=
-    continuous_fst.clm_comp
-      ((continuous_fst.comp continuous_snd).clm_comp
-        (continuous_snd.comp continuous_snd))
-  have htriple :
-      Tendsto (fun n => (unitaryGroup (A n) t, C n, unitaryGroup (B n) (-t)))
-        atTop (nhds (unitaryGroup A0 t, C0, unitaryGroup B0 (-t))) :=
-    hUAn.prodMk_nhds (hC.prodMk_nhds hUBn)
-  exact (hΦ.tendsto _).comp htriple
+  have hUA : Tendsto (fun n => unitaryGroup (A n) t) atTop
+      (nhds (unitaryGroup A0 t)) :=
+    ((continuous_unitaryGroup_generator t).tendsto A0).comp hA
+  have hUB : Tendsto (fun n => unitaryGroup (B n) (-t)) atTop
+      (nhds (unitaryGroup B0 (-t))) :=
+    ((continuous_unitaryGroup_generator (-t)).tendsto B0).comp hB
+  have hCB : Tendsto (fun n => C n ∘L unitaryGroup (B n) (-t)) atTop
+      (nhds (C0 ∘L unitaryGroup B0 (-t))) := by
+    have hcont : Continuous fun p : (E →L[ℂ] F) × (E →L[ℂ] E) => p.1 ∘L p.2 :=
+      isBoundedBilinearMap_comp.continuous
+    exact (hcont.tendsto (C0, unitaryGroup B0 (-t))).comp (hC.prodMk_nhds hUB)
+  have hcont2 : Continuous fun p : (F →L[ℂ] F) × (E →L[ℂ] F) => p.1 ∘L p.2 :=
+    isBoundedBilinearMap_comp.continuous
+  exact (hcont2.tendsto (unitaryGroup A0 t, C0 ∘L unitaryGroup B0 (-t))).comp
+    (hUA.prodMk_nhds hCB)
+
+/-- Dominated-convergence passage for the separated reciprocal integral. -/
+theorem tendsto_separated_integral
+    {An : ℕ → F →L[ℂ] F} {Bn : ℕ → E →L[ℂ] E} {Cn : ℕ → E →L[ℂ] F}
+    {A0 : F →L[ℂ] F} {B0 : E →L[ℂ] E} {C0 : E →L[ℂ] F}
+    (hAn : ∀ n, IsSelfAdjointOperator (An n))
+    (hBn : ∀ n, IsSelfAdjointOperator (Bn n))
+    {M : ℝ} (hM : ∀ n, ‖Cn n‖ ≤ M)
+    (hA : Tendsto An atTop (nhds A0)) (hB : Tendsto Bn atTop (nhds B0))
+    (hC : Tendsto Cn atTop (nhds C0))
+    {d : ℝ} (hd : 0 < d) :
+    Tendsto (fun n => ∫ t : ℝ, separatedSylvesterMultiplier d hd t •
+        (unitaryGroup (An n) t ∘L Cn n ∘L unitaryGroup (Bn n) (-t))) atTop
+      (nhds (∫ t : ℝ, separatedSylvesterMultiplier d hd t •
+        (unitaryGroup A0 t ∘L C0 ∘L unitaryGroup B0 (-t)))) := by
+  have hμ := integrable_separatedSylvesterMultiplier d hd
+  refine MeasureTheory.tendsto_integral_of_dominated_convergence
+    (fun t => ‖separatedSylvesterMultiplier d hd t‖ * M) ?_ ?_ ?_ ?_
+  · intro n
+    have hcont : Continuous fun t : ℝ =>
+        unitaryGroup (An n) t ∘L Cn n ∘L unitaryGroup (Bn n) (-t) :=
+      (continuous_unitaryGroup (An n)).clm_comp (continuous_const.clm_comp
+        ((continuous_unitaryGroup (Bn n)).comp continuous_neg))
+    exact hμ.aestronglyMeasurable.smul hcont.aestronglyMeasurable
+  · exact hμ.norm.mul_const M
+  · intro n
+    filter_upwards with t
+    rw [norm_smul]
+    have horbit : ‖unitaryGroup (An n) t ∘L Cn n ∘L unitaryGroup (Bn n) (-t)‖ ≤
+        M := by
+      calc
+        ‖unitaryGroup (An n) t ∘L Cn n ∘L unitaryGroup (Bn n) (-t)‖
+            ≤ ‖unitaryGroup (An n) t‖ *
+              ‖Cn n ∘L unitaryGroup (Bn n) (-t)‖ :=
+          (unitaryGroup (An n) t).opNorm_comp_le _
+        _ ≤ 1 * (‖Cn n‖ * ‖unitaryGroup (Bn n) (-t)‖) := by
+          gcongr
+          · exact norm_unitaryGroup_le_one (An n) (hAn n) t
+          · exact (Cn n).opNorm_comp_le _
+        _ ≤ M := by
+          have hB1 := norm_unitaryGroup_le_one (Bn n) (hBn n) (-t)
+          have hCle := hM n
+          have h0C : (0 : ℝ) ≤ ‖Cn n‖ := norm_nonneg _
+          have h0B : (0 : ℝ) ≤ ‖unitaryGroup (Bn n) (-t)‖ := norm_nonneg _
+          nlinarith
+    exact mul_le_mul_of_nonneg_left horbit (norm_nonneg _)
+  · filter_upwards with t
+    exact (tendsto_unitary_orbit hA hB hC t).const_smul
+      (separatedSylvesterMultiplier d hd t)
 
 /-- Exact separated-spectrum reconstruction on complex Hilbert spaces. -/
 theorem separatedSylvester_reconstruction_complex
@@ -640,14 +678,63 @@ theorem separatedSylvester_reconstruction_complex
     (hEq : A ∘L X - X ∘L B = C) :
     X = ∫ t : ℝ, separatedSylvesterMultiplier d hd t •
       (unitaryGroup A t ∘L C ∘L unitaryGroup B (-t)) := by
-  -- Open obligation: the dominated-convergence limit passing the finite
-  -- spectral-step reconstruction to the general operator.  Depends on
-  -- `finiteSpectralStep_reconstruction`, `exists_finiteSpectralStep`,
-  -- `FiniteSpectralStep.norm_operator_sub_le`, `norm_bounded_of_tendsto`, and
-  -- `FiniteSpectralStep.operator_isSelfAdjoint`, handed to the mathematics
-  -- agent.  The uniform bound is `‖μ_d‖_{L¹} · ‖C‖` from the (proved)
-  -- `l1_norm_separatedSylvesterMultiplier`.
-  sorry
+  have hpos : ∀ n : ℕ, (0 : ℝ) < 1 / (n + 1) := fun n => by positivity
+  choose SA hSA using fun n : ℕ => exists_finiteSpectralStep A hA (hpos n)
+  choose SB hSB using fun n : ℕ => exists_finiteSpectralStep B hB (hpos n)
+  have hone : ∀ n : ℕ, (1 : ℝ) / (n + 1) ≤ 1 := fun n => by
+    rw [div_le_one (by positivity)]
+    have : (0 : ℝ) ≤ (n : ℝ) := Nat.cast_nonneg n
+    linarith
+  have honeover : Tendsto (fun n : ℕ => 1 / ((n : ℝ) + 1)) atTop (nhds 0) :=
+    tendsto_one_div_add_atTop_nhds_zero_nat
+  have hAop : Tendsto (fun n => (SA n).operator) atTop (nhds A) := by
+    rw [tendsto_iff_norm_sub_tendsto_zero]
+    exact squeeze_zero (fun n => norm_nonneg _)
+      (fun n => (SA n).norm_operator_sub_le.trans (hSA n)) honeover
+  have hBop : Tendsto (fun n => (SB n).operator) atTop (nhds B) := by
+    rw [tendsto_iff_norm_sub_tendsto_zero]
+    exact squeeze_zero (fun n => norm_nonneg _)
+      (fun n => (SB n).norm_operator_sub_le.trans (hSB n)) honeover
+  have hCn : Tendsto
+      (fun n => (SA n).operator ∘L X - X ∘L (SB n).operator) atTop (nhds C) := by
+    have hcomp1 : Continuous fun M : F →L[ℂ] F => M ∘L X :=
+      continuous_id.clm_comp continuous_const
+    have hcomp2 : Continuous fun M : E →L[ℂ] E => X ∘L M :=
+      continuous_const.clm_comp continuous_id
+    have h1 : Tendsto (fun n => (SA n).operator ∘L X) atTop (nhds (A ∘L X)) :=
+      ((hcomp1.tendsto A).comp hAop)
+    have h2 : Tendsto (fun n => X ∘L (SB n).operator) atTop (nhds (X ∘L B)) :=
+      ((hcomp2.tendsto B).comp hBop)
+    have := h1.sub h2
+    rwa [hEq] at this
+  have hM : ∀ n, ‖(SA n).operator ∘L X - X ∘L (SB n).operator‖ ≤
+      (‖A‖ + 1) * ‖X‖ + ‖X‖ * (‖B‖ + 1) := by
+    intro n
+    have hnormA : ‖(SA n).operator‖ ≤ ‖A‖ + 1 := by
+      have h1 := (SA n).norm_operator_le
+      have h2 : (SA n).diameter_le ≤ 1 := (hSA n).trans (hone n)
+      linarith
+    have hnormB : ‖(SB n).operator‖ ≤ ‖B‖ + 1 := by
+      have h1 := (SB n).norm_operator_le
+      have h2 : (SB n).diameter_le ≤ 1 := (hSB n).trans (hone n)
+      linarith
+    calc
+      ‖(SA n).operator ∘L X - X ∘L (SB n).operator‖
+          ≤ ‖(SA n).operator ∘L X‖ + ‖X ∘L (SB n).operator‖ := norm_sub_le _ _
+      _ ≤ ‖(SA n).operator‖ * ‖X‖ + ‖X‖ * ‖(SB n).operator‖ :=
+          add_le_add ((SA n).operator.opNorm_comp_le X) (X.opNorm_comp_le _)
+      _ ≤ (‖A‖ + 1) * ‖X‖ + ‖X‖ * (‖B‖ + 1) := by gcongr
+  have hlim := tendsto_separated_integral
+    (fun n => (SA n).operator_isSelfAdjoint)
+    (fun n => (SB n).operator_isSelfAdjoint) hM hAop hBop hCn hd
+  have hconst : (fun n => ∫ t : ℝ, separatedSylvesterMultiplier d hd t •
+      (unitaryGroup (SA n).operator t ∘L
+        ((SA n).operator ∘L X - X ∘L (SB n).operator) ∘L
+        unitaryGroup (SB n).operator (-t))) = fun _ => X := by
+    funext n
+    exact (finiteSpectralStep_reconstruction hd hsep (SA n) (SB n) X).symm
+  rw [hconst] at hlim
+  exact tendsto_nhds_unique tendsto_const_nhds hlim
 
 /-- The integral in the separated reconstruction is integrable. -/
 theorem separatedSylvester_integrable_complex
@@ -656,24 +743,14 @@ theorem separatedSylvester_integrable_complex
     {d : ℝ} (hd : 0 < d) (C : E →L[ℂ] F) :
     Integrable fun t : ℝ => separatedSylvesterMultiplier d hd t •
       (unitaryGroup A t ∘L C ∘L unitaryGroup B (-t)) := by
-  have hcontA : Continuous (unitaryGroup A) :=
-    continuous_iff_continuousAt.mpr fun t => (hasDerivAt_unitaryGroup A t).continuousAt
-  have hcontB : Continuous (unitaryGroup B) :=
-    continuous_iff_continuousAt.mpr fun t => (hasDerivAt_unitaryGroup B t).continuousAt
-  have hUBneg : Continuous (fun t : ℝ => unitaryGroup B (-t)) :=
-    hcontB.comp continuous_neg
-  have horbit : Continuous
-      (fun t : ℝ => unitaryGroup A t ∘L C ∘L unitaryGroup B (-t)) :=
-    hcontA.clm_comp (continuous_const.clm_comp hUBneg)
-  have hμ : AEStronglyMeasurable (separatedSylvesterMultiplier d hd) volume :=
-    (integrable_separatedSylvesterMultiplier d hd).aestronglyMeasurable
-  have hmajor : Integrable (fun t : ℝ => ‖separatedSylvesterMultiplier d hd t‖ * ‖C‖) :=
-    (integrable_separatedSylvesterMultiplier d hd).norm.mul_const ‖C‖
-  -- Dominate the operator-valued integrand by the integrable scalar majorant
-  -- `‖μ_d(t)‖ · ‖C‖`; the orbit norm is exactly `‖C‖` by two-sided unitarity.
-  refine hmajor.mono' (hμ.smul horbit.aestronglyMeasurable) ?_
+  have hμ := integrable_separatedSylvesterMultiplier d hd
+  have hcont : Continuous fun t : ℝ =>
+      unitaryGroup A t ∘L C ∘L unitaryGroup B (-t) :=
+    (continuous_unitaryGroup A).clm_comp (continuous_const.clm_comp
+      ((continuous_unitaryGroup B).comp continuous_neg))
+  refine Integrable.mono' (hμ.norm.mul_const ‖C‖)
+    (hμ.aestronglyMeasurable.smul hcont.aestronglyMeasurable) ?_
   filter_upwards with t
-  refine le_of_eq ?_
   rw [norm_smul, norm_unitary_left_right A hA B hB t C]
 
 
@@ -693,12 +770,88 @@ theorem spectral_step_integral_right_inverse
       (unitaryGroup A t ∘L C ∘L unitaryGroup B (-t))) -
       (∫ t : ℝ, separatedSylvesterMultiplier d hd t •
         (unitaryGroup A t ∘L C ∘L unitaryGroup B (-t))) ∘L B = C := by
-  -- Open obligation: the right-inverse form of the reconstruction, proved by
-  -- the same finite spectral-step limit (`finiteSpectralStep_reconstruction`
-  -- transported to `sylvesterOperator`, `integral_finset_sylvester_blocks`,
-  -- dominated convergence), handed to the mathematics agent.  The scalar
-  -- premise on each spectral rectangle is `separatedSylvesterMultiplier_identity`.
-  sorry
+  have hpos : ∀ n : ℕ, (0 : ℝ) < 1 / (n + 1) := fun n => by positivity
+  choose SA hSA using fun n : ℕ => exists_finiteSpectralStep A hA (hpos n)
+  choose SB hSB using fun n : ℕ => exists_finiteSpectralStep B hB (hpos n)
+  have honeover : Tendsto (fun n : ℕ => 1 / ((n : ℝ) + 1)) atTop (nhds 0) :=
+    tendsto_one_div_add_atTop_nhds_zero_nat
+  have hAop : Tendsto (fun n => (SA n).operator) atTop (nhds A) := by
+    rw [tendsto_iff_norm_sub_tendsto_zero]
+    exact squeeze_zero (fun n => norm_nonneg _)
+      (fun n => (SA n).norm_operator_sub_le.trans (hSA n)) honeover
+  have hBop : Tendsto (fun n => (SB n).operator) atTop (nhds B) := by
+    rw [tendsto_iff_norm_sub_tendsto_zero]
+    exact squeeze_zero (fun n => norm_nonneg _)
+      (fun n => (SB n).norm_operator_sub_le.trans (hSB n)) honeover
+  -- each finite reciprocal integral solves the finite Sylvester equation
+  have hsolve : ∀ n, (SA n).operator ∘L
+      (∫ t : ℝ, separatedSylvesterMultiplier d hd t •
+        (unitaryGroup (SA n).operator t ∘L C ∘L
+          unitaryGroup (SB n).operator (-t))) -
+      (∫ t : ℝ, separatedSylvesterMultiplier d hd t •
+        (unitaryGroup (SA n).operator t ∘L C ∘L
+          unitaryGroup (SB n).operator (-t))) ∘L (SB n).operator = C := by
+    intro n
+    have hne : ∀ (i : Fin (SA n).n) (j : Fin (SB n).n),
+        (SA n).representative i - (SB n).representative j ≠ 0 := fun i j =>
+      abs_pos.mp (lt_of_lt_of_le hd
+        (finiteSpectralStep_representatives_separated hsep (SA n) (SB n) i j))
+    set Xn : E →L[ℂ] F := ∑ i, ∑ j,
+      ((((SA n).representative i - (SB n).representative j)⁻¹ : ℝ) : ℂ) •
+        (boundedSelfAdjointSpectralProjection A hA ((SA n).cell i)
+            ((SA n).measurable_cell i) ∘L C ∘L
+          boundedSelfAdjointSpectralProjection B hB ((SB n).cell j)
+            ((SB n).measurable_cell j)) with hXn
+    have hdefect : (SA n).operator ∘L Xn - Xn ∘L (SB n).operator = C :=
+      finiteDiagonal_sylvester_solution
+        (fun i => boundedSelfAdjointSpectralProjection A hA ((SA n).cell i)
+          ((SA n).measurable_cell i))
+        (fun j => boundedSelfAdjointSpectralProjection B hB ((SB n).cell j)
+          ((SB n).measurable_cell j))
+        (SA n).representative (SB n).representative
+        (fun i => (boundedSelfAdjointSpectralPVM A hA).proj_idem
+          ((SA n).cell i) ((SA n).measurable_cell i))
+        (spectralProjection_pairwise_orthogonal A hA (SA n).cell
+          (SA n).measurable_cell (SA n).pairwise_disjoint)
+        (SA n).sum_projection_eq_one
+        (fun j => (boundedSelfAdjointSpectralPVM B hB).proj_idem
+          ((SB n).cell j) ((SB n).measurable_cell j))
+        (spectralProjection_pairwise_orthogonal B hB (SB n).cell
+          (SB n).measurable_cell (SB n).pairwise_disjoint)
+        (SB n).sum_projection_eq_one
+        hne C
+    have hXrec := finiteSpectralStep_reconstruction hd hsep (SA n) (SB n) Xn
+    simp only [hdefect] at hXrec
+    rw [← hXrec]
+    exact hdefect
+  -- the finite reciprocal integrals converge to the limit integral
+  have hIlim := tendsto_separated_integral
+    (fun n => (SA n).operator_isSelfAdjoint)
+    (fun n => (SB n).operator_isSelfAdjoint)
+    (M := ‖C‖) (fun n => le_rfl) hAop hBop
+    (tendsto_const_nhds (x := C)) hd
+  -- limit of the finite Sylvester identities
+  have hcomp : Continuous fun p : (F →L[ℂ] F) × (E →L[ℂ] F) => p.1 ∘L p.2 :=
+    isBoundedBilinearMap_comp.continuous
+  have hcomp' : Continuous fun p : (E →L[ℂ] F) × (E →L[ℂ] E) => p.1 ∘L p.2 :=
+    isBoundedBilinearMap_comp.continuous
+  have h1 : Tendsto (fun n => (SA n).operator ∘L
+      (∫ t : ℝ, separatedSylvesterMultiplier d hd t •
+        (unitaryGroup (SA n).operator t ∘L C ∘L
+          unitaryGroup (SB n).operator (-t)))) atTop
+      (nhds (A ∘L (∫ t : ℝ, separatedSylvesterMultiplier d hd t •
+        (unitaryGroup A t ∘L C ∘L unitaryGroup B (-t))))) :=
+    (hcomp.tendsto _).comp (hAop.prodMk_nhds hIlim)
+  have h2 : Tendsto (fun n =>
+      (∫ t : ℝ, separatedSylvesterMultiplier d hd t •
+        (unitaryGroup (SA n).operator t ∘L C ∘L
+          unitaryGroup (SB n).operator (-t))) ∘L (SB n).operator) atTop
+      (nhds ((∫ t : ℝ, separatedSylvesterMultiplier d hd t •
+        (unitaryGroup A t ∘L C ∘L unitaryGroup B (-t))) ∘L B)) :=
+    (hcomp'.tendsto _).comp (hIlim.prodMk_nhds hBop)
+  have hL := h1.sub h2
+  rw [funext hsolve] at hL
+  exact (tendsto_nhds_unique hL tendsto_const_nhds).symm.symm
 
 
 /-- Spectral-multiplier extensionality for the reciprocal kernel.
