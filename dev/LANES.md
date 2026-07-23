@@ -27,7 +27,8 @@ duplicated-effort collisions that occurred on the Sylvester analytic lane
 | fable | InfiniteDimensional/GraphSubspace.lean | acuteAngularOperator, acuteAngularOperator_spec, acute_iff_exists_bounded_angularOperator | 2026-07-23 | done |
 | opus | MathAhead/HiddenFoundations/PolarIsometryFinal.lean | polarIsometry_comp_adjoint_self | 2026-07-23 | done |
 | opus | MathAhead/HiddenFoundations/{Section3Nonacute,PolarIsometryFinal}.lean | remaining 5 polar leaves | 2026-07-23 | blocked (missing infra) |
-| opus | SinTheta/General.lean, SinTheta/SpectralBridge.lean (Experimental) | RCLikeSpectralBridge.* spectral-mapping lemmas, centered_sylvester_equation, boundedInverseDataOfIsUnit, projectionDifference_ideal_intervalExterior; make General.lean elaborate | 2026-07-23 | claimed |
+| opus | SinTheta/RCLikeSpectralBridge.lean (new), SinTheta/SpectralBridge.lean (Experimental) | phantom machinery + estimate repair — SpectralBridge now COMPILES | 2026-07-23 | done (3 RCLike leaf sorries) |
+| opus | SinTheta/General.lean | make it elaborate — needs spectralSubspace/spectralProjection/sinAngleOperator defs + projectionDifference_ideal_intervalExterior + proof/timeout repair | 2026-07-23 | claimed (large next phase) |
 | opus | SinTheta/RestrictionCompat.lean | restrictedSpectrum_top_eq_realSpectrum_general, boundedRealSpectrum_eq_realSpectrum, mem_realResolventSet_ofBounded_iff | 2026-07-23 | done |
 | fable | Frontier/Core.lean, Frontier/RieszCircle.lean | circleRieszProjection (Core) + all 8 RieszCircle declarations (circle contour surface) | 2026-07-23 | claimed |
 
