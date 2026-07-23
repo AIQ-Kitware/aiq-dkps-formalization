@@ -1,0 +1,31 @@
+{
+  "base_commit": "7f9f562",
+  "lane": "Davis-Kahan 1970 Lemma 6.3 statement repair and promotion",
+  "status": "independent scratch draft",
+  "candidates": [
+    {
+      "scratch": "ForMathlib.DavisKahan.Experimental.Scratch.Section6.frontier_lemma6_3_approximationNumber_leakage",
+      "target": "ForMathlib.DavisKahan.Experimental.Frontier.Section6Appendix.lemma6_3_approximationNumber_leakage",
+      "action": "replace the current body if the existing overstrong equation is retained",
+      "semantic_status": "grounded but vacuous relative to the paper"
+    },
+    {
+      "scratch": "ForMathlib.DavisKahan.Experimental.Scratch.Section6.frontier_lemma6_3_singularValue_leakage",
+      "target": "ForMathlib.DavisKahan.Experimental.Frontier.Section6Appendix.lemma6_3_singularValue_leakage",
+      "action": "replace the current body if the existing overstrong equation is retained",
+      "semantic_status": "grounded but vacuous relative to the paper"
+    },
+    {
+      "scratch": "ForMathlib.DavisKahan.Experimental.Scratch.Section6.paper_lemma6_3_approximationNumber_leakage",
+      "target": "corrected source-facing approximation-number theorem",
+      "action": "repair the frontier statement to use K*P = Q*K*P and add 0<n, then promote",
+      "semantic_status": "paper-faithful quantitative theorem"
+    },
+    {
+      "scratch": "ForMathlib.DavisKahan.Experimental.Scratch.Section6.paper_lemma6_3_singularValue_leakage",
+      "target": "corrected finite-dimensional specialization",
+      "action": "repair the frontier statement and promote after the approximation theorem",
+      "semantic_status": "paper-faithful finite specialization"
+    }
+  ]
+}
