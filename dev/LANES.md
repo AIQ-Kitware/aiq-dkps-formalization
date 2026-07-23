@@ -35,19 +35,26 @@ below.
 | jon | MathAhead/HiddenFoundations/PolarIsometryFinal.lean | polarIsometry_comp_adjoint_self | 2026-07-23 | done |
 | jon | MathAhead/HiddenFoundations/{Section3Nonacute,PolarIsometryFinal}.lean | remaining 5 polar leaves | 2026-07-23 | blocked (missing infra) |
 | jon | SinTheta/RCLikeSpectralBridge.lean (new), SinTheta/SpectralBridge.lean (Experimental) | phantom machinery + estimate repair — SpectralBridge now COMPILES | 2026-07-23 | done (3 RCLike leaf sorries) |
-| jon | SinTheta/General.lean | make it elaborate — needs spectralSubspace/spectralProjection/sinAngleOperator defs + projectionDifference_ideal_intervalExterior + proof/timeout repair | 2026-07-23 | claimed (queued after RieszCircle) |
+| jon | SinTheta/General.lean, DoubleAngle.lean, DirectRotation.lean | Continuation-chain repair: all three elaborate (documented leaf obligations); ContinuationCore → ContinuationSpectralIdentification builds green | 2026-07-23 | done |
 | jon | SinTheta/RestrictionCompat.lean | restrictedSpectrum_top_eq_realSpectrum_general, boundedRealSpectrum_eq_realSpectrum, mem_realResolventSet_ofBounded_iff | 2026-07-23 | done |
 | jon | Frontier/Core.lean, Frontier/RieszCircle.lean | circle Riesz lane: all 9 obligations closed (RieszCircle sorry-free, incl. the projection identity via the new contour-free SinTheta/CayleySelectorBridge.lean); signatures 4 and 5 gained the necessary `0 ≤ radius` | 2026-07-23 | done |
 
-## Spectral lane — claimed by jon (2026-07-23)
+## Spectral lane — COMPLETE through the Continuation chain (jon, 2026-07-23)
 
-There is no separate "spectral agent" — the lane was unowned, so jon's agent
-took it. Scope: make `SinTheta/General.lean` elaborate. The genuinely-phantom
-`RCLikeSpectralBridge.*` machinery is now supplied and Experimental
-SpectralBridge COMPILES; what remains is General's own missing
-`spectralSubspace`/`spectralProjection`/`sinAngleOperator` definitions,
-`projectionDifference_ideal_intervalExterior`, and proof/timeout repair.
-General is outside the default build roots, so the tree stays green throughout.
+`SinTheta/General.lean`, `DoubleAngle.lean`, and `DirectRotation.lean` all
+elaborate; the full chain `General → DoubleAngle → ContinuationCore →
+ContinuationTransport → ContinuationAssembly →
+ContinuationSpectralIdentification` builds green (8893 jobs), and the default
+build stays green (9097 jobs). The remaining mathematical content is isolated
+as documented **leaf obligations** inside those three files: the two RCLike
+Sylvester engine transports, the measurable `spectralSubspace` triple,
+`operatorAbsoluteValue` + ideal-gauge identity + ideal projector-difference
+estimate (General); the reflected-subspace transports and double-angle
+identities (DoubleAngle); the polar units/commutation and the two
+Halmos-decomposition extremal theorems (DirectRotation). Signature note:
+`sinTheta_perturbation`/`sinTheta_symmetric`/`spectralProjection_sinTheta`/
+`ideal_sinTheta`/`sinTwoTheta_residual` gained necessary `left ≤ right` /
+instance hypotheses.
 
 ## Parked (claim explicitly before starting)
 
