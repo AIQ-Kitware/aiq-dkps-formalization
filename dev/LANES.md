@@ -37,7 +37,7 @@ below.
 | jon | SinTheta/RCLikeSpectralBridge.lean (new), SinTheta/SpectralBridge.lean (Experimental) | phantom machinery + estimate repair — SpectralBridge now COMPILES | 2026-07-23 | done (3 RCLike leaf sorries) |
 | jon | SinTheta/General.lean | make it elaborate — needs spectralSubspace/spectralProjection/sinAngleOperator defs + projectionDifference_ideal_intervalExterior + proof/timeout repair | 2026-07-23 | claimed (queued after RieszCircle) |
 | jon | SinTheta/RestrictionCompat.lean | restrictedSpectrum_top_eq_realSpectrum_general, boundedRealSpectrum_eq_realSpectrum, mem_realResolventSet_ofBounded_iff | 2026-07-23 | done |
-| jon | Frontier/Core.lean, Frontier/RieszCircle.lean | circle Riesz lane: remaining 5 RieszCircle sorries, per edward's plan in dev/circle-riesz-lane-status-2026-07-23.md (inherited — edward's agent stopped at 4/9) | 2026-07-23 | in progress |
+| jon | Frontier/Core.lean, Frontier/RieszCircle.lean | circle Riesz lane: all 9 obligations closed (RieszCircle sorry-free, incl. the projection identity via the new contour-free SinTheta/CayleySelectorBridge.lean); signatures 4 and 5 gained the necessary `0 ≤ radius` | 2026-07-23 | done |
 
 ## Spectral lane — claimed by jon (2026-07-23)
 
@@ -53,11 +53,11 @@ General is outside the default build roots, so the tree stays green throughout.
 
 - `Ideals/Rectangular.lean` (4): Schatten / Hilbert–Schmidt / trace-class rectangular
   families over RCLike — multi-session analytic campaign; Schauder absent from pinned Mathlib.
-- Frontier Contour-blocked sections (Section3/8/9): park until the circle contour
-  surface exists. That surface (Core.circleRieszProjection + RieszCircle.lean) is
-  now jon's lane (inherited from edward, 2026-07-23); the RieszCircle signatures
-  ARE the intended API — consumers should target them, not a new abstract
-  contour framework.
+- Frontier Contour-blocked sections (Section3/8/9): **UNBLOCKED 2026-07-23** —
+  the circle contour surface is complete (RieszCircle.lean sorry-free; the
+  projection identity is proved through SinTheta/CayleySelectorBridge.lean).
+  Consumers should target the RieszCircle signatures; note theorems 4/5 now
+  take `0 ≤ radius` (supplied by `CircleSeparatesRealSpectrum.radius_pos`).
 - `MathAhead/.../KyFanBochner.lean`: broken on `main` since de30805 (11 errors, pre-existing).
 - Polar-decomposition campaign (5 leaves): `adjoint_polarIsometry` needs the abs-adjoint
   closure relation `closure_range_abs_adjoint_eq_closure_range` + partial-adjoint formula;
