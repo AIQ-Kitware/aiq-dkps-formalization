@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
 import DavisKahan.Experimental.InfiniteDimensional.Core.OperatorAngle
+import DavisKahan.OperatorIdeal.UnitarilyInvariant.RectangularFamily
 
 /-!
 # Symmetric norm ideals
@@ -66,6 +67,9 @@ namespace ForMathlib
 namespace DavisKahanExt
 
 open scoped InnerProductSpace
+-- `RectangularSymmetricIdealFamily` and its concrete instances live in the
+-- `ExactSinTheta` namespace of the rectangular-family module
+open DavisKahan.Experimental.ExactSinTheta
 
 variable {𝕜 : Type*} [RCLike 𝕜]
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
@@ -119,34 +123,114 @@ namespace SymmetricNormIdeal
   Schatten `p = 1` and `p = 2` instead of reproving every structure field.
 -/
 
+/-- Specialize a rectangular symmetric ideal family to the square case on a
+single Hilbert space.  Every field is the corresponding rectangular field at
+`F = E`, except unitary invariance, which the rectangular family only supplies
+as a two-sided norm bound; the equality follows by applying that bound in both
+directions with `‖U‖ ≤ 1`. -/
+noncomputable def ofRectangular
+    (N : RectangularSymmetricIdealFamily (𝕜 := 𝕜)) :
+    SymmetricNormIdeal (𝕜 := 𝕜) (E := E) where
+  mem A := N.Mem A
+  gauge A := N.gauge A
+  zero_mem := N.zero_mem
+  -- point-free assignment, not `field args :=` or `fun args =>`: naming the
+  -- hypothesis binder positionally over a telescope with an interleaved
+  -- implicit `{A}` binds the proof slot to the operator instead
+  add_mem := N.add_mem
+  smul_mem := N.smul_mem
+  ideal_mem := fun L R => N.comp_mem L R
+  adjoint_mem := N.adjoint_mem
+  nonneg := N.gauge_nonneg
+  gauge_zero := N.gauge_zero
+  gauge_eq_zero := N.gauge_eq_zero
+  triangle := N.gauge_add_le
+  gauge_smul := N.gauge_smul
+  gauge_adjoint := N.gauge_adjoint
+  unitary_invariant := fun U Uinv A hU hUinv hUinvU _hUUinv hA => by
+    -- a two-sided conjugation gauge bound, applied in both directions
+    have hUnorm : ‖U‖ ≤ 1 :=
+      ContinuousLinearMap.opNorm_le_bound _ zero_le_one fun x => by
+        rw [one_mul]; exact le_of_eq (hU.1 x)
+    have hUinvnorm : ‖Uinv‖ ≤ 1 :=
+      ContinuousLinearMap.opNorm_le_bound _ zero_le_one fun x => by
+        rw [one_mul]; exact le_of_eq (hUinv.1 x)
+    -- `‖L‖ * g * ‖R‖ ≤ g` whenever both norms are ≤ 1 and `g ≥ 0`
+    have shrink : ∀ (a b g : ℝ), a ≤ 1 → b ≤ 1 → 0 ≤ a → 0 ≤ b → 0 ≤ g →
+        a * g * b ≤ g := by
+      intro a b g ha hb ha0 hb0 hg0
+      have h1 : a * g ≤ g := by nlinarith
+      have h2 : 0 ≤ a * g := mul_nonneg ha0 hg0
+      nlinarith
+    have hforward : N.gauge (U ∘L A ∘L Uinv) ≤ N.gauge A :=
+      (N.gauge_comp_le U Uinv hA).trans
+        (shrink _ _ _ hUnorm hUinvnorm (norm_nonneg _) (norm_nonneg _)
+          (N.gauge_nonneg hA))
+    -- `A` is the same conjugation of `U ∘L A ∘L Uinv` by the inverse pair
+    have hAeq : Uinv ∘L (U ∘L A ∘L Uinv) ∘L U = A := by
+      ext x
+      simp only [ContinuousLinearMap.comp_apply]
+      have hx : Uinv (U x) = x := by
+        have := congrArg (fun T : E →L[𝕜] E => T x) hUinvU
+        simpa using this
+      have hy : Uinv (U (A x)) = A x := by
+        have := congrArg (fun T : E →L[𝕜] E => T (A x)) hUinvU
+        simpa using this
+      rw [hx, hy]
+    have hbackward : N.gauge A ≤ N.gauge (U ∘L A ∘L Uinv) := by
+      have h := N.gauge_comp_le Uinv U (N.comp_mem U Uinv hA)
+      rw [hAeq] at h
+      exact h.trans
+        (shrink _ _ _ hUinvnorm hUnorm (norm_nonneg _) (norm_nonneg _)
+          (N.gauge_nonneg (N.comp_mem U Uinv hA)))
+    exact le_antisymm hforward hbackward
+  ideal_bound := fun L R => N.gauge_comp_le L R
+  gauge_complete := N.gauge_complete
+
 /-- The operator norm ideal. -/
 noncomputable def operatorNorm : SymmetricNormIdeal (𝕜 := 𝕜) (E := E) :=
   ofRectangular RectangularSymmetricIdealFamily.operatorNorm
 
-/-- Compact-operator ideal equipped with the operator norm. -/
+/-!
+The compact, Schatten, trace-class, Hilbert--Schmidt and Ky Fan ideals below are
+open obligations.  `ofRectangular` (above) reduces each to the corresponding
+*rectangular* symmetric-ideal-family instance, but only
+`RectangularSymmetricIdealFamily.operatorNorm` is currently constructed; the
+compact and singular-value families are not built yet.  Once the rectangular
+instances exist, each body becomes `ofRectangular <rectangular instance>` with
+no further work.  Kept as declarations so the abstract ideal theorems in this
+file and its dependents elaborate against them.
+-/
+
+/-- Compact-operator ideal equipped with the operator norm.  Open obligation:
+awaits the rectangular compact family. -/
 noncomputable def compactOperator :
     SymmetricNormIdeal (𝕜 := 𝕜) (E := E) :=
-  ofRectangular RectangularSymmetricIdealFamily.compactOperatorNorm
+  sorry
 
-/-- Schatten `p` ideal. -/
-noncomputable def schatten (p : ℝ) (hp : 1 ≤ p) :
+/-- Schatten `p` ideal.  Open obligation: awaits the rectangular Schatten
+family. -/
+noncomputable def schatten (_p : ℝ) (_hp : 1 ≤ _p) :
     SymmetricNormIdeal (𝕜 := 𝕜) (E := E) :=
-  ofRectangular (RectangularSymmetricIdealFamily.schatten p hp)
+  sorry
 
-/-- Trace-class ideal. -/
+/-- Trace-class ideal.  Open obligation: awaits the rectangular trace-class
+family. -/
 noncomputable def traceClass : SymmetricNormIdeal (𝕜 := 𝕜) (E := E) :=
-  ofRectangular RectangularSymmetricIdealFamily.traceClass
+  sorry
 
-/-- Hilbert--Schmidt ideal. -/
+/-- Hilbert--Schmidt ideal.  Open obligation: awaits the rectangular
+Hilbert--Schmidt family. -/
 noncomputable def hilbertSchmidt : SymmetricNormIdeal (𝕜 := 𝕜) (E := E) :=
-  ofRectangular RectangularSymmetricIdealFamily.hilbertSchmidt
+  sorry
 
 /-- Ky Fan `k` ideal norm for positive `k`.  The positivity premise is
 mathematically necessary: the `k = 0` gauge vanishes on every operator and
-therefore cannot satisfy `gauge_eq_zero`. -/
-noncomputable def kyFan (k : ℕ) (hk : 0 < k) :
+therefore cannot satisfy `gauge_eq_zero`.  Open obligation: awaits the
+rectangular Ky Fan family. -/
+noncomputable def kyFan (_k : ℕ) (_hk : 0 < _k) :
     SymmetricNormIdeal (𝕜 := 𝕜) (E := E) :=
-  ofRectangular (RectangularSymmetricIdealFamily.kyFan k hk)
+  sorry
 
 /-- Unitary invariance of a symmetric ideal norm.
 
@@ -187,7 +271,7 @@ theorem gauge_diagonalPart_le
     I.mem (diagonalPart U A) ∧
       I.gauge (diagonalPart U A) ≤ I.gauge A := by
   let J := reflectionOperator U
-  have hJ : IsUnitaryOperator J := reflection_unitary U
+  have hJ : IsUnitaryOperator J := reflectionOperator_isUnitary U
   have hJinv : J ∘L J = ContinuousLinearMap.id 𝕜 E :=
     reflectionOperator_involutive U
   have hconjMem : I.mem (J ∘L A ∘L J) := I.ideal_mem J J hA
@@ -203,7 +287,7 @@ theorem gauge_diagonalPart_le
     exact I.smul_mem _ hsumMem
   refine ⟨hdiagMem, ?_⟩
   have hscaled := I.gauge_smul (2 : 𝕜) hdiagMem
-  rw [hformula, norm_ofNat] at hscaled
+  rw [hformula, RCLike.norm_ofNat] at hscaled
   have htriangle := I.triangle hA hconjMem
   rw [hconjGauge] at htriangle
   nlinarith
@@ -231,7 +315,7 @@ theorem gauge_offDiagonalPart_le
     I.mem (offDiagonalPart U A) ∧
       I.gauge (offDiagonalPart U A) ≤ I.gauge A := by
   let J := reflectionOperator U
-  have hJ : IsUnitaryOperator J := reflection_unitary U
+  have hJ : IsUnitaryOperator J := reflectionOperator_isUnitary U
   have hJinv : J ∘L J = ContinuousLinearMap.id 𝕜 E :=
     reflectionOperator_involutive U
   have hconjMem : I.mem (J ∘L A ∘L J) := I.ideal_mem J J hA
@@ -250,11 +334,17 @@ theorem gauge_offDiagonalPart_le
     exact I.smul_mem _ hdiffMem
   refine ⟨hoffMem, ?_⟩
   have hscaled := I.gauge_smul (2 : 𝕜) hoffMem
-  rw [hformula, norm_ofNat] at hscaled
+  rw [hformula, RCLike.norm_ofNat] at hscaled
+  have hnegGauge : I.gauge (-(J ∘L A ∘L J)) = I.gauge (J ∘L A ∘L J) := by
+    have h := I.gauge_smul (-1 : 𝕜) hconjMem
+    rw [neg_one_smul] at h
+    simpa using h
   have htriangle : I.gauge (A - J ∘L A ∘L J) ≤
       I.gauge A + I.gauge (J ∘L A ∘L J) := by
-    simpa [sub_eq_add_neg, I.gauge_smul (-1 : 𝕜) hconjMem] using
-      I.triangle hA hnegConjMem
+    rw [sub_eq_add_neg]
+    calc I.gauge (A + -(J ∘L A ∘L J))
+          ≤ I.gauge A + I.gauge (-(J ∘L A ∘L J)) := I.triangle hA hnegConjMem
+      _ = I.gauge A + I.gauge (J ∘L A ∘L J) := by rw [hnegGauge]
   rw [hconjGauge] at htriangle
   nlinarith
 

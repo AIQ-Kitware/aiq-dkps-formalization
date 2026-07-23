@@ -156,6 +156,18 @@ noncomputable def graphProjectionFormula
     Ring.inverse (1 + star (X * projection U) * (X * projection U)) *
     star (projection U + X * projection U)
 
+/-- An acute pair `(U, V)` admits a bounded angular operator over `U` whose
+graph range is `V`.  Open obligation: only the quarter-acute contractive
+version is constructed so far
+(`existsUnique_contractiveAngularOperator_of_isQuarterAcute`); the full acute
+case is the bounded-Riccati existence step. -/
+theorem acute_iff_exists_bounded_angularOperator (U V : Submodule 𝕜 E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
+    IsAcute U V ↔
+      ∃ X : E →L[𝕜] E, IsAngularOperator U X ∧
+        V = LinearMap.range (projection U + X ∘L projection U).toLinearMap :=
+  sorry
+
 /-- Every acute subspace is the graph of a unique bounded angular operator.
 
 Proof strategy:
