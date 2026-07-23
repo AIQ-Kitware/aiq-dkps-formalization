@@ -3,7 +3,7 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
-import DavisKahan.Experimental.InfiniteDimensional.Sylvester.Basic
+import DavisKahan.Experimental.InfiniteDimensional.SinTheta.RestrictionCompat
 
 /-!
 # Infinite-dimensional `sin Θ` theorems
@@ -52,22 +52,24 @@ theorem sinTheta_residual
     (hsep : OrderedSpectraSeparated M ⊤ A Uᗮ d) :
     d * ‖sinThetaEmbedding U X‖ ≤ ‖residual A X M‖ := by
   let Y : F →L[𝕜] Uᗮ :=
-    (complementaryProjection U ∘L X).corestrict Uᗮ
+    codRestrictTo (complementaryProjection U ∘L X) Uᗮ
+      (fun x => Uᗮ.starProjection_apply_mem _)
   let C : F →L[𝕜] Uᗮ :=
-    (complementaryProjection U ∘L residual A X M).corestrict Uᗮ
-  have hEq : sylvesterOperator (A.restrictToOrthogonal hU) M Y = C :=
+    codRestrictTo (complementaryProjection U ∘L residual A X M) Uᗮ
+      (fun x => Uᗮ.starProjection_apply_mem _)
+  have hEq : sylvesterOperator (restrictToOrthogonal A U hU) M Y = C :=
     directedResidual_sylvesterEquation hA hU
   have hsep' : OrderedSpectraSeparated M ⊤
-      (A.restrictToOrthogonal hU) ⊤ d :=
-    restrictedSpectrum_orthogonal_eq hA hU ▸ hsep
+      (restrictToOrthogonal A U hU) ⊤ d :=
+    restrictedSpectrum_orthogonal_eq A U hU ▸ hsep
   have hbound := norm_sylvester_le_of_orderedSeparation
-    (hA.restrictToOrthogonal hU) hM hd hsep' hEq
+    (hA.restrictToOrthogonal U hU) hM hd hsep' hEq
   have hY : ‖Y‖ = ‖sinThetaEmbedding U X‖ :=
-    corestrict_norm_eq_of_range _
+    norm_codRestrictTo_eq _ _ _
   have hC : ‖C‖ ≤ ‖residual A X M‖ := by
     calc
       ‖C‖ = ‖complementaryProjection U ∘L residual A X M‖ :=
-        corestrict_norm_eq_of_range _
+        norm_codRestrictTo_eq _ _ _
       _ ≤ ‖residual A X M‖ :=
         projection_comp_opNorm_le Uᗮ _
   simpa [hY] using hbound.trans hC
@@ -100,17 +102,20 @@ theorem sinTheta_perturbation
     (hgap : IntervalExteriorSeparated A U B Vᗮ left right d) :
     d * directedGap U V ≤ ‖B - A‖ := by
   let X : U →L[𝕜] Vᗮ :=
-    (complementaryProjection V ∘L U.subtypeL).corestrict Vᗮ
+    codRestrictTo (complementaryProjection V ∘L U.subtypeL) Vᗮ
+      (fun x => Vᗮ.starProjection_apply_mem _)
   let C : U →L[𝕜] Vᗮ :=
-    (complementaryProjection V ∘L (B - A) ∘L U.subtypeL).corestrict Vᗮ
+    codRestrictTo
+      (complementaryProjection V ∘L (B - A) ∘L U.subtypeL) Vᗮ
+      (fun x => Vᗮ.starProjection_apply_mem _)
   have hEq := directedPerturbation_sylvesterEquation hA hB hU hV
   have hgap' : ExactSinTheta.IntervalExteriorGap
-      (B.restrictToOrthogonal hV) (A.restrict hU.1)
+      (restrictToOrthogonal B V hV) (restrictToReducingSubspace A U hU)
       left right d := by
     exact intervalExteriorSeparated_restrictions hA hB hU hV hgap
   have hsolve := ExactSinTheta.sylvester_mem_and_gauge_le_of_intervalExteriorGap
     ExactSinTheta.RectangularSymmetricIdealFamily.operatorNorm
-    (hB.restrictToOrthogonal hV) (hA.restrict hU.1)
+    (hB.restrictToOrthogonal V hV) (hA.restrictToReducingSubspace U hU)
     (le_of_mem_Icc hgap) hd hgap' hEq trivial
   have hX : ‖X‖ = directedGap U V :=
     directedGap_eq_restrictedBlock_norm U V
@@ -354,15 +359,18 @@ theorem sinTheta_generalSeparation
     {d : ℝ} (hd : 0 < d) (hgap : HybridGap A B U V d) :
     d * directedGap U V ≤ (Real.pi / 2) * ‖B - A‖ := by
   let X : U →L[𝕜] Vᗮ :=
-    (complementaryProjection V ∘L U.subtypeL).corestrict Vᗮ
+    codRestrictTo (complementaryProjection V ∘L U.subtypeL) Vᗮ
+      (fun x => Vᗮ.starProjection_apply_mem _)
   let C : U →L[𝕜] Vᗮ :=
-    (complementaryProjection V ∘L (B - A) ∘L U.subtypeL).corestrict Vᗮ
+    codRestrictTo
+      (complementaryProjection V ∘L (B - A) ∘L U.subtypeL) Vᗮ
+      (fun x => Vᗮ.starProjection_apply_mem _)
   have hEq := directedPerturbation_sylvesterEquation hA hB hU hV
-  have hsep : SpectraSeparated (B.restrictToOrthogonal hV) ⊤
-      (A.restrict hU.1) ⊤ d :=
+  have hsep : SpectraSeparated (restrictToOrthogonal B V hV) ⊤
+      (restrictToReducingSubspace A U hU) ⊤ d :=
     hybridGap_restrictions hA hB hU hV hgap
   have hsol := norm_sylvester_le_of_generalSeparation
-    (hB.restrictToOrthogonal hV) (hA.restrict hU.1) hd hsep hEq
+    (hB.restrictToOrthogonal V hV) (hA.restrictToReducingSubspace U hU) hd hsep hEq
   have hX : ‖X‖ = directedGap U V :=
     directedGap_eq_restrictedBlock_norm U V
   have hC : ‖C‖ ≤ ‖B - A‖ :=
