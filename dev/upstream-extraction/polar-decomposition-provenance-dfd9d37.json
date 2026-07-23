@@ -1,0 +1,112 @@
+{
+  "schema_version": 1,
+  "campaign": "bounded-polar-decomposition",
+  "dkps_baseline": "dfd9d37ebc86421eea50ee79e71e2420d507878d",
+  "source": {
+    "repository": "https://github.com/adambornemann-glitch/Spectra.git",
+    "commit": "8dbaaf6728d1342ae16acf79fd7eef7c59b37e63",
+    "license": "Apache-2.0",
+    "copyright": "Copyright (c) 2026 Spectra Formalization Project. All rights reserved.",
+    "authors": [
+      "Adam Bornemann"
+    ]
+  },
+  "target": {
+    "local_root": "TauCetiCandidates/Analysis/InnerProductSpace/PolarDecomposition",
+    "intended_tauceti_root": "TauCeti/Analysis/InnerProductSpace/PolarDecomposition",
+    "spectra_dependency_allowed": false,
+    "davis_kahan_dependency_allowed": false
+  },
+  "source_files": [
+    {
+      "path": "Spectra/QuantumMechanics/Channels/PolarDecomp.lean",
+      "role": "primary donor",
+      "declarations": [
+        "Spectra.QuantumMechanics.Channels.absOp",
+        "Spectra.QuantumMechanics.Channels.absOp_nonneg",
+        "Spectra.QuantumMechanics.Channels.absOp_isSelfAdjoint",
+        "Spectra.QuantumMechanics.Channels.absOp_mul_absOp",
+        "Spectra.QuantumMechanics.Channels.adjoint_absOp_comp_absOp",
+        "Spectra.QuantumMechanics.Channels.norm_absOp_apply",
+        "Spectra.QuantumMechanics.Channels.polarRange",
+        "Spectra.QuantumMechanics.Channels.absOp_mem_polarRange",
+        "Spectra.QuantumMechanics.Channels.absOpCorestrict",
+        "Spectra.QuantumMechanics.Channels.norm_absOpCorestrict",
+        "Spectra.QuantumMechanics.Channels.denseRange_absOpCorestrict",
+        "Spectra.QuantumMechanics.Channels.polarPartial",
+        "Spectra.QuantumMechanics.Channels.polarPartial_absOpCorestrict",
+        "Spectra.QuantumMechanics.Channels.polarIsometry",
+        "Spectra.QuantumMechanics.Channels.polar_decomposition"
+      ]
+    },
+    {
+      "path": "Spectra/QuantumMechanics/Channels/TraceClass/PartialIsometry.lean",
+      "role": "partial-isometry donor",
+      "declarations": [
+        "Spectra.QuantumMechanics.Channels.norm_polarPartial_eq",
+        "Spectra.QuantumMechanics.Channels.polarPartial_li",
+        "Spectra.QuantumMechanics.Channels.polarIsometry_apply_eq",
+        "Spectra.QuantumMechanics.Channels.norm_polarIsometry_apply_le",
+        "Spectra.QuantumMechanics.Channels.norm_polarIsometry_le_one",
+        "Spectra.QuantumMechanics.Channels.polarIsometry_adjoint_comp_self",
+        "Spectra.QuantumMechanics.Channels.polarIsometry_adjoint_comp"
+      ],
+      "notes": "The actual Lean source name polarPartial_li uses a Unicode subscript in the donor file; verify the exact environment name during extraction. Do not extract the unrelated Hilbert--Schmidt sum theorem as part of this cluster."
+    },
+    {
+      "path": "Spectra/QuantumMechanics/Channels/TraceClass/Basic.lean",
+      "role": "dependency donor only",
+      "declarations": [
+        "Spectra.QuantumMechanics.Channels.sqrtOp",
+        "Spectra.QuantumMechanics.Channels.sqrtOp_nonneg",
+        "Spectra.QuantumMechanics.Channels.sqrtOp_isSelfAdjoint",
+        "Spectra.QuantumMechanics.Channels.sqrtOp_mul_self",
+        "Spectra.QuantumMechanics.Channels.sqrtOp_comp_self"
+      ],
+      "notes": "Prefer direct Mathlib CFC APIs in the candidate. Do not import the trace-class development merely to obtain square-root helpers."
+    }
+  ],
+  "dkps_derived_sources": [
+    {
+      "path": "DavisKahan/Experimental/MathAhead/HiddenFoundations/PolarIsometryFinal.lean",
+      "authors": [
+        "Jon Crall",
+        "OpenAI GPT-5.6 Thinking"
+      ],
+      "declarations": [
+        "Spectra.QuantumMechanics.Channels.polarFinalRange",
+        "Spectra.QuantumMechanics.Channels.polarPartial_mem_finalRange",
+        "Spectra.QuantumMechanics.Channels.denseRange_polarPartial_final",
+        "Spectra.QuantumMechanics.Channels.polarPartial_final_surjective",
+        "Spectra.QuantumMechanics.Channels.polarPartialFinalEquiv",
+        "Spectra.QuantumMechanics.Channels.polarIsometry_comp_adjoint_self",
+        "Spectra.QuantumMechanics.Channels.adjoint_polarIsometry"
+      ]
+    }
+  ],
+  "planned_new_mathematics": [
+    {
+      "topic": "regularized polar factor",
+      "semantic_status": "new reusable theorem",
+      "purpose": "Handle nonclosed range without an invalid bounded support inverse."
+    },
+    {
+      "topic": "polar equivariance under adjoint and unitary conjugation",
+      "semantic_status": "new or completed reusable theorem",
+      "purpose": "Supply reflection and crossed-block identities."
+    },
+    {
+      "topic": "canonical projection-pair compression positivity",
+      "semantic_status": "Davis--Kahan specialization",
+      "purpose": "Close nonacute direct-rotation diagonal positivity."
+    }
+  ],
+  "declaration_map": [],
+  "upstream_status": "planned",
+  "downstream_migration_status": "not-started",
+  "audit_notes": [
+    "Do not claim a bounded inverse of |T| on its support without a bounded-below hypothesis.",
+    "Audit whether IsPaperDirectRotation real-part inequalities imply the intended positive diagonal blocks.",
+    "Record every renamed or substantially redesigned declaration before upstream submission."
+  ]
+}
