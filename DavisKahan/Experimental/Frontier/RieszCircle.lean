@@ -33,23 +33,27 @@ universe u
 variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
   [CompleteSpace H]
 
-/-- The circle resolvent integrand. -/
+/-- The circle resolvent integrand: the resolvent at the parametrized circle
+point, weighted by the derivative of the parametrization, exactly as in
+Mathlib's `circleIntegral`. -/
 noncomputable def circleResolventIntegrand
-    (A : H →L[ℂ] H) (center radius θ : ℝ) : H →L[ℂ] H := by
-  sorry
+    (A : H →L[ℂ] H) (center radius θ : ℝ) : H →L[ℂ] H :=
+  deriv (circleMap (center : ℂ) radius) θ •
+    Ring.inverse (circleMap (center : ℂ) radius θ • (1 : H →L[ℂ] H) - A)
 
 /-- The operator-valued circle integral defining the Riesz projection. -/
 noncomputable def circleRieszProjectionIntegral
-    (A : H →L[ℂ] H) (center radius : ℝ) : H →L[ℂ] H := by
-  sorry
+    (A : H →L[ℂ] H) (center radius : ℝ) : H →L[ℂ] H :=
+  (2 * Real.pi * Complex.I)⁻¹ •
+    ∫ θ : ℝ in (0 : ℝ)..2 * Real.pi, circleResolventIntegrand A center radius θ
 
 /-- The core definition in `Core` agrees with the explicit operator-valued
 circle integral. -/
 theorem circleRieszProjection_eq_integral
     (A : H →L[ℂ] H) (center radius : ℝ) :
     Frontier.circleRieszProjection A center radius =
-      circleRieszProjectionIntegral A center radius := by
-  sorry
+      circleRieszProjectionIntegral A center radius :=
+  rfl
 
 /-- The resolvent integrand is continuous around a separating circle. -/
 theorem continuous_circleResolventIntegrand

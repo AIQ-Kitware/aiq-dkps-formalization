@@ -7,6 +7,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 import DavisKahan.Interop.Spectra.HalmosTwoProjections
 import DavisKahan.Interop.Spectra.SpectralRestriction
 import ForMathlib.Analysis.Normed.Operator.ApproximationNumber
+import Mathlib.MeasureTheory.Integral.CircleIntegral
 
 /-!
 # Experimental frontier interfaces for the remaining Davis--Kahan 1970 proof
@@ -152,11 +153,15 @@ structure CircleSeparatesRealSpectrum
     ∀ x : ℝ, (x : ℂ) ∈ spectrum ℂ A →
       (‖(x : ℂ) - (center : ℂ)‖ < radius ↔ x ∈ B)
 
-/-- Circle-integral Riesz projection for a closed operator.  The implementation
-should use Mathlib's circle integral rather than a new general contour API. -/
+/-- Circle-integral Riesz projection for a bounded operator, through Mathlib's
+circle integral: `(2 π i)⁻¹ ∮_{|z-c|=r} (z - A)⁻¹ dz`, with the resolvent
+taken through the total `Ring.inverse` so the definition needs no separation
+hypothesis. -/
 noncomputable def circleRieszProjection
-    (A : H →L[ℂ] H) (center radius : ℝ) : H →L[ℂ] H := by
-  sorry
+    (A : H →L[ℂ] H) (center radius : ℝ) : H →L[ℂ] H :=
+  (2 * Real.pi * Complex.I)⁻¹ •
+    ∮ z in C((center : ℂ), radius),
+      Ring.inverse (z • (1 : H →L[ℂ] H) - A)
 
 end CircleRieszInterface
 
