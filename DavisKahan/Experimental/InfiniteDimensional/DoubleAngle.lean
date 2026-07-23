@@ -125,14 +125,12 @@ noncomputable def reflectedSubspace (V U : Submodule 𝕜 E)
     [V.HasOrthogonalProjection] : Submodule 𝕜 E :=
   U.map (reflectionOperator V : E →L[𝕜] E).toLinearMap
 
-/-- **Leaf obligation.** The mirror image of a subspace with an orthogonal
-projection has one: the conjugated projection is a self-adjoint idempotent
-with the reflected range. -/
-noncomputable instance reflectedSubspace_hasOrthogonalProjection
-    (V U : Submodule 𝕜 E) [V.HasOrthogonalProjection]
-    [U.HasOrthogonalProjection] :
-    (reflectedSubspace V U).HasOrthogonalProjection :=
-  sorry
+/-- The reflection is an involution, applied pointwise. -/
+theorem reflectionOperator_apply_apply
+    (V : Submodule 𝕜 E) [V.HasOrthogonalProjection] (x : E) :
+    reflectionOperator V (reflectionOperator V x) = x := by
+  have h := congrArg (fun T : E →L[𝕜] E => T x) (reflectionOperator_involutive V)
+  simpa using h
 
 /-- The reflection through a subspace is self-adjoint: it is `2 P - 1`. -/
 theorem isSelfAdjoint_reflectionOperator
@@ -146,6 +144,69 @@ theorem isSelfAdjoint_reflectionOperator
     simp [Submodule.reflectionOperator_apply]
   rw [hform, IsSelfAdjoint, star_sub, star_smul, star_ofNat, hP.star_eq,
     star_one]
+
+/-- The reflection through `V` exchanges orthogonal complements with mirror
+images: it is a self-adjoint involution. -/
+theorem reflectedSubspace_orthogonal
+    (V U : Submodule 𝕜 E) [V.HasOrthogonalProjection] :
+    (reflectedSubspace V U)ᗮ = reflectedSubspace V Uᗮ := by
+  have hJsym := ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
+    (isSelfAdjoint_reflectionOperator V)
+  ext y
+  constructor
+  · intro hy
+    refine Submodule.mem_map.mpr
+      ⟨reflectionOperator V y, ?_, reflectionOperator_apply_apply V y⟩
+    rw [Submodule.mem_orthogonal]
+    intro u hu
+    have h := (Submodule.mem_orthogonal _ y).mp hy (reflectionOperator V u)
+      (Submodule.mem_map.mpr ⟨u, hu, rfl⟩)
+    have h2 : ⟪reflectionOperator V u, y⟫_𝕜 =
+        ⟪u, reflectionOperator V y⟫_𝕜 := hJsym u y
+    rw [← h2]
+    exact h
+  · intro hy
+    obtain ⟨w, hw, rfl⟩ := Submodule.mem_map.mp hy
+    rw [Submodule.mem_orthogonal]
+    rintro _ ⟨u, hu, rfl⟩
+    calc ⟪reflectionOperator V u, reflectionOperator V w⟫_𝕜
+        = ⟪u, reflectionOperator V (reflectionOperator V w)⟫_𝕜 :=
+          hJsym u (reflectionOperator V w)
+      _ = ⟪u, w⟫_𝕜 := by rw [reflectionOperator_apply_apply V w]
+      _ = 0 := Submodule.inner_right_of_mem_orthogonal hu hw
+
+/-- The mirror image of a subspace with an orthogonal projection has one:
+the conjugated projection is an idempotent with the reflected range. -/
+noncomputable instance reflectedSubspace_hasOrthogonalProjection
+    (V U : Submodule 𝕜 E) [V.HasOrthogonalProjection]
+    [U.HasOrthogonalProjection] :
+    (reflectedSubspace V U).HasOrthogonalProjection := by
+  set P : E →L[𝕜] E :=
+    reflectionOperator V ∘L projection U ∘L reflectionOperator V with hP
+  have hPapp : ∀ x, P x = reflectionOperator V
+      (U.starProjection (reflectionOperator V x)) := fun x => rfl
+  have hidem : IsIdempotentElem P := by
+    show P * P = P
+    ext x
+    show P (P x) = P x
+    rw [hPapp, hPapp, reflectionOperator_apply_apply,
+      Submodule.starProjection_eq_self_iff.mpr
+        (U.starProjection_apply_mem (reflectionOperator V x))]
+  have hrange : LinearMap.range (P : E →ₗ[𝕜] E) = reflectedSubspace V U := by
+    apply le_antisymm
+    · rintro _ ⟨x, rfl⟩
+      exact Submodule.mem_map.mpr
+        ⟨U.starProjection (reflectionOperator V x),
+          U.starProjection_apply_mem _, rfl⟩
+    · intro y hy
+      obtain ⟨u, hu, rfl⟩ := Submodule.mem_map.mp hy
+      refine ⟨reflectionOperator V u, ?_⟩
+      show P (reflectionOperator V u) =
+        (reflectionOperator V : E →L[𝕜] E) u
+      rw [hPapp, reflectionOperator_apply_apply,
+        Submodule.starProjection_eq_self_iff.mpr hu]
+  exact hrange ▸
+    ContinuousLinearMap.IsIdempotentElem.hasOrthogonalProjection_range hidem
 
 /-- Conjugation by the reflection preserves self-adjointness. -/
 theorem IsSelfAdjointOperator.reflection_conjugate
@@ -164,16 +225,28 @@ theorem IsSelfAdjointOperator.reflection_conjugate
     rw [star_mul, star_mul, hJsa.star_eq, hAsa.star_eq, mul_assoc]
   exact ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hstar
 
-/-- **Leaf obligation.** The mirror image of a reducing subspace reduces the
-conjugated operator (needs `(J '' U)ᗮ = J '' Uᗮ` for the self-adjoint unitary
-reflection). -/
+/-- The mirror image of a reducing subspace reduces the conjugated
+operator. -/
 theorem reduces_reflectedSubspace
     {A : E →L[𝕜] E} {U : Submodule 𝕜 E} {V : Submodule 𝕜 E}
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hU : Reduces A U) :
     Reduces (reflectionOperator V ∘L A ∘L reflectionOperator V)
-      (reflectedSubspace V U) :=
-  sorry
+      (reflectedSubspace V U) := by
+  constructor
+  · intro y hy
+    obtain ⟨u, hu, rfl⟩ := Submodule.mem_map.mp hy
+    show reflectionOperator V (A (reflectionOperator V
+      (reflectionOperator V u))) ∈ reflectedSubspace V U
+    rw [reflectionOperator_apply_apply]
+    exact Submodule.mem_map.mpr ⟨A u, hU.1 u hu, rfl⟩
+  · intro y hy
+    rw [reflectedSubspace_orthogonal] at hy ⊢
+    obtain ⟨w, hw, rfl⟩ := Submodule.mem_map.mp hy
+    show reflectionOperator V (A (reflectionOperator V
+      (reflectionOperator V w))) ∈ reflectedSubspace V Uᗮ
+    rw [reflectionOperator_apply_apply]
+    exact Submodule.mem_map.mpr ⟨A w, hU.2 w hw, rfl⟩
 
 /-- **Leaf obligation.** A finite-gap configuration yields both mixed
 interval/exterior separations against its own reflection through `V`, with
