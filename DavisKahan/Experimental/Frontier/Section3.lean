@@ -48,12 +48,14 @@ theorem proposition3_1_positivity_characterization
       T = spectraDirectRotation U V hacute := by
   sorry
 
+omit [CompleteSpace H] [U.HasOrthogonalProjection]
+  [V.HasOrthogonalProjection] in
 /-- The paper's crossed intersections are exactly the Halmos source and target
 defect spaces. -/
 theorem crossed_intersections_are_halmos_defects :
     halmosSourceDefect U V = U ⊓ Vᗮ ∧
-      halmosTargetDefect U V = Uᗮ ⊓ V := by
-  sorry
+      halmosTargetDefect U V = Uᗮ ⊓ V :=
+  ⟨rfl, rfl⟩
 
 /-- Davis--Kahan 1970, Proposition 3.2: a nonacute direct rotation exists
 exactly when the crossed defect spaces have equal Hilbert dimension, expressed
