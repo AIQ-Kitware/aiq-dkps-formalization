@@ -31,10 +31,10 @@ variable {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
 /-- One-sided double-angle sine operator for a trial embedding. -/
 noncomputable def sinTwoThetaEmbedding (U : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] (X : F →L[𝕜] E)
-    [(LinearMap.range X.toLinearMap).HasOrthogonalProjection] : E →ₗ[𝕜] E :=
+    [(LinearMap.range X.toLinearMap).HasOrthogonalProjection] : E →L[𝕜] E :=
   (2 : 𝕜) •
-    (complementaryProjection U ∘ₗ
-      projection (LinearMap.range X.toLinearMap) ∘ₗ projection U)
+    (complementaryProjection U ∘L
+      projection (LinearMap.range X.toLinearMap) ∘L projection U)
 
 /-- Unfolding identifies the trial-range construction with the ambient
 one-sided double-angle operator `2 P_{U^perp} P_V P_U`. -/
@@ -44,8 +44,8 @@ theorem sinTwoThetaEmbedding_eq_rangeAngle (U : Submodule 𝕜 E)
     [(LinearMap.range X.toLinearMap).HasOrthogonalProjection] :
     sinTwoThetaEmbedding U X =
       (2 : 𝕜) •
-        (complementaryProjection U ∘ₗ
-          projection (LinearMap.range X.toLinearMap) ∘ₗ projection U) :=
+        (complementaryProjection U ∘L
+          projection (LinearMap.range X.toLinearMap) ∘L projection U) :=
   rfl
 
 end DavisKahanExt
