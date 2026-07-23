@@ -35,19 +35,21 @@ noncomputable section
 /-- Fundamental theorem in a form convenient for repeatedly integrating a
 specified derivative from zero. -/
 theorem eq_zero_value_add_intervalIntegral
-    {G : Type*} [NormedAddCommGroup G] [NormedSpace ℝ G]
+    {G : Type*} [NormedAddCommGroup G] [NormedSpace ℝ G] [CompleteSpace G]
     (f f' : ℝ → G)
     (hf : ∀ x, HasDerivAt f (f' x) x)
     (hf' : Continuous f') (x : ℝ) :
     f x = f 0 + ∫ t in (0 : ℝ)..x, f' t := by
   have hftc : (∫ t in (0 : ℝ)..x, f' t) = f x - f 0 :=
-    intervalIntegral.integral_eq_sub_of_hasDerivAt hf hf'.intervalIntegrable
+    intervalIntegral.integral_eq_sub_of_hasDerivAt (fun t _ => hf t)
+      (hf'.intervalIntegrable _ _)
+  rw [hftc]
   abel
 
 /-- A differentiable Banach-valued function with zero derivative and zero value
 at the origin vanishes identically. -/
 theorem eq_zero_of_hasDerivAt_zero
-    {G : Type*} [NormedAddCommGroup G] [NormedSpace ℝ G]
+    {G : Type*} [NormedAddCommGroup G] [NormedSpace ℝ G] [CompleteSpace G]
     (f : ℝ → G)
     (hf : ∀ x, HasDerivAt f 0 x)
     (h0 : f 0 = 0) :
@@ -59,14 +61,14 @@ theorem eq_zero_of_hasDerivAt_zero
 
 /-- A function with constant derivative is affine. -/
 theorem eq_affine_of_hasDerivAt_const
-    {G : Type*} [NormedAddCommGroup G] [NormedSpace ℝ G]
+    {G : Type*} [NormedAddCommGroup G] [NormedSpace ℝ G] [CompleteSpace G]
     (f : ℝ → G) (c : G)
     (hf : ∀ x, HasDerivAt f c x) :
     ∀ x, f x = f 0 + x • c := by
   intro x
   have h := eq_zero_value_add_intervalIntegral f (fun _ => c)
     hf continuous_const x
-  simpa using h
+  simpa [intervalIntegral.integral_const] using h
 
 namespace FourthOrderData
 
