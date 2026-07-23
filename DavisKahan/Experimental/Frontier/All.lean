@@ -10,10 +10,15 @@ import DavisKahan.Experimental.Frontier.Section4
 import DavisKahan.Experimental.Frontier.Lemma63
 import DavisKahan.Experimental.Frontier.RieszCircle
 import DavisKahan.Experimental.Frontier.RemainingSourceSurface
--- Section8 and Section9Analytic are TEMPORARILY out of the aggregate: they
--- reach the four experimental modules that have never compiled
--- (Ideals.Symmetric, Core.CompatibilitySinTwoTheta, Sylvester.Resolvent,
--- GraphSubspace).  Restored once those elaborate.
+-- Section8 and Section9Analytic are TEMPORARILY out of the aggregate.  The four
+-- modules that originally blocked them (Ideals.Symmetric,
+-- Core.CompatibilitySinTwoTheta, Sylvester.Resolvent, GraphSubspace) now
+-- elaborate; the remaining blocker is
+-- `DavisKahan.Experimental.InfiniteDimensional.Sylvester.Basic`, which needs an
+-- operator-semigroup / Bochner-integral Sylvester reconstruction (unitaryGroup,
+-- semigroup, separatedSylvesterMultiplier, orderedSylvester_reconstruction, ...)
+-- that is a genuine missing development, not a rename.  Restore both imports
+-- once Sylvester.Basic elaborates.
 -- import DavisKahan.Experimental.Frontier.Section8
 -- import DavisKahan.Experimental.Frontier.Section9Analytic
 
