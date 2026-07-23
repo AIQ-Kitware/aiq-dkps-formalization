@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "campaign": "selfadjoint-borel-calculus-mathahead-gpt56",
+  "status": "uncompiled_mathematics_ahead",
+  "aggregate": "DavisKahan.Experimental.MathAhead.Sylvester.All",
+  "candidates": [
+    {
+      "role": "bounded self-adjoint real-line Borel calculus",
+      "declaration": "ForMathlib.DavisKahanExt.boundedSelfAdjointBorelCalculus",
+      "replaces_missing_helper": "boundedSelfAdjointBorelCalculus"
+    },
+    {
+      "role": "identity symbol reconstructs the generator",
+      "declaration": "ForMathlib.DavisKahanExt.boundedSelfAdjointBorelCalculus_id",
+      "replaces_missing_helper": "boundedSelfAdjointBorelCalculus_id"
+    },
+    {
+      "role": "spectral sup norm estimate",
+      "declaration": "ForMathlib.DavisKahanExt.boundedSelfAdjointBorelCalculus_norm_sub_le",
+      "replaces_missing_helper": "boundedSelfAdjointBorelCalculus_norm_sub_le"
+    },
+    {
+      "role": "finite step calculus expansion",
+      "declaration": "ForMathlib.DavisKahanExt.boundedSelfAdjointBorelCalculus_eq_finset_sum_indicator",
+      "replaces_missing_helper": "boundedSelfAdjointBorelCalculus_eq_finset_sum_indicator"
+    },
+    {
+      "role": "PVM support congruence",
+      "declaration": "ForMathlib.DavisKahanExt.spectralPVM_proj_congr_of_inter_spectrum_eq",
+      "replaces_missing_helper": "spectralPVM_proj_congr_of_inter_spectrum_eq"
+    },
+    {
+      "role": "finite spectral projections sum to identity",
+      "declaration": "ForMathlib.DavisKahanExt.spectralProjection_finset_sum_eq_id",
+      "replaces_missing_helper": "ProjValMeasure.proj_iUnion_finite"
+    },
+    {
+      "role": "finite orthogonal idempotent exponential",
+      "declaration": "ForMathlib.DavisKahanExt.exp_finset_orthogonal_idempotents",
+      "replaces_missing_helper": "exp_finset_orthogonal_idempotents"
+    },
+    {
+      "role": "blockwise Fourier reconstruction",
+      "declaration": "ForMathlib.DavisKahanExt.finiteDiagonal_sylvester_reconstruction",
+      "replaces_missing_helper": "finiteSpectralStep_reconstruction algebraic core"
+    }
+  ],
+  "rebased_on_commit": "53297a486170",
+  "rebased_overlay": "pending-mathahead-rebased-53297a4-gpt56"
+}

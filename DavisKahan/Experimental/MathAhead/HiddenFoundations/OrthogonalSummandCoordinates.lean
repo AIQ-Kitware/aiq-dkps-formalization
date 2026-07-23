@@ -1,0 +1,179 @@
+/-
+Copyright (c) 2026 Kitware, Inc. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Jon Crall, OpenAI GPT-5.6 Thinking
+-/
+
+import DavisKahan.Interop.Spectra.HalmosTwoProjections
+import Mathlib.Analysis.InnerProductSpace.ProdL2
+
+/-!
+# Orthogonal-summand coordinates
+
+This file packages the elementary coordinate map associated with an
+orthogonally complemented closed subspace.  It is the reusable assembly layer
+needed by the nonacute two-projection classification: once isometries have been
+constructed on mutually orthogonal summands, they can be joined into one
+ambient unitary without repeating projection algebra.
+-/
+
+open scoped InnerProductSpace
+
+namespace ForMathlib
+namespace DavisKahan
+namespace Experimental
+namespace MathAhead
+namespace HiddenFoundations
+
+noncomputable section
+
+universe u
+
+variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
+  [CompleteSpace H]
+
+/-- Coordinates of a vector relative to `K ⊕ Kᗮ`. -/
+noncomputable def orthogonalCoordinates
+    (K : Submodule ℂ H) [K.HasOrthogonalProjection] :
+    H →ₗ[ℂ] WithLp 2 (K × Kᗮ) where
+  toFun x := WithLp.toLp 2
+    (⟨K.starProjection x, K.starProjection_apply_mem x⟩,
+      ⟨Kᗮ.starProjection x, (Kᗮ).starProjection_apply_mem x⟩)
+  map_add' x y := by
+    apply WithLp.ofLp_injective 2
+    ext <;> simp
+  map_smul' c x := by
+    apply WithLp.ofLp_injective 2
+    ext <;> simp
+
+/-- Reassemble orthogonal coordinates by adding their ambient values. -/
+noncomputable def orthogonalCoordinatesInv
+    (K : Submodule ℂ H) [K.HasOrthogonalProjection] :
+    WithLp 2 (K × Kᗮ) →ₗ[ℂ] H where
+  toFun z := ((WithLp.fst z : K) : H) + ((WithLp.snd z : Kᗮ) : H)
+  map_add' x y := by
+    simp only [map_add, Submodule.coe_add]
+    abel
+  map_smul' c x := by
+    simp only [map_smul, Submodule.coe_smul]
+    module
+
+@[simp] theorem orthogonalCoordinatesInv_apply
+    (K : Submodule ℂ H) [K.HasOrthogonalProjection]
+    (z : WithLp 2 (K × Kᗮ)) :
+    orthogonalCoordinatesInv K z =
+      ((WithLp.fst z : K) : H) + ((WithLp.snd z : Kᗮ) : H) := rfl
+
+@[simp] theorem orthogonalCoordinatesInv_coordinates
+    (K : Submodule ℂ H) [K.HasOrthogonalProjection] (x : H) :
+    orthogonalCoordinatesInv K (orthogonalCoordinates K x) = x := by
+  change K.starProjection x + Kᗮ.starProjection x = x
+  exact K.starProjection_add_starProjection_orthogonal x
+
+@[simp] theorem orthogonalCoordinates_coordinatesInv
+    (K : Submodule ℂ H) [K.HasOrthogonalProjection]
+    (z : WithLp 2 (K × Kᗮ)) :
+    orthogonalCoordinates K (orthogonalCoordinatesInv K z) = z := by
+  apply WithLp.ofLp_injective 2
+  apply Prod.ext
+  · apply Subtype.ext
+    change K.starProjection
+      (((WithLp.fst z : K) : H) + ((WithLp.snd z : Kᗮ) : H)) =
+        ((WithLp.fst z : K) : H)
+    rw [map_add, K.starProjection_eq_self_iff.mpr (WithLp.fst z).property,
+      K.starProjection_apply_eq_zero_iff.mpr (WithLp.snd z).property]
+    exact add_zero _
+  · apply Subtype.ext
+    change Kᗮ.starProjection
+      (((WithLp.fst z : K) : H) + ((WithLp.snd z : Kᗮ) : H)) =
+        ((WithLp.snd z : Kᗮ) : H)
+    have hfst : ((WithLp.fst z : K) : H) ∈ (Kᗮ)ᗮ := by
+      simpa using (WithLp.fst z).property
+    rw [map_add, (Kᗮ).starProjection_apply_eq_zero_iff.mpr hfst,
+      (Kᗮ).starProjection_eq_self_iff.mpr (WithLp.snd z).property,
+      zero_add]
+
+/-- Pythagoras for the coordinate map. -/
+theorem norm_sq_orthogonalCoordinates
+    (K : Submodule ℂ H) [K.HasOrthogonalProjection] (x : H) :
+    ‖WithLp.fst (orthogonalCoordinates K x)‖ ^ 2 +
+        ‖WithLp.snd (orthogonalCoordinates K x)‖ ^ 2 = ‖x‖ ^ 2 := by
+  change ‖K.starProjection x‖ ^ 2 + ‖Kᗮ.starProjection x‖ ^ 2 = ‖x‖ ^ 2
+  rw [Submodule.starProjection_orthogonal_apply]
+  exact norm_sq_starProjection_add_norm_sq_sub K x
+
+/-- The coordinate map is norm preserving. -/
+theorem norm_orthogonalCoordinates
+    (K : Submodule ℂ H) [K.HasOrthogonalProjection] (x : H) :
+    ‖orthogonalCoordinates K x‖ = ‖x‖ := by
+  have hs := norm_sq_orthogonalCoordinates K x
+  have hpair : ‖orthogonalCoordinates K x‖ ^ 2 =
+      ‖WithLp.fst (orthogonalCoordinates K x)‖ ^ 2 +
+        ‖WithLp.snd (orthogonalCoordinates K x)‖ ^ 2 := by
+    exact WithLp.norm_sq_eq_add_norm_sq _
+  have hsq : ‖orthogonalCoordinates K x‖ ^ 2 = ‖x‖ ^ 2 := hpair.trans hs
+  exact (sq_eq_sq₀ (norm_nonneg _) (norm_nonneg _)).mp hsq
+
+/-- Canonical unitary coordinates for `H = K ⊕ Kᗮ`. -/
+noncomputable def orthogonalDecompositionEquiv
+    (K : Submodule ℂ H) [K.HasOrthogonalProjection] :
+    H ≃ₗᵢ[ℂ] WithLp 2 (K × Kᗮ) where
+  toLinearEquiv :=
+    { toLinearMap := orthogonalCoordinates K
+      invFun := orthogonalCoordinatesInv K
+      left_inv := orthogonalCoordinatesInv_coordinates K
+      right_inv := orthogonalCoordinates_coordinatesInv K }
+  norm_map' := norm_orthogonalCoordinates K
+
+/-- Join two isometries acting on complementary orthogonal summands. -/
+noncomputable def orthogonalSumEquiv
+    (K L : Submodule ℂ H)
+    [K.HasOrthogonalProjection] [L.HasOrthogonalProjection]
+    (eK : K ≃ₗᵢ[ℂ] L) (ePerp : Kᗮ ≃ₗᵢ[ℂ] Lᗮ) :
+    H ≃ₗᵢ[ℂ] H :=
+  (orthogonalDecompositionEquiv K).trans
+    ((LinearIsometryEquiv.prod eK ePerp).withLp 2) |>.trans
+      (orthogonalDecompositionEquiv L).symm
+
+@[simp] theorem orthogonalSumEquiv_apply_mem
+    (K L : Submodule ℂ H)
+    [K.HasOrthogonalProjection] [L.HasOrthogonalProjection]
+    (eK : K ≃ₗᵢ[ℂ] L) (ePerp : Kᗮ ≃ₗᵢ[ℂ] Lᗮ)
+    (x : K) :
+    orthogonalSumEquiv K L eK ePerp (x : H) = (eK x : H) := by
+  simp [orthogonalSumEquiv, orthogonalDecompositionEquiv,
+    orthogonalCoordinates, orthogonalCoordinatesInv]
+
+@[simp] theorem orthogonalSumEquiv_apply_mem_orthogonal
+    (K L : Submodule ℂ H)
+    [K.HasOrthogonalProjection] [L.HasOrthogonalProjection]
+    (eK : K ≃ₗᵢ[ℂ] L) (ePerp : Kᗮ ≃ₗᵢ[ℂ] Lᗮ)
+    (x : Kᗮ) :
+    orthogonalSumEquiv K L eK ePerp (x : H) = (ePerp x : H) := by
+  simp [orthogonalSumEquiv, orthogonalDecompositionEquiv,
+    orthogonalCoordinates, orthogonalCoordinatesInv]
+
+/-- The joined equivalence conjugates the first orthogonal projection. -/
+theorem orthogonalSumEquiv_intertwines_projection
+    (K L : Submodule ℂ H)
+    [K.HasOrthogonalProjection] [L.HasOrthogonalProjection]
+    (eK : K ≃ₗᵢ[ℂ] L) (ePerp : Kᗮ ≃ₗᵢ[ℂ] Lᗮ) :
+    (orthogonalSumEquiv K L eK ePerp : H →L[ℂ] H) ∘L K.starProjection =
+      L.starProjection ∘L
+        (orthogonalSumEquiv K L eK ePerp : H →L[ℂ] H) := by
+  apply ContinuousLinearMap.ext
+  intro x
+  rw [← K.starProjection_add_starProjection_orthogonal x]
+  simp only [map_add, ContinuousLinearMap.comp_apply]
+  have hxK : K.starProjection x ∈ K := K.starProjection_apply_mem x
+  have hxP : Kᗮ.starProjection x ∈ Kᗮ := (Kᗮ).starProjection_apply_mem x
+  simp [orthogonalSumEquiv_apply_mem, orthogonalSumEquiv_apply_mem_orthogonal,
+    hxK, hxP]
+
+end
+
+end HiddenFoundations
+end MathAhead
+end Experimental
+end DavisKahan
+end ForMathlib

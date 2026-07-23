@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "description": "Uncompiled mathematics-ahead candidates supplied by the Section 3 elementary and Lemma 6.3 overlay.",
+  "candidates": [
+    {
+      "frontier_id": "s3-generic-cosine-restriction",
+      "declaration": "ForMathlib.DavisKahan.Experimental.MathAhead.Section3.genericHalmosCosineSqCompleted",
+      "status": "complete_math_uncompiled"
+    },
+    {
+      "frontier_id": "s3-generic-sine-restriction",
+      "declaration": "ForMathlib.DavisKahan.Experimental.MathAhead.Section3.genericHalmosSineSqCompleted",
+      "status": "complete_math_uncompiled"
+    },
+    {
+      "frontier_id": "s3-generic-pythagoras",
+      "declaration": "ForMathlib.DavisKahan.Experimental.MathAhead.Section3.genericHalmosCosineSqCompleted_add_sineSq",
+      "status": "complete_math_uncompiled"
+    },
+    {
+      "frontier_id": "s3-crossed-identification",
+      "declaration": "ForMathlib.DavisKahan.Experimental.MathAhead.Section3.crossed_intersections_are_halmos_defects_completed",
+      "status": "complete_math_uncompiled"
+    },
+    {
+      "frontier_id": "s3-cor3-2",
+      "declaration": "ForMathlib.DavisKahan.Experimental.MathAhead.Section3.corollary3_2_reversal_completed",
+      "status": "complete_math_uncompiled"
+    },
+    {
+      "frontier_id": "s6-approximation-energy",
+      "declaration": "ForMathlib.DavisKahan.Experimental.MathAhead.Section6Appendix.approximationSquareEnergy",
+      "status": "complete_math_uncompiled"
+    },
+    {
+      "frontier_id": "s6-lemma6-3-approx",
+      "declaration": "ForMathlib.DavisKahan.Experimental.MathAhead.Section6Appendix.lemma6_3_approximationNumber_leakage_completed",
+      "status": "complete_math_uncompiled",
+      "semantic_note": "Uses the corrected paper hypothesis K*P = Q*K*P."
+    }
+  ],
+  "rebased_on_commit": "53297a486170",
+  "rebased_overlay": "pending-mathahead-rebased-53297a4-gpt56"
+}
