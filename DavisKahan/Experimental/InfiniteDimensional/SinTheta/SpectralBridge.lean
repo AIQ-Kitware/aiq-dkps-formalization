@@ -45,14 +45,13 @@ theorem norm_sub_midpoint_le_of_spectrumIn_Icc
     intro z hz
     obtain ⟨r, hrA, rfl⟩ :=
       RCLikeSpectralBridge.mem_spectrum_sub_real_scalar_iff hA hz
-    have hrI : r ∈ Set.Icc β α := hσ hrA
-    change ‖(((r - c : ℝ) : 𝕜))‖ ≤ ρ
-    rw [RCLike.norm_ofReal]
+    obtain ⟨hrβ, hrα⟩ := Set.mem_Icc.mp (hσ hrA)
+    rw [Metric.mem_closedBall, dist_zero_right, RCLike.norm_ofReal]
     exact abs_le.mpr ⟨by dsimp [c, ρ] at *; linarith,
       by dsimp [c, ρ] at *; linarith⟩
   have hcenterSelf :
       (A - ((c : ℝ) : 𝕜) • ContinuousLinearMap.id 𝕜 E).IsSymmetric :=
-    hA.sub (ContinuousLinearMap.isSymmetric_id.smul ((c : ℝ) : 𝕜))
+    hA.sub (isSymmetric_real_smul_id c)
   exact RCLikeSpectralBridge.norm_le_of_selfAdjoint_spectrum_subset_closedBall
     hcenterSelf hρ hspectrum
 
@@ -70,13 +69,13 @@ theorem centered_isUnit_of_spectrumOutside
   let T : E →L[𝕜] E :=
     A - ((c : ℝ) : 𝕜) • ContinuousLinearMap.id 𝕜 E
   have hTself : T.IsSymmetric :=
-    hA.sub (ContinuousLinearMap.isSymmetric_id.smul ((c : ℝ) : 𝕜))
+    hA.sub (isSymmetric_real_smul_id c)
   have hdist : ∀ z ∈ spectrum 𝕜 T, γ ≤ ‖z‖ := by
     intro z hz
     obtain ⟨r, hrA, rfl⟩ :=
       RCLikeSpectralBridge.mem_spectrum_sub_real_scalar_iff hA hz
     have hr := hσ hrA
-    change γ ≤ |r - c|
+    rw [RCLike.norm_ofReal]
     rcases hr with hr | hr
     · rw [abs_of_nonpos (by dsimp [c]; linarith)]
       dsimp [γ, c]
@@ -87,9 +86,10 @@ theorem centered_isUnit_of_spectrumOutside
   have hzero : (0 : 𝕜) ∉ spectrum 𝕜 T := by
     intro h0
     have := hdist 0 h0
-    simpa using (not_le_of_gt hγ this)
+    rw [norm_zero] at this
+    exact absurd this (not_le_of_gt hγ)
   have hunit : IsUnit T :=
-    (isUnit_iff_zero_not_mem_spectrum T).2 hzero
+    not_not.mp fun hnu => hzero ((spectrum.zero_mem_iff 𝕜).mpr hnu)
   let hInv := boundedInverseDataOfIsUnit hunit
   refine ⟨hInv, ?_⟩
   have hinvSpectrum :
@@ -100,7 +100,7 @@ theorem centered_isUnit_of_spectrumOutside
     intro z hz
     obtain ⟨w, hwT, rfl⟩ := hinvSpectrum ▸ hz
     rw [norm_inv]
-    exact inv_le_inv₀ hγ (hdist w hwT)
+    simpa only [one_div] using one_div_le_one_div_of_le hγ (hdist w hwT)
   have hInvNormal : IsStarNormal hInv.inv :=
     RCLikeSpectralBridge.inverse_isNormal hTself hunit
   simpa [γ] using
@@ -114,12 +114,15 @@ noncomputable def centeredIntervalExteriorWitness_of_gap
     {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
     (hgap : IntervalExteriorGap A B β α δ) :
     CenteredIntervalExteriorWitness A B β α δ := by
-  rcases hgap with ⟨hAin, hBout⟩ | ⟨hBin, hAout⟩
-  · exact .intervalOnLeft
+  by_cases hL : SpectrumInRealSet A (Set.Icc β α) ∧
+      SpectrumInRealSet B {x | x ≤ β - δ ∨ α + δ ≤ x}
+  · obtain ⟨hAin, hBout⟩ := hL
+    exact .intervalOnLeft
       (norm_sub_midpoint_le_of_spectrumIn_Icc hA hβα hAin)
       (centered_isUnit_of_spectrumOutside hB hβα hδ hBout).choose
       (centered_isUnit_of_spectrumOutside hB hβα hδ hBout).choose_spec
-  · exact .intervalOnRight
+  · obtain ⟨hBin, hAout⟩ := hgap.resolve_left hL
+    exact .intervalOnRight
       (norm_sub_midpoint_le_of_spectrumIn_Icc hB hβα hBin)
       (centered_isUnit_of_spectrumOutside hA hβα hδ hAout).choose
       (centered_isUnit_of_spectrumOutside hA hβα hδ hAout).choose_spec

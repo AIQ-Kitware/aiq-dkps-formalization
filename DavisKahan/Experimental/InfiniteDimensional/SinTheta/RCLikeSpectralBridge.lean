@@ -63,6 +63,11 @@ noncomputable def boundedInverseDataOfIsUnit {T : E →L[𝕜] E} (hunit : IsUni
   left_inv := by have h := hunit.unit.inv_mul; rw [hunit.unit_spec] at h; exact h
   right_inv := by have h := hunit.unit.mul_inv; rw [hunit.unit_spec] at h; exact h
 
+/-- A real scalar multiple of the identity is a symmetric operator. -/
+theorem isSymmetric_real_smul_id (c : ℝ) :
+    (((c : ℝ) : 𝕜) • ContinuousLinearMap.id 𝕜 E).IsSymmetric := fun x y => by
+  simp [inner_smul_left, inner_smul_right, RCLike.conj_ofReal]
+
 namespace RCLikeSpectralBridge
 
 /-- **Leaf obligation.** For self-adjoint `A`, `σ(A - c·1)` is real and equals
