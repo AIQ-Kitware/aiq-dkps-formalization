@@ -1,0 +1,64 @@
+{
+  "base_commit": "4080ec31786f",
+  "prerequisite_overlay": "aiq_dkps_independent_scratch_lanes_4080ec3_gpt56_20260723.zip",
+  "active_agent_exclusions": [
+    "DavisKahan/Experimental/InfiniteDimensional/SinTheta/General.lean",
+    "DavisKahan/Experimental/InfiniteDimensional/SinTheta/ExactSinTheta.lean",
+    "DavisKahan/Experimental/InfiniteDimensional/Continuation*",
+    "DavisKahan/Experimental/Frontier/RieszCircle.lean",
+    "DavisKahan/Experimental/MathAhead/HiddenFoundations/PolarIsometryFinal.lean",
+    "DavisKahan/Experimental/MathAhead/HiddenFoundations/Section3Nonacute.lean"
+  ],
+  "lanes": [
+    {
+      "id": "generic-rectangular-ideal-banach-space",
+      "aggregate": "DavisKahan.Experimental.Scratch.IdealBanach.All",
+      "promotion_targets": [
+        "DavisKahan/OperatorIdeal/UnitarilyInvariant/RectangularFamily.lean",
+        "generic Bochner integration layer for every RectangularSymmetricIdealFamily",
+        "Hilbert-Schmidt, trace-class, Schatten, and Ky Fan integral estimates"
+      ],
+      "candidate_declarations": [
+        "ForMathlib.DavisKahan.Experimental.ExactSinTheta.Scratch.IdealBanach.IdealOperator",
+        "ForMathlib.DavisKahan.Experimental.ExactSinTheta.Scratch.IdealBanach.IdealOperator.toOpL",
+        "ForMathlib.DavisKahan.Experimental.ExactSinTheta.Scratch.IdealBanach.IdealOperator.instCompleteSpace",
+        "ForMathlib.DavisKahan.Experimental.ExactSinTheta.Scratch.IdealBanach.IdealOperator.mem_integral_toOp",
+        "ForMathlib.DavisKahan.Experimental.ExactSinTheta.Scratch.IdealBanach.IdealOperator.gauge_integral_toOp_le"
+      ]
+    },
+    {
+      "id": "rectangular-hilbert-schmidt-bochner",
+      "aggregate": "DavisKahan.Experimental.Scratch.RectangularHilbertSchmidt.All",
+      "promotion_targets": [
+        "Hilbert-Schmidt-valued Sylvester integral closure",
+        "rectangular square-norm Minkowski inequality",
+        "real and complex Hilbert-Schmidt ideal integration"
+      ],
+      "candidate_declarations": [
+        "ForMathlib.DavisKahan.Experimental.ExactSinTheta.Scratch.RectangularHilbertSchmidt.ComplexOperator",
+        "ForMathlib.DavisKahan.Experimental.ExactSinTheta.Scratch.RectangularHilbertSchmidt.RealOperator",
+        "ForMathlib.DavisKahan.Experimental.ExactSinTheta.Scratch.RectangularHilbertSchmidt.complex_integral_mem",
+        "ForMathlib.DavisKahan.Experimental.ExactSinTheta.Scratch.RectangularHilbertSchmidt.complex_norm_integral_le",
+        "ForMathlib.DavisKahan.Experimental.ExactSinTheta.Scratch.RectangularHilbertSchmidt.real_integral_mem",
+        "ForMathlib.DavisKahan.Experimental.ExactSinTheta.Scratch.RectangularHilbertSchmidt.real_norm_integral_le"
+      ]
+    },
+    {
+      "id": "free-beam-complex-smooth-core",
+      "aggregate": "DavisKahan.Experimental.Scratch.FreeBeam.All",
+      "promotion_targets": [
+        "complex free-beam Green identity",
+        "complex free-beam positivity",
+        "zero eigenspace equals affine modes on the smooth core",
+        "kernel multiplicity-two portion of the Section 9 realization"
+      ],
+      "candidate_declarations": [
+        "ForMathlib.DavisKahan.Experimental.Scratch.FreeBeam.ComplexFourthOrderData.integral_free_green_symmetry",
+        "ForMathlib.DavisKahan.Experimental.Scratch.FreeBeam.ComplexFourthOrderData.integral_free_energy",
+        "ForMathlib.DavisKahan.Experimental.Scratch.FreeBeam.ComplexFourthOrderData.re_integral_free_energy_nonneg",
+        "ForMathlib.DavisKahan.Experimental.Scratch.FreeBeam.FourthOrderData.exists_affine_representation",
+        "ForMathlib.DavisKahan.Experimental.Scratch.FreeBeam.ComplexFourthOrderData.exists_affine_representation"
+      ]
+    }
+  ]
+}

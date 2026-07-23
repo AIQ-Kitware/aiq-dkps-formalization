@@ -1,2 +1,3 @@
 import DavisKahan.Experimental.MathAhead.HiddenFoundations.HilbertSchmidtComplexFamily
 import DavisKahan.Experimental.Scratch.RectangularHilbertSchmidt.RealDescent
+import DavisKahan.Experimental.Scratch.RectangularHilbertSchmidt.BochnerIntegral
