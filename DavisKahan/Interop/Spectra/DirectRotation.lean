@@ -900,6 +900,138 @@ theorem reflectionOperator_mem_unitary_complex
       reflectionOperator_involutive U
   exact ⟨by rw [hstar, hinv], by rw [hstar, hinv]⟩
 
+omit [CompleteSpace H] in
+/-- Reflections square to the identity in the bounded-operator algebra. -/
+theorem reflectionOperator_mul_self_complex
+    (U : Submodule ℂ H) [U.HasOrthogonalProjection] :
+    reflectionOperator U * reflectionOperator U = 1 := by
+  simpa only [ContinuousLinearMap.mul_def, ContinuousLinearMap.one_def] using
+    reflectionOperator_involutive U
+
+omit [CompleteSpace H] in
+/-- Doubling identity: `C + C = 1 + Rᵥ Rᵤ`.  Because each reflection is degree
+one in a single projection, this expands with no idempotent reduction. -/
+theorem spectraCanonicalIntertwiner_add_self
+    (U V : Submodule ℂ H)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
+    spectraCanonicalIntertwiner U V + spectraCanonicalIntertwiner U V =
+      1 + reflectionOperator V * reflectionOperator U := by
+  change
+    (V.starProjection * U.starProjection +
+          Vᗮ.starProjection * Uᗮ.starProjection) +
+        (V.starProjection * U.starProjection +
+          Vᗮ.starProjection * Uᗮ.starProjection) =
+      1 + reflectionOperator V * reflectionOperator U
+  rw [reflectionOperator_eq_projection_add_projection_sub_one U,
+    reflectionOperator_eq_projection_add_projection_sub_one V,
+    Submodule.starProjection_orthogonal' U, Submodule.starProjection_orthogonal' V]
+  noncomm_ring
+
+omit [CompleteSpace H] in
+/-- Additive doubling is injective in a torsion-free bounded-operator algebra. -/
+private theorem add_self_cancel_complex {w z : H →L[ℂ] H} (h : w + w = z + z) :
+    w = z := by
+  have hw : w + w = (2 : ℂ) • w := by module
+  have hz : z + z = (2 : ℂ) • z := by module
+  rw [hw, hz] at h
+  exact smul_right_injective (H →L[ℂ] H) (by norm_num) h
+
+omit [CompleteSpace H] in
+/-- Additive quadrupling is injective in a torsion-free bounded-operator
+algebra. -/
+private theorem add_four_cancel_complex {w z : H →L[ℂ] H}
+    (h : w + w + w + w = z + z + z + z) : w = z := by
+  have hw : w + w + w + w = (4 : ℂ) • w := by module
+  have hz : z + z + z + z = (4 : ℂ) • z := by module
+  rw [hw, hz] at h
+  exact smul_right_injective (H →L[ℂ] H) (by norm_num) h
+
+/-- The canonical intertwiner `C = Q P + Qᗮ Pᗮ` is **normal**: `C⋆ C = C C⋆`.
+Since `2 C = 1 + Rᵥ Rᵤ` is one plus a product of two reflections (a unitary),
+both Gram products equal `2 + Rᵥ Rᵤ + Rᵤ Rᵥ` after clearing the factor of four,
+forcing normality. -/
+theorem spectraCanonicalIntertwiner_normal
+    (U V : Submodule ℂ H)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
+    star (spectraCanonicalIntertwiner U V) * spectraCanonicalIntertwiner U V =
+      spectraCanonicalIntertwiner U V * star (spectraCanonicalIntertwiner U V) := by
+  set C := spectraCanonicalIntertwiner U V with hCdef
+  set a := reflectionOperator U with hadef
+  set b := reflectionOperator V with hbdef
+  have hRU : a * a = 1 := reflectionOperator_mul_self_complex U
+  have hRV : b * b = 1 := reflectionOperator_mul_self_complex V
+  have hGG' : (b * a) * (a * b) = 1 := by
+    rw [mul_assoc, ← mul_assoc a, hRU, one_mul, hRV]
+  have hG'G : (a * b) * (b * a) = 1 := by
+    rw [mul_assoc, ← mul_assoc b, hRV, one_mul, hRU]
+  have hC : C + C = 1 + b * a := spectraCanonicalIntertwiner_add_self U V
+  have hCs : star C + star C = 1 + a * b := by
+    have h := congrArg star hC
+    rwa [star_add, star_add, star_one, star_mul,
+      star_reflectionOperator_complex U, star_reflectionOperator_complex V] at h
+  refine add_four_cancel_complex ?_
+  have e1 : star C * C + star C * C + star C * C + star C * C =
+      (star C + star C) * (C + C) := by noncomm_ring
+  have e2 : C * star C + C * star C + C * star C + C * star C =
+      (C + C) * (star C + star C) := by noncomm_ring
+  rw [e1, e2, hC, hCs]
+  have hlhs : (1 + a * b) * (1 + b * a) = 1 + a * b + b * a + (a * b) * (b * a) := by
+    noncomm_ring
+  have hrhs : (1 + b * a) * (1 + a * b) = 1 + b * a + a * b + (b * a) * (a * b) := by
+    noncomm_ring
+  rw [hlhs, hrhs, hGG', hG'G]
+  abel
+
+/-- The canonical intertwiner satisfies `C + C⋆ = 2 C⋆C`; its Hermitian part is
+its Gram operator.  With `2C = 1 + G`, `G = Rᵥ Rᵤ` unitary, both sides equal
+`2 + G + G⋆`. -/
+theorem spectraCanonicalIntertwiner_add_star
+    (U V : Submodule ℂ H)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
+    spectraCanonicalIntertwiner U V + star (spectraCanonicalIntertwiner U V) =
+      star (spectraCanonicalIntertwiner U V) * spectraCanonicalIntertwiner U V +
+        star (spectraCanonicalIntertwiner U V) * spectraCanonicalIntertwiner U V := by
+  set C := spectraCanonicalIntertwiner U V with hCdef
+  set a := reflectionOperator U with hadef
+  set b := reflectionOperator V with hbdef
+  have hRU : a * a = 1 := reflectionOperator_mul_self_complex U
+  have hRV : b * b = 1 := reflectionOperator_mul_self_complex V
+  have hG'G : (a * b) * (b * a) = 1 := by
+    rw [mul_assoc, ← mul_assoc b, hRV, one_mul, hRU]
+  have hC : C + C = 1 + b * a := spectraCanonicalIntertwiner_add_self U V
+  have hCs : star C + star C = 1 + a * b := by
+    have h := congrArg star hC
+    rwa [star_add, star_add, star_one, star_mul,
+      star_reflectionOperator_complex U, star_reflectionOperator_complex V] at h
+  refine add_self_cancel_complex ?_
+  have eL : (C + star C) + (C + star C) = (C + C) + (star C + star C) := by abel
+  have eR : (star C * C + star C * C) + (star C * C + star C * C) =
+      (star C + star C) * (C + C) := by noncomm_ring
+  rw [eL, eR, hC, hCs]
+  have hprod : (1 + a * b) * (1 + b * a) = 1 + a * b + b * a + (a * b) * (b * a) := by
+    noncomm_ring
+  rw [hprod, hG'G]
+  abel
+
+/-- The Gram operator `C⋆C` commutes with the source projection `P`.  This
+follows purely from the intertwining `C P = Q C` and its adjoint, with no
+coordinate computation. -/
+theorem commute_projection_spectraCanonicalIntertwiner_star_mul_self
+    (U V : Submodule ℂ H)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
+    Commute (projection U)
+      (star (spectraCanonicalIntertwiner U V) * spectraCanonicalIntertwiner U V) := by
+  set C := spectraCanonicalIntertwiner U V with hCdef
+  have h1 : C * projection U = projection V * C :=
+    spectraCanonicalIntertwiner_mul_projection U V
+  have h2 : star C * projection V = projection U * star C := by
+    have h := congrArg star h1
+    rw [star_mul, star_mul, (isSelfAdjoint_starProjection U).star_eq,
+      (isSelfAdjoint_starProjection V).star_eq] at h
+    exact h.symm
+  show projection U * (star C * C) = star C * C * projection U
+  rw [← mul_assoc, ← h2, mul_assoc, ← h1, ← mul_assoc]
+
 /-- The ordered product of the target and source reflections.  The direct
 rotation square theorem identifies this operator with the square of the polar
 factor. -/
