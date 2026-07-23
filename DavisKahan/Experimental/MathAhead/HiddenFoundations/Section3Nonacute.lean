@@ -473,20 +473,151 @@ theorem canonicalPolarFactor_intertwines_general :
   simpa [ContinuousLinearMap.mul_def] using
     canonicalPolarFactor_intertwines_from_polar U V
 
-/-- Positivity of the source diagonal compression of the canonical partial
-polar factor.
+/-- The modulus of the canonical intertwiner kills the crossed-defect sum: the
+crossed defects are exactly the kernel of `C`, hence of `|C|`. -/
+theorem canonicalAbsoluteValue_apply_crossedDefect_eq_zero
+    {x : H} (hx : x ∈ crossedDefectSum U V) :
+    spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V) x = 0 := by
+  have hCx : spectraCanonicalIntertwiner U V x = 0 := by
+    have hmem : x ∈ LinearMap.ker (spectraCanonicalIntertwiner U V).toLinearMap := by
+      rw [ker_canonicalIntertwiner_eq_crossedDefectSum]; exact hx
+    exact hmem
+  have hnorm := norm_spectraOperatorAbsoluteValue_apply (spectraCanonicalIntertwiner U V) x
+  rw [hCx, norm_zero] at hnorm
+  exact norm_eq_zero.mp hnorm
 
-Leaf obligation handed to the mathematics agent: this needs the source-block
-compression formula `P U * polarFactor * P U = positiveSupportInverse |C| ∘L
-(P U * C* * P V * P U)` together with the positive-support inverse of the
-canonical absolute value and its quadratic-form nonnegativity
-(`positiveSupportInverse`, `source_compression_polar_formula`,
-`positiveSupportInverse_quadratic_nonnegative`), none of which exist yet in
-Mathlib, Spectra, or this repo. -/
+/-- **Real-part identity for the direct rotation.**  The polar factor `W` of the
+canonical intertwiner satisfies `W + W⋆ = 2 |C|`.
+
+Because `C` is normal (`spectraCanonicalIntertwiner_normal`), `W` commutes with
+`|C|`, so `C + C⋆ = |C| (W + W⋆)`; combined with `C + C⋆ = 2|C|²`
+(`spectraCanonicalIntertwiner_add_star`) this gives `|C| (W + W⋆ - 2|C|) = 0`.
+The difference `D := W + W⋆ - 2|C|` is self-adjoint, maps everything into
+`ker |C|`, and vanishes on `ker |C|`, so `D² = 0` and hence `D = 0`. -/
+theorem polarFactor_add_star_eq_two_absoluteValue :
+    spectraCanonicalPolarFactor U V + star (spectraCanonicalPolarFactor U V) =
+      spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V) +
+        spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V) := by
+  set C := spectraCanonicalIntertwiner U V with hCdef
+  set A := spectraOperatorAbsoluteValue C with hAdef
+  set W := spectraCanonicalPolarFactor U V with hWdef
+  have hAsa : IsSelfAdjoint A := spectraOperatorAbsoluteValue_isSelfAdjoint C
+  have hWA : W * A = C := by
+    rw [ContinuousLinearMap.mul_def]; exact spectraCanonicalPolarFactor_decomposition U V
+  have hAA : A * A = star C * C := spectraOperatorAbsoluteValue_mul_self C
+  have hAsW : A * star W = star C := by
+    have h : star (W * A) = star C := by rw [hWA]
+    rwa [star_mul, hAsa.star_eq] at h
+  obtain ⟨hWstarW, hWWstar⟩ := canonicalPolarFactor_initial_final_projection U V
+  -- `A` vanishes on the crossed block, so `A · P_reg = A`.
+  have hRegCross1 : regularProjection U V + crossedDefectProjection U V = 1 := by
+    simp only [regularProjection, crossedDefectProjection, complementaryProjection]
+    rw [Submodule.starProjection_orthogonal']
+    abel
+  have hAcrossProj : A * crossedDefectProjection U V = 0 := by
+    ext y
+    simp only [ContinuousLinearMap.mul_apply, ContinuousLinearMap.zero_apply]
+    exact canonicalAbsoluteValue_apply_crossedDefect_eq_zero U V
+      ((crossedDefectSum U V).starProjection_apply_mem y)
+  have hAreg : A * regularProjection U V = A := by
+    have h : A * (regularProjection U V + crossedDefectProjection U V) = A * 1 := by
+      rw [hRegCross1]
+    rwa [mul_add, hAcrossProj, add_zero, mul_one] at h
+  have hsCW : star C * W = A := by
+    rw [← hAsW, mul_assoc, hWstarW, hAreg]
+  -- `W` commutes with the Gram operator, hence with `|C|`.
+  have hcomm : Commute (star C * C) W := by
+    show star C * C * W = W * (star C * C)
+    calc star C * C * W
+        = C * star C * W := by rw [spectraCanonicalIntertwiner_normal U V]
+      _ = C * (star C * W) := by rw [mul_assoc]
+      _ = C * A := by rw [hsCW]
+      _ = W * A * A := by rw [← hWA]
+      _ = W * (A * A) := by rw [mul_assoc]
+      _ = W * (star C * C) := by rw [hAA]
+  have hcommAW : Commute A W :=
+    commute_spectraOperatorAbsoluteValue_of_commute_star_mul_self C W hcomm
+  have hAW : A * W = C := hcommAW.eq.trans hWA
+  have hsum1 : C + star C = A * (W + star W) := by rw [mul_add, hAW, hAsW]
+  have hsum2 : star C * C + star C * C = A * (A + A) := by rw [mul_add, hAA]
+  have hAD : A * ((W + star W) - (A + A)) = 0 := by
+    rw [mul_sub, ← hsum1, ← hsum2, spectraCanonicalIntertwiner_add_star U V, sub_self]
+  -- `E := W + W⋆ - 2A` is self-adjoint, `A E = 0`, and vanishes on the crossed block.
+  set E := (W + star W) - (A + A) with hEdef
+  have hEsa : IsSelfAdjoint E := by
+    show star E = E
+    rw [hEdef, star_sub, star_add, star_add, star_star, hAsa.star_eq]
+    abel
+  have hEcross : ∀ z : H, z ∈ crossedDefectSum U V → E z = 0 := by
+    intro z hz
+    have hWz : W z = 0 := canonicalPolarFactor_apply_crossedDefect_eq_zero U V hz
+    have hAz : A z = 0 := canonicalAbsoluteValue_apply_crossedDefect_eq_zero U V hz
+    have hreg : regularProjection U V z = 0 := by
+      simp only [regularProjection, complementaryProjection]
+      exact (Submodule.starProjection_apply_eq_zero_iff _).mpr
+        (Submodule.le_orthogonal_orthogonal _ hz)
+    have hWsWz : W (star W z) = 0 := by
+      rw [← ContinuousLinearMap.mul_apply, hWWstar]; exact hreg
+    have hsWz : star W z = 0 := by
+      have hip : ⟪star W z, star W z⟫_ℂ = ⟪z, W (star W z)⟫_ℂ := by
+        rw [ContinuousLinearMap.star_eq_adjoint, ContinuousLinearMap.adjoint_inner_left]
+      rw [hWsWz, inner_zero_right] at hip
+      exact inner_self_eq_zero.mp hip
+    rw [hEdef]
+    simp only [ContinuousLinearMap.sub_apply, ContinuousLinearMap.add_apply,
+      hWz, hsWz, hAz, add_zero, sub_zero]
+  have hEE : E * E = 0 := by
+    ext y
+    have hAEy : A (E y) = 0 := by
+      have h := congrArg (fun T : H →L[ℂ] H => T y) hAD
+      simpa only [ContinuousLinearMap.mul_apply, ContinuousLinearMap.zero_apply] using h
+    have hCEy : C (E y) = 0 := by
+      have hn := norm_spectraOperatorAbsoluteValue_apply C (E y)
+      rw [hAEy, norm_zero] at hn
+      exact norm_eq_zero.mp hn.symm
+    have hEycross : E y ∈ crossedDefectSum U V := by
+      rw [← ker_canonicalIntertwiner_eq_crossedDefectSum]
+      exact LinearMap.mem_ker.mpr hCEy
+    simp only [ContinuousLinearMap.mul_apply, ContinuousLinearMap.zero_apply,
+      hEcross (E y) hEycross]
+  have hEzero : E = 0 := by
+    have hs : star E * E = 0 := by rw [hEsa.star_eq]; exact hEE
+    exact (CStarRing.star_mul_self_eq_zero_iff E).mp hs
+  have : (W + star W) - (A + A) = 0 := hEdef.symm.trans hEzero
+  exact sub_eq_zero.mp this
+
+/-- Real part of the polar factor equals the real part of its modulus on every
+vector: a direct consequence of `W + W⋆ = 2|C|`. -/
+theorem re_inner_polarFactor_eq_absoluteValue (u : H) :
+    RCLike.re ⟪spectraCanonicalPolarFactor U V u, u⟫_ℂ =
+      RCLike.re ⟪spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V) u, u⟫_ℂ := by
+  set W := spectraCanonicalPolarFactor U V with hWdef
+  set A := spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V) with hAdef
+  have hWsW : W + star W = A + A := polarFactor_add_star_eq_two_absoluteValue U V
+  have hkey : ⟪(W + star W) u, u⟫_ℂ = ⟪(A + A) u, u⟫_ℂ := by rw [hWsW]
+  rw [ContinuousLinearMap.add_apply, ContinuousLinearMap.add_apply,
+    inner_add_left, inner_add_left] at hkey
+  have hstar : ⟪star W u, u⟫_ℂ = ⟪u, W u⟫_ℂ := by
+    rw [ContinuousLinearMap.star_eq_adjoint, ContinuousLinearMap.adjoint_inner_left]
+  have hre1 : RCLike.re ⟪star W u, u⟫_ℂ = RCLike.re ⟪W u, u⟫_ℂ := by
+    rw [hstar]; exact inner_re_symm (𝕜 := ℂ) u (W u)
+  have hre := congrArg RCLike.re hkey
+  rw [map_add, map_add, hre1] at hre
+  linarith
+
+/-- Positivity of the source diagonal compression of the canonical partial
+polar factor.  On the source block, `re⟪x, P W P x⟫ = re⟪P x, |C| (P x)⟫ ≥ 0`
+because `W + W⋆ = 2|C|` and `|C| ≥ 0`. -/
 theorem canonicalPolarFactor_sourceCompression_nonnegative (x : H) :
     0 ≤ RCLike.re
-      ⟪x, (projection U * spectraCanonicalPolarFactor U V * projection U) x⟫_ℂ :=
-  sorry
+      ⟪x, (projection U * spectraCanonicalPolarFactor U V * projection U) x⟫_ℂ := by
+  rw [Section3.re_inner_projection_compression U (spectraCanonicalPolarFactor U V) x,
+    re_inner_polarFactor_eq_absoluteValue U V (projection U x)]
+  have hnonneg : (0 : H →L[ℂ] H) ≤
+      spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V) :=
+    spectraOperatorAbsoluteValue_nonneg _
+  exact ((ContinuousLinearMap.nonneg_iff_isPositive _).mp hnonneg).re_inner_nonneg_left
+    (projection U x)
 
 /-- Positivity of the complementary diagonal compression. -/
 theorem canonicalPolarFactor_complementCompression_nonnegative (x : H) :
@@ -503,19 +634,43 @@ theorem canonicalPolarFactor_complementCompression_nonnegative (x : H) :
   have h := canonicalPolarFactor_sourceCompression_nonnegative Uᗮ Vᗮ x
   rwa [hswap] at h
 
-/-- The crossed blocks of the canonical partial polar factor are
-skew-adjoint.
-
-Leaf obligation handed to the mathematics agent: the proof needs the reflection
-relation `canonicalPolarFactor_reflection_relation` for the canonical polar
-factor (relating `Pᗮ U * polarFactor * P U` to the adjoint of
-`P U * polarFactor * Pᗮ U`), which does not exist yet in Mathlib, Spectra, or
-this repo. -/
+/-- The crossed blocks of the canonical partial polar factor are skew-adjoint.
+Since `W + W⋆ = 2|C|` and `|C|` commutes with `P` (its Gram operator does, and
+`|C|` is a continuous function of it), the Hermitian part `W + W⋆` is block
+diagonal for `P`, so the off-diagonal block of `W` is the negative adjoint of
+the opposite off-diagonal block. -/
 theorem canonicalPolarFactor_crossed_blocks_general :
     complementaryProjection U * spectraCanonicalPolarFactor U V * projection U =
       -star (projection U * spectraCanonicalPolarFactor U V *
-        complementaryProjection U) :=
-  sorry
+        complementaryProjection U) := by
+  set W := spectraCanonicalPolarFactor U V with hWdef
+  set A := spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V) with hAdef
+  have hcommAP : Commute A (projection U) :=
+    commute_spectraOperatorAbsoluteValue_of_commute_star_mul_self _ _
+      (commute_projection_spectraCanonicalIntertwiner_star_mul_self U V).symm
+  have hP'P : complementaryProjection U * projection U = 0 := by
+    rw [show complementaryProjection U = 1 - projection U from
+        Submodule.starProjection_orthogonal' U, sub_mul, one_mul,
+      U.isIdempotentElem_starProjection, sub_self]
+  have hP'AP : complementaryProjection U * A * projection U = 0 := by
+    rw [mul_assoc, hcommAP.eq, ← mul_assoc, hP'P, zero_mul]
+  have hRHS : star (projection U * W * complementaryProjection U) =
+      complementaryProjection U * star W * projection U := by
+    rw [star_mul, star_mul, (isSelfAdjoint_starProjection U).star_eq,
+      (isSelfAdjoint_starProjection Uᗮ).star_eq, ← mul_assoc]
+  rw [hRHS]
+  have hsum : complementaryProjection U * W * projection U +
+      complementaryProjection U * star W * projection U = 0 := by
+    calc complementaryProjection U * W * projection U +
+          complementaryProjection U * star W * projection U
+        = complementaryProjection U * (W + star W) * projection U := by
+          rw [mul_add, add_mul]
+      _ = complementaryProjection U * (A + A) * projection U := by
+          rw [polarFactor_add_star_eq_two_absoluteValue U V]
+      _ = complementaryProjection U * A * projection U +
+            complementaryProjection U * A * projection U := by rw [mul_add, add_mul]
+      _ = 0 := by rw [hP'AP, add_zero]
+  exact eq_neg_of_add_eq_zero_left hsum
 
 /-- The defect quarter-turn has the paper crossed-block relation. -/
 theorem crossedDefectQuarterTurn_crossed_blocks
