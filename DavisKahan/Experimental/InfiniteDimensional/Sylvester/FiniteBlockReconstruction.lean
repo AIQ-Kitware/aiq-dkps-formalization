@@ -171,6 +171,76 @@ theorem finiteDiagonal_orbit_expansion
   push_cast
   ring
 
+/-- The separated finite diagonal Sylvester equation has an explicit
+blockwise solution. -/
+theorem finiteDiagonal_sylvester_solution
+    {m n : ℕ}
+    (P : Fin m → F →L[ℂ] F) (Q : Fin n → E →L[ℂ] E)
+    (a : Fin m → ℝ) (b : Fin n → ℝ)
+    (hPid : ∀ i, P i * P i = P i)
+    (hPorth : ∀ i j, i ≠ j → P i * P j = 0)
+    (hPsum : ∑ i, P i = (1 : F →L[ℂ] F))
+    (hQid : ∀ i, Q i * Q i = Q i)
+    (hQorth : ∀ i j, i ≠ j → Q i * Q j = 0)
+    (hQsum : ∑ i, Q i = (1 : E →L[ℂ] E))
+    (hne : ∀ i j, a i - b j ≠ 0)
+    (C : E →L[ℂ] F) :
+    finiteDiagonalOperator P a ∘L
+        (∑ i, ∑ j, ((((a i - b j)⁻¹ : ℝ) : ℂ)) • (P i ∘L C ∘L Q j)) -
+      (∑ i, ∑ j, ((((a i - b j)⁻¹ : ℝ) : ℂ)) • (P i ∘L C ∘L Q j)) ∘L
+        finiteDiagonalOperator Q b = C := by
+  have hL : finiteDiagonalOperator P a ∘L
+      (∑ i, ∑ j, ((((a i - b j)⁻¹ : ℝ) : ℂ)) • (P i ∘L C ∘L Q j)) =
+      ∑ i, ∑ j, ((((a i - b j)⁻¹ : ℝ) : ℂ)) •
+        ((a i : ℂ) • (P i ∘L C ∘L Q j)) := by
+    rw [ContinuousLinearMap.comp_finset_sum]
+    refine Finset.sum_congr rfl fun i _ => ?_
+    rw [ContinuousLinearMap.comp_finset_sum]
+    refine Finset.sum_congr rfl fun j _ => ?_
+    rw [ContinuousLinearMap.comp_smul]
+    congr 1
+    calc
+      finiteDiagonalOperator P a ∘L (P i ∘L C ∘L Q j)
+          = (finiteDiagonalOperator P a ∘L P i) ∘L C ∘L Q j := by
+            rw [ContinuousLinearMap.comp_assoc]
+      _ = (a i : ℂ) • (P i ∘L C ∘L Q j) := by
+            rw [finiteDiagonal_select_right P a hPid hPorth i,
+              ContinuousLinearMap.smul_comp]
+  have hR : (∑ i, ∑ j, ((((a i - b j)⁻¹ : ℝ) : ℂ)) • (P i ∘L C ∘L Q j)) ∘L
+      finiteDiagonalOperator Q b =
+      ∑ i, ∑ j, ((((a i - b j)⁻¹ : ℝ) : ℂ)) •
+        ((b j : ℂ) • (P i ∘L C ∘L Q j)) := by
+    rw [ContinuousLinearMap.finset_sum_comp]
+    refine Finset.sum_congr rfl fun i _ => ?_
+    rw [ContinuousLinearMap.finset_sum_comp]
+    refine Finset.sum_congr rfl fun j _ => ?_
+    rw [ContinuousLinearMap.smul_comp]
+    congr 1
+    calc
+      (P i ∘L C ∘L Q j) ∘L finiteDiagonalOperator Q b
+          = P i ∘L C ∘L (Q j ∘L finiteDiagonalOperator Q b) := by
+            rw [ContinuousLinearMap.comp_assoc, ContinuousLinearMap.comp_assoc]
+      _ = (b j : ℂ) • (P i ∘L C ∘L Q j) := by
+            rw [finiteDiagonal_select_left Q b hQid hQorth j,
+              ContinuousLinearMap.comp_smul, ContinuousLinearMap.comp_smul]
+  rw [hL, hR, ← Finset.sum_sub_distrib]
+  calc
+    (∑ i, ((∑ j, ((((a i - b j)⁻¹ : ℝ) : ℂ)) •
+          ((a i : ℂ) • (P i ∘L C ∘L Q j))) -
+        ∑ j, ((((a i - b j)⁻¹ : ℝ) : ℂ)) •
+          ((b j : ℂ) • (P i ∘L C ∘L Q j))))
+        = ∑ i, ∑ j, P i ∘L C ∘L Q j := by
+      refine Finset.sum_congr rfl fun i _ => ?_
+      rw [← Finset.sum_sub_distrib]
+      refine Finset.sum_congr rfl fun j _ => ?_
+      rw [smul_smul, smul_smul, ← sub_smul, ← mul_sub]
+      have hone : ((((a i - b j)⁻¹ : ℝ) : ℂ)) *
+          ((a i : ℂ) - (b j : ℂ)) = 1 := by
+        norm_cast
+        exact inv_mul_cancel₀ (hne i j)
+      rw [hone, one_smul]
+    _ = C := (eq_sum_rectangular_blocks P Q hPsum hQsum C).symm
+
 /-- Integrability of one scalar oscillatory block against an `L1` kernel. -/
 theorem integrable_scalar_oscillatory_block
     (μ : ℝ → ℂ) (hμ : Integrable μ)
