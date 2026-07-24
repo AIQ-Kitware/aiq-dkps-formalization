@@ -19,13 +19,13 @@ A piece is one manifest node in the result's transitive dependency closure. Miss
 | `DK-3.1-prop` — Proposition 3.1: Acute direct rotation existence and uniqueness | proposition | `s3-prop3-1` | 0 / 3 | 100% | yes |
 | `DK-3.2-prop` — Proposition 3.2: Nonacute existence criterion | proposition | `s3-prop3-2-existence` | 0 / 6 | 100% | yes |
 | `DK-3.3-prop` — Proposition 3.3: Principal square-root characterization | proposition | `s3-prop3-3` | 0 / 5 | 100% | yes |
-| `DK-3.4-prop` — Proposition 3.4: Square as a direct rotation | proposition | `s3-prop3-4` | 1 / 2 | 50% | no |
+| `DK-3.4-prop` — Proposition 3.4: Square as a direct rotation | proposition | `s3-prop3-4` | 0 / 2 | 100% | yes |
 | `DK-3.1-thm` — Theorem 3.1: Classification of pairs of subspaces | theorem | `s3-theorem3-1` | 2 / 7 | 71% | no |
 | `DK-3.1-cor` — Corollary 3.1: Compact classification by angle eigenvalues | corollary | `s3-cor3-1` | 2 / 6 | 66% | no |
 | `DK-3.5-prop` — Proposition 3.5: Angle commutation and eigenspace geometry | proposition | `s3-prop3-5` | 1 / 5 | 80% | no |
 | `DK-3.2-cor` — Corollary 3.2: Reversal symmetry | corollary | `s3-cor3-2` | 0 / 2 | 100% | yes |
-| `DK-4.1-prop` — Proposition 4.1: Pointwise and singular-value extremality of the direct rotation | proposition | `s4-prop4-1` | 1 / 2 | 50% | no |
-| `DK-4.1-cor` — Corollary 4.1: UI-norm minimality of direct rotation displacement | corollary | `s4-cor4-1` | 1 / 3 | 66% | no |
+| `DK-4.1-prop` — Proposition 4.1: Pointwise and singular-value extremality of the direct rotation | proposition | `s4-prop4-1` | 0 / 2 | 100% | yes |
+| `DK-4.1-cor` — Corollary 4.1: UI-norm minimality of direct rotation displacement | corollary | `s4-cor4-1` | 0 / 3 | 100% | yes |
 | `DK-4.2-prop` — Proposition 4.2: Basis-angle square-sum extremality | proposition | `s4-prop4-2` | 1 / 2 | 50% | no |
 | `DK-4.3-prop` — Proposition 4.3: Squared displacement UI-norm minimality | proposition | `s4-prop4-3` | 1 / 2 | 50% | no |
 | `DK-5.1-thm` — Theorem 5.1: Banach-space Sylvester lower bound | theorem | `s5-theorem5-1` | 0 / 2 | 100% | yes |
@@ -46,16 +46,16 @@ A piece is one manifest node in the result's transitive dependency closure. Miss
 ## Summary
 
 - Manifest nodes: **72**
-- Textually present: **70**
+- Textually present: **72**
 - Paper result rows represented in the frontier: **32**
 - Census rows requiring frontier coverage: **29**
 - Census rows mapped: **29**
 - Declarations resolving in Lean: **43**
-- Declarations with admission-free Lean closure: **29**
-- Recursively grounded manifest nodes: **29**
-- Paper results recursively grounded: **11 / 32**
+- Declarations with admission-free Lean closure: **32**
+- Recursively grounded manifest nodes: **32**
+- Paper results recursively grounded: **14 / 32**
 - Source-role endpoints resolving: **17 / 27**
-- Source-role endpoints recursively grounded: **8 / 27**
+- Source-role endpoints recursively grounded: **11 / 27**
 
 ## Manifest nodes
 
@@ -82,7 +82,7 @@ A piece is one manifest node in the result's transitive dependency closure. Miss
 | `s3-prop3-2-existence` | source | yes | `DK-3.2-prop` | high | yes | yes | yes | yes |
 | `s3-prop3-2-parameter` | bridge | no |  | high | yes | yes | yes | yes |
 | `s3-prop3-3` | source | yes | `DK-3.3-prop` | medium | yes | yes | yes | yes |
-| `s3-prop3-4` | source | yes | `DK-3.4-prop` | medium | yes | yes | no | no |
+| `s3-prop3-4` | source | yes | `DK-3.4-prop` | medium | yes | yes | yes | yes |
 | `s3-fixed-angle-subspace` | foundation | no |  | medium | yes | yes | no | no |
 | `s3-prop3-5` | source | yes | `DK-3.5-prop` | high | yes | yes | no | no |
 | `s3-cor3-2` | source | yes | `DK-3.2-cor` | medium | yes | yes | yes | yes |
@@ -90,8 +90,8 @@ A piece is one manifest node in the result's transitive dependency closure. Miss
 | `s3-theorem3-1` | source | yes | `DK-3.1-thm` | hard | yes | yes | no | no |
 | `s3-compact-angle-list` | foundation | no |  | medium | yes | yes | no | no |
 | `s3-cor3-1` | source | yes | `DK-3.1-cor` | high | yes | yes | no | no |
-| `s4-prop4-1` | source | yes | `DK-4.1-prop` | medium | yes | yes | no | no |
-| `s4-cor4-1` | source | yes | `DK-4.1-cor` | medium | yes | yes | no | no |
+| `s4-prop4-1` | source | yes | `DK-4.1-prop` | medium | yes | yes | yes | yes |
+| `s4-cor4-1` | source | yes | `DK-4.1-cor` | medium | yes | yes | yes | yes |
 | `s4-prop4-2` | source | yes | `DK-4.2-prop` | medium | yes | yes | no | no |
 | `s4-prop4-3` | source | yes | `DK-4.3-prop` | medium | yes | yes | no | no |
 | `s6-approximation-energy` | foundation | no |  | high | yes | yes | yes | yes |
@@ -113,8 +113,8 @@ A piece is one manifest node in the result's transitive dependency closure. Miss
 | `s8-continuation-witness` | bridge | no |  | hard | yes | no | ? | no |
 | `s8-continuation-endpoints` | bridge | no |  | high | yes | no | ? | no |
 | `s8-projection-lipschitz` | bridge | no |  | high | yes | no | ? | no |
-| `s8-direct-rotation-upper-data` | bridge | no |  | high | no | no | ? | no |
-| `s8-direct-rotation-lower-data` | bridge | no |  | high | no | no | ? | no |
+| `s8-direct-rotation-upper-data` | bridge | no |  | high | yes | no | ? | no |
+| `s8-direct-rotation-lower-data` | bridge | no |  | high | yes | no | ? | no |
 | `s8-theorem8-1` | source | yes | `DK-8.1-thm` | hard | yes | no | ? | no |
 | `s8-perturbation-half-gap` | bridge | no |  | high | yes | no | ? | no |
 | `s8-residual-half-gap` | bridge | no |  | hard | yes | no | ? | no |
