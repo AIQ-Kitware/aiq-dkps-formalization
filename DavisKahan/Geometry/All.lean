@@ -7,5 +7,6 @@ import DavisKahan.Geometry.Angle.All
 import DavisKahan.Geometry.Halmos.Classification
 import DavisKahan.Geometry.Halmos.GenericRotationPredicates
 import DavisKahan.Geometry.Halmos.UnitaryEquivalence
+import DavisKahan.Geometry.Polar.All
 
 /-! # `DavisKahan/Geometry` -/

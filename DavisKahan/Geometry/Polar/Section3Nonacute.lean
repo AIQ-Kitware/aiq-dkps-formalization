@@ -4,9 +4,9 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
-import DavisKahan.Experimental.MathAhead.Section3Elementary
-import DavisKahan.Experimental.MathAhead.HiddenFoundations.PolarIsometryFinal
-import DavisKahan.Experimental.MathAhead.HiddenFoundations.PolarIntertwining
+import DavisKahan.Geometry.Polar.Section3Elementary
+import DavisKahan.Geometry.Polar.PolarIsometryFinal
+import DavisKahan.Geometry.Polar.PolarIntertwining
 import Spectra.QuantumMechanics.Channels.TraceClass.PartialIsometry
 
 /-!

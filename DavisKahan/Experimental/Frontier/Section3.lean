@@ -16,7 +16,7 @@ import DavisKahan.Experimental.InfiniteDimensional.DoubleAngle
 -- to ground the Proposition 3.2 and Corollary 3.2 source statements below.  The
 -- construction depends on the polar and acute machinery under `MathAhead`, which
 -- itself never imports this module, so the dependency is acyclic.
-import DavisKahan.Experimental.MathAhead.HiddenFoundations.Section3Nonacute
+import DavisKahan.Geometry.Polar.Section3Nonacute
 -- supplies the forward direction of the operator-level Halmos classification
 -- (`sameHalmosInvariant_of_pairEquiv`).  This module imports only Frontier/Core,
 -- so the dependency is acyclic.
