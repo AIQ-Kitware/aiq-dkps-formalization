@@ -1,2 +1,1 @@
 import DavisKahan.Experimental.Scratch.Section6.Lemma63Promotion
-import DavisKahan.Experimental.Scratch.Section6.Theorem63SourceFaithful

@@ -810,6 +810,31 @@ theorem theorem6_3_generalizedTanTheta_source_ideal
     hResidual
 
 
+/-- Historical scratch proposition used while the Ky Fan root was open. -/
+def Theorem63KyFanCore
+    {E F : Type v}
+    [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
+    [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
+    (delta : ℝ) (tanTheta0 residual : E →L[ℂ] F) : Prop :=
+  ∀ k, delta * ExactSinTheta.kyFanApproximationGauge k tanTheta0 ≤
+    ExactSinTheta.kyFanApproximationGauge k residual
+
+/-- Fan-dominance promotion retained at its historical scratch name. -/
+theorem theorem6_3_ideal_of_kyFan_core
+    {E F : Type v}
+    [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
+    [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
+    (N : ExactSinTheta.KyFanDominantIdealFamily (𝕜 := ℂ))
+    {delta : ℝ} (hdelta : 0 < delta)
+    {tanTheta0 residual : E →L[ℂ] F}
+    (hResidual : N.toRectangularSymmetricIdealFamily.Mem residual)
+    (hcore : Theorem63KyFanCore delta tanTheta0 residual) :
+    N.toRectangularSymmetricIdealFamily.Mem tanTheta0 ∧
+      delta * N.toRectangularSymmetricIdealFamily.gauge tanTheta0 ≤
+        N.toRectangularSymmetricIdealFamily.gauge residual :=
+  ExactSinTheta.mem_and_scaled_gauge_le_of_all_scaled_kyFan_le
+    N hdelta hResidual hcore
+
 end ExactTanTheta
 end Experimental
 end DavisKahan

@@ -12,9 +12,9 @@ authoritative; this Markdown file is generated from it.
 | Status | Count |
 | --- | ---: |
 | `compiled_exact` | 7 |
-| `compiled_specialization` | 2 |
+| `compiled_specialization` | 3 |
 | `compiled_general_infrastructure` | 7 |
-| `proof_written` | 1 |
+| `proof_written` | 0 |
 | `candidate_under_repair` | 18 |
 | `partial_or_wrapper_missing` | 5 |
 | `not_represented` | 3 |
@@ -48,7 +48,7 @@ no `sorry` and no `axiom`, so a declaration reachable from
 
 | Verification | Count |
 | --- | ---: |
-| `proved_in_build` | 33 |
+| `proved_in_build` | 34 |
 | `proved_conditional` | 5 |
 | `partially_in_build` | 0 |
 | `proved_outside_build` | 0 |
@@ -473,11 +473,11 @@ DK-6.3-lem (absent)
 #### Theorem 6.3: Generalized tangent theorem
 
 - **Kind:** `theorem`
-- **Status:** `proof_written`
-- **Verification:** `compiler_pending`
+- **Status:** `compiled_specialization`
+- **Verification:** `proved_in_build`
 - **Mathematics:** A strict inequality of source-coordinate Hilbert dimensions, the Rayleigh–Ritz residual condition, and a one-sided gap control a directed rectangular tangent representative defined from the singular values of E₀*F₁.
 - **Current Lean references:** `ForMathlib.DavisKahan.Experimental.ExactTanTheta.theorem6_3_all_kyFan_core`, `ForMathlib.DavisKahan.Experimental.ExactTanTheta.theorem6_3_generalizedTanTheta_source_ideal`
-- **Assessment:** The bounded source theorem is implemented at the paper's effective separable scope: finite trial coordinates, arbitrary complete ambient Hilbert space, and the strict-rank hypothesis preserved explicitly. The formal endpoint does not derive the finite-dimensional typeclass from separability/cardinal arithmetic; it records that consequence as an explicit Lean assumption. The proof is directed and does not use symmetric IsAcute. The earlier mistranscription remains regression-tested.
+- **Assessment:** Bounded finite-source Theorem 6.3 proved axiom-clean in DavisKahan.TanTheta.Theorem63FiniteSource (theorem6_3_all_kyFan_core, theorem6_3_generalizedTanTheta_source_ideal); promoted out of Scratch.
 - **Next action:** Compile the new production theorem. The equal-dimension Section 2 tangent theorem and the Appendix arbitrary-ideal unbounded passage remain separate obligations.
 
 ### Section 6 appendix

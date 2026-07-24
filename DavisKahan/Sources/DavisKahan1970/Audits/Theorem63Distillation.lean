@@ -5,7 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
 import DavisKahan.FiniteDimensional.Core.AngleGeometry
-import DavisKahan.Experimental.Scratch.Section6.Theorem63SourceFaithful
+import DavisKahan.TanTheta.Theorem63FiniteSource
 
 /-!
 # Audit: the Theorem 6.3 dimension hypothesis does not imply acuteness
@@ -59,12 +59,12 @@ theorem not_mistranscribedDimensionImpliesAcute :
   have hone : (1 : ℂ) = 0 := hacute.2 1 (by simp) (by simp)
   exact one_ne_zero hone
 
-#check ForMathlib.DavisKahan.Experimental.Scratch.Section6.directedSineBlock
-#check ForMathlib.DavisKahan.Experimental.Scratch.Section6.HasDirectedTangentApproximationNumbers
-#check ForMathlib.DavisKahan.Experimental.Scratch.Section6.Theorem63KyFanCore
-#check ForMathlib.DavisKahan.Experimental.Scratch.Section6.theorem6_3_ideal_of_kyFan_core
+#check ForMathlib.DavisKahan.Experimental.ExactTanTheta.theorem63DirectedSineBlock
+#check ForMathlib.DavisKahan.Experimental.ExactTanTheta.HasTheorem63DirectedTangentApproximationNumbers
+#check ForMathlib.DavisKahan.Experimental.ExactTanTheta.Theorem63KyFanCore
+#check ForMathlib.DavisKahan.Experimental.ExactTanTheta.theorem6_3_ideal_of_kyFan_core
 #print axioms not_mistranscribedDimensionImpliesAcute
-#print axioms ForMathlib.DavisKahan.Experimental.Scratch.Section6.theorem6_3_ideal_of_kyFan_core
+#print axioms ForMathlib.DavisKahan.Experimental.ExactTanTheta.theorem6_3_ideal_of_kyFan_core
 
 end Theorem63DistillationAudit
 end DavisKahan1970
