@@ -230,7 +230,7 @@ theorem canonicalGapCircle_distance_interval
 /-- Every point on the canonical finite-gap circle is at distance at least
 `d / 2` from the complementary exterior. -/
 theorem canonicalGapCircle_distance_exterior
-    {left right d : ℝ} (hlr : left ≤ right) {z : ℂ}
+    {left right d : ℝ} (hlr : left ≤ right) (hd0 : 0 ≤ d) {z : ℂ}
     (hz : ‖z - (((left + right) / 2 : ℝ) : ℂ)‖ =
       (right - left + d) / 2)
     {lam : ℝ} (hlam : lam ≤ left - d ∨ right + d ≤ lam) :
@@ -240,12 +240,14 @@ theorem canonicalGapCircle_distance_exterior
         ‖(lam : ℂ) - (((left + right) / 2 : ℝ) : ℂ)‖ := by
     rw [← Complex.ofReal_sub, Complex.norm_real, Real.norm_eq_abs]
     rcases hlam with hlam | hlam
-    · rw [abs_of_nonpos]
-      · linarith
-      · linarith
-    · rw [abs_of_nonneg]
-      · linarith
-      · linarith
+    · have hsign : lam - (left + right) / 2 ≤ 0 := by
+        linarith
+      rw [abs_of_nonpos hsign]
+      linarith
+    · have hsign : 0 ≤ lam - (left + right) / 2 := by
+        linarith
+      rw [abs_of_nonneg hsign]
+      linarith
   have hdecomp :
       (lam : ℂ) - (((left + right) / 2 : ℝ) : ℂ) =
         ((lam : ℂ) - z) +
@@ -257,8 +259,10 @@ theorem canonicalGapCircle_distance_exterior
           ‖z - (((left + right) / 2 : ℝ) : ℂ)‖ := by
     rw [hdecomp]
     exact norm_add_le _ _
-  rw [hz, norm_sub_rev] at htri
-  linarith
+  rw [hz] at htri
+  have hdist : d / 2 ≤ ‖(lam : ℂ) - z‖ := by
+    linarith
+  simpa only [norm_sub_rev] using hdist
 
 /-- The real points strictly inside the canonical finite-gap circle are
 exactly the interval enlarged by `d / 2` on both sides. -/
@@ -337,7 +341,7 @@ theorem canonicalGapCircle_margin_le_realSpectrum
   have hsep1 : ∀ mu ∈ {x : ℝ | x ≤ left - d ∨ right + d ≤ x},
       delta ≤ ‖(lam : ℂ) - (mu : ℂ)‖ := by
     intro mu hmu
-    have hcircle := canonicalGapCircle_distance_exterior hlr hz hmu
+    have hcircle := canonicalGapCircle_distance_exterior hlr hd.le hz hmu
     have htri : ‖z - (mu : ℂ)‖ ≤
         ‖z - (lam : ℂ)‖ + ‖(lam : ℂ) - (mu : ℂ)‖ := by
       calc
@@ -356,37 +360,61 @@ theorem canonicalGapCircle_margin_le_realSpectrum
   have hratio1 : delta⁻¹ * (t * ‖E‖) < 1 := by
     rw [inv_mul_eq_div]
     exact (div_lt_one hdelta).2 htd
+  let R0 : U →L[ℂ] U := resolventOperator Ht.A0 (lam : ℂ)
+  let R1 : Uᗮ →L[ℂ] Uᗮ := resolventOperator Ht.A1 (lam : ℂ)
+  have hR0' : ‖R0‖ ≤ delta⁻¹ := by
+    simpa only [R0] using hR0
+  have hR1' : ‖R1‖ ≤ delta⁻¹ := by
+    simpa only [R1] using hR1
+  have hdeltaInv : 0 ≤ delta⁻¹ := inv_nonneg.mpr hdelta.le
   have hprod :
-      ‖resolventOperator Ht.A1 (lam : ℂ) ∘L Ht.B10 ∘L
-          resolventOperator Ht.A0 (lam : ℂ) ∘L Ht.B01‖ < 1 := by
+      ‖(((R1 ∘L Ht.B10) ∘L R0) ∘L Ht.B01)‖ < 1 := by
+    have hcomp1 :
+        ‖(((R1 ∘L Ht.B10) ∘L R0) ∘L Ht.B01)‖ ≤
+          ‖((R1 ∘L Ht.B10) ∘L R0)‖ * ‖Ht.B01‖ :=
+      ContinuousLinearMap.opNorm_comp_le
+        ((R1 ∘L Ht.B10) ∘L R0) Ht.B01
+    have hcomp2 :
+        ‖((R1 ∘L Ht.B10) ∘L R0)‖ ≤
+          ‖R1 ∘L Ht.B10‖ * ‖R0‖ :=
+      ContinuousLinearMap.opNorm_comp_le (R1 ∘L Ht.B10) R0
+    have hcomp3 :
+        ‖R1 ∘L Ht.B10‖ ≤ ‖R1‖ * ‖Ht.B10‖ :=
+      ContinuousLinearMap.opNorm_comp_le R1 Ht.B10
+    have hpair :
+        ‖R1‖ * ‖Ht.B10‖ ≤ delta⁻¹ * (t * ‖E‖) :=
+      mul_le_mul hR1' hB10 (norm_nonneg Ht.B10) hdeltaInv
+    have htriple :
+        (‖R1‖ * ‖Ht.B10‖) * ‖R0‖ ≤
+          (delta⁻¹ * (t * ‖E‖)) * delta⁻¹ :=
+      mul_le_mul hpair hR0' (norm_nonneg R0) hratio0
+    have hfour :
+        ((‖R1‖ * ‖Ht.B10‖) * ‖R0‖) * ‖Ht.B01‖ ≤
+          ((delta⁻¹ * (t * ‖E‖)) * delta⁻¹) * (t * ‖E‖) :=
+      mul_le_mul htriple hB01 (norm_nonneg Ht.B01)
+        (mul_nonneg hratio0 hdeltaInv)
     have hnorm :
-        ‖resolventOperator Ht.A1 (lam : ℂ) ∘L Ht.B10 ∘L
-            resolventOperator Ht.A0 (lam : ℂ) ∘L Ht.B01‖ ≤
+        ‖(((R1 ∘L Ht.B10) ∘L R0) ∘L Ht.B01)‖ ≤
           delta⁻¹ * (t * ‖E‖) * delta⁻¹ * (t * ‖E‖) := by
       calc
-        ‖resolventOperator Ht.A1 (lam : ℂ) ∘L Ht.B10 ∘L
-            resolventOperator Ht.A0 (lam : ℂ) ∘L Ht.B01‖
-            ≤ ‖resolventOperator Ht.A1 (lam : ℂ) ∘L Ht.B10 ∘L
-                resolventOperator Ht.A0 (lam : ℂ)‖ * ‖Ht.B01‖ :=
-              ContinuousLinearMap.opNorm_comp_le _ _
-        _ ≤ (‖resolventOperator Ht.A1 (lam : ℂ) ∘L Ht.B10‖ *
-                ‖resolventOperator Ht.A0 (lam : ℂ)‖) * ‖Ht.B01‖ := by
-              gcongr
-              exact ContinuousLinearMap.opNorm_comp_le _ _
-        _ ≤ ((‖resolventOperator Ht.A1 (lam : ℂ)‖ * ‖Ht.B10‖) *
-                ‖resolventOperator Ht.A0 (lam : ℂ)‖) * ‖Ht.B01‖ := by
-              gcongr
-              exact ContinuousLinearMap.opNorm_comp_le _ _
-        _ ≤ delta⁻¹ * (t * ‖E‖) * delta⁻¹ * (t * ‖E‖) := by
-              gcongr
+        ‖(((R1 ∘L Ht.B10) ∘L R0) ∘L Ht.B01)‖
+            ≤ ‖((R1 ∘L Ht.B10) ∘L R0)‖ * ‖Ht.B01‖ := hcomp1
+        _ ≤ (‖R1 ∘L Ht.B10‖ * ‖R0‖) * ‖Ht.B01‖ :=
+          mul_le_mul_of_nonneg_right hcomp2 (norm_nonneg Ht.B01)
+        _ ≤ ((‖R1‖ * ‖Ht.B10‖) * ‖R0‖) * ‖Ht.B01‖ := by
+          exact mul_le_mul_of_nonneg_right
+            (mul_le_mul_of_nonneg_right hcomp3 (norm_nonneg R0))
+            (norm_nonneg Ht.B01)
+        _ ≤ delta⁻¹ * (t * ‖E‖) * delta⁻¹ * (t * ‖E‖) := hfour
     calc
-      ‖resolventOperator Ht.A1 (lam : ℂ) ∘L Ht.B10 ∘L
-          resolventOperator Ht.A0 (lam : ℂ) ∘L Ht.B01‖
+      ‖(((R1 ∘L Ht.B10) ∘L R0) ∘L Ht.B01)‖
           ≤ delta⁻¹ * (t * ‖E‖) * delta⁻¹ * (t * ‖E‖) := hnorm
       _ = (delta⁻¹ * (t * ‖E‖)) ^ 2 := by ring
       _ < 1 := by nlinarith
-  have hblock : InResolventSet (blockOperator Ht) (lam : ℂ) :=
-    blockOperator_inResolventSet_of_schur_norm_lt_one Ht (lam : ℂ) h0 h1 hprod
+  have hblock : InResolventSet (blockOperator Ht) (lam : ℂ) := by
+    simpa only [R0, R1, ContinuousLinearMap.comp_assoc] using
+      blockOperator_inResolventSet_of_schur_norm_lt_one
+        Ht (lam : ℂ) h0 h1 hprod
   have hnotBlock : (lam : ℂ) ∉ spectrum ℂ (blockOperator Ht) :=
     not_mem_spectrum_of_inResolventSet (blockOperator Ht) hblock
   have hspec := spectrum_subspaceBlockOperatorData
@@ -407,8 +435,8 @@ theorem exists_circleContinuationData_of_offDiagonal_halfGap
     (hfinite : FiniteGapConfiguration A U d)
     (hsmall : ‖E‖ < d / 2) :
     ∃ left right : ℝ, left ≤ right ∧
-      CircleContinuationData A E
-        (Set.Ioo (left - d / 2) (right + d / 2)) := by
+      Nonempty (CircleContinuationData A E
+        (Set.Ioo (left - d / 2) (right + d / 2))) := by
   letI : CompleteSpace U :=
     (U.isComplete_coe_of_hasOrthogonalProjection).completeSpace_coe
   letI : CompleteSpace (Uᗮ : Submodule ℂ H) :=
@@ -431,8 +459,8 @@ theorem exists_circleContinuationData_of_offDiagonal_halfGap
     intro t ht z hz lam hlam
     exact canonicalGapCircle_margin_le_realSpectrum hA hE hU hoff hd hlr
       hdiag hsmall ht (by simpa only [center, radius] using hz) hlam
-  refine ⟨left, right, hlr, ?_⟩
-  exact
+  refine ⟨left, right, hlr, ⟨?_⟩⟩
+  refine
     { hA := hA
       hE := hE
       hs := measurableSet_Ioo
@@ -482,7 +510,7 @@ theorem exists_spectralContinuationWitness_of_offDiagonal_halfGap
     ∃ left right : ℝ, left ≤ right ∧
       Nonempty (SpectralContinuationWitness A E
         (Set.Ioo (left - d / 2) (right + d / 2))) := by
-  obtain ⟨left, right, hlr, D⟩ :=
+  obtain ⟨left, right, hlr, ⟨D⟩⟩ :=
     exists_circleContinuationData_of_offDiagonal_halfGap
       hA hE hU hoff hd hfinite hsmall
   exact ⟨left, right, hlr, ⟨spectralContinuationWitness_of_circle D⟩⟩
