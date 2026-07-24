@@ -168,7 +168,7 @@ theorem realKernel_fourier_of_one_le {x : ℝ} (hx : 1 ≤ x) :
           Complex.exp ((((t * x : ℝ) : ℂ) * Complex.I)) =
           (((Real.sin t / 2 : ℝ) : ℂ) *
               Complex.exp ((((t * x : ℝ) : ℂ) * Complex.I))) *
-            ((innerLaplace t : ℝ) : ℂ) := by
+            ((weightLaplaceTransform t : ℝ) : ℂ) := by
         rw [realKernel_def]
         push_cast
         ring
@@ -177,7 +177,7 @@ theorem realKernel_fourier_of_one_le {x : ℝ} (hx : 1 ≤ x) :
             ∫ y in Set.Ioi (0 : ℝ),
               ((weight y * Real.exp (-y * |t|) : ℝ) : ℂ) := by
         congr 1
-        rw [innerLaplace_def, ← integral_complex_ofReal]
+        rw [weightLaplaceTransform_def, ← integral_complex_ofReal]
         apply setIntegral_congr_fun measurableSet_Ioi
         intro y _
         dsimp only
