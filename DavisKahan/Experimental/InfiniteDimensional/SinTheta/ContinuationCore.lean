@@ -5,7 +5,7 @@ Authors: Jon Crall, GPT 5.6 High
 -/
 import DavisKahan.Experimental.InfiniteDimensional.DoubleAngle
 import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.DirectRotationAPI
-import DavisKahan.Experimental.InfiniteDimensional.Sylvester.Resolvent
+import DavisKahan.SpectralTheory.ResolventOperator
 
 /-!
 # Spectral projection continuation and branch selection

@@ -5,7 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.ContinuationAssembly
 import DavisKahan.Interop.Spectra.BoundedSelfAdjointSpectralProjection
-import DavisKahan.Experimental.InfiniteDimensional.SinTheta.CayleySelectorBridge
+import DavisKahan.SpectralTheory.CayleySelectorBridge
 import Spectra.SpectralTheory.ResolventForm
 import Spectra.StoneBridge.CalculusBridge
 import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Integral

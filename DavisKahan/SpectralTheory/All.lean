@@ -9,5 +9,7 @@ import DavisKahan.SpectralTheory.Real.All
 import DavisKahan.SpectralTheory.ReducingSubspace.All
 import DavisKahan.SpectralTheory.AbstractSpectrum
 import DavisKahan.SpectralTheory.Compatibility
+import DavisKahan.SpectralTheory.ResolventOperator
+import DavisKahan.SpectralTheory.CayleySelectorBridge
 
 /-! # `DavisKahan/SpectralTheory` -/

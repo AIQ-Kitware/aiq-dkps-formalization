@@ -739,7 +739,7 @@
       "id": "s8-circle-integrand",
       "title": "Circle resolvent integrand",
       "kind": "foundation",
-      "module": "DavisKahan.Experimental.Frontier.RieszCircle",
+      "module": "DavisKahan.Sources.DavisKahan1970.Section8RieszCircle",
       "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.RieszCircle.circleResolventIntegrand",
       "dependencies": [],
       "source_census_ids": [],
@@ -751,7 +751,7 @@
       "id": "s8-circle-integral",
       "title": "Operator-valued circle Riesz integral",
       "kind": "foundation",
-      "module": "DavisKahan.Experimental.Frontier.RieszCircle",
+      "module": "DavisKahan.Sources.DavisKahan1970.Section8RieszCircle",
       "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.RieszCircle.circleRieszProjectionIntegral",
       "dependencies": [
         "s8-circle-integrand"
@@ -765,7 +765,7 @@
       "id": "s8-scalar-cauchy",
       "title": "Scalar circle Cauchy indicator formula",
       "kind": "foundation",
-      "module": "DavisKahan.Experimental.Frontier.RieszCircle",
+      "module": "DavisKahan.Sources.DavisKahan1970.Section8RieszCircle",
       "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.RieszCircle.scalar_circleIntegral_resolvent_indicator",
       "dependencies": [],
       "source_census_ids": [],
@@ -777,7 +777,7 @@
       "id": "s8-riesz-eq-spectral",
       "title": "Circle Riesz equals spectral projection",
       "kind": "bridge",
-      "module": "DavisKahan.Experimental.Frontier.RieszCircle",
+      "module": "DavisKahan.Sources.DavisKahan1970.Section8RieszCircle",
       "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.RieszCircle.circleRieszProjection_eq_boundedSelfAdjointSpectralProjection",
       "dependencies": [
         "s8-circle-integral",
@@ -793,7 +793,7 @@
       "id": "s8-riesz-norm-bound",
       "title": "Circle Riesz perturbation norm bound",
       "kind": "bridge",
-      "module": "DavisKahan.Experimental.Frontier.RieszCircle",
+      "module": "DavisKahan.Sources.DavisKahan1970.Section8RieszCircle",
       "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.RieszCircle.norm_circleRieszProjection_sub_le",
       "dependencies": [
         "s8-circle-integral"
@@ -807,7 +807,7 @@
       "id": "s8-riesz-path-continuity",
       "title": "Circle Riesz path continuity",
       "kind": "bridge",
-      "module": "DavisKahan.Experimental.Frontier.RieszCircle",
+      "module": "DavisKahan.Sources.DavisKahan1970.Section8RieszCircle",
       "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.RieszCircle.continuous_circleRieszProjection_path",
       "dependencies": [
         "s8-riesz-eq-spectral",

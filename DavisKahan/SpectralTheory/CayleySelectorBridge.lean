@@ -3,7 +3,7 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Fable 5
 -/
-import DavisKahan.Experimental.InfiniteDimensional.Sylvester.Resolvent
+import DavisKahan.SpectralTheory.ResolventOperator
 import Spectra.SpectralTheory.ResolventForm
 import Spectra.StoneBridge.CalculusBridge
 import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Integral
