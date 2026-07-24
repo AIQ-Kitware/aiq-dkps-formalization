@@ -613,15 +613,15 @@
       "id": "s6-theorem6-3-kyfan-core",
       "title": "Theorem 6.3 source finite-Ky-Fan core",
       "kind": "bridge",
-      "module": "DavisKahan.Experimental.Scratch.Section6.Theorem63SourceFaithful",
-      "declaration": "ForMathlib.DavisKahan.Experimental.Scratch.Section6.theorem6_3_all_kyFan_core",
+      "module": "DavisKahan.TanTheta.Theorem63FiniteSource",
+      "declaration": "ForMathlib.DavisKahan.Experimental.ExactTanTheta.theorem6_3_all_kyFan_core",
       "dependencies": [
         "s6-trial-residual",
         "s6-theorem6-3-directed-tangent-data"
       ],
       "source_census_ids": [],
       "priority": "hard",
-      "notes": "Open hard step: reproduce equations (6.5)-(6.6) and the finite-projector approximation argument for every Ky Fan prefix, without introducing symmetric IsAcute.",
+      "notes": "Grounded bounded source core: finite trial coordinates, arbitrary complete ambient Hilbert space; singular-vector equation (6.6), all Ky Fan prefixes, and finite-rank tail stabilization.",
       "external": false
     },
     {
@@ -640,8 +640,8 @@
       "id": "s6-theorem6-3",
       "title": "Theorem 6.3 generalized directed tangent theorem",
       "kind": "source",
-      "module": "DavisKahan.Experimental.Frontier.RemainingSourceSurface",
-      "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.RemainingSourceSurface.theorem6_3_generalizedTanTheta_source_ideal",
+      "module": "DavisKahan.TanTheta.Theorem63FiniteSource",
+      "declaration": "ForMathlib.DavisKahan.Experimental.ExactTanTheta.theorem6_3_generalizedTanTheta_source_ideal",
       "dependencies": [
         "s6-theorem6-3-kyfan-core",
         "s6-theorem6-3-kyfan-promotion"
@@ -650,7 +650,7 @@
         "DK-6.3-thm"
       ],
       "priority": "hard",
-      "notes": "Literal source scope: strict Hilbert-dimension inequality and a directed tangent representative defined from E0*F1 singular values. The prior hdim-to-IsAcute endpoint was a distillation error.",
+      "notes": "Bounded source-effective scope under the paper's global separability convention: the strict Hilbert-dimension inequality makes the smaller trial-coordinate space finite-dimensional. The Lean endpoint records finite trial coordinates explicitly and preserves the strict-rank hypothesis. Directed tangent; no symmetric IsAcute premise.",
       "external": false
     },
     {
@@ -658,17 +658,17 @@
       "title": "Section 2 single-angle tangent theorem",
       "kind": "source",
       "module": "DavisKahan.Experimental.Frontier.RemainingSourceSurface",
-      "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.RemainingSourceSurface.tanTheta_source_ideal",
+      "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.RemainingSourceSurface.theorem6_3_equalRank_finite_tanTheta_ideal",
       "dependencies": [
-        "s6-theorem6-3-kyfan-core",
         "s6-theorem6-3-kyfan-promotion"
       ],
       "source_census_ids": [
         "S2-tan-theta"
       ],
       "priority": "high",
-      "notes": "The finite equal-rank UI-norm theorem is compiled, but the source Hilbert-space arbitrary-UI-norm residual and perturbation forms remain open.",
-      "external": false
+      "notes": "Open obligation. The finite equal-rank UI-norm theorem is compiled, but the equal-dimensional infinite/noncompact Section 2 theorem requires the Appendix finite-projector limiting argument.",
+      "external": false,
+      "open_obligation": true
     },
     {
       "id": "s6-theorem6-3-unbounded-opnorm-partial",
@@ -687,7 +687,7 @@
       "title": "Section 2 unbounded self-adjoint scope",
       "kind": "source",
       "module": "DavisKahan.Experimental.Frontier.RemainingSourceSurface",
-      "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.RemainingSourceSurface.unbounded_angle_theorems_source_scope",
+      "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.RemainingSourceSurface.unbounded_angle_theorems_source_scope_partial_marker",
       "dependencies": [
         "base-theorem5-2",
         "s6-theorem6-3",
@@ -697,8 +697,9 @@
         "S2-unbounded-scope"
       ],
       "priority": "hard",
-      "notes": "The sine family and an operator-norm tangent companion exist, but the paper claims arbitrary-UI-norm unbounded scope; the tangent cutoff/Ky-Fan passage remains open.",
-      "external": false
+      "notes": "Open obligation. The bounded Theorem 6.3 and an unbounded graph-angle operator-norm companion are grounded, but the paper claims arbitrary-UI-norm unbounded scope; the Appendix cutoff/Fan passage remains open.",
+      "external": false,
+      "open_obligation": true
     },
     {
       "id": "s7-sin2",

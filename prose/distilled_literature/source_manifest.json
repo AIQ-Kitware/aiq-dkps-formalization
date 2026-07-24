@@ -810,7 +810,7 @@
       "group": "Spectral perturbation, principal angles, and matrix inequalities",
       "tier": "primary",
       "priority": "P0",
-      "formalization_status": "source-faithful sine family complete; finite equal-rank and strict-lower-rank tangent UI-norm specializations compile; Theorem 6.3 Hilbert-space directed Ky-Fan core and arbitrary-UI-norm unbounded passage remain open; Section 8 and Section 9 campaigns remain active",
+      "formalization_status": "source-faithful sine family complete; bounded Theorem 6.3 proof written at source-effective finite-trial/arbitrary-ambient scope; compiler certification pending; equal-dimensional infinite tan theta and arbitrary-UI-norm unbounded passage remain open; Section 8 and Section 9 campaigns remain active",
       "distilled_status": "core_note",
       "primary_url": "https://doi.org/10.1137/0707001",
       "target_note": "DavisKahan1970_part_III.tex",
@@ -827,7 +827,8 @@
         "prose/distilled_literature/DavisKahan1970_section8_branch_selection.tex",
         "DavisKahan/Sources/DavisKahan1970/Audits/Theorem63Distillation.lean",
         "DavisKahan/Experimental/Scratch/Section6/Theorem63SourceFaithful.lean",
-        "dev/journals/davis-kahan-theorem63-distillation-error-2026-07-23.md"
+        "dev/journals/davis-kahan-theorem63-distillation-error-2026-07-23.md",
+        "DavisKahan/TanTheta/Theorem63FiniteSource.lean"
       ],
       "existing_assets": [
         "ForMathlib/prose/Davis-Kahan-1970-part-III-core-arguments.tex",
@@ -837,7 +838,7 @@
         "prose/distilled_literature/DavisKahan1970_section8_branch_selection.tex"
       ],
       "scope": "Full Part III theory on separable Hilbert spaces: bounded Hermitian main body, four angle theorem families for arbitrary unitary-invariant norms, direct rotation, spectral selection, and unbounded self-adjoint extensions.",
-      "missing_work": "Prove the source-faithful Hilbert-space Theorem 6.3 from the directed E₀*F₁ tangent data via all finite Ky Fan inequalities and the unbounded cutoff passage; do not reintroduce the refuted hdim-to-IsAcute distillation. Continue the Section 3 classification, Section 4 infinite comparison, Section 8, and Section 9 campaigns.",
+      "missing_work": "Compile and promote the bounded Theorem 6.3 implementation. The finite-trial typeclass is the explicit Lean encoding of the paper's strict Hilbert-dimension consequence under separability; a future cardinal bridge may derive it mechanically. Complete the equal-dimensional infinite/noncompact tan theta theorem and the arbitrary-UI-norm unbounded Appendix passage; do not reintroduce the refuted hdim-to-IsAcute distillation. Continue the Section 3 classification, Section 4 infinite comparison, Section 8, and Section 9 campaigns.",
       "role": "primary_theorem_source",
       "bibliographic_status": "verified"
     },

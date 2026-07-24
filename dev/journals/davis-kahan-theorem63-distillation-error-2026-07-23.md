@@ -68,16 +68,19 @@ it never promotes the unequal-dimensional pair to symmetric acuteness.
 ## Repair
 
 - The distillation now quotes the directed cross-block formulation explicitly.
-- The finite strict-lower-rank theorem is labeled a compiled specialization,
-  not the full Hilbert-space source endpoint.
-- The frontier no longer credits the finite specialization as completion of
-  Theorem 6.3 or of the unbounded arbitrary-UI-norm scope.
-- `Experimental/Scratch/Section6/Theorem63SourceFaithful.lean` records the
-  directed sine block, a directed tangent approximation-number interface, and
-  the already-proved Fan-dominance promotion.
-- The remaining hard blocker is named honestly: prove the source finite-Ky-Fan
-  inequalities (and then the unbounded cutoff passage) without introducing a
-  symmetric `IsAcute` premise.
+- The finite strict-lower-rank theorem was first relabeled as a specialization
+  while the source statement was re-audited.
+- A second source check exposed the decisive global hypothesis: the paper works
+  in a separable Hilbert space.  Under the strict dimension inequality in
+  Theorem 6.3, the smaller trial-coordinate space is therefore finite-dimensional.
+- `DavisKahan/TanTheta/Theorem63FiniteSource.lean` now implements the bounded
+  source theorem for finite trial coordinates and an arbitrary complete ambient
+  Hilbert space.  It proves the directed no-pole result, equation (6.6), every
+  Ky Fan prefix inequality, finite-rank tail stabilization, and Fan-dominance
+  promotion to every supported unitary-invariant ideal gauge.
+- The frontier credits this bounded Theorem 6.3 endpoint only.  The equal-rank
+  infinite/noncompact tangent theorem and the Appendix arbitrary-ideal unbounded
+  passage remain separately marked open.
 
 ## Durable rules
 
@@ -94,3 +97,17 @@ it never promotes the unequal-dimensional pair to symmetric acuteness.
    rotation, would have exposed the mistake immediately.
 5. **Keep a kernel-checked counterexample for every rejected transcription.**
    Prose warnings alone are too easy to regress.
+
+## Follow-up correction: separability collapses the strict-dimension case
+
+The first repair correctly rejected symmetric acuteness but still described the
+bounded theorem as needing the Appendix's general noncompact cutoff argument.
+That was too pessimistic.  Because the paper globally assumes separability, a
+strict inequality between the trial and exact Hilbert dimensions forces the
+smaller trial coordinate space to have finite dimension.  The bounded Theorem
+6.3 proof is therefore the finite-source singular-vector argument in an
+arbitrary ambient Hilbert space.  The noncompact cutoff machinery belongs to
+the equal-dimension theorem and the unbounded Appendix extension.
+
+This distinction is now encoded in both the production theorem and the frontier
+manifest.

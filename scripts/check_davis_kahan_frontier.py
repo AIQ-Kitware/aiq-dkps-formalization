@@ -362,7 +362,9 @@ def compute_recursive_status(
         else:
             resolved = bool(lean[node_id]["resolved"])
             admitted = lean[node_id]["admitted"]
-            local_grounded = resolved and admitted is False
+            local_grounded = (
+                resolved and admitted is False and not node.get("open_obligation", False)
+            )
         dependencies = [one(dep) for dep in node.get("dependencies", [])]
         if lean is None:
             recursive_grounded: bool | None = None
@@ -515,8 +517,8 @@ def render_report(
         "",
         "## Manifest nodes",
         "",
-        "| Node | Kind | Paper-facing? | Paper row(s) | Priority | Text | Resolves | Admission-free | Recursive |",
-        "|---|---|:---:|---|---:|:---:|:---:|:---:|:---:|",
+        "| Node | Kind | Paper-facing? | Paper row(s) | Priority | Open obligation? | Text | Resolves | Admission-free | Recursive |",
+        "|---|---|:---:|---|---:|:---:|:---:|:---:|:---:|:---:|",
     ])
     for node in manifest["nodes"]:
         st = status[node["id"]]
@@ -526,6 +528,7 @@ def render_report(
         lines.append(
             f"| `{node['id']}` | {node['kind']} | {mark(bool(paper_ids))} | "
             f"{paper_rows_cell} | {node.get('priority','')} | "
+            f"{mark(bool(node.get('open_obligation', False)))} | "
             f"{mark(st['text_present'])} | {mark(st['resolved'])} | "
             f"{mark(admission_free)} | {mark(st['recursive_grounded'])} |"
         )
