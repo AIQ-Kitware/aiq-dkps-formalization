@@ -1,4 +1,4 @@
-import DavisKahan.Experimental.Scratch.Section4.InfiniteIdealDominance
+import DavisKahan.Experimental.MathAhead.Section4.InfiniteIdealDominance
 import DavisKahan.Experimental.Scratch.Section4.FiniteSourceSurface
 
-import DavisKahan.Experimental.Scratch.Section4.InfiniteProposition41
+import DavisKahan.Experimental.MathAhead.Section4.InfiniteProposition41

@@ -5,7 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
 import DavisKahan.FiniteDimensional.DirectRotation
-import DavisKahan.Experimental.Scratch.Section4.InfiniteIdealDominance
+import DavisKahan.Experimental.MathAhead.Section4.InfiniteIdealDominance
 
 /-!
 # Certified finite-dimensional Section 4 surface
@@ -29,6 +29,7 @@ namespace Scratch
 namespace Section4
 
 open ExactSinTheta
+open MathAhead.Section4
 
 universe u v
 
