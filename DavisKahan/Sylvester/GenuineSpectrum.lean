@@ -8,7 +8,7 @@ import DavisKahan.SpectralTheory.ClosedOperator.Complex
 import DavisKahan.SpectralTheory.ClosedOperator.BoundedRealization
 import DavisKahan.Sylvester.Gap
 import DavisKahan.Sylvester.Unbounded.Neumann
-import ForMathlib.Analysis.CStarAlgebra.SelfAdjointGapInverse
+import ForTauCeti.Analysis.CStarAlgebra.SelfAdjointGapInverse
 import Mathlib.Analysis.CStarAlgebra.ContinuousLinearMap
 
 /-!
@@ -102,9 +102,9 @@ theorem norm_sylvester_le_of_spectrum_intervalExterior
     · rw [hc, hrdef]; linarith [hmem.1]
     · rw [hc, hrdef]; linarith [hmem.2]
   have hB₁norm : ‖B₁‖ ≤ r :=
-    ForMathlib.IsSelfAdjoint.norm_le_of_spectrum_subset_Icc hB₁sa hr0 hB₁spec
+    TauCeti.IsSelfAdjoint.norm_le_of_spectrum_subset_Icc hB₁sa hr0 hB₁spec
   obtain ⟨J, hJ1, _hJ2, hJnorm⟩ :=
-    ForMathlib.IsSelfAdjoint.exists_two_sided_inverse_of_spectrum_gap hA₁sa
+    TauCeti.IsSelfAdjoint.exists_two_sided_inverse_of_spectrum_gap hA₁sa
       hrd hA₁spec
   -- the shifted Sylvester equation
   have hEq₁ : A₁ ∘L X - X ∘L B₁ = C := by
@@ -371,9 +371,9 @@ theorem mem_and_gauge_sylvester_le_of_spectrum_intervalExterior
     · rw [hc, hrdef]; linarith [hmem.1]
     · rw [hc, hrdef]; linarith [hmem.2]
   have hB₁norm : ‖B₁‖ ≤ r :=
-    ForMathlib.IsSelfAdjoint.norm_le_of_spectrum_subset_Icc hB₁sa hr0 hB₁spec
+    TauCeti.IsSelfAdjoint.norm_le_of_spectrum_subset_Icc hB₁sa hr0 hB₁spec
   obtain ⟨J, hJ1, hJ2, hJnorm⟩ :=
-    ForMathlib.IsSelfAdjoint.exists_two_sided_inverse_of_spectrum_gap hA₁sa
+    TauCeti.IsSelfAdjoint.exists_two_sided_inverse_of_spectrum_gap hA₁sa
       hrd hA₁spec
   have hEq₁ : A₁ ∘L X - X ∘L B₁ = C := by
     have h1 : algebraMap ℝ (F₁ →L[ℂ] F₁) c ∘L X =

@@ -6,6 +6,10 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 
 import DavisKahan.Experimental.Frontier.Section3
 import DavisKahan.OperatorIdeal.UnitarilyInvariant.RectangularFamily
+-- promoted infinite-dimensional Proposition 4.1 approximation-number majorization
+-- and the Fan-dominant ideal bridge for Corollary 4.1.  This module depends only
+-- on source-facing analysis, never on this frontier file, so the edge is acyclic.
+import DavisKahan.Experimental.MathAhead.Section4.InfiniteProposition41
 
 /-!
 # Section 4 frontier: valid extremal properties of the direct rotation
@@ -48,20 +52,32 @@ theorem proposition4_1_restrictedDisplacement_approximationNumbers
     ContinuousLinearMap.approximationNumber
         ((1 - spectraDirectRotation U V hacute) ∘L projection U) n ≤
       ContinuousLinearMap.approximationNumber
-        ((1 - W) ∘L projection U) n := by
-  sorry
+        ((1 - W) ∘L projection U) n :=
+  MathAhead.Section4.proposition4_1_restrictedDisplacement_approximationNumbers_scratch
+    U V hacute W hWunitary hWmap n
 
-/-- Davis--Kahan 1970, Corollary 4.1 at rectangular ideal-gauge scope. -/
+/-- Davis--Kahan 1970, Corollary 4.1 at Fan-dominant ideal-gauge scope.
+
+The bare `RectangularSymmetricIdealFamily` interface does not supply the
+monotonicity principle "domination of every finite Ky Fan approximation gauge
+implies ideal membership and gauge domination" that the infinite-dimensional
+statement genuinely needs; the honest hypothesis is a `KyFanDominantIdealFamily`,
+whose membership and gauge are read off through `toRectangularSymmetricIdealFamily`. -/
 theorem corollary4_1_restrictedDisplacement_idealGauge
-    (N : RectangularSymmetricIdealFamily (𝕜 := ℂ))
+    (N : KyFanDominantIdealFamily (𝕜 := ℂ))
     (hacute : IsAcute U V) (W : H →L[ℂ] H)
     (hWunitary : W ∈ unitary (H →L[ℂ] H))
     (hWmap : W * projection U = projection V * W)
-    (hWmem : N.Mem ((1 - W) ∘L projection U)) :
-    N.Mem ((1 - spectraDirectRotation U V hacute) ∘L projection U) ∧
-      N.gauge ((1 - spectraDirectRotation U V hacute) ∘L projection U) ≤
-        N.gauge ((1 - W) ∘L projection U) := by
-  sorry
+    (hWmem : N.toRectangularSymmetricIdealFamily.Mem ((1 - W) ∘L projection U)) :
+    N.toRectangularSymmetricIdealFamily.Mem
+        ((1 - spectraDirectRotation U V hacute) ∘L projection U) ∧
+      N.toRectangularSymmetricIdealFamily.gauge
+          ((1 - spectraDirectRotation U V hacute) ∘L projection U) ≤
+        N.toRectangularSymmetricIdealFamily.gauge ((1 - W) ∘L projection U) :=
+  MathAhead.Section4.restrictedDisplacement_idealGauge_le N
+    (MathAhead.Section4.infinite_restrictedDisplacementDominance
+      U V hacute W hWunitary hWmap)
+    hWmem
 
 /-- Squared sine cost of one unit source vector under a unitary competitor. -/
 noncomputable def basisAngleSquareCost (W : H →L[ℂ] H) (x : H) : ℝ :=

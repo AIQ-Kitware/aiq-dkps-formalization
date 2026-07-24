@@ -5,7 +5,7 @@ Authors: Jon Crall, GPT 5.6 High
 -/
 import DavisKahan.Experimental.InfiniteDimensional.Sylvester.Basic
 import DavisKahan.Sylvester.GenuineSpectrum
-import DavisKahan.Experimental.InfiniteDimensional.Sylvester.Resolvent
+import DavisKahan.SpectralTheory.ResolventOperator
 import DavisKahan.Sylvester.Bounded
 import DavisKahan.Experimental.InfiniteDimensional.Sylvester.Unbounded
 import DavisKahan.Interop.Spectra.SpectralCutoff

@@ -41,6 +41,113 @@ The highest-value operating rules are:
   coordinate proof;
 - never claim a declaration is complete until Lean has accepted it.
 
+## Milestone ordering and dependency policy
+
+**This policy was revised 2026-07-24.** The earlier "complete the whole paper
+first, migrate second" gate is retired: it no longer matches the repository.
+`TauCeti` is already a local dependency, `ForTauCeti` is a default build target,
+reusable foundations have already been staged there, and production code is
+already being reorganized for extraction. The Davis--Kahan machinery that
+justifies an upstream spectral-perturbation library is substantial and the
+source census is clean; the remaining 1970 source obligations are not
+prerequisites for beginning Tau Ceti integration.
+
+The repository now runs on a **dual-track** policy.
+
+### Primary track — Tau Ceti extraction
+
+Polish and upstream stable, paper-independent foundations into `ForTauCeti` (the
+staging home whose declarations already carry their final `TauCeti.*`
+namespaces), in small dependency-closed clusters. This is the current default
+work. `ForTauCeti` is the polished destination for reusable mathematics; Mathlib
+is not the near-term target for this contribution.
+
+### Maintenance track — Davis--Kahan source fidelity
+
+Keep `DavisKahan` the paper-facing package: the source census, counterexamples,
+paper wrappers, and remaining analytic obligations stay honest and compiling. Do
+**not** expand this track merely to satisfy an obsolete completion gate. The
+remaining paper obligations block upstream work only when they:
+
+- reveal an error in an API being proposed upstream;
+- require a foundational result that itself belongs in Tau Ceti;
+- expose a source-fidelity problem comparable to the Theorem 6.3 transcription
+  error; or
+- prevent `DavisKahan` from consuming the upstream replacement.
+
+Migration must not wait for Section 9 examples, every extremal statement, or
+every unbounded arbitrary-ideal endpoint.
+
+### Dependency rules (unchanged where still valid)
+
+Current build graph:
+
+```text
+Mathlib      TauCeti
+   ↑            ↑
+vendor/Spectra  ForTauCeti
+   ↑            ↑
+DavisKahan  ←────┘   (DavisKahan / paper may import ForTauCeti)
+```
+
+- `ForTauCeti` may import only `Mathlib` / `TauCeti` / `ForTauCeti`. `ForMathlib`
+  may import only `Mathlib` / `ForMathlib`. Enforced by
+  `scripts/check_dependency_layers.py`; this firewall shapes migration order (a
+  `ForMathlib` file migrates only once no remaining `ForMathlib` file imports it).
+- `DavisKahan` remains its own package and the paper-facing home of the work; it
+  may consume `ForTauCeti`.
+- `vendor/Spectra` is an accepted temporary production dependency. The final
+  migration target removes Spectra from the normal build.
+- **Do not commit the `external/TauCeti` submodule pointer yet.** Stage
+  everything in `ForTauCeti`; `scripts/export_for_tauceti.py` reproduces the
+  `TauCeti/` copy on demand at submission time. `external/Spectra` and
+  `external/TauCeti` remain read-only provenance references for the ordinary
+  build.
+- Reusable mathematics is written for extraction: keep paper-specific wrappers
+  downstream, avoid unnecessary Spectra coupling, record exact provenance.
+- A source claim shown false is completed by a machine-checked counterexample,
+  an explanation of the failure, and a corrected theorem when one is justified.
+  Proposition 4.4 is the known example; do not restore it as a theorem.
+
+### Convergence before submission (the phase that actually matters)
+
+The near-term job is **not** "copy `ForMathlib` files to `ForTauCeti`, then
+submit them." We carry three independently evolved operator-theory stacks — DKPS
+local abstractions, Tau Ceti canonical abstractions, and Spectra donor
+abstractions — that must collapse into **one Tau Ceti-native stack** before most
+PRs, without losing the genuinely new Davis--Kahan mathematics or Spectra
+provenance. The primary planning artifact for this is the **convergence matrix**
+([`dev/tauceti/convergence-matrix.md`](dev/tauceti/convergence-matrix.md)): one
+row per declaration, classified as exact-duplicate / wrapper-duplicate /
+parallel-formulation / missing-reusable-result / paper-specific, with a canonical
+destination. Two tracks run in parallel:
+
+- **Track A (now):** the approximation-number cluster — internally deduplicate
+  (Wave 1) and pursue its roadmap; it is independent of the unbounded /
+  semigroup / PDE architecture, so it does not wait on Track B.
+- **Track B (now):** the convergence audit + refactor waves for closed operators
+  (onto `LinearPMap`), semigroups/resolvents, forms/Fredholm/PDE, PVMs/spectral
+  calculus, polar decomposition, and Hilbert--Schmidt. Gates the later PRs.
+
+Overall ordering: `0` inventory/equivalence map → `1` internal dedup → `2`
+refactor onto Tau Ceti structures → `3` port missing Spectra foundations → `4`
+rewrite DavisKahan consumers → `5` delete old APIs → `6` polish and submit the
+residual new mathematics.
+
+### Governance gate before upstreaming (Tau Ceti)
+
+Tau Ceti admits new mathematical declarations only against an **accepted
+roadmap target**, one topic per PR, green build, standard axiom allowlist. We do
+all this prep **in this repository**, structured as if accepted: roadmaps are
+drafted in [`ForTauCetiRoadmap/`](ForTauCetiRoadmap/README.md) (mirroring the
+sibling `TauCetiRoadmap` layout), code stages in `ForTauCeti/`, submission
+packaging lives under `dev/tauceti/`. See
+[`docs/planning/tauceti-adaptation-and-spectra-extraction.md`](docs/planning/tauceti-adaptation-and-spectra-extraction.md)
+for the roadmap sequence, acceptance gates, and the A1--A3 submission split.
+
+The current Opus campaign is in
+[`docs/planning/opus-next-paper-completion-campaign.md`](docs/planning/opus-next-paper-completion-campaign.md).
+
 ## Davis--Kahan project goal and completion discipline
 
 The default Davis--Kahan objective is a source-faithful formalization of the
@@ -170,6 +277,42 @@ for the audited capability map, ownership boundary, and contribution plan.
   to chase it, and do not add `set_option linter.unusedSectionVars false`; add
   the one-line `omit`, or leave the warning if the declaration is in flux.
 
+
+## Scratch overlays are proof sketches to be promoted, not fixed in place
+
+Files under `DavisKahan/Experimental/Scratch/**` (and analogous overlay drops)
+are **proof sketches**, usually authored by an external agent without a
+compiler. Their only job is to give a compiler-equipped agent a good
+first-guess at proof *structure* so the real work is easier. A scratch file is
+**not required to build**, and making the scratch file itself compile is not the
+task.
+
+The task is to **promote** the sketch:
+
+1. Read the sketch and its manifest in `dev/overlays/*.md` (and the paired
+   `*-candidates-*.json`). The manifest states what each declaration proves,
+   where it should land, and the likely elaboration seams.
+2. Take the proof **out** of the scratch file and put it in its correct home
+   module — the source-facing location the statement actually belongs to — then
+   fix it *there* until it compiles. Do not repair it inside `Scratch/`.
+3. The source-facing home is the `Frontier/**` statement (often a documented
+   open obligation). "Mathematics ahead" of the frontier lives in `MathAhead/**`;
+   *promotion* means lifting that proof up so the `Frontier` statement is proved
+   directly. Because `MathAhead` imports `Frontier`, the proof and its helper
+   lemmas must be moved **up** into the frontier module (import graph permitting;
+   the underlying `Sources/**` lemmas are upstream of both and cycle-safe).
+4. Prefer the **source-faithful** signature over whatever the scratch happened to
+   state. A sketch may carry an accidentally overstrong hypothesis that
+   trivializes the conclusion; correct the statement to match the paper before
+   grounding it (retain the paper's hypotheses even if the Lean proof does not
+   consume all of them, for source correspondence).
+5. After promotion, slim the staging module (`MathAhead/**`) to a thin
+   re-export of the promoted names so there is a single source of truth, and
+   record the promotion in the overlay manifest.
+
+Scratch directories are excluded from the default `DavisKahan.All` build. Do not
+wire them into it, and do not treat a non-building scratch overlay as a
+regression.
 
 ## Comparator challenge rule
 

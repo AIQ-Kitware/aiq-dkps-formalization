@@ -1,6 +1,6 @@
 /-
 # TendstoInMeasure from a vanishing rate (pending: verify substantive) -- solution / dependency audit
 -/
-import ForMathlib.MeasureTheory.Function.ConvergenceInMeasure
+import ForTauCeti.MeasureTheory.Function.ConvergenceInMeasure
 
-#print axioms ForMathlib.tendstoInMeasure_of_tendsto_measure_dist_le_rate
+#print axioms TauCeti.tendstoInMeasure_of_tendsto_measure_dist_le_rate

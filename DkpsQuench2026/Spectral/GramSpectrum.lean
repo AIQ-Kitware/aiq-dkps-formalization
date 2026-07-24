@@ -18,7 +18,7 @@ the target-augmentation floor in `SpectralRegularity.lean`.
 
 import DkpsQuench2026.Core.Certificates
 import ForMathlib.Analysis.InnerProductSpace.FiniteFrame
-import ForMathlib.Analysis.InnerProductSpace.CenteredScatter
+import ForTauCeti.Analysis.InnerProductSpace.CenteredScatter
 
 set_option linter.mathlibStandardSet false
 
@@ -116,7 +116,7 @@ theorem quadratic_floor_of_sortedEigenvalues_configGram_lower
 
 /-- The repository centroid is the `ForMathlib` finite mean. -/
 theorem configCentroid_eq_finiteMean {n d : Nat} (z : Config n d) :
-    configCentroid z = ForMathlib.finiteMean ℝ z :=
+    configCentroid z = TauCeti.finiteMean ℝ z :=
   rfl
 
 /-- Sorted eigenvalues depend only on the matrix, not on the Hermitian certificate. -/
@@ -135,16 +135,16 @@ theorem sum_sq_centered_le_augmented {n d : Nat}
         (∑ a, x a * centerConfig (Fin.lastCases target ψref) i a) ^ 2 := by
   have hkey : ∀ {m : Nat} (w : Config m d),
       ∑ i : Fin m, (∑ a, x a * centerConfig w i a) ^ 2 =
-        RCLike.re (inner ℝ (ForMathlib.centeredScatter ℝ w x) x) := by
+        RCLike.re (inner ℝ (TauCeti.centeredScatter ℝ w x) x) := by
     intro m w
-    rw [ForMathlib.re_inner_centeredScatter_self]
+    rw [TauCeti.re_inner_centeredScatter_self]
     exact sum_sq_linearForm_eq_sum_norm_inner (centerConfig w) x
   rw [hkey ψref, hkey (Fin.lastCases target ψref)]
   rw [show (Fin.lastCases target ψref : Fin (n + 1) → Vec d) =
-    ForMathlib.appendFin ψref target from rfl]
-  rw [ForMathlib.re_inner_centeredScatter_append]
+    TauCeti.appendFin ψref target from rfl]
+  rw [TauCeti.re_inner_centeredScatter_append]
   have hnn : 0 ≤ (n : ℝ) / ((n : ℝ) + 1) *
-      ‖(inner ℝ (target - ForMathlib.finiteMean ℝ ψref) x : ℝ)‖ ^ 2 := by
+      ‖(inner ℝ (target - TauCeti.finiteMean ℝ ψref) x : ℝ)‖ ^ 2 := by
     positivity
   linarith
 

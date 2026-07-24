@@ -15,7 +15,7 @@ repository's `HighProbAtTop` interface when the replicate schedule grows.
 import DkpsQuench2026.Paper.EvaluationBridges
 import ForMathlib.Probability.Moments.SampleMean
 import ForMathlib.Probability.Moments.Variance
-import ForMathlib.MeasureTheory.Measure.Typeclasses.Probability
+import ForTauCeti.MeasureTheory.Measure.Typeclasses.Probability
 
 set_option linter.mathlibStandardSet false
 
@@ -140,7 +140,7 @@ theorem highProbAtTop_of_failure_bound_tendsto_zero
   have hfailδ : μ k (event k)ᶜ ≤ δ :=
     (hfailure k).trans (hN k (le_of_lt hk))
   exact (tsub_le_tsub_left hfailδ 1).trans
-    (ForMathlib.one_sub_measure_compl_le (μ k) (event k))
+    (TauCeti.one_sub_measure_compl_le (μ k) (event k))
 
 
 /-- A finite failure-probability upper bound is equivalently a lower confidence
@@ -151,7 +151,7 @@ theorem one_sub_failureBound_le_successProbability
     (hfailure : P eventᶜ ≤ failureBound) :
     1 - failureBound ≤ P event := by
   exact (tsub_le_tsub_left hfailure 1).trans
-    (ForMathlib.one_sub_measure_compl_le P event)
+    (TauCeti.one_sub_measure_compl_le P event)
 
 /-- Stage-dependent Chebyshev concentration promoted to `HighProbAtTop` whenever
 its explicit second-moment bound vanishes.  The replicate count may grow with

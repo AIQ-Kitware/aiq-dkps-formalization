@@ -8,6 +8,7 @@ import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtFrobenius
 import DavisKahan.Sources.DavisKahan1970.SineTheta.Theorem61Universal
 import DavisKahan.Geometry.Angle.OperatorAngleReal
 import ForMathlib.Analysis.InnerProductSpace.UnitarilyInvariantNorm
+import ForTauCeti.Analysis.InnerProductSpace.OperatorAbsoluteValue
 
 /-!
 # Source-faithful sharpness and the one-gap counterexample
@@ -541,7 +542,7 @@ theorem paperHilbertSchmidtNorm_sinAngleOperatorRC_eq_projectionDifference
     ForMathlib.DavisKahanExt.sinAngleOperatorC]
   calc
     paperHilbertSchmidtNorm
-        (ForMathlib.operatorAbs
+        (TauCeti.operatorAbs
           ((complexifySubmodule U).starProjection -
             (complexifySubmodule V).starProjection)) =
         paperHilbertSchmidtNorm

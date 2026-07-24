@@ -7,7 +7,7 @@ already present there in a comparable form.
 -/
 
 import Mathlib
-import ForMathlib.MeasureTheory.Function.ConvergenceInMeasure
+import ForTauCeti.MeasureTheory.Function.ConvergenceInMeasure
 
 open scoped BigOperators Topology
 open Filter MeasureTheory
@@ -146,7 +146,7 @@ theorem tendsto_measure_abs_gt_zero_of_highProb_abs_le_rate
     simp [not_le]
   -- Apply the staged Mathlib candidate: convergence in measure to `0`.
   have htim : TendstoInMeasure P X atTop (fun _ => (0 : Real)) :=
-    ForMathlib.tendstoInMeasure_of_tendsto_measure_rate_lt_dist hrate hbad
+    TauCeti.tendstoInMeasure_of_tendsto_measure_rate_lt_dist hrate hbad
   -- Extract the bad-event probabilities at a fixed threshold `ε`.
   intro ε hε
   have hclosed := (MeasureTheory.tendstoInMeasure_iff_dist.mp htim) ε hε

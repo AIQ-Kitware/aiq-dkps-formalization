@@ -1,3 +1,6 @@
 [submodule "external/Spectra"]
 	path = external/Spectra
 	url = https://github.com/adambornemann-glitch/Spectra.git
+[submodule "external/TauCeti"]
+	path = external/TauCeti
+	url = https://github.com/TauCetiProject/TauCeti.git

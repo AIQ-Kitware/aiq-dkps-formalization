@@ -1,9 +1,9 @@
-import DavisKahan.Experimental.MathAhead.Section3Elementary
+import DavisKahan.Geometry.Polar.Section3Elementary
 import DavisKahan.Experimental.MathAhead.Lemma63
-import DavisKahan.Experimental.MathAhead.HiddenFoundations.PolarIsometryFinal
-import DavisKahan.Experimental.MathAhead.HiddenFoundations.PolarIntertwining
+import DavisKahan.Geometry.Polar.PolarIsometryFinal
+import DavisKahan.Geometry.Polar.PolarIntertwining
 import DavisKahan.Experimental.MathAhead.HiddenFoundations.OrthogonalSummandCoordinates
-import DavisKahan.Experimental.MathAhead.HiddenFoundations.Section3Nonacute
+import DavisKahan.Geometry.Polar.Section3Nonacute
 import DavisKahan.Experimental.MathAhead.HiddenFoundations.TwoProjectionOperatorClassification
 import DavisKahan.Experimental.MathAhead.HiddenFoundations.SpectralMultiplicityFoundation
 

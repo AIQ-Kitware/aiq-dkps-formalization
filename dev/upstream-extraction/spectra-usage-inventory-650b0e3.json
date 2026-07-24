@@ -1,0 +1,907 @@
+{
+  "schema_version": 1,
+  "generated_date": "2026-07-23",
+  "dkps_baseline_commit": "650b0e3271b8",
+  "upstreams": {
+    "spectra": {
+      "repository": "https://github.com/adambornemann-glitch/Spectra.git",
+      "pinned_commit": "8dbaaf6728d1342ae16acf79fd7eef7c59b37e63",
+      "license": "Apache-2.0",
+      "vendor_path": "vendor/Spectra",
+      "reference_path": "external/Spectra",
+      "mathlib_pin": "40f05009d036d2e4b488e8a01f559a6036ec2484",
+      "compatibility_patch": "vendor/patches/Spectra/0001-dkps-lean-v4.32-mathlib-compatibility.patch",
+      "compatibility_patch_file_count": 16,
+      "compatibility_patch_stat_summary": " 16 files changed, 172 insertions(+), 104 deletions(-)"
+    },
+    "tauceti": {
+      "repository": "https://github.com/TauCetiProject/TauCeti.git",
+      "pinned_commit": "92c79e5e0a618f8c5c2b9909be1ce50f6891dde7",
+      "license": "Apache-2.0",
+      "reference_path": "external/TauCeti",
+      "mathlib_pin": "81a5d257c8e410db227a6665ed08f64fea08e997",
+      "lean_toolchain": "leanprover/lean4:v4.32.0"
+    },
+    "dkps": {
+      "mathlib_pin": "3dffaf2f18b47d11948f6390838ea6f2ae662aaf",
+      "lean_toolchain": "leanprover/lean4:v4.32.0"
+    }
+  },
+  "summary": {
+    "direct_spectra_import_edges": 57,
+    "unique_direct_spectra_modules": 38,
+    "unique_spectra_namespace_references": 164
+  },
+  "clusters": {
+    "born-measure-observable-adapters": [
+      "Spectra.QuantumMechanics.BornRule.Joint.ProjectivePVM",
+      "Spectra.QuantumMechanics.BornRule.Observable"
+    ],
+    "hilbert-schmidt": [
+      "Spectra.Spaces.Tensor.HilbertSchmidt",
+      "Spectra.Spaces.Tensor.HilbertSchmidtGeneratorBridge",
+      "Spectra.Spaces.Tensor.HilbertSchmidtSpectralGap"
+    ],
+    "mathlib-bridge": [
+      "Spectra.Mathlib.CharFunBridge"
+    ],
+    "modular-specialized-dependency": [
+      "Spectra.Modular.Cocycle.ModularSqrtSquare",
+      "Spectra.Modular.Tomita.BoundedPicture"
+    ],
+    "polar-traceclass-operator-ideals": [
+      "Spectra.QuantumMechanics.Channels.PolarDecomp",
+      "Spectra.QuantumMechanics.Channels.TraceClass.Basic",
+      "Spectra.QuantumMechanics.Channels.TraceClass.PartialIsometry"
+    ],
+    "semigroup-stone-cayley": [
+      "Spectra.CayleyTransform.BorelCalculus",
+      "Spectra.YosidaHille.Approximation.ExpBounded.Helpers",
+      "Spectra.YosidaHille.Approximation.ExpBounded.Unitary",
+      "Spectra.YosidaHille.Basic"
+    ],
+    "spectral-theorem-pvm-calculus": [
+      "Spectra.ProjValMeasure.Basic",
+      "Spectra.SpectralTheory.Algebra",
+      "Spectra.SpectralTheory.Calculus.Bounded",
+      "Spectra.SpectralTheory.Calculus.PMapBounded",
+      "Spectra.SpectralTheory.Calculus.PMapSquareRoot",
+      "Spectra.SpectralTheory.Calculus.SpectralGapInverse",
+      "Spectra.SpectralTheory.Calculus.SquareBridge",
+      "Spectra.SpectralTheory.Essential.Discrete",
+      "Spectra.SpectralTheory.Essential.Weyl",
+      "Spectra.SpectralTheory.Measure.GeneratorLink",
+      "Spectra.SpectralTheory.Measure.PVM",
+      "Spectra.SpectralTheory.ResolventForm",
+      "Spectra.SpectralTheory.SeparatedIntertwiner",
+      "Spectra.SpectralTheory.Spectrum",
+      "Spectra.SpectralTheory.Weak",
+      "Spectra.StoneBridge.CalculusBridge"
+    ],
+    "unbounded-operator-and-resolvent": [
+      "Spectra.Operator.Bounded",
+      "Spectra.Operator.KatoRellich",
+      "Spectra.Operator.SelfAdjoint",
+      "Spectra.Operator.Unitary.Conjugation",
+      "Spectra.Resolvent.Defs",
+      "Spectra.Resolvent.Identities",
+      "Spectra.Resolvent.Spectrum"
+    ]
+  },
+  "direct_import_edges": [
+    {
+      "consumer": "DavisKahan/Experimental/InfiniteDimensional/Sylvester/FourierSemigroup.lean",
+      "spectra_module": "Spectra.CayleyTransform.BorelCalculus"
+    },
+    {
+      "consumer": "DavisKahan/Interop/Spectra/SpectralRestrictionLocalization.lean",
+      "spectra_module": "Spectra.Mathlib.CharFunBridge"
+    },
+    {
+      "consumer": "DavisKahan/Experimental/InfiniteDimensional/Sylvester/SelfAdjointBorelCalculus.lean",
+      "spectra_module": "Spectra.Modular.Cocycle.ModularSqrtSquare"
+    },
+    {
+      "consumer": "DavisKahan/Experimental/InfiniteDimensional/Sylvester/SelfAdjointBorelCalculus.lean",
+      "spectra_module": "Spectra.Modular.Tomita.BoundedPicture"
+    },
+    {
+      "consumer": "DavisKahan/Interop/Spectra/Basic.lean",
+      "spectra_module": "Spectra.Operator.Bounded"
+    },
+    {
+      "consumer": "DavisKahan/Interop/Spectra/BoundedPerturbationSinTheta.lean",
+      "spectra_module": "Spectra.Operator.KatoRellich"
+    },
+    {
+      "consumer": "DavisKahan/Interop/Spectra/ClosedOperator.lean",
+      "spectra_module": "Spectra.Operator.SelfAdjoint"
+    },
+    {
+      "consumer": "DavisKahan/Interop/Spectra/UnitaryConjugation.lean",
+      "spectra_module": "Spectra.Operator.Unitary.Conjugation"
+    },
+    {
+      "consumer": "DavisKahan/Interop/Spectra/PVMSubspace.lean",
+      "spectra_module": "Spectra.ProjValMeasure.Basic"
+    },
+    {
+      "consumer": "DavisKahan/Sources/DavisKahan1970/Audits/SylvesterHilbertSchmidt.lean",
+      "spectra_module": "Spectra.QuantumMechanics.BornRule.Joint.ProjectivePVM"
+    },
+    {
+      "consumer": "DavisKahan/Experimental/InfiniteDimensional/Sylvester/SelfAdjointBorelCalculus.lean",
+      "spectra_module": "Spectra.QuantumMechanics.BornRule.Observable"
+    },
+    {
+      "consumer": "DavisKahan/Interop/Spectra/OrderedHalfLine.lean",
+      "spectra_module": "Spectra.QuantumMechanics.BornRule.Observable"
+    },
+    {
+      "consumer": "DavisKahan/Sources/DavisKahan1970/Sylvester/HilbertSchmidtPairwise.lean",
+      "spectra_module": "Spectra.QuantumMechanics.BornRule.Observable"
+    },
+    {
+      "consumer": "DavisKahan/Interop/Spectra/OperatorAbsoluteValue.lean",
+      "spectra_module": "Spectra.QuantumMechanics.Channels.PolarDecomp"
+    },
+    {
+      "consumer": "DavisKahan/Sources/DavisKahan1970/Ideals/HilbertSchmidtBasis.lean",
+      "spectra_module": "Spectra.QuantumMechanics.Channels.TraceClass.Basic"
+    },
+    {
+      "consumer": "DavisKahan/Experimental/MathAhead/HiddenFoundations/PolarIsometryFinal.lean",
+      "spectra_module": "Spectra.QuantumMechanics.Channels.TraceClass.PartialIsometry"
+    },
+    {
+      "consumer": "DavisKahan/Experimental/MathAhead/HiddenFoundations/Section3Nonacute.lean",
+      "spectra_module": "Spectra.QuantumMechanics.Channels.TraceClass.PartialIsometry"
+    },
+    {
+      "consumer": "DavisKahan/Experimental/InfiniteDimensional/SinTheta/ContinuationSharpSchurComplement.lean",
+      "spectra_module": "Spectra.Resolvent.Defs"
+    },
+    {
+      "consumer": "DavisKahan/Interop/Spectra/RealSpectralRestriction.lean",
+      "spectra_module": "Spectra.Resolvent.Identities"
+    },
+    {
+      "consumer": "DavisKahan/Interop/Spectra/RealSpectrumBridge.lean",
+      "spectra_module": "Spectra.Resolvent.Spectrum"
+    },
+    {
+      "consumer": "DavisKahan/Interop/Spectra/UnitaryConjugation.lean",
+      "spectra_module": "Spectra.Resolvent.Spectrum"
+    },
+    {
+      "consumer": "DavisKahan/SpectralTheory/ClosedOperator/Complexification.lean",
+      "spectra_module": "Spectra.Resolvent.Spectrum"
+    },
+    {
+      "consumer": "DavisKahan/Sylvester/PairwiseSpectrumGap.lean",
+      "spectra_module": "Spectra.Resolvent.Spectrum"
+    },
+    {
+      "consumer": "DavisKahan/Alternative/OperatorIdeal/HilbertSchmidt/ColumnExpansion.lean",
+      "spectra_module": "Spectra.Spaces.Tensor.HilbertSchmidt"
+    },
+    {
+      "consumer": "DavisKahan/Sources/DavisKahan1970/Ideals/HilbertSchmidtBasis.lean",
+      "spectra_module": "Spectra.Spaces.Tensor.HilbertSchmidt"
+    },
+    {
+      "consumer": "DavisKahan/Sources/DavisKahan1970/Sylvester/HilbertSchmidtDefectFirst.lean",
+      "spectra_module": "Spectra.Spaces.Tensor.HilbertSchmidtGeneratorBridge"
+    },
+    {
+      "consumer": "DavisKahan/Sources/DavisKahan1970/Sylvester/HilbertSchmidtPairwise.lean",
+      "spectra_module": "Spectra.Spaces.Tensor.HilbertSchmidtSpectralGap"
+    },
+    {
+      "consumer": "DavisKahan/Interop/Spectra/ApproximationNumberMinMax.lean",
+      "spectra_module": "Spectra.SpectralTheory.Algebra"
+    },
+    {
+      "consumer": "DavisKahan/Interop/Spectra/BoundedTruncation.lean",
+      "spectra_module": "Spectra.SpectralTheory.Algebra"
+    },
+    {
+      "consumer": "DavisKahan/Interop/Spectra/GapResolvent.lean",
+      "spectra_module": "Spectra.SpectralTheory.Algebra"
+    },
+    {
+      "consumer": "DavisKahan/Experimental/InfiniteDimensional/Sylvester/SelfAdjointBorelCalculus.lean",
+      "spectra_module": "Spectra.SpectralTheory.Calculus.Bounded"
+    },
+    {
+      "consumer": "DavisKahan/Experimental/InfiniteDimensional/Sylvester/SelfAdjointBorelCalculus.lean",
+      "spectra_module": "Spectra.SpectralTheory.Calculus.PMapBounded"
+    },
+    {
+      "consumer": "DavisKahan/Interop/Spectra/SpectralRestrictionLocalization.lean",
+      "spectra_module": "Spectra.SpectralTheory.Calculus.PMapSquareRoot"
+    },
+    {
+      "consumer": "DavisKahan/Sources/DavisKahan1970/Sylvester/HilbertSchmidtDefectFirst.lean",
+      "spectra_module": "Spectra.SpectralTheory.Calculus.SpectralGapInverse"
+    },
+    {
+      "consumer": "DavisKahan/Experimental/InfiniteDimensional/Sylvester/SelfAdjointBorelCalculus.lean",
+      "spectra_module": "Spectra.SpectralTheory.Calculus.SquareBridge"
+    },
+    {
+      "consumer": "DavisKahan/Interop/Spectra/BoundedFromSpectrum.lean",
+      "spectra_module": "Spectra.SpectralTheory.Essential.Discrete"
+    },
+    {
+      "consumer": "DavisKahan/Interop/Spectra/RealSpectralRestriction.lean",
+      "spectra_module": "Spectra.SpectralTheory.Essential.Weyl"
+    },
+    {
+      "consumer": "DavisKahan/Experimental/InfiniteDimensional/SinTheta/ContinuationSelectedReduction.lean",
+      "spectra_module": "Spectra.SpectralTheory.Measure.GeneratorLink"
+    },
+    {
+      "consumer": "DavisKahan/Interop/Spectra/BoundedFromSpectrum.lean",
+      "spectra_module": "Spectra.SpectralTheory.Measure.GeneratorLink"
+    },
+    {
+      "consumer": "DavisKahan/Interop/Spectra/SpectralRestriction.lean",
+      "spectra_module": "Spectra.SpectralTheory.Measure.GeneratorLink"
+    },
+    {
+      "consumer": "DavisKahan/Interop/Spectra/SpectralRestriction.lean",
+      "spectra_module": "Spectra.SpectralTheory.Measure.PVM"
+    },
+    {
+      "consumer": "DavisKahan/Experimental/InfiniteDimensional/Core/SpectralProjection.lean",
+      "spectra_module": "Spectra.SpectralTheory.ResolventForm"
+    },
+    {
+      "consumer": "DavisKahan/Experimental/InfiniteDimensional/SinTheta/CayleySelectorBridge.lean",
+      "spectra_module": "Spectra.SpectralTheory.ResolventForm"
+    },
+    {
+      "consumer": "DavisKahan/Experimental/InfiniteDimensional/SinTheta/ContinuationSpectralIdentification.lean",
+      "spectra_module": "Spectra.SpectralTheory.ResolventForm"
+    },
+    {
+      "consumer": "DavisKahan/Interop/Spectra/ApproximationNumberMinMax.lean",
+      "spectra_module": "Spectra.SpectralTheory.ResolventForm"
+    },
+    {
+      "consumer": "DavisKahan/Interop/Spectra/RealSpectralRestriction.lean",
+      "spectra_module": "Spectra.SpectralTheory.ResolventForm"
+    },
+    {
+      "consumer": "DavisKahan/Experimental/InfiniteDimensional/Sylvester/SelfAdjointBorelCalculus.lean",
+      "spectra_module": "Spectra.SpectralTheory.SeparatedIntertwiner"
+    },
+    {
+      "consumer": "DavisKahan/Sylvester/PairwiseHomogeneousUniqueness.lean",
+      "spectra_module": "Spectra.SpectralTheory.SeparatedIntertwiner"
+    },
+    {
+      "consumer": "DavisKahan/Interop/Spectra/GapResolvent.lean",
+      "spectra_module": "Spectra.SpectralTheory.Spectrum"
+    },
+    {
+      "consumer": "DavisKahan/Interop/Spectra/SpectralRestrictionLocalization.lean",
+      "spectra_module": "Spectra.SpectralTheory.Spectrum"
+    },
+    {
+      "consumer": "DavisKahan/Interop/Spectra/SpectralCutoff.lean",
+      "spectra_module": "Spectra.SpectralTheory.Weak"
+    },
+    {
+      "consumer": "DavisKahan/Experimental/InfiniteDimensional/Core/SpectralProjection.lean",
+      "spectra_module": "Spectra.StoneBridge.CalculusBridge"
+    },
+    {
+      "consumer": "DavisKahan/Experimental/InfiniteDimensional/SinTheta/CayleySelectorBridge.lean",
+      "spectra_module": "Spectra.StoneBridge.CalculusBridge"
+    },
+    {
+      "consumer": "DavisKahan/Experimental/InfiniteDimensional/SinTheta/ContinuationSpectralIdentification.lean",
+      "spectra_module": "Spectra.StoneBridge.CalculusBridge"
+    },
+    {
+      "consumer": "DavisKahan/Experimental/InfiniteDimensional/Sylvester/OrthogonalIdempotentExp.lean",
+      "spectra_module": "Spectra.YosidaHille.Approximation.ExpBounded.Helpers"
+    },
+    {
+      "consumer": "DavisKahan/Experimental/InfiniteDimensional/Sylvester/FourierSemigroup.lean",
+      "spectra_module": "Spectra.YosidaHille.Approximation.ExpBounded.Unitary"
+    },
+    {
+      "consumer": "DavisKahan/Sources/DavisKahan1970/Sylvester/HilbertSchmidtDefectFirst.lean",
+      "spectra_module": "Spectra.YosidaHille.Basic"
+    }
+  ],
+  "namespace_references": [
+    "Spectra.All",
+    "Spectra.ApproximationNumberMinMax",
+    "Spectra.Basic",
+    "Spectra.Borel",
+    "Spectra.BoundedFromSpectrum",
+    "Spectra.BoundedPerturbationSinTheta",
+    "Spectra.BoundedPerturbationSinThetaIdeal",
+    "Spectra.BoundedTruncation",
+    "Spectra.Cayley.cayley",
+    "Spectra.Cayley.cayleyTransform",
+    "Spectra.Cayley.cayley_isStarNormal",
+    "Spectra.Cayley.inverseMobius",
+    "Spectra.Cayley.inverseMobiusReal",
+    "Spectra.Cayley.inverseMobiusReal_coe",
+    "Spectra.Cayley.one_add_mobius",
+    "Spectra.Cayley.one_sub_mobius",
+    "Spectra.Cayley.one_sub_mobius_ne_zero",
+    "Spectra.Cayley.real_add_I_ne_zero",
+    "Spectra.Cayley.stoneGroup",
+    "Spectra.CayleyTransform.BorelCalculus",
+    "Spectra.ClosedOperator",
+    "Spectra.DirectRotation",
+    "Spectra.DirectRotationSquare",
+    "Spectra.Essential",
+    "Spectra.Fourier.measure_ext_of_fourier",
+    "Spectra.GapResolvent",
+    "Spectra.HalmosTwoProjections",
+    "Spectra.HilbertSchmidtTensor",
+    "Spectra.HilbertSchmidtTensor.PairwiseScalarSupportGap",
+    "Spectra.HilbertSchmidtTensor.Space",
+    "Spectra.HilbertSchmidtTensor.borelMeasure_sylvesterGroup_tmul",
+    "Spectra.HilbertSchmidtTensor.existsUnique_tensor_iff_summable_columns",
+    "Spectra.HilbertSchmidtTensor.hasVectorSpectralGap",
+    "Spectra.HilbertSchmidtTensor.norm_sq_eq_tsum_column_norm_sq",
+    "Spectra.HilbertSchmidtTensor.norm_toOperator_le",
+    "Spectra.HilbertSchmidtTensor.spectralProjection_gap_eq_zero",
+    "Spectra.HilbertSchmidtTensor.sylvesterGroup",
+    "Spectra.HilbertSchmidtTensor.toOperator",
+    "Spectra.HilbertSchmidtTensor.toOperator_add",
+    "Spectra.HilbertSchmidtTensor.toOperator_hasGeneratorSylvesterEquation",
+    "Spectra.HilbertSchmidtTensor.toOperator_injective",
+    "Spectra.HilbertSchmidtTensor.toOperator_sub",
+    "Spectra.HilbertSchmidtTensor.toOperator_zero",
+    "Spectra.HilbertTensor",
+    "Spectra.Mathlib.CharFunBridge",
+    "Spectra.Modular.Cocycle.ModularSqrtSquare",
+    "Spectra.Modular.Tomita.BoundedPicture",
+    "Spectra.OneParameterUnitaryGroup",
+    "Spectra.OneParameterUnitaryGroup.generator",
+    "Spectra.Operator",
+    "Spectra.Operator.Bounded",
+    "Spectra.Operator.KatoRellich",
+    "Spectra.Operator.SelfAdjoint",
+    "Spectra.Operator.SelfAdjointOperator",
+    "Spectra.Operator.SelfAdjointOperator.bornMeasure",
+    "Spectra.Operator.SelfAdjointOperator.boundedExtension_apply",
+    "Spectra.Operator.SelfAdjointOperator.domain_ofBounded",
+    "Spectra.Operator.SelfAdjointOperator.ofBounded",
+    "Spectra.Operator.Unitary.Conjugation",
+    "Spectra.Operator.isFormalAdjoint_self_of_isSelfAdjoint",
+    "Spectra.Operator.kato_rellich_bounded",
+    "Spectra.Operator.mem_unitaryConj_domain_iff",
+    "Spectra.Operator.perturbedOp",
+    "Spectra.Operator.unitaryConj",
+    "Spectra.Operator.unitaryConj_apply",
+    "Spectra.Operator.unitaryConj_isSelfAdjoint",
+    "Spectra.OperatorAbsoluteValue",
+    "Spectra.OrderedHalfLine",
+    "Spectra.PVMSubspace",
+    "Spectra.ProjValMeasure",
+    "Spectra.ProjValMeasure.Basic",
+    "Spectra.QuantumMechanics",
+    "Spectra.QuantumMechanics.BornRule.Joint.ProjectivePVM",
+    "Spectra.QuantumMechanics.BornRule.Moments.bornExpectation",
+    "Spectra.QuantumMechanics.BornRule.Observable",
+    "Spectra.QuantumMechanics.BornRule.PVM",
+    "Spectra.QuantumMechanics.Channels",
+    "Spectra.QuantumMechanics.Channels.PolarDecomp",
+    "Spectra.QuantumMechanics.Channels.TraceClass.Basic",
+    "Spectra.QuantumMechanics.Channels.TraceClass.PartialIsometry",
+    "Spectra.QuantumMechanics.Channels.absOp",
+    "Spectra.QuantumMechanics.Channels.absOp_isSelfAdjoint",
+    "Spectra.QuantumMechanics.Channels.absOp_mul_absOp",
+    "Spectra.QuantumMechanics.Channels.absOp_nonneg",
+    "Spectra.QuantumMechanics.Channels.adjoint_polarIsometry",
+    "Spectra.QuantumMechanics.Channels.norm_absOp_apply",
+    "Spectra.QuantumMechanics.Channels.polarFinalRange",
+    "Spectra.QuantumMechanics.Channels.polarIsometry",
+    "Spectra.QuantumMechanics.Channels.polarIsometry_adjoint_comp_self",
+    "Spectra.QuantumMechanics.Channels.polarIsometry_apply_eq",
+    "Spectra.QuantumMechanics.Channels.polarIsometry_comp_adjoint_self",
+    "Spectra.QuantumMechanics.Channels.polarPartial_mem_finalRange",
+    "Spectra.QuantumMechanics.Channels.polarRange",
+    "Spectra.QuantumMechanics.Channels.polar_decomposition",
+    "Spectra.QuantumMechanics.Channels.tsum_enorm_inner_sq",
+    "Spectra.QuantumMechanics.SpectralTheory",
+    "Spectra.QuantumMechanics.SpectralTheory.HasVectorSpectralGap",
+    "Spectra.QuantumMechanics.SpectralTheory.PVM.spectralPVM",
+    "Spectra.QuantumMechanics.SpectralTheory.generatorIntertwiner_eq_zero_of_disjoint_spectrum",
+    "Spectra.QuantumMechanics.SpectralTheory.generator_spectralGapSolution",
+    "Spectra.QuantumMechanics.SpectralTheory.indicator_one_bdd",
+    "Spectra.QuantumMechanics.SpectralTheory.norm_spectralGapSolution_le",
+    "Spectra.QuantumMechanics.SpectralTheory.spectralCalculus",
+    "Spectra.QuantumMechanics.SpectralTheory.spectralCalculus_stoneGroup_eq_cfcHom",
+    "Spectra.QuantumMechanics.SpectralTheory.spectralGapSolution",
+    "Spectra.QuantumMechanics.SpectralTheory.spectralGapSolution_mem_generatorDomain",
+    "Spectra.QuantumMechanics.SpectralTheory.spectralPVM",
+    "Spectra.QuantumMechanics.SpectralTheory.spectralProjection",
+    "Spectra.QuantumMechanics.SpectralTheory.spectralProjection_compl",
+    "Spectra.QuantumMechanics.SpectralTheory.spectralProjection_intertwines_of_generator",
+    "Spectra.RealSpectralRestriction",
+    "Spectra.RealSpectrumBridge",
+    "Spectra.ReflectionRestriction",
+    "Spectra.Resolvent",
+    "Spectra.Resolvent.Defs",
+    "Spectra.Resolvent.Identities",
+    "Spectra.Resolvent.Rplus",
+    "Spectra.Resolvent.Rplus_eq",
+    "Spectra.Resolvent.Rplus_mem",
+    "Spectra.Resolvent.Spectrum",
+    "Spectra.Resolvent.generator_isSelfAdjoint",
+    "Spectra.Resolvent.neumannSeries",
+    "Spectra.Resolvent.neumannSeries_mul_left",
+    "Spectra.Resolvent.neumannSeries_mul_right",
+    "Spectra.Resolvent.resolventAtImaginary",
+    "Spectra.Resolvent.resolventAtNegI",
+    "Spectra.Resolvent.resolventSet",
+    "Spectra.Resolvent.resolvent_at_neg_i_unique",
+    "Spectra.Resolvent.spectrum",
+    "Spectra.SinAngle",
+    "Spectra.Spaces.Tensor.HilbertSchmidt",
+    "Spectra.Spaces.Tensor.HilbertSchmidtGeneratorBridge",
+    "Spectra.Spaces.Tensor.HilbertSchmidtSpectralGap",
+    "Spectra.SpectralCutoff",
+    "Spectra.SpectralProjectionSinTheta",
+    "Spectra.SpectralRestriction",
+    "Spectra.SpectralRestrictionLocalization",
+    "Spectra.SpectralRestrictionOperator",
+    "Spectra.SpectralTheory.Algebra",
+    "Spectra.SpectralTheory.Calculus.Bounded",
+    "Spectra.SpectralTheory.Calculus.PMapBounded",
+    "Spectra.SpectralTheory.Calculus.PMapSquareRoot",
+    "Spectra.SpectralTheory.Calculus.SpectralGapInverse",
+    "Spectra.SpectralTheory.Calculus.SquareBridge",
+    "Spectra.SpectralTheory.Essential.Discrete",
+    "Spectra.SpectralTheory.Essential.Weyl",
+    "Spectra.SpectralTheory.Measure.GeneratorLink",
+    "Spectra.SpectralTheory.Measure.PVM",
+    "Spectra.SpectralTheory.ResolventForm",
+    "Spectra.SpectralTheory.SeparatedIntertwiner",
+    "Spectra.SpectralTheory.SpectralTheorem",
+    "Spectra.SpectralTheory.Spectrum",
+    "Spectra.SpectralTheory.Weak",
+    "Spectra.StoneBridge.CalculusBridge",
+    "Spectra.UnitaryConjugation",
+    "Spectra.YosidaHille",
+    "Spectra.YosidaHille.Approximation",
+    "Spectra.YosidaHille.Approximation.ExpBounded.Helpers",
+    "Spectra.YosidaHille.Approximation.ExpBounded.Unitary",
+    "Spectra.YosidaHille.Basic",
+    "Spectra.YosidaHille.GeneratorIntertwines.group",
+    "Spectra.YosidaHille.genToGroup",
+    "Spectra.YosidaHille.isSelfAdjoint_to_surjective",
+    "Spectra.YosidaHille.stoneGroup_eq_genToGroup"
+  ],
+  "module_disposition_ledger": [
+    {
+      "spectra_module": "Spectra.CayleyTransform.BorelCalculus",
+      "cluster": "semigroup-stone-cayley",
+      "status": "unclassified",
+      "decision": null,
+      "candidate_tauceti_target": null,
+      "replacement_module": null,
+      "source_commit": "8dbaaf6728d1342ae16acf79fd7eef7c59b37e63",
+      "attribution_required": true,
+      "notes": null
+    },
+    {
+      "spectra_module": "Spectra.Mathlib.CharFunBridge",
+      "cluster": "mathlib-bridge",
+      "status": "unclassified",
+      "decision": null,
+      "candidate_tauceti_target": null,
+      "replacement_module": null,
+      "source_commit": "8dbaaf6728d1342ae16acf79fd7eef7c59b37e63",
+      "attribution_required": true,
+      "notes": null
+    },
+    {
+      "spectra_module": "Spectra.Modular.Cocycle.ModularSqrtSquare",
+      "cluster": "modular-specialized-dependency",
+      "status": "unclassified",
+      "decision": null,
+      "candidate_tauceti_target": null,
+      "replacement_module": null,
+      "source_commit": "8dbaaf6728d1342ae16acf79fd7eef7c59b37e63",
+      "attribution_required": true,
+      "notes": null
+    },
+    {
+      "spectra_module": "Spectra.Modular.Tomita.BoundedPicture",
+      "cluster": "modular-specialized-dependency",
+      "status": "unclassified",
+      "decision": null,
+      "candidate_tauceti_target": null,
+      "replacement_module": null,
+      "source_commit": "8dbaaf6728d1342ae16acf79fd7eef7c59b37e63",
+      "attribution_required": true,
+      "notes": null
+    },
+    {
+      "spectra_module": "Spectra.Operator.Bounded",
+      "cluster": "unbounded-operator-and-resolvent",
+      "status": "unclassified",
+      "decision": null,
+      "candidate_tauceti_target": null,
+      "replacement_module": null,
+      "source_commit": "8dbaaf6728d1342ae16acf79fd7eef7c59b37e63",
+      "attribution_required": true,
+      "notes": null
+    },
+    {
+      "spectra_module": "Spectra.Operator.KatoRellich",
+      "cluster": "unbounded-operator-and-resolvent",
+      "status": "unclassified",
+      "decision": null,
+      "candidate_tauceti_target": null,
+      "replacement_module": null,
+      "source_commit": "8dbaaf6728d1342ae16acf79fd7eef7c59b37e63",
+      "attribution_required": true,
+      "notes": null
+    },
+    {
+      "spectra_module": "Spectra.Operator.SelfAdjoint",
+      "cluster": "unbounded-operator-and-resolvent",
+      "status": "unclassified",
+      "decision": null,
+      "candidate_tauceti_target": null,
+      "replacement_module": null,
+      "source_commit": "8dbaaf6728d1342ae16acf79fd7eef7c59b37e63",
+      "attribution_required": true,
+      "notes": null
+    },
+    {
+      "spectra_module": "Spectra.Operator.Unitary.Conjugation",
+      "cluster": "unbounded-operator-and-resolvent",
+      "status": "unclassified",
+      "decision": null,
+      "candidate_tauceti_target": null,
+      "replacement_module": null,
+      "source_commit": "8dbaaf6728d1342ae16acf79fd7eef7c59b37e63",
+      "attribution_required": true,
+      "notes": null
+    },
+    {
+      "spectra_module": "Spectra.ProjValMeasure.Basic",
+      "cluster": "spectral-theorem-pvm-calculus",
+      "status": "unclassified",
+      "decision": null,
+      "candidate_tauceti_target": null,
+      "replacement_module": null,
+      "source_commit": "8dbaaf6728d1342ae16acf79fd7eef7c59b37e63",
+      "attribution_required": true,
+      "notes": null
+    },
+    {
+      "spectra_module": "Spectra.QuantumMechanics.BornRule.Joint.ProjectivePVM",
+      "cluster": "born-measure-observable-adapters",
+      "status": "unclassified",
+      "decision": null,
+      "candidate_tauceti_target": null,
+      "replacement_module": null,
+      "source_commit": "8dbaaf6728d1342ae16acf79fd7eef7c59b37e63",
+      "attribution_required": true,
+      "notes": null
+    },
+    {
+      "spectra_module": "Spectra.QuantumMechanics.BornRule.Observable",
+      "cluster": "born-measure-observable-adapters",
+      "status": "unclassified",
+      "decision": null,
+      "candidate_tauceti_target": null,
+      "replacement_module": null,
+      "source_commit": "8dbaaf6728d1342ae16acf79fd7eef7c59b37e63",
+      "attribution_required": true,
+      "notes": null
+    },
+    {
+      "spectra_module": "Spectra.QuantumMechanics.Channels.PolarDecomp",
+      "cluster": "polar-traceclass-operator-ideals",
+      "status": "unclassified",
+      "decision": null,
+      "candidate_tauceti_target": null,
+      "replacement_module": null,
+      "source_commit": "8dbaaf6728d1342ae16acf79fd7eef7c59b37e63",
+      "attribution_required": true,
+      "notes": null
+    },
+    {
+      "spectra_module": "Spectra.QuantumMechanics.Channels.TraceClass.Basic",
+      "cluster": "polar-traceclass-operator-ideals",
+      "status": "unclassified",
+      "decision": null,
+      "candidate_tauceti_target": null,
+      "replacement_module": null,
+      "source_commit": "8dbaaf6728d1342ae16acf79fd7eef7c59b37e63",
+      "attribution_required": true,
+      "notes": null
+    },
+    {
+      "spectra_module": "Spectra.QuantumMechanics.Channels.TraceClass.PartialIsometry",
+      "cluster": "polar-traceclass-operator-ideals",
+      "status": "unclassified",
+      "decision": null,
+      "candidate_tauceti_target": null,
+      "replacement_module": null,
+      "source_commit": "8dbaaf6728d1342ae16acf79fd7eef7c59b37e63",
+      "attribution_required": true,
+      "notes": null
+    },
+    {
+      "spectra_module": "Spectra.Resolvent.Defs",
+      "cluster": "unbounded-operator-and-resolvent",
+      "status": "unclassified",
+      "decision": null,
+      "candidate_tauceti_target": null,
+      "replacement_module": null,
+      "source_commit": "8dbaaf6728d1342ae16acf79fd7eef7c59b37e63",
+      "attribution_required": true,
+      "notes": null
+    },
+    {
+      "spectra_module": "Spectra.Resolvent.Identities",
+      "cluster": "unbounded-operator-and-resolvent",
+      "status": "unclassified",
+      "decision": null,
+      "candidate_tauceti_target": null,
+      "replacement_module": null,
+      "source_commit": "8dbaaf6728d1342ae16acf79fd7eef7c59b37e63",
+      "attribution_required": true,
+      "notes": null
+    },
+    {
+      "spectra_module": "Spectra.Resolvent.Spectrum",
+      "cluster": "unbounded-operator-and-resolvent",
+      "status": "unclassified",
+      "decision": null,
+      "candidate_tauceti_target": null,
+      "replacement_module": null,
+      "source_commit": "8dbaaf6728d1342ae16acf79fd7eef7c59b37e63",
+      "attribution_required": true,
+      "notes": null
+    },
+    {
+      "spectra_module": "Spectra.Spaces.Tensor.HilbertSchmidt",
+      "cluster": "hilbert-schmidt",
+      "status": "unclassified",
+      "decision": null,
+      "candidate_tauceti_target": null,
+      "replacement_module": null,
+      "source_commit": "8dbaaf6728d1342ae16acf79fd7eef7c59b37e63",
+      "attribution_required": true,
+      "notes": null
+    },
+    {
+      "spectra_module": "Spectra.Spaces.Tensor.HilbertSchmidtGeneratorBridge",
+      "cluster": "hilbert-schmidt",
+      "status": "unclassified",
+      "decision": null,
+      "candidate_tauceti_target": null,
+      "replacement_module": null,
+      "source_commit": "8dbaaf6728d1342ae16acf79fd7eef7c59b37e63",
+      "attribution_required": true,
+      "notes": null
+    },
+    {
+      "spectra_module": "Spectra.Spaces.Tensor.HilbertSchmidtSpectralGap",
+      "cluster": "hilbert-schmidt",
+      "status": "unclassified",
+      "decision": null,
+      "candidate_tauceti_target": null,
+      "replacement_module": null,
+      "source_commit": "8dbaaf6728d1342ae16acf79fd7eef7c59b37e63",
+      "attribution_required": true,
+      "notes": null
+    },
+    {
+      "spectra_module": "Spectra.SpectralTheory.Algebra",
+      "cluster": "spectral-theorem-pvm-calculus",
+      "status": "unclassified",
+      "decision": null,
+      "candidate_tauceti_target": null,
+      "replacement_module": null,
+      "source_commit": "8dbaaf6728d1342ae16acf79fd7eef7c59b37e63",
+      "attribution_required": true,
+      "notes": null
+    },
+    {
+      "spectra_module": "Spectra.SpectralTheory.Calculus.Bounded",
+      "cluster": "spectral-theorem-pvm-calculus",
+      "status": "unclassified",
+      "decision": null,
+      "candidate_tauceti_target": null,
+      "replacement_module": null,
+      "source_commit": "8dbaaf6728d1342ae16acf79fd7eef7c59b37e63",
+      "attribution_required": true,
+      "notes": null
+    },
+    {
+      "spectra_module": "Spectra.SpectralTheory.Calculus.PMapBounded",
+      "cluster": "spectral-theorem-pvm-calculus",
+      "status": "unclassified",
+      "decision": null,
+      "candidate_tauceti_target": null,
+      "replacement_module": null,
+      "source_commit": "8dbaaf6728d1342ae16acf79fd7eef7c59b37e63",
+      "attribution_required": true,
+      "notes": null
+    },
+    {
+      "spectra_module": "Spectra.SpectralTheory.Calculus.PMapSquareRoot",
+      "cluster": "spectral-theorem-pvm-calculus",
+      "status": "unclassified",
+      "decision": null,
+      "candidate_tauceti_target": null,
+      "replacement_module": null,
+      "source_commit": "8dbaaf6728d1342ae16acf79fd7eef7c59b37e63",
+      "attribution_required": true,
+      "notes": null
+    },
+    {
+      "spectra_module": "Spectra.SpectralTheory.Calculus.SpectralGapInverse",
+      "cluster": "spectral-theorem-pvm-calculus",
+      "status": "unclassified",
+      "decision": null,
+      "candidate_tauceti_target": null,
+      "replacement_module": null,
+      "source_commit": "8dbaaf6728d1342ae16acf79fd7eef7c59b37e63",
+      "attribution_required": true,
+      "notes": null
+    },
+    {
+      "spectra_module": "Spectra.SpectralTheory.Calculus.SquareBridge",
+      "cluster": "spectral-theorem-pvm-calculus",
+      "status": "unclassified",
+      "decision": null,
+      "candidate_tauceti_target": null,
+      "replacement_module": null,
+      "source_commit": "8dbaaf6728d1342ae16acf79fd7eef7c59b37e63",
+      "attribution_required": true,
+      "notes": null
+    },
+    {
+      "spectra_module": "Spectra.SpectralTheory.Essential.Discrete",
+      "cluster": "spectral-theorem-pvm-calculus",
+      "status": "unclassified",
+      "decision": null,
+      "candidate_tauceti_target": null,
+      "replacement_module": null,
+      "source_commit": "8dbaaf6728d1342ae16acf79fd7eef7c59b37e63",
+      "attribution_required": true,
+      "notes": null
+    },
+    {
+      "spectra_module": "Spectra.SpectralTheory.Essential.Weyl",
+      "cluster": "spectral-theorem-pvm-calculus",
+      "status": "unclassified",
+      "decision": null,
+      "candidate_tauceti_target": null,
+      "replacement_module": null,
+      "source_commit": "8dbaaf6728d1342ae16acf79fd7eef7c59b37e63",
+      "attribution_required": true,
+      "notes": null
+    },
+    {
+      "spectra_module": "Spectra.SpectralTheory.Measure.GeneratorLink",
+      "cluster": "spectral-theorem-pvm-calculus",
+      "status": "unclassified",
+      "decision": null,
+      "candidate_tauceti_target": null,
+      "replacement_module": null,
+      "source_commit": "8dbaaf6728d1342ae16acf79fd7eef7c59b37e63",
+      "attribution_required": true,
+      "notes": null
+    },
+    {
+      "spectra_module": "Spectra.SpectralTheory.Measure.PVM",
+      "cluster": "spectral-theorem-pvm-calculus",
+      "status": "unclassified",
+      "decision": null,
+      "candidate_tauceti_target": null,
+      "replacement_module": null,
+      "source_commit": "8dbaaf6728d1342ae16acf79fd7eef7c59b37e63",
+      "attribution_required": true,
+      "notes": null
+    },
+    {
+      "spectra_module": "Spectra.SpectralTheory.ResolventForm",
+      "cluster": "spectral-theorem-pvm-calculus",
+      "status": "unclassified",
+      "decision": null,
+      "candidate_tauceti_target": null,
+      "replacement_module": null,
+      "source_commit": "8dbaaf6728d1342ae16acf79fd7eef7c59b37e63",
+      "attribution_required": true,
+      "notes": null
+    },
+    {
+      "spectra_module": "Spectra.SpectralTheory.SeparatedIntertwiner",
+      "cluster": "spectral-theorem-pvm-calculus",
+      "status": "unclassified",
+      "decision": null,
+      "candidate_tauceti_target": null,
+      "replacement_module": null,
+      "source_commit": "8dbaaf6728d1342ae16acf79fd7eef7c59b37e63",
+      "attribution_required": true,
+      "notes": null
+    },
+    {
+      "spectra_module": "Spectra.SpectralTheory.Spectrum",
+      "cluster": "spectral-theorem-pvm-calculus",
+      "status": "unclassified",
+      "decision": null,
+      "candidate_tauceti_target": null,
+      "replacement_module": null,
+      "source_commit": "8dbaaf6728d1342ae16acf79fd7eef7c59b37e63",
+      "attribution_required": true,
+      "notes": null
+    },
+    {
+      "spectra_module": "Spectra.SpectralTheory.Weak",
+      "cluster": "spectral-theorem-pvm-calculus",
+      "status": "unclassified",
+      "decision": null,
+      "candidate_tauceti_target": null,
+      "replacement_module": null,
+      "source_commit": "8dbaaf6728d1342ae16acf79fd7eef7c59b37e63",
+      "attribution_required": true,
+      "notes": null
+    },
+    {
+      "spectra_module": "Spectra.StoneBridge.CalculusBridge",
+      "cluster": "spectral-theorem-pvm-calculus",
+      "status": "unclassified",
+      "decision": null,
+      "candidate_tauceti_target": null,
+      "replacement_module": null,
+      "source_commit": "8dbaaf6728d1342ae16acf79fd7eef7c59b37e63",
+      "attribution_required": true,
+      "notes": null
+    },
+    {
+      "spectra_module": "Spectra.YosidaHille.Approximation.ExpBounded.Helpers",
+      "cluster": "semigroup-stone-cayley",
+      "status": "unclassified",
+      "decision": null,
+      "candidate_tauceti_target": null,
+      "replacement_module": null,
+      "source_commit": "8dbaaf6728d1342ae16acf79fd7eef7c59b37e63",
+      "attribution_required": true,
+      "notes": null
+    },
+    {
+      "spectra_module": "Spectra.YosidaHille.Approximation.ExpBounded.Unitary",
+      "cluster": "semigroup-stone-cayley",
+      "status": "unclassified",
+      "decision": null,
+      "candidate_tauceti_target": null,
+      "replacement_module": null,
+      "source_commit": "8dbaaf6728d1342ae16acf79fd7eef7c59b37e63",
+      "attribution_required": true,
+      "notes": null
+    },
+    {
+      "spectra_module": "Spectra.YosidaHille.Basic",
+      "cluster": "semigroup-stone-cayley",
+      "status": "unclassified",
+      "decision": null,
+      "candidate_tauceti_target": null,
+      "replacement_module": null,
+      "source_commit": "8dbaaf6728d1342ae16acf79fd7eef7c59b37e63",
+      "attribution_required": true,
+      "notes": null
+    }
+  ]
+}
