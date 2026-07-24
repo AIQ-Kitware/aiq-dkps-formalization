@@ -115,8 +115,8 @@ theorem graph_bound_of_bounded_preimage
     (hinj : Function.Injective R)
     (y : ℕ → H) {C : ℝ} (hC : ∀ n, ‖y n‖ ≤ C) :
     ∀ n,
-      ‖(⟨R (y n), LinearMap.mem_range_self R.toLinearMap (y n)⟩ :
-          (inverseClosedOperator R hR hinj).domain) : H‖ ^ 2 +
+      ‖((⟨R (y n), LinearMap.mem_range_self R.toLinearMap (y n)⟩ :
+          (inverseClosedOperator R hR hinj).domain) : H)‖ ^ 2 +
         ‖(inverseClosedOperator R hR hinj).toLinearMap
           ⟨R (y n), LinearMap.mem_range_self R.toLinearMap (y n)⟩‖ ^ 2
       ≤ (‖R‖ ^ 2 + 1) * max C 0 ^ 2 := by
@@ -127,9 +127,19 @@ theorem graph_bound_of_bounded_preimage
     (R.le_opNorm (y n)).trans
       (mul_le_mul_of_nonneg_left hCn (norm_nonneg R))
   rw [inverseClosedOperator_apply_R]
+  change ‖R (y n)‖ ^ 2 + ‖y n‖ ^ 2 ≤
+    (‖R‖ ^ 2 + 1) * max C 0 ^ 2
   have hC0 : 0 ≤ max C 0 := le_max_right _ _
   have hR0 : 0 ≤ ‖R‖ := norm_nonneg _
-  nlinarith [sq_nonneg ‖R (y n)‖, sq_nonneg ‖y n‖]
+  have hRyn_sq : ‖R (y n)‖ ^ 2 ≤ (‖R‖ * max C 0) ^ 2 :=
+    (sq_le_sq₀ (norm_nonneg _) (mul_nonneg hR0 hC0)).2 hRyn
+  have hyn_sq : ‖y n‖ ^ 2 ≤ max C 0 ^ 2 :=
+    (sq_le_sq₀ (norm_nonneg _) hC0).2 hCn
+  calc
+    ‖R (y n)‖ ^ 2 + ‖y n‖ ^ 2
+        ≤ (‖R‖ * max C 0) ^ 2 + max C 0 ^ 2 :=
+      add_le_add hRyn_sq hyn_sq
+    _ = (‖R‖ ^ 2 + 1) * max C 0 ^ 2 := by ring
 
 /-- Compactness of the inverse graph embedding implies sequential compactness
  of the bounded resolvent. -/

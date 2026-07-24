@@ -115,8 +115,7 @@ theorem freeAmbientDomain_le_maximalAmbientDomain
 noncomputable def freeToMaximal
     (D : FourthOrderTraceModel (H := H) (V := V)) :
     D.freeAmbientDomain →ₗ[ℂ] D.maximalAmbientDomain :=
-  Submodule.inclusion D.freeAmbientDomain D.maximalAmbientDomain
-    D.freeAmbientDomain_le_maximalAmbientDomain
+  Submodule.inclusion D.freeAmbientDomain_le_maximalAmbientDomain
 
 /-- The maximal inverse of a free vector is the underlying free graph-space
 representative. -/
@@ -126,8 +125,10 @@ theorem maximalAmbientInverse_freeToMaximal
     D.maximalAmbientInverse (D.freeToMaximal x) =
       (D.freeAmbientInverse x : D.freeSubspace) := by
   apply D.embed_injective
-  rw [D.embed_maximalAmbientInverse, D.freeEmbed_freeAmbientInverse]
-  rfl
+  rw [D.embed_maximalAmbientInverse]
+  change (x : H) = D.freeEmbed (D.freeAmbientInverse x)
+  have h := D.freeRangeEquiv.apply_symm_apply x
+  exact (congrArg Subtype.val h).symm
 
 /-- The free fourth derivative agrees with the maximal fourth derivative after
 domain inclusion. -/
@@ -157,7 +158,10 @@ theorem mem_freeAmbientDomain_iff_traces
     let xf : D.freeAmbientDomain := ⟨(x : H), hx⟩
     have hu : u = (D.freeAmbientInverse xf : D.freeSubspace) := by
       apply D.embed_injective
-      rw [hxu, D.freeEmbed_freeAmbientInverse]
+      rw [hxu]
+      change (x : H) = D.freeEmbed (D.freeAmbientInverse xf)
+      have h := D.freeRangeEquiv.apply_symm_apply xf
+      exact (congrArg Subtype.val h).symm
     have hfree : (D.freeAmbientInverse xf : V) ∈ D.freeSubspace :=
       (D.freeAmbientInverse xf).property
     rw [D.mem_freeSubspace_iff] at hfree

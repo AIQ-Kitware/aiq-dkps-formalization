@@ -122,7 +122,7 @@ theorem variational_identity
     ⟪D.formOperator (D.solutionOperator f), v⟫_ℂ =
       ⟪f, D.embed v⟫_ℂ := by
   rw [D.formOperator_solutionOperator]
-  exact ContinuousLinearMap.adjoint_inner_left D.embed f v
+  exact ContinuousLinearMap.adjoint_inner_left D.embed v f
 
 /-- The ambient form resolvent is injective. -/
 theorem resolvent_injective
@@ -142,7 +142,9 @@ theorem resolvent_isSymmetric
   let v := D.solutionOperator g
   calc
     ⟪D.resolvent f, g⟫_ℂ = ⟪u, D.embed.adjoint g⟫_ℂ := by
-      rw [resolvent_apply, ContinuousLinearMap.adjoint_inner_left]
+      rw [resolvent_apply]
+      simpa [u] using
+        (ContinuousLinearMap.adjoint_inner_right D.embed u g).symm
     _ = ⟪u, D.formOperator v⟫_ℂ := by
       rw [D.formOperator_solutionOperator g]
     _ = ⟪D.formOperator u, v⟫_ℂ := by
@@ -150,7 +152,8 @@ theorem resolvent_isSymmetric
     _ = ⟪D.embed.adjoint f, v⟫_ℂ := by
       rw [D.formOperator_solutionOperator f]
     _ = ⟪f, D.resolvent g⟫_ℂ := by
-      rw [resolvent_apply, ContinuousLinearMap.adjoint_inner_left]
+      rw [resolvent_apply]
+      exact ContinuousLinearMap.adjoint_inner_left D.embed v f
 
 /-- The ambient form resolvent is self-adjoint. -/
 theorem resolvent_isSelfAdjoint
@@ -167,7 +170,9 @@ theorem resolvent_energy_identity
   calc
     ⟪D.resolvent f, f⟫_ℂ =
         ⟪D.solutionOperator f, D.embed.adjoint f⟫_ℂ := by
-      rw [resolvent_apply, ContinuousLinearMap.adjoint_inner_left]
+      rw [resolvent_apply]
+      exact (ContinuousLinearMap.adjoint_inner_right D.embed
+        (D.solutionOperator f) f).symm
     _ = ⟪D.solutionOperator f,
         D.formOperator (D.solutionOperator f)⟫_ℂ := by
       rw [D.formOperator_solutionOperator]

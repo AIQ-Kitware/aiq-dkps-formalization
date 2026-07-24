@@ -43,6 +43,7 @@ theorem graph_bound_original_of_addBounded
         ‖(A.addBounded V).toLinearMap (x n)‖ ^ 2 ≤ C) :
     ∃ D : ℝ, ∀ n,
       ‖(x n : H)‖ ^ 2 + ‖A.toLinearMap (x n)‖ ^ 2 ≤ D := by
+  change ℕ → A.domain at x
   let S := Real.sqrt (max C 0)
   refine ⟨S ^ 2 + ((1 + ‖V‖) * S) ^ 2, ?_⟩
   intro n
@@ -55,7 +56,8 @@ theorem graph_bound_original_of_addBounded
       (mul_le_mul_of_nonneg_left hx (norm_nonneg V))
   have hAeq : A.toLinearMap (x n) =
       (A.addBounded V).toLinearMap (x n) - V (x n : H) := by
-    rw [DavisKahanExt.ClosedOperator.addBounded_apply]
+    change A.toLinearMap (x n) =
+      (A.toLinearMap (x n) + V (x n : H)) - V (x n : H)
     abel
   have hAx : ‖A.toLinearMap (x n)‖ ≤ (1 + ‖V‖) * S := by
     rw [hAeq]
@@ -68,7 +70,12 @@ theorem graph_bound_original_of_addBounded
   have hS : 0 ≤ S := Real.sqrt_nonneg _
   have hfac : 0 ≤ (1 + ‖V‖) * S :=
     mul_nonneg (by positivity) hS
-  nlinarith [sq_nonneg ‖(x n : H)‖, sq_nonneg ‖A.toLinearMap (x n)‖]
+  have hx_sq : ‖(x n : H)‖ ^ 2 ≤ S ^ 2 :=
+    (sq_le_sq₀ (norm_nonneg _) hS).2 hx
+  have hAx_sq : ‖A.toLinearMap (x n)‖ ^ 2 ≤
+      ((1 + ‖V‖) * S) ^ 2 :=
+    (sq_le_sq₀ (norm_nonneg _) hfac).2 hAx
+  exact add_le_add hx_sq hAx_sq
 
 /-- A graph-bounded sequence for `A` is graph-bounded for `A + V`. -/
 theorem graph_bound_addBounded_of_original
@@ -81,6 +88,7 @@ theorem graph_bound_addBounded_of_original
     ∃ D : ℝ, ∀ n,
       ‖(x n : H)‖ ^ 2 +
         ‖(A.addBounded V).toLinearMap (x n)‖ ^ 2 ≤ D := by
+  change ℕ → (A.addBounded V).domain at x
   let S := Real.sqrt (max C 0)
   refine ⟨S ^ 2 + ((1 + ‖V‖) * S) ^ 2, ?_⟩
   intro n
@@ -93,7 +101,8 @@ theorem graph_bound_addBounded_of_original
       (mul_le_mul_of_nonneg_left hx (norm_nonneg V))
   have hsum : ‖(A.addBounded V).toLinearMap (x n)‖ ≤
       (1 + ‖V‖) * S := by
-    rw [DavisKahanExt.ClosedOperator.addBounded_apply]
+    change ‖A.toLinearMap (x n) + V (x n : H)‖ ≤
+      (1 + ‖V‖) * S
     calc
       ‖A.toLinearMap (x n) + V (x n : H)‖
           ≤ ‖A.toLinearMap (x n)‖ + ‖V (x n : H)‖ := norm_add_le _ _
@@ -102,8 +111,12 @@ theorem graph_bound_addBounded_of_original
   have hS : 0 ≤ S := Real.sqrt_nonneg _
   have hfac : 0 ≤ (1 + ‖V‖) * S :=
     mul_nonneg (by positivity) hS
-  nlinarith [sq_nonneg ‖(x n : H)‖,
-    sq_nonneg ‖(A.addBounded V).toLinearMap (x n)‖]
+  have hx_sq : ‖(x n : H)‖ ^ 2 ≤ S ^ 2 :=
+    (sq_le_sq₀ (norm_nonneg _) hS).2 hx
+  have hsum_sq : ‖(A.addBounded V).toLinearMap (x n)‖ ^ 2 ≤
+      ((1 + ‖V‖) * S) ^ 2 :=
+    (sq_le_sq₀ (norm_nonneg _) hfac).2 hsum
+  exact add_le_add hx_sq hsum_sq
 
 /-- Sequential graph compactness is preserved by a bounded perturbation. -/
 theorem graphCompact_addBounded
