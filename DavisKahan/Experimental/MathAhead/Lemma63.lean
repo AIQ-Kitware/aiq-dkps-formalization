@@ -4,15 +4,16 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
-import DavisKahan.Experimental.Frontier.Lemma63
+import DavisKahan.Sources.DavisKahan1970.Section6AppendixLeakage
 
 /-!
 # Mathematics-ahead proof of Davis--Kahan Lemma 6.3 — promoted
 
 The corrected, source-faithful proof of Lemma 6.3 (block hypothesis
 `K * P = Q * K * P`, not the overstrong `K * P = Q * K`) has been promoted to
-the frontier module `DavisKahan.Experimental.Frontier.Lemma63`, where it now
-closes the source-facing statements directly.
+the production module `DavisKahan.Sources.DavisKahan1970.Section6AppendixLeakage`
+(graduated out of the experimental frontier), where it now closes the
+source-facing statements directly.
 
 This module retains the former ahead-of-frontier names as thin re-exports so
 existing references continue to resolve.  The mathematics lives at the

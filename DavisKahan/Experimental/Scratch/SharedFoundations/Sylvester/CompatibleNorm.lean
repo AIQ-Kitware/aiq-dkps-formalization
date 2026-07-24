@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Experimental.Scratch.SharedFoundations.Sylvester.BoundedLeftInverse
-import DavisKahan.Experimental.Frontier.RemainingSourceSurface
+import DavisKahan.Sources.DavisKahan1970.RemainingSourceSurface
 
 /-!
 # Compatible cross-operator norms and Banach Sylvester estimates

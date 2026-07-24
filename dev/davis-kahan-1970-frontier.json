@@ -491,7 +491,7 @@
       "id": "s6-approximation-energy",
       "title": "Approximation-number energy",
       "kind": "foundation",
-      "module": "DavisKahan.Experimental.Frontier.Lemma63",
+      "module": "DavisKahan.Sources.DavisKahan1970.Section6AppendixLeakage",
       "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.Section6Appendix.approximationEnergy",
       "dependencies": [],
       "source_census_ids": [],
@@ -503,7 +503,7 @@
       "id": "s6-lemma6-3-approx",
       "title": "Lemma 6.3 approximation-number form",
       "kind": "source",
-      "module": "DavisKahan.Experimental.Frontier.Lemma63",
+      "module": "DavisKahan.Sources.DavisKahan1970.Section6AppendixLeakage",
       "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.Section6Appendix.lemma6_3_approximationNumber_leakage",
       "dependencies": [
         "s6-approximation-energy"
@@ -519,7 +519,7 @@
       "id": "s6-lemma6-3-finite",
       "title": "Lemma 6.3 singular-value specialization",
       "kind": "bridge",
-      "module": "DavisKahan.Experimental.Frontier.Lemma63",
+      "module": "DavisKahan.Sources.DavisKahan1970.Section6AppendixLeakage",
       "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.Section6Appendix.lemma6_3_singularValue_leakage",
       "dependencies": [
         "s6-lemma6-3-approx"
@@ -533,7 +533,7 @@
       "id": "s5-compatible-cross-norm",
       "title": "Compatible cross-operator norm interface",
       "kind": "foundation",
-      "module": "DavisKahan.Experimental.Frontier.RemainingSourceSurface",
+      "module": "DavisKahan.Sources.DavisKahan1970.RemainingSourceSurface",
       "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.RemainingSourceSurface.CompatibleCrossOperatorNorm",
       "dependencies": [],
       "source_census_ids": [],
@@ -545,7 +545,7 @@
       "id": "s5-theorem5-1",
       "title": "Theorem 5.1 exact compatible-norm form",
       "kind": "source",
-      "module": "DavisKahan.Experimental.Frontier.RemainingSourceSurface",
+      "module": "DavisKahan.Sources.DavisKahan1970.RemainingSourceSurface",
       "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.RemainingSourceSurface.theorem5_1_banach_sylvester",
       "dependencies": [
         "s5-compatible-cross-norm"
@@ -561,7 +561,7 @@
       "id": "s6-trial-residual",
       "title": "Trial residual operator",
       "kind": "foundation",
-      "module": "DavisKahan.Experimental.Frontier.RemainingSourceSurface",
+      "module": "DavisKahan.Sources.DavisKahan1970.RemainingSourceSurface",
       "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.RemainingSourceSurface.trialResidual",
       "dependencies": [],
       "source_census_ids": [],
@@ -628,7 +628,7 @@
       "id": "s6-theorem6-3-finite-specialization",
       "title": "Theorem 6.3 finite strict-lower-rank specialization",
       "kind": "bridge",
-      "module": "DavisKahan.Experimental.Frontier.RemainingSourceSurface",
+      "module": "DavisKahan.Sources.DavisKahan1970.RemainingSourceSurface",
       "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.RemainingSourceSurface.theorem6_3_finite_generalizedTanTheta_ideal",
       "dependencies": [],
       "source_census_ids": [],
@@ -657,7 +657,7 @@
       "id": "s2-tan-theta",
       "title": "Section 2 single-angle tangent theorem",
       "kind": "source",
-      "module": "DavisKahan.Experimental.Frontier.RemainingSourceSurface",
+      "module": "DavisKahan.Sources.DavisKahan1970.RemainingSourceSurface",
       "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.RemainingSourceSurface.theorem6_3_equalRank_finite_tanTheta_ideal",
       "dependencies": [
         "s6-theorem6-3-kyfan-promotion"
@@ -674,7 +674,7 @@
       "id": "s6-theorem6-3-unbounded-opnorm-partial",
       "title": "Theorem 6.3 unbounded graph-angle operator-norm partial",
       "kind": "bridge",
-      "module": "DavisKahan.Experimental.Frontier.RemainingSourceSurface",
+      "module": "DavisKahan.Sources.DavisKahan1970.RemainingSourceSurface",
       "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.RemainingSourceSurface.theorem6_3_unbounded_graphAngle_opNorm_partial",
       "dependencies": [],
       "source_census_ids": [],
@@ -686,7 +686,7 @@
       "id": "s2-unbounded-scope",
       "title": "Section 2 unbounded self-adjoint scope",
       "kind": "source",
-      "module": "DavisKahan.Experimental.Frontier.RemainingSourceSurface",
+      "module": "DavisKahan.Sources.DavisKahan1970.RemainingSourceSurface",
       "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.RemainingSourceSurface.unbounded_angle_theorems_source_scope_partial_marker",
       "dependencies": [
         "base-theorem5-2",
@@ -705,7 +705,7 @@
       "id": "s7-sin2",
       "title": "Section 7 sine double-angle source ideal theorem",
       "kind": "source",
-      "module": "DavisKahan.Experimental.Frontier.RemainingSourceSurface",
+      "module": "DavisKahan.Sources.DavisKahan1970.RemainingSourceSurface",
       "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.RemainingSourceSurface.section7_sinTwoTheta_source_ideal",
       "dependencies": [
         "base-spectral-projection"
@@ -722,7 +722,7 @@
       "id": "s7-tan2",
       "title": "Section 7 tangent double-angle source ideal theorem",
       "kind": "source",
-      "module": "DavisKahan.Experimental.Frontier.RemainingSourceSurface",
+      "module": "DavisKahan.Sources.DavisKahan1970.RemainingSourceSurface",
       "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.RemainingSourceSurface.section7_tanTwoTheta_source_ideal",
       "dependencies": [
         "s7-sin2"
