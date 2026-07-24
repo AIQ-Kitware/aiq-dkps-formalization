@@ -53,7 +53,7 @@ theorem strongBlockEquation_forces_zero_leakage
       P.isIdempotentElem_starProjection
   have hPzero :
       P.starProjection ((1 - P.starProjection) x) = 0 := by
-    simp only [sub_apply, one_apply, map_sub]
+    simp only [sub_apply, one_apply_eq_self, map_sub]
     rw [hPidem, sub_self]
   have hblock := congrArg
     (fun T : E →L[ℂ] F => T ((1 - P.starProjection) x)) hKP
@@ -118,12 +118,16 @@ theorem sourceBlockEquation_of_strongBlockEquation
         Q.starProjection ∘L K) :
     K ∘L P.starProjection =
       Q.starProjection ∘L K ∘L P.starProjection := by
-  calc
-    K ∘L P.starProjection =
-        (K ∘L P.starProjection) ∘L P.starProjection := by
-      rw [ContinuousLinearMap.comp_assoc,
-        P.isIdempotentElem_starProjection]
-    _ = Q.starProjection ∘L K ∘L P.starProjection := by rw [hKP]
+  ext x
+  have hblock := congrArg
+    (fun T : E →L[ℂ] F => T (P.starProjection x)) hKP
+  simp only [ContinuousLinearMap.comp_apply] at hblock ⊢
+  have hPidem :
+      P.starProjection (P.starProjection x) = P.starProjection x :=
+    congrArg (fun T : E →L[ℂ] E => T x)
+      P.isIdempotentElem_starProjection
+  rw [hPidem] at hblock
+  exact hblock
 
 /-- The frontier energy and the mathematics-ahead square energy are the same
 quantity under their two names. -/
@@ -152,10 +156,9 @@ theorem paper_lemma6_3_approximationNumber_leakage
           (K ∘L P.starProjection) n >
         Frontier.Section6Appendix.approximationEnergy K n - η ^ 2) :
     ‖Q.starProjection ∘L K ∘L (1 - P.starProjection)‖ < η := by
-  clear hrankP
   apply
     MathAhead.Section6Appendix.lemma6_3_approximationNumber_leakage_completed
-      K P Q n hn η hη hKP hrankQ
+      K P Q n hn η hη hKP hrankP hrankQ
   simpa only [approximationEnergy_eq_approximationSquareEnergy] using hnear
 
 /-- In finite dimensions, the frontier approximation energy is the sum of the
