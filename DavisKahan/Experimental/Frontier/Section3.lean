@@ -192,6 +192,7 @@ structure IsPrincipalUnitarySquareRoot
   spectrum_right_half_plane :
     ∀ z ∈ spectrum ℂ T, 0 ≤ z.re
 
+open scoped ComplexOrder in
 /-- Davis--Kahan 1970, Proposition 3.3, converse direction.  The crossed
 intersection mapping condition selects the correct square root on the
 minus-one spectral subspace. -/
@@ -202,7 +203,280 @@ theorem proposition3_3_principalSquareRoot_converse
     (hcross : T '' (halmosSourceDefect U V : Set H) =
       (halmosTargetDefect U V : Set H)) :
     IsPaperDirectRotation U V T := by
-  sorry
+  set A := spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V) with hAdef
+  have hunit := hroot.unitary_mem
+  have hTsT : T * star T = 1 := Unitary.mul_star_self_of_mem hunit
+  have hsTT : star T * T = 1 := Unitary.star_mul_self_of_mem hunit
+  haveI hTnorm : IsStarNormal T := isStarNormal_of_mem_unitary hunit
+  -- (1) accretive: 0 ≤ T + star T
+  have hTpos : (0 : H →L[ℂ] H) ≤ T + star T := by
+    have e2 : cfc (fun z : ℂ => star z) T = star T := by
+      rw [cfc_star (R := ℂ) (fun z : ℂ => z) T, cfc_id' ℂ T]
+    have e3 : T + star T = cfc (fun z : ℂ => z + star z) T := by
+      rw [cfc_add (R := ℂ) T (fun z : ℂ => z) (fun z : ℂ => star z)
+        continuous_id.continuousOn continuous_star.continuousOn, cfc_id' ℂ T, e2]
+    rw [e3]
+    apply cfc_nonneg
+    intro z hz
+    have hre : 0 ≤ z.re := hroot.spectrum_right_half_plane z hz
+    rw [Complex.le_def]
+    refine ⟨?_, ?_⟩
+    · simp only [Complex.zero_re, Complex.add_re, Complex.star_def, Complex.conj_re]
+      linarith
+    · simp only [Complex.zero_im, Complex.add_im, Complex.star_def, Complex.conj_im]
+      ring
+  -- accretive quadratic form
+  have haccr : ∀ y : H, 0 ≤ RCLike.re ⟪T y, y⟫_ℂ := by
+    intro y
+    have hp := (ContinuousLinearMap.nonneg_iff_isPositive (T + star T)).mp hTpos
+    have hy := hp.re_inner_nonneg_left y
+    rw [ContinuousLinearMap.add_apply, inner_add_left, map_add] at hy
+    have hstar : RCLike.re ⟪star T y, y⟫_ℂ = RCLike.re ⟪T y, y⟫_ℂ := by
+      rw [ContinuousLinearMap.star_eq_adjoint, ContinuousLinearMap.adjoint_inner_left]
+      exact inner_re_symm (𝕜 := ℂ) y (T y)
+    rw [hstar] at hy
+    linarith
+  -- (2) T + star T = A + A
+  have hkey : T + star T = A + A := by
+    have hsqeq : (T + star T) * (T + star T) = (A + A) * (A + A) := by
+      have expand : (T + star T) * (T + star T)
+          = T * T + T * star T + star T * T + star T * star T := by noncomm_ring
+      have hstarTT : star T * star T = star (spectraReflectionProduct U V) := by
+        rw [← star_mul, hroot.square_eq]
+      have expandR : (A + A) * (A + A) = A * A + A * A + A * A + A * A := by noncomm_ring
+      have hAA : A * A = star (spectraCanonicalIntertwiner U V) * spectraCanonicalIntertwiner U V :=
+        spectraOperatorAbsoluteValue_mul_self _
+      rw [expand, hroot.square_eq, hTsT, hsTT, hstarTT, expandR, hAA]
+      have hG : spectraReflectionProduct U V + 1 =
+          spectraCanonicalIntertwiner U V + spectraCanonicalIntertwiner U V := by
+        rw [add_comm]
+        exact (spectraCanonicalIntertwiner_add_self_eq_one_add_reflectionProduct U V).symm
+      have hstarG : star (spectraReflectionProduct U V) + 1 =
+          star (spectraCanonicalIntertwiner U V) + star (spectraCanonicalIntertwiner U V) := by
+        have h := congrArg star hG
+        rwa [star_add, star_add, star_one] at h
+      have hSS : spectraCanonicalIntertwiner U V + star (spectraCanonicalIntertwiner U V)
+          = star (spectraCanonicalIntertwiner U V) * spectraCanonicalIntertwiner U V
+            + star (spectraCanonicalIntertwiner U V) * spectraCanonicalIntertwiner U V :=
+        spectraCanonicalIntertwiner_add_star U V
+      calc spectraReflectionProduct U V + 1 + 1 + star (spectraReflectionProduct U V)
+          = (spectraReflectionProduct U V + 1) + (star (spectraReflectionProduct U V) + 1) := by
+            abel
+        _ = (spectraCanonicalIntertwiner U V + spectraCanonicalIntertwiner U V)
+              + (star (spectraCanonicalIntertwiner U V) + star (spectraCanonicalIntertwiner U V)) := by
+            rw [hG, hstarG]
+        _ = (spectraCanonicalIntertwiner U V + star (spectraCanonicalIntertwiner U V))
+              + (spectraCanonicalIntertwiner U V + star (spectraCanonicalIntertwiner U V)) := by
+            abel
+        _ = (star (spectraCanonicalIntertwiner U V) * spectraCanonicalIntertwiner U V
+              + star (spectraCanonicalIntertwiner U V) * spectraCanonicalIntertwiner U V)
+            + (star (spectraCanonicalIntertwiner U V) * spectraCanonicalIntertwiner U V
+              + star (spectraCanonicalIntertwiner U V) * spectraCanonicalIntertwiner U V) := by
+            rw [hSS]
+        _ = star (spectraCanonicalIntertwiner U V) * spectraCanonicalIntertwiner U V
+              + star (spectraCanonicalIntertwiner U V) * spectraCanonicalIntertwiner U V
+              + star (spectraCanonicalIntertwiner U V) * spectraCanonicalIntertwiner U V
+              + star (spectraCanonicalIntertwiner U V) * spectraCanonicalIntertwiner U V := by
+            abel
+    have h2A_nonneg : (0 : H →L[ℂ] H) ≤ A + A :=
+      add_nonneg (spectraOperatorAbsoluteValue_nonneg _) (spectraOperatorAbsoluteValue_nonneg _)
+    calc T + star T
+        = CFC.sqrt ((T + star T) * (T + star T)) := (CFC.sqrt_unique rfl hTpos).symm
+      _ = CFC.sqrt ((A + A) * (A + A)) := by rw [hsqeq]
+      _ = A + A := CFC.sqrt_unique rfl h2A_nonneg
+  -- (3) T * A = S
+  have hTA : T * A = spectraCanonicalIntertwiner U V := by
+    have h1 : T * (T + star T) = spectraCanonicalIntertwiner U V + spectraCanonicalIntertwiner U V := by
+      rw [mul_add, hroot.square_eq, hTsT,
+        spectraCanonicalIntertwiner_add_self_eq_one_add_reflectionProduct U V]
+      abel
+    rw [hkey, mul_add] at h1
+    -- h1 : T * A + T * A = S + S
+    have hh : (2 : ℂ) • (T * A) = (2 : ℂ) • spectraCanonicalIntertwiner U V := by
+      rw [two_smul, two_smul]; exact h1
+    exact smul_right_injective (H →L[ℂ] H) (two_ne_zero) hh
+  -- crossed_blocks and compressions and intertwines
+  have hAP : A * projection U = projection U * A :=
+    (spectraCanonicalAbsoluteValue_commute_projection U V).eq
+  -- hXA
+  have hXA : (T * projection U - projection V * T) * A = 0 := by
+    have step : T * projection U * A = projection V * T * A := by
+      calc T * projection U * A
+          = T * (projection U * A) := by rw [mul_assoc]
+        _ = T * (A * projection U) := by rw [← hAP]
+        _ = (T * A) * projection U := by rw [mul_assoc]
+        _ = spectraCanonicalIntertwiner U V * projection U := by rw [hTA]
+        _ = projection V * spectraCanonicalIntertwiner U V :=
+            spectraCanonicalIntertwiner_mul_projection U V
+        _ = projection V * (T * A) := by rw [hTA]
+        _ = projection V * T * A := by rw [mul_assoc]
+    rw [sub_mul, step, sub_self]
+  -- G = -1 on source defect
+  have hGneg : ∀ z, z ∈ halmosSourceDefect U V → spectraReflectionProduct U V z = -z := by
+    intro z hz
+    obtain ⟨hPz, hQz⟩ := projections_apply_of_mem_halmosSourceDefect hz
+    have hRU : reflectionOperator U z = z := by
+      rw [Submodule.reflectionOperator_apply, hPz]; module
+    rw [ContinuousLinearMap.mul_apply, hRU, Submodule.reflectionOperator_apply, hQz]
+    module
+  -- X vanishes on ker A
+  have hXker : ∀ x : H, A x = 0 → (T * projection U - projection V * T) x = 0 := by
+    intro x hx
+    have hSx : spectraCanonicalIntertwiner U V x = 0 := by
+      have hn : ‖spectraCanonicalIntertwiner U V x‖ = 0 := by
+        rw [← norm_spectraOperatorAbsoluteValue_apply (spectraCanonicalIntertwiner U V) x, ← hAdef,
+          hx, norm_zero]
+      exact norm_eq_zero.mp hn
+    have hSexpand : spectraCanonicalIntertwiner U V x =
+        projection V (projection U x) + complementaryProjection V (complementaryProjection U x) := by
+      show (projection V * projection U + complementaryProjection V * complementaryProjection U) x = _
+      simp only [ContinuousLinearMap.add_apply, ContinuousLinearMap.mul_apply]
+    rw [hSexpand] at hSx
+    have hmemV : projection V (projection U x) ∈ V := V.starProjection_apply_mem _
+    have hmemVc : complementaryProjection V (complementaryProjection U x) ∈ Vᗮ :=
+      Vᗮ.starProjection_apply_mem _
+    have hab_inner : ⟪projection V (projection U x),
+        complementaryProjection V (complementaryProjection U x)⟫_ℂ = 0 :=
+      Submodule.inner_right_of_mem_orthogonal hmemV hmemVc
+    have hQPx : projection V (projection U x) = 0 := by
+      have hself : ⟪projection V (projection U x), projection V (projection U x)⟫_ℂ = 0 := by
+        calc ⟪projection V (projection U x), projection V (projection U x)⟫_ℂ
+            = ⟪projection V (projection U x),
+                projection V (projection U x)
+                  + complementaryProjection V (complementaryProjection U x)⟫_ℂ
+              - ⟪projection V (projection U x),
+                complementaryProjection V (complementaryProjection U x)⟫_ℂ := by
+              rw [inner_add_right]; ring
+          _ = 0 := by rw [hSx, hab_inner, inner_zero_right]; ring
+      exact inner_self_eq_zero.mp hself
+    have hPxsource : projection U x ∈ halmosSourceDefect U V := by
+      refine Submodule.mem_inf.mpr ⟨U.starProjection_apply_mem x, ?_⟩
+      exact (Submodule.starProjection_apply_eq_zero_iff V).mp hQPx
+    have hQcPcx : complementaryProjection V (complementaryProjection U x) = 0 := by
+      have := hSx
+      rw [hQPx, zero_add] at this
+      exact this
+    have hPcxtarget : complementaryProjection U x ∈ halmosTargetDefect U V := by
+      refine Submodule.mem_inf.mpr ⟨Uᗮ.starProjection_apply_mem x, ?_⟩
+      have := (Submodule.starProjection_apply_eq_zero_iff Vᗮ).mp hQcPcx
+      simpa using this
+    -- x = Px + Pᗮx
+    have hxsplit : projection U x + complementaryProjection U x = x :=
+      U.starProjection_add_starProjection_orthogonal x
+    -- T (Px) ∈ target defect ⊆ V
+    have hTPx_mem : T (projection U x) ∈ halmosTargetDefect U V := by
+      have : T (projection U x) ∈ (halmosTargetDefect U V : Set H) := by
+        rw [← hcross]
+        exact Set.mem_image_of_mem T hPxsource
+      exact this
+    have hQTPx : projection V (T (projection U x)) = T (projection U x) :=
+      V.starProjection_eq_self_iff.mpr (mem_halmosTargetDefect.mp hTPx_mem).2
+    -- T (Pᗮx) ∈ source defect ⊆ Vᗮ
+    have hTPcx_mem : T (complementaryProjection U x) ∈ halmosSourceDefect U V := by
+      have hmem : complementaryProjection U x ∈ (halmosTargetDefect U V : Set H) := hPcxtarget
+      rw [← hcross] at hmem
+      obtain ⟨z, hzsource, hzeq⟩ := hmem
+      have hTz : T (T z) = spectraReflectionProduct U V z := by
+        have := congrArg (fun f : H →L[ℂ] H => f z) hroot.square_eq
+        simpa [ContinuousLinearMap.mul_apply] using this
+      have : T (complementaryProjection U x) = -z := by
+        rw [← hzeq, hTz, hGneg z hzsource]
+      rw [this]
+      exact Submodule.neg_mem _ hzsource
+    have hQTPcx : projection V (T (complementaryProjection U x)) = 0 := by
+      apply (Submodule.starProjection_apply_eq_zero_iff V).mpr
+      exact (mem_halmosSourceDefect.mp hTPcx_mem).2
+    -- assemble
+    have hTx : T x = T (projection U x) + T (complementaryProjection U x) := by
+      rw [← map_add, hxsplit]
+    show (T * projection U - projection V * T) x = 0
+    rw [ContinuousLinearMap.sub_apply, ContinuousLinearMap.mul_apply, ContinuousLinearMap.mul_apply,
+      hTx, map_add, hQTPx, hQTPcx, add_zero, sub_self]
+  -- final intertwining: X = 0
+  have hXeq : T * projection U = projection V * T := by
+    haveI : CompleteSpace A.ker := A.isClosed_ker.completeSpace_coe
+    haveI : A.ker.HasOrthogonalProjection := inferInstance
+    have hrangeLe : A.range ≤ (T * projection U - projection V * T).ker := by
+      rintro y ⟨z, rfl⟩
+      rw [LinearMap.mem_ker]
+      have := congrArg (fun f : H →L[ℂ] H => f z) hXA
+      simpa [ContinuousLinearMap.mul_apply] using this
+    have hself : ContinuousLinearMap.adjoint A = A := by
+      rw [← ContinuousLinearMap.star_eq_adjoint]
+      exact (spectraOperatorAbsoluteValue_isSelfAdjoint _).star_eq
+    have horthEq : A.kerᗮ = A.range.topologicalClosure := by
+      have h1 : A.rangeᗮ = A.ker := by rw [A.orthogonal_range, hself]
+      calc A.kerᗮ = A.rangeᗮᗮ := by rw [h1]
+        _ = A.range.topologicalClosure := Submodule.orthogonal_orthogonal_eq_closure _
+    have hOrthLe : A.kerᗮ ≤ (T * projection U - projection V * T).ker := by
+      rw [horthEq]
+      exact Submodule.topologicalClosure_minimal _ hrangeLe
+        (T * projection U - projection V * T).isClosed_ker
+    have hsub : ∀ x : H, (T * projection U - projection V * T) x = 0 := by
+      intro x
+      have hsplit := A.ker.starProjection_add_starProjection_orthogonal x
+      rw [← hsplit, map_add]
+      have h1 : (T * projection U - projection V * T) (A.ker.starProjection x) = 0 := by
+        apply hXker
+        exact LinearMap.mem_ker.mp (A.ker.starProjection_apply_mem x)
+      have h2 : (T * projection U - projection V * T) (A.kerᗮ.starProjection x) = 0 :=
+        LinearMap.mem_ker.mp (hOrthLe (A.kerᗮ.starProjection_apply_mem x))
+      rw [h1, h2, add_zero]
+    have hzero : T * projection U - projection V * T = 0 := ContinuousLinearMap.ext hsub
+    exact sub_eq_zero.mp hzero
+  -- crossed_blocks
+  refine
+    { unitary_mem := hunit
+      intertwines := hXeq
+      source_compression_nonnegative := ?_
+      complement_compression_nonnegative := ?_
+      crossed_blocks := ?_ }
+  · intro x
+    have h := haccr (projection U x)
+    have hPTP : (projection U * T * projection U) x = projection U (T (projection U x)) := by
+      simp only [ContinuousLinearMap.mul_apply]
+    have hsymm : ⟪projection U x, T (projection U x)⟫_ℂ
+        = ⟪x, projection U (T (projection U x))⟫_ℂ :=
+      U.starProjection_isSymmetric x (T (projection U x))
+    have heq : RCLike.re ⟪x, (projection U * T * projection U) x⟫_ℂ
+        = RCLike.re ⟪T (projection U x), projection U x⟫_ℂ := by
+      rw [hPTP, ← hsymm]
+      exact inner_re_symm (𝕜 := ℂ) _ _
+    rw [heq]; exact h
+  · intro x
+    have h := haccr (complementaryProjection U x)
+    have hPTP : (complementaryProjection U * T * complementaryProjection U) x
+        = complementaryProjection U (T (complementaryProjection U x)) := by
+      simp only [ContinuousLinearMap.mul_apply]
+    have hsymm : ⟪complementaryProjection U x, T (complementaryProjection U x)⟫_ℂ
+        = ⟪x, complementaryProjection U (T (complementaryProjection U x))⟫_ℂ :=
+      Uᗮ.starProjection_isSymmetric x (T (complementaryProjection U x))
+    have heq : RCLike.re ⟪x, (complementaryProjection U * T * complementaryProjection U) x⟫_ℂ
+        = RCLike.re ⟪T (complementaryProjection U x), complementaryProjection U x⟫_ℂ := by
+      rw [hPTP, ← hsymm]
+      exact inner_re_symm (𝕜 := ℂ) _ _
+    rw [heq]; exact h
+  · have hcomm : Commute (T + star T) (projection U) := by
+      rw [hkey]
+      exact (spectraCanonicalAbsoluteValue_commute_projection U V).add_left
+        (spectraCanonicalAbsoluteValue_commute_projection U V)
+    have hblock : complementaryProjection U * (T + star T) * projection U = 0 := by
+      calc complementaryProjection U * (T + star T) * projection U
+          = complementaryProjection U * ((T + star T) * projection U) := by rw [mul_assoc]
+        _ = complementaryProjection U * (projection U * (T + star T)) := by rw [hcomm.eq]
+        _ = (complementaryProjection U * projection U) * (T + star T) := by rw [mul_assoc]
+        _ = 0 := by rw [complementaryProjection_mul_projection U, zero_mul]
+    have hstar : star (projection U * T * complementaryProjection U)
+        = complementaryProjection U * star T * projection U := by
+      rw [star_mul, star_mul, (isSelfAdjoint_starProjection U).star_eq,
+        (isSelfAdjoint_starProjection Uᗮ).star_eq, ← mul_assoc]
+    rw [hstar]
+    have hsum : complementaryProjection U * T * projection U
+        + complementaryProjection U * star T * projection U = 0 := by
+      have h := hblock
+      rw [mul_add, add_mul] at h
+      exact h
+    exact eq_neg_of_add_eq_zero_left hsum
 
 /-- Davis--Kahan 1970, Proposition 3.4 in source form: under the half-angle
 condition, the square of the direct rotation is the direct rotation between
