@@ -1,58 +1,62 @@
-# Davis--Kahan completion first; Tau Ceti and Spectra migration second
+# Dual-track: Tau Ceti extraction (primary) and Davis--Kahan source fidelity (maintenance)
 
 **Current DKPS baseline:** `dfd9d37ebc86`  
 **Tau Ceti reference:** `external/TauCeti` at `92c79e5e0a618f8c5c2b9909be1ce50f6891dde7`  
 **Spectra reference/vendor:** `8dbaaf6728d1342ae16acf79fd7eef7c59b37e63`
 
-This document fixes the milestone order and dependency policy for the remainder
-of the project. It supersedes any earlier instruction to restructure the
-repository around Tau Ceti before the Davis--Kahan paper is complete.
+**Revised 2026-07-24.** This document previously imposed a strict *complete the
+paper first, migrate second* order. That gate is **retired** because it no
+longer describes the repository: `TauCeti` is already a local dependency,
+`ForTauCeti` is a default build target, sixteen reusable modules are already
+staged there, and production code is already reorganized for extraction. The
+reusable foundations and the principal Davis--Kahan machinery needed to justify
+an upstream spectral-perturbation library are in hand, and the source census is
+clean; the remaining 1970 source obligations are not prerequisites for beginning
+Tau Ceti integration.
 
-## Executive decision
+## Executive decision — dual-track
 
-There are two distinct milestones.
+The project runs two tracks in parallel, not two sequential milestones.
 
-### Milestone 1: complete the 1970 paper as a standalone DavisKahan package
+### Primary track: Tau Ceti extraction
 
-The current target architecture is:
-
-```text
-Mathlib
-   ↑
-vendor/Spectra
-   ↑
-DavisKahan
-```
-
-The project should use this architecture to finish the paper. The existing
-package, theorem frontier, source census, and vendored dependency are assets,
-not temporary clutter that must be removed before completion.
-
-### Milestone 2: migrate reusable foundations into Tau Ceti
-
-Only after the paper completion gate is met should the normal architecture be
-migrated toward:
+Polish and upstream stable, paper-independent foundations into `ForTauCeti` (the
+staging library whose declarations already carry their final `TauCeti.*`
+namespaces), in small dependency-closed clusters. Mathlib is **not** the
+near-term destination for this contribution — `ForTauCeti` (→ Tau Ceti) is the
+polished home. This is the current default work.
 
 ```text
-Mathlib
-   ↑
-Tau Ceti
-   ↑
-DavisKahan
+Mathlib      TauCeti
+   ↑            ↑
+vendor/Spectra  ForTauCeti
+   ↑            ↑
+DavisKahan  ←────┘
 ```
 
-`DavisKahan` remains a package in this final architecture. Tau Ceti receives
-reusable foundations; paper statements, source correspondence, corrected
-claims, and paper-specific assembly remain downstream.
+`DavisKahan` remains a package and may consume `ForTauCeti`. Tau Ceti receives
+reusable foundations; paper statements, source correspondence, corrected claims,
+and paper-specific assembly stay downstream. The final build removes Spectra,
+with mathematics adapted from Spectra deeply integrated or replaced, and durable
+attribution.
 
-The final post-migration build must not depend on Spectra. Mathematics adapted
-from Spectra must be deeply integrated into Tau Ceti or replaced by Tau Ceti or
-Mathlib results, with durable attribution. That is a major second-milestone
-campaign and must not derail the first milestone.
+### Maintenance track: Davis--Kahan source fidelity
 
-## Milestone 1 completion gate
+Keep the source census, counterexamples, paper wrappers, and remaining analytic
+obligations honest and compiling. **Do not expand this track merely to satisfy
+an obsolete completion gate.** A remaining paper obligation blocks upstream work
+only when it (a) reveals an error in an API being proposed upstream, (b) requires
+a foundational result that belongs in Tau Ceti, (c) exposes a source-fidelity
+problem comparable to the Theorem 6.3 transcription error, or (d) prevents
+`DavisKahan` from consuming the upstream replacement. Migration does not wait for
+Section 9 examples, every extremal statement, or every unbounded arbitrary-ideal
+endpoint.
 
-The paper milestone is met only when all of the following are true.
+## Maintenance-track definition of done for the paper
+
+The following is the *definition of done for the paper as a maintenance
+deliverable* — no longer a gate that blocks upstreaming. The paper is complete
+when all of the following are true.
 
 1. Every theorem, proposition, lemma, corollary, definition, and construction
    in the maintained 1970 source census has a compiled formal endpoint.
@@ -115,22 +119,16 @@ be disciplined.
 7. Preserve the pristine reference checkout. Never make project edits under
    `external/Spectra`.
 
-### Tau Ceti during Milestone 1
+### Tau Ceti staging (current)
 
-`external/TauCeti` is a design and overlap reference, not a production
-requirement. Agents should inspect it to avoid incompatible or duplicative API
-design, but should not:
-
-- add Tau Ceti to the ordinary Lake dependency graph;
-- reorganize the project around a `TauCetiCandidates` root library;
-- perform a bulk namespace migration;
-- port a large Spectra subsystem solely for architectural cleanliness;
-- block a Davis--Kahan theorem on upstream review or Tau Ceti integration.
-
-A tiny dependency-closed Tau Ceti slice may be vendored only if it demonstrably
-saves a major development required to complete the paper. That decision must be
-made separately and must include a pin, dependency closure, provenance, and a
-rollback path.
+`TauCeti` is now a local dependency and `ForTauCeti` is a default build target;
+`external/TauCeti` remains the read-only pin/provenance reference. Reusable
+foundations are staged into `ForTauCeti` (final `TauCeti.*` namespaces), not
+committed to the `external/TauCeti` submodule pointer, which stays fixed until a
+roadmap-accepted PR lands. `scripts/export_for_tauceti.py` reproduces the
+`TauCeti/` copy on demand at submission time. Still avoid a speculative bulk
+namespace migration unconnected to an accepted roadmap target: migrate
+dependency-closed clusters that map to a roadmap area.
 
 ## Where new mathematics should land before paper completion
 
@@ -237,24 +235,134 @@ Likely clusters include:
 The order should follow the completed DavisKahan dependency graph rather than a
 speculative library taxonomy.
 
-## Hard prohibitions before Milestone 1
+## Hard prohibitions (both tracks)
 
-Unless the user explicitly changes the milestone order, do not:
+Do not:
 
-- delete or replace `vendor/Spectra` wholesale;
-- make the ordinary build require Tau Ceti;
-- spend a campaign on namespace-only migration;
-- move the paper frontier into Tau Ceti;
+- delete or replace `vendor/Spectra` wholesale before its consumers migrate;
+- commit the `external/TauCeti` submodule pointer, or otherwise assume admission
+  — all Tau Ceti prep is staged **in this repository**, structured as if
+  accepted (see "In-repo Tau Ceti-readiness" below);
+- perform a speculative bulk namespace migration unconnected to a roadmap area;
 - claim the paper complete from textual presence or a bounded specialization;
 - restore a refuted source statement as a theorem;
-- let an upstream contribution block a compiled local proof;
-- perform a large architectural rewrite without a theorem-closure payoff.
+- author a Tau Ceti code PR against an area with no accepted roadmap target.
+
+## In-repo Tau Ceti-readiness
+
+We do the full prep to be Tau-Ceti-ready **here**, and structure everything as if
+the contribution will be accepted — without assuming it will. Concretely:
+
+- **Roadmaps** are drafted in `ForTauCetiRoadmap/` in this repo (mirroring the
+  sibling `TauCetiRoadmap` layout: one folder per area, `README.md` definitive,
+  `Suggested.lean` for prototype signatures). No external roadmap PR is assumed.
+- **Code** is staged in `ForTauCeti/` with final `TauCeti.*` namespaces;
+  `scripts/export_for_tauceti.py` reproduces the `TauCeti/` copy on demand.
+- **Submission packaging** (the A1--A3 split, acceptance-gate checklists, the
+  two-roadmap proposal) lives under `dev/tauceti/`.
+
+When a real Tau Ceti submission is authorized, this material is lifted out
+verbatim; until then nothing here depends on external acceptance.
+
+## Convergence phase (Track A / Track B)
+
+Extraction is not "copy `ForMathlib` → `ForTauCeti` → submit." Three
+independently evolved operator-theory stacks — DKPS local abstractions, Tau Ceti
+canonical abstractions, Spectra donor abstractions — must collapse into one
+Tau Ceti-native stack before most PRs, without losing the new Davis--Kahan
+mathematics or Spectra provenance. The instrument is the **convergence matrix**
+([`dev/tauceti/convergence-matrix.md`](../../dev/tauceti/convergence-matrix.md)):
+one row per declaration, classified (exact-duplicate / wrapper-duplicate /
+parallel-formulation / missing-reusable-result / paper-specific) with a canonical
+destination.
+
+Two tracks run in parallel:
+
+- **Track A (now):** approximation numbers — internal deduplication (Wave 1) then
+  the roadmap below. Independent of the unbounded/semigroup/PDE architecture, so
+  it does not block on Track B.
+- **Track B (now):** the convergence audit and refactor waves — closed operators
+  onto `LinearPMap` (Wave 2), semigroups/resolvents (Wave 3), forms/Fredholm/PDE
+  (Wave 4), and the Spectra decomposition clusters A--E (Wave 5, incl. the
+  PVM/spectral-calculus donor layer). Gates the later PRs.
+
+Overall ordering: `0` inventory/equivalence map → `1` internal dedup → `2`
+refactor onto Tau Ceti structures → `3` port missing Spectra foundations → `4`
+rewrite DavisKahan consumers → `5` delete old APIs → `6` polish and submit the
+residual new mathematics.
+
+## Roadmap sequence (drafted in `ForTauCetiRoadmap/`)
+
+Do not open with a single roadmap for the whole Davis--Kahan paper — that bundles
+too many unsettled APIs. Use a focused sequence, each depending on the prior.
+
+1. **Approximation Numbers and Symmetric Operator Ideals** (first): approximation
+   numbers for rectangular continuous linear maps; order/scalar/addition/
+   composition laws; adjoint invariance; finite-dimensional singular-value
+   agreement; min--max characterizations; rectangular operator modulus; symmetric
+   ideal families and Ky Fan dominance; orthogonal block sums; Hilbert--Schmidt
+   and related ideal examples.
+2. **Spectral Subspaces, Sylvester Equations, and Davis--Kahan Perturbation
+   Bounds** (later): depends on (1); coordinates its closed-operator layer with
+   Tau Ceti's existing one-parameter-semigroup roadmap.
+
+Each roadmap cites the DavisKahan repository only in a provenance/existing-work
+section; it specifies the mathematics intrinsically and does not prescribe our
+file layout or preserve local wrappers.
+
+## Acceptance gates for any staged Tau Ceti cluster
+
+"Moved to `ForTauCeti` and green" is not "ready." A cluster is ready only when:
+
+- **Roadmap gate** — a drafted `ForTauCetiRoadmap/` target names it; intended
+  generality and namespace conventions are settled.
+- **Mathematical gate** — no paper-specific assumptions/numbering; independently
+  useful; carries the natural basic API, not only the one downstream lemma; every
+  excluded theorem has a precise dependency reason, not "later."
+- **API gate** — Mathlib/Tau Ceti naming; no duplication of existing Tau Ceti
+  structures; no compatibility wrapper presented as canonical; source/target
+  universe and scalar generality decided.
+- **File gate** — under Tau Ceti's 1000-line new-file limit (1500 hard ceiling);
+  minimal imports, public only where part of the exported interface; no
+  `set_option`/linter suppression/heartbeat override; module system + durable
+  provenance.
+- **Verification gate** — from a fresh branch against the pinned Tau Ceti:
+  `lake exe cache get && lake build && lake exe axioms && lake exe module-system`
+  and the environment lint pass, whole repo green.
+- **Downstream gate** — DavisKahan consumers rebuild against the ForTauCeti
+  version with no proof change beyond import/namespace migration; frontier,
+  source-census, dependency-layer, trusted-dependency audits clean.
+- **Cleanup gate** — after a cluster is submission-shaped, no duplicate
+  definition of the same declaration remains importable from both `ForMathlib`
+  and `ForTauCeti`; the extraction manifest and provenance ledger are updated.
+
+## A1--A3 submission split (approximation-number cluster)
+
+The staged six-file cluster is one coherent development but three separately
+reviewable layers; split for "one topic per PR":
+
+- **A1 — basic approximation numbers**: `Basic`, `Adjoint` (definition,
+  elementary API, ideal inequalities, adjoint invariance).
+- **A2 — singular-value identification**: `CourantFischer`, `FiniteDimensional`
+  (finite-dimensional min--max support, Eckart--Young identification).
+- **A3 — infinite-dimensional helpers and modulus**: `MinMax`, `OperatorModulus`
+  (proved half of the infinite-dimensional min--max API, rectangular modulus).
+
+Open namespace questions to settle in the roadmap, not defended only in a PR:
+whether `ContinuousLinearMap.approximationNumber` should extend the global
+Mathlib namespace (good dot-notation reason; still a global commitment) and
+whether the `Cardinal` helper belongs in a global namespace. Audit blanket
+`@[expose] public section` toward selective exposure. Before any real submission,
+recheck upstream duplication (current Tau Ceti, pinned Mathlib, open Mathlib/Tau
+Ceti PRs, Zulip) — in particular the Mathlib approximation-number work this was
+adapted from.
 
 ## Current success metric
 
-For now, measure progress by source endpoints recursively grounded, false source
-claims formally resolved, and hard mathematical leaves closed in the
-`DavisKahan` package.
+Measure progress on the primary track by dependency-closed clusters staged in
+`ForTauCeti` with a drafted roadmap target and all acceptance gates green, and on
+the maintenance track by source endpoints recursively grounded and false source
+claims formally resolved.
 
 Do not measure progress by the number of Spectra files copied, Tau Ceti modules
 created, or namespaces renamed.
