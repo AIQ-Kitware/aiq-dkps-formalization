@@ -9,7 +9,7 @@ import DavisKahan.Sylvester.GenuineSpectrum
 import DavisKahan.DoubleAngle.KyFanOrthonormal
 import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
 import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtFiniteRank
-import ForMathlib.Analysis.InnerProductSpace.FiniteSourceSingularSystem
+import DavisKahan.OperatorIdeal.ApproximationNumbers.FiniteSourceSingularSystem
 import ForMathlib.Analysis.InnerProductSpace.SingularSubspace
 import ForMathlib.Analysis.InnerProductSpace.SpectralOrder.Complex
 
