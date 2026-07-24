@@ -214,7 +214,7 @@ theorem cauchy_fourier_isBigO_rpow_neg_two
     _ = (y / Real.pi) * (x ^ 2)⁻¹ := div_eq_mul_inv _ _
 
 /-- Two-sided integrability of a symmetric exponential. -/
-theorem integrable_exp_neg_mul_abs {y : ℝ} (hy : 0 < y) :
+private theorem integrable_exp_neg_mul_abs {y : ℝ} (hy : 0 < y) :
     Integrable (fun t : ℝ => Real.exp (-y * |t|)) := by
   refine (integrable_iff_integrableOn_Ioi_of_even (fun t => by rw [abs_neg])).mpr ?_
   apply (exp_neg_integrableOn_Ioi 0 hy).congr_fun _ measurableSet_Ioi

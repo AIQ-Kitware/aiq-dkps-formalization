@@ -64,7 +64,7 @@ noncomputable section
 
 /-- One-period Laplace--sine integral, from the elementary antiderivative
 `-(exp (-y*t) * (y * sin t + cos t)) / (1 + y ^ 2)`. -/
-theorem integral_zero_pi_sin_mul_exp_neg (y : ℝ) :
+private theorem integral_zero_pi_sin_mul_exp_neg (y : ℝ) :
     (∫ t in (0 : ℝ)..Real.pi, Real.sin t * Real.exp (-y * t)) =
       (1 + Real.exp (-Real.pi * y)) / (1 + y ^ 2) := by
   have hden : (1 : ℝ) + y ^ 2 ≠ 0 := by positivity
@@ -97,7 +97,7 @@ theorem integral_zero_pi_sin_mul_exp_neg (y : ℝ) :
 
 /-- Partial Laplace transform of the absolute sine over `N` periods.  Each
 period contributes one geometric factor. -/
-theorem integral_abs_sin_mul_exp_neg_upto (y : ℝ) (N : ℕ) :
+private theorem integral_abs_sin_mul_exp_neg_upto (y : ℝ) (N : ℕ) :
     (∫ t in (0 : ℝ)..((N : ℝ) * Real.pi),
         |Real.sin t| * Real.exp (-y * t)) =
       (∑ n ∈ Finset.range N, Real.exp (-Real.pi * y) ^ n) *
@@ -162,7 +162,7 @@ theorem integral_abs_sin_mul_exp_neg_upto (y : ℝ) (N : ℕ) :
       ring
 
 /-- Integrability of the absolute sine against an exponential weight. -/
-theorem integrableOn_abs_sin_mul_exp_neg {y : ℝ} (hy : 0 < y) :
+private theorem integrableOn_abs_sin_mul_exp_neg {y : ℝ} (hy : 0 < y) :
     IntegrableOn (fun t : ℝ => |Real.sin t| * Real.exp (-y * t))
       (Set.Ioi 0) := by
   apply (exp_neg_integrableOn_Ioi 0 hy).mono'
@@ -179,7 +179,7 @@ theorem integrableOn_abs_sin_mul_exp_neg {y : ℝ} (hy : 0 < y) :
 
 /-- The Laplace transform of the absolute sine, by periodic decomposition and
 the geometric series. -/
-theorem integral_Ioi_abs_sin_mul_exp_neg {y : ℝ} (hy : 0 < y) :
+private theorem integral_Ioi_abs_sin_mul_exp_neg {y : ℝ} (hy : 0 < y) :
     (∫ t in Set.Ioi (0 : ℝ), |Real.sin t| * Real.exp (-y * t)) =
       (1 + Real.exp (-Real.pi * y)) /
         ((1 - Real.exp (-Real.pi * y)) * (1 + y ^ 2)) := by
