@@ -218,8 +218,7 @@ private theorem card_filter_ge (k : Fin n) :
 /-- **Courant–Fischer, upper direction.** On any subspace `V` of dimension
 `k + 1` there is a unit vector `x` with `re ⟪T x, x⟫ ≤ λₖ(T)`, where `λ` is the
 decreasing enumeration `LinearMap.IsSymmetric.eigenvalues` of the eigenvalues
-of the symmetric operator `T`.
- -/
+of the symmetric operator `T`. -/
 theorem exists_unit_vector_re_inner_le_eigenvalue
     (hT : T.IsSymmetric) (hn : finrank 𝕜 E = n) (k : Fin n)
     (V : Submodule 𝕜 E) (hV : finrank 𝕜 V = (k : ℕ) + 1) :
@@ -496,9 +495,9 @@ theorem map_mem_specSubspace (hT : T.IsSymmetric) (hn : finrank 𝕜 E = n)
 
 /-- The orthogonal complement of a spectral subspace is the complementary
 spectral subspace: `(span {bᵢ : p i})ᗮ = span {bᵢ : ¬ p i}`. -/
-theorem orthogonal_specSubspace (b : OrthonormalBasis (Fin n) 𝕜 E) (p : Fin n → Prop)
-    [DecidablePred p] :
+theorem orthogonal_specSubspace (b : OrthonormalBasis (Fin n) 𝕜 E) (p : Fin n → Prop) :
     (specSubspace b p)ᗮ = specSubspace b (fun i => ¬ p i) := by
+  classical
   have hEn : finrank 𝕜 E = n := by
     rw [Module.finrank_eq_card_basis b.toBasis, Fintype.card_fin]
   refine (Submodule.eq_of_le_of_finrank_le ?_ ?_).symm
@@ -507,7 +506,7 @@ theorem orthogonal_specSubspace (b : OrthonormalBasis (Fin n) 𝕜 E) (p : Fin n
     rintro y ⟨j, rfl⟩
     rw [SetLike.mem_coe, Submodule.mem_orthogonal]
     intro u hu
-    show ⟪u, b ↑j⟫_𝕜 = 0
+    change ⟪u, b ↑j⟫_𝕜 = 0
     rw [← inner_conj_symm, ← b.repr_apply_apply,
       repr_eq_zero_of_mem_specSubspace b p hu j.2, map_zero]
   · -- dimensions match: `n − #p` on both sides.
