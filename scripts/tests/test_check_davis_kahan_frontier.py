@@ -138,5 +138,43 @@ class PaperResultRowsTest(unittest.TestCase):
             self.assertIsNone(row["recursively_grounded"])
 
 
+class ProbeParserTest(unittest.TestCase):
+    def test_sections_parse_in_diagnostic_order(self) -> None:
+        output = "\n".join([
+            "FRONTIER_BEGIN:a",
+            "ForMathlib.a : Prop",
+            "'ForMathlib.a' depends on axioms: [propext]",
+            "FRONTIER_END:a",
+            "FRONTIER_BEGIN:b",
+            "dev/probe.lean:9:1: error: unknown identifier 'ForMathlib.b'",
+            "FRONTIER_END:b",
+            "FRONTIER_BEGIN:__canary__",
+            "dev/probe.lean:12:1: error: unknown identifier 'NeverResolve'",
+            "FRONTIER_END:__canary__",
+        ])
+        sections, outside = MODULE.parse_probe_sections(output, ["a", "b"])
+        self.assertEqual(outside, [])
+        self.assertIn("ForMathlib.a", "\n".join(sections["a"]))
+        self.assertIn("unknown identifier", "\n".join(sections["b"]))
+
+    def test_missing_markers_is_a_probe_failure(self) -> None:
+        output = "dev/probe.lean:1:0: error: unknown module prefix 'BrokenRoot'"
+        with self.assertRaisesRegex(RuntimeError, "root import may have failed"):
+            MODULE.parse_probe_sections(output, ["a"])
+
+    def test_buffered_stdout_layout_is_rejected(self) -> None:
+        # This is the old failure mode: diagnostics arrived first, then all
+        # stdout markers flushed together at process exit.
+        output = "\n".join([
+            "dev/probe.lean:2:1: error: unknown identifier 'ForMathlib.a'",
+            "FRONTIER_BEGIN:a",
+            "FRONTIER_END:a",
+            "FRONTIER_BEGIN:__canary__",
+            "FRONTIER_END:__canary__",
+        ])
+        sections, outside = MODULE.parse_probe_sections(output, ["a"])
+        self.assertEqual(sections.get("a", []), [])
+        self.assertTrue(outside)
+
 if __name__ == "__main__":
     unittest.main()

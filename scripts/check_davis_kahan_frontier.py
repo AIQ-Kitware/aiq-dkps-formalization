@@ -229,18 +229,76 @@ def write_probe(manifest: dict[str, Any]) -> None:
         node_id = node["id"]
         decl = node["declaration"]
         lines.extend([
-            f'#eval IO.println "FRONTIER_BEGIN:{node_id}"\n',
+            f'#eval IO.eprintln "FRONTIER_BEGIN:{node_id}"\n',
             f"#check @{decl}\n",
             f"#print axioms {decl}\n",
-            f'#eval IO.println "FRONTIER_END:{node_id}"\n\n',
+            f'#eval IO.eprintln "FRONTIER_END:{node_id}"\n\n',
         ])
     # Canary ensures an output parser change cannot silently classify all names as resolved.
     lines.extend([
-        '#eval IO.println "FRONTIER_BEGIN:__canary__"\n',
+        '#eval IO.eprintln "FRONTIER_BEGIN:__canary__"\n',
         "#check @ForMathlib.DavisKahan.Experimental.Frontier.ThisNameMustNeverResolve\n",
-        '#eval IO.println "FRONTIER_END:__canary__"\n',
+        '#eval IO.eprintln "FRONTIER_END:__canary__"\n',
     ])
     PROBE.write_text("".join(lines), encoding="utf8")
+
+
+def parse_probe_sections(
+    output: str, expected_ids: list[str]
+) -> tuple[dict[str, list[str]], list[str]]:
+    """Split Lean probe output into declaration sections.
+
+    Probe markers are emitted with ``IO.eprintln`` so they share stderr's
+    ordering with Lean diagnostics even when output is captured by a pipe.
+    The previous stdout markers could be block-buffered until process exit,
+    causing every declaration section to appear empty and falsely reporting
+    ``0/N`` resolution.
+    """
+    sections: dict[str, list[str]] = collections.defaultdict(list)
+    outside: list[str] = []
+    current: str | None = None
+    begin = re.compile(r"FRONTIER_BEGIN:([^\s]+)")
+    end = re.compile(r"FRONTIER_END:([^\s]+)")
+    begun: list[str] = []
+    ended: list[str] = []
+    for line in output.splitlines():
+        mb = begin.search(line)
+        if mb:
+            node_id = mb.group(1)
+            if current is not None:
+                raise RuntimeError(
+                    f"nested frontier probe marker: began {node_id!r} while "
+                    f"inside {current!r}")
+            current = node_id
+            begun.append(node_id)
+            continue
+        me = end.search(line)
+        if me:
+            node_id = me.group(1)
+            if current != node_id:
+                raise RuntimeError(
+                    f"mismatched frontier probe marker: ended {node_id!r} "
+                    f"while inside {current!r}")
+            ended.append(node_id)
+            current = None
+            continue
+        if current is not None:
+            sections[current].append(line)
+        elif line.strip():
+            outside.append(line)
+    if current is not None:
+        raise RuntimeError(f"unterminated frontier probe section {current!r}")
+    expected = expected_ids + ["__canary__"]
+    if begun != expected or ended != expected:
+        missing_begin = [node_id for node_id in expected if node_id not in begun]
+        missing_end = [node_id for node_id in expected if node_id not in ended]
+        tail = "\n".join(outside[-20:]) or "(no unsectioned Lean output)"
+        raise RuntimeError(
+            "frontier probe markers were not emitted in full; "
+            f"missing begin={missing_begin}, missing end={missing_end}. "
+            "The root import may have failed before the probe commands ran. "
+            f"Unsectioned output tail:\n{tail}")
+    return dict(sections), outside
 
 
 def run_lean_probe(manifest: dict[str, Any]) -> tuple[dict[str, dict[str, Any]], str]:
@@ -254,22 +312,8 @@ def run_lean_probe(manifest: dict[str, Any]) -> tuple[dict[str, dict[str, Any]],
         check=False,
     )
     output = result.stdout
-    # Markers are printed even when the command between them reports an error.
-    sections: dict[str, list[str]] = collections.defaultdict(list)
-    current: str | None = None
-    begin = re.compile(r"FRONTIER_BEGIN:([^\s]+)")
-    end = re.compile(r"FRONTIER_END:([^\s]+)")
-    for line in output.splitlines():
-        mb = begin.search(line)
-        if mb:
-            current = mb.group(1)
-            continue
-        me = end.search(line)
-        if me:
-            current = None
-            continue
-        if current is not None:
-            sections[current].append(line)
+    expected_ids = [node["id"] for node in manifest["nodes"]]
+    sections, outside = parse_probe_sections(output, expected_ids)
     status: dict[str, dict[str, Any]] = {}
     marker = manifest.get("coverage_policy", {}).get("admission_marker", "sorryAx")
     error_re = re.compile(r"\berror(?:\(|:)", re.I)
@@ -278,7 +322,7 @@ def run_lean_probe(manifest: dict[str, Any]) -> tuple[dict[str, dict[str, Any]],
         node_id = node["id"]
         chunk = "\n".join(sections.get(node_id, []))
         has_error = bool(error_re.search(chunk) or unknown_re.search(chunk))
-        resolved = bool(chunk) and not has_error
+        resolved = bool(chunk.strip()) and not has_error
         admitted = marker in chunk if resolved else None
         status[node_id] = {
             "resolved": resolved,
@@ -288,6 +332,14 @@ def run_lean_probe(manifest: dict[str, Any]) -> tuple[dict[str, dict[str, Any]],
     if status["__canary__"]["resolved"]:
         raise RuntimeError(
             "frontier probe parser is broken: the deliberately unknown canary resolved")
+    if not any(status[node_id]["resolved"] for node_id in expected_ids):
+        empty = [node_id for node_id in expected_ids if not sections.get(node_id)]
+        outside_tail = "\n".join(outside[-20:]) or "(none)"
+        raise RuntimeError(
+            "frontier probe resolved zero real declarations; refusing to treat "
+            "this as a valid census. Empty sections: "
+            f"{len(empty)}/{len(expected_ids)}. Unsectioned output tail:\n"
+            f"{outside_tail}")
     status.pop("__canary__", None)
     return status, output
 

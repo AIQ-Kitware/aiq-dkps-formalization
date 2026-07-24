@@ -13,7 +13,6 @@ The original and adapted files are Apache-2.0 licensed.
 
 import DavisKahan.Experimental.Scratch.FreeBeam.Abstract.PositiveSurjectiveCriterion
 import ForMathlib.Analysis.InnerProductSpace.CoerciveUnit
-import Mathlib.LinearAlgebra.Submodule.Equiv
 import Mathlib.Tactic
 
 /-!
@@ -139,7 +138,7 @@ theorem isClosed_graph_rangeInverse
   have hzinv : rangeInverse R hinj z = y := by
     apply hinj
     rw [apply_rangeInverse]
-    exact hRyx
+    simpa [z] using hRyx.symm
   refine ⟨z, ?_⟩
   ext
   · rfl
@@ -202,7 +201,7 @@ theorem inverseClosedOperator_isSymmetric
             rw [R_inverseClosedOperator_apply]
     _ = ⟪R ((inverseClosedOperator R hR hinj).toLinearMap x),
           (inverseClosedOperator R hR hinj).toLinearMap y⟫_ℂ := by
-            exact hR.isSymmetric _ _
+            exact (hR.isSymmetric _ _).symm
     _ = ⟪(x : H),
           (inverseClosedOperator R hR hinj).toLinearMap y⟫_ℂ := by
             rw [R_inverseClosedOperator_apply]
@@ -229,8 +228,8 @@ theorem inverseClosedOperator_one_add_surjective
   have hunit : IsUnit (1 + R) := by
     apply ContinuousLinearMap.isUnit_of_coercive one_pos
     intro z
-    change ‖z‖ ^ 2 ≤ RCLike.re ⟪z + R z, z⟫_ℂ
-    rw [inner_add_left, map_add, inner_self_eq_norm_sq]
+    have hNz : (1 + R) z = z + R z := rfl
+    rw [one_mul, hNz, inner_add_left, map_add, inner_self_eq_norm_sq]
     nlinarith [hRpos z]
   intro h
   let y : H := Ring.inverse (1 + R) h
@@ -241,7 +240,9 @@ theorem inverseClosedOperator_one_add_surjective
     Ring.mul_inverse_cancel (1 + R) hunit
   have happ := DFunLike.congr_fun hmul h
   change y + R y = h at happ
-  change y + R y = h
+  change (inverseClosedOperator R hR hinj).toLinearMap
+      ⟨R y, LinearMap.mem_range_self R.toLinearMap y⟩ + R y = h
+  rw [inverseClosedOperator_apply_R]
   exact happ
 
 /-- The densely defined inverse of a bounded positive self-adjoint injective

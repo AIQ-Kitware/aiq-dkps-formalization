@@ -159,7 +159,12 @@ noncomputable def freeFourthAmbient
       ⟨D.freeEmbed x,
         LinearMap.mem_range_self D.freeEmbed.toLinearMap x⟩ =
       D.freeFourth x := by
-  simp [freeFourthAmbient]
+  change D.freeFourth
+      (D.freeAmbientInverse
+        ⟨D.freeEmbed x,
+          LinearMap.mem_range_self D.freeEmbed.toLinearMap x⟩) =
+    D.freeFourth x
+  rw [D.freeAmbientInverse_freeEmbed]
 
 /-- Density of a concrete smooth free core inside the ambient Hilbert space is
  enough to prove density of the transported free operator domain. -/
