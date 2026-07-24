@@ -149,6 +149,27 @@ Graduated out of the Experimental file tree, green each step:
 
 = 16 of 33 grounded nodes graduated. Remaining 17 are the deep clusters above.
 
+Additionally, `Frontier/Core` is now a **pure 2-sorry stub**: its 9 grounded
+declarations were split into production —
+`Geometry/Halmos/GenericRotationPredicates` (5 S3 predicates),
+`Geometry/Halmos/UnitaryEquivalence` (`PairOfSubspacesUnitaryEquivalent`,
+`BoundedOperatorsUnitaryEquivalent`), and
+`Interop/Spectra/CircleRieszProjection` (`CircleSeparatesRealSpectrum`,
+`circleRieszProjection`). Core retains only `SameSpectralMultiplicity` /
+`sameSpectralMultiplicity_iff_unitarilyEquivalent` (the ungrounded
+`s3-spectral-multiplicity-*` nodes) and re-exports the production helpers.
+
+**Now unblocked for the next pass** (their only Experimental dep was Core's
+grounded helpers, now production): `MathAhead/HiddenFoundations/HalmosClassification`
+(repoint its `Frontier.Core` import → `Geometry/Halmos/UnitaryEquivalence`, then it
+has 0 Experimental deps → graduate); and RieszCircle's Core dependency is now on
+production `Interop/Spectra/CircleRieszProjection` (its remaining blocker is
+`CayleySelectorBridge` → `Sylvester/Resolvent`).
+
+Next-session order: HalmosClassification (clean) → DoubleAngle (sorry-split first)
+→ Section3Nonacute chain → then Section3/Section4 grounded heads → RieszCircle
+after CayleySelectorBridge/Resolvent.
+
 ## Blockers named explicitly
 
 - `Frontier/Core` (2 sorries) blocks Lemma63, RemainingSourceSurface, Section3, RieszCircle.
