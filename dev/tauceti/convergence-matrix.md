@@ -84,6 +84,42 @@ Upstream roadmap / PR     — the ForTauCetiRoadmap area this maps to
 
 NOT: `copy ForMathlib → ForTauCeti → submit`.
 
+## Wave 1 — status (2026-07-24)
+
+- **Done (commit `f73d9e7`):** the approximation-number cluster deduped. The five
+  `ForMathlib/Analysis/Normed/Operator/ApproximationNumber*` originals were
+  deleted; the four live ones map to the existing `ForTauCeti` twins
+  (`Basic`/`Adjoint`/`MinMax`/`FiniteDimensional`), `ApproximationNumberHilbert`
+  was a declaration-free aggregate with 0 consumers and was deleted. Consumers
+  repointed (FQNs unchanged — `ContinuousLinearMap.*` dot-notation). Exactly one
+  importable `ContinuousLinearMap.approximationNumber`. No alternates warranted
+  (statements+proofs were byte-identical). Gates green: layer OK (672 modules),
+  census CLEAN, frontier 80/80 textual.
+- **Blocked — the CourantFischer dedup pulls a runaway closure.** Closed under
+  both forward imports and reverse ForMathlib importers (firewall), CourantFischer
+  drags **42 of 54** ForMathlib modules — the whole singular-value / UI-norm /
+  frame subgraph **plus an unrelated probability/statistics subsystem**
+  (`Probability/Moments/*`, `MeasureTheory/CfcMeasurable`, matrix-measurability).
+  The attaching edges to break first: `EntrywiseEigenvalue → CourantFischer`
+  (drags stats via `EntrywiseEigenvalue → MatrixConcentration → SampleCovariance
+  → …`) and the `KyFan → {Spectrum, PolarDecomposition, ProjectionGeometry}`
+  norm/frame tangle. **Decision needed (phase 0):** classify the
+  probability/statistics subsystem as its own component (likely its own migration
+  or DavisKahan-bound), and sever `EntrywiseEigenvalue → CourantFischer`, before
+  CourantFischer can dedup. Do NOT migrate the 42-file runaway as one blob.
+- **Regression surfaced (maintenance-track, pre-Wave-1):** two DavisKahan modules
+  are build-broken at HEAD because an earlier leaf migration
+  (`OperatorAbsoluteValue`, `SelfAdjointGapInverse` → ForTauCeti) moved
+  `operatorAbs` and `IsSelfAdjoint.exists_two_sided_inverse_of_spectrum_gap` out
+  of `ForMathlib` without repointing these consumers:
+  `DavisKahan/TanTheta/UnboundedGenuineSpectrum` (needs
+  `TauCeti.IsSelfAdjoint.exists_two_sided_inverse_of_spectrum_gap` from
+  `ForTauCeti/Analysis/CStarAlgebra/SelfAdjointGapInverse`) and
+  `DavisKahan/Sources/DavisKahan1970/SineTheta/Sharpness` (needs
+  `TauCeti.operatorAbs` from `ForTauCeti/Analysis/InnerProductSpace/OperatorAbsoluteValue`).
+  Stale oleans masked this; it drops the frontier Lean-resolution probe to "not
+  available". Being repaired.
+
 ## Refactor waves
 
 ### Wave 1 — internal deduplication (Track A; can begin immediately)
@@ -102,6 +138,18 @@ Known duplicate families (see matrix): Courant–Fischer infrastructure;
 approximation-number definitions and lemmas; approximation-number
 adjoint/min–max/singular-value files; some operator-absolute-value
 infrastructure. Mechanical; runs alongside roadmap discussion.
+
+**Preserve interesting alternate proofs.** Deduplication removes duplicate
+*declarations* (exactly one importable copy of each fully-qualified name), but a
+*materially different and mathematically interesting proof* of the same statement
+is worth keeping. When two copies prove the same result by genuinely different
+methods, keep one canonical declaration and move the alternate proof — renamed so
+it does not collide with the canonical name, with a docstring noting it is an
+alternate — to an `Alternates` folder: `DavisKahan/Alternative/` for paper-facing
+alternates, `ForTauCeti/.../Alternates/` (mirroring the module path) for reusable
+ones. The alternate must still compile and pass all gates. This is a judgment
+call: keep alternates only for genuinely interesting methods, not routine
+variations; when in doubt, keep and flag it.
 
 ### Wave 2 — canonical unbounded-operator refactor onto `LinearPMap`
 
