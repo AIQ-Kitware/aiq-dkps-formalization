@@ -9,7 +9,7 @@ import DavisKahan.Sylvester.GenuineSpectrum
 import DavisKahan.DoubleAngle.KyFanOrthonormal
 import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
 import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtFiniteRank
-import ForMathlib.Analysis.InnerProductSpace.SingularSystem
+import ForMathlib.Analysis.InnerProductSpace.FiniteSourceSingularSystem
 import ForMathlib.Analysis.InnerProductSpace.SingularSubspace
 import ForMathlib.Analysis.InnerProductSpace.SpectralOrder.Complex
 
@@ -130,9 +130,10 @@ theorem theorem63_singularValues_sine_le_one
     (Z V : Submodule ℂ H) [Z.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] [FiniteDimensional ℂ Z]
     (i : Fin (finrank ℂ Z)) :
-    (theorem63DirectedSineBlock Z V).toLinearMap.singularValues i ≤ 1 := by
-  exact singularValues_le_one_of_contraction
-    (theorem63DirectedSineBlock_apply_norm_le Z V) rfl i
+    finiteSourceSingularValue (theorem63DirectedSineBlock Z V) i ≤ 1 := by
+  exact finiteSourceSingularValue_le_one_of_contraction
+    (theorem63DirectedSineBlock Z V)
+    (theorem63DirectedSineBlock_apply_norm_le Z V) i
 
 /-- The source spectral placement forces the directed cosine projection to be
 injective.  This is the unequal-dimensional, directed replacement for the
@@ -184,17 +185,17 @@ theorem theorem63_singularValues_sine_lt_one
     (hUnwantedLower : ∀ y ∈ Vᗮ,
       (alpha + delta) * ‖y‖ ^ 2 ≤ RCLike.re ⟪T y, y⟫_ℂ)
     (i : Fin (finrank ℂ Z)) :
-    (theorem63DirectedSineBlock Z V).toLinearMap.singularValues i < 1 := by
-  let S := (theorem63DirectedSineBlock Z V).toLinearMap
-  let v := rightSingularBasis S i
-  have hle : S.singularValues i ≤ 1 :=
+    finiteSourceSingularValue (theorem63DirectedSineBlock Z V) i < 1 := by
+  let S := theorem63DirectedSineBlock Z V
+  let v := finiteSourceRightSingularBasis S i
+  have hle : finiteSourceSingularValue S i ≤ 1 :=
     theorem63_singularValues_sine_le_one Z V i
   by_contra hlt
-  have hsigma : S.singularValues i = 1 :=
+  have hsigma : finiteSourceSingularValue S i = 1 :=
     le_antisymm hle (not_lt.mp hlt)
-  have hvnorm : ‖v‖ = 1 := (rightSingularBasis S).orthonormal.norm_eq_one i
+  have hvnorm : ‖v‖ = 1 := (finiteSourceRightSingularBasis S).orthonormal.norm_eq_one i
   have hSnorm : ‖S v‖ = 1 := by
-    rw [norm_apply_rightSingularBasis, hsigma]
+    rw [norm_apply_finiteSourceRightSingularBasis, hsigma]
   have hperpnorm : ‖Vᗮ.starProjection (v : H)‖ = 1 := hSnorm
   have hpyth := Submodule.norm_sq_eq_add_norm_sq_starProjection (v : H) V
   have hvambient : ‖(v : H)‖ = 1 := hvnorm
@@ -209,31 +210,31 @@ theorem theorem63_singularValues_sine_lt_one
     apply Subtype.ext
     change V.starProjection (v : H) = V.starProjection (0 : H)
     simpa using hprojzero
-  exact (rightSingularBasis S).orthonormal.ne_zero i hvzero
+  exact (finiteSourceRightSingularBasis S).orthonormal.ne_zero i hvzero
 
 /-- The subtype adjoint acts on a nonzero directed-sine left singular vector
 by the corresponding singular relation. -/
-theorem theorem63_subtypeAdjoint_apply_leftSingularVector
+theorem theorem63_subtypeAdjoint_apply_finiteSourceLeftSingularVector
     (Z V : Submodule ℂ H) [Z.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] [FiniteDimensional ℂ Z]
     {i : Fin (finrank ℂ Z)}
-    (hi : (theorem63DirectedSineBlock Z V).toLinearMap.singularValues i ≠ 0) :
+    (hi : finiteSourceSingularValue (theorem63DirectedSineBlock Z V) i ≠ 0) :
     Z.subtypeL.adjoint
-        (leftSingularVector
-          (theorem63DirectedSineBlock Z V).toLinearMap i) =
-      ((((theorem63DirectedSineBlock Z V).toLinearMap.singularValues i : ℝ) : ℂ) •
-        rightSingularBasis
-          (theorem63DirectedSineBlock Z V).toLinearMap i) := by
-  let S := (theorem63DirectedSineBlock Z V).toLinearMap
-  let y := leftSingularVector S i
-  have hSadj : S.adjoint y = ((S.singularValues i : ℝ) : ℂ) •
-      rightSingularBasis S i := adjoint_apply_leftSingularVector S hi
+        (finiteSourceLeftSingularVector
+          (theorem63DirectedSineBlock Z V) i) =
+      (((finiteSourceSingularValue (theorem63DirectedSineBlock Z V) i : ℝ) : ℂ) •
+        finiteSourceRightSingularBasis
+          (theorem63DirectedSineBlock Z V) i) := by
+  let S := theorem63DirectedSineBlock Z V
+  let y := finiteSourceLeftSingularVector S i
+  have hSadj : S.adjoint y = ((finiteSourceSingularValue S i : ℝ) : ℂ) •
+      finiteSourceRightSingularBasis S i := adjoint_apply_finiteSourceLeftSingularVector S hi
   have hyVperp : y ∈ Vᗮ := by
-    dsimp [y]
-    rw [leftSingularVector]
-    exact Vᗮ.smul_mem _
-      (Vᗮ.starProjection_apply_mem
-        ((rightSingularBasis S i : Z) : H))
+    have hyRange : y ∈ S.range := by
+      simpa [y] using finiteSourceLeftSingularVector_mem_range S i
+    rcases hyRange with ⟨x, hx⟩
+    rw [← hx]
+    exact Vᗮ.starProjection_apply_mem ((x : Z) : H)
   apply ext_inner_right ℂ
   intro z
   calc
@@ -243,10 +244,10 @@ theorem theorem63_subtypeAdjoint_apply_leftSingularVector
       rw [← Vᗮ.inner_starProjection_left_eq_right,
         Submodule.starProjection_eq_self_iff.mpr hyVperp]
     _ = ⟪S.adjoint y, z⟫_ℂ := by
-      rw [LinearMap.adjoint_inner_left]
-      rfl
-    _ = ⟪((S.singularValues i : ℝ) : ℂ) •
-          rightSingularBasis S i, z⟫_ℂ := by rw [hSadj]
+      change ⟪y, S z⟫_ℂ = ⟪S.adjoint y, z⟫_ℂ
+      exact (ContinuousLinearMap.adjoint_inner_left S z y).symm
+    _ = ⟪((finiteSourceSingularValue S i : ℝ) : ℂ) •
+          finiteSourceRightSingularBasis S i, z⟫_ℂ := by rw [hSadj]
 
 /-- The normalized residual-side witness associated with one directed sine
 singular vector. -/
@@ -254,12 +255,12 @@ noncomputable def theorem63ResidualWitness
     (Z V : Submodule ℂ H) [Z.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] [FiniteDimensional ℂ Z]
     (i : Fin (finrank ℂ Z)) : H :=
-  let S := (theorem63DirectedSineBlock Z V).toLinearMap
-  let sigma := S.singularValues i
-  let v := rightSingularBasis S i
+  let S := theorem63DirectedSineBlock Z V
+  let sigma := finiteSourceSingularValue S i
+  let v := finiteSourceRightSingularBasis S i
   if sigma = 0 then (v : H) else
     (((Real.sqrt (1 - sigma ^ 2) : ℝ) : ℂ)⁻¹) •
-      (leftSingularVector S i - ((sigma : ℝ) : ℂ) • (v : H))
+      (finiteSourceLeftSingularVector S i - ((sigma : ℝ) : ℂ) • (v : H))
 
 /-- The residual witnesses form an orthonormal family once the source gap has
 excluded the tangent pole. -/
@@ -274,16 +275,16 @@ theorem orthonormal_theorem63ResidualWitness
       (alpha + delta) * ‖y‖ ^ 2 ≤ RCLike.re ⟪T y, y⟫_ℂ) :
     Orthonormal ℂ (theorem63ResidualWitness Z V) := by
   classical
-  let S := (theorem63DirectedSineBlock Z V).toLinearMap
+  let S := theorem63DirectedSineBlock Z V
   rw [orthonormal_iff_ite]
   intro i j
-  let sigma_i := S.singularValues i
-  let sigma_j := S.singularValues j
-  let v_i := rightSingularBasis S i
-  let v_j := rightSingularBasis S j
+  let sigma_i := finiteSourceSingularValue S i
+  let sigma_j := finiteSourceSingularValue S j
+  let v_i := finiteSourceRightSingularBasis S i
+  let v_j := finiteSourceRightSingularBasis S j
   have hvv : ⟪v_i, v_j⟫_ℂ = if i = j then 1 else 0 := by
     simpa [v_i, v_j] using
-      (orthonormal_iff_ite.mp (rightSingularBasis S).orthonormal i j)
+      (orthonormal_iff_ite.mp (finiteSourceRightSingularBasis S).orthonormal i j)
   have hZZ : ⟪(v_i : H), (v_j : H)⟫_ℂ = if i = j then 1 else 0 := by
     simpa [Submodule.coe_inner] using hvv
   by_cases hij : i = j
@@ -294,15 +295,15 @@ theorem orthonormal_theorem63ResidualWitness
         simp [theorem63ResidualWitness, S, sigma_i, v_i, hsigma]
       rw [hw]
       simpa [hZZ]
-    · let y := leftSingularVector S i
+    · let y := finiteSourceLeftSingularVector S i
       have hyy : ⟪y, y⟫_ℂ = 1 := by
         simpa [y] using
-          (orthonormal_iff_ite.mp (orthonormal_leftSingularVector_subtype S)
+          (orthonormal_iff_ite.mp (orthonormal_finiteSourceLeftSingularVector_subtype S)
             ⟨i, hsigma⟩ ⟨i, hsigma⟩)
       have hZadj : Z.subtypeL.adjoint y =
           ((sigma_i : ℝ) : ℂ) • v_i := by
         simpa [S, sigma_i, v_i, y] using
-          theorem63_subtypeAdjoint_apply_leftSingularVector Z V hsigma
+          theorem63_subtypeAdjoint_apply_finiteSourceLeftSingularVector Z V hsigma
       have hZv_y : ⟪(v_i : H), y⟫_ℂ = ((sigma_i : ℝ) : ℂ) := by
         calc
           ⟪(v_i : H), y⟫_ℂ = ⟪v_i, Z.subtypeL.adjoint y⟫_ℂ :=
@@ -311,7 +312,7 @@ theorem orthonormal_theorem63ResidualWitness
           _ = ((sigma_i : ℝ) : ℂ) := by
             rw [inner_smul_right]
             simpa [v_i] using
-              (rightSingularBasis S).orthonormal.inner_self i
+              (finiteSourceRightSingularBasis S).orthonormal.inner_self i
       have hy_Zv : ⟪y, (v_i : H)⟫_ℂ = ((sigma_i : ℝ) : ℂ) := by
         calc
           ⟪y, (v_i : H)⟫_ℂ = ⟪Z.subtypeL.adjoint y, v_i⟫_ℂ :=
@@ -320,8 +321,8 @@ theorem orthonormal_theorem63ResidualWitness
           _ = ((sigma_i : ℝ) : ℂ) := by
             rw [inner_smul_left, RCLike.conj_ofReal]
             simpa [v_i] using
-              (rightSingularBasis S).orthonormal.inner_self i
-      have hsigma_nonneg : 0 ≤ sigma_i := S.singularValues_nonneg i
+              (finiteSourceRightSingularBasis S).orthonormal.inner_self i
+      have hsigma_nonneg : 0 ≤ sigma_i := finiteSourceSingularValue_nonneg S i
       have hsigma_lt : sigma_i < 1 := by
         simpa [S, sigma_i] using theorem63_singularValues_sine_lt_one
           T hT V Z hV hdelta hCompressionUpper hUnwantedLower i
@@ -354,11 +355,11 @@ theorem orthonormal_theorem63ResidualWitness
       · have hwj : theorem63ResidualWitness Z V j = (v_j : H) := by
           simp [theorem63ResidualWitness, S, sigma_j, v_j, hj]
         rw [hwi, hwj, hZZ, if_neg hij]
-      · let yj := leftSingularVector S j
+      · let yj := finiteSourceLeftSingularVector S j
         have hZadjj : Z.subtypeL.adjoint yj =
             ((sigma_j : ℝ) : ℂ) • v_j := by
           simpa [S, sigma_j, v_j, yj] using
-            theorem63_subtypeAdjoint_apply_leftSingularVector Z V hj
+            theorem63_subtypeAdjoint_apply_finiteSourceLeftSingularVector Z V hj
         have hraw :
             ⟪(v_i : H),
               yj - ((sigma_j : ℝ) : ℂ) • (v_j : H)⟫_ℂ = 0 := by
@@ -378,11 +379,11 @@ theorem orthonormal_theorem63ResidualWitness
               (yj - ((sigma_j : ℝ) : ℂ) • (v_j : H))) := by
           simp [theorem63ResidualWitness, S, sigma_j, v_j, yj, cj, hj]
         rw [hwi, hwj, inner_smul_right, hraw, mul_zero]
-    · let yi := leftSingularVector S i
+    · let yi := finiteSourceLeftSingularVector S i
       have hZadji : Z.subtypeL.adjoint yi =
           ((sigma_i : ℝ) : ℂ) • v_i := by
         simpa [S, sigma_i, v_i, yi] using
-          theorem63_subtypeAdjoint_apply_leftSingularVector Z V hi
+          theorem63_subtypeAdjoint_apply_finiteSourceLeftSingularVector Z V hi
       by_cases hj : sigma_j = 0
       · have hraw :
             ⟪yi - ((sigma_i : ℝ) : ℂ) • (v_i : H),
@@ -405,14 +406,14 @@ theorem orthonormal_theorem63ResidualWitness
         have hwj : theorem63ResidualWitness Z V j = (v_j : H) := by
           simp [theorem63ResidualWitness, S, sigma_j, v_j, hj]
         rw [hwi, hwj, inner_smul_left, hraw, mul_zero]
-      · let yj := leftSingularVector S j
+      · let yj := finiteSourceLeftSingularVector S j
         have hZadjj : Z.subtypeL.adjoint yj =
             ((sigma_j : ℝ) : ℂ) • v_j := by
           simpa [S, sigma_j, v_j, yj] using
-            theorem63_subtypeAdjoint_apply_leftSingularVector Z V hj
+            theorem63_subtypeAdjoint_apply_finiteSourceLeftSingularVector Z V hj
         have hyy : ⟪yi, yj⟫_ℂ = 0 := by
           simpa [yi, yj, hij] using
-            (orthonormal_iff_ite.mp (orthonormal_leftSingularVector_subtype S)
+            (orthonormal_iff_ite.mp (orthonormal_finiteSourceLeftSingularVector_subtype S)
               ⟨i, hi⟩ ⟨j, hj⟩)
         have hraw :
             ⟪yi - ((sigma_i : ℝ) : ℂ) • (v_i : H),
@@ -475,15 +476,15 @@ theorem theorem63ResidualWitness_scalar
     delta * approximationSingularValue i tanTheta0 ≤
       RCLike.re ⟪theorem63ResidualWitness Z V i,
         theorem63Residual T Z
-          (rightSingularBasis
-            (theorem63DirectedSineBlock Z V).toLinearMap i)⟫_ℂ := by
-  let S := (theorem63DirectedSineBlock Z V).toLinearMap
+          (finiteSourceRightSingularBasis
+            (theorem63DirectedSineBlock Z V) i)⟫_ℂ := by
+  let S := theorem63DirectedSineBlock Z V
   let M := theorem63Compression T Z
   let R := theorem63Residual T Z
-  let sigma := S.singularValues i
-  let v := rightSingularBasis S i
-  have hvnorm : ‖v‖ = 1 := (rightSingularBasis S).orthonormal.norm_eq_one i
-  have hsigma_nonneg : 0 ≤ sigma := S.singularValues_nonneg i
+  let sigma := finiteSourceSingularValue S i
+  let v := finiteSourceRightSingularBasis S i
+  have hvnorm : ‖v‖ = 1 := (finiteSourceRightSingularBasis S).orthonormal.norm_eq_one i
+  have hsigma_nonneg : 0 ≤ sigma := finiteSourceSingularValue_nonneg S i
   have hsigma_lt : sigma < 1 := by
     simpa [S, sigma] using theorem63_singularValues_sine_lt_one
       T hT V Z hV hdelta hCompressionUpper hUnwantedLower i
@@ -491,7 +492,7 @@ theorem theorem63ResidualWitness_scalar
     Real.sqrt_pos.2 (by nlinarith)
   have hSapprox : approximationSingularValue i
       (theorem63DirectedSineBlock Z V) = sigma := by
-    simpa [S, sigma] using approximationSingularValue_eq_singularValues S i
+    simpa [S, sigma] using approximationSingularValue_eq_finiteSourceSingularValue S i
   have htan_i : approximationSingularValue i tanTheta0 =
       sigma / Real.sqrt (1 - sigma ^ 2) := by
     rw [htan i, hSapprox, Real.tan_arcsin]
@@ -505,24 +506,25 @@ theorem theorem63ResidualWitness_scalar
     change 0 ≤ RCLike.re ⟪(v : H), R v⟫_ℂ
     rw [horth]
     simp
-  · let y := leftSingularVector S i
+  · let y := finiteSourceLeftSingularVector S i
     have hynorm : ‖y‖ = 1 := by
       simpa [y] using
-        (orthonormal_leftSingularVector_subtype S).norm_eq_one ⟨i, hsigma_zero⟩
+        (orthonormal_finiteSourceLeftSingularVector_subtype S).norm_eq_one ⟨i, hsigma_zero⟩
     have hSv : S v = ((sigma : ℝ) : ℂ) • y := by
       simpa [S, sigma, v, y] using
-        apply_rightSingularBasis_eq_smul_leftSingularVector S i
+        apply_finiteSourceRightSingularBasis_eq_smul_leftSingularVector S i
     have hSadj : S.adjoint y = ((sigma : ℝ) : ℂ) • v := by
       simpa [S, sigma, v, y] using
-        adjoint_apply_leftSingularVector S hsigma_zero
+        adjoint_apply_finiteSourceLeftSingularVector S hsigma_zero
     have hyVperp : y ∈ Vᗮ := by
-      dsimp [y]
-      rw [leftSingularVector]
-      exact Vᗮ.smul_mem _
-        (Vᗮ.starProjection_apply_mem ((v : Z) : H))
+      have hyRange : y ∈ S.range := by
+        simpa [y] using finiteSourceLeftSingularVector_mem_range S i
+      rcases hyRange with ⟨x, hx⟩
+      rw [← hx]
+      exact Vᗮ.starProjection_apply_mem ((x : Z) : H)
     have hZadj : Z.subtypeL.adjoint y = ((sigma : ℝ) : ℂ) • v := by
       simpa [S, sigma, v, y] using
-        theorem63_subtypeAdjoint_apply_leftSingularVector Z V hsigma_zero
+        theorem63_subtypeAdjoint_apply_finiteSourceLeftSingularVector Z V hsigma_zero
     have hMupper : RCLike.re ⟪M v, v⟫_ℂ ≤ alpha := by
       have h := hCompressionUpper v
       simpa [hvnorm] using h
@@ -541,7 +543,7 @@ theorem theorem63ResidualWitness_scalar
       have hsyl' : T (S v) - S (M v) = Vᗮ.starProjection (R v) := by
         simpa [S, M, R] using hsyl
       have hSM : ⟪y, S (M v)⟫_ℂ = ⟪S.adjoint y, M v⟫_ℂ := by
-        exact (LinearMap.adjoint_inner_left S (M v) y).symm
+        exact (ContinuousLinearMap.adjoint_inner_left S (M v) y).symm
       have hcomplex :
           ⟪y, R v⟫_ℂ =
             ((sigma : ℂ) * (⟪y, T y⟫_ℂ - ⟪v, M v⟫_ℂ)) := by
@@ -627,14 +629,14 @@ private theorem theorem6_3_kyFan_core_of_le_finrank
       (orthonormal_iff_ite.mp huFull (castIndex i) (castIndex j))
   have hv : Orthonormal ℂ
       (fun i : Fin k =>
-        (rightSingularBasis
-          (theorem63DirectedSineBlock Z V).toLinearMap (castIndex i) : Z)) := by
+        (finiteSourceRightSingularBasis
+          (theorem63DirectedSineBlock Z V) (castIndex i) : Z)) := by
     rw [orthonormal_iff_ite]
     intro i j
     simpa [castIndex] using
       (orthonormal_iff_ite.mp
-        (rightSingularBasis
-          (theorem63DirectedSineBlock Z V).toLinearMap).orthonormal
+        (finiteSourceRightSingularBasis
+          (theorem63DirectedSineBlock Z V)).orthonormal
         (castIndex i) (castIndex j))
   have hsum := sum_le_kyFanApproximationGauge_of_orthonormal
     (theorem63Residual T Z) hu hv

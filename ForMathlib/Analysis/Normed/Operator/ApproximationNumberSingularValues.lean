@@ -36,7 +36,7 @@ universe u v w
 variable {𝕜 : Type u} [RCLike 𝕜]
 variable {E : Type v} {F : Type w}
   [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [FiniteDimensional 𝕜 E]
-  [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
+  [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [FiniteDimensional 𝕜 F]
 
 /-- The first `k` indices of `Fin n` have cardinality `k`. -/
 private theorem card_filter_lt {n k : ℕ} (hk : k ≤ n) :

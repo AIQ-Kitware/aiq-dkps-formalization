@@ -144,7 +144,7 @@ theorem singularValues_le_approximationSingularValue
     [NormedAddCommGroup E₀] [InnerProductSpace 𝕜 E₀]
     [FiniteDimensional 𝕜 E₀]
     [NormedAddCommGroup F₀] [InnerProductSpace 𝕜 F₀]
-    [CompleteSpace F₀]
+    [FiniteDimensional 𝕜 F₀]
     (A : E₀ →ₗ[𝕜] F₀) (n : ℕ) :
     A.singularValues n ≤
       approximationSingularValue n A.toContinuousLinearMap := by
@@ -159,7 +159,7 @@ theorem approximationSingularValue_eq_singularValues
     [NormedAddCommGroup E₀] [InnerProductSpace 𝕜 E₀]
     [FiniteDimensional 𝕜 E₀]
     [NormedAddCommGroup F₀] [InnerProductSpace 𝕜 F₀]
-    [CompleteSpace F₀]
+    [FiniteDimensional 𝕜 F₀]
     (A : E₀ →ₗ[𝕜] F₀) (n : ℕ) :
     approximationSingularValue n A.toContinuousLinearMap =
       A.singularValues n := by

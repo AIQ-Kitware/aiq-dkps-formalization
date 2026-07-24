@@ -42,7 +42,7 @@ open scoped InnerProductSpace
 
 variable {𝕜 E F : Type*} [RCLike 𝕜]
   [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [FiniteDimensional 𝕜 E]
-  [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
+  [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [FiniteDimensional 𝕜 F]
 
 /-- The right singular basis, chosen as the sorted orthonormal eigenbasis of `A†A`. -/
 noncomputable def rightSingularBasis (A : E →ₗ[𝕜] F) :
@@ -188,7 +188,7 @@ theorem eq_sum_singularValue_rankOne (A : E →ₗ[𝕜] F) :
 
 /-- The nonzero left singular family extends to an orthonormal basis of the codomain. -/
 theorem exists_orthonormalBasis_extending_leftSingularVector
-    [FiniteDimensional 𝕜 F] (A : E →ₗ[𝕜] F) :
+    (A : E →ₗ[𝕜] F) :
     ∃ b : OrthonormalBasis (Fin (finrank 𝕜 F)) 𝕜 F,
       Set.range
           (fun i : {j : Fin (finrank 𝕜 E) // A.singularValues j ≠ 0} =>
