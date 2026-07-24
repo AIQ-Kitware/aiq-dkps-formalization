@@ -5,9 +5,10 @@ Formalized by Claude Opus 4.8 (claude-opus-4-8[1m]); golfed (drop unused
 `set … with`, `intro;exact` → term mode) per the `mathlib-quality` rules.
 To be re-authored per Mathlib's AI-contribution policy at PR time.
 -/
+module
 
-import Mathlib.Analysis.Matrix.Spectrum
-import Mathlib.Analysis.Matrix.PosDef
+public import Mathlib.Analysis.Matrix.Spectrum
+public import Mathlib.Analysis.Matrix.PosDef
 
 /-! # Vanishing tail of the sorted eigenvalues of a low-rank PSD matrix
 
@@ -23,10 +24,24 @@ sorted and unsorted eigenvalues differ by the index equivalence used to *define*
 
 ## Main result
 
-* `ForMathlib.Matrix.PosSemidef.eigenvalues₀_eq_zero_of_le`
+* `TauCeti.Matrix.PosSemidef.eigenvalues₀_eq_zero_of_le`
+
+## Provenance
+
+* Original repository: Davis--Kahan/DKPS formalization (Kitware, Inc.).
+* Original module: `ForMathlib/Analysis/Matrix/Spectrum.lean`
+  at Davis--Kahan commit `fc38eb4`.
+* Original declaration: `ForMathlib.Matrix.PosSemidef.eigenvalues₀_eq_zero_of_le`.
+* Original authorship: formalized by Claude Opus 4.8 (`claude-opus-4-8[1m]`);
+  staged for Mathlib (no separate copyright line in the source header), released
+  under Apache 2.0.
+* Extraction class: **copied**, converted to the Tau Ceti module system.
+* Spectra influence: **none** (imports only Mathlib).
 -/
 
-namespace ForMathlib.Matrix
+@[expose] public section
+
+namespace TauCeti.Matrix
 
 open scoped BigOperators ComplexOrder
 open Matrix
@@ -75,4 +90,4 @@ theorem PosSemidef.eigenvalues₀_eq_zero_of_le {B : Matrix n n 𝕜}
   rw [hcount] at hcard_le
   omega
 
-end ForMathlib.Matrix
+end TauCeti.Matrix

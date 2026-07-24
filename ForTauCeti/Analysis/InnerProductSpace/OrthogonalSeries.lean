@@ -3,8 +3,10 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import Mathlib.Analysis.InnerProductSpace.Subspace
-import Mathlib.Topology.Algebra.InfiniteSum.Real
+module
+
+public import Mathlib.Analysis.InnerProductSpace.Subspace
+public import Mathlib.Topology.Algebra.InfiniteSum.Real
 
 /-!
 # Orthogonal series from bounded finite partial sums
@@ -17,12 +19,26 @@ The main point is that pairwise orthogonality converts unconditional
 summability into scalar square summability.  A uniform bound on all finite
 partial sums therefore gives summability directly, without a separate
 closedness theorem for a parameterized family of series.
+
+## Provenance
+
+* Original repository: Davis--Kahan/DKPS formalization (Kitware, Inc.).
+* Original module: `ForMathlib/Analysis/InnerProductSpace/OrthogonalSeries.lean`
+  at Davis--Kahan commit `fc38eb4`.
+* Original declarations: the `ForMathlib.OrthogonalSeries` API (namespace renamed
+  here `ForMathlib.OrthogonalSeries` → `TauCeti.OrthogonalSeries`).
+* Original authors / copyright: Jon Crall, OpenAI GPT-5.6 Thinking;
+  Copyright (c) 2026 Kitware, Inc.; Apache 2.0.
+* Extraction class: **copied**, converted to the Tau Ceti module system.
+* Spectra influence: **none** (imports only Mathlib).
 -/
 
 open Filter Topology
 open scoped BigOperators InnerProductSpace
 
-namespace ForMathlib.OrthogonalSeries
+@[expose] public section
+
+namespace TauCeti.OrthogonalSeries
 
 noncomputable section
 
@@ -190,4 +206,4 @@ theorem HasSum.norm_sq_eq_tsum_of_pairwise_inner_eq_zero
 
 end
 
-end ForMathlib.OrthogonalSeries
+end TauCeti.OrthogonalSeries
