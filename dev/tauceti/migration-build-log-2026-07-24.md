@@ -22,7 +22,14 @@ trusted-dependency audits are therefore unaffected by construction; the only
 lakefile changes are the additive `ForTauCeti` target/default and the (unused by
 DK modules) `TauCeti` path require.
 
-## Tau Ceti submodule (branch `approximation-numbers`)
+## Tau Ceti submodule — validation via throwaway export (NOT committed)
+
+> Everything stays staged in `ForTauCeti`; **no commit is made to the
+> `external/TauCeti` submodule** while we reorganize (awaiting roadmap guidance).
+> The results below were produced by a *throwaway* `export_for_tauceti.py --write`
+> into a temporary branch that was then reset — the submodule is back at pristine
+> `main` (`92c79e5e`). Re-run `scripts/export_for_tauceti.py --cluster
+> approximation-number --write` in a scratch branch to reproduce them.
 
 | Command | Result |
 | --- | --- |

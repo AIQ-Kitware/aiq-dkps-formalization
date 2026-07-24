@@ -1,13 +1,19 @@
-# Tau Ceti PR 1 — package
+# Tau Ceti PR 1 — package (PREPARED, population DEFERRED)
 
-Prepared, not pushed. See the safe push command at the bottom.
+Content and validation are ready, but **nothing is committed to the
+`external/TauCeti` submodule yet** — everything stays staged in `ForTauCeti`
+while we reorganize and wait on roadmap guidance for which roadmap to submit
+first. When we are ready to submit, `scripts/export_for_tauceti.py --cluster
+approximation-number --write` reproduces the `TauCeti/…` files deterministically
+on a fresh branch off `origin/main`; then use the safe push command at the bottom.
 
 * **Repository**: `https://github.com/TauCetiProject/TauCeti.git`
-* **Branch**: `approximation-numbers` (created from `origin/main`)
+* **Branch (to create at submission time)**: `approximation-numbers` from `origin/main`
 * **Observed `origin/main` head**: `92c79e5e0a618f8c5c2b9909be1ce50f6891dde7`
-* **Diff scope**: only `TauCeti/…` — 6 new files, 1662 insertions. No change to
-  `scripts/`, `.github/`, `lakefile.toml`, `formalization.yaml`, `TauCeti.lean`,
-  `lake-manifest.json`, or `lean-toolchain`.
+  (re-verify at submission time)
+* **Diff scope (when populated)**: only `TauCeti/…` — 6 files, 1662 insertions.
+  No change to `scripts/`, `.github/`, `lakefile.toml`, `formalization.yaml`,
+  `TauCeti.lean`, `lake-manifest.json`, or `lean-toolchain`.
 
 ---
 
