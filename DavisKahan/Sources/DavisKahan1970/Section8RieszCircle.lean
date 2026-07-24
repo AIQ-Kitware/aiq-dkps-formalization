@@ -4,9 +4,9 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
-import DavisKahan.Experimental.Frontier.Core
+import DavisKahan.Interop.Spectra.CircleRieszProjection
 import DavisKahan.Interop.Spectra.BoundedSelfAdjointSpectralProjection
-import DavisKahan.Experimental.InfiniteDimensional.SinTheta.CayleySelectorBridge
+import DavisKahan.SpectralTheory.CayleySelectorBridge
 import Mathlib.MeasureTheory.Integral.CircleIntegral
 import Mathlib.Analysis.Complex.CauchyIntegral
 

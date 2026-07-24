@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.ContinuationSharpSourceSpectrum
-import DavisKahan.Experimental.InfiniteDimensional.Sylvester.Resolvent
+import DavisKahan.SpectralTheory.ResolventOperator
 
 /-!
 # Diagonal resolvent data for sharp off-diagonal continuation

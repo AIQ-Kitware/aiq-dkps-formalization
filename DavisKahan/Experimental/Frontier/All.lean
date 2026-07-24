@@ -8,7 +8,7 @@ import DavisKahan.Experimental.Frontier.Core
 import DavisKahan.Experimental.Frontier.Section3
 import DavisKahan.Experimental.Frontier.Section4
 import DavisKahan.Sources.DavisKahan1970.Section6AppendixLeakage
-import DavisKahan.Experimental.Frontier.RieszCircle
+import DavisKahan.Sources.DavisKahan1970.Section8RieszCircle
 import DavisKahan.Sources.DavisKahan1970.RemainingSourceSurface
 -- Section8 and Section9Analytic are TEMPORARILY out of the aggregate.  The four
 -- modules that originally blocked them (Ideals.Symmetric,
