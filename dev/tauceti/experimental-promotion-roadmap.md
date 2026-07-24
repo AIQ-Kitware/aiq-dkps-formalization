@@ -128,6 +128,27 @@ dependency-closed subgraphs (DoubleAngle, HiddenFoundations, Core-helpers,
 CayleySelectorBridge) out of Experimental, each of which pulls its own closure.
 That is the overnight body of work; the leaf graduations above are the quick wins.
 
+**Deep-cluster dependencies verified real (NOT vestigial):** Section3 uses genuine
+declarations from all four of its Experimental imports (Core 3, DoubleAngle 2,
+Section3Nonacute 3, HalmosClassification 1); RieszCircle uses Core (2) +
+CayleySelectorBridge (4). So the overnight sequence is: promote each of
+`InfiniteDimensional/DoubleAngle`, `MathAhead/HiddenFoundations/Section3Nonacute`,
+`MathAhead/HiddenFoundations/HalmosClassification`,
+`InfiniteDimensional/SinTheta/CayleySelectorBridge`, and Core's remaining grounded
+helpers (`circleRieszProjection`, `CircleSeparatesRealSpectrum`) — each with its own
+dependency closure and sorry-split where needed — THEN Section3/Section4/RieszCircle
+graduate. Check each candidate's imports for vestigial ones first (cheapest lever).
+
+## Progress ledger (this session)
+
+Graduated out of the Experimental file tree, green each step:
+- `SpectralProjection` → `Interop/Spectra/BoundedSelfAdjointSpectralProjection` (1 node).
+- Core Section-3 predicates → `Geometry/Halmos/GenericRotationPredicates` (5 nodes).
+- `Lemma63` → `Sources/DavisKahan1970/Section6AppendixLeakage` (3 nodes; vestigial Core import dropped).
+- `RemainingSourceSurface` → `Sources/DavisKahan1970/RemainingSourceSurface` (7 nodes; vestigial Lemma63 import dropped).
+
+= 16 of 33 grounded nodes graduated. Remaining 17 are the deep clusters above.
+
 ## Blockers named explicitly
 
 - `Frontier/Core` (2 sorries) blocks Lemma63, RemainingSourceSurface, Section3, RieszCircle.
