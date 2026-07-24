@@ -263,6 +263,41 @@ Concrete rows we already know; expand each into the full schema during phase 0.
 | Hilbert–Schmidt / trace class (column-expansion + approx-number + Spectra tensor) | partial | HS/trace tensor layer | Parallel | one HS predicate+norm; others are equivalence theorems | ApproximationNumbers (C) + Cluster D |
 | Sylvester uniqueness/estimates + `GenuinePairwiseSpectrumGap` | resolvent/spectrum API | separated-intertwiner results | Parallel | reformulate over canonical spectra; drop bridge predicate | (spectral-perturbation, later) |
 
+## Declaration-level deletion / adapter rows (from the signature audit §13)
+
+The adversarial-review audit `dev/tauceti-signature-polish-todo.md` (baseline
+`543b46f`) already classifies specific declarations. Fold these into the matrix:
+
+| Local declaration | Class | Canonical action | Adapter / deletion |
+| --- | --- | --- | --- |
+| ForMathlib approximation-number copies | Exact duplicate | delete after imports point to ForTauCeti | **DONE** (Wave 1, `f73d9e7`) |
+| `operatorAbs` | Wrapper (square special case of rectangular modulus) | delete definition; canonical `ContinuousLinearMap.modulus` | temporary compat in `DavisKahan/Interop/TauCeti`; delete after A4 |
+| `rectangularOperatorModulus` | Parallel | rename → `ContinuousLinearMap.modulus`; unify with `operatorAbs` | — |
+| `specSubspace` (+ its lemmas) | Wrapper (misnamed coordinate span) | rename/relocate → `OrthonormalBasis.spanIndices` | deprecated local alias only if needed |
+| `ClosedOperator` (+ SameDomain, …) | Parallel | demote to adapter over `LinearPMap` | `DavisKahan/Interop/TauCeti`; delete from generic production (Wave 2) |
+| `RectangularSymmetricIdealFamily` | Parallel (free-data gauge off carrier) | normed-carrier/family redesign | adapter from old Mem/gauge for DK proofs |
+| `GenuinePairwiseSpectrumGap` | Paper/bridge terminology | canonical `SpectraSeparated`/set-distance predicate | paper wrapper downstream |
+| `finiteMean` / `appendFin` | Exact duplicate (generic) | replace with `Finset`/`Fintype` API | no upstream adapter |
+| `exists_two_sided_inverse_of_spectrum_gap` | Missing reusable / redesign | signature redesign (`isUnit_of_abs_spectrum_ge` + `norm_inv_le…`) | — |
+
+**Note on the Wave-1 green-restoration repair.** Repointing
+`UnboundedGenuineSpectrum`/`Sharpness` onto `TauCeti.operatorAbs` and
+`TauCeti.IsSelfAdjoint.exists_two_sided_inverse_of_spectrum_gap` is a
+**green-restoration stopgap, not a final state**: both of those identifiers are
+themselves convergence targets in the table above (`operatorAbs` → delete/merge
+into the canonical modulus; the gap-inverse theorem → signature redesign). When
+A4 / the C*-algebra polish lands, those two consumers repoint again.
+
+## Roadmap-level review questions (from the signature audit Appendix B)
+
+Each drafted `ForTauCetiRoadmap/` area must answer the audit's Appendix-B review
+questions for its cluster (index convention, codomain, namespace, canonical
+modulus name, redundant CFC lemmas, the exact Courant–Fischer equality, bundled
+`SelfAdjointOperator` vs `LinearPMap` properties, minimal PVM/Borel slice, the
+single Hilbert–Schmidt object, symmetric-ideal extensionality, HZ prerequisite
+placement, excluded paper aliases). The approximation-number area answers its
+share in its "Open representation decisions" section.
+
 ## Relationship to existing artifacts
 
 - `dev/tauceti/extraction-manifest.json` — demoted from central doc to a

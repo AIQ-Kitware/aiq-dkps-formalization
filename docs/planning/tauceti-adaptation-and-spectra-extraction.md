@@ -336,26 +336,35 @@ file layout or preserve local wrappers.
   definition of the same declaration remains importable from both `ForMathlib`
   and `ForTauCeti`; the extraction manifest and provenance ledger are updated.
 
-## A1--A3 submission split (approximation-number cluster)
+## Submission split (approximation-number cluster) — A0 → A4
 
-The staged six-file cluster is one coherent development but three separately
-reviewable layers; split for "one topic per PR":
+The declaration-level adversarial-review audit
+([`dev/tauceti-signature-polish-todo.md`](../../dev/tauceti-signature-polish-todo.md))
+is the signature-polish instrument. Its central rule: **settle representation
+before names — no blanket rename pass**, because renaming a parallel abstraction
+only makes the duplication harder to remove. Its PR slicing:
 
-- **A1 — basic approximation numbers**: `Basic`, `Adjoint` (definition,
-  elementary API, ideal inequalities, adjoint invariance).
-- **A2 — singular-value identification**: `CourantFischer`, `FiniteDimensional`
-  (finite-dimensional min--max support, Eckart--Young identification).
-- **A3 — infinite-dimensional helpers and modulus**: `MinMax`, `OperatorModulus`
-  (proved half of the infinite-dimensional min--max API, rectangular modulus).
+- **A0 — roadmap + representation decisions** (index convention, `ℝ≥0`-vs-`ℝ`
+  codomain, `ContinuousLinearMap`-vs-`TauCeti` namespace, canonical modulus name
+  and `operatorAbs` deletion, the actual Courant–Fischer equality, one
+  Hilbert–Schmidt object, body-hiding). Captured in
+  [`ForTauCetiRoadmap/ApproximationNumbers`](../../ForTauCetiRoadmap/ApproximationNumbers/README.md).
+- **A1 — `Basic` only**, after conventions settled.
+- **A2 — adjoint invariance + finite-dimensional singular-value identification**
+  (`Adjoint`, `FiniteDimensional`).
+- **A3 — min–max lower bound + Courant–Fischer support**, ending in the actual
+  min–max theorem (`MinMax`, `CourantFischer` — the latter split into a generic
+  `spanIndices` basis layer and the spectral min–max layer).
+- **A4 — one canonical rectangular modulus**, deleting the parallel `operatorAbs`
+  API downstream.
 
-Open namespace questions to settle in the roadmap, not defended only in a PR:
-whether `ContinuousLinearMap.approximationNumber` should extend the global
-Mathlib namespace (good dot-notation reason; still a global commitment) and
-whether the `Cardinal` helper belongs in a global namespace. Audit blanket
-`@[expose] public section` toward selective exposure. Before any real submission,
-recheck upstream duplication (current Tau Ceti, pinned Mathlib, open Mathlib/Tau
-Ceti PRs, Zulip) — in particular the Mathlib approximation-number work this was
-adapted from.
+`U1` (LinearPMap unbounded-operator convergence) and `S1+` (dependency-closed
+Spectra ports) are later roadmaps. A PR must not mix a P0 convergence refactor
+with downstream theorem additions. The **pre-PR declaration checklist** (audit
+§14) is the per-declaration gate that complements the cluster acceptance gates.
+Before any real submission, recheck upstream duplication (current Tau Ceti,
+pinned Mathlib, open Mathlib/Tau Ceti PRs, Zulip) — in particular the Mathlib
+approximation-number work this was adapted from.
 
 ## Current success metric
 

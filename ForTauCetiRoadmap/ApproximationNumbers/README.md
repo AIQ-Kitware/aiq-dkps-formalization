@@ -185,6 +185,63 @@ Builds the ideal theory on the `s`-number sequence.
   Mathlib-namespace lemma justified on its own terms, not smuggled in because one
   proof needed it — its inclusion is reviewed under the API gate.
 
+## Open representation decisions (settle in A0, before any A1 code PR)
+
+A declaration-level adversarial-review audit of the staged code
+(`dev/tauceti-signature-polish-todo.md`, baseline `543b46f`) surfaced the
+representation and API decisions a Tau Ceti reviewer will demand this roadmap
+answer up front. Settle them here before writing names — **do not run a blanket
+rename pass first**; renaming a parallel abstraction only makes duplication
+harder to remove. The decisions (with this roadmap's current stance):
+
+1. **Index convention.** Zero-based `aₙ` (`a₀ = ‖T‖`, infimum over `rank ≤ n`).
+   *Pinned above.* Must be stated in the first sentence of the definition
+   docstring and module overview (it differs from the common one-based
+   `rank < n`).
+2. **Codomain: `ℝ≥0` vs `ℝ`.** *Open.* `ℝ≥0` makes positivity/norm bounds clean
+   but creates constructor noise against Mathlib's `singularValues : ℝ`. Decide
+   one; do **not** carry both full APIs. If `ℝ≥0` is kept, add exactly one
+   canonical NNReal singular-value accessor so public conclusions never expose
+   `⟨value, proof⟩`. Tautological `0 ≤ aₙ` lemmas are deleted if `ℝ≥0`.
+3. **Namespace: extend `ContinuousLinearMap` vs live under `TauCeti`.** Current
+   stance: extend `ContinuousLinearMap` for dot notation (candidate Mathlib
+   name). *Flagged for maintainer review* — a global-namespace commitment.
+4. **Canonical rectangular modulus name and unification.** `|T| = (T⋆T)^{1/2}`
+   is the single source modulus (candidate `ContinuousLinearMap.modulus`); the
+   square-operator `operatorAbs` is its **specialization and must be deleted**,
+   not shipped as a peer API. Record which Mathlib `CFC.sqrt`/`cfc` lemmas make
+   modulus lemmas redundant (consume them, don't re-derive).
+5. **The Courant–Fischer product is an equality, not support lemmas.** Layer B.4
+   must expose an actual min–max/max–min equality as the headline; the coordinate
+   helpers become private/secondary. The staged `specSubspace` is a *coordinate
+   span of an arbitrary basis*, not intrinsically spectral — rename/relocate to
+   `OrthonormalBasis.spanIndices` (it contains no operator or spectrum).
+6. **Hilbert–Schmidt: one predicate + norm.** Layer C.3 fixes a single
+   `IsHilbertSchmidt`/`hilbertSchmidtNorm`; the basis-column, tensor,
+   singular-value, and Frobenius presentations are **equivalence theorems** for
+   that one object, never peer definitions.
+7. **API hygiene (per-declaration).** Hide definition bodies (drop blanket
+   `@[expose] public section`; expose one `_eq_iInf` characterization instead);
+   name every lemma from its conclusion outward with the quantifier matching the
+   statement; keep proof-only helpers `private`; the universe-`lift` `Cardinal`
+   helper stays `private` unless independently useful.
+
+The per-declaration name/disposition sketches live in the audit doc
+(§5–§6, Appendix A name-change index) and are *sketches to verify against
+adjacent Mathlib naming*, not a compile-ready patch. The **pre-PR declaration
+checklist** (audit §14) is the per-declaration gate that complements this repo's
+cluster-level acceptance gates.
+
+## PR slicing (from the audit §4)
+
+`A0` roadmap + representation decisions (this section) → `A1` `Basic` only, after
+conventions settled → `A2` adjoint invariance + finite-dimensional singular-value
+identification → `A3` min–max lower bound + Courant–Fischer support ending in the
+actual min–max theorem → `A4` one canonical modulus, deleting `operatorAbs`
+downstream. (`U1` LinearPMap unbounded-operator convergence and `S1+` Spectra
+ports belong to the later roadmaps, not this one.) A PR must not mix a P0
+convergence refactor with downstream theorem additions.
+
 ## Provenance (secondary — not prescriptive)
 
 This section records where a working formalization of Layers A–B already exists,
