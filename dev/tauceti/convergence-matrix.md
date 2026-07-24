@@ -95,18 +95,39 @@ NOT: `copy ForMathlib → ForTauCeti → submit`.
   importable `ContinuousLinearMap.approximationNumber`. No alternates warranted
   (statements+proofs were byte-identical). Gates green: layer OK (672 modules),
   census CLEAN, frontier 80/80 textual.
-- **Blocked — the CourantFischer dedup pulls a runaway closure.** Closed under
-  both forward imports and reverse ForMathlib importers (firewall), CourantFischer
-  drags **42 of 54** ForMathlib modules — the whole singular-value / UI-norm /
-  frame subgraph **plus an unrelated probability/statistics subsystem**
-  (`Probability/Moments/*`, `MeasureTheory/CfcMeasurable`, matrix-measurability).
-  The attaching edges to break first: `EntrywiseEigenvalue → CourantFischer`
-  (drags stats via `EntrywiseEigenvalue → MatrixConcentration → SampleCovariance
-  → …`) and the `KyFan → {Spectrum, PolarDecomposition, ProjectionGeometry}`
-  norm/frame tangle. **Decision needed (phase 0):** classify the
-  probability/statistics subsystem as its own component (likely its own migration
-  or DavisKahan-bound), and sever `EntrywiseEigenvalue → CourantFischer`, before
-  CourantFischer can dedup. Do NOT migrate the 42-file runaway as one blob.
+- **Phase-0 decision RECORDED (2026-07-24, edward): the probability/statistics
+  subsystem is its own convergence cluster.** Evidence gathered at the
+  declaration level: the chain is *linear* —
+  `SampleCovariance → MatrixConcentration → EntrywiseEigenvalue →
+  CourantFischer` — and the trio
+  `{SampleCovariance, MatrixConcentration, EntrywiseEigenvalue}` has **zero**
+  paper/DavisKahan consumers (only the `ForMathlib.lean` aggregate and
+  `Challenge/MathlibPending/*` leaderboards). Its remaining ForMathlib deps
+  (`EntrywiseOpNorm`, `SpectralFunctionMeasurable`, `CfcMeasurable`) have only
+  repoint-style consumers (`DkpsQuench2026/Geometry/Covariance`,
+  `Acharyya2025/OperatorBridge` import `EntrywiseOpNorm` directly).
+  **Classification:** its own ForTauCeti-bound cluster (destination
+  `ForTauCeti/Probability/Moments/**` + the matrix-measurability files under
+  `ForTauCeti/Analysis/Matrix/**`), its own roadmap area and PR slice —
+  *not* DavisKahan-bound (the material is reusable, Mathlib-candidate-grade).
+  Because the firewall forbids `ForMathlib → ForTauCeti` imports and the chain
+  is linear with no external consumers, "severing
+  `EntrywiseEigenvalue → CourantFischer`" is realized not by refactoring the
+  proof but by having the stats chain **ride the same dedup commit** as the
+  singular-value component while remaining a separate roadmap/PR unit.
+  (Alternative rejected: parking the trio in a paper layer — it serves no
+  paper and would demote reusable mathematics.) The `KyFan → {Spectrum,
+  PolarDecomposition, ProjectionGeometry}` edges are all *inside* the
+  singular-value component, so they enlarge no closure and need no severing.
+- **CourantFischer final API landed (2026-07-24, edward).** The ForTauCeti
+  copy no longer mirrors the ForMathlib names: the P0 redesign of
+  `dev/tauceti-signature-polish-todo.md` §6 is executed
+  (`OrthonormalBasis.spanIndices` in the new `BasisSpan.lean`; eigenvalue API
+  in the `LinearMap.IsSymmetric` namespace; the genuine sup-inf
+  Courant–Fischer equality `eigenvalues_eq_iSup_iInf_re_inner`; Weyl at
+  `ContinuousLinearMap` level with `‖T − S‖`). The dedup therefore repoints
+  the 17 ForMathlib consumers **once, straight to the final names** — see the
+  name map in `formathlib-to-fortauceti-migration.md`.
 - **Regression surfaced (maintenance-track, pre-Wave-1):** two DavisKahan modules
   are build-broken at HEAD because an earlier leaf migration
   (`OperatorAbsoluteValue`, `SelfAdjointGapInverse` → ForTauCeti) moved

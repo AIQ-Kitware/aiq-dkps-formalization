@@ -48,9 +48,10 @@ maintainer review.
   Copyright (c) 2026 Kitware, Inc.; Apache 2.0.
 * Extraction class: **copied**, converted to the Tau Ceti module system.
   Declaration names are unchanged (they already extend the canonical Mathlib
-  namespace); references to the Courant--Fischer helpers were renamed
-  `ForMathlib.*` → `TauCeti.*` to track File 2's namespace move.  No
-  mathematical change.
+  namespace); references to the Courant--Fischer helpers track the redesigned
+  API (`OrthonormalBasis.spanIndices` in `BasisSpan.lean` and the
+  `LinearMap.IsSymmetric`-namespace eigenvalue results).  No mathematical
+  change.
 * Spectra influence: **none** — this module imports only Mathlib and the
   sibling `Basic` and `CourantFischer` staging modules.
 -/
@@ -98,7 +99,7 @@ theorem singularValues_le_norm_sub_of_rank_le
   · have hnlt : n < finrank 𝕜 E := Nat.lt_of_not_ge hn
     let k : Fin (finrank 𝕜 E) := ⟨n, hnlt⟩
     obtain ⟨V, hVdim, hVlow⟩ :=
-      TauCeti.forall_unit_vector_eigenvalue_le_re_inner
+      LinearMap.IsSymmetric.exists_submodule_forall_unit_eigenvalue_le_re_inner
         T.toLinearMap.isSymmetric_adjoint_comp_self rfl k
     have hVdim' : finrank 𝕜 V = n + 1 := by
       simpa [k] using hVdim
@@ -196,11 +197,11 @@ theorem approximationNumber_le_singularValues
     let hGram : (A.adjoint ∘ₗ A).IsSymmetric := A.isSymmetric_adjoint_comp_self
     let b : OrthonormalBasis (Fin (finrank 𝕜 E)) 𝕜 E := hGram.eigenvectorBasis rfl
     let W : Submodule 𝕜 E :=
-      TauCeti.specSubspace b (fun i : Fin (finrank 𝕜 E) => (i : ℕ) < n)
+      b.spanIndices {i : Fin (finrank 𝕜 E) | (i : ℕ) < n}
     let k : Fin (finrank 𝕜 E) := ⟨n, hnlt⟩
     have hWdim : finrank 𝕜 W = n := by
       dsimp only [W]
-      rw [TauCeti.finrank_specSubspace, card_filter_lt hnlt.le]
+      rw [b.finrank_spanIndices_set, Set.toFinset_setOf, card_filter_lt hnlt.le]
     have hPrank : W.starProjection.rank = (n : Cardinal) := by
       change Module.rank 𝕜 W.starProjection.range = (n : Cardinal)
       rw [Submodule.range_starProjection, ← Module.finrank_eq_rank' 𝕜 W, hWdim]
@@ -210,22 +211,21 @@ theorem approximationNumber_le_singularValues
     have hRrank : R.rank ≤ (n : Cardinal) :=
       ContinuousLinearMap.rank_comp_left_le_of_rank_le T W.starProjection
         hPrank.le
-    have htail : Wᗮ = TauCeti.specSubspace b
-        (fun i : Fin (finrank 𝕜 E) => ¬ (i : ℕ) < n) := by
-      exact TauCeti.orthogonal_specSubspace b
-        (fun i : Fin (finrank 𝕜 E) => (i : ℕ) < n)
+    have htail : Wᗮ = b.spanIndices
+        {i : Fin (finrank 𝕜 E) | (i : ℕ) < n}ᶜ := by
+      exact b.orthogonal_spanIndices {i : Fin (finrank 𝕜 E) | (i : ℕ) < n}
     have htailQuad {y : E} (hy : y ∈ Wᗮ) :
         RCLike.re ⟪(A.adjoint ∘ₗ A) y, y⟫_𝕜 ≤
           A.singularValues n ^ 2 * ‖y‖ ^ 2 := by
-      have hy' : y ∈ TauCeti.specSubspace b
-          (fun i : Fin (finrank 𝕜 E) => ¬ (i : ℕ) < n) := by
+      have hy' : y ∈ b.spanIndices
+          {i : Fin (finrank 𝕜 E) | (i : ℕ) < n}ᶜ := by
         rw [← htail]
         exact hy
-      have hbound := TauCeti.re_inner_map_self_le_of_mem_specSubspace
-        hGram rfl
-        (p := fun i : Fin (finrank 𝕜 E) => ¬ (i : ℕ) < n)
+      have hbound := hGram.re_inner_apply_self_le_of_mem_spanIndices rfl
+        (s := {i : Fin (finrank 𝕜 E) | (i : ℕ) < n}ᶜ)
         (c := hGram.eigenvalues rfl k)
         (fun i hi => hGram.eigenvalues_antitone rfl (by
+          rw [Set.mem_compl_iff, Set.mem_setOf_eq] at hi
           change n ≤ (i : ℕ)
           exact Nat.le_of_not_gt hi))
         hy'

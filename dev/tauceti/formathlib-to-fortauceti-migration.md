@@ -51,16 +51,38 @@ importing a ForTauCeti one. Repoint the many paper/DavisKahan consumers as you g
 
 ### DEDUPLICATION (important)
 
-The first cluster already created ForTauCeti copies of **CourantFischer** (renamed
-`ForMathlib.* → TauCeti.*`) and the **ApproximationNumber{,Adjoint,MinMax,SingularValues}**
-files (kept `ContinuousLinearMap.*` FQNs — identical to the ForMathlib originals).
+The first cluster already created ForTauCeti copies of **CourantFischer** and the
+**ApproximationNumber{,Adjoint,MinMax,SingularValues}** files (the AN files kept
+`ContinuousLinearMap.*` FQNs — identical to the ForMathlib originals).
 So migrating those ForMathlib originals is a **dedup, not a copy**: delete the
-ForMathlib original, and repoint ALL its consumers (17 for CourantFischer, incl.
-DavisKahan/paper) to the ForTauCeti version — updating `ForMathlib.specSubspace` →
-`TauCeti.specSubspace` for CourantFischer's consumers. The approximation-number
+ForMathlib original and repoint ALL its consumers (17 for CourantFischer, incl.
+DavisKahan/paper) to the ForTauCeti version. The approximation-number
 `ContinuousLinearMap.*` FQNs are unchanged, so those consumers only repoint imports.
-Do the dedup as part of the component migration; do NOT leave two definitions of
-`ContinuousLinearMap.approximationNumber` / `TauCeti.specSubspace` importable together.
+Do the dedup as part of the component migration; do NOT leave two copies of a
+declaration importable together.
+
+**CourantFischer name map (2026-07-24).** The ForTauCeti copy carries the FINAL
+redesigned API (polish backlog §6 executed; basis-span scaffolding generalized
+into `ForTauCeti/Analysis/InnerProductSpace/BasisSpan.lean`). The dedup repoints
+ForMathlib consumers once, to these names:
+
+| ForMathlib name | canonical name |
+| --- | --- |
+| `ForMathlib.specSubspace b p` | `OrthonormalBasis.spanIndices b s` (`s : Set ι`; general `ι`, in `BasisSpan.lean`) |
+| `ForMathlib.finrank_specSubspace` | `OrthonormalBasis.finrank_spanIndices` (Finset) / `finrank_spanIndices_set` |
+| `ForMathlib.orthogonal_specSubspace` | `OrthonormalBasis.orthogonal_spanIndices` |
+| — (new) | `OrthonormalBasis.mem_spanIndices_iff`, `repr_eq_zero_of_mem_spanIndices`, `mem_spanIndices_of_mem`, `spanIndices_mono` |
+| `ForMathlib.re_inner_map_self_eq_sum_eigenvalues_mul_sq` | `LinearMap.IsSymmetric.re_inner_apply_self_eq_sum_eigenvalues_mul_sq` |
+| `ForMathlib.re_inner_map_self_le_of_mem_specSubspace` (+ dual) | `LinearMap.IsSymmetric.re_inner_apply_self_le_of_mem_spanIndices` (+ `le_…_of_mem_spanIndices`) |
+| `ForMathlib.exists_unit_vector_re_inner_le_eigenvalue` | `LinearMap.IsSymmetric.exists_unit_vector_re_inner_le_eigenvalue` |
+| `ForMathlib.forall_unit_vector_eigenvalue_le_re_inner` | `LinearMap.IsSymmetric.exists_submodule_forall_unit_eigenvalue_le_re_inner` |
+| — (new headline) | `LinearMap.IsSymmetric.eigenvalues_eq_iSup_iInf_re_inner` (sup-inf Courant–Fischer equality) |
+| `ForMathlib.re_inner_map_self_eq_sum_of_eigenbasis` | `LinearMap.IsSymmetric.re_inner_apply_self_eq_sum_of_eigenbasis` |
+| `ForMathlib.eigenvalues_eq_of_eigenbasis` | `LinearMap.IsSymmetric.eigenvalues_eq_of_eigenbasis` |
+| `ForMathlib.eigenvalues_le_eigenvalues_of_re_inner_le` | `LinearMap.IsSymmetric.eigenvalue_mono` |
+| `ForMathlib.map_mem_specSubspace` | `LinearMap.IsSymmetric.map_mem_spanIndices` |
+| `ForMathlib.abs_eigenvalues_sub_le` | `TauCeti.abs_eigenvalue_sub_eigenvalue_le` (LinearMap, pointwise bound) |
+| `ForMathlib.abs_eigenvalues_sub_le_opNorm` | `TauCeti.abs_eigenvalue_sub_eigenvalue_le_norm` (CLM; symmetry stated on the coerced linear maps so no `Star`/`CompleteSpace` instance is required; conclusion `‖T − S‖`, no `toContinuousLinearMap` in the signature) |
 
 ## Not for ForTauCeti
 
