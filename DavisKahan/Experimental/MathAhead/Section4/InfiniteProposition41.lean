@@ -3,7 +3,7 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.Experimental.Scratch.Section4.InfiniteIdealDominance
+import DavisKahan.Experimental.MathAhead.Section4.InfiniteIdealDominance
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.ContinuationSelectedReduction
 import DavisKahan.Interop.Spectra.ApproximationNumberMinMax
 import DavisKahan.Interop.Spectra.DirectRotationSquare
@@ -43,7 +43,7 @@ open scoped InnerProductSpace
 namespace ForMathlib
 namespace DavisKahan
 namespace Experimental
-namespace Scratch
+namespace MathAhead
 namespace Section4
 
 open Spectra.OneParameterUnitaryGroup
@@ -703,7 +703,7 @@ end DavisKahanGeometry
 end
 
 end Section4
-end Scratch
+end MathAhead
 end Experimental
 end DavisKahan
 end ForMathlib

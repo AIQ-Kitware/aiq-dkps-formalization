@@ -24,7 +24,7 @@ open scoped InnerProductSpace BigOperators
 namespace ForMathlib
 namespace DavisKahan
 namespace Experimental
-namespace Scratch
+namespace MathAhead
 namespace Section4
 
 open ExactSinTheta
@@ -98,7 +98,7 @@ theorem restrictedDisplacement_kyFan_le
     D.approximation_le k
 
 end Section4
-end Scratch
+end MathAhead
 end Experimental
 end DavisKahan
 end ForMathlib
