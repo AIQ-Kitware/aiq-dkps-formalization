@@ -8,8 +8,9 @@
       "cluster": "approximation-number",
       "roadmap_target": "SpectralSubspacePerturbation Part B (Approximation numbers and rectangular symmetric ideals) / public-api-integration-review PR 1",
       "roadmap_focus": "spectral-subspace-perturbation",
-      "status": "staged",
-      "upstream_pr": null,
+      "status": "exported-to-branch",
+      "upstream_pr": "external/TauCeti branch approximation-numbers @ 450317c1 (from origin/main 92c79e5e); not pushed",
+      "tauceti_target_marker": "<!--tauceti-target:v1 {\"focus\":\"spectral-subspace-perturbation\",\"id\":\"SpectralSubspacePerturbation/PartB/approximation-numbers\"}--> (provisional; confirm accepted id against TauCetiRoadmap before push)",
       "staging_modules": [
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Basic",
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Adjoint",
