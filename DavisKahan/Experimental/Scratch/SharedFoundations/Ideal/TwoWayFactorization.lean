@@ -57,7 +57,7 @@ theorem SymmetricNormIdeal.gauge_le_of_contraction_factorization
     (hB : I.mem B) (hEq : A = L ∘L B ∘L R)
     (hL : ‖L‖ ≤ 1) (hR : ‖R‖ ≤ 1) :
     I.gauge A ≤ I.gauge B := by
-  have hraw := I.gauge_le_of_eq_comp_comp hB hEq
+  have hraw := SymmetricNormIdeal.gauge_le_of_eq_comp_comp I hB hEq
   have hnonneg : 0 ≤ I.gauge B := I.nonneg hB
   calc
     I.gauge A ≤ ‖L‖ * I.gauge B * ‖R‖ := hraw
@@ -73,9 +73,9 @@ theorem SymmetricNormIdeal.mem_iff_of_twoWayContractions
     I.mem A ↔ I.mem B := by
   constructor
   · intro hA
-    exact I.mem_of_eq_comp_comp hA hBA
+    exact SymmetricNormIdeal.mem_of_eq_comp_comp I hA hBA
   · intro hB
-    exact I.mem_of_eq_comp_comp hB hAB
+    exact SymmetricNormIdeal.mem_of_eq_comp_comp I hB hAB
 
 /-- Two contraction factorizations give equal gauges. -/
 theorem SymmetricNormIdeal.gauge_eq_of_twoWayContractions
@@ -87,10 +87,10 @@ theorem SymmetricNormIdeal.gauge_eq_of_twoWayContractions
     (hL' : ‖L'‖ ≤ 1) (hR' : ‖R'‖ ≤ 1)
     (hA : I.mem A) :
     I.gauge A = I.gauge B := by
-  have hB : I.mem B := I.mem_of_eq_comp_comp hA hBA
+  have hB : I.mem B := SymmetricNormIdeal.mem_of_eq_comp_comp I hA hBA
   apply le_antisymm
-  · exact I.gauge_le_of_contraction_factorization hB hAB hL hR
-  · exact I.gauge_le_of_contraction_factorization hA hBA hL' hR'
+  · exact SymmetricNormIdeal.gauge_le_of_contraction_factorization I hB hAB hL hR
+  · exact SymmetricNormIdeal.gauge_le_of_contraction_factorization I hA hBA hL' hR'
 
 /-- Combined square membership and gauge transport. -/
 theorem SymmetricNormIdeal.mem_iff_and_gauge_eq_of_twoWayContractions
@@ -102,9 +102,9 @@ theorem SymmetricNormIdeal.mem_iff_and_gauge_eq_of_twoWayContractions
     (hL' : ‖L'‖ ≤ 1) (hR' : ‖R'‖ ≤ 1)
     (hA : I.mem A) :
     I.mem B ∧ I.gauge B = I.gauge A := by
-  have hB : I.mem B := I.mem_of_eq_comp_comp hA hBA
+  have hB : I.mem B := SymmetricNormIdeal.mem_of_eq_comp_comp I hA hBA
   refine ⟨hB, ?_⟩
-  exact (I.gauge_eq_of_twoWayContractions hAB hBA hL hR hL' hR' hA).symm
+  exact (SymmetricNormIdeal.gauge_eq_of_twoWayContractions I hAB hBA hL hR hL' hR' hA).symm
 
 end Square
 
@@ -144,7 +144,7 @@ theorem RectangularSymmetricIdealFamily.gauge_le_of_contraction_factorization
     (hB : N.Mem B) (hEq : A = L ∘L B ∘L R)
     (hL : ‖L‖ ≤ 1) (hR : ‖R‖ ≤ 1) :
     N.gauge A ≤ N.gauge B := by
-  have hraw := N.gauge_le_of_eq_comp_comp L R hB hEq
+  have hraw := RectangularSymmetricIdealFamily.gauge_le_of_eq_comp_comp N L R hB hEq
   have hnonneg := N.gauge_nonneg hB
   calc
     N.gauge A ≤ ‖L‖ * N.gauge B * ‖R‖ := hraw

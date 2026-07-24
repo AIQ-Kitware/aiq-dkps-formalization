@@ -12,9 +12,15 @@ Build one Lean module::
     scripts/lake_build_report.py \
         DavisKahan.Experimental.Scratch.SharedFoundations.Ideal.TwoWayFactorization
 
-Build several targets::
+Build several targets sequentially with concise progress and one deduplicated
+report::
 
     scripts/lake_build_report.py Target.One Target.Two
+
+Use one Lake invocation instead when maximum build parallelism matters more than
+per-target progress::
+
+    scripts/lake_build_report.py --single-invocation Target.One Target.Two
 
 Include warnings, or show the unfiltered log::
 
@@ -41,6 +47,7 @@ import signal
 import subprocess
 import sys
 import tempfile
+import time
 from collections import Counter
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -111,6 +118,7 @@ class Diagnostic:
     body: list[str] = field(default_factory=list)
     ordinal: int = 0
     repeats: int = 1
+    origins: list[str] = field(default_factory=list)
 
     def normalized_key(self) -> tuple[object, ...]:
         body = tuple(line.rstrip() for line in self.body)
@@ -142,6 +150,7 @@ class Diagnostic:
             "body": self.body,
             "ordinal": self.ordinal,
             "repeats": self.repeats,
+            "origins": self.origins,
         }
 
 
@@ -151,6 +160,16 @@ class ParseResult:
     raw_counts: Counter[str]
     synthetic_lines: list[str]
     other_lines: list[str]
+
+
+@dataclass
+class BuildRun:
+    targets: list[str]
+    command: list[str]
+    return_code: int
+    elapsed_seconds: float
+    raw_lines: list[str]
+    parse_result: ParseResult
 
 
 @dataclass
@@ -284,11 +303,15 @@ def deduplicate(diagnostics: Sequence[Diagnostic]) -> list[Diagnostic]:
                 column=diagnostic.column,
                 body=list(diagnostic.body),
                 ordinal=diagnostic.ordinal,
+                origins=list(diagnostic.origins),
             )
             by_key[key] = copy
             unique.append(copy)
         else:
             previous.repeats += 1
+            for origin in diagnostic.origins:
+                if origin not in previous.origins:
+                    previous.origins.append(origin)
     return unique
 
 
@@ -483,10 +506,59 @@ def run_build(command: Sequence[str], root: Path) -> tuple[int, list[str]]:
         return return_code, lines
 
 
+def merge_parse_results(runs: Sequence[BuildRun]) -> ParseResult:
+    """Merge per-invocation parser results into one globally ordered report."""
+    diagnostics: list[Diagnostic] = []
+    raw_counts: Counter[str] = Counter()
+    synthetic_lines: list[str] = []
+    other_lines: list[str] = []
+    for run in runs:
+        raw_counts.update(run.parse_result.raw_counts)
+        synthetic_lines.extend(run.parse_result.synthetic_lines)
+        other_lines.extend(run.parse_result.other_lines)
+        for diagnostic in run.parse_result.diagnostics:
+            if not diagnostic.origins:
+                diagnostic.origins = list(run.targets)
+            diagnostic.ordinal = len(diagnostics) + 1
+            diagnostics.append(diagnostic)
+    return ParseResult(diagnostics, raw_counts, synthetic_lines, other_lines)
+
+
+def combined_raw_lines(runs: Sequence[BuildRun]) -> list[str]:
+    """Combine raw logs with target headers when there were multiple invocations."""
+    if len(runs) == 1:
+        return list(runs[0].raw_lines)
+    lines: list[str] = []
+    for index, run in enumerate(runs, 1):
+        if lines:
+            lines.append("")
+        target_text = " ".join(run.targets)
+        lines.append(f"===== lake invocation {index}: {target_text} =====")
+        lines.extend(run.raw_lines)
+    return lines
+
+
+def overall_return_code(runs: Sequence[BuildRun]) -> int:
+    """Return zero only when every attempted invocation succeeded."""
+    for run in runs:
+        if run.return_code != 0:
+            return run.return_code
+    return 0
+
+
+def format_origins(origins: Sequence[str], limit: int = 4) -> str:
+    if not origins:
+        return ""
+    shown = list(origins[:limit])
+    suffix = f", +{len(origins) - limit} more" if len(origins) > limit else ""
+    return ", ".join(shown) + suffix
+
+
 def render_text_report(
     *,
     root: Path,
-    command: Sequence[str],
+    runs: Sequence[BuildRun],
+    skipped_targets: Sequence[str],
     return_code: int,
     parse_result: ParseResult,
     shown: Sequence[Diagnostic],
@@ -498,14 +570,28 @@ def render_text_report(
     raw_lines: Sequence[str],
     show_raw: bool,
     fallback_tail_lines: int,
+    sequential_mode: bool,
 ) -> None:
     duplicate_count = sum(item.repeats - 1 for item in shown)
+    all_targets = [target for run in runs for target in run.targets] + list(skipped_targets)
+    failed_runs = sum(run.return_code != 0 for run in runs)
+    passed_runs = sum(run.return_code == 0 for run in runs)
+    elapsed = sum(run.elapsed_seconds for run in runs)
 
     status_text = "SUCCEEDED" if return_code == 0 else "FAILED"
     status_color = "green" if return_code == 0 else "red"
-    print(colorize(f"Lean build {status_text}", status_color, color_enabled))
+    noun = "Lean build" if len(all_targets) == 1 else "Lean build batch"
+    print(colorize(f"{noun} {status_text}", status_color, color_enabled))
     print(f"root: {root}")
-    print(f"command: {shlex.join(command)}")
+    if len(runs) == 1:
+        print(f"command: {shlex.join(runs[0].command)}")
+    else:
+        mode = "sequential target builds" if sequential_mode else "single Lake invocation"
+        print(f"mode: {mode}")
+        print(f"lake invocations: {len(runs)}")
+    print(f"targets: total={len(all_targets)}, skipped={len(skipped_targets)}")
+    print(f"attempts: passed={passed_runs}, failed={failed_runs}")
+    print(f"elapsed: {elapsed:.2f}s")
     print(f"exit: {return_code}")
     print(
         "diagnostics: "
@@ -520,6 +606,8 @@ def render_text_report(
             f"noise removed: exact_duplicates={duplicate_count}, "
             f"lake_wrapper_lines={suppressed_count}"
         )
+    if skipped_targets:
+        print("skipped targets: " + ", ".join(skipped_targets))
     print()
 
     if shown:
@@ -570,6 +658,8 @@ def render_text_report(
                     f"{diagnostic_tag} {severity} {diagnostic.location()}"
                     f"{repeat_suffix}"
                 )
+                if len(all_targets) > 1 and diagnostic.origins:
+                    print("while building: " + format_origins(diagnostic.origins))
                 print(diagnostic.message or "(no message)")
                 body = diagnostic.body[:max_diag_lines]
                 if body:
@@ -603,17 +693,28 @@ def render_text_report(
 def render_json_report(
     *,
     root: Path,
-    command: Sequence[str],
+    runs: Sequence[BuildRun],
+    skipped_targets: Sequence[str],
     return_code: int,
     parse_result: ParseResult,
     shown: Sequence[Diagnostic],
 ) -> None:
     payload = {
         "root": str(root),
-        "command": list(command),
         "exit_code": return_code,
+        "skipped_targets": list(skipped_targets),
         "raw_counts": dict(parse_result.raw_counts),
         "synthetic_line_count": len(parse_result.synthetic_lines),
+        "runs": [
+            {
+                "targets": run.targets,
+                "command": run.command,
+                "exit_code": run.return_code,
+                "elapsed_seconds": run.elapsed_seconds,
+                "raw_counts": dict(run.parse_result.raw_counts),
+            }
+            for run in runs
+        ],
         "diagnostics": [diagnostic.to_json() for diagnostic in shown],
     }
     json.dump(payload, sys.stdout, indent=2, sort_keys=True)
@@ -647,6 +748,30 @@ def build_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="Do not pass Lake's -q flag",
     )
+    parser.add_argument(
+        "--single-invocation",
+        action="store_true",
+        help="Build all targets in one Lake invocation instead of sequentially",
+    )
+    parser.add_argument(
+        "--fail-fast",
+        action="store_true",
+        help="Stop the sequential batch after the first failed target",
+    )
+    progress_group = parser.add_mutually_exclusive_group()
+    progress_group.add_argument(
+        "--progress",
+        dest="progress",
+        action="store_true",
+        help="Show concise progress on stderr (default for multi-target text reports)",
+    )
+    progress_group.add_argument(
+        "--no-progress",
+        dest="progress",
+        action="store_false",
+        help="Suppress progress messages",
+    )
+    parser.set_defaults(progress=None)
     parser.add_argument("--warnings", action="store_true", help="Include warnings")
     parser.add_argument("--info", action="store_true", help="Include info diagnostics")
     parser.add_argument("--trace", action="store_true", help="Include trace diagnostics")
@@ -714,12 +839,108 @@ def build_parser() -> argparse.ArgumentParser:
     return parser
 
 
+def progress_enabled(args: argparse.Namespace) -> bool:
+    if args.progress is not None:
+        return bool(args.progress)
+    return len(args.targets) > 1 and args.format == "text"
+
+
+def emit_progress(
+    *,
+    index: int,
+    total: int,
+    targets: Sequence[str],
+    phase: str,
+    color_enabled: bool,
+    elapsed: float | None = None,
+    parse_result: ParseResult | None = None,
+) -> None:
+    target_text = " ".join(targets)
+    if phase == "BUILD":
+        status = colorize("BUILD", "cyan", color_enabled)
+        detail = ""
+    elif phase == "PASS":
+        status = colorize("PASS ", "green", color_enabled)
+        warnings = parse_result.raw_counts.get("warning", 0) if parse_result else 0
+        detail = f" ({elapsed:.2f}s, warnings={warnings})"
+    else:
+        status = colorize("FAIL ", "red", color_enabled)
+        errors = parse_result.raw_counts.get("error", 0) if parse_result else 0
+        detail = f" ({elapsed:.2f}s, errors={errors})"
+    print(f"[{index}/{total}] {status} {target_text}{detail}", file=sys.stderr, flush=True)
+
+
+def execute_builds(
+    *,
+    args: argparse.Namespace,
+    root: Path,
+    lake_global_args: Sequence[str],
+    color_enabled: bool,
+) -> tuple[list[BuildRun], list[str], bool]:
+    """Run one build per target by default, preserving cache and batch progress."""
+    runs: list[BuildRun] = []
+    skipped_targets: list[str] = []
+    show_progress = progress_enabled(args)
+    sequential_mode = len(args.targets) > 1 and not args.single_invocation
+
+    target_groups = (
+        [[target] for target in args.targets]
+        if sequential_mode
+        else [list(args.targets)]
+    )
+    total = len(target_groups)
+    for index, targets in enumerate(target_groups, 1):
+        command = [args.lake, *lake_global_args, "build", *targets]
+        if show_progress:
+            emit_progress(
+                index=index,
+                total=total,
+                targets=targets,
+                phase="BUILD",
+                color_enabled=color_enabled,
+            )
+        started = time.monotonic()
+        try:
+            return_code, raw_lines = run_build(command, root)
+        except RuntimeError:
+            raise
+        elapsed = time.monotonic() - started
+        parse_result = parse_output(raw_lines)
+        for diagnostic in parse_result.diagnostics:
+            diagnostic.origins = list(targets)
+        run = BuildRun(
+            targets=list(targets),
+            command=list(command),
+            return_code=return_code,
+            elapsed_seconds=elapsed,
+            raw_lines=raw_lines,
+            parse_result=parse_result,
+        )
+        runs.append(run)
+        if show_progress:
+            emit_progress(
+                index=index,
+                total=total,
+                targets=targets,
+                phase="PASS" if return_code == 0 else "FAIL",
+                color_enabled=color_enabled,
+                elapsed=elapsed,
+                parse_result=parse_result,
+            )
+        if return_code != 0 and (args.fail_fast or return_code == 130):
+            skipped_targets = [target for group in target_groups[index:] for target in group]
+            break
+    return runs, skipped_targets, sequential_mode
+
+
 def main(argv: Sequence[str] | None = None) -> int:
     parser = build_parser()
     args = parser.parse_args(argv)
 
     if args.context < 0 or args.max_diag_lines < 0 or args.tabsize <= 0:
         parser.error("context/max-diag-lines must be nonnegative and tabsize positive")
+    if args.fail_fast and args.single_invocation:
+        parser.error("--fail-fast has no effect with --single-invocation")
 
     root = args.root.expanduser().resolve() if args.root else find_lake_root(Path.cwd())
     if root is None:
@@ -730,14 +951,20 @@ def main(argv: Sequence[str] | None = None) -> int:
     lake_global_args = list(args.lake_arg)
     if not args.no_quiet and "-q" not in lake_global_args and "--quiet" not in lake_global_args:
         lake_global_args.append("-q")
-    command = [args.lake, *lake_global_args, "build", *args.targets]
+    color_enabled = use_color(args.color)
 
     try:
-        return_code, raw_lines = run_build(command, root)
+        runs, skipped_targets, sequential_mode = execute_builds(
+            args=args,
+            root=root,
+            lake_global_args=lake_global_args,
+            color_enabled=color_enabled,
+        )
     except RuntimeError as ex:
         print(f"lake_build_report.py: {ex}", file=sys.stderr)
         return 127
 
+    raw_lines = combined_raw_lines(runs)
     if args.save_raw:
         raw_path = args.save_raw.expanduser()
         if not raw_path.is_absolute():
@@ -745,7 +972,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         raw_path.parent.mkdir(parents=True, exist_ok=True)
         raw_path.write_text("\n".join(raw_lines) + "\n", encoding="utf-8")
 
-    parse_result = parse_output(raw_lines)
+    parse_result = merge_parse_results(runs)
     diagnostics = (
         list(parse_result.diagnostics)
         if args.no_dedup
@@ -770,10 +997,12 @@ def main(argv: Sequence[str] | None = None) -> int:
     if cluster_gap < 0:
         parser.error("cluster-gap must be nonnegative")
 
+    return_code = overall_return_code(runs)
     if args.format == "json":
         render_json_report(
             root=root,
-            command=command,
+            runs=runs,
+            skipped_targets=skipped_targets,
             return_code=return_code,
             parse_result=parse_result,
             shown=shown,
@@ -781,7 +1010,8 @@ def main(argv: Sequence[str] | None = None) -> int:
     else:
         render_text_report(
             root=root,
-            command=command,
+            runs=runs,
+            skipped_targets=skipped_targets,
             return_code=return_code,
             parse_result=parse_result,
             shown=shown,
@@ -789,10 +1019,11 @@ def main(argv: Sequence[str] | None = None) -> int:
             cluster_gap=cluster_gap,
             max_diag_lines=args.max_diag_lines,
             tabsize=args.tabsize,
-            color_enabled=use_color(args.color),
+            color_enabled=color_enabled,
             raw_lines=raw_lines,
             show_raw=args.raw,
             fallback_tail_lines=args.fallback_tail_lines,
+            sequential_mode=sequential_mode,
         )
 
     return return_code
