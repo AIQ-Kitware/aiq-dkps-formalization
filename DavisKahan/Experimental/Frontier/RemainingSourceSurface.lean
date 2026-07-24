@@ -10,6 +10,7 @@ import DavisKahan.TanTwoTheta.UnboundedIdeal
 import DavisKahan.TanTheta.GenuineSpectrum
 import DavisKahan.TanTheta.UnboundedGraphAngle
 import DavisKahan.FiniteDimensional.TanTheta.RitzResidual
+import DavisKahan.TanTheta.Theorem63FiniteSource
 import DavisKahan.OperatorIdeal.UnitarilyInvariant.RectangularFamily
 
 /-!
@@ -219,10 +220,12 @@ assumes a strict dimension inequality between the coordinate spaces and defines
 not infer the symmetric relation `IsAcute Z V` from an abstract isometric
 embedding of the smaller space into the larger one.
 
-The finite strict-lower-rank theorem below is a compiled specialization, not the
-full Hilbert-space source endpoint.  The full endpoint remains open at the
-finite-Ky-Fan approximation step recorded in
-`Experimental/Scratch/Section6/Theorem63SourceFaithful.lean`.
+The bounded strict-dimension theorem is now proved at the paper's effective
+scope: finite trial coordinates and an arbitrary complete ambient Hilbert
+space.  This follows from the paper's global separability convention together
+with its strict Hilbert-dimension inequality.  The equal-dimension tangent
+theorem and the Appendix's full unbounded arbitrary-ideal extension remain
+separate open endpoints.
 -/
 
 /-- Compiled finite-dimensional strict-lower-rank specialization of
@@ -241,6 +244,20 @@ partial source coverage but does not discharge the paper's arbitrary
 unitarily-invariant-norm statement. -/
 alias theorem6_3_unbounded_graphAngle_opNorm_partial :=
   DavisKahan.Experimental.TanTheta.tanTheta_unbounded_graphAngle_genuineTrialBlock
+
+/-- Unique frontier marker for the still-open arbitrary-ideal unbounded scope.
+Its type deliberately records only the currently grounded operator-norm
+specialization; the manifest marks this declaration as an open obligation. -/
+alias unbounded_angle_theorems_source_scope_partial_marker :=
+  DavisKahan.Experimental.TanTheta.tanTheta_unbounded_graphAngle_genuineTrialBlock
+
+/-- Completed finite-trial/arbitrary-ambient Ky Fan root of Theorem 6.3. -/
+alias theorem6_3_all_kyFan_core :=
+  ExactTanTheta.theorem6_3_all_kyFan_core
+
+/-- Completed bounded source-faithful Davis--Kahan Theorem 6.3. -/
+alias theorem6_3_generalizedTanTheta_source_ideal :=
+  ExactTanTheta.theorem6_3_generalizedTanTheta_source_ideal
 
 end GeneralizedTangent
 

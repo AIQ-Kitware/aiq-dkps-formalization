@@ -11,6 +11,7 @@
     "compiled_exact": "An exact source-facing theorem or construction is compiled on the base.",
     "compiled_specialization": "A useful compiled specialization exists, but not the full source scope.",
     "compiled_general_infrastructure": "The mathematics exists in a general reusable form, though a source-numbered wrapper may be absent.",
+    "proof_written": "A source-facing proof has been written and statically audited, but compiler certification is still pending.",
     "candidate_under_repair": "A statement/candidate exists in the full Part III repair campaign but is not compiler-certified on this base.",
     "partial_or_wrapper_missing": "Substantial ingredients exist, but the exact source theorem is not represented or audited.",
     "not_represented": "No matching declaration was found.",
@@ -24,6 +25,7 @@
     "proved_conditional": "Declarations resolve against DavisKahan.All and are proved, but the source conclusion is stated relative to a hypothesis record that no value is ever constructed for, so the paper's claim is assumed rather than derived.",
     "partially_in_build": "Some declarations resolve against DavisKahan.All and some do not, so the row's source claim is only partly guarded by CI. `declarations_outside_build` lists the unguarded ones.",
     "proved_outside_build": "Declarations compile, but only under DavisKahan/Experimental, which no default target builds. The mathematics is done; it is not guarded against regression and is not reachable from the source facade.",
+    "compiler_pending": "Declarations and proofs are present, but this exact revision has not yet been checked by the Lean compiler.",
     "not_compiling": "Declarations are written but their package does not compile, so nothing is certified.",
     "absent": "No declaration exists.",
     "not_applicable": "A documented research question or exposition item. No formalization is intended, so the row is not proof debt and must not be counted as a gap."
@@ -619,19 +621,15 @@
       "source_anchor": "Theorem 6.3",
       "title": "Generalized tangent theorem",
       "summary": "A strict inequality of source-coordinate Hilbert dimensions, the Rayleigh–Ritz residual condition, and a one-sided gap control a directed rectangular tangent representative defined from the singular values of E₀*F₁.",
-      "status": "compiled_specialization",
-      "verification": "proved_in_build",
-      "blocked_by": [
-        "exact-source-wrappers"
-      ],
+      "status": "proof_written",
+      "verification": "compiler_pending",
+      "blocked_by": [],
       "lean_declarations": [
-        "ForMathlib.DavisKahanTheory.partIII_generalizedTanTheta_ritzResidual_uiNorm"
+        "ForMathlib.DavisKahan.Experimental.ExactTanTheta.theorem6_3_all_kyFan_core",
+        "ForMathlib.DavisKahan.Experimental.ExactTanTheta.theorem6_3_generalizedTanTheta_source_ideal"
       ],
-      "notes": "The finite arbitrary-UI-norm specialization is compiled. A previous frontier distillation incorrectly replaced the source directed cross-block statement by hdim -> IsAcute; that implication is false and is now regression-tested.",
-      "next_action": "Prove the Hilbert-space finite-Ky-Fan core for the directed E₀*F₁ tangent data, then use the existing Fan-dominance promotion and audit the unbounded cutoff passage.",
-      "planned_declarations": [
-        "ForMathlib.DavisKahan.Experimental.Frontier.RemainingSourceSurface.theorem6_3_generalizedTanTheta_source_ideal"
-      ]
+      "notes": "The bounded source theorem is implemented at the paper's effective separable scope: finite trial coordinates, arbitrary complete ambient Hilbert space, and the strict-rank hypothesis preserved explicitly. The formal endpoint does not derive the finite-dimensional typeclass from separability/cardinal arithmetic; it records that consequence as an explicit Lean assumption. The proof is directed and does not use symmetric IsAcute. The earlier mistranscription remains regression-tested.",
+      "next_action": "Compile the new production theorem. The equal-dimension Section 2 tangent theorem and the Appendix arbitrary-ideal unbounded passage remain separate obligations."
     },
     {
       "id": "DK-6-appendix",
@@ -647,8 +645,8 @@
         "ForMathlib.DavisKahan1970.Theorem6_1_commonDomain",
         "ForMathlib.DavisKahan1970.Theorem6_1_commonCore"
       ],
-      "notes": "The main common-domain and graph-core source forms are compiled.",
-      "next_action": "Audit every displayed appendix identity, not only the headline theorem."
+      "notes": "Common-domain and graph-core source forms are compiled. This does not by itself ground the Appendix's full arbitrary-unitarily-invariant tan-theta cutoff/Fan passage, which remains a separate frontier obligation.",
+      "next_action": "Audit every displayed appendix identity and complete the arbitrary-ideal tangent cutoff/Fan passage; do not infer it from the compiled common-domain wrappers alone."
     },
     {
       "id": "DK-6.3-lem",

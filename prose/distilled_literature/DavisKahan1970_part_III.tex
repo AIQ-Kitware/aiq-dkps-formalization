@@ -340,15 +340,20 @@ conclusion concerns only this directed rectangular tangent representative.  It
 does not assert a direct rotation of the full unequal-dimensional pair and does
 not require \code{IsAcute Z V}.
 
-The repository's theorem
-\code{partIII_generalizedTanTheta_ritzResidual_uiNorm} is therefore a compiled
-finite-dimensional strict-lower-rank specialization, not the full
-Hilbert-space source theorem.  The source-faithful remaining hard step is the
-finite-Ky-Fan approximation argument of the paper (and its unbounded cutoff
-passage), followed by the already-available Fan-dominance promotion to an
-arbitrary unitary-invariant ideal gauge.  The false symmetric formulation is
-now guarded by a compiled counterexample in
+The false symmetric formulation is now guarded by a compiled counterexample
+in
 \code{DavisKahan.Sources.DavisKahan1970.Audits.Theorem63Distillation}.
+A second audit observation closes the bounded source theorem: the paper works
+throughout in a separable Hilbert space, so its strict Hilbert-dimension
+inequality forces the smaller trial-coordinate space to be finite-dimensional.
+Thus the source proof requires finite singular vectors only on the trial side;
+the ambient and exact spectral subspaces may remain infinite-dimensional.
+The production module
+\code{DavisKahan.TanTheta.Theorem63FiniteSource} implements equation (6.6),
+all Ky Fan prefix inequalities, finite-rank tail stabilization, and the
+Fan-dominance promotion to arbitrary supported unitary-invariant ideal gauges.
+The equal-dimension noncompact tangent theorem and the arbitrary-ideal
+unbounded Appendix passage remain separate obligations.
 
 \section{Section 7: reflection and the double-angle theorems}
 
@@ -520,7 +525,7 @@ Full source audit & Partial & Map every numbered result and qualification agains
 \item Theorem 6.3 is a directed unequal-dimension statement.  A Hilbert-dimension embedding must never be upgraded to symmetric acuteness or to a full direct-rotation tangent operator; the source uses the singular values of the rectangular cross block $E_0^*F_1$.
 \item The arbitrary-separated-spectrum Sylvester estimate with sharp constant $\pi/2$ is later theory. It is useful infrastructure but is not the analytic root of the four source statements.
 \item Exact finite reciprocal orbit interpolation is stronger than any of the four classical conclusions. In particular, a generic undoubled real certificate at mass $\pi/2$ is false and must not be installed as a hidden premise of this API.
-\item The finite-dimensional arbitrary-unitarily-invariant-norm \code{tan Theta} Ritz-residual specializations are proved.  They must not be conflated with the still-open Hilbert-space Theorem 6.3 source endpoint, the all-unitarily-invariant-norm \code{tan 2 Theta} extension, or graph-operator APIs whose construction remains experimental.
+\item The finite-dimensional arbitrary-unitarily-invariant-norm \code{tan Theta} Ritz-residual specializations and the bounded strict-dimension Theorem 6.3 proof are distinct results.  Neither should be conflated with the still-open equal-dimension noncompact tangent theorem, the all-unitarily-invariant-norm \code{tan 2 Theta} extension, the unbounded arbitrary-ideal Appendix passage, or graph-operator APIs whose construction remains experimental.
 \item Direct rotation extremality is conceptually central but can remain a separate module from the inequalities themselves.
 \end{enumerate}
 
