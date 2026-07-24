@@ -8,7 +8,7 @@ import DavisKahan.Interop.Spectra.HalmosTwoProjections
 import DavisKahan.Interop.Spectra.SpectralRestriction
 -- supplies `compressOperator`
 import DavisKahan.Sylvester.GenuineSpectrum
-import ForMathlib.Analysis.Normed.Operator.ApproximationNumber
+import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Basic
 
 /-!
 # Grounded generic direct-rotation predicates for Davis--Kahan 1970

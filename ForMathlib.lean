@@ -36,11 +36,6 @@ import ForMathlib.Analysis.Matrix.EntrywiseEigenvalue
 import ForMathlib.Analysis.Matrix.EntrywiseOpNorm
 import ForMathlib.Analysis.Matrix.SpectralFunctionMeasurable
 import ForMathlib.Analysis.Normed.FiniteLpGauge
-import ForMathlib.Analysis.Normed.Operator.ApproximationNumber
-import ForMathlib.Analysis.Normed.Operator.ApproximationNumberAdjoint
-import ForMathlib.Analysis.Normed.Operator.ApproximationNumberHilbert
-import ForMathlib.Analysis.Normed.Operator.ApproximationNumberMinMax
-import ForMathlib.Analysis.Normed.Operator.ApproximationNumberSingularValues
 import ForMathlib.Analysis.Normed.Operator.LinearIsometry
 import ForMathlib.LinearAlgebra.Matrix.PosDef
 import ForMathlib.LinearAlgebra.Matrix.RankFactorization

@@ -5,9 +5,9 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Interop.Spectra.ApproximationNumberMinMax
 import Mathlib.Topology.Algebra.Module.FiniteDimension
-import ForMathlib.Analysis.Normed.Operator.ApproximationNumberAdjoint
-import ForMathlib.Analysis.Normed.Operator.ApproximationNumberSingularValues
-import ForMathlib.Analysis.Normed.Operator.ApproximationNumberMinMax
+import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Adjoint
+import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteDimensional
+import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.MinMax
 import ForMathlib.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm
 
 /-!
