@@ -8,7 +8,7 @@ import DavisKahan.SpectralTheory.Compatibility
 import DavisKahan.SpectralTheory.Complexification.Basic
 import DavisKahan.SpectralTheory.Complexification.Subspace
 import DavisKahan.Experimental.InfiniteDimensional.Core.Forms
-import DavisKahan.Experimental.InfiniteDimensional.Core.OperatorAngle
+import DavisKahan.SpectralTheory.OperatorAngle
 import DavisKahan.Geometry.Angle.OperatorAngleComplex
 import DavisKahan.Geometry.Angle.OperatorAngleReal
 import DavisKahan.SpectralTheory.Real.ContinuousFunctionalCalculus
