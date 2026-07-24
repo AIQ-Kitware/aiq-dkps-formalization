@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
-import DavisKahan.Experimental.Scratch.FreeBeam.SmoothKernel
+import DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.SmoothKernel
 import Mathlib.Analysis.Complex.RealDeriv
 import Mathlib.Tactic
 
@@ -19,7 +19,8 @@ representation.  Together the two files identify the smooth kernel exactly.
 namespace ForMathlib
 namespace DavisKahan
 namespace Experimental
-namespace Scratch
+namespace MathAhead
+namespace HiddenFoundations
 namespace FreeBeam
 namespace Classical
 
@@ -145,7 +146,8 @@ end
 
 end Classical
 end FreeBeam
-end Scratch
+end HiddenFoundations
+end MathAhead
 end Experimental
 end DavisKahan
 end ForMathlib

@@ -22,7 +22,8 @@ finite set of scalar facts is sufficient for `PositiveRootLocalization`.
 namespace ForMathlib
 namespace DavisKahan
 namespace Experimental
-namespace Scratch
+namespace MathAhead
+namespace HiddenFoundations
 namespace FreeBeam
 namespace Classical
 
@@ -151,7 +152,8 @@ end
 
 end Classical
 end FreeBeam
-end Scratch
+end HiddenFoundations
+end MathAhead
 end Experimental
 end DavisKahan
 end ForMathlib

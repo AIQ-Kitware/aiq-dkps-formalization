@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
-import DavisKahan.Experimental.Scratch.FreeBeam.Classical.CharacteristicConverse
-import DavisKahan.Experimental.Scratch.FreeBeam.SmoothGreenIdentity
+import DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Classical.CharacteristicConverse
+import DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.SmoothGreenIdentity
 import Mathlib.Tactic
 
 /-!
@@ -20,7 +20,8 @@ eigen-equation.
 namespace ForMathlib
 namespace DavisKahan
 namespace Experimental
-namespace Scratch
+namespace MathAhead
+namespace HiddenFoundations
 namespace FreeBeam
 namespace Classical
 
@@ -151,7 +152,8 @@ end
 
 end Classical
 end FreeBeam
-end Scratch
+end HiddenFoundations
+end MathAhead
 end Experimental
 end DavisKahan
 end ForMathlib

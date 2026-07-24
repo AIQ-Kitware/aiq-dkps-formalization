@@ -22,7 +22,8 @@ the four-parameter classical mode with coefficients `(a,b,a,b)`.
 namespace ForMathlib
 namespace DavisKahan
 namespace Experimental
-namespace Scratch
+namespace MathAhead
+namespace HiddenFoundations
 namespace FreeBeam
 namespace Classical
 
@@ -159,7 +160,8 @@ end
 
 end Classical
 end FreeBeam
-end Scratch
+end HiddenFoundations
+end MathAhead
 end Experimental
 end DavisKahan
 end ForMathlib

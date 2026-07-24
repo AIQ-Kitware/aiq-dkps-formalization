@@ -36,7 +36,8 @@ open scoped Interval ComplexConjugate
 namespace ForMathlib
 namespace DavisKahan
 namespace Experimental
-namespace Scratch
+namespace MathAhead
+namespace HiddenFoundations
 namespace FreeBeam
 
 noncomputable section
@@ -234,7 +235,8 @@ end ComplexFourthOrderData
 end
 
 end FreeBeam
-end Scratch
+end HiddenFoundations
+end MathAhead
 end Experimental
 end DavisKahan
 end ForMathlib

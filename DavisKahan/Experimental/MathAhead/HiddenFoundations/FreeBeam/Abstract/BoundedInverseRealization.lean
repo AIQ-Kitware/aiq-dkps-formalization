@@ -11,7 +11,7 @@ it is the exact bounded-to-unbounded bridge used by variational resolvents.
 The original and adapted files are Apache-2.0 licensed.
 -/
 
-import DavisKahan.Experimental.Scratch.FreeBeam.Abstract.PositiveSurjectiveCriterion
+import DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Abstract.PositiveSurjectiveCriterion
 import ForMathlib.Analysis.InnerProductSpace.CoerciveUnit
 import Mathlib.Tactic
 
@@ -34,7 +34,8 @@ open Set Filter Topology
 namespace ForMathlib
 namespace DavisKahan
 namespace Experimental
-namespace Scratch
+namespace MathAhead
+namespace HiddenFoundations
 namespace FreeBeam
 namespace Abstract
 
@@ -261,7 +262,8 @@ end
 
 end Abstract
 end FreeBeam
-end Scratch
+end HiddenFoundations
+end MathAhead
 end Experimental
 end DavisKahan
 end ForMathlib

@@ -37,7 +37,8 @@ open scoped Interval
 namespace ForMathlib
 namespace DavisKahan
 namespace Experimental
-namespace Scratch
+namespace MathAhead
+namespace HiddenFoundations
 namespace FreeBeam
 
 noncomputable section
@@ -217,7 +218,8 @@ end FourthOrderData
 end
 
 end FreeBeam
-end Scratch
+end HiddenFoundations
+end MathAhead
 end Experimental
 end DavisKahan
 end ForMathlib
