@@ -79,8 +79,9 @@ noncomputable def beamOperator
     (x : D.beamOperator.domain) :
     D.beamOperator.toLinearMap x =
       D.shiftedOperator.toLinearMap x - (x : H) := by
-  change D.shiftedOperator.toLinearMap x + (-(1 : H →L[ℂ] H)) (x : H) = _
-  simp
+  change D.shiftedOperator.toLinearMap x + -(x : H) =
+    D.shiftedOperator.toLinearMap x - (x : H)
+  rw [sub_eq_add_neg]
 
 /-- Form-space representative of a vector in the shifted operator domain. -/
 noncomputable def formRepresentative
