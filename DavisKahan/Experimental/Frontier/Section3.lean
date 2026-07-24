@@ -20,7 +20,7 @@ import DavisKahan.Experimental.MathAhead.HiddenFoundations.Section3Nonacute
 -- supplies the forward direction of the operator-level Halmos classification
 -- (`sameHalmosInvariant_of_pairEquiv`).  This module imports only Frontier/Core,
 -- so the dependency is acyclic.
-import DavisKahan.Experimental.MathAhead.HiddenFoundations.HalmosClassification
+import DavisKahan.Geometry.Halmos.Classification
 
 /-!
 # Section 3 frontier: separation and classification of two subspaces
