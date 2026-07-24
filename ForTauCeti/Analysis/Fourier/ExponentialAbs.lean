@@ -5,13 +5,7 @@ Authors: Jon Crall, GPT 5.6 High
 -/
 module
 
-public import Mathlib.Analysis.Fourier.PoissonSummation
 public import Mathlib.Analysis.Fourier.Inversion
-public import Mathlib.Analysis.SpecialFunctions.ImproperIntegrals
-public import Mathlib.Analysis.SpecialFunctions.Integrals.Basic
-public import Mathlib.Analysis.SpecificLimits.Basic
-public import Mathlib.MeasureTheory.Integral.ExpDecay
-public import Mathlib.MeasureTheory.Integral.IntervalIntegral.Basic
 
 /-!
 # The exponential Fourier transform of the two-sided absolute exponential
