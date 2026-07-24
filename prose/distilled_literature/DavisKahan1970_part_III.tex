@@ -314,7 +314,41 @@ For the tangent estimate, the off-diagonal condition allows the residual equatio
 \]
 The source's one-sided spectral placement ensures the relevant cosine is invertible and gives another ordered Sylvester inequality. The gain from $\sin\Theta$ to $\tan\Theta$ is paid for by the stronger spectral orientation and by the Rayleigh--Ritz condition.
 
-A modern pole-free proof should not simply write $C^{-1}$ before proving that no angle equals $\pi/2$. Nakatsukasa and Motovilov clarify how the required graph property follows from finite-dimensional spectral placement.  The repository now exposes the source-facing arbitrary-unitarily-invariant-norm Ritz-residual theorem through \code{partIII_tanTheta_ritzResidual_uiNorm} and its strict-lower-rank companion, with transversality derived rather than assumed.  The elementary \code{tan_theta_le} theorem remains useful as a coordinate-free operator-norm proof with substantially lighter singular-value dependencies.
+A modern pole-free proof should not simply write $C^{-1}$ before proving that no angle equals $\pi/2$. Nakatsukasa and Motovilov clarify how the required graph property follows from spectral placement.  The elementary \code{tan_theta_le} theorem remains useful as a coordinate-free operator-norm proof with substantially lighter singular-value dependencies.
+
+\subsubsection*{Source-audit correction: Theorem 6.3 is directed, not symmetrically acute}
+
+An earlier version of this distillation made a serious transcription error.  It
+replaced the paper's strict inequality
+\[
+  \dim \mathcal X(E_0)<\dim \mathcal X(F_0)
+\]
+by an abstract isometric embedding of the smaller trial space into the larger
+exact space, and then treated that embedding as if it implied the symmetric
+Davis--Kahan acute relation between the two ambient subspaces.  That implication
+is false: a proper subspace embeds isometrically into a larger subspace while
+the reverse directed projection can have a nontrivial kernel.
+
+The printed theorem does not make this inference.  It defines the directed sine
+data from the singular values of
+\[
+  E_0^*F_1,
+\]
+or equivalently of the adjoint cross block $F_1^*E_0$, and defines
+$\tan\Theta_0$ by applying tangent to that same singular-value list.  The
+conclusion concerns only this directed rectangular tangent representative.  It
+does not assert a direct rotation of the full unequal-dimensional pair and does
+not require \code{IsAcute Z V}.
+
+The repository's theorem
+\code{partIII_generalizedTanTheta_ritzResidual_uiNorm} is therefore a compiled
+finite-dimensional strict-lower-rank specialization, not the full
+Hilbert-space source theorem.  The source-faithful remaining hard step is the
+finite-Ky-Fan approximation argument of the paper (and its unbounded cutoff
+passage), followed by the already-available Fan-dominance promotion to an
+arbitrary unitary-invariant ideal gauge.  The false symmetric formulation is
+now guarded by a compiled counterexample in
+\code{DavisKahan.Sources.DavisKahan1970.Audits.Theorem63Distillation}.
 
 \section{Section 7: reflection and the double-angle theorems}
 
@@ -458,7 +492,7 @@ The declarations below record the current finite specialization. They should ret
 Section 5, Theorem 5.1 & Ordered-gap Sylvester estimate with constant one for rectangular UI norms & \code{uiNorm_sylvester_le_of_orderedGap}, \code{uiNorm_sylvester_le_of_intervalGap} \\
 Section 6, generalized sin theorem & Residual-to-sine estimate through a cross-block Sylvester equation & \code{sinTheta_residual_le}, \code{sinTheta_residual_le_of_orderedGap}, \code{partIII_sinTheta_uiNorm} \\
 Section 7, sin $2\Theta$ & Reflection reduction and factor-two UI-norm estimate & \code{sin_two_theta_reflection_le}, \code{sin_two_theta_starProjection_le}, \code{partIII_sinTwoTheta_uiNorm} \\
-Section 6, tan theorem & Rayleigh--Ritz residual, source-oriented interval placement, equal-rank and strict-lower-rank alternatives & \code{partIII_tanTheta_ritzResidual_uiNorm}, \code{partIII_generalizedTanTheta_ritzResidual_uiNorm}, and the low-dependency \code{partIII_tanTheta_vector} companion \\
+Section 6, tan theorem & Rayleigh--Ritz residual; finite equal-rank and strict-lower-rank UI-norm specializations, plus a Hilbert-space operator-norm companion & \code{partIII_tanTheta_ritzResidual_uiNorm}, \code{partIII_generalizedTanTheta_ritzResidual_uiNorm}, and \code{partIII_tanTheta_vector}; the full source Hilbert-space UI-norm theorem remains open \\
 Sections 7--8, tan $2\Theta$ & Off-diagonal reflection, operator-norm bound, and acute branch & \code{tan_two_theta_norm_sub_le}, \code{partIII_tanTwoTheta_opNorm} \\
 Projector geometry & Operator norm of projector difference equals maximal directed sine & \code{opNorm_starProjection_sub_le}, \code{opNorm_spectralSubspace_sub_le} \\
 Spectral selection & Replace an arbitrary reducing subspace by the canonical spectral subspace associated with the separated cluster & \code{spectralProjection}, \code{opNorm_spectralSubspace_sub_le}, and the spectral wrappers in the sine modules \\
@@ -483,9 +517,10 @@ Full source audit & Partial & Map every numbered result and qualification agains
 
 \begin{enumerate}[leftmargin=2em]
 \item Completion of a finite-dimensional quartet is not completion of the 1970 paper. It is a specialization with valuable weaker foundations.
+\item Theorem 6.3 is a directed unequal-dimension statement.  A Hilbert-dimension embedding must never be upgraded to symmetric acuteness or to a full direct-rotation tangent operator; the source uses the singular values of the rectangular cross block $E_0^*F_1$.
 \item The arbitrary-separated-spectrum Sylvester estimate with sharp constant $\pi/2$ is later theory. It is useful infrastructure but is not the analytic root of the four source statements.
 \item Exact finite reciprocal orbit interpolation is stronger than any of the four classical conclusions. In particular, a generic undoubled real certificate at mass $\pi/2$ is false and must not be installed as a hidden premise of this API.
-\item The arbitrary-unitarily-invariant-norm \code{tan Theta} Ritz-residual theorem is now proved.  This must not be conflated with the still-open all-unitarily-invariant-norm \code{tan 2 Theta} extension or with graph-operator APIs whose construction remains experimental.
+\item The finite-dimensional arbitrary-unitarily-invariant-norm \code{tan Theta} Ritz-residual specializations are proved.  They must not be conflated with the still-open Hilbert-space Theorem 6.3 source endpoint, the all-unitarily-invariant-norm \code{tan 2 Theta} extension, or graph-operator APIs whose construction remains experimental.
 \item Direct rotation extremality is conceptually central but can remain a separate module from the inequalities themselves.
 \end{enumerate}
 

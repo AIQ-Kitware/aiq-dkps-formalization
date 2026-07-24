@@ -9,6 +9,7 @@ import DavisKahan.Sources.DavisKahan1970.Audits.FullPaperSineTheta
 import DavisKahan.Sources.DavisKahan1970.Audits.GeneralSinThetaExtensions
 import DavisKahan.Sources.DavisKahan1970.Audits.Section9
 import DavisKahan.Sources.DavisKahan1970.Audits.SylvesterHilbertSchmidt
+import DavisKahan.Sources.DavisKahan1970.Audits.Theorem63Distillation
 import DavisKahan.Sources.DavisKahan1970.Audits.Unbounded
 
 /-! # `DavisKahan/Sources/DavisKahan1970/Audits` -/
