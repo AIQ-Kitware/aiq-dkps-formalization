@@ -17,6 +17,7 @@ in doubt; this file is a routing aid, not a complete replacement for grep (see
 
 | Symptom | Read |
 |---|---|
+| Theorem 6.3 strict dimension / isometric embedding was treated as implying `IsAcute`; finite theorem was mislabeled as full source scope | [`davis-kahan-theorem63-distillation-error-2026-07-23.md`](davis-kahan-theorem63-distillation-error-2026-07-23.md) |
 | A `grep sorry` reports sorries in libraries that are actually clean (matched docstring prose like "no `sorry` remains") | [`comparator-statement-export-matching-2026-06-14.md`](comparator-statement-export-matching-2026-06-14.md) (and benchmark Q3) |
 
 ## Lean: turning a theorem into a `def` + API / apply-lemma debugging

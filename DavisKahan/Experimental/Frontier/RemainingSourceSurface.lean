@@ -8,6 +8,8 @@ import DavisKahan.Experimental.Frontier.Lemma63
 import DavisKahan.DoubleAngle.UnboundedIdeal
 import DavisKahan.TanTwoTheta.UnboundedIdeal
 import DavisKahan.TanTheta.GenuineSpectrum
+import DavisKahan.TanTheta.UnboundedGraphAngle
+import DavisKahan.FiniteDimensional.TanTheta.RitzResidual
 import DavisKahan.OperatorIdeal.UnitarilyInvariant.RectangularFamily
 
 /-!
@@ -193,7 +195,7 @@ theorem theorem5_1_banach_sylvester
 
 end BanachSylvester
 
-section GeneralizedTangent
+section GeneralizedTangentResidual
 
 variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
   [CompleteSpace H]
@@ -204,29 +206,41 @@ noncomputable def trialResidual
     [Z.HasOrthogonalProjection] : Z →L[ℂ] H :=
   Zᗮ.starProjection ∘L T ∘L Z.subtypeL
 
-/-- Davis--Kahan 1970, Theorem 6.3 at Hilbert-space rectangular-ideal scope.
-The dimension hypothesis is expressed by an isometric embedding of the trial
-space into the selected exact space, rather than finite rank. -/
-theorem theorem6_3_generalizedTanTheta_ideal
-    (N : RectangularSymmetricIdealFamily (𝕜 := ℂ))
-    (T : H →L[ℂ] H) (hT : IsSelfAdjoint T)
-    -- `compressOperator Z T` needs the trial subspace to be a Hilbert space in
-    -- its own right; the source's trial space is closed, so this is a
-    -- faithful hypothesis rather than a restriction
-    (Z V : Submodule ℂ H) [Z.HasOrthogonalProjection] [CompleteSpace Z]
-    [V.HasOrthogonalProjection]
-    (hdim : Nonempty (Z →ₗᵢ[ℂ] V))
-    (hVinv : ∀ x ∈ V, T x ∈ V)
-    {alpha delta : ℝ} (hdelta : 0 < delta)
-    (hZspec : ∀ x ∈ spectrum ℝ (compressOperator Z T), x ≤ alpha)
-    (hVspec : ∀ x ∈ spectrum ℝ (compressOperator Vᗮ T),
-      alpha + delta ≤ x)
-    (hRmem : N.Mem (trialResidual T Z)) :
-    ∃ hacute : IsAcute Z V,
-      N.Mem (tanAngleOperatorC Z V hacute) ∧
-      delta * N.gauge (tanAngleOperatorC Z V hacute) ≤
-        N.gauge (trialResidual T Z) := by
-  sorry
+end GeneralizedTangentResidual
+
+section GeneralizedTangent
+
+/-!
+## Source-audit correction for Theorem 6.3
+
+The previous frontier draft mistranscribed the paper.  Davis--Kahan Theorem 6.3
+assumes a strict dimension inequality between the coordinate spaces and defines
+`tan Θ₀` from the singular values of the directed cross block `E₀⋆ F₁`.  It does
+not infer the symmetric relation `IsAcute Z V` from an abstract isometric
+embedding of the smaller space into the larger one.
+
+The finite strict-lower-rank theorem below is a compiled specialization, not the
+full Hilbert-space source endpoint.  The full endpoint remains open at the
+finite-Ky-Fan approximation step recorded in
+`Experimental/Scratch/Section6/Theorem63SourceFaithful.lean`.
+-/
+
+/-- Compiled finite-dimensional strict-lower-rank specialization of
+Davis--Kahan 1970, Theorem 6.3.  This is intentionally not named as the full
+source endpoint. -/
+alias theorem6_3_finite_generalizedTanTheta_ideal :=
+  DavisKahanTheory.davisKahan1970_generalizedTanTheta0_ritzResidual_le
+
+/-- Compiled finite-dimensional equal-rank specialization of the Section 2
+single-angle tangent theorem. -/
+alias theorem6_3_equalRank_finite_tanTheta_ideal :=
+  DavisKahanTheory.davisKahan1970_tanTheta0_ritzResidual_le
+
+/-- Compiled unbounded graph-angle companion at operator norm.  This is useful
+partial source coverage but does not discharge the paper's arbitrary
+unitarily-invariant-norm statement. -/
+alias theorem6_3_unbounded_graphAngle_opNorm_partial :=
+  DavisKahan.Experimental.TanTheta.tanTheta_unbounded_graphAngle_genuineTrialBlock
 
 end GeneralizedTangent
 
