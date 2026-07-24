@@ -1,0 +1,186 @@
+{
+  "_schema": "tauceti-extraction-manifest/v1",
+  "_comment": "Machine-readable record of the Tau Ceti extraction. `clusters` drives scripts/check_dependency_layers.py (rule 6, closure) and scripts/export_for_tauceti.py (staging->TauCeti copy). `records` carries the per-module provenance and ownership detail required by the campaign spec.",
+  "davis_kahan_commit": "fc38eb48b9b49f2e1d87fe0c7022dc5e262820a7",
+  "tauceti_submodule_commit": "92c79e5e0a618f8c5c2b9909be1ce50f6891dde7",
+  "clusters": [
+    {
+      "cluster": "approximation-number",
+      "roadmap_target": "SpectralSubspacePerturbation Part B (Approximation numbers and rectangular symmetric ideals) / public-api-integration-review PR 1",
+      "roadmap_focus": "spectral-subspace-perturbation",
+      "status": "staged",
+      "upstream_pr": null,
+      "staging_modules": [
+        "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Basic",
+        "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Adjoint",
+        "ForTauCeti.Analysis.InnerProductSpace.CourantFischer",
+        "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteDimensional",
+        "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.MinMax",
+        "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.OperatorModulus"
+      ]
+    }
+  ],
+  "records": [
+    {
+      "source_module": "ForMathlib.Analysis.Normed.Operator.ApproximationNumber",
+      "source_declarations": [
+        "Cardinal.le_natCast_of_lift_le",
+        "ContinuousLinearMap.approximationNumber",
+        "ContinuousLinearMap.approximationNumber_def",
+        "ContinuousLinearMap.approximationNumber_le",
+        "ContinuousLinearMap.le_approximationNumber",
+        "ContinuousLinearMap.approximationNumber_eq",
+        "ContinuousLinearMap.approximationNumber_zero",
+        "ContinuousLinearMap.antitone_approximationNumber",
+        "ContinuousLinearMap.approximationNumber_le_nnnorm",
+        "ContinuousLinearMap.zero_approximationNumber",
+        "ContinuousLinearMap.approximationNumber_nonneg",
+        "ContinuousLinearMap.lt_approximationNumber_add_pos",
+        "ContinuousLinearMap.approximationNumber_add_le",
+        "ContinuousLinearMap.approximationNumber_add_le_add",
+        "ContinuousLinearMap.rank_comp_left_le_of_rank_le",
+        "ContinuousLinearMap.approximationNumber_comp_right_le",
+        "ContinuousLinearMap.approximationNumber_comp_left_le",
+        "ContinuousLinearMap.approximationNumber_comp_comp_le",
+        "ContinuousLinearMap.approximationNumber_smul"
+      ],
+      "current_namespace": "ContinuousLinearMap, Cardinal",
+      "staging_module": "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Basic",
+      "final_tauceti_module": "TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Basic",
+      "ownership_class": "tauceti",
+      "roadmap_target": "Part B / PR 1",
+      "provenance_class": "copied",
+      "direct_dependencies": ["Mathlib"],
+      "blocked_dependencies": [],
+      "downstream_users": [
+        "DavisKahan.OperatorIdeal.ApproximationNumbers.Core"
+      ],
+      "status": "staged",
+      "upstream_pr": null
+    },
+    {
+      "source_module": "ForMathlib.Analysis.Normed.Operator.ApproximationNumberAdjoint",
+      "source_declarations": [
+        "ContinuousLinearMap.approximationNumber_adjoint"
+      ],
+      "current_namespace": "ContinuousLinearMap",
+      "staging_module": "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Adjoint",
+      "final_tauceti_module": "TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Adjoint",
+      "ownership_class": "tauceti",
+      "roadmap_target": "Part B / PR 1",
+      "provenance_class": "copied",
+      "direct_dependencies": [
+        "Mathlib",
+        "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Basic"
+      ],
+      "blocked_dependencies": [],
+      "downstream_users": [
+        "DavisKahan.OperatorIdeal.ApproximationNumbers.Core"
+      ],
+      "status": "staged",
+      "upstream_pr": null
+    },
+    {
+      "source_module": "ForMathlib.Analysis.InnerProductSpace.CourantFischer",
+      "source_declarations": [
+        "TauCeti.specSubspace (was ForMathlib.specSubspace)",
+        "TauCeti.finrank_specSubspace",
+        "TauCeti.forall_unit_vector_eigenvalue_le_re_inner",
+        "TauCeti.re_inner_map_self_le_of_mem_specSubspace",
+        "TauCeti.orthogonal_specSubspace",
+        "and the Courant-Fischer eigenvalue-comparison API"
+      ],
+      "current_namespace": "ForMathlib -> renamed to TauCeti",
+      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.CourantFischer",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.CourantFischer",
+      "ownership_class": "tauceti",
+      "roadmap_target": "Part B / PR 1 (finite-dimensional min-max support)",
+      "provenance_class": "copied (namespace renamed ForMathlib -> TauCeti)",
+      "direct_dependencies": ["Mathlib"],
+      "blocked_dependencies": [],
+      "downstream_users": [
+        "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteDimensional",
+        "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.MinMax"
+      ],
+      "status": "staged",
+      "upstream_pr": null
+    },
+    {
+      "source_module": "ForMathlib.Analysis.Normed.Operator.ApproximationNumberSingularValues",
+      "source_declarations": [
+        "ContinuousLinearMap.singularValues_le_norm_sub_of_rank_le",
+        "ContinuousLinearMap.singularValues_le_approximationNumber",
+        "ContinuousLinearMap.approximationNumber_le_singularValues",
+        "ContinuousLinearMap.approximationNumber_eq_singularValues"
+      ],
+      "current_namespace": "ContinuousLinearMap",
+      "staging_module": "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteDimensional",
+      "final_tauceti_module": "TauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteDimensional",
+      "ownership_class": "tauceti",
+      "roadmap_target": "Part B / PR 1",
+      "provenance_class": "copied (ForMathlib.* helper refs rewritten to TauCeti.*)",
+      "direct_dependencies": [
+        "Mathlib",
+        "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Basic",
+        "ForTauCeti.Analysis.InnerProductSpace.CourantFischer"
+      ],
+      "blocked_dependencies": [],
+      "downstream_users": [
+        "DavisKahan.OperatorIdeal.ApproximationNumbers.Core"
+      ],
+      "status": "staged",
+      "upstream_pr": null
+    },
+    {
+      "source_module": "ForMathlib.Analysis.Normed.Operator.ApproximationNumberMinMax",
+      "source_declarations": [
+        "ContinuousLinearMap.lowerBound_le_approximationNumber_of_finrank",
+        "ContinuousLinearMap.lowerBound_le_approximationNumber_of_linearIndependent"
+      ],
+      "current_namespace": "ContinuousLinearMap",
+      "staging_module": "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.MinMax",
+      "final_tauceti_module": "TauCeti.Analysis.OperatorIdeal.ApproximationNumber.MinMax",
+      "ownership_class": "tauceti",
+      "roadmap_target": "Part B / PR 1",
+      "provenance_class": "copied",
+      "direct_dependencies": [
+        "Mathlib",
+        "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Basic",
+        "ForTauCeti.Analysis.InnerProductSpace.CourantFischer"
+      ],
+      "blocked_dependencies": [],
+      "downstream_users": [
+        "DavisKahan.OperatorIdeal.ApproximationNumbers.Core"
+      ],
+      "status": "staged",
+      "upstream_pr": null
+    },
+    {
+      "source_module": "DavisKahan.OperatorIdeal.ApproximationNumbers.OperatorModulus",
+      "source_declarations": [
+        "TauCeti.rectangularOperatorModulus",
+        "TauCeti.rectangularGram_nonneg",
+        "TauCeti.rectangularOperatorModulus_nonneg",
+        "TauCeti.isSelfAdjoint_rectangularOperatorModulus",
+        "TauCeti.rectangularOperatorModulus_mul_self",
+        "TauCeti.norm_rectangularOperatorModulus_apply",
+        "TauCeti.norm_rectangularOperatorModulus"
+      ],
+      "current_namespace": "ForMathlib.DavisKahan.Experimental.ExactSinTheta -> re-homed to TauCeti",
+      "staging_module": "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.OperatorModulus",
+      "final_tauceti_module": "TauCeti.Analysis.OperatorIdeal.ApproximationNumber.OperatorModulus",
+      "ownership_class": "tauceti",
+      "roadmap_target": "Part B / PR 1",
+      "provenance_class": "copied (partial: Spectra-coupled invariance and paper-norm wrappers deferred)",
+      "direct_dependencies": ["Mathlib"],
+      "blocked_dependencies": [
+        "approximationNumber invariance under the source modulus depends on SpectraBridge.lt_approximationNumber_iff_exists_finiteDimensional_lowerBound (Spectra infinite-dim min-max) -> deferred to a later dependency-closed PR per campaign 9.2 option 2"
+      ],
+      "downstream_users": [
+        "DavisKahan.OperatorIdeal.ApproximationNumbers.OperatorModulus (paper-norm wrappers)"
+      ],
+      "status": "staged-partial",
+      "upstream_pr": null
+    }
+  ]
+}
