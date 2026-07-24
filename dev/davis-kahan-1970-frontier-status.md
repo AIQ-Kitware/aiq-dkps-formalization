@@ -22,7 +22,7 @@ A piece is one manifest node in the result's transitive dependency closure. Miss
 | `DK-3.4-prop` — Proposition 3.4: Square as a direct rotation | proposition | `s3-prop3-4` | 0 / 2 | 100% | yes |
 | `DK-3.1-thm` — Theorem 3.1: Classification of pairs of subspaces | theorem | `s3-theorem3-1` | 2 / 7 | 71% | no |
 | `DK-3.1-cor` — Corollary 3.1: Compact classification by angle eigenvalues | corollary | `s3-cor3-1` | 2 / 6 | 66% | no |
-| `DK-3.5-prop` — Proposition 3.5: Angle commutation and eigenspace geometry | proposition | `s3-prop3-5` | 1 / 5 | 80% | no |
+| `DK-3.5-prop` — Proposition 3.5: Angle commutation and eigenspace geometry | proposition | `s3-prop3-5` | 0 / 5 | 100% | yes |
 | `DK-3.2-cor` — Corollary 3.2: Reversal symmetry | corollary | `s3-cor3-2` | 0 / 2 | 100% | yes |
 | `DK-4.1-prop` — Proposition 4.1: Pointwise and singular-value extremality of the direct rotation | proposition | `s4-prop4-1` | 0 / 2 | 100% | yes |
 | `DK-4.1-cor` — Corollary 4.1: UI-norm minimality of direct rotation displacement | corollary | `s4-cor4-1` | 0 / 3 | 100% | yes |
@@ -51,11 +51,11 @@ A piece is one manifest node in the result's transitive dependency closure. Miss
 - Census rows requiring frontier coverage: **29**
 - Census rows mapped: **29**
 - Declarations resolving in Lean: **43**
-- Declarations with admission-free Lean closure: **32**
-- Recursively grounded manifest nodes: **32**
-- Paper results recursively grounded: **14 / 32**
+- Declarations with admission-free Lean closure: **34**
+- Recursively grounded manifest nodes: **34**
+- Paper results recursively grounded: **15 / 32**
 - Source-role endpoints resolving: **17 / 27**
-- Source-role endpoints recursively grounded: **11 / 27**
+- Source-role endpoints recursively grounded: **12 / 27**
 
 ## Manifest nodes
 
@@ -83,8 +83,8 @@ A piece is one manifest node in the result's transitive dependency closure. Miss
 | `s3-prop3-2-parameter` | bridge | no |  | high | yes | yes | yes | yes |
 | `s3-prop3-3` | source | yes | `DK-3.3-prop` | medium | yes | yes | yes | yes |
 | `s3-prop3-4` | source | yes | `DK-3.4-prop` | medium | yes | yes | yes | yes |
-| `s3-fixed-angle-subspace` | foundation | no |  | medium | yes | yes | no | no |
-| `s3-prop3-5` | source | yes | `DK-3.5-prop` | high | yes | yes | no | no |
+| `s3-fixed-angle-subspace` | foundation | no |  | medium | yes | yes | yes | yes |
+| `s3-prop3-5` | source | yes | `DK-3.5-prop` | high | yes | yes | yes | yes |
 | `s3-cor3-2` | source | yes | `DK-3.2-cor` | medium | yes | yes | yes | yes |
 | `s3-operator-classification` | bridge | no |  | high | yes | yes | no | no |
 | `s3-theorem3-1` | source | yes | `DK-3.1-thm` | hard | yes | yes | no | no |
