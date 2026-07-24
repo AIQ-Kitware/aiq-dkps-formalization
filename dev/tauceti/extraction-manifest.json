@@ -8,9 +8,10 @@
       "cluster": "approximation-number",
       "roadmap_target": "SpectralSubspacePerturbation Part B (Approximation numbers and rectangular symmetric ideals) / public-api-integration-review PR 1",
       "roadmap_focus": "spectral-subspace-perturbation",
-      "status": "exported-to-branch",
-      "upstream_pr": "external/TauCeti branch approximation-numbers @ 450317c1 (from origin/main 92c79e5e); not pushed",
-      "tauceti_target_marker": "<!--tauceti-target:v1 {\"focus\":\"spectral-subspace-perturbation\",\"id\":\"SpectralSubspacePerturbation/PartB/approximation-numbers\"}--> (provisional; confirm accepted id against TauCetiRoadmap before push)",
+      "status": "staged-in-fortauceti",
+      "upstream_pr": null,
+      "tauceti_population": "DEFERRED. Everything stays staged in ForTauCeti while we reorganize; no commit is made to the external/TauCeti submodule until we are ready to submit (awaiting roadmap guidance). scripts/export_for_tauceti.py reproduces the TauCeti/ copy deterministically on demand; a throwaway export was used to validate the cluster under Tau Ceti's strict build (see migration-build-log-2026-07-24.md) and then reset.",
+      "tauceti_target_marker": "<!--tauceti-target:v1 {\"focus\":\"spectral-subspace-perturbation\",\"id\":\"SpectralSubspacePerturbation/PartB/approximation-numbers\"}--> (provisional; confirm accepted id against TauCetiRoadmap before submission)",
       "staging_modules": [
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Basic",
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Adjoint",
