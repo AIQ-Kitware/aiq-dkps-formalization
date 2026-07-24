@@ -211,43 +211,35 @@ end GeneralizedTangentResidual
 section GeneralizedTangent
 
 /-!
-The previous draft in this location was not the paper's Theorem 6.3.  It tried
-to infer the symmetric acute relation `IsAcute Z V` in an arbitrary Hilbert
-space from only `Nonempty (Z →ₗᵢ[ℂ] V)`.  That implication is false in infinite
-dimension (and already fails for a proper trial subspace of a larger exact
-subspace): an abstract isometric embedding controls only Hilbert dimension, not
-surjectivity of the restricted orthogonal projection or the reverse directed
-gap.
+## Source-audit correction for Theorem 6.3
 
-The actual 1970 theorem is the strict-lower-rank finite trial theorem for every
-rectangular unitarily invariant norm.  Its production proof is the Ky Fan
-majorization theorem in `FiniteDimensional/TanTheta/RitzResidual.lean`; the
-frontier endpoint below now exposes that theorem directly.  The separately
-proved unbounded Hilbert-space scope is operator-norm graph-angle theory and is
-recorded as its own endpoint instead of being conflated with an unproved
-infinite-dimensional ideal-gauge extension.
+The previous frontier draft mistranscribed the paper.  Davis--Kahan Theorem 6.3
+assumes a strict dimension inequality between the coordinate spaces and defines
+`tan Θ₀` from the singular values of the directed cross block `E₀⋆ F₁`.  It does
+not infer the symmetric relation `IsAcute Z V` from an abstract isometric
+embedding of the smaller space into the larger one.
+
+The finite strict-lower-rank theorem below is a compiled specialization, not the
+full Hilbert-space source endpoint.  The full endpoint remains open at the
+finite-Ky-Fan approximation step recorded in
+`Experimental/Scratch/Section6/Theorem63SourceFaithful.lean`.
 -/
 
-/-- **Davis--Kahan 1970, Theorem 6.3, paper-exact generalized tangent
-endpoint.**  The trial space has strictly smaller finite rank than the exact
-invariant subspace, the source one-sided Ritz/exact spectral gap holds, and the
-conclusion is valid for every rectangular unitarily invariant norm and every
-`tangent Θ₀` representative with the principal-tangent singular values. -/
-alias theorem6_3_generalizedTanTheta_ideal :=
+/-- Compiled finite-dimensional strict-lower-rank specialization of
+Davis--Kahan 1970, Theorem 6.3.  This is intentionally not named as the full
+source endpoint. -/
+alias theorem6_3_finite_generalizedTanTheta_ideal :=
   DavisKahanTheory.davisKahan1970_generalizedTanTheta0_ritzResidual_le
 
-/-- **Davis--Kahan 1970, Section 2 single-angle tangent theorem.**  This is
-the equal-rank companion of Theorem 6.3, with the same paper-exact residual
-bound for every rectangular unitarily invariant norm. -/
-alias theorem6_3_equalRank_tanTheta_ideal :=
+/-- Compiled finite-dimensional equal-rank specialization of the Section 2
+single-angle tangent theorem. -/
+alias theorem6_3_equalRank_finite_tanTheta_ideal :=
   DavisKahanTheory.davisKahan1970_tanTheta0_ritzResidual_le
 
-/-- **Davis--Kahan 1970 unbounded scope, graph-angle operator-norm form.**
-This is the compiled general Hilbert-space companion: explicit transverse
-coordinates select the graph branch, and the genuine spectral placement gives
-`δ * ‖tan Θ‖ ≤ ‖R‖`.  It is intentionally separate from the finite-rank
-all-unitarily-invariant-norm theorem above. -/
-alias theorem6_3_unbounded_graphAngle_opNorm :=
+/-- Compiled unbounded graph-angle companion at operator norm.  This is useful
+partial source coverage but does not discharge the paper's arbitrary
+unitarily-invariant-norm statement. -/
+alias theorem6_3_unbounded_graphAngle_opNorm_partial :=
   DavisKahan.Experimental.TanTheta.tanTheta_unbounded_graphAngle_genuineTrialBlock
 
 end GeneralizedTangent
