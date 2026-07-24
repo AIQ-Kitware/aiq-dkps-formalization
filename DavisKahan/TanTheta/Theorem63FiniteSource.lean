@@ -579,9 +579,14 @@ theorem theorem63ResidualWitness_scalar
         rw [← inner_conj_symm, RCLike.conj_re]
       have hMv : RCLike.re ⟪v, M v⟫_ℂ = RCLike.re ⟪M v, v⟫_ℂ := by
         rw [← inner_conj_symm, RCLike.conj_re]
-      have hre := congrArg RCLike.re hcomplex
-      simpa only [RCLike.re_to_complex, Complex.re_ofReal_mul,
-        map_sub, hTy, hMv] using hre
+      have hTy' : (⟪y, T y⟫_ℂ).re = (⟪T y, y⟫_ℂ).re := by
+        simpa only [RCLike.re_to_complex] using hTy
+      have hMv' : (⟪v, M v⟫_ℂ).re = (⟪M v, v⟫_ℂ).re := by
+        simpa only [RCLike.re_to_complex] using hMv
+      have hre := congrArg Complex.re hcomplex
+      simpa only [RCLike.re_to_complex, Complex.mul_re,
+        Complex.ofReal_re, Complex.ofReal_im, Complex.sub_re,
+        zero_mul, sub_zero, hTy', hMv'] using hre
     have hpair_lower : delta * sigma ≤ RCLike.re ⟪y, R v⟫_ℂ := by
       rw [hpair]
       nlinarith
@@ -609,8 +614,14 @@ theorem theorem63ResidualWitness_scalar
             c⁻¹ * RCLike.re
               ⟪y - ((sigma : ℝ) : ℂ) • (v : H), R v⟫_ℂ := by
                 rw [inner_smul_left, map_inv₀, Complex.conj_ofReal,
-                  ← Complex.ofReal_inv, RCLike.re_to_complex,
-                  Complex.re_ofReal_mul]
+                  ← Complex.ofReal_inv]
+                change
+                  (((c⁻¹ : ℝ) : ℂ) *
+                    ⟪y - ((sigma : ℝ) : ℂ) • (v : H), R v⟫_ℂ).re =
+                    c⁻¹ *
+                      (⟪y - ((sigma : ℝ) : ℂ) • (v : H), R v⟫_ℂ).re
+                simp only [Complex.mul_re, Complex.ofReal_re,
+                  Complex.ofReal_im, zero_mul, sub_zero]
         _ = c⁻¹ * RCLike.re ⟪y, R v⟫_ℂ := by rw [hraw]
         _ = RCLike.re ⟪y, R v⟫_ℂ / c := by
           simp [div_eq_mul_inv, mul_comm]
