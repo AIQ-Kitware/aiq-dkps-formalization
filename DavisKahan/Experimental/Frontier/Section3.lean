@@ -206,7 +206,23 @@ theorem proposition3_3_principalSquareRoot_converse
 
 /-- Davis--Kahan 1970, Proposition 3.4 in source form: under the half-angle
 condition, the square of the direct rotation is the direct rotation between
-the reflected source and target subspaces. -/
+the reflected source and target subspaces.
+
+Open obligation, with a required hypothesis correction recorded here.  The
+natural reflected pair is `Uref = U`, `Vref = reflectedSubspace V U`, for which
+`spectraDirectRotation U V hacute` squared equals the ordered reflection product
+`R_V R_U` (see `spectraDirectRotation_sq`).  Because every acute direct rotation
+has nonnegative numerical real part, a necessary condition for the conclusion is
+`0 ≤ re ⟪(R_V R_U) x, x⟫`.  Writing `2 S = 1 + R_V R_U` for the canonical
+intertwiner `S` and using its normality identity `Re S = S⋆ S = |S| ^ 2`, one has
+`re ⟪(R_V R_U) x, x⟫ = 2 * re ⟪(|S| ^ 2) x, x⟫ - ‖x‖ ^ 2`, and `|S| ^ 2` is the
+Halmos cosine square.  Hence the correct threshold is on the cosine *square*,
+`re ⟪halmosCosineSq x, x⟫ ≥ ‖x‖ ^ 2 / 2` (cosine `≥ 1 / √2`, angle `≤ π / 4`),
+not on `|S|` itself: the printed bound `re ⟪|S| x, x⟫ ≥ ‖x‖ ^ 2 / 2` is strictly
+weaker since `|S| ≤ 1`.  Moreover the reflected pair is acute only under a
+uniform strict form of that bound (a boundary cosine of `1 / √2` gives a
+double angle of exactly `π / 2`, hence gap `1`), so the field should carry a
+uniform gap, not the pointwise nonstrict inequality below. -/
 theorem proposition3_4_square_is_reflected_directRotation
     (hacute : IsAcute U V)
     (hhalf : ∀ x : H,
