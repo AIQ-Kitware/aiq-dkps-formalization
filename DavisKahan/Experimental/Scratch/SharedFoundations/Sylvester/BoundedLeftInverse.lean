@@ -47,9 +47,9 @@ theorem lower_bound_of_nonnegative
     {A : Y →L[ℂ] Y} {c : ℝ} (h : BoundedLeftInverseData A c)
     (hc : 0 ≤ c) (y : Y) :
     ‖y‖ ≤ c * ‖A y‖ := by
-  rw [← h.apply_apply_eq y]
   calc
-    ‖h.leftInverse (A y)‖ ≤ ‖h.leftInverse‖ * ‖A y‖ := h.leftInverse.le_opNorm _
+    ‖y‖ = ‖h.leftInverse (A y)‖ := by rw [h.apply_apply_eq y]
+    _ ≤ ‖h.leftInverse‖ * ‖A y‖ := h.leftInverse.le_opNorm _
     _ ≤ c * ‖A y‖ := mul_le_mul_of_nonneg_right h.norm_le (norm_nonneg _)
 
 /-- Scaling a left inverse estimate. -/

@@ -1,10 +1,12 @@
-Overlay: aiq_dkps_namek_lake_build_report_b2ea942_gpt56_20260723.zip
+Overlay: aiq_dkps_namek_lake_build_report_batch_progress_b2ea942_gpt56_20260723.zip
 Base: b2ea942eabea
 Target: /home/joncrall/code/aiq-dkps-namek
 
-Added:
+Updated:
 - scripts/lake_build_report.py
 - scripts/tests/test_lake_build_report.py
-- dev/overlays/namek-lake-build-report-b2ea942-gpt56.md
-- dev/namek-lake-build-report-compiler-prompt.md
+
+Added:
+- dev/overlays/namek-lake-build-report-batch-progress-b2ea942-gpt56.md
+- dev/namek-lake-build-report-batch-progress-compiler-prompt.md
 - OVERLAY_MANIFEST.txt

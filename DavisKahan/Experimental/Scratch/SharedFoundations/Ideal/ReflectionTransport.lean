@@ -77,9 +77,14 @@ theorem RectangularSymmetricIdealFamily.gauge_reflection_comp
   apply le_antisymm
   · exact N.gauge_comp_left_le (reflectionOperator V) hT
       (norm_reflectionOperator_le_one V)
-  · rw [← reflection_left_twoWay V T]
-    exact N.gauge_comp_left_le (reflectionOperator V) hRT
-      (norm_reflectionOperator_le_one V)
+  · calc
+      N.gauge T =
+          N.gauge (reflectionOperator V ∘L (reflectionOperator V ∘L T)) :=
+        congrArg (fun S : E →L[𝕜] E => N.gauge S)
+          (reflection_left_twoWay V T).symm
+      _ ≤ N.gauge (reflectionOperator V ∘L T) :=
+        N.gauge_comp_left_le (reflectionOperator V) hRT
+          (norm_reflectionOperator_le_one V)
 
 /-- Rectangular ideal membership is invariant under right reflection. -/
 theorem RectangularSymmetricIdealFamily.mem_comp_reflection_iff
@@ -105,9 +110,14 @@ theorem RectangularSymmetricIdealFamily.gauge_comp_reflection
   apply le_antisymm
   · exact N.gauge_comp_right_le (reflectionOperator V) hT
       (norm_reflectionOperator_le_one V)
-  · rw [← reflection_right_twoWay V T]
-    exact N.gauge_comp_right_le (reflectionOperator V) hTR
-      (norm_reflectionOperator_le_one V)
+  · calc
+      N.gauge T =
+          N.gauge ((T ∘L reflectionOperator V) ∘L reflectionOperator V) :=
+        congrArg (fun S : E →L[𝕜] E => N.gauge S)
+          (reflection_right_twoWay V T).symm
+      _ ≤ N.gauge (T ∘L reflectionOperator V) :=
+        N.gauge_comp_right_le (reflectionOperator V) hTR
+          (norm_reflectionOperator_le_one V)
 
 /-- Exact operator identity behind the directed ideal double-angle theorem. -/
 theorem directedSinBlock_reflected_eq_reflection_comp_sinTwo
@@ -139,9 +149,10 @@ theorem RectangularSymmetricIdealFamily.directed_reflected_mem_iff_and_gauge_eq
         N.gauge (sinTwoAngleOperator U V)) := by
   rw [directedSinBlock_reflected_eq_reflection_comp_sinTwo]
   constructor
-  · exact N.mem_reflection_comp_iff V (sinTwoAngleOperator U V)
+  · exact RectangularSymmetricIdealFamily.mem_reflection_comp_iff N V
+      (sinTwoAngleOperator U V)
   · intro h
-    exact N.gauge_reflection_comp V h
+    exact RectangularSymmetricIdealFamily.gauge_reflection_comp N V h
 
 /-- Square-ideal version of the directed mirror-angle transport. -/
 theorem DavisKahanExt.SymmetricNormIdeal.directed_reflected_mem_and_gauge_eq
@@ -166,8 +177,8 @@ theorem DavisKahanExt.SymmetricNormIdeal.directed_reflected_mem_and_gauge_eq
       ContinuousLinearMap.id_comp]
   have hR : ‖R‖ ≤ 1 := norm_reflectionOperator_le_one V
   have hJ : ‖J‖ ≤ 1 := ContinuousLinearMap.norm_id_le
-  exact I.mem_iff_and_gauge_eq_of_twoWayContractions
-    hforward hback hR hJ hR hJ hT
+  exact SymmetricNormIdeal.mem_iff_and_gauge_eq_of_twoWayContractions I
+    hback hforward hR hJ hR hJ hT
 
 end SharedFoundations
 end Scratch

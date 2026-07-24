@@ -27,11 +27,11 @@ open scoped InnerProductSpace
 open ExactSinTheta
 open DavisKahanExt
 
-universe u v
+universe u
 
 variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
   [CompleteSpace H]
-variable {F : Type v} [NormedAddCommGroup F] [InnerProductSpace ℂ F]
+variable {F : Type u} [NormedAddCommGroup F] [InnerProductSpace ℂ F]
   [CompleteSpace F]
 
 /-- The canonical residual of a closed trial subspace, viewed as a map from

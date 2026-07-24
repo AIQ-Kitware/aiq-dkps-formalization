@@ -58,6 +58,16 @@ noncomputable def BoundedSpectralSelection.canonical
 
 namespace BoundedSpectralSelection
 
+/-- Every member of an equal pair of projected subspaces has the same pointwise
+star projection.  This avoids dependent rewriting through the projection
+instance. -/
+private theorem starProjection_apply_congr
+    {U V : Submodule ℂ H}
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (h : U = V) (x : H) : U.starProjection x = V.starProjection x := by
+  subst V
+  rfl
+
 /-- A certified selection carries the canonical orthogonal projection. -/
 noncomputable instance hasOrthogonalProjection
     {A : H →L[ℂ] H} (S : BoundedSpectralSelection A) :
@@ -69,9 +79,19 @@ noncomputable instance hasOrthogonalProjection
 theorem projection_eq_starProjection
     {A : H →L[ℂ] H} (S : BoundedSpectralSelection A) :
     S.projection = S.subspace.starProjection := by
-  rw [S.projection_eq, S.subspace_eq]
-  exact boundedSelfAdjointSpectralProjection_eq_starProjection
-    A S.selfAdjoint S.carrier S.measurable_carrier
+  apply ContinuousLinearMap.ext
+  intro x
+  rw [S.projection_eq]
+  calc
+    boundedSelfAdjointSpectralProjection A S.selfAdjoint S.carrier
+          S.measurable_carrier x =
+        (boundedSelfAdjointSpectralSubspace A S.selfAdjoint S.carrier
+          S.measurable_carrier).starProjection x := by
+      exact congrArg (fun T : H →L[ℂ] H => T x)
+        (boundedSelfAdjointSpectralProjection_eq_starProjection
+          A S.selfAdjoint S.carrier S.measurable_carrier)
+    _ = S.subspace.starProjection x :=
+      starProjection_apply_congr S.subspace_eq.symm x
 
 /-- The stored projection commutes with the operator. -/
 theorem projection_comp_comm
@@ -80,13 +100,19 @@ theorem projection_comp_comm
   apply ContinuousLinearMap.ext
   intro x
   rw [S.projection_eq]
-  exact boundedSelfAdjointSpectralProjection_apply_comm
-    A S.selfAdjoint S.carrier S.measurable_carrier x
+  simpa only [ContinuousLinearMap.comp_apply] using
+    (boundedSelfAdjointSpectralProjection_apply_comm
+      A S.selfAdjoint S.carrier S.measurable_carrier x).symm
 
 /-- The selected complement also reduces the operator. -/
 theorem orthogonal_reduces
     {A : H →L[ℂ] H} (S : BoundedSpectralSelection A) :
-    Reduces A S.subspaceᗮ := S.reduces.orthogonalComplement
+    Reduces A S.subspaceᗮ := by
+  constructor
+  · exact S.reduces.2
+  · intro x hx
+    rw [Submodule.orthogonal_orthogonal] at hx ⊢
+    exact S.reduces.1 x hx
 
 end BoundedSpectralSelection
 

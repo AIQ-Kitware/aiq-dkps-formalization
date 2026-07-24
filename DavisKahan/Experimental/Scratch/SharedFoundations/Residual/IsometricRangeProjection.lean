@@ -34,11 +34,12 @@ variable {F : Type v} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
 theorem isClosed_range_of_isometric
     {X : F →L[𝕜] E} (hX : IsometricEmbedding X) :
     IsClosed (Set.range X) := by
-  exact (lowerFrameBound_one_of_isometry hX).closedRange zero_lt_one
+  exact ExactSinTheta.LowerFrameBound.closedRange
+    (ExactSinTheta.lowerFrameBound_one_of_isometry hX) zero_lt_one
 
 /-- The range of an isometric bounded embedding has its canonical orthogonal
 projection. -/
-noncomputable def rangeHasOrthogonalProjection
+theorem rangeHasOrthogonalProjection
     (X : F →L[𝕜] E) (hX : IsometricEmbedding X) :
     (LinearMap.range X.toLinearMap).HasOrthogonalProjection := by
   have hset : ((LinearMap.range X.toLinearMap : Submodule 𝕜 E) : Set E) =
@@ -69,7 +70,7 @@ theorem starProjection_range_eq_comp_adjoint
     apply sub_eq_zero.mpr
     calc
       ⟪y, X z⟫_𝕜 = ⟪X.adjoint y, z⟫_𝕜 :=
-        ContinuousLinearMap.adjoint_inner_left X z y
+        (ContinuousLinearMap.adjoint_inner_left X z y).symm
       _ = ⟪X (X.adjoint y), X z⟫_𝕜 := by
         let U : F →ₗᵢ[𝕜] E :=
           { toLinearMap := X.toLinearMap
@@ -80,7 +81,7 @@ theorem starProjection_range_eq_comp_adjoint
 theorem adjoint_comp_isometry_eq_id
     (X : F →L[𝕜] E) (hX : IsometricEmbedding X) :
     X.adjoint ∘L X = ContinuousLinearMap.id 𝕜 F :=
-  adjoint_comp_self_eq_id_of_isometry hX
+  ExactSinTheta.adjoint_comp_self_eq_id_of_isometry hX
 
 /-- The range projection fixes the embedding. -/
 theorem starProjection_range_comp_isometry
@@ -99,16 +100,19 @@ theorem complementaryProjection_range_comp_isometry
     (LinearMap.range X.toLinearMap)ᗮ.starProjection ∘L X = 0 := by
   letI := rangeHasOrthogonalProjection X hX
   rw [Submodule.starProjection_orthogonal',
-    ContinuousLinearMap.sub_comp, ContinuousLinearMap.one_comp,
-    starProjection_range_comp_isometry X hX, sub_self]
+    ContinuousLinearMap.sub_comp,
+    starProjection_range_comp_isometry X hX]
+  change ContinuousLinearMap.id 𝕜 E ∘L X - X = 0
+  rw [ContinuousLinearMap.id_comp, sub_self]
 
 /-- Both an isometric embedding and its adjoint are contractions. -/
 theorem isometry_and_adjoint_norm_le_one
     (X : F →L[𝕜] E) (hX : IsometricEmbedding X) :
     ‖X‖ ≤ 1 ∧ ‖X.adjoint‖ ≤ 1 := by
-  refine ⟨opNorm_le_one_of_isometry hX, ?_⟩
-  rw [ContinuousLinearMap.norm_adjoint]
-  exact opNorm_le_one_of_isometry hX
+  refine ⟨ExactSinTheta.opNorm_le_one_of_isometry hX, ?_⟩
+  calc
+    ‖X.adjoint‖ = ‖X‖ := ContinuousLinearMap.adjoint.norm_map X
+    _ ≤ 1 := ExactSinTheta.opNorm_le_one_of_isometry hX
 
 /-- The adjoint is a left inverse pointwise. -/
 theorem adjoint_apply_isometry_apply

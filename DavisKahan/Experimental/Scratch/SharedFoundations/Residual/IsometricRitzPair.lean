@@ -23,11 +23,11 @@ namespace SharedFoundations
 open scoped InnerProductSpace
 open DavisKahanExt
 
-universe u v
+universe u
 
 variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
   [CompleteSpace H]
-variable {F : Type v} [NormedAddCommGroup F] [InnerProductSpace ℂ F]
+variable {F : Type u} [NormedAddCommGroup F] [InnerProductSpace ℂ F]
   [CompleteSpace F]
 
 /-- Certified isometric Ritz data. -/
@@ -52,10 +52,14 @@ theorem compression_isSelfAdjoint
 theorem adjoint_comp_residual_eq_zero
     {A : H →L[ℂ] H} (P : IsometricRitzPair (F := F) A) :
     P.X.adjoint ∘L residual A P.X P.M = 0 := by
-  rw [residual, ContinuousLinearMap.comp_sub,
-    ← ContinuousLinearMap.comp_assoc, P.compression_eq,
-    ContinuousLinearMap.comp_assoc, adjoint_comp_isometry_eq_id P.X P.isometric,
-    ContinuousLinearMap.id_comp, sub_self]
+  apply ContinuousLinearMap.ext
+  intro x
+  have hM := congrArg (fun T : F →L[ℂ] F => T x) P.compression_eq
+  simp only [residual, ContinuousLinearMap.comp_apply, sub_apply,
+    map_sub, zero_apply]
+  rw [adjoint_apply_isometry_apply P.X P.isometric]
+  apply sub_eq_zero.mpr
+  simpa only [ContinuousLinearMap.comp_apply] using hM.symm
 
 /-- The range projection annihilates the Ritz residual. -/
 theorem rangeProjection_comp_residual_eq_zero
@@ -64,7 +68,8 @@ theorem rangeProjection_comp_residual_eq_zero
     let V : Submodule ℂ H := LinearMap.range P.X.toLinearMap
     V.starProjection ∘L residual A P.X P.M = 0 := by
   letI := rangeHasOrthogonalProjection P.X P.isometric
-  let V : Submodule ℂ H := LinearMap.range P.X.toLinearMap
+  change (LinearMap.range P.X.toLinearMap).starProjection ∘L
+    residual A P.X P.M = 0
   rw [starProjection_range_eq_comp_adjoint P.X P.isometric,
     ContinuousLinearMap.comp_assoc, P.adjoint_comp_residual_eq_zero,
     ContinuousLinearMap.comp_zero]
@@ -76,10 +81,13 @@ theorem complementaryProjection_comp_residual_eq
     let V : Submodule ℂ H := LinearMap.range P.X.toLinearMap
     Vᗮ.starProjection ∘L residual A P.X P.M = residual A P.X P.M := by
   letI := rangeHasOrthogonalProjection P.X P.isometric
-  let V : Submodule ℂ H := LinearMap.range P.X.toLinearMap
+  change (LinearMap.range P.X.toLinearMap)ᗮ.starProjection ∘L
+    residual A P.X P.M = residual A P.X P.M
   rw [Submodule.starProjection_orthogonal', ContinuousLinearMap.sub_comp,
-    ContinuousLinearMap.one_comp, P.rangeProjection_comp_residual_eq_zero,
-    sub_zero]
+    P.rangeProjection_comp_residual_eq_zero, sub_zero]
+  change ContinuousLinearMap.id ℂ H ∘L residual A P.X P.M =
+    residual A P.X P.M
+  rw [ContinuousLinearMap.id_comp]
 
 /-- The ambient cross block factors through the Ritz residual with no extra
 projection on the residual side. -/
