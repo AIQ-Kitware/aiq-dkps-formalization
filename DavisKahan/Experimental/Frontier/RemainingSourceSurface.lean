@@ -8,6 +8,8 @@ import DavisKahan.Experimental.Frontier.Lemma63
 import DavisKahan.DoubleAngle.UnboundedIdeal
 import DavisKahan.TanTwoTheta.UnboundedIdeal
 import DavisKahan.TanTheta.GenuineSpectrum
+import DavisKahan.TanTheta.UnboundedGraphAngle
+import DavisKahan.FiniteDimensional.TanTheta.RitzResidual
 import DavisKahan.OperatorIdeal.UnitarilyInvariant.RectangularFamily
 
 /-!
@@ -193,7 +195,7 @@ theorem theorem5_1_banach_sylvester
 
 end BanachSylvester
 
-section GeneralizedTangent
+section GeneralizedTangentResidual
 
 variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
   [CompleteSpace H]
@@ -204,29 +206,49 @@ noncomputable def trialResidual
     [Z.HasOrthogonalProjection] : Z →L[ℂ] H :=
   Zᗮ.starProjection ∘L T ∘L Z.subtypeL
 
-/-- Davis--Kahan 1970, Theorem 6.3 at Hilbert-space rectangular-ideal scope.
-The dimension hypothesis is expressed by an isometric embedding of the trial
-space into the selected exact space, rather than finite rank. -/
-theorem theorem6_3_generalizedTanTheta_ideal
-    (N : RectangularSymmetricIdealFamily (𝕜 := ℂ))
-    (T : H →L[ℂ] H) (hT : IsSelfAdjoint T)
-    -- `compressOperator Z T` needs the trial subspace to be a Hilbert space in
-    -- its own right; the source's trial space is closed, so this is a
-    -- faithful hypothesis rather than a restriction
-    (Z V : Submodule ℂ H) [Z.HasOrthogonalProjection] [CompleteSpace Z]
-    [V.HasOrthogonalProjection]
-    (hdim : Nonempty (Z →ₗᵢ[ℂ] V))
-    (hVinv : ∀ x ∈ V, T x ∈ V)
-    {alpha delta : ℝ} (hdelta : 0 < delta)
-    (hZspec : ∀ x ∈ spectrum ℝ (compressOperator Z T), x ≤ alpha)
-    (hVspec : ∀ x ∈ spectrum ℝ (compressOperator Vᗮ T),
-      alpha + delta ≤ x)
-    (hRmem : N.Mem (trialResidual T Z)) :
-    ∃ hacute : IsAcute Z V,
-      N.Mem (tanAngleOperatorC Z V hacute) ∧
-      delta * N.gauge (tanAngleOperatorC Z V hacute) ≤
-        N.gauge (trialResidual T Z) := by
-  sorry
+end GeneralizedTangentResidual
+
+section GeneralizedTangent
+
+/-!
+The previous draft in this location was not the paper's Theorem 6.3.  It tried
+to infer the symmetric acute relation `IsAcute Z V` in an arbitrary Hilbert
+space from only `Nonempty (Z →ₗᵢ[ℂ] V)`.  That implication is false in infinite
+dimension (and already fails for a proper trial subspace of a larger exact
+subspace): an abstract isometric embedding controls only Hilbert dimension, not
+surjectivity of the restricted orthogonal projection or the reverse directed
+gap.
+
+The actual 1970 theorem is the strict-lower-rank finite trial theorem for every
+rectangular unitarily invariant norm.  Its production proof is the Ky Fan
+majorization theorem in `FiniteDimensional/TanTheta/RitzResidual.lean`; the
+frontier endpoint below now exposes that theorem directly.  The separately
+proved unbounded Hilbert-space scope is operator-norm graph-angle theory and is
+recorded as its own endpoint instead of being conflated with an unproved
+infinite-dimensional ideal-gauge extension.
+-/
+
+/-- **Davis--Kahan 1970, Theorem 6.3, paper-exact generalized tangent
+endpoint.**  The trial space has strictly smaller finite rank than the exact
+invariant subspace, the source one-sided Ritz/exact spectral gap holds, and the
+conclusion is valid for every rectangular unitarily invariant norm and every
+`tangent Θ₀` representative with the principal-tangent singular values. -/
+alias theorem6_3_generalizedTanTheta_ideal :=
+  DavisKahanTheory.davisKahan1970_generalizedTanTheta0_ritzResidual_le
+
+/-- **Davis--Kahan 1970, Section 2 single-angle tangent theorem.**  This is
+the equal-rank companion of Theorem 6.3, with the same paper-exact residual
+bound for every rectangular unitarily invariant norm. -/
+alias theorem6_3_equalRank_tanTheta_ideal :=
+  DavisKahanTheory.davisKahan1970_tanTheta0_ritzResidual_le
+
+/-- **Davis--Kahan 1970 unbounded scope, graph-angle operator-norm form.**
+This is the compiled general Hilbert-space companion: explicit transverse
+coordinates select the graph branch, and the genuine spectral placement gives
+`δ * ‖tan Θ‖ ≤ ‖R‖`.  It is intentionally separate from the finite-rank
+all-unitarily-invariant-norm theorem above. -/
+alias theorem6_3_unbounded_graphAngle_opNorm :=
+  DavisKahan.Experimental.TanTheta.tanTheta_unbounded_graphAngle_genuineTrialBlock
 
 end GeneralizedTangent
 

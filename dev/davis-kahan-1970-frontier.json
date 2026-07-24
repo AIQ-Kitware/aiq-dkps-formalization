@@ -571,21 +571,44 @@
     },
     {
       "id": "s6-theorem6-3",
-      "title": "Theorem 6.3 general ideal form",
+      "title": "Theorem 6.3 paper-exact finite ideal form",
       "kind": "source",
       "module": "DavisKahan.Experimental.Frontier.RemainingSourceSurface",
       "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.RemainingSourceSurface.theorem6_3_generalizedTanTheta_ideal",
-      "dependencies": [
-        "s6-trial-residual",
-        "s3-prop3-2-existence"
-      ],
+      "dependencies": [],
       "source_census_ids": [
-        "DK-6.3-thm",
-        "S2-tan-theta",
+        "DK-6.3-thm"
+      ],
+      "priority": "hard",
+      "notes": "The former frontier draft was a false overgeneralization: an abstract isometric embedding Z -> V does not imply the acute relation. This endpoint now exposes the existing paper-exact strict-lower-rank finite rectangular UI-norm proof.",
+      "external": false
+    },
+    {
+      "id": "s2-tan-theta",
+      "title": "Section 2 equal-rank tangent theorem",
+      "kind": "source",
+      "module": "DavisKahan.Experimental.Frontier.RemainingSourceSurface",
+      "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.RemainingSourceSurface.theorem6_3_equalRank_tanTheta_ideal",
+      "dependencies": [],
+      "source_census_ids": [
+        "S2-tan-theta"
+      ],
+      "priority": "high",
+      "notes": "Paper-exact equal-rank companion of Theorem 6.3.",
+      "external": false
+    },
+    {
+      "id": "s6-theorem6-3-unbounded-scope",
+      "title": "Theorem 6.3 unbounded graph-angle operator-norm scope",
+      "kind": "source",
+      "module": "DavisKahan.Experimental.Frontier.RemainingSourceSurface",
+      "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.RemainingSourceSurface.theorem6_3_unbounded_graphAngle_opNorm",
+      "dependencies": [],
+      "source_census_ids": [
         "S2-unbounded-scope"
       ],
       "priority": "hard",
-      "notes": "",
+      "notes": "General Hilbert-space companion with explicit transverse coordinates; operator-norm graph-angle conclusion.",
       "external": false
     },
     {
