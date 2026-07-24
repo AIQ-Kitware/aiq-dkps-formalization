@@ -24,6 +24,7 @@ finite-dimensional singular-value files.
 namespace ForMathlib
 
 open Module LinearMap
+open DavisKahan.Experimental.ExactSinTheta
 open scoped InnerProductSpace
 
 variable {E F : Type*}
@@ -86,7 +87,6 @@ theorem approximationSingularValue_eq_finiteSourceSingularValue
     exact ⟨x, rfl⟩
   have hAW : AW = A.rangeRestrict := by
     ext x
-    apply Subtype.ext
     change W.starProjection (A x) = A x
     exact W.starProjection_eq_self_iff.mpr (hA x)
   calc
@@ -145,9 +145,24 @@ theorem orthonormal_finiteSourceLeftSingularVector_subtype (A : E →L[ℂ] F) :
   have h := orthonormal_leftSingularVector_subtype A.rangeRestrict.toLinearMap
   rw [orthonormal_iff_ite] at h ⊢
   intro i j
-  have hij := h i j
-  simpa [finiteSourceLeftSingularVector, finiteSourceRightSingularBasis,
-    finiteSourceSingularValue, leftSingularVector] using hij
+  let i' : {k : Fin (finrank ℂ E) //
+      A.rangeRestrict.toLinearMap.singularValues k ≠ 0} :=
+    ⟨i.1, by simpa [finiteSourceSingularValue] using i.2⟩
+  let j' : {k : Fin (finrank ℂ E) //
+      A.rangeRestrict.toLinearMap.singularValues k ≠ 0} :=
+    ⟨j.1, by simpa [finiteSourceSingularValue] using j.2⟩
+  have hij := h i' j'
+  by_cases heq : i = j
+  · subst j
+    simpa [finiteSourceLeftSingularVector, i', j'] using hij
+  · have hne : i' ≠ j' := by
+      intro h'
+      apply heq
+      apply Subtype.ext
+      exact congrArg Subtype.val h'
+    rw [if_neg hne] at hij
+    rw [if_neg heq]
+    simpa [finiteSourceLeftSingularVector, i', j'] using hij
 
 /-- The ambient adjoint singular relation. -/
 theorem adjoint_apply_finiteSourceLeftSingularVector
@@ -158,7 +173,7 @@ theorem adjoint_apply_finiteSourceLeftSingularVector
         finiteSourceRightSingularBasis A i := by
   let Ar : E →L[ℂ] A.range := A.rangeRestrict
   let ur : A.range := leftSingularVector Ar.toLinearMap i
-  have hur : Ar.adjoint ur =
+  have hur : Ar.toLinearMap.adjoint ur =
       ((finiteSourceSingularValue A i : ℝ) : ℂ) •
         finiteSourceRightSingularBasis A i := by
     simpa [Ar, ur, finiteSourceSingularValue, finiteSourceRightSingularBasis] using
@@ -172,8 +187,8 @@ theorem adjoint_apply_finiteSourceLeftSingularVector
     ⟪A.adjoint (ur : F), x⟫_ℂ = ⟪(ur : F), A x⟫_ℂ :=
       ContinuousLinearMap.adjoint_inner_left A x (ur : F)
     _ = ⟪ur, Ar x⟫_ℂ := rfl
-    _ = ⟪Ar.adjoint ur, x⟫_ℂ :=
-      (ContinuousLinearMap.adjoint_inner_left Ar x ur).symm
+    _ = ⟪Ar.toLinearMap.adjoint ur, x⟫_ℂ :=
+      (LinearMap.adjoint_inner_left Ar.toLinearMap x ur).symm
     _ = ⟪((finiteSourceSingularValue A i : ℝ) : ℂ) •
           finiteSourceRightSingularBasis A i, x⟫_ℂ := by rw [hur]
 
