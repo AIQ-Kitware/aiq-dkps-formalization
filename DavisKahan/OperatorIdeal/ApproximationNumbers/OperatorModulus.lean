@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.UnitaryInvariantNorm
-import ForMathlib.Analysis.InnerProductSpace.OperatorAbsoluteValue
+import ForTauCeti.Analysis.InnerProductSpace.OperatorAbsoluteValue
 
 /-!
 # Approximation singular values of the rectangular operator modulus
@@ -156,9 +156,9 @@ theorem sameApproximationSingularValues_rectangularOperatorModulus
 /-- Square-operator specialization. -/
 theorem operatorAbs_sameApproximationSingularValues
     (T : E →L[ℂ] E) :
-    SameApproximationSingularValues (ForMathlib.operatorAbs T) T :=
+    SameApproximationSingularValues (TauCeti.operatorAbs T) T :=
   sameApproximationSingularValues_of_norm_apply_eq _ _
-    (ForMathlib.norm_operatorAbs_apply T)
+    (TauCeti.norm_operatorAbs_apply T)
 
 /-- Every current ideal family assigns the same membership and gauge to `T`
 and its positive modulus. -/
@@ -166,8 +166,8 @@ theorem operatorAbs_mem_and_gauge_eq
     (N : UnitaryInvariantIdealFamily (𝕜 := ℂ))
     {T : E →L[ℂ] E}
     (hT : N.toRectangularSymmetricIdealFamily.Mem T) :
-    N.toRectangularSymmetricIdealFamily.Mem (ForMathlib.operatorAbs T) ∧
-      N.toRectangularSymmetricIdealFamily.gauge (ForMathlib.operatorAbs T) =
+    N.toRectangularSymmetricIdealFamily.Mem (TauCeti.operatorAbs T) ∧
+      N.toRectangularSymmetricIdealFamily.gauge (TauCeti.operatorAbs T) =
         N.toRectangularSymmetricIdealFamily.gauge T :=
   (operatorAbs_sameApproximationSingularValues T).mem_and_gauge_eq N hT
 
@@ -175,7 +175,7 @@ theorem operatorAbs_mem_and_gauge_eq
 operator and its positive modulus. -/
 theorem paperNorm_operatorAbs_eq
     (N : PaperUnitaryInvariantNorm) (T : E →L[ℂ] E) :
-    N.extendedGauge (ForMathlib.operatorAbs T) = N.extendedGauge T :=
+    N.extendedGauge (TauCeti.operatorAbs T) = N.extendedGauge T :=
   N.gauge_eq_of_sameApproximationSingularValues
     (operatorAbs_sameApproximationSingularValues T)
 

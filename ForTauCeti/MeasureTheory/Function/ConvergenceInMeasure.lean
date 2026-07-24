@@ -5,8 +5,9 @@ Staged for Mathlib: additions to
 Formalized by Claude Fable 5 (claude-fable-5[1m]);
 to be re-authored per Mathlib's AI-contribution policy at PR time.
 -/
+module
 
-import Mathlib.MeasureTheory.Function.ConvergenceInMeasure
+public import Mathlib.MeasureTheory.Function.ConvergenceInMeasure
 
 /-! # Convergence in measure from a vanishing high-probability rate
 
@@ -22,18 +23,35 @@ filter, matching the generality of `MeasureTheory.TendstoInMeasure`.
 
 ## Main results
 
-* `ForMathlib.tendstoInMeasure_of_tendsto_measure_rate_lt_edist`: the `edist`
+* `TauCeti.tendstoInMeasure_of_tendsto_measure_rate_lt_edist`: the `edist`
   form, for an `ℝ≥0∞`-valued rate and a target with an extended distance.
-* `ForMathlib.tendstoInMeasure_of_tendsto_measure_rate_lt_dist`: the `dist`
+* `TauCeti.tendstoInMeasure_of_tendsto_measure_rate_lt_dist`: the `dist`
   form, for a real-valued rate and a pseudometric target.
-* `ForMathlib.tendstoInMeasure_of_tendsto_measure_dist_le_rate`: the
+* `TauCeti.tendstoInMeasure_of_tendsto_measure_dist_le_rate`: the
   high-probability phrasing for a probability measure, with hypothesis
   `μ {x | dist (f i x) (g x) ≤ rate i} → 1`; here null-measurability of the
   good events is genuinely needed, since an outer measure can assign full
   measure to both a set and its complement.
+
+## Provenance
+
+* Original repository: Davis--Kahan/DKPS formalization (Kitware, Inc.).
+* Original module: `ForMathlib/MeasureTheory/Function/ConvergenceInMeasure.lean`
+  at Davis--Kahan commit `fc38eb4`.
+* Original declarations: `ForMathlib.tendstoInMeasure_of_tendsto_measure_rate_lt_edist`,
+  `ForMathlib.tendstoInMeasure_of_tendsto_measure_rate_lt_dist`,
+  `ForMathlib.tendstoInMeasure_of_tendsto_measure_dist_le_rate`
+  (namespace renamed here `ForMathlib` → `TauCeti`).
+* Original authorship: formalized by Claude Fable 5 (`claude-fable-5[1m]`);
+  staged for Mathlib (no separate copyright line in the source header), released
+  under Apache 2.0.
+* Extraction class: **copied**, converted to the Tau Ceti module system.
+* Spectra influence: **none** (imports only Mathlib).
 -/
 
-namespace ForMathlib
+@[expose] public section
+
+namespace TauCeti
 
 open Filter MeasureTheory
 open scoped ENNReal Topology
@@ -102,4 +120,4 @@ theorem tendstoInMeasure_of_tendsto_measure_dist_le_rate [PseudoMetricSpace E]
   simpa [hcompl] using
     ENNReal.Tendsto.sub tendsto_const_nhds hprob (Or.inl ENNReal.one_ne_top)
 
-end ForMathlib
+end TauCeti

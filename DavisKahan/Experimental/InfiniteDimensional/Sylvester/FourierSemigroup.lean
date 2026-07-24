@@ -5,7 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Interop.Spectra.BoundedSelfAdjointSpectralProjection
 import DavisKahan.Experimental.InfiniteDimensional.Sylvester.FiniteBlockReconstruction
-import ForMathlib.Analysis.Fourier.HaagerupZsidoKernel
+import ForTauCeti.Analysis.Fourier.HaagerupZsidoKernel
 import Spectra.YosidaHille.Approximation.ExpBounded.Unitary
 import Spectra.CayleyTransform.BorelCalculus
 import Mathlib.MeasureTheory.Integral.Bochner.Basic
@@ -44,6 +44,7 @@ Bochner dominated convergence.
 namespace ForMathlib
 namespace DavisKahanExt
 
+open TauCeti
 open MeasureTheory Set Filter
 open scoped InnerProductSpace BigOperators
 open Spectra.YosidaHille.Approximation

@@ -5,8 +5,9 @@ Staged for Mathlib: additions to
 Formalized by Claude Fable 5 (claude-fable-5[1m]);
 to be re-authored per Mathlib's AI-contribution policy at PR time.
 -/
+module
 
-import Mathlib.MeasureTheory.Measure.Typeclasses.Probability
+public import Mathlib.MeasureTheory.Measure.Typeclasses.Probability
 
 /-! # Measurability-free complement bound for probability measures
 
@@ -18,9 +19,28 @@ nothing, because subadditivity `1 = μ (s ∪ sᶜ) ≤ μ s + μ sᶜ` holds fo
 measures.  This is the form in which high-probability events are consumed when
 converting vanishing failure probabilities into convergence statements, where
 the event sets are often not (easily) measurable.
+
+## Main result
+
+* `TauCeti.one_sub_measure_compl_le`
+
+## Provenance
+
+* Original repository: Davis--Kahan/DKPS formalization (Kitware, Inc.).
+* Original module: `ForMathlib/MeasureTheory/Measure/Typeclasses/Probability.lean`
+  at Davis--Kahan commit `fc38eb4`.
+* Original declaration: `ForMathlib.one_sub_measure_compl_le`
+  (namespace renamed here `ForMathlib` → `TauCeti`).
+* Original authorship: formalized by Claude Fable 5 (`claude-fable-5[1m]`);
+  staged for Mathlib (no separate copyright line in the source header), released
+  under Apache 2.0.
+* Extraction class: **copied**, converted to the Tau Ceti module system.
+* Spectra influence: **none** (imports only Mathlib).
 -/
 
-namespace ForMathlib
+@[expose] public section
+
+namespace TauCeti
 
 open MeasureTheory
 open scoped ENNReal
@@ -35,4 +55,4 @@ theorem one_sub_measure_compl_le {Ω : Type*} [MeasurableSpace Ω] (μ : Measure
     calc (1 : ℝ≥0∞) = μ (s ∪ sᶜ) := by rw [Set.union_compl_self, measure_univ]
       _ ≤ μ s + μ sᶜ := measure_union_le _ _
 
-end ForMathlib
+end TauCeti

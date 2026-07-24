@@ -3,18 +3,20 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Fable 5
 -/
-import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Basic
-import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Instances
-import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Isometric
+module
+
+public import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Basic
+public import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Instances
+public import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Isometric
 
 /-!
 # Norm and inverse bounds from self-adjoint spectral position
 
 For a self-adjoint element of a unital C*-algebra:
 
-* `ForMathlib.IsSelfAdjoint.norm_le_of_spectrum_subset_Icc`: if the real
+* `TauCeti.IsSelfAdjoint.norm_le_of_spectrum_subset_Icc`: if the real
   spectrum lies in `[-r, r]` then `‖a‖ ≤ r`;
-* `ForMathlib.IsSelfAdjoint.exists_two_sided_inverse_of_spectrum_gap`: if the
+* `TauCeti.IsSelfAdjoint.exists_two_sided_inverse_of_spectrum_gap`: if the
   real spectrum avoids the open interval `(-r, r)` then `a` has a two-sided
   inverse of norm at most `r⁻¹`.
 
@@ -24,9 +26,24 @@ estimate for the Davis--Kahan `sin Θ` theorem (shift-and-invert argument).
 
 Proposed Mathlib destination:
 `Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/Isometric.lean`.
+
+## Provenance
+
+* Original repository: Davis--Kahan/DKPS formalization (Kitware, Inc.).
+* Original module: `ForMathlib/Analysis/CStarAlgebra/SelfAdjointGapInverse.lean`
+  at Davis--Kahan commit `fc38eb4`.
+* Original declarations: `ForMathlib.IsSelfAdjoint.norm_le_of_spectrum_subset_Icc`,
+  `ForMathlib.IsSelfAdjoint.exists_two_sided_inverse_of_spectrum_gap`
+  (namespace renamed here `ForMathlib` → `TauCeti`).
+* Original authors / copyright: Jon Crall, Claude Fable 5;
+  Copyright (c) 2026 Kitware, Inc.; Apache 2.0.
+* Extraction class: **copied**, converted to the Tau Ceti module system.
+* Spectra influence: **none** (imports only Mathlib).
 -/
 
-namespace ForMathlib
+@[expose] public section
+
+namespace TauCeti
 
 variable {A : Type*} [CStarAlgebra A]
 
@@ -77,4 +94,4 @@ theorem IsSelfAdjoint.exists_two_sided_inverse_of_spectrum_gap {a : A}
     rw [Real.norm_eq_abs, abs_inv]
     exact inv_anti₀ hr (h x hx)
 
-end ForMathlib
+end TauCeti

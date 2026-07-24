@@ -3,13 +3,15 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
-import Mathlib.Analysis.Fourier.PoissonSummation
-import Mathlib.Analysis.Fourier.Inversion
-import Mathlib.Analysis.SpecialFunctions.ImproperIntegrals
-import Mathlib.Analysis.SpecialFunctions.Integrals.Basic
-import Mathlib.Analysis.SpecificLimits.Basic
-import Mathlib.MeasureTheory.Integral.ExpDecay
-import Mathlib.MeasureTheory.Integral.IntervalIntegral.Basic
+module
+
+public import Mathlib.Analysis.Fourier.PoissonSummation
+public import Mathlib.Analysis.Fourier.Inversion
+public import Mathlib.Analysis.SpecialFunctions.ImproperIntegrals
+public import Mathlib.Analysis.SpecialFunctions.Integrals.Basic
+public import Mathlib.Analysis.SpecificLimits.Basic
+public import Mathlib.MeasureTheory.Integral.ExpDecay
+public import Mathlib.MeasureTheory.Integral.IntervalIntegral.Basic
 
 /-!
 # The Haagerup--Zsidó reciprocal Fourier kernel
@@ -20,9 +22,26 @@ arbitrary-spectrum Sylvester estimate.  It contains no Hilbert-space data.
 The Fourier convention needed downstream is the unnormalized integral
 `integral fun t => f t * exp (t * x * I)`.  Mathlib's normalized real Fourier
 transform is used only for the Poisson-summation calculation.
+
+## Provenance
+
+* Original repository: Davis--Kahan/DKPS formalization (Kitware, Inc.).
+* Original module: `ForMathlib/Analysis/Fourier/HaagerupZsidoKernel.lean`
+  at Davis--Kahan commit `fc38eb4`.
+* Original declarations: the `HaagerupZsido` scalar Fourier-kernel API
+  (`weight`, `innerLaplace`, `realKernel`, `reciprocalKernel`, and the
+  supporting integral/summation lemmas); the enclosing top namespace was
+  renamed here `ForMathlib` → `TauCeti`, so the API now lives under
+  `TauCeti.HaagerupZsido`.
+* Original authors / copyright: Jon Crall, GPT 5.6 High;
+  Copyright (c) 2026 Kitware, Inc.; Apache 2.0.
+* Extraction class: **copied**, converted to the Tau Ceti module system.
+* Spectra influence: **none** (imports only Mathlib).
 -/
 
-namespace ForMathlib
+@[expose] public section
+
+namespace TauCeti
 namespace HaagerupZsido
 
 open MeasureTheory Set Filter Asymptotics
@@ -1651,4 +1670,4 @@ theorem reciprocalKernel_fourier (x : ℝ) (hx : 1 ≤ |x|) :
 end
 
 end HaagerupZsido
-end ForMathlib
+end TauCeti

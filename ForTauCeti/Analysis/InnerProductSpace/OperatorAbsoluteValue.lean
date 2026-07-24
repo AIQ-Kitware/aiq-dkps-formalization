@@ -3,10 +3,13 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Fable 5
 -/
-import Mathlib.Analysis.CStarAlgebra.ContinuousLinearMap
-import Mathlib.Analysis.InnerProductSpace.StarOrder
-import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Rpow.Basic
-import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Rpow.Isometric
+module
+
+public import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Commute
+public import Mathlib.Analysis.CStarAlgebra.ContinuousLinearMap
+public import Mathlib.Analysis.InnerProductSpace.StarOrder
+public import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Rpow.Basic
+public import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Rpow.Isometric
 
 /-!
 # The absolute value of a Hilbert-space operator
@@ -24,9 +27,26 @@ on the C⋆-algebra of bounded operators, together with its defining laws:
 Complex scalars are required because Mathlib registers the continuous
 functional calculus on Hilbert-space operators only over `ℂ`; the real case
 is expected to follow by complexification transfer.
+
+## Provenance
+
+* Original repository: Davis--Kahan/DKPS formalization (Kitware, Inc.).
+* Original module: `ForMathlib/Analysis/InnerProductSpace/OperatorAbsoluteValue.lean`
+  at Davis--Kahan commit `fc38eb4`.
+* Original declarations: `operatorAbs` and its API (`operatorAbs_nonneg`,
+  `isSelfAdjoint_operatorAbs`, `operatorAbs_mul_self`, `operatorAbs_unique`,
+  `operatorAbs_commute_operatorAbs`, `norm_operatorAbs`, `norm_operatorAbs_mul`,
+  `norm_mul_operatorAbs`, `norm_operatorAbs_apply`), namespace renamed here
+  `ForMathlib` → `TauCeti`.
+* Original authors / copyright: Jon Crall, Claude Fable 5;
+  Copyright (c) 2026 Kitware, Inc.; Apache 2.0.
+* Extraction class: **copied**, converted to the Tau Ceti module system.
+* Spectra influence: **none** (imports only Mathlib).
 -/
 
-namespace ForMathlib
+@[expose] public section
+
+namespace TauCeti
 
 open scoped InnerProductSpace
 
@@ -63,9 +83,9 @@ theorem operatorAbs_commute_operatorAbs {S T : E →L[ℂ] E}
     (h : Commute (star S * S) (star T * T)) :
     Commute (operatorAbs S) (operatorAbs T) := by
   have h1 : Commute (CFC.sqrt (star S * S)) (star T * T) :=
-    h.cfcₙ_nnreal _
+    Commute.cfcₙ_nnreal h _
   have h2 : Commute (CFC.sqrt (star T * T)) (CFC.sqrt (star S * S)) :=
-    h1.symm.cfcₙ_nnreal _
+    Commute.cfcₙ_nnreal h1.symm _
   exact h2.symm
 
 /-- `‖|T|‖ = ‖T‖`. -/
@@ -135,4 +155,4 @@ theorem norm_operatorAbs_apply (T : E →L[ℂ] E) (x : E) :
   have h5 := congrArg Real.sqrt h4
   rwa [Real.sqrt_sq (norm_nonneg _), Real.sqrt_sq (norm_nonneg _)] at h5
 
-end ForMathlib
+end TauCeti

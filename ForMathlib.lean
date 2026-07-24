@@ -6,7 +6,6 @@ Mathlib destination path.  See `ForMathlib/README.md` for the contribution
 workflow and `planning/mathlib-candidates.md` for the ranked candidate list.
 -/
 
-import ForMathlib.Analysis.CStarAlgebra.SelfAdjointGapInverse
 import ForMathlib.Analysis.InnerProductSpace.AlignedBasis
 import ForMathlib.Analysis.InnerProductSpace.CoerciveUnit
 import ForMathlib.Analysis.InnerProductSpace.CourantFischer
@@ -17,7 +16,6 @@ import ForMathlib.Analysis.InnerProductSpace.GramMatrix
 import ForMathlib.Analysis.InnerProductSpace.HoffmanWielandt
 import ForMathlib.Analysis.InnerProductSpace.IntertwiningUnitary
 import ForMathlib.Analysis.InnerProductSpace.KyFan
-import ForMathlib.Analysis.InnerProductSpace.OperatorAbsoluteValue
 import ForMathlib.Analysis.InnerProductSpace.PartialIsometry
 import ForMathlib.Analysis.InnerProductSpace.PolarDecomposition
 import ForMathlib.Analysis.InnerProductSpace.PositiveSqrt
@@ -47,9 +45,6 @@ import ForMathlib.Analysis.Normed.Operator.LinearIsometry
 import ForMathlib.LinearAlgebra.Matrix.PosDef
 import ForMathlib.LinearAlgebra.Matrix.RankFactorization
 import ForMathlib.MeasureTheory.CfcMeasurable
-import ForMathlib.MeasureTheory.CompactExists
-import ForMathlib.MeasureTheory.Function.ConvergenceInMeasure
-import ForMathlib.MeasureTheory.Measure.Typeclasses.Probability
 import ForMathlib.Probability.Moments.MatrixConcentration
 import ForMathlib.Probability.Moments.SampleCovariance
 import ForMathlib.Probability.Moments.SampleMean

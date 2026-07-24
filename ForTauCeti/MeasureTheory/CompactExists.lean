@@ -5,12 +5,13 @@ Staged for Mathlib: addition to `Mathlib/MeasureTheory/Constructions/BorelSpace/
 Formalized by Claude Fable 5 (claude-fable-5[1m]);
 to be re-authored per Mathlib's AI-contribution policy at PR time.
 -/
+module
 
-import Mathlib.Topology.Sequences
-import Mathlib.Topology.MetricSpace.Pseudo.Basic
-import Mathlib.Topology.Metrizable.Basic
-import Mathlib.MeasureTheory.Constructions.BorelSpace.Order
-import Mathlib.Analysis.SpecificLimits.Basic
+public import Mathlib.Topology.Sequences
+public import Mathlib.Topology.MetricSpace.Pseudo.Basic
+public import Mathlib.Topology.Metrizable.Basic
+public import Mathlib.MeasureTheory.Constructions.BorelSpace.Order
+public import Mathlib.Analysis.SpecificLimits.Basic
 
 /-! # Measurability of compactly-quantified existential events
 
@@ -31,10 +32,25 @@ selecting the optimal transformation measurably.
 
 ## Main result
 
-* `ForMathlib.measurableSet_exists_mem_le`
+* `TauCeti.measurableSet_exists_mem_le`
+
+## Provenance
+
+* Original repository: Davis--Kahan/DKPS formalization (Kitware, Inc.).
+* Original module: `ForMathlib/MeasureTheory/CompactExists.lean`
+  at Davis--Kahan commit `fc38eb4`.
+* Original declaration: `ForMathlib.measurableSet_exists_mem_le`
+  (namespace renamed here `ForMathlib` → `TauCeti`).
+* Original authorship: formalized by Claude Fable 5 (`claude-fable-5[1m]`);
+  staged for Mathlib (no separate copyright line in the source header), released
+  under Apache 2.0.
+* Extraction class: **copied**, converted to the Tau Ceti module system.
+* Spectra influence: **none** (imports only Mathlib).
 -/
 
-namespace ForMathlib
+@[expose] public section
+
+namespace TauCeti
 
 open Filter Topology TopologicalSpace
 
@@ -118,4 +134,4 @@ theorem measurableSet_exists_mem_le
     MeasurableSet.biUnion hDc fun y hy =>
       measurableSet_lt (hFm y (hDS hy)) measurable_const
 
-end ForMathlib
+end TauCeti
