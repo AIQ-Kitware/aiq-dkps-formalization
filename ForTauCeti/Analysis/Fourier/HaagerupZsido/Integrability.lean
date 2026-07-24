@@ -39,7 +39,7 @@ noncomputable section
 
 /-- The hyperbolic weight cancels the geometric quotient of the absolute-sine
 Laplace transform. -/
-theorem weight_mul_expRatio {y : ℝ} (hy : 0 < y) :
+theorem weight_mul_exp_ratio {y : ℝ} (hy : 0 < y) :
     weight y * ((1 + Real.exp (-Real.pi * y)) /
       (1 - Real.exp (-Real.pi * y))) = 1 := by
   have hq1 : Real.exp (-(Real.pi * y)) < 1 :=
@@ -78,7 +78,7 @@ theorem integrable_kernel_prod :
       2 * (1 + y ^ 2)⁻¹ =
           (weight y * ((1 + Real.exp (-Real.pi * y)) /
             (1 - Real.exp (-Real.pi * y)))) * (2 * (1 + y ^ 2)⁻¹) := by
-        rw [weight_mul_expRatio hy0, one_mul]
+        rw [weight_mul_exp_ratio hy0, one_mul]
       _ = weight y * (2 * ((1 + Real.exp (-Real.pi * y)) /
             ((1 - Real.exp (-Real.pi * y)) * (1 + y ^ 2)))) := by
         field_simp
@@ -91,8 +91,8 @@ theorem integrable_kernel_prod :
             (mul_nonneg (abs_nonneg _) (Real.exp_pos _).le))]
 
 /-- The full-line sine-weighted Laplace mass. -/
-theorem integral_abs_sin_mul_innerLaplace :
-    (∫ t : ℝ, |Real.sin t| * innerLaplace t) = Real.pi := by
+theorem integral_abs_sin_mul_weightLaplaceTransform :
+    (∫ t : ℝ, |Real.sin t| * weightLaplaceTransform t) = Real.pi := by
   have hswap := integral_integral_swap integrable_kernel_prod
   have hleft :
       (∫ y in Set.Ioi (0 : ℝ),
@@ -119,7 +119,7 @@ theorem integral_abs_sin_mul_innerLaplace :
             rw [integral_abs_sin_mul_exp_neg_abs hy0]
             field_simp
           _ = 2 * (1 + y ^ 2)⁻¹ := by
-            rw [weight_mul_expRatio hy0, one_mul]
+            rw [weight_mul_exp_ratio hy0, one_mul]
       _ = 2 * ∫ y in Set.Ioi (0 : ℝ), (1 + y ^ 2)⁻¹ := by
         rw [integral_const_mul]
       _ = Real.pi := by
@@ -128,10 +128,10 @@ theorem integral_abs_sin_mul_innerLaplace :
   have hright :
       (∫ t : ℝ,
         ∫ y in Set.Ioi (0 : ℝ), weight y * (|Real.sin t| * Real.exp (-y * |t|))) =
-        ∫ t : ℝ, |Real.sin t| * innerLaplace t := by
+        ∫ t : ℝ, |Real.sin t| * weightLaplaceTransform t := by
     apply integral_congr_ae
     filter_upwards [] with t
-    rw [innerLaplace_def, ← integral_const_mul]
+    rw [weightLaplaceTransform_def, ← integral_const_mul]
     apply setIntegral_congr_fun measurableSet_Ioi
     intro y _
     dsimp only
@@ -140,8 +140,8 @@ theorem integral_abs_sin_mul_innerLaplace :
   rw [← hright, ← hswap, hleft]
 
 /-- Integrability of the even envelope of the kernel. -/
-theorem integrable_abs_sin_mul_innerLaplace :
-    Integrable (fun t : ℝ => |Real.sin t| * innerLaplace t) := by
+theorem integrable_abs_sin_mul_weightLaplaceTransform :
+    Integrable (fun t : ℝ => |Real.sin t| * weightLaplaceTransform t) := by
   have hswap := integrable_kernel_prod.swap
   have h2 := ((integrable_prod_iff hswap.aestronglyMeasurable).mp hswap).2
   apply h2.congr
@@ -160,16 +160,16 @@ theorem integrable_abs_sin_mul_innerLaplace :
           (mul_nonneg (abs_nonneg _) (Real.exp_pos _).le)),
         show -|t| * y = -y * |t| by ring]
       ring
-    _ = |Real.sin t| * innerLaplace t := by
-      rw [integral_const_mul, innerLaplace_def]
+    _ = |Real.sin t| * weightLaplaceTransform t := by
+      rw [integral_const_mul, weightLaplaceTransform_def]
 
 /-- The real kernel is integrable. -/
 theorem integrable_realKernel : Integrable realKernel := by
-  apply integrable_abs_sin_mul_innerLaplace.mono'
+  apply integrable_abs_sin_mul_weightLaplaceTransform.mono'
     measurable_realKernel.aestronglyMeasurable
   filter_upwards [] with t
   rw [Real.norm_eq_abs, abs_realKernel]
-  have h1 := innerLaplace_nonneg t
+  have h1 := weightLaplaceTransform_nonneg t
   have h2 := abs_nonneg (Real.sin t)
   nlinarith
 
@@ -181,15 +181,15 @@ theorem integrable_reciprocalKernel : Integrable reciprocalKernel :=
 theorem integral_abs_realKernel : (∫ t : ℝ, |realKernel t|) = Real.pi / 2 := by
   calc
     (∫ t : ℝ, |realKernel t|) =
-        ∫ t : ℝ, (1 / 2 : ℝ) * (|Real.sin t| * innerLaplace t) := by
+        ∫ t : ℝ, (1 / 2 : ℝ) * (|Real.sin t| * weightLaplaceTransform t) := by
       apply integral_congr_ae
       filter_upwards [] with t
       rw [abs_realKernel]
       ring
-    _ = (1 / 2 : ℝ) * ∫ t : ℝ, |Real.sin t| * innerLaplace t :=
+    _ = (1 / 2 : ℝ) * ∫ t : ℝ, |Real.sin t| * weightLaplaceTransform t :=
       integral_const_mul _ _
     _ = Real.pi / 2 := by
-      rw [integral_abs_sin_mul_innerLaplace]
+      rw [integral_abs_sin_mul_weightLaplaceTransform]
       ring
 
 /-- **Exact mass.**  The reciprocal kernel has `L¹` norm exactly `π / 2`. -/

@@ -16,8 +16,8 @@ public import Mathlib.MeasureTheory.Integral.IntervalIntegral.Basic
 /-!
 # The Haagerup--Zsidó kernel: definitions and elementary API
 
-This file defines the hyperbolic `weight`, the inner Laplace factor
-`innerLaplace`, the real kernel `realKernel`, and the complex reciprocal kernel
+This file defines the hyperbolic `weight`, its Laplace transform
+`weightLaplaceTransform`, the real kernel `realKernel`, and the complex reciprocal kernel
 `reciprocalKernel`, together with their elementary algebraic, positivity,
 measurability, and parity API.
 
@@ -74,20 +74,21 @@ weight.  Its value at zero already vanishes through the sine factor, so no
 separate zero branch is required; the natural one-sided limits at zero are
 irrelevant for every integral computed below. -/
 
-/-- The inner Laplace factor of the limiting Haagerup--Zsidó kernel. -/
-def innerLaplace (t : ℝ) : ℝ :=
+/-- The Laplace transform of the hyperbolic weight at `|t|`, the inner factor of
+the limiting Haagerup--Zsidó kernel. -/
+def weightLaplaceTransform (t : ℝ) : ℝ :=
   ∫ y in Set.Ioi (0 : ℝ), weight y * Real.exp (-|t| * y)
 
-theorem innerLaplace_def (t : ℝ) :
-    innerLaplace t = ∫ y in Set.Ioi (0 : ℝ), weight y * Real.exp (-|t| * y) :=
+theorem weightLaplaceTransform_def (t : ℝ) :
+    weightLaplaceTransform t = ∫ y in Set.Ioi (0 : ℝ), weight y * Real.exp (-|t| * y) :=
   rfl
 
 /-- The real Haagerup--Zsidó kernel at the sharp parameter. -/
 def realKernel (t : ℝ) : ℝ :=
-  (Real.sin t / 2) * innerLaplace t
+  (Real.sin t / 2) * weightLaplaceTransform t
 
 theorem realKernel_def (t : ℝ) :
-    realKernel t = (Real.sin t / 2) * innerLaplace t :=
+    realKernel t = (Real.sin t / 2) * weightLaplaceTransform t :=
   rfl
 
 /-- The complex reciprocal kernel `-i f₀`. -/
@@ -108,14 +109,14 @@ theorem continuous_weight : Continuous weight := by
   intro y
   positivity
 
-theorem innerLaplace_nonneg (t : ℝ) : 0 ≤ innerLaplace t :=
+theorem weightLaplaceTransform_nonneg (t : ℝ) : 0 ≤ weightLaplaceTransform t :=
   setIntegral_nonneg measurableSet_Ioi fun _y hy =>
     mul_nonneg (weight_nonneg (le_of_lt hy)) (Real.exp_pos _).le
 
-theorem innerLaplace_neg (t : ℝ) : innerLaplace (-t) = innerLaplace t := by
-  simp only [innerLaplace_def, abs_neg]
+theorem weightLaplaceTransform_neg (t : ℝ) : weightLaplaceTransform (-t) = weightLaplaceTransform t := by
+  simp only [weightLaplaceTransform_def, abs_neg]
 
-theorem measurable_innerLaplace : Measurable innerLaplace := by
+theorem measurable_weightLaplaceTransform : Measurable weightLaplaceTransform := by
   have hcont : Continuous fun p : ℝ × ℝ =>
       weight p.2 * Real.exp (-|p.1| * p.2) :=
     (continuous_weight.comp continuous_snd).mul
@@ -123,13 +124,13 @@ theorem measurable_innerLaplace : Measurable innerLaplace := by
   exact hcont.stronglyMeasurable.integral_prod_right'.measurable
 
 theorem measurable_realKernel : Measurable realKernel :=
-  (Real.measurable_sin.div_const 2).mul measurable_innerLaplace
+  (Real.measurable_sin.div_const 2).mul measurable_weightLaplaceTransform
 
 theorem measurable_reciprocalKernel : Measurable reciprocalKernel :=
   (Complex.measurable_ofReal.comp measurable_realKernel).const_mul (-Complex.I)
 
 theorem realKernel_neg (t : ℝ) : realKernel (-t) = -realKernel t := by
-  simp only [realKernel_def, Real.sin_neg, innerLaplace_neg]
+  simp only [realKernel_def, Real.sin_neg, weightLaplaceTransform_neg]
   ring
 
 theorem reciprocalKernel_neg (t : ℝ) :
@@ -141,9 +142,9 @@ theorem norm_reciprocalKernel (t : ℝ) : ‖reciprocalKernel t‖ = |realKernel
   simp [reciprocalKernel_def]
 
 theorem abs_realKernel (t : ℝ) :
-    |realKernel t| = |Real.sin t| / 2 * innerLaplace t := by
+    |realKernel t| = |Real.sin t| / 2 * weightLaplaceTransform t := by
   rw [realKernel_def, abs_mul, abs_div, abs_two,
-    abs_of_nonneg (innerLaplace_nonneg t)]
+    abs_of_nonneg (weightLaplaceTransform_nonneg t)]
 
 end
 
