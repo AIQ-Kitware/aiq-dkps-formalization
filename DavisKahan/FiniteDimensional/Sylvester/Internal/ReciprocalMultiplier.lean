@@ -3,7 +3,7 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
-import ForMathlib.Analysis.Fourier.HaagerupZsidoKernel
+import ForTauCeti.Analysis.Fourier.HaagerupZsidoKernel
 import ForMathlib.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm
 import Mathlib.Analysis.Convex.Integral
 import Mathlib.Analysis.Real.Pi.Bounds
@@ -40,6 +40,7 @@ certificate bound.
 namespace ForMathlib
 namespace DavisKahanTheory
 
+open TauCeti
 open scoped InnerProductSpace BigOperators ComplexConjugate
 
 variable {𝕜 E F : Type*} [RCLike 𝕜]
