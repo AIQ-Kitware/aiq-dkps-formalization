@@ -4,8 +4,12 @@
 from __future__ import annotations
 
 import importlib.util
+import io
 import sys
+import tempfile
 import unittest
+from contextlib import redirect_stderr, redirect_stdout
+from unittest import mock
 from pathlib import Path
 
 SCRIPT = Path(__file__).resolve().parents[1] / "lake_build_report.py"
@@ -82,6 +86,71 @@ class ParseTest(unittest.TestCase):
         self.assertEqual(diagnostic.line, 12)
         self.assertEqual(diagnostic.column, 7)
         self.assertTrue(diagnostic.file.endswith("Test.lean"))
+
+    def test_deduplication_merges_origins(self) -> None:
+        first = MODULE.Diagnostic(
+            severity="error", message="same", file="Test.lean", line=1, column=1,
+            origins=["Target.One"],
+        )
+        second = MODULE.Diagnostic(
+            severity="error", message="same", file="Test.lean", line=1, column=1,
+            origins=["Target.Two"],
+        )
+        unique = MODULE.deduplicate([first, second])
+        self.assertEqual(len(unique), 1)
+        self.assertEqual(unique[0].repeats, 2)
+        self.assertEqual(unique[0].origins, ["Target.One", "Target.Two"])
+
+    def test_multi_target_sequential_progress_and_global_dedup(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            (root / "lakefile.toml").write_text("name = \"test\"\n")
+
+            def fake_run(command, actual_root):
+                self.assertEqual(actual_root, root)
+                target = command[-1]
+                lines = [
+                    "error: Test.lean:1:1: shared failure",
+                    "same body",
+                    "error: Lean exited with code 1",
+                    "error: build failed",
+                ]
+                self.assertIn(target, {"Target.One", "Target.Two"})
+                return 1, lines
+
+            stdout = io.StringIO()
+            stderr = io.StringIO()
+            with mock.patch.object(MODULE, "run_build", side_effect=fake_run) as patched:
+                with redirect_stdout(stdout), redirect_stderr(stderr):
+                    rc = MODULE.main([
+                        "--root", str(root), "--color=never",
+                        "Target.One", "Target.Two",
+                    ])
+
+            self.assertEqual(rc, 1)
+            self.assertEqual(patched.call_count, 2)
+            progress = stderr.getvalue()
+            self.assertIn("[1/2] BUILD Target.One", progress)
+            self.assertIn("[2/2] BUILD Target.Two", progress)
+            report = stdout.getvalue()
+            self.assertIn("mode: sequential target builds", report)
+            self.assertIn("repeated 2 times", report)
+            self.assertIn("while building: Target.One, Target.Two", report)
+
+    def test_single_invocation_mode(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            (root / "lakefile.toml").write_text("name = \"test\"\n")
+            with mock.patch.object(MODULE, "run_build", return_value=(0, [])) as patched:
+                with redirect_stdout(io.StringIO()), redirect_stderr(io.StringIO()):
+                    rc = MODULE.main([
+                        "--root", str(root), "--color=never", "--single-invocation",
+                        "Target.One", "Target.Two",
+                    ])
+            self.assertEqual(rc, 0)
+            self.assertEqual(patched.call_count, 1)
+            command = patched.call_args.args[0]
+            self.assertEqual(command[-2:], ["Target.One", "Target.Two"])
 
 
 if __name__ == "__main__":

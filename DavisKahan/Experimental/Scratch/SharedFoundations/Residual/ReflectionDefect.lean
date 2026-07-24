@@ -23,11 +23,11 @@ namespace SharedFoundations
 open scoped InnerProductSpace
 open DavisKahanExt
 
-universe u v
+universe u
 
 variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
   [CompleteSpace H]
-variable {F : Type v} [NormedAddCommGroup F] [InnerProductSpace ℂ F]
+variable {F : Type u} [NormedAddCommGroup F] [InnerProductSpace ℂ F]
   [CompleteSpace F]
 
 /-- Reflection defect of a self-adjoint operator at the range of an isometric
