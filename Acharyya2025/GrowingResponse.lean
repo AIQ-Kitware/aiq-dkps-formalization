@@ -44,7 +44,7 @@ theorem highProbAtTop_of_tendsto_compl_zero
   have hcompl : P u ((E u)ᶜ) ≤ δ := (hN u (le_of_lt hu)).le
   have h1 : (1 : ENNReal) - δ ≤ 1 - P u ((E u)ᶜ) :=
     tsub_le_tsub_left hcompl 1
-  exact h1.trans (ForMathlib.one_sub_measure_compl_le (P u) (E u))
+  exact h1.trans (TauCeti.one_sub_measure_compl_le (P u) (E u))
 
 /-- Average a finite family of response vectors.  The zero-replicate branch is
 left at Lean's totalized scalar inverse; every statistical theorem below
