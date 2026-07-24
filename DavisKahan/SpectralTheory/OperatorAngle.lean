@@ -19,7 +19,7 @@ scalar-generic graph predicates; the actual operators live in the canonical
 complex and real-complexified modules imported above.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanExt
 
 open scoped InnerProductSpace
@@ -41,4 +41,4 @@ noncomputable def maximalAngle (U V : Submodule 𝕜 E)
   Real.arcsin (subspaceGap U V)
 
 end DavisKahanExt
-end ForMathlib
+end TauCeti

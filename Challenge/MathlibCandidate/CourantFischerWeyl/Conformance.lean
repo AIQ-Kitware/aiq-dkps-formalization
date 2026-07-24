@@ -24,8 +24,7 @@ statements and use only the permitted kernel dependencies.
 -/
 
 
-namespace ForMathlib
-
+namespace TauCeti
 open scoped InnerProductSpace
 open Module (finrank)
 
@@ -236,4 +235,4 @@ theorem abs_eigenvalues_sub_le_opNorm (hT : T.IsSymmetric) (hS : S.IsSymmetric)
   have hx := (LinearMap.toContinuousLinearMap (T - S)).le_opNorm x
   rwa [LinearMap.coe_toContinuousLinearMap'] at hx
 
-end ForMathlib
+end TauCeti

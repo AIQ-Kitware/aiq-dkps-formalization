@@ -40,7 +40,7 @@ the claimed bound would force it to vanish.  Its only consumer needed the
 self-adjoint case, which is `norm_le_of_selfAdjoint_spectrum_subset_closedBall`.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace ExactSinTheta
@@ -318,4 +318,4 @@ end RCLikeSpectralBridge
 end ExactSinTheta
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

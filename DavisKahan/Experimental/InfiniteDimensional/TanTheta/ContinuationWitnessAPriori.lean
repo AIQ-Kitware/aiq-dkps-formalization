@@ -21,7 +21,7 @@ wrapper can supply the form bounds from the source spectral configuration and
 supply the witness from sharp branch preservation.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanExt
 
 open Set
@@ -247,4 +247,4 @@ end SpectralContinuationWitness
 end WitnessAPriori
 
 end DavisKahanExt
-end ForMathlib
+end TauCeti

@@ -17,7 +17,9 @@ frame bound.  This module exposes the closed-range, Gram inverse, polar factor,
 and ideal-norm transport seams separately.
 -/
 
-namespace ForMathlib
+namespace TauCeti
+
+open ForMathlib
 namespace DavisKahan
 namespace Experimental
 namespace ExactSinTheta
@@ -457,4 +459,4 @@ end Complex
 end ExactSinTheta
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

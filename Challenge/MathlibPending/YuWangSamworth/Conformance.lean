@@ -14,8 +14,7 @@ ordinary `ForMathlib` implementation imported by the paired leaderboard.
 -/
 
 
-namespace ForMathlib
-
+namespace TauCeti
 open scoped InnerProductSpace BigOperators
 open Module (finrank)
 
@@ -37,4 +36,4 @@ theorem sqrt_sum_cross_le_of_population_gap
           (∑ k, ‖(S - T) (hT.eigenvectorBasis hn k)‖ ^ 2) / Δ := by
   sorry
 
-end ForMathlib
+end TauCeti

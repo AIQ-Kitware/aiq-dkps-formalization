@@ -21,7 +21,7 @@ The normalized Bochner curve integral defines the Riesz operator selected by
 the contour.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanExt
 
 open Set
@@ -267,4 +267,4 @@ end SpectralSeparatingContour
 end ResolventRieszIntegral
 
 end DavisKahanExt
-end ForMathlib
+end TauCeti

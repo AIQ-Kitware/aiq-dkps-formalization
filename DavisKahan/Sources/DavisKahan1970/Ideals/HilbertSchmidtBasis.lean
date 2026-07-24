@@ -29,7 +29,7 @@ monotone convergence then identify their suprema.  No compactness assumption
 is made; compactness follows afterwards from finite square energy.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace ExactSinTheta
@@ -263,7 +263,7 @@ theorem paperHilbertSchmidtEnergy_comp_starProjection
     rfl
   have hfrob : ∑ k : Fin n, T.toLinearMap.singularValues (k : ℕ) ^ 2
       = ∑ k : Fin n, ‖T (c k)‖ ^ 2 :=
-    ForMathlib.sum_sq_singularValues T.toLinearMap hn c
+    TauCeti.sum_sq_singularValues T.toLinearMap hn c
   rw [hsame.paperHilbertSchmidtEnergy_eq,
     paperHilbertSchmidtEnergy_eq_sum_range_of_rank_le hTrank,
     ← Fin.sum_univ_eq_sum_range
@@ -533,4 +533,4 @@ end
 end ExactSinTheta
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

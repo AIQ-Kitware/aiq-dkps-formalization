@@ -14,7 +14,7 @@ these are the two `sin Θ` endpoints it feeds, in operator norm and in an
 arbitrary unitarily invariant ideal gauge.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace SpectraBridge
@@ -23,7 +23,7 @@ open Spectra.QuantumMechanics.SpectralTheory
 
 section SinTheta
 
-open ForMathlib.DavisKahan.Experimental.ExactSinTheta
+open TauCeti.DavisKahan.Experimental.ExactSinTheta
 
 universe v
 
@@ -94,4 +94,4 @@ end SinTheta
 end SpectraBridge
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

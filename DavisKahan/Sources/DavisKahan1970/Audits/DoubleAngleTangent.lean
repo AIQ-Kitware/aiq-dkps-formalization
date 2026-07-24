@@ -15,7 +15,7 @@ tangent-double-angle source facades.  Every `#print axioms` below must report
 only the three standard axioms (`propext`, `Classical.choice`, `Quot.sound`).
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan1970
 
 /-! ## Section 7, equations (7.1)--(7.5): sine double angle -/
@@ -74,4 +74,4 @@ namespace DavisKahan1970
 #print axioms kyFanApproximationGauge_orthonormal_bound
 
 end DavisKahan1970
-end ForMathlib
+end TauCeti

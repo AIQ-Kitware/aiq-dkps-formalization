@@ -19,7 +19,7 @@ majorization is the final-prefix inequality.  Consequently this is also a
 small end-to-end regression test for the source-norm correspondence.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace ExactSinTheta
@@ -161,4 +161,4 @@ end
 end ExactSinTheta
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

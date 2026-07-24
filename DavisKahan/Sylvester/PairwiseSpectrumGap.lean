@@ -14,7 +14,7 @@ estimate and Davis--Kahan Theorem 6.2.  It is intentionally independent of the
 three stronger interval/exterior and ordered gap configurations.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace ExactSinTheta
@@ -23,7 +23,7 @@ noncomputable section
 
 universe v
 
-open ForMathlib.DavisKahanExt
+open TauCeti.DavisKahanExt
 
 /-- Every point of the two real spectra is separated by at least `delta`. -/
 def GenuinePairwiseSpectrumGap
@@ -85,4 +85,4 @@ end
 end ExactSinTheta
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

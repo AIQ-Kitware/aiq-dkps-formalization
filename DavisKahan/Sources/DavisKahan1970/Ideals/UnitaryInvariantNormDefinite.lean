@@ -16,7 +16,7 @@ its ideal.  This closes the definition-level correspondence with the norm class
 used by Davis and Kahan.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace ExactSinTheta
@@ -95,4 +95,4 @@ end
 end ExactSinTheta
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

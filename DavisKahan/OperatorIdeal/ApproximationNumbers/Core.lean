@@ -8,7 +8,7 @@ import Mathlib.Topology.Algebra.Module.FiniteDimension
 import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Adjoint
 import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteDimensional
 import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.MinMax
-import ForMathlib.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm
+import ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm
 
 /-!
 # Approximation-number foundation and scalar-specific analytic endpoints
@@ -23,7 +23,7 @@ The public aggregate and downstream ideal-family construction remain in
 `ApproximationNumbers`.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace ExactSinTheta
@@ -407,9 +407,9 @@ theorem rectangularKyFanSum_le_kyFanApproximationGauge
     [NormedAddCommGroup F₀] [InnerProductSpace 𝕜 F₀]
     [FiniteDimensional 𝕜 F₀]
     (k : ℕ) (A : E₀ →ₗ[𝕜] F₀) :
-    ForMathlib.DavisKahanTheory.RectangularUnitarilyInvariantNorm.rectangularKyFanSum k A ≤
+    TauCeti.DavisKahanTheory.RectangularUnitarilyInvariantNorm.rectangularKyFanSum k A ≤
       kyFanApproximationGauge k A.toContinuousLinearMap := by
-  unfold ForMathlib.DavisKahanTheory.RectangularUnitarilyInvariantNorm.rectangularKyFanSum
+  unfold TauCeti.DavisKahanTheory.RectangularUnitarilyInvariantNorm.rectangularKyFanSum
     kyFanApproximationGauge
   rw [Fin.sum_univ_eq_sum_range]
   exact Finset.sum_le_sum fun n _ =>
@@ -424,9 +424,9 @@ theorem rectangularKyFanSum_eq_kyFanApproximationGauge
     [NormedAddCommGroup F₀] [InnerProductSpace 𝕜 F₀]
     [FiniteDimensional 𝕜 F₀]
     (k : ℕ) (A : E₀ →ₗ[𝕜] F₀) :
-    ForMathlib.DavisKahanTheory.RectangularUnitarilyInvariantNorm.rectangularKyFanSum k A =
+    TauCeti.DavisKahanTheory.RectangularUnitarilyInvariantNorm.rectangularKyFanSum k A =
       kyFanApproximationGauge k A.toContinuousLinearMap := by
-  unfold ForMathlib.DavisKahanTheory.RectangularUnitarilyInvariantNorm.rectangularKyFanSum
+  unfold TauCeti.DavisKahanTheory.RectangularUnitarilyInvariantNorm.rectangularKyFanSum
     kyFanApproximationGauge
   rw [Fin.sum_univ_eq_sum_range]
   exact Finset.sum_congr rfl fun n _ =>
@@ -447,7 +447,7 @@ theorem kyFanApproximationGauge_add_le_finiteDimensional
   rw [← rectangularKyFanSum_eq_kyFanApproximationGauge k (A + B),
     ← rectangularKyFanSum_eq_kyFanApproximationGauge k A,
     ← rectangularKyFanSum_eq_kyFanApproximationGauge k B]
-  exact (ForMathlib.DavisKahanTheory.RectangularUnitarilyInvariantNorm.kyFan
+  exact (TauCeti.DavisKahanTheory.RectangularUnitarilyInvariantNorm.kyFan
     (𝕜 := 𝕜) (E := E₀) (F := F₀) k).add_le A B
 
 
@@ -816,4 +816,4 @@ theorem kyFanApproximationGauge_le_nat_mul_opNorm
 end ExactSinTheta
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

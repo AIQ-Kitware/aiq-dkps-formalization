@@ -24,7 +24,7 @@ selection developments.
 
 open scoped InnerProductSpace
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace ExactSinTheta
@@ -37,8 +37,8 @@ variable {E F : Type v}
 
 /-- Genuine Spectra interval/exterior separation for a Sylvester pair. -/
 def GenuineSylvesterIntervalExteriorGap
-    (A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := E))
-    (B : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := F))
+    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := E))
+    (B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := F))
     (β α δ : ℝ) : Prop :=
   (Spectra.Resolvent.spectrum A.toLinearPMap ⊆ Set.Icc β α ∧
     ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
@@ -49,8 +49,8 @@ def GenuineSylvesterIntervalExteriorGap
 
 /-- All three source gap configurations, stated with genuine Spectra spectra. -/
 inductive GenuineUnboundedSylvesterGap
-    (A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := E))
-    (B : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := F))
+    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := E))
+    (B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := F))
     (δ : ℝ) : Prop where
   | intervalExterior
       {β α : ℝ}
@@ -68,8 +68,8 @@ inductive GenuineUnboundedSylvesterGap
 /-- Source-facing Theorem 5.2 wrapper with genuine spectra in every branch. -/
 theorem davisKahan1970_sylvester_of_genuineSpectrumGap
     (N : UnitaryInvariantIdealFamily (𝕜 := ℂ))
-    {A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := E)}
-    {B : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := F)}
+    {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := E)}
+    {B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := F)}
     (hA : A.IsSelfAdjoint) (hB : B.IsSelfAdjoint)
     {X C : F →L[ℂ] E} {δ : ℝ}
     (hδ : 0 < δ)
@@ -104,4 +104,4 @@ theorem davisKahan1970_sylvester_of_genuineSpectrumGap
 end ExactSinTheta
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

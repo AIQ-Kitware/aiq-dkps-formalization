@@ -15,7 +15,7 @@ projector-difference identity combines them without a factor of two.
 
 open scoped InnerProductSpace
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace ExactSinTheta
@@ -62,4 +62,4 @@ theorem mul_subspaceGap_le_max_of_two_directedGap_le
 end ExactSinTheta
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

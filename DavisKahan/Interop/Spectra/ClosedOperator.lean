@@ -18,7 +18,7 @@ adjoint and self-adjoint APIs without deleting the generic wrapper.
 
 open scoped InnerProductSpace
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace SpectraBridge
@@ -27,7 +27,7 @@ variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
   [CompleteSpace H]
 
 abbrev DKClosedOperator :=
-  ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := H)
+  TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := H)
 
 /-- Forget a Spectra self-adjoint operator to the scalar-generic DK closed
 operator wrapper. -/
@@ -103,4 +103,4 @@ theorem closedOperatorToSpectra_symmetric
 end SpectraBridge
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

@@ -23,7 +23,7 @@ promotion record.
 
 open scoped InnerProductSpace BigOperators
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace MathAhead
@@ -60,4 +60,4 @@ end Section6Appendix
 end MathAhead
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

@@ -17,7 +17,7 @@ complement.  Combining this observation with the algebraic result in
 solutions of the operator Riccati equation.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanExt
 
 open scoped InnerProductSpace
@@ -102,4 +102,4 @@ theorem blockGraph_reduces_iff_solvesRiccati
     exact (blockGraph_invariant_iff_solvesRiccati H X).2 hX
 
 end DavisKahanExt
-end ForMathlib
+end TauCeti

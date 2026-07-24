@@ -28,7 +28,7 @@ from that placement to effective blocks and genuine spectral repulsion is
 proved here.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanExt
 
 open Set
@@ -410,4 +410,4 @@ end SpectralContinuationWitness
 end WitnessOrientedBlocks
 
 end DavisKahanExt
-end ForMathlib
+end TauCeti

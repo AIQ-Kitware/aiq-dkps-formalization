@@ -16,13 +16,13 @@ then force the bounded intertwiner to vanish.  Unlike the older uniqueness
 lemma, no interval/exterior or ordered half-line geometry is required.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace ExactSinTheta
 
 open scoped InnerProductSpace
-open ForMathlib.DavisKahanExt
+open TauCeti.DavisKahanExt
 open Spectra.YosidaHille
 open Spectra.Operator
 -- `generator` belongs to the one-parameter unitary group namespace, which none of
@@ -136,4 +136,4 @@ end
 end ExactSinTheta
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

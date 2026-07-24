@@ -14,7 +14,7 @@ sets should contain only the standard classical/choice foundations inherited
 from the spectral calculus, and no project-local admissions.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan1970
 namespace Section8
 
@@ -41,4 +41,4 @@ namespace Section8
 
 end Section8
 end DavisKahan1970
-end ForMathlib
+end TauCeti

@@ -14,7 +14,7 @@ functional calculus.  The independent scalar-generic isometric theorem in
 `Bounded.lean` remains available.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace ExactSinTheta
@@ -52,8 +52,8 @@ structure BoundedGeneralSinThetaProblem
   frameLowerBound_pos : 0 < frameLowerBound
   lowerFrame : LowerFrameBound X frameLowerBound
   spectral_gap : UnboundedSylvesterGap
-    (ForMathlib.DavisKahanExt.ClosedOperator.ofBounded A₀)
-    (ForMathlib.DavisKahanExt.ClosedOperator.ofBounded Λ₁) gap
+    (TauCeti.DavisKahanExt.ClosedOperator.ofBounded A₀)
+    (TauCeti.DavisKahanExt.ClosedOperator.ofBounded Λ₁) gap
   residual_mem : N.toRectangularSymmetricIdealFamily.Mem
     (generalResidual A X A₀)
 
@@ -68,9 +68,9 @@ noncomputable def toGeneral
     GeneralSinThetaProblem (E := E) (F := F)
       (G := G) (H := H) N := by
   let D : UnboundedSinThetaData (𝕜 := ℂ) (E := E) (F := F) (G := G) := {
-    A := ForMathlib.DavisKahanExt.ClosedOperator.ofBounded P.A
-    A₀ := ForMathlib.DavisKahanExt.ClosedOperator.ofBounded P.A₀
-    Λ₁ := ForMathlib.DavisKahanExt.ClosedOperator.ofBounded P.Λ₁
+    A := TauCeti.DavisKahanExt.ClosedOperator.ofBounded P.A
+    A₀ := TauCeti.DavisKahanExt.ClosedOperator.ofBounded P.A₀
+    Λ₁ := TauCeti.DavisKahanExt.ClosedOperator.ofBounded P.Λ₁
     X := P.X
     F₁ := P.F₁
     residual := generalResidual P.A P.X P.A₀
@@ -91,13 +91,13 @@ noncomputable def toGeneral
     data := D
     exactMap := P.F₀
     ambient_selfAdjoint :=
-      ForMathlib.DavisKahanExt.ClosedOperator.ofBounded_isSelfAdjoint
+      TauCeti.DavisKahanExt.ClosedOperator.ofBounded_isSelfAdjoint
         P.A P.ambient_symmetric
     trial_selfAdjoint :=
-      ForMathlib.DavisKahanExt.ClosedOperator.ofBounded_isSelfAdjoint
+      TauCeti.DavisKahanExt.ClosedOperator.ofBounded_isSelfAdjoint
         P.A₀ P.trial_symmetric
     complement_selfAdjoint :=
-      ForMathlib.DavisKahanExt.ClosedOperator.ofBounded_isSelfAdjoint
+      TauCeti.DavisKahanExt.ClosedOperator.ofBounded_isSelfAdjoint
         P.Λ₁ P.complement_symmetric
     exact_decomposition := P.exact_decomposition
     gap := P.gap
@@ -147,8 +147,8 @@ theorem intervalExteriorGap_to_unbounded
     {β α δ : ℝ}
     (hgap : IntervalExteriorGap A B β α δ) :
     UnboundedIntervalExteriorGap
-      (ForMathlib.DavisKahanExt.ClosedOperator.ofBounded A)
-      (ForMathlib.DavisKahanExt.ClosedOperator.ofBounded B)
+      (TauCeti.DavisKahanExt.ClosedOperator.ofBounded A)
+      (TauCeti.DavisKahanExt.ClosedOperator.ofBounded B)
       β α δ := by
   exact hgap
 
@@ -157,4 +157,4 @@ end Generic
 end ExactSinTheta
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

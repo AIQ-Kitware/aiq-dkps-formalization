@@ -19,7 +19,7 @@ cutoff proofs.
 open scoped InnerProductSpace Topology
 open Filter
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace ExactSinTheta
@@ -31,15 +31,15 @@ variable {E F : Type v}
   [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
 
 abbrev ComplexClosedOperatorOnE :=
-  ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := E)
+  TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := E)
 abbrev ComplexClosedOperatorOnF :=
-  ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := F)
+  TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := F)
 
 /-- Fill the complement of an interface cutoff by a real scalar. -/
 noncomputable def interfaceFilledTruncation
     {H : Type v}
     [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
-    {A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := H)}
+    {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := H)}
     {hA : A.IsSelfAdjoint}
     (P : GenuineSpectralCutoffInterface A hA)
     (T : GenuineBoundedTruncationInterface A hA P)
@@ -51,7 +51,7 @@ noncomputable def interfaceFilledTruncation
 theorem interfaceFilledTruncation_isSymmetric
     {H : Type v}
     [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
-    {A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := H)}
+    {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := H)}
     {hA : A.IsSelfAdjoint}
     (P : GenuineSpectralCutoffInterface A hA)
     (T : GenuineBoundedTruncationInterface A hA P)
@@ -66,7 +66,7 @@ theorem interfaceFilledTruncation_isSymmetric
 theorem interfaceCutoff_complement_identities
     {H : Type v}
     [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
-    {A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := H)}
+    {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := H)}
     {hA : A.IsSelfAdjoint}
     (P : GenuineSpectralCutoffInterface A hA)
     (τ : ℝ) (x : H) :
@@ -96,7 +96,7 @@ filling the orthogonal complement by the same scalar. -/
 theorem interfaceFilledTruncation_lowerBound
     {H : Type v}
     [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
-    {A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := H)}
+    {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := H)}
     {hA : A.IsSelfAdjoint}
     (P : GenuineSpectralCutoffInterface A hA)
     (T : GenuineBoundedTruncationInterface A hA P)
@@ -165,7 +165,7 @@ filling the orthogonal complement by the same scalar. -/
 theorem interfaceFilledTruncation_upperBound
     {H : Type v}
     [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
-    {A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := H)}
+    {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := H)}
     {hA : A.IsSelfAdjoint}
     (P : GenuineSpectralCutoffInterface A hA)
     (T : GenuineBoundedTruncationInterface A hA P)
@@ -389,4 +389,4 @@ end ApproximationNumberEndpointAssumptions
 end ExactSinTheta
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

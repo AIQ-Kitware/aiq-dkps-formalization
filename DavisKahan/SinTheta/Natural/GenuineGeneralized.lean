@@ -15,7 +15,7 @@ modifying that verified module.
 
 open scoped InnerProductSpace
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace ExactSinTheta
@@ -33,9 +33,9 @@ spectral inputs. The lower-frame polar factorization and every complementary
 spectral restriction are constructed internally. -/
 theorem generalizedSinTheta_unbounded_spectralSubspace_of_genuineSpectrumGap
     (N : UnitaryInvariantIdealFamily (𝕜 := ℂ))
-    (A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := E))
+    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := E))
     (hA : A.IsSelfAdjoint) (S : Set ℝ) (hS : MeasurableSet S)
-    (A0 : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := F))
+    (A0 : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := F))
     (hA0 : A0.IsSelfAdjoint)
     (X Rop : F →L[ℂ] E)
     {δ ε : ℝ} (hδ : 0 < δ) (hε : 0 < ε)
@@ -71,4 +71,4 @@ theorem generalizedSinTheta_unbounded_spectralSubspace_of_genuineSpectrumGap
 end ExactSinTheta
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

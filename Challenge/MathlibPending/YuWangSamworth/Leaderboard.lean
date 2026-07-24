@@ -5,4 +5,4 @@
 
 import DavisKahan.Sources.YuWangSamworth2015
 
-#print axioms ForMathlib.sqrt_sum_cross_le_of_population_gap
+#print axioms TauCeti.sqrt_sum_cross_le_of_population_gap

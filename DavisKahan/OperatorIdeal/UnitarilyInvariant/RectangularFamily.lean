@@ -21,7 +21,7 @@ only this interface.  The genuinely two-unbounded cutoff route uses the
 stronger `KyFanDominantIdealFamily` defined in `ApproximationNumbers.lean`.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace ExactSinTheta
@@ -420,4 +420,4 @@ end RectangularSymmetricIdealFamily
 end ExactSinTheta
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

@@ -30,7 +30,9 @@ the transfer to arbitrary vectors and the Cauchy--Schwarz duality back to
 the test side proceed exactly as in finite dimensions.
 -/
 
-namespace ForMathlib
+namespace TauCeti
+
+open ForMathlib
 namespace DavisKahanExt
 
 open scoped InnerProductSpace
@@ -397,4 +399,4 @@ theorem tan_theta_le' (hT : T.IsSymmetric)
       Real.sqrt_sq (mul_nonneg hρ0 (norm_nonneg _))] at this
 
 end DavisKahanExt
-end ForMathlib
+end TauCeti

@@ -20,7 +20,7 @@ statements and use only the permitted kernel dependencies.
 -/
 
 
-namespace ForMathlib.Matrix
+namespace TauCeti.Matrix
 
 open scoped BigOperators ComplexOrder
 open Matrix
@@ -65,9 +65,9 @@ theorem PosSemidef.eigenvalues₀_eq_zero_of_le {B : Matrix n n 𝕜}
   rw [hcount] at hcard_le
   omega
 
-end ForMathlib.Matrix
+end TauCeti.Matrix
 
-namespace ForMathlib.Matrix.RankFactorizationAux
+namespace TauCeti.Matrix.RankFactorizationAux
 
 open Module (finrank)
 open _root_.Matrix
@@ -123,9 +123,9 @@ theorem exists_eq_mul_of_rank_le (M : Matrix m n 𝕜) {r : ℕ} (h : M.rank ≤
       fun k _ hk => dif_neg (by simpa using hk)).symm
   rw [Matrix.mul_apply, hsum, ← Matrix.mul_apply, ← hM]
 
-end ForMathlib.Matrix.RankFactorizationAux
+end TauCeti.Matrix.RankFactorizationAux
 
-namespace ForMathlib.Matrix
+namespace TauCeti.Matrix
 
 open scoped BigOperators Matrix ComplexConjugate ComplexOrder
 open _root_.Matrix
@@ -211,4 +211,4 @@ theorem posSemidef_and_rank_le_iff_exists_conjTranspose_mul_self
   rw [rank_conjTranspose_mul_self]
   exact A.rank_le_height
 
-end ForMathlib.Matrix
+end TauCeti.Matrix

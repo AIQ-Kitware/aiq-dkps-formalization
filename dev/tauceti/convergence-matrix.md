@@ -119,6 +119,15 @@ NOT: `copy ForMathlib → ForTauCeti → submit`.
   paper and would demote reusable mathematics.) The `KyFan → {Spectrum,
   PolarDecomposition, ProjectionGeometry}` edges are all *inside* the
   singular-value component, so they enlarge no closure and need no severing.
+- **DONE (2026-07-24, edward): the CourantFischer dedup wave landed.** The
+  37-module weakly-connected component (singular-value/UI-norm/frame subgraph
+  + statistics cluster) migrated to `ForTauCeti` in one commit;
+  `ForMathlib/CourantFischer.lean` deleted; consumers repointed (historical
+  signatures ride the transitional `CourantFischerCompat` shim; paper files
+  extending the library namespace now extend `TauCeti`). `ForMathlib` is down
+  to 12 modules. Module-system conversion of the moved files is deferred to a
+  dedicated mechanical pass (see the migration doc for why). Gates: full build
+  9266 green, layer check 684 OK, census CLEAN.
 - **CourantFischer final API landed (2026-07-24, edward).** The ForTauCeti
   copy no longer mirrors the ForMathlib names: the P0 redesign of
   `dev/tauceti-signature-polish-todo.md` §6 is executed

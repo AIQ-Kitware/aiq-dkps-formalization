@@ -24,7 +24,7 @@ membership in every source norm without postulating finite-dimensional
 membership as an extra assumption.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan1970
 
 open scoped InnerProductSpace BigOperators ENNReal
@@ -359,4 +359,4 @@ theorem finiteMultiplicitySineBlock_injective
 end
 
 end DavisKahan1970
-end ForMathlib
+end TauCeti

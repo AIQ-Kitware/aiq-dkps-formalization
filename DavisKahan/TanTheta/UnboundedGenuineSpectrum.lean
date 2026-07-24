@@ -24,7 +24,7 @@ operator yields a genuine-spectrum unbounded tangent estimate.
 
 open scoped InnerProductSpace
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace TanTheta
@@ -208,4 +208,4 @@ theorem tanTheta_unbounded_exactSpectralIcc_genuineTrialBlock
 end TanTheta
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

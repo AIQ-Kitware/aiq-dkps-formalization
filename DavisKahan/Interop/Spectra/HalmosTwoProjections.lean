@@ -31,7 +31,7 @@ the two-projection argument.
 
 open scoped InnerProductSpace
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace SpectraBridge
@@ -693,4 +693,4 @@ theorem halmosCosineSq_nonneg
 end SpectraBridge
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

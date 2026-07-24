@@ -7,9 +7,9 @@ import DavisKahan.FiniteDimensional.Core.SpectralGap
 import DavisKahan.FiniteDimensional.Residual.AngleEmbedding
 import DavisKahan.FiniteDimensional.TanTheta.RitzResidual
 import DavisKahan.FiniteDimensional.Sylvester.Internal.SpectralBounds
-import ForMathlib.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm
-import ForMathlib.Analysis.InnerProductSpace.MoorePenroseInverse
-import ForMathlib.Analysis.InnerProductSpace.UnitarilyInvariantNorm
+import ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm
+import ForTauCeti.Analysis.InnerProductSpace.MoorePenroseInverse
+import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantNorm
 
 /-!
 # Coordinate tangent and double-angle embeddings
@@ -32,7 +32,7 @@ identifications still require a simultaneous CS decomposition and are not
 asserted here merely from these definitions.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanTheory
 
 open scoped InnerProductSpace BigOperators
@@ -539,4 +539,4 @@ theorem tanTheta_vector_le
         rw [cosThetaMagnitude, norm_trialGramSqrt_apply]
 
 end DavisKahanTheory
-end ForMathlib
+end TauCeti

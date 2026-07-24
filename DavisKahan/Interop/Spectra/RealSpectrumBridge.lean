@@ -16,7 +16,7 @@ The bridge is intentionally kept above both foundations to avoid an import
 cycle.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace SpectraBridge
@@ -31,7 +31,7 @@ variable {E : Type v}
 /-- Membership in the closed-operator real resolvent is exactly membership of
 the real scalar in the Spectra resolvent. -/
 theorem mem_realResolventSet_iff_mem_spectraResolvent
-    (A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := E))
+    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := E))
     (lam : ℝ) :
     lam ∈ A.realResolventSet ↔
       (lam : ℂ) ∈ Spectra.Resolvent.resolventSet A.toLinearPMap := by
@@ -40,7 +40,7 @@ theorem mem_realResolventSet_iff_mem_spectraResolvent
 /-- The generic closed-operator real spectrum agrees with the genuine Spectra
 spectrum after specializing the scalar field to `ℂ`. -/
 theorem realSpectrum_eq_spectraSpectrum
-    (A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := E)) :
+    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := E)) :
     A.realSpectrum = Spectra.Resolvent.spectrum A.toLinearPMap := by
   ext lam
   rfl
@@ -48,4 +48,4 @@ theorem realSpectrum_eq_spectraSpectrum
 end SpectraBridge
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

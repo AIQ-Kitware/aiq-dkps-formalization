@@ -13,7 +13,7 @@ fixed-contour Riesz operators at those endpoints as the genuine orthogonal
 projections onto the selected bounded spectral subspaces.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanExt
 
 open scoped InnerProductSpace
@@ -105,4 +105,4 @@ theorem fixedContourRieszOperator_operatorPath_one_eq_starProjection
 end AffineEndpoints
 
 end DavisKahanExt
-end ForMathlib
+end TauCeti

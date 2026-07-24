@@ -21,7 +21,7 @@ gauge and descend the resulting majorization through an arbitrary real
 unitarily invariant ideal family.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace ExactSinTheta
@@ -344,4 +344,4 @@ end ComplexificationApproximation
 end ExactSinTheta
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

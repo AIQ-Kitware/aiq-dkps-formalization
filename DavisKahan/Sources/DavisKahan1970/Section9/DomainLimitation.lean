@@ -17,7 +17,7 @@ are sequence-level and avoid pretending that an undefined residual is a vector
 of `ell^2`.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan1970
 namespace Section9
 
@@ -109,4 +109,4 @@ theorem truncation_eventually_agrees_on_prefix
 
 end Section9
 end DavisKahan1970
-end ForMathlib
+end TauCeti

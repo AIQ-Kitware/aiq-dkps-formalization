@@ -15,7 +15,7 @@ the full isometric sine-theta theorem over real Hilbert spaces for all three
 gap configurations and every real unitarily invariant ideal family.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace ExactSinTheta
@@ -86,4 +86,4 @@ end
 end ExactSinTheta
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

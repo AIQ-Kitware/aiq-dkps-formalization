@@ -17,7 +17,7 @@ programs.
 
 open scoped InnerProductSpace
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace SpectraBridge
@@ -89,4 +89,4 @@ theorem spectraPolar_decomposition (T : H →L[ℂ] H) :
 end SpectraBridge
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

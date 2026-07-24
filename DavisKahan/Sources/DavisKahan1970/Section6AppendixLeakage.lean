@@ -47,7 +47,7 @@ The final argument is then a scalar subtraction.
 open scoped InnerProductSpace BigOperators ENNReal
 open Finset
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace Frontier
@@ -341,4 +341,4 @@ end Section6Appendix
 end Frontier
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

@@ -4,9 +4,9 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
 import DavisKahan.FiniteDimensional.Core.SpectralSubspace
-import ForMathlib.Analysis.InnerProductSpace.PrincipalAngles
-import ForMathlib.Analysis.InnerProductSpace.UnitarilyInvariantNorm
-import ForMathlib.Analysis.InnerProductSpace.PolarDecomposition
+import ForTauCeti.Analysis.InnerProductSpace.PrincipalAngles
+import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantNorm
+import ForTauCeti.Analysis.InnerProductSpace.PolarDecomposition
 import ForMathlib.Analysis.InnerProductSpace.ProjectionGap
 
 /-!
@@ -16,7 +16,7 @@ Canonical finite-dimensional cosine, sine, angle, tangent, and double-angle
 objects, together with their singular-value and projector dictionaries.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanTheory
 
 open scoped InnerProductSpace BigOperators
@@ -30,9 +30,9 @@ Gram operators coincide, `|A|⋆|A| = |A|² = A⋆A`.  This is the finite-dimens
 `σ(|A|) = σ(A)` used to identify difference-of-projector singular values with the
 `sin Θ` operator's. -/
 theorem singularValues_abs (A : E →ₗ[𝕜] E) :
-    (ForMathlib.abs A).singularValues = A.singularValues := by
-  refine ForMathlib.singularValues_eq_of_gram_eq ?_
-  rw [(ForMathlib.isPositive_abs A).adjoint_eq, ForMathlib.abs_mul_self]
+    (TauCeti.abs A).singularValues = A.singularValues := by
+  refine TauCeti.singularValues_eq_of_gram_eq ?_
+  rw [(TauCeti.isPositive_abs A).adjoint_eq, TauCeti.abs_mul_self]
 
 /-- The cosine cross-projection `P_V P_U`. -/
 noncomputable def cosThetaMap (U V : Submodule 𝕜 E)
@@ -48,14 +48,14 @@ noncomputable def sinThetaMap (U V : Submodule 𝕜 E)
 principal-angle cosines (`singularValues_abs` and `singularValues_cosThetaMap`). -/
 noncomputable def cosAngleOperator (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →ₗ[𝕜] E :=
-  ForMathlib.abs (cosThetaMap U V)
+  TauCeti.abs (cosThetaMap U V)
 
 /-- `sin Θ` on the full ambient space, the modulus `|P_U - P_V|` of the projector
 difference.  This is the symmetric full-space sine operator; its singular values
 are those of `P_U - P_V` (`singularValues_projection_sub_projection`). -/
 noncomputable def sinAngleOperator (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →ₗ[𝕜] E :=
-  ForMathlib.abs (projection U - projection V)
+  TauCeti.abs (projection U - projection V)
 
 /-- The one-sided finite-dimensional `sin (2 Θ)` map supported on `U`.
 
@@ -201,7 +201,7 @@ theorem principalCosines_comm (U V : Submodule 𝕜 E)
     intro x y
     simp only [cosThetaMap, projection, LinearMap.comp_apply, ContinuousLinearMap.coe_coe]
     rw [V.inner_starProjection_left_eq_right, U.inner_starProjection_left_eq_right]
-  rw [principalCosines, principalCosines, ← hadj, ForMathlib.singularValues_adjoint]
+  rw [principalCosines, principalCosines, ← hadj, TauCeti.singularValues_adjoint]
 
 /-- The singular values of `P_U-P_V` are the full-space `sin Θ` values: with
 `sinAngleOperator = |P_U - P_V|` and `σ(|T|) = σ(T)` (`singularValues_abs`). -/
@@ -213,7 +213,7 @@ theorem singularValues_projection_sub_projection (U V : Submodule 𝕜 E)
 
 /-- **A unitarily invariant norm depends only on the singular-value sequence.**
 Via the gauge representation `apply_eq_gauge` of the operator SVD. -/
-theorem _root_.ForMathlib.UnitarilyInvariantNorm.eq_of_singularValues_eq
+theorem _root_.TauCeti.UnitarilyInvariantNorm.eq_of_singularValues_eq
     (N : UnitarilyInvariantNorm 𝕜 E) {A B : E →ₗ[𝕜] E}
     (h : A.singularValues = B.singularValues) : N A = N B := by
   rw [N.apply_eq_gauge rfl (stdOrthonormalBasis 𝕜 E) A,
@@ -331,7 +331,7 @@ theorem principalCosines_span_eq_cosPrincipalAngles {d : ℕ}
           (Submodule.span 𝕜 (Set.range u)).starProjection : E →L[𝕜] E) : E →ₗ[𝕜] E) :=
     rfl
   rw [principalCosines, hcomp,
-    ForMathlib.singularValues_starProjection_comp_starProjection hu hv,
+    TauCeti.singularValues_starProjection_comp_starProjection hu hv,
     cosPrincipalAngles_comm hv hu]
 
 /-- The principal-cosine sequence of two unit-generated lines has one entry,
@@ -386,4 +386,4 @@ theorem principalCosines_rankOne {u v : E} (hu : ‖u‖ = 1) (hv : ‖v‖ = 1)
 
 
 end DavisKahanTheory
-end ForMathlib
+end TauCeti

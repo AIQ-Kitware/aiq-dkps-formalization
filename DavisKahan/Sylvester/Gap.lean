@@ -18,7 +18,7 @@ unbounded; only the interval/exterior constructor requires a bounded spectral
 block.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace ExactSinTheta
@@ -34,8 +34,8 @@ variable {E F : Type v}
 
 /-- Interval/exterior spectral configuration for two closed self-adjoint blocks. -/
 def UnboundedIntervalExteriorGap
-    (A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := E))
-    (B : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := F))
+    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := E))
+    (B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := F))
     (β α δ : ℝ) : Prop :=
   (A.realSpectrum ⊆ Set.Icc β α ∧
     B.realSpectrum ⊆ {x | x ≤ β - δ ∨ α + δ ≤ x}) ∨
@@ -46,8 +46,8 @@ def UnboundedIntervalExteriorGap
 endpoint.  The ordered constructors allow both diagonal blocks to be genuinely
 unbounded; the interval/exterior constructor has a bounded spectral block. -/
 inductive UnboundedSylvesterGap
-    (A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := E))
-    (B : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := F))
+    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := E))
+    (B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := F))
     (δ : ℝ) : Prop where
   | intervalExterior
       {β α : ℝ}
@@ -65,4 +65,4 @@ inductive UnboundedSylvesterGap
 end ExactSinTheta
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

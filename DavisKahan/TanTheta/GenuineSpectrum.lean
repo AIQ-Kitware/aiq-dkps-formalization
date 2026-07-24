@@ -26,7 +26,7 @@ gives coercivity (through the two-sided inverse
 `IsSelfAdjoint.exists_two_sided_inverse_of_spectrum_gap`).
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanExt
 
 open scoped InnerProductSpace
@@ -276,4 +276,4 @@ theorem tanTheta_genuineSpectrum_oneSided
 end OneSided
 
 end DavisKahanExt
-end ForMathlib
+end TauCeti

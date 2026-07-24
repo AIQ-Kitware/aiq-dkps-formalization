@@ -20,8 +20,7 @@ statements and use only the permitted kernel dependencies.
 -/
 
 
-namespace ForMathlib
-
+namespace TauCeti
 open scoped BigOperators InnerProductSpace
 open MeasureTheory ProbabilityTheory Filter
 
@@ -177,4 +176,4 @@ theorem integral_norm_sq_average_sub_le_of_bound
     _ = γ / r := by
           rw [sq, mul_assoc, inv_mul_cancel_left₀ hr0.ne', div_eq_inv_mul]
 
-end ForMathlib
+end TauCeti

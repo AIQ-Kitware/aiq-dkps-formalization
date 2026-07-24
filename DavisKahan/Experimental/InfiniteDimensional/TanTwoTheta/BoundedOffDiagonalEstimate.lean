@@ -19,7 +19,7 @@ from `OrderedInternalGap`, then identify the scalar Riccati expression with the
 implemented double-angle operator.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanExt
 
 open scoped InnerProductSpace
@@ -100,4 +100,4 @@ theorem quarterAcuteAngularCoordinate_sharp_bound_of_form_gap
         (1 - ‖quarterAcuteAngularCoordinate U V hquarter‖ ^ 2) := by rfl
 
 end DavisKahanExt
-end ForMathlib
+end TauCeti

@@ -27,7 +27,7 @@ hypothesis needed to turn these certificates into the
 open Set
 open scoped InnerProductSpace
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace MathAhead
@@ -161,4 +161,4 @@ end HiddenFoundations
 end MathAhead
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

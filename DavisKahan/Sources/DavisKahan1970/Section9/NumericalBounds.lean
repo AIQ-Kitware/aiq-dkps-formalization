@@ -17,7 +17,7 @@ Davis--Kahan APIs can discharge those hypotheses in a separate integration
 module.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan1970
 namespace Section9
 
@@ -307,4 +307,4 @@ theorem final_upper_individual_angle_bound
 
 end Section9
 end DavisKahan1970
-end ForMathlib
+end TauCeti

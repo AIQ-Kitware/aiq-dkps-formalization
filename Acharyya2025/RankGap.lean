@@ -57,7 +57,7 @@ theorem gap_of_rank_floor
     ∀ i j : Fin n, (i : Nat) < d → d ≤ (j : Nat) →
       α / 2 ≤ |hT.eigenvalues hn i - hS.eigenvalues hn j| := by
   -- Thin ℝ-instantiation of the Mathlib-staged version.
-  exact ForMathlib.gap_of_rank_floor hT hS hn d hα htail hε hsmall
+  exact TauCeti.gap_of_rank_floor hT hS hn d hα htail hε hsmall
 
 /--
 **Davis–Kahan sin-Θ bound under the rank-`d` population structure (standard).**
@@ -88,7 +88,7 @@ theorem sum_cross_inner_sq_le_of_rank_floor
         (⟪hT.eigenvectorBasis hn i, hS.eigenvectorBasis hn j⟫_ℝ)^2
       ≤ 4 * (n : ℝ) * ε^2 / α^2 := by
   -- Thin ℝ-instantiation of the Mathlib-staged version.
-  have h := ForMathlib.sum_cross_norm_inner_eigenvectorBasis_sq_le_of_rank_floor
+  have h := TauCeti.sum_cross_norm_inner_eigenvectorBasis_sq_le_of_rank_floor
     hT hS hn d hα_pos hα htail hε hsmall
   simpa [Real.norm_eq_abs, sq_abs] using h
 

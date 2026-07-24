@@ -17,7 +17,7 @@ produce such a realization: the structure is pure bookkeeping, so it belongs
 with the closed-operator basics rather than with any particular criterion.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace ExactSinTheta
@@ -33,7 +33,7 @@ variable {E F : Type v}
 
 /-- Bounded realization of a closed operator on its full domain. -/
 structure BoundedRealization
-    (A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := E)) where
+    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := E)) where
   operator : E →L[𝕜] E
   domain_eq_top : A.domain = ⊤
   agrees : ∀ x : A.domain, operator (x : E) = A.toLinearMap x
@@ -41,4 +41,4 @@ structure BoundedRealization
 end ExactSinTheta
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

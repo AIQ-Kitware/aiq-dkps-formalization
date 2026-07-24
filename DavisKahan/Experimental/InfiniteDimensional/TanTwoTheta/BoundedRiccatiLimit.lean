@@ -23,7 +23,7 @@ only for constructing the approximate singular pairs and supplying the finite
 error inequality.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanExt
 
 /-- Close the finite-error near-singular-pair estimates at the operator norm.
@@ -72,4 +72,4 @@ theorem sharp_riccati_bound_of_epsilon
     simpa [pow_two] using hlim
 
 end DavisKahanExt
-end ForMathlib
+end TauCeti

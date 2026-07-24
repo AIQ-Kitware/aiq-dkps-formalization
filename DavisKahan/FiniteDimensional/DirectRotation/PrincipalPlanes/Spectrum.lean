@@ -4,8 +4,9 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking, Claude Fable 5
 -/
 import DavisKahan.FiniteDimensional.DirectRotation.PrincipalPlanes.Basic
-import ForMathlib.Analysis.InnerProductSpace.CourantFischer
-import ForMathlib.Analysis.InnerProductSpace.KyFan
+import ForTauCeti.Analysis.InnerProductSpace.CourantFischer
+import ForTauCeti.Analysis.InnerProductSpace.CourantFischerCompat
+import ForTauCeti.Analysis.InnerProductSpace.KyFan
 
 /-!
 # The spectrum of the direct displacement `I - R`
@@ -21,7 +22,7 @@ Gram identity `(I-R)⋆(I-R) = 2 (I - |S|)`, and the closed forms
 * `kyFanSum_directRotation_displacement_eq_principalChords`.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanTheory
 
 open scoped InnerProductSpace BigOperators
@@ -92,7 +93,7 @@ theorem abs_canonicalIntertwiner_apply_eq_self_of_orthogonal_sources
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     {x : E} (hxU : x ∈ U)
     (hx : ∀ i, ⟪principalSourceVector U V i, x⟫_𝕜 = 0) :
-    ForMathlib.abs (canonicalIntertwiner U V) x = x := by
+    TauCeti.abs (canonicalIntertwiner U V) x = x := by
   have hxV := mem_of_mem_orthogonal_sources U V hxU hx
   exact abs_canonicalIntertwiner_apply_eq_self_of_projection_eq U V
     (by rw [projection_apply_of_mem hxU, projection_apply_of_mem hxV])
@@ -231,7 +232,7 @@ theorem adjoint_comp_displacement_directRotation
     (LinearMap.id - (directRotation U V hacute).toLinearMap).adjoint ∘ₗ
         (LinearMap.id - (directRotation U V hacute).toLinearMap) =
       (2 : 𝕜) • (LinearMap.id -
-        ForMathlib.abs (canonicalIntertwiner U V)) := by
+        TauCeti.abs (canonicalIntertwiner U V)) := by
   have htwo := two_smul_abs_canonicalIntertwiner U V hacute
   have hadj : (directRotation U V hacute).toLinearMap.adjoint =
       (directRotation U V hacute).symm.toLinearMap :=
@@ -555,4 +556,4 @@ theorem kyFanSum_directRotation_displacement_eq_principalChords
   simp_rw [singularValues_directRotation_displacement U V hacute]
   exact sum_repeated_pair_prefix (fun i => principalPlaneChord U V i) k
 end DavisKahanTheory
-end ForMathlib
+end TauCeti

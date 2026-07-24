@@ -14,7 +14,7 @@ and range projection `X X*`.  These identities are shared by residual,
 generalized tangent, reflection-defect, and finite-rank comparison arguments.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace Scratch
@@ -126,4 +126,4 @@ end SharedFoundations
 end Scratch
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

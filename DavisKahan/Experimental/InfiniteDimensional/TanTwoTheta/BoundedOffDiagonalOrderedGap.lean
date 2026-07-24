@@ -19,7 +19,7 @@ orientation explicit avoids hiding the complementary-graph argument needed by
 the final public theorem.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanExt
 
 open scoped InnerProductSpace
@@ -125,4 +125,4 @@ theorem quarterAcuteAngularCoordinate_sharp_bound_of_orderedSpectraSeparated
     A H hA hH U V hU hV hoff hd hA0spec hA1spec hquarter
 
 end DavisKahanExt
-end ForMathlib
+end TauCeti

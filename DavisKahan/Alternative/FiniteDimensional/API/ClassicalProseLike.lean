@@ -36,7 +36,7 @@ For the two sine theorems we name the actual projection products used by the
 proved theorems.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanTheory
 
 open scoped InnerProductSpace
@@ -204,7 +204,7 @@ theorem partIII_tanTheta_vector_classical_prose_like
     [Z.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     {α β δ ρ : ℝ} (hgap : TanThetaVectorGapClassicalProseLike T Z V α β δ ρ) :
     ∀ x ∈ Z, δ * ‖x - V.starProjection x‖ ≤ ρ * ‖V.starProjection x‖ := by
-  exact ForMathlib.tan_theta_le hgap.T_symm hgap.V_inv hgap.strip_order
+  exact TauCeti.tan_theta_le hgap.T_symm hgap.V_inv hgap.strip_order
     hgap.gap_pos hgap.residual_nonneg hgap.Z_outside_strip hgap.Vperp_lower
     hgap.Vperp_upper hgap.residual_bound
 
@@ -246,7 +246,7 @@ theorem partIII_tanTwoTheta_opNorm_classical_prose_like
       (b - a) * (2 * ‖projectorDifferenceOperatorClassicalProseLike U V‖
           * Real.sqrt (1 - ‖projectorDifferenceOperatorClassicalProseLike U V‖ ^ 2))
         ≤ 2 * ε * (1 - 2 * ‖projectorDifferenceOperatorClassicalProseLike U V‖ ^ 2) := by
-  exact ForMathlib.tan_two_theta_norm_sub_le hgap.T_symm hgap.S_symm
+  exact TauCeti.tan_two_theta_norm_sub_le hgap.T_symm hgap.S_symm
     hgap.U_inv hgap.V_inv hgap.split_pos hgap.perturbation_nonneg
     hgap.U_above hgap.Uperp_below hgap.V_above hgap.Vperp_below
     hgap.offdiag_U hgap.offdiag_Uperp hgap.perturbation_bound
@@ -319,4 +319,4 @@ theorem spectralProjector_difference_opNorm_classical_prose_like
     hgap.perturbation_nonneg hgap.perturbation_bound
 
 end DavisKahanTheory
-end ForMathlib
+end TauCeti

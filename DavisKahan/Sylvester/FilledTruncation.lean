@@ -15,7 +15,9 @@ two-unbounded Sylvester argument over `GenuineSpectralCutoffInterface` and
 `GenuineBoundedTruncationInterface`.
 -/
 
-namespace ForMathlib
+namespace TauCeti
+
+open ForMathlib
 namespace DavisKahan
 namespace Experimental
 namespace ExactSinTheta
@@ -35,7 +37,7 @@ variable {E F : Type v}
 noncomputable def genuineFilledTruncation
     {H : Type v}
     [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] [CompleteSpace H]
-    (A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := H))
+    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := H))
     (hA : A.IsSelfAdjoint)
     (Pcut : GenuineSpectralCutoffInterface A hA)
     (Tcut : GenuineBoundedTruncationInterface A hA Pcut)
@@ -48,7 +50,7 @@ noncomputable def genuineFilledTruncation
 theorem genuineFilledTruncation_isSymmetric
     {H : Type v}
     [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] [CompleteSpace H]
-    (A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := H))
+    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := H))
     (hA : A.IsSelfAdjoint)
     (Pcut : GenuineSpectralCutoffInterface A hA)
     (Tcut : GenuineBoundedTruncationInterface A hA Pcut)
@@ -64,7 +66,7 @@ its squared norm completes the Pythagorean decomposition. -/
 theorem genuineCutoff_complement_identities
     {H : Type v}
     [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] [CompleteSpace H]
-    (A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := H))
+    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := H))
     (hA : A.IsSelfAdjoint)
     (Pcut : GenuineSpectralCutoffInterface A hA)
     (Tcut : GenuineBoundedTruncationInterface A hA Pcut)
@@ -95,7 +97,7 @@ recovers the bounded truncation. -/
 theorem genuineFilledTruncation_commutes_cutoff
     {H : Type v}
     [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] [CompleteSpace H]
-    (A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := H))
+    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := H))
     (hA : A.IsSelfAdjoint)
     (Pcut : GenuineSpectralCutoffInterface A hA)
     (Tcut : GenuineBoundedTruncationInterface A hA Pcut)
@@ -134,7 +136,7 @@ operator. -/
 theorem genuineFilledTruncation_eq_on_cutoff
     {H : Type v}
     [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] [CompleteSpace H]
-    (A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := H))
+    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := H))
     (hA : A.IsSelfAdjoint)
     (Pcut : GenuineSpectralCutoffInterface A hA)
     (Tcut : GenuineBoundedTruncationInterface A hA Pcut)
@@ -158,7 +160,7 @@ operator on its domain. -/
 theorem genuineFilledTruncation_tendsto_on_domain
     {H : Type v}
     [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] [CompleteSpace H]
-    (A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := H))
+    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := H))
     (hA : A.IsSelfAdjoint)
     (Pcut : GenuineSpectralCutoffInterface A hA)
     (Tcut : GenuineBoundedTruncationInterface A hA Pcut)
@@ -196,7 +198,7 @@ filling the orthogonal complement by the same scalar. -/
 theorem genuineFilledTruncation_lowerBound
     {H : Type v}
     [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] [CompleteSpace H]
-    (A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := H))
+    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := H))
     (hA : A.IsSelfAdjoint)
     (Pcut : GenuineSpectralCutoffInterface A hA)
     (Tcut : GenuineBoundedTruncationInterface A hA Pcut)
@@ -255,7 +257,7 @@ filling the orthogonal complement by the same scalar. -/
 theorem genuineFilledTruncation_upperBound
     {H : Type v}
     [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] [CompleteSpace H]
-    (A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := H))
+    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := H))
     (hA : A.IsSelfAdjoint)
     (Pcut : GenuineSpectralCutoffInterface A hA)
     (Tcut : GenuineBoundedTruncationInterface A hA Pcut)
@@ -373,4 +375,4 @@ theorem norm_add_opNorm_id_le_of_nonpos_direct
 end ExactSinTheta
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

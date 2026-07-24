@@ -29,7 +29,30 @@ Plus the original approximation-number cluster (6 modules).
 None remain trivially — the other Mathlib-only leaves all have ≥1 ForMathlib
 consumer (see below), so the next work is component migration.
 
-## The big remaining chunk: the singular-value / frame component
+## DONE (2026-07-24): the singular-value / frame component + statistics cluster
+
+The CourantFischer weakly-connected component (37 ForMathlib modules — the
+whole singular-value / UI-norm / frame subgraph plus the
+probability/statistics cluster) migrated in one commit, as the firewall
+requires (movers may leave behind neither dependencies nor importers, so a
+weakly-connected component moves atomically). `ForMathlib/CourantFischer.lean`
+was **deleted** (dedup — the ForTauCeti copy carries the redesigned API);
+consumers of the historical predicate-based signatures compile through the
+transitional `ForTauCeti/Analysis/InnerProductSpace/CourantFischerCompat.lean`
+shim (delete each wrapper as consumers migrate to the canonical names).
+Paper-layer files that re-entered `namespace ForMathlib` to extend the library
+tree now extend `namespace TauCeti`. The known-non-elaborating
+`RectangularSingularValuesDkVariant.lean` comparison record moved to
+`dev/alternates/` (ForTauCeti builds by glob, so it cannot live there).
+**Deferred:** module-system conversion of the 36 moved files (a later
+mechanical pass — under the module system `private` helpers stop being visible
+to later public declarations and non-public transitive Mathlib imports stop
+leaking, so each file needs individual import/privacy repair).
+`ForMathlib` now contains 12 modules (SpectralOrder bridges, Sylvester
+operator layer, projection geometry helpers, Berge/ApproxMinimizer,
+PosDef/RankFactorization).
+
+## Historical plan (superseded by the DONE note above)
 
 A connected ForMathlib subgraph (~15+ files) rooted at CourantFischer. Import edges
 (A → B means A imports B):

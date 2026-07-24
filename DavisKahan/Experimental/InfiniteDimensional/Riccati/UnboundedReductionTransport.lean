@@ -21,7 +21,7 @@ operator is block diagonal before its two closed coordinate restrictions are
 constructed explicitly.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanExt
 
 open scoped InnerProductSpace
@@ -185,4 +185,4 @@ theorem unboundedBlockDiagonalOperatorCore_unitaryEquivalent
   exact unboundedGraphRotationPullback_unitaryEquivalent H X
 
 end DavisKahanExt
-end ForMathlib
+end TauCeti

@@ -1,6 +1,7 @@
 /-
 # Courant-Fischer min-max + Weyl perturbation (Mathlib candidate 02) -- solution / dependency audit
 -/
-import ForMathlib.Analysis.InnerProductSpace.CourantFischer
+import ForTauCeti.Analysis.InnerProductSpace.CourantFischer
+import ForTauCeti.Analysis.InnerProductSpace.CourantFischerCompat
 
-#print axioms ForMathlib.abs_eigenvalues_sub_le_opNorm
+#print axioms TauCeti.abs_eigenvalues_sub_le_opNorm

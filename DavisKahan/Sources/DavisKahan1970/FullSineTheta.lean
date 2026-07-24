@@ -18,7 +18,7 @@ module adds the exact source norm, source angle, symmetric theorem, second
 generalized theorem, common-domain forms, and optimality statements.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan1970
 
 -- Lean has no namespace-alias command, so the paper implementation namespace
@@ -180,4 +180,4 @@ alias oneGap_does_not_imply_Proposition6_1 :=
   paperOneGap_does_not_imply_symmetric_square_estimate
 
 end DavisKahan1970
-end ForMathlib
+end TauCeti

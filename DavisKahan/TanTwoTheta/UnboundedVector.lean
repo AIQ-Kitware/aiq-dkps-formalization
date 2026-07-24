@@ -18,13 +18,13 @@ belongs to the branch-dependent theory.
 
 open scoped InnerProductSpace
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace SpectraBridge
 
-open ForMathlib.DavisKahanExt
-open ForMathlib.DavisKahan.Experimental.ExactSinTheta
+open TauCeti.DavisKahanExt
+open TauCeti.DavisKahan.Experimental.ExactSinTheta
 
 universe v
 
@@ -118,4 +118,4 @@ theorem norm_tanTwoAngleOperatorC_apply_le_addBounded_of_intervalExterior
 end SpectraBridge
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

@@ -21,7 +21,7 @@ proof is the product closed-graph proof transported through the L2 coordinate
 homeomorphism.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace ExactSinTheta
@@ -69,31 +69,31 @@ theorem norm_im_le (z : Eℂ) : ‖im z‖ ≤ ‖z‖ := by
   nlinarith [sq_nonneg ‖re z‖]
 
 /-- Coordinatewise complexification of a real closed-operator domain. -/
-def domain (A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E)) :
+def domain (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E)) :
     Submodule ℂ Eℂ :=
   complexifySubmodule A.domain
 
 @[simp] theorem mem_domain_iff
-    (A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E))
+    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E))
     (z : Eℂ) :
     z ∈ domain A ↔ re z ∈ A.domain ∧ im z ∈ A.domain := by
   rfl
 
 /-- Real coordinate of a vector in the complexified operator domain. -/
 def domainRe
-    (A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E))
+    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E))
     (z : domain A) : A.domain :=
   ⟨re (z : Eℂ), (mem_domain_iff A z).mp z.property |>.1⟩
 
 /-- Imaginary coordinate of a vector in the complexified operator domain. -/
 def domainIm
-    (A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E))
+    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E))
     (z : domain A) : A.domain :=
   ⟨im (z : Eℂ), (mem_domain_iff A z).mp z.property |>.2⟩
 
 /-- Coordinatewise action on the complexified domain. -/
 def linearMap
-    (A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E)) :
+    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E)) :
     domain A →ₗ[ℂ] Eℂ where
   toFun z := mk (A.toLinearMap (domainRe A z))
     (A.toLinearMap (domainIm A z))
@@ -117,17 +117,17 @@ def linearMap
       rw [map_add, map_smul, map_smul]
 
 @[simp] theorem re_linearMap
-    (A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E))
+    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E))
     (z : domain A) :
     re (linearMap A z) = A.toLinearMap (domainRe A z) := rfl
 
 @[simp] theorem im_linearMap
-    (A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E))
+    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E))
     (z : domain A) :
     im (linearMap A z) = A.toLinearMap (domainIm A z) := rfl
 
 private theorem domain_dense
-    (A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E)) :
+    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E)) :
     Dense ((domain A : Submodule ℂ Eℂ) : Set Eℂ) := by
   have hprod : Dense
       ((A.domain : Set E) ×ˢ (A.domain : Set E)) :=
@@ -148,7 +148,7 @@ private theorem domain_dense
   exact himage
 
 private theorem linearMap_closedGraph
-    (A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E)) :
+    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E)) :
     IsClosed (Set.range fun z : domain A =>
       ((z : Eℂ), linearMap A z)) := by
   let coords : (Eℂ × Eℂ) → ((E × E) × (E × E)) :=
@@ -190,32 +190,32 @@ private theorem linearMap_closedGraph
 
 /-- Coordinatewise complexification of a real closed operator. -/
 def complexify
-    (A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E)) :
-    ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := Eℂ) where
+    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E)) :
+    TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := Eℂ) where
   domain := domain A
   toLinearMap := linearMap A
   dense_domain := domain_dense A
   closed_graph := linearMap_closedGraph A
 
 @[simp] theorem complexify_domain
-    (A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E)) :
+    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E)) :
     (complexify A).domain = domain A := rfl
 
 @[simp] theorem mem_complexify_domain_iff
-    (A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E))
+    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E))
     (z : Eℂ) :
     z ∈ (complexify A).domain ↔ re z ∈ A.domain ∧ im z ∈ A.domain := by
   rfl
 
 @[simp] theorem complexify_apply_re
-    (A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E))
+    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E))
     (z : (complexify A).domain) :
     re ((complexify A).toLinearMap z) =
       A.toLinearMap ⟨re (z : Eℂ), (mem_complexify_domain_iff A z).mp z.property |>.1⟩ :=
   rfl
 
 @[simp] theorem complexify_apply_im
-    (A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E))
+    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E))
     (z : (complexify A).domain) :
     im ((complexify A).toLinearMap z) =
       A.toLinearMap ⟨im (z : Eℂ), (mem_complexify_domain_iff A z).mp z.property |>.2⟩ :=
@@ -224,19 +224,19 @@ def complexify
 /-- Applying a closed operator depends only on the underlying vector, not on
 the domain-membership witness. -/
 theorem toLinearMap_congr
-    {A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E)}
+    {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E)}
     {u v : A.domain} (h : (u : E) = (v : E)) :
     A.toLinearMap u = A.toLinearMap v :=
   congrArg A.toLinearMap (Subtype.ext h)
 
 /-- The real copy of a domain vector lies in the complexified domain. -/
 def ofRealDomain
-    (A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E))
+    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E))
     (x : A.domain) : (complexify A).domain :=
   ⟨ofReal (x : E), by simpa using x.property⟩
 
 @[simp] theorem complexify_apply_ofReal
-    (A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E))
+    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E))
     (x : A.domain) :
     (complexify A).toLinearMap (ofRealDomain A x) =
       ofReal (A.toLinearMap x) := by
@@ -251,7 +251,7 @@ def ofRealDomain
 
 /-- The imaginary copy of a domain vector lies in the complexified domain. -/
 def ofImaginaryDomain
-    (A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E))
+    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E))
     (x : A.domain) : (complexify A).domain :=
   ⟨Complex.I • ofReal (x : E), by
     rw [mem_complexify_domain_iff]
@@ -259,7 +259,7 @@ def ofImaginaryDomain
     exact ⟨A.domain.zero_mem, x.property⟩⟩
 
 @[simp] theorem complexify_apply_ofImaginary
-    (A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E))
+    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E))
     (x : A.domain) :
     (complexify A).toLinearMap (ofImaginaryDomain A x) =
       Complex.I • ofReal (A.toLinearMap x) := by
@@ -280,7 +280,7 @@ fields are propositions, so they are settled by proof irrelevance. -/
 theorem closedOperator_ext
     {𝕜 : Type*} [RCLike 𝕜] {H : Type*}
     [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] [CompleteSpace H]
-    {A B : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := H)}
+    {A B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := H)}
     (hdom : A.domain = B.domain)
     (haction : ∀ (x : A.domain) (y : B.domain),
       (x : H) = (y : H) → A.toLinearMap x = B.toLinearMap y) :
@@ -300,8 +300,8 @@ theorem closedOperator_ext
 operator. -/
 theorem complexify_ofBounded
     (T : E →L[ℝ] E) :
-    complexify (ForMathlib.DavisKahanExt.ClosedOperator.ofBounded T) =
-      ForMathlib.DavisKahanExt.ClosedOperator.ofBounded
+    complexify (TauCeti.DavisKahanExt.ClosedOperator.ofBounded T) =
+      TauCeti.DavisKahanExt.ClosedOperator.ofBounded
         (RealComplexification.complexify T) := by
   refine closedOperator_ext ?_ ?_
   · ext z
@@ -319,8 +319,8 @@ theorem complexify_ofBounded
 
 /-- A real domain map complexifies to a complex domain map. -/
 theorem mapsDomainTo_complexify
-    {A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E)}
-    {B : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := F)}
+    {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E)}
+    {B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := F)}
     {X : F →L[ℝ] E}
     (hX : A.MapsDomainTo B X) :
     (complexify A).MapsDomainTo (complexify B)
@@ -332,8 +332,8 @@ theorem mapsDomainTo_complexify
 
 /-- The domain-aware Sylvester equation complexifies coordinatewise. -/
 theorem closedSylvesterEquation_complexify
-    {A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E)}
-    {B : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := F)}
+    {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E)}
+    {B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := F)}
     {X C : F →L[ℝ] E}
     (hEq : HasClosedSylvesterEquation A B X C) :
     HasClosedSylvesterEquation (complexify A) (complexify B)
@@ -354,7 +354,7 @@ theorem closedSylvesterEquation_complexify
 
 /-- A lower quadratic-form bound is preserved exactly by complexification. -/
 theorem semiboundedBelow_complexify
-    {A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E)}
+    {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E)}
     {c : ℝ} (hA : SemiboundedBelow A c) :
     SemiboundedBelow (complexify A) c := by
   intro z
@@ -370,7 +370,7 @@ theorem semiboundedBelow_complexify
 
 /-- An upper quadratic-form bound is preserved exactly by complexification. -/
 theorem semiboundedAbove_complexify
-    {A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E)}
+    {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E)}
     {c : ℝ} (hA : SemiboundedAbove A c) :
     SemiboundedAbove (complexify A) c := by
   intro z
@@ -387,7 +387,7 @@ theorem semiboundedAbove_complexify
 
 /-- Symmetry is preserved by coordinatewise complexification. -/
 theorem isSymmetric_complexify
-    {A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E)}
+    {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E)}
     (hA : A.IsSymmetric) :
     (complexify A).IsSymmetric := by
   intro z w
@@ -408,13 +408,13 @@ theorem isSymmetric_complexify
 /-- The real embedding of the domain is continuous.  `fun_prop` cannot see
 through the `WithLp` wrapper or the subtype, so this is proved by hand. -/
 private theorem continuous_ofRealDomain
-    (A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E)) :
+    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E)) :
     Continuous (ofRealDomain A) :=
   ((ofReal (E := E)).continuous.comp continuous_subtype_val).subtype_mk _
 
 /-- The imaginary embedding of the domain is continuous. -/
 private theorem continuous_ofImaginaryDomain
-    (A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E)) :
+    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E)) :
     Continuous (ofImaginaryDomain A) := by
   have h : Continuous fun x : A.domain => Complex.I • (ofReal (x : E) : Eℂ) :=
     (continuous_const_smul (Complex.I : ℂ)).comp
@@ -423,13 +423,13 @@ private theorem continuous_ofImaginaryDomain
 
 /-- The real coordinate of the complexified domain is continuous. -/
 private theorem continuous_domainRe
-    (A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E)) :
+    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E)) :
     Continuous (domainRe A) :=
   (continuous_re.comp continuous_subtype_val).subtype_mk _
 
 /-- The imaginary coordinate of the complexified domain is continuous. -/
 private theorem continuous_domainIm
-    (A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E)) :
+    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E)) :
     Continuous (domainIm A) :=
   (continuous_im.comp continuous_subtype_val).subtype_mk _
 
@@ -447,7 +447,7 @@ private theorem inner_I_ofReal_right_re (z : Eℂ) (v : E) :
 conditions.  This is the maximality step in the real-to-complex self-adjoint
 transport. -/
 theorem mem_complexify_adjoint_domain_iff
-    (A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E))
+    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E))
     (z : Eℂ) :
     z ∈ (complexify A).toLinearPMap.adjoint.domain ↔
       re z ∈ A.toLinearPMap.adjoint.domain ∧
@@ -466,7 +466,7 @@ theorem mem_complexify_adjoint_domain_iff
         hz.comp hofReal
       have hre := Complex.continuous_re.comp hrestrict
       simp only [Function.comp_def,
-        ForMathlib.DavisKahanExt.ClosedOperator.toLinearPMap_apply,
+        TauCeti.DavisKahanExt.ClosedOperator.toLinearPMap_apply,
         complexify_apply_ofReal, inner_ofReal_right_re] at hre
       exact hre
     · rw [LinearPMap.mem_adjoint_domain_iff]
@@ -476,7 +476,7 @@ theorem mem_complexify_adjoint_domain_iff
         hz.comp hofImaginary
       have hre := Complex.continuous_re.comp hrestrict
       simp only [Function.comp_def,
-        ForMathlib.DavisKahanExt.ClosedOperator.toLinearPMap_apply,
+        TauCeti.DavisKahanExt.ClosedOperator.toLinearPMap_apply,
         complexify_apply_ofImaginary, inner_I_ofReal_right_re] at hre
       exact hre
   · rintro ⟨hr, hi⟩
@@ -502,10 +502,10 @@ theorem mem_complexify_adjoint_domain_iff
 /-- Self-adjointness of a real closed operator is preserved by
 complexification. -/
 theorem isSelfAdjoint_complexify
-    {A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E)}
+    {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E)}
     (hA : A.IsSelfAdjoint) :
     (complexify A).IsSelfAdjoint := by
-  rw [ForMathlib.DavisKahanExt.ClosedOperator.isSelfAdjoint_iff_toLinearPMap_adjoint_eq]
+  rw [TauCeti.DavisKahanExt.ClosedOperator.isSelfAdjoint_iff_toLinearPMap_adjoint_eq]
   refine LinearPMap.ext_iff.mpr ⟨?_, ?_⟩
   · ext z
     rw [mem_complexify_adjoint_domain_iff]
@@ -537,7 +537,7 @@ theorem isSelfAdjoint_complexify
 /-- A real bounded inverse complexifies to a complex bounded inverse of every
 real shift. -/
 theorem realResolvent_mem_complexify
-    (A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E))
+    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E))
     {lam : ℝ} (hlam : lam ∈ A.realResolventSet) :
     lam ∈ (complexify A).realResolventSet := by
   rcases hlam with ⟨R, hleft, hright⟩
@@ -561,7 +561,7 @@ theorem realResolvent_mem_complexify
 /-- A complex resolvent of the coordinatewise complexification descends to a
 real resolvent by restricting to the real copy and taking real coordinates. -/
 theorem complexify_realResolvent_mem
-    (A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E))
+    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E))
     {lam : ℝ} (hlam : lam ∈ (complexify A).realResolventSet) :
     lam ∈ A.realResolventSet := by
   rcases hlam with ⟨R, hleft, hright⟩
@@ -590,7 +590,7 @@ theorem complexify_realResolvent_mem
 /-- Real resolvent membership is exactly preserved by closed-operator
 complexification. -/
 theorem mem_realResolventSet_complexify_iff
-    (A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E))
+    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E))
     (lam : ℝ) :
     lam ∈ (complexify A).realResolventSet ↔ lam ∈ A.realResolventSet := by
   exact ⟨complexify_realResolvent_mem A, realResolvent_mem_complexify A⟩
@@ -598,7 +598,7 @@ theorem mem_realResolventSet_complexify_iff
 /-- Closed-operator real spectrum is exactly preserved by
 coordinatewise complexification. -/
 theorem closed_realSpectrum_complexify
-    (A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E)) :
+    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E)) :
     (complexify A).realSpectrum = A.realSpectrum := by
   ext lam
   change lam ∉ (complexify A).realResolventSet ↔
@@ -608,7 +608,7 @@ theorem closed_realSpectrum_complexify
 /-- The real spectrum of a real closed operator is the genuine real spectrum
 of its complexification. -/
 theorem realSpectrum_complexify
-    (A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E)) :
+    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E)) :
     A.realSpectrum = Spectra.Resolvent.spectrum (complexify A).toLinearPMap := by
   rw [← closed_realSpectrum_complexify A]
   ext lam
@@ -617,8 +617,8 @@ theorem realSpectrum_complexify
 /-- Complexification preserves every constructor of the manuscript gap
 predicate. -/
 theorem unboundedSylvesterGap_complexify
-    {A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E)}
-    {B : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := F)}
+    {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E)}
+    {B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := F)}
     {δ : ℝ} (hgap : UnboundedSylvesterGap A B δ) :
     UnboundedSylvesterGap (complexify A) (complexify B) δ := by
   cases hgap with
@@ -659,4 +659,4 @@ end
 end ExactSinTheta
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

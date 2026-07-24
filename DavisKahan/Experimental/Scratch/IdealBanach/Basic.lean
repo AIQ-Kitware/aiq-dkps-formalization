@@ -26,7 +26,7 @@ trace, or Schatten family has been supplied, no additional completeness or
 integration argument is needed for that family.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace ExactSinTheta
@@ -370,4 +370,4 @@ end Scratch
 end ExactSinTheta
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

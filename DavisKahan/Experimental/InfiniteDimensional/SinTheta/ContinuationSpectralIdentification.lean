@@ -29,7 +29,7 @@ identifies it with Spectra's bounded measurable calculus through the Cayley
 transform.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanExt
 
 open Set
@@ -630,4 +630,4 @@ theorem fixedContourRieszOperator_operatorPath_isOrthogonalProjection
 end BoundedSpectralProjection
 
 end DavisKahanExt
-end ForMathlib
+end TauCeti

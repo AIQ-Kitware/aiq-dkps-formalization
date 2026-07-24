@@ -24,7 +24,7 @@ spectrum of `blockDiagonalOperator D0 D1` is the union of the spectra of its
 two diagonal blocks.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanExt
 
 variable {E : Type*} [NormedAddCommGroup E] [NormedSpace ℂ E]
@@ -93,4 +93,4 @@ theorem complex_blockOperator_spectrum_eq_blockDiagonal_of_riccati
 end ComplexRiccati
 
 end DavisKahanExt
-end ForMathlib
+end TauCeti

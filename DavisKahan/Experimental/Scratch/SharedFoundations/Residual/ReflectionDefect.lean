@@ -14,7 +14,7 @@ This is the shared algebraic bridge needed by residual forms of the
 residual estimate without any spectral assumptions.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace Scratch
@@ -54,4 +54,4 @@ end SharedFoundations
 end Scratch
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

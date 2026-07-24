@@ -30,12 +30,12 @@ Neumann engines of `GenuineUnboundedGauge` finish both orientations.
 
 open scoped InnerProductSpace
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace SpectraBridge
 
-open ForMathlib.DavisKahan.Experimental.ExactSinTheta
+open TauCeti.DavisKahan.Experimental.ExactSinTheta
 
 universe v
 
@@ -176,4 +176,4 @@ theorem unbounded_sylvester_mem_and_gauge_le_of_spectra_intervalLeft_exteriorRig
 end SpectraBridge
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

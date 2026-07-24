@@ -18,7 +18,7 @@ extends both domain compatibility and the residual equation to all of
 domain theorems without any stronger spectral or norm assumption.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace ExactSinTheta
@@ -29,7 +29,7 @@ noncomputable section
 
 universe u v
 
-open ForMathlib.DavisKahanExt
+open TauCeti.DavisKahanExt
 
 /-- Scalar-generic source bookkeeping with the residual equation supplied on a
 graph core of the trial operator. -/
@@ -304,4 +304,4 @@ end
 end ExactSinTheta
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

@@ -21,7 +21,7 @@ this file.  Splitting them apart is what lets the source-faithful sine-theta
 layer reach `ClosedOperator` without inheriting an admission closure.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanExt
 
 open scoped InnerProductSpace
@@ -552,4 +552,4 @@ theorem SpectralSetsSeparated.mono_sets
   exact h a ha (hs has') b hb (ht hbt')
 end ClosedOperator
 end DavisKahanExt
-end ForMathlib
+end TauCeti

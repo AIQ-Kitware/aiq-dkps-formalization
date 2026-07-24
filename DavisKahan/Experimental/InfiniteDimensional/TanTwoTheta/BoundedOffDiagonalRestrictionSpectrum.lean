@@ -20,7 +20,7 @@ the supremum-center construction is nonemptiness, which is handled separately
 for nontrivial subspaces.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanExt
 
 open scoped InnerProductSpace
@@ -106,4 +106,4 @@ theorem restrictedSpectrum_bddBelow_of_invariant
   exact realSpectrum_bddBelow (compressOperator U A)
 
 end DavisKahanExt
-end ForMathlib
+end TauCeti

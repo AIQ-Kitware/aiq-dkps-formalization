@@ -16,7 +16,7 @@ approximation-number sequences give exactly the same membership and gauge in
 every Ky-Fan-dominant unitarily invariant ideal family.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace ExactSinTheta
@@ -356,4 +356,4 @@ end PaperSinThetaRepresentative
 end ExactSinTheta
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

@@ -31,7 +31,7 @@ is explicit: measurability alone does not imply boundedness, even on a compact
 set.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanExt
 
 open MeasureTheory Set Filter
@@ -372,4 +372,4 @@ theorem boundedSelfAdjointBorelCalculus_id [Nontrivial H]
 
 end
 end DavisKahanExt
-end ForMathlib
+end TauCeti

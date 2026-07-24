@@ -15,7 +15,7 @@ is stated as an identity-unitary equivalence so that both directions of domain
 transport remain explicit.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanExt
 
 open scoped InnerProductSpace
@@ -395,4 +395,4 @@ theorem unboundedBlockDiagonalOperatorCore_coordinateDirectSum
     (unboundedBlockDiagonalOperatorCore_reduces_zeroGraph H X hred)
 
 end DavisKahanExt
-end ForMathlib
+end TauCeti

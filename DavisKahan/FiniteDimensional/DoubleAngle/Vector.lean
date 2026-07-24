@@ -59,14 +59,14 @@ recovers the left-hand side of the identity and yields
 
 ## Main results
 
-* `ForMathlib.sin_two_theta_le`: the product form
+* `TauCeti.sin_two_theta_le`: the product form
   `(b - a) * (‖P x‖ * ‖x - P x‖) ≤ ε`.
-* `ForMathlib.sin_two_arccos_le`: the literature-facing form
+* `TauCeti.sin_two_arccos_le`: the literature-facing form
   `(b - a) * sin (2 * arccos ‖P x‖) ≤ 2 * ε`.
-* `ForMathlib.tan_two_theta_le` / `…_of_mem`: Davis's `tan 2θ` theorem under
+* `TauCeti.tan_two_theta_le` / `…_of_mem`: Davis's `tan 2θ` theorem under
   the vanishing-pinch hypotheses, in product form
   `(b - a) * (‖P x‖ * ‖x - P x‖) ≤ |‖P x‖ ^ 2 - ‖x - P x‖ ^ 2| * ε`.
-* `ForMathlib.map_mem_orthogonal_of_forall_map_mem`: the orthogonal complement
+* `TauCeti.map_mem_orthogonal_of_forall_map_mem`: the orthogonal complement
   of an invariant subspace of a symmetric operator is invariant.
 
 ## References
@@ -77,8 +77,7 @@ recovers the left-hand side of the identity and yields
   perturbation. III*, SIAM J. Numer. Anal. 7 (1970), 1–46 (the sin 2Θ theorem).
 -/
 
-namespace ForMathlib
-
+namespace TauCeti
 open scoped InnerProductSpace
 
 variable {𝕜 E : Type*} [RCLike 𝕜] [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
@@ -413,4 +412,4 @@ theorem tan_two_theta_le (hT : T.IsSymmetric) (hH : H.IsSymmetric)
     (U.starProjection_apply_mem x) (U.sub_starProjection_mem_orthogonal x)
     (by rw [hxsum]; exact hx) (by rw [hxsum]; exact hμ)
 
-end ForMathlib
+end TauCeti

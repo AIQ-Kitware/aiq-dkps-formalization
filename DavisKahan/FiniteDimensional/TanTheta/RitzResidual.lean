@@ -7,8 +7,8 @@ import DavisKahan.FiniteDimensional.Core.SpectralSubspace
 import DavisKahan.FiniteDimensional.Core.AngleGeometry
 import DavisKahan.FiniteDimensional.Residual.Ritz
 import DavisKahan.FiniteDimensional.Residual.AngleEmbedding
-import ForMathlib.Analysis.InnerProductSpace.SingularSystem
-import ForMathlib.Analysis.InnerProductSpace.SingularSubspace
+import ForTauCeti.Analysis.InnerProductSpace.SingularSystem
+import ForTauCeti.Analysis.InnerProductSpace.SingularSubspace
 
 /-!
 # The paper-exact finite Davis--Kahan `tan Θ` theorem
@@ -25,7 +25,7 @@ intentionally separate from the later relaxed spectral-norm theorem and from
 an ordered graph-Sylvester formulation.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanTheory
 
 open scoped InnerProductSpace BigOperators
@@ -704,4 +704,4 @@ theorem tanTheta0_ritzResidual_le_and_isTransverse
     tanTheta0_ritzResidual_le N hA hU X hβα hδ hgap tanTheta0 htan⟩
 
 end DavisKahanTheory
-end ForMathlib
+end TauCeti

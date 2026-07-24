@@ -22,7 +22,7 @@ restriction.
 open scoped InnerProductSpace
 open Filter Topology
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace SpectraBridge
@@ -280,4 +280,4 @@ theorem selfAdjointSpectralRestriction_inclusion_intertwines
 end SpectraBridge
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

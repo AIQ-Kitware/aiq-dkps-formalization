@@ -16,7 +16,7 @@ later graph rotation and block diagonalization, without constructing that
 rotation here.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanExt
 
 open scoped InnerProductSpace
@@ -95,4 +95,4 @@ theorem existsUnique_contractive_reducingGraph_of_spectrum_gap
       H hd hlr hA0spec hA1spec hsmall hY.1 hY.2.1
 
 end DavisKahanExt
-end ForMathlib
+end TauCeti

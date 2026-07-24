@@ -27,7 +27,7 @@ failing symmetric acuteness.
 
 open Module (finrank)
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan1970
 namespace Theorem63DistillationAudit
 
@@ -59,13 +59,13 @@ theorem not_mistranscribedDimensionImpliesAcute :
   have hone : (1 : ℂ) = 0 := hacute.2 1 (by simp) (by simp)
   exact one_ne_zero hone
 
-#check ForMathlib.DavisKahan.Experimental.ExactTanTheta.theorem63DirectedSineBlock
-#check ForMathlib.DavisKahan.Experimental.ExactTanTheta.HasTheorem63DirectedTangentApproximationNumbers
-#check ForMathlib.DavisKahan.Experimental.ExactTanTheta.Theorem63KyFanCore
-#check ForMathlib.DavisKahan.Experimental.ExactTanTheta.theorem6_3_ideal_of_kyFan_core
+#check TauCeti.DavisKahan.Experimental.ExactTanTheta.theorem63DirectedSineBlock
+#check TauCeti.DavisKahan.Experimental.ExactTanTheta.HasTheorem63DirectedTangentApproximationNumbers
+#check TauCeti.DavisKahan.Experimental.ExactTanTheta.Theorem63KyFanCore
+#check TauCeti.DavisKahan.Experimental.ExactTanTheta.theorem6_3_ideal_of_kyFan_core
 #print axioms not_mistranscribedDimensionImpliesAcute
-#print axioms ForMathlib.DavisKahan.Experimental.ExactTanTheta.theorem6_3_ideal_of_kyFan_core
+#print axioms TauCeti.DavisKahan.Experimental.ExactTanTheta.theorem6_3_ideal_of_kyFan_core
 
 end Theorem63DistillationAudit
 end DavisKahan1970
-end ForMathlib
+end TauCeti

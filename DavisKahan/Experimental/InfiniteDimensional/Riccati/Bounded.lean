@@ -21,7 +21,7 @@ a complex Hilbert space.  Their majorant is stated in the algebraic smaller-root
 form proved by the bounded existence and sharp-estimate leaves.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanExt
 
 open scoped InnerProductSpace
@@ -112,4 +112,4 @@ theorem blockDiagonalization_of_riccati
 end Complex
 
 end DavisKahanExt
-end ForMathlib
+end TauCeti

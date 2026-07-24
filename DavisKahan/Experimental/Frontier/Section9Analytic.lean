@@ -22,7 +22,7 @@ numbers.
 open scoped InnerProductSpace
 open Set
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace Frontier
@@ -202,4 +202,4 @@ end Section9
 end Frontier
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

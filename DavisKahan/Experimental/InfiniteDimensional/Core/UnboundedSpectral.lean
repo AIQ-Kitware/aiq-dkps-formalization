@@ -25,7 +25,7 @@ the interval/exterior estimate goes through the vendored Spectra calculus, which
 proves the same statements outright.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace ExactSinTheta
@@ -54,7 +54,7 @@ theorem closedOperator_adjoint_closed
 theorem closedOperator_adjoint_adjoint
     (A : ClosedOperatorE (𝕜 := 𝕜) (E := E)) :
     A.adjoint.adjoint = A := by
-  apply ForMathlib.DavisKahanExt.ClosedOperator.ext
+  apply TauCeti.DavisKahanExt.ClosedOperator.ext
   · exact A.domain_adjoint_adjoint
   · intro x
     exact A.adjoint_adjoint_apply x
@@ -132,7 +132,7 @@ noncomputable def selfAdjoint_resolventData_of_im_ne_zero
     intro x
     have him : RCLike.im ⟪T.toLinearMap x, (x : E)⟫_𝕜 =
         -RCLike.im z * ‖(x : E)‖^2 := by
-      simp [T, ForMathlib.DavisKahanExt.ClosedOperator.subScalar,
+      simp [T, TauCeti.DavisKahanExt.ClosedOperator.subScalar,
         hA.inner_real]
     exact lowerBound_of_inner_imaginary_part him
   have hkerAdj : T.adjoint.domain ⊓ LinearMap.ker T.adjoint.toLinearMap = ⊥ := by
@@ -524,4 +524,4 @@ theorem boundedInverse_of_spectrumOutside
 end ExactSinTheta
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

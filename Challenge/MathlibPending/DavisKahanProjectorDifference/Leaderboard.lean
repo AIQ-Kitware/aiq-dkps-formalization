@@ -2,5 +2,5 @@
 
 import DavisKahan.Sources.DavisKahan1970.PartIII
 
-#print axioms ForMathlib.DavisKahanTheory.projector_difference_opNorm
-#print axioms ForMathlib.DavisKahanTheory.spectralProjector_difference_opNorm
+#print axioms TauCeti.DavisKahanTheory.projector_difference_opNorm
+#print axioms TauCeti.DavisKahanTheory.spectralProjector_difference_opNorm

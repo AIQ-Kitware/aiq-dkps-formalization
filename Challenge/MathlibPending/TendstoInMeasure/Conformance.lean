@@ -20,8 +20,7 @@ statements and use only the permitted kernel dependencies.
 -/
 
 
-namespace ForMathlib
-
+namespace TauCeti
 open Filter MeasureTheory
 open scoped ENNReal Topology
 
@@ -58,4 +57,4 @@ theorem tendstoInMeasure_of_tendsto_measure_dist_le_rate [PseudoMetricSpace E]
     ENNReal.ofReal_le_ofReal hle
   exact absurd ((hx.trans hmono).trans_lt hi) (lt_irrefl ε)
 
-end ForMathlib
+end TauCeti

@@ -22,7 +22,7 @@ ambient operator to a graph vector, uses graph invariance, and projects the
 result onto the two orthogonal coordinates.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanExt
 
 open scoped InnerProductSpace
@@ -190,4 +190,4 @@ end SpectralContinuationWitness
 end WitnessRiccati
 
 end DavisKahanExt
-end ForMathlib
+end TauCeti

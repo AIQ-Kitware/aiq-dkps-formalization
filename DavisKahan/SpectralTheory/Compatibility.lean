@@ -10,12 +10,12 @@ import DavisKahan.SpectralTheory.AbstractSpectrum
 # Compatibility layer for the former `DavisKahanExt.Basic`
 
 Supported declarations now live in general `ForMathlib` modules and in
-`ForMathlib.DavisKahan`.  Experimental restricted-operator spectral interfaces
+`TauCeti.DavisKahan`.  Experimental restricted-operator spectral interfaces
 live under `DavisKahan.Experimental.Foundation`.  This module retains the old
 names so existing literature scaffolds continue to compile during migration.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanExt
 
 open scoped InnerProductSpace
@@ -155,4 +155,4 @@ theorem directedGap_le_subspaceGap (U V : Submodule 𝕜 E)
     directedGap U V ≤ subspaceGap U V := U.directedProjectionGap_le_projectionGap V
 
 end DavisKahanExt
-end ForMathlib
+end TauCeti

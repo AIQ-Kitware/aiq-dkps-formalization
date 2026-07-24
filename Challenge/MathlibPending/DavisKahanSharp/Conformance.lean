@@ -17,7 +17,7 @@ verifies that implementation against this independently compiled statement.
 -/
 
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanTheory
 
 variable {𝕜 : Type*} [RCLike 𝕜]
@@ -37,4 +37,4 @@ theorem sinAngleOperator_perturbation_le
   sorry
 
 end DavisKahanTheory
-end ForMathlib
+end TauCeti

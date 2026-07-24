@@ -5,7 +5,7 @@ A focused comparator statement for the source-faithful Part III sin-2Theta
 endpoint in every unitarily invariant norm.
 -/
 
-import ForMathlib.Analysis.InnerProductSpace.UnitarilyInvariantNorm
+import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantNorm
 
 /-!
 ## Comparator maintenance rule
@@ -15,7 +15,7 @@ lives in the ordinary library module imported by the paired leaderboard.
 -/
 
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanTheory
 
 open scoped InnerProductSpace
@@ -40,4 +40,4 @@ theorem partIII_sinTwoTheta_uiNorm
   sorry
 
 end DavisKahanTheory
-end ForMathlib
+end TauCeti

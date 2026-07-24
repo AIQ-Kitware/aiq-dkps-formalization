@@ -25,7 +25,7 @@ subspace perturbation through Hermitian dilation.
   subspaces, then specialize the self-adjoint Davis--Kahan theorem.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanExt
 
 open scoped InnerProductSpace
@@ -276,4 +276,4 @@ theorem covariance_subspace_sinTheta
   exact spectralProjection_sinTheta hA hB s t hs ht hd hAs hBt hBs hAt
 
 end DavisKahanExt
-end ForMathlib
+end TauCeti

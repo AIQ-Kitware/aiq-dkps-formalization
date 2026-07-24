@@ -15,7 +15,7 @@ are kept as separate lemmas so later existence and diagonalization arguments
 can reuse the same core calculation.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanExt
 
 open scoped InnerProductSpace
@@ -202,4 +202,4 @@ theorem unboundedBlockGraph_invariant_iff_strongRiccatiCore
     exact hpoint x0
 
 end DavisKahanExt
-end ForMathlib
+end TauCeti

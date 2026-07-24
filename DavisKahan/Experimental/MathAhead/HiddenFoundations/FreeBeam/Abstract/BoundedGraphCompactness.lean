@@ -18,7 +18,7 @@ ambient graph embedding is preserved in both directions.
 open Set Filter Topology
 open scoped InnerProductSpace
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace MathAhead
@@ -160,4 +160,4 @@ end HiddenFoundations
 end MathAhead
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

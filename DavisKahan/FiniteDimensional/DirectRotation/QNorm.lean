@@ -35,7 +35,7 @@ full rank is the trace norm, and `kyFan_not_isQNorm` below turns the
 counterexample around to show that it is *not* a `Q`-norm.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanTheory
 
 open scoped InnerProductSpace
@@ -83,4 +83,4 @@ theorem directRotation_fullDisplacement_qnorm
     N.nonneg (LinearMap.id - W.toLinearMap), hsq]
 
 end DavisKahanTheory
-end ForMathlib
+end TauCeti

@@ -21,7 +21,7 @@ is complex scalars, inherited from the current Hilbert tensor implementation.
 The real family is intended to be obtained by exact complexification transport.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace ExactSinTheta
@@ -248,4 +248,4 @@ end HiddenFoundations
 end ExactSinTheta
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

@@ -72,7 +72,9 @@ Expand this identity blockwise and only afterward package the ambient
 `graphProjectionFormula`.
 -/
 
-namespace ForMathlib
+namespace TauCeti
+
+open ForMathlib
 namespace DavisKahanExt
 
 open scoped InnerProductSpace
@@ -841,4 +843,4 @@ theorem norm_angularOperator_lt_one_iff
     nlinarith [norm_nonneg X]
 
 end DavisKahanExt
-end ForMathlib
+end TauCeti

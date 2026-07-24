@@ -9,7 +9,7 @@ Two advertising-level leaves of the completed generic theory:
   separated Sylvester solution.
 -/
 
-import ForMathlib.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm
+import ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm
 
 /-!
 ## Comparator maintenance rule
@@ -20,7 +20,7 @@ leaderboard.
 -/
 
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanTheory
 
 open scoped InnerProductSpace BigOperators
@@ -54,4 +54,4 @@ theorem sylvester_hasFiniteUnitaryOrbitCertificate_of_spectralDistance
   sorry
 
 end DavisKahanTheory
-end ForMathlib
+end TauCeti

@@ -32,7 +32,7 @@ and should eventually be built from the closed range of an isometric embedding.
   transport it by unitary invariance.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace Foundation
@@ -292,4 +292,4 @@ theorem InternalGap.mono_gap
 end Foundation
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

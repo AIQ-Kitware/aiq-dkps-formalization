@@ -25,7 +25,7 @@ with a real-scalar bridge by complexification expected later.
   `‖sin Θ(U, V) x‖ = ‖(P_U - P_V) x‖`.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanExt
 
 open scoped InnerProductSpace
@@ -349,7 +349,7 @@ theorem sq_norm_sin_add_sq_norm_cos (U V : Submodule ℂ E)
   linarith
 
 /-- The absolute value vanishes exactly where the operator does. -/
-theorem _root_.ForMathlib.operatorAbs_apply_eq_zero_iff (T : E →L[ℂ] E)
+theorem _root_.TauCeti.operatorAbs_apply_eq_zero_iff (T : E →L[ℂ] E)
     (x : E) : TauCeti.operatorAbs T x = 0 ↔ T x = 0 := by
   constructor <;> intro h
   · have := TauCeti.norm_operatorAbs_apply T x
@@ -365,7 +365,7 @@ theorem cosAngleOperatorC_apply_eq_zero_of_mem_orthogonal
     (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     {y : E} (hy : y ∈ Uᗮ) : cosAngleOperatorC U V y = 0 := by
-  rw [cosAngleOperatorC, ForMathlib.operatorAbs_apply_eq_zero_iff]
+  rw [cosAngleOperatorC, TauCeti.operatorAbs_apply_eq_zero_iff]
   have hPU : U.starProjection y = 0 := by
     rw [Submodule.starProjection_apply, Submodule.coe_eq_zero,
       Submodule.orthogonalProjectionOnto_eq_zero_iff]
@@ -781,7 +781,7 @@ theorem sinAngleOperatorDirectedC_apply_eq_zero_of_mem_orthogonal
     (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     {y : E} (hy : y ∈ Uᗮ) : sinAngleOperatorDirectedC U V y = 0 := by
-  rw [sinAngleOperatorDirectedC, ForMathlib.operatorAbs_apply_eq_zero_iff]
+  rw [sinAngleOperatorDirectedC, TauCeti.operatorAbs_apply_eq_zero_iff]
   have hPU : U.starProjection y = 0 := by
     rw [Submodule.starProjection_apply, Submodule.coe_eq_zero,
       Submodule.orthogonalProjectionOnto_eq_zero_iff]
@@ -1058,4 +1058,4 @@ end TangentNormBounds
 end DoubleAngleTangent
 
 end DavisKahanExt
-end ForMathlib
+end TauCeti

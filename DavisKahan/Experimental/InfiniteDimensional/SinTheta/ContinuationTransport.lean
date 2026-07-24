@@ -24,7 +24,7 @@ to later leaf modules.  The declarations here require only self-adjointness and
 uniform contour separation along the path.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanExt
 
 open Set
@@ -285,4 +285,4 @@ theorem continuousOn_fixedContourRieszOperator_operatorPath
 end AffineRieszTransport
 
 end DavisKahanExt
-end ForMathlib
+end TauCeti

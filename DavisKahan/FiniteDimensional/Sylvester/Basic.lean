@@ -14,7 +14,9 @@ The Sylvester operator, spectral-separation predicates, injectivity, and the
 canonical finite-dimensional solution.
 -/
 
-namespace ForMathlib
+namespace TauCeti
+
+open ForMathlib
 namespace DavisKahanTheory
 
 open scoped InnerProductSpace BigOperators
@@ -172,4 +174,4 @@ theorem sylvesterOperator_solveSylvester {A : F →ₗ[𝕜] F}
   exact (LinearEquiv.ofBijective (sylvesterOperator A B) hbij).apply_symm_apply C
 
 end DavisKahanTheory
-end ForMathlib
+end TauCeti

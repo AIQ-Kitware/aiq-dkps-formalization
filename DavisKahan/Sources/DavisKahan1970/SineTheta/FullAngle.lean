@@ -19,7 +19,7 @@ cross-block identity show that its complete singular-value sequence is exactly
 that of the projector difference.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace ExactSinTheta
@@ -156,4 +156,4 @@ end
 end ExactSinTheta
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

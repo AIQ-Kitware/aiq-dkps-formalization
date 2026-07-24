@@ -16,7 +16,7 @@ measurable spectral set of the ambient self-adjoint operator.
 
 open scoped InnerProductSpace
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace ExactSinTheta
@@ -34,7 +34,7 @@ variable {E F : Type v}
 /-- The canonical exact and complementary spectral inclusions form a complete
 orthogonal coordinate decomposition of the ambient Hilbert space. -/
 theorem spectralSubspace_orthogonalExactDecomposition
-    (A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := E))
+    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := E))
     (hA : A.IsSelfAdjoint) (S : Set ℝ) (hS : MeasurableSet S) :
     OrthogonalExactDecomposition
       (selfAdjointSpectralSubspaceInclusion A hA S hS)
@@ -79,9 +79,9 @@ theorem spectralSubspace_orthogonalExactDecomposition
 /-- Construct the internal unbounded sine-theta bookkeeping directly from a
 measurable exact spectral set and a bounded residual extension. -/
 noncomputable def unboundedSinThetaDataOfSpectralSubspace
-    (A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := E))
+    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := E))
     (hA : A.IsSelfAdjoint) (S : Set ℝ) (hS : MeasurableSet S)
-    (A0 : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := F))
+    (A0 : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := F))
     (X Rop : F →L[ℂ] E)
     (hXdom : ∀ x : A0.domain, X (x : F) ∈ A.domain)
     (hReq : ∀ x : A0.domain,
@@ -106,9 +106,9 @@ The complementary restriction and all exact-space bookkeeping are constructed
 internally. -/
 theorem sinTheta_unbounded_spectralSubspace_of_genuineSpectrumGap
     (N : UnitaryInvariantIdealFamily (𝕜 := ℂ))
-    (A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := E))
+    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := E))
     (hA : A.IsSelfAdjoint) (S : Set ℝ) (hS : MeasurableSet S)
-    (A0 : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := F))
+    (A0 : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := F))
     (hA0 : A0.IsSelfAdjoint)
     (X Rop : F →L[ℂ] E)
     (hX : IsometricEmbedding X)
@@ -144,4 +144,4 @@ theorem sinTheta_unbounded_spectralSubspace_of_genuineSpectrumGap
 end ExactSinTheta
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

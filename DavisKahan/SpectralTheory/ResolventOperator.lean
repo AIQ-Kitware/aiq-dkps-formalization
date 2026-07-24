@@ -70,7 +70,7 @@ continuation theorem separate: it may use a fixed finite contour and needs no
 general PVM construction.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanExt
 
 open scoped InnerProductSpace
@@ -483,4 +483,4 @@ tail, `SinTheta/Continuation.lean`, is rewired onto that surface.
 -/
 
 end DavisKahanExt
-end ForMathlib
+end TauCeti

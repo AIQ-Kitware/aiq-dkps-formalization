@@ -37,7 +37,7 @@ projection equals the requested spectral projection only after the path
 argument.  This prevents a cycle between continuity and spectral selection.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanExt
 
 open scoped InnerProductSpace
@@ -242,4 +242,4 @@ theorem range_equiv_of_projection_norm_lt_one
 end ComplexCloseProjections
 
 end DavisKahanExt
-end ForMathlib
+end TauCeti

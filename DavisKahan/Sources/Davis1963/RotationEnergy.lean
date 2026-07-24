@@ -6,7 +6,7 @@ Authors: Jon Crall, GPT 5.6 High
 import DavisKahan.Sources.Davis1963.RotationBound
 import DavisKahan.Sources.Davis1963.DoubleAngle
 import DavisKahan.FiniteDimensional.Core.OperatorBlocks
-import ForMathlib.Analysis.InnerProductSpace.UnitarilyInvariantNorm
+import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantNorm
 
 /-!
 # Davis's 1963 finite-dimensional rotation theory
@@ -33,7 +33,7 @@ rank-one overlap theorem in `RotationBound.lean` blockwise and use Frobenius
 orthogonality to prove the family-level Davis 1963 statements.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanTheory
 
 open scoped InnerProductSpace BigOperators
@@ -212,4 +212,4 @@ theorem tanTwoTheta_eigenvector_product_le
     tan_two_theta_le hA hH hU hlower hupper hHbound hHU hHUperp hx heig'
 
 end DavisKahanTheory
-end ForMathlib
+end TauCeti

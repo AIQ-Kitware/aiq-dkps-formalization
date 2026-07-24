@@ -22,11 +22,11 @@ used by `SinTheta/General.lean`.  The definitions are explicit, so later source
 modules do not depend on stale convenience constructors.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanExt
 
 open scoped InnerProductSpace
-open ForMathlib.DavisKahan.Experimental.ExactSinTheta
+open TauCeti.DavisKahan.Experimental.ExactSinTheta
 
 noncomputable section
 
@@ -97,10 +97,10 @@ theorem restrictedSpectrum_eq_realSpectrum_restrictToReducingSubspace
     (A : E →L[𝕜] E) (U : Submodule 𝕜 E) (hU : Reduces A U) :
     restrictedSpectrum A U =
       realSpectrum (restrictToReducingSubspace A U hU) := by
-  change ForMathlib.DavisKahan.Experimental.Foundation.restrictedSpectrum A U =
-    ForMathlib.DavisKahan.Experimental.Foundation.realSpectrum
+  change TauCeti.DavisKahan.Experimental.Foundation.restrictedSpectrum A U =
+    TauCeti.DavisKahan.Experimental.Foundation.realSpectrum
       (restrictToReducingSubspace A U hU)
-  rw [ForMathlib.DavisKahan.Experimental.Foundation.restrictedSpectrum_eq_restrictionSpectrum
+  rw [TauCeti.DavisKahan.Experimental.Foundation.restrictedSpectrum_eq_restrictionSpectrum
     A U hU.1]
   rfl
 
@@ -130,10 +130,10 @@ real spectrum of the explicit restriction. -/
 theorem restrictedSpectrum_orthogonal_eq
     (A : E →L[𝕜] E) (U : Submodule 𝕜 E) (hU : Reduces A U) :
     restrictedSpectrum A Uᗮ = realSpectrum (restrictToOrthogonal A U hU) := by
-  change ForMathlib.DavisKahan.Experimental.Foundation.restrictedSpectrum A Uᗮ =
-    ForMathlib.DavisKahan.Experimental.Foundation.realSpectrum
+  change TauCeti.DavisKahan.Experimental.Foundation.restrictedSpectrum A Uᗮ =
+    TauCeti.DavisKahan.Experimental.Foundation.realSpectrum
       (restrictToOrthogonal A U hU)
-  rw [ForMathlib.DavisKahan.Experimental.Foundation.restrictedSpectrum_eq_restrictionSpectrum
+  rw [TauCeti.DavisKahan.Experimental.Foundation.restrictedSpectrum_eq_restrictionSpectrum
     A Uᗮ hU.2]
   rfl
 
@@ -146,14 +146,14 @@ equivalence.  Completeness of the ambient space is not required, so the lemma
 also applies to the restricted operators living on non-`CompleteSpace`
 subspace carriers. -/
 theorem restrictedSpectrum_top_eq_realSpectrum_general (A : E →L[𝕜] E) :
-    ForMathlib.DavisKahan.Experimental.Foundation.restrictedSpectrum A
+    TauCeti.DavisKahan.Experimental.Foundation.restrictedSpectrum A
         (⊤ : Submodule 𝕜 E) =
-      ForMathlib.DavisKahan.Experimental.Foundation.realSpectrum A := by
+      TauCeti.DavisKahan.Experimental.Foundation.realSpectrum A := by
   have hInv :
-      ForMathlib.DavisKahan.Experimental.Foundation.InvariantFor A (⊤ : Submodule 𝕜 E) :=
+      TauCeti.DavisKahan.Experimental.Foundation.InvariantFor A (⊤ : Submodule 𝕜 E) :=
     fun x _ => Submodule.mem_top
   have hbridge :=
-    ForMathlib.DavisKahan.Experimental.Foundation.restrictedSpectrum_eq_restrictionSpectrum
+    TauCeti.DavisKahan.Experimental.Foundation.restrictedSpectrum_eq_restrictionSpectrum
       A ⊤ hInv
   have hconj :
       (Submodule.topContEquiv : (⊤ : Submodule 𝕜 E) ≃L[𝕜] E).conjContinuousAlgEquiv
@@ -171,7 +171,7 @@ theorem restrictedSpectrum_top_eq_realSpectrum_general (A : E →L[𝕜] E) :
       (A.restrict hInv)).symm
   rw [hbridge]
   ext r
-  simp only [ForMathlib.DavisKahan.Experimental.Foundation.realSpectrum,
+  simp only [TauCeti.DavisKahan.Experimental.Foundation.realSpectrum,
     Set.mem_setOf_eq, hspec]
 
 omit [CompleteSpace E] in
@@ -179,8 +179,8 @@ omit [CompleteSpace E] in
 realization is exactly the invertibility locus of `X - lam` in the bounded
 operator algebra. -/
 theorem mem_realResolventSet_ofBounded_iff (X : E →L[𝕜] E) (lam : ℝ) :
-    lam ∈ ForMathlib.DavisKahanExt.ClosedOperator.realResolventSet
-        (ForMathlib.DavisKahanExt.ClosedOperator.ofBounded X) ↔
+    lam ∈ TauCeti.DavisKahanExt.ClosedOperator.realResolventSet
+        (TauCeti.DavisKahanExt.ClosedOperator.ofBounded X) ↔
       IsUnit (X - (lam : 𝕜) • (1 : E →L[𝕜] E)) := by
   constructor
   · rintro ⟨R, hleft, hright⟩
@@ -220,11 +220,11 @@ omit [CompleteSpace E] in
 bridge coincides with the Banach-algebra real spectrum used by the abstract
 separation predicates. -/
 theorem boundedRealSpectrum_eq_realSpectrum (X : E →L[𝕜] E) :
-    ForMathlib.DavisKahan.Experimental.ExactSinTheta.boundedRealSpectrum X =
-      ForMathlib.DavisKahan.Experimental.Foundation.realSpectrum X := by
+    TauCeti.DavisKahan.Experimental.ExactSinTheta.boundedRealSpectrum X =
+      TauCeti.DavisKahan.Experimental.Foundation.realSpectrum X := by
   ext lam
-  show lam ∈ (ForMathlib.DavisKahanExt.ClosedOperator.realResolventSet
-      (ForMathlib.DavisKahanExt.ClosedOperator.ofBounded X))ᶜ ↔
+  show lam ∈ (TauCeti.DavisKahanExt.ClosedOperator.realResolventSet
+      (TauCeti.DavisKahanExt.ClosedOperator.ofBounded X))ᶜ ↔
     (lam : 𝕜) ∈ spectrum 𝕜 X
   rw [Set.mem_compl_iff, mem_realResolventSet_ofBounded_iff, spectrum.mem_iff,
     Algebra.algebraMap_eq_smul_one, ← IsUnit.neg_iff, neg_sub]
@@ -381,7 +381,7 @@ theorem intervalExteriorSeparated_restrictions
     (hU : Reduces A U) (hV : Reduces B V)
     {left right d : ℝ}
     (hgap : IntervalExteriorSeparated A U B Vᗮ left right d) :
-    ForMathlib.DavisKahan.Experimental.ExactSinTheta.IntervalExteriorGap
+    TauCeti.DavisKahan.Experimental.ExactSinTheta.IntervalExteriorGap
       (restrictToOrthogonal B V hV) (restrictToReducingSubspace A U hU)
       left right d := by
   right
@@ -401,4 +401,4 @@ theorem intervalExteriorSeparated_restrictions
 
 end
 end DavisKahanExt
-end ForMathlib
+end TauCeti

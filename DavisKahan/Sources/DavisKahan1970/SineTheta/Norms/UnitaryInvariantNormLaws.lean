@@ -19,7 +19,7 @@ hide an independently postulated operator ideal.  The ideal and its norm are
 constructed from the single source gauge exactly as in the paper.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace ExactSinTheta
@@ -339,4 +339,4 @@ end
 end ExactSinTheta
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

@@ -25,7 +25,7 @@ The finite version may use ordered eigenvalue continuity, but the bounded
 version should use the resolvent/Riesz infrastructure.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanExt
 
 open scoped InnerProductSpace
@@ -306,4 +306,4 @@ theorem spectral_repulsion_offDiagonal
     hU_spec hUc_spec horiented hdiag hleft hright
 
 end DavisKahanExt
-end ForMathlib
+end TauCeti

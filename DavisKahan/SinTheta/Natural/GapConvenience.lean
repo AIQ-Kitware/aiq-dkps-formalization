@@ -18,7 +18,7 @@ having to remember the orientation convention.
 
 open scoped InnerProductSpace
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace ExactSinTheta
@@ -34,8 +34,8 @@ variable {E F : Type v}
 /-- Genuine interval/exterior separation, named for a trial/complementary
 sine-theta application. -/
 theorem trialInterval_complementExterior
-    {A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := E)}
-    {B : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := F)}
+    {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := E)}
+    {B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := F)}
     {β α δ : ℝ} (hβα : β ≤ α)
     (hgap : GenuineSylvesterIntervalExteriorGap A B β α δ) :
     GenuineUnboundedSylvesterGap A B δ :=
@@ -43,8 +43,8 @@ theorem trialInterval_complementExterior
 
 /-- The trial spectrum lies above the complementary spectrum. -/
 theorem trialAbove_complementBelow
-    {A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := E)}
-    {B : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := F)}
+    {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := E)}
+    {B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := F)}
     {δ c : ℝ}
     (hA : Spectra.Resolvent.spectrum A.toLinearPMap ⊆ Set.Ici (c + δ))
     (hB : Spectra.Resolvent.spectrum B.toLinearPMap ⊆ Set.Iic c) :
@@ -53,8 +53,8 @@ theorem trialAbove_complementBelow
 
 /-- The trial spectrum lies below the complementary spectrum. -/
 theorem trialBelow_complementAbove
-    {A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := E)}
-    {B : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := F)}
+    {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := E)}
+    {B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := F)}
     {δ c : ℝ}
     (hA : Spectra.Resolvent.spectrum A.toLinearPMap ⊆ Set.Iic c)
     (hB : Spectra.Resolvent.spectrum B.toLinearPMap ⊆ Set.Ici (c + δ)) :
@@ -73,8 +73,8 @@ variable {E F : Type v}
 /-- Legacy-spectrum interval/exterior separation, named for a
 trial/complementary sine-theta application. -/
 theorem trialInterval_complementExterior
-    {A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := E)}
-    {B : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := F)}
+    {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := E)}
+    {B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := F)}
     {β α δ : ℝ} (hβα : β ≤ α)
     (hgap : UnboundedIntervalExteriorGap A B β α δ) :
     UnboundedSylvesterGap A B δ :=
@@ -82,8 +82,8 @@ theorem trialInterval_complementExterior
 
 /-- The trial operator is semibounded above the complementary operator. -/
 theorem trialAbove_complementBelow
-    {A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := E)}
-    {B : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := F)}
+    {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := E)}
+    {B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := F)}
     {δ c : ℝ}
     (hA : SemiboundedBelow A (c + δ))
     (hB : SemiboundedAbove B c) :
@@ -92,8 +92,8 @@ theorem trialAbove_complementBelow
 
 /-- The trial operator is semibounded below the complementary operator. -/
 theorem trialBelow_complementAbove
-    {A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := E)}
-    {B : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := F)}
+    {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := E)}
+    {B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := F)}
     {δ c : ℝ}
     (hA : SemiboundedAbove A c)
     (hB : SemiboundedBelow B (c + δ)) :
@@ -105,4 +105,4 @@ end UnboundedSylvesterGap
 end ExactSinTheta
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

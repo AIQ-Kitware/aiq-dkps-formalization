@@ -64,7 +64,7 @@ test cases.  They expose missing summability and adjoint APIs without the full
 symmetric-gauge representation theorem.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanExt
 
 open scoped InnerProductSpace
@@ -338,4 +338,4 @@ theorem gauge_offDiagonalPart_le
 
 end SymmetricNormIdeal
 end DavisKahanExt
-end ForMathlib
+end TauCeti

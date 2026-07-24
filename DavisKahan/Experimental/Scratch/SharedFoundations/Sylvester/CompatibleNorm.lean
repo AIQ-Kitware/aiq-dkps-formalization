@@ -17,7 +17,7 @@ operator hypothesis.  It also develops full two-sided scaling from the
 contraction property.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace Scratch
@@ -186,4 +186,4 @@ end SharedFoundations
 end Scratch
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

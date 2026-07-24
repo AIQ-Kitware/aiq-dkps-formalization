@@ -16,7 +16,7 @@ operators with matching singular data: functional calculus shows that they
 produce exactly the same angle operator.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace ExactSinTheta
@@ -135,4 +135,4 @@ end
 end ExactSinTheta
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

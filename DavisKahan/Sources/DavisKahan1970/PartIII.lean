@@ -50,7 +50,7 @@ sharpness/numerical examples require separate source modules and proof audits.
 Those developments must not be inferred merely from the quartet aliases below.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanTheory
 
 /-! ## Sections 3--4: direct rotation foundation -/
@@ -135,7 +135,7 @@ This compatibility alias retains the elementary spectral-norm endpoint.  New
 source-facing uses that need the paper's arbitrary-UI-norm conclusion should
 prefer `partIII_tanTheta_ritzResidual_uiNorm`. -/
 alias partIII_tanTheta_vector :=
-  ForMathlib.tan_theta_le
+  TauCeti.tan_theta_le
 
 /-! ## Sections 7--8: double-angle theorems -/
 
@@ -157,11 +157,11 @@ alias partIII_sinTwoTheta_angleOperator_uiNorm :=
 
 /-- The finite Part III `tan 2 Theta` theorem in its sharp operator-norm form.
 
-This is an exact canonical alias of `ForMathlib.tan_two_theta_norm_sub_le`.
+This is an exact canonical alias of `TauCeti.tan_two_theta_norm_sub_le`.
 Besides the sharp factor-two estimate, the conclusion proves that the maximal
 angle is strictly below `pi / 4`, so the tangent remains on the acute branch. -/
 alias partIII_tanTwoTheta_opNorm :=
-  ForMathlib.tan_two_theta_norm_sub_le
+  TauCeti.tan_two_theta_norm_sub_le
 
 /-! ## Projector companions -/
 
@@ -178,4 +178,4 @@ alias spectralProjector_difference_opNorm :=
   opNorm_spectralSubspace_sub_le
 
 end DavisKahanTheory
-end ForMathlib
+end TauCeti

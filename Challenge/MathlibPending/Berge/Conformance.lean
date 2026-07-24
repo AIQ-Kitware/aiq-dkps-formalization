@@ -20,8 +20,7 @@ statements and use only the permitted kernel dependencies.
 -/
 
 
-namespace ForMathlib
-
+namespace TauCeti
 open Filter Topology Set
 
 variable {P X : Type*} [TopologicalSpace P] [TopologicalSpace X]
@@ -203,4 +202,4 @@ theorem exists_modulus_isMinOn {P X : Type*} [PseudoMetricSpace P] [PseudoMetric
   obtain ⟨x₀, hx₀K, hx₀min, hclose⟩ := h p x hxK hxmin hpd
   exact ⟨x₀, hx₀K, hx₀min, hclose ()⟩
 
-end ForMathlib
+end TauCeti

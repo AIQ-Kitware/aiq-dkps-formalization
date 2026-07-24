@@ -18,7 +18,7 @@ The remaining ambient off-diagonal bridge only needs to construct the block
 coordinates and obtain such a center from the ordered restricted spectra.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanExt
 
 open scoped InnerProductSpace
@@ -144,4 +144,4 @@ theorem sharp_riccati_norm_bound_of_form_gap
   simpa [shiftBlockOperatorData] using hbound
 
 end DavisKahanExt
-end ForMathlib
+end TauCeti

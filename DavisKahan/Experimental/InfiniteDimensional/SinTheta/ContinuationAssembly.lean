@@ -19,7 +19,7 @@ the following assembly layer can then choose and compose the local direct
 rotations.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanExt
 
 open Set
@@ -109,4 +109,4 @@ theorem exists_uniform_subdivision_fixedContourRieszOperator_norm_sub_lt_one
 end UniformSubdivision
 
 end DavisKahanExt
-end ForMathlib
+end TauCeti

@@ -24,7 +24,7 @@ conclusions are compiler-certified and audited against the paper.
 open scoped InnerProductSpace
 open Set
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace Frontier
@@ -342,4 +342,4 @@ end RemainingSourceSurface
 end Frontier
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

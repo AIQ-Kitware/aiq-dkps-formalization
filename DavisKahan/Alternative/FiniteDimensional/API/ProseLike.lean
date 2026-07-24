@@ -31,7 +31,7 @@ The suffix `ProseLike` is deliberate: these names are exploratory wrappers for
 readability while the final public API shape is still being refined.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanTheory
 
 open scoped InnerProductSpace
@@ -161,4 +161,4 @@ theorem partIII_sinTheta_uiNorm_canonical_spectral_prose_like
     hgap.gap_pos hgap.U_spectrum hgap.V_spectrum
 
 end DavisKahanTheory
-end ForMathlib
+end TauCeti

@@ -15,7 +15,7 @@ additional off-diagonal block theorem and should not be hidden in the basic
 ideal interface.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace Scratch
@@ -102,4 +102,4 @@ end SharedFoundations
 end Scratch
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

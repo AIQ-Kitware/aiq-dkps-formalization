@@ -25,7 +25,7 @@ Sylvester body was not type-correct: its displayed right-hand side consisted
 of ambient endomorphisms while the norm had rectangular type `F -> E`.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanTheory
 
 open scoped InnerProductSpace BigOperators
@@ -100,4 +100,4 @@ theorem sinTwoTheta_residual_le_of_spectralDistance
     _ = Real.pi * N (residual A X M) := by ring
 
 end DavisKahanTheory
-end ForMathlib
+end TauCeti

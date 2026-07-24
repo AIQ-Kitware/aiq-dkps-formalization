@@ -15,7 +15,7 @@ and its reduction property for downstream sine, tangent, continuation, and
 Riesz-projection campaigns.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace Scratch
@@ -120,4 +120,4 @@ end SharedFoundations
 end Scratch
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

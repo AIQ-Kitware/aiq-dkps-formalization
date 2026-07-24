@@ -10,7 +10,7 @@ import DavisKahan.DoubleAngle.KyFanOrthonormal
 import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
 import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtFiniteRank
 import DavisKahan.OperatorIdeal.ApproximationNumbers.FiniteSourceSingularSystem
-import ForMathlib.Analysis.InnerProductSpace.SingularSubspace
+import ForTauCeti.Analysis.InnerProductSpace.SingularSubspace
 import ForMathlib.Analysis.InnerProductSpace.SpectralOrder.Complex
 
 /-!
@@ -40,7 +40,9 @@ pair `Z,V`.
 
 open scoped InnerProductSpace BigOperators
 
-namespace ForMathlib
+namespace TauCeti
+
+open ForMathlib
 namespace DavisKahan
 namespace Experimental
 namespace ExactTanTheta
@@ -838,4 +840,4 @@ theorem theorem6_3_ideal_of_kyFan_core
 end ExactTanTheta
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

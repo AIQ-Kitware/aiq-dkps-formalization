@@ -16,7 +16,7 @@ and the downstream Ky Fan dominant ideal families live here, above both
 scalar-specific implementations, avoiding the former real-proof import cycle.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace ExactSinTheta
@@ -343,4 +343,4 @@ theorem mem_and_scaled_gauge_le_of_all_scaled_kyFan_le
 end ExactSinTheta
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

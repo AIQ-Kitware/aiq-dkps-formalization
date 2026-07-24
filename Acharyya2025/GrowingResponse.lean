@@ -123,7 +123,7 @@ theorem highProb_uniformResponseMeanClose_of_growing_secondMoment
     have hcheb : ∀ i : Fin (count u),
         P u {ω | η u < ‖Xbar u ω i - μ u ω i‖}
           ≤ ENNReal.ofReal (σ2 u / (η u) ^ 2) := fun i =>
-      ForMathlib.meas_gt_le_ofReal_integral_sq_div_sq
+      TauCeti.meas_gt_le_ofReal_integral_sq_div_sq
         (P u) (hint u i) (hη_pos u) (hσ2 u i)
     calc
       P u ((GrowingUniformResponseMeanClose count Xbar μ η u)ᶜ)
@@ -367,7 +367,7 @@ theorem highProb_uniformTargetResponseMeanClose_of_secondMoment
     have hcheb : ∀ t (i : Fin (count u)),
         P u {ω | η u < ‖Xbar u ω t i - μ u ω t i‖}
           ≤ ENNReal.ofReal (σ2 u / (η u) ^ 2) := fun t i =>
-      ForMathlib.meas_gt_le_ofReal_integral_sq_div_sq
+      TauCeti.meas_gt_le_ofReal_integral_sq_div_sq
         (P u) (hint u t i) (hη_pos u) (hσ2 u t i)
     calc
       P u ({ω | ∀ t i,

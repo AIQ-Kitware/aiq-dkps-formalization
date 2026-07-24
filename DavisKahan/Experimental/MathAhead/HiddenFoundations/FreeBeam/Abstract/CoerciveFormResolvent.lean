@@ -31,7 +31,9 @@ represent the shifted bending form.
 
 open scoped InnerProductSpace
 
-namespace ForMathlib
+namespace TauCeti
+
+open ForMathlib
 namespace DavisKahan
 namespace Experimental
 namespace MathAhead
@@ -224,4 +226,4 @@ end HiddenFoundations
 end MathAhead
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

@@ -44,7 +44,7 @@ prove the scalar fiber inequality.  Do not generalize that result to arbitrary
 symmetric ideals without a separate majorization theorem.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanExt
 
 open scoped InnerProductSpace
@@ -423,4 +423,4 @@ theorem directRotation_minimal
   sorry
 
 end DavisKahanExt
-end ForMathlib
+end TauCeti

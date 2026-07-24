@@ -24,7 +24,7 @@ sine to the source-defined angle has the complete singular-value sequence of
 the cross projection into `V`'s orthogonal complement.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace ExactSinTheta
@@ -293,4 +293,4 @@ end
 end ExactSinTheta
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

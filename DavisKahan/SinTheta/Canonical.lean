@@ -16,7 +16,7 @@ legacy engine and therefore stays with the open obligations; the manuscript
 surface selects the complex proof here and the real proof in `Real.Canonical`.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace ExactSinTheta
@@ -250,4 +250,4 @@ end ComplexIsometricBridge
 end ExactSinTheta
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

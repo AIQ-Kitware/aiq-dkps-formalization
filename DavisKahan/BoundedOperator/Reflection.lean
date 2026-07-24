@@ -7,7 +7,7 @@ import DavisKahan.BoundedOperator.Basic
 
 /-! # Reflection defects for bounded operators -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 
 open scoped InnerProductSpace
@@ -94,4 +94,4 @@ theorem norm_reflectionDefect_le_two_mul
 
 
 end DavisKahan
-end ForMathlib
+end TauCeti

@@ -28,7 +28,7 @@ Supporting API, upstream candidates:
   reducing subspaces, orthogonal projections, compressions, and spectra.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanExt
 
 open scoped InnerProductSpace
@@ -308,7 +308,7 @@ theorem sinTwoTheta_genuineSpectrum_sinAngle
 
 section IdealScope
 
-open ForMathlib.DavisKahan.Experimental.ExactSinTheta
+open TauCeti.DavisKahan.Experimental.ExactSinTheta
 
 /-- **The genuine-spectrum `sin 2Θ` theorem at unitary-invariant ideal
 scope** (directed form).  Under the genuine internal configuration of `A`
@@ -560,4 +560,4 @@ end SinTwoThetaIdentification
 end SinTwoTheta
 
 end DavisKahanExt
-end ForMathlib
+end TauCeti

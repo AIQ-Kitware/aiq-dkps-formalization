@@ -14,7 +14,7 @@ a full-domain closed operator, so every lemma about the closed equation applies
 verbatim.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace ExactSinTheta
@@ -36,9 +36,9 @@ abbrev HasUnboundedBoundedSylvesterEquation
     (A : ClosedOperatorE (𝕜 := 𝕜) (E := E))
     (B : F →L[𝕜] F) (X C : F →L[𝕜] E) : Prop :=
   HasClosedSylvesterEquation A
-    (ForMathlib.DavisKahanExt.ClosedOperator.ofBounded B) X C
+    (TauCeti.DavisKahanExt.ClosedOperator.ofBounded B) X C
 
 end ExactSinTheta
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

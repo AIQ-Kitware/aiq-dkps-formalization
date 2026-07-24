@@ -15,7 +15,7 @@ integrable, almost-everywhere compact-valued function is compact.  This is the
 closure fact needed by the Fourier Sylvester inverse.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanExt
 
 open MeasureTheory Filter
@@ -72,4 +72,4 @@ theorem isCompactOperator_integral
 end
 
 end DavisKahanExt
-end ForMathlib
+end TauCeti

@@ -31,7 +31,9 @@ operator model already used throughout the Davis--Kahan development.
 open scoped InnerProductSpace
 open Set Filter Topology
 
-namespace ForMathlib
+namespace TauCeti
+
+open ForMathlib
 namespace DavisKahan
 namespace Experimental
 namespace MathAhead
@@ -266,4 +268,4 @@ end HiddenFoundations
 end MathAhead
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

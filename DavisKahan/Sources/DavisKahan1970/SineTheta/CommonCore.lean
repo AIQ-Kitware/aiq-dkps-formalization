@@ -21,7 +21,7 @@ Thus the accepted unbounded sine-theta theorem applies without strengthening a
 source statement that was intended only on a core.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace ExactSinTheta
@@ -37,7 +37,7 @@ variable {E F G : Type v}
   [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
   [NormedAddCommGroup G] [InnerProductSpace 𝕜 G] [CompleteSpace G]
 
-open ForMathlib.DavisKahanExt
+open TauCeti.DavisKahanExt
 
 namespace ClosedOperator
 
@@ -225,4 +225,4 @@ theorem unboundedSinThetaDataOfPaperCommonCore_residual
 end ExactSinTheta
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

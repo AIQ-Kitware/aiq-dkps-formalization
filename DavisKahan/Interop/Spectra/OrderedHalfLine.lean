@@ -23,7 +23,7 @@ required form bound.
 open scoped InnerProductSpace
 open MeasureTheory
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace SpectraBridge
@@ -31,7 +31,7 @@ namespace SpectraBridge
 open Spectra.QuantumMechanics
 open Spectra.QuantumMechanics.BornRule.Observable
 open Spectra.QuantumMechanics.SpectralTheory
-open ForMathlib.DavisKahan.Experimental.ExactSinTheta
+open TauCeti.DavisKahan.Experimental.ExactSinTheta
 
 universe v
 
@@ -118,4 +118,4 @@ theorem semiboundedAbove_of_spectrum_subset_Iic
 end SpectraBridge
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

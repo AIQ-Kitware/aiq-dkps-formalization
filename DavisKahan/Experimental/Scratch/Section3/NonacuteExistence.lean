@@ -33,7 +33,9 @@ This file is additive scratch work.  It intentionally does not edit the active
 
 open scoped InnerProductSpace
 
-namespace ForMathlib
+namespace TauCeti
+
+open ForMathlib
 namespace DavisKahan
 namespace Experimental
 namespace Scratch
@@ -299,4 +301,4 @@ end Section3
 end Scratch
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

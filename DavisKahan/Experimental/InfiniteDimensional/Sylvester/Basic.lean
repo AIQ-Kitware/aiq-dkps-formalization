@@ -8,7 +8,7 @@ import DavisKahan.Experimental.InfiniteDimensional.Ideals.CompactIntegral
 import DavisKahan.Experimental.InfiniteDimensional.Sylvester.FourierSemigroup
 import DavisKahan.Experimental.InfiniteDimensional.Sylvester.OrderedSemigroup
 import ForMathlib.Analysis.InnerProductSpace.SylvesterBound
-import ForMathlib.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm
+import ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm
 
 /-!
 # Infinite-dimensional bounded Sylvester equations
@@ -24,7 +24,9 @@ formula `exp(i t A)` is not available over real scalars; real consequences must 
 transported through complexification.
 -/
 
-namespace ForMathlib
+namespace TauCeti
+
+open ForMathlib
 namespace DavisKahanExt
 
 open MeasureTheory Set Filter
@@ -92,7 +94,7 @@ theorem norm_sylvester_le_of_coercive
     (hBc : ∀ x, RCLike.re ⟪B x, x⟫_𝕜 ≤ c * ‖x‖ ^ 2)
     (hEq : sylvesterOperator A B X = C) :
     ‖X‖ ≤ ‖C‖ / g :=
-  ContinuousLinearMap.opNorm_le_div_of_comp_sub_comp_eq hA hB hg hAc hBc hEq
+  ForMathlib.ContinuousLinearMap.opNorm_le_div_of_comp_sub_comp_eq hA hB hg hAc hBc hEq
 
 
 section OrderedComplex
@@ -275,4 +277,4 @@ end Complex
 end
 
 end DavisKahanExt
-end ForMathlib
+end TauCeti

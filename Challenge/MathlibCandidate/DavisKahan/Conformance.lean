@@ -20,8 +20,7 @@ statements and use only the permitted kernel dependencies.
 -/
 
 
-namespace ForMathlib
-
+namespace TauCeti
 open scoped InnerProductSpace BigOperators
 open Module (finrank)
 
@@ -67,4 +66,4 @@ theorem sum_norm_sub_starProjection_span_sq_le {T S : F →ₗ[𝕜] F}
   sorry
 
 end Projector
-end ForMathlib
+end TauCeti

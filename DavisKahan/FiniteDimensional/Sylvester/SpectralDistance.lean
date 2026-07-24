@@ -14,7 +14,7 @@ The reciprocal spectral multiplier, finite orbit certificates, and the sharp
 `pi / 2` Ky Fan and arbitrary-UI-norm bounds over real and complex scalars.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanTheory
 
 open scoped InnerProductSpace BigOperators
@@ -468,4 +468,4 @@ theorem frobenius_sylvester_le_of_spectraSeparated
   exact Real.sqrt_le_sqrt htot
 
 end DavisKahanTheory
-end ForMathlib
+end TauCeti

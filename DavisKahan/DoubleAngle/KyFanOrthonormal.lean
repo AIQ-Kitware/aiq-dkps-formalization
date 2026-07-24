@@ -26,7 +26,7 @@ This closes the max–min gap in the approximation-number layer; the natural
 upstream home is `DavisKahan/OperatorIdeal/ApproximationNumbers/Core.lean`.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace ExactSinTheta
@@ -135,4 +135,4 @@ theorem sum_le_kyFanApproximationGauge_of_orthonormal
 end ExactSinTheta
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

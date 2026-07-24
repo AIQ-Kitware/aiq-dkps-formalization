@@ -14,7 +14,7 @@ after the implementation leaves, then inspect the printed dependencies before
 promoting the new source forms.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace ExactSinTheta
@@ -39,4 +39,4 @@ namespace ExactSinTheta
 end ExactSinTheta
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

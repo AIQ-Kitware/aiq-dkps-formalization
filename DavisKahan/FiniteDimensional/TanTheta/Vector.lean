@@ -25,7 +25,7 @@ pole never appears.
 To be re-authored per Mathlib's AI-contribution policy at PR time.
 -/
 
-import ForMathlib.Analysis.InnerProductSpace.PrincipalAngles
+import ForTauCeti.Analysis.InnerProductSpace.PrincipalAngles
 import DavisKahan.FiniteDimensional.DoubleAngle.Vector
 import ForMathlib.Analysis.InnerProductSpace.SylvesterBound
 
@@ -77,12 +77,12 @@ Points the gate had to settle, and how the sources settle them:
 
 ## Main results
 
-* `ForMathlib.tan_theta_le` (plan step G3): the tan Θ theorem in the
+* `TauCeti.tan_theta_le` (plan step G3): the tan Θ theorem in the
   per-vector, pole-free form.
-* `ForMathlib.norm_map_sub_midpoint_smul_le`: a symmetric operator whose form
+* `TauCeti.norm_map_sub_midpoint_smul_le`: a symmetric operator whose form
   on an invariant subspace lies in `[α, β]` moves vectors of that subspace at
   most `(β − α)/2` per unit norm away from the midpoint scaling.
-* `ForMathlib.norm_starProjection_map_le_of_mem_orthogonal`: the columnwise
+* `TauCeti.norm_starProjection_map_le_of_mem_orthogonal`: the columnwise
   residual bound on `Z` transfers to the adjoint block, `‖P_Z (T w)‖ ≤ ρ ‖w‖`
   for `w ⊥ Z`.
 
@@ -99,8 +99,9 @@ Points the gate had to settle, and how the sources settle them:
   arXiv:1204.4441.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 
+open ForMathlib
 open scoped InnerProductSpace
 open Module (finrank)
 
@@ -426,4 +427,4 @@ theorem tan_theta_le (hT : T.IsSymmetric)
     rwa [Real.sqrt_sq (mul_nonneg hδ.le (norm_nonneg _)),
       Real.sqrt_sq (mul_nonneg hρ0 (norm_nonneg _))] at this
 
-end ForMathlib
+end TauCeti

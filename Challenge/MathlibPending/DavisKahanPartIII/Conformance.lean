@@ -7,7 +7,7 @@ and the sharp operator-norm tan 2Theta theorem with strict quarter-turn
 avoidance.
 -/
 
-import ForMathlib.Analysis.InnerProductSpace.UnitarilyInvariantNorm
+import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantNorm
 
 /-!
 ## Comparator maintenance rule
@@ -20,7 +20,7 @@ kernel dependencies.
 -/
 
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanTheory
 
 open scoped InnerProductSpace
@@ -107,4 +107,4 @@ theorem partIII_tanTwoTheta_opNorm {T S : E →ₗ[𝕜] E}
 
 end TangentTheorems
 end DavisKahanTheory
-end ForMathlib
+end TauCeti

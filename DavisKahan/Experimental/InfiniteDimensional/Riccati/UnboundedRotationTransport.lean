@@ -16,7 +16,7 @@ intertwining needed before the transformed operator can be identified with a
 closed block-diagonal direct sum.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanExt
 
 open scoped InnerProductSpace
@@ -165,4 +165,4 @@ theorem unboundedGraphRotationPullback_unitaryEquivalent
     (unboundedGraphRotationEquiv_unitary X)
 
 end DavisKahanExt
-end ForMathlib
+end TauCeti

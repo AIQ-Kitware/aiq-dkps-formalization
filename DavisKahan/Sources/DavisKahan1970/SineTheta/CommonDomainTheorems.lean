@@ -15,7 +15,7 @@ construct the internal full-domain package.  No smaller unspecified core is
 substituted.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace ExactSinTheta
@@ -26,7 +26,7 @@ noncomputable section
 
 universe u v
 
-open ForMathlib.DavisKahanExt
+open TauCeti.DavisKahanExt
 
 /-- Scalar-generic source bookkeeping before choosing the spectral gap. -/
 structure PaperCommonDomainSinThetaData
@@ -379,4 +379,4 @@ end
 end ExactSinTheta
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

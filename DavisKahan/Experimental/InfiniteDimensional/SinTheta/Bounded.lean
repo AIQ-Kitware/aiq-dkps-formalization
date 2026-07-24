@@ -16,7 +16,7 @@ an open obligation.  The production route to the same endpoints goes through the
 vendored Spectra calculus instead.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace ExactSinTheta
@@ -205,4 +205,4 @@ end GenericExact
 end ExactSinTheta
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

@@ -19,7 +19,7 @@ exactly that package.  It does not yet invert the full `2 × 2` block operator;
 the subsequent Schur-complement leaf consumes the data proved here.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanExt
 
 open Set
@@ -90,4 +90,4 @@ theorem FiniteGapConfiguration.exists_operatorPath_diagonalResolventData
 end DiagonalResolventData
 
 end DavisKahanExt
-end ForMathlib
+end TauCeti

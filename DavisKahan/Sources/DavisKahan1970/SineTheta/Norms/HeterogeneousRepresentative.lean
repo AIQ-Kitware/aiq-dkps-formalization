@@ -14,7 +14,7 @@ sits above both the pure approximation-number relation and the paper norm, so
 that the lower singular-data layer remains independent of the norm package.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace ExactSinTheta
@@ -100,4 +100,4 @@ end PaperSinThetaRepresentativeAcross
 end ExactSinTheta
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

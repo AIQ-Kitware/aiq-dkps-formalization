@@ -19,7 +19,7 @@ not yet been proved.  Instead it supplies exact constructors showing which
 finite set of scalar facts is sufficient for `PositiveRootLocalization`.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace MathAhead
@@ -156,4 +156,4 @@ end HiddenFoundations
 end MathAhead
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

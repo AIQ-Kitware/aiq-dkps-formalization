@@ -19,7 +19,7 @@ work.  Keeping that dependency explicit prevents arbitrary block
 diagonalization from being mistaken for branch selection.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanExt
 
 open scoped InnerProductSpace
@@ -86,4 +86,4 @@ theorem exists_strongRiccati_solution_of_selected_reducing_graph
   exact S.exists_strongRiccati_solution
 
 end DavisKahanExt
-end ForMathlib
+end TauCeti

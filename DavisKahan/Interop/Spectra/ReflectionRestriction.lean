@@ -19,12 +19,12 @@ the exact defect identity for a bounded perturbation.
 
 open scoped InnerProductSpace
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace SpectraBridge
 
-open ForMathlib.DavisKahanExt
+open TauCeti.DavisKahanExt
 
 universe v
 
@@ -621,4 +621,4 @@ theorem add_reflectionPerturbation_intertwines
 end SpectraBridge
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

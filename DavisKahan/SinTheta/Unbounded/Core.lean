@@ -15,7 +15,7 @@ these consumes a Sylvester estimate, so every engine that supplies one shares
 them.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace ExactSinTheta
@@ -34,13 +34,13 @@ variable {E F G H : Type v}
   [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] [CompleteSpace H]
 
 abbrev ClosedOperatorAmbient :=
-  ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := E)
+  TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := E)
 
 abbrev ClosedOperatorTrial :=
-  ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := F)
+  TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := F)
 
 abbrev ClosedOperatorComplement :=
-  ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := G)
+  TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := G)
 
 /-- Paper-shaped data for the unbounded residual theorem. -/
 structure UnboundedSinThetaData where
@@ -192,4 +192,4 @@ end GenericCore
 end ExactSinTheta
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

@@ -19,7 +19,7 @@ The final theorem removes the acuteness hypothesis from the complex bounded
 Riccati block diagonalization result.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanExt
 
 open scoped InnerProductSpace
@@ -168,4 +168,4 @@ theorem complex_blockDiagonalization_of_riccati
 end Complex
 
 end DavisKahanExt
-end ForMathlib
+end TauCeti

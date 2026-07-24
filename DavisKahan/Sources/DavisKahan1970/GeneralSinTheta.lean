@@ -19,7 +19,7 @@ legacy statement surface but use the direct genuine engine and exact finite
 Ky Fan transport underneath.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan1970
 
 /-- Complete generalized 1970 target, including ordered half-lines. -/
@@ -95,4 +95,4 @@ alias generalizedSinTheta_boundedSpecialization_real :=
   DavisKahan.Experimental.ExactSinTheta.RealBoundedGeneralSinThetaProblem.result
 
 end DavisKahan1970
-end ForMathlib
+end TauCeti

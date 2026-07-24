@@ -15,7 +15,7 @@ terms of the selected spectral subspaces.  The public conclusion contains no
 contour integral or continuous-functional-calculus expression.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanExt
 
 open Set
@@ -182,4 +182,4 @@ end SpectralContinuationWitness
 end SpectralContinuation
 
 end DavisKahanExt
-end ForMathlib
+end TauCeti

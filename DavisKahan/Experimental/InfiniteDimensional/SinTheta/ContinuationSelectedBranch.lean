@@ -19,7 +19,7 @@ later graph identification and quarter-acuteness arguments without reopening
 the already green contour, subdivision, or rotation-chain proofs.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanExt
 
 open Set
@@ -175,4 +175,4 @@ theorem exists_unitary_transport_selectedSpectralSubspaces_endpoints_of_identifi
 end SelectedSpectralBranch
 
 end DavisKahanExt
-end ForMathlib
+end TauCeti

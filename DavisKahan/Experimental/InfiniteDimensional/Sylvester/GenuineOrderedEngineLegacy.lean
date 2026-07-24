@@ -16,7 +16,7 @@ or use this leaf.
 
 open scoped InnerProductSpace
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace ExactSinTheta
@@ -29,8 +29,8 @@ theorem legacyGenuineOrderedSylvesterEngine_lowerUpper
     [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
     [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
     (N : UnitaryInvariantIdealFamily (𝕜 := ℂ))
-    {A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := E)}
-    {B : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := F)}
+    {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := E)}
+    {B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := F)}
     (hA : A.IsSelfAdjoint) (hB : B.IsSelfAdjoint)
     {X C : F →L[ℂ] E} {c δ : ℝ}
     (hδ : 0 < δ)
@@ -51,8 +51,8 @@ theorem legacyGenuineOrderedSylvesterEngine_upperLower
     [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
     [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
     (N : UnitaryInvariantIdealFamily (𝕜 := ℂ))
-    {A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := E)}
-    {B : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := F)}
+    {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := E)}
+    {B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := F)}
     (hA : A.IsSelfAdjoint) (hB : B.IsSelfAdjoint)
     {X C : F →L[ℂ] E} {c δ : ℝ}
     (hδ : 0 < δ)
@@ -78,4 +78,4 @@ noncomputable def legacyGenuineOrderedSylvesterEngine :
 end ExactSinTheta
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

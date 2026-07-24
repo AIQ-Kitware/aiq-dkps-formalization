@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
 import DavisKahan.Specialized.Statistics
-import ForMathlib.Analysis.InnerProductSpace.SingularSubspace
+import ForTauCeti.Analysis.InnerProductSpace.SingularSubspace
 import DavisKahan.Sources.YuWangSamworth2015
 
 /-!
@@ -26,7 +26,7 @@ of the scalar and Frobenius infrastructure; this file records the final
 canonical subspace API.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanTheory
 
 open scoped InnerProductSpace BigOperators
@@ -293,4 +293,4 @@ theorem sq_gap_mul_sum_cross_singularVectors_le
     A.isSymmetric_adjoint_comp_self Â.isSymmetric_adjoint_comp_self hn s hΓ hgap
     (fun x => norm_gram_sub_gram_apply_le hâ hε hA hÂ hE x)
 
-end ForMathlib
+end TauCeti

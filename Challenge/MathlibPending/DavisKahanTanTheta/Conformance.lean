@@ -6,7 +6,7 @@ tan-Theta endpoint. No dimension comparison between the trial and invariant
 subspaces is assumed.
 -/
 
-import ForMathlib.Analysis.InnerProductSpace.UnitarilyInvariantNorm
+import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantNorm
 
 /-!
 ## Comparator maintenance rule
@@ -16,7 +16,7 @@ lives in the ordinary library module imported by the paired leaderboard.
 -/
 
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanTheory
 
 open scoped InnerProductSpace
@@ -39,4 +39,4 @@ theorem partIII_tanTheta_vector {T : E →ₗ[𝕜] E} (hT : T.IsSymmetric)
   sorry
 
 end DavisKahanTheory
-end ForMathlib
+end TauCeti

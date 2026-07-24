@@ -24,9 +24,9 @@ needs to invent direct-integral machinery once these interfaces are available.
 
 open scoped InnerProductSpace
 
-open ForMathlib.DavisKahan.Experimental.ExactSinTheta.HiddenFoundations
+open TauCeti.DavisKahan.Experimental.ExactSinTheta.HiddenFoundations
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace MathAhead
@@ -143,4 +143,4 @@ end HiddenFoundations
 end MathAhead
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

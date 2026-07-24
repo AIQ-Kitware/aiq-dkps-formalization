@@ -20,8 +20,7 @@ statements and use only the permitted kernel dependencies.
 -/
 
 
-namespace ForMathlib
-
+namespace TauCeti
 open MeasureTheory Set
 
 variable {Ω A : Type*} [MeasurableSpace Ω]
@@ -87,10 +86,8 @@ theorem measurable_cfc_comp
     (hB.comp measurable_subtype_coe).subtype_mk
   exact hcont'.measurable.comp hcore
 
-end ForMathlib
-
-namespace ForMathlib
-
+end TauCeti
+namespace TauCeti
 open Filter Topology TopologicalSpace
 
 /-- **Measurability of a compactly-quantified existential constraint.** -/
@@ -136,4 +133,4 @@ theorem measurableSet_exists_mem_le
   refine MeasurableSet.biUnion htc fun p _ => ?_
   exact measurableSet_le (hFm (p : Y) p.2) measurable_const
 
-end ForMathlib
+end TauCeti

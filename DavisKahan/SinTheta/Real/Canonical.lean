@@ -14,7 +14,7 @@ parallel real lower-frame package and clean real result fields, while reusing
 the scalar-generic isometric input package.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace ExactSinTheta
@@ -136,4 +136,4 @@ end
 end ExactSinTheta
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

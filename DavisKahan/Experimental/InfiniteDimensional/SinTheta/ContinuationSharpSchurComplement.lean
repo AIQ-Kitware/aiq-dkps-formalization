@@ -20,7 +20,7 @@ all intermediate expressions well typed when the two coordinate Hilbert spaces
 are different.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanExt
 
 open scoped InnerProductSpace
@@ -531,4 +531,4 @@ theorem blockOperator_inResolventSet_of_schur_norm_lt_one
 end SchurResolvent
 
 end DavisKahanExt
-end ForMathlib
+end TauCeti

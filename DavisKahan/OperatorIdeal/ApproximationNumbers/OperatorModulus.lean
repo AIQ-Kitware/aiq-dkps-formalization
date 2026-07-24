@@ -20,7 +20,7 @@ approximation number, while the square-root identity gives
 `norm (|T| x) = norm (T x)`.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace ExactSinTheta
@@ -184,4 +184,4 @@ end
 end ExactSinTheta
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

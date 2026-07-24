@@ -15,7 +15,7 @@ for the directed theorem is the one-sided block.  Reflection converts the
 block for the mirror subspace exactly into the one-sided double-angle block.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace Scratch
@@ -184,4 +184,4 @@ end SharedFoundations
 end Scratch
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

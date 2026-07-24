@@ -24,7 +24,7 @@ No added axioms, no open proof obligations.
 -/
 
 import Acharyya2024.Common
-import ForMathlib.Probability.Moments.Variance
+import ForTauCeti.Probability.Moments.Variance
 
 open scoped BigOperators Topology
 open Filter MeasureTheory
@@ -42,7 +42,7 @@ For a nonnegative measurable function `Y` with `∫ Y² ≤ v` and `0 < η`,
 the probability of `{ω | η < Y ω}` is at most `ENNReal.ofReal (v / η²)`.
 
 Thin wrapper around the Mathlib-staged
-`ForMathlib.meas_gt_le_ofReal_integral_sq_div_sq`; kept under its original
+`TauCeti.meas_gt_le_ofReal_integral_sq_div_sq`; kept under its original
 name for downstream call-sites.
 
 Internal tooling: this is the standard Chebyshev/Markov second-moment bound (it
@@ -59,7 +59,7 @@ theorem meas_gt_le_ofReal_secondMoment_div_sq
     (hmoment : ∫ ω, (Y ω) ^ 2 ∂P ≤ v) :            -- second moment bounded by v
     -- Conclusion: the tail probability P(Y > η) is at most v/η² (Chebyshev/Markov).
     P {ω | η < Y ω} ≤ ENNReal.ofReal (v / η ^ 2) :=
-  ForMathlib.meas_gt_le_ofReal_integral_sq_div_sq P hY_int hη hmoment
+  TauCeti.meas_gt_le_ofReal_integral_sq_div_sq P hY_int hη hmoment
 
 /--
 Main probabilistic theorem (paper Theorem 2 / Appendix A.2).

@@ -14,7 +14,7 @@ printed dependency sets before promoting the certificate bridge to exact source
 coverage.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan1970
 namespace Section9
 
@@ -49,4 +49,4 @@ namespace Section9
 
 end Section9
 end DavisKahan1970
-end ForMathlib
+end TauCeti

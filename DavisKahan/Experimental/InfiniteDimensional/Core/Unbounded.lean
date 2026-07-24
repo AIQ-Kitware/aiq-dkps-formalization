@@ -15,7 +15,7 @@ declarations that are still unresolved, so that the admission closure stays
 confined here.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanExt
 
 open scoped InnerProductSpace
@@ -230,4 +230,4 @@ theorem sinTheta_unbounded_boundedPerturbation
 
 end ClosedOperator
 end DavisKahanExt
-end ForMathlib
+end TauCeti

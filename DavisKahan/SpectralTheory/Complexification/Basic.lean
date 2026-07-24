@@ -36,7 +36,7 @@ The construction includes:
 No unbounded-operator, spectral-cutoff, or Ky Fan file depends on this module.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace Foundation
@@ -410,4 +410,4 @@ end
 end Foundation
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

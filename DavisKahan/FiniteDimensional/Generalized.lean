@@ -17,7 +17,7 @@ contour continuation belongs to the concrete `Continuation*` hierarchy and is
 not imported through this finite module.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanTheory
 
 open scoped InnerProductSpace BigOperators Topology unitInterval
@@ -171,4 +171,4 @@ theorem generalizedSinTwoTheta_unequalFinrank
 
 
 end DavisKahanTheory
-end ForMathlib
+end TauCeti

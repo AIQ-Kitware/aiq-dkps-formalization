@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking, Claude Fable 5
 -/
 import DavisKahan.FiniteDimensional.DirectRotation.Basic
-import ForMathlib.Analysis.InnerProductSpace.SingularSystem
+import ForTauCeti.Analysis.InnerProductSpace.SingularSystem
 
 /-!
 # Principal planes of an acute pair: definitions and rotation block
@@ -23,7 +23,7 @@ directions and the spectrum of `I - R`) and `PrincipalPlanes.Variational`
 (Davis's variational theorem for the restricted displacement).
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanTheory
 
 open scoped InnerProductSpace BigOperators
@@ -217,7 +217,7 @@ theorem abs_canonicalIntertwiner_apply_principalSourceVector
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hacute : IsAcute U V)
     (i : Fin (nontrivialAngleCount U V)) :
-    ForMathlib.abs (canonicalIntertwiner U V) (principalSourceVector U V i) =
+    TauCeti.abs (canonicalIntertwiner U V) (principalSourceVector U V i) =
       (principalPlaneCosine U V i : 𝕜) • principalSourceVector U V i := by
   have hu := principalSourceVector_mem U V hacute i
   have heig := adjointCompSelf_apply_rightSingularBasis (sinThetaMap U V)
@@ -291,7 +291,7 @@ theorem exists_canonicalIntertwiner_singularValue_eq_principalPlaneCosine
   have hu1 : ‖principalSourceVector U V i‖ = 1 :=
     (orthonormal_principalSourceVector U V).norm_eq_one i
   have heigAbs := abs_canonicalIntertwiner_apply_principalSourceVector U V hacute i
-  have hev : Module.End.HasEigenvalue (ForMathlib.abs (canonicalIntertwiner U V))
+  have hev : Module.End.HasEigenvalue (TauCeti.abs (canonicalIntertwiner U V))
       ((principalPlaneCosine U V i : ℝ) : 𝕜) := by
     apply Module.End.hasEigenvalue_of_hasEigenvector
       (x := principalSourceVector U V i)
@@ -358,7 +358,7 @@ theorem principalOrthogonalVector_mem
     rw [← h1, h2]
   have hpolar : canonicalIntertwiner U V =
       (directRotation U V hacute).toLinearMap ∘ₗ
-        ForMathlib.abs (canonicalIntertwiner U V) := by
+        TauCeti.abs (canonicalIntertwiner U V) := by
     rw [directRotation_toLinearMap]; exact polar_decomposition (canonicalIntertwiner U V)
   have hWpsv : projection V (principalSourceVector U V i) =
       (principalPlaneCosine U V i : 𝕜) •
@@ -415,7 +415,7 @@ theorem projection_apply_principalSourceVector
       projection_apply_of_mem hu, hcompUu, map_zero, add_zero]
   have hpolar : canonicalIntertwiner U V =
       (directRotation U V hacute).toLinearMap ∘ₗ
-        ForMathlib.abs (canonicalIntertwiner U V) := by
+        TauCeti.abs (canonicalIntertwiner U V) := by
     rw [directRotation_toLinearMap]; exact polar_decomposition (canonicalIntertwiner U V)
   have h := LinearMap.congr_fun hpolar (principalSourceVector U V i)
   simp only [LinearMap.comp_apply] at h
@@ -648,7 +648,7 @@ theorem abs_canonicalIntertwiner_apply_principalOrthogonalVector
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hacute : IsAcute U V)
     (i : Fin (nontrivialAngleCount U V)) :
-    ForMathlib.abs (canonicalIntertwiner U V)
+    TauCeti.abs (canonicalIntertwiner U V)
         (principalOrthogonalVector U V hacute i) =
       (principalPlaneCosine U V i : 𝕜) •
         principalOrthogonalVector U V hacute i := by
@@ -658,7 +658,7 @@ theorem abs_canonicalIntertwiner_apply_principalOrthogonalVector
     LinearIsometryEquiv.coe_toLinearEquiv] at htwo
   rw [directRotation_apply_principalOrthogonalVector U V hacute i,
     directRotation_symm_apply_principalOrthogonalVector U V hacute i] at htwo
-  have h2 : (2 : 𝕜) • ForMathlib.abs (canonicalIntertwiner U V)
+  have h2 : (2 : 𝕜) • TauCeti.abs (canonicalIntertwiner U V)
       (principalOrthogonalVector U V hacute i) =
       (2 : 𝕜) • ((principalPlaneCosine U V i : 𝕜) •
         principalOrthogonalVector U V hacute i) := by
@@ -716,4 +716,4 @@ theorem principalPlaneChord_sq
   have := principalPlaneCosine_le_one U V i
   linarith
 end DavisKahanTheory
-end ForMathlib
+end TauCeti

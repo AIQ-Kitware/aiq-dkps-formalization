@@ -10,7 +10,7 @@ import DavisKahan.BoundedOperator.Basic
 # Compatibility bridges for the historical continuous-linear-map API
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanExt
 
 open DavisKahan
@@ -160,4 +160,4 @@ theorem ideal_sylvester_le_real
       N hA' hB' hd hsep' hEq'
 
 end DavisKahanExt
-end ForMathlib
+end TauCeti

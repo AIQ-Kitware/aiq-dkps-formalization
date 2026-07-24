@@ -24,7 +24,7 @@ the original block operator, matching the forward graph rotation from the zero
 coordinate graph to the Riccati graph.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanExt
 
 open scoped InnerProductSpace
@@ -101,4 +101,4 @@ theorem unbounded_blockDiagonalization
 end Complex
 
 end DavisKahanExt
-end ForMathlib
+end TauCeti

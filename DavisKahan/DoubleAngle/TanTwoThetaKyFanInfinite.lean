@@ -37,7 +37,7 @@ and the two Ky Fan prefixes transport back to the ambient operators along
 projection, exactly for `T` and one-sidedly for `H`.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanTheory
 
 open scoped InnerProductSpace
@@ -429,4 +429,4 @@ theorem tanTwoTheta0_offDiagonal_mem_and_gauge_le_infinite
 end Main
 
 end DavisKahanTheory
-end ForMathlib
+end TauCeti

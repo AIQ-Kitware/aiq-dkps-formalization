@@ -14,7 +14,7 @@ The Neumann construction and ideal-norm convergence are separated so that the
 analytic difficulty is visible in the dependency graph.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace ExactSinTheta
@@ -564,4 +564,4 @@ theorem sylvester_mem_and_gauge_le_of_bound_inverse_swapped
 end ExactSinTheta
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

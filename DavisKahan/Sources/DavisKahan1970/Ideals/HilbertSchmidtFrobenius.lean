@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidt
-import ForMathlib.Analysis.InnerProductSpace.UnitarilyInvariantNorm
+import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantNorm
 
 /-!
 # Finite-dimensional Frobenius realization of the paper square norm
@@ -26,7 +26,7 @@ so proof irrelevance identifies whatever instance a call site already carries
 with one produced by `letI : CompleteSpace E := FiniteDimensional.complete 𝕜 E`.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace ExactSinTheta
@@ -97,7 +97,7 @@ theorem paperHilbertSchmidtNorm_eq_frobenius
     [FiniteDimensional 𝕜 E] [CompleteSpace E]
     (A : E →L[𝕜] E) :
     paperHilbertSchmidtNorm A =
-      ForMathlib.UnitarilyInvariantNorm.frobenius 𝕜 E A.toLinearMap := by
+      TauCeti.UnitarilyInvariantNorm.frobenius 𝕜 E A.toLinearMap := by
   rw [paperHilbertSchmidtNorm_eq_rectangularFrobenius]
   rfl
 
@@ -106,4 +106,4 @@ end
 end ExactSinTheta
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

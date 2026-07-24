@@ -23,7 +23,7 @@ are available.
 
 open scoped InnerProductSpace
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace ExactSinTheta
@@ -37,7 +37,7 @@ variable {E F : Type v}
   [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
   [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
 
-open ForMathlib.DavisKahanExt
+open TauCeti.DavisKahanExt
 
 /-- An orthogonally complemented subspace is complete.  This repeats the
 instance carried by the reducing-restriction core, which declares it locally and
@@ -488,4 +488,4 @@ end
 end ExactSinTheta
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

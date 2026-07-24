@@ -20,7 +20,7 @@ It avoids first assuming that the unknown bounded solution belongs to the
 square ideal.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace ExactSinTheta
@@ -40,8 +40,8 @@ variable {E F : Type v}
 /-- A bounded homogeneous complex Sylvester solution vanishes under any of the
 three source gap configurations. -/
 theorem closedSylvester_homogeneous_eq_zero_complex
-    {A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := E)}
-    {B : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := F)}
+    {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := E)}
+    {B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := F)}
     (hA : A.IsSelfAdjoint) (hB : B.IsSelfAdjoint)
     {X : F →L[ℂ] E} {δ : ℝ}
     (hδ : 0 < δ)
@@ -64,8 +64,8 @@ theorem closedSylvester_homogeneous_eq_zero_complex
 /-- Two bounded complex solutions of the same separated closed Sylvester
 equation coincide. -/
 theorem closedSylvester_solution_unique_complex
-    {A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := E)}
-    {B : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := F)}
+    {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := E)}
+    {B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := F)}
     (hA : A.IsSelfAdjoint) (hB : B.IsSelfAdjoint)
     {X Y C : F →L[ℂ] E} {δ : ℝ}
     (hδ : 0 < δ)
@@ -90,8 +90,8 @@ variable {E F : Type v}
 /-- A bounded homogeneous real Sylvester solution vanishes under any of the
 three source gap configurations. -/
 theorem closedSylvester_homogeneous_eq_zero_real
-    {A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E)}
-    {B : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := F)}
+    {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E)}
+    {B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := F)}
     (hA : A.IsSelfAdjoint) (hB : B.IsSelfAdjoint)
     {X : F →L[ℝ] E} {δ : ℝ}
     (hδ : 0 < δ)
@@ -114,8 +114,8 @@ theorem closedSylvester_homogeneous_eq_zero_real
 /-- Two bounded real solutions of the same separated closed Sylvester equation
 coincide. -/
 theorem closedSylvester_solution_unique_real
-    {A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E)}
-    {B : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := F)}
+    {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E)}
+    {B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := F)}
     (hA : A.IsSelfAdjoint) (hB : B.IsSelfAdjoint)
     {X Y C : F →L[ℝ] E} {δ : ℝ}
     (hδ : 0 < δ)
@@ -136,4 +136,4 @@ end
 end ExactSinTheta
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

@@ -22,7 +22,9 @@ it is logically different from the two-sided Fourier branch, whose universal
 constant is `pi/2`.
 -/
 
-namespace ForMathlib
+namespace TauCeti
+
+open ForMathlib
 namespace DavisKahanExt
 
 open MeasureTheory Set Filter
@@ -350,4 +352,4 @@ theorem orderedSylvester_reconstruction
 end
 
 end DavisKahanExt
-end ForMathlib
+end TauCeti

@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Sources.DavisKahan1970.Ideals.UnitaryInvariantNormDefinite
-import ForMathlib.Analysis.InnerProductSpace.KyFan
+import ForTauCeti.Analysis.InnerProductSpace.KyFan
 
 /-!
 # Exact correspondence with the norm class of Davis--Kahan 1970
@@ -26,7 +26,7 @@ values of its diagonal.  That is established here as
 operators together with the basis-permutation unitary.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace ExactSinTheta
@@ -46,11 +46,11 @@ the same Gram operator, hence exactly the same singular values. -/
 theorem singularValues_diagOp_abs
     (b : OrthonormalBasis (Fin n) ℂ (EuclideanSpace ℂ (Fin n)))
     (x : Fin n → ℝ) :
-    (ForMathlib.diagOp b x).singularValues =
-      (ForMathlib.diagOp b fun i => |x i|).singularValues := by
-  apply ForMathlib.singularValues_eq_of_gram_eq
-  rw [ForMathlib.adjoint_diagOp, ForMathlib.adjoint_diagOp,
-    ForMathlib.diagOp_comp, ForMathlib.diagOp_comp]
+    (TauCeti.diagOp b x).singularValues =
+      (TauCeti.diagOp b fun i => |x i|).singularValues := by
+  apply TauCeti.singularValues_eq_of_gram_eq
+  rw [TauCeti.adjoint_diagOp, TauCeti.adjoint_diagOp,
+    TauCeti.diagOp_comp, TauCeti.diagOp_comp]
   congr 1
   funext i
   simp [abs_mul_abs_self]
@@ -64,26 +64,26 @@ basis-permutation unitary, so the singular values are unchanged. -/
 theorem singularValues_diagOp_comp_perm
     (b : OrthonormalBasis (Fin n) ℂ (EuclideanSpace ℂ (Fin n)))
     (x : Fin n → ℝ) (π : Equiv.Perm (Fin n)) :
-    (ForMathlib.diagOp b (x ∘ π)).singularValues =
-      (ForMathlib.diagOp b x).singularValues := by
-  have hconj : ForMathlib.diagOp b (x ∘ π)
+    (TauCeti.diagOp b (x ∘ π)).singularValues =
+      (TauCeti.diagOp b x).singularValues := by
+  have hconj : TauCeti.diagOp b (x ∘ π)
       = (↑(b.equiv b π).symm.toLinearEquiv :
             EuclideanSpace ℂ (Fin n) →ₗ[ℂ] EuclideanSpace ℂ (Fin n)) ∘ₗ
-          (ForMathlib.diagOp b x ∘ₗ
+          (TauCeti.diagOp b x ∘ₗ
             (↑(b.equiv b π).toLinearEquiv :
               EuclideanSpace ℂ (Fin n) →ₗ[ℂ] EuclideanSpace ℂ (Fin n))) := by
     refine b.toBasis.ext fun j => ?_
     rw [OrthonormalBasis.coe_toBasis, LinearMap.comp_apply,
       LinearMap.comp_apply]
-    show ForMathlib.diagOp b (x ∘ π) (b j) =
-      (b.equiv b π).symm (ForMathlib.diagOp b x ((b.equiv b π) (b j)))
-    rw [OrthonormalBasis.equiv_apply_basis, ForMathlib.diagOp_apply_basis,
-      ForMathlib.diagOp_apply_basis, map_smul, Function.comp_apply]
+    show TauCeti.diagOp b (x ∘ π) (b j) =
+      (b.equiv b π).symm (TauCeti.diagOp b x ((b.equiv b π) (b j)))
+    rw [OrthonormalBasis.equiv_apply_basis, TauCeti.diagOp_apply_basis,
+      TauCeti.diagOp_apply_basis, map_smul, Function.comp_apply]
     congr 1
     rw [← OrthonormalBasis.equiv_apply_basis b b π j,
       LinearIsometryEquiv.symm_apply_apply]
-  rw [hconj, ForMathlib.singularValues_unitary_comp,
-    ForMathlib.singularValues_comp_unitary]
+  rw [hconj, TauCeti.singularValues_unitary_comp,
+    TauCeti.singularValues_comp_unitary]
 
 /-- Every real vector can be permuted so that its absolute values decrease. -/
 theorem exists_perm_abs_antitone (x : Fin n → ℝ) :
@@ -99,10 +99,10 @@ theorem exists_perm_singularValues_diagOp
     (b : OrthonormalBasis (Fin n) ℂ (EuclideanSpace ℂ (Fin n)))
     (x : Fin n → ℝ) :
     ∃ π : Equiv.Perm (Fin n), ∀ i : Fin n,
-      (ForMathlib.diagOp b x).singularValues (i : ℕ) = |x (π i)| := by
+      (TauCeti.diagOp b x).singularValues (i : ℕ) = |x (π i)| := by
   obtain ⟨π, hπ⟩ := exists_perm_abs_antitone x
   refine ⟨π, fun i => ?_⟩
-  have hsorted := ForMathlib.singularValues_diagOp
+  have hsorted := TauCeti.singularValues_diagOp
     (𝕜 := ℂ) (E := EuclideanSpace ℂ (Fin n)) finrank_euclideanSpace_fin b
     (x := fun i => |x (π i)|) hπ (fun i => abs_nonneg _) i
   have hcomp : (fun i => |x (π i)|) = (fun i => |x i|) ∘ π := rfl
@@ -116,16 +116,16 @@ end DiagonalSingularValues
 section UnitarilyInvariantGauge
 
 variable {n : ℕ}
-  (N : ForMathlib.UnitarilyInvariantNorm ℂ (EuclideanSpace ℂ (Fin n)))
+  (N : TauCeti.UnitarilyInvariantNorm ℂ (EuclideanSpace ℂ (Fin n)))
   (b : OrthonormalBasis (Fin n) ℂ (EuclideanSpace ℂ (Fin n)))
 
 /-- The gauge of any unitarily invariant norm ignores the signs of the
 diagonal. -/
 theorem uinGauge_abs (x : Fin n → ℝ) :
     N.gauge b (fun i => |x i|) = N.gauge b x := by
-  have h1 := N.apply_eq_gauge finrank_euclideanSpace_fin b (ForMathlib.diagOp b x)
+  have h1 := N.apply_eq_gauge finrank_euclideanSpace_fin b (TauCeti.diagOp b x)
   have h2 := N.apply_eq_gauge finrank_euclideanSpace_fin b
-    (ForMathlib.diagOp b fun i => |x i|)
+    (TauCeti.diagOp b fun i => |x i|)
   rw [singularValues_diagOp_abs b x] at h1
   exact h2.trans h1.symm
 
@@ -140,7 +140,7 @@ end UnitarilyInvariantGauge
 theorem singularValues_smul_complex {n : ℕ} (a : ℂ)
     (A : EuclideanSpace ℂ (Fin n) →ₗ[ℂ] EuclideanSpace ℂ (Fin n)) (i : ℕ) :
     (a • A).singularValues i = ‖a‖ * A.singularValues i :=
-  ForMathlib.DavisKahanTheory.RectangularUnitarilyInvariantNorm.singularValues_smul_rect
+  TauCeti.DavisKahanTheory.RectangularUnitarilyInvariantNorm.singularValues_smul_rect
     a A i
 
 namespace PaperUnitaryInvariantNorm
@@ -281,7 +281,7 @@ def finiteOperatorValue (Φ : PaperSymmetricNormingFunction) (n : ℕ)
 /-- A source symmetric gauge induces the finite-dimensional unitarily
 invariant norm used by the implementation. -/
 noncomputable def finiteNorm (Φ : PaperSymmetricNormingFunction) (n : ℕ) :
-    ForMathlib.UnitarilyInvariantNorm ℂ (EuclideanSpace ℂ (Fin n)) where
+    TauCeti.UnitarilyInvariantNorm ℂ (EuclideanSpace ℂ (Fin n)) where
   toFun := Φ.finiteOperatorValue n
   add_le' A B := by
     have hmaj : ∀ m : ℕ,
@@ -292,19 +292,19 @@ noncomputable def finiteNorm (Φ : PaperSymmetricNormingFunction) (n : ℕ) :
       intro m
       rw [Finset.sum_add_distrib]
       rcases le_or_gt m n with hm | hm
-      · rw [ForMathlib.sum_filter_lt_eq_sum_fin hm
+      · rw [TauCeti.sum_filter_lt_eq_sum_fin hm
             (fun k => (A + B).singularValues k),
-          ForMathlib.sum_filter_lt_eq_sum_fin hm (fun k => A.singularValues k),
-          ForMathlib.sum_filter_lt_eq_sum_fin hm (fun k => B.singularValues k),
-          ← ForMathlib.kyFanSum_eq_sum_fin, ← ForMathlib.kyFanSum_eq_sum_fin,
-          ← ForMathlib.kyFanSum_eq_sum_fin]
-        exact ForMathlib.kyFanSum_add_le m A B
+          TauCeti.sum_filter_lt_eq_sum_fin hm (fun k => A.singularValues k),
+          TauCeti.sum_filter_lt_eq_sum_fin hm (fun k => B.singularValues k),
+          ← TauCeti.kyFanSum_eq_sum_fin, ← TauCeti.kyFanSum_eq_sum_fin,
+          ← TauCeti.kyFanSum_eq_sum_fin]
+        exact TauCeti.kyFanSum_add_le m A B
       · have huniv :
             (Finset.univ.filter fun i : Fin n => (i : ℕ) < m) = Finset.univ :=
           Finset.filter_true_of_mem fun i _ => lt_trans i.isLt hm
-        rw [huniv, ← ForMathlib.kyFanSum_eq_sum_fin,
-          ← ForMathlib.kyFanSum_eq_sum_fin, ← ForMathlib.kyFanSum_eq_sum_fin]
-        exact ForMathlib.kyFanSum_add_le n A B
+        rw [huniv, ← TauCeti.kyFanSum_eq_sum_fin,
+          ← TauCeti.kyFanSum_eq_sum_fin, ← TauCeti.kyFanSum_eq_sum_fin]
+        exact TauCeti.kyFanSum_add_le n A B
     show Φ.gauge n (fun i : Fin n => (A + B).singularValues (i : ℕ)) ≤
       Φ.gauge n (fun i : Fin n => A.singularValues (i : ℕ)) +
         Φ.gauge n (fun i : Fin n => B.singularValues (i : ℕ))
@@ -340,8 +340,8 @@ noncomputable def finiteNorm (Φ : PaperSymmetricNormingFunction) (n : ℕ) :
         show (V.toLinearMap :
               EuclideanSpace ℂ (Fin n) →ₗ[ℂ] EuclideanSpace ℂ (Fin n))
             = ↑V.toLinearEquiv from rfl,
-        ForMathlib.singularValues_unitary_comp,
-        ForMathlib.singularValues_comp_unitary]
+        TauCeti.singularValues_unitary_comp,
+        TauCeti.singularValues_comp_unitary]
     show Φ.gauge n (fun i : Fin n =>
         (U.toLinearMap ∘ₗ A ∘ₗ V.toLinearMap).singularValues (i : ℕ)) =
       Φ.gauge n (fun i : Fin n => A.singularValues (i : ℕ))
@@ -357,10 +357,10 @@ theorem finiteNorm_gauge (Φ : PaperSymmetricNormingFunction) (n : ℕ)
   obtain ⟨π, hπ⟩ :=
     exists_perm_singularValues_diagOp (EuclideanSpace.basisFun (Fin n) ℂ) x
   show Φ.gauge n (fun i : Fin n =>
-      (ForMathlib.diagOp (EuclideanSpace.basisFun (Fin n) ℂ) x).singularValues
+      (TauCeti.diagOp (EuclideanSpace.basisFun (Fin n) ℂ) x).singularValues
         (i : ℕ)) = Φ.gauge n x
   have hfun : (fun i : Fin n =>
-      (ForMathlib.diagOp (EuclideanSpace.basisFun (Fin n) ℂ) x).singularValues
+      (TauCeti.diagOp (EuclideanSpace.basisFun (Fin n) ℂ) x).singularValues
         (i : ℕ)) = (fun i => |x i|) ∘ π := by
     funext i
     exact hπ i
@@ -401,7 +401,7 @@ theorem toPaperNorm_ofPaperNorm_finite_apply
 
 /-- Two coherent finite operator families with the same gauge agree. -/
 private theorem uin_ext {n : ℕ}
-    {N M : ForMathlib.UnitarilyInvariantNorm ℂ (EuclideanSpace ℂ (Fin n))}
+    {N M : TauCeti.UnitarilyInvariantNorm ℂ (EuclideanSpace ℂ (Fin n))}
     (h : ∀ A, N A = M A) : N = M := by
   cases N
   cases M
@@ -447,4 +447,4 @@ end
 end ExactSinTheta
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

@@ -14,7 +14,9 @@ the interval and arbitrary-distance Sylvester arguments. These declarations are
 implementation support rather than part of the public theorem surface.
 -/
 
-namespace ForMathlib
+namespace TauCeti
+
+open ForMathlib
 namespace DavisKahanTheory
 
 open scoped InnerProductSpace BigOperators
@@ -150,4 +152,4 @@ theorem norm_shift_lower_of_spectrumOutside
   simpa [mul_pow] using hsq
 
 end DavisKahanTheory
-end ForMathlib
+end TauCeti

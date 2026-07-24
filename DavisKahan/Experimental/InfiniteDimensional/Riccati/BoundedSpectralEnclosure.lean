@@ -25,7 +25,7 @@ satisfies those enclosures is the later spectral-repulsion input; it does not
 follow from diagonalization of an arbitrary Riccati solution alone.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanExt
 
 variable {E0 : Type*} [NormedAddCommGroup E0] [InnerProductSpace ℂ E0]
@@ -185,4 +185,4 @@ theorem realSpectrum_blockOperator_subset_exterior_of_diagonalization
   · exact Or.inr (h1 hr1)
 
 end DavisKahanExt
-end ForMathlib
+end TauCeti

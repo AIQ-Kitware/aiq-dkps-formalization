@@ -15,7 +15,7 @@ therefore an explicit bounded left inverse.  Hilbert-space and invertible
 specializations can construct this data separately.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace Scratch
@@ -76,4 +76,4 @@ end SharedFoundations
 end Scratch
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

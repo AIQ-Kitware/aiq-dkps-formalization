@@ -16,7 +16,9 @@ explicit.  The remaining `OrderedInternalGap` bridge only has to construct such
 a center, including the degenerate-subspace cases and the reverse orientation.
 -/
 
-namespace ForMathlib
+namespace TauCeti
+
+open ForMathlib
 namespace DavisKahanExt
 
 open scoped InnerProductSpace
@@ -90,4 +92,4 @@ theorem quarterAcuteAngularCoordinate_sharp_bound_of_spectral_halfLines
     hquarter
 
 end DavisKahanExt
-end ForMathlib
+end TauCeti

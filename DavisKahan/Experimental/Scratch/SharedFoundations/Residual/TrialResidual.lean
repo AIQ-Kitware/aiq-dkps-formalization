@@ -17,7 +17,7 @@ For an isometric trial map `X`, the orthogonal projection onto its range is
 residual and `X*`.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace Scratch
@@ -168,4 +168,4 @@ end SharedFoundations
 end Scratch
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

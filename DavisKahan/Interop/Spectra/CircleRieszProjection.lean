@@ -19,7 +19,7 @@ a chosen measurable part of the real spectrum of a self-adjoint operator, while
 
 open scoped InnerProductSpace
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace Frontier
@@ -61,4 +61,4 @@ end CircleRieszInterface
 end Frontier
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

@@ -15,7 +15,7 @@ API, whose declarations are still open obligations.  The production
 implementation comes from the vendored Spectra calculus instead.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace ExactSinTheta
@@ -32,7 +32,7 @@ variable {E : Type v}
 
 /-- Package the current cutoff declarations behind the coherent interface. -/
 noncomputable def legacySpectralCutoffInterface
-    (A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := E))
+    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := E))
     (hA : A.IsSelfAdjoint) :
     GenuineSpectralCutoffInterface A hA where
   cutoff := spectralCutoff A hA
@@ -44,7 +44,7 @@ noncomputable def legacySpectralCutoffInterface
 /-- Package the current bounded truncation declarations behind the coherent
 interface. -/
 noncomputable def legacyBoundedTruncationInterface
-    (A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := E))
+    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := E))
     (hA : A.IsSelfAdjoint) :
     GenuineBoundedTruncationInterface A hA
       (legacySpectralCutoffInterface A hA) where
@@ -63,4 +63,4 @@ noncomputable def legacyBoundedTruncationInterface
 end ExactSinTheta
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

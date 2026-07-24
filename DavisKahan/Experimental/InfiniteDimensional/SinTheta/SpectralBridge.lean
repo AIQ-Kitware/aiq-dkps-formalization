@@ -14,7 +14,7 @@ The definitions now live in `DavisKahan.SinTheta.SpectralBridge`; the four
 estimates below remain unresolved.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace ExactSinTheta
@@ -165,4 +165,4 @@ theorem sylvester_mem_and_gauge_le_of_intervalExteriorGap
 end ExactSinTheta
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

@@ -5,9 +5,10 @@ Authors: Jon Crall, Claude Fable 5, Claude Opus 4.8
 -/
 import Mathlib.Analysis.InnerProductSpace.Spectrum
 import Mathlib.Analysis.InnerProductSpace.PiL2
-import ForMathlib.Analysis.InnerProductSpace.Spectrum
-import ForMathlib.Analysis.InnerProductSpace.CourantFischer
-import ForMathlib.Analysis.InnerProductSpace.ProjectionGeometry
+import ForTauCeti.Analysis.InnerProductSpace.Spectrum
+import ForTauCeti.Analysis.InnerProductSpace.CourantFischer
+import ForTauCeti.Analysis.InnerProductSpace.CourantFischerCompat
+import ForTauCeti.Analysis.InnerProductSpace.ProjectionGeometry
 
 /-!
 # Elementary eigenbasis and Frobenius Davis--Kahan bounds
@@ -17,8 +18,7 @@ cross-term identities and Parseval.  These results are useful lightweight
 alternatives to the canonical arbitrary-UI-norm theorem family.
 -/
 
-namespace ForMathlib
-
+namespace TauCeti
 open scoped InnerProductSpace BigOperators
 open Module (finrank)
 
@@ -589,4 +589,4 @@ theorem sum_norm_sub_starProjection_span_sq_le {T S : F →ₗ[𝕜] F}
 
 
 end ProjectorBounds
-end ForMathlib
+end TauCeti

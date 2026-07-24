@@ -20,8 +20,7 @@ statements and use only the permitted kernel dependencies.
 -/
 
 
-namespace ForMathlib
-
+namespace TauCeti
 open scoped RealInnerProductSpace InnerProductSpace
 open Module (finrank)
 
@@ -255,4 +254,4 @@ theorem exists_linearIsometryEquiv_norm_sub_le (M : E →L[ℝ] E) {δ : ℝ} (h
   exact ⟨W, fun x => by simpa using hW x⟩
 
 end ContinuousLinearMap
-end ForMathlib
+end TauCeti

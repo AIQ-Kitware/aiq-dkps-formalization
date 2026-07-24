@@ -14,7 +14,9 @@ This leaf module obtains those bounds from spectra of actual restricted
 operators on complex Hilbert spaces.
 -/
 
-namespace ForMathlib
+namespace TauCeti
+
+open ForMathlib
 namespace DavisKahan
 namespace Spectral
 namespace Complex
@@ -51,4 +53,4 @@ theorem opNorm_starProjection_sub_le_of_restriction_spectra
 end Complex
 end Spectral
 end DavisKahan
-end ForMathlib
+end TauCeti

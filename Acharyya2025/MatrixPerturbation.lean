@@ -155,7 +155,7 @@ theorem abs_sortedEigenvalues_le_of_entry_le
     rw [hu]
     exact (opSym hB).apply_eigenvectorBasis hn_eq k
   have hle : ‖Matrix.toEuclideanLin B (u k)‖ ≤ (n : ℝ) * β * ‖u k‖ :=
-    ForMathlib.norm_toEuclideanLin_le_of_entry_le hβ (u k)
+    TauCeti.norm_toEuclideanLin_le_of_entry_le hβ (u k)
   rwa [happly, norm_smul, Real.norm_eq_abs, hnorm1, mul_one, mul_one] at hle
 
 /-- Non-absolute version of the entrywise spectral ceiling. -/

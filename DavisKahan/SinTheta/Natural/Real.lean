@@ -22,7 +22,7 @@ is supplied by the caller.
 
 open scoped InnerProductSpace
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace ExactSinTheta
@@ -40,7 +40,7 @@ variable {E F : Type v}
 /-- The canonical exact and complementary real spectral inclusions form a
 complete orthogonal coordinate decomposition of the ambient Hilbert space. -/
 theorem realSpectralSubspace_orthogonalExactDecomposition
-    (A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E))
+    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E))
     (hA : A.IsSelfAdjoint) (S : Set ℝ) (hS : MeasurableSet S) :
     OrthogonalExactDecomposition
       (realSelfAdjointSpectralSubspaceInclusion A hA S hS)
@@ -87,9 +87,9 @@ theorem realSpectralSubspace_orthogonalExactDecomposition
 /-- Construct the internal real unbounded sine-theta bookkeeping from a
 measurable exact spectral set and a bounded residual extension. -/
 noncomputable def unboundedSinThetaDataOfRealSpectralSubspace
-    (A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E))
+    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E))
     (hA : A.IsSelfAdjoint) (S : Set ℝ) (hS : MeasurableSet S)
-    (A0 : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := F))
+    (A0 : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := F))
     (X Rop : F →L[ℝ] E)
     (hXdom : ∀ x : A0.domain, X (x : F) ∈ A.domain)
     (hReq : ∀ x : A0.domain,
@@ -116,9 +116,9 @@ inputs.  The real spectral projection, complementary self-adjoint restriction,
 and all exact-space bookkeeping are constructed internally. -/
 theorem sinTheta_unbounded_real_spectralSubspace
     (N : UnitaryInvariantIdealFamily (𝕜 := ℝ))
-    (A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E))
+    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E))
     (hA : A.IsSelfAdjoint) (S : Set ℝ) (hS : MeasurableSet S)
-    (A0 : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := F))
+    (A0 : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := F))
     (hA0 : A0.IsSelfAdjoint)
     (X Rop : F →L[ℝ] E)
     (hX : IsometricEmbedding X)
@@ -158,9 +158,9 @@ operator while constructing the complementary spectral restriction
 internally. -/
 theorem generalizedSinTheta_unbounded_real_spectralSubspace
     (N : UnitaryInvariantIdealFamily (𝕜 := ℝ))
-    (A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E))
+    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E))
     (hA : A.IsSelfAdjoint) (S : Set ℝ) (hS : MeasurableSet S)
-    (A0 : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := F))
+    (A0 : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := F))
     (hA0 : A0.IsSelfAdjoint)
     (X Rop : F →L[ℝ] E)
     {δ ε : ℝ} (hδ : 0 < δ) (hε : 0 < ε)
@@ -199,4 +199,4 @@ end
 end ExactSinTheta
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

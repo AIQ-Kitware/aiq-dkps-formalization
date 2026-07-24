@@ -13,8 +13,8 @@ fails.  An additional generic theorem converts vanishing failure bounds into the
 repository's `HighProbAtTop` interface when the replicate schedule grows.
 -/
 import DkpsQuench2026.Paper.EvaluationBridges
-import ForMathlib.Probability.Moments.SampleMean
-import ForMathlib.Probability.Moments.Variance
+import ForTauCeti.Probability.Moments.SampleMean
+import ForTauCeti.Probability.Moments.Variance
 import ForTauCeti.MeasureTheory.Measure.Typeclasses.Probability
 
 set_option linter.mathlibStandardSet false
@@ -62,7 +62,7 @@ theorem integral_sq_randomEmpiricalMean_sub_le
   have hsecondNorm : ∀ i, ∫ ω, ‖Z i ω - center‖ ^ 2 ∂P ≤ γ := by
     intro i
     simpa [Real.norm_eq_abs, sq_abs] using hsecond i
-  have h := ForMathlib.integral_norm_sq_average_sub_le_of_bound
+  have h := TauCeti.integral_norm_sq_average_sub_le_of_bound
     P hr Z center hL2 hmean hindep hsecondNorm
   simpa [randomEmpiricalMean, empiricalMean, smul_eq_mul,
     Real.norm_eq_abs, sq_abs] using h
@@ -95,7 +95,7 @@ theorem measure_randomEmpiricalMean_deviation_gt_le
     simpa [sq_abs] using
       integral_sq_randomEmpiricalMean_sub_le
         P hr Z center γ hL2 hmean hindep hsecond
-  exact ForMathlib.meas_gt_le_ofReal_integral_sq_div_sq
+  exact TauCeti.meas_gt_le_ofReal_integral_sq_div_sq
     P hdevInt hε hmoment
 
 /-- If both the statistic and its mean lie in `[0,1]`, its centered second

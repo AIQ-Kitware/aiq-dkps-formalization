@@ -2,4 +2,4 @@
 
 import DavisKahan.Sources.DavisKahan1970.PartIII
 
-#print axioms ForMathlib.DavisKahanTheory.partIII_sinTwoTheta_uiNorm
+#print axioms TauCeti.DavisKahanTheory.partIII_sinTwoTheta_uiNorm

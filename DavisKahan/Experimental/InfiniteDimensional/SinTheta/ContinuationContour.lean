@@ -25,7 +25,7 @@ module can use the same parameterization and derivative without introducing a
 second contour representation.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanExt
 
 open Set
@@ -197,4 +197,4 @@ theorem norm_resolventOperator_le {A : H →L[ℂ] H} {s : Set ℝ}
 end SpectralSeparatingContour
 
 end DavisKahanExt
-end ForMathlib
+end TauCeti

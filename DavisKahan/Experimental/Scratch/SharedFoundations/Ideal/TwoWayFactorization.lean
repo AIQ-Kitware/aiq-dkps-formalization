@@ -15,7 +15,7 @@ This applies to polar partial isometries, reflections, inclusions, projections,
 and zero-extended rectangular blocks.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace Scratch
@@ -157,4 +157,4 @@ end SharedFoundations
 end Scratch
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

@@ -24,7 +24,7 @@ enclosures.  Proving those inequalities is the remaining spectral-repulsion
 input; exact diagonalization and spectrum union alone do not imply them.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanExt
 
 open Set
@@ -157,4 +157,4 @@ end SpectralContinuationWitness
 end WitnessEffectiveBlocks
 
 end DavisKahanExt
-end ForMathlib
+end TauCeti

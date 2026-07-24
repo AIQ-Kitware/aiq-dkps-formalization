@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.FiniteDimensional.Residual.AngleEmbeddings
-import ForMathlib.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm
+import ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm
 
 /-!
 # Finite coordinate tangent perturbation bounds
@@ -15,7 +15,7 @@ operator is `S |C|⁺ : F → E`, its singular values are the directed principal
 tangents, and the ordered Ritz gap controls it through the trial residual.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanTheory
 
 open scoped InnerProductSpace BigOperators
@@ -94,4 +94,4 @@ theorem kyFan_tanTheta_le
       hA hU X hM hGalerkin hδ hgap
 
 end DavisKahanTheory
-end ForMathlib
+end TauCeti

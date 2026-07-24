@@ -5,7 +5,7 @@ Authors: Jon Crall, GPT-5.6 Thinking
 -/
 import DavisKahan.FiniteDimensional.DirectRotation.Majorization
 import DavisKahan.FiniteDimensional.SinTheta.UnitarilyInvariant
-import ForMathlib.Analysis.InnerProductSpace.MoorePenroseInverse
+import ForTauCeti.Analysis.InnerProductSpace.MoorePenroseInverse
 
 /-!
 # Finite direct rotation: trigonometric and extremal formulas
@@ -22,7 +22,7 @@ real `pi / 3` claim for the full displacement is false when principal-angle
 multiplicity spaces are mixed by the competitor; it is not reintroduced.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanTheory
 
 open scoped InnerProductSpace BigOperators
@@ -38,7 +38,7 @@ orthogonal complement and therefore participates in the full-space formula
 `R = C + J S`. -/
 noncomputable def directRotationCosine (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →ₗ[𝕜] E :=
-  ForMathlib.abs (canonicalIntertwiner U V)
+  TauCeti.abs (canonicalIntertwiner U V)
 
 /-- The partial complex structure on the nonzero-angle space.  Total
 Moore--Penrose inversion makes it zero on the zero-angle space. -/
@@ -255,4 +255,4 @@ theorem directRotation_minimizes_sum_sq_basis_angles
   simpa [norm_sub_rev] using h'
 
 end DavisKahanTheory
-end ForMathlib
+end TauCeti

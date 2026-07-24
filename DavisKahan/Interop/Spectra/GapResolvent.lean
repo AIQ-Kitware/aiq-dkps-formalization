@@ -248,7 +248,7 @@ theorem exists_norm_le_two_sided_shifted_inverse_of_spectrum_gap
 end SpectralTheory
 end Spectra.QuantumMechanics
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace SpectraBridge
@@ -265,7 +265,7 @@ theorem twoSidedShiftedInverseBound_of_spectrum_gap
     (hA : IsSelfAdjoint A.toLinearPMap) {c s : ℝ} (hs : 0 < s)
     (hgap : ∀ lam ∈ Set.Ioo (c - s) (c + s),
       lam ∉ Spectra.Resolvent.spectrum A.toLinearPMap) :
-    ForMathlib.DavisKahan.Experimental.ExactSinTheta.TwoSidedShiftedInverseBound
+    TauCeti.DavisKahan.Experimental.ExactSinTheta.TwoSidedShiftedInverseBound
       A c s := by
   obtain ⟨R, hnorm, hleft, hright⟩ :=
     exists_norm_le_two_sided_shifted_inverse_of_spectrum_gap hA hs hgap
@@ -276,4 +276,4 @@ theorem twoSidedShiftedInverseBound_of_spectrum_gap
 end SpectraBridge
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

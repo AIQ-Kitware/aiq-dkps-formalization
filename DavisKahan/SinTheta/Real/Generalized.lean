@@ -15,7 +15,7 @@ configurations, sharp product constant, and arbitrary unitarily invariant
 ideal family as the complex generalized theorem.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace ExactSinTheta
@@ -131,4 +131,4 @@ end
 end ExactSinTheta
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

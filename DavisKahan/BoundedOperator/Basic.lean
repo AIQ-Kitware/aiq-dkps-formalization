@@ -16,7 +16,7 @@ Davis--Kahan theory.  Spectral implementations and long-horizon literature
 scaffolds live in separate modules.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 
 open scoped InnerProductSpace
@@ -145,7 +145,7 @@ theorem norm_sylvester_le_of_coercive
     (hBc : ∀ x, RCLike.re ⟪B x, x⟫_𝕜 ≤ c * ‖x‖ ^ 2)
     (hEq : sylvesterOperator A B X = C) :
     ‖X‖ ≤ ‖C‖ / g :=
-  ContinuousLinearMap.opNorm_le_div_of_comp_sub_comp_eq hA hB hg hAc hBc hEq
+  ForMathlib.ContinuousLinearMap.opNorm_le_div_of_comp_sub_comp_eq hA hB hg hAc hBc hEq
 
 end DavisKahan
-end ForMathlib
+end TauCeti

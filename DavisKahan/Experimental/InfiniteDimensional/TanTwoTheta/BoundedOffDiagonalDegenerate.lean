@@ -16,7 +16,7 @@ contractive Riccati inequality is immediate.  Otherwise the nontrivial
 ordered-gap theorem applies.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanExt
 
 open scoped InnerProductSpace
@@ -70,4 +70,4 @@ theorem quarterAcuteAngularCoordinate_sharp_bound_of_orderedInternalGap
           A H hA hH U V hU hV hoff hd hgap hquarter
 
 end DavisKahanExt
-end ForMathlib
+end TauCeti

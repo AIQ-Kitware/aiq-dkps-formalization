@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
-import ForMathlib.Analysis.InnerProductSpace.SingularSystem
+import ForTauCeti.Analysis.InnerProductSpace.SingularSystem
 import DavisKahan.OperatorIdeal.ApproximationNumbers.Core
 
 /-!
@@ -21,8 +21,7 @@ instance on the ambient codomain and does not weaken the assumptions of the esta
 finite-dimensional singular-value files.
 -/
 
-namespace ForMathlib
-
+namespace TauCeti
 open Module LinearMap
 open DavisKahan.Experimental.ExactSinTheta
 open scoped InnerProductSpace
@@ -204,4 +203,4 @@ theorem finiteSourceSingularValue_le_one_of_contraction
 
 end
 
-end ForMathlib
+end TauCeti

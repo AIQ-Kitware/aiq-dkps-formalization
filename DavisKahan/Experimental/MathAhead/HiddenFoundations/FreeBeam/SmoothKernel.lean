@@ -24,7 +24,7 @@ and `u` is affine.  Both real- and complex-valued versions are included.
 open Set
 open scoped Interval
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace MathAhead
@@ -201,4 +201,4 @@ end HiddenFoundations
 end MathAhead
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

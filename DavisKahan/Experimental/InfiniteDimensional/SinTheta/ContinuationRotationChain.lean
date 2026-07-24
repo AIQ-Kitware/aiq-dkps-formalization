@@ -20,7 +20,7 @@ orthogonal-projectionhood explicitly, while the final specialization discharges
 that input from a common family of spectral-separation witnesses.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanExt
 
 open Set
@@ -215,4 +215,4 @@ theorem exists_unitary_transport_of_spectralSeparatingContour_operatorPath
 end RieszSpecialization
 
 end DavisKahanExt
-end ForMathlib
+end TauCeti

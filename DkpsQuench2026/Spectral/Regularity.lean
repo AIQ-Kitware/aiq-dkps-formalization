@@ -275,7 +275,7 @@ theorem highProb_referenceCoordinateMean_of_compact_iid
             integral_mono ((hL2 n i).sub (memLp_const c)).integrable_sq (integrable_const _) hle
         _ = 4 * B ^ 2 := by simp
     simp only [referenceCoordinateMean]
-    rw [ForMathlib.integral_sq_scaledSum_sub_of_pairwise_indep (μref n) hn
+    rw [TauCeti.integral_sq_scaledSum_sub_of_pairwise_indep (μref n) hn
       (fun i ωref => ψ (f_ref n ωref i) a) c (fun i => hL2 n i) (fun i => hint_coord n i)
       (hindep n)]
     have hsum : ∑ i : Fin n, ∫ ωref, (ψ (f_ref n ωref i) a - c) ^ 2 ∂(μref n)
@@ -304,9 +304,9 @@ theorem highProb_referenceCoordinateMean_of_compact_iid
     have hInt' : Integrable
         (fun ωref => (-(referenceCoordinateMean ψ f_ref n ωref a - c)) ^ 2) (μref n) := by
       simpa only [neg_sq] using hInt
-    have hpos := ForMathlib.meas_gt_le_ofReal_integral_sq_div_sq (μref n)
+    have hpos := TauCeti.meas_gt_le_ofReal_integral_sq_div_sq (μref n)
       (Y := fun ωref => referenceCoordinateMean ψ f_ref n ωref a - c) hInt hε (hmse n hn)
-    have hneg := ForMathlib.meas_gt_le_ofReal_integral_sq_div_sq (μref n)
+    have hneg := TauCeti.meas_gt_le_ofReal_integral_sq_div_sq (μref n)
       (Y := fun ωref => -(referenceCoordinateMean ψ f_ref n ωref a - c)) hInt' hε
       (by simpa only [neg_sq] using hmse n hn)
     have hsub : {ωref | |referenceCoordinateMean ψ f_ref n ωref a - c| ≤ ε}ᶜ
@@ -506,7 +506,7 @@ theorem highProb_referenceCoordinateProductMean_of_compact_iid
             integral_mono ((hL2 n i).sub (memLp_const c)).integrable_sq (integrable_const _) hle
         _ = 4 * Bg ^ 2 := by simp
     simp only [referenceCoordinateProductMean]
-    rw [ForMathlib.integral_sq_scaledSum_sub_of_pairwise_indep (μref n) hn
+    rw [TauCeti.integral_sq_scaledSum_sub_of_pairwise_indep (μref n) hn
       (fun i ωref => ψ (f_ref n ωref i) a * ψ (f_ref n ωref i) b) c (fun i => hL2 n i)
       (fun i => hint_coord n i) (hindep n)]
     have hsum : ∑ i : Fin n,
@@ -539,9 +539,9 @@ theorem highProb_referenceCoordinateProductMean_of_compact_iid
     have hInt' : Integrable
         (fun ωref => (-(referenceCoordinateProductMean ψ f_ref n ωref a b - c)) ^ 2) (μref n) := by
       simpa only [neg_sq] using hInt
-    have hpos := ForMathlib.meas_gt_le_ofReal_integral_sq_div_sq (μref n)
+    have hpos := TauCeti.meas_gt_le_ofReal_integral_sq_div_sq (μref n)
       (Y := fun ωref => referenceCoordinateProductMean ψ f_ref n ωref a b - c) hInt hε (hmse n hn)
-    have hneg := ForMathlib.meas_gt_le_ofReal_integral_sq_div_sq (μref n)
+    have hneg := TauCeti.meas_gt_le_ofReal_integral_sq_div_sq (μref n)
       (Y := fun ωref => -(referenceCoordinateProductMean ψ f_ref n ωref a b - c)) hInt' hε
       (by simpa only [neg_sq] using hmse n hn)
     have hsub : {ωref | |referenceCoordinateProductMean ψ f_ref n ωref a b - c| ≤ ε}ᶜ
@@ -953,7 +953,7 @@ The proof is the online-variance route through the rectangular Gram bridge:
 `quadratic_floor_of_sortedEigenvalues_configGram_lower` converts `href` (with
 `d ≤ n`) back into the quadratic floor of the centered reference cloud;
 `sum_sq_centered_le_augmented` — the exact add-one centered-scatter identity
-`ForMathlib.centeredScatter_append` — shows the augmented centered
+`TauCeti.centeredScatter_append` — shows the augmented centered
 squared-projection sum dominates it by the nonnegative rank-one correction
 `(n/(n+1)) ⟪x, target - centroid⟫²`; and
 `sortedEigenvalues_configGram_lower_of_quadratic_floor` transfers the floor to

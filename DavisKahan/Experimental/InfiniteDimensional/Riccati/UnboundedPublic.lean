@@ -21,7 +21,7 @@ to the Riccati graph.  The two closed coordinate restrictions are exposed as a
 separate identity-unitary equivalence with the rotated pullback.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanExt
 
 open scoped InnerProductSpace
@@ -134,4 +134,4 @@ theorem complex_unbounded_blockDiagonalization_of_strongSolution
 end Complex
 
 end DavisKahanExt
-end ForMathlib
+end TauCeti

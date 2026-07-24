@@ -1,6 +1,6 @@
 /-
 # Countable restrict-cover measurability (pending: minor) -- solution / dependency audit
 -/
-import ForMathlib.MeasureTheory.CfcMeasurable
+import ForTauCeti.MeasureTheory.CfcMeasurable
 
-#print axioms ForMathlib.measurable_of_iUnion_restrict
+#print axioms TauCeti.measurable_of_iUnion_restrict

@@ -15,13 +15,13 @@ Hilbert–Schmidt and spectral instances.
 The norm-free construction of `A, B, X, Y` is shared verbatim with the
 operator-norm theorem (`exists_isSymmetric_comp_sub_comp_eq`); only the final
 estimate differs — here it is the abstract Sylvester bound
-`ContinuousLinearMap.le_div_of_comp_sub_comp_eq`, fed the operator seminorm
+`ForMathlib.ContinuousLinearMap.le_div_of_comp_sub_comp_eq`, fed the operator seminorm
 induced by `N`, whose operator-ideal property is `UnitarilyInvariantNorm`'s
 `apply_comp_le`.
 To be re-authored per Mathlib's AI-contribution policy at PR time.
 -/
 
-import ForMathlib.Analysis.InnerProductSpace.UnitarilyInvariantNorm
+import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantNorm
 import DavisKahan.FiniteDimensional.SinTheta.OperatorNorm
 
 /-! # The unitarily-invariant-norm Davis–Kahan sin-Θ theorem
@@ -34,7 +34,7 @@ bounds the cross-projection:
 
 ## Main results
 
-* `ForMathlib.UnitarilyInvariantNorm.apply_starProjection_comp_starProjection_le`:
+* `TauCeti.UnitarilyInvariantNorm.apply_starProjection_comp_starProjection_le`:
   the part-III `sin Θ` bound, every unitarily invariant norm.
 
 ## References
@@ -44,8 +44,7 @@ bounds the cross-projection:
 * R. Bhatia, *Matrix Analysis*, Chapter VII (the Davis–Kahan theorems).
 -/
 
-namespace ForMathlib
-
+namespace TauCeti
 open scoped InnerProductSpace
 open Module (finrank)
 
@@ -108,7 +107,7 @@ theorem apply_starProjection_comp_starProjection_le (N : UnitarilyInvariantNorm 
     exact N.apply_comp_le' (norm_nonneg C) fun y => C.le_opNorm y
   -- The abstract Sylvester bound gives `N' X ≤ N' Y / g`.
   have hbound : N' X ≤ N' Y / g :=
-    ContinuousLinearMap.le_div_of_comp_sub_comp_eq hadd hsmul hidealL hidealR
+    ForMathlib.ContinuousLinearMap.le_div_of_comp_sub_comp_eq hadd hsmul hidealL hidealR
       hAsym hBsym hg hAc hBc hsylv
   -- `N' Y ≤ N (S − T)` by the ideal property (both projections are contractions).
   have hYcoe : (Y : E →ₗ[𝕜] E) = (P : E →ₗ[𝕜] E) ∘ₗ ((T - S) ∘ₗ (Q : E →ₗ[𝕜] E)) := by
@@ -159,4 +158,4 @@ theorem frobenius_starProjection_comp_starProjection_le
 
 end UnitarilyInvariantNorm
 
-end ForMathlib
+end TauCeti

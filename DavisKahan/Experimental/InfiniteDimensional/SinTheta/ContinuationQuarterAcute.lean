@@ -19,7 +19,7 @@ It is a quantitative continuation result, not yet the sharp off-diagonal
 enclosures and scalar optimization.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanExt
 
 open Set
@@ -171,4 +171,4 @@ theorem boundedSelfAdjointSpectralSubspaces_endpoints_isQuarterAcute_of_contour_
 end SelectedBranchQuarterAcute
 
 end DavisKahanExt
-end ForMathlib
+end TauCeti

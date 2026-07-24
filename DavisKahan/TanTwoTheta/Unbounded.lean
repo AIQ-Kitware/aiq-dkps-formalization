@@ -21,13 +21,13 @@ Riccati estimate or an ideal-gauge analogue.
 
 open scoped InnerProductSpace
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace SpectraBridge
 
-open ForMathlib.DavisKahanExt
-open ForMathlib.DavisKahan.Experimental.ExactSinTheta
+open TauCeti.DavisKahanExt
+open TauCeti.DavisKahan.Experimental.ExactSinTheta
 
 universe v
 
@@ -131,4 +131,4 @@ theorem tanTwoTheta_addBounded_of_intervalExterior
 end SpectraBridge
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

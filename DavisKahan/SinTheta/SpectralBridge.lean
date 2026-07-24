@@ -15,7 +15,7 @@ are still open and stay in
 `DavisKahan.Experimental.InfiniteDimensional.SinTheta.SpectralBridge`.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace ExactSinTheta
@@ -34,7 +34,7 @@ spectral API used by the canonical unbounded theorem.  This avoids maintaining
 an unrelated bounded spectrum placeholder and makes bounded gap hypotheses
 eligible for a direct full-domain specialization bridge. -/
 noncomputable def boundedRealSpectrum (A : E →L[𝕜] E) : Set ℝ :=
-  (ForMathlib.DavisKahanExt.ClosedOperator.ofBounded A).realSpectrum
+  (TauCeti.DavisKahanExt.ClosedOperator.ofBounded A).realSpectrum
 
 /-- The real spectrum is contained in a set. -/
 def SpectrumInRealSet (A : E →L[𝕜] E) (s : Set ℝ) : Prop :=
@@ -70,4 +70,4 @@ inductive CenteredIntervalExteriorWitness
 end ExactSinTheta
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

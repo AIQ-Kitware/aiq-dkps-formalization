@@ -27,7 +27,7 @@ supply the operator-theoretic enclosure and use these lemmas only for the
 scalar optimization.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanExt
 
 open Set
@@ -116,4 +116,4 @@ theorem offDiagonalContinuationMargin_path_pos
 end OperatorPath
 
 end DavisKahanExt
-end ForMathlib
+end TauCeti

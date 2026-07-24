@@ -19,7 +19,7 @@ The operator in this file is the implemented complex operator-angle object
 of this leaf until it is connected to the complex and real constructions.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanExt
 
 open scoped InnerProductSpace
@@ -149,4 +149,4 @@ theorem tanTwoTheta_offDiagonalC_of_weighted_sine
   norm_tanTwoAngleOperatorC_le_of_weighted_sine U V hquarter hd hweighted
 
 end DavisKahanExt
-end ForMathlib
+end TauCeti

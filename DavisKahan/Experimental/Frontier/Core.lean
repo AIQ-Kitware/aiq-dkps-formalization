@@ -32,7 +32,7 @@ not treated as a permanent hypothesis in the source-facing API.
 
 open scoped InnerProductSpace
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace Frontier
@@ -70,4 +70,4 @@ end CrossSpaceClassification
 end Frontier
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

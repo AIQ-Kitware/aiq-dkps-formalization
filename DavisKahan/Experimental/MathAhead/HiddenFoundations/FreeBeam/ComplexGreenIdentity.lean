@@ -33,7 +33,7 @@ closed-operator realization.
 open Set
 open scoped Interval ComplexConjugate
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace MathAhead
@@ -239,4 +239,4 @@ end HiddenFoundations
 end MathAhead
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

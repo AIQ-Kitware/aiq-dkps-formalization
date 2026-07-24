@@ -16,7 +16,7 @@ of half of the `tan(2 psi)` coefficient and the complementary-coordinate
 `tangent` coefficient.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan1970
 namespace Section9
 
@@ -85,4 +85,4 @@ theorem individual_angle_le_exact_envelope
 
 end Section9
 end DavisKahan1970
-end ForMathlib
+end TauCeti

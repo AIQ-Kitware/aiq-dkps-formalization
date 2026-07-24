@@ -24,7 +24,9 @@ can be measured at the analytic, geometric, and source-wrapper layers.
 open scoped InnerProductSpace
 open Set Filter
 
-namespace ForMathlib
+namespace TauCeti
+
+open ForMathlib
 namespace DavisKahan
 namespace Experimental
 namespace Frontier
@@ -853,4 +855,4 @@ end Section8
 end Frontier
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

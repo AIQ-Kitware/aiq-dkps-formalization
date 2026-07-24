@@ -62,7 +62,7 @@ Until these are closed, the ideal-gauge Hilbert-space form must not be
 advertised.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan1970
 
 /-! ## The finite source theorem, literal orientation, every UI norm -/
@@ -151,4 +151,4 @@ low-dependency Hilbert-space companion. -/
 alias Theorem6_3_bounded_vector_formBounds := DavisKahanExt.tan_theta_le'
 
 end DavisKahan1970
-end ForMathlib
+end TauCeti

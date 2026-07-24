@@ -18,7 +18,7 @@ The general arbitrary-norm `pi / 2` theorem for disconnected spectra is not
 used and is not an acceptable substitute.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace ExactSinTheta
@@ -29,7 +29,7 @@ noncomputable section
 
 universe v
 
-open ForMathlib.DavisKahanExt
+open TauCeti.DavisKahanExt
 
 section Complex
 
@@ -463,4 +463,4 @@ end
 end ExactSinTheta
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

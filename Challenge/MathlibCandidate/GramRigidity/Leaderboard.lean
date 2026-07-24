@@ -1,6 +1,6 @@
 /-
 # Gram rigidity (Mathlib candidate 01) -- solution / dependency audit
 -/
-import ForMathlib.Analysis.InnerProductSpace.GramMatrix
+import ForTauCeti.Analysis.InnerProductSpace.GramMatrix
 
-#print axioms ForMathlib.Matrix.gram_eq_gram_iff_exists_linearIsometryEquiv_map_eq
+#print axioms TauCeti.Matrix.gram_eq_gram_iff_exists_linearIsometryEquiv_map_eq

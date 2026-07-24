@@ -21,14 +21,14 @@ solution and the sharp norm estimate; squaring and converting between finite
 `ENNReal` energies gives the claimed inequality.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace ExactSinTheta
 
 open scoped InnerProductSpace ENNReal
 
-open ForMathlib.DavisKahanExt
+open TauCeti.DavisKahanExt
 
 noncomputable section
 
@@ -117,4 +117,4 @@ end
 end ExactSinTheta
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

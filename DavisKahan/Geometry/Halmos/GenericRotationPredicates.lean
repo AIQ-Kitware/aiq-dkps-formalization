@@ -20,7 +20,7 @@ sine squares to the reducing generic summand (together with their Pythagorean
 identity).
 
 These declarations were promoted out of the experimental frontier module once
-they became grounded.  The namespace stack `ForMathlib.DavisKahan.Experimental.Frontier`
+they became grounded.  The namespace stack `TauCeti.DavisKahan.Experimental.Frontier`
 is retained verbatim so that the fully-qualified names are unchanged; only the
 module path has moved.  De-experimentalizing the namespace is a deliberately
 deferred later pass.
@@ -28,7 +28,7 @@ deferred later pass.
 
 open scoped InnerProductSpace
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace Frontier
@@ -109,4 +109,4 @@ end UnitaryGeometry
 end Frontier
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

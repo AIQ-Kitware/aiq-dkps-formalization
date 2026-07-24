@@ -18,7 +18,7 @@ Keeping them apart from the endpoint theorems makes this file independent of
 which engine supplies the Sylvester estimate.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace ExactSinTheta
@@ -291,4 +291,4 @@ end GenericExact
 end ExactSinTheta
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

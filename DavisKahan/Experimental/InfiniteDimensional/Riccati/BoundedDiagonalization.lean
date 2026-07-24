@@ -24,7 +24,7 @@ the zero graph.  It is intentionally left as an explicit hypothesis of the
 last theorem so that its proof can be isolated from the block algebra.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanExt
 
 open scoped InnerProductSpace
@@ -257,11 +257,11 @@ theorem complex_blockDiagonalization_of_riccati_of_acute
   let Winv := star W
   have hWinvEq : Winv = complexDirectRotation V U hacute.symm := by
     change star
-        (_root_.ForMathlib.DavisKahan.Experimental.SpectraBridge.spectraDirectRotation
+        (_root_.TauCeti.DavisKahan.Experimental.SpectraBridge.spectraDirectRotation
           U V hacute) =
-      _root_.ForMathlib.DavisKahan.Experimental.SpectraBridge.spectraDirectRotation
+      _root_.TauCeti.DavisKahan.Experimental.SpectraBridge.spectraDirectRotation
         V U hacute.symm
-    exact (_root_.ForMathlib.DavisKahan.Experimental.SpectraBridge.spectraDirectRotation_reversal
+    exact (_root_.TauCeti.DavisKahan.Experimental.SpectraBridge.spectraDirectRotation_reversal
       U V hacute).symm
   have hWunit : IsUnitaryOperator W :=
     complexDirectRotation_unitary U V hacute
@@ -309,4 +309,4 @@ theorem complex_blockDiagonalization_of_riccati_of_acute
 end Complex
 
 end DavisKahanExt
-end ForMathlib
+end TauCeti

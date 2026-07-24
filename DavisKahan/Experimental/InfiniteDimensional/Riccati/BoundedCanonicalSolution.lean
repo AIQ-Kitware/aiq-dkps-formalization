@@ -13,7 +13,7 @@ sharp smaller-root estimate into one reusable theorem.  It also exposes a
 noncomputable canonical solution selected from that unique contractive branch.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanExt
 
 open scoped InnerProductSpace
@@ -124,4 +124,4 @@ theorem eq_canonicalContractiveRiccatiSolution
         H hd hlr hA0spec hA1spec hsmall)
 
 end DavisKahanExt
-end ForMathlib
+end TauCeti

@@ -19,7 +19,9 @@ Ky Fan estimates and therefore uses `KyFanDominantIdealFamily`; that stronger
 property is not derived from the ordinary ideal laws.
 -/
 
-namespace ForMathlib
+namespace TauCeti
+
+open ForMathlib
 namespace DavisKahan
 namespace Experimental
 namespace ExactSinTheta
@@ -36,15 +38,15 @@ variable {E F : Type v}
   [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
 
 abbrev ClosedOperatorOnE :=
-  ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := E)
+  TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := E)
 abbrev ClosedOperatorOnF :=
-  ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := F)
+  TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := F)
 
 /-- Fill the complement of an orthogonal spectral cutoff by a real scalar. -/
 noncomputable def filledSpectralTruncation
     {H : Type v}
     [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] [CompleteSpace H]
-    (A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := H))
+    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := H))
     (hA : A.IsSelfAdjoint) (a τ : ℝ) : H →L[𝕜] H :=
   boundedSpectralTruncation A hA τ +
     ((a : ℝ) : 𝕜) •
@@ -54,7 +56,7 @@ noncomputable def filledSpectralTruncation
 theorem filledSpectralTruncation_isSymmetric
     {H : Type v}
     [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] [CompleteSpace H]
-    (A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := H))
+    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := H))
     (hA : A.IsSelfAdjoint) (a τ : ℝ) :
     (filledSpectralTruncation A hA a τ).IsSymmetric := by
   have hT := boundedSpectralTruncation_isSymmetric A hA τ
@@ -67,7 +69,7 @@ its squared norm completes the Pythagorean decomposition. -/
 theorem spectralCutoff_complement_identities
     {H : Type v}
     [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] [CompleteSpace H]
-    (A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := H))
+    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := H))
     (hA : A.IsSelfAdjoint) (τ : ℝ) (x : H) :
     let P := spectralCutoff A hA τ
     ⟪P x, x - P x⟫_𝕜 = 0 ∧
@@ -95,7 +97,7 @@ filling the orthogonal complement by the same scalar. -/
 theorem filledSpectralTruncation_lowerBound
     {H : Type v}
     [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] [CompleteSpace H]
-    (A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := H))
+    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := H))
     (hA : A.IsSelfAdjoint) {a τ : ℝ} (hτ : 0 ≤ τ)
     (ha : SemiboundedBelow A a) :
     ∀ x, a * ‖x‖ ^ 2 ≤
@@ -151,7 +153,7 @@ filling the orthogonal complement by the same scalar. -/
 theorem filledSpectralTruncation_upperBound
     {H : Type v}
     [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] [CompleteSpace H]
-    (A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := H))
+    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := H))
     (hA : A.IsSelfAdjoint) {a τ : ℝ} (hτ : 0 ≤ τ)
     (ha : SemiboundedAbove A a) :
     ∀ x, RCLike.re ⟪filledSpectralTruncation A hA a τ x, x⟫_𝕜 ≤
@@ -280,7 +282,7 @@ theorem spectralCutoff_sylvester_equation
     intro x
     exact spectralCutoff_range_le_domain B hB τ ⟨x, rfl⟩
   have hmap : A.MapsDomainTo
-      (ForMathlib.DavisKahanExt.ClosedOperator.ofBounded T)
+      (TauCeti.DavisKahanExt.ClosedOperator.ofBounded T)
       (X ∘L P) := by
     intro x
     change X (P (x : F)) ∈ A.domain
@@ -897,4 +899,4 @@ end ApproximationNumberEndpointAssumptions
 end ExactSinTheta
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

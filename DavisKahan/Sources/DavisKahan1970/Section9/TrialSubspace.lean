@@ -19,7 +19,7 @@ source prose.  A later integration lemma may identify these forms with actual
 Lebesgue integrals on the unit interval.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan1970
 namespace Section9
 
@@ -211,4 +211,4 @@ theorem recentered_residual_gram_from_affine_moments (ε : ℝ) :
 
 end Section9
 end DavisKahan1970
-end ForMathlib
+end TauCeti

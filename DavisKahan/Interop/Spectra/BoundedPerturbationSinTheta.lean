@@ -26,12 +26,12 @@ Halmos machinery is used.
 
 open scoped InnerProductSpace
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace SpectraBridge
 
-open ForMathlib.DavisKahan.Experimental.ExactSinTheta
+open TauCeti.DavisKahan.Experimental.ExactSinTheta
 
 universe v
 
@@ -276,4 +276,4 @@ theorem sinTheta_addBounded_spectralSubspaces_opNorm_of_intervalExterior
 end SpectraBridge
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

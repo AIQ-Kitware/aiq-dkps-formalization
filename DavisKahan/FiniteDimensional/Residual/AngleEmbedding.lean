@@ -5,7 +5,7 @@ Authors: Jon Crall, GPT 5.6 High
 -/
 import DavisKahan.FiniteDimensional.Core.AngleGeometry
 import DavisKahan.FiniteDimensional.Residual.TrialMap
-import ForMathlib.Analysis.InnerProductSpace.FrameFactorization
+import ForTauCeti.Analysis.InnerProductSpace.FrameFactorization
 
 /-!
 # Principal-angle embeddings for trial subspaces
@@ -14,7 +14,7 @@ Coordinate-space sine and cosine embeddings, their projected residual identity,
 and the singular-value dictionary relating them to directed principal angles.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanTheory
 
 open scoped InnerProductSpace BigOperators
@@ -377,4 +377,4 @@ theorem tanThetaEmbedding_defined_iff (U : Submodule 𝕜 E)
 
 
 end DavisKahanTheory
-end ForMathlib
+end TauCeti
