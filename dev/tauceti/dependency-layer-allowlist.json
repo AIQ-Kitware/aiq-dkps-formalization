@@ -1,0 +1,18 @@
+{
+  "_comment": "Ratcheting allowlists for scripts/check_dependency_layers.py. These capture the pre-migration state as of Davis-Kahan fc38eb4 so the checker is green today and flags only NEW regressions. Entries are transitional backwards-dependencies that later extraction PRs remove; do not add to these lists to work around the architecture.",
+  "generic_davis_kahan_prefixes": [
+    "DavisKahan.OperatorIdeal",
+    "DavisKahan.SpectralTheory",
+    "DavisKahan.Sylvester",
+    "DavisKahan.Geometry"
+  ],
+  "generic_imports_sources": [
+    "DavisKahan.OperatorIdeal.ApproximationNumbers.BlockSum",
+    "DavisKahan.OperatorIdeal.ApproximationNumbers.OperatorModulus"
+  ],
+  "production_imports_experimental": [
+    "DavisKahan.Experimental",
+    "DavisKahan.FiniteDimensional.Generalized",
+    "DavisKahan.Sources.DavisKahan1970.Audits.Theorem63Distillation"
+  ]
+}
