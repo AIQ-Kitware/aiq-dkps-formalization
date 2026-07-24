@@ -122,9 +122,14 @@ noncomputable def toSobolevTraceFoundation
     simpa [Abstract.FourthOrderTraceModel.toClosedOperatorOfGraphNorm,
       Abstract.FourthOrderTraceModel.toClosedOperator] using D.selfAdjoint
   graph_compact := by
-    simpa [Abstract.SequentiallyCompactGraphEmbedding,
-      Abstract.FourthOrderTraceModel.toClosedOperatorOfGraphNorm,
-      Abstract.FourthOrderTraceModel.toClosedOperator] using D.graph_compact
+    intro x hx
+    apply D.graph_compact x
+    rcases hx with ⟨C, hC⟩
+    refine ⟨C, ?_⟩
+    intro n
+    change ‖(x n : H)‖ ^ 2 +
+      ‖D.traceModel.freeFourthAmbient (x n)‖ ^ 2 ≤ C
+    simpa only [Abstract.FourthOrderTraceModel.freeFourthAmbient_inverse] using hC n
   affineKernelEquiv := by
     simpa [Abstract.FourthOrderTraceModel.toClosedOperatorOfGraphNorm,
       Abstract.FourthOrderTraceModel.toClosedOperator] using D.affineKernelEquiv
