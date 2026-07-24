@@ -21,14 +21,38 @@ This file develops the Laplace transform of `|sin|` against an exponential
 weight, by periodic decomposition and the geometric series, together with the
 elementary periodicity and two-sided integrability facts it needs.
 
-This is a topic split of `ForTauCeti/Analysis/Fourier/HaagerupZsidoKernel.lean`;
+This is a topic split of `ForTauCeti/Analysis/Fourier/HaagerupZsidoKernel.lean`.
+The generic absolute-sine trigonometric lemmas `Real.abs_sin_add_nat_mul_pi` and
+`Real.abs_sin_abs` live in the `Real` namespace; the generic even-function
+integrability lemma `MeasureTheory.integrable_iff_integrableOn_Ioi_of_even`
+lives in `ForTauCeti.Analysis.Fourier.ExponentialAbs`.  The remaining
 declarations are moved verbatim and remain in the `TauCeti.HaagerupZsido`
-namespace.  The generic even-function integrability lemma
-`integrable_of_even_integrableOn_Ioi` lives in
-`ForTauCeti.Analysis.Fourier.ExponentialAbs`.
+namespace.
 -/
 
 @[expose] public section
+
+namespace Real
+
+/-- Shifting by an integer multiple of `π` preserves the absolute sine. -/
+theorem abs_sin_add_nat_mul_pi (s : ℝ) (n : ℕ) :
+    |Real.sin (s + n * Real.pi)| = |Real.sin s| := by
+  induction n with
+  | zero => simp
+  | succ n ih =>
+      have hstep : s + ((n + 1 : ℕ) : ℝ) * Real.pi =
+          (s + (n : ℝ) * Real.pi) + Real.pi := by
+        push_cast
+        ring
+      rw [hstep, Real.sin_add_pi, abs_neg, ih]
+
+/-- The absolute sine is invariant under absolute value of the argument. -/
+theorem abs_sin_abs (t : ℝ) : |Real.sin (|t|)| = |Real.sin t| := by
+  rcases abs_cases t with ⟨h, _⟩ | ⟨h, _⟩
+  · rw [h]
+  · rw [h, Real.sin_neg, abs_neg]
+
+end Real
 
 namespace TauCeti
 namespace HaagerupZsido
@@ -70,18 +94,6 @@ theorem integral_zero_pi_sin_mul_exp_neg (y : ℝ) :
     mul_zero, mul_one, zero_add, mul_neg]
   rw [show -y * Real.pi = -Real.pi * y by ring, Real.exp_zero]
   ring
-
-/-- Shifting by an integer multiple of `π` preserves the absolute sine. -/
-theorem abs_sin_add_nat_mul_pi (s : ℝ) (n : ℕ) :
-    |Real.sin (s + n * Real.pi)| = |Real.sin s| := by
-  induction n with
-  | zero => simp
-  | succ n ih =>
-      have hstep : s + ((n + 1 : ℕ) : ℝ) * Real.pi =
-          (s + (n : ℝ) * Real.pi) + Real.pi := by
-        push_cast
-        ring
-      rw [hstep, Real.sin_add_pi, abs_neg, ih]
 
 /-- Partial Laplace transform of the absolute sine over `N` periods.  Each
 period contributes one geometric factor. -/
@@ -129,7 +141,7 @@ theorem integral_abs_sin_mul_exp_neg_upto (y : ℝ) (N : ℕ) :
             rw [Set.uIcc_of_le Real.pi_nonneg] at hs
             dsimp only
             have hsin : |Real.sin (s + (N : ℝ) * Real.pi)| = Real.sin s := by
-              rw [abs_sin_add_nat_mul_pi]
+              rw [Real.abs_sin_add_nat_mul_pi]
               exact abs_of_nonneg
                 (Real.sin_nonneg_of_nonneg_of_le_pi hs.1 hs.2)
             rw [hsin, show -y * (s + (N : ℝ) * Real.pi) =
@@ -197,23 +209,15 @@ theorem integral_Ioi_abs_sin_mul_exp_neg {y : ℝ} (hy : 0 < y) :
   change (1 - q)⁻¹ * ((1 + q) / (1 + y ^ 2)) = (1 + q) / ((1 - q) * (1 + y ^ 2))
   field_simp
 
-/-- The absolute sine is invariant under absolute value of the argument. -/
-theorem abs_sin_abs (t : ℝ) : |Real.sin (|t|)| = |Real.sin t| := by
-  rcases abs_cases t with ⟨h, _⟩ | ⟨h, _⟩
-  · rw [h]
-  · rw [h, Real.sin_neg, abs_neg]
-
 /-- Two-sided integrability of the absolute sine against a symmetric
 exponential. -/
 theorem integrable_abs_sin_mul_exp_neg_abs {y : ℝ} (hy : 0 < y) :
     Integrable (fun t : ℝ => |Real.sin t| * Real.exp (-y * |t|)) := by
-  apply integrable_of_even_integrableOn_Ioi
-  · intro t
-    simp [Real.sin_neg]
-  · apply (integrableOn_abs_sin_mul_exp_neg hy).congr_fun _ measurableSet_Ioi
-    intro t ht
-    dsimp only
-    rw [abs_of_pos (show (0 : ℝ) < t from ht)]
+  refine (integrable_iff_integrableOn_Ioi_of_even (fun t => by simp [Real.sin_neg])).mpr ?_
+  apply (integrableOn_abs_sin_mul_exp_neg hy).congr_fun _ measurableSet_Ioi
+  intro t ht
+  dsimp only
+  rw [abs_of_pos (show (0 : ℝ) < t from ht)]
 
 /-- The two-sided Laplace transform of the absolute sine. -/
 theorem integral_abs_sin_mul_exp_neg_abs {y : ℝ} (hy : 0 < y) :
@@ -227,7 +231,7 @@ theorem integral_abs_sin_mul_exp_neg_abs {y : ℝ} (hy : 0 < y) :
         ∫ t : ℝ, |Real.sin (|t|)| * Real.exp (-y * |t|) := by
       apply integral_congr_ae
       filter_upwards [] with t
-      rw [abs_sin_abs]
+      rw [Real.abs_sin_abs]
     _ = 2 * ∫ t in Set.Ioi (0 : ℝ), |Real.sin t| * Real.exp (-y * t) := h
     _ = 2 * ((1 + Real.exp (-Real.pi * y)) /
         ((1 - Real.exp (-Real.pi * y)) * (1 + y ^ 2))) := by
