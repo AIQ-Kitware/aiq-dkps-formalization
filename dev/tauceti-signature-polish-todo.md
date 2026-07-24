@@ -33,7 +33,7 @@ Purpose: design review only; no signatures are changed by this document
 
 10. Measure-theory helpers
 
-11. Haagerup-Zsido kernel decomposition
+11. ~~Haagerup-Zsido kernel decomposition~~ — RESOLVED, removed from backlog
 
 12. Next-wave convergence signatures
 
@@ -2071,137 +2071,20 @@ theorem one_sub_measure_compl_le_measure
 
 **Likely adversarial review:** This is likely a one-line consequence of existing probability-measure API and may not merit a new public declaration.
 
-## 11. Haagerup-Zsido kernel decomposition
+## 11. Haagerup-Zsido kernel decomposition — RESOLVED
 
-| **Current file** | ForTauCeti/Analysis/Fourier/HaagerupZsidoKernel.lean |
-| --- | --- |
-| **Proposed disposition** | Do not submit as one file. Split generic analytic prerequisites from the named kernel construction and aggressively reduce the public surface. |
-| **Readiness** | Low in current form despite compiled proofs. |
-| **Primary review risks** | 1673 lines; 62 declarations; generic integral/series helpers mixed with named construction; proof-route names; likely duplicates; only final theorems need public exposure. |
-| **Likely PR slice** | A sequence of prerequisite PRs plus a final kernel PR. |
-
-> **Hard file-level blocker**
->
-> The file is above Tau Ceti’s hard file-size ceiling. More importantly, the current module exposes nearly every intermediate calculation as public API. Splitting must follow mathematical topics, not arbitrary line ranges.
-
-### 11.1 Exponential Fourier transform
-
-| **Current declaration** | **Proposed action** | **Signature/name direction** |
-| --- | --- | --- |
-| integral_cexp_neg_mul_abs_mul_cexp | Private or prerequisite | Shorten only after choosing the destination file; prefer conclusion terminology over proof route. |
-| fourier_cexp_neg_two_pi_mul_abs | Private or prerequisite | Shorten only after choosing the destination file; prefer conclusion terminology over proof route. |
-| cexp_neg_mul_abs_isLittleO_rpow_cocompact | Private or prerequisite | Shorten only after choosing the destination file; prefer conclusion terminology over proof route. |
-| cauchy_fourier_isBigO_rpow_neg_two | Private or prerequisite | Shorten only after choosing the destination file; prefer conclusion terminology over proof route. |
-| integrable_exp_neg_mul_abs | Private or prerequisite | Shorten only after choosing the destination file; prefer conclusion terminology over proof route. |
-| integrable_cexp_neg_mul_abs_mul_cexp | Private or prerequisite | Shorten only after choosing the destination file; prefer conclusion terminology over proof route. |
-
-### 11.2 Lattice sums and Poisson summation
-
-| **Current declaration** | **Proposed action** | **Signature/name direction** |
-| --- | --- | --- |
-| tsum_nat_exp_neg_mul_add_one | Private or prerequisite | Shorten only after choosing the destination file; prefer conclusion terminology over proof route. |
-| tsum_int_exp_neg_mul_abs | Private or prerequisite | Shorten only after choosing the destination file; prefer conclusion terminology over proof route. |
-| poisson_exponential_eq_cauchy_lattice | Private or prerequisite | Name the exact two sums or package as a Poisson-summation specialization. |
-| tsum_int_inv_sq_add_sq | Private or prerequisite | Shorten only after choosing the destination file; prefer conclusion terminology over proof route. |
-| summable_nat_inv_sq_add_sq | Private or prerequisite | Shorten only after choosing the destination file; prefer conclusion terminology over proof route. |
-| tsum_nat_inv_sq_add_sq | Private or prerequisite | Shorten only after choosing the destination file; prefer conclusion terminology over proof route. |
-| tsum_odd_inv_sq_add_sq | Private or prerequisite | Use a parity/index-set formulation if an odd-integer sum is the real object. |
-| weight_div_eq_tsum_odd | Private or prerequisite | Shorten only after choosing the destination file; prefer conclusion terminology over proof route. |
-
-### 11.3 Rational integral library
-
-| **Current declaration** | **Proposed action** | **Signature/name direction** |
-| --- | --- | --- |
-| integrable_inv_sq_add_sq | Private or prerequisite | Shorten only after choosing the destination file; prefer conclusion terminology over proof route. |
-| integral_Ioi_inv_sq_add_sq | Private or prerequisite | Shorten only after choosing the destination file; prefer conclusion terminology over proof route. |
-| integral_Ioi_sq_div_sq_add_sq_sq | Private or prerequisite | Shorten only after choosing the destination file; prefer conclusion terminology over proof route. |
-| integral_Ioi_sq_div_two_quadratics | Private or prerequisite | Shorten only after choosing the destination file; prefer conclusion terminology over proof route. |
-| integrable_sq_div_two_quadratics | Private or prerequisite | Remove the unused nonnegativity premise if truly unused. |
-| hasSum_reciprocal_step_difference | Private or prerequisite | Shorten only after choosing the destination file; prefer conclusion terminology over proof route. |
-| integral_weight_mul_reciprocal_difference | Private or prerequisite | Shorten only after choosing the destination file; prefer conclusion terminology over proof route. |
-
-### 11.4 Sine-Laplace integrals
-
-| **Current declaration** | **Proposed action** | **Signature/name direction** |
-| --- | --- | --- |
-| integral_zero_pi_sin_mul_exp_neg | Private or prerequisite | Shorten only after choosing the destination file; prefer conclusion terminology over proof route. |
-| abs_sin_add_nat_mul_pi | Move generic | Shorten only after choosing the destination file; prefer conclusion terminology over proof route. |
-| integral_abs_sin_mul_exp_neg_upto | Private or prerequisite | Shorten only after choosing the destination file; prefer conclusion terminology over proof route. |
-| integrableOn_abs_sin_mul_exp_neg | Private or prerequisite | Shorten only after choosing the destination file; prefer conclusion terminology over proof route. |
-| integral_Ioi_abs_sin_mul_exp_neg | Private or prerequisite | Shorten only after choosing the destination file; prefer conclusion terminology over proof route. |
-| integrable_abs_sin_mul_exp_neg_abs | Private or prerequisite | Shorten only after choosing the destination file; prefer conclusion terminology over proof route. |
-| integral_abs_sin_mul_exp_neg_abs | Private or prerequisite | Shorten only after choosing the destination file; prefer conclusion terminology over proof route. |
-
-### 11.5 Kernel definitions and elementary API
-
-| **Current declaration** | **Proposed action** | **Signature/name direction** |
-| --- | --- | --- |
-| weight | Public headline | Shorten only after choosing the destination file; prefer conclusion terminology over proof route. |
-| weight_nonneg | Private or prerequisite | Shorten only after choosing the destination file; prefer conclusion terminology over proof route. |
-| weight_le_one | Private or prerequisite | Shorten only after choosing the destination file; prefer conclusion terminology over proof route. |
-| weight_eq_exp_quotient | Private or prerequisite | Shorten only after choosing the destination file; prefer conclusion terminology over proof route. |
-| innerLaplace | Private or prerequisite | Rename to weightLaplaceTransform or laplaceWeight; “inner” is proof architecture. |
-| innerLaplace_def | Private or prerequisite | Shorten only after choosing the destination file; prefer conclusion terminology over proof route. |
-| realKernel | Private or prerequisite | Shorten only after choosing the destination file; prefer conclusion terminology over proof route. |
-| realKernel_def | Private or prerequisite | Shorten only after choosing the destination file; prefer conclusion terminology over proof route. |
-| reciprocalKernel | Public headline | Shorten only after choosing the destination file; prefer conclusion terminology over proof route. |
-| reciprocalKernel_def | Private or prerequisite | Shorten only after choosing the destination file; prefer conclusion terminology over proof route. |
-| continuous_weight | Private or prerequisite | Shorten only after choosing the destination file; prefer conclusion terminology over proof route. |
-| innerLaplace_nonneg | Private or prerequisite | Shorten only after choosing the destination file; prefer conclusion terminology over proof route. |
-| innerLaplace_neg | Private or prerequisite | Shorten only after choosing the destination file; prefer conclusion terminology over proof route. |
-| measurable_innerLaplace | Private or prerequisite | Shorten only after choosing the destination file; prefer conclusion terminology over proof route. |
-| measurable_realKernel | Private or prerequisite | Shorten only after choosing the destination file; prefer conclusion terminology over proof route. |
-| measurable_reciprocalKernel | Private or prerequisite | Shorten only after choosing the destination file; prefer conclusion terminology over proof route. |
-| realKernel_neg | Private or prerequisite | Shorten only after choosing the destination file; prefer conclusion terminology over proof route. |
-| reciprocalKernel_neg | Private or prerequisite | Shorten only after choosing the destination file; prefer conclusion terminology over proof route. |
-| norm_reciprocalKernel | Private or prerequisite | Shorten only after choosing the destination file; prefer conclusion terminology over proof route. |
-| abs_realKernel | Private or prerequisite | Shorten only after choosing the destination file; prefer conclusion terminology over proof route. |
-
-### 11.6 Kernel integrability and norm
-
-| **Current declaration** | **Proposed action** | **Signature/name direction** |
-| --- | --- | --- |
-| integrable_of_even_integrableOn_Ioi | Move generic | Move/generalize as Even.integrable_iff_integrableOn_Ioi. |
-| integrable_kernel_prod | Private or prerequisite | Shorten only after choosing the destination file; prefer conclusion terminology over proof route. |
-| integral_abs_sin_mul_innerLaplace | Private or prerequisite | Shorten only after choosing the destination file; prefer conclusion terminology over proof route. |
-| integrable_abs_sin_mul_innerLaplace | Private or prerequisite | Shorten only after choosing the destination file; prefer conclusion terminology over proof route. |
-| integrable_realKernel | Private or prerequisite | Shorten only after choosing the destination file; prefer conclusion terminology over proof route. |
-| integrable_reciprocalKernel | Private or prerequisite | Shorten only after choosing the destination file; prefer conclusion terminology over proof route. |
-| integral_abs_realKernel | Private or prerequisite | Shorten only after choosing the destination file; prefer conclusion terminology over proof route. |
-| integral_norm_reciprocalKernel | Private or prerequisite | Shorten only after choosing the destination file; prefer conclusion terminology over proof route. |
-| weight_mul_expRatio | Private or prerequisite | Rename with snake_case: weight_mul_exp_ratio; or keep private algebra. |
-| abs_sin_abs | Move generic | Shorten only after choosing the destination file; prefer conclusion terminology over proof route. |
-
-### 11.7 Final Fourier identity
-
-| **Current declaration** | **Proposed action** | **Signature/name direction** |
-| --- | --- | --- |
-| integral_sin_mul_cexp_neg_mul_abs_mul_cexp | Private or prerequisite | Shorten only after choosing the destination file; prefer conclusion terminology over proof route. |
-| realKernel_fourier_of_one_le | Private or prerequisite | Keep private if only used to prove the complex kernel identity. |
-| reciprocalKernel_fourier_of_one_le | Private or prerequisite | Shorten only after choosing the destination file; prefer conclusion terminology over proof route. |
-| reciprocalKernel_fourier | Public headline | Keep as final headline; state Fourier normalization in docstring. |
-
-### 11.8 Proposed module split
-
-```lean
-TauCeti/Analysis/Fourier/ExponentialAbs.lean
-TauCeti/Analysis/Fourier/Poisson/CauchyLattice.lean
-TauCeti/Analysis/SpecialFunctions/Integral/RationalQuadratic.lean
-TauCeti/Analysis/SpecialFunctions/Integral/SineLaplace.lean
-TauCeti/Analysis/Fourier/HaagerupZsido/Defs.lean
-TauCeti/Analysis/Fourier/HaagerupZsido/Integrability.lean
-TauCeti/Analysis/Fourier/HaagerupZsido/Fourier.lean
-```
-
-- Move only truly generic lemmas out of the named directory; do not hide campaign-specific hypotheses in generic files.
-
-- Keep elementary algebra and one-use integral identities private in the narrowest file.
-
-- Expose weight, the final kernel, integrability/norm, parity, and the final Fourier reciprocal theorem as the characteristic API.
-
-- Replace blanket body exposure with explicit _def lemmas for weight/laplace/kernel definitions.
-
-- Run a Mathlib search for every trigonometric periodicity, even-function integrability, geometric-series, and rational-integral helper before retaining it.
+The 1673-line monolith was split into 7 topic modules (commit `f35ffc0`:
+`ExponentialAbs`, `Poisson/CauchyLattice`, `SpecialFunctions/Integral/{RationalQuadratic,SineLaplace}`,
+`HaagerupZsido/{Defs,Integrability,Fourier}`; old path is a thin re-export) and
+polished for review (commits `72b4697` renames, `df963aa` generic relocation,
+`e5fd786` privatization + dead-hypothesis removal, `d5074a9` import trim,
+`5ad1b91` `weight_def`). All files < 1000 lines; 26 intermediates privatized;
+`innerLaplace`→`weightLaplaceTransform`, `weight_mul_expRatio`→`weight_mul_exp_ratio`;
+`integrable_of_even_integrableOn_Ioi`→`MeasureTheory.integrable_iff_integrableOn_Ioi_of_even`,
+`abs_sin_abs`/`abs_sin_add_nat_mul_pi`→`Real` namespace. The per-declaration tables
+are removed from the backlog so they are not re-treaded. Remaining optional follow-up
+(not blocking): full de-`@[expose]` of bodies, and per-file explicit direct Mathlib
+imports for self-containment.
 
 ## 12. Next-wave convergence signatures
 
@@ -2383,7 +2266,6 @@ theorem approximationNumber_tangentOperator ...
 
 | **Cluster** | **Current state** | **Signature risk** | **Upstream action** | **Priority** |
 | --- | --- | --- | --- | --- |
-| ForMathlib approximation-number copies | Exact duplicate of staged files | Delete after all imports point to Tau Ceti | Temporary import aliases only | P0 |
 | operatorAbs | Special case duplicate of rectangular modulus | Delete definition; retain compatibility theorem/notation temporarily | DavisKahan.Interop.TauCeti | P0 |
 | ClosedOperator | Parallel bundle over LinearPMap | Demote to adapter, then delete from generic production | DavisKahan.Interop.TauCeti | P0 |
 | Spectra SelfAdjointOperator | Potential donor wrapper | Port useful lemmas; choose canonical Tau Ceti representation | Short-lived conversion functions | P1 |
@@ -2464,8 +2346,6 @@ theorem approximationNumber_tangentOperator ...
 | finiteMean | Finset.mean / existing average | Sketch; verify adjacent Mathlib naming |
 | centeredScatter | scatterOperator | Sketch; verify adjacent Mathlib naming |
 | appendFin | delete; existing Fin combinator | Sketch; verify adjacent Mathlib naming |
-| innerLaplace | weightLaplaceTransform | Sketch; verify adjacent Mathlib naming |
-| weight_mul_expRatio | weight_mul_exp_ratio or private | Sketch; verify adjacent Mathlib naming |
 | PosSemidef.eigenvalues₀_eq_zero_of_le | eigenvalues₀_eq_zero_of_rank_le | Sketch; verify adjacent Mathlib naming |
 | exists_two_sided_inverse_of_spectrum_gap | isUnit_of_abs_spectrum_ge + norm_inv_le... | Sketch; verify adjacent Mathlib naming |
 
