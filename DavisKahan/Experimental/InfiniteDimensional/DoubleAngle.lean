@@ -604,6 +604,168 @@ theorem SymmetricNormIdeal.sinAngle_reflected_mem_gauge_eq
       I.gauge (sinTwoAngleOperator U V) :=
   sorry
 
+omit [CompleteSpace E] in
+/-- The reflection defect is `-2` times the sum of the two off-diagonal
+blocks: `J A J - A = -2 (P_{Vᗮ} A P_V + P_V A P_{Vᗮ})`. -/
+theorem reflectionDefect_eq_neg_two_smul_offdiag (V : Submodule 𝕜 E)
+    [V.HasOrthogonalProjection] (A : E →L[𝕜] E) :
+    reflectionDefect V A =
+      (-2 : 𝕜) • (Vᗮ.starProjection ∘L A ∘L V.starProjection +
+        V.starProjection ∘L A ∘L Vᗮ.starProjection) := by
+  ext x
+  show reflectionOperator V (A (reflectionOperator V x)) - A x =
+    (-2 : 𝕜) • (Vᗮ.starProjection (A (V.starProjection x)) +
+      V.starProjection (A (Vᗮ.starProjection x)))
+  rw [reflectionOperator_apply, reflectionOperator_apply,
+    Submodule.starProjection_orthogonal' V]
+  simp only [map_sub, map_smul, sub_apply, one_apply_eq_self]
+  module
+
+/-- The two off-diagonal blocks are mutually adjoint for self-adjoint `A`. -/
+theorem offdiag_adjoint (V : Submodule 𝕜 E) [V.HasOrthogonalProjection]
+    {A : E →L[𝕜] E} (hA : IsSelfAdjoint A) :
+    (Vᗮ.starProjection ∘L A ∘L V.starProjection).adjoint =
+      V.starProjection ∘L A ∘L Vᗮ.starProjection := by
+  rw [ContinuousLinearMap.adjoint_comp, ContinuousLinearMap.adjoint_comp,
+    ← ContinuousLinearMap.star_eq_adjoint,
+    ← ContinuousLinearMap.star_eq_adjoint,
+    ← ContinuousLinearMap.star_eq_adjoint,
+    (isSelfAdjoint_starProjection V).star_eq,
+    (isSelfAdjoint_starProjection Vᗮ).star_eq, hA.star_eq,
+    ContinuousLinearMap.comp_assoc]
+
+/-- **Sharp reflection-defect estimate through the off-diagonal block.**
+For self-adjoint `A`, `‖J_V A J_V - A‖ ≤ 2 ‖P_{Vᗮ} A P_V‖` — no reduction
+hypothesis on `V`.  This is the analytic input for the residual form of the
+`sin 2Θ` theorem. -/
+theorem norm_reflectionDefect_le_two_mul_norm_cross (V : Submodule 𝕜 E)
+    [V.HasOrthogonalProjection] {A : E →L[𝕜] E} (hA : IsSelfAdjoint A) :
+    ‖reflectionDefect V A‖ ≤
+      2 * ‖Vᗮ.starProjection ∘L A ∘L V.starProjection‖ := by
+  set T₁ : E →L[𝕜] E := Vᗮ.starProjection ∘L A ∘L V.starProjection
+    with hT₁
+  set T₂ : E →L[𝕜] E := V.starProjection ∘L A ∘L Vᗮ.starProjection
+    with hT₂
+  have hnormT₂ : ‖T₂‖ = ‖T₁‖ := by
+    rw [hT₂, ← offdiag_adjoint V hA, ← ContinuousLinearMap.star_eq_adjoint]
+    exact norm_star T₁
+  -- the sum of the off-diagonal blocks is bounded by the larger block
+  have hsum : ‖T₁ + T₂‖ ≤ ‖T₁‖ := by
+    refine ContinuousLinearMap.opNorm_le_bound _ (norm_nonneg _) fun z => ?_
+    have h1out : T₁ z ∈ Vᗮ := by
+      rw [hT₁]
+      exact Vᗮ.starProjection_apply_mem _
+    have h2out : T₂ z ∈ V := by
+      rw [hT₂]
+      exact V.starProjection_apply_mem _
+    have horth : ⟪T₂ z, T₁ z⟫_𝕜 = 0 :=
+      (Submodule.mem_orthogonal V _).mp h1out _ h2out
+    have hpyth : ‖(T₁ + T₂) z‖ ^ 2 = ‖T₂ z‖ ^ 2 + ‖T₁ z‖ ^ 2 := by
+      have h := norm_add_sq_eq_norm_sq_add_norm_sq_of_inner_eq_zero
+        (T₂ z) (T₁ z) horth
+      have hadd : (T₁ + T₂) z = T₂ z + T₁ z := by
+        rw [add_apply]
+        abel
+      rw [hadd, sq, sq, sq]
+      linarith
+    have hin1 : ‖T₁ z‖ ≤ ‖T₁‖ * ‖V.starProjection z‖ := by
+      have hfac : T₁ z = T₁ (V.starProjection z) := by
+        rw [hT₁]
+        show Vᗮ.starProjection (A (V.starProjection z)) =
+          Vᗮ.starProjection (A (V.starProjection (V.starProjection z)))
+        rw [show V.starProjection (V.starProjection z) =
+          V.starProjection z from
+            Submodule.starProjection_eq_self_iff.mpr
+              (V.starProjection_apply_mem z)]
+      rw [hfac]
+      exact T₁.le_opNorm _
+    have hin2 : ‖T₂ z‖ ≤ ‖T₁‖ * ‖Vᗮ.starProjection z‖ := by
+      have hfac : T₂ z = T₂ (Vᗮ.starProjection z) := by
+        rw [hT₂]
+        show V.starProjection (A (Vᗮ.starProjection z)) =
+          V.starProjection (A (Vᗮ.starProjection (Vᗮ.starProjection z)))
+        rw [show Vᗮ.starProjection (Vᗮ.starProjection z) =
+          Vᗮ.starProjection z from
+            Submodule.starProjection_eq_self_iff.mpr
+              (Vᗮ.starProjection_apply_mem z)]
+      rw [hfac]
+      calc ‖T₂ (Vᗮ.starProjection z)‖
+          ≤ ‖T₂‖ * ‖Vᗮ.starProjection z‖ := T₂.le_opNorm _
+        _ = ‖T₁‖ * ‖Vᗮ.starProjection z‖ := by rw [hnormT₂]
+    have hzdecomp : ‖z‖ ^ 2 =
+        ‖V.starProjection z‖ ^ 2 + ‖Vᗮ.starProjection z‖ ^ 2 := by
+      have horth' : ⟪V.starProjection z, Vᗮ.starProjection z⟫_𝕜 = 0 :=
+        (Submodule.mem_orthogonal V _).mp
+          (Vᗮ.starProjection_apply_mem z) _ (V.starProjection_apply_mem z)
+      have h := norm_add_sq_eq_norm_sq_add_norm_sq_of_inner_eq_zero
+        (V.starProjection z) (Vᗮ.starProjection z) horth'
+      rw [V.starProjection_add_starProjection_orthogonal z] at h
+      rw [sq, sq, sq]
+      linarith
+    have hsq : ‖(T₁ + T₂) z‖ ^ 2 ≤ (‖T₁‖ * ‖z‖) ^ 2 := by
+      rw [hpyth]
+      have h1 := mul_self_le_mul_self (norm_nonneg (T₁ z)) hin1
+      have h2 := mul_self_le_mul_self (norm_nonneg (T₂ z)) hin2
+      have key : ‖T₂ z‖ ^ 2 + ‖T₁ z‖ ^ 2 ≤
+          ‖T₁‖ ^ 2 * (‖V.starProjection z‖ ^ 2 +
+            ‖Vᗮ.starProjection z‖ ^ 2) := by
+        nlinarith [h1, h2]
+      calc ‖T₂ z‖ ^ 2 + ‖T₁ z‖ ^ 2
+          ≤ ‖T₁‖ ^ 2 * (‖V.starProjection z‖ ^ 2 +
+              ‖Vᗮ.starProjection z‖ ^ 2) := key
+        _ = (‖T₁‖ * ‖z‖) ^ 2 := by rw [← hzdecomp]; ring
+    have hs := Real.sqrt_le_sqrt hsq
+    rwa [Real.sqrt_sq (norm_nonneg _),
+      Real.sqrt_sq (mul_nonneg (norm_nonneg _) (norm_nonneg z))] at hs
+  calc ‖reflectionDefect V A‖
+      = ‖(-2 : 𝕜) • (T₁ + T₂)‖ := by
+        rw [reflectionDefect_eq_neg_two_smul_offdiag]
+    _ = 2 * ‖T₁ + T₂‖ := by
+        rw [norm_smul]
+        norm_num
+    _ ≤ 2 * ‖T₁‖ := by linarith [hsum]
+
+omit [CompleteSpace E] [CompleteSpace F] in
+/-- **The off-diagonal block is bounded by the residual.**  If the trial
+subspace `V` is the range of an isometric embedding `X` and
+`R = A X - X M` is the residual of the approximate intertwining
+relation `A X ≈ X M`, then `‖P_{Vᗮ} A P_V‖ ≤ ‖R‖`: on `v = X u ∈ V`,
+`(1 - P_V) A v = (1 - P_V) (X (M u)) + (1 - P_V) (R u) = (1 - P_V) (R u)`,
+and the isometry converts `‖u‖` back to `‖v‖`. -/
+theorem norm_cross_le_norm_residual
+    {X : F →L[𝕜] E} (hX : DavisKahan.IsometricEmbedding X)
+    (A : E →L[𝕜] E) (M : F →L[𝕜] F)
+    {V : Submodule 𝕜 E} [V.HasOrthogonalProjection]
+    (hmem : ∀ u, X u ∈ V) (hsurj : ∀ v ∈ V, ∃ u, X u = v) :
+    ‖Vᗮ.starProjection ∘L A ∘L V.starProjection‖ ≤
+      ‖A ∘L X - X ∘L M‖ := by
+  refine ContinuousLinearMap.opNorm_le_bound _ (norm_nonneg _) fun z => ?_
+  obtain ⟨u, hu⟩ := hsurj (V.starProjection z) (V.starProjection_apply_mem z)
+  have hunorm : ‖u‖ = ‖V.starProjection z‖ := by rw [← hX u, hu]
+  have hperp0 : Vᗮ.starProjection (X (M u)) = 0 := by
+    rw [Submodule.starProjection_orthogonal' V]
+    have hfix : V.starProjection (X (M u)) = X (M u) :=
+      Submodule.starProjection_eq_self_iff.mpr (hmem (M u))
+    rw [sub_apply, one_apply_eq_self, hfix, sub_self]
+  have hsplit : A (X u) = X (M u) + (A ∘L X - X ∘L M) u := by
+    show A (X u) = X (M u) + (A (X u) - X (M u))
+    rw [add_sub_cancel]
+  have hcalc : (Vᗮ.starProjection ∘L A ∘L V.starProjection) z =
+      Vᗮ.starProjection ((A ∘L X - X ∘L M) u) := by
+    show Vᗮ.starProjection (A (V.starProjection z)) = _
+    rw [← hu, hsplit, map_add, hperp0, zero_add]
+  rw [hcalc]
+  calc ‖Vᗮ.starProjection ((A ∘L X - X ∘L M) u)‖
+      ≤ ‖(A ∘L X - X ∘L M) u‖ :=
+        Vᗮ.norm_starProjection_apply_le _
+    _ ≤ ‖A ∘L X - X ∘L M‖ * ‖u‖ :=
+        ContinuousLinearMap.le_opNorm _ _
+    _ = ‖A ∘L X - X ∘L M‖ * ‖V.starProjection z‖ := by rw [hunorm]
+    _ ≤ ‖A ∘L X - X ∘L M‖ * ‖z‖ :=
+        mul_le_mul_of_nonneg_left (V.norm_starProjection_apply_le z)
+          (norm_nonneg _)
+
+omit [CompleteSpace F] in
 /-- **Leaf obligation.** The reflection defect through the closed trial range
 is at most twice the residual: the defect is twice the off-diagonal block of
 `A`, which the residual dominates. -/
@@ -613,8 +775,20 @@ theorem reflectionDefect_range_le_residual
     [(LinearMap.range X.toLinearMap).HasOrthogonalProjection]
     {M : F →L[𝕜] F} (hM : IsSelfAdjointOperator M) :
     ‖reflectionDefect (LinearMap.range X.toLinearMap) A‖ ≤
-      2 * ‖residual A X M‖ :=
-  sorry
+      2 * ‖residual A X M‖ := by
+  have hAsa : IsSelfAdjoint A :=
+    ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hA
+  set V := LinearMap.range X.toLinearMap with hV
+  have hmem : ∀ u, X u ∈ V := fun u => ⟨u, rfl⟩
+  have hsurj : ∀ v ∈ V, ∃ u, X u = v := fun v hv => hv
+  have hcross := norm_cross_le_norm_residual hX A M hmem hsurj
+  calc ‖reflectionDefect V A‖
+      ≤ 2 * ‖Vᗮ.starProjection ∘L A ∘L V.starProjection‖ :=
+        norm_reflectionDefect_le_two_mul_norm_cross V hAsa
+    _ ≤ 2 * ‖residual A X M‖ := by
+        have hres : residual A X M = A ∘L X - X ∘L M := rfl
+        rw [hres]
+        linarith
 
 /-- The range of an isometric embedding of a complete space is closed, hence
 admits an orthogonal projection. -/
