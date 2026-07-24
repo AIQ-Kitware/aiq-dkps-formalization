@@ -3,9 +3,10 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-5.6 High, Claude Fable 5
 -/
+module
 
-import Mathlib.Analysis.InnerProductSpace.Positive
-import Mathlib.Analysis.InnerProductSpace.PiL2
+public import Mathlib.Analysis.InnerProductSpace.Positive
+public import Mathlib.Analysis.InnerProductSpace.PiL2
 
 /-!
 # Finite means and centered scatter operators
@@ -24,9 +25,24 @@ from which Löwner monotonicity and quadratic-form growth are short corollaries.
 * `ForMathlib.re_inner_centeredScatter_append`: the quadratic-form version of the update;
 * `ForMathlib.re_inner_centeredScatter_self`: the scatter quadratic form is the sum of
   squared centered inner products.
+
+## Provenance
+
+* Original repository: Davis--Kahan/DKPS formalization (Kitware, Inc.).
+* Original module: `ForMathlib/Analysis/InnerProductSpace/CenteredScatter.lean`
+  at Davis--Kahan commit `fc38eb4`.
+* Original declarations: `centeredScatter`, `finiteMean`, `appendFin` and the
+  add-one / Löwner / quadratic-form API (namespace renamed here
+  `ForMathlib` → `TauCeti`).
+* Original authors / copyright: Jon Crall, GPT-5.6 High, Claude Fable 5;
+  Copyright (c) 2026 Kitware, Inc.; Apache 2.0.
+* Extraction class: **copied**, converted to the Tau Ceti module system.
+* Spectra influence: **none** (imports only Mathlib).
 -/
 
-namespace ForMathlib
+@[expose] public section
+
+namespace TauCeti
 
 open Module InnerProductSpace
 open scoped BigOperators
@@ -234,4 +250,4 @@ theorem re_inner_centeredScatter_append {n : ℕ} (z : Fin n → E) (y x : E) :
     rfl
   rw [hcast, ← RCLike.ofReal_pow, ← RCLike.ofReal_mul, RCLike.ofReal_re]
 
-end ForMathlib
+end TauCeti

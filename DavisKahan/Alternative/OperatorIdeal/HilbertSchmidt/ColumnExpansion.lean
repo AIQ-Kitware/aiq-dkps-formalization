@@ -3,7 +3,7 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import ForMathlib.Analysis.InnerProductSpace.OrthogonalSeries
+import ForTauCeti.Analysis.InnerProductSpace.OrthogonalSeries
 import ForMathlib.Analysis.InnerProductSpace.ProjectionGeometry
 import Spectra.Spaces.Tensor.HilbertSchmidt
 
@@ -44,7 +44,7 @@ variable {E : Type u} {F : Type v}
 variable [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
 variable [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
 
-open ForMathlib.OrthogonalSeries
+open TauCeti.OrthogonalSeries
 
 /-- Every finite column partial sum is bounded by the norm of the source
 tensor. -/

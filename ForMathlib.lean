@@ -8,7 +8,6 @@ workflow and `planning/mathlib-candidates.md` for the ranked candidate list.
 
 import ForMathlib.Analysis.CStarAlgebra.SelfAdjointGapInverse
 import ForMathlib.Analysis.InnerProductSpace.AlignedBasis
-import ForMathlib.Analysis.InnerProductSpace.CenteredScatter
 import ForMathlib.Analysis.InnerProductSpace.CoerciveUnit
 import ForMathlib.Analysis.InnerProductSpace.CourantFischer
 import ForMathlib.Analysis.InnerProductSpace.EigenvalueChange
@@ -18,9 +17,7 @@ import ForMathlib.Analysis.InnerProductSpace.GramMatrix
 import ForMathlib.Analysis.InnerProductSpace.HoffmanWielandt
 import ForMathlib.Analysis.InnerProductSpace.IntertwiningUnitary
 import ForMathlib.Analysis.InnerProductSpace.KyFan
-import ForMathlib.Analysis.InnerProductSpace.NearIsometry
 import ForMathlib.Analysis.InnerProductSpace.OperatorAbsoluteValue
-import ForMathlib.Analysis.InnerProductSpace.OrthogonalSeries
 import ForMathlib.Analysis.InnerProductSpace.PartialIsometry
 import ForMathlib.Analysis.InnerProductSpace.PolarDecomposition
 import ForMathlib.Analysis.InnerProductSpace.PositiveSqrt
@@ -40,7 +37,6 @@ import ForMathlib.Analysis.InnerProductSpace.SylvesterBound
 import ForMathlib.Analysis.Matrix.EntrywiseEigenvalue
 import ForMathlib.Analysis.Matrix.EntrywiseOpNorm
 import ForMathlib.Analysis.Matrix.SpectralFunctionMeasurable
-import ForMathlib.Analysis.Matrix.Spectrum
 import ForMathlib.Analysis.Normed.FiniteLpGauge
 import ForMathlib.Analysis.Normed.Operator.ApproximationNumber
 import ForMathlib.Analysis.Normed.Operator.ApproximationNumberAdjoint

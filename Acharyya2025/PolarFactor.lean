@@ -25,7 +25,7 @@ Formalized by Claude Fable 5 (claude-fable-5[1m]).
 -/
 
 import Mathlib
-import ForMathlib.Analysis.InnerProductSpace.NearIsometry
+import ForTauCeti.Analysis.InnerProductSpace.NearIsometry
 import Acharyya2025.Weyl
 
 open scoped BigOperators RealInnerProductSpace InnerProductSpace
@@ -49,7 +49,7 @@ theorem abs_one_sub_inv_sqrt_le {μ δ : ℝ}
     (hμ : |μ - 1| ≤ δ) :      -- hypothesis: `μ` lies within `δ` of 1
     -- Conclusion: the inverse-square-root rescaling moves `1` by at most `δ`.
     |1 - (Real.sqrt μ)⁻¹| ≤ δ :=
-  ForMathlib.Real.abs_one_sub_inv_sqrt_le hδ hμ
+  TauCeti.Real.abs_one_sub_inv_sqrt_le hδ hμ
 
 /-! ### The quantitative polar factor -/
 
@@ -91,7 +91,7 @@ theorem exists_isometry_close_of_self_adjoint_comp_close
       (∀ x y : F, ⟪W x, W y⟫_ℝ = ⟪x, y⟫_ℝ) ∧
       (∀ x : F, ‖(M - W) x‖ ≤ 2 * δ * ‖x‖) := by
   obtain ⟨W, hW⟩ :=
-    ForMathlib.LinearMap.exists_linearIsometryEquiv_norm_sub_le M hδ_lt hclose
+    TauCeti.LinearMap.exists_linearIsometryEquiv_norm_sub_le M hδ_lt hclose
   refine ⟨W.toLinearEquiv.toLinearMap, fun x y => W.inner_map_map x y, fun x => ?_⟩
   rw [LinearMap.sub_apply]
   simpa using hW x

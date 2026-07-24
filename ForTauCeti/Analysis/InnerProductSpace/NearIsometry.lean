@@ -7,9 +7,10 @@ a single `hunit`) by Claude Opus 4.8 (claude-opus-4-8[1m]) per the
 `mathlib-quality` rules.
 To be re-authored per Mathlib's AI-contribution policy at PR time.
 -/
+module
 
-import Mathlib.Analysis.InnerProductSpace.Adjoint
-import Mathlib.Analysis.InnerProductSpace.Spectrum
+public import Mathlib.Analysis.InnerProductSpace.Adjoint
+public import Mathlib.Analysis.InnerProductSpace.Spectrum
 
 /-! # A near-isometry is close to a genuine isometry (via the quantitative polar factor)
 
@@ -31,13 +32,13 @@ source development).
 
 ## Main results
 
-* `ForMathlib.Real.abs_one_sub_inv_sqrt_le`: the scalar inequality `|1 - (√μ)⁻¹| ≤ δ` for
+* `TauCeti.Real.abs_one_sub_inv_sqrt_le`: the scalar inequality `|1 - (√μ)⁻¹| ≤ δ` for
   `|μ - 1| ≤ δ ≤ 1 / 2`, used to control the eigenvalue rescaling.  It belongs with the
   `Real.sqrt` API (`Mathlib/Analysis/Real/Sqrt.lean`) and is staged here next to its consumer.
-* `ForMathlib.LinearMap.exists_linearIsometryEquiv_norm_sub_le`: the quantitative polar
+* `TauCeti.LinearMap.exists_linearIsometryEquiv_norm_sub_le`: the quantitative polar
   factor, with the pointwise quadratic-form hypothesis
   `|⟪M x, M x⟫ - ⟪x, x⟫| ≤ δ * ⟪x, x⟫`.
-* `ForMathlib.ContinuousLinearMap.exists_linearIsometryEquiv_norm_sub_le`: the corollary for
+* `TauCeti.ContinuousLinearMap.exists_linearIsometryEquiv_norm_sub_le`: the corollary for
   the operator-norm hypothesis `‖adjoint M * M - 1‖ ≤ δ`.
 
 ## TODO
@@ -50,9 +51,26 @@ source development).
 
 * N. J. Higham, *Functions of Matrices: Theory and Computation*, SIAM, 2008, Ch. 8
   (the unitary polar factor as the nearest isometry).
+
+## Provenance
+
+* Original repository: Davis--Kahan/DKPS formalization (Kitware, Inc.).
+* Original module: `ForMathlib/Analysis/InnerProductSpace/NearIsometry.lean`
+  at Davis--Kahan commit `fc38eb4`.
+* Original declarations: `ForMathlib.Real.abs_one_sub_inv_sqrt_le`,
+  `ForMathlib.LinearMap.exists_linearIsometryEquiv_norm_sub_le`, and
+  `ForMathlib.ContinuousLinearMap.exists_linearIsometryEquiv_norm_sub_le`
+  (renamed here `ForMathlib.*` → `TauCeti.*`).
+* Original authorship: formalized by Claude Fable 5 (`claude-fable-5[1m]`), golf
+  pass by Claude Opus 4.8 (`claude-opus-4-8[1m]`); staged for Mathlib (no
+  separate copyright line in the source header), released under Apache 2.0.
+* Extraction class: **copied**, converted to the Tau Ceti module system.
+* Spectra influence: **none** (imports only Mathlib).
 -/
 
-namespace ForMathlib
+@[expose] public section
+
+namespace TauCeti
 
 open scoped RealInnerProductSpace InnerProductSpace
 open Module (finrank)
@@ -112,7 +130,7 @@ from a linear isometry equivalence `W` by at most `2 * δ` pointwise:
 
 `W` is the polar factor `M ∘ G^(-1/2)` where `G = Mᵀ ∘ M` is the Gram operator; its inverse
 square root is built from the orthonormal eigenbasis of `G`, with the eigenvalue rescaling
-controlled by `ForMathlib.Real.abs_one_sub_inv_sqrt_le`.  The constant `2 * δ` is not sharp:
+controlled by `TauCeti.Real.abs_one_sub_inv_sqrt_le`.  The constant `2 * δ` is not sharp:
 the construction gives `√(1 + δ) * δ` (the known sharp constant), and the statement rounds it
 up to `2 * δ`. -/
 theorem exists_linearIsometryEquiv_norm_sub_le (M : E →ₗ[ℝ] E) {δ : ℝ} (hδ : δ ≤ 1 / 2)
@@ -311,7 +329,7 @@ finite-dimensional real inner product space satisfies `‖adjoint M * M - 1‖ �
 `δ ≤ 1 / 2`, then `M` differs from a linear isometry equivalence `W` by at most `2 * δ`
 pointwise: `‖M x - W x‖ ≤ 2 * δ * ‖x‖`.
 
-This is a corollary of `ForMathlib.LinearMap.exists_linearIsometryEquiv_norm_sub_le` via
+This is a corollary of `TauCeti.LinearMap.exists_linearIsometryEquiv_norm_sub_le` via
 Cauchy–Schwarz: `|⟪M x, M x⟫ - ⟪x, x⟫| = |⟪(adjoint M * M - 1) x, x⟫| ≤ δ * ⟪x, x⟫`. -/
 theorem exists_linearIsometryEquiv_norm_sub_le (M : E →L[ℝ] E) {δ : ℝ} (hδ : δ ≤ 1 / 2)
     (hM : ‖ContinuousLinearMap.adjoint M * M - 1‖ ≤ δ) :
@@ -338,4 +356,4 @@ theorem exists_linearIsometryEquiv_norm_sub_le (M : E →L[ℝ] E) {δ : ℝ} (h
 
 end ContinuousLinearMap
 
-end ForMathlib
+end TauCeti
