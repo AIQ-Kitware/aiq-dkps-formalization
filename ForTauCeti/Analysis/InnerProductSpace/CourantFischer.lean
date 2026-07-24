@@ -1,27 +1,27 @@
 /-
-Staged for Mathlib: additions to `Mathlib/Analysis/InnerProductSpace/CourantFischer.lean`
+Staged for Tau Ceti: additions to `Mathlib/Analysis/InnerProductSpace/CourantFischer.lean`
 (new file).
 
 Formalized by Claude Fable 5 (claude-fable-5[1m]); golfed/polished to Mathlib
 style by Claude Opus 4.8 (claude-opus-4-8[1m]) following the `mathlib-quality`
-rules (dedup, drop unused `set … with` bindings, `simpa`/`rwa` consolidation).
-PR-prep by Claude Opus 4.8: the `specSubspace` helper and its two lemmas are a
-general orthonormal-subfamily-span fact (not Courant–Fischer-specific) used only
-internally, so they are `private` — keeping a `CourantFischer.lean` file's public
-surface to Courant–Fischer/Weyl.  Minimal imports: `FiniteDimensional.Lemmas`
-dropped (its `finrank` lemmas arrive transitively via `PiL2`/`Spectrum`).
-Elegance pass by Claude Opus 4.8 (claude-opus-4-8[1m]): the two min-max directions
-previously duplicated a `diagonalize → bound each surviving term → Parseval` calc.
-That mechanism is now the pair of dual private lemmas
-`re_inner_map_self_le_of_mem_specSubspace` / `le_re_inner_map_self_of_mem_specSubspace`
-(the quadratic form on a spectral subspace is bounded by any bound on the selected
-eigenvalues), and each Courant–Fischer direction is a two-line application.
-To be re-authored per Mathlib's AI-contribution policy at PR time.
+rules.  API redesign by Claude Fable 5 per the signature-polish backlog
+(`dev/tauceti-signature-polish-todo.md` §6): the basis-span scaffolding moved to
+`BasisSpan.lean` as `OrthonormalBasis.spanIndices`; the eigenvalue results moved
+into the `LinearMap.IsSymmetric` namespace with `_apply_` naming; the lower
+Courant–Fischer direction was renamed to state its outer existential; the
+characteristic sup-inf Courant–Fischer equality
+(`eigenvalues_eq_iSup_iInf_re_inner`) is now proved as the headline; Weyl's
+inequality is exposed at `ContinuousLinearMap` level with an operator-norm
+right-hand side (no `toContinuousLinearMap` in the public signature).
+To be re-authored per upstream AI-contribution policy at PR time.
 -/
 module
 
 public import Mathlib.Analysis.InnerProductSpace.PiL2
 public import Mathlib.Analysis.InnerProductSpace.Spectrum
+public import Mathlib.Analysis.InnerProductSpace.Adjoint
+public import Mathlib.Analysis.Normed.Module.FiniteDimension
+public import ForTauCeti.Analysis.InnerProductSpace.BasisSpan
 
 /-! # Courant–Fischer min-max and Weyl's eigenvalue perturbation inequality
 
@@ -29,26 +29,32 @@ For a symmetric operator `T` on a finite-dimensional inner product space over
 `𝕜 = ℝ, ℂ`, Mathlib provides the decreasingly sorted eigenvalues
 `LinearMap.IsSymmetric.eigenvalues` together with an orthonormal eigenbasis
 `LinearMap.IsSymmetric.eigenvectorBasis`.  This file proves the discrete
-Courant–Fischer characterization of these sorted eigenvalues and derives from
-it Weyl's eigenvalue perturbation inequality
-`|λₖ(T) − λₖ(S)| ≤ ε` whenever `∀ x, ‖(T − S) x‖ ≤ ε * ‖x‖`.
+Courant–Fischer characterization of these sorted eigenvalues — the directional
+bounds and the characteristic sup-inf equality — and derives from it Weyl's
+eigenvalue perturbation inequality.
 
 ## Main results
 
-* `TauCeti.re_inner_map_self_eq_sum_eigenvalues_mul_sq`: diagonalization of
-  the quadratic form, `re ⟪T x, x⟫ = ∑ i, λᵢ * ‖(b.repr x) i‖ ^ 2` in the
-  eigenbasis `b` of `T`.
-* `TauCeti.exists_unit_vector_re_inner_le_eigenvalue`: Courant–Fischer,
-  upper direction — every subspace of dimension `k + 1` contains a unit vector
-  `x` with `re ⟪T x, x⟫ ≤ λₖ(T)`.
-* `TauCeti.forall_unit_vector_eigenvalue_le_re_inner`: Courant–Fischer,
-  lower direction — some subspace of dimension `k + 1` satisfies
-  `λₖ(T) ≤ re ⟪T x, x⟫` for all unit vectors `x` in it.
-* `TauCeti.abs_eigenvalues_sub_le`: **Weyl's inequality** — the `k`-th
-  sorted eigenvalues of two symmetric operators differ by at most an operator
-  norm bound `ε` on their difference (`∀ x, ‖(T − S) x‖ ≤ ε * ‖x‖`).
-* `TauCeti.abs_eigenvalues_sub_le_opNorm`: Weyl's inequality phrased directly
-  with the continuous-linear-map operator norm `‖T − S‖`.
+* `LinearMap.IsSymmetric.re_inner_apply_self_eq_sum_eigenvalues_mul_sq`:
+  diagonalization of the quadratic form,
+  `re ⟪T x, x⟫ = ∑ i, λᵢ * ‖(b.repr x) i‖ ^ 2` in the eigenbasis `b` of `T`.
+* `LinearMap.IsSymmetric.exists_unit_vector_re_inner_le_eigenvalue`:
+  Courant–Fischer, upper direction — every subspace of dimension `k + 1`
+  contains a unit vector `x` with `re ⟪T x, x⟫ ≤ λₖ(T)`.
+* `LinearMap.IsSymmetric.exists_submodule_forall_unit_eigenvalue_le_re_inner`:
+  Courant–Fischer, lower direction — some subspace of dimension `k + 1`
+  satisfies `λₖ(T) ≤ re ⟪T x, x⟫` for all unit vectors `x` in it.
+* `LinearMap.IsSymmetric.eigenvalues_eq_iSup_iInf_re_inner`: the
+  **Courant–Fischer min-max equality**
+  `λₖ(T) = ⨆ (V, dim V = k+1), ⨅ (x ∈ V, ‖x‖ = 1), re ⟪T x, x⟫`.
+* `LinearMap.IsSymmetric.eigenvalues_eq_of_eigenbasis`: an antitone list
+  diagonalizing `T` in some orthonormal basis is the sorted eigenvalue list.
+* `LinearMap.IsSymmetric.eigenvalue_mono`: Loewner monotonicity of the sorted
+  eigenvalues in the quadratic form.
+* `TauCeti.abs_eigenvalue_sub_eigenvalue_le`: **Weyl's inequality** at
+  `LinearMap` level, with the operator-norm bound supplied pointwise.
+* `TauCeti.abs_eigenvalue_sub_eigenvalue_le_norm`: **Weyl's inequality** for
+  self-adjoint continuous linear maps, `|λₖ(T) − λₖ(S)| ≤ ‖T − S‖`.
 
 ## References
 
@@ -58,75 +64,34 @@ it Weyl's eigenvalue perturbation inequality
 
 ## Namespace note
 
-The source declarations lived in `namespace ForMathlib`; they are helper facts
-(not dot notation on a Mathlib type), so they are placed under `namespace
-TauCeti` for the Tau Ceti staging library.
+The eigenvalue results extend `LinearMap.IsSymmetric` (dot notation on the
+Mathlib symmetry certificate, matching `IsSymmetric.eigenvalues`); the
+two-operator Weyl inequalities are helper facts under `TauCeti`.
 
 ## Provenance
 
 * Original repository: Davis--Kahan/DKPS formalization (Kitware, Inc.).
 * Original module: `ForMathlib/Analysis/InnerProductSpace/CourantFischer.lean`
   at Davis--Kahan commit `fc38eb48b9b49f2e1d87fe0c7022dc5e262820a7`.
-* Original declarations: the Courant–Fischer / Weyl API listed above, together
-  with the private `specSubspace` scaffolding and counting lemmas.
+* Original declarations: the Courant–Fischer / Weyl API listed above, with the
+  former names `specSubspace`, `re_inner_map_self_eq_sum_eigenvalues_mul_sq`,
+  `forall_unit_vector_eigenvalue_le_re_inner`, `abs_eigenvalues_sub_le`,
+  `abs_eigenvalues_sub_le_opNorm`, `eigenvalues_le_eigenvalues_of_re_inner_le`,
+  `map_mem_specSubspace`.
 * Original authors / copyright: formalized by Claude Fable 5, golfed/polished by
-  Claude Opus 4.8, per the header block above; Apache 2.0.  To be re-authored
-  per Mathlib's AI-contribution policy at PR time.
-* Extraction class: **copied**, converted to the Tau Ceti module system.  The
-  enclosing namespace was renamed `ForMathlib` → `TauCeti`; no mathematical
-  change.
+  Claude Opus 4.8; Apache 2.0.  To be re-authored per upstream AI-contribution
+  policy at PR time.
+* Extraction class: **redesigned** per the signature-polish backlog; the
+  min-max equality endpoint is new in the redesign.
 * Spectra influence: **none** — this module imports only Mathlib.
 -/
 
 @[expose] public section
 
-namespace TauCeti
-
-open scoped InnerProductSpace
 open Module (finrank)
+open scoped InnerProductSpace
 
 variable {𝕜 E : Type*} [RCLike 𝕜] [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] {n : ℕ}
-
-/-! ### Spectral subspaces
-
-Given an orthonormal basis `b` and a predicate `p` on the index set, the
-subspace spanned by the basis vectors selected by `p`.  We record its dimension
-(the number of selected indices) and the key orthogonality fact: a vector in
-this subspace has vanishing `b`-coordinates outside `p`. -/
-
-/-- The subspace spanned by the orthonormal basis vectors `b i` for indices `i`
-satisfying `p i`.  Internal scaffolding for the Courant–Fischer proofs (a general
-orthonormal-subfamily span, not Courant–Fischer-specific), hence `private`. -/
-noncomputable def specSubspace (b : OrthonormalBasis (Fin n) 𝕜 E) (p : Fin n → Prop) :
-    Submodule 𝕜 E :=
-  Submodule.span 𝕜 (Set.range (fun i : {i : Fin n // p i} => b i))
-
-/-- A spectral subspace has dimension equal to the number of selected indices. -/
-theorem finrank_specSubspace (b : OrthonormalBasis (Fin n) 𝕜 E) (p : Fin n → Prop)
-    [DecidablePred p] :
-    finrank 𝕜 (specSubspace b p) = (Finset.univ.filter p).card := by
-  rw [specSubspace,
-    finrank_span_eq_card (b := fun i : {i : Fin n // p i} => b i)
-      (b.orthonormal.linearIndependent.comp _ Subtype.val_injective),
-    Fintype.card_subtype]
-
-/-- A vector in a spectral subspace has zero `b`-coordinate at any index outside
-the selecting predicate. -/
-private theorem repr_eq_zero_of_mem_specSubspace (b : OrthonormalBasis (Fin n) 𝕜 E)
-    (p : Fin n → Prop) {x : E} (hx : x ∈ specSubspace b p) {i : Fin n} (hi : ¬ p i) :
-    b.repr x i = 0 := by
-  rw [b.repr_apply_apply]
-  -- `⟪b i, ·⟫` vanishes on the spanning set, hence on the whole span.
-  refine Submodule.span_induction ?_ ?_ ?_ ?_ hx
-  · rintro y ⟨j, rfl⟩
-    refine b.inner_eq_zero ?_
-    rintro rfl
-    exact hi j.2
-  · rw [inner_zero_right]
-  · intro y z _ _ hy hz
-    rw [inner_add_right, hy, hz, add_zero]
-  · intro a y _ hy
-    rw [inner_smul_right, hy, mul_zero]
 
 /-- Parseval: in an orthonormal basis the squared norms of the coordinates sum
 to the squared norm.  Thin wrapper around
@@ -136,16 +101,18 @@ private theorem sum_sq_norm_repr_eq_sq_norm (b : OrthonormalBasis (Fin n) 𝕜 E
   simp_rw [b.repr_apply_apply]
   exact b.sum_sq_norm_inner_right x
 
-/-! ### The quadratic form in the eigenbasis -/
+namespace LinearMap.IsSymmetric
 
 variable [FiniteDimensional 𝕜 E] {T S : E →ₗ[𝕜] E}
+
+/-! ### The quadratic form in the eigenbasis -/
 
 /-- The quadratic form `re ⟪T x, x⟫` of a symmetric operator `T` expressed in
 its eigenbasis: it is the eigenvalue-weighted sum of the squared norms of the
 coordinates of `x`.  This is the diagonalization of the quadratic form.  (For
 symmetric `T` the inner product `⟪T x, x⟫` is real, so no information is lost
 by taking the real part.) -/
-theorem re_inner_map_self_eq_sum_eigenvalues_mul_sq
+theorem re_inner_apply_self_eq_sum_eigenvalues_mul_sq
     (hT : T.IsSymmetric) (hn : finrank 𝕜 E = n) (x : E) :
     RCLike.re ⟪T x, x⟫_𝕜
       = ∑ i : Fin n, hT.eigenvalues hn i * ‖(hT.eigenvectorBasis hn).repr x i‖ ^ 2 := by
@@ -159,61 +126,42 @@ theorem re_inner_map_self_eq_sum_eigenvalues_mul_sq
       mul_left_comm, RCLike.mul_conj]
   rw [key, RCLike.ofReal_re]
 
-/-- On a spectral subspace, the quadratic form is bounded by any bound on the selected
-eigenvalues.  If `x ∈ specSubspace b p` (so its coordinates vanish off `p`) and every
-selected eigenvalue satisfies `λᵢ ≤ c`, then `re ⟪T x, x⟫ ≤ c ‖x‖²`: the diagonalized form
-`∑ λᵢ ‖repr x i‖²` only sees eigenvalues `≤ c`, and the weights sum to `‖x‖²`. -/
-theorem re_inner_map_self_le_of_mem_specSubspace
-    (hT : T.IsSymmetric) (hn : finrank 𝕜 E = n) {p : Fin n → Prop} {c : ℝ}
-    (hc : ∀ i, p i → hT.eigenvalues hn i ≤ c)
-    {x : E} (hx : x ∈ specSubspace (hT.eigenvectorBasis hn) p) :
+/-- On the span of a selected subfamily of the eigenbasis, the quadratic form
+is bounded by any bound on the selected eigenvalues: if
+`x ∈ b.spanIndices s` (so its coordinates vanish off `s`) and every selected
+eigenvalue satisfies `λᵢ ≤ c`, then `re ⟪T x, x⟫ ≤ c ‖x‖²`. -/
+theorem re_inner_apply_self_le_of_mem_spanIndices
+    (hT : T.IsSymmetric) (hn : finrank 𝕜 E = n) {s : Set (Fin n)} {c : ℝ}
+    (hc : ∀ i ∈ s, hT.eigenvalues hn i ≤ c)
+    {x : E} (hx : x ∈ (hT.eigenvectorBasis hn).spanIndices s) :
     RCLike.re ⟪T x, x⟫_𝕜 ≤ c * ‖x‖ ^ 2 := by
   set b := hT.eigenvectorBasis hn
-  rw [re_inner_map_self_eq_sum_eigenvalues_mul_sq hT hn x,
+  rw [hT.re_inner_apply_self_eq_sum_eigenvalues_mul_sq hn x,
     show c * ‖x‖ ^ 2 = ∑ i : Fin n, c * ‖b.repr x i‖ ^ 2 by
       rw [← Finset.mul_sum, sum_sq_norm_repr_eq_sq_norm]]
   refine Finset.sum_le_sum fun i _ => ?_
-  by_cases hp : p i
+  by_cases hp : i ∈ s
   · exact mul_le_mul_of_nonneg_right (hc i hp) (sq_nonneg _)
-  · rw [repr_eq_zero_of_mem_specSubspace b p hx hp]; simp
+  · rw [b.repr_eq_zero_of_mem_spanIndices hx hp]; simp
 
-/-- Dual of `re_inner_map_self_le_of_mem_specSubspace`: if `x ∈ specSubspace b p` and every
-selected eigenvalue satisfies `c ≤ λᵢ`, then `c ‖x‖² ≤ re ⟪T x, x⟫`. -/
-theorem le_re_inner_map_self_of_mem_specSubspace
-    (hT : T.IsSymmetric) (hn : finrank 𝕜 E = n) {p : Fin n → Prop} {c : ℝ}
-    (hc : ∀ i, p i → c ≤ hT.eigenvalues hn i)
-    {x : E} (hx : x ∈ specSubspace (hT.eigenvectorBasis hn) p) :
+/-- Dual of `re_inner_apply_self_le_of_mem_spanIndices`: if
+`x ∈ b.spanIndices s` and every selected eigenvalue satisfies `c ≤ λᵢ`, then
+`c ‖x‖² ≤ re ⟪T x, x⟫`. -/
+theorem le_re_inner_apply_self_of_mem_spanIndices
+    (hT : T.IsSymmetric) (hn : finrank 𝕜 E = n) {s : Set (Fin n)} {c : ℝ}
+    (hc : ∀ i ∈ s, c ≤ hT.eigenvalues hn i)
+    {x : E} (hx : x ∈ (hT.eigenvectorBasis hn).spanIndices s) :
     c * ‖x‖ ^ 2 ≤ RCLike.re ⟪T x, x⟫_𝕜 := by
   set b := hT.eigenvectorBasis hn
-  rw [re_inner_map_self_eq_sum_eigenvalues_mul_sq hT hn x,
+  rw [hT.re_inner_apply_self_eq_sum_eigenvalues_mul_sq hn x,
     show c * ‖x‖ ^ 2 = ∑ i : Fin n, c * ‖b.repr x i‖ ^ 2 by
       rw [← Finset.mul_sum, sum_sq_norm_repr_eq_sq_norm]]
   refine Finset.sum_le_sum fun i _ => ?_
-  by_cases hp : p i
+  by_cases hp : i ∈ s
   · exact mul_le_mul_of_nonneg_right (hc i hp) (sq_nonneg _)
-  · rw [repr_eq_zero_of_mem_specSubspace b p hx hp]; simp
+  · rw [b.repr_eq_zero_of_mem_spanIndices hx hp]; simp
 
 /-! ### Discrete Courant–Fischer directional bounds -/
-
-/-- Counting lemma: the number of indices `i : Fin n` with `k ≤ i` is `n - k`. -/
-private theorem card_filter_le (k : Fin n) :
-    (Finset.univ.filter (fun i : Fin n => k ≤ i)).card = n - (k : ℕ) := by
-  have : (Finset.univ.filter (fun i : Fin n => k ≤ i)).card
-      = (Finset.Ici k).card := by
-    congr 1
-    ext i
-    simp [Finset.mem_Ici]
-  rw [this, Fin.card_Ici]
-
-/-- Counting lemma: the number of indices `i : Fin n` with `i ≤ k` is `k + 1`. -/
-private theorem card_filter_ge (k : Fin n) :
-    (Finset.univ.filter (fun i : Fin n => i ≤ k)).card = (k : ℕ) + 1 := by
-  have : (Finset.univ.filter (fun i : Fin n => i ≤ k)).card
-      = (Finset.Iic k).card := by
-    congr 1
-    ext i
-    simp [Finset.mem_Iic]
-  rw [this, Fin.card_Iic]
 
 /-- **Courant–Fischer, upper direction.** On any subspace `V` of dimension
 `k + 1` there is a unit vector `x` with `re ⟪T x, x⟫ ≤ λₖ(T)`, where `λ` is the
@@ -224,9 +172,9 @@ theorem exists_unit_vector_re_inner_le_eigenvalue
     (V : Submodule 𝕜 E) (hV : finrank 𝕜 V = (k : ℕ) + 1) :
     ∃ x ∈ V, ‖x‖ = 1 ∧ RCLike.re ⟪T x, x⟫_𝕜 ≤ hT.eigenvalues hn k := by
   set b := hT.eigenvectorBasis hn
-  set W := specSubspace b (fun i : Fin n => k ≤ i) with hW
+  set W := b.spanIndices ↑(Finset.Ici k) with hW
   have hWdim : finrank 𝕜 W = n - (k : ℕ) := by
-    rw [hW, finrank_specSubspace, card_filter_le]
+    rw [hW, b.finrank_spanIndices, Fin.card_Ici]
   -- Dimension counting: `finrank V + finrank W > finrank E`, so `V ⊓ W ≠ ⊥`.
   have hsum : finrank 𝕜 V + finrank 𝕜 W = n + 1 := by
     rw [hV, hWdim]
@@ -251,8 +199,8 @@ theorem exists_unit_vector_re_inner_le_eigenvalue
   have hxW : x ∈ W := W.smul_mem _ hzW
   calc RCLike.re ⟪T x, x⟫_𝕜
       ≤ hT.eigenvalues hn k * ‖x‖ ^ 2 :=
-        re_inner_map_self_le_of_mem_specSubspace hT hn
-          (fun _ hik => hT.eigenvalues_antitone hn hik) hxW
+        hT.re_inner_apply_self_le_of_mem_spanIndices hn
+          (fun _ hik => hT.eigenvalues_antitone hn (by simpa using hik)) hxW
     _ = hT.eigenvalues hn k := by rw [hnx]; ring
 
 /-- **Courant–Fischer, lower direction.** There is a subspace `V` of dimension
@@ -262,23 +210,231 @@ eigenvalues of the symmetric operator `T`.
 
 Witness: `V = span {bᵢ : i ≤ k}`; on it the quadratic form is bounded below by
 `λₖ` since all involved eigenvalues are `≥ λₖ`. -/
-theorem forall_unit_vector_eigenvalue_le_re_inner
+theorem exists_submodule_forall_unit_eigenvalue_le_re_inner
     (hT : T.IsSymmetric) (hn : finrank 𝕜 E = n) (k : Fin n) :
     ∃ V : Submodule 𝕜 E, finrank 𝕜 V = (k : ℕ) + 1 ∧
       ∀ x ∈ V, ‖x‖ = 1 → hT.eigenvalues hn k ≤ RCLike.re ⟪T x, x⟫_𝕜 := by
   set b := hT.eigenvectorBasis hn
-  refine ⟨specSubspace b (fun i : Fin n => i ≤ k), ?_, ?_⟩
-  · rw [finrank_specSubspace, card_filter_ge]
+  refine ⟨b.spanIndices ↑(Finset.Iic k), ?_, ?_⟩
+  · rw [b.finrank_spanIndices, Fin.card_Iic]
   · intro x hxV hnx
     -- On this subspace the selected eigenvalues are all `≥ λₖ` (antitone), so the dual
     -- spectral-subspace bound gives `λₖ = λₖ · ‖x‖² ≤ re ⟪T x, x⟫`.
     calc hT.eigenvalues hn k
         = hT.eigenvalues hn k * ‖x‖ ^ 2 := by rw [hnx]; ring
       _ ≤ RCLike.re ⟪T x, x⟫_𝕜 :=
-          le_re_inner_map_self_of_mem_specSubspace hT hn
-            (fun _ hik => hT.eigenvalues_antitone hn hik) hxV
+          hT.le_re_inner_apply_self_of_mem_spanIndices hn
+            (fun _ hik => hT.eigenvalues_antitone hn (by simpa using hik)) hxV
+
+/-! ### The Courant–Fischer min-max equality -/
+
+/-- **Courant–Fischer min-max equality.** The `k`-th (decreasingly sorted)
+eigenvalue of a symmetric operator on a finite-dimensional inner product space
+over `𝕜 = ℝ, ℂ` is the supremum, over the subspaces `V` of dimension `k + 1`,
+of the infimum of the Rayleigh quotient `re ⟪T x, x⟫` over the unit vectors of
+`V`.
+
+Horn & Johnson, *Matrix Analysis* 2nd ed., Theorem 4.2.6. -/
+theorem eigenvalues_eq_iSup_iInf_re_inner
+    (hT : T.IsSymmetric) (hn : finrank 𝕜 E = n) (k : Fin n) :
+    hT.eigenvalues hn k =
+      ⨆ V : {V : Submodule 𝕜 E // finrank 𝕜 V = (k : ℕ) + 1},
+        ⨅ x : {x : E // x ∈ (V : Submodule 𝕜 E) ∧ ‖x‖ = 1},
+          RCLike.re ⟪T (x : E), (x : E)⟫_𝕜 := by
+  have hn0 : 0 < n := k.pos
+  -- Uniform Rayleigh lower bound: every unit vector has quadratic form at least
+  -- the smallest eigenvalue; this bounds every inner infimum below.
+  set m : Fin n := ⟨n - 1, by omega⟩ with hm
+  have hray : ∀ x : E, ‖x‖ = 1 →
+      hT.eigenvalues hn m ≤ RCLike.re ⟪T x, x⟫_𝕜 := by
+    intro x hx
+    rw [hT.re_inner_apply_self_eq_sum_eigenvalues_mul_sq hn x,
+      show hT.eigenvalues hn m = ∑ i : Fin n,
+          hT.eigenvalues hn m * ‖(hT.eigenvectorBasis hn).repr x i‖ ^ 2 by
+        rw [← Finset.mul_sum, sum_sq_norm_repr_eq_sq_norm, hx]; ring]
+    refine Finset.sum_le_sum fun i _ => ?_
+    refine mul_le_mul_of_nonneg_right
+      (hT.eigenvalues_antitone hn ?_) (sq_nonneg _)
+    rw [Fin.le_def]
+    show (i : ℕ) ≤ n - 1
+    have := i.2
+    omega
+  have hbddB : ∀ V : {V : Submodule 𝕜 E // finrank 𝕜 V = (k : ℕ) + 1},
+      BddBelow (Set.range fun x : {x : E // x ∈ (V : Submodule 𝕜 E) ∧ ‖x‖ = 1} =>
+        RCLike.re ⟪T (x : E), (x : E)⟫_𝕜) := by
+    intro V
+    exact ⟨hT.eigenvalues hn m, by rintro _ ⟨x, rfl⟩; exact hray _ x.2.2⟩
+  -- Every inner infimum is at most `λₖ` (upper direction).
+  have hupper : ∀ V : {V : Submodule 𝕜 E // finrank 𝕜 V = (k : ℕ) + 1},
+      (⨅ x : {x : E // x ∈ (V : Submodule 𝕜 E) ∧ ‖x‖ = 1},
+        RCLike.re ⟪T (x : E), (x : E)⟫_𝕜) ≤ hT.eigenvalues hn k := by
+    intro V
+    obtain ⟨x, hxV, hx1, hxle⟩ :=
+      hT.exists_unit_vector_re_inner_le_eigenvalue hn k V.1 V.2
+    exact (ciInf_le (hbddB V) ⟨x, hxV, hx1⟩).trans hxle
+  -- The lower-direction witness subspace attains `λₖ` from below.
+  obtain ⟨V₀, hV₀dim, hV₀low⟩ :=
+    hT.exists_submodule_forall_unit_eigenvalue_le_re_inner hn k
+  haveI : Nonempty {V : Submodule 𝕜 E // finrank 𝕜 V = (k : ℕ) + 1} :=
+    ⟨⟨V₀, hV₀dim⟩⟩
+  obtain ⟨x₀, hx₀V, hx₀1, -⟩ :=
+    hT.exists_unit_vector_re_inner_le_eigenvalue hn k V₀ hV₀dim
+  refine le_antisymm ?_ (ciSup_le hupper)
+  have hlow : hT.eigenvalues hn k ≤
+      ⨅ x : {x : E // x ∈ ((⟨V₀, hV₀dim⟩ :
+          {V : Submodule 𝕜 E // finrank 𝕜 V = (k : ℕ) + 1}) :
+            Submodule 𝕜 E) ∧ ‖x‖ = 1},
+        RCLike.re ⟪T (x : E), (x : E)⟫_𝕜 := by
+    haveI : Nonempty {x : E // x ∈ V₀ ∧ ‖x‖ = 1} := ⟨⟨x₀, hx₀V, hx₀1⟩⟩
+    exact le_ciInf fun x => hV₀low _ x.2.1 x.2.2
+  have hbddA : BddAbove (Set.range
+      fun V : {V : Submodule 𝕜 E // finrank 𝕜 V = (k : ℕ) + 1} =>
+        ⨅ x : {x : E // x ∈ (V : Submodule 𝕜 E) ∧ ‖x‖ = 1},
+          RCLike.re ⟪T (x : E), (x : E)⟫_𝕜) :=
+    ⟨hT.eigenvalues hn k, by rintro _ ⟨V, rfl⟩; exact hupper V⟩
+  exact hlow.trans (le_ciSup hbddA ⟨V₀, hV₀dim⟩)
+
+/-! ### Sorted-eigenvalue uniqueness and Loewner monotonicity
+
+Courant–Fischer consequences needed by the Ky Fan / unitarily-invariant-norm
+development: an antitone list diagonalizing a symmetric operator in *some*
+orthonormal basis is *the* sorted eigenvalue list, and the sorted eigenvalues
+are monotone in the quadratic form (Loewner order). -/
+
+omit [FiniteDimensional 𝕜 E] in
+/-- Diagonalization of the quadratic form in any orthonormal eigenbasis: if
+`S (w i) = μ i • w i` for all `i`, then
+`re ⟪S x, x⟫ = ∑ i, μ i * ‖w.repr x i‖ ^ 2`. -/
+theorem re_inner_apply_self_eq_sum_of_eigenbasis
+    (hS : S.IsSymmetric) (w : OrthonormalBasis (Fin n) 𝕜 E) {μ : Fin n → ℝ}
+    (hw : ∀ i, S (w i) = (μ i : 𝕜) • w i) (x : E) :
+    RCLike.re ⟪S x, x⟫_𝕜 = ∑ i : Fin n, μ i * ‖w.repr x i‖ ^ 2 := by
+  have hrepr : ∀ i, w.repr (S x) i = (μ i : 𝕜) * w.repr x i := by
+    intro i
+    rw [w.repr_apply_apply, w.repr_apply_apply, ← hS (w i) x, hw i, inner_smul_left,
+      RCLike.conj_ofReal]
+  have key : ⟪S x, x⟫_𝕜 = ((∑ i : Fin n, μ i * ‖w.repr x i‖ ^ 2 : ℝ) : 𝕜) := by
+    rw [← w.repr.inner_map_map (S x) x, PiLp.inner_apply]
+    push_cast
+    refine Finset.sum_congr rfl fun i _ => ?_
+    rw [RCLike.inner_apply, hrepr i, map_mul, RCLike.conj_ofReal, mul_left_comm,
+      RCLike.mul_conj]
+  rw [key, RCLike.ofReal_re]
+
+omit [FiniteDimensional 𝕜 E] in
+/-- On the span of the eigenvectors selected by `s`, the quadratic form is
+bounded below by any lower bound on the selected values (general-eigenbasis
+version of `le_re_inner_apply_self_of_mem_spanIndices`). -/
+private theorem le_re_inner_of_eigenbasis
+    (hS : S.IsSymmetric) (w : OrthonormalBasis (Fin n) 𝕜 E) {μ : Fin n → ℝ}
+    (hw : ∀ i, S (w i) = (μ i : 𝕜) • w i) {s : Set (Fin n)} {c : ℝ}
+    (hc : ∀ i ∈ s, c ≤ μ i) {x : E} (hx : x ∈ w.spanIndices s) :
+    c * ‖x‖ ^ 2 ≤ RCLike.re ⟪S x, x⟫_𝕜 := by
+  rw [hS.re_inner_apply_self_eq_sum_of_eigenbasis w hw x,
+    show c * ‖x‖ ^ 2 = ∑ i : Fin n, c * ‖w.repr x i‖ ^ 2 by
+      rw [← Finset.mul_sum, sum_sq_norm_repr_eq_sq_norm]]
+  refine Finset.sum_le_sum fun i _ => ?_
+  by_cases hp : i ∈ s
+  · exact mul_le_mul_of_nonneg_right (hc i hp) (sq_nonneg _)
+  · rw [w.repr_eq_zero_of_mem_spanIndices hx hp]; simp
+
+omit [FiniteDimensional 𝕜 E] in
+/-- Dual of `le_re_inner_of_eigenbasis`. -/
+private theorem re_inner_le_of_eigenbasis
+    (hS : S.IsSymmetric) (w : OrthonormalBasis (Fin n) 𝕜 E) {μ : Fin n → ℝ}
+    (hw : ∀ i, S (w i) = (μ i : 𝕜) • w i) {s : Set (Fin n)} {c : ℝ}
+    (hc : ∀ i ∈ s, μ i ≤ c) {x : E} (hx : x ∈ w.spanIndices s) :
+    RCLike.re ⟪S x, x⟫_𝕜 ≤ c * ‖x‖ ^ 2 := by
+  rw [hS.re_inner_apply_self_eq_sum_of_eigenbasis w hw x,
+    show c * ‖x‖ ^ 2 = ∑ i : Fin n, c * ‖w.repr x i‖ ^ 2 by
+      rw [← Finset.mul_sum, sum_sq_norm_repr_eq_sq_norm]]
+  refine Finset.sum_le_sum fun i _ => ?_
+  by_cases hp : i ∈ s
+  · exact mul_le_mul_of_nonneg_right (hc i hp) (sq_nonneg _)
+  · rw [w.repr_eq_zero_of_mem_spanIndices hx hp]; simp
+
+/-- **Sorted-eigenvalue uniqueness.**  If an orthonormal basis `w`
+diagonalizes the symmetric operator `S` with an *antitone* value list `μ`,
+then `μ` is the sorted eigenvalue list: `hS.eigenvalues hn = μ`.
+(Courant–Fischer: both lists satisfy the same minimax characterization.) -/
+theorem eigenvalues_eq_of_eigenbasis
+    (hS : S.IsSymmetric) (hn : finrank 𝕜 E = n) (w : OrthonormalBasis (Fin n) 𝕜 E)
+    {μ : Fin n → ℝ} (hμ : Antitone μ) (hw : ∀ i, S (w i) = (μ i : 𝕜) • w i) :
+    hS.eigenvalues hn = μ := by
+  funext k
+  refine le_antisymm ?_ ?_
+  · -- `λₖ ≤ μₖ`: intersect the CF-lower witness with the `w`-tail span.
+    obtain ⟨V, hVdim, hVlow⟩ :=
+      hS.exists_submodule_forall_unit_eigenvalue_le_re_inner hn k
+    set W := w.spanIndices ↑(Finset.Ici k) with hW
+    have hWdim : finrank 𝕜 W = n - (k : ℕ) := by
+      rw [hW, w.finrank_spanIndices, Fin.card_Ici]
+    have hinf : V ⊓ W ≠ ⊥ := by
+      intro hbot
+      have hle := Submodule.finrank_sup_add_finrank_inf_eq V W
+      rw [hbot, finrank_bot, add_zero] at hle
+      have hsup : finrank 𝕜 (↑(V ⊔ W) : Submodule 𝕜 E) ≤ n := by
+        rw [← hn]; exact Submodule.finrank_le _
+      have hk : (k : ℕ) < n := k.2
+      omega
+    obtain ⟨z, hz, hz0⟩ := Submodule.exists_mem_ne_zero_of_ne_bot hinf
+    obtain ⟨hzV, hzW⟩ := Submodule.mem_inf.mp hz
+    have hz0' : ‖z‖ ≠ 0 := norm_ne_zero_iff.mpr hz0
+    set x := ((‖z‖⁻¹ : ℝ) : 𝕜) • z with hx
+    have hnx : ‖x‖ = 1 := by
+      rw [hx, norm_smul, RCLike.norm_ofReal, abs_inv, abs_norm, inv_mul_cancel₀ hz0']
+    have hxW : x ∈ W := W.smul_mem _ hzW
+    calc hS.eigenvalues hn k ≤ RCLike.re ⟪S x, x⟫_𝕜 := hVlow x (V.smul_mem _ hzV) hnx
+      _ ≤ μ k * ‖x‖ ^ 2 :=
+          re_inner_le_of_eigenbasis hS w hw (fun _ hik => hμ (by simpa using hik)) hxW
+      _ = μ k := by rw [hnx]; ring
+  · -- `μₖ ≤ λₖ`: test the CF-upper bound on the `w`-head span.
+    set V := w.spanIndices ↑(Finset.Iic k) with hV
+    have hVdim : finrank 𝕜 V = (k : ℕ) + 1 := by
+      rw [hV, w.finrank_spanIndices, Fin.card_Iic]
+    obtain ⟨x, hxV, hnx, hup⟩ :=
+      hS.exists_unit_vector_re_inner_le_eigenvalue hn k V hVdim
+    calc μ k = μ k * ‖x‖ ^ 2 := by rw [hnx]; ring
+      _ ≤ RCLike.re ⟪S x, x⟫_𝕜 :=
+          le_re_inner_of_eigenbasis hS w hw (fun _ hik => hμ (by simpa using hik)) hxV
+      _ ≤ hS.eigenvalues hn k := hup
+
+/-- **Loewner monotonicity of the sorted eigenvalues.**  If the quadratic form
+of `T` is dominated by that of `S`, then so is every sorted eigenvalue. -/
+theorem eigenvalue_mono
+    (hT : T.IsSymmetric) (hS : S.IsSymmetric) (hn : finrank 𝕜 E = n)
+    (h : ∀ x, RCLike.re ⟪T x, x⟫_𝕜 ≤ RCLike.re ⟪S x, x⟫_𝕜) (k : Fin n) :
+    hT.eigenvalues hn k ≤ hS.eigenvalues hn k := by
+  obtain ⟨V, hVdim, hVlow⟩ :=
+    hT.exists_submodule_forall_unit_eigenvalue_le_re_inner hn k
+  obtain ⟨x, hxV, hnx, hup⟩ :=
+    hS.exists_unit_vector_re_inner_le_eigenvalue hn k V hVdim
+  calc hT.eigenvalues hn k ≤ RCLike.re ⟪T x, x⟫_𝕜 := hVlow x hxV hnx
+    _ ≤ RCLike.re ⟪S x, x⟫_𝕜 := h x
+    _ ≤ hS.eigenvalues hn k := hup
+
+/-- The span of a selected subfamily of the eigenbasis of a symmetric operator
+is invariant under the operator. -/
+theorem map_mem_spanIndices (hT : T.IsSymmetric) (hn : finrank 𝕜 E = n)
+    (s : Set (Fin n)) {x : E}
+    (hx : x ∈ (hT.eigenvectorBasis hn).spanIndices s) :
+    T x ∈ (hT.eigenvectorBasis hn).spanIndices s := by
+  induction hx using Submodule.span_induction with
+  | mem y hy =>
+    obtain ⟨j, hj, rfl⟩ := hy
+    rw [hT.apply_eigenvectorBasis hn j]
+    exact Submodule.smul_mem _ _ (Submodule.subset_span ⟨j, hj, rfl⟩)
+  | zero => rw [map_zero]; exact Submodule.zero_mem _
+  | add a b _ _ ha hb => rw [map_add]; exact Submodule.add_mem _ ha hb
+  | smul c a _ ha => rw [map_smul]; exact Submodule.smul_mem _ _ ha
+
+end LinearMap.IsSymmetric
 
 /-! ### Weyl's inequality -/
+
+namespace TauCeti
+
+variable [FiniteDimensional 𝕜 E] {T S : E →ₗ[𝕜] E}
 
 /-- One-sided Weyl bound: `λₖ(S) − λₖ(T) ≤ ‖S − T‖op`.  This is the core
 estimate; Weyl's inequality follows by symmetry.
@@ -291,8 +447,10 @@ private theorem eigenvalues_sub_le
     (hT : T.IsSymmetric) (hS : S.IsSymmetric) (hn : finrank 𝕜 E = n)
     {ε : ℝ} (hε : ∀ x : E, ‖(S - T) x‖ ≤ ε * ‖x‖) (k : Fin n) :
     hS.eigenvalues hn k - hT.eigenvalues hn k ≤ ε := by
-  obtain ⟨V, hVdim, hVlow⟩ := forall_unit_vector_eigenvalue_le_re_inner hS hn k
-  obtain ⟨x, hxV, hnx, hTup⟩ := exists_unit_vector_re_inner_le_eigenvalue hT hn k V hVdim
+  obtain ⟨V, hVdim, hVlow⟩ :=
+    hS.exists_submodule_forall_unit_eigenvalue_le_re_inner hn k
+  obtain ⟨x, hxV, hnx, hTup⟩ :=
+    hT.exists_unit_vector_re_inner_le_eigenvalue hn k V hVdim
   have hSlow : hS.eigenvalues hn k ≤ RCLike.re ⟪S x, x⟫_𝕜 := hVlow x hxV hnx
   -- `λₖ(S) − λₖ(T) ≤ re ⟪Sx,x⟫ − re ⟪Tx,x⟫ = re ⟪(S−T)x,x⟫ ≤ ‖(S−T)x‖ ≤ ε`.
   have hdiff : RCLike.re ⟪S x, x⟫_𝕜 - RCLike.re ⟪T x, x⟫_𝕜
@@ -313,12 +471,14 @@ private theorem eigenvalues_sub_le
 product space over `𝕜 = ℝ, ℂ`: the `k`-th (decreasingly sorted) eigenvalues of
 `T` and `S` differ by at most the operator norm of `T − S`.
 
-Here the operator-norm bound is supplied as the hypothesis
-`∀ x, ‖(T − S) x‖ ≤ ε * ‖x‖`.
+At `LinearMap` level there is no operator norm, so the bound is supplied as the
+pointwise hypothesis `∀ x, ‖(T − S) x‖ ≤ ε * ‖x‖`; see
+`TauCeti.abs_eigenvalue_sub_eigenvalue_le_norm` for the continuous-linear-map
+operator-norm form.
 
 Horn & Johnson, *Matrix Analysis* 2nd ed., Theorem 4.3.1; Bhatia,
 *Matrix Analysis*, Corollary III.2.6. -/
-theorem abs_eigenvalues_sub_le
+theorem abs_eigenvalue_sub_eigenvalue_le
     (hT : T.IsSymmetric) (hS : S.IsSymmetric) (hn : finrank 𝕜 E = n)
     {ε : ℝ} (hε : ∀ x : E, ‖(T - S) x‖ ≤ ε * ‖x‖) (k : Fin n) :
     |hT.eigenvalues hn k - hS.eigenvalues hn k| ≤ ε := by
@@ -336,189 +496,27 @@ theorem abs_eigenvalues_sub_le
   · have := eigenvalues_sub_le hS hT hn hε k
     linarith
 
-/-- **Weyl's inequality**, operator-norm form.  The `k`-th sorted eigenvalues of
-two symmetric operators `T`, `S` on a finite-dimensional inner product space
-differ by at most the (continuous-linear-map) operator norm `‖T − S‖` of their
-difference.  This is `abs_eigenvalues_sub_le` with the bound supplied by
-`ContinuousLinearMap.le_opNorm`.
+/-- **Weyl's inequality**, operator-norm form, for symmetric (equivalently,
+self-adjoint) continuous linear maps on a finite-dimensional inner product
+space: the `k`-th sorted eigenvalues of `T` and `S` differ by at most
+`‖T − S‖`.  The symmetry hypotheses are stated on the underlying linear maps
+so that the signature does not require the adjoint star structure (whose
+instance needs `CompleteSpace E`, which `FiniteDimensional` deliberately does
+not register as an instance).
 
 Related Lean work: `YuanheZ/lean-stat-learning-theory`,
 `SLT/MatrixInfra/Perturb.lean` at commit
 `216e578c9576bab6b0abc3ba6c65762536768e96`, proves the same operator-norm
-endpoint under the same declaration name.  The present proof belongs to the
-local Courant--Fischer chain and is retained to keep the DK development
-self-contained. -/
-theorem abs_eigenvalues_sub_le_opNorm (hT : T.IsSymmetric) (hS : S.IsSymmetric)
+endpoint.  The present proof belongs to the local Courant--Fischer chain and is
+retained to keep the development self-contained. -/
+theorem abs_eigenvalue_sub_eigenvalue_le_norm
+    {T S : E →L[𝕜] E}
+    (hT : LinearMap.IsSymmetric (T : E →ₗ[𝕜] E))
+    (hS : LinearMap.IsSymmetric (S : E →ₗ[𝕜] E))
     (hn : finrank 𝕜 E = n) (k : Fin n) :
-    |hT.eigenvalues hn k - hS.eigenvalues hn k|
-      ≤ ‖LinearMap.toContinuousLinearMap (T - S)‖ := by
-  refine abs_eigenvalues_sub_le hT hS hn (fun x => ?_) k
-  have hx := (LinearMap.toContinuousLinearMap (T - S)).le_opNorm x
-  rwa [LinearMap.coe_toContinuousLinearMap'] at hx
-
-/-! ### Sorted-eigenvalue uniqueness and Loewner monotonicity
-
-Courant–Fischer consequences needed by the Ky Fan / unitarily-invariant-norm
-development (plan steps F0–F1 of `dev/davis-kahan-expert-completion-plan.md`):
-an antitone list diagonalizing a symmetric operator in *some* orthonormal
-basis is *the* sorted eigenvalue list, and the sorted eigenvalues are monotone
-in the quadratic form (Loewner order). -/
-
-omit [FiniteDimensional 𝕜 E] in
-/-- Diagonalization of the quadratic form in any orthonormal eigenbasis: if
-`S (w i) = μ i • w i` for all `i`, then
-`re ⟪S x, x⟫ = ∑ i, μ i * ‖w.repr x i‖ ^ 2`. -/
-theorem re_inner_map_self_eq_sum_of_eigenbasis
-    (hS : S.IsSymmetric) (w : OrthonormalBasis (Fin n) 𝕜 E) {μ : Fin n → ℝ}
-    (hw : ∀ i, S (w i) = (μ i : 𝕜) • w i) (x : E) :
-    RCLike.re ⟪S x, x⟫_𝕜 = ∑ i : Fin n, μ i * ‖w.repr x i‖ ^ 2 := by
-  have hrepr : ∀ i, w.repr (S x) i = (μ i : 𝕜) * w.repr x i := by
-    intro i
-    rw [w.repr_apply_apply, w.repr_apply_apply, ← hS (w i) x, hw i, inner_smul_left,
-      RCLike.conj_ofReal]
-  have key : ⟪S x, x⟫_𝕜 = ((∑ i : Fin n, μ i * ‖w.repr x i‖ ^ 2 : ℝ) : 𝕜) := by
-    rw [← w.repr.inner_map_map (S x) x, PiLp.inner_apply]
-    push_cast
-    refine Finset.sum_congr rfl fun i _ => ?_
-    rw [RCLike.inner_apply, hrepr i, map_mul, RCLike.conj_ofReal, mul_left_comm,
-      RCLike.mul_conj]
-  rw [key, RCLike.ofReal_re]
-
-omit [FiniteDimensional 𝕜 E] in
-/-- On the span of the eigenvectors selected by `p`, the quadratic form is
-bounded below by any lower bound on the selected values (general-eigenbasis
-version of `le_re_inner_map_self_of_mem_specSubspace`). -/
-private theorem le_re_inner_of_eigenbasis
-    (hS : S.IsSymmetric) (w : OrthonormalBasis (Fin n) 𝕜 E) {μ : Fin n → ℝ}
-    (hw : ∀ i, S (w i) = (μ i : 𝕜) • w i) {p : Fin n → Prop} {c : ℝ}
-    (hc : ∀ i, p i → c ≤ μ i) {x : E} (hx : x ∈ specSubspace w p) :
-    c * ‖x‖ ^ 2 ≤ RCLike.re ⟪S x, x⟫_𝕜 := by
-  rw [re_inner_map_self_eq_sum_of_eigenbasis hS w hw x,
-    show c * ‖x‖ ^ 2 = ∑ i : Fin n, c * ‖w.repr x i‖ ^ 2 by
-      rw [← Finset.mul_sum, sum_sq_norm_repr_eq_sq_norm]]
-  refine Finset.sum_le_sum fun i _ => ?_
-  by_cases hp : p i
-  · exact mul_le_mul_of_nonneg_right (hc i hp) (sq_nonneg _)
-  · rw [repr_eq_zero_of_mem_specSubspace w p hx hp]; simp
-
-omit [FiniteDimensional 𝕜 E] in
-/-- Dual of `le_re_inner_of_eigenbasis`. -/
-private theorem re_inner_le_of_eigenbasis
-    (hS : S.IsSymmetric) (w : OrthonormalBasis (Fin n) 𝕜 E) {μ : Fin n → ℝ}
-    (hw : ∀ i, S (w i) = (μ i : 𝕜) • w i) {p : Fin n → Prop} {c : ℝ}
-    (hc : ∀ i, p i → μ i ≤ c) {x : E} (hx : x ∈ specSubspace w p) :
-    RCLike.re ⟪S x, x⟫_𝕜 ≤ c * ‖x‖ ^ 2 := by
-  rw [re_inner_map_self_eq_sum_of_eigenbasis hS w hw x,
-    show c * ‖x‖ ^ 2 = ∑ i : Fin n, c * ‖w.repr x i‖ ^ 2 by
-      rw [← Finset.mul_sum, sum_sq_norm_repr_eq_sq_norm]]
-  refine Finset.sum_le_sum fun i _ => ?_
-  by_cases hp : p i
-  · exact mul_le_mul_of_nonneg_right (hc i hp) (sq_nonneg _)
-  · rw [repr_eq_zero_of_mem_specSubspace w p hx hp]; simp
-
-/-- **Sorted-eigenvalue uniqueness.**  If an orthonormal basis `w`
-diagonalizes the symmetric operator `S` with an *antitone* value list `μ`,
-then `μ` is the sorted eigenvalue list: `hS.eigenvalues hn = μ`.
-(Courant–Fischer: both lists satisfy the same minimax characterization.) -/
-theorem eigenvalues_eq_of_eigenbasis
-    (hS : S.IsSymmetric) (hn : finrank 𝕜 E = n) (w : OrthonormalBasis (Fin n) 𝕜 E)
-    {μ : Fin n → ℝ} (hμ : Antitone μ) (hw : ∀ i, S (w i) = (μ i : 𝕜) • w i) :
-    hS.eigenvalues hn = μ := by
-  funext k
-  refine le_antisymm ?_ ?_
-  · -- `λₖ ≤ μₖ`: intersect the CF-lower witness with the `w`-tail span.
-    obtain ⟨V, hVdim, hVlow⟩ := forall_unit_vector_eigenvalue_le_re_inner hS hn k
-    set W := specSubspace w (fun i : Fin n => k ≤ i) with hW
-    have hWdim : finrank 𝕜 W = n - (k : ℕ) := by
-      rw [hW, finrank_specSubspace, card_filter_le]
-    have hinf : V ⊓ W ≠ ⊥ := by
-      intro hbot
-      have hle := Submodule.finrank_sup_add_finrank_inf_eq V W
-      rw [hbot, finrank_bot, add_zero] at hle
-      have hsup : finrank 𝕜 (↑(V ⊔ W) : Submodule 𝕜 E) ≤ n := by
-        rw [← hn]; exact Submodule.finrank_le _
-      have hk : (k : ℕ) < n := k.2
-      omega
-    obtain ⟨z, hz, hz0⟩ := Submodule.exists_mem_ne_zero_of_ne_bot hinf
-    obtain ⟨hzV, hzW⟩ := Submodule.mem_inf.mp hz
-    have hz0' : ‖z‖ ≠ 0 := norm_ne_zero_iff.mpr hz0
-    set x := ((‖z‖⁻¹ : ℝ) : 𝕜) • z with hx
-    have hnx : ‖x‖ = 1 := by
-      rw [hx, norm_smul, RCLike.norm_ofReal, abs_inv, abs_norm, inv_mul_cancel₀ hz0']
-    have hxW : x ∈ W := W.smul_mem _ hzW
-    calc hS.eigenvalues hn k ≤ RCLike.re ⟪S x, x⟫_𝕜 := hVlow x (V.smul_mem _ hzV) hnx
-      _ ≤ μ k * ‖x‖ ^ 2 :=
-          re_inner_le_of_eigenbasis hS w hw (fun _ hik => hμ hik) hxW
-      _ = μ k := by rw [hnx]; ring
-  · -- `μₖ ≤ λₖ`: test the CF-upper bound on the `w`-head span.
-    set V := specSubspace w (fun i : Fin n => i ≤ k) with hV
-    have hVdim : finrank 𝕜 V = (k : ℕ) + 1 := by
-      rw [hV, finrank_specSubspace, card_filter_ge]
-    obtain ⟨x, hxV, hnx, hup⟩ := exists_unit_vector_re_inner_le_eigenvalue hS hn k V hVdim
-    calc μ k = μ k * ‖x‖ ^ 2 := by rw [hnx]; ring
-      _ ≤ RCLike.re ⟪S x, x⟫_𝕜 :=
-          le_re_inner_of_eigenbasis hS w hw (fun _ hik => hμ hik) hxV
-      _ ≤ hS.eigenvalues hn k := hup
-
-/-- **Loewner monotonicity of the sorted eigenvalues.**  If the quadratic form
-of `T` is dominated by that of `S`, then so is every sorted eigenvalue. -/
-theorem eigenvalues_le_eigenvalues_of_re_inner_le
-    (hT : T.IsSymmetric) (hS : S.IsSymmetric) (hn : finrank 𝕜 E = n)
-    (h : ∀ x, RCLike.re ⟪T x, x⟫_𝕜 ≤ RCLike.re ⟪S x, x⟫_𝕜) (k : Fin n) :
-    hT.eigenvalues hn k ≤ hS.eigenvalues hn k := by
-  obtain ⟨V, hVdim, hVlow⟩ := forall_unit_vector_eigenvalue_le_re_inner hT hn k
-  obtain ⟨x, hxV, hnx, hup⟩ := exists_unit_vector_re_inner_le_eigenvalue hS hn k V hVdim
-  calc hT.eigenvalues hn k ≤ RCLike.re ⟪T x, x⟫_𝕜 := hVlow x hxV hnx
-    _ ≤ RCLike.re ⟪S x, x⟫_𝕜 := h x
-    _ ≤ hS.eigenvalues hn k := hup
-
-/-! ### Spectral subspaces: invariance and orthogonal complement
-
-Public API for consumers of `specSubspace` (the operator-norm sin-Θ and
-sin 2θ/tan 2θ spectral corollaries; plan step E3 of
-`dev/davis-kahan-expert-completion-plan.md`). -/
-
-/-- A spectral subspace of a symmetric operator (the span of a selected
-subfamily of its eigenvectors) is invariant. -/
-theorem map_mem_specSubspace (hT : T.IsSymmetric) (hn : finrank 𝕜 E = n)
-    (p : Fin n → Prop) {x : E}
-    (hx : x ∈ specSubspace (hT.eigenvectorBasis hn) p) :
-    T x ∈ specSubspace (hT.eigenvectorBasis hn) p := by
-  induction hx using Submodule.span_induction with
-  | mem y hy =>
-    obtain ⟨j, rfl⟩ := hy
-    rw [hT.apply_eigenvectorBasis hn j]
-    exact Submodule.smul_mem _ _ (Submodule.subset_span ⟨j, rfl⟩)
-  | zero => rw [map_zero]; exact Submodule.zero_mem _
-  | add a b _ _ ha hb => rw [map_add]; exact Submodule.add_mem _ ha hb
-  | smul c a _ ha => rw [map_smul]; exact Submodule.smul_mem _ _ ha
-
-/-- The orthogonal complement of a spectral subspace is the complementary
-spectral subspace: `(span {bᵢ : p i})ᗮ = span {bᵢ : ¬ p i}`. -/
-theorem orthogonal_specSubspace (b : OrthonormalBasis (Fin n) 𝕜 E) (p : Fin n → Prop) :
-    (specSubspace b p)ᗮ = specSubspace b (fun i => ¬ p i) := by
-  classical
-  have hEn : finrank 𝕜 E = n := by
-    rw [Module.finrank_eq_card_basis b.toBasis, Fintype.card_fin]
-  refine (Submodule.eq_of_le_of_finrank_le ?_ ?_).symm
-  · -- the complementary span is orthogonal to the selected span.
-    apply Submodule.span_le.mpr
-    rintro y ⟨j, rfl⟩
-    rw [SetLike.mem_coe, Submodule.mem_orthogonal]
-    intro u hu
-    change ⟪u, b ↑j⟫_𝕜 = 0
-    rw [← inner_conj_symm, ← b.repr_apply_apply,
-      repr_eq_zero_of_mem_specSubspace b p hu j.2, map_zero]
-  · -- dimensions match: `n − #p` on both sides.
-    have h1 : finrank 𝕜 (specSubspace b p)
-        + finrank 𝕜 ((specSubspace b p)ᗮ : Submodule 𝕜 E) = n := by
-      rw [Submodule.finrank_add_finrank_orthogonal, hEn]
-    have h2 := finrank_specSubspace b p
-    have h3 := finrank_specSubspace b (fun i => ¬ p i)
-    have h4 := Finset.card_filter_add_card_filter_not (s := (Finset.univ : Finset (Fin n))) p
-    have h5 : (Finset.univ : Finset (Fin n)).card = n := by
-      rw [Finset.card_univ, Fintype.card_fin]
-    omega
+    |hT.eigenvalues hn k - hS.eigenvalues hn k| ≤ ‖T - S‖ := by
+  refine abs_eigenvalue_sub_eigenvalue_le hT hS hn (fun x => ?_) k
+  simpa using (T - S).le_opNorm x
 
 end TauCeti
 
