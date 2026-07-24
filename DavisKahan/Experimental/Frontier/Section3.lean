@@ -8,6 +8,10 @@ import DavisKahan.Experimental.Frontier.Core
 import DavisKahan.Interop.Spectra.DirectRotation
 -- supplies `spectraReflectionProduct` and `IsAcute.symm`
 import DavisKahan.Interop.Spectra.DirectRotationSquare
+-- supplies `reflectedSubspace` and its projection/conjugation calculus used by
+-- Proposition 3.4.  This module imports only `SinTheta`/`SpectralTheory`
+-- material and never touches `Frontier`, so the dependency is acyclic.
+import DavisKahan.Experimental.InfiniteDimensional.DoubleAngle
 -- supplies the completed nonacute construction and acute characterizations used
 -- to ground the Proposition 3.2 and Corollary 3.2 source statements below.  The
 -- construction depends on the polar and acute machinery under `MathAhead`, which
@@ -37,6 +41,7 @@ namespace Frontier
 namespace Section3
 
 open SpectraBridge
+open ForMathlib.DavisKahanExt (reflectedSubspace starProjection_reflectedSubspace)
 
 universe u v
 
@@ -478,31 +483,115 @@ theorem proposition3_3_principalSquareRoot_converse
       exact h
     exact eq_neg_of_add_eq_zero_left hsum
 
-/-- Davis--Kahan 1970, Proposition 3.4 in source form: under the half-angle
-condition, the square of the direct rotation is the direct rotation between
-the reflected source and target subspaces.
+/-- Reflection through the mirror image `reflectedSubspace V U` is the
+conjugate of the reflection through `U` by the reflection through `V`.
+Since the mirror image has projection `R_V P_U R_V`, its reflection
+`2 P - 1` equals `R_V (2 P_U - 1) R_V = R_V R_U R_V`. -/
+theorem reflectionOperator_reflectedSubspace :
+    reflectionOperator (reflectedSubspace V U)
+      = reflectionOperator V * reflectionOperator U * reflectionOperator V := by
+  have hRR : reflectionOperator V * reflectionOperator V = 1 :=
+    reflectionOperator_mul_self_complex V
+  have hPVref : projection (reflectedSubspace V U)
+      = reflectionOperator V * projection U * reflectionOperator V :=
+    starProjection_reflectedSubspace V U
+  rw [reflectionOperator_eq_projection_add_projection_sub_one (reflectedSubspace V U),
+      reflectionOperator_eq_projection_add_projection_sub_one U, hPVref]
+  have expand : reflectionOperator V * (projection U + projection U - 1)
+      * reflectionOperator V
+      = reflectionOperator V * projection U * reflectionOperator V
+        + reflectionOperator V * projection U * reflectionOperator V
+        - reflectionOperator V * reflectionOperator V := by noncomm_ring
+  rw [expand, hRR]
 
-Open obligation, with a required hypothesis correction recorded here.  The
-natural reflected pair is `Uref = U`, `Vref = reflectedSubspace V U`, for which
-`spectraDirectRotation U V hacute` squared equals the ordered reflection product
-`R_V R_U` (see `spectraDirectRotation_sq`).  Because every acute direct rotation
-has nonnegative numerical real part, a necessary condition for the conclusion is
-`0 ≤ re ⟪(R_V R_U) x, x⟫`.  Writing `2 S = 1 + R_V R_U` for the canonical
-intertwiner `S` and using its normality identity `Re S = S⋆ S = |S| ^ 2`, one has
-`re ⟪(R_V R_U) x, x⟫ = 2 * re ⟪(|S| ^ 2) x, x⟫ - ‖x‖ ^ 2`, and `|S| ^ 2` is the
-Halmos cosine square.  Hence the correct threshold is on the cosine *square*,
-`re ⟪halmosCosineSq x, x⟫ ≥ ‖x‖ ^ 2 / 2` (cosine `≥ 1 / √2`, angle `≤ π / 4`),
-not on `|S|` itself: the printed bound `re ⟪|S| x, x⟫ ≥ ‖x‖ ^ 2 / 2` is strictly
-weaker since `|S| ≤ 1`.  Moreover the reflected pair is acute only under a
-uniform strict form of that bound (a boundary cosine of `1 / √2` gives a
-double angle of exactly `π / 2`, hence gap `1`), so the field should carry a
-uniform gap, not the pointwise nonstrict inequality below. -/
+/-- The canonical intertwiner and the Halmos cosine square carry the same
+numerical real part.  The Hermitian part of `S` is `S⋆ S = |S| ^ 2`, which is
+exactly `halmosCosineSq U V`, so `re ⟪S x, x⟫ = re ⟪halmosCosineSq x, x⟫`. -/
+theorem re_inner_intertwiner_eq_cosineSq (x : H) :
+    RCLike.re ⟪spectraCanonicalIntertwiner U V x, x⟫_ℂ
+      = RCLike.re ⟪halmosCosineSq U V x, x⟫_ℂ := by
+  have hSstar : spectraCanonicalIntertwiner U V
+        + star (spectraCanonicalIntertwiner U V)
+      = halmosCosineSq U V + halmosCosineSq U V := by
+    rw [spectraCanonicalIntertwiner_add_star U V,
+      ← spectraOperatorAbsoluteValue_mul_self,
+      spectraCanonicalAbsoluteValue_sq_eq_halmosCosineSq]
+  have h := congrArg (fun T : H →L[ℂ] H => RCLike.re ⟪T x, x⟫_ℂ) hSstar
+  have hstar : RCLike.re ⟪star (spectraCanonicalIntertwiner U V) x, x⟫_ℂ
+      = RCLike.re ⟪spectraCanonicalIntertwiner U V x, x⟫_ℂ := by
+    rw [ContinuousLinearMap.star_eq_adjoint,
+      ContinuousLinearMap.adjoint_inner_left]
+    exact inner_re_symm x (spectraCanonicalIntertwiner U V x)
+  simp only [ContinuousLinearMap.add_apply, inner_add_left, map_add, hstar] at h
+  linarith
+
+/-- Under the corrected half-angle bound (cosine *square* at least `1/2`), the
+ordered reflection product `R_V R_U` is accretive.  Using `2 S = 1 + R_V R_U`
+one has `re ⟪(R_V R_U) x, x⟫ = 2 * re ⟪halmosCosineSq x, x⟫ - ‖x‖ ^ 2`, which is
+nonnegative precisely when `re ⟪halmosCosineSq x, x⟫ ≥ ‖x‖ ^ 2 / 2`. -/
+theorem re_inner_reflectionProduct_nonneg
+    (hhalf : ∀ x : H,
+      0 ≤ RCLike.re ⟪x, halmosCosineSq U V x⟫_ℂ - ‖x‖ ^ 2 / 2)
+    (x : H) :
+    0 ≤ RCLike.re ⟪spectraReflectionProduct U V x, x⟫_ℂ := by
+  have hG : spectraReflectionProduct U V
+      = spectraCanonicalIntertwiner U V + spectraCanonicalIntertwiner U V - 1 := by
+    have h1 : spectraReflectionProduct U V + 1
+        = spectraCanonicalIntertwiner U V + spectraCanonicalIntertwiner U V := by
+      rw [add_comm]
+      exact (spectraCanonicalIntertwiner_add_self_eq_one_add_reflectionProduct U V).symm
+    exact eq_sub_of_add_eq h1
+  have hcos : RCLike.re ⟪spectraCanonicalIntertwiner U V x, x⟫_ℂ
+      = RCLike.re ⟪x, halmosCosineSq U V x⟫_ℂ := by
+    rw [re_inner_intertwiner_eq_cosineSq U V x]
+    exact (inner_re_symm _ _).symm
+  have hself : RCLike.re ⟪x, x⟫_ℂ = ‖x‖ ^ 2 := by
+    rw [inner_self_eq_norm_sq]
+  rw [hG]
+  simp only [ContinuousLinearMap.sub_apply, ContinuousLinearMap.add_apply,
+    ContinuousLinearMap.one_apply, inner_sub_left, inner_add_left, map_sub, map_add,
+    hself, hcos]
+  have := hhalf x
+  linarith
+
+/-- Davis--Kahan 1970, Proposition 3.4 in source form: the square of the direct
+rotation is the direct rotation between the reflected source and target
+subspaces.  The natural reflected pair is `Uref = U`, `Vref = reflectedSubspace
+V U`, for which `spectraDirectRotation U V hacute` squared is the ordered
+reflection product `R_V R_U = spectraReflectionProduct U V` (see
+`spectraDirectRotation_sq`).  Because `reflectionOperator (reflectedSubspace V U)
+= R_V R_U R_V`, the reflection product of the reflected pair is `(R_V R_U) ^ 2`,
+so `R_V R_U` is a unitary square root of it; the accretive branch is the direct
+rotation between the reflected subspaces.
+
+Two hypothesis corrections are recorded here relative to the originally printed
+statement.  First, the half-angle threshold is on the cosine *square*,
+`re ⟪halmosCosineSq x, x⟫ ≥ ‖x‖ ^ 2 / 2` (cosine `≥ 1 / √2`, double angle
+`≤ π / 2`); it is *not* the pointwise bound `re ⟪|S| x, x⟫ ≥ ‖x‖ ^ 2 / 2`, which
+is strictly weaker since `|S| ≤ 1`.  The algebra `2 S = 1 + R_V R_U` together
+with the normality identity `Re S = S⋆ S = |S| ^ 2 = halmosCosineSq` shows this
+cosine-square bound is exactly accretivity of `R_V R_U`
+(`re_inner_reflectionProduct_nonneg`), which is the branch condition needed to
+identify the square root with the direct rotation.
+
+Second, acuteness of the reflected pair `IsAcute U (reflectedSubspace V U)` is
+carried as an *independent* hypothesis.  It is genuinely not derivable from the
+cosine-square bound and is not implied by it: a boundary cosine square of `1/2`
+makes the double angle exactly `π / 2`, so the reflected pair has gap `1` and is
+not acute, while the cosine-square bound still holds nonstrictly.  Conversely
+acuteness of the reflected pair alone does not force accretivity of `R_V R_U`:
+a pair carrying a single principal angle in `(π/4, π/2)` has an acute reflected
+pair (double angle folded below `π/2`) yet a reflection product with strictly
+negative numerical real part on the corresponding vectors, so the conclusion
+fails without the cosine-square bound.  Both conditions are therefore necessary;
+a single uniform spectral-gap field on `R_V R_U` would subsume them, but the
+present two-hypothesis form is the faithful minimal correction. -/
 theorem proposition3_4_square_is_reflected_directRotation
     (hacute : IsAcute U V)
+    (hacuteReflected : IsAcute U (reflectedSubspace V U))
     (hhalf : ∀ x : H,
       0 ≤ RCLike.re
-        ⟪x, (spectraOperatorAbsoluteValue
-          (spectraCanonicalIntertwiner U V)) x⟫_ℂ - ‖x‖ ^ 2 / 2) :
+        ⟪x, halmosCosineSq U V x⟫_ℂ - ‖x‖ ^ 2 / 2) :
     -- the reflected pair is existentially quantified, so its orthogonal
     -- projections cannot be found by instance search; they are bound here and
     -- reinstated with `haveI` inside the body
@@ -514,7 +603,26 @@ theorem proposition3_4_square_is_reflected_directRotation
         spectraDirectRotation U V hacute *
             spectraDirectRotation U V hacute =
           spectraDirectRotation Uref Vref hacuteRef := by
-  sorry
+  refine ⟨U, reflectedSubspace V U, inferInstance, inferInstance, hacuteReflected, ?_⟩
+  have hWsq : spectraDirectRotation U V hacute * spectraDirectRotation U V hacute
+      = spectraReflectionProduct U V := spectraDirectRotation_sq U V hacute
+  rw [hWsq]
+  have hGunit : spectraReflectionProduct U V ∈ unitary (H →L[ℂ] H) :=
+    spectraReflectionProduct_mem_unitary U V
+  have hGsq : spectraReflectionProduct U V * spectraReflectionProduct U V
+      = spectraReflectionProduct U (reflectedSubspace V U) := by
+    show spectraReflectionProduct U V * spectraReflectionProduct U V
+      = reflectionOperator (reflectedSubspace V U) * reflectionOperator U
+    rw [reflectionOperator_reflectedSubspace U V]
+    show (reflectionOperator V * reflectionOperator U)
+        * (reflectionOperator V * reflectionOperator U)
+      = reflectionOperator V * reflectionOperator U * reflectionOperator V
+        * reflectionOperator U
+    noncomm_ring
+  have hGre : ∀ x, 0 ≤ Complex.re ⟪spectraReflectionProduct U V x, x⟫_ℂ :=
+    re_inner_reflectionProduct_nonneg U V hhalf
+  exact spectraDirectRotation_unique_of_sq U (reflectedSubspace V U) hacuteReflected
+    (spectraReflectionProduct U V) hGunit hGsq hGre
 
 /-- A subspace on which both projections reduce and every nonzero source or
 target vector has the same projection cosine. -/
