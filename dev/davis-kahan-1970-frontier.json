@@ -123,7 +123,7 @@
       "id": "s3-paper-direct-rotation-predicate",
       "title": "Paper direct-rotation predicate",
       "kind": "foundation",
-      "module": "DavisKahan.Experimental.Frontier.Core",
+      "module": "DavisKahan.Geometry.Halmos.GenericRotationPredicates",
       "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.IsPaperDirectRotation",
       "dependencies": [
         "base-acute-direct-rotation"
@@ -137,7 +137,7 @@
       "id": "s3-crossed-defect-equivalence",
       "title": "Crossed-defect Hilbert equivalence",
       "kind": "foundation",
-      "module": "DavisKahan.Experimental.Frontier.Core",
+      "module": "DavisKahan.Geometry.Halmos.GenericRotationPredicates",
       "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.CrossedDefectsEquivalent",
       "dependencies": [
         "base-halmos-decomposition"
@@ -151,7 +151,7 @@
       "id": "s3-generic-cosine-restriction",
       "title": "Generic Halmos cosine restriction",
       "kind": "foundation",
-      "module": "DavisKahan.Experimental.Frontier.Core",
+      "module": "DavisKahan.Geometry.Halmos.GenericRotationPredicates",
       "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.genericHalmosCosineSq",
       "dependencies": [
         "base-halmos-decomposition",
@@ -166,7 +166,7 @@
       "id": "s3-generic-sine-restriction",
       "title": "Generic Halmos sine restriction",
       "kind": "foundation",
-      "module": "DavisKahan.Experimental.Frontier.Core",
+      "module": "DavisKahan.Geometry.Halmos.GenericRotationPredicates",
       "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.genericHalmosSineSq",
       "dependencies": [
         "base-halmos-decomposition",
@@ -181,7 +181,7 @@
       "id": "s3-generic-pythagoras",
       "title": "Generic restriction Pythagoras",
       "kind": "bridge",
-      "module": "DavisKahan.Experimental.Frontier.Core",
+      "module": "DavisKahan.Geometry.Halmos.GenericRotationPredicates",
       "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.genericHalmosCosineSq_add_sineSq",
       "dependencies": [
         "s3-generic-cosine-restriction",
