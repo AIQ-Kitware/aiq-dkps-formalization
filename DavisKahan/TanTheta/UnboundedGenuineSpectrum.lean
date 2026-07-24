@@ -5,6 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.TanTheta.UnboundedVector
 import DavisKahan.TanTheta.GenuineSpectrum
+import ForTauCeti.Analysis.CStarAlgebra.SelfAdjointGapInverse
 
 /-!
 # The unbounded tangent theorem with a genuine trial spectrum
@@ -127,7 +128,7 @@ theorem coercive_of_selfAdjoint_spectrum_exterior
         linarith
       exact hge.trans (le_abs_self _)
   obtain ⟨J, hJleft, _hJright, hJnorm⟩ :=
-    ForMathlib.IsSelfAdjoint.exists_two_sided_inverse_of_spectrum_gap
+    TauCeti.IsSelfAdjoint.exists_two_sided_inverse_of_spectrum_gap
       (A := K →L[ℂ] K) hM₁sa hrd hM₁spec
   intro x
   have hJx : J (M₁ x) = x := by
