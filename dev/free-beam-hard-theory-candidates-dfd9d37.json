@@ -1,0 +1,139 @@
+{
+  "base_commit": "dfd9d37ebc86",
+  "lane": "free-beam hard analytic theory",
+  "collision_policy": "additive scratch only; does not edit the active Opus polar lane",
+  "compiler_status": "not compiled in the producing environment",
+  "modules": [
+    {
+      "module": "DavisKahan.Experimental.Scratch.FreeBeam.Abstract.PositiveSurjectiveCriterion",
+      "role": "generic self-adjointness criterion",
+      "promotion_targets": [
+        "generic partial-operator infrastructure",
+        "free-beam shifted inverse realization"
+      ]
+    },
+    {
+      "module": "DavisKahan.Experimental.Scratch.FreeBeam.Abstract.BoundedInverseRealization",
+      "role": "closed self-adjoint inverse of a bounded positive resolvent",
+      "promotion_targets": [
+        "Section 9 form realization",
+        "future reusable operator theory"
+      ]
+    },
+    {
+      "module": "DavisKahan.Experimental.Scratch.FreeBeam.Abstract.CoerciveFormResolvent",
+      "role": "construct j A^-1 j* and its associated unbounded operator",
+      "promotion_targets": [
+        "free-beam shifted form method"
+      ]
+    },
+    {
+      "module": "DavisKahan.Experimental.Scratch.FreeBeam.Abstract.CompactGraphEmbedding",
+      "role": "compact resolvent versus compact graph embedding",
+      "promotion_targets": [
+        "SobolevTraceFoundation.graph_compact"
+      ]
+    },
+    {
+      "module": "DavisKahan.Experimental.Scratch.FreeBeam.Abstract.FormCompactness",
+      "role": "Rellich embedding implies compact resolvent",
+      "promotion_targets": [
+        "free-beam compact resolvent"
+      ]
+    },
+    {
+      "module": "DavisKahan.Experimental.Scratch.FreeBeam.Abstract.BoundedGraphCompactness",
+      "role": "bounded perturbations preserve graph compactness",
+      "promotion_targets": [
+        "shifted-to-unshifted beam transfer"
+      ]
+    },
+    {
+      "module": "DavisKahan.Experimental.Scratch.FreeBeam.Abstract.TraceKernelModel",
+      "role": "graph Hilbert space with continuous free endpoint traces",
+      "promotion_targets": [
+        "SobolevTraceFoundation maximal and free domains"
+      ]
+    },
+    {
+      "module": "DavisKahan.Experimental.Scratch.FreeBeam.Abstract.GraphClosedness",
+      "role": "graph-norm lower bound gives closed operator graph",
+      "promotion_targets": [
+        "SobolevTraceFoundation.closed_freeGraph"
+      ]
+    },
+    {
+      "module": "DavisKahan.Experimental.Scratch.FreeBeam.Abstract.MaximalDomainTransport",
+      "role": "transport graph-space derivative and traces to ambient submodules",
+      "promotion_targets": [
+        "SobolevTraceFoundation.free_le_maximal",
+        "SobolevTraceFoundation.freeFourth_agrees",
+        "SobolevTraceFoundation.mem_freeDomain_iff"
+      ]
+    },
+    {
+      "module": "DavisKahan.Experimental.Scratch.FreeBeam.Classical.CharacteristicConverse",
+      "role": "characteristic root produces a nontrivial free mode",
+      "promotion_targets": [
+        "positive free-beam mode construction",
+        "ODE spectrum converse"
+      ]
+    },
+    {
+      "module": "DavisKahan.Experimental.Scratch.FreeBeam.Classical.ModeData",
+      "role": "bundle classical modes for Green and kernel arguments",
+      "promotion_targets": [
+        "positive-spectrum realization"
+      ]
+    },
+    {
+      "module": "DavisKahan.Experimental.Scratch.FreeBeam.Classical.AffineModes",
+      "role": "construct the two affine zero modes",
+      "promotion_targets": [
+        "SobolevTraceFoundation.affineKernelEquiv"
+      ]
+    },
+    {
+      "module": "DavisKahan.Experimental.Scratch.FreeBeam.Classical.RootLocalizationReduction",
+      "role": "reduce root localization to pointwise scalar exclusions",
+      "promotion_targets": [
+        "SobolevTraceFoundation.rootLocalization"
+      ]
+    },
+    {
+      "module": "DavisKahan.Experimental.Scratch.FreeBeam.Analytic.ShiftedBeamRealization",
+      "role": "construct B from the coercive realization of B+I",
+      "promotion_targets": [
+        "Section9Analytic.freeBeamOperator",
+        "Section9Analytic.freeBeamOperator_selfAdjoint",
+        "SobolevTraceFoundation.spectrum_nonnegative"
+      ]
+    },
+    {
+      "module": "DavisKahan.Experimental.Scratch.FreeBeam.Analytic.EigenmodeReduction",
+      "role": "point spectrum plus ODE regularity implies characteristic classification",
+      "promotion_targets": [
+        "SobolevTraceFoundation.positive_spectrum_characterization"
+      ]
+    },
+    {
+      "module": "DavisKahan.Experimental.Scratch.FreeBeam.Analytic.FoundationAssembler",
+      "role": "assemble the existing paper-facing foundation",
+      "promotion_targets": [
+        "FreeBeamAnalyticFoundation.SobolevTraceFoundation",
+        "Frontier.Section9Analytic canonical model"
+      ]
+    }
+  ],
+  "remaining_concrete_foundations": [
+    "interval H2 form space",
+    "interval H4 graph space",
+    "continuous traces through order three",
+    "smooth-core density",
+    "compact H2 to L2 embedding",
+    "operator-domain identification",
+    "eigenvector regularity and ODE classification",
+    "rigorous first-positive-root exclusion",
+    "isometric affine-kernel equivalence"
+  ]
+}

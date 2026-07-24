@@ -8,6 +8,10 @@ import DavisKahan.SpectralTheory.Complexification.All
 import DavisKahan.SpectralTheory.Real.All
 import DavisKahan.SpectralTheory.ReducingSubspace.All
 import DavisKahan.SpectralTheory.AbstractSpectrum
+import DavisKahan.SpectralTheory.OperatorAngle
+import DavisKahan.SpectralTheory.SelfAdjointBorelCalculus
 import DavisKahan.SpectralTheory.Compatibility
+import DavisKahan.SpectralTheory.ResolventOperator
+import DavisKahan.SpectralTheory.CayleySelectorBridge
 
 /-! # `DavisKahan/SpectralTheory` -/

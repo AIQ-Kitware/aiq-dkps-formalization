@@ -5,7 +5,7 @@ Authors: Jon Crall, Claude Fable 5
 -/
 import DavisKahan.TanTheta.Vector
 import DavisKahan.Sylvester.GenuineSpectrum
-import ForMathlib.Analysis.CStarAlgebra.SelfAdjointGapInverse
+import ForTauCeti.Analysis.CStarAlgebra.SelfAdjointGapInverse
 
 /-!
 # The `tan Θ` theorem with genuine spectra
@@ -66,7 +66,7 @@ theorem formBounds_of_compress_spectrum_subset_Icc
     rw [← hyz, Set.mem_Icc]
     constructor <;> [linarith [hmem.1]; linarith [hmem.2]]
   have hM₁norm : ‖M₁‖ ≤ (β - α) / 2 :=
-    ForMathlib.IsSelfAdjoint.norm_le_of_spectrum_subset_Icc
+    TauCeti.IsSelfAdjoint.norm_le_of_spectrum_subset_Icc
       (A := ↥W →L[ℂ] ↥W) hM₁sa he0 hM₁spec
   have key : ∀ u : E, ∀ hu : u ∈ W,
       |RCLike.re ⟪T u, u⟫_ℂ - (α + β) / 2 * ‖u‖ ^ 2| ≤
@@ -150,7 +150,7 @@ theorem coercive_of_compress_spectrum_exterior
     · have hge : (β - α) / 2 + δ ≤ y - (α + β) / 2 := by linarith
       exact hge.trans (le_abs_self _)
   obtain ⟨J, hJ1, _hJ2, hJnorm⟩ :=
-    ForMathlib.IsSelfAdjoint.exists_two_sided_inverse_of_spectrum_gap
+    TauCeti.IsSelfAdjoint.exists_two_sided_inverse_of_spectrum_gap
       (A := ↥Z →L[ℂ] ↥Z) hM₁sa hrd hM₁spec
   intro x hx
   set v : Z := ⟨x, hx⟩ with hv

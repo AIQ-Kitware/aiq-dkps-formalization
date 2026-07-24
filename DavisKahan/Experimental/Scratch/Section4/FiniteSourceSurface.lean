@@ -5,7 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
 import DavisKahan.FiniteDimensional.DirectRotation
-import DavisKahan.Experimental.Scratch.Section4.InfiniteIdealDominance
+import DavisKahan.Experimental.MathAhead.Section4.InfiniteIdealDominance
 
 /-!
 # Certified finite-dimensional Section 4 surface
@@ -29,7 +29,7 @@ namespace Scratch
 namespace Section4
 
 open ExactSinTheta
-open DavisKahanTheory
+open MathAhead.Section4
 
 universe u v
 
@@ -42,26 +42,26 @@ variable {E : Type v}
 theorem finite_proposition4_1_singularValues
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V)
+    (hacute : DavisKahanTheory.IsAcute U V)
     (W : E ≃ₗᵢ[𝕜] E) (hmap : U.map W.toLinearMap = V) (n : ℕ) :
-    ((LinearMap.id - (directRotation U V hacute).toLinearMap) ∘ₗ
-        projection U).singularValues n ≤
-      ((LinearMap.id - W.toLinearMap) ∘ₗ projection U).singularValues n :=
-  singularValues_restrictedDisplacement_le U V hacute W hmap n
+    ((LinearMap.id - (DavisKahanTheory.directRotation U V hacute).toLinearMap) ∘ₗ
+        DavisKahanTheory.projection U).singularValues n ≤
+      ((LinearMap.id - W.toLinearMap) ∘ₗ DavisKahanTheory.projection U).singularValues n :=
+  DavisKahanTheory.singularValues_restrictedDisplacement_le U V hacute W hmap n
 
 /-- Finite-dimensional Proposition 4.1 rewritten with the same approximation
 singular values used by the infinite-dimensional ideal framework. -/
 theorem finite_proposition4_1_approximationSingularValue
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V)
+    (hacute : DavisKahanTheory.IsAcute U V)
     (W : E ≃ₗᵢ[𝕜] E) (hmap : U.map W.toLinearMap = V) (n : ℕ) :
     approximationSingularValue n
-        (((LinearMap.id - (directRotation U V hacute).toLinearMap) ∘ₗ
-          projection U).toContinuousLinearMap) ≤
+        (((LinearMap.id - (DavisKahanTheory.directRotation U V hacute).toLinearMap) ∘ₗ
+          DavisKahanTheory.projection U).toContinuousLinearMap) ≤
       approximationSingularValue n
         (((LinearMap.id - W.toLinearMap) ∘ₗ
-          projection U).toContinuousLinearMap) := by
+          DavisKahanTheory.projection U).toContinuousLinearMap) := by
   rw [approximationSingularValue_eq_singularValues,
     approximationSingularValue_eq_singularValues]
   exact finite_proposition4_1_singularValues U V hacute W hmap n
@@ -71,13 +71,13 @@ theorem finite_proposition4_1_approximationSingularValue
 noncomputable def finite_restrictedDisplacementDominance
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V)
+    (hacute : DavisKahanTheory.IsAcute U V)
     (W : E ≃ₗᵢ[𝕜] E) (hmap : U.map W.toLinearMap = V) :
     RestrictedDisplacementApproximationDominance
-      (((LinearMap.id - (directRotation U V hacute).toLinearMap) ∘ₗ
-        projection U).toContinuousLinearMap)
+      (((LinearMap.id - (DavisKahanTheory.directRotation U V hacute).toLinearMap) ∘ₗ
+        DavisKahanTheory.projection U).toContinuousLinearMap)
       (((LinearMap.id - W.toLinearMap) ∘ₗ
-        projection U).toContinuousLinearMap) where
+        DavisKahanTheory.projection U).toContinuousLinearMap) where
   approximation_le :=
     finite_proposition4_1_approximationSingularValue U V hacute W hmap
 
@@ -87,12 +87,12 @@ theorem finite_corollary4_1_uiNorm
     (N : UnitarilyInvariantNorm 𝕜 E)
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V)
+    (hacute : DavisKahanTheory.IsAcute U V)
     (W : E ≃ₗᵢ[𝕜] E) (hmap : U.map W.toLinearMap = V) :
-    N ((LinearMap.id - (directRotation U V hacute).toLinearMap) ∘ₗ
-        projection U) ≤
-      N ((LinearMap.id - W.toLinearMap) ∘ₗ projection U) :=
-  directRotation_minimizes_restrictedDisplacement_uiNorm
+    N ((LinearMap.id - (DavisKahanTheory.directRotation U V hacute).toLinearMap) ∘ₗ
+        DavisKahanTheory.projection U) ≤
+      N ((LinearMap.id - W.toLinearMap) ∘ₗ DavisKahanTheory.projection U) :=
+  DavisKahanTheory.directRotation_minimizes_restrictedDisplacement_uiNorm
     N U V hacute W hmap
 
 /-- Finite-dimensional Proposition 4.3: the direct rotation minimizes every
@@ -101,11 +101,12 @@ theorem finite_proposition4_3_uiNorm
     (N : UnitarilyInvariantNorm 𝕜 E)
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V)
+    (hacute : DavisKahanTheory.IsAcute U V)
     (W : E ≃ₗᵢ[𝕜] E) (hmap : U.map W.toLinearMap = V) :
-    N (displacementSquare (directRotation U V hacute).toLinearMap) ≤
-      N (displacementSquare W.toLinearMap) :=
-  directRotation_minimizes_displacementSquare_uiNorm
+    N (DavisKahanTheory.displacementSquare
+      (DavisKahanTheory.directRotation U V hacute).toLinearMap) ≤
+      N (DavisKahanTheory.displacementSquare W.toLinearMap) :=
+  DavisKahanTheory.directRotation_minimizes_displacementSquare_uiNorm
     N U V hacute W hmap
 
 /-- Finite-dimensional Proposition 4.2 in the compiled full-basis energy form.
@@ -115,12 +116,12 @@ theorem finite_proposition4_2_fullBasisEnergy
     {n : ℕ}
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V)
+    (hacute : DavisKahanTheory.IsAcute U V)
     (b : OrthonormalBasis (Fin n) 𝕜 E)
     (W : E ≃ₗᵢ[𝕜] E) (hmap : U.map W.toLinearMap = V) :
-    ∑ i, ‖directRotation U V hacute (b i) - b i‖ ^ 2 ≤
+    ∑ i, ‖DavisKahanTheory.directRotation U V hacute (b i) - b i‖ ^ 2 ≤
       ∑ i, ‖W (b i) - b i‖ ^ 2 :=
-  directRotation_minimizes_sum_sq_basis_angles
+  DavisKahanTheory.directRotation_minimizes_sum_sq_basis_angles
     U V hacute b W hmap
 
 end Section4

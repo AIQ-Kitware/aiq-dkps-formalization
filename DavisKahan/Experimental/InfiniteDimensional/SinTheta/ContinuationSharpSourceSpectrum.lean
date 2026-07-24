@@ -48,7 +48,7 @@ theorem compressOperator_eq_restrict_of_reduces
 
 /-- The real spectrum of a compression to a reducing subspace is exactly the
 restricted spectrum used by the theorem-facing gap predicates. -/
-theorem realSpectrum_compressOperator_eq_restrictedSpectrum
+theorem realSpectrum_compressOperator_eq_restrictedSpectrum_of_reduces
     (A : Hspace →L[ℂ] Hspace)
     (U : Submodule ℂ Hspace) [U.HasOrthogonalProjection]
     [CompleteSpace U]
@@ -90,9 +90,9 @@ theorem FiniteGapConfiguration.exists_compressOperator_enclosures
         {x : ℝ | x ≤ left - d ∨ right + d ≤ x} := by
   rcases hfinite with ⟨left, right, hlr, hselected, hcomplement⟩
   refine ⟨left, right, hlr, ?_, ?_⟩
-  · rw [realSpectrum_compressOperator_eq_restrictedSpectrum A U hU]
+  · rw [realSpectrum_compressOperator_eq_restrictedSpectrum_of_reduces A U hU]
     exact hselected.2
-  · rw [realSpectrum_compressOperator_eq_restrictedSpectrum A Uᗮ
+  · rw [realSpectrum_compressOperator_eq_restrictedSpectrum_of_reduces A Uᗮ
       hU.orthogonalComplement]
     exact hcomplement.2
 

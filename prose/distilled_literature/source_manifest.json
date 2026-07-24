@@ -810,7 +810,7 @@
       "group": "Spectral perturbation, principal angles, and matrix inequalities",
       "tier": "primary",
       "priority": "P0",
-      "formalization_status": "source-faithful Section 6 complete; finite four-theorem specialization complete; Section 8 continuation-selected branch and conditional spectral-repulsion candidate added; Section 9 exact finite-moment, numerical, domain, and Schur-complement candidate added; full Part III direct-rotation, tangent/double-angle, exact Section 8 bridge/refinement, classification, and analytic free-beam work remains active",
+      "formalization_status": "source-faithful sine family complete; bounded Theorem 6.3 proof written at source-effective finite-trial/arbitrary-ambient scope; compiler certification pending; equal-dimensional infinite tan theta and arbitrary-UI-norm unbounded passage remain open; Section 8 and Section 9 campaigns remain active",
       "distilled_status": "core_note",
       "primary_url": "https://doi.org/10.1137/0707001",
       "target_note": "DavisKahan1970_part_III.tex",
@@ -824,7 +824,11 @@
         "prose/distilled_literature/DavisKahan1970_section9_numerical_example.tex",
         "DavisKahan/Experimental/Sources/DavisKahan1970/Section8/All.lean",
         "DavisKahan/Experimental/Sources/DavisKahan1970/Section8/SourceSurface.lean",
-        "prose/distilled_literature/DavisKahan1970_section8_branch_selection.tex"
+        "prose/distilled_literature/DavisKahan1970_section8_branch_selection.tex",
+        "DavisKahan/Sources/DavisKahan1970/Audits/Theorem63Distillation.lean",
+        "DavisKahan/Experimental/Scratch/Section6/Theorem63SourceFaithful.lean",
+        "dev/journals/davis-kahan-theorem63-distillation-error-2026-07-23.md",
+        "DavisKahan/TanTheta/Theorem63FiniteSource.lean"
       ],
       "existing_assets": [
         "ForMathlib/prose/Davis-Kahan-1970-part-III-core-arguments.tex",
@@ -834,7 +838,7 @@
         "prose/distilled_literature/DavisKahan1970_section8_branch_selection.tex"
       ],
       "scope": "Full Part III theory on separable Hilbert spaces: bounded Hermitian main body, four angle theorem families for arbitrary unitary-invariant norms, direct rotation, spectral selection, and unbounded self-adjoint extensions.",
-      "missing_work": "Compile and promote the full Part III candidate surface; formalize the Section 3 classification and nonacute direct-rotation results; add exact source wrappers for Sections 4, 5, and 7; complete the unrestricted Theorem 8.1 branch construction, compression/eigenvalue/symmetric-gauge repulsion, and the two exact Theorem 8.2 half-gap bridges; prove Appendix Lemma 6.3; and discharge the Section 9 analytic free-beam realization, spectral gap, and theorem-instantiation bridge.",
+      "missing_work": "Compile and promote the bounded Theorem 6.3 implementation. The finite-trial typeclass is the explicit Lean encoding of the paper's strict Hilbert-dimension consequence under separability; a future cardinal bridge may derive it mechanically. Complete the equal-dimensional infinite/noncompact tan theta theorem and the arbitrary-UI-norm unbounded Appendix passage; do not reintroduce the refuted hdim-to-IsAcute distillation. Continue the Section 3 classification, Section 4 infinite comparison, Section 8, and Section 9 campaigns.",
       "role": "primary_theorem_source",
       "bibliographic_status": "verified"
     },

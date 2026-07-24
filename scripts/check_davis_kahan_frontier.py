@@ -128,6 +128,100 @@ def mapped_census_ids(manifest: dict[str, Any]) -> set[str]:
     }
 
 
+def node_ids_by_census_id(manifest: dict[str, Any]) -> dict[str, list[str]]:
+    """Map each source-census row to its directly implementing frontier nodes."""
+    result: dict[str, list[str]] = collections.defaultdict(list)
+    for node in manifest.get("nodes", []):
+        for census_id in node.get("source_census_ids", []):
+            result[census_id].append(node["id"])
+    return dict(result)
+
+
+def dependency_closure(manifest: dict[str, Any], roots: list[str]) -> list[str]:
+    """Return manifest nodes needed by ``roots`` in stable manifest order."""
+    by_id = {node["id"]: node for node in manifest.get("nodes", [])}
+    needed: set[str] = set()
+
+    def visit(node_id: str) -> None:
+        if node_id in needed:
+            return
+        needed.add(node_id)
+        for dependency in by_id[node_id].get("dependencies", []):
+            visit(dependency)
+
+    for root in roots:
+        visit(root)
+    return [node["id"] for node in manifest.get("nodes", []) if node["id"] in needed]
+
+
+def paper_result_rows(
+    manifest: dict[str, Any], census: dict[str, Any],
+    status: dict[str, dict[str, Any]], lean_used: bool,
+) -> list[dict[str, Any]]:
+    """Summarize source-census rows represented by the frontier graph.
+
+    ``kind == "source"`` is deliberately not used here. ``kind`` describes a
+    node's role in the formalization graph, whereas ``source_census_ids`` is the
+    explicit evidence that a node represents something printed in the 1970
+    paper.
+
+    A "piece" is one node in the union of the endpoint dependency closures.
+    Missing pieces are the currently exposed blockers: ungrounded nodes whose
+    declared dependencies are already grounded. This avoids counting one
+    upstream blocker again at every downstream node, although additional
+    blockers may become visible after the current ones are repaired. The
+    estimate reaches 100% only when every endpoint is recursively grounded.
+    """
+    mapped = node_ids_by_census_id(manifest)
+    rows: list[dict[str, Any]] = []
+    for item in census.get("items", []):
+        census_id = item["id"]
+        endpoints = mapped.get(census_id, [])
+        if not endpoints:
+            continue
+        closure = dependency_closure(manifest, endpoints)
+        if lean_used:
+            by_id = {node["id"]: node for node in manifest.get("nodes", [])}
+            missing = [
+                node_id for node_id in closure
+                if not bool(status[node_id]["recursive_grounded"])
+                and all(
+                    bool(status[dependency]["recursive_grounded"])
+                    for dependency in by_id[node_id].get("dependencies", [])
+                )
+            ]
+            endpoints_grounded = all(
+                bool(status[node_id]["recursive_grounded"])
+                for node_id in endpoints
+            )
+            complete_pieces = len(closure) - len(missing)
+            estimate = 100 if endpoints_grounded else (
+                (100 * complete_pieces) // len(closure) if closure else 0
+            )
+            if not endpoints_grounded:
+                estimate = min(99, estimate)
+        else:
+            missing = None
+            endpoints_grounded = None
+            estimate = None
+        rows.append({
+            "id": census_id,
+            "source_anchor": item.get("source_anchor", ""),
+            "source_kind": item.get("source_kind", ""),
+            "title": item.get("title", ""),
+            "census_status": item.get("status", ""),
+            "verification": item.get("verification", ""),
+            "endpoint_nodes": endpoints,
+            "closure_nodes": closure,
+            "pieces_total": len(closure),
+            "missing_piece_nodes": missing,
+            "estimated_missing_pieces": None if missing is None else len(missing),
+            "estimated_complete_percent": estimate,
+            "recursively_grounded": endpoints_grounded,
+        })
+    return rows
+
+
 def write_probe(manifest: dict[str, Any]) -> None:
     root_import = manifest["root_import"]
     lines = [f"import {root_import}\n\n"]
@@ -135,18 +229,76 @@ def write_probe(manifest: dict[str, Any]) -> None:
         node_id = node["id"]
         decl = node["declaration"]
         lines.extend([
-            f'#eval IO.println "FRONTIER_BEGIN:{node_id}"\n',
+            f'#eval IO.eprintln "FRONTIER_BEGIN:{node_id}"\n',
             f"#check @{decl}\n",
             f"#print axioms {decl}\n",
-            f'#eval IO.println "FRONTIER_END:{node_id}"\n\n',
+            f'#eval IO.eprintln "FRONTIER_END:{node_id}"\n\n',
         ])
     # Canary ensures an output parser change cannot silently classify all names as resolved.
     lines.extend([
-        '#eval IO.println "FRONTIER_BEGIN:__canary__"\n',
+        '#eval IO.eprintln "FRONTIER_BEGIN:__canary__"\n',
         "#check @ForMathlib.DavisKahan.Experimental.Frontier.ThisNameMustNeverResolve\n",
-        '#eval IO.println "FRONTIER_END:__canary__"\n',
+        '#eval IO.eprintln "FRONTIER_END:__canary__"\n',
     ])
     PROBE.write_text("".join(lines), encoding="utf8")
+
+
+def parse_probe_sections(
+    output: str, expected_ids: list[str]
+) -> tuple[dict[str, list[str]], list[str]]:
+    """Split Lean probe output into declaration sections.
+
+    Probe markers are emitted with ``IO.eprintln`` so they share stderr's
+    ordering with Lean diagnostics even when output is captured by a pipe.
+    The previous stdout markers could be block-buffered until process exit,
+    causing every declaration section to appear empty and falsely reporting
+    ``0/N`` resolution.
+    """
+    sections: dict[str, list[str]] = collections.defaultdict(list)
+    outside: list[str] = []
+    current: str | None = None
+    begin = re.compile(r"FRONTIER_BEGIN:([^\s]+)")
+    end = re.compile(r"FRONTIER_END:([^\s]+)")
+    begun: list[str] = []
+    ended: list[str] = []
+    for line in output.splitlines():
+        mb = begin.search(line)
+        if mb:
+            node_id = mb.group(1)
+            if current is not None:
+                raise RuntimeError(
+                    f"nested frontier probe marker: began {node_id!r} while "
+                    f"inside {current!r}")
+            current = node_id
+            begun.append(node_id)
+            continue
+        me = end.search(line)
+        if me:
+            node_id = me.group(1)
+            if current != node_id:
+                raise RuntimeError(
+                    f"mismatched frontier probe marker: ended {node_id!r} "
+                    f"while inside {current!r}")
+            ended.append(node_id)
+            current = None
+            continue
+        if current is not None:
+            sections[current].append(line)
+        elif line.strip():
+            outside.append(line)
+    if current is not None:
+        raise RuntimeError(f"unterminated frontier probe section {current!r}")
+    expected = expected_ids + ["__canary__"]
+    if begun != expected or ended != expected:
+        missing_begin = [node_id for node_id in expected if node_id not in begun]
+        missing_end = [node_id for node_id in expected if node_id not in ended]
+        tail = "\n".join(outside[-20:]) or "(no unsectioned Lean output)"
+        raise RuntimeError(
+            "frontier probe markers were not emitted in full; "
+            f"missing begin={missing_begin}, missing end={missing_end}. "
+            "The root import may have failed before the probe commands ran. "
+            f"Unsectioned output tail:\n{tail}")
+    return dict(sections), outside
 
 
 def run_lean_probe(manifest: dict[str, Any]) -> tuple[dict[str, dict[str, Any]], str]:
@@ -160,22 +312,8 @@ def run_lean_probe(manifest: dict[str, Any]) -> tuple[dict[str, dict[str, Any]],
         check=False,
     )
     output = result.stdout
-    # Markers are printed even when the command between them reports an error.
-    sections: dict[str, list[str]] = collections.defaultdict(list)
-    current: str | None = None
-    begin = re.compile(r"FRONTIER_BEGIN:([^\s]+)")
-    end = re.compile(r"FRONTIER_END:([^\s]+)")
-    for line in output.splitlines():
-        mb = begin.search(line)
-        if mb:
-            current = mb.group(1)
-            continue
-        me = end.search(line)
-        if me:
-            current = None
-            continue
-        if current is not None:
-            sections[current].append(line)
+    expected_ids = [node["id"] for node in manifest["nodes"]]
+    sections, outside = parse_probe_sections(output, expected_ids)
     status: dict[str, dict[str, Any]] = {}
     marker = manifest.get("coverage_policy", {}).get("admission_marker", "sorryAx")
     error_re = re.compile(r"\berror(?:\(|:)", re.I)
@@ -184,7 +322,7 @@ def run_lean_probe(manifest: dict[str, Any]) -> tuple[dict[str, dict[str, Any]],
         node_id = node["id"]
         chunk = "\n".join(sections.get(node_id, []))
         has_error = bool(error_re.search(chunk) or unknown_re.search(chunk))
-        resolved = bool(chunk) and not has_error
+        resolved = bool(chunk.strip()) and not has_error
         admitted = marker in chunk if resolved else None
         status[node_id] = {
             "resolved": resolved,
@@ -194,6 +332,14 @@ def run_lean_probe(manifest: dict[str, Any]) -> tuple[dict[str, dict[str, Any]],
     if status["__canary__"]["resolved"]:
         raise RuntimeError(
             "frontier probe parser is broken: the deliberately unknown canary resolved")
+    if not any(status[node_id]["resolved"] for node_id in expected_ids):
+        empty = [node_id for node_id in expected_ids if not sections.get(node_id)]
+        outside_tail = "\n".join(outside[-20:]) or "(none)"
+        raise RuntimeError(
+            "frontier probe resolved zero real declarations; refusing to treat "
+            "this as a valid census. Empty sections: "
+            f"{len(empty)}/{len(expected_ids)}. Unsectioned output tail:\n"
+            f"{outside_tail}")
     status.pop("__canary__", None)
     return status, output
 
@@ -216,7 +362,9 @@ def compute_recursive_status(
         else:
             resolved = bool(lean[node_id]["resolved"])
             admitted = lean[node_id]["admitted"]
-            local_grounded = resolved and admitted is False
+            local_grounded = (
+                resolved and admitted is False and not node.get("open_obligation", False)
+            )
         dependencies = [one(dep) for dep in node.get("dependencies", [])]
         if lean is None:
             recursive_grounded: bool | None = None
@@ -248,6 +396,7 @@ def summary(
     required = required_census_ids(manifest, census)
     mapped = mapped_census_ids(manifest)
     source_nodes = [n for n in manifest["nodes"] if n["kind"] == "source"]
+    paper_rows = paper_result_rows(manifest, census, status, lean_used)
     all_nodes = manifest["nodes"]
     return {
         "lean_used": lean_used,
@@ -272,6 +421,11 @@ def summary(
             sum(bool(status[n["id"]]["recursive_grounded"]) for n in source_nodes)
             if lean_used else None
         ),
+        "paper_results_total": len(paper_rows),
+        "paper_results_recursively_grounded": (
+            sum(bool(row["recursively_grounded"]) for row in paper_rows)
+            if lean_used else None
+        ),
         "census_rows_requiring_frontier": len(required),
         "census_rows_mapped": len(required & mapped),
         "census_rows_unmapped": sorted(required - mapped),
@@ -283,25 +437,76 @@ def render_report(
     manifest: dict[str, Any], census: dict[str, Any],
     status: dict[str, dict[str, Any]], totals: dict[str, Any]
 ) -> str:
+    paper_rows = paper_result_rows(
+        manifest, census, status, bool(totals["lean_used"]))
+
+    def mark(value: Any) -> str:
+        if value is True:
+            return "yes"
+        if value is False:
+            return "no"
+        return "?"
+
+    def markdown_cell(value: Any) -> str:
+        return str(value).replace("|", "\\|").replace("\n", " ")
+
     lines = [
         "# Davis--Kahan 1970 frontier status",
         "",
         "Generated by `scripts/check_davis_kahan_frontier.py`.",
         "",
+        "## Davis--Kahan 1970 paper results",
+        "",
+        "This table is based on explicit `source_census_ids` mappings. "
+        "`kind = source` means a frontier endpoint; it does **not** by itself "
+        "mean that the declaration appeared in the paper.",
+        "",
+        "A piece is one manifest node in the result's transitive dependency "
+        "closure. Missing pieces are currently exposed blockers: ungrounded "
+        "nodes whose declared dependencies are already grounded. This avoids "
+        "counting one upstream blocker at every downstream node, but new "
+        "blockers may appear after repairs. The percentage is intentionally "
+        "approximate, but **100% is reserved for a recursively grounded "
+        "result**.",
+        "",
+        "| Paper item | Source kind | Frontier endpoint(s) | Missing pieces | Est. complete | Grounded |",
+        "|---|---|---|---:|---:|:---:|",
+    ]
+    for row in paper_rows:
+        label = f"`{row['id']}` — {row['source_anchor']}: {row['title']}"
+        endpoints = ", ".join(f"`{node_id}`" for node_id in row["endpoint_nodes"])
+        missing = (
+            "?" if row["estimated_missing_pieces"] is None
+            else f"{row['estimated_missing_pieces']} / {row['pieces_total']}"
+        )
+        estimate = (
+            "?" if row["estimated_complete_percent"] is None
+            else f"{row['estimated_complete_percent']}%"
+        )
+        lines.append(
+            f"| {markdown_cell(label)} | {markdown_cell(row['source_kind'])} | "
+            f"{endpoints} | {missing} | {estimate} | "
+            f"{mark(row['recursively_grounded'])} |"
+        )
+
+    lines.extend([
+        "",
         "## Summary",
         "",
         f"- Manifest nodes: **{totals['nodes_total']}**",
         f"- Textually present: **{totals['nodes_textually_present']}**",
+        f"- Paper result rows represented in the frontier: **{totals['paper_results_total']}**",
         f"- Census rows requiring frontier coverage: **{totals['census_rows_requiring_frontier']}**",
         f"- Census rows mapped: **{totals['census_rows_mapped']}**",
-    ]
+    ])
     if totals["lean_used"]:
         lines.extend([
             f"- Declarations resolving in Lean: **{totals['nodes_resolved']}**",
             f"- Declarations with admission-free Lean closure: **{totals['nodes_admission_free']}**",
             f"- Recursively grounded manifest nodes: **{totals['nodes_recursively_grounded']}**",
-            f"- Source endpoints resolving: **{totals['source_nodes_resolved']} / {totals['source_nodes_total']}**",
-            f"- Source endpoints recursively grounded: **{totals['source_nodes_recursively_grounded']} / {totals['source_nodes_total']}**",
+            f"- Paper results recursively grounded: **{totals['paper_results_recursively_grounded']} / {totals['paper_results_total']}**",
+            f"- Source-role endpoints resolving: **{totals['source_nodes_resolved']} / {totals['source_nodes_total']}**",
+            f"- Source-role endpoints recursively grounded: **{totals['source_nodes_recursively_grounded']} / {totals['source_nodes_total']}**",
         ])
     else:
         lines.append("- Lean probe: **not run**")
@@ -310,22 +515,20 @@ def render_report(
         lines.extend(f"- `{x}`" for x in totals["census_rows_unmapped"])
     lines.extend([
         "",
-        "## Nodes",
+        "## Manifest nodes",
         "",
-        "| Node | Kind | Priority | Text | Resolves | Admission-free | Recursive |",
-        "|---|---|---:|:---:|:---:|:---:|:---:|",
+        "| Node | Kind | Paper-facing? | Paper row(s) | Priority | Open obligation? | Text | Resolves | Admission-free | Recursive |",
+        "|---|---|:---:|---|---:|:---:|:---:|:---:|:---:|:---:|",
     ])
-    def mark(value: Any) -> str:
-        if value is True:
-            return "yes"
-        if value is False:
-            return "no"
-        return "?"
     for node in manifest["nodes"]:
         st = status[node["id"]]
         admission_free = None if st["admitted"] is None else not st["admitted"]
+        paper_ids = node.get("source_census_ids", [])
+        paper_rows_cell = ", ".join(f"`{item}`" for item in paper_ids)
         lines.append(
-            f"| `{node['id']}` | {node['kind']} | {node.get('priority','')} | "
+            f"| `{node['id']}` | {node['kind']} | {mark(bool(paper_ids))} | "
+            f"{paper_rows_cell} | {node.get('priority','')} | "
+            f"{mark(bool(node.get('open_obligation', False)))} | "
             f"{mark(st['text_present'])} | {mark(st['resolved'])} | "
             f"{mark(admission_free)} | {mark(st['recursive_grounded'])} |"
         )
@@ -386,6 +589,8 @@ def main() -> int:
     payload = {
         "summary": totals,
         "problems": problems,
+        "paper_results": paper_result_rows(
+            manifest, census, status, lean_status is not None),
         "nodes": {n["id"]: status[n["id"]] for n in manifest["nodes"]},
     }
     if args.json:
@@ -398,7 +603,8 @@ def main() -> int:
             print(
                 f"Lean: {totals['nodes_resolved']}/{totals['nodes_total']} resolve; "
                 f"{totals['nodes_recursively_grounded']}/{totals['nodes_total']} recursively grounded; "
-                f"{totals['source_nodes_recursively_grounded']}/{totals['source_nodes_total']} source endpoints grounded")
+                f"{totals['paper_results_recursively_grounded']}/{totals['paper_results_total']} paper results grounded; "
+                f"{totals['source_nodes_recursively_grounded']}/{totals['source_nodes_total']} source-role endpoints grounded")
         else:
             print("Lean: not available; recursive proof-closure status is unknown")
         if problems:

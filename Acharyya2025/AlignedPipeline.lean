@@ -38,7 +38,7 @@ import Acharyya2025.ConfigPerturbation
 import Acharyya2025.MatrixPerturbation
 import Acharyya2025.GramRealization
 import Acharyya2025.Bridge
-import ForMathlib.MeasureTheory.CompactExists
+import ForTauCeti.MeasureTheory.CompactExists
 
 open scoped BigOperators RealInnerProductSpace InnerProductSpace Matrix Topology
 open Filter MeasureTheory
@@ -277,7 +277,7 @@ If the raw spectral embedding `ω ↦ spectralConfig … (Dhat u ω) …` is mea
 measurable selection of the alignment: the set of inner-product-preserving
 continuous linear maps of `ℝ^d` is compact (closed and bounded in the
 finite-dimensional operator space), so the existential is a compactly-quantified
-constraint and `ForMathlib.measurableSet_exists_mem_le` applies.
+constraint and `TauCeti.measurableSet_exists_mem_le` applies.
 
 Combined with `configError_alignedSpectralConfig_le_iff_alignExists`, this makes
 the aligned-estimator error event measurable from the single honest primitive
@@ -348,7 +348,7 @@ theorem measurableSet_setOf_alignExists {n d : Nat} (hd : d ≤ n)
   have hScompact : IsCompact S := Metric.isCompact_of_isClosed_isBounded hSclosed hSbounded
   -- The compactly-quantified existential is measurable.
   rw [hevent]
-  refine ForMathlib.measurableSet_exists_mem_le hScompact (fun ω => ?_) (fun W _ => ?_) (c u)
+  refine TauCeti.measurableSet_exists_mem_le hScompact (fun ω => ?_) (fun W _ => ?_) (c u)
   · -- Continuity in `W` of the error sum.
     refine Continuous.continuousOn ?_
     refine continuous_finsetSum _ fun i _ => ?_

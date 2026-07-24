@@ -5,7 +5,7 @@ Authors: Jon Crall, GPT 5.6 High, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.FiniteDimensional.SinTheta.TrialMap
 import DavisKahan.FiniteDimensional.Residual.AngleEmbeddings
-import DavisKahan.Experimental.FiniteDimensional.DoubleAngle.SinTheta
+import DavisKahan.FiniteDimensional.DoubleAngle.SinTwoThetaResidual
 
 /-!
 # Generalized finite-dimensional residual theorems

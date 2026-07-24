@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Fable 5
 -/
 import DavisKahan.SpectralTheory.Compatibility
-import ForMathlib.Analysis.InnerProductSpace.OperatorAbsoluteValue
+import ForTauCeti.Analysis.InnerProductSpace.OperatorAbsoluteValue
 
 /-!
 # The complex operator angle calculus: honest first rungs
@@ -37,25 +37,25 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
 the absolute value of the projector difference. -/
 noncomputable def sinAngleOperatorC (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →L[ℂ] E :=
-  ForMathlib.operatorAbs (U.starProjection - V.starProjection)
+  TauCeti.operatorAbs (U.starProjection - V.starProjection)
 
 /-- The sine operator is nonnegative. -/
 theorem sinAngleOperatorC_nonneg (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     0 ≤ sinAngleOperatorC U V :=
-  ForMathlib.operatorAbs_nonneg _
+  TauCeti.operatorAbs_nonneg _
 
 /-- The sine operator is self-adjoint. -/
 theorem isSelfAdjoint_sinAngleOperatorC (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     IsSelfAdjoint (sinAngleOperatorC U V) :=
-  ForMathlib.isSelfAdjoint_operatorAbs _
+  TauCeti.isSelfAdjoint_operatorAbs _
 
 /-- **The norm of the sine operator is the subspace gap.** -/
 theorem norm_sinAngleOperatorC (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     ‖sinAngleOperatorC U V‖ = subspaceGap U V :=
-  ForMathlib.norm_operatorAbs _
+  TauCeti.norm_operatorAbs _
 
 /-- Pointwise identity: the sine operator is a pointwise isometry of the
 projector difference. -/
@@ -63,33 +63,33 @@ theorem norm_sinAngleOperatorC_apply (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] (x : E) :
     ‖sinAngleOperatorC U V x‖ =
       ‖(U.starProjection - V.starProjection) x‖ :=
-  ForMathlib.norm_operatorAbs_apply _ x
+  TauCeti.norm_operatorAbs_apply _ x
 
 /-- Cosine of the directed operator angle at complex scalars: the absolute
 value of the projection composition `P_V P_U`.  Its singular values are the
 cosines of the principal angles of `U` against `V`. -/
 noncomputable def cosAngleOperatorC (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →L[ℂ] E :=
-  ForMathlib.operatorAbs (V.starProjection ∘L U.starProjection)
+  TauCeti.operatorAbs (V.starProjection ∘L U.starProjection)
 
 /-- The cosine operator is nonnegative. -/
 theorem cosAngleOperatorC_nonneg (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     0 ≤ cosAngleOperatorC U V :=
-  ForMathlib.operatorAbs_nonneg _
+  TauCeti.operatorAbs_nonneg _
 
 /-- The cosine operator is self-adjoint. -/
 theorem isSelfAdjoint_cosAngleOperatorC (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     IsSelfAdjoint (cosAngleOperatorC U V) :=
-  ForMathlib.isSelfAdjoint_operatorAbs _
+  TauCeti.isSelfAdjoint_operatorAbs _
 
 /-- The norm of the cosine operator is the norm of the directed projection
 composition — the largest principal cosine. -/
 theorem norm_cosAngleOperatorC (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     ‖cosAngleOperatorC U V‖ = ‖V.starProjection ∘L U.starProjection‖ :=
-  ForMathlib.norm_operatorAbs _
+  TauCeti.norm_operatorAbs _
 
 /-- The cosine operator is a contraction. -/
 theorem norm_cosAngleOperatorC_le_one (U V : Submodule ℂ E)
@@ -109,25 +109,25 @@ value of the cross projection composition `P_{Vᗮ} P_U`.  Its norm is the
 directed gap. -/
 noncomputable def sinAngleOperatorDirectedC (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →L[ℂ] E :=
-  ForMathlib.operatorAbs (Vᗮ.starProjection ∘L U.starProjection)
+  TauCeti.operatorAbs (Vᗮ.starProjection ∘L U.starProjection)
 
 /-- The directed sine operator is nonnegative. -/
 theorem sinAngleOperatorDirectedC_nonneg (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     0 ≤ sinAngleOperatorDirectedC U V :=
-  ForMathlib.operatorAbs_nonneg _
+  TauCeti.operatorAbs_nonneg _
 
 /-- The directed sine operator is self-adjoint. -/
 theorem isSelfAdjoint_sinAngleOperatorDirectedC (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     IsSelfAdjoint (sinAngleOperatorDirectedC U V) :=
-  ForMathlib.isSelfAdjoint_operatorAbs _
+  TauCeti.isSelfAdjoint_operatorAbs _
 
 /-- **The norm of the directed sine operator is the directed gap.** -/
 theorem norm_sinAngleOperatorDirectedC (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     ‖sinAngleOperatorDirectedC U V‖ = directedGap U V :=
-  ForMathlib.norm_operatorAbs _
+  TauCeti.norm_operatorAbs _
 
 /-- Square of the compressed cross block: `(P_W P_U)⋆ (P_W P_U) = P_U P_W P_U`
 for any orthogonally complemented `W`. -/
@@ -158,7 +158,7 @@ theorem sinAngleOperatorDirectedC_sq_add_cosAngleOperatorC_sq
     sinAngleOperatorDirectedC U V * sinAngleOperatorDirectedC U V +
       cosAngleOperatorC U V * cosAngleOperatorC U V = U.starProjection := by
   rw [sinAngleOperatorDirectedC, cosAngleOperatorC,
-    ForMathlib.operatorAbs_mul_self, ForMathlib.operatorAbs_mul_self,
+    TauCeti.operatorAbs_mul_self, TauCeti.operatorAbs_mul_self,
     adjoint_cross_mul_cross, adjoint_cross_mul_cross]
   calc U.starProjection ∘L Vᗮ.starProjection ∘L U.starProjection +
         U.starProjection ∘L V.starProjection ∘L U.starProjection
@@ -244,7 +244,7 @@ theorem commute_sinAngleOperatorDirectedC_cosAngleOperatorC
     (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     Commute (sinAngleOperatorDirectedC U V) (cosAngleOperatorC U V) :=
-  ForMathlib.operatorAbs_commute_operatorAbs (commute_cross_sq U V)
+  TauCeti.operatorAbs_commute_operatorAbs (commute_cross_sq U V)
 
 /-- Sine of twice the directed operator angle at complex scalars:
 `2 sin Θ cos Θ` through the commuting directed sine and cosine. -/
@@ -313,7 +313,7 @@ theorem norm_sinTwoAngleOperatorC (U V : Submodule ℂ E)
   have hprod : ‖sinAngleOperatorDirectedC U V * cosAngleOperatorC U V‖ =
       ‖Vᗮ.starProjection ∘L U.starProjection ∘L V.starProjection‖ := by
     rw [sinAngleOperatorDirectedC, cosAngleOperatorC,
-      ForMathlib.norm_operatorAbs_mul, ForMathlib.norm_mul_operatorAbs,
+      TauCeti.norm_operatorAbs_mul, TauCeti.norm_mul_operatorAbs,
       hstar, hcomp]
   rw [sinTwoAngleOperatorC, norm_smul, hprod]
   norm_num
@@ -350,12 +350,12 @@ theorem sq_norm_sin_add_sq_norm_cos (U V : Submodule ℂ E)
 
 /-- The absolute value vanishes exactly where the operator does. -/
 theorem _root_.ForMathlib.operatorAbs_apply_eq_zero_iff (T : E →L[ℂ] E)
-    (x : E) : ForMathlib.operatorAbs T x = 0 ↔ T x = 0 := by
+    (x : E) : TauCeti.operatorAbs T x = 0 ↔ T x = 0 := by
   constructor <;> intro h
-  · have := ForMathlib.norm_operatorAbs_apply T x
+  · have := TauCeti.norm_operatorAbs_apply T x
     rw [h, norm_zero] at this
     exact norm_eq_zero.mp this.symm
-  · have := ForMathlib.norm_operatorAbs_apply T x
+  · have := TauCeti.norm_operatorAbs_apply T x
     rw [h, norm_zero] at this
     exact norm_eq_zero.mp this
 
@@ -395,7 +395,7 @@ theorem norm_cosAngleOperatorC_apply_ge (U V : Submodule ℂ E)
     rw [hg]; exact norm_nonneg _
   have hcos : ‖cosAngleOperatorC U V x‖ =
       ‖(V.starProjection ∘L U.starProjection) x‖ :=
-    ForMathlib.norm_operatorAbs_apply _ x
+    TauCeti.norm_operatorAbs_apply _ x
   have hsin_le : ‖(Vᗮ.starProjection ∘L U.starProjection) x‖ ≤
       directedGap U V * ‖x‖ := by
     rw [hg]
@@ -862,10 +862,10 @@ theorem norm_cosTwoAngleOperatorC_apply_ge (U V : Submodule ℂ E)
   -- pointwise Pythagoras data
   have hcosn : ‖cosAngleOperatorC U V x‖ =
       ‖(V.starProjection ∘L U.starProjection) x‖ :=
-    ForMathlib.norm_operatorAbs_apply _ x
+    TauCeti.norm_operatorAbs_apply _ x
   have hsinn : ‖sinAngleOperatorDirectedC U V x‖ =
       ‖(Vᗮ.starProjection ∘L U.starProjection) x‖ :=
-    ForMathlib.norm_operatorAbs_apply _ x
+    TauCeti.norm_operatorAbs_apply _ x
   have hpyth := sq_norm_sin_add_sq_norm_cos U V hx
   have hsin_le : ‖(Vᗮ.starProjection ∘L U.starProjection) x‖ ≤
       directedGap U V * ‖x‖ := by

@@ -45,7 +45,7 @@
       "id": "base-spectral-projection",
       "title": "Compiled bounded self-adjoint spectral projection",
       "kind": "foundation",
-      "module": "DavisKahan.Experimental.InfiniteDimensional.Core.SpectralProjection",
+      "module": "DavisKahan.Interop.Spectra.BoundedSelfAdjointSpectralProjection",
       "declaration": "ForMathlib.DavisKahanExt.boundedSelfAdjointSpectralProjection",
       "dependencies": [],
       "source_census_ids": [],
@@ -123,7 +123,7 @@
       "id": "s3-paper-direct-rotation-predicate",
       "title": "Paper direct-rotation predicate",
       "kind": "foundation",
-      "module": "DavisKahan.Experimental.Frontier.Core",
+      "module": "DavisKahan.Geometry.Halmos.GenericRotationPredicates",
       "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.IsPaperDirectRotation",
       "dependencies": [
         "base-acute-direct-rotation"
@@ -137,7 +137,7 @@
       "id": "s3-crossed-defect-equivalence",
       "title": "Crossed-defect Hilbert equivalence",
       "kind": "foundation",
-      "module": "DavisKahan.Experimental.Frontier.Core",
+      "module": "DavisKahan.Geometry.Halmos.GenericRotationPredicates",
       "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.CrossedDefectsEquivalent",
       "dependencies": [
         "base-halmos-decomposition"
@@ -151,7 +151,7 @@
       "id": "s3-generic-cosine-restriction",
       "title": "Generic Halmos cosine restriction",
       "kind": "foundation",
-      "module": "DavisKahan.Experimental.Frontier.Core",
+      "module": "DavisKahan.Geometry.Halmos.GenericRotationPredicates",
       "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.genericHalmosCosineSq",
       "dependencies": [
         "base-halmos-decomposition",
@@ -166,7 +166,7 @@
       "id": "s3-generic-sine-restriction",
       "title": "Generic Halmos sine restriction",
       "kind": "foundation",
-      "module": "DavisKahan.Experimental.Frontier.Core",
+      "module": "DavisKahan.Geometry.Halmos.GenericRotationPredicates",
       "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.genericHalmosSineSq",
       "dependencies": [
         "base-halmos-decomposition",
@@ -181,7 +181,7 @@
       "id": "s3-generic-pythagoras",
       "title": "Generic restriction Pythagoras",
       "kind": "bridge",
-      "module": "DavisKahan.Experimental.Frontier.Core",
+      "module": "DavisKahan.Geometry.Halmos.GenericRotationPredicates",
       "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.genericHalmosCosineSq_add_sineSq",
       "dependencies": [
         "s3-generic-cosine-restriction",
@@ -491,7 +491,7 @@
       "id": "s6-approximation-energy",
       "title": "Approximation-number energy",
       "kind": "foundation",
-      "module": "DavisKahan.Experimental.Frontier.Lemma63",
+      "module": "DavisKahan.Sources.DavisKahan1970.Section6AppendixLeakage",
       "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.Section6Appendix.approximationEnergy",
       "dependencies": [],
       "source_census_ids": [],
@@ -503,7 +503,7 @@
       "id": "s6-lemma6-3-approx",
       "title": "Lemma 6.3 approximation-number form",
       "kind": "source",
-      "module": "DavisKahan.Experimental.Frontier.Lemma63",
+      "module": "DavisKahan.Sources.DavisKahan1970.Section6AppendixLeakage",
       "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.Section6Appendix.lemma6_3_approximationNumber_leakage",
       "dependencies": [
         "s6-approximation-energy"
@@ -519,7 +519,7 @@
       "id": "s6-lemma6-3-finite",
       "title": "Lemma 6.3 singular-value specialization",
       "kind": "bridge",
-      "module": "DavisKahan.Experimental.Frontier.Lemma63",
+      "module": "DavisKahan.Sources.DavisKahan1970.Section6AppendixLeakage",
       "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.Section6Appendix.lemma6_3_singularValue_leakage",
       "dependencies": [
         "s6-lemma6-3-approx"
@@ -533,7 +533,7 @@
       "id": "s5-compatible-cross-norm",
       "title": "Compatible cross-operator norm interface",
       "kind": "foundation",
-      "module": "DavisKahan.Experimental.Frontier.RemainingSourceSurface",
+      "module": "DavisKahan.Sources.DavisKahan1970.RemainingSourceSurface",
       "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.RemainingSourceSurface.CompatibleCrossOperatorNorm",
       "dependencies": [],
       "source_census_ids": [],
@@ -545,7 +545,7 @@
       "id": "s5-theorem5-1",
       "title": "Theorem 5.1 exact compatible-norm form",
       "kind": "source",
-      "module": "DavisKahan.Experimental.Frontier.RemainingSourceSurface",
+      "module": "DavisKahan.Sources.DavisKahan1970.RemainingSourceSurface",
       "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.RemainingSourceSurface.theorem5_1_banach_sylvester",
       "dependencies": [
         "s5-compatible-cross-norm"
@@ -561,7 +561,7 @@
       "id": "s6-trial-residual",
       "title": "Trial residual operator",
       "kind": "foundation",
-      "module": "DavisKahan.Experimental.Frontier.RemainingSourceSurface",
+      "module": "DavisKahan.Sources.DavisKahan1970.RemainingSourceSurface",
       "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.RemainingSourceSurface.trialResidual",
       "dependencies": [],
       "source_census_ids": [],
@@ -570,29 +570,142 @@
       "external": false
     },
     {
-      "id": "s6-theorem6-3",
-      "title": "Theorem 6.3 general ideal form",
-      "kind": "source",
-      "module": "DavisKahan.Experimental.Frontier.RemainingSourceSurface",
-      "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.RemainingSourceSurface.theorem6_3_generalizedTanTheta_ideal",
+      "id": "s6-theorem6-3-directed-sine",
+      "title": "Theorem 6.3 directed sine cross block",
+      "kind": "foundation",
+      "module": "DavisKahan.TanTheta.Theorem63FiniteSource",
+      "declaration": "ForMathlib.DavisKahan.Experimental.ExactTanTheta.theorem63DirectedSineBlock",
+      "dependencies": [],
+      "source_census_ids": [],
+      "priority": "high",
+      "notes": "Promoted out of Scratch into the production module DavisKahan.TanTheta.Theorem63FiniteSource.",
+      "external": false
+    },
+    {
+      "id": "s6-theorem6-3-directed-tangent-data",
+      "title": "Theorem 6.3 directed tangent approximation data",
+      "kind": "foundation",
+      "module": "DavisKahan.TanTheta.Theorem63FiniteSource",
+      "declaration": "ForMathlib.DavisKahan.Experimental.ExactTanTheta.HasTheorem63DirectedTangentApproximationNumbers",
+      "dependencies": [
+        "s6-theorem6-3-directed-sine"
+      ],
+      "source_census_ids": [],
+      "priority": "high",
+      "notes": "Promoted out of Scratch into the production module DavisKahan.TanTheta.Theorem63FiniteSource.",
+      "external": false
+    },
+    {
+      "id": "s6-theorem6-3-kyfan-promotion",
+      "title": "Theorem 6.3 Ky Fan to ideal-gauge promotion",
+      "kind": "bridge",
+      "module": "DavisKahan.TanTheta.Theorem63FiniteSource",
+      "declaration": "ForMathlib.DavisKahan.Experimental.ExactTanTheta.theorem6_3_ideal_of_kyFan_core",
+      "dependencies": [
+        "s6-theorem6-3-directed-tangent-data"
+      ],
+      "source_census_ids": [],
+      "priority": "high",
+      "notes": "Promoted out of Scratch into the production module DavisKahan.TanTheta.Theorem63FiniteSource.",
+      "external": false
+    },
+    {
+      "id": "s6-theorem6-3-kyfan-core",
+      "title": "Theorem 6.3 source finite-Ky-Fan core",
+      "kind": "bridge",
+      "module": "DavisKahan.TanTheta.Theorem63FiniteSource",
+      "declaration": "ForMathlib.DavisKahan.Experimental.ExactTanTheta.theorem6_3_all_kyFan_core",
       "dependencies": [
         "s6-trial-residual",
-        "s3-prop3-2-existence"
+        "s6-theorem6-3-directed-tangent-data"
+      ],
+      "source_census_ids": [],
+      "priority": "hard",
+      "notes": "Grounded bounded source core: finite trial coordinates, arbitrary complete ambient Hilbert space; singular-vector equation (6.6), all Ky Fan prefixes, and finite-rank tail stabilization.",
+      "external": false
+    },
+    {
+      "id": "s6-theorem6-3-finite-specialization",
+      "title": "Theorem 6.3 finite strict-lower-rank specialization",
+      "kind": "bridge",
+      "module": "DavisKahan.Sources.DavisKahan1970.RemainingSourceSurface",
+      "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.RemainingSourceSurface.theorem6_3_finite_generalizedTanTheta_ideal",
+      "dependencies": [],
+      "source_census_ids": [],
+      "priority": "high",
+      "notes": "Compiled arbitrary-UI-norm finite-dimensional specialization; useful evidence but not the full source Hilbert-space endpoint.",
+      "external": false
+    },
+    {
+      "id": "s6-theorem6-3",
+      "title": "Theorem 6.3 generalized directed tangent theorem",
+      "kind": "source",
+      "module": "DavisKahan.TanTheta.Theorem63FiniteSource",
+      "declaration": "ForMathlib.DavisKahan.Experimental.ExactTanTheta.theorem6_3_generalizedTanTheta_source_ideal",
+      "dependencies": [
+        "s6-theorem6-3-kyfan-core",
+        "s6-theorem6-3-kyfan-promotion"
       ],
       "source_census_ids": [
-        "DK-6.3-thm",
-        "S2-tan-theta",
+        "DK-6.3-thm"
+      ],
+      "priority": "hard",
+      "notes": "Bounded source-effective scope under the paper's global separability convention: the strict Hilbert-dimension inequality makes the smaller trial-coordinate space finite-dimensional. The Lean endpoint records finite trial coordinates explicitly and preserves the strict-rank hypothesis. Directed tangent; no symmetric IsAcute premise.",
+      "external": false
+    },
+    {
+      "id": "s2-tan-theta",
+      "title": "Section 2 single-angle tangent theorem",
+      "kind": "source",
+      "module": "DavisKahan.Sources.DavisKahan1970.RemainingSourceSurface",
+      "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.RemainingSourceSurface.theorem6_3_equalRank_finite_tanTheta_ideal",
+      "dependencies": [
+        "s6-theorem6-3-kyfan-promotion"
+      ],
+      "source_census_ids": [
+        "S2-tan-theta"
+      ],
+      "priority": "high",
+      "notes": "Open obligation. The finite equal-rank UI-norm theorem is compiled, but the equal-dimensional infinite/noncompact Section 2 theorem requires the Appendix finite-projector limiting argument.",
+      "external": false,
+      "open_obligation": true
+    },
+    {
+      "id": "s6-theorem6-3-unbounded-opnorm-partial",
+      "title": "Theorem 6.3 unbounded graph-angle operator-norm partial",
+      "kind": "bridge",
+      "module": "DavisKahan.Sources.DavisKahan1970.RemainingSourceSurface",
+      "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.RemainingSourceSurface.theorem6_3_unbounded_graphAngle_opNorm_partial",
+      "dependencies": [],
+      "source_census_ids": [],
+      "priority": "high",
+      "notes": "Compiled operator-norm graph-coordinate companion; it does not prove the source arbitrary-UI-norm unbounded scope.",
+      "external": false
+    },
+    {
+      "id": "s2-unbounded-scope",
+      "title": "Section 2 unbounded self-adjoint scope",
+      "kind": "source",
+      "module": "DavisKahan.Sources.DavisKahan1970.RemainingSourceSurface",
+      "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.RemainingSourceSurface.unbounded_angle_theorems_source_scope_partial_marker",
+      "dependencies": [
+        "base-theorem5-2",
+        "s6-theorem6-3",
+        "s6-lemma6-3-approx"
+      ],
+      "source_census_ids": [
         "S2-unbounded-scope"
       ],
       "priority": "hard",
-      "notes": "",
-      "external": false
+      "notes": "Open obligation. The bounded Theorem 6.3 and an unbounded graph-angle operator-norm companion are grounded, but the paper claims arbitrary-UI-norm unbounded scope; the Appendix cutoff/Fan passage remains open.",
+      "external": false,
+      "open_obligation": true
     },
     {
       "id": "s7-sin2",
       "title": "Section 7 sine double-angle source ideal theorem",
       "kind": "source",
-      "module": "DavisKahan.Experimental.Frontier.RemainingSourceSurface",
+      "module": "DavisKahan.Sources.DavisKahan1970.RemainingSourceSurface",
       "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.RemainingSourceSurface.section7_sinTwoTheta_source_ideal",
       "dependencies": [
         "base-spectral-projection"
@@ -609,7 +722,7 @@
       "id": "s7-tan2",
       "title": "Section 7 tangent double-angle source ideal theorem",
       "kind": "source",
-      "module": "DavisKahan.Experimental.Frontier.RemainingSourceSurface",
+      "module": "DavisKahan.Sources.DavisKahan1970.RemainingSourceSurface",
       "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.RemainingSourceSurface.section7_tanTwoTheta_source_ideal",
       "dependencies": [
         "s7-sin2"
@@ -626,7 +739,7 @@
       "id": "s8-circle-integrand",
       "title": "Circle resolvent integrand",
       "kind": "foundation",
-      "module": "DavisKahan.Experimental.Frontier.RieszCircle",
+      "module": "DavisKahan.Sources.DavisKahan1970.Section8RieszCircle",
       "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.RieszCircle.circleResolventIntegrand",
       "dependencies": [],
       "source_census_ids": [],
@@ -638,7 +751,7 @@
       "id": "s8-circle-integral",
       "title": "Operator-valued circle Riesz integral",
       "kind": "foundation",
-      "module": "DavisKahan.Experimental.Frontier.RieszCircle",
+      "module": "DavisKahan.Sources.DavisKahan1970.Section8RieszCircle",
       "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.RieszCircle.circleRieszProjectionIntegral",
       "dependencies": [
         "s8-circle-integrand"
@@ -652,7 +765,7 @@
       "id": "s8-scalar-cauchy",
       "title": "Scalar circle Cauchy indicator formula",
       "kind": "foundation",
-      "module": "DavisKahan.Experimental.Frontier.RieszCircle",
+      "module": "DavisKahan.Sources.DavisKahan1970.Section8RieszCircle",
       "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.RieszCircle.scalar_circleIntegral_resolvent_indicator",
       "dependencies": [],
       "source_census_ids": [],
@@ -664,7 +777,7 @@
       "id": "s8-riesz-eq-spectral",
       "title": "Circle Riesz equals spectral projection",
       "kind": "bridge",
-      "module": "DavisKahan.Experimental.Frontier.RieszCircle",
+      "module": "DavisKahan.Sources.DavisKahan1970.Section8RieszCircle",
       "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.RieszCircle.circleRieszProjection_eq_boundedSelfAdjointSpectralProjection",
       "dependencies": [
         "s8-circle-integral",
@@ -680,7 +793,7 @@
       "id": "s8-riesz-norm-bound",
       "title": "Circle Riesz perturbation norm bound",
       "kind": "bridge",
-      "module": "DavisKahan.Experimental.Frontier.RieszCircle",
+      "module": "DavisKahan.Sources.DavisKahan1970.Section8RieszCircle",
       "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.RieszCircle.norm_circleRieszProjection_sub_le",
       "dependencies": [
         "s8-circle-integral"
@@ -694,7 +807,7 @@
       "id": "s8-riesz-path-continuity",
       "title": "Circle Riesz path continuity",
       "kind": "bridge",
-      "module": "DavisKahan.Experimental.Frontier.RieszCircle",
+      "module": "DavisKahan.Sources.DavisKahan1970.Section8RieszCircle",
       "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.RieszCircle.continuous_circleRieszProjection_path",
       "dependencies": [
         "s8-riesz-eq-spectral",
@@ -769,13 +882,13 @@
       "title": "Direct-rotation upper compression data",
       "kind": "bridge",
       "module": "DavisKahan.Experimental.Frontier.Section8",
-      "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.Section8.directRotationUpperCompressionData",
+      "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.Section8.upperCompressionRepulsionData_of_targetSplitting",
       "dependencies": [
         "s3-prop3-1"
       ],
       "source_census_ids": [],
       "priority": "high",
-      "notes": "",
+      "notes": " Declaration renamed during the Section 8 target-splitting honest restatement (was directRotation{Upper,Lower}CompressionData).",
       "external": false
     },
     {
@@ -783,13 +896,13 @@
       "title": "Direct-rotation lower compression data",
       "kind": "bridge",
       "module": "DavisKahan.Experimental.Frontier.Section8",
-      "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.Section8.directRotationLowerCompressionData",
+      "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.Section8.lowerCompressionRepulsionData_of_targetSplitting",
       "dependencies": [
         "s3-prop3-1"
       ],
       "source_census_ids": [],
       "priority": "high",
-      "notes": "",
+      "notes": " Declaration renamed during the Section 8 target-splitting honest restatement (was directRotation{Upper,Lower}CompressionData).",
       "external": false
     },
     {

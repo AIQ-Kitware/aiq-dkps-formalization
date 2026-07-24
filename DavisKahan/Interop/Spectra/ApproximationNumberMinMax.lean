@@ -3,7 +3,7 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import ForMathlib.Analysis.Normed.Operator.ApproximationNumberMinMax
+import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.MinMax
 import DavisKahan.Interop.Spectra.Basic
 import DavisKahan.Interop.Spectra.PVMSubspace
 import Spectra.SpectralTheory.ResolventForm

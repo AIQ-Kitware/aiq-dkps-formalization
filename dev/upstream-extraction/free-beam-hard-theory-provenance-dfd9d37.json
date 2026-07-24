@@ -1,0 +1,90 @@
+{
+  "base_commit": "dfd9d37ebc86",
+  "campaign": "hard free-beam scratch theory",
+  "production_milestone": "complete standalone DavisKahan package before Tau Ceti migration",
+  "spectra_snapshot": {
+    "repository": "https://github.com/adambornemann-glitch/Spectra",
+    "commit": "8dbaaf6728d1342ae16acf79fd7eef7c59b37e63",
+    "license": "Apache-2.0",
+    "original_author": "Adam Bornemann"
+  },
+  "adapted_declarations": [
+    {
+      "source_file": "Spectra/Modular/TomitaTakesaki/VonNeumannTstarT.lean",
+      "source_declaration": "Spectra.TomitaTakesaki.modularOp_isSelfAdjoint",
+      "local_file": "DavisKahan/Experimental/Scratch/FreeBeam/Abstract/PositiveSurjectiveCriterion.lean",
+      "local_declarations": [
+        "dense_domain_of_nonnegative_one_add_surjective",
+        "isSelfAdjoint_of_isFormalAdjoint_nonnegative_one_add_surjective",
+        "DavisKahanExt.ClosedOperator.isSelfAdjoint_of_nonnegative_one_add_surjective"
+      ],
+      "adaptation_kind": "generalized and reorganized proof",
+      "semantic_note": "The modular-operator-specific argument is abstracted to every symmetric nonnegative partial operator with surjective one-plus operator."
+    },
+    {
+      "source_file": "Spectra/Modular/Tomita/BoundedPicture.lean",
+      "source_declaration": "denseRange_of_selfAdjoint_injective",
+      "source_visibility": "private",
+      "local_file": "DavisKahan/Experimental/Scratch/FreeBeam/Abstract/BoundedInverseRealization.lean",
+      "local_declarations": [
+        "denseRange_of_adjoint_eq_self_injective"
+      ],
+      "adaptation_kind": "promoted and namespace-adapted proof",
+      "semantic_note": "The statement is unchanged except that the previously private argument becomes reusable infrastructure."
+    }
+  ],
+  "new_local_mathematics": [
+    {
+      "cluster": "bounded inverse realization",
+      "files": [
+        "DavisKahan/Experimental/Scratch/FreeBeam/Abstract/BoundedInverseRealization.lean",
+        "DavisKahan/Experimental/Scratch/FreeBeam/Abstract/CompactGraphEmbedding.lean"
+      ],
+      "future_destination": "generic operator-theory library candidate"
+    },
+    {
+      "cluster": "coercive form realization",
+      "files": [
+        "DavisKahan/Experimental/Scratch/FreeBeam/Abstract/CoerciveFormResolvent.lean",
+        "DavisKahan/Experimental/Scratch/FreeBeam/Abstract/FormCompactness.lean",
+        "DavisKahan/Experimental/Scratch/FreeBeam/Abstract/BoundedGraphCompactness.lean"
+      ],
+      "future_destination": "generic operator-form library candidate"
+    },
+    {
+      "cluster": "fourth-order trace transport",
+      "files": [
+        "DavisKahan/Experimental/Scratch/FreeBeam/Abstract/TraceKernelModel.lean",
+        "DavisKahan/Experimental/Scratch/FreeBeam/Abstract/GraphClosedness.lean",
+        "DavisKahan/Experimental/Scratch/FreeBeam/Abstract/MaximalDomainTransport.lean"
+      ],
+      "future_destination": "interval Sobolev and differential-operator library candidate"
+    },
+    {
+      "cluster": "classical free-beam ODE",
+      "files": [
+        "DavisKahan/Experimental/Scratch/FreeBeam/Classical/CharacteristicConverse.lean",
+        "DavisKahan/Experimental/Scratch/FreeBeam/Classical/ModeData.lean",
+        "DavisKahan/Experimental/Scratch/FreeBeam/Classical/AffineModes.lean",
+        "DavisKahan/Experimental/Scratch/FreeBeam/Classical/RootLocalizationReduction.lean"
+      ],
+      "future_destination": "DavisKahan initially; reusable ODE pieces may later move upstream"
+    },
+    {
+      "cluster": "free-beam analytic assembly",
+      "files": [
+        "DavisKahan/Experimental/Scratch/FreeBeam/Analytic/ShiftedBeamRealization.lean",
+        "DavisKahan/Experimental/Scratch/FreeBeam/Analytic/EigenmodeReduction.lean",
+        "DavisKahan/Experimental/Scratch/FreeBeam/Analytic/FoundationAssembler.lean"
+      ],
+      "future_destination": "DavisKahan Section 9 production layer"
+    }
+  ],
+  "normal_build_dependency_policy": {
+    "mathlib": "required",
+    "vendor_spectra": "allowed during paper-completion milestone",
+    "external_spectra": "reference only",
+    "external_tauceti": "reference only",
+    "tauceti_required_dependency": false
+  }
+}
