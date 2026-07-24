@@ -10,6 +10,7 @@ import DavisKahan.Interop.Spectra.BoundedFromSpectrum
 import DavisKahan.Interop.Spectra.BoundedPerturbationSinTheta
 import DavisKahan.Interop.Spectra.BoundedPerturbationSinThetaIdeal
 import DavisKahan.Interop.Spectra.BoundedTruncation
+import DavisKahan.Interop.Spectra.CircleRieszProjection
 import DavisKahan.Interop.Spectra.ClosedOperator
 import DavisKahan.Interop.Spectra.DirectRotation
 import DavisKahan.Interop.Spectra.DirectRotationSquare

@@ -5,5 +5,6 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Geometry.Angle.All
 import DavisKahan.Geometry.Halmos.GenericRotationPredicates
+import DavisKahan.Geometry.Halmos.UnitaryEquivalence
 
 /-! # `DavisKahan/Geometry` -/
