@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
-import DavisKahan.Experimental.Scratch.FreeBeam.Classical.CharacteristicConverse
+import DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Classical.CharacteristicConverse
 import DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeamAnalyticFoundation
 import Mathlib.Tactic
 
@@ -30,7 +30,8 @@ open scoped InnerProductSpace
 namespace ForMathlib
 namespace DavisKahan
 namespace Experimental
-namespace Scratch
+namespace MathAhead
+namespace HiddenFoundations
 namespace FreeBeam
 namespace Analytic
 
@@ -156,7 +157,8 @@ end
 
 end Analytic
 end FreeBeam
-end Scratch
+end HiddenFoundations
+end MathAhead
 end Experimental
 end DavisKahan
 end ForMathlib

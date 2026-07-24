@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
-import DavisKahan.Experimental.Scratch.FreeBeam.SmoothGreenIdentity
-import DavisKahan.Experimental.Scratch.FreeBeam.ComplexGreenIdentity
+import DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.SmoothGreenIdentity
+import DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.ComplexGreenIdentity
 import Mathlib.MeasureTheory.Integral.IntervalIntegral.FundThmCalculus
 import Mathlib.Tactic
 
@@ -27,7 +27,8 @@ open scoped Interval
 namespace ForMathlib
 namespace DavisKahan
 namespace Experimental
-namespace Scratch
+namespace MathAhead
+namespace HiddenFoundations
 namespace FreeBeam
 
 noncomputable section
@@ -196,7 +197,8 @@ end ComplexFourthOrderData
 end
 
 end FreeBeam
-end Scratch
+end HiddenFoundations
+end MathAhead
 end Experimental
 end DavisKahan
 end ForMathlib

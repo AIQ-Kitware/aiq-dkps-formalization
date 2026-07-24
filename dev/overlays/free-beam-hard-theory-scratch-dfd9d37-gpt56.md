@@ -224,3 +224,23 @@ library with the attribution preserved.
 
 Compile each file independently before using the aggregate import. Promote
 small generic results only after their local APIs have stabilized.
+
+## Promotion status (2026-07-24, jon window A)
+
+**PROMOTED out of Scratch into the maintained MathAhead tree.** The whole
+campaign compiles and moved from `DavisKahan/Experimental/Scratch/FreeBeam/**`
+to `DavisKahan/Experimental/MathAhead/HiddenFoundations/FreeBeam/**` (namespace
+`…Experimental.Scratch.FreeBeam` → `…Experimental.MathAhead.HiddenFoundations.FreeBeam`).
+All 16 hard-theory modules plus the 3 smooth-core files and both aggregates now
+build; the aggregate is `FreeBeam.All` (smooth core + `HardTheoryAll`), wired
+through `MathAhead.Section9All` into `MathAhead.All` / `HiddenFoundations.All`.
+`Scratch/All.lean` no longer imports FreeBeam. `MathAhead.Section9All` builds
+green (8799 jobs); `Scratch.All` builds green (9003 jobs); zero proof-escape
+terms in the promoted tree.
+
+The three genuinely unresolved concrete inputs listed above (interval `H2`/`H4`
+space, continuous traces + Rellich compactness, and the first-root localization
+`4.73 < firstPositiveRoot`) remain packaged as `structure` fields — the campaign
+is reduction machinery, so this promotion does **not** discharge the
+`Frontier/Section9Analytic.lean` obligations; grounding those needs the concrete
+inputs constructed.
