@@ -28,6 +28,26 @@ namespace.
 
 @[expose] public section
 
+namespace MeasureTheory
+
+/-- An even function is integrable on the line iff it is integrable on the
+positive half-line. -/
+theorem integrable_iff_integrableOn_Ioi_of_even {g : ℝ → ℝ}
+    (heven : ∀ t, g (-t) = g t) :
+    Integrable g ↔ IntegrableOn g (Set.Ioi 0) := by
+  refine ⟨fun hg => hg.integrableOn, fun hg => ?_⟩
+  have hIic : IntegrableOn g (Set.Iic 0) := by
+    rw [← Measure.map_neg_eq_self (volume : Measure ℝ)]
+    have m : MeasurableEmbedding fun x : ℝ => -x :=
+      (Homeomorph.neg ℝ).measurableEmbedding
+    rw [m.integrableOn_map_iff]
+    simp only [Function.comp_def, heven, Set.neg_preimage, Set.neg_Iic, neg_zero]
+    exact Iff.mpr (integrableOn_Ici_iff_integrableOn_Ioi (by finiteness)) hg
+  rw [← integrableOn_univ, ← Set.Iic_union_Ioi (a := (0 : ℝ))]
+  exact hIic.union hg
+
+end MeasureTheory
+
 namespace TauCeti
 namespace HaagerupZsido
 
@@ -193,31 +213,14 @@ theorem cauchy_fourier_isBigO_rpow_neg_two
         (by nlinarith [sq_nonneg y])
     _ = (y / Real.pi) * (x ^ 2)⁻¹ := div_eq_mul_inv _ _
 
-/-- Integrability of an even function from its positive half-line
-restriction. -/
-theorem integrable_of_even_integrableOn_Ioi
-    {g : ℝ → ℝ} (heven : ∀ t, g (-t) = g t)
-    (hg : IntegrableOn g (Set.Ioi 0)) : Integrable g := by
-  have hIic : IntegrableOn g (Set.Iic 0) := by
-    rw [← Measure.map_neg_eq_self (volume : Measure ℝ)]
-    have m : MeasurableEmbedding fun x : ℝ => -x :=
-      (Homeomorph.neg ℝ).measurableEmbedding
-    rw [m.integrableOn_map_iff]
-    simp only [Function.comp_def, heven, Set.neg_preimage, Set.neg_Iic, neg_zero]
-    exact Iff.mpr (integrableOn_Ici_iff_integrableOn_Ioi (by finiteness)) hg
-  rw [← integrableOn_univ, ← Set.Iic_union_Ioi (a := (0 : ℝ))]
-  exact hIic.union hg
-
 /-- Two-sided integrability of a symmetric exponential. -/
 theorem integrable_exp_neg_mul_abs {y : ℝ} (hy : 0 < y) :
     Integrable (fun t : ℝ => Real.exp (-y * |t|)) := by
-  apply integrable_of_even_integrableOn_Ioi
-  · intro t
-    rw [abs_neg]
-  · apply (exp_neg_integrableOn_Ioi 0 hy).congr_fun _ measurableSet_Ioi
-    intro t ht
-    dsimp only
-    rw [abs_of_pos (show (0 : ℝ) < t from ht)]
+  refine (integrable_iff_integrableOn_Ioi_of_even (fun t => by rw [abs_neg])).mpr ?_
+  apply (exp_neg_integrableOn_Ioi 0 hy).congr_fun _ measurableSet_Ioi
+  intro t ht
+  dsimp only
+  rw [abs_of_pos (show (0 : ℝ) < t from ht)]
 
 /-- Integrability of the modulated two-sided exponential. -/
 theorem integrable_cexp_neg_mul_abs_mul_cexp (x : ℝ) {y : ℝ} (hy : 0 < y) :
