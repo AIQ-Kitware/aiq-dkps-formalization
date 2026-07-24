@@ -8,7 +8,7 @@ import DavisKahan.Interop.Spectra.HalmosTwoProjections
 import DavisKahan.Interop.Spectra.SpectralRestriction
 -- supplies `compressOperator`
 import DavisKahan.Sylvester.GenuineSpectrum
-import ForMathlib.Analysis.Normed.Operator.ApproximationNumber
+import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Basic
 import Mathlib.MeasureTheory.Integral.CircleIntegral
 -- grounded Section-3 predicates promoted out of the experimental frontier;
 -- re-exported here so Core's remaining declarations keep seeing their names
