@@ -170,6 +170,53 @@ Next-session order: HalmosClassification (clean) → DoubleAngle (sorry-split fi
 → Section3Nonacute chain → then Section3/Section4 grounded heads → RieszCircle
 after CayleySelectorBridge/Resolvent.
 
+## Session close state (this session, all committed + green)
+
+Graduated out of `Experimental/` (all verbatim, namespaces kept, green each step):
+SpectralProjection; Core split into GenericRotationPredicates + UnitaryEquivalence
++ CircleRieszProjection (Core now a pure 2-sorry stub); Lemma63; RemainingSourceSurface;
+HalmosClassification; Resolvent→CayleySelectorBridge→RieszCircle (6 s8 nodes);
+PolarIsometry/Section3Nonacute subgraph (4 modules). **22 of 33 grounded frontier
+declarations + the Core hub + the PolarIsometry infrastructure now live in production.**
+
+## What remains — needs judgment or open math, NOT blind mechanical batching
+
+1. **~15 sorry-free Experimental leaves remain**, but they split into two kinds that
+   must NOT be treated identically:
+   - **Genuine reusable foundations** (graduate when confirmed frontier/production-used):
+     `InfiniteDimensional/Core/{AbstractSpectrum,OperatorAngle}`,
+     `InfiniteDimensional/Sylvester/SelfAdjointBorelCalculus`,
+     `FiniteDimensional/DoubleAngle/SinTheta` (already production-imported — highest priority),
+     `MathAhead/HiddenFoundations/{HilbertSchmidtComplexFamily,SchattenApproximationFoundation,OrthogonalSummandCoordinates}`.
+   - **Ahead-of-frontier EXPERIMENTS** (do NOT force into production — Section 9 is still open):
+     `MathAhead/HiddenFoundations/FreeBeam/*`, `MathAhead/Section4/InfiniteIdealDominance`,
+     `MathAhead/Lemma63` (thin re-export stub). These stay in `MathAhead` until their
+     frontier endpoint is proved and they are source-integrated.
+2. **Section3 (9 grounded props) needs an intricate PARTIAL split**: prop3_4 and its
+   helpers (lines ~486–589) genuinely use `DoubleAngle.reflectedSubspace` /
+   `starProjection_reflectedSubspace`; prop3_1/3_2/3_3/3_5/cor3_2 appear DoubleAngle-free
+   and could be extracted to production, but they interleave with the DoubleAngle-using
+   props and the 4 sorry props (non-contiguous extraction). Careful, deliberate work.
+3. **Section4 (2 grounded props)** import Section3 → blocked on Section3.
+4. **`InfiniteDimensional/DoubleAngle` has 8 real sorries** — this is open **paper-completion
+   math** (per owner framing, the "pivot back to finishing DK proofs" work), NOT polish.
+   It gates the Section3 prop3_4 area and Section3/Section4 heads.
+
+So: the clean, unambiguous "grounded proof out of Experimental" graduations are DONE.
+The remainder is (a) per-module readiness judgment on the reusable-vs-ahead-of-frontier
+leaves, (b) intricate Section3 partial split, and (c) genuinely-open DoubleAngle math.
+
+5. **`Experimental/FiniteDimensional/DoubleAngle/SinTheta` is a name-colliding twin.**
+   A production `DavisKahan/FiniteDimensional/DoubleAngle/SinTheta.lean` ALREADY exists
+   (same `ForMathlib` namespace), and production `FiniteDimensional/Generalized` imports
+   the **experimental** twin — that is the standing `check_library_structure` #2 violation
+   (production → Experimental). Fixing it is not a move: it needs the two same-namespace
+   SinTheta files RECONCILED (diff them; fold the experimental additions into the
+   production file, or point Generalized at the production file if it already suffices),
+   then delete the experimental twin. Careful reconciliation, not a `git mv`. This is the
+   single highest-value cleanup (it clears the one production→Experimental violation) — do
+   it deliberately, first, next session.
+
 ## Blockers named explicitly
 
 - `Frontier/Core` (2 sorries) blocks Lemma63, RemainingSourceSurface, Section3, RieszCircle.
