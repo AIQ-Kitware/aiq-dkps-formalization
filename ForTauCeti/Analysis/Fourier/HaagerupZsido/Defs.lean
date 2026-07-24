@@ -33,6 +33,9 @@ noncomputable section
 def weight (y : ℝ) : ℝ :=
   Real.tanh (Real.pi * y / 2)
 
+theorem weight_def (y : ℝ) : weight y = Real.tanh (Real.pi * y / 2) :=
+  rfl
+
 theorem weight_nonneg {y : ℝ} (hy : 0 ≤ y) : 0 ≤ weight y := by
   rw [weight, Real.tanh_eq]
   have hmono : Real.exp (- (Real.pi * y / 2)) ≤
