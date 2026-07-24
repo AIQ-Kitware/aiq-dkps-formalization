@@ -48,7 +48,7 @@ theorem weight_nonneg {y : ℝ} (hy : 0 ≤ y) : 0 ≤ weight y := by
     nlinarith [Real.pi_pos]
   positivity
 
-theorem weight_le_one (y : ℝ) : weight y ≤ 1 :=
+private theorem weight_le_one (y : ℝ) : weight y ≤ 1 :=
   (Real.tanh_lt_one _).le
 
 /-- Exponential form of the hyperbolic weight. -/
@@ -113,10 +113,10 @@ theorem weightLaplaceTransform_nonneg (t : ℝ) : 0 ≤ weightLaplaceTransform t
   setIntegral_nonneg measurableSet_Ioi fun _y hy =>
     mul_nonneg (weight_nonneg (le_of_lt hy)) (Real.exp_pos _).le
 
-theorem weightLaplaceTransform_neg (t : ℝ) : weightLaplaceTransform (-t) = weightLaplaceTransform t := by
+private theorem weightLaplaceTransform_neg (t : ℝ) : weightLaplaceTransform (-t) = weightLaplaceTransform t := by
   simp only [weightLaplaceTransform_def, abs_neg]
 
-theorem measurable_weightLaplaceTransform : Measurable weightLaplaceTransform := by
+private theorem measurable_weightLaplaceTransform : Measurable weightLaplaceTransform := by
   have hcont : Continuous fun p : ℝ × ℝ =>
       weight p.2 * Real.exp (-|p.1| * p.2) :=
     (continuous_weight.comp continuous_snd).mul
@@ -129,7 +129,7 @@ theorem measurable_realKernel : Measurable realKernel :=
 theorem measurable_reciprocalKernel : Measurable reciprocalKernel :=
   (Complex.measurable_ofReal.comp measurable_realKernel).const_mul (-Complex.I)
 
-theorem realKernel_neg (t : ℝ) : realKernel (-t) = -realKernel t := by
+private theorem realKernel_neg (t : ℝ) : realKernel (-t) = -realKernel t := by
   simp only [realKernel_def, Real.sin_neg, weightLaplaceTransform_neg]
   ring
 

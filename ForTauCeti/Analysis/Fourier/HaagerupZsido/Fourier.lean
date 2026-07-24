@@ -41,7 +41,7 @@ noncomputable section
 
 /-- The oscillatory sine transform against a symmetric exponential, from the
 two-sided Laplace transform at the shifted frequencies `x ± 1`. -/
-theorem integral_sin_mul_cexp_neg_mul_abs_mul_cexp
+private theorem integral_sin_mul_cexp_neg_mul_abs_mul_cexp
     (x : ℝ) {y : ℝ} (hy : 0 < y) :
     (∫ t : ℝ,
         ((Real.sin t : ℝ) : ℂ) * Complex.exp ((-(y * |t|) : ℝ) : ℂ) *
@@ -91,14 +91,6 @@ theorem integral_sin_mul_cexp_neg_mul_abs_mul_cexp
               Complex.exp ((((t * (x - 1) : ℝ) : ℂ) * Complex.I))) := by
     rw [← hphase1, ← hphase2, hsin]
     ring
-  have hd1 : (y ^ 2 + (x - 1) ^ 2 : ℝ) ≠ 0 := by
-    nlinarith [sq_nonneg (x - 1), sq_nonneg y, hy]
-  have hd2 : (y ^ 2 + (x + 1) ^ 2 : ℝ) ≠ 0 := by
-    nlinarith [sq_nonneg (x + 1), sq_nonneg y, hy]
-  have hc1 : ((y : ℂ) ^ 2 + ((x : ℂ) - 1) ^ 2) ≠ 0 := fun h =>
-    hd1 (Complex.ofReal_eq_zero.mp (by push_cast; exact h))
-  have hc2 : ((y : ℂ) ^ 2 + ((x : ℂ) + 1) ^ 2) ≠ 0 := fun h =>
-    hd2 (Complex.ofReal_eq_zero.mp (by push_cast; exact h))
   calc
     (∫ t : ℝ,
         ((Real.sin t : ℝ) : ℂ) * Complex.exp ((-(y * |t|) : ℝ) : ℂ) *
@@ -127,7 +119,7 @@ theorem integral_sin_mul_cexp_neg_mul_abs_mul_cexp
 frequencies.  The kernel unfolds to a double integral; the proved mass
 certificate justifies Fubini, the oscillatory sine transform evaluates the
 inner integral, and the telescoping integral collapses the outer one. -/
-theorem realKernel_fourier_of_one_le {x : ℝ} (hx : 1 ≤ x) :
+private theorem realKernel_fourier_of_one_le {x : ℝ} (hx : 1 ≤ x) :
     (∫ t : ℝ, ((realKernel t : ℝ) : ℂ) *
         Complex.exp ((((t * x : ℝ) : ℂ) * Complex.I))) =
       Complex.I * ((1 / x : ℝ) : ℂ) := by
@@ -245,7 +237,7 @@ theorem realKernel_fourier_of_one_le {x : ℝ} (hx : 1 ≤ x) :
       exact div_self hx0
 
 /-- The reciprocal Fourier identity at exterior positive frequencies. -/
-theorem reciprocalKernel_fourier_of_one_le {x : ℝ} (hx : 1 ≤ x) :
+private theorem reciprocalKernel_fourier_of_one_le {x : ℝ} (hx : 1 ≤ x) :
     (∫ t : ℝ, reciprocalKernel t *
         Complex.exp ((((t * x : ℝ) : ℂ) * Complex.I))) =
       1 / (x : ℂ) := by

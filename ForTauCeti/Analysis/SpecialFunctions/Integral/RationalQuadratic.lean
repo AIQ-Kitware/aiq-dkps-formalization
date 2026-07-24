@@ -39,7 +39,7 @@ open scoped BigOperators FourierTransform
 noncomputable section
 
 /-- Integrability of a rescaled Cauchy kernel. -/
-theorem integrable_inv_sq_add_sq {c : ℝ} (hc : c ≠ 0) :
+private theorem integrable_inv_sq_add_sq {c : ℝ} (hc : c ≠ 0) :
     Integrable (fun x : ℝ => (c ^ 2 + x ^ 2)⁻¹) := by
   have hcomp := integrable_inv_one_add_sq.comp_mul_left' (inv_ne_zero hc)
   have hscaled := hcomp.const_mul (c⁻¹ ^ 2)
@@ -51,7 +51,7 @@ theorem integrable_inv_sq_add_sq {c : ℝ} (hc : c ≠ 0) :
   field_simp [hc, hden, hbase]
 
 /-- Integral of a Cauchy kernel over the positive half-line. -/
-theorem integral_Ioi_inv_sq_add_sq {c : ℝ} (hc : 0 < c) :
+private theorem integral_Ioi_inv_sq_add_sq {c : ℝ} (hc : 0 < c) :
     (∫ x : ℝ in Set.Ioi 0, (c ^ 2 + x ^ 2)⁻¹) =
       Real.pi / (2 * c) := by
   have hchange := integral_comp_mul_left_Ioi
@@ -74,7 +74,7 @@ theorem integral_Ioi_inv_sq_add_sq {c : ℝ} (hc : 0 < c) :
 
 /-- The repeated-pole Cauchy integral needed when the two positive parameters
 coincide. -/
-theorem integral_Ioi_sq_div_sq_add_sq_sq {c : ℝ} (hc : 0 < c) :
+private theorem integral_Ioi_sq_div_sq_add_sq_sq {c : ℝ} (hc : 0 < c) :
     (∫ x : ℝ in Set.Ioi 0, x ^ 2 / (c ^ 2 + x ^ 2) ^ 2) =
       Real.pi / (4 * c) := by
   let g : ℝ → ℝ := (id : ℝ → ℝ) / fun x => c ^ 2 + x ^ 2
@@ -154,7 +154,7 @@ theorem integral_Ioi_sq_div_sq_add_sq_sq {c : ℝ} (hc : 0 < c) :
       ring
 
 /-- The elementary two-Cauchy-denominator integral. -/
-theorem integral_Ioi_sq_div_two_quadratics
+private theorem integral_Ioi_sq_div_two_quadratics
     {a c : ℝ} (ha : 0 ≤ a) (hc : 0 < c) :
     (∫ y : ℝ in Set.Ioi 0,
         y ^ 2 / ((y ^ 2 + c ^ 2) * (y ^ 2 + a ^ 2))) =
@@ -224,8 +224,8 @@ theorem integral_Ioi_sq_div_two_quadratics
 
 /-- Integrability of the nonnegative rational kernel used in the telescoping
 argument. -/
-theorem integrable_sq_div_two_quadratics
-    {a c : ℝ} (_ha : 0 ≤ a) (hc : 0 < c) :
+private theorem integrable_sq_div_two_quadratics
+    (a : ℝ) {c : ℝ} (hc : 0 < c) :
     Integrable (fun y : ℝ =>
       y ^ 2 / ((y ^ 2 + c ^ 2) * (y ^ 2 + a ^ 2))) := by
   have hCauchy : Integrable (fun y : ℝ => (c ^ 2 + y ^ 2)⁻¹) :=
@@ -252,7 +252,7 @@ theorem integrable_sq_div_two_quadratics
           ring
 
 /-- The elementary reciprocal series telescopes by steps of two. -/
-theorem hasSum_reciprocal_step_difference
+private theorem hasSum_reciprocal_step_difference
     {a : ℝ} (ha : 0 ≤ a) :
     HasSum (fun n : ℕ =>
       (a + 2 * n + 1)⁻¹ - (a + 2 * n + 3)⁻¹) (a + 1)⁻¹ := by
@@ -311,14 +311,14 @@ theorem integral_weight_mul_reciprocal_difference
     dsimp only [c]
     positivity
   have hFInt (n : ℕ) : IntegrableOn (F n) (Set.Ioi 0) := by
-    have hA := integrable_sq_div_two_quadratics ha (hc n)
-    have hB := integrable_sq_div_two_quadratics (by linarith : 0 ≤ a + 2) (hc n)
+    have hA := integrable_sq_div_two_quadratics a (hc n)
+    have hB := integrable_sq_div_two_quadratics (a + 2) (hc n)
     exact ((hA.sub hB).const_mul (4 / Real.pi)).integrableOn
   have hFintegral (n : ℕ) :
       (∫ y : ℝ in Set.Ioi 0, F n y) =
         2 * ((a + 2 * n + 1)⁻¹ - (a + 2 * n + 3)⁻¹) := by
-    have hA := integrable_sq_div_two_quadratics ha (hc n)
-    have hB := integrable_sq_div_two_quadratics (by linarith : 0 ≤ a + 2) (hc n)
+    have hA := integrable_sq_div_two_quadratics a (hc n)
+    have hB := integrable_sq_div_two_quadratics (a + 2) (hc n)
     dsimp only [F]
     rw [integral_const_mul, integral_sub hA.integrableOn hB.integrableOn,
       integral_Ioi_sq_div_two_quadratics ha (hc n),

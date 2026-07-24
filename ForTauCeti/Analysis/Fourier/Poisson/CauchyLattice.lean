@@ -38,7 +38,7 @@ open scoped BigOperators FourierTransform
 noncomputable section
 
 /-- The positive tail of the geometric exponential series. -/
-theorem tsum_nat_exp_neg_mul_add_one {a : ℝ} (ha : 0 < a) :
+private theorem tsum_nat_exp_neg_mul_add_one {a : ℝ} (ha : 0 < a) :
     (∑' n : ℕ, Real.exp (-a * (n + 1 : ℕ))) =
       Real.exp (-a) / (1 - Real.exp (-a)) := by
   let q := Real.exp (-a)
@@ -64,7 +64,7 @@ theorem tsum_nat_exp_neg_mul_add_one {a : ℝ} (ha : 0 < a) :
       ring
 
 /-- The elementary two-sided geometric lattice sum. -/
-theorem tsum_int_exp_neg_mul_abs {a : ℝ} (ha : 0 < a) :
+private theorem tsum_int_exp_neg_mul_abs {a : ℝ} (ha : 0 < a) :
     (∑' n : ℤ, Real.exp (-a * |(n : ℝ)|)) =
       (1 + Real.exp (-a)) / (1 - Real.exp (-a)) := by
   let f : ℤ → ℝ := fun n => Real.exp (-a * |(n : ℝ)|)
@@ -124,7 +124,7 @@ theorem tsum_int_exp_neg_mul_abs {a : ℝ} (ha : 0 < a) :
 
 /-- Poisson summation for the two-sided exponential, before evaluating its
 geometric side. -/
-theorem poisson_exponential_eq_cauchy_lattice
+private theorem poisson_exponential_eq_cauchy_lattice
     {y : ℝ} (hy : 0 < y) :
     (∑' n : ℤ,
         Complex.exp ((-(2 * Real.pi * y * |(n : ℝ)|) : ℝ) : ℂ)) =
@@ -153,7 +153,7 @@ theorem poisson_exponential_eq_cauchy_lattice
 
 /-- The Cauchy lattice sum, written in exponential rather than hyperbolic
 notation. -/
-theorem tsum_int_inv_sq_add_sq
+private theorem tsum_int_inv_sq_add_sq
     {y : ℝ} (hy : 0 < y) :
     (∑' n : ℤ, (y ^ 2 + (n : ℝ) ^ 2)⁻¹) =
       (Real.pi / y) *
@@ -217,7 +217,7 @@ theorem tsum_int_inv_sq_add_sq
 
 /-- The natural-number Cauchy series is summable, uniformly with respect to
 the harmless nonnegative square added to its denominator. -/
-theorem summable_nat_inv_sq_add_sq (y : ℝ) :
+private theorem summable_nat_inv_sq_add_sq (y : ℝ) :
     Summable (fun n : ℕ => (y ^ 2 + (n : ℝ) ^ 2)⁻¹) := by
   have hmajor : Summable (fun n : ℕ => (((n + 1 : ℕ) : ℝ) ^ 2)⁻¹) := by
     have h := Real.summable_nat_pow_inv.mpr (by norm_num : 1 < (2 : ℕ))
@@ -236,7 +236,7 @@ theorem summable_nat_inv_sq_add_sq (y : ℝ) :
   exact htail
 
 /-- The half-lattice version of the Cauchy sum. -/
-theorem tsum_nat_inv_sq_add_sq
+private theorem tsum_nat_inv_sq_add_sq
     {y : ℝ} (hy : 0 < y) :
     (∑' n : ℕ, (y ^ 2 + (n : ℝ) ^ 2)⁻¹) =
       (1 / 2) *
@@ -265,7 +265,7 @@ theorem tsum_nat_inv_sq_add_sq
   nlinarith
 
 /-- The positive odd part of the Cauchy lattice. -/
-theorem tsum_odd_inv_sq_add_sq
+private theorem tsum_odd_inv_sq_add_sq
     {y : ℝ} (hy : 0 < y) :
     (∑' n : ℕ, (y ^ 2 + (((2 * n + 1 : ℕ) : ℝ) ^ 2))⁻¹) =
       (Real.pi / (4 * y)) * weight y := by

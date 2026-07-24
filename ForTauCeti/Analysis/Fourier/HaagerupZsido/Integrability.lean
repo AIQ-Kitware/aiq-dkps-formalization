@@ -39,7 +39,7 @@ noncomputable section
 
 /-- The hyperbolic weight cancels the geometric quotient of the absolute-sine
 Laplace transform. -/
-theorem weight_mul_exp_ratio {y : ℝ} (hy : 0 < y) :
+private theorem weight_mul_exp_ratio {y : ℝ} (hy : 0 < y) :
     weight y * ((1 + Real.exp (-Real.pi * y)) /
       (1 - Real.exp (-Real.pi * y))) = 1 := by
   have hq1 : Real.exp (-(Real.pi * y)) < 1 :=
@@ -91,7 +91,7 @@ theorem integrable_kernel_prod :
             (mul_nonneg (abs_nonneg _) (Real.exp_pos _).le))]
 
 /-- The full-line sine-weighted Laplace mass. -/
-theorem integral_abs_sin_mul_weightLaplaceTransform :
+private theorem integral_abs_sin_mul_weightLaplaceTransform :
     (∫ t : ℝ, |Real.sin t| * weightLaplaceTransform t) = Real.pi := by
   have hswap := integral_integral_swap integrable_kernel_prod
   have hleft :
@@ -140,7 +140,7 @@ theorem integral_abs_sin_mul_weightLaplaceTransform :
   rw [← hright, ← hswap, hleft]
 
 /-- Integrability of the even envelope of the kernel. -/
-theorem integrable_abs_sin_mul_weightLaplaceTransform :
+private theorem integrable_abs_sin_mul_weightLaplaceTransform :
     Integrable (fun t : ℝ => |Real.sin t| * weightLaplaceTransform t) := by
   have hswap := integrable_kernel_prod.swap
   have h2 := ((integrable_prod_iff hswap.aestronglyMeasurable).mp hswap).2
@@ -164,7 +164,7 @@ theorem integrable_abs_sin_mul_weightLaplaceTransform :
       rw [integral_const_mul, weightLaplaceTransform_def]
 
 /-- The real kernel is integrable. -/
-theorem integrable_realKernel : Integrable realKernel := by
+private theorem integrable_realKernel : Integrable realKernel := by
   apply integrable_abs_sin_mul_weightLaplaceTransform.mono'
     measurable_realKernel.aestronglyMeasurable
   filter_upwards [] with t
@@ -178,7 +178,7 @@ theorem integrable_reciprocalKernel : Integrable reciprocalKernel :=
   integrable_realKernel.ofReal.const_mul (-Complex.I)
 
 /-- The exact `L¹` mass of the real kernel. -/
-theorem integral_abs_realKernel : (∫ t : ℝ, |realKernel t|) = Real.pi / 2 := by
+private theorem integral_abs_realKernel : (∫ t : ℝ, |realKernel t|) = Real.pi / 2 := by
   calc
     (∫ t : ℝ, |realKernel t|) =
         ∫ t : ℝ, (1 / 2 : ℝ) * (|Real.sin t| * weightLaplaceTransform t) := by
