@@ -624,34 +624,340 @@ theorem proposition3_4_square_is_reflected_directRotation
   exact spectraDirectRotation_unique_of_sq U (reflectedSubspace V U) hacuteReflected
     (spectraReflectionProduct U V) hGunit hGsq hGre
 
-/-- A subspace on which both projections reduce and every nonzero source or
-target vector has the same projection cosine. -/
+/-- A subspace on which both projections reduce and every nonzero vector makes
+the fixed angle with the opposite subspace.
+
+Correction relative to the originally printed predicate.  The printed version
+constrained only the source (`M ∩ U`) and target (`M ∩ V`) vectors.  That is
+insufficient for the maximality half of Proposition 3.5: a nonzero vector in the
+exterior `Uᗮ ⊓ Vᗮ` (which is compatible with acuteness) spans a subspace that
+reduces both projections and meets the source and target conditions vacuously,
+yet on it the cosine square is `1`, not `c ^ 2`.  So for `c < 1` the printed
+predicate admits subspaces that are not contained in the fixed-cosine
+eigenspace.  The paper's phrasing — *all nonzero vectors make the fixed angle
+with the opposite subspace* — is captured by adding the two complement
+conditions on `M ∩ Uᗮ` and `M ∩ Vᗮ`, which is exactly what excludes the
+exterior and makes the eigenspace maximal. -/
 def IsFixedCosineReducingSubspace
     (M : Submodule ℂ H) (c : ℝ) : Prop :=
   (projection U).Reduces M ∧
   (projection V).Reduces M ∧
   (∀ x : H, x ∈ M → x ∈ U → ‖projection V x‖ = c * ‖x‖) ∧
-  (∀ x : H, x ∈ M → x ∈ V → ‖projection U x‖ = c * ‖x‖)
+  (∀ x : H, x ∈ M → x ∈ V → ‖projection U x‖ = c * ‖x‖) ∧
+  (∀ x : H, x ∈ M → x ∈ Uᗮ → ‖complementaryProjection V x‖ = c * ‖x‖) ∧
+  (∀ x : H, x ∈ M → x ∈ Vᗮ → ‖complementaryProjection U x‖ = c * ‖x‖)
 
-/-- The fixed-cosine spectral subspace on the generic Halmos summand.
+/-- Polarization on a reducing subspace: a bounded operator that preserves a
+subspace and has vanishing quadratic form there vanishes on it. -/
+theorem eigen_of_reducing_quadratic {T : H →L[ℂ] H} {W : Submodule ℂ H}
+    (hTW : ∀ w ∈ W, T w ∈ W) (hquad : ∀ w ∈ W, ⟪T w, w⟫_ℂ = 0)
+    {w : H} (hw : w ∈ W) : T w = 0 := by
+  have key : ∀ v ∈ W, ⟪T w, v⟫_ℂ = 0 := by
+    intro v hv
+    have hqw := hquad w hw
+    have hqv := hquad v hv
+    have h1 := hquad (w + v) (W.add_mem hw hv)
+    have hi := hquad (w + (Complex.I • v)) (W.add_mem hw (W.smul_mem _ hv))
+    simp only [map_add, map_smul, inner_add_left, inner_add_right,
+      inner_smul_left, inner_smul_right, hqw, hqv, Complex.conj_I,
+      mul_zero, add_zero, zero_add] at h1 hi
+    have hab : ⟪T w, v⟫_ℂ - ⟪T v, w⟫_ℂ = 0 := by
+      have hI : Complex.I * (⟪T w, v⟫_ℂ - ⟪T v, w⟫_ℂ) = 0 := by linear_combination hi
+      exact (mul_eq_zero.mp hI).resolve_left Complex.I_ne_zero
+    have h2a : (2 : ℂ) * ⟪T w, v⟫_ℂ = 0 := by linear_combination h1 + hab
+    exact (mul_eq_zero.mp h2a).resolve_left (by norm_num)
+  exact inner_self_eq_zero.mp (key (T w) (hTW w hw))
 
-The pair is bound explicitly rather than taken from the section: the body is
-still an open obligation, so auto-inclusion would not fire and the subspace
-would spuriously fail to depend on the pair it is defined from. -/
-noncomputable def fixedCosineSubspace (U V : Submodule ℂ H)
-    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (c : ℝ) : Submodule ℂ H := by
-  sorry
+/-- The Halmos cosine square is symmetric in the ordered pair: it is
+`1 - (P_U - P_V) ^ 2`, invariant under swapping the projections. -/
+theorem halmosCosineSq_symm :
+    halmosCosineSq U V = halmosCosineSq V U := by
+  rw [halmosCosineSq_eq_one_sub_projection_sub_sq U V,
+    halmosCosineSq_eq_one_sub_projection_sub_sq V U]
+  noncomm_ring
+
+/-- Squared-norm quadratic form, with the real-to-complex coercion pinned to
+`Complex.ofReal`. -/
+theorem inner_self_ofReal (x : H) : ⟪x, x⟫_ℂ = (‖x‖ : ℂ) ^ 2 :=
+  inner_self_eq_norm_sq_to_K x
+
+/-- The quadratic form of an orthogonal projection is its squared norm. -/
+theorem inner_starProjection_self_eq (K : Submodule ℂ H)
+    [K.HasOrthogonalProjection] (y : H) :
+    ⟪K.starProjection y, y⟫_ℂ = (‖K.starProjection y‖ : ℂ) ^ 2 := by
+  have hidem : K.starProjection (K.starProjection y) = K.starProjection y :=
+    Submodule.starProjection_eq_self_iff.mpr (K.starProjection_apply_mem y)
+  calc ⟪K.starProjection y, y⟫_ℂ
+      = ⟪K.starProjection (K.starProjection y), y⟫_ℂ := by rw [hidem]
+    _ = ⟪K.starProjection y, K.starProjection y⟫_ℂ := K.starProjection_isSymmetric _ _
+    _ = (‖K.starProjection y‖ : ℂ) ^ 2 := inner_self_eq_norm_sq_to_K _
+
+/-- On the source subspace, the cosine-square quadratic form is `‖P_V x‖ ^ 2`. -/
+theorem inner_halmosCosineSq_source (x : H) (hx : x ∈ U) :
+    ⟪halmosCosineSq U V x, x⟫_ℂ = (‖projection V x‖ : ℂ) ^ 2 := by
+  have hPU : projection U x = x := Submodule.starProjection_eq_self_iff.mpr hx
+  have hPUc : complementaryProjection U x = 0 := by
+    have hx' : Uᗮ.starProjection x = x - U.starProjection x :=
+      congrArg (fun T : H →L[ℂ] H => T x) (Submodule.starProjection_orthogonal' U)
+    rw [show complementaryProjection U x = Uᗮ.starProjection x from rfl, hx', hPU, sub_self]
+  have hval : halmosCosineSq U V x = projection U (projection V x) := by
+    show (projection U * projection V * projection U
+      + complementaryProjection U * complementaryProjection V
+        * complementaryProjection U) x = _
+    simp only [ContinuousLinearMap.add_apply, ContinuousLinearMap.mul_apply, hPU,
+      hPUc, map_zero, add_zero]
+  rw [hval]
+  calc ⟪projection U (projection V x), x⟫_ℂ
+      = ⟪projection V x, projection U x⟫_ℂ := U.starProjection_isSymmetric _ _
+    _ = ⟪projection V x, x⟫_ℂ := by rw [hPU]
+    _ = (‖projection V x‖ : ℂ) ^ 2 := inner_starProjection_self_eq V x
+
+/-- On the source complement, the cosine-square quadratic form is
+`‖Pᗮ_V x‖ ^ 2`. -/
+theorem inner_halmosCosineSq_source_compl (x : H) (hx : x ∈ Uᗮ) :
+    ⟪halmosCosineSq U V x, x⟫_ℂ = (‖complementaryProjection V x‖ : ℂ) ^ 2 := by
+  have hPUc : complementaryProjection U x = x :=
+    Submodule.starProjection_eq_self_iff.mpr hx
+  have hPU : projection U x = 0 := by
+    have hx' : Uᗮ.starProjection x = x - U.starProjection x :=
+      congrArg (fun T : H →L[ℂ] H => T x) (Submodule.starProjection_orthogonal' U)
+    rw [show complementaryProjection U x = Uᗮ.starProjection x from rfl] at hPUc
+    have hUeq : U.starProjection x = x - Uᗮ.starProjection x := by rw [hx']; abel
+    rw [show projection U x = U.starProjection x from rfl, hUeq, hPUc, sub_self]
+  have hval : halmosCosineSq U V x
+      = complementaryProjection U (complementaryProjection V x) := by
+    show (projection U * projection V * projection U
+      + complementaryProjection U * complementaryProjection V
+        * complementaryProjection U) x = _
+    simp only [ContinuousLinearMap.add_apply, ContinuousLinearMap.mul_apply, hPU,
+      hPUc, map_zero, zero_add]
+  rw [hval]
+  calc ⟪complementaryProjection U (complementaryProjection V x), x⟫_ℂ
+      = ⟪complementaryProjection V x, complementaryProjection U x⟫_ℂ :=
+        Uᗮ.starProjection_isSymmetric _ _
+    _ = ⟪complementaryProjection V x, x⟫_ℂ := by rw [hPUc]
+    _ = (‖complementaryProjection V x‖ : ℂ) ^ 2 := inner_starProjection_self_eq Vᗮ x
+
+/-- The fixed-cosine subspace: the `c ^ 2`-eigenspace of the Halmos cosine
+square `cos²Θ`.  For a singleton this eigenspace coincides with the
+`{c ^ 2}`-spectral subspace, but presenting it as `ker (cos²Θ - c ^ 2)` makes
+the fixed-cosine eigenvalue equation available definitionally, so no
+projection-valued-measure eigenvalue extraction is needed downstream. -/
+noncomputable def fixedCosineSubspace (c : ℝ) : Submodule ℂ H :=
+  (halmosCosineSq U V - (c : ℂ) ^ 2 • (1 : H →L[ℂ] H)).ker
+
+/-- Membership in the fixed-cosine subspace is the eigenvalue equation. -/
+theorem mem_fixedCosineSubspace (c : ℝ) (w : H) :
+    w ∈ fixedCosineSubspace U V c ↔ halmosCosineSq U V w = (c : ℂ) ^ 2 • w := by
+  rw [fixedCosineSubspace, LinearMap.mem_ker]
+  simp only [ContinuousLinearMap.coe_coe, ContinuousLinearMap.sub_apply,
+    ContinuousLinearMap.smul_apply, ContinuousLinearMap.one_apply]
+  rw [sub_eq_zero]
+
+/-- A projection commuting with the cosine square reduces the eigenspace. -/
+theorem reduces_projection_of_commute (c : ℝ) (W : Submodule ℂ H)
+    [W.HasOrthogonalProjection]
+    (hcomm : Commute (halmosCosineSq U V) (projection W)) :
+    (projection W).Reduces (fixedCosineSubspace U V c) := by
+  refine reduces_orthogonalComplement W.starProjection_isSymmetric ?_
+  intro x hx
+  rw [mem_fixedCosineSubspace] at hx ⊢
+  have hcm := congrArg (fun T : H →L[ℂ] H => T x) hcomm.eq
+  simp only [ContinuousLinearMap.mul_apply] at hcm
+  rw [hcm, hx, map_smul]
+
+/-- Extract a real norm equality from a complex squared identity. -/
+theorem norm_eq_from_ofReal_sq {p q c : ℝ} (hp : 0 ≤ p) (hq : 0 ≤ q) (hc : 0 ≤ c)
+    (h : (p : ℂ) ^ 2 = (c : ℂ) ^ 2 * (q : ℂ) ^ 2) : p = c * q := by
+  have hr : p ^ 2 = (c * q) ^ 2 := by
+    have hcast : ((p ^ 2 : ℝ) : ℂ) = (((c * q) ^ 2 : ℝ) : ℂ) := by
+      push_cast; linear_combination h
+    exact_mod_cast hcast
+  have hcq : 0 ≤ c * q := mul_nonneg hc hq
+  calc p = Real.sqrt (p ^ 2) := (Real.sqrt_sq hp).symm
+    _ = Real.sqrt ((c * q) ^ 2) := by rw [hr]
+    _ = c * q := Real.sqrt_sq hcq
+
+/-- The cosine square commutes with the target projection too. -/
+theorem halmosCosineSq_commute_projection_right :
+    Commute (halmosCosineSq U V) (projection V) := by
+  rw [halmosCosineSq_symm U V]
+  exact halmosCosineSq_commute_projection V U
+
+/-- Vector form of the cosine square on the source subspace. -/
+theorem halmosCosineSq_source_apply (x : H) (hx : x ∈ U) :
+    halmosCosineSq U V x = projection U (projection V x) := by
+  have hPU : projection U x = x := Submodule.starProjection_eq_self_iff.mpr hx
+  have hPUc : complementaryProjection U x = 0 := by
+    have hx' : Uᗮ.starProjection x = x - U.starProjection x :=
+      congrArg (fun T : H →L[ℂ] H => T x) (Submodule.starProjection_orthogonal' U)
+    rw [show complementaryProjection U x = Uᗮ.starProjection x from rfl, hx', hPU, sub_self]
+  show (projection U * projection V * projection U
+    + complementaryProjection U * complementaryProjection V
+      * complementaryProjection U) x = _
+  simp only [ContinuousLinearMap.add_apply, ContinuousLinearMap.mul_apply, hPU,
+    hPUc, map_zero, add_zero]
+
+/-- Vector form of the cosine square on the source complement. -/
+theorem halmosCosineSq_source_compl_apply (x : H) (hx : x ∈ Uᗮ) :
+    halmosCosineSq U V x
+      = complementaryProjection U (complementaryProjection V x) := by
+  have hPUc : complementaryProjection U x = x :=
+    Submodule.starProjection_eq_self_iff.mpr hx
+  have hPU : projection U x = 0 := by
+    have hx' : Uᗮ.starProjection x = x - U.starProjection x :=
+      congrArg (fun T : H →L[ℂ] H => T x) (Submodule.starProjection_orthogonal' U)
+    rw [show complementaryProjection U x = Uᗮ.starProjection x from rfl] at hPUc
+    have hUeq : U.starProjection x = x - Uᗮ.starProjection x := by rw [hx']; abel
+    rw [show projection U x = U.starProjection x from rfl, hUeq, hPUc, sub_self]
+  show (projection U * projection V * projection U
+    + complementaryProjection U * complementaryProjection V
+      * complementaryProjection U) x = _
+  simp only [ContinuousLinearMap.add_apply, ContinuousLinearMap.mul_apply, hPU,
+    hPUc, map_zero, zero_add]
+
+/-- Complementary projections preserve a subspace reducing the projection. -/
+theorem complementaryProjection_mem_of_reduces {W M : Submodule ℂ H}
+    [W.HasOrthogonalProjection] (hR : (projection W).Reduces M) {w : H}
+    (hw : w ∈ M) : complementaryProjection W w ∈ M := by
+  have hcompl : complementaryProjection W w = w - projection W w :=
+    congrArg (fun T : H →L[ℂ] H => T w) (Submodule.starProjection_orthogonal' W)
+  rw [hcompl]
+  exact M.sub_mem hw (hR.1 w hw)
+
+/-- The cosine square preserves a subspace reducing both projections. -/
+theorem halmosCosineSq_mem_of_reduces {M : Submodule ℂ H}
+    (hRU : (projection U).Reduces M) (hRV : (projection V).Reduces M)
+    {w : H} (hw : w ∈ M) : halmosCosineSq U V w ∈ M := by
+  have hval : halmosCosineSq U V w
+      = projection U (projection V (projection U w))
+        + complementaryProjection U (complementaryProjection V
+            (complementaryProjection U w)) := by
+    show (projection U * projection V * projection U
+      + complementaryProjection U * complementaryProjection V
+        * complementaryProjection U) w = _
+    simp only [ContinuousLinearMap.add_apply, ContinuousLinearMap.mul_apply]
+  rw [hval]
+  refine M.add_mem (hRU.1 _ (hRV.1 _ (hRU.1 _ hw))) ?_
+  exact complementaryProjection_mem_of_reduces hRU
+    (complementaryProjection_mem_of_reduces hRV
+      (complementaryProjection_mem_of_reduces hRU hw))
+
+/-- Forward direction of Proposition 3.5: the fixed-cosine eigenspace reduces
+both projections and every source, target, source-complement and
+target-complement vector makes the fixed cosine `c`. -/
+theorem fixedCosineSubspace_isFixedCosineReducing (c : ℝ) (hc0 : 0 < c) :
+    IsFixedCosineReducingSubspace U V (fixedCosineSubspace U V c) c := by
+  refine ⟨reduces_projection_of_commute U V c U (halmosCosineSq_commute_projection U V),
+    reduces_projection_of_commute U V c V (halmosCosineSq_commute_projection_right U V),
+    ?_, ?_, ?_, ?_⟩
+  · intro x hxM hxU
+    refine norm_eq_from_ofReal_sq (norm_nonneg _) (norm_nonneg _) hc0.le ?_
+    rw [← inner_halmosCosineSq_source U V x hxU, (mem_fixedCosineSubspace U V c x).mp hxM,
+      inner_smul_left, map_pow, Complex.conj_ofReal, inner_self_ofReal]
+  · intro x hxM hxV
+    refine norm_eq_from_ofReal_sq (norm_nonneg _) (norm_nonneg _) hc0.le ?_
+    rw [← inner_halmosCosineSq_source V U x hxV, ← halmosCosineSq_symm U V,
+      (mem_fixedCosineSubspace U V c x).mp hxM, inner_smul_left, map_pow,
+      Complex.conj_ofReal, inner_self_ofReal]
+  · intro x hxM hxU
+    refine norm_eq_from_ofReal_sq (norm_nonneg _) (norm_nonneg _) hc0.le ?_
+    rw [← inner_halmosCosineSq_source_compl U V x hxU, (mem_fixedCosineSubspace U V c x).mp hxM,
+      inner_smul_left, map_pow, Complex.conj_ofReal, inner_self_ofReal]
+  · intro x hxM hxV
+    refine norm_eq_from_ofReal_sq (norm_nonneg _) (norm_nonneg _) hc0.le ?_
+    rw [← inner_halmosCosineSq_source_compl V U x hxV, ← halmosCosineSq_symm U V,
+      (mem_fixedCosineSubspace U V c x).mp hxM, inner_smul_left, map_pow,
+      Complex.conj_ofReal, inner_self_ofReal]
+
+/-- Maximality direction of Proposition 3.5: any subspace with constant
+source-side cosine `c` lies in the fixed-cosine eigenspace. -/
+theorem fixedCosineSubspace_maximal (c : ℝ) {M : Submodule ℂ H}
+    (hRU : (projection U).Reduces M) (hRV : (projection V).Reduces M)
+    (hU : ∀ x : H, x ∈ M → x ∈ U → ‖projection V x‖ = c * ‖x‖)
+    (hUc : ∀ x : H, x ∈ M → x ∈ Uᗮ → ‖complementaryProjection V x‖ = c * ‖x‖) :
+    M ≤ fixedCosineSubspace U V c := by
+  have hEU : ∀ w ∈ M, w ∈ U → halmosCosineSq U V w = (c : ℂ) ^ 2 • w := by
+    intro w hwM hwU
+    have hclaim : (halmosCosineSq U V - (c : ℂ) ^ 2 • (1 : H →L[ℂ] H)) w = 0 := by
+      refine eigen_of_reducing_quadratic (W := M ⊓ U) ?_ ?_
+        (Submodule.mem_inf.mpr ⟨hwM, hwU⟩)
+      · intro y hy
+        obtain ⟨hyM, hyU⟩ := Submodule.mem_inf.mp hy
+        simp only [ContinuousLinearMap.sub_apply, ContinuousLinearMap.smul_apply,
+          ContinuousLinearMap.one_apply]
+        refine Submodule.mem_inf.mpr
+          ⟨M.sub_mem (halmosCosineSq_mem_of_reduces U V hRU hRV hyM) (M.smul_mem _ hyM), ?_⟩
+        rw [halmosCosineSq_source_apply U V y hyU]
+        exact U.sub_mem (U.starProjection_apply_mem _) (U.smul_mem _ hyU)
+      · intro y hy
+        obtain ⟨hyM, hyU⟩ := Submodule.mem_inf.mp hy
+        rw [ContinuousLinearMap.sub_apply, inner_sub_left,
+          ContinuousLinearMap.smul_apply, ContinuousLinearMap.one_apply,
+          inner_halmosCosineSq_source U V y hyU, inner_smul_left, map_pow,
+          Complex.conj_ofReal, inner_self_ofReal, hU y hyM hyU]
+        push_cast; ring
+    have heq : halmosCosineSq U V w - (c : ℂ) ^ 2 • w = 0 := by
+      rwa [ContinuousLinearMap.sub_apply, ContinuousLinearMap.smul_apply,
+        ContinuousLinearMap.one_apply] at hclaim
+    exact sub_eq_zero.mp heq
+  have hEUc : ∀ w ∈ M, w ∈ Uᗮ → halmosCosineSq U V w = (c : ℂ) ^ 2 • w := by
+    intro w hwM hwU
+    have hclaim : (halmosCosineSq U V - (c : ℂ) ^ 2 • (1 : H →L[ℂ] H)) w = 0 := by
+      refine eigen_of_reducing_quadratic (W := M ⊓ Uᗮ) ?_ ?_
+        (Submodule.mem_inf.mpr ⟨hwM, hwU⟩)
+      · intro y hy
+        obtain ⟨hyM, hyU⟩ := Submodule.mem_inf.mp hy
+        simp only [ContinuousLinearMap.sub_apply, ContinuousLinearMap.smul_apply,
+          ContinuousLinearMap.one_apply]
+        refine Submodule.mem_inf.mpr
+          ⟨M.sub_mem (halmosCosineSq_mem_of_reduces U V hRU hRV hyM) (M.smul_mem _ hyM), ?_⟩
+        rw [halmosCosineSq_source_compl_apply U V y hyU]
+        exact Uᗮ.sub_mem (Uᗮ.starProjection_apply_mem _) (Uᗮ.smul_mem _ hyU)
+      · intro y hy
+        obtain ⟨hyM, hyU⟩ := Submodule.mem_inf.mp hy
+        rw [ContinuousLinearMap.sub_apply, inner_sub_left,
+          ContinuousLinearMap.smul_apply, ContinuousLinearMap.one_apply,
+          inner_halmosCosineSq_source_compl U V y hyU, inner_smul_left, map_pow,
+          Complex.conj_ofReal, inner_self_ofReal, hUc y hyM hyU]
+        push_cast; ring
+    have heq : halmosCosineSq U V w - (c : ℂ) ^ 2 • w = 0 := by
+      rwa [ContinuousLinearMap.sub_apply, ContinuousLinearMap.smul_apply,
+        ContinuousLinearMap.one_apply] at hclaim
+    exact sub_eq_zero.mp heq
+  intro w hw
+  rw [mem_fixedCosineSubspace]
+  have hdecomp : w = projection U w + complementaryProjection U w := by
+    have hcompl : complementaryProjection U w = w - projection U w :=
+      congrArg (fun T : H →L[ℂ] H => T w) (Submodule.starProjection_orthogonal' U)
+    rw [hcompl]; abel
+  have e1 := hEU (projection U w) (hRU.1 w hw) (U.starProjection_apply_mem w)
+  have e2 := hEUc (complementaryProjection U w)
+    (complementaryProjection_mem_of_reduces hRU hw) (Uᗮ.starProjection_apply_mem w)
+  conv_lhs => rw [hdecomp]
+  conv_rhs => rw [hdecomp]
+  rw [map_add, e1, e2, smul_add]
 
 /-- Davis--Kahan 1970, Proposition 3.5: in the acute case each fixed-angle
-spectral subspace is the unique maximal reducing subspace with that angle. -/
+eigenspace of the Halmos cosine square is the unique maximal reducing subspace
+with that angle.
+
+The maximality hypothesis carries the corrected `IsFixedCosineReducingSubspace`
+predicate (see its docstring): the printed source predicate, constraining only
+`M ∩ U` and `M ∩ V`, is refuted for `c < 1` by an exterior vector, and the
+complement conditions restore the paper's *all nonzero vectors make the fixed
+angle* clause.  The acuteness and `c ≤ 1` hypotheses are retained for source
+correspondence; the proof needs only `0 < c`. -/
 theorem proposition3_5_fixedAngle_maximal
     (hacute : IsAcute U V) (c : ℝ) (hc0 : 0 < c) (hc1 : c ≤ 1) :
     IsFixedCosineReducingSubspace U V (fixedCosineSubspace U V c) c ∧
       ∀ M : Submodule ℂ H,
         IsFixedCosineReducingSubspace U V M c →
           M ≤ fixedCosineSubspace U V c := by
-  sorry
+  refine ⟨fixedCosineSubspace_isFixedCosineReducing U V c hc0, ?_⟩
+  intro M hM
+  obtain ⟨hRU, hRV, hUcond, _hVcond, hUperp, _hVperp⟩ := hM
+  exact fixedCosineSubspace_maximal U V c hRU hRV hUcond hUperp
 
 /-- Davis--Kahan 1970, Corollary 3.2: interchanging the subspaces preserves the
 angle data and reverses the canonical quarter-turn. -/
