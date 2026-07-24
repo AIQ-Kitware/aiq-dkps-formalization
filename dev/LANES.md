@@ -29,6 +29,7 @@ RESUMED (2026-07-23) and claims lanes under `edward (resumed)` below.
 
 | agent | file(s) | declarations | date | status |
 |-------|---------|-------------|------|--------|
+| edward (resumed) | ForTauCeti/Analysis/InnerProductSpace/{CourantFischer,BasisSpan(new)}.lean, dev/tauceti/convergence-matrix.md + formathlib-to-fortauceti-migration.md (phase-0 classification), dev/tauceti-signature-polish-todo.md §6 | Tau Ceti P0: Courant–Fischer API redesign on the canonical ForTauCeti copy (specSubspace → OrthonormalBasis.spanIndices generalized off Fin/predicates; eigenvalue API into LinearMap.IsSymmetric namespace; genuine sup-inf Courant–Fischer endpoint theorem; Weyl at ContinuousLinearMap level) + phase-0 stats-subsystem classification unblocking the CourantFischer dedup. ForMathlib originals untouched (dedup repoints once, later, to the final API). | 2026-07-24 | in progress |
 | edward (stopped) | Sylvester/{FourierSemigroup,OrderedSemigroup,CompactIntegral,FiniteBlockReconstruction}.lean | whole Sylvester analytic lane (sorry-free) | 2026-07-23 | done |
 | edward (stopped) | Sylvester/Basic.lean | norm_sylvester_le_of_orderedSeparation, compact_mem_of_separatedSylvester_solution | 2026-07-23 | done |
 | edward (stopped) | InfiniteDimensional/GraphSubspace.lean | acuteAngularOperator, acuteAngularOperator_spec, acute_iff_exists_bounded_angularOperator | 2026-07-23 | done |
