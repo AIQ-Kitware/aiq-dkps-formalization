@@ -206,7 +206,13 @@ So: the clean, unambiguous "grounded proof out of Experimental" graduations are 
 The remainder is (a) per-module readiness judgment on the reusable-vs-ahead-of-frontier
 leaves, (b) intricate Section3 partial split, and (c) genuinely-open DoubleAngle math.
 
-5. **`Experimental/FiniteDimensional/DoubleAngle/SinTheta` is a name-colliding twin.**
+5. ~~**`Experimental/FiniteDimensional/DoubleAngle/SinTheta` is a name-colliding twin.**~~
+   **DONE.** It was actually a sorry-free *downstream extension* (imports the production
+   SinTheta, adds the 3 `sinTwoTheta_residual_*` theorems). Graduated to
+   `DavisKahan/FiniteDimensional/DoubleAngle/SinTwoThetaResidual.lean` (descriptive name
+   avoids the file collision); Generalized repointed. **`check_library_structure` #2 is now
+   green — zero production→Experimental imports.** Original note retained below for history:
+   
    A production `DavisKahan/FiniteDimensional/DoubleAngle/SinTheta.lean` ALREADY exists
    (same `ForMathlib` namespace), and production `FiniteDimensional/Generalized` imports
    the **experimental** twin — that is the standing `check_library_structure` #2 violation
