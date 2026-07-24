@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
-import DavisKahan.Experimental.MathAhead.HiddenFoundations.Section3Nonacute
+import DavisKahan.Geometry.Polar.Section3Nonacute
 import ForMathlib.Analysis.InnerProductSpace.CoerciveUnit
 
 /-!
@@ -14,7 +14,7 @@ This scratch module isolates the hard converse direction in Davis--Kahan 1970,
 Proposition 3.2.
 
 The constructive direction already available in
-`MathAhead.HiddenFoundations.Section3Nonacute` fills the crossed defect spaces
+`Geometry.Polar.Section3Nonacute` fills the crossed defect spaces
 with a chosen unitary quarter-turn.  The missing converse is subtler: from the
 paper's direct-rotation axioms one must recover a unitary equivalence
 
