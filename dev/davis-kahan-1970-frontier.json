@@ -45,7 +45,7 @@
       "id": "base-spectral-projection",
       "title": "Compiled bounded self-adjoint spectral projection",
       "kind": "foundation",
-      "module": "DavisKahan.Experimental.InfiniteDimensional.Core.SpectralProjection",
+      "module": "DavisKahan.Interop.Spectra.BoundedSelfAdjointSpectralProjection",
       "declaration": "ForMathlib.DavisKahanExt.boundedSelfAdjointSpectralProjection",
       "dependencies": [],
       "source_census_ids": [],

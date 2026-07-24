@@ -3,7 +3,7 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
-import DavisKahan.Experimental.InfiniteDimensional.Core.SpectralProjection
+import DavisKahan.Interop.Spectra.BoundedSelfAdjointSpectralProjection
 import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Basic
 import Mathlib.Analysis.CStarAlgebra.ContinuousLinearMap
 import Mathlib.Topology.MetricSpace.Lipschitz
