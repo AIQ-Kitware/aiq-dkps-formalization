@@ -5,6 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
 import DavisKahan.Experimental.Scratch.FreeBeam.SmoothKernel
+import Mathlib.Analysis.Complex.RealDeriv
 import Mathlib.Tactic
 
 /-!
@@ -36,8 +37,8 @@ noncomputable def realAffineData (a b : ℝ) : FourthOrderData where
   continuous2 := continuous_const
   continuous3 := continuous_const
   continuous4 := continuous_const
-  deriv0 := fun x => by simpa [mul_comm] using
-    ((hasDerivAt_const x a).add ((hasDerivAt_const x b).mul (hasDerivAt_id x)))
+  deriv0 := fun x => by
+    simpa [add_comm] using ((hasDerivAt_id x).const_mul b).add_const a
   deriv1 := fun x => hasDerivAt_const x b
   deriv2 := fun x => hasDerivAt_const x 0
   deriv3 := fun x => hasDerivAt_const x 0
@@ -86,7 +87,9 @@ theorem realAffineData_injective :
   have h0 := congrArg (fun u : FourthOrderData => u.f0 0) h
   have h1 := congrArg (fun u : FourthOrderData => u.f1 0) h
   obtain ⟨hac, hbd⟩ := realAffineData_parameters h0 h1
-  simp [hac, hbd]
+  cases hac
+  cases hbd
+  rfl
 
 /-- Complex affine fourth-order derivative data. -/
 noncomputable def complexAffineData (a b : ℂ) : ComplexFourthOrderData where
@@ -96,14 +99,15 @@ noncomputable def complexAffineData (a b : ℂ) : ComplexFourthOrderData where
   f3 := fun _ => 0
   f4 := fun _ => 0
   continuous0 := continuous_const.add
-    (Complex.continuous_ofReal.comp continuous_id).mul continuous_const
+    (Complex.continuous_ofReal.mul continuous_const)
   continuous1 := continuous_const
   continuous2 := continuous_const
   continuous3 := continuous_const
   continuous4 := continuous_const
   deriv0 := fun x => by
-    have hx : HasDerivAt (fun y : ℝ => (y : ℂ)) 1 x := Complex.ofRealCLM.hasDerivAt
-    simpa using (hasDerivAt_const x a).add (hx.mul_const b)
+    have hx : HasDerivAt (fun y : ℝ => (y : ℂ)) 1 x :=
+      (hasDerivAt_id x).ofReal_comp
+    simpa [add_comm] using (hx.mul_const b).add_const a
   deriv1 := fun x => hasDerivAt_const x b
   deriv2 := fun x => hasDerivAt_const x 0
   deriv3 := fun x => hasDerivAt_const x 0
