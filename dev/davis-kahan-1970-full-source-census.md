@@ -12,8 +12,9 @@ authoritative; this Markdown file is generated from it.
 | Status | Count |
 | --- | ---: |
 | `compiled_exact` | 7 |
-| `compiled_specialization` | 3 |
+| `compiled_specialization` | 2 |
 | `compiled_general_infrastructure` | 7 |
+| `proof_written` | 1 |
 | `candidate_under_repair` | 18 |
 | `partial_or_wrapper_missing` | 5 |
 | `not_represented` | 3 |
@@ -27,6 +28,7 @@ authoritative; this Markdown file is generated from it.
 - **`compiled_exact`** -- An exact source-facing theorem or construction is compiled on the base.
 - **`compiled_specialization`** -- A useful compiled specialization exists, but not the full source scope.
 - **`compiled_general_infrastructure`** -- The mathematics exists in a general reusable form, though a source-numbered wrapper may be absent.
+- **`proof_written`** -- A source-facing proof has been written and statically audited, but compiler certification is still pending.
 - **`candidate_under_repair`** -- A statement/candidate exists in the full Part III repair campaign but is not compiler-certified on this base.
 - **`partial_or_wrapper_missing`** -- Substantial ingredients exist, but the exact source theorem is not represented or audited.
 - **`not_represented`** -- No matching declaration was found.
@@ -46,7 +48,7 @@ no `sorry` and no `axiom`, so a declaration reachable from
 
 | Verification | Count |
 | --- | ---: |
-| `proved_in_build` | 34 |
+| `proved_in_build` | 33 |
 | `proved_conditional` | 5 |
 | `partially_in_build` | 0 |
 | `proved_outside_build` | 0 |
@@ -119,7 +121,7 @@ Gates: DK-9-model (proved_conditional), DK-9.1-9.4 (proved_conditional), DK-9.5-
 
 The mathematics is in the build in a more general form; what is missing is a statement carrying the paper's numbering, scope and hypotheses, so the facade can cite it.
 
-Gates: S1-block-residual (proved_in_build), S2-tan-theta (proved_in_build), S2-sin-two-theta (proved_in_build), S2-tan-two-theta (proved_in_build), S2-unbounded-scope (proved_in_build), DK-3.1-def (proved_in_build), DK-3.2-def (proved_in_build), DK-3.1-prop (proved_in_build), DK-3.3-prop (proved_in_build), DK-3.4-prop (proved_in_build), DK-3.5-prop (proved_in_build), DK-4.1-prop (proved_in_build), DK-5.1-thm (proved_in_build), DK-5.2-thm (proved_in_build), DK-5.1-lem (proved_in_build), DK-6.3-thm (proved_in_build), DK-7-sin2-proof (proved_in_build), DK-7-tan2-proof (proved_in_build)
+Gates: S1-block-residual (proved_in_build), S2-tan-theta (proved_in_build), S2-sin-two-theta (proved_in_build), S2-tan-two-theta (proved_in_build), S2-unbounded-scope (proved_in_build), DK-3.1-def (proved_in_build), DK-3.2-def (proved_in_build), DK-3.1-prop (proved_in_build), DK-3.3-prop (proved_in_build), DK-3.4-prop (proved_in_build), DK-3.5-prop (proved_in_build), DK-4.1-prop (proved_in_build), DK-5.1-thm (proved_in_build), DK-5.2-thm (proved_in_build), DK-5.1-lem (proved_in_build), DK-7-sin2-proof (proved_in_build), DK-7-tan2-proof (proved_in_build)
 
 ### Not attributed to a blocker
 
@@ -471,13 +473,12 @@ DK-6.3-lem (absent)
 #### Theorem 6.3: Generalized tangent theorem
 
 - **Kind:** `theorem`
-- **Status:** `compiled_specialization`
-- **Verification:** `proved_in_build`
+- **Status:** `proof_written`
+- **Verification:** `compiler_pending`
 - **Mathematics:** A strict inequality of source-coordinate Hilbert dimensions, the Rayleigh–Ritz residual condition, and a one-sided gap control a directed rectangular tangent representative defined from the singular values of E₀*F₁.
-- **Blocked by:** `exact-source-wrappers`
-- **Current Lean references:** `ForMathlib.DavisKahanTheory.partIII_generalizedTanTheta_ritzResidual_uiNorm`
-- **Assessment:** The finite arbitrary-UI-norm specialization is compiled. A previous frontier distillation incorrectly replaced the source directed cross-block statement by hdim -> IsAcute; that implication is false and is now regression-tested.
-- **Next action:** Prove the Hilbert-space finite-Ky-Fan core for the directed E₀*F₁ tangent data, then use the existing Fan-dominance promotion and audit the unbounded cutoff passage.
+- **Current Lean references:** `ForMathlib.DavisKahan.Experimental.ExactTanTheta.theorem6_3_all_kyFan_core`, `ForMathlib.DavisKahan.Experimental.ExactTanTheta.theorem6_3_generalizedTanTheta_source_ideal`
+- **Assessment:** The bounded source theorem is implemented at the paper's effective separable scope: finite trial coordinates, arbitrary complete ambient Hilbert space, and the strict-rank hypothesis preserved explicitly. The formal endpoint does not derive the finite-dimensional typeclass from separability/cardinal arithmetic; it records that consequence as an explicit Lean assumption. The proof is directed and does not use symmetric IsAcute. The earlier mistranscription remains regression-tested.
+- **Next action:** Compile the new production theorem. The equal-dimension Section 2 tangent theorem and the Appendix arbitrary-ideal unbounded passage remain separate obligations.
 
 ### Section 6 appendix
 
@@ -488,8 +489,8 @@ DK-6.3-lem (absent)
 - **Verification:** `proved_in_build`
 - **Mathematics:** Domain invariance, bounded residual, spectral cutoffs, and limiting arguments extend the single-angle theorems to unbounded self-adjoint operators.
 - **Current Lean references:** `ForMathlib.DavisKahan1970.Theorem6_1_commonDomain`, `ForMathlib.DavisKahan1970.Theorem6_1_commonCore`
-- **Assessment:** The main common-domain and graph-core source forms are compiled.
-- **Next action:** Audit every displayed appendix identity, not only the headline theorem.
+- **Assessment:** Common-domain and graph-core source forms are compiled. This does not by itself ground the Appendix's full arbitrary-unitarily-invariant tan-theta cutoff/Fan passage, which remains a separate frontier obligation.
+- **Next action:** Audit every displayed appendix identity and complete the arbitrary-ideal tangent cutoff/Fan passage; do not infer it from the compiled common-domain wrappers alone.
 
 #### Lemma 6.3: Finite-rank near-maximizer leakage estimate
 
