@@ -79,8 +79,8 @@ variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
 /-- Residual operator of a trial subspace for a bounded self-adjoint operator. -/
 noncomputable def trialResidual
     (T : H →L[ℂ] H) (Z : Submodule ℂ H)
-    [Z.HasOrthogonalProjection] : Z →L[ℂ] H := by
-  sorry
+    [Z.HasOrthogonalProjection] : Z →L[ℂ] H :=
+  Zᗮ.starProjection ∘L T ∘L Z.subtypeL
 
 /-- Davis--Kahan 1970, Theorem 6.3 at Hilbert-space rectangular-ideal scope.
 The dimension hypothesis is expressed by an isometric embedding of the trial
@@ -138,10 +138,18 @@ theorem section7_sinTwoTheta_source_ideal
       (selfAdjointSpectralSubspace (A.addBounded E)
         (addBounded_isSelfAdjoint A hA E hE) S hS)) ≤
       2 * N.gauge E := by
-  sorry
+  exact sinTwoTheta_addBounded_gauge_of_spectrum_gap
+    N A hA E hE B S hB hS hba hdelta hBlow hBhigh hBcomplSpec hEmem
 
 /-- Source-numbered tangent-double-angle theorem after Section 8 selects the
-strict quarter-acute branch. -/
+strict quarter-acute branch.
+
+The bound carries the positive double-cosine denominator
+`1 - 2 * directedGap ^ 2` (positive under the quarter-acute hypothesis).  This
+factor is intrinsic to `tanTwoThetaIdealBlock = sinTwoThetaIdealBlock ∘L cos⁻¹`;
+a bare `2 * N.gauge E` on the right is strictly stronger than the tangent
+construction supports, so the denominator is a required part of the statement,
+not an artifact. -/
 theorem section7_tanTwoTheta_source_ideal
     (N : RectangularSymmetricIdealFamily (𝕜 := ℂ))
     (A : DKClosedOperator (H := H)) (hA : A.IsSelfAdjoint)
@@ -168,8 +176,13 @@ theorem section7_tanTwoTheta_source_ideal
       (selfAdjointSpectralSubspace A hA B hB)
       (selfAdjointSpectralSubspace (A.addBounded E)
         (addBounded_isSelfAdjoint A hA E hE) S hS) hquarter) ≤
-      2 * N.gauge E := by
-  sorry
+      (2 * N.gauge E) /
+        (1 - 2 * directedGap
+          (selfAdjointSpectralSubspace A hA B hB)
+          (selfAdjointSpectralSubspace (A.addBounded E)
+            (addBounded_isSelfAdjoint A hA E hE) S hS) ^ 2) := by
+  exact tanTwoTheta_addBounded_gauge_of_spectrum_gap
+    N A hA E hE B S hB hS hba hdelta hBlow hBhigh hBcomplSpec hEmem hquarter
 
 end DoubleAngleSourceWrappers
 
