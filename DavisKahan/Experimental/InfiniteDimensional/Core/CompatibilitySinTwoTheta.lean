@@ -18,7 +18,7 @@ with the finite-dimensional source normalization.  No singular-value or compactn
 hypothesis is needed to define it.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanExt
 
 open scoped InnerProductSpace
@@ -48,4 +48,4 @@ theorem sinTwoThetaEmbedding_eq_rangeAngle (U : Submodule 𝕜 E)
   rfl
 
 end DavisKahanExt
-end ForMathlib
+end TauCeti

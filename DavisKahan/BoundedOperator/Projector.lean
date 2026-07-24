@@ -12,7 +12,7 @@ The two-projection norm identity and the sharp factor-one coercive projector
 theorem over arbitrary `RCLike` scalars.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 
 open scoped InnerProductSpace
@@ -86,4 +86,4 @@ theorem opNorm_starProjection_sub_le_of_formBounds
 
 
 end DavisKahan
-end ForMathlib
+end TauCeti

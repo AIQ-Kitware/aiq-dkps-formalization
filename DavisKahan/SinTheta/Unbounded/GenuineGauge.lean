@@ -10,7 +10,7 @@ import DavisKahan.SinTheta.Unbounded.GenuineOpNorm
 # Ideal-gauge `sin Θ` bound from a two-sided shifted inverse
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace ExactSinTheta
@@ -80,4 +80,4 @@ theorem sinTheta_unbounded_gauge
 end ExactSinTheta
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

@@ -21,7 +21,7 @@ spaces, the statements use the heterogeneous relation
 `SameApproximationSingularValues`.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace ExactSinTheta
@@ -139,4 +139,4 @@ end
 end ExactSinTheta
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

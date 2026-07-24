@@ -25,7 +25,7 @@ one symbol.
 open scoped InnerProductSpace Topology
 open Filter
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace ExactSinTheta
@@ -167,4 +167,4 @@ noncomputable def spectraSpectralCutoffInterface
 end ExactSinTheta
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

@@ -9,7 +9,7 @@ import DavisKahan.Sylvester.ShiftedInverse
 # Operator-norm `sin Θ` bound from a two-sided shifted inverse
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace ExactSinTheta
@@ -48,4 +48,4 @@ theorem sinTheta_unbounded_opNorm
 end ExactSinTheta
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

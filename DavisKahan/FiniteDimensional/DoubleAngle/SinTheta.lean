@@ -25,7 +25,7 @@ To be re-authored per Mathlib's AI-contribution policy at PR time.
 -/
 
 import DavisKahan.FiniteDimensional.SinTheta.UnitarilyInvariant
-import ForMathlib.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm
+import ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm
 import DavisKahan.FiniteDimensional.Core.AngleGeometry
 import DavisKahan.FiniteDimensional.Core.SpectralGap
 import DavisKahan.FiniteDimensional.Core.SpectralSubspace
@@ -66,10 +66,10 @@ at all, only the reflection.
 
 ## Main results
 
-* `ForMathlib.UnitarilyInvariantNorm.sin_two_theta_reflection_le`: the
+* `TauCeti.UnitarilyInvariantNorm.sin_two_theta_reflection_le`: the
   mirror-defect bound `2 N (Q ∘ W.starProjection ∘ P) ≤ N (J T J − T) / (b−a)`
   for an arbitrary subspace `W` with reflection `J`.
-* `ForMathlib.UnitarilyInvariantNorm.sin_two_theta_starProjection_le`: the
+* `TauCeti.UnitarilyInvariantNorm.sin_two_theta_starProjection_le`: the
   sin 2Θ theorem `N (Q ∘ P̂ ∘ P) ≤ N (S − T) / (b − a)`.
 
 ## References
@@ -82,8 +82,7 @@ at all, only the reflection.
   `RotationSharp.lean`).
 -/
 
-namespace ForMathlib
-
+namespace TauCeti
 open scoped InnerProductSpace
 open Module (finrank)
 
@@ -480,10 +479,8 @@ end Dictionary
 
 end UnitarilyInvariantNorm
 
-end ForMathlib
-
-
-namespace ForMathlib
+end TauCeti
+namespace TauCeti
 namespace DavisKahanTheory
 
 open scoped InnerProductSpace BigOperators
@@ -694,4 +691,4 @@ theorem kyFan_sinTwoTheta_le
     kyFanSum_eq_sum_fin] using h
 
 end DavisKahanTheory
-end ForMathlib
+end TauCeti

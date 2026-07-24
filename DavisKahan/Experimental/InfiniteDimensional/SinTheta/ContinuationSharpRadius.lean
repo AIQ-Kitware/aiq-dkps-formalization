@@ -20,7 +20,7 @@ operator-theoretic spectral enclosure will consume.
 No spectral inclusion is asserted here.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanExt
 
 open Set
@@ -141,4 +141,4 @@ theorem offDiagonal_path_enlargedInterval_separated_from_exterior
     (offDiagonal_enlargedInterval_separated_from_exterior hx hy)
 
 end DavisKahanExt
-end ForMathlib
+end TauCeti

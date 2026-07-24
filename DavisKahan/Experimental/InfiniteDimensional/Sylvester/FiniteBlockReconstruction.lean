@@ -14,7 +14,7 @@ Sylvester theorem.  It is parameterized by a scalar kernel and its reciprocal
 identity, so it is independent of the particular Haagerup--Zsido construction.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanExt
 
 open MeasureTheory Set
@@ -342,4 +342,4 @@ theorem finiteDiagonal_sylvester_reconstruction
 
 end
 end DavisKahanExt
-end ForMathlib
+end TauCeti

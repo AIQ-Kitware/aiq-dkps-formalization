@@ -20,7 +20,7 @@ equation unchanged, so ordered spectral separation can be converted to this
 normalization in a separate bridge leaf.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanExt
 
 open scoped InnerProductSpace
@@ -186,4 +186,4 @@ theorem riccati_near_singular_pair_bound
   nlinarith
 
 end DavisKahanExt
-end ForMathlib
+end TauCeti

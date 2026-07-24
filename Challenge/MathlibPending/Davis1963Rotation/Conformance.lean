@@ -13,8 +13,7 @@ ordinary `ForMathlib` implementation imported by the paired leaderboard.
 -/
 
 
-namespace ForMathlib
-
+namespace TauCeti
 open scoped InnerProductSpace BigOperators
 open Module (finrank)
 
@@ -36,4 +35,4 @@ theorem rotation_add_displacement_le_hilbertSchmidt
       ≤ ∑ i, ‖(S - T) (hT.eigenvectorBasis hn i)‖ ^ 2 := by
   sorry
 
-end ForMathlib
+end TauCeti

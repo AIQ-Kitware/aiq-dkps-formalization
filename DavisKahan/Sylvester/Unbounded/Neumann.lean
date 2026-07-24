@@ -18,7 +18,7 @@ left, and the unbounded block on the right.
 The constant is one: the estimate is `δ * gauge X ≤ gauge C`, with no loss.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace ExactSinTheta
@@ -248,8 +248,8 @@ theorem sylvester_mem_and_gauge_le_of_unbounded_bound_inverse
 right block.  Agreement on the dense domain extends to the whole space through
 the closed graph of the left block. -/
 theorem closedSylvesterEquation_boundedRealization
-    {A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := E)}
-    {B : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := F)}
+    {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := E)}
+    {B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := F)}
     {X C : F →L[𝕜] E} {T : F →L[𝕜] F}
     (hEq : HasClosedSylvesterEquation A B X C)
     (hT : ∀ y : B.domain, T (y : F) = B.toLinearMap y) :
@@ -304,7 +304,7 @@ theorem mem_and_gauge_le_of_boundedLeft_exteriorRight
     {G : Type v}
     [NormedAddCommGroup G] [InnerProductSpace 𝕜 G] [CompleteSpace G]
     {S : F →L[𝕜] F}
-    {Λ : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := G)}
+    {Λ : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := G)}
     {Y C : G →L[𝕜] F} {c ρ δ : ℝ}
     (hρ : 0 ≤ ρ) (hδ : 0 < δ)
     (hSnorm : ‖S‖ ≤ ρ)
@@ -513,4 +513,4 @@ theorem mem_and_gauge_le_of_boundedLeft_exteriorRight
 end ExactSinTheta
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

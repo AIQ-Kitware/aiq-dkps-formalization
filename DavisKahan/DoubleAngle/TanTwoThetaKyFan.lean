@@ -3,9 +3,9 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Fable 5
 -/
-import ForMathlib.Analysis.InnerProductSpace.SingularSystem
-import ForMathlib.Analysis.InnerProductSpace.KyFan
-import ForMathlib.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm
+import ForTauCeti.Analysis.InnerProductSpace.SingularSystem
+import ForTauCeti.Analysis.InnerProductSpace.KyFan
+import ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm
 
 /-!
 # The `tan 2Θ` theorem for every unitarily invariant norm
@@ -58,7 +58,7 @@ This module lives in the double-angle production directory; it is
 finite-dimensional because it consumes the intrinsic singular-system layer.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanTheory
 
 open Module LinearMap
@@ -514,4 +514,4 @@ theorem tanTwoTheta0_offDiagonal_le
 end KyFan
 
 end DavisKahanTheory
-end ForMathlib
+end TauCeti

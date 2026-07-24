@@ -14,7 +14,7 @@ operator domain is kept explicit, and coordinate membership and action are
 exposed as separate lemmas for the later strong Riccati reduction.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanExt
 
 open scoped InnerProductSpace
@@ -274,4 +274,4 @@ noncomputable def unboundedBlockOperatorCore
   rfl
 
 end DavisKahanExt
-end ForMathlib
+end TauCeti

@@ -20,7 +20,9 @@ conjugation and therefore descend to real bounded operators.  All package laws
 are then reflected through the injective complexification functor.
 -/
 
-namespace ForMathlib
+namespace TauCeti
+
+open ForMathlib
 namespace DavisKahan
 namespace Experimental
 namespace ExactSinTheta
@@ -326,4 +328,4 @@ end
 end ExactSinTheta
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

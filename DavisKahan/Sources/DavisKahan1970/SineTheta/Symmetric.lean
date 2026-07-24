@@ -26,7 +26,7 @@ This module follows the paper proof exactly.
 No triangle estimate is used in the coupling step.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace ExactSinTheta
@@ -37,7 +37,7 @@ noncomputable section
 
 universe v
 
-open ForMathlib.DavisKahanExt
+open TauCeti.DavisKahanExt
 
 variable {E : Type v}
   [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
@@ -296,7 +296,7 @@ theorem symmetric_all_kyFan
     (P : PaperSymmetricSinThetaProblem (E := E)) :
     ∀ k,
       P.gap * kyFanApproximationGauge k
-          (ForMathlib.DavisKahanExt.paperSinAngleOperatorC P.U P.V) ≤
+          (TauCeti.DavisKahanExt.paperSinAngleOperatorC P.U P.V) ≤
         kyFanApproximationGauge k P.perturbation := by
   intro k
   have hadjA : P.A.adjoint = P.A := P.selfAdjoint_A.isSelfAdjoint.adjoint_eq
@@ -368,7 +368,7 @@ theorem symmetric_all_kyFan
   rw [hcross] at hcombine
   calc
     P.gap * kyFanApproximationGauge k
-        (ForMathlib.DavisKahanExt.paperSinAngleOperatorC P.U P.V) =
+        (TauCeti.DavisKahanExt.paperSinAngleOperatorC P.U P.V) =
       kyFanApproximationGauge k
         (((P.gap : ℝ) : ℂ) • paperCrossSineSum P.U P.V) := by
       rw [kyFanApproximationGauge_smul, hgapNorm,
@@ -382,9 +382,9 @@ invariant norm in the source sense. -/
 theorem result_every_unitarilyInvariantNorm
     (P : PaperSymmetricSinThetaProblem (E := E))
     (N : PaperUnitaryInvariantNorm) (hH : N.Mem P.perturbation) :
-    N.Mem (ForMathlib.DavisKahanExt.paperSinAngleOperatorC P.U P.V) ∧
+    N.Mem (TauCeti.DavisKahanExt.paperSinAngleOperatorC P.U P.V) ∧
       P.gap * N.gauge
-          (ForMathlib.DavisKahanExt.paperSinAngleOperatorC P.U P.V) ≤
+          (TauCeti.DavisKahanExt.paperSinAngleOperatorC P.U P.V) ≤
         N.gauge P.perturbation :=
   N.mul_gauge_le_of_all_mul_kyFan_le P.gap_pos hH P.symmetric_all_kyFan
 
@@ -395,4 +395,4 @@ end
 end ExactSinTheta
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

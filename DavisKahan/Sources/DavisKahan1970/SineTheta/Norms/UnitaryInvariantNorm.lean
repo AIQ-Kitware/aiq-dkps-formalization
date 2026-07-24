@@ -3,7 +3,7 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import ForMathlib.Analysis.InnerProductSpace.UnitarilyInvariantNorm
+import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantNorm
 import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SingularValueTransport
 import Mathlib.Data.ENNReal.Inv
 
@@ -29,7 +29,7 @@ is the exact adapter from the compiler-accepted cutoff proof to the universal
 norm quantifier in the 1970 paper.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace ExactSinTheta
@@ -54,7 +54,7 @@ and complex operators, and to rectangular operators through their singular
 values. -/
 structure PaperUnitaryInvariantNorm where
   finiteNorm : ∀ n : ℕ,
-    ForMathlib.UnitarilyInvariantNorm ℂ (EuclideanSpace ℂ (Fin n))
+    TauCeti.UnitarilyInvariantNorm ℂ (EuclideanSpace ℂ (Fin n))
   normalized :
     (finiteNorm 1).gauge (EuclideanSpace.basisFun (Fin 1) ℂ)
       (fun _ => 1) = 1
@@ -361,4 +361,4 @@ end
 end ExactSinTheta
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

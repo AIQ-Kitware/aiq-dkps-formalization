@@ -42,7 +42,7 @@ functional calculus on Hilbert-space operators only over `ℂ`; the real case
 is expected to follow by a norm-preserving complexification transfer.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanExt
 
 open scoped InnerProductSpace
@@ -310,7 +310,7 @@ theorem sinTheta_genuineSpectrum_symmetric
 
 section IdealScope
 
-open ForMathlib.DavisKahan.Experimental.ExactSinTheta
+open TauCeti.DavisKahan.Experimental.ExactSinTheta
 
 universe v'
 
@@ -390,7 +390,7 @@ theorem mem_and_gauge_sylvester_le_of_spectrum_intervalExterior
       _ = C := by rw [h1, sub_self, sub_zero, hEq]
   -- package the inverse for the Neumann ideal engine
   have hEq' : HasUnboundedBoundedSylvesterEquation
-      (ForMathlib.DavisKahanExt.ClosedOperator.ofBounded A₁) B₁ X C :=
+      (TauCeti.DavisKahanExt.ClosedOperator.ofBounded A₁) B₁ X C :=
     ClosedSylvesterEquation.ofBounded hEq₁
   refine sylvester_mem_and_gauge_le_of_unbounded_bound_inverse N
     ⟨J, fun y => Submodule.mem_top, ?_, ?_⟩ B₁ hr0 hd hJnorm hB₁norm hEq' hC
@@ -405,7 +405,7 @@ end IdealScope
 
 section SinThetaIdealScope
 
-open ForMathlib.DavisKahan.Experimental.ExactSinTheta
+open TauCeti.DavisKahan.Experimental.ExactSinTheta
 
 /-- **The bounded Davis--Kahan `sin Θ` theorem at unitary-invariant ideal
 scope, genuine spectra.**  Under the directed spectral configuration of
@@ -541,4 +541,4 @@ theorem sinTheta_genuineSpectrum_gauge_symmetric
 end SinThetaIdealScope
 
 end DavisKahanExt
-end ForMathlib
+end TauCeti

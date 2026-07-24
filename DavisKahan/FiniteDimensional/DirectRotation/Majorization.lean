@@ -5,9 +5,10 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.FiniteDimensional.DirectRotation.PrincipalPlanes
 import DavisKahan.FiniteDimensional.Core.OperatorBlocks
-import ForMathlib.Analysis.InnerProductSpace.CourantFischer
-import ForMathlib.Analysis.InnerProductSpace.KyFan
-import ForMathlib.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm
+import ForTauCeti.Analysis.InnerProductSpace.CourantFischer
+import ForTauCeti.Analysis.InnerProductSpace.CourantFischerCompat
+import ForTauCeti.Analysis.InnerProductSpace.KyFan
+import ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm
 
 /-!
 # Fan dominance for the finite direct rotation
@@ -34,7 +35,7 @@ obtained from the modulus of the canonical intertwiner and ordinary
 finite-dimensional Courant--Fischer theory.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanTheory
 
 open scoped InnerProductSpace BigOperators
@@ -172,8 +173,8 @@ theorem abs_pinch_competitor_eq_abs_canonicalIntertwiner
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (W : E ≃ₗᵢ[𝕜] E) (hmap : U.map W.toLinearMap = V) :
-    ForMathlib.abs (pinch U W.symm.toLinearMap) =
-      ForMathlib.abs (canonicalIntertwiner U V) := by
+    TauCeti.abs (pinch U W.symm.toLinearMap) =
+      TauCeti.abs (canonicalIntertwiner U V) := by
   have hfactor := symm_comp_canonicalIntertwiner_eq_pinch U V W hmap
   have hgram :
       (pinch U W.symm.toLinearMap).adjoint ∘ₗ pinch U W.symm.toLinearMap =
@@ -184,14 +185,14 @@ theorem abs_pinch_competitor_eq_abs_canonicalIntertwiner
     -- the composite is `W (W.symm _)`, so the cancellation is `apply_symm_apply`
     simp only [LinearMap.comp_apply, LinearIsometryEquiv.coe_toLinearEquiv,
       LinearEquiv.coe_coe, LinearIsometryEquiv.apply_symm_apply]
-  have hsq : ForMathlib.abs (pinch U W.symm.toLinearMap) ∘ₗ
-      ForMathlib.abs (pinch U W.symm.toLinearMap) =
+  have hsq : TauCeti.abs (pinch U W.symm.toLinearMap) ∘ₗ
+      TauCeti.abs (pinch U W.symm.toLinearMap) =
       (canonicalIntertwiner U V).adjoint ∘ₗ canonicalIntertwiner U V := by
-    rw [ForMathlib.abs, LinearMap.IsPositive.sqrt_mul_self]
+    rw [TauCeti.abs, LinearMap.IsPositive.sqrt_mul_self]
     exact hgram
   exact LinearMap.IsPositive.sqrt_unique
     (LinearMap.isPositive_adjoint_comp_self (canonicalIntertwiner U V))
-    (ForMathlib.isPositive_abs _) hsq
+    (TauCeti.isPositive_abs _) hsq
 
 set_option maxHeartbeats 1000000 in
 /-- Fan--Hoffman pointwise inequality: every sorted eigenvalue of the Hermitian
@@ -202,7 +203,7 @@ theorem eigenvalues_hermitianPart_le_singularValues
       A.singularValues (i : ℕ) := by
   classical
   let H := hermitianPart A
-  let C := ForMathlib.abs A
+  let C := TauCeti.abs A
   -- Use the Gram eigenbasis throughout: `abs A` is *defined* through it, so
   -- staying in it avoids an expensive cross-basis defeq.
   let b := A.isSymmetric_adjoint_comp_self.eigenvectorBasis rfl
@@ -251,8 +252,8 @@ theorem eigenvalues_hermitianPart_le_singularValues
       calc RCLike.re ⟪(LinearMap.adjoint A ∘ₗ A) x, x⟫_𝕜
           ≤ A.singularValues (i : ℕ) ^ 2 * ‖x‖ ^ 2 := hgram
         _ = A.singularValues (i : ℕ) ^ 2 := by rw [hxnorm, one_pow, mul_one]
-    show ‖ForMathlib.abs A x‖ ≤ A.singularValues (i : ℕ)
-    rw [ForMathlib.norm_abs_apply]
+    show ‖TauCeti.abs A x‖ ≤ A.singularValues (i : ℕ)
+    rw [TauCeti.norm_abs_apply]
     nlinarith [norm_nonneg (A x), A.singularValues_nonneg (i : ℕ), hsq]
   calc
     (hermitianPart_isSymmetric A).eigenvalues rfl i
@@ -478,7 +479,7 @@ theorem hermitianPart_directRotation (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hacute : IsAcute U V) :
     hermitianPart (directRotation U V hacute).toLinearMap =
-      ForMathlib.abs (canonicalIntertwiner U V) := by
+      TauCeti.abs (canonicalIntertwiner U V) := by
   have htwo := two_smul_abs_canonicalIntertwiner U V hacute
   apply LinearMap.ext
   intro x
@@ -498,7 +499,7 @@ theorem displacementSquare_directRotation (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hacute : IsAcute U V) :
     displacementSquare (directRotation U V hacute).toLinearMap =
-      (2 : 𝕜) • (LinearMap.id - ForMathlib.abs (canonicalIntertwiner U V)) := by
+      (2 : 𝕜) • (LinearMap.id - TauCeti.abs (canonicalIntertwiner U V)) := by
   rw [displacementSquare_unitary, hermitianPart_directRotation]
 
 /-- Weak majorization of the positive displacement squares.  This is the
@@ -512,13 +513,13 @@ theorem directRotation_displacementSquare_kyFan
       kyFanSum k (displacementSquare W.toLinearMap) := by
   classical
   let S := canonicalIntertwiner U V
-  let C := ForMathlib.abs S
+  let C := TauCeti.abs S
   let B := pinch U W.symm.toLinearMap
   let H := hermitianPart B
   let A0 := displacementSquare (directRotation U V hacute).toLinearMap
   let A1 := displacementSquare W.toLinearMap
   let P1 := pinch U A1
-  have hCeq : ForMathlib.abs B = C := by
+  have hCeq : TauCeti.abs B = C := by
     simpa [B, C, S] using
       abs_pinch_competitor_eq_abs_canonicalIntertwiner U V W hmap
   have hA0 : A0 = (2 : 𝕜) • (LinearMap.id - C) := by
@@ -630,4 +631,4 @@ valid arbitrary-UI endpoint is `uiNorm_restrictedDisplacement_le`.
 -/
 
 end DavisKahanTheory
-end ForMathlib
+end TauCeti

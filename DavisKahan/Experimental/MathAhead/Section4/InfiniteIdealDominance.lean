@@ -21,7 +21,7 @@ short consequence of `KyFanDominantIdealFamily`.
 
 open scoped InnerProductSpace BigOperators
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace MathAhead
@@ -101,4 +101,4 @@ end Section4
 end MathAhead
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

@@ -30,7 +30,7 @@ part on the spectral range can be bundled as a self-adjoint closed operator.
 
 open scoped InnerProductSpace
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace SpectraBridge
@@ -209,4 +209,4 @@ theorem selfAdjoint_maps_spectralSubspace
 end SpectraBridge
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

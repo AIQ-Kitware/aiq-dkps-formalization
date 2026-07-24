@@ -22,7 +22,7 @@ coherent finite symmetric gauges.  Thus the final quantifier is literally the
 one used in Davis--Kahan 1970.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace ExactSinTheta
@@ -370,4 +370,4 @@ end
 end ExactSinTheta
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

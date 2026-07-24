@@ -14,7 +14,7 @@ The bounded shift extension and the exterior-left/interval-right ideal-gauge
 Sylvester estimate built from it.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace ExactSinTheta
@@ -36,7 +36,7 @@ on its dense domain (`c = (α+β)/2`, radius `r = (α-β)/2`), which therefore
 extends to a bounded operator on the whole space with the same norm bound
 and agreeing with `B - c` on the domain. -/
 theorem exists_bounded_shift_extension
-    {B : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := F)}
+    {B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := F)}
     (hsym : B.IsSymmetric) {β α : ℝ} (hβα : β ≤ α)
     (hlow : SemiboundedBelow B β) (hhigh : SemiboundedAbove B α) :
     ∃ S : F →L[𝕜] F, ‖S‖ ≤ (α - β) / 2 ∧
@@ -52,7 +52,7 @@ theorem exists_bounded_shift_extension
   have hgbound : ∀ y : B.domain, ‖g y‖ ≤ (α - β) / 2 * ‖y‖ := by
     intro y
     rw [hgapply y]
-    exact ForMathlib.DavisKahanExt.ClosedOperator.norm_shift_apply_le_of_form_bounds
+    exact TauCeti.DavisKahanExt.ClosedOperator.norm_shift_apply_le_of_form_bounds
       hsym hβα hlow hhigh y
   set f : B.domain →L[𝕜] F := g.mkContinuous ((α - β) / 2) hgbound with hfdef
   have hrange : Set.range ((B.domain.subtypeL : B.domain →L[𝕜] F)) =
@@ -97,8 +97,8 @@ the exterior block `A` carries a proof-carrying two-sided shifted inverse.
 Both closed blocks may be genuinely unbounded a priori. -/
 theorem mem_and_gauge_le_of_exteriorLeft_intervalRight
     (N : RectangularSymmetricIdealFamily (𝕜 := 𝕜))
-    {A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := E)}
-    {B : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := F)}
+    {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := E)}
+    {B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := F)}
     {X C : F →L[𝕜] E} {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
     (hBsym : B.IsSymmetric)
     (hBlow : SemiboundedBelow B β) (hBhigh : SemiboundedAbove B α)
@@ -123,7 +123,7 @@ theorem mem_and_gauge_le_of_exteriorLeft_intervalRight
     closedSylvesterEquation_boundedRealization hEq hT
   -- shift both blocks by the center
   set c𝕜 : 𝕜 := (((α + β) / 2 : ℝ) : 𝕜) with hc𝕜
-  set A' : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := E) :=
+  set A' : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := E) :=
     A.addBounded (-(c𝕜 • ContinuousLinearMap.id 𝕜 E)) with hA'def
   have hA'domain : A'.domain = A.domain := rfl
   have hA'apply : ∀ x : A.domain,
@@ -167,4 +167,4 @@ theorem mem_and_gauge_le_of_exteriorLeft_intervalRight
 end ExactSinTheta
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

@@ -20,7 +20,7 @@ restricted spectral sets to the compressed self-adjoint blocks and handle the
 reverse orientation.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanExt
 
 /-- A nonempty bounded-above ordered lower set admits a separating supremum
@@ -88,4 +88,4 @@ theorem OrderedInternalGap.exists_oriented_halfLine_center
       (exists_halfLine_center_of_ordered_sets hUc_ne hUc_bdd hordered)
 
 end DavisKahanExt
-end ForMathlib
+end TauCeti

@@ -21,7 +21,7 @@ dimensional Ky Fan triangle inequality:
 
 open scoped InnerProductSpace ComplexConjugate Topology
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace ExactSinTheta
@@ -438,4 +438,4 @@ end ApproximationNumbersReal
 end ExactSinTheta
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

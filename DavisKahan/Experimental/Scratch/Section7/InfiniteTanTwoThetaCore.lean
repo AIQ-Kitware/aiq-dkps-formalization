@@ -31,7 +31,7 @@ hide that separate operator-theoretic obligation behind an axiom or `sorry`.
 
 open scoped InnerProductSpace BigOperators
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace Scratch
@@ -252,4 +252,4 @@ end Section7
 end Scratch
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

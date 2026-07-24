@@ -25,7 +25,7 @@ that same rotation.  Reduce all norm and angle calculations to explicit
 acute, ordered-gap, and rank hypotheses.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanExt
 
 open scoped InnerProductSpace
@@ -261,4 +261,4 @@ theorem ideal_planar_extremizer
     RCLike.norm_ofReal, Real.norm_of_nonneg hd.le]
 
 end DavisKahanExt
-end ForMathlib
+end TauCeti

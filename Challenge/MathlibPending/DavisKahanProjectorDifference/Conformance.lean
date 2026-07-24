@@ -14,7 +14,7 @@ implementations live in the ordinary library module imported by the paired
 leaderboard.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanTheory
 
 open scoped InnerProductSpace
@@ -52,4 +52,4 @@ theorem spectralProjector_difference_opNorm {A B : E →ₗ[𝕜] E}
   sorry
 
 end DavisKahanTheory
-end ForMathlib
+end TauCeti

@@ -17,7 +17,7 @@ constructing certified roots of the comparison polynomial is the correct
 future interface.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan1970
 namespace Section9
 
@@ -153,4 +153,4 @@ theorem equation_9_8_upper
 
 end Section9
 end DavisKahan1970
-end ForMathlib
+end TauCeti

@@ -34,14 +34,14 @@ latter can be completed without inventing direct-integral infrastructure.
 
 open scoped InnerProductSpace
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace Frontier
 namespace Section3
 
 open SpectraBridge
-open ForMathlib.DavisKahanExt (reflectedSubspace starProjection_reflectedSubspace)
+open TauCeti.DavisKahanExt (reflectedSubspace starProjection_reflectedSubspace)
 
 universe u v
 
@@ -964,7 +964,7 @@ angle data and reverses the canonical quarter-turn. -/
 theorem corollary3_2_reversal_source_form
     (hacute : IsAcute U V) :
     spectraDirectRotation V U
-        (_root_.ForMathlib.DavisKahan.IsAcute.symm hacute) =
+        (_root_.TauCeti.DavisKahan.IsAcute.symm hacute) =
       star (spectraDirectRotation U V hacute) :=
   MathAhead.Section3.corollary3_2_reversal_completed U V hacute
 
@@ -1073,4 +1073,4 @@ end Section3
 end Frontier
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

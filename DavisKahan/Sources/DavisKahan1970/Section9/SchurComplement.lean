@@ -14,7 +14,7 @@ free-beam realization.  The statement is algebraic and works for arbitrary
 modules over a field.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan1970
 namespace Section9
 
@@ -93,4 +93,4 @@ end SchurComplement
 
 end Section9
 end DavisKahan1970
-end ForMathlib
+end TauCeti

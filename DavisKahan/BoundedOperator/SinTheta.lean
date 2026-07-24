@@ -12,7 +12,7 @@ The supported scalar-generic coercive theorem.  Spectral hypotheses are
 converted to these form bounds in scalar-specific bridge modules.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 
 open scoped InnerProductSpace
@@ -202,4 +202,4 @@ theorem sinTheta_directed_of_formBounds
 
 
 end DavisKahan
-end ForMathlib
+end TauCeti

@@ -21,7 +21,7 @@ transport through proof-valued self-adjointness fields and gives downstream
 norm and spectral estimates direct rewrite lemmas.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanExt
 
 open Set
@@ -261,4 +261,4 @@ end SpectralContinuationWitness
 end WitnessOffDiagonal
 
 end DavisKahanExt
-end ForMathlib
+end TauCeti

@@ -21,7 +21,7 @@ integrals to Hilbert--Schmidt estimates once continuity or strong measurability
 of the lifted orbit has been established.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace ExactSinTheta
@@ -168,4 +168,4 @@ end Scratch
 end ExactSinTheta
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

@@ -15,7 +15,7 @@ Sylvester estimate; the finite-interval branch is stated through the legacy
 generic truncation API, which is still an open obligation.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace ExactSinTheta
@@ -283,4 +283,4 @@ end GenericExact
 end ExactSinTheta
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

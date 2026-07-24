@@ -19,7 +19,7 @@ block-resolvent spectral-enclosure theorem.  No spectral inclusion for the full
 perturbed operator is asserted here.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanExt
 
 open Set
@@ -146,4 +146,4 @@ theorem FiniteGapConfiguration.exists_operatorPath_block_enclosureData
 end PathEnclosureData
 
 end DavisKahanExt
-end ForMathlib
+end TauCeti

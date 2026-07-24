@@ -18,7 +18,7 @@ produces the coefficient `sqrt 3 / 30` used in the final individual-vector
 estimate.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan1970
 namespace Section9
 
@@ -127,4 +127,4 @@ theorem half_tanTwoPsi_ratio_lt_of_eigenvalue_upper
 
 end Section9
 end DavisKahan1970
-end ForMathlib
+end TauCeti

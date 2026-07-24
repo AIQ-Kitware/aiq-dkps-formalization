@@ -27,7 +27,7 @@ ordered-eigenvalue, and symmetric-gauge refinements in Theorem 8.1 are also not
 asserted here.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan1970
 namespace Section8
 
@@ -158,4 +158,4 @@ end SelectedBranch
 
 end Section8
 end DavisKahan1970
-end ForMathlib
+end TauCeti

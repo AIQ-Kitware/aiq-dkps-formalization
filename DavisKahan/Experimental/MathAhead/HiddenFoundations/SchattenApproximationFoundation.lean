@@ -22,7 +22,7 @@ family consumed by the Davis--Kahan ideal layer.
 
 open scoped InnerProductSpace
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace ExactSinTheta
@@ -199,4 +199,4 @@ end HiddenFoundations
 end ExactSinTheta
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

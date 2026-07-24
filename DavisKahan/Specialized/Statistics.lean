@@ -5,7 +5,7 @@ Authors: Jon Crall, GPT 5.6 High
 -/
 import DavisKahan.FiniteDimensional.SinTheta.Perturbation
 import DavisKahan.Sources.YuWangSamworth2015
-import ForMathlib.Analysis.InnerProductSpace.AlignedBasis
+import ForTauCeti.Analysis.InnerProductSpace.AlignedBasis
 
 /-!
 # Population-gap and statistical Davis--Kahan variants
@@ -21,7 +21,7 @@ This file gives the existing YWS results a canonical subspace-facing API and
 records the full interval-block, aligned-basis, and single-vector surfaces.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanTheory
 
 open scoped InnerProductSpace BigOperators
@@ -198,9 +198,9 @@ theorem reduces_specSubspace {n : ℕ} {B : E →ₗ[𝕜] E} (hB : B.IsSymmetri
     Reduces B (specSubspace (hB.eigenvectorBasis hn) p) := by
   intro x hx
   refine Submodule.span_induction ?_ ?_ ?_ ?_ hx
-  · rintro y ⟨i, rfl⟩
-    rw [hB.apply_eigenvectorBasis hn (i : Fin n)]
-    exact Submodule.smul_mem _ _ (Submodule.subset_span ⟨i, rfl⟩)
+  · rintro y ⟨i, hip, rfl⟩
+    rw [hB.apply_eigenvectorBasis hn i]
+    exact Submodule.smul_mem _ _ (Submodule.subset_span ⟨i, hip, rfl⟩)
   · rw [map_zero]; exact Submodule.zero_mem _
   · intro a b _ _ ha hb; rw [map_add]; exact Submodule.add_mem _ ha hb
   · intro c a _ ha; rw [map_smul]; exact Submodule.smul_mem _ c ha
@@ -547,4 +547,4 @@ theorem yuWangSamworth_eigenvector_le
   gcongr
 
 end DavisKahanTheory
-end ForMathlib
+end TauCeti

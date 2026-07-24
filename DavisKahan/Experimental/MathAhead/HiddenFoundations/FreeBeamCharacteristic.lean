@@ -27,7 +27,7 @@ Consequently a nonzero positive-frequency mode satisfies
 Sobolev realization of the fourth-derivative operator.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace MathAhead
@@ -268,4 +268,4 @@ end HiddenFoundations
 end MathAhead
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

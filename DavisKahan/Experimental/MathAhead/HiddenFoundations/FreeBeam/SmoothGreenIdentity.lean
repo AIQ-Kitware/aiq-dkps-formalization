@@ -34,7 +34,7 @@ same proof with conjugation as a real-linear operation.
 open Set
 open scoped Interval
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace MathAhead
@@ -222,4 +222,4 @@ end HiddenFoundations
 end MathAhead
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

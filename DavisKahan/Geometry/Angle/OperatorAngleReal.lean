@@ -22,7 +22,7 @@ operators.  All norm-level and projection-geometric content is already exact
 here.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanExt
 namespace Real
 
@@ -30,8 +30,8 @@ open scoped InnerProductSpace
 
 noncomputable section
 
-open ForMathlib.DavisKahan.Experimental.Foundation
-open ForMathlib.DavisKahan.Experimental.Foundation.RealComplexification
+open TauCeti.DavisKahan.Experimental.Foundation
+open TauCeti.DavisKahan.Experimental.Foundation.RealComplexification
 
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
   [CompleteSpace E]
@@ -64,7 +64,7 @@ noncomputable def sinTwoAngleOperatorRC (U V : Submodule ℝ E)
 /-- Tangent-angle operator for acute real subspaces, in the complexification. -/
 noncomputable def tanAngleOperatorRC (U V : Submodule ℝ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : ForMathlib.DavisKahan.IsAcute U V) :
+    (hacute : TauCeti.DavisKahan.IsAcute U V) :
     RealComplexification E →L[ℂ] RealComplexification E :=
   tanAngleOperatorC (complexifySubmodule U) (complexifySubmodule V)
     ((isAcute_complexifySubmodule_iff U V).2 hacute)
@@ -72,7 +72,7 @@ noncomputable def tanAngleOperatorRC (U V : Submodule ℝ E)
 /-- Tangent of twice the angle for quarter-acute real subspaces. -/
 noncomputable def tanTwoAngleOperatorRC (U V : Submodule ℝ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hquarter : ForMathlib.DavisKahan.IsQuarterAcute U V) :
+    (hquarter : TauCeti.DavisKahan.IsQuarterAcute U V) :
     RealComplexification E →L[ℂ] RealComplexification E :=
   tanTwoAngleOperatorC (complexifySubmodule U) (complexifySubmodule V)
     ((isQuarterAcute_complexifySubmodule_iff U V).2 hquarter)
@@ -93,10 +93,10 @@ theorem isSelfAdjoint_sinAngleOperatorRC (U V : Submodule ℝ E)
 original real projection gap. -/
 theorem norm_sinAngleOperatorRC (U V : Submodule ℝ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
-    ‖sinAngleOperatorRC U V‖ = ForMathlib.DavisKahan.subspaceGap U V := by
+    ‖sinAngleOperatorRC U V‖ = TauCeti.DavisKahan.subspaceGap U V := by
   rw [sinAngleOperatorRC, norm_sinAngleOperatorC]
-  change ForMathlib.DavisKahan.subspaceGap (complexifySubmodule U)
-      (complexifySubmodule V) = ForMathlib.DavisKahan.subspaceGap U V
+  change TauCeti.DavisKahan.subspaceGap (complexifySubmodule U)
+      (complexifySubmodule V) = TauCeti.DavisKahan.subspaceGap U V
   exact subspaceGap_complexifySubmodule U V
 
 /-- Pointwise real-copy form of the sine-angle norm identity. -/
@@ -113,10 +113,10 @@ theorem norm_sinAngleOperatorRC_ofReal (U V : Submodule ℝ E)
 theorem norm_sinAngleOperatorDirectedRC (U V : Submodule ℝ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     ‖sinAngleOperatorDirectedRC U V‖ =
-      ForMathlib.DavisKahan.directedGap U V := by
+      TauCeti.DavisKahan.directedGap U V := by
   rw [sinAngleOperatorDirectedRC, norm_sinAngleOperatorDirectedC]
-  change ForMathlib.DavisKahan.directedGap (complexifySubmodule U)
-      (complexifySubmodule V) = ForMathlib.DavisKahan.directedGap U V
+  change TauCeti.DavisKahan.directedGap (complexifySubmodule U)
+      (complexifySubmodule V) = TauCeti.DavisKahan.directedGap U V
   exact directedGap_complexifySubmodule U V
 
 /-- The cosine operator remains contractive for real subspaces. -/
@@ -149,16 +149,16 @@ terms of the original real directed gap. -/
 theorem norm_sinTwoAngleOperatorRC_le (U V : Submodule ℝ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     ‖sinTwoAngleOperatorRC U V‖ ≤
-      2 * ForMathlib.DavisKahan.directedGap U V := by
+      2 * TauCeti.DavisKahan.directedGap U V := by
   rw [sinTwoAngleOperatorRC]
   have h := norm_sinTwoAngleOperatorC_le
     (complexifySubmodule U) (complexifySubmodule V)
   change ‖sinTwoAngleOperatorC (complexifySubmodule U)
       (complexifySubmodule V)‖ ≤
-    2 * ForMathlib.DavisKahan.directedGap U V
+    2 * TauCeti.DavisKahan.directedGap U V
   change ‖sinTwoAngleOperatorC (complexifySubmodule U)
       (complexifySubmodule V)‖ ≤
-    2 * ForMathlib.DavisKahan.directedGap (complexifySubmodule U)
+    2 * TauCeti.DavisKahan.directedGap (complexifySubmodule U)
       (complexifySubmodule V) at h
   rw [directedGap_complexifySubmodule] at h
   exact h
@@ -167,7 +167,7 @@ theorem norm_sinTwoAngleOperatorRC_le (U V : Submodule ℝ E)
 theorem tanAngleOperatorRC_comp_cosAngleExtended
     (U V : Submodule ℝ E) [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection]
-    (hacute : ForMathlib.DavisKahan.IsAcute U V) :
+    (hacute : TauCeti.DavisKahan.IsAcute U V) :
     tanAngleOperatorRC U V hacute ∘L
         cosAngleExtendedC (complexifySubmodule U) (complexifySubmodule V) =
       sinAngleOperatorDirectedRC U V := by
@@ -179,7 +179,7 @@ theorem tanAngleOperatorRC_comp_cosAngleExtended
 theorem tanTwoAngleOperatorRC_comp_cosTwoAngleExtended
     (U V : Submodule ℝ E) [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection]
-    (hquarter : ForMathlib.DavisKahan.IsQuarterAcute U V) :
+    (hquarter : TauCeti.DavisKahan.IsQuarterAcute U V) :
     tanTwoAngleOperatorRC U V hquarter ∘L
         cosTwoAngleExtendedC (complexifySubmodule U) (complexifySubmodule V) =
       sinTwoAngleOperatorRC U V := by
@@ -191,4 +191,4 @@ end
 
 end Real
 end DavisKahanExt
-end ForMathlib
+end TauCeti

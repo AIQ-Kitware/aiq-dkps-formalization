@@ -36,7 +36,7 @@ Formalized by Claude Fable 5 (claude-fable-5[1m]).
 -/
 
 import Mathlib
-import ForMathlib.Analysis.InnerProductSpace.Spectrum
+import ForTauCeti.Analysis.InnerProductSpace.Spectrum
 import DavisKahan.Alternative.FiniteDimensional.EigenbasisFrobenius
 import Acharyya2025.Weyl
 
@@ -61,7 +61,7 @@ difference times the overlap of the two eigenvectors:
 
 Internal helper (the algebraic core of the sin-Θ argument).
 Thin `ℝ`-instantiation of the Mathlib-staged
-`ForMathlib.inner_eigenvectorBasis_map_sub_eigenvectorBasis` (stated over
+`TauCeti.inner_eigenvectorBasis_map_sub_eigenvectorBasis` (stated over
 `RCLike 𝕜`); kept under its original name for downstream call-sites. -/
 theorem inner_eigenvector_map_sub_eq
     (hT : T.IsSymmetric) (hS : S.IsSymmetric)  -- both operators self-adjoint
@@ -72,7 +72,7 @@ theorem inner_eigenvector_map_sub_eq
       = (hS.eigenvalues hn j - hT.eigenvalues hn i)
           * ⟪hT.eigenvectorBasis hn i, hS.eigenvectorBasis hn j⟫_ℝ := by
   simpa using
-    ForMathlib.inner_eigenvectorBasis_map_sub_eigenvectorBasis hT hS hn i j
+    TauCeti.inner_eigenvectorBasis_map_sub_eigenvectorBasis hT hS hn i j
 
 /-! ### Helper: total cross-energy bound (Parseval in the `u`-basis)
 
@@ -95,7 +95,7 @@ theorem sum_inner_map_sq_le
       (⟪hT.eigenvectorBasis hn i, (S - T) (hS.eigenvectorBasis hn j)⟫_ℝ)^2
       ≤ (n : ℝ) * ε^2 := by
   -- Thin ℝ-instantiation of the Mathlib-staged RCLike version.
-  have h := ForMathlib.sum_norm_inner_eigenvectorBasis_map_sub_sq_le hT hS hn hε
+  have h := TauCeti.sum_norm_inner_eigenvectorBasis_map_sub_sq_le hT hS hn hε
   simpa [Real.norm_eq_abs, sq_abs] using h
 
 /-! ### Step (b): the Davis–Kahan cross-block bound
@@ -133,7 +133,7 @@ theorem sum_cross_inner_sq_le
         (⟪hT.eigenvectorBasis hn i, hS.eigenvectorBasis hn j⟫_ℝ)^2
       ≤ (n : ℝ) * ε^2 / gap^2 := by
   -- Thin ℝ-instantiation of the Mathlib-staged RCLike version.
-  have h := ForMathlib.sum_cross_norm_inner_eigenvectorBasis_sq_le hT hS hn d hgap_pos hgap hε
+  have h := TauCeti.sum_cross_norm_inner_eigenvectorBasis_sq_le hT hS hn d hgap_pos hgap hε
   simpa [Real.norm_eq_abs, sq_abs] using h
 
 end Acharyya2025.DavisKahan

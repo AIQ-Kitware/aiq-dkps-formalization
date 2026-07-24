@@ -26,7 +26,7 @@ pinned dependencies.  Downstream contour theory should identify its Riesz
 operator with `boundedSelfAdjointSpectralProjection` instead.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanExt
 
 open Set
@@ -121,4 +121,4 @@ theorem boundedSelfAdjointSpectralProjection_isOrthogonalProjection
       (P.isSelfAdjoint_proj s hs)
 
 end DavisKahanExt
-end ForMathlib
+end TauCeti

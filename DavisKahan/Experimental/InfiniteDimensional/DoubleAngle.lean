@@ -14,7 +14,7 @@ Literature writeup: local TeX, Sections 14--15, including Seelmann's general
 spectral-separation form.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanExt
 
 open scoped InnerProductSpace
@@ -1028,4 +1028,4 @@ theorem ideal_sinTwoTheta
     by rw [← hgaugeeq]; exact hsin.2.trans hdefGauge⟩
 
 end DavisKahanExt
-end ForMathlib
+end TauCeti

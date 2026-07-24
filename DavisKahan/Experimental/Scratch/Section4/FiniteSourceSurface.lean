@@ -22,7 +22,7 @@ number dominance for the restricted displacement in arbitrary Hilbert space.
 
 open scoped InnerProductSpace BigOperators
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace Scratch
@@ -128,4 +128,4 @@ end Section4
 end Scratch
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

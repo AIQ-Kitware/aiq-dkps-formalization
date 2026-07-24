@@ -18,7 +18,7 @@ separate ambient block-coordinate bridge will obtain those bounds from the
 ordered internal spectral gap in the bounded tangent-two-theta theorem.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanExt
 
 open scoped InnerProductSpace
@@ -157,4 +157,4 @@ theorem sharp_riccati_norm_bound
   exact hlhs.trans <| hpair.trans <| add_le_add hfirst hcoeff
 
 end DavisKahanExt
-end ForMathlib
+end TauCeti

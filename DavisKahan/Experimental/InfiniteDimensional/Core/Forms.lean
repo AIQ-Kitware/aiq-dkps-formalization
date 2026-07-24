@@ -52,7 +52,7 @@ form as an everywhere-defined function on the ambient Hilbert space; that
 would make domain-sensitive statements formally false.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanExt
 
 open scoped InnerProductSpace
@@ -227,4 +227,4 @@ theorem sinTheta_formPerturbation
   exact le_trans hcombine (by
     nlinarith [hsize, Real.pi_pos.le])
 end DavisKahanExt
-end ForMathlib
+end TauCeti

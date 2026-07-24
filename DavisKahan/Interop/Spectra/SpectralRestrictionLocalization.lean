@@ -36,7 +36,7 @@ bounded-perturbation sine-theta path.
 open scoped InnerProductSpace ENNReal
 open Complex Filter MeasureTheory Topology
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace SpectraBridge
@@ -47,7 +47,7 @@ open Spectra.OneParameterUnitaryGroup
 open Spectra.YosidaHille
 open Spectra.QuantumMechanics.SpectralTheory
 open Spectra.Resolvent
-open ForMathlib.DavisKahan.Experimental.ExactSinTheta
+open TauCeti.DavisKahan.Experimental.ExactSinTheta
 
 variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
   [CompleteSpace H]
@@ -232,4 +232,4 @@ theorem selfAdjointSpectralRestriction_spectrum_avoids_open_of_inter_eq_empty
 end SpectraBridge
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

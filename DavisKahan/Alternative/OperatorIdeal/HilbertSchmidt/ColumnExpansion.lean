@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import ForTauCeti.Analysis.InnerProductSpace.OrthogonalSeries
-import ForMathlib.Analysis.InnerProductSpace.ProjectionGeometry
+import ForTauCeti.Analysis.InnerProductSpace.ProjectionGeometry
 import Spectra.Spaces.Tensor.HilbertSchmidt
 
 /-!
@@ -79,7 +79,7 @@ theorem mathAhead_norm_sum_columnTensor_le
     -- The composition has to be unfolded before `P x` occurs syntactically.
     rw [ContinuousLinearMap.comp_apply,
       show P x = ∑ i ∈ s, ⟪b i, x⟫_ℂ • b i from
-        ForMathlib.Orthonormal.starProjection_span_image_apply b.orthonormal s x]
+        TauCeti.Orthonormal.starProjection_span_image_apply b.orthonormal s x]
     simp only [map_sum, map_smul]
   rw [hproj]
   have hP : ‖P‖ ≤ 1 := by

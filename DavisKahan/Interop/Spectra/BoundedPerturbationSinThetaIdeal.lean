@@ -16,12 +16,12 @@ interface: adjoint invariance and two-sided contraction under composition.
 
 open scoped InnerProductSpace
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace SpectraBridge
 
-open ForMathlib.DavisKahan.Experimental.ExactSinTheta
+open TauCeti.DavisKahan.Experimental.ExactSinTheta
 
 universe v
 
@@ -102,4 +102,4 @@ theorem sinTheta_addBounded_gauge_of_spectrum_gap_isometric
 end SpectraBridge
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

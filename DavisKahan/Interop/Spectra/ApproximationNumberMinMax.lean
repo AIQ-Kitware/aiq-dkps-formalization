@@ -27,7 +27,7 @@ complete lattice.
 
 open scoped InnerProductSpace
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace SpectraBridge
@@ -344,4 +344,4 @@ end
 end SpectraBridge
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

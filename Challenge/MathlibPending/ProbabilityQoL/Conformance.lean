@@ -20,8 +20,7 @@ statements and use only the permitted kernel dependencies.
 -/
 
 
-namespace ForMathlib
-
+namespace TauCeti
 open MeasureTheory
 open scoped ENNReal
 
@@ -58,4 +57,4 @@ theorem meas_gt_le_ofReal_integral_sq_div_sq {Ω : Type*} [MeasurableSpace Ω]
         (ENNReal.ofReal_toReal (measure_ne_top P _)).symm
     _ ≤ ENNReal.ofReal (v / η ^ 2) := ENNReal.ofReal_le_ofReal hPreal
 
-end ForMathlib
+end TauCeti

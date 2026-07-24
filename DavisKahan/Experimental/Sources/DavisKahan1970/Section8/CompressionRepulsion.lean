@@ -23,7 +23,7 @@ identities are connected to them, the inequalities follow without any further
 spectral argument.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan1970
 namespace Section8
 
@@ -100,4 +100,4 @@ end CompressionAlgebra
 
 end Section8
 end DavisKahan1970
-end ForMathlib
+end TauCeti

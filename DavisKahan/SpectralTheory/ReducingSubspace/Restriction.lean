@@ -19,7 +19,7 @@ produce the reducing-subspace laws; the closed restriction and its inclusion
 intertwining are then canonical.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanExt
 
 open scoped InnerProductSpace
@@ -401,4 +401,4 @@ theorem reducingRestriction_isSelfAdjoint
 
 end ClosedOperator
 end DavisKahanExt
-end ForMathlib
+end TauCeti

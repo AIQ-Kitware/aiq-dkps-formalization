@@ -13,7 +13,7 @@ shifted closed operator, and the resulting operator-norm bounds on the solution
 of a closed Sylvester equation in both interval/exterior orientations.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace ExactSinTheta
@@ -33,7 +33,7 @@ variable {E F G : Type v}
 `s⁻¹`: the one-sided resolvent surrogate for "the spectrum of the
 self-adjoint `A` avoids `(c - s, c + s)`". -/
 def LeftShiftedInverseBound
-    (A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := E))
+    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := E))
     (c s : ℝ) : Prop :=
   ∃ J : E →L[𝕜] E,
     (∀ x : A.domain,
@@ -43,7 +43,7 @@ def LeftShiftedInverseBound
 /-- Bounded two-sided inverse of the shifted operator `A - c` with norm at
 most `s⁻¹`, including the domain transport of the right-inverse leg. -/
 def TwoSidedShiftedInverseBound
-    (A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := E))
+    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := E))
     (c s : ℝ) : Prop :=
   ∃ J : E →L[𝕜] E, ∃ hdom : ∀ z : E, J z ∈ A.domain,
     (∀ x : A.domain,
@@ -52,7 +52,7 @@ def TwoSidedShiftedInverseBound
     ‖J‖ ≤ s⁻¹
 
 theorem TwoSidedShiftedInverseBound.leftShiftedInverseBound
-    {A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := E)} {c s : ℝ}
+    {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := E)} {c s : ℝ}
     (h : TwoSidedShiftedInverseBound A c s) :
     LeftShiftedInverseBound A c s := by
   obtain ⟨J, _hdom, hleft, _hright, hnorm⟩ := h
@@ -64,8 +64,8 @@ theorem TwoSidedShiftedInverseBound.leftShiftedInverseBound
 domain satisfies `‖B y - c y‖ ≤ r ‖y‖` there, where `c = (α+β)/2` is the
 center and `r = (α-β)/2` the radius.  Polarization gives the sesquilinear
 bound and density of the domain converts it into the norm bound. -/
-theorem _root_.ForMathlib.DavisKahanExt.ClosedOperator.norm_shift_apply_le_of_form_bounds
-    {B : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := F)}
+theorem _root_.TauCeti.DavisKahanExt.ClosedOperator.norm_shift_apply_le_of_form_bounds
+    {B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := F)}
     (hsym : B.IsSymmetric)
     {β α : ℝ} (hβα : β ≤ α)
     (hlow : SemiboundedBelow B β) (hhigh : SemiboundedAbove B α)
@@ -214,8 +214,8 @@ theorem _root_.ForMathlib.DavisKahanExt.ClosedOperator.norm_shift_apply_le_of_fo
 (quadratic form in `[β, α]`) and the exterior block `A` (bounded shifted left
 inverse at distance `δ` beyond the interval). -/
 theorem norm_closedSylvester_le_of_intervalExterior
-    {A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := E)}
-    {B : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := F)}
+    {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := E)}
+    {B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := F)}
     (hBsym : B.IsSymmetric)
     {X C : F →L[𝕜] E} {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
     (hBlow : SemiboundedBelow B β) (hBhigh : SemiboundedAbove B α)
@@ -248,7 +248,7 @@ theorem norm_closedSylvester_le_of_intervalExterior
   have hbound : ∀ y : B.domain, ‖X (y : F)‖ ≤
       (r + δ)⁻¹ * (‖C‖ + ‖X‖ * r) * ‖(y : F)‖ := by
     intro y
-    have hshift := ForMathlib.DavisKahanExt.ClosedOperator.norm_shift_apply_le_of_form_bounds
+    have hshift := TauCeti.DavisKahanExt.ClosedOperator.norm_shift_apply_le_of_form_bounds
       hBsym hβα hBlow hBhigh y
     calc ‖X (y : F)‖
         = ‖J (C (y : F) + X (B.toLinearMap y - ((c : ℝ) : 𝕜) • (y : F)))‖ := by
@@ -294,8 +294,8 @@ theorem norm_closedSylvester_le_of_intervalExterior
 interval block `A` (quadratic form in `[β, α]`) and exterior block `B`
 (bounded shifted two-sided inverse at distance `δ` beyond the interval). -/
 theorem norm_closedSylvester_le_of_exteriorInterval
-    {A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := E)}
-    {B : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := F)}
+    {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := E)}
+    {B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := F)}
     (hAsym : A.IsSymmetric)
     {X C : F →L[𝕜] E} {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
     (hAlow : SemiboundedBelow A β) (hAhigh : SemiboundedAbove A α)
@@ -330,7 +330,7 @@ theorem norm_closedSylvester_le_of_exteriorInterval
           ((c : ℝ) : 𝕜) • X (J z)) - C (J z) := by abel
   have hbound : ∀ z : F, ‖X z‖ ≤ (r + δ)⁻¹ * (‖X‖ * r + ‖C‖) * ‖z‖ := by
     intro z
-    have hshift := ForMathlib.DavisKahanExt.ClosedOperator.norm_shift_apply_le_of_form_bounds
+    have hshift := TauCeti.DavisKahanExt.ClosedOperator.norm_shift_apply_le_of_form_bounds
       hAsym hβα hAlow hAhigh ⟨X (J z), hEq.mapsTo ⟨J z, hJdom z⟩⟩
     have hJz : ‖J z‖ ≤ (r + δ)⁻¹ * ‖z‖ := by
       refine (J.le_opNorm z).trans ?_
@@ -364,4 +364,4 @@ theorem norm_closedSylvester_le_of_exteriorInterval
 end ExactSinTheta
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

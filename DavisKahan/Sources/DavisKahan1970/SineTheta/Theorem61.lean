@@ -19,7 +19,7 @@ complete singular-value sequence, without changing the spectral, domain,
 residual, or lower-frame hypotheses.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace ExactSinTheta
@@ -162,4 +162,4 @@ end
 end ExactSinTheta
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

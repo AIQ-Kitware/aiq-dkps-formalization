@@ -14,7 +14,7 @@ particular construction lets the vendored Spectra calculus supply an
 implementation while the legacy construction remains an open obligation.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace ExactSinTheta
@@ -32,7 +32,7 @@ variable {E : Type v}
 /-- The exact projection, domain, commutation, and strong-convergence laws
 needed from a spectral cutoff family. -/
 structure GenuineSpectralCutoffInterface
-    (A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := E))
+    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := E))
     (hA : A.IsSelfAdjoint) where
   cutoff : ℝ → E →L[𝕜] E
   isOrthogonalProjection : ∀ τ,
@@ -46,7 +46,7 @@ structure GenuineSpectralCutoffInterface
 
 /-- The bounded truncation laws needed after a cutoff family has been chosen. -/
 structure GenuineBoundedTruncationInterface
-    (A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := E))
+    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := E))
     (hA : A.IsSelfAdjoint)
     (P : GenuineSpectralCutoffInterface A hA) where
   truncation : ℝ → E →L[𝕜] E
@@ -72,4 +72,4 @@ structure GenuineBoundedTruncationInterface
 end ExactSinTheta
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

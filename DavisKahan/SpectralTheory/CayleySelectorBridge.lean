@@ -28,7 +28,7 @@ continuous spectral function that agrees with the selector on the real
 spectrum.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanExt
 
 open Set
@@ -596,4 +596,4 @@ theorem spectralCalculus_selector_eq_cfcL_of_agrees
 end CayleySelectorBridge
 
 end DavisKahanExt
-end ForMathlib
+end TauCeti

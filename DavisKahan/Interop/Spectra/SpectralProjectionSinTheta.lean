@@ -23,7 +23,7 @@ restrictions and localization results from the preceding bridge modules.
 
 open scoped InnerProductSpace
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace SpectraBridge
@@ -31,7 +31,7 @@ namespace SpectraBridge
 open Spectra.OneParameterUnitaryGroup
 open Spectra.YosidaHille
 open Spectra.QuantumMechanics.SpectralTheory
-open ForMathlib.DavisKahan.Experimental.ExactSinTheta
+open TauCeti.DavisKahan.Experimental.ExactSinTheta
 
 universe v
 
@@ -326,4 +326,4 @@ theorem sinTheta_addBounded_spectralProjection_sub_opNorm_of_spectrum_gap
 end SpectraBridge
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

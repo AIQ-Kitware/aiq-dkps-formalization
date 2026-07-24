@@ -22,7 +22,7 @@ unit ball.  Banach's fixed-point theorem then supplies a contractive Riccati
 solution.  The algebraic smaller-root estimate is applied afterwards.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanExt
 
 open scoped InnerProductSpace
@@ -266,10 +266,10 @@ theorem exists_contractive_riccati_solution_of_spectrum_gap
     · rw [hc, hrdef]
       linarith [hmem.2]
   have hB0cnorm : ‖B0c‖ ≤ r :=
-    ForMathlib.IsSelfAdjoint.norm_le_of_spectrum_subset_Icc
+    TauCeti.IsSelfAdjoint.norm_le_of_spectrum_subset_Icc
       hB0csa hr0 hB0cspec
   obtain ⟨J, _hJA, hAJmul, hJnorm⟩ :=
-    ForMathlib.IsSelfAdjoint.exists_two_sided_inverse_of_spectrum_gap
+    TauCeti.IsSelfAdjoint.exists_two_sided_inverse_of_spectrum_gap
       (A := E1 →L[ℂ] E1) hA1csa hrd hA1cspec
   have hAJ : A1c ∘L J = ContinuousLinearMap.id ℂ E1 := by
     rw [← ContinuousLinearMap.mul_def, hAJmul,
@@ -344,4 +344,4 @@ theorem exists_contractive_riccati_solution_of_spectrum_gap
     H hd hlr hA0spec hA1spec hsmall hXRiccati hXlt
 
 end DavisKahanExt
-end ForMathlib
+end TauCeti

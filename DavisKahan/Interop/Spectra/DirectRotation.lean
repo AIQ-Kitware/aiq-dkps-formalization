@@ -36,7 +36,7 @@ alongside the independent scalar-generic development.
 
 open scoped InnerProductSpace
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace SpectraBridge
@@ -218,9 +218,8 @@ theorem spectraDirectRotation_decomposition
 end SpectraBridge
 end Experimental
 end DavisKahan
-end ForMathlib
-
-namespace ForMathlib
+end TauCeti
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace SpectraBridge
@@ -1180,4 +1179,4 @@ theorem spectraDirectRotation_commute_reflectionProduct
 end SpectraBridge
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

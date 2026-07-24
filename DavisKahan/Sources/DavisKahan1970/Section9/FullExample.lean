@@ -22,7 +22,7 @@ being mistaken for a construction of the unbounded fourth-derivative operator
 or a proof of its third-eigenvalue gap.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan1970
 namespace Section9
 
@@ -175,4 +175,4 @@ def NumericalExampleCertificate.printedConclusions
 
 end Section9
 end DavisKahan1970
-end ForMathlib
+end TauCeti

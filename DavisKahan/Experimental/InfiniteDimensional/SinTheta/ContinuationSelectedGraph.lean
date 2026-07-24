@@ -19,7 +19,7 @@ step requires reduction of the selected spectral subspace by the perturbed
 block operator and comparison with the block-coordinate graph API.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanExt
 
 open Set
@@ -238,4 +238,4 @@ theorem norm_selectedEndpointAngularOperator_lt_one
 end SelectedEndpointGraph
 
 end DavisKahanExt
-end ForMathlib
+end TauCeti

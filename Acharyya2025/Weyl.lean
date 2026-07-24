@@ -24,7 +24,8 @@ Formalized by Claude Fable 5 (claude-fable-5[1m]).
 -/
 
 import Mathlib
-import ForMathlib.Analysis.InnerProductSpace.CourantFischer
+import ForTauCeti.Analysis.InnerProductSpace.CourantFischer
+import ForTauCeti.Analysis.InnerProductSpace.CourantFischerCompat
 
 open scoped BigOperators RealInnerProductSpace
 open Module (finrank)
@@ -144,7 +145,7 @@ theorem exists_unit_vector_inner_le_eigenvalue
     (V : Submodule ℝ E) (hV : finrank ℝ V = (k : ℕ) + 1) :  -- any (k+1)-dim subspace
     -- Conclusion: V contains a unit vector whose Rayleigh quotient is ≤ λₖ(T).
     ∃ x ∈ V, ‖x‖ = 1 ∧ ⟪T x, x⟫ ≤ hT.eigenvalues hn k := by
-  simpa using ForMathlib.exists_unit_vector_re_inner_le_eigenvalue hT hn k V hV
+  simpa using TauCeti.exists_unit_vector_re_inner_le_eigenvalue hT hn k V hV
 
 /-- **Courant–Fischer, lower direction.** There is a subspace `V` of dimension
 `k + 1` on which every unit vector `x` satisfies `λₖ(T) ≤ ⟪T x, x⟫`.
@@ -160,7 +161,7 @@ theorem forall_unit_vector_eigenvalue_le_inner
     -- Conclusion: some (k+1)-dim subspace has every unit vector's Rayleigh quotient ≥ λₖ(T).
     ∃ V : Submodule ℝ E, finrank ℝ V = (k : ℕ) + 1 ∧
       ∀ x ∈ V, ‖x‖ = 1 → hT.eigenvalues hn k ≤ ⟪T x, x⟫ := by
-  simpa using ForMathlib.forall_unit_vector_eigenvalue_le_re_inner hT hn k
+  simpa using TauCeti.forall_unit_vector_eigenvalue_le_re_inner hT hn k
 
 /-! ### Step 3: Weyl's inequality -/
 
@@ -185,4 +186,4 @@ theorem abs_eigenvalues_sub_le
     (k : Fin n) :
     -- Conclusion: |λₖ(T) − λₖ(S)| ≤ ε (eigenvalues move by at most ‖T − S‖op).
     |hT.eigenvalues hn k - hS.eigenvalues hn k| ≤ ε :=
-  ForMathlib.abs_eigenvalues_sub_le hT hS hn hε k
+  TauCeti.abs_eigenvalues_sub_le hT hS hn hε k

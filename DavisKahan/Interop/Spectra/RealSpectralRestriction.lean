@@ -30,7 +30,7 @@ self-adjointness, and inclusion intertwining are supplied by the generic core.
 
 open scoped InnerProductSpace ComplexConjugate
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace SpectraBridge
@@ -59,7 +59,7 @@ use site; an abbreviation here would turn `E` into an uninferable implicit
 argument in several PVM declarations. -/
 local notation "Eℂ" => RealComplexification E
 local notation "RealClosedOperator" =>
-  ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E)
+  TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E)
 
 /-- Conjugate a projection-valued measure by the canonical real-structure
 conjugation. -/
@@ -554,7 +554,7 @@ noncomputable def realSelfAdjointSpectralSubspaceInclusion
     (A : RealClosedOperator) (hA : A.IsSelfAdjoint)
     (S : Set ℝ) (hS : MeasurableSet S) :
     realSelfAdjointSpectralSubspace A hA S hS →L[ℝ] E :=
-  ForMathlib.DavisKahanExt.ClosedOperator.reducingSubspaceInclusion
+  TauCeti.DavisKahanExt.ClosedOperator.reducingSubspaceInclusion
     (realSelfAdjointSpectralSubspace A hA S hS)
 
 /-- The real spectral-range inclusion is isometric. -/
@@ -563,15 +563,15 @@ theorem realSelfAdjointSpectralSubspaceInclusion_isometric
     (S : Set ℝ) (hS : MeasurableSet S) :
     IsometricEmbedding
       (realSelfAdjointSpectralSubspaceInclusion A hA S hS) :=
-  ForMathlib.DavisKahanExt.ClosedOperator.reducingSubspaceInclusion_isometric _
+  TauCeti.DavisKahanExt.ClosedOperator.reducingSubspaceInclusion_isometric _
 
 /-- Canonical real closed restriction to a measurable spectral range. -/
 noncomputable def realSelfAdjointSpectralRestriction
     (A : RealClosedOperator) (hA : A.IsSelfAdjoint)
     (S : Set ℝ) (hS : MeasurableSet S) :
-    ForMathlib.DavisKahanExt.ClosedOperator
+    TauCeti.DavisKahanExt.ClosedOperator
       (𝕜 := ℝ) (E := realSelfAdjointSpectralSubspace A hA S hS) :=
-  ForMathlib.DavisKahanExt.ClosedOperator.reducingRestriction A
+  TauCeti.DavisKahanExt.ClosedOperator.reducingRestriction A
     (realSelfAdjointSpectralSubspace A hA S hS)
     (realSelfAdjointSpectralSubspace_reducing A hA S hS)
 
@@ -580,7 +580,7 @@ theorem realSelfAdjointSpectralRestriction_isSelfAdjoint
     (A : RealClosedOperator) (hA : A.IsSelfAdjoint)
     (S : Set ℝ) (hS : MeasurableSet S) :
     (realSelfAdjointSpectralRestriction A hA S hS).IsSelfAdjoint := by
-  exact ForMathlib.DavisKahanExt.ClosedOperator.reducingRestriction_isSelfAdjoint
+  exact TauCeti.DavisKahanExt.ClosedOperator.reducingRestriction_isSelfAdjoint
     A (realSelfAdjointSpectralSubspace A hA S hS)
     (realSelfAdjointSpectralSubspace_reducing A hA S hS) hA
 
@@ -592,7 +592,7 @@ theorem realSelfAdjointSpectralRestriction_inclusion_mem_domain
     (x : (realSelfAdjointSpectralRestriction A hA S hS).domain) :
     realSelfAdjointSpectralSubspaceInclusion A hA S hS
         (x : realSelfAdjointSpectralSubspace A hA S hS) ∈ A.domain := by
-  exact ForMathlib.DavisKahanExt.ClosedOperator.reducingRestriction_inclusion_mem_domain
+  exact TauCeti.DavisKahanExt.ClosedOperator.reducingRestriction_inclusion_mem_domain
     A (realSelfAdjointSpectralSubspace A hA S hS)
     (realSelfAdjointSpectralSubspace_reducing A hA S hS) x
 
@@ -609,7 +609,7 @@ theorem realSelfAdjointSpectralRestriction_inclusion_intertwines
             A hA S hS x⟩ =
       realSelfAdjointSpectralSubspaceInclusion A hA S hS
         ((realSelfAdjointSpectralRestriction A hA S hS).toLinearMap x) := by
-  exact ForMathlib.DavisKahanExt.ClosedOperator.reducingRestriction_inclusion_intertwines
+  exact TauCeti.DavisKahanExt.ClosedOperator.reducingRestriction_inclusion_intertwines
     A (realSelfAdjointSpectralSubspace A hA S hS)
     (realSelfAdjointSpectralSubspace_reducing A hA S hS) x
 
@@ -618,4 +618,4 @@ end RealSpectralRestriction
 end SpectraBridge
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

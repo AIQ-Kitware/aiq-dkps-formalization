@@ -5,7 +5,7 @@ A focused comparator statement for the sharp operator-norm Part III
 tan-2Theta endpoint, including strict quarter-turn avoidance.
 -/
 
-import ForMathlib.Analysis.InnerProductSpace.UnitarilyInvariantNorm
+import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantNorm
 
 /-!
 ## Comparator maintenance rule
@@ -15,7 +15,7 @@ lives in the ordinary library module imported by the paired leaderboard.
 -/
 
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanTheory
 
 open scoped InnerProductSpace
@@ -46,4 +46,4 @@ theorem partIII_tanTwoTheta_opNorm {T S : E →ₗ[𝕜] E}
   sorry
 
 end DavisKahanTheory
-end ForMathlib
+end TauCeti

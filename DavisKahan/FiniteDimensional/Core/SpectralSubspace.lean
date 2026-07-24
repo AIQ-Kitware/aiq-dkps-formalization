@@ -3,7 +3,8 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
-import ForMathlib.Analysis.InnerProductSpace.CourantFischer
+import ForTauCeti.Analysis.InnerProductSpace.CourantFischer
+import ForTauCeti.Analysis.InnerProductSpace.CourantFischerCompat
 import ForMathlib.Analysis.InnerProductSpace.ProjectionGap
 
 /-!
@@ -13,7 +14,7 @@ Restricted spectra, reducing subspaces, canonical spectral projectors, and the
 quadratic-form bridges used by finite Davis--Kahan theorems.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanTheory
 
 open scoped InnerProductSpace BigOperators
@@ -197,7 +198,7 @@ theorem re_inner_le_of_forall_eigenvalue_le {n : ℕ} {T : E →ₗ[𝕜] E}
     (fun i _ => hc i) ?_
   have htop : specSubspace (hT.eigenvectorBasis hn) (fun _ : Fin n => True) = ⊤ := by
     rw [specSubspace, eq_top_iff, ← (hT.eigenvectorBasis hn).toBasis.span_eq]
-    exact Submodule.span_mono (by rintro y ⟨i, rfl⟩; exact ⟨⟨i, trivial⟩, by simp⟩)
+    exact Submodule.span_mono (by rintro y ⟨i, rfl⟩; exact ⟨i, trivial, rfl⟩)
   rw [htop]; exact Submodule.mem_top
 
 /-- Dual: if every eigenvalue of a symmetric `T` is `≥ c`, the quadratic form is
@@ -210,7 +211,7 @@ theorem le_re_inner_of_forall_le_eigenvalue {n : ℕ} {T : E →ₗ[𝕜] E}
     (fun i _ => hc i) ?_
   have htop : specSubspace (hT.eigenvectorBasis hn) (fun _ : Fin n => True) = ⊤ := by
     rw [specSubspace, eq_top_iff, ← (hT.eigenvectorBasis hn).toBasis.span_eq]
-    exact Submodule.span_mono (by rintro y ⟨i, rfl⟩; exact ⟨⟨i, trivial⟩, by simp⟩)
+    exact Submodule.span_mono (by rintro y ⟨i, rfl⟩; exact ⟨i, trivial, rfl⟩)
   rw [htop]; exact Submodule.mem_top
 
 /-- **The spectral-gap coercivity bridge (upper).**  If `A` is symmetric, `U`
@@ -268,4 +269,4 @@ theorem spectralSubspace_eq_span_eigenvectors (A : E →ₗ[𝕜] E)
 
 
 end DavisKahanTheory
-end ForMathlib
+end TauCeti

@@ -12,7 +12,7 @@ Canonical separation hypotheses used by the sine, tangent, double-angle, and
 Sylvester theorem families.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanTheory
 
 open scoped InnerProductSpace BigOperators
@@ -107,4 +107,4 @@ theorem OrderedInternalGap.internalGap {A : E →ₗ[𝕜] E}
 
 
 end DavisKahanTheory
-end ForMathlib
+end TauCeti

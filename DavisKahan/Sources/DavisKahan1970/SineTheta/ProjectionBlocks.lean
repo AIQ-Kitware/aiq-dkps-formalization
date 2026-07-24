@@ -23,7 +23,7 @@ The results are proved both for the existing ideal-family interface and for the
 literal paper norm represented by `PaperUnitaryInvariantNorm`.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace ExactSinTheta
@@ -260,4 +260,4 @@ end
 end ExactSinTheta
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

@@ -16,7 +16,7 @@ inverses.  The spectral projection and truncation theory that is still open
 stays in `DavisKahan.Experimental.InfiniteDimensional.Core.UnboundedSpectral`.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace ExactSinTheta
@@ -33,9 +33,9 @@ variable {E F : Type v}
   [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
 
 abbrev ClosedOperatorE :=
-  ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := E)
+  TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := E)
 abbrev ClosedOperatorF :=
-  ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := F)
+  TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := F)
 
 /-- Lower semibound for a closed operator. -/
 def SemiboundedBelow
@@ -113,8 +113,8 @@ theorem ofBounded
     {A : E →L[𝕜] E} {B : F →L[𝕜] F} {X C : F →L[𝕜] E}
     (hEq : A ∘L X - X ∘L B = C) :
     HasClosedSylvesterEquation
-      (ForMathlib.DavisKahanExt.ClosedOperator.ofBounded A)
-      (ForMathlib.DavisKahanExt.ClosedOperator.ofBounded B) X C := by
+      (TauCeti.DavisKahanExt.ClosedOperator.ofBounded A)
+      (TauCeti.DavisKahanExt.ClosedOperator.ofBounded B) X C := by
   refine {
     mapsTo_domain := ?_
     equation := ?_
@@ -243,4 +243,4 @@ end HasBoundedEverywhereInverse
 end ExactSinTheta
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

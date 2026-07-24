@@ -30,7 +30,7 @@ No added axioms, no open proof obligations.
 -/
 
 import Mathlib
-import ForMathlib.Probability.Moments.SampleMean
+import ForTauCeti.Probability.Moments.SampleMean
 
 open scoped BigOperators Topology
 open Filter MeasureTheory ProbabilityTheory
@@ -73,7 +73,7 @@ mean equals `r⁻²` times the sum of the individual mean-squared errors:
 Only pairwise independence and identical centring are needed (not identical
 distribution); the cross terms vanish by independence.  The proof upgrades the
 coordinate means to a Bochner mean (`bochner_mean_of_coord`) and applies the
-Mathlib-staged `ForMathlib.integral_norm_sq_average_sub_eq_sum`.
+Mathlib-staged `TauCeti.integral_norm_sq_average_sub_eq_sum`.
 
 PAPER CORRESPONDENCE: the additive form behind the paper's variance computation
 `E‖(X̄_i)_j· − (μ_i)_j·‖² = trace(cov[(X̄_i)_j·]) = γ_ij/r` (Appendix A.2). This
@@ -100,7 +100,7 @@ theorem integral_norm_sq_sampleMean_sub_mean_eq_sum
   have hbm : ∀ k, ∫ ω, X k ω ∂P = μ :=
     fun k => bochner_mean_of_coord P (X k) μ ((hL2 k).integrable one_le_two)
       (fun c => hmean k c)
-  exact ForMathlib.integral_norm_sq_average_sub_eq_sum P hr X μ hL2 hbm hindep
+  exact TauCeti.integral_norm_sq_average_sub_eq_sum P hr X μ hL2 hbm hindep
 
 /--
 **iid corollary (equality form).**

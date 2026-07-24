@@ -14,7 +14,7 @@ coefficientwise, and the exponential power series may then be interchanged with
 the finite sum.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanExt
 
 open scoped InnerProductSpace BigOperators
@@ -192,4 +192,4 @@ theorem exp_finset_orthogonal_idempotents
 
 end
 end DavisKahanExt
-end ForMathlib
+end TauCeti

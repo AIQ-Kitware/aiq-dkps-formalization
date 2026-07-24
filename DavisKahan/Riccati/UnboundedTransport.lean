@@ -14,7 +14,7 @@ by pulling the graph back through the product homeomorphism, and both action
 identities are exposed for later graph-rotation diagonalization.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanExt
 
 open scoped InnerProductSpace
@@ -201,4 +201,4 @@ theorem pullback_unitaryEquivalent
 end ClosedOperator
 
 end DavisKahanExt
-end ForMathlib
+end TauCeti

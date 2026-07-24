@@ -40,7 +40,9 @@ reversal, and the positive-real-part branch characterizes the same square root.
 
 open scoped InnerProductSpace ComplexConjugate ComplexOrder
 
-namespace ForMathlib
+namespace TauCeti
+
+open ForMathlib
 namespace DavisKahan
 namespace Experimental
 namespace SpectraBridge
@@ -216,7 +218,7 @@ theorem spectraReflectionProductHalfPhase_sq
     _ = spectraReflectionProduct U V := cfc_id' ℂ _
 
 /-- Acuteness is symmetric in the two subspaces. -/
-theorem _root_.ForMathlib.DavisKahan.IsAcute.symm
+theorem _root_.TauCeti.DavisKahan.IsAcute.symm
     {U V : Submodule ℂ H}
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (h : IsAcute U V) : IsAcute V U := by
@@ -1403,4 +1405,4 @@ theorem spectraDirectRotation_minimal
 end SpectraBridge
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

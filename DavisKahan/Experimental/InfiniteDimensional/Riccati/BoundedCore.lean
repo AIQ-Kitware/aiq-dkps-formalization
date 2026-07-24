@@ -15,7 +15,7 @@ defect.  The later reduction, existence, uniqueness, and block-diagonalization
 steps can build on this result without repeating direct-sum coordinate algebra.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanExt
 
 open scoped InnerProductSpace
@@ -140,4 +140,4 @@ theorem blockGraph_invariant_iff_solvesRiccati
     exact hpoint u
 
 end DavisKahanExt
-end ForMathlib
+end TauCeti

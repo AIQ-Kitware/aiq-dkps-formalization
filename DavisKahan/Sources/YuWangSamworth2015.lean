@@ -14,8 +14,9 @@ and the upper bound is Hoffman–Wielandt.
 To be re-authored per Mathlib's AI-contribution policy at PR time.
 -/
 
-import ForMathlib.Analysis.InnerProductSpace.CourantFischer
-import ForMathlib.Analysis.InnerProductSpace.HoffmanWielandt
+import ForTauCeti.Analysis.InnerProductSpace.CourantFischer
+import ForTauCeti.Analysis.InnerProductSpace.CourantFischerCompat
+import ForTauCeti.Analysis.InnerProductSpace.HoffmanWielandt
 
 /-! # The Yu–Wang–Samworth Davis–Kahan variant (Frobenius, population gap)
 
@@ -45,9 +46,9 @@ The proof is the residual sandwich around `Rⱼ = λⱼ(T) wⱼ − T wⱼ`:
 
 ## Main results
 
-* `ForMathlib.sq_gap_mul_sum_cross_le_of_population_gap`: the squared bound
+* `TauCeti.sq_gap_mul_sum_cross_le_of_population_gap`: the squared bound
   `Δ² · overlap ≤ 4 · ∑ₖ ‖(S − T) uₖ‖²`.
-* `ForMathlib.sqrt_sum_cross_le_of_population_gap`: the `‖sinΘ‖_F` form
+* `TauCeti.sqrt_sum_cross_le_of_population_gap`: the `‖sinΘ‖_F` form
   `√overlap ≤ 2 · √(∑ₖ ‖(S − T) uₖ‖²) / Δ`.
 
 ## References
@@ -56,8 +57,7 @@ The proof is the residual sandwich around `Rⱼ = λⱼ(T) wⱼ − T wⱼ`:
   for statisticians*, Biometrika 102 (2015), 315–323.  arXiv:1405.0680.
 -/
 
-namespace ForMathlib
-
+namespace TauCeti
 open scoped InnerProductSpace BigOperators
 open Module (finrank)
 
@@ -267,4 +267,4 @@ theorem sqrt_sum_cross_le_of_population_gap
   have hR : 0 ≤ 2 * Real.sqrt frob := by positivity
   nlinarith [hsq, hL, hR, sq_nonneg (Real.sqrt overlap * Δ - 2 * Real.sqrt frob)]
 
-end ForMathlib
+end TauCeti

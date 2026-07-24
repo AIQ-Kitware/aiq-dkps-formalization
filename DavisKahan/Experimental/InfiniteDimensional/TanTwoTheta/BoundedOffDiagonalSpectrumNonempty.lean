@@ -18,7 +18,7 @@ that zero belongs to the spectrum of the zero operator on a nontrivial space.
 Self-adjoint spectral restriction then supplies a real spectral point.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanExt
 
 open scoped InnerProductSpace
@@ -105,4 +105,4 @@ theorem OrderedInternalGap.exists_oriented_halfLine_center_of_nontrivial
       hordered
 
 end DavisKahanExt
-end ForMathlib
+end TauCeti

@@ -3,7 +3,7 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-5.6 Thinking
 -/
-import ForMathlib.Analysis.InnerProductSpace.SchattenNorm
+import ForTauCeti.Analysis.InnerProductSpace.SchattenNorm
 import Mathlib.Analysis.Normed.Lp.ProdLp
 
 /-!
@@ -18,7 +18,7 @@ the same `RectangularUnitarilyInvariantNorm.schatten` and `mem_schatten`
 interface to downstream files.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanTheory
 namespace RectangularUnitarilyInvariantNorm
 
@@ -80,4 +80,4 @@ theorem mem_schatten (p : ℝ) (hp : 1 ≤ p) (A : E →ₗ[𝕜] F) :
 
 end RectangularUnitarilyInvariantNorm
 end DavisKahanTheory
-end ForMathlib
+end TauCeti

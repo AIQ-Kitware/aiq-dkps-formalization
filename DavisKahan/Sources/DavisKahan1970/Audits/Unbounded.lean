@@ -20,7 +20,7 @@ source-shaped sine-theta capstones.
 
 open scoped InnerProductSpace
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace ExactSinTheta
@@ -41,7 +41,7 @@ namespace ExactSinTheta
 #check unboundedSinThetaDataOfSpectralSubspace
 #check spectralSubspace_orthogonalExactDecomposition
 #check sinTheta_unbounded_spectralSubspace_of_genuineSpectrumGap
-#check ForMathlib.DavisKahanExt.ClosedOperator.reducingRestriction_isSelfAdjoint
+#check TauCeti.DavisKahanExt.ClosedOperator.reducingRestriction_isSelfAdjoint
 #check SpectraBridge.RealSpectralRestriction.conjugatePVM_spectralPVM
 #check SpectraBridge.RealSpectralRestriction.realSelfAdjointSpectralRestriction_isSelfAdjoint
 #check SpectraBridge.RealSpectralRestriction.complexifySubmodule_realSelfAdjointSpectralSubspace
@@ -51,7 +51,7 @@ namespace ExactSinTheta
 #check generalizedSinTheta_unbounded_real_spectralSubspace
 #check GenuineGeneralSinThetaProblem.result
 #check GenuineIsometricSinThetaProblem.result
-#check ForMathlib.DavisKahanExt.ClosedOperator.realResolventSet
+#check TauCeti.DavisKahanExt.ClosedOperator.realResolventSet
 #check SpectraBridge.realSpectrum_eq_spectraSpectrum
 #check ClosedOperatorComplexification.isSelfAdjoint_complexify
 #check ClosedOperatorComplexification.unboundedSylvesterGap_complexify
@@ -75,14 +75,14 @@ namespace ExactSinTheta
 #check RealGeneralSinThetaProblem.result
 #check BoundedGeneralSinThetaProblem.result
 #check RealBoundedGeneralSinThetaProblem.result
-#check ForMathlib.DavisKahan1970.sinTheta
-#check ForMathlib.DavisKahan1970.sinTheta_real
-#check ForMathlib.DavisKahan1970.sinTheta_real_spectralSubspace
-#check ForMathlib.DavisKahan1970.generalizedSinTheta_real_spectralSubspace
-#check ForMathlib.DavisKahan1970.generalizedSinTheta
-#check ForMathlib.DavisKahan1970.generalizedSinTheta_real
-#check ForMathlib.DavisKahan1970.generalizedSinTheta_boundedSpecialization
-#check ForMathlib.DavisKahan1970.generalizedSinTheta_boundedSpecialization_real
+#check TauCeti.DavisKahan1970.sinTheta
+#check TauCeti.DavisKahan1970.sinTheta_real
+#check TauCeti.DavisKahan1970.sinTheta_real_spectralSubspace
+#check TauCeti.DavisKahan1970.generalizedSinTheta_real_spectralSubspace
+#check TauCeti.DavisKahan1970.generalizedSinTheta
+#check TauCeti.DavisKahan1970.generalizedSinTheta_real
+#check TauCeti.DavisKahan1970.generalizedSinTheta_boundedSpecialization
+#check TauCeti.DavisKahan1970.generalizedSinTheta_boundedSpecialization_real
 
 #print axioms sylvesterNeumannPartialSum_cauchy
 #print axioms sylvesterNeumannSolution_mem
@@ -97,7 +97,7 @@ namespace ExactSinTheta
 #print axioms generalizedSinTheta_unbounded_exact_of_genuineSpectrumGap
 #print axioms sinTheta_unbounded_exact_of_genuineSpectrumGap
 #print axioms sinTheta_unbounded_spectralSubspace_of_genuineSpectrumGap
-#print axioms ForMathlib.DavisKahanExt.ClosedOperator.reducingRestriction_isSelfAdjoint
+#print axioms TauCeti.DavisKahanExt.ClosedOperator.reducingRestriction_isSelfAdjoint
 #print axioms SpectraBridge.RealSpectralRestriction.conjugatePVM_spectralPVM
 #print axioms SpectraBridge.RealSpectralRestriction.realSelfAdjointSpectralRestriction_isSelfAdjoint
 #print axioms SpectraBridge.RealSpectralRestriction.complexifySubmodule_realSelfAdjointSpectralSubspace
@@ -107,7 +107,7 @@ namespace ExactSinTheta
 #print axioms generalizedSinTheta_unbounded_real_spectralSubspace
 #print axioms GenuineGeneralSinThetaProblem.result
 #print axioms GenuineIsometricSinThetaProblem.result
-#print axioms ForMathlib.DavisKahanExt.ClosedOperator.realSpectrum
+#print axioms TauCeti.DavisKahanExt.ClosedOperator.realSpectrum
 #print axioms SpectraBridge.realSpectrum_eq_spectraSpectrum
 #print axioms ClosedOperatorComplexification.isSelfAdjoint_complexify
 #print axioms ClosedOperatorComplexification.unboundedSylvesterGap_complexify
@@ -131,16 +131,16 @@ namespace ExactSinTheta
 #print axioms RealGeneralSinThetaProblem.result
 #print axioms BoundedGeneralSinThetaProblem.result
 #print axioms RealBoundedGeneralSinThetaProblem.result
-#print axioms ForMathlib.DavisKahan1970.sinTheta
-#print axioms ForMathlib.DavisKahan1970.sinTheta_real
-#print axioms ForMathlib.DavisKahan1970.sinTheta_real_spectralSubspace
-#print axioms ForMathlib.DavisKahan1970.generalizedSinTheta_real_spectralSubspace
-#print axioms ForMathlib.DavisKahan1970.generalizedSinTheta
-#print axioms ForMathlib.DavisKahan1970.generalizedSinTheta_real
-#print axioms ForMathlib.DavisKahan1970.generalizedSinTheta_boundedSpecialization
-#print axioms ForMathlib.DavisKahan1970.generalizedSinTheta_boundedSpecialization_real
+#print axioms TauCeti.DavisKahan1970.sinTheta
+#print axioms TauCeti.DavisKahan1970.sinTheta_real
+#print axioms TauCeti.DavisKahan1970.sinTheta_real_spectralSubspace
+#print axioms TauCeti.DavisKahan1970.generalizedSinTheta_real_spectralSubspace
+#print axioms TauCeti.DavisKahan1970.generalizedSinTheta
+#print axioms TauCeti.DavisKahan1970.generalizedSinTheta_real
+#print axioms TauCeti.DavisKahan1970.generalizedSinTheta_boundedSpecialization
+#print axioms TauCeti.DavisKahan1970.generalizedSinTheta_boundedSpecialization_real
 
 end ExactSinTheta
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

@@ -27,7 +27,7 @@ real and imaginary coordinates both lie in `U`.  The main results prove that:
 * reducing-subspace data transports through operator complexification.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace Foundation
@@ -223,38 +223,38 @@ theorem directedProjectionGap_complexifySubmodule
 theorem subspaceGap_complexifySubmodule
     (U V : Submodule ℝ E) [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] :
-    ForMathlib.DavisKahan.subspaceGap (complexifySubmodule U)
+    TauCeti.DavisKahan.subspaceGap (complexifySubmodule U)
         (complexifySubmodule V) =
-      ForMathlib.DavisKahan.subspaceGap U V :=
+      TauCeti.DavisKahan.subspaceGap U V :=
   projectionGap_complexifySubmodule U V
 
 /-- Davis--Kahan directed gap is unchanged by complexification. -/
 theorem directedGap_complexifySubmodule
     (U V : Submodule ℝ E) [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] :
-    ForMathlib.DavisKahan.directedGap (complexifySubmodule U)
+    TauCeti.DavisKahan.directedGap (complexifySubmodule U)
         (complexifySubmodule V) =
-      ForMathlib.DavisKahan.directedGap U V :=
+      TauCeti.DavisKahan.directedGap U V :=
   directedProjectionGap_complexifySubmodule U V
 
 /-- Acuteness is preserved and reflected by complexification. -/
 theorem isAcute_complexifySubmodule_iff
     (U V : Submodule ℝ E) [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] :
-    ForMathlib.DavisKahan.IsAcute (complexifySubmodule U)
+    TauCeti.DavisKahan.IsAcute (complexifySubmodule U)
         (complexifySubmodule V) ↔
-      ForMathlib.DavisKahan.IsAcute U V := by
-  simp only [ForMathlib.DavisKahan.IsAcute,
+      TauCeti.DavisKahan.IsAcute U V := by
+  simp only [TauCeti.DavisKahan.IsAcute,
     subspaceGap_complexifySubmodule]
 
 /-- Quarter-acuteness is preserved and reflected by complexification. -/
 theorem isQuarterAcute_complexifySubmodule_iff
     (U V : Submodule ℝ E) [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] :
-    ForMathlib.DavisKahan.IsQuarterAcute (complexifySubmodule U)
+    TauCeti.DavisKahan.IsQuarterAcute (complexifySubmodule U)
         (complexifySubmodule V) ↔
-      ForMathlib.DavisKahan.IsQuarterAcute U V := by
-  simp only [ForMathlib.DavisKahan.IsQuarterAcute,
+      TauCeti.DavisKahan.IsQuarterAcute U V := by
+  simp only [TauCeti.DavisKahan.IsQuarterAcute,
     subspaceGap_complexifySubmodule]
 
 /-- Reduction by a real operator is preserved and reflected by operator and
@@ -304,4 +304,4 @@ end RealComplexification
 end Foundation
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

@@ -25,8 +25,7 @@ open scoped BigOperators Matrix ComplexConjugate ComplexOrder
 open Module (finrank)
 open _root_.Matrix
 
-namespace ForMathlib
-
+namespace TauCeti
 open scoped InnerProductSpace
 
 section
@@ -170,4 +169,4 @@ theorem gram_eq_gram_iff_exists_linearIsometryEquiv_map_eq {φ ψ : ι → E} :
     simp [gram_apply, ← hW i, ← hW j, LinearIsometryEquiv.inner_map_map]
 
 end Matrix
-end ForMathlib
+end TauCeti

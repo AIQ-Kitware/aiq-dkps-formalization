@@ -15,7 +15,7 @@ direct cutoff and bounded-truncation interfaces, including the two strong-limit
 passages and Fan dominance endpoint.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace ExactSinTheta
@@ -31,9 +31,9 @@ variable {E F : Type v}
   [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
 
 abbrev DirectClosedOperatorOnE :=
-  ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := E)
+  TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := E)
 abbrev DirectClosedOperatorOnF :=
-  ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := F)
+  TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := F)
 
 section ApproximationNumberEndpointAssumptions
 
@@ -517,4 +517,4 @@ end ApproximationNumberEndpointAssumptions
 end ExactSinTheta
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

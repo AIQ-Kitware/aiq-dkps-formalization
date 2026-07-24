@@ -24,13 +24,13 @@ no Hilbert--Schmidt membership of `X` is assumed before it is proved.The remaini
 gap of the defect tensor from pairwise separation of the two operator spectra.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace ExactSinTheta
 
 open scoped InnerProductSpace
-open ForMathlib.DavisKahanExt
+open TauCeti.DavisKahanExt
 open Spectra.YosidaHille
 
 noncomputable section
@@ -163,4 +163,4 @@ end
 end ExactSinTheta
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

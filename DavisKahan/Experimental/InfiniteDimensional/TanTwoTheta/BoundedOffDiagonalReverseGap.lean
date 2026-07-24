@@ -19,7 +19,7 @@ coordinate.  Combining the forward and reverse branches closes the
 are nontrivial.  Degenerate subspaces remain a separate final leaf.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanExt
 
 open scoped InnerProductSpace
@@ -221,4 +221,4 @@ theorem quarterAcuteAngularCoordinate_sharp_bound_of_orderedInternalGap_nontrivi
       A H hA hH U V hU hV hoff hd hreverse hquarter
 
 end DavisKahanExt
-end ForMathlib
+end TauCeti

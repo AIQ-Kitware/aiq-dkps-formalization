@@ -17,7 +17,7 @@ spaces, where the supplied real ideal family's Fan-dominance field produces
 membership and the arbitrary-gauge estimate.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace ExactSinTheta
@@ -40,8 +40,8 @@ open ComplexificationApproximation
 obtained by applying the complex theorem to the coordinatewise
 complexification. -/
 theorem real_unbounded_sylvester_kyFan
-    {A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E)}
-    {B : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := F)}
+    {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E)}
+    {B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := F)}
     (hA : A.IsSelfAdjoint) (hB : B.IsSelfAdjoint)
     {X C : F →L[ℝ] E} {δ : ℝ}
     (hδ : 0 < δ)
@@ -75,8 +75,8 @@ orientations, with the same sharp constant and an arbitrary real unitarily
 invariant ideal family. -/
 theorem davisKahan1970_sylvester_real
     (N : UnitaryInvariantIdealFamily (𝕜 := ℝ))
-    {A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E)}
-    {B : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := F)}
+    {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E)}
+    {B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := F)}
     (hA : A.IsSelfAdjoint) (hB : B.IsSelfAdjoint)
     {X C : F →L[ℝ] E} {δ : ℝ}
     (hδ : 0 < δ)
@@ -95,4 +95,4 @@ end
 end ExactSinTheta
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

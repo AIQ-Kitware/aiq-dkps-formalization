@@ -13,7 +13,7 @@ The full real angle is the direct sum of the two source-directed angles after
 canonical complexification, exactly paralleling the complex source definition.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace ExactSinTheta
@@ -43,4 +43,4 @@ end
 end ExactSinTheta
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

@@ -19,7 +19,7 @@ The primary quantities are kept in radical form.  Decimal values used in the
 paper are derived later as rational upper bounds.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan1970
 namespace Section9
 
@@ -231,4 +231,4 @@ structure FreeBeamFiniteDataCertificate (ε : ℝ) where
 
 end Section9
 end DavisKahan1970
-end ForMathlib
+end TauCeti

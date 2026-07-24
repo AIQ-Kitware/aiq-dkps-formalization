@@ -7,7 +7,7 @@ import DavisKahan.Sources.DavisKahan1970.Ideals.RankOneNormalization
 import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtFrobenius
 import DavisKahan.Sources.DavisKahan1970.SineTheta.Theorem61Universal
 import DavisKahan.Geometry.Angle.OperatorAngleReal
-import ForMathlib.Analysis.InnerProductSpace.UnitarilyInvariantNorm
+import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantNorm
 import ForTauCeti.Analysis.InnerProductSpace.OperatorAbsoluteValue
 
 /-!
@@ -23,15 +23,15 @@ before Proposition 6.1: one directional gap does not imply the symmetric
 square-norm estimate.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace ExactSinTheta
 
 open scoped InnerProductSpace BigOperators
 
-open ForMathlib.DavisKahan.Experimental.Foundation
-open ForMathlib.DavisKahan.Experimental.Foundation.RealComplexification
+open TauCeti.DavisKahan.Experimental.Foundation
+open TauCeti.DavisKahan.Experimental.Foundation.RealComplexification
 
 noncomputable section
 
@@ -536,10 +536,10 @@ theorem paperHilbertSchmidtNorm_sinAngleOperatorRC_eq_projectionDifference
     (U V : Submodule ℝ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     paperHilbertSchmidtNorm
-        (ForMathlib.DavisKahanExt.Real.sinAngleOperatorRC U V) =
+        (TauCeti.DavisKahanExt.Real.sinAngleOperatorRC U V) =
       paperHilbertSchmidtNorm (U.starProjection - V.starProjection) := by
-  rw [ForMathlib.DavisKahanExt.Real.sinAngleOperatorRC,
-    ForMathlib.DavisKahanExt.sinAngleOperatorC]
+  rw [TauCeti.DavisKahanExt.Real.sinAngleOperatorRC,
+    TauCeti.DavisKahanExt.sinAngleOperatorC]
   calc
     paperHilbertSchmidtNorm
         (TauCeti.operatorAbs
@@ -561,11 +561,11 @@ theorem paperHilbertSchmidtNorm_sinAngleOperatorRC_eq_projectionDifference
 /-- The source counterexample has angle `pi/4`, hence square sine norm one. -/
 theorem paperCounterexample_sine_square_norm :
     paperHilbertSchmidtNorm
-      (ForMathlib.DavisKahanExt.Real.sinAngleOperatorRC
+      (TauCeti.DavisKahanExt.Real.sinAngleOperatorRC
         paperCounterexampleExact paperCounterexampleTrial) = 1 := by
   rw [paperHilbertSchmidtNorm_sinAngleOperatorRC_eq_projectionDifference,
     paperHilbertSchmidtNorm_eq_frobenius,
-    ForMathlib.UnitarilyInvariantNorm.frobenius_apply
+    TauCeti.UnitarilyInvariantNorm.frobenius_apply
     ℝ PaperRealPlane
     (paperCounterexampleExact.starProjection -
       paperCounterexampleTrial.starProjection).toLinearMap
@@ -586,7 +586,7 @@ theorem paperCounterexample_sine_square_norm :
 theorem paperCounterexample_perturbation_square_norm :
     paperHilbertSchmidtNorm paperCounterexampleH = Real.sqrt 3 := by
   rw [paperHilbertSchmidtNorm_eq_frobenius,
-    ForMathlib.UnitarilyInvariantNorm.frobenius_apply
+    TauCeti.UnitarilyInvariantNorm.frobenius_apply
     ℝ PaperRealPlane paperCounterexampleH.toLinearMap
     paperRealPlane_finrank (EuclideanSpace.basisFun (Fin 2) ℝ)]
   rw [Fin.sum_univ_two]
@@ -603,7 +603,7 @@ square-norm estimate. -/
 theorem paperOneGap_does_not_imply_symmetric_square_estimate :
     paperHilbertSchmidtNorm paperCounterexampleH <
       2 * paperHilbertSchmidtNorm
-        (ForMathlib.DavisKahanExt.Real.sinAngleOperatorRC
+        (TauCeti.DavisKahanExt.Real.sinAngleOperatorRC
           paperCounterexampleExact paperCounterexampleTrial) := by
   rw [paperCounterexample_sine_square_norm,
     paperCounterexample_perturbation_square_norm]
@@ -617,4 +617,4 @@ end
 end ExactSinTheta
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

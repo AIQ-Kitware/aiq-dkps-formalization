@@ -17,7 +17,7 @@ existential propositions so they carry no computational datum.
 
 open scoped InnerProductSpace
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace Frontier
@@ -59,4 +59,4 @@ end CrossSpaceClassification
 end Frontier
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

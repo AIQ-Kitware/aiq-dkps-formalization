@@ -14,7 +14,7 @@ construction: the compiler-side topology helpers only need to produce a finite
 measurable disjoint cover and representatives.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanExt
 
 open MeasureTheory Set Filter
@@ -409,4 +409,4 @@ theorem boundedSelfAdjointBorelCalculus_eq_finset_sum_indicator [Nontrivial H]
 
 end
 end DavisKahanExt
-end ForMathlib
+end TauCeti

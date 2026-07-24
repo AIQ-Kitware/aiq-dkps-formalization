@@ -13,7 +13,7 @@ Riccati leaf proofs.  The public facade is
 `DavisKahan.Experimental.InfiniteDimensional.Riccati.Bounded`.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanExt
 
 open scoped InnerProductSpace
@@ -69,4 +69,4 @@ def SolvesRiccati (H : BlockOperatorData (𝕜 := 𝕜) (E0 := E0) (E1 := E1))
   riccatiDefect H X = 0
 
 end DavisKahanExt
-end ForMathlib
+end TauCeti

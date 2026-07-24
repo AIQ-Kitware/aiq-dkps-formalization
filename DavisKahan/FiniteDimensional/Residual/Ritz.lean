@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
 import DavisKahan.FiniteDimensional.Core.SpectralSubspace
-import ForMathlib.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm
+import ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm
 
 /-!
 # Ritz compression and residual
@@ -13,7 +13,7 @@ Finite-dimensional compressions, invariant-pair residuals, Galerkin
 orthogonality, covariance, and Frobenius minimality.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanTheory
 
 open scoped InnerProductSpace BigOperators
@@ -235,4 +235,4 @@ theorem ritzResidual_frobenius_minimal (A : E →ₗ[𝕜] E)
 
 
 end DavisKahanTheory
-end ForMathlib
+end TauCeti

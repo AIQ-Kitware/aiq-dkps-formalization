@@ -6,9 +6,9 @@ Davis Result B: the sharper total-rotation estimate (Davis 1963, Theorem 3.2, eq
 corollary combining with Result A (Theorem 4.1). Tickets PD-18 + BL1/BL2/BL4/BL5/BL6.
 -/
 
-import ForMathlib.Analysis.InnerProductSpace.IntertwiningUnitary
-import ForMathlib.Analysis.InnerProductSpace.EigenvalueChange
-import ForMathlib.Analysis.InnerProductSpace.Spectrum
+import ForTauCeti.Analysis.InnerProductSpace.IntertwiningUnitary
+import ForTauCeti.Analysis.InnerProductSpace.EigenvalueChange
+import ForTauCeti.Analysis.InnerProductSpace.Spectrum
 
 /-! # Davis's sharper total-rotation estimate (Davis 1963, Theorem 3.2)
 
@@ -33,12 +33,12 @@ eigenvector rotation is controlled by the *off-diagonal* part of the perturbatio
 
 ## Main results
 
-* `ForMathlib.rotation_add_displacement_le_hilbertSchmidt` — Theorem 3.2, eq. 3.1 (overlap form).
-* `ForMathlib.sqSinAngle_ofOrthonormalBasis` — `sin²θᵢ = 1 − ‖⟪vᵢ, xᵢ⟫‖²` for the canonical
+* `TauCeti.rotation_add_displacement_le_hilbertSchmidt` — Theorem 3.2, eq. 3.1 (overlap form).
+* `TauCeti.sqSinAngle_ofOrthonormalBasis` — `sin²θᵢ = 1 − ‖⟪vᵢ, xᵢ⟫‖²` for the canonical
   unitary of the rank-one spectral families (BL4).
-* `ForMathlib.rotation_add_displacement_le_hilbertSchmidt_intertwining` — Theorem 3.2 stated
+* `TauCeti.rotation_add_displacement_le_hilbertSchmidt_intertwining` — Theorem 3.2 stated
   through the canonical intertwining unitary (PD-18 milestone).
-* `ForMathlib.rotation_le_two_mul_offDiag` — the corollary `(γ')² ∑ sin²θᵢ ≤ 2 ‖𝒞⊥H‖²_F` (BL6).
+* `TauCeti.rotation_le_two_mul_offDiag` — the corollary `(γ')² ∑ sin²θᵢ ≤ 2 ‖𝒞⊥H‖²_F` (BL6).
 
 ## References
 
@@ -46,8 +46,7 @@ eigenvector rotation is controlled by the *off-diagonal* part of the perturbatio
   6 (1963), 159–173, Theorem 3.2 and §5.
 -/
 
-namespace ForMathlib
-
+namespace TauCeti
 open scoped InnerProductSpace
 open LinearMap InnerProductSpace Module
 
@@ -352,4 +351,4 @@ theorem rotation_le_two_mul_offDiag
     Finset.sum_congr rfl fun i _ => by ring
   linarith [hB, hA, hid, hsym]
 
-end ForMathlib
+end TauCeti

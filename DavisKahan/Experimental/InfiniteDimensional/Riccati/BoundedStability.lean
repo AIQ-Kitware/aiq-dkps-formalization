@@ -17,7 +17,7 @@ gives a residual certificate, and specializing further to the canonical local
 solution gives a directly reusable a posteriori estimate.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanExt
 
 open scoped InnerProductSpace
@@ -163,4 +163,4 @@ theorem norm_sub_canonicalContractiveRiccatiSolution_le_defect_div
       H hd hlr hA0spec hA1spec hsmall)
 
 end DavisKahanExt
-end ForMathlib
+end TauCeti

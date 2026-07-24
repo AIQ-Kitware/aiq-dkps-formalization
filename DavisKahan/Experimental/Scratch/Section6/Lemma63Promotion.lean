@@ -24,7 +24,7 @@ singular-value form is derived here explicitly.
 open scoped InnerProductSpace BigOperators
 open Finset
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace Scratch
@@ -207,4 +207,4 @@ end Section6
 end Scratch
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

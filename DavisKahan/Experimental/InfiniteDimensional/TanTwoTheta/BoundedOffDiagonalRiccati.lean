@@ -21,7 +21,7 @@ Riccati estimate and operator-angle implementation.  Scalar-generic public
 integration is a later compatibility step.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanExt
 
 open scoped InnerProductSpace
@@ -203,4 +203,4 @@ theorem norm_subspaceBlockOperatorData_B01_add_offDiagonal_le
   exact norm_upperRightSubspaceCompression_le U H
 
 end DavisKahanExt
-end ForMathlib
+end TauCeti

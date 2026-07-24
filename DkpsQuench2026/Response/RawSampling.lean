@@ -174,7 +174,7 @@ theorem integral_norm_sq_modelReplicateMean_sub_mean_le
     rw [Hraw.mean_entry n f k c] at h
     exact h
   -- Apply the universe-polymorphic sample-mean second-moment bound.
-  have hbound := ForMathlib.integral_norm_sq_average_sub_le_of_bound
+  have hbound := TauCeti.integral_norm_sq_average_sub_le_of_bound
     (μresp n) (Hraw.replicates_pos n) (Y n f) (μmodel f)
     (Hraw.memLp_two n f) hmean (Hraw.pairwise_independent n f) (Hraw.second_moment n f)
   simpa [modelReplicateMean, replicateMean] using hbound

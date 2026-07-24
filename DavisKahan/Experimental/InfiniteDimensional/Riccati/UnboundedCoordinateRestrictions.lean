@@ -14,7 +14,7 @@ the first coordinate summand, its domain splits exactly into coordinate-domain
 pieces, and its action on each piece has no off-diagonal coordinate.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanExt
 
 open scoped InnerProductSpace
@@ -272,4 +272,4 @@ theorem closedOperatorCoordinate1_action_eq
   exact hrec.symm
 
 end DavisKahanExt
-end ForMathlib
+end TauCeti

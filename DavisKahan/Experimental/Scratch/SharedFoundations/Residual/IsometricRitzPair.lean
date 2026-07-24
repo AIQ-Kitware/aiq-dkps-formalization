@@ -14,7 +14,7 @@ are shared by generalized tangent estimates, Galerkin/Ritz theory, and
 finite-rank approximation arguments.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace Scratch
@@ -107,4 +107,4 @@ end SharedFoundations
 end Scratch
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

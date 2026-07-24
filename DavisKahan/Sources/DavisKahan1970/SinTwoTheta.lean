@@ -44,7 +44,7 @@ Every declaration below is an alias of, or a thin wrapper around, a compiled
 theorem; no new mathematics is introduced in this facade.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan1970
 
 open DavisKahan.Experimental.ExactSinTheta
@@ -225,4 +225,4 @@ theorem unbounded_sinTwoTheta_residual_uiNorm_representative
   exact hcanonical.2
 
 end DavisKahan1970
-end ForMathlib
+end TauCeti

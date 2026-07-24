@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.FiniteDimensional.Core.AngleGeometry
-import ForMathlib.Analysis.InnerProductSpace.PolarDecomposition
-import ForMathlib.Analysis.InnerProductSpace.SelfAdjointFunctionalCalculus
+import ForTauCeti.Analysis.InnerProductSpace.PolarDecomposition
+import ForTauCeti.Analysis.InnerProductSpace.SelfAdjointFunctionalCalculus
 
 /-!
 # Canonical finite direct rotation
@@ -20,7 +20,7 @@ intertwining-unitary construction, but exposes the identities needed in Part
 III without a fictional principal-plane API.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanTheory
 
 open scoped InnerProductSpace BigOperators
@@ -273,8 +273,8 @@ projection. -/
 theorem projection_comm_abs_canonicalIntertwiner
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
-    projection U ∘ₗ ForMathlib.abs (canonicalIntertwiner U V) =
-      ForMathlib.abs (canonicalIntertwiner U V) ∘ₗ projection U := by
+    projection U ∘ₗ TauCeti.abs (canonicalIntertwiner U V) =
+      TauCeti.abs (canonicalIntertwiner U V) ∘ₗ projection U := by
   exact FiniteDimensional.sqrt_comm
     (LinearMap.isPositive_adjoint_comp_self (canonicalIntertwiner U V))
     (projection_comm_canonicalIntertwiner_gram U V)
@@ -312,7 +312,7 @@ theorem abs_canonicalIntertwiner_apply_eq_self_of_projection_eq
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     {x : E} (hx : projection U x = projection V x) :
-    ForMathlib.abs (canonicalIntertwiner U V) x = x := by
+    TauCeti.abs (canonicalIntertwiner U V) x = x := by
   let S := canonicalIntertwiner U V
   have hS : S x = x :=
     canonicalIntertwiner_apply_eq_self_of_projection_eq U V hx
@@ -352,7 +352,7 @@ theorem directRotation_apply_eq_self_of_projection_eq
   let S := canonicalIntertwiner U V
   have hS : S x = x :=
     canonicalIntertwiner_apply_eq_self_of_projection_eq U V hx
-  have hC : ForMathlib.abs S x = x :=
+  have hC : TauCeti.abs S x = x :=
     abs_canonicalIntertwiner_apply_eq_self_of_projection_eq U V hx
   have hpolar := LinearMap.congr_fun (polar_decomposition S) x
   rw [LinearMap.comp_apply, hC, hS] at hpolar
@@ -367,11 +367,11 @@ theorem directRotation_comm_abs_canonicalIntertwiner
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hacute : IsAcute U V) :
     (directRotation U V hacute).toLinearMap ∘ₗ
-        ForMathlib.abs (canonicalIntertwiner U V) =
-      ForMathlib.abs (canonicalIntertwiner U V) ∘ₗ
+        TauCeti.abs (canonicalIntertwiner U V) =
+      TauCeti.abs (canonicalIntertwiner U V) ∘ₗ
         (directRotation U V hacute).toLinearMap := by
   let S := canonicalIntertwiner U V
-  let C := ForMathlib.abs S
+  let C := TauCeti.abs S
   let R := (directRotation U V hacute).toLinearMap
   have hSC : S ∘ₗ C = C ∘ₗ S :=
     abs_comm_of_normal (canonicalIntertwiner_normal_of_acute U V hacute)
@@ -396,7 +396,7 @@ theorem directRotation_comp_projection (U V : Submodule 𝕜 E)
     (directRotation U V hacute).toLinearMap ∘ₗ projection U =
       projection V ∘ₗ (directRotation U V hacute).toLinearMap := by
   let S := canonicalIntertwiner U V
-  let C := ForMathlib.abs S
+  let C := TauCeti.abs S
   let W := (directRotation U V hacute).toLinearMap
   have hpolar : S = W ∘ₗ C := by
     simpa [S, C, W, directRotation] using
@@ -522,8 +522,8 @@ theorem reflectionProduct_comm_abs_canonicalIntertwiner
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     (reflectionProduct U V).toLinearMap ∘ₗ
-        ForMathlib.abs (canonicalIntertwiner U V) =
-      ForMathlib.abs (canonicalIntertwiner U V) ∘ₗ
+        TauCeti.abs (canonicalIntertwiner U V) =
+      TauCeti.abs (canonicalIntertwiner U V) ∘ₗ
         (reflectionProduct U V).toLinearMap := by
   exact FiniteDimensional.sqrt_comm
     (LinearMap.isPositive_adjoint_comp_self (canonicalIntertwiner U V))
@@ -538,7 +538,7 @@ theorem directRotation_sq (U V : Submodule 𝕜 E)
         (directRotation U V hacute).toLinearMap =
       (reflectionProduct U V).toLinearMap := by
   let S := canonicalIntertwiner U V
-  let C := ForMathlib.abs S
+  let C := TauCeti.abs S
   let W := (directRotation U V hacute).toLinearMap
   let R := (reflectionProduct U V).toLinearMap
   have hpolar : S = W ∘ₗ C := by
@@ -589,11 +589,11 @@ theorem two_smul_abs_canonicalIntertwiner
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hacute : IsAcute U V) :
-    (2 : 𝕜) • ForMathlib.abs (canonicalIntertwiner U V) =
+    (2 : 𝕜) • TauCeti.abs (canonicalIntertwiner U V) =
       (directRotation U V hacute).toLinearMap +
         (directRotation U V hacute).symm.toLinearMap := by
   let S := canonicalIntertwiner U V
-  let C := ForMathlib.abs S
+  let C := TauCeti.abs S
   let W := (directRotation U V hacute).toLinearMap
   have hpolar : S = W ∘ₗ C := by
     simpa [S, C, W, directRotation] using
@@ -652,4 +652,4 @@ theorem directRotation_map_eq (U V : Submodule 𝕜 E)
     exact h
 
 end DavisKahanTheory
-end ForMathlib
+end TauCeti

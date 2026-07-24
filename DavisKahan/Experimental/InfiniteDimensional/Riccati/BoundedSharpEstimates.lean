@@ -17,7 +17,7 @@ argument independent of trigonometric normalization and exposes the exact
 scalar endpoint needed by later continuation and branch-selection proofs.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanExt
 
 variable {E0 : Type*} [NormedAddCommGroup E0] [InnerProductSpace ℂ E0]
@@ -99,4 +99,4 @@ theorem norm_riccati_solution_le_small_root_of_contractive_spectrum_gap
       H hd hlr hA0spec hA1spec hX
 
 end DavisKahanExt
-end ForMathlib
+end TauCeti

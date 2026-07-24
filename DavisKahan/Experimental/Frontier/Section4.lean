@@ -22,13 +22,13 @@ partial sums, and rectangular ideal gauges.
 
 open scoped InnerProductSpace BigOperators
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace Frontier
 namespace Section4
 
--- `SpectraBridge` is `ForMathlib.DavisKahan.Experimental.SpectraBridge`, so it
+-- `SpectraBridge` is `TauCeti.DavisKahan.Experimental.SpectraBridge`, so it
 -- can only be opened once those namespaces are entered
 open SpectraBridge
 open ExactSinTheta
@@ -114,4 +114,4 @@ end Section4
 end Frontier
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

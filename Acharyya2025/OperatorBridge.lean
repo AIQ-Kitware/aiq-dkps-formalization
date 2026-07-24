@@ -22,7 +22,7 @@ Formalized by Claude Fable 5 (claude-fable-5[1m]).
 
 import Acharyya2025.MathlibBridge
 import Acharyya2025.Weyl
-import ForMathlib.Analysis.Matrix.EntrywiseOpNorm
+import ForTauCeti.Analysis.Matrix.EntrywiseOpNorm
 
 open scoped BigOperators RealInnerProductSpace
 open Module (finrank)
@@ -58,7 +58,7 @@ theorem sum_abs_le_sqrt_card_mul_norm {n : Nat} (x : EuclideanSpace Real (Fin n)
     ∑ j : Fin n, |x j| ≤ Real.sqrt n * ‖x‖ := by
   -- Thin ℝ-instantiation of the Mathlib-staged RCLike version.
   simpa [Real.norm_eq_abs, Fintype.card_fin] using
-    ForMathlib.sum_norm_le_sqrt_card_mul_norm x
+    TauCeti.sum_norm_le_sqrt_card_mul_norm x
 
 /--
 Entrywise closeness gives honest `ℓ² → ℓ²` operator-norm closeness with
@@ -88,7 +88,7 @@ theorem matrixL2OperatorClose_of_entrywise
   -- applied to the difference matrix `A - B`.
   have hentry' : ∀ i j, |(A - B) i j| ≤ ε := by
     intro i j; rw [Matrix.sub_apply]; exact hentry i j
-  exact ForMathlib.norm_toEuclideanLin_le_of_entry_le hentry' x
+  exact TauCeti.norm_toEuclideanLin_le_of_entry_le hentry' x
 
 /--
 A Hermitian (over `ℝ`: symmetric) matrix induces a symmetric operator on

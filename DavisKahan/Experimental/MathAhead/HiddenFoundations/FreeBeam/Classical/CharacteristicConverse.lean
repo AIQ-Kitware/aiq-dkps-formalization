@@ -19,7 +19,7 @@ This file supplies the missing two-by-two kernel construction and reconstructs
 the four-parameter classical mode with coefficients `(a,b,a,b)`.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace MathAhead
@@ -164,4 +164,4 @@ end HiddenFoundations
 end MathAhead
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

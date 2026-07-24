@@ -157,7 +157,7 @@ theorem highProb_modelNetResponseEventFor_of_secondMoment
       exact Set.mem_biUnion hfc hfgt
     have hcheb : ∀ f, μresp n {ω | τ n < ‖Xbar n ω f - μmodel f‖}
         ≤ ENNReal.ofReal (σ2 n / (τ n) ^ 2) := fun f =>
-      ForMathlib.meas_gt_le_ofReal_integral_sq_div_sq (μresp n) (hint n f) (hτ n) (hσ2 n f)
+      TauCeti.meas_gt_le_ofReal_integral_sq_div_sq (μresp n) (hint n f) (hτ n) (hσ2 n f)
     calc
       μresp n ((modelNetResponseEventFor ψ Xbar μmodel net τ n)ᶜ)
           ≤ μresp n (⋃ f ∈ net.centers n, {ω | τ n < ‖Xbar n ω f - μmodel f‖}) :=

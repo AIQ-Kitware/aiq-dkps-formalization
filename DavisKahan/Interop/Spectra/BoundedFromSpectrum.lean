@@ -37,7 +37,7 @@ the spectral-projection algebra.
 
 open scoped InnerProductSpace
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace ExactSinTheta
@@ -191,4 +191,4 @@ theorem exists_boundedRealization_of_spectrum_subset_Icc
 end ExactSinTheta
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

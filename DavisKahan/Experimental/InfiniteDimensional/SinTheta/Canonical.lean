@@ -15,7 +15,7 @@ through the legacy unbounded Sylvester engine, whose generic spectral cutoff is
 still an open obligation.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace ExactSinTheta
@@ -61,4 +61,4 @@ end GenericIsometric
 end ExactSinTheta
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

@@ -16,7 +16,7 @@ Sylvester and sine-theta implementation layers so that the compatibility route
 does not enter either foundational import cone.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace ExactSinTheta
@@ -152,4 +152,4 @@ end Complex
 end ExactSinTheta
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

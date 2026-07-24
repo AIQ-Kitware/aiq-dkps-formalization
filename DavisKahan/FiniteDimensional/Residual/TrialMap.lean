@@ -12,7 +12,7 @@ General trial-map residuals, complementary blocks, and the projected Sylvester
 identity before orthonormalization.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanTheory
 
 open scoped InnerProductSpace BigOperators
@@ -65,4 +65,4 @@ theorem sylvester_complementaryTrialBlock_eq_projectedGeneralResidual
   rw [complementaryProjection_apply_comm_of_reduces hA hU (X x)]
 
 end DavisKahanTheory
-end ForMathlib
+end TauCeti

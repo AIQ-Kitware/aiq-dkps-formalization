@@ -18,7 +18,7 @@ spectral-theorem import cone is ported to the root Lean/Mathlib revision.
 
 open scoped InnerProductSpace
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace SpectraBridge
@@ -54,4 +54,4 @@ theorem boundedExtension_boundedSelfAdjointOperator
 end SpectraBridge
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

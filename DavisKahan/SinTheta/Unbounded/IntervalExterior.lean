@@ -15,7 +15,7 @@ identification.  It deliberately bypasses the older abstract unbounded spectral
 facade, whose ordered half-line branch still depends on spectral-cutoff work.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace ExactSinTheta
@@ -33,8 +33,8 @@ variable {E F G H : Type v}
 /-- Genuine Spectra interval/exterior separation for two self-adjoint closed
 operators.  Either orientation is permitted. -/
 def GenuineUnboundedIntervalExteriorGap
-    (A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := F))
-    (B : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := G))
+    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := F))
+    (B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := G))
     (β α δ : ℝ) : Prop :=
   (Spectra.Resolvent.spectrum A.toLinearPMap ⊆ Set.Icc β α ∧
     ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
@@ -146,4 +146,4 @@ theorem sinTheta_unbounded_exact_of_genuineIntervalExteriorGap
 end ExactSinTheta
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

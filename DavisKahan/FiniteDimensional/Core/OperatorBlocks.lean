@@ -12,7 +12,7 @@ Pinching, off-diagonal parts, and zero-compression predicates used by the
 finite double-angle and tangent theories.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanTheory
 
 open scoped InnerProductSpace BigOperators
@@ -109,4 +109,4 @@ theorem inner_blocks_eq_zero_of_isOffDiagonal
         (isOffDiagonal_orthogonal U H hoff)) hw hw'
 
 end DavisKahanTheory
-end ForMathlib
+end TauCeti

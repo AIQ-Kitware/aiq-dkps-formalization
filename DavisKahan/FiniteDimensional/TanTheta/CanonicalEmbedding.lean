@@ -10,7 +10,7 @@ import DavisKahan.FiniteDimensional.Residual.AngleEmbeddings
 # Compatibility surface for the unfinished canonical tangent-map corollary
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanTheory
 
 open scoped InnerProductSpace BigOperators
@@ -40,4 +40,4 @@ theorem tanThetaEmbedding_ritzResidual_le
 
 
 end DavisKahanTheory
-end ForMathlib
+end TauCeti

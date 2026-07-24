@@ -15,7 +15,7 @@ projections complexify exactly, and the complexified subspaces have the same
 principal-angle data as the original real subspaces.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace ExactSinTheta
@@ -68,4 +68,4 @@ end
 end ExactSinTheta
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

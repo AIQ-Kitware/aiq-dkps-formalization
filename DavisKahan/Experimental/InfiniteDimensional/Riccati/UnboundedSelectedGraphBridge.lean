@@ -22,7 +22,7 @@ preservation and reduction of the closed block operator remain separate,
 genuinely unbounded obligations.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanExt
 
 open scoped InnerProductSpace
@@ -151,4 +151,4 @@ theorem exists_strongRiccati_solution_of_ambientAngularGraph
     H Y hY hdom hnorm hred).exists_strongRiccati_solution
 
 end DavisKahanExt
-end ForMathlib
+end TauCeti

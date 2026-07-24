@@ -24,7 +24,7 @@ on the canonical complexification; this is the construction used elsewhere in
 the repository for real operator functional calculus.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanExt
 
 open scoped InnerProductSpace
@@ -184,9 +184,9 @@ theorem paperSin_sq_add_paperCos_sq (U V : Submodule ℂ E)
 
 section Real
 
-open ForMathlib.DavisKahan.Experimental.Foundation
-open ForMathlib.DavisKahan.Experimental.Foundation.RealComplexification
-open ForMathlib.DavisKahanExt.Real
+open TauCeti.DavisKahan.Experimental.Foundation
+open TauCeti.DavisKahan.Experimental.Foundation.RealComplexification
+open TauCeti.DavisKahanExt.Real
 
 variable {ER : Type*} [NormedAddCommGroup ER] [InnerProductSpace ℝ ER]
   [CompleteSpace ER]
@@ -229,4 +229,4 @@ end Real
 end
 
 end DavisKahanExt
-end ForMathlib
+end TauCeti

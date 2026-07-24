@@ -26,7 +26,7 @@ compiler agent can repair the few topology and coercion spellings here, then
 promote `hilbertSchmidtReal` into the rectangular-family implementation.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace ExactSinTheta
@@ -302,4 +302,4 @@ end Scratch
 end ExactSinTheta
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

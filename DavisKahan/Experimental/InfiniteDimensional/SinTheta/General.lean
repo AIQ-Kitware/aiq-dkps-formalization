@@ -14,7 +14,7 @@ forms are represented, including general separated spectra and ideal-norm
 versions.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanExt
 
 open scoped InnerProductSpace
@@ -111,13 +111,13 @@ theorem sinTheta_residual
     refine ⟨hM, fun x _ => Submodule.mem_top, ?_⟩
     intro a ha b hb
     refine hord a ha b ?_
-    have hb' : b ∈ ForMathlib.DavisKahan.Experimental.Foundation.realSpectrum
+    have hb' : b ∈ TauCeti.DavisKahan.Experimental.Foundation.realSpectrum
         (restrictToOrthogonal A U hU) :=
       (restrictedSpectrum_top_eq_realSpectrum_general
         (restrictToOrthogonal A U hU)) ▸ hb
-    have h2 : ForMathlib.DavisKahan.Experimental.Foundation.restrictedSpectrum
+    have h2 : TauCeti.DavisKahan.Experimental.Foundation.restrictedSpectrum
           A Uᗮ =
-        ForMathlib.DavisKahan.Experimental.Foundation.realSpectrum
+        TauCeti.DavisKahan.Experimental.Foundation.realSpectrum
           (restrictToOrthogonal A U hU) :=
       restrictedSpectrum_orthogonal_eq A U hU
     rw [h2]
@@ -627,4 +627,4 @@ theorem ideal_sinTheta
     And.intro habs.1 hdiff.2
 
 end DavisKahanExt
-end ForMathlib
+end TauCeti

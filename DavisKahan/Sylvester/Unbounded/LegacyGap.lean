@@ -16,7 +16,7 @@ direct cutoff engine for the ordered branches.  This file connects those two
 surfaces without importing any theorem from the obsolete cutoff facade.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace ExactSinTheta
@@ -32,8 +32,8 @@ variable {E F : Type v}
 /-- A legacy interval/exterior hypothesis becomes the genuine Spectra
 interval/exterior hypothesis after identifying the two real spectra. -/
 theorem genuineSylvesterIntervalExteriorGap_of_legacy
-    {A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := E)}
-    {B : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := F)}
+    {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := E)}
+    {B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := F)}
     {β α δ : ℝ}
     (hgap : UnboundedIntervalExteriorGap A B β α δ) :
     GenuineSylvesterIntervalExteriorGap A B β α δ := by
@@ -61,8 +61,8 @@ theorem genuineSylvesterIntervalExteriorGap_of_legacy
 genuine all-gap predicate.  Ordered constructors are intentionally handled by
 their form bounds rather than translated into spectral containments. -/
 theorem GenuineUnboundedSylvesterGap.intervalExterior_of_legacy
-    {A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := E)}
-    {B : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := F)}
+    {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := E)}
+    {B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := F)}
     {β α δ : ℝ}
     (hβα : β ≤ α)
     (hgap : UnboundedIntervalExteriorGap A B β α δ) :
@@ -76,8 +76,8 @@ Spectra theorem, while the two ordered constructors retain their original
 form-bound hypotheses and call the direct engine verbatim. -/
 theorem davisKahan1970_sylvester_complex
     (N : UnitaryInvariantIdealFamily (𝕜 := ℂ))
-    {A : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := E)}
-    {B : ForMathlib.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := F)}
+    {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := E)}
+    {B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := F)}
     (hA : A.IsSelfAdjoint) (hB : B.IsSelfAdjoint)
     {X C : F →L[ℂ] E} {δ : ℝ}
     (hδ : 0 < δ)
@@ -103,4 +103,4 @@ theorem davisKahan1970_sylvester_complex
 end ExactSinTheta
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

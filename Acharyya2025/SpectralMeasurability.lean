@@ -16,7 +16,7 @@ spectral function `Σₖ h(λₖ) uₖuₖᵀ` of a measurable Hermitian-matrix 
 measurable (no functional calculus, no eigenbasis selection) — is staged
 independently as a Mathlib candidate in
 `ForMathlib/Analysis/Matrix/SpectralFunctionMeasurable.lean`
-(`ForMathlib.Matrix.measurable_specTransform`).
+(`TauCeti.Matrix.measurable_specTransform`).
 
 Formalized by Claude Fable 5 (claude-fable-5[1m]) and Claude Opus 4.8
 (claude-opus-4-8[1m]).

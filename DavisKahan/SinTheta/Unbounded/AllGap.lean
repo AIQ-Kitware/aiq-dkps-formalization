@@ -21,7 +21,7 @@ facade file is imported or modified here.
 
 open scoped InnerProductSpace
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace ExactSinTheta
@@ -206,4 +206,4 @@ end GenuineIsometricSinThetaProblem
 end ExactSinTheta
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

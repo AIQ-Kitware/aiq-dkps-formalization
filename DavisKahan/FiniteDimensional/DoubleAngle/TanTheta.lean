@@ -19,7 +19,8 @@ unitaries, uniform over `ℝ` and `ℂ`).
 To be re-authored per Mathlib's AI-contribution policy at PR time.
 -/
 
-import ForMathlib.Analysis.InnerProductSpace.CourantFischer
+import ForTauCeti.Analysis.InnerProductSpace.CourantFischer
+import ForTauCeti.Analysis.InnerProductSpace.CourantFischerCompat
 import DavisKahan.FiniteDimensional.DoubleAngle.Vector
 
 /-! # The subspace tan 2Θ theorem: block identities and the gated statement
@@ -75,14 +76,14 @@ together are equivalent to `tan 2θ_max ≤ 2ε/(b − a)`.
 
 ## Main results
 
-* `ForMathlib.starProjection_comp_comp_starProjection_eq_zero`: a perturbation
+* `TauCeti.starProjection_comp_comp_starProjection_eq_zero`: a perturbation
   with vanishing `U`-diagonal form compresses to zero, `P ∘ H ∘ P = 0`.
-* `ForMathlib.starProjection_comp_comp_starProjection_congr`: two operators
+* `TauCeti.starProjection_comp_comp_starProjection_congr`: two operators
   whose `U`-diagonal forms agree have equal `U`-diagonal blocks,
   `P ∘ S ∘ P = P ∘ T ∘ P`.
-* `ForMathlib.eigenvalue_notMem_gap_of_diagonal_form` (plan step G2.2a):
+* `TauCeti.eigenvalue_notMem_gap_of_diagonal_form` (plan step G2.2a):
   spectral repulsion — no eigenvalue in the open form gap.
-* `ForMathlib.tan_two_theta_norm_sub_le` (plan step G2.2b): the subspace
+* `TauCeti.tan_two_theta_norm_sub_le` (plan step G2.2b): the subspace
   tan 2Θ theorem, gated statement above.
 
 ## References
@@ -95,8 +96,7 @@ together are equivalent to `tan 2θ_max ≤ 2ε/(b − a)`.
   (2014); arXiv:1310.2036 (for the operator-angle formalism).
 -/
 
-namespace ForMathlib
-
+namespace TauCeti
 open scoped InnerProductSpace
 
 variable {𝕜 E : Type*} [RCLike 𝕜] [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
@@ -959,4 +959,4 @@ theorem tan_two_theta_norm_sub_le (hT : T.IsSymmetric) (hS : S.IsSymmetric)
 
 end Headline
 
-end ForMathlib
+end TauCeti

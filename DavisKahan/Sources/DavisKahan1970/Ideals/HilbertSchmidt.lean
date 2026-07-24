@@ -23,7 +23,7 @@ finite, and the norm is its square root.  This is basis free and immediately
 compatible with every singular-value transport theorem in the repository.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace ExactSinTheta
@@ -410,4 +410,4 @@ end
 end ExactSinTheta
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

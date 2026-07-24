@@ -22,7 +22,7 @@ number framework.
 open scoped InnerProductSpace Topology
 open Set Filter
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace Frontier
@@ -549,4 +549,4 @@ end RieszCircle
 end Frontier
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

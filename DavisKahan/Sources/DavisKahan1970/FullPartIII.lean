@@ -35,7 +35,7 @@ The mathematical dependency order and per-declaration repair ledger are in
 `dev/davis-kahan-1970-one-shot-proof-manuscript.md`.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan1970
 
 /-! ## Canonical single-angle target
@@ -159,4 +159,4 @@ alias unbounded_sinTheta_boundedPerturbation_spectralSubspaces :=
 /-! ## Continuation, ideal, and sharpness package -/
 
 end DavisKahan1970
-end ForMathlib
+end TauCeti

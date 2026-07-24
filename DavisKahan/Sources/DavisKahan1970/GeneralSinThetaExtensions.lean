@@ -20,7 +20,7 @@ After this leaf is compiler-accepted, its aliases can be folded into the main
 source facade without changing the verified theorem chain.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan1970
 
 /-- Complex isometric unbounded theorem from a measurable exact spectral set. -/
@@ -72,4 +72,4 @@ alias generalizedSinTheta_bounded_real_spectralSubspace :=
   DavisKahan.Experimental.ExactSinTheta.generalizedSinTheta_bounded_real_spectralSubspace
 
 end DavisKahan1970
-end ForMathlib
+end TauCeti

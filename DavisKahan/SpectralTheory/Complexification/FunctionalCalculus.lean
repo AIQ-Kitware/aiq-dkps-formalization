@@ -21,7 +21,7 @@ infinite-dimensional polar factorization.
 
 open scoped InnerProductSpace ComplexConjugate Topology
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace ExactSinTheta
@@ -385,4 +385,4 @@ end RealComplexificationFunctionalCalculus
 end ExactSinTheta
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

@@ -20,13 +20,13 @@ This file discharges the two hypotheses left by the defect-first reduction.Posit
 square-norm Sylvester estimate used in Davis--Kahan Theorem 6.2.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace ExactSinTheta
 
 open scoped InnerProductSpace
-open ForMathlib.DavisKahanExt
+open TauCeti.DavisKahanExt
 open Spectra.Operator
 open Spectra.YosidaHille
 -- The support estimate sits under the observable namespace, and the
@@ -152,4 +152,4 @@ end
 end ExactSinTheta
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

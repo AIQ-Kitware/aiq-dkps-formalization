@@ -10,8 +10,8 @@ import DavisKahan.FiniteDimensional.Core.AngleGeometry
 import DavisKahan.FiniteDimensional.Sylvester.Interval
 import DavisKahan.FiniteDimensional.Sylvester.SpectralDistance
 import DavisKahan.FiniteDimensional.Residual.AngleEmbedding
-import ForMathlib.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm
-import ForMathlib.Analysis.InnerProductSpace.RectangularSingularValues
+import ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm
+import ForTauCeti.Analysis.InnerProductSpace.RectangularSingularValues
 import DavisKahan.FiniteDimensional.SinTheta.UnitarilyInvariant
 import DavisKahan.FiniteDimensional.SinTheta.OperatorNorm
 import DavisKahan.BoundedOperator.SinTheta
@@ -35,7 +35,7 @@ unitarily invariant norm, followed by the interval, spectral-projector, and
 concrete-norm corollaries expected from the final API.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanTheory
 
 open scoped InnerProductSpace BigOperators
@@ -1095,4 +1095,4 @@ theorem sinTheta_perturbation_le_of_spectralDistance
       mul_le_mul_of_nonneg_left hresBound (by positivity)
 
 end DavisKahanTheory
-end ForMathlib
+end TauCeti

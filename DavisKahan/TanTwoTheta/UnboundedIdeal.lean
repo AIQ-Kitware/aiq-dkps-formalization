@@ -22,13 +22,13 @@ between this reflected-overlap companion and `tanTwoAngleOperatorC`.
 
 open scoped InnerProductSpace
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace SpectraBridge
 
-open ForMathlib.DavisKahanExt
-open ForMathlib.DavisKahan.Experimental.ExactSinTheta
+open TauCeti.DavisKahanExt
+open TauCeti.DavisKahan.Experimental.ExactSinTheta
 
 universe v
 
@@ -266,4 +266,4 @@ theorem tanTwoTheta_addBounded_unitaryInvariant_of_intervalExterior
 end SpectraBridge
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

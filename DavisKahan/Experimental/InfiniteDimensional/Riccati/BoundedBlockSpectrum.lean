@@ -25,7 +25,7 @@ an exact spectral decomposition of every bounded complex block operator which
 admits a Riccati solution.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanExt
 
 variable {E0 : Type*} [NormedAddCommGroup E0] [InnerProductSpace ℂ E0]
@@ -160,4 +160,4 @@ theorem complex_blockOperator_spectrum_eq_union_of_riccati
       spectrum_blockDiagonalOperator D0 D1
 
 end DavisKahanExt
-end ForMathlib
+end TauCeti

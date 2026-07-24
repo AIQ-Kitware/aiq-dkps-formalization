@@ -14,7 +14,7 @@ factorization, ideal transport, and exact-angle arguments are purely Hilbert
 space algebra.  This file records that scalar-generic layer explicitly.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace ExactSinTheta
@@ -246,4 +246,4 @@ end
 end ExactSinTheta
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

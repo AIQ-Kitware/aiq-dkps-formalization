@@ -4,8 +4,9 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking, Claude Fable 5
 -/
 import DavisKahan.FiniteDimensional.DirectRotation.PrincipalPlanes.Spectrum
-import ForMathlib.Analysis.InnerProductSpace.CourantFischer
-import ForMathlib.Analysis.InnerProductSpace.UnitarilyInvariantNorm
+import ForTauCeti.Analysis.InnerProductSpace.CourantFischer
+import ForTauCeti.Analysis.InnerProductSpace.CourantFischerCompat
+import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantNorm
 
 /-!
 # Davis's variational theorem for the restricted displacement
@@ -22,7 +23,7 @@ any `RCLike` field, with no angle restriction.  The main results are
   (Davis--Kahan Corollary 4.1).
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanTheory
 
 open scoped InnerProductSpace BigOperators
@@ -249,7 +250,7 @@ theorem singularValues_restrictedDisplacement_directRotation
   have hgramfull := adjoint_comp_displacement_directRotation U V hacute
   have hgram : AR.adjoint ∘ₗ AR =
       projection U ∘ₗ ((2 : 𝕜) • (LinearMap.id -
-        ForMathlib.abs (canonicalIntertwiner U V))) ∘ₗ projection U := by
+        TauCeti.abs (canonicalIntertwiner U V))) ∘ₗ projection U := by
     rw [hAR, LinearMap.adjoint_comp, projection_adjoint, ← hgramfull]
     ext x
     simp only [LinearMap.comp_apply]
@@ -360,4 +361,4 @@ theorem uiNorm_restrictedDisplacement_le
   N.apply_le_of_kyFanSum_le
     (kyFanSum_restrictedDisplacement_le U V hacute W hmap)
 end DavisKahanTheory
-end ForMathlib
+end TauCeti

@@ -14,7 +14,7 @@ spectral-selection or diagonalization theorem, so downstream leaves can import
 it without creating a cycle through the public API.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanExt
 
 open scoped InnerProductSpace
@@ -105,4 +105,4 @@ def ClosedOperator.UnitaryEquivalent
       A.toLinearMap ⟨Winv (y : G), hWinvdom y⟩ = Winv (B.toLinearMap y))
 
 end DavisKahanExt
-end ForMathlib
+end TauCeti

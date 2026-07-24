@@ -22,7 +22,7 @@ analytic theorem in the representation consumed by the proved Sylvester
 estimate.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanExt
 
 open scoped InnerProductSpace
@@ -240,4 +240,4 @@ theorem unique_contractive_riccati_solution_of_spectrum_gap
   exact sub_eq_zero.mp hD
 
 end DavisKahanExt
-end ForMathlib
+end TauCeti

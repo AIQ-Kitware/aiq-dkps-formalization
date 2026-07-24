@@ -22,7 +22,7 @@ statements and use only the permitted kernel dependencies.
 
 open scoped Matrix
 
-namespace ForMathlib.Matrix
+namespace TauCeti.Matrix
 
 variable {n : ℕ}
 
@@ -34,10 +34,9 @@ noncomputable def sortedEig {B : Matrix (Fin n) (Fin n) ℝ} (hB : B.IsHermitian
     Fin n → ℝ :=
   (opSym hB).eigenvalues finrank_euclideanSpace_fin
 
-end ForMathlib.Matrix
+end TauCeti.Matrix
 
-namespace ForMathlib
-
+namespace TauCeti
 open scoped Matrix ENNReal
 open MeasureTheory
 
@@ -56,4 +55,4 @@ theorem measure_forall_sortedEig_ge_ge
       ≥ 1 - ENNReal.ofReal ((n : ℝ) ^ 2 * v / η ^ 2) := by
   sorry
 
-end ForMathlib
+end TauCeti

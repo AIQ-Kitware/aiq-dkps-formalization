@@ -20,7 +20,7 @@ block-coordinate Riccati claim is made here; that requires a separate bridge
 from the ambient source spectral subspace to the direct-sum block model.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanExt
 
 open Set
@@ -168,16 +168,15 @@ end SpectralContinuationWitness
 end WitnessSelectedGraph
 
 end DavisKahanExt
-end ForMathlib
-
-namespace ForMathlib
+end TauCeti
+namespace TauCeti
 namespace DavisKahanTheory
 
 open scoped InnerProductSpace Topology
 
 namespace ComplexContinuation
 
-open ForMathlib.DavisKahanExt
+open TauCeti.DavisKahanExt
 
 variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
   [CompleteSpace H]
@@ -208,4 +207,4 @@ theorem sinTwoTheta_acute_of_small_perturbation
 end ComplexContinuation
 
 end DavisKahanTheory
-end ForMathlib
+end TauCeti

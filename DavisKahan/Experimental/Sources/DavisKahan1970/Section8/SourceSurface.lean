@@ -27,7 +27,7 @@ The declarations below make those boundaries visible while exposing all
 admission-free downstream conclusions to the Section 9 application layer.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan1970
 namespace Section8
 
@@ -78,4 +78,4 @@ end SourceAliases
 
 end Section8
 end DavisKahan1970
-end ForMathlib
+end TauCeti

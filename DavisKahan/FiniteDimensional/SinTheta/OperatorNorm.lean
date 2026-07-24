@@ -16,8 +16,9 @@ To be re-authored per Mathlib's AI-contribution policy at PR time.
 
 import ForMathlib.Analysis.InnerProductSpace.SylvesterBound
 import DavisKahan.FiniteDimensional.DoubleAngle.Vector
-import ForMathlib.Analysis.InnerProductSpace.CourantFischer
-import ForMathlib.Analysis.InnerProductSpace.PrincipalAngles
+import ForTauCeti.Analysis.InnerProductSpace.CourantFischer
+import ForTauCeti.Analysis.InnerProductSpace.CourantFischerCompat
+import ForTauCeti.Analysis.InnerProductSpace.PrincipalAngles
 import Mathlib.Analysis.InnerProductSpace.Adjoint
 
 /-! # The operator-norm Davis–Kahan sin-Θ theorem
@@ -39,9 +40,9 @@ self-adjointness of the projections.
 
 ## Main results
 
-* `ForMathlib.starProjection_comp_toContinuousLinearMap_comm`: an invariant
+* `TauCeti.starProjection_comp_toContinuousLinearMap_comm`: an invariant
   subspace's projection commutes with a symmetric operator.
-* `ForMathlib.norm_starProjection_comp_starProjection_le`: the operator-norm
+* `TauCeti.norm_starProjection_comp_starProjection_le`: the operator-norm
   sin-Θ bound `‖Q̂ ∘L P‖ ≤ ε / g`.
 
 ## References
@@ -51,8 +52,9 @@ self-adjointness of the projections.
   perturbation. III*, SIAM J. Numer. Anal. 7 (1970), 1–46.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 
+open ForMathlib
 open scoped InnerProductSpace
 open Module (finrank)
 
@@ -283,7 +285,7 @@ theorem norm_starProjection_comp_starProjection_le (hT : T.IsSymmetric) (hS : S.
   -- Sylvester bound: `‖X‖ ≤ ‖Y‖ / g ≤ ε / g`.
   have hXbound : ‖X‖ ≤ ε / g :=
     calc ‖X‖ ≤ ‖Y‖ / g :=
-          ContinuousLinearMap.opNorm_le_div_of_comp_sub_comp_eq hAsym hBsym hg hAc hBc hsylv
+          ForMathlib.ContinuousLinearMap.opNorm_le_div_of_comp_sub_comp_eq hAsym hBsym hg hAc hBc hsylv
       _ ≤ ε / g := by gcongr
   -- `‖Q ∘L P‖ = ‖P ∘L Q‖ = ‖X‖`.
   have hstar : star (Q ∘L P) = P ∘L Q := by
@@ -395,4 +397,4 @@ theorem sqrt_one_sub_sq_cosPrincipalAngles_le
 
 end Spectral
 
-end ForMathlib
+end TauCeti

@@ -14,7 +14,7 @@ double-cosine denominator at the present level of generality; deleting that
 denominator is not a promotion step.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace Scratch
@@ -98,4 +98,4 @@ end SharedFoundations
 end Scratch
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

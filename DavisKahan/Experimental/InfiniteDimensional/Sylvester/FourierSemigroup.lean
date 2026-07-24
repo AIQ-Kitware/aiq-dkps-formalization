@@ -41,7 +41,7 @@ block by block for the finite spectral sums and then passed to the limit by
 Bochner dominated convergence.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanExt
 
 open TauCeti
@@ -888,4 +888,4 @@ end LimitReconstruction
 end
 
 end DavisKahanExt
-end ForMathlib
+end TauCeti

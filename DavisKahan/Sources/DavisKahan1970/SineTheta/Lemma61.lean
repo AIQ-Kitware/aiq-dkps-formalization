@@ -22,7 +22,7 @@ identifications are recorded with the heterogeneous relation
 `SameApproximationSingularSequence`.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace ExactSinTheta
@@ -335,4 +335,4 @@ end
 end ExactSinTheta
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

@@ -28,7 +28,7 @@ interface:
 open scoped InnerProductSpace Topology
 open Filter
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace ExactSinTheta
@@ -324,4 +324,4 @@ noncomputable def spectraBoundedTruncationInterface
 end ExactSinTheta
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

@@ -20,8 +20,7 @@ statements and use only the permitted kernel dependencies.
 -/
 
 
-namespace ForMathlib
-
+namespace TauCeti
 open MeasureTheory Set
 
 /-- **Measurability from a countable restrict-cover** (countable version of
@@ -40,4 +39,4 @@ theorem measurable_of_iUnion_restrict {Ω A : Type*}
   have him := (hs k).subtype_image hk
   rwa [Subtype.image_preimage_val] at him
 
-end ForMathlib
+end TauCeti

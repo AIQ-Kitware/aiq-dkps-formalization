@@ -16,6 +16,6 @@ This package lives under `Experimental` rather than alongside `Section9` in
 `DavisKahan/Sources` because `SelectedBranch` and `SourceSurface` import
 `DavisKahan.Experimental.InfiniteDimensional`.  Four modules on that import
 path have never compiled, so this aggregate does not build; the Lean
-namespaces are still `ForMathlib.DavisKahan1970.Section8`, unchanged by the
+namespaces are still `TauCeti.DavisKahan1970.Section8`, unchanged by the
 move.  Promote the package back into `DavisKahan/Sources/DavisKahan1970`
 once its dependencies compile. -/

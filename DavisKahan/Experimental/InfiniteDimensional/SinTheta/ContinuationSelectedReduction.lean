@@ -21,7 +21,7 @@ bridge must transport this ambient reducing graph to the direct-sum block
 model before invoking the bounded Riccati reduction theorem.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanExt
 
 open Set
@@ -153,4 +153,4 @@ theorem selectedEndpointAngularOperator_graph_reduces_of_contour_bound
 end SelectedEndpointReduction
 
 end DavisKahanExt
-end ForMathlib
+end TauCeti

@@ -16,7 +16,7 @@ constructs the reverse inclusion and records injectivity of the two-parameter
 representation.  Together the two files identify the smooth kernel exactly.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace MathAhead
@@ -150,4 +150,4 @@ end HiddenFoundations
 end MathAhead
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

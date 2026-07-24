@@ -25,7 +25,7 @@ construct the coordinate equivalence and then apply these theorems directly.
 
 open scoped InnerProductSpace
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace TanTheta
@@ -179,4 +179,4 @@ theorem tanTheta_unbounded_graphAngle_genuineTrialBlock
 end TanTheta
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

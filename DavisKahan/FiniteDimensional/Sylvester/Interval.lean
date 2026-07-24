@@ -5,7 +5,7 @@ Authors: Jon Crall, GPT 5.6 High
 -/
 import DavisKahan.FiniteDimensional.Sylvester.Basic
 import DavisKahan.FiniteDimensional.Sylvester.Internal.SpectralBounds
-import ForMathlib.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm
+import ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm
 import ForMathlib.Analysis.InnerProductSpace.SylvesterBound
 
 /-!
@@ -15,7 +15,9 @@ Sharp constant-one operator and rectangular unitarily invariant norm bounds
 under ordered or interval/exterior spectral separation.
 -/
 
-namespace ForMathlib
+namespace TauCeti
+
+open ForMathlib
 namespace DavisKahanTheory
 
 open scoped InnerProductSpace BigOperators
@@ -62,7 +64,7 @@ theorem opNorm_sylvester_le_of_intervalGap
   let r : ℝ := (b - a) / 2
   let S : F →ₗ[𝕜] F := A - (m : 𝕜) • LinearMap.id
   let T : E →ₗ[𝕜] E := B - (m : 𝕜) • LinearMap.id
-  let H : F →ₗ[𝕜] F := ForMathlib.abs S
+  let H : F →ₗ[𝕜] F := TauCeti.abs S
   let U : F ≃ₗᵢ[𝕜] F := polarUnitary S
   let Z : E →ₗ[𝕜] F := U.symm.toLinearMap ∘ₗ X
   let Y : E →ₗ[𝕜] F := U.symm.toLinearMap ∘ₗ C
@@ -72,17 +74,17 @@ theorem opNorm_sylvester_le_of_intervalGap
   have hSlower : ∀ y, (r + δ) * ‖y‖ ≤ ‖S y‖ := by
     simpa [S, m, r] using
       norm_shift_lower_of_spectrumOutside hA hab hδ hgap.2
-  have hHsym : H.IsSymmetric := (ForMathlib.isPositive_abs S).isSymmetric
+  have hHsym : H.IsSymmetric := (TauCeti.isPositive_abs S).isSymmetric
   have hHeig : ∀ i : Fin (Module.finrank 𝕜 F),
       r + δ ≤ hHsym.eigenvalues rfl i := by
     intro i
     have hi : (r + δ) * ‖hHsym.eigenvectorBasis rfl i‖ ≤
         ‖H (hHsym.eigenvectorBasis rfl i)‖ := by
       change (r + δ) * ‖hHsym.eigenvectorBasis rfl i‖ ≤
-        ‖ForMathlib.abs S (hHsym.eigenvectorBasis rfl i)‖
-      rw [ForMathlib.norm_abs_apply]
+        ‖TauCeti.abs S (hHsym.eigenvectorBasis rfl i)‖
+      rw [TauCeti.norm_abs_apply]
       exact hSlower (hHsym.eigenvectorBasis rfl i)
-    have hnonneg := (ForMathlib.isPositive_abs S).nonneg_eigenvalues rfl i
+    have hnonneg := (TauCeti.isPositive_abs S).nonneg_eigenvalues rfl i
     rw [hHsym.apply_eigenvectorBasis rfl i, norm_smul, RCLike.norm_ofReal,
       abs_of_nonneg hnonneg,
       (hHsym.eigenvectorBasis rfl).orthonormal.norm_eq_one, mul_one, mul_one] at hi
@@ -186,7 +188,7 @@ private theorem uiNorm_sylvester_le_of_form_bounds_aux
     simpa [A', B', X', C', ContinuousLinearMap.comp_apply] using
       LinearMap.congr_fun hEq x
   have hbound : N' X' ≤ N' C' / δ :=
-    ContinuousLinearMap.le_div_of_comp_sub_comp_eq_rectangular
+    ForMathlib.ContinuousLinearMap.le_div_of_comp_sub_comp_eq_rectangular
       hadd hsmul hidealL hidealR hA' hB' hδ hAform hBform hEq'
   have hbound' : N X ≤ N C / δ := by
     simpa [N', X', C'] using hbound
@@ -320,7 +322,7 @@ theorem uiNorm_sylvester_le_of_intervalGap
   let r : ℝ := (b - a) / 2
   let S : F →ₗ[𝕜] F := A - (m : 𝕜) • LinearMap.id
   let T : E →ₗ[𝕜] E := B - (m : 𝕜) • LinearMap.id
-  let H : F →ₗ[𝕜] F := ForMathlib.abs S
+  let H : F →ₗ[𝕜] F := TauCeti.abs S
   let U : F ≃ₗᵢ[𝕜] F := polarUnitary S
   let Z : E →ₗ[𝕜] F := U.symm.toLinearMap ∘ₗ X
   let Y : E →ₗ[𝕜] F := U.symm.toLinearMap ∘ₗ C
@@ -330,17 +332,17 @@ theorem uiNorm_sylvester_le_of_intervalGap
   have hSlower : ∀ y, (r + δ) * ‖y‖ ≤ ‖S y‖ := by
     simpa [S, m, r] using
       norm_shift_lower_of_spectrumOutside hA hab hδ hgap.2
-  have hHsym : H.IsSymmetric := (ForMathlib.isPositive_abs S).isSymmetric
+  have hHsym : H.IsSymmetric := (TauCeti.isPositive_abs S).isSymmetric
   have hHeig : ∀ i : Fin (Module.finrank 𝕜 F),
       r + δ ≤ hHsym.eigenvalues rfl i := by
     intro i
     have hi : (r + δ) * ‖hHsym.eigenvectorBasis rfl i‖ ≤
         ‖H (hHsym.eigenvectorBasis rfl i)‖ := by
       change (r + δ) * ‖hHsym.eigenvectorBasis rfl i‖ ≤
-        ‖ForMathlib.abs S (hHsym.eigenvectorBasis rfl i)‖
-      rw [ForMathlib.norm_abs_apply]
+        ‖TauCeti.abs S (hHsym.eigenvectorBasis rfl i)‖
+      rw [TauCeti.norm_abs_apply]
       exact hSlower (hHsym.eigenvectorBasis rfl i)
-    have hnonneg := (ForMathlib.isPositive_abs S).nonneg_eigenvalues rfl i
+    have hnonneg := (TauCeti.isPositive_abs S).nonneg_eigenvalues rfl i
     rw [hHsym.apply_eigenvectorBasis rfl i, norm_smul, RCLike.norm_ofReal,
       abs_of_nonneg hnonneg,
       (hHsym.eigenvectorBasis rfl).orthonormal.norm_eq_one, mul_one, mul_one] at hi
@@ -496,4 +498,4 @@ theorem uiNorm_sylvester_le_of_form_bounds
   exact uiNorm_sylvester_le_of_form_bounds_aux N hA hB hδ hAform hBform hEq
 
 end DavisKahanTheory
-end ForMathlib
+end TauCeti

@@ -6,43 +6,9 @@ Mathlib destination path.  See `ForMathlib/README.md` for the contribution
 workflow and `planning/mathlib-candidates.md` for the ranked candidate list.
 -/
 
-import ForMathlib.Analysis.InnerProductSpace.AlignedBasis
 import ForMathlib.Analysis.InnerProductSpace.CoerciveUnit
-import ForMathlib.Analysis.InnerProductSpace.CourantFischer
-import ForMathlib.Analysis.InnerProductSpace.EigenvalueChange
-import ForMathlib.Analysis.InnerProductSpace.FiniteFrame
-import ForMathlib.Analysis.InnerProductSpace.FrameFactorization
-import ForMathlib.Analysis.InnerProductSpace.GramMatrix
-import ForMathlib.Analysis.InnerProductSpace.HoffmanWielandt
-import ForMathlib.Analysis.InnerProductSpace.IntertwiningUnitary
-import ForMathlib.Analysis.InnerProductSpace.KyFan
-import ForMathlib.Analysis.InnerProductSpace.PartialIsometry
-import ForMathlib.Analysis.InnerProductSpace.PolarDecomposition
-import ForMathlib.Analysis.InnerProductSpace.PositiveSqrt
-import ForMathlib.Analysis.InnerProductSpace.PrincipalAngles
-import ForMathlib.Analysis.InnerProductSpace.ProjectionGeometry
-import ForMathlib.Analysis.InnerProductSpace.MoorePenroseInverse
-import ForMathlib.Analysis.InnerProductSpace.RectangularSingularValues
-import ForMathlib.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm
-import ForMathlib.Analysis.InnerProductSpace.SchattenNorm
-import ForMathlib.Analysis.InnerProductSpace.SchurHorn
-import ForMathlib.Analysis.InnerProductSpace.SelfAdjointFunctionalCalculus
-import ForMathlib.Analysis.InnerProductSpace.SingularSubspace
-import ForMathlib.Analysis.InnerProductSpace.SingularSystem
-import ForMathlib.Analysis.InnerProductSpace.Spectrum
-import ForMathlib.Analysis.InnerProductSpace.TwoDimensionalSingularValues
 import ForMathlib.Analysis.InnerProductSpace.SylvesterBound
-import ForMathlib.Analysis.Matrix.EntrywiseEigenvalue
-import ForMathlib.Analysis.Matrix.EntrywiseOpNorm
-import ForMathlib.Analysis.Matrix.SpectralFunctionMeasurable
-import ForMathlib.Analysis.Normed.FiniteLpGauge
-import ForMathlib.Analysis.Normed.Operator.LinearIsometry
 import ForMathlib.LinearAlgebra.Matrix.PosDef
 import ForMathlib.LinearAlgebra.Matrix.RankFactorization
-import ForMathlib.MeasureTheory.CfcMeasurable
-import ForMathlib.Probability.Moments.MatrixConcentration
-import ForMathlib.Probability.Moments.SampleCovariance
-import ForMathlib.Probability.Moments.SampleMean
-import ForMathlib.Probability.Moments.Variance
 import ForMathlib.Topology.ApproxMinimizer
 import ForMathlib.Topology.Berge

@@ -18,7 +18,7 @@ spectral subspaces.
 
 open scoped InnerProductSpace
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace SpectraBridge
@@ -227,4 +227,4 @@ noncomputable def submoduleMapIsometry
 end SpectraBridge
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

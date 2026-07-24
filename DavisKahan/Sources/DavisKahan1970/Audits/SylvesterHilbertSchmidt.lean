@@ -15,7 +15,7 @@ directly after repairing the new infrastructure, then inspect the trusted
 assumptions of every declaration below.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace ExactSinTheta
@@ -58,4 +58,4 @@ namespace ExactSinTheta
 end ExactSinTheta
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

@@ -20,7 +20,7 @@ positive gap for every positive separation.
 
 open scoped InnerProductSpace
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace ExactSinTheta
@@ -28,7 +28,7 @@ namespace NaturalExamples
 
 noncomputable section
 
-open ForMathlib.DavisKahanExt
+open TauCeti.DavisKahanExt
 
 universe v
 
@@ -224,4 +224,4 @@ end NaturalExamples
 end ExactSinTheta
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

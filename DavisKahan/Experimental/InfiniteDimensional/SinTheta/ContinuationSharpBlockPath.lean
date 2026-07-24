@@ -19,7 +19,7 @@ These are the operator inputs for the sharp finite-gap spectral-enclosure
 argument.  No spectral inclusion is claimed in this leaf.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanExt
 
 open Set
@@ -165,4 +165,4 @@ theorem norm_operatorPath_subspaceBlockOperatorData_B10_le
 end PathBlockData
 
 end DavisKahanExt
-end ForMathlib
+end TauCeti

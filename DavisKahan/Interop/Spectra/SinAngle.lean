@@ -22,7 +22,7 @@ existing DKPS subspace gap.
 
 open scoped InnerProductSpace
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace SpectraBridge
@@ -98,4 +98,4 @@ theorem norm_spectraSinAngleOperator
 end SpectraBridge
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

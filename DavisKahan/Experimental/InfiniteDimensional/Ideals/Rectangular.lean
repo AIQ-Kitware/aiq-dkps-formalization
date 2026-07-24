@@ -15,7 +15,7 @@ Hilbert-Schmidt, trace-class, and Schatten families remain unresolved
 and stay here.  The Ky Fan family reuses the proved approximation-number package.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace ExactSinTheta
@@ -93,4 +93,4 @@ end RectangularSymmetricIdealFamily
 end ExactSinTheta
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

@@ -21,7 +21,7 @@ the residual alternative still needs the Krein replacement step used in the
 paper.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan1970
 namespace Section8
 
@@ -89,4 +89,4 @@ end SmallnessBridges
 
 end Section8
 end DavisKahan1970
-end ForMathlib
+end TauCeti

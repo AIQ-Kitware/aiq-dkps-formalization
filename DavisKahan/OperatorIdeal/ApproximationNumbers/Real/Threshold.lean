@@ -34,7 +34,7 @@ cutoff.  The transport helpers are `private`; the public results are:
 
 open scoped InnerProductSpace ComplexConjugate Topology
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace ExactSinTheta
@@ -834,4 +834,4 @@ end ApproximationNumbersReal
 end ExactSinTheta
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

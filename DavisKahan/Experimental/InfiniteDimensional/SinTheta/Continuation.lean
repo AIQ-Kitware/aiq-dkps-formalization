@@ -16,7 +16,7 @@ hypotheses.  This replacement uses the repository's proof-carrying
 `PiecewiseC1ClosedContour` and `SpectralSeparatingContour` objects.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanExt
 
 open Set
@@ -102,4 +102,4 @@ theorem continuedProjection_isOrthogonalProjection
     Γ A V s D.separating D.geometric t ht
 
 end DavisKahanExt
-end ForMathlib
+end TauCeti

@@ -21,7 +21,7 @@ aliases and promote the admission-free results.
 
 open scoped InnerProductSpace
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace MathAhead
@@ -345,4 +345,4 @@ end Section3
 end MathAhead
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

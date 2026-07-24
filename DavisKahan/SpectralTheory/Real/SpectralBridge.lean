@@ -58,7 +58,7 @@ between continuous and plain linear maps in a tiny local `example` before
 embedding it into the restriction proof.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace Foundation
@@ -268,4 +268,4 @@ end RealSpectralBridge
 end Foundation
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

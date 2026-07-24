@@ -22,7 +22,7 @@ calculus remains an explicit input.  This leaf therefore does not assume the
 conclusion that still has to be proved in the spectral-identification branch.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanExt
 
 open Set
@@ -110,4 +110,4 @@ theorem exists_unitary_transport_selectedSpectralSubspaces_of_identification
 end SelectedSubspaceTransport
 
 end DavisKahanExt
-end ForMathlib
+end TauCeti

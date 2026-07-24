@@ -13,7 +13,7 @@ core restriction construction.  In particular, it records orthogonal-complement
 closure and agreement with the ordinary bounded restriction.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanExt
 
 open scoped InnerProductSpace
@@ -74,4 +74,4 @@ theorem reducingRestriction_ofBounded_apply
 
 end ClosedOperator
 end DavisKahanExt
-end ForMathlib
+end TauCeti

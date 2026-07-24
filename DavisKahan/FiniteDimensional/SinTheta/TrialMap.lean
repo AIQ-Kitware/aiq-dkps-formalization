@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
 import DavisKahan.FiniteDimensional.Core.SpectralSubspace
-import ForMathlib.Analysis.InnerProductSpace.FrameFactorization
+import ForTauCeti.Analysis.InnerProductSpace.FrameFactorization
 import DavisKahan.FiniteDimensional.Residual.Ritz
 import DavisKahan.FiniteDimensional.Residual.TrialMap
 import DavisKahan.FiniteDimensional.Residual.AngleEmbedding
@@ -50,7 +50,7 @@ The final wrapper also accepts any `sin Θ₀` operator with the canonical compl
 singular-value sequence.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahanTheory
 
 open scoped InnerProductSpace BigOperators Topology
@@ -297,4 +297,4 @@ theorem generalizedSinTheta_residual_le
     _ ≤ N (generalResidual A X M) := hraw
 
 end DavisKahanTheory
-end ForMathlib
+end TauCeti

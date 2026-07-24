@@ -26,7 +26,7 @@ graph field required by `DavisKahanExt.ClosedOperator`.
 open Set
 open scoped InnerProductSpace NNReal
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace MathAhead
@@ -162,4 +162,4 @@ end HiddenFoundations
 end MathAhead
 end Experimental
 end DavisKahan
-end ForMathlib
+end TauCeti

@@ -30,7 +30,7 @@ Formalized by Claude Fable 5 (claude-fable-5[1m]).
 -/
 
 import Acharyya2024.Common
-import ForMathlib.Analysis.InnerProductSpace.GramMatrix
+import ForTauCeti.Analysis.InnerProductSpace.GramMatrix
 
 open scoped RealInnerProductSpace BigOperators
 
@@ -45,7 +45,7 @@ product space have equal Gram matrices, i.e. `⟪φ i, φ j⟫ = ⟪ψ i, ψ j�
 `W (φ i) = ψ i` for every `i`.
 
 Thin `ℝ`-instantiation of the Mathlib-staged
-`ForMathlib.exists_linearIsometryEquiv_map_eq_of_inner_eq` (which is stated over
+`TauCeti.exists_linearIsometryEquiv_map_eq_of_inner_eq` (which is stated over
 `RCLike 𝕜`); kept under its original name for downstream call-sites.
 
 Paper correspondence: this is the **exact (noise-free) limit** of the alignment
@@ -69,7 +69,7 @@ theorem exists_linearIsometryEquiv_of_inner_eq
     -- Conclusion: there is an orthogonal map `W` (linear isometry equivalence of `E`)
     -- aligning the families exactly, `W (φ i) = ψ i` for all `i` — the exact analogue of `W*`.
     ∃ W : E ≃ₗᵢ[ℝ] E, ∀ i, W (φ i) = ψ i :=
-  ForMathlib.exists_linearIsometryEquiv_map_eq_of_inner_eq h
+  TauCeti.exists_linearIsometryEquiv_map_eq_of_inner_eq h
 
 /--
 **Gram rigidity for DKPS configurations.**

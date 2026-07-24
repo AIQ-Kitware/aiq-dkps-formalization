@@ -80,7 +80,7 @@ vectors, claiming every unitary-invariant norm.
    area and is deliberately not attempted here.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace DavisKahan1970
 
 /-! ## The source norm scope: every unitarily invariant norm -/
@@ -140,13 +140,13 @@ norm, with the Section 8 acute branch.**  Ambient scope: any inner-product
 space over any `RCLike` field.  Conclusion: `sin² θ_max < 1/2` and
 `(b - a) sin 2θ_max ≤ 2 ε cos 2θ_max`, i.e. `tan 2θ_max ≤ 2ε/(b - a)` with
 the strict quarter-turn branch. -/
-alias tanTwoTheta_sharp_opNorm := ForMathlib.tan_two_theta_norm_sub_le
+alias tanTwoTheta_sharp_opNorm := TauCeti.tan_two_theta_norm_sub_le
 
 /-- **Spectral repulsion for off-diagonal perturbations**: no eigenvalue
 enters the open form gap.  This is the source's reason the selected branch
 stays acute. -/
 alias tanTwoTheta_spectral_repulsion :=
-  ForMathlib.eigenvalue_notMem_gap_of_diagonal_form
+  TauCeti.eigenvalue_notMem_gap_of_diagonal_form
 
 /-! ## Unbounded genuine-spectral-subspace companions
 
@@ -190,4 +190,4 @@ alias unbounded_tanTwoTheta_intervalExterior_uiNorm :=
   DavisKahan.Experimental.SpectraBridge.tanTwoTheta_addBounded_unitaryInvariant_of_intervalExterior
 
 end DavisKahan1970
-end ForMathlib
+end TauCeti
