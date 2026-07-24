@@ -573,40 +573,40 @@
       "id": "s6-theorem6-3-directed-sine",
       "title": "Theorem 6.3 directed sine cross block",
       "kind": "foundation",
-      "module": "DavisKahan.Experimental.Scratch.Section6.Theorem63SourceFaithful",
-      "declaration": "ForMathlib.DavisKahan.Experimental.Scratch.Section6.directedSineBlock",
+      "module": "DavisKahan.TanTheta.Theorem63FiniteSource",
+      "declaration": "ForMathlib.DavisKahan.Experimental.ExactTanTheta.theorem63DirectedSineBlock",
       "dependencies": [],
       "source_census_ids": [],
       "priority": "high",
-      "notes": "Intrinsic form of the paper cross block F1* E0 (adjoint to the displayed E0* F1); it is directed and does not require symmetric acuteness.",
+      "notes": "Promoted out of Scratch into the production module DavisKahan.TanTheta.Theorem63FiniteSource.",
       "external": false
     },
     {
       "id": "s6-theorem6-3-directed-tangent-data",
       "title": "Theorem 6.3 directed tangent approximation data",
       "kind": "foundation",
-      "module": "DavisKahan.Experimental.Scratch.Section6.Theorem63SourceFaithful",
-      "declaration": "ForMathlib.DavisKahan.Experimental.Scratch.Section6.HasDirectedTangentApproximationNumbers",
+      "module": "DavisKahan.TanTheta.Theorem63FiniteSource",
+      "declaration": "ForMathlib.DavisKahan.Experimental.ExactTanTheta.HasTheorem63DirectedTangentApproximationNumbers",
       "dependencies": [
         "s6-theorem6-3-directed-sine"
       ],
       "source_census_ids": [],
       "priority": "high",
-      "notes": "Source-faithful replacement for the false hdim-to-IsAcute formulation: tangent data are defined from the singular/approximation values of the directed cross block.",
+      "notes": "Promoted out of Scratch into the production module DavisKahan.TanTheta.Theorem63FiniteSource.",
       "external": false
     },
     {
       "id": "s6-theorem6-3-kyfan-promotion",
       "title": "Theorem 6.3 Ky Fan to ideal-gauge promotion",
       "kind": "bridge",
-      "module": "DavisKahan.Experimental.Scratch.Section6.Theorem63SourceFaithful",
-      "declaration": "ForMathlib.DavisKahan.Experimental.Scratch.Section6.theorem6_3_ideal_of_kyFan_core",
+      "module": "DavisKahan.TanTheta.Theorem63FiniteSource",
+      "declaration": "ForMathlib.DavisKahan.Experimental.ExactTanTheta.theorem6_3_ideal_of_kyFan_core",
       "dependencies": [
         "s6-theorem6-3-directed-tangent-data"
       ],
       "source_census_ids": [],
       "priority": "high",
-      "notes": "The arbitrary unitary-invariant ideal conclusion is complete once all finite Ky Fan inequalities are supplied.",
+      "notes": "Promoted out of Scratch into the production module DavisKahan.TanTheta.Theorem63FiniteSource.",
       "external": false
     },
     {

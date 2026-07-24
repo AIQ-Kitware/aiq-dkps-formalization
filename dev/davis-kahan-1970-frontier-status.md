@@ -10,11 +10,11 @@ A piece is one manifest node in the result's transitive dependency closure. Miss
 
 | Paper item | Source kind | Frontier endpoint(s) | Missing pieces | Est. complete | Grounded |
 |---|---|---|---:|---:|:---:|
-| `S2-tan-theta` — Section 2, tan theta theorem: Single-angle tangent theorem | unnumbered_theorem | `s6-theorem6-3` | 1 / 8 | 87% | no |
+| `S2-tan-theta` — Section 2, tan theta theorem: Single-angle tangent theorem | unnumbered_theorem | `s2-tan-theta` | 1 / 4 | 75% | no |
 | `S2-sin-two-theta` — Section 2, sin 2 theta theorem: Double-angle sine theorem | unnumbered_theorem | `s7-sin2` | 0 / 2 | 100% | yes |
 | `S2-tan-two-theta` — Section 2, tan 2 theta theorem: Double-angle tangent theorem | unnumbered_theorem | `s7-tan2` | 0 / 3 | 100% | yes |
 | `S2-sharpness` — Section 2, paragraph after four theorems: Best constants and simultaneous equality | source_claim | `base-sharpness` | 1 / 1 | 0% | no |
-| `S2-unbounded-scope` — Section 2, final paragraphs: Unbounded self-adjoint scope | scope_claim | `s6-theorem6-3` | 1 / 8 | 87% | no |
+| `S2-unbounded-scope` — Section 2, final paragraphs: Unbounded self-adjoint scope | scope_claim | `s2-unbounded-scope` | 1 / 10 | 90% | no |
 | `DK-3.1-def` — Definition 3.1: Direct rotation | definition | `base-acute-direct-rotation` | 0 / 1 | 100% | yes |
 | `DK-3.1-prop` — Proposition 3.1: Acute direct rotation existence and uniqueness | proposition | `s3-prop3-1` | 0 / 3 | 100% | yes |
 | `DK-3.2-prop` — Proposition 3.2: Nonacute existence criterion | proposition | `s3-prop3-2-existence` | 0 / 6 | 100% | yes |
@@ -30,109 +30,117 @@ A piece is one manifest node in the result's transitive dependency closure. Miss
 | `DK-4.3-prop` — Proposition 4.3: Squared displacement UI-norm minimality | proposition | `s4-prop4-3` | 1 / 2 | 50% | no |
 | `DK-5.1-thm` — Theorem 5.1: Banach-space Sylvester lower bound | theorem | `s5-theorem5-1` | 0 / 2 | 100% | yes |
 | `DK-5.2-thm` — Theorem 5.2: Semibounded self-adjoint Sylvester theorem | theorem | `base-theorem5-2` | 1 / 1 | 0% | no |
-| `DK-6.3-thm` — Theorem 6.3: Generalized tangent theorem | theorem | `s6-theorem6-3` | 1 / 8 | 87% | no |
+| `DK-6.3-thm` — Theorem 6.3: Generalized tangent theorem | theorem | `s6-theorem6-3` | 0 / 6 | 100% | yes |
 | `DK-6.3-lem` — Lemma 6.3: Finite-rank near-maximizer leakage estimate | lemma | `s6-lemma6-3-approx` | 0 / 2 | 100% | yes |
 | `DK-7-sin2-proof` — Section 7, equations (7.1)–(7.5): Reflection proof of the sine double-angle theorem | proof_package | `s7-sin2` | 0 / 2 | 100% | yes |
 | `DK-7-tan2-proof` — Section 7, equation (7.6) and following argument: Singular-vector proof of the tangent double-angle theorem | proof_package | `s7-tan2` | 0 / 3 | 100% | yes |
 | `DK-8.1-thm` — Theorem 8.1: Branch selection and spectral repulsion | theorem | `s8-theorem8-1` | 4 / 18 | 77% | no |
 | `DK-8.2-thm` — Theorem 8.2: Smallness selects the acute branch | theorem | `s8-theorem8-2-perturbation`, `s8-theorem8-2-residual` | 1 / 14 | 92% | no |
-| `DK-9-model` — Section 9, problem setup: Fourth-derivative Rayleigh–Ritz model | numerical_model | `s9-finite-certificate`, `s9-final-certificate` | 4 / 25 | 84% | no |
-| `DK-9.1-9.4` — Equations (9.1)–(9.4): Initial sine and sine-double-angle bounds | numerical_claims | `s9-initial-angle-bounds`, `s9-final-certificate` | 4 / 25 | 84% | no |
-| `DK-9.5-9.7` — Equations (9.5)–(9.7): Rayleigh–Ritz tangent refinements | numerical_claims | `s9-tangent-angle-bounds`, `s9-final-certificate` | 4 / 25 | 84% | no |
-| `DK-9.8` — Equation (9.8): Comparison with Weinberger bounds | comparison_claim | `s9-output-certificate`, `s9-final-certificate` | 4 / 25 | 84% | no |
+| `DK-9-model` — Section 9, problem setup: Fourth-derivative Rayleigh–Ritz model | numerical_model | `s9-finite-certificate`, `s9-final-certificate` | 3 / 23 | 86% | no |
+| `DK-9.1-9.4` — Equations (9.1)–(9.4): Initial sine and sine-double-angle bounds | numerical_claims | `s9-initial-angle-bounds`, `s9-final-certificate` | 3 / 23 | 86% | no |
+| `DK-9.5-9.7` — Equations (9.5)–(9.7): Rayleigh–Ritz tangent refinements | numerical_claims | `s9-tangent-angle-bounds`, `s9-final-certificate` | 3 / 23 | 86% | no |
+| `DK-9.8` — Equation (9.8): Comparison with Weinberger bounds | comparison_claim | `s9-output-certificate`, `s9-final-certificate` | 3 / 23 | 86% | no |
 | `DK-9-infinite-residual-counterexample` — Section 9, l2 example after (9.8): Residual-infinite limitation example | example | `base-section9-infinite-residual-example` | 1 / 1 | 0% | no |
-| `DK-9.9-9.11` — Equations (9.9)–(9.11) and final bounds: Individual eigenvector identification inside a cluster | numerical_claims | `s9-output-certificate`, `s9-final-certificate` | 4 / 25 | 84% | no |
+| `DK-9.9-9.11` — Equations (9.9)–(9.11) and final bounds: Individual eigenvector identification inside a cluster | numerical_claims | `s9-output-certificate`, `s9-final-certificate` | 3 / 23 | 86% | no |
 
 ## Summary
 
-- Manifest nodes: **72**
-- Textually present: **72**
+- Manifest nodes: **80**
+- Textually present: **80**
 - Paper result rows represented in the frontier: **32**
 - Census rows requiring frontier coverage: **29**
 - Census rows mapped: **29**
-- Declarations resolving in Lean: **43**
-- Declarations with admission-free Lean closure: **34**
-- Recursively grounded manifest nodes: **34**
-- Paper results recursively grounded: **15 / 32**
-- Source-role endpoints resolving: **17 / 27**
-- Source-role endpoints recursively grounded: **12 / 27**
+- Declarations resolving in Lean: **51**
+- Declarations with admission-free Lean closure: **43**
+- Recursively grounded manifest nodes: **41**
+- Paper results recursively grounded: **16 / 32**
+- Source-role endpoints resolving: **19 / 29**
+- Source-role endpoints recursively grounded: **13 / 29**
 
 ## Manifest nodes
 
-| Node | Kind | Paper-facing? | Paper row(s) | Priority | Text | Resolves | Admission-free | Recursive |
-|---|---|:---:|---|---:|:---:|:---:|:---:|:---:|
-| `base-halmos-decomposition` | foundation | no |  | high | yes | yes | yes | yes |
-| `base-halmos-pythagoras` | foundation | no |  | high | yes | yes | yes | yes |
-| `base-acute-direct-rotation` | foundation | yes | `DK-3.1-def` | high | yes | yes | yes | yes |
-| `base-spectral-projection` | foundation | no |  | high | yes | yes | yes | yes |
-| `base-section8-core` | bridge | no |  | high | yes | no | ? | no |
-| `base-section9-arithmetic` | bridge | no |  | medium | yes | no | ? | no |
-| `base-section9-infinite-residual-example` | source | yes | `DK-9-infinite-residual-counterexample` | low | yes | no | ? | no |
-| `base-theorem5-2` | source | yes | `DK-5.2-thm` | medium | yes | no | ? | no |
-| `base-sharpness` | source | yes | `S2-sharpness` | medium | yes | no | ? | no |
-| `s3-paper-direct-rotation-predicate` | foundation | no |  | high | yes | yes | yes | yes |
-| `s3-crossed-defect-equivalence` | foundation | no |  | high | yes | yes | yes | yes |
-| `s3-generic-cosine-restriction` | foundation | no |  | high | yes | yes | yes | yes |
-| `s3-generic-sine-restriction` | foundation | no |  | medium | yes | yes | yes | yes |
-| `s3-generic-pythagoras` | bridge | no |  | medium | yes | yes | yes | yes |
-| `s3-spectral-multiplicity-definition` | foundation | no |  | hard | yes | yes | no | no |
-| `s3-spectral-multiplicity-complete` | foundation | no |  | hard | yes | yes | no | no |
-| `s3-prop3-1` | source | yes | `DK-3.1-prop` | high | yes | yes | yes | yes |
-| `s3-crossed-identification` | bridge | no |  | high | yes | yes | yes | yes |
-| `s3-prop3-2-existence` | source | yes | `DK-3.2-prop` | high | yes | yes | yes | yes |
-| `s3-prop3-2-parameter` | bridge | no |  | high | yes | yes | yes | yes |
-| `s3-prop3-3` | source | yes | `DK-3.3-prop` | medium | yes | yes | yes | yes |
-| `s3-prop3-4` | source | yes | `DK-3.4-prop` | medium | yes | yes | yes | yes |
-| `s3-fixed-angle-subspace` | foundation | no |  | medium | yes | yes | yes | yes |
-| `s3-prop3-5` | source | yes | `DK-3.5-prop` | high | yes | yes | yes | yes |
-| `s3-cor3-2` | source | yes | `DK-3.2-cor` | medium | yes | yes | yes | yes |
-| `s3-operator-classification` | bridge | no |  | high | yes | yes | no | no |
-| `s3-theorem3-1` | source | yes | `DK-3.1-thm` | hard | yes | yes | no | no |
-| `s3-compact-angle-list` | foundation | no |  | medium | yes | yes | no | no |
-| `s3-cor3-1` | source | yes | `DK-3.1-cor` | high | yes | yes | no | no |
-| `s4-prop4-1` | source | yes | `DK-4.1-prop` | medium | yes | yes | yes | yes |
-| `s4-cor4-1` | source | yes | `DK-4.1-cor` | medium | yes | yes | yes | yes |
-| `s4-prop4-2` | source | yes | `DK-4.2-prop` | medium | yes | yes | no | no |
-| `s4-prop4-3` | source | yes | `DK-4.3-prop` | medium | yes | yes | no | no |
-| `s6-approximation-energy` | foundation | no |  | high | yes | yes | yes | yes |
-| `s6-lemma6-3-approx` | source | yes | `DK-6.3-lem` | high | yes | yes | yes | yes |
-| `s6-lemma6-3-finite` | bridge | no |  | medium | yes | yes | yes | yes |
-| `s5-compatible-cross-norm` | foundation | no |  | medium | yes | yes | yes | yes |
-| `s5-theorem5-1` | source | yes | `DK-5.1-thm` | medium | yes | yes | yes | yes |
-| `s6-trial-residual` | foundation | no |  | high | yes | yes | yes | yes |
-| `s6-theorem6-3` | source | yes | `DK-6.3-thm`, `S2-tan-theta`, `S2-unbounded-scope` | hard | yes | yes | no | no |
-| `s7-sin2` | source | yes | `DK-7-sin2-proof`, `S2-sin-two-theta` | high | yes | yes | yes | yes |
-| `s7-tan2` | source | yes | `DK-7-tan2-proof`, `S2-tan-two-theta` | high | yes | yes | yes | yes |
-| `s8-circle-integrand` | foundation | no |  | high | yes | yes | yes | yes |
-| `s8-circle-integral` | foundation | no |  | hard | yes | yes | yes | yes |
-| `s8-scalar-cauchy` | foundation | no |  | high | yes | yes | yes | yes |
-| `s8-riesz-eq-spectral` | bridge | no |  | hard | yes | yes | yes | yes |
-| `s8-riesz-norm-bound` | bridge | no |  | high | yes | yes | yes | yes |
-| `s8-riesz-path-continuity` | bridge | no |  | high | yes | yes | yes | yes |
-| `s8-circle-continuation-data` | foundation | no |  | high | yes | no | ? | no |
-| `s8-continuation-witness` | bridge | no |  | hard | yes | no | ? | no |
-| `s8-continuation-endpoints` | bridge | no |  | high | yes | no | ? | no |
-| `s8-projection-lipschitz` | bridge | no |  | high | yes | no | ? | no |
-| `s8-direct-rotation-upper-data` | bridge | no |  | high | yes | no | ? | no |
-| `s8-direct-rotation-lower-data` | bridge | no |  | high | yes | no | ? | no |
-| `s8-theorem8-1` | source | yes | `DK-8.1-thm` | hard | yes | no | ? | no |
-| `s8-perturbation-half-gap` | bridge | no |  | high | yes | no | ? | no |
-| `s8-residual-half-gap` | bridge | no |  | hard | yes | no | ? | no |
-| `s8-theorem8-2-perturbation` | source | yes | `DK-8.2-thm` | high | yes | no | ? | no |
-| `s8-theorem8-2-residual` | source | yes | `DK-8.2-thm` | hard | yes | no | ? | no |
-| `s9-semantic-model` | foundation | no |  | high | yes | no | ? | no |
-| `s9-represents-free-beam` | foundation | no |  | hard | yes | no | ? | no |
-| `s9-third-eigenvalue-correct` | foundation | no |  | hard | yes | no | ? | no |
-| `s9-free-beam-operator` | foundation | no |  | hard | yes | no | ? | no |
-| `s9-free-beam-selfadjoint` | foundation | no |  | hard | yes | no | ? | no |
-| `s9-canonical-model` | bridge | no |  | hard | yes | no | ? | no |
-| `s9-third-eigenvalue-bound` | source | no |  | hard | yes | no | ? | no |
-| `s9-exact-finite-data` | bridge | no |  | high | yes | no | ? | no |
-| `s9-finite-certificate` | bridge | yes | `DK-9-model` | high | yes | no | ? | no |
-| `s9-initial-angle-bounds` | source | yes | `DK-9.1-9.4` | high | yes | no | ? | no |
-| `s9-tangent-angle-bounds` | source | yes | `DK-9.5-9.7` | high | yes | no | ? | no |
-| `s9-output-certificate` | bridge | yes | `DK-9.8`, `DK-9.9-9.11` | hard | yes | no | ? | no |
-| `s9-final-certificate` | source | yes | `DK-9-model`, `DK-9.1-9.4`, `DK-9.5-9.7`, `DK-9.8`, `DK-9.9-9.11` | hard | yes | no | ? | no |
+| Node | Kind | Paper-facing? | Paper row(s) | Priority | Open obligation? | Text | Resolves | Admission-free | Recursive |
+|---|---|:---:|---|---:|:---:|:---:|:---:|:---:|:---:|
+| `base-halmos-decomposition` | foundation | no |  | high | no | yes | yes | yes | yes |
+| `base-halmos-pythagoras` | foundation | no |  | high | no | yes | yes | yes | yes |
+| `base-acute-direct-rotation` | foundation | yes | `DK-3.1-def` | high | no | yes | yes | yes | yes |
+| `base-spectral-projection` | foundation | no |  | high | no | yes | yes | yes | yes |
+| `base-section8-core` | bridge | no |  | high | no | yes | no | ? | no |
+| `base-section9-arithmetic` | bridge | no |  | medium | no | yes | no | ? | no |
+| `base-section9-infinite-residual-example` | source | yes | `DK-9-infinite-residual-counterexample` | low | no | yes | no | ? | no |
+| `base-theorem5-2` | source | yes | `DK-5.2-thm` | medium | no | yes | no | ? | no |
+| `base-sharpness` | source | yes | `S2-sharpness` | medium | no | yes | no | ? | no |
+| `s3-paper-direct-rotation-predicate` | foundation | no |  | high | no | yes | yes | yes | yes |
+| `s3-crossed-defect-equivalence` | foundation | no |  | high | no | yes | yes | yes | yes |
+| `s3-generic-cosine-restriction` | foundation | no |  | high | no | yes | yes | yes | yes |
+| `s3-generic-sine-restriction` | foundation | no |  | medium | no | yes | yes | yes | yes |
+| `s3-generic-pythagoras` | bridge | no |  | medium | no | yes | yes | yes | yes |
+| `s3-spectral-multiplicity-definition` | foundation | no |  | hard | no | yes | yes | no | no |
+| `s3-spectral-multiplicity-complete` | foundation | no |  | hard | no | yes | yes | no | no |
+| `s3-prop3-1` | source | yes | `DK-3.1-prop` | high | no | yes | yes | yes | yes |
+| `s3-crossed-identification` | bridge | no |  | high | no | yes | yes | yes | yes |
+| `s3-prop3-2-existence` | source | yes | `DK-3.2-prop` | high | no | yes | yes | yes | yes |
+| `s3-prop3-2-parameter` | bridge | no |  | high | no | yes | yes | yes | yes |
+| `s3-prop3-3` | source | yes | `DK-3.3-prop` | medium | no | yes | yes | yes | yes |
+| `s3-prop3-4` | source | yes | `DK-3.4-prop` | medium | no | yes | yes | yes | yes |
+| `s3-fixed-angle-subspace` | foundation | no |  | medium | no | yes | yes | yes | yes |
+| `s3-prop3-5` | source | yes | `DK-3.5-prop` | high | no | yes | yes | yes | yes |
+| `s3-cor3-2` | source | yes | `DK-3.2-cor` | medium | no | yes | yes | yes | yes |
+| `s3-operator-classification` | bridge | no |  | high | no | yes | yes | no | no |
+| `s3-theorem3-1` | source | yes | `DK-3.1-thm` | hard | no | yes | yes | no | no |
+| `s3-compact-angle-list` | foundation | no |  | medium | no | yes | yes | no | no |
+| `s3-cor3-1` | source | yes | `DK-3.1-cor` | high | no | yes | yes | no | no |
+| `s4-prop4-1` | source | yes | `DK-4.1-prop` | medium | no | yes | yes | yes | yes |
+| `s4-cor4-1` | source | yes | `DK-4.1-cor` | medium | no | yes | yes | yes | yes |
+| `s4-prop4-2` | source | yes | `DK-4.2-prop` | medium | no | yes | yes | no | no |
+| `s4-prop4-3` | source | yes | `DK-4.3-prop` | medium | no | yes | yes | no | no |
+| `s6-approximation-energy` | foundation | no |  | high | no | yes | yes | yes | yes |
+| `s6-lemma6-3-approx` | source | yes | `DK-6.3-lem` | high | no | yes | yes | yes | yes |
+| `s6-lemma6-3-finite` | bridge | no |  | medium | no | yes | yes | yes | yes |
+| `s5-compatible-cross-norm` | foundation | no |  | medium | no | yes | yes | yes | yes |
+| `s5-theorem5-1` | source | yes | `DK-5.1-thm` | medium | no | yes | yes | yes | yes |
+| `s6-trial-residual` | foundation | no |  | high | no | yes | yes | yes | yes |
+| `s6-theorem6-3-directed-sine` | foundation | no |  | high | no | yes | yes | yes | yes |
+| `s6-theorem6-3-directed-tangent-data` | foundation | no |  | high | no | yes | yes | yes | yes |
+| `s6-theorem6-3-kyfan-promotion` | bridge | no |  | high | no | yes | yes | yes | yes |
+| `s6-theorem6-3-kyfan-core` | bridge | no |  | hard | no | yes | yes | yes | yes |
+| `s6-theorem6-3-finite-specialization` | bridge | no |  | high | no | yes | yes | yes | yes |
+| `s6-theorem6-3` | source | yes | `DK-6.3-thm` | hard | no | yes | yes | yes | yes |
+| `s2-tan-theta` | source | yes | `S2-tan-theta` | high | yes | yes | yes | yes | no |
+| `s6-theorem6-3-unbounded-opnorm-partial` | bridge | no |  | high | no | yes | yes | yes | yes |
+| `s2-unbounded-scope` | source | yes | `S2-unbounded-scope` | hard | yes | yes | yes | yes | no |
+| `s7-sin2` | source | yes | `DK-7-sin2-proof`, `S2-sin-two-theta` | high | no | yes | yes | yes | yes |
+| `s7-tan2` | source | yes | `DK-7-tan2-proof`, `S2-tan-two-theta` | high | no | yes | yes | yes | yes |
+| `s8-circle-integrand` | foundation | no |  | high | no | yes | yes | yes | yes |
+| `s8-circle-integral` | foundation | no |  | hard | no | yes | yes | yes | yes |
+| `s8-scalar-cauchy` | foundation | no |  | high | no | yes | yes | yes | yes |
+| `s8-riesz-eq-spectral` | bridge | no |  | hard | no | yes | yes | yes | yes |
+| `s8-riesz-norm-bound` | bridge | no |  | high | no | yes | yes | yes | yes |
+| `s8-riesz-path-continuity` | bridge | no |  | high | no | yes | yes | yes | yes |
+| `s8-circle-continuation-data` | foundation | no |  | high | no | yes | no | ? | no |
+| `s8-continuation-witness` | bridge | no |  | hard | no | yes | no | ? | no |
+| `s8-continuation-endpoints` | bridge | no |  | high | no | yes | no | ? | no |
+| `s8-projection-lipschitz` | bridge | no |  | high | no | yes | no | ? | no |
+| `s8-direct-rotation-upper-data` | bridge | no |  | high | no | yes | no | ? | no |
+| `s8-direct-rotation-lower-data` | bridge | no |  | high | no | yes | no | ? | no |
+| `s8-theorem8-1` | source | yes | `DK-8.1-thm` | hard | no | yes | no | ? | no |
+| `s8-perturbation-half-gap` | bridge | no |  | high | no | yes | no | ? | no |
+| `s8-residual-half-gap` | bridge | no |  | hard | no | yes | no | ? | no |
+| `s8-theorem8-2-perturbation` | source | yes | `DK-8.2-thm` | high | no | yes | no | ? | no |
+| `s8-theorem8-2-residual` | source | yes | `DK-8.2-thm` | hard | no | yes | no | ? | no |
+| `s9-semantic-model` | foundation | no |  | high | no | yes | no | ? | no |
+| `s9-represents-free-beam` | foundation | no |  | hard | no | yes | no | ? | no |
+| `s9-third-eigenvalue-correct` | foundation | no |  | hard | no | yes | no | ? | no |
+| `s9-free-beam-operator` | foundation | no |  | hard | no | yes | no | ? | no |
+| `s9-free-beam-selfadjoint` | foundation | no |  | hard | no | yes | no | ? | no |
+| `s9-canonical-model` | bridge | no |  | hard | no | yes | no | ? | no |
+| `s9-third-eigenvalue-bound` | source | no |  | hard | no | yes | no | ? | no |
+| `s9-exact-finite-data` | bridge | no |  | high | no | yes | no | ? | no |
+| `s9-finite-certificate` | bridge | yes | `DK-9-model` | high | no | yes | no | ? | no |
+| `s9-initial-angle-bounds` | source | yes | `DK-9.1-9.4` | high | no | yes | no | ? | no |
+| `s9-tangent-angle-bounds` | source | yes | `DK-9.5-9.7` | high | no | yes | no | ? | no |
+| `s9-output-certificate` | bridge | yes | `DK-9.8`, `DK-9.9-9.11` | hard | no | yes | no | ? | no |
+| `s9-final-certificate` | source | yes | `DK-9-model`, `DK-9.1-9.4`, `DK-9.5-9.7`, `DK-9.8`, `DK-9.9-9.11` | hard | no | yes | no | ? | no |
 
 ## Dependency edges
 
@@ -162,7 +170,12 @@ A piece is one manifest node in the result's transitive dependency closure. Miss
 - `s6-lemma6-3-approx` <- `s6-approximation-energy`
 - `s6-lemma6-3-finite` <- `s6-lemma6-3-approx`
 - `s5-theorem5-1` <- `s5-compatible-cross-norm`
-- `s6-theorem6-3` <- `s6-trial-residual`, `s3-prop3-2-existence`
+- `s6-theorem6-3-directed-tangent-data` <- `s6-theorem6-3-directed-sine`
+- `s6-theorem6-3-kyfan-promotion` <- `s6-theorem6-3-directed-tangent-data`
+- `s6-theorem6-3-kyfan-core` <- `s6-trial-residual`, `s6-theorem6-3-directed-tangent-data`
+- `s6-theorem6-3` <- `s6-theorem6-3-kyfan-core`, `s6-theorem6-3-kyfan-promotion`
+- `s2-tan-theta` <- `s6-theorem6-3-kyfan-promotion`
+- `s2-unbounded-scope` <- `base-theorem5-2`, `s6-theorem6-3`, `s6-lemma6-3-approx`
 - `s7-sin2` <- `base-spectral-projection`
 - `s7-tan2` <- `s7-sin2`
 - `s8-circle-integral` <- `s8-circle-integrand`
