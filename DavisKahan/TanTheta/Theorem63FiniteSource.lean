@@ -111,7 +111,7 @@ theorem theorem63_sylvester_identity
   rw [map_sub]
   congr 1
   exact (ContinuousLinearMap.starProjection_apply_comm_of_reduces
-    T Vᗮ hV.orthogonalComplement (z : H)).symm
+    T Vᗮ (DavisKahanExt.Reduces.orthogonalComplement hV) (z : H)).symm
 
 /-- The directed sine block is a contraction. -/
 theorem theorem63DirectedSineBlock_apply_norm_le
@@ -163,10 +163,10 @@ theorem theorem63_directed_transverse_of_form_gap
     change RCLike.re
       ⟪Z.orthogonalProjectionOnto (T ((x - y : Z) : H)), x - y⟫_ℂ = _
     rw [Submodule.coe_inner, Submodule.coe_orthogonalProjectionOnto_apply,
-      ← Z.inner_starProjection_left_eq_right,
+      Z.inner_starProjection_left_eq_right,
       Submodule.starProjection_eq_self_iff.mpr (x - y).2]
   have hnorm : ‖((x - y : Z) : H)‖ = ‖x - y‖ := rfl
-  rw [hcomp, hnorm] at hlower
+  rw [← hcomp, hnorm] at hlower
   have hzero : x - y = 0 := by
     by_contra hne
     have hn : 0 < ‖x - y‖ := norm_pos_iff.mpr hne
@@ -278,101 +278,115 @@ theorem orthonormal_theorem63ResidualWitness
   let S := theorem63DirectedSineBlock Z V
   rw [orthonormal_iff_ite]
   intro i j
-  let sigma_i := finiteSourceSingularValue S i
-  let sigma_j := finiteSourceSingularValue S j
-  let v_i := finiteSourceRightSingularBasis S i
-  let v_j := finiteSourceRightSingularBasis S j
-  have hvv : ⟪v_i, v_j⟫_ℂ = if i = j then 1 else 0 := by
-    simpa [v_i, v_j] using
-      (orthonormal_iff_ite.mp (finiteSourceRightSingularBasis S).orthonormal i j)
-  have hZZ : ⟪(v_i : H), (v_j : H)⟫_ℂ = if i = j then 1 else 0 := by
-    simpa [Submodule.coe_inner] using hvv
   by_cases hij : i = j
   · subst j
     rw [if_pos rfl]
-    by_cases hsigma : sigma_i = 0
-    · have hw : theorem63ResidualWitness Z V i = (v_i : H) := by
-        simp [theorem63ResidualWitness, S, sigma_i, v_i, hsigma]
+    let sigma := finiteSourceSingularValue S i
+    let v := finiteSourceRightSingularBasis S i
+    have hvv : ⟪(v : H), (v : H)⟫_ℂ = 1 := by
+      change ⟪v, v⟫_ℂ = 1
+      simp [v]
+    by_cases hsigma : sigma = 0
+    · have hw : theorem63ResidualWitness Z V i = (v : H) := by
+        simp [theorem63ResidualWitness, S, sigma, v, hsigma]
       rw [hw]
-      simpa [hZZ]
+      exact hvv
     · let y := finiteSourceLeftSingularVector S i
+      have hZadj : Z.subtypeL.adjoint y =
+          ((sigma : ℝ) : ℂ) • v := by
+        simpa [S, sigma, v, y] using
+          theorem63_subtypeAdjoint_apply_finiteSourceLeftSingularVector Z V hsigma
       have hyy : ⟪y, y⟫_ℂ = 1 := by
         simpa [y] using
-          (orthonormal_iff_ite.mp (orthonormal_finiteSourceLeftSingularVector_subtype S)
+          (orthonormal_iff_ite.mp
+            (orthonormal_finiteSourceLeftSingularVector_subtype S)
             ⟨i, hsigma⟩ ⟨i, hsigma⟩)
-      have hZadj : Z.subtypeL.adjoint y =
-          ((sigma_i : ℝ) : ℂ) • v_i := by
-        simpa [S, sigma_i, v_i, y] using
-          theorem63_subtypeAdjoint_apply_finiteSourceLeftSingularVector Z V hsigma
-      have hZv_y : ⟪(v_i : H), y⟫_ℂ = ((sigma_i : ℝ) : ℂ) := by
+      have hZv_y : ⟪(v : H), y⟫_ℂ = ((sigma : ℝ) : ℂ) := by
         calc
-          ⟪(v_i : H), y⟫_ℂ = ⟪v_i, Z.subtypeL.adjoint y⟫_ℂ :=
-            (ContinuousLinearMap.adjoint_inner_right Z.subtypeL v_i y).symm
-          _ = ⟪v_i, ((sigma_i : ℝ) : ℂ) • v_i⟫_ℂ := by rw [hZadj]
-          _ = ((sigma_i : ℝ) : ℂ) := by
+          ⟪(v : H), y⟫_ℂ = ⟪v, Z.subtypeL.adjoint y⟫_ℂ :=
+            (ContinuousLinearMap.adjoint_inner_right Z.subtypeL v y).symm
+          _ = ⟪v, ((sigma : ℝ) : ℂ) • v⟫_ℂ := by rw [hZadj]
+          _ = ((sigma : ℝ) : ℂ) := by
             rw [inner_smul_right]
-            simpa [v_i] using
-              (finiteSourceRightSingularBasis S).orthonormal.inner_self i
-      have hy_Zv : ⟪y, (v_i : H)⟫_ℂ = ((sigma_i : ℝ) : ℂ) := by
+            simpa [Submodule.coe_inner, v] using
+              (orthonormal_iff_ite.mp
+                (finiteSourceRightSingularBasis S).orthonormal i i)
+      have hy_Zv : ⟪y, (v : H)⟫_ℂ = ((sigma : ℝ) : ℂ) := by
         calc
-          ⟪y, (v_i : H)⟫_ℂ = ⟪Z.subtypeL.adjoint y, v_i⟫_ℂ :=
-            (ContinuousLinearMap.adjoint_inner_left Z.subtypeL v_i y).symm
-          _ = ⟪((sigma_i : ℝ) : ℂ) • v_i, v_i⟫_ℂ := by rw [hZadj]
-          _ = ((sigma_i : ℝ) : ℂ) := by
-            rw [inner_smul_left, RCLike.conj_ofReal]
-            simpa [v_i] using
-              (finiteSourceRightSingularBasis S).orthonormal.inner_self i
-      have hsigma_nonneg : 0 ≤ sigma_i := finiteSourceSingularValue_nonneg S i
-      have hsigma_lt : sigma_i < 1 := by
-        simpa [S, sigma_i] using theorem63_singularValues_sine_lt_one
+          ⟪y, (v : H)⟫_ℂ = ⟪Z.subtypeL.adjoint y, v⟫_ℂ :=
+            (ContinuousLinearMap.adjoint_inner_left Z.subtypeL v y).symm
+          _ = ⟪((sigma : ℝ) : ℂ) • v, v⟫_ℂ := by rw [hZadj]
+          _ = ((sigma : ℝ) : ℂ) := by
+            rw [inner_smul_left, Complex.conj_ofReal]
+            simpa [v] using
+              (orthonormal_iff_ite.mp
+                (finiteSourceRightSingularBasis S).orthonormal i i)
+      have hsigma_nonneg : 0 ≤ sigma := finiteSourceSingularValue_nonneg S i
+      have hsigma_lt : sigma < 1 := by
+        simpa [S, sigma] using theorem63_singularValues_sine_lt_one
           T hT V Z hV hdelta hCompressionUpper hUnwantedLower i
-      let c := Real.sqrt (1 - sigma_i ^ 2)
-      have hcpos : 0 < c := Real.sqrt_pos.2 (by nlinarith)
       have hraw :
-          ⟪y - ((sigma_i : ℝ) : ℂ) • (v_i : H),
-            y - ((sigma_i : ℝ) : ℂ) • (v_i : H)⟫_ℂ =
-              ((c ^ 2 : ℝ) : ℂ) := by
+          ⟪y - ((sigma : ℝ) : ℂ) • (v : H),
+            y - ((sigma : ℝ) : ℂ) • (v : H)⟫_ℂ =
+              (((1 - sigma ^ 2 : ℝ) : ℂ)) := by
         simp only [inner_sub_left, inner_sub_right, inner_smul_left,
-          inner_smul_right, RCLike.conj_ofReal, hyy, hZv_y, hy_Zv, hZZ]
-        rw [if_pos rfl]
-        norm_num
-        rw [Real.sq_sqrt (by nlinarith)]
+          inner_smul_right, Complex.conj_ofReal, hyy, hZv_y, hy_Zv, hvv]
         push_cast
         ring
+      let c := Real.sqrt (1 - sigma ^ 2)
+      have hcpos : 0 < c := by
+        dsimp [c]
+        exact Real.sqrt_pos.2 (by nlinarith)
+      have hcne : c ≠ 0 := ne_of_gt hcpos
       have hw : theorem63ResidualWitness Z V i =
           ((((c : ℝ) : ℂ)⁻¹) •
-            (y - ((sigma_i : ℝ) : ℂ) • (v_i : H))) := by
-        simp [theorem63ResidualWitness, S, sigma_i, v_i, y, c, hsigma]
-      rw [hw, inner_smul_left, inner_smul_right, map_inv₀,
-        RCLike.conj_ofReal, hraw]
-      have hc0 : ((c : ℝ) : ℂ) ≠ 0 := RCLike.ofReal_ne_zero.mpr hcpos.ne'
-      field_simp
+            (y - ((sigma : ℝ) : ℂ) • (v : H))) := by
+        simp [theorem63ResidualWitness, S, sigma, v, y, c, hsigma]
+      have hc_sq : c ^ 2 = 1 - sigma ^ 2 := by
+        dsimp [c]
+        rw [Real.sq_sqrt (by nlinarith)]
+      have hnormalize : c⁻¹ * (c⁻¹ * (1 - sigma ^ 2)) = 1 := by
+        rw [← hc_sq]
+        field_simp [hcne]
+      rw [hw]
+      simp only [inner_smul_left, inner_smul_right, map_inv₀,
+        Complex.conj_ofReal, hraw]
+      exact_mod_cast hnormalize
   · rw [if_neg hij]
+    let sigma_i := finiteSourceSingularValue S i
+    let sigma_j := finiteSourceSingularValue S j
+    let v_i := finiteSourceRightSingularBasis S i
+    let v_j := finiteSourceRightSingularBasis S j
+    have hvv : ⟪v_i, v_j⟫_ℂ = 0 := by
+      simp [v_i, v_j, hij,
+        orthonormal_iff_ite.mp (finiteSourceRightSingularBasis S).orthonormal i j]
+    have hZZ : ⟪(v_i : H), (v_j : H)⟫_ℂ = 0 := by
+      simpa [Submodule.coe_inner] using hvv
     by_cases hi : sigma_i = 0
     · have hwi : theorem63ResidualWitness Z V i = (v_i : H) := by
         simp [theorem63ResidualWitness, S, sigma_i, v_i, hi]
       by_cases hj : sigma_j = 0
       · have hwj : theorem63ResidualWitness Z V j = (v_j : H) := by
           simp [theorem63ResidualWitness, S, sigma_j, v_j, hj]
-        rw [hwi, hwj, hZZ, if_neg hij]
+        rw [hwi, hwj, hZZ]
       · let yj := finiteSourceLeftSingularVector S j
         have hZadjj : Z.subtypeL.adjoint yj =
             ((sigma_j : ℝ) : ℂ) • v_j := by
           simpa [S, sigma_j, v_j, yj] using
             theorem63_subtypeAdjoint_apply_finiteSourceLeftSingularVector Z V hj
+        have hvi_yj :
+            ⟪(v_i : H), yj⟫_ℂ =
+              ((sigma_j : ℝ) : ℂ) * ⟪v_i, v_j⟫_ℂ := by
+          calc
+            ⟪(v_i : H), yj⟫_ℂ = ⟪v_i, Z.subtypeL.adjoint yj⟫_ℂ :=
+              (ContinuousLinearMap.adjoint_inner_right Z.subtypeL v_i yj).symm
+            _ = ⟪v_i, ((sigma_j : ℝ) : ℂ) • v_j⟫_ℂ := by rw [hZadjj]
+            _ = _ := by rw [inner_smul_right]
         have hraw :
             ⟪(v_i : H),
               yj - ((sigma_j : ℝ) : ℂ) • (v_j : H)⟫_ℂ = 0 := by
-          rw [inner_sub_right, inner_smul_right]
-          have h1 : ⟪(v_i : H), yj⟫_ℂ =
-              ((sigma_j : ℝ) : ℂ) * ⟪v_i, v_j⟫_ℂ := by
-            calc
-              ⟪(v_i : H), yj⟫_ℂ = ⟪v_i, Z.subtypeL.adjoint yj⟫_ℂ :=
-                (ContinuousLinearMap.adjoint_inner_right Z.subtypeL v_i yj).symm
-              _ = ⟪v_i, ((sigma_j : ℝ) : ℂ) • v_j⟫_ℂ := by rw [hZadjj]
-              _ = _ := by rw [inner_smul_right]
-          rw [h1, hZZ, if_neg hij]
-          simp
+          rw [inner_sub_right, inner_smul_right, hvi_yj, hZZ, hvv]
+          ring
         let cj := Real.sqrt (1 - sigma_j ^ 2)
         have hwj : theorem63ResidualWitness Z V j =
             ((((cj : ℝ) : ℂ)⁻¹) •
@@ -385,19 +399,20 @@ theorem orthonormal_theorem63ResidualWitness
         simpa [S, sigma_i, v_i, yi] using
           theorem63_subtypeAdjoint_apply_finiteSourceLeftSingularVector Z V hi
       by_cases hj : sigma_j = 0
-      · have hraw :
+      · have hyi_vj :
+            ⟪yi, (v_j : H)⟫_ℂ =
+              ((sigma_i : ℝ) : ℂ) * ⟪v_i, v_j⟫_ℂ := by
+          calc
+            ⟪yi, (v_j : H)⟫_ℂ = ⟪Z.subtypeL.adjoint yi, v_j⟫_ℂ :=
+              (ContinuousLinearMap.adjoint_inner_left Z.subtypeL v_j yi).symm
+            _ = ⟪((sigma_i : ℝ) : ℂ) • v_i, v_j⟫_ℂ := by rw [hZadji]
+            _ = _ := by rw [inner_smul_left, Complex.conj_ofReal]
+        have hraw :
             ⟪yi - ((sigma_i : ℝ) : ℂ) • (v_i : H),
               (v_j : H)⟫_ℂ = 0 := by
-          rw [inner_sub_left, inner_smul_left, RCLike.conj_ofReal]
-          have h1 : ⟪yi, (v_j : H)⟫_ℂ =
-              ((sigma_i : ℝ) : ℂ) * ⟪v_i, v_j⟫_ℂ := by
-            calc
-              ⟪yi, (v_j : H)⟫_ℂ = ⟪Z.subtypeL.adjoint yi, v_j⟫_ℂ :=
-                (ContinuousLinearMap.adjoint_inner_left Z.subtypeL v_j yi).symm
-              _ = ⟪((sigma_i : ℝ) : ℂ) • v_i, v_j⟫_ℂ := by rw [hZadji]
-              _ = _ := by rw [inner_smul_left, RCLike.conj_ofReal]
-          rw [h1, hZZ, if_neg hij]
-          simp
+          rw [inner_sub_left, inner_smul_left, Complex.conj_ofReal,
+            hyi_vj, hZZ, hvv]
+          ring
         let ci := Real.sqrt (1 - sigma_i ^ 2)
         have hwi : theorem63ResidualWitness Z V i =
             ((((ci : ℝ) : ℂ)⁻¹) •
@@ -413,28 +428,31 @@ theorem orthonormal_theorem63ResidualWitness
             theorem63_subtypeAdjoint_apply_finiteSourceLeftSingularVector Z V hj
         have hyy : ⟪yi, yj⟫_ℂ = 0 := by
           simpa [yi, yj, hij] using
-            (orthonormal_iff_ite.mp (orthonormal_finiteSourceLeftSingularVector_subtype S)
+            (orthonormal_iff_ite.mp
+              (orthonormal_finiteSourceLeftSingularVector_subtype S)
               ⟨i, hi⟩ ⟨j, hj⟩)
+        have hyi_vj :
+            ⟪yi, (v_j : H)⟫_ℂ =
+              ((sigma_i : ℝ) : ℂ) * ⟪v_i, v_j⟫_ℂ := by
+          calc
+            ⟪yi, (v_j : H)⟫_ℂ = ⟪Z.subtypeL.adjoint yi, v_j⟫_ℂ :=
+              (ContinuousLinearMap.adjoint_inner_left Z.subtypeL v_j yi).symm
+            _ = ⟪((sigma_i : ℝ) : ℂ) • v_i, v_j⟫_ℂ := by rw [hZadji]
+            _ = _ := by rw [inner_smul_left, Complex.conj_ofReal]
+        have hvi_yj :
+            ⟪(v_i : H), yj⟫_ℂ =
+              ((sigma_j : ℝ) : ℂ) * ⟪v_i, v_j⟫_ℂ := by
+          calc
+            ⟪(v_i : H), yj⟫_ℂ = ⟪v_i, Z.subtypeL.adjoint yj⟫_ℂ :=
+              (ContinuousLinearMap.adjoint_inner_right Z.subtypeL v_i yj).symm
+            _ = ⟪v_i, ((sigma_j : ℝ) : ℂ) • v_j⟫_ℂ := by rw [hZadjj]
+            _ = _ := by rw [inner_smul_right]
         have hraw :
             ⟪yi - ((sigma_i : ℝ) : ℂ) • (v_i : H),
               yj - ((sigma_j : ℝ) : ℂ) • (v_j : H)⟫_ℂ = 0 := by
-          have h1 : ⟪yi, (v_j : H)⟫_ℂ =
-              ((sigma_i : ℝ) : ℂ) * ⟪v_i, v_j⟫_ℂ := by
-            calc
-              ⟪yi, (v_j : H)⟫_ℂ = ⟪Z.subtypeL.adjoint yi, v_j⟫_ℂ :=
-                (ContinuousLinearMap.adjoint_inner_left Z.subtypeL v_j yi).symm
-              _ = ⟪((sigma_i : ℝ) : ℂ) • v_i, v_j⟫_ℂ := by rw [hZadji]
-              _ = _ := by rw [inner_smul_left, RCLike.conj_ofReal]
-          have h2 : ⟪(v_i : H), yj⟫_ℂ =
-              ((sigma_j : ℝ) : ℂ) * ⟪v_i, v_j⟫_ℂ := by
-            calc
-              ⟪(v_i : H), yj⟫_ℂ = ⟪v_i, Z.subtypeL.adjoint yj⟫_ℂ :=
-                (ContinuousLinearMap.adjoint_inner_right Z.subtypeL v_i yj).symm
-              _ = ⟪v_i, ((sigma_j : ℝ) : ℂ) • v_j⟫_ℂ := by rw [hZadjj]
-              _ = _ := by rw [inner_smul_right]
           simp only [inner_sub_left, inner_sub_right, inner_smul_left,
-            inner_smul_right, RCLike.conj_ofReal, hyy, h1, h2, hZZ,
-            if_neg hij]
+            inner_smul_right, Complex.conj_ofReal,
+            hyy, hyi_vj, hvi_yj, hZZ, hvv]
           ring
         let ci := Real.sqrt (1 - sigma_i ^ 2)
         let cj := Real.sqrt (1 - sigma_j ^ 2)
@@ -555,13 +573,15 @@ theorem theorem63ResidualWitness_scalar
             rw [hSv, map_smul, inner_smul_right]
           _ = (sigma : ℂ) * ⟪y, T y⟫_ℂ -
               (sigma : ℂ) * ⟪v, M v⟫_ℂ := by
-            rw [hSM, hSadj, inner_smul_left, RCLike.conj_ofReal]
+            rw [hSM, hSadj, inner_smul_left, Complex.conj_ofReal]
           _ = (sigma : ℂ) * (⟪y, T y⟫_ℂ - ⟪v, M v⟫_ℂ) := by ring
       have hTy : RCLike.re ⟪y, T y⟫_ℂ = RCLike.re ⟪T y, y⟫_ℂ := by
         rw [← inner_conj_symm, RCLike.conj_re]
       have hMv : RCLike.re ⟪v, M v⟫_ℂ = RCLike.re ⟪M v, v⟫_ℂ := by
         rw [← inner_conj_symm, RCLike.conj_re]
-      rw [hcomplex, RCLike.re_ofReal_mul, map_sub, hTy, hMv]
+      have hre := congrArg RCLike.re hcomplex
+      simpa only [RCLike.re_to_complex, Complex.re_ofReal_mul,
+        map_sub, hTy, hMv] using hre
     have hpair_lower : delta * sigma ≤ RCLike.re ⟪y, R v⟫_ℂ := by
       rw [hpair]
       nlinarith
@@ -574,7 +594,7 @@ theorem theorem63ResidualWitness_scalar
       have hc :
           ⟪y - ((sigma : ℝ) : ℂ) • (v : H), R v⟫_ℂ =
             ⟪y, R v⟫_ℂ := by
-        rw [inner_sub_left, inner_smul_left, RCLike.conj_ofReal,
+        rw [inner_sub_left, inner_smul_left, Complex.conj_ofReal,
           hZorth, mul_zero, sub_zero]
       exact congrArg RCLike.re hc
     let c := Real.sqrt (1 - sigma ^ 2)
@@ -588,8 +608,9 @@ theorem theorem63ResidualWitness_scalar
             (y - ((sigma : ℝ) : ℂ) • (v : H))), R v⟫_ℂ =
             c⁻¹ * RCLike.re
               ⟪y - ((sigma : ℝ) : ℂ) • (v : H), R v⟫_ℂ := by
-                rw [inner_smul_left, map_inv₀, RCLike.conj_ofReal,
-                  ← RCLike.ofReal_inv, RCLike.re_ofReal_mul]
+                rw [inner_smul_left, map_inv₀, Complex.conj_ofReal,
+                  ← Complex.ofReal_inv, RCLike.re_to_complex,
+                  Complex.re_ofReal_mul]
         _ = c⁻¹ * RCLike.re ⟪y, R v⟫_ℂ := by rw [hraw]
         _ = RCLike.re ⟪y, R v⟫_ℂ / c := by
           simp [div_eq_mul_inv, mul_comm]
@@ -643,14 +664,14 @@ private theorem theorem6_3_kyFan_core_of_le_finrank
     (fun i => theorem63ResidualWitness_scalar
       T hT V Z hV hdelta hCompressionUpper hUnwantedLower
       tanTheta0 htan (castIndex i))
-  unfold kyFanApproximationGauge
-  rw [Finset.mul_sum]
-  exact hsum
+  unfold kyFanApproximationGauge at hsum ⊢
+  rw [Finset.mul_sum, ← Fin.sum_univ_eq_sum_range]
+  simpa [castIndex] using hsum
 
 /-- A bounded operator with finite-dimensional domain has no approximation
 singular values beyond that domain dimension. -/
 private theorem kyFanApproximationGauge_eq_finrank_of_finrank_le
-    {E F : Type*}
+    {E F : Type u}
     [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
     [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
     [FiniteDimensional ℂ E]
@@ -747,7 +768,7 @@ theorem theorem6_3_generalizedTanTheta_source_ideal
     (hCompressionSpectrum :
       spectrum ℝ (theorem63Compression T Z) ⊆ Set.Icc beta alpha)
     (hUnwantedSpectrum :
-      spectrum ℝ (T.restrict hV.orthogonalComplement.1) ⊆
+      spectrum ℝ (T.restrict (DavisKahanExt.Reduces.orthogonalComplement hV).1) ⊆
         Set.Ici (alpha + delta))
     (tanTheta0 : Z →L[ℂ] H)
     (htan : HasTheorem63DirectedTangentApproximationNumbers Z V tanTheta0)
@@ -772,7 +793,7 @@ theorem theorem6_3_generalizedTanTheta_source_ideal
       (alpha + delta) * ‖y‖ ^ 2 ≤ RCLike.re ⟪T y, y⟫_ℂ := by
     intro y hy
     exact SpectralOrder.Complex.le_re_inner_on_subspace_of_restriction_spectrum_subset_Ici
-      hT hV.orthogonalComplement.1 hUnwantedSpectrum hy
+      hT (DavisKahanExt.Reduces.orthogonalComplement hV).1 hUnwantedSpectrum hy
   exact theorem6_3_generalizedTanTheta_of_formBounds N T hT V Z hV
     hStrictDimension hdelta hCompressionUpper hUnwantedLower tanTheta0 htan
     hResidual
