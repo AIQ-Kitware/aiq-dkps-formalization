@@ -769,13 +769,13 @@
       "title": "Direct-rotation upper compression data",
       "kind": "bridge",
       "module": "DavisKahan.Experimental.Frontier.Section8",
-      "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.Section8.directRotationUpperCompressionData",
+      "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.Section8.upperCompressionRepulsionData_of_targetSplitting",
       "dependencies": [
         "s3-prop3-1"
       ],
       "source_census_ids": [],
       "priority": "high",
-      "notes": "",
+      "notes": " Declaration renamed during the Section 8 target-splitting honest restatement (was directRotation{Upper,Lower}CompressionData).",
       "external": false
     },
     {
@@ -783,13 +783,13 @@
       "title": "Direct-rotation lower compression data",
       "kind": "bridge",
       "module": "DavisKahan.Experimental.Frontier.Section8",
-      "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.Section8.directRotationLowerCompressionData",
+      "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.Section8.lowerCompressionRepulsionData_of_targetSplitting",
       "dependencies": [
         "s3-prop3-1"
       ],
       "source_census_ids": [],
       "priority": "high",
-      "notes": "",
+      "notes": " Declaration renamed during the Section 8 target-splitting honest restatement (was directRotation{Upper,Lower}CompressionData).",
       "external": false
     },
     {
