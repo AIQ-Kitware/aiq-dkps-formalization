@@ -55,6 +55,8 @@ graduate.
    a slimmed Experimental frontier module. Repoint the 5 frontier nodes' module
    field; repoint the 6 importers.
 3. **Graduate `Frontier/Lemma63`** (Section-6 appendix leakage) → `DavisKahan/Sources/DavisKahan1970/Section6/…` or `DavisKahan/OperatorIdeal/…`.
+   - **REFINEMENT (verified):** Lemma63's `import DavisKahan.Experimental.Frontier.Core` is **vestigial** — it references zero Core declarations. Its real deps are `ForMathlib.…ApproximationNumberSingularValues` + `DavisKahan.Sources.DavisKahan1970.Ideals.*` (all non-Experimental). So: **drop the vestigial Core import** → Lemma63 has 0 Experimental deps → graduate immediately (independent of the Core split). Clean next win after the split lands.
+   - RieszCircle, by contrast, genuinely uses Core's grounded helpers `circleRieszProjection` (17×) and `CircleSeparatesRealSpectrum` (5×) (Core lines 160–175, sorry-free). To unblock RieszCircle, those two grounded helpers must ALSO be split out of Core (a second Core split), or RieszCircle graduation is deferred.
 4. **Split `Frontier/Section3`** (9 grounded + 4 sorry) and **`Frontier/Section4`**
    (2 grounded + 2 sorry): grounded propositions → `DavisKahan/Sources/DavisKahan1970/Section3` / `Section4`.
 5. **Graduate `Frontier/RemainingSourceSurface`** (Section 5/6/7 source theorems)
@@ -86,6 +88,45 @@ NOT the DavisKahan-internal graduation above. NOTE (owner): this will eventually
 require **bringing the needed Spectra pieces into Tau Ceti** and **adopting Tau
 Ceti's data structures** rather than the local/Spectra ones — a deep migration
 that comes after the DK-internal graduation and the roadmap acceptance.
+
+## Reality check: most clusters need whole-subgraph promotion
+
+Verified dependency closures show the frontier is a tightly connected Experimental
+subgraph. **Clean single-module graduations are limited to true leaves:**
+
+- `SpectralProjection` — DONE (leaf).
+- `Lemma63` — clean after dropping its **vestigial** Core import (uses no Core decl).
+- `RemainingSourceSurface` — its ONLY Experimental import is `Frontier/Lemma63`, and
+  it is **vestigial** (uses no Lemma63 decl; real deps are all production:
+  `TanTheta.GenuineSpectrum`, `UnboundedGraphAngle`, `FiniteDimensional.TanTheta.RitzResidual`,
+  `TanTheta.Theorem63FiniteSource`). Drop it → 0 Experimental deps → graduate its
+  **7 grounded nodes** (theorem5_1, section7 sin2/tan2, trialResidual, the two
+  theorem6_3 source specializations, compatible-cross-norm).
+
+**Vestigial-import insight:** several grounded frontier modules carry stale
+Experimental imports they no longer use. Dropping those (verify by build) is the
+cheapest graduation lever — the real coupling is looser than the import lines suggest.
+Clean-win tally so far: SpectralProjection (1) + Core-predicate split (5) +
+Lemma63 (3) + RemainingSourceSurface (7) = **16 of 33 grounded nodes** graduate
+cleanly; the remaining 17 are in the deep clusters below.
+
+**Deep clusters (defer; promote the whole dependency-closed subgraph together):**
+
+- `Frontier/Section3` (9 grounded props) imports **four** Experimental modules:
+  `Frontier/Core`, `InfiniteDimensional/DoubleAngle`,
+  `MathAhead/HiddenFoundations/Section3Nonacute`,
+  `MathAhead/HiddenFoundations/HalmosClassification`. Its 4 sorries are clustered
+  at the end (`twoProjection_operator_classification`,
+  `theorem3_1_spectralMultiplicity_classification`, `compactAngleEigenvalueList`,
+  `corollary3_1_compact_angleList_classification`) — split those off, but the
+  grounded head still needs all four Experimental deps promoted first.
+- `Frontier/RieszCircle` needs Core's grounded helpers `circleRieszProjection` +
+  `CircleSeparatesRealSpectrum` (a second Core split) AND `CayleySelectorBridge`.
+
+So the campaign is **not** mostly quick file moves — the bulk is promoting
+dependency-closed subgraphs (DoubleAngle, HiddenFoundations, Core-helpers,
+CayleySelectorBridge) out of Experimental, each of which pulls its own closure.
+That is the overnight body of work; the leaf graduations above are the quick wins.
 
 ## Blockers named explicitly
 
