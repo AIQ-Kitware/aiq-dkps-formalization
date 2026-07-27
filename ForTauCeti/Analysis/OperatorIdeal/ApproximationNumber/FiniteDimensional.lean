@@ -25,6 +25,21 @@ dimension counting against the kernel of an arbitrary rank-at-most-`n`
 approximant. The upper bound projects onto the first `n` right singular
 directions and controls the complementary spectral tail.
 
+## Main declarations
+
+* `ContinuousLinearMap.approximationNumber_eq_singularValues`: the
+  identification `aₙ(T) = σₙ(T)`, index for index — the whole point of the
+  zero-based convention (see `ApproximationNumber/Basic.lean`).
+* `ContinuousLinearMap.singularValues_le_norm_sub_of_rank_le`: the sharp lower
+  bound against an *arbitrary* rank-at-most-`n` approximant.  It is strictly
+  stronger than the inequality below, which is its infimum form.
+* `ContinuousLinearMap.singularValues_le_approximationNumber`: the half of the
+  identification that does not depend on the truncation construction, and so
+  the half that has a shape in infinite dimensions.
+
+The reverse inequality is private: it is the half that exists only to be
+combined into the identification.  See the declaration for the reasoning.
+
 ## Namespace note
 
 These declarations extend the existing Mathlib namespace `ContinuousLinearMap`
@@ -165,8 +180,17 @@ theorem singularValues_le_approximationNumber
 
 /-- Upper Eckart--Young inequality: projection onto the first `n` right
 singular directions gives a rank-at-most-`n` approximant whose error is bounded
-by the `n`th singular value. -/
-theorem approximationNumber_le_singularValues
+by the `n`th singular value.
+
+Private, unlike its converse `singularValues_le_approximationNumber`.  The
+asymmetry is deliberate and evidence-based rather than an oversight: this
+direction has no consumer outside the identification it feeds, while the
+converse has independent ones, and the two are not equally general — the
+converse bounds an arbitrary approximant from below and is the shape that
+survives into infinite dimensions, whereas this one is built from the singular
+value decomposition and is finite-dimensional in an essential way.  Make it
+public if a consumer ever needs the truncation bound on its own. -/
+private theorem approximationNumber_le_singularValues
     (T : E →L[𝕜] F) (n : ℕ) :
     T.approximationNumber n ≤
       T.singularValues n := by
@@ -268,7 +292,14 @@ theorem approximationNumber_le_singularValues
     exact happrox.trans htailOpNorm'
 
 /-- Finite-dimensional Eckart--Young identification for the zero-based
-approximation-number convention used in this project. -/
+approximation-number convention used in this project: `aₙ(T) = σₙ(T)`, with no
+index shift on either side.
+
+Deliberately **not** `@[simp]`.  It would fire on every `approximationNumber`
+goal that happens to sit under `FiniteDimensional` instances, rewriting the
+object this development is *about* into Mathlib's, which is the wrong normal
+form for a downstream perturbation argument; and unlike the other direction
+there is no cheap way for a consumer to opt out once it is global. -/
 theorem approximationNumber_eq_singularValues
     (T : E →L[𝕜] F) (n : ℕ) :
     T.approximationNumber n =
