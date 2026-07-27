@@ -323,6 +323,27 @@ library module; the paired `Leaderboard.lean` and Comparator configuration test
 that the implementation has the same statement and only the permitted trusted
 dependencies.
 
+**Renaming a staged declaration? Run `lake build Challenge`.** `Challenge` is
+deliberately not in `defaultTargets`, so a fully green default build does not
+compile a single one of these modules. `Challenge/**/Leaderboard.lean` names
+library declarations in `#print axioms`, and `comparator/*.json` stores them as
+plain strings, so neither the compiler nor a `DavisKahan`-wide grep will notice a
+rename that orphans them. Every rename lane must therefore (a) grep the whole
+repository, `Challenge/` and `comparator/*.json` included, not just the Lean
+libraries, and (b) build this library explicitly. The signature pre-flight
+`scripts/check_comparator_signatures.py` takes `--no-build` and a single config
+path; without those it re-runs a full build per invocation.
+
+This is not hypothetical. A rename that passed a green 9272-job default build
+still broke a Leaderboard, and separately a `Conformance` file sat broken from the
+day it was written because the library had no root module and nothing ever built
+it as a whole.
+
+Adding an `import` to a `Conformance` file so its statement can elaborate is not
+a violation of the immutability rule above: the statement and its placeholders
+stay untouched. Filling a placeholder, or changing a statement to match an
+implementation, is.
+
 Challenge admission has an intentionally high bar. Add a theorem only when it
 is a recognizable literature endpoint or a broadly reusable canonical result
 that would be worth highlighting outside this repository. Do not create
