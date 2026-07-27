@@ -1,26 +1,28 @@
 {
   "_schema": "tauceti-extraction-manifest/v1",
   "_comment": "Machine-readable record of the Tau Ceti extraction. `clusters` drives scripts/check_dependency_layers.py (rule 6, closure) and scripts/export_for_tauceti.py (staging->TauCeti copy). `records` carries the per-module provenance and ownership detail required by the campaign spec.",
-  "davis_kahan_commit": "fc38eb48b9b49f2e1d87fe0c7022dc5e262820a7",
+  "davis_kahan_commit": "8874c1789ce9a2cd0742c9974b1ede44bc5b66de",
   "tauceti_submodule_commit": "92c79e5e0a618f8c5c2b9909be1ce50f6891dde7",
   "clusters": [
     {
       "cluster": "approximation-number",
       "roadmap_target": "SpectralSubspacePerturbation Part B (Approximation numbers and rectangular symmetric ideals) / public-api-integration-review PR 1",
       "roadmap_focus": "spectral-subspace-perturbation",
-      "status": "staged-in-fortauceti",
+      "status": "staged-needs-current-validation",
       "upstream_pr": null,
-      "tauceti_population": "DEFERRED. Everything stays staged in ForTauCeti while we reorganize; no commit is made to the external/TauCeti submodule until we are ready to submit (awaiting roadmap guidance). scripts/export_for_tauceti.py reproduces the TauCeti/ copy deterministically on demand; a throwaway export was used to validate the cluster under Tau Ceti's strict build (see migration-build-log-2026-07-24.md) and then reset.",
+      "tauceti_population": "Everything remains staged in ForTauCeti. The 2026-07-24 Tau Ceti throwaway export/build predates the real-valued approximation-number conversion, Courant--Fischer redesign, dependency splits, and unified operator-modulus API; it is historical evidence only. Re-export the dependency-closed module list computed from current imports and rerun strict Tau Ceti validation before submission.",
       "tauceti_target_marker": "<!--tauceti-target:v1 {\"focus\":\"spectral-subspace-perturbation\",\"id\":\"SpectralSubspacePerturbation/PartB/approximation-numbers\"}--> (provisional; confirm accepted id against TauCetiRoadmap before submission)",
       "staging_modules": [
+        "ForTauCeti.SetTheory.Cardinal.Lift",
+        "ForTauCeti.LinearAlgebra.Dimension.RankComp",
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Basic",
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Adjoint",
+        "ForTauCeti.Analysis.InnerProductSpace.BasisSpan",
         "ForTauCeti.Analysis.InnerProductSpace.CourantFischer",
+        "ForTauCeti.Analysis.InnerProductSpace.SingularValues",
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteDimensional",
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.MinMax",
-        "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.OperatorModulus",
-        "ForTauCeti.SetTheory.Cardinal.Lift",
-        "ForTauCeti.LinearAlgebra.Dimension.RankComp"
+        "ForTauCeti.Analysis.InnerProductSpace.OperatorModulus"
       ]
     }
   ],
@@ -211,7 +213,7 @@
       "upstream_pr": null
     },
     {
-      "source_module": "DavisKahan.OperatorIdeal.ApproximationNumbers.OperatorModulus",
+      "source_module": "ForMathlib.Analysis.InnerProductSpace.OperatorAbsoluteValue; DavisKahan.OperatorIdeal.ApproximationNumbers.OperatorModulus",
       "source_declarations": [
         "TauCeti.rectangularOperatorModulus",
         "TauCeti.rectangularGram_nonneg",
@@ -221,12 +223,12 @@
         "TauCeti.norm_rectangularOperatorModulus_apply",
         "TauCeti.norm_rectangularOperatorModulus"
       ],
-      "current_namespace": "ForMathlib.DavisKahan.Experimental.ExactSinTheta -> re-homed to TauCeti",
-      "staging_module": "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.OperatorModulus",
-      "final_tauceti_module": "TauCeti.Analysis.OperatorIdeal.ApproximationNumber.OperatorModulus",
+      "current_namespace": "ContinuousLinearMap",
+      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.OperatorModulus",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.OperatorModulus",
       "ownership_class": "tauceti",
       "roadmap_target": "Part B / PR 1",
-      "provenance_class": "copied (partial: Spectra-coupled invariance and paper-norm wrappers deferred)",
+      "provenance_class": "unified and generalized (former square operatorAbs and rectangular operator-modulus APIs)",
       "direct_dependencies": [
         "Mathlib"
       ],
@@ -236,7 +238,7 @@
       "downstream_users": [
         "DavisKahan.OperatorIdeal.ApproximationNumbers.OperatorModulus (paper-norm wrappers)"
       ],
-      "status": "staged-partial",
+      "status": "staged-needs-current-validation",
       "upstream_pr": null
     }
   ]
