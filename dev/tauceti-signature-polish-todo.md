@@ -31,7 +31,7 @@ Purpose: design review only; no signatures are changed by this document
 
 9. ~~C*-algebra and matrix helpers~~ — RESOLVED, removed from backlog
 
-10. Measure-theory helpers
+10. ~~Measure-theory helpers~~ — RESOLVED, removed from backlog
 
 11. ~~Haagerup-Zsido kernel decomposition~~ — RESOLVED, removed from backlog
 
@@ -1181,141 +1181,60 @@ The index equivalence relating the two indexings is kept **private**: it is an
 implementation detail of Mathlib's `eigenvalues`, and all three public statements
 avoid it.
 
-## 10. Measure-theory helpers
+## 10. ~~Measure-theory helpers~~ — RESOLVED, removed from backlog
 
-| **Current file** | Three ForTauCeti MeasureTheory files |
-| --- | --- |
-| **Proposed disposition** | Generalize and relocate only after exact Mathlib reuse audit. |
-| **Readiness** | Unknown. |
-| **Primary review risks** | Proof-specific rate lemmas; generic file names; missing canonical measurable-infimum object; possible existing probability complement facts. |
-| **Likely PR slice** | Independent small PRs, not bundled with operator theory. |
+Executed 2026-07-27 (jon). **The reuse audit cleared the section: nothing was deleted.**
+That is the opposite of what this section's framing anticipated ("Generalize and relocate
+only after exact Mathlib reuse audit", and for `one_sub_measure_compl_le` specifically,
+"may not merit a new public declaration"). Each candidate was checked by putting the goal
+to `exact?` against Mathlib, not by reading names.
 
-#### P0  measurableSet_exists_mem_le
+**`one_sub_measure_compl_le` — KEEP.** `exact?` cannot close
+`1 - μ sᶜ ≤ μ s` for `[IsProbabilityMeasure μ]`. Upstream `prob_compl_eq_one_sub₀` needs
+`NullMeasurableSet s` and `prob_compl_le_one_sub_of_le_prob` needs `MeasurableSet s`; the
+measurability-free form genuinely does not exist, and it is the form high-probability events
+are consumed in, where the event sets are often not easily measurable.
 
-**Disposition: Strengthen / reuse**
+**`measurableSet_exists_mem_le` — KEEP, and the P0 request is now satisfied.** The backlog
+asked for the missing canonical measurable-infimum object, with the set form derived. Added:
 
-```lean
-theorem measurableSet_exists_mem_le {Y : Type*} [PseudoMetricSpace Y] {Ω : Type*} [MeasurableSpace Ω] {S : Set Y} (hS : IsCompact S) {F : Y → Ω → ℝ} (hFc : ∀ ω, ContinuousOn (fun y => F y ω) S) (hFm : ∀ y ∈ S, Measurable (F y)) (c : ℝ) : MeasurableSet {ω | ∃ y ∈ S, F y ω ≤ c}
-```
+- `TauCeti.exists_mem_le_iff_iInf_le` — on a nonempty compact `S` the two agree, because the
+  infimum is attained. Stated with `omit [MeasurableSpace Ω]`: it is pure order/topology, and
+  the linter caught that the instance was along for the ride.
+- `TauCeti.measurable_iInf_of_isCompact` — `Measurable fun ω => ⨅ y : S, F y ω`.
 
-**Proposed target shape**
+FINDING on the direction of the derivation: the backlog proposed deriving the set form *from*
+the infimum lemma. It is done the other way round, because the existential form is what the
+uncountable-index argument actually proves and what consumers use, while the infimum
+statement follows from it in four lines through `measurable_of_Iic`. Deriving in the proposed
+direction would have meant rewriting the separability/sequential-compactness proof for no
+gain. Recorded here so the choice is not re-litigated.
 
-```lean
-theorem measurable_iInf_compact
-    (hS : IsCompact S)
-    (hcont : ∀ ω, ContinuousOn (fun y => F y ω) S)
-    (hmeas : ∀ y ∈ S, Measurable (F y)) :
-    Measurable (fun ω => ⨅ y : S, F y ω)
+Why the infimum lemma is the right canonical object anyway: Mathlib's `measurable_iInf`
+requires a *countable* index, and the whole content here is that continuity in the parameter
+replaces countability over an uncountable compact set.
 
--- derive:
-theorem measurableSet_exists_mem_le ...
-```
+**The three `tendstoInMeasure_*` rate lemmas — KEEP, unchanged.** Mathlib's
+`ConvergenceInMeasure` offers entry points from a.e. convergence, from `eLpNorm`
+convergence, and the `iff_dist`/`iff_norm`/`iff_enorm` reformulations — but **no**
+vanishing-rate or high-probability entry point at all. These three are the
+concentration-inequality bridge and fill a real gap. The names are already
+conclusion-first, and the review risk this section listed ("proof-specific rate lemmas") does
+not hold: they are stated over an arbitrary filter `l` and an arbitrary `EDist E`, matching
+the generality of `TendstoInMeasure` itself. The docstrings' claim that null-measurability is
+dispensable for the first two but *not* for the third is correct and was re-derived: bounding
+`μ bad` above from `μ good → 1` needs superadditivity, which fails for outer measures.
 
-- Prefer the measurable value function as the reusable theorem; derive the existential sublevel set.
+**`measurable_of_iUnion_restrict` — KEEP.** `exact?` cannot close it; upstream has only the
+two-set `measurable_of_restrict_of_restrict_compl`, not the countable-cover version.
 
-- Check measurable maximum/minimum theorems and Caratheodory integrand API in Mathlib.
-
-- Rename CompactExists.lean to a canonical measurable-minimum topic.
-
-**Likely adversarial review:** The current theorem is a single sublevel-set consequence rather than the characteristic measurable-infimum result.
-
-#### P0  tendstoInMeasure_of_tendsto_measure_rate_lt_edist
-
-**Disposition: Reuse / rename**
-
-```lean
-theorem tendstoInMeasure_of_tendsto_measure_rate_lt_edist [EDist E] {f : ι → α → E} {g : α → E} {rate : ι → ℝ≥0∞} (hrate : Tendsto rate l (𝓝 0)) (h : Tendsto (fun i => μ {x | rate i < edist (f i x) (g x)}) l (𝓝 0)) : TendstoInMeasure μ f l g
-```
-
-**Proposed target shape**
-
-```lean
-theorem tendstoInMeasure_of_measure_edist_gt_tendsto_zero
-    (hrate : Tendsto rate l (𝓝 0))
-    (hbad : Tendsto (fun i => μ {x | rate i < edist (f i x) (g x)}) l (𝓝 0)) :
-    TendstoInMeasure μ f l g
-```
-
-- Choose a name that exposes bad-event measure convergence, not “tendsto_measure_rate_lt_edist” word order.
-
-- Use a nonnegative rate type; ENNReal is natural here.
-
-- Check if this is already the definition or a standard epsilon criterion.
-
-**Likely adversarial review:** The long proof-shaped name is likely to be renamed, and direct duplication of TendstoInMeasure criteria would block.
-
-#### P0  tendstoInMeasure_of_tendsto_measure_rate_lt_dist
-
-**Disposition: Fix rate type / derive**
-
-```lean
-theorem tendstoInMeasure_of_tendsto_measure_rate_lt_dist [PseudoMetricSpace E] {f : ι → α → E} {g : α → E} {rate : ι → ℝ} (hrate : Tendsto rate l (𝓝 0)) (h : Tendsto (fun i => μ {x | rate i < dist (f i x) (g x)}) l (𝓝 0)) : TendstoInMeasure μ f l g
-```
-
-**Proposed target shape**
-
-```lean
-theorem tendstoInMeasure_of_measure_dist_gt_tendsto_zero
-    {rate : ι → ℝ≥0} ...
-```
-
-- Use ℝ≥0 or require eventual nonnegativity; a negative real rate makes the bad event nearly universal.
-
-- Derive from the edist theorem via coercions.
-
-- Keep only if the metric specialization materially improves use.
-
-**Likely adversarial review:** Generality review will challenge unrestricted real-valued rates and duplicated edist/dist proofs.
-
-#### P1  tendstoInMeasure_of_tendsto_measure_dist_le_rate
-
-**Disposition: Polish / derive**
-
-```lean
-theorem tendstoInMeasure_of_tendsto_measure_dist_le_rate [PseudoMetricSpace E] [IsProbabilityMeasure μ] {f : ι → α → E} {g : α → E} {rate : ι → ℝ} (hrate : Tendsto rate l (𝓝 0)) (hmeas : ∀ i, NullMeasurableSet {x | dist (f i x) (g x) ≤ rate i} μ) (hprob : Tendsto (fun i => μ {x | dist (f i x) (g x) ≤ rate i}) l (𝓝 1)) : TendstoInMeasure μ f l g
-```
-
-**Proposed target shape**
-
-```lean
-theorem tendstoInMeasure_of_measure_dist_le_tendsto_one
-    [IsProbabilityMeasure μ]
-    (hrate : Tendsto rate l (𝓝 0))
-    (hgood : Tendsto (fun i => μ {x | dist (f i x) (g x) ≤ rate i}) l (𝓝 1)) :
-    TendstoInMeasure μ f l g
-```
-
-- Use a nonnegative rate type.
-
-- Try to remove explicit NullMeasurableSet by assuming measurable f/g or deriving measurability from the distance map.
-
-- Derive through the complement/bad-event theorem and a standard probability measure identity.
-
-**Likely adversarial review:** The signature exposes a per-index measurability obligation that may indicate the theorem is stated one level too low.
-
-#### P0  one_sub_measure_compl_le
-
-**Disposition: Reuse audit**
-
-```lean
-theorem one_sub_measure_compl_le {Ω : Type*} [MeasurableSpace Ω] (μ : Measure Ω) [IsProbabilityMeasure μ] (s : Set Ω) : 1 - μ sᶜ ≤ μ s
-```
-
-**Proposed target shape**
-
-```lean
-theorem one_sub_measure_compl_le_measure
-    [IsProbabilityMeasure μ] (s : Set Ω) :
-    1 - μ sᶜ ≤ μ s
-```
-
-- Rename to include the right-hand side.
-
-- Search for measure_compl_le or ENNReal subtraction lemmas first.
-
-- If measurable s gives equality, expose that standard theorem rather than only the weak nonmeasurable inequality.
-
-**Likely adversarial review:** This is likely a one-line consequence of existing probability-measure API and may not merit a new public declaration.
+**COUPLING, recorded for every future rename lane.** These declarations are restated verbatim
+in `Challenge/MathlibPending/{CfcMeasurable,TendstoInMeasure,ProbabilityQoL}/{Conformance,Leaderboard}.lean`
+and listed by name in three `comparator/*.json` configs, with live consumers in
+`Acharyya2024/WellKnown.lean` and `DkpsQuench2026/Paper/EvaluationConcentration.lean`.
+`Challenge` is **not** in `defaultTargets`. This pass therefore renamed nothing — the audit
+found no rename worth the churn — and all five §10 `Challenge` modules were built
+individually to confirm.
 
 ## 11. Haagerup-Zsido kernel decomposition — RESOLVED
 
