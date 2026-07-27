@@ -163,7 +163,7 @@ State whether scatter is normalized, whether Fourier transform uses 2π, whether
 
 ## 5. Approximation-number foundation
 
-> **RECONCILED 2026-07-27 — §5.1 and §5.4 are closed; §5.2 and §5.3 are what is left.**
+> **RECONCILED 2026-07-27 — §5 IS CLOSED. Every subsection has a disposition.**
 > The audit that used to sit here recorded a divergence between this section and the tree;
 > that divergence has been worked off item by item against
 > `ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/`, and every §5.1 heading is now
@@ -177,12 +177,16 @@ State whether scatter is normalized, whether Fourier transform uses 2π, whether
 >   verified-and-kept with the reason recorded, and two blocks were stale text rather than
 >   work. Name index in Appendix A.
 > - **§5.4 MinMax.lean — CLOSED** earlier the same day; see the lane note in `dev/LANES.md`.
-> - **§5.2 Adjoint.lean and §5.3 FiniteDimensional.lean — still open**, and still to be
->   re-checked against the tree before being worked: the same drift that produced this audit
->   block applies to them. Known specifics: §5.3's `singularValues_le_norm_sub_of_rank_le`,
->   `singularValues_le_approximationNumber` and `approximationNumber_eq_singularValues` are
->   already struck through, so what remains there is `approximationNumber_le_singularValues`;
->   §5.2 carries a single P1 "keep or annotate".
+> - **§5.2 Adjoint.lean — CLOSED.** Its single P1 got its `@[simp]`, and both questions the
+>   item left open were answered with evidence: the private rank transport does *not*
+>   duplicate Mathlib (`LinearMap.finrank_range_adjoint` is `finrank`-valued and so needs
+>   finite-dimensional ambient spaces, which is exactly the case this helper is not about),
+>   and both `CompleteSpace` assumptions are load-bearing.
+> - **§5.3 FiniteDimensional.lean — CLOSED.** Its one open P1 resolved to *privatize*, on
+>   consumer evidence rather than on the sketch's symmetry argument.
+>
+> Nothing in §5 is claimed or open. The remaining backlog is §12.2–12.7 (design-stage by the
+> roadmap's own rule) and §13's adapter retirement.
 
 
 ### 5.1 Basic.lean
@@ -903,9 +907,38 @@ theorem approximationNumber_smul (c : 𝕜) (T : E →L[𝕜] F) (n : ℕ) : (c 
 | **Primary review risks** | Potential duplication with generic rank-adjoint API; missing simp annotation; RCLike/CompleteSpace assumptions. |
 | **Likely PR slice** | PR A2. |
 
-#### P1  approximationNumber_adjoint
+#### P1  ~~approximationNumber_adjoint~~ — RESOLVED 2026-07-27
 
-**Disposition: Keep / annotate**
+**Disposition: `@[simp]` added; statement, name and assumptions unchanged.**  It
+orients (the left-hand side is strictly larger — it eliminates `adjoint`
+outright) and cannot loop, which is the condition the item attaches; the reason
+is recorded on the declaration rather than left for the next reader to re-derive.
+
+**The item's two open questions, answered with evidence rather than assumed:**
+
+* *Does the private rank proof duplicate Mathlib?*  **No.**  The closest
+  statement is `LinearMap.finrank_range_adjoint`, and it is `finrank`-valued,
+  which forces `[FiniteDimensional]` on the ambient spaces; this helper is about
+  a *finite-rank operator between infinite-dimensional* Hilbert spaces, where
+  `finrank` of the ambient space is `0` and the Mathlib lemma says nothing.  It
+  stays private, as the item asks.
+* *Is `CompleteSpace` needed on both spaces, or only because `adjoint` is
+  defined there?*  **Both are genuinely needed and neither is inherited noise.**
+  `ContinuousLinearMap.adjoint` is an isometric equivalence `(E →L[𝕜] F) ≃ₗᵢ⋆
+  (F →L[𝕜] E)` that requires completeness of both sides, and the statement names
+  the adjoint on both sides (`T.adjoint` and, through `adjoint_adjoint`, its
+  own adjoint).  Nothing weaker states.
+
+**Also landed here, opportunistic reuse:** the private helper's closing step was
+a `change` down to `LinearMap` level followed by `LinearMap.rank_comp_le_left`.
+That is exactly what §5.1's new `ContinuousLinearMap.rank_comp_le_left` exists
+for, so the helper lost eight lines and a `change`.  Its remaining lift plumbing
+also collapsed to one `Cardinal.lift_le_natCast` round trip.  And one stale
+`coe_nnnorm` simp argument, left over from the `ℝ≥0` codomain, is gone —
+**worth knowing: the `unusedSimpArgs` linter did not flag it**, so `simpa only`
+argument lists are not covered by the warning-zero sweep.
+
+*Original disposition:*
 
 ```lean
 theorem approximationNumber_adjoint (T : E →L[𝕜] F) (n : ℕ) : T.adjoint.approximationNumber n = T.approximationNumber n
@@ -1015,9 +1048,33 @@ theorem singularValue_le_approximationNumber
 
 **Likely adversarial review:** Constructor noise and mixed codomains are likely API-design findings.
 
-#### P1  approximationNumber_le_singularValues
+#### P1  ~~approximationNumber_le_singularValues~~ — RESOLVED 2026-07-27
 
-**Disposition: Possibly privatize**
+**Disposition: privatized.**  The item's own criterion is whether both
+directions have independent consumers; they do not.  `singularValues_le_
+approximationNumber` has a consumer outside this file
+(`DavisKahan/OperatorIdeal/ApproximationNumbers/Core.lean`) and stays public;
+this direction has **none**, and exists only to be combined into
+`approximationNumber_eq_singularValues`, so it is proof decomposition and is now
+`private`.
+
+**The resulting asymmetry is principled, not an oversight**, and the reason is
+recorded on the declaration so nobody "restores parallelism" later: the public
+direction bounds an *arbitrary* rank-at-most-`n` approximant from below and is
+the shape that survives into infinite dimensions (it is the half roadmap B.4
+says the two-sided package must be honest about), whereas this one is built from
+the singular value decomposition and is finite-dimensional in an essential way.
+The sketch's "keep syntactically parallel with the reverse inequality" would
+have preserved a symmetry the mathematics does not have.
+
+**Related decision recorded while here:** the resolved
+`approximationNumber_eq_singularValues` sketch above proposed `@[simp]`.
+**Declined**, with the reason on the declaration: it would fire on every
+`approximationNumber` goal that happens to sit under `FiniteDimensional`
+instances and rewrite the object this development is *about* into Mathlib's,
+which is the wrong normal form for a downstream perturbation argument.
+
+*Original disposition:*
 
 ```lean
 theorem approximationNumber_le_singularValues (T : E →L[𝕜] F) (n : ℕ) : T.approximationNumber n ≤ (⟨T.toLinearMap.singularValues n, T.toLinearMap.singularValues_nonneg n⟩ : NNReal)

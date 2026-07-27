@@ -162,7 +162,7 @@ theorem le_approximationNumber_of_finrank_lt
         simp only [hy, Submodule.coe_smul, norm_smul, RCLike.norm_ofReal, abs_inv, abs_norm]
         exact inv_mul_cancel₀ hxn
       have hTy : ‖T (y : E₁)‖ = ‖(x : E₁)‖⁻¹ * ‖T (x : E₁)‖ := by
-        simp [hy, Submodule.coe_smul, norm_smul, abs_inv]
+        simp [hy, norm_smul]
       have hstep := hV y hyNorm
       rw [hTy] at hstep
       calc c * ‖(x : E₁)‖
