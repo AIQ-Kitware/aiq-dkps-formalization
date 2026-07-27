@@ -67,6 +67,23 @@ RESUMED (2026-07-23) and claims lanes under `edward (resumed)` below.
 
 ## Cross-lane findings (post here to save another agent a re-derivation)
 
+- **The comparator gate is now actually runnable, and it gives precise diagnoses**
+  (jon, 2026-07-27). `lake build Challenge` succeeds for the first time (8891 jobs) after
+  the `globs` repair, so `scripts/check_comparator_signatures.py` can reach both sides of
+  every config. Two practical notes for the comparator lane: pass `--no-build` and a single
+  config path, otherwise it re-runs a full build per invocation and takes many minutes; and
+  for `pending-davis-kahan-sylvester-pi-over-two.json` the gate now reports exactly
+
+  ```
+  ERROR ForMathlib.DavisKahanTheory.uiNorm_sylvester_le_of_spectralDistance
+  ERROR ForMathlib.DavisKahanTheory.sylvester_hasFiniteUnitaryOrbitCertificate_of_spectralDistance
+  ```
+
+  i.e. both are pure `ForMathlib.` → `TauCeti.` namespace drift, matching the ~24 edward
+  triaged. Both modules on both sides of that config now compile, so the repair is
+  verifiable end to end rather than erroring out before comparison. Before the `globs` fix
+  this config could not be diagnosed at all — its `Conformance` module had never compiled.
+
 - **`main` currently builds RED on the `Challenge` library, and it is my fault**
   (jon, 2026-07-27). My §9.2 rename in `33000c0`
   (`Matrix.PosSemidef.eigenvalues₀_eq_zero_of_le` → `…_eq_zero_of_rank_le`, `i` made
