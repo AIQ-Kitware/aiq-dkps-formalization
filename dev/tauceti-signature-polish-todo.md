@@ -1539,12 +1539,32 @@ carry a transitional adapter whose deletion condition is stated.*
 > a distinct piece of work from the canonical-API lanes that created them, and it is not
 > currently claimed by anyone.
 
-> **Gate gap found while reconciling this table (§10 lane).** The last bullet above asks for
-> "a grep gate for old fully qualified names" after each rename. There is no such gate, and
-> its absence is not theoretical: the §9.2 rename passed a green 9272-job default build and
-> still broke `Challenge.MathlibPending.RankPsdRealization.Leaderboard`, because `Challenge`
-> is not in `defaultTargets` and `comparator/*.json` restates declaration names as data. Any
-> such gate has to cover `Challenge/` and `comparator/*.json`, not just the Lean libraries.
+> **~~Gate gap found while reconciling this table (§10 lane).~~ CLOSED 2026-07-27 —
+> `scripts/check_declaration_name_drift.py`.** The last bullet above asks for "a grep gate for
+> old fully qualified names" after each rename. There was no such gate, and its absence was
+> not theoretical: the §9.2 rename passed a green 9272-job default build and still broke
+> `Challenge.MathlibPending.RankPsdRealization.Leaderboard`, because `Challenge` is not in
+> `defaultTargets` and `comparator/*.json` restates declaration names as data.
+>
+> The gate now exists and covers exactly those two blind spots. It is **build-free** — it
+> resolves names by parsing declarations out of the sources rather than by asking Lean — so it
+> runs in about a second and works on a tree that does not compile. Three hard checks:
+> `pinned-name-resolves` (every name asserted as data, in a comparator `theorem_names` list or
+> a `#print axioms` line, names a declaration that exists), `pinned-name-in-challenge` (the
+> challenge module actually declares what its config pins — this is the
+> `ForMathlib`-vs-`TauCeti` mismatch class, which compiles on both sides and fails only in the
+> comparator's export comparison), and `pinned-name-unaudited` (a pinned statement whose axiom
+> footprint no leaderboard certifies). A leaderboard auditing *more* than its config pins is
+> reported as an informational note, not a failure — that is legitimate.
+>
+> **Limits, stated rather than hidden:** resolution is syntactic, so it does not follow
+> `export`, `open … in`, or alias targets, and a pass is not proof of resolvability. It is a
+> tripwire for the failure mode that has actually occurred here; the compiler and
+> `scripts/check_comparator_signatures.py` remain ground truth. Regression tests in
+> `scripts/tests/test_check_declaration_name_drift.py` pin the two bugs found while writing it
+> — a bare `end` closing a `section` must not pop a `namespace`, and the `end`/`namespace`/
+> `section` patterns must not span newlines (`\s*$` under `re.MULTILINE` parses `end` and a
+> following `section` as one `end section`, silently unbalancing every name in the file).
 
 ## 14. Pre-PR declaration checklist
 
