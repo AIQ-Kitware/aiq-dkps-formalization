@@ -14,17 +14,37 @@ public import Mathlib.Analysis.InnerProductSpace.PiL2
 For a finite family `z : Fin n → E` in an inner-product space, the centered scatter operator
 is `∑ i, (zᵢ - mean z) ⊗ (zᵢ - mean z)`.  The primary theorem is the exact add-one update
 
-`S(z ++ [y]) = S(z) + n/(n+1) • ((y - mean z) ⊗ (y - mean z))`,
+`S(Fin.snoc z y) = S(z) + n/(n+1) • ((y - mean z) ⊗ (y - mean z))`,
 
 from which Löwner monotonicity and quadratic-form growth are short corollaries.
 
 ## Main results
 
-* `ForMathlib.centeredScatter_append`: the exact operator-level add-one identity;
-* `ForMathlib.centeredScatter_le_append`: appending a point grows the scatter in Löwner order;
-* `ForMathlib.re_inner_centeredScatter_append`: the quadratic-form version of the update;
-* `ForMathlib.re_inner_centeredScatter_self`: the scatter quadratic form is the sum of
+* `TauCeti.centeredScatter_append`: the exact operator-level add-one identity;
+* `TauCeti.centeredScatter_le_append`: appending a point grows the scatter in Löwner order;
+* `TauCeti.re_inner_centeredScatter_append`: the quadratic-form version of the update;
+* `TauCeti.re_inner_centeredScatter_self`: the scatter quadratic form is the sum of
   squared centered inner products.
+
+## Implementation notes
+
+`centeredScatter` is a `ContinuousLinearMap`. Its summands `rankOne 𝕜 a a` are continuous
+already, so taking the bundled linear map would discard continuity for nothing; the
+`IsPositive` and Löwner-order API used below exists at both levels and needs no
+completeness assumption.
+
+`finiteMean` is *not* an instance of an existing Mathlib average.
+
+* `Finset.expect`, the canonical finite average, requires `Module ℚ≥0 E`. That instance does
+  not resolve for a general `𝕜`-inner-product space: `NormedSpace ℝ E` is reachable only
+  through `InnerProductSpace.rclikeToReal` / `NormedSpace.restrictScalars`, which are
+  deliberately definitions rather than instances.
+* `Finset.centroid` does typecheck here, but `Finset.affineCombination` is defined against
+  `Classical.arbitrary`, so the centroid of the empty family is nonconstructive junk.
+  `finiteMean` instead returns `0` there, by Mathlib's total-inverse convention, and
+  `finiteMean_append` is deliberately stated to hold *at* `n = 0`.
+
+See backlog §8.1.
 
 ## Provenance
 
@@ -36,7 +56,9 @@ from which Löwner monotonicity and quadratic-form growth are short corollaries.
   `ForMathlib` → `TauCeti`).
 * Original authors / copyright: Jon Crall, GPT-5.6 High, Claude Fable 5;
   Copyright (c) 2026 Kitware, Inc.; Apache 2.0.
-* Extraction class: **copied**, converted to the Tau Ceti module system.
+* Extraction class: **copied**, converted to the Tau Ceti module system, then polished
+  against the reuse rubric (backlog §8.1): `appendFin` was deleted in favour of
+  `Fin.snoc`, and `centeredScatter` moved from `E →ₗ[𝕜] E` to `E →L[𝕜] E`.
 * Spectra influence: **none** (imports only Mathlib).
 -/
 
@@ -55,30 +77,12 @@ this zero. -/
 noncomputable def finiteMean {n : ℕ} (z : Fin n → E) : E :=
   ((n : 𝕜)⁻¹) • ∑ i, z i
 
-/-- Append one point to a `Fin n` family, placing the new point at the final index. -/
-def appendFin {n : ℕ} (z : Fin n → E) (y : E) : Fin (n + 1) → E :=
-  Fin.lastCases y z
-
-variable {𝕜}
-
-omit [NormedAddCommGroup E] in
-@[simp] theorem appendFin_castSucc {n : ℕ} (z : Fin n → E) (y : E) (i : Fin n) :
-    appendFin z y i.castSucc = z i :=
-  Fin.lastCases_castSucc ..
-
-omit [NormedAddCommGroup E] in
-@[simp] theorem appendFin_last {n : ℕ} (z : Fin n → E) (y : E) :
-    appendFin z y (Fin.last n) = y :=
-  Fin.lastCases_last ..
-
-variable (𝕜)
-
 /-- Unnormalized centered scatter operator `∑ i, (zᵢ - mean z) ⊗ (zᵢ - mean z)`.
 
 The rank-one convention is chosen so its quadratic form is
 `∑ i, ‖⟪zᵢ - mean z, x⟫‖²`. -/
-noncomputable def centeredScatter {n : ℕ} (z : Fin n → E) : E →ₗ[𝕜] E :=
-  ∑ i, (rankOne 𝕜 (z i - finiteMean 𝕜 z) (z i - finiteMean 𝕜 z)).toLinearMap
+noncomputable def centeredScatter {n : ℕ} (z : Fin n → E) : E →L[𝕜] E :=
+  ∑ i, rankOne 𝕜 (z i - finiteMean 𝕜 z) (z i - finiteMean 𝕜 z)
 
 /-- The centered residuals sum to zero. -/
 theorem sum_sub_finiteMean_eq_zero {n : ℕ} (z : Fin n → E) :
@@ -94,23 +98,24 @@ theorem sum_sub_finiteMean_eq_zero {n : ℕ} (z : Fin n → E) :
 `1/(n+1)` of the deviation `y - mean z`.  The formula also holds at `n = 0`, where the old
 mean is the junk value `0` and the new mean is `y`. -/
 theorem finiteMean_append {n : ℕ} (z : Fin n → E) (y : E) :
-    finiteMean 𝕜 (appendFin z y) =
+    finiteMean 𝕜 (Fin.snoc z y) =
       finiteMean 𝕜 z + ((n : 𝕜) + 1)⁻¹ • (y - finiteMean 𝕜 z) := by
+  have hsum : ∑ i, Fin.snoc z y i = (∑ i, z i) + y := by
+    rw [Fin.sum_univ_castSucc]
+    simp
   rcases Nat.eq_zero_or_pos n with hn | hn
   · subst hn
-    have h0 : ∀ i : Fin 1, appendFin z y i = y := fun i => by
-      have hi : i = Fin.last 0 := Subsingleton.elim _ _
-      rw [hi, appendFin_last]
-    simp [finiteMean, h0]
+    -- The old mean is the junk value `0` and the new family sums to `y`.
+    unfold finiteMean
+    rw [hsum]
+    simp
   · have hn0 : (n : 𝕜) ≠ 0 := Nat.cast_ne_zero.mpr hn.ne'
     have hn1 : (n : 𝕜) + 1 ≠ 0 := by
       have : ((n + 1 : ℕ) : 𝕜) ≠ 0 := Nat.cast_ne_zero.mpr (Nat.succ_ne_zero n)
       push_cast at this
       exact this
     unfold finiteMean
-    rw [show ∑ i, appendFin z y i = (∑ i, z i) + y by
-      rw [Fin.sum_univ_castSucc]
-      simp]
+    rw [hsum]
     push_cast
     match_scalars
     all_goals field_simp
@@ -119,9 +124,9 @@ theorem finiteMean_append {n : ℕ} (z : Fin n → E) (y : E) :
 /-- **Exact add-one centered-scatter identity**:
 `S(z ++ [y]) = S(z) + n/(n+1) • ((y - mean z) ⊗ (y - mean z))`. -/
 theorem centeredScatter_append {n : ℕ} (z : Fin n → E) (y : E) :
-    centeredScatter 𝕜 (appendFin z y) = centeredScatter 𝕜 z +
+    centeredScatter 𝕜 (Fin.snoc z y) = centeredScatter 𝕜 z +
       ((n : 𝕜) / ((n : 𝕜) + 1)) •
-        (rankOne 𝕜 (y - finiteMean 𝕜 z) (y - finiteMean 𝕜 z)).toLinearMap := by
+        rankOne 𝕜 (y - finiteMean 𝕜 z) (y - finiteMean 𝕜 z) := by
   have hn1 : (n : 𝕜) + 1 ≠ 0 := by
     have : ((n + 1 : ℕ) : 𝕜) ≠ 0 := Nat.cast_ne_zero.mpr (Nat.succ_ne_zero n)
     push_cast at this
@@ -131,10 +136,10 @@ theorem centeredScatter_append {n : ℕ} (z : Fin n → E) (y : E) :
   set c : 𝕜 := ((n : 𝕜) + 1)⁻¹ with hc
   have hconjc : (starRingEnd 𝕜) c = c := by
     simp [hc]
-  have hmean' : finiteMean 𝕜 (appendFin z y) = m + c • δ := finiteMean_append 𝕜 z y
+  have hmean' : finiteMean 𝕜 (Fin.snoc z y) = m + c • δ := finiteMean_append 𝕜 z y
   have hzero : ∑ i, (z i - m) = 0 := by
     rw [hm]; exact sum_sub_finiteMean_eq_zero 𝕜 z
-  apply LinearMap.ext
+  apply ContinuousLinearMap.ext
   intro x
   have hterm : ∀ a : E,
       inner 𝕜 (a - c • δ) x • (a - c • δ) =
@@ -145,10 +150,10 @@ theorem centeredScatter_append {n : ℕ} (z : Fin n → E) (y : E) :
     module
   have hzero' : ∑ i, inner 𝕜 (z i - m) x = 0 := by
     rw [← sum_inner, hzero, inner_zero_left]
-  simp only [centeredScatter, LinearMap.sum_apply, LinearMap.add_apply, LinearMap.smul_apply,
-    ContinuousLinearMap.coe_coe, rankOne_apply]
+  simp only [centeredScatter, sum_apply, add_apply,
+    smul_apply, rankOne_apply]
   rw [hmean', Fin.sum_univ_castSucc]
-  simp only [appendFin_castSucc, appendFin_last]
+  simp only [Fin.snoc_castSucc, Fin.snoc_last]
   have hres : ∀ i : Fin n, z i - (m + c • δ) = (z i - m) - c • δ := fun i => by
     rw [sub_add_eq_sub_sub]
   have hlast : y - (m + c • δ) = δ - c • δ := by
@@ -185,7 +190,7 @@ theorem re_inner_centeredScatter_self {n : ℕ} (z : Fin n → E) (x : E) :
       ∑ i, ‖inner 𝕜 (z i - finiteMean 𝕜 z) x‖ ^ 2 := by
   have h1 : inner 𝕜 (centeredScatter 𝕜 z x) x =
       ((∑ i, ‖inner 𝕜 (z i - finiteMean 𝕜 z) x‖ ^ 2 : ℝ) : 𝕜) := by
-    rw [centeredScatter, LinearMap.sum_apply, sum_inner]
+    rw [centeredScatter, sum_apply, sum_inner]
     push_cast
     refine Finset.sum_congr rfl fun i _ => ?_
     rw [rankOne_apply, inner_smul_left, RCLike.conj_mul]
@@ -196,27 +201,28 @@ theorem centeredScatter_isPositive {n : ℕ} (z : Fin n → E) :
     (centeredScatter 𝕜 z).IsPositive := by
   constructor
   · intro u v
-    rw [centeredScatter, LinearMap.sum_apply, LinearMap.sum_apply, sum_inner, inner_sum]
+    simp only [centeredScatter, ContinuousLinearMap.toLinearMap_sum, LinearMap.sum_apply,
+      ContinuousLinearMap.coe_coe, sum_inner, inner_sum]
     refine Finset.sum_congr rfl fun i _ => ?_
-    rw [ContinuousLinearMap.coe_coe, rankOne_apply, rankOne_apply, inner_smul_left,
+    rw [rankOne_apply, rankOne_apply, inner_smul_left,
       inner_smul_right, inner_conj_symm]
     ring
   · intro u
-    rw [re_inner_centeredScatter_self]
+    rw [ContinuousLinearMap.reApplyInnerSelf_apply, re_inner_centeredScatter_self]
     exact Finset.sum_nonneg fun i _ => sq_nonneg _
 
 /-- Appending a point can only increase the centered scatter in Löwner order. -/
 theorem centeredScatter_le_append {n : ℕ} (z : Fin n → E) (y : E) :
-    centeredScatter 𝕜 z ≤ centeredScatter 𝕜 (appendFin z y) := by
-  rw [LinearMap.le_def, centeredScatter_append, add_sub_cancel_left]
+    centeredScatter 𝕜 z ≤ centeredScatter 𝕜 (Fin.snoc z y) := by
+  rw [ContinuousLinearMap.le_def, centeredScatter_append, add_sub_cancel_left]
   set δ := y - finiteMean 𝕜 z with hδ
   have hcoef : (starRingEnd 𝕜) ((n : 𝕜) / ((n : 𝕜) + 1)) = (n : 𝕜) / ((n : 𝕜) + 1) := by
     simp
   have hre : ∀ u : E, RCLike.re (inner 𝕜
-      ((((n : 𝕜) / ((n : 𝕜) + 1)) • (rankOne 𝕜 δ δ).toLinearMap) u) u) =
+      ((((n : 𝕜) / ((n : 𝕜) + 1)) • rankOne 𝕜 δ δ) u) u) =
       ((n : ℝ) / ((n : ℝ) + 1)) * ‖inner 𝕜 δ u‖ ^ 2 := by
     intro u
-    rw [LinearMap.smul_apply, inner_smul_left, hcoef, ContinuousLinearMap.coe_coe,
+    rw [smul_apply, inner_smul_left, hcoef,
       rankOne_apply, inner_smul_left, RCLike.conj_mul]
     have hcast : ((n : 𝕜) / ((n : 𝕜) + 1)) = (((n : ℝ) / ((n : ℝ) + 1) : ℝ) : 𝕜) := by
       push_cast
@@ -224,26 +230,26 @@ theorem centeredScatter_le_append {n : ℕ} (z : Fin n → E) (y : E) :
     rw [hcast, ← RCLike.ofReal_pow, ← RCLike.ofReal_mul, RCLike.ofReal_re]
   constructor
   · intro u v
-    rw [LinearMap.smul_apply, LinearMap.smul_apply, inner_smul_left, inner_smul_right, hcoef,
-      ContinuousLinearMap.coe_coe, rankOne_apply, rankOne_apply, inner_smul_left,
-      inner_smul_right, inner_conj_symm]
+    simp only [FunLike.coe_smul, Pi.smul_apply, ContinuousLinearMap.coe_coe,
+      inner_smul_left, inner_smul_right, hcoef, rankOne_apply]
+    rw [inner_conj_symm]
     ring
   · intro u
-    rw [hre u]
+    rw [ContinuousLinearMap.reApplyInnerSelf_apply, hre u]
     positivity
 
 /-- Quadratic-form version of the add-one identity: adding one point adds the exact
 nonnegative correction `n/(n+1) ⟪y - mean z, x⟫²` to the scatter quadratic form. -/
 theorem re_inner_centeredScatter_append {n : ℕ} (z : Fin n → E) (y x : E) :
-    RCLike.re (inner 𝕜 (centeredScatter 𝕜 (appendFin z y) x) x) =
+    RCLike.re (inner 𝕜 (centeredScatter 𝕜 (Fin.snoc z y) x) x) =
       RCLike.re (inner 𝕜 (centeredScatter 𝕜 z x) x) +
         (n : ℝ) / ((n : ℝ) + 1) * ‖inner 𝕜 (y - finiteMean 𝕜 z) x‖ ^ 2 := by
-  rw [centeredScatter_append, LinearMap.add_apply, inner_add_left, map_add]
+  rw [centeredScatter_append, add_apply, inner_add_left, map_add]
   congr 1
   set δ := y - finiteMean 𝕜 z with hδ
   have hcoef : (starRingEnd 𝕜) ((n : 𝕜) / ((n : 𝕜) + 1)) = (n : 𝕜) / ((n : 𝕜) + 1) := by
     simp
-  rw [LinearMap.smul_apply, inner_smul_left, hcoef, ContinuousLinearMap.coe_coe,
+  rw [smul_apply, inner_smul_left, hcoef,
     rankOne_apply, inner_smul_left, RCLike.conj_mul]
   have hcast : ((n : 𝕜) / ((n : 𝕜) + 1)) = (((n : ℝ) / ((n : ℝ) + 1) : ℝ) : 𝕜) := by
     push_cast
