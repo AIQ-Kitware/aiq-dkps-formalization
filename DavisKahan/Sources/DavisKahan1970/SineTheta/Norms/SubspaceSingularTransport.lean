@@ -75,7 +75,7 @@ theorem sameApproximationSingularValues_extendDomainByZero
     refine le_antisymm ?_ ?_
     · calc (T ∘L U.subtypeL.adjoint).approximationNumber n
           ≤ T.approximationNumber n * ‖U.subtypeL.adjoint‖ :=
-            T.approximationNumber_comp_right_le _ n
+            T.approximationNumber_comp_le_mul_norm _ n
         _ ≤ T.approximationNumber n * 1 := by
             gcongr <;>
               first
@@ -86,7 +86,7 @@ theorem sameApproximationSingularValues_extendDomainByZero
           = ((T ∘L U.subtypeL.adjoint) ∘L U.subtypeL).approximationNumber n := by
             rw [hfactor]
         _ ≤ (T ∘L U.subtypeL.adjoint).approximationNumber n * ‖U.subtypeL‖ :=
-            (T ∘L U.subtypeL.adjoint).approximationNumber_comp_right_le _ n
+            (T ∘L U.subtypeL.adjoint).approximationNumber_comp_le_mul_norm _ n
         _ ≤ (T ∘L U.subtypeL.adjoint).approximationNumber n * 1 := by
             gcongr <;>
               first
@@ -110,7 +110,7 @@ theorem sameApproximationSingularValues_includeCodomain
     refine le_antisymm ?_ ?_
     · calc (V.subtypeL ∘L T).approximationNumber n
           ≤ ‖V.subtypeL‖ * T.approximationNumber n :=
-            ContinuousLinearMap.approximationNumber_comp_left_le _ T n
+            ContinuousLinearMap.approximationNumber_comp_le_norm_mul _ T n
         _ ≤ 1 * T.approximationNumber n := by
             gcongr <;>
               first
@@ -121,7 +121,7 @@ theorem sameApproximationSingularValues_includeCodomain
           = (V.subtypeL.adjoint ∘L (V.subtypeL ∘L T)).approximationNumber n := by
             rw [hfactor]
         _ ≤ ‖V.subtypeL.adjoint‖ * (V.subtypeL ∘L T).approximationNumber n :=
-            ContinuousLinearMap.approximationNumber_comp_left_le _ _ n
+            ContinuousLinearMap.approximationNumber_comp_le_norm_mul _ _ n
         _ ≤ 1 * (V.subtypeL ∘L T).approximationNumber n := by
             gcongr <;>
               first

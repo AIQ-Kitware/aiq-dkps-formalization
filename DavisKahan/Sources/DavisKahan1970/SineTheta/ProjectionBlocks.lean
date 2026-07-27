@@ -168,7 +168,7 @@ theorem sameApproximationSingularValues_comp_reflection_right
     calc (T ∘L U.reflectionOperator).approximationNumber n
         ≤ T.approximationNumber n *
             ‖(U.reflectionOperator : E →L[𝕜] E)‖ :=
-          T.approximationNumber_comp_right_le _ n
+          T.approximationNumber_comp_le_mul_norm _ n
       _ ≤ T.approximationNumber n * 1 := by
         gcongr <;>
           first
@@ -205,7 +205,7 @@ theorem sameApproximationSingularValues_comp_reflection_left
     calc (U.reflectionOperator ∘L T).approximationNumber n
         ≤ ‖(U.reflectionOperator : E →L[𝕜] E)‖ *
             T.approximationNumber n :=
-          ContinuousLinearMap.approximationNumber_comp_left_le _ T n
+          ContinuousLinearMap.approximationNumber_comp_le_norm_mul _ T n
       _ ≤ 1 * T.approximationNumber n := by
         gcongr <;>
           first

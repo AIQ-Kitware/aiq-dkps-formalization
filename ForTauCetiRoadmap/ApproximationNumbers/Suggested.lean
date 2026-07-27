@@ -20,11 +20,20 @@ top.
 `sorry` is used honestly for milestone statements whose full form is settled but
 not proved here; where a milestone needs a notion whose API does not yet exist,
 the condition is omitted rather than named as an empty `Prop`.
+
+**This file is not compiled.** `ForTauCetiRoadmap` is not a `lean_lib`, so
+nothing here is checked by `lake build` and it can only be kept honest by hand.
+Where a milestone has since *landed*, the signature below is synchronized with
+the shipped one — currently all of Layer A, in
+`ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/`, which is the
+authority. Last synchronized 2026-07-27 against the §5.1 signature-polish lane:
+the codomain is `ℝ` (README decision 2), not the `ℝ≥0` this file was drafted
+with, and the names are the landed ones.
 -/
 
 namespace TauCetiRoadmap.ApproximationNumbers
 
-open scoped NNReal
+open scoped ENNReal
 
 /-! ## Layer A — the approximation number and its ideal theory (field-generic)
 
@@ -39,41 +48,43 @@ variable {F : Type*} [SeminormedAddCommGroup F] [NormedSpace 𝕜 F]
 variable {G : Type*} [SeminormedAddCommGroup G] [NormedSpace 𝕜 G]
 
 /-- A.1 — Zero-based approximation number: operator-norm distance to maps of
-rank at most `n`, valued in `ℝ≥0`. (Extends the Mathlib `ContinuousLinearMap`
-namespace for dot notation; a global-namespace commitment, see README.) -/
-noncomputable def approximationNumber (T : E →L[𝕜] F) (n : ℕ) : ℝ≥0 :=
-  ⨅ R : {R : E →L[𝕜] F // R.rank ≤ (n : Cardinal)}, ‖T - R.1‖₊
+rank at most `n`, valued in `ℝ` (README decision 2). (Extends the Mathlib
+`ContinuousLinearMap` namespace for dot notation; a global-namespace
+commitment, see README.) -/
+noncomputable def approximationNumber (T : E →L[𝕜] F) (n : ℕ) : ℝ :=
+  ⨅ R : {R : E →L[𝕜] F // R.rank ≤ (n : Cardinal)}, ‖T - R.1‖
 
 @[simp]
-theorem approximationNumber_zero_eq_nnnorm (T : E →L[𝕜] F) :
-    approximationNumber T 0 = ‖T‖₊ := sorry
+theorem approximationNumber_index_zero (T : E →L[𝕜] F) :
+    approximationNumber T 0 = ‖T‖ := sorry
 
 /-- A.1 — antitone in the allowed rank. -/
-theorem antitone_approximationNumber (T : E →L[𝕜] F) :
+theorem approximationNumber_antitone (T : E →L[𝕜] F) :
     Antitone (approximationNumber T) := sorry
 
 /-- A.2 — the additive ideal inequality. -/
-theorem approximationNumber_add_le_add (S T : E →L[𝕜] F) (m n : ℕ) :
+theorem approximationNumber_add_le (S T : E →L[𝕜] F) (m n : ℕ) :
     approximationNumber (S + T) (m + n) ≤
       approximationNumber S m + approximationNumber T n := sorry
 
 /-- A.2 — Lipschitz in the operator norm. -/
 theorem dist_approximationNumber_le (S T : E →L[𝕜] F) (n : ℕ) :
-    dist (approximationNumber S n) (approximationNumber T n) ≤ ‖S - T‖₊ := sorry
+    dist (approximationNumber S n) (approximationNumber T n) ≤ ‖S - T‖ := sorry
 
 /-- A.3 — two-sided ideal (multiplicativity), right factor. -/
-theorem approximationNumber_comp_right_le
+theorem approximationNumber_comp_le_mul_norm
     (T : F →L[𝕜] G) (B : E →L[𝕜] F) (n : ℕ) :
-    approximationNumber (T ∘L B) n ≤ approximationNumber T n * ‖B‖₊ := sorry
+    approximationNumber (T ∘L B) n ≤ approximationNumber T n * ‖B‖ := sorry
 
 /-- A.3 — two-sided ideal (multiplicativity), left factor. -/
-theorem approximationNumber_comp_left_le
+theorem approximationNumber_comp_le_norm_mul
     (A : F →L[𝕜] G) (T : E →L[𝕜] F) (n : ℕ) :
-    approximationNumber (A ∘L T) n ≤ ‖A‖₊ * approximationNumber T n := sorry
+    approximationNumber (A ∘L T) n ≤ ‖A‖ * approximationNumber T n := sorry
 
 /-- A.3 — absolute homogeneity. -/
+@[simp]
 theorem approximationNumber_smul (c : 𝕜) (T : E →L[𝕜] F) (n : ℕ) :
-    approximationNumber (c • T) n = ‖c‖₊ * approximationNumber T n := sorry
+    approximationNumber (c • T) n = ‖c‖ * approximationNumber T n := sorry
 
 end LayerA
 
@@ -115,7 +126,7 @@ variable {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [FiniteDi
 /-- B.3 — `n`th zero-based singular value: sorted eigenvalues of `|T|`. Reuses
 the finite-dimensional eigenvalue enumeration; no private singular-value
 predicate. -/
-noncomputable def singularValue (T : E →L[𝕜] F) (n : ℕ) : ℝ≥0 := sorry
+noncomputable def singularValue (T : E →L[𝕜] F) (n : ℕ) : ℝ := sorry
 
 /-- B.3 — Eckart–Young: approximation numbers are the singular values. -/
 theorem approximationNumber_eq_singularValue (T : E →L[𝕜] F) (n : ℕ) :
@@ -141,7 +152,7 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [Complete
 variable {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
 
 /-- C.2 — Ky Fan `k`-norm: the sum of the first `k` approximation numbers. -/
-noncomputable def kyFanNorm (T : E →L[𝕜] F) (k : ℕ) : ℝ≥0 :=
+noncomputable def kyFanNorm (T : E →L[𝕜] F) (k : ℕ) : ℝ :=
   ∑ n ∈ Finset.range k, approximationNumber T n
 
 /-- C.2 — Ky Fan dominance implies domination by every symmetric gauge. Stated
@@ -155,7 +166,7 @@ theorem kyFanNorm_mono_of_forall_le {S T : E →L[𝕜] F}
 sequence; the basis-column identity `∑ ‖T eᵢ‖²` is an equivalence theorem for
 this one object (README C.3). -/
 noncomputable def hilbertSchmidtNorm (T : E →L[𝕜] F) : ℝ≥0∞ :=
-  ∑' n : ℕ, ((approximationNumber T n : ℝ≥0∞)) ^ 2
+  ∑' n : ℕ, ENNReal.ofReal (approximationNumber T n) ^ 2
 
 end LayerC
 

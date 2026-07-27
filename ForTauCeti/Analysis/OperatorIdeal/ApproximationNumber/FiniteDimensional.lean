@@ -204,7 +204,7 @@ theorem approximationNumber_le_singularValues
     -- Cross-universe once the codomain is independent, so route the bound
     -- through the natural-number rank estimate.
     have hRrank : R.rank ≤ (n : Cardinal) :=
-      ContinuousLinearMap.rank_comp_left_le_of_rank_le T W.starProjection
+      ContinuousLinearMap.rank_comp_le_natCast_right W.starProjection T
         hPrank.le
     have htail : Wᗮ = b.spanIndices
         {i : Fin (finrank 𝕜 E) | (i : ℕ) < n}ᶜ := by

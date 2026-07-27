@@ -340,7 +340,7 @@ theorem lt_approximationNumber_competitor_of_lt_direct
     intro hP
     let R : E →L[ℂ] F := A ∘L P
     have hRrank : R.rank ≤ (n : Cardinal) :=
-      ContinuousLinearMap.rank_comp_left_le_of_rank_le A P hP
+      ContinuousLinearMap.rank_comp_le_natCast_right P A hP
     have herr : A - R = A ∘L Q := by
       ext x
       change A x - A (P x) = A (Q x)

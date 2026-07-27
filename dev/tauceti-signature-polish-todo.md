@@ -163,28 +163,26 @@ State whether scatter is normalized, whether Fourier transform uses 2π, whether
 
 ## 5. Approximation-number foundation
 
-> **AUDIT 2026-07-27 — this section has diverged from the tree; re-check each item before
-> working it.** The §5 lanes landed real changes without striking through every entry, so
-> some headings below describe work that is already done and some describe a signature that
-> no longer exists. Verified against
-> `ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/`:
+> **RECONCILED 2026-07-27 — §5.1 and §5.4 are closed; §5.2 and §5.3 are what is left.**
+> The audit that used to sit here recorded a divergence between this section and the tree;
+> that divergence has been worked off item by item against
+> `ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/`, and every §5.1 heading is now
+> struck through with its disposition and the reasoning that settled it.
 >
-> - **Genuinely open (P0):** `rank_comp_left_le_of_rank_le` is still public at
->   `Basic.lean:293`; its disposition is "privatize or reuse".
-> - **Stale text, not open work:** the `approximationNumber` P0 block still shows `: ℝ≥0`
->   and an undecided convention. Both were settled — codomain `ℝ`, zero-based convention —
->   and the code reads `approximationNumber … : ℝ` at `Basic.lean:134`.
-> - **Renamed in code but unstruck here:** `approximationNumber_le_nnnorm` is
->   `approximationNumber_le_norm` (`Basic.lean:197`); `approximationNumber_def`,
->   `approximationNumber_le` and `le_approximationNumber` landed as
->   `approximationNumber_eq_iInf`, `approximationNumber_le_norm_sub` and
->   `le_approximationNumber_iff`.
-> - **Believed genuinely open (P1/P2):** `approximationNumber_eq`, `_zero`, `_nonneg`,
->   `_add_le`, `_add_le_add`, `_comp_right_le`, `_comp_left_le`, `_comp_comp_le`, `_smul`,
->   `_adjoint`, `_le_singularValues`.
->
-> Anyone taking §5 should reconcile the section against the tree first — that reconciliation
-> is itself part of the lane, exactly as it was for §13.
+> - **§5.1 Basic.lean — CLOSED.** The one genuinely-open P0,
+>   `rank_comp_left_le_of_rank_le`, could not be privatized (four independent consumers), so
+>   it was moved out and generalized to `LinearMap.rank_comp_le_natCast_right` in
+>   `ForTauCeti/LinearAlgebra/Dimension/RankComp.lean`; `Basic.lean` now carries
+>   approximation-number API and nothing else. Seven renames landed, three items were
+>   verified-and-kept with the reason recorded, and two blocks were stale text rather than
+>   work. Name index in Appendix A.
+> - **§5.4 MinMax.lean — CLOSED** earlier the same day; see the lane note in `dev/LANES.md`.
+> - **§5.2 Adjoint.lean and §5.3 FiniteDimensional.lean — still open**, and still to be
+>   re-checked against the tree before being worked: the same drift that produced this audit
+>   block applies to them. Known specifics: §5.3's `singularValues_le_norm_sub_of_rank_le`,
+>   `singularValues_le_approximationNumber` and `approximationNumber_eq_singularValues` are
+>   already struck through, so what remains there is `approximationNumber_le_singularValues`;
+>   §5.2 carries a single P1 "keep or annotate".
 
 
 ### 5.1 Basic.lean
@@ -247,7 +245,25 @@ private theorem rank_le_natCast_of_lift_rank_le
 
 **Likely adversarial review:** A generic global Cardinal theorem in an operator-ideal PR will be challenged for placement and reuse.
 
-#### P0  approximationNumber
+#### P0  ~~approximationNumber~~ — RESOLVED (stale text, reconciled 2026-07-27)
+
+**Disposition: Nothing was open here.**  Both questions this block asks had
+already been answered by the two decision callouts above it, and the code has
+read `ContinuousLinearMap.approximationNumber (T : E →L[𝕜] F) (n : ℕ) : ℝ`
+since the codomain decision landed (`Basic.lean:134`).  The sketch below still
+shows `ℝ≥0` and an "undecided convention"; that is a documentation lag, not
+work.  Of its four bullets, three are done — dot notation retained and
+justified in the module's "Namespace note", the zero-based convention stated in
+the first sentence of both the definition docstring and the module overview,
+and the body no longer needs unfolding now that
+`approximationNumber_le_norm_sub` / `le_approximationNumber_iff` /
+`approximationNumber_eq_iInf` cover it.  The fourth, an internal
+`rankAtMost n R` abbreviation "to reduce repeated `Cardinal` casts", was
+**deliberately declined**: the cast appears in exactly one place per statement,
+and a private predicate would put a Tau Ceti-owned name into the *hypothesis*
+of every public theorem, which is a worse trade than a visible `(n : Cardinal)`.
+
+*Original disposition:*
 
 **Disposition: Representation decision**
 
@@ -369,7 +385,18 @@ theorem le_approximationNumber_iff :
 
 **Likely adversarial review:** The current one-way introduction rule leaves the definition without a complete elimination/characterization API.
 
-#### P1  approximationNumber_eq
+#### P1  ~~approximationNumber_eq~~ — RESOLVED 2026-07-27
+
+**Disposition: Renamed to `approximationNumber_eq_norm_sub_of_forall_le`.**  The
+generic `_eq` is gone, as asked, and the name now says why equality holds.  The
+review's alternative — phrase the minimality hypothesis as `IsLeast` over the
+set of admissible distances — was **considered and declined**: it would force
+every call site to build `{x | ∃ S, S.rank ≤ n ∧ x = ‖T - S‖}` and then destructure
+it, where the explicit `∀ S` form is applied directly.  The theorem had zero
+external consumers, so the rename cost nothing; it is kept public because it is
+the statement an Eckart–Young-style argument actually cites.
+
+*Original disposition:*
 
 **Disposition: Rename**
 
@@ -394,7 +421,23 @@ theorem approximationNumber_eq_nnnorm_sub_of_isLeast
 
 **Likely adversarial review:** The name approximationNumber_eq is not searchable and will collide conceptually with later equality characterizations.
 
-#### P1  approximationNumber_zero
+#### P1  ~~approximationNumber_zero~~ — RESOLVED 2026-07-27
+
+**Disposition: Renamed to `approximationNumber_index_zero`; the name
+`approximationNumber_zero` now belongs to the zero *operator*.**  The review
+asked for the docstring to say "zeroth, not first" — it does — but the deeper
+problem was that two different theorems were competing for one name, and the
+tree had assigned it to the *index*.  Mathlib's decisive precedent is the sibling
+object: `LinearMap.singularValues_zero` is about the zero map, as are
+`ContinuousLinearMap.opNorm_zero` and `LinearMap.rank_zero`; a head symbol
+applied to `0` takes the plain `_zero` suffix.  Since this development's flagship
+theorem is `approximationNumber_eq_singularValues`, having
+`approximationNumber_zero` and `singularValues_zero` mean *different* things
+would have been a genuine trap.  For the index Mathlib names the parameter's
+role rather than its position (`eLpNorm_exponent_zero`), hence
+`approximationNumber_index_zero`.  Both docstrings now point at each other.
+
+*Original disposition:*
 
 **Disposition: Keep with documentation**
 
@@ -417,7 +460,20 @@ theorem approximationNumber_zero (T : E →L[𝕜] F) : T.approximationNumber 0 
 
 **Likely adversarial review:** The theorem is fine, but its semantics become misleading if the indexing convention is not prominently fixed.
 
-#### P2  antitone_approximationNumber
+#### P2  ~~antitone_approximationNumber~~ — RESOLVED 2026-07-27
+
+**Disposition: Renamed to `approximationNumber_antitone`.**  The item asks to
+"check adjacent Mathlib convention between `antitone_foo` and `foo_antitone`;
+keep the locally consistent form" — the adjacent convention is
+`LinearMap.singularValues_antitone`, on the object this one is proved equal to,
+so the head symbol comes first.  It also makes `T.approximationNumber_antitone`
+available by dot notation, which `antitone_approximationNumber` did not.
+`@[gcongr]` was **not** added: the item makes it conditional on testing, and
+`gcongr` wants a pointwise `≤`-to-`≤` lemma, not an `Antitone` bundle, so
+tagging this would have done nothing.  No pointwise corollary was added either —
+`approximationNumber_le_norm` is the only consumer and it uses the bundle.
+
+*Original disposition:*
 
 **Disposition: Keep / minor polish**
 
@@ -440,7 +496,15 @@ theorem antitone_approximationNumber (T : E →L[𝕜] F) :
 
 **Likely adversarial review:** This is likely acceptable; the main review question is naming consistency with nearby Mathlib sequence APIs.
 
-#### P2  approximationNumber_le_nnnorm
+#### P2  ~~approximationNumber_le_nnnorm~~ — RESOLVED (renamed with the codomain decision)
+
+**Disposition: Landed as `approximationNumber_le_norm`** (`Basic.lean:197`),
+which is exactly the item's own conditional — "if the invariant becomes
+real-valued, rename the bound to `approximationNumber_le_norm`".  It is derived
+by antitonicity from `approximationNumber_index_zero`, the second of the two
+routes the item offers.
+
+*Original disposition:*
 
 **Disposition: Keep**
 
@@ -463,7 +527,18 @@ theorem approximationNumber_le_nnnorm (T : E →L[𝕜] F) (n : ℕ) :
 
 **Likely adversarial review:** Low risk, except the suffix must match the chosen codomain.
 
-#### P2  zero_approximationNumber
+#### P2  ~~zero_approximationNumber~~ — RESOLVED 2026-07-27
+
+**Disposition: Renamed to `approximationNumber_zero`** (not the sketched
+`approximationNumber_zero_map`).  The item's own instruction was to check
+Mathlib precedent, and precedent is unanimous that the head symbol leads:
+`singularValues_zero`, `opNorm_zero`, `rank_zero`.  `_map` is not a Mathlib
+suffix.  The name was free because the index statement moved to
+`approximationNumber_index_zero` in the same pass — see that item for why the
+swap, rather than a suffix on this one, is the right direction.  Exactly one
+simp-normal name each, no aliases.
+
+*Original disposition:*
 
 **Disposition: Naming check**
 
@@ -486,7 +561,15 @@ theorem zero_approximationNumber (n : ℕ) : (0 : E →L[𝕜] F).approximationN
 
 **Likely adversarial review:** This is a naming consistency question rather than a semantic risk.
 
-#### P1  approximationNumber_nonneg
+#### P1  ~~approximationNumber_nonneg~~ — RESOLVED: kept
+
+**Disposition: Kept, unconditionally.**  The item is conditional on the codomain
+and the codomain decision resolved to `ℝ`, which is the branch under which the
+item itself says "retain".  It is not API noise in that branch: it is the
+statement `Metric.infDist` and `LinearMap.singularValues_nonneg` both carry, and
+it has consumers.  Nothing to do; recorded so the conditional is not re-opened.
+
+*Original disposition:*
 
 **Disposition: Delete or codomain-dependent**
 
@@ -510,7 +593,22 @@ theorem approximationNumber_nonneg (T) (n) : 0 ≤ T.approximationNumber n
 
 **Likely adversarial review:** The API-design reviewer is likely to request deletion of a tautological public theorem.
 
-#### P1  lt_approximationNumber_add_pos
+#### P1  ~~lt_approximationNumber_add_pos~~ — RESOLVED 2026-07-27
+
+**Disposition: Renamed to
+`exists_rank_le_norm_sub_lt_approximationNumber_add`**, from the existential
+conclusion outward as asked (`nnnorm` → `norm` per the codomain decision).
+**Reuse audit run:** Mathlib's generic near-minimizer is
+`exists_lt_of_ciInf_lt`, which this theorem *uses*; what it adds is the
+translation from a `ciInf` over the rank-bounded subtype to a plain `∃ R,
+R.rank ≤ n ∧ …`, and every consumer wants the latter.  `Metric.infDist` has no
+usable analogue here because the admissible set is a subtype, not a set in the
+ambient space.  **Kept public:** it has consumers in another file
+(`DavisKahan/OperatorIdeal/ApproximationNumbers/BlockSum.lean`), which is the
+item's own criterion, and it is the workhorse behind every inequality in the
+file — a fact now stated in its docstring.
+
+*Original disposition:*
 
 **Disposition: Rename / reuse audit**
 
@@ -534,7 +632,20 @@ theorem exists_rank_le_nnnorm_sub_lt_approximationNumber_add
 
 **Likely adversarial review:** The proof-shaped name is a direct naming-rubric target; reuse may find a generic ciInf near-minimizer theorem.
 
-#### P1  approximationNumber_add_le
+#### P1  ~~approximationNumber_add_le~~ — RESOLVED 2026-07-27
+
+**Disposition: Renamed to `approximationNumber_add_le_add_norm`**, freeing the
+short name for the principal two-index inequality (next item).  This is the
+rename the two items ask for as a pair, and Mathlib settles which way round:
+`norm_add_le : ‖a + b‖ ≤ ‖a‖ + ‖b‖` carries the short name for subadditivity, so
+the subadditive statement gets `approximationNumber_add_le` and the perturbative
+one names its extra term.  The suggested symmetric Lipschitz consequence
+`|aₙ(T) - aₙ(S)| ≤ ‖T - S‖` was **not** added — no roadmap consumer needs it,
+which is the condition the item attaches.  Deriving it from the two-index
+inequality at `n = 0` was also declined: `a₀(S) = ‖S‖` makes that route true but
+it would invert the dependency order of the file for no gain.
+
+*Original disposition:*
 
 **Disposition: Rename**
 
@@ -558,7 +669,15 @@ theorem approximationNumber_add_le_add_nnnorm
 
 **Likely adversarial review:** The current name is ambiguous with the stronger two-index additive inequality.
 
-#### P1  approximationNumber_add_le_add
+#### P1  ~~approximationNumber_add_le_add~~ — RESOLVED 2026-07-27
+
+**Disposition: Renamed to `approximationNumber_add_le`**, exactly as sketched —
+it is the principal additive ideal inequality and now carries the canonical
+short name, with `norm_add_le` as the naming precedent.  The zero-based index
+shift is documented on the theorem itself: `a_{m+n}(T + S) ≤ aₘ(T) + aₙ(S)` is
+exact, where one-based `s`-numbers would carry an `m + n - 1`.
+
+*Original disposition:*
 
 **Disposition: Rename family**
 
@@ -583,7 +702,40 @@ theorem approximationNumber_add_le
 
 **Likely adversarial review:** The existing pair of names reverses the likely importance hierarchy and is hard to discover.
 
-#### P0  rank_comp_left_le_of_rank_le
+#### P0  ~~rank_comp_left_le_of_rank_le~~ — RESOLVED 2026-07-27
+
+**Disposition: Moved out and generalized to `LinearMap`.**  Now
+`LinearMap.rank_comp_le_natCast_right` with continuous specializations
+`ContinuousLinearMap.rank_comp_le_natCast_right` and
+`ContinuousLinearMap.rank_comp_le_left`, in a new dependency-closed module
+`ForTauCeti/LinearAlgebra/Dimension/RankComp.lean`, so the operator-ideal file
+now carries approximation-number API and no rank plumbing at all — which is the
+item's actual objection.
+
+**Privatizing was not available** (the item's first alternative): the theorem has
+independent consumers in three `DavisKahan` modules
+(`Interop/Spectra/ApproximationNumberMinMax`,
+`OperatorIdeal/ApproximationNumbers/Real/Threshold`,
+`Experimental/MathAhead/Section4/InfiniteProposition41`) plus the sibling
+`ApproximationNumber/FiniteDimensional`.  This is the same situation as
+`le_natCast_of_lift_le` above, and it takes the same route.
+
+**Reuse audit run as asked:** Mathlib has `LinearMap.rank_comp_le_left`,
+`rank_comp_le_right`, `lift_rank_comp_le_right` and `lift_rank_comp_le`, but no
+natural-number-bounded form.  The gap is real and structural rather than
+incidental — `rank_comp_le_right` gets rid of the lift by forcing the outer
+codomain into the domain's universe, which a `ContinuousLinearMap` between
+independent spaces cannot do; bounding by a natural number gets rid of it
+instead, because `Cardinal.lift` fixes the image of `ℕ`
+(`Cardinal.lift_le_natCast`).  So it closes exactly the "real cross-universe gap
+with independent users" the item names as the condition for keeping it.  Stated
+at `LinearMap` level it is also no longer "specialized to continuous maps", the
+other half of the objection; the continuous forms are one-line specializations
+whose point is that `(f ∘L g).rank` needs no unfolding at the call site.  The
+argument order now follows Mathlib's `(inner, outer)`, so the four call sites
+swapped their two explicit arguments.
+
+*Original disposition:*
 
 **Disposition: Privatize / reuse**
 
@@ -607,7 +759,18 @@ private theorem rank_comp_le_of_rank_le ...
 
 **Likely adversarial review:** Reuse review will object to a public rank lemma specialized to continuous maps if the LinearMap theorem already applies.
 
-#### P1  approximationNumber_comp_right_le
+#### P1  ~~approximationNumber_comp_right_le~~ — RESOLVED 2026-07-27
+
+**Disposition: Renamed to `approximationNumber_comp_le_mul_norm`**
+(`aₙ(T ∘L A) ≤ aₙ(T) * ‖A‖`), conclusion-oriented as the item prefers, with the
+`nnnorm` in the sketch corrected to `norm`.  `∘L` is kept rather than `.comp`:
+it is what the adjacent `ContinuousLinearMap` norm API uses
+(`opNorm_comp_le`) and what every consumer in this repository writes.  The
+sketched dot-notation form `T.approximationNumber_comp_le A n` **does** work,
+since `T` is the first explicit argument, so no separate method wrapper was
+added.
+
+*Original disposition:*
 
 **Disposition: Rename / notation**
 
@@ -631,7 +794,15 @@ theorem approximationNumber_comp_le_mul_nnnorm
 
 **Likely adversarial review:** The reviewer will compare naming and composition notation with existing ContinuousLinearMap lemmas.
 
-#### P1  approximationNumber_comp_left_le
+#### P1  ~~approximationNumber_comp_left_le~~ — RESOLVED 2026-07-27
+
+**Disposition: Renamed to `approximationNumber_comp_le_norm_mul`**
+(`aₙ(B ∘L T) ≤ ‖B‖ * aₙ(T)`).  The pair is syntactically parallel as asked, and
+the two names differ exactly where the statements differ — which factor keeps
+its approximation number — so neither can be used in place of the other by
+accident.  Argument order matches `ContinuousLinearMap.comp`: outer map first.
+
+*Original disposition:*
 
 **Disposition: Rename / notation**
 
@@ -655,7 +826,18 @@ theorem approximationNumber_comp_le_nnnorm_mul
 
 **Likely adversarial review:** Parallel-form inconsistency will be caught by naming/API review.
 
-#### P2  approximationNumber_comp_comp_le
+#### P2  ~~approximationNumber_comp_comp_le~~ — RESOLVED: kept
+
+**Disposition: Kept, name unchanged.**  Both of the item's proof-quality asks
+were already satisfied and were re-verified: it is derived from the two
+one-sided inequalities in three lines with no duplicated machinery, and it uses
+the canonical `∘L` with `L ∘L T ∘L R` parsed by the standard right
+associativity.  It deliberately does **not** follow the conclusion-oriented
+renaming of the two one-sided lemmas — spelling this RHS out would give
+`…_le_norm_mul_mul_norm`, which is less legible than the shape it describes, and
+`comp_comp` already determines the statement uniquely.
+
+*Original disposition:*
 
 **Disposition: Keep / fold proof**
 
@@ -680,7 +862,15 @@ theorem approximationNumber_comp_comp_le
 
 **Likely adversarial review:** Low naming risk; proof-quality review may request deriving it from the two one-sided lemmas.
 
-#### P2  approximationNumber_smul
+#### P2  ~~approximationNumber_smul~~ — RESOLVED 2026-07-27
+
+**Disposition: `@[simp]` added; name and statement unchanged** (`‖c‖`, not
+`‖c‖₊`, per the codomain decision).  Both of the item's conditions were checked
+rather than assumed: the zero scalar is handled inside the proof with no
+hypothesis on `c`, and the left-hand side `(c • T).approximationNumber n` is a
+sound simp target because it strictly decomposes.
+
+*Original disposition:*
 
 **Disposition: Keep / add simp**
 
@@ -1681,10 +1871,16 @@ carry a transitional adapter whose deletion condition is stated.*
 | --- | --- | --- |
 | approximationNumber_def | approximationNumber_eq_iInf | **Done 2026-07-27** (also de-simped) |
 | approximationNumber_le | ~~approximationNumber_le_nnnorm_sub~~ → **approximationNumber_le_norm_sub** | **Done 2026-07-27**; `nnnorm` in the sketch is stale — the codomain decision (2) made the API real-valued, so the suffix is `norm`, not `nnnorm`. The same correction applies to every `_nnnorm_` sketch below. |
-| approximationNumber_eq | approximationNumber_eq_nnnorm_sub_of_isLeast | Sketch; verify adjacent Mathlib naming |
-| lt_approximationNumber_add_pos | exists_rank_le_nnnorm_sub_lt_approximationNumber_add | Sketch; verify adjacent Mathlib naming |
-| approximationNumber_add_le | approximationNumber_add_le_add_nnnorm | Sketch; verify adjacent Mathlib naming |
-| approximationNumber_add_le_add | approximationNumber_add_le | Sketch; verify adjacent Mathlib naming |
+| approximationNumber_eq | ~~approximationNumber_eq_nnnorm_sub_of_isLeast~~ → **approximationNumber_eq_norm_sub_of_forall_le** | **Done 2026-07-27** (§5.1); the `IsLeast` packaging was declined — it forces call sites to build and destructure the set of admissible distances |
+| lt_approximationNumber_add_pos | **exists_rank_le_norm_sub_lt_approximationNumber_add** | **Done 2026-07-27** (§5.1); `nnnorm` → `norm` per the codomain decision. Kept public: consumers in another file |
+| approximationNumber_add_le | **approximationNumber_add_le_add_norm** | **Done 2026-07-27** (§5.1); paired with the row below. `norm_add_le` is the precedent that decides which of the two additive theorems keeps the short name |
+| approximationNumber_add_le_add | **approximationNumber_add_le** | **Done 2026-07-27** (§5.1); the principal additive ideal inequality now carries the canonical short name |
+| approximationNumber_zero | **approximationNumber_index_zero** | **Done 2026-07-27** (§5.1); the plain `_zero` suffix belongs to the zero *operator*, per `LinearMap.singularValues_zero` / `opNorm_zero` / `rank_zero`. The index is named by its role, as in `eLpNorm_exponent_zero` |
+| zero_approximationNumber | **approximationNumber_zero** | **Done 2026-07-27** (§5.1); head symbol leads. The sketched `approximationNumber_zero_map` was declined — `_map` is not a Mathlib suffix |
+| antitone_approximationNumber | **approximationNumber_antitone** | **Done 2026-07-27** (§5.1); matches `LinearMap.singularValues_antitone` on the object this one is proved equal to, and enables dot notation |
+| approximationNumber_comp_right_le | **approximationNumber_comp_le_mul_norm** | **Done 2026-07-27** (§5.1); conclusion-oriented, `∘L` kept to match `opNorm_comp_le` |
+| approximationNumber_comp_left_le | **approximationNumber_comp_le_norm_mul** | **Done 2026-07-27** (§5.1); parallel to the row above, differing exactly where the statements differ |
+| rank_comp_left_le_of_rank_le | **LinearMap.rank_comp_le_natCast_right** (+ two `ContinuousLinearMap` specializations) | **Done 2026-07-27** (§5.1); moved to `ForTauCeti/LinearAlgebra/Dimension/RankComp.lean` and generalized off continuous maps. Privatizing was impossible — four independent consumers |
 | singularValues_le_norm_sub_of_rank_le | singularValue_le_norm_sub_of_rank_le | Sketch; verify adjacent Mathlib naming |
 | approximationNumber_eq_singularValues | approximationNumber_eq_singularValue | Sketch; verify adjacent Mathlib naming |
 | lowerBound_le_approximationNumber_of_finrank | le_approximationNumber_of_finrank_lt | Sketch; verify adjacent Mathlib naming |

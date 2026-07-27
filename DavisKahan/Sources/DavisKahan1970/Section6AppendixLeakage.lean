@@ -82,7 +82,7 @@ theorem opNorm_sq_le_approximationEnergy
   have hzero :
       (approximationSingularValue 0 T) ^ 2 = ‖T‖ ^ 2 := by
     unfold approximationSingularValue
-    rw [T.approximationNumber_zero]
+    rw [T.approximationNumber_index_zero]
     rfl
   calc
     ‖T‖ ^ 2 = (approximationSingularValue 0 T) ^ 2 := hzero.symm
@@ -104,7 +104,7 @@ theorem approximationEnergy_starProjection_comp_le
   have hcompNN :
       (Q.starProjection ∘L K).approximationNumber i ≤
         ‖Q.starProjection‖₊ * K.approximationNumber i :=
-    ContinuousLinearMap.approximationNumber_comp_left_le
+    ContinuousLinearMap.approximationNumber_comp_le_norm_mul
       Q.starProjection K i
   have hprojNN : ‖Q.starProjection‖₊ ≤ 1 := by
     exact_mod_cast Q.starProjection_norm_le
