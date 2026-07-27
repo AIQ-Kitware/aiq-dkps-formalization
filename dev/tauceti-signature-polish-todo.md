@@ -23,9 +23,9 @@ Purpose: design review only; no signatures are changed by this document
 
 5. Approximation-number foundation
 
-6. Courant-Fischer and finite spectral API
+6. ~~Courant-Fischer and finite spectral API~~ — RESOLVED, removed from backlog
 
-7. Operator modulus and absolute value convergence
+7. ~~Operator modulus and absolute value convergence~~ — RESOLVED, removed from backlog
 
 8. Inner-product-space utilities
 
@@ -63,7 +63,7 @@ The staged library is mathematically substantial, but it is not yet a single Tau
 | Orthogonal series | Staged | Likely duplicate helpers; proof-shaped names | Reuse Orthogonal predicate and existing summability API | P1 |
 | Haagerup-Zsido kernel | Staged monolith, 1673 lines | File size, public helper explosion, generic lemmas mixed in | Split into 7-8 modules; privatize/move helpers | P0 |
 | Closed operators / semigroups | Production local API | Parallel to Tau Ceti LinearPMap architecture | Rewrite over LinearPMap properties | P0 |
-| Symmetric ideal families | Production local structure | Unconstrained gauge off carrier; fixed universes | Redesign as normed subtype/family | P0 |
+| Symmetric ideal families | Production local structure | Unconstrained gauge off carrier; fixed universes | ~~Redesign as normed subtype/family~~ **RESOLVED 2026-07-27** (§12.1): single `ℝ≥0∞` gauge, carrier derived, adjoint layer split off | ~~P0~~ |
 | Spectra spectral calculus | Vendored donor dependency | Needs provenance-preserving canonical port | Port minimal dependency-closed slices | P1 |
 
 ### What “Mathlib quality” means here
@@ -1559,35 +1559,40 @@ imports for self-containment.
 
 The following clusters are not ready for declaration-level cosmetic polishing. Their public object model must converge with Tau Ceti and Spectra first. The TODOs below describe the desired signature direction rather than exact final declarations.
 
-### 12.1 Rectangular symmetric ideal families
+### 12.1 ~~Rectangular symmetric ideal families~~ — P0 RESOLVED 2026-07-27
 
-> **P0 extensionality defect**
->
-> RectangularSymmetricIdealFamily carries Mem and a total gauge on every operator, but the laws constrain gauge only on members. Two structures can agree on every meaningful ideal element and still differ on nonmembers, defeating a natural extensionality theorem. This matches the Tau Ceti API-design rubric’s “free data” failure mode.
+The extensionality defect is fixed. `ForTauCeti/Analysis/OperatorIdeal/Family/Basic.lean` carries the canonical replacement:
 
 ```lean
--- Preferred direction: the gauge is a norm on the carrier, not free data off it.
-structure SymmetricOperatorIdealFamily (𝕜) where
-  carrier (E F) : Submodule 𝕜 (E →L[𝕜] F)
-  normedAddCommGroup (E F) : NormedAddCommGroup (carrier E F)
-  completeSpace (E F) : CompleteSpace (carrier E F)
-  comp_mem ...
-  norm_comp_le ...
-  adjoint_equiv ...
-  -- invariance / Ky Fan dominance as separate stronger mixins
+structure OperatorIdealFamily (𝕜) [NontriviallyNormedField 𝕜] where
+  gauge : ∀ {E : Type v} {F : Type w} [...], (E →L[𝕜] F) → ℝ≥0∞
+  gauge_add_le  ...      -- four laws, all unconditional
+  gauge_smul    ...
+  enorm_le_gauge ...
+  gauge_comp_le ...
+
+structure SymmetricOperatorIdealFamily (𝕜) [RCLike 𝕜]
+    extends OperatorIdealFamily.{u, v, v} 𝕜 where
+  gauge_adjoint ...
 ```
 
-- Replace Mem A plus gauge A with a subtype element A : N E F whose norm is the ideal norm.
+What was executed, against each bullet of the original TODO:
 
-- Express zero/add/smul/completeness through standard typeclasses rather than structure fields.
+- *"Replace Mem plus gauge with a subtype element whose norm is the ideal norm."* Done, with one refinement that turned out to matter more: the **data** is a single total gauge into `ℝ≥0∞`, and the ideal `OperatorIdealFamily.carrier : Submodule 𝕜 (E →L[𝕜] F)` is *derived* as its finiteness domain. This is strictly better than a `(carrier, norm-on-carrier)` pair, because a pair still needs a coherence axiom between the two fields and still admits two records with the same carrier and norm but different bundled instances. A single field has `ext` for free, and the "gauge = ∞ off the ideal" convention is the classical Gohberg–Krein/Calkin one. The subtype-with-ideal-norm still exists, as the *derived* `OperatorIdealFamily.Elem` (a type synonym — the bare subtype already inherits the operator norm, and the two differ).
 
-- Allow independent source and target universes; the current one-universe family is unnecessarily restrictive.
+- *"Express zero/add/smul/completeness through standard typeclasses."* Done. Closure under `0`, `+`, `•`, `-`, finite sums is `Submodule` membership; the ideal norm is a real `NormedAddCommGroup`/`NormedSpace` on `Elem`; completeness is the mixin `OperatorIdealFamily.IsComplete`, i.e. `CompleteSpace (N.Elem E F)` (with `[CompleteSpace F]`, exactly as for the ambient `E →L[𝕜] F`), replacing the hand-rolled ε–N `gauge_complete`.
 
-- Split the minimal normed operator ideal, symmetric/unitarily invariant structure, and Ky Fan dominance into layered classes.
+- *"Allow independent source and target universes."* Done for the base layer, **with a recorded obstruction**: the adjoint exchanges source and target, so a family closed under adjoints cannot keep them independent. Hence the split — `OperatorIdealFamily` over Banach spaces with universes `v`, `w`, and `SymmetricOperatorIdealFamily` extending its *diagonal* instantiation over Hilbert spaces. One structure with an optional adjoint field is not expressible.
 
-- Provide extensionality on carrier and norm/invariance data.
+- *"Split the minimal normed operator ideal, symmetric structure, and Ky Fan dominance into layered classes."* First two layers done as above; Ky Fan dominance remains for Layer C.2 of the approximation-number roadmap and should be a mixin over `SymmetricOperatorIdealFamily`, not a fourteenth field.
 
-- Do not include Davis-Kahan-specific “paper norm” normalization in the generic structure.
+- *"Provide extensionality."* `OperatorIdealFamily.ext`: equal gauges ⟹ equal families.
+
+- *"Do not include Davis–Kahan-specific paper-norm normalization."* The generic structure has no normalization field. Note that `Φ(e₀) = 1`-style normalization belongs to the *symmetric-gauge* construction (roadmap C.1), not to the ideal-family interface.
+
+Axiom count went 14 fields → 4 laws: `gauge 0 = 0` follows from homogeneity at `c = 0` (which also excludes the everywhere-`∞` gauge), definiteness from `‖A‖ₑ ≤ gauge A`, and every closure property from the carrier submodule.
+
+**Validation and migration.** `DavisKahan/Interop/TauCeti/RectangularFamilyAdapter.lean` derives the entire historical record from the canonical one (`SymmetricOperatorIdealFamily.toRectangular`), including `gauge_complete`, so nothing the ~70 production consumers rely on was lost. There is deliberately no inverse — a historical record does not determine a canonical family, which *is* the defect. Remaining work is the incremental migration of those consumers, after which both the adapter and `RectangularSymmetricIdealFamily` are deleted. `KyFanDominantIdealFamily` (in `ApproximationNumbers.lean`) has the same free-data shape and should be redone as a mixin during that migration.
 
 ### 12.2 Closed and self-adjoint unbounded operators
 
@@ -1740,7 +1745,7 @@ theorem approximationNumber_tangentOperator ...
 | Spectra SelfAdjointOperator | Potential donor wrapper | Port useful lemmas; choose canonical Tau Ceti representation | Short-lived conversion functions | P1 |
 | specSubspace | Misnamed coordinate span | Rename/move; compatibility alias only downstream if needed | Deprecated local alias | P0 |
 | finiteMean / appendFin | Likely generic duplicates | Replace with Finset/Fintype API | No upstream adapter | P0 |
-| RectangularSymmetricIdealFamily | Free-data structure | Replace with normed carrier/family | Adapter from old Mem/gauge for DK proofs | P0 |
+| RectangularSymmetricIdealFamily | Free-data structure | ~~Replace with normed carrier/family~~ **DONE** — `TauCeti.SymmetricOperatorIdealFamily` | `SymmetricOperatorIdealFamily.toRectangular` (transitional; delete with the legacy structure) | ~~P0~~ |
 | GenuinePairwiseSpectrumGap | Paper/bridge terminology | Replace with canonical separation predicate | Paper wrapper | P1 |
 
 - Adapters must be visibly downstream and carry a deletion condition.
