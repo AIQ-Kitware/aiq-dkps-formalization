@@ -305,7 +305,7 @@ The adversarial-review audit `dev/tauceti-signature-polish-todo.md` (baseline
 | `rectangularOperatorModulus` | Parallel | rename → `ContinuousLinearMap.modulus`; unify with `operatorAbs` | — |
 | `specSubspace` (+ its lemmas) | Wrapper (misnamed coordinate span) | rename/relocate → `OrthonormalBasis.spanIndices` | deprecated local alias only if needed |
 | `ClosedOperator` (+ SameDomain, …) | Parallel | demote to adapter over `LinearPMap` | `DavisKahan/Interop/TauCeti`; delete from generic production (Wave 2) |
-| `RectangularSymmetricIdealFamily` | Parallel (free-data gauge off carrier) | normed-carrier/family redesign | adapter from old Mem/gauge for DK proofs |
+| `RectangularSymmetricIdealFamily` | Parallel (free-data gauge off carrier) | **DONE 2026-07-27** — canonical `TauCeti.OperatorIdealFamily` / `SymmetricOperatorIdealFamily` (single `ℝ≥0∞` gauge; carrier = its finiteness domain) in `ForTauCeti/Analysis/OperatorIdeal/Family/` | `SymmetricOperatorIdealFamily.toRectangular` in `DavisKahan/Interop/TauCeti/RectangularFamilyAdapter.lean`; ~70 consumers migrate incrementally, then both the adapter and the legacy structure are deleted |
 | `GenuinePairwiseSpectrumGap` | Paper/bridge terminology | canonical `SpectraSeparated`/set-distance predicate | paper wrapper downstream |
 | `finiteMean` / `appendFin` | Exact duplicate (generic) | replace with `Finset`/`Fintype` API | no upstream adapter |
 | `exists_two_sided_inverse_of_spectrum_gap` | Missing reusable / redesign | signature redesign (`isUnit_of_abs_spectrum_ge` + `norm_inv_le…`) | — |
