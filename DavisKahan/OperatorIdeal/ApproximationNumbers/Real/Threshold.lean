@@ -760,7 +760,7 @@ theorem exists_finiteRestrictionApproximationNumber_gt_of_lt_real
   have hw : LinearIndependent ℝ w := by
     simpa only [w] using b.linearIndependent
   have hsNN : s ≤ (T ∘L V.subtypeL).approximationNumber n := by
-    apply ContinuousLinearMap.lowerBound_le_approximationNumber_of_linearIndependent
+    apply ContinuousLinearMap.le_approximationNumber_of_linearIndependent
       (T ∘L V.subtypeL) n w hw
     intro x _ hxNorm
     have hxV : ((x : V) : E) ∈ V := x.property
@@ -809,7 +809,7 @@ theorem lt_approximationNumber_iff_exists_finiteDimensional_lowerBound_real
   · rintro ⟨s, hrs, v, hv, hV⟩
     have hs0 : 0 ≤ s := hr0.trans hrs.le
     have hsNN : s ≤ T.approximationNumber n := by
-      apply ContinuousLinearMap.lowerBound_le_approximationNumber_of_linearIndependent
+      apply ContinuousLinearMap.le_approximationNumber_of_linearIndependent
         T n v hv
       intro x hxV hxNorm
       change s ≤ ‖T x‖
