@@ -127,9 +127,12 @@ theorem coercive_of_selfAdjoint_spectrum_exterior
     · have hge : (β - α) / 2 + δ ≤ y - (α + β) / 2 := by
         linarith
       exact hge.trans (le_abs_self _)
-  obtain ⟨J, hJleft, _hJright, hJnorm⟩ :=
-    TauCeti.IsSelfAdjoint.exists_two_sided_inverse_of_spectrum_gap
-      (A := K →L[ℂ] K) hM₁sa hrd hM₁spec
+  have hM₁unit : IsUnit M₁ :=
+    TauCeti.isUnit_of_forall_le_abs (A := K →L[ℂ] K) hrd hM₁spec
+  set J : K →L[ℂ] K := Ring.inverse M₁
+  have hJleft : J * M₁ = 1 := Ring.inverse_mul_cancel _ hM₁unit
+  have hJnorm : ‖J‖ ≤ ((β - α) / 2 + δ)⁻¹ :=
+    TauCeti.IsSelfAdjoint.norm_ringInverse_le (A := K →L[ℂ] K) hM₁sa hrd hM₁spec
   intro x
   have hJx : J (M₁ x) = x := by
     exact DFunLike.congr_fun hJleft x
