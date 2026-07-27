@@ -62,6 +62,26 @@ RESUMED (2026-07-23) and claims lanes under `edward (resumed)` below.
 | jon | DoubleAngle.lean, DoubleAngleGenuine.lean | reflectionDefect_range_le_residual (leaf closure) → sinTwoTheta_residual axiom-clean | 2026-07-24 | done — leaf `reflectionDefect_range_le_residual` PROVED axiom-clean (propext/Classical.choice/Quot.sound only), so `sinTwoTheta_residual` is now fully proved. Route: moved `reflectionDefect_eq_neg_two_smul_offdiag`, `offdiag_adjoint`, `norm_reflectionDefect_le_two_mul_norm_cross`, `norm_cross_le_norm_residual` UP from DoubleAngleGenuine into DoubleAngle, generalizing ℂ→𝕜 (RCLike); deleted the ℂ copies (downstream Genuine users resolve against the moved RCLike versions since ℂ is an RCLike instance). Leaf = `‖reflDefect V A‖ ≤ 2‖P_{Vᗮ}AP_V‖` (sharp off-diagonal estimate) chained with `‖P_{Vᗮ}AP_V‖ ≤ ‖residual‖` for `V = range X` (hmem/hsurj trivial). Only ℂ→𝕜 gotcha: `norm_star _` gets stuck on `NormedStarGroup ?m` metavariables at general RCLike — pass the argument explicitly (`norm_star T₁`). DoubleAngle now has exactly ONE remaining leaf: `SymmetricNormIdeal.sinAngle_reflected_mem_gauge_eq` (blocks `ideal_sinTwoTheta`) — untouched (separate hard leaf). DoubleAngleGenuine stays sorry-free/green. |
 | jon (window A) | Frontier/RemainingSourceSurface.lean (trialResidual, section7_sinTwoTheta_source_ideal, section7_tanTwoTheta_source_ideal), Frontier/Section3.lean (Props 3.3 done) | close-out sweep of near-complete source statements | 2026-07-24 | 3/5 RemainingSourceSurface items DONE axiom-clean: `trialResidual` defined concretely (`Zᗮ.starProjection ∘L T ∘L Z.subtypeL`); `section7_sinTwoTheta_source_ideal` = one-line instantiation of the proven `sinTwoTheta_addBounded_gauge_of_spectrum_gap` (DoubleAngle/UnboundedIdeal); `section7_tanTwoTheta_source_ideal` promoted via `tanTwoTheta_addBounded_gauge_of_spectrum_gap` AFTER correcting the RHS — FINDING #3: the printed bound `2·N.gauge E` was too strong; the tangent block carries the intrinsic double-cosine denominator `(2·N.gauge E)/(1 − 2·directedGap²)` (positive under quarter-acute). `theorem5_1_banach_sylvester` ALSO DONE axiom-clean — promoted the complete scratch proof under the corrected hypothesis. FINDING #4: the printed bounded-below separation is insufficient on general Banach (range need not be complemented ⇒ no bounded left inverse); the faithful hypothesis is an explicit `BoundedLeftInverseData A (γ+δ)⁻¹` (moved the structure + `map_zero`/`comp_le_mul`/`comp_left_le_mul` scaling lemmas into the frontier), which on Hilbert the separation supplies via `lowerFramePolarData`. ONLY `theorem6_3_generalizedTanTheta_ideal` remains in this file (genuinely NOT close — needs new IsAcute-from-spectral-gap + infinite-dim ideal-gauge tan-θ majorization for tanAngleOperatorC). SWEEP TOTAL this session: Props 3.1, 3.3 (Section3) + trialResidual, section7_sinTwoTheta, section7_tanTwoTheta, theorem5_1 (RemainingSourceSurface) = 6 endpoints, all axiom-clean. Did NOT touch Classification/Core (window B) or Section8 (edward). |
 
+## Cross-lane findings (post here to save another agent a re-derivation)
+
+- **`Finset.expect` is NOT usable as the canonical mean in our scalar setting**
+  (edward, 2026-07-27, probed in Lean). It needs `[Module ℚ≥0 M]`, and for
+  `[RCLike 𝕜] [InnerProductSpace 𝕜 E]` that instance does not resolve —
+  `NormedSpace ℝ E` is available only through the *def* `InnerProductSpace.rclikeToReal`
+  / `NormedSpace.restrictScalars`, deliberately not instances. Relevant to the
+  §8.1 `finiteMean` reuse audit.
+- **`Finset.centroid 𝕜 s z : E` does typecheck** in that setting (only the
+  `noncomputable` complaint), so it *is* a live reuse candidate — but note its
+  empty-set behaviour: `Finset.affineCombination` is defined against
+  `Classical.arbitrary P`, so `centroid` on `∅` is nonconstructive junk, whereas
+  the current `finiteMean` returns `0` there (Mathlib's total-inverse
+  convention) and `finiteMean_append` is stated to hold *at* `n = 0`. Any
+  swap to `centroid` must re-examine that boundary case.
+- **`appendFin z y` is `Fin.snoc z y`** — same `Fin.lastCases` construction, and
+  `Fin.snoc_castSucc` / `Fin.snoc_last` are the upstream simp lemmas matching
+  `appendFin_castSucc` / `appendFin_last`. The two are *not* `rfl`-equal
+  (`snoc` inserts a cast) but are equal by `funext` + `Fin.lastCases` + `simp`.
+
 ## Spectral lane — COMPLETE through the Continuation chain (jon, 2026-07-23)
 
 `SinTheta/General.lean`, `DoubleAngle.lean`, and `DirectRotation.lean` all
