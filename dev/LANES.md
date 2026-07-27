@@ -132,6 +132,37 @@ and pruned. What is genuinely left:
 
 ## Cross-lane findings (post here to save another agent a re-derivation)
 
+- **`DavisKahan/Experimental/MathAhead/Section4/InfiniteProposition41.lean` has not
+  compiled since the `ℝ` codomain decision, and nothing noticed** (jon/namek, 2026-07-27,
+  for whoever unparks Experimental). It still wraps approximation-number inequalities in
+  `NNReal.coe_le_coe` at seven sites and calls `approximationNumber_le_nnnorm`, a name
+  deleted when the codomain went real. `lake build DavisKahan.Experimental.MathAhead.Section4.InfiniteProposition41`
+  fails at line 698. **Not fallout from the §5.1 renames** — I touched exactly one line in
+  that file (a rank-lemma call site) and the failures are all in the `ℝ≥0` bridge. Left
+  alone because Experimental is parked; recorded so the next person there does not
+  re-diagnose it as fresh damage. The repair is mechanical: drop the `NNReal.coe_*`
+  wrappers and repoint `approximationNumber_le_nnnorm` → `approximationNumber_le_norm`.
+
+- **The `unusedSimpArgs` linter does not cover `simpa only [...]` argument lists**
+  (jon/namek, 2026-07-27). `ApproximationNumber/Adjoint.lean` carried a dead `coe_nnnorm`
+  inside a `simpa only`, left over from the `ℝ≥0` era, through a build that the
+  warning-zero hygiene lane had certified at zero warnings. Removing it changes nothing.
+  So "zero linter warnings" does **not** imply "no dead simp arguments"; a `grep -rn
+  "simpa only \[" ForTauCeti/` sweep is the only way to find the rest.
+
+- **`DavisKahan.approximationSingularValue` is now a pure alias** (jon/namek, 2026-07-27,
+  for the §13 adapter-retirement lane). Since the codomain decision it reads
+  `approximationSingularValue (n : ℕ) (K : E →L[𝕜] F) : ℝ := K.approximationNumber n` —
+  same value, arguments flipped, no dot notation. That is the fourth live alias, and it is
+  not in §13's table; add it there when that lane is claimed.
+
+- **`ForTauCetiRoadmap/` is not a `lean_lib`, so `Suggested.lean` is never compiled**
+  (jon/namek, 2026-07-27). Same rot class as the missing `Challenge.lean` root aggregate:
+  it had drifted to `ℝ≥0` signatures its own README decision 2 overturned, plus an
+  `open scoped NNReal` that does not supply the `ℝ≥0∞` notation it uses. I synchronized it
+  by hand and said so in its header, but the structural fix — a non-default `lean_lib` so
+  `lake build ForTauCetiRoadmap` is a runnable gate — is unclaimed.
+
 - **Two unused simp arguments in `ApproximationNumber/MinMax.lean:165`** (jon,
   2026-07-27, for edward's open §5.4 lane). `lake build ForTauCeti` was at zero warnings
   after my hygiene pass; merging §5.4 reintroduced exactly two, both on the same line:
