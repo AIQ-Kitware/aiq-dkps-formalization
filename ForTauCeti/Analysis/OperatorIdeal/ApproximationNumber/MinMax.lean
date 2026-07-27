@@ -35,8 +35,8 @@ Ceti maintainer review.
   `ForMathlib/Analysis/Normed/Operator/ApproximationNumberMinMax.lean`
   at Davis--Kahan commit `fc38eb48b9b49f2e1d87fe0c7022dc5e262820a7`.
 * Original declarations:
-  `ContinuousLinearMap.lowerBound_le_approximationNumber_of_finrank` and
-  `ContinuousLinearMap.lowerBound_le_approximationNumber_of_linearIndependent`.
+  `ContinuousLinearMap.le_approximationNumber_of_finrank_lt` and
+  `ContinuousLinearMap.le_approximationNumber_of_linearIndependent`.
 * Original authors / copyright: Jon Crall, OpenAI GPT-5.6 Thinking;
   Copyright (c) 2026 Kitware, Inc.; Apache 2.0.
 * Extraction class: **copied**, converted to the Tau Ceti module system.
@@ -65,17 +65,31 @@ variable {E₁ : Type v} {F₁ : Type w}
   [NormedAddCommGroup E₁] [InnerProductSpace 𝕜 E₁]
   [NormedAddCommGroup F₁] [InnerProductSpace 𝕜 F₁]
 
-/-- Courant--Fischer lower bound for approximation numbers. If an
-`(n+1)`-dimensional test subspace has lower modulus at least `c`, then the
-`n`th approximation number is at least `c`.
+/-- **Courant--Fischer lower bound for approximation numbers.**  If `T` is
+bounded below by `c` on a test subspace of rank greater than `n`, then the `n`th
+approximation number is at least `c`.
 
-Unlike the finite-dimensional Eckart--Young theorem above, the ambient source
-and target spaces need not be finite-dimensional. -/
-theorem lowerBound_le_approximationNumber_of_finrank
-    (T : E₁ →L[𝕜] F₁) (n : ℕ) (V : Submodule 𝕜 E₁)
-    [FiniteDimensional 𝕜 V]
-    (hVdim : finrank 𝕜 V = n + 1) (c : ℝ)
-    (hV : ∀ x : V, ‖x‖ = 1 → c ≤ ‖T (x : E₁)‖) :
+The hypothesis is stated on `Module.rank`, not `finrank`, and the bound is
+homogeneous rather than restricted to unit vectors.  Both matter:
+
+* rank rather than dimension means the test subspace need not be
+  finite-dimensional, so there is no `[FiniteDimensional 𝕜 V]` instance to
+  supply — an infinite-dimensional `V` satisfies `n < Module.rank 𝕜 V` for every
+  `n`.  The proof never uses more than "`V` is too big to be killed by a rank
+  `≤ n` map";
+* the homogeneous bound `c * ‖x‖ ≤ ‖T x‖` says something at `x = 0` and scales,
+  where a unit-vector premise does neither.  `le_approximationNumber_of_finrank_lt`
+  below converts from the unit-vector form, which needs no sign hypothesis on
+  `c`.
+
+Unlike the finite-dimensional Eckart--Young identification, the ambient source
+and target spaces need not be finite-dimensional either.  Only this half of the
+min--max characterization is unconditional in infinite dimensions; see the
+module docstring. -/
+theorem le_approximationNumber_of_lt_rank
+    (T : E₁ →L[𝕜] F₁) (n : ℕ) (V : Submodule 𝕜 E₁) {c : ℝ}
+    (hVrank : (n : Cardinal) < Module.rank 𝕜 V)
+    (hV : ∀ x : V, c * ‖(x : E₁)‖ ≤ ‖T (x : E₁)‖) :
     c ≤ T.approximationNumber n := by
   refine T.le_approximationNumber_iff.mpr ?_
   intro R hR
@@ -91,8 +105,8 @@ theorem lowerBound_le_approximationNumber_of_finrank
     intro hkerbot
     -- The rank-nullity identity compares the rank of the range, which lives in
     -- the codomain universe, with the rank of the domain.  Those universes are
-    -- now independent, so argue through injectivity and `Cardinal.lift`
-    -- instead: an injective map identifies the domain with its range.
+    -- independent, so argue through injectivity and `Cardinal.lift` instead: an
+    -- injective map identifies the domain with its range.
     have hinj : Function.Injective RV.toLinearMap :=
       LinearMap.ker_eq_bot.mp hkerbot
     have hequiv :
@@ -100,55 +114,81 @@ theorem lowerBound_le_approximationNumber_of_finrank
           Cardinal.lift.{v}
             (Module.rank 𝕜 (LinearMap.range RV.toLinearMap)) :=
       (LinearEquiv.ofInjective RV.toLinearMap hinj).lift_rank_eq
-    have hVrank : Module.rank 𝕜 V = ((n + 1 : ℕ) : Cardinal) := by
+    have hbad : Module.rank 𝕜 V ≤ (n : Cardinal) := by
+      refine Cardinal.lift_le_natCast.mp ?_
       calc
-        Module.rank 𝕜 V = (finrank 𝕜 V : Cardinal) :=
-          (Module.finrank_eq_rank' 𝕜 V).symm
-        _ = ((n + 1 : ℕ) : Cardinal) := by rw [hVdim]
-    have hbad : ((n + 1 : ℕ) : Cardinal.{max v w}) ≤ ((n : ℕ) : Cardinal) := by
-      calc
-        ((n + 1 : ℕ) : Cardinal.{max v w})
-            = Cardinal.lift.{w} (Module.rank 𝕜 V) := by
-          rw [hVrank, Cardinal.lift_natCast]
-        _ = Cardinal.lift.{v} (LinearMap.rank RV.toLinearMap) := hequiv
-        _ ≤ Cardinal.lift.{v} ((n : ℕ) : Cardinal) :=
-          Cardinal.lift_le.mpr hRVrank
+        Cardinal.lift.{w} (Module.rank 𝕜 V)
+            = Cardinal.lift.{v} (LinearMap.rank RV.toLinearMap) := hequiv
+        _ ≤ Cardinal.lift.{v} ((n : ℕ) : Cardinal) := Cardinal.lift_le.mpr hRVrank
         _ = ((n : ℕ) : Cardinal) := Cardinal.lift_natCast n
-    have hbad' : n + 1 ≤ n := by exact_mod_cast hbad
-    omega
+    exact absurd hbad (not_le.mpr hVrank)
   obtain ⟨z, hzker, hz0⟩ := Submodule.exists_mem_ne_zero_of_ne_bot hker
   have hzNorm : ‖z‖ ≠ 0 := norm_ne_zero_iff.mpr hz0
   let x : V := ((‖z‖⁻¹ : ℝ) : 𝕜) • z
   have hxker : x ∈ RV.ker := RV.ker.smul_mem _ hzker
-  have hxNorm : ‖x‖ = 1 := by
-    simp only [x, norm_smul, RCLike.norm_ofReal, abs_inv, abs_norm]
+  have hxNorm : ‖(x : E₁)‖ = 1 := by
+    simp only [x, Submodule.coe_smul, norm_smul, RCLike.norm_ofReal, abs_inv, abs_norm]
     exact inv_mul_cancel₀ hzNorm
   have hRx : R (x : E₁) = 0 := by
     change RV x = 0
     exact LinearMap.mem_ker.mp hxker
   calc
-    c ≤ ‖T (x : E₁)‖ := hV x hxNorm
+    c = c * ‖(x : E₁)‖ := by rw [hxNorm, mul_one]
+    _ ≤ ‖T (x : E₁)‖ := hV x
     _ = ‖(T - R) (x : E₁)‖ := by rw [sub_apply, hRx, sub_zero]
     _ ≤ ‖T - R‖ * ‖(x : E₁)‖ := (T - R).le_opNNNorm (x : E₁)
-    _ = ‖T - R‖ := by
-      have hxNN : ‖(x : E₁)‖ = 1 := by
-        exact hxNorm
-      rw [hxNN, mul_one]
+    _ = ‖T - R‖ := by rw [hxNorm, mul_one]
 
-/-- Family form of `lowerBound_le_approximationNumber_of_finrank`. A linearly
-independent family of `n+1` vectors determines the required test subspace. -/
-theorem lowerBound_le_approximationNumber_of_linearIndependent
+/-- Finite-dimensional form of `le_approximationNumber_of_lt_rank`, with the
+unit-vector premise the classical statement uses.
+
+Nothing is assumed about the sign of `c`: at `x = 0` the homogeneous bound reads
+`c * 0 ≤ 0`, and elsewhere it follows by rescaling to a unit vector. -/
+theorem le_approximationNumber_of_finrank_lt
+    (T : E₁ →L[𝕜] F₁) (n : ℕ) (V : Submodule 𝕜 E₁)
+    [FiniteDimensional 𝕜 V] {c : ℝ} (hVdim : n < finrank 𝕜 V)
+    (hV : ∀ x : V, ‖(x : E₁)‖ = 1 → c ≤ ‖T (x : E₁)‖) :
+    c ≤ T.approximationNumber n := by
+  refine le_approximationNumber_of_lt_rank T n V ?_ ?_
+  · rw [← Module.finrank_eq_rank' 𝕜 V]
+    exact_mod_cast hVdim
+  · intro x
+    rcases eq_or_ne (x : E₁) 0 with hx | hx
+    · simp [hx]
+    · -- Rescale `x` to the unit sphere of `V` and use homogeneity of both sides.
+      have hxn : ‖(x : E₁)‖ ≠ 0 := norm_ne_zero_iff.mpr hx
+      set y : V := ((‖(x : E₁)‖⁻¹ : ℝ) : 𝕜) • x with hy
+      have hyNorm : ‖(y : E₁)‖ = 1 := by
+        simp only [hy, Submodule.coe_smul, norm_smul, RCLike.norm_ofReal, abs_inv, abs_norm]
+        exact inv_mul_cancel₀ hxn
+      have hTy : ‖T (y : E₁)‖ = ‖(x : E₁)‖⁻¹ * ‖T (x : E₁)‖ := by
+        simp [hy, Submodule.coe_smul, norm_smul, abs_inv]
+      have hstep := hV y hyNorm
+      rw [hTy] at hstep
+      calc c * ‖(x : E₁)‖
+          ≤ (‖(x : E₁)‖⁻¹ * ‖T (x : E₁)‖) * ‖(x : E₁)‖ :=
+            mul_le_mul_of_nonneg_right hstep (norm_nonneg _)
+        _ = ‖T (x : E₁)‖ := by field_simp
+
+/-- Family form of `le_approximationNumber_of_finrank_lt`: a linearly independent
+family of `n + 1` vectors determines the required test subspace.
+
+This is not a forgetful wrapper — it is how every downstream consumer in this
+repository applies the bound, since a spanning family is what the perturbation
+arguments produce. -/
+theorem le_approximationNumber_of_linearIndependent
     (T : E₁ →L[𝕜] F₁) (n : ℕ) (v : Fin (n + 1) → E₁)
-    (hv : LinearIndependent 𝕜 v) (c : ℝ)
+    (hv : LinearIndependent 𝕜 v) {c : ℝ}
     (hV : ∀ x ∈ Submodule.span 𝕜 (Set.range v),
       ‖x‖ = 1 → c ≤ ‖T x‖) :
     c ≤ T.approximationNumber n := by
   let V : Submodule 𝕜 E₁ := Submodule.span 𝕜 (Set.range v)
   let b : Module.Basis (Fin (n + 1)) 𝕜 V := Module.Basis.span hv
   letI : FiniteDimensional 𝕜 V := b.finiteDimensional_of_finite
-  have hVdim : finrank 𝕜 V = n + 1 := by
+  have hVdim : n < finrank 𝕜 V := by
     rw [Module.finrank_eq_card_basis b, Fintype.card_fin]
-  apply lowerBound_le_approximationNumber_of_finrank T n V hVdim c
+    exact Nat.lt_succ_self n
+  refine le_approximationNumber_of_finrank_lt T n V hVdim ?_
   intro x hx
   exact hV (x : E₁) x.2 hx
 

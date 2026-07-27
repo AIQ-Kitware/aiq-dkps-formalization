@@ -375,7 +375,7 @@ theorem lt_approximationNumber_competitor_of_lt_direct
     rintro x ⟨i, rfl⟩
     exact (f i).2
   have hs₁NN : (⟨s₁, hs₁0⟩ : NNReal) ≤ B.approximationNumber n := by
-    apply ContinuousLinearMap.lowerBound_le_approximationNumber_of_linearIndependent
+    apply ContinuousLinearMap.le_approximationNumber_of_linearIndependent
       B n v hv
     intro x hxM hxNorm
     have hxL : x ∈ L := hMle hxM

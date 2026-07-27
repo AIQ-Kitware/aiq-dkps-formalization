@@ -860,7 +860,37 @@ theorem approximationNumber_eq_singularValues (T : E →L[𝕜] F) (n : ℕ) : T
 | **Primary review risks** | Proof-oriented name; equality finrank=n+1 stronger than needed; family corollary may be API clutter. |
 | **Likely PR slice** | PR A3. |
 
-#### P0  lowerBound_le_approximationNumber_of_finrank
+#### P0  ~~lowerBound_le_approximationNumber_of_finrank~~ — RESOLVED 2026-07-27
+
+**Disposition: generalized, and split into a primary result plus two derived
+forms.**  The primary statement is now
+`ContinuousLinearMap.le_approximationNumber_of_lt_rank`, over
+`(n : Cardinal) < Module.rank 𝕜 V` with the **homogeneous** hypothesis
+`c * ‖x‖ ≤ ‖T x‖`.  Both changes are real generalizations, not renames:
+
+* stating the size hypothesis on `Module.rank` rather than `finrank`
+  **removes the `[FiniteDimensional 𝕜 V]` instance entirely** — an
+  infinite-dimensional test subspace satisfies `n < Module.rank 𝕜 V` for every
+  `n`, and the proof never needed more than "`V` is too big to be killed by a
+  rank `≤ n` map".  The exact dimension `finrank 𝕜 V = n + 1` the review
+  flagged was doing no work at all;
+* the homogeneous bound says something at `x = 0` and scales, where a
+  unit-vector premise does neither.
+
+`le_approximationNumber_of_finrank_lt` recovers the classical finite-dimensional
+unit-vector form (the conversion needs **no** sign hypothesis on `c`: at `x = 0`
+the bound reads `c * 0 ≤ 0`, and elsewhere it is a rescaling), and
+`le_approximationNumber_of_linearIndependent` the family form.  All three are
+named from the conclusion outward; `lowerBound` is gone, since it never named an
+object in the statement.  No aliases retained; 8 call sites repointed.
+
+**Not in scope, and deliberately not faked:** the review's fourth ask, "the
+ultimate API should expose a supremum/max-min formula, with this as a lemma".
+Only *this* half of the min--max characterization is unconditional in infinite
+dimensions, which is precisely what roadmap milestone B.4 says the two-sided
+package must be honest about; inventing a `⨆`-form here would paper over that.
+
+*Original disposition:*
 
 **Disposition: Generalize signature**
 
@@ -887,7 +917,20 @@ theorem le_approximationNumber_of_finrank_lt
 
 **Likely adversarial review:** Generality review will likely flag exact dimension equality and proof-oriented naming.
 
-#### P1  lowerBound_le_approximationNumber_of_linearIndependent
+#### P1  ~~lowerBound_le_approximationNumber_of_linearIndependent~~ — RESOLVED 2026-07-27
+
+**Disposition: kept public, renamed `le_approximationNumber_of_linearIndependent`.**
+The open question was "decide whether this family wrapper has independent
+consumers; otherwise keep private".  **It has 8, across 6 `DavisKahan` modules** —
+it is how every downstream consumer actually applies the bound, because a
+spanning family is what the perturbation arguments produce.  So it is not a
+forgetful convenience wrapper, and that evidence is now recorded on the theorem
+itself rather than left as an open question.  The homogeneous-inequality
+suggestion is satisfied one level down, at the primary
+`le_approximationNumber_of_lt_rank`; this wrapper keeps the unit-vector premise
+its callers supply.
+
+*Original disposition:*
 
 **Disposition: Corollary or private**
 
