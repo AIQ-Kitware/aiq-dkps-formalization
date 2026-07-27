@@ -334,6 +334,17 @@ libraries, and (b) build this library explicitly. The signature pre-flight
 `scripts/check_comparator_signatures.py` takes `--no-build` and a single config
 path; without those it re-runs a full build per invocation.
 
+The grep half of (a) is now automated: `python3
+scripts/check_declaration_name_drift.py` checks every declaration name that this
+repository asserts as *data* — the `theorem_names` lists in `comparator/*.json`
+and the `#print axioms` targets under `Challenge/` — and fails if one no longer
+resolves, if a challenge module does not declare what its config pins, or if a
+pinned statement's axioms are audited nowhere. It parses the sources instead of
+invoking Lean, so it takes about a second and works on a tree that does not
+compile; run it after every rename, *before* the slower `lake build Challenge`.
+It is a tripwire, not a proof: resolution is syntactic, so `lake build Challenge`
+and the signature pre-flight remain ground truth.
+
 This is not hypothetical. A rename that passed a green 9272-job default build
 still broke a Leaderboard, and separately a `Conformance` file sat broken from the
 day it was written because the library had no root module and nothing ever built
