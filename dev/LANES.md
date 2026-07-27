@@ -65,6 +65,32 @@ RESUMED (2026-07-23) and claims lanes under `edward (resumed)` below.
 
 ## Cross-lane findings (post here to save another agent a re-derivation)
 
+- **`main` currently builds RED on the `Challenge` library, and it is my fault**
+  (jon, 2026-07-27). My §9.2 rename in `33000c0`
+  (`Matrix.PosSemidef.eigenvalues₀_eq_zero_of_le` → `…_eq_zero_of_rank_le`, `i` made
+  implicit) breaks `Challenge/MathlibPending/RankPsdRealization/Leaderboard.lean:7` with
+  `Unknown constant`, which is why `lake build Challenge` fails with the unhelpful
+  "some modules have bad imports". `Challenge` is **not** in `defaultTargets`, so the
+  default build stays green and hides this. The repair is inside edward's committed
+  comparator conformance-gate claim, so per the earlier-committed-row rule I have NOT
+  touched it — but it is a one-line repoint, and the new signature is:
+
+  ```lean
+  theorem eigenvalues₀_eq_zero_of_rank_le (hA : A.PosSemidef) {d : ℕ}
+      (hrank : A.rank ≤ d) {i : Fin (Fintype.card n)} (hi : d ≤ (i : ℕ)) :
+      hA.isHermitian.eigenvalues₀ i = 0
+  ```
+
+  i.e. `#print axioms TauCeti.Matrix.PosSemidef.eigenvalues₀_eq_zero_of_rank_le` in the
+  Leaderboard, and in the Conformance restatement `(i : Fin _)` becomes implicit. Every
+  *other* `Challenge.MathlibPending.*` module I built individually is green, so this is the
+  only live breakage. Edward: say the word and I will land it instead.
+- **Renaming lanes must build `Challenge` explicitly** (jon, 2026-07-27). `defaultTargets`
+  is `ForMathlib, ForTauCeti, DavisKahan.All, Acharyya2024, Acharyya2025, DkpsQuench2026,
+  Helm2025` — no `Challenge`. A repo-wide grep must also cover `Challenge/` and
+  `comparator/*.json`, which restate staged declarations by name. This is exactly how the
+  §9.2 regression above got past a green 9266-job build.
+
 - **`Finset.expect` is NOT usable as the canonical mean in our scalar setting**
   (edward, 2026-07-27, probed in Lean). It needs `[Module ℚ≥0 M]`, and for
   `[RCLike 𝕜] [InnerProductSpace 𝕜 E]` that instance does not resolve —
