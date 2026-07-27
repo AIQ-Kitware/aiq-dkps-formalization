@@ -31,7 +31,7 @@ Purpose: design review only; no signatures are changed by this document
 
 9. ~~C*-algebra and matrix helpers~~ — RESOLVED, removed from backlog
 
-10. Measure-theory helpers
+10. ~~Measure-theory helpers~~ — RESOLVED, removed from backlog
 
 11. ~~Haagerup-Zsido kernel decomposition~~ — RESOLVED, removed from backlog
 
@@ -949,241 +949,55 @@ was chosen because `abs` collides with lattice/`|·|` expectations.
 
 ## 8. Inner-product-space utilities
 
-### 8.1 CenteredScatter.lean
-
-| **Current file** | ForTauCeti/Analysis/InnerProductSpace/CenteredScatter.lean |
-| --- | --- |
-| **Proposed disposition** | Refactor around a finite set/type and existing averaging API; retain the Welford update identity. |
-| **Readiness** | Medium-low. |
-| **Primary review risks** | Custom finiteMean and appendFin duplicate general combinators; normalization is implicit; LinearMap versus ContinuousLinearMap. |
-| **Likely PR slice** | Independent roadmap/PR after reuse audit. |
-
-#### P0  finiteMean
-
-**Disposition: Reuse / generalize**
-
-```lean
-noncomputable def finiteMean {n : ℕ} (z : Fin n → E) : E
-```
-
-**Proposed target shape**
-
-```lean
-noncomputable def Finset.mean
-    (s : Finset ι) (z : ι → E) : E :=
-  (s.card : 𝕜)⁻¹ • ∑ i ∈ s, z i
-```
-
-- Search Mathlib for average/centroid/expectation over a finite set before defining anything.
-
-- Generalize from Fin n to Finset or Fintype; make empty-family behavior explicit.
-
-- Do not use the generic name finiteMean in namespace TauCeti if the object is tied to a finite family.
-
-**Likely adversarial review:** Reuse review is likely to find an existing finite average construction or request a general Finset API.
-
-#### P0  appendFin
-
-**Disposition: Delete / privatize**
-
-```lean
-def appendFin {n : ℕ} (z : Fin n → E) (y : E) : Fin (n + 1) → E
-```
-
-**Proposed target shape**
-
-```lean
--- Delete in favor of Fin.cons, Matrix.vecCons, or an equivalence-based append.
--- Keep only private if no canonical combinator matches.
-```
-
-- Search for Fin.cons and existing vector append operations.
-
-- The helper is implementation scaffolding for one update theorem, not a reusable public object.
-
-- If retained, put it in a generic Fin utility file, not CenteredScatter.
-
-**Likely adversarial review:** A public hand-rolled Fin append is a classic reuse-rubric target.
-
-#### P0  centeredScatter
-
-**Disposition: Redesign**
-
-```lean
-noncomputable def centeredScatter {n : ℕ} (z : Fin n → E) : E →ₗ[𝕜] E
-```
-
-**Proposed target shape**
-
-```lean
-noncomputable def scatterOperator
-    (s : Finset ι) (z : ι → E) : E →L[𝕜] E :=
-  ∑ i ∈ s, rankOne 𝕜 (z i - s.mean z) (z i - s.mean z)
-```
-
-- Choose scatterOperator versus covarianceOperator based on normalization; current definition is unnormalized.
-
-- Prefer ContinuousLinearMap for an analytic operator with positivity/order/norm consumers.
-
-- Generalize to finite types/Finsets and avoid a custom append encoding.
-
-- Provide apply/inner/self-adjoint/nonneg API without unfolding.
-
-**Likely adversarial review:** The current name is plausible, but the signature does not state normalization and uses a narrower indexing representation than necessary.
-
-#### P1  sum_sub_finiteMean_eq_zero
-
-**Disposition: Rename after refactor**
-
-```lean
-theorem sum_sub_finiteMean_eq_zero {n : ℕ} (z : Fin n → E) : ∑ i, (z i - finiteMean 𝕜 z) = 0
-```
-
-**Proposed target shape**
-
-```lean
-theorem sum_sub_mean_eq_zero ...
-```
-
-- Rewrite against the Finset/Fintype API and canonical mean.
-
-- Use consistent apply/self/order terminology.
-
-- Keep only the update and positivity results that have independent consumers.
-
-**Likely adversarial review:** All current names depend on the local finiteMean/appendFin representation and should be revisited together.
-
-#### P1  finiteMean_append
-
-**Disposition: Rename after refactor**
-
-```lean
-theorem finiteMean_append {n : ℕ} (z : Fin n → E) (y : E) : finiteMean 𝕜 (appendFin z y) = finiteMean 𝕜 z + ((n : 𝕜) + 1)⁻¹ • (y - finiteMean 𝕜 z)
-```
-
-**Proposed target shape**
-
-```lean
-theorem mean_cons ...
-```
-
-- Rewrite against the Finset/Fintype API and canonical mean.
-
-- Use consistent apply/self/order terminology.
-
-- Keep only the update and positivity results that have independent consumers.
-
-**Likely adversarial review:** All current names depend on the local finiteMean/appendFin representation and should be revisited together.
-
-#### P1  centeredScatter_append
-
-**Disposition: Rename after refactor**
-
-```lean
-theorem centeredScatter_append {n : ℕ} (z : Fin n → E) (y : E) : centeredScatter 𝕜 (appendFin z y) = centeredScatter 𝕜 z + ((n : 𝕜) / ((n : 𝕜) + 1)) • (rankOne 𝕜 (y - finiteMean 𝕜 z) (y - finiteMean 𝕜 z)).toLinearMap
-```
-
-**Proposed target shape**
-
-```lean
-theorem scatterOperator_cons ...
-```
-
-- Rewrite against the Finset/Fintype API and canonical mean.
-
-- Use consistent apply/self/order terminology.
-
-- Keep only the update and positivity results that have independent consumers.
-
-**Likely adversarial review:** All current names depend on the local finiteMean/appendFin representation and should be revisited together.
-
-#### P1  re_inner_centeredScatter_self
-
-**Disposition: Rename after refactor**
-
-```lean
-theorem re_inner_centeredScatter_self {n : ℕ} (z : Fin n → E) (x : E) : RCLike.re (inner 𝕜 (centeredScatter 𝕜 z x) x) = ∑ i, ‖inner 𝕜 (z i - finiteMean 𝕜 z) x‖ ^ 2
-```
-
-**Proposed target shape**
-
-```lean
-theorem re_inner_scatterOperator_apply_self ...
-```
-
-- Rewrite against the Finset/Fintype API and canonical mean.
-
-- Use consistent apply/self/order terminology.
-
-- Keep only the update and positivity results that have independent consumers.
-
-**Likely adversarial review:** All current names depend on the local finiteMean/appendFin representation and should be revisited together.
-
-#### P1  centeredScatter_isPositive
-
-**Disposition: Rename after refactor**
-
-```lean
-theorem centeredScatter_isPositive {n : ℕ} (z : Fin n → E) : (centeredScatter 𝕜 z).IsPositive
-```
-
-**Proposed target shape**
-
-```lean
-theorem scatterOperator_isPositive ...
-```
-
-- Rewrite against the Finset/Fintype API and canonical mean.
-
-- Use consistent apply/self/order terminology.
-
-- Keep only the update and positivity results that have independent consumers.
-
-**Likely adversarial review:** All current names depend on the local finiteMean/appendFin representation and should be revisited together.
-
-#### P1  centeredScatter_le_append
-
-**Disposition: Rename after refactor**
-
-```lean
-theorem centeredScatter_le_append {n : ℕ} (z : Fin n → E) (y : E) : centeredScatter 𝕜 z ≤ centeredScatter 𝕜 (appendFin z y)
-```
-
-**Proposed target shape**
-
-```lean
-theorem scatterOperator_le_scatterOperator_cons ...
-```
-
-- Rewrite against the Finset/Fintype API and canonical mean.
-
-- Use consistent apply/self/order terminology.
-
-- Keep only the update and positivity results that have independent consumers.
-
-**Likely adversarial review:** All current names depend on the local finiteMean/appendFin representation and should be revisited together.
-
-#### P1  re_inner_centeredScatter_append
-
-**Disposition: Rename after refactor**
-
-```lean
-theorem re_inner_centeredScatter_append {n : ℕ} (z : Fin n → E) (y x : E) : RCLike.re (inner 𝕜 (centeredScatter 𝕜 (appendFin z y) x) x) = RCLike.re (inner 𝕜 (centeredScatter 𝕜 z x) x) + (n : ℝ) / ((n : ℝ) + 1) * ‖inner 𝕜 (y - finiteMean 𝕜 z) x‖ ^ 2
-```
-
-**Proposed target shape**
-
-```lean
-theorem re_inner_scatterOperator_cons_apply_self ...
-```
-
-- Rewrite against the Finset/Fintype API and canonical mean.
-
-- Use consistent apply/self/order terminology.
-
-- Keep only the update and positivity results that have independent consumers.
-
-**Likely adversarial review:** All current names depend on the local finiteMean/appendFin representation and should be revisited together.
+### 8.1 ~~CenteredScatter.lean~~ — RESOLVED, removed from backlog
+
+Executed 2026-07-27 (jon). All three P0 items settled; the file builds clean with no
+deprecation warnings and every declaration stays axiom-clean.
+
+**P0 `appendFin` — DELETED.** It was exactly `Fin.snoc`, so the "classic reuse-rubric
+target" the backlog predicted was real. The two `@[simp]` lemmas `appendFin_castSucc` /
+`appendFin_last` went with it, replaced by upstream `Fin.snoc_castSucc` / `Fin.snoc_last`.
+FINDING for the one consumer: `Fin.lastCases` and `Fin.snoc` are **not** definitionally
+equal — `snoc` transports along `cast` — so `DkpsQuench2026/Spectral/GramSpectrum.lean`,
+which had bridged the two by `rfl`, now needs a two-line `funext`/`Fin.lastCases`
+comparison. Its statement still uses `Fin.lastCases` because that spelling propagates into
+`DkpsQuench2026/Spectral/Regularity.lean`, outside this lane.
+
+**P0 `centeredScatter` — moved to `E →L[𝕜] E`.** Its summands `rankOne 𝕜 a a` are already
+continuous, so the old `E →ₗ[𝕜] E` codomain discarded continuity for nothing. Verified
+before committing: `ContinuousLinearMap.IsPositive` and the Löwner order (`le_def`) both
+exist at CLM level and — contrary to the obvious worry — need **no** `CompleteSpace`
+hypothesis, so the move costs no generality. Not done: the `Finset`/`Fintype`
+generalization. The add-one identity is intrinsically about extending `Fin n` to
+`Fin (n+1)`, so a `Finset` restatement would be `insert`-indexed and is a genuine redesign
+of the headline theorem plus its 60-line scalar-algebra proof, not a signature edit.
+
+**P0 `finiteMean` — reuse audit says KEEP, and it is not a duplicate.** Checked against the
+compiler, not by inspection:
+
+- `Finset.expect` (Mathlib's canonical finite average, `𝔼 i ∈ s, f i`) requires
+  `Module ℚ≥0 M`. That instance does **not** synthesize for a general `𝕜`-inner-product
+  space — confirmed by elaborating `Finset.expect Finset.univ z` against
+  `[RCLike 𝕜] [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]`, which fails on
+  `Module ℚ≥0 E`.
+- `Finset.centroid` *does* typecheck in this setting, so it is a live candidate — but
+  `Finset.affineCombination` is defined against `Classical.arbitrary`, so the centroid of
+  the empty family is nonconstructive junk. `finiteMean` returns `0` there and
+  `finiteMean_append` is deliberately stated to hold *at* `n = 0`, so a swap would have to
+  re-open that boundary case. (This sharper reading of `centroid`, and the fact that
+  `Module ℚ≥0 E` fails because `NormedSpace ℝ E` is reachable only through the
+  non-instance `InnerProductSpace.rclikeToReal` / `NormedSpace.restrictScalars`, are
+  edward's — independently probed while scoping §8.2 and posted to the LANES cross-lane
+  findings section. Both lanes reached the same conclusion separately.)
+
+Either would force non-`𝕜` scalars into a computation that is otherwise pure `𝕜`-module
+algebra (`inner_smul_left`, `match_scalars`, `field_simp`). The audit result is recorded in
+the module docstring so the next reviewer does not repeat it. The `Fin n` → `Finset`
+generalization the backlog also asked for is deferred with the headline theorem, above.
+
+Also fixed in passing: the module docstring's "Main results" list still pointed at
+`ForMathlib.*` names for declarations that now live in `TauCeti.*` — stale links that would
+not have resolved in generated docs.
 
 ### 8.2 ~~NearIsometry.lean~~ — P0 RESOLVED 2026-07-27
 
@@ -1274,124 +1088,54 @@ way: `comparator/pending-near-isometry.json` still named the pre-dedup
 follow-up, not fixed here.**
 
 
-### 8.3 OrthogonalSeries.lean
+### 8.3 ~~OrthogonalSeries.lean~~ — RESOLVED, removed from backlog
 
-| **Current file** | ForTauCeti/Analysis/InnerProductSpace/OrthogonalSeries.lean |
+Executed 2026-07-27 (jon). The backlog asked for an "exact duplicate audit" of the whole
+file. It found one.
+
+**Mathlib's `OrthogonalFamily` API contains statement-for-statement counterparts of three of
+the five declarations** (`Analysis/InnerProductSpace/Subspace.lean`):
+
+| this file | upstream |
 | --- | --- |
-| **Proposed disposition** | Retain only results not already in Mathlib; state them with the canonical Orthogonal predicate. |
-| **Readiness** | Unknown until reuse grep is completed. |
-| **Primary review risks** | Long proof-shaped names, repeated raw inner=0 predicate, likely overlap with existing orthogonal-family summability API. |
-| **Likely PR slice** | Small independent PR only if genuinely new. |
+| `norm_sq_finset_sum_of_pairwise_inner_eq_zero` | `OrthogonalFamily.norm_sum` |
+| `norm_sq_sdiff_sum_of_pairwise_inner_eq_zero` | `OrthogonalFamily.norm_sq_sdiff_sum` |
+| `summable_iff_norm_sq_summable_of_pairwise_inner_eq_zero` | `OrthogonalFamily.summable_iff_norm_sq_summable` |
 
-#### P0  norm_sq_finset_sum_of_pairwise_inner_eq_zero
+The only difference is the indexing: upstream takes a family of *subspaces* `G i` with
+isometries `V i : G i →ₗᵢ E`; this file takes *vectors* with pairwise `⟪f i, f j⟫ = 0`.
 
-**Disposition: Reuse audit / rename**
+**FINDING — the missing piece is a constructor, not the theorems.** Mathlib's only bridge
+into `OrthogonalFamily` from vectors is `Orthonormal.orthogonalFamily`, which requires
+*unit* vectors; there is nothing for a merely pairwise-orthogonal family. So the file's real
+contribution is that constructor, now stated as
+`orthogonalFamily_of_pairwise_inner_eq_zero`: the lines `𝕜 ∙ f i` with `subtypeₗᵢ`, proved
+in one line from `Submodule.isOrtho_span`. Because `V i (l i)` is `f i` definitionally, every
+downstream statement is a specialization needing no rewriting.
 
-```lean
-theorem norm_sq_finset_sum_of_pairwise_inner_eq_zero {ι : Type*} (f : ι → H) (horth : Pairwise fun i j => ⟪f i, f j⟫_𝕜 = 0) (s : Finset ι) : ‖∑ i ∈ s, f i‖ ^ 2 = ∑ i ∈ s, ‖f i‖ ^ 2
-```
+Result: the hand-rolled Pythagoras induction, the symmetric-difference identity and the
+ε–N Cauchy-criterion argument — roughly 90 lines of proof duplicating upstream — are gone.
+`norm_sq_sdiff_sum_of_pairwise_inner_eq_zero` became unused once the Cauchy argument was
+replaced by the upstream equivalence and was **deleted outright**; the backlog had only
+proposed privatizing it.
 
-**Proposed target shape**
+Kept, because they have no `OrthogonalFamily` counterpart upstream and carry the file's
+remaining content: `summable_of_pairwise_inner_eq_zero_of_partial_sum_norm_le` (a uniform
+bound on all finite partial sums gives summability, with no separate closedness theorem) and
+`HasSum.norm_sq_eq_tsum_of_pairwise_inner_eq_zero` (Parseval).
 
-```lean
-theorem norm_sum_sq_of_pairwise_orthogonal ...
-```
+Naming: only `norm_sq_finset_sum_…` → `norm_sum_sq_…` was renamed (`finset` was redundant —
+the argument is visibly a `Finset`). The other names deliberately kept their
+`_of_pairwise_inner_eq_zero` suffix to mirror upstream `OrthogonalFamily.*` spelling; there
+is no bundled Mathlib predicate for pairwise-orthogonal *vectors* to shorten them with, so
+the backlog's proposed `..._of_pairwise_orthogonal` would name a predicate that does not
+exist. The sole consumer,
+`DavisKahan/Alternative/OperatorIdeal/HilbertSchmidt/ColumnExpansion.lean`, uses only
+unrenamed declarations and needed no edit.
 
-- Use Pairwise (Orthogonal 𝕜 on f) or the exact canonical Mathlib predicate.
-
-- Search existing Hilbert-space tsum/Pythagorean lemmas before retaining.
-
-- Shorten names after the predicate carries the orthogonality semantics.
-
-**Likely adversarial review:** The reuse rubric explicitly searches long plumbing proofs and near-clones; this whole file needs an exact duplicate audit.
-
-#### P1  norm_sq_sdiff_sum_of_pairwise_inner_eq_zero
-
-**Disposition: Reuse audit / rename**
-
-```lean
-theorem norm_sq_sdiff_sum_of_pairwise_inner_eq_zero {ι : Type*} [DecidableEq ι] (f : ι → H) (horth : Pairwise fun i j => ⟪f i, f j⟫_𝕜 = 0) (s₁ s₂ : Finset ι) : ‖(∑ i ∈ s₁, f i) - ∑ i ∈ s₂, f i‖ ^ 2 = (∑ i ∈ s₁ \ s₂, ‖f i‖ ^ 2) + ∑ i ∈ s₂ \ s₁, ‖f i‖ ^ 2
-```
-
-**Proposed target shape**
-
-```lean
-private theorem norm_sub_sum_sq_of_pairwise_orthogonal ...
-```
-
-- Use Pairwise (Orthogonal 𝕜 on f) or the exact canonical Mathlib predicate.
-
-- Search existing Hilbert-space tsum/Pythagorean lemmas before retaining.
-
-- Shorten names after the predicate carries the orthogonality semantics.
-
-**Likely adversarial review:** The reuse rubric explicitly searches long plumbing proofs and near-clones; this whole file needs an exact duplicate audit.
-
-#### P1  summable_iff_norm_sq_summable_of_pairwise_inner_eq_zero
-
-**Disposition: Reuse audit / rename**
-
-```lean
-theorem summable_iff_norm_sq_summable_of_pairwise_inner_eq_zero {ι : Type*} [CompleteSpace H] (f : ι → H) (horth : Pairwise fun i j => ⟪f i, f j⟫_𝕜 = 0) : Summable f ↔ Summable fun i => ‖f i‖ ^ 2
-```
-
-**Proposed target shape**
-
-```lean
-theorem summable_iff_summable_norm_sq_of_pairwise_orthogonal ...
-```
-
-- Use Pairwise (Orthogonal 𝕜 on f) or the exact canonical Mathlib predicate.
-
-- Search existing Hilbert-space tsum/Pythagorean lemmas before retaining.
-
-- Shorten names after the predicate carries the orthogonality semantics.
-
-**Likely adversarial review:** The reuse rubric explicitly searches long plumbing proofs and near-clones; this whole file needs an exact duplicate audit.
-
-#### P1  summable_of_pairwise_inner_eq_zero_of_partial_sum_norm_le
-
-**Disposition: Reuse audit / rename**
-
-```lean
-theorem summable_of_pairwise_inner_eq_zero_of_partial_sum_norm_le {ι : Type*} [CompleteSpace H] (f : ι → H) (horth : Pairwise fun i j => ⟪f i, f j⟫_𝕜 = 0) {C : ℝ} (hC : 0 ≤ C) (hbound : ∀ s : Finset ι, ‖∑ i ∈ s, f i‖ ≤ C) : Summable f
-```
-
-**Proposed target shape**
-
-```lean
-theorem summable_of_pairwise_orthogonal_of_norm_sum_le ...
-```
-
-- Use Pairwise (Orthogonal 𝕜 on f) or the exact canonical Mathlib predicate.
-
-- Search existing Hilbert-space tsum/Pythagorean lemmas before retaining.
-
-- Shorten names after the predicate carries the orthogonality semantics.
-
-**Likely adversarial review:** The reuse rubric explicitly searches long plumbing proofs and near-clones; this whole file needs an exact duplicate audit.
-
-#### P1  HasSum.norm_sq_eq_tsum_of_pairwise_inner_eq_zero
-
-**Disposition: Reuse audit / rename**
-
-```lean
-theorem HasSum.norm_sq_eq_tsum_of_pairwise_inner_eq_zero {ι : Type*} [CompleteSpace H] {f : ι → H} {z : H} (hsum : HasSum f z) (horth : Pairwise fun i j => ⟪f i, f j⟫_𝕜 = 0) : ‖z‖ ^ 2 = ∑' i, ‖f i‖ ^ 2
-```
-
-**Proposed target shape**
-
-```lean
-theorem HasSum.norm_sq_eq_tsum_norm_sq (horth : Pairwise (Orthogonal 𝕜 on f)) ...
-```
-
-- Use Pairwise (Orthogonal 𝕜 on f) or the exact canonical Mathlib predicate.
-
-- Search existing Hilbert-space tsum/Pythagorean lemmas before retaining.
-
-- Shorten names after the predicate carries the orthogonality semantics.
-
-**Likely adversarial review:** The reuse rubric explicitly searches long plumbing proofs and near-clones; this whole file needs an exact duplicate audit.
+Not done: the `TauCeti.OrthogonalSeries` namespace is itself non-Mathlib-idiomatic (upstream
+would put these at root or under `OrthogonalFamily`), but changing it is consumer churn
+without API benefit and is left for the namespace pass.
 
 ## 9. ~~C*-algebra and matrix helpers~~ — RESOLVED, removed from backlog
 
@@ -1480,141 +1224,60 @@ The index equivalence relating the two indexings is kept **private**: it is an
 implementation detail of Mathlib's `eigenvalues`, and all three public statements
 avoid it.
 
-## 10. Measure-theory helpers
+## 10. ~~Measure-theory helpers~~ — RESOLVED, removed from backlog
 
-| **Current file** | Three ForTauCeti MeasureTheory files |
-| --- | --- |
-| **Proposed disposition** | Generalize and relocate only after exact Mathlib reuse audit. |
-| **Readiness** | Unknown. |
-| **Primary review risks** | Proof-specific rate lemmas; generic file names; missing canonical measurable-infimum object; possible existing probability complement facts. |
-| **Likely PR slice** | Independent small PRs, not bundled with operator theory. |
+Executed 2026-07-27 (jon). **The reuse audit cleared the section: nothing was deleted.**
+That is the opposite of what this section's framing anticipated ("Generalize and relocate
+only after exact Mathlib reuse audit", and for `one_sub_measure_compl_le` specifically,
+"may not merit a new public declaration"). Each candidate was checked by putting the goal
+to `exact?` against Mathlib, not by reading names.
 
-#### P0  measurableSet_exists_mem_le
+**`one_sub_measure_compl_le` — KEEP.** `exact?` cannot close
+`1 - μ sᶜ ≤ μ s` for `[IsProbabilityMeasure μ]`. Upstream `prob_compl_eq_one_sub₀` needs
+`NullMeasurableSet s` and `prob_compl_le_one_sub_of_le_prob` needs `MeasurableSet s`; the
+measurability-free form genuinely does not exist, and it is the form high-probability events
+are consumed in, where the event sets are often not easily measurable.
 
-**Disposition: Strengthen / reuse**
+**`measurableSet_exists_mem_le` — KEEP, and the P0 request is now satisfied.** The backlog
+asked for the missing canonical measurable-infimum object, with the set form derived. Added:
 
-```lean
-theorem measurableSet_exists_mem_le {Y : Type*} [PseudoMetricSpace Y] {Ω : Type*} [MeasurableSpace Ω] {S : Set Y} (hS : IsCompact S) {F : Y → Ω → ℝ} (hFc : ∀ ω, ContinuousOn (fun y => F y ω) S) (hFm : ∀ y ∈ S, Measurable (F y)) (c : ℝ) : MeasurableSet {ω | ∃ y ∈ S, F y ω ≤ c}
-```
+- `TauCeti.exists_mem_le_iff_iInf_le` — on a nonempty compact `S` the two agree, because the
+  infimum is attained. Stated with `omit [MeasurableSpace Ω]`: it is pure order/topology, and
+  the linter caught that the instance was along for the ride.
+- `TauCeti.measurable_iInf_of_isCompact` — `Measurable fun ω => ⨅ y : S, F y ω`.
 
-**Proposed target shape**
+FINDING on the direction of the derivation: the backlog proposed deriving the set form *from*
+the infimum lemma. It is done the other way round, because the existential form is what the
+uncountable-index argument actually proves and what consumers use, while the infimum
+statement follows from it in four lines through `measurable_of_Iic`. Deriving in the proposed
+direction would have meant rewriting the separability/sequential-compactness proof for no
+gain. Recorded here so the choice is not re-litigated.
 
-```lean
-theorem measurable_iInf_compact
-    (hS : IsCompact S)
-    (hcont : ∀ ω, ContinuousOn (fun y => F y ω) S)
-    (hmeas : ∀ y ∈ S, Measurable (F y)) :
-    Measurable (fun ω => ⨅ y : S, F y ω)
+Why the infimum lemma is the right canonical object anyway: Mathlib's `measurable_iInf`
+requires a *countable* index, and the whole content here is that continuity in the parameter
+replaces countability over an uncountable compact set.
 
--- derive:
-theorem measurableSet_exists_mem_le ...
-```
+**The three `tendstoInMeasure_*` rate lemmas — KEEP, unchanged.** Mathlib's
+`ConvergenceInMeasure` offers entry points from a.e. convergence, from `eLpNorm`
+convergence, and the `iff_dist`/`iff_norm`/`iff_enorm` reformulations — but **no**
+vanishing-rate or high-probability entry point at all. These three are the
+concentration-inequality bridge and fill a real gap. The names are already
+conclusion-first, and the review risk this section listed ("proof-specific rate lemmas") does
+not hold: they are stated over an arbitrary filter `l` and an arbitrary `EDist E`, matching
+the generality of `TendstoInMeasure` itself. The docstrings' claim that null-measurability is
+dispensable for the first two but *not* for the third is correct and was re-derived: bounding
+`μ bad` above from `μ good → 1` needs superadditivity, which fails for outer measures.
 
-- Prefer the measurable value function as the reusable theorem; derive the existential sublevel set.
+**`measurable_of_iUnion_restrict` — KEEP.** `exact?` cannot close it; upstream has only the
+two-set `measurable_of_restrict_of_restrict_compl`, not the countable-cover version.
 
-- Check measurable maximum/minimum theorems and Caratheodory integrand API in Mathlib.
-
-- Rename CompactExists.lean to a canonical measurable-minimum topic.
-
-**Likely adversarial review:** The current theorem is a single sublevel-set consequence rather than the characteristic measurable-infimum result.
-
-#### P0  tendstoInMeasure_of_tendsto_measure_rate_lt_edist
-
-**Disposition: Reuse / rename**
-
-```lean
-theorem tendstoInMeasure_of_tendsto_measure_rate_lt_edist [EDist E] {f : ι → α → E} {g : α → E} {rate : ι → ℝ≥0∞} (hrate : Tendsto rate l (𝓝 0)) (h : Tendsto (fun i => μ {x | rate i < edist (f i x) (g x)}) l (𝓝 0)) : TendstoInMeasure μ f l g
-```
-
-**Proposed target shape**
-
-```lean
-theorem tendstoInMeasure_of_measure_edist_gt_tendsto_zero
-    (hrate : Tendsto rate l (𝓝 0))
-    (hbad : Tendsto (fun i => μ {x | rate i < edist (f i x) (g x)}) l (𝓝 0)) :
-    TendstoInMeasure μ f l g
-```
-
-- Choose a name that exposes bad-event measure convergence, not “tendsto_measure_rate_lt_edist” word order.
-
-- Use a nonnegative rate type; ENNReal is natural here.
-
-- Check if this is already the definition or a standard epsilon criterion.
-
-**Likely adversarial review:** The long proof-shaped name is likely to be renamed, and direct duplication of TendstoInMeasure criteria would block.
-
-#### P0  tendstoInMeasure_of_tendsto_measure_rate_lt_dist
-
-**Disposition: Fix rate type / derive**
-
-```lean
-theorem tendstoInMeasure_of_tendsto_measure_rate_lt_dist [PseudoMetricSpace E] {f : ι → α → E} {g : α → E} {rate : ι → ℝ} (hrate : Tendsto rate l (𝓝 0)) (h : Tendsto (fun i => μ {x | rate i < dist (f i x) (g x)}) l (𝓝 0)) : TendstoInMeasure μ f l g
-```
-
-**Proposed target shape**
-
-```lean
-theorem tendstoInMeasure_of_measure_dist_gt_tendsto_zero
-    {rate : ι → ℝ≥0} ...
-```
-
-- Use ℝ≥0 or require eventual nonnegativity; a negative real rate makes the bad event nearly universal.
-
-- Derive from the edist theorem via coercions.
-
-- Keep only if the metric specialization materially improves use.
-
-**Likely adversarial review:** Generality review will challenge unrestricted real-valued rates and duplicated edist/dist proofs.
-
-#### P1  tendstoInMeasure_of_tendsto_measure_dist_le_rate
-
-**Disposition: Polish / derive**
-
-```lean
-theorem tendstoInMeasure_of_tendsto_measure_dist_le_rate [PseudoMetricSpace E] [IsProbabilityMeasure μ] {f : ι → α → E} {g : α → E} {rate : ι → ℝ} (hrate : Tendsto rate l (𝓝 0)) (hmeas : ∀ i, NullMeasurableSet {x | dist (f i x) (g x) ≤ rate i} μ) (hprob : Tendsto (fun i => μ {x | dist (f i x) (g x) ≤ rate i}) l (𝓝 1)) : TendstoInMeasure μ f l g
-```
-
-**Proposed target shape**
-
-```lean
-theorem tendstoInMeasure_of_measure_dist_le_tendsto_one
-    [IsProbabilityMeasure μ]
-    (hrate : Tendsto rate l (𝓝 0))
-    (hgood : Tendsto (fun i => μ {x | dist (f i x) (g x) ≤ rate i}) l (𝓝 1)) :
-    TendstoInMeasure μ f l g
-```
-
-- Use a nonnegative rate type.
-
-- Try to remove explicit NullMeasurableSet by assuming measurable f/g or deriving measurability from the distance map.
-
-- Derive through the complement/bad-event theorem and a standard probability measure identity.
-
-**Likely adversarial review:** The signature exposes a per-index measurability obligation that may indicate the theorem is stated one level too low.
-
-#### P0  one_sub_measure_compl_le
-
-**Disposition: Reuse audit**
-
-```lean
-theorem one_sub_measure_compl_le {Ω : Type*} [MeasurableSpace Ω] (μ : Measure Ω) [IsProbabilityMeasure μ] (s : Set Ω) : 1 - μ sᶜ ≤ μ s
-```
-
-**Proposed target shape**
-
-```lean
-theorem one_sub_measure_compl_le_measure
-    [IsProbabilityMeasure μ] (s : Set Ω) :
-    1 - μ sᶜ ≤ μ s
-```
-
-- Rename to include the right-hand side.
-
-- Search for measure_compl_le or ENNReal subtraction lemmas first.
-
-- If measurable s gives equality, expose that standard theorem rather than only the weak nonmeasurable inequality.
-
-**Likely adversarial review:** This is likely a one-line consequence of existing probability-measure API and may not merit a new public declaration.
+**COUPLING, recorded for every future rename lane.** These declarations are restated verbatim
+in `Challenge/MathlibPending/{CfcMeasurable,TendstoInMeasure,ProbabilityQoL}/{Conformance,Leaderboard}.lean`
+and listed by name in three `comparator/*.json` configs, with live consumers in
+`Acharyya2024/WellKnown.lean` and `DkpsQuench2026/Paper/EvaluationConcentration.lean`.
+`Challenge` is **not** in `defaultTargets`. This pass therefore renamed nothing — the audit
+found no rename worth the churn — and all five §10 `Challenge` modules were built
+individually to confirm.
 
 ## 11. Haagerup-Zsido kernel decomposition — RESOLVED
 
@@ -1893,9 +1556,9 @@ theorem approximationNumber_tangentOperator ...
 | eigenvalues_le_eigenvalues_of_re_inner_le | eigenvalue_mono | Sketch; verify adjacent Mathlib naming |
 | rectangularOperatorModulus | ContinuousLinearMap.modulus | Sketch; verify adjacent Mathlib naming |
 | operatorAbs | delete; square specialization of modulus | Sketch; verify adjacent Mathlib naming |
-| finiteMean | Finset.mean / existing average | Sketch; verify adjacent Mathlib naming |
-| centeredScatter | scatterOperator | Sketch; verify adjacent Mathlib naming |
-| appendFin | delete; existing Fin combinator | Sketch; verify adjacent Mathlib naming |
+| finiteMean | **KEPT 2026-07-27** (§8.1) — not a duplicate: `Finset.expect` needs `Module ℚ≥0 E` (fails to synthesize here), `Finset.centroid` is affine |
+| centeredScatter | **RETYPED 2026-07-27** (§8.1) to `E →L[𝕜] E`; name kept (unnormalized, and `scatterOperator` would not say so either) |
+| appendFin | **DELETED 2026-07-27** (§8.1) — it was exactly `Fin.snoc` |
 | PosSemidef.eigenvalues₀_eq_zero_of_le | Matrix.PosSemidef.eigenvalues₀_eq_zero_of_rank_le | **Landed 2026-07-27** (§9.2); `i` made implicit, and the two facts its proof buried are now separate exports |
 | exists_two_sided_inverse_of_spectrum_gap | isUnit_of_forall_le_abs + IsSelfAdjoint.norm_ringInverse_le | **Landed 2026-07-27** (§9.1); split, and invertibility dropped the `IsSelfAdjoint` hypothesis |
 | IsSelfAdjoint.norm_le_of_spectrum_subset_Icc | IsSelfAdjoint.norm_le_iff_spectrum_subset_Icc | **Landed 2026-07-27** (§9.1); strengthened to an iff, one-directional form not retained |
