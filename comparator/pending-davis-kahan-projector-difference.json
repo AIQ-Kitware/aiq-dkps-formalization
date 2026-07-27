@@ -2,8 +2,8 @@
   "challenge_module": "Challenge.MathlibPending.DavisKahanProjectorDifference.Conformance",
   "solution_module": "Challenge.MathlibPending.DavisKahanProjectorDifference.Leaderboard",
   "theorem_names": [
-    "ForMathlib.DavisKahanTheory.projector_difference_opNorm",
-    "ForMathlib.DavisKahanTheory.spectralProjector_difference_opNorm"
+    "TauCeti.DavisKahanTheory.projector_difference_opNorm",
+    "TauCeti.DavisKahanTheory.spectralProjector_difference_opNorm"
   ],
   "permitted_axioms": [
     "propext",

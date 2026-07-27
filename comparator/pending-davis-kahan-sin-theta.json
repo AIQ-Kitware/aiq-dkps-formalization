@@ -2,7 +2,7 @@
   "challenge_module": "Challenge.MathlibPending.DavisKahanSinTheta.Conformance",
   "solution_module": "Challenge.MathlibPending.DavisKahanSinTheta.Leaderboard",
   "theorem_names": [
-    "ForMathlib.DavisKahanTheory.partIII_sinTheta_uiNorm"
+    "TauCeti.DavisKahanTheory.partIII_sinTheta_uiNorm"
   ],
   "permitted_axioms": [
     "propext",

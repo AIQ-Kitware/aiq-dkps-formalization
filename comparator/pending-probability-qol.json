@@ -2,8 +2,8 @@
   "challenge_module": "Challenge.MathlibPending.ProbabilityQoL.Conformance",
   "solution_module": "Challenge.MathlibPending.ProbabilityQoL.Leaderboard",
   "theorem_names": [
-    "ForMathlib.one_sub_measure_compl_le",
-    "ForMathlib.meas_gt_le_ofReal_integral_sq_div_sq"
+    "TauCeti.one_sub_measure_compl_le",
+    "TauCeti.meas_gt_le_ofReal_integral_sq_div_sq"
   ],
   "permitted_axioms": [
     "propext",
