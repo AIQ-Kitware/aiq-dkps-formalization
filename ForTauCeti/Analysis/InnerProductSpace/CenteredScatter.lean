@@ -33,11 +33,18 @@ already, so taking the bundled linear map would discard continuity for nothing; 
 `IsPositive` and Löwner-order API used below exists at both levels and needs no
 completeness assumption.
 
-`finiteMean` is *not* an instance of an existing Mathlib average. `Finset.expect` (the
-canonical finite average) requires `Module ℚ≥0 E`, which a general `𝕜`-inner-product space
-does not have, and `Finset.centroid` lives in the affine hierarchy and is stated through
-`affineCombination`. Both would force scalars other than `𝕜` into an otherwise pure
-`𝕜`-module computation. See backlog §8.1.
+`finiteMean` is *not* an instance of an existing Mathlib average.
+
+* `Finset.expect`, the canonical finite average, requires `Module ℚ≥0 E`. That instance does
+  not resolve for a general `𝕜`-inner-product space: `NormedSpace ℝ E` is reachable only
+  through `InnerProductSpace.rclikeToReal` / `NormedSpace.restrictScalars`, which are
+  deliberately definitions rather than instances.
+* `Finset.centroid` does typecheck here, but `Finset.affineCombination` is defined against
+  `Classical.arbitrary`, so the centroid of the empty family is nonconstructive junk.
+  `finiteMean` instead returns `0` there, by Mathlib's total-inverse convention, and
+  `finiteMean_append` is deliberately stated to hold *at* `n = 0`.
+
+See backlog §8.1.
 
 ## Provenance
 
