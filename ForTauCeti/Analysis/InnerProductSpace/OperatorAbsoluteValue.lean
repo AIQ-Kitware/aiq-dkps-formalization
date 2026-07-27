@@ -2,47 +2,26 @@
 Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Fable 5
+
+TRANSITIONAL COMPATIBILITY SHIM — NOT an upstream candidate.
+
+The signature-polish backlog (`dev/tauceti-signature-polish-todo.md` §7)
+requires a single modulus API: two public definitions of `(T⋆ T)^(1/2)` — one
+rectangular, one square — would be blocked on the reuse rubric.  The canonical
+definition is now `ContinuousLinearMap.modulus` in
+`ForTauCeti/Analysis/InnerProductSpace/OperatorModulus.lean`, stated for
+rectangular operators; the square case is a specialization of it.
+
+`operatorAbs` survives here only as a reducible alias with its historical API
+restated, so that the Davis--Kahan consumers keep compiling while they migrate.
+Delete each declaration once its downstream users have moved to the canonical
+name (see the name map in
+`dev/tauceti/formathlib-to-fortauceti-migration.md`).  Nothing in this file may
+be exported to Tau Ceti.
 -/
 module
 
-public import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Commute
-public import Mathlib.Analysis.CStarAlgebra.ContinuousLinearMap
-public import Mathlib.Analysis.InnerProductSpace.StarOrder
-public import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Rpow.Basic
-public import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Rpow.Isometric
-
-/-!
-# The absolute value of a Hilbert-space operator
-
-For a bounded operator `T` on a complex Hilbert space, the absolute value
-`|T| = (T⋆ T)^(1/2)` through the continuous-functional-calculus square root
-on the C⋆-algebra of bounded operators, together with its defining laws:
-
-* `operatorAbs_nonneg` — `0 ≤ |T|`;
-* `operatorAbs_mul_self` — `|T| * |T| = T⋆ T`;
-* `operatorAbs_unique` — the positive square root is unique;
-* `norm_operatorAbs` — `‖|T|‖ = ‖T‖`;
-* `norm_operatorAbs_apply` — the pointwise isometry `‖|T| x‖ = ‖T x‖`.
-
-Complex scalars are required because Mathlib registers the continuous
-functional calculus on Hilbert-space operators only over `ℂ`; the real case
-is expected to follow by complexification transfer.
-
-## Provenance
-
-* Original repository: Davis--Kahan/DKPS formalization (Kitware, Inc.).
-* Original module: `ForMathlib/Analysis/InnerProductSpace/OperatorAbsoluteValue.lean`
-  at Davis--Kahan commit `fc38eb4`.
-* Original declarations: `operatorAbs` and its API (`operatorAbs_nonneg`,
-  `isSelfAdjoint_operatorAbs`, `operatorAbs_mul_self`, `operatorAbs_unique`,
-  `operatorAbs_commute_operatorAbs`, `norm_operatorAbs`, `norm_operatorAbs_mul`,
-  `norm_mul_operatorAbs`, `norm_operatorAbs_apply`), namespace renamed here
-  `ForMathlib` → `TauCeti`.
-* Original authors / copyright: Jon Crall, Claude Fable 5;
-  Copyright (c) 2026 Kitware, Inc.; Apache 2.0.
-* Extraction class: **copied**, converted to the Tau Ceti module system.
-* Spectra influence: **none** (imports only Mathlib).
--/
+public import ForTauCeti.Analysis.InnerProductSpace.OperatorModulus
 
 @[expose] public section
 
@@ -53,106 +32,56 @@ open scoped InnerProductSpace
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
   [CompleteSpace E]
 
-/-- The absolute value `|T| = (T⋆ T)^(1/2)` of a bounded operator on a
-complex Hilbert space, through the continuous-functional-calculus square
-root. -/
-noncomputable def operatorAbs (T : E →L[ℂ] E) : E →L[ℂ] E :=
-  CFC.sqrt (star T * T)
+/-- Historical name for the endomorphism case of
+`ContinuousLinearMap.modulus`. -/
+noncomputable abbrev operatorAbs (T : E →L[ℂ] E) : E →L[ℂ] E := T.modulus
 
-/-- The absolute value is nonnegative in the C⋆-order. -/
+/-- Historical name for `ContinuousLinearMap.modulus_nonneg`. -/
 theorem operatorAbs_nonneg (T : E →L[ℂ] E) : 0 ≤ operatorAbs T :=
-  CFC.sqrt_nonneg _
+  T.modulus_nonneg
 
-/-- The absolute value is self-adjoint. -/
+/-- Historical name for `ContinuousLinearMap.modulus_isSelfAdjoint`. -/
 theorem isSelfAdjoint_operatorAbs (T : E →L[ℂ] E) :
     IsSelfAdjoint (operatorAbs T) :=
-  IsSelfAdjoint.of_nonneg (operatorAbs_nonneg T)
+  T.modulus_isSelfAdjoint
 
-/-- The defining identity `|T| * |T| = T⋆ T`. -/
+/-- Historical name for
+`ContinuousLinearMap.modulus_mul_self_eq_star_mul_self`. -/
 theorem operatorAbs_mul_self (T : E →L[ℂ] E) :
     operatorAbs T * operatorAbs T = star T * T :=
-  CFC.sqrt_mul_sqrt_self _ (star_mul_self_nonneg T)
+  T.modulus_mul_self_eq_star_mul_self
 
-/-- The absolute value is the unique nonnegative square root of `T⋆ T`. -/
+/-- Historical name for
+`ContinuousLinearMap.eq_modulus_of_nonneg_of_mul_self_eq`. -/
 theorem operatorAbs_unique {T b : E →L[ℂ] E} (hb : 0 ≤ b)
     (h : b * b = star T * T) : b = operatorAbs T :=
-  (CFC.sqrt_unique h hb).symm
+  ContinuousLinearMap.eq_modulus_of_nonneg_of_mul_self_eq hb h
 
-/-- Absolute values of operators with commuting squares commute. -/
+/-- Historical name for `ContinuousLinearMap.modulus_commute_modulus`. -/
 theorem operatorAbs_commute_operatorAbs {S T : E →L[ℂ] E}
     (h : Commute (star S * S) (star T * T)) :
-    Commute (operatorAbs S) (operatorAbs T) := by
-  have h1 : Commute (CFC.sqrt (star S * S)) (star T * T) :=
-    Commute.cfcₙ_nnreal h _
-  have h2 : Commute (CFC.sqrt (star T * T)) (CFC.sqrt (star S * S)) :=
-    Commute.cfcₙ_nnreal h1.symm _
-  exact h2.symm
+    Commute (operatorAbs S) (operatorAbs T) :=
+  ContinuousLinearMap.modulus_commute_modulus h
 
-/-- `‖|T|‖ = ‖T‖`. -/
-theorem norm_operatorAbs (T : E →L[ℂ] E) :
-    ‖operatorAbs T‖ = ‖T‖ := by
-  rw [operatorAbs, CFC.norm_sqrt _ (star_mul_self_nonneg T),
-    CStarRing.norm_star_mul_self]
-  exact Real.sqrt_mul_self (norm_nonneg T)
+/-- Historical name for `ContinuousLinearMap.norm_modulus`. -/
+theorem norm_operatorAbs (T : E →L[ℂ] E) : ‖operatorAbs T‖ = ‖T‖ :=
+  T.norm_modulus
 
-/-- Left composition sees only the absolute value:
-`‖|S| * D‖ = ‖S * D‖`, by the C⋆-identity applied to
-`(|S| D)⋆ (|S| D) = D⋆ (S⋆ S) D = (S D)⋆ (S D)`. -/
+/-- Historical name for `ContinuousLinearMap.norm_modulus_comp`. -/
 theorem norm_operatorAbs_mul (S D : E →L[ℂ] E) :
-    ‖operatorAbs S * D‖ = ‖S * D‖ := by
-  have h : star (operatorAbs S * D) * (operatorAbs S * D) =
-      star (S * D) * (S * D) := by
-    calc star (operatorAbs S * D) * (operatorAbs S * D)
-        = star D * (operatorAbs S * operatorAbs S) * D := by
-          rw [star_mul, (isSelfAdjoint_operatorAbs S).star_eq]
-          simp only [mul_assoc]
-      _ = star D * (star S * S) * D := by rw [operatorAbs_mul_self]
-      _ = star (S * D) * (S * D) := by
-          rw [star_mul]
-          simp only [mul_assoc]
-  have hsq : ‖operatorAbs S * D‖ ^ 2 = ‖S * D‖ ^ 2 := by
-    rw [sq, sq, ← CStarRing.norm_star_mul_self,
-      ← CStarRing.norm_star_mul_self, h]
-  have hs := congrArg Real.sqrt hsq
-  rwa [Real.sqrt_sq (norm_nonneg _), Real.sqrt_sq (norm_nonneg _)] at hs
+    ‖operatorAbs S * D‖ = ‖S * D‖ :=
+  S.norm_modulus_comp D
 
-/-- Right composition sees the absolute value as the adjoint:
-`‖D * |T|‖ = ‖D * T⋆‖`, by conjugating the left-composition identity. -/
+/-- Historical name for `ContinuousLinearMap.norm_comp_modulus`. -/
 theorem norm_mul_operatorAbs (D T : E →L[ℂ] E) :
-    ‖D * operatorAbs T‖ = ‖D * star T‖ := by
-  calc ‖D * operatorAbs T‖
-      = ‖star (D * operatorAbs T)‖ := (norm_star _).symm
-    _ = ‖operatorAbs T * star D‖ := by
-        rw [star_mul, (isSelfAdjoint_operatorAbs T).star_eq]
-    _ = ‖T * star D‖ := norm_operatorAbs_mul T (star D)
-    _ = ‖star (T * star D)‖ := (norm_star _).symm
-    _ = ‖D * star T‖ := by rw [star_mul, star_star]
+    ‖D * operatorAbs T‖ = ‖D * star T‖ :=
+  D.norm_comp_modulus T
 
-/-- The pointwise isometry `‖|T| x‖ = ‖T x‖`. -/
+/-- Historical name for `ContinuousLinearMap.norm_modulus_apply`. -/
 theorem norm_operatorAbs_apply (T : E →L[ℂ] E) (x : E) :
-    ‖operatorAbs T x‖ = ‖T x‖ := by
-  have habs : (operatorAbs T).adjoint = operatorAbs T := by
-    rw [← ContinuousLinearMap.star_eq_adjoint]
-    exact (isSelfAdjoint_operatorAbs T).star_eq
-  have h1 : (⟪operatorAbs T x, operatorAbs T x⟫_ℂ : ℂ) =
-      ⟪x, (operatorAbs T * operatorAbs T) x⟫_ℂ := by
-    calc (⟪operatorAbs T x, operatorAbs T x⟫_ℂ : ℂ)
-        = ⟪(operatorAbs T).adjoint x, operatorAbs T x⟫_ℂ := by rw [habs]
-      _ = ⟪x, operatorAbs T (operatorAbs T x)⟫_ℂ :=
-          ContinuousLinearMap.adjoint_inner_left _ _ _
-      _ = ⟪x, (operatorAbs T * operatorAbs T) x⟫_ℂ := rfl
-  have h2 : (⟪T x, T x⟫_ℂ : ℂ) = ⟪x, (star T * T) x⟫_ℂ := by
-    calc (⟪T x, T x⟫_ℂ : ℂ)
-        = ⟪x, T.adjoint (T x)⟫_ℂ :=
-          (ContinuousLinearMap.adjoint_inner_right _ _ _).symm
-      _ = ⟪x, (star T * T) x⟫_ℂ := rfl
-  have h3 : (⟪operatorAbs T x, operatorAbs T x⟫_ℂ : ℂ) =
-      ⟪T x, T x⟫_ℂ := by
-    rw [h1, h2, operatorAbs_mul_self]
-  have h4 : (‖operatorAbs T x‖ : ℝ) ^ 2 = ‖T x‖ ^ 2 := by
-    rw [inner_self_eq_norm_sq_to_K, inner_self_eq_norm_sq_to_K] at h3
-    exact_mod_cast h3
-  have h5 := congrArg Real.sqrt h4
-  rwa [Real.sqrt_sq (norm_nonneg _), Real.sqrt_sq (norm_nonneg _)] at h5
+    ‖operatorAbs T x‖ = ‖T x‖ :=
+  T.norm_modulus_apply x
 
 end TauCeti
+
+end

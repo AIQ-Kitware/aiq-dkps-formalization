@@ -84,6 +84,30 @@ DavisKahan/paper) to the ForTauCeti version. The approximation-number
 Do the dedup as part of the component migration; do NOT leave two copies of a
 declaration importable together.
 
+**Operator-modulus name map (2026-07-24).** The three overlapping copies are
+unified onto `ContinuousLinearMap.modulus`
+(`ForTauCeti/Analysis/InnerProductSpace/OperatorModulus.lean`):
+
+| old name | canonical name |
+| --- | --- |
+| `TauCeti.rectangularOperatorModulus T` (both copies) | `T.modulus` |
+| `TauCeti.rectangularGram_nonneg` | `ContinuousLinearMap.adjoint_comp_self_nonneg` |
+| `TauCeti.rectangularOperatorModulus_nonneg` | `ContinuousLinearMap.modulus_nonneg` |
+| `TauCeti.isSelfAdjoint_rectangularOperatorModulus` | `ContinuousLinearMap.modulus_isSelfAdjoint` |
+| `TauCeti.rectangularOperatorModulus_mul_self` | `ContinuousLinearMap.modulus_mul_self` |
+| `TauCeti.norm_rectangularOperatorModulus_apply` | `ContinuousLinearMap.norm_modulus_apply` (`simp`) |
+| `TauCeti.norm_rectangularOperatorModulus` | `ContinuousLinearMap.norm_modulus` (`simp`) |
+| `TauCeti.operatorAbs T` | `T.modulus` (square case; shim alias retained) |
+| `TauCeti.operatorAbs_unique` | `ContinuousLinearMap.eq_modulus_of_nonneg_of_mul_self_eq` |
+| `TauCeti.operatorAbs_commute_operatorAbs` | `ContinuousLinearMap.modulus_commute_modulus` |
+| `TauCeti.norm_operatorAbs_mul` | `ContinuousLinearMap.norm_modulus_comp` (generalized to rectangular) |
+| `TauCeti.norm_mul_operatorAbs` | `ContinuousLinearMap.norm_comp_modulus` (generalized to rectangular) |
+| — (new) | `ContinuousLinearMap.adjoint_modulus`, `modulus_eq_sqrt_star_mul_self`, `modulus_mul_self_eq_star_mul_self` |
+
+Historical `operatorAbs` names remain available from the transitional
+`OperatorAbsoluteValue.lean` shim; the historical `rectangularOperatorModulus`
+names are **gone** (their consumers were repointed in the same commit).
+
 **CourantFischer name map (2026-07-24).** The ForTauCeti copy carries the FINAL
 redesigned API (polish backlog §6 executed; basis-span scaffolding generalized
 into `ForTauCeti/Analysis/InnerProductSpace/BasisSpan.lean`). The dedup repoints

@@ -864,258 +864,45 @@ Still open, deliberately (recorded here so the roadmap can decide):
   quadratic-form inequality) waits until the target library's operator order
   for `E →L[𝕜] E` is the settled premise language.
 
-## 7. Operator modulus and absolute value convergence
-
-> **P0 duplicate API**
->
-> ForTauCeti currently contains rectangularOperatorModulus while a separate staged OperatorAbsoluteValue file defines operatorAbs for square maps. These are the same construction at different generalities. Upstreaming both would create a parallel API and likely trigger the reuse rubric. Keep one rectangular source-modulus definition and derive the square specialization.
-
-| **Current file** | OperatorModulus.lean + OperatorAbsoluteValue.lean |
-| --- | --- |
-| **Proposed disposition** | Merge into one canonical ContinuousLinearMap modulus API. |
-| **Readiness** | Low until naming and namespace are settled. |
-| **Primary review risks** | Duplicate definitions; rectangular prefix is proof-history terminology; square multiplication versus composition; complex-only assumptions. |
-| **Likely PR slice** | PR A4, separate prerequisite refactor. |
-
-#### P0  rectangularOperatorModulus
-
-**Disposition: Unify definition**
-
-```lean
-noncomputable def rectangularOperatorModulus (T : E →L[ℂ] F) : E →L[ℂ] E
-```
-
-**Proposed target shape**
-
-```lean
-noncomputable def ContinuousLinearMap.modulus
-    (T : E →L[ℂ] F) : E →L[ℂ] E :=
-  CFC.sqrt (T.adjoint.comp T)
-```
-
-- Use the general rectangular map as the sole definition.
-
-- The source space already disambiguates the construction; rectangular in every name is unnecessary.
-
-- Evaluate whether Mathlib convention prefers abs, modulus, or operatorAbs; search adjacent C*-algebra names before choosing.
-
-- Expose a square specialization theorem rather than a second definition.
-
-**Likely adversarial review:** Two public definitions for the same mathematical object are a reuse/API blocker.
-
-#### P1  rectangularGram_nonneg
-
-**Disposition: Merge family**
-
-```lean
-theorem rectangularGram_nonneg (T : E →L[ℂ] F) : 0 ≤ T.adjoint ∘L T
-```
-
-**Proposed target shape**
-
-```lean
-theorem ContinuousLinearMap.adjoint_comp_self_nonneg (T) : 0 ≤ T.adjoint.comp T
-```
-
-- Rename under the single modulus API.
-
-- Delete the corresponding operatorAbs duplicate where present.
-
-**Likely adversarial review:** The name rectangularGram is local terminology and may duplicate an existing positivity theorem.
-
-#### P1  rectangularOperatorModulus_nonneg
-
-**Disposition: Merge family**
-
-```lean
-theorem rectangularOperatorModulus_nonneg (T : E →L[ℂ] F) : 0 ≤ rectangularOperatorModulus T
-```
-
-**Proposed target shape**
-
-```lean
-theorem ContinuousLinearMap.modulus_nonneg (T) : 0 ≤ T.modulus
-```
-
-- Rename under the single modulus API.
-
-- Delete the corresponding operatorAbs duplicate where present.
-
-**Likely adversarial review:** Characteristic result; should live by the definition and likely feed self-adjointness.
-
-#### P1  isSelfAdjoint_rectangularOperatorModulus
-
-**Disposition: Merge family**
-
-```lean
-theorem isSelfAdjoint_rectangularOperatorModulus (T : E →L[ℂ] F) : IsSelfAdjoint (rectangularOperatorModulus T)
-```
-
-**Proposed target shape**
-
-```lean
-theorem ContinuousLinearMap.modulus_isSelfAdjoint (T) : IsSelfAdjoint T.modulus
-```
-
-- Rename under the single modulus API.
-
-- Delete the corresponding operatorAbs duplicate where present.
-
-**Likely adversarial review:** Current name order is inconsistent with method-style API.
-
-#### P1  rectangularOperatorModulus_mul_self
-
-**Disposition: Merge family**
-
-```lean
-theorem rectangularOperatorModulus_mul_self (T : E →L[ℂ] F) : rectangularOperatorModulus T * rectangularOperatorModulus T = T.adjoint ∘L T
-```
-
-**Proposed target shape**
-
-```lean
-theorem ContinuousLinearMap.modulus_sq (T) : T.modulus * T.modulus = T.adjoint.comp T
-```
-
-- Rename under the single modulus API.
-
-- Delete the corresponding operatorAbs duplicate where present.
-
-**Likely adversarial review:** Use a standard sq/mul_self naming precedent and canonical composition.
-
-#### P1  norm_rectangularOperatorModulus_apply
-
-**Disposition: Merge family**
-
-```lean
-theorem norm_rectangularOperatorModulus_apply (T : E →L[ℂ] F) (x : E) : ‖rectangularOperatorModulus T x‖ = ‖T x‖
-```
-
-**Proposed target shape**
-
-```lean
-@[simp] theorem ContinuousLinearMap.norm_modulus_apply (T) (x) : ‖T.modulus x‖ = ‖T x‖
-```
-
-- Rename under the single modulus API.
-
-- Delete the corresponding operatorAbs duplicate where present.
-
-**Likely adversarial review:** This is the key computation theorem and should likely be simp.
-
-#### P1  norm_rectangularOperatorModulus
-
-**Disposition: Merge family**
-
-```lean
-theorem norm_rectangularOperatorModulus (T : E →L[ℂ] F) : ‖rectangularOperatorModulus T‖ = ‖T‖
-```
-
-**Proposed target shape**
-
-```lean
-@[simp] theorem ContinuousLinearMap.norm_modulus (T) : ‖T.modulus‖ = ‖T‖
-```
-
-- Rename under the single modulus API.
-
-- Delete the corresponding operatorAbs duplicate where present.
-
-**Likely adversarial review:** Low risk after the definition is canonical.
-
-#### P1  operatorAbs_unique
-
-**Disposition: Generalize / rename**
-
-```lean
-theorem operatorAbs_unique {T b : E →L[ℂ] E} (hb : 0 ≤ b) (h : b * b = star T * T) : b = operatorAbs T
-```
-
-**Proposed target shape**
-
-```lean
-theorem ContinuousLinearMap.eq_modulus_of_nonneg_of_sq_eq
-    (hb : 0 ≤ b) (hsq : b * b = T.adjoint * T) :
-    b = T.modulus
-```
-
-- Keep uniqueness as a characterization theorem for the one modulus definition.
-
-- State it in the general source-space setting if CFC uniqueness supports it.
-
-- Name from the equality conclusion and hypotheses; avoid operatorAbs after unification.
-
-**Likely adversarial review:** This is useful API, but only after the duplicate definition is removed.
-
-#### P2  operatorAbs_commute_operatorAbs
-
-**Disposition: Reuse judgment**
-
-```lean
-theorem operatorAbs_commute_operatorAbs {S T : E →L[ℂ] E} (h : Commute (star S * S) (star T * T)) : Commute (operatorAbs S) (operatorAbs T)
-```
-
-**Proposed target shape**
-
-```lean
-theorem ContinuousLinearMap.modulus_commute_modulus
-    (h : Commute (S.adjoint * S) (T.adjoint * T)) :
-    Commute S.modulus T.modulus
-```
-
-- Check whether CFC already has a commute-map theorem making this one line.
-
-- Consider a more general CFC sqrt commute theorem rather than an operator-specific restatement.
-
-- Keep only if downstream operator-theory users need this specialization.
-
-**Likely adversarial review:** Reuse review may identify this as a direct CFC corollary that does not need a public specialized theorem.
-
-#### P1  norm_operatorAbs_mul
-
-**Disposition: Audit and generalize**
-
-```lean
-theorem norm_operatorAbs_mul (S D : E →L[ℂ] E) : ‖operatorAbs S * D‖ = ‖S * D‖
-```
-
-**Proposed target shape**
-
-```lean
-theorem norm_modulus_mul (S D : E →L[ℂ] E) :
-    ‖S.modulus * D‖ = ‖S * D‖
-```
-
-- Verify the mathematical orientation and whether this needs D to commute; the current theorem is nonobvious and deserves a precise docstring.
-
-- Generalize rectangular source/target spaces if composition types permit.
-
-- Name and place under the modulus namespace, not a duplicate square API.
-
-**Likely adversarial review:** Correctness review will scrutinize a norm equality this strong; the docstring must explain the adjoint calculation.
-
-#### P1  norm_mul_operatorAbs
-
-**Disposition: Audit**
-
-```lean
-theorem norm_mul_operatorAbs (D T : E →L[ℂ] E) : ‖D * operatorAbs T‖ = ‖D * star T‖
-```
-
-**Proposed target shape**
-
-```lean
-theorem norm_mul_modulus (D T : E →L[ℂ] E) :
-    ‖D * T.modulus‖ = ‖D * T.adjoint‖
-```
-
-- Check whether the right side should be D*T or D*T.adjoint and explain why.
-
-- Generalize dimensions/types where possible.
-
-- Avoid publishing both left/right forms unless both have consumers.
-
-**Likely adversarial review:** The asymmetric right-hand side is surprising and likely to receive correctness and naming scrutiny.
+## 7. ~~Operator modulus and absolute value convergence~~ — RESOLVED, removed from backlog
+
+Executed 2026-07-24 (edward). There were in fact **three** importable copies,
+not two: `TauCeti.operatorAbs` (square), the staged ForTauCeti
+`rectangularOperatorModulus` (dead — zero importers), and a still-live
+redefinition of `rectangularOperatorModulus` inside
+`DavisKahan/OperatorIdeal/ApproximationNumbers/OperatorModulus.lean`.
+
+All three are replaced by one canonical rectangular definition,
+`ContinuousLinearMap.modulus` in
+`ForTauCeti/Analysis/InnerProductSpace/OperatorModulus.lean`, with dot notation
+and the full API (`modulus_nonneg`, `modulus_isSelfAdjoint`, `adjoint_modulus`,
+`modulus_mul_self`, `eq_modulus_of_nonneg_of_mul_self_eq`, `norm_modulus_apply`
+and `norm_modulus` as `simp`, `norm_modulus_comp`, `norm_comp_modulus`,
+`modulus_commute_modulus`, plus the endomorphism specializations
+`modulus_eq_sqrt_star_mul_self` / `modulus_mul_self_eq_star_mul_self`).
+
+Beyond deduplication the following backlog concerns were answered:
+
+- the square-only composition laws `norm_operatorAbs_mul` / `norm_mul_operatorAbs`
+  are **generalized to rectangular operators** and reproved — the left law is
+  now a one-line consequence of the pointwise isometry rather than a
+  C⋆-identity computation, and the right law is that law conjugated by the
+  isometric adjoint.  The backlog's open question ("check whether the right
+  side should be `D * T` or `D * T.adjoint`") is settled: it is `T.adjoint`,
+  and the docstring explains why (the two sides act on different spaces);
+- uniqueness and the commutation lemma are likewise stated rectangularly (the
+  latter for operators with a common *source* and unrelated targets);
+- `rectangularGram_nonneg` became `adjoint_comp_self_nonneg`, documented as the
+  `0 ≤ ·` form of Mathlib's `isPositive_adjoint_comp_self`.
+
+`operatorAbs` survives only as a reducible alias in a documented transitional
+shim (`OperatorAbsoluteValue.lean`, not upstream-bound) so the ~80 Davis--Kahan
+references keep compiling; delete per declaration as consumers migrate.
+
+Still open, deliberately: whether the canonical name should be `modulus`,
+`abs`, or `operatorAbs` is a naming call for the roadmap — Mathlib has no
+operator absolute value today, so there is no precedent to match; `modulus`
+was chosen because `abs` collides with lattice/`|·|` expectations.
 
 ## 8. Inner-product-space utilities
 
