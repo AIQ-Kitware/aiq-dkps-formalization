@@ -81,13 +81,13 @@ noncomputable def paperSineBlockC
 noncomputable def paperCosineModulusC
     (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : U →L[ℂ] U :=
-  rectangularOperatorModulus (paperCosineBlockC U V)
+  ContinuousLinearMap.modulus (paperCosineBlockC U V)
 
 /-- The positive directed sine modulus on the trial coordinate space. -/
 noncomputable def paperSineModulusC
     (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : U →L[ℂ] U :=
-  rectangularOperatorModulus (paperSineBlockC U V)
+  ContinuousLinearMap.modulus (paperSineBlockC U V)
 
 /-- The cosine modulus is a positive contraction. -/
 theorem norm_paperCosineModulusC_le_one
@@ -96,8 +96,8 @@ theorem norm_paperCosineModulusC_le_one
     ‖paperCosineModulusC U V‖ ≤ 1 := by
   rw [paperCosineModulusC]
   calc
-    ‖rectangularOperatorModulus (paperCosineBlockC U V)‖ =
-        ‖paperCosineBlockC U V‖ := norm_rectangularOperatorModulus _
+    ‖ContinuousLinearMap.modulus (paperCosineBlockC U V)‖ =
+        ‖paperCosineBlockC U V‖ := ContinuousLinearMap.norm_modulus _
     _ ≤ ‖V.subtypeL.adjoint‖ * ‖U.subtypeL‖ :=
       ContinuousLinearMap.opNorm_comp_le _ _
     _ ≤ 1 * 1 := by
@@ -115,7 +115,7 @@ theorem spectrum_paperCosineModulusC_subset_Icc
     spectrum ℝ (paperCosineModulusC U V) ⊆ Set.Icc 0 1 := by
   intro x hx
   refine ⟨spectrum_nonneg_of_nonneg
-    (rectangularOperatorModulus_nonneg (paperCosineBlockC U V)) hx, ?_⟩
+    (ContinuousLinearMap.modulus_nonneg (paperCosineBlockC U V)) hx, ?_⟩
   -- `spectrum.norm_le_norm_of_mem` would need `NormOneClass`, i.e. `‖id‖ = 1`,
   -- which fails when `U` is the zero subspace.  The `mul` form carries no such
   -- instance, and `norm_id_le` bounds the unit without nontriviality.
@@ -154,7 +154,7 @@ theorem paperSourceDirectedCosC_eq
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     paperSourceDirectedCosC U V = paperCosineModulusC U V := by
   have hsa : IsSelfAdjoint (paperCosineModulusC U V) :=
-    isSelfAdjoint_rectangularOperatorModulus _
+    ContinuousLinearMap.modulus_isSelfAdjoint _
   rw [paperSourceDirectedCosC, paperSourceDirectedAngleC,
     ← cfc_comp Real.cos Real.arccos (paperCosineModulusC U V)
       hsa Real.continuous_cos.continuousOn
@@ -176,8 +176,8 @@ theorem paperSineModulus_sq_add_paperCosineModulus_sq
       paperCosineModulusC U V * paperCosineModulusC U V =
         ContinuousLinearMap.id ℂ U := by
   rw [paperSineModulusC, paperCosineModulusC,
-    rectangularOperatorModulus_mul_self,
-    rectangularOperatorModulus_mul_self]
+    ContinuousLinearMap.modulus_mul_self,
+    ContinuousLinearMap.modulus_mul_self]
   ext x
   -- The adjoint of a projection onto the subtype is the inclusion.
   have hadjPerp : (Vᗮ.orthogonalProjectionOnto).adjoint = Vᗮ.subtypeL := by
@@ -206,7 +206,7 @@ theorem paperSourceDirectedSinC_eq_paperSineModulusC
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     paperSourceDirectedSinC U V = paperSineModulusC U V := by
   have hsaCos : IsSelfAdjoint (paperCosineModulusC U V) :=
-    isSelfAdjoint_rectangularOperatorModulus _
+    ContinuousLinearMap.modulus_isSelfAdjoint _
   -- The spectrum of the angle is the arccosine image of the modulus spectrum,
   -- by the spectral mapping theorem.
   have hspec : spectrum ℝ (paperSourceDirectedAngleC U V) =
@@ -265,7 +265,7 @@ theorem paperSourceDirectedSinC_eq_paperSineModulusC
       nlinarith [Real.sin_sq_add_cos_sq x]
     rw [htrig]
     have hp := paperSineModulus_sq_add_paperCosineModulus_sq U V
-    have hs := rectangularOperatorModulus_mul_self (paperSineBlockC U V)
+    have hs := ContinuousLinearMap.modulus_mul_self (paperSineBlockC U V)
     rw [← hs]
     exact (eq_sub_of_add_eq hp).symm
   show paperSourceDirectedSinC U V =

@@ -57,7 +57,7 @@ theorem spectrum_paperSourceDirectedAngleC_subset_Icc
     spectrum ℝ (paperSourceDirectedAngleC U V) ⊆
       Set.Icc 0 (Real.pi / 2) := by
   have hsa : IsSelfAdjoint (paperCosineModulusC U V) :=
-    isSelfAdjoint_rectangularOperatorModulus _
+    ContinuousLinearMap.modulus_isSelfAdjoint _
   intro y hy
   rw [paperSourceDirectedAngleC,
     cfc_map_spectrum (R := ℝ) Real.arccos (paperCosineModulusC U V)

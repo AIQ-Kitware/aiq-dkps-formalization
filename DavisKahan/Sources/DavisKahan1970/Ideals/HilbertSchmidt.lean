@@ -171,7 +171,7 @@ theorem paperHilbertSchmidtNorm_operatorModulus
     [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
     [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
     (A : E →L[ℂ] F) :
-    paperHilbertSchmidtNorm (rectangularOperatorModulus A) =
+    paperHilbertSchmidtNorm (ContinuousLinearMap.modulus A) =
       paperHilbertSchmidtNorm A :=
   (sameApproximationSingularValues_rectangularOperatorModulus A).paperHilbertSchmidtNorm_eq
 
