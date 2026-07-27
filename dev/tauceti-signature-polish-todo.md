@@ -153,7 +153,7 @@ State whether scatter is normalized, whether Fourier transform uses 2π, whether
 
 1. PR A4: one canonical operator modulus, deleting the parallel operatorAbs API downstream.
 
-1. PR U1: LinearPMap convergence refactor for closed/self-adjoint operators; no new perturbation theorem.
+1. PR U1: **ACTIVE / CLAIMED.** LinearPMap convergence refactor for closed/self-adjoint operators; no new perturbation theorem. This is required representation work, not optional polish.
 
 1. PR S1+: dependency-closed Spectra ports with exact provenance, after reuse audit.
 
@@ -1586,7 +1586,11 @@ imports for self-containment.
 
 ## 12. Next-wave convergence signatures
 
-The following clusters are not ready for declaration-level cosmetic polishing. Their public object model must converge with Tau Ceti and Spectra first. The TODOs below describe the desired signature direction rather than exact final declarations.
+These sections are representation work, not a cosmetic-renaming backlog. When a
+canonical Tau Ceti/Mathlib representation is already forced, the corresponding
+section becomes an executable migration lane immediately. **Section 12.2 is now
+active and claimed**; Sections 12.3–12.7 remain design-stage until their own
+canonical representation decisions are closed.
 
 ### 12.1 ~~Rectangular symmetric ideal families~~ — P0 RESOLVED 2026-07-27
 
@@ -1623,38 +1627,72 @@ Axiom count went 14 fields → 4 laws: `gauge 0 = 0` follows from homogeneity at
 
 **Validation and migration.** `DavisKahan/Interop/TauCeti/RectangularFamilyAdapter.lean` derives the entire historical record from the canonical one (`SymmetricOperatorIdealFamily.toRectangular`), including `gauge_complete`, so nothing the ~70 production consumers rely on was lost. There is deliberately no inverse — a historical record does not determine a canonical family, which *is* the defect. Remaining work is the incremental migration of those consumers, after which both the adapter and `RectangularSymmetricIdealFamily` are deleted. `KyFanDominantIdealFamily` (in `ApproximationNumbers.lean`) has the same free-data shape and should be redone as a mixin during that migration.
 
-### 12.2 Closed and self-adjoint unbounded operators
+### 12.2 Closed and self-adjoint unbounded operators — P0 ACTIVE / CLAIMED
+
+> **Decision closed:** the canonical foundational object is Mathlib
+> `LinearPMap`, with closedness, density, symmetry, and self-adjointness as
+> properties. The DKPS `ClosedOperator` bundle is a temporary downstream adapter,
+> not an upstream candidate. See `dev/tauceti/u1-linearpmap-migration.md`.
+
+Do not add a second definition when pinned Mathlib already supplies the notion.
+The intended API shape is:
 
 ```lean
--- Avoid a parallel bundled ClosedOperator as the foundation.
 namespace LinearPMap
 
-def IsClosed (A : E →ₗ.[𝕜] F) : Prop := IsClosed A.graph
+-- Reuse existing Mathlib predicates and add only missing characteristic lemmas.
+-- Typical arguments are the partial map plus explicit facts:
+variable (A : E →ₗ.[𝕜] F)
+variable (hAclosed : A.IsClosed)
+variable (hAdense : Dense (A.domain : Set E))
 
-def IsDenselyDefined (A : E →ₗ.[𝕜] F) : Prop := Dense (A.domain : Set E)
-
-theorem isClosed_of_isSelfAdjoint ...
+-- Domain-aware relations are predicates over partial maps, not new operator bundles.
+def SameDomain (A B : E →ₗ.[𝕜] F) : Prop := A.domain = B.domain
 
 def MapsDomainTo (A : E →ₗ.[𝕜] E) (B : F →ₗ.[𝕜] F)
-    (X : F →L[𝕜] E) : Prop := ...
+    (X : E →L[𝕜] F) : Prop :=
+  ∀ x : A.domain, X x.1 ∈ B.domain
 
--- Thin bundles only if a roadmap API demonstrably benefits:
-structure SelfAdjointOperator where
-  toLinearPMap : H →ₗ.[ℂ] H
-  selfAdjoint : IsSelfAdjoint toLinearPMap
+end LinearPMap
 ```
 
-- Rewrite ClosedOperator consumers onto LinearPMap and predicates before upstreaming any theorem.
+Required implementation order:
 
-- Derive density, symmetry, and closedness from self-adjointness rather than store redundant fields.
+1. **Inventory and exact correspondence.** Map every public declaration in
+   `DavisKahan/SpectralTheory/ClosedOperator/Basic.lean` to an existing Mathlib /
+   Tau Ceti declaration, a missing reusable `LinearPMap` theorem, a temporary
+   adapter field, or a Davis--Kahan-specific downstream theorem.
+2. **Canonical reusable core.** State same-domain, extension, domain transport,
+   bounded extension, graph norm, relative boundedness, bounded embedding, and
+   bounded-perturbation facts directly over `LinearPMap` in a dependency-clean
+   `ForTauCeti` module tree.
+3. **Compatibility seam.** Implement the historical bundle from the canonical
+   layer under `DavisKahan/Interop/TauCeti/`; do not let it flow back into
+   `ForTauCeti`.
+4. **Consumer migration.** Repoint reducing restrictions, closed Sylvester
+   equations, unbounded estimates, and graph/Riccati inputs in dependency order.
+5. **Deletion/demotion.** Remove generic production imports of the historical
+   bundle; retain only source-facing compatibility corollaries that have a real
+   paper-interface purpose.
 
-- Replace SameDomain records with equality of LinearPMap.domain or a simple predicate only when necessary.
+Hard requirements:
 
-- Represent bounded operators through the existing LinearPMap full-domain constructor, not a second closed-operator embedding.
+- derive density, symmetry, and closedness from self-adjointness where available
+  rather than store redundant evidence;
+- use equality of `LinearPMap.domain` or a simple predicate instead of a bundled
+  `SameDomain` record unless additional data is genuinely required;
+- represent bounded operators through Mathlib's existing full-domain partial-map
+  constructor, not a second closed-operator embedding;
+- define graph norm and bounded-extension constructions on the domain subtype of
+  a `LinearPMap`;
+- preserve green builds with adapters, but never treat adapter-backed greenness
+  as completion;
+- do not wait for Spectra PVM, real-spectrum, or complexification work; isolate
+  those bridges downstream and continue the representation migration around them.
 
-- Make graph norm and bounded-extension constructions operate on the domain subtype of a LinearPMap.
-
-- Coordinate naming with Tau Ceti semigroup generator files, which already use LinearPMap.
+Exit criterion: no generic production theorem has DKPS `ClosedOperator` as its
+fundamental input. A remaining use must be explicitly classified as a temporary
+interop wrapper or a source-facing compatibility theorem.
 
 ### 12.3 Partial isometries and polar decomposition
 
@@ -1774,7 +1812,7 @@ carry a transitional adapter whose deletion condition is stated.*
 | **Cluster** | **Current state** | **Signature risk** | **Upstream action** | **Priority** |
 | --- | --- | --- | --- | --- |
 | ~~operatorAbs~~ | **Canonical API landed (§7).** `ContinuousLinearMap.modulus` is the one rectangular modulus; `operatorAbs` survives only as a `reducible abbrev` in a documented not-for-upstream shim | Adapter is live, so the duplicate name is still importable | Delete the alias once its consumers move to `.modulus`; do not submit the alias | ~~P0~~ adapter-retirement |
-| ClosedOperator | **Open.** Still a parallel bundle over `LinearPMap` | Two competing closed-operator representations in production | Demote to adapter, then delete from generic production — see §12.2 | P0 |
+| ClosedOperator | **ACTIVE / CLAIMED 2026-07-27.** Canonical representation fixed to `LinearPMap` + properties | Two competing closed-operator representations in production | Execute U1: build canonical core, adapter, consumer migration, then delete/demote bundle — see §12.2 | P0 |
 | Spectra SelfAdjointOperator | **Open.** Still consumed across `DavisKahan/Sources/**` and `DavisKahan/Alternative/**` | Potential donor wrapper competing with the Tau Ceti representation | Port useful lemmas; choose canonical Tau Ceti representation | P1 |
 | ~~specSubspace~~ | **Renamed (§6).** Canonical is `OrthonormalBasis.spanIndices` in `ForTauCeti/Analysis/InnerProductSpace/BasisSpan.lean`, generalized off `Fin`/predicates; `specSubspace` remains only inside `CourantFischerCompat.lean` | Compat shim is importable | Delete with the shim once the historical Courant–Fischer signatures are retired | ~~P0~~ adapter-retirement |
 | ~~appendFin~~ | **Deleted (§8.1).** It was exactly `Fin.snoc`; `Fin.snoc_castSucc` / `Fin.snoc_last` replace its two simp lemmas | none | done — no adapter was needed | ~~P0~~ |
@@ -1914,7 +1952,7 @@ carry a transitional adapter whose deletion condition is stated.*
 
 1. What exact Courant-Fischer equality is the roadmap product, rather than merely a support lemma?
 
-1. Does Tau Ceti want a bundled SelfAdjointOperator, or properties on LinearPMap?
+1. ~~Does Tau Ceti want a bundled SelfAdjointOperator, or properties on LinearPMap?~~ **Resolved 2026-07-27:** `LinearPMap` plus properties is canonical; a thin bundle is permitted only as a derived convenience after the property API exists.
 
 1. What is the minimal PVM/Borel-calculus slice to port from Spectra?
 
