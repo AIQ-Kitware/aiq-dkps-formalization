@@ -1694,11 +1694,14 @@ carry a transitional adapter whose deletion condition is stated.*
 | eigenvalues_le_eigenvalues_of_re_inner_le | eigenvalue_mono | Sketch; verify adjacent Mathlib naming |
 | rectangularOperatorModulus | ContinuousLinearMap.modulus | Sketch; verify adjacent Mathlib naming |
 | operatorAbs | delete; square specialization of modulus | Sketch; verify adjacent Mathlib naming |
-| finiteMean | **KEPT 2026-07-27** (§8.1) — not a duplicate: `Finset.expect` needs `Module ℚ≥0 E` (fails to synthesize here), `Finset.centroid` is affine |
-| centeredScatter | **RETYPED 2026-07-27** (§8.1) to `E →L[𝕜] E`; name kept (unnormalized, and `scatterOperator` would not say so either) |
-| appendFin | **DELETED 2026-07-27** (§8.1) — it was exactly `Fin.snoc` |
+| finiteMean | *(no rename)* | **KEPT 2026-07-27** (§8.1) — not a duplicate: `Finset.expect` needs `Module ℚ≥0 E`, which does not synthesize here; `Finset.centroid` is affine with `Classical.arbitrary` empty-family junk |
+| centeredScatter | *(name kept)* | **RETYPED 2026-07-27** (§8.1) to `E →L[𝕜] E`; `scatterOperator` was rejected because it states the normalization no better |
+| appendFin | `Fin.snoc` | **DELETED 2026-07-27** (§8.1) — it was exactly `Fin.snoc`; note the two are *not* `rfl`-equal, `snoc` transports along `cast` |
 | PosSemidef.eigenvalues₀_eq_zero_of_le | Matrix.PosSemidef.eigenvalues₀_eq_zero_of_rank_le | **Landed 2026-07-27** (§9.2); `i` made implicit, and the two facts its proof buried are now separate exports |
 | exists_two_sided_inverse_of_spectrum_gap | isUnit_of_forall_le_abs + IsSelfAdjoint.norm_ringInverse_le | **Landed 2026-07-27** (§9.1); split, and invertibility dropped the `IsSelfAdjoint` hypothesis |
+| norm_sq_finset_sum_of_pairwise_inner_eq_zero | norm_sum_sq_of_pairwise_inner_eq_zero | **Landed 2026-07-27** (§8.3); `finset` dropped as redundant. The other names in that file deliberately keep `_of_pairwise_inner_eq_zero`, mirroring upstream `OrthogonalFamily.*` — there is no bundled Mathlib predicate for pairwise-orthogonal *vectors* |
+| norm_sq_sdiff_sum_of_pairwise_inner_eq_zero | *(deleted)* | **DELETED 2026-07-27** (§8.3) — subsumed by `OrthogonalFamily.norm_sq_sdiff_sum` and left unused once the Cauchy argument was replaced; the backlog had proposed only privatizing it |
+| *(new)* | orthogonalFamily_of_pairwise_inner_eq_zero | **Added 2026-07-27** (§8.3) — the constructor Mathlib lacks: `Orthonormal.orthogonalFamily` requires *unit* vectors, so nothing covered a merely pairwise-orthogonal family |
 | IsSelfAdjoint.norm_le_of_spectrum_subset_Icc | IsSelfAdjoint.norm_le_iff_spectrum_subset_Icc | **Landed 2026-07-27** (§9.1); strengthened to an iff, one-directional form not retained |
 
 ## Appendix B. Review questions to answer in roadmaps
