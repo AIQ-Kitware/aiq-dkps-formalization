@@ -29,7 +29,7 @@ Purpose: design review only; no signatures are changed by this document
 
 8. Inner-product-space utilities
 
-9. C*-algebra and matrix helpers
+9. ~~C*-algebra and matrix helpers~~ — RESOLVED, removed from backlog
 
 10. Measure-theory helpers
 
@@ -1326,7 +1326,7 @@ theorem HasSum.norm_sq_eq_tsum_norm_sq (horth : Pairwise (Orthogonal 𝕜 on f))
 
 **Likely adversarial review:** The reuse rubric explicitly searches long plumbing proofs and near-clones; this whole file needs an exact duplicate audit.
 
-## 9. C*-algebra and matrix helpers
+## 9. ~~C*-algebra and matrix helpers~~ — RESOLVED, removed from backlog
 
 ### 9.1 ~~SelfAdjointGapInverse.lean~~ — RESOLVED, removed from backlog
 
@@ -1377,32 +1377,41 @@ Consumers repointed (8 call sites, 4 files): `DavisKahan/Sylvester/GenuineSpectr
 of the eight destructured a `_hJ2` they never used — direct evidence that the
 bundled conjunction was over-packaged.
 
-### 9.2 Matrix/Spectrum.lean
+### 9.2 ~~Matrix/Spectrum.lean~~ — RESOLVED, removed from backlog
 
-#### P1  PosSemidef.eigenvalues₀_eq_zero_of_le
+Executed 2026-07-27 (jon). Renamed as proposed, and the backlog's own question —
+"check whether the natural conclusion is support/cardinality, with this pointwise
+theorem as a corollary" — resolved in the affirmative: it is, and both supporting
+facts were buried inside the single proof.
 
-**Disposition: Rename**
+Reuse audit: Mathlib indexes Hermitian eigenvalues twice (`eigenvalues₀`, sorted
+and `Fin (Fintype.card n)`-indexed; `eigenvalues`, reusing the matrix index `n`,
+*defined* from the first along an index equivalence), but states the basic theory
+only for the second. Upstream `eigenvalues₀` carries just `eigenvalues₀_antitone`
+and the charpoly identities — neither `rank_eq_card_non_zero_eigs` nor
+`PosSemidef.eigenvalues_nonneg` has a sorted counterpart. So this was a
+basic-theory build-out, not a rename.
 
-```lean
-PosSemidef.eigenvalues₀_eq_zero_of_le
-```
+The file now carries three declarations, all axiom-clean:
 
-**Proposed target shape**
+- `Matrix.IsHermitian.rank_eq_card_non_zero_eigenvalues₀` — the rank counts the
+  nonzero *sorted* eigenvalues, in the exact shape of Mathlib's unsorted
+  `rank_eq_card_non_zero_eigs`. **Positive semidefiniteness is not needed**; the
+  old proof carried it only because the statement it served did.
+- `Matrix.PosSemidef.eigenvalues₀_nonneg` — sorted counterpart of
+  `PosSemidef.eigenvalues_nonneg`.
+- `Matrix.PosSemidef.eigenvalues₀_eq_zero_of_rank_le` — the renamed headline, now
+  a short counting corollary, with `i` implicit as the backlog asked.
 
-```lean
-theorem Matrix.PosSemidef.eigenvalues₀_eq_zero_of_rank_le
-    (hB : B.PosSemidef) (hrank : B.rank ≤ d)
-    (hi : d ≤ i) :
-    hB.isHermitian.eigenvalues₀ i = 0
-```
+FINDING: positive semidefiniteness is **essential** to the headline and not merely
+convenient — a rank-one Hermitian matrix whose nonzero eigenvalue is negative sorts
+that eigenvalue *last*, so its tail is not zero. It is inessential to the rank
+count. Separating the two is the substance of this pass, and the reason the
+counting lemma is the more reusable export.
 
-- Put rank in the name; it is the decisive hypothesis.
-
-- Check whether the natural conclusion is support/cardinality or zero after rank, with this pointwise theorem as a corollary.
-
-- Use implicit i only if dot notation remains readable.
-
-**Likely adversarial review:** The current name “of_le” does not say what is ≤ what and is not discoverable.
+The index equivalence relating the two indexings is kept **private**: it is an
+implementation detail of Mathlib's `eigenvalues`, and all three public statements
+avoid it.
 
 ## 10. Measure-theory helpers
 
@@ -1820,7 +1829,7 @@ theorem approximationNumber_tangentOperator ...
 | finiteMean | Finset.mean / existing average | Sketch; verify adjacent Mathlib naming |
 | centeredScatter | scatterOperator | Sketch; verify adjacent Mathlib naming |
 | appendFin | delete; existing Fin combinator | Sketch; verify adjacent Mathlib naming |
-| PosSemidef.eigenvalues₀_eq_zero_of_le | eigenvalues₀_eq_zero_of_rank_le | Sketch; verify adjacent Mathlib naming |
+| PosSemidef.eigenvalues₀_eq_zero_of_le | Matrix.PosSemidef.eigenvalues₀_eq_zero_of_rank_le | **Landed 2026-07-27** (§9.2); `i` made implicit, and the two facts its proof buried are now separate exports |
 | exists_two_sided_inverse_of_spectrum_gap | isUnit_of_forall_le_abs + IsSelfAdjoint.norm_ringInverse_le | **Landed 2026-07-27** (§9.1); split, and invertibility dropped the `IsSelfAdjoint` hypothesis |
 | IsSelfAdjoint.norm_le_of_spectrum_subset_Icc | IsSelfAdjoint.norm_le_iff_spectrum_subset_Icc | **Landed 2026-07-27** (§9.1); strengthened to an iff, one-directional form not retained |
 
