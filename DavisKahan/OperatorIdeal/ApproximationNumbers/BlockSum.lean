@@ -307,7 +307,7 @@ theorem approximationNumber_continuousOrthogonalBlockSum_le_max
       _ ≤ (r : Cardinal) + (s : Cardinal) := add_le_add hRrank hQrank
       _ = ((r + s : ℕ) : Cardinal) := by norm_cast
   refine le_trans
-    ((continuousOrthogonalBlockSum A B).approximationNumber_le hrank) ?_
+    ((continuousOrthogonalBlockSum A B).approximationNumber_le_norm_sub hrank) ?_
   rw [continuousOrthogonalBlockSum_sub]
   refine le_trans (norm_continuousOrthogonalBlockSum_le (A - R) (B - Q)) ?_
   refine max_le ?_ ?_

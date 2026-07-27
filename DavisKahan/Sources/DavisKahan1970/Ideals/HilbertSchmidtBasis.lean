@@ -251,7 +251,7 @@ theorem paperHilbertSchmidtEnergy_comp_starProjection
   have hTrank : T.rank ≤ (n : Cardinal) := by
     have hK : Module.rank ℂ K = (n : Cardinal) := by
       rw [← Module.finrank_eq_rank' ℂ K, hn]
-    refine Cardinal.le_natCast_of_lift_le
+    refine Cardinal.lift_le_natCast.mp
       ((lift_rank_range_le T.toLinearMap).trans ?_)
     calc
       Cardinal.lift.{vE} (Module.rank ℂ K)

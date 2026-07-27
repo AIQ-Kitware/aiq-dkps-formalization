@@ -77,7 +77,7 @@ theorem lowerBound_le_approximationNumber_of_finrank
     (hVdim : finrank 𝕜 V = n + 1) (c : ℝ)
     (hV : ∀ x : V, ‖x‖ = 1 → c ≤ ‖T (x : E₁)‖) :
     c ≤ T.approximationNumber n := by
-  apply T.le_approximationNumber
+  refine T.le_approximationNumber_iff.mpr ?_
   intro R hR
   let RV : V →L[𝕜] F₁ := R.comp V.subtypeL
   have hRVrank : RV.rank ≤ (n : Cardinal) := by
