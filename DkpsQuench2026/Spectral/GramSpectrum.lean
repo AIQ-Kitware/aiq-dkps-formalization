@@ -139,9 +139,11 @@ theorem sum_sq_centered_le_augmented {n d : Nat}
     intro m w
     rw [TauCeti.re_inner_centeredScatter_self]
     exact sum_sq_linearForm_eq_sum_norm_inner (centerConfig w) x
-  rw [hkey ψref, hkey (Fin.lastCases target ψref)]
-  rw [show (Fin.lastCases target ψref : Fin (n + 1) → Vec d) =
-    TauCeti.appendFin ψref target from rfl]
+  -- `Fin.lastCases` and `Fin.snoc` agree, but are not definitionally equal: `snoc`
+  -- transports along `cast`, so the two must be compared index by index.
+  have hsnoc : (Fin.lastCases target ψref : Fin (n + 1) → Vec d) = Fin.snoc ψref target :=
+    funext fun i => Fin.lastCases (by simp) (fun j => by simp) i
+  rw [hkey ψref, hkey (Fin.lastCases target ψref), hsnoc]
   rw [TauCeti.re_inner_centeredScatter_append]
   have hnn : 0 ≤ (n : ℝ) / ((n : ℝ) + 1) *
       ‖(inner ℝ (target - TauCeti.finiteMean ℝ ψref) x : ℝ)‖ ^ 2 := by
