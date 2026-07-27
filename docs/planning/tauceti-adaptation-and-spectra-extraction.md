@@ -358,13 +358,35 @@ only makes the duplication harder to remove. Its PR slicing:
 - **A4 — one canonical rectangular modulus**, deleting the parallel `operatorAbs`
   API downstream.
 
-`U1` (LinearPMap unbounded-operator convergence) and `S1+` (dependency-closed
-Spectra ports) are later roadmaps. A PR must not mix a P0 convergence refactor
-with downstream theorem additions. The **pre-PR declaration checklist** (audit
+`U1` (LinearPMap unbounded-operator convergence) is an **active local
+implementation campaign**, not a later design question. Its canonical
+representation is forced by Mathlib and Tau Ceti, so local convergence proceeds
+now through a temporary adapter even though the eventual upstream theorem PR is
+later. `S1+` (dependency-closed Spectra ports) remains a later roadmap. A PR must
+not mix a P0 convergence refactor with downstream theorem additions. The **pre-PR declaration checklist** (audit
 §14) is the per-declaration gate that complements the cluster acceptance gates.
 Before any real submission, recheck upstream duplication (current Tau Ceti,
 pinned Mathlib, open Mathlib/Tau Ceti PRs, Zulip) — in particular the Mathlib
 approximation-number work this was adapted from.
+
+## Representation-migration discipline
+
+Agents must distinguish *keeping the branch green* from *finishing the
+architecture*. A parallel wrapper can be useful temporarily, but a green build
+that still routes generic production through the wrapper is intermediate state.
+When the canonical target is known, representation migration is the primary
+work:
+
+1. state the reusable theorem over the canonical object;
+2. derive the old API as a compatibility adapter;
+3. migrate consumers in dependency order;
+4. delete or quarantine the adapter;
+5. prove by import/declaration searches that the old foundation no longer owns
+   generic production statements.
+
+For U1 the canonical object is `LinearPMap`. The active execution contract is
+`dev/tauceti/u1-linearpmap-migration.md`; it does not wait on approximation-number
+PR completion or Spectra functional-calculus ports.
 
 ## Current success metric
 

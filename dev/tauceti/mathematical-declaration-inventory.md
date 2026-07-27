@@ -74,8 +74,15 @@ Main contributions:
 - bounded realizations of spectrally bounded restrictions;
 - complexification of real closed operators.
 
-Tau Ceti value: a perturbation-oriented closed-operator API that should be
-reconciled with the existing Tau Ceti semigroup roadmap before integration.
+Tau Ceti value: reusable domain-aware operator theory, but **not** as the
+existing bundle. The representation decision is closed: restate the reusable
+content over Mathlib `LinearPMap`, compatible with Tau Ceti's semigroup
+generators, and demote the bundle to a temporary Davis--Kahan adapter. This is
+active U1 implementation work; semigroup coordination affects later theorem
+placement, not the foundational representation choice.
+
+Migration status: **ACTIVE / CLAIMED 2026-07-27.** The exact execution order and
+exit gates are in `dev/tauceti/u1-linearpmap-migration.md`.
 
 ### Reducing restrictions
 

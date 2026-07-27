@@ -129,6 +129,30 @@ destination. Two tracks run in parallel:
   (onto `LinearPMap`), semigroups/resolvents, forms/Fredholm/PDE, PVMs/spectral
   calculus, polar decomposition, and Hilbert--Schmidt. Gates the later PRs.
 
+### Representation migrations are required implementation work
+
+A green build is an invariant to preserve during a migration, not a reason to
+avoid the migration. When Mathlib or Tau Ceti already forces the canonical
+representation, agents must not classify the work as indefinitely "design-stage"
+or keep extending a parallel local abstraction because doing so is easier.
+Instead, claim the representation lane, introduce a temporary downstream adapter,
+migrate consumers in dependency order, and delete or demote the old foundation.
+
+For unbounded operators the representation decision is **closed**:
+
+```text
+canonical carrier: Mathlib LinearPMap
+canonical facts:   closedness, dense domain, symmetry, self-adjointness as properties
+temporary only:    DKPS ClosedOperator compatibility adapter
+```
+
+Tau Ceti's semigroup generator is already a `LinearPMap`, and Spectra's
+self-adjoint operator is also based on a `LinearPMap`. There is no remaining
+architectural question that can justify postponing U1. The active execution
+contract is `dev/tauceti/u1-linearpmap-migration.md`; its lane claim in
+`dev/LANES.md` owns the representation migration while leaving Spectra PVM /
+functional-calculus work and paper theorem redesign out of scope.
+
 Overall ordering: `0` inventory/equivalence map → `1` internal dedup → `2`
 refactor onto Tau Ceti structures → `3` port missing Spectra foundations → `4`
 rewrite DavisKahan consumers → `5` delete old APIs → `6` polish and submit the
