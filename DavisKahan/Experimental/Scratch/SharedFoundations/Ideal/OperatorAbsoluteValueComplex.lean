@@ -36,20 +36,20 @@ variable {E : Type u} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
 
 /-- Spectra's CFC absolute value agrees with the local square-root definition. -/
 theorem spectra_absOp_eq_operatorAbs (T : E →L[ℂ] E) :
-    absOp T = TauCeti.operatorAbs T := by
-  apply TauCeti.operatorAbs_unique (T := T)
+    absOp T = ContinuousLinearMap.modulus T := by
+  apply ContinuousLinearMap.eq_modulus_of_nonneg_of_mul_self_eq (T := T)
   · exact absOp_nonneg T
   · exact absOp_mul_absOp T
 
 /-- The local absolute value has the Spectra polar factorization. -/
 theorem polarIsometry_comp_operatorAbs (T : E →L[ℂ] E) :
-    polarIsometry T ∘L TauCeti.operatorAbs T = T := by
+    polarIsometry T ∘L ContinuousLinearMap.modulus T = T := by
   rw [← spectra_absOp_eq_operatorAbs]
   exact Spectra.QuantumMechanics.Channels.polar_decomposition T
 
 /-- The adjoint polar factor recovers the local absolute value. -/
 theorem polarIsometry_adjoint_comp_operator (T : E →L[ℂ] E) :
-    (polarIsometry T).adjoint ∘L T = TauCeti.operatorAbs T := by
+    (polarIsometry T).adjoint ∘L T = ContinuousLinearMap.modulus T := by
   rw [← spectra_absOp_eq_operatorAbs]
   exact Spectra.QuantumMechanics.Channels.polarIsometry_adjoint_comp T
 
@@ -67,14 +67,14 @@ and assigns them equal gauge. -/
 theorem SymmetricNormIdeal.operatorAbs_mem_iff_and_gauge_eq
     (I : DavisKahanExt.SymmetricNormIdeal (𝕜 := ℂ) (E := E))
     (T : E →L[ℂ] E) :
-    (I.mem (TauCeti.operatorAbs T) ↔ I.mem T) ∧
-      (I.mem T → I.gauge (TauCeti.operatorAbs T) = I.gauge T) := by
+    (I.mem (ContinuousLinearMap.modulus T) ↔ I.mem T) ∧
+      (I.mem T → I.gauge (ContinuousLinearMap.modulus T) = I.gauge T) := by
   let U : E →L[ℂ] E := polarIsometry T
   let J : E →L[ℂ] E := ContinuousLinearMap.id ℂ E
-  have hTfactor : T = U ∘L TauCeti.operatorAbs T ∘L J := by
+  have hTfactor : T = U ∘L ContinuousLinearMap.modulus T ∘L J := by
     rw [ContinuousLinearMap.comp_id]
     exact (polarIsometry_comp_operatorAbs T).symm
-  have hAbsfactor : TauCeti.operatorAbs T = U.adjoint ∘L T ∘L J := by
+  have hAbsfactor : ContinuousLinearMap.modulus T = U.adjoint ∘L T ∘L J := by
     rw [ContinuousLinearMap.comp_id]
     exact (polarIsometry_adjoint_comp_operator T).symm
   have hU := (polarIsometry_and_adjoint_norm_le_one T).1
@@ -87,27 +87,27 @@ theorem SymmetricNormIdeal.operatorAbs_mem_iff_and_gauge_eq
     · intro hT
       exact SymmetricNormIdeal.mem_of_eq_comp_comp I hT hAbsfactor
   · intro hT
-    have hAbs : I.mem (TauCeti.operatorAbs T) :=
+    have hAbs : I.mem (ContinuousLinearMap.modulus T) :=
       SymmetricNormIdeal.mem_of_eq_comp_comp I hT hAbsfactor
     apply le_antisymm
     · exact SymmetricNormIdeal.gauge_le_of_contraction_factorization I hT hAbsfactor hUa hJ
     · exact SymmetricNormIdeal.gauge_le_of_contraction_factorization I hAbs hTfactor hU hJ
 
 /-- Direct form used by the `sin Θ` ideal layer. -/
-theorem SymmetricNormIdeal.operatorAbs_mem_and_gauge_eq
+theorem SymmetricNormIdeal.modulus_mem_and_gauge_eq
     (I : DavisKahanExt.SymmetricNormIdeal (𝕜 := ℂ) (E := E))
     {T : E →L[ℂ] E} (hT : I.mem T) :
-    I.mem (TauCeti.operatorAbs T) ∧
-      I.gauge (TauCeti.operatorAbs T) = I.gauge T := by
+    I.mem (ContinuousLinearMap.modulus T) ∧
+      I.gauge (ContinuousLinearMap.modulus T) = I.gauge T := by
   have h := SymmetricNormIdeal.operatorAbs_mem_iff_and_gauge_eq I T
   exact ⟨h.1.mpr hT, h.2 hT⟩
 
 /-- Rectangular-family square specialization. -/
-theorem RectangularSymmetricIdealFamily.operatorAbs_mem_and_gauge_eq
+theorem RectangularSymmetricIdealFamily.modulus_mem_and_gauge_eq
     (N : RectangularSymmetricIdealFamily (𝕜 := ℂ))
     {T : E →L[ℂ] E} (hT : N.Mem T) :
-    N.Mem (TauCeti.operatorAbs T) ∧
-      N.gauge (TauCeti.operatorAbs T) = N.gauge T := by
+    N.Mem (ContinuousLinearMap.modulus T) ∧
+      N.gauge (ContinuousLinearMap.modulus T) = N.gauge T := by
   let I : DavisKahanExt.SymmetricNormIdeal (𝕜 := ℂ) (E := E) :=
     DavisKahanExt.SymmetricNormIdeal.ofRectangular N
   have h := SymmetricNormIdeal.operatorAbs_mem_iff_and_gauge_eq I T
@@ -119,10 +119,10 @@ theorem operatorAbs_family_transport_two_routes
     (N : UnitaryInvariantIdealFamily (𝕜 := ℂ))
     {T : E →L[ℂ] E}
     (hT : N.toRectangularSymmetricIdealFamily.Mem T) :
-    N.toRectangularSymmetricIdealFamily.Mem (TauCeti.operatorAbs T) ∧
-      N.toRectangularSymmetricIdealFamily.gauge (TauCeti.operatorAbs T) =
+    N.toRectangularSymmetricIdealFamily.Mem (ContinuousLinearMap.modulus T) ∧
+      N.toRectangularSymmetricIdealFamily.gauge (ContinuousLinearMap.modulus T) =
         N.toRectangularSymmetricIdealFamily.gauge T := by
-  exact RectangularSymmetricIdealFamily.operatorAbs_mem_and_gauge_eq
+  exact RectangularSymmetricIdealFamily.modulus_mem_and_gauge_eq
     N.toRectangularSymmetricIdealFamily hT
 
 end SharedFoundations
