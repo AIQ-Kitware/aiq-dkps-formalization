@@ -163,6 +163,30 @@ State whether scatter is normalized, whether Fourier transform uses 2π, whether
 
 ## 5. Approximation-number foundation
 
+> **AUDIT 2026-07-27 — this section has diverged from the tree; re-check each item before
+> working it.** The §5 lanes landed real changes without striking through every entry, so
+> some headings below describe work that is already done and some describe a signature that
+> no longer exists. Verified against
+> `ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/`:
+>
+> - **Genuinely open (P0):** `rank_comp_left_le_of_rank_le` is still public at
+>   `Basic.lean:293`; its disposition is "privatize or reuse".
+> - **Stale text, not open work:** the `approximationNumber` P0 block still shows `: ℝ≥0`
+>   and an undecided convention. Both were settled — codomain `ℝ`, zero-based convention —
+>   and the code reads `approximationNumber … : ℝ` at `Basic.lean:134`.
+> - **Renamed in code but unstruck here:** `approximationNumber_le_nnnorm` is
+>   `approximationNumber_le_norm` (`Basic.lean:197`); `approximationNumber_def`,
+>   `approximationNumber_le` and `le_approximationNumber` landed as
+>   `approximationNumber_eq_iInf`, `approximationNumber_le_norm_sub` and
+>   `le_approximationNumber_iff`.
+> - **Believed genuinely open (P1/P2):** `approximationNumber_eq`, `_zero`, `_nonneg`,
+>   `_add_le`, `_add_le_add`, `_comp_right_le`, `_comp_left_le`, `_comp_comp_le`, `_smul`,
+>   `_adjoint`, `_le_singularValues`.
+>
+> Anyone taking §5 should reconcile the section against the tree first — that reconciliation
+> is itself part of the lane, exactly as it was for §13.
+
+
 ### 5.1 Basic.lean
 
 | **Current file** | ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/Basic.lean |
