@@ -307,16 +307,22 @@ The adversarial-review audit `dev/tauceti-signature-polish-todo.md` (baseline
 | `ClosedOperator` (+ SameDomain, …) | Parallel | demote to adapter over `LinearPMap` | `DavisKahan/Interop/TauCeti`; delete from generic production (Wave 2) |
 | `RectangularSymmetricIdealFamily` | Parallel (free-data gauge off carrier) | **DONE 2026-07-27** — canonical `TauCeti.OperatorIdealFamily` / `SymmetricOperatorIdealFamily` (single `ℝ≥0∞` gauge; carrier = its finiteness domain) in `ForTauCeti/Analysis/OperatorIdeal/Family/` | `SymmetricOperatorIdealFamily.toRectangular` in `DavisKahan/Interop/TauCeti/RectangularFamilyAdapter.lean`; ~70 consumers migrate incrementally, then both the adapter and the legacy structure are deleted |
 | `GenuinePairwiseSpectrumGap` | Paper/bridge terminology | canonical `SpectraSeparated`/set-distance predicate | paper wrapper downstream |
-| `finiteMean` / `appendFin` | Exact duplicate (generic) | replace with `Finset`/`Fintype` API | no upstream adapter |
-| `exists_two_sided_inverse_of_spectrum_gap` | Missing reusable / redesign | signature redesign (`isUnit_of_abs_spectrum_ge` + `norm_inv_le…`) | — |
+| `finiteMean` / `appendFin` | **Reclassified 2026-07-27 (§8.1): only `appendFin` was a duplicate** | `appendFin` **DELETED** — it was exactly `Fin.snoc`. `finiteMean` **KEPT**: `Finset.expect` needs `Module ℚ≥0 E`, which does not synthesize for a `𝕜`-inner-product space, and `Finset.centroid` is affine with `Classical.arbitrary` junk on the empty family, whereas `finiteMean_append` is deliberately stated to hold *at* `n = 0`. `centeredScatter` retyped to `E →L[𝕜] E` | no upstream adapter |
+| `exists_two_sided_inverse_of_spectrum_gap` | **DONE 2026-07-27 (§9.1)** | split into `TauCeti.isUnit_of_forall_le_abs` + `TauCeti.IsSelfAdjoint.norm_ringInverse_le` over the canonical `Ring.inverse` (the sketched names were `isUnit_of_abs_spectrum_ge` / `norm_inv_le…`). Invertibility needs **neither** self-adjointness **nor** a C\*-algebra, so it is stated at `[Ring A] [Algebra ℝ A]` outside the `IsSelfAdjoint` namespace. Its sibling `norm_le_of_spectrum_subset_Icc` became the iff `norm_le_iff_spectrum_subset_Icc` | — |
 
-**Note on the Wave-1 green-restoration repair.** Repointing
-`UnboundedGenuineSpectrum`/`Sharpness` onto `TauCeti.operatorAbs` and
-`TauCeti.IsSelfAdjoint.exists_two_sided_inverse_of_spectrum_gap` is a
-**green-restoration stopgap, not a final state**: both of those identifiers are
-themselves convergence targets in the table above (`operatorAbs` → delete/merge
-into the canonical modulus; the gap-inverse theorem → signature redesign). When
-A4 / the C*-algebra polish lands, those two consumers repoint again.
+**Note on the Wave-1 green-restoration repair — half resolved 2026-07-27.**
+Repointing `UnboundedGenuineSpectrum`/`Sharpness` onto `TauCeti.operatorAbs` and
+`TauCeti.IsSelfAdjoint.exists_two_sided_inverse_of_spectrum_gap` was recorded as a
+**green-restoration stopgap, not a final state**, with both identifiers named as
+convergence targets. That prediction has now come true for one of the two:
+
+- **Gap-inverse: settled (§9.1).** The redesign landed, and
+  `DavisKahan/TanTheta/UnboundedGenuineSpectrum` was repointed with it — as were the other
+  three consumers, 8 call sites across 4 files. Nothing here is a stopgap any more.
+- **`operatorAbs`: still a stopgap.** §7 made `ContinuousLinearMap.modulus` canonical but
+  left `operatorAbs` as a reducible `abbrev` in a documented shim, so
+  `DavisKahan/Sources/DavisKahan1970/SineTheta/Sharpness` still rides the alias. That
+  repoint, and deleting the alias, remain open — see backlog §13's adapter-retirement row.
 
 ## Roadmap-level review questions (from the signature audit Appendix B)
 
