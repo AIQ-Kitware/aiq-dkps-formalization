@@ -19,16 +19,16 @@ six-file export. If the concurrent Section 5.1 lane moves rank plumbing into a
 new ``RankCompLe`` module and imports it from ``Basic``, that module is included
 automatically without this tool editing any declaration-name entry.
 
-Typical use while another agent still owns declaration names::
-
-    python3 scripts/refresh_tauceti_pr1_consistency.py --claim
-
-After that lane has landed and committed its name changes::
+Shared-main workflow::
 
     python3 scripts/refresh_tauceti_pr1_consistency.py --write
     python3 scripts/refresh_tauceti_pr1_consistency.py --check
-    python3 scripts/export_for_tauceti.py --cluster approximation-number --write
-    python3 scripts/export_for_tauceti.py --cluster approximation-number --check
+
+The refresh is safe to run repeatedly while other lanes advance. It preserves
+every ``source_declarations`` list, recomputes the live import closure, and treats
+the recorded Davis--Kahan revision as the last observed ancestor rather than a
+self-referential requirement that the metadata commit name itself. Re-run it
+after later integration commits before exporting the Tau Ceti cluster.
 """
 from __future__ import annotations
 
@@ -98,6 +98,35 @@ def observed_revisions() -> tuple[str, str]:
     tc_root = ROOT / "external/TauCeti"
     tc = _git_output(["rev-parse", "HEAD"], tc_root)
     return dk, tc
+
+
+def git_is_ancestor(ancestor: str, descendant: str, cwd: pathlib.Path) -> bool:
+    """Return whether ``ancestor`` is an ancestor of ``descendant``."""
+    proc = subprocess.run(
+        ["git", "merge-base", "--is-ancestor", ancestor, descendant],
+        cwd=cwd,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+    if proc.returncode == 0:
+        return True
+    if proc.returncode == 1:
+        return False
+    raise ConsistencyError(
+        "git merge-base --is-ancestor failed in "
+        f"{cwd}: {proc.stderr.strip()}"
+    )
+
+
+def manifest_metadata_matches(
+    actual: dict[str, Any], expected: dict[str, Any]
+) -> bool:
+    """Compare live metadata while allowing the recorded DK parent revision."""
+    actual_copy = copy.deepcopy(actual)
+    expected_copy = copy.deepcopy(expected)
+    expected_copy["davis_kahan_commit"] = actual_copy.get("davis_kahan_commit")
+    return actual_copy == expected_copy
 
 
 def load_manifest(path: pathlib.Path = MANIFEST_PATH) -> dict[str, Any]:
@@ -295,7 +324,15 @@ def run(mode: str) -> int:
 
     assert mode == "check"
     errors: list[str] = []
-    if old_manifest != expected_manifest:
+    recorded_dk = old_manifest.get("davis_kahan_commit")
+    if not isinstance(recorded_dk, str) or not recorded_dk:
+        errors.append("extraction manifest has no recorded Davis--Kahan revision")
+    elif not git_is_ancestor(recorded_dk, dk_commit, ROOT):
+        errors.append(
+            "recorded Davis--Kahan revision is not an ancestor of the current "
+            "branch; run this tool with --write"
+        )
+    if not manifest_metadata_matches(old_manifest, expected_manifest):
         errors.append(
             "extraction manifest metadata or dependency closure is stale; "
             "run this tool with --write"

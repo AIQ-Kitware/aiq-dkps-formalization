@@ -119,6 +119,44 @@ class RefreshManifestTest(unittest.TestCase):
             second = M.refresh_manifest(first, "new-dk", "new-tc", root)
         self.assertEqual(first, second)
 
+    def test_manifest_comparison_ignores_only_dk_revision(self) -> None:
+        actual = self.fixture()
+        expected = copy.deepcopy(actual)
+        expected["davis_kahan_commit"] = "newer-commit"
+        self.assertTrue(M.manifest_metadata_matches(actual, expected))
+        expected["clusters"][0]["status"] = "changed"
+        self.assertFalse(M.manifest_metadata_matches(actual, expected))
+
+    def test_git_is_ancestor(self) -> None:
+        import subprocess
+
+        with tempfile.TemporaryDirectory() as d:
+            root = Path(d)
+            subprocess.run(["git", "init", "-q"], cwd=root, check=True)
+            subprocess.run(
+                ["git", "config", "user.email", "test@example.com"],
+                cwd=root,
+                check=True,
+            )
+            subprocess.run(
+                ["git", "config", "user.name", "Test"],
+                cwd=root,
+                check=True,
+            )
+            (root / "x").write_text("one", encoding="utf-8")
+            subprocess.run(["git", "add", "x"], cwd=root, check=True)
+            subprocess.run(["git", "commit", "-qm", "one"], cwd=root, check=True)
+            first = subprocess.check_output(
+                ["git", "rev-parse", "HEAD"], cwd=root, text=True
+            ).strip()
+            (root / "x").write_text("two", encoding="utf-8")
+            subprocess.run(["git", "commit", "-qam", "two"], cwd=root, check=True)
+            second = subprocess.check_output(
+                ["git", "rev-parse", "HEAD"], cwd=root, text=True
+            ).strip()
+            self.assertTrue(M.git_is_ancestor(first, second, root))
+            self.assertFalse(M.git_is_ancestor(second, first, root))
+
     def test_cycle_is_rejected(self) -> None:
         with tempfile.TemporaryDirectory() as d:
             root = Path(d)
