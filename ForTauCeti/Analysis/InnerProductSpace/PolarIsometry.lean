@@ -6,6 +6,7 @@ Authors: Claude Opus 5
 module
 
 public import ForTauCeti.Analysis.InnerProductSpace.OperatorModulus
+public import ForTauCeti.Analysis.SpecialFunctions.Sqrt
 public import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Isometric
 public import Mathlib.Analysis.Normed.Ring.Units
 
@@ -90,24 +91,6 @@ calculus on Hilbert-space operators only over `ℂ`; see
 -/
 
 @[expose] public section
-
-namespace TauCeti.Real
-
-/-- The square root contracts the distance to `1`: `|√μ - 1| ≤ |μ - 1|`.
-
-The identity `(√μ - 1) (√μ + 1) = μ - 1` writes `√μ - 1` as `(μ - 1)` divided by
-`√μ + 1 ≥ 1`.  Staged for `Mathlib/Analysis/SpecialFunctions/Sqrt.lean`. -/
-theorem abs_sqrt_sub_one_le_abs_sub_one {μ : ℝ} (hμ : 0 ≤ μ) :
-    |Real.sqrt μ - 1| ≤ |μ - 1| := by
-  have hs : 0 ≤ Real.sqrt μ := Real.sqrt_nonneg μ
-  have hsq : Real.sqrt μ * Real.sqrt μ = μ := Real.mul_self_sqrt hμ
-  have key : |Real.sqrt μ - 1| * (Real.sqrt μ + 1) = |μ - 1| := by
-    rw [← abs_of_nonneg (by linarith : (0 : ℝ) ≤ Real.sqrt μ + 1), ← abs_mul]
-    congr 1
-    nlinarith [hsq]
-  nlinarith [key, mul_nonneg (abs_nonneg (Real.sqrt μ - 1)) hs]
-
-end TauCeti.Real
 
 namespace ContinuousLinearMap
 

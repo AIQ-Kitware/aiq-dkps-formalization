@@ -58,7 +58,7 @@ The staged library is mathematically substantial, but it is not yet a single Tau
 | Approximation numbers | Staged and Mathlib-only | ~~Codomain~~ (settled: ℝ); indexing pinned; characteristic API still P1 | Split into small PRs | P1 |
 | Courant-Fischer | Staged helper layer | Misleading specSubspace and missing min-max endpoint | Refactor around basis spans and actual min-max theorem | P0 |
 | Operator modulus / operatorAbs | Two overlapping APIs | Duplicate definitions and noncanonical names | Unify into one modulus API | P0 |
-| Near isometry | Staged real finite-dimensional result | Existential instead of canonical polar factor; wrong generality split | Define canonical object; derive finite equiv | P0 |
+| Near isometry | Staged real finite-dimensional result | Existential instead of canonical polar factor; wrong generality split | ~~Define canonical object; derive finite equiv~~ **RESOLVED 2026-07-27** (§8.2): canonical `ContinuousLinearMap.polarIsometry` over arbitrary complex Hilbert spaces, sharp constant `δ`, real finite-dimensional statement returns the polar factorization | ~~P0~~ |
 | Centered scatter | Staged | Custom finite mean and append family | Refactor to Finset/Fintype and reuse average/cons | P1 |
 | Orthogonal series | Staged | Likely duplicate helpers; proof-shaped names | Reuse Orthogonal predicate and existing summability API | P1 |
 | Haagerup-Zsido kernel | Staged monolith, 1673 lines | File size, public helper explosion, generic lemmas mixed in | Split into 7-8 modules; privatize/move helpers | P0 |
@@ -1142,70 +1142,94 @@ theorem re_inner_scatterOperator_cons_apply_self ...
 
 **Likely adversarial review:** All current names depend on the local finiteMean/appendFin representation and should be revisited together.
 
-### 8.2 NearIsometry.lean
+### 8.2 ~~NearIsometry.lean~~ — P0 RESOLVED 2026-07-27
 
-| **Current file** | ForTauCeti/Analysis/InnerProductSpace/NearIsometry.lean |
+| **Current file** | ForTauCeti/Analysis/InnerProductSpace/NearIsometry.lean (rewritten), ForTauCeti/Analysis/InnerProductSpace/PolarIsometry.lean (new), ForTauCeti/Analysis/SpecialFunctions/Sqrt.lean (new) |
 | --- | --- |
-| **Proposed disposition** | Replace anonymous existence with a canonical polar/isometric factor API; separate general embedding from finite-dimensional equivalence. |
-| **Readiness** | Low in current signature shape. |
-| **Primary review risks** | Real-only specialization, duplicated LinearMap/ContinuousLinearMap theorem, existential witness, hidden surjectivity reason. |
-| **Likely PR slice** | After polar-decomposition convergence. |
+| **Disposition** | **Done.**  Canonical object defined over `ℂ`; real finite-dimensional statement now returns the polar factorization; constant sharpened; scalar lemmas moved out. |
 
-#### P1  abs_one_sub_inv_sqrt_le
+**What the review asked for, and what was done.**
 
-**Disposition: Move / clarify**
+- *"First prove the natural general object: an isometric embedding/partial
+  isometry from polar decomposition."*  `ContinuousLinearMap.polarIsometry M =
+  M ∘L Ring.inverse M.modulus` is now a **definition**, over arbitrary complex
+  Hilbert spaces `E →L[ℂ] F` — no finite-dimensionality, no equal-dimension
+  assumption, and rectangular.  It is total in `M` (junk-valued off the
+  bounded-below locus, in the style of `Ring.inverse`), so it rewrites and
+  composes; the isometry hypothesis `IsUnit M.modulus` is carried explicitly by
+  each theorem.  Supporting API: `polarIsometry_comp_modulus` (the polar
+  identity `W ∘L |M| = M`), `norm_polarIsometry_apply`, `isometry_polarIsometry`,
+  `isUnit_modulus_iff`.
 
-```lean
-theorem abs_one_sub_inv_sqrt_le {μ δ : ℝ} (hδ : δ ≤ 1 / 2) (hμ : |μ - 1| ≤ δ) : |1 - (Real.sqrt μ)⁻¹| ≤ δ
-```
+- *"Derive a `LinearIsometryEquiv` only with finite-dimensional equal-rank or
+  explicit surjectivity."*  Done: `polarLinearIsometry` is the bundled
+  `E →ₗᵢ[ℂ] F`; `polarLinearIsometryEquiv` takes surjectivity as an explicit
+  hypothesis, with `surjective_polarIsometry_of_surjective` supplying it from
+  surjectivity of `M`.  The hidden `injective_iff_surjective` step of the old
+  proof is gone from the general statement (it survives only inside the real
+  finite-dimensional proof, where it is genuinely available).
 
-**Proposed target shape**
+- *"Generalize from `ℝ` to `RCLike` if the proof is not genuinely ordered-real
+  specific."*  **Finding: it is not `RCLike`-generalizable as one theorem, and
+  the reason is an upstream instance gap, not the proof.**  The canonical object
+  needs the operator square root `|M| = (M⋆ M)^(1/2)`, which Mathlib supplies
+  only through the continuous functional calculus, and the C⋆-algebra instance
+  on `E →L[𝕜] E` is registered **only for `𝕜 = ℂ`**
+  (`Mathlib/Analysis/CStarAlgebra/ContinuousLinearMap.lean`).  So the general
+  development is complex, and the real case keeps its own eigenbasis proof —
+  which is now justified rather than accidental, and is documented as such in
+  both module docstrings.  The real file's `TODO(RCLike)` is retained for the
+  *statement* generality (the eigenbasis machinery does work over `RCLike`).
 
-```lean
-theorem abs_one_sub_inv_sqrt_le_of_abs_sub_one_le
-    (hδ : 0 ≤ δ) (hδhalf : δ ≤ 1 / 2)
-    (hμ : |μ - 1| ≤ δ) :
-    |1 - (sqrt μ)⁻¹| ≤ δ
-```
+- *"Avoid two public theorems with the same basename in `LinearMap` and
+  `ContinuousLinearMap`."*  The two levels now take genuinely different
+  hypotheses (pointwise quadratic form vs. operator norm `‖M⋆M - 1‖ ≤ δ`), and
+  the `ContinuousLinearMap` one is a three-line corollary through a `private`
+  Cauchy--Schwarz bridge rather than a parallel development.
 
-- Give δ nonnegativity explicitly instead of deriving it indirectly from hμ.
+- *"P1 `abs_one_sub_inv_sqrt_le`: place this scalar lemma in `Real.Sqrt` or a
+  dedicated elementary analysis file, not inside near-isometry operator
+  theory."*  Moved to the new `ForTauCeti/Analysis/SpecialFunctions/Sqrt.lean`,
+  together with the new sharp lemma `abs_sqrt_sub_one_le_abs_sub_one`
+  (`|√μ - 1| ≤ |μ - 1|`, `0 ≤ μ`).  **Deviation from the review sketch,
+  deliberate:** the sketch proposed adding an explicit `0 ≤ δ` hypothesis.  Not
+  done — `0 ≤ δ` is forced by `hμ : |μ - 1| ≤ δ`, and a redundant hypothesis is
+  worse Mathlib style than a derivable one.  The derivation is now stated in the
+  docstring, which is what the review was actually after ("hides how positivity
+  is obtained").
 
-- Place this scalar lemma in Real.Sqrt or a dedicated elementary analysis file, not inside near-isometry operator theory.
+**Mathematical improvement beyond the requested polish.**
 
-- Search for an existing bound on inv_sqrt.
+Returning the factorization instead of only the estimate makes the constant
+sharp.  Because `W` is an isometry and `M x = W (S x)`,
+`‖M x - W x‖ = ‖S x - x‖` exactly, so the operator bound *is* the scalar bound
+on the eigenvalues of the Gram operator.  Consequences:
 
-**Likely adversarial review:** The current premise hδ : δ ≤ 1/2 omits the natural 0 ≤ δ assumption and hides how positivity is obtained.
+- the constant improves from `2 * δ` to **`δ`**, in both the complex and the
+  real development;
+- the hypothesis weakens from `δ ≤ 1 / 2` to **`δ < 1`** (needed only to make
+  `M` bounded below);
+- the old proof's lossy steps — `‖M z‖ ≤ √(1 + δ) ‖z‖` and `√(1 + δ) ≤ 2` — are
+  deleted outright, and so is the inverse-square-root scalar lemma from the
+  proof path (`|√μ - 1| ≤ |μ - 1|` replaces it and needs no smallness
+  hypothesis).
 
-#### P0  exists_linearIsometryEquiv_norm_sub_le
+The real statement `exists_linearIsometryEquiv_comp_polarFactor` additionally
+pins the factor down: `S` is symmetric with `S ∘ S = Mᵀ ∘ M`, i.e. it *is* the
+modulus of `M`, so the canonical object is recoverable from the existential.
 
-**Disposition: Major redesign**
+**Compatibility.**  The two historical statements
+`TauCeti.{LinearMap,ContinuousLinearMap}.exists_linearIsometryEquiv_norm_sub_le`
+(constant `2 * δ`, hypothesis `δ ≤ 1 / 2`) are **kept verbatim** as one-line
+corollaries, because they are the form quoted by `Acharyya2025.PolarFactor` (a
+paper-fidelity wrapper, which must keep the printed constant) and by the
+challenge comparator, whose export check compares full types.  Fixed along the
+way: `comparator/pending-near-isometry.json` still named the pre-dedup
+`ForMathlib.*` declarations and could never have passed; repointed to
+`TauCeti.*` and verified with `scripts/check_comparator_signatures.py`.
+**The same staleness affects ~20 other comparator configs (36 names) — repo-wide
+follow-up, not fixed here.**
 
-```lean
-theorem exists_linearIsometryEquiv_norm_sub_le (M : E →L[ℝ] E) {δ : ℝ} (hδ : δ ≤ 1 / 2) (hM : ‖ContinuousLinearMap.adjoint M * M - 1‖ ≤ δ) : ∃ W : E ≃ₗᵢ[ℝ] E, ∀ x : E, ‖M x - W x‖ ≤ 2 * δ * ‖x‖
-```
-
-**Proposed target shape**
-
-```lean
-noncomputable def ContinuousLinearMap.polarIsometry (M : E →L[𝕜] F) : E →L[𝕜] F
-
-theorem norm_sub_polarIsometry_apply_le
-    (hM : ‖M.adjoint * M - 1‖ ≤ δ) :
-    ‖M x - M.polarIsometry x‖ ≤ C δ * ‖x‖
-
--- finite-dimensional/surjective corollary:
-theorem exists_linearIsometryEquiv_norm_sub_le ...
-```
-
-- First prove the natural general object: an isometric embedding/partial isometry from polar decomposition.
-
-- Derive a LinearIsometryEquiv only with finite-dimensional equal-rank or explicit surjectivity.
-
-- Avoid two public theorems with the same basename in LinearMap and ContinuousLinearMap unless that matches established namespaces.
-
-- Generalize from ℝ to RCLike if the proof is not genuinely ordered-real-specific.
-
-**Likely adversarial review:** Generality and API reviewers will ask why a canonical polar factor is returned only existentially and why the theorem is duplicated at two operator levels.
 
 ### 8.3 OrthogonalSeries.lean
 
