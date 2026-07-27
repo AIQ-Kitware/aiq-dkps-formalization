@@ -28,9 +28,9 @@ open Matrix
 variable {𝕜 n : Type*} [RCLike 𝕜] [Fintype n] [DecidableEq n]
 
 /-- **Vanishing tail of the sorted eigenvalues** of a PSD matrix of rank `≤ d`. -/
-theorem PosSemidef.eigenvalues₀_eq_zero_of_le {B : Matrix n n 𝕜}
+theorem PosSemidef.eigenvalues₀_eq_zero_of_rank_le {B : Matrix n n 𝕜}
     (hB : B.PosSemidef) {d : ℕ} (hrank : B.rank ≤ d)
-    (i : Fin (Fintype.card n)) (hi : d ≤ (i : ℕ)) :
+    {i : Fin (Fintype.card n)} (hi : d ≤ (i : ℕ)) :
     hB.isHermitian.eigenvalues₀ i = 0 := by
   set hH := hB.isHermitian
   -- The index equivalence `eigenvalues₀ = eigenvalues ∘ e` from the definition.
@@ -125,7 +125,7 @@ theorem exists_eq_mul_of_rank_le (M : Matrix m n 𝕜) {r : ℕ} (h : M.rank ≤
 
 end TauCeti.Matrix.RankFactorizationAux
 
-namespace TauCeti.Matrix
+namespace ForMathlib.Matrix
 
 open scoped BigOperators Matrix ComplexConjugate ComplexOrder
 open _root_.Matrix
@@ -188,7 +188,7 @@ theorem PosSemidef.exists_conjTranspose_mul_self_of_rank_le
   obtain ⟨A₀, hA₀⟩ := PosSemidef.exists_eq_conjTranspose_mul_self hB
   have hrankA₀ : A₀.rank ≤ d := by
     rwa [hA₀, rank_conjTranspose_mul_self] at hrank
-  obtain ⟨L, R, hLR⟩ := RankFactorizationAux.exists_eq_mul_of_rank_le A₀ hrankA₀
+  obtain ⟨L, R, hLR⟩ := TauCeti.Matrix.RankFactorizationAux.exists_eq_mul_of_rank_le A₀ hrankA₀
   obtain ⟨S, hS⟩ :=
     PosSemidef.exists_eq_conjTranspose_mul_self (posSemidef_conjTranspose_mul_self L)
   refine ⟨S * R, ?_⟩
@@ -211,4 +211,4 @@ theorem posSemidef_and_rank_le_iff_exists_conjTranspose_mul_self
   rw [rank_conjTranspose_mul_self]
   exact A.rank_le_height
 
-end TauCeti.Matrix
+end ForMathlib.Matrix

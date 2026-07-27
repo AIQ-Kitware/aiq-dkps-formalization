@@ -20,7 +20,7 @@ statements and use only the permitted kernel dependencies.
 -/
 
 
-namespace TauCeti.Matrix
+namespace ForMathlib.Matrix
 
 -- Binder names match the ForMathlib source (`{𝕜 m n}`); the comparator exports
 -- de Bruijn terms so names do not affect matching, but keeping them identical
@@ -87,4 +87,4 @@ theorem rank_le_iff_exists_eq_mul (M : Matrix m n 𝕜) (r : ℕ) :
     _ ≤ Fintype.card (Fin r) := L.rank_le_card_width
     _ = r := Fintype.card_fin r
 
-end TauCeti.Matrix
+end ForMathlib.Matrix
