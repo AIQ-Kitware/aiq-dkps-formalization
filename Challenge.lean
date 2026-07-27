@@ -1,0 +1,19 @@
+-- Root of the comparator/challenge library.
+--
+-- Intentionally empty, mirroring `ForTauCeti.lean`: the lakefile's
+-- `globs = ["Challenge.*"]` is authoritative for what gets built, so every
+-- `Challenge/` module is compiled directly and no code needs to import this root.
+--
+-- The glob exists so that `lake build Challenge` actually builds the conformance
+-- gate. Before it was added, the `[[lean_lib]] name = "Challenge"` block declared
+-- neither a root module nor globs, so the library target could never resolve and
+-- only individually named modules ever compiled. That is how
+-- `Challenge/MathlibPending/DavisKahanSylvesterPiOverTwo/Conformance.lean` sat
+-- broken from the day it was written without anyone noticing.
+--
+-- `Challenge` is still deliberately outside `defaultTargets`: these modules carry
+-- intentional `sorry` placeholders (a Conformance file states the challenge; the
+-- paired Leaderboard audits the real proof), so they are built on demand, not as
+-- part of the ordinary claimed-mathematics build. Run the gate with
+-- `lake build Challenge`, and note that a rename touching staged declarations must
+-- do so, since a green default build does not cover this library.
