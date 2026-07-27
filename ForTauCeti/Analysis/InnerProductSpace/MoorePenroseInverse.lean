@@ -84,7 +84,7 @@ theorem moorePenroseInverse_apply_apply_rightSingularBasis
       inner_apply_rightSingularBasis]
     have hinner : inner 𝕜 (TauCeti.rightSingularBasis A i)
         (TauCeti.rightSingularBasis A k) = 0 := by
-      simpa [orthonormal_iff_ite.mp
+      simp [orthonormal_iff_ite.mp
         (TauCeti.rightSingularBasis A).orthonormal i k, if_neg hik]
     rw [hinner, mul_zero, zero_smul, smul_zero]
   · intro hkmem
@@ -94,9 +94,7 @@ theorem moorePenroseInverse_apply_apply_rightSingularBasis
       inner_apply_rightSingularBasis]
     have hinner : inner 𝕜 (TauCeti.rightSingularBasis A k)
         (TauCeti.rightSingularBasis A k) = 1 := by
-      simpa using
-        orthonormal_iff_ite.mp
-          (TauCeti.rightSingularBasis A).orthonormal k k
+      simp
     rw [hinner, mul_one, smul_smul]
     have hσ : ((((A.singularValues k) ^ 2 : ℝ) : 𝕜)) ≠ 0 := by
       exact RCLike.ofReal_ne_zero.mpr (pow_ne_zero 2 hk)

@@ -128,6 +128,7 @@ theorem norm_modulus_apply (T : E →L[ℂ] F) (x : E) : ‖T.modulus x‖ = ‖
   have hsqrt := congrArg Real.sqrt hsq
   rwa [Real.sqrt_sq (norm_nonneg _), Real.sqrt_sq (norm_nonneg _)] at hsqrt
 
+omit [CompleteSpace E] [CompleteSpace F] [CompleteSpace G] in
 /-- Two operators out of the same space with pointwise equal norms have equal
 operator norms.  Local scaffolding for the modulus norm laws. -/
 private theorem opNorm_eq_of_forall_norm_apply_eq {f : E →L[ℂ] F} {g : E →L[ℂ] G}
@@ -141,6 +142,7 @@ private theorem opNorm_eq_of_forall_norm_apply_eq {f : E →L[ℂ] F} {g : E →
 theorem norm_modulus (T : E →L[ℂ] F) : ‖T.modulus‖ = ‖T‖ :=
   opNorm_eq_of_forall_norm_apply_eq T.norm_modulus_apply
 
+omit [CompleteSpace G] in
 /-- Precomposition sees only the modulus: `‖|T| ∘L D‖ = ‖T ∘L D‖`, since the
 two composites agree pointwise in norm. -/
 theorem norm_modulus_comp (T : E →L[ℂ] F) (D : G →L[ℂ] E) :

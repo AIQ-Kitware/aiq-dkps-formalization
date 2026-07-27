@@ -131,7 +131,6 @@ theorem orthogonal_spanIndices (b : OrthonormalBasis ι 𝕜 E) (s : Set ι) :
     rintro y ⟨j, hj, rfl⟩
     rw [SetLike.mem_coe, Submodule.mem_orthogonal]
     intro u hu
-    change ⟪u, b j⟫_𝕜 = 0
     rw [← inner_conj_symm, ← b.repr_apply_apply,
       b.repr_eq_zero_of_mem_spanIndices hu hj, map_zero]
   · -- dimensions match: `card ι − #s` on both sides.

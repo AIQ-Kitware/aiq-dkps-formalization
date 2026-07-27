@@ -2063,7 +2063,7 @@ theorem nuclear_adjoint_comp_self_eq_sum_sq_norm
   apply Finset.sum_congr rfl
   intro i hi
   simp only [G, LinearMap.comp_apply, LinearMap.adjoint_inner_left,
-    LinearMap.adjoint_inner_right, inner_self_eq_norm_sq]
+    inner_self_eq_norm_sq]
 
 /-- The nuclear norm is bounded by the square root of the domain dimension
 times the Frobenius norm.  This is the finite Cauchy--Schwarz inequality for
