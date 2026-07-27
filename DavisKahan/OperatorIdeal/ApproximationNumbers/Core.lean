@@ -157,7 +157,8 @@ theorem approximationSingularValue_eq_singularValues
       A.singularValues n := by
   have hNN : A.toContinuousLinearMap.approximationNumber n =
       A.singularValues n := by
-    simpa only [LinearMap.coe_toContinuousLinearMap] using
+    simpa only [← ContinuousLinearMap.toLinearMap_singularValues,
+      LinearMap.coe_toContinuousLinearMap] using
       (ContinuousLinearMap.approximationNumber_eq_singularValues
         A.toContinuousLinearMap n)
   change (A.toContinuousLinearMap.approximationNumber n : ℝ) =
@@ -314,7 +315,7 @@ theorem approximationSingularValue_comp_strongProjection_tendsto_complex
         hDnorm.eventually (Iio_mem_nhds (sub_pos.mpr hcs))
       filter_upwards [hsmall] with i hi
       have hcNN : c ≤ (K ∘L P i).approximationNumber n := by
-        apply ContinuousLinearMap.lowerBound_le_approximationNumber_of_linearIndependent
+        apply ContinuousLinearMap.le_approximationNumber_of_linearIndependent
           (K ∘L P i) n v hv
         intro x hxV hxNorm
         have hDx : ‖D i ⟨x, hxV⟩‖ ≤ ‖D i‖ := by

@@ -5,6 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking, Niels Voss, Arnav Mehta, Rawad Kans
 -/
 module
 
+public import ForTauCeti.SetTheory.Cardinal.Lift
 public import Mathlib.Analysis.Normed.Operator.NNNorm
 public import Mathlib.LinearAlgebra.Dimension.LinearMap
 public import Mathlib.LinearAlgebra.Dimension.Finite
@@ -12,9 +13,9 @@ public import Mathlib.LinearAlgebra.Dimension.Finite
 /-!
 # Approximation numbers of bounded operators
 
-The zero-based approximation number of a continuous linear map `T` at index `n`
-is the operator-norm distance from `T` to continuous linear maps of rank at
-most `n`.  This file develops its elementary order and ideal API over an
+The **zero-based** approximation number of a continuous linear map `T` at index
+`n` is the operator-norm distance from `T` to continuous linear maps of rank
+**at most** `n`.  This file develops its elementary order and ideal API over an
 arbitrary nontrivially normed field, with independent source and target
 universes.
 
@@ -22,10 +23,40 @@ The declarations here deliberately stop before Hilbert-space-specific results:
 adjoint invariance, finite-dimensional singular-value identification, and
 infinite-dimensional min--max lower bounds live in sibling modules.
 
+## The index convention
+
+The operator-ideal literature is split.  Pietsch's `s`-numbers are one-based,
+`sₙ(T) = dist(T, {rank < n})` with `s₁(T) = ‖T‖`; here `aₙ(T)` is zero-based,
+`aₙ(T) = dist(T, {rank ≤ n})` with `a₀(T) = ‖T‖`, so `sₙ = a_{n-1}`.  Only one
+of the two is developed — carrying both would duplicate the whole API for an
+index shift — and the zero-based one is chosen because every downstream
+statement is off-by-one free in it:
+
+* the additive ideal inequality is `a_{m+n}(S + T) ≤ aₘ(S) + aₙ(T)`
+  (`ContinuousLinearMap.approximationNumber_add_le_add`), against the one-based
+  `s_{m+n-1}`;
+* the singular-value identification is `aₙ(T) = σₙ(T)`
+  (`ContinuousLinearMap.approximationNumber_eq_singularValues`), a genuine
+  identity of indices, because Mathlib's `LinearMap.singularValues` is itself
+  zero-indexed; one-based numbering would put an `n - 1` — truncated
+  subtraction — into the flagship theorem of the development;
+* `a₀(T) = ‖T‖` needs no convention at `n = 0`, whereas the one-based `s₀` has
+  to be defined by fiat.
+
+The convention is stated in the first sentence of the definition's docstring
+and is recorded as decision 1 of
+`ForTauCetiRoadmap/ApproximationNumbers/README.md`.
+
 ## Main declarations
 
 * `ContinuousLinearMap.approximationNumber`: the `n`th zero-based approximation
   number, valued in `ℝ`.
+* `ContinuousLinearMap.approximationNumber_le_norm_sub` and
+  `ContinuousLinearMap.le_approximationNumber_iff`: the characteristic upper and
+  lower bounds.  Together they replace unfolding the definition; the defining
+  infimum itself is available as
+  `ContinuousLinearMap.approximationNumber_eq_iInf`, which is deliberately not a
+  `simp` lemma.
 * `ContinuousLinearMap.approximationNumber_zero`: the first approximation number
   is the operator norm.
 * `ContinuousLinearMap.antitone_approximationNumber`: approximation numbers
@@ -53,7 +84,8 @@ choice, flagged for Tau Ceti maintainer review.
   at Davis--Kahan commit `fc38eb48b9b49f2e1d87fe0c7022dc5e262820a7`.
 * Original declarations: `ContinuousLinearMap.approximationNumber` and the order
   and ideal API in the same namespace, plus the universe helper
-  `Cardinal.le_natCast_of_lift_le`.
+  `Cardinal.le_natCast_of_lift_le` (moved to `ForTauCeti/SetTheory/Cardinal/Lift.lean`
+  and restated as the iff `Cardinal.lift_le_natCast`).
 * Original authors / copyright: Jon Crall, OpenAI GPT-5.6 Thinking, Niels Voss,
   Arnav Mehta, Rawad Kansoh; Copyright (c) 2026 Kitware, Inc.; Apache 2.0.
 * The Davis--Kahan file was itself adapted from Mathlib PR #32126.
@@ -69,19 +101,6 @@ choice, flagged for Tau Ceti maintainer review.
 noncomputable section
 
 universe u v w x y
-
-namespace Cardinal
-
-/-- A natural-number bound on a cardinal is invariant under universe lifting.
-
-Ranks of maps between spaces in different universes are not directly
-comparable, but every bound used by the approximation-number API is a natural
-number, and natural numbers are fixed by `Cardinal.lift`. -/
-theorem le_natCast_of_lift_le {c : Cardinal.{v}} {n : ℕ}
-    (h : Cardinal.lift.{w} c ≤ (n : Cardinal)) : c ≤ (n : Cardinal) := by
-  rwa [← Cardinal.lift_natCast.{w} n, Cardinal.lift_le] at h
-
-end Cardinal
 
 namespace ContinuousLinearMap
 
@@ -103,27 +122,40 @@ private theorem bddBelow_norm_sub_range (T : E →L[𝕜] F) (n : ℕ) :
   rintro _ ⟨R, rfl⟩
   exact norm_nonneg _
 
-/-- Zero-based approximation number: distance in operator norm to maps of
-rank at most `n`. -/
+/-- The **zero-based** approximation number `aₙ(T)`: the operator-norm distance
+from `T` to the continuous linear maps of rank **at most** `n`.
+
+The indexing is zero-based, so `a₀(T) = ‖T‖`
+(`ContinuousLinearMap.approximationNumber_zero`).  This differs from the
+one-based convention `sₙ(T) = dist(T, {rank < n})` common in the operator-ideal
+literature (Pietsch), for which `s₁(T) = ‖T‖`; the translation is
+`sₙ = a_{n-1}`.  The zero-based form is the one used throughout this
+development: see the module docstring for why. -/
 noncomputable def approximationNumber (T : E →L[𝕜] F) (n : ℕ) : ℝ :=
   ⨅ R : {R : E →L[𝕜] F // R.rank ≤ (n : Cardinal)}, ‖T - R.1‖
 
-@[simp]
-theorem approximationNumber_def (T : E →L[𝕜] F) (n : ℕ) :
+/-- The defining infimum.  Stated for proofs that genuinely need the
+construction; it is deliberately not a `simp` lemma, since a `ciInf` over a
+subtype is not a useful normal form for a norm-like quantity.  Prefer
+`ContinuousLinearMap.approximationNumber_le_norm_sub` and
+`ContinuousLinearMap.le_approximationNumber_iff`. -/
+theorem approximationNumber_eq_iInf (T : E →L[𝕜] F) (n : ℕ) :
     T.approximationNumber n =
       ⨅ R : {R : E →L[𝕜] F // R.rank ≤ (n : Cardinal)}, ‖T - R.1‖ :=
   rfl
 
-/-- Every admissible finite-rank approximation bounds the infimum. -/
-theorem approximationNumber_le (T : E →L[𝕜] F) {n : ℕ}
+/-- Every admissible approximation of rank at most `n` bounds `aₙ(T)` above. -/
+theorem approximationNumber_le_norm_sub (T : E →L[𝕜] F) {n : ℕ}
     {R : E →L[𝕜] F} (hR : R.rank ≤ (n : Cardinal)) :
     T.approximationNumber n ≤ ‖T - R‖ :=
   ciInf_le (T.bddBelow_norm_sub_range n) ⟨R, hR⟩
 
-/-- Lower-bound introduction rule for approximation numbers. -/
-theorem le_approximationNumber (T : E →L[𝕜] F) {n : ℕ} (x : ℝ)
-    (h : ∀ R : E →L[𝕜] F, R.rank ≤ (n : Cardinal) → x ≤ ‖T - R‖) :
-    x ≤ T.approximationNumber n := by
+/-- Characteristic lower-bound property: `x` bounds `aₙ(T)` from below exactly
+when it bounds every admissible approximation error. -/
+theorem le_approximationNumber_iff (T : E →L[𝕜] F) {n : ℕ} {x : ℝ} :
+    x ≤ T.approximationNumber n ↔
+      ∀ R : E →L[𝕜] F, R.rank ≤ (n : Cardinal) → x ≤ ‖T - R‖ := by
+  refine ⟨fun h R hR => h.trans (T.approximationNumber_le_norm_sub hR), fun h => ?_⟩
   apply le_ciInf
   rintro ⟨R, hR⟩
   exact h R hR
@@ -135,8 +167,8 @@ theorem approximationNumber_eq (T : E →L[𝕜] F) {n : ℕ}
       ‖T - R‖ ≤ ‖T - S‖) :
     T.approximationNumber n = ‖T - R‖ := by
   apply le_antisymm
-  · exact T.approximationNumber_le hR
-  · exact T.le_approximationNumber _ hbest
+  · exact T.approximationNumber_le_norm_sub hR
+  · exact T.le_approximationNumber_iff.mpr hbest
 
 /-- The first zero-based approximation number is the operator norm. -/
 @[simp]
@@ -156,9 +188,9 @@ theorem approximationNumber_zero (T : E →L[𝕜] F) :
 theorem antitone_approximationNumber (T : E →L[𝕜] F) :
     Antitone T.approximationNumber := by
   intro n m hnm
-  apply T.le_approximationNumber
+  refine T.le_approximationNumber_iff.mpr ?_
   intro R hR
-  exact T.approximationNumber_le
+  exact T.approximationNumber_le_norm_sub
     (hR.trans (by exact_mod_cast hnm))
 
 /-- Every approximation number is bounded by the operator norm. -/
@@ -182,7 +214,7 @@ theorem zero_approximationNumber (n : ℕ) :
     (0 : E →L[𝕜] F).approximationNumber n = 0 := by
   apply le_antisymm
   · simpa using
-      (approximationNumber_le (0 : E →L[𝕜] F) (n := n) (R := 0)
+      (approximationNumber_le_norm_sub (0 : E →L[𝕜] F) (n := n) (R := 0)
         (by simp [LinearMap.rank_zero]))
   · exact approximationNumber_nonneg _ n
 
@@ -194,7 +226,7 @@ theorem lt_approximationNumber_add_pos (T : E →L[𝕜] F)
         ‖T - R‖ < T.approximationNumber n + ε := by
   have hlt : T.approximationNumber n < T.approximationNumber n + ε := by
     exact lt_add_of_pos_right _ hε
-  rw [T.approximationNumber_def] at hlt
+  rw [T.approximationNumber_eq_iInf] at hlt
   obtain ⟨⟨R, hR⟩, hdist⟩ := exists_lt_of_ciInf_lt hlt
   exact ⟨R, hR, hdist⟩
 
@@ -207,7 +239,7 @@ theorem approximationNumber_add_le (T S : E →L[𝕜] F) (n : ℕ) :
   obtain ⟨R, hRrank, hRdist⟩ := happ
   exact le_of_lt <| calc
     (T + S).approximationNumber n ≤ ‖(T + S) - R‖ :=
-      (T + S).approximationNumber_le hRrank
+      (T + S).approximationNumber_le_norm_sub hRrank
     _ = ‖(T - R) + S‖ := by rw [add_sub_right_comm]
     _ ≤ ‖T - R‖ + ‖S‖ := norm_add_le _ _
     _ < (T.approximationNumber n + ε) + ‖S‖ := by
@@ -235,7 +267,7 @@ theorem approximationNumber_add_le_add
       _ = ((m + n : ℕ) : Cardinal) := by norm_cast
   exact le_of_lt <| calc
     (T + S).approximationNumber (m + n) ≤ ‖(T + S) - (R + Q)‖ :=
-      (T + S).approximationNumber_le hsumRank
+      (T + S).approximationNumber_le_norm_sub hsumRank
     _ = ‖(T - R) + (S - Q)‖ := by rw [add_sub_add_comm]
     _ ≤ ‖T - R‖ + ‖S - Q‖ := norm_add_le _ _
     _ < (T.approximationNumber m + ε / 2) +
@@ -272,7 +304,7 @@ theorem rank_comp_left_le_of_rank_le
       Cardinal.lift.{x} (LinearMap.rank R.toLinearMap)
           ≤ Cardinal.lift.{x} ((n : Cardinal)) := Cardinal.lift_le.mpr hR
       _ = (n : Cardinal) := Cardinal.lift_natCast n
-  exact Cardinal.le_natCast_of_lift_le (hcomp.trans hbound)
+  exact Cardinal.lift_le_natCast.mp (hcomp.trans hbound)
 
 /-- Right ideal inequality for approximation numbers. -/
 theorem approximationNumber_comp_right_le
@@ -295,7 +327,7 @@ theorem approximationNumber_comp_right_le
       (rank_comp_right_le_rank R A).trans hRrank
     exact le_of_lt <| calc
       (T ∘L A).approximationNumber n ≤ ‖(T ∘L A) - (R ∘L A)‖ :=
-        (T ∘L A).approximationNumber_le hcompRank
+        (T ∘L A).approximationNumber_le_norm_sub hcompRank
       _ = ‖(T - R) ∘L A‖ := by rw [ContinuousLinearMap.sub_comp]
       _ ≤ ‖T - R‖ * ‖A‖ := ContinuousLinearMap.opNorm_comp_le _ _
       _ < (T.approximationNumber n + ε / ‖A‖) * ‖A‖ :=
@@ -324,7 +356,7 @@ theorem approximationNumber_comp_left_le
       rank_comp_left_le_of_rank_le B R hRrank
     exact le_of_lt <| calc
       (B ∘L T).approximationNumber n ≤ ‖(B ∘L T) - (B ∘L R)‖ :=
-        (B ∘L T).approximationNumber_le hcompRank
+        (B ∘L T).approximationNumber_le_norm_sub hcompRank
       _ = ‖B ∘L (T - R)‖ := by rw [ContinuousLinearMap.comp_sub]
       _ ≤ ‖B‖ * ‖T - R‖ := ContinuousLinearMap.opNorm_comp_le _ _
       _ < ‖B‖ * (T.approximationNumber n + ε / ‖B‖) :=
@@ -374,7 +406,7 @@ theorem approximationNumber_smul (c : 𝕜) (T : E →L[𝕜] F) (n : ℕ) :
         S.lt_approximationNumber_add_pos n hεd
       exact le_of_lt <| calc
         (d • S).approximationNumber n ≤ ‖d • S - d • R‖ :=
-          (d • S).approximationNumber_le ((rank_smul_le_rank d R).trans hRrank)
+          (d • S).approximationNumber_le_norm_sub ((rank_smul_le_rank d R).trans hRrank)
         _ = ‖d‖ * ‖S - R‖ := by
           rw [← smul_sub, norm_smul]
         _ < ‖d‖ * (S.approximationNumber n + ε / ‖d‖) :=

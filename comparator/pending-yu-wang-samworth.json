@@ -2,7 +2,7 @@
   "challenge_module": "Challenge.MathlibPending.YuWangSamworth.Conformance",
   "solution_module": "Challenge.MathlibPending.YuWangSamworth.Leaderboard",
   "theorem_names": [
-    "ForMathlib.sqrt_sum_cross_le_of_population_gap"
+    "TauCeti.sqrt_sum_cross_le_of_population_gap"
   ],
   "permitted_axioms": [
     "propext",

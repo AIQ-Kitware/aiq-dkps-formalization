@@ -41,12 +41,10 @@ ideal theory. See `Suggested.lean` for prototype signatures.
   `aₘ₊ₙ(S+T) ≤ aₘ(S) + aₙ(T)`, the two-sided ideal inequalities, or absolute
   homogeneity needs an inner product. State them at that generality; the
   Hilbert-space results are a strictly later layer that *imports* this one.
-- **Zero-based indexing, `ℝ≥0`-valued.** `aₙ(T)` is indexed from `n = 0` (so
-  `a₀(T) = ‖T‖`, the distance to rank-`0` maps) and valued in `ℝ≥0` (`NNReal`).
-  This must be pinned: the literature is split between `sₙ` (one-based) and `aₙ`
-  (zero-based). We commit to zero-based `aₙ` and prove the one-based bridge
-  lemma, not the reverse. Rationale: the infimum over `rank ≤ n` is the clean
-  primitive, and `n = 0` is then the operator norm with no off-by-one.
+- **Zero-based indexing, `ℝ`-valued.** `aₙ(T)` is indexed from `n = 0` (so
+  `a₀(T) = ‖T‖`, the distance to rank-`0` maps) and valued in `ℝ` with
+  `approximationNumber_nonneg`. Both halves are now *decided*, not merely
+  proposed: see decisions 1 (index) and 2 (codomain) below.
 - **Adjoint invariance is Hilbert-space, `RCLike`-generic.** `aₙ(T⋆) = aₙ(T)`
   requires an adjoint, so it lives in the Hilbert layer over `[RCLike 𝕜]` with
   `E`, `F` inner-product spaces; real and complex are the two instances, decided
@@ -110,7 +108,7 @@ layer here. Harder material is later, but nothing is optional.
 The `s`-number function and its complete elementary theory over
 `NontriviallyNormedField`, no inner product.
 
-1. **A.1 Definition and order.** `approximationNumber T n : ℝ≥0` as the infimum
+1. **A.1 Definition and order.** `approximationNumber T n : ℝ` as the infimum
    over rank-`≤ n` maps; the characterizing inequalities (`aₙ(T) ≤ ‖T − R‖` for
    admissible `R`; the universal lower bound); `a₀(T) = ‖T‖`; antitonicity in
    `n`; `aₙ(T) ≤ ‖T‖`; `aₙ(0) = 0`; nonnegativity; the strict-approximant
@@ -175,7 +173,7 @@ Builds the ideal theory on the `s`-number sequence.
 
 ## Conventions pinned here
 
-- **`approximationNumber`, zero-based, `ℝ≥0`-valued**, extending the Mathlib
+- **`approximationNumber`, zero-based, `ℝ`-valued**, extending the Mathlib
   namespace `ContinuousLinearMap` for dot notation (`T.approximationNumber n`).
   This is a **global-namespace commitment** and a candidate Mathlib upstreaming
   name; it is called out for maintainer review rather than hidden. If Tau Ceti
@@ -187,9 +185,18 @@ Builds the ideal theory on the `s`-number sequence.
   `k`-norms are instances of the symmetric-gauge ideal, never the primitive.
 - **`Bornology.IsBounded` / explicit `∀ x, ‖T x‖ ≤ C`** for boundedness in
   hypotheses; no "bounded on a set" wrapper.
-- Any universe-`lift` helper (e.g. `Cardinal.le_natCast_of_lift_le`) is a generic
-  Mathlib-namespace lemma justified on its own terms, not smuggled in because one
-  proof needed it — its inclusion is reviewed under the API gate.
+- Any universe-`lift` helper is a generic Mathlib-namespace lemma justified on
+  its own terms, not smuggled in because one proof needed it — its inclusion is
+  reviewed under the API gate. ***Settled 2026-07-27:*** the one such helper,
+  formerly `Cardinal.le_natCast_of_lift_le` sitting inside the approximation-number
+  file, now lives in its own dependency-closed module
+  `ForTauCeti/SetTheory/Cardinal/Lift.lean` and is stated as the iff
+  `Cardinal.lift_le_natCast : lift.{w} c ≤ ↑n ↔ c ≤ ↑n`, matching the shape of its
+  Mathlib neighbours `Cardinal.aleph_natCast_le_lift` / `beth_natCast_le_lift` /
+  `omega_natCast_le_lift`. It is separately upstreamable to
+  `Mathlib/SetTheory/Cardinal/Order.lean`, so the operator-ideal PR no longer
+  carries a `Cardinal` namespace extension at all. Privatizing was not an option:
+  it has four call sites in three ForTauCeti modules plus a downstream consumer.
 
 ## Open representation decisions (settle in A0, before any A1 code PR)
 
@@ -200,10 +207,47 @@ answer up front. Settle them here before writing names — **do not run a blanke
 rename pass first**; renaming a parallel abstraction only makes duplication
 harder to remove. The decisions (with this roadmap's current stance):
 
-1. **Index convention.** Zero-based `aₙ` (`a₀ = ‖T‖`, infimum over `rank ≤ n`).
-   *Pinned above.* Must be stated in the first sentence of the definition
-   docstring and module overview (it differs from the common one-based
-   `rank < n`).
+1. **Index convention.** ***Decided: zero-based*** (2026-07-27). `aₙ(T)` is the
+   infimum over `rank ≤ n`, so `a₀(T) = ‖T‖`; the one-based `s`-numbers of the
+   operator-ideal literature (Pietsch: `sₙ(T) = dist(T, {rank < n})`,
+   `s₁(T) = ‖T‖`) are `sₙ = a_{n-1}`. **Only one of the two is developed** —
+   carrying both would duplicate the entire API for an index shift, which is the
+   same "do not carry both" rule that settled decision 2.
+
+   The audit demanded this be "explicitly approved … or the entire API reindexed
+   before any PR", so here is the argument a reviewer should be given, in order
+   of force:
+
+   * **The flagship theorem is index-free only in the zero-based convention.**
+     Mathlib's `LinearMap.singularValues` is zero-indexed, so the identification
+     reads `aₙ(T) = σₙ(T)`
+     (`ContinuousLinearMap.approximationNumber_eq_singularValues`). One-based
+     numbering turns it into `sₙ(T) = σ_{n-1}(T)` — and `n - 1` on `ℕ` is
+     *truncated* subtraction, so the statement would additionally need an
+     `n ≠ 0` side condition or would be silently false at `n = 0`. Putting
+     truncated subtraction into the headline theorem of the development is a
+     worse defect than departing from Pietsch's numbering.
+   * **The ideal inequalities are off-by-one free.** `a_{m+n}(S + T) ≤ aₘ(S) +
+     aₙ(T)` (`approximationNumber_add_le_add`) against the one-based
+     `s_{m+n-1}(S + T) ≤ sₘ(S) + sₙ(T)`; likewise for the two-sided
+     multiplicative bounds. Every one of these would acquire a `- 1`.
+   * **`n = 0` is not a special case.** `a₀(T) = ‖T‖` is a theorem
+     (`approximationNumber_zero`) with the same proof as every other index. The
+     one-based convention has to *define* `s₀` by fiat, since `rank < 0` is
+     empty and the infimum is over an empty set.
+   * **It matches the ambient library.** Mathlib indexes sequences, `Fin`
+     families, and sorted eigenvalues (`Matrix.IsHermitian.eigenvalues₀`) from
+     zero; a one-based `s`-number API would be the odd one out and would force
+     `Nat.succ`/`Fin.succ` shims at every interface with the singular-value and
+     Courant–Fischer layers.
+
+   **What is deliberately *not* done:** no one-based `sNumber` definition and no
+   `sₙ = a_{n-1}` bridge *theorem* is added. A bridge theorem needs a one-based
+   definition to bridge to, and adding one purely to state the translation would
+   reintroduce exactly the duplicate API this decision exists to avoid. The
+   translation is documented instead — in the module docstring of
+   `ApproximationNumber/Basic.lean` and in the first sentence of the
+   definition's own docstring, as the audit requires.
 2. **Codomain: `ℝ≥0` vs `ℝ`.** ***Decided: `ℝ`*** (2026-07-24; executed, whole
    workspace green). `approximationNumber : ℝ` with
    `approximationNumber_nonneg`, and **no** `ℝ≥0` API — not even an accessor —

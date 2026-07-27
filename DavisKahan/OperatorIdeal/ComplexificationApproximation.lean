@@ -261,7 +261,7 @@ theorem approximationNumber_complexify_le
     (T : E →L[ℝ] F) (n : ℕ) :
     (RealComplexification.complexify T).approximationNumber n ≤
       T.approximationNumber n := by
-  rw [T.approximationNumber_def]
+  rw [T.approximationNumber_eq_iInf]
   apply le_ciInf
   rintro ⟨R, hR⟩
   have hRc : (RealComplexification.complexify R).rank ≤ (n : Cardinal) := by
@@ -271,7 +271,7 @@ theorem approximationNumber_complexify_le
     (RealComplexification.complexify T).approximationNumber n ≤
         ‖RealComplexification.complexify T -
           RealComplexification.complexify R‖ :=
-      (RealComplexification.complexify T).approximationNumber_le hRc
+      (RealComplexification.complexify T).approximationNumber_le_norm_sub hRc
     _ = ‖T - R‖ := by
       rw [← RealComplexification.complexify_sub,
         RealComplexification.norm_complexify]
@@ -298,7 +298,7 @@ theorem approximationNumber_le_complexify
   have hlower := lowerBound_complex_span T v hs0 hV
   have hsNN : s ≤
       (RealComplexification.complexify T).approximationNumber n := by
-    apply ContinuousLinearMap.lowerBound_le_approximationNumber_of_linearIndependent
+    apply ContinuousLinearMap.le_approximationNumber_of_linearIndependent
       (RealComplexification.complexify T) n (fun i => ofReal (v i)) hvC
     intro z hz hnorm
     change s ≤ ‖RealComplexification.complexify T z‖

@@ -172,15 +172,34 @@ State whether scatter is normalized, whether Fourier transform uses 2π, whether
 | **Primary review risks** | Zero-based rank convention; NNReal versus Real; global namespace extension; overexposed body; vague characteristic theorem names. |
 | **Likely PR slice** | PR A1 after roadmap acceptance. |
 
-> **P0 convention decision**
+> **P0 convention decision — RESOLVED 2026-07-27: zero-based**
 >
-> Choose and document one convention: current aₙ(T) is the distance to maps of rank at most n, so a₀(T)=‖T‖. This is coherent but differs from the common one-based rank < n convention. The roadmap must explicitly approve the zero-based convention, or the entire API should be reindexed before any PR.
+> `aₙ(T) = dist(T, {rank ≤ n})`, so `a₀(T) = ‖T‖`; the one-based literature `s`-numbers are `sₙ = a_{n-1}`. Approved as decision 1 of `ForTauCetiRoadmap/ApproximationNumbers/README.md`, with the reviewer-facing argument recorded there and summarized in a new "The index convention" section of the module docstring. Decisive point: Mathlib's `LinearMap.singularValues` is **zero**-indexed, so the flagship identification is the index-free `aₙ(T) = σₙ(T)`; one-based numbering would make it `sₙ(T) = σ_{n-1}(T)`, putting *truncated* `ℕ`-subtraction (and an `n ≠ 0` side condition) into the headline theorem. Same for every ideal inequality (`a_{m+n} ≤ aₘ + aₙ` vs `s_{m+n-1}`), and `a₀ = ‖T‖` is a theorem rather than a definition-by-fiat over an empty infimum. Deliberately **not** done: no one-based `sNumber` definition and no bridge theorem — a bridge needs something to bridge to, and adding it would reintroduce the duplicate API the "do not carry both" rule (decision 2) exists to prevent. The translation is documented instead.
 
 > **P0 codomain decision — RESOLVED 2026-07-24: `ℝ`**
 >
 > `ContinuousLinearMap.approximationNumber : ℝ` plus `approximationNumber_nonneg`, with no `ℝ≥0` API at all (not even an accessor). Deciding precedent: `Metric.infDist` — an infimum of nonnegative reals — is real-valued in Mathlib, as are `norm`, `dist`, and `singularValues`. The `ℝ≥0` codomain was paying a tax at both boundaries: `⟨value, proof⟩` constructor noise in the flagship Eckart–Young statements, and a real-valued `approximationSingularValue` wrapper downstream. Executed across the workspace; two NNReal↔ℝ bridging layers were deleted outright. Full rationale in `ForTauCetiRoadmap/ApproximationNumbers/README.md` decision 2.
 
-#### P0  le_natCast_of_lift_le
+#### P0  ~~le_natCast_of_lift_le~~ — RESOLVED 2026-07-27
+
+**Disposition: Moved and generalized to an iff.**  Now
+`Cardinal.lift_le_natCast : Cardinal.lift.{w} c ≤ ↑n ↔ c ≤ ↑n` in its own
+dependency-closed module `ForTauCeti/SetTheory/Cardinal/Lift.lean`, separately
+upstreamable to `Mathlib/SetTheory/Cardinal/Order.lean`, so the operator-ideal
+PR carries no `Cardinal` namespace extension.  **Reuse audit run as requested:**
+Mathlib has the two ingredients (`Cardinal.lift_natCast`, `Cardinal.lift_le`)
+and the analogous cancellations for the `ℵ`/`ℶ`/`ω` families
+(`aleph_natCast_le_lift`, `beth_natCast_le_lift`, `omega_natCast_le_lift`) — the
+iff shape is copied from those — but not this statement, so it is not a
+duplicate.  **Privatizing was not an option** (the review's first alternative):
+it has four call sites across three ForTauCeti modules plus one `DavisKahan`
+consumer.  The four call sites are now `Cardinal.lift_le_natCast.mp`.
+Gotcha for whoever upstreams it: the two `↑n`s live in *different* universes
+(`Cardinal.{max v w}` and `Cardinal.{v}`), so both need explicit universe
+ascriptions in the statement, and the proof must rewrite under `conv_lhs` — a
+bare `rw [← lift_natCast]` unifies the two sides and fails.
+
+*Original disposition:*
 
 **Disposition: Privatize or move**
 
@@ -230,7 +249,19 @@ noncomputable def ContinuousLinearMap.approximationNumber
 
 **Likely adversarial review:** The reviewer may regard an unannounced nonstandard index convention as a correctness/API defect.
 
-#### P1  approximationNumber_def
+#### P1  ~~approximationNumber_def~~ — RESOLVED 2026-07-27
+
+**Disposition: Renamed to `approximationNumber_eq_iInf` and de-simped.**  The
+`@[simp]` attribute is gone (a `ciInf` over a subtype is not a normal form for a
+norm-like quantity) and the docstring points readers at
+`approximationNumber_le_norm_sub` / `le_approximationNumber_iff` instead.  Three
+internal proofs that had been relying on it as a `simp` lemma now name it
+explicitly.  Note the `@[expose] public section` question raised alongside this
+item in roadmap item 8 is *not* settled here: dropping the blanket `@[expose]`
+is a module-system change and belongs to the deferred repo-wide module-system
+pass, not to a single file.
+
+*Original disposition:*
 
 **Disposition: Rename and de-simp**
 
@@ -254,7 +285,12 @@ theorem approximationNumber_eq_iInf (T : E →L[𝕜] F) (n : ℕ) :
 
 **Likely adversarial review:** An @[simp] theorem that expands a high-level invariant into ciInf is a likely API-design request change.
 
-#### P1  approximationNumber_le
+#### P1  ~~approximationNumber_le~~ — RESOLVED 2026-07-27
+
+**Disposition: Renamed to `approximationNumber_le_norm_sub`** (conclusion-describing
+suffix, as asked).  Ten call sites repointed across `ForTauCeti` and `DavisKahan`.
+
+*Original disposition:*
 
 **Disposition: Rename**
 
@@ -278,7 +314,14 @@ theorem approximationNumber_le_nnnorm_sub
 
 **Likely adversarial review:** The current name omits the actual upper bound and forces users to inspect the signature.
 
-#### P1  le_approximationNumber
+#### P1  ~~le_approximationNumber~~ — RESOLVED 2026-07-27
+
+**Disposition: Replaced by the iff `le_approximationNumber_iff`.**  The old
+introduction rule is `…​.mpr`; per the review's "keep only one public theorem"
+rule no named wrapper was retained, and the four call sites now use `.mpr`
+directly.  `x` became implicit (it is determined by the goal in every use).
+
+*Original disposition:*
 
 **Disposition: Strengthen API**
 
@@ -679,7 +722,36 @@ theorem approximationNumber_adjoint (T : E →L[𝕜] F) (n : ℕ) : T.adjoint.a
 | **Primary review risks** | Plural singularValues naming, raw NNReal constructor in conclusions, possible duplicate truncation API. |
 | **Likely PR slice** | PR A2 after adjoint. |
 
-#### P0  singularValues_le_norm_sub_of_rank_le
+#### P0  ~~singularValues_le_norm_sub_of_rank_le~~ — RESOLVED 2026-07-27
+
+**Disposition: restated over a new `ContinuousLinearMap`-level accessor.**  All
+three §5.3 P0s shared one root cause — every public statement said
+`T.toLinearMap.singularValues n`, leaking the `ContinuousLinearMap → LinearMap`
+coercion into the statement and into every downstream proof — so they are fixed
+together by the new module
+`ForTauCeti/Analysis/InnerProductSpace/SingularValues.lean`:
+`ContinuousLinearMap.singularValues T := T.toLinearMap.singularValues`, with the
+`@[simp]` bridge `toLinearMap_singularValues` (oriented so `simp` *removes* the
+coercion) and one-line delegations for the facts the operator layer uses.  The
+four statements `singularValues_le_norm_sub_of_rank_le`,
+`singularValues_le_approximationNumber`, `approximationNumber_le_singularValues`
+and the headline `approximationNumber_eq_singularValues` are now stated over it;
+the proofs convert back with a single `rw [← toLinearMap_singularValues]` where
+they need Mathlib's `LinearMap`-level lemmas, so nothing is duplicated.
+
+**Deviation from the review sketch, deliberate:** the sketch asks for a
+*singular* `singularValue` "unless the existing Mathlib function is irrevocably
+plural".  It is — Mathlib's object is the whole `Finsupp` sequence `ℕ →₀ ℝ`, and
+`T.singularValues n` is application to it — so the accessor stays plural.  A
+singular accessor would have to be a second definition wrapping the first, i.e.
+exactly the duplication the module exists to remove.
+
+**Stale half of the sketch:** the `⟨value, proof⟩ : NNReal` constructor noise it
+flags in `singularValues_le_approximationNumber` no longer exists; the codomain
+decision (§5.1 decision 2) made the whole API real-valued, so that statement had
+already lost its constructor.
+
+*Original disposition:*
 
 **Disposition: API bridge**
 
@@ -703,7 +775,9 @@ theorem singularValue_le_norm_sub_of_rank_le
 
 **Likely adversarial review:** The current signature leaks conversion to LinearMap and a plural function name into every consumer.
 
-#### P0  singularValues_le_approximationNumber
+#### P0  ~~singularValues_le_approximationNumber~~ — RESOLVED 2026-07-27 (see above)
+
+*Original disposition:*
 
 **Disposition: Redesign codomain bridge**
 
@@ -751,7 +825,9 @@ theorem approximationNumber_le_singularValue
 
 **Likely adversarial review:** The API reviewer may ask why both inequalities are public if equality is the real product.
 
-#### P0  approximationNumber_eq_singularValues
+#### P0  ~~approximationNumber_eq_singularValues~~ — RESOLVED 2026-07-27 (statement now `T.approximationNumber n = T.singularValues n`, no coercion; see above)
+
+*Original disposition:*
 
 **Disposition: Headline API**
 
@@ -784,7 +860,37 @@ theorem approximationNumber_eq_singularValues (T : E →L[𝕜] F) (n : ℕ) : T
 | **Primary review risks** | Proof-oriented name; equality finrank=n+1 stronger than needed; family corollary may be API clutter. |
 | **Likely PR slice** | PR A3. |
 
-#### P0  lowerBound_le_approximationNumber_of_finrank
+#### P0  ~~lowerBound_le_approximationNumber_of_finrank~~ — RESOLVED 2026-07-27
+
+**Disposition: generalized, and split into a primary result plus two derived
+forms.**  The primary statement is now
+`ContinuousLinearMap.le_approximationNumber_of_lt_rank`, over
+`(n : Cardinal) < Module.rank 𝕜 V` with the **homogeneous** hypothesis
+`c * ‖x‖ ≤ ‖T x‖`.  Both changes are real generalizations, not renames:
+
+* stating the size hypothesis on `Module.rank` rather than `finrank`
+  **removes the `[FiniteDimensional 𝕜 V]` instance entirely** — an
+  infinite-dimensional test subspace satisfies `n < Module.rank 𝕜 V` for every
+  `n`, and the proof never needed more than "`V` is too big to be killed by a
+  rank `≤ n` map".  The exact dimension `finrank 𝕜 V = n + 1` the review
+  flagged was doing no work at all;
+* the homogeneous bound says something at `x = 0` and scales, where a
+  unit-vector premise does neither.
+
+`le_approximationNumber_of_finrank_lt` recovers the classical finite-dimensional
+unit-vector form (the conversion needs **no** sign hypothesis on `c`: at `x = 0`
+the bound reads `c * 0 ≤ 0`, and elsewhere it is a rescaling), and
+`le_approximationNumber_of_linearIndependent` the family form.  All three are
+named from the conclusion outward; `lowerBound` is gone, since it never named an
+object in the statement.  No aliases retained; 8 call sites repointed.
+
+**Not in scope, and deliberately not faked:** the review's fourth ask, "the
+ultimate API should expose a supremum/max-min formula, with this as a lemma".
+Only *this* half of the min--max characterization is unconditional in infinite
+dimensions, which is precisely what roadmap milestone B.4 says the two-sided
+package must be honest about; inventing a `⨆`-form here would paper over that.
+
+*Original disposition:*
 
 **Disposition: Generalize signature**
 
@@ -811,7 +917,20 @@ theorem le_approximationNumber_of_finrank_lt
 
 **Likely adversarial review:** Generality review will likely flag exact dimension equality and proof-oriented naming.
 
-#### P1  lowerBound_le_approximationNumber_of_linearIndependent
+#### P1  ~~lowerBound_le_approximationNumber_of_linearIndependent~~ — RESOLVED 2026-07-27
+
+**Disposition: kept public, renamed `le_approximationNumber_of_linearIndependent`.**
+The open question was "decide whether this family wrapper has independent
+consumers; otherwise keep private".  **It has 8, across 6 `DavisKahan` modules** —
+it is how every downstream consumer actually applies the bound, because a
+spanning family is what the perturbation arguments produce.  So it is not a
+forgetful convenience wrapper, and that evidence is now recorded on the theorem
+itself rather than left as an open question.  The homogeneous-inequality
+suggestion is satisfied one level down, at the primary
+`le_approximationNumber_of_lt_rank`; this wrapper keeps the unit-vector premise
+its callers supply.
+
+*Original disposition:*
 
 **Disposition: Corollary or private**
 
@@ -1463,12 +1582,32 @@ carry a transitional adapter whose deletion condition is stated.*
 > a distinct piece of work from the canonical-API lanes that created them, and it is not
 > currently claimed by anyone.
 
-> **Gate gap found while reconciling this table (§10 lane).** The last bullet above asks for
-> "a grep gate for old fully qualified names" after each rename. There is no such gate, and
-> its absence is not theoretical: the §9.2 rename passed a green 9272-job default build and
-> still broke `Challenge.MathlibPending.RankPsdRealization.Leaderboard`, because `Challenge`
-> is not in `defaultTargets` and `comparator/*.json` restates declaration names as data. Any
-> such gate has to cover `Challenge/` and `comparator/*.json`, not just the Lean libraries.
+> **~~Gate gap found while reconciling this table (§10 lane).~~ CLOSED 2026-07-27 —
+> `scripts/check_declaration_name_drift.py`.** The last bullet above asks for "a grep gate for
+> old fully qualified names" after each rename. There was no such gate, and its absence was
+> not theoretical: the §9.2 rename passed a green 9272-job default build and still broke
+> `Challenge.MathlibPending.RankPsdRealization.Leaderboard`, because `Challenge` is not in
+> `defaultTargets` and `comparator/*.json` restates declaration names as data.
+>
+> The gate now exists and covers exactly those two blind spots. It is **build-free** — it
+> resolves names by parsing declarations out of the sources rather than by asking Lean — so it
+> runs in about a second and works on a tree that does not compile. Three hard checks:
+> `pinned-name-resolves` (every name asserted as data, in a comparator `theorem_names` list or
+> a `#print axioms` line, names a declaration that exists), `pinned-name-in-challenge` (the
+> challenge module actually declares what its config pins — this is the
+> `ForMathlib`-vs-`TauCeti` mismatch class, which compiles on both sides and fails only in the
+> comparator's export comparison), and `pinned-name-unaudited` (a pinned statement whose axiom
+> footprint no leaderboard certifies). A leaderboard auditing *more* than its config pins is
+> reported as an informational note, not a failure — that is legitimate.
+>
+> **Limits, stated rather than hidden:** resolution is syntactic, so it does not follow
+> `export`, `open … in`, or alias targets, and a pass is not proof of resolvability. It is a
+> tripwire for the failure mode that has actually occurred here; the compiler and
+> `scripts/check_comparator_signatures.py` remain ground truth. Regression tests in
+> `scripts/tests/test_check_declaration_name_drift.py` pin the two bugs found while writing it
+> — a bare `end` closing a `section` must not pop a `namespace`, and the `end`/`namespace`/
+> `section` patterns must not span newlines (`\s*$` under `re.MULTILINE` parses `end` and a
+> following `section` as one `end section`, silently unbalancing every name in the file).
 
 ## 14. Pre-PR declaration checklist
 
@@ -1516,8 +1655,8 @@ carry a transitional adapter whose deletion condition is stated.*
 
 | **Current** | **Candidate** | **Decision status** |
 | --- | --- | --- |
-| approximationNumber_def | approximationNumber_eq_iInf | Sketch; verify adjacent Mathlib naming |
-| approximationNumber_le | approximationNumber_le_nnnorm_sub | Sketch; verify adjacent Mathlib naming |
+| approximationNumber_def | approximationNumber_eq_iInf | **Done 2026-07-27** (also de-simped) |
+| approximationNumber_le | ~~approximationNumber_le_nnnorm_sub~~ → **approximationNumber_le_norm_sub** | **Done 2026-07-27**; `nnnorm` in the sketch is stale — the codomain decision (2) made the API real-valued, so the suffix is `norm`, not `nnnorm`. The same correction applies to every `_nnnorm_` sketch below. |
 | approximationNumber_eq | approximationNumber_eq_nnnorm_sub_of_isLeast | Sketch; verify adjacent Mathlib naming |
 | lt_approximationNumber_add_pos | exists_rank_le_nnnorm_sub_lt_approximationNumber_add | Sketch; verify adjacent Mathlib naming |
 | approximationNumber_add_le | approximationNumber_add_le_add_nnnorm | Sketch; verify adjacent Mathlib naming |
