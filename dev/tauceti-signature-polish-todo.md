@@ -906,241 +906,48 @@ was chosen because `abs` collides with lattice/`|·|` expectations.
 
 ## 8. Inner-product-space utilities
 
-### 8.1 CenteredScatter.lean
-
-| **Current file** | ForTauCeti/Analysis/InnerProductSpace/CenteredScatter.lean |
-| --- | --- |
-| **Proposed disposition** | Refactor around a finite set/type and existing averaging API; retain the Welford update identity. |
-| **Readiness** | Medium-low. |
-| **Primary review risks** | Custom finiteMean and appendFin duplicate general combinators; normalization is implicit; LinearMap versus ContinuousLinearMap. |
-| **Likely PR slice** | Independent roadmap/PR after reuse audit. |
-
-#### P0  finiteMean
-
-**Disposition: Reuse / generalize**
-
-```lean
-noncomputable def finiteMean {n : ℕ} (z : Fin n → E) : E
-```
-
-**Proposed target shape**
-
-```lean
-noncomputable def Finset.mean
-    (s : Finset ι) (z : ι → E) : E :=
-  (s.card : 𝕜)⁻¹ • ∑ i ∈ s, z i
-```
-
-- Search Mathlib for average/centroid/expectation over a finite set before defining anything.
-
-- Generalize from Fin n to Finset or Fintype; make empty-family behavior explicit.
-
-- Do not use the generic name finiteMean in namespace TauCeti if the object is tied to a finite family.
-
-**Likely adversarial review:** Reuse review is likely to find an existing finite average construction or request a general Finset API.
-
-#### P0  appendFin
-
-**Disposition: Delete / privatize**
-
-```lean
-def appendFin {n : ℕ} (z : Fin n → E) (y : E) : Fin (n + 1) → E
-```
-
-**Proposed target shape**
-
-```lean
--- Delete in favor of Fin.cons, Matrix.vecCons, or an equivalence-based append.
--- Keep only private if no canonical combinator matches.
-```
-
-- Search for Fin.cons and existing vector append operations.
-
-- The helper is implementation scaffolding for one update theorem, not a reusable public object.
-
-- If retained, put it in a generic Fin utility file, not CenteredScatter.
-
-**Likely adversarial review:** A public hand-rolled Fin append is a classic reuse-rubric target.
-
-#### P0  centeredScatter
-
-**Disposition: Redesign**
-
-```lean
-noncomputable def centeredScatter {n : ℕ} (z : Fin n → E) : E →ₗ[𝕜] E
-```
-
-**Proposed target shape**
-
-```lean
-noncomputable def scatterOperator
-    (s : Finset ι) (z : ι → E) : E →L[𝕜] E :=
-  ∑ i ∈ s, rankOne 𝕜 (z i - s.mean z) (z i - s.mean z)
-```
-
-- Choose scatterOperator versus covarianceOperator based on normalization; current definition is unnormalized.
-
-- Prefer ContinuousLinearMap for an analytic operator with positivity/order/norm consumers.
-
-- Generalize to finite types/Finsets and avoid a custom append encoding.
-
-- Provide apply/inner/self-adjoint/nonneg API without unfolding.
-
-**Likely adversarial review:** The current name is plausible, but the signature does not state normalization and uses a narrower indexing representation than necessary.
-
-#### P1  sum_sub_finiteMean_eq_zero
-
-**Disposition: Rename after refactor**
-
-```lean
-theorem sum_sub_finiteMean_eq_zero {n : ℕ} (z : Fin n → E) : ∑ i, (z i - finiteMean 𝕜 z) = 0
-```
-
-**Proposed target shape**
-
-```lean
-theorem sum_sub_mean_eq_zero ...
-```
-
-- Rewrite against the Finset/Fintype API and canonical mean.
-
-- Use consistent apply/self/order terminology.
-
-- Keep only the update and positivity results that have independent consumers.
-
-**Likely adversarial review:** All current names depend on the local finiteMean/appendFin representation and should be revisited together.
-
-#### P1  finiteMean_append
-
-**Disposition: Rename after refactor**
-
-```lean
-theorem finiteMean_append {n : ℕ} (z : Fin n → E) (y : E) : finiteMean 𝕜 (appendFin z y) = finiteMean 𝕜 z + ((n : 𝕜) + 1)⁻¹ • (y - finiteMean 𝕜 z)
-```
-
-**Proposed target shape**
-
-```lean
-theorem mean_cons ...
-```
-
-- Rewrite against the Finset/Fintype API and canonical mean.
-
-- Use consistent apply/self/order terminology.
-
-- Keep only the update and positivity results that have independent consumers.
-
-**Likely adversarial review:** All current names depend on the local finiteMean/appendFin representation and should be revisited together.
-
-#### P1  centeredScatter_append
-
-**Disposition: Rename after refactor**
-
-```lean
-theorem centeredScatter_append {n : ℕ} (z : Fin n → E) (y : E) : centeredScatter 𝕜 (appendFin z y) = centeredScatter 𝕜 z + ((n : 𝕜) / ((n : 𝕜) + 1)) • (rankOne 𝕜 (y - finiteMean 𝕜 z) (y - finiteMean 𝕜 z)).toLinearMap
-```
-
-**Proposed target shape**
-
-```lean
-theorem scatterOperator_cons ...
-```
-
-- Rewrite against the Finset/Fintype API and canonical mean.
-
-- Use consistent apply/self/order terminology.
-
-- Keep only the update and positivity results that have independent consumers.
-
-**Likely adversarial review:** All current names depend on the local finiteMean/appendFin representation and should be revisited together.
-
-#### P1  re_inner_centeredScatter_self
-
-**Disposition: Rename after refactor**
-
-```lean
-theorem re_inner_centeredScatter_self {n : ℕ} (z : Fin n → E) (x : E) : RCLike.re (inner 𝕜 (centeredScatter 𝕜 z x) x) = ∑ i, ‖inner 𝕜 (z i - finiteMean 𝕜 z) x‖ ^ 2
-```
-
-**Proposed target shape**
-
-```lean
-theorem re_inner_scatterOperator_apply_self ...
-```
-
-- Rewrite against the Finset/Fintype API and canonical mean.
-
-- Use consistent apply/self/order terminology.
-
-- Keep only the update and positivity results that have independent consumers.
-
-**Likely adversarial review:** All current names depend on the local finiteMean/appendFin representation and should be revisited together.
-
-#### P1  centeredScatter_isPositive
-
-**Disposition: Rename after refactor**
-
-```lean
-theorem centeredScatter_isPositive {n : ℕ} (z : Fin n → E) : (centeredScatter 𝕜 z).IsPositive
-```
-
-**Proposed target shape**
-
-```lean
-theorem scatterOperator_isPositive ...
-```
-
-- Rewrite against the Finset/Fintype API and canonical mean.
-
-- Use consistent apply/self/order terminology.
-
-- Keep only the update and positivity results that have independent consumers.
-
-**Likely adversarial review:** All current names depend on the local finiteMean/appendFin representation and should be revisited together.
-
-#### P1  centeredScatter_le_append
-
-**Disposition: Rename after refactor**
-
-```lean
-theorem centeredScatter_le_append {n : ℕ} (z : Fin n → E) (y : E) : centeredScatter 𝕜 z ≤ centeredScatter 𝕜 (appendFin z y)
-```
-
-**Proposed target shape**
-
-```lean
-theorem scatterOperator_le_scatterOperator_cons ...
-```
-
-- Rewrite against the Finset/Fintype API and canonical mean.
-
-- Use consistent apply/self/order terminology.
-
-- Keep only the update and positivity results that have independent consumers.
-
-**Likely adversarial review:** All current names depend on the local finiteMean/appendFin representation and should be revisited together.
-
-#### P1  re_inner_centeredScatter_append
-
-**Disposition: Rename after refactor**
-
-```lean
-theorem re_inner_centeredScatter_append {n : ℕ} (z : Fin n → E) (y x : E) : RCLike.re (inner 𝕜 (centeredScatter 𝕜 (appendFin z y) x) x) = RCLike.re (inner 𝕜 (centeredScatter 𝕜 z x) x) + (n : ℝ) / ((n : ℝ) + 1) * ‖inner 𝕜 (y - finiteMean 𝕜 z) x‖ ^ 2
-```
-
-**Proposed target shape**
-
-```lean
-theorem re_inner_scatterOperator_cons_apply_self ...
-```
-
-- Rewrite against the Finset/Fintype API and canonical mean.
-
-- Use consistent apply/self/order terminology.
-
-- Keep only the update and positivity results that have independent consumers.
-
-**Likely adversarial review:** All current names depend on the local finiteMean/appendFin representation and should be revisited together.
+### 8.1 ~~CenteredScatter.lean~~ — RESOLVED, removed from backlog
+
+Executed 2026-07-27 (jon). All three P0 items settled; the file builds clean with no
+deprecation warnings and every declaration stays axiom-clean.
+
+**P0 `appendFin` — DELETED.** It was exactly `Fin.snoc`, so the "classic reuse-rubric
+target" the backlog predicted was real. The two `@[simp]` lemmas `appendFin_castSucc` /
+`appendFin_last` went with it, replaced by upstream `Fin.snoc_castSucc` / `Fin.snoc_last`.
+FINDING for the one consumer: `Fin.lastCases` and `Fin.snoc` are **not** definitionally
+equal — `snoc` transports along `cast` — so `DkpsQuench2026/Spectral/GramSpectrum.lean`,
+which had bridged the two by `rfl`, now needs a two-line `funext`/`Fin.lastCases`
+comparison. Its statement still uses `Fin.lastCases` because that spelling propagates into
+`DkpsQuench2026/Spectral/Regularity.lean`, outside this lane.
+
+**P0 `centeredScatter` — moved to `E →L[𝕜] E`.** Its summands `rankOne 𝕜 a a` are already
+continuous, so the old `E →ₗ[𝕜] E` codomain discarded continuity for nothing. Verified
+before committing: `ContinuousLinearMap.IsPositive` and the Löwner order (`le_def`) both
+exist at CLM level and — contrary to the obvious worry — need **no** `CompleteSpace`
+hypothesis, so the move costs no generality. Not done: the `Finset`/`Fintype`
+generalization. The add-one identity is intrinsically about extending `Fin n` to
+`Fin (n+1)`, so a `Finset` restatement would be `insert`-indexed and is a genuine redesign
+of the headline theorem plus its 60-line scalar-algebra proof, not a signature edit.
+
+**P0 `finiteMean` — reuse audit says KEEP, and it is not a duplicate.** Checked against the
+compiler, not by inspection:
+
+- `Finset.expect` (Mathlib's canonical finite average, `𝔼 i ∈ s, f i`) requires
+  `Module ℚ≥0 M`. That instance does **not** synthesize for a general `𝕜`-inner-product
+  space — confirmed by elaborating `Finset.expect Finset.univ z` against
+  `[RCLike 𝕜] [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]`, which fails on
+  `Module ℚ≥0 E`.
+- `Finset.centroid` exists but lives in the affine hierarchy and is stated through
+  `affineCombination`, with a different junk value on the empty family.
+
+Either would force non-`𝕜` scalars into a computation that is otherwise pure `𝕜`-module
+algebra (`inner_smul_left`, `match_scalars`, `field_simp`). The audit result is recorded in
+the module docstring so the next reviewer does not repeat it. The `Fin n` → `Finset`
+generalization the backlog also asked for is deferred with the headline theorem, above.
+
+Also fixed in passing: the module docstring's "Main results" list still pointed at
+`ForMathlib.*` names for declarations that now live in `TauCeti.*` — stale links that would
+not have resolved in generated docs.
 
 ### 8.2 ~~NearIsometry.lean~~ — P0 RESOLVED 2026-07-27
 
@@ -1231,124 +1038,54 @@ way: `comparator/pending-near-isometry.json` still named the pre-dedup
 follow-up, not fixed here.**
 
 
-### 8.3 OrthogonalSeries.lean
+### 8.3 ~~OrthogonalSeries.lean~~ — RESOLVED, removed from backlog
 
-| **Current file** | ForTauCeti/Analysis/InnerProductSpace/OrthogonalSeries.lean |
+Executed 2026-07-27 (jon). The backlog asked for an "exact duplicate audit" of the whole
+file. It found one.
+
+**Mathlib's `OrthogonalFamily` API contains statement-for-statement counterparts of three of
+the five declarations** (`Analysis/InnerProductSpace/Subspace.lean`):
+
+| this file | upstream |
 | --- | --- |
-| **Proposed disposition** | Retain only results not already in Mathlib; state them with the canonical Orthogonal predicate. |
-| **Readiness** | Unknown until reuse grep is completed. |
-| **Primary review risks** | Long proof-shaped names, repeated raw inner=0 predicate, likely overlap with existing orthogonal-family summability API. |
-| **Likely PR slice** | Small independent PR only if genuinely new. |
+| `norm_sq_finset_sum_of_pairwise_inner_eq_zero` | `OrthogonalFamily.norm_sum` |
+| `norm_sq_sdiff_sum_of_pairwise_inner_eq_zero` | `OrthogonalFamily.norm_sq_sdiff_sum` |
+| `summable_iff_norm_sq_summable_of_pairwise_inner_eq_zero` | `OrthogonalFamily.summable_iff_norm_sq_summable` |
 
-#### P0  norm_sq_finset_sum_of_pairwise_inner_eq_zero
+The only difference is the indexing: upstream takes a family of *subspaces* `G i` with
+isometries `V i : G i →ₗᵢ E`; this file takes *vectors* with pairwise `⟪f i, f j⟫ = 0`.
 
-**Disposition: Reuse audit / rename**
+**FINDING — the missing piece is a constructor, not the theorems.** Mathlib's only bridge
+into `OrthogonalFamily` from vectors is `Orthonormal.orthogonalFamily`, which requires
+*unit* vectors; there is nothing for a merely pairwise-orthogonal family. So the file's real
+contribution is that constructor, now stated as
+`orthogonalFamily_of_pairwise_inner_eq_zero`: the lines `𝕜 ∙ f i` with `subtypeₗᵢ`, proved
+in one line from `Submodule.isOrtho_span`. Because `V i (l i)` is `f i` definitionally, every
+downstream statement is a specialization needing no rewriting.
 
-```lean
-theorem norm_sq_finset_sum_of_pairwise_inner_eq_zero {ι : Type*} (f : ι → H) (horth : Pairwise fun i j => ⟪f i, f j⟫_𝕜 = 0) (s : Finset ι) : ‖∑ i ∈ s, f i‖ ^ 2 = ∑ i ∈ s, ‖f i‖ ^ 2
-```
+Result: the hand-rolled Pythagoras induction, the symmetric-difference identity and the
+ε–N Cauchy-criterion argument — roughly 90 lines of proof duplicating upstream — are gone.
+`norm_sq_sdiff_sum_of_pairwise_inner_eq_zero` became unused once the Cauchy argument was
+replaced by the upstream equivalence and was **deleted outright**; the backlog had only
+proposed privatizing it.
 
-**Proposed target shape**
+Kept, because they have no `OrthogonalFamily` counterpart upstream and carry the file's
+remaining content: `summable_of_pairwise_inner_eq_zero_of_partial_sum_norm_le` (a uniform
+bound on all finite partial sums gives summability, with no separate closedness theorem) and
+`HasSum.norm_sq_eq_tsum_of_pairwise_inner_eq_zero` (Parseval).
 
-```lean
-theorem norm_sum_sq_of_pairwise_orthogonal ...
-```
+Naming: only `norm_sq_finset_sum_…` → `norm_sum_sq_…` was renamed (`finset` was redundant —
+the argument is visibly a `Finset`). The other names deliberately kept their
+`_of_pairwise_inner_eq_zero` suffix to mirror upstream `OrthogonalFamily.*` spelling; there
+is no bundled Mathlib predicate for pairwise-orthogonal *vectors* to shorten them with, so
+the backlog's proposed `..._of_pairwise_orthogonal` would name a predicate that does not
+exist. The sole consumer,
+`DavisKahan/Alternative/OperatorIdeal/HilbertSchmidt/ColumnExpansion.lean`, uses only
+unrenamed declarations and needed no edit.
 
-- Use Pairwise (Orthogonal 𝕜 on f) or the exact canonical Mathlib predicate.
-
-- Search existing Hilbert-space tsum/Pythagorean lemmas before retaining.
-
-- Shorten names after the predicate carries the orthogonality semantics.
-
-**Likely adversarial review:** The reuse rubric explicitly searches long plumbing proofs and near-clones; this whole file needs an exact duplicate audit.
-
-#### P1  norm_sq_sdiff_sum_of_pairwise_inner_eq_zero
-
-**Disposition: Reuse audit / rename**
-
-```lean
-theorem norm_sq_sdiff_sum_of_pairwise_inner_eq_zero {ι : Type*} [DecidableEq ι] (f : ι → H) (horth : Pairwise fun i j => ⟪f i, f j⟫_𝕜 = 0) (s₁ s₂ : Finset ι) : ‖(∑ i ∈ s₁, f i) - ∑ i ∈ s₂, f i‖ ^ 2 = (∑ i ∈ s₁ \ s₂, ‖f i‖ ^ 2) + ∑ i ∈ s₂ \ s₁, ‖f i‖ ^ 2
-```
-
-**Proposed target shape**
-
-```lean
-private theorem norm_sub_sum_sq_of_pairwise_orthogonal ...
-```
-
-- Use Pairwise (Orthogonal 𝕜 on f) or the exact canonical Mathlib predicate.
-
-- Search existing Hilbert-space tsum/Pythagorean lemmas before retaining.
-
-- Shorten names after the predicate carries the orthogonality semantics.
-
-**Likely adversarial review:** The reuse rubric explicitly searches long plumbing proofs and near-clones; this whole file needs an exact duplicate audit.
-
-#### P1  summable_iff_norm_sq_summable_of_pairwise_inner_eq_zero
-
-**Disposition: Reuse audit / rename**
-
-```lean
-theorem summable_iff_norm_sq_summable_of_pairwise_inner_eq_zero {ι : Type*} [CompleteSpace H] (f : ι → H) (horth : Pairwise fun i j => ⟪f i, f j⟫_𝕜 = 0) : Summable f ↔ Summable fun i => ‖f i‖ ^ 2
-```
-
-**Proposed target shape**
-
-```lean
-theorem summable_iff_summable_norm_sq_of_pairwise_orthogonal ...
-```
-
-- Use Pairwise (Orthogonal 𝕜 on f) or the exact canonical Mathlib predicate.
-
-- Search existing Hilbert-space tsum/Pythagorean lemmas before retaining.
-
-- Shorten names after the predicate carries the orthogonality semantics.
-
-**Likely adversarial review:** The reuse rubric explicitly searches long plumbing proofs and near-clones; this whole file needs an exact duplicate audit.
-
-#### P1  summable_of_pairwise_inner_eq_zero_of_partial_sum_norm_le
-
-**Disposition: Reuse audit / rename**
-
-```lean
-theorem summable_of_pairwise_inner_eq_zero_of_partial_sum_norm_le {ι : Type*} [CompleteSpace H] (f : ι → H) (horth : Pairwise fun i j => ⟪f i, f j⟫_𝕜 = 0) {C : ℝ} (hC : 0 ≤ C) (hbound : ∀ s : Finset ι, ‖∑ i ∈ s, f i‖ ≤ C) : Summable f
-```
-
-**Proposed target shape**
-
-```lean
-theorem summable_of_pairwise_orthogonal_of_norm_sum_le ...
-```
-
-- Use Pairwise (Orthogonal 𝕜 on f) or the exact canonical Mathlib predicate.
-
-- Search existing Hilbert-space tsum/Pythagorean lemmas before retaining.
-
-- Shorten names after the predicate carries the orthogonality semantics.
-
-**Likely adversarial review:** The reuse rubric explicitly searches long plumbing proofs and near-clones; this whole file needs an exact duplicate audit.
-
-#### P1  HasSum.norm_sq_eq_tsum_of_pairwise_inner_eq_zero
-
-**Disposition: Reuse audit / rename**
-
-```lean
-theorem HasSum.norm_sq_eq_tsum_of_pairwise_inner_eq_zero {ι : Type*} [CompleteSpace H] {f : ι → H} {z : H} (hsum : HasSum f z) (horth : Pairwise fun i j => ⟪f i, f j⟫_𝕜 = 0) : ‖z‖ ^ 2 = ∑' i, ‖f i‖ ^ 2
-```
-
-**Proposed target shape**
-
-```lean
-theorem HasSum.norm_sq_eq_tsum_norm_sq (horth : Pairwise (Orthogonal 𝕜 on f)) ...
-```
-
-- Use Pairwise (Orthogonal 𝕜 on f) or the exact canonical Mathlib predicate.
-
-- Search existing Hilbert-space tsum/Pythagorean lemmas before retaining.
-
-- Shorten names after the predicate carries the orthogonality semantics.
-
-**Likely adversarial review:** The reuse rubric explicitly searches long plumbing proofs and near-clones; this whole file needs an exact duplicate audit.
+Not done: the `TauCeti.OrthogonalSeries` namespace is itself non-Mathlib-idiomatic (upstream
+would put these at root or under `OrthogonalFamily`), but changing it is consumer churn
+without API benefit and is left for the namespace pass.
 
 ## 9. ~~C*-algebra and matrix helpers~~ — RESOLVED, removed from backlog
 
@@ -1850,9 +1587,9 @@ theorem approximationNumber_tangentOperator ...
 | eigenvalues_le_eigenvalues_of_re_inner_le | eigenvalue_mono | Sketch; verify adjacent Mathlib naming |
 | rectangularOperatorModulus | ContinuousLinearMap.modulus | Sketch; verify adjacent Mathlib naming |
 | operatorAbs | delete; square specialization of modulus | Sketch; verify adjacent Mathlib naming |
-| finiteMean | Finset.mean / existing average | Sketch; verify adjacent Mathlib naming |
-| centeredScatter | scatterOperator | Sketch; verify adjacent Mathlib naming |
-| appendFin | delete; existing Fin combinator | Sketch; verify adjacent Mathlib naming |
+| finiteMean | **KEPT 2026-07-27** (§8.1) — not a duplicate: `Finset.expect` needs `Module ℚ≥0 E` (fails to synthesize here), `Finset.centroid` is affine |
+| centeredScatter | **RETYPED 2026-07-27** (§8.1) to `E →L[𝕜] E`; name kept (unnormalized, and `scatterOperator` would not say so either) |
+| appendFin | **DELETED 2026-07-27** (§8.1) — it was exactly `Fin.snoc` |
 | PosSemidef.eigenvalues₀_eq_zero_of_le | Matrix.PosSemidef.eigenvalues₀_eq_zero_of_rank_le | **Landed 2026-07-27** (§9.2); `i` made implicit, and the two facts its proof buried are now separate exports |
 | exists_two_sided_inverse_of_spectrum_gap | isUnit_of_forall_le_abs + IsSelfAdjoint.norm_ringInverse_le | **Landed 2026-07-27** (§9.1); split, and invertibility dropped the `IsSelfAdjoint` hypothesis |
 | IsSelfAdjoint.norm_le_of_spectrum_subset_Icc | IsSelfAdjoint.norm_le_iff_spectrum_subset_Icc | **Landed 2026-07-27** (§9.1); strengthened to an iff, one-directional form not retained |
