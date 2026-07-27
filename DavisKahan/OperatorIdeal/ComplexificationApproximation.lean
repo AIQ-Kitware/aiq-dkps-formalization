@@ -261,7 +261,7 @@ theorem approximationNumber_complexify_le
     (T : E →L[ℝ] F) (n : ℕ) :
     (RealComplexification.complexify T).approximationNumber n ≤
       T.approximationNumber n := by
-  rw [T.approximationNumber_def]
+  rw [T.approximationNumber_eq_iInf]
   apply le_ciInf
   rintro ⟨R, hR⟩
   have hRc : (RealComplexification.complexify R).rank ≤ (n : Cardinal) := by
@@ -271,7 +271,7 @@ theorem approximationNumber_complexify_le
     (RealComplexification.complexify T).approximationNumber n ≤
         ‖RealComplexification.complexify T -
           RealComplexification.complexify R‖ :=
-      (RealComplexification.complexify T).approximationNumber_le hRc
+      (RealComplexification.complexify T).approximationNumber_le_norm_sub hRc
     _ = ‖T - R‖ := by
       rw [← RealComplexification.complexify_sub,
         RealComplexification.norm_complexify]

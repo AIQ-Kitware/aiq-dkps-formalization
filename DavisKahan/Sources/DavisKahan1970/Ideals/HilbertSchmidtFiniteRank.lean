@@ -43,7 +43,7 @@ theorem approximationSingularValue_eq_zero_of_rank_le
     (hA : A.rank ≤ (n : Cardinal)) :
     approximationSingularValue n A = 0 := by
   have h : A.approximationNumber n ≤ ‖A - A‖ :=
-    A.approximationNumber_le (R := A) hA
+    A.approximationNumber_le_norm_sub (R := A) hA
   rw [sub_self, norm_zero] at h
   exact le_antisymm h (A.approximationNumber_nonneg n)
 

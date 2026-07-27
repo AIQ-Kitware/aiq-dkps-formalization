@@ -158,7 +158,7 @@ theorem singularValues_le_approximationNumber
     (T : E →L[𝕜] F) (n : ℕ) :
     T.toLinearMap.singularValues n ≤
       T.approximationNumber n := by
-  apply T.le_approximationNumber
+  refine T.le_approximationNumber_iff.mpr ?_
   intro R hR
   exact_mod_cast singularValues_le_norm_sub_of_rank_le T R n hR
 
@@ -174,7 +174,7 @@ theorem approximationNumber_le_singularValues
   · -- The rank of `T` lives in the codomain universe and `Module.rank 𝕜 E` in
     -- the domain universe, so compare them through `Cardinal.lift`.
     have hTrank : T.rank ≤ (n : Cardinal) := by
-      refine Cardinal.le_natCast_of_lift_le
+      refine Cardinal.lift_le_natCast.mp
         ((lift_rank_range_le T.toLinearMap).trans ?_)
       calc
         Cardinal.lift.{w} (Module.rank 𝕜 E)
@@ -183,7 +183,7 @@ theorem approximationNumber_le_singularValues
         _ = ((finrank 𝕜 E : ℕ) : Cardinal) := Cardinal.lift_natCast _
         _ ≤ (n : Cardinal) := by exact_mod_cast hn
     have hle : T.approximationNumber n ≤ 0 := by
-      simpa using T.approximationNumber_le (R := T) hTrank
+      simpa using T.approximationNumber_le_norm_sub (R := T) hTrank
     exact hle.trans (T.toLinearMap.singularValues_nonneg n)
   · have hnlt : n < finrank 𝕜 E := Nat.lt_of_not_ge hn
     let A : E →ₗ[𝕜] F := T.toLinearMap
@@ -262,7 +262,7 @@ theorem approximationNumber_le_singularValues
       simpa [A] using htailOpNorm
     have happrox :
         T.approximationNumber n ≤ ‖T ∘L Wᗮ.starProjection‖ := by
-      simpa only [herr] using T.approximationNumber_le hRrank
+      simpa only [herr] using T.approximationNumber_le_norm_sub hRrank
     exact happrox.trans htailOpNorm'
 
 /-- Finite-dimensional Eckart--Young identification for the zero-based

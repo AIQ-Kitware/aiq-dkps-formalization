@@ -345,7 +345,7 @@ theorem lt_approximationNumber_competitor_of_lt_direct
       ext x
       change A x - A (P x) = A (Q x)
       rw [hQeq, sub_apply, ContinuousLinearMap.id_apply, map_sub]
-    have happrox := A.approximationNumber_le hRrank
+    have happrox := A.approximationNumber_le_norm_sub hRrank
     have happroxReal : a ≤ ‖A - R‖ := by
       have hco := NNReal.coe_le_coe.mpr happrox
       change a ≤ ‖A - R‖ at hco

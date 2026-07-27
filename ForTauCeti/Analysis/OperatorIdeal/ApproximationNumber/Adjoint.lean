@@ -89,7 +89,7 @@ private theorem rank_adjoint_le_natCast_of_rank_le
         Cardinal.lift.{v} (Module.rank 𝕜 R.range)
             ≤ Cardinal.lift.{v} ((n : Cardinal)) := Cardinal.lift_le.mpr hR
         _ = (n : Cardinal) := Cardinal.lift_natCast n
-    exact Cardinal.le_natCast_of_lift_le (hlift.trans hbound)
+    exact Cardinal.lift_le_natCast.mp (hlift.trans hbound)
   rw [hadj]
   refine le_trans ?_ hrestrict
   change LinearMap.rank
@@ -102,11 +102,11 @@ private theorem rank_adjoint_le_natCast_of_rank_le
 private theorem approximationNumber_adjoint_le
     (T : E →L[𝕜] F) (n : ℕ) :
     T.adjoint.approximationNumber n ≤ T.approximationNumber n := by
-  apply T.le_approximationNumber
+  refine T.le_approximationNumber_iff.mpr ?_
   intro R hR
   calc
     T.adjoint.approximationNumber n ≤ ‖T.adjoint - R.adjoint‖ :=
-      T.adjoint.approximationNumber_le
+      T.adjoint.approximationNumber_le_norm_sub
         (rank_adjoint_le_natCast_of_rank_le R hR)
     _ = ‖T - R‖ := by
       simpa only [coe_nnnorm, ← map_sub] using

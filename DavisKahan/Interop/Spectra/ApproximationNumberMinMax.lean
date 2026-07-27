@@ -200,7 +200,7 @@ theorem exists_linearIndependent_lowerBound_of_lt_approximationNumber
       ext x
       change T x - T (P x) = T (Q x)
       rw [hQeq, sub_apply, ContinuousLinearMap.id_apply, map_sub]
-    have happroxReal : a ≤ ‖T - R‖ := T.approximationNumber_le hRrank
+    have happroxReal : a ≤ ‖T - R‖ := T.approximationNumber_le_norm_sub hRrank
     have hau : a ≤ u := by
       calc
         a ≤ ‖T - R‖ := happroxReal
