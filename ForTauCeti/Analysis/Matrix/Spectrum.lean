@@ -10,28 +10,46 @@ module
 public import Mathlib.Analysis.Matrix.Spectrum
 public import Mathlib.Analysis.Matrix.PosDef
 
-/-! # Vanishing tail of the sorted eigenvalues of a low-rank PSD matrix
+/-! # Sorted eigenvalues of a Hermitian matrix
 
-For a positive semidefinite matrix of rank at most `d`, the sorted eigenvalues
-`Matrix.IsHermitian.eigenvalues₀` (decreasing) vanish from index `d` on.
+Mathlib indexes the eigenvalues of a Hermitian matrix twice: `eigenvalues₀`, sorted
+decreasingly and indexed by `Fin (Fintype.card n)`, and `eigenvalues`, reusing the matrix
+index `n`. The second is *defined* from the first along an index equivalence, but the
+basic theory is currently stated only for `eigenvalues`: upstream `eigenvalues₀` carries
+just `eigenvalues₀_antitone` and the characteristic-polynomial identities.
 
-Mathlib's `eigenvalues₀` currently exposes little beyond `eigenvalues₀_antitone`.
-The proof here is the elementary counting argument: by antitonicity and
-nonnegativity (PSD), a nonzero sorted eigenvalue at an index `≥ d` would force
-`> d` nonzero sorted eigenvalues, but their number equals `rank ≤ d` (the
-sorted and unsorted eigenvalues differ by the index equivalence used to *define*
-`eigenvalues`, so `rank_eq_card_non_zero_eigs` transports).
+This file transports the two facts that the sorted indexing needs — the rank count and,
+for a positive semidefinite matrix, nonnegativity — and deduces the vanishing tail of a
+low-rank positive semidefinite matrix.
 
-## Main result
+## Main results
 
-* `TauCeti.Matrix.PosSemidef.eigenvalues₀_eq_zero_of_le`
+* `TauCeti.Matrix.IsHermitian.rank_eq_card_non_zero_eigenvalues₀`: the rank counts the
+  nonzero *sorted* eigenvalues. Positive semidefiniteness is not needed.
+* `TauCeti.Matrix.PosSemidef.eigenvalues₀_nonneg`: sorted eigenvalues of a positive
+  semidefinite matrix are nonnegative.
+* `TauCeti.Matrix.PosSemidef.eigenvalues₀_eq_zero_of_rank_le`: for `A.rank ≤ d` the sorted
+  eigenvalues vanish at every index `≥ d`.
+
+Positive semidefiniteness is essential for the last statement and not merely convenient: a
+rank-one Hermitian matrix whose nonzero eigenvalue is negative sorts that eigenvalue
+*last*, so its tail is not zero. It is inessential for the rank count, which is why the two
+are separated here.
+
+## Implementation notes
+
+The counting argument is elementary: by antitonicity and nonnegativity, a nonzero sorted
+eigenvalue at an index `≥ d` forces more than `d` nonzero sorted eigenvalues, whereas their
+number is the rank.
 
 ## Provenance
 
 * Original repository: Davis--Kahan/DKPS formalization (Kitware, Inc.).
 * Original module: `ForMathlib/Analysis/Matrix/Spectrum.lean`
   at Davis--Kahan commit `fc38eb4`.
-* Original declaration: `ForMathlib.Matrix.PosSemidef.eigenvalues₀_eq_zero_of_le`.
+* Original declaration: `ForMathlib.Matrix.PosSemidef.eigenvalues₀_eq_zero_of_le`,
+  renamed here to `eigenvalues₀_eq_zero_of_rank_le` and split so that the two supporting
+  facts it proved inline are stated separately (backlog §9.2).
 * Original authorship: formalized by Claude Opus 4.8 (`claude-opus-4-8[1m]`);
   staged for Mathlib (no separate copyright line in the source header), released
   under Apache 2.0.
@@ -46,48 +64,56 @@ namespace TauCeti.Matrix
 open scoped BigOperators ComplexOrder
 open Matrix
 
-variable {𝕜 n : Type*} [RCLike 𝕜] [Fintype n] [DecidableEq n]
+variable {𝕜 n : Type*} [RCLike 𝕜] [Fintype n] [DecidableEq n] {A : Matrix n n 𝕜}
+
+/-- `eigenvalues` is *defined* as `eigenvalues₀` reindexed along
+`Fintype.equivOfCardEq (Fintype.card_fin _)`; this is that definition, read forwards.
+
+Kept private: the equivalence is an implementation detail of Mathlib's `eigenvalues`, and
+every result below is stated without it. -/
+private theorem eigenvalues₀_eq_eigenvalues (hA : A.IsHermitian)
+    (k : Fin (Fintype.card n)) :
+    hA.eigenvalues₀ k
+      = hA.eigenvalues (Fintype.equivOfCardEq (Fintype.card_fin (Fintype.card n)) k) := by
+  rw [Matrix.IsHermitian.eigenvalues, Equiv.symm_apply_apply]
+
+/-- The rank of a Hermitian matrix is the number of its nonzero **sorted** eigenvalues.
+
+This is `Matrix.IsHermitian.rank_eq_card_non_zero_eigs` for `eigenvalues₀`. -/
+theorem IsHermitian.rank_eq_card_non_zero_eigenvalues₀ (hA : A.IsHermitian) :
+    A.rank = Fintype.card {i // hA.eigenvalues₀ i ≠ 0} := by
+  rw [hA.rank_eq_card_non_zero_eigs]
+  exact (Fintype.card_congr (Equiv.subtypeEquiv
+    (Fintype.equivOfCardEq (Fintype.card_fin (Fintype.card n)))
+    fun k => by rw [eigenvalues₀_eq_eigenvalues hA k])).symm
+
+/-- The sorted eigenvalues of a positive semidefinite matrix are nonnegative.
+
+This is `Matrix.PosSemidef.eigenvalues_nonneg` for `eigenvalues₀`. -/
+theorem PosSemidef.eigenvalues₀_nonneg (hA : A.PosSemidef) (i : Fin (Fintype.card n)) :
+    0 ≤ hA.isHermitian.eigenvalues₀ i := by
+  rw [eigenvalues₀_eq_eigenvalues]
+  exact hA.eigenvalues_nonneg _
 
 /--
-**Vanishing tail of the sorted eigenvalues.** If `B` is positive semidefinite
-with `B.rank ≤ d`, then its sorted (decreasing) eigenvalues
-`hB.isHermitian.eigenvalues₀` are zero at every index `≥ d`.
+**Vanishing tail of the sorted eigenvalues.** If `A` is positive semidefinite with
+`A.rank ≤ d`, then its sorted (decreasing) eigenvalues vanish at every index `≥ d`.
 -/
-theorem PosSemidef.eigenvalues₀_eq_zero_of_le {B : Matrix n n 𝕜}
-    (hB : B.PosSemidef) {d : ℕ} (hrank : B.rank ≤ d)
-    (i : Fin (Fintype.card n)) (hi : d ≤ (i : ℕ)) :
-    hB.isHermitian.eigenvalues₀ i = 0 := by
-  set hH := hB.isHermitian
-  -- The index equivalence `eigenvalues₀ = eigenvalues ∘ e` from the definition.
-  set e : Fin (Fintype.card n) ≃ n :=
-    Fintype.equivOfCardEq (Fintype.card_fin (Fintype.card n)) with he
-  have heq0 : ∀ k, hH.eigenvalues₀ k = hH.eigenvalues (e k) := by
-    intro k
-    rw [Matrix.IsHermitian.eigenvalues, he, Equiv.symm_apply_apply]
-  -- PSD ⇒ sorted eigenvalues are nonnegative.
-  have hnonneg : ∀ k, 0 ≤ hH.eigenvalues₀ k := fun k => by
-    rw [heq0 k]; exact hB.eigenvalues_nonneg (e k)
+theorem PosSemidef.eigenvalues₀_eq_zero_of_rank_le (hA : A.PosSemidef) {d : ℕ}
+    (hrank : A.rank ≤ d) {i : Fin (Fintype.card n)} (hi : d ≤ (i : ℕ)) :
+    hA.isHermitian.eigenvalues₀ i = 0 := by
   by_contra hne
-  have hipos : 0 < hH.eigenvalues₀ i := (hnonneg i).lt_of_ne' hne
-  -- By antitonicity, every index `≤ i` also has a strictly positive eigenvalue.
-  have hpos_le : ∀ k, k ≤ i → 0 < hH.eigenvalues₀ k := fun k hk =>
-    lt_of_lt_of_le hipos (hH.eigenvalues₀_antitone hk)
-  -- The `i + 1` leading indices all lie in the nonzero-eigenvalue Finset.
-  have hsub : Finset.Iic i ⊆ Finset.univ.filter (fun k => hH.eigenvalues₀ k ≠ 0) :=
-    fun k hk => Finset.mem_filter.mpr ⟨Finset.mem_univ _,
-      ne_of_gt (hpos_le k (Finset.mem_Iic.mp hk))⟩
-  have hcard_le : (i : ℕ) + 1 ≤ (Finset.univ.filter (fun k => hH.eigenvalues₀ k ≠ 0)).card := by
-    calc (i : ℕ) + 1 = (Finset.Iic i).card := by rw [Fin.card_Iic]
-      _ ≤ _ := Finset.card_le_card hsub
-  -- That Finset has cardinality `rank` (count transported across `e`).
-  have hcount : (Finset.univ.filter (fun k => hH.eigenvalues₀ k ≠ 0)).card = B.rank := by
-    have h1 : (Finset.univ.filter (fun k => hH.eigenvalues₀ k ≠ 0)).card
-        = Fintype.card {k // hH.eigenvalues₀ k ≠ 0} := (Fintype.card_subtype _).symm
-    have h2 : Fintype.card {k // hH.eigenvalues₀ k ≠ 0}
-        = Fintype.card {j // hH.eigenvalues j ≠ 0} :=
-      Fintype.card_congr (Equiv.subtypeEquiv e fun k => by rw [heq0 k])
-    rw [h1, h2, ← hH.rank_eq_card_non_zero_eigs]
-  rw [hcount] at hcard_le
+  -- By antitonicity, every index `≤ i` also carries a strictly positive eigenvalue.
+  have hpos : ∀ k ≤ i, 0 < hA.isHermitian.eigenvalues₀ k := fun k hk =>
+    ((PosSemidef.eigenvalues₀_nonneg hA i).lt_of_ne' hne).trans_le
+      (hA.isHermitian.eigenvalues₀_antitone hk)
+  -- So the `i + 1` leading indices all sit in the nonzero-eigenvalue finset, whose
+  -- cardinality is the rank.
+  have hcard : (i : ℕ) + 1 ≤ A.rank := by
+    rw [IsHermitian.rank_eq_card_non_zero_eigenvalues₀ hA.isHermitian, Fintype.card_subtype,
+      ← Fin.card_Iic]
+    exact Finset.card_le_card fun k hk =>
+      Finset.mem_filter.mpr ⟨Finset.mem_univ _, (hpos k (Finset.mem_Iic.mp hk)).ne'⟩
   omega
 
 end TauCeti.Matrix
