@@ -25,6 +25,10 @@ Baseline inspected: `7463ca25c64a46c48411a2769b47714889974a97`.
   and proposed Tau Ceti treatment of Spectra-derived material.
 - `public-api-integration-review.md`: namespace, placement, and PR-boundary
   recommendations for a Tau Ceti port.
+- `convergence-matrix.md`: canonical ownership and representation decisions across
+  DKPS, Tau Ceti, and Spectra; Wave 2 is the active `LinearPMap` migration.
+- `u1-linearpmap-migration.md`: executable contract for replacing the bundled
+  `ClosedOperator` foundation with `LinearPMap` plus properties.
 
 The roadmap and issue draft should be revised after maintainers answer the
 scope and placement questions.  They should not be submitted as if the current
@@ -40,3 +44,11 @@ speculative continuation roadmap API with the completed proof-carrying
 continuation stack.  These candidates are not part of the Tau Ceti-ready
 accepted surface until compiled and structurally promoted.  See
 `dev/full-part-iii-admission-elimination-math-ahead-2026-07-20.md`.
+
+## Active representation migration
+
+U1 is claimed and executable. The canonical unbounded-operator representation is
+Mathlib `LinearPMap`; the local `ClosedOperator` bundle is temporary compatibility
+infrastructure. Agents should preserve green builds through adapters while
+migrating consumers, not use green builds as a reason to leave the parallel
+foundation in place. See `u1-linearpmap-migration.md` and `dev/LANES.md`.

@@ -183,32 +183,102 @@ variations; when in doubt, keep and flag it.
 
 ### Wave 2 — canonical unbounded-operator refactor onto `LinearPMap`
 
+> **STATUS: ACTIVE AND CLAIMED (2026-07-27). This is implementation work, not an
+> open representation discussion.** See `dev/tauceti/u1-linearpmap-migration.md`
+> and the corresponding row in `dev/LANES.md`.
+
 Three representations of an unbounded operator currently coexist and **must not
 all survive as peer public APIs**:
 
-- DKPS `ClosedOperator` — bundles domain, action, density, closed graph.
-- Tau Ceti — Mathlib `LinearPMap` directly; the semigroup generator *is* a
-  `LinearPMap` so it composes with Mathlib's unbounded-operator API.
-- Spectra `SelfAdjointOperator` — bundles a `LinearPMap` with `IsSelfAdjoint`;
-  density/symmetry derived, not stored.
+- DKPS `ClosedOperator` — bundles domain, action, density, and closed graph;
+- Tau Ceti — uses Mathlib `LinearPMap` directly; a semigroup generator is a
+  `LinearPMap`, so it composes with Mathlib's unbounded-operator API;
+- Spectra `SelfAdjointOperator` — stores a `LinearPMap` with self-adjointness and
+  derives density/symmetry rather than storing an independent domain/action pair.
 
-Canonical design: **`LinearPMap` + properties** (`IsClosed`, `IsSelfAdjoint`,
-dense domain), with thin bundled objects only where they materially improve an
-API. Our `ClosedOperator` becomes, at most, a temporary downstream adapter; its
-useful results (`SameDomain`, `MapsDomainTo`, bounded extensions, restrictions,
-relative bounds, resolvent facts) are reformulated directly over `LinearPMap`.
+The canonical design is forced: **`LinearPMap` plus properties**. Closedness,
+dense domain, symmetry, and self-adjointness are facts about the partial linear
+map. A thin bundle may be introduced later only when a concrete Tau Ceti API
+benefits from it; it may not become a second foundational universe.
 
-Refactor onto `LinearPMap`: closedness/dense-domain predicates; self-adjointness
-and symmetry; same-domain relations; domain transport under bounded maps;
-bounded extensions and full-domain totalization; reducing subspaces and
-restricted operators; closed Sylvester equations; unbounded graph and Riccati
-operators.
+There is no remaining roadmap decision that blocks local convergence. In
+particular, agents must not preserve `ClosedOperator` merely because a direct
+signature migration temporarily breaks consumers. The required technique is:
 
-Temporary adapters live under `DavisKahan/Interop/TauCeti/`; they are **not**
-upstream candidates. **Completion criterion:** *no production theorem takes DKPS
-`ClosedOperator` as its fundamental unbounded-operator representation unless it is
-a compatibility wrapper.* Must precede any closed-operator / reducing-restriction
-/ unbounded-Sylvester / unbounded-Davis–Kahan PR.
+1. add the canonical `LinearPMap` theorem first;
+2. make the historical bundled declaration a thin adapter or derived wrapper;
+3. repoint consumers in dependency order;
+4. keep every committed step green;
+5. delete the adapter once the last production consumer is gone.
+
+#### U1.1 — dependency-clean reusable core
+
+Create a `ForTauCeti` layer whose public declarations are stated directly over
+`E →ₗ.[𝕜] F`. Reuse pinned Mathlib declarations rather than redefining them.
+The first closure includes:
+
+- closedness and densely-defined predicates/lemmas;
+- symmetry and self-adjointness consequences;
+- domain equality / extension relations;
+- domain transport by bounded maps;
+- bounded extensions and full-domain embeddings of continuous linear maps;
+- graph norm and relative boundedness on the domain subtype;
+- bounded perturbation closedness where it is dependency-clean.
+
+The core may import only Mathlib, Tau Ceti, and `ForTauCeti`. It may not import
+DavisKahan or Spectra.
+
+#### U1.2 — downstream compatibility seam
+
+Move the historical bundle behind
+`DavisKahan/Interop/TauCeti/ClosedOperator.lean`. The adapter may preserve old
+field projections, coercions, and theorem names temporarily, but it must be
+implemented from the canonical `LinearPMap` API and must be documented as
+transitional. No `ForTauCeti` module may import it.
+
+#### U1.3 — production consumer migration
+
+Migrate consumers by mathematical dependency rather than directory size:
+
+1. same-domain, maps-domain-to, extensions, graph norm, and relative bounds;
+2. reducing restrictions and restricted operators;
+3. closed Sylvester equations and unbounded norm estimates;
+4. graph/Riccati inputs and unbounded perturbation endpoints;
+5. Spectra-facing bridges, while keeping the Spectra-specific spectral calculus
+   isolated downstream.
+
+Completed Davis--Kahan theorem statements should remain stable unless the old
+bundle itself leaks into the public statement. When it does, replace it with the
+`LinearPMap` statement and retain a source-facing compatibility corollary only
+when the paper API requires one.
+
+#### Explicit deferrals, not blockers
+
+The following do not block the core migration and remain separate lanes:
+
+- PVM/Borel functional calculus and spectral projections;
+- Spectra real-spectrum and resolvent identification proofs;
+- real-to-complex closed-operator complexification;
+- source-facing theorem redesign unrelated to the representation;
+- semigroup theorem additions beyond adapting to Tau Ceti's existing generator.
+
+#### Completion gates
+
+Wave 2 is complete only when:
+
+- no generic production theorem takes DKPS `ClosedOperator` as its fundamental
+  unbounded-operator representation;
+- the reusable API is dependency-clean and stated over `LinearPMap`;
+- `ClosedOperator` is confined to an explicitly temporary interoperability or
+  source-compatibility layer, or deleted;
+- the direct consumer count and import graph are recorded and monotonically
+  shrinking;
+- default targets and focused migrated targets build after each committed slice;
+- dependency-layer, source-census, and trusted-dependency checks remain clean.
+
+This wave must precede any Tau Ceti PR for closed operators, reducing
+restrictions, unbounded Sylvester equations, or unbounded Davis--Kahan results.
+It does **not** need to wait for those theorem PRs before starting.
 
 ### Wave 3 — semigroup and resolvent convergence
 

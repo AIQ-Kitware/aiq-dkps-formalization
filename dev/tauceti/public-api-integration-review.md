@@ -70,8 +70,10 @@ Frobenius specialization.
 
 ### PR 3 -- closed operators and reducing restrictions
 
-Only after coordination with `OneParameterSemigroups`; adapt to the canonical
-Tau Ceti unbounded-operator vocabulary.
+After the local U1 convergence migration is complete. The foundational choice is
+already fixed: use Mathlib `LinearPMap` plus property predicates, matching Tau
+Ceti's semigroup generator. Coordination may refine names and PR boundaries, but
+it does not justify retaining the DKPS `ClosedOperator` bundle as a peer API.
 
 ### PR 4 -- Sylvester equations
 
