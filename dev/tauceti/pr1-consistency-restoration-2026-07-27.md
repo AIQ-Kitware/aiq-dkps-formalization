@@ -51,18 +51,20 @@ workflow once worked. They are not validation of the current API.
 `scripts/refresh_tauceti_pr1_consistency.py` provides an idempotent split-safe
 repair.
 
-While signature work is active, claim this lane without touching the manifest:
-
-```bash
-python3 scripts/refresh_tauceti_pr1_consistency.py --claim
-```
-
-After the §5.1 lane has landed its name changes, refresh the non-name metadata:
+On the shared integration branch, refresh and check immediately:
 
 ```bash
 python3 scripts/refresh_tauceti_pr1_consistency.py --write
 python3 scripts/refresh_tauceti_pr1_consistency.py --check
 ```
+
+This is deliberately safe while signature lanes continue elsewhere: it preserves
+every `source_declarations` list and derives the export closure from the imports
+visible in the current checkout. Push the resulting metadata commit to `main`;
+other agents can merge it, and this command can be rerun after later integration
+commits without coordination. The recorded Davis--Kahan revision is treated as
+the last observed ancestor, so committing the metadata does not make its own
+check fail immediately.
 
 The refresh performs only these manifest changes:
 
@@ -81,8 +83,9 @@ It asserts that every `source_declarations` list is unchanged.
 
 ## Current validation sequence
 
-Once all approximation-number signature lanes are released, perform the current
-validation from the final working tree, not from the July 24 log.
+Run the inexpensive workspace checks on each consistency refresh. Perform the
+full Tau Ceti export and strict submission validation again from the eventual PR
+working tree, not from the July 24 log.
 
 ### Davis--Kahan workspace
 
@@ -98,8 +101,8 @@ lake build ForTauCeti
 lake build Challenge
 ```
 
-Run the relevant declaration-name drift and source-census gates after the §5.1
-renames have settled.
+Run the relevant declaration-name drift and source-census gates against whatever
+names are present in the current checkout. Re-run after later rename commits.
 
 ### Throwaway Tau Ceti export
 
