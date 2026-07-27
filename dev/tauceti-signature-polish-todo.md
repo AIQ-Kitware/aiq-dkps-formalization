@@ -1477,15 +1477,20 @@ theorem approximationNumber_tangentOperator ...
 
 ## 13. Definition-level deletion and adapter plan
 
+*Reconciled 2026-07-27 against what has actually landed. Rows are struck through once the
+canonical API exists; a struck-through row is not necessarily finished work — several still
+carry a transitional adapter whose deletion condition is stated.*
+
 | **Cluster** | **Current state** | **Signature risk** | **Upstream action** | **Priority** |
 | --- | --- | --- | --- | --- |
-| operatorAbs | Special case duplicate of rectangular modulus | Delete definition; retain compatibility theorem/notation temporarily | DavisKahan.Interop.TauCeti | P0 |
-| ClosedOperator | Parallel bundle over LinearPMap | Demote to adapter, then delete from generic production | DavisKahan.Interop.TauCeti | P0 |
-| Spectra SelfAdjointOperator | Potential donor wrapper | Port useful lemmas; choose canonical Tau Ceti representation | Short-lived conversion functions | P1 |
-| specSubspace | Misnamed coordinate span | Rename/move; compatibility alias only downstream if needed | Deprecated local alias | P0 |
-| finiteMean / appendFin | Likely generic duplicates | Replace with Finset/Fintype API | No upstream adapter | P0 |
-| RectangularSymmetricIdealFamily | Free-data structure | ~~Replace with normed carrier/family~~ **DONE** — `TauCeti.SymmetricOperatorIdealFamily` | `SymmetricOperatorIdealFamily.toRectangular` (transitional; delete with the legacy structure) | ~~P0~~ |
-| GenuinePairwiseSpectrumGap | Paper/bridge terminology | Replace with canonical separation predicate | Paper wrapper | P1 |
+| ~~operatorAbs~~ | **Canonical API landed (§7).** `ContinuousLinearMap.modulus` is the one rectangular modulus; `operatorAbs` survives only as a `reducible abbrev` in a documented not-for-upstream shim | Adapter is live, so the duplicate name is still importable | Delete the alias once its consumers move to `.modulus`; do not submit the alias | ~~P0~~ adapter-retirement |
+| ClosedOperator | **Open.** Still a parallel bundle over `LinearPMap` | Two competing closed-operator representations in production | Demote to adapter, then delete from generic production — see §12.2 | P0 |
+| Spectra SelfAdjointOperator | **Open.** Still consumed across `DavisKahan/Sources/**` and `DavisKahan/Alternative/**` | Potential donor wrapper competing with the Tau Ceti representation | Port useful lemmas; choose canonical Tau Ceti representation | P1 |
+| ~~specSubspace~~ | **Renamed (§6).** Canonical is `OrthonormalBasis.spanIndices` in `ForTauCeti/Analysis/InnerProductSpace/BasisSpan.lean`, generalized off `Fin`/predicates; `specSubspace` remains only inside `CourantFischerCompat.lean` | Compat shim is importable | Delete with the shim once the historical Courant–Fischer signatures are retired | ~~P0~~ adapter-retirement |
+| ~~appendFin~~ | **Deleted (§8.1).** It was exactly `Fin.snoc`; `Fin.snoc_castSucc` / `Fin.snoc_last` replace its two simp lemmas | none | done — no adapter was needed | ~~P0~~ |
+| **finiteMean** | **KEPT (§8.1) — the "likely generic duplicate" reading was wrong.** `Finset.expect` requires `Module ℚ≥0 E`, which does not synthesize for a general `𝕜`-inner-product space; `Finset.centroid` typechecks but is `Classical.arbitrary` junk on the empty family, whereas `finiteMean` returns `0` there and `finiteMean_append` is deliberately stated to hold *at* `n = 0` | none — it is not a duplicate | Keep. Open sub-item: generalize `Fin n` → `Finset`, which is a redesign of the add-one identity, not a signature edit | P2 (was P0) |
+| ~~RectangularSymmetricIdealFamily~~ | **Replaced (§12.1).** `TauCeti.SymmetricOperatorIdealFamily` | Legacy record still has 68 consumers | `SymmetricOperatorIdealFamily.toRectangular` (transitional; delete with the legacy structure) | ~~P0~~ adapter-retirement |
+| GenuinePairwiseSpectrumGap | **Open.** Still live across `DavisKahan/Sources/DavisKahan1970/**`, with `PairwiseSpectrumGap` aliased to it | Paper/bridge terminology in a generic position | Replace with canonical separation predicate | P1 |
 
 - Adapters must be visibly downstream and carry a deletion condition.
 
@@ -1494,6 +1499,19 @@ theorem approximationNumber_tangentOperator ...
 - After each canonical API lands, repoint consumers, remove duplicate declarations, and run a grep gate for old fully qualified names.
 
 - Avoid long-lived aliases before upstream review; they obscure which API reviewers are evaluating.
+
+> **Three adapters are now live at once** — `operatorAbs`, `CourantFischerCompat`, and
+> `SymmetricOperatorIdealFamily.toRectangular` — which is exactly the "long-lived aliases
+> obscure which API reviewers are evaluating" risk this section warns about. Retiring them is
+> a distinct piece of work from the canonical-API lanes that created them, and it is not
+> currently claimed by anyone.
+
+> **Gate gap found while reconciling this table (§10 lane).** The last bullet above asks for
+> "a grep gate for old fully qualified names" after each rename. There is no such gate, and
+> its absence is not theoretical: the §9.2 rename passed a green 9272-job default build and
+> still broke `Challenge.MathlibPending.RankPsdRealization.Leaderboard`, because `Challenge`
+> is not in `defaultTargets` and `comparator/*.json` restates declaration names as data. Any
+> such gate has to cover `Challenge/` and `comparator/*.json`, not just the Lean libraries.
 
 ## 14. Pre-PR declaration checklist
 
