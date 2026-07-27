@@ -20,10 +20,14 @@ Ownership classes: `mathlib` · `tauceti` · `davis-kahan` · `spectra-bridge` �
 
 | Cluster | Ownership | Final Tau Ceti path | Status |
 | --- | --- | --- | --- |
-| rectangular approximation-number foundation | `tauceti` | `TauCeti/Analysis/OperatorIdeal/ApproximationNumber/{Basic,Adjoint,FiniteDimensional,MinMax,OperatorModulus}` + `TauCeti/Analysis/InnerProductSpace/CourantFischer` | `staged` |
+| rectangular approximation-number foundation | `tauceti` | dependency-closed export rooted at `TauCeti/Analysis/OperatorIdeal/ApproximationNumber/{Basic,Adjoint,FiniteDimensional,MinMax}` and `TauCeti/Analysis/InnerProductSpace/{CourantFischer,OperatorModulus}` | `staged-needs-current-validation` |
 
-* **Closure**: Mathlib only. `Basic`→Mathlib; `Adjoint`→Basic; `CourantFischer`→Mathlib;
-  `FiniteDimensional`,`MinMax`→Basic+CourantFischer; `OperatorModulus`(clean part)→Mathlib.
+* **Closure**: Mathlib only, but no longer six files. The current transitive
+  `ForTauCeti` closure also contains `SetTheory/Cardinal/Lift`,
+  `InnerProductSpace/BasisSpan`, and `InnerProductSpace/SingularValues`; the
+  separately owned Section 5.1 lane may add `LinearAlgebra/Dimension/RankCompLe`.
+  `scripts/refresh_tauceti_pr1_consistency.py` derives this list from imports so
+  the manifest and exporter cannot silently omit newly split dependencies.
 * **Provenance**: copied from `ForMathlib/Analysis/Normed/Operator/ApproximationNumber*`
   and `ForMathlib/Analysis/InnerProductSpace/CourantFischer` (Kitware, Apache 2.0;
   adapted from Mathlib PR #32126); `OperatorModulus` clean part from

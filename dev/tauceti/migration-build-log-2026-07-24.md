@@ -1,5 +1,13 @@
 # Tau Ceti extraction — build & audit log (2026-07-24)
 
+> **Historical validation only.** These results apply to the July 24
+> `ℝ≥0`-valued approximation-number API, the former Courant--Fischer surface,
+> and the former approximation-number-local operator-modulus module. They do
+> **not** validate the current real-valued API, redesigned Courant--Fischer
+> layer, unified `ContinuousLinearMap.modulus`, or the current export manifest.
+> See `pr1-consistency-restoration-2026-07-27.md`; produce a new dated log before
+> calling PR 1 ready.
+
 All commands run at Davis–Kahan `fc38eb4`+campaign, Tau Ceti branch
 `approximation-numbers` @ `450317c1` (from `origin/main` `92c79e5e`).
 

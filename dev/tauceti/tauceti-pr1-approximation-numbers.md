@@ -1,196 +1,203 @@
-# Tau Ceti PR 1 — package (PREPARED, population DEFERRED)
+# Tau Ceti PR 1 package — rectangular approximation numbers
 
-Content and validation are ready, but **nothing is committed to the
-`external/TauCeti` submodule yet** — everything stays staged in `ForTauCeti`
-while we reorganize and wait on roadmap guidance for which roadmap to submit
-first. When we are ready to submit, `scripts/export_for_tauceti.py --cluster
-approximation-number --write` reproduces the `TauCeti/…` files deterministically
-on a fresh branch off `origin/main`; then use the safe push command at the bottom.
+> **Status: DRAFT — API narrative synchronized; current validation pending.**
+>
+> The July 24 export/build log predates the real-valued approximation-number
+> conversion, the Courant--Fischer redesign, and the unified operator-modulus
+> API. It is historical evidence only. Do not submit this PR or copy its PASS
+> labels forward until the current validation sequence in
+> `pr1-consistency-restoration-2026-07-27.md` has completed.
 
-* **Repository**: `https://github.com/TauCetiProject/TauCeti.git`
-* **Branch (to create at submission time)**: `approximation-numbers` from `origin/main`
-* **Observed `origin/main` head**: `92c79e5e0a618f8c5c2b9909be1ce50f6891dde7`
-  (re-verify at submission time)
-* **Diff scope (when populated)**: only `TauCeti/…` — 6 files, 1662 insertions.
-  No change to `scripts/`, `.github/`, `lakefile.toml`, `formalization.yaml`,
-  `TauCeti.lean`, `lake-manifest.json`, or `lean-toolchain`.
+## Proposed title
 
----
+**Add rectangular approximation numbers for bounded operators**
 
-## PR title
+## Submission coordinates
 
-```
-Add rectangular approximation numbers for Hilbert-space operators
-```
+These values must be refreshed immediately before creating the Tau Ceti branch:
 
-## PR body
-
-### Summary
-
-Adds the reusable, paper-agnostic foundation of **approximation numbers** for
-continuous linear maps: the zero-based approximation number
-`ContinuousLinearMap.approximationNumber T n : ℝ≥0` — the operator-norm distance
-from `T` to maps of rank at most `n` — together with its order and ideal API, its
-adjoint invariance on Hilbert spaces, its finite-dimensional agreement with
-singular values (Eckart–Young), a Spectra-free Courant–Fischer lower-bound
-(min–max) helper layer, and the positive rectangular operator modulus with its
-pointwise-norm identity. Independent source and target universes are preserved
-throughout. No Davis–Kahan perturbation theorem and no Spectra dependency are
-introduced.
+- **Tau Ceti base:** freshly fetched `origin/main`, not the old detached
+  submodule pin;
+- **Davis--Kahan source revision:** the value recorded by
+  `scripts/refresh_tauceti_pr1_consistency.py --write` after all PR-1 signature
+  lanes have landed;
+- **branch:** `approximation-numbers` or the branch required by current Tau Ceti
+  coordination policy;
+- **roadmap marker:** replace the provisional marker below with the exact
+  accepted target identifier before submission.
 
 <!--tauceti-target:v1 {"focus":"spectral-subspace-perturbation","id":"SpectralSubspacePerturbation/PartB/approximation-numbers"}-->
 
-> **Roadmap-target note for the maintainer:** this maps to *Part B — Approximation
-> numbers and rectangular symmetric ideals* of the SpectralSubspacePerturbation
-> roadmap draft, i.e. "PR 1 — approximation numbers" in the extraction plan. The
-> draft is not yet merged into TauCetiRoadmap, so the `id` above is provisional;
-> replace it with the canonical accepted target id (roadmap file + label) before
-> merge, and claim `author/spectral-subspace-perturbation/<target-id>` per
-> COORDINATION.md §4 first.
+## Draft PR body
+
+### Summary
+
+This PR adds a rectangular approximation-number foundation for bounded linear
+operators. The canonical quantity is
+
+```lean
+ContinuousLinearMap.approximationNumber T n : ℝ
+```
+
+the operator-norm distance from `T` to maps of rank at most `n`. The API uses
+zero-based indexing, so the zeroth approximation number is the operator norm.
+The cluster includes elementary order and ideal inequalities, Hilbert-space
+adjoint invariance, finite-dimensional identification with singular values, the
+current finite-dimensional Courant--Fischer support, and the general
+Hilbert-space operator modulus needed by later operator-ideal work.
+
+No Davis--Kahan perturbation theorem is included.
 
 ### Roadmap target
 
-Part B (Approximation numbers and rectangular symmetric ideals). Acceptance
-checks from the roadmap are met: operator norm recovered at index zero
-(`approximationNumber_zero`), finite-dimensional agreement with singular values
-(`approximationNumber_eq_singularValues`), adjoint invariance
-(`approximationNumber_adjoint`), and the two-sided ideal/contraction behavior
-(`approximationNumber_comp_comp_le`, `approximationNumber_smul`).
+Part B, approximation-number foundation. This is the first dependency-closed
+library PR supporting the later rectangular ideal and spectral-subspace
+perturbation layers.
 
-### Scope (what is included)
+The exact `Basic.lean` declaration-name list is intentionally not frozen in this
+draft while the separately claimed §5.1 signature-polish lane is active. The
+final PR body must be regenerated from the resulting tree and extraction
+manifest after that lane is released.
 
-Files (all `module`, `public import`, `@[expose] public section`, warning-clean,
-< 1000 lines):
+### Scope
 
-* `TauCeti/Analysis/OperatorIdeal/ApproximationNumber/Basic.lean` — the definition
-  and the elementary order + ideal API over a `NontriviallyNormedField`:
-  `approximationNumber`, `approximationNumber_zero` (= operator norm),
-  antitonicity, nonnegativity, operator-norm bound, zero/negation/scalar/addition
-  behavior, the additive shift `approximationNumber_add_le_add`, the left/right/
-  two-sided composition inequalities, and absolute homogeneity `approximationNumber_smul`.
-  Includes the universe helper `Cardinal.le_natCast_of_lift_le` and the
-  cross-universe rank lemma `rank_comp_left_le_of_rank_le`.
-* `TauCeti/Analysis/OperatorIdeal/ApproximationNumber/Adjoint.lean` — adjoint
-  invariance `approximationNumber_adjoint` on Hilbert spaces.
-* `TauCeti/Analysis/InnerProductSpace/CourantFischer.lean` — the finite-dimensional
-  Courant–Fischer / spectral-subspace min–max helpers (`specSubspace`,
-  `finrank_specSubspace`, the eigenvalue min–max comparison lemmas,
-  `orthogonal_specSubspace`) supporting the singular-value identification.
-* `TauCeti/Analysis/OperatorIdeal/ApproximationNumber/FiniteDimensional.lean` —
-  the finite-dimensional Eckart–Young identification
-  `approximationNumber_eq_singularValues` and its two inequalities.
-* `TauCeti/Analysis/OperatorIdeal/ApproximationNumber/MinMax.lean` — the
-  infinite-dimensional Courant–Fischer lower bound
-  `lowerBound_le_approximationNumber_of_finrank` and its linear-independent form
-  (Spectra-free; only the `≥` half of the min–max, which needs no witnessing-subspace
-  existence theorem).
-* `TauCeti/Analysis/OperatorIdeal/ApproximationNumber/OperatorModulus.lean` — the
-  positive rectangular source modulus `rectangularOperatorModulus T = (T* T)^{1/2}`
-  for complex Hilbert spaces, its self-adjointness/positivity/defining square, and
-  the pointwise identity `‖|T| x‖ = ‖T x‖` and `‖|T|‖ = ‖T‖`.
+The export closure is computed from the actual `ForTauCeti` import graph by
+`scripts/refresh_tauceti_pr1_consistency.py`; the manifest must not carry only
+the historical six headline modules. In the corrected 2026-07-27 base the
+closure contains the headline modules plus `Cardinal.Lift`, `BasisSpan`, and
+`SingularValues`. If Section 5.1 moves rank plumbing to `RankCompLe.lean`, that
+module is included automatically once `Basic.lean` imports it.
+
+The headline modules are:
+
+- `TauCeti/SetTheory/Cardinal/Lift.lean`
+  - the cardinal-lift helper required by the cross-universe approximation-number
+    proof;
+- `TauCeti/LinearAlgebra/Dimension/RankCompLe.lean`, when present after the
+  separately owned Section 5.1 lane;
+- `TauCeti/Analysis/OperatorIdeal/ApproximationNumber/Basic.lean`
+  - the real-valued approximation-number definition;
+  - zero-based operator-norm endpoint;
+  - antitonicity and nonnegativity;
+  - addition, scalar, and composition inequalities;
+  - only approximation-number declarations after generic rank plumbing has
+    been moved to its own dependency-appropriate module by the §5.1 lane.
+- `TauCeti/Analysis/OperatorIdeal/ApproximationNumber/Adjoint.lean`
+  - Hilbert-space adjoint invariance.
+- `TauCeti/Analysis/InnerProductSpace/BasisSpan.lean`
+  - the basis-index span API used by Courant--Fischer;
+- `TauCeti/Analysis/InnerProductSpace/CourantFischer.lean`
+  - the current finite-dimensional min--max and eigenvalue-comparison support,
+    centered on basis-span subspaces rather than the retired public
+    `specSubspace` surface.
+- `TauCeti/Analysis/InnerProductSpace/SingularValues.lean`
+  - the singular-value support imported by the finite-dimensional and min--max
+    modules;
+- `TauCeti/Analysis/OperatorIdeal/ApproximationNumber/FiniteDimensional.lean`
+  - comparison with and equality to finite-dimensional singular values.
+- `TauCeti/Analysis/OperatorIdeal/ApproximationNumber/MinMax.lean`
+  - lower-modulus bounds from rank, finite-dimensional, and linearly independent
+    test families;
+- `TauCeti/Analysis/InnerProductSpace/OperatorModulus.lean`
+  - the unified rectangular definition
+    `ContinuousLinearMap.modulus T = (T⋆ T)^(1/2)`;
+  - positivity, self-adjointness, uniqueness of the nonnegative square root;
+  - `modulus_mul_self`;
+  - pointwise and operator-norm identities;
+  - one-sided composition norm laws and commuting-modulus support.
+
+All final files must use Tau Ceti module syntax, public imports only where part
+of the exported interface, exact provenance, no warning suppressions, and the
+current Tau Ceti file-size policy.
 
 ### Deliberate exclusions
 
-This PR does **not** include:
+This PR does not include:
 
-* any Davis–Kahan sine/tangent/spectral-subspace perturbation theorem;
-* rectangular symmetric ideal families or paper unitary-invariant norm structures;
-* Hilbert–Schmidt / Schatten theory (a later PR);
-* Spectra / PVM infrastructure or arbitrary-Hilbert-space spectral localization;
-* the full **approximation-number invariance under the source modulus**
-  (`sameApproximationSingularValues_rectangularOperatorModulus`) — its current proof
-  routes through a Spectra-based infinite-dimensional min–max
-  (`SpectraBridge.lt_approximationNumber_iff_exists_finiteDimensional_lowerBound`);
-  the modulus definition and its pointwise-norm identity are included, but the
-  invariance theorem is deferred to a later dependency-closed PR (per the extraction
-  plan's option 2 — do not import Spectra to keep a theorem count);
-* exact orthogonal block-sum merge formulas whose proof depends on Spectra;
-* real-complexification machinery unrelated to the basic API;
-* any Davis–Kahan source `SameApproximationSingularSequence` record or paper
-  correspondence.
+- any Davis--Kahan sine, tangent, or spectral-subspace perturbation theorem;
+- rectangular symmetric ideal families or paper-specific unitary-invariant norm
+  structures;
+- Hilbert--Schmidt, trace-class, or Schatten families;
+- Spectra, PVM, or arbitrary-Hilbert-space spectral-localization machinery;
+- exact orthogonal block-sum merge formulas whose current proof is
+  Spectra-coupled;
+- real-complexification machinery unrelated to this cluster;
+- paper-facing approximation-singular-sequence records or historical wrappers;
+- the Spectra-dependent approximation-number invariance theorem for the modulus,
+  unless a separate dependency-clean proof has landed and been explicitly added
+  to the accepted roadmap target.
 
 ### API decisions
 
-* **Canonical object.** The foundation is the `ℝ≥0`-valued
-  `ContinuousLinearMap.approximationNumber`, not the Davis–Kahan real-valued wrapper
-  `approximationSingularValue`. `ContinuousLinearMap.approximationNumber` does not yet
-  exist in Mathlib (checked at the pinned revision), so this contributes it; the
-  definition and API follow Mathlib PR #32126, from which the Davis–Kahan version was
-  originally adapted.
-* **Namespace.** Declarations extend the existing Mathlib namespaces
-  `ContinuousLinearMap` and `Cardinal` rather than living under `TauCeti`, so that
-  dot notation (`T.approximationNumber`) resolves and the names match the eventual
-  Mathlib upstreaming target. Lean field projection binds `T.approximationNumber`
-  only to a literal `ContinuousLinearMap.approximationNumber`, so a `TauCeti.`
-  prefix would break every dot-notation proof. The Courant–Fischer *helpers* (not
-  dot-notation on a Mathlib type) do live under `namespace TauCeti`. **Flagged for
-  maintainer review** — happy to move everything under `TauCeti` and drop dot
-  notation (as `TauCeti.ContinuousLinearMap.index` does) if that is preferred.
-* **Independent universes.** Source and target spaces move in independent universes
-  wherever the mathematics allows; cross-universe rank comparisons are routed through
-  `Cardinal.lift` and the natural-number-bound helper.
-* **File split.** Split by mathematical responsibility (definition/order API;
-  adjoint; finite-dimensional singular-value identification; infinite-dimensional
-  min–max; operator modulus) and to keep the finite-dimensional Courant–Fischer
-  support importable on its own, each file well under the 1000-line new-file limit.
-* **Finite-dimensional singular values.** Connected to Mathlib's
-  `LinearMap.singularValues` via the Eckart–Young theorem in `FiniteDimensional.lean`
-  (lower bound by dimension counting against a Courant–Fischer test subspace; upper
-  bound by projecting onto the top singular directions).
-* **Operator-modulus invariance is deferred**, not included (see exclusions).
+- **Codomain:** `ℝ`, not `ℝ≥0`. Nonnegativity is a theorem. This matches the
+  finite-dimensional singular-value API and removes repeated coercion layers in
+  downstream Davis--Kahan code.
+- **Indexing:** zero-based. The §5.1 lane owns the final roadmap wording and any
+  concluding declaration rename required by that decision.
+- **Namespace:** operator methods extend `ContinuousLinearMap` so dot notation is
+  available. Generic spectral-subspace helpers remain in their natural Tau Ceti
+  namespaces.
+- **Universes:** source and target spaces retain independent universes wherever
+  possible. Cross-universe rank plumbing is not hidden in the operator-ideal
+  file; the §5.1 lane moves the reusable rank fact to its own module.
+- **Operator modulus:** there is one rectangular
+  `ContinuousLinearMap.modulus`, not separate square `operatorAbs` and
+  rectangular `rectangularOperatorModulus` public APIs.
+- **File split:** modules are separated by mathematical responsibility and
+  dependency closure, not by historical Davis--Kahan paths.
 
 ### Provenance
 
-* Source repository: the Davis–Kahan / DKPS formalization (Kitware, Inc.), commit
-  `fc38eb48b9b49f2e1d87fe0c7022dc5e262820a7`.
-* Original paths: `ForMathlib/Analysis/Normed/Operator/ApproximationNumber*.lean`,
-  `ForMathlib/Analysis/InnerProductSpace/CourantFischer.lean`, and the clean part of
-  `DavisKahan/OperatorIdeal/ApproximationNumbers/OperatorModulus.lean`.
-* Original authors / copyright: Jon Crall, OpenAI GPT-5.6 Thinking, Niels Voss,
-  Arnav Mehta, Rawad Kansoh; Copyright (c) 2026 Kitware, Inc., Apache 2.0 (headers
-  preserved verbatim; each file carries a Provenance section).
-* Mathlib relation: adapted from Mathlib PR #32126.
-* Spectra influence: none for the included declarations.
+The code was developed in the Davis--Kahan/DKPS formalization repository,
+Copyright 2026 Kitware, Inc., Apache 2.0. Each exported file must retain its own
+exact source modules, source revision, authors, and whether the result was
+copied, adapted, unified, generalized, or re-proved.
+
+The current operator-modulus module unifies work formerly located in:
+
+- `ForMathlib/Analysis/InnerProductSpace/OperatorAbsoluteValue.lean`; and
+- `DavisKahan/OperatorIdeal/ApproximationNumbers/OperatorModulus.lean`.
+
+The approximation-number foundation was adapted from the Mathlib PR documented
+in the module provenance. Spectra is not an import of the exported cluster;
+where Spectra influenced deferred theorem selection, that influence remains
+recorded rather than silently erased.
 
 ### Validation
 
-Run in `external/TauCeti` on the branch (see the build log
-`dev/tauceti/migration-build-log-2026-07-24.md`):
+**Pending.** The current tree must be exported and validated after all PR-1
+signature lanes are complete.
 
-```
-lake build (cluster targets, warningAsError=true)  # PASS — 3036 jobs, no warning/error
-#print axioms (all cluster decls)                  # PASS — {propext, Classical.choice, Quot.sound} only
-module-system                                      # PASS by construction (module + @[expose] public section, built under warningAsError)
+Required Davis--Kahan-side checks include:
+
+```text
+refresh_tauceti_pr1_consistency.py --check
+check_dependency_layers.py
+export_for_tauceti.py --cluster approximation-number --write
+export_for_tauceti.py --cluster approximation-number --check
+ForTauCeti build
+Challenge build and declaration-name drift gate after renames
+relevant source-census and downstream consumer builds
 ```
 
-`lake exe axioms`, `lake exe module-system`, and `bash scripts/lint-env.sh`
-enumerate the whole `TauCeti` tree and so need a full `lake build TauCeti` (run
-in CI). Locally the cluster modules were validated individually: they build
-warning-clean under `warningAsError=true`, every declaration is axiom-clean by
-`#print axioms`, and every file is a `module`. See
-`dev/tauceti/migration-build-log-2026-07-24.md`.
+Required Tau Ceti-side checks include the repository's current warning-as-error
+build, axiom audit, module-system audit, and lint environment. Record exact
+commands and results in a new dated build log.
 
 ### Downstream validation
 
-The same declarations, staged in `ForTauCeti`, build warning-clean as a library
-in the Davis–Kahan workspace and are consumed by the Davis–Kahan
-approximation-number cluster; the post-merge import switch was simulated (see
-`dev/tauceti/migration-build-log-2026-07-24.md`).
+Also pending. A landing simulation must temporarily replace this cluster's
+`ForTauCeti.*` imports with the exported `TauCeti.*` modules and rebuild the
+actual Davis--Kahan consumers. The simulation must use the real-valued API and
+`TauCeti.Analysis.InnerProductSpace.OperatorModulus`; a July 24 simulation of
+older files is not sufficient.
 
 ---
 
-## Safe push command (do NOT run without explicit instruction)
+## Safe push command
 
-New branch, create-only, force-with-lease against an empty expected value (per
-`external/TauCeti/COORDINATION.md` §1):
-
-```sh
-git -C external/TauCeti push --force-with-lease=approximation-numbers: \
-    https://github.com/TauCetiProject/TauCeti.git HEAD:approximation-numbers
-```
-
-Before pushing: claim the roadmap target per COORDINATION §4
-(`author/spectral-subspace-perturbation/<accepted-target-id>`), confirm the
-canonical `tauceti-target` id, and confirm the observed `origin/main` head is
-still `92c79e5e0a618f8c5c2b9909be1ce50f6891dde7` (re-fetch; if it moved, rebase
-the branch onto the new head first).
+Do not push or open a PR without explicit instruction. Re-read the current
+`external/TauCeti/COORDINATION.md`, fetch `origin/main`, record its exact head,
+create a fresh branch from that head, and use the coordination-prescribed
+force-with-lease form. Do not reuse the July 24 observed base SHA as an expected
+current value.
