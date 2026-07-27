@@ -10,6 +10,10 @@ Two advertising-level leaves of the completed generic theory:
 -/
 
 import ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm
+-- `SpectraSeparated` is the *hypothesis* predicate of the challenge, not part of what is to
+-- be proved; the challenged theorems live in `DavisKahan.FiniteDimensional.Sylvester.All`,
+-- which only the paired leaderboard imports.
+import DavisKahan.FiniteDimensional.Core.SpectralGap
 
 /-!
 ## Comparator maintenance rule
