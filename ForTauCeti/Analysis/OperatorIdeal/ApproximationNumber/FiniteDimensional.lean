@@ -5,7 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 module
 
-public import Mathlib.Analysis.InnerProductSpace.SingularValues
+public import ForTauCeti.Analysis.InnerProductSpace.SingularValues
 public import Mathlib.Analysis.InnerProductSpace.Projection.Basic
 public import Mathlib.LinearAlgebra.Basis.Basic
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Basic
@@ -92,7 +92,8 @@ of `T`. -/
 theorem singularValues_le_norm_sub_of_rank_le
     (T R : E →L[𝕜] F) (n : ℕ)
     (hR : R.rank ≤ (n : Cardinal)) :
-    T.toLinearMap.singularValues n ≤ ‖T - R‖ := by
+    T.singularValues n ≤ ‖T - R‖ := by
+  rw [← toLinearMap_singularValues]
   by_cases hn : finrank 𝕜 E ≤ n
   · rw [T.toLinearMap.singularValues_of_finrank_le hn]
     exact norm_nonneg _
@@ -156,9 +157,9 @@ approximation number. This is the lower half of the finite-dimensional
 Eckart--Young identification. -/
 theorem singularValues_le_approximationNumber
     (T : E →L[𝕜] F) (n : ℕ) :
-    T.toLinearMap.singularValues n ≤
+    T.singularValues n ≤
       T.approximationNumber n := by
-  apply T.le_approximationNumber
+  refine T.le_approximationNumber_iff.mpr ?_
   intro R hR
   exact_mod_cast singularValues_le_norm_sub_of_rank_le T R n hR
 
@@ -168,13 +169,14 @@ by the `n`th singular value. -/
 theorem approximationNumber_le_singularValues
     (T : E →L[𝕜] F) (n : ℕ) :
     T.approximationNumber n ≤
-      T.toLinearMap.singularValues n := by
+      T.singularValues n := by
+  rw [← toLinearMap_singularValues]
   classical
   by_cases hn : finrank 𝕜 E ≤ n
   · -- The rank of `T` lives in the codomain universe and `Module.rank 𝕜 E` in
     -- the domain universe, so compare them through `Cardinal.lift`.
     have hTrank : T.rank ≤ (n : Cardinal) := by
-      refine Cardinal.le_natCast_of_lift_le
+      refine Cardinal.lift_le_natCast.mp
         ((lift_rank_range_le T.toLinearMap).trans ?_)
       calc
         Cardinal.lift.{w} (Module.rank 𝕜 E)
@@ -183,7 +185,7 @@ theorem approximationNumber_le_singularValues
         _ = ((finrank 𝕜 E : ℕ) : Cardinal) := Cardinal.lift_natCast _
         _ ≤ (n : Cardinal) := by exact_mod_cast hn
     have hle : T.approximationNumber n ≤ 0 := by
-      simpa using T.approximationNumber_le (R := T) hTrank
+      simpa using T.approximationNumber_le_norm_sub (R := T) hTrank
     exact hle.trans (T.toLinearMap.singularValues_nonneg n)
   · have hnlt : n < finrank 𝕜 E := Nat.lt_of_not_ge hn
     let A : E →ₗ[𝕜] F := T.toLinearMap
@@ -262,7 +264,7 @@ theorem approximationNumber_le_singularValues
       simpa [A] using htailOpNorm
     have happrox :
         T.approximationNumber n ≤ ‖T ∘L Wᗮ.starProjection‖ := by
-      simpa only [herr] using T.approximationNumber_le hRrank
+      simpa only [herr] using T.approximationNumber_le_norm_sub hRrank
     exact happrox.trans htailOpNorm'
 
 /-- Finite-dimensional Eckart--Young identification for the zero-based
@@ -270,7 +272,7 @@ approximation-number convention used in this project. -/
 theorem approximationNumber_eq_singularValues
     (T : E →L[𝕜] F) (n : ℕ) :
     T.approximationNumber n =
-      T.toLinearMap.singularValues n := by
+      T.singularValues n := by
   apply le_antisymm
   · exact approximationNumber_le_singularValues T n
   · exact singularValues_le_approximationNumber T n

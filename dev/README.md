@@ -179,3 +179,25 @@ Validate with:
 python3 scripts/render_davis_kahan_1970_source_census.py --check
 python3 scripts/check_davis_kahan_1970_source_census.py
 ```
+
+## Declaration-name drift
+
+Two places in this repository assert declaration names as **data**, where no
+compiler checks them: the `theorem_names` lists in `comparator/*.json`, and the
+`#print axioms` lines in `Challenge/**/Leaderboard.lean` (`Challenge` is not in
+`defaultTargets`, so `lake build` does not compile it). A rename that is green
+across the whole default build can therefore still leave the conformance gate
+pointing at nothing — which is exactly what happened after the Wave-1
+CourantFischer dedup, and again after the §9.2 sorted-eigenvalue rename.
+
+Run after any rename or namespace move:
+
+```bash
+python3 scripts/check_declaration_name_drift.py            # fast, build-free
+python3 scripts/check_declaration_name_drift.py --verbose  # plus informational notes
+```
+
+It resolves names by parsing the sources, not by asking Lean, so it is fast and
+works on a tree that does not compile — but for the same reason a pass is a
+tripwire, not a proof. `scripts/check_comparator_signatures.py` (which does
+invoke Lean) remains ground truth.

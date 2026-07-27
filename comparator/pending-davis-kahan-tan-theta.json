@@ -2,7 +2,7 @@
   "challenge_module": "Challenge.MathlibPending.DavisKahanTanTheta.Conformance",
   "solution_module": "Challenge.MathlibPending.DavisKahanTanTheta.Leaderboard",
   "theorem_names": [
-    "ForMathlib.DavisKahanTheory.partIII_tanTheta_vector"
+    "TauCeti.DavisKahanTheory.partIII_tanTheta_vector"
   ],
   "permitted_axioms": [
     "propext",
