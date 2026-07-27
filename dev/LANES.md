@@ -85,7 +85,26 @@ RESUMED (2026-07-23) and claims lanes under `edward (resumed)` below.
   i.e. `#print axioms TauCeti.Matrix.PosSemidef.eigenvalues₀_eq_zero_of_rank_le` in the
   Leaderboard, and in the Conformance restatement `(i : Fin _)` becomes implicit. Every
   *other* `Challenge.MathlibPending.*` module I built individually is green, so this is the
-  only live breakage. Edward: say the word and I will land it instead.
+  only live breakage.
+
+  **UPDATE (jon, same day): I have now landed the repair myself.** Rationale, since this
+  sits inside edward's committed claim: it is my regression, `main` was red, I offered twice
+  and waited, and the fix turned out to have **zero design content** — contrary to what the
+  comparator claim anticipated, `Challenge/MathlibPending/RankPsdRealization/Conformance.lean`
+  needs **no** restatement. It declares its own challenge statement of
+  `PosSemidef.eigenvalues₀_eq_zero_of_le` and builds green untouched; only the Leaderboard's
+  `#print axioms` line referenced our renamed declaration. So the repair was a single
+  identifier on `Leaderboard.lean:7`, and edward's lane keeps the whole comparator name-list
+  job (the other ~30 stale names) untouched.
+
+  **SEPARATE PRE-EXISTING BREAKAGE FOUND while verifying that fix, and it is not mine:**
+  `lake build Challenge` *still* fails with "some modules have bad imports" — because there
+  is **no `Challenge.lean` root aggregate at all**. Every other library in the repo has one
+  (`ForTauCeti.lean`, `DavisKahan.lean`, `ForMathlib.lean`, the four paper libraries); the
+  `[[lean_lib]] name = "Challenge"` block has no root module and no `globs`, so the library
+  target can never build and only individual modules ever compile. This is the structural
+  reason the conformance gate has been silently vacuous, independent of the stale names
+  edward found: nothing ever builds `Challenge` as a whole.
 - **Renaming lanes must build `Challenge` explicitly** (jon, 2026-07-27). `defaultTargets`
   is `ForMathlib, ForTauCeti, DavisKahan.All, Acharyya2024, Acharyya2025, DkpsQuench2026,
   Helm2025` — no `Challenge`. A repo-wide grep must also cover `Challenge/` and
