@@ -30,9 +30,17 @@ This is the standard device for showing measurability of events of the form
 "some alignment/transformation in a compact group achieves error ≤ c" without
 selecting the optimal transformation measurably.
 
-## Main result
+The infimum over such an `S` is therefore measurable too
+(`TauCeti.measurable_iInf_of_isCompact`), which is the canonical object here: Mathlib's
+`measurable_iInf` needs a *countable* index, and continuity in the parameter is exactly what
+replaces countability. The sublevel-set form is the one consumers use, so it stays primitive
+and the infimum statement is derived from it.
+
+## Main results
 
 * `TauCeti.measurableSet_exists_mem_le`
+* `TauCeti.exists_mem_le_iff_iInf_le` — the two agree, by attainment on a compact set
+* `TauCeti.measurable_iInf_of_isCompact`
 
 ## Provenance
 
@@ -133,5 +141,55 @@ theorem measurableSet_exists_mem_le
   exact MeasurableSet.iInter fun k =>
     MeasurableSet.biUnion hDc fun y hy =>
       measurableSet_lt (hFm y (hDS hy)) measurable_const
+
+section Infimum
+
+variable {Y : Type*} [PseudoMetricSpace Y] {Ω : Type*} [MeasurableSpace Ω]
+  {S : Set Y} {F : Y → Ω → ℝ}
+
+omit [MeasurableSpace Ω] in
+/-- On a nonempty compact parameter set the infimum is attained, so the compactly-quantified
+existential of `measurableSet_exists_mem_le` is exactly a sublevel set of the pointwise
+infimum.
+
+Compactness is what makes this an equality rather than one inclusion: `≤ c` for the
+infimum only yields values arbitrarily close to `c` without attainment.
+
+No measurability enters here; this is the order-theoretic half of
+`measurable_iInf_of_isCompact`. -/
+theorem exists_mem_le_iff_iInf_le (hS : IsCompact S) (hSne : S.Nonempty)
+    (hFc : ∀ ω, ContinuousOn (fun y => F y ω) S) (c : ℝ) (ω : Ω) :
+    (∃ y ∈ S, F y ω ≤ c) ↔ ⨅ y : S, F y ω ≤ c := by
+  have hne : Nonempty ↥S := hSne.to_subtype
+  have hrange : (Set.range fun y : ↥S => F y ω) = (fun y => F y ω) '' S :=
+    (Set.image_eq_range (fun y => F y ω) S).symm
+  have hbdd : BddBelow (Set.range fun y : ↥S => F y ω) := by
+    rw [hrange]; exact hS.bddBelow_image (hFc ω)
+  constructor
+  · rintro ⟨y₀, hy₀S, hy₀⟩
+    exact (ciInf_le hbdd (⟨y₀, hy₀S⟩ : ↥S)).trans hy₀
+  · intro h
+    obtain ⟨y, hyS, hy⟩ := hS.exists_isMinOn hSne (hFc ω)
+    refine ⟨y, hyS, le_trans (le_of_eq ?_) h⟩
+    exact le_antisymm (le_ciInf fun z => hy z.2) (ciInf_le hbdd (⟨y, hyS⟩ : ↥S))
+
+/-- **The pointwise infimum over a compact parameter set is measurable.**
+
+This is the canonical measurable object behind `measurableSet_exists_mem_le`: `Mathlib`'s
+`measurable_iInf` needs a countable index, whereas here the index is an uncountable compact
+set and continuity in the parameter is what replaces countability. -/
+theorem measurable_iInf_of_isCompact (hS : IsCompact S) (hSne : S.Nonempty)
+    (hFc : ∀ ω, ContinuousOn (fun y => F y ω) S)
+    (hFm : ∀ y ∈ S, Measurable (F y)) :
+    Measurable fun ω => ⨅ y : S, F y ω :=
+  measurable_of_Iic fun c => by
+    have h : (fun ω => ⨅ y : S, F y ω) ⁻¹' Set.Iic c = {ω | ∃ y ∈ S, F y ω ≤ c} := by
+      ext ω
+      simpa only [Set.mem_preimage, Set.mem_Iic, Set.mem_setOf_eq] using
+        (exists_mem_le_iff_iInf_le hS hSne hFc c ω).symm
+    rw [h]
+    exact measurableSet_exists_mem_le hS hFc hFm c
+
+end Infimum
 
 end TauCeti
