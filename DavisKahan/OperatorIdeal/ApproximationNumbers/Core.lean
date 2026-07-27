@@ -157,7 +157,8 @@ theorem approximationSingularValue_eq_singularValues
       A.singularValues n := by
   have hNN : A.toContinuousLinearMap.approximationNumber n =
       A.singularValues n := by
-    simpa only [LinearMap.coe_toContinuousLinearMap] using
+    simpa only [← ContinuousLinearMap.toLinearMap_singularValues,
+      LinearMap.coe_toContinuousLinearMap] using
       (ContinuousLinearMap.approximationNumber_eq_singularValues
         A.toContinuousLinearMap n)
   change (A.toContinuousLinearMap.approximationNumber n : ℝ) =

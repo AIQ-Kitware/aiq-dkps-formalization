@@ -722,7 +722,36 @@ theorem approximationNumber_adjoint (T : E →L[𝕜] F) (n : ℕ) : T.adjoint.a
 | **Primary review risks** | Plural singularValues naming, raw NNReal constructor in conclusions, possible duplicate truncation API. |
 | **Likely PR slice** | PR A2 after adjoint. |
 
-#### P0  singularValues_le_norm_sub_of_rank_le
+#### P0  ~~singularValues_le_norm_sub_of_rank_le~~ — RESOLVED 2026-07-27
+
+**Disposition: restated over a new `ContinuousLinearMap`-level accessor.**  All
+three §5.3 P0s shared one root cause — every public statement said
+`T.toLinearMap.singularValues n`, leaking the `ContinuousLinearMap → LinearMap`
+coercion into the statement and into every downstream proof — so they are fixed
+together by the new module
+`ForTauCeti/Analysis/InnerProductSpace/SingularValues.lean`:
+`ContinuousLinearMap.singularValues T := T.toLinearMap.singularValues`, with the
+`@[simp]` bridge `toLinearMap_singularValues` (oriented so `simp` *removes* the
+coercion) and one-line delegations for the facts the operator layer uses.  The
+four statements `singularValues_le_norm_sub_of_rank_le`,
+`singularValues_le_approximationNumber`, `approximationNumber_le_singularValues`
+and the headline `approximationNumber_eq_singularValues` are now stated over it;
+the proofs convert back with a single `rw [← toLinearMap_singularValues]` where
+they need Mathlib's `LinearMap`-level lemmas, so nothing is duplicated.
+
+**Deviation from the review sketch, deliberate:** the sketch asks for a
+*singular* `singularValue` "unless the existing Mathlib function is irrevocably
+plural".  It is — Mathlib's object is the whole `Finsupp` sequence `ℕ →₀ ℝ`, and
+`T.singularValues n` is application to it — so the accessor stays plural.  A
+singular accessor would have to be a second definition wrapping the first, i.e.
+exactly the duplication the module exists to remove.
+
+**Stale half of the sketch:** the `⟨value, proof⟩ : NNReal` constructor noise it
+flags in `singularValues_le_approximationNumber` no longer exists; the codomain
+decision (§5.1 decision 2) made the whole API real-valued, so that statement had
+already lost its constructor.
+
+*Original disposition:*
 
 **Disposition: API bridge**
 
@@ -746,7 +775,9 @@ theorem singularValue_le_norm_sub_of_rank_le
 
 **Likely adversarial review:** The current signature leaks conversion to LinearMap and a plural function name into every consumer.
 
-#### P0  singularValues_le_approximationNumber
+#### P0  ~~singularValues_le_approximationNumber~~ — RESOLVED 2026-07-27 (see above)
+
+*Original disposition:*
 
 **Disposition: Redesign codomain bridge**
 
@@ -794,7 +825,9 @@ theorem approximationNumber_le_singularValue
 
 **Likely adversarial review:** The API reviewer may ask why both inequalities are public if equality is the real product.
 
-#### P0  approximationNumber_eq_singularValues
+#### P0  ~~approximationNumber_eq_singularValues~~ — RESOLVED 2026-07-27 (statement now `T.approximationNumber n = T.singularValues n`, no coercion; see above)
+
+*Original disposition:*
 
 **Disposition: Headline API**
 
