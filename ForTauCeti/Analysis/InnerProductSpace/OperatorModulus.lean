@@ -40,6 +40,7 @@ expected to follow by complexification transfer.
   (`‖|T|‖ = ‖T‖`) and the one-sided composition laws
   `ContinuousLinearMap.norm_modulus_comp` (`‖|T| ∘L D‖ = ‖T ∘L D‖`) and
   `ContinuousLinearMap.norm_comp_modulus` (`‖D ∘L |T|‖ = ‖D ∘L T⋆‖`) follow;
+* `ContinuousLinearMap.modulus_apply_eq_zero_iff`: `|T| x = 0 ↔ T x = 0`;
 * `ContinuousLinearMap.modulus_commute_modulus`: moduli of operators with
   commuting Gram operators commute.
 
@@ -127,6 +128,15 @@ theorem norm_modulus_apply (T : E →L[ℂ] F) (x : E) : ‖T.modulus x‖ = ‖
     exact_mod_cast hinner
   have hsqrt := congrArg Real.sqrt hsq
   rwa [Real.sqrt_sq (norm_nonneg _), Real.sqrt_sq (norm_nonneg _)] at hsqrt
+
+/-- The modulus vanishes exactly where the operator does.
+
+Immediate from `norm_modulus_apply`, but worth its own name: it is how the
+directed angle operators are shown to vanish off the source subspace. -/
+@[simp]
+theorem modulus_apply_eq_zero_iff (T : E →L[ℂ] F) (x : E) :
+    T.modulus x = 0 ↔ T x = 0 := by
+  rw [← norm_eq_zero, ← norm_eq_zero (a := T x), norm_modulus_apply]
 
 omit [CompleteSpace E] [CompleteSpace F] [CompleteSpace G] in
 /-- Two operators out of the same space with pointwise equal norms have equal

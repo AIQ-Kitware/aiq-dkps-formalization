@@ -5,7 +5,6 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.UnitaryInvariantNorm
 import ForTauCeti.Analysis.InnerProductSpace.OperatorModulus
-import ForTauCeti.Analysis.InnerProductSpace.OperatorAbsoluteValue
 
 /-!
 # Approximation singular values of the rectangular operator modulus
@@ -82,30 +81,30 @@ theorem sameApproximationSingularValues_rectangularOperatorModulus
     (ContinuousLinearMap.norm_modulus_apply T)
 
 /-- Square-operator specialization. -/
-theorem operatorAbs_sameApproximationSingularValues
+theorem modulus_sameApproximationSingularValues
     (T : E →L[ℂ] E) :
-    SameApproximationSingularValues (TauCeti.operatorAbs T) T :=
+    SameApproximationSingularValues (ContinuousLinearMap.modulus T) T :=
   sameApproximationSingularValues_of_norm_apply_eq _ _
-    (TauCeti.norm_operatorAbs_apply T)
+    (ContinuousLinearMap.norm_modulus_apply T)
 
 /-- Every current ideal family assigns the same membership and gauge to `T`
 and its positive modulus. -/
-theorem operatorAbs_mem_and_gauge_eq
+theorem modulus_mem_and_gauge_eq
     (N : UnitaryInvariantIdealFamily (𝕜 := ℂ))
     {T : E →L[ℂ] E}
     (hT : N.toRectangularSymmetricIdealFamily.Mem T) :
-    N.toRectangularSymmetricIdealFamily.Mem (TauCeti.operatorAbs T) ∧
-      N.toRectangularSymmetricIdealFamily.gauge (TauCeti.operatorAbs T) =
+    N.toRectangularSymmetricIdealFamily.Mem (ContinuousLinearMap.modulus T) ∧
+      N.toRectangularSymmetricIdealFamily.gauge (ContinuousLinearMap.modulus T) =
         N.toRectangularSymmetricIdealFamily.gauge T :=
-  (operatorAbs_sameApproximationSingularValues T).mem_and_gauge_eq N hT
+  (modulus_sameApproximationSingularValues T).mem_and_gauge_eq N hT
 
 /-- Every literal paper norm assigns exactly the same extended value to an
 operator and its positive modulus. -/
-theorem paperNorm_operatorAbs_eq
+theorem paperNorm_modulus_eq
     (N : PaperUnitaryInvariantNorm) (T : E →L[ℂ] E) :
-    N.extendedGauge (TauCeti.operatorAbs T) = N.extendedGauge T :=
+    N.extendedGauge (ContinuousLinearMap.modulus T) = N.extendedGauge T :=
   N.gauge_eq_of_sameApproximationSingularValues
-    (operatorAbs_sameApproximationSingularValues T)
+    (modulus_sameApproximationSingularValues T)
 
 end
 

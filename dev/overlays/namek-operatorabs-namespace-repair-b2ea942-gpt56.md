@@ -8,7 +8,7 @@ This overlay repairs the scratch-local theorem namespaces in
 The two helpers were declared as:
 
 - `DavisKahanExt.SymmetricNormIdeal.operatorAbs_mem_iff_and_gauge_eq`
-- `DavisKahanExt.SymmetricNormIdeal.operatorAbs_mem_and_gauge_eq`
+- `DavisKahanExt.SymmetricNormIdeal.modulus_mem_and_gauge_eq`
 
 inside the already nested scratch namespace. Lean therefore placed them under a
 nested scratch `DavisKahanExt` namespace rather than the local

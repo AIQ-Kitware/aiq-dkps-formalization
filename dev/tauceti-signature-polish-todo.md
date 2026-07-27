@@ -1285,9 +1285,14 @@ Beyond deduplication the following backlog concerns were answered:
 - `rectangularGram_nonneg` became `adjoint_comp_self_nonneg`, documented as the
   `0 ≤ ·` form of Mathlib's `isPositive_adjoint_comp_self`.
 
-`operatorAbs` survives only as a reducible alias in a documented transitional
+~~`operatorAbs` survives only as a reducible alias in a documented transitional
 shim (`OperatorAbsoluteValue.lean`, not upstream-bound) so the ~80 Davis--Kahan
-references keep compiling; delete per declaration as consumers migrate.
+references keep compiling; delete per declaration as consumers migrate.~~
+**Done 2026-07-27 (§13):** the shim is deleted and every consumer is on
+`ContinuousLinearMap.modulus`. The migration was all-at-once rather than "per
+declaration as consumers migrate" — with the canonical API complete, a
+per-declaration retirement would have meant keeping the file alive for a single
+name at a time, which is precisely the long-lived-alias state §13 warns about.
 
 Still open, deliberately: whether the canonical name should be `modulus`,
 `abs`, or `operatorAbs` is a naming call for the roadmap — Mathlib has no
@@ -1868,7 +1873,7 @@ carry a transitional adapter whose deletion condition is stated.*
 
 | **Cluster** | **Current state** | **Signature risk** | **Upstream action** | **Priority** |
 | --- | --- | --- | --- | --- |
-| ~~operatorAbs~~ | **Canonical API landed (§7).** `ContinuousLinearMap.modulus` is the one rectangular modulus; `operatorAbs` survives only as a `reducible abbrev` in a documented not-for-upstream shim | Adapter is live, so the duplicate name is still importable | Delete the alias once its consumers move to `.modulus`; do not submit the alias | ~~P0~~ adapter-retirement |
+| ~~operatorAbs~~ | **RETIRED 2026-07-27.** `ContinuousLinearMap.modulus` is the one modulus; the `OperatorAbsoluteValue.lean` shim is **deleted** and the word `operatorAbs` no longer appears in any declaration name in the repository | none — the duplicate name is gone | done — there was never anything here to submit | ~~P0~~ ~~adapter-retirement~~ **done** |
 | ClosedOperator | **ACTIVE / CLAIMED 2026-07-27.** Canonical representation fixed to `LinearPMap` + properties | Two competing closed-operator representations in production | Execute U1: build canonical core, adapter, consumer migration, then delete/demote bundle — see §12.2 | P0 |
 | Spectra SelfAdjointOperator | **Open.** Still consumed across `DavisKahan/Sources/**` and `DavisKahan/Alternative/**` | Potential donor wrapper competing with the Tau Ceti representation | Port useful lemmas; choose canonical Tau Ceti representation | P1 |
 | ~~specSubspace~~ | **Renamed (§6).** Canonical is `OrthonormalBasis.spanIndices` in `ForTauCeti/Analysis/InnerProductSpace/BasisSpan.lean`, generalized off `Fin`/predicates; `specSubspace` remains only inside `CourantFischerCompat.lean` | Compat shim is importable | Delete with the shim once the historical Courant–Fischer signatures are retired | ~~P0~~ adapter-retirement |
@@ -1885,11 +1890,26 @@ carry a transitional adapter whose deletion condition is stated.*
 
 - Avoid long-lived aliases before upstream review; they obscure which API reviewers are evaluating.
 
-> **Three adapters are now live at once** — `operatorAbs`, `CourantFischerCompat`, and
-> `SymmetricOperatorIdealFamily.toRectangular` — which is exactly the "long-lived aliases
-> obscure which API reviewers are evaluating" risk this section warns about. Retiring them is
-> a distinct piece of work from the canonical-API lanes that created them, and it is not
-> currently claimed by anyone.
+> **~~Three adapters are now live at once~~ — down to two, 2026-07-27.** `operatorAbs` is
+> retired: its shim file is deleted and its call sites repointed to
+> `ContinuousLinearMap.modulus`. `CourantFischerCompat` and
+> `SymmetricOperatorIdealFamily.toRectangular` remain live and unclaimed, and both are
+> larger than `operatorAbs` was — `CourantFischerCompat` is referenced from 12 modules across
+> four libraries including a `Challenge` leaderboard, and the `toRectangular` row's own note
+> says the legacy structure still has 68 consumers.
+>
+> **What the `operatorAbs` retirement showed, worth knowing before taking the other two.**
+> Repointing names was the easy half. Two things were not mechanical: (1) the shim had
+> accreted a *new* declaration that was never part of the canonical API
+> (`operatorAbs_apply_eq_zero_iff`, declared into the shim's namespace from a paper-side
+> module, `DavisKahan/Geometry/Angle/OperatorAngleComplex.lean`), so retiring an adapter means
+> auditing what has been *added* to it, not only what it restates — that lemma is now
+> `ContinuousLinearMap.modulus_apply_eq_zero_iff` in the canonical module and generalized off
+> endomorphisms; and (2) the shim had quietly *weakened* the canonical statements to whatever
+> was convenient at the call site — `star`/`*` where the canonical API says `adjoint`/`∘L`.
+> Those agree on an endomorphism algebra but not up to `rw`, so call sites written against the
+> convenient form do not typecheck against the canonical one until their local facts are
+> restated. Budget for both.
 
 > **~~Gate gap found while reconciling this table (§10 lane).~~ CLOSED 2026-07-27 —
 > `scripts/check_declaration_name_drift.py`.** The last bullet above asks for "a grep gate for
@@ -1984,7 +2004,11 @@ carry a transitional adapter whose deletion condition is stated.*
 | abs_eigenvalues_sub_le_opNorm | abs_eigenvalue_sub_eigenvalue_le_norm | Sketch; verify adjacent Mathlib naming |
 | eigenvalues_le_eigenvalues_of_re_inner_le | eigenvalue_mono | Sketch; verify adjacent Mathlib naming |
 | rectangularOperatorModulus | ContinuousLinearMap.modulus | Sketch; verify adjacent Mathlib naming |
-| operatorAbs | delete; square specialization of modulus | Sketch; verify adjacent Mathlib naming |
+| operatorAbs | **deleted** — square specialization of `ContinuousLinearMap.modulus` | **Done 2026-07-27** (§13); shim file removed, call sites repointed, no alias kept |
+| operatorAbs_sameApproximationSingularValues | **modulus_sameApproximationSingularValues** | **Done 2026-07-27** (§13); the DKPS-side wrappers that still carried the retired word |
+| operatorAbs_mem_and_gauge_eq | **modulus_mem_and_gauge_eq** | **Done 2026-07-27** (§13) |
+| paperNorm_operatorAbs_eq | **paperNorm_modulus_eq** | **Done 2026-07-27** (§13) |
+| *(new)* | ContinuousLinearMap.modulus_apply_eq_zero_iff | **Added 2026-07-27** (§13) — had been declared from a paper-side module into the shim's namespace; moved to the canonical module and generalized off endomorphisms |
 | finiteMean | *(no rename)* | **KEPT 2026-07-27** (§8.1) — not a duplicate: `Finset.expect` needs `Module ℚ≥0 E`, which does not synthesize here; `Finset.centroid` is affine with `Classical.arbitrary` empty-family junk |
 | centeredScatter | *(name kept)* | **RETYPED 2026-07-27** (§8.1) to `E →L[𝕜] E`; `scatterOperator` was rejected because it states the normalization no better |
 | appendFin | `Fin.snoc` | **DELETED 2026-07-27** (§8.1) — it was exactly `Fin.snoc`; note the two are *not* `rfl`-equal, `snoc` transports along `cast` |

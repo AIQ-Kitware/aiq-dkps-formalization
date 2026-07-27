@@ -161,7 +161,7 @@ theorem paperDirectedSin_same_crossProjection
       (Vᗮ.starProjection ∘L U.starProjection) := by
   rw [paperDirectedSinAngleOperatorC_eq,
     TauCeti.DavisKahanExt.sinAngleOperatorDirectedC]
-  exact operatorAbs_sameApproximationSingularValues _
+  exact modulus_sameApproximationSingularValues _
 
 /-- The whole-space literal sine has exactly the singular values of the
 projector difference. -/
@@ -173,7 +173,7 @@ theorem paperSin_same_projectionDiff
       (U.starProjection - V.starProjection) := by
   rw [TauCeti.DavisKahanExt.paperSinAngleOperatorC_eq,
     TauCeti.DavisKahanExt.sinAngleOperatorC]
-  exact operatorAbs_sameApproximationSingularValues _
+  exact modulus_sameApproximationSingularValues _
 
 /-- Negation changes no approximation singular value. -/
 theorem sameApproximationSingularValues_neg (A : E →L[ℂ] E) :

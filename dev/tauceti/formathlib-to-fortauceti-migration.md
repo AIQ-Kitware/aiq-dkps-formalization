@@ -97,16 +97,38 @@ unified onto `ContinuousLinearMap.modulus`
 | `TauCeti.rectangularOperatorModulus_mul_self` | `ContinuousLinearMap.modulus_mul_self` |
 | `TauCeti.norm_rectangularOperatorModulus_apply` | `ContinuousLinearMap.norm_modulus_apply` (`simp`) |
 | `TauCeti.norm_rectangularOperatorModulus` | `ContinuousLinearMap.norm_modulus` (`simp`) |
-| `TauCeti.operatorAbs T` | `T.modulus` (square case; shim alias retained) |
+| `TauCeti.operatorAbs T` | `T.modulus` (square case) |
 | `TauCeti.operatorAbs_unique` | `ContinuousLinearMap.eq_modulus_of_nonneg_of_mul_self_eq` |
 | `TauCeti.operatorAbs_commute_operatorAbs` | `ContinuousLinearMap.modulus_commute_modulus` |
 | `TauCeti.norm_operatorAbs_mul` | `ContinuousLinearMap.norm_modulus_comp` (generalized to rectangular) |
 | `TauCeti.norm_mul_operatorAbs` | `ContinuousLinearMap.norm_comp_modulus` (generalized to rectangular) |
 | — (new) | `ContinuousLinearMap.adjoint_modulus`, `modulus_eq_sqrt_star_mul_self`, `modulus_mul_self_eq_star_mul_self` |
 
-Historical `operatorAbs` names remain available from the transitional
-`OperatorAbsoluteValue.lean` shim; the historical `rectangularOperatorModulus`
-names are **gone** (their consumers were repointed in the same commit).
+Both historical name families are now **gone**. The
+`rectangularOperatorModulus` names went with the unification; the `operatorAbs`
+names outlived it by a few days inside a transitional
+`OperatorAbsoluteValue.lean` shim, and that file was deleted on 2026-07-27 once
+its consumers were repointed (§13 adapter retirement). The three DKPS wrappers
+that carried the old word in their own names moved with it:
+`operatorAbs_sameApproximationSingularValues` →
+`modulus_sameApproximationSingularValues`, `operatorAbs_mem_and_gauge_eq` →
+`modulus_mem_and_gauge_eq`, `paperNorm_operatorAbs_eq` → `paperNorm_modulus_eq`,
+all in `DavisKahan/OperatorIdeal/ApproximationNumbers/OperatorModulus.lean`.
+
+One lemma moved *into* the canonical module rather than being deleted:
+`ContinuousLinearMap.modulus_apply_eq_zero_iff` (`|T| x = 0 ↔ T x = 0`) had been
+declared from `DavisKahan/Geometry/Angle/OperatorAngleComplex.lean` directly into
+the shim's namespace. It is a general fact about the modulus, so it now lives in
+`ForTauCeti/Analysis/InnerProductSpace/OperatorModulus.lean`, stated for
+rectangular `T` rather than only for endomorphisms.
+
+**Gotcha for anyone repointing the remaining adapters:** the canonical modulus
+laws are stated with `ContinuousLinearMap.adjoint` and `∘L`, whereas the shim
+restated them with `star` and `*`. On an endomorphism algebra those agree, but
+only by unfolding, so `rw` will not see through it — a call site in the `*` form
+needs a `show … ∘L …` (or its local facts restated in the canonical form) before
+the rewrite matches. Two rewrites in `norm_sinTwoAngleOperatorC` needed exactly
+that.
 
 **CourantFischer name map (2026-07-24).** The ForTauCeti copy carries the FINAL
 redesigned API (polish backlog §6 executed; basis-span scaffolding generalized
