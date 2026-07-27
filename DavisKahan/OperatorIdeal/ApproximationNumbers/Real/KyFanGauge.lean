@@ -56,16 +56,16 @@ theorem approximationSingularValue_comp_strongProjection_tendsto_real
       approximationSingularValue n (K ∘L P i) ≤
         approximationSingularValue n K := by
     intro i
-    have hnormNN : ‖P i‖₊ ≤ (1 : NNReal) := by
+    have hnormNN : ‖P i‖ ≤ (1 : ℝ) := by
       exact_mod_cast (hPproj i).norm_le_one
     have hNN : (K ∘L P i).approximationNumber n ≤
         K.approximationNumber n := by
       calc
         (K ∘L P i).approximationNumber n
-            ≤ K.approximationNumber n * ‖P i‖₊ :=
+            ≤ K.approximationNumber n * ‖P i‖ :=
           K.approximationNumber_comp_right_le (P i) n
         _ ≤ K.approximationNumber n * 1 :=
-          mul_le_mul_of_nonneg_left hnormNN bot_le
+          mul_le_mul_of_nonneg_left hnormNN (K.approximationNumber_nonneg n)
         _ = K.approximationNumber n := by rw [mul_one]
     exact_mod_cast hNN
   have hLower : ∀ r : ℝ,
@@ -101,7 +101,7 @@ theorem approximationSingularValue_comp_strongProjection_tendsto_real
       have hsmall : ∀ᶠ i in l, ‖D i‖ < s - c :=
         hDnorm.eventually (Iio_mem_nhds (sub_pos.mpr hcs))
       filter_upwards [hsmall] with i hi
-      have hcNN : (⟨c, hc0⟩ : NNReal) ≤
+      have hcNN : c ≤
           (K ∘L P i).approximationNumber n := by
         apply ContinuousLinearMap.lowerBound_le_approximationNumber_of_linearIndependent
           (K ∘L P i) n v hv
@@ -120,11 +120,9 @@ theorem approximationSingularValue_comp_strongProjection_tendsto_real
         have hsx : s ≤ ‖K x‖ := by
           have := hV x hxV
           simpa only [hxNorm, mul_one] using this
-        apply NNReal.coe_le_coe.mpr
         change c ≤ ‖K (P i x)‖
         linarith
-      have hcReal : c ≤ approximationSingularValue n (K ∘L P i) := by
-        exact_mod_cast hcNN
+      have hcReal : c ≤ approximationSingularValue n (K ∘L P i) := hcNN
       exact hrc.trans_le hcReal
     · have hrneg : r < 0 := lt_of_not_ge hr0
       filter_upwards [] with i
@@ -168,7 +166,7 @@ theorem approximationSingularValue_restrict_mono_real
     (Submodule.inclusion hUV).mkContinuous 1 (fun x => by
       change ‖((x : U) : E)‖ ≤ 1 * ‖x‖
       simp)
-  have hJnorm : ‖J‖₊ ≤ (1 : NNReal) := by
+  have hJnorm : ‖J‖ ≤ (1 : ℝ) := by
     exact_mod_cast (J.opNorm_le_bound zero_le_one fun x => by
       change ‖((x : U) : E)‖ ≤ 1 * ‖x‖
       simp)
@@ -180,10 +178,10 @@ theorem approximationSingularValue_restrict_mono_real
     rw [hcomp]
     calc
       ((T ∘L V.subtypeL) ∘L J).approximationNumber n
-          ≤ (T ∘L V.subtypeL).approximationNumber n * ‖J‖₊ :=
+          ≤ (T ∘L V.subtypeL).approximationNumber n * ‖J‖ :=
         (T ∘L V.subtypeL).approximationNumber_comp_right_le J n
       _ ≤ (T ∘L V.subtypeL).approximationNumber n * 1 :=
-        mul_le_mul_of_nonneg_left hJnorm bot_le
+        mul_le_mul_of_nonneg_left hJnorm (ContinuousLinearMap.approximationNumber_nonneg _ _)
       _ = (T ∘L V.subtypeL).approximationNumber n := by rw [mul_one]
   change ((T ∘L U.subtypeL).approximationNumber n : ℝ) ≤
     ((T ∘L V.subtypeL).approximationNumber n : ℝ)
@@ -204,30 +202,30 @@ theorem approximationSingularValue_orthogonalProjectionOnto_comp_eq_real
     ext x
     change W.starProjection (A x) = A x
     exact W.starProjection_eq_self_iff.mpr (hA x)
-  have hproj : ‖W.orthogonalProjectionOnto‖₊ ≤ (1 : NNReal) := by
+  have hproj : ‖W.orthogonalProjectionOnto‖ ≤ (1 : ℝ) := by
     exact_mod_cast W.orthogonalProjectionOnto_norm_le
-  have hsub : ‖W.subtypeL‖₊ ≤ (1 : NNReal) := by
+  have hsub : ‖W.subtypeL‖ ≤ (1 : ℝ) := by
     exact_mod_cast W.norm_subtypeL_le
   have hNN : AW.approximationNumber n = A.approximationNumber n := by
     apply le_antisymm
     · calc
         AW.approximationNumber n
-            ≤ ‖W.orthogonalProjectionOnto‖₊ * A.approximationNumber n :=
+            ≤ ‖W.orthogonalProjectionOnto‖ * A.approximationNumber n :=
           ContinuousLinearMap.approximationNumber_comp_left_le
             W.orthogonalProjectionOnto A n
         _ ≤ 1 * A.approximationNumber n :=
-          mul_le_mul_of_nonneg_right hproj bot_le
+          mul_le_mul_of_nonneg_right hproj (ContinuousLinearMap.approximationNumber_nonneg _ _)
         _ = A.approximationNumber n := by rw [one_mul]
     · rw [← hfactor]
       calc
         (W.subtypeL ∘L AW).approximationNumber n
-            ≤ ‖W.subtypeL‖₊ * AW.approximationNumber n :=
+            ≤ ‖W.subtypeL‖ * AW.approximationNumber n :=
           ContinuousLinearMap.approximationNumber_comp_left_le W.subtypeL AW n
         _ ≤ 1 * AW.approximationNumber n :=
-          mul_le_mul_of_nonneg_right hsub bot_le
+          mul_le_mul_of_nonneg_right hsub (ContinuousLinearMap.approximationNumber_nonneg _ _)
         _ = AW.approximationNumber n := by rw [one_mul]
   change (AW.approximationNumber n : ℝ) = (A.approximationNumber n : ℝ)
-  exact congrArg (fun x : NNReal => (x : ℝ)) hNN
+  exact hNN
 
 /-- Projecting the codomain onto a real subspace containing the range preserves
 all finite Ky Fan approximation gauges. -/
@@ -311,24 +309,25 @@ theorem kyFanApproximationGauge_add_le_finiteSource_real
 /-- Every positive tolerance admits a real finite-source restriction whose
 approximation number is within that tolerance of the ambient value. -/
 theorem exists_finiteRestrictionApproximationNumber_add_gt_real
-    (T : E →L[ℝ] F) (n : ℕ) (ε : NNReal) (hε : 0 < ε) :
+    (T : E →L[ℝ] F) (n : ℕ) (ε : ℝ) (hε : 0 < ε) :
     ∃ v : Fin (n + 1) → E,
       T.approximationNumber n <
         (T ∘L (Submodule.span ℝ (Set.range v)).subtypeL).approximationNumber n + ε := by
   by_cases hsmall : T.approximationNumber n < ε
   · refine ⟨fun _ => 0, hsmall.trans_le ?_⟩
-    exact le_add_of_nonneg_left bot_le
+    exact le_add_of_nonneg_left (ContinuousLinearMap.approximationNumber_nonneg _ _)
   · have hεle : ε ≤ T.approximationNumber n := le_of_not_gt hsmall
     have ha0 : 0 < T.approximationNumber n := hε.trans_le hεle
     have hsub : T.approximationNumber n - ε < T.approximationNumber n :=
-      tsub_lt_self ha0 hε
+      sub_lt_self _ hε
     obtain ⟨v, hv⟩ :=
-      exists_finiteRestrictionApproximationNumber_gt_of_lt_real T n hsub
+      exists_finiteRestrictionApproximationNumber_gt_of_lt_real T n
+        (sub_nonneg.mpr hεle) hsub
     refine ⟨v, ?_⟩
     calc
       T.approximationNumber n =
           (T.approximationNumber n - ε) + ε :=
-        (tsub_add_cancel_of_le hεle).symm
+        by ring
       _ < (T ∘L (Submodule.span ℝ (Set.range v)).subtypeL).approximationNumber n + ε :=
         add_lt_add_left hv ε
 

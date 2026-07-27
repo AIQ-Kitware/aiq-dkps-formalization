@@ -42,12 +42,10 @@ theorem approximationSingularValue_eq_zero_of_rank_le
     {A : E →L[𝕜] F} {n : ℕ}
     (hA : A.rank ≤ (n : Cardinal)) :
     approximationSingularValue n A = 0 := by
-  have h : A.approximationNumber n ≤ ‖A - A‖₊ :=
+  have h : A.approximationNumber n ≤ ‖A - A‖ :=
     A.approximationNumber_le (R := A) hA
-  rw [sub_self, nnnorm_zero] at h
-  have h0 : A.approximationNumber n = 0 := le_antisymm h bot_le
-  show (A.approximationNumber n : ℝ) = 0
-  rw [h0, NNReal.coe_zero]
+  rw [sub_self, norm_zero] at h
+  exact le_antisymm h (A.approximationNumber_nonneg n)
 
 /-- If `A` has rank at most `r`, every term after the first `r` terms of its
 approximation singular-value sequence vanishes. -/

@@ -25,7 +25,7 @@ infinite-dimensional min--max lower bounds live in sibling modules.
 ## Main declarations
 
 * `ContinuousLinearMap.approximationNumber`: the `n`th zero-based approximation
-  number, valued in `ℝ≥0`.
+  number, valued in `ℝ`.
 * `ContinuousLinearMap.approximationNumber_zero`: the first approximation number
   is the operator norm.
 * `ContinuousLinearMap.antitone_approximationNumber`: approximation numbers
@@ -64,8 +64,6 @@ choice, flagged for Tau Ceti maintainer review.
   did; it imports only Mathlib.
 -/
 
-open NNReal
-
 @[expose] public section
 
 noncomputable section
@@ -96,27 +94,35 @@ private instance approximationNumberIndexNonempty (n : ℕ) :
     Nonempty {R : E →L[𝕜] F // R.rank ≤ (n : Cardinal)} :=
   ⟨⟨0, by simp [LinearMap.rank_zero]⟩⟩
 
+/-- The defining family of approximation errors is bounded below by `0`.
+Scaffolding for the conditionally-complete-lattice infimum API on `ℝ`. -/
+private theorem bddBelow_norm_sub_range (T : E →L[𝕜] F) (n : ℕ) :
+    BddBelow (Set.range fun R : {R : E →L[𝕜] F // R.rank ≤ (n : Cardinal)} =>
+      ‖T - R.1‖) := by
+  refine ⟨0, ?_⟩
+  rintro _ ⟨R, rfl⟩
+  exact norm_nonneg _
+
 /-- Zero-based approximation number: distance in operator norm to maps of
 rank at most `n`. -/
-noncomputable def approximationNumber (T : E →L[𝕜] F) (n : ℕ) : ℝ≥0 :=
-  ⨅ R : {R : E →L[𝕜] F // R.rank ≤ (n : Cardinal)}, ‖T - R.1‖₊
+noncomputable def approximationNumber (T : E →L[𝕜] F) (n : ℕ) : ℝ :=
+  ⨅ R : {R : E →L[𝕜] F // R.rank ≤ (n : Cardinal)}, ‖T - R.1‖
 
 @[simp]
 theorem approximationNumber_def (T : E →L[𝕜] F) (n : ℕ) :
     T.approximationNumber n =
-      ⨅ R : {R : E →L[𝕜] F // R.rank ≤ (n : Cardinal)}, ‖T - R.1‖₊ :=
+      ⨅ R : {R : E →L[𝕜] F // R.rank ≤ (n : Cardinal)}, ‖T - R.1‖ :=
   rfl
 
 /-- Every admissible finite-rank approximation bounds the infimum. -/
 theorem approximationNumber_le (T : E →L[𝕜] F) {n : ℕ}
     {R : E →L[𝕜] F} (hR : R.rank ≤ (n : Cardinal)) :
-    T.approximationNumber n ≤ ‖T - R‖₊ :=
-  ciInf_le' (fun S : {S : E →L[𝕜] F // S.rank ≤ (n : Cardinal)} =>
-    ‖T - S.1‖₊) ⟨R, hR⟩
+    T.approximationNumber n ≤ ‖T - R‖ :=
+  ciInf_le (T.bddBelow_norm_sub_range n) ⟨R, hR⟩
 
 /-- Lower-bound introduction rule for approximation numbers. -/
-theorem le_approximationNumber (T : E →L[𝕜] F) {n : ℕ} (x : ℝ≥0)
-    (h : ∀ R : E →L[𝕜] F, R.rank ≤ (n : Cardinal) → x ≤ ‖T - R‖₊) :
+theorem le_approximationNumber (T : E →L[𝕜] F) {n : ℕ} (x : ℝ)
+    (h : ∀ R : E →L[𝕜] F, R.rank ≤ (n : Cardinal) → x ≤ ‖T - R‖) :
     x ≤ T.approximationNumber n := by
   apply le_ciInf
   rintro ⟨R, hR⟩
@@ -126,8 +132,8 @@ theorem le_approximationNumber (T : E →L[𝕜] F) {n : ℕ} (x : ℝ≥0)
 theorem approximationNumber_eq (T : E →L[𝕜] F) {n : ℕ}
     {R : E →L[𝕜] F} (hR : R.rank ≤ (n : Cardinal))
     (hbest : ∀ S : E →L[𝕜] F, S.rank ≤ (n : Cardinal) →
-      ‖T - R‖₊ ≤ ‖T - S‖₊) :
-    T.approximationNumber n = ‖T - R‖₊ := by
+      ‖T - R‖ ≤ ‖T - S‖) :
+    T.approximationNumber n = ‖T - R‖ := by
   apply le_antisymm
   · exact T.approximationNumber_le hR
   · exact T.le_approximationNumber _ hbest
@@ -135,8 +141,8 @@ theorem approximationNumber_eq (T : E →L[𝕜] F) {n : ℕ}
 /-- The first zero-based approximation number is the operator norm. -/
 @[simp]
 theorem approximationNumber_zero (T : E →L[𝕜] F) :
-    T.approximationNumber 0 = ‖T‖₊ := by
-  suffices h : T.approximationNumber 0 = ‖T - 0‖₊ by simpa using h
+    T.approximationNumber 0 = ‖T‖ := by
+  suffices h : T.approximationNumber 0 = ‖T - 0‖ by simpa using h
   apply T.approximationNumber_eq
   · simp [LinearMap.rank_zero]
   · intro R hR
@@ -156,12 +162,19 @@ theorem antitone_approximationNumber (T : E →L[𝕜] F) :
     (hR.trans (by exact_mod_cast hnm))
 
 /-- Every approximation number is bounded by the operator norm. -/
-theorem approximationNumber_le_nnnorm (T : E →L[𝕜] F) (n : ℕ) :
-    T.approximationNumber n ≤ ‖T‖₊ := by
+theorem approximationNumber_le_norm (T : E →L[𝕜] F) (n : ℕ) :
+    T.approximationNumber n ≤ ‖T‖ := by
   calc
     T.approximationNumber n ≤ T.approximationNumber 0 :=
       T.antitone_approximationNumber (Nat.zero_le n)
-    _ = ‖T‖₊ := T.approximationNumber_zero
+    _ = ‖T‖ := T.approximationNumber_zero
+
+/-- Approximation numbers are nonnegative.  (With the real-valued codomain
+this is a theorem rather than a triviality; it is the price of matching the
+Mathlib convention for norm-like quantities.) -/
+theorem approximationNumber_nonneg (T : E →L[𝕜] F) (n : ℕ) :
+    0 ≤ T.approximationNumber n :=
+  le_ciInf fun _ => norm_nonneg _
 
 /-- The zero operator has every approximation number equal to zero. -/
 @[simp]
@@ -171,18 +184,14 @@ theorem zero_approximationNumber (n : ℕ) :
   · simpa using
       (approximationNumber_le (0 : E →L[𝕜] F) (n := n) (R := 0)
         (by simp [LinearMap.rank_zero]))
-  · exact bot_le
-
-/-- Approximation numbers are nonnegative. -/
-theorem approximationNumber_nonneg (T : E →L[𝕜] F) (n : ℕ) :
-    0 ≤ T.approximationNumber n := bot_le
+  · exact approximationNumber_nonneg _ n
 
 /-- Near-minimizers exist for the defining infimum. -/
 theorem lt_approximationNumber_add_pos (T : E →L[𝕜] F)
-    (n : ℕ) {ε : ℝ≥0} (hε : 0 < ε) :
+    (n : ℕ) {ε : ℝ} (hε : 0 < ε) :
     ∃ R : E →L[𝕜] F,
       R.rank ≤ (n : Cardinal) ∧
-        ‖T - R‖₊ < T.approximationNumber n + ε := by
+        ‖T - R‖ < T.approximationNumber n + ε := by
   have hlt : T.approximationNumber n < T.approximationNumber n + ε := by
     exact lt_add_of_pos_right _ hε
   rw [T.approximationNumber_def] at hlt
@@ -191,19 +200,19 @@ theorem lt_approximationNumber_add_pos (T : E →L[𝕜] F)
 
 /-- Approximation numbers are Lipschitz in the ambient operator norm. -/
 theorem approximationNumber_add_le (T S : E →L[𝕜] F) (n : ℕ) :
-    (T + S).approximationNumber n ≤ T.approximationNumber n + ‖S‖₊ := by
+    (T + S).approximationNumber n ≤ T.approximationNumber n + ‖S‖ := by
   apply le_of_forall_pos_le_add
   intro ε hε
   have happ := T.lt_approximationNumber_add_pos n hε
   obtain ⟨R, hRrank, hRdist⟩ := happ
   exact le_of_lt <| calc
-    (T + S).approximationNumber n ≤ ‖(T + S) - R‖₊ :=
+    (T + S).approximationNumber n ≤ ‖(T + S) - R‖ :=
       (T + S).approximationNumber_le hRrank
-    _ = ‖(T - R) + S‖₊ := by rw [add_sub_right_comm]
-    _ ≤ ‖T - R‖₊ + ‖S‖₊ := nnnorm_add_le _ _
-    _ < (T.approximationNumber n + ε) + ‖S‖₊ := by
-      simpa [add_comm] using add_lt_add_left hRdist ‖S‖₊
-    _ = T.approximationNumber n + ‖S‖₊ + ε := by
+    _ = ‖(T - R) + S‖ := by rw [add_sub_right_comm]
+    _ ≤ ‖T - R‖ + ‖S‖ := norm_add_le _ _
+    _ < (T.approximationNumber n + ε) + ‖S‖ := by
+      simpa [add_comm] using add_lt_add_left hRdist ‖S‖
+    _ = T.approximationNumber n + ‖S‖ + ε := by
       ac_rfl
 
 /-- Shifted addition inequality for approximation numbers. Two approximants
@@ -225,15 +234,13 @@ theorem approximationNumber_add_le_add
       _ ≤ (m : Cardinal) + (n : Cardinal) := add_le_add hRrank hQrank
       _ = ((m + n : ℕ) : Cardinal) := by norm_cast
   exact le_of_lt <| calc
-    (T + S).approximationNumber (m + n) ≤ ‖(T + S) - (R + Q)‖₊ :=
+    (T + S).approximationNumber (m + n) ≤ ‖(T + S) - (R + Q)‖ :=
       (T + S).approximationNumber_le hsumRank
-    _ = ‖(T - R) + (S - Q)‖₊ := by rw [add_sub_add_comm]
-    _ ≤ ‖T - R‖₊ + ‖S - Q‖₊ := nnnorm_add_le _ _
+    _ = ‖(T - R) + (S - Q)‖ := by rw [add_sub_add_comm]
+    _ ≤ ‖T - R‖ + ‖S - Q‖ := norm_add_le _ _
     _ < (T.approximationNumber m + ε / 2) +
         (S.approximationNumber n + ε / 2) := add_lt_add hRdist hQdist
     _ = T.approximationNumber m + S.approximationNumber n + ε := by
-      apply NNReal.eq
-      simp only [NNReal.coe_add, NNReal.coe_div, NNReal.coe_ofNat]
       ring
 
 /-- Rank does not increase after right composition. -/
@@ -272,28 +279,28 @@ theorem approximationNumber_comp_right_le
     {G : Type x} [SeminormedAddCommGroup G] [NormedSpace 𝕜 G]
     (T : E →L[𝕜] F) (A : G →L[𝕜] E) (n : ℕ) :
     (T ∘L A).approximationNumber n ≤
-      T.approximationNumber n * ‖A‖₊ := by
-  by_cases hA : ‖A‖₊ = 0
+      T.approximationNumber n * ‖A‖ := by
+  by_cases hA : ‖A‖ = 0
   · calc
-      (T ∘L A).approximationNumber n ≤ ‖T ∘L A‖₊ :=
-        (T ∘L A).approximationNumber_le_nnnorm n
-      _ ≤ ‖T‖₊ * ‖A‖₊ := ContinuousLinearMap.opNNNorm_comp_le _ _
-      _ = T.approximationNumber n * ‖A‖₊ := by simp [hA]
+      (T ∘L A).approximationNumber n ≤ ‖T ∘L A‖ :=
+        (T ∘L A).approximationNumber_le_norm n
+      _ ≤ ‖T‖ * ‖A‖ := ContinuousLinearMap.opNorm_comp_le _ _
+      _ = T.approximationNumber n * ‖A‖ := by simp [hA]
   · apply le_of_forall_pos_le_add
     intro ε hε
-    have hεA : 0 < ε / ‖A‖₊ := div_pos hε (bot_lt_iff_ne_bot.mpr hA)
+    have hεA : 0 < ε / ‖A‖ := div_pos hε (lt_of_le_of_ne (norm_nonneg _) (Ne.symm hA))
     obtain ⟨R, hRrank, hRdist⟩ :=
       T.lt_approximationNumber_add_pos n hεA
     have hcompRank : (R ∘L A).rank ≤ (n : Cardinal) :=
       (rank_comp_right_le_rank R A).trans hRrank
     exact le_of_lt <| calc
-      (T ∘L A).approximationNumber n ≤ ‖(T ∘L A) - (R ∘L A)‖₊ :=
+      (T ∘L A).approximationNumber n ≤ ‖(T ∘L A) - (R ∘L A)‖ :=
         (T ∘L A).approximationNumber_le hcompRank
-      _ = ‖(T - R) ∘L A‖₊ := by rw [ContinuousLinearMap.sub_comp]
-      _ ≤ ‖T - R‖₊ * ‖A‖₊ := ContinuousLinearMap.opNNNorm_comp_le _ _
-      _ < (T.approximationNumber n + ε / ‖A‖₊) * ‖A‖₊ :=
-        mul_lt_mul_of_pos_right hRdist (bot_lt_iff_ne_bot.mpr hA)
-      _ = T.approximationNumber n * ‖A‖₊ + ε := by
+      _ = ‖(T - R) ∘L A‖ := by rw [ContinuousLinearMap.sub_comp]
+      _ ≤ ‖T - R‖ * ‖A‖ := ContinuousLinearMap.opNorm_comp_le _ _
+      _ < (T.approximationNumber n + ε / ‖A‖) * ‖A‖ :=
+        mul_lt_mul_of_pos_right hRdist (lt_of_le_of_ne (norm_nonneg _) (Ne.symm hA))
+      _ = T.approximationNumber n * ‖A‖ + ε := by
         rw [add_mul, div_mul_cancel₀ ε hA]
 
 /-- Left ideal inequality for approximation numbers. -/
@@ -301,28 +308,28 @@ theorem approximationNumber_comp_left_le
     {G : Type x} [SeminormedAddCommGroup G] [NormedSpace 𝕜 G]
     (B : F →L[𝕜] G) (T : E →L[𝕜] F) (n : ℕ) :
     (B ∘L T).approximationNumber n ≤
-      ‖B‖₊ * T.approximationNumber n := by
-  by_cases hB : ‖B‖₊ = 0
+      ‖B‖ * T.approximationNumber n := by
+  by_cases hB : ‖B‖ = 0
   · calc
-      (B ∘L T).approximationNumber n ≤ ‖B ∘L T‖₊ :=
-        (B ∘L T).approximationNumber_le_nnnorm n
-      _ ≤ ‖B‖₊ * ‖T‖₊ := ContinuousLinearMap.opNNNorm_comp_le _ _
-      _ = ‖B‖₊ * T.approximationNumber n := by simp [hB]
+      (B ∘L T).approximationNumber n ≤ ‖B ∘L T‖ :=
+        (B ∘L T).approximationNumber_le_norm n
+      _ ≤ ‖B‖ * ‖T‖ := ContinuousLinearMap.opNorm_comp_le _ _
+      _ = ‖B‖ * T.approximationNumber n := by simp [hB]
   · apply le_of_forall_pos_le_add
     intro ε hε
-    have hεB : 0 < ε / ‖B‖₊ := div_pos hε (bot_lt_iff_ne_bot.mpr hB)
+    have hεB : 0 < ε / ‖B‖ := div_pos hε (lt_of_le_of_ne (norm_nonneg _) (Ne.symm hB))
     obtain ⟨R, hRrank, hRdist⟩ :=
       T.lt_approximationNumber_add_pos n hεB
     have hcompRank : (B ∘L R).rank ≤ (n : Cardinal) :=
       rank_comp_left_le_of_rank_le B R hRrank
     exact le_of_lt <| calc
-      (B ∘L T).approximationNumber n ≤ ‖(B ∘L T) - (B ∘L R)‖₊ :=
+      (B ∘L T).approximationNumber n ≤ ‖(B ∘L T) - (B ∘L R)‖ :=
         (B ∘L T).approximationNumber_le hcompRank
-      _ = ‖B ∘L (T - R)‖₊ := by rw [ContinuousLinearMap.comp_sub]
-      _ ≤ ‖B‖₊ * ‖T - R‖₊ := ContinuousLinearMap.opNNNorm_comp_le _ _
-      _ < ‖B‖₊ * (T.approximationNumber n + ε / ‖B‖₊) :=
-        mul_lt_mul_of_pos_left hRdist (bot_lt_iff_ne_bot.mpr hB)
-      _ = ‖B‖₊ * T.approximationNumber n + ε := by
+      _ = ‖B ∘L (T - R)‖ := by rw [ContinuousLinearMap.comp_sub]
+      _ ≤ ‖B‖ * ‖T - R‖ := ContinuousLinearMap.opNorm_comp_le _ _
+      _ < ‖B‖ * (T.approximationNumber n + ε / ‖B‖) :=
+        mul_lt_mul_of_pos_left hRdist (lt_of_le_of_ne (norm_nonneg _) (Ne.symm hB))
+      _ = ‖B‖ * T.approximationNumber n + ε := by
         rw [mul_add, mul_div_cancel₀ ε hB]
 
 /-- Two-sided ideal inequality for approximation numbers. -/
@@ -333,12 +340,12 @@ theorem approximationNumber_comp_comp_le
     (L : F →L[𝕜] G) (T : E →L[𝕜] F) (R : H →L[𝕜] E)
     (n : ℕ) :
     (L ∘L T ∘L R).approximationNumber n ≤
-      ‖L‖₊ * T.approximationNumber n * ‖R‖₊ := by
+      ‖L‖ * T.approximationNumber n * ‖R‖ := by
   calc
     (L ∘L T ∘L R).approximationNumber n
-        ≤ (L ∘L T).approximationNumber n * ‖R‖₊ :=
+        ≤ (L ∘L T).approximationNumber n * ‖R‖ :=
       (L ∘L T).approximationNumber_comp_right_le R n
-    _ ≤ (‖L‖₊ * T.approximationNumber n) * ‖R‖₊ := by
+    _ ≤ (‖L‖ * T.approximationNumber n) * ‖R‖ := by
       gcongr
       exact approximationNumber_comp_left_le L T n
 
@@ -351,44 +358,44 @@ private theorem rank_smul_le_rank (c : 𝕜) (R : E →L[𝕜] F) :
 
 /-- Approximation numbers are absolutely homogeneous. -/
 theorem approximationNumber_smul (c : 𝕜) (T : E →L[𝕜] F) (n : ℕ) :
-    (c • T).approximationNumber n = ‖c‖₊ * T.approximationNumber n := by
+    (c • T).approximationNumber n = ‖c‖ * T.approximationNumber n := by
   have upper (d : 𝕜) (S : E →L[𝕜] F) :
-      (d • S).approximationNumber n ≤ ‖d‖₊ * S.approximationNumber n := by
+      (d • S).approximationNumber n ≤ ‖d‖ * S.approximationNumber n := by
     by_cases hd : d = 0
     · subst d
       have hz : (0 : E →L[𝕜] F).approximationNumber n = 0 :=
         zero_approximationNumber n
-      simpa only [zero_smul, nnnorm_zero, zero_mul] using hz.le
+      simpa only [zero_smul, norm_zero, zero_mul] using hz.le
     · apply le_of_forall_pos_le_add
       intro ε hε
-      have hdn : ‖d‖₊ ≠ 0 := by simpa using hd
-      have hεd : 0 < ε / ‖d‖₊ := div_pos hε (bot_lt_iff_ne_bot.mpr hdn)
+      have hdn : ‖d‖ ≠ 0 := by simpa using hd
+      have hεd : 0 < ε / ‖d‖ := div_pos hε (lt_of_le_of_ne (norm_nonneg _) (Ne.symm hdn))
       obtain ⟨R, hRrank, hRdist⟩ :=
         S.lt_approximationNumber_add_pos n hεd
       exact le_of_lt <| calc
-        (d • S).approximationNumber n ≤ ‖d • S - d • R‖₊ :=
+        (d • S).approximationNumber n ≤ ‖d • S - d • R‖ :=
           (d • S).approximationNumber_le ((rank_smul_le_rank d R).trans hRrank)
-        _ = ‖d‖₊ * ‖S - R‖₊ := by
-          rw [← smul_sub, nnnorm_smul]
-        _ < ‖d‖₊ * (S.approximationNumber n + ε / ‖d‖₊) :=
-          mul_lt_mul_of_pos_left hRdist (bot_lt_iff_ne_bot.mpr hdn)
-        _ = ‖d‖₊ * S.approximationNumber n + ε := by
+        _ = ‖d‖ * ‖S - R‖ := by
+          rw [← smul_sub, norm_smul]
+        _ < ‖d‖ * (S.approximationNumber n + ε / ‖d‖) :=
+          mul_lt_mul_of_pos_left hRdist (lt_of_le_of_ne (norm_nonneg _) (Ne.symm hdn))
+        _ = ‖d‖ * S.approximationNumber n + ε := by
           rw [mul_add, mul_div_cancel₀ ε hdn]
   by_cases hc : c = 0
   · subst c
     have hz : (0 : E →L[𝕜] F).approximationNumber n = 0 :=
       zero_approximationNumber n
-    simpa only [zero_smul, nnnorm_zero, zero_mul] using hz
+    simpa only [zero_smul, norm_zero, zero_mul] using hz
   apply le_antisymm
   · exact upper c T
   · have hupper := upper c⁻¹ (c • T)
     have hcinv : c⁻¹ • (c • T) = T := by
       rw [← mul_smul, inv_mul_cancel₀ hc, one_smul]
-    rw [hcinv, nnnorm_inv] at hupper
-    have hnorm_ne : ‖c‖₊ ≠ 0 := by simpa using hc
+    rw [hcinv, norm_inv] at hupper
+    have hnorm_ne : ‖c‖ ≠ 0 := by simpa using hc
     calc
-      ‖c‖₊ * T.approximationNumber n
-          ≤ ‖c‖₊ * (‖c‖₊⁻¹ * (c • T).approximationNumber n) := by
+      ‖c‖ * T.approximationNumber n
+          ≤ ‖c‖ * (‖c‖⁻¹ * (c • T).approximationNumber n) := by
         gcongr
       _ = (c • T).approximationNumber n := by
         rw [← mul_assoc, mul_inv_cancel₀ hnorm_ne, one_mul]

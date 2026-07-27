@@ -64,28 +64,22 @@ theorem approximationSingularValue_nonneg
 @[simp]
 theorem approximationSingularValue_zero_map (n : ℕ) :
     approximationSingularValue n (0 : E →L[𝕜] F) = 0 := by
-  have h := congrArg (fun x : NNReal => (x : ℝ))
-    (ContinuousLinearMap.zero_approximationNumber
+  exact (ContinuousLinearMap.zero_approximationNumber
       (𝕜 := 𝕜) (E := E) (F := F) n)
-  simpa only [approximationSingularValue, NNReal.coe_zero] using h
 
 /-- The zero-based first approximation singular value is the operator norm. -/
 @[simp]
 theorem approximationSingularValue_zero
     (K : E →L[𝕜] F) :
     approximationSingularValue 0 K = ‖K‖ := by
-  have h := congrArg (fun x : NNReal => (x : ℝ))
-    K.approximationNumber_zero
-  simpa only [approximationSingularValue, coe_nnnorm] using h
+  exact K.approximationNumber_zero
 
 /-- Approximation singular values are absolutely homogeneous. -/
 theorem approximationSingularValue_smul
     (n : ℕ) (c : 𝕜) (K : E →L[𝕜] F) :
     approximationSingularValue n (c • K) =
       ‖c‖ * approximationSingularValue n K := by
-  have h := congrArg (fun x : NNReal => (x : ℝ))
-    (ContinuousLinearMap.approximationNumber_smul c K n)
-  simpa only [approximationSingularValue, NNReal.coe_mul, coe_nnnorm] using h
+  exact (ContinuousLinearMap.approximationNumber_smul c K n)
 
 /-- Approximation singular values are unchanged by negation. -/
 @[simp]
@@ -106,7 +100,7 @@ theorem approximationSingularValue_antitone
 theorem approximationSingularValue_le_opNorm
     (n : ℕ) (K : E →L[𝕜] F) :
     approximationSingularValue n K ≤ ‖K‖ := by
-  exact_mod_cast K.approximationNumber_le_nnnorm n
+  exact_mod_cast K.approximationNumber_le_norm n
 
 /-- Perturbation inequality at a fixed approximation index. -/
 theorem approximationSingularValue_add_le
@@ -120,9 +114,7 @@ theorem approximationSingularValue_adjoint
     (n : ℕ) (K : E →L[𝕜] F) :
     approximationSingularValue n K.adjoint =
       approximationSingularValue n K := by
-  have h := congrArg (fun x : NNReal => (x : ℝ))
-    (K.approximationNumber_adjoint n)
-  simpa only [approximationSingularValue] using h
+  exact (K.approximationNumber_adjoint n)
 
 /-- Ideal inequality for approximation singular values. -/
 theorem approximationSingularValue_comp_le
@@ -164,13 +156,13 @@ theorem approximationSingularValue_eq_singularValues
     approximationSingularValue n A.toContinuousLinearMap =
       A.singularValues n := by
   have hNN : A.toContinuousLinearMap.approximationNumber n =
-      (⟨A.singularValues n, A.singularValues_nonneg n⟩ : NNReal) := by
+      A.singularValues n := by
     simpa only [LinearMap.coe_toContinuousLinearMap] using
       (ContinuousLinearMap.approximationNumber_eq_singularValues
         A.toContinuousLinearMap n)
   change (A.toContinuousLinearMap.approximationNumber n : ℝ) =
     A.singularValues n
-  exact congrArg (fun x : NNReal => x.1) hNN
+  exact hNN
 
 /-- An orthogonal projection does not increase vector norms. -/
 theorem IsOrthogonalProjectionMap.norm_apply_le
@@ -276,16 +268,16 @@ theorem approximationSingularValue_comp_strongProjection_tendsto_complex
       approximationSingularValue n (K ∘L P i) ≤
         approximationSingularValue n K := by
     intro i
-    have hnormNN : ‖P i‖₊ ≤ (1 : NNReal) := by
+    have hnormNN : ‖P i‖ ≤ (1 : ℝ) := by
       exact_mod_cast (hPproj i).norm_le_one
     have hNN : (K ∘L P i).approximationNumber n ≤
         K.approximationNumber n := by
       calc
         (K ∘L P i).approximationNumber n
-            ≤ K.approximationNumber n * ‖P i‖₊ :=
+            ≤ K.approximationNumber n * ‖P i‖ :=
           K.approximationNumber_comp_right_le (P i) n
         _ ≤ K.approximationNumber n * 1 :=
-          mul_le_mul_of_nonneg_left hnormNN bot_le
+          mul_le_mul_of_nonneg_left hnormNN (K.approximationNumber_nonneg n)
         _ = K.approximationNumber n := by rw [mul_one]
     exact_mod_cast hNN
   have hLower : ∀ r : ℝ,
@@ -321,8 +313,7 @@ theorem approximationSingularValue_comp_strongProjection_tendsto_complex
       have hsmall : ∀ᶠ i in l, ‖D i‖ < s - c :=
         hDnorm.eventually (Iio_mem_nhds (sub_pos.mpr hcs))
       filter_upwards [hsmall] with i hi
-      have hcNN : (⟨c, hc0⟩ : NNReal) ≤
-          (K ∘L P i).approximationNumber n := by
+      have hcNN : c ≤ (K ∘L P i).approximationNumber n := by
         apply ContinuousLinearMap.lowerBound_le_approximationNumber_of_linearIndependent
           (K ∘L P i) n v hv
         intro x hxV hxNorm
@@ -340,11 +331,9 @@ theorem approximationSingularValue_comp_strongProjection_tendsto_complex
         have hsx : s ≤ ‖K x‖ := by
           have := hV x hxV
           simpa only [hxNorm, mul_one] using this
-        apply NNReal.coe_le_coe.mpr
         change c ≤ ‖K (P i x)‖
         linarith
-      have hcReal : c ≤ approximationSingularValue n (K ∘L P i) := by
-        exact_mod_cast hcNN
+      have hcReal : c ≤ approximationSingularValue n (K ∘L P i) := hcNN
       exact hrc.trans_le hcReal
     · have hrneg : r < 0 := lt_of_not_ge hr0
       filter_upwards [] with i
@@ -468,7 +457,7 @@ theorem approximationSingularValue_restrict_mono_complex
     (Submodule.inclusion hUV).mkContinuous 1 (fun x => by
       change ‖((x : U) : E₀)‖ ≤ 1 * ‖x‖
       simp)
-  have hJnorm : ‖J‖₊ ≤ (1 : NNReal) := by
+  have hJnorm : ‖J‖ ≤ (1 : ℝ) := by
     exact_mod_cast (J.opNorm_le_bound zero_le_one fun x => by
       change ‖((x : U) : E₀)‖ ≤ 1 * ‖x‖
       simp)
@@ -480,10 +469,10 @@ theorem approximationSingularValue_restrict_mono_complex
     rw [hcomp]
     calc
       ((T ∘L V.subtypeL) ∘L J).approximationNumber n
-          ≤ (T ∘L V.subtypeL).approximationNumber n * ‖J‖₊ :=
+          ≤ (T ∘L V.subtypeL).approximationNumber n * ‖J‖ :=
         (T ∘L V.subtypeL).approximationNumber_comp_right_le J n
       _ ≤ (T ∘L V.subtypeL).approximationNumber n * 1 :=
-        mul_le_mul_of_nonneg_left hJnorm bot_le
+        mul_le_mul_of_nonneg_left hJnorm (ContinuousLinearMap.approximationNumber_nonneg _ _)
       _ = (T ∘L V.subtypeL).approximationNumber n := by rw [mul_one]
   change ((T ∘L U.subtypeL).approximationNumber n : ℝ) ≤
     ((T ∘L V.subtypeL).approximationNumber n : ℝ)
@@ -504,30 +493,30 @@ theorem approximationSingularValue_orthogonalProjectionOnto_comp_eq
     ext x
     change W.starProjection (A x) = A x
     exact W.starProjection_eq_self_iff.mpr (hA x)
-  have hproj : ‖W.orthogonalProjectionOnto‖₊ ≤ (1 : NNReal) := by
+  have hproj : ‖W.orthogonalProjectionOnto‖ ≤ (1 : ℝ) := by
     exact_mod_cast W.orthogonalProjectionOnto_norm_le
-  have hsub : ‖W.subtypeL‖₊ ≤ (1 : NNReal) := by
+  have hsub : ‖W.subtypeL‖ ≤ (1 : ℝ) := by
     exact_mod_cast W.norm_subtypeL_le
   have hNN : AW.approximationNumber n = A.approximationNumber n := by
     apply le_antisymm
     · calc
         AW.approximationNumber n
-            ≤ ‖W.orthogonalProjectionOnto‖₊ * A.approximationNumber n :=
+            ≤ ‖W.orthogonalProjectionOnto‖ * A.approximationNumber n :=
           ContinuousLinearMap.approximationNumber_comp_left_le
             W.orthogonalProjectionOnto A n
         _ ≤ 1 * A.approximationNumber n :=
-          mul_le_mul_of_nonneg_right hproj bot_le
+          mul_le_mul_of_nonneg_right hproj (ContinuousLinearMap.approximationNumber_nonneg _ _)
         _ = A.approximationNumber n := by rw [one_mul]
     · rw [← hfactor]
       calc
         (W.subtypeL ∘L AW).approximationNumber n
-            ≤ ‖W.subtypeL‖₊ * AW.approximationNumber n :=
+            ≤ ‖W.subtypeL‖ * AW.approximationNumber n :=
           ContinuousLinearMap.approximationNumber_comp_left_le W.subtypeL AW n
         _ ≤ 1 * AW.approximationNumber n :=
-          mul_le_mul_of_nonneg_right hsub bot_le
+          mul_le_mul_of_nonneg_right hsub (ContinuousLinearMap.approximationNumber_nonneg _ _)
         _ = AW.approximationNumber n := by rw [one_mul]
   change (AW.approximationNumber n : ℝ) = (A.approximationNumber n : ℝ)
-  exact congrArg (fun x : NNReal => (x : ℝ)) hNN
+  exact hNN
 
 /-- Projecting the codomain onto a subspace containing the range preserves
 all finite Ky Fan approximation gauges. -/
@@ -611,25 +600,24 @@ theorem kyFanApproximationGauge_add_le_finiteSource_complex
 /-- Every positive tolerance admits a finite source restriction whose
 approximation number is within that tolerance of the ambient complex value. -/
 theorem exists_finiteRestrictionApproximationNumber_add_gt
-    (T : E₀ →L[ℂ] F₀) (n : ℕ) (ε : NNReal) (hε : 0 < ε) :
+    (T : E₀ →L[ℂ] F₀) (n : ℕ) (ε : ℝ) (hε : 0 < ε) :
     ∃ v : Fin (n + 1) → E₀,
       T.approximationNumber n <
         (T ∘L (Submodule.span ℂ (Set.range v)).subtypeL).approximationNumber n + ε := by
   by_cases hsmall : T.approximationNumber n < ε
   · refine ⟨fun _ => 0, hsmall.trans_le ?_⟩
-    exact le_add_of_nonneg_left bot_le
+    exact le_add_of_nonneg_left (ContinuousLinearMap.approximationNumber_nonneg _ _)
   · have hεle : ε ≤ T.approximationNumber n := le_of_not_gt hsmall
     have ha0 : 0 < T.approximationNumber n := hε.trans_le hεle
     have hsub : T.approximationNumber n - ε < T.approximationNumber n :=
-      tsub_lt_self ha0 hε
+      sub_lt_self _ hε
     obtain ⟨v, hv⟩ :=
       SpectraBridge.exists_finiteRestrictionApproximationNumber_gt_of_lt
-        T n hsub
+        T n (sub_nonneg.mpr hεle) hsub
     refine ⟨v, ?_⟩
     calc
       T.approximationNumber n =
-          (T.approximationNumber n - ε) + ε :=
-        (tsub_add_cancel_of_le hεle).symm
+          (T.approximationNumber n - ε) + ε := by ring
       _ < (T ∘L (Submodule.span ℂ (Set.range v)).subtypeL).approximationNumber n + ε :=
         add_lt_add_left hv ε
 

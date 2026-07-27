@@ -156,8 +156,7 @@ approximation number. This is the lower half of the finite-dimensional
 Eckart--Young identification. -/
 theorem singularValues_le_approximationNumber
     (T : E →L[𝕜] F) (n : ℕ) :
-    (⟨T.toLinearMap.singularValues n,
-      T.toLinearMap.singularValues_nonneg n⟩ : NNReal) ≤
+    T.toLinearMap.singularValues n ≤
       T.approximationNumber n := by
   apply T.le_approximationNumber
   intro R hR
@@ -169,8 +168,7 @@ by the `n`th singular value. -/
 theorem approximationNumber_le_singularValues
     (T : E →L[𝕜] F) (n : ℕ) :
     T.approximationNumber n ≤
-      (⟨T.toLinearMap.singularValues n,
-        T.toLinearMap.singularValues_nonneg n⟩ : NNReal) := by
+      T.toLinearMap.singularValues n := by
   classical
   by_cases hn : finrank 𝕜 E ≤ n
   · -- The rank of `T` lives in the codomain universe and `Module.rank 𝕜 E` in
@@ -184,14 +182,9 @@ theorem approximationNumber_le_singularValues
           rw [← Module.finrank_eq_rank' 𝕜 E]
         _ = ((finrank 𝕜 E : ℕ) : Cardinal) := Cardinal.lift_natCast _
         _ ≤ (n : Cardinal) := by exact_mod_cast hn
-    have hle : T.approximationNumber n ≤ (0 : NNReal) := by
-      have h := T.approximationNumber_le (R := T) hTrank
-      have hdist : ‖T - T‖₊ = (0 : NNReal) := by simp
-      rw [hdist] at h
-      exact h
-    exact hle.trans (bot_le : (0 : NNReal) ≤
-      (⟨T.toLinearMap.singularValues n,
-        T.toLinearMap.singularValues_nonneg n⟩ : NNReal))
+    have hle : T.approximationNumber n ≤ 0 := by
+      simpa using T.approximationNumber_le (R := T) hTrank
+    exact hle.trans (T.toLinearMap.singularValues_nonneg n)
   · have hnlt : n < finrank 𝕜 E := Nat.lt_of_not_ge hn
     let A : E →ₗ[𝕜] F := T.toLinearMap
     let hGram : (A.adjoint ∘ₗ A).IsSymmetric := A.isSymmetric_adjoint_comp_self
@@ -267,25 +260,17 @@ theorem approximationNumber_le_singularValues
     have htailOpNorm' :
         ‖T ∘L Wᗮ.starProjection‖ ≤ T.toLinearMap.singularValues n := by
       simpa [A] using htailOpNorm
-    have htailNN :
-        ‖T ∘L Wᗮ.starProjection‖₊ ≤
-          (⟨T.toLinearMap.singularValues n,
-            T.toLinearMap.singularValues_nonneg n⟩ : NNReal) := by
-      apply NNReal.coe_le_coe.mp
-      change ‖T ∘L Wᗮ.starProjection‖ ≤ T.toLinearMap.singularValues n
-      exact htailOpNorm'
     have happrox :
-        T.approximationNumber n ≤ ‖T ∘L Wᗮ.starProjection‖₊ := by
+        T.approximationNumber n ≤ ‖T ∘L Wᗮ.starProjection‖ := by
       simpa only [herr] using T.approximationNumber_le hRrank
-    exact happrox.trans htailNN
+    exact happrox.trans htailOpNorm'
 
 /-- Finite-dimensional Eckart--Young identification for the zero-based
 approximation-number convention used in this project. -/
 theorem approximationNumber_eq_singularValues
     (T : E →L[𝕜] F) (n : ℕ) :
     T.approximationNumber n =
-      (⟨T.toLinearMap.singularValues n,
-        T.toLinearMap.singularValues_nonneg n⟩ : NNReal) := by
+      T.toLinearMap.singularValues n := by
   apply le_antisymm
   · exact approximationNumber_le_singularValues T n
   · exact singularValues_le_approximationNumber T n

@@ -130,18 +130,22 @@ private theorem approximationNumber_comp_isometricEquiv_le
     (U.toContinuousLinearEquiv.toContinuousLinearMap ∘L A ∘L
         V.toContinuousLinearEquiv.toContinuousLinearMap).approximationNumber n
       ≤ A.approximationNumber n := by
-  have hU : ‖U.toContinuousLinearEquiv.toContinuousLinearMap‖₊ ≤ 1 :=
-    ContinuousLinearMap.opNNNorm_le_bound _ 1 fun x => by simp
-  have hV : ‖V.toContinuousLinearEquiv.toContinuousLinearMap‖₊ ≤ 1 :=
-    ContinuousLinearMap.opNNNorm_le_bound _ 1 fun x => by simp
+  have hU : ‖U.toContinuousLinearEquiv.toContinuousLinearMap‖ ≤ 1 :=
+    ContinuousLinearMap.opNorm_le_bound _ zero_le_one fun x => by simp
+  have hV : ‖V.toContinuousLinearEquiv.toContinuousLinearMap‖ ≤ 1 :=
+    ContinuousLinearMap.opNorm_le_bound _ zero_le_one fun x => by simp
   calc
     (U.toContinuousLinearEquiv.toContinuousLinearMap ∘L A ∘L
           V.toContinuousLinearEquiv.toContinuousLinearMap).approximationNumber n
-        ≤ ‖U.toContinuousLinearEquiv.toContinuousLinearMap‖₊ *
+        ≤ ‖U.toContinuousLinearEquiv.toContinuousLinearMap‖ *
             A.approximationNumber n *
-            ‖V.toContinuousLinearEquiv.toContinuousLinearMap‖₊ :=
+            ‖V.toContinuousLinearEquiv.toContinuousLinearMap‖ :=
       ContinuousLinearMap.approximationNumber_comp_comp_le _ _ _ n
-    _ ≤ 1 * A.approximationNumber n * 1 := by gcongr
+    _ ≤ 1 * A.approximationNumber n * 1 := by
+      gcongr <;>
+        first
+          | assumption
+          | simpa using ContinuousLinearMap.approximationNumber_nonneg _ _
     _ = A.approximationNumber n := by rw [one_mul, mul_one]
 
 /-- Two-sided composition with isometric equivalences preserves every
@@ -189,8 +193,7 @@ theorem comp_isometricEquiv
       (U.toContinuousLinearEquiv.toContinuousLinearMap ∘L A ∘L
         V.toContinuousLinearEquiv.toContinuousLinearMap) A := by
   intro n
-  exact congrArg (fun x : NNReal => (x : ℝ))
-    (approximationNumber_comp_isometricEquiv_eq U V A n)
+  exact approximationNumber_comp_isometricEquiv_eq U V A n
 
 /-- If an operator becomes another operator after unitary coordinate changes,
 they have the same complete singular sequence. -/
@@ -206,7 +209,7 @@ theorem of_isometricEquiv_comp
   intro n
   have hkey := approximationNumber_comp_isometricEquiv_eq U V.symm A n
   rw [h] at hkey
-  exact congrArg (fun x : NNReal => (x : ℝ)) hkey.symm
+  exact hkey.symm
 
 @[refl]
 theorem refl (A : E →L[𝕜] F) : SameApproximationSingularValues A A :=

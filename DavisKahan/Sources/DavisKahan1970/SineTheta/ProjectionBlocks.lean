@@ -160,16 +160,20 @@ theorem sameApproximationSingularValues_comp_reflection_right
     SameApproximationSingularValues
       (A ∘L U.reflectionOperator) A := by
   intro n
-  have hnn : ‖(U.reflectionOperator : E →L[𝕜] E)‖₊ ≤ 1 := by
+  have hnn : ‖(U.reflectionOperator : E →L[𝕜] E)‖ ≤ 1 := by
     exact_mod_cast Submodule.norm_reflectionOperator_le_one U
   have hright (T : E →L[𝕜] E) :
       (T ∘L U.reflectionOperator).approximationNumber n ≤
         T.approximationNumber n :=
     calc (T ∘L U.reflectionOperator).approximationNumber n
         ≤ T.approximationNumber n *
-            ‖(U.reflectionOperator : E →L[𝕜] E)‖₊ :=
+            ‖(U.reflectionOperator : E →L[𝕜] E)‖ :=
           T.approximationNumber_comp_right_le _ n
-      _ ≤ T.approximationNumber n * 1 := by gcongr
+      _ ≤ T.approximationNumber n * 1 := by
+        gcongr <;>
+          first
+            | assumption
+            | simpa using ContinuousLinearMap.approximationNumber_nonneg _ _
       _ = T.approximationNumber n := mul_one _
   have hcomp :
       (A ∘L U.reflectionOperator) ∘L U.reflectionOperator = A := by
@@ -183,7 +187,7 @@ theorem sameApproximationSingularValues_comp_reflection_right
             U.reflectionOperator).approximationNumber n := by rw [hcomp]
       _ ≤ (A ∘L U.reflectionOperator).approximationNumber n :=
           hright (A ∘L U.reflectionOperator)
-  exact congrArg (fun x : NNReal => (x : ℝ)) key
+  exact key
 
 /-- Left composition with a subspace reflection preserves every approximation
 singular value. -/
@@ -193,16 +197,20 @@ theorem sameApproximationSingularValues_comp_reflection_left
     SameApproximationSingularValues
       (U.reflectionOperator ∘L A) A := by
   intro n
-  have hnn : ‖(U.reflectionOperator : E →L[𝕜] E)‖₊ ≤ 1 := by
+  have hnn : ‖(U.reflectionOperator : E →L[𝕜] E)‖ ≤ 1 := by
     exact_mod_cast Submodule.norm_reflectionOperator_le_one U
   have hleft (T : E →L[𝕜] E) :
       (U.reflectionOperator ∘L T).approximationNumber n ≤
         T.approximationNumber n :=
     calc (U.reflectionOperator ∘L T).approximationNumber n
-        ≤ ‖(U.reflectionOperator : E →L[𝕜] E)‖₊ *
+        ≤ ‖(U.reflectionOperator : E →L[𝕜] E)‖ *
             T.approximationNumber n :=
           ContinuousLinearMap.approximationNumber_comp_left_le _ T n
-      _ ≤ 1 * T.approximationNumber n := by gcongr
+      _ ≤ 1 * T.approximationNumber n := by
+        gcongr <;>
+          first
+            | assumption
+            | simpa using ContinuousLinearMap.approximationNumber_nonneg _ _
       _ = T.approximationNumber n := one_mul _
   have hcomp :
       U.reflectionOperator ∘L (U.reflectionOperator ∘L A) = A := by
@@ -216,7 +224,7 @@ theorem sameApproximationSingularValues_comp_reflection_left
             (U.reflectionOperator ∘L A)).approximationNumber n := by rw [hcomp]
       _ ≤ (U.reflectionOperator ∘L A).approximationNumber n :=
           hleft (U.reflectionOperator ∘L A)
-  exact congrArg (fun x : NNReal => (x : ℝ)) key
+  exact key
 
 /-- Sum of the two cross-projection blocks appearing in Proposition 6.1. -/
 def paperCrossSineSum (U V : Submodule 𝕜 E)

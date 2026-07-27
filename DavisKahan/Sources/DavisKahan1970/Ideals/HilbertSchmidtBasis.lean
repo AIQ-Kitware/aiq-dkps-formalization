@@ -190,19 +190,19 @@ theorem paperHilbertSchmidtEnergy_comp_starProjection
     ContinuousLinearMap.ext fun x =>
       congrArg A (Submodule.starProjection_eq_self_iff.mpr x.2).symm
   -- all four structural maps are contractions
-  have hsubL : ‖L.subtypeL‖₊ ≤ 1 := by
+  have hsubL : ‖L.subtypeL‖ ≤ 1 := by
     have h : ‖L.subtypeL‖ ≤ 1 :=
       ContinuousLinearMap.opNorm_le_bound _ zero_le_one fun x => by
         simpa using le_rfl
     exact_mod_cast h
-  have hsubK : ‖K.subtypeL‖₊ ≤ 1 := by
+  have hsubK : ‖K.subtypeL‖ ≤ 1 := by
     have h : ‖K.subtypeL‖ ≤ 1 :=
       ContinuousLinearMap.opNorm_le_bound _ zero_le_one fun x => by
         simpa using le_rfl
     exact_mod_cast h
-  have hprojK : ‖K.orthogonalProjectionOnto‖₊ ≤ 1 := by
+  have hprojK : ‖K.orthogonalProjectionOnto‖ ≤ 1 := by
     exact_mod_cast K.orthogonalProjectionOnto_norm_le
-  have hprojL : ‖L.orthogonalProjectionOnto‖₊ ≤ 1 := by
+  have hprojL : ‖L.orthogonalProjectionOnto‖ ≤ 1 := by
     exact_mod_cast L.orthogonalProjectionOnto_norm_le
   -- hence the cutoff and the compression have the same singular sequence
   have hsame : SameApproximationSingularSequence (A ∘L K.starProjection) T := by
@@ -212,31 +212,35 @@ theorem paperHilbertSchmidtEnergy_comp_starProjection
       calc (A ∘L K.starProjection).approximationNumber m
           = (T₀ ∘L K.orthogonalProjectionOnto).approximationNumber m := by
             rw [hfac1]
-        _ ≤ T₀.approximationNumber m * ‖K.orthogonalProjectionOnto‖₊ :=
+        _ ≤ T₀.approximationNumber m * ‖K.orthogonalProjectionOnto‖ :=
             T₀.approximationNumber_comp_right_le _ m
         _ ≤ T₀.approximationNumber m * 1 :=
-            mul_le_mul_of_nonneg_left hprojK bot_le
+            mul_le_mul_of_nonneg_left hprojK
+              (ContinuousLinearMap.approximationNumber_nonneg _ _)
         _ = (L.subtypeL ∘L T).approximationNumber m := by rw [mul_one, hfac2]
-        _ ≤ ‖L.subtypeL‖₊ * T.approximationNumber m :=
+        _ ≤ ‖L.subtypeL‖ * T.approximationNumber m :=
             ContinuousLinearMap.approximationNumber_comp_left_le _ _ m
         _ ≤ 1 * T.approximationNumber m :=
-            mul_le_mul_of_nonneg_right hsubL bot_le
+            mul_le_mul_of_nonneg_right hsubL
+              (ContinuousLinearMap.approximationNumber_nonneg _ _)
         _ = T.approximationNumber m := one_mul _
     have h2 : T.approximationNumber m ≤
         (A ∘L K.starProjection).approximationNumber m := by
       calc T.approximationNumber m
           = (L.orthogonalProjectionOnto ∘L T₀).approximationNumber m := by
             rw [← hfac3]
-        _ ≤ ‖L.orthogonalProjectionOnto‖₊ * T₀.approximationNumber m :=
+        _ ≤ ‖L.orthogonalProjectionOnto‖ * T₀.approximationNumber m :=
             ContinuousLinearMap.approximationNumber_comp_left_le _ _ m
         _ ≤ 1 * T₀.approximationNumber m :=
-            mul_le_mul_of_nonneg_right hprojL bot_le
+            mul_le_mul_of_nonneg_right hprojL
+              (ContinuousLinearMap.approximationNumber_nonneg _ _)
         _ = ((A ∘L K.starProjection) ∘L K.subtypeL).approximationNumber m := by
             rw [one_mul, ← hfac4]
-        _ ≤ (A ∘L K.starProjection).approximationNumber m * ‖K.subtypeL‖₊ :=
+        _ ≤ (A ∘L K.starProjection).approximationNumber m * ‖K.subtypeL‖ :=
             ContinuousLinearMap.approximationNumber_comp_right_le _ _ m
         _ ≤ (A ∘L K.starProjection).approximationNumber m * 1 :=
-            mul_le_mul_of_nonneg_left hsubK bot_le
+            mul_le_mul_of_nonneg_left hsubK
+              (ContinuousLinearMap.approximationNumber_nonneg _ _)
         _ = (A ∘L K.starProjection).approximationNumber m := mul_one _
     show approximationSingularValue m _ = approximationSingularValue m _
     unfold approximationSingularValue
@@ -258,9 +262,7 @@ theorem paperHilbertSchmidtEnergy_comp_starProjection
   have hsv : ∀ m : ℕ,
       approximationSingularValue m T = T.toLinearMap.singularValues m := by
     intro m
-    show ((T.approximationNumber m : NNReal) : ℝ) = _
-    rw [ContinuousLinearMap.approximationNumber_eq_singularValues T m]
-    rfl
+    exact ContinuousLinearMap.approximationNumber_eq_singularValues T m
   have hfrob : ∑ k : Fin n, T.toLinearMap.singularValues (k : ℕ) ^ 2
       = ∑ k : Fin n, ‖T (c k)‖ ^ 2 :=
     TauCeti.sum_sq_singularValues T.toLinearMap hn c
@@ -374,16 +376,17 @@ theorem paperHilbertSchmidtEnergy_eq_iSup_cutoff {ι : Type*}
       approximationSingularValue n (A ∘L paperBasisProjection b s) ≤
         approximationSingularValue n A := by
     intro s n
-    have hnormNN : ‖paperBasisProjection b s‖₊ ≤ (1 : NNReal) := by
+    have hnormNN : ‖paperBasisProjection b s‖ ≤ (1 : NNReal) := by
       exact_mod_cast (paperBasisProjection_isOrthogonalProjection b s).norm_le_one
     have hNN : (A ∘L paperBasisProjection b s).approximationNumber n ≤
         A.approximationNumber n := by
       calc
         (A ∘L paperBasisProjection b s).approximationNumber n
-            ≤ A.approximationNumber n * ‖paperBasisProjection b s‖₊ :=
+            ≤ A.approximationNumber n * ‖paperBasisProjection b s‖ :=
           A.approximationNumber_comp_right_le (paperBasisProjection b s) n
         _ ≤ A.approximationNumber n * 1 :=
-          mul_le_mul_of_nonneg_left hnormNN bot_le
+          mul_le_mul_of_nonneg_left hnormNN
+              (ContinuousLinearMap.approximationNumber_nonneg _ _)
         _ = A.approximationNumber n := by rw [mul_one]
     exact_mod_cast hNN
   apply le_antisymm
