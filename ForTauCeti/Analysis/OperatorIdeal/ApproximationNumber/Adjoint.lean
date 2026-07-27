@@ -42,8 +42,6 @@ review.
   did; it imports only Mathlib and the sibling `Basic` staging module.
 -/
 
-open NNReal
-
 @[expose] public section
 
 noncomputable section
@@ -107,11 +105,10 @@ private theorem approximationNumber_adjoint_le
   apply T.le_approximationNumber
   intro R hR
   calc
-    T.adjoint.approximationNumber n ≤ ‖T.adjoint - R.adjoint‖₊ :=
+    T.adjoint.approximationNumber n ≤ ‖T.adjoint - R.adjoint‖ :=
       T.adjoint.approximationNumber_le
         (rank_adjoint_le_natCast_of_rank_le R hR)
-    _ = ‖T - R‖₊ := by
-      apply NNReal.eq
+    _ = ‖T - R‖ := by
       simpa only [coe_nnnorm, ← map_sub] using
         (ContinuousLinearMap.adjoint.norm_map (T - R))
 

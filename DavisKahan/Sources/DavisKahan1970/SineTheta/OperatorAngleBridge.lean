@@ -180,10 +180,10 @@ theorem sameApproximationSingularValues_neg (A : E →L[ℂ] E) :
     SameApproximationSingularValues (-A) A := by
   intro n
   have h : ((-1 : ℂ) • A).approximationNumber n =
-      ‖(-1 : ℂ)‖₊ * A.approximationNumber n :=
+      ‖(-1 : ℂ)‖ * A.approximationNumber n :=
     ContinuousLinearMap.approximationNumber_smul (-1 : ℂ) A n
-  simp only [neg_smul, one_smul, nnnorm_neg, nnnorm_one, one_mul] at h
-  exact congrArg (fun x : NNReal => (x : ℝ)) h
+  simp only [neg_smul, one_smul, norm_neg, norm_one, one_mul] at h
+  exact h
 
 /-- The cross-block sum in Proposition 6.1 realizes the singular values of the
 literal whole-space sine. -/

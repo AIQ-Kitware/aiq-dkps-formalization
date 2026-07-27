@@ -270,12 +270,9 @@ theorem approximationNumber_complexify_le
   calc
     (RealComplexification.complexify T).approximationNumber n ≤
         ‖RealComplexification.complexify T -
-          RealComplexification.complexify R‖₊ :=
+          RealComplexification.complexify R‖ :=
       (RealComplexification.complexify T).approximationNumber_le hRc
-    _ = ‖T - R‖₊ := by
-      apply NNReal.eq
-      change ‖RealComplexification.complexify T -
-        RealComplexification.complexify R‖ = ‖T - R‖
+    _ = ‖T - R‖ := by
       rw [← RealComplexification.complexify_sub,
         RealComplexification.norm_complexify]
 
@@ -288,16 +285,18 @@ theorem approximationNumber_le_complexify
       (RealComplexification.complexify T).approximationNumber n := by
   apply le_of_forall_lt
   intro r hr
-  have hrReal : (r : ℝ) < (T.approximationNumber n : ℝ) := by
-    exact_mod_cast hr
+  by_cases hr0 : 0 ≤ r
+  case neg =>
+    exact (lt_of_not_ge hr0).trans_le
+      (ContinuousLinearMap.approximationNumber_nonneg _ n)
   obtain ⟨s, hrs, v, hv, hV⟩ :=
     ApproximationNumbersReal.exists_linearIndependent_lowerBound_of_lt_approximationNumber_real
-      T n (NNReal.coe_nonneg r) hrReal
-  have hs0 : 0 ≤ s := (NNReal.coe_nonneg r).trans hrs.le
+      T n hr0 hr
+  have hs0 : 0 ≤ s := hr0.trans hrs.le
   have hvC : LinearIndependent ℂ (fun i => ofReal (v i)) :=
     linearIndependent_ofReal hv
   have hlower := lowerBound_complex_span T v hs0 hV
-  have hsNN : (⟨s, hs0⟩ : NNReal) ≤
+  have hsNN : s ≤
       (RealComplexification.complexify T).approximationNumber n := by
     apply ContinuousLinearMap.lowerBound_le_approximationNumber_of_linearIndependent
       (RealComplexification.complexify T) n (fun i => ofReal (v i)) hvC
@@ -324,8 +323,7 @@ theorem approximationSingularValue_complexify
     (T : E →L[ℝ] F) (n : ℕ) :
     approximationSingularValue n (RealComplexification.complexify T) =
       approximationSingularValue n T := by
-  exact congrArg (fun x : NNReal => (x : ℝ))
-    (approximationNumber_complexify T n)
+  exact approximationNumber_complexify T n
 
 /-- Every finite Ky Fan approximation gauge is exactly preserved by real
 complexification. -/

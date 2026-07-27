@@ -74,8 +74,8 @@ and target spaces need not be finite-dimensional. -/
 theorem lowerBound_le_approximationNumber_of_finrank
     (T : E₁ →L[𝕜] F₁) (n : ℕ) (V : Submodule 𝕜 E₁)
     [FiniteDimensional 𝕜 V]
-    (hVdim : finrank 𝕜 V = n + 1) (c : NNReal)
-    (hV : ∀ x : V, ‖x‖ = 1 → c ≤ ‖T (x : E₁)‖₊) :
+    (hVdim : finrank 𝕜 V = n + 1) (c : ℝ)
+    (hV : ∀ x : V, ‖x‖ = 1 → c ≤ ‖T (x : E₁)‖) :
     c ≤ T.approximationNumber n := by
   apply T.le_approximationNumber
   intro R hR
@@ -127,12 +127,11 @@ theorem lowerBound_le_approximationNumber_of_finrank
     change RV x = 0
     exact LinearMap.mem_ker.mp hxker
   calc
-    c ≤ ‖T (x : E₁)‖₊ := hV x hxNorm
-    _ = ‖(T - R) (x : E₁)‖₊ := by rw [sub_apply, hRx, sub_zero]
-    _ ≤ ‖T - R‖₊ * ‖(x : E₁)‖₊ := (T - R).le_opNNNorm (x : E₁)
-    _ = ‖T - R‖₊ := by
-      have hxNN : ‖(x : E₁)‖₊ = 1 := by
-        apply NNReal.eq
+    c ≤ ‖T (x : E₁)‖ := hV x hxNorm
+    _ = ‖(T - R) (x : E₁)‖ := by rw [sub_apply, hRx, sub_zero]
+    _ ≤ ‖T - R‖ * ‖(x : E₁)‖ := (T - R).le_opNNNorm (x : E₁)
+    _ = ‖T - R‖ := by
+      have hxNN : ‖(x : E₁)‖ = 1 := by
         exact hxNorm
       rw [hxNN, mul_one]
 
@@ -140,9 +139,9 @@ theorem lowerBound_le_approximationNumber_of_finrank
 independent family of `n+1` vectors determines the required test subspace. -/
 theorem lowerBound_le_approximationNumber_of_linearIndependent
     (T : E₁ →L[𝕜] F₁) (n : ℕ) (v : Fin (n + 1) → E₁)
-    (hv : LinearIndependent 𝕜 v) (c : NNReal)
+    (hv : LinearIndependent 𝕜 v) (c : ℝ)
     (hV : ∀ x ∈ Submodule.span 𝕜 (Set.range v),
-      ‖x‖ = 1 → c ≤ ‖T x‖₊) :
+      ‖x‖ = 1 → c ≤ ‖T x‖) :
     c ≤ T.approximationNumber n := by
   let V : Submodule 𝕜 E₁ := Submodule.span 𝕜 (Set.range v)
   let b : Module.Basis (Fin (n + 1)) 𝕜 V := Module.Basis.span hv

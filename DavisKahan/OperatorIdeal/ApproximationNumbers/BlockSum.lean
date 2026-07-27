@@ -123,34 +123,34 @@ theorem blockInr_apply (y : E₁) :
     (blockInr (E₀ := E₀) (𝕜 := 𝕜) y) = WithLp.toLp 2 ((0 : E₀), y) := rfl
 
 omit [CompleteSpace E₀] [CompleteSpace E₁] in
-theorem nnnorm_blockInl_le : ‖(blockInl : E₀ →L[𝕜] WithLp 2 (E₀ × E₁))‖₊ ≤ 1 := by
-  apply ContinuousLinearMap.opNNNorm_le_bound
+theorem norm_blockInl_le : ‖(blockInl : E₀ →L[𝕜] WithLp 2 (E₀ × E₁))‖ ≤ 1 := by
+  apply ContinuousLinearMap.opNorm_le_bound _ zero_le_one
   intro x
   simp
 
 omit [CompleteSpace E₀] [CompleteSpace E₁] in
-theorem nnnorm_blockInr_le : ‖(blockInr : E₁ →L[𝕜] WithLp 2 (E₀ × E₁))‖₊ ≤ 1 := by
-  apply ContinuousLinearMap.opNNNorm_le_bound
+theorem norm_blockInr_le : ‖(blockInr : E₁ →L[𝕜] WithLp 2 (E₀ × E₁))‖ ≤ 1 := by
+  apply ContinuousLinearMap.opNorm_le_bound _ zero_le_one
   intro x
   simp
 
 omit [CompleteSpace F₀] [CompleteSpace F₁] in
-theorem nnnorm_fstL_le : ‖(WithLp.fstL 2 𝕜 F₀ F₁)‖₊ ≤ 1 := by
-  apply ContinuousLinearMap.opNNNorm_le_bound
+theorem norm_fstL_le : ‖(WithLp.fstL 2 𝕜 F₀ F₁)‖ ≤ 1 := by
+  apply ContinuousLinearMap.opNorm_le_bound _ zero_le_one
   intro x
   have h := WithLp.prod_norm_sq_eq_of_L2 x
   have h1 : ‖x.fst‖ ^ 2 ≤ ‖x‖ ^ 2 := by nlinarith [sq_nonneg ‖x.snd‖]
-  have h2 : ‖x.fst‖₊ ≤ ‖x‖₊ := by
+  have h2 : ‖x.fst‖ ≤ ‖x‖ := by
     exact_mod_cast le_of_sq_le_sq h1 (norm_nonneg x)
   simpa using h2
 
 omit [CompleteSpace F₀] [CompleteSpace F₁] in
-theorem nnnorm_sndL_le : ‖(WithLp.sndL 2 𝕜 F₀ F₁)‖₊ ≤ 1 := by
-  apply ContinuousLinearMap.opNNNorm_le_bound
+theorem norm_sndL_le : ‖(WithLp.sndL 2 𝕜 F₀ F₁)‖ ≤ 1 := by
+  apply ContinuousLinearMap.opNorm_le_bound _ zero_le_one
   intro x
   have h := WithLp.prod_norm_sq_eq_of_L2 x
   have h1 : ‖x.snd‖ ^ 2 ≤ ‖x‖ ^ 2 := by nlinarith [sq_nonneg ‖x.fst‖]
-  have h2 : ‖x.snd‖₊ ≤ ‖x‖₊ := by
+  have h2 : ‖x.snd‖ ≤ ‖x‖ := by
     exact_mod_cast le_of_sq_le_sq h1 (norm_nonneg x)
   simpa using h2
 
@@ -181,13 +181,16 @@ theorem approximationNumber_le_blockSum_left
     (blockInl : E₀ →L[𝕜] WithLp 2 (E₀ × E₁)) n
   rw [fstL_comp_blockSum_comp_blockInl] at h
   refine h.trans ?_
-  calc ‖(WithLp.fstL 2 𝕜 F₀ F₁)‖₊ *
+  calc ‖(WithLp.fstL 2 𝕜 F₀ F₁)‖ *
         (continuousOrthogonalBlockSum A B).approximationNumber n *
-        ‖(blockInl : E₀ →L[𝕜] WithLp 2 (E₀ × E₁))‖₊
+        ‖(blockInl : E₀ →L[𝕜] WithLp 2 (E₀ × E₁))‖
       ≤ 1 * (continuousOrthogonalBlockSum A B).approximationNumber n * 1 := by
-        gcongr
-        · exact nnnorm_fstL_le
-        · exact nnnorm_blockInl_le
+        gcongr <;>
+          first
+            | exact norm_fstL_le
+            | exact norm_blockInl_le
+            | simpa using
+                ContinuousLinearMap.approximationNumber_nonneg _ _
     _ = _ := by rw [one_mul, mul_one]
 
 /-- Every approximation number of the second summand is dominated by the
@@ -201,21 +204,25 @@ theorem approximationNumber_le_blockSum_right
     (blockInr : E₁ →L[𝕜] WithLp 2 (E₀ × E₁)) n
   rw [sndL_comp_blockSum_comp_blockInr] at h
   refine h.trans ?_
-  calc ‖(WithLp.sndL 2 𝕜 F₀ F₁)‖₊ *
+  calc ‖(WithLp.sndL 2 𝕜 F₀ F₁)‖ *
         (continuousOrthogonalBlockSum A B).approximationNumber n *
-        ‖(blockInr : E₁ →L[𝕜] WithLp 2 (E₀ × E₁))‖₊
+        ‖(blockInr : E₁ →L[𝕜] WithLp 2 (E₀ × E₁))‖
       ≤ 1 * (continuousOrthogonalBlockSum A B).approximationNumber n * 1 := by
-        gcongr
-        · exact nnnorm_sndL_le
-        · exact nnnorm_blockInr_le
+        gcongr <;>
+          first
+            | exact norm_sndL_le
+            | exact norm_blockInr_le
+            | simpa using
+                ContinuousLinearMap.approximationNumber_nonneg _ _
     _ = _ := by rw [one_mul, mul_one]
 
 /-- The operator norm of a block sum is the larger of the two block norms;
 only the upper bound is needed here. -/
-theorem nnnorm_continuousOrthogonalBlockSum_le
+theorem norm_continuousOrthogonalBlockSum_le
     (A : E₀ →L[𝕜] F₀) (B : E₁ →L[𝕜] F₁) :
-    ‖continuousOrthogonalBlockSum A B‖₊ ≤ max ‖A‖₊ ‖B‖₊ := by
-  apply ContinuousLinearMap.opNNNorm_le_bound
+    ‖continuousOrthogonalBlockSum A B‖ ≤ max ‖A‖ ‖B‖ := by
+  apply ContinuousLinearMap.opNorm_le_bound _
+    (le_trans (norm_nonneg A) (le_max_left _ _))
   intro x
   have hgoal : ‖continuousOrthogonalBlockSum A B x‖ ≤ (max ‖A‖ ‖B‖) * ‖x‖ := by
     have hM : (0 : ℝ) ≤ max ‖A‖ ‖B‖ := le_trans (norm_nonneg A) (le_max_left _ _)
@@ -302,7 +309,7 @@ theorem approximationNumber_continuousOrthogonalBlockSum_le_max
   refine le_trans
     ((continuousOrthogonalBlockSum A B).approximationNumber_le hrank) ?_
   rw [continuousOrthogonalBlockSum_sub]
-  refine le_trans (nnnorm_continuousOrthogonalBlockSum_le (A - R) (B - Q)) ?_
+  refine le_trans (norm_continuousOrthogonalBlockSum_le (A - R) (B - Q)) ?_
   refine max_le ?_ ?_
   · exact le_trans hRdist.le (add_le_add (le_max_left _ _) le_rfl)
   · exact le_trans hQdist.le (add_le_add (le_max_right _ _) le_rfl)
@@ -326,12 +333,12 @@ theorem min_le_approximationNumber_continuousOrthogonalBlockSum
   by_contra hcon
   push Not at hcon
   set T := continuousOrthogonalBlockSum A B with hT
-  set m : ℝ := (T.approximationNumber (i + j + 1) : ℝ) with hm
-  have hm0 : 0 ≤ m := (T.approximationNumber (i + j + 1)).coe_nonneg
-  have hmA : m < (A.approximationNumber i : ℝ) := by
+  set m : ℝ := T.approximationNumber (i + j + 1) with hm
+  have hm0 : 0 ≤ m := T.approximationNumber_nonneg (i + j + 1)
+  have hmA : m < A.approximationNumber i := by
     have := lt_of_lt_of_le hcon (min_le_left _ _)
     exact_mod_cast this
-  have hmB : m < (B.approximationNumber j : ℝ) := by
+  have hmB : m < B.approximationNumber j := by
     have := lt_of_lt_of_le hcon (min_le_right _ _)
     exact_mod_cast this
   obtain ⟨s, hms, v, hv, hV⟩ :=

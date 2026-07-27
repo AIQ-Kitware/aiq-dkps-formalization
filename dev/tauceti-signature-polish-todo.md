@@ -55,7 +55,7 @@ The staged library is mathematically substantial, but it is not yet a single Tau
 
 | **Cluster** | **Current state** | **Signature risk** | **Upstream action** | **Priority** |
 | --- | --- | --- | --- | --- |
-| Approximation numbers | Staged and Mathlib-only | Indexing, codomain, characteristic API | Settle representation; split into small PRs | P0 |
+| Approximation numbers | Staged and Mathlib-only | ~~Codomain~~ (settled: ℝ); indexing pinned; characteristic API still P1 | Split into small PRs | P1 |
 | Courant-Fischer | Staged helper layer | Misleading specSubspace and missing min-max endpoint | Refactor around basis spans and actual min-max theorem | P0 |
 | Operator modulus / operatorAbs | Two overlapping APIs | Duplicate definitions and noncanonical names | Unify into one modulus API | P0 |
 | Near isometry | Staged real finite-dimensional result | Existential instead of canonical polar factor; wrong generality split | Define canonical object; derive finite equiv | P0 |
@@ -176,9 +176,9 @@ State whether scatter is normalized, whether Fourier transform uses 2π, whether
 >
 > Choose and document one convention: current aₙ(T) is the distance to maps of rank at most n, so a₀(T)=‖T‖. This is coherent but differs from the common one-based rank < n convention. The roadmap must explicitly approve the zero-based convention, or the entire API should be reindexed before any PR.
 
-> **P0 codomain decision**
+> **P0 codomain decision — RESOLVED 2026-07-24: `ℝ`**
 >
-> Decide whether approximationNumber returns ℝ≥0 or ℝ. NNReal makes positivity and norm bounds pleasant but creates constructor noise when compared with Mathlib singularValues : ℝ. A likely Mathlib-style alternative is a real-valued definition plus approximationNumber_nonneg, with an optional NNReal accessor. Do not carry both full APIs.
+> `ContinuousLinearMap.approximationNumber : ℝ` plus `approximationNumber_nonneg`, with no `ℝ≥0` API at all (not even an accessor). Deciding precedent: `Metric.infDist` — an infimum of nonnegative reals — is real-valued in Mathlib, as are `norm`, `dist`, and `singularValues`. The `ℝ≥0` codomain was paying a tax at both boundaries: `⟨value, proof⟩` constructor noise in the flagship Eckart–Young statements, and a real-valued `approximationSingularValue` wrapper downstream. Executed across the workspace; two NNReal↔ℝ bridging layers were deleted outright. Full rationale in `ForTauCetiRoadmap/ApproximationNumbers/README.md` decision 2.
 
 #### P0  le_natCast_of_lift_le
 

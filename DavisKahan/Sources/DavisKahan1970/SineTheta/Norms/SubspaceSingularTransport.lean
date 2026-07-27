@@ -46,16 +46,16 @@ local instance instCompleteSpaceCoeOfHasOrthogonalProjection
   (Submodule.isComplete_coe_of_hasOrthogonalProjection U).completeSpace_coe
 
 omit [CompleteSpace E] in
-/-- The canonical inclusion of a subspace has `‖·‖₊ ≤ 1`. -/
-private theorem nnnorm_subtypeL_le_one (U : Submodule 𝕜 E) :
-    ‖U.subtypeL‖₊ ≤ 1 := by
+/-- The canonical inclusion of a subspace has `‖·‖ ≤ 1`. -/
+private theorem norm_subtypeL_le_one (U : Submodule 𝕜 E) :
+    ‖U.subtypeL‖ ≤ 1 := by
   exact_mod_cast U.norm_subtypeL_le
 
 /-- The adjoint of the canonical inclusion is the orthogonal projection, so it
-too has `‖·‖₊ ≤ 1`. -/
-private theorem nnnorm_adjoint_subtypeL_le_one
+too has `‖·‖ ≤ 1`. -/
+private theorem norm_adjoint_subtypeL_le_one
     (U : Submodule 𝕜 E) [U.HasOrthogonalProjection] :
-    ‖U.subtypeL.adjoint‖₊ ≤ 1 := by
+    ‖U.subtypeL.adjoint‖ ≤ 1 := by
   rw [Submodule.adjoint_subtypeL]
   exact_mod_cast U.orthogonalProjectionOnto_norm_le
 
@@ -74,22 +74,26 @@ theorem sameApproximationSingularValues_extendDomainByZero
       = T.approximationNumber n := by
     refine le_antisymm ?_ ?_
     · calc (T ∘L U.subtypeL.adjoint).approximationNumber n
-          ≤ T.approximationNumber n * ‖U.subtypeL.adjoint‖₊ :=
+          ≤ T.approximationNumber n * ‖U.subtypeL.adjoint‖ :=
             T.approximationNumber_comp_right_le _ n
         _ ≤ T.approximationNumber n * 1 := by
-            gcongr
-            exact nnnorm_adjoint_subtypeL_le_one U
+            gcongr <;>
+              first
+                | exact norm_adjoint_subtypeL_le_one U
+                | simpa using ContinuousLinearMap.approximationNumber_nonneg _ _
         _ = T.approximationNumber n := mul_one _
     · calc T.approximationNumber n
           = ((T ∘L U.subtypeL.adjoint) ∘L U.subtypeL).approximationNumber n := by
             rw [hfactor]
-        _ ≤ (T ∘L U.subtypeL.adjoint).approximationNumber n * ‖U.subtypeL‖₊ :=
+        _ ≤ (T ∘L U.subtypeL.adjoint).approximationNumber n * ‖U.subtypeL‖ :=
             (T ∘L U.subtypeL.adjoint).approximationNumber_comp_right_le _ n
         _ ≤ (T ∘L U.subtypeL.adjoint).approximationNumber n * 1 := by
-            gcongr
-            exact nnnorm_subtypeL_le_one U
+            gcongr <;>
+              first
+                | exact norm_subtypeL_le_one U
+                | simpa using ContinuousLinearMap.approximationNumber_nonneg _ _
         _ = (T ∘L U.subtypeL.adjoint).approximationNumber n := mul_one _
-  exact congrArg (fun x : NNReal => (x : ℝ)) key
+  exact key
 
 /-- Including the range of a map into the ambient Hilbert space preserves every
 approximation singular value. -/
@@ -105,22 +109,26 @@ theorem sameApproximationSingularValues_includeCodomain
       = T.approximationNumber n := by
     refine le_antisymm ?_ ?_
     · calc (V.subtypeL ∘L T).approximationNumber n
-          ≤ ‖V.subtypeL‖₊ * T.approximationNumber n :=
+          ≤ ‖V.subtypeL‖ * T.approximationNumber n :=
             ContinuousLinearMap.approximationNumber_comp_left_le _ T n
         _ ≤ 1 * T.approximationNumber n := by
-            gcongr
-            exact nnnorm_subtypeL_le_one V
+            gcongr <;>
+              first
+                | exact norm_subtypeL_le_one V
+                | simpa using ContinuousLinearMap.approximationNumber_nonneg _ _
         _ = T.approximationNumber n := one_mul _
     · calc T.approximationNumber n
           = (V.subtypeL.adjoint ∘L (V.subtypeL ∘L T)).approximationNumber n := by
             rw [hfactor]
-        _ ≤ ‖V.subtypeL.adjoint‖₊ * (V.subtypeL ∘L T).approximationNumber n :=
+        _ ≤ ‖V.subtypeL.adjoint‖ * (V.subtypeL ∘L T).approximationNumber n :=
             ContinuousLinearMap.approximationNumber_comp_left_le _ _ n
         _ ≤ 1 * (V.subtypeL ∘L T).approximationNumber n := by
-            gcongr
-            exact nnnorm_adjoint_subtypeL_le_one V
+            gcongr <;>
+              first
+                | exact norm_adjoint_subtypeL_le_one V
+                | simpa using ContinuousLinearMap.approximationNumber_nonneg _ _
         _ = (V.subtypeL ∘L T).approximationNumber n := one_mul _
-  exact congrArg (fun x : NNReal => (x : ℝ)) key
+  exact key
 
 /-- Ambient extension of a rectangular subspace block preserves the complete
 singular-value sequence. -/

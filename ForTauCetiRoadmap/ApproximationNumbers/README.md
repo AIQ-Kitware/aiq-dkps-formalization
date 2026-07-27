@@ -198,11 +198,34 @@ harder to remove. The decisions (with this roadmap's current stance):
    *Pinned above.* Must be stated in the first sentence of the definition
    docstring and module overview (it differs from the common one-based
    `rank < n`).
-2. **Codomain: `ℝ≥0` vs `ℝ`.** *Open.* `ℝ≥0` makes positivity/norm bounds clean
-   but creates constructor noise against Mathlib's `singularValues : ℝ`. Decide
-   one; do **not** carry both full APIs. If `ℝ≥0` is kept, add exactly one
-   canonical NNReal singular-value accessor so public conclusions never expose
-   `⟨value, proof⟩`. Tautological `0 ≤ aₙ` lemmas are deleted if `ℝ≥0`.
+2. **Codomain: `ℝ≥0` vs `ℝ`.** ***Decided: `ℝ`*** (2026-07-24; executed, whole
+   workspace green). `approximationNumber : ℝ` with
+   `approximationNumber_nonneg`, and **no** `ℝ≥0` API — not even an accessor —
+   so the "do not carry both" rule holds exactly.
+
+   Rationale, in the order it should be presented to a reviewer:
+
+   * **Mathlib precedent.** `Metric.infDist` is the same shape — an infimum of
+     nonnegative reals — and Mathlib defines it real-valued with a separate
+     `infDist_nonneg`. The same holds for the norm-like quantities this object
+     sits beside: `norm`, `dist`, and `LinearMap.singularValues` are all `ℝ`
+     (the `₊` versions are secondary accessors, not the primary definition).
+   * **The `ℝ≥0` choice was paying a tax at *both* boundaries.** Upward, the
+     flagship Eckart–Young statements read
+     `(⟨T.singularValues n, T.singularValues_nonneg n⟩ : NNReal) ≤ …` — exactly
+     the `⟨value, proof⟩` exposure this document forbids. Downward, the paper
+     layer had already built a real-valued wrapper
+     (`approximationSingularValue : ℝ`) used in *more* files than the `ℝ≥0`
+     original, together with a tautological `_nonneg` lemma for it.
+   * **Cost paid.** The lattice-completeness convenience is replaced by two
+     small private facts (a `Nonempty` index instance, already present, and a
+     `BddBelow` range lemma) discharged once inside the two characterization
+     lemmas; every later lemma goes through those. `0 ≤ aₙ` becomes a one-line
+     theorem instead of `bot_le`.
+   * **What it deleted.** Two entire NNReal↔ℝ bridging layers in the downstream
+     (the complex and real Courant–Fischer localization files) lost their
+     coercion machinery outright, and the `congrArg (coe)`-plus-`simpa` idiom
+     that wrapped roughly a dozen paper-facing restatements is gone.
 3. **Namespace: extend `ContinuousLinearMap` vs live under `TauCeti`.** Current
    stance: extend `ContinuousLinearMap` for dot notation (candidate Mathlib
    name). *Flagged for maintainer review* — a global-namespace commitment.
