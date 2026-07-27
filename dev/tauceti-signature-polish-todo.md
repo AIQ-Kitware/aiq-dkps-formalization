@@ -937,8 +937,15 @@ compiler, not by inspection:
   space — confirmed by elaborating `Finset.expect Finset.univ z` against
   `[RCLike 𝕜] [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]`, which fails on
   `Module ℚ≥0 E`.
-- `Finset.centroid` exists but lives in the affine hierarchy and is stated through
-  `affineCombination`, with a different junk value on the empty family.
+- `Finset.centroid` *does* typecheck in this setting, so it is a live candidate — but
+  `Finset.affineCombination` is defined against `Classical.arbitrary`, so the centroid of
+  the empty family is nonconstructive junk. `finiteMean` returns `0` there and
+  `finiteMean_append` is deliberately stated to hold *at* `n = 0`, so a swap would have to
+  re-open that boundary case. (This sharper reading of `centroid`, and the fact that
+  `Module ℚ≥0 E` fails because `NormedSpace ℝ E` is reachable only through the
+  non-instance `InnerProductSpace.rclikeToReal` / `NormedSpace.restrictScalars`, are
+  edward's — independently probed while scoping §8.2 and posted to the LANES cross-lane
+  findings section. Both lanes reached the same conclusion separately.)
 
 Either would force non-`𝕜` scalars into a computation that is otherwise pure `𝕜`-module
 algebra (`inner_smul_left`, `match_scalars`, `field_simp`). The audit result is recorded in
