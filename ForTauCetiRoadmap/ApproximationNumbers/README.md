@@ -154,6 +154,12 @@ Builds the ideal theory on the `s`-number sequence.
 9. **C.1 Symmetric gauges.** a symmetric norming function `Φ` on finitely
    supported `ℝ≥0` sequences (monotone, symmetric, `Φ(e₀)=1`); the induced ideal
    `S_Φ = {T // Summable/finite Φ(a(T))}` with `‖T‖_Φ := Φ(a(T))`.
+
+   The *target* of this construction is fixed: it produces a
+   `TauCeti.SymmetricOperatorIdealFamily` (decision 7 below), whose gauge is
+   `Φ ∘ a` read in `ℝ≥0∞`. The abstract family structure is already staged in
+   `ForTauCeti/Analysis/OperatorIdeal/Family/`, with the operator norm as its
+   first instance; C.1's job is to add the Calkin construction as the second.
 10. **C.2 Ky Fan norms and dominance.** the Ky Fan `k`-norms
     `‖T‖_{(k)} = ∑_{n<k} aₙ(T)`; Ky Fan dominance (`∀k, ∑_{n<k} aₙ(S) ≤ ∑_{n<k}
     aₙ(T)` ⟹ `Φ`-domination for every symmetric gauge `Φ`); the triangle
@@ -243,7 +249,60 @@ harder to remove. The decisions (with this roadmap's current stance):
    `IsHilbertSchmidt`/`hilbertSchmidtNorm`; the basis-column, tensor,
    singular-value, and Frobenius presentations are **equivalence theorems** for
    that one object, never peer definitions.
-7. **API hygiene (per-declaration).** Hide definition bodies (drop blanket
+7. **Representation of an operator ideal family.** ***Decided: one `ℝ≥0∞`-valued
+   gauge*** (2026-07-27; staged as `ForTauCeti/Analysis/OperatorIdeal/Family/`).
+   A symmetric operator ideal family is presented by a *single* datum
+
+   ```lean
+   gauge : ∀ {E F} [...], (E →L[𝕜] F) → ℝ≥0∞
+   ```
+
+   with the ideal recovered as its finiteness domain
+   (`OperatorIdealFamily.carrier : Submodule 𝕜 (E →L[𝕜] F)`), not by a
+   membership predicate plus an independent real gauge.
+
+   Rationale, in the order it should be presented to a reviewer:
+
+   * **It is the only presentation that has an extensionality theorem.** With
+     membership and gauge as independent data, the laws constrain the gauge only
+     *on* members, so two families can agree on every ideal element and still
+     differ off it. That is the API-design rubric's "free data" failure mode, and
+     it makes `ext` unstatable. With the finiteness-domain presentation the gauge
+     is the only field and `OperatorIdealFamily.ext` is immediate.
+   * **It is the classical presentation.** A symmetric norming function
+     (Gohberg–Krein, Calkin) is defined on everything and the ideal *is* where it
+     is finite; `ℝ≥0∞` is the honest codomain of an ideal norm. Note this does
+     **not** conflict with decision 2: `approximationNumber` is a real number
+     attached to a single operator, while an ideal gauge is genuinely `∞` off its
+     ideal.
+   * **Every law becomes unconditional.** In `ℝ≥0∞` subadditivity, homogeneity
+     `gauge (c • A) = ‖c‖ₑ * gauge A`, the two-sided ideal bound
+     `gauge (L ∘L A ∘L R) ≤ ‖L‖ₑ * gauge A * ‖R‖ₑ`, and `‖A‖ₑ ≤ gauge A` all hold
+     verbatim at non-members. No axiom and no downstream lemma carries a
+     membership hypothesis.
+   * **The axiom list collapses from fourteen fields to four.** Closure under
+     `0`, `+`, `•`, `-` and finite sums is `Submodule` membership for the carrier;
+     `gauge 0 = 0` follows from homogeneity at `c = 0` (which also rules out the
+     everywhere-`∞` gauge); definiteness follows from `‖A‖ₑ ≤ gauge A`.
+   * **Completeness is a typeclass, not a Cauchy criterion.** The ideal carries a
+     `NormedAddCommGroup`/`NormedSpace` structure on
+     `OperatorIdealFamily.Elem` — a type synonym, because the bare subtype already
+     inherits the *operator* norm and the two differ — and completeness is
+     `OperatorIdealFamily.IsComplete`, i.e. `CompleteSpace` for that norm.
+   * **Layering, with a genuine obstruction recorded.** The base layer is stated
+     over Banach spaces with **independent source and target universes**, per the
+     generality bar above. Adjoint symmetry cannot be added there: the adjoint
+     exchanges source and target, so a family closed under adjoints must live on
+     one universe over Hilbert spaces. Hence two structures —
+     `OperatorIdealFamily` and `SymmetricOperatorIdealFamily`, the latter
+     extending the diagonal instantiation — rather than one with an optional
+     field.
+   * **Validation.** The historical Davis–Kahan record
+     `RectangularSymmetricIdealFamily` is *derivable*: every one of its fourteen
+     fields, including the hand-rolled `gauge_complete`, is a theorem about the
+     canonical family (`SymmetricOperatorIdealFamily.toRectangular`). The
+     converse map does not exist, which is the defect restated.
+8. **API hygiene (per-declaration).** Hide definition bodies (drop blanket
    `@[expose] public section`; expose one `_eq_iInf` characterization instead);
    name every lemma from its conclusion outward with the quantifier matching the
    statement; keep proof-only helpers `private`; the universe-`lift` `Cardinal`
