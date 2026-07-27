@@ -45,7 +45,7 @@ noncomputable def pairSingularValues (s0 s1 : ℝ) : ℕ →₀ ℝ :=
 
 @[simp] theorem pairSingularValues_of_two_le (s0 s1 : ℝ) {i : ℕ} (hi : 2 ≤ i) :
     pairSingularValues s0 s1 i = 0 := by
-  simp [pairSingularValues, Finsupp.single_apply, Nat.ne_of_gt (lt_of_lt_of_le Nat.zero_lt_two hi),
+  simp [pairSingularValues, Nat.ne_of_gt (lt_of_lt_of_le Nat.zero_lt_two hi),
     Nat.ne_of_gt (lt_of_lt_of_le Nat.one_lt_two hi)]
 
 /-- A nonnegative decreasing diagonal on a two-dimensional inner-product space
@@ -154,11 +154,15 @@ theorem singularValues_offDiagonal_two_by_two (r : ℝ) :
   have hsq : A ∘ₗ A = (((r ^ 2 : ℝ) : 𝕜) • LinearMap.id) := by
     ext x i
     fin_cases i <;>
-      simp [A, Matrix.toEuclideanLin_apply, Matrix.vecHead, Matrix.vecTail] <;>
-      push_cast <;> ring
+      simp [A, Matrix.toLpLin_apply, Matrix.vecHead, Matrix.vecTail] <;>
+      ring
   exact singularValues_eq_abs_pair_of_isSymmetric_sq
     finrank_euclideanSpace_fin (EuclideanSpace.basisFun (Fin 2) 𝕜) A r hsym hsq
 
+-- `simp` closes some of the `fin_cases` branches outright, so the final `<;> ring`
+-- must tolerate zero remaining goals; sequencing it (`; ring`) fails with
+-- "No goals to be solved". The seq-focus linter cannot see that and misfires here.
+set_option linter.unnecessarySeqFocus false in
 /-- The singular values of the one-sided lower-left planar block
 `[[0,0],[r,0]]` are `|r|,0`. -/
 theorem singularValues_lowerLeft_two_by_two (r : ℝ) :
@@ -187,10 +191,10 @@ theorem singularValues_lowerLeft_two_by_two (r : ℝ) :
     fin_cases i <;>
       rw [diagOp_apply_basis] <;>
       ext j <;> fin_cases j <;>
-      simp [A, LinearMap.comp_apply, Matrix.toEuclideanLin_apply,
+      simp [A, LinearMap.comp_apply, Matrix.toLpLin_apply,
         Matrix.vecHead, Matrix.vecTail, EuclideanSpace.basisFun_apply,
         sq_abs] <;>
-      push_cast <;> ring
+      ring
   refine singularValues_eq_pair_of_gram_eq finrank_euclideanSpace_fin
     (EuclideanSpace.basisFun (Fin 2) 𝕜) A (abs_nonneg r) le_rfl
     (abs_nonneg r) ?_
@@ -309,8 +313,8 @@ theorem singularValues_eq_pair_of_gram_trace_det_fin_two
   ext i
   rcases lt_or_ge i 2 with hi | hi
   · interval_cases i
-    · simpa [a, ha]
-    · simpa [b, hb]
+    · simp [a, ha]
+    · simp [b, hb]
   · rw [A.singularValues_of_finrank_le]
     · exact (pairSingularValues_of_two_le s0 s1 hi).symm
     · simpa using hi

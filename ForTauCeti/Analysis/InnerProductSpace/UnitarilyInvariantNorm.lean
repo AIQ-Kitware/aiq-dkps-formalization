@@ -123,6 +123,7 @@ theorem diagOp_real_smul (b : OrthonormalBasis (Fin n) 𝕜 E) (c : ℝ)
   refine Finset.sum_congr rfl fun i _ => ?_
   rw [Pi.smul_apply, smul_eq_mul, RCLike.ofReal_mul, smul_smul]
 
+omit [FiniteDimensional 𝕜 E] in
 /-- A constant real diagonal is a scalar multiple of the identity.  This is
 the bridge between the functional-calculus form `r • id` and the diagonal
 form the singular-value lemmas are stated in. -/
@@ -132,6 +133,7 @@ theorem diagOp_const (b : OrthonormalBasis (Fin n) 𝕜 E) (r : ℝ) :
   rw [OrthonormalBasis.coe_toBasis, diagOp_apply_basis]
   simp
 
+omit [FiniteDimensional 𝕜 E] in
 /-- The two-entry constant diagonal, in the `![r, r]` shape the planar
 singular-value lemmas use. -/
 theorem diagOp_const_pair (b : OrthonormalBasis (Fin 2) 𝕜 E) (r : ℝ) :
