@@ -213,13 +213,13 @@ theorem paperHilbertSchmidtEnergy_comp_starProjection
           = (T₀ ∘L K.orthogonalProjectionOnto).approximationNumber m := by
             rw [hfac1]
         _ ≤ T₀.approximationNumber m * ‖K.orthogonalProjectionOnto‖ :=
-            T₀.approximationNumber_comp_right_le _ m
+            T₀.approximationNumber_comp_le_mul_norm _ m
         _ ≤ T₀.approximationNumber m * 1 :=
             mul_le_mul_of_nonneg_left hprojK
               (ContinuousLinearMap.approximationNumber_nonneg _ _)
         _ = (L.subtypeL ∘L T).approximationNumber m := by rw [mul_one, hfac2]
         _ ≤ ‖L.subtypeL‖ * T.approximationNumber m :=
-            ContinuousLinearMap.approximationNumber_comp_left_le _ _ m
+            ContinuousLinearMap.approximationNumber_comp_le_norm_mul _ _ m
         _ ≤ 1 * T.approximationNumber m :=
             mul_le_mul_of_nonneg_right hsubL
               (ContinuousLinearMap.approximationNumber_nonneg _ _)
@@ -230,14 +230,14 @@ theorem paperHilbertSchmidtEnergy_comp_starProjection
           = (L.orthogonalProjectionOnto ∘L T₀).approximationNumber m := by
             rw [← hfac3]
         _ ≤ ‖L.orthogonalProjectionOnto‖ * T₀.approximationNumber m :=
-            ContinuousLinearMap.approximationNumber_comp_left_le _ _ m
+            ContinuousLinearMap.approximationNumber_comp_le_norm_mul _ _ m
         _ ≤ 1 * T₀.approximationNumber m :=
             mul_le_mul_of_nonneg_right hprojL
               (ContinuousLinearMap.approximationNumber_nonneg _ _)
         _ = ((A ∘L K.starProjection) ∘L K.subtypeL).approximationNumber m := by
             rw [one_mul, ← hfac4]
         _ ≤ (A ∘L K.starProjection).approximationNumber m * ‖K.subtypeL‖ :=
-            ContinuousLinearMap.approximationNumber_comp_right_le _ _ m
+            ContinuousLinearMap.approximationNumber_comp_le_mul_norm _ _ m
         _ ≤ (A ∘L K.starProjection).approximationNumber m * 1 :=
             mul_le_mul_of_nonneg_left hsubK
               (ContinuousLinearMap.approximationNumber_nonneg _ _)
@@ -383,7 +383,7 @@ theorem paperHilbertSchmidtEnergy_eq_iSup_cutoff {ι : Type*}
       calc
         (A ∘L paperBasisProjection b s).approximationNumber n
             ≤ A.approximationNumber n * ‖paperBasisProjection b s‖ :=
-          A.approximationNumber_comp_right_le (paperBasisProjection b s) n
+          A.approximationNumber_comp_le_mul_norm (paperBasisProjection b s) n
         _ ≤ A.approximationNumber n * 1 :=
           mul_le_mul_of_nonneg_left hnormNN
               (ContinuousLinearMap.approximationNumber_nonneg _ _)

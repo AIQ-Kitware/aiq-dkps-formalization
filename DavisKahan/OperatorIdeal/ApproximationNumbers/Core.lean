@@ -64,7 +64,7 @@ theorem approximationSingularValue_nonneg
 @[simp]
 theorem approximationSingularValue_zero_map (n : ℕ) :
     approximationSingularValue n (0 : E →L[𝕜] F) = 0 := by
-  exact (ContinuousLinearMap.zero_approximationNumber
+  exact (ContinuousLinearMap.approximationNumber_zero
       (𝕜 := 𝕜) (E := E) (F := F) n)
 
 /-- The zero-based first approximation singular value is the operator norm. -/
@@ -72,7 +72,7 @@ theorem approximationSingularValue_zero_map (n : ℕ) :
 theorem approximationSingularValue_zero
     (K : E →L[𝕜] F) :
     approximationSingularValue 0 K = ‖K‖ := by
-  exact K.approximationNumber_zero
+  exact K.approximationNumber_index_zero
 
 /-- Approximation singular values are absolutely homogeneous. -/
 theorem approximationSingularValue_smul
@@ -94,7 +94,7 @@ theorem approximationSingularValue_antitone
     (K : E →L[𝕜] F) :
     Antitone (fun n => approximationSingularValue n K) := by
   intro n m hnm
-  exact_mod_cast K.antitone_approximationNumber hnm
+  exact_mod_cast K.approximationNumber_antitone hnm
 
 /-- Every approximation singular value is controlled by operator norm. -/
 theorem approximationSingularValue_le_opNorm
@@ -107,7 +107,7 @@ theorem approximationSingularValue_add_le
     (n : ℕ) (K L : E →L[𝕜] F) :
     approximationSingularValue n (K + L) ≤
       approximationSingularValue n K + ‖L‖ := by
-  exact_mod_cast K.approximationNumber_add_le L n
+  exact_mod_cast K.approximationNumber_add_le_add_norm L n
 
 /-- Adjoint invariance of approximation singular values on Hilbert spaces. -/
 theorem approximationSingularValue_adjoint
@@ -276,7 +276,7 @@ theorem approximationSingularValue_comp_strongProjection_tendsto_complex
       calc
         (K ∘L P i).approximationNumber n
             ≤ K.approximationNumber n * ‖P i‖ :=
-          K.approximationNumber_comp_right_le (P i) n
+          K.approximationNumber_comp_le_mul_norm (P i) n
         _ ≤ K.approximationNumber n * 1 :=
           mul_le_mul_of_nonneg_left hnormNN (K.approximationNumber_nonneg n)
         _ = K.approximationNumber n := by rw [mul_one]
@@ -471,7 +471,7 @@ theorem approximationSingularValue_restrict_mono_complex
     calc
       ((T ∘L V.subtypeL) ∘L J).approximationNumber n
           ≤ (T ∘L V.subtypeL).approximationNumber n * ‖J‖ :=
-        (T ∘L V.subtypeL).approximationNumber_comp_right_le J n
+        (T ∘L V.subtypeL).approximationNumber_comp_le_mul_norm J n
       _ ≤ (T ∘L V.subtypeL).approximationNumber n * 1 :=
         mul_le_mul_of_nonneg_left hJnorm (ContinuousLinearMap.approximationNumber_nonneg _ _)
       _ = (T ∘L V.subtypeL).approximationNumber n := by rw [mul_one]
@@ -503,7 +503,7 @@ theorem approximationSingularValue_orthogonalProjectionOnto_comp_eq
     · calc
         AW.approximationNumber n
             ≤ ‖W.orthogonalProjectionOnto‖ * A.approximationNumber n :=
-          ContinuousLinearMap.approximationNumber_comp_left_le
+          ContinuousLinearMap.approximationNumber_comp_le_norm_mul
             W.orthogonalProjectionOnto A n
         _ ≤ 1 * A.approximationNumber n :=
           mul_le_mul_of_nonneg_right hproj (ContinuousLinearMap.approximationNumber_nonneg _ _)
@@ -512,7 +512,7 @@ theorem approximationSingularValue_orthogonalProjectionOnto_comp_eq
       calc
         (W.subtypeL ∘L AW).approximationNumber n
             ≤ ‖W.subtypeL‖ * AW.approximationNumber n :=
-          ContinuousLinearMap.approximationNumber_comp_left_le W.subtypeL AW n
+          ContinuousLinearMap.approximationNumber_comp_le_norm_mul W.subtypeL AW n
         _ ≤ 1 * AW.approximationNumber n :=
           mul_le_mul_of_nonneg_right hsub (ContinuousLinearMap.approximationNumber_nonneg _ _)
         _ = AW.approximationNumber n := by rw [one_mul]

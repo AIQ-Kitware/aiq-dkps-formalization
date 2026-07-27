@@ -299,8 +299,8 @@ theorem approximationNumber_continuousOrthogonalBlockSum_le_max
       max (A.approximationNumber r) (B.approximationNumber s) := by
   apply le_of_forall_pos_le_add
   intro ε hε
-  obtain ⟨R, hRrank, hRdist⟩ := A.lt_approximationNumber_add_pos r hε
-  obtain ⟨Q, hQrank, hQdist⟩ := B.lt_approximationNumber_add_pos s hε
+  obtain ⟨R, hRrank, hRdist⟩ := A.exists_rank_le_norm_sub_lt_approximationNumber_add r hε
+  obtain ⟨Q, hQrank, hQdist⟩ := B.exists_rank_le_norm_sub_lt_approximationNumber_add s hε
   have hrank : (continuousOrthogonalBlockSum R Q).rank ≤ ((r + s : ℕ) : Cardinal) := by
     calc (continuousOrthogonalBlockSum R Q).rank ≤ R.rank + Q.rank :=
           rank_continuousOrthogonalBlockSum_le R Q

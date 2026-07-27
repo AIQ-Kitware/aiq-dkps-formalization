@@ -18,11 +18,60 @@
         "ForTauCeti.Analysis.InnerProductSpace.CourantFischer",
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteDimensional",
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.MinMax",
-        "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.OperatorModulus"
+        "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.OperatorModulus",
+        "ForTauCeti.SetTheory.Cardinal.Lift",
+        "ForTauCeti.LinearAlgebra.Dimension.RankComp"
       ]
     }
   ],
   "records": [
+    {
+      "source_module": "ForMathlib.Analysis.Normed.Operator.ApproximationNumber",
+      "source_declarations": [
+        "Cardinal.le_natCast_of_lift_le"
+      ],
+      "current_namespace": "Cardinal",
+      "staging_module": "ForTauCeti.SetTheory.Cardinal.Lift",
+      "final_tauceti_module": "TauCeti.SetTheory.Cardinal.Lift",
+      "ownership_class": "tauceti",
+      "roadmap_target": "Part B / PR 1 (dependency-closed prerequisite; separately upstreamable to Mathlib/SetTheory/Cardinal/Order.lean)",
+      "provenance_class": "moved out of the approximation-number module and generalized to an iff (`Cardinal.lift_le_natCast`)",
+      "direct_dependencies": [
+        "Mathlib"
+      ],
+      "blocked_dependencies": [],
+      "downstream_users": [
+        "ForTauCeti.LinearAlgebra.Dimension.RankComp"
+      ],
+      "status": "staged",
+      "upstream_pr": null
+    },
+    {
+      "source_module": "ForMathlib.Analysis.Normed.Operator.ApproximationNumber",
+      "source_declarations": [
+        "ContinuousLinearMap.rank_comp_left_le_of_rank_le",
+        "ContinuousLinearMap.rank_comp_right_le_rank"
+      ],
+      "current_namespace": "LinearMap, ContinuousLinearMap",
+      "staging_module": "ForTauCeti.LinearAlgebra.Dimension.RankComp",
+      "final_tauceti_module": "TauCeti.LinearAlgebra.Dimension.RankComp",
+      "ownership_class": "tauceti",
+      "roadmap_target": "Part B / PR 1 (dependency-closed prerequisite; the LinearMap statement is separately upstreamable to Mathlib/LinearAlgebra/Dimension/LinearMap.lean)",
+      "provenance_class": "moved out of the approximation-number module and generalized off continuous maps (`LinearMap.rank_comp_le_natCast_right`)",
+      "direct_dependencies": [
+        "Mathlib",
+        "ForTauCeti.SetTheory.Cardinal.Lift"
+      ],
+      "blocked_dependencies": [],
+      "downstream_users": [
+        "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Basic",
+        "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteDimensional",
+        "DavisKahan.Interop.Spectra.ApproximationNumberMinMax",
+        "DavisKahan.OperatorIdeal.ApproximationNumbers.Real.Threshold"
+      ],
+      "status": "staged",
+      "upstream_pr": null
+    },
     {
       "source_module": "ForMathlib.Analysis.Normed.Operator.ApproximationNumber",
       "source_declarations": [
@@ -52,7 +101,9 @@
       "ownership_class": "tauceti",
       "roadmap_target": "Part B / PR 1",
       "provenance_class": "copied",
-      "direct_dependencies": ["Mathlib"],
+      "direct_dependencies": [
+        "Mathlib"
+      ],
       "blocked_dependencies": [],
       "downstream_users": [
         "DavisKahan.OperatorIdeal.ApproximationNumbers.Core"
@@ -98,7 +149,9 @@
       "ownership_class": "tauceti",
       "roadmap_target": "Part B / PR 1 (finite-dimensional min-max support)",
       "provenance_class": "copied (namespace renamed ForMathlib -> TauCeti)",
-      "direct_dependencies": ["Mathlib"],
+      "direct_dependencies": [
+        "Mathlib"
+      ],
       "blocked_dependencies": [],
       "downstream_users": [
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteDimensional",
@@ -174,7 +227,9 @@
       "ownership_class": "tauceti",
       "roadmap_target": "Part B / PR 1",
       "provenance_class": "copied (partial: Spectra-coupled invariance and paper-norm wrappers deferred)",
-      "direct_dependencies": ["Mathlib"],
+      "direct_dependencies": [
+        "Mathlib"
+      ],
       "blocked_dependencies": [
         "approximationNumber invariance under the source modulus depends on SpectraBridge.lt_approximationNumber_iff_exists_finiteDimensional_lowerBound (Spectra infinite-dim min-max) -> deferred to a later dependency-closed PR per campaign 9.2 option 2"
       ],

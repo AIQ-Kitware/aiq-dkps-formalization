@@ -63,7 +63,7 @@ theorem approximationSingularValue_comp_strongProjection_tendsto_real
       calc
         (K ∘L P i).approximationNumber n
             ≤ K.approximationNumber n * ‖P i‖ :=
-          K.approximationNumber_comp_right_le (P i) n
+          K.approximationNumber_comp_le_mul_norm (P i) n
         _ ≤ K.approximationNumber n * 1 :=
           mul_le_mul_of_nonneg_left hnormNN (K.approximationNumber_nonneg n)
         _ = K.approximationNumber n := by rw [mul_one]
@@ -179,7 +179,7 @@ theorem approximationSingularValue_restrict_mono_real
     calc
       ((T ∘L V.subtypeL) ∘L J).approximationNumber n
           ≤ (T ∘L V.subtypeL).approximationNumber n * ‖J‖ :=
-        (T ∘L V.subtypeL).approximationNumber_comp_right_le J n
+        (T ∘L V.subtypeL).approximationNumber_comp_le_mul_norm J n
       _ ≤ (T ∘L V.subtypeL).approximationNumber n * 1 :=
         mul_le_mul_of_nonneg_left hJnorm (ContinuousLinearMap.approximationNumber_nonneg _ _)
       _ = (T ∘L V.subtypeL).approximationNumber n := by rw [mul_one]
@@ -211,7 +211,7 @@ theorem approximationSingularValue_orthogonalProjectionOnto_comp_eq_real
     · calc
         AW.approximationNumber n
             ≤ ‖W.orthogonalProjectionOnto‖ * A.approximationNumber n :=
-          ContinuousLinearMap.approximationNumber_comp_left_le
+          ContinuousLinearMap.approximationNumber_comp_le_norm_mul
             W.orthogonalProjectionOnto A n
         _ ≤ 1 * A.approximationNumber n :=
           mul_le_mul_of_nonneg_right hproj (ContinuousLinearMap.approximationNumber_nonneg _ _)
@@ -220,7 +220,7 @@ theorem approximationSingularValue_orthogonalProjectionOnto_comp_eq_real
       calc
         (W.subtypeL ∘L AW).approximationNumber n
             ≤ ‖W.subtypeL‖ * AW.approximationNumber n :=
-          ContinuousLinearMap.approximationNumber_comp_left_le W.subtypeL AW n
+          ContinuousLinearMap.approximationNumber_comp_le_norm_mul W.subtypeL AW n
         _ ≤ 1 * AW.approximationNumber n :=
           mul_le_mul_of_nonneg_right hsub (ContinuousLinearMap.approximationNumber_nonneg _ _)
         _ = AW.approximationNumber n := by rw [one_mul]

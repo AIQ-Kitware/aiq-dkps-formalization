@@ -50,7 +50,7 @@ variable {E : Type v} {F : Type vF}
 theorem approximationNumber_comp_subtypeL_le
     (T : E →L[ℂ] F) (n : ℕ) (V : Submodule ℂ E) :
     (T ∘L V.subtypeL).approximationNumber n ≤ T.approximationNumber n := by
-  have h := T.approximationNumber_comp_right_le V.subtypeL n
+  have h := T.approximationNumber_comp_le_mul_norm V.subtypeL n
   have hsub : ‖V.subtypeL‖ ≤ (1 : ℝ) := V.norm_subtypeL_le
   calc
     (T ∘L V.subtypeL).approximationNumber n
@@ -195,7 +195,7 @@ theorem exists_linearIndependent_lowerBound_of_lt_approximationNumber
     -- `R.rank` and `P.rank` live in different universes once the codomain is
     -- independent, so the comparison goes through the natural-number bound.
     have hRrank : R.rank ≤ (n : Cardinal) :=
-      ContinuousLinearMap.rank_comp_left_le_of_rank_le T P hP
+      ContinuousLinearMap.rank_comp_le_natCast_right P T hP
     have herr : T - R = T ∘L Q := by
       ext x
       change T x - T (P x) = T (Q x)
