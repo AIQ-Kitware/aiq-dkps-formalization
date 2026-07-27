@@ -266,11 +266,13 @@ theorem exists_contractive_riccati_solution_of_spectrum_gap
     · rw [hc, hrdef]
       linarith [hmem.2]
   have hB0cnorm : ‖B0c‖ ≤ r :=
-    TauCeti.IsSelfAdjoint.norm_le_of_spectrum_subset_Icc
-      hB0csa hr0 hB0cspec
-  obtain ⟨J, _hJA, hAJmul, hJnorm⟩ :=
-    TauCeti.IsSelfAdjoint.exists_two_sided_inverse_of_spectrum_gap
-      (A := E1 →L[ℂ] E1) hA1csa hrd hA1cspec
+    (TauCeti.IsSelfAdjoint.norm_le_iff_spectrum_subset_Icc hB0csa hr0).mpr hB0cspec
+  have hA1cunit : IsUnit A1c :=
+    TauCeti.isUnit_of_forall_le_abs (A := E1 →L[ℂ] E1) hrd hA1cspec
+  set J : E1 →L[ℂ] E1 := Ring.inverse A1c
+  have hAJmul : A1c * J = 1 := Ring.mul_inverse_cancel _ hA1cunit
+  have hJnorm : ‖J‖ ≤ (r + d)⁻¹ :=
+    TauCeti.IsSelfAdjoint.norm_ringInverse_le (A := E1 →L[ℂ] E1) hA1csa hrd hA1cspec
   have hAJ : A1c ∘L J = ContinuousLinearMap.id ℂ E1 := by
     rw [← ContinuousLinearMap.mul_def, hAJmul,
       ContinuousLinearMap.one_def]

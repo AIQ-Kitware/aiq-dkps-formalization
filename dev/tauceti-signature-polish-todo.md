@@ -1328,66 +1328,54 @@ theorem HasSum.norm_sq_eq_tsum_norm_sq (horth : Pairwise (Orthogonal 𝕜 on f))
 
 ## 9. C*-algebra and matrix helpers
 
-### 9.1 SelfAdjointGapInverse.lean
+### 9.1 ~~SelfAdjointGapInverse.lean~~ — RESOLVED, removed from backlog
 
-| **Current file** | ForTauCeti/Analysis/CStarAlgebra/SelfAdjointGapInverse.lean |
-| --- | --- |
-| **Proposed disposition** | Replace existential inverse packaging with IsUnit/inverse theorems; verify existing spectral-radius API. |
-| **Readiness** | Medium-low. |
-| **Primary review risks** | Likely reuse; noncanonical witness; bundled conjunction; spectrum-over-ℝ conventions. |
-| **Likely PR slice** | Prerequisite PR only if absent upstream. |
+Executed 2026-07-27 (jon). Both P0 items are settled; the file now carries three
+declarations, all axiom-clean.
 
-#### P0  IsSelfAdjoint.norm_le_of_spectrum_subset_Icc
+**Reuse audit result (P0 `norm_le_of_spectrum_subset_Icc`): no direct Mathlib
+replacement exists, but the honest statement is an iff.** Mathlib's isometric CFC
+layer supplies `norm_cfc_le_iff`, and specializing it to the identity through
+`cfc_id` gives both directions at once, so the one-directional form was strictly
+weaker than what the same proof yields. Kept and strengthened as
+`TauCeti.IsSelfAdjoint.norm_le_iff_spectrum_subset_Icc :
+‖a‖ ≤ r ↔ spectrum ℝ a ⊆ Set.Icc (-r) r` (three-line proof). The four call sites
+now use `.mpr`; the one-directional lemma was **not** retained, per "do not carry
+both APIs".
 
-**Disposition: Reuse audit**
+**Redesign result (P0 `exists_two_sided_inverse_of_spectrum_gap`): the existential
+is gone, split into two declarations.**
 
-```lean
-theorem IsSelfAdjoint.norm_le_of_spectrum_subset_Icc {a : A} (ha : IsSelfAdjoint a) {r : ℝ} (hr : 0 ≤ r) (h : spectrum ℝ a ⊆ Set.Icc (-r) r) : ‖a‖ ≤ r
-```
+- `TauCeti.isUnit_of_forall_le_abs (hr : 0 < r)
+  (hσ : ∀ x ∈ spectrum ℝ a, r ≤ |x|) : IsUnit a`
+- `TauCeti.IsSelfAdjoint.norm_ringInverse_le (ha : IsSelfAdjoint a) (hr : 0 < r)
+  (hσ : ∀ x ∈ spectrum ℝ a, r ≤ |x|) : ‖Ring.inverse a‖ ≤ r⁻¹`
 
-**Proposed target shape**
+Two findings beyond the planned redesign:
 
-```lean
-theorem IsSelfAdjoint.norm_le_of_spectrum_subset_Icc
-    (ha : IsSelfAdjoint a) (hr : 0 ≤ r)
-    (hσ : spectrum ℝ a ⊆ Set.Icc (-r) r) :
-    ‖a‖ ≤ r
-```
+- **Invertibility needs neither self-adjointness nor a C\*-algebra.** It is
+  `spectrum.isUnit_of_zero_notMem` plus "a gap around `0` excludes `0`", so
+  `isUnit_of_forall_le_abs` is stated for `[Ring A] [Algebra ℝ A]` and sits
+  outside the `IsSelfAdjoint` namespace. Carrying `IsSelfAdjoint` there would have
+  been an unused hypothesis — exactly what §3 tells reviewers to attack.
+- **The old proof reimplemented Mathlib.** Its ~30 lines built the inverse by hand
+  from two `cfc_mul`/`cfc_congr` round trips; that is precisely `cfcUnits` /
+  `cfc_inv`, and `cfc_ringInverse_id` states the needed identity outright. The new
+  proof is four lines and, unlike the old one, returns the *canonical*
+  `Ring.inverse` rather than an anonymous witness.
 
-- The name is already conclusion-oriented.
+The hypothesis was left as `∀ x ∈ spectrum ℝ a, r ≤ |x|` rather than the
+`spectrum ℝ a ∩ Set.Ioo (-r) r = ∅` or `Metric.infDist` alternatives the backlog
+floated: all four call sites discharge it pointwise (`rcases` on a two-sided
+spectral hypothesis, then `neg_le_abs`/`le_abs_self`), so the ∀-form is what
+consumers actually produce, and it is the form `norm_cfc_le` consumes.
 
-- Search for self-adjoint norm=spectral-radius and spectrum bounds that make this a one-line corollary.
-
-- Keep only if a direct replacement is absent.
-
-**Likely adversarial review:** Reuse can block this theorem if Mathlib already derives it from the CFC spectrum/norm API.
-
-#### P0  IsSelfAdjoint.exists_two_sided_inverse_of_spectrum_gap
-
-**Disposition: Redesign**
-
-```lean
-theorem IsSelfAdjoint.exists_two_sided_inverse_of_spectrum_gap {a : A} (ha : IsSelfAdjoint a) {r : ℝ} (hr : 0 < r) (h : ∀ x ∈ spectrum ℝ a, r ≤ |x|) : ∃ j : A, j * a = 1 ∧ a * j = 1 ∧ ‖j‖ ≤ r⁻¹
-```
-
-**Proposed target shape**
-
-```lean
-theorem IsSelfAdjoint.isUnit_of_abs_spectrum_ge
-    (ha : IsSelfAdjoint a) (hr : 0 < r)
-    (hσ : ∀ x ∈ spectrum ℝ a, r ≤ |x|) : IsUnit a
-
-theorem IsSelfAdjoint.norm_inv_le_of_abs_spectrum_ge
-    ... : ‖a⁻¹‖ ≤ r⁻¹
-```
-
-- Use the canonical inverse after proving IsUnit.
-
-- Split invertibility and norm bound so consumers can use either result.
-
-- Consider formulating the hypothesis as spectrum ℝ a ∩ Ioo (-r) r = ∅ or dist 0 spectrum ≥ r, whichever matches existing API.
-
-**Likely adversarial review:** An existential j with both inverse equations and a bound is not a characteristic C*-algebra API and will be requested to change.
+Consumers repointed (8 call sites, 4 files): `DavisKahan/Sylvester/GenuineSpectrum.lean`,
+`DavisKahan/TanTheta/GenuineSpectrum.lean`,
+`DavisKahan/TanTheta/UnboundedGenuineSpectrum.lean`,
+`DavisKahan/Experimental/InfiniteDimensional/Riccati/BoundedExistence.lean`. Three
+of the eight destructured a `_hJ2` they never used — direct evidence that the
+bundled conjunction was over-packaged.
 
 ### 9.2 Matrix/Spectrum.lean
 
@@ -1828,7 +1816,8 @@ theorem approximationNumber_tangentOperator ...
 | centeredScatter | scatterOperator | Sketch; verify adjacent Mathlib naming |
 | appendFin | delete; existing Fin combinator | Sketch; verify adjacent Mathlib naming |
 | PosSemidef.eigenvalues₀_eq_zero_of_le | eigenvalues₀_eq_zero_of_rank_le | Sketch; verify adjacent Mathlib naming |
-| exists_two_sided_inverse_of_spectrum_gap | isUnit_of_abs_spectrum_ge + norm_inv_le... | Sketch; verify adjacent Mathlib naming |
+| exists_two_sided_inverse_of_spectrum_gap | isUnit_of_forall_le_abs + IsSelfAdjoint.norm_ringInverse_le | **Landed 2026-07-27** (§9.1); split, and invertibility dropped the `IsSelfAdjoint` hypothesis |
+| IsSelfAdjoint.norm_le_of_spectrum_subset_Icc | IsSelfAdjoint.norm_le_iff_spectrum_subset_Icc | **Landed 2026-07-27** (§9.1); strengthened to an iff, one-directional form not retained |
 
 ## Appendix B. Review questions to answer in roadmaps
 
