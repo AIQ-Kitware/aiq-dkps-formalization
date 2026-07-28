@@ -5,8 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidt
 import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtFiniteRank
-import Spectra.Spaces.Tensor.HilbertSchmidt
-import Spectra.QuantumMechanics.Channels.TraceClass.Basic
+import ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidtEnergy
 
 /-!
 # Basis and tensor models of the paper square norm
@@ -18,9 +17,10 @@ coordinate bridge:
 
 * the column-square sum is independent of the Hilbert basis;
 * it equals the sum of squared approximation singular values;
-* finite energy is equivalent to representation by a unique vector of
-  `E tensor Conj F`;
-* the tensor norm is exactly the paper square norm.
+The tensor model itself — the identification with `E tensor Conj F` and the
+equality of the tensor norm with the paper square norm — lives in
+`DavisKahan/Interop/Spectra/HilbertSchmidtTensor.lean`, because it is the only
+part that needs `vendor/Spectra`.
 
 The key comparison uses finite basis projections.  For every finite set of
 basis vectors, finite-dimensional Eckart--Young and the Frobenius identity
@@ -51,33 +51,18 @@ def paperHilbertSchmidtBasisEnergy {ι : Type*}
     (b : HilbertBasis ι ℂ F) (A : F →L[ℂ] E) : ENNReal :=
   ∑' i, (‖A (b i)‖₊ : ENNReal) ^ 2
 
+/-- The paper column energy is the staged `ContinuousLinearMap.hilbertSchmidtEnergy`. -/
+theorem paperHilbertSchmidtBasisEnergy_eq_hilbertSchmidtEnergy {ι : Type*}
+    (b : HilbertBasis ι ℂ F) (A : F →L[ℂ] E) :
+    paperHilbertSchmidtBasisEnergy b A = A.hilbertSchmidtEnergy b := rfl
+
 /-- Adjoint cross-swap for rectangular operators. -/
 theorem paperHilbertSchmidtBasisEnergy_adjoint_swap
     {ι κ : Type*} (bF : HilbertBasis ι ℂ F)
     (bE : HilbertBasis κ ℂ E) (A : F →L[ℂ] E) :
     paperHilbertSchmidtBasisEnergy bF A =
-      paperHilbertSchmidtBasisEnergy bE A.adjoint := by
-  have hsym : ∀ i j,
-      ‖⟪bE j, A (bF i)⟫_ℂ‖₊ =
-        ‖⟪bF i, A.adjoint (bE j)⟫_ℂ‖₊ := by
-    intro i j
-    rw [← ContinuousLinearMap.adjoint_inner_left,
-      ← inner_conj_symm (bF i) (A.adjoint (bE j)), RCLike.nnnorm_conj]
-  calc
-    paperHilbertSchmidtBasisEnergy bF A
-        = ∑' i, ∑' j,
-            (‖⟪bE j, A (bF i)⟫_ℂ‖₊ : ENNReal) ^ 2 := by
-          simp_rw [paperHilbertSchmidtBasisEnergy,
-            Spectra.QuantumMechanics.Channels.tsum_enorm_inner_sq bE]
-    _ = ∑' j, ∑' i,
-          (‖⟪bE j, A (bF i)⟫_ℂ‖₊ : ENNReal) ^ 2 := ENNReal.tsum_comm
-    _ = ∑' j, ∑' i,
-          (‖⟪bF i, A.adjoint (bE j)⟫_ℂ‖₊ : ENNReal) ^ 2 :=
-        tsum_congr fun j => tsum_congr fun i =>
-          congrArg (fun x : NNReal => (x : ENNReal) ^ 2) (hsym i j)
-    _ = paperHilbertSchmidtBasisEnergy bE A.adjoint := by
-          simp_rw [paperHilbertSchmidtBasisEnergy,
-            Spectra.QuantumMechanics.Channels.tsum_enorm_inner_sq bF]
+      paperHilbertSchmidtBasisEnergy bE A.adjoint :=
+  A.hilbertSchmidtEnergy_adjoint bF bE
 
 /-- The rectangular column-square energy does not depend on the domain basis. -/
 theorem paperHilbertSchmidtBasisEnergy_indep
@@ -469,67 +454,6 @@ theorem paperHilbertSchmidtNorm_eq_sqrt_tsum_basis {ι : Type*}
   congr 1
   rw [NNReal.coe_tsum]
   simp only [NNReal.coe_pow, coe_nnnorm]
-
-/-- Finite paper square energy is equivalent to representation by a unique
-Hilbert tensor. -/
-theorem isPaperHilbertSchmidt_iff_existsUnique_tensor
-    (A : F →L[ℂ] E) :
-    IsPaperHilbertSchmidt A ↔
-      ∃! z : Spectra.HilbertSchmidtTensor.Space E F,
-        Spectra.HilbertSchmidtTensor.toOperator z = A := by
-  obtain ⟨w, b, -⟩ := exists_hilbertBasis ℂ F
-  rw [isPaperHilbertSchmidt_iff_summable_basis b A]
-  exact
-    (Spectra.HilbertSchmidtTensor.existsUnique_tensor_iff_summable_columns b A).symm
-
-/-- The canonical tensor representing a paper Hilbert--Schmidt operator. -/
-noncomputable def paperHilbertSchmidtTensor (A : F →L[ℂ] E)
-    (hA : IsPaperHilbertSchmidt A) :
-    Spectra.HilbertSchmidtTensor.Space E F :=
-  Classical.choose ((isPaperHilbertSchmidt_iff_existsUnique_tensor A).1 hA)
-
-@[simp]
-theorem toOperator_paperHilbertSchmidtTensor (A : F →L[ℂ] E)
-    (hA : IsPaperHilbertSchmidt A) :
-    Spectra.HilbertSchmidtTensor.toOperator
-      (paperHilbertSchmidtTensor A hA) = A :=
-  (Classical.choose_spec
-    ((isPaperHilbertSchmidt_iff_existsUnique_tensor A).1 hA)).1
-
-/-- The tensor norm is exactly the paper square norm. -/
-theorem norm_paperHilbertSchmidtTensor (A : F →L[ℂ] E)
-    (hA : IsPaperHilbertSchmidt A) :
-    ‖paperHilbertSchmidtTensor A hA‖ = paperHilbertSchmidtNorm A := by
-  obtain ⟨w, b, -⟩ := exists_hilbertBasis ℂ F
-  have hsq := Spectra.HilbertSchmidtTensor.norm_sq_eq_tsum_column_norm_sq
-    b (paperHilbertSchmidtTensor A hA)
-  rw [toOperator_paperHilbertSchmidtTensor] at hsq
-  rw [paperHilbertSchmidtNorm_eq_sqrt_tsum_basis b A hA, ← hsq,
-    Real.sqrt_sq (norm_nonneg _)]
-
-/-- Every Hilbert tensor represents a paper Hilbert--Schmidt operator. -/
-theorem isPaperHilbertSchmidt_toOperator
-    (z : Spectra.HilbertSchmidtTensor.Space E F) :
-    IsPaperHilbertSchmidt (Spectra.HilbertSchmidtTensor.toOperator z) := by
-  rw [isPaperHilbertSchmidt_iff_existsUnique_tensor]
-  refine ⟨z, rfl, ?_⟩
-  intro w hw
-  exact Spectra.HilbertSchmidtTensor.toOperator_injective hw
-
-/-- The paper square norm of the represented operator is exactly the Hilbert
-tensor norm. -/
-theorem paperHilbertSchmidtNorm_toOperator
-    (z : Spectra.HilbertSchmidtTensor.Space E F) :
-    paperHilbertSchmidtNorm (Spectra.HilbertSchmidtTensor.toOperator z) = ‖z‖ := by
-  let hZ := isPaperHilbertSchmidt_toOperator z
-  have hcanon := norm_paperHilbertSchmidtTensor
-    (Spectra.HilbertSchmidtTensor.toOperator z) hZ
-  have heq : paperHilbertSchmidtTensor
-      (Spectra.HilbertSchmidtTensor.toOperator z) hZ = z := by
-    apply Spectra.HilbertSchmidtTensor.toOperator_injective
-    rw [toOperator_paperHilbertSchmidtTensor]
-  rw [heq] at hcanon
-  exact hcanon.symm
 
 end
 
