@@ -1,0 +1,17 @@
+name = "finish_tan_two_theta"
+version = "0.1.0"
+defaultTargets = ["FinishTanTwoTheta"]
+
+[leanOptions]
+pp.unicode.fun = true
+autoImplicit = false
+
+# This package is deliberately nested so the overlay adds only new files.
+# It consumes the live parent repository as a Lake dependency.
+[[require]]
+name = "aiq_dkps_formalization"
+path = ".."
+
+[[lean_lib]]
+name = "FinishTanTwoTheta"
+globs = ["FinishTanTwoTheta.*"]
