@@ -19,3 +19,41 @@ Do not add new generic theorems to this module. A consumer should import the
 canonical `ForTauCeti` API directly whenever its statement can use raw partial
 maps. Delete this boundary after the final source/Spectra consumer migrates.
 -/
+
+namespace TauCeti
+namespace DavisKahanExt
+namespace ClosedOperator
+
+variable {𝕜 : Type*} [RCLike 𝕜]
+variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
+  [CompleteSpace E]
+
+/-- Compatibility packaging of a raw partial map when a legacy source-facing
+result still requires the historical bundle. -/
+noncomputable def ofLinearPMap
+    (A : E →ₗ.[𝕜] E)
+    (hdense : Dense (A.domain : Set E))
+    (hclosed : A.IsClosed) :
+    ClosedOperator (𝕜 := 𝕜) (E := E) where
+  domain := A.domain
+  toLinearMap := A.toFun
+  dense_domain := hdense
+  closed_graph := by
+    have hgraph : (A.graph : Set (E × E)) =
+        Set.range fun x : A.domain => ((x : E), A.toFun x) := by
+      ext p
+      change p ∈ A.graph ↔ p ∈ Set.range fun x : A.domain => ((x : E), A.toFun x)
+      rw [LinearPMap.mem_graph_iff']
+      rfl
+    rw [← hgraph]
+    exact hclosed
+
+@[simp] theorem ofLinearPMap_toLinearPMap
+    (A : E →ₗ.[𝕜] E)
+    (hdense : Dense (A.domain : Set E))
+    (hclosed : A.IsClosed) :
+    (ofLinearPMap A hdense hclosed).toLinearPMap = A := rfl
+
+end ClosedOperator
+end DavisKahanExt
+end TauCeti

@@ -41,8 +41,9 @@ theorem sinTheta_unbounded_opNorm
       ((α - β) / 2 + δ)) :
     δ * ‖D.X.adjoint ∘L D.F₁‖ ≤ ‖D.residual.adjoint ∘L D.F₁‖ := by
   have hEq := unbounded_adjoint_residual_block_identity D hA hA₀ hΛ₁
-  have h := norm_closedSylvester_le_of_exteriorInterval hA₀.isSymmetric
-    hβα hδ hA₀low hA₀high hΛres hEq
+  have h := linearPMap_norm_sylvester_le_of_exteriorInterval
+    (A := D.A₀.toLinearPMap) (B := D.Λ₁.toLinearPMap)
+    hA₀.isSymmetric D.A₀.toLinearPMap_dense hβα hδ hA₀low hA₀high hΛres hEq
   simpa [norm_neg] using h
 
 end ExactSinTheta
