@@ -52,42 +52,44 @@ theorem TwoSidedShiftedInverseBound.leftShiftedInverseBound
 
 /-! ## Numerical radius controls the norm of a symmetric block -/
 
-/-- A symmetric closed operator whose quadratic form lies in `[β, α]` on its
+omit [CompleteSpace F] in
+/-- A symmetric partial map whose quadratic form lies in `[β, α]` on its
 domain satisfies `‖B y - c y‖ ≤ r ‖y‖` there, where `c = (α+β)/2` is the
 center and `r = (α-β)/2` the radius.  Polarization gives the sesquilinear
 bound and density of the domain converts it into the norm bound. -/
-theorem _root_.TauCeti.DavisKahanExt.ClosedOperator.norm_shift_apply_le_of_form_bounds
-    {B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := F)}
-    (hsym : B.IsSymmetric)
+theorem linearPMap_norm_shift_apply_le_of_form_bounds
+    {B : F →ₗ.[𝕜] F} (hsym : TauCeti.LinearPMap.IsSymmetric B)
+    (hBdense : Dense (B.domain : Set F))
     {β α : ℝ} (hβα : β ≤ α)
-    (hlow : SemiboundedBelow B β) (hhigh : SemiboundedAbove B α)
+    (hlow : TauCeti.LinearPMap.SemiboundedBelow B β)
+    (hhigh : TauCeti.LinearPMap.SemiboundedAbove B α)
     (u : B.domain) :
-    ‖B.toLinearMap u - (((α + β) / 2 : ℝ) : 𝕜) • (u : F)‖ ≤
+    ‖B u - (((α + β) / 2 : ℝ) : 𝕜) • (u : F)‖ ≤
       (α - β) / 2 * ‖(u : F)‖ := by
   set c : ℝ := (α + β) / 2 with hc
   set r : ℝ := (α - β) / 2 with hr
   have hr0 : 0 ≤ r := by rw [hr]; linarith
   set S : B.domain → F :=
-    fun w => B.toLinearMap w - ((c : ℝ) : 𝕜) • (w : F) with hS
+    fun w => B w - ((c : ℝ) : 𝕜) • (w : F) with hS
   -- symmetry of the shifted operator
   have hSsym : ∀ v w : B.domain, ⟪S v, (w : F)⟫_𝕜 = ⟪(v : F), S w⟫_𝕜 := by
     intro v w
     simp only [hS, inner_sub_left, inner_sub_right, inner_smul_left,
       inner_smul_right, RCLike.conj_ofReal]
-    rw [TauCeti.DavisKahanExt.ClosedOperator.IsSymmetric.toLinearMap_inner_eq hsym v w]
+    rw [hsym v w]
   -- the quadratic form of the shift lies in `[-r, r]`
   have hform : ∀ w : B.domain,
       |RCLike.re ⟪S w, (w : F)⟫_𝕜| ≤ r * ‖(w : F)‖ ^ 2 := by
     intro w
     have hval : ⟪S w, (w : F)⟫_𝕜 =
-        ⟪B.toLinearMap w, (w : F)⟫_𝕜 -
+        ⟪B w, (w : F)⟫_𝕜 -
           ((c : ℝ) : 𝕜) * ⟪(w : F), (w : F)⟫_𝕜 := by
       simp only [hS, inner_sub_left, inner_smul_left, RCLike.conj_ofReal]
     have hre : RCLike.re ⟪S w, (w : F)⟫_𝕜 =
-        RCLike.re ⟪B.toLinearMap w, (w : F)⟫_𝕜 - c * ‖(w : F)‖ ^ 2 := by
+        RCLike.re ⟪B w, (w : F)⟫_𝕜 - c * ‖(w : F)‖ ^ 2 := by
       rw [hval, map_sub, RCLike.re_ofReal_mul, inner_self_eq_norm_sq]
-    have h1 := SemiboundedBelow.toLinearMap_bound hlow w
-    have h2 := SemiboundedAbove.toLinearMap_bound hhigh w
+    have h1 := hlow w
+    have h2 := hhigh w
     rw [hre, abs_le]
     constructor
     · rw [hc, hr] at *
@@ -99,10 +101,20 @@ theorem _root_.TauCeti.DavisKahanExt.ClosedOperator.norm_shift_apply_le_of_form_
       RCLike.re ⟪S v, (w : F)⟫_𝕜 ≤ (r / 2) * (‖(v : F)‖ ^ 2 + ‖(w : F)‖ ^ 2) := by
     intro v w
     have hSadd : S (v + w) = S v + S w := by
-      simp only [hS, map_add, Submodule.coe_add, smul_add]
+      rw [hS]
+      change B (v + w) - ((c : ℝ) : 𝕜) • ((v + w : B.domain) : F) =
+        (B v - ((c : ℝ) : 𝕜) • (v : F)) +
+          (B w - ((c : ℝ) : 𝕜) • (w : F))
+      rw [_root_.LinearPMap.map_add B v w]
+      simp only [Submodule.coe_add, smul_add]
       abel
     have hSsub : S (v - w) = S v - S w := by
-      simp only [hS, map_sub, Submodule.coe_sub, smul_sub]
+      rw [hS]
+      change B (v - w) - ((c : ℝ) : 𝕜) • ((v - w : B.domain) : F) =
+        (B v - ((c : ℝ) : 𝕜) • (v : F)) -
+          (B w - ((c : ℝ) : 𝕜) • (w : F))
+      rw [_root_.LinearPMap.map_sub B v w]
+      simp only [Submodule.coe_sub, smul_sub]
       abel
     have hswap : RCLike.re ⟪S w, (v : F)⟫_𝕜 = RCLike.re ⟪S v, (w : F)⟫_𝕜 := by
       rw [hSsym w v, ← inner_conj_symm]
@@ -147,7 +159,12 @@ theorem _root_.TauCeti.DavisKahanExt.ClosedOperator.norm_shift_apply_le_of_form_
     set v' : B.domain := ((a : ℝ) : 𝕜) • v with hv'
     set w' : B.domain := ((b : ℝ) : 𝕜) • w with hw'
     have hSv' : S v' = ((a : ℝ) : 𝕜) • S v := by
-      simp only [hS, hv', map_smul, Submodule.coe_smul, smul_sub]
+      rw [hS, hv']
+      change B (((a : ℝ) : 𝕜) • v) - ((c : ℝ) : 𝕜) •
+          ((((a : ℝ) : 𝕜) • v : B.domain) : F) =
+        ((a : ℝ) : 𝕜) • (B v - ((c : ℝ) : 𝕜) • (v : F))
+      rw [_root_.LinearPMap.map_smul B ((a : ℝ) : 𝕜) v]
+      simp only [Submodule.coe_smul, smul_sub]
       rw [smul_comm]
     have hnv' : ‖(v' : F)‖ = 1 := by
       rw [hv', Submodule.coe_smul, norm_smul, RCLike.norm_ofReal,
@@ -190,7 +207,7 @@ theorem _root_.TauCeti.DavisKahanExt.ClosedOperator.norm_shift_apply_le_of_form_
       exact hscaled u ⟨z, hz⟩
     intro z
     have hz : z ∈ closure (B.domain : Set F) := by
-      rw [B.dense_domain.closure_eq]
+      rw [hBdense.closure_eq]
       trivial
     exact closure_minimal hsubset hclosed hz
   have hkey := hall (S u)
@@ -199,6 +216,20 @@ theorem _root_.TauCeti.DavisKahanExt.ClosedOperator.norm_shift_apply_le_of_form_
   · rw [← h0]
     exact mul_nonneg hr0 (norm_nonneg _)
   · nlinarith
+
+omit [CompleteSpace F] in
+/-- Compatibility entry point for the raw shifted-form estimate. -/
+theorem _root_.TauCeti.DavisKahanExt.ClosedOperator.norm_shift_apply_le_of_form_bounds
+    {B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := F)}
+    (hsym : B.IsSymmetric)
+    {β α : ℝ} (hβα : β ≤ α)
+    (hlow : SemiboundedBelow B β) (hhigh : SemiboundedAbove B α)
+    (u : B.domain) :
+    ‖B.toLinearMap u - (((α + β) / 2 : ℝ) : 𝕜) • (u : F)‖ ≤
+      (α - β) / 2 * ‖(u : F)‖ := by
+  simpa only [TauCeti.DavisKahanExt.ClosedOperator.toLinearPMap_apply] using
+    linearPMap_norm_shift_apply_le_of_form_bounds (B := B.toLinearPMap) hsym B.toLinearPMap_dense
+      hβα hlow hhigh u
 
 /-! ## Constant-one interval/exterior closed Sylvester estimates -/
 
