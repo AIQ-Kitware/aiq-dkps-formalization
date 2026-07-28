@@ -30,15 +30,6 @@ open Module (finrank)
 variable {𝕜 : Type*} [RCLike 𝕜]
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
 
-private theorem specSubspace_eq_span_filter {n : ℕ}
-    (b : OrthonormalBasis (Fin n) 𝕜 E) (p : Fin n → Prop) [DecidablePred p] :
-    specSubspace b p =
-      Submodule.span 𝕜 (b '' (↑(Finset.univ.filter p) : Set (Fin n))) := by
-  unfold specSubspace
-  congr 1
-  ext x
-  simp
-
 variable [FiniteDimensional 𝕜 E]
 
 /-- Population-only gap around a selected spectral set. -/
@@ -51,9 +42,9 @@ Yu--Wang--Samworth population-gap theorem. -/
 def CorrespondingEigenblock {A B : E →ₗ[𝕜] E}
     (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     (U V : Submodule 𝕜 E) : Prop :=
-  ∃ (n : ℕ) (hn : finrank 𝕜 E = n) (p : Fin n → Prop),
-    U = specSubspace (hA.eigenvectorBasis hn) p ∧
-      V = specSubspace (hB.eigenvectorBasis hn) p
+  ∃ (n : ℕ) (hn : finrank 𝕜 E = n) (s : Finset (Fin n)),
+    U = (hA.eigenvectorBasis hn).spanIndices ↑s ∧
+      V = (hB.eigenvectorBasis hn).spanIndices ↑s
 
 /-- Frobenius sine distance in canonical subspace notation. -/
 noncomputable def sinThetaFrobenius (U V : Submodule 𝕜 E)
@@ -121,30 +112,29 @@ theorem yuWangSamworth_sinTheta_le
       2 * min (Real.sqrt d * ‖(B - A).toContinuousLinearMap‖)
         (UnitarilyInvariantNorm.frobenius 𝕜 E (B - A)) / Δ := by
   classical
-  obtain ⟨n, hn, p, rfl, rfl⟩ := hcorr
-  let s : Finset (Fin n) := Finset.univ.filter p
+  obtain ⟨n, hn, s, rfl, rfl⟩ := hcorr
   have hcard : s.card = d := by
-    rw [← hrank, finrank_specSubspace]
+    rw [← hrank, (hA.eigenvectorBasis hn).finrank_spanIndices]
   have hindexGap : ∀ j ∈ s, ∀ k ∉ s,
       Δ ≤ |hA.eigenvalues hn j - hA.eigenvalues hn k| := by
     intro j hj k hk
     apply hgap (hA.eigenvalues hn j) (hA.eigenvalues hn k)
     · refine ⟨hA.eigenvectorBasis hn j, ?_, ?_, hA.apply_eigenvectorBasis hn j⟩
-      · rw [specSubspace_eq_span_filter]
+      · rw [OrthonormalBasis.spanIndices]
         exact Submodule.subset_span ⟨j, hj, rfl⟩
       · exact (hA.eigenvectorBasis hn).orthonormal.ne_zero j
     · refine ⟨hA.eigenvectorBasis hn k, ?_, ?_, hA.apply_eigenvectorBasis hn k⟩
-      · rw [orthogonal_specSubspace, specSubspace_eq_span_filter]
+      · rw [OrthonormalBasis.orthogonal_spanIndices, OrthonormalBasis.spanIndices]
         apply Submodule.subset_span
         refine ⟨k, ?_, rfl⟩
-        simpa [s] using hk
+        simpa using hk
       · exact (hA.eigenvectorBasis hn).orthonormal.ne_zero k
   have hsine : sinThetaFrobenius
-      (specSubspace (hA.eigenvectorBasis hn) p)
-      (specSubspace (hB.eigenvectorBasis hn) p) =
+      ((hA.eigenvectorBasis hn).spanIndices ↑s)
+      ((hB.eigenvectorBasis hn).spanIndices ↑s) =
       Real.sqrt (∑ j ∈ s, ∑ k ∈ sᶜ,
         ‖⟪hA.eigenvectorBasis hn k, hB.eigenvectorBasis hn j⟫_𝕜‖ ^ 2) := by
-    simpa only [specSubspace_eq_span_filter] using
+    simpa only [OrthonormalBasis.spanIndices] using
       (sinThetaFrobenius_eq_sqrt_sum_cross
         (hA.eigenvectorBasis hn) (hB.eigenvectorBasis hn) s)
   rw [hsine]
@@ -193,9 +183,9 @@ theorem yuWangSamworth_sinTheta_le
 
 /-- A spectral subspace of an eigenbasis reduces the operator: it is spanned by
 eigenvectors, each of which maps to a scalar multiple of itself. -/
-theorem reduces_specSubspace {n : ℕ} {B : E →ₗ[𝕜] E} (hB : B.IsSymmetric)
-    (hn : finrank 𝕜 E = n) (p : Fin n → Prop) :
-    Reduces B (specSubspace (hB.eigenvectorBasis hn) p) := by
+theorem reduces_spanIndices {n : ℕ} {B : E →ₗ[𝕜] E} (hB : B.IsSymmetric)
+    (hn : finrank 𝕜 E = n) (s : Set (Fin n)) :
+    Reduces B ((hB.eigenvectorBasis hn).spanIndices s) := by
   intro x hx
   refine Submodule.span_induction ?_ ?_ ?_ ?_ hx
   · rintro y ⟨i, hip, rfl⟩
@@ -222,10 +212,10 @@ theorem yuWangSamworth_intervalBlock_le
     sinThetaFrobenius U V ≤
       2 * min (Real.sqrt (finrank 𝕜 U) * ‖(B - A).toContinuousLinearMap‖)
         (UnitarilyInvariantNorm.frobenius 𝕜 E (B - A)) / Δ := by
-  obtain ⟨n, hn, p, -, hVp⟩ := id hcorr
+  obtain ⟨n, hn, s, -, hVp⟩ := id hcorr
   refine yuWangSamworth_sinTheta_le hA hB ?_ ?_ hcorr rfl hΔ hgap
   · rw [hUeq]; exact reduces_spectralSubspace A (Set.Icc a b)
-  · rw [hVp]; exact reduces_specSubspace hB hn p
+  · rw [hVp]; exact reduces_spanIndices hB hn ↑s
 
 /-- The family-level squared sine agrees with the canonical Frobenius
 sine whenever the two orthonormal families span the supplied subspaces. -/

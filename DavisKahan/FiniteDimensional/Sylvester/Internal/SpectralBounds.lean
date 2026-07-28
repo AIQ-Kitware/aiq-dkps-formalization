@@ -37,7 +37,7 @@ theorem re_inner_le_of_eigenvalues_le
     {T : E →ₗ[𝕜] E} (hT : T.IsSymmetric) {c : ℝ}
     (hc : ∀ i : Fin (Module.finrank 𝕜 E), hT.eigenvalues rfl i ≤ c)
     (x : E) : RCLike.re ⟪T x, x⟫_𝕜 ≤ c * ‖x‖ ^ 2 := by
-  rw [re_inner_map_self_eq_sum_eigenvalues_mul_sq hT rfl x]
+  rw [LinearMap.IsSymmetric.re_inner_apply_self_eq_sum_eigenvalues_mul_sq hT rfl x]
   calc
     (∑ i : Fin (Module.finrank 𝕜 E),
         hT.eigenvalues rfl i * ‖(hT.eigenvectorBasis rfl).repr x i‖ ^ 2)
@@ -55,7 +55,7 @@ theorem le_re_inner_of_le_eigenvalues
     {T : E →ₗ[𝕜] E} (hT : T.IsSymmetric) {c : ℝ}
     (hc : ∀ i : Fin (Module.finrank 𝕜 E), c ≤ hT.eigenvalues rfl i)
     (x : E) : c * ‖x‖ ^ 2 ≤ RCLike.re ⟪T x, x⟫_𝕜 := by
-  rw [re_inner_map_self_eq_sum_eigenvalues_mul_sq hT rfl x]
+  rw [LinearMap.IsSymmetric.re_inner_apply_self_eq_sum_eigenvalues_mul_sq hT rfl x]
   calc
     c * ‖x‖ ^ 2 = ∑ i : Fin (Module.finrank 𝕜 E),
         c * ‖(hT.eigenvectorBasis rfl).repr x i‖ ^ 2 := by

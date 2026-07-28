@@ -4,7 +4,6 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
 import ForTauCeti.Analysis.InnerProductSpace.CourantFischer
-import ForTauCeti.Analysis.InnerProductSpace.CourantFischerCompat
 import ForMathlib.Analysis.InnerProductSpace.ProjectionGap
 
 /-!
@@ -194,10 +193,11 @@ theorem re_inner_le_of_forall_eigenvalue_le {n : ℕ} {T : E →ₗ[𝕜] E}
     (hT : T.IsSymmetric) (hn : finrank 𝕜 E = n) {c : ℝ}
     (hc : ∀ i, hT.eigenvalues hn i ≤ c) (x : E) :
     RCLike.re ⟪T x, x⟫_𝕜 ≤ c * ‖x‖ ^ 2 := by
-  refine re_inner_map_self_le_of_mem_specSubspace hT hn (p := fun _ => True)
+  refine LinearMap.IsSymmetric.re_inner_apply_self_le_of_mem_spanIndices hT hn (s := Set.univ)
     (fun i _ => hc i) ?_
-  have htop : specSubspace (hT.eigenvectorBasis hn) (fun _ : Fin n => True) = ⊤ := by
-    rw [specSubspace, eq_top_iff, ← (hT.eigenvectorBasis hn).toBasis.span_eq]
+  have htop : (hT.eigenvectorBasis hn).spanIndices (Set.univ : Set (Fin n)) = ⊤ := by
+    rw [OrthonormalBasis.spanIndices, eq_top_iff,
+      ← (hT.eigenvectorBasis hn).toBasis.span_eq]
     exact Submodule.span_mono (by rintro y ⟨i, rfl⟩; exact ⟨i, trivial, rfl⟩)
   rw [htop]; exact Submodule.mem_top
 
@@ -207,10 +207,11 @@ theorem le_re_inner_of_forall_le_eigenvalue {n : ℕ} {T : E →ₗ[𝕜] E}
     (hT : T.IsSymmetric) (hn : finrank 𝕜 E = n) {c : ℝ}
     (hc : ∀ i, c ≤ hT.eigenvalues hn i) (x : E) :
     c * ‖x‖ ^ 2 ≤ RCLike.re ⟪T x, x⟫_𝕜 := by
-  refine le_re_inner_map_self_of_mem_specSubspace hT hn (p := fun _ => True)
+  refine LinearMap.IsSymmetric.le_re_inner_apply_self_of_mem_spanIndices hT hn (s := Set.univ)
     (fun i _ => hc i) ?_
-  have htop : specSubspace (hT.eigenvectorBasis hn) (fun _ : Fin n => True) = ⊤ := by
-    rw [specSubspace, eq_top_iff, ← (hT.eigenvectorBasis hn).toBasis.span_eq]
+  have htop : (hT.eigenvectorBasis hn).spanIndices (Set.univ : Set (Fin n)) = ⊤ := by
+    rw [OrthonormalBasis.spanIndices, eq_top_iff,
+      ← (hT.eigenvectorBasis hn).toBasis.span_eq]
     exact Submodule.span_mono (by rintro y ⟨i, rfl⟩; exact ⟨i, trivial, rfl⟩)
   rw [htop]; exact Submodule.mem_top
 

@@ -7,6 +7,7 @@ module
 
 public import Mathlib.Analysis.InnerProductSpace.Adjoint
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Basic
+public import ForTauCeti.LinearAlgebra.Dimension.RankComp
 
 /-!
 # Adjoint invariance of approximation numbers
@@ -80,23 +81,12 @@ private theorem rank_adjoint_le_natCast_of_rank_le
       R.rangeRestrict.adjoint ∘L R.range.subtypeL.adjoint := by
     rw [← ContinuousLinearMap.adjoint_comp]
     congr 1
-  have hrestrict :
-      LinearMap.rank R.rangeRestrict.adjoint.toLinearMap ≤ (n : Cardinal) := by
-    have hlift := lift_rank_range_le R.rangeRestrict.adjoint.toLinearMap
-    have hbound :
-        Cardinal.lift.{v} (Module.rank 𝕜 R.range) ≤ (n : Cardinal) := by
-      calc
-        Cardinal.lift.{v} (Module.rank 𝕜 R.range)
-            ≤ Cardinal.lift.{v} ((n : Cardinal)) := Cardinal.lift_le.mpr hR
-        _ = (n : Cardinal) := Cardinal.lift_natCast n
-    exact Cardinal.lift_le_natCast.mp (hlift.trans hbound)
+  have hrestrict : R.rangeRestrict.adjoint.rank ≤ (n : Cardinal) :=
+    Cardinal.lift_le_natCast.mp
+      ((lift_rank_range_le R.rangeRestrict.adjoint.toLinearMap).trans
+        (Cardinal.lift_le_natCast.mpr hR))
   rw [hadj]
-  refine le_trans ?_ hrestrict
-  change LinearMap.rank
-      (R.rangeRestrict.adjoint.toLinearMap.comp
-        R.range.subtypeL.adjoint.toLinearMap) ≤
-    LinearMap.rank R.rangeRestrict.adjoint.toLinearMap
-  exact LinearMap.rank_comp_le_left _ _
+  exact (rank_comp_le_left _ _).trans hrestrict
 
 /-- One half of adjoint invariance for approximation numbers. -/
 private theorem approximationNumber_adjoint_le
@@ -109,11 +99,16 @@ private theorem approximationNumber_adjoint_le
       T.adjoint.approximationNumber_le_norm_sub
         (rank_adjoint_le_natCast_of_rank_le R hR)
     _ = ‖T - R‖ := by
-      simpa only [coe_nnnorm, ← map_sub] using
+      simpa only [← map_sub] using
         (ContinuousLinearMap.adjoint.norm_map (T - R))
 
 /-- Approximation numbers of bounded operators between Hilbert spaces are
- invariant under adjoint. -/
+invariant under adjoint.
+
+Marked `@[simp]` because it eliminates `adjoint` outright: the left-hand side is
+strictly larger than the right, so it cannot loop, and `T.adjoint` is never the
+normal form when an approximation number is what is being computed. -/
+@[simp]
 theorem approximationNumber_adjoint (T : E →L[𝕜] F) (n : ℕ) :
     T.adjoint.approximationNumber n = T.approximationNumber n := by
   apply le_antisymm

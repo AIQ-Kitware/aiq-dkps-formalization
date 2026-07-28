@@ -97,16 +97,38 @@ unified onto `ContinuousLinearMap.modulus`
 | `TauCeti.rectangularOperatorModulus_mul_self` | `ContinuousLinearMap.modulus_mul_self` |
 | `TauCeti.norm_rectangularOperatorModulus_apply` | `ContinuousLinearMap.norm_modulus_apply` (`simp`) |
 | `TauCeti.norm_rectangularOperatorModulus` | `ContinuousLinearMap.norm_modulus` (`simp`) |
-| `TauCeti.operatorAbs T` | `T.modulus` (square case; shim alias retained) |
+| `TauCeti.operatorAbs T` | `T.modulus` (square case) |
 | `TauCeti.operatorAbs_unique` | `ContinuousLinearMap.eq_modulus_of_nonneg_of_mul_self_eq` |
 | `TauCeti.operatorAbs_commute_operatorAbs` | `ContinuousLinearMap.modulus_commute_modulus` |
 | `TauCeti.norm_operatorAbs_mul` | `ContinuousLinearMap.norm_modulus_comp` (generalized to rectangular) |
 | `TauCeti.norm_mul_operatorAbs` | `ContinuousLinearMap.norm_comp_modulus` (generalized to rectangular) |
 | — (new) | `ContinuousLinearMap.adjoint_modulus`, `modulus_eq_sqrt_star_mul_self`, `modulus_mul_self_eq_star_mul_self` |
 
-Historical `operatorAbs` names remain available from the transitional
-`OperatorAbsoluteValue.lean` shim; the historical `rectangularOperatorModulus`
-names are **gone** (their consumers were repointed in the same commit).
+Both historical name families are now **gone**. The
+`rectangularOperatorModulus` names went with the unification; the `operatorAbs`
+names outlived it by a few days inside a transitional
+`OperatorAbsoluteValue.lean` shim, and that file was deleted on 2026-07-27 once
+its consumers were repointed (§13 adapter retirement). The three DKPS wrappers
+that carried the old word in their own names moved with it:
+`operatorAbs_sameApproximationSingularValues` →
+`modulus_sameApproximationSingularValues`, `operatorAbs_mem_and_gauge_eq` →
+`modulus_mem_and_gauge_eq`, `paperNorm_operatorAbs_eq` → `paperNorm_modulus_eq`,
+all in `DavisKahan/OperatorIdeal/ApproximationNumbers/OperatorModulus.lean`.
+
+One lemma moved *into* the canonical module rather than being deleted:
+`ContinuousLinearMap.modulus_apply_eq_zero_iff` (`|T| x = 0 ↔ T x = 0`) had been
+declared from `DavisKahan/Geometry/Angle/OperatorAngleComplex.lean` directly into
+the shim's namespace. It is a general fact about the modulus, so it now lives in
+`ForTauCeti/Analysis/InnerProductSpace/OperatorModulus.lean`, stated for
+rectangular `T` rather than only for endomorphisms.
+
+**Gotcha for anyone repointing the remaining adapters:** the canonical modulus
+laws are stated with `ContinuousLinearMap.adjoint` and `∘L`, whereas the shim
+restated them with `star` and `*`. On an endomorphism algebra those agree, but
+only by unfolding, so `rw` will not see through it — a call site in the `*` form
+needs a `show … ∘L …` (or its local facts restated in the canonical form) before
+the rewrite matches. Two rewrites in `norm_sinTwoAngleOperatorC` needed exactly
+that.
 
 **CourantFischer name map (2026-07-24).** The ForTauCeti copy carries the FINAL
 redesigned API (polish backlog §6 executed; basis-span scaffolding generalized
@@ -129,7 +151,34 @@ ForMathlib consumers once, to these names:
 | `ForMathlib.eigenvalues_le_eigenvalues_of_re_inner_le` | `LinearMap.IsSymmetric.eigenvalue_mono` |
 | `ForMathlib.map_mem_specSubspace` | `LinearMap.IsSymmetric.map_mem_spanIndices` |
 | `ForMathlib.abs_eigenvalues_sub_le` | `TauCeti.abs_eigenvalue_sub_eigenvalue_le` (LinearMap, pointwise bound) |
-| `ForMathlib.abs_eigenvalues_sub_le_opNorm` | `TauCeti.abs_eigenvalue_sub_eigenvalue_le_norm` (CLM; symmetry stated on the coerced linear maps so no `Star`/`CompleteSpace` instance is required; conclusion `‖T − S‖`, no `toContinuousLinearMap` in the signature) |
+| `ForMathlib.abs_eigenvalues_sub_le_opNorm` | `TauCeti.abs_eigenvalue_sub_eigenvalue_le_norm` (CLM; symmetry stated on the coerced linear maps so no `Star`/`CompleteSpace` instance is required; conclusion `‖T − S‖`, no `toContinuousLinearMap` in the signature) — **but the old name also survives**, see below |
+
+**The `CourantFischerCompat` shim is retired (2026-07-27).** Every name in the
+left column above is gone from the tree; the consumers listed in the shim's
+header have been repointed. Two things this map did not anticipate, both now
+settled in `CourantFischer.lean` and `BasisSpan.lean`:
+
+- **`TauCeti.abs_eigenvalues_sub_le_opNorm` could not be deleted**, because it is
+  pinned *as data*: `comparator/candidate-02-courant-fischer-weyl.json` lists it
+  in `theorem_names` and the immutable
+  `Challenge/MathlibCandidate/CourantFischerWeyl/Conformance.lean` declares it
+  under that name. It therefore moved out of the shim into the canonical
+  `CourantFischer.lean`, keeping its name and its `LinearMap` +
+  `toContinuousLinearMap` statement, with the reason recorded on the
+  declaration. It is not a duplicate of
+  `abs_eigenvalue_sub_eigenvalue_le_norm`: the eigenvalue API is stated for
+  `LinearMap.IsSymmetric`, so the `LinearMap` form needs no coercion in its
+  hypotheses where the continuous form needs two.
+- **The predicate-to-set change is not a rename.** `specSubspace b p` became
+  `b.spanIndices ↑s` with `s : Finset`, or `b.spanIndices {i | p i}` / `Set.univ`
+  / `Set.Ici i` where the selection was not a Finset, and each call site's
+  hypotheses changed shape with it. Three consequences worth knowing: `rw
+  [orthogonal_spanIndices]` produces `sᶜ`, so a site that wrote its two blocks as
+  `(· ∈ s)`/`(· ∉ s)` must use `↑s`/`(↑s)ᶜ` or the rewrite will not close;
+  `finrank_spanIndices` has both a `Finset` and a `Set` form and the `Set` one is
+  what a `Set.Ici`-style selection needs; and `DavisKahan/Specialized/Statistics.lean`
+  lost a private helper outright, because `spanIndices` *is* `Submodule.span 𝕜 (b '' s)`
+  by definition and the helper existed only to say so through a `Finset.filter`.
 
 ## Not for ForTauCeti
 

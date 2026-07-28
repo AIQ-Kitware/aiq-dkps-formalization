@@ -9,7 +9,7 @@ This overlay repairs the final remaining error in
 campaign.
 
 The rectangular specialization no longer refers to the fragile local helper
-name `SymmetricNormIdeal.operatorAbs_mem_and_gauge_eq`. It derives the same
+name `SymmetricNormIdeal.modulus_mem_and_gauge_eq`. It derives the same
 result directly from the already-elaborated
 `SymmetricNormIdeal.operatorAbs_mem_iff_and_gauge_eq` theorem.
 
