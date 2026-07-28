@@ -90,7 +90,8 @@ Current home: `DavisKahan/SpectralTheory/ReducingSubspace/`.
 
 Main contributions:
 
-- invariant and reducing subspaces for domain-aware operators;
+- invariant and reducing subspaces for domain-aware operators (now canonical
+  `TauCeti.LinearPMap` predicates, with historical bundle names as facades);
 - preservation of domains by orthogonal projections;
 - restricted domains, restricted actions, and projection back into the
   restricted domain;

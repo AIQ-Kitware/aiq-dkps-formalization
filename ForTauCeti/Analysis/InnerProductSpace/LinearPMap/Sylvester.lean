@@ -179,6 +179,13 @@ theorem smul {A : E →ₗ.[𝕜] E} {B : F →ₗ.[𝕜] F}
 
 end SylvesterEquation
 
+/-- A Sylvester equation with a partial left block and a bounded right block.
+This is the ordinary partial-map equation with the right block embedded on its
+full domain. -/
+abbrev UnboundedBoundedSylvesterEquation
+    (A : E →ₗ.[𝕜] E) (B : F →L[𝕜] F) (X C : F →L[𝕜] E) : Prop :=
+  SylvesterEquation A (B.toLinearMap.toPMap ⊤) X C
+
 /-- A partial linear map whose inverse is everywhere defined and bounded. -/
 structure HasBoundedEverywhereInverse (A : E →ₗ.[𝕜] E) where
   inv : E →L[𝕜] E
