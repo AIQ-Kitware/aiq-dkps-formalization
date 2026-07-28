@@ -1,0 +1,8 @@
+Overlay: aiq_dkps_namek_operatorabs_namespace_repair_b2ea942_gpt56_20260723.zip
+Target: /home/joncrall/code/aiq-dkps-namek
+Base inspected: b2ea942
+Files:
+- DavisKahan/Experimental/Scratch/SharedFoundations/Ideal/OperatorAbsoluteValueComplex.lean
+- dev/overlays/namek-operatorabs-namespace-repair-b2ea942-gpt56.md
+- dev/namek-operatorabs-namespace-repair-compiler-prompt.md
+- OVERLAY-METADATA/namek-operatorabs-namespace-repair-b2ea942-gpt56.manifest

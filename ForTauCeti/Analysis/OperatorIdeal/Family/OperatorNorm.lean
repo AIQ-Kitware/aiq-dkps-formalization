@@ -41,14 +41,14 @@ universe u v w
 
 section Base
 
-variable {𝕜 : Type u} [NontriviallyNormedField 𝕜]
+variable {𝕜 : Type u} [RCLike 𝕜]
 variable {E : Type v} {F : Type w}
-variable [NormedAddCommGroup E] [NormedSpace 𝕜 E]
-variable [NormedAddCommGroup F] [NormedSpace 𝕜 F]
+variable [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+variable [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
 
 /-- The operator norm, as an operator ideal family: every bounded operator is a
 member, and the gauge is the operator norm. -/
-noncomputable def operatorNormIdealFamily (𝕜 : Type u) [NontriviallyNormedField 𝕜] :
+noncomputable def operatorNormIdealFamily (𝕜 : Type u) [RCLike 𝕜] :
     OperatorIdealFamily.{u, v, w} 𝕜 where
   gauge A := ‖A‖ₑ
   gauge_add_le A B := by
@@ -122,7 +122,6 @@ noncomputable def operatorNormFamily (𝕜 : Type u) [RCLike 𝕜] :
 instance : (operatorNormFamily.{u, v} 𝕜).toOperatorIdealFamily.IsComplete :=
   inferInstanceAs (operatorNormIdealFamily.{u, v, v} 𝕜).IsComplete
 
-omit [CompleteSpace E] [CompleteSpace F] in
 @[simp]
 theorem gauge_operatorNormFamily (A : E →L[𝕜] F) :
     (operatorNormFamily.{u, v} 𝕜).gauge A = ‖A‖ₑ := rfl
