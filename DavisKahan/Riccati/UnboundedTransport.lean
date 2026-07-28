@@ -111,45 +111,8 @@ theorem pullback_unitaryEquivalent
     (he : IsUnitaryOperator e.toContinuousLinearMap) :
     ClosedOperator.UnitaryEquivalent
       (pullback A e) A e.toContinuousLinearMap
-        e.symm.toContinuousLinearMap := by
-  have hesymm : IsUnitaryOperator e.symm.toContinuousLinearMap := by
-    constructor
-    · intro y
-      have h := he.1 (e.symm y)
-      simpa using h.symm
-    · exact e.symm.surjective
-  have hleft : e.symm.toContinuousLinearMap ∘L e.toContinuousLinearMap =
-      ContinuousLinearMap.id 𝕜 E := by
-    apply ContinuousLinearMap.ext
-    intro x
-    simp
-  have hright : e.toContinuousLinearMap ∘L e.symm.toContinuousLinearMap =
-      ContinuousLinearMap.id 𝕜 E := by
-    apply ContinuousLinearMap.ext
-    intro x
-    simp
-  refine ⟨he, hesymm, hleft, hright, ?_⟩
-  let hWdom : ∀ x : (pullback A e).domain,
-      e (x : E) ∈ A.domain := fun x => x.property
-  refine ⟨hWdom, ?_⟩
-  let hWinvdom : ∀ y : A.domain,
-      e.symm (y : E) ∈ (pullback A e).domain := fun y => by
-        change e (e.symm (y : E)) ∈ A.domain
-        simpa using y.property
-  refine ⟨hWinvdom, ?_, ?_⟩
-  · intro x
-    change A.toLinearMap ⟨e (x : E), hWdom x⟩ =
-      e ((pullback A e).toLinearMap x)
-    rw [pullback_apply, e.apply_symm_apply]
-    rfl
-  · intro y
-    change (pullback A e).toLinearMap
-        ⟨e.symm (y : E), hWinvdom y⟩ =
-      e.symm (A.toLinearMap y)
-    rw [pullback_apply]
-    congr 2
-    apply Subtype.ext
-    simp
+        e.symm.toContinuousLinearMap :=
+  TauCeti.LinearPMap.pullback_unitaryEquivalent A.toLinearPMap e he
 
 end ClosedOperator
 

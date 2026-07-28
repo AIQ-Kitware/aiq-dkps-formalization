@@ -501,6 +501,69 @@ theorem pullback_closedGraph
       exact hsnd]
   exact hA.preimage hcoords
 
+/-- A bounded operator is unitary when it is norm preserving and surjective. -/
+def IsUnitaryOperator (W : E →L[𝕜] E) : Prop :=
+  (∀ x, ‖W x‖ = ‖x‖) ∧ Function.Surjective W
+
+/-- Two partial maps are unitarily equivalent when mutually inverse unitary
+maps transport both domains and both actions. -/
+def UnitaryEquivalent (A B : E →ₗ.[𝕜] E)
+    (W Winv : E →L[𝕜] E) : Prop :=
+  IsUnitaryOperator W ∧ IsUnitaryOperator Winv ∧
+  Winv ∘L W = ContinuousLinearMap.id 𝕜 E ∧
+  W ∘L Winv = ContinuousLinearMap.id 𝕜 E ∧
+  ∃ hWdom : ∀ x : A.domain, W (x : E) ∈ B.domain,
+  ∃ hWinvdom : ∀ y : B.domain, Winv (y : E) ∈ A.domain,
+    (∀ x : A.domain,
+      B ⟨W (x : E), hWdom x⟩ = W (A x)) ∧
+    (∀ y : B.domain,
+      A ⟨Winv (y : E), hWinvdom y⟩ = Winv (B y))
+
+/-- Pullback through a unitary equivalence is unitarily equivalent to the
+original partial map. -/
+theorem pullback_unitaryEquivalent
+    (A : E →ₗ.[𝕜] E) (e : E ≃L[𝕜] E)
+    (he : IsUnitaryOperator e.toContinuousLinearMap) :
+    UnitaryEquivalent (pullback A e) A e.toContinuousLinearMap
+      e.symm.toContinuousLinearMap := by
+  have hesymm : IsUnitaryOperator e.symm.toContinuousLinearMap := by
+    constructor
+    · intro y
+      have h := he.1 (e.symm y)
+      simpa using h.symm
+    · exact e.symm.surjective
+  have hleft : e.symm.toContinuousLinearMap ∘L e.toContinuousLinearMap =
+      ContinuousLinearMap.id 𝕜 E := by
+    apply ContinuousLinearMap.ext
+    intro x
+    simp
+  have hright : e.toContinuousLinearMap ∘L e.symm.toContinuousLinearMap =
+      ContinuousLinearMap.id 𝕜 E := by
+    apply ContinuousLinearMap.ext
+    intro x
+    simp
+  refine ⟨he, hesymm, hleft, hright, ?_⟩
+  let hWdom : ∀ x : (pullback A e).domain,
+      e (x : E) ∈ A.domain := fun x => x.property
+  refine ⟨hWdom, ?_⟩
+  let hWinvdom : ∀ y : A.domain,
+      e.symm (y : E) ∈ (pullback A e).domain := fun y => by
+        change e (e.symm (y : E)) ∈ A.domain
+        simpa only [e.apply_symm_apply] using y.property
+  refine ⟨hWinvdom, ?_, ?_⟩
+  · intro x
+    change A ⟨e (x : E), hWdom x⟩ = e ((pullback A e) x)
+    change A ⟨e (x : E), hWdom x⟩ = e (pullbackLinearMap A e x)
+    rw [pullbackLinearMap_apply, e.apply_symm_apply]
+    rfl
+  · intro y
+    change (pullback A e) ⟨e.symm (y : E), hWinvdom y⟩ = e.symm (A y)
+    change pullbackLinearMap A e ⟨e.symm (y : E), hWinvdom y⟩ = e.symm (A y)
+    rw [pullbackLinearMap_apply]
+    congr 2
+    apply Subtype.ext
+    simp
+
 /-- A partial linear map is symmetric on its operator domain. -/
 def IsSymmetric (A : E →ₗ.[𝕜] E) : Prop :=
   ∀ x y : A.domain, ⟪A x, (y : E)⟫_𝕜 = ⟪(x : E), A y⟫_𝕜
