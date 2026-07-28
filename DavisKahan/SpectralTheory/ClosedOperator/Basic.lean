@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
 import DavisKahan.SpectralTheory.Compatibility
-import Mathlib.Analysis.InnerProductSpace.LinearPMap
+import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Closed
 
 /-!
 # Closed densely defined operators
@@ -96,39 +96,40 @@ theorem toLinearPMap_adjoint_isClosed
     A.toLinearPMap.adjoint.IsClosed :=
   LinearPMap.adjoint_isClosed A.toLinearPMap_dense
 
-/-- Two closed operators have the same operator domain. -/
-def SameDomain (A B : ClosedOperator (𝕜 := 𝕜) (E := E)) : Prop :=
-  A.domain = B.domain
+/-- Compatibility facade for equality of the canonical partial-map domains. -/
+abbrev SameDomain (A B : ClosedOperator (𝕜 := 𝕜) (E := E)) : Prop :=
+  TauCeti.LinearPMap.SameDomain A.toLinearPMap B.toLinearPMap
 
 omit [CompleteSpace E] in
 /-- Equality of domains is reflexive. -/
 @[refl] theorem SameDomain.refl (A : ClosedOperator (𝕜 := 𝕜) (E := E)) :
-    A.SameDomain A := rfl
+    A.SameDomain A :=
+  TauCeti.LinearPMap.SameDomain.refl A.toLinearPMap
 
 omit [CompleteSpace E] in
 /-- Equality of domains is symmetric. -/
 @[symm] theorem SameDomain.symm {A B : ClosedOperator (𝕜 := 𝕜) (E := E)}
-    (h : A.SameDomain B) : B.SameDomain A := Eq.symm h
+    (h : A.SameDomain B) : B.SameDomain A :=
+  TauCeti.LinearPMap.SameDomain.symm h
 
 omit [CompleteSpace E] in
 /-- Equality of domains is transitive. -/
 @[trans] theorem SameDomain.trans {A B C : ClosedOperator (𝕜 := 𝕜) (E := E)}
     (hAB : A.SameDomain B) (hBC : B.SameDomain C) : A.SameDomain C :=
-  Eq.trans hAB hBC
+  TauCeti.LinearPMap.SameDomain.trans hAB hBC
 
-/-- A bounded map sends the domain of `B` into the domain of `A`. -/
-def MapsDomainTo
+/-- Compatibility facade for domain transport between canonical partial maps. -/
+abbrev MapsDomainTo
     {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
     (A : ClosedOperator (𝕜 := 𝕜) (E := E))
     (B : ClosedOperator (𝕜 := 𝕜) (E := F))
     (X : F →L[𝕜] E) : Prop :=
-  ∀ x : B.domain, X (x : F) ∈ A.domain
+  TauCeti.LinearPMap.MapsDomainTo A.toLinearPMap B.toLinearPMap X
 
 /-- The identity map preserves every operator domain. -/
 theorem MapsDomainTo.id (A : ClosedOperator (𝕜 := 𝕜) (E := E)) :
-    A.MapsDomainTo A (ContinuousLinearMap.id 𝕜 E) := by
-  intro x
-  simp
+    A.MapsDomainTo A (ContinuousLinearMap.id 𝕜 E) :=
+  TauCeti.LinearPMap.MapsDomainTo.id A.toLinearPMap
 
 omit [CompleteSpace E] in
 /-- Domain transport composes with bounded maps. -/
@@ -141,17 +142,14 @@ theorem MapsDomainTo.comp
     {C : ClosedOperator (𝕜 := 𝕜) (E := G)}
     {X : F →L[𝕜] E} {Y : G →L[𝕜] F}
     (hX : A.MapsDomainTo B X) (hY : B.MapsDomainTo C Y) :
-    A.MapsDomainTo C (X ∘L Y) := by
-  intro z
-  exact hX ⟨Y (z : G), hY z⟩
+    A.MapsDomainTo C (X ∘L Y) :=
+  TauCeti.LinearPMap.MapsDomainTo.comp hX hY
 
-/-- A linear map defined on a dense operator domain has a bounded extension to
-the ambient Hilbert space. -/
-structure BoundedExtension
+/-- Compatibility alias for the reusable bounded-extension record. -/
+abbrev BoundedExtension
     {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
-    (D : Submodule 𝕜 F) (T : D →ₗ[𝕜] E) where
-  operator : F →L[𝕜] E
-  agrees : ∀ x : D, operator (x : F) = T x
+    (D : Submodule 𝕜 F) (T : D →ₗ[𝕜] E) :=
+  TauCeti.LinearPMap.BoundedExtension D T
 
 /-- Regard a bounded operator as a closed operator with full domain.
 
@@ -228,37 +226,35 @@ theorem MapsDomainTo.ofBounded_left
   intro x
   simp
 
-/-- Extension relation for partially defined operators. -/
-def Extends (A B : ClosedOperator (𝕜 := 𝕜) (E := E)) : Prop :=
-  ∃ hdom : A.domain ≤ B.domain,
-    ∀ x : A.domain,
-      B.toLinearMap ⟨(x : E), hdom x.property⟩ = A.toLinearMap x
+/-- Compatibility facade for extension of canonical partial maps. -/
+abbrev Extends (A B : ClosedOperator (𝕜 := 𝕜) (E := E)) : Prop :=
+  TauCeti.LinearPMap.Extends A.toLinearPMap B.toLinearPMap
 
 omit [CompleteSpace E] in
 /-- Every closed operator extends itself. -/
 @[refl] theorem Extends.refl (A : ClosedOperator (𝕜 := 𝕜) (E := E)) :
-    A.Extends A := by
-  refine ⟨le_rfl, ?_⟩
-  intro x
-  rfl
+    A.Extends A :=
+  TauCeti.LinearPMap.Extends.refl A.toLinearPMap
 
 omit [CompleteSpace E] in
 /-- Extension of closed operators is transitive. -/
 @[trans] theorem Extends.trans {A B C : ClosedOperator (𝕜 := 𝕜) (E := E)}
-    (hAB : A.Extends B) (hBC : B.Extends C) : A.Extends C := by
-  rcases hAB with ⟨hdomAB, hactAB⟩
-  rcases hBC with ⟨hdomBC, hactBC⟩
-  refine ⟨hdomAB.trans hdomBC, ?_⟩
-  intro x
-  calc
-    C.toLinearMap ⟨(x : E), hdomBC (hdomAB x.property)⟩ =
-        B.toLinearMap ⟨(x : E), hdomAB x.property⟩ :=
-      hactBC ⟨(x : E), hdomAB x.property⟩
-    _ = A.toLinearMap x := hactAB x
+    (hAB : A.Extends B) (hBC : B.Extends C) : A.Extends C :=
+  TauCeti.LinearPMap.Extends.trans hAB hBC
 
-/-- Symmetric closed operator. -/
-def IsSymmetric (A : ClosedOperator (𝕜 := 𝕜) (E := E)) : Prop :=
-  ∀ x y : A.domain, ⟪A.toLinearMap x, (y : E)⟫_𝕜 = ⟪(x : E), A.toLinearMap y⟫_𝕜
+/-- Compatibility facade for symmetry of the canonical partial map. -/
+abbrev IsSymmetric (A : ClosedOperator (𝕜 := 𝕜) (E := E)) : Prop :=
+  TauCeti.LinearPMap.IsSymmetric A.toLinearPMap
+
+omit [CompleteSpace E] in
+/-- Rewrite symmetry of the canonical partial map through the historical
+`toLinearMap` compatibility field. -/
+theorem IsSymmetric.toLinearMap_inner_eq
+    {A : ClosedOperator (𝕜 := 𝕜) (E := E)}
+    (hA : A.IsSymmetric) (x y : A.domain) :
+    ⟪A.toLinearMap x, (y : E)⟫_𝕜 =
+      ⟪(x : E), A.toLinearMap y⟫_𝕜 := by
+  simpa only [toLinearPMap_apply] using hA x y
 /-- A closed operator is self-adjoint when its canonical Mathlib partial
 operator equals its Hilbert-space adjoint.
 
@@ -299,38 +295,35 @@ theorem ofBounded_isSelfAdjoint (A : E →L[𝕜] E)
     (ofBounded A).IsSelfAdjoint :=
   toLinearPMap_ofBounded_isSelfAdjoint A hA
 
-/-- Graph norm. -/
-noncomputable def graphNorm (A : ClosedOperator (𝕜 := 𝕜) (E := E))
+/-- Compatibility facade for the graph norm of the canonical partial map. -/
+noncomputable abbrev graphNorm (A : ClosedOperator (𝕜 := 𝕜) (E := E))
     (x : A.domain) : ℝ :=
-  Real.sqrt (‖(x : E)‖ ^ 2 + ‖A.toLinearMap x‖ ^ 2)
+  TauCeti.LinearPMap.graphNorm A.toLinearPMap x
 
 omit [CompleteSpace E] in
 /-- The graph norm is nonnegative. -/
 theorem graphNorm_nonneg (A : ClosedOperator (𝕜 := 𝕜) (E := E))
     (x : A.domain) : 0 ≤ A.graphNorm x :=
-  Real.sqrt_nonneg _
+  TauCeti.LinearPMap.graphNorm_nonneg A.toLinearPMap x
 
 omit [CompleteSpace E] in
 /-- Squaring the graph norm recovers the defining sum of squares. -/
 theorem graphNorm_sq (A : ClosedOperator (𝕜 := 𝕜) (E := E))
     (x : A.domain) :
-    A.graphNorm x ^ 2 = ‖(x : E)‖ ^ 2 + ‖A.toLinearMap x‖ ^ 2 := by
-  unfold graphNorm
-  exact Real.sq_sqrt (by positivity)
+    A.graphNorm x ^ 2 = ‖(x : E)‖ ^ 2 + ‖A.toLinearMap x‖ ^ 2 :=
+  TauCeti.LinearPMap.graphNorm_sq A.toLinearPMap x
 
 omit [CompleteSpace E] in
 /-- The ambient norm is controlled by the graph norm. -/
 theorem norm_coe_le_graphNorm (A : ClosedOperator (𝕜 := 𝕜) (E := E))
-    (x : A.domain) : ‖(x : E)‖ ≤ A.graphNorm x := by
-  rw [graphNorm]
-  exact Real.le_sqrt_of_sq_le (by nlinarith [sq_nonneg ‖A.toLinearMap x‖])
+    (x : A.domain) : ‖(x : E)‖ ≤ A.graphNorm x :=
+  TauCeti.LinearPMap.norm_coe_le_graphNorm A.toLinearPMap x
 
 omit [CompleteSpace E] in
 /-- The operator-value norm is controlled by the graph norm. -/
 theorem norm_apply_le_graphNorm (A : ClosedOperator (𝕜 := 𝕜) (E := E))
-    (x : A.domain) : ‖A.toLinearMap x‖ ≤ A.graphNorm x := by
-  rw [graphNorm]
-  exact Real.le_sqrt_of_sq_le (by nlinarith [sq_nonneg ‖(x : E)‖])
+    (x : A.domain) : ‖A.toLinearMap x‖ ≤ A.graphNorm x :=
+  TauCeti.LinearPMap.norm_apply_le_graphNorm A.toLinearPMap x
 
 /-- Sum with a bounded perturbation, on the original domain.
 
@@ -391,19 +384,18 @@ omit [CompleteSpace E] in
     (V : E →L[𝕜] E) (x : (A.addBounded V).domain) :
     (A.addBounded V) x = A.toLinearMap x + V (x : E) := rfl
 
-/-- Relative boundedness with respect to a closed operator. -/
-def RelativelyBounded (A : ClosedOperator (𝕜 := 𝕜) (E := E))
+/-- Compatibility facade for relative boundedness over the canonical partial map. -/
+abbrev RelativelyBounded (A : ClosedOperator (𝕜 := 𝕜) (E := E))
     (V : A.domain →ₗ[𝕜] E) (a b : ℝ) : Prop :=
-  ∀ x, ‖V x‖ ≤ a * ‖(x : E)‖ + b * ‖A.toLinearMap x‖
+  TauCeti.LinearPMap.RelativelyBounded A.toLinearPMap V a b
 
 namespace RelativelyBounded
 
 omit [CompleteSpace E] in
 /-- The zero perturbation has zero relative bound. -/
 theorem zero (A : ClosedOperator (𝕜 := 𝕜) (E := E)) :
-    RelativelyBounded A (0 : A.domain →ₗ[𝕜] E) 0 0 := by
-  intro x
-  simp
+    RelativelyBounded A (0 : A.domain →ₗ[𝕜] E) 0 0 :=
+  TauCeti.LinearPMap.RelativelyBounded.zero A.toLinearPMap
 
 omit [CompleteSpace E] in
 /-- Relative bounds may be weakened by increasing either coefficient. -/
@@ -412,11 +404,8 @@ theorem mono
     {V : A.domain →ₗ[𝕜] E} {a b a' b' : ℝ}
     (hV : RelativelyBounded A V a b)
     (haa' : a ≤ a') (hbb' : b ≤ b') :
-    RelativelyBounded A V a' b' := by
-  intro x
-  exact (hV x).trans <| add_le_add
-    (mul_le_mul_of_nonneg_right haa' (norm_nonneg (x : E)))
-    (mul_le_mul_of_nonneg_right hbb' (norm_nonneg (A.toLinearMap x)))
+    RelativelyBounded A V a' b' :=
+  TauCeti.LinearPMap.RelativelyBounded.mono hV haa' hbb'
 
 omit [CompleteSpace E] in
 /-- Relative bounds add under addition of perturbations. -/
@@ -425,14 +414,8 @@ theorem add
     {V W : A.domain →ₗ[𝕜] E} {a b c d : ℝ}
     (hV : RelativelyBounded A V a b)
     (hW : RelativelyBounded A W c d) :
-    RelativelyBounded A (V + W) (a + c) (b + d) := by
-  intro x
-  calc
-    ‖(V + W) x‖ ≤ ‖V x‖ + ‖W x‖ := norm_add_le _ _
-    _ ≤ (a * ‖(x : E)‖ + b * ‖A.toLinearMap x‖) +
-        (c * ‖(x : E)‖ + d * ‖A.toLinearMap x‖) :=
-      add_le_add (hV x) (hW x)
-    _ = (a + c) * ‖(x : E)‖ + (b + d) * ‖A.toLinearMap x‖ := by ring
+    RelativelyBounded A (V + W) (a + c) (b + d) :=
+  TauCeti.LinearPMap.RelativelyBounded.add hV hW
 
 omit [CompleteSpace E] in
 /-- Relative bounds scale by the norm of the scalar. -/
@@ -440,15 +423,8 @@ theorem smul
     {A : ClosedOperator (𝕜 := 𝕜) (E := E)}
     {V : A.domain →ₗ[𝕜] E} {a b : ℝ}
     (hV : RelativelyBounded A V a b) (c : 𝕜) :
-    RelativelyBounded A (c • V) (‖c‖ * a) (‖c‖ * b) := by
-  intro x
-  rw [LinearMap.smul_apply, norm_smul]
-  calc
-    ‖c‖ * ‖V x‖ ≤ ‖c‖ *
-        (a * ‖(x : E)‖ + b * ‖A.toLinearMap x‖) :=
-      mul_le_mul_of_nonneg_left (hV x) (norm_nonneg c)
-    _ = (‖c‖ * a) * ‖(x : E)‖ +
-        (‖c‖ * b) * ‖A.toLinearMap x‖ := by ring
+    RelativelyBounded A (c • V) (‖c‖ * a) (‖c‖ * b) :=
+  TauCeti.LinearPMap.RelativelyBounded.smul hV c
 
 omit [CompleteSpace E] in
 /-- Relative bounds are preserved by negation. -/
@@ -456,8 +432,8 @@ theorem neg
     {A : ClosedOperator (𝕜 := 𝕜) (E := E)}
     {V : A.domain →ₗ[𝕜] E} {a b : ℝ}
     (hV : RelativelyBounded A V a b) :
-    RelativelyBounded A (-V) a b := by
-  simpa using hV.smul (-1 : 𝕜)
+    RelativelyBounded A (-V) a b :=
+  TauCeti.LinearPMap.RelativelyBounded.neg hV
 
 omit [CompleteSpace E] in
 /-- Relative bounds add under subtraction of perturbations. -/
@@ -466,17 +442,16 @@ theorem sub
     {V W : A.domain →ₗ[𝕜] E} {a b c d : ℝ}
     (hV : RelativelyBounded A V a b)
     (hW : RelativelyBounded A W c d) :
-    RelativelyBounded A (V - W) (a + c) (b + d) := by
-  simpa [sub_eq_add_neg] using hV.add hW.neg
+    RelativelyBounded A (V - W) (a + c) (b + d) :=
+  TauCeti.LinearPMap.RelativelyBounded.sub hV hW
 
 omit [CompleteSpace E] in
 /-- Restricting a bounded ambient operator to the domain gives relative bound
 `(‖V‖, 0)`. -/
 theorem domRestrict (A : ClosedOperator (𝕜 := 𝕜) (E := E))
     (V : E →L[𝕜] E) :
-    RelativelyBounded A (V.toLinearMap.domRestrict A.domain) ‖V‖ 0 := by
-  intro x
-  simpa using V.le_opNorm (x : E)
+    RelativelyBounded A (V.toLinearMap.domRestrict A.domain) ‖V‖ 0 :=
+  TauCeti.LinearPMap.RelativelyBounded.domRestrict A.toLinearPMap V
 
 end RelativelyBounded
 
@@ -484,33 +459,29 @@ end RelativelyBounded
 to this set when the shifted operator has a bounded two-sided inverse: the
 left inverse law is imposed on the operator domain, while the right inverse
 law includes the domain witness for the image of the inverse. -/
-def realResolventSet
+abbrev realResolventSet
     (A : ClosedOperator (𝕜 := 𝕜) (E := E)) : Set ℝ :=
-  { lam : ℝ | ∃ R : E →L[𝕜] E,
-      (∀ x : A.domain,
-        R (A.toLinearMap x - (lam : 𝕜) • (x : E)) = (x : E)) ∧
-      (∀ y : E, ∃ h : R y ∈ A.domain,
-        A.toLinearMap ⟨R y, h⟩ - (lam : 𝕜) • R y = y) }
+  TauCeti.LinearPMap.realResolventSet A.toLinearPMap
 
 /-- Real spectrum of a closed operator, defined as the complement of the real
 resolvent set.  For a self-adjoint complex operator this agrees definitionally
 with the real slice of the Spectra resolvent. -/
-def realSpectrum
+abbrev realSpectrum
     (A : ClosedOperator (𝕜 := 𝕜) (E := E)) : Set ℝ :=
-  (realResolventSet A)ᶜ
+  TauCeti.LinearPMap.realSpectrum A.toLinearPMap
 
 /-- Spectral-set separation for closed operators, possibly acting on
 different Hilbert spaces.  The separation condition depends only on the two
 real spectra, so requiring a common ambient space would be artificial and
 would block the diagonal-block Riccati theory. -/
-def SpectralSetsSeparated
+abbrev SpectralSetsSeparated
     {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
     [CompleteSpace F]
     (A : ClosedOperator (𝕜 := 𝕜) (E := E))
     (B : ClosedOperator (𝕜 := 𝕜) (E := F))
     (s t : Set ℝ) (d : ℝ) : Prop :=
-  ∀ a ∈ A.realSpectrum, a ∈ s →
-    ∀ b ∈ B.realSpectrum, b ∈ t → d ≤ |a - b|
+  TauCeti.LinearPMap.SpectralSetsSeparated
+    A.toLinearPMap B.toLinearPMap s t d
 
 /-- Spectral-set separation is symmetric in the two operators. -/
 theorem SpectralSetsSeparated.symm
@@ -520,9 +491,8 @@ theorem SpectralSetsSeparated.symm
     {B : ClosedOperator (𝕜 := 𝕜) (E := F)}
     {s t : Set ℝ} {d : ℝ}
     (h : SpectralSetsSeparated A B s t d) :
-    SpectralSetsSeparated B A t s d := by
-  intro b hb ht a ha hs
-  simpa [abs_sub_comm] using h a ha hs b hb ht
+    SpectralSetsSeparated B A t s d :=
+  TauCeti.LinearPMap.SpectralSetsSeparated.symm h
 
 omit [CompleteSpace E] in
 /-- Weakening the required gap preserves spectral-set separation. -/
@@ -533,9 +503,8 @@ theorem SpectralSetsSeparated.mono_gap
     {B : ClosedOperator (𝕜 := 𝕜) (E := F)}
     {s t : Set ℝ} {d e : ℝ}
     (h : SpectralSetsSeparated A B s t d) (hed : e ≤ d) :
-    SpectralSetsSeparated A B s t e := by
-  intro a ha hs b hb ht
-  exact hed.trans (h a ha hs b hb ht)
+    SpectralSetsSeparated A B s t e :=
+  TauCeti.LinearPMap.SpectralSetsSeparated.mono_gap h hed
 
 omit [CompleteSpace E] in
 /-- Restricting either selected spectral set preserves separation. -/
@@ -547,9 +516,8 @@ theorem SpectralSetsSeparated.mono_sets
     {s s' t t' : Set ℝ} {d : ℝ}
     (h : SpectralSetsSeparated A B s t d)
     (hs : s' ⊆ s) (ht : t' ⊆ t) :
-    SpectralSetsSeparated A B s' t' d := by
-  intro a ha has' b hb hbt'
-  exact h a ha (hs has') b hb (ht hbt')
+    SpectralSetsSeparated A B s' t' d :=
+  TauCeti.LinearPMap.SpectralSetsSeparated.mono_sets h hs ht
 end ClosedOperator
 end DavisKahanExt
 end TauCeti

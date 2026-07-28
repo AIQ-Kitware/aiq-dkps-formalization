@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 """Run ``lake build`` quietly and render compact, deduplicated diagnostics.
 
-The default output contains errors only. Lake progress, successful jobs,
-warnings, informational diagnostics, traces, and repeated Lake failure summaries
-are suppressed unless requested.
+The default report contains errors only, while stderr retains Lake's live
+``done/total`` build counter. Successful job lines, warnings, informational
+diagnostics, traces, and repeated Lake failure summaries remain suppressed.
+Use ``--no-progress`` for fully quiet execution.
 
 Examples
 --------
@@ -39,6 +40,7 @@ workflows.
 from __future__ import annotations
 
 import argparse
+import codecs
 import json
 import os
 import re
@@ -51,7 +53,7 @@ import time
 from collections import Counter
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Iterable, Sequence
+from typing import Callable, Iterable, Sequence, TextIO
 
 SEVERITIES = ("error", "warning", "info", "trace")
 SEVERITY_RANK = {"trace": 0, "info": 1, "warning": 2, "error": 3}
@@ -78,8 +80,12 @@ LOCATION_RE = re.compile(
     r"^(?P<file>.+):(?P<line>\d+):(?P<column>\d+):\s*(?P<message>.*)$"
 )
 
+PROGRESS_COUNTER_RE = re.compile(
+    r"(?:^|\s)(?:\[)?(?P<done>\d+)/(?P<total>\d+)(?:\])?(?=\s|$)"
+)
+
 PROGRESS_RE = re.compile(
-    r"^\s*(?:[✓✔✖✗]\s+)?\[\d+/\d+\](?:\s+|$)"
+    r"^\s*(?:[✓✔✖✗⏳]\s+)?(?:\[)?\d+/\d+(?:\])?(?:\s+|$)"
 )
 
 SYNTHETIC_ERROR_RE = re.compile(
@@ -183,6 +189,63 @@ class Cluster:
 def strip_control(text: str) -> str:
     """Remove terminal control sequences and carriage returns."""
     return ANSI_RE.sub("", text.replace("\r", ""))
+
+
+def parse_lake_progress(text: str) -> tuple[int, int] | None:
+    """Extract Lake's ``done/total`` job counter from one output fragment."""
+    clean = strip_control(text).strip()
+    match = PROGRESS_COUNTER_RE.search(clean)
+    if match is None:
+        return None
+    done = int(match.group("done"))
+    total = int(match.group("total"))
+    if total <= 0 or done < 0 or done > total:
+        return None
+    return done, total
+
+
+class LakeProgressDisplay:
+    """Render Lake's live job counter without forwarding its noisy job lines."""
+
+    def __init__(
+        self,
+        *,
+        enabled: bool,
+        target_text: str,
+        stream: TextIO = sys.stderr,
+        color_enabled: bool = False,
+        interactive: bool | None = None,
+    ) -> None:
+        self.enabled = enabled
+        self.target_text = target_text
+        self.stream = stream
+        self.color_enabled = color_enabled
+        self.interactive = stream.isatty() if interactive is None else interactive
+        self.last_counter: tuple[int, int] | None = None
+        self.last_reported_done = -1
+        self.active_line = False
+
+    def update(self, done: int, total: int) -> None:
+        if not self.enabled or self.last_counter == (done, total):
+            return
+        self.last_counter = (done, total)
+        label = colorize("LAKE", "cyan", self.color_enabled)
+        text = f"{label} {done}/{total} {self.target_text}"
+        if self.interactive:
+            print(f"\r\x1b[2K{text}", end="", file=self.stream, flush=True)
+            self.active_line = True
+            return
+
+        # Redirected logs should show useful checkpoints without one line per job.
+        step = max(1, total // 20)
+        if done == total or self.last_reported_done < 0 or done - self.last_reported_done >= step:
+            print(text, file=self.stream, flush=True)
+            self.last_reported_done = done
+
+    def clear(self) -> None:
+        if self.active_line:
+            print("\r\x1b[2K", end="", file=self.stream, flush=True)
+            self.active_line = False
 
 
 def find_lake_root(start: Path) -> Path | None:
@@ -469,22 +532,53 @@ def significant_tail(lines: Sequence[str], limit: int) -> list[str]:
     return kept[-limit:]
 
 
-def run_build(command: Sequence[str], root: Path) -> tuple[int, list[str]]:
-    """Run Lake without keeping an unbounded pipe buffer in memory."""
+def run_build(
+    command: Sequence[str],
+    root: Path,
+    progress_callback: Callable[[int, int], None] | None = None,
+) -> tuple[int, list[str]]:
+    """Run Lake, teeing output to disk while forwarding live job counters."""
     with tempfile.TemporaryFile(mode="w+b") as stream:
         try:
             process = subprocess.Popen(
                 list(command),
                 cwd=root,
-                stdout=stream,
+                stdout=subprocess.PIPE,
                 stderr=subprocess.STDOUT,
                 stdin=None,
+                bufsize=0,
             )
         except FileNotFoundError as ex:
             raise RuntimeError(f"cannot execute {command[0]!r}: {ex}") from ex
 
+        assert process.stdout is not None
+        decoder = codecs.getincrementaldecoder("utf-8")(errors="replace")
+        pending = ""
+
+        def consume_text(text: str, *, final: bool = False) -> None:
+            nonlocal pending
+            if progress_callback is None:
+                return
+            pending += text
+            pieces = re.split(r"[\r\n]", pending)
+            if final:
+                pending = ""
+            else:
+                pending = pieces.pop()
+            for piece in pieces:
+                progress = parse_lake_progress(piece)
+                if progress is not None:
+                    progress_callback(*progress)
+
         interrupted = False
         try:
+            while True:
+                chunk = process.stdout.read(65536)
+                if not chunk:
+                    break
+                stream.write(chunk)
+                consume_text(decoder.decode(chunk))
+            consume_text(decoder.decode(b"", final=True), final=True)
             return_code = process.wait()
         except KeyboardInterrupt:
             interrupted = True
@@ -495,6 +589,13 @@ def run_build(command: Sequence[str], root: Path) -> tuple[int, list[str]]:
             except subprocess.TimeoutExpired:
                 process.terminate()
                 return_code = process.wait()
+            while True:
+                chunk = process.stdout.read(65536)
+                if not chunk:
+                    break
+                stream.write(chunk)
+                consume_text(decoder.decode(chunk))
+            consume_text(decoder.decode(b"", final=True), final=True)
 
         stream.seek(0)
         text = stream.read().decode("utf-8", errors="replace")
@@ -763,7 +864,7 @@ def build_parser() -> argparse.ArgumentParser:
         "--progress",
         dest="progress",
         action="store_true",
-        help="Show concise progress on stderr (default for multi-target text reports)",
+        help="Show target status and Lake's live done/total counter on stderr (default for text reports)",
     )
     progress_group.add_argument(
         "--no-progress",
@@ -842,7 +943,7 @@ def build_parser() -> argparse.ArgumentParser:
 def progress_enabled(args: argparse.Namespace) -> bool:
     if args.progress is not None:
         return bool(args.progress)
-    return len(args.targets) > 1 and args.format == "text"
+    return args.format == "text"
 
 
 def emit_progress(
@@ -891,6 +992,12 @@ def execute_builds(
     total = len(target_groups)
     for index, targets in enumerate(target_groups, 1):
         command = [args.lake, *lake_global_args, "build", *targets]
+        target_text = " ".join(targets)
+        lake_progress = LakeProgressDisplay(
+            enabled=show_progress,
+            target_text=target_text,
+            color_enabled=color_enabled,
+        )
         if show_progress:
             emit_progress(
                 index=index,
@@ -901,9 +1008,16 @@ def execute_builds(
             )
         started = time.monotonic()
         try:
-            return_code, raw_lines = run_build(command, root)
+            return_code, raw_lines = run_build(
+                command,
+                root,
+                lake_progress.update if show_progress else None,
+            )
         except RuntimeError:
+            lake_progress.clear()
             raise
+        finally:
+            lake_progress.clear()
         elapsed = time.monotonic() - started
         parse_result = parse_output(raw_lines)
         for diagnostic in parse_result.diagnostics:
@@ -949,7 +1063,15 @@ def main(argv: Sequence[str] | None = None) -> int:
         parser.error(f"not a Lake package root: {root}")
 
     lake_global_args = list(args.lake_arg)
-    if not args.no_quiet and "-q" not in lake_global_args and "--quiet" not in lake_global_args:
+    show_progress = progress_enabled(args)
+    # Lake emits its useful done/total counter only in non-quiet mode. The
+    # reporter consumes the noisy job lines and forwards just that counter.
+    if (
+        not args.no_quiet
+        and not show_progress
+        and "-q" not in lake_global_args
+        and "--quiet" not in lake_global_args
+    ):
         lake_global_args.append("-q")
     color_enabled = use_color(args.color)
 

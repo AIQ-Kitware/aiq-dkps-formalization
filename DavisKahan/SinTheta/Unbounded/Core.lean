@@ -96,7 +96,13 @@ theorem unbounded_adjoint_residual_block_identity
           rw [← D.intertwines y]
         _ = ⟪D.F₁ (y : G), D.A.toLinearMap Fx⟫_𝕜 -
               ⟪D.F₁ (y : G), D.residual (x : F)⟫_𝕜 := by
-          rw [hA_symm Fy Fx]
+          have hsymm :
+              ⟪D.A.toLinearMap Fy, D.X (x : F)⟫_𝕜 =
+                ⟪D.F₁ (y : G), D.A.toLinearMap Fx⟫_𝕜 := by
+            simpa only [
+              TauCeti.DavisKahanExt.ClosedOperator.toLinearPMap_apply,
+              Fx, Fy] using hA_symm Fy Fx
+          rw [hsymm]
         _ = ⟪D.F₁ (y : G), D.X (D.A₀.toLinearMap x)⟫_𝕜 := by
           rw [← D.residual_eq x, inner_sub_right]
           abel
@@ -104,9 +110,10 @@ theorem unbounded_adjoint_residual_block_identity
           rw [← D.X.adjoint_inner_left (D.A₀.toLinearMap x) (D.F₁ (y : G))]
     have hzAdj : z ∈ D.A₀.toLinearPMap.adjoint.domain :=
       LinearPMap.mem_adjoint_domain_of_exists z ⟨w, hw⟩
-    have hdom : D.A₀.toLinearPMap.adjoint.domain = D.A₀.domain :=
-      congrArg LinearPMap.domain hA₀P
-    exact hdom ▸ hzAdj
+    have hz : z ∈ D.A₀.toLinearPMap.domain := by
+      rw [← hA₀P]
+      exact hzAdj
+    simpa only [z, ContinuousLinearMap.comp_apply] using hz
   · intro y
     let z : F := D.X.adjoint (D.F₁ (y : G))
     let w : F :=
@@ -129,7 +136,13 @@ theorem unbounded_adjoint_residual_block_identity
           rw [← D.intertwines y]
         _ = ⟪D.F₁ (y : G), D.A.toLinearMap Fx⟫_𝕜 -
               ⟪D.F₁ (y : G), D.residual (x : F)⟫_𝕜 := by
-          rw [hA_symm Fy Fx]
+          have hsymm :
+              ⟪D.A.toLinearMap Fy, D.X (x : F)⟫_𝕜 =
+                ⟪D.F₁ (y : G), D.A.toLinearMap Fx⟫_𝕜 := by
+            simpa only [
+              TauCeti.DavisKahanExt.ClosedOperator.toLinearPMap_apply,
+              Fx, Fy] using hA_symm Fy Fx
+          rw [hsymm]
         _ = ⟪D.F₁ (y : G), D.X (D.A₀.toLinearMap x)⟫_𝕜 := by
           rw [← D.residual_eq x, inner_sub_right]
           abel
@@ -137,9 +150,12 @@ theorem unbounded_adjoint_residual_block_identity
           rw [← D.X.adjoint_inner_left (D.A₀.toLinearMap x) (D.F₁ (y : G))]
     have hzAdj : z ∈ D.A₀.toLinearPMap.adjoint.domain :=
       LinearPMap.mem_adjoint_domain_of_exists z ⟨w, hw⟩
-    have hdom : D.A₀.toLinearPMap.adjoint.domain = D.A₀.domain :=
-      congrArg LinearPMap.domain hA₀P
-    have hzDom : z ∈ D.A₀.domain := hdom ▸ hzAdj
+    have hzDomPMap : z ∈ D.A₀.toLinearPMap.domain := by
+      simpa only [hA₀P] using hzAdj
+    have hzDom : z ∈ D.A₀.domain := by
+      simpa only [
+        TauCeti.DavisKahanExt.ClosedOperator.toLinearPMap_domain] using
+        hzDomPMap
     have hA₀z : D.A₀.toLinearMap ⟨z, hzDom⟩ = w := by
       have hinner :
           (fun x : F => ⟪D.A₀.toLinearMap ⟨z, hzDom⟩, x⟫_𝕜) =

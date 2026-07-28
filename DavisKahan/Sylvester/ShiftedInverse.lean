@@ -82,7 +82,7 @@ theorem _root_.TauCeti.DavisKahanExt.ClosedOperator.norm_shift_apply_le_of_form_
     intro v w
     simp only [hS, inner_sub_left, inner_sub_right, inner_smul_left,
       inner_smul_right, RCLike.conj_ofReal]
-    rw [hsym v w]
+    rw [TauCeti.DavisKahanExt.ClosedOperator.IsSymmetric.toLinearMap_inner_eq hsym v w]
   -- the quadratic form of the shift lies in `[-r, r]`
   have hform : ∀ w : B.domain,
       |RCLike.re ⟪S w, (w : F)⟫_𝕜| ≤ r * ‖(w : F)‖ ^ 2 := by
@@ -94,8 +94,8 @@ theorem _root_.TauCeti.DavisKahanExt.ClosedOperator.norm_shift_apply_le_of_form_
     have hre : RCLike.re ⟪S w, (w : F)⟫_𝕜 =
         RCLike.re ⟪B.toLinearMap w, (w : F)⟫_𝕜 - c * ‖(w : F)‖ ^ 2 := by
       rw [hval, map_sub, RCLike.re_ofReal_mul, inner_self_eq_norm_sq]
-    have h1 := hlow w
-    have h2 := hhigh w
+    have h1 := SemiboundedBelow.toLinearMap_bound hlow w
+    have h2 := SemiboundedAbove.toLinearMap_bound hhigh w
     rw [hre, abs_le]
     constructor
     · rw [hc, hr] at *
@@ -231,15 +231,15 @@ theorem norm_closedSylvester_le_of_intervalExterior
   have hkey : ∀ y : B.domain, X (y : F) =
       J (C (y : F) + X (B.toLinearMap y - ((c : ℝ) : 𝕜) • (y : F))) := by
     intro y
-    have heq := hEq.equation y
-    have hJ := hJleft ⟨X (y : F), hEq.mapsTo y⟩
-    have hexpand : A.toLinearMap ⟨X (y : F), hEq.mapsTo y⟩ -
+    have heq := ClosedSylvesterEquation.equation_toLinearMap hEq y (hEq.mapsTo_domain y)
+    have hJ := hJleft ⟨X (y : F), hEq.mapsTo_domain y⟩
+    have hexpand : A.toLinearMap ⟨X (y : F), hEq.mapsTo_domain y⟩ -
         ((c : ℝ) : 𝕜) • X (y : F) =
         C (y : F) + X (B.toLinearMap y - ((c : ℝ) : 𝕜) • (y : F)) := by
       rw [map_sub, map_smul]
-      have : A.toLinearMap ⟨X (y : F), hEq.mapsTo y⟩ =
-          C (y : F) + X (B.toLinearMap y) := by
-        rw [← heq]; abel
+      have : A.toLinearMap ⟨X (y : F), hEq.mapsTo_domain y⟩ =
+          C (y : F) + X (B.toLinearMap y) :=
+        sub_eq_iff_eq_add.mp heq
       rw [this]
       abel
     rw [hexpand] at hJ
@@ -309,10 +309,11 @@ theorem norm_closedSylvester_le_of_exteriorInterval
   have hrd : (0 : ℝ) < r + δ := by linarith
   -- pointwise absorption identity, now on all of `F`
   have hkey : ∀ z : F, X z =
-      (A.toLinearMap ⟨X (J z), hEq.mapsTo ⟨J z, hJdom z⟩⟩ -
+      (A.toLinearMap ⟨X (J z), hEq.mapsTo_domain ⟨J z, hJdom z⟩⟩ -
         ((c : ℝ) : 𝕜) • X (J z)) - C (J z) := by
     intro z
-    have heq := hEq.equation ⟨J z, hJdom z⟩
+    have heq := ClosedSylvesterEquation.equation_toLinearMap hEq ⟨J z, hJdom z⟩
+      (hEq.mapsTo_domain ⟨J z, hJdom z⟩)
     have hres := hJright z
     -- `B (J z) = z + c • J z`
     have hBJ : B.toLinearMap ⟨J z, hJdom z⟩ = z + ((c : ℝ) : 𝕜) • J z :=
@@ -320,25 +321,27 @@ theorem norm_closedSylvester_le_of_exteriorInterval
     have hXB : X (B.toLinearMap ⟨J z, hJdom z⟩) =
         X z + ((c : ℝ) : 𝕜) • X (J z) := by
       rw [hBJ, map_add, map_smul]
-    have := heq
-    rw [hXB] at this
-    -- this : A (X (J z)) - (X z + c • X (J z)) = C (J z)
-    calc X z = A.toLinearMap ⟨X (J z), hEq.mapsTo ⟨J z, hJdom z⟩⟩ -
+    rw [hXB] at heq
+    -- `heq` is now the shifted equation in the historical `toLinearMap` view.
+    calc X z = A.toLinearMap
+          ⟨X (J z), hEq.mapsTo_domain ⟨J z, hJdom z⟩⟩ -
           (X z + ((c : ℝ) : 𝕜) • X (J z)) - C (J z) + X z := by
-          rw [this]; abel
-      _ = (A.toLinearMap ⟨X (J z), hEq.mapsTo ⟨J z, hJdom z⟩⟩ -
+          rw [heq]
+          abel
+      _ = (A.toLinearMap
+          ⟨X (J z), hEq.mapsTo_domain ⟨J z, hJdom z⟩⟩ -
           ((c : ℝ) : 𝕜) • X (J z)) - C (J z) := by abel
   have hbound : ∀ z : F, ‖X z‖ ≤ (r + δ)⁻¹ * (‖X‖ * r + ‖C‖) * ‖z‖ := by
     intro z
     have hshift := TauCeti.DavisKahanExt.ClosedOperator.norm_shift_apply_le_of_form_bounds
-      hAsym hβα hAlow hAhigh ⟨X (J z), hEq.mapsTo ⟨J z, hJdom z⟩⟩
+      hAsym hβα hAlow hAhigh ⟨X (J z), hEq.mapsTo_domain ⟨J z, hJdom z⟩⟩
     have hJz : ‖J z‖ ≤ (r + δ)⁻¹ * ‖z‖ := by
       refine (J.le_opNorm z).trans ?_
       exact mul_le_mul_of_nonneg_right hJnorm (norm_nonneg z)
     calc ‖X z‖
-        = ‖(A.toLinearMap ⟨X (J z), hEq.mapsTo ⟨J z, hJdom z⟩⟩ -
+        = ‖(A.toLinearMap ⟨X (J z), hEq.mapsTo_domain ⟨J z, hJdom z⟩⟩ -
             ((c : ℝ) : 𝕜) • X (J z)) - C (J z)‖ := by rw [← hkey z]
-      _ ≤ ‖A.toLinearMap ⟨X (J z), hEq.mapsTo ⟨J z, hJdom z⟩⟩ -
+      _ ≤ ‖A.toLinearMap ⟨X (J z), hEq.mapsTo_domain ⟨J z, hJdom z⟩⟩ -
             ((c : ℝ) : 𝕜) • X (J z)‖ + ‖C (J z)‖ := norm_sub_le _ _
       _ ≤ r * ‖X (J z)‖ + ‖C‖ * ‖J z‖ :=
           add_le_add hshift (C.le_opNorm _)
