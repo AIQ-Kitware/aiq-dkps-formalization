@@ -114,8 +114,8 @@ theorem finiteDiagonal_sylvester_block
     (finiteDiagonal_select_left P a hPid hPorth i) (X (Q j v))
   have hR := ContinuousLinearMap.ext_iff.mp
     (finiteDiagonal_select_right Q b hQid hQorth j) v
-  simp only [ContinuousLinearMap.comp_apply, ContinuousLinearMap.sub_apply,
-    map_sub, ContinuousLinearMap.smul_apply] at hL hR ⊢
+  simp only [ContinuousLinearMap.comp_apply, sub_apply,
+    map_sub, smul_apply] at hL hR ⊢
   rw [hL, hR, map_smul, map_smul, Complex.ofReal_sub, sub_smul]
 
 /-- The full operator is the sum of all rectangular blocks. -/

@@ -67,8 +67,8 @@ theorem rectangularBlockMap_mul
         (a ∘L a' + b ∘L c') (a ∘L b' + b ∘L d')
         (c ∘L a' + d ∘L c') (c ∘L b' + d ∘L d') := by
   ext x
-  simp only [ContinuousLinearMap.mul_apply, rectangularBlockMap_apply,
-    WithLp.toLp_fst, WithLp.toLp_snd, ContinuousLinearMap.add_apply,
+  simp only [mul_apply_eq_comp, rectangularBlockMap_apply,
+    WithLp.toLp_fst, WithLp.toLp_snd, add_apply,
     ContinuousLinearMap.comp_apply, map_add]
   refine congrArg (WithLp.toLp 2) ?_
   rw [Prod.mk.injEq]
@@ -83,7 +83,7 @@ theorem rectangularBlockMap_add
     rectangularBlockMap a b c d + rectangularBlockMap a' b' c' d' =
       rectangularBlockMap (a + a') (b + b') (c + c') (d + d') := by
   ext x
-  simp only [ContinuousLinearMap.add_apply, rectangularBlockMap_apply,
+  simp only [add_apply, rectangularBlockMap_apply,
     ← WithLp.toLp_add, Prod.mk_add_mk]
   refine congrArg (WithLp.toLp 2) ?_
   rw [Prod.mk.injEq]
@@ -97,7 +97,7 @@ theorem rectangularBlockMap_smul
     z • rectangularBlockMap a b c d =
       rectangularBlockMap (z • a) (z • b) (z • c) (z • d) := by
   ext x
-  simp only [ContinuousLinearMap.smul_apply, rectangularBlockMap_apply,
+  simp only [smul_apply, rectangularBlockMap_apply,
     ← WithLp.toLp_smul, Prod.smul_mk, smul_add]
 
 /-- Subtraction of rectangular block maps is entrywise. -/
@@ -109,7 +109,7 @@ theorem rectangularBlockMap_sub
     rectangularBlockMap a b c d - rectangularBlockMap a' b' c' d' =
       rectangularBlockMap (a - a') (b - b') (c - c') (d - d') := by
   ext x
-  simp only [ContinuousLinearMap.sub_apply, rectangularBlockMap_apply,
+  simp only [sub_apply, rectangularBlockMap_apply,
     ← WithLp.toLp_sub, Prod.mk_sub_mk]
   refine congrArg (WithLp.toLp 2) ?_
   rw [Prod.mk.injEq]
@@ -120,8 +120,8 @@ theorem rectangularBlockMap_one :
     rectangularBlockMap
       (1 : E0 →L[ℂ] E0) 0 0 (1 : E1 →L[ℂ] E1) = 1 := by
   ext x
-  simp only [rectangularBlockMap_apply, ContinuousLinearMap.one_apply,
-    ContinuousLinearMap.zero_apply, add_zero, zero_add, WithLp.fst,
+  simp only [rectangularBlockMap_apply, one_apply_eq_self,
+    zero_apply, add_zero, zero_add, WithLp.fst,
     WithLp.snd, Prod.mk.eta, WithLp.toLp_ofLp]
 
 /-- The shifted bounded block operator is the rectangular block map of the two
@@ -171,7 +171,7 @@ theorem schurLower_apply
       WithLp.toLp 2
         (WithLp.fst x, c (r0 (WithLp.fst x)) + WithLp.snd x) := by
   simp only [schurLower, rectangularBlockMap_apply,
-    ContinuousLinearMap.one_apply, ContinuousLinearMap.zero_apply,
+    one_apply_eq_self, zero_apply,
     ContinuousLinearMap.comp_apply, add_zero, zero_add]
 
 @[simp]
@@ -182,8 +182,8 @@ theorem schurLowerInv_apply
       WithLp.toLp 2
         (WithLp.fst x, -(c (r0 (WithLp.fst x))) + WithLp.snd x) := by
   simp only [schurLowerInv, rectangularBlockMap_apply,
-    ContinuousLinearMap.one_apply, ContinuousLinearMap.zero_apply,
-    ContinuousLinearMap.neg_apply, ContinuousLinearMap.comp_apply,
+    one_apply_eq_self, zero_apply,
+    neg_apply, ContinuousLinearMap.comp_apply,
     add_zero, zero_add]
 
 @[simp]
@@ -194,7 +194,7 @@ theorem schurUpper_apply
       WithLp.toLp 2
         (WithLp.fst x + r0 (b (WithLp.snd x)), WithLp.snd x) := by
   simp only [schurUpper, rectangularBlockMap_apply,
-    ContinuousLinearMap.one_apply, ContinuousLinearMap.zero_apply,
+    one_apply_eq_self, zero_apply,
     ContinuousLinearMap.comp_apply, add_zero, zero_add]
 
 @[simp]
@@ -205,8 +205,8 @@ theorem schurUpperInv_apply
       WithLp.toLp 2
         (WithLp.fst x - r0 (b (WithLp.snd x)), WithLp.snd x) := by
   simp only [schurUpperInv, rectangularBlockMap_apply,
-    ContinuousLinearMap.one_apply, ContinuousLinearMap.zero_apply,
-    ContinuousLinearMap.neg_apply, ContinuousLinearMap.comp_apply,
+    one_apply_eq_self, zero_apply,
+    neg_apply, ContinuousLinearMap.comp_apply,
     add_zero, zero_add, sub_eq_add_neg]
 
 /-- Reconstruct a direct-sum vector from its two coordinates. -/
@@ -225,14 +225,14 @@ theorem schurLowerInv_mul_schurLower
           (WithLp.fst x,
             -(c (r0 (WithLp.fst x))) +
               (c (r0 (WithLp.fst x)) + WithLp.snd x)) := by
-      simp only [ContinuousLinearMap.mul_apply, schurLowerInv_apply,
+      simp only [mul_apply_eq_comp, schurLowerInv_apply,
         schurLower_apply, WithLp.toLp_fst, WithLp.toLp_snd]
     _ = WithLp.toLp 2 (WithLp.fst x, WithLp.snd x) := by
       refine congrArg (WithLp.toLp 2) ?_
       rw [Prod.mk.injEq]
       exact ⟨rfl, by abel⟩
     _ = (1 : WithLp 2 (E0 × E1) →L[ℂ] WithLp 2 (E0 × E1)) x := by
-      simpa only [ContinuousLinearMap.one_apply] using rectangularDirectSum_eta x
+      simpa only [one_apply_eq_self] using rectangularDirectSum_eta x
 
 @[simp]
 theorem schurLower_mul_schurLowerInv
@@ -245,14 +245,14 @@ theorem schurLower_mul_schurLowerInv
           (WithLp.fst x,
             c (r0 (WithLp.fst x)) +
               (-(c (r0 (WithLp.fst x))) + WithLp.snd x)) := by
-      simp only [ContinuousLinearMap.mul_apply, schurLower_apply,
+      simp only [mul_apply_eq_comp, schurLower_apply,
         schurLowerInv_apply, WithLp.toLp_fst, WithLp.toLp_snd]
     _ = WithLp.toLp 2 (WithLp.fst x, WithLp.snd x) := by
       refine congrArg (WithLp.toLp 2) ?_
       rw [Prod.mk.injEq]
       exact ⟨rfl, by abel⟩
     _ = (1 : WithLp 2 (E0 × E1) →L[ℂ] WithLp 2 (E0 × E1)) x := by
-      simpa only [ContinuousLinearMap.one_apply] using rectangularDirectSum_eta x
+      simpa only [one_apply_eq_self] using rectangularDirectSum_eta x
 
 @[simp]
 theorem schurUpperInv_mul_schurUpper
@@ -264,14 +264,14 @@ theorem schurUpperInv_mul_schurUpper
         WithLp.toLp 2
           ((WithLp.fst x + r0 (b (WithLp.snd x))) -
             r0 (b (WithLp.snd x)), WithLp.snd x) := by
-      simp only [ContinuousLinearMap.mul_apply, schurUpperInv_apply,
+      simp only [mul_apply_eq_comp, schurUpperInv_apply,
         schurUpper_apply, WithLp.toLp_fst, WithLp.toLp_snd]
     _ = WithLp.toLp 2 (WithLp.fst x, WithLp.snd x) := by
       refine congrArg (WithLp.toLp 2) ?_
       rw [Prod.mk.injEq]
       exact ⟨by abel, rfl⟩
     _ = (1 : WithLp 2 (E0 × E1) →L[ℂ] WithLp 2 (E0 × E1)) x := by
-      simpa only [ContinuousLinearMap.one_apply] using rectangularDirectSum_eta x
+      simpa only [one_apply_eq_self] using rectangularDirectSum_eta x
 
 @[simp]
 theorem schurUpper_mul_schurUpperInv
@@ -283,14 +283,14 @@ theorem schurUpper_mul_schurUpperInv
         WithLp.toLp 2
           ((WithLp.fst x - r0 (b (WithLp.snd x))) +
             r0 (b (WithLp.snd x)), WithLp.snd x) := by
-      simp only [ContinuousLinearMap.mul_apply, schurUpper_apply,
+      simp only [mul_apply_eq_comp, schurUpper_apply,
         schurUpperInv_apply, WithLp.toLp_fst, WithLp.toLp_snd]
     _ = WithLp.toLp 2 (WithLp.fst x, WithLp.snd x) := by
       refine congrArg (WithLp.toLp 2) ?_
       rw [Prod.mk.injEq]
       exact ⟨by abel, rfl⟩
     _ = (1 : WithLp 2 (E0 × E1) →L[ℂ] WithLp 2 (E0 × E1)) x := by
-      simpa only [ContinuousLinearMap.one_apply] using rectangularDirectSum_eta x
+      simpa only [one_apply_eq_self] using rectangularDirectSum_eta x
 
 /-- Evaluate an endomorphism inverse law at a vector. -/
 theorem apply_apply_eq_of_mul_eq_one
@@ -298,7 +298,7 @@ theorem apply_apply_eq_of_mul_eq_one
     (S T : E →L[ℂ] E) (h : S * T = 1) (x : E) :
     S (T x) = x := by
   have hx := congrArg (fun R : E →L[ℂ] E => R x) h
-  simpa only [ContinuousLinearMap.mul_apply, ContinuousLinearMap.one_apply] using hx
+  simpa only [mul_apply_eq_comp, one_apply_eq_self] using hx
 
 /-- Second Schur complement of a shifted rectangular block matrix. -/
 def secondSchurComplement
@@ -321,10 +321,10 @@ theorem rectangularBlockMap_eq_schur_factorization
     apply_apply_eq_of_mul_eq_one r0 l0 hr0l0 (WithLp.fst x)
   have hl0r0bx : l0 (r0 (b (WithLp.snd x))) = b (WithLp.snd x) :=
     apply_apply_eq_of_mul_eq_one l0 r0 hl0r0 (b (WithLp.snd x))
-  simp only [ContinuousLinearMap.mul_apply, schurLower_apply, schurUpper_apply,
+  simp only [mul_apply_eq_comp, schurLower_apply, schurUpper_apply,
     rectangularBlockMap_apply, WithLp.toLp_fst, WithLp.toLp_snd,
-    secondSchurComplement, ContinuousLinearMap.sub_apply,
-    ContinuousLinearMap.comp_apply, ContinuousLinearMap.zero_apply,
+    secondSchurComplement, sub_apply,
+    ContinuousLinearMap.comp_apply, zero_apply,
     add_zero, zero_add, map_add, hr0l0x, hl0r0bx]
   refine congrArg (WithLp.toLp 2) ?_
   rw [Prod.mk.injEq]
@@ -349,9 +349,9 @@ theorem rectangularBlockMap_diagonal_mul
     apply_apply_eq_of_mul_eq_one r0 l0 h0 (WithLp.fst x)
   have h1x : q (s (WithLp.snd x)) = WithLp.snd x :=
     apply_apply_eq_of_mul_eq_one q s h1 (WithLp.snd x)
-  simpa only [rectangularBlockMap_apply, ContinuousLinearMap.add_apply,
-    ContinuousLinearMap.comp_apply, ContinuousLinearMap.zero_apply, map_zero,
-    add_zero, zero_add, h0x, h1x, ContinuousLinearMap.one_apply] using
+  simpa only [rectangularBlockMap_apply, add_apply,
+    ContinuousLinearMap.comp_apply, zero_apply, map_zero,
+    add_zero, zero_add, h0x, h1x, one_apply_eq_self] using
       rectangularDirectSum_eta x
 
 /-- The Schur inverse is a left inverse of the full block map. -/
@@ -459,14 +459,14 @@ theorem secondSchurComplement_has_inverse_of_norm_lt_one
     apply_apply_eq_of_mul_eq_one l1 r1 hl1r1 x
   have hr1S : r1 * secondSchurComplement l1 c r0 b = 1 - n := by
     ext x
-    simp only [ContinuousLinearMap.mul_apply, secondSchurComplement,
-      ContinuousLinearMap.sub_apply, ContinuousLinearMap.comp_apply,
-      ContinuousLinearMap.one_apply, map_sub, n, hr1l1x]
+    simp only [mul_apply_eq_comp, secondSchurComplement,
+      sub_apply, ContinuousLinearMap.comp_apply,
+      one_apply_eq_self, map_sub, n, hr1l1x]
   have hSfactor : secondSchurComplement l1 c r0 b = l1 * (1 - n) := by
     ext x
-    simp only [secondSchurComplement, ContinuousLinearMap.sub_apply,
-      ContinuousLinearMap.comp_apply, ContinuousLinearMap.mul_apply,
-      ContinuousLinearMap.one_apply, n, map_sub, hl1r1x]
+    simp only [secondSchurComplement, sub_apply,
+      ContinuousLinearMap.comp_apply, mul_apply_eq_comp,
+      one_apply_eq_self, n, map_sub, hl1r1x]
   refine ⟨q, ?_, ?_⟩
   · unfold q
     calc

@@ -97,7 +97,7 @@ theorem abs_im_mul_norm_le_norm_sub_smul_apply
   have hxpos : (0 : ℝ) < ‖x‖ := norm_pos_iff.mpr hx
   have hinner : ⟪(A - z • ContinuousLinearMap.id 𝕜 E) x, x⟫_𝕜 =
       ⟪A x, x⟫_𝕜 - (starRingEnd 𝕜) z * ((‖x‖ ^ 2 : ℝ) : 𝕜) := by
-    simp only [ContinuousLinearMap.sub_apply, ContinuousLinearMap.smul_apply,
+    simp only [sub_apply, smul_apply,
       ContinuousLinearMap.id_apply, inner_sub_left, inner_smul_left]
     rw [inner_self_eq_norm_sq_to_K]
     push_cast

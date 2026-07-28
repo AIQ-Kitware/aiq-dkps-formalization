@@ -57,7 +57,7 @@ theorem closedSylvester_homogeneous_eq_zero_complex
     -- reduce, and the product of the gap with the norm is nonlinear in any case.
     rw [norm_zero] at hbound
     by_contra hpos
-    push_neg at hpos
+    push Not at hpos
     exact absurd hbound (not_le.mpr (mul_pos hδ hpos))
   exact norm_eq_zero.mp (le_antisymm hle (norm_nonneg X))
 
@@ -107,7 +107,7 @@ theorem closedSylvester_homogeneous_eq_zero_real
     -- reduce, and the product of the gap with the norm is nonlinear in any case.
     rw [norm_zero] at hbound
     by_contra hpos
-    push_neg at hpos
+    push Not at hpos
     exact absurd hbound (not_le.mpr (mul_pos hδ hpos))
   exact norm_eq_zero.mp (le_antisymm hle (norm_nonneg X))
 

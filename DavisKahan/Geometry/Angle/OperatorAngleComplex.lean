@@ -428,7 +428,7 @@ theorem cosAngleOperatorC_eq_zero_imp_of_acute (U V : Submodule ℂ E)
     nlinarith
   have hxle : ‖x‖ ≤ 0 := by
     by_contra hcon
-    push_neg at hcon
+    push Not at hcon
     nlinarith
   exact norm_eq_zero.mp (le_antisymm hxle (norm_nonneg x))
 
@@ -841,7 +841,7 @@ theorem norm_cosTwoAngleOperatorC_apply_ge (U V : Submodule ℂ E)
             ⟪sinAngleOperatorDirectedC U V
               (sinAngleOperatorDirectedC U V x), x⟫_ℂ := by
           rw [cosTwoAngleOperatorC]
-          simp [inner_sub_left, ContinuousLinearMap.sub_apply, mul_apply]
+          simp [inner_sub_left, sub_apply, mul_apply]
       _ = ⟪cosAngleOperatorC U V x, cosAngleOperatorC U V x⟫_ℂ -
             ⟪sinAngleOperatorDirectedC U V x,
               sinAngleOperatorDirectedC U V x⟫_ℂ := by

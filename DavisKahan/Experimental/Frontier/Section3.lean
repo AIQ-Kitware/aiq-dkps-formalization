@@ -235,7 +235,7 @@ theorem proposition3_3_principalSquareRoot_converse
     intro y
     have hp := (ContinuousLinearMap.nonneg_iff_isPositive (T + star T)).mp hTpos
     have hy := hp.re_inner_nonneg_left y
-    rw [ContinuousLinearMap.add_apply, inner_add_left, map_add] at hy
+    rw [add_apply, inner_add_left, map_add] at hy
     have hstar : RCLike.re ⟪star T y, y⟫_ℂ = RCLike.re ⟪T y, y⟫_ℂ := by
       rw [ContinuousLinearMap.star_eq_adjoint, ContinuousLinearMap.adjoint_inner_left]
       exact inner_re_symm (𝕜 := ℂ) y (T y)
@@ -322,7 +322,7 @@ theorem proposition3_3_principalSquareRoot_converse
     obtain ⟨hPz, hQz⟩ := projections_apply_of_mem_halmosSourceDefect hz
     have hRU : reflectionOperator U z = z := by
       rw [Submodule.reflectionOperator_apply, hPz]; module
-    rw [ContinuousLinearMap.mul_apply, hRU, Submodule.reflectionOperator_apply, hQz]
+    rw [mul_apply_eq_comp, hRU, Submodule.reflectionOperator_apply, hQz]
     module
   -- X vanishes on ker A
   have hXker : ∀ x : H, A x = 0 → (T * projection U - projection V * T) x = 0 := by
@@ -335,7 +335,7 @@ theorem proposition3_3_principalSquareRoot_converse
     have hSexpand : spectraCanonicalIntertwiner U V x =
         projection V (projection U x) + complementaryProjection V (complementaryProjection U x) := by
       show (projection V * projection U + complementaryProjection V * complementaryProjection U) x = _
-      simp only [ContinuousLinearMap.add_apply, ContinuousLinearMap.mul_apply]
+      simp only [add_apply, mul_apply_eq_comp]
     rw [hSexpand] at hSx
     have hmemV : projection V (projection U x) ∈ V := V.starProjection_apply_mem _
     have hmemVc : complementaryProjection V (complementaryProjection U x) ∈ Vᗮ :=
@@ -383,7 +383,7 @@ theorem proposition3_3_principalSquareRoot_converse
       obtain ⟨z, hzsource, hzeq⟩ := hmem
       have hTz : T (T z) = spectraReflectionProduct U V z := by
         have := congrArg (fun f : H →L[ℂ] H => f z) hroot.square_eq
-        simpa [ContinuousLinearMap.mul_apply] using this
+        simpa [mul_apply_eq_comp] using this
       have : T (complementaryProjection U x) = -z := by
         rw [← hzeq, hTz, hGneg z hzsource]
       rw [this]
@@ -395,7 +395,7 @@ theorem proposition3_3_principalSquareRoot_converse
     have hTx : T x = T (projection U x) + T (complementaryProjection U x) := by
       rw [← map_add, hxsplit]
     show (T * projection U - projection V * T) x = 0
-    rw [ContinuousLinearMap.sub_apply, ContinuousLinearMap.mul_apply, ContinuousLinearMap.mul_apply,
+    rw [sub_apply, mul_apply_eq_comp, mul_apply_eq_comp,
       hTx, map_add, hQTPx, hQTPcx, add_zero, sub_self]
   -- final intertwining: X = 0
   have hXeq : T * projection U = projection V * T := by
@@ -405,7 +405,7 @@ theorem proposition3_3_principalSquareRoot_converse
       rintro y ⟨z, rfl⟩
       rw [LinearMap.mem_ker]
       have := congrArg (fun f : H →L[ℂ] H => f z) hXA
-      simpa [ContinuousLinearMap.mul_apply] using this
+      simpa [mul_apply_eq_comp] using this
     have hself : ContinuousLinearMap.adjoint A = A := by
       rw [← ContinuousLinearMap.star_eq_adjoint]
       exact (spectraOperatorAbsoluteValue_isSelfAdjoint _).star_eq
@@ -439,7 +439,7 @@ theorem proposition3_3_principalSquareRoot_converse
   · intro x
     have h := haccr (projection U x)
     have hPTP : (projection U * T * projection U) x = projection U (T (projection U x)) := by
-      simp only [ContinuousLinearMap.mul_apply]
+      simp only [mul_apply_eq_comp]
     have hsymm : ⟪projection U x, T (projection U x)⟫_ℂ
         = ⟪x, projection U (T (projection U x))⟫_ℂ :=
       U.starProjection_isSymmetric x (T (projection U x))
@@ -452,7 +452,7 @@ theorem proposition3_3_principalSquareRoot_converse
     have h := haccr (complementaryProjection U x)
     have hPTP : (complementaryProjection U * T * complementaryProjection U) x
         = complementaryProjection U (T (complementaryProjection U x)) := by
-      simp only [ContinuousLinearMap.mul_apply]
+      simp only [mul_apply_eq_comp]
     have hsymm : ⟪complementaryProjection U x, T (complementaryProjection U x)⟫_ℂ
         = ⟪x, complementaryProjection U (T (complementaryProjection U x))⟫_ℂ :=
       Uᗮ.starProjection_isSymmetric x (T (complementaryProjection U x))
@@ -522,7 +522,7 @@ theorem re_inner_intertwiner_eq_cosineSq (x : H) :
     rw [ContinuousLinearMap.star_eq_adjoint,
       ContinuousLinearMap.adjoint_inner_left]
     exact inner_re_symm x (spectraCanonicalIntertwiner U V x)
-  simp only [ContinuousLinearMap.add_apply, inner_add_left, map_add, hstar] at h
+  simp only [add_apply, inner_add_left, map_add, hstar] at h
   linarith
 
 /-- Under the corrected half-angle bound (cosine *square* at least `1/2`), the
@@ -548,8 +548,8 @@ theorem re_inner_reflectionProduct_nonneg
   have hself : RCLike.re ⟪x, x⟫_ℂ = ‖x‖ ^ 2 := by
     rw [inner_self_eq_norm_sq]
   rw [hG]
-  simp only [ContinuousLinearMap.sub_apply, ContinuousLinearMap.add_apply,
-    ContinuousLinearMap.one_apply, inner_sub_left, inner_add_left, map_sub, map_add,
+  simp only [sub_apply, add_apply,
+    one_apply_eq_self, inner_sub_left, inner_add_left, map_sub, map_add,
     hself, hcos]
   have := hhalf x
   linarith
@@ -704,7 +704,7 @@ theorem inner_halmosCosineSq_source (x : H) (hx : x ∈ U) :
     show (projection U * projection V * projection U
       + complementaryProjection U * complementaryProjection V
         * complementaryProjection U) x = _
-    simp only [ContinuousLinearMap.add_apply, ContinuousLinearMap.mul_apply, hPU,
+    simp only [add_apply, mul_apply_eq_comp, hPU,
       hPUc, map_zero, add_zero]
   rw [hval]
   calc ⟪projection U (projection V x), x⟫_ℂ
@@ -729,7 +729,7 @@ theorem inner_halmosCosineSq_source_compl (x : H) (hx : x ∈ Uᗮ) :
     show (projection U * projection V * projection U
       + complementaryProjection U * complementaryProjection V
         * complementaryProjection U) x = _
-    simp only [ContinuousLinearMap.add_apply, ContinuousLinearMap.mul_apply, hPU,
+    simp only [add_apply, mul_apply_eq_comp, hPU,
       hPUc, map_zero, zero_add]
   rw [hval]
   calc ⟪complementaryProjection U (complementaryProjection V x), x⟫_ℂ
@@ -750,8 +750,8 @@ noncomputable def fixedCosineSubspace (c : ℝ) : Submodule ℂ H :=
 theorem mem_fixedCosineSubspace (c : ℝ) (w : H) :
     w ∈ fixedCosineSubspace U V c ↔ halmosCosineSq U V w = (c : ℂ) ^ 2 • w := by
   rw [fixedCosineSubspace, LinearMap.mem_ker]
-  simp only [ContinuousLinearMap.coe_coe, ContinuousLinearMap.sub_apply,
-    ContinuousLinearMap.smul_apply, ContinuousLinearMap.one_apply]
+  simp only [ContinuousLinearMap.coe_coe, sub_apply,
+    smul_apply, one_apply_eq_self]
   rw [sub_eq_zero]
 
 /-- A projection commuting with the cosine square reduces the eigenspace. -/
@@ -763,7 +763,7 @@ theorem reduces_projection_of_commute (c : ℝ) (W : Submodule ℂ H)
   intro x hx
   rw [mem_fixedCosineSubspace] at hx ⊢
   have hcm := congrArg (fun T : H →L[ℂ] H => T x) hcomm.eq
-  simp only [ContinuousLinearMap.mul_apply] at hcm
+  simp only [mul_apply_eq_comp] at hcm
   rw [hcm, hx, map_smul]
 
 /-- Extract a real norm equality from a complex squared identity. -/
@@ -795,7 +795,7 @@ theorem halmosCosineSq_source_apply (x : H) (hx : x ∈ U) :
   show (projection U * projection V * projection U
     + complementaryProjection U * complementaryProjection V
       * complementaryProjection U) x = _
-  simp only [ContinuousLinearMap.add_apply, ContinuousLinearMap.mul_apply, hPU,
+  simp only [add_apply, mul_apply_eq_comp, hPU,
     hPUc, map_zero, add_zero]
 
 /-- Vector form of the cosine square on the source complement. -/
@@ -813,7 +813,7 @@ theorem halmosCosineSq_source_compl_apply (x : H) (hx : x ∈ Uᗮ) :
   show (projection U * projection V * projection U
     + complementaryProjection U * complementaryProjection V
       * complementaryProjection U) x = _
-  simp only [ContinuousLinearMap.add_apply, ContinuousLinearMap.mul_apply, hPU,
+  simp only [add_apply, mul_apply_eq_comp, hPU,
     hPUc, map_zero, zero_add]
 
 /-- Complementary projections preserve a subspace reducing the projection. -/
@@ -836,7 +836,7 @@ theorem halmosCosineSq_mem_of_reduces {M : Submodule ℂ H}
     show (projection U * projection V * projection U
       + complementaryProjection U * complementaryProjection V
         * complementaryProjection U) w = _
-    simp only [ContinuousLinearMap.add_apply, ContinuousLinearMap.mul_apply]
+    simp only [add_apply, mul_apply_eq_comp]
   rw [hval]
   refine M.add_mem (hRU.1 _ (hRV.1 _ (hRU.1 _ hw))) ?_
   exact complementaryProjection_mem_of_reduces hRU
@@ -884,22 +884,22 @@ theorem fixedCosineSubspace_maximal (c : ℝ) {M : Submodule ℂ H}
         (Submodule.mem_inf.mpr ⟨hwM, hwU⟩)
       · intro y hy
         obtain ⟨hyM, hyU⟩ := Submodule.mem_inf.mp hy
-        simp only [ContinuousLinearMap.sub_apply, ContinuousLinearMap.smul_apply,
-          ContinuousLinearMap.one_apply]
+        simp only [sub_apply, smul_apply,
+          one_apply_eq_self]
         refine Submodule.mem_inf.mpr
           ⟨M.sub_mem (halmosCosineSq_mem_of_reduces U V hRU hRV hyM) (M.smul_mem _ hyM), ?_⟩
         rw [halmosCosineSq_source_apply U V y hyU]
         exact U.sub_mem (U.starProjection_apply_mem _) (U.smul_mem _ hyU)
       · intro y hy
         obtain ⟨hyM, hyU⟩ := Submodule.mem_inf.mp hy
-        rw [ContinuousLinearMap.sub_apply, inner_sub_left,
-          ContinuousLinearMap.smul_apply, ContinuousLinearMap.one_apply,
+        rw [sub_apply, inner_sub_left,
+          smul_apply, one_apply_eq_self,
           inner_halmosCosineSq_source U V y hyU, inner_smul_left, map_pow,
           Complex.conj_ofReal, inner_self_ofReal, hU y hyM hyU]
         push_cast; ring
     have heq : halmosCosineSq U V w - (c : ℂ) ^ 2 • w = 0 := by
-      rwa [ContinuousLinearMap.sub_apply, ContinuousLinearMap.smul_apply,
-        ContinuousLinearMap.one_apply] at hclaim
+      rwa [sub_apply, smul_apply,
+        one_apply_eq_self] at hclaim
     exact sub_eq_zero.mp heq
   have hEUc : ∀ w ∈ M, w ∈ Uᗮ → halmosCosineSq U V w = (c : ℂ) ^ 2 • w := by
     intro w hwM hwU
@@ -908,22 +908,22 @@ theorem fixedCosineSubspace_maximal (c : ℝ) {M : Submodule ℂ H}
         (Submodule.mem_inf.mpr ⟨hwM, hwU⟩)
       · intro y hy
         obtain ⟨hyM, hyU⟩ := Submodule.mem_inf.mp hy
-        simp only [ContinuousLinearMap.sub_apply, ContinuousLinearMap.smul_apply,
-          ContinuousLinearMap.one_apply]
+        simp only [sub_apply, smul_apply,
+          one_apply_eq_self]
         refine Submodule.mem_inf.mpr
           ⟨M.sub_mem (halmosCosineSq_mem_of_reduces U V hRU hRV hyM) (M.smul_mem _ hyM), ?_⟩
         rw [halmosCosineSq_source_compl_apply U V y hyU]
         exact Uᗮ.sub_mem (Uᗮ.starProjection_apply_mem _) (Uᗮ.smul_mem _ hyU)
       · intro y hy
         obtain ⟨hyM, hyU⟩ := Submodule.mem_inf.mp hy
-        rw [ContinuousLinearMap.sub_apply, inner_sub_left,
-          ContinuousLinearMap.smul_apply, ContinuousLinearMap.one_apply,
+        rw [sub_apply, inner_sub_left,
+          smul_apply, one_apply_eq_self,
           inner_halmosCosineSq_source_compl U V y hyU, inner_smul_left, map_pow,
           Complex.conj_ofReal, inner_self_ofReal, hUc y hyM hyU]
         push_cast; ring
     have heq : halmosCosineSq U V w - (c : ℂ) ^ 2 • w = 0 := by
-      rwa [ContinuousLinearMap.sub_apply, ContinuousLinearMap.smul_apply,
-        ContinuousLinearMap.one_apply] at hclaim
+      rwa [sub_apply, smul_apply,
+        one_apply_eq_self] at hclaim
     exact sub_eq_zero.mp heq
   intro w hw
   rw [mem_fixedCosineSubspace]

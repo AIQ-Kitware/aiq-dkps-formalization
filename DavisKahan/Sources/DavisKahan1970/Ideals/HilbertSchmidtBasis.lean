@@ -398,7 +398,7 @@ theorem paperHilbertSchmidtEnergy_eq_iSup_cutoff {ι : Type*}
           ((approximationSingularValue n (A ∘L paperBasisProjection b s)) ^ 2))
         atTop (𝓝 (∑ n ∈ t, ENNReal.ofReal
           ((approximationSingularValue n A) ^ 2))) := by
-      refine tendsto_finset_sum _ fun n _ => ?_
+      refine tendsto_finsetSum _ fun n _ => ?_
       exact ENNReal.tendsto_ofReal
         ((approximationSingularValue_cutoff_tendsto b A n).pow 2)
     refine le_of_tendsto hten (Filter.Eventually.of_forall fun s => ?_)

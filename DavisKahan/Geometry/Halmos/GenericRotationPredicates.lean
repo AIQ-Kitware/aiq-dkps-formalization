@@ -98,7 +98,7 @@ theorem genericHalmosCosineSq_add_sineSq
     have h := congrArg
       (fun T : H →L[ℂ] H => T (x : H)) (halmosCosineSq_add_sineSq U V)
     simpa using h
-  simp only [ContinuousLinearMap.add_apply, ContinuousLinearMap.one_apply,
+  simp only [add_apply, one_apply_eq_self,
     genericHalmosCosineSq, genericHalmosSineSq, DavisKahanExt.compressOperator,
     ContinuousLinearMap.comp_apply, Submodule.subtypeL_apply]
   simp only [Submodule.coe_add, Submodule.coe_orthogonalProjectionOnto_apply]
