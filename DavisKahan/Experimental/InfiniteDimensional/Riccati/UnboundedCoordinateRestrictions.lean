@@ -9,9 +9,14 @@ import DavisKahan.Experimental.InfiniteDimensional.Riccati.UnboundedReductionTra
 # Coordinate domains of a reduced unbounded direct-sum operator
 
 This leaf isolates the algebraic and domain decomposition needed before the two
-closed diagonal restrictions are constructed.  For a closed operator reducing
-the first coordinate summand, its domain splits exactly into coordinate-domain
+diagonal restrictions are constructed.  For a partial linear map reducing the
+first coordinate summand, its domain splits exactly into coordinate-domain
 pieces, and its action on each piece has no off-diagonal coordinate.
+
+Everything here is stated for a bare `LinearPMap`: the decomposition is purely
+algebraic, so neither density nor closedness of the domain is a hypothesis.
+Those two properties enter one module downstream, where the coordinate
+restrictions are shown to inherit them.
 -/
 
 namespace TauCeti
@@ -26,39 +31,44 @@ variable {E1 : Type*} [NormedAddCommGroup E1] [InnerProductSpace ℂ E1]
 
 abbrev DirectSumSpace := WithLp 2 (E0 × E1)
 
-/-- The first-coordinate domain induced by a closed operator on the direct sum. -/
-noncomputable def closedOperatorCoordinateDomain0
-    (D : ClosedOperator (𝕜 := ℂ) (E := DirectSumSpace (E0 := E0) (E1 := E1))) :
+/-- Partial linear maps on the Hilbert direct sum, the carrier of every
+coordinate-restriction statement below. -/
+abbrev DirectSumPMap :=
+  DirectSumSpace (E0 := E0) (E1 := E1) →ₗ.[ℂ] DirectSumSpace (E0 := E0) (E1 := E1)
+
+/-- The first-coordinate domain induced by a partial map on the direct sum. -/
+noncomputable def coordinateRestrictionDomain0
+    (D : DirectSumPMap (E0 := E0) (E1 := E1)) :
     Submodule ℂ E0 :=
   D.domain.comap
     (blockCoordinate0 (𝕜 := ℂ) (E0 := E0) (E1 := E1)).toLinearMap
 
-/-- The second-coordinate domain induced by a closed operator on the direct sum. -/
-noncomputable def closedOperatorCoordinateDomain1
-    (D : ClosedOperator (𝕜 := ℂ) (E := DirectSumSpace (E0 := E0) (E1 := E1))) :
+/-- The second-coordinate domain induced by a partial map on the direct sum. -/
+noncomputable def coordinateRestrictionDomain1
+    (D : DirectSumPMap (E0 := E0) (E1 := E1)) :
     Submodule ℂ E1 :=
   D.domain.comap
     (blockCoordinate1 (𝕜 := ℂ) (E0 := E0) (E1 := E1)).toLinearMap
 
-@[simp] theorem mem_closedOperatorCoordinateDomain0_iff
-    (D : ClosedOperator (𝕜 := ℂ) (E := DirectSumSpace (E0 := E0) (E1 := E1)))
+@[simp] theorem mem_coordinateRestrictionDomain0_iff
+    (D : DirectSumPMap (E0 := E0) (E1 := E1))
     (u : E0) :
-    u ∈ closedOperatorCoordinateDomain0 D ↔
+    u ∈ coordinateRestrictionDomain0 D ↔
       blockCoordinate0 (𝕜 := ℂ) (E0 := E0) (E1 := E1) u ∈ D.domain :=
   Iff.rfl
 
-@[simp] theorem mem_closedOperatorCoordinateDomain1_iff
-    (D : ClosedOperator (𝕜 := ℂ) (E := DirectSumSpace (E0 := E0) (E1 := E1)))
+@[simp] theorem mem_coordinateRestrictionDomain1_iff
+    (D : DirectSumPMap (E0 := E0) (E1 := E1))
     (v : E1) :
-    v ∈ closedOperatorCoordinateDomain1 D ↔
+    v ∈ coordinateRestrictionDomain1 D ↔
       blockCoordinate1 (𝕜 := ℂ) (E0 := E0) (E1 := E1) v ∈ D.domain :=
   Iff.rfl
 
 /-- Bundle a first-coordinate domain vector as an element of the ambient
 operator domain. -/
-noncomputable def closedOperatorCoordinateDomain0ToOriginal
-    (D : ClosedOperator (𝕜 := ℂ) (E := DirectSumSpace (E0 := E0) (E1 := E1))) :
-    closedOperatorCoordinateDomain0 D →ₗ[ℂ] D.domain where
+noncomputable def coordinateRestrictionDomain0ToOriginal
+    (D : DirectSumPMap (E0 := E0) (E1 := E1)) :
+    coordinateRestrictionDomain0 D →ₗ[ℂ] D.domain where
   toFun u :=
     ⟨blockCoordinate0 (𝕜 := ℂ) (E0 := E0) (E1 := E1) (u : E0), u.property⟩
   map_add' x y := by
@@ -77,9 +87,9 @@ noncomputable def closedOperatorCoordinateDomain0ToOriginal
 
 /-- Bundle a second-coordinate domain vector as an element of the ambient
 operator domain. -/
-noncomputable def closedOperatorCoordinateDomain1ToOriginal
-    (D : ClosedOperator (𝕜 := ℂ) (E := DirectSumSpace (E0 := E0) (E1 := E1))) :
-    closedOperatorCoordinateDomain1 D →ₗ[ℂ] D.domain where
+noncomputable def coordinateRestrictionDomain1ToOriginal
+    (D : DirectSumPMap (E0 := E0) (E1 := E1)) :
+    coordinateRestrictionDomain1 D →ₗ[ℂ] D.domain where
   toFun v :=
     ⟨blockCoordinate1 (𝕜 := ℂ) (E0 := E0) (E1 := E1) (v : E1), v.property⟩
   map_add' x y := by
@@ -96,18 +106,18 @@ noncomputable def closedOperatorCoordinateDomain1ToOriginal
       c • blockCoordinate1 (𝕜 := ℂ) (E0 := E0) (E1 := E1) (x : E1)
     exact (blockCoordinate1 (𝕜 := ℂ) (E0 := E0) (E1 := E1)).map_smul c (x : E1)
 
-@[simp] theorem closedOperatorCoordinateDomain0ToOriginal_coe
-    (D : ClosedOperator (𝕜 := ℂ) (E := DirectSumSpace (E0 := E0) (E1 := E1)))
-    (u : closedOperatorCoordinateDomain0 D) :
-    ((closedOperatorCoordinateDomain0ToOriginal D u : D.domain) :
+@[simp] theorem coordinateRestrictionDomain0ToOriginal_coe
+    (D : DirectSumPMap (E0 := E0) (E1 := E1))
+    (u : coordinateRestrictionDomain0 D) :
+    ((coordinateRestrictionDomain0ToOriginal D u : D.domain) :
         DirectSumSpace (E0 := E0) (E1 := E1)) =
       blockCoordinate0 (𝕜 := ℂ) (E0 := E0) (E1 := E1) (u : E0) :=
   rfl
 
-@[simp] theorem closedOperatorCoordinateDomain1ToOriginal_coe
-    (D : ClosedOperator (𝕜 := ℂ) (E := DirectSumSpace (E0 := E0) (E1 := E1)))
-    (v : closedOperatorCoordinateDomain1 D) :
-    ((closedOperatorCoordinateDomain1ToOriginal D v : D.domain) :
+@[simp] theorem coordinateRestrictionDomain1ToOriginal_coe
+    (D : DirectSumPMap (E0 := E0) (E1 := E1))
+    (v : coordinateRestrictionDomain1 D) :
+    ((coordinateRestrictionDomain1ToOriginal D v : D.domain) :
         DirectSumSpace (E0 := E0) (E1 := E1)) =
       blockCoordinate1 (𝕜 := ℂ) (E0 := E0) (E1 := E1) (v : E1) :=
   rfl
@@ -139,14 +149,14 @@ theorem zeroUnboundedGraph_orthogonalProjection_apply
 
 /-- Reduction by the first coordinate summand splits the operator domain
 coordinatewise. -/
-theorem mem_closedOperator_domain_iff_coordinate_domains
-    (D : ClosedOperator (𝕜 := ℂ) (E := DirectSumSpace (E0 := E0) (E1 := E1)))
-    (hred : D.ReducesSubspace
+theorem mem_domain_iff_coordinateRestrictionDomains
+    (D : DirectSumPMap (E0 := E0) (E1 := E1))
+    (hred : TauCeti.LinearPMap.ReducesSubspace D
       (unboundedBlockGraph (0 : E0 →L[ℂ] E1)))
     (z : DirectSumSpace (E0 := E0) (E1 := E1)) :
     z ∈ D.domain ↔
-      WithLp.fst z ∈ closedOperatorCoordinateDomain0 D ∧
-      WithLp.snd z ∈ closedOperatorCoordinateDomain1 D := by
+      WithLp.fst z ∈ coordinateRestrictionDomain0 D ∧
+      WithLp.snd z ∈ coordinateRestrictionDomain1 D := by
   constructor
   · intro hz
     let x : D.domain := ⟨z, hz⟩
@@ -169,106 +179,106 @@ theorem mem_closedOperator_domain_iff_coordinate_domains
     exact D.domain.add_mem h0 h1
 
 /-- First coordinate of the ambient action on the first-coordinate domain. -/
-noncomputable def closedOperatorCoordinateLinearMap0
-    (D : ClosedOperator (𝕜 := ℂ) (E := DirectSumSpace (E0 := E0) (E1 := E1))) :
-    closedOperatorCoordinateDomain0 D →ₗ[ℂ] E0 :=
+noncomputable def coordinateRestrictionMap0
+    (D : DirectSumPMap (E0 := E0) (E1 := E1)) :
+    coordinateRestrictionDomain0 D →ₗ[ℂ] E0 :=
   (WithLp.fstL 2 ℂ E0 E1).toLinearMap.comp
-    (D.toLinearMap.comp (closedOperatorCoordinateDomain0ToOriginal D))
+    (D.toFun.comp (coordinateRestrictionDomain0ToOriginal D))
 
 /-- Second coordinate of the ambient action on the second-coordinate domain. -/
-noncomputable def closedOperatorCoordinateLinearMap1
-    (D : ClosedOperator (𝕜 := ℂ) (E := DirectSumSpace (E0 := E0) (E1 := E1))) :
-    closedOperatorCoordinateDomain1 D →ₗ[ℂ] E1 :=
+noncomputable def coordinateRestrictionMap1
+    (D : DirectSumPMap (E0 := E0) (E1 := E1)) :
+    coordinateRestrictionDomain1 D →ₗ[ℂ] E1 :=
   (WithLp.sndL 2 ℂ E0 E1).toLinearMap.comp
-    (D.toLinearMap.comp (closedOperatorCoordinateDomain1ToOriginal D))
+    (D.toFun.comp (coordinateRestrictionDomain1ToOriginal D))
 
-@[simp] theorem closedOperatorCoordinateLinearMap0_apply
-    (D : ClosedOperator (𝕜 := ℂ) (E := DirectSumSpace (E0 := E0) (E1 := E1)))
-    (u : closedOperatorCoordinateDomain0 D) :
-    closedOperatorCoordinateLinearMap0 D u =
-      WithLp.fst (D.toLinearMap (closedOperatorCoordinateDomain0ToOriginal D u)) :=
+@[simp] theorem coordinateRestrictionMap0_apply
+    (D : DirectSumPMap (E0 := E0) (E1 := E1))
+    (u : coordinateRestrictionDomain0 D) :
+    coordinateRestrictionMap0 D u =
+      WithLp.fst (D (coordinateRestrictionDomain0ToOriginal D u)) :=
   rfl
 
-@[simp] theorem closedOperatorCoordinateLinearMap1_apply
-    (D : ClosedOperator (𝕜 := ℂ) (E := DirectSumSpace (E0 := E0) (E1 := E1)))
-    (v : closedOperatorCoordinateDomain1 D) :
-    closedOperatorCoordinateLinearMap1 D v =
-      WithLp.snd (D.toLinearMap (closedOperatorCoordinateDomain1ToOriginal D v)) :=
+@[simp] theorem coordinateRestrictionMap1_apply
+    (D : DirectSumPMap (E0 := E0) (E1 := E1))
+    (v : coordinateRestrictionDomain1 D) :
+    coordinateRestrictionMap1 D v =
+      WithLp.snd (D (coordinateRestrictionDomain1ToOriginal D v)) :=
   rfl
 
 /-- Reduction kills the second output coordinate on the first-coordinate
 operator domain. -/
-theorem closedOperatorCoordinate0_action_snd_eq_zero
-    (D : ClosedOperator (𝕜 := ℂ) (E := DirectSumSpace (E0 := E0) (E1 := E1)))
-    (hred : D.ReducesSubspace
+theorem coordinateRestriction0_action_snd_eq_zero
+    (D : DirectSumPMap (E0 := E0) (E1 := E1))
+    (hred : TauCeti.LinearPMap.ReducesSubspace D
       (unboundedBlockGraph (0 : E0 →L[ℂ] E1)))
-    (u : closedOperatorCoordinateDomain0 D) :
-    WithLp.snd (D.toLinearMap (closedOperatorCoordinateDomain0ToOriginal D u)) = 0 := by
+    (u : coordinateRestrictionDomain0 D) :
+    WithLp.snd (D (coordinateRestrictionDomain0ToOriginal D u)) = 0 := by
   have hmem0 :
-      ((closedOperatorCoordinateDomain0ToOriginal D u : D.domain) :
+      ((coordinateRestrictionDomain0ToOriginal D u : D.domain) :
           DirectSumSpace (E0 := E0) (E1 := E1)) ∈
         unboundedBlockGraph (0 : E0 →L[ℂ] E1) := by
     change blockCoordinate0 (𝕜 := ℂ) (E0 := E0) (E1 := E1) (u : E0) ∈
       blockGraph (0 : E0 →L[ℂ] E1)
     exact blockCoordinate0_mem_zeroGraph
       (𝕜 := ℂ) (E0 := E0) (E1 := E1) (u : E0)
-  have hout := hred.2.2.1 (closedOperatorCoordinateDomain0ToOriginal D u) hmem0
-  change D.toLinearMap (closedOperatorCoordinateDomain0ToOriginal D u) ∈
+  have hout := hred.2.2.1 (coordinateRestrictionDomain0ToOriginal D u) hmem0
+  change D (coordinateRestrictionDomain0ToOriginal D u) ∈
     blockGraph (0 : E0 →L[ℂ] E1) at hout
   exact (mem_blockGraph_zero_iff_snd_eq_zero
     (𝕜 := ℂ) (E0 := E0) (E1 := E1)
-    (D.toLinearMap (closedOperatorCoordinateDomain0ToOriginal D u))).mp hout
+    (D (coordinateRestrictionDomain0ToOriginal D u))).mp hout
 
 /-- Reduction kills the first output coordinate on the second-coordinate
 operator domain. -/
-theorem closedOperatorCoordinate1_action_fst_eq_zero
-    (D : ClosedOperator (𝕜 := ℂ) (E := DirectSumSpace (E0 := E0) (E1 := E1)))
-    (hred : D.ReducesSubspace
+theorem coordinateRestriction1_action_fst_eq_zero
+    (D : DirectSumPMap (E0 := E0) (E1 := E1))
+    (hred : TauCeti.LinearPMap.ReducesSubspace D
       (unboundedBlockGraph (0 : E0 →L[ℂ] E1)))
-    (v : closedOperatorCoordinateDomain1 D) :
-    WithLp.fst (D.toLinearMap (closedOperatorCoordinateDomain1ToOriginal D v)) = 0 := by
+    (v : coordinateRestrictionDomain1 D) :
+    WithLp.fst (D (coordinateRestrictionDomain1ToOriginal D v)) = 0 := by
   have hmem1 :
-      ((closedOperatorCoordinateDomain1ToOriginal D v : D.domain) :
+      ((coordinateRestrictionDomain1ToOriginal D v : D.domain) :
           DirectSumSpace (E0 := E0) (E1 := E1)) ∈
         (unboundedBlockGraph (0 : E0 →L[ℂ] E1))ᗮ := by
     change blockCoordinate1 (𝕜 := ℂ) (E0 := E0) (E1 := E1) (v : E1) ∈
       (blockGraph (0 : E0 →L[ℂ] E1))ᗮ
     exact blockCoordinate1_mem_zeroGraph_orthogonal
       (𝕜 := ℂ) (E0 := E0) (E1 := E1) (v : E1)
-  have hout := hred.2.2.2 (closedOperatorCoordinateDomain1ToOriginal D v) hmem1
-  change D.toLinearMap (closedOperatorCoordinateDomain1ToOriginal D v) ∈
+  have hout := hred.2.2.2 (coordinateRestrictionDomain1ToOriginal D v) hmem1
+  change D (coordinateRestrictionDomain1ToOriginal D v) ∈
     (blockGraph (0 : E0 →L[ℂ] E1))ᗮ at hout
   exact fst_eq_zero_of_mem_zeroGraph_orthogonal
     (𝕜 := ℂ) (E0 := E0) (E1 := E1) hout
 
 /-- On the first coordinate domain, the ambient action is exactly the first
 coordinate compression embedded back into the direct sum. -/
-theorem closedOperatorCoordinate0_action_eq
-    (D : ClosedOperator (𝕜 := ℂ) (E := DirectSumSpace (E0 := E0) (E1 := E1)))
-    (hred : D.ReducesSubspace
+theorem coordinateRestriction0_action_eq
+    (D : DirectSumPMap (E0 := E0) (E1 := E1))
+    (hred : TauCeti.LinearPMap.ReducesSubspace D
       (unboundedBlockGraph (0 : E0 →L[ℂ] E1)))
-    (u : closedOperatorCoordinateDomain0 D) :
-    D.toLinearMap (closedOperatorCoordinateDomain0ToOriginal D u) =
+    (u : coordinateRestrictionDomain0 D) :
+    D (coordinateRestrictionDomain0ToOriginal D u) =
       blockCoordinate0 (𝕜 := ℂ) (E0 := E0) (E1 := E1)
-        (closedOperatorCoordinateLinearMap0 D u) := by
+        (coordinateRestrictionMap0 D u) := by
   have hrec := blockCoordinate0_add_blockCoordinate1 (𝕜 := ℂ)
-    (D.toLinearMap (closedOperatorCoordinateDomain0ToOriginal D u))
-  rw [closedOperatorCoordinate0_action_snd_eq_zero D hred u, map_zero, add_zero] at hrec
+    (D (coordinateRestrictionDomain0ToOriginal D u))
+  rw [coordinateRestriction0_action_snd_eq_zero D hred u, map_zero, add_zero] at hrec
   exact hrec.symm
 
 /-- On the second coordinate domain, the ambient action is exactly the second
 coordinate compression embedded back into the direct sum. -/
-theorem closedOperatorCoordinate1_action_eq
-    (D : ClosedOperator (𝕜 := ℂ) (E := DirectSumSpace (E0 := E0) (E1 := E1)))
-    (hred : D.ReducesSubspace
+theorem coordinateRestriction1_action_eq
+    (D : DirectSumPMap (E0 := E0) (E1 := E1))
+    (hred : TauCeti.LinearPMap.ReducesSubspace D
       (unboundedBlockGraph (0 : E0 →L[ℂ] E1)))
-    (v : closedOperatorCoordinateDomain1 D) :
-    D.toLinearMap (closedOperatorCoordinateDomain1ToOriginal D v) =
+    (v : coordinateRestrictionDomain1 D) :
+    D (coordinateRestrictionDomain1ToOriginal D v) =
       blockCoordinate1 (𝕜 := ℂ) (E0 := E0) (E1 := E1)
-        (closedOperatorCoordinateLinearMap1 D v) := by
+        (coordinateRestrictionMap1 D v) := by
   have hrec := blockCoordinate0_add_blockCoordinate1 (𝕜 := ℂ)
-    (D.toLinearMap (closedOperatorCoordinateDomain1ToOriginal D v))
-  rw [closedOperatorCoordinate1_action_fst_eq_zero D hred v, map_zero, zero_add] at hrec
+    (D (coordinateRestrictionDomain1ToOriginal D v))
+  rw [coordinateRestriction1_action_fst_eq_zero D hred v, map_zero, zero_add] at hrec
   exact hrec.symm
 
 end DavisKahanExt
