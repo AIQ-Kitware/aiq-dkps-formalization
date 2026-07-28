@@ -3,6 +3,8 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking, Claude Opus 5
 -/
+import ForTauCeti.Analysis.InnerProductSpace.OperatorModulus
+import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteRestriction
 import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.KyFan
 
 /-!
@@ -92,5 +94,48 @@ theorem kyFanGauge_eq {A : E₁ →L[𝕜] F₁} {B : E₂ →L[𝕜] F₂}
   Finset.sum_congr rfl fun n _ => h n
 
 end HasSameApproximationNumbers
+
+section Complex
+
+variable {X : Type v₁} {Y : Type w₁} {Z : Type w₂}
+  [NormedAddCommGroup X] [InnerProductSpace ℂ X] [CompleteSpace X]
+  [NormedAddCommGroup Y] [InnerProductSpace ℂ Y] [CompleteSpace Y]
+  [NormedAddCommGroup Z] [InnerProductSpace ℂ Z] [CompleteSpace Z]
+
+/-- **A pointwise norm bound is inherited by every approximation number.**
+
+The proof is the min--max characterisation used twice: a strict lower bound for `aₙ A` is
+realized as a uniform lower modulus on an `(n+1)`-dimensional subspace, and the pointwise
+estimate carries that same witness over to `B`.  It is rank-safe — no averaging of `A`
+against a second operator happens, so no rank doubling can occur. -/
+theorem approximationNumber_le_of_norm_apply_le
+    (A : X →L[ℂ] Y) (B : X →L[ℂ] Z) (h : ∀ x : X, ‖A x‖ ≤ ‖B x‖) (n : ℕ) :
+    A.approximationNumber n ≤ B.approximationNumber n := by
+  by_contra hnot
+  have hlt : B.approximationNumber n < A.approximationNumber n := lt_of_not_ge hnot
+  have hB0 : 0 ≤ B.approximationNumber n := B.approximationNumber_nonneg n
+  obtain ⟨s, hrs, v, hv, hV⟩ :=
+    (A.lt_approximationNumber_iff_exists_finiteDimensional_lowerBound n hB0).mp hlt
+  exact lt_irrefl _
+    ((B.lt_approximationNumber_iff_exists_finiteDimensional_lowerBound n hB0).mpr
+      ⟨s, hrs, v, hv, fun x hx => (hV x hx).trans (h x)⟩)
+
+/-- Pointwise equality of norms determines the whole approximation-number sequence.  The two
+operators may have different targets, which is what the heterogeneous relation is for. -/
+theorem hasSameApproximationNumbers_of_norm_apply_eq
+    (A : X →L[ℂ] Y) (B : X →L[ℂ] Z) (h : ∀ x : X, ‖A x‖ = ‖B x‖) :
+    A.HasSameApproximationNumbers B := fun n =>
+  le_antisymm
+    (approximationNumber_le_of_norm_apply_le A B (fun x => (h x).le) n)
+    (approximationNumber_le_of_norm_apply_le B A (fun x => (h x).ge) n)
+
+/-- **An operator and its modulus have the same approximation numbers.**  The modulus acts
+on the source while the operator maps into the target, so this is genuinely the
+heterogeneous relation. -/
+theorem modulus_hasSameApproximationNumbers (T : X →L[ℂ] Y) :
+    T.modulus.HasSameApproximationNumbers T :=
+  hasSameApproximationNumbers_of_norm_apply_eq _ _ T.norm_modulus_apply
+
+end Complex
 
 end ContinuousLinearMap
