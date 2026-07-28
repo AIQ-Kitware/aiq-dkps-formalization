@@ -7,6 +7,16 @@ Prints the number of Spectra constants the given declarations transitively
 depend on, grouped by defining module.  Used to size the remaining port in
 `dev/tauceti/spectra-removal-plan.md`.
 
+**KNOWN LIMITATION — this is a LOWER BOUND, not a closure.**  `importModules`
+loads theorem *statements* without their proof terms: empirically 0 of 279,026
+theorems in the Spectra environment have `value?`, against 131,277 of 131,277
+definitions.  So this walk sees definition bodies and theorem types, and never
+theorem *proofs*.  For sizing a **port** that undercounts badly, because porting
+a theorem requires everything its proof uses.  Treat the output as "the
+definitional skeleton", not "the work".  For sizing a **reproof** — restating an
+endpoint and proving it afresh from Mathlib — the skeleton is the relevant
+measure, which is what it was built for.
+
 **Attribute by defining module, never by name prefix.**  Private declarations
 are mangled to `_private.<module>.…`, so a `name.startsWith "Spectra."` filter
 silently drops them and under-reports the closure — it reported 77 constants for

@@ -503,7 +503,36 @@ declaration-level closure — `Expr.getUsedConstants`, transitively, over
 
 Most of each donor file is content this endpoint never touches.
 
-> **Corrected 2026-07-28.** This first read **77 constants over 15 modules**, and
+> **Corrected twice, and the second correction matters more than the first.**
+> **(2) The declaration-closure figures below are a LOWER BOUND, not a closure,
+> and must not be used to size a port.** `importModules` loads theorem
+> *statements* without proof terms — empirically **0 of 279,026 theorems** in the
+> Spectra environment carry a value, against **131,277 of 131,277 definitions**.
+> So the walk follows definition bodies and theorem types and never theorem
+> *proofs*, which is where essentially all the porting work lives. The tell:
+> `genToGroup`'s source visibly calls `exponential_group_law` and
+> `exponential_identity`, and neither appears in the "closure", because they are
+> reached only through `genToGroup._proof_N` — theorems, hence valueless on
+> import.
+>
+> **Consequence for the (a)-vs-(b) decision.** The claim "the port is only ~99
+> declarations, therefore porting beats rebuilding" is **not supported**. For
+> porting, the honest estimate is much closer to the import closure. The
+> decision between porting Spectra's spectral theorem and rebuilding it on
+> Mathlib's `cfc` + `RieszMarkovKakutani` is therefore **reopened**, and should
+> be made on the import-closure numbers, not on the declaration counts.
+>
+> **What is *not* affected.** The completed work — the gap-resolvent bound,
+> bounded Kato--Rellich, the self-adjoint criterion — was *reproved* natively
+> from Mathlib, and is validated by compiling, not by any closure measurement.
+> The "restate the endpoint at a lower altitude" strategy stands on its results.
+> For sizing a *reproof* the definitional skeleton is the right measure, which is
+> what the tool was built for.
+>
+> **Track progress by `import Spectra` count and the lakefile requirement, not by
+> the constant count** — those are ground truth for "is the dependency gone".
+>
+> **Corrected 2026-07-28 (1).** This first read **77 constants over 15 modules**, and
 > that number was wrong — it filtered candidates by the name prefix `Spectra.`,
 > which silently drops **private** declarations, whose names are mangled to
 > `_private.<module>.…`. The symptom that caught it: `exponential`'s body
