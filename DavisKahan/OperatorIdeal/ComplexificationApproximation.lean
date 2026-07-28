@@ -18,7 +18,7 @@ cardinality or lower modulus.
 Consequently every finite Ky Fan gauge is preserved exactly.  This is the
 scalar bridge needed to apply a complex Sylvester theorem at each finite Ky Fan
 gauge and descend the resulting majorization through an arbitrary real
-unitarily invariant ideal family.
+Ky-Fan-dominant unitarily invariant ideal family.
 -/
 
 namespace TauCeti
