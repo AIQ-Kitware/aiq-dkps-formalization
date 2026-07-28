@@ -190,6 +190,52 @@ is not this lane's to migrate.
 - The `Restriction.lean` and `ClosedSylvesterEquation.lean` facade blocks, once
   their remaining callers move.
 
+**The gap predicates are now canonical — and they were the keystone (edward,
+aiq-gpu, 2026-07-28).**  `UnboundedSylvesterGap` and
+`UnboundedIntervalExteriorGap` (`DavisKahan/Sylvester/Gap.lean`) are stated over
+`LinearPMap`; the bundled spellings survive as reducible `abbrev`s at
+`A.toLinearPMap`, so **none of the 27 consumer modules changed**.
+
+Why this one mattered more than its size (67 lines) suggests: it is what
+*blocked* the rest of the unbounded sin-Θ cluster.  `SinTheta/Natural/Reducing.lean`
+— U1's second-largest un-migrated record at 14 type-position uses — carries a
+`spectral_gap : UnboundedSylvesterGap A₀ Λ₁ gap` field, so retyping its two
+problem structures over `LinearPMap` without first retyping the gap would have
+forced `.toClosed` round-trips *at the gap field*, reintroducing the bundle in
+the middle of the record that was supposed to leave it.  The same field blocks
+`Sources/**/SineTheta/{CommonCore,CommonDomain,Symmetric,Theorem61Universal}`
+(U1's 17-use entry).  **Those five records can now each migrate independently**;
+that is the point of this change.
+
+The restatement cost no mathematics.  Every component was *already* a reducible
+facade over the canonical layer — `ClosedOperator.realSpectrum`
+(`ClosedOperator/Basic.lean:469`) and `SemiboundedBelow`/`SemiboundedAbove`
+(`ClosedSylvesterEquation.lean:42,47`) — so the raw and bundled predicates are
+definitionally equal and `cases`/`rcases` see the canonical constructors
+directly.
+
+**Two gotchas for whoever repeats this shape.**
+
+1. **`cases` survives a reducible `abbrev`; `rw` does not.**  Demoting the
+   bundled predicate to an `abbrev` left every `cases hgap with | intervalExterior
+   ... =>` working untouched, and the three constructor `alias`es kept the
+   `UnboundedSylvesterGap.«ctor»` references resolving.  But four `rw`s in
+   `SpectralTheory/ClosedOperator/Complexification.lean` broke: `rw` matches on
+   the head symbol, and the goal's head became `LinearPMap.realSpectrum …
+   toLinearPMap` where the rewrite lemma still says `ClosedOperator.realSpectrum`.
+   Reducibility does not help — keyed matching has already failed by then.  Fix
+   is to bind the hypothesis at the facade type first (`have hlamA : lam ∈
+   (complexify A).realSpectrum := hlam`, which typechecks by defeq), making the
+   conversion boundary explicit at the one place it matters.
+2. **`lake build Challenge` fails spuriously on a cold cache.**  It reported 47
+   errors, 23 of them `failed to open file … .ir: Too many open files` — file-
+   descriptor exhaustion from cold-cache parallelism, not proof breakage, and
+   the paths in the message are stale absolute paths from another machine.  The
+   soft `ulimit -n` is already 1048576, so raising it is not the fix; simply
+   **re-running with the warm cache passes** (8827 jobs, 0 errors).  Do not read
+   a first-run `Challenge` failure as a regression without checking whether every
+   error is `Too many open files`.
+
 **Scan: bundled twins superseded by a `linearPMap_` version (edward, aiq-gpu,
 2026-07-28).**  Both deletions this lane made were the same shape — a bundled
 declaration whose `linearPMap_` twin had taken over every caller — so it is worth
