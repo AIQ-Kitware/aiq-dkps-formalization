@@ -5,6 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.SinTheta.Bounded.Core
 import DavisKahan.Sylvester.Gap
+import DavisKahan.Interop.TauCeti.ClosedOperator
 
 /-!
 # Unbounded `sin Θ` problem data and residual block identity
@@ -58,6 +59,48 @@ structure UnboundedSinThetaData where
   intertwines : ∀ y : Λ₁.domain,
     A.toLinearMap ⟨F₁ (y : G), F₁_maps_domain y⟩ =
       F₁ (Λ₁.toLinearMap y)
+
+/-- Canonical partial-map data for the unbounded residual theorem.  Density
+and graph closedness are properties, not fields of a local operator bundle. -/
+structure UnboundedSinThetaDataPMap where
+  A : E →ₗ.[𝕜] E
+  A₀ : F →ₗ.[𝕜] F
+  Λ₁ : G →ₗ.[𝕜] G
+  A_dense : Dense (A.domain : Set E)
+  A₀_dense : Dense (A₀.domain : Set F)
+  Λ₁_dense : Dense (Λ₁.domain : Set G)
+  A_closed : A.IsClosed
+  A₀_closed : A₀.IsClosed
+  Λ₁_closed : Λ₁.IsClosed
+  X : F →L[𝕜] E
+  F₁ : G →L[𝕜] E
+  residual : F →L[𝕜] E
+  X_maps_domain : ∀ x : A₀.domain, X (x : F) ∈ A.domain
+  F₁_maps_domain : ∀ y : Λ₁.domain, F₁ (y : G) ∈ A.domain
+  residual_eq : ∀ x : A₀.domain,
+    A ⟨X (x : F), X_maps_domain x⟩ - X (A₀ x) = residual (x : F)
+  intertwines : ∀ y : Λ₁.domain,
+    A ⟨F₁ (y : G), F₁_maps_domain y⟩ = F₁ (Λ₁ y)
+
+namespace UnboundedSinThetaDataPMap
+
+/-- The sole compatibility conversion used by source-facing residual results
+that have not yet accepted raw partial-map data. -/
+noncomputable def toClosed
+    (D : UnboundedSinThetaDataPMap (𝕜 := 𝕜) (E := E) (F := F) (G := G)) :
+    UnboundedSinThetaData (𝕜 := 𝕜) (E := E) (F := F) (G := G) where
+  A := TauCeti.DavisKahanExt.ClosedOperator.ofLinearPMap D.A D.A_dense D.A_closed
+  A₀ := TauCeti.DavisKahanExt.ClosedOperator.ofLinearPMap D.A₀ D.A₀_dense D.A₀_closed
+  Λ₁ := TauCeti.DavisKahanExt.ClosedOperator.ofLinearPMap D.Λ₁ D.Λ₁_dense D.Λ₁_closed
+  X := D.X
+  F₁ := D.F₁
+  residual := D.residual
+  X_maps_domain := D.X_maps_domain
+  F₁_maps_domain := D.F₁_maps_domain
+  residual_eq := D.residual_eq
+  intertwines := D.intertwines
+
+end UnboundedSinThetaDataPMap
 
 /-- The residual identity induces the domain-aware complementary Sylvester
 equation.  The right-hand side has a minus sign:
