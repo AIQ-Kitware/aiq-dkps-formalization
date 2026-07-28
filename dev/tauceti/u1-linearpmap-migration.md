@@ -1,6 +1,9 @@
 # U1 execution contract: migrate unbounded operators to `LinearPMap`
 
-Status: **ACTIVE / CLAIMED by jon (toothbrush), 2026-07-28**.
+Status: **OPEN / UNCLAIMED, released 2026-07-28** (previously claimed by
+jon (toothbrush)). The canonical layer is built and the consumer migration is
+partly done; see "Release state" below for exactly what is left and what is
+already contractible.
 
 This document is an implementation contract. It replaces the previous habit of
 calling the closed-operator convergence problem "design-stage" after the
@@ -105,6 +108,66 @@ The pairwise canonical form cannot move into `ForTauCeti` yet: it depends on
 blocker is therefore Spectra's spectrum/intertwiner API, not any missing
 `LinearPMap` domain machinery.  The next U1 slice is the remaining closed
 Sylvester estimates, followed by reducing restrictions and Riccati inputs.
+
+## Release state (2026-07-28) — read before reclaiming
+
+The lane is **released mid-migration, not finished**.  Everything below is
+measured, not estimated; re-measure before trusting it.
+
+**Gate U1.4, first command: met in substance.**  `grep -R "ClosedOperator"
+ForTauCeti --include='*.lean'` returns 3 hits and all 3 are prose — two
+provenance lines in `LinearPMap/Closed.lean` and one docstring sentence in
+`LinearPMap/Sylvester.lean`.  No `ForTauCeti` declaration references the bundle.
+
+**Gate U1.4, second command: not met.**  171 type-position uses of
+`ClosedOperator` survive in production, across 18 modules outside
+`DavisKahan/SpectralTheory/ClosedOperator/**` and `DavisKahan/Experimental/**`:
+
+| module | uses | classification |
+| --- | --- | --- |
+| `Riccati/UnboundedCore.lean` | 32 | un-migrated |
+| `SpectralTheory/ReducingSubspace/Restriction.lean` | 23 | documented facade |
+| `Sylvester/ClosedSylvesterEquation.lean` | 18 | documented facade |
+| `Sources/DavisKahan1970/SineTheta/CommonCore.lean` | 17 | un-migrated |
+| `SinTheta/Natural/Reducing.lean` | 14 | un-migrated |
+| `Riccati/UnboundedTransport.lean` | 13 | un-migrated |
+| `SinTheta/Natural/Examples.lean` | 10 | un-migrated |
+| `Sylvester/PairwiseSpectrumGap.lean` | 8 | un-migrated |
+| `Sources/DavisKahan1970/Sylvester/HilbertSchmidtPairwise.lean` | 8 | un-migrated (complexification-blocked) |
+| `Sylvester/PairwiseHomogeneousUniqueness.lean` | 6 | un-migrated |
+| `Sources/DavisKahan1970/Sylvester/PaperHilbertSchmidt.lean` | 6 | un-migrated |
+| `Sources/DavisKahan1970/Sylvester/HilbertSchmidtDefectFirst.lean` | 4 | un-migrated |
+| `Sources/DavisKahan1970/SineTheta/{CommonDomainTheorems,CommonCoreTheorems}.lean` | 3 + 3 | un-migrated |
+| `Riccati/UnboundedBasic.lean` | 3 | un-migrated |
+| `Sylvester/Unbounded/{Neumann,Equation}.lean`, `ReducingSubspace/RestrictionExtras.lean` | 1 each | un-migrated |
+
+So **41 of the 171 are already compatibility facades over raw proofs** — those
+are deletions, not proofs.  The other 130 are genuine records and source-facing
+data structures that still quantify over the bundle.
+
+**Contractible right now, no new mathematics:**
+
+- `generalizedSinTheta_unbounded_{,exact_}of_genuineIntervalExteriorGap` have no
+  production caller outside `SinTheta/Unbounded/IntervalExterior.lean` itself.
+- The `Restriction.lean` and `ClosedSylvesterEquation.lean` facade blocks, once
+  their remaining callers move.
+
+**Out of this lane's declared scope; needs its own claim.**  `Interop/Spectra/**`
+(6 modules, ~130 `ClosedOperator` occurrences, none in type position — they sit
+at the PVM/Borel/real-spectrum/cutoff boundary that "Explicitly excluded" names)
+and `OperatorIdeal/ComplexificationApproximation.lean`.
+`Interop/TauCeti/ClosedOperator.lean` is the adapter and is deleted last by
+construction.
+
+**Ordering constraint inherited from the ideal-family lane.** §13.2 phase C
+(restating the ~25 ideal-parameterized sin-Θ theorems over
+`TauCeti.SymmetricOperatorIdealFamily`) and phase D (deleting
+`RectangularSymmetricIdealFamily` and its adapter) were both deferred to
+whoever holds `DavisKahan/Sylvester/**` — that is, to this lane.  With U1
+released they are unblocked, and phase C should be taken **root-outward from
+`Sylvester/Bounded.lean`, as one sweep**, not leaf-inward: migrated piecemeal it
+leaves an `ENNReal.toReal` conversion boundary in the middle of the sin-Θ
+development.  See the `jon (namek)` sin-Θ row in `dev/LANES.md`.
 
 ## Phase U1.0: declaration inventory
 
