@@ -3,17 +3,17 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-5.6 Thinking
 -/
-import DavisKahan.Riccati.UnboundedTransport
+import DavisKahan.Riccati.UnboundedExistence
 import DavisKahan.Experimental.InfiniteDimensional.Riccati.BoundedGraphAcute
 
 /-!
 # Canonical graph-rotation transport for unbounded block operators
 
-This leaf specializes the generic closed-operator pullback construction to the
+This leaf specializes the canonical partial-map pullback construction to the
 completed complex direct rotation from the zero block graph to a bounded graph.
 It keeps the transported operator domain explicit and records the projection
 intertwining needed before the transformed operator can be identified with a
-closed block-diagonal direct sum.
+block-diagonal direct sum.
 -/
 
 namespace TauCeti
@@ -142,56 +142,6 @@ theorem unboundedGraphRotationPullbackPMap_unitaryEquivalent
       (unboundedGraphRotationEquiv X).symm.toContinuousLinearMap := by
   exact TauCeti.LinearPMap.pullback_unitaryEquivalent
     (unboundedBlockOperatorPMapCore H)
-    (unboundedGraphRotationEquiv X)
-    (unboundedGraphRotationEquiv_unitary X)
-
-/-- The closed operator obtained by transporting the full unbounded block
-operator back along the canonical graph rotation. -/
-noncomputable def unboundedGraphRotationPullback
-    (H : UnboundedBlockData (𝕜 := ℂ) (E0 := E0) (E1 := E1))
-    (X : E0 →L[ℂ] E1) :
-    ClosedOperator (𝕜 := ℂ) (E := WithLp 2 (E0 × E1)) :=
-  ClosedOperator.pullback (unboundedBlockOperatorCore H)
-    (unboundedGraphRotationEquiv X)
-
-/-- Exact domain of the graph-rotated unbounded block operator. -/
-@[simp] theorem mem_unboundedGraphRotationPullback_domain_iff
-    (H : UnboundedBlockData (𝕜 := ℂ) (E0 := E0) (E1 := E1))
-    (X : E0 →L[ℂ] E1) (z : WithLp 2 (E0 × E1)) :
-    z ∈ (unboundedGraphRotationPullback H X).domain ↔
-      unboundedGraphRotation X z ∈ (unboundedBlockOperatorCore H).domain := by
-  rfl
-
-/-- Action of the rotated operator, stated after applying the forward graph
-rotation so that no inverse-domain coercions are hidden. -/
-theorem unboundedGraphRotationPullback_action
-    (H : UnboundedBlockData (𝕜 := ℂ) (E0 := E0) (E1 := E1))
-    (X : E0 →L[ℂ] E1)
-    (z : (unboundedGraphRotationPullback H X).domain) :
-    unboundedGraphRotation X
-        ((unboundedGraphRotationPullback H X).toLinearMap z) =
-      (unboundedBlockOperatorCore H).toLinearMap
-        (ClosedOperator.pullbackDomainToOriginal
-          (unboundedBlockOperatorCore H)
-          (unboundedGraphRotationEquiv X) z) := by
-  change (unboundedGraphRotationEquiv X)
-        ((ClosedOperator.pullback (unboundedBlockOperatorCore H)
-          (unboundedGraphRotationEquiv X)).toLinearMap z) = _
-  rw [ClosedOperator.pullback_apply,
-    (unboundedGraphRotationEquiv X).apply_symm_apply]
-
-/-- The canonical rotation gives a genuine two-way unitary equivalence between
-the transported closed operator and the original unbounded block operator. -/
-theorem unboundedGraphRotationPullback_unitaryEquivalent
-    (H : UnboundedBlockData (𝕜 := ℂ) (E0 := E0) (E1 := E1))
-    (X : E0 →L[ℂ] E1) :
-    ClosedOperator.UnitaryEquivalent
-      (unboundedGraphRotationPullback H X)
-      (unboundedBlockOperatorCore H)
-      (unboundedGraphRotationEquiv X).toContinuousLinearMap
-      (unboundedGraphRotationEquiv X).symm.toContinuousLinearMap := by
-  exact ClosedOperator.pullback_unitaryEquivalent
-    (unboundedBlockOperatorCore H)
     (unboundedGraphRotationEquiv X)
     (unboundedGraphRotationEquiv_unitary X)
 

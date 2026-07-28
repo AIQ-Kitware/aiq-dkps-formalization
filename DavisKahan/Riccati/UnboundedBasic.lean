@@ -8,10 +8,15 @@ import DavisKahan.SpectralTheory.ReducingSubspace.Restriction
 /-!
 # Foundational definitions for strong unbounded Riccati theory
 
-This module contains the shared data, graph, domain, reduction, and unitary
-transport definitions used by the proof leaves.  It intentionally contains no
-spectral-selection or diagonalization theorem, so downstream leaves can import
-it without creating a cycle through the public API.
+This module contains the shared block data, graph, and domain definitions used
+by the proof leaves.  It intentionally contains no spectral-selection or
+diagonalization theorem, so downstream leaves can import it without creating a
+cycle through the public API.
+
+The diagonal blocks are Mathlib `LinearPMap`s: density, closedness, and
+self-adjointness are recorded as fields of the data rather than bundled into a
+local operator type.  Unitary transport of a partial map is the canonical
+`TauCeti.LinearPMap.UnitaryEquivalent`, and needs no local restatement.
 -/
 
 namespace TauCeti
@@ -25,19 +30,10 @@ variable {E0 : Type*} [NormedAddCommGroup E0] [InnerProductSpace 𝕜 E0]
 variable {E1 : Type*} [NormedAddCommGroup E1] [InnerProductSpace 𝕜 E1]
   [CompleteSpace E1]
 
-/-- Unbounded diagonal block data with bounded off-diagonal coupling. -/
-structure UnboundedBlockData where
-  A0 : ClosedOperator (𝕜 := 𝕜) (E := E0)
-  A1 : ClosedOperator (𝕜 := 𝕜) (E := E1)
-  B01 : E1 →L[𝕜] E0
-  B10 : E0 →L[𝕜] E1
-  selfAdjoint0 : A0.IsSelfAdjoint
-  selfAdjoint1 : A1.IsSelfAdjoint
-  offDiagonalAdjoint : ∀ x y, ⟪B01 y, x⟫_𝕜 = ⟪y, B10 x⟫_𝕜
-
-/-- Unbounded diagonal block data in the canonical partial-map representation.
-Density, closedness, and self-adjointness remain explicit properties instead
-of fields of a local operator bundle. -/
+/-- Unbounded diagonal block data with bounded off-diagonal coupling, in the
+canonical partial-map representation.  Density, closedness, and
+self-adjointness are explicit properties rather than fields of an operator
+bundle. -/
 structure UnboundedBlockDataPMap where
   A0 : E0 →ₗ.[𝕜] E0
   A1 : E1 →ₗ.[𝕜] E1
@@ -51,53 +47,36 @@ structure UnboundedBlockDataPMap where
   selfAdjoint1 : _root_.IsSelfAdjoint A1
   offDiagonalAdjoint : ∀ x y, ⟪B01 y, x⟫_𝕜 = ⟪y, B10 x⟫_𝕜
 
-/-- View historical Riccati block data through its canonical partial maps. -/
-noncomputable def UnboundedBlockData.toPMap
-    (H : UnboundedBlockData (𝕜 := 𝕜) (E0 := E0) (E1 := E1)) :
-    UnboundedBlockDataPMap (𝕜 := 𝕜) (E0 := E0) (E1 := E1) where
-  A0 := H.A0.toLinearPMap
-  A1 := H.A1.toLinearPMap
-  B01 := H.B01
-  B10 := H.B10
-  dense0 := H.A0.toLinearPMap_dense
-  dense1 := H.A1.toLinearPMap_dense
-  closed0 := H.A0.toLinearPMap_isClosed
-  closed1 := H.A1.toLinearPMap_isClosed
-  selfAdjoint0 := H.selfAdjoint0
-  selfAdjoint1 := H.selfAdjoint1
-  offDiagonalAdjoint := H.offDiagonalAdjoint
+namespace UnboundedBlockDataPMap
+
+/-- The first diagonal block is symmetric on its operator domain.  This is the
+form the Riccati estimates consume; self-adjointness is the stronger field. -/
+theorem isSymmetric0
+    (H : UnboundedBlockDataPMap (𝕜 := 𝕜) (E0 := E0) (E1 := E1)) :
+    TauCeti.LinearPMap.IsSymmetric H.A0 := by
+  have hformal := LinearPMap.adjoint_isFormalAdjoint (T := H.A0) H.dense0
+  rw [LinearPMap.isSelfAdjoint_def.mp H.selfAdjoint0] at hformal
+  intro x y
+  exact hformal x y
+
+/-- The second diagonal block is symmetric on its operator domain. -/
+theorem isSymmetric1
+    (H : UnboundedBlockDataPMap (𝕜 := 𝕜) (E0 := E0) (E1 := E1)) :
+    TauCeti.LinearPMap.IsSymmetric H.A1 := by
+  have hformal := LinearPMap.adjoint_isFormalAdjoint (T := H.A1) H.dense1
+  rw [LinearPMap.isSelfAdjoint_def.mp H.selfAdjoint1] at hformal
+  intro x y
+  exact hformal x y
+
+end UnboundedBlockDataPMap
 
 /-- A bounded angular operator preserves the unbounded diagonal domains. -/
-def PreservesRiccatiDomains
-    (H : UnboundedBlockData (𝕜 := 𝕜) (E0 := E0) (E1 := E1))
-    (X : E0 →L[𝕜] E1) : Prop :=
-  ∀ x : H.A0.domain, X (x : E0) ∈ H.A1.domain
-
-/-- A bounded angular operator preserves the diagonal domains of raw block
-data. -/
 def PreservesRiccatiPMapDomains
     (H : UnboundedBlockDataPMap (𝕜 := 𝕜) (E0 := E0) (E1 := E1))
     (X : E0 →L[𝕜] E1) : Prop :=
   ∀ x : H.A0.domain, X (x : E0) ∈ H.A1.domain
 
-/-- Historical domain preservation agrees definitionally with its raw
-partial-map formulation. -/
-theorem preservesRiccatiDomains_toPMap_iff
-    (H : UnboundedBlockData (𝕜 := 𝕜) (E0 := E0) (E1 := E1))
-    (X : E0 →L[𝕜] E1) :
-    PreservesRiccatiDomains H X ↔ PreservesRiccatiPMapDomains H.toPMap X := Iff.rfl
-
 /-- Strong Riccati solution, including the domain condition. -/
-def StrongSolvesRiccati
-    (H : UnboundedBlockData (𝕜 := 𝕜) (E0 := E0) (E1 := E1))
-    (X : E0 →L[𝕜] E1) : Prop :=
-  ∃ hdom : PreservesRiccatiDomains H X,
-    ∀ x : H.A0.domain,
-      H.A1.toLinearMap ⟨X (x : E0), hdom x⟩ -
-        X (H.A0.toLinearMap x) -
-        X (H.B01 (X (x : E0))) + H.B10 (x : E0) = 0
-
-/-- Strong Riccati solution over canonical partial-map block data. -/
 def StrongSolvesRiccatiPMap
     (H : UnboundedBlockDataPMap (𝕜 := 𝕜) (E0 := E0) (E1 := E1))
     (X : E0 →L[𝕜] E1) : Prop :=
@@ -106,13 +85,6 @@ def StrongSolvesRiccatiPMap
       H.A1 ⟨X (x : E0), hdom x⟩ -
         X (H.A0 x) -
         X (H.B01 (X (x : E0))) + H.B10 (x : E0) = 0
-
-/-- Historical strong solutions agree definitionally with their raw
-partial-map formulation. -/
-theorem strongSolvesRiccati_toPMap_iff
-    (H : UnboundedBlockData (𝕜 := 𝕜) (E0 := E0) (E1 := E1))
-    (X : E0 →L[𝕜] E1) :
-    StrongSolvesRiccati H X ↔ StrongSolvesRiccatiPMap H.toPMap X := Iff.rfl
 
 /-- Graph subspace of a bounded angular operator in the Hilbert direct sum. -/
 noncomputable def unboundedBlockGraph (X : E0 →L[𝕜] E1) :
@@ -150,14 +122,6 @@ noncomputable instance unboundedBlockGraph_hasOrthogonalProjection
     exact hGmem _
   have : CompleteSpace (unboundedBlockGraph X) := hclosed.completeSpace_coe
   exact Submodule.HasOrthogonalProjection.ofCompleteSpace _
-
-/-- Two closed operators on the same Hilbert space are unitarily equivalent
-with explicit transport of domains and operator actions. -/
-abbrev ClosedOperator.UnitaryEquivalent
-    {G : Type*} [NormedAddCommGroup G] [InnerProductSpace 𝕜 G] [CompleteSpace G]
-    (A B : ClosedOperator (𝕜 := 𝕜) (E := G))
-    (W Winv : G →L[𝕜] G) : Prop :=
-  TauCeti.LinearPMap.UnitaryEquivalent A.toLinearPMap B.toLinearPMap W Winv
 
 end DavisKahanExt
 end TauCeti
