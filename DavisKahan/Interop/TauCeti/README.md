@@ -38,10 +38,13 @@ checked by `scripts/check_dependency_layers.py`.
 
 ## Current status
 
-Empty of Lean modules pending the first merged Tau Ceti cluster. During staging,
-Davis–Kahan approximation-number consumers import the `ForTauCeti.*` modules
-directly (they carry the final declaration names), so no adapter is required yet.
-An adapter file appears here only when a Davis–Kahan name must be preserved that
-does not map to a canonical Tau Ceti name by definitional equality — for example
-if the paper-facing real-valued wrapper `approximationSingularValue` must be
-retained atop the canonical `ℝ≥0`-valued `ContinuousLinearMap.approximationNumber`.
+`ClosedOperator.lean` is the active U1 boundary. It re-exports the historical
+bundle only for source-facing and Spectra-dependent consumers while the generic
+mathematics migrates to raw `LinearPMap` signatures. Its deletion condition is
+the final migration of those consumers; it must not collect new generic proofs.
+
+During staging, Davis–Kahan approximation-number consumers import the
+`ForTauCeti.*` modules directly (they carry the final declaration names), so no
+adapter is required there. An adapter file appears here only when a
+Davis–Kahan name must be preserved that does not map to a canonical Tau Ceti
+name by definitional equality.
