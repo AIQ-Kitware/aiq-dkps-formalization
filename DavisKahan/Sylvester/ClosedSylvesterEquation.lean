@@ -48,42 +48,6 @@ abbrev SemiboundedAbove
     (A : ClosedOperatorE (𝕜 := 𝕜) (E := E)) (c : ℝ) : Prop :=
   TauCeti.LinearPMap.SemiboundedAbove A.toLinearPMap c
 
-omit [CompleteSpace E] in
-/-- A lower semibound remains valid after decreasing the constant. -/
-theorem SemiboundedBelow.mono
-    {A : ClosedOperatorE (𝕜 := 𝕜) (E := E)} {c d : ℝ}
-    (hA : SemiboundedBelow A c) (hdc : d ≤ c) :
-    SemiboundedBelow A d :=
-  TauCeti.LinearPMap.SemiboundedBelow.mono hA hdc
-
-omit [CompleteSpace E] in
-/-- An upper semibound remains valid after increasing the constant. -/
-theorem SemiboundedAbove.mono
-    {A : ClosedOperatorE (𝕜 := 𝕜) (E := E)} {c d : ℝ}
-    (hA : SemiboundedAbove A c) (hcd : c ≤ d) :
-    SemiboundedAbove A d :=
-  TauCeti.LinearPMap.SemiboundedAbove.mono hA hcd
-
-omit [CompleteSpace E] in
-/-- Rewrite a lower semibound through the historical `toLinearMap` field. -/
-theorem SemiboundedBelow.toLinearMap_bound
-    {A : ClosedOperatorE (𝕜 := 𝕜) (E := E)} {c : ℝ}
-    (hA : SemiboundedBelow A c) (x : A.domain) :
-    c * ‖(x : E)‖ ^ 2 ≤
-      RCLike.re ⟪A.toLinearMap x, (x : E)⟫_𝕜 := by
-  simpa only [
-    TauCeti.DavisKahanExt.ClosedOperator.toLinearPMap_apply] using hA x
-
-omit [CompleteSpace E] in
-/-- Rewrite an upper semibound through the historical `toLinearMap` field. -/
-theorem SemiboundedAbove.toLinearMap_bound
-    {A : ClosedOperatorE (𝕜 := 𝕜) (E := E)} {c : ℝ}
-    (hA : SemiboundedAbove A c) (x : A.domain) :
-    RCLike.re ⟪A.toLinearMap x, (x : E)⟫_𝕜 ≤
-      c * ‖(x : E)‖ ^ 2 := by
-  simpa only [
-    TauCeti.DavisKahanExt.ClosedOperator.toLinearPMap_apply] using hA x
-
 /-- Compatibility facade for the canonical `LinearPMap` Sylvester equation.
 
 Closedness, dense domain, and self-adjointness are properties of `A.toLinearPMap`
@@ -108,7 +72,7 @@ abbrev HasClosedSylvesterEquation
 
 namespace ClosedSylvesterEquation
 
-omit [CompleteSpace E] in
+omit [CompleteSpace E] [CompleteSpace F] in
 /-- Rewrite the canonical partial-map equation through the historical
 `toLinearMap` fields.  The explicit output-domain witness may be any proof of
 the required membership; proof irrelevance identifies it with the witness
@@ -141,7 +105,7 @@ theorem mapsTo
     A.MapsDomainTo B X :=
   TauCeti.LinearPMap.SylvesterEquation.mapsTo h
 
-omit [CompleteSpace E] in
+omit [CompleteSpace E] [CompleteSpace F] in
 /-- A bounded Sylvester equation is a full-domain closed Sylvester equation. -/
 theorem ofBounded
     {A : E →L[𝕜] E} {B : F →L[𝕜] F} {X C : F →L[𝕜] E}
@@ -160,7 +124,7 @@ theorem ofBounded
     change A (X (x : F)) - X (B (x : F)) = C (x : F)
     simpa only [ContinuousLinearMap.comp_apply, sub_apply] using hx
 
-omit [CompleteSpace E] in
+omit [CompleteSpace E] [CompleteSpace F] in
 /-- The zero map solves the homogeneous domain-aware equation. -/
 theorem zero
     (A : ClosedOperatorE (𝕜 := 𝕜) (E := E))
@@ -168,7 +132,7 @@ theorem zero
     HasClosedSylvesterEquation A B 0 0 :=
   TauCeti.LinearPMap.SylvesterEquation.zero A.toLinearPMap B.toLinearPMap
 
-omit [CompleteSpace E] in
+omit [CompleteSpace E] [CompleteSpace F] in
 /-- Domain-aware Sylvester equations add. -/
 theorem add
     {A : ClosedOperatorE (𝕜 := 𝕜) (E := E)}
@@ -179,7 +143,7 @@ theorem add
     HasClosedSylvesterEquation A B (X + Y) (C + D) :=
   TauCeti.LinearPMap.SylvesterEquation.add hX hY
 
-omit [CompleteSpace E] in
+omit [CompleteSpace E] [CompleteSpace F] in
 /-- Domain-aware Sylvester equations are preserved by negation. -/
 theorem neg
     {A : ClosedOperatorE (𝕜 := 𝕜) (E := E)}
@@ -189,7 +153,7 @@ theorem neg
     HasClosedSylvesterEquation A B (-X) (-C) :=
   TauCeti.LinearPMap.SylvesterEquation.neg hX
 
-omit [CompleteSpace E] in
+omit [CompleteSpace E] [CompleteSpace F] in
 /-- Domain-aware Sylvester equations subtract. -/
 theorem sub
     {A : ClosedOperatorE (𝕜 := 𝕜) (E := E)}
@@ -200,7 +164,7 @@ theorem sub
     HasClosedSylvesterEquation A B (X - Y) (C - D) :=
   TauCeti.LinearPMap.SylvesterEquation.sub hX hY
 
-omit [CompleteSpace E] in
+omit [CompleteSpace E] [CompleteSpace F] in
 /-- Domain-aware Sylvester equations commute with scalar multiplication. -/
 theorem smul
     {A : ClosedOperatorE (𝕜 := 𝕜) (E := E)}
