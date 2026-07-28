@@ -103,6 +103,15 @@ name = "DkpsQuench2026"
 [[lean_lib]]
 name = "Helm2025"
 
+# Temporary mathematics-first completion workspace for the sharp tan(2Theta)
+# theory.  Its source remains grouped under FinishTanTwoTheta/, but it is a
+# non-default library in this root Lake package so it shares the repository's
+# dependency resolution and .lake build directory.
+[[lean_lib]]
+name = "FinishTanTwoTheta"
+srcDir = "FinishTanTwoTheta"
+globs = ["FinishTanTwoTheta.*"]
+
 
 # Comparator/challenge modules for community calibration of AI-authored
 # ForMathlib candidates. These are intentionally not default targets.
