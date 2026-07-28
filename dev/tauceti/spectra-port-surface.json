@@ -1,0 +1,645 @@
+{
+  "clusters": {
+    "A": {
+      "disposition": {
+        "staged": "collides",
+        "upstream": "partial"
+      },
+      "donorModules": {
+        "Spectra.Operator.Bounded": {
+          "constants": {
+            "Spectra.Operator.SelfAdjointOperator.boundedExtension": {
+              "consumerModules": [
+                "DavisKahan.Interop.Spectra.Basic"
+              ],
+              "uses": 1
+            },
+            "Spectra.Operator.SelfAdjointOperator.ofBounded": {
+              "consumerModules": [
+                "DavisKahan.Interop.Spectra.Basic"
+              ],
+              "uses": 1
+            }
+          },
+          "lines": 208
+        },
+        "Spectra.Operator.KatoRellich": {
+          "constants": {
+            "Spectra.Operator.perturbedOp": {
+              "consumerModules": [
+                "DavisKahan.Interop.Spectra.BoundedPerturbationSinTheta"
+              ],
+              "uses": 1
+            }
+          },
+          "lines": 640
+        },
+        "Spectra.Operator.SelfAdjoint": {
+          "constants": {
+            "Spectra.Operator.SelfAdjointOperator": {
+              "consumerModules": [
+                "DavisKahan.Interop.Spectra.Basic",
+                "DavisKahan.Interop.Spectra.ClosedOperator",
+                "DavisKahan.Interop.Spectra.OrderedHalfLine",
+                "DavisKahan.Interop.Spectra.SpectralRestrictionOperator",
+                "DavisKahan.SpectralTheory.SelfAdjointBorelCalculus"
+              ],
+              "uses": 10
+            },
+            "Spectra.Operator.SelfAdjointOperator.bornMeasure": {
+              "consumerModules": [
+                "DavisKahan.Interop.Spectra.OrderedHalfLine"
+              ],
+              "uses": 1
+            },
+            "Spectra.Operator.SelfAdjointOperator.dense": {
+              "consumerModules": [
+                "DavisKahan.Interop.Spectra.ClosedOperator"
+              ],
+              "uses": 1
+            },
+            "Spectra.Operator.SelfAdjointOperator.domain": {
+              "consumerModules": [
+                "DavisKahan.Interop.Spectra.Basic",
+                "DavisKahan.Interop.Spectra.ClosedOperator"
+              ],
+              "uses": 5
+            },
+            "Spectra.Operator.SelfAdjointOperator.mk": {
+              "consumerModules": [
+                "DavisKahan.Interop.Spectra.ClosedOperator",
+                "DavisKahan.Interop.Spectra.SpectralRestrictionOperator",
+                "DavisKahan.Interop.Spectra.UnitaryConjugation"
+              ],
+              "uses": 3
+            },
+            "Spectra.Operator.SelfAdjointOperator.selfAdjoint": {
+              "consumerModules": [
+                "DavisKahan.Interop.Spectra.BoundedSelfAdjointSpectralProjection",
+                "DavisKahan.SpectralTheory.CayleySelectorBridge"
+              ],
+              "uses": 10
+            },
+            "Spectra.Operator.SelfAdjointOperator.spectralPVM": {
+              "consumerModules": [
+                "DavisKahan.Interop.Spectra.OrderedHalfLine"
+              ],
+              "uses": 1
+            },
+            "Spectra.Operator.SelfAdjointOperator.toLinearPMap": {
+              "consumerModules": [
+                "DavisKahan.Interop.Spectra.BoundedSelfAdjointSpectralProjection",
+                "DavisKahan.Interop.Spectra.ClosedOperator",
+                "DavisKahan.SpectralTheory.CayleySelectorBridge",
+                "DavisKahan.SpectralTheory.SelfAdjointBorelCalculus"
+              ],
+              "uses": 20
+            },
+            "Spectra.Operator.isFormalAdjoint_self_of_isSelfAdjoint": {
+              "consumerModules": [
+                "DavisKahan.SpectralTheory.CayleySelectorBridge"
+              ],
+              "uses": 1
+            }
+          },
+          "lines": 143
+        },
+        "Spectra.Operator.Unitary.Conjugation": {
+          "constants": {
+            "Spectra.Operator.unitaryConj": {
+              "consumerModules": [
+                "DavisKahan.Interop.Spectra.UnitaryConjugation"
+              ],
+              "uses": 4
+            }
+          },
+          "lines": 191
+        },
+        "Spectra.Resolvent.SpecialCases": {
+          "constants": {
+            "Spectra.Resolvent.Rimag": {
+              "consumerModules": [
+                "DavisKahan.SpectralTheory.CayleySelectorBridge"
+              ],
+              "uses": 3
+            },
+            "Spectra.Resolvent.Rplus": {
+              "consumerModules": [
+                "DavisKahan.SpectralTheory.CayleySelectorBridge"
+              ],
+              "uses": 1
+            },
+            "Spectra.Resolvent.resolventAtImaginary": {
+              "consumerModules": [
+                "DavisKahan.SpectralTheory.CayleySelectorBridge"
+              ],
+              "uses": 2
+            },
+            "Spectra.Resolvent.resolventAtImaginary._proof_1": {
+              "consumerModules": [
+                "DavisKahan.SpectralTheory.CayleySelectorBridge"
+              ],
+              "uses": 1
+            },
+            "Spectra.Resolvent.resolventAtImaginary._proof_2": {
+              "consumerModules": [
+                "DavisKahan.SpectralTheory.CayleySelectorBridge"
+              ],
+              "uses": 1
+            },
+            "Spectra.Resolvent.resolventAtImaginary._proof_3": {
+              "consumerModules": [
+                "DavisKahan.SpectralTheory.CayleySelectorBridge"
+              ],
+              "uses": 1
+            },
+            "Spectra.Resolvent.resolventAtNegI": {
+              "consumerModules": [
+                "DavisKahan.SpectralTheory.CayleySelectorBridge"
+              ],
+              "uses": 2
+            }
+          },
+          "lines": 318
+        },
+        "Spectra.Resolvent.Spectrum": {
+          "constants": {
+            "Spectra.Resolvent.resolventSet": {
+              "consumerModules": [
+                "DavisKahan.Interop.Spectra.GapResolvent",
+                "DavisKahan.Interop.Spectra.RealSpectrumBridge",
+                "DavisKahan.Interop.Spectra.UnitaryConjugation",
+                "DavisKahan.SpectralTheory.SelfAdjointBorelCalculus"
+              ],
+              "uses": 6
+            },
+            "Spectra.Resolvent.spectrum": {
+              "consumerModules": [
+                "DavisKahan.DoubleAngle.UnboundedIdeal",
+                "DavisKahan.Interop.Spectra.BoundedFromSpectrum",
+                "DavisKahan.Interop.Spectra.BoundedPerturbationSinTheta",
+                "DavisKahan.Interop.Spectra.BoundedPerturbationSinThetaIdeal",
+                "DavisKahan.Interop.Spectra.GapResolvent",
+                "DavisKahan.Interop.Spectra.OrderedHalfLine",
+                "DavisKahan.Interop.Spectra.RealSpectrumBridge",
+                "DavisKahan.Interop.Spectra.SpectralProjectionSinTheta",
+                "DavisKahan.Interop.Spectra.SpectralRestrictionLocalization",
+                "DavisKahan.Interop.Spectra.UnitaryConjugation",
+                "DavisKahan.SinTheta.Natural.GapConvenience",
+                "DavisKahan.SinTheta.Unbounded.AllGap",
+                "DavisKahan.SinTheta.Unbounded.IntervalExterior",
+                "DavisKahan.SinTheta.Unbounded.SpectrumGap",
+                "DavisKahan.Sources.DavisKahan1970.FullPartIII",
+                "DavisKahan.Sources.DavisKahan1970.SinTwoTheta",
+                "DavisKahan.Sources.DavisKahan1970.TanTwoTheta",
+                "DavisKahan.SpectralTheory.ClosedOperator.Complexification",
+                "DavisKahan.SpectralTheory.SelfAdjointBorelCalculus",
+                "DavisKahan.Sylvester.PairwiseHomogeneousUniqueness",
+                "DavisKahan.Sylvester.PairwiseSpectrumGap",
+                "DavisKahan.Sylvester.Unbounded.AllGap",
+                "DavisKahan.Sylvester.Unbounded.IntervalExterior",
+                "DavisKahan.TanTwoTheta.Unbounded",
+                "DavisKahan.TanTwoTheta.UnboundedIdeal",
+                "DavisKahan.TanTwoTheta.UnboundedVector"
+              ],
+              "uses": 75
+            }
+          },
+          "lines": 90
+        }
+      },
+      "label": "self-adjoint unbounded operators, resolvent and spectrum"
+    },
+    "B": {
+      "disposition": {
+        "staged": "partial",
+        "upstream": "absent"
+      },
+      "donorModules": {
+        "Spectra.Bochner.Borel.CDF": {
+          "constants": {
+            "Spectra.Borel.borelMeasure": {
+              "consumerModules": [
+                "DavisKahan.Interop.Spectra.SpectralRestrictionLocalization",
+                "DavisKahan.SpectralTheory.SelfAdjointBorelCalculus"
+              ],
+              "uses": 3
+            }
+          },
+          "lines": 277
+        },
+        "Spectra.ProjValMeasure.Basic": {
+          "constants": {
+            "Spectra.ProjValMeasure": {
+              "consumerModules": [
+                "DavisKahan.Interop.Spectra.BoundedSelfAdjointSpectralProjection",
+                "DavisKahan.Interop.Spectra.OrderedHalfLine",
+                "DavisKahan.Interop.Spectra.PVMSubspace",
+                "DavisKahan.Interop.Spectra.RealSpectralRestriction"
+              ],
+              "uses": 14
+            },
+            "Spectra.ProjValMeasure.diag": {
+              "consumerModules": [
+                "DavisKahan.Interop.Spectra.RealSpectralRestriction"
+              ],
+              "uses": 2
+            },
+            "Spectra.ProjValMeasure.mk": {
+              "consumerModules": [
+                "DavisKahan.Interop.Spectra.RealSpectralRestriction"
+              ],
+              "uses": 1
+            },
+            "Spectra.ProjValMeasure.proj": {
+              "consumerModules": [
+                "DavisKahan.Interop.Spectra.BoundedSelfAdjointSpectralProjection",
+                "DavisKahan.Interop.Spectra.PVMSubspace",
+                "DavisKahan.Interop.Spectra.RealSpectralRestriction"
+              ],
+              "uses": 9
+            }
+          },
+          "lines": 228
+        },
+        "Spectra.QuantumMechanics.BornRule.Moments": {
+          "constants": {
+            "Spectra.QuantumMechanics.BornRule.Moments.bornExpectation": {
+              "consumerModules": [
+                "DavisKahan.Interop.Spectra.OrderedHalfLine"
+              ],
+              "uses": 1
+            }
+          },
+          "lines": 62
+        },
+        "Spectra.QuantumMechanics.BornRule.PVM": {
+          "constants": {
+            "Spectra.QuantumMechanics.BornRule.PVM.bornMeasure": {
+              "consumerModules": [
+                "DavisKahan.Interop.Spectra.OrderedHalfLine"
+              ],
+              "uses": 2
+            }
+          },
+          "lines": 144
+        },
+        "Spectra.SpectralTheory.Calculus.Bounded": {
+          "constants": {
+            "Spectra.QuantumMechanics.SpectralTheory.spectralCalculus": {
+              "consumerModules": [
+                "DavisKahan.Interop.Spectra.BoundedTruncation",
+                "DavisKahan.SpectralTheory.CayleySelectorBridge",
+                "DavisKahan.SpectralTheory.SelfAdjointBorelCalculus"
+              ],
+              "uses": 5
+            }
+          },
+          "lines": 367
+        },
+        "Spectra.SpectralTheory.Calculus.SpectralGapInverse": {
+          "constants": {
+            "Spectra.QuantumMechanics.SpectralTheory.HasVectorSpectralGap": {
+              "consumerModules": [
+                "DavisKahan.Sources.DavisKahan1970.Sylvester.HilbertSchmidtDefectFirst",
+                "DavisKahan.Sources.DavisKahan1970.Sylvester.HilbertSchmidtPairwise"
+              ],
+              "uses": 2
+            }
+          },
+          "lines": 224
+        },
+        "Spectra.SpectralTheory.Measure.Convergence": {
+          "constants": {
+            "Spectra.QuantumMechanics.SpectralTheory.indicator_one_bdd": {
+              "consumerModules": [
+                "DavisKahan.SpectralTheory.SelfAdjointBorelCalculus"
+              ],
+              "uses": 1
+            },
+            "Spectra.QuantumMechanics.SpectralTheory.spectralProjection": {
+              "consumerModules": [
+                "DavisKahan.Interop.Spectra.BoundedSelfAdjointSpectralProjection",
+                "DavisKahan.Interop.Spectra.GapResolvent",
+                "DavisKahan.Interop.Spectra.SpectralCutoff",
+                "DavisKahan.Interop.Spectra.SpectralRestriction",
+                "DavisKahan.Interop.Spectra.SpectralRestrictionLocalization"
+              ],
+              "uses": 7
+            }
+          },
+          "lines": 215
+        },
+        "Spectra.SpectralTheory.Measure.PVM": {
+          "constants": {
+            "Spectra.QuantumMechanics.SpectralTheory.PVM.spectralPVM": {
+              "consumerModules": [
+                "DavisKahan.Interop.Spectra.SpectralRestriction"
+              ],
+              "uses": 1
+            }
+          },
+          "lines": 64
+        },
+        "Spectra.SpectralTheory.ResolventForm": {
+          "constants": {
+            "Spectra.QuantumMechanics.SpectralTheory.selfAdjointResolvent": {
+              "consumerModules": [
+                "DavisKahan.Interop.Spectra.RealSpectralRestriction"
+              ],
+              "uses": 1
+            },
+            "Spectra.QuantumMechanics.SpectralTheory.spectralPVM": {
+              "consumerModules": [
+                "DavisKahan.Interop.Spectra.BoundedSelfAdjointSpectralProjection",
+                "DavisKahan.Interop.Spectra.RealSpectralRestriction"
+              ],
+              "uses": 2
+            }
+          },
+          "lines": 208
+        }
+      },
+      "label": "PVMs, spectral measures and Borel functional calculus"
+    },
+    "C": {
+      "disposition": {
+        "staged": "collides",
+        "upstream": "absent"
+      },
+      "donorModules": {
+        "Spectra.QuantumMechanics.Channels.PolarDecomp": {
+          "constants": {
+            "Spectra.QuantumMechanics.Channels.absOp": {
+              "consumerModules": [
+                "DavisKahan.Interop.Spectra.OperatorAbsoluteValue"
+              ],
+              "uses": 2
+            },
+            "Spectra.QuantumMechanics.Channels.polarIsometry": {
+              "consumerModules": [
+                "DavisKahan.Geometry.Polar.PolarIntertwining",
+                "DavisKahan.Interop.Spectra.OperatorAbsoluteValue"
+              ],
+              "uses": 2
+            },
+            "Spectra.QuantumMechanics.Channels.polarRange": {
+              "consumerModules": [
+                "DavisKahan.Interop.Spectra.OperatorAbsoluteValue"
+              ],
+              "uses": 1
+            }
+          },
+          "lines": 144
+        }
+      },
+      "label": "polar decomposition and partial isometries"
+    },
+    "D": {
+      "disposition": {
+        "staged": "collides",
+        "upstream": "absent"
+      },
+      "donorModules": {
+        "Spectra.Spaces.Tensor.Hilbert": {
+          "constants": {
+            "Spectra.HilbertTensor": {
+              "consumerModules": [
+                "DavisKahan.Interop.Spectra.HilbertSchmidtColumnExpansion"
+              ],
+              "uses": 1
+            },
+            "Spectra.HilbertTensor.tmul": {
+              "consumerModules": [
+                "DavisKahan.Interop.Spectra.HilbertSchmidtColumnExpansion"
+              ],
+              "uses": 1
+            }
+          },
+          "lines": 324
+        },
+        "Spectra.Spaces.Tensor.HilbertSchmidt": {
+          "constants": {
+            "Spectra.HilbertSchmidtTensor.Space": {
+              "consumerModules": [
+                "DavisKahan.Interop.Spectra.HilbertSchmidtColumnExpansion",
+                "DavisKahan.Interop.Spectra.HilbertSchmidtTensor",
+                "DavisKahan.Sources.DavisKahan1970.Sylvester.HilbertSchmidtDefectFirst",
+                "DavisKahan.Sources.DavisKahan1970.Sylvester.HilbertSchmidtPairwise"
+              ],
+              "uses": 16
+            },
+            "Spectra.HilbertSchmidtTensor.columnTensor": {
+              "consumerModules": [
+                "DavisKahan.Interop.Spectra.HilbertSchmidtColumnExpansion"
+              ],
+              "uses": 4
+            },
+            "Spectra.HilbertSchmidtTensor.ofOperator": {
+              "consumerModules": [
+                "DavisKahan.Interop.Spectra.HilbertSchmidtColumnExpansion"
+              ],
+              "uses": 3
+            },
+            "Spectra.HilbertSchmidtTensor.toOperator": {
+              "consumerModules": [
+                "DavisKahan.Interop.Spectra.HilbertSchmidtColumnExpansion",
+                "DavisKahan.Interop.Spectra.HilbertSchmidtTensor"
+              ],
+              "uses": 11
+            }
+          },
+          "lines": 625
+        },
+        "Spectra.Spaces.Tensor.HilbertSchmidtFlow": {
+          "constants": {
+            "Spectra.HilbertSchmidtTensor.sylvesterGroup": {
+              "consumerModules": [
+                "DavisKahan.Sources.DavisKahan1970.Sylvester.HilbertSchmidtDefectFirst",
+                "DavisKahan.Sources.DavisKahan1970.Sylvester.HilbertSchmidtPairwise"
+              ],
+              "uses": 2
+            }
+          },
+          "lines": 279
+        },
+        "Spectra.SpectralTheory.Antilinear.ConjugateSpace": {
+          "constants": {
+            "Spectra.Conj": {
+              "consumerModules": [
+                "DavisKahan.Interop.Spectra.HilbertSchmidtColumnExpansion",
+                "DavisKahan.Interop.Spectra.HilbertSchmidtTensor",
+                "DavisKahan.Sources.DavisKahan1970.Sylvester.HilbertSchmidtDefectFirst",
+                "DavisKahan.Sources.DavisKahan1970.Sylvester.HilbertSchmidtPairwise"
+              ],
+              "uses": 11
+            },
+            "Spectra.Conj.instInnerProductSpace": {
+              "consumerModules": [
+                "DavisKahan.Interop.Spectra.HilbertSchmidtColumnExpansion",
+                "DavisKahan.Interop.Spectra.HilbertSchmidtTensor",
+                "DavisKahan.Sources.DavisKahan1970.Sylvester.HilbertSchmidtDefectFirst",
+                "DavisKahan.Sources.DavisKahan1970.Sylvester.HilbertSchmidtPairwise"
+              ],
+              "uses": 11
+            },
+            "Spectra.Conj.instNormedAddCommGroup": {
+              "consumerModules": [
+                "DavisKahan.Interop.Spectra.HilbertSchmidtColumnExpansion",
+                "DavisKahan.Interop.Spectra.HilbertSchmidtTensor",
+                "DavisKahan.Sources.DavisKahan1970.Sylvester.HilbertSchmidtDefectFirst",
+                "DavisKahan.Sources.DavisKahan1970.Sylvester.HilbertSchmidtPairwise"
+              ],
+              "uses": 11
+            },
+            "Spectra.Conj.toConj": {
+              "consumerModules": [
+                "DavisKahan.Interop.Spectra.HilbertSchmidtColumnExpansion"
+              ],
+              "uses": 1
+            }
+          },
+          "lines": 151
+        }
+      },
+      "label": "Hilbert-Schmidt, tensor products and trace class"
+    },
+    "F": {
+      "disposition": {
+        "staged": "absent",
+        "upstream": "collides"
+      },
+      "donorModules": {
+        "Spectra.CayleyTransform.Generator.InverseAction": {
+          "constants": {
+            "Spectra.Cayley.cayley": {
+              "consumerModules": [
+                "DavisKahan.SpectralTheory.CayleySelectorBridge"
+              ],
+              "uses": 6
+            }
+          },
+          "lines": 360
+        },
+        "Spectra.CayleyTransform.Generator.Pushforward": {
+          "constants": {
+            "Spectra.Cayley.inverseMobiusReal": {
+              "consumerModules": [
+                "DavisKahan.SpectralTheory.CayleySelectorBridge"
+              ],
+              "uses": 1
+            }
+          },
+          "lines": 90
+        },
+        "Spectra.CayleyTransform.Mobius": {
+          "constants": {
+            "Spectra.Cayley.inverseMobius": {
+              "consumerModules": [
+                "DavisKahan.SpectralTheory.CayleySelectorBridge"
+              ],
+              "uses": 3
+            }
+          },
+          "lines": 135
+        },
+        "Spectra.OneParameterUnitaryGroup.Basic": {
+          "constants": {
+            "Spectra.OneParameterUnitaryGroup": {
+              "consumerModules": [
+                "DavisKahan.Interop.Spectra.GapResolvent",
+                "DavisKahan.Interop.Spectra.SpectralRestrictionOperator",
+                "DavisKahan.SpectralTheory.SelfAdjointBorelCalculus"
+              ],
+              "uses": 5
+            },
+            "Spectra.OneParameterUnitaryGroup.U": {
+              "consumerModules": [
+                "DavisKahan.Interop.Spectra.SpectralRestrictionOperator"
+              ],
+              "uses": 4
+            },
+            "Spectra.OneParameterUnitaryGroup.genDiffQuot": {
+              "consumerModules": [
+                "DavisKahan.Interop.Spectra.SpectralRestrictionOperator"
+              ],
+              "uses": 2
+            },
+            "Spectra.OneParameterUnitaryGroup.generator": {
+              "consumerModules": [
+                "DavisKahan.Interop.Spectra.GapResolvent",
+                "DavisKahan.Interop.Spectra.SpectralRestrictionOperator"
+              ],
+              "uses": 6
+            },
+            "Spectra.OneParameterUnitaryGroup.mk": {
+              "consumerModules": [
+                "DavisKahan.Interop.Spectra.SpectralRestrictionOperator"
+              ],
+              "uses": 1
+            }
+          },
+          "lines": 292
+        },
+        "Spectra.YosidaHille.Basic": {
+          "constants": {
+            "Spectra.YosidaHille.genToGroup": {
+              "consumerModules": [
+                "DavisKahan.Interop.Spectra.BoundedSelfAdjointSpectralProjection",
+                "DavisKahan.Interop.Spectra.BoundedTruncation",
+                "DavisKahan.Interop.Spectra.SpectralCutoff",
+                "DavisKahan.Interop.Spectra.SpectralRestriction",
+                "DavisKahan.Interop.Spectra.SpectralRestrictionLocalization",
+                "DavisKahan.Interop.Spectra.SpectralRestrictionOperator",
+                "DavisKahan.Sources.DavisKahan1970.Sylvester.HilbertSchmidtDefectFirst",
+                "DavisKahan.Sources.DavisKahan1970.Sylvester.HilbertSchmidtPairwise",
+                "DavisKahan.SpectralTheory.CayleySelectorBridge",
+                "DavisKahan.SpectralTheory.SelfAdjointBorelCalculus"
+              ],
+              "uses": 22
+            }
+          },
+          "lines": 132
+        },
+        "Spectra.YosidaHille.Helpers": {
+          "constants": {
+            "Spectra.YosidaHille.isSelfAdjoint_to_surjective": {
+              "consumerModules": [
+                "DavisKahan.SpectralTheory.CayleySelectorBridge"
+              ],
+              "uses": 1
+            }
+          },
+          "lines": 239
+        }
+      },
+      "label": "Cayley transform, Stone bridge and one-parameter groups"
+    },
+    "X": {
+      "disposition": {
+        "staged": "n/a",
+        "upstream": "n/a"
+      },
+      "donorModules": {
+        "X": {
+          "constants": {
+            "Spectra.HilbertSchmidtTensor.mathAhead_summable_column_norm_sq": {
+              "consumerModules": [
+                "DavisKahan.Interop.Spectra.HilbertSchmidtColumnExpansion"
+              ],
+              "uses": 1
+            }
+          },
+          "lines": null
+        }
+      },
+      "label": "DKPS-authored declarations living inside `namespace Spectra.*` \u2014 not donor material, and a provenance hazard until re-homed"
+    }
+  },
+  "distinctSpectraConstants": 61,
+  "donorModules": 27,
+  "note": "Regenerate with scripts/ExportSpectraUsage.lean + scripts/spectra_port_surface.py.",
+  "productionConsumerDeclarations": 178,
+  "spectraUpstreamCommit": "8dbaaf6728d1342ae16acf79fd7eef7c59b37e63",
+  "trackedTauCetiModules": 629
+}
