@@ -107,47 +107,9 @@ private theorem closedOperatorDirectSumLinearMap_closedGraph
     (A0 : ClosedOperator (𝕜 := 𝕜) (E := E0))
     (A1 : ClosedOperator (𝕜 := 𝕜) (E := E1)) :
     IsClosed (Set.range fun z : closedOperatorDirectSumDomain A0 A1 =>
-      ((z : WithLp 2 (E0 × E1)), closedOperatorDirectSumLinearMap A0 A1 z)) := by
-  let coords :
-      (WithLp 2 (E0 × E1) × WithLp 2 (E0 × E1)) →
-        ((E0 × E0) × (E1 × E1)) :=
-    fun p => ((WithLp.fst p.1, WithLp.fst p.2),
-      (WithLp.snd p.1, WithLp.snd p.2))
-  have hcoords : Continuous coords := by
-    fun_prop
-  have hclosed : IsClosed
-      ((Set.range fun x : A0.domain => ((x : E0), A0.toLinearMap x)) ×ˢ
-       (Set.range fun y : A1.domain => ((y : E1), A1.toLinearMap y))) :=
-    A0.closed_graph.prod A1.closed_graph
-  rw [show Set.range (fun z : closedOperatorDirectSumDomain A0 A1 =>
-      ((z : WithLp 2 (E0 × E1)), closedOperatorDirectSumLinearMap A0 A1 z)) =
-      coords ⁻¹'
-        ((Set.range fun x : A0.domain => ((x : E0), A0.toLinearMap x)) ×ˢ
-         (Set.range fun y : A1.domain => ((y : E1), A1.toLinearMap y))) by
-    ext p
-    constructor
-    · rintro ⟨z, rfl⟩
-      exact ⟨
-        ⟨closedOperatorDirectSumDomainFst A0 A1 z, by ext <;> rfl⟩,
-        ⟨closedOperatorDirectSumDomainSnd A0 A1 z, by ext <;> rfl⟩⟩
-    · rintro ⟨⟨x0, hx0⟩, ⟨x1, hx1⟩⟩
-      have hx0_fst : (x0 : E0) = WithLp.fst p.1 := congrArg Prod.fst hx0
-      have hx0_snd : A0.toLinearMap x0 = WithLp.fst p.2 := congrArg Prod.snd hx0
-      have hx1_fst : (x1 : E1) = WithLp.snd p.1 := congrArg Prod.fst hx1
-      have hx1_snd : A1.toLinearMap x1 = WithLp.snd p.2 := congrArg Prod.snd hx1
-      let z : closedOperatorDirectSumDomain A0 A1 :=
-        ⟨p.1, (mem_closedOperatorDirectSumDomain_iff A0 A1 p.1).2
-          ⟨hx0_fst ▸ x0.property, hx1_fst ▸ x1.property⟩⟩
-      have hz0 : closedOperatorDirectSumDomainFst A0 A1 z = x0 :=
-        Subtype.ext hx0_fst.symm
-      have hz1 : closedOperatorDirectSumDomainSnd A0 A1 z = x1 :=
-        Subtype.ext hx1_fst.symm
-      refine ⟨z, Prod.ext rfl ?_⟩
-      apply (WithLp.linearEquiv 2 𝕜 (E0 × E1)).injective
-      apply Prod.ext
-      · simpa [hz0] using hx0_snd
-      · simpa [hz1] using hx1_snd]
-  exact hclosed.preimage hcoords
+      ((z : WithLp 2 (E0 × E1)), closedOperatorDirectSumLinearMap A0 A1 z)) :=
+  TauCeti.LinearPMap.directSum_closedGraph A0.toLinearPMap A1.toLinearPMap
+    A0.closed_graph A1.closed_graph
 
 /-- The closed direct sum of two closed operators on the Hilbert direct sum. -/
 noncomputable def closedOperatorDirectSum
