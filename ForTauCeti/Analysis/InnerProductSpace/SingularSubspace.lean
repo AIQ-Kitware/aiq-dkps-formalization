@@ -208,11 +208,22 @@ theorem sum_sq_norm_apply_unitary_comp (A : E →ₗ[𝕜] F) (U : E ≃ₗᵢ[�
   simp only [OrthonormalBasis.map_apply] at h1
   rw [← h2, ← h1]
 
-/-- **Weyl's inequality for squared singular values.** The `k`-th squared singular
-values of `A` and `Â` differ by at most the Gram perturbation bound:
-`|σₖ(Â)² − σₖ(A)²| ≤ (a + â) ε`.  Via the dictionary `σₖ² = λₖ(·⋆·)`
+/-- **Gram-transported Weyl bound for squared singular values.** The `k`-th
+squared singular values of `A` and `Â` differ by at most the Gram perturbation
+bound: `|σₖ(Â)² − σₖ(A)²| ≤ (a + â) ε`.  Via the dictionary `σₖ² = λₖ(·⋆·)`
 (`sq_singularValues_fin`) and Weyl's inequality on the Gram operators, fed by the
-perturbation bound `norm_gram_sub_gram_apply_le`. -/
+perturbation bound `norm_gram_sub_gram_apply_le`.
+
+**This is weaker than Weyl's inequality for singular values, in three ways**, and
+the name is deliberately not "Weyl's inequality" on that account: it bounds the
+*squares*, its constant carries the extra factor `a + â` so the bound degrades
+with the size of the operators, and it needs the auxiliary hypotheses `hA`, `hÂ`
+that the genuine theorem does not.  The sharp form is
+`ContinuousLinearMap.abs_singularValues_sub_singularValues_le`
+(`ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/FiniteDimensional.lean`),
+`|σₙ(T) − σₙ(S)| ≤ ‖T − S‖`, which implies this one but not conversely — dividing
+back out by `σₖ(A) + σₖ(Â)` recovers nothing when the singular values are small.
+This version survives because it is the shape the Gram-side arguments produce. -/
 theorem abs_sq_singularValues_sub_le {A Â : E →ₗ[𝕜] F} {a â ε : ℝ}
     (hâ : 0 ≤ â) (hε : 0 ≤ ε)
     (hA : ∀ x, ‖A x‖ ≤ a * ‖x‖) (hÂ : ∀ x, ‖Â x‖ ≤ â * ‖x‖)
