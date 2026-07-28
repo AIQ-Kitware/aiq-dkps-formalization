@@ -99,6 +99,17 @@ structure ContractiveReducingGraphSelection
 
 namespace ContractiveReducingGraphSelection
 
+/-- View the historical selected-graph package through the canonical
+partial-map block data. -/
+noncomputable def toPMap
+    {H : UnboundedBlockData (𝕜 := 𝕜) (E0 := E0) (E1 := E1)}
+    (S : ContractiveReducingGraphSelection H) :
+    ContractiveReducingGraphSelectionPMap H.toPMap where
+  X := S.X
+  preservesDomains := S.preservesDomains
+  norm_lt_one := S.norm_lt_one
+  reduces := S.reduces
+
 /-- The selected reducing graph is invariant under the closed block operator. -/
 theorem invariant
     {H : UnboundedBlockData (𝕜 := 𝕜) (E0 := E0) (E1 := E1)}
@@ -113,8 +124,7 @@ theorem strongSolvesRiccati
     {H : UnboundedBlockData (𝕜 := 𝕜) (E0 := E0) (E1 := E1)}
     (S : ContractiveReducingGraphSelection H) :
     StrongSolvesRiccati H S.X :=
-  (unboundedBlockGraph_invariantPMap_iff_strongRiccatiCore H S.X).1
-    ⟨S.preservesDomains, S.invariant⟩
+  strongSolvesRiccati_toPMap_iff H S.X |>.2 S.toPMap.strongSolvesRiccati
 
 /-- Package the selected graph as the contractive strong solution required by
 later unbounded diagonalization. -/
