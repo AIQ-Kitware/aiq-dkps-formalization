@@ -65,7 +65,12 @@ subspace gives `polarPartial`.
   `W⋆ M = |M|`;
 * `ContinuousLinearMap.modulus_adjoint`: `|M⋆| = W |M| W⋆`, and
   `ContinuousLinearMap.modulus_adjoint_comp_polarPartial`: the second polar identity
-  `M = |M⋆| W`.
+  `M = |M⋆| W`;
+* `ContinuousLinearMap.eq_polarPartial_of_comp_modulus`: **uniqueness** — a bounded `V`
+  with `V |M| = M` vanishing off the initial space *is* `W`, so the decomposition is
+  characterised and not merely exhibited;
+* `ContinuousLinearMap.polarPartial_adjoint`: `W(M⋆) = W(M)⋆`, an immediate consequence of
+  uniqueness.
 
 ## Relation to the rest of the library
 
@@ -498,5 +503,123 @@ theorem modulus_adjoint_comp_polarPartial (M : E →L[ℂ] F) :
     _ = M.polarPartial ∘L M.modulus := by
         rw [M.adjoint_comp_polarPartial, M.modulus_comp_starProjection]
     _ = M := M.polarPartial_comp_modulus
+
+/-- **Uniqueness of the polar partial isometry.**  A bounded `V` with `V |M| = M` that
+vanishes off the initial space *is* `W`.
+
+Together with `polarPartial_comp_modulus` this characterises the decomposition: `W` is the
+unique partial isometry with initial space `(ker M)ᗮ` factoring `M` through `|M|`. -/
+theorem eq_polarPartial_of_comp_modulus (M : E →L[ℂ] F) (V : E →L[ℂ] F)
+    (hV : V ∘L M.modulus = M)
+    (hker : ∀ y ∈ M.polarInitialᗮ, V y = 0) :
+    V = M.polarPartial := by
+  ext x
+  obtain ⟨p, hp, q, hq, rfl⟩ := Submodule.exists_add_mem_mem_orthogonal (K := M.polarInitial) x
+  have hagree : ∀ z ∈ M.polarInitial, V z = M.polarPartial z := by
+    intro z hz
+    have hclosed : IsClosed {w : M.polarInitial | V w = M.polarPartial w} :=
+      isClosed_eq (by fun_prop) (by fun_prop)
+    have hgen : ∀ u : E, V (M.modulusCorestrict u) = M.polarPartial (M.modulusCorestrict u) := by
+      intro u
+      have hVu : V (M.modulus u) = M u := by
+        rw [← ContinuousLinearMap.comp_apply, hV]
+      simpa using hVu.trans (M.polarPartial_apply_modulus u).symm
+    exact M.denseRange_modulusCorestrict.induction_on
+      (p := fun w : M.polarInitial => V w = M.polarPartial w) ⟨z, hz⟩ hclosed hgen
+  rw [map_add, map_add, hagree p hp, hker q hq,
+    M.polarPartial_eq_zero_of_mem_orthogonal hq]
+
+/-- The projection onto the initial space fixes the range of `|M|`. -/
+theorem starProjection_comp_modulus (M : E →L[ℂ] F) :
+    M.polarInitial.starProjection ∘L M.modulus = M.modulus := by
+  ext x
+  exact Submodule.starProjection_eq_self_iff.mpr (M.modulus_apply_mem_polarInitial x)
+
+/-- `W⋆` lands in the initial space. -/
+theorem starProjection_comp_adjoint_polarPartial (M : E →L[ℂ] F) :
+    M.polarInitial.starProjection ∘L M.polarPartial.adjoint = M.polarPartial.adjoint := by
+  have h := congrArg ContinuousLinearMap.adjoint M.polarPartial_comp_starProjection
+  rwa [ContinuousLinearMap.adjoint_comp,
+    (_root_.isSelfAdjoint_starProjection M.polarInitial).adjoint_eq] at h
+
+/-- **`W(M⋆) = W(M)⋆`**: the partial isometry of the adjoint is the adjoint of the partial
+isometry.  By uniqueness, since `W⋆ |M⋆| = M⋆` and `W⋆` vanishes on `ker M⋆`. -/
+theorem polarPartial_adjoint (M : E →L[ℂ] F) :
+    M.adjoint.polarPartial = M.polarPartial.adjoint := by
+  refine (M.adjoint.eq_polarPartial_of_comp_modulus M.polarPartial.adjoint ?_ ?_).symm
+  · -- W⋆ |M⋆| = W⋆ W |M| W⋆ = P |M| W⋆ = |M| W⋆ = M⋆
+    rw [M.modulus_adjoint]
+    have hstep : M.polarPartial.adjoint ∘L
+        (M.polarPartial ∘L M.modulus ∘L M.polarPartial.adjoint)
+        = (M.polarPartial.adjoint ∘L M.polarPartial) ∘L
+            M.modulus ∘L M.polarPartial.adjoint := by
+      simp only [ContinuousLinearMap.comp_assoc]
+    rw [hstep, M.adjoint_comp_polarPartial]
+    have hstep2 : M.polarInitial.starProjection ∘L M.modulus ∘L M.polarPartial.adjoint
+        = (M.polarInitial.starProjection ∘L M.modulus) ∘L M.polarPartial.adjoint := by
+      simp only [ContinuousLinearMap.comp_assoc]
+    rw [hstep2, M.starProjection_comp_modulus,
+      ← M.adjoint_eq_modulus_comp_adjoint_polarPartial]
+  · -- W⋆ kills ker M⋆
+    intro y hy
+    have hker : y ∈ LinearMap.ker M.adjoint.toLinearMap := by
+      rwa [← M.adjoint.polarInitial_orthogonal_eq_ker]
+    have hmod : M.modulus (M.polarPartial.adjoint y) = 0 := by
+      have : M.adjoint y = 0 := hker
+      rwa [M.adjoint_eq_modulus_comp_adjoint_polarPartial,
+        ContinuousLinearMap.comp_apply] at this
+    have hperp : M.polarPartial.adjoint y ∈ M.polarInitialᗮ := by
+      rw [M.polarInitial_orthogonal_eq_ker]
+      exact (M.modulus_apply_eq_zero_iff _).mp hmod
+    have hmem : M.polarPartial.adjoint y ∈ M.polarInitial := by
+      have h := congrArg (fun T => T y) M.starProjection_comp_adjoint_polarPartial
+      simp only [ContinuousLinearMap.comp_apply] at h
+      rw [← h]
+      exact Submodule.starProjection_apply_mem _ _
+    exact inner_self_eq_zero.mp (hperp _ hmem)
+
+/-- The **final space** of the polar decomposition: the closure of the range of `M`,
+equivalently the range of `W` (`range_polarPartial`). -/
+noncomputable def polarFinal (M : E →L[ℂ] F) : Submodule ℂ F :=
+  (LinearMap.range M.toLinearMap).topologicalClosure
+
+instance (M : E →L[ℂ] F) : CompleteSpace M.polarFinal :=
+  Submodule.topologicalClosure.completeSpace _
+
+theorem polarFinal_eq_range_polarPartial (M : E →L[ℂ] F) :
+    M.polarFinal = LinearMap.range M.polarPartial.toLinearMap :=
+  M.range_polarPartial.symm
+
+/-- `W⋆` vanishes off the final space. -/
+theorem adjoint_polarPartial_eq_zero_of_mem_orthogonal (M : E →L[ℂ] F) {y : F}
+    (hy : y ∈ M.polarFinalᗮ) : M.polarPartial.adjoint y = 0 := by
+  have hall : ∀ z : E, ⟪z, M.polarPartial.adjoint y⟫_ℂ = 0 := by
+    intro z
+    rw [ContinuousLinearMap.adjoint_inner_right]
+    refine hy _ ?_
+    rw [M.polarFinal_eq_range_polarPartial]
+    exact ⟨z, rfl⟩
+  exact inner_self_eq_zero.mp (hall _)
+
+/-- **`W W⋆` is the orthogonal projection onto the final space.** -/
+theorem polarPartial_comp_adjoint (M : E →L[ℂ] F) :
+    M.polarPartial ∘L M.polarPartial.adjoint = M.polarFinal.starProjection := by
+  ext y
+  obtain ⟨p, hp, q, hq, rfl⟩ := Submodule.exists_add_mem_mem_orthogonal (K := M.polarFinal) y
+  have hqz : M.polarFinal.starProjection q = 0 := by
+    have hmem : q ∈ (M.polarFinal.starProjection).ker := by
+      rw [Submodule.ker_starProjection]; exact hq
+    exact hmem
+  have hqW : M.polarPartial.adjoint q = 0 :=
+    M.adjoint_polarPartial_eq_zero_of_mem_orthogonal hq
+  have hpW : M.polarPartial (M.polarPartial.adjoint p) = p := by
+    rw [M.polarFinal_eq_range_polarPartial] at hp
+    obtain ⟨z, rfl⟩ := hp
+    simp only [ContinuousLinearMap.coe_coe]
+    have hz : M.polarPartial.adjoint (M.polarPartial z) = M.polarInitial.starProjection z := by
+      rw [← ContinuousLinearMap.comp_apply, M.adjoint_comp_polarPartial]
+    rw [hz, ← ContinuousLinearMap.comp_apply, M.polarPartial_comp_starProjection]
+  simp only [ContinuousLinearMap.comp_apply, map_add, hqW, hqz, map_zero, add_zero,
+    Submodule.starProjection_eq_self_iff.mpr hp, hpW]
 
 end ContinuousLinearMap
