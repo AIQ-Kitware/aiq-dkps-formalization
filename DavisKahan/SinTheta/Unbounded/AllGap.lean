@@ -65,6 +65,26 @@ theorem toClosed
 
 end GenuineUnboundedSylvesterGapPMap
 
+namespace GenuineUnboundedSylvesterGap
+
+omit [CompleteSpace F] [CompleteSpace G] in
+/-- View a source-facing genuine all-gap condition through canonical partial
+maps. -/
+theorem toPMap
+    {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := F)}
+    {B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := G)}
+    {δ : ℝ} (h : GenuineUnboundedSylvesterGap A B δ) :
+    GenuineUnboundedSylvesterGapPMap A.toLinearPMap B.toLinearPMap δ := by
+  cases h with
+  | intervalExterior hβα hgap =>
+      exact .intervalExterior hβα hgap
+  | leftAboveRightBelow c hA hB =>
+      exact .leftAboveRightBelow c hA hB
+  | leftBelowRightAbove c hA hB =>
+      exact .leftBelowRightAbove c hA hB
+
+end GenuineUnboundedSylvesterGap
+
 /-- Generalized complementary-block theorem with a genuine all-gap spectral
 hypothesis. -/
 theorem generalizedSinTheta_unbounded_of_genuineSpectrumGap
