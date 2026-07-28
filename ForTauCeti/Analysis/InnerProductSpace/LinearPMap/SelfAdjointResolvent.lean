@@ -7,6 +7,7 @@ module
 
 public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.ResolventBound
 public import Mathlib.Analysis.InnerProductSpace.LinearPMap
+public import Mathlib.Analysis.CStarAlgebra.ContinuousLinearMap
 
 /-!
 # A self-adjoint operator has real spectrum
@@ -44,7 +45,7 @@ The argument is the classical one, in three steps:
 namespace TauCeti
 namespace LinearPMap
 
-open scoped InnerProductSpace ComplexConjugate
+open scoped InnerProductSpace ComplexConjugate ENNReal NNReal
 
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
 
@@ -285,6 +286,87 @@ theorem norm_resolvent_le_of_im_ne_zero {A : E →ₗ.[ℂ] E} (hA : IsSelfAdjoi
       - z • ((⟨resolvent A hmem y, hdom⟩ : A.domain) : E) = y from hsolve] at h
   rw [inv_mul_eq_div, le_div_iff₀ habs, mul_comm]
   exact h
+
+/-- The resolvent of a self-adjoint operator at a **real** point is a
+self-adjoint bounded operator. -/
+theorem isSelfAdjoint_resolvent_ofReal {A : E →ₗ.[ℂ] E} (hA : IsSelfAdjoint A)
+    {c : ℝ} (hc : (c : ℂ) ∈ resolventSet A) :
+    _root_.IsSelfAdjoint (resolvent A hc) := by
+  have hsym : A.IsFormalAdjoint A := by
+    have h := _root_.LinearPMap.adjoint_isFormalAdjoint (T := A) hA.dense_domain
+    rwa [_root_.LinearPMap.isSelfAdjoint_def.mp hA] at h
+  rw [ContinuousLinearMap.isSelfAdjoint_iff']
+  symm
+  rw [ContinuousLinearMap.eq_adjoint_iff]
+  intro x y
+  -- write both arguments as `(A - c)` of a domain point and use symmetry
+  set px : A.domain := ⟨resolvent A hc x, resolvent_mem_domain hc x⟩ with hpx
+  set py : A.domain := ⟨resolvent A hc y, resolvent_mem_domain hc y⟩ with hpy
+  have hx : A px - (c : ℂ) • (px : E) = x := sub_smul_resolvent hc x
+  have hy : A py - (c : ℂ) • (py : E) = y := sub_smul_resolvent hc y
+  have hstep : ⟪(px : E), A py - (c : ℂ) • (py : E)⟫_ℂ
+      = ⟪A px - (c : ℂ) • (px : E), (py : E)⟫_ℂ := by
+    rw [inner_sub_left, inner_sub_right, inner_smul_left, inner_smul_right,
+      Complex.conj_ofReal, hsym px py]
+  calc ⟪resolvent A hc x, y⟫_ℂ
+      = ⟪(px : E), A py - (c : ℂ) • (py : E)⟫_ℂ := by rw [hy]
+    _ = ⟪A px - (c : ℂ) • (px : E), (py : E)⟫_ℂ := hstep
+    _ = ⟪x, resolvent A hc y⟫_ℂ := by rw [hx]
+
+/-- **The Davis--Kahan gap-resolvent bound.**  If the spectrum of a self-adjoint
+`A` avoids the open interval `(c - s, c + s)` then `A - c` has a bounded
+two-sided inverse of norm at most `s⁻¹`.
+
+The proof is a C⋆-algebra argument about the *bounded* operator `R`: spectral
+mapping puts `spectrum R \ {0}` inside `(· - c)⁻¹ '' spectrum A`, the gap bounds
+that by `s⁻¹`, and for a self-adjoint element the norm *is* the spectral radius.
+No projection-valued measure and no functional calculus appear. -/
+theorem exists_norm_le_two_sided_shifted_inverse_of_spectrum_gap
+    {A : E →ₗ.[ℂ] E} (hA : IsSelfAdjoint A) {c s : ℝ} (hs : 0 < s)
+    (hgap : ∀ lam ∈ Set.Ioo (c - s) (c + s), (lam : ℂ) ∉ spectrum A) :
+    ∃ R : E →L[ℂ] E, ‖R‖ ≤ s⁻¹ ∧
+      (∀ ψ : A.domain, R (A ψ - (c : ℂ) • (ψ : E)) = (ψ : E)) ∧
+      ∀ φ : E, ∃ hmem : R φ ∈ A.domain,
+        A ⟨R φ, hmem⟩ - (c : ℂ) • R φ = φ := by
+  have hcmem : c ∈ Set.Ioo (c - s) (c + s) := ⟨by linarith, by linarith⟩
+  have hc : (c : ℂ) ∈ resolventSet A := not_not.mp (hgap c hcmem)
+  refine ⟨resolvent A hc, ?_, fun ψ => resolvent_apply_sub_smul hc ψ, fun φ =>
+    ⟨resolvent_mem_domain hc φ, sub_smul_resolvent hc φ⟩⟩
+  -- every spectral point of the bounded resolvent has modulus at most `s⁻¹`
+  have hspec : ∀ μ ∈ _root_.spectrum ℂ (resolvent A hc), ‖μ‖ ≤ s⁻¹ := by
+    intro μ hμ
+    rcases eq_or_ne μ 0 with rfl | hμ0
+    · simpa using (by positivity : (0:ℝ) ≤ s⁻¹)
+    · -- `c + μ⁻¹` is a spectral point of `A`, hence real and outside the gap
+      have hnot : (c : ℂ) + μ⁻¹ ∉ resolventSet A := fun hmem =>
+        notMem_spectrum_resolvent hc hμ0 hmem hμ
+      obtain ⟨r, -, hr⟩ := spectrum_subset_real hA hnot
+      have hrspec : (r : ℂ) ∈ spectrum A := by rw [hr]; exact hnot
+      have hrgap : r ∉ Set.Ioo (c - s) (c + s) := fun hmem => hgap r hmem hrspec
+      have hge : s ≤ |r - c| := by
+        rw [Set.mem_Ioo, not_and_or, not_lt, not_lt] at hrgap
+        rcases hrgap with h | h
+        · rw [abs_of_nonpos (by linarith)]; linarith
+        · rw [abs_of_nonneg (by linarith)]; linarith
+      have hinvnorm : ‖μ‖⁻¹ = |r - c| := by
+        rw [← norm_inv, show μ⁻¹ = (r : ℂ) - (c : ℂ) by rw [hr]; ring,
+          ← Complex.ofReal_sub, Complex.norm_real, Real.norm_eq_abs]
+      have hpos : 0 < ‖μ‖ := norm_pos_iff.mpr hμ0
+      have hsle : s ≤ ‖μ‖⁻¹ := hinvnorm ▸ hge
+      have hcancel : ‖μ‖⁻¹ * ‖μ‖ = 1 := inv_mul_cancel₀ (ne_of_gt hpos)
+      rw [show s⁻¹ = 1 / s by ring, le_div_iff₀ hs]
+      nlinarith [hsle, hpos, hcancel]
+  -- for a self-adjoint element the norm *is* the spectral radius
+  have hsa : _root_.IsSelfAdjoint (resolvent A hc) := isSelfAdjoint_resolvent_ofReal hA hc
+  have hrad : spectralRadius ℂ (resolvent A hc) ≤ ENNReal.ofReal s⁻¹ := by
+    refine iSup₂_le fun μ hμ => ?_
+    calc (‖μ‖₊ : ℝ≥0∞) = ENNReal.ofReal ‖μ‖ := by
+          rw [← ENNReal.ofReal_coe_nnreal]; norm_cast
+      _ ≤ ENNReal.ofReal s⁻¹ := ENNReal.ofReal_le_ofReal (hspec μ hμ)
+  calc ‖resolvent A hc‖
+      = (spectralRadius ℂ (resolvent A hc)).toReal :=
+        hsa.toReal_spectralRadius_complex_eq_norm.symm
+    _ ≤ s⁻¹ := ENNReal.toReal_le_of_le_ofReal (by positivity) hrad
 
 end SelfAdjoint
 

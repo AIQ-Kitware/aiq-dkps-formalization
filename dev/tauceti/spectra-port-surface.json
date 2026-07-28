@@ -166,18 +166,6 @@
           },
           "lines": 318,
           "origin": "upstream"
-        },
-        "Spectra.Resolvent.Spectrum": {
-          "constants": {
-            "Spectra.Resolvent.resolventSet": {
-              "consumerModules": [
-                "DavisKahan.Interop.Spectra.GapResolvent"
-              ],
-              "uses": 1
-            }
-          },
-          "lines": 90,
-          "origin": "upstream"
         }
       },
       "label": "self-adjoint unbounded operators, resolvent and spectrum"
@@ -298,12 +286,11 @@
             "Spectra.QuantumMechanics.SpectralTheory.spectralProjection": {
               "consumerModules": [
                 "DavisKahan.Interop.Spectra.BoundedSelfAdjointSpectralProjection",
-                "DavisKahan.Interop.Spectra.GapResolvent",
                 "DavisKahan.Interop.Spectra.SpectralCutoff",
                 "DavisKahan.Interop.Spectra.SpectralRestriction",
                 "DavisKahan.Interop.Spectra.SpectralRestrictionLocalization"
               ],
-              "uses": 7
+              "uses": 5
             }
           },
           "lines": 215,
@@ -502,11 +489,10 @@
           "constants": {
             "Spectra.OneParameterUnitaryGroup": {
               "consumerModules": [
-                "DavisKahan.Interop.Spectra.GapResolvent",
                 "DavisKahan.Interop.Spectra.SpectralRestrictionOperator",
                 "DavisKahan.SpectralTheory.SelfAdjointBorelCalculus"
               ],
-              "uses": 5
+              "uses": 3
             },
             "Spectra.OneParameterUnitaryGroup.U": {
               "consumerModules": [
@@ -522,10 +508,9 @@
             },
             "Spectra.OneParameterUnitaryGroup.generator": {
               "consumerModules": [
-                "DavisKahan.Interop.Spectra.GapResolvent",
                 "DavisKahan.Interop.Spectra.SpectralRestrictionOperator"
               ],
-              "uses": 6
+              "uses": 4
             },
             "Spectra.OneParameterUnitaryGroup.mk": {
               "consumerModules": [
@@ -574,15 +559,15 @@
       "label": "Cayley transform, Stone bridge and one-parameter groups"
     }
   },
-  "distinctSpectraConstants": 56,
+  "distinctSpectraConstants": 55,
   "dkpsAuthoredDonorModules": [
     "Spectra.Spaces.Tensor.HilbertSchmidt",
     "Spectra.Spaces.Tensor.HilbertSchmidtFlow",
     "Spectra.SpectralTheory.Calculus.SpectralGapInverse"
   ],
-  "donorModules": 25,
+  "donorModules": 24,
   "note": "Regenerate with scripts/ExportSpectraUsage.lean + scripts/spectra_port_surface.py.",
-  "productionConsumerDeclarations": 97,
+  "productionConsumerDeclarations": 95,
   "spectraUpstreamCommit": "8dbaaf6728d1342ae16acf79fd7eef7c59b37e63",
   "trackedTauCetiModules": 629
 }
