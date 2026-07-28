@@ -94,7 +94,7 @@ Main contributions:
   `TauCeti.LinearPMap` predicates, with historical bundle names as facades);
 - preservation of domains by orthogonal projections, density, and graph
   closedness, plus the adjoint-domain and symmetry transport (now raw
-  `TauCeti.LinearPMap` lemmas);
+  `TauCeti.LinearPMap` lemmas), and self-adjointness of the restriction;
 - restricted domains, restricted actions, projection back into the restricted
   domain, and the resulting raw partial map (all now canonical
   `TauCeti.LinearPMap` declarations);
