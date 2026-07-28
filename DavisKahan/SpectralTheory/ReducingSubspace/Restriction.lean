@@ -85,8 +85,8 @@ end ReducesSubspace
 /-- Compatibility facade for the raw restricted domain. -/
 abbrev reducingRestrictionDomain
     (A : ClosedOperator (𝕜 := 𝕜) (E := E))
-    (U : Submodule 𝕜 E) : Submodule 𝕜 U where
-  _ := TauCeti.LinearPMap.reducingRestrictionDomain A.toLinearPMap U
+    (U : Submodule 𝕜 E) : Submodule 𝕜 U :=
+  TauCeti.LinearPMap.reducingRestrictionDomain A.toLinearPMap U
 
 @[simp]
 theorem mem_reducingRestrictionDomain_iff

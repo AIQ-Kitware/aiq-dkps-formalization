@@ -62,14 +62,14 @@ abbrev closedOperatorDirectSumDomainSnd
 abbrev closedOperatorDirectSumDomainFstLinearMap
     (A0 : ClosedOperator (𝕜 := 𝕜) (E := E0))
     (A1 : ClosedOperator (𝕜 := 𝕜) (E := E1)) :
-    closedOperatorDirectSumDomain A0 A1 →ₗ[𝕜] A0.domain where
+    closedOperatorDirectSumDomain A0 A1 →ₗ[𝕜] A0.domain :=
   TauCeti.LinearPMap.directSumDomainFstLinearMap A0.toLinearPMap A1.toLinearPMap
 
 /-- Second-coordinate extraction as a linear map between the bundled domains. -/
 abbrev closedOperatorDirectSumDomainSndLinearMap
     (A0 : ClosedOperator (𝕜 := 𝕜) (E := E0))
     (A1 : ClosedOperator (𝕜 := 𝕜) (E := E1)) :
-    closedOperatorDirectSumDomain A0 A1 →ₗ[𝕜] A1.domain where
+    closedOperatorDirectSumDomain A0 A1 →ₗ[𝕜] A1.domain :=
   TauCeti.LinearPMap.directSumDomainSndLinearMap A0.toLinearPMap A1.toLinearPMap
 
 /-- Componentwise action of the direct sum on its explicit product domain. -/
@@ -152,13 +152,19 @@ noncomputable def closedOperatorDirectSum
   rfl
 
 /-- The bounded off-diagonal coupling on the Hilbert direct sum. -/
-noncomputable def unboundedOffDiagonalCoupling
-    (H : UnboundedBlockData (𝕜 := 𝕜) (E0 := E0) (E1 := E1)) :
+noncomputable def unboundedOffDiagonalCouplingPMap
+    (B01 : E1 →L[𝕜] E0) (B10 : E0 →L[𝕜] E1) :
     WithLp 2 (E0 × E1) →L[𝕜] WithLp 2 (E0 × E1) :=
   ((WithLp.prodContinuousLinearEquiv 2 𝕜 E0 E1).symm :
       (E0 × E1) →L[𝕜] WithLp 2 (E0 × E1)) ∘L
-    ((H.B01 ∘L WithLp.sndL 2 𝕜 E0 E1).prod
-      (H.B10 ∘L WithLp.fstL 2 𝕜 E0 E1))
+    ((B01 ∘L WithLp.sndL 2 𝕜 E0 E1).prod
+      (B10 ∘L WithLp.fstL 2 𝕜 E0 E1))
+
+/-- The bundled-data spelling of the raw off-diagonal coupling. -/
+noncomputable abbrev unboundedOffDiagonalCoupling
+    (H : UnboundedBlockData (𝕜 := 𝕜) (E0 := E0) (E1 := E1)) :
+    WithLp 2 (E0 × E1) →L[𝕜] WithLp 2 (E0 × E1) :=
+  unboundedOffDiagonalCouplingPMap H.B01 H.B10
 
 @[simp] theorem unboundedOffDiagonalCoupling_fst
     (H : UnboundedBlockData (𝕜 := 𝕜) (E0 := E0) (E1 := E1))
@@ -172,8 +178,35 @@ noncomputable def unboundedOffDiagonalCoupling
     WithLp.snd (unboundedOffDiagonalCoupling H z) = H.B10 (WithLp.fst z) := by
   rfl
 
-/-- The closed unbounded block operator obtained by adding the bounded
-coupling to the closed diagonal direct sum. -/
+/-- The canonical partial-map block operator obtained by adding the bounded
+coupling to the diagonal direct sum. -/
+noncomputable abbrev unboundedBlockOperatorPMapCore
+    (H : UnboundedBlockDataPMap (𝕜 := 𝕜) (E0 := E0) (E1 := E1)) :
+    WithLp 2 (E0 × E1) →ₗ.[𝕜] WithLp 2 (E0 × E1) :=
+  TauCeti.LinearPMap.addBounded
+    (TauCeti.LinearPMap.directSum H.A0 H.A1)
+    (unboundedOffDiagonalCouplingPMap H.B01 H.B10)
+
+@[simp] theorem unboundedBlockOperatorPMapCore_domain
+    (H : UnboundedBlockDataPMap (𝕜 := 𝕜) (E0 := E0) (E1 := E1)) :
+    (unboundedBlockOperatorPMapCore H).domain =
+      TauCeti.LinearPMap.directSumDomain H.A0 H.A1 := rfl
+
+@[simp] theorem unboundedBlockOperatorPMapCore_apply_fst
+    (H : UnboundedBlockDataPMap (𝕜 := 𝕜) (E0 := E0) (E1 := E1))
+    (z : (unboundedBlockOperatorPMapCore H).domain) :
+    WithLp.fst (unboundedBlockOperatorPMapCore H z) =
+      H.A0 (TauCeti.LinearPMap.directSumDomainFst H.A0 H.A1 z) +
+        H.B01 (WithLp.snd (z : WithLp 2 (E0 × E1))) := rfl
+
+@[simp] theorem unboundedBlockOperatorPMapCore_apply_snd
+    (H : UnboundedBlockDataPMap (𝕜 := 𝕜) (E0 := E0) (E1 := E1))
+    (z : (unboundedBlockOperatorPMapCore H).domain) :
+    WithLp.snd (unboundedBlockOperatorPMapCore H z) =
+      H.A1 (TauCeti.LinearPMap.directSumDomainSnd H.A0 H.A1 z) +
+        H.B10 (WithLp.fst (z : WithLp 2 (E0 × E1))) := rfl
+
+/-- The raw block core associated to historical bundled data. -/
 noncomputable def unboundedBlockOperatorCorePMap
     (H : UnboundedBlockData (𝕜 := 𝕜) (E0 := E0) (E1 := E1)) :
     WithLp 2 (E0 × E1) →ₗ.[𝕜] WithLp 2 (E0 × E1) :=
@@ -207,6 +240,12 @@ noncomputable def unboundedBlockOperatorCore
     ClosedOperator (𝕜 := 𝕜) (E := WithLp 2 (E0 × E1)) :=
   (closedOperatorDirectSum H.A0 H.A1).addBounded
     (unboundedOffDiagonalCoupling H)
+
+/-- The closed compatibility package has the raw block core as its canonical
+partial-map view. -/
+@[simp] theorem unboundedBlockOperatorCore_toLinearPMap
+    (H : UnboundedBlockData (𝕜 := 𝕜) (E0 := E0) (E1 := E1)) :
+    (unboundedBlockOperatorCore H).toLinearPMap = unboundedBlockOperatorCorePMap H := rfl
 
 @[simp] theorem unboundedBlockOperatorCore_domain
     (H : UnboundedBlockData (𝕜 := 𝕜) (E0 := E0) (E1 := E1)) :
