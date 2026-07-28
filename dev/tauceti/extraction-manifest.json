@@ -75,6 +75,10 @@
         "ForTauCeti.Analysis.InnerProductSpace.ProjectionGeometry",
         "ForTauCeti.Analysis.InnerProductSpace.RectangularSingularValues",
         "ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm",
+        "ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm.Basic",
+        "ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm.BlockSum",
+        "ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm.Instances",
+        "ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm.Majorization",
         "ForTauCeti.Analysis.InnerProductSpace.SchattenNorm",
         "ForTauCeti.Analysis.InnerProductSpace.SchurHorn",
         "ForTauCeti.Analysis.InnerProductSpace.SelfAdjointFunctionalCalculus",
@@ -1519,6 +1523,82 @@
       "provenance_class": "moved; introduced at Davis--Kahan commit 56f7495; authors Jon Crall, Claude Fable 5; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
       "direct_dependencies": [
         "Mathlib"
+      ],
+      "blocked_dependencies": [],
+      "downstream_users": [],
+      "status": "staged",
+      "upstream_pr": null
+    },
+    {
+      "source_module": "ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm",
+      "source_declarations": [],
+      "current_namespace": "TauCeti.DavisKahanTheory",
+      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm.Basic",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm.Basic",
+      "ownership_class": "tauceti",
+      "roadmap_target": "unitarily-invariant-norm",
+      "provenance_class": "split out of the 2124-line RectangularUnitarilyInvariantNorm on 2026-07-28 to meet Tau Ceti's 1500-line hard ceiling (1000 for a new file); no statement, proof or name changed, except that exists_unitary_factorization_of_singularValues_eq was promoted from private to public because the split separates it from its users",
+      "direct_dependencies": [
+        "Mathlib",
+        "ForTauCeti.Analysis.InnerProductSpace.GramMatrix",
+        "ForTauCeti.Analysis.InnerProductSpace.KyFan",
+        "ForTauCeti.Analysis.InnerProductSpace.PrincipalAngles",
+        "ForTauCeti.Analysis.InnerProductSpace.RectangularSingularValues",
+        "ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantNorm"
+      ],
+      "blocked_dependencies": [],
+      "downstream_users": [],
+      "status": "staged",
+      "upstream_pr": null
+    },
+    {
+      "source_module": "ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm",
+      "source_declarations": [],
+      "current_namespace": "TauCeti.DavisKahanTheory",
+      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm.Majorization",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm.Majorization",
+      "ownership_class": "tauceti",
+      "roadmap_target": "unitarily-invariant-norm",
+      "provenance_class": "split out of the 2124-line RectangularUnitarilyInvariantNorm on 2026-07-28 to meet Tau Ceti's 1500-line hard ceiling (1000 for a new file); no statement, proof or name changed, except that exists_unitary_factorization_of_singularValues_eq was promoted from private to public because the split separates it from its users",
+      "direct_dependencies": [
+        "Mathlib",
+        "ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm.Basic"
+      ],
+      "blocked_dependencies": [],
+      "downstream_users": [],
+      "status": "staged",
+      "upstream_pr": null
+    },
+    {
+      "source_module": "ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm",
+      "source_declarations": [],
+      "current_namespace": "TauCeti.DavisKahanTheory",
+      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm.BlockSum",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm.BlockSum",
+      "ownership_class": "tauceti",
+      "roadmap_target": "unitarily-invariant-norm",
+      "provenance_class": "split out of the 2124-line RectangularUnitarilyInvariantNorm on 2026-07-28 to meet Tau Ceti's 1500-line hard ceiling (1000 for a new file); no statement, proof or name changed, except that exists_unitary_factorization_of_singularValues_eq was promoted from private to public because the split separates it from its users",
+      "direct_dependencies": [
+        "Mathlib",
+        "ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm.Majorization"
+      ],
+      "blocked_dependencies": [],
+      "downstream_users": [],
+      "status": "staged",
+      "upstream_pr": null
+    },
+    {
+      "source_module": "ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm",
+      "source_declarations": [],
+      "current_namespace": "TauCeti.DavisKahanTheory",
+      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm.Instances",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm.Instances",
+      "ownership_class": "tauceti",
+      "roadmap_target": "unitarily-invariant-norm",
+      "provenance_class": "split out of the 2124-line RectangularUnitarilyInvariantNorm on 2026-07-28 to meet Tau Ceti's 1500-line hard ceiling (1000 for a new file); no statement, proof or name changed, except that exists_unitary_factorization_of_singularValues_eq was promoted from private to public because the split separates it from its users",
+      "direct_dependencies": [
+        "Mathlib",
+        "ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm.BlockSum"
       ],
       "blocked_dependencies": [],
       "downstream_users": [],
