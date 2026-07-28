@@ -243,36 +243,9 @@ theorem reducingRestriction_isSelfAdjoint
     (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     (hred : A.ReducesSubspace U)
     (hA : A.IsSelfAdjoint) :
-    (reducingRestriction A U hred).IsSelfAdjoint := by
-  let R := reducingRestriction A U hred
-  rw [R.isSelfAdjoint_iff_toLinearPMap_adjoint_eq]
-  refine LinearPMap.ext_iff.mpr ⟨?_, ?_⟩
-  · ext y
-    change y ∈ R.toLinearPMap.adjoint.domain ↔ y ∈ R.domain
-    rw [mem_reducingRestriction_adjoint_domain_iff A U hred]
-    rw [hA.toLinearPMap_adjoint_eq]
-    rfl
-  · intro y hyAdj hyR
-    let yAdj : U := R.toLinearPMap.adjoint ⟨y, hyAdj⟩
-    let yAct : U := R.toLinearPMap ⟨y, hyR⟩
-    have hformal := LinearPMap.adjoint_isFormalAdjoint
-      R.toLinearPMap_dense ⟨y, hyAdj⟩
-    have hsymm := reducingRestriction_isSymmetric A U hred hA.isSymmetric
-    have hinner : (fun x : U => ⟪yAdj, x⟫_𝕜) =
-        fun x : U => ⟪yAct, x⟫_𝕜 := by
-      apply Continuous.ext_on R.dense_domain
-      · exact continuous_const.inner continuous_id
-      · exact continuous_const.inner continuous_id
-      · intro x hx
-        let xDom : R.domain := ⟨x, hx⟩
-        calc
-          ⟪yAdj, x⟫_𝕜 = ⟪y, R.toLinearPMap xDom⟫_𝕜 := by
-            simpa [yAdj, xDom] using hformal xDom
-          _ = ⟪yAct, x⟫_𝕜 := by
-            simpa [yAct, xDom, R] using (hsymm ⟨y, hyR⟩ xDom).symm
-    have hzero : ⟪yAdj - yAct, yAdj - yAct⟫_𝕜 = 0 := by
-      rw [inner_sub_left, congrFun hinner (yAdj - yAct), sub_self]
-    exact sub_eq_zero.mp (inner_self_eq_zero.mp hzero)
+    (reducingRestriction A U hred).IsSelfAdjoint :=
+  TauCeti.LinearPMap.reducingRestriction_isSelfAdjoint A.toLinearPMap U hred
+    A.toLinearPMap_dense hA
 
 end ClosedOperator
 end DavisKahanExt

@@ -383,6 +383,51 @@ def Extends (A B : E →ₗ.[𝕜] E) : Prop :=
 def IsSymmetric (A : E →ₗ.[𝕜] E) : Prop :=
   ∀ x y : A.domain, ⟪A x, (y : E)⟫_𝕜 = ⟪(x : E), A y⟫_𝕜
 
+/-- A self-adjoint partial map restricts to a self-adjoint partial map on every
+reducing subspace. -/
+theorem reducingRestriction_isSelfAdjoint
+    (A : E →ₗ.[𝕜] E) (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
+    [CompleteSpace E] [CompleteSpace U]
+    (hred : ReducesSubspace A U) (hDense : Dense (A.domain : Set E))
+    (hA : _root_.IsSelfAdjoint A) :
+    _root_.IsSelfAdjoint (reducingRestriction A U hred) := by
+  let R := reducingRestriction A U hred
+  change _root_.IsSelfAdjoint R
+  rw [LinearPMap.isSelfAdjoint_def] at hA ⊢
+  refine LinearPMap.ext_iff.mpr ⟨?_, ?_⟩
+  · ext y
+    change y ∈ R.adjoint.domain ↔ y ∈ R.domain
+    rw [show R = reducingRestriction A U hred by rfl,
+      mem_reducingRestriction_adjoint_domain_iff A U hred]
+    rw [hA]
+    rfl
+  · intro y hyAdj hyR
+    let yAdj : U := R.adjoint ⟨y, hyAdj⟩
+    let yAct : U := R ⟨y, hyR⟩
+    have hformal := LinearPMap.adjoint_isFormalAdjoint
+      (reducingRestriction_dense A U hred hDense) ⟨y, hyAdj⟩
+    have hAformal := LinearPMap.adjoint_isFormalAdjoint hDense
+    rw [hA] at hAformal
+    have hAsymm : IsSymmetric A := by
+      intro x z
+      exact hAformal x z
+    have hsymm := reducingRestriction_isSymmetric A U hred hAsymm
+    have hinner : (fun x : U => ⟪yAdj, x⟫_𝕜) =
+        fun x : U => ⟪yAct, x⟫_𝕜 := by
+      apply Continuous.ext_on (reducingRestriction_dense A U hred hDense)
+      · exact continuous_const.inner continuous_id
+      · exact continuous_const.inner continuous_id
+      · intro x hx
+        let xDom : R.domain := ⟨x, hx⟩
+        calc
+          ⟪yAdj, x⟫_𝕜 = ⟪y, R xDom⟫_𝕜 := by
+            simpa [yAdj, xDom] using hformal xDom
+          _ = ⟪yAct, x⟫_𝕜 := by
+            simpa [yAct, xDom, R] using (hsymm ⟨y, hyR⟩ xDom).symm
+    have hzero : ⟪yAdj - yAct, yAdj - yAct⟫_𝕜 = 0 := by
+      rw [inner_sub_left, congrFun hinner (yAdj - yAct), sub_self]
+    exact sub_eq_zero.mp (inner_self_eq_zero.mp hzero)
+
 /-- Graph norm associated with a partial linear map. -/
 noncomputable def graphNorm (A : E →ₗ.[𝕜] E) (x : A.domain) : ℝ :=
   Real.sqrt (‖(x : E)‖ ^ 2 + ‖A x‖ ^ 2)
