@@ -5,6 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.OperatorIdeal.UnitarilyInvariant.RectangularFamily
 import DavisKahan.SpectralTheory.ClosedOperator.Basic
+import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Sylvester
 import Mathlib.MeasureTheory.Measure.MeasureSpaceDef
 
 /-!
@@ -37,52 +38,62 @@ abbrev ClosedOperatorE :=
 abbrev ClosedOperatorF :=
   TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := F)
 
-/-- Lower semibound for a closed operator. -/
-def SemiboundedBelow
+/-- Compatibility facade for a lower semibound of the canonical partial map. -/
+abbrev SemiboundedBelow
     (A : ClosedOperatorE (𝕜 := 𝕜) (E := E)) (c : ℝ) : Prop :=
-  ∀ x : A.domain,
-    c * ‖(x : E)‖ ^ 2 ≤
-      RCLike.re ⟪A.toLinearMap x, (x : E)⟫_𝕜
+  TauCeti.LinearPMap.SemiboundedBelow A.toLinearPMap c
 
-/-- Upper semibound for a closed operator. -/
-def SemiboundedAbove
+/-- Compatibility facade for an upper semibound of the canonical partial map. -/
+abbrev SemiboundedAbove
     (A : ClosedOperatorE (𝕜 := 𝕜) (E := E)) (c : ℝ) : Prop :=
-  ∀ x : A.domain,
-    RCLike.re ⟪A.toLinearMap x, (x : E)⟫_𝕜 ≤
-      c * ‖(x : E)‖ ^ 2
+  TauCeti.LinearPMap.SemiboundedAbove A.toLinearPMap c
 
 omit [CompleteSpace E] in
 /-- A lower semibound remains valid after decreasing the constant. -/
 theorem SemiboundedBelow.mono
     {A : ClosedOperatorE (𝕜 := 𝕜) (E := E)} {c d : ℝ}
     (hA : SemiboundedBelow A c) (hdc : d ≤ c) :
-    SemiboundedBelow A d := by
-  intro x
-  exact (mul_le_mul_of_nonneg_right hdc (sq_nonneg ‖(x : E)‖)).trans (hA x)
+    SemiboundedBelow A d :=
+  TauCeti.LinearPMap.SemiboundedBelow.mono hA hdc
 
 omit [CompleteSpace E] in
 /-- An upper semibound remains valid after increasing the constant. -/
 theorem SemiboundedAbove.mono
     {A : ClosedOperatorE (𝕜 := 𝕜) (E := E)} {c d : ℝ}
     (hA : SemiboundedAbove A c) (hcd : c ≤ d) :
-    SemiboundedAbove A d := by
-  intro x
-  exact (hA x).trans
-    (mul_le_mul_of_nonneg_right hcd (sq_nonneg ‖(x : E)‖))
+    SemiboundedAbove A d :=
+  TauCeti.LinearPMap.SemiboundedAbove.mono hA hcd
 
-/-- Domain-aware equation `A X - X B = C` for two closed blocks.
+omit [CompleteSpace E] in
+/-- Rewrite a lower semibound through the historical `toLinearMap` field. -/
+theorem SemiboundedBelow.toLinearMap_bound
+    {A : ClosedOperatorE (𝕜 := 𝕜) (E := E)} {c : ℝ}
+    (hA : SemiboundedBelow A c) (x : A.domain) :
+    c * ‖(x : E)‖ ^ 2 ≤
+      RCLike.re ⟪A.toLinearMap x, (x : E)⟫_𝕜 := by
+  simpa only [
+    TauCeti.DavisKahanExt.ClosedOperator.toLinearPMap_apply] using hA x
 
-The domain transport is a named field rather than an existential nested inside
-the equation.  This is essential for spectral-cutoff composition and for the
-residual block identity in the unbounded sine theorem. -/
-structure ClosedSylvesterEquation
+omit [CompleteSpace E] in
+/-- Rewrite an upper semibound through the historical `toLinearMap` field. -/
+theorem SemiboundedAbove.toLinearMap_bound
+    {A : ClosedOperatorE (𝕜 := 𝕜) (E := E)} {c : ℝ}
+    (hA : SemiboundedAbove A c) (x : A.domain) :
+    RCLike.re ⟪A.toLinearMap x, (x : E)⟫_𝕜 ≤
+      c * ‖(x : E)‖ ^ 2 := by
+  simpa only [
+    TauCeti.DavisKahanExt.ClosedOperator.toLinearPMap_apply] using hA x
+
+/-- Compatibility facade for the canonical `LinearPMap` Sylvester equation.
+
+Closedness, dense domain, and self-adjointness are properties of `A.toLinearPMap`
+and `B.toLinearPMap`; the algebraic equation itself is no longer tied to the
+historical bundled representation. -/
+abbrev ClosedSylvesterEquation
     (A : ClosedOperatorE (𝕜 := 𝕜) (E := E))
     (B : ClosedOperatorF (𝕜 := 𝕜) (F := F))
-    (X C : F →L[𝕜] E) : Prop where
-  mapsTo_domain : A.MapsDomainTo B X
-  equation : ∀ x : B.domain,
-    A.toLinearMap ⟨X (x : F), mapsTo_domain x⟩ -
-      X (B.toLinearMap x) = C (x : F)
+    (X C : F →L[𝕜] E) : Prop :=
+  TauCeti.LinearPMap.SylvesterEquation A.toLinearPMap B.toLinearPMap X C
 
 /-- Compatibility name retained for the existing experimental theorem graph.
 
@@ -98,6 +109,29 @@ abbrev HasClosedSylvesterEquation
 namespace ClosedSylvesterEquation
 
 omit [CompleteSpace E] in
+/-- Rewrite the canonical partial-map equation through the historical
+`toLinearMap` fields.  The explicit output-domain witness may be any proof of
+the required membership; proof irrelevance identifies it with the witness
+stored by the canonical equation. -/
+theorem equation_toLinearMap
+    {A : ClosedOperatorE (𝕜 := 𝕜) (E := E)}
+    {B : ClosedOperatorF (𝕜 := 𝕜) (F := F)}
+    {X C : F →L[𝕜] E}
+    (h : HasClosedSylvesterEquation A B X C)
+    (x : B.domain) (hx : X (x : F) ∈ A.domain) :
+    A.toLinearMap ⟨X (x : F), hx⟩ - X (B.toLinearMap x) = C (x : F) := by
+  have heq := h.equation x
+  simp only [
+    TauCeti.DavisKahanExt.ClosedOperator.toLinearPMap_apply] at heq
+  have harg :
+      (⟨X (x : F), hx⟩ : A.domain) =
+        ⟨X (x : F), h.mapsTo_domain x⟩ := by
+    apply Subtype.ext
+    rfl
+  rw [harg]
+  exact heq
+
+omit [CompleteSpace E] in
 /-- Extract the operator-domain transport from a Sylvester equation. -/
 theorem mapsTo
     {A : ClosedOperatorE (𝕜 := 𝕜) (E := E)}
@@ -105,7 +139,7 @@ theorem mapsTo
     {X C : F →L[𝕜] E}
     (h : HasClosedSylvesterEquation A B X C) :
     A.MapsDomainTo B X :=
-  h.mapsTo_domain
+  TauCeti.LinearPMap.SylvesterEquation.mapsTo h
 
 omit [CompleteSpace E] in
 /-- A bounded Sylvester equation is a full-domain closed Sylvester equation. -/
@@ -131,13 +165,8 @@ omit [CompleteSpace E] in
 theorem zero
     (A : ClosedOperatorE (𝕜 := 𝕜) (E := E))
     (B : ClosedOperatorF (𝕜 := 𝕜) (F := F)) :
-    HasClosedSylvesterEquation A B 0 0 := by
-  refine ⟨?_, ?_⟩
-  · intro x
-    simp
-  · intro x
-    change A.toLinearMap (0 : A.domain) - 0 = (0 : E)
-    simp
+    HasClosedSylvesterEquation A B 0 0 :=
+  TauCeti.LinearPMap.SylvesterEquation.zero A.toLinearPMap B.toLinearPMap
 
 omit [CompleteSpace E] in
 /-- Domain-aware Sylvester equations add. -/
@@ -147,18 +176,8 @@ theorem add
     {X Y C D : F →L[𝕜] E}
     (hX : HasClosedSylvesterEquation A B X C)
     (hY : HasClosedSylvesterEquation A B Y D) :
-    HasClosedSylvesterEquation A B (X + Y) (C + D) := by
-  refine ⟨?_, ?_⟩
-  · intro x
-    exact A.domain.add_mem (hX.mapsTo_domain x) (hY.mapsTo_domain x)
-  · intro x
-    change A.toLinearMap
-        (⟨X (x : F), hX.mapsTo_domain x⟩ +
-          ⟨Y (x : F), hY.mapsTo_domain x⟩) -
-        (X (B.toLinearMap x) + Y (B.toLinearMap x)) =
-      C (x : F) + D (x : F)
-    rw [map_add, ← hX.equation x, ← hY.equation x]
-    abel
+    HasClosedSylvesterEquation A B (X + Y) (C + D) :=
+  TauCeti.LinearPMap.SylvesterEquation.add hX hY
 
 omit [CompleteSpace E] in
 /-- Domain-aware Sylvester equations are preserved by negation. -/
@@ -167,15 +186,8 @@ theorem neg
     {B : ClosedOperatorF (𝕜 := 𝕜) (F := F)}
     {X C : F →L[𝕜] E}
     (hX : HasClosedSylvesterEquation A B X C) :
-    HasClosedSylvesterEquation A B (-X) (-C) := by
-  refine ⟨?_, ?_⟩
-  · intro x
-    exact A.domain.neg_mem (hX.mapsTo_domain x)
-  · intro x
-    change A.toLinearMap (-⟨X (x : F), hX.mapsTo_domain x⟩) -
-        (-X (B.toLinearMap x)) = -C (x : F)
-    rw [map_neg, ← hX.equation x]
-    abel
+    HasClosedSylvesterEquation A B (-X) (-C) :=
+  TauCeti.LinearPMap.SylvesterEquation.neg hX
 
 omit [CompleteSpace E] in
 /-- Domain-aware Sylvester equations subtract. -/
@@ -185,8 +197,8 @@ theorem sub
     {X Y C D : F →L[𝕜] E}
     (hX : HasClosedSylvesterEquation A B X C)
     (hY : HasClosedSylvesterEquation A B Y D) :
-    HasClosedSylvesterEquation A B (X - Y) (C - D) := by
-  simpa [sub_eq_add_neg] using hX.add hY.neg
+    HasClosedSylvesterEquation A B (X - Y) (C - D) :=
+  TauCeti.LinearPMap.SylvesterEquation.sub hX hY
 
 omit [CompleteSpace E] in
 /-- Domain-aware Sylvester equations commute with scalar multiplication. -/
@@ -195,25 +207,16 @@ theorem smul
     {B : ClosedOperatorF (𝕜 := 𝕜) (F := F)}
     {X C : F →L[𝕜] E}
     (hX : HasClosedSylvesterEquation A B X C) (c : 𝕜) :
-    HasClosedSylvesterEquation A B (c • X) (c • C) := by
-  refine ⟨?_, ?_⟩
-  · intro x
-    exact A.domain.smul_mem c (hX.mapsTo_domain x)
-  · intro x
-    change A.toLinearMap (c • ⟨X (x : F), hX.mapsTo_domain x⟩) -
-        c • X (B.toLinearMap x) = c • C (x : F)
-    rw [map_smul, ← hX.equation x, smul_sub]
+    HasClosedSylvesterEquation A B (c • X) (c • C) :=
+  TauCeti.LinearPMap.SylvesterEquation.smul hX c
 
 end ClosedSylvesterEquation
 
-/-- A closed operator whose inverse is everywhere defined and bounded. -/
-structure HasBoundedEverywhereInverse
-    (A : ClosedOperatorE (𝕜 := 𝕜) (E := E)) where
-  inv : E →L[𝕜] E
-  inv_mapsTo_domain : ∀ y, inv y ∈ A.domain
-  apply_inv : ∀ y,
-    A.toLinearMap ⟨inv y, inv_mapsTo_domain y⟩ = y
-  inv_apply : ∀ x : A.domain, inv (A.toLinearMap x) = (x : E)
+/-- Compatibility facade for a bounded everywhere inverse of the canonical
+partial map. -/
+abbrev HasBoundedEverywhereInverse
+    (A : ClosedOperatorE (𝕜 := 𝕜) (E := E)) :=
+  TauCeti.LinearPMap.HasBoundedEverywhereInverse A.toLinearPMap
 
 namespace HasBoundedEverywhereInverse
 
@@ -222,22 +225,16 @@ omit [CompleteSpace E] in
 theorem injective
     {A : ClosedOperatorE (𝕜 := 𝕜) (E := E)}
     (hA : HasBoundedEverywhereInverse A) :
-    Function.Injective A.toLinearMap := by
-  intro x y hxy
-  apply Subtype.ext
-  calc
-    (x : E) = hA.inv (A.toLinearMap x) := (hA.inv_apply x).symm
-    _ = hA.inv (A.toLinearMap y) := congrArg hA.inv hxy
-    _ = (y : E) := hA.inv_apply y
+    Function.Injective A.toLinearMap :=
+  TauCeti.LinearPMap.HasBoundedEverywhereInverse.injective hA
 
 omit [CompleteSpace E] in
 /-- The operator action is onto the ambient Hilbert space. -/
 theorem surjective
     {A : ClosedOperatorE (𝕜 := 𝕜) (E := E)}
     (hA : HasBoundedEverywhereInverse A) :
-    Function.Surjective A.toLinearMap := by
-  intro y
-  exact ⟨⟨hA.inv y, hA.inv_mapsTo_domain y⟩, hA.apply_inv y⟩
+    Function.Surjective A.toLinearMap :=
+  TauCeti.LinearPMap.HasBoundedEverywhereInverse.surjective hA
 
 end HasBoundedEverywhereInverse
 end ExactSinTheta

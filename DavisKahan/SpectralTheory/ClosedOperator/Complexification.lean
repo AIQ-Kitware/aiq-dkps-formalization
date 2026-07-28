@@ -221,6 +221,45 @@ def complexify
       A.toLinearMap ⟨im (z : Eℂ), (mem_complexify_domain_iff A z).mp z.property |>.2⟩ :=
   rfl
 
+/-- Membership in the canonical partial-map domain of a complexified closed
+operator separates coordinatewise.  This is the `LinearPMap`-native form of
+`mem_complexify_domain_iff`, used while the historical bundle remains as a
+compatibility adapter. -/
+@[simp] theorem mem_complexify_toLinearPMap_domain_iff
+    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E))
+    (z : Eℂ) :
+    z ∈ (complexify A).toLinearPMap.domain ↔
+      re z ∈ A.toLinearPMap.domain ∧ im z ∈ A.toLinearPMap.domain := by
+  rfl
+
+/-- Real coordinate of a canonical partial-map domain vector. -/
+def domainRePMap
+    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E))
+    (z : (complexify A).toLinearPMap.domain) : A.toLinearPMap.domain :=
+  ⟨re (z : Eℂ),
+    (mem_complexify_toLinearPMap_domain_iff A z).mp z.property |>.1⟩
+
+/-- Imaginary coordinate of a canonical partial-map domain vector. -/
+def domainImPMap
+    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E))
+    (z : (complexify A).toLinearPMap.domain) : A.toLinearPMap.domain :=
+  ⟨im (z : Eℂ),
+    (mem_complexify_toLinearPMap_domain_iff A z).mp z.property |>.2⟩
+
+@[simp] theorem complexify_toLinearPMap_apply_re
+    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E))
+    (z : (complexify A).toLinearPMap.domain) :
+    re ((complexify A).toLinearPMap z) =
+      A.toLinearPMap (domainRePMap A z) :=
+  rfl
+
+@[simp] theorem complexify_toLinearPMap_apply_im
+    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E))
+    (z : (complexify A).toLinearPMap.domain) :
+    im ((complexify A).toLinearPMap z) =
+      A.toLinearPMap (domainImPMap A z) :=
+  rfl
+
 /-- Applying a closed operator depends only on the underlying vector, not on
 the domain-membership witness. -/
 theorem toLinearMap_congr
@@ -248,6 +287,29 @@ def ofRealDomain
     rw [complexify_apply_im, hR]
     exact (toLinearMap_congr (v := (0 : A.domain))
       (by simp [ofRealDomain])).trans (map_zero _)
+
+/-- The real copy of a canonical partial-map domain vector. -/
+def ofRealDomainPMap
+    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E))
+    (x : A.toLinearPMap.domain) : (complexify A).toLinearPMap.domain :=
+  ⟨ofReal (x : E), by simpa using x.property⟩
+
+@[simp] theorem complexify_toLinearPMap_apply_ofReal
+    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E))
+    (x : A.toLinearPMap.domain) :
+    (complexify A).toLinearPMap (ofRealDomainPMap A x) =
+      ofReal (A.toLinearPMap x) := by
+  refine RealComplexification.ext ?_ ?_
+  · rw [complexify_toLinearPMap_apply_re]
+    change A.toLinearPMap (domainRePMap A (ofRealDomainPMap A x)) =
+      A.toLinearPMap x
+    congr 1
+  · rw [complexify_toLinearPMap_apply_im]
+    change A.toLinearPMap (domainImPMap A (ofRealDomainPMap A x)) = 0
+    rw [show domainImPMap A (ofRealDomainPMap A x) = 0 by
+      apply Subtype.ext
+      simp [domainImPMap, ofRealDomainPMap]]
+    exact LinearPMap.map_zero A.toLinearPMap
 
 /-- The imaginary copy of a domain vector lies in the complexified domain. -/
 def ofImaginaryDomain
@@ -326,9 +388,12 @@ theorem mapsDomainTo_complexify
     (complexify A).MapsDomainTo (complexify B)
       (RealComplexification.complexify X) := by
   intro z
-  rw [mem_complexify_domain_iff]
-  exact ⟨hX ⟨re (z : Fℂ), (mem_complexify_domain_iff B z).mp z.property |>.1⟩,
-    hX ⟨im (z : Fℂ), (mem_complexify_domain_iff B z).mp z.property |>.2⟩⟩
+  rw [mem_complexify_toLinearPMap_domain_iff]
+  constructor
+  · rw [re_complexify]
+    exact hX (domainRePMap B z)
+  · rw [im_complexify]
+    exact hX (domainImPMap B z)
 
 /-- The domain-aware Sylvester equation complexifies coordinatewise. -/
 theorem closedSylvesterEquation_complexify
@@ -393,17 +458,19 @@ theorem isSymmetric_complexify
   intro z w
   apply Complex.ext
   · change
-      ⟪A.toLinearMap (domainRe A z), domainRe A w⟫_ℝ +
-        ⟪A.toLinearMap (domainIm A z), domainIm A w⟫_ℝ =
-      ⟪(domainRe A z : E), A.toLinearMap (domainRe A w)⟫_ℝ +
-        ⟪(domainIm A z : E), A.toLinearMap (domainIm A w)⟫_ℝ
-    rw [hA, hA]
+      ⟪A.toLinearPMap (domainRePMap A z), domainRePMap A w⟫_ℝ +
+        ⟪A.toLinearPMap (domainImPMap A z), domainImPMap A w⟫_ℝ =
+      ⟪(domainRePMap A z : E), A.toLinearPMap (domainRePMap A w)⟫_ℝ +
+        ⟪(domainImPMap A z : E), A.toLinearPMap (domainImPMap A w)⟫_ℝ
+    rw [hA (domainRePMap A z) (domainRePMap A w),
+      hA (domainImPMap A z) (domainImPMap A w)]
   · change
-      ⟪A.toLinearMap (domainRe A z), domainIm A w⟫_ℝ -
-        ⟪A.toLinearMap (domainIm A z), domainRe A w⟫_ℝ =
-      ⟪(domainRe A z : E), A.toLinearMap (domainIm A w)⟫_ℝ -
-        ⟪(domainIm A z : E), A.toLinearMap (domainRe A w)⟫_ℝ
-    rw [hA, hA]
+      ⟪A.toLinearPMap (domainRePMap A z), domainImPMap A w⟫_ℝ -
+        ⟪A.toLinearPMap (domainImPMap A z), domainRePMap A w⟫_ℝ =
+      ⟪(domainRePMap A z : E), A.toLinearPMap (domainImPMap A w)⟫_ℝ -
+        ⟪(domainImPMap A z : E), A.toLinearPMap (domainRePMap A w)⟫_ℝ
+    rw [hA (domainRePMap A z) (domainImPMap A w),
+      hA (domainImPMap A z) (domainRePMap A w)]
 
 /-- The real embedding of the domain is continuous.  `fun_prop` cannot see
 through the `WithLp` wrapper or the subtype, so this is proved by hand. -/
@@ -544,19 +611,22 @@ theorem realResolvent_mem_complexify
   refine ⟨RealComplexification.complexify R, ?_, ?_⟩
   · intro z
     apply RealComplexification.ext
-    · rw [re_complexify, re_sub, complexify_apply_re, re_complex_smul]
-      simpa [domainRe] using hleft (domainRe A z)
-    · rw [im_complexify, im_sub, complexify_apply_im, im_complex_smul]
-      simpa [domainIm] using hleft (domainIm A z)
+    · rw [re_complexify, re_sub, complexify_toLinearPMap_apply_re,
+        re_complex_smul]
+      simpa [domainRePMap] using hleft (domainRePMap A z)
+    · rw [im_complexify, im_sub, complexify_toLinearPMap_apply_im,
+        im_complex_smul]
+      simpa [domainImPMap] using hleft (domainImPMap A z)
   · intro w
     obtain ⟨hrdom, hr⟩ := hright (re w)
     obtain ⟨hidom, hi⟩ := hright (im w)
-    refine ⟨(mem_complexify_domain_iff A _).2 ⟨hrdom, hidom⟩, ?_⟩
+    refine ⟨(mem_complexify_toLinearPMap_domain_iff A _).2
+      ⟨hrdom, hidom⟩, ?_⟩
     apply RealComplexification.ext
-    · rw [re_sub, complexify_apply_re, re_complex_smul]
-      simpa using hr
-    · rw [im_sub, complexify_apply_im, im_complex_smul]
-      simpa using hi
+    · rw [re_sub, complexify_toLinearPMap_apply_re, re_complex_smul]
+      simpa [domainRePMap] using hr
+    · rw [im_sub, complexify_toLinearPMap_apply_im, im_complex_smul]
+      simpa [domainImPMap] using hi
 
 /-- A complex resolvent of the coordinatewise complexification descends to a
 real resolvent by restricting to the real copy and taking real coordinates. -/
@@ -577,15 +647,16 @@ theorem complexify_realResolvent_mem
         _ = ‖R‖ * ‖y‖ := by rw [ofReal.norm_map])
   refine ⟨Rr, ?_, ?_⟩
   · intro x
-    have hx := hleft (ofRealDomain A x)
-    rw [complexify_apply_ofReal] at hx
-    simpa [Rr, RrLinear, ofRealDomain] using congrArg re hx
+    have hx := hleft (ofRealDomainPMap A x)
+    rw [complexify_toLinearPMap_apply_ofReal] at hx
+    simpa [Rr, RrLinear, ofRealDomainPMap] using congrArg re hx
   · intro y
     obtain ⟨hdom, hy⟩ := hright (ofReal y)
-    refine ⟨(mem_complexify_domain_iff A (R (ofReal y))).mp hdom |>.1, ?_⟩
+    refine ⟨(mem_complexify_toLinearPMap_domain_iff A
+      (R (ofReal y))).mp hdom |>.1, ?_⟩
     have hre := congrArg re hy
-    rw [re_sub, complexify_apply_re, re_complex_smul] at hre
-    simpa [Rr, RrLinear] using hre
+    rw [re_sub, complexify_toLinearPMap_apply_re, re_complex_smul] at hre
+    simpa [Rr, RrLinear, domainRePMap] using hre
 
 /-- Real resolvent membership is exactly preserved by closed-operator
 complexification. -/

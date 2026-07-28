@@ -267,11 +267,12 @@ theorem closedSylvesterEquation_boundedRealization
       refine ⟨⟨X (u n), hEq.mapsTo_domain ⟨u n, hu_mem n⟩⟩, Prod.ext rfl ?_⟩
       show A.toLinearMap ⟨X (u n), hEq.mapsTo_domain ⟨u n, hu_mem n⟩⟩ =
         C (u n) + X (T (u n))
-      have heq := hEq.equation ⟨u n, hu_mem n⟩
+      have heq := ClosedSylvesterEquation.equation_toLinearMap hEq ⟨u n, hu_mem n⟩
+        (hEq.mapsTo_domain ⟨u n, hu_mem n⟩)
       have hval : A.toLinearMap
           ⟨X (u n), hEq.mapsTo_domain ⟨u n, hu_mem n⟩⟩ =
-          C (u n) + X (B.toLinearMap ⟨u n, hu_mem n⟩) := by
-        rw [← heq]; abel
+          C (u n) + X (B.toLinearMap ⟨u n, hu_mem n⟩) :=
+        sub_eq_iff_eq_add.mp heq
       rw [hval, hT ⟨u n, hu_mem n⟩]
     have hconv : Filter.Tendsto (fun n => (X (u n), C (u n) + X (T (u n))))
         Filter.atTop (nhds (X x, C x + X (T x))) := by

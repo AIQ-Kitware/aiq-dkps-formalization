@@ -59,6 +59,28 @@ class ParseTest(unittest.TestCase):
         self.assertEqual(result.diagnostics[0].body, ["context line"])
         self.assertEqual(len(result.synthetic_lines), 4)
 
+    def test_parse_lake_progress_counter(self) -> None:
+        self.assertEqual(MODULE.parse_lake_progress("[9117/9173] Building Foo"), (9117, 9173))
+        self.assertEqual(MODULE.parse_lake_progress("9117/9173 Building Foo"), (9117, 9173))
+        self.assertEqual(MODULE.parse_lake_progress("⏳ [12/30] Foo"), (12, 30))
+        self.assertIsNone(MODULE.parse_lake_progress("31/30 impossible"))
+
+    def test_noninteractive_progress_is_throttled(self) -> None:
+        stream = io.StringIO()
+        display = MODULE.LakeProgressDisplay(
+            enabled=True,
+            target_text="DavisKahan.All",
+            stream=stream,
+            color_enabled=False,
+            interactive=False,
+        )
+        for done in range(101):
+            display.update(done, 100)
+        lines = stream.getvalue().splitlines()
+        self.assertLessEqual(len(lines), 22)
+        self.assertIn("LAKE 0/100 DavisKahan.All", lines[0])
+        self.assertIn("LAKE 100/100 DavisKahan.All", lines[-1])
+
     def test_exact_deduplication(self) -> None:
         result = MODULE.parse_output(
             [
@@ -106,9 +128,12 @@ class ParseTest(unittest.TestCase):
             root = Path(temp)
             (root / "lakefile.toml").write_text("name = \"test\"\n")
 
-            def fake_run(command, actual_root):
+            def fake_run(command, actual_root, progress_callback=None):
                 self.assertEqual(actual_root, root)
                 target = command[-1]
+                if progress_callback is not None:
+                    progress_callback(1, 2)
+                    progress_callback(2, 2)
                 lines = [
                     "error: Test.lean:1:1: shared failure",
                     "same body",
@@ -151,6 +176,52 @@ class ParseTest(unittest.TestCase):
             self.assertEqual(patched.call_count, 1)
             command = patched.call_args.args[0]
             self.assertEqual(command[-2:], ["Target.One", "Target.Two"])
+
+    def test_default_text_progress_uses_nonquiet_lake(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            (root / "lakefile.toml").write_text("name = \"test\"\n")
+            with mock.patch.object(MODULE, "run_build", return_value=(0, [])) as patched:
+                with redirect_stdout(io.StringIO()), redirect_stderr(io.StringIO()):
+                    rc = MODULE.main([
+                        "--root", str(root), "--color=never", "Target.One",
+                    ])
+            self.assertEqual(rc, 0)
+            command = patched.call_args.args[0]
+            self.assertNotIn("-q", command)
+            self.assertNotIn("--quiet", command)
+
+    def test_no_progress_keeps_quiet_lake(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            (root / "lakefile.toml").write_text("name = \"test\"\n")
+            with mock.patch.object(MODULE, "run_build", return_value=(0, [])) as patched:
+                with redirect_stdout(io.StringIO()), redirect_stderr(io.StringIO()):
+                    rc = MODULE.main([
+                        "--root", str(root), "--color=never", "--no-progress",
+                        "Target.One",
+                    ])
+            self.assertEqual(rc, 0)
+            command = patched.call_args.args[0]
+            self.assertIn("-q", command)
+
+    def test_run_build_streams_carriage_return_progress(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            seen = []
+            code = (
+                "import sys; "
+                "sys.stdout.write('[1/3] one\\r[2/3] two\\r[3/3] done\\n'); "
+                "sys.stdout.flush()"
+            )
+            rc, lines = MODULE.run_build(
+                [sys.executable, "-c", code],
+                root,
+                lambda done, total: seen.append((done, total)),
+            )
+            self.assertEqual(rc, 0)
+            self.assertEqual(seen, [(1, 3), (2, 3), (3, 3)])
+            self.assertEqual(lines, ["[1/3] one", "[2/3] two", "[3/3] done"])
 
 
 if __name__ == "__main__":

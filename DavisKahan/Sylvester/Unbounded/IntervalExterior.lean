@@ -92,12 +92,21 @@ theorem semibounded_of_spectrum_subset_Icc
     have h := (abs_le.mp (key x)).1
     have hring : (β + α) / 2 * ‖(x : F)‖ ^ 2 -
         (α - β) / 2 * ‖(x : F)‖ ^ 2 = β * ‖(x : F)‖ ^ 2 := by ring
-    linarith
+    have hlegacy : β * ‖(x : F)‖ ^ 2 ≤
+        RCLike.re ⟪B.toLinearMap x, (x : F)⟫_ℂ := by
+      linarith
+    simpa only [
+      TauCeti.DavisKahanExt.ClosedOperator.toLinearPMap_apply] using hlegacy
   · intro x
     have h := (abs_le.mp (key x)).2
     have hring : (β + α) / 2 * ‖(x : F)‖ ^ 2 +
         (α - β) / 2 * ‖(x : F)‖ ^ 2 = α * ‖(x : F)‖ ^ 2 := by ring
-    linarith
+    have hlegacy :
+        RCLike.re ⟪B.toLinearMap x, (x : F)⟫_ℂ ≤
+          α * ‖(x : F)‖ ^ 2 := by
+      linarith
+    simpa only [
+      TauCeti.DavisKahanExt.ClosedOperator.toLinearPMap_apply] using hlegacy
 
 /-- **Davis--Kahan Theorem 5.2, interval/exterior, exterior block on the
 left, genuine spectra.**  For closed self-adjoint `A`, `B` with the

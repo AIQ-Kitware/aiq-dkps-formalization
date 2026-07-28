@@ -99,9 +99,6 @@ private theorem hasClosedSylvesterEquation_of_tensorGenerator
             Spectra.HilbertSchmidtTensor.toOperator z
               (Spectra.OneParameterUnitaryGroup.generator V xV) := by
                 rw [hAapply, hBapply]
-                -- The two domain elements carry the same vector under
-                -- different membership proofs.
-                congr 2
       _ = Spectra.HilbertSchmidtTensor.toOperator c (x : F) := heq
 
 /-- Defect-first square-norm estimate, reduced to the vector spectral gap of

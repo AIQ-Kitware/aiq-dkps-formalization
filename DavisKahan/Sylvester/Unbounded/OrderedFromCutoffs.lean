@@ -373,7 +373,7 @@ theorem interfaceDoubleCutoff_sylvester_equation
     rw [hTAPA, hPAPAx, sub_self, smul_zero, add_zero]
     rw [hTAcut]
     exact hAcomm
-  have heq := hEq.equation ⟨PB x, hPBdom⟩
+  have heq := ClosedSylvesterEquation.equation_toLinearMap hEq ⟨PB x, hPBdom⟩ hXdom
   have heqPA := congrArg PA heq
   change
     interfaceFilledTruncation PAi TAi a τA (PA (X (PB x))) -
