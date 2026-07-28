@@ -35,20 +35,6 @@ universe v
 variable {H : Type v}
   [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
 
-private theorem doubleCosineDenominator_pos_ideal
-    (U V : Submodule ℂ H)
-    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hquarter : IsQuarterAcute U V) :
-    0 < 1 - 2 * directedGap U V ^ 2 := by
-  have hglt : directedGap U V < Real.sqrt 2 / 2 :=
-    lt_of_le_of_lt (directedGap_le_subspaceGap U V) hquarter
-  have hg0 : 0 ≤ directedGap U V := by
-    rw [show directedGap U V =
-      ‖Vᗮ.starProjection ∘L U.starProjection‖ from rfl]
-    exact norm_nonneg _
-  have h2 : (Real.sqrt 2) ^ 2 = 2 := Real.sq_sqrt (by norm_num)
-  nlinarith
-
 /-- The ideal-theoretic tangent-two-theta companion of the reflected
 complementary overlap block. -/
 noncomputable def tanTwoThetaIdealBlock
@@ -138,7 +124,7 @@ theorem tanTwoTheta_addBounded_gauge_of_spectrum_gap
   have htan := tanTwoThetaIdealBlock_mem_and_gauge_le
     N U V hquarter hsin.1
   have hden : 0 < 1 - 2 * directedGap U V ^ 2 :=
-    doubleCosineDenominator_pos_ideal U V hquarter
+    doubleCosineDenominator_pos U V hquarter
   refine ⟨htan.1, ?_⟩
   calc
     δ * N.gauge (tanTwoThetaIdealBlock U V hquarter) ≤
