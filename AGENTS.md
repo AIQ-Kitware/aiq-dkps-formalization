@@ -97,7 +97,13 @@ DavisKahan  ←────┘   (DavisKahan / paper may import ForTauCeti)
 - `DavisKahan` remains its own package and the paper-facing home of the work; it
   may consume `ForTauCeti`.
 - `vendor/Spectra` is an accepted temporary production dependency. The final
-  migration target removes Spectra from the normal build.
+  migration target removes Spectra from the normal build. That removal now has a
+  measured surface and an execution contract — read
+  [`dev/tauceti/spectra-removal-plan.md`](dev/tauceti/spectra-removal-plan.md)
+  and its ledger
+  [`dev/tauceti/spectra-to-tauceti-port-ledger.md`](dev/tauceti/spectra-to-tauceti-port-ledger.md)
+  before doing Spectra-facing work, and **do not re-measure the surface by
+  counting import lines**; it is 61 declarations, generated and drift-gated.
 - **Do not commit the `external/TauCeti` submodule pointer yet.** Stage
   everything in `ForTauCeti`; `scripts/export_for_tauceti.py` reproduces the
   `TauCeti/` copy on demand at submission time. `external/Spectra` and
@@ -252,9 +258,17 @@ remain owned by this repository.
   modifying Spectra.
 - Import the narrowest required Spectra modules; never import the root
   `Spectra` module.
+- **Never declare into `namespace Spectra` (or any `Spectra.*` sub-namespace)
+  from outside `vendor/`.** A DKPS theorem parked in the donor's namespace
+  becomes indistinguishable from donor material the moment the imports are
+  removed, and the attribution ledger then credits Spectra for our work. Two
+  files currently violate this and are being repaired under phase S0 of the
+  removal plan.
 
 See [`dev/spectra-integration-survey-2026-07-14.md`](dev/spectra-integration-survey-2026-07-14.md)
-for the audited capability map, ownership boundary, and contribution plan.
+for the audited capability map, ownership boundary, and contribution plan, and
+[`dev/tauceti/spectra-removal-plan.md`](dev/tauceti/spectra-removal-plan.md) for
+how the dependency is actually being retired.
 <!-- END Spectra collaboration policy -->
 
 ## Lean source conventions

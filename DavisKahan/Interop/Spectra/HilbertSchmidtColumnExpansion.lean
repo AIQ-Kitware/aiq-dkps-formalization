@@ -29,23 +29,39 @@ series converges to the original tensor.  Instead it proceeds as follows:
 
 ## Why this lives under `Interop`
 
-Every statement here is *about* `Spectra.HilbertSchmidtTensor.Space`, and each is declared
-into Spectra's own namespace with a `mathAhead_` prefix, so the module cannot exist without
-`vendor/Spectra` and is not production mathematics.  It was under
+Every statement here is *about* `Spectra.HilbertSchmidtTensor.Space`, so the module cannot
+exist without `vendor/Spectra` and is not production mathematics.  It was under
 `DavisKahan/Alternative/OperatorIdeal/HilbertSchmidt/` until 2026-07-28, where rule 7 of
 `scripts/check_dependency_layers.py` flagged it as production code importing Spectra and it
 had to be carried on the ratcheting allowlist.  `DavisKahan/Interop/Spectra/` is where the
 rule expects Spectra-facing code, so the allowlist entry is gone rather than merely
 tolerated.
+
+## Why these theorems are *not* in Spectra's namespace
+
+Until 2026-07-28 the eleven `mathAhead_*` theorems below were declared into
+`namespace Spectra.HilbertSchmidtTensor`, on the reasoning that they are statements about
+Spectra's object.  They are nonetheless **ours**, and `vendor/Spectra` is being retired from
+the build (`dev/tauceti/spectra-removal-plan.md`): once the imports are gone, a theorem
+sitting in the donor's namespace is indistinguishable from donor material, and the
+attribution ledger would credit Spectra for our work.  They now live in `SpectraBridge` with
+every other module under `DavisKahan/Interop/Spectra/`.  Statements and proofs are
+unchanged; only the enclosing namespace moved.
 -/
 
 open scoped InnerProductSpace ComplexConjugate BigOperators
-
-namespace Spectra.HilbertSchmidtTensor
-
--- `HilbertTensor` is `Spectra.HilbertTensor`, so its scoped notation can only be
--- opened once the `Spectra` namespace is entered.
 open scoped Spectra.HilbertTensor
+
+-- The short names below (`Space`, `toOperator`, `columnTensor`, …) resolved implicitly
+-- while this block sat inside `namespace Spectra.HilbertSchmidtTensor`; from our own
+-- namespace they have to be opened.
+open Spectra.HilbertSchmidtTensor
+open Spectra (HilbertTensor Conj)
+
+namespace TauCeti
+namespace DavisKahan
+namespace Experimental
+namespace SpectraBridge
 
 noncomputable section
 
@@ -276,4 +292,7 @@ theorem mathAhead_existsUnique_tensor_iff_summable_columns
 
 end
 
-end Spectra.HilbertSchmidtTensor
+end SpectraBridge
+end Experimental
+end DavisKahan
+end TauCeti
