@@ -70,10 +70,12 @@ Ownership classes: `mathlib` · `tauceti` · `davis-kahan` · `spectra-bridge` �
   `KyFanDominantIdealFamily`), sine-theta UI-norm layer.
 
 ### 1b. Orthogonal block sums / column reconstruction
-* **Home**: `DavisKahan/OperatorIdeal/ApproximationNumbers/BlockSum.lean`,
-  `DavisKahan/Alternative/OperatorIdeal/HilbertSchmidt/ColumnExpansion.lean`.
+* **Home**: `DavisKahan/OperatorIdeal/ApproximationNumbers/BlockSum.lean`.
+  (The `Alternative/…/ColumnExpansion.lean` half moved to
+  `DavisKahan/Interop/Spectra/HilbertSchmidtColumnExpansion.lean` on 2026-07-28:
+  it is about Spectra's tensor space and is not part of this cluster.)
 * **Ownership**: `tauceti`. **Final**: `TauCeti/Analysis/OperatorIdeal/ApproximationNumber/BlockSum.lean`.
-* **Status (updated 2026-07-28)**: `needs-api-refactor`. The
+* **Status (updated 2026-07-28)**: `needs-api-refactor`, and *only* that. The
   `blocked-on-spectra-removal` half is **gone**: the Spectra bridge that
   `BlockSum.lean` imported has been deleted, its content staged as
   `ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/FiniteRestriction.lean`,
@@ -82,12 +84,16 @@ Ownership classes: `mathlib` · `tauceti` · `davis-kahan` · `spectra-bridge` �
   `DavisKahan.Sources…SingularValueTransport`, a backwards dependency from the
   generic layer into the source layer, which is an API-shape problem and not a
   Spectra one.
-* **Blocker (precise)**: the `Sources…SingularValueTransport` import only. The
-  former blocker
-  `SpectraBridge.lt_approximationNumber_iff_exists_finiteDimensional_lowerBound`
-  is now `ContinuousLinearMap.lt_approximationNumber_iff_exists_finiteDimensional_lowerBound`,
-  staged and proved from Mathlib's continuous functional calculus.
-* **PR order**: after PR 1/2.
+* **Blocker: none, as of 2026-07-28.** Both recorded obstacles are gone. The
+  Spectra bridge was deleted and its content staged; the
+  `Sources…SingularValueTransport` import was there for one relation, now staged
+  as `ContinuousLinearMap.HasSameApproximationNumbers` in
+  `ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/SameSequence.lean`. An
+  import-closure walk confirms `BlockSum.lean` reaches neither `Spectra` nor
+  `DavisKahan.Sources`.
+* **PR order**: with PR 1/2. The remaining work is the API refactor the status
+  line has always named — the module still defines its own block-sum vocabulary
+  rather than reusing a staged one — not a dependency obstruction.
 
 ### 1c. Reusable Hilbert–Schmidt identities
 * **Home**: `ForTauCeti/Analysis/InnerProductSpace/{OrthogonalSeries,HilbertSchmidtEnergy}.lean`

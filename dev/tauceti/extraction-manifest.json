@@ -33,7 +33,8 @@
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.KyFan",
         "ForTauCeti.Analysis.OperatorIdeal.Family.KyFan",
         "ForTauCeti.Analysis.OperatorIdeal.Family.TraceClass",
-        "ForTauCeti.Analysis.OperatorIdeal.Family.KyFanDominance"
+        "ForTauCeti.Analysis.OperatorIdeal.Family.KyFanDominance",
+        "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.SameSequence"
       ]
     },
     {
@@ -1832,6 +1833,29 @@
       ],
       "blocked_dependencies": [],
       "downstream_users": [],
+      "status": "staged",
+      "upstream_pr": null
+    },
+    {
+      "source_module": "DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SingularValueTransport",
+      "source_declarations": [
+        "TauCeti.DavisKahan.Experimental.ExactSinTheta.SameApproximationSingularSequence"
+      ],
+      "current_namespace": "ContinuousLinearMap",
+      "staging_module": "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.SameSequence",
+      "final_tauceti_module": "TauCeti.Analysis.OperatorIdeal.ApproximationNumber.SameSequence",
+      "ownership_class": "tauceti",
+      "roadmap_target": "approximation-numbers",
+      "provenance_class": "copied and renamespaced 2026-07-28: the heterogeneous same-approximation-numbers relation, extracted so that DavisKahan/OperatorIdeal/ApproximationNumbers/BlockSum.lean no longer imports the source layer -- the last recorded obstacle to extraction cluster 1b",
+      "direct_dependencies": [
+        "Mathlib",
+        "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.KyFan"
+      ],
+      "blocked_dependencies": [],
+      "downstream_users": [
+        "DavisKahan.OperatorIdeal.ApproximationNumbers.BlockSum",
+        "DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SingularValueTransport"
+      ],
       "status": "staged",
       "upstream_pr": null
     }
