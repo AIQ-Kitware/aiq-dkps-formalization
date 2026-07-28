@@ -1,6 +1,6 @@
 # U1 execution contract: migrate unbounded operators to `LinearPMap`
 
-Status: **ACTIVE / CLAIMED by jon (namek), 2026-07-27**.
+Status: **ACTIVE / CLAIMED by jon (toothbrush), 2026-07-28**.
 
 This document is an implementation contract. It replaces the previous habit of
 calling the closed-operator convergence problem "design-stage" after the
@@ -75,6 +75,28 @@ final abstraction. Direct importers include reducing restrictions, closed
 Sylvester equations, genuine-spectrum estimates, and Spectra interoperability.
 Record the exact current consumer count before the first implementation commit
 and after every phase.
+
+## Live inventory and migration log
+
+The 2026-07-28 production census found no `ClosedOperator` reference in
+`ForTauCeti`: its reusable closedness, domain, extension, graph-norm, and
+Sylvester APIs are already the dependency-clean
+`TauCeti.LinearPMap` declarations in
+`ForTauCeti/Analysis/InnerProductSpace/LinearPMap/{Closed,Sylvester}.lean`.
+The remaining non-experimental references divide as follows:
+
+| Family | Classification | Canonical implementation | Remaining bundle boundary / deletion condition |
+| --- | --- | --- | --- |
+| domain, extension, graph-norm, semibound, and closed-Sylvester algebra | missing reusable result, now migrated | `TauCeti.LinearPMap` in `ForTauCeti` | `ClosedOperator` declarations are compatibility facades; move the bundle behind the interop module once direct consumers no longer import its current home |
+| pairwise spectral separation and homogeneous uniqueness | Spectra-dependent downstream result | `LinearPMap.GenuinePairwiseSpectrumGap` and `linearPMapSylvester_*` in `DavisKahan/Sylvester` | `GenuinePairwiseSpectrumGap` remains only for seven source/audit consumers until their paper data records accept raw partial maps; it is reducible to the canonical predicate and its three old uniqueness theorems delegate to the raw proofs |
+| PVM, spectral restriction, cutoff, real-spectrum, and complexification bridges | Spectra/PVM boundary | none yet; depends on Spectra spectral-calculus APIs | retain downstream and list the exact Spectra import at each bridge; not a reason to retain the bundle in unrelated Sylvester or Riccati mathematics |
+| reducing restrictions and Riccati transport | production consumers still needing migration | `TauCeti.LinearPMap` closed/domain API | convert after the closed-Sylvester family; their current bundled constructions must be replaced rather than wrapped permanently |
+
+The pairwise canonical form cannot move into `ForTauCeti` yet: it depends on
+`Spectra.Resolvent.spectrum` and the separated-intertwiner theorem.  Its exact
+blocker is therefore Spectra's spectrum/intertwiner API, not any missing
+`LinearPMap` domain machinery.  The next U1 slice is the remaining closed
+Sylvester estimates, followed by reducing restrictions and Riccati inputs.
 
 ## Phase U1.0: declaration inventory
 
