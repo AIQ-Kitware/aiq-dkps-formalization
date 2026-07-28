@@ -6,6 +6,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 import DavisKahan.Interop.Spectra.SpectralRestrictionLocalization
 import DavisKahan.SinTheta.Unbounded.SpectrumGap
 import Spectra.Operator.KatoRellich
+import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
 
 /-!
 # Bounded-perturbation adapter for the unbounded sine-theta theorem
@@ -139,7 +140,7 @@ theorem sinTheta_addBounded_opNorm_of_spectrum_gap
     {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
     (hA₀low : SemiboundedBelow A₀ β) (hA₀high : SemiboundedAbove A₀ α)
     (hΛspec : ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
-      lam ∉ Spectra.Resolvent.spectrum Λ₁.toLinearPMap) :
+      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum Λ₁.toLinearPMap) :
     δ * ‖X.adjoint ∘L F₁‖ ≤ ‖V‖ := by
   let D := boundedPerturbationSinThetaData A V A₀ Λ₁ X F₁
     hXdom hXintertwines hF₁dom hF₁intertwines
@@ -175,7 +176,7 @@ theorem sinTheta_addBounded_opNorm_of_spectrum_gap_isometric
     {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
     (hA₀low : SemiboundedBelow A₀ β) (hA₀high : SemiboundedAbove A₀ α)
     (hΛspec : ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
-      lam ∉ Spectra.Resolvent.spectrum Λ₁.toLinearPMap) :
+      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum Λ₁.toLinearPMap) :
     δ * ‖X.adjoint ∘L F₁‖ ≤ ‖V‖ := by
   exact sinTheta_addBounded_opNorm_of_spectrum_gap A hA V hV
     A₀ hA₀ Λ₁ hΛ₁ X F₁ hXdom hXintertwines hF₁dom hF₁intertwines
@@ -221,7 +222,7 @@ theorem sinTheta_addBounded_spectralSubspaces_opNorm_of_spectrum_gap
     (hA₀high : SemiboundedAbove
       (selfAdjointSpectralRestriction A hA B hB) α)
     (hΛspec : ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
-      lam ∉ Spectra.Resolvent.spectrum
+      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum
         (selfAdjointSpectralRestriction (A.addBounded V)
           (addBounded_isSelfAdjoint A hA V hV) T hT).toLinearPMap) :
     δ * ‖(selfAdjointSpectralSubspaceInclusion A hA B hB).adjoint ∘L

@@ -7,6 +7,7 @@ import DavisKahan.Sylvester.PairwiseHomogeneousUniqueness
 import DavisKahan.Sources.DavisKahan1970.Sylvester.HilbertSchmidtDefectFirst
 import Spectra.Spaces.Tensor.HilbertSchmidtSpectralGap
 import Spectra.QuantumMechanics.BornRule.Observable
+import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
 
 /-!
 # Pairwise-gap square-norm Sylvester theorem
@@ -53,17 +54,20 @@ private theorem pairwiseScalarSupportGap_of_spectra
   intro u v lam hlam alpha halpha
   let AO : SelfAdjointOperator E := ⟨A.toLinearPMap, hA⟩
   let BO : SelfAdjointOperator F := ⟨B.toLinearPMap, hB⟩
-  have hlamSpec : lam ∈ Spectra.Resolvent.spectrum A.toLinearPMap := by
+  have hlamSpec : (lam : ℂ) ∈ TauCeti.LinearPMap.spectrum A.toLinearPMap := by
     have hsupp := bornMeasure_support_subset_spectrum AO u
     exact hsupp (by
       simpa [AO, bornMeasure,
         SelfAdjointOperator.spectralPVM] using hlam)
-  have halphaSpec : alpha ∈ Spectra.Resolvent.spectrum B.toLinearPMap := by
+  have halphaSpec : (alpha : ℂ) ∈ TauCeti.LinearPMap.spectrum B.toLinearPMap := by
     have hsupp := bornMeasure_support_subset_spectrum BO v
     exact hsupp (by
       simpa [BO, bornMeasure,
         SelfAdjointOperator.spectralPVM] using halpha)
-  exact hgap lam hlamSpec alpha halphaSpec
+  -- `hgap` now measures separation in `ℂ`; on real points that is the real
+  -- absolute value, via `‖(x : ℂ)‖ = |x|`.
+  have h := hgap (lam : ℂ) hlamSpec (alpha : ℂ) halphaSpec
+  rwa [← Complex.ofReal_sub, Complex.norm_real, Real.norm_eq_abs] at h
 
 /-- The defect tensor has the vector spectral gap dictated by the pairwise
 separation of the original spectra.  In fact the tensor flow has this gap at
@@ -131,9 +135,20 @@ theorem paperHilbertSchmidt_sylvester_real_le_of_pairwiseSpectrumGap_direct
       (ClosedOperatorComplexification.complexify A)
       (ClosedOperatorComplexification.complexify B) δ := by
     intro lam hlam α hα
-    apply hgap lam _ α _
-    · rwa [ClosedOperatorComplexification.realSpectrum_complexify A]
-    · rwa [ClosedOperatorComplexification.realSpectrum_complexify B]
+    -- The canonical spectrum lives in `ℂ`; `hgap` constrains only real points, so
+    -- first use self-adjointness to see that there are no others.
+    obtain ⟨lr, -, rfl⟩ :=
+      SpectraBridge.spectrum_subset_real_of_isSelfAdjoint
+        (ClosedOperatorComplexification.isSelfAdjoint_complexify hA) hlam
+    obtain ⟨ar, -, rfl⟩ :=
+      SpectraBridge.spectrum_subset_real_of_isSelfAdjoint
+        (ClosedOperatorComplexification.isSelfAdjoint_complexify hB) hα
+    have h := hgap lr (by
+        rwa [ClosedOperatorComplexification.realSpectrum_complexify A,
+          Set.mem_preimage]) ar (by
+        rwa [ClosedOperatorComplexification.realSpectrum_complexify B,
+          Set.mem_preimage])
+    rwa [← Complex.ofReal_sub, Complex.norm_real, Real.norm_eq_abs]
   have hCcomplex : IsPaperHilbertSchmidt
       (RealComplexification.complexify C) :=
     (isPaperHilbertSchmidt_complexify_iff C).2 hC

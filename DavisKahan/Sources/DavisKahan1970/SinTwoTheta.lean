@@ -6,6 +6,7 @@ Authors: Jon Crall, Claude Fable 5
 import DavisKahan.BoundedOperator.Reflection
 import DavisKahan.DoubleAngle.UnboundedIdeal
 import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SingularValueTransport
+import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
 
 /-!
 # Literal Davis--Kahan 1970 Section 7 sine-double-angle surface
@@ -165,7 +166,7 @@ theorem unbounded_sinTwoTheta_uiNorm_representative
     (hBhigh : SemiboundedAbove
       (selfAdjointSpectralRestriction A hA B hB) α)
     (hBcomplSpec : ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
-      lam ∉ Spectra.Resolvent.spectrum
+      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum
         (selfAdjointSpectralRestriction A hA Bᶜ hB.compl).toLinearPMap)
     (hEmem : N.Mem E)
     (sinTwoTheta₀ : PaperSinThetaRepresentative
@@ -202,7 +203,7 @@ theorem unbounded_sinTwoTheta_residual_uiNorm_representative
     (hBhigh : SemiboundedAbove
       (selfAdjointSpectralRestriction A hA B hB) α)
     (hBcomplSpec : ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
-      lam ∉ Spectra.Resolvent.spectrum
+      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum
         (selfAdjointSpectralRestriction A hA Bᶜ hB.compl).toLinearPMap)
     (hJdom : ∀ x : A.domain, V.reflectionOperator (x : H) ∈ A.domain)
     (hJintertwines : ∀ x : A.domain,

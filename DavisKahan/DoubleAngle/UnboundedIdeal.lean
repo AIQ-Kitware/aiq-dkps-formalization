@@ -6,6 +6,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
 import DavisKahan.DoubleAngle.Unbounded
 import DavisKahan.Interop.Spectra.BoundedPerturbationSinThetaIdeal
+import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
 
 /-!
 # Ideal-gauge unbounded sine two theta
@@ -153,7 +154,7 @@ theorem sinTwoTheta_reflectionResidual_gauge_of_spectrum_gap
     (hBhigh : SemiboundedAbove
       (selfAdjointSpectralRestriction A hA B hB) α)
     (hBcomplSpec : ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
-      lam ∉ Spectra.Resolvent.spectrum
+      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum
         (selfAdjointSpectralRestriction A hA Bᶜ hB.compl).toLinearPMap)
     (hJdom : ∀ x : A.domain, V.reflectionOperator (x : H) ∈ A.domain)
     (hJintertwines : ∀ x : A.domain,
@@ -267,7 +268,7 @@ theorem sinTwoTheta_reflectionResidual_gauge_of_spectrum_gap
     intro y
     rfl
   have hΛJspec : ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
-      lam ∉ Spectra.Resolvent.spectrum ΛJ.toLinearPMap := by
+      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum ΛJ.toLinearPMap := by
     intro lam hlam
     rw [unitaryConjugate_spectrum_eq e Λ hΛ]
     exact hBcomplSpec lam hlam
@@ -328,7 +329,7 @@ theorem sinTwoTheta_addBounded_gauge_of_spectrum_gap
     (hBhigh : SemiboundedAbove
       (selfAdjointSpectralRestriction A hA B hB) α)
     (hBcomplSpec : ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
-      lam ∉ Spectra.Resolvent.spectrum
+      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum
         (selfAdjointSpectralRestriction A hA Bᶜ hB.compl).toLinearPMap)
     (hEmem : N.Mem E) :
     N.Mem (sinTwoThetaIdealBlock
@@ -397,7 +398,7 @@ theorem sinTwoTheta_addBounded_unitaryInvariant_of_spectrum_gap
     (hBhigh : SemiboundedAbove
       (selfAdjointSpectralRestriction A hA B hB) α)
     (hBcomplSpec : ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
-      lam ∉ Spectra.Resolvent.spectrum
+      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum
         (selfAdjointSpectralRestriction A hA Bᶜ hB.compl).toLinearPMap)
     (hEmem : N.Mem E) :
     N.Mem (sinTwoThetaIdealBlock
@@ -454,7 +455,7 @@ theorem sinTwoTheta_reflectionResidual_of_spectrum_gap
     (hBhigh : SemiboundedAbove
       (selfAdjointSpectralRestriction A hA B hB) α)
     (hBcomplSpec : ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
-      lam ∉ Spectra.Resolvent.spectrum
+      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum
         (selfAdjointSpectralRestriction A hA Bᶜ hB.compl).toLinearPMap)
     (hJdom : ∀ x : A.domain, V.reflectionOperator (x : H) ∈ A.domain)
     (hJintertwines : ∀ x : A.domain,
@@ -482,7 +483,7 @@ theorem sinTwoTheta_addBounded_of_spectrum_gap
     (hBhigh : SemiboundedAbove
       (selfAdjointSpectralRestriction A hA B hB) α)
     (hBcomplSpec : ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
-      lam ∉ Spectra.Resolvent.spectrum
+      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum
         (selfAdjointSpectralRestriction A hA Bᶜ hB.compl).toLinearPMap) :
     δ * ‖sinTwoAngleOperatorC
         (selfAdjointSpectralSubspace A hA B hB)

@@ -24,8 +24,8 @@ proof architecture came from Spectra.
 
 | | |
 |---|---|
-| port surface | **57 constants**, 25 donor modules (was 61 / 27 before S0) |
-| consumers | **173 declarations**, all under `DavisKahan/**` |
+| port surface | **56 constants**, 25 donor modules (was 61 / 27 before S0) |
+| consumers | **97 declarations** (was 178), all under `DavisKahan/**` |
 | `ForTauCeti` / `ForMathlib` | **already entirely Spectra-free** |
 | vendored tree | 464 modules; 152 in the production closure; 27 referenced |
 | default build | 9290 jobs green |
@@ -228,12 +228,41 @@ sites across ten modules. Renaming them is a naming-audit sweep that would
 collide with edward's active naming rows, so it is a follow-on, not part of the
 dependency removal. Tracked below under "Follow-ons".
 
-### S2 — Cluster A core, 22 constants, 31 consumer modules
+### S2 — Cluster A core, 22 constants, 31 consumer modules — **step 1 DONE**
 
 Under the S0 decision. Order inside the cluster:
 
-1. `Resolvent/Spectrum.lean` — 90 lines, 2 definitions, 2 lemmas. This is the
-   75-use block. Re-home to a canonical Tau Ceti location.
+1. **`Resolvent/Spectrum.lean` — DONE 2026-07-28.** Re-homed to
+   `ForTauCeti/Analysis/InnerProductSpace/LinearPMap/Resolvent.lean` as
+   `TauCeti.LinearPMap.{resolventSet,spectrum}`, `Set 𝕜` per the S0 decision,
+   generalised from `ℂ`/inner-product to `NontriviallyNormedField`/normed space
+   (nothing in the definitions used the inner product). **Consumers 173 → 97**;
+   `spectrum` went from 75 uses in 26 modules to 0.
+
+   Three things worth knowing before the next cluster:
+
+   - **The faithful translation of a real-set inclusion is the *preimage*, not the
+     image.** `spectrum A ⊆ Set.Icc β α` over `Set ℝ` becomes
+     `Complex.ofReal ⁻¹' spectrum A ⊆ Set.Icc β α`, not
+     `spectrum A ⊆ Complex.ofReal '' Set.Icc β α`. The image form silently asserts
+     the spectrum is real, which *strengthens hypotheses* (weakening the theorem)
+     and makes conclusions unprovable. I wrote the image form first and it broke
+     `Sylvester/Unbounded/LegacyGap.lean` — correctly, because that implication
+     genuinely needs realness.
+   - **One place does need realness**, and it is where a `Set ℂ` gap predicate is
+     built from a real-points hypothesis
+     (`Sources/.../HilbertSchmidtPairwise.lean`). The canonical statement
+     `spectrum_subset_real_of_isSelfAdjoint` now lives in
+     `Interop/Spectra/RealSpectrumBridge.lean` with a **canonical statement and a
+     borrowed proof** — it still routes through
+     `Spectra.Resolvent.mem_resolventSet_of_im_ne_zero`, because the native proof
+     needs `±i` deficiency-surjectivity from Spectra's Yosida–Hille layer (phase
+     S5). Isolating it there keeps the remaining dependency to *one lemma in one
+     file* instead of 26 modules.
+   - `GenuinePairwiseSpectrumGap` improved rather than merely moved: separation is
+     now `‖lam - α‖` in `ℂ`. The old real version was not the honest condition —
+     two operators with separated real slices but colliding complex spectra
+     satisfied it.
 2. `Resolvent/SpecialCases.lean` and `Operator/Unitary/Conjugation.lean` — used
    only by `CayleySelectorBridge` and `UnitaryConjugation`; they can wait for F.
 3. `Operator/SelfAdjoint.lean` — **port the lemmas, not the wrapper.**

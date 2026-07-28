@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.TanTwoTheta.Unbounded
+import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
 
 /-!
 # Per-vector unbounded tangent two theta
@@ -43,7 +44,7 @@ theorem norm_tanTwoAngleOperatorC_apply_le_addBounded_of_spectrum_gap
     (hBhigh : SemiboundedAbove
       (selfAdjointSpectralRestriction A hA B hB) α)
     (hBcomplSpec : ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
-      lam ∉ Spectra.Resolvent.spectrum
+      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum
         (selfAdjointSpectralRestriction A hA Bᶜ hB.compl).toLinearPMap)
     (hquarter : IsQuarterAcute
       (selfAdjointSpectralSubspace A hA B hB)

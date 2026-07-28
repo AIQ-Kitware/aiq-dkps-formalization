@@ -8,6 +8,7 @@ import DavisKahan.Sylvester.ClosedSylvesterEquation
 import Spectra.Mathlib.CharFunBridge
 import Spectra.SpectralTheory.Calculus.PMapSquareRoot
 import Spectra.SpectralTheory.Spectrum
+import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
 
 /-!
 # Spectral localization of Stone generators on spectral ranges
@@ -189,7 +190,8 @@ theorem selfAdjointSpectralRestriction_spectrum_avoids_open_of_inter_eq_empty
     (B : Set ℝ) (hB : MeasurableSet B)
     {a b : ℝ} (hdisj : B ∩ Set.Ioo a b = ∅) :
     ∀ lam ∈ Set.Ioo a b,
-      lam ∉ spectrum (selfAdjointSpectralRestriction A hA B hB).toLinearPMap := by
+      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum
+        (selfAdjointSpectralRestriction A hA B hB).toLinearPMap := by
   intro lam hlam
   let ε : ℝ := min (lam - a) (b - lam) / 2
   have hleft : 0 < lam - a := by linarith [hlam.1]
