@@ -64,10 +64,10 @@ min--max theorem lives.
   `rectangularKyFanSum_le_kyFanApproximationGauge,`
   `rectangularKyFanSum_eq_kyFanApproximationGauge,`
   `kyFanApproximationGauge_add_le_finiteDimensional,`
-  `approximationSingularValue_restrict_mono_complex,`
+  `approximationSingularValue_restrict_mono,`
   `approximationSingularValue_orthogonalProjectionOnto_comp_eq,`
   `kyFanApproximationGauge_orthogonalProjectionOnto_comp_eq,`
-  `kyFanApproximationGauge_add_le_finiteSource_complex,`
+  `kyFanApproximationGauge_add_le_finiteSource,`
   `exists_finiteRestrictionApproximationNumber_add_gt,`
   `kyFanApproximationGauge_add_le_complex}`.
 * Original authors / copyright: Jon Crall, OpenAI GPT-5.6 Thinking; Copyright (c) 2026
@@ -201,18 +201,18 @@ theorem kyFanGauge_add_le_of_finiteDimensional (k : ℕ) (A B : E →ₗ[𝕜] F
 
 end FiniteDimensional
 
-section Complex
+section Compression
 
 variable {E : Type v} {F : Type w}
-  [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
-  [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
+  [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+  [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
 
 omit [CompleteSpace E] [CompleteSpace F] in
 /-- Restricting to a larger source subspace can only increase an approximation number. -/
-theorem approximationNumber_restrict_mono (T : E →L[ℂ] F) (n : ℕ) {U V : Submodule ℂ E}
+theorem approximationNumber_restrict_mono (T : E →L[𝕜] F) (n : ℕ) {U V : Submodule 𝕜 E}
     (hUV : U ≤ V) :
     (T ∘L U.subtypeL).approximationNumber n ≤ (T ∘L V.subtypeL).approximationNumber n := by
-  let J : U →L[ℂ] V :=
+  let J : U →L[𝕜] V :=
     (Submodule.inclusion hUV).mkContinuous 1 fun x => by
       change ‖((x : U) : E)‖ ≤ 1 * ‖x‖
       simp
@@ -236,10 +236,10 @@ omit [CompleteSpace E] [CompleteSpace F] in
 /-- Compressing the codomain to a subspace that already contains the range preserves every
 approximation number. -/
 theorem approximationNumber_orthogonalProjectionOnto_comp_eq
-    (W : Submodule ℂ F) [W.HasOrthogonalProjection]
-    (A : E →L[ℂ] F) (hA : ∀ x, A x ∈ W) (n : ℕ) :
+    (W : Submodule 𝕜 F) [W.HasOrthogonalProjection]
+    (A : E →L[𝕜] F) (hA : ∀ x, A x ∈ W) (n : ℕ) :
     (W.orthogonalProjectionOnto ∘L A).approximationNumber n = A.approximationNumber n := by
-  set AW : E →L[ℂ] W := W.orthogonalProjectionOnto ∘L A with hAW
+  set AW : E →L[𝕜] W := W.orthogonalProjectionOnto ∘L A with hAW
   have hfactor : W.subtypeL ∘L AW = A := by
     ext x
     change W.starProjection (A x) = A x
@@ -267,42 +267,42 @@ theorem approximationNumber_orthogonalProjectionOnto_comp_eq
 omit [CompleteSpace E] [CompleteSpace F] in
 /-- The Ky Fan form of `approximationNumber_orthogonalProjectionOnto_comp_eq`. -/
 theorem kyFanGauge_orthogonalProjectionOnto_comp_eq
-    (W : Submodule ℂ F) [W.HasOrthogonalProjection]
-    (A : E →L[ℂ] F) (hA : ∀ x, A x ∈ W) (k : ℕ) :
+    (W : Submodule 𝕜 F) [W.HasOrthogonalProjection]
+    (A : E →L[𝕜] F) (hA : ∀ x, A x ∈ W) (k : ℕ) :
     (W.orthogonalProjectionOnto ∘L A).kyFanGauge k = A.kyFanGauge k :=
   Finset.sum_congr rfl fun n _ =>
     approximationNumber_orthogonalProjectionOnto_comp_eq W A hA n
 
-end Complex
+end Compression
 
 section FiniteSource
 
 variable {V : Type v} {G : Type w}
-  [NormedAddCommGroup V] [InnerProductSpace ℂ V] [FiniteDimensional ℂ V]
-  [NormedAddCommGroup G] [InnerProductSpace ℂ G] [CompleteSpace G]
+  [NormedAddCommGroup V] [InnerProductSpace 𝕜 V] [FiniteDimensional 𝕜 V]
+  [NormedAddCommGroup G] [InnerProductSpace 𝕜 G] [CompleteSpace G]
 
 omit [CompleteSpace G] in
 /-- **Step 2 of the triangle inequality**: a finite-dimensional source and an arbitrary
-complex Hilbert codomain.  The codomain is compressed onto the range of `A ⊕ B`, which is
+Hilbert codomain.  The codomain is compressed onto the range of `A ⊕ B`, which is
 finite-dimensional and changes no approximation number. -/
-theorem kyFanGauge_add_le_of_finiteDimensional_source (k : ℕ) (A B : V →L[ℂ] G) :
+theorem kyFanGauge_add_le_of_finiteDimensional_source (k : ℕ) (A B : V →L[𝕜] G) :
     (A + B).kyFanGauge k ≤ A.kyFanGauge k + B.kyFanGauge k := by
-  letI : CompleteSpace V := FiniteDimensional.complete ℂ V
-  let C : V × V →L[ℂ] G :=
-    A ∘L ContinuousLinearMap.fst ℂ V V + B ∘L ContinuousLinearMap.snd ℂ V V
-  let W : Submodule ℂ G := C.range
-  letI : FiniteDimensional ℂ W := by
+  letI : CompleteSpace V := FiniteDimensional.complete 𝕜 V
+  let C : V × V →L[𝕜] G :=
+    A ∘L ContinuousLinearMap.fst 𝕜 V V + B ∘L ContinuousLinearMap.snd 𝕜 V V
+  let W : Submodule 𝕜 G := C.range
+  letI : FiniteDimensional 𝕜 W := by
     apply FiniteDimensional.of_surjective C.rangeRestrict.toLinearMap
     intro y
     rcases y.property with ⟨x, hx⟩
     exact ⟨x, Subtype.ext hx⟩
-  letI : CompleteSpace W := FiniteDimensional.complete ℂ W
+  letI : CompleteSpace W := FiniteDimensional.complete 𝕜 W
   letI : W.HasOrthogonalProjection := Submodule.HasOrthogonalProjection.ofCompleteSpace W
   have hA : ∀ x, A x ∈ W := fun x => ⟨(x, 0), by simp [C]⟩
   have hB : ∀ x, B x ∈ W := fun x => ⟨(0, x), by simp [C]⟩
   have hAB : ∀ x, (A + B) x ∈ W := fun x => W.add_mem (hA x) (hB x)
-  let AW : V →L[ℂ] W := W.orthogonalProjectionOnto ∘L A
-  let BW : V →L[ℂ] W := W.orthogonalProjectionOnto ∘L B
+  let AW : V →L[𝕜] W := W.orthogonalProjectionOnto ∘L A
+  let BW : V →L[𝕜] W := W.orthogonalProjectionOnto ∘L B
   have hsum : W.orthogonalProjectionOnto ∘L (A + B) = AW + BW := by
     ext x
     simp [AW, BW]
@@ -311,7 +311,7 @@ theorem kyFanGauge_add_le_of_finiteDimensional_source (k : ℕ) (A B : V →L[�
   have hsumcont : (AW.toLinearMap + BW.toLinearMap).toContinuousLinearMap = AW + BW := by
     ext x
     rfl
-  have htri := kyFanGauge_add_le_of_finiteDimensional (𝕜 := ℂ) k AW.toLinearMap BW.toLinearMap
+  have htri := kyFanGauge_add_le_of_finiteDimensional (𝕜 := 𝕜) k AW.toLinearMap BW.toLinearMap
   rw [hsumcont, hAWcont, hBWcont] at htri
   calc
     (A + B).kyFanGauge k
@@ -325,33 +325,31 @@ theorem kyFanGauge_add_le_of_finiteDimensional_source (k : ℕ) (A B : V →L[�
 
 end FiniteSource
 
-section Triangle
+section Localization
 
 variable {E : Type v} {F : Type w}
-  [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
-  [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
+  [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+  [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
 
-/-- Every positive tolerance admits a finite source restriction whose approximation number
-is within that tolerance of the ambient one. -/
-theorem exists_finiteRestrictionApproximationNumber_add_gt
-    (T : E →L[ℂ] F) (n : ℕ) (ε : ℝ) (hε : 0 < ε) :
-    ∃ v : Fin (n + 1) → E,
-      T.approximationNumber n <
-        (T ∘L (Submodule.span ℂ (Set.range v)).subtypeL).approximationNumber n + ε := by
-  by_cases hsmall : T.approximationNumber n < ε
-  · exact ⟨fun _ => 0, hsmall.trans_le
-      (le_add_of_nonneg_left (ContinuousLinearMap.approximationNumber_nonneg _ _))⟩
-  · have hεle : ε ≤ T.approximationNumber n := le_of_not_gt hsmall
-    obtain ⟨v, hv⟩ := T.exists_finiteRestrictionApproximationNumber_gt_of_lt n
-      (sub_nonneg.mpr hεle) (sub_lt_self _ hε)
-    exact ⟨v, by linarith⟩
+omit [CompleteSpace E] [CompleteSpace F] in
+/-- **Step 3 of the triangle inequality, and the only step that is not field-generic —
+so it takes the field-dependent input as a hypothesis.**
 
-/-- **The Ky Fan triangle inequality**, in full generality: arbitrary bounded operators
-between complex Hilbert spaces, no compactness or finite-dimensionality.
+Given that every approximation number of `S + T` is approached by its restrictions to
+finite-dimensional subspaces of the source, the Ky Fan triangle inequality for `S` and `T`
+follows: span the finitely many near-optimal vectors, restrict there, apply the
+finite-dimensional-source case, and let the tolerance go to zero.
 
-This is the inequality that makes every Ky Fan gauge a norm, and hence the one every
-symmetric operator ideal built on approximation numbers depends on. -/
-theorem kyFanGauge_add_le (S T : E →L[ℂ] F) (k : ℕ) :
+Nothing else in the argument sees the scalars.  Over `ℂ` the hypothesis is
+`exists_finiteRestrictionApproximationNumber_add_gt`, a corollary of the min-max theorem;
+over `ℝ`, where Mathlib's continuous functional calculus is not available for operators on
+the space itself, it is proved by complexification.  Stating the step this way is what keeps
+the two fields from needing two copies of the argument. -/
+theorem kyFanGauge_add_le_of_exists_finiteRestriction {S T : E →L[𝕜] F}
+    (hfr : ∀ (n : ℕ) (ε : ℝ), 0 < ε → ∃ v : Fin (n + 1) → E,
+      (S + T).approximationNumber n <
+        ((S + T) ∘L (Submodule.span 𝕜 (Set.range v)).subtypeL).approximationNumber n + ε)
+    (k : ℕ) :
     (S + T).kyFanGauge k ≤ S.kyFanGauge k + T.kyFanGauge k := by
   classical
   rcases Nat.eq_zero_or_pos k with rfl | hkpos
@@ -360,22 +358,21 @@ theorem kyFanGauge_add_le (S T : E →L[ℂ] F) (k : ℕ) :
   intro ε hε
   have hkreal : 0 < (k : ℝ) := by exact_mod_cast hkpos
   have hδ : 0 < ε / (k : ℝ) := div_pos hε hkreal
-  choose v hv using fun n =>
-    (S + T).exists_finiteRestrictionApproximationNumber_add_gt n (ε / (k : ℝ)) hδ
+  choose v hv using fun n => hfr n (ε / (k : ℝ)) hδ
   let β : Type := Σ n : Fin k, Fin (n.1 + 1)
   let w : β → E := fun p => v p.1.1 p.2
-  let V : Submodule ℂ E := Submodule.span ℂ (Set.range w)
-  letI : FiniteDimensional ℂ V := Module.Finite.span_of_finite ℂ (Set.finite_range w)
-  letI : CompleteSpace V := FiniteDimensional.complete ℂ V
-  let SV : V →L[ℂ] F := S ∘L V.subtypeL
-  let TV : V →L[ℂ] F := T ∘L V.subtypeL
+  let V : Submodule 𝕜 E := Submodule.span 𝕜 (Set.range w)
+  letI : FiniteDimensional 𝕜 V := Module.Finite.span_of_finite 𝕜 (Set.finite_range w)
+  letI : CompleteSpace V := FiniteDimensional.complete 𝕜 V
+  let SV : V →L[𝕜] F := S ∘L V.subtypeL
+  let TV : V →L[𝕜] F := T ∘L V.subtypeL
   have hsumRestrict : (S + T) ∘L V.subtypeL = SV + TV := by
     ext x
     rfl
   have hterm : ∀ n ∈ Finset.range k,
       (S + T).approximationNumber n ≤ (SV + TV).approximationNumber n + ε / (k : ℝ) := by
     intro n hn
-    let U : Submodule ℂ E := Submodule.span ℂ (Set.range (v n))
+    let U : Submodule 𝕜 E := Submodule.span 𝕜 (Set.range (v n))
     have hUV : U ≤ V := by
       refine Submodule.span_le.mpr ?_
       rintro x ⟨j, rfl⟩
@@ -404,6 +401,41 @@ theorem kyFanGauge_add_le (S T : E →L[ℂ] F) (k : ℕ) :
       gcongr
       exact kyFanGauge_add_le_of_finiteDimensional_source k SV TV
     _ ≤ (S.kyFanGauge k + T.kyFanGauge k) + ε := by gcongr
+
+end Localization
+
+section Triangle
+
+variable {E : Type v} {F : Type w}
+  [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
+  [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
+
+/-- Every positive tolerance admits a finite source restriction whose approximation number
+is within that tolerance of the ambient one. -/
+theorem exists_finiteRestrictionApproximationNumber_add_gt
+    (T : E →L[ℂ] F) (n : ℕ) (ε : ℝ) (hε : 0 < ε) :
+    ∃ v : Fin (n + 1) → E,
+      T.approximationNumber n <
+        (T ∘L (Submodule.span ℂ (Set.range v)).subtypeL).approximationNumber n + ε := by
+  by_cases hsmall : T.approximationNumber n < ε
+  · exact ⟨fun _ => 0, hsmall.trans_le
+      (le_add_of_nonneg_left (ContinuousLinearMap.approximationNumber_nonneg _ _))⟩
+  · have hεle : ε ≤ T.approximationNumber n := le_of_not_gt hsmall
+    obtain ⟨v, hv⟩ := T.exists_finiteRestrictionApproximationNumber_gt_of_lt n
+      (sub_nonneg.mpr hεle) (sub_lt_self _ hε)
+    exact ⟨v, by linarith⟩
+
+/-- **The Ky Fan triangle inequality**, in full generality: arbitrary bounded operators
+between complex Hilbert spaces, no compactness or finite-dimensionality.
+
+This is the inequality that makes every Ky Fan gauge a norm, and hence the one every
+symmetric operator ideal built on approximation numbers depends on.  The argument is
+`kyFanGauge_add_le_of_exists_finiteRestriction`; what is complex-specific is only the
+min-max input it consumes. -/
+theorem kyFanGauge_add_le (S T : E →L[ℂ] F) (k : ℕ) :
+    (S + T).kyFanGauge k ≤ S.kyFanGauge k + T.kyFanGauge k :=
+  kyFanGauge_add_le_of_exists_finiteRestriction
+    (fun n ε hε => (S + T).exists_finiteRestrictionApproximationNumber_add_gt n ε hε) k
 
 end Triangle
 

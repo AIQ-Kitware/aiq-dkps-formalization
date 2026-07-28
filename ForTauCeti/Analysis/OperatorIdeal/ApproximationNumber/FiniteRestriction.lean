@@ -100,27 +100,39 @@ theorem finiteRestrictionApproximationNumbers_upperBound (T : E →L[𝕜] F) (n
   rintro _ ⟨v, rfl⟩
   exact T.approximationNumber_comp_subtypeL_le n (Submodule.span 𝕜 (Set.range v))
 
-end Restriction
+/-- **The min--max lower-bound property** for a pair of Hilbert spaces over `𝕜`: strictly
+below every approximation number of every `T : E →L[𝕜] F` there is a strictly larger uniform
+lower modulus, attained on the span of `n + 1` independent vectors.
 
-section Complex
+This is the *only* input to the approximation-number localization theory that depends on the
+scalar field.  Over `ℂ` it is the min--max theorem
+`ContinuousLinearMap.exists_linearIndependent_lowerBound_of_lt_approximationNumber`, proved
+from the continuous functional calculus on `T.modulus`; over `ℝ`, where that calculus is not
+available for operators on the space itself, it is transported through the complexification.
+Everything downstream — the finite-restriction localization, the least-upper-bound
+characterisation, and through them the Ky Fan triangle inequality — is stated once against
+this predicate rather than twice, once per field. -/
+def HasMinMaxLowerBound (𝕜 : Type u) [RCLike 𝕜] (E : Type v) (F : Type w)
+    [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
+    [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] : Prop :=
+  ∀ (T : E →L[𝕜] F) (n : ℕ) {r : ℝ}, 0 ≤ r → r < T.approximationNumber n →
+    ∃ s : ℝ, r < s ∧ ∃ v : Fin (n + 1) → E, LinearIndependent 𝕜 v ∧
+      ∀ x ∈ Submodule.span 𝕜 (Set.range v), s * ‖x‖ ≤ ‖T x‖
 
-variable {E : Type v} {F : Type w}
-  [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
-  [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
+namespace HasMinMaxLowerBound
 
 /-- Every strict lower threshold for the ambient approximation number is exceeded by an
 approximation number of an `(n+1)`-generated restriction. -/
 theorem exists_finiteRestrictionApproximationNumber_gt_of_lt
-    (T : E →L[ℂ] F) (n : ℕ) {r : ℝ} (hr0 : 0 ≤ r)
+    (h : HasMinMaxLowerBound 𝕜 E F) (T : E →L[𝕜] F) (n : ℕ) {r : ℝ} (hr0 : 0 ≤ r)
     (hr : r < T.approximationNumber n) :
     ∃ v : Fin (n + 1) → E,
-      r < (T ∘L (Submodule.span ℂ (Set.range v)).subtypeL).approximationNumber n := by
-  obtain ⟨s, hrs, v, hv, hV⟩ :=
-    T.exists_linearIndependent_lowerBound_of_lt_approximationNumber n hr0 hr
-  let V : Submodule ℂ E := Submodule.span ℂ (Set.range v)
-  let b : Module.Basis (Fin (n + 1)) ℂ V := Module.Basis.span hv
+      r < (T ∘L (Submodule.span 𝕜 (Set.range v)).subtypeL).approximationNumber n := by
+  obtain ⟨s, hrs, v, hv, hV⟩ := h T n hr0 hr
+  let V : Submodule 𝕜 E := Submodule.span 𝕜 (Set.range v)
+  let b : Module.Basis (Fin (n + 1)) 𝕜 V := Module.Basis.span hv
   let w : Fin (n + 1) → V := fun i => b i
-  have hw : LinearIndependent ℂ w := by
+  have hw : LinearIndependent 𝕜 w := by
     simpa only [w] using b.linearIndependent
   have hsNN : s ≤ (T ∘L V.subtypeL).approximationNumber n := by
     apply ContinuousLinearMap.le_approximationNumber_of_linearIndependent
@@ -141,7 +153,8 @@ vectors.
 Approximation numbers are real-valued, so `IsLUB` is the conditionally-complete
 formulation appropriate to `ℝ`; the family is nonempty and bounded above by the ambient
 approximation number. -/
-theorem approximationNumber_isLUB_finiteRestrictions (T : E →L[ℂ] F) (n : ℕ) :
+theorem approximationNumber_isLUB_finiteRestrictions
+    (h : HasMinMaxLowerBound 𝕜 E F) (T : E →L[𝕜] F) (n : ℕ) :
     IsLUB (T.finiteRestrictionApproximationNumbers n) (T.approximationNumber n) := by
   refine ⟨T.finiteRestrictionApproximationNumbers_upperBound n, ?_⟩
   intro b hb
@@ -150,24 +163,23 @@ theorem approximationNumber_isLUB_finiteRestrictions (T : E →L[ℂ] F) (n : �
     (ContinuousLinearMap.approximationNumber_nonneg _ n).trans (hb ⟨fun _ => 0, rfl⟩)
   by_contra hnot
   obtain ⟨v, hv⟩ :=
-    T.exists_finiteRestrictionApproximationNumber_gt_of_lt n hb0 (lt_of_not_ge hnot)
+    h.exists_finiteRestrictionApproximationNumber_gt_of_lt T n hb0 (lt_of_not_ge hnot)
   exact (not_le_of_gt hv) (hb ⟨v, rfl⟩)
 
 /-- **Epsilon form of the min--max characterisation.**  `r` is strictly below `aₙ(T)`
 exactly when `T` has a strictly larger uniform lower modulus on some `(n+1)`-dimensional
 subspace.
 
-The forward direction is
-`ContinuousLinearMap.exists_linearIndependent_lowerBound_of_lt_approximationNumber` and the
-reverse is `ContinuousLinearMap.le_approximationNumber_of_linearIndependent`, so this is the
-statement in which both halves of the min--max theorem appear together. -/
+The forward direction is the hypothesis and the reverse is
+`ContinuousLinearMap.le_approximationNumber_of_linearIndependent`, so this is the statement
+in which both halves of the min--max theorem appear together. -/
 theorem lt_approximationNumber_iff_exists_finiteDimensional_lowerBound
-    (T : E →L[ℂ] F) (n : ℕ) {r : ℝ} (hr0 : 0 ≤ r) :
+    (h : HasMinMaxLowerBound 𝕜 E F) (T : E →L[𝕜] F) (n : ℕ) {r : ℝ} (hr0 : 0 ≤ r) :
     r < T.approximationNumber n ↔
       ∃ s : ℝ, r < s ∧
-        ∃ v : Fin (n + 1) → E, LinearIndependent ℂ v ∧
-          ∀ x ∈ Submodule.span ℂ (Set.range v), s * ‖x‖ ≤ ‖T x‖ := by
-  refine ⟨T.exists_linearIndependent_lowerBound_of_lt_approximationNumber n hr0, ?_⟩
+        ∃ v : Fin (n + 1) → E, LinearIndependent 𝕜 v ∧
+          ∀ x ∈ Submodule.span 𝕜 (Set.range v), s * ‖x‖ ≤ ‖T x‖ := by
+  refine ⟨h T n hr0, ?_⟩
   rintro ⟨s, hrs, v, hv, hV⟩
   refine hrs.trans_le ?_
   apply ContinuousLinearMap.le_approximationNumber_of_linearIndependent T n v hv
@@ -175,6 +187,44 @@ theorem lt_approximationNumber_iff_exists_finiteDimensional_lowerBound
   calc
     s = s * ‖x‖ := by rw [hxNorm, mul_one]
     _ ≤ ‖T x‖ := hV x hxV
+
+end HasMinMaxLowerBound
+
+end Restriction
+
+section Complex
+
+variable {E : Type v} {F : Type w}
+  [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
+  [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
+
+/-- Over `ℂ` the min--max lower-bound property is the min--max theorem itself. -/
+theorem hasMinMaxLowerBound_complex : HasMinMaxLowerBound ℂ E F :=
+  fun T n _ hr0 hr => T.exists_linearIndependent_lowerBound_of_lt_approximationNumber n hr0 hr
+
+/-- Every strict lower threshold for the ambient approximation number is exceeded by an
+approximation number of an `(n+1)`-generated restriction. -/
+theorem exists_finiteRestrictionApproximationNumber_gt_of_lt
+    (T : E →L[ℂ] F) (n : ℕ) {r : ℝ} (hr0 : 0 ≤ r)
+    (hr : r < T.approximationNumber n) :
+    ∃ v : Fin (n + 1) → E,
+      r < (T ∘L (Submodule.span ℂ (Set.range v)).subtypeL).approximationNumber n :=
+  hasMinMaxLowerBound_complex.exists_finiteRestrictionApproximationNumber_gt_of_lt T n hr0 hr
+
+/-- **Exact finite-dimensional localization** over `ℂ`. -/
+theorem approximationNumber_isLUB_finiteRestrictions (T : E →L[ℂ] F) (n : ℕ) :
+    IsLUB (T.finiteRestrictionApproximationNumbers n) (T.approximationNumber n) :=
+  hasMinMaxLowerBound_complex.approximationNumber_isLUB_finiteRestrictions T n
+
+/-- **Epsilon form of the min--max characterisation** over `ℂ`. -/
+theorem lt_approximationNumber_iff_exists_finiteDimensional_lowerBound
+    (T : E →L[ℂ] F) (n : ℕ) {r : ℝ} (hr0 : 0 ≤ r) :
+    r < T.approximationNumber n ↔
+      ∃ s : ℝ, r < s ∧
+        ∃ v : Fin (n + 1) → E, LinearIndependent ℂ v ∧
+          ∀ x ∈ Submodule.span ℂ (Set.range v), s * ‖x‖ ≤ ‖T x‖ :=
+  hasMinMaxLowerBound_complex.lt_approximationNumber_iff_exists_finiteDimensional_lowerBound
+    T n hr0
 
 end Complex
 
