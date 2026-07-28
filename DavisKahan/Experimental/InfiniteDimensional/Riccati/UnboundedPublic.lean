@@ -39,6 +39,35 @@ noncomputable abbrev constructedUnboundedBlockOperator
     ClosedOperator (𝕜 := 𝕜) (E := WithLp 2 (E0 × E1)) :=
   unboundedBlockOperatorCore H
 
+/-- Canonical proof-complete block core over raw partial-map data. -/
+noncomputable abbrev constructedUnboundedBlockOperatorPMap
+    (H : UnboundedBlockDataPMap (𝕜 := 𝕜) (E0 := E0) (E1 := E1)) :
+    WithLp 2 (E0 × E1) →ₗ.[𝕜] WithLp 2 (E0 × E1) :=
+  unboundedBlockOperatorPMapCore H
+
+/-- Raw public aggregate form of the domain-controlled graph-invariance
+characterization. -/
+theorem constructedUnboundedBlockGraphPMap_invariant_iff_strongRiccati
+    (H : UnboundedBlockDataPMap (𝕜 := 𝕜) (E0 := E0) (E1 := E1))
+    (X : E0 →L[𝕜] E1) :
+    (PreservesRiccatiPMapDomains H X ∧
+      TauCeti.LinearPMap.InvariantSubspace
+        (constructedUnboundedBlockOperatorPMap H)
+        (unboundedBlockGraph X)) ↔
+      StrongSolvesRiccatiPMap H X := by
+  exact unboundedBlockGraph_invariantPMapData_iff_strongRiccatiPMapCore H X
+
+/-- The raw continuation handoff exposed from the aggregate module. -/
+theorem constructedStrongRiccatiPMapSolution_of_selectedGraph
+    (H : UnboundedBlockDataPMap (𝕜 := 𝕜) (E0 := E0) (E1 := E1))
+    (hselection : Nonempty (ContractiveReducingGraphSelectionPMap H)) :
+    ∃ X : E0 →L[𝕜] E1,
+      StrongSolvesRiccatiPMap H X ∧ ‖X‖ < 1 ∧
+      TauCeti.LinearPMap.ReducesSubspace
+        (constructedUnboundedBlockOperatorPMap H)
+        (unboundedBlockGraph X) := by
+  exact exists_strongRiccatiPMap_solution_of_selected_reducing_graph H hselection
+
 /-- Public aggregate form of the domain-controlled graph-invariance
 characterization. -/
 theorem constructedUnboundedBlockGraph_invariant_iff_strongRiccati
