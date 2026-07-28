@@ -1,6 +1,9 @@
 # U1 execution contract: migrate unbounded operators to `LinearPMap`
 
-Status: **ACTIVE / CLAIMED by jon (toothbrush), 2026-07-28**.
+Status: **OPEN / UNCLAIMED, released 2026-07-28** (previously claimed by
+jon (toothbrush)). The canonical layer is built and the consumer migration is
+partly done; see "Release state" below for exactly what is left and what is
+already contractible.
 
 This document is an implementation contract. It replaces the previous habit of
 calling the closed-operator convergence problem "design-stage" after the
@@ -97,7 +100,7 @@ The remaining non-experimental references divide as follows:
 | Riccati block data and direct sum | generic downstream result | `UnboundedBlockDataPMap` stores partial maps with explicit density, closed-graph, and self-adjointness properties; `UnboundedBlockData.toPMap` is the compatibility conversion. `LinearPMap.directSumDomain`, coordinate maps, component action, `directSum`, density, graph closedness, `unboundedOffDiagonalCouplingPMap`, and `unboundedBlockOperatorPMapCore` (with direct domain and coordinate-action lemmas) own the raw construction. `unboundedBlockOperatorCore_toLinearPMap` states the bundled core's canonical raw view, while its remaining package carries closedness | migrate graph reduction and selected-graph records to `UnboundedBlockDataPMap`, then contract the closedness-only facade |
 | Riccati graph reduction | production consumer migrated | `unboundedBlockGraph_invariantPMapData_iff_strongRiccatiPMapCore` proves the raw-data invariance equivalence over `UnboundedBlockDataPMap`; the historical theorem delegates to it | migrate selected-graph records and continue reducing bundled graph-domain helpers to documented facades |
 | selected reducing graph handoff | production consumer migrated | `ContractiveReducingGraphSelectionPMap` and its existential handoff store raw `LinearPMap.ReducesSubspace` and derive `StrongSolvesRiccatiPMap`; `UnboundedSelectedGraphBridge` now takes raw block data at its ambient-angular continuation endpoint, `UnboundedPublic` exposes matching raw aggregate and complex diagonalization endpoints, and the raw graph-rotation diagonal representative carries its reduction and unitary-equivalence conclusions; closed coordinate restrictions remain an explicitly documented closed-output adapter | migrate remaining source-facing diagonalization callers to the raw record, then contract historical graph-domain helpers not needed by the closed-output adapter |
-| unbounded sine-theta residual data | production consumer migration in progress | `UnboundedSinThetaDataPMap` now stores the three raw partial maps together with explicit density and closed-graph hypotheses; `UnboundedSinThetaData.toPMap` and the genuine interval/all-gap predicate views supply the canonical route for source facades. The natural complex isometric and generalized all-gap consumers now call raw endpoints through those views; raw operator-norm and ideal-gauge endpoints (including raw Spectra resolvent-gap discharges), raw generalized/exact/isometric interval-exterior and all-gap endpoints, and the long `linearPMap_mem_and_gauge_le_of_boundedLeft_exteriorRight` Neumann proof are stated directly over `LinearPMap` domains and actions | the historical residual and Neumann entry points are source-facing compatibility wrappers. The raw interval/exterior and all-gap endpoints package only at the documented Spectra bounded-realization/resolvent boundary; migrate the remaining interval/gauge callers through their raw views |
+| unbounded sine-theta residual data | production consumer migration in progress | `UnboundedSinThetaDataPMap` now stores the three raw partial maps together with explicit density and closed-graph hypotheses; `UnboundedSinThetaData.toPMap` and the genuine interval/all-gap predicate views supply the canonical route for source facades. The natural complex isometric and generalized all-gap consumers, and the canonical `FiniteIntervalGeneralSinThetaProblem.{result,complementaryBlock_result}` source records, now call raw endpoints through those views; raw operator-norm and ideal-gauge endpoints (including raw Spectra resolvent-gap discharges), raw generalized/exact/isometric interval-exterior and all-gap endpoints, and the long `linearPMap_mem_and_gauge_le_of_boundedLeft_exteriorRight` Neumann proof are stated directly over `LinearPMap` domains and actions | the historical residual and Neumann entry points are source-facing compatibility wrappers. The raw interval/exterior and all-gap endpoints package only at the documented Spectra bounded-realization/resolvent boundary. `generalizedSinTheta_unbounded_{,exact_}of_genuineIntervalExteriorGap` now have **no production caller outside their own defining module**, so they are contractible once the `Sources/**` and `Real/**` records move; migrate the remaining interval/gauge callers through their raw views |
 | Sylvester bounded realization transfer | production consumer migrated | `linearPMapSylvesterEquation_boundedRealization` transfers a raw Sylvester equation using explicit closed-graph and dense-domain properties; the bundled theorem delegates to it, and `ShiftedInverseGauge` calls the raw theorem directly | migrate remaining shifted-inverse callers to raw partial-map hypotheses and contract their bundle-only entry points |
 
 The pairwise canonical form cannot move into `ForTauCeti` yet: it depends on
@@ -105,6 +108,66 @@ The pairwise canonical form cannot move into `ForTauCeti` yet: it depends on
 blocker is therefore Spectra's spectrum/intertwiner API, not any missing
 `LinearPMap` domain machinery.  The next U1 slice is the remaining closed
 Sylvester estimates, followed by reducing restrictions and Riccati inputs.
+
+## Release state (2026-07-28) — read before reclaiming
+
+The lane is **released mid-migration, not finished**.  Everything below is
+measured, not estimated; re-measure before trusting it.
+
+**Gate U1.4, first command: met in substance.**  `grep -R "ClosedOperator"
+ForTauCeti --include='*.lean'` returns 3 hits and all 3 are prose — two
+provenance lines in `LinearPMap/Closed.lean` and one docstring sentence in
+`LinearPMap/Sylvester.lean`.  No `ForTauCeti` declaration references the bundle.
+
+**Gate U1.4, second command: not met.**  171 type-position uses of
+`ClosedOperator` survive in production, across 18 modules outside
+`DavisKahan/SpectralTheory/ClosedOperator/**` and `DavisKahan/Experimental/**`:
+
+| module | uses | classification |
+| --- | --- | --- |
+| `Riccati/UnboundedCore.lean` | 32 | un-migrated |
+| `SpectralTheory/ReducingSubspace/Restriction.lean` | 23 | documented facade |
+| `Sylvester/ClosedSylvesterEquation.lean` | 18 | documented facade |
+| `Sources/DavisKahan1970/SineTheta/CommonCore.lean` | 17 | un-migrated |
+| `SinTheta/Natural/Reducing.lean` | 14 | un-migrated |
+| `Riccati/UnboundedTransport.lean` | 13 | un-migrated |
+| `SinTheta/Natural/Examples.lean` | 10 | un-migrated |
+| `Sylvester/PairwiseSpectrumGap.lean` | 8 | un-migrated |
+| `Sources/DavisKahan1970/Sylvester/HilbertSchmidtPairwise.lean` | 8 | un-migrated (complexification-blocked) |
+| `Sylvester/PairwiseHomogeneousUniqueness.lean` | 6 | un-migrated |
+| `Sources/DavisKahan1970/Sylvester/PaperHilbertSchmidt.lean` | 6 | un-migrated |
+| `Sources/DavisKahan1970/Sylvester/HilbertSchmidtDefectFirst.lean` | 4 | un-migrated |
+| `Sources/DavisKahan1970/SineTheta/{CommonDomainTheorems,CommonCoreTheorems}.lean` | 3 + 3 | un-migrated |
+| `Riccati/UnboundedBasic.lean` | 3 | un-migrated |
+| `Sylvester/Unbounded/{Neumann,Equation}.lean`, `ReducingSubspace/RestrictionExtras.lean` | 1 each | un-migrated |
+
+So **41 of the 171 are already compatibility facades over raw proofs** — those
+are deletions, not proofs.  The other 130 are genuine records and source-facing
+data structures that still quantify over the bundle.
+
+**Contractible right now, no new mathematics:**
+
+- `generalizedSinTheta_unbounded_{,exact_}of_genuineIntervalExteriorGap` have no
+  production caller outside `SinTheta/Unbounded/IntervalExterior.lean` itself.
+- The `Restriction.lean` and `ClosedSylvesterEquation.lean` facade blocks, once
+  their remaining callers move.
+
+**Out of this lane's declared scope; needs its own claim.**  `Interop/Spectra/**`
+(6 modules, ~130 `ClosedOperator` occurrences, none in type position — they sit
+at the PVM/Borel/real-spectrum/cutoff boundary that "Explicitly excluded" names)
+and `OperatorIdeal/ComplexificationApproximation.lean`.
+`Interop/TauCeti/ClosedOperator.lean` is the adapter and is deleted last by
+construction.
+
+**Ordering constraint inherited from the ideal-family lane.** §13.2 phase C
+(restating the ~25 ideal-parameterized sin-Θ theorems over
+`TauCeti.SymmetricOperatorIdealFamily`) and phase D (deleting
+`RectangularSymmetricIdealFamily` and its adapter) were both deferred to
+whoever holds `DavisKahan/Sylvester/**` — that is, to this lane.  With U1
+released they are unblocked, and phase C should be taken **root-outward from
+`Sylvester/Bounded.lean`, as one sweep**, not leaf-inward: migrated piecemeal it
+leaves an `ENNReal.toReal` conversion boundary in the middle of the sin-Θ
+development.  See the `jon (namek)` sin-Θ row in `dev/LANES.md`.
 
 ## Phase U1.0: declaration inventory
 

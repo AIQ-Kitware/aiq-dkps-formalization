@@ -133,11 +133,15 @@ theorem result
             (directedSinThetaOperator P.data.X P.exactMap
               P.lowerFrame P.frameLowerBound_pos)
         ≤ N.gauge P.data.residual :=
-  generalizedSinTheta_unbounded_exact_of_genuineIntervalExteriorGap
-    N.toRectangularSymmetricIdealFamily P.data P.exactMap
-      P.ambient_selfAdjoint P.trial_selfAdjoint P.complement_selfAdjoint
-      P.exact_decomposition P.interval_order P.gap_pos
-      P.frameLowerBound_pos P.lowerFrame P.spectral_gap P.residual_mem
+  by
+    simpa only [UnboundedSinThetaData.toPMap] using
+      linearPMap_generalizedSinTheta_unbounded_exact_of_genuineIntervalExteriorGap
+        N.toRectangularSymmetricIdealFamily P.data.toPMap P.exactMap
+        (P.data.toPMap_A_isSelfAdjoint P.ambient_selfAdjoint)
+        (P.data.toPMap_A₀_isSelfAdjoint P.trial_selfAdjoint)
+        (P.data.toPMap_Λ₁_isSelfAdjoint P.complement_selfAdjoint)
+        P.exact_decomposition P.interval_order P.gap_pos
+        P.frameLowerBound_pos P.lowerFrame P.spectral_gap.toPMap P.residual_mem
 
 /-- Complementary-overlap form of the completed finite interval/exterior
 branch. -/
@@ -153,11 +157,15 @@ theorem complementaryBlock_result
             (sinThetaBlock P.data.X P.data.F₁
               P.lowerFrame P.frameLowerBound_pos)
         ≤ N.gauge P.data.residual :=
-  generalizedSinTheta_unbounded_of_genuineIntervalExteriorGap
-    N.toRectangularSymmetricIdealFamily P.data
-      P.ambient_selfAdjoint P.trial_selfAdjoint P.complement_selfAdjoint
-      P.exact_decomposition.isometry₁ P.interval_order P.gap_pos
-      P.frameLowerBound_pos P.lowerFrame P.spectral_gap P.residual_mem
+  by
+    simpa only [UnboundedSinThetaData.toPMap] using
+      linearPMap_generalizedSinTheta_unbounded_of_genuineIntervalExteriorGap
+        N.toRectangularSymmetricIdealFamily P.data.toPMap
+        (P.data.toPMap_A_isSelfAdjoint P.ambient_selfAdjoint)
+        (P.data.toPMap_A₀_isSelfAdjoint P.trial_selfAdjoint)
+        (P.data.toPMap_Λ₁_isSelfAdjoint P.complement_selfAdjoint)
+        P.exact_decomposition.isometry₁ P.interval_order P.gap_pos
+        P.frameLowerBound_pos P.lowerFrame P.spectral_gap.toPMap P.residual_mem
 
 end FiniteIntervalGeneralSinThetaProblem
 
