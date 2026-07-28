@@ -217,6 +217,29 @@ complex ones, since the transfer is definitional — removes the last four
 conversions.  Those two files are inside jon (namek)'s released rows, which is why
 this lane stopped at the boundary rather than crossing it.
 
+**Correction to the two entries above, made the same day and before anyone acted
+on it.**  Both said the four `Sources/**/SineTheta` records route through the
+exact complex engines and are unblocked by their raw twins.  **They do not and
+are not.**  Enumerating every caller of `sinTheta_unbounded_exact_complex` /
+`generalizedSinTheta_unbounded_exact_complex` repo-wide gives exactly three:
+`SinTheta/Canonical.lean` (two sites), `SinTheta/Natural/Reducing.lean` (now on
+the raw twins), and `Sources/**/Audits/Unbounded.lean` (`#check` / `#print
+axioms` only).  So **the genuinely unblocked consumer is
+`SinTheta/Canonical.lean`**, which sits in jon (namek)'s row.
+
+The Sources records have a *different* blocker, and naming it correctly should
+save someone a lane: `SineTheta/CommonCore.lean` (22 uses) is a
+`ClosedOperator.IsGraphCore` development, and `SineTheta/Symmetric.lean` (42
+uses) is `ClosedOperator.ofBounded` composed with the **bundled**
+`ClosedOperator.reducingRestriction`.  Their blocker is therefore
+`SpectralTheory/ReducingSubspace/Restriction.lean` — the 23-use facade U1 already
+classifies as a deletion rather than a proof — not the sin-Θ engines at all.
+
+The mistake came from reading U1's inventory, which lists `SineTheta/CommonCore`
+as one of the largest un-migrated records, and treating "large" as "blocked by
+the same thing".  **The inventory sizes files; it does not group them by
+blocker.**  Enumerate the callers.
+
 Reusable bit worth promoting some day: `linearPMap_isClosed_iff_range_isClosed`
 (currently `private` in this module) reconciles `LinearPMap.IsClosed`, which is
 stated on the graph, with the reducing-restriction API, which states closedness as
