@@ -117,5 +117,61 @@ noncomputable def yosidaApprox (hA : IsSelfAdjoint A) (n : ℕ+) : H →L[ℂ] H
 noncomputable def yosidaApproxSym (hA : IsSelfAdjoint A) (n : ℕ+) : H →L[ℂ] H :=
   ((n : ℂ) ^ 2 / 2) • (resolventAtIn hA n + resolventAtNegIn hA n)
 
+/-- The contraction `Jₙ = -in·R(in)`. -/
+noncomputable def yosidaJ (hA : IsSelfAdjoint A) (n : ℕ+) : H →L[ℂ] H :=
+  (-I * (n : ℂ)) • resolventAtIn hA n
+
+/-- The contraction `Jₙ⁻ = in·R(-in)`. -/
+noncomputable def yosidaJNeg (hA : IsSelfAdjoint A) (n : ℕ+) : H →L[ℂ] H :=
+  (I * (n : ℂ)) • resolventAtNegIn hA n
+
+/-! ### Norm bounds -/
+
+/-- `‖Aₙ‖ ≤ 2n`. -/
+theorem norm_yosidaApprox_le (hA : IsSelfAdjoint A) (n : ℕ+) :
+    ‖yosidaApprox hA n‖ ≤ 2 * (n : ℝ) := by
+  have hfirst : ‖(n : ℂ) ^ 2 • resolventAtIn hA n‖ ≤ (n : ℝ) := by
+    calc ‖(n : ℂ) ^ 2 • resolventAtIn hA n‖
+        = ‖((n : ℂ) ^ 2)‖ * ‖resolventAtIn hA n‖ := norm_smul _ _
+      _ ≤ ‖((n : ℂ) ^ 2)‖ * ((n : ℝ))⁻¹ :=
+          mul_le_mul_of_nonneg_left (norm_resolventAtIn_le hA n) (norm_nonneg _)
+      _ = (n : ℝ) ^ 2 * ((n : ℝ))⁻¹ := by rw [norm_pnat_sq]
+      _ = (n : ℝ) := by
+          have : (n : ℝ) ≠ 0 := ne_of_gt (Nat.cast_pos.mpr n.pos)
+          field_simp
+  have hsecond : ‖(I * (n : ℂ)) • ContinuousLinearMap.id ℂ H‖ ≤ (n : ℝ) := by
+    calc ‖(I * (n : ℂ)) • ContinuousLinearMap.id ℂ H‖
+        = ‖I * (n : ℂ)‖ * ‖ContinuousLinearMap.id ℂ H‖ := norm_smul _ _
+      _ ≤ ‖I * (n : ℂ)‖ * 1 :=
+          mul_le_mul_of_nonneg_left ContinuousLinearMap.norm_id_le (norm_nonneg _)
+      _ = (n : ℝ) := by rw [mul_one, norm_I_mul_pnat]
+  calc ‖yosidaApprox hA n‖
+      ≤ ‖(n : ℂ) ^ 2 • resolventAtIn hA n‖
+          + ‖(I * (n : ℂ)) • ContinuousLinearMap.id ℂ H‖ := norm_sub_le _ _
+    _ ≤ (n : ℝ) + (n : ℝ) := add_le_add hfirst hsecond
+    _ = 2 * (n : ℝ) := by ring
+
+/-- `‖Jₙ‖ ≤ 1`. -/
+theorem norm_yosidaJ_le (hA : IsSelfAdjoint A) (n : ℕ+) : ‖yosidaJ hA n‖ ≤ 1 := by
+  have hn : (0 : ℝ) < (n : ℝ) := Nat.cast_pos.mpr n.pos
+  have hcoeff : ‖(-I * (n : ℂ))‖ = (n : ℝ) := by
+    rw [neg_mul, norm_neg, norm_I_mul_pnat]
+  calc ‖yosidaJ hA n‖
+      = ‖(-I * (n : ℂ))‖ * ‖resolventAtIn hA n‖ := norm_smul _ _
+    _ = (n : ℝ) * ‖resolventAtIn hA n‖ := by rw [hcoeff]
+    _ ≤ (n : ℝ) * ((n : ℝ))⁻¹ :=
+        mul_le_mul_of_nonneg_left (norm_resolventAtIn_le hA n) hn.le
+    _ = 1 := by field_simp
+
+/-- `‖Jₙ⁻‖ ≤ 1`. -/
+theorem norm_yosidaJNeg_le (hA : IsSelfAdjoint A) (n : ℕ+) : ‖yosidaJNeg hA n‖ ≤ 1 := by
+  have hn : (0 : ℝ) < (n : ℝ) := Nat.cast_pos.mpr n.pos
+  calc ‖yosidaJNeg hA n‖
+      = ‖I * (n : ℂ)‖ * ‖resolventAtNegIn hA n‖ := norm_smul _ _
+    _ = (n : ℝ) * ‖resolventAtNegIn hA n‖ := by rw [norm_I_mul_pnat]
+    _ ≤ (n : ℝ) * ((n : ℝ))⁻¹ :=
+        mul_le_mul_of_nonneg_left (norm_resolventAtNegIn_le hA n) hn.le
+    _ = 1 := by field_simp
+
 end LinearPMap
 end TauCeti
