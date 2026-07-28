@@ -50,6 +50,13 @@ scope = "leanprover-community"
 
 [[lean_lib]]
 name = "ForMathlib"
+# ForMathlib is destined for **Mathlib**, so it is measured against Mathlib's own linter
+# set rather than this repository's default. Unlike `ForTauCeti` the copyright-header
+# linter stays **on**: Tau Ceti disables it, Mathlib does not. The census under these
+# options was 22 when the default set reported 0; it is now 3, and `warningAsError` is
+# deliberately NOT set because those 3 cannot be fixed from here -- see the note in
+# ForMathlib/LinearAlgebra/Matrix/RankFactorization.lean and dev/LANES.md.
+leanOptions = { weak.linter.mathlibStandardSet = true, weak.linter.style.longFile = 1500, weak.linter.style.longFileDefValue = 1500 }
 
 # ForTauCeti: temporary staging library for reusable mathematics whose accepted
 # Tau Ceti roadmap target and API are settled but whose code has not yet merged

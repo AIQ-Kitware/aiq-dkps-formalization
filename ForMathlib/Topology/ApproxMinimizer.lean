@@ -1,10 +1,7 @@
 /-
-Staged for Mathlib: additions to `Mathlib/Topology/Order/Compact.lean` (companion
-to `IsCompact.exists_isMinOn`), or a dedicated file alongside
-`Mathlib/Topology/Sequences.lean`.
-
-Formalized by Claude Opus 4.8 (claude-opus-4-8[1m]);
-to be re-authored per Mathlib's AI-contribution policy at PR time.
+Copyright (c) 2026 Kitware, Inc. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Jon Crall, Claude Opus 4.8
 -/
 
 import Mathlib.Topology.Sequences
@@ -31,6 +28,28 @@ The typical source of the approximate-minimizer hypothesis is a second family
   approximate-minimization comparison ranges only over the compact set `K`, so the
   limit is a minimizer *on `K`* (`IsMinOn F K`) rather than a global one. This is
   the form the Berge maximum theorem consumes (the feasible set is constrained).
+
+## Staging note
+
+Staged for Mathlib: additions to `Mathlib/Topology/Order/Compact.lean` (companion
+to `IsCompact.exists_isMinOn`), or a dedicated file alongside
+`Mathlib/Topology/Sequences.lean`.
+Formalized by Claude Opus 4.8 (claude-opus-4-8[1m]);
+to be re-authored per Mathlib's AI-contribution policy at PR time.
+
+## Provenance
+
+* Original repository: Davis--Kahan/DKPS formalization (Kitware, Inc.).
+* Original module: authored directly in `ForMathlib` at Davis--Kahan commit
+  `72b913b`; it has had no prior home.
+* Extraction class: **authored in place**, for upstreaming to Mathlib rather than
+  to Tau Ceti — see `ForTauCeti/README.md` on the split between the two staging
+  areas.
+* Intended Mathlib home: additions to `Mathlib/Topology/Order/Compact.
+* Original authors / copyright: Jon Crall, Claude Opus 4.8; Copyright (c) 2026
+  Kitware, Inc.; Apache 2.0.
+* Spectra influence: **none** — the `ForMathlib` import firewall admits only
+  Mathlib and `ForMathlib` (enforced by `scripts/check_dependency_layers.py`).
 -/
 
 namespace ForMathlib

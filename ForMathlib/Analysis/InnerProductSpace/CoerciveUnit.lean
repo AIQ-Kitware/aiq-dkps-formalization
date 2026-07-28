@@ -1,14 +1,7 @@
 /-
-Staged for Mathlib: additions to `Mathlib/Analysis/InnerProductSpace/CoerciveUnit.lean`
-(new file).
-
-Formalized by Claude Fable 5 (claude-fable-5[1m]) while closing the graph
-projection formula of the Davis–Kahan graph-subspace correspondence.  This is
-the operator form of the Lax–Milgram lemma on a Hilbert space: a uniformly
-coercive bounded operator is invertible in the algebra of bounded operators.
-No self-adjointness is required — coercivity alone forces injectivity, a
-closed range, and a trivial orthogonal complement of the range.
-To be re-authored per Mathlib's AI-contribution policy at PR time.
+Copyright (c) 2026 Kitware, Inc. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Jon Crall, Claude Fable 5
 -/
 
 import ForMathlib.Analysis.InnerProductSpace.SylvesterBound
@@ -22,6 +15,32 @@ form is uniformly coercive, `c * ‖z‖ ^ 2 ≤ re ⟪N z, z⟫` with `c > 0`, 
 operator `N` is invertible in `E →L[𝕜] E`.  This is the operator-level
 Lax–Milgram lemma; the inverse is then available through `Ring.inverse` or
 through `IsUnit.unit`.
+
+## Staging note
+
+Staged for Mathlib: additions to `Mathlib/Analysis/InnerProductSpace/CoerciveUnit.lean`
+(new file).
+Formalized by Claude Fable 5 (claude-fable-5[1m]) while closing the graph
+projection formula of the Davis–Kahan graph-subspace correspondence.  This is
+the operator form of the Lax–Milgram lemma on a Hilbert space: a uniformly
+coercive bounded operator is invertible in the algebra of bounded operators.
+No self-adjointness is required — coercivity alone forces injectivity, a
+closed range, and a trivial orthogonal complement of the range.
+To be re-authored per Mathlib's AI-contribution policy at PR time.
+
+## Provenance
+
+* Original repository: Davis--Kahan/DKPS formalization (Kitware, Inc.).
+* Original module: authored directly in `ForMathlib` at Davis--Kahan commit
+  `00ca5e1`; it has had no prior home.
+* Extraction class: **authored in place**, for upstreaming to Mathlib rather than
+  to Tau Ceti — see `ForTauCeti/README.md` on the split between the two staging
+  areas.
+* Intended Mathlib home: additions to `Mathlib/Analysis/InnerProductSpace/CoerciveUnit.
+* Original authors / copyright: Jon Crall, Claude Fable 5; Copyright (c) 2026
+  Kitware, Inc.; Apache 2.0.
+* Spectra influence: **none** — the `ForMathlib` import firewall admits only
+  Mathlib and `ForMathlib` (enforced by `scripts/check_dependency_layers.py`).
 -/
 
 namespace ForMathlib
@@ -189,7 +208,7 @@ theorem norm_one_sub_inverse_one_add {B : E →L[𝕜] E} (hB : IsSelfAdjoint B)
       _ = R * (N * star R) := by rw [mul_assoc]
       _ = R := by rw [h1, mul_one]
   have hCsa : IsSelfAdjoint (1 - R) := by
-    show star (1 - R) = 1 - R
+    change star (1 - R) = 1 - R
     rw [star_sub, star_one, hRsa]
   have hbs : ∀ y, RCLike.re ⟪B y, y⟫_𝕜 ≤ ‖B‖ * ‖y‖ ^ 2 := by
     intro y
