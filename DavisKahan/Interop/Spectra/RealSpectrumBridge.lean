@@ -4,8 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.SpectralTheory.ClosedOperator.Basic
-import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
-import Spectra.Resolvent.Spectrum
+import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SelfAdjointResolvent
 
 /-!
 # Closed-operator real spectrum and the Spectra spectrum
@@ -49,35 +48,22 @@ theorem realSpectrum_eq_spectraSpectrum
 
 /-! ## The spectrum of a self-adjoint operator is real
 
-This is the one genuinely *mathematical* consequence of taking the canonical
-spectrum in `ℂ` rather than in `ℝ`: statements that used to be about a set of
-reals by construction now have to *prove* that the spectrum is real.
-
-**It is still proved through Spectra, and that is deliberate and temporary.**
-The standard argument — for symmetric `A` and `z = a + bi` with `b ≠ 0`,
-`‖(A - z)x‖² = ‖(A - a)x‖² + b²‖x‖² ≥ b²‖x‖²`, so `A - z` is injective with
-closed range, and self-adjointness makes the range dense hence everything —
-needs the `±i` deficiency-surjectivity of a self-adjoint partial map, which lives
-in Spectra's resolvent/Yosida–Hille layer and is scheduled for phases S2/S5 of
-`dev/tauceti/spectra-removal-plan.md`.  Rather than block the `spectrum`
-migration on that, the *statement* is canonical (`TauCeti.LinearPMap.spectrum`)
-and only the *proof* is borrowed, so the remaining dependency is a single lemma
-in a single file instead of being spread across 26 modules.
-
-Provenance: the proof is `Spectra.Resolvent.mem_resolventSet_of_im_ne_zero`,
-`Spectra/Resolvent/Spectrum.lean` at `8dbaaf67…`, Copyright (c) 2026 Spectra
-Formalization Project, Apache 2.0.  Re-prove natively and this file's last
-Spectra import disappears. -/
+**Now proved natively, 2026-07-28.**  This lemma briefly had a canonical
+statement and a proof borrowed from `Spectra.Resolvent.mem_resolventSet_of_im_ne_zero`,
+because the native argument needs the `±i` deficiency-surjectivity of a
+self-adjoint partial map.  That is now
+`TauCeti.LinearPMap.mem_resolventSet_of_im_ne_zero` in
+`ForTauCeti/Analysis/InnerProductSpace/LinearPMap/SelfAdjointResolvent.lean`,
+proved from Mathlib's `LinearPMap` adjoint API — the estimate
+`|Im z| ‖x‖ ≤ ‖(A - z)x‖`, closed range from closedness of `A`, dense range from
+"no non-real eigenvalues" — so the borrowed proof and this file's last Spectra
+import are both gone. -/
 
 /-- **A self-adjoint partial map has real spectrum.** -/
 theorem spectrum_subset_real_of_isSelfAdjoint {A : E →ₗ.[ℂ] E}
     (hA : IsSelfAdjoint A) :
-    TauCeti.LinearPMap.spectrum A ⊆ Complex.ofReal '' Set.univ := by
-  intro z hz
-  by_cases him : z.im = 0
-  · exact ⟨z.re, Set.mem_univ _, by
-      simp [Complex.ext_iff, him]⟩
-  · exact absurd (Spectra.Resolvent.mem_resolventSet_of_im_ne_zero hA him) hz
+    TauCeti.LinearPMap.spectrum A ⊆ Complex.ofReal '' Set.univ :=
+  TauCeti.LinearPMap.spectrum_subset_real hA
 
 end SpectraBridge
 end Experimental
