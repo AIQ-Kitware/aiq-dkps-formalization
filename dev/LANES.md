@@ -140,6 +140,23 @@ and pruned. What is genuinely left:
 
 ## Cross-lane findings (post here to save another agent a re-derivation)
 
+- **Step 2 of the `toRectangular` retirement is gated on one missing object, and it is not
+  in DavisKahan** (jon/namek, 2026-07-27). With step 1 landed, no production module outside
+  `DavisKahan/OperatorIdeal/ApproximationNumbers/ScalarGeneric.lean` reaches into
+  `toRectangularSymmetricIdealFamily` at all — verified by grep, the count is zero. So the
+  representation swap really is a one-file change now. What blocks it: that file builds
+  **two** `KyFanDominantIdealFamily` instances, `operatorNorm` and `kyFan`, and only the
+  first has a canonical counterpart. `ForTauCeti/Analysis/OperatorIdeal/Family/` provides
+  `TauCeti.operatorNormFamily` and **no Ky Fan family**. So before the swap someone has to
+  build a `SymmetricOperatorIdealFamily` for `kyFanApproximationGauge`, which means proving
+  its four laws in `ℝ≥0∞` where the existing proofs are in `ℝ` — subadditivity, homogeneity,
+  the two-sided ideal bound and completeness, each needing `ENNReal.ofReal` bridging. That
+  is new mathematics in ForTauCeti, not a migration, and it is the honest first task of any
+  step-2 session. The 73 remaining production type-position uses of
+  `RectangularSymmetricIdealFamily` are a separate and *legitimate* generality choice — the
+  `SinTheta/**` block lemmas do not need Ky Fan dominance — so they are re-parameterization,
+  not deletions, and they come after the swap, not before.
+
 - **Two Experimental `sorry` leaves are already theorems in ForTauCeti, modulo scalars**
   (jon/namek, 2026-07-27, found while retiring the `operatorAbs` shim).
   `DavisKahan/Experimental/InfiniteDimensional/SinTheta/General.lean:550` defines
