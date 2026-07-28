@@ -7,15 +7,14 @@ Authors: Jon Crall, GPT-5.6 High, Claude Fable 5
 Wave-1 migration provenance: original module `ForMathlib.Analysis.InnerProductSpace.RectangularSingularValuesDkVariant` at the
 Davis--Kahan repository; moved to `ForTauCeti` with the namespace
 `ForMathlib` renamed `TauCeti` (module-system conversion deferred to a
-later mechanical pass).  No mathematical change
-beyond routing historical Courant--Fischer names through the transitional
-`CourantFischerCompat` shim.
+later mechanical pass).  No mathematical change; the historical
+Courant--Fischer names it used were repointed to the canonical API when the
+`CourantFischerCompat` shim was retired.
 -/
 
 import Mathlib.Analysis.InnerProductSpace.SingularValues
 import Mathlib.Analysis.InnerProductSpace.Positive
 import ForTauCeti.Analysis.InnerProductSpace.CourantFischer
-import ForTauCeti.Analysis.InnerProductSpace.CourantFischerCompat
 
 
 /-!
@@ -378,7 +377,7 @@ theorem norm_sq_floor_of_le_eigenvalues_adjointCompSelf
         Finset.sum_le_sum fun i _ =>
           mul_le_mul_of_nonneg_right (hlow i) (sq_nonneg _)
     _ = RCLike.re (inner 𝕜 ((A.adjoint ∘ₗ A) x) x) :=
-        (re_inner_map_self_eq_sum_eigenvalues_mul_sq hS hd x).symm
+        (LinearMap.IsSymmetric.re_inner_apply_self_eq_sum_eigenvalues_mul_sq hS hd x).symm
     _ = ‖A x‖ ^ 2 := re_inner_adjointCompSelf_self A x
 
 omit [FiniteDimensional 𝕜 E] in

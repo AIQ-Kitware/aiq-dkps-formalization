@@ -17,7 +17,6 @@ To be re-authored per Mathlib's AI-contribution policy at PR time.
 import ForMathlib.Analysis.InnerProductSpace.SylvesterBound
 import DavisKahan.FiniteDimensional.DoubleAngle.Vector
 import ForTauCeti.Analysis.InnerProductSpace.CourantFischer
-import ForTauCeti.Analysis.InnerProductSpace.CourantFischerCompat
 import ForTauCeti.Analysis.InnerProductSpace.PrincipalAngles
 import Mathlib.Analysis.InnerProductSpace.Adjoint
 
@@ -317,13 +316,13 @@ theorem norm_starProjection_comp_starProjection_le_of_eigenvalues
     (hs : ∀ i ∈ s, c + g ≤ hT.eigenvalues hn i)
     (hs' : ∀ j ∉ s', hS.eigenvalues hn j ≤ c)
     (hε0 : 0 ≤ ε) (hε : ∀ x, ‖(S - T) x‖ ≤ ε * ‖x‖) :
-    ‖(specSubspace (hS.eigenvectorBasis hn) (· ∉ s')).starProjection ∘L
-        (specSubspace (hT.eigenvectorBasis hn) (· ∈ s)).starProjection‖ ≤ ε / g :=
+    ‖((hS.eigenvectorBasis hn).spanIndices (↑s')ᶜ).starProjection ∘L
+        ((hT.eigenvectorBasis hn).spanIndices ↑s).starProjection‖ ≤ ε / g :=
   norm_starProjection_comp_starProjection_le hT hS
-    (fun _ hx => map_mem_specSubspace hT hn _ hx)
-    (fun _ hx => map_mem_specSubspace hS hn _ hx) hg
-    (fun _ hx => le_re_inner_map_self_of_mem_specSubspace hT hn (fun i hi => hs i hi) hx)
-    (fun _ hx => re_inner_map_self_le_of_mem_specSubspace hS hn (fun j hj => hs' j hj) hx)
+    (fun _ hx => LinearMap.IsSymmetric.map_mem_spanIndices hT hn _ hx)
+    (fun _ hx => LinearMap.IsSymmetric.map_mem_spanIndices hS hn _ hx) hg
+    (fun _ hx => LinearMap.IsSymmetric.le_re_inner_apply_self_of_mem_spanIndices hT hn (fun i hi => hs i hi) hx)
+    (fun _ hx => LinearMap.IsSymmetric.re_inner_apply_self_le_of_mem_spanIndices hS hn (fun j hj => hs' j hj) hx)
     hε0 hε
 
 omit [CompleteSpace E] in
@@ -339,13 +338,13 @@ theorem sin_two_theta_le_of_eigenvalues
     (ha : ∀ i ∉ s, hT.eigenvalues hn i ≤ a)
     (hε : ∀ v, ‖S v‖ ≤ ε * ‖v‖)
     {x : E} (hx : ‖x‖ = 1) {μ : ℝ} (hμ : T x + S x = (μ : 𝕜) • x) :
-    (b - a) * (‖(specSubspace (hT.eigenvectorBasis hn) (· ∈ s)).starProjection x‖
-      * ‖x - (specSubspace (hT.eigenvectorBasis hn) (· ∈ s)).starProjection x‖) ≤ ε := by
-  refine sin_two_theta_le hT hS (fun u hu => map_mem_specSubspace hT hn _ hu)
-    (fun u hu => le_re_inner_map_self_of_mem_specSubspace hT hn (fun i hi => hb i hi) hu)
+    (b - a) * (‖((hT.eigenvectorBasis hn).spanIndices ↑s).starProjection x‖
+      * ‖x - ((hT.eigenvectorBasis hn).spanIndices ↑s).starProjection x‖) ≤ ε := by
+  refine sin_two_theta_le hT hS (fun u hu => LinearMap.IsSymmetric.map_mem_spanIndices hT hn _ hu)
+    (fun u hu => LinearMap.IsSymmetric.le_re_inner_apply_self_of_mem_spanIndices hT hn (fun i hi => hb i hi) hu)
     (fun w hw => ?_) hε hx hμ
-  rw [orthogonal_specSubspace] at hw
-  exact re_inner_map_self_le_of_mem_specSubspace hT hn (fun i hi => ha i hi) hw
+  rw [OrthonormalBasis.orthogonal_spanIndices] at hw
+  exact LinearMap.IsSymmetric.re_inner_apply_self_le_of_mem_spanIndices hT hn (fun i hi => ha i hi) hw
 
 omit [CompleteSpace E] in
 /-- **Davis's tan 2θ theorem, spectral form.**  As `sin_two_theta_le_of_eigenvalues`,
@@ -358,21 +357,21 @@ theorem tan_two_theta_le_of_eigenvalues
     (hb : ∀ i ∈ s, b ≤ hT.eigenvalues hn i)
     (ha : ∀ i ∉ s, hT.eigenvalues hn i ≤ a)
     (hε : ∀ v, ‖S v‖ ≤ ε * ‖v‖)
-    (hSU : ∀ u ∈ specSubspace (hT.eigenvectorBasis hn) (· ∈ s),
-      ∀ u' ∈ specSubspace (hT.eigenvectorBasis hn) (· ∈ s), ⟪u, S u'⟫_𝕜 = 0)
-    (hSUperp : ∀ w ∈ specSubspace (hT.eigenvectorBasis hn) (· ∉ s),
-      ∀ w' ∈ specSubspace (hT.eigenvectorBasis hn) (· ∉ s), ⟪w, S w'⟫_𝕜 = 0)
+    (hSU : ∀ u ∈ (hT.eigenvectorBasis hn).spanIndices ↑s,
+      ∀ u' ∈ (hT.eigenvectorBasis hn).spanIndices ↑s, ⟪u, S u'⟫_𝕜 = 0)
+    (hSUperp : ∀ w ∈ (hT.eigenvectorBasis hn).spanIndices (↑s)ᶜ,
+      ∀ w' ∈ (hT.eigenvectorBasis hn).spanIndices (↑s)ᶜ, ⟪w, S w'⟫_𝕜 = 0)
     {x : E} (hx : ‖x‖ = 1) {μ : ℝ} (hμ : T x + S x = (μ : 𝕜) • x) :
-    (b - a) * (‖(specSubspace (hT.eigenvectorBasis hn) (· ∈ s)).starProjection x‖
-        * ‖x - (specSubspace (hT.eigenvectorBasis hn) (· ∈ s)).starProjection x‖)
-      ≤ |‖(specSubspace (hT.eigenvectorBasis hn) (· ∈ s)).starProjection x‖ ^ 2
-          - ‖x - (specSubspace (hT.eigenvectorBasis hn) (· ∈ s)).starProjection x‖ ^ 2| * ε := by
-  refine tan_two_theta_le hT hS (fun u hu => map_mem_specSubspace hT hn _ hu)
-    (fun u hu => le_re_inner_map_self_of_mem_specSubspace hT hn (fun i hi => hb i hi) hu)
+    (b - a) * (‖((hT.eigenvectorBasis hn).spanIndices ↑s).starProjection x‖
+        * ‖x - ((hT.eigenvectorBasis hn).spanIndices ↑s).starProjection x‖)
+      ≤ |‖((hT.eigenvectorBasis hn).spanIndices ↑s).starProjection x‖ ^ 2
+          - ‖x - ((hT.eigenvectorBasis hn).spanIndices ↑s).starProjection x‖ ^ 2| * ε := by
+  refine tan_two_theta_le hT hS (fun u hu => LinearMap.IsSymmetric.map_mem_spanIndices hT hn _ hu)
+    (fun u hu => LinearMap.IsSymmetric.le_re_inner_apply_self_of_mem_spanIndices hT hn (fun i hi => hb i hi) hu)
     (fun w hw => ?_) hε hSU (fun w hw w' hw' => ?_) hx hμ
-  · rw [orthogonal_specSubspace] at hw
-    exact re_inner_map_self_le_of_mem_specSubspace hT hn (fun i hi => ha i hi) hw
-  · rw [orthogonal_specSubspace] at hw hw'
+  · rw [OrthonormalBasis.orthogonal_spanIndices] at hw
+    exact LinearMap.IsSymmetric.re_inner_apply_self_le_of_mem_spanIndices hT hn (fun i hi => ha i hi) hw
+  · rw [OrthonormalBasis.orthogonal_spanIndices] at hw hw'
     exact hSUperp w hw w' hw'
 
 /-- **Operator-norm sin-Θ bound on the largest principal angle.**  Chaining the

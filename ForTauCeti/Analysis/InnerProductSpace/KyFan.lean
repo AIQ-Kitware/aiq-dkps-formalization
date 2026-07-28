@@ -18,14 +18,13 @@ To be re-authored per Mathlib's AI-contribution policy at PR time.
 Wave-1 migration provenance: original module `ForMathlib.Analysis.InnerProductSpace.KyFan` at the
 Davis--Kahan repository; moved to `ForTauCeti` with the namespace
 `ForMathlib` renamed `TauCeti` (module-system conversion deferred to a
-later mechanical pass).  No mathematical change
-beyond routing historical Courant--Fischer names through the transitional
-`CourantFischerCompat` shim.
+later mechanical pass).  No mathematical change; the historical
+Courant--Fischer names it used were repointed to the canonical API when the
+`CourantFischerCompat` shim was retired.
 -/
 
 import Mathlib.Analysis.InnerProductSpace.SingularValues
 import ForTauCeti.Analysis.InnerProductSpace.CourantFischer
-import ForTauCeti.Analysis.InnerProductSpace.CourantFischerCompat
 import ForTauCeti.Analysis.InnerProductSpace.SingularSubspace
 import ForTauCeti.Analysis.InnerProductSpace.PolarDecomposition
 import ForTauCeti.Analysis.InnerProductSpace.ProjectionGeometry
@@ -120,7 +119,7 @@ theorem isSymmetric_real_smul {S : E →ₗ[𝕜] E} (hS : S.IsSymmetric) (r : �
 theorem eigenvalues_real_smul {S : E →ₗ[𝕜] E} (hS : S.IsSymmetric) {n : ℕ}
     (hn : finrank 𝕜 E = n) {r : ℝ} (hr : 0 ≤ r) :
     (isSymmetric_real_smul hS r).eigenvalues hn = fun i => r * hS.eigenvalues hn i := by
-  refine eigenvalues_eq_of_eigenbasis _ hn (hS.eigenvectorBasis hn)
+  refine LinearMap.IsSymmetric.eigenvalues_eq_of_eigenbasis _ hn (hS.eigenvectorBasis hn)
     (fun i j hij => mul_le_mul_of_nonneg_left (hS.eigenvalues_antitone hn hij) hr)
     fun i => ?_
   rw [LinearMap.smul_apply, hS.apply_eigenvectorBasis hn i, smul_smul, ← RCLike.ofReal_mul]
@@ -173,7 +172,7 @@ theorem singularValues_comp_le {C : F →ₗ[𝕜] F'} {c : ℝ} (hc : 0 ≤ c)
       have h3 : ‖(C ∘ₗ A) x‖ ≤ c * ‖A x‖ := hC (A x)
       nlinarith [norm_nonneg ((C ∘ₗ A) x), norm_nonneg (A x),
         mul_nonneg hc (norm_nonneg (A x))]
-    have hloew := eigenvalues_le_eigenvalues_of_re_inner_le
+    have hloew := LinearMap.IsSymmetric.eigenvalue_mono
       (C ∘ₗ A).isSymmetric_adjoint_comp_self hsm rfl hforms ⟨i, hi⟩
     rw [congrFun (eigenvalues_real_smul A.isSymmetric_adjoint_comp_self rfl
       (by positivity : (0:ℝ) ≤ c ^ 2)) ⟨i, hi⟩] at hloew
@@ -197,7 +196,7 @@ theorem singularValues_comp_le' {X C : E →ₗ[𝕜] E} {c : ℝ} (hc : 0 ≤ c
 theorem eigenvalues_abs (A : E →ₗ[𝕜] E) :
     (isPositive_abs A).isSymmetric.eigenvalues rfl
       = fun i : Fin (finrank 𝕜 E) => A.singularValues (i : ℕ) := by
-  refine eigenvalues_eq_of_eigenbasis _ rfl
+  refine LinearMap.IsSymmetric.eigenvalues_eq_of_eigenbasis _ rfl
     (A.isSymmetric_adjoint_comp_self.eigenvectorBasis rfl)
     (fun i j hij => A.singularValues_antitone (by exact_mod_cast hij))
     fun i => ?_
@@ -299,7 +298,7 @@ theorem sum_re_inner_le_sum_eigenvalues_top {S : E →ₗ[𝕜] E} (hS : S.IsSym
   have hswap : ∑ i, RCLike.re ⟪S (w i), w i⟫_𝕜 = ∑ j, hS.eigenvalues hn j * c j := by
     have hdiag : ∀ i, RCLike.re ⟪S (w i), w i⟫_𝕜
         = ∑ j : Fin n, hS.eigenvalues hn j * ‖b.repr (w i) j‖ ^ 2 := fun i =>
-      re_inner_map_self_eq_sum_eigenvalues_mul_sq hS hn (w i)
+      LinearMap.IsSymmetric.re_inner_apply_self_eq_sum_eigenvalues_mul_sq hS hn (w i)
     simp_rw [hdiag, hc, Finset.mul_sum]
     exact Finset.sum_comm
   rw [hswap]

@@ -163,7 +163,7 @@ State whether scatter is normalized, whether Fourier transform uses 2π, whether
 
 ## 5. Approximation-number foundation
 
-> **RECONCILED 2026-07-27 — §5.1 and §5.4 are closed; §5.2 and §5.3 are what is left.**
+> **RECONCILED 2026-07-27 — §5 IS CLOSED. Every subsection has a disposition.**
 > The audit that used to sit here recorded a divergence between this section and the tree;
 > that divergence has been worked off item by item against
 > `ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/`, and every §5.1 heading is now
@@ -177,12 +177,16 @@ State whether scatter is normalized, whether Fourier transform uses 2π, whether
 >   verified-and-kept with the reason recorded, and two blocks were stale text rather than
 >   work. Name index in Appendix A.
 > - **§5.4 MinMax.lean — CLOSED** earlier the same day; see the lane note in `dev/LANES.md`.
-> - **§5.2 Adjoint.lean and §5.3 FiniteDimensional.lean — still open**, and still to be
->   re-checked against the tree before being worked: the same drift that produced this audit
->   block applies to them. Known specifics: §5.3's `singularValues_le_norm_sub_of_rank_le`,
->   `singularValues_le_approximationNumber` and `approximationNumber_eq_singularValues` are
->   already struck through, so what remains there is `approximationNumber_le_singularValues`;
->   §5.2 carries a single P1 "keep or annotate".
+> - **§5.2 Adjoint.lean — CLOSED.** Its single P1 got its `@[simp]`, and both questions the
+>   item left open were answered with evidence: the private rank transport does *not*
+>   duplicate Mathlib (`LinearMap.finrank_range_adjoint` is `finrank`-valued and so needs
+>   finite-dimensional ambient spaces, which is exactly the case this helper is not about),
+>   and both `CompleteSpace` assumptions are load-bearing.
+> - **§5.3 FiniteDimensional.lean — CLOSED.** Its one open P1 resolved to *privatize*, on
+>   consumer evidence rather than on the sketch's symmetry argument.
+>
+> Nothing in §5 is claimed or open. The remaining backlog is §12.2–12.7 (design-stage by the
+> roadmap's own rule) and §13's adapter retirement.
 
 
 ### 5.1 Basic.lean
@@ -903,9 +907,38 @@ theorem approximationNumber_smul (c : 𝕜) (T : E →L[𝕜] F) (n : ℕ) : (c 
 | **Primary review risks** | Potential duplication with generic rank-adjoint API; missing simp annotation; RCLike/CompleteSpace assumptions. |
 | **Likely PR slice** | PR A2. |
 
-#### P1  approximationNumber_adjoint
+#### P1  ~~approximationNumber_adjoint~~ — RESOLVED 2026-07-27
 
-**Disposition: Keep / annotate**
+**Disposition: `@[simp]` added; statement, name and assumptions unchanged.**  It
+orients (the left-hand side is strictly larger — it eliminates `adjoint`
+outright) and cannot loop, which is the condition the item attaches; the reason
+is recorded on the declaration rather than left for the next reader to re-derive.
+
+**The item's two open questions, answered with evidence rather than assumed:**
+
+* *Does the private rank proof duplicate Mathlib?*  **No.**  The closest
+  statement is `LinearMap.finrank_range_adjoint`, and it is `finrank`-valued,
+  which forces `[FiniteDimensional]` on the ambient spaces; this helper is about
+  a *finite-rank operator between infinite-dimensional* Hilbert spaces, where
+  `finrank` of the ambient space is `0` and the Mathlib lemma says nothing.  It
+  stays private, as the item asks.
+* *Is `CompleteSpace` needed on both spaces, or only because `adjoint` is
+  defined there?*  **Both are genuinely needed and neither is inherited noise.**
+  `ContinuousLinearMap.adjoint` is an isometric equivalence `(E →L[𝕜] F) ≃ₗᵢ⋆
+  (F →L[𝕜] E)` that requires completeness of both sides, and the statement names
+  the adjoint on both sides (`T.adjoint` and, through `adjoint_adjoint`, its
+  own adjoint).  Nothing weaker states.
+
+**Also landed here, opportunistic reuse:** the private helper's closing step was
+a `change` down to `LinearMap` level followed by `LinearMap.rank_comp_le_left`.
+That is exactly what §5.1's new `ContinuousLinearMap.rank_comp_le_left` exists
+for, so the helper lost eight lines and a `change`.  Its remaining lift plumbing
+also collapsed to one `Cardinal.lift_le_natCast` round trip.  And one stale
+`coe_nnnorm` simp argument, left over from the `ℝ≥0` codomain, is gone —
+**worth knowing: the `unusedSimpArgs` linter did not flag it**, so `simpa only`
+argument lists are not covered by the warning-zero sweep.
+
+*Original disposition:*
 
 ```lean
 theorem approximationNumber_adjoint (T : E →L[𝕜] F) (n : ℕ) : T.adjoint.approximationNumber n = T.approximationNumber n
@@ -1015,9 +1048,33 @@ theorem singularValue_le_approximationNumber
 
 **Likely adversarial review:** Constructor noise and mixed codomains are likely API-design findings.
 
-#### P1  approximationNumber_le_singularValues
+#### P1  ~~approximationNumber_le_singularValues~~ — RESOLVED 2026-07-27
 
-**Disposition: Possibly privatize**
+**Disposition: privatized.**  The item's own criterion is whether both
+directions have independent consumers; they do not.  `singularValues_le_
+approximationNumber` has a consumer outside this file
+(`DavisKahan/OperatorIdeal/ApproximationNumbers/Core.lean`) and stays public;
+this direction has **none**, and exists only to be combined into
+`approximationNumber_eq_singularValues`, so it is proof decomposition and is now
+`private`.
+
+**The resulting asymmetry is principled, not an oversight**, and the reason is
+recorded on the declaration so nobody "restores parallelism" later: the public
+direction bounds an *arbitrary* rank-at-most-`n` approximant from below and is
+the shape that survives into infinite dimensions (it is the half roadmap B.4
+says the two-sided package must be honest about), whereas this one is built from
+the singular value decomposition and is finite-dimensional in an essential way.
+The sketch's "keep syntactically parallel with the reverse inequality" would
+have preserved a symmetry the mathematics does not have.
+
+**Related decision recorded while here:** the resolved
+`approximationNumber_eq_singularValues` sketch above proposed `@[simp]`.
+**Declined**, with the reason on the declaration: it would fire on every
+`approximationNumber` goal that happens to sit under `FiniteDimensional`
+instances and rewrite the object this development is *about* into Mathlib's,
+which is the wrong normal form for a downstream perturbation argument.
+
+*Original disposition:*
 
 ```lean
 theorem approximationNumber_le_singularValues (T : E →L[𝕜] F) (n : ℕ) : T.approximationNumber n ≤ (⟨T.toLinearMap.singularValues n, T.toLinearMap.singularValues_nonneg n⟩ : NNReal)
@@ -1228,9 +1285,14 @@ Beyond deduplication the following backlog concerns were answered:
 - `rectangularGram_nonneg` became `adjoint_comp_self_nonneg`, documented as the
   `0 ≤ ·` form of Mathlib's `isPositive_adjoint_comp_self`.
 
-`operatorAbs` survives only as a reducible alias in a documented transitional
+~~`operatorAbs` survives only as a reducible alias in a documented transitional
 shim (`OperatorAbsoluteValue.lean`, not upstream-bound) so the ~80 Davis--Kahan
-references keep compiling; delete per declaration as consumers migrate.
+references keep compiling; delete per declaration as consumers migrate.~~
+**Done 2026-07-27 (§13):** the shim is deleted and every consumer is on
+`ContinuousLinearMap.modulus`. The migration was all-at-once rather than "per
+declaration as consumers migrate" — with the canonical API complete, a
+per-declaration retirement would have meant keeping the file alive for a single
+name at a time, which is precisely the long-lived-alias state §13 warns about.
 
 Still open, deliberately: whether the canonical name should be `modulus`,
 `abs`, or `operatorAbs` is a naming call for the roadmap — Mathlib has no
@@ -1811,10 +1873,10 @@ carry a transitional adapter whose deletion condition is stated.*
 
 | **Cluster** | **Current state** | **Signature risk** | **Upstream action** | **Priority** |
 | --- | --- | --- | --- | --- |
-| ~~operatorAbs~~ | **Canonical API landed (§7).** `ContinuousLinearMap.modulus` is the one rectangular modulus; `operatorAbs` survives only as a `reducible abbrev` in a documented not-for-upstream shim | Adapter is live, so the duplicate name is still importable | Delete the alias once its consumers move to `.modulus`; do not submit the alias | ~~P0~~ adapter-retirement |
+| ~~operatorAbs~~ | **RETIRED 2026-07-27.** `ContinuousLinearMap.modulus` is the one modulus; the `OperatorAbsoluteValue.lean` shim is **deleted** and the word `operatorAbs` no longer appears in any declaration name in the repository | none — the duplicate name is gone | done — there was never anything here to submit | ~~P0~~ ~~adapter-retirement~~ **done** |
 | ClosedOperator | **ACTIVE / CLAIMED 2026-07-27.** Canonical representation fixed to `LinearPMap` + properties | Two competing closed-operator representations in production | Execute U1: build canonical core, adapter, consumer migration, then delete/demote bundle — see §12.2 | P0 |
 | Spectra SelfAdjointOperator | **Open.** Still consumed across `DavisKahan/Sources/**` and `DavisKahan/Alternative/**` | Potential donor wrapper competing with the Tau Ceti representation | Port useful lemmas; choose canonical Tau Ceti representation | P1 |
-| ~~specSubspace~~ | **Renamed (§6).** Canonical is `OrthonormalBasis.spanIndices` in `ForTauCeti/Analysis/InnerProductSpace/BasisSpan.lean`, generalized off `Fin`/predicates; `specSubspace` remains only inside `CourantFischerCompat.lean` | Compat shim is importable | Delete with the shim once the historical Courant–Fischer signatures are retired | ~~P0~~ adapter-retirement |
+| ~~specSubspace~~ | **RETIRED 2026-07-27.** Canonical is `OrthonormalBasis.spanIndices` in `ForTauCeti/Analysis/InnerProductSpace/BasisSpan.lean`; `CourantFischerCompat.lean` is **deleted** and no `specSubspace` survives outside the immutable `Challenge` conformance file and `Acharyya2025`'s own self-contained paper copy | none — the compat shim is gone | done | ~~P0~~ ~~adapter-retirement~~ **done** |
 | ~~appendFin~~ | **Deleted (§8.1).** It was exactly `Fin.snoc`; `Fin.snoc_castSucc` / `Fin.snoc_last` replace its two simp lemmas | none | done — no adapter was needed | ~~P0~~ |
 | **finiteMean** | **KEPT (§8.1) — the "likely generic duplicate" reading was wrong.** `Finset.expect` requires `Module ℚ≥0 E`, which does not synthesize for a general `𝕜`-inner-product space; `Finset.centroid` typechecks but is `Classical.arbitrary` junk on the empty family, whereas `finiteMean` returns `0` there and `finiteMean_append` is deliberately stated to hold *at* `n = 0` | none — it is not a duplicate | Keep. Open sub-item: generalize `Fin n` → `Finset`, which is a redesign of the add-one identity, not a signature edit | P2 (was P0) |
 | ~~RectangularSymmetricIdealFamily~~ | **Replaced (§12.1).** `TauCeti.SymmetricOperatorIdealFamily` | Legacy record still has 68 consumers | `SymmetricOperatorIdealFamily.toRectangular` (transitional; delete with the legacy structure) | ~~P0~~ adapter-retirement |
@@ -1828,11 +1890,38 @@ carry a transitional adapter whose deletion condition is stated.*
 
 - Avoid long-lived aliases before upstream review; they obscure which API reviewers are evaluating.
 
-> **Three adapters are now live at once** — `operatorAbs`, `CourantFischerCompat`, and
-> `SymmetricOperatorIdealFamily.toRectangular` — which is exactly the "long-lived aliases
-> obscure which API reviewers are evaluating" risk this section warns about. Retiring them is
-> a distinct piece of work from the canonical-API lanes that created them, and it is not
-> currently claimed by anyone.
+> **~~Three adapters are now live at once~~ — down to ONE, 2026-07-27.** `operatorAbs` is
+> retired: its shim file is deleted and its call sites repointed to
+> `ContinuousLinearMap.modulus`. `CourantFischerCompat` is retired too: 14 wrappers, ~150 call
+> sites, shim file deleted. Only `SymmetricOperatorIdealFamily.toRectangular` remains live
+> and unclaimed, and the `toRectangular` row's own note says the legacy structure still has
+> 68 consumers.
+>
+> **What the `CourantFischerCompat` retirement added to the list below.** (3) An adapter can
+> hold a declaration that is **pinned as data** and therefore cannot be deleted at all:
+> `TauCeti.abs_eigenvalues_sub_le_opNorm` is named by
+> `comparator/candidate-02-courant-fischer-weyl.json` and by the immutable conformance
+> statement, so it moved into the canonical module keeping its off-convention name, with the
+> reason recorded on the declaration. Check `comparator/*.json` and `Challenge/**/Leaderboard.lean`
+> *before* planning a deletion, not after. (4) Half of that shim was not a rename at all but a
+> **representation** change (predicate `p : Fin n → Prop` → set `s`), which changes the shape
+> of every call site's hypotheses; a blind substitution silently renamed a *paper-facing*
+> `Acharyya2025` declaration that merely shared a name with a shim wrapper, and the resulting
+> self-reference showed up as "fail to show termination" rather than as an unknown identifier.
+> Diff the declaration headers after any repo-wide substitution.
+>
+> **What the `operatorAbs` retirement showed, worth knowing before taking the other two.**
+> Repointing names was the easy half. Two things were not mechanical: (1) the shim had
+> accreted a *new* declaration that was never part of the canonical API
+> (`operatorAbs_apply_eq_zero_iff`, declared into the shim's namespace from a paper-side
+> module, `DavisKahan/Geometry/Angle/OperatorAngleComplex.lean`), so retiring an adapter means
+> auditing what has been *added* to it, not only what it restates — that lemma is now
+> `ContinuousLinearMap.modulus_apply_eq_zero_iff` in the canonical module and generalized off
+> endomorphisms; and (2) the shim had quietly *weakened* the canonical statements to whatever
+> was convenient at the call site — `star`/`*` where the canonical API says `adjoint`/`∘L`.
+> Those agree on an endomorphism algebra but not up to `rw`, so call sites written against the
+> convenient form do not typecheck against the canonical one until their local facts are
+> restated. Budget for both.
 
 > **~~Gate gap found while reconciling this table (§10 lane).~~ CLOSED 2026-07-27 —
 > `scripts/check_declaration_name_drift.py`.** The last bullet above asks for "a grep gate for
@@ -1922,12 +2011,21 @@ carry a transitional adapter whose deletion condition is stated.*
 | singularValues_le_norm_sub_of_rank_le | singularValue_le_norm_sub_of_rank_le | Sketch; verify adjacent Mathlib naming |
 | approximationNumber_eq_singularValues | approximationNumber_eq_singularValue | Sketch; verify adjacent Mathlib naming |
 | lowerBound_le_approximationNumber_of_finrank | le_approximationNumber_of_finrank_lt | Sketch; verify adjacent Mathlib naming |
-| specSubspace | OrthonormalBasis.spanIndices | Sketch; verify adjacent Mathlib naming |
-| forall_unit_vector_eigenvalue_le_re_inner | exists_submodule_forall_unit_eigenvalue_le_re_inner | Sketch; verify adjacent Mathlib naming |
-| abs_eigenvalues_sub_le_opNorm | abs_eigenvalue_sub_eigenvalue_le_norm | Sketch; verify adjacent Mathlib naming |
-| eigenvalues_le_eigenvalues_of_re_inner_le | eigenvalue_mono | Sketch; verify adjacent Mathlib naming |
+| specSubspace | **OrthonormalBasis.spanIndices** | **Done 2026-07-27** (§13); a representation change (predicate → set), not a rename — the compat shim is deleted |
+| finrank_specSubspace / orthogonal_specSubspace / map_mem_specSubspace / re_inner_map_self_*_of_mem_specSubspace | **OrthonormalBasis.finrank_spanIndices(_set) / orthogonal_spanIndices / LinearMap.IsSymmetric.map_mem_spanIndices / …_of_mem_spanIndices** | **Done 2026-07-27** (§13) |
+| re_inner_map_self_eq_sum_eigenvalues_mul_sq / re_inner_map_self_eq_sum_of_eigenbasis / eigenvalues_eq_of_eigenbasis | **LinearMap.IsSymmetric.re_inner_apply_self_eq_sum_eigenvalues_mul_sq / …_eq_sum_of_eigenbasis / eigenvalues_eq_of_eigenbasis** | **Done 2026-07-27** (§13); two of these keep their name and change only namespace |
+| abs_eigenvalues_sub_le | **TauCeti.abs_eigenvalue_sub_eigenvalue_le** | **Done 2026-07-27** (§13) |
+| abs_eigenvalues_sub_le_opNorm | *(name kept)* | **MOVED, not renamed, 2026-07-27** (§13) — pinned by `comparator/candidate-02-courant-fischer-weyl.json` and the immutable conformance statement, so it keeps its off-convention name and moved into `CourantFischer.lean` with the reason on the declaration |
+| DavisKahan.reduces_specSubspace | **DavisKahan.reduces_spanIndices** | **Done 2026-07-27** (§13); its selection datum became a `Set` |
+| forall_unit_vector_eigenvalue_le_re_inner | **LinearMap.IsSymmetric.exists_submodule_forall_unit_eigenvalue_le_re_inner** | **Done 2026-07-27** (§13); the old name misstated the quantifier |
+| abs_eigenvalues_sub_le_opNorm | abs_eigenvalue_sub_eigenvalue_le_norm | **Superseded** — see the `abs_eigenvalues_sub_le_opNorm` row above; the continuous-linear-map form landed under that name, and the `LinearMap` form kept the old name because the comparator pins it |
+| eigenvalues_le_eigenvalues_of_re_inner_le | **LinearMap.IsSymmetric.eigenvalue_mono** | **Done 2026-07-27** (§13) |
 | rectangularOperatorModulus | ContinuousLinearMap.modulus | Sketch; verify adjacent Mathlib naming |
-| operatorAbs | delete; square specialization of modulus | Sketch; verify adjacent Mathlib naming |
+| operatorAbs | **deleted** — square specialization of `ContinuousLinearMap.modulus` | **Done 2026-07-27** (§13); shim file removed, call sites repointed, no alias kept |
+| operatorAbs_sameApproximationSingularValues | **modulus_sameApproximationSingularValues** | **Done 2026-07-27** (§13); the DKPS-side wrappers that still carried the retired word |
+| operatorAbs_mem_and_gauge_eq | **modulus_mem_and_gauge_eq** | **Done 2026-07-27** (§13) |
+| paperNorm_operatorAbs_eq | **paperNorm_modulus_eq** | **Done 2026-07-27** (§13) |
+| *(new)* | ContinuousLinearMap.modulus_apply_eq_zero_iff | **Added 2026-07-27** (§13) — had been declared from a paper-side module into the shim's namespace; moved to the canonical module and generalized off endomorphisms |
 | finiteMean | *(no rename)* | **KEPT 2026-07-27** (§8.1) — not a duplicate: `Finset.expect` needs `Module ℚ≥0 E`, which does not synthesize here; `Finset.centroid` is affine with `Classical.arbitrary` empty-family junk |
 | centeredScatter | *(name kept)* | **RETYPED 2026-07-27** (§8.1) to `E →L[𝕜] E`; `scatterOperator` was rejected because it states the normalization no better |
 | appendFin | `Fin.snoc` | **DELETED 2026-07-27** (§8.1) — it was exactly `Fin.snoc`; note the two are *not* `rfl`-equal, `snoc` transports along `cast` |

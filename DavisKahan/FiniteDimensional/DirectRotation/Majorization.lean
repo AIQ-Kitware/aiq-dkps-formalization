@@ -6,7 +6,6 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 import DavisKahan.FiniteDimensional.DirectRotation.PrincipalPlanes
 import DavisKahan.FiniteDimensional.Core.OperatorBlocks
 import ForTauCeti.Analysis.InnerProductSpace.CourantFischer
-import ForTauCeti.Analysis.InnerProductSpace.CourantFischerCompat
 import ForTauCeti.Analysis.InnerProductSpace.KyFan
 import ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm
 
@@ -207,13 +206,13 @@ theorem eigenvalues_hermitianPart_le_singularValues
   -- Use the Gram eigenbasis throughout: `abs A` is *defined* through it, so
   -- staying in it avoids an expensive cross-basis defeq.
   let b := A.isSymmetric_adjoint_comp_self.eigenvectorBasis rfl
-  let tail := specSubspace b (fun j : Fin (finrank 𝕜 E) => i ≤ j)
+  let tail := b.spanIndices (Set.Ici i)
   obtain ⟨L, hLdim, hLlow⟩ :=
-    forall_unit_vector_eigenvalue_le_re_inner
+    LinearMap.IsSymmetric.exists_submodule_forall_unit_eigenvalue_le_re_inner
       (hermitianPart_isSymmetric A) rfl i
   have htaildim : finrank 𝕜 tail = finrank 𝕜 E - (i : ℕ) := by
     dsimp [tail]
-    rw [finrank_specSubspace, ← Fin.card_Ici i]
+    rw [b.finrank_spanIndices_set, ← Fin.card_Ici i]
     congr 1
     ext j
     simp
@@ -237,7 +236,7 @@ theorem eigenvalues_hermitianPart_le_singularValues
     -- the bound has to be ascribed, or it stays a metavariable in the rewrite
     have hgram : RCLike.re ⟪(LinearMap.adjoint A ∘ₗ A) x, x⟫_𝕜 ≤
         A.singularValues (i : ℕ) ^ 2 * ‖x‖ ^ 2 :=
-      re_inner_map_self_le_of_mem_specSubspace
+      LinearMap.IsSymmetric.re_inner_apply_self_le_of_mem_spanIndices
         A.isSymmetric_adjoint_comp_self rfl
         (fun j hj => by
           rw [← A.sq_singularValues_fin rfl j]
@@ -359,7 +358,7 @@ theorem singularValues_of_isPositive {A : E →ₗ[𝕜] E} (hA : A.IsPositive)
     A.singularValues (j : ℕ) = hA.isSymmetric.eigenvalues rfl j := by
   have hgram : A.isSymmetric_adjoint_comp_self.eigenvalues rfl =
       fun i => (hA.isSymmetric.eigenvalues rfl i) ^ 2 :=
-    eigenvalues_eq_of_eigenbasis A.isSymmetric_adjoint_comp_self rfl
+    LinearMap.IsSymmetric.eigenvalues_eq_of_eigenbasis A.isSymmetric_adjoint_comp_self rfl
       (hA.isSymmetric.eigenvectorBasis rfl)
       (fun a b hab => pow_le_pow_left₀ (hA.nonneg_eigenvalues rfl b)
         (hA.isSymmetric.eigenvalues_antitone rfl hab) 2)
@@ -436,7 +435,7 @@ theorem positive_affine_reverse_kyFanSum
     have hrev : Fin.rev j ≤ Fin.rev i := Fin.rev_le_rev.mpr hij
     have hlam := hC.eigenvalues_antitone rfl hrev
     linarith
-  have hAeig := eigenvalues_eq_of_eigenbasis hA.isSymmetric rfl br hanti heig
+  have hAeig := LinearMap.IsSymmetric.eigenvalues_eq_of_eigenbasis hA.isSymmetric rfl br hanti heig
   have hrange : kyFanSum k A
       = ∑ i ∈ Finset.range (min k (finrank 𝕜 E)), A.singularValues i := by
     refine (Finset.sum_subset

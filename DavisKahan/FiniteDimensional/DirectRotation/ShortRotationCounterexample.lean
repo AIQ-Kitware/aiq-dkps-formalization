@@ -314,7 +314,7 @@ theorem singularValues_displacement_R (j : Fin 4) :
       Real.sqrt (2 - Real.sqrt 2) := by
   set D := LinearMap.id - (directRotation U4 V4 acute).toLinearMap with hD
   have hfr : finrank ℝ E4 = 4 := finrank_euclideanSpace_fin
-  have heig := eigenvalues_eq_of_eigenbasis D.isSymmetric_adjoint_comp_self hfr
+  have heig := LinearMap.IsSymmetric.eigenvalues_eq_of_eigenbasis D.isSymmetric_adjoint_comp_self hfr
     (EuclideanSpace.basisFun (Fin 4) ℝ)
     (μ := fun _ => 2 - Real.sqrt 2) (fun _ _ _ => le_rfl)
     (fun i => by
@@ -508,7 +508,7 @@ theorem singularValues_displacement_W (j : Fin 4) :
       Real.sqrt ((![2, 2, 0, 0] : Fin 4 → ℝ) j) := by
   set D := LinearMap.id - Wlin with hD
   have hfr : finrank ℝ E4 = 4 := finrank_euclideanSpace_fin
-  have heig := eigenvalues_eq_of_eigenbasis
+  have heig := LinearMap.IsSymmetric.eigenvalues_eq_of_eigenbasis
     D.isSymmetric_adjoint_comp_self hfr mbasis
     (μ := ![2, 2, 0, 0]) antitone_two_two_zero_zero
     (fun i => gram_displacement_W_apply i)
@@ -559,7 +559,7 @@ theorem antitone_half_half_zero_zero :
 /-- The largest principal sine is `√½`. -/
 theorem principalSines_zero : principalSines U4 V4 0 = Real.sqrt 2⁻¹ := by
   have hfr : finrank ℝ E4 = 4 := finrank_euclideanSpace_fin
-  have heig := eigenvalues_eq_of_eigenbasis
+  have heig := LinearMap.IsSymmetric.eigenvalues_eq_of_eigenbasis
     (sinThetaMap U4 V4).isSymmetric_adjoint_comp_self hfr
     (EuclideanSpace.basisFun (Fin 4) ℝ)
     (μ := ![2⁻¹, 2⁻¹, 0, 0]) antitone_half_half_zero_zero

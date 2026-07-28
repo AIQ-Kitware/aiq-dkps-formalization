@@ -517,6 +517,35 @@ theorem abs_eigenvalue_sub_eigenvalue_le_norm
   refine abs_eigenvalue_sub_eigenvalue_le hT hS hn (fun x => ?_) k
   simpa using (T - S).le_opNorm x
 
+/-- **Weyl's inequality**, `LinearMap` form: the bound is the operator norm of
+`T - S` read through `LinearMap.toContinuousLinearMap`.
+
+Two things about this declaration are not free choices, and both are worth
+stating rather than leaving to be rediscovered.
+
+*The name* does not follow the convention its neighbours use
+(`abs_eigenvalue_sub_eigenvalue_le`, `abs_eigenvalue_sub_eigenvalue_le_norm`)
+because it is **pinned as data**: `comparator/candidate-02-courant-fischer-weyl.json`
+lists `TauCeti.abs_eigenvalues_sub_le_opNorm` in its `theorem_names`, and the
+paired immutable challenge statement in
+`Challenge/MathlibCandidate/CourantFischerWeyl/Conformance.lean` declares it
+under that name.  Renaming it here would silently orphan the conformance
+comparison, which no compiler checks.
+
+*The duplication with `abs_eigenvalue_sub_eigenvalue_le_norm` is only apparent.*
+The eigenvalue API is stated for `LinearMap.IsSymmetric`, so the `LinearMap`
+form is the one that needs no coercion in its hypotheses; the continuous form
+above needs `(T : E →ₗ[𝕜] E)` in both.  They bound the same quantity by norms
+of two different objects. -/
+theorem abs_eigenvalues_sub_le_opNorm
+    {T S : E →ₗ[𝕜] E} (hT : T.IsSymmetric) (hS : S.IsSymmetric)
+    (hn : finrank 𝕜 E = n) (k : Fin n) :
+    |hT.eigenvalues hn k - hS.eigenvalues hn k|
+      ≤ ‖LinearMap.toContinuousLinearMap (T - S)‖ := by
+  refine abs_eigenvalue_sub_eigenvalue_le hT hS hn (fun x => ?_) k
+  have hx := (LinearMap.toContinuousLinearMap (T - S)).le_opNorm x
+  rwa [LinearMap.coe_toContinuousLinearMap'] at hx
+
 end TauCeti
 
 end

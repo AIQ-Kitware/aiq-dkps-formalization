@@ -17,9 +17,9 @@ To be re-authored per Mathlib's AI-contribution policy at PR time.
 Wave-1 migration provenance: original module `ForMathlib.Analysis.InnerProductSpace.PrincipalAngles` at the
 Davis--Kahan repository; moved to `ForTauCeti` with the namespace
 `ForMathlib` renamed `TauCeti` (module-system conversion deferred to a
-later mechanical pass).  No mathematical change
-beyond routing historical Courant--Fischer names through the transitional
-`CourantFischerCompat` shim.
+later mechanical pass).  No mathematical change; the historical
+Courant--Fischer names it used were repointed to the canonical API when the
+`CourantFischerCompat` shim was retired.
 -/
 
 import ForTauCeti.Analysis.InnerProductSpace.AlignedBasis
@@ -396,7 +396,7 @@ theorem singularValues_comp_adjoint_linearIsometry
         hadj, hGX.apply_eigenvectorBasis rfl, map_smul, LinearIsometry.coe_toLinearMap]
     · rw [dif_neg h, hw_ge i h, LinearMap.comp_apply, LinearMap.comp_apply,
         hker _ (SetLike.coe_mem _), map_zero, map_zero, RCLike.ofReal_zero, zero_smul]
-  have heq := eigenvalues_eq_of_eigenbasis Y.isSymmetric_adjoint_comp_self rfl bE
+  have heq := LinearMap.IsSymmetric.eigenvalues_eq_of_eigenbasis Y.isSymmetric_adjoint_comp_self rfl bE
     hμ'_anti heig
   refine Finsupp.ext fun i => ?_
   rcases lt_or_ge i (finrank 𝕜 D) with hid | hid
@@ -420,7 +420,7 @@ padding.  `ι_u⋆ ∘ ι_u = 1` gives the gram identity
 `gram (X ∘ₗ ι_u⋆) = ι_u ∘ₗ gram X ∘ₗ ι_u⋆`, whose eigendata is that of `gram X`
 pushed through `ι_u` and extended by `0` on `(span (range u))ᗮ`; gram
 eigenvalues are nonnegative and sorted, so the padded vector is still sorted
-and the sorted-eigenvalue uniqueness (`eigenvalues_eq_of_eigenbasis`) closes.
+and the sorted-eigenvalue uniqueness (`LinearMap.IsSymmetric.eigenvalues_eq_of_eigenbasis`) closes.
 This transports singular-value data between the coordinate model and the
 ambient space (plan step OP3.0). -/
 theorem singularValues_comp_adjoint_familyIsometry
