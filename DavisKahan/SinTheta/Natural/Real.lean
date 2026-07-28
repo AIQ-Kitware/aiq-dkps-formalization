@@ -128,16 +128,16 @@ theorem sinTheta_unbounded_real_spectralSubspace
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : UnboundedSylvesterGap A0
       (realSelfAdjointSpectralRestriction A hA Sᶜ hS.compl) δ)
-    (hR : N.toRectangularSymmetricIdealFamily.Mem Rop) :
-    N.toRectangularSymmetricIdealFamily.Mem
+    (hR : N.Mem Rop) :
+    N.Mem
       ((ContinuousLinearMap.id ℝ E -
         realSelfAdjointSpectralSubspaceInclusion A hA S hS ∘L
           (realSelfAdjointSpectralSubspaceInclusion A hA S hS).adjoint) ∘L X) ∧
-      δ * N.toRectangularSymmetricIdealFamily.gauge
+      δ * N.gauge
         ((ContinuousLinearMap.id ℝ E -
           realSelfAdjointSpectralSubspaceInclusion A hA S hS ∘L
             (realSelfAdjointSpectralSubspaceInclusion A hA S hS).adjoint) ∘L X)
-        ≤ N.toRectangularSymmetricIdealFamily.gauge Rop := by
+        ≤ N.gauge Rop := by
   let D := unboundedSinThetaDataOfRealSpectralSubspace
     A hA S hS A0 X Rop hXdom hReq
   have hLambda : D.Λ₁.IsSelfAdjoint := by
@@ -170,16 +170,16 @@ theorem generalizedSinTheta_unbounded_real_spectralSubspace
       A.toLinearMap ⟨X (x : F), hXdom x⟩ - X (A0.toLinearMap x) = Rop (x : F))
     (hgap : UnboundedSylvesterGap A0
       (realSelfAdjointSpectralRestriction A hA Sᶜ hS.compl) δ)
-    (hR : N.toRectangularSymmetricIdealFamily.Mem Rop) :
-    N.toRectangularSymmetricIdealFamily.Mem
+    (hR : N.Mem Rop) :
+    N.Mem
       (directedSinThetaOperatorReal X
         (realSelfAdjointSpectralSubspaceInclusion A hA S hS)
         hframe hε) ∧
-      δ * ε * N.toRectangularSymmetricIdealFamily.gauge
+      δ * ε * N.gauge
         (directedSinThetaOperatorReal X
           (realSelfAdjointSpectralSubspaceInclusion A hA S hS)
           hframe hε)
-        ≤ N.toRectangularSymmetricIdealFamily.gauge Rop := by
+        ≤ N.gauge Rop := by
   let D := unboundedSinThetaDataOfRealSpectralSubspace
     A hA S hS A0 X Rop hXdom hReq
   have hLambda : D.Λ₁.IsSelfAdjoint := by

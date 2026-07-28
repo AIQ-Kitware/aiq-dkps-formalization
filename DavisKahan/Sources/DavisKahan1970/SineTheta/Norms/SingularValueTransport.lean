@@ -262,10 +262,10 @@ theorem mem_and_gauge_eq
     (N : UnitaryInvariantIdealFamily (𝕜 := 𝕜))
     {A B : G →L[𝕜] H}
     (h : SameApproximationSingularValues A B)
-    (hB : N.toRectangularSymmetricIdealFamily.Mem B) :
-    N.toRectangularSymmetricIdealFamily.Mem A ∧
-      N.toRectangularSymmetricIdealFamily.gauge A =
-        N.toRectangularSymmetricIdealFamily.gauge B := by
+    (hB : N.Mem B) :
+    N.Mem A ∧
+      N.gauge A =
+        N.gauge B := by
   let M := N.toRectangularSymmetricIdealFamily
   have hAB : ∀ k, kyFanApproximationGauge k A ≤
       kyFanApproximationGauge k B := fun k =>
@@ -283,12 +283,12 @@ theorem mem_and_mul_gauge_le
     (N : UnitaryInvariantIdealFamily (𝕜 := 𝕜))
     {A B C : G →L[𝕜] H} {c : ℝ}
     (h : SameApproximationSingularValues A B)
-    (hB : N.toRectangularSymmetricIdealFamily.Mem B)
-    (hbound : c * N.toRectangularSymmetricIdealFamily.gauge B ≤
-      N.toRectangularSymmetricIdealFamily.gauge C) :
-    N.toRectangularSymmetricIdealFamily.Mem A ∧
-      c * N.toRectangularSymmetricIdealFamily.gauge A ≤
-        N.toRectangularSymmetricIdealFamily.gauge C := by
+    (hB : N.Mem B)
+    (hbound : c * N.gauge B ≤
+      N.gauge C) :
+    N.Mem A ∧
+      c * N.gauge A ≤
+        N.gauge C := by
   obtain ⟨hA, hgauge⟩ := h.mem_and_gauge_eq N hB
   refine ⟨hA, ?_⟩
   rw [hgauge]
@@ -348,10 +348,10 @@ theorem mem_and_gauge_eq
     (N : UnitaryInvariantIdealFamily (𝕜 := 𝕜))
     {canonical : G →L[𝕜] H}
     (S : PaperSinThetaRepresentative canonical)
-    (hcanonical : N.toRectangularSymmetricIdealFamily.Mem canonical) :
-    N.toRectangularSymmetricIdealFamily.Mem S.operator ∧
-      N.toRectangularSymmetricIdealFamily.gauge S.operator =
-        N.toRectangularSymmetricIdealFamily.gauge canonical :=
+    (hcanonical : N.Mem canonical) :
+    N.Mem S.operator ∧
+      N.gauge S.operator =
+        N.gauge canonical :=
   S.same_singular_values.mem_and_gauge_eq N hcanonical
 
 end PaperSinThetaRepresentative

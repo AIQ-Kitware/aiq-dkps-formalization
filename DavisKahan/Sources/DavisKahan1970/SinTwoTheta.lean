@@ -167,15 +167,15 @@ theorem unbounded_sinTwoTheta_uiNorm_representative
     (hBcomplSpec : ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
       lam ∉ Spectra.Resolvent.spectrum
         (selfAdjointSpectralRestriction A hA Bᶜ hB.compl).toLinearPMap)
-    (hEmem : N.toRectangularSymmetricIdealFamily.Mem E)
+    (hEmem : N.Mem E)
     (sinTwoTheta₀ : PaperSinThetaRepresentative
       (sinTwoThetaIdealBlock
         (selfAdjointSpectralSubspace A hA B hB)
         (selfAdjointSpectralSubspace (A.addBounded E)
           (addBounded_isSelfAdjoint A hA E hE) S hS))) :
-    N.toRectangularSymmetricIdealFamily.Mem sinTwoTheta₀.operator ∧
-      δ * N.toRectangularSymmetricIdealFamily.gauge sinTwoTheta₀.operator ≤
-        2 * N.toRectangularSymmetricIdealFamily.gauge E := by
+    N.Mem sinTwoTheta₀.operator ∧
+      δ * N.gauge sinTwoTheta₀.operator ≤
+        2 * N.gauge E := by
   have hcanonical := sinTwoTheta_addBounded_gauge_of_spectrum_gap
     N.toRectangularSymmetricIdealFamily A hA E hE B S hB hS
       hβα hδ hBlow hBhigh hBcomplSpec hEmem
@@ -209,13 +209,13 @@ theorem unbounded_sinTwoTheta_residual_uiNorm_representative
       (A.addBounded R).toLinearMap
           ⟨V.reflectionOperator (x : H), hJdom x⟩ =
         V.reflectionOperator (A.toLinearMap x))
-    (hRmem : N.toRectangularSymmetricIdealFamily.Mem R)
+    (hRmem : N.Mem R)
     (sinTwoTheta₀ : PaperSinThetaRepresentative
       (sinTwoThetaIdealBlock
         (selfAdjointSpectralSubspace A hA B hB) V)) :
-    N.toRectangularSymmetricIdealFamily.Mem sinTwoTheta₀.operator ∧
-      δ * N.toRectangularSymmetricIdealFamily.gauge sinTwoTheta₀.operator ≤
-        N.toRectangularSymmetricIdealFamily.gauge R := by
+    N.Mem sinTwoTheta₀.operator ∧
+      δ * N.gauge sinTwoTheta₀.operator ≤
+        N.gauge R := by
   have hcanonical := sinTwoTheta_reflectionResidual_gauge_of_spectrum_gap
     N.toRectangularSymmetricIdealFamily A hA R hR B hB V
       hβα hδ hBlow hBhigh hBcomplSpec hJdom hJintertwines hRmem

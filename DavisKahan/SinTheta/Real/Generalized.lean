@@ -51,32 +51,31 @@ theorem generalizedSinTheta_unbounded_real
     (hδ : 0 < δ) (hε : 0 < ε)
     (hframe : LowerFrameBound D.X ε)
     (hgap : UnboundedSylvesterGap D.A₀ D.Λ₁ δ)
-    (hR : N.toRectangularSymmetricIdealFamily.Mem D.residual) :
-    N.toRectangularSymmetricIdealFamily.Mem
+    (hR : N.Mem D.residual) :
+    N.Mem
       (sinThetaBlockReal D.X D.F₁ hframe hε) ∧
-      δ * ε * N.toRectangularSymmetricIdealFamily.gauge
+      δ * ε * N.gauge
         (sinThetaBlockReal D.X D.F₁ hframe hε)
-        ≤ N.toRectangularSymmetricIdealFamily.gauge D.residual := by
-  let M := N.toRectangularSymmetricIdealFamily
+        ≤ N.gauge D.residual := by
   let P := lowerFramePolarDataReal D.X hframe hε
   have hEq := unbounded_adjoint_residual_block_identity D hA hA₀ hΛ₁
-  have hC := adjointResidualBlock_mem_and_gauge_le M D hF₁ hR
+  have hC := adjointResidualBlock_mem_and_gauge_le N.toRectangularSymmetricIdealFamily D hF₁ hR
   have hRaw := davisKahan1970_sylvester_real
     N hA₀ hΛ₁ hδ hgap hEq hC.1
   have hFrame := lowerFrame_sinThetaBlockOfPolarData_mem_and_gauge_le
-    M P D.F₁ hRaw.1
+    N.toRectangularSymmetricIdealFamily P D.F₁ hRaw.1
   have hBlockDef :
       sinThetaBlockReal D.X D.F₁ hframe hε =
         sinThetaBlockOfPolarData P D.F₁ := rfl
   refine ⟨hBlockDef ▸ hFrame.1, ?_⟩
   rw [hBlockDef]
   calc
-    δ * ε * M.gauge (sinThetaBlockOfPolarData P D.F₁) =
-        δ * (ε * M.gauge (sinThetaBlockOfPolarData P D.F₁)) := by ring
-    _ ≤ δ * M.gauge (D.X.adjoint ∘L D.F₁) :=
+    δ * ε * N.gauge (sinThetaBlockOfPolarData P D.F₁) =
+        δ * (ε * N.gauge (sinThetaBlockOfPolarData P D.F₁)) := by ring
+    _ ≤ δ * N.gauge (D.X.adjoint ∘L D.F₁) :=
       mul_le_mul_of_nonneg_left hFrame.2 hδ.le
-    _ ≤ M.gauge (-(D.residual.adjoint ∘L D.F₁)) := hRaw.2
-    _ ≤ M.gauge D.residual := hC.2
+    _ ≤ N.gauge (-(D.residual.adjoint ∘L D.F₁)) := hRaw.2
+    _ ≤ N.gauge D.residual := hC.2
 
 /-- Exact real generalized theorem in full directed sine form. -/
 theorem generalizedSinTheta_unbounded_exact_real
@@ -91,13 +90,12 @@ theorem generalizedSinTheta_unbounded_exact_real
     (hδ : 0 < δ) (hε : 0 < ε)
     (hframe : LowerFrameBound D.X ε)
     (hgap : UnboundedSylvesterGap D.A₀ D.Λ₁ δ)
-    (hR : N.toRectangularSymmetricIdealFamily.Mem D.residual) :
-    N.toRectangularSymmetricIdealFamily.Mem
+    (hR : N.Mem D.residual) :
+    N.Mem
       (directedSinThetaOperatorReal D.X F₀ hframe hε) ∧
-      δ * ε * N.toRectangularSymmetricIdealFamily.gauge
+      δ * ε * N.gauge
         (directedSinThetaOperatorReal D.X F₀ hframe hε)
-        ≤ N.toRectangularSymmetricIdealFamily.gauge D.residual := by
-  let M := N.toRectangularSymmetricIdealFamily
+        ≤ N.gauge D.residual := by
   let P := lowerFramePolarDataReal D.X hframe hε
   have hBlock := generalizedSinTheta_unbounded_real
     N D hA hA₀ hΛ₁ hdecomp.isometry₁ hδ hε hframe hgap hR
@@ -105,11 +103,12 @@ theorem generalizedSinTheta_unbounded_exact_real
       sinThetaBlockReal D.X D.F₁ hframe hε =
         sinThetaBlockOfPolarData P D.F₁ := rfl
   have hAngle := sinThetaBlockOfPolarData_mem_and_gauge_eq_directed
-    M P F₀ D.F₁ hdecomp (hBlockDef ▸ hBlock.1)
+    N.toRectangularSymmetricIdealFamily P F₀ D.F₁ hdecomp (hBlockDef ▸ hBlock.1)
   have hDirectedDef :
       directedSinThetaOperatorReal D.X F₀ hframe hε =
         directedSinThetaOperatorOfPolarData P F₀ := rfl
   refine ⟨hDirectedDef ▸ hAngle.1, ?_⟩
+  simp only [KyFanDominantIdealFamily.gauge]
   rw [hDirectedDef, hAngle.2, ← hBlockDef]
   exact hBlock.2
 

@@ -36,10 +36,10 @@ theorem directGenuineOrderedSylvesterEngine_lowerUpper
     (hAc : SemiboundedBelow A (c + δ))
     (hBc : SemiboundedAbove B c)
     (hEq : HasClosedSylvesterEquation A B X R)
-    (hR : N.toRectangularSymmetricIdealFamily.Mem R) :
-    N.toRectangularSymmetricIdealFamily.Mem X ∧
-      δ * N.toRectangularSymmetricIdealFamily.gauge X ≤
-        N.toRectangularSymmetricIdealFamily.gauge R := by
+    (hR : N.Mem R) :
+    N.Mem X ∧
+      δ * N.gauge X ≤
+        N.gauge R := by
   exact unbounded_sylvester_mem_and_gauge_le_direct
     (N := N) (A := A) (B := B) (X := X) (C := R) (c := c) (δ := δ)
     hA hB
@@ -63,10 +63,10 @@ theorem directGenuineOrderedSylvesterEngine_upperLower
     (hAc : SemiboundedAbove A c)
     (hBc : SemiboundedBelow B (c + δ))
     (hEq : HasClosedSylvesterEquation A B X R)
-    (hR : N.toRectangularSymmetricIdealFamily.Mem R) :
-    N.toRectangularSymmetricIdealFamily.Mem X ∧
-      δ * N.toRectangularSymmetricIdealFamily.gauge X ≤
-        N.toRectangularSymmetricIdealFamily.gauge R := by
+    (hR : N.Mem R) :
+    N.Mem X ∧
+      δ * N.gauge X ≤
+        N.gauge R := by
   exact unbounded_sylvester_mem_and_gauge_le_direct_swapped
     (N := N) (A := A) (B := B) (X := X) (C := R) (c := c) (δ := δ)
     hA hB

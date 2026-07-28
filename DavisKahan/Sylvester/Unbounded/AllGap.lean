@@ -75,10 +75,10 @@ theorem davisKahan1970_sylvester_of_genuineSpectrumGap
     (hδ : 0 < δ)
     (hgap : GenuineUnboundedSylvesterGap A B δ)
     (hEq : HasClosedSylvesterEquation A B X C)
-    (hC : N.toRectangularSymmetricIdealFamily.Mem C) :
-    N.toRectangularSymmetricIdealFamily.Mem X ∧
-      δ * N.toRectangularSymmetricIdealFamily.gauge X ≤
-        N.toRectangularSymmetricIdealFamily.gauge C := by
+    (hC : N.Mem C) :
+    N.Mem X ∧
+      δ * N.gauge X ≤
+        N.gauge C := by
   cases hgap with
   | intervalExterior hβα hgap =>
       rcases hgap with hgap | hgap
