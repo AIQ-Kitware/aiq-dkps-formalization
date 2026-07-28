@@ -73,14 +73,21 @@ Ownership classes: `mathlib` · `tauceti` · `davis-kahan` · `spectra-bridge` �
 * **Home**: `DavisKahan/OperatorIdeal/ApproximationNumbers/BlockSum.lean`,
   `DavisKahan/Alternative/OperatorIdeal/HilbertSchmidt/ColumnExpansion.lean`.
 * **Ownership**: `tauceti`. **Final**: `TauCeti/Analysis/OperatorIdeal/ApproximationNumber/BlockSum.lean`.
-* **Status**: `needs-api-refactor` + partially `blocked-on-spectra-removal`.
-  `BlockSum.lean` imports `DavisKahan.Interop.Spectra.ApproximationNumberMinMax`
-  and `DavisKahan.Sources…SingularValueTransport` (a source facade — a backwards
-  dependency). Exact orthogonal block-sum merge formulas whose current proof
-  depends on Spectra are excluded from an early PR (campaign §9.2).
-* **Blocker (precise)**: `SpectraBridge.lt_approximationNumber_iff_exists_finiteDimensional_lowerBound`
-  and the `Sources…SingularValueTransport` import.
-* **PR order**: after PR 1/2, once the Spectra-free min–max lands.
+* **Status (updated 2026-07-28)**: `needs-api-refactor`. The
+  `blocked-on-spectra-removal` half is **gone**: the Spectra bridge that
+  `BlockSum.lean` imported has been deleted, its content staged as
+  `ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/FiniteRestriction.lean`,
+  and an import-closure walk confirms `BlockSum.lean` no longer reaches Spectra
+  transitively. What remains is the **source-facade import**
+  `DavisKahan.Sources…SingularValueTransport`, a backwards dependency from the
+  generic layer into the source layer, which is an API-shape problem and not a
+  Spectra one.
+* **Blocker (precise)**: the `Sources…SingularValueTransport` import only. The
+  former blocker
+  `SpectraBridge.lt_approximationNumber_iff_exists_finiteDimensional_lowerBound`
+  is now `ContinuousLinearMap.lt_approximationNumber_iff_exists_finiteDimensional_lowerBound`,
+  staged and proved from Mathlib's continuous functional calculus.
+* **PR order**: after PR 1/2.
 
 ### 1c. Reusable Hilbert–Schmidt identities
 * **Home**: `ForTauCeti/Analysis/InnerProductSpace/{OrthogonalSeries,HilbertSchmidtEnergy}.lean`
@@ -190,8 +197,15 @@ Ownership classes: `mathlib` · `tauceti` · `davis-kahan` · `spectra-bridge` �
 
 1. **PR 1 — approximation numbers** *(staged this campaign)*: Basic, Adjoint,
    FiniteDimensional, MinMax, CourantFischer, OperatorModulus (clean part). No DK
-   theorem; no Spectra.
+   theorem; no Spectra. **Grew on 2026-07-28** by the other half of the min–max
+   theorem (`SpectralCutoff`, `MinMaxUpper`), its localization corollaries
+   (`FiniteRestriction`), and the Ky Fan gauges (`ApproximationNumber/KyFan`),
+   all Spectra-free.
 2. **PR 2 — rectangular symmetric ideal families + Hilbert–Schmidt equivalences.**
+   *(2026-07-28: Hilbert–Schmidt staged as `InnerProductSpace/HilbertSchmidtEnergy`
+   and `Family/HilbertSchmidt`; the Ky Fan instance staged as `Family/KyFan`,
+   with no capability hypothesis. What remains is the symmetric-gauge/Calkin
+   construction — item S1 of the symmetric-ideals roadmap.)*
 3. **PR 3 — closed operators + reducing restrictions** (after `OneParameterSemigroups`
    coordination).
 4. **PR 4 — Sylvester equations** (finite core first; unbounded after Spectra-free
