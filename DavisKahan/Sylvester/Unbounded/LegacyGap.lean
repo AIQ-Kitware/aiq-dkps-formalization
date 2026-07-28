@@ -43,7 +43,8 @@ theorem genuineSylvesterIntervalExteriorGap_of_legacy
     · simpa only [SpectraBridge.realSpectrum_eq_spectraSpectrum] using hgap.1
     · intro lam hlam hlamSpec
       have hlegacy : lam ∈ B.realSpectrum := by
-        simpa only [SpectraBridge.realSpectrum_eq_spectraSpectrum] using hlamSpec
+        simpa only [SpectraBridge.realSpectrum_eq_spectraSpectrum, Set.mem_preimage]
+          using hlamSpec
       rcases hgap.2 hlegacy with hleft | hright
       · exact (not_lt_of_ge hleft) hlam.1
       · exact (not_lt_of_ge hright) hlam.2
@@ -52,7 +53,8 @@ theorem genuineSylvesterIntervalExteriorGap_of_legacy
     · simpa only [SpectraBridge.realSpectrum_eq_spectraSpectrum] using hgap.1
     · intro lam hlam hlamSpec
       have hlegacy : lam ∈ A.realSpectrum := by
-        simpa only [SpectraBridge.realSpectrum_eq_spectraSpectrum] using hlamSpec
+        simpa only [SpectraBridge.realSpectrum_eq_spectraSpectrum, Set.mem_preimage]
+          using hlamSpec
       rcases hgap.2 hlegacy with hleft | hright
       · exact (not_lt_of_ge hleft) hlam.1
       · exact (not_lt_of_ge hright) hlam.2

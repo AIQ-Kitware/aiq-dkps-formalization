@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Sources.DavisKahan1970.RemainingSourceSurface
+import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
 
 /-!
 # Correct source wrappers for Section 7
@@ -43,7 +44,7 @@ theorem section7_sinTwoTheta_source_ideal_completed
     (hBhigh : SemiboundedAbove
       (selfAdjointSpectralRestriction A hA B hB) alpha)
     (hBcomplSpec : ∀ lam ∈ Set.Ioo (beta - delta) (alpha + delta),
-      lam ∉ Spectra.Resolvent.spectrum
+      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum
         (selfAdjointSpectralRestriction A hA Bᶜ hB.compl).toLinearPMap)
     (hEmem : N.Mem E) :
     N.Mem (sinTwoThetaIdealBlock
@@ -71,7 +72,7 @@ theorem section7_tanTwoTheta_source_ideal_corrected
     (hBhigh : SemiboundedAbove
       (selfAdjointSpectralRestriction A hA B hB) alpha)
     (hBcomplSpec : ∀ lam ∈ Set.Ioo (beta - delta) (alpha + delta),
-      lam ∉ Spectra.Resolvent.spectrum
+      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum
         (selfAdjointSpectralRestriction A hA Bᶜ hB.compl).toLinearPMap)
     (hEmem : N.Mem E)
     (hquarter : IsQuarterAcute

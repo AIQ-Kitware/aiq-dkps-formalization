@@ -7,6 +7,7 @@ import DavisKahan.Interop.Spectra.ClosedOperator
 import DavisKahan.Sylvester.ShiftedInverseGauge
 import Spectra.SpectralTheory.Spectrum
 import Spectra.SpectralTheory.Algebra
+import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
 
 /-!
 # Norm-bounded gap resolvents from the Spectra spectral theorem
@@ -241,7 +242,7 @@ then `A - c` has a two-sided bounded inverse of norm at most `s⁻¹`. -/
 theorem exists_norm_le_two_sided_shifted_inverse_of_spectrum_gap
     {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A) {c s : ℝ} (hs : 0 < s)
     (hgap : ∀ lam ∈ Set.Ioo (c - s) (c + s),
-      lam ∉ Spectra.Resolvent.spectrum A) :
+      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum A) :
     ∃ R : H →L[ℂ] H, ‖R‖ ≤ s⁻¹ ∧
       (∀ ψ : A.domain, R (A ψ - (c : ℂ) • (ψ : H)) = (ψ : H)) ∧
       ∀ φ : H, ∃ hmem : R φ ∈ A.domain,
@@ -249,7 +250,7 @@ theorem exists_norm_le_two_sided_shifted_inverse_of_spectrum_gap
   have hres : ∀ lam ∈ Set.Ioo (c - s) (c + s),
       (lam : ℂ) ∈ resolventSet (generator (genToGroup hA)) := by
     intro lam hlam
-    have h1 : ¬ ((lam : ℂ) ∉ Spectra.Resolvent.resolventSet A) :=
+    have h1 : ¬ ((lam : ℂ) ∉ TauCeti.LinearPMap.resolventSet A) :=
       hgap lam hlam
     rw [generator_genToGroup hA]
     exact not_not.mp h1
@@ -271,7 +272,7 @@ theorem twoSidedShiftedInverseBound_of_spectrum_gap
     {A : DKClosedOperator (H := H)}
     (hA : IsSelfAdjoint A.toLinearPMap) {c s : ℝ} (hs : 0 < s)
     (hgap : ∀ lam ∈ Set.Ioo (c - s) (c + s),
-      lam ∉ Spectra.Resolvent.spectrum A.toLinearPMap) :
+      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum A.toLinearPMap) :
     TauCeti.DavisKahan.Experimental.ExactSinTheta.TwoSidedShiftedInverseBound
       A c s := by
   obtain ⟨R, hnorm, hleft, hright⟩ :=

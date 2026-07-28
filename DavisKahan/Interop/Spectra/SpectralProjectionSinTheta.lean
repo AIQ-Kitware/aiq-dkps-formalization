@@ -7,6 +7,7 @@ import DavisKahan.Interop.Spectra.SpectralRestrictionLocalization
 import DavisKahan.Interop.Spectra.BoundedPerturbationSinTheta
 import DavisKahan.Sylvester.Unbounded.IntervalExterior
 import ForMathlib.Analysis.InnerProductSpace.ProjectionGap
+import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
 
 /-!
 # Canonical unbounded spectral-projection sine-theta theorems
@@ -131,7 +132,7 @@ theorem sinTheta_addBounded_directedGap_of_spectrum_gap
     (hBhigh : SemiboundedAbove
       (selfAdjointSpectralRestriction A hA B hB) α)
     (hScomplSpec : ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
-      lam ∉ Spectra.Resolvent.spectrum
+      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum
         (selfAdjointSpectralRestriction (A.addBounded V)
           (addBounded_isSelfAdjoint A hA V hV) Sᶜ hS.compl).toLinearPMap) :
     δ * directedGap
@@ -185,7 +186,7 @@ theorem sinTheta_addBounded_reverseDirectedGap_of_spectrum_gap
       (selfAdjointSpectralRestriction (A.addBounded V)
         (addBounded_isSelfAdjoint A hA V hV) S hS) α)
     (hBcomplSpec : ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
-      lam ∉ Spectra.Resolvent.spectrum
+      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum
         (selfAdjointSpectralRestriction A hA Bᶜ hB.compl).toLinearPMap) :
     δ * directedGap
         (selfAdjointSpectralSubspace (A.addBounded V)
@@ -249,7 +250,7 @@ theorem sinTheta_addBounded_spectralProjection_sub_opNorm_of_formBounds
     (hBhigh : SemiboundedAbove
       (selfAdjointSpectralRestriction A hA B hB) α)
     (hScomplSpec : ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
-      lam ∉ Spectra.Resolvent.spectrum
+      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum
         (selfAdjointSpectralRestriction (A.addBounded V)
           (addBounded_isSelfAdjoint A hA V hV) Sᶜ hS.compl).toLinearPMap)
     (hSlow : SemiboundedBelow
@@ -259,7 +260,7 @@ theorem sinTheta_addBounded_spectralProjection_sub_opNorm_of_formBounds
       (selfAdjointSpectralRestriction (A.addBounded V)
         (addBounded_isSelfAdjoint A hA V hV) S hS) α')
     (hBcomplSpec : ∀ lam ∈ Set.Ioo (β' - δ) (α' + δ),
-      lam ∉ Spectra.Resolvent.spectrum
+      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum
         (selfAdjointSpectralRestriction A hA Bᶜ hB.compl).toLinearPMap) :
     δ * ‖selfAdjointSpectralProjection A hA B hB -
       selfAdjointSpectralProjection (A.addBounded V)
@@ -297,19 +298,19 @@ theorem sinTheta_addBounded_spectralProjection_sub_opNorm_of_spectrum_gap
     (B S : Set ℝ) (hB : MeasurableSet B) (hS : MeasurableSet S)
     {β α β' α' δ : ℝ}
     (hβα : β ≤ α) (hβ'α' : β' ≤ α') (hδ : 0 < δ)
-    (hBspec : Spectra.Resolvent.spectrum
+    (hBspec : Complex.ofReal ⁻¹' TauCeti.LinearPMap.spectrum
       (selfAdjointSpectralRestriction A hA B hB).toLinearPMap ⊆
         Set.Icc β α)
     (hScomplSpec : ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
-      lam ∉ Spectra.Resolvent.spectrum
+      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum
         (selfAdjointSpectralRestriction (A.addBounded V)
           (addBounded_isSelfAdjoint A hA V hV) Sᶜ hS.compl).toLinearPMap)
-    (hSspec : Spectra.Resolvent.spectrum
+    (hSspec : Complex.ofReal ⁻¹' TauCeti.LinearPMap.spectrum
       (selfAdjointSpectralRestriction (A.addBounded V)
         (addBounded_isSelfAdjoint A hA V hV) S hS).toLinearPMap ⊆
         Set.Icc β' α')
     (hBcomplSpec : ∀ lam ∈ Set.Ioo (β' - δ) (α' + δ),
-      lam ∉ Spectra.Resolvent.spectrum
+      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum
         (selfAdjointSpectralRestriction A hA Bᶜ hB.compl).toLinearPMap) :
     δ * ‖selfAdjointSpectralProjection A hA B hB -
       selfAdjointSpectralProjection (A.addBounded V)

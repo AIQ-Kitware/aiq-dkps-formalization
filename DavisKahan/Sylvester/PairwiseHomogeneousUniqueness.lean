@@ -6,6 +6,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 import DavisKahan.Sylvester.PairwiseSpectrumGap
 import DavisKahan.Sylvester.ClosedSylvesterEquation
 import Spectra.SpectralTheory.SeparatedIntertwiner
+import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
 
 /-!
 # Homogeneous Sylvester uniqueness at arbitrary spectral separation
@@ -86,14 +87,21 @@ theorem linearPMapSylvester_homogeneous_eq_zero_of_disjoint_spectrum
     (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
     {X : F →L[ℂ] E}
     (hdisj : Disjoint
-      (Spectra.Resolvent.spectrum A)
-      (Spectra.Resolvent.spectrum B))
+      (TauCeti.LinearPMap.spectrum A)
+      (TauCeti.LinearPMap.spectrum B))
     (hEq : TauCeti.LinearPMap.SylvesterEquation A B X 0) :
     X = 0 := by
   let AO : SelfAdjointOperator E := ⟨A, hA⟩
   let BO : SelfAdjointOperator F := ⟨B, hB⟩
+  -- The donor lemma is stated over Spectra's *real* spectrum, which is the
+  -- `Complex.ofReal` preimage of the canonical one; disjointness transfers along
+  -- a preimage, so no realness of either spectrum is needed here.
+  have hdisjReal : Disjoint (Spectra.Resolvent.spectrum A)
+      (Spectra.Resolvent.spectrum B) := by
+    refine Set.disjoint_left.mpr fun lam hlamA hlamB => ?_
+    exact Set.disjoint_left.mp hdisj hlamA hlamB
   exact Spectra.QuantumMechanics.SpectralTheory.generatorIntertwiner_eq_zero_of_disjoint_spectrum
-    AO BO X (generatorIntertwines_of_linearPMapHomogeneous hA hB hEq) hdisj
+    AO BO X (generatorIntertwines_of_linearPMapHomogeneous hA hB hEq) hdisjReal
 
 /-- Positive pairwise spectral distance gives homogeneous uniqueness for raw
 self-adjoint partial maps. -/
@@ -120,8 +128,8 @@ theorem linearPMapSylvester_solution_unique_of_disjoint_spectrum
     (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
     {X Y C : F →L[ℂ] E}
     (hdisj : Disjoint
-      (Spectra.Resolvent.spectrum A)
-      (Spectra.Resolvent.spectrum B))
+      (TauCeti.LinearPMap.spectrum A)
+      (TauCeti.LinearPMap.spectrum B))
     (hX : TauCeti.LinearPMap.SylvesterEquation A B X C)
     (hY : TauCeti.LinearPMap.SylvesterEquation A B Y C) :
     X = Y := by
@@ -152,8 +160,8 @@ theorem closedSylvester_homogeneous_eq_zero_of_disjoint_spectrum
     (hA : A.IsSelfAdjoint) (hB : B.IsSelfAdjoint)
     {X : F →L[ℂ] E}
     (hdisj : Disjoint
-      (Spectra.Resolvent.spectrum A.toLinearPMap)
-      (Spectra.Resolvent.spectrum B.toLinearPMap))
+      (TauCeti.LinearPMap.spectrum A.toLinearPMap)
+      (TauCeti.LinearPMap.spectrum B.toLinearPMap))
     (hEq : HasClosedSylvesterEquation A B X 0) :
     X = 0 := by
   exact linearPMapSylvester_homogeneous_eq_zero_of_disjoint_spectrum
@@ -180,8 +188,8 @@ theorem closedSylvester_solution_unique_of_disjoint_spectrum
     (hA : A.IsSelfAdjoint) (hB : B.IsSelfAdjoint)
     {X Y C : F →L[ℂ] E}
     (hdisj : Disjoint
-      (Spectra.Resolvent.spectrum A.toLinearPMap)
-      (Spectra.Resolvent.spectrum B.toLinearPMap))
+      (TauCeti.LinearPMap.spectrum A.toLinearPMap)
+      (TauCeti.LinearPMap.spectrum B.toLinearPMap))
     (hX : HasClosedSylvesterEquation A B X C)
     (hY : HasClosedSylvesterEquation A B Y C) :
     X = Y :=

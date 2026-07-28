@@ -11,6 +11,7 @@ import DavisKahan.TanTheta.UnboundedGraphAngle
 import DavisKahan.FiniteDimensional.TanTheta.RitzResidual
 import DavisKahan.TanTheta.Theorem63FiniteSource
 import DavisKahan.OperatorIdeal.UnitarilyInvariant.RectangularFamily
+import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
 
 /-!
 # Remaining source-level endpoint signatures
@@ -278,7 +279,7 @@ theorem section7_sinTwoTheta_source_ideal
     (hBhigh : SemiboundedAbove
       (selfAdjointSpectralRestriction A hA B hB) alpha)
     (hBcomplSpec : ∀ lam ∈ Set.Ioo (beta - delta) (alpha + delta),
-      lam ∉ Spectra.Resolvent.spectrum
+      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum
         (selfAdjointSpectralRestriction A hA Bᶜ hB.compl).toLinearPMap)
     (hEmem : N.Mem E) :
     N.Mem (sinTwoThetaIdealBlock
@@ -313,7 +314,7 @@ theorem section7_tanTwoTheta_source_ideal
     (hBhigh : SemiboundedAbove
       (selfAdjointSpectralRestriction A hA B hB) alpha)
     (hBcomplSpec : ∀ lam ∈ Set.Ioo (beta - delta) (alpha + delta),
-      lam ∉ Spectra.Resolvent.spectrum
+      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum
         (selfAdjointSpectralRestriction A hA Bᶜ hB.compl).toLinearPMap)
     (hEmem : N.Mem E)
     (hquarter : IsQuarterAcute

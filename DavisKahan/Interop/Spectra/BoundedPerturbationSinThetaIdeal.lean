@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Interop.Spectra.BoundedPerturbationSinTheta
+import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
 
 /-!
 # Ideal-gauge bounded-perturbation adapter for unbounded sine theta
@@ -53,7 +54,7 @@ theorem sinTheta_addBounded_gauge_of_spectrum_gap_isometric
     {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
     (hA₀low : SemiboundedBelow A₀ β) (hA₀high : SemiboundedAbove A₀ α)
     (hΛspec : ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
-      lam ∉ Spectra.Resolvent.spectrum Λ₁.toLinearPMap)
+      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum Λ₁.toLinearPMap)
     (hVmem : N.Mem V) :
     N.Mem (X.adjoint ∘L F₁) ∧
       δ * N.gauge (X.adjoint ∘L F₁) ≤ N.gauge V := by
