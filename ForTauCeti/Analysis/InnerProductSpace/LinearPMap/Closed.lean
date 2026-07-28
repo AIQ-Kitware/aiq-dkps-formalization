@@ -122,6 +122,19 @@ theorem orthogonal_invariant
     (h : ReducesSubspace A U) : InvariantSubspace A Uᗮ :=
   h.2.2.2
 
+/-- Orthogonal complementation preserves the reducing-subspace property. -/
+theorem orthogonal
+    {A : E →ₗ.[𝕜] E} {U : Submodule 𝕜 E} [U.HasOrthogonalProjection]
+    (h : ReducesSubspace A U) : ReducesSubspace A Uᗮ := by
+  refine ⟨h.orthogonalProjection_mem_domain, ?_,
+    h.orthogonal_invariant, ?_⟩
+  · intro x
+    simpa only [Submodule.orthogonal_orthogonal] using
+      h.projection_mem_domain x
+  · intro x hx
+    rw [Submodule.orthogonal_orthogonal] at hx ⊢
+    exact h.invariant x hx
+
 end ReducesSubspace
 
 /-- The operator domain inside a reducing subspace. -/
