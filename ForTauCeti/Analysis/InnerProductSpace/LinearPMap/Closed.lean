@@ -34,6 +34,7 @@ namespace TauCeti
 namespace LinearPMap
 
 open scoped InnerProductSpace
+open Filter Topology
 
 universe u v w
 
@@ -208,6 +209,67 @@ noncomputable def reducingRestriction
     (hred : ReducesSubspace A U) :
     (reducingRestriction A U hred).domain = reducingRestrictionDomain A U :=
   rfl
+
+/-- A dense partial-map domain remains dense after restriction to a reducing
+subspace. -/
+theorem reducingRestriction_dense
+    (A : E →ₗ.[𝕜] E) (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
+    (hred : ReducesSubspace A U) (hA : Dense (A.domain : Set E)) :
+    Dense ((reducingRestriction A U hred).domain : Set U) := by
+  rw [reducingRestriction_domain, dense_iff_closure_eq]
+  ext u
+  simp only [Set.mem_univ, iff_true]
+  have hu : (u : E) ∈ closure (A.domain : Set E) := by
+    rw [hA.closure_eq]
+    trivial
+  obtain ⟨s, hs, hs_lim⟩ := mem_closure_iff_seq_limit.mp hu
+  let t : ℕ → U := fun n =>
+    ⟨U.starProjection (s n), U.starProjection_apply_mem (s n)⟩
+  refine mem_closure_iff_seq_limit.mpr ⟨t, ?_, ?_⟩
+  · intro n
+    exact hred.projection_mem_domain ⟨s n, hs n⟩
+  · have hlim := (U.starProjection.continuous.tendsto (u : E)).comp hs_lim
+    have hfix : U.starProjection (u : E) = (u : E) :=
+      Submodule.starProjection_eq_self_iff.mpr u.property
+    change Tendsto (fun n => t n) atTop (𝓝 u)
+    apply tendsto_subtype_rng.mpr
+    simpa [t, hfix, Function.comp_def] using hlim
+
+/-- Closedness of the graph is preserved by restriction to a reducing
+subspace.  The hypothesis is stated as a graph range to make it directly
+applicable to compatibility records as well as raw partial maps. -/
+theorem reducingRestriction_closedGraph
+    (A : E →ₗ.[𝕜] E) (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
+    (hred : ReducesSubspace A U)
+    (hA : IsClosed (Set.range fun x : A.domain => ((x : E), A x))) :
+    IsClosed (Set.range fun x : (reducingRestriction A U hred).domain =>
+      (((x : (reducingRestriction A U hred).domain) : U),
+        reducingRestriction A U hred x)) := by
+  let coords : U × U → E × E := fun p => ((p.1 : E), (p.2 : E))
+  have hcoords : Continuous coords :=
+    (U.subtypeL.continuous.comp continuous_fst).prodMk
+      (U.subtypeL.continuous.comp continuous_snd)
+  rw [show Set.range (fun x : (reducingRestriction A U hred).domain =>
+      (((x : (reducingRestriction A U hred).domain) : U),
+        reducingRestriction A U hred x)) =
+      coords ⁻¹' (Set.range fun x : A.domain => ((x : E), A x)) by
+    ext p
+    constructor
+    · rintro ⟨x, rfl⟩
+      exact ⟨reducingRestrictionDomainToAmbient A U x, rfl⟩
+    · rintro ⟨x, hx⟩
+      have hx0 : (x : E) = (p.1 : E) := congrArg Prod.fst hx
+      have hx1 : A x = (p.2 : E) := congrArg Prod.snd hx
+      have hpdom : (p.1 : E) ∈ A.domain := hx0 ▸ x.property
+      let u : (reducingRestriction A U hred).domain := ⟨p.1, hpdom⟩
+      refine ⟨u, Prod.ext rfl ?_⟩
+      apply Subtype.ext
+      change A (reducingRestrictionDomainToAmbient A U u) = (p.2 : E)
+      have hxu : reducingRestrictionDomainToAmbient A U u = x := by
+        apply Subtype.ext
+        exact hx0.symm
+      simpa [hxu] using hx1]
+  exact hA.preimage hcoords
 
 /-- A linear map on a submodule has a bounded extension to the ambient space. -/
 structure BoundedExtension (D : Submodule 𝕜 F) (T : D →ₗ[𝕜] E) where
