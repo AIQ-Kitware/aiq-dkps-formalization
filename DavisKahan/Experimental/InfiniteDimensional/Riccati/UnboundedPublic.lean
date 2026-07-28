@@ -98,6 +98,31 @@ variable {F0 : Type*} [NormedAddCommGroup F0] [InnerProductSpace ℂ F0]
 variable {F1 : Type*} [NormedAddCommGroup F1] [InnerProductSpace ℂ F1]
   [CompleteSpace F1]
 
+/-- Raw complex graph-rotation diagonalization.  The coordinate-restriction
+direct-sum statement below remains a closed-output compatibility endpoint;
+this theorem is the canonical partial-map transport result consumed before
+such closed coordinate packages are requested. -/
+theorem complex_unbounded_blockDiagonalizationPMap
+    (H : UnboundedBlockDataPMap (𝕜 := ℂ) (E0 := F0) (E1 := F1))
+    (X : F0 →L[ℂ] F1)
+    (hred : TauCeti.LinearPMap.ReducesSubspace
+      (unboundedBlockOperatorPMapCore H) (unboundedBlockGraph X)) :
+    ∃ W Winv : WithLp 2 (F0 × F1) →L[ℂ] WithLp 2 (F0 × F1),
+      TauCeti.LinearPMap.UnitaryEquivalent
+        (unboundedBlockDiagonalPMapCore H X)
+        (unboundedBlockOperatorPMapCore H) W Winv ∧
+      W ∘L projection (unboundedBlockGraph (0 : F0 →L[ℂ] F1)) =
+        projection (unboundedBlockGraph X) ∘L W ∧
+      TauCeti.LinearPMap.ReducesSubspace
+        (unboundedBlockDiagonalPMapCore H X)
+        (unboundedBlockGraph (0 : F0 →L[ℂ] F1)) := by
+  let W := (unboundedGraphRotationEquiv X).toContinuousLinearMap
+  let Winv := (unboundedGraphRotationEquiv X).symm.toContinuousLinearMap
+  refine ⟨W, Winv, ?_, ?_, ?_⟩
+  · exact unboundedBlockDiagonalPMapCore_unitaryEquivalent H X
+  · exact unboundedGraphRotationEquiv_intertwines_projection X
+  · exact unboundedBlockDiagonalPMapCore_reduces_zeroGraph H X hred
+
 /-- The complex coordinate-diagonal representative obtained by pulling the
 full block operator back through the canonical graph rotation. -/
 noncomputable abbrev complexUnboundedBlockDiagonalOperator
