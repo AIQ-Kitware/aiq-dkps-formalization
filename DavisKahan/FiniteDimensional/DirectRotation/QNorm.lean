@@ -59,7 +59,8 @@ theorem displacementSquare_eq_adjoint_comp (W : E →ₗ[𝕜] E) :
 
 /-- **The `Q`-norm repair of Proposition 4.4.**  For every `Q`-norm the direct
 rotation minimizes the *full* displacement `1 - V` among unitaries carrying `U`
-onto `V` — with no angle hypothesis and over every `RCLike` field.
+onto `V` — without the source's `Θ ≤ π/3` threshold, and over every `RCLike`
+field.
 
 This is the statement the source should have made: the counterexample shows the
 arbitrary-unitarily-invariant-norm version is false, and no angle threshold

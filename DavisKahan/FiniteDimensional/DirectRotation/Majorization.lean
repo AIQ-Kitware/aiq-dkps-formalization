@@ -466,7 +466,8 @@ it is false for arbitrary competitors carrying `U` onto `V` (see
 `dev/targeted-mathematical-repair-2026-07-21.md`; a competitor may mix an
 equal-angle multiplicity space and beat the direct rotation in trace norm at
 every angle).  The valid arbitrary-UI endpoint is the restricted-displacement
-theorem `uiNorm_restrictedDisplacement_le`, which needs no angle hypothesis.
+theorem `uiNorm_restrictedDisplacement_le`, which needs no largest-angle
+threshold (only the standing `IsAcute`).
 The spectral-floor lemma that fed the historical corollary also relied on the
 two-projection identity `‖P_U - P_V‖ = sin theta_max`, which is not yet in the
 tree; both were removed with the corollary since nothing else consumes them.

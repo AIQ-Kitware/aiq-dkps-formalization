@@ -104,7 +104,7 @@ Summing the per-pair estimate `gap² ⟪uᵢ, ûⱼ⟫² ≤ ⟪uᵢ, (S − T) 
 cross block `{i < d} × {d ≤ j}` and applying the total cross-energy bound gives
 the sin-Θ-type inequality with the crude constant `n ε² / gap²`. -/
 
-/-- **Davis–Kahan sin-Θ bound (standard), elementary finite-dimensional form.**
+/-- **Davis–Kahan sin-Θ bound, crude operator-norm form.**
 Suppose `T`, `S` are symmetric, close in operator norm
 (`∀ x, ‖(S − T) x‖ ≤ ε ‖x‖`), and there is a positive `gap` separating the first
 `d` eigenvalues of `T` from the trailing eigenvalues of `S`
@@ -117,8 +117,18 @@ This is the eigenvector-perturbation tool the paper invokes (prose: "Davis Kahan
 Theorem, which puts a bound on the eigenvector perturbations").  The left-hand
 sum is the squared sine of the principal angles between the leading population
 eigenspace and the trailing sample eigenspace (a `sinΘ` quantity); bounding it
-gives the eigenvector alignment used in Theorem 2.  Note this version carries the
-crude constant `n ε² / gap²` rather than the sharp operator-norm sin-Θ constant. -/
+gives the eigenvector alignment used in Theorem 2.
+
+**This is not the standard Davis–Kahan constant, and the name should not be read
+as claiming it.**  The classical bound is `‖sin Θ‖_F ≤ ‖S − T‖_F / gap`; this one
+is `‖sin Θ‖_F ≤ √n · ε / gap`, worse by a factor of the *ambient* dimension,
+because it starts from an operator-norm hypothesis and pays `‖S − T‖²_F ≤ n ε²`
+for it.  It is what the paper's prose invokes and it is what Theorem 2 needs, so
+it stays; but the sharp form is already available in this repository as
+`TauCeti.sum_cross_norm_inner_eigenvectorBasis_sq_le_hilbertSchmidt`
+(`DavisKahan/Alternative/FiniteDimensional/EigenbasisFrobenius.lean`), of which
+this is a corollary, and the arbitrary-unitarily-invariant-norm form as
+`TauCeti.DavisKahanTheory.sinTheta_perturbation_le`. -/
 theorem sum_cross_inner_sq_le
     (hT : T.IsSymmetric) (hS : S.IsSymmetric)   -- both operators self-adjoint
     (hn : finrank ℝ E = n)                       -- finite-dimensionality (implicit in the paper)

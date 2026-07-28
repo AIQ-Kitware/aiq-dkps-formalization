@@ -13,7 +13,9 @@ import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantNorm
 Davis 1958, Theorem 7.2 (= Davis--Kahan 1970, Proposition 4.1): among all
 unitaries `W` carrying `U` onto `V`, the direct rotation minimizes every
 singular value of the restricted displacement `(I - W) P_U` — pointwise, over
-any `RCLike` field, with no angle restriction.  The main results are
+any `RCLike` field, and with no largest-angle threshold.  (`IsAcute` is
+standing throughout: it is the hypothesis under which the direct rotation
+exists, not a restriction on the conclusion.)  The main results are
 
 * `principalPlaneChord_le_singularValues_restrictedDisplacement` (lower bound),
 * `singularValues_restrictedDisplacement_directRotation` (closed form for `R`),
@@ -37,7 +39,7 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
 Davis 1958, Theorem 7.2 (= Davis--Kahan 1970, Proposition 4.1): among all
 unitaries `W` carrying `U` onto `V`, the direct rotation minimizes every
 singular value of the restricted displacement `(I - W) P_U` — pointwise, over
-any `RCLike` field, with no angle restriction.  The proof is the minimax
+any `RCLike` field, and with no largest-angle threshold.  The proof is the minimax
 argument: for a unit vector `x ∈ U`, the image `W x` is a *unit* vector of
 `V`, so `‖x - W x‖² ≥ 2 - 2 ‖P_V x‖`, and on the span of the top source
 vectors the cosine bound `‖P_V x‖ ≤ c_j` is uniform. -/
@@ -347,7 +349,9 @@ theorem kyFanSum_restrictedDisplacement_le
 
 /-- **Unitarily-invariant-norm minimality of the restricted displacement**
 (Davis--Kahan Corollary 4.1): the direct rotation minimizes `N ((I - W) P_U)`
-for every UI norm `N`, with no angle restriction, over any `RCLike` field. -/
+for every UI norm `N`, over any `RCLike` field, with no largest-angle
+threshold.  `IsAcute` is required, but only because `directRotation` is
+defined from it. -/
 theorem uiNorm_restrictedDisplacement_le
     (N : UnitarilyInvariantNorm 𝕜 E)
     (U V : Submodule 𝕜 E)
