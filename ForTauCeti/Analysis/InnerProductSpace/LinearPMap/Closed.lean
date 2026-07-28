@@ -80,6 +80,49 @@ theorem MapsDomainTo.comp
   intro z
   exact hX ⟨Y (z : G), hY z⟩
 
+/-- A subspace is invariant under a partial linear map on its domain. -/
+def InvariantSubspace
+    (A : E →ₗ.[𝕜] E) (U : Submodule 𝕜 E) : Prop :=
+  ∀ x : A.domain, (x : E) ∈ U → A x ∈ U
+
+/-- A subspace reduces a partial linear map when both orthogonal projections
+preserve its domain and both summands are invariant. -/
+def ReducesSubspace
+    (A : E →ₗ.[𝕜] E) (U : Submodule 𝕜 E) [U.HasOrthogonalProjection] : Prop :=
+  (∀ x : A.domain, U.starProjection (x : E) ∈ A.domain) ∧
+  (∀ x : A.domain, Uᗮ.starProjection (x : E) ∈ A.domain) ∧
+  InvariantSubspace A U ∧ InvariantSubspace A Uᗮ
+
+namespace ReducesSubspace
+
+/-- The projection onto a reducing subspace preserves the partial-map domain. -/
+theorem projection_mem_domain
+    {A : E →ₗ.[𝕜] E} {U : Submodule 𝕜 E} [U.HasOrthogonalProjection]
+    (h : ReducesSubspace A U) (x : A.domain) :
+    U.starProjection (x : E) ∈ A.domain :=
+  h.1 x
+
+/-- The complementary projection of a reducing subspace preserves the domain. -/
+theorem orthogonalProjection_mem_domain
+    {A : E →ₗ.[𝕜] E} {U : Submodule 𝕜 E} [U.HasOrthogonalProjection]
+    (h : ReducesSubspace A U) (x : A.domain) :
+    Uᗮ.starProjection (x : E) ∈ A.domain :=
+  h.2.1 x
+
+/-- The selected summand of a reducing subspace is invariant. -/
+theorem invariant
+    {A : E →ₗ.[𝕜] E} {U : Submodule 𝕜 E} [U.HasOrthogonalProjection]
+    (h : ReducesSubspace A U) : InvariantSubspace A U :=
+  h.2.2.1
+
+/-- The complementary summand of a reducing subspace is invariant. -/
+theorem orthogonal_invariant
+    {A : E →ₗ.[𝕜] E} {U : Submodule 𝕜 E} [U.HasOrthogonalProjection]
+    (h : ReducesSubspace A U) : InvariantSubspace A Uᗮ :=
+  h.2.2.2
+
+end ReducesSubspace
+
 /-- A linear map on a submodule has a bounded extension to the ambient space. -/
 structure BoundedExtension (D : Submodule 𝕜 F) (T : D →ₗ[𝕜] E) where
   operator : F →L[𝕜] E
