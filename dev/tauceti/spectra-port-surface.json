@@ -24,18 +24,6 @@
           "lines": 208,
           "origin": "upstream"
         },
-        "Spectra.Operator.KatoRellich": {
-          "constants": {
-            "Spectra.Operator.perturbedOp": {
-              "consumerModules": [
-                "DavisKahan.Interop.Spectra.BoundedPerturbationSinTheta"
-              ],
-              "uses": 1
-            }
-          },
-          "lines": 640,
-          "origin": "upstream"
-        },
         "Spectra.Operator.SelfAdjoint": {
           "constants": {
             "Spectra.Operator.SelfAdjointOperator": {
@@ -559,15 +547,15 @@
       "label": "Cayley transform, Stone bridge and one-parameter groups"
     }
   },
-  "distinctSpectraConstants": 55,
+  "distinctSpectraConstants": 54,
   "dkpsAuthoredDonorModules": [
     "Spectra.Spaces.Tensor.HilbertSchmidt",
     "Spectra.Spaces.Tensor.HilbertSchmidtFlow",
     "Spectra.SpectralTheory.Calculus.SpectralGapInverse"
   ],
-  "donorModules": 24,
+  "donorModules": 23,
   "note": "Regenerate with scripts/ExportSpectraUsage.lean + scripts/spectra_port_surface.py.",
-  "productionConsumerDeclarations": 95,
+  "productionConsumerDeclarations": 94,
   "spectraUpstreamCommit": "8dbaaf6728d1342ae16acf79fd7eef7c59b37e63",
   "trackedTauCetiModules": 629
 }
