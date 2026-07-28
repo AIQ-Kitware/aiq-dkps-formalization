@@ -69,10 +69,10 @@ theorem sinTheta_unbounded
     (hF₁ : IsometricEmbedding D.F₁)
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : UnboundedSylvesterGap D.A₀ D.Λ₁ δ)
-    (hR : N.toRectangularSymmetricIdealFamily.Mem D.residual) :
-    N.toRectangularSymmetricIdealFamily.Mem (D.X.adjoint ∘L D.F₁) ∧
-      δ * N.toRectangularSymmetricIdealFamily.gauge (D.X.adjoint ∘L D.F₁)
-        ≤ N.toRectangularSymmetricIdealFamily.gauge D.residual := by
+    (hR : N.Mem D.residual) :
+    N.Mem (D.X.adjoint ∘L D.F₁) ∧
+      δ * N.gauge (D.X.adjoint ∘L D.F₁)
+        ≤ N.gauge D.residual := by
   let M := N.toRectangularSymmetricIdealFamily
   have hEq := unbounded_adjoint_residual_block_identity D hA hA₀ hΛ₁
   have hC := adjointResidualBlock_mem_and_gauge_le M D hF₁ hR
@@ -162,10 +162,10 @@ theorem generalizedSinTheta_unbounded
     (hδ : 0 < δ) (hε : 0 < ε)
     (hframe : LowerFrameBound D.X ε)
     (hgap : UnboundedSylvesterGap D.A₀ D.Λ₁ δ)
-    (hR : N.toRectangularSymmetricIdealFamily.Mem D.residual) :
-    N.toRectangularSymmetricIdealFamily.Mem (sinThetaBlock D.X D.F₁ hframe hε) ∧
-      δ * ε * N.toRectangularSymmetricIdealFamily.gauge (sinThetaBlock D.X D.F₁ hframe hε)
-        ≤ N.toRectangularSymmetricIdealFamily.gauge D.residual := by
+    (hR : N.Mem D.residual) :
+    N.Mem (sinThetaBlock D.X D.F₁ hframe hε) ∧
+      δ * ε * N.gauge (sinThetaBlock D.X D.F₁ hframe hε)
+        ≤ N.gauge D.residual := by
   let M := N.toRectangularSymmetricIdealFamily
   have hEq := unbounded_adjoint_residual_block_identity D hA hA₀ hΛ₁
   have hC := adjointResidualBlock_mem_and_gauge_le M D hF₁ hR
@@ -196,10 +196,10 @@ theorem generalizedSinTheta_unbounded_exact
     (hδ : 0 < δ) (hε : 0 < ε)
     (hframe : LowerFrameBound D.X ε)
     (hgap : UnboundedSylvesterGap D.A₀ D.Λ₁ δ)
-    (hR : N.toRectangularSymmetricIdealFamily.Mem D.residual) :
-    N.toRectangularSymmetricIdealFamily.Mem (directedSinThetaOperator D.X F₀ hframe hε) ∧
-      δ * ε * N.toRectangularSymmetricIdealFamily.gauge (directedSinThetaOperator D.X F₀ hframe hε)
-        ≤ N.toRectangularSymmetricIdealFamily.gauge D.residual := by
+    (hR : N.Mem D.residual) :
+    N.Mem (directedSinThetaOperator D.X F₀ hframe hε) ∧
+      δ * ε * N.gauge (directedSinThetaOperator D.X F₀ hframe hε)
+        ≤ N.gauge D.residual := by
   let M := N.toRectangularSymmetricIdealFamily
   have hBlock := generalizedSinTheta_unbounded
     N D hA hA₀ hΛ₁ hdecomp.isometry₁ hδ hε hframe hgap hR
@@ -264,12 +264,12 @@ theorem sinTheta_unbounded_exact
     (hdecomp : OrthogonalExactDecomposition F₀ D.F₁)
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : UnboundedSylvesterGap D.A₀ D.Λ₁ δ)
-    (hR : N.toRectangularSymmetricIdealFamily.Mem D.residual) :
-    N.toRectangularSymmetricIdealFamily.Mem
+    (hR : N.Mem D.residual) :
+    N.Mem
       ((ContinuousLinearMap.id 𝕜 E - F₀ ∘L F₀.adjoint) ∘L D.X) ∧
-      δ * N.toRectangularSymmetricIdealFamily.gauge
+      δ * N.gauge
         ((ContinuousLinearMap.id 𝕜 E - F₀ ∘L F₀.adjoint) ∘L D.X)
-        ≤ N.toRectangularSymmetricIdealFamily.gauge D.residual := by
+        ≤ N.gauge D.residual := by
   have hBlock := sinTheta_unbounded
     N D hA hA₀ hΛ₁ hX hdecomp.isometry₁ hδ hgap hR
   have hAngle := isometricComplementaryBlock_mem_and_gauge_eq_directed

@@ -185,6 +185,46 @@ abbrev UnitaryInvariantIdealFamily
 
 namespace KyFanDominantIdealFamily
 
+/-! ### The ideal interface
+
+`KyFanDominantIdealFamily` carries its ideal as a `RectangularSymmetricIdealFamily`
+field, but no consumer should have to say so.  These two accessors are the whole
+public surface the sin-Θ development uses, and everything downstream is stated
+through them rather than through the field.
+
+That indirection is deliberate and is the first half of the §13 retirement of
+`RectangularSymmetricIdealFamily` (see `dev/tauceti-signature-polish-todo.md`).
+The canonical replacement, `TauCeti.SymmetricOperatorIdealFamily`, carries a
+single `ℝ≥0∞` gauge and no membership predicate — its laws are unconditional —
+so swapping the representation changes the *type* of `gauge` and deletes
+`Mem` as data.  With ~376 call sites naming the field directly that swap was a
+sixty-module flag day; with them naming these accessors it is a change to this
+file plus whatever proof repair the `ℝ`-valued view needs, and the `ℝ`-valued
+interface below can survive as a documented convenience of the paper layer
+instead of as a second competing structure. -/
+
+variable (N : KyFanDominantIdealFamily.{u, v} 𝕜)
+
+/-- Membership in the ideal: the operator has finite ideal gauge. -/
+abbrev Mem (A : E →L[𝕜] F) : Prop :=
+  N.toRectangularSymmetricIdealFamily.Mem A
+
+/-- The ideal gauge, real-valued and meaningful only on members
+(`KyFanDominantIdealFamily.Mem`). -/
+abbrev gauge (A : E →L[𝕜] F) : ℝ :=
+  N.toRectangularSymmetricIdealFamily.gauge A
+
+/-! Both accessors are `abbrev`, so they are reducible and `exact` sees through
+them.  `rw` does **not**: it keys on the head symbol, and
+`KyFanDominantIdealFamily.gauge N A` and
+`RectangularSymmetricIdealFamily.gauge N.toRectangularSymmetricIdealFamily A`
+have different ones.  A proof whose goal is stated through these accessors but
+whose supporting lemmas are stated over the underlying ideal — the block
+lemmas in `SinTheta/**` are the usual case — needs one
+`simp only [KyFanDominantIdealFamily.gauge]` before the rewrite.  Five proofs
+needed exactly that when the call sites were repointed; there is no need to
+avoid the accessors on account of it. -/
+
 /-- The ordinary operator norm with its finite-Ky-Fan dominance property. -/
 noncomputable def operatorNorm :
     KyFanDominantIdealFamily (𝕜 := 𝕜) where

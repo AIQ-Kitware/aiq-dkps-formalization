@@ -118,10 +118,10 @@ current family abstraction. -/
 theorem operatorAbs_family_transport_two_routes
     (N : UnitaryInvariantIdealFamily (𝕜 := ℂ))
     {T : E →L[ℂ] E}
-    (hT : N.toRectangularSymmetricIdealFamily.Mem T) :
-    N.toRectangularSymmetricIdealFamily.Mem (ContinuousLinearMap.modulus T) ∧
-      N.toRectangularSymmetricIdealFamily.gauge (ContinuousLinearMap.modulus T) =
-        N.toRectangularSymmetricIdealFamily.gauge T := by
+    (hT : N.Mem T) :
+    N.Mem (ContinuousLinearMap.modulus T) ∧
+      N.gauge (ContinuousLinearMap.modulus T) =
+        N.gauge T := by
   exact RectangularSymmetricIdealFamily.modulus_mem_and_gauge_eq
     N.toRectangularSymmetricIdealFamily hT
 

@@ -120,7 +120,7 @@ structure NaturalReducingIsometricSinThetaProblem
   gap_pos : 0 < gap
   spectral_gap : UnboundedSylvesterGap A₀
     (ClosedOperator.reducingRestriction A Uᗮ reduces.orthogonal) gap
-  residual_mem : N.toRectangularSymmetricIdealFamily.Mem residual
+  residual_mem : N.Mem residual
 
 namespace NaturalReducingIsometricSinThetaProblem
 
@@ -159,7 +159,7 @@ structure NaturalReducingGeneralSinThetaProblem
   lowerFrame : LowerFrameBound X frameLowerBound
   spectral_gap : UnboundedSylvesterGap A₀
     (ClosedOperator.reducingRestriction A Uᗮ reduces.orthogonal) gap
-  residual_mem : N.toRectangularSymmetricIdealFamily.Mem residual
+  residual_mem : N.Mem residual
 
 namespace NaturalReducingGeneralSinThetaProblem
 
@@ -189,11 +189,11 @@ theorem result_complex
     {U : Submodule ℂ EC} [U.HasOrthogonalProjection]
     (P : NaturalReducingIsometricSinThetaProblem
       (𝕜 := ℂ) (E := EC) (F := FC) N U) :
-    N.toRectangularSymmetricIdealFamily.Mem
+    N.Mem
         ((ContinuousLinearMap.id ℂ EC - U.subtypeL ∘L U.subtypeL.adjoint) ∘L P.X) ∧
-      P.gap * N.toRectangularSymmetricIdealFamily.gauge
+      P.gap * N.gauge
           ((ContinuousLinearMap.id ℂ EC - U.subtypeL ∘L U.subtypeL.adjoint) ∘L P.X)
-        ≤ N.toRectangularSymmetricIdealFamily.gauge P.residual := by
+        ≤ N.gauge P.residual := by
   let D := P.toData N
   have hcomp : D.Λ₁.IsSelfAdjoint := by
     exact ClosedOperator.reducingRestriction_isSelfAdjoint
@@ -218,14 +218,14 @@ theorem result_complex
     {U : Submodule ℂ EC} [U.HasOrthogonalProjection]
     (P : NaturalReducingGeneralSinThetaProblem
       (𝕜 := ℂ) (E := EC) (F := FC) N U) :
-    N.toRectangularSymmetricIdealFamily.Mem
+    N.Mem
         (directedSinThetaOperator P.X U.subtypeL
           P.lowerFrame P.frameLowerBound_pos) ∧
       P.gap * P.frameLowerBound *
-          N.toRectangularSymmetricIdealFamily.gauge
+          N.gauge
             (directedSinThetaOperator P.X U.subtypeL
               P.lowerFrame P.frameLowerBound_pos)
-        ≤ N.toRectangularSymmetricIdealFamily.gauge P.residual := by
+        ≤ N.gauge P.residual := by
   let D := P.toData N
   have hcomp : D.Λ₁.IsSelfAdjoint := by
     exact ClosedOperator.reducingRestriction_isSelfAdjoint
@@ -260,12 +260,12 @@ theorem sinTheta_unbounded_complex_reducingSubspace
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : UnboundedSylvesterGap A0
       (ClosedOperator.reducingRestriction A Uᗮ hred.orthogonal) δ)
-    (hR : N.toRectangularSymmetricIdealFamily.Mem Rop) :
-    N.toRectangularSymmetricIdealFamily.Mem
+    (hR : N.Mem Rop) :
+    N.Mem
         ((ContinuousLinearMap.id ℂ EC - U.subtypeL ∘L U.subtypeL.adjoint) ∘L X) ∧
-      δ * N.toRectangularSymmetricIdealFamily.gauge
+      δ * N.gauge
           ((ContinuousLinearMap.id ℂ EC - U.subtypeL ∘L U.subtypeL.adjoint) ∘L X)
-        ≤ N.toRectangularSymmetricIdealFamily.gauge Rop := by
+        ≤ N.gauge Rop := by
   let P : NaturalReducingIsometricSinThetaProblem
       (𝕜 := ℂ) (E := EC) (F := FC) N U :=
     { A := A
@@ -301,12 +301,12 @@ theorem generalizedSinTheta_unbounded_complex_reducingSubspace
       A.toLinearMap ⟨X (x : FC), hXdom x⟩ - X (A0.toLinearMap x) = Rop (x : FC))
     (hgap : UnboundedSylvesterGap A0
       (ClosedOperator.reducingRestriction A Uᗮ hred.orthogonal) δ)
-    (hR : N.toRectangularSymmetricIdealFamily.Mem Rop) :
-    N.toRectangularSymmetricIdealFamily.Mem
+    (hR : N.Mem Rop) :
+    N.Mem
         (directedSinThetaOperator X U.subtypeL hframe hε) ∧
-      δ * ε * N.toRectangularSymmetricIdealFamily.gauge
+      δ * ε * N.gauge
           (directedSinThetaOperator X U.subtypeL hframe hε)
-        ≤ N.toRectangularSymmetricIdealFamily.gauge Rop := by
+        ≤ N.gauge Rop := by
   let P : NaturalReducingGeneralSinThetaProblem
       (𝕜 := ℂ) (E := EC) (F := FC) N U :=
     { A := A
@@ -343,11 +343,11 @@ theorem result_real
     {U : Submodule ℝ ER} [U.HasOrthogonalProjection]
     (P : NaturalReducingIsometricSinThetaProblem
       (𝕜 := ℝ) (E := ER) (F := FR) N U) :
-    N.toRectangularSymmetricIdealFamily.Mem
+    N.Mem
         ((ContinuousLinearMap.id ℝ ER - U.subtypeL ∘L U.subtypeL.adjoint) ∘L P.X) ∧
-      P.gap * N.toRectangularSymmetricIdealFamily.gauge
+      P.gap * N.gauge
           ((ContinuousLinearMap.id ℝ ER - U.subtypeL ∘L U.subtypeL.adjoint) ∘L P.X)
-        ≤ N.toRectangularSymmetricIdealFamily.gauge P.residual := by
+        ≤ N.gauge P.residual := by
   let D := P.toData N
   have hcomp : D.Λ₁.IsSelfAdjoint := by
     exact ClosedOperator.reducingRestriction_isSelfAdjoint
@@ -372,14 +372,14 @@ theorem result_real
     {U : Submodule ℝ ER} [U.HasOrthogonalProjection]
     (P : NaturalReducingGeneralSinThetaProblem
       (𝕜 := ℝ) (E := ER) (F := FR) N U) :
-    N.toRectangularSymmetricIdealFamily.Mem
+    N.Mem
         (directedSinThetaOperatorReal P.X U.subtypeL
           P.lowerFrame P.frameLowerBound_pos) ∧
       P.gap * P.frameLowerBound *
-          N.toRectangularSymmetricIdealFamily.gauge
+          N.gauge
             (directedSinThetaOperatorReal P.X U.subtypeL
               P.lowerFrame P.frameLowerBound_pos)
-        ≤ N.toRectangularSymmetricIdealFamily.gauge P.residual := by
+        ≤ N.gauge P.residual := by
   let D := P.toData N
   have hcomp : D.Λ₁.IsSelfAdjoint := by
     exact ClosedOperator.reducingRestriction_isSelfAdjoint
@@ -414,12 +414,12 @@ theorem sinTheta_unbounded_real_reducingSubspace
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : UnboundedSylvesterGap A0
       (ClosedOperator.reducingRestriction A Uᗮ hred.orthogonal) δ)
-    (hR : N.toRectangularSymmetricIdealFamily.Mem Rop) :
-    N.toRectangularSymmetricIdealFamily.Mem
+    (hR : N.Mem Rop) :
+    N.Mem
         ((ContinuousLinearMap.id ℝ ER - U.subtypeL ∘L U.subtypeL.adjoint) ∘L X) ∧
-      δ * N.toRectangularSymmetricIdealFamily.gauge
+      δ * N.gauge
           ((ContinuousLinearMap.id ℝ ER - U.subtypeL ∘L U.subtypeL.adjoint) ∘L X)
-        ≤ N.toRectangularSymmetricIdealFamily.gauge Rop := by
+        ≤ N.gauge Rop := by
   let P : NaturalReducingIsometricSinThetaProblem
       (𝕜 := ℝ) (E := ER) (F := FR) N U :=
     { A := A
@@ -455,12 +455,12 @@ theorem generalizedSinTheta_unbounded_real_reducingSubspace
       A.toLinearMap ⟨X (x : FR), hXdom x⟩ - X (A0.toLinearMap x) = Rop (x : FR))
     (hgap : UnboundedSylvesterGap A0
       (ClosedOperator.reducingRestriction A Uᗮ hred.orthogonal) δ)
-    (hR : N.toRectangularSymmetricIdealFamily.Mem Rop) :
-    N.toRectangularSymmetricIdealFamily.Mem
+    (hR : N.Mem Rop) :
+    N.Mem
         (directedSinThetaOperatorReal X U.subtypeL hframe hε) ∧
-      δ * ε * N.toRectangularSymmetricIdealFamily.gauge
+      δ * ε * N.gauge
           (directedSinThetaOperatorReal X U.subtypeL hframe hε)
-        ≤ N.toRectangularSymmetricIdealFamily.gauge Rop := by
+        ≤ N.gauge Rop := by
   let P : NaturalReducingGeneralSinThetaProblem
       (𝕜 := ℝ) (E := ER) (F := FR) N U :=
     { A := A

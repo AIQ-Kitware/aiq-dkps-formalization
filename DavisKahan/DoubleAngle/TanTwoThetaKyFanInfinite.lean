@@ -410,10 +410,10 @@ theorem tanTwoTheta0_offDiagonal_mem_and_gauge_le_infinite
     (tanTwoTheta0 : E →L[𝕜] E)
     (htan : ∀ n, approximationSingularValue n tanTwoTheta0 =
       doubleAngleTangent (approximationSingularValue n T))
-    (hHmem : N.toRectangularSymmetricIdealFamily.Mem H) :
-    N.toRectangularSymmetricIdealFamily.Mem tanTwoTheta0 ∧
-      (b - a) * N.toRectangularSymmetricIdealFamily.gauge tanTwoTheta0 ≤
-        2 * N.toRectangularSymmetricIdealFamily.gauge H := by
+    (hHmem : N.Mem H) :
+    N.Mem tanTwoTheta0 ∧
+      (b - a) * N.gauge tanTwoTheta0 ≤
+        2 * N.gauge H := by
   have hδ : (0 : ℝ) < (b - a) / 2 := by linarith
   have hscaled : ∀ k,
       (b - a) / 2 * kyFanApproximationGauge k tanTwoTheta0 ≤

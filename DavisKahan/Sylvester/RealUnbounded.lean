@@ -82,10 +82,10 @@ theorem davisKahan1970_sylvester_real
     (hδ : 0 < δ)
     (hgap : UnboundedSylvesterGap A B δ)
     (hEq : HasClosedSylvesterEquation A B X C)
-    (hC : N.toRectangularSymmetricIdealFamily.Mem C) :
-    N.toRectangularSymmetricIdealFamily.Mem X ∧
-      δ * N.toRectangularSymmetricIdealFamily.gauge X ≤
-        N.toRectangularSymmetricIdealFamily.gauge C := by
+    (hC : N.Mem C) :
+    N.Mem X ∧
+      δ * N.gauge X ≤
+        N.gauge C := by
   apply mem_and_scaled_gauge_le_of_all_scaled_kyFan_le N hδ hC
   intro k
   exact real_unbounded_sylvester_kyFan hA hB hδ hgap hEq k

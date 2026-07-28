@@ -164,11 +164,11 @@ theorem realPlane_zeroResidual_model :
     let U : Submodule ℝ RealPlane := ⊤
     let X : RealPlane →L[ℝ] RealPlane := ContinuousLinearMap.id ℝ RealPlane
     let Rop : RealPlane →L[ℝ] RealPlane := 0
-    (KyFanDominantIdealFamily.operatorNorm (𝕜 := ℝ)).toRectangularSymmetricIdealFamily.Mem
+    (KyFanDominantIdealFamily.operatorNorm (𝕜 := ℝ)).Mem
       ((ContinuousLinearMap.id ℝ RealPlane - U.subtypeL ∘L U.subtypeL.adjoint) ∘L X) ∧
-      1 * (KyFanDominantIdealFamily.operatorNorm (𝕜 := ℝ)).toRectangularSymmetricIdealFamily.gauge
+      1 * (KyFanDominantIdealFamily.operatorNorm (𝕜 := ℝ)).gauge
         ((ContinuousLinearMap.id ℝ RealPlane - U.subtypeL ∘L U.subtypeL.adjoint) ∘L X)
-      ≤ (KyFanDominantIdealFamily.operatorNorm (𝕜 := ℝ)).toRectangularSymmetricIdealFamily.gauge Rop := by
+      ≤ (KyFanDominantIdealFamily.operatorNorm (𝕜 := ℝ)).gauge Rop := by
   dsimp
   let A : ClosedOperator (𝕜 := ℝ) (E := RealPlane) :=
     ClosedOperator.ofBounded (0 : RealPlane →L[ℝ] RealPlane)

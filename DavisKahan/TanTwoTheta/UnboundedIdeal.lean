@@ -205,22 +205,22 @@ theorem tanTwoTheta_addBounded_unitaryInvariant_of_spectrum_gap
     (hBcomplSpec : ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
       lam ∉ Spectra.Resolvent.spectrum
         (selfAdjointSpectralRestriction A hA Bᶜ hB.compl).toLinearPMap)
-    (hEmem : N.toRectangularSymmetricIdealFamily.Mem E)
+    (hEmem : N.Mem E)
     (hquarter : IsQuarterAcute
       (selfAdjointSpectralSubspace A hA B hB)
       (selfAdjointSpectralSubspace (A.addBounded E)
         (addBounded_isSelfAdjoint A hA E hE) S hS)) :
-    N.toRectangularSymmetricIdealFamily.Mem (tanTwoThetaIdealBlock
+    N.Mem (tanTwoThetaIdealBlock
         (selfAdjointSpectralSubspace A hA B hB)
         (selfAdjointSpectralSubspace (A.addBounded E)
           (addBounded_isSelfAdjoint A hA E hE) S hS)
         hquarter) ∧
-      δ * N.toRectangularSymmetricIdealFamily.gauge (tanTwoThetaIdealBlock
+      δ * N.gauge (tanTwoThetaIdealBlock
         (selfAdjointSpectralSubspace A hA B hB)
         (selfAdjointSpectralSubspace (A.addBounded E)
           (addBounded_isSelfAdjoint A hA E hE) S hS)
         hquarter) ≤
-        (2 * N.toRectangularSymmetricIdealFamily.gauge E) /
+        (2 * N.gauge E) /
           (1 - 2 * directedGap
             (selfAdjointSpectralSubspace A hA B hB)
             (selfAdjointSpectralSubspace (A.addBounded E)
@@ -239,22 +239,22 @@ theorem tanTwoTheta_addBounded_unitaryInvariant_of_intervalExterior
     {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
     (hBsub : B ⊆ Set.Icc β α)
     (hBcomplDisj : Bᶜ ∩ Set.Ioo (β - δ) (α + δ) = ∅)
-    (hEmem : N.toRectangularSymmetricIdealFamily.Mem E)
+    (hEmem : N.Mem E)
     (hquarter : IsQuarterAcute
       (selfAdjointSpectralSubspace A hA B hB)
       (selfAdjointSpectralSubspace (A.addBounded E)
         (addBounded_isSelfAdjoint A hA E hE) S hS)) :
-    N.toRectangularSymmetricIdealFamily.Mem (tanTwoThetaIdealBlock
+    N.Mem (tanTwoThetaIdealBlock
         (selfAdjointSpectralSubspace A hA B hB)
         (selfAdjointSpectralSubspace (A.addBounded E)
           (addBounded_isSelfAdjoint A hA E hE) S hS)
         hquarter) ∧
-      δ * N.toRectangularSymmetricIdealFamily.gauge (tanTwoThetaIdealBlock
+      δ * N.gauge (tanTwoThetaIdealBlock
         (selfAdjointSpectralSubspace A hA B hB)
         (selfAdjointSpectralSubspace (A.addBounded E)
           (addBounded_isSelfAdjoint A hA E hE) S hS)
         hquarter) ≤
-        (2 * N.toRectangularSymmetricIdealFamily.gauge E) /
+        (2 * N.gauge E) /
           (1 - 2 * directedGap
             (selfAdjointSpectralSubspace A hA B hB)
             (selfAdjointSpectralSubspace (A.addBounded E)

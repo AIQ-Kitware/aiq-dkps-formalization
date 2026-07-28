@@ -118,16 +118,16 @@ theorem sinTheta_unbounded_spectralSubspace_of_genuineSpectrumGap
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : GenuineUnboundedSylvesterGap A0
       (selfAdjointSpectralRestriction A hA Sᶜ hS.compl) δ)
-    (hR : N.toRectangularSymmetricIdealFamily.Mem Rop) :
-    N.toRectangularSymmetricIdealFamily.Mem
+    (hR : N.Mem Rop) :
+    N.Mem
       ((ContinuousLinearMap.id ℂ E -
         selfAdjointSpectralSubspaceInclusion A hA S hS ∘L
           (selfAdjointSpectralSubspaceInclusion A hA S hS).adjoint) ∘L X) ∧
-      δ * N.toRectangularSymmetricIdealFamily.gauge
+      δ * N.gauge
         ((ContinuousLinearMap.id ℂ E -
           selfAdjointSpectralSubspaceInclusion A hA S hS ∘L
             (selfAdjointSpectralSubspaceInclusion A hA S hS).adjoint) ∘L X)
-        ≤ N.toRectangularSymmetricIdealFamily.gauge Rop := by
+        ≤ N.gauge Rop := by
   let D := unboundedSinThetaDataOfSpectralSubspace
     A hA S hS A0 X Rop hXdom hReq
   have hLambda : D.Λ₁.IsSelfAdjoint := by

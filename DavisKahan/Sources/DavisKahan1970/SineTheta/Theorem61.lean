@@ -56,10 +56,10 @@ theorem result
     (N : UnitaryInvariantIdealFamily (𝕜 := ℂ))
     (P : PaperGeneralSinThetaProblem (E := E) (F := F)
       (G := G) (H := H) N) :
-    N.toRectangularSymmetricIdealFamily.Mem P.sinTheta₀.operator ∧
+    N.Mem P.sinTheta₀.operator ∧
       P.problem.gap * P.problem.frameLowerBound *
-          N.toRectangularSymmetricIdealFamily.gauge P.sinTheta₀.operator
-        ≤ N.toRectangularSymmetricIdealFamily.gauge P.problem.data.residual := by
+          N.gauge P.sinTheta₀.operator
+        ≤ N.gauge P.problem.data.residual := by
   have hcanonical := GeneralSinThetaProblem.result N P.problem
   exact P.sinTheta₀.same_singular_values.mem_and_mul_gauge_le N
     hcanonical.1 hcanonical.2
@@ -83,10 +83,10 @@ theorem result
     (N : UnitaryInvariantIdealFamily (𝕜 := ℂ))
     (P : PaperIsometricSinThetaProblem (E := E) (F := F)
       (G := G) (H := H) N) :
-    N.toRectangularSymmetricIdealFamily.Mem P.sinTheta₀.operator ∧
+    N.Mem P.sinTheta₀.operator ∧
       P.problem.gap *
-          N.toRectangularSymmetricIdealFamily.gauge P.sinTheta₀.operator
-        ≤ N.toRectangularSymmetricIdealFamily.gauge P.problem.data.residual := by
+          N.gauge P.sinTheta₀.operator
+        ≤ N.gauge P.problem.data.residual := by
   have hcanonical := IsometricSinThetaProblem.result_complex N P.problem
   exact P.sinTheta₀.same_singular_values.mem_and_mul_gauge_le N
     hcanonical.1 hcanonical.2
@@ -119,10 +119,10 @@ theorem result
     (N : UnitaryInvariantIdealFamily (𝕜 := ℝ))
     (P : PaperRealGeneralSinThetaProblem (E := E) (F := F)
       (G := G) (H := H) N) :
-    N.toRectangularSymmetricIdealFamily.Mem P.sinTheta₀.operator ∧
+    N.Mem P.sinTheta₀.operator ∧
       P.problem.gap * P.problem.frameLowerBound *
-          N.toRectangularSymmetricIdealFamily.gauge P.sinTheta₀.operator
-        ≤ N.toRectangularSymmetricIdealFamily.gauge P.problem.data.residual := by
+          N.gauge P.sinTheta₀.operator
+        ≤ N.gauge P.problem.data.residual := by
   have hcanonical := RealGeneralSinThetaProblem.result N P.problem
   exact P.sinTheta₀.same_singular_values.mem_and_mul_gauge_le N
     hcanonical.1 hcanonical.2
@@ -145,10 +145,10 @@ theorem result
     (N : UnitaryInvariantIdealFamily (𝕜 := ℝ))
     (P : PaperRealIsometricSinThetaProblem (E := E) (F := F)
       (G := G) (H := H) N) :
-    N.toRectangularSymmetricIdealFamily.Mem P.sinTheta₀.operator ∧
+    N.Mem P.sinTheta₀.operator ∧
       P.problem.gap *
-          N.toRectangularSymmetricIdealFamily.gauge P.sinTheta₀.operator
-        ≤ N.toRectangularSymmetricIdealFamily.gauge P.problem.data.residual := by
+          N.gauge P.sinTheta₀.operator
+        ≤ N.gauge P.problem.data.residual := by
   have hcanonical := IsometricSinThetaProblem.result_real N P.problem
   exact P.sinTheta₀.same_singular_values.mem_and_mul_gauge_le N
     hcanonical.1 hcanonical.2

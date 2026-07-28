@@ -713,8 +713,8 @@ theorem unbounded_sylvester_mem_of_semibounded_viaKyFan
     (hAc : SemiboundedBelow A (c + δ))
     (hBc : SemiboundedAbove B c)
     (hEq : HasClosedSylvesterEquation A B X C)
-    (hC : N.toRectangularSymmetricIdealFamily.Mem C) :
-    N.toRectangularSymmetricIdealFamily.Mem X := by
+    (hC : N.Mem C) :
+    N.Mem X := by
   exact (mem_and_scaled_gauge_le_of_all_scaled_kyFan_le
     N hδ hC
       (kyFan_unbounded_sylvester_le_of_semibounded
@@ -731,8 +731,8 @@ theorem unbounded_sylvester_mem_and_gauge_le_viaKyFan
     (hAc : SemiboundedBelow A (c + δ))
     (hBc : SemiboundedAbove B c)
     (hEq : HasClosedSylvesterEquation A B X C)
-    (hC : N.toRectangularSymmetricIdealFamily.Mem C) :
-    N.toRectangularSymmetricIdealFamily.Mem X ∧ δ * N.toRectangularSymmetricIdealFamily.gauge X ≤ N.toRectangularSymmetricIdealFamily.gauge C := by
+    (hC : N.Mem C) :
+    N.Mem X ∧ δ * N.gauge X ≤ N.gauge C := by
   exact mem_and_scaled_gauge_le_of_all_scaled_kyFan_le
     N hδ hC
       (kyFan_unbounded_sylvester_le_of_semibounded
@@ -749,8 +749,8 @@ theorem unbounded_sylvester_mem_and_gauge_le_swapped_viaKyFan
     (hAc : SemiboundedAbove A c)
     (hBc : SemiboundedBelow B (c + δ))
     (hEq : HasClosedSylvesterEquation A B X C)
-    (hC : N.toRectangularSymmetricIdealFamily.Mem C) :
-    N.toRectangularSymmetricIdealFamily.Mem X ∧ δ * N.toRectangularSymmetricIdealFamily.gauge X ≤ N.toRectangularSymmetricIdealFamily.gauge C := by
+    (hC : N.Mem C) :
+    N.Mem X ∧ δ * N.gauge X ≤ N.gauge C := by
   exact mem_and_scaled_gauge_le_of_all_scaled_kyFan_le
     N hδ hC
       (kyFan_unbounded_sylvester_le_of_semibounded_swapped
@@ -861,10 +861,10 @@ theorem unbounded_sylvester_mem_and_gauge_le_of_gap
     (hδ : 0 < δ)
     (hgap : UnboundedSylvesterGap A B δ)
     (hEq : HasClosedSylvesterEquation A B X C)
-    (hC : N.toRectangularSymmetricIdealFamily.Mem C) :
-    N.toRectangularSymmetricIdealFamily.Mem X ∧
-      δ * N.toRectangularSymmetricIdealFamily.gauge X ≤
-        N.toRectangularSymmetricIdealFamily.gauge C := by
+    (hC : N.Mem C) :
+    N.Mem X ∧
+      δ * N.gauge X ≤
+        N.gauge C := by
   cases hgap with
   | intervalExterior hβα hgap =>
       exact unbounded_sylvester_mem_and_gauge_le_of_intervalExteriorGap
@@ -888,10 +888,10 @@ theorem davisKahan1970_sylvester
     (hδ : 0 < δ)
     (hgap : UnboundedSylvesterGap A B δ)
     (hEq : HasClosedSylvesterEquation A B X C)
-    (hC : N.toRectangularSymmetricIdealFamily.Mem C) :
-    N.toRectangularSymmetricIdealFamily.Mem X ∧
-      δ * N.toRectangularSymmetricIdealFamily.gauge X ≤
-        N.toRectangularSymmetricIdealFamily.gauge C :=
+    (hC : N.Mem C) :
+    N.Mem X ∧
+      δ * N.gauge X ≤
+        N.gauge C :=
   unbounded_sylvester_mem_and_gauge_le_of_gap N hA hB hδ hgap hEq hC
 
 end ApproximationNumberEndpointAssumptions
