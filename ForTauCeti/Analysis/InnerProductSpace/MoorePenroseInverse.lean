@@ -43,6 +43,11 @@ the orthogonal projection onto the directions of nonzero singular value.
 Identity (3) needs no orthogonality at all — `A A⁺` is visibly a
 real-coefficient combination of rank-one projections onto the images of those
 directions.
+
+`eq_moorePenroseInverse_of_penrose` completes the characterization: any map
+satisfying all four identities equals `A⁺`.  So the name is earned — this is
+*the* Moore--Penrose inverse, not merely a generalized inverse that happens to
+be constructed from the singular system.
 -/
 
 namespace FiniteDimensional
@@ -230,6 +235,60 @@ theorem isSymmetric_comp_moorePenroseInverse (A : E →ₗ[𝕜] F) :
   refine Finset.sum_congr rfl fun i _ => ?_
   rw [inner_conj_symm]
   ring
+
+/-- **Uniqueness: the four Penrose identities determine the inverse.**
+
+Any `B` satisfying all four *is* `A⁺`, so together with the identities above the
+name is earned rather than asserted: `moorePenroseInverse` is the Moore--Penrose
+inverse, not merely some generalized inverse.
+
+The proof is the classical one.  Both `B` and `A⁺` are shown equal to the same
+composite `B ∘ₗ A ∘ₗ A⁺`, each by pushing an adjoint through the factorization
+of `A` supplied by the *other* map's first identity. -/
+theorem eq_moorePenroseInverse_of_penrose (A : E →ₗ[𝕜] F) (B : F →ₗ[𝕜] E)
+    (h1 : A ∘ₗ B ∘ₗ A = A) (h2 : B ∘ₗ A ∘ₗ B = B)
+    (h3 : (A ∘ₗ B).IsSymmetric) (h4 : (B ∘ₗ A).IsSymmetric) :
+    B = moorePenroseInverse A := by
+  set G := moorePenroseInverse A with hGdef
+  have hG1 : A ∘ₗ G ∘ₗ A = A := comp_moorePenroseInverse_comp A
+  have hG2 : G ∘ₗ A ∘ₗ G = G := moorePenroseInverse_comp_comp A
+  have hG3 : (A ∘ₗ G).IsSymmetric := isSymmetric_comp_moorePenroseInverse A
+  have hG4 : (G ∘ₗ A).IsSymmetric := isSymmetric_moorePenroseInverse_comp A
+  -- `A⋆ = A⋆ (A A⁺)`, from `A = (A A⁺) A` and self-adjointness of `A A⁺`.
+  have hAr : LinearMap.adjoint A = LinearMap.adjoint A ∘ₗ (A ∘ₗ G) := by
+    conv_lhs => rw [← hG1, ← LinearMap.comp_assoc]
+    rw [LinearMap.adjoint_comp, hG3.adjoint_eq]
+  -- `A⋆ = (B A) A⋆`, from `A = A (B A)` and self-adjointness of `B A`.
+  have hAl : LinearMap.adjoint A = (B ∘ₗ A) ∘ₗ LinearMap.adjoint A := by
+    conv_lhs => rw [← h1]
+    rw [LinearMap.adjoint_comp, h4.adjoint_eq]
+  have hB : B = B ∘ₗ A ∘ₗ G := by
+    calc B = B ∘ₗ A ∘ₗ B := h2.symm
+      _ = B ∘ₗ LinearMap.adjoint (A ∘ₗ B) := by rw [h3.adjoint_eq]
+      _ = B ∘ₗ LinearMap.adjoint B ∘ₗ LinearMap.adjoint A := by
+          rw [LinearMap.adjoint_comp]
+      _ = B ∘ₗ LinearMap.adjoint B ∘ₗ LinearMap.adjoint A ∘ₗ (A ∘ₗ G) := by
+          conv_lhs => rw [hAr]
+      _ = (B ∘ₗ LinearMap.adjoint (A ∘ₗ B)) ∘ₗ (A ∘ₗ G) := by
+          rw [LinearMap.adjoint_comp]
+          simp only [LinearMap.comp_assoc]
+      _ = (B ∘ₗ A ∘ₗ B) ∘ₗ (A ∘ₗ G) := by rw [h3.adjoint_eq]
+      _ = B ∘ₗ A ∘ₗ G := by rw [h2]
+  have hG : G = B ∘ₗ A ∘ₗ G := by
+    calc G = G ∘ₗ A ∘ₗ G := hG2.symm
+      _ = (G ∘ₗ A) ∘ₗ G := by rw [LinearMap.comp_assoc]
+      _ = LinearMap.adjoint (G ∘ₗ A) ∘ₗ G := by rw [hG4.adjoint_eq]
+      _ = (LinearMap.adjoint A ∘ₗ LinearMap.adjoint G) ∘ₗ G := by
+          rw [LinearMap.adjoint_comp]
+      _ = ((B ∘ₗ A) ∘ₗ LinearMap.adjoint A ∘ₗ LinearMap.adjoint G) ∘ₗ G := by
+          conv_lhs => rw [hAl]
+          simp only [LinearMap.comp_assoc]
+      _ = (B ∘ₗ A) ∘ₗ (LinearMap.adjoint (G ∘ₗ A) ∘ₗ G) := by
+          rw [LinearMap.adjoint_comp]
+          simp only [LinearMap.comp_assoc]
+      _ = (B ∘ₗ A) ∘ₗ ((G ∘ₗ A) ∘ₗ G) := by rw [hG4.adjoint_eq]
+      _ = B ∘ₗ A ∘ₗ G := by simp only [LinearMap.comp_assoc, hG2]
+  rw [hB, ← hG]
 
 /-- If `A` is injective, the pseudoinverse is a left inverse. -/
 theorem moorePenroseInverse_comp_eq_id_of_injective
