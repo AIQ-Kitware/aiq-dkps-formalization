@@ -342,10 +342,20 @@ left until port time:
      `git archive <new-upstream-commit>`". Anyone following the repository's own
      instructions loses all 2,589 lines.
 
-   Note this makes the removal *cheaper*, not dearer: those modules need no port
-   and no donor negotiation. They are already ours; they only need to move to
+   **Checked against the whole public history, not just the pin:** none of the 11
+   exists at any commit on any branch of `external/Spectra` (82 commits;
+   `origin/master` is not ahead of `8dbaaf67`), so they are not a newer upstream
+   revision that drifted in. Authorship is *not* uniform, and the difference
+   governs what may be submitted upstream: **7** are Jon Crall + GPT-5.6, **3**
+   are co-authored with Adam Bornemann, and **1** — `BornRule/POVMCore.lean`,
+   378 lines — is solely his, obtained outside the public repo. Relocating any of
+   them inside this repository is ours to do; submitting the last four to Tau Ceti
+   is not, and needs his sign-off first.
+
+   This makes most of the removal *cheaper*, not dearer: those modules need no
+   port and no donor negotiation. They are already ours; they only need to move to
    `ForTauCeti` and be reconciled against Tau Ceti's API like any other staged
-   module. **Do not run `spectra_compatibility_patch.py refresh` to "fix" this** —
+   module. **Decided 2026-07-28: relocate all 11.** **Do not run `spectra_compatibility_patch.py refresh` to "fix" this** —
    the patch is documented as compatibility-only and explicitly "not the place for
    Davis–Kahan-specific mathematical APIs", so refreshing would launder our
    mathematics into a compatibility record and hide the problem instead of
