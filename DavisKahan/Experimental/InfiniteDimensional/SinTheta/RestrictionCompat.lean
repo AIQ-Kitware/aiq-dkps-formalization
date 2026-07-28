@@ -189,13 +189,13 @@ theorem mem_realResolventSet_ofBounded_iff (X : E →L[𝕜] E) (lam : ℝ) :
       intro y
       obtain ⟨h, hy⟩ := hright y
       have hy' : X (R y) - (lam : 𝕜) • R y = y := hy
-      simpa [ContinuousLinearMap.mul_apply, ContinuousLinearMap.sub_apply,
-        ContinuousLinearMap.smul_apply, ContinuousLinearMap.one_apply] using hy'
+      simpa [mul_apply_eq_comp, sub_apply,
+        smul_apply, one_apply_eq_self] using hy'
     · apply ContinuousLinearMap.ext
       intro x
       have hx' : R (X x - (lam : 𝕜) • x) = x := hleft ⟨x, Submodule.mem_top⟩
-      simpa [ContinuousLinearMap.mul_apply, ContinuousLinearMap.sub_apply,
-        ContinuousLinearMap.smul_apply, ContinuousLinearMap.one_apply] using hx'
+      simpa [mul_apply_eq_comp, sub_apply,
+        smul_apply, one_apply_eq_self] using hx'
   · rintro ⟨u, hu⟩
     have hval : (↑u : E →L[𝕜] E) = X - (lam : 𝕜) • (1 : E →L[𝕜] E) := hu
     refine ⟨↑u⁻¹, ?_, ?_⟩
@@ -204,16 +204,16 @@ theorem mem_realResolventSet_ofBounded_iff (X : E →L[𝕜] E) (lam : ℝ) :
       have hinv : (↑u⁻¹ : E →L[𝕜] E) * (X - (lam : 𝕜) • (1 : E →L[𝕜] E)) = 1 := by
         rw [← hval]; exact u.inv_mul
       have hpt := ContinuousLinearMap.ext_iff.mp hinv (x : E)
-      simpa [ContinuousLinearMap.mul_apply, ContinuousLinearMap.sub_apply,
-        ContinuousLinearMap.smul_apply, ContinuousLinearMap.one_apply] using hpt
+      simpa [mul_apply_eq_comp, sub_apply,
+        smul_apply, one_apply_eq_self] using hpt
     · intro y
       refine ⟨Submodule.mem_top, ?_⟩
       show X ((↑u⁻¹ : E →L[𝕜] E) y) - (lam : 𝕜) • ((↑u⁻¹ : E →L[𝕜] E) y) = y
       have hinv : (X - (lam : 𝕜) • (1 : E →L[𝕜] E)) * (↑u⁻¹ : E →L[𝕜] E) = 1 := by
         rw [← hval]; exact u.mul_inv
       have hpt := ContinuousLinearMap.ext_iff.mp hinv y
-      simpa [ContinuousLinearMap.mul_apply, ContinuousLinearMap.sub_apply,
-        ContinuousLinearMap.smul_apply, ContinuousLinearMap.one_apply] using hpt
+      simpa [mul_apply_eq_comp, sub_apply,
+        smul_apply, one_apply_eq_self] using hpt
 
 omit [CompleteSpace E] in
 /-- The bounded-realization real spectrum used by the `sin Θ` interval/exterior

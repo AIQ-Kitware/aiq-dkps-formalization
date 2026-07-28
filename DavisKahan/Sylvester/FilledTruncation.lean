@@ -187,9 +187,9 @@ theorem genuineFilledTruncation_tendsto_on_domain
         fun τ : ℝ => Tcut.truncation τ (x : H) +
           ((a : ℝ) : 𝕜) • ((x : H) - Pcut.cutoff τ (x : H)) := by
     funext τ
-    simp only [genuineFilledTruncation, ContinuousLinearMap.add_apply,
-      ContinuousLinearMap.coe_smul', Pi.smul_apply,
-      ContinuousLinearMap.sub_apply, ContinuousLinearMap.id_apply]
+    simp only [genuineFilledTruncation, add_apply,
+      FunLike.coe_smul, Pi.smul_apply,
+      sub_apply, ContinuousLinearMap.id_apply]
   rw [hfun]
   exact hfill
 

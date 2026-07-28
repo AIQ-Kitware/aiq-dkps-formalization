@@ -218,7 +218,7 @@ theorem paperPlanar_residual_identity (delta theta : ℝ) :
   ext i
   fin_cases i <;>
     simp [paperPlanarAmbient, paperPlanarTrialOperator, paperPlanarResidual,
-      paperPlaneE0, paperPlaneE1, Matrix.toEuclideanLin_apply,
+      paperPlaneE0, paperPlaneE1, Matrix.toLpLin_apply,
       PiLp.single_apply, mul_comm] <;>
     push_cast <;> ring
 
@@ -494,7 +494,7 @@ theorem paperCounterexample_projectionDifference_e0 :
         paperCounterexampleTrial.starProjection) (paperPlaneE0 (𝕜 := ℝ)) =
       (1 / 2 : ℝ) • paperPlaneE0 (𝕜 := ℝ) +
         (1 / 2 : ℝ) • paperPlaneE1 (𝕜 := ℝ) := by
-  rw [ContinuousLinearMap.sub_apply,
+  rw [sub_apply,
     paperCounterexampleExact_starProjection_e0,
     paperCounterexampleTrial_starProjection_e0]
   module
@@ -505,7 +505,7 @@ theorem paperCounterexample_projectionDifference_e1 :
         paperCounterexampleTrial.starProjection) (paperPlaneE1 (𝕜 := ℝ)) =
       (1 / 2 : ℝ) • paperPlaneE0 (𝕜 := ℝ) +
         (-(1 / 2) : ℝ) • paperPlaneE1 (𝕜 := ℝ) := by
-  rw [ContinuousLinearMap.sub_apply,
+  rw [sub_apply,
     paperCounterexampleExact_starProjection_e1,
     paperCounterexampleTrial_starProjection_e1]
   module
@@ -517,7 +517,7 @@ theorem paperCounterexampleH_e0 :
   ext i
   fin_cases i <;>
     simp [paperCounterexampleH, paperPlaneE0, paperPlaneE1,
-      Matrix.toEuclideanLin_apply, PiLp.single_apply]
+      Matrix.toLpLin_apply, PiLp.single_apply]
 
 /-- The printed perturbation on the second coordinate vector. -/
 theorem paperCounterexampleH_e1 :
@@ -526,7 +526,7 @@ theorem paperCounterexampleH_e1 :
   ext i
   fin_cases i <;>
     simp [paperCounterexampleH, paperPlaneE0, paperPlaneE1,
-      Matrix.toEuclideanLin_apply, PiLp.single_apply]
+      Matrix.toLpLin_apply, PiLp.single_apply]
 
 /-- The real complexified sine operator has the same paper square norm as the
 real projection difference from which it is constructed. -/

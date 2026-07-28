@@ -72,7 +72,7 @@ private theorem starProjection_eq_zero_of_mem_orthogonal
     {x : E} (hx : x ∈ Uᗮ) :
     U.starProjection x = 0 := by
   have h := DFunLike.congr_fun (U.starProjection_orthogonal') x
-  rw [ContinuousLinearMap.sub_apply, ContinuousLinearMap.one_apply,
+  rw [sub_apply, one_apply_eq_self,
     Submodule.starProjection_eq_self_iff.mpr hx] at h
   exact sub_eq_self.mp h.symm
 
@@ -287,7 +287,7 @@ theorem kyFan_doubleAngleTangent_offDiagonal_le_infinite
     calc M.starProjection (A ((x : E) + T (x : E))) +
           M.starProjection (H ((x : E) + T (x : E)))
         = M.starProjection ((A + H) ((x : E) + T (x : E))) := by
-          rw [ContinuousLinearMap.add_apply]
+          rw [add_apply]
           exact (map_add M.starProjection _ _).symm
       _ = M.starProjection (y + T y) := by rw [hy]
       _ = y + T y := Submodule.starProjection_eq_self_iff.mpr hyM

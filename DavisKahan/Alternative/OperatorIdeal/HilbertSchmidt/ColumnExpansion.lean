@@ -74,7 +74,7 @@ theorem mathAhead_norm_sum_columnTensor_le
     rw [toOperator_sum]
     -- `x` must be pushed inside the finite sum first, otherwise the rank-one
     -- operators are never applied and `rankOne_apply` cannot fire.
-    simp_rw [ContinuousLinearMap.sum_apply, columnTensor, toOperator_tmul,
+    simp_rw [sum_apply, columnTensor, toOperator_tmul,
       InnerProductSpace.rankOne_apply]
     -- The composition has to be unfolded before `P x` occurs syntactically.
     rw [ContinuousLinearMap.comp_apply,

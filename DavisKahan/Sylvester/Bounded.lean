@@ -404,7 +404,7 @@ theorem sylvesterNeumannSolution_eq
       (fun n : ℕ => C x - t n (B x)) :=
     Filter.Eventually.of_forall fun n => by
       have h := congrArg (fun T : F →L[𝕜] E => T x) (hfinite n)
-      simpa only [ContinuousLinearMap.sub_apply,
+      simpa only [sub_apply,
         ContinuousLinearMap.comp_apply] using h
   exact tendsto_nhds_unique (hlhs.congr' hsame) hrhs
 

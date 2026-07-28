@@ -474,7 +474,7 @@ theorem spectraDirectRotation_real_inner_nonneg
         star (spectraReflectionProductHalfPhase U V hacute)) x, x⟫_ℂ =
       ⟪spectraReflectionProductHalfPhase U V hacute x, x⟫_ℂ +
         (starRingEnd ℂ) ⟪spectraReflectionProductHalfPhase U V hacute x, x⟫_ℂ := by
-    rw [ContinuousLinearMap.add_apply, inner_add_left]
+    rw [add_apply, inner_add_left]
     congr 1
     rw [ContinuousLinearMap.star_eq_adjoint,
       ContinuousLinearMap.adjoint_inner_left, ← inner_conj_symm]

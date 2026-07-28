@@ -87,8 +87,8 @@ theorem intertwines_halmosCosineSq (e : H₁ ≃ₗᵢ[ℂ] H₂)
   have hpV := isometryEquiv_intertwines_projection e hV
   have hpUc := isometryEquiv_intertwines_projection e hUc
   have hpVc := isometryEquiv_intertwines_projection e hVc
-  simp only [halmosCosineSq, ContinuousLinearMap.add_apply,
-    ContinuousLinearMap.mul_apply, map_add]
+  simp only [halmosCosineSq, add_apply,
+    mul_apply_eq_comp, map_add]
   rw [hpU, hpV, hpU, hpUc, hpVc, hpUc]
 
 /-- **Forward direction of the operator-level Halmos classification.**  A

@@ -66,7 +66,7 @@ theorem spectralSubspace_orthogonalExactDecomposition
       Submodule.starProjection_eq_self_iff.mpr x.property
     rw [hUcProjection] at hfix
     have hfix' : (x : E) - U.starProjection (x : E) = (x : E) := by
-      simpa only [ContinuousLinearMap.sub_apply,
+      simpa only [sub_apply,
         ContinuousLinearMap.id_apply] using hfix
     exact sub_eq_self.mp hfix'
   · show U.subtypeL ∘L U.subtypeL.adjoint +
