@@ -56,6 +56,16 @@ Ownership classes: `mathlib` · `tauceti` · `davis-kahan` · `spectra-bridge` �
 * **Status**: `staged, building`.
 * **PR order**: **PR 1** for the abstraction itself; **PR 2** for the
   symmetric-gauge/Calkin construction and Hilbert–Schmidt equivalences.
+* **PR 2 progress (2026-07-28)**: the Hilbert–Schmidt half is **staged and
+  building** — `ForTauCeti/Analysis/InnerProductSpace/HilbertSchmidtEnergy.lean`
+  and `ForTauCeti/Analysis/OperatorIdeal/Family/HilbertSchmidt.lean`, giving
+  `TauCeti.hilbertSchmidtIdealFamily`, a second `SymmetricOperatorIdealFamily`
+  built from orthonormal expansions rather than approximation numbers.  Both
+  modules are in the `approximation-number` cluster's `staging_modules` and
+  export cleanly.  What remains for PR 2 is the **symmetric-gauge/Calkin
+  construction** (item S1 of
+  `ForTauCetiRoadmap/SymmetricOperatorIdeals/README.md`), which is still
+  unstarted.
 * **Consumers**: `…/ApproximationNumbers/ScalarGeneric` (which stores it inside
   `KyFanDominantIdealFamily`), sine-theta UI-norm layer.
 
@@ -73,13 +83,28 @@ Ownership classes: `mathlib` · `tauceti` · `davis-kahan` · `spectra-bridge` �
 * **PR order**: after PR 1/2, once the Spectra-free min–max lands.
 
 ### 1c. Reusable Hilbert–Schmidt identities
-* **Home**: `ForMathlib/Analysis/InnerProductSpace/` orthogonal-series modules,
-  `DavisKahan/Alternative/OperatorIdeal/HilbertSchmidt/`.
-* **Ownership**: split `mathlib`/`tauceti`. **Final**: `TauCeti/Analysis/OperatorIdeal/HilbertSchmidt/…`.
-* **Status**: `ready` for the Mathlib-only orthogonal-series parts; the
-  H–S tensor/Schatten parts are `blocked-on-spectra-removal`
-  (import `Spectra.Spaces.Tensor.HilbertSchmidt`).
-* **PR order**: **PR 2/PR 3** (Hilbert–Schmidt & square-summable singular values).
+* **Home**: `ForTauCeti/Analysis/InnerProductSpace/{OrthogonalSeries,HilbertSchmidtEnergy}.lean`
+  and `ForTauCeti/Analysis/OperatorIdeal/Family/HilbertSchmidt.lean`.
+  (The earlier entry named `ForMathlib/Analysis/InnerProductSpace/` and
+  `DavisKahan/Alternative/OperatorIdeal/HilbertSchmidt/`; both were wrong by
+  2026-07-28 — `ForMathlib` has no orthogonal-series module, `OrthogonalSeries.lean`
+  is in `ForTauCeti`, and the `Alternative/` column-expansion proof has moved to
+  `DavisKahan/Interop/Spectra/HilbertSchmidtColumnExpansion.lean`.)
+* **Ownership**: `tauceti`. **Final**: `TauCeti/Analysis/OperatorIdeal/…`.
+* **Status**: **staged** for the whole basis-side theory — energy, Parseval, the
+  rectangular adjoint swap, basis independence, the norm and the ideal family.
+  None of it needs Spectra: the `ℂ`-only Parseval lemma that
+  `HilbertSchmidtBasis.lean` used to import is a short consequence of Mathlib's
+  `HilbertBasis.hasSum_inner_mul_inner` and is now staged for a general `RCLike`
+  field.  Only the **tensor model** is still Spectra-bound, and it is confined to
+  `DavisKahan/Interop/Spectra/HilbertSchmidtTensor.lean`, where it belongs.
+  The reconciliation with the singular-value definition,
+  `tsum_approximationSingularValue_sq_eq_hilbertSchmidtEnergy`, is proved in
+  `DavisKahan/Sources/DavisKahan1970/Ideals/HilbertSchmidtBasis.lean`; staging it
+  is what "square-summable singular values" still means for this cluster, and it
+  needs the finite-rank/Eckart–Young cutoff argument that lives beside it.
+* **PR order**: **PR 2** for the staged basis-side theory (ready now); **PR 3**
+  for the singular-value reconciliation.
 
 ### 1d. Closed operators & bounded extensions
 * **Home**: `DavisKahan/SpectralTheory/ClosedOperator/`.
