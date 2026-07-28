@@ -7,6 +7,5 @@ import DavisKahan.Riccati.UnboundedBasic
 import DavisKahan.Riccati.UnboundedCore
 import DavisKahan.Riccati.UnboundedExistence
 import DavisKahan.Riccati.UnboundedReduction
-import DavisKahan.Riccati.UnboundedTransport
 
 /-! # `DavisKahan/Riccati` -/
