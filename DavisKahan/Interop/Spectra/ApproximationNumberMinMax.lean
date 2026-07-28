@@ -3,19 +3,13 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.MinMax
-import DavisKahan.Interop.Spectra.Basic
-import DavisKahan.Interop.Spectra.PVMSubspace
-import Spectra.SpectralTheory.ResolventForm
-import Spectra.SpectralTheory.Algebra
+import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.MinMaxUpper
 
 /-!
 # Infinite-dimensional Courant--Fischer localization for approximation numbers
 
 For a bounded operator between complex Hilbert spaces, the `n`th approximation
-number is already detected on finite-dimensional source subspaces. The proof is
-the spectral-theorem extension of Courant--Fischer applied to the bounded
-positive Gram operator `T⋆T`.
+number is already detected on finite-dimensional source subspaces.
 
 The core threshold theorem says that every strict lower bound for `a_n(T)` is
 realized, with margin, as a uniform lower modulus on an `(n+1)`-dimensional
@@ -24,6 +18,28 @@ set of approximation numbers of these finite restrictions.  Approximation
 numbers are real-valued, so the least-upper-bound formulation is the
 conditionally-complete one for `ℝ`; the family is nonempty and bounded above by
 the ambient approximation number.
+
+## This module no longer bridges to Spectra
+
+Until 2026-07-28 the threshold theorem
+`exists_linearIndependent_lowerBound_of_lt_approximationNumber` was proved here from
+`vendor/Spectra`'s projection-valued measures, one-parameter unitary groups and resolvent
+form — about 175 lines — and that proof was the reason four `Spectra` imports sat at the top
+of this file.  It is now a one-line consequence of
+`ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/MinMaxUpper.lean`, which proves the
+same statement from Mathlib's **continuous** functional calculus alone: the spectral
+projection for `[0, s]` is replaced by the kernel of `(|T| - s)₊`, and
+`ForTauCeti/Analysis/InnerProductSpace/SpectralCutoff.lean` supplies the two bounds that
+kernel and its complement satisfy.
+
+So nothing in this file mentions Spectra any more, and its remaining content — restriction
+monotonicity, the finite-restriction family, its `IsLUB` characterisation and the
+epsilon-form equivalence — is ordinary approximation-number theory.  **It should be moved
+out of `DavisKahan/Interop/Spectra/` and staged**, most naturally as
+`ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/FiniteRestriction.lean`.  That was
+not done in the same change because the `SpectraBridge` namespace is referenced by name
+across the approximation-number and sine-theta layers, and a rename is a separate,
+mechanical, wide-reaching edit that deserves its own lane.
 -/
 
 open scoped InnerProductSpace
@@ -34,9 +50,6 @@ namespace Experimental
 namespace SpectraBridge
 
 open Module (finrank)
-open Spectra.OneParameterUnitaryGroup
-open Spectra.YosidaHille
-open Spectra.QuantumMechanics.SpectralTheory
 
 noncomputable section
 
@@ -86,175 +99,8 @@ theorem exists_linearIndependent_lowerBound_of_lt_approximationNumber
     ∃ s : ℝ, r < s ∧
       ∃ v : Fin (n + 1) → E, LinearIndependent ℂ v ∧
         ∀ x ∈ Submodule.span ℂ (Set.range v),
-          s * ‖x‖ ≤ ‖T x‖ := by
-  classical
-  let a : ℝ := T.approximationNumber n
-  let s : ℝ := (2 * r + a) / 3
-  let u : ℝ := (r + 2 * a) / 3
-  have hrs : r < s := by dsimp only [s, a]; linarith
-  have hsu : s < u := by dsimp only [s, u, a]; linarith
-  have hua : u < a := by dsimp only [u, a]; linarith
-  have hs0 : 0 ≤ s := hr0.trans hrs.le
-  have hu0 : 0 ≤ u := hs0.trans hsu.le
-  have hsq : s ^ 2 < u ^ 2 := by nlinarith
-
-  let C : E →L[ℂ] E := T.adjoint ∘L T
-  have hC : IsSelfAdjoint C := by
-    apply ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr
-    intro x y
-    change ⟪T.adjoint (T x), y⟫_ℂ = ⟪x, T.adjoint (T y)⟫_ℂ
-    rw [ContinuousLinearMap.adjoint_inner_left,
-      ContinuousLinearMap.adjoint_inner_right]
-  let A : Spectra.Operator.SelfAdjointOperator E :=
-    Spectra.Operator.SelfAdjointOperator.ofBounded C hC
-  have hA : IsSelfAdjoint A.toLinearPMap := A.selfAdjoint
-  let U := genToGroup hA
-  let PVM : Spectra.ProjValMeasure E := spectralPVM hA
-  let P : E →L[ℂ] E := PVM.proj (Set.Ioi (s ^ 2)) measurableSet_Ioi
-  let Q : E →L[ℂ] E := PVM.proj (Set.Iic (s ^ 2)) measurableSet_Iic
-
-  have hgen : generator U = A.toLinearPMap := by
-    dsimp only [U]
-    exact generator_genToGroup hA
-  have hAdom : A.toLinearPMap.domain = ⊤ := by
-    dsimp only [A]
-    exact Spectra.Operator.SelfAdjointOperator.domain_ofBounded C hC
-  have hdom : (generator U).domain = ⊤ := by
-    rw [hgen, hAdom]
-  have hgenApply (x : E) (hx : x ∈ (generator U).domain) :
-      generator U ⟨x, hx⟩ = C x := by
-    have hxA : x ∈ A.toLinearPMap.domain := by
-      rw [hAdom]
-      exact Submodule.mem_top
-    have happly := (LinearPMap.ext_iff.mp hgen).2
-    calc
-      generator U ⟨x, hx⟩ = A.toLinearPMap ⟨x, hxA⟩ :=
-        happly (x := x) (hf := hx) (hg := hxA)
-      _ = C x := rfl
-
-  have hQeq : Q = ContinuousLinearMap.id ℂ E - P := by
-    change spectralProjection U (Set.Iic (s ^ 2)) measurableSet_Iic =
-      ContinuousLinearMap.id ℂ E -
-        spectralProjection U (Set.Ioi (s ^ 2)) measurableSet_Ioi
-    simpa only [Set.compl_Ioi] using
-      (spectralProjection_compl U (Set.Ioi (s ^ 2)) measurableSet_Ioi)
-
-  have hIciIic : Set.Ici (u ^ 2) ∩ Set.Iic (s ^ 2) = ∅ := by
-    ext z
-    simp only [Set.mem_inter_iff, Set.mem_Ici, Set.mem_Iic,
-      Set.mem_empty_iff_false, iff_false]
-    exact fun hz => (not_le_of_gt hsq) (hz.1.trans hz.2)
-  have hIicIoi : Set.Iic (s ^ 2) ∩ Set.Ioi (s ^ 2) = ∅ := by
-    ext z
-    simp only [Set.mem_inter_iff, Set.mem_Iic, Set.mem_Ioi,
-      Set.mem_empty_iff_false, iff_false]
-    exact fun hz => (not_lt_of_ge hz.1) hz.2
-
-  have htailNorm : ‖T ∘L Q‖ ≤ u := by
-    refine (T ∘L Q).opNorm_le_bound hu0 ?_
-    intro x
-    let y : E := Q x
-    have hyDom : y ∈ (generator U).domain := by
-      rw [hdom]
-      exact Submodule.mem_top
-    have hhighZero :
-        spectralProjection U (Set.Ici (u ^ 2)) measurableSet_Ici y = 0 := by
-      change spectralProjection U (Set.Ici (u ^ 2)) measurableSet_Ici
-        (spectralProjection U (Set.Iic (s ^ 2)) measurableSet_Iic x) = 0
-      rw [← mul_apply_eq_comp, spectralProjection_inter U,
-        spectralProjection_congr U hIciIic
-          (measurableSet_Ici.inter measurableSet_Iic) MeasurableSet.empty,
-        spectralProjection_empty U, zero_apply]
-    have henergy := energy_upper_bound_of_spectralProjection_Ici_eq_zero
-      U (u ^ 2) (⟨y, hyDom⟩ : (generator U).domain) hhighZero
-    have hquad : ‖T y‖ ^ 2 ≤ u ^ 2 * ‖y‖ ^ 2 := by
-      calc
-        ‖T y‖ ^ 2 = (⟪C y, y⟫_ℂ).re := by
-          change ‖T y‖ ^ 2 =
-            (⟪(T.adjoint ∘L T) y, y⟫_ℂ).re
-          exact ContinuousLinearMap.apply_norm_sq_eq_inner_adjoint_left T y
-        _ = (⟪generator U ⟨y, hyDom⟩, y⟫_ℂ).re := by
-          rw [hgenApply y hyDom]
-        _ ≤ u ^ 2 * ‖y‖ ^ 2 := henergy
-    have hquad' : ‖T y‖ ^ 2 ≤ (u * ‖y‖) ^ 2 := by
-      calc
-        ‖T y‖ ^ 2 ≤ u ^ 2 * ‖y‖ ^ 2 := hquad
-        _ = (u * ‖y‖) ^ 2 := by ring
-    have hyNorm : ‖T y‖ ≤ u * ‖y‖ :=
-      le_of_sq_le_sq hquad' (mul_nonneg hu0 (norm_nonneg y))
-    calc
-      ‖(T ∘L Q) x‖ = ‖T y‖ := rfl
-      _ ≤ u * ‖y‖ := hyNorm
-      _ ≤ u * ‖x‖ :=
-        mul_le_mul_of_nonneg_left (PVM.norm_proj_apply_le
-          (Set.Iic (s ^ 2)) measurableSet_Iic x) hu0
-
-  have hPrank : ¬ P.rank ≤ (n : Cardinal) := by
-    intro hP
-    let R : E →L[ℂ] F := T ∘L P
-    -- `R.rank` and `P.rank` live in different universes once the codomain is
-    -- independent, so the comparison goes through the natural-number bound.
-    have hRrank : R.rank ≤ (n : Cardinal) :=
-      ContinuousLinearMap.rank_comp_le_natCast_right P T hP
-    have herr : T - R = T ∘L Q := by
-      ext x
-      change T x - T (P x) = T (Q x)
-      rw [hQeq, sub_apply, ContinuousLinearMap.id_apply, map_sub]
-    have happroxReal : a ≤ ‖T - R‖ := T.approximationNumber_le_norm_sub hRrank
-    have hau : a ≤ u := by
-      calc
-        a ≤ ‖T - R‖ := happroxReal
-        _ = ‖T ∘L Q‖ := by rw [herr]
-        _ ≤ u := htailNorm
-    exact (not_le_of_gt hua) hau
-
-  let W : Submodule ℂ E :=
-    pvmRangeSubspace PVM (Set.Ioi (s ^ 2)) measurableSet_Ioi
-  have hnrank : ((n + 1 : ℕ) : Cardinal) ≤ Module.rank ℂ W := by
-    change ((n + 1 : ℕ) : Cardinal) ≤ P.rank
-    have hlt : (n : Cardinal) < P.rank := lt_of_not_ge hPrank
-    rw [← Cardinal.natCast_add_one_le_iff, ← Nat.cast_add_one] at hlt
-    exact hlt
-  obtain ⟨f, hf⟩ := (Module.le_rank_iff).mp hnrank
-  let v : Fin (n + 1) → E := W.subtype ∘ f
-  have hv : LinearIndependent ℂ v := by
-    change LinearIndependent ℂ (W.subtype ∘ f)
-    exact hf.map' W.subtype
-      (LinearMap.ker_eq_bot.mpr W.injective_subtype)
-  let V : Submodule ℂ E := Submodule.span ℂ (Set.range v)
-  have hVle : V ≤ W := by
-    apply Submodule.span_le.mpr
-    rintro x ⟨i, rfl⟩
-    exact (f i).2
-  refine ⟨s, hrs, v, hv, ?_⟩
-  intro x hxV
-  have hxW : x ∈ W := hVle hxV
-  have hPfix : P x = x := by
-    exact pvmProjection_eq_self_of_mem_rangeSubspace
-      PVM (Set.Ioi (s ^ 2)) measurableSet_Ioi hxW
-  have hlowZero :
-      spectralProjection U (Set.Iic (s ^ 2)) measurableSet_Iic x = 0 := by
-    rw [← hPfix]
-    change spectralProjection U (Set.Iic (s ^ 2)) measurableSet_Iic
-      (spectralProjection U (Set.Ioi (s ^ 2)) measurableSet_Ioi x) = 0
-    rw [← mul_apply_eq_comp, spectralProjection_inter U,
-      spectralProjection_congr U hIicIoi
-        (measurableSet_Iic.inter measurableSet_Ioi) MeasurableSet.empty,
-      spectralProjection_empty U, zero_apply]
-  have hxDom : x ∈ (generator U).domain := by
-    rw [hdom]
-    exact Submodule.mem_top
-  have henergy := energy_lower_bound_of_spectralProjection_Iic_eq_zero
-    U (s ^ 2) (⟨x, hxDom⟩ : (generator U).domain) hlowZero
-  have hquad : (s * ‖x‖) ^ 2 ≤ ‖T x‖ ^ 2 := by
-    calc
-      (s * ‖x‖) ^ 2 = s ^ 2 * ‖x‖ ^ 2 := by ring
-      _ ≤ (⟪generator U ⟨x, hxDom⟩, x⟫_ℂ).re := henergy
-      _ = (⟪C x, x⟫_ℂ).re := by rw [hgenApply x hxDom]
-      _ = ‖T x‖ ^ 2 := by
-        change (⟪(T.adjoint ∘L T) x, x⟫_ℂ).re = ‖T x‖ ^ 2
-        exact (ContinuousLinearMap.apply_norm_sq_eq_inner_adjoint_left T x).symm
-  exact le_of_sq_le_sq hquad (norm_nonneg (T x))
+          s * ‖x‖ ≤ ‖T x‖ :=
+  T.exists_linearIndependent_lowerBound_of_lt_approximationNumber n hr0 hr
 
 /-- Every strict lower threshold for the ambient approximation number is
 exceeded by an approximation number of an `(n+1)`-generated restriction. -/
