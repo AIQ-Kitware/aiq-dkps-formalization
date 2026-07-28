@@ -138,17 +138,17 @@ theorem polarIsometry_intertwines_of_projection_intertwining
     ⟨x - m, hmk, by abel⟩
   have hUk : polarIsometry T k = 0 := by
     rw [polarIsometry_apply_eq]
-    rw [Submodule.orthogonalProjection_eq_zero_iff.mpr hk]
+    rw [Submodule.orthogonalProjectionOnto_eq_zero_iff.mpr hk]
     simp
   have hUPk : polarIsometry T (P k) = 0 := by
     rw [polarIsometry_apply_eq]
-    rw [Submodule.orthogonalProjection_eq_zero_iff.mpr (hpresOrth k hk)]
+    rw [Submodule.orthogonalProjectionOnto_eq_zero_iff.mpr (hpresOrth k hk)]
     simp
   simp only [ContinuousLinearMap.comp_apply, map_add, hUk, hUPk, map_zero,
     add_zero]
   have heqOnDense :
-      polarPartial T ((polarRange T).orthogonalProjection (P m)) =
-        Q (polarPartial T ((polarRange T).orthogonalProjection m)) := by
+      polarPartial T ((polarRange T).orthogonalProjectionOnto (P m)) =
+        Q (polarPartial T ((polarRange T).orthogonalProjectionOnto m)) := by
     let f : polarRange T →L[ℂ] H :=
       polarPartial T ∘L
         (P ∘L (polarRange T).subtypeL).codRestrict
@@ -171,11 +171,11 @@ theorem polarIsometry_intertwines_of_projection_intertwining
         simpa using hpabs.symm
       rw [hleft, polarPartial_absOpCorestrict, polarPartial_absOpCorestrict]
       exact DFunLike.congr_fun hTP z
-    have hmproj : (polarRange T).orthogonalProjection m = ⟨m, hm⟩ := by
+    have hmproj : (polarRange T).orthogonalProjectionOnto m = ⟨m, hm⟩ := by
       apply Subtype.ext
       exact Submodule.starProjection_eq_self_iff.mpr hm
     have hPm : P m ∈ polarRange T := hpres m hm
-    have hPmproj : (polarRange T).orthogonalProjection (P m) = ⟨P m, hPm⟩ := by
+    have hPmproj : (polarRange T).orthogonalProjectionOnto (P m) = ⟨P m, hPm⟩ := by
       apply Subtype.ext
       exact Submodule.starProjection_eq_self_iff.mpr hPm
     have hcodeq :

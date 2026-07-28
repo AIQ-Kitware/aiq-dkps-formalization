@@ -139,9 +139,9 @@ theorem polarIsometry_comp_adjoint_self (T : H →L[ℂ] H) :
     simp only [ContinuousLinearMap.comp_apply, hU, polarIsometry_apply_eq]
     congr 1
     have hsp : (polarRange T).starProjection w
-        = ((polarRange T).orthogonalProjection w : H) := rfl
+        = ((polarRange T).orthogonalProjectionOnto w : H) := rfl
     rw [hsp]
-    exact (polarRange T).orthogonalProjection_mem_subspace_eq_self _
+    exact (polarRange T).orthogonalProjectionOnto_mem_subspace_eq_self _
   have hUadjU : U† ∘L U = (polarRange T).starProjection := polarIsometry_adjoint_comp_self T
   -- `(U U†) U = U`, so `U U†` is idempotent (and self-adjoint), a star projection.
   have hUUadjU : (U ∘L U†) ∘L U = U := by
@@ -165,7 +165,7 @@ theorem polarIsometry_comp_adjoint_self (T : H →L[ℂ] H) :
       have hxy : (polarPartial T x : H) = y := congrArg Subtype.val hx
       have hUx : U (↑x : H) = y := by
         rw [hU, polarIsometry_apply_eq,
-          (polarRange T).orthogonalProjection_mem_subspace_eq_self x, coe_polarPartialₗᵢ]
+          (polarRange T).orthogonalProjectionOnto_mem_subspace_eq_self x, coe_polarPartialₗᵢ]
         exact hxy
       refine ⟨y, ?_⟩
       show (U ∘L U†) y = y

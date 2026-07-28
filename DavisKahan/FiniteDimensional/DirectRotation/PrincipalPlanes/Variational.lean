@@ -143,7 +143,7 @@ theorem principalPlaneChord_le_singularValues_restrictedDisplacement
             have hmono : principalPlaneCosine U V (Fin.castLE (by omega) a) ≤
                 principalPlaneCosine U V i := by
               apply principalPlaneCosine_monotone
-              simp only [Fin.le_def, Fin.coe_castLE]
+              simp only [Fin.le_def, Fin.val_castLE]
               omega
             have h0 : 0 ≤ principalPlaneCosine U V (Fin.castLE (by omega) a) :=
               Real.sqrt_nonneg _

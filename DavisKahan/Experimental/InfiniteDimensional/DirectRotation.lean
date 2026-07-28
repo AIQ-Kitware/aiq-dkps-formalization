@@ -139,7 +139,7 @@ theorem canonicalIntertwiner_intertwines (U V : Submodule 𝕜 E)
     rw [Submodule.starProjection_apply_eq_zero_iff]
     exact Vᗮ.starProjection_apply_mem _
   simp only [canonicalIntertwiner, ContinuousLinearMap.comp_apply,
-    ContinuousLinearMap.add_apply, map_add]
+    add_apply, map_add]
   simp only [projection, complementaryProjection] at *
   rw [hPP, hP'P, map_zero, add_zero, hQQ, hQQ']
   rw [add_zero]
@@ -169,7 +169,7 @@ private theorem isUnitaryOperator_of_star_identities
   · intro x
     have happ := congrArg (fun T : E →L[𝕜] E => T x) hleft
     simp only [ContinuousLinearMap.comp_apply,
-      ContinuousLinearMap.one_apply] at happ
+      one_apply_eq_self] at happ
     have hinner : ⟪W x, W x⟫_𝕜 = ⟪x, x⟫_𝕜 := by
       calc ⟪W x, W x⟫_𝕜
           = ⟪star W (W x), x⟫_𝕜 := by
@@ -185,7 +185,7 @@ private theorem isUnitaryOperator_of_star_identities
     refine ⟨star W y, ?_⟩
     have happ := congrArg (fun T : E →L[𝕜] E => T y) hright
     simpa only [ContinuousLinearMap.comp_apply,
-      ContinuousLinearMap.one_apply] using happ
+      one_apply_eq_self] using happ
 
 /-- The direct rotation is unitary. 
 
@@ -312,7 +312,7 @@ theorem directRotation_intertwines
       (projection U x) = projection U
         ((↑(canonicalAbsoluteValueUnit U V hacute)⁻¹ : E →L[𝕜] E) x) := by
     have h := congrArg (fun T : E →L[𝕜] E => T x) hAinv.eq
-    simpa only [ContinuousLinearMap.mul_apply] using h
+    simpa only [mul_apply_eq_comp] using h
   have h2 : canonicalIntertwiner U V (projection U
       ((↑(canonicalAbsoluteValueUnit U V hacute)⁻¹ : E →L[𝕜] E) x)) =
     projection V (canonicalIntertwiner U V
