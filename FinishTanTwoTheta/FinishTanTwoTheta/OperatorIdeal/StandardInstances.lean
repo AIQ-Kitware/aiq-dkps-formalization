@@ -54,15 +54,14 @@ noncomputable def paperLpSymmetricNormingFunction
     intro n x
     unfold FiniteVector.lpGauge
     congr 2
-    apply Finset.sum_congr rfl
-    intro i hi
-    simp
+    funext i
+    rw [abs_abs]
   zero_pad := by
     intro n x
     rw [paperZeroPad_eq_zeroPadRight]
     exact FiniteVector.lpGauge_zeroPadRight p x
   normalized := by
-    simp [FiniteVector.lpGauge, lt_of_lt_of_le zero_lt_one hp]
+    simp [FiniteVector.lpGauge]
   weak_majorization := by
     intro n x y hx h0x h0y hprefix
     exact (FiniteVector.lpSymmetricGauge (n := n) p hp).le_of_prefixSum_le
