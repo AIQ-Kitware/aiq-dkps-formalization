@@ -195,6 +195,14 @@ It is uniquely tied to the invertible polar factor and may remain, though a name
 
 The underlying mathematics need not be discarded.
 
+### Resolution 2026-07-28 — RESOLVED
+
+`polarUnitary → choosePolarUnitary`, `polarUnitary_apply_abs_apply → choosePolarUnitary_apply_abs_apply`, `polar_decomposition_unitary → polar_decomposition_choosePolarUnitary`; 40 references across 8 files. The section docstring now states outright that the kernel completion is a choice, and points at `polarUnitaryEquiv` for the invertible case where the factor is genuinely unique.
+
+`exists_polar_decomposition_unitary` was added as the audit recommends, and is the statement downstream users should prefer when they need only *some* unitary factor.
+
+One recommendation deliberately not taken: `polarUnitaryEquiv` is **not** renamed to `polarUnitaryEquivOfIsUnit`. The audit floats this without requiring it. The declaration takes `(hA : IsUnit A)` as an explicit argument, so the material hypothesis is already visible in the signature; `_of_` suffixes on *definitions* rather than theorems are not the Mathlib convention; and that factor really is canonical, so the bare name is honest.
+
 ---
 
 ## 3. `FiniteDimensional.inverseOnRange`
