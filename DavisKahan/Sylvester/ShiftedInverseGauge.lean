@@ -121,7 +121,8 @@ theorem mem_and_gauge_le_of_exteriorLeft_intervalRight
     abel
   have hEqT : TauCeti.LinearPMap.SylvesterEquation
       A.toLinearPMap (T.toLinearMap.toPMap ⊤) X C :=
-    closedSylvesterEquation_boundedRealization hEq hT
+    linearPMapSylvesterEquation_boundedRealization A.toLinearPMap_isClosed
+      B.toLinearPMap_dense hEq hT
   -- shift both blocks by the center
   set c𝕜 : 𝕜 := (((α + β) / 2 : ℝ) : 𝕜) with hc𝕜
   set A' : E →ₗ.[𝕜] E :=
@@ -139,7 +140,7 @@ theorem mem_and_gauge_le_of_exteriorLeft_intervalRight
     refine ⟨fun x => hEqT.mapsTo_domain x, fun x => ?_⟩
     have h1 : A.toLinearMap ⟨X (x : F), hEqT.mapsTo_domain x⟩ -
         X (T (x : F)) = C (x : F) := hEqT.equation x
-    have h2 : A'.toLinearMap ⟨X (x : F), hEqT.mapsTo_domain x⟩ =
+    have h2 : A' ⟨X (x : F), hEqT.mapsTo_domain x⟩ =
         A.toLinearMap ⟨X (x : F), hEqT.mapsTo_domain x⟩ -
           c𝕜 • X (x : F) :=
       hA'apply ⟨X (x : F), hEqT.mapsTo_domain x⟩

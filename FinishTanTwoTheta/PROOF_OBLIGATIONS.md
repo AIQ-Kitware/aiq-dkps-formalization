@@ -1,8 +1,47 @@
 # FinishTanTwoTheta proof obligations
 
-This file is the compiler-agent work order.  The Lean sources contain the full
-intended theorem statements and local proof plans.  The obligations below are
-ordered by mathematical dependency, not by filename.
+This file is the compiler-agent work order. The Lean sources contain the full
+intended theorem statements and concrete first-pass proofs. None of the declarations
+uses a proof placeholder. The obligations below identify places where those proof
+attempts are expected to need API adaptation, decomposition into reusable lemmas, or
+substantial compiler-guided repair. They are ordered by mathematical dependency,
+not by filename.
+
+
+## Expected helper seams in the first-pass proofs
+
+The proof attempts deliberately name the reusable lemmas they expect the final
+library to expose. Some of these names do not yet exist in the parent snapshot and
+are therefore expected first compiler failures rather than hidden assumptions. The
+compiler agent should either implement the named theorem or replace the call with
+the current equivalent API.
+
+The principal guessed seams are:
+
+```text
+FullySymmetricSequenceSpace.minimalClosure_mem_of_weakSubmajorized
+SymmetricNormingFunction.firstCoordinate_le_standardSequenceGauge
+SymmetricNormingFunction.standardSequenceGauge_add_le
+SymmetricNormingFunction.standardSequenceGauge_smul
+ENNReal.iSup_lpPrefix_eq_rpow_tsum
+lp_tail_sequenceGauge_tendsto_zero_of_sequenceGauge_ne_top
+linfty_sequenceGauge_of_antitone_nonneg_eq_first
+linfty_sequenceGauge_antitone_tail_eq_first
+FiniteVector.kyFanSymmetricGauge
+FiniteVector.iSup_kyFanPrefixGauge_eq_prefix
+ContinuousLinearMap.exists_orthonormal_approximateSingularSystem_initialSegment
+ContinuousLinearMap.approximationNumber_polarFunctionalCalculus
+stable_exactSingularPair_doubleAngleTangent_le
+approximateLeadingFamilies_remove_error
+unscale_positive_gauge_inequality
+sharp_unbounded_from_boundedOffDiagonalRiccati
+gauge_eq_of_unitary_equivalent
+quarterAcuteGraphTangent_unitaryEquivalent_sourceBlock
+```
+
+These are theorem-sized implementation targets. They must not be replaced with
+axioms, capability fields that assume the desired conclusion, compactness, or
+finite-dimensional restrictions.
 
 ## A. Elaboration and API adaptation
 

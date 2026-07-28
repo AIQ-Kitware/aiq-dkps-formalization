@@ -46,11 +46,10 @@ theorem approximationNumber_zero_le_generatedGauge
     (A : E →L[𝕜] F) :
     ENNReal.ofReal (A.approximationNumber 0) ≤
       generatedIdealGauge (𝕜 := 𝕜) Φ mode A := by
-  /-
-  On a member, apply finite-gauge monotonicity to the one-coordinate vector
-  `(a_0)` and normalization.  Off the minimal carrier the right side is `∞`.
-  -/
-  sorry
+  unfold generatedIdealGauge
+  exact Φ.firstCoordinate_le_standardSequenceGauge mode
+    (approximationNumberSequence A)
+    (A.approximationNumber_nonneg 0)
 
 /-- Generated gauges are subadditive. -/
 theorem generatedIdealGauge_add_le
@@ -62,14 +61,31 @@ theorem generatedIdealGauge_add_le
     generatedIdealGauge (𝕜 := 𝕜) Φ mode (A + B) ≤
       generatedIdealGauge (𝕜 := 𝕜) Φ mode A +
         generatedIdealGauge (𝕜 := 𝕜) Φ mode B := by
-  /-
-  The approximation-number sequence of `A+B` is weakly submajorized by the
-  pointwise sum of those of `A` and `B` (Ky Fan addition inequality).  Apply
-  Fan monotonicity and the finite-gauge triangle inequality at every prefix.
-  For the minimal completion, also show that the sum of two vanishing tails
-  has vanishing tail.
-  -/
-  sorry
+  unfold generatedIdealGauge
+  let a := approximationNumberSequence A
+  let b := approximationNumberSequence B
+  let c := approximationNumberSequence (A + B)
+  have hc : WeaklySubmajorized c (a + b) := by
+    obtain ⟨hca, hcn⟩ := approximationNumberSequence_antitone_nonneg (A + B)
+    obtain ⟨haa, han⟩ := approximationNumberSequence_antitone_nonneg A
+    obtain ⟨hba, hbn⟩ := approximationNumberSequence_antitone_nonneg B
+    refine ⟨hca, ?_, hcn, ?_, ?_⟩
+    · intro i j hij
+      exact add_le_add (haa hij) (hba hij)
+    · intro n
+      exact add_nonneg (han n) (hbn n)
+    · intro k
+      simpa [a, b, c, approximationNumberPrefix, sequencePrefixSum,
+        approximationNumberSequence, kyFanApproximationGauge,
+        approximationSingularValue] using
+        (kyFanApproximationGauge_add_le k A B)
+  calc
+    Φ.standardSequenceGauge mode c
+        ≤ Φ.standardSequenceGauge mode (a + b) :=
+      Φ.standardSequenceGauge_mono_of_weaklySubmajorized mode hc
+    _ ≤ Φ.standardSequenceGauge mode a +
+          Φ.standardSequenceGauge mode b :=
+      Φ.standardSequenceGauge_add_le mode a b
 
 /-- Generated gauges are absolutely homogeneous. -/
 theorem generatedIdealGauge_smul
@@ -80,9 +96,13 @@ theorem generatedIdealGauge_smul
     (c : 𝕜) (A : E →L[𝕜] F) :
     generatedIdealGauge (𝕜 := 𝕜) Φ mode (c • A) =
       ‖c‖ₑ * generatedIdealGauge (𝕜 := 𝕜) Φ mode A := by
-  /- Approximation numbers scale by `||c||`.  For `c != 0`, minimal tail
-  membership is equivalent before and after scaling; `c=0` is immediate. -/
-  sorry
+  unfold generatedIdealGauge
+  have hseq : approximationNumberSequence (c • A) =
+      ‖c‖ • approximationNumberSequence A := by
+    funext n
+    simp [approximationNumberSequence]
+  rw [hseq, Φ.standardSequenceGauge_smul mode (norm_nonneg c)]
+  simp [ofReal_norm]
 
 /-- Two-sided ideal inequality for generated gauges. -/
 theorem generatedIdealGauge_comp_le
@@ -95,12 +115,36 @@ theorem generatedIdealGauge_comp_le
     (L : F →L[𝕜] G) (A : E →L[𝕜] F) (R : H →L[𝕜] E) :
     generatedIdealGauge (𝕜 := 𝕜) Φ mode (L ∘L A ∘L R) ≤
       ‖L‖ₑ * generatedIdealGauge (𝕜 := 𝕜) Φ mode A * ‖R‖ₑ := by
-  /-
-  Use `a_n(LAR) <= ||L|| a_n(A) ||R||` coordinatewise, finite symmetric-gauge
-  monotonicity, and homogeneity.  The same estimate sends vanishing tails to
-  vanishing tails in the minimal completion.
-  -/
-  sorry
+  unfold generatedIdealGauge
+  let c : ℝ := ‖L‖ * ‖R‖
+  have hc : 0 ≤ c := mul_nonneg (norm_nonneg L) (norm_nonneg R)
+  have hpoint : ∀ n,
+      approximationNumberSequence (L ∘L A ∘L R) n ≤
+        (c • approximationNumberSequence A) n := by
+    intro n
+    simpa [c, approximationNumberSequence, mul_assoc] using
+      (ContinuousLinearMap.approximationNumber_comp_comp_le L A R n)
+  have hweak : WeaklySubmajorized
+      (approximationNumberSequence (L ∘L A ∘L R))
+      (c • approximationNumberSequence A) := by
+    obtain ⟨hxa, hxn⟩ :=
+      approximationNumberSequence_antitone_nonneg (L ∘L A ∘L R)
+    obtain ⟨haa, han⟩ := approximationNumberSequence_antitone_nonneg A
+    exact WeaklySubmajorized.of_pointwise hxa
+      (fun _ _ h => mul_le_mul_of_nonneg_left (haa h) hc) hxn
+      (fun n => mul_nonneg hc (han n)) hpoint
+  calc
+    Φ.standardSequenceGauge mode
+        (approximationNumberSequence (L ∘L A ∘L R))
+        ≤ Φ.standardSequenceGauge mode
+            (c • approximationNumberSequence A) :=
+      Φ.standardSequenceGauge_mono_of_weaklySubmajorized mode hweak
+    _ = ENNReal.ofReal c * Φ.standardSequenceGauge mode
+          (approximationNumberSequence A) :=
+      Φ.standardSequenceGauge_smul mode hc
+    _ = ‖L‖ₑ * Φ.standardSequenceGauge mode
+          (approximationNumberSequence A) * ‖R‖ₑ := by
+      simp [c, ENNReal.ofReal_mul (norm_nonneg L), ofReal_norm, mul_assoc]
 
 /-- Generated gauges are invariant under adjoint. -/
 theorem generatedIdealGauge_adjoint
@@ -111,8 +155,10 @@ theorem generatedIdealGauge_adjoint
     (A : E →L[𝕜] F) :
     generatedIdealGauge (𝕜 := 𝕜) Φ mode A.adjoint =
       generatedIdealGauge (𝕜 := 𝕜) Φ mode A := by
-  /- Approximation numbers agree termwise under adjoint. -/
-  sorry
+  unfold generatedIdealGauge
+  congr 1
+  funext n
+  exact A.approximationNumber_adjoint n
 
 /-- The symmetric operator ideal generated by `Φ` in either classical
 completion. -/
