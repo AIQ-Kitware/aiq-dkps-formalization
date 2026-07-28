@@ -78,9 +78,6 @@ private theorem generatorIntertwines_of_linearPMapHomogeneous
           simpa using sub_eq_zero.mp heq
       _ = X (generator (genToGroup hB) x) := by
           rw [hBapply]
-          -- The two domain elements carry the same vector with different
-          -- membership proofs, so they agree by extensionality.
-          congr 2
 
 /-- A bounded homogeneous Sylvester solution for raw self-adjoint partial maps
 vanishes whenever their spectra are disjoint. -/
