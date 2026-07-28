@@ -677,9 +677,9 @@ private theorem theorem6_3_kyFan_core_of_le_finrank
     (fun i => theorem63ResidualWitness_scalar
       T hT V Z hV hdelta hCompressionUpper hUnwantedLower
       tanTheta0 htan (castIndex i))
-  unfold kyFanApproximationGauge at hsum ⊢
+  unfold kyFanApproximationGauge ContinuousLinearMap.kyFanGauge at hsum ⊢
   rw [Finset.mul_sum, ← Fin.sum_univ_eq_sum_range]
-  simpa [castIndex] using hsum
+  simpa [castIndex, approximationSingularValue] using hsum
 
 /-- A bounded operator with finite-dimensional domain has no approximation
 singular values beyond that domain dimension. -/
@@ -697,7 +697,7 @@ private theorem kyFanApproximationGauge_eq_finrank_of_finrank_le
       A.rank ≤ Module.rank ℂ E := LinearMap.rank_le_domain _
       _ = (d : Cardinal) := by
         rw [← Module.finrank_eq_rank' ℂ E]
-  unfold kyFanApproximationGauge
+  unfold kyFanApproximationGauge ContinuousLinearMap.kyFanGauge
   rw [← Finset.sum_range_add_sum_Ico _ hk]
   apply add_eq_left.mpr
   apply Finset.sum_eq_zero

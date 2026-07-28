@@ -331,7 +331,7 @@ theorem kyFanApproximationGauge_complexify
     (T : E →L[ℝ] F) (k : ℕ) :
     kyFanApproximationGauge k (RealComplexification.complexify T) =
       kyFanApproximationGauge k T := by
-  unfold kyFanApproximationGauge
+  unfold kyFanApproximationGauge ContinuousLinearMap.kyFanGauge
   apply Finset.sum_congr rfl
   intro n hn
   exact approximationSingularValue_complexify T n

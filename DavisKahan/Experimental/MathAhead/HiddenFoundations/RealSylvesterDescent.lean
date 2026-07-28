@@ -184,7 +184,7 @@ theorem real_bounded_separated_sylvester_kyFan
       (Real.pi / 2) * kyFanApproximationGauge k C := by
   by_cases hk : k = 0
   · subst k
-    simp [kyFanApproximationGauge]
+    simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge]
   · let N := KyFanDominantIdealFamily.kyFan (𝕜 := ℂ) k
       (Nat.pos_of_ne_zero hk)
     have hfan := complex_separated_sylvester_kyFan
