@@ -36,7 +36,7 @@ module violates the layering. The rules (see the campaign spec and
 Violations are reported with the shortest offending import path, not just a
 boolean. Exit status is nonzero when any hard rule is violated.
 
-The two ratcheting allowlists live in
+The three ratcheting allowlists live in
 `dev/tauceti/dependency-layer-allowlist.json`; they capture the *current*
 pre-migration state so the checker is green today and flags only *new*
 regressions.
