@@ -39,7 +39,7 @@ structure ContractiveReducingGraphSelection
   X : E0 →L[𝕜] E1
   preservesDomains : PreservesRiccatiDomains H X
   norm_lt_one : ‖X‖ < 1
-  reduces : (unboundedBlockOperatorCore H).ReducesSubspace
+  reduces : TauCeti.LinearPMap.ReducesSubspace (unboundedBlockOperatorCorePMap H)
     (unboundedBlockGraph X)
 
 namespace ContractiveReducingGraphSelection
@@ -48,7 +48,7 @@ namespace ContractiveReducingGraphSelection
 theorem invariant
     {H : UnboundedBlockData (𝕜 := 𝕜) (E0 := E0) (E1 := E1)}
     (S : ContractiveReducingGraphSelection H) :
-    (unboundedBlockOperatorCore H).InvariantSubspace
+    TauCeti.LinearPMap.InvariantSubspace (unboundedBlockOperatorCorePMap H)
       (unboundedBlockGraph S.X) :=
   S.reduces.2.2.1
 
@@ -58,7 +58,7 @@ theorem strongSolvesRiccati
     {H : UnboundedBlockData (𝕜 := 𝕜) (E0 := E0) (E1 := E1)}
     (S : ContractiveReducingGraphSelection H) :
     StrongSolvesRiccati H S.X :=
-  (unboundedBlockGraph_invariant_iff_strongRiccatiCore H S.X).1
+  (unboundedBlockGraph_invariantPMap_iff_strongRiccatiCore H S.X).1
     ⟨S.preservesDomains, S.invariant⟩
 
 /-- Package the selected graph as the contractive strong solution required by
@@ -68,7 +68,7 @@ theorem exists_strongRiccati_solution
     (S : ContractiveReducingGraphSelection H) :
     ∃ X : E0 →L[𝕜] E1,
       StrongSolvesRiccati H X ∧ ‖X‖ < 1 ∧
-      (unboundedBlockOperatorCore H).ReducesSubspace
+      TauCeti.LinearPMap.ReducesSubspace (unboundedBlockOperatorCorePMap H)
         (unboundedBlockGraph X) :=
   ⟨S.X, S.strongSolvesRiccati, S.norm_lt_one, S.reduces⟩
 
@@ -80,7 +80,7 @@ theorem exists_strongRiccati_solution_of_selected_reducing_graph
     (hselection : Nonempty (ContractiveReducingGraphSelection H)) :
     ∃ X : E0 →L[𝕜] E1,
       StrongSolvesRiccati H X ∧ ‖X‖ < 1 ∧
-      (unboundedBlockOperatorCore H).ReducesSubspace
+      TauCeti.LinearPMap.ReducesSubspace (unboundedBlockOperatorCorePMap H)
         (unboundedBlockGraph X) := by
   obtain ⟨S⟩ := hselection
   exact S.exists_strongRiccati_solution
