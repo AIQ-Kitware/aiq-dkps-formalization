@@ -209,7 +209,7 @@ theorem moorePenroseInverse_comp_comp (A : E →ₗ[𝕜] F) :
       moorePenroseInverse A := by
   classical
   ext y
-  show (moorePenroseInverse A ∘ₗ A) (moorePenroseInverse A y) =
+  change (moorePenroseInverse A ∘ₗ A) (moorePenroseInverse A y) =
     moorePenroseInverse A y
   rw [moorePenroseInverse_apply, map_sum]
   refine Finset.sum_congr rfl fun i _ => ?_

@@ -259,7 +259,7 @@ theorem eigenvalues_eq_iSup_iInf_re_inner
     refine mul_le_mul_of_nonneg_right
       (hT.eigenvalues_antitone hn ?_) (sq_nonneg _)
     rw [Fin.le_def]
-    show (i : ℕ) ≤ n - 1
+    change (i : ℕ) ≤ n - 1
     have := i.2
     omega
   have hbddB : ∀ V : {V : Submodule 𝕜 E // finrank 𝕜 V = (k : ℕ) + 1},

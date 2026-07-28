@@ -361,7 +361,7 @@ noncomputable def blockPolar (hnd : P.NonDegenerate P') (j : Fin m) :
     rintro ⟨y, hy⟩
     refine ⟨⟨P.proj j ((intertwiningUnitary hnd).symm y), LinearMap.mem_range_self _ _⟩, ?_⟩
     apply Subtype.ext
-    show ((intertwiningUnitary hnd : E →ₗ[𝕜] E))
+    change ((intertwiningUnitary hnd : E →ₗ[𝕜] E))
       (P.proj j ((intertwiningUnitary hnd).symm y)) = y
     have h := congrArg (fun f : E →ₗ[𝕜] E => f ((intertwiningUnitary hnd).symm y))
       (intertwiningUnitary_comp_proj hnd j)
@@ -371,7 +371,7 @@ noncomputable def blockPolar (hnd : P.NonDegenerate P') (j : Fin m) :
     exact proj_apply_of_mem_range hy
   { LinearEquiv.ofBijective _ ⟨hinj, hsurj⟩ with
     norm_map' := fun v => by
-      show ‖((intertwiningUnitary hnd : E →ₗ[𝕜] E)) ↑v‖ = ‖(↑v : E)‖
+      change ‖((intertwiningUnitary hnd : E →ₗ[𝕜] E)) ↑v‖ = ‖(↑v : E)‖
       exact (intertwiningUnitary hnd).norm_map ↑v }
 
 /-! ### Rotation-angle interpretation (ticket PD-17) — needed by Davis Result B (BL4)

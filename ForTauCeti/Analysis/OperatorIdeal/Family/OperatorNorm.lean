@@ -103,7 +103,7 @@ noncomputable def operatorNormIdealFamilyElemEquiv :
   map_add' _ _ := rfl
   map_smul' _ _ := rfl
   norm_map' A := by
-    show ‖A.val‖ = ‖A‖
+    change ‖A.val‖ = ‖A‖
     rw [OperatorIdealFamily.Elem.norm_def, gauge_operatorNormIdealFamily, toReal_enorm]
 
 instance instIsCompleteOperatorNormIdealFamily :

@@ -112,7 +112,7 @@ theorem add_le (A B : E →ₗ[𝕜] F) : N (A + B) ≤ N A + N B :=
 individual seminorms.
 
 This is the finite replacement for the integral triangle inequality in the
-unitary-orbit proof of the `π/2` Sylvester theorem.-/
+unitary-orbit proof of the `π/2` Sylvester theorem. -/
 theorem sum_le {ι : Type*} (s : Finset ι) (A : ι → E →ₗ[𝕜] F) :
     N (∑ i ∈ s, A i) ≤ ∑ i ∈ s, N (A i) := by
   classical
@@ -131,7 +131,7 @@ barycentric target for the arbitrary-spectrum `π/2` proof.
 
 The definition is field-uniform: over `ℝ`, the only scalar phases absorbed into
 the orbit are the real unitary signs, while a complex proof must descend to a
-real orbit before invoking this API.-/
+real orbit before invoking this API. -/
 def twoSidedUnitaryOrbit (C : E →ₗ[𝕜] F) : Set (E →ₗ[𝕜] F) :=
   {Y | ∃ (U : F ≃ₗᵢ[𝕜] F) (V : E ≃ₗᵢ[𝕜] E),
     Y = U.toLinearMap ∘ₗ C ∘ₗ V.toLinearMap}
@@ -144,7 +144,7 @@ norms is at most `mass`.
 
 For the arbitrary-spectrum `π/2` theorem, the difficult analytic task is exactly
 to construct such a certificate for `((δ : 𝕜) • X)` from the Sylvester defect
-`C` with mass `π / 2`.-/
+`C` with mass `π / 2`. -/
 def HasFiniteUnitaryOrbitCertificate
     (mass : ℝ) (X C : E →ₗ[𝕜] F) : Prop :=
   ∃ n : ℕ, ∃ a : Fin n → 𝕜,
@@ -158,7 +158,7 @@ omit [FiniteDimensional 𝕜 E] [FiniteDimensional 𝕜 F] in
 /-- Reindex a finite certificate candidate from an arbitrary finite type by `Fin n`.
 
 This lemma keeps all `Fin n` bookkeeping out of the convex-geometric proof.
-It is purely finite algebra and has no analytic or field-specific content.-/
+It is purely finite algebra and has no analytic or field-specific content. -/
 theorem hasFiniteUnitaryOrbitCertificate_of_fintype
     {ι : Type*} [Fintype ι] {mass : ℝ} {X C : E →ₗ[𝕜] F}
     (a : ι → 𝕜) (U : ι → F ≃ₗᵢ[𝕜] F) (V : ι → E ≃ₗᵢ[𝕜] E)
@@ -199,7 +199,7 @@ This theorem discharges the entire exact finite-dimensional convex-combination
 stage of the `π/2` proof.  The remaining analytic theorem only has to produce a
 bounded-mass barycentric orbit representation.  The argument is valid over
 both `ℝ` and `ℂ`; any complexification/descent issue must already have been
-resolved before establishing the real convex-hull hypothesis.-/
+resolved before establishing the real convex-hull hypothesis. -/
 theorem hasFiniteUnitaryOrbitCertificate_of_smul_mem_convexHull
     {m mass : ℝ} (hm : 0 ≤ m) (hmass : m ≤ mass)
     {X Y C : E →ₗ[𝕜] F}
@@ -274,7 +274,7 @@ unitary-orbit certificate.
 
 This theorem deliberately contains all norm-theoretic content needed by the
 `π/2` front. The remaining hard theorem may therefore focus solely on
-constructing the orbit certificate.-/
+constructing the orbit certificate. -/
 theorem apply_le_of_finiteUnitaryOrbitCertificate
     {mass : ℝ} {X C : E →ₗ[𝕜] F}
     (hcert : HasFiniteUnitaryOrbitCertificate mass X C) :
@@ -1458,7 +1458,7 @@ theorem rectangularKyFanSum_orthogonalBlockSum_self
 /-- Real orbit-convex domination is stable under orthogonal block sums.
 
 This is the sharp coupling seam needed by the symmetric projector theorem:
-it combines two one-sided sine estimates without adding their norms.-/
+it combines two one-sided sine estimates without adding their norms. -/
 theorem orthogonalBlockSum_mem_convexHull_twoSidedUnitaryOrbit
     {E₁ E₂ F₁ F₂ : Type*}
     [NormedAddCommGroup E₁] [InnerProductSpace 𝕜 E₁]
@@ -1987,7 +1987,7 @@ column norms in any orthonormal basis of the domain.
 theorem frobenius_apply (A : E →ₗ[𝕜] F)
     (b : OrthonormalBasis (Fin (finrank 𝕜 E)) 𝕜 E) :
     frobenius A = Real.sqrt (∑ i, ‖A (b i)‖ ^ 2) := by
-  show Real.sqrt (∑ i, ‖A (stdOrthonormalBasis 𝕜 E i)‖ ^ 2) = _
+  change Real.sqrt (∑ i, ‖A (stdOrthonormalBasis 𝕜 E i)‖ ^ 2) = _
   rw [← sum_sq_singularValues A rfl (stdOrthonormalBasis 𝕜 E),
     ← sum_sq_singularValues A rfl b]
 
@@ -2027,7 +2027,7 @@ theorem kyFan_apply (k : ℕ) (A : E →ₗ[𝕜] F) :
 /-- A finite two-sided unitary-orbit certificate bounds every rectangular
 Ky Fan prefix by the same certificate mass.
 
-This is the exact bridge used by the arbitrary-spectrum Sylvester theorem.-/
+This is the exact bridge used by the arbitrary-spectrum Sylvester theorem. -/
 theorem rectangularKyFanSum_le_of_finiteUnitaryOrbitCertificate
     {mass : ℝ} {X C : E →ₗ[𝕜] F} (k : ℕ)
     (hcert : HasFiniteUnitaryOrbitCertificate mass X C) :

@@ -79,7 +79,7 @@ theorem isHermitian_sampleCovariance {n d : ℕ}
     (V : Fin n → Ω → EuclideanSpace ℝ (Fin d)) (ω : Ω) :
     (sampleCovariance V ω).IsHermitian := by
   ext k l
-  show star (sampleCovariance V ω l k) = sampleCovariance V ω k l
+  change star (sampleCovariance V ω l k) = sampleCovariance V ω k l
   simp only [sampleCovariance, star_trivial]
   refine congrArg _ (Finset.sum_congr rfl fun i _ => ?_)
   ring

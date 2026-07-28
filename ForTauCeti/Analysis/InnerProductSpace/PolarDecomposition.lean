@@ -109,7 +109,7 @@ theorem polarFactor_apply_abs_apply (A : E →ₗ[𝕜] E) (x : E) :
   have habs : abs A x ∈ (ker A)ᗮ := abs_apply_mem_orthogonal_ker A x
   have hproj : ((ker A)ᗮ).orthogonalProjectionOnto (abs A x) = ⟨abs A x, habs⟩ :=
     Submodule.orthogonalProjectionOnto_mem_subspace_eq_self ⟨abs A x, habs⟩
-  show A ↑((absRestrict A).symm (((ker A)ᗮ).orthogonalProjectionOnto (abs A x))) = A x
+  change A ↑((absRestrict A).symm (((ker A)ᗮ).orthogonalProjectionOnto (abs A x))) = A x
   rw [hproj]
   have h1 : abs A ↑((absRestrict A).symm ⟨abs A x, habs⟩) = abs A x :=
     congrArg Subtype.val ((absRestrict A).apply_symm_apply ⟨abs A x, habs⟩)
@@ -145,7 +145,7 @@ theorem ker_polarFactor (A : E →ₗ[𝕜] E) : ker (polarFactor A) = ker A := 
     have hproj : ((ker A)ᗮ).orthogonalProjectionOnto x = 0 :=
       Submodule.orthogonalProjectionOnto_eq_zero_iff.mpr
         (by rwa [Submodule.orthogonal_orthogonal])
-    show A ↑((absRestrict A).symm (((ker A)ᗮ).orthogonalProjectionOnto x)) = 0
+    change A ↑((absRestrict A).symm (((ker A)ᗮ).orthogonalProjectionOnto x)) = 0
     rw [hproj, map_zero]
     simp
 
@@ -162,7 +162,7 @@ theorem norm_polarFactor_apply_of_mem {A : E →ₗ[𝕜] E} {x : E} (hx : x ∈
     ‖polarFactor A x‖ = ‖x‖ := by
   have hproj : ((ker A)ᗮ).orthogonalProjectionOnto x = ⟨x, hx⟩ :=
     Submodule.orthogonalProjectionOnto_mem_subspace_eq_self ⟨x, hx⟩
-  show ‖A ↑((absRestrict A).symm (((ker A)ᗮ).orthogonalProjectionOnto x))‖ = ‖x‖
+  change ‖A ↑((absRestrict A).symm (((ker A)ᗮ).orthogonalProjectionOnto x))‖ = ‖x‖
   rw [hproj, ← norm_abs_apply,
     show abs A ↑((absRestrict A).symm ⟨x, hx⟩) = x from
       congrArg Subtype.val ((absRestrict A).apply_symm_apply ⟨x, hx⟩)]
