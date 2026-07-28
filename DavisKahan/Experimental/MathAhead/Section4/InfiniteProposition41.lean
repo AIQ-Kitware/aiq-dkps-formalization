@@ -222,7 +222,7 @@ private theorem cosine_norm_le_on_low_range
           pow_le_pow_left₀ (norm_nonneg _) hyNorm 2
         exact mul_le_mul_of_nonneg_left hySq hc₁0
   have hCPnorm : ‖CP‖ ≤ c₁ :=
-    ContinuousLinearMap.norm_le_of_abs_re_inner_map_self_le
+    ForMathlib.ContinuousLinearMap.norm_le_of_abs_re_inner_map_self_le
       hCPsym hc₁0 hform
   calc
     ‖C x‖ = ‖CP x‖ := by rw [show CP x = C x by simp [CP, hPx]]
@@ -246,8 +246,7 @@ theorem lt_approximationNumber_competitor_of_lt_direct
   have hs₂a : s₂ < a := by dsimp only [s₂]; linarith
   have hs₁0 : 0 ≤ s₁ := hr0.trans hrs₁.le
   have hs₂0 : 0 ≤ s₂ := hs₁0.trans hs₁s₂.le
-  have haNorm : a ≤ ‖A‖ := by
-    exact (NNReal.coe_le_coe.mpr (A.approximationNumber_le_nnnorm n))
+  have haNorm : a ≤ ‖A‖ := A.approximationNumber_le_norm n
   have hs₂sqrt : s₂ < Real.sqrt 2 :=
     hs₂a.trans_le (haNorm.trans D.direct_norm_le_sqrt_two)
   have hs₂sq : s₂ ^ 2 < 2 := by
@@ -346,10 +345,7 @@ theorem lt_approximationNumber_competitor_of_lt_direct
       change A x - A (P x) = A (Q x)
       rw [hQeq, sub_apply, ContinuousLinearMap.id_apply, map_sub]
     have happrox := A.approximationNumber_le_norm_sub hRrank
-    have happroxReal : a ≤ ‖A - R‖ := by
-      have hco := NNReal.coe_le_coe.mpr happrox
-      change a ≤ ‖A - R‖ at hco
-      exact hco
+    have happroxReal : a ≤ ‖A - R‖ := happrox
     have has₂ : a ≤ s₂ := by
       calc
         a ≤ ‖A - R‖ := happroxReal
@@ -390,8 +386,7 @@ theorem lt_approximationNumber_competitor_of_lt_direct
       (sq_le_sq₀ (mul_nonneg hs₁0 (norm_nonneg x)) (norm_nonneg _)).1 hBsq
     change s₁ ≤ ‖B x‖
     simpa only [hxNorm, mul_one] using hlower
-  have hs₁le : s₁ ≤ (B.approximationNumber n : ℝ) :=
-    NNReal.coe_le_coe.mpr hs₁NN
+  have hs₁le : s₁ ≤ (B.approximationNumber n : ℝ) := hs₁NN
   exact hrs₁.trans_le hs₁le
 
 /-- Pointwise approximation-number dominance furnished by the spectral-cutoff
@@ -406,7 +401,7 @@ theorem approximationNumber_direct_le_competitor
   have hltReal : (B.approximationNumber n : ℝ) <
       (A.approximationNumber n : ℝ) := by exact_mod_cast hlt
   have htransfer := D.lt_approximationNumber_competitor_of_lt_direct n
-    (NNReal.coe_nonneg (B.approximationNumber n)) hltReal
+    (B.approximationNumber_nonneg n) hltReal
   exact (lt_irrefl (B.approximationNumber n : ℝ)) htransfer
 
 end CosineDisplacementData
@@ -668,7 +663,6 @@ theorem proposition4_1_restrictedDisplacement_approximationNumbers_scratch
     U (spectraDirectRotation U V hacute) n
   have hWseq := sourceRestrictedDisplacement_sameApproximationSingularSequence
     U W n
-  apply NNReal.coe_le_coe.mp
   change approximationSingularValue n
       ((1 - spectraDirectRotation U V hacute) ∘L projection U) ≤
     approximationSingularValue n ((1 - W) ∘L projection U)
@@ -679,8 +673,7 @@ theorem proposition4_1_restrictedDisplacement_approximationNumbers_scratch
           (sourceRestrictedDisplacement U
             (spectraDirectRotation U V hacute)) := hDseq
     _ ≤ approximationSingularValue n (sourceRestrictedDisplacement U W) := by
-      simpa only [approximationSingularValue] using
-        NNReal.coe_le_coe.mpr hsource
+      simpa only [approximationSingularValue] using hsource
     _ = approximationSingularValue n ((1 - W) ∘L projection U) := hWseq.symm
 
 /-- Package the hard theorem for the existing infinite ideal-dominance bridge. -/
@@ -694,9 +687,8 @@ noncomputable def infinite_restrictedDisplacementDominance
   approximation_le := by
     intro n
     simpa only [approximationSingularValue] using
-      NNReal.coe_le_coe.mpr
-        (proposition4_1_restrictedDisplacement_approximationNumbers_scratch
-          U V hacute W hWunitary hWmap n)
+      proposition4_1_restrictedDisplacement_approximationNumbers_scratch
+        U V hacute W hWunitary hWmap n
 
 end DavisKahanGeometry
 
