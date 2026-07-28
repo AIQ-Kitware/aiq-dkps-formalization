@@ -46,6 +46,29 @@ theorem sinTheta_unbounded_opNorm
     hA₀.isSymmetric D.A₀.toLinearPMap_dense hβα hδ hA₀low hA₀high hΛres hEq
   simpa [norm_neg] using h
 
+/-- Raw partial-map operator-norm sine-theta estimate.  The form and
+shifted-inverse hypotheses stay over `LinearPMap` throughout. -/
+theorem linearPMap_sinTheta_unbounded_opNorm
+    (D : UnboundedSinThetaDataPMap (𝕜 := 𝕜) (E := E) (F := F) (G := G))
+    (hA : _root_.IsSelfAdjoint D.A) (hA₀ : _root_.IsSelfAdjoint D.A₀)
+    (hΛ₁ : _root_.IsSelfAdjoint D.Λ₁)
+    {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
+    (hA₀low : TauCeti.LinearPMap.SemiboundedBelow D.A₀ β)
+    (hA₀high : TauCeti.LinearPMap.SemiboundedAbove D.A₀ α)
+    (hΛres : TauCeti.LinearPMap.TwoSidedShiftedInverseBound D.Λ₁ ((α + β) / 2)
+      ((α - β) / 2 + δ)) :
+    δ * ‖D.X.adjoint ∘L D.F₁‖ ≤ ‖D.residual.adjoint ∘L D.F₁‖ := by
+  have hA₀sym : TauCeti.LinearPMap.IsSymmetric D.A₀ := by
+    have hformal := LinearPMap.adjoint_isFormalAdjoint D.A₀_dense
+    rw [LinearPMap.isSelfAdjoint_def.mp hA₀] at hformal
+    intro x y
+    exact hformal x y
+  have hEq := linearPMap_unbounded_adjoint_residual_block_identity D hA hA₀ hΛ₁
+  have h := linearPMap_norm_sylvester_le_of_exteriorInterval
+    (A := D.A₀) (B := D.Λ₁)
+    hA₀sym D.A₀_dense hβα hδ hA₀low hA₀high hΛres hEq
+  simpa [norm_neg] using h
+
 end ExactSinTheta
 end Experimental
 end DavisKahan
