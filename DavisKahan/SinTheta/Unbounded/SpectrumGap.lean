@@ -58,6 +58,34 @@ theorem sinTheta_unbounded_opNorm_of_spectrum_gap
   rw [Set.mem_Ioo] at hlam ⊢
   exact ⟨by linarith [hlam.1], by linarith [hlam.2]⟩
 
+/-- Raw partial-map operator-norm sine-theta endpoint with the Spectra
+resolvent-set gap discharge. -/
+theorem linearPMap_sinTheta_unbounded_opNorm_of_spectrum_gap
+    (D : UnboundedSinThetaDataPMap (𝕜 := ℂ) (E := E) (F := F) (G := G))
+    (hA : _root_.IsSelfAdjoint D.A) (hA₀ : _root_.IsSelfAdjoint D.A₀)
+    (hΛ₁ : _root_.IsSelfAdjoint D.Λ₁)
+    {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
+    (hA₀low : TauCeti.LinearPMap.SemiboundedBelow D.A₀ β)
+    (hA₀high : TauCeti.LinearPMap.SemiboundedAbove D.A₀ α)
+    (hΛspec : ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
+      lam ∉ Spectra.Resolvent.spectrum D.Λ₁) :
+    δ * ‖D.X.adjoint ∘L D.F₁‖ ≤ ‖D.residual.adjoint ∘L D.F₁‖ := by
+  have hΛsa : _root_.IsSelfAdjoint D.toClosed.Λ₁.toLinearPMap := by
+    simpa only [UnboundedSinThetaDataPMap.toClosed,
+      DavisKahanExt.ClosedOperator.ofLinearPMap_toLinearPMap] using hΛ₁
+  refine linearPMap_sinTheta_unbounded_opNorm
+    D hA hA₀ hΛ₁ hβα hδ hA₀low hA₀high ?_
+  have hShift := twoSidedShiftedInverseBound_of_spectrum_gap
+    (c := (α + β) / 2) (s := (α - β) / 2 + δ) hΛsa (by linarith) (by
+    intro lam hlam
+    refine hΛspec lam ?_
+    rw [Set.mem_Ioo] at hlam ⊢
+    exact ⟨by linarith [hlam.1], by linarith [hlam.2]⟩)
+  change LinearPMap.TwoSidedShiftedInverseBound D.toClosed.Λ₁.toLinearPMap
+    ((α + β) / 2) ((α - β) / 2 + δ) at hShift
+  have hΛmap : D.toClosed.Λ₁.toLinearPMap = D.Λ₁ := rfl
+  rwa [hΛmap] at hShift
+
 /-- **The unbounded Davis--Kahan `sin Θ` theorem at unitary-invariant ideal
 scope, with genuine spectra.**  Combines the ideal-gauge endpoint
 `sinTheta_unbounded_gauge` with the spectral-theorem discharge of the
@@ -87,6 +115,38 @@ theorem sinTheta_unbounded_gauge_of_spectrum_gap
   refine hΛspec lam ?_
   rw [Set.mem_Ioo] at hlam ⊢
   exact ⟨by linarith [hlam.1], by linarith [hlam.2]⟩
+
+/-- Raw partial-map ideal-gauge sine-theta endpoint with the Spectra
+resolvent-set gap discharge. -/
+theorem linearPMap_sinTheta_unbounded_gauge_of_spectrum_gap
+    (N : RectangularSymmetricIdealFamily (𝕜 := ℂ))
+    (D : UnboundedSinThetaDataPMap (𝕜 := ℂ) (E := E) (F := F) (G := G))
+    (hA : _root_.IsSelfAdjoint D.A) (hA₀ : _root_.IsSelfAdjoint D.A₀)
+    (hΛ₁ : _root_.IsSelfAdjoint D.Λ₁)
+    {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
+    (hA₀low : TauCeti.LinearPMap.SemiboundedBelow D.A₀ β)
+    (hA₀high : TauCeti.LinearPMap.SemiboundedAbove D.A₀ α)
+    (hΛspec : ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
+      lam ∉ Spectra.Resolvent.spectrum D.Λ₁)
+    (hC : N.Mem (D.residual.adjoint ∘L D.F₁)) :
+    N.Mem (D.X.adjoint ∘L D.F₁) ∧
+      δ * N.gauge (D.X.adjoint ∘L D.F₁) ≤
+        N.gauge (D.residual.adjoint ∘L D.F₁) := by
+  have hΛsa : _root_.IsSelfAdjoint D.toClosed.Λ₁.toLinearPMap := by
+    simpa only [UnboundedSinThetaDataPMap.toClosed,
+      DavisKahanExt.ClosedOperator.ofLinearPMap_toLinearPMap] using hΛ₁
+  refine linearPMap_sinTheta_unbounded_gauge
+    N D hA hA₀ hΛ₁ hβα hδ hA₀low hA₀high ?_ hC
+  have hShift := twoSidedShiftedInverseBound_of_spectrum_gap
+    (c := (α + β) / 2) (s := (α - β) / 2 + δ) hΛsa (by linarith) (by
+    intro lam hlam
+    refine hΛspec lam ?_
+    rw [Set.mem_Ioo] at hlam ⊢
+    exact ⟨by linarith [hlam.1], by linarith [hlam.2]⟩)
+  change LinearPMap.TwoSidedShiftedInverseBound D.toClosed.Λ₁.toLinearPMap
+    ((α + β) / 2) ((α - β) / 2 + δ) at hShift
+  have hΛmap : D.toClosed.Λ₁.toLinearPMap = D.Λ₁ := rfl
+  rwa [hΛmap] at hShift
 
 end SinTheta
 
