@@ -45,6 +45,7 @@
         "ForTauCeti.Analysis.InnerProductSpace.PartialIsometry",
         "ForTauCeti.Analysis.InnerProductSpace.PolarDecomposition",
         "ForTauCeti.Analysis.InnerProductSpace.PolarIsometry",
+        "ForTauCeti.Analysis.InnerProductSpace.PolarPartialIsometry",
         "ForTauCeti.Analysis.InnerProductSpace.PositiveSqrt",
         "ForTauCeti.Analysis.InnerProductSpace.RectangularSingularValues",
         "ForTauCeti.Analysis.InnerProductSpace.SelfAdjointFunctionalCalculus",
@@ -1599,6 +1600,25 @@
       "direct_dependencies": [
         "Mathlib",
         "ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm.BlockSum"
+      ],
+      "blocked_dependencies": [],
+      "downstream_users": [],
+      "status": "staged",
+      "upstream_pr": null
+    },
+    {
+      "source_module": "ForTauCeti.Analysis.InnerProductSpace.PolarPartialIsometry",
+      "source_declarations": [],
+      "current_namespace": "ContinuousLinearMap",
+      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.PolarPartialIsometry",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.PolarPartialIsometry",
+      "ownership_class": "tauceti",
+      "roadmap_target": "operator-polar-decomposition",
+      "provenance_class": "authored in place 2026-07-28: the general bounded polar decomposition with a partial isometry, closing the TODO in PolarIsometry.lean and giving a Spectra-free replacement for Spectra.QuantumMechanics.Channels' polar API",
+      "direct_dependencies": [
+        "Mathlib",
+        "ForTauCeti.Analysis.InnerProductSpace.OperatorModulus",
+        "ForTauCeti.Analysis.InnerProductSpace.PartialIsometry"
       ],
       "blocked_dependencies": [],
       "downstream_users": [],
