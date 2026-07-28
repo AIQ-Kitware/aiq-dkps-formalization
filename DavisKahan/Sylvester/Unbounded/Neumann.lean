@@ -340,22 +340,21 @@ theorem closedSylvesterEquation_boundedRealization
     `sylvester_mem_and_gauge_le_of_unbounded_bound_inverse`.  A bounded left
     block and a bounded shifted right inverse yield a Neumann contraction
     `Y ↦ S Y J`, preserving membership and the sharp constant-one gauge bound. -/
-theorem mem_and_gauge_le_of_boundedLeft_exteriorRight
+theorem linearPMap_mem_and_gauge_le_of_boundedLeft_exteriorRight
     (N : RectangularSymmetricIdealFamily (𝕜 := 𝕜))
     {G : Type v}
     [NormedAddCommGroup G] [InnerProductSpace 𝕜 G] [CompleteSpace G]
-    {S : F →L[𝕜] F}
-    {Λ : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := G)}
+    {S : F →L[𝕜] F} {Λ : G →ₗ.[𝕜] G}
     {Y C : G →L[𝕜] F} {c ρ δ : ℝ}
     (hρ : 0 ≤ ρ) (hδ : 0 < δ)
     (hSnorm : ‖S‖ ≤ ρ)
     {J : G →L[𝕜] G} (hdom : ∀ z : G, J z ∈ Λ.domain)
     (hres : ∀ z : G,
-      Λ.toLinearMap ⟨J z, hdom z⟩ - ((c : ℝ) : 𝕜) • J z = z)
+      Λ ⟨J z, hdom z⟩ - ((c : ℝ) : 𝕜) • J z = z)
     (hJnorm : ‖J‖ ≤ (ρ + δ)⁻¹)
     (hEq : ∀ y : Λ.domain,
       S (Y (y : G)) -
-        (Y (Λ.toLinearMap y) - ((c : ℝ) : 𝕜) • Y (y : G)) = C (y : G))
+        (Y (Λ y) - ((c : ℝ) : 𝕜) • Y (y : G)) = C (y : G))
     (hC : N.Mem C) :
     N.Mem Y ∧ δ * N.gauge Y ≤ N.gauge C := by
   have hρδ : (0 : ℝ) < ρ + δ := by linarith
@@ -367,7 +366,7 @@ theorem mem_and_gauge_le_of_boundedLeft_exteriorRight
   -- the bounded fixed-point identity `Y = S Y J - C J`
   have hfix : Y = S ∘L Y ∘L J + -(C ∘L J) := by
     ext z
-    have hres' : Λ.toLinearMap ⟨J z, hdom z⟩ =
+    have hres' : Λ ⟨J z, hdom z⟩ =
         z + ((c : ℝ) : 𝕜) • J z := sub_eq_iff_eq_add.mp (hres z)
     have h1 := hEq ⟨J z, hdom z⟩
     rw [hres', map_add, map_smul] at h1
@@ -550,6 +549,29 @@ theorem mem_and_gauge_le_of_boundedLeft_exteriorRight
   have hkey := mul_le_mul_of_nonneg_left hgauge hρδ.le
   rw [← mul_assoc, mul_inv_cancel₀ hρδ.ne', one_mul] at hkey
   linarith
+
+/-- Historical closed-operator presentation of the raw right-unbounded
+Neumann contraction. -/
+theorem mem_and_gauge_le_of_boundedLeft_exteriorRight
+    (N : RectangularSymmetricIdealFamily (𝕜 := 𝕜))
+    {G : Type v}
+    [NormedAddCommGroup G] [InnerProductSpace 𝕜 G] [CompleteSpace G]
+    {S : F →L[𝕜] F}
+    {Λ : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := G)}
+    {Y C : G →L[𝕜] F} {c ρ δ : ℝ}
+    (hρ : 0 ≤ ρ) (hδ : 0 < δ)
+    (hSnorm : ‖S‖ ≤ ρ)
+    {J : G →L[𝕜] G} (hdom : ∀ z : G, J z ∈ Λ.domain)
+    (hres : ∀ z : G,
+      Λ.toLinearMap ⟨J z, hdom z⟩ - ((c : ℝ) : 𝕜) • J z = z)
+    (hJnorm : ‖J‖ ≤ (ρ + δ)⁻¹)
+    (hEq : ∀ y : Λ.domain,
+      S (Y (y : G)) -
+        (Y (Λ.toLinearMap y) - ((c : ℝ) : 𝕜) • Y (y : G)) = C (y : G))
+    (hC : N.Mem C) :
+    N.Mem Y ∧ δ * N.gauge Y ≤ N.gauge C := by
+  exact linearPMap_mem_and_gauge_le_of_boundedLeft_exteriorRight
+    (Λ := Λ.toLinearPMap) N hρ hδ hSnorm hdom hres hJnorm hEq hC
 
 end ExactSinTheta
 end Experimental
