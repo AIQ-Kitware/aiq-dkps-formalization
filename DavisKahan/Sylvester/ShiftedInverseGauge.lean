@@ -95,19 +95,6 @@ theorem linearPMap_exists_bounded_shift_extension
         = f y := h
       _ = B y - (((α + β) / 2 : ℝ) : 𝕜) • (y : F) := hgapply y
 
-/-- Compatibility entry point for the raw bounded-shift extension. -/
-theorem exists_bounded_shift_extension
-    {B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := F)}
-    (hsym : B.IsSymmetric) {β α : ℝ} (hβα : β ≤ α)
-    (hlow : SemiboundedBelow B β) (hhigh : SemiboundedAbove B α) :
-    ∃ S : F →L[𝕜] F, ‖S‖ ≤ (α - β) / 2 ∧
-      ∀ y : B.domain, S (y : F) =
-        B.toLinearMap y - (((α + β) / 2 : ℝ) : 𝕜) • (y : F) := by
-  simpa only [TauCeti.DavisKahanExt.ClosedOperator.toLinearPMap_domain,
-    TauCeti.DavisKahanExt.ClosedOperator.toLinearPMap_apply] using
-    linearPMap_exists_bounded_shift_extension (B := B.toLinearPMap)
-      hsym B.toLinearPMap_dense hβα hlow hhigh
-
 /- The two one-unbounded Neumann engines and the bounded-realization
 transfer lemma live in `Core.UnboundedSpectral`, below this source-facing
 assembly layer. -/
