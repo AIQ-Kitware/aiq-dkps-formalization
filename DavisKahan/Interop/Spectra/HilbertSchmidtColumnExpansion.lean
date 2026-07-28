@@ -1,7 +1,7 @@
 /-
 Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
-Authors: Jon Crall, OpenAI GPT-5.6 Thinking
+Authors: Jon Crall, OpenAI GPT-5.6 Thinking, Claude Opus 5
 -/
 import ForTauCeti.Analysis.InnerProductSpace.OrthogonalSeries
 import ForTauCeti.Analysis.InnerProductSpace.ProjectionGeometry
@@ -26,6 +26,17 @@ series converges to the original tensor.  Instead it proceeds as follows:
 4. Hilbert-basis reconstruction identifies that operator sum with the original
    operator;
 5. injectivity of the tensor-to-operator map identifies the tensor sum.
+
+## Why this lives under `Interop`
+
+Every statement here is *about* `Spectra.HilbertSchmidtTensor.Space`, and each is declared
+into Spectra's own namespace with a `mathAhead_` prefix, so the module cannot exist without
+`vendor/Spectra` and is not production mathematics.  It was under
+`DavisKahan/Alternative/OperatorIdeal/HilbertSchmidt/` until 2026-07-28, where rule 7 of
+`scripts/check_dependency_layers.py` flagged it as production code importing Spectra and it
+had to be carried on the ratcheting allowlist.  `DavisKahan/Interop/Spectra/` is where the
+rule expects Spectra-facing code, so the allowlist entry is gone rather than merely
+tolerated.
 -/
 
 open scoped InnerProductSpace ComplexConjugate BigOperators
