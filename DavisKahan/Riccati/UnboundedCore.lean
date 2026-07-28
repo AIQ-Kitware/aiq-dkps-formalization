@@ -208,6 +208,12 @@ noncomputable def unboundedBlockOperatorCore
   (closedOperatorDirectSum H.A0 H.A1).addBounded
     (unboundedOffDiagonalCoupling H)
 
+/-- The closed compatibility package has the raw block core as its canonical
+partial-map view. -/
+@[simp] theorem unboundedBlockOperatorCore_toLinearPMap
+    (H : UnboundedBlockData (𝕜 := 𝕜) (E0 := E0) (E1 := E1)) :
+    (unboundedBlockOperatorCore H).toLinearPMap = unboundedBlockOperatorCorePMap H := rfl
+
 @[simp] theorem unboundedBlockOperatorCore_domain
     (H : UnboundedBlockData (𝕜 := 𝕜) (E0 := E0) (E1 := E1)) :
     (unboundedBlockOperatorCore H).domain =
