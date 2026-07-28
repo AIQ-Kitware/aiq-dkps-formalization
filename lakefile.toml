@@ -50,13 +50,22 @@ scope = "leanprover-community"
 
 [[lean_lib]]
 name = "ForMathlib"
+# The glob builds every ForMathlib file, not just the ones the root aggregate happens to
+# import. Without it Lake builds `ForMathlib.lean` and its six transitive imports only, so
+# the other six modules were compiled solely as dependencies of `DavisKahan` -- outside the
+# `leanOptions` below, and therefore against this repository's default linter set rather than
+# Mathlib's. That is the very gap these options exist to close, and it was invisible because
+# `lake build ForMathlib` never touched those files. `ForTauCeti` carries the same glob.
+globs = ["ForMathlib.*"]
 # ForMathlib is destined for **Mathlib**, so it is measured against Mathlib's own linter
 # set rather than this repository's default. Unlike `ForTauCeti` the copyright-header
 # linter stays **on**: Tau Ceti disables it, Mathlib does not. The census under these
-# options was 22 when the default set reported 0; it is now 3, and `warningAsError` is
-# deliberately NOT set because those 3 cannot be fixed from here -- see the note in
-# ForMathlib/LinearAlgebra/Matrix/RankFactorization.lean and dev/LANES.md.
-leanOptions = { weak.linter.mathlibStandardSet = true, weak.linter.style.longFile = 1500, weak.linter.style.longFileDefValue = 1500 }
+# options was 22 when the default set reported 0, and it is now 0 across all twelve modules.
+# `warningAsError` is on so it cannot regress. The three `[DecidableEq n]` warnings that
+# used to keep it off are pinned by an immutable Challenge conformance statement and cannot
+# be fixed from here; they are suppressed at exactly those three declarations, with the
+# reasoning at the point of use -- see ForMathlib/LinearAlgebra/Matrix/RankFactorization.lean.
+leanOptions = { warningAsError = true, weak.linter.mathlibStandardSet = true, weak.linter.style.longFile = 1500, weak.linter.style.longFileDefValue = 1500 }
 
 # ForTauCeti: temporary staging library for reusable mathematics whose accepted
 # Tau Ceti roadmap target and API are settled but whose code has not yet merged

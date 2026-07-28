@@ -99,8 +99,10 @@ theorem norm_add_eq_max_of_block {P A B : E →L[𝕜] E}
   have hPsym := ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hPsa
   have hPsymC : ∀ x y, ⟪P x, y⟫_𝕜 = ⟪x, P y⟫_𝕜 := fun x y => hPsym x y
   have app : ∀ (f g : E →L[𝕜] E) (x : E), (f * g) x = f (g x) := fun _ _ _ => rfl
-  have hAppx : ∀ x, A (P x) = A x := fun x => by rw [← app]; exact congrFun (congrArg DFunLike.coe hAP) x
-  have hPArange : ∀ x, P (A x) = A x := fun x => by rw [← app]; exact congrFun (congrArg DFunLike.coe hPA) x
+  have hAppx : ∀ x, A (P x) = A x := fun x => by
+    rw [← app]; exact congrFun (congrArg DFunLike.coe hAP) x
+  have hPArange : ∀ x, P (A x) = A x := fun x => by
+    rw [← app]; exact congrFun (congrArg DFunLike.coe hPA) x
   have hPBker : ∀ x, P (B x) = 0 := fun x => by
     rw [← app]; have h := congrFun (congrArg DFunLike.coe hPB) x; simpa using h
   have hBPx : ∀ x, B (P x) = 0 := fun x => by
@@ -130,9 +132,11 @@ theorem norm_add_eq_max_of_block {P A B : E →L[𝕜] E}
       simp only [horthAB, map_zero, mul_zero, add_zero] at h
       simp only [add_apply]; linarith
     have hAxle : ‖A x‖ ≤ max ‖A‖ ‖B‖ * ‖P x‖ := by
-      rw [← hAppx x]; exact (ContinuousLinearMap.le_opNorm _ _).trans (by gcongr; exact le_max_left _ _)
+      rw [← hAppx x]
+      exact (ContinuousLinearMap.le_opNorm _ _).trans (by gcongr; exact le_max_left _ _)
     have hBxle : ‖B x‖ ≤ max ‖A‖ ‖B‖ * ‖(1 - P) x‖ := by
-      rw [← hBcpx x]; exact (ContinuousLinearMap.le_opNorm _ _).trans (by gcongr; exact le_max_right _ _)
+      rw [← hBcpx x]
+      exact (ContinuousLinearMap.le_opNorm _ _).trans (by gcongr; exact le_max_right _ _)
     have hM : (0:ℝ) ≤ max ‖A‖ ‖B‖ := le_max_of_le_left (norm_nonneg _)
     have hkey : ‖(A + B) x‖ ^ 2 ≤ (max ‖A‖ ‖B‖ * ‖x‖) ^ 2 := by
       have e : (max ‖A‖ ‖B‖ * ‖x‖) ^ 2
