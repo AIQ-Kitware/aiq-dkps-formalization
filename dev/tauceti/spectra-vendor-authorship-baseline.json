@@ -1,0 +1,62 @@
+{
+  "fileCount": 11,
+  "files": [
+    {
+      "authors": "Jon Crall, OpenAI GPT-5.6 Thinking",
+      "lines": 98,
+      "path": "Spectra/OneParameterUnitaryGroup/Product.lean"
+    },
+    {
+      "authors": "Jon Crall, OpenAI GPT-5.6 Thinking",
+      "lines": 70,
+      "path": "Spectra/ProjValMeasure/GeneralMap.lean"
+    },
+    {
+      "authors": "Jon Crall, OpenAI GPT-5.6 Thinking",
+      "lines": 118,
+      "path": "Spectra/QuantumMechanics/BornRule/Joint/ProjectivePVM.lean"
+    },
+    {
+      "authors": "Adam Bornemann",
+      "lines": 378,
+      "path": "Spectra/QuantumMechanics/BornRule/POVMCore.lean"
+    },
+    {
+      "authors": "Jon Crall, OpenAI GPT-5.6 Thinking",
+      "lines": 625,
+      "path": "Spectra/Spaces/Tensor/HilbertSchmidt.lean"
+    },
+    {
+      "authors": "Jon Crall, OpenAI GPT-5.6 Thinking",
+      "lines": 279,
+      "path": "Spectra/Spaces/Tensor/HilbertSchmidtFlow.lean"
+    },
+    {
+      "authors": "Jon Crall, OpenAI GPT-5.6 Thinking",
+      "lines": 209,
+      "path": "Spectra/Spaces/Tensor/HilbertSchmidtGeneratorBridge.lean"
+    },
+    {
+      "authors": "Adam Bornemann, Jon Crall, OpenAI GPT-5.6 Thinking",
+      "lines": 225,
+      "path": "Spectra/Spaces/Tensor/HilbertSchmidtSpectralGap.lean"
+    },
+    {
+      "authors": "Jon Crall, OpenAI GPT-5.6 Thinking",
+      "lines": 224,
+      "path": "Spectra/SpectralTheory/Calculus/SpectralGapInverse.lean"
+    },
+    {
+      "authors": "Adam Bornemann, Jon Crall, OpenAI GPT-5.6 Thinking",
+      "lines": 130,
+      "path": "Spectra/SpectralTheory/SeparatedIntertwiner.lean"
+    },
+    {
+      "authors": "Adam Bornemann, Jon Crall, OpenAI GPT-5.6 Thinking",
+      "lines": 233,
+      "path": "Spectra/YosidaHille/RectangularIntertwining.lean"
+    }
+  ],
+  "lineCount": 2589,
+  "note": "DKPS-authored modules inside vendor/Spectra. Ratchet: this list may only shrink. Driven to zero by dev/tauceti/spectra-removal-plan.md."
+}

@@ -95,21 +95,49 @@ Cheap now, impossible later. Nothing else starts until this lands.
    Spectra for our theorems. `LANES.md` already records the rule — *nothing
    outside `vendor/` should declare into `namespace Spectra`* — but no gate
    enforces it. **Add the gate with the fix**, or it recurs.
-3. **Record the unmanaged vendor edit.**
-   `vendor/Spectra/Spectra/Spaces/Tensor/Hilbert.lean` carries a real (and
-   well-commented) `notation`-elaboration fix that is *not* in
-   `vendor/patches/Spectra/0001-*.patch`. `Spectra.UPSTREAM.md` requires the
-   snapshot to be byte-identical to upstream with every delta in the managed
-   patch. Regenerate the patch via `scripts/spectra_compatibility_patch.py`.
-4. **Repair or delete the stale toggle scripts.**
-   `scripts/{enable,disable}_spectra_lake_dependency.py` search for the marker
-   `# BEGIN local Spectra development dependency`; `lakefile.toml` says
-   `# BEGIN vendored upstream Spectra snapshot`, so `disable` prints "was not
-   enabled" and changes nothing. `scripts/check_spectra_parent_only_bridge.sh`
-   invokes two scripts that no longer exist and builds
-   `DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.*` modules that are
-   gone. **A de-Spectra verification step run through these gets a false pass** —
-   which is the worst possible failure for this campaign specifically.
+3. **Get our own mathematics out of `vendor/Spectra` — 11 files, 2,589 lines.**
+   `scripts/spectra_compatibility_patch.py status` reports `diverged`: the tree
+   differs from the recorded patch by 172,661 bytes against 23,378 recorded.
+   20 files sit outside the managed patch — 9 upstream files edited, and **11
+   that do not exist upstream at all**, carrying a `Spectra Formalization
+   Project` copyright and `Authors: Jon Crall, OpenAI GPT-5.6 Thinking`.
+   Inventory and ratchet:
+   [`spectra-vendor-authorship-baseline.json`](spectra-vendor-authorship-baseline.json)
+   / `scripts/check_spectra_vendor_authorship.py`.
+
+   **This is the largest provenance hazard in the repository, and it is also the
+   piece of good news in the campaign.** Bad: a file under `vendor/` reads as the
+   donor's work, three of these are load-bearing in the port surface (6 of the 61
+   constants), and step 3 of `Spectra.UPSTREAM.md` — "replace `vendor/Spectra/`
+   with `git archive <new-upstream-commit>`" — deletes all 2,589 lines if anyone
+   follows the documented update procedure. Good: these modules need **no port
+   and no donor coordination**. They are ours already; they move to `ForTauCeti`
+   and get reconciled against Tau Ceti's API like any other staged module.
+
+   **Do not "fix" this with `spectra_compatibility_patch.py refresh`.** The patch
+   is documented as compatibility-only and explicitly "not the place for
+   Davis–Kahan-specific mathematical APIs"; refreshing would launder our
+   mathematics into a compatibility record and make the problem invisible rather
+   than smaller. The 9 genuine compatibility edits *should* be recorded that way;
+   the 11 files should leave.
+
+   Sequencing note: `Spaces/Tensor/HilbertSchmidt.lean` (625 lines) is the
+   biggest and is Cluster D's core, so this step and S3 are the same work — do
+   the relocation as part of S3 rather than twice.
+4. **Retire the stale toggle scripts.** All three encoded the pre-vendoring
+   architecture and are now loud-failing stubs (kept as files because historical
+   `dev/` notes reference the paths; deleting them would dangle those records).
+   Measured behaviour before the fix — they differed, and only one was dangerous:
+
+   - `disable_spectra_lake_dependency.py` **exited 0 while changing nothing**
+     (wrong marker), so a "disable Spectra and confirm the build" check passed
+     without disabling anything. For a campaign about removing this dependency,
+     a verification step that silently succeeds is the worst failure available.
+   - `enable_spectra_lake_dependency.py` was worse than inert: it inserts
+     `path = "external/Spectra"`, repointing the build at the read-only
+     provenance submodule and undoing the vendoring architecture.
+   - `check_spectra_parent_only_bridge.sh` exited 2 on a missing script — loud,
+     dead, not hazardous.
 
 ### S1 — Cluster C closeout (polar), 3 constants
 
@@ -240,7 +268,8 @@ python3 scripts/check_dependency_layers.py
 python3 scripts/check_declaration_name_drift.py   # required for any rename
 python3 scripts/check_library_structure.py
 python3 scripts/check_davis_kahan_1970_source_census.py
-python3 scripts/verify_vendored_spectra.py        # snapshot integrity
+python3 scripts/check_spectra_namespace.py        # S0.2 — nothing in namespace Spectra.*
+python3 scripts/check_spectra_vendor_authorship.py # S0.3 — ratchet, target 0
 python3 scripts/spectra_port_surface.py build/spectra_direct_uses.jsonl --check
 ```
 
