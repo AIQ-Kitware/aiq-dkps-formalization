@@ -25,9 +25,7 @@ The coordinate tangent is `S |C|⁺`.  The double-angle source cosine is
 choices put every denominator on the trial-coordinate space and avoid the
 extra cosine factor produced by the former ambient pseudoinverse formulas.
 
-The definitions below are totalized by Moore--Penrose inverses.  Under the
-corresponding injectivity assumptions, the compatibility lemmas identify them
-with the proof-carrying `inverseOnRange` construction.  Singular-value
+The definitions below are totalized by Moore--Penrose inverses.  Singular-value
 identifications still require a simultaneous CS decomposition and are not
 asserted here merely from these definitions.
 -/
@@ -54,33 +52,20 @@ noncomputable def tanThetaEmbedding (U : Submodule 𝕜 E)
   sinThetaEmbedding U X ∘ₗ
     FiniteDimensional.moorePenroseInverse (cosThetaMagnitude U X)
 
-/-- Under transversality, the totalized tangent agrees with composition by the
-proof-carrying inverse of the positive coordinate cosine. -/
-theorem tanThetaEmbedding_eq_inverseOnRange
-    (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
-    (X : F →ₗᵢ[𝕜] E)
-    (hC : Function.Injective (cosThetaEmbedding U X)) :
-    tanThetaEmbedding U X =
-      sinThetaEmbedding U X ∘ₗ
-        FiniteDimensional.inverseOnRange (cosThetaMagnitude U X)
-          (cosThetaMagnitude_injective U X hC) := by
-  rw [tanThetaEmbedding,
-    FiniteDimensional.moorePenroseInverse_eq_inverseOnRange]
+/-- Transversality supplies the injectivity that makes the coordinate tangent
+well defined.
 
-/-- Transversality supplies the inverse required by the coordinate tangent. -/
-theorem tanThetaEmbedding_eq_inverseOnRange_of_isTransverse
+This is what the retired `tanThetaEmbedding_eq_inverseOnRange_of_isTransverse`
+actually contained.  Its stated conclusion was `rfl` — `inverseOnRange` was a
+definitional alias for `moorePenroseInverse`, which is what `tanThetaEmbedding`
+is already defined by — so the only content was this translation of
+transversality into injectivity. -/
+theorem cosThetaMagnitude_injective_of_isTransverse
     (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     (X : F →ₗᵢ[𝕜] E)
     (htrans : IsTransverse (approximateSubspace X) U) :
-    tanThetaEmbedding U X =
-      sinThetaEmbedding U X ∘ₗ
-        FiniteDimensional.inverseOnRange (cosThetaMagnitude U X)
-          (cosThetaMagnitude_injective U X
-            (LinearMap.ker_eq_bot.mp
-              ((tanThetaEmbedding_defined_iff U X).mp htrans))) :=
-  -- the injectivity witness occurs only in a proof position, so unification
-  -- cannot recover it; it has to be supplied explicitly
-  tanThetaEmbedding_eq_inverseOnRange U X
+    Function.Injective (cosThetaMagnitude U X) :=
+  cosThetaMagnitude_injective U X
     (LinearMap.ker_eq_bot.mp ((tanThetaEmbedding_defined_iff U X).mp htrans))
 
 /-- Trial-coordinate double-angle sine `2 S |C|`.
@@ -120,18 +105,6 @@ noncomputable def tanTwoThetaEmbedding (U : Submodule 𝕜 E)
   sinTwoThetaEmbedding U X ∘ₗ
     FiniteDimensional.moorePenroseInverse
       (cosTwoThetaSourceOperator U X)
-
-/-- Under quarter-turn avoidance expressed as injectivity of the source
-cosine, the totalized double-angle tangent agrees with `inverseOnRange`. -/
-theorem tanTwoThetaEmbedding_eq_inverseOnRange
-    (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
-    (X : F →ₗᵢ[𝕜] E)
-    (hC₂ : Function.Injective (cosTwoThetaSourceOperator U X)) :
-    tanTwoThetaEmbedding U X =
-      sinTwoThetaEmbedding U X ∘ₗ
-        FiniteDimensional.inverseOnRange (cosTwoThetaSourceOperator U X) hC₂ := by
-  rw [tanTwoThetaEmbedding,
-    FiniteDimensional.moorePenroseInverse_eq_inverseOnRange]
 
 
 /-! ## Tangent singular values and ordered residual graph bounds
