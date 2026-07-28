@@ -1879,7 +1879,7 @@ carry a transitional adapter whose deletion condition is stated.*
 | ~~specSubspace~~ | **RETIRED 2026-07-27.** Canonical is `OrthonormalBasis.spanIndices` in `ForTauCeti/Analysis/InnerProductSpace/BasisSpan.lean`; `CourantFischerCompat.lean` is **deleted** and no `specSubspace` survives outside the immutable `Challenge` conformance file and `Acharyya2025`'s own self-contained paper copy | none — the compat shim is gone | done | ~~P0~~ ~~adapter-retirement~~ **done** |
 | ~~appendFin~~ | **Deleted (§8.1).** It was exactly `Fin.snoc`; `Fin.snoc_castSucc` / `Fin.snoc_last` replace its two simp lemmas | none | done — no adapter was needed | ~~P0~~ |
 | **finiteMean** | **KEPT (§8.1) — the "likely generic duplicate" reading was wrong.** `Finset.expect` requires `Module ℚ≥0 E`, which does not synthesize for a general `𝕜`-inner-product space; `Finset.centroid` typechecks but is `Classical.arbitrary` junk on the empty family, whereas `finiteMean` returns `0` there and `finiteMean_append` is deliberately stated to hold *at* `n = 0` | none — it is not a duplicate | Keep. Open sub-item: generalize `Fin n` → `Finset`, which is a redesign of the add-one identity, not a signature edit | P2 (was P0) |
-| ~~RectangularSymmetricIdealFamily~~ | **Replaced (§12.1).** `TauCeti.SymmetricOperatorIdealFamily` | Legacy record still has 68 consumers | `SymmetricOperatorIdealFamily.toRectangular` (transitional; delete with the legacy structure) | ~~P0~~ adapter-retirement |
+| ~~RectangularSymmetricIdealFamily~~ | **Replaced (§12.1); retirement STARTED 2026-07-27, step 1 of N landed.** The row below its old text was wrong about the size — see the callout under this table | The 376 call sites that named the legacy structure now go through `KyFanDominantIdealFamily.{Mem,gauge}`, so the remaining coupling is 73 production type-position uses in 30 modules, not 520 references in 60 | Swap the representation inside `KyFanDominantIdealFamily` (one file + proof repair), then delete the structure and the `toRectangular` adapter | ~~P0~~ adapter-retirement, **in progress** |
 | GenuinePairwiseSpectrumGap | **IN PROGRESS 2026-07-28.** The generic implementation is now raw `LinearPMap.GenuinePairwiseSpectrumGap` plus `linearPMapSylvester_*`; the bundled predicate remains at seven source/audit consumers, with `PairwiseSpectrumGap` still aliased to it | Spectrum/intertwiner layer is Spectra-dependent, so the raw implementation is downstream rather than a `ForTauCeti` candidate today | Migrate the seven source/audit data records to raw partial maps, then delete the bundled facade; a final Tau Ceti predicate waits on the exact Spectrum/SeparatedIntertwiner port | P1 |
 
 - Adapters must be visibly downstream and carry a deletion condition.
@@ -1890,7 +1890,7 @@ carry a transitional adapter whose deletion condition is stated.*
 
 - Avoid long-lived aliases before upstream review; they obscure which API reviewers are evaluating.
 
-> **~~Three adapters are now live at once~~ — down to ONE, 2026-07-27.** `operatorAbs` is
+> **~~Three adapters are now live at once~~ — down to ONE, and that one is started, 2026-07-27.** `operatorAbs` is
 > retired: its shim file is deleted and its call sites repointed to
 > `ContinuousLinearMap.modulus`. `CourantFischerCompat` is retired too: 14 wrappers, ~150 call
 > sites, shim file deleted. Only `SymmetricOperatorIdealFamily.toRectangular` remains live
@@ -1909,6 +1909,34 @@ carry a transitional adapter whose deletion condition is stated.*
 > `Acharyya2025` declaration that merely shared a name with a shim wrapper, and the resulting
 > self-reference showed up as "fail to show termination" rather than as an unknown identifier.
 > Diff the declaration headers after any repo-wide substitution.
+>
+> **The third adapter is not what this table said it was, and the correction matters.**
+> `RectangularSymmetricIdealFamily` was described as a "legacy record" with "68 consumers"
+> reachable through `SymmetricOperatorIdealFamily.toRectangular`. It is not. It is a **field
+> of `KyFanDominantIdealFamily`** (source-facing name `UnitaryInvariantIdealFamily`), the
+> structure the entire ideal-valued sin-Θ development is parameterized over: 520 references,
+> of which 376 were `N.toRectangularSymmetricIdealFamily.{Mem,gauge}`. It has exactly three
+> origins, so the *structure* was never the obstacle — the 376 textual dependencies on its
+> name were.
+>
+> **Why a direct swap is a mathematical project and not a polish pass.** The canonical
+> replacement carries a single `ℝ≥0∞` gauge and **no membership predicate** — its laws are
+> unconditional, which is the whole point of the redesign. So the swap (a) deletes `Mem` as
+> data, removing a hypothesis from hundreds of statements, and (b) retypes `gauge` from `ℝ`
+> to `ℝ≥0∞`, which re-proves every downstream bound in a different ordered algebra:
+> subtraction is truncated, `linarith` does not apply, and statements of the shape
+> `gap * gauge (sinΘ) ≤ gauge residual` need the real `gap` moved across `ENNReal.ofReal`.
+> That is days of work with real risk of getting a bound subtly wrong, and it must not be
+> attempted as a flag day.
+>
+> **Step 1, landed 2026-07-27:** `KyFanDominantIdealFamily` now exposes its own `Mem` and
+> `gauge`, and all 376 call sites go through those instead of naming the field. Nothing
+> changed meaning; the point is that the representation swap is now a change to **one file**
+> plus proof repair, and the `ℝ`-valued interface can survive as a documented convenience of
+> the paper layer rather than as a second competing structure. One gotcha is recorded on the
+> accessors themselves: they are `abbrev`, so `exact` sees through them but `rw` does not —
+> five proofs needed a `simp only [KyFanDominantIdealFamily.gauge]` before a rewrite whose
+> supporting lemma is stated over the underlying ideal.
 >
 > **What the `operatorAbs` retirement showed, worth knowing before taking the other two.**
 > Repointing names was the easy half. Two things were not mechanical: (1) the shim had

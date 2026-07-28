@@ -42,13 +42,13 @@ theorem result
     (N : UnitaryInvariantIdealFamily (𝕜 := 𝕜))
     (P : IsometricSinThetaProblem (𝕜 := 𝕜) (E := E) (F := F)
       (G := G) (H := H) N) :
-    N.toRectangularSymmetricIdealFamily.Mem
+    N.Mem
         ((ContinuousLinearMap.id 𝕜 E -
           P.exactMap ∘L P.exactMap.adjoint) ∘L P.data.X) ∧
-      P.gap * N.toRectangularSymmetricIdealFamily.gauge
+      P.gap * N.gauge
           ((ContinuousLinearMap.id 𝕜 E -
             P.exactMap ∘L P.exactMap.adjoint) ∘L P.data.X)
-        ≤ N.toRectangularSymmetricIdealFamily.gauge P.data.residual :=
+        ≤ N.gauge P.data.residual :=
   sinTheta_unbounded_exact
     N P.data P.exactMap P.ambient_selfAdjoint P.trial_selfAdjoint
       P.complement_selfAdjoint P.trial_isometry P.exact_decomposition

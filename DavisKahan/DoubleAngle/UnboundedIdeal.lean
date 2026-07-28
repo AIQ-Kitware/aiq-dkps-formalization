@@ -399,16 +399,16 @@ theorem sinTwoTheta_addBounded_unitaryInvariant_of_spectrum_gap
     (hBcomplSpec : ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
       lam ∉ Spectra.Resolvent.spectrum
         (selfAdjointSpectralRestriction A hA Bᶜ hB.compl).toLinearPMap)
-    (hEmem : N.toRectangularSymmetricIdealFamily.Mem E) :
-    N.toRectangularSymmetricIdealFamily.Mem (sinTwoThetaIdealBlock
+    (hEmem : N.Mem E) :
+    N.Mem (sinTwoThetaIdealBlock
         (selfAdjointSpectralSubspace A hA B hB)
         (selfAdjointSpectralSubspace (A.addBounded E)
           (addBounded_isSelfAdjoint A hA E hE) S hS)) ∧
-      δ * N.toRectangularSymmetricIdealFamily.gauge (sinTwoThetaIdealBlock
+      δ * N.gauge (sinTwoThetaIdealBlock
         (selfAdjointSpectralSubspace A hA B hB)
         (selfAdjointSpectralSubspace (A.addBounded E)
           (addBounded_isSelfAdjoint A hA E hE) S hS)) ≤
-        2 * N.toRectangularSymmetricIdealFamily.gauge E := by
+        2 * N.gauge E := by
   exact sinTwoTheta_addBounded_gauge_of_spectrum_gap
     N.toRectangularSymmetricIdealFamily A hA E hE B S hB hS
       hβα hδ hBlow hBhigh hBcomplSpec hEmem
@@ -423,16 +423,16 @@ theorem sinTwoTheta_addBounded_unitaryInvariant_of_intervalExterior
     {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
     (hBsub : B ⊆ Set.Icc β α)
     (hBcomplDisj : Bᶜ ∩ Set.Ioo (β - δ) (α + δ) = ∅)
-    (hEmem : N.toRectangularSymmetricIdealFamily.Mem E) :
-    N.toRectangularSymmetricIdealFamily.Mem (sinTwoThetaIdealBlock
+    (hEmem : N.Mem E) :
+    N.Mem (sinTwoThetaIdealBlock
         (selfAdjointSpectralSubspace A hA B hB)
         (selfAdjointSpectralSubspace (A.addBounded E)
           (addBounded_isSelfAdjoint A hA E hE) S hS)) ∧
-      δ * N.toRectangularSymmetricIdealFamily.gauge (sinTwoThetaIdealBlock
+      δ * N.gauge (sinTwoThetaIdealBlock
         (selfAdjointSpectralSubspace A hA B hB)
         (selfAdjointSpectralSubspace (A.addBounded E)
           (addBounded_isSelfAdjoint A hA E hE) S hS)) ≤
-        2 * N.toRectangularSymmetricIdealFamily.gauge E := by
+        2 * N.gauge E := by
   exact sinTwoTheta_addBounded_gauge_of_intervalExterior
     N.toRectangularSymmetricIdealFamily A hA E hE B S hB hS
       hβα hδ hBsub hBcomplDisj hEmem

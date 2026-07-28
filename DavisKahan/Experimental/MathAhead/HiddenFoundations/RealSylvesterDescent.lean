@@ -205,16 +205,16 @@ theorem real_bounded_separated_sylvester
     {d : ℝ} (hd : 0 < d)
     (hsep : SpectraSeparated A ⊤ B ⊤ d)
     (hEq : sylvesterOperator A B X = C)
-    (hC : N.toRectangularSymmetricIdealFamily.Mem C) :
-    N.toRectangularSymmetricIdealFamily.Mem X ∧
-      d * N.toRectangularSymmetricIdealFamily.gauge X ≤
-        (Real.pi / 2) * N.toRectangularSymmetricIdealFamily.gauge C := by
+    (hC : N.Mem C) :
+    N.Mem X ∧
+      d * N.gauge X ≤
+        (Real.pi / 2) * N.gauge C := by
   let c : ℝ := Real.pi / 2
   have hc : 0 < c := by
     dsimp [c]
     positivity
   let Cscaled : E →L[ℝ] F := c • C
-  have hCscaled : N.toRectangularSymmetricIdealFamily.Mem Cscaled :=
+  have hCscaled : N.Mem Cscaled :=
     N.toRectangularSymmetricIdealFamily.smul_mem c hC
   have hfan : ∀ k, d * kyFanApproximationGauge k X ≤
       kyFanApproximationGauge k Cscaled := by
@@ -224,7 +224,7 @@ theorem real_bounded_separated_sylvester
   obtain ⟨hX, hg⟩ :=
     mem_and_scaled_gauge_le_of_all_scaled_kyFan_le N hd hCscaled hfan
   refine ⟨hX, ?_⟩
-  have hhom := N.toRectangularSymmetricIdealFamily.gauge_smul c hC
+  have hhom := N.gauge_smul c hC
   rw [Real.norm_eq_abs, abs_of_pos hc] at hhom
   simpa [Cscaled, c, hhom] using hg
 

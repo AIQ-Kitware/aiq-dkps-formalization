@@ -45,16 +45,16 @@ theorem generalizedSinTheta_unbounded_spectralSubspace_of_genuineSpectrumGap
       A.toLinearMap ⟨X (x : F), hXdom x⟩ - X (A0.toLinearMap x) = Rop (x : F))
     (hgap : GenuineUnboundedSylvesterGap A0
       (selfAdjointSpectralRestriction A hA Sᶜ hS.compl) δ)
-    (hR : N.toRectangularSymmetricIdealFamily.Mem Rop) :
-    N.toRectangularSymmetricIdealFamily.Mem
+    (hR : N.Mem Rop) :
+    N.Mem
       (directedSinThetaOperator X
         (selfAdjointSpectralSubspaceInclusion A hA S hS)
         hframe hε) ∧
-      δ * ε * N.toRectangularSymmetricIdealFamily.gauge
+      δ * ε * N.gauge
         (directedSinThetaOperator X
           (selfAdjointSpectralSubspaceInclusion A hA S hS)
           hframe hε)
-        ≤ N.toRectangularSymmetricIdealFamily.gauge Rop := by
+        ≤ N.gauge Rop := by
   let D := unboundedSinThetaDataOfSpectralSubspace
     A hA S hS A0 X Rop hXdom hReq
   have hLambda : D.Λ₁.IsSelfAdjoint := by

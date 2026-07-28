@@ -40,10 +40,10 @@ structure GenuineOrderedSylvesterEngine : Prop where
       (hAc : SemiboundedBelow A (c + δ))
       (hBc : SemiboundedAbove B c)
       (hEq : HasClosedSylvesterEquation A B X C)
-      (hC : N.toRectangularSymmetricIdealFamily.Mem C),
-      N.toRectangularSymmetricIdealFamily.Mem X ∧
-        δ * N.toRectangularSymmetricIdealFamily.gauge X ≤
-          N.toRectangularSymmetricIdealFamily.gauge C
+      (hC : N.Mem C),
+      N.Mem X ∧
+        δ * N.gauge X ≤
+          N.gauge C
   upperLower :
     ∀ {E F : Type v}
       [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
@@ -57,10 +57,10 @@ structure GenuineOrderedSylvesterEngine : Prop where
       (hAc : SemiboundedAbove A c)
       (hBc : SemiboundedBelow B (c + δ))
       (hEq : HasClosedSylvesterEquation A B X C)
-      (hC : N.toRectangularSymmetricIdealFamily.Mem C),
-      N.toRectangularSymmetricIdealFamily.Mem X ∧
-        δ * N.toRectangularSymmetricIdealFamily.gauge X ≤
-          N.toRectangularSymmetricIdealFamily.gauge C
+      (hC : N.Mem C),
+      N.Mem X ∧
+        δ * N.gauge X ≤
+          N.gauge C
 
 end ExactSinTheta
 end Experimental

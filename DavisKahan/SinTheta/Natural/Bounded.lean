@@ -50,9 +50,9 @@ theorem sinTheta_bounded_spectralSubspace_of_genuineSpectrumGap
         (TauCeti.DavisKahanExt.ClosedOperator.ofBounded A)
         (TauCeti.DavisKahanExt.ClosedOperator.ofBounded_isSelfAdjoint A hA)
         Sᶜ hS.compl) δ)
-    (hR : N.toRectangularSymmetricIdealFamily.Mem
+    (hR : N.Mem
       (generalResidual A X A0)) :
-    N.toRectangularSymmetricIdealFamily.Mem
+    N.Mem
       ((ContinuousLinearMap.id ℂ E -
         selfAdjointSpectralSubspaceInclusion
           (TauCeti.DavisKahanExt.ClosedOperator.ofBounded A)
@@ -62,7 +62,7 @@ theorem sinTheta_bounded_spectralSubspace_of_genuineSpectrumGap
           (TauCeti.DavisKahanExt.ClosedOperator.ofBounded A)
           (TauCeti.DavisKahanExt.ClosedOperator.ofBounded_isSelfAdjoint A hA)
           S hS).adjoint) ∘L X) ∧
-      δ * N.toRectangularSymmetricIdealFamily.gauge
+      δ * N.gauge
         ((ContinuousLinearMap.id ℂ E -
           selfAdjointSpectralSubspaceInclusion
             (TauCeti.DavisKahanExt.ClosedOperator.ofBounded A)
@@ -72,7 +72,7 @@ theorem sinTheta_bounded_spectralSubspace_of_genuineSpectrumGap
             (TauCeti.DavisKahanExt.ClosedOperator.ofBounded A)
             (TauCeti.DavisKahanExt.ClosedOperator.ofBounded_isSelfAdjoint A hA)
             S hS).adjoint) ∘L X)
-        ≤ N.toRectangularSymmetricIdealFamily.gauge
+        ≤ N.gauge
           (generalResidual A X A0) := by
   apply sinTheta_unbounded_spectralSubspace_of_genuineSpectrumGap
     N (TauCeti.DavisKahanExt.ClosedOperator.ofBounded A)
@@ -101,21 +101,21 @@ theorem generalizedSinTheta_bounded_spectralSubspace_of_genuineSpectrumGap
         (TauCeti.DavisKahanExt.ClosedOperator.ofBounded A)
         (TauCeti.DavisKahanExt.ClosedOperator.ofBounded_isSelfAdjoint A hA)
         Sᶜ hS.compl) δ)
-    (hR : N.toRectangularSymmetricIdealFamily.Mem
+    (hR : N.Mem
       (generalResidual A X A0)) :
-    N.toRectangularSymmetricIdealFamily.Mem
+    N.Mem
       (directedSinThetaOperator X
         (selfAdjointSpectralSubspaceInclusion
           (TauCeti.DavisKahanExt.ClosedOperator.ofBounded A)
           (TauCeti.DavisKahanExt.ClosedOperator.ofBounded_isSelfAdjoint A hA)
           S hS) hframe hε) ∧
-      δ * ε * N.toRectangularSymmetricIdealFamily.gauge
+      δ * ε * N.gauge
         (directedSinThetaOperator X
           (selfAdjointSpectralSubspaceInclusion
             (TauCeti.DavisKahanExt.ClosedOperator.ofBounded A)
             (TauCeti.DavisKahanExt.ClosedOperator.ofBounded_isSelfAdjoint A hA)
             S hS) hframe hε)
-        ≤ N.toRectangularSymmetricIdealFamily.gauge
+        ≤ N.gauge
           (generalResidual A X A0) := by
   apply generalizedSinTheta_unbounded_spectralSubspace_of_genuineSpectrumGap
     N (TauCeti.DavisKahanExt.ClosedOperator.ofBounded A)
@@ -153,9 +153,9 @@ theorem sinTheta_bounded_real_spectralSubspace
         (TauCeti.DavisKahanExt.ClosedOperator.ofBounded A)
         (TauCeti.DavisKahanExt.ClosedOperator.ofBounded_isSelfAdjoint A hA)
         Sᶜ hS.compl) δ)
-    (hR : N.toRectangularSymmetricIdealFamily.Mem
+    (hR : N.Mem
       (generalResidual A X A0)) :
-    N.toRectangularSymmetricIdealFamily.Mem
+    N.Mem
       ((ContinuousLinearMap.id ℝ E -
         realSelfAdjointSpectralSubspaceInclusion
           (TauCeti.DavisKahanExt.ClosedOperator.ofBounded A)
@@ -165,7 +165,7 @@ theorem sinTheta_bounded_real_spectralSubspace
           (TauCeti.DavisKahanExt.ClosedOperator.ofBounded A)
           (TauCeti.DavisKahanExt.ClosedOperator.ofBounded_isSelfAdjoint A hA)
           S hS).adjoint) ∘L X) ∧
-      δ * N.toRectangularSymmetricIdealFamily.gauge
+      δ * N.gauge
         ((ContinuousLinearMap.id ℝ E -
           realSelfAdjointSpectralSubspaceInclusion
             (TauCeti.DavisKahanExt.ClosedOperator.ofBounded A)
@@ -175,7 +175,7 @@ theorem sinTheta_bounded_real_spectralSubspace
             (TauCeti.DavisKahanExt.ClosedOperator.ofBounded A)
             (TauCeti.DavisKahanExt.ClosedOperator.ofBounded_isSelfAdjoint A hA)
             S hS).adjoint) ∘L X)
-        ≤ N.toRectangularSymmetricIdealFamily.gauge
+        ≤ N.gauge
           (generalResidual A X A0) := by
   apply sinTheta_unbounded_real_spectralSubspace
     N (TauCeti.DavisKahanExt.ClosedOperator.ofBounded A)
@@ -205,21 +205,21 @@ theorem generalizedSinTheta_bounded_real_spectralSubspace
         (TauCeti.DavisKahanExt.ClosedOperator.ofBounded A)
         (TauCeti.DavisKahanExt.ClosedOperator.ofBounded_isSelfAdjoint A hA)
         Sᶜ hS.compl) δ)
-    (hR : N.toRectangularSymmetricIdealFamily.Mem
+    (hR : N.Mem
       (generalResidual A X A0)) :
-    N.toRectangularSymmetricIdealFamily.Mem
+    N.Mem
       (directedSinThetaOperatorReal X
         (realSelfAdjointSpectralSubspaceInclusion
           (TauCeti.DavisKahanExt.ClosedOperator.ofBounded A)
           (TauCeti.DavisKahanExt.ClosedOperator.ofBounded_isSelfAdjoint A hA)
           S hS) hframe hε) ∧
-      δ * ε * N.toRectangularSymmetricIdealFamily.gauge
+      δ * ε * N.gauge
         (directedSinThetaOperatorReal X
           (realSelfAdjointSpectralSubspaceInclusion
             (TauCeti.DavisKahanExt.ClosedOperator.ofBounded A)
             (TauCeti.DavisKahanExt.ClosedOperator.ofBounded_isSelfAdjoint A hA)
             S hS) hframe hε)
-        ≤ N.toRectangularSymmetricIdealFamily.gauge
+        ≤ N.gauge
           (generalResidual A X A0) := by
   apply generalizedSinTheta_unbounded_real_spectralSubspace
     N (TauCeti.DavisKahanExt.ClosedOperator.ofBounded A)

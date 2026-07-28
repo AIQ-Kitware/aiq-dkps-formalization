@@ -750,11 +750,11 @@ theorem theorem6_3_generalizedTanTheta_of_formBounds
       (alpha + delta) * ‖y‖ ^ 2 ≤ RCLike.re ⟪T y, y⟫_ℂ)
     (tanTheta0 : Z →L[ℂ] H)
     (htan : HasTheorem63DirectedTangentApproximationNumbers Z V tanTheta0)
-    (hResidual : N.toRectangularSymmetricIdealFamily.Mem
+    (hResidual : N.Mem
       (theorem63Residual T Z)) :
-    N.toRectangularSymmetricIdealFamily.Mem tanTheta0 ∧
-      delta * N.toRectangularSymmetricIdealFamily.gauge tanTheta0 ≤
-        N.toRectangularSymmetricIdealFamily.gauge (theorem63Residual T Z) := by
+    N.Mem tanTheta0 ∧
+      delta * N.gauge tanTheta0 ≤
+        N.gauge (theorem63Residual T Z) := by
   exact mem_and_scaled_gauge_le_of_all_scaled_kyFan_le
     N hdelta hResidual
       (theorem6_3_all_kyFan_core T hT V Z hV hdelta
@@ -785,11 +785,11 @@ theorem theorem6_3_generalizedTanTheta_source_ideal
         Set.Ici (alpha + delta))
     (tanTheta0 : Z →L[ℂ] H)
     (htan : HasTheorem63DirectedTangentApproximationNumbers Z V tanTheta0)
-    (hResidual : N.toRectangularSymmetricIdealFamily.Mem
+    (hResidual : N.Mem
       (theorem63Residual T Z)) :
-    N.toRectangularSymmetricIdealFamily.Mem tanTheta0 ∧
-      delta * N.toRectangularSymmetricIdealFamily.gauge tanTheta0 ≤
-        N.toRectangularSymmetricIdealFamily.gauge (theorem63Residual T Z) := by
+    N.Mem tanTheta0 ∧
+      delta * N.gauge tanTheta0 ≤
+        N.gauge (theorem63Residual T Z) := by
   have hTsa : IsSelfAdjoint T :=
     ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hT
   have hMsa : IsSelfAdjoint (theorem63Compression T Z) := by
@@ -829,11 +829,11 @@ theorem theorem6_3_ideal_of_kyFan_core
     (N : ExactSinTheta.KyFanDominantIdealFamily (𝕜 := ℂ))
     {delta : ℝ} (hdelta : 0 < delta)
     {tanTheta0 residual : E →L[ℂ] F}
-    (hResidual : N.toRectangularSymmetricIdealFamily.Mem residual)
+    (hResidual : N.Mem residual)
     (hcore : Theorem63KyFanCore delta tanTheta0 residual) :
-    N.toRectangularSymmetricIdealFamily.Mem tanTheta0 ∧
-      delta * N.toRectangularSymmetricIdealFamily.gauge tanTheta0 ≤
-        N.toRectangularSymmetricIdealFamily.gauge residual :=
+    N.Mem tanTheta0 ∧
+      delta * N.gauge tanTheta0 ≤
+        N.gauge residual :=
   ExactSinTheta.mem_and_scaled_gauge_le_of_all_scaled_kyFan_le
     N hdelta hResidual hcore
 

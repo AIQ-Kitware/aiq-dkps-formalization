@@ -51,12 +51,12 @@ The stronger family contains precisely the missing monotonicity principle. -/
 theorem mem_and_gauge_le_of_approximationSingularValue_le
     (N : KyFanDominantIdealFamily (𝕜 := 𝕜))
     {A B : E →L[𝕜] F}
-    (hB : N.toRectangularSymmetricIdealFamily.Mem B)
+    (hB : N.Mem B)
     (h : ∀ n, approximationSingularValue n A ≤
       approximationSingularValue n B) :
-    N.toRectangularSymmetricIdealFamily.Mem A ∧
-      N.toRectangularSymmetricIdealFamily.gauge A ≤
-        N.toRectangularSymmetricIdealFamily.gauge B := by
+    N.Mem A ∧
+      N.gauge A ≤
+        N.gauge B := by
   apply mem_and_gauge_le_of_all_kyFanApproximationGauge_le N hB
   intro k
   exact kyFanApproximationGauge_le_of_approximationSingularValue_le h k
@@ -74,10 +74,10 @@ theorem restrictedDisplacement_idealGauge_le
     (N : KyFanDominantIdealFamily (𝕜 := 𝕜))
     {A B : E →L[𝕜] F}
     (D : RestrictedDisplacementApproximationDominance A B)
-    (hB : N.toRectangularSymmetricIdealFamily.Mem B) :
-    N.toRectangularSymmetricIdealFamily.Mem A ∧
-      N.toRectangularSymmetricIdealFamily.gauge A ≤
-        N.toRectangularSymmetricIdealFamily.gauge B :=
+    (hB : N.Mem B) :
+    N.Mem A ∧
+      N.gauge A ≤
+        N.gauge B :=
   mem_and_gauge_le_of_approximationSingularValue_le N hB D.approximation_le
 
 /-- The operator-norm specialization of the dominance bridge. -/
