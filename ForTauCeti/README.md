@@ -152,20 +152,20 @@ forbidden-import-refusing).
 
 | Cluster | Modules | Status |
 | --- | --- | --- |
-| `approximation-number` | 12 | staged-needs-current-validation |
+| `approximation-number` | 22 | staged-needs-current-validation |
 | `cstar-gap-inverse` | 1 | staged-unreviewed |
 | `fourier-haagerup-zsido` | 8 | staged-unreviewed |
 | `hoffman-wielandt` | 4 | staged-unreviewed |
 | `linear-pmap-sylvester` | 2 | staged-unreviewed |
 | `matrix-spectral` | 7 | staged-unreviewed |
 | `measure-theory-helpers` | 4 | staged-unreviewed |
-| `operator-polar-decomposition` | 14 | staged-unreviewed |
+| `operator-polar-decomposition` | 15 | staged-unreviewed |
 | `orthogonal-series` | 1 | staged-unreviewed |
 | `principal-angles` | 6 | staged-unreviewed |
 | `probability-concentration` | 11 | staged-unreviewed |
-| `unitarily-invariant-norm` | 27 | staged-unreviewed |
+| `unitarily-invariant-norm` | 28 | staged-unreviewed |
 
-All **71** staged modules on disk are declared (the column sums to 97 because
+All **83** staged modules on disk are declared (the column sums to 109 because
 clusters overlap on shared prerequisites). A cluster's module list is the
 **import closure** of its roots, so exporting one yields a self-contained Tau Ceti
 subtree; clusters therefore overlap on shared prerequisites, which is intended.
