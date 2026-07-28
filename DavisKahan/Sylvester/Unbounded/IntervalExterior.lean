@@ -5,6 +5,7 @@ Authors: Jon Crall, Claude Fable 5
 -/
 import DavisKahan.Interop.Spectra.BoundedFromSpectrum
 import DavisKahan.Interop.Spectra.GapResolvent
+import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
 
 /-!
 # Theorem 5.2, interval/exterior orientation, with genuine spectra
@@ -50,7 +51,8 @@ theorem semibounded_of_spectrum_subset_Icc
     {B : DKClosedOperator (H := F)}
     (hB : B.IsSelfAdjoint)
     {β α : ℝ} (hβα : β ≤ α)
-    (hσ : Spectra.Resolvent.spectrum B.toLinearPMap ⊆ Set.Icc β α) :
+    (hσ : Complex.ofReal ⁻¹' TauCeti.LinearPMap.spectrum B.toLinearPMap ⊆
+        Set.Icc β α) :
     SemiboundedBelow B β ∧ SemiboundedAbove B α := by
   obtain ⟨R, hnorm⟩ :=
     exists_boundedRealization_of_spectrum_subset_Icc hB hβα hσ
@@ -120,8 +122,9 @@ theorem unbounded_sylvester_mem_and_gauge_le_of_spectra_exteriorLeft_intervalRig
     (hA : A.IsSelfAdjoint) (hB : B.IsSelfAdjoint)
     {X C : F →L[ℂ] E} {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
     (hσA : ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
-      lam ∉ Spectra.Resolvent.spectrum A.toLinearPMap)
-    (hσB : Spectra.Resolvent.spectrum B.toLinearPMap ⊆ Set.Icc β α)
+      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum A.toLinearPMap)
+    (hσB : Complex.ofReal ⁻¹' TauCeti.LinearPMap.spectrum B.toLinearPMap ⊆
+        Set.Icc β α)
     (hEq : HasClosedSylvesterEquation A B X C)
     (hC : N.Mem C) :
     N.Mem X ∧ δ * N.gauge X ≤ N.gauge C := by
@@ -147,9 +150,10 @@ theorem unbounded_sylvester_mem_and_gauge_le_of_spectra_intervalLeft_exteriorRig
     {A : DKClosedOperator (H := E)} {B : DKClosedOperator (H := F)}
     (hA : A.IsSelfAdjoint) (hB : B.IsSelfAdjoint)
     {X C : F →L[ℂ] E} {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
-    (hσA : Spectra.Resolvent.spectrum A.toLinearPMap ⊆ Set.Icc β α)
+    (hσA : Complex.ofReal ⁻¹' TauCeti.LinearPMap.spectrum A.toLinearPMap ⊆
+        Set.Icc β α)
     (hσB : ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
-      lam ∉ Spectra.Resolvent.spectrum B.toLinearPMap)
+      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum B.toLinearPMap)
     (hEq : HasClosedSylvesterEquation A B X C)
     (hC : N.Mem C) :
     N.Mem X ∧ δ * N.gauge X ≤ N.gauge C := by

@@ -171,43 +171,9 @@
           "constants": {
             "Spectra.Resolvent.resolventSet": {
               "consumerModules": [
-                "DavisKahan.Interop.Spectra.GapResolvent",
-                "DavisKahan.Interop.Spectra.RealSpectrumBridge",
-                "DavisKahan.Interop.Spectra.UnitaryConjugation",
-                "DavisKahan.SpectralTheory.SelfAdjointBorelCalculus"
+                "DavisKahan.Interop.Spectra.GapResolvent"
               ],
-              "uses": 6
-            },
-            "Spectra.Resolvent.spectrum": {
-              "consumerModules": [
-                "DavisKahan.DoubleAngle.UnboundedIdeal",
-                "DavisKahan.Interop.Spectra.BoundedFromSpectrum",
-                "DavisKahan.Interop.Spectra.BoundedPerturbationSinTheta",
-                "DavisKahan.Interop.Spectra.BoundedPerturbationSinThetaIdeal",
-                "DavisKahan.Interop.Spectra.GapResolvent",
-                "DavisKahan.Interop.Spectra.OrderedHalfLine",
-                "DavisKahan.Interop.Spectra.RealSpectrumBridge",
-                "DavisKahan.Interop.Spectra.SpectralProjectionSinTheta",
-                "DavisKahan.Interop.Spectra.SpectralRestrictionLocalization",
-                "DavisKahan.Interop.Spectra.UnitaryConjugation",
-                "DavisKahan.SinTheta.Natural.GapConvenience",
-                "DavisKahan.SinTheta.Unbounded.AllGap",
-                "DavisKahan.SinTheta.Unbounded.IntervalExterior",
-                "DavisKahan.SinTheta.Unbounded.SpectrumGap",
-                "DavisKahan.Sources.DavisKahan1970.FullPartIII",
-                "DavisKahan.Sources.DavisKahan1970.SinTwoTheta",
-                "DavisKahan.Sources.DavisKahan1970.TanTwoTheta",
-                "DavisKahan.SpectralTheory.ClosedOperator.Complexification",
-                "DavisKahan.SpectralTheory.SelfAdjointBorelCalculus",
-                "DavisKahan.Sylvester.PairwiseHomogeneousUniqueness",
-                "DavisKahan.Sylvester.PairwiseSpectrumGap",
-                "DavisKahan.Sylvester.Unbounded.AllGap",
-                "DavisKahan.Sylvester.Unbounded.IntervalExterior",
-                "DavisKahan.TanTwoTheta.Unbounded",
-                "DavisKahan.TanTwoTheta.UnboundedIdeal",
-                "DavisKahan.TanTwoTheta.UnboundedVector"
-              ],
-              "uses": 75
+              "uses": 1
             }
           },
           "lines": 90,
@@ -608,7 +574,7 @@
       "label": "Cayley transform, Stone bridge and one-parameter groups"
     }
   },
-  "distinctSpectraConstants": 57,
+  "distinctSpectraConstants": 56,
   "dkpsAuthoredDonorModules": [
     "Spectra.Spaces.Tensor.HilbertSchmidt",
     "Spectra.Spaces.Tensor.HilbertSchmidtFlow",
@@ -616,7 +582,7 @@
   ],
   "donorModules": 25,
   "note": "Regenerate with scripts/ExportSpectraUsage.lean + scripts/spectra_port_surface.py.",
-  "productionConsumerDeclarations": 173,
+  "productionConsumerDeclarations": 97,
   "spectraUpstreamCommit": "8dbaaf6728d1342ae16acf79fd7eef7c59b37e63",
   "trackedTauCetiModules": 629
 }

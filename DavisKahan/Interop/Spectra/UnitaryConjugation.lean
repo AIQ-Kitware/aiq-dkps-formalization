@@ -5,7 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Interop.Spectra.ClosedOperator
 import Spectra.Operator.Unitary.Conjugation
-import Spectra.Resolvent.Spectrum
+import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
 
 /-!
 # Unitary conjugation for DK closed operators
@@ -109,8 +109,8 @@ noncomputable def unitaryConjugateBounded
 /-- A resolvent of a partial operator transports to its unitary conjugate. -/
 theorem mem_resolventSet_unitaryConj_of_mem
     (W : H ≃ₗᵢ[ℂ] K) (A : H →ₗ.[ℂ] H) {z : ℂ}
-    (hz : z ∈ Spectra.Resolvent.resolventSet A) :
-    z ∈ Spectra.Resolvent.resolventSet
+    (hz : z ∈ TauCeti.LinearPMap.resolventSet A) :
+    z ∈ TauCeti.LinearPMap.resolventSet
       (Spectra.Operator.unitaryConj W A) := by
   obtain ⟨R, hleft, hright⟩ := hz
   refine ⟨unitaryConjugateBounded W R, ?_, ?_⟩
@@ -151,9 +151,9 @@ theorem unitaryConj_symm_unitaryConj
 /-- Resolvent membership is invariant under unitary conjugation. -/
 theorem mem_resolventSet_unitaryConj_iff
     (W : H ≃ₗᵢ[ℂ] K) (A : H →ₗ.[ℂ] H) {z : ℂ} :
-    z ∈ Spectra.Resolvent.resolventSet
+    z ∈ TauCeti.LinearPMap.resolventSet
         (Spectra.Operator.unitaryConj W A) ↔
-      z ∈ Spectra.Resolvent.resolventSet A := by
+      z ∈ TauCeti.LinearPMap.resolventSet A := by
   constructor
   · intro hz
     have hz' := mem_resolventSet_unitaryConj_of_mem
@@ -166,12 +166,12 @@ unitarily conjugated DK operator. -/
 theorem mem_resolventSet_unitaryConjugate_iff
     (W : H ≃ₗᵢ[ℂ] K) (A : DKClosedOperator (H := H))
     (hA : A.IsSelfAdjoint) {z : ℂ} :
-    z ∈ Spectra.Resolvent.resolventSet
+    z ∈ TauCeti.LinearPMap.resolventSet
         (unitaryConjugate W A hA).toLinearPMap ↔
-      z ∈ Spectra.Resolvent.resolventSet A.toLinearPMap := by
-  change z ∈ Spectra.Resolvent.resolventSet
+      z ∈ TauCeti.LinearPMap.resolventSet A.toLinearPMap := by
+  change z ∈ TauCeti.LinearPMap.resolventSet
       (Spectra.Operator.unitaryConj W A.toLinearPMap) ↔
-    z ∈ Spectra.Resolvent.resolventSet A.toLinearPMap
+    z ∈ TauCeti.LinearPMap.resolventSet A.toLinearPMap
   exact mem_resolventSet_unitaryConj_iff W A.toLinearPMap
 
 /-- The conjugated DK operator is self-adjoint. -/
@@ -185,12 +185,12 @@ theorem unitaryConjugate_isSelfAdjoint
 theorem unitaryConjugate_spectrum_eq
     (W : H ≃ₗᵢ[ℂ] K) (A : DKClosedOperator (H := H))
     (hA : A.IsSelfAdjoint) :
-    Spectra.Resolvent.spectrum (unitaryConjugate W A hA).toLinearPMap =
-      Spectra.Resolvent.spectrum A.toLinearPMap := by
+    TauCeti.LinearPMap.spectrum (unitaryConjugate W A hA).toLinearPMap =
+      TauCeti.LinearPMap.spectrum A.toLinearPMap := by
   ext lam
-  change ((lam : ℂ) ∉ Spectra.Resolvent.resolventSet
+  change ((lam : ℂ) ∉ TauCeti.LinearPMap.resolventSet
       (unitaryConjugate W A hA).toLinearPMap) ↔
-    ((lam : ℂ) ∉ Spectra.Resolvent.resolventSet A.toLinearPMap)
+    ((lam : ℂ) ∉ TauCeti.LinearPMap.resolventSet A.toLinearPMap)
   exact not_congr (mem_resolventSet_unitaryConjugate_iff W A hA)
 
 /-- Restriction of an ambient unitary to a submodule and its transported
