@@ -44,15 +44,16 @@ law, the gauges decay geometrically because `‖J‖ ‖B‖ ≤ ρ / (ρ + δ) 
 operator-norm contraction identifies that limit with `X`.  The gauge estimate
 then follows from the fixed-point identity by absorption, exactly as in the
 operator-norm shift-and-invert argument. -/
-theorem sylvester_mem_and_gauge_le_of_unbounded_bound_inverse
+theorem linearPMapSylvester_mem_and_gauge_le_of_unbounded_bound_inverse
     (N : RectangularSymmetricIdealFamily (𝕜 := 𝕜))
-    {A : ClosedOperatorE (𝕜 := 𝕜) (E := E)}
-    (hAinv : HasBoundedEverywhereInverse A)
+    {A : E →ₗ.[𝕜] E}
+    (hAinv : TauCeti.LinearPMap.HasBoundedEverywhereInverse A)
     (B : F →L[𝕜] F) {X C : F →L[𝕜] E}
     {ρ δ : ℝ} (hρ : 0 ≤ ρ) (hδ : 0 < δ)
     (hInvNorm : ‖hAinv.inv‖ ≤ (ρ + δ)⁻¹)
     (hB : ‖B‖ ≤ ρ)
-    (hEq : HasUnboundedBoundedSylvesterEquation A B X C)
+    (hEq : TauCeti.LinearPMap.SylvesterEquation
+      A (B.toLinearMap.toPMap ⊤) X C)
     (hC : N.Mem C) :
     N.Mem X ∧ δ * N.gauge X ≤ N.gauge C := by
   set J : E →L[𝕜] E := hAinv.inv with hJdef
@@ -68,13 +69,13 @@ theorem sylvester_mem_and_gauge_le_of_unbounded_bound_inverse
   -- the bounded fixed-point identity `X = J (C + X B)`
   have hfix : X = J ∘L (C + X ∘L B) := by
     ext x
-    have heq : A.toLinearMap ⟨X x, hdom x⟩ - X (B x) = C x :=
+    have heq : A ⟨X x, hdom x⟩ - X (B x) = C x :=
       hEq.equation ⟨x, Submodule.mem_top⟩
-    have happ : A.toLinearMap ⟨X x, hdom x⟩ = C x + X (B x) := by
+    have happ : A ⟨X x, hdom x⟩ = C x + X (B x) := by
       rw [← heq]; abel
-    have hinv : J (A.toLinearMap ⟨X x, hdom x⟩) = X x :=
+    have hinv : J (A ⟨X x, hdom x⟩) = X x :=
       hAinv.inv_apply ⟨X x, hdom x⟩
-    calc X x = J (A.toLinearMap ⟨X x, hdom x⟩) := hinv.symm
+    calc X x = J (A ⟨X x, hdom x⟩) := hinv.symm
       _ = J (C x + X (B x)) := by rw [happ]
       _ = (J ∘L (C + X ∘L B)) x := by
           simp [ContinuousLinearMap.comp_apply]
@@ -243,6 +244,22 @@ theorem sylvester_mem_and_gauge_le_of_unbounded_bound_inverse
   have hkey := mul_le_mul_of_nonneg_left hgauge hρδ.le
   rw [← mul_assoc, mul_inv_cancel₀ hρδ.ne', one_mul] at hkey
   linarith
+
+/-- Bundle-shaped compatibility entry point for the raw partial-map Neumann
+estimate. -/
+theorem sylvester_mem_and_gauge_le_of_unbounded_bound_inverse
+    (N : RectangularSymmetricIdealFamily (𝕜 := 𝕜))
+    {A : ClosedOperatorE (𝕜 := 𝕜) (E := E)}
+    (hAinv : HasBoundedEverywhereInverse A)
+    (B : F →L[𝕜] F) {X C : F →L[𝕜] E}
+    {ρ δ : ℝ} (hρ : 0 ≤ ρ) (hδ : 0 < δ)
+    (hInvNorm : ‖hAinv.inv‖ ≤ (ρ + δ)⁻¹)
+    (hB : ‖B‖ ≤ ρ)
+    (hEq : HasUnboundedBoundedSylvesterEquation A B X C)
+    (hC : N.Mem C) :
+    N.Mem X ∧ δ * N.gauge X ≤ N.gauge C :=
+  linearPMapSylvester_mem_and_gauge_le_of_unbounded_bound_inverse N hAinv B
+    hρ hδ hInvNorm hB hEq hC
 
 /-- Transfer a closed Sylvester equation to a bounded realization of its
 right block.  Agreement on the dense domain extends to the whole space through
