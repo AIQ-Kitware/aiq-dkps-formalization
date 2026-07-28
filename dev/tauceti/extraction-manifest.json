@@ -24,7 +24,9 @@
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.MinMax",
         "ForTauCeti.Analysis.InnerProductSpace.OperatorModulus",
         "ForTauCeti.Analysis.OperatorIdeal.Family.Basic",
-        "ForTauCeti.Analysis.OperatorIdeal.Family.OperatorNorm"
+        "ForTauCeti.Analysis.OperatorIdeal.Family.OperatorNorm",
+        "ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidtEnergy",
+        "ForTauCeti.Analysis.OperatorIdeal.Family.HilbertSchmidt"
       ]
     },
     {
@@ -1619,6 +1621,44 @@
         "Mathlib",
         "ForTauCeti.Analysis.InnerProductSpace.OperatorModulus",
         "ForTauCeti.Analysis.InnerProductSpace.PartialIsometry"
+      ],
+      "blocked_dependencies": [],
+      "downstream_users": [],
+      "status": "staged",
+      "upstream_pr": null
+    },
+    {
+      "source_module": "ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidtEnergy",
+      "source_declarations": [],
+      "current_namespace": "ContinuousLinearMap",
+      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidtEnergy",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.HilbertSchmidtEnergy",
+      "ownership_class": "tauceti",
+      "roadmap_target": "symmetric-operator-ideals",
+      "provenance_class": "authored in place 2026-07-28: the rectangular Hilbert-Schmidt energy in ENNReal, with Parseval, the adjoint swap and basis independence; replaces the C-only, self-adjoint-only Spectra lemmas that DavisKahan/Sources/DavisKahan1970/Ideals/HilbertSchmidtBasis.lean used to import",
+      "direct_dependencies": [
+        "Mathlib"
+      ],
+      "blocked_dependencies": [],
+      "downstream_users": [
+        "DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtBasis"
+      ],
+      "status": "staged",
+      "upstream_pr": null
+    },
+    {
+      "source_module": "ForTauCeti.Analysis.OperatorIdeal.Family.HilbertSchmidt",
+      "source_declarations": [],
+      "current_namespace": "ContinuousLinearMap",
+      "staging_module": "ForTauCeti.Analysis.OperatorIdeal.Family.HilbertSchmidt",
+      "final_tauceti_module": "TauCeti.Analysis.OperatorIdeal.Family.HilbertSchmidt",
+      "ownership_class": "tauceti",
+      "roadmap_target": "symmetric-operator-ideals",
+      "provenance_class": "authored in place 2026-07-28: the Hilbert-Schmidt norm and the resulting TauCeti.SymmetricOperatorIdealFamily, the second instance of that structure after the Ky Fan families",
+      "direct_dependencies": [
+        "Mathlib",
+        "ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidtEnergy",
+        "ForTauCeti.Analysis.OperatorIdeal.Family.Basic"
       ],
       "blocked_dependencies": [],
       "downstream_users": [],

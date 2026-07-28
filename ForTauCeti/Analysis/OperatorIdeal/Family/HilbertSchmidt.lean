@@ -48,7 +48,7 @@ literature reaches for first.
   tensor product and does not build an operator ideal from them.
 -/
 
-open scoped ENNReal InnerProductSpace
+open scoped ENNReal NNReal InnerProductSpace
 
 @[expose] public section
 
@@ -66,37 +66,27 @@ sums. -/
 theorem tsum_sq_add_rpow_le (f g : ι → ℝ≥0∞) :
     (∑' i, (f i + g i) ^ 2) ^ (2 : ℝ)⁻¹ ≤
       (∑' i, f i ^ 2) ^ (2 : ℝ)⁻¹ + (∑' i, g i ^ 2) ^ (2 : ℝ)⁻¹ := by
-  set A := (∑' i, f i ^ 2) ^ (2 : ℝ)⁻¹ with hA
-  set B := (∑' i, g i ^ 2) ^ (2 : ℝ)⁻¹ with hB
+  simp only [← ENNReal.rpow_two]
+  set A := (∑' i, f i ^ (2 : ℝ)) ^ (2 : ℝ)⁻¹ with hA
+  set B := (∑' i, g i ^ (2 : ℝ)) ^ (2 : ℝ)⁻¹ with hB
   have hsq : ∀ x : ℝ≥0∞, (x ^ (2 : ℝ)⁻¹) ^ (2 : ℝ) = x := fun x => by
-    rw [← ENNReal.rpow_natCast (x ^ (2 : ℝ)⁻¹) 2] at *
     rw [← ENNReal.rpow_mul]
     norm_num
-  have hpow : ∀ x : ℝ≥0∞, x ^ 2 = x ^ (2 : ℝ) := fun x => by
-    rw [← ENNReal.rpow_natCast x 2]
-    norm_num
-  have key : ∀ s : Finset ι, ∑ i ∈ s, (f i + g i) ^ 2 ≤ (A + B) ^ (2 : ℝ) := by
+  have key : ∀ s : Finset ι, ∑ i ∈ s, (f i + g i) ^ (2 : ℝ) ≤ (A + B) ^ (2 : ℝ) := by
     intro s
     have hfin := ENNReal.Lp_add_le (s := s) (f := f) (g := g) (p := 2) one_le_two
-    have hfA : (∑ i ∈ s, f i ^ (2 : ℝ)) ^ (1 / 2 : ℝ) ≤ A := by
-      rw [hA]
-      refine ENNReal.rpow_le_rpow ?_ (by norm_num) |>.trans_eq (by norm_num)
-      simpa only [← hpow] using ENNReal.sum_le_tsum (f := fun i => f i ^ 2) s
-    have hgB : (∑ i ∈ s, g i ^ (2 : ℝ)) ^ (1 / 2 : ℝ) ≤ B := by
-      rw [hB]
-      refine ENNReal.rpow_le_rpow ?_ (by norm_num) |>.trans_eq (by norm_num)
-      simpa only [← hpow] using ENNReal.sum_le_tsum (f := fun i => g i ^ 2) s
-    have hle : (∑ i ∈ s, (f i + g i) ^ (2 : ℝ)) ^ (1 / 2 : ℝ) ≤ A + B :=
-      hfin.trans (add_le_add hfA hgB)
-    have := ENNReal.rpow_le_rpow hle (by norm_num : (0 : ℝ) ≤ 2)
-    calc ∑ i ∈ s, (f i + g i) ^ 2
-        = ((∑ i ∈ s, (f i + g i) ^ (2 : ℝ)) ^ (1 / 2 : ℝ)) ^ (2 : ℝ) := by
-          simp only [← hpow]
-          rw [one_div, hsq]
-      _ ≤ (A + B) ^ (2 : ℝ) := this
-  have hsum : ∑' i, (f i + g i) ^ 2 ≤ (A + B) ^ (2 : ℝ) :=
+    rw [one_div] at hfin
+    have hfA : (∑ i ∈ s, f i ^ (2 : ℝ)) ^ (2 : ℝ)⁻¹ ≤ A :=
+      ENNReal.rpow_le_rpow (ENNReal.sum_le_tsum s) (by norm_num)
+    have hgB : (∑ i ∈ s, g i ^ (2 : ℝ)) ^ (2 : ℝ)⁻¹ ≤ B :=
+      ENNReal.rpow_le_rpow (ENNReal.sum_le_tsum s) (by norm_num)
+    calc ∑ i ∈ s, (f i + g i) ^ (2 : ℝ)
+        = ((∑ i ∈ s, (f i + g i) ^ (2 : ℝ)) ^ (2 : ℝ)⁻¹) ^ (2 : ℝ) := (hsq _).symm
+      _ ≤ (A + B) ^ (2 : ℝ) :=
+          ENNReal.rpow_le_rpow (hfin.trans (add_le_add hfA hgB)) (by norm_num)
+  have hsum : ∑' i, (f i + g i) ^ (2 : ℝ) ≤ (A + B) ^ (2 : ℝ) :=
     ENNReal.tsum_eq_iSup_sum.trans_le (iSup_le key)
-  calc (∑' i, (f i + g i) ^ 2) ^ (2 : ℝ)⁻¹
+  calc (∑' i, (f i + g i) ^ (2 : ℝ)) ^ (2 : ℝ)⁻¹
       ≤ ((A + B) ^ (2 : ℝ)) ^ (2 : ℝ)⁻¹ := ENNReal.rpow_le_rpow hsum (by norm_num)
     _ = A + B := by rw [← ENNReal.rpow_mul]; norm_num
 
@@ -106,12 +96,18 @@ namespace TauCeti
 
 variable (𝕜 : Type*) [RCLike 𝕜]
 
-/-- A choice of Hilbert basis of `E`, used to give the Hilbert--Schmidt norm a definition
-that mentions no basis.  Nothing depends on *which* basis this is: every statement about it
-is proved from `ContinuousLinearMap.hilbertSchmidtEnergy_indep`. -/
+/-- The index set of `TauCeti.chosenHilbertBasis`: a choice of Hilbert basis of `E`, used to
+give the Hilbert--Schmidt norm a definition that mentions no basis.  Nothing depends on
+*which* basis this is — every statement about it is proved from
+`ContinuousLinearMap.hilbertSchmidtEnergy_indep`. -/
+noncomputable def chosenHilbertBasisSet (E : Type*) [NormedAddCommGroup E]
+    [InnerProductSpace 𝕜 E] [CompleteSpace E] : Set E :=
+  Classical.choose (exists_hilbertBasis 𝕜 E)
+
+/-- A choice of Hilbert basis of `E`, indexed by `TauCeti.chosenHilbertBasisSet`. -/
 noncomputable def chosenHilbertBasis (E : Type*) [NormedAddCommGroup E]
     [InnerProductSpace 𝕜 E] [CompleteSpace E] :
-    HilbertBasis (Classical.choose (exists_hilbertBasis 𝕜 E)) 𝕜 E :=
+    HilbertBasis (chosenHilbertBasisSet 𝕜 E) 𝕜 E :=
   Classical.choose (Classical.choose_spec (exists_hilbertBasis 𝕜 E))
 
 end TauCeti
@@ -142,14 +138,22 @@ theorem hilbertSchmidtENorm_rpow_two (T : E →L[𝕜] F) (b : HilbertBasis ι �
   rw [T.hilbertSchmidtENorm_eq b, ← ENNReal.rpow_mul]
   norm_num
 
+/-- Squaring the Hilbert--Schmidt norm returns the energy, natural-power form. -/
+theorem hilbertSchmidtENorm_sq (T : E →L[𝕜] F) (b : HilbertBasis ι 𝕜 E) :
+    T.hilbertSchmidtENorm ^ 2 = T.hilbertSchmidtEnergy b := by
+  rw [← ENNReal.rpow_two, T.hilbertSchmidtENorm_rpow_two b]
+
+omit [CompleteSpace F] in
 @[simp] theorem hilbertSchmidtENorm_zero : (0 : E →L[𝕜] F).hilbertSchmidtENorm = 0 := by
   rw [hilbertSchmidtENorm, hilbertSchmidtEnergy_zero]
   exact ENNReal.zero_rpow_of_pos (by norm_num)
 
+omit [CompleteSpace F] in
 @[simp] theorem hilbertSchmidtENorm_neg (T : E →L[𝕜] F) :
     (-T).hilbertSchmidtENorm = T.hilbertSchmidtENorm := by
   rw [hilbertSchmidtENorm, hilbertSchmidtENorm, hilbertSchmidtEnergy_neg]
 
+omit [CompleteSpace F] in
 theorem hilbertSchmidtENorm_smul (c : 𝕜) (T : E →L[𝕜] F) :
     (c • T).hilbertSchmidtENorm = ‖c‖ₑ * T.hilbertSchmidtENorm := by
   rw [hilbertSchmidtENorm, hilbertSchmidtENorm, hilbertSchmidtEnergy_smul,
@@ -171,15 +175,14 @@ theorem hilbertSchmidtENorm_add_le (S T : E →L[𝕜] F) :
 /-- **The Hilbert--Schmidt norm dominates the operator norm.** -/
 theorem enorm_le_hilbertSchmidtENorm (T : E →L[𝕜] F) : ‖T‖ₑ ≤ T.hilbertSchmidtENorm := by
   obtain ⟨w, b, -⟩ := exists_hilbertBasis 𝕜 E
-  refine opENorm_le_bound _ ?_
-  intro x
-  have hx : ‖T x‖ₑ ^ (2 : ℝ) ≤ (T.hilbertSchmidtENorm * ‖x‖ₑ) ^ (2 : ℝ) := by
+  refine opENorm_le_bound _ fun x => ?_
+  have hbase : ‖T x‖ₑ ^ (2 : ℝ) ≤ (T.hilbertSchmidtENorm * ‖x‖ₑ) ^ (2 : ℝ) := by
     rw [ENNReal.mul_rpow_of_nonneg _ _ (by norm_num), T.hilbertSchmidtENorm_rpow_two b,
-      ← ENNReal.rpow_natCast ‖T x‖ₑ 2, ← ENNReal.rpow_natCast ‖x‖ₑ 2] at *
-    exact_mod_cast T.enorm_apply_sq_le_hilbertSchmidtEnergy_mul b x
-  have := ENNReal.rpow_le_rpow hx (by norm_num : (0 : ℝ) ≤ (2 : ℝ)⁻¹)
-  rwa [← ENNReal.rpow_mul, ← ENNReal.rpow_mul, mul_inv_cancel₀ (by norm_num : (2 : ℝ) ≠ 0),
-    ENNReal.rpow_one, ENNReal.rpow_one] at this
+      ENNReal.rpow_two, ENNReal.rpow_two]
+    exact T.enorm_apply_sq_le_hilbertSchmidtEnergy_mul b x
+  have h2 := ENNReal.rpow_le_rpow hbase (by norm_num : (0 : ℝ) ≤ (2 : ℝ)⁻¹)
+  rwa [← ENNReal.rpow_mul, ← ENNReal.rpow_mul,
+    mul_inv_cancel₀ (by norm_num : (2 : ℝ) ≠ 0), ENNReal.rpow_one, ENNReal.rpow_one] at h2
 
 /-- **Adjoint invariance.** -/
 theorem hilbertSchmidtENorm_adjoint (T : E →L[𝕜] F) :
@@ -193,19 +196,43 @@ theorem hilbertSchmidtENorm_adjoint (T : E →L[𝕜] F) :
 theorem hilbertSchmidtENorm_comp_left_le (A : F →L[𝕜] G) (T : E →L[𝕜] F) :
     (A ∘L T).hilbertSchmidtENorm ≤ ‖A‖ₑ * T.hilbertSchmidtENorm := by
   obtain ⟨w, b, -⟩ := exists_hilbertBasis 𝕜 E
-  rw [(A ∘L T).hilbertSchmidtENorm_eq b, T.hilbertSchmidtENorm_eq b,
-    ← ENNReal.rpow_natCast ‖A‖ₑ 2, ← ENNReal.rpow_mul, ← ENNReal.mul_rpow_of_nonneg _ _
-      (by norm_num : (0 : ℝ) ≤ (2 : ℝ)⁻¹)]
-  refine ENNReal.rpow_le_rpow ?_ (by norm_num)
-  simpa using hilbertSchmidtEnergy_comp_left_le A T b
+  have hsplit : ‖A‖ₑ * (T.hilbertSchmidtEnergy b) ^ (2 : ℝ)⁻¹
+      = (‖A‖ₑ ^ 2 * T.hilbertSchmidtEnergy b) ^ (2 : ℝ)⁻¹ := by
+    rw [ENNReal.mul_rpow_of_nonneg _ _ (by norm_num), ← ENNReal.rpow_two, ← ENNReal.rpow_mul,
+      mul_inv_cancel₀ (by norm_num : (2 : ℝ) ≠ 0), ENNReal.rpow_one]
+  rw [(A ∘L T).hilbertSchmidtENorm_eq b, T.hilbertSchmidtENorm_eq b, hsplit]
+  exact ENNReal.rpow_le_rpow (hilbertSchmidtEnergy_comp_left_le A T b) (by norm_num)
 
 /-- Precomposition contracts the Hilbert--Schmidt norm. -/
 theorem hilbertSchmidtENorm_comp_right_le (T : F →L[𝕜] G) (B : E →L[𝕜] F) :
     (T ∘L B).hilbertSchmidtENorm ≤ T.hilbertSchmidtENorm * ‖B‖ₑ := by
-  have h := T.adjoint.hilbertSchmidtENorm_comp_left_le B.adjoint
+  have h := ContinuousLinearMap.hilbertSchmidtENorm_comp_left_le B.adjoint T.adjoint
   rw [← ContinuousLinearMap.adjoint_comp, hilbertSchmidtENorm_adjoint,
     hilbertSchmidtENorm_adjoint, B.enorm_adjoint] at h
   rwa [mul_comm]
+
+/-- `T` is a **Hilbert--Schmidt operator** when its Hilbert--Schmidt norm is finite.
+
+The predicate is stated through the `ℝ≥0∞`-valued norm rather than through a summability
+hypothesis so that it carries no choice of basis; `isHilbertSchmidt_iff_summable` recovers
+the concrete form. -/
+def IsHilbertSchmidt (T : E →L[𝕜] F) : Prop := T.hilbertSchmidtENorm ≠ ∞
+
+theorem isHilbertSchmidt_iff_energy_ne_top (T : E →L[𝕜] F) (b : HilbertBasis ι 𝕜 E) :
+    T.IsHilbertSchmidt ↔ T.hilbertSchmidtEnergy b ≠ ∞ := by
+  rw [IsHilbertSchmidt, T.hilbertSchmidtENorm_eq b, Ne, Ne,
+    ENNReal.rpow_eq_top_iff_of_pos (by norm_num)]
+
+/-- Concretely, `T` is Hilbert--Schmidt exactly when the squared column norms are
+summable in any — equivalently, some — Hilbert basis. -/
+theorem isHilbertSchmidt_iff_summable (T : E →L[𝕜] F) (b : HilbertBasis ι 𝕜 E) :
+    T.IsHilbertSchmidt ↔ Summable fun i => ‖T (b i)‖ ^ 2 := by
+  rw [T.isHilbertSchmidt_iff_energy_ne_top b, hilbertSchmidtEnergy]
+  have hcoe : ∀ i, ‖T (b i)‖ₑ ^ 2 = ((‖T (b i)‖₊ ^ 2 : ℝ≥0) : ℝ≥0∞) := fun i => by
+    simp [enorm_eq_nnnorm]
+  simp only [hcoe]
+  rw [ENNReal.tsum_coe_ne_top_iff_summable, ← NNReal.summable_coe]
+  simp
 
 /-- **The two-sided ideal bound.** -/
 theorem hilbertSchmidtENorm_comp_le (L : F →L[𝕜] G) (T : E →L[𝕜] F) (R : H →L[𝕜] E) :
@@ -234,6 +261,12 @@ noncomputable def hilbertSchmidtIdealFamily (𝕜 : Type u) [RCLike 𝕜] :
   enorm_le_gauge A := A.enorm_le_hilbertSchmidtENorm
   gauge_comp_le L A R := ContinuousLinearMap.hilbertSchmidtENorm_comp_le L A R
   gauge_adjoint A := A.hilbertSchmidtENorm_adjoint
+
+theorem mem_hilbertSchmidtIdealFamily_carrier_iff {𝕜 : Type u} [RCLike 𝕜] {E F : Type v}
+    [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+    [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F] (A : E →L[𝕜] F) :
+    A ∈ (hilbertSchmidtIdealFamily.{u, v} 𝕜).toOperatorIdealFamily.carrier ↔
+      A.IsHilbertSchmidt := Iff.rfl
 
 @[simp] theorem hilbertSchmidtIdealFamily_gauge {𝕜 : Type u} [RCLike 𝕜] {E F : Type v}
     [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
