@@ -60,7 +60,12 @@ subspace gives `polarPartial`.
   closure of `range M` — the **final** space;
 * `ContinuousLinearMap.isSelfAdjoint_polarPartial_comp_adjoint` and
   `ContinuousLinearMap.isIdempotentElem_polarPartial_comp_adjoint`: `W W⋆` is the
-  orthogonal projection onto it.
+  orthogonal projection onto it;
+* `ContinuousLinearMap.adjoint_polarPartial_comp_self`: the initial-space identity
+  `W⋆ M = |M|`;
+* `ContinuousLinearMap.modulus_adjoint`: `|M⋆| = W |M| W⋆`, and
+  `ContinuousLinearMap.modulus_adjoint_comp_polarPartial`: the second polar identity
+  `M = |M⋆| W`.
 
 ## Relation to the rest of the library
 
@@ -413,5 +418,85 @@ theorem range_polarPartial (M : E →L[ℂ] F) :
       exact ⟨M.modulus x, M.polarPartial_apply_modulus x⟩
     · rw [LinearMap.coe_range]
       exact M.isClosed_range_polarPartial
+
+/-- **The initial-space identity `W⋆ M = |M|`.**
+
+`W⋆ M = W⋆ W |M| = P |M| = |M|`, because the range of `|M|` already lies in the initial
+space, where `W⋆ W` is the identity.  This is the identity behind the trace-norm duality
+`tr (W⋆ M) = tr |M|`. -/
+theorem adjoint_polarPartial_comp_self (M : E →L[ℂ] F) :
+    M.polarPartial.adjoint ∘L M = M.modulus := by
+  ext x
+  have hstep : M.polarPartial.adjoint (M x)
+      = M.polarPartial.adjoint (M.polarPartial (M.modulus x)) := by
+    rw [M.polarPartial_apply_modulus]
+  simpa [hstep] using
+    M.adjoint_polarPartial_polarPartial_apply_of_mem (M.modulus_apply_mem_polarInitial x)
+
+/-- `|M|` vanishes off the initial space, so projecting first changes nothing. -/
+theorem modulus_comp_starProjection (M : E →L[ℂ] F) :
+    M.modulus ∘L M.polarInitial.starProjection = M.modulus := by
+  ext x
+  obtain ⟨p, hp, q, hq, rfl⟩ := Submodule.exists_add_mem_mem_orthogonal (K := M.polarInitial) x
+  have hqker : M.modulus q = 0 := by
+    have hq' : q ∈ LinearMap.ker M.toLinearMap := by
+      rw [← M.polarInitial_orthogonal_eq_ker]; exact hq
+    exact (M.modulus_apply_eq_zero_iff q).mpr hq'
+  have hqz : M.polarInitial.starProjection q = 0 := by
+    have hmem : q ∈ (M.polarInitial.starProjection).ker := by
+      rw [Submodule.ker_starProjection]; exact hq
+    exact hmem
+  simp only [ContinuousLinearMap.comp_apply, map_add, hqz, add_zero,
+    Submodule.starProjection_eq_self_iff.mpr hp, hqker, map_zero]
+
+/-- The adjoint form of the polar identity: `M⋆ = |M| W⋆`. -/
+theorem adjoint_eq_modulus_comp_adjoint_polarPartial (M : E →L[ℂ] F) :
+    M.adjoint = M.modulus ∘L M.polarPartial.adjoint := by
+  have h := congrArg ContinuousLinearMap.adjoint M.polarPartial_comp_modulus
+  rw [ContinuousLinearMap.adjoint_comp, M.modulus_isSelfAdjoint.adjoint_eq] at h
+  exact h.symm
+
+/-- **The modulus of the adjoint**: `|M⋆| = W |M| W⋆`.
+
+This is the other half of the polar decomposition — alongside `M = W |M|` it gives
+`M = |M⋆| W` — and it identifies the final space as the initial space of `M⋆`.  The proof
+is uniqueness of the positive square root: `W |M| W⋆` is positive, and both it squared and
+`M M⋆` reduce to `W (M⋆ M) W⋆`. -/
+theorem modulus_adjoint (M : E →L[ℂ] F) :
+    M.adjoint.modulus = M.polarPartial ∘L M.modulus ∘L M.polarPartial.adjoint := by
+  refine (eq_modulus_of_nonneg_of_mul_self_eq ?_ ?_).symm
+  · rw [ContinuousLinearMap.nonneg_iff_isPositive]
+    exact ((ContinuousLinearMap.nonneg_iff_isPositive _).mp M.modulus_nonneg).conj_adjoint
+      M.polarPartial
+  · have hP : ∀ y : E, M.polarPartial.adjoint (M.polarPartial y)
+        = M.polarInitial.starProjection y := by
+      intro y
+      rw [← ContinuousLinearMap.comp_apply, M.adjoint_comp_polarPartial]
+    have hS : ∀ z : E, M.modulus (M.polarInitial.starProjection z) = M.modulus z := by
+      intro z
+      rw [← ContinuousLinearMap.comp_apply, M.modulus_comp_starProjection]
+    have hMadj : ∀ y : F, M.adjoint y = M.modulus (M.polarPartial.adjoint y) := by
+      intro y
+      rw [M.adjoint_eq_modulus_comp_adjoint_polarPartial, ContinuousLinearMap.comp_apply]
+    have hM : ∀ z : E, M z = M.polarPartial (M.modulus z) := by
+      intro z
+      rw [M.polarPartial_apply_modulus]
+    change (M.polarPartial ∘L M.modulus ∘L M.polarPartial.adjoint) ∘L
+      (M.polarPartial ∘L M.modulus ∘L M.polarPartial.adjoint) = _
+    rw [ContinuousLinearMap.adjoint_adjoint]
+    ext x
+    simp only [ContinuousLinearMap.comp_apply]
+    rw [hP, hS, hMadj, hM]
+
+/-- The second polar identity, `M = |M⋆| W`. -/
+theorem modulus_adjoint_comp_polarPartial (M : E →L[ℂ] F) :
+    M.adjoint.modulus ∘L M.polarPartial = M := by
+  rw [M.modulus_adjoint]
+  calc (M.polarPartial ∘L M.modulus ∘L M.polarPartial.adjoint) ∘L M.polarPartial
+      = M.polarPartial ∘L M.modulus ∘L (M.polarPartial.adjoint ∘L M.polarPartial) := by
+        simp only [ContinuousLinearMap.comp_assoc]
+    _ = M.polarPartial ∘L M.modulus := by
+        rw [M.adjoint_comp_polarPartial, M.modulus_comp_starProjection]
+    _ = M := M.polarPartial_comp_modulus
 
 end ContinuousLinearMap
