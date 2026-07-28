@@ -156,7 +156,8 @@ forbidden-import-refusing).
 
 The cluster covers `Analysis/OperatorIdeal/ApproximationNumber/**` (the
 `s`-number layer) and `Analysis/OperatorIdeal/Family/**` (the canonical
-symmetric operator ideal family, roadmap decision 7). The `Family/` modules were
+symmetric operator ideal family; roadmap area
+`ForTauCetiRoadmap/SymmetricOperatorIdeals/`). The `Family/` modules were
 absent from the manifest until 2026-07-28, which put them outside both the
 dependency-closure check and `export_for_tauceti.py`; if you add a module here,
 add it to `staging_modules` in the same commit.
