@@ -347,7 +347,7 @@ theorem re_sum_inner_map_le_sum_singularValues {A : E →ₗ[𝕜] E} {k : ℕ}
     (hk : k ≤ finrank 𝕜 E) {u v : Fin k → E}
     (hu : Orthonormal 𝕜 u) (hv : Orthonormal 𝕜 v) :
     RCLike.re (∑ i, ⟪u i, A (v i)⟫_𝕜) ≤ ∑ i : Fin k, A.singularValues (i : ℕ) := by
-  set W := polarUnitary A with hW
+  set W := choosePolarUnitary A with hW
   set R := (isPositive_abs A).sqrt with hR
   have hRsymm : R.IsSymmetric := (isPositive_abs A).sqrt_isPositive.isSymmetric
   have hRR : R ∘ₗ R = abs A := (isPositive_abs A).sqrt_mul_self
@@ -355,7 +355,7 @@ theorem re_sum_inner_map_le_sum_singularValues {A : E →ₗ[𝕜] E} {k : ℕ}
   have hterm : ∀ i, ⟪u i, A (v i)⟫_𝕜 = ⟪R (W.symm (u i)), R (v i)⟫_𝕜 := by
     intro i
     have h1 : A (v i) = W (abs A (v i)) := by
-      have h := LinearMap.congr_fun (polar_decomposition_unitary A) (v i)
+      have h := LinearMap.congr_fun (polar_decomposition_choosePolarUnitary A) (v i)
       rw [LinearMap.comp_apply] at h
       exact h.trans rfl
     calc ⟪u i, A (v i)⟫_𝕜 = ⟪W (W.symm (u i)), W (abs A (v i))⟫_𝕜 := by
@@ -409,19 +409,19 @@ theorem exists_orthonormal_re_sum_inner_map_eq (A : E →ₗ[𝕜] E) {k : ℕ}
   set b := A.isSymmetric_adjoint_comp_self.eigenvectorBasis rfl with hb
   set v : Fin k → E := fun i => b (Fin.castLE hk i) with hv
   have hvon : Orthonormal 𝕜 v := b.orthonormal.comp _ (Fin.castLE_injective hk)
-  set u : Fin k → E := fun i => polarUnitary A (v i) with hu
+  set u : Fin k → E := fun i => choosePolarUnitary A (v i) with hu
   have huon : Orthonormal 𝕜 u := by
     rw [orthonormal_iff_ite] at hvon ⊢
     intro i j
     rw [hu]
     simp only
-    rw [(polarUnitary A).inner_map_map]
+    rw [(choosePolarUnitary A).inner_map_map]
     exact hvon i j
   refine ⟨u, v, huon, hvon, ?_⟩
   have hterm : ∀ i, ⟪u i, A (v i)⟫_𝕜 = ((A.singularValues (i : ℕ) : ℝ) : 𝕜) := by
     intro i
-    have h1 : A (v i) = polarUnitary A (abs A (v i)) := by
-      have h := LinearMap.congr_fun (polar_decomposition_unitary A) (v i)
+    have h1 : A (v i) = choosePolarUnitary A (abs A (v i)) := by
+      have h := LinearMap.congr_fun (polar_decomposition_choosePolarUnitary A) (v i)
       rw [LinearMap.comp_apply] at h
       exact h.trans rfl
     have h2 : abs A (v i) = ((A.singularValues (i : ℕ) : ℝ) : 𝕜) • v i := by
@@ -433,7 +433,7 @@ theorem exists_orthonormal_re_sum_inner_map_eq (A : E →ₗ[𝕜] E) {k : ℕ}
       rfl
     rw [hu]
     simp only
-    rw [h1, (polarUnitary A).inner_map_map, h2, inner_smul_right,
+    rw [h1, (choosePolarUnitary A).inner_map_map, h2, inner_smul_right,
       inner_self_eq_norm_sq_to_K, hvon.1 i, RCLike.ofReal_one, one_pow, mul_one]
   rw [Finset.sum_congr rfl fun i _ => hterm i]
   rw [show (∑ i : Fin k, ((A.singularValues (i : ℕ) : ℝ) : 𝕜))
