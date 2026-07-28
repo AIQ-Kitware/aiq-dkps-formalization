@@ -150,17 +150,39 @@ forbidden-import-refusing).
 
 ## Current contents
 
-| Cluster | Status | Roadmap target |
+| Cluster | Modules | Status |
 | --- | --- | --- |
-| `approximation-number` | staged, building | Part B (Approximation numbers & rectangular symmetric ideals) — PR 1 |
+| `approximation-number` | 12 | staged-needs-current-validation |
+| `cstar-gap-inverse` | 1 | staged-unreviewed |
+| `fourier-haagerup-zsido` | 8 | staged-unreviewed |
+| `hoffman-wielandt` | 4 | staged-unreviewed |
+| `linear-pmap-sylvester` | 2 | staged-unreviewed |
+| `matrix-spectral` | 7 | staged-unreviewed |
+| `measure-theory-helpers` | 4 | staged-unreviewed |
+| `operator-polar-decomposition` | 14 | staged-unreviewed |
+| `orthogonal-series` | 1 | staged-unreviewed |
+| `principal-angles` | 6 | staged-unreviewed |
+| `probability-concentration` | 11 | staged-unreviewed |
+| `unitarily-invariant-norm` | 27 | staged-unreviewed |
 
-The cluster covers `Analysis/OperatorIdeal/ApproximationNumber/**` (the
-`s`-number layer) and `Analysis/OperatorIdeal/Family/**` (the canonical
-symmetric operator ideal family; roadmap area
-`ForTauCetiRoadmap/SymmetricOperatorIdeals/`). The `Family/` modules were
-absent from the manifest until 2026-07-28, which put them outside both the
-dependency-closure check and `export_for_tauceti.py`; if you add a module here,
-add it to `staging_modules` in the same commit.
+All **71** staged modules on disk are declared (the column sums to 97 because
+clusters overlap on shared prerequisites). A cluster's module list is the
+**import closure** of its roots, so exporting one yields a self-contained Tau Ceti
+subtree; clusters therefore overlap on shared prerequisites, which is intended.
+
+### Upstream gate
+
+`lean_lib ForTauCeti` mirrors the `leanOptions` of Tau Ceti's own `lean_lib`
+(`external/TauCeti/lakefile.toml`): `mathlibStandardSet`, a 1500-line ceiling, and
+`warningAsError`. That is deliberate. Before 2026-07-28 this library carried no
+`leanOptions` at all, so "`lake build ForTauCeti` is warning-free" was measured against
+a strictly weaker linter set than the one that gates the PR — the census under upstream's
+options was **78**, against 0 under ours. Do not remove these options to make a build
+pass; a warning here is a warning Tau Ceti's CI would reject.
+
+Current state against that gate: **0 warnings**, every module under the 1000-line
+new-file guard, every module carrying an Apache-2.0 header and a `## Provenance`
+section, and `scripts/export_for_tauceti.py --check` green for all clusters.
 
 See `dev/tauceti/extraction-manifest.json` for the per-module record and
 `dev/tauceti/extraction-cluster-classification.md` for the full Tier 1–3 queue.
