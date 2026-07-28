@@ -34,7 +34,7 @@ variable {E1 : Type*} [NormedAddCommGroup E1] [InnerProductSpace 𝕜 E1]
 canonical partial-map representation.  Density, closedness, and
 self-adjointness are explicit properties rather than fields of an operator
 bundle. -/
-structure UnboundedBlockDataPMap where
+structure UnboundedBlockData where
   A0 : E0 →ₗ.[𝕜] E0
   A1 : E1 →ₗ.[𝕜] E1
   B01 : E1 →L[𝕜] E0
@@ -47,12 +47,12 @@ structure UnboundedBlockDataPMap where
   selfAdjoint1 : _root_.IsSelfAdjoint A1
   offDiagonalAdjoint : ∀ x y, ⟪B01 y, x⟫_𝕜 = ⟪y, B10 x⟫_𝕜
 
-namespace UnboundedBlockDataPMap
+namespace UnboundedBlockData
 
 /-- The first diagonal block is symmetric on its operator domain.  This is the
 form the Riccati estimates consume; self-adjointness is the stronger field. -/
 theorem isSymmetric0
-    (H : UnboundedBlockDataPMap (𝕜 := 𝕜) (E0 := E0) (E1 := E1)) :
+    (H : UnboundedBlockData (𝕜 := 𝕜) (E0 := E0) (E1 := E1)) :
     TauCeti.LinearPMap.IsSymmetric H.A0 := by
   have hformal := LinearPMap.adjoint_isFormalAdjoint (T := H.A0) H.dense0
   rw [LinearPMap.isSelfAdjoint_def.mp H.selfAdjoint0] at hformal
@@ -61,26 +61,26 @@ theorem isSymmetric0
 
 /-- The second diagonal block is symmetric on its operator domain. -/
 theorem isSymmetric1
-    (H : UnboundedBlockDataPMap (𝕜 := 𝕜) (E0 := E0) (E1 := E1)) :
+    (H : UnboundedBlockData (𝕜 := 𝕜) (E0 := E0) (E1 := E1)) :
     TauCeti.LinearPMap.IsSymmetric H.A1 := by
   have hformal := LinearPMap.adjoint_isFormalAdjoint (T := H.A1) H.dense1
   rw [LinearPMap.isSelfAdjoint_def.mp H.selfAdjoint1] at hformal
   intro x y
   exact hformal x y
 
-end UnboundedBlockDataPMap
+end UnboundedBlockData
 
 /-- A bounded angular operator preserves the unbounded diagonal domains. -/
-def PreservesRiccatiPMapDomains
-    (H : UnboundedBlockDataPMap (𝕜 := 𝕜) (E0 := E0) (E1 := E1))
+def PreservesRiccatiDomains
+    (H : UnboundedBlockData (𝕜 := 𝕜) (E0 := E0) (E1 := E1))
     (X : E0 →L[𝕜] E1) : Prop :=
   ∀ x : H.A0.domain, X (x : E0) ∈ H.A1.domain
 
 /-- Strong Riccati solution, including the domain condition. -/
-def StrongSolvesRiccatiPMap
-    (H : UnboundedBlockDataPMap (𝕜 := 𝕜) (E0 := E0) (E1 := E1))
+def StrongSolvesRiccati
+    (H : UnboundedBlockData (𝕜 := 𝕜) (E0 := E0) (E1 := E1))
     (X : E0 →L[𝕜] E1) : Prop :=
-  ∃ hdom : PreservesRiccatiPMapDomains H X,
+  ∃ hdom : PreservesRiccatiDomains H X,
     ∀ x : H.A0.domain,
       H.A1 ⟨X (x : E0), hdom x⟩ -
         X (H.A0 x) -

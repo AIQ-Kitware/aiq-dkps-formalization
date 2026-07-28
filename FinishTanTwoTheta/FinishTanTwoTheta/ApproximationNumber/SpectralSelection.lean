@@ -5,7 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import FinishTanTwoTheta.GroundedImports
 import FinishTanTwoTheta.OperatorIdeal.StandardInstances
-import DavisKahan.Interop.Spectra.ApproximationNumberMinMax
+import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.MinMaxUpper
 import DavisKahan.OperatorIdeal.ApproximationNumbers.FiniteSourceSingularSystem
 import DavisKahan.Experimental.Scratch.Section7.InfiniteTanTwoThetaCore
 import Spectra.SpectralTheory.Essential.Discrete
@@ -185,8 +185,8 @@ theorem exists_gramSpectralBandModel
             ∀ x ∈ Submodule.span ℂ (Set.range v),
               s * ‖x‖ ≤ ‖X x‖ := by
       intro n _ r hr0 hr
-      exact exists_linearIndependent_lowerBound_of_lt_approximationNumber
-        X n hr0 hr
+      exact X.exists_linearIndependent_lowerBound_of_lt_approximationNumber
+        n hr0 hr
     -- The finite cluster recursion now has all of its mathematical inputs in
     -- scope.  Each recursive step uses `hthreshold` for multiplicity,
     -- `Module.le_rank_iff` to choose vectors in the band range,
