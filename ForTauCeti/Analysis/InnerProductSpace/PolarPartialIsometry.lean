@@ -325,4 +325,30 @@ theorem polarPartial_comp_adjoint_comp_polarPartial (M : E →L[ℂ] F) :
     M.polarPartial ∘L M.polarPartial.adjoint ∘L M.polarPartial = M.polarPartial := by
   rw [M.adjoint_comp_polarPartial, M.polarPartial_comp_starProjection]
 
+/-- The adjoint form of the partial-isometry identity, `W⋆ W W⋆ = W⋆`. -/
+theorem adjoint_comp_polarPartial_comp_adjoint (M : E →L[ℂ] F) :
+    M.polarPartial.adjoint ∘L M.polarPartial ∘L M.polarPartial.adjoint =
+      M.polarPartial.adjoint := by
+  have h := congrArg ContinuousLinearMap.adjoint M.polarPartial_comp_adjoint_comp_polarPartial
+  simpa [ContinuousLinearMap.adjoint_comp, ContinuousLinearMap.comp_assoc] using h
+
+/-- `W W⋆` is an orthogonal projection: idempotent and self-adjoint.  It is the projection
+onto the *final* space of the polar decomposition. -/
+theorem isSelfAdjoint_polarPartial_comp_adjoint (M : E →L[ℂ] F) :
+    IsSelfAdjoint (M.polarPartial ∘L M.polarPartial.adjoint) := by
+  rw [IsSelfAdjoint, ContinuousLinearMap.star_eq_adjoint, ContinuousLinearMap.adjoint_comp,
+    ContinuousLinearMap.adjoint_adjoint]
+
+theorem isIdempotentElem_polarPartial_comp_adjoint (M : E →L[ℂ] F) :
+    IsIdempotentElem (M.polarPartial ∘L M.polarPartial.adjoint) := by
+  have h := M.adjoint_comp_polarPartial_comp_adjoint
+  change (M.polarPartial ∘L M.polarPartial.adjoint) ∘L
+    (M.polarPartial ∘L M.polarPartial.adjoint) = _
+  calc (M.polarPartial ∘L M.polarPartial.adjoint) ∘L
+        (M.polarPartial ∘L M.polarPartial.adjoint)
+      = M.polarPartial ∘L (M.polarPartial.adjoint ∘L M.polarPartial ∘L
+          M.polarPartial.adjoint) := by
+        simp only [ContinuousLinearMap.comp_assoc]
+    _ = M.polarPartial ∘L M.polarPartial.adjoint := by rw [h]
+
 end ContinuousLinearMap
