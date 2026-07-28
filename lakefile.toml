@@ -67,9 +67,10 @@ globs = ["ForTauCeti.*"]
 # `external/TauCeti/lakefile.toml`), so that the staging library is measured against the
 # rules that will actually gate the PR rather than against this repository's laxer default.
 # Without these, "`lake build ForTauCeti` is warning-free" is true here and says nothing
-# about upstream. `warningAsError` is deliberately NOT enabled yet: turn it on once the
-# census below is zero, so it cannot regress.
-leanOptions = { weak.linter.mathlibStandardSet = true, weak.linter.style.longFile = 1500, weak.linter.style.longFileDefValue = 1500, weak.linter.style.header = false }
+# about upstream: the census under these options was 78 when the default set reported 0.
+# It is now 0, and `warningAsError` is on so it cannot silently regress -- a warning here
+# is a warning Tau Ceti's CI would reject.
+leanOptions = { warningAsError = true, weak.linter.mathlibStandardSet = true, weak.linter.style.longFile = 1500, weak.linter.style.longFileDefValue = 1500, weak.linter.style.header = false }
 
 [[lean_lib]]
 name = "DavisKahan"
