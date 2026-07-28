@@ -40,12 +40,27 @@ BASELINE_NAME = "spectra-vendor-authorship-baseline.json"
 
 
 def upstream_paths(repo: Path) -> set[str] | None:
+    """Every .lean path that has *ever* existed in the public Spectra repository.
+
+    Deliberately not `git ls-files` (which sees only the pinned commit): a file
+    absent from the pin might simply be newer or older upstream work that drifted
+    into the snapshot, and calling that "ours" would be a false accusation.
+    Scanning every commit on every ref turns "not at the pin" into the much
+    stronger "has never existed upstream", which is what the authorship claim in
+    `spectra-to-tauceti-port-ledger.md` actually rests on.
+    """
     ref = repo / "external" / "Spectra"
     if not (ref / ".git").exists():
         return None
-    out = subprocess.run(["git", "-C", str(ref), "ls-files"],
-                         capture_output=True, text=True, check=False).stdout
-    return {p for p in out.splitlines() if p.endswith(".lean")}
+    out = subprocess.run(
+        ["git", "-C", str(ref), "log", "--all", "--pretty=format:", "--name-only", "--diff-filter=A"],
+        capture_output=True, text=True, check=False).stdout
+    paths = {p.strip() for p in out.splitlines() if p.strip().endswith(".lean")}
+    # Include the pinned tree too, in case a path predates the earliest commit.
+    tracked = subprocess.run(["git", "-C", str(ref), "ls-files"],
+                             capture_output=True, text=True, check=False).stdout
+    paths |= {p for p in tracked.splitlines() if p.endswith(".lean")}
+    return paths
 
 
 def scan(repo: Path) -> list[dict]:
