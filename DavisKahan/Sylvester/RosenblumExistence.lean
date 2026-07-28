@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Claude Opus 5
 -/
 import DavisKahan.SpectralTheory.CircleRieszEndpoints
+import ForMathlib.Analysis.InnerProductSpace.SylvesterOperator
 
 /-!
 # Rosenblum's theorem: solving the Sylvester equation
@@ -367,6 +368,85 @@ theorem existsUnique_comp_sub_comp_eq (hr : 0 < radius)
   rw [← hY, rosenblumSolution_comp_sub_comp A B Y hr hA hB]
 
 end Main
+
+section BoundedInverse
+
+variable (A : E →L[ℂ] E) (B : F →L[ℂ] F) {center radius : ℝ}
+
+omit [CompleteSpace E] [CompleteSpace F] in
+@[simp]
+theorem rosenblumSolution_zero (center radius : ℝ) :
+    rosenblumSolution A B 0 center radius = 0 := by
+  simp [rosenblumSolution, rosenblumIntegrand, circleIntegral]
+
+/-- **The Sylvester operator is a linear homeomorphism under circle separation.**
+
+Bijectivity is exactly the pair of Rosenblum identities: `rosenblumSolution` is a
+right inverse by `comp_rosenblumSolution_sub_comp_eq` and a left inverse by
+`rosenblumSolution_comp_sub_comp`.  Boundedness of the inverse is then the open
+mapping theorem.
+
+This is the reason to bundle the Sylvester operator at all: injectivity, closed
+range and a bounded inverse are statements about an *operator*, and the
+consequence downstream users want — the reverse estimate
+`‖X‖ ≤ K * ‖A X - X B‖` of `norm_le_mul_norm_sylvesterOperator` — is not
+available from the pointwise `∃!` alone. -/
+noncomputable def sylvesterEquiv (hr : 0 < radius)
+    (hA : spectrum ℂ A ⊆ ball ((center : ℂ)) radius)
+    (hB : ∀ z : ℂ, z ∈ closedBall ((center : ℂ)) radius → z ∉ spectrum ℂ B) :
+    (F →L[ℂ] E) ≃L[ℂ] (F →L[ℂ] E) :=
+  ContinuousLinearEquiv.ofBijective (ContinuousLinearMap.sylvesterOperatorL A B)
+    (LinearMap.ker_eq_bot'.mpr fun X hX => by
+      have hX' : A ∘L X - X ∘L B = 0 := hX
+      have h := rosenblumSolution_comp_sub_comp A B X hr hA hB
+      rw [hX', rosenblumSolution_zero] at h
+      exact h.symm)
+    (LinearMap.range_eq_top.mpr fun C =>
+      ⟨rosenblumSolution A B C center radius,
+        comp_rosenblumSolution_sub_comp_eq A B C hr hA hB⟩)
+
+@[simp]
+theorem sylvesterEquiv_apply (hr : 0 < radius)
+    (hA : spectrum ℂ A ⊆ ball ((center : ℂ)) radius)
+    (hB : ∀ z : ℂ, z ∈ closedBall ((center : ℂ)) radius → z ∉ spectrum ℂ B)
+    (X : F →L[ℂ] E) :
+    sylvesterEquiv A B hr hA hB X = A ∘L X - X ∘L B :=
+  rfl
+
+/-- The inverse of the Sylvester operator *is* the Rosenblum contour integral. -/
+theorem sylvesterEquiv_symm_apply (hr : 0 < radius)
+    (hA : spectrum ℂ A ⊆ ball ((center : ℂ)) radius)
+    (hB : ∀ z : ℂ, z ∈ closedBall ((center : ℂ)) radius → z ∉ spectrum ℂ B)
+    (C : F →L[ℂ] E) :
+    (sylvesterEquiv A B hr hA hB).symm C = rosenblumSolution A B C center radius := by
+  refine (ContinuousLinearEquiv.symm_apply_eq _).mpr ?_
+  rw [sylvesterEquiv_apply]
+  exact (comp_rosenblumSolution_sub_comp_eq A B C hr hA hB).symm
+
+/-- **The Sylvester operator is bounded below.**  This is the estimate the
+Davis--Kahan gap bounds consume, and it is what the bundled form buys: the
+constant is uniform in `X`, which an `∃!` statement cannot express. -/
+theorem norm_le_mul_norm_sylvesterOperator (hr : 0 < radius)
+    (hA : spectrum ℂ A ⊆ ball ((center : ℂ)) radius)
+    (hB : ∀ z : ℂ, z ∈ closedBall ((center : ℂ)) radius → z ∉ spectrum ℂ B)
+    (X : F →L[ℂ] E) :
+    ‖X‖ ≤ ‖((sylvesterEquiv A B hr hA hB).symm : (F →L[ℂ] E) →L[ℂ] (F →L[ℂ] E))‖ *
+      ‖A ∘L X - X ∘L B‖ := by
+  have h := ((sylvesterEquiv A B hr hA hB).symm :
+    (F →L[ℂ] E) →L[ℂ] (F →L[ℂ] E)).le_opNorm (A ∘L X - X ∘L B)
+  rwa [ContinuousLinearEquiv.coe_coe, ← sylvesterEquiv_apply A B hr hA hB X,
+    ContinuousLinearEquiv.symm_apply_apply] at h
+
+/-- The uniform lower bound, packaged without naming the equivalence. -/
+theorem exists_norm_le_mul_norm_sylvesterOperator (hr : 0 < radius)
+    (hA : spectrum ℂ A ⊆ ball ((center : ℂ)) radius)
+    (hB : ∀ z : ℂ, z ∈ closedBall ((center : ℂ)) radius → z ∉ spectrum ℂ B) :
+    ∃ K : ℝ, 0 ≤ K ∧ ∀ X : F →L[ℂ] E, ‖X‖ ≤ K * ‖A ∘L X - X ∘L B‖ :=
+  ⟨‖((sylvesterEquiv A B hr hA hB).symm : (F →L[ℂ] E) →L[ℂ] (F →L[ℂ] E))‖,
+    ContinuousLinearMap.opNorm_nonneg _,
+    norm_le_mul_norm_sylvesterOperator A B hr hA hB⟩
+
+end BoundedInverse
 
 end Frontier
 end Experimental
