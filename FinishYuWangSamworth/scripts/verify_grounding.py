@@ -12,6 +12,8 @@ REQUIRED_FILES = [
     "ForTauCeti/Analysis/InnerProductSpace/SingularSubspace.lean",
     "DavisKahan/Sources/DavisKahan1970/Ideals/HilbertSchmidt.lean",
     "DavisKahan/Sources/DavisKahan1970/Ideals/HilbertSchmidtFrobenius.lean",
+    "FinishYuWangSamworth/FinishYuWangSamworth/Rectangular/FrobeniusGram.lean",
+    "FinishYuWangSamworth/FinishYuWangSamworth/Rectangular/Theorem4.lean",
 ]
 
 REQUIRED_DECLARATIONS = {
@@ -32,6 +34,12 @@ REQUIRED_DECLARATIONS = {
     "DavisKahan/Sources/DavisKahan1970/Ideals/HilbertSchmidtFrobenius.lean": [
         "theorem paperHilbertSchmidtNorm_eq_rectangularFrobenius",
         "theorem paperHilbertSchmidtNorm_eq_frobenius",
+    ],
+    "FinishYuWangSamworth/FinishYuWangSamworth/Rectangular/Theorem4.lean": [
+        "theorem yuWangSamworth_rightSingularSubspace_le",
+        "theorem yuWangSamworth_leftSingularSubspace_le",
+        "theorem yuWangSamworth_rightSingularAlignedBasis_le",
+        "theorem yuWangSamworth_leftSingularAlignedBasis_le",
     ],
 }
 
