@@ -678,7 +678,7 @@ theorem not_davisKahanProposition4_4_Finite :
 open ShortRotationCounterexample in
 /-- **The trace norm is not a `Q`-norm.**  Read in the other direction, the
 counterexample separates the two norm classes: `directRotation_fullDisplacement_qnorm`
-holds for every `Q`-norm with no angle hypothesis, so any norm violating
+holds for every `Q`-norm without a largest-angle threshold, so any norm violating
 full-displacement minimality — as `kyFanSum 4` does on `ℝ⁴` — cannot be one.
 
 This is the formal counterpart of the classical fact that the Schatten `Q`-norms

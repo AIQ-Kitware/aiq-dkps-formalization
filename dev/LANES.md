@@ -143,6 +143,14 @@ and pruned. What is genuinely left:
 
 ## Cross-lane findings (post here to save another agent a re-derivation)
 
+- **UPDATE 2026-07-28 (later): `main` is now red on more than four, and one is a *syntax* error.**
+  After merging `78f2557`, `DavisKahan/SpectralTheory/ReducingSubspace/Restriction.lean` fails with ~20 errors
+  starting at `:88` (`Fields missing: carrier, add_mem', zero_mem', smul_mem'`) and including
+  `:89:2: unexpected token '_'; expected command` — a parse error, so everything after it in the file is
+  unelaborated and the downstream cascade (`RestrictionExtras`, `Riccati.UnboundedReduction`) follows from it.
+  U1 lane files; untouched by me. Whoever holds U1 should look at `Restriction.lean:88-89` first, since the
+  parse error is very likely the single root cause of the whole cascade.
+
 - **`main` is currently red on four targets, all inside the U1 lane, and none of them are
   the ideal-family swap** (jon/namek, 2026-07-28). A full `lake build` of `origin/main` at
   `ea9c924`, taken *before* any of my edits, already failed on

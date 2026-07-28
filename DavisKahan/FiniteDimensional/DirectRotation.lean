@@ -167,10 +167,15 @@ theorem directRotation_minimizes_displacementSquare_uiNorm
       N (displacementSquare W.toLinearMap) :=
   directRotation_displacementSquare_uiNorm N U V hacute W hmap
 
-/-- Davis--Kahan Corollary 4.1: without any angle restriction, the
-direct rotation minimizes every unitarily invariant norm of the displacement
-restricted to the source subspace.  This is the sound replacement for the
-historical full-displacement `pi / 3` candidate. -/
+/-- Davis--Kahan Corollary 4.1: the direct rotation minimizes every unitarily
+invariant norm of the displacement restricted to the source subspace.
+
+This is the sound replacement for the historical full-displacement `pi / 3`
+candidate: what is dropped is the *largest-angle threshold*, not every angle
+condition.  `IsAcute` remains, and is not a weakening of the result — it is the
+hypothesis under which `directRotation U V hacute` exists at all
+(`IsAcute` says no principal angle is a quarter turn, in either direction; see
+`DavisKahan.FiniteDimensional.IsAcute`). -/
 theorem directRotation_minimizes_restrictedDisplacement_uiNorm
     (N : UnitarilyInvariantNorm 𝕜 E) (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
