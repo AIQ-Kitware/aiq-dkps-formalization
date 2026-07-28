@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import Spectra.QuantumMechanics.Channels.PolarDecomp
+import ForTauCeti.Analysis.InnerProductSpace.PolarPartialIsometry
 
 /-!
 # Spectra-backed bounded operator absolute value and polar factor
@@ -85,6 +86,67 @@ noncomputable def spectraPolarIsometry (T : H →L[ℂ] H) : H →L[ℂ] H :=
 theorem spectraPolar_decomposition (T : H →L[ℂ] H) :
     spectraPolarIsometry T ∘L spectraOperatorAbsoluteValue T = T :=
   Spectra.QuantumMechanics.Channels.polar_decomposition T
+
+/-! ## Bridge to the Spectra-free polar decomposition
+
+`ForTauCeti/Analysis/InnerProductSpace/PolarPartialIsometry.lean` develops the general
+bounded polar decomposition without Spectra, and more generally (rectangular rather than
+square).  These two lemmas identify it with the Spectra-backed one, so every result proved
+there transfers to this bridge by rewriting — and so the Spectra dependency here becomes a
+naming convenience rather than a mathematical one. -/
+
+/-- Spectra's `absOp` is our `modulus`: both are `CFC.sqrt` of the Gram operator. -/
+theorem spectra_absOp_eq_modulus (T : H →L[ℂ] H) :
+    Spectra.QuantumMechanics.Channels.absOp T = T.modulus := by
+  unfold Spectra.QuantumMechanics.Channels.absOp CFC.abs ContinuousLinearMap.modulus
+  congr 1
+
+@[simp]
+theorem spectraOperatorAbsoluteValue_eq_modulus (T : H →L[ℂ] H) :
+    spectraOperatorAbsoluteValue T = T.modulus :=
+  spectra_absOp_eq_modulus T
+
+/-- Spectra's initial space is ours. -/
+theorem spectra_polarRange_eq_polarInitial (T : H →L[ℂ] H) :
+    Spectra.QuantumMechanics.Channels.polarRange T = T.polarInitial := by
+  unfold Spectra.QuantumMechanics.Channels.polarRange ContinuousLinearMap.polarInitial
+  rw [spectra_absOp_eq_modulus]
+
+/-- **The Spectra-backed polar isometry is ours.**  Proved from the uniqueness
+characterisation: it factors `T` through the modulus and vanishes off the initial space. -/
+@[simp]
+theorem spectraPolarIsometry_eq_polarPartial (T : H →L[ℂ] H) :
+    spectraPolarIsometry T = T.polarPartial := by
+  refine T.eq_polarPartial_of_comp_modulus _ ?_ ?_
+  · rw [← spectraOperatorAbsoluteValue_eq_modulus, spectraPolar_decomposition]
+  · intro y hy
+    have hy' : y ∈ (Spectra.QuantumMechanics.Channels.polarRange T)ᗮ := by
+      rw [spectra_polarRange_eq_polarInitial]; exact hy
+    show Spectra.QuantumMechanics.Channels.polarIsometry T y = 0
+    unfold Spectra.QuantumMechanics.Channels.polarIsometry
+    rw [ContinuousLinearMap.comp_apply,
+      Submodule.orthogonalProjectionOnto_eq_zero_iff.mpr hy', map_zero]
+
+
+
+/-- **The adjoint of the polar isometry is the polar isometry of the adjoint**, for the
+Spectra-backed factor.  Immediate from the bridge and the ForTauCeti uniqueness theorem;
+the direct Spectra-side argument runs some 140 lines. -/
+theorem adjoint_spectraPolarIsometry (T : H →L[ℂ] H) :
+    (spectraPolarIsometry T).adjoint = spectraPolarIsometry T.adjoint := by
+  rw [spectraPolarIsometry_eq_polarPartial, spectraPolarIsometry_eq_polarPartial,
+    T.polarPartial_adjoint]
+
+/-- The final projection identity, transferred through the bridge. -/
+theorem spectraPolarIsometry_comp_adjoint (T : H →L[ℂ] H) :
+    spectraPolarIsometry T ∘L (spectraPolarIsometry T).adjoint = T.polarFinal.starProjection := by
+  rw [spectraPolarIsometry_eq_polarPartial, T.polarPartial_comp_adjoint]
+
+/-- The initial projection identity, transferred through the bridge. -/
+theorem adjoint_spectraPolarIsometry_comp (T : H →L[ℂ] H) :
+    (spectraPolarIsometry T).adjoint ∘L spectraPolarIsometry T
+      = T.polarInitial.starProjection := by
+  rw [spectraPolarIsometry_eq_polarPartial, T.adjoint_comp_polarPartial]
 
 end SpectraBridge
 end Experimental
