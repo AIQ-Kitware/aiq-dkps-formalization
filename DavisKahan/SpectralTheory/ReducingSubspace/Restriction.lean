@@ -35,20 +35,17 @@ noncomputable local instance completeSpaceOfHasOrthogonalProjection
 
 namespace ClosedOperator
 
-/-- A subspace is invariant under a closed operator on its operator domain. -/
-def InvariantSubspace
+/-- Compatibility facade for invariance under the canonical partial map. -/
+abbrev InvariantSubspace
     (A : ClosedOperator (𝕜 := 𝕜) (E := E))
     (U : Submodule 𝕜 E) : Prop :=
-  ∀ x : A.domain, (x : E) ∈ U → A.toLinearMap x ∈ U
+  TauCeti.LinearPMap.InvariantSubspace A.toLinearPMap U
 
-/-- A subspace reduces a closed operator when both orthogonal projections
-preserve the operator domain and both summands are invariant. -/
-def ReducesSubspace
+/-- Compatibility facade for reduction of the canonical partial map. -/
+abbrev ReducesSubspace
     (A : ClosedOperator (𝕜 := 𝕜) (E := E))
     (U : Submodule 𝕜 E) [U.HasOrthogonalProjection] : Prop :=
-  (∀ x : A.domain, U.starProjection (x : E) ∈ A.domain) ∧
-  (∀ x : A.domain, Uᗮ.starProjection (x : E) ∈ A.domain) ∧
-  A.InvariantSubspace U ∧ A.InvariantSubspace Uᗮ
+  TauCeti.LinearPMap.ReducesSubspace A.toLinearPMap U
 
 namespace ReducesSubspace
 
