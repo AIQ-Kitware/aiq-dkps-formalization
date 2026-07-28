@@ -51,7 +51,25 @@ sorry-free and building, and recorded in `dev/tauceti/extraction-manifest.json`:
 - `TauCeti.operatorNormFamily` — the first instance, with the isometry
   `Elem E F ≃ₗᵢ[𝕜] (E →L[𝕜] F)` and the resulting `IsComplete` instance.
 
-A second instance exists but is **parked downstream**, in
+A second instance landed on 2026-07-28 in
+`ForTauCeti/Analysis/OperatorIdeal/Family/HilbertSchmidt.lean`, over the energy
+staged in `ForTauCeti/Analysis/InnerProductSpace/HilbertSchmidtEnergy.lean`:
+
+- `ContinuousLinearMap.hilbertSchmidtEnergy b T = ∑' i, ‖T (b i)‖ₑ ^ 2`, with
+  Parseval in `ℝ≥0∞`, the rectangular adjoint swap, and basis independence;
+- `ContinuousLinearMap.hilbertSchmidtENorm`, its square root, with Minkowski at
+  `p = 2` (`ENNReal.tsum_sq_add_rpow_le`, itself a staged extension of Mathlib's
+  `Finset`-level `ENNReal.Lp_add_le` to `tsum`), domination of the operator
+  norm, adjoint invariance and the two-sided ideal bound;
+- `TauCeti.hilbertSchmidtIdealFamily` — a `SymmetricOperatorIdealFamily` whose
+  carrier is exactly `ContinuousLinearMap.IsHilbertSchmidt`.
+
+This is the instance that matters most for the interface: it is built from
+orthonormal expansions and shares no machinery with `operatorNormFamily`, so
+the two together are evidence that the structure is not shaped around a single
+example.
+
+A third instance exists but is **parked downstream**, in
 `DavisKahan/OperatorIdeal/ApproximationNumbers/ScalarGeneric.lean`:
 `kyFanSymmetricIdealFamily k hk`, the `ENNReal.ofReal` transport of
 `kyFanApproximationGauge k`, with a completeness instance proved from the
@@ -150,12 +168,23 @@ field.
    `SymmetricOperatorIdealFamily`, so that a family carries dominance as a
    property rather than as data.
 3. **S3 — Schatten instances.** `Φ_p(a) = (∑ aₙ^p)^{1/p}` and the Schatten
-   `p`-ideals as instances of S1; Hilbert--Schmidt (`p = 2`, with
-   `∑ aₙ² = ∑ ‖T eᵢ‖²` basis-independent) and trace class (`p = 1`) as named
-   examples with their defining identities. Reconcile with Mathlib's existing
-   `Schatten`/`HilbertSchmidt` rather than duplicating: the deliverable is the
-   *rectangular family* view and the equivalence to what Mathlib already has on
-   a single space.
+   `p`-ideals as instances of S1, with trace class (`p = 1`) as the named
+   example still missing.
+
+   Two corrections to the earlier text. First, **Mathlib has neither `Schatten`
+   nor a Hilbert--Schmidt theory** — searched 2026-07-28, there is no file
+   matching either name under `Mathlib/Analysis/` — so there is nothing to
+   reconcile with and no duplication risk; the whole layer is new mathematics
+   for the ecosystem. Second, **`p = 2` is done**, but by the *direct* route
+   rather than through S1: the Hilbert--Schmidt family above is built from
+   `∑' i, ‖T (b i)‖ₑ ^ 2` and the Fubini exchange, and never mentions
+   approximation numbers. That is deliberate — it needs no spectral theory, so
+   it does not wait on S1 — but it leaves an obligation: **prove
+   `∑' n, aₙ(T) ^ 2 = ∑' i, ‖T (b i)‖ₑ ^ 2`**, reconciling the singular-value
+   and orthonormal-expansion definitions. In the Davis--Kahan library that
+   identity is `paperHilbertSchmidtEnergy_eq_basisEnergy`, and its proof runs
+   through finite-dimensional Eckart--Young and monotone convergence; the
+   staged form is the S1-facing statement.
 4. **S4 — block sums and scalar transport.** The ideal gauge of an orthogonal
    block-diagonal sum in terms of the summands, and invariance of the theory
    under real ⇆ complex complexification, so the real-scalar ideal theory is a
@@ -169,7 +198,8 @@ field.
 2. **Ky Fan** — the finite gauges as an instance, once `approximationNumber` is
    upstream; this is the parked `kyFanSymmetricIdealFamily` moved into place.
 3. **S1 + S2** — symmetric gauges and dominance.
-4. **S3** — Schatten, Hilbert--Schmidt, trace class.
+4. **S3** — Schatten and trace class. Hilbert--Schmidt is already staged and
+   can ship with the family interface; the rest waits on S1.
 5. **S4** — block sums and transport.
 
 ## References
