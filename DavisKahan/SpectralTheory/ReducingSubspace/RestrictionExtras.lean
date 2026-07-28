@@ -29,15 +29,8 @@ namespace ReducesSubspace
 theorem orthogonal
     {A : ClosedOperator (𝕜 := 𝕜) (E := E)}
     {U : Submodule 𝕜 E} [U.HasOrthogonalProjection]
-    (h : A.ReducesSubspace U) : A.ReducesSubspace Uᗮ := by
-  refine ⟨h.orthogonalProjection_mem_domain, ?_,
-    h.orthogonal_invariant, ?_⟩
-  · intro x
-    simpa only [Submodule.orthogonal_orthogonal] using
-      h.projection_mem_domain x
-  · intro x hx
-    rw [Submodule.orthogonal_orthogonal] at hx ⊢
-    exact h.invariant x hx
+    (h : A.ReducesSubspace U) : A.ReducesSubspace Uᗮ :=
+  TauCeti.LinearPMap.ReducesSubspace.orthogonal h
 
 end ReducesSubspace
 

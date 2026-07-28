@@ -28,10 +28,10 @@ namespace ClosedOperator
 
 /-- Domain obtained by pulling an operator domain back through a continuous
 linear equivalence. -/
-def pullbackDomain
+abbrev pullbackDomain
     (A : ClosedOperator (𝕜 := 𝕜) (E := E)) (e : E ≃L[𝕜] E) :
     Submodule 𝕜 E :=
-  A.domain.comap e.toLinearMap
+  TauCeti.LinearPMap.pullbackDomain A.toLinearPMap e
 
 @[simp] theorem mem_pullbackDomain_iff
     (A : ClosedOperator (𝕜 := 𝕜) (E := E)) (e : E ≃L[𝕜] E)
@@ -41,16 +41,10 @@ def pullbackDomain
 
 /-- A vector in the pulled-back domain, transported to the original operator
  domain with its membership witness. -/
-def pullbackDomainToOriginal
+abbrev pullbackDomainToOriginal
     (A : ClosedOperator (𝕜 := 𝕜) (E := E)) (e : E ≃L[𝕜] E) :
-    pullbackDomain A e →ₗ[𝕜] A.domain where
-  toFun x := ⟨e (x : E), x.property⟩
-  map_add' x y := by
-    apply Subtype.ext
-    exact e.map_add (x : E) (y : E)
-  map_smul' c x := by
-    apply Subtype.ext
-    exact e.map_smul c (x : E)
+    pullbackDomain A e →ₗ[𝕜] A.domain :=
+  TauCeti.LinearPMap.pullbackDomainToOriginal A.toLinearPMap e
 
 @[simp] theorem pullbackDomainToOriginal_coe
     (A : ClosedOperator (𝕜 := 𝕜) (E := E)) (e : E ≃L[𝕜] E)
@@ -59,11 +53,10 @@ def pullbackDomainToOriginal
   rfl
 
 /-- Action of the pulled-back operator on its explicit transported domain. -/
-def pullbackLinearMap
+abbrev pullbackLinearMap
     (A : ClosedOperator (𝕜 := 𝕜) (E := E)) (e : E ≃L[𝕜] E) :
     pullbackDomain A e →ₗ[𝕜] E :=
-  e.symm.toLinearMap.comp
-    (A.toLinearMap.comp (pullbackDomainToOriginal A e))
+  TauCeti.LinearPMap.pullbackLinearMap A.toLinearPMap e
 
 @[simp] theorem pullbackLinearMap_apply
     (A : ClosedOperator (𝕜 := 𝕜) (E := E)) (e : E ≃L[𝕜] E)
@@ -74,54 +67,14 @@ def pullbackLinearMap
 
 private theorem pullbackDomain_dense
     (A : ClosedOperator (𝕜 := 𝕜) (E := E)) (e : E ≃L[𝕜] E) :
-    Dense ((pullbackDomain A e : Submodule 𝕜 E) : Set E) := by
-  have himage : Dense (e.symm '' (A.domain : Set E)) :=
-    (e.symm.toHomeomorph.isDenseEmbedding.dense_image).2 A.dense_domain
-  rw [show ((pullbackDomain A e : Submodule 𝕜 E) : Set E) =
-      e.symm '' (A.domain : Set E) by
-    ext x
-    constructor
-    · intro hx
-      exact ⟨e x, hx, e.symm_apply_apply x⟩
-    · rintro ⟨y, hy, rfl⟩
-      simpa using hy]
-  exact himage
+    Dense ((pullbackDomain A e : Submodule 𝕜 E) : Set E) :=
+  TauCeti.LinearPMap.pullback_dense A.toLinearPMap e A.toLinearPMap_dense
 
 private theorem pullbackLinearMap_closedGraph
     (A : ClosedOperator (𝕜 := 𝕜) (E := E)) (e : E ≃L[𝕜] E) :
     IsClosed (Set.range fun x : pullbackDomain A e =>
-      ((x : E), pullbackLinearMap A e x)) := by
-  let coords : E × E → E × E := fun p => (e p.1, e p.2)
-  have hcoords : Continuous coords := by
-    fun_prop
-  rw [show Set.range (fun x : pullbackDomain A e =>
-      ((x : E), pullbackLinearMap A e x)) =
-      coords ⁻¹' (Set.range fun x : A.domain =>
-        ((x : E), A.toLinearMap x)) by
-    ext p
-    constructor
-    · rintro ⟨x, rfl⟩
-      refine ⟨pullbackDomainToOriginal A e x, ?_⟩
-      apply Prod.ext
-      · rfl
-      · simp [coords]
-    · rintro ⟨x, hx⟩
-      have hfst : (x : E) = e p.1 := congrArg Prod.fst hx
-      have hsnd : A.toLinearMap x = e p.2 := congrArg Prod.snd hx
-      have hp1 : p.1 ∈ pullbackDomain A e := by
-        change e p.1 ∈ A.domain
-        rw [← hfst]
-        exact x.property
-      let z : pullbackDomain A e := ⟨p.1, hp1⟩
-      have hz : pullbackDomainToOriginal A e z = x := by
-        apply Subtype.ext
-        exact hfst.symm
-      refine ⟨z, Prod.ext rfl ?_⟩
-      apply e.injective
-      change e (pullbackLinearMap A e z) = e p.2
-      rw [pullbackLinearMap_apply, e.apply_symm_apply, hz]
-      exact hsnd]
-  exact A.closed_graph.preimage hcoords
+      ((x : E), pullbackLinearMap A e x)) :=
+  TauCeti.LinearPMap.pullback_closedGraph A.toLinearPMap e A.closed_graph
 
 /-- Pull a closed operator back through a continuous linear equivalence.  Its
  domain is exactly the inverse image of the original domain. -/
@@ -158,45 +111,8 @@ theorem pullback_unitaryEquivalent
     (he : IsUnitaryOperator e.toContinuousLinearMap) :
     ClosedOperator.UnitaryEquivalent
       (pullback A e) A e.toContinuousLinearMap
-        e.symm.toContinuousLinearMap := by
-  have hesymm : IsUnitaryOperator e.symm.toContinuousLinearMap := by
-    constructor
-    · intro y
-      have h := he.1 (e.symm y)
-      simpa using h.symm
-    · exact e.symm.surjective
-  have hleft : e.symm.toContinuousLinearMap ∘L e.toContinuousLinearMap =
-      ContinuousLinearMap.id 𝕜 E := by
-    apply ContinuousLinearMap.ext
-    intro x
-    simp
-  have hright : e.toContinuousLinearMap ∘L e.symm.toContinuousLinearMap =
-      ContinuousLinearMap.id 𝕜 E := by
-    apply ContinuousLinearMap.ext
-    intro x
-    simp
-  refine ⟨he, hesymm, hleft, hright, ?_⟩
-  let hWdom : ∀ x : (pullback A e).domain,
-      e (x : E) ∈ A.domain := fun x => x.property
-  refine ⟨hWdom, ?_⟩
-  let hWinvdom : ∀ y : A.domain,
-      e.symm (y : E) ∈ (pullback A e).domain := fun y => by
-        change e (e.symm (y : E)) ∈ A.domain
-        simpa using y.property
-  refine ⟨hWinvdom, ?_, ?_⟩
-  · intro x
-    change A.toLinearMap ⟨e (x : E), hWdom x⟩ =
-      e ((pullback A e).toLinearMap x)
-    rw [pullback_apply, e.apply_symm_apply]
-    rfl
-  · intro y
-    change (pullback A e).toLinearMap
-        ⟨e.symm (y : E), hWinvdom y⟩ =
-      e.symm (A.toLinearMap y)
-    rw [pullback_apply]
-    congr 2
-    apply Subtype.ext
-    simp
+        e.symm.toContinuousLinearMap :=
+  TauCeti.LinearPMap.pullback_unitaryEquivalent A.toLinearPMap e he
 
 end ClosedOperator
 

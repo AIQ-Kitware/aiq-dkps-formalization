@@ -105,9 +105,12 @@ Main contributions:
 
 - invariant and reducing subspaces for domain-aware operators (now canonical
   `TauCeti.LinearPMap` predicates, with historical bundle names as facades);
-- preservation of domains by orthogonal projections;
-- restricted domains, restricted actions, and projection back into the
-  restricted domain;
+- preservation of domains by orthogonal projections, density, and graph
+  closedness, plus the adjoint-domain and symmetry transport (now raw
+  `TauCeti.LinearPMap` lemmas), and self-adjointness of the restriction;
+- restricted domains, restricted actions, projection back into the restricted
+  domain, and the resulting raw partial map (all now canonical
+  `TauCeti.LinearPMap` declarations);
 - self-adjointness and spectral localization of restrictions.
 
 Tau Ceti value: general spectral-subspace machinery for unbounded operators.

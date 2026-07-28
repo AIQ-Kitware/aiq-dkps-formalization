@@ -90,19 +90,11 @@ noncomputable instance unboundedBlockGraph_hasOrthogonalProjection
 
 /-- Two closed operators on the same Hilbert space are unitarily equivalent
 with explicit transport of domains and operator actions. -/
-def ClosedOperator.UnitaryEquivalent
+abbrev ClosedOperator.UnitaryEquivalent
     {G : Type*} [NormedAddCommGroup G] [InnerProductSpace 𝕜 G] [CompleteSpace G]
     (A B : ClosedOperator (𝕜 := 𝕜) (E := G))
     (W Winv : G →L[𝕜] G) : Prop :=
-  IsUnitaryOperator W ∧ IsUnitaryOperator Winv ∧
-  Winv ∘L W = ContinuousLinearMap.id 𝕜 G ∧
-  W ∘L Winv = ContinuousLinearMap.id 𝕜 G ∧
-  ∃ hWdom : ∀ x : A.domain, W (x : G) ∈ B.domain,
-  ∃ hWinvdom : ∀ y : B.domain, Winv (y : G) ∈ A.domain,
-    (∀ x : A.domain,
-      B.toLinearMap ⟨W (x : G), hWdom x⟩ = W (A.toLinearMap x)) ∧
-    (∀ y : B.domain,
-      A.toLinearMap ⟨Winv (y : G), hWinvdom y⟩ = Winv (B.toLinearMap y))
+  TauCeti.LinearPMap.UnitaryEquivalent A.toLinearPMap B.toLinearPMap W Winv
 
 end DavisKahanExt
 end TauCeti
