@@ -392,6 +392,58 @@ def Extends (A B : E →ₗ.[𝕜] E) : Prop :=
       hactBC ⟨(x : E), hdomAB x.property⟩
     _ = A x := hactAB x
 
+/-- Domain obtained by pulling a partial-map domain back through a continuous
+linear equivalence. -/
+def pullbackDomain (A : E →ₗ.[𝕜] E) (e : E ≃L[𝕜] E) : Submodule 𝕜 E :=
+  A.domain.comap e.toLinearMap
+
+@[simp] theorem mem_pullbackDomain_iff
+    (A : E →ₗ.[𝕜] E) (e : E ≃L[𝕜] E) (x : E) :
+    x ∈ pullbackDomain A e ↔ e x ∈ A.domain :=
+  Iff.rfl
+
+/-- A vector in a pulled-back domain, transported to the original domain. -/
+def pullbackDomainToOriginal
+    (A : E →ₗ.[𝕜] E) (e : E ≃L[𝕜] E) :
+    pullbackDomain A e →ₗ[𝕜] A.domain where
+  toFun x := ⟨e (x : E), x.property⟩
+  map_add' x y := by
+    apply Subtype.ext
+    exact e.map_add (x : E) (y : E)
+  map_smul' c x := by
+    apply Subtype.ext
+    exact e.map_smul c (x : E)
+
+@[simp] theorem pullbackDomainToOriginal_coe
+    (A : E →ₗ.[𝕜] E) (e : E ≃L[𝕜] E)
+    (x : pullbackDomain A e) :
+    ((pullbackDomainToOriginal A e x : A.domain) : E) = e (x : E) :=
+  rfl
+
+/-- Action of the partial map pulled back through a continuous linear
+equivalence. -/
+def pullbackLinearMap (A : E →ₗ.[𝕜] E) (e : E ≃L[𝕜] E) :
+    pullbackDomain A e →ₗ[𝕜] E :=
+  e.symm.toLinearMap.comp (A.toFun.comp (pullbackDomainToOriginal A e))
+
+@[simp] theorem pullbackLinearMap_apply
+    (A : E →ₗ.[𝕜] E) (e : E ≃L[𝕜] E)
+    (x : pullbackDomain A e) :
+    pullbackLinearMap A e x =
+      e.symm (A (pullbackDomainToOriginal A e x)) :=
+  rfl
+
+/-- Pull a partial map back through a continuous linear equivalence.  Density
+and graph closedness are separate properties of the resulting partial map. -/
+noncomputable def pullback (A : E →ₗ.[𝕜] E) (e : E ≃L[𝕜] E) : E →ₗ.[𝕜] E where
+  domain := pullbackDomain A e
+  toFun := pullbackLinearMap A e
+
+@[simp] theorem pullback_domain
+    (A : E →ₗ.[𝕜] E) (e : E ≃L[𝕜] E) :
+    (pullback A e).domain = pullbackDomain A e :=
+  rfl
+
 /-- A partial linear map is symmetric on its operator domain. -/
 def IsSymmetric (A : E →ₗ.[𝕜] E) : Prop :=
   ∀ x y : A.domain, ⟪A x, (y : E)⟫_𝕜 = ⟪(x : E), A y⟫_𝕜

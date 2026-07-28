@@ -28,10 +28,10 @@ namespace ClosedOperator
 
 /-- Domain obtained by pulling an operator domain back through a continuous
 linear equivalence. -/
-def pullbackDomain
+abbrev pullbackDomain
     (A : ClosedOperator (𝕜 := 𝕜) (E := E)) (e : E ≃L[𝕜] E) :
     Submodule 𝕜 E :=
-  A.domain.comap e.toLinearMap
+  TauCeti.LinearPMap.pullbackDomain A.toLinearPMap e
 
 @[simp] theorem mem_pullbackDomain_iff
     (A : ClosedOperator (𝕜 := 𝕜) (E := E)) (e : E ≃L[𝕜] E)
@@ -41,16 +41,10 @@ def pullbackDomain
 
 /-- A vector in the pulled-back domain, transported to the original operator
  domain with its membership witness. -/
-def pullbackDomainToOriginal
+abbrev pullbackDomainToOriginal
     (A : ClosedOperator (𝕜 := 𝕜) (E := E)) (e : E ≃L[𝕜] E) :
-    pullbackDomain A e →ₗ[𝕜] A.domain where
-  toFun x := ⟨e (x : E), x.property⟩
-  map_add' x y := by
-    apply Subtype.ext
-    exact e.map_add (x : E) (y : E)
-  map_smul' c x := by
-    apply Subtype.ext
-    exact e.map_smul c (x : E)
+    pullbackDomain A e →ₗ[𝕜] A.domain :=
+  TauCeti.LinearPMap.pullbackDomainToOriginal A.toLinearPMap e
 
 @[simp] theorem pullbackDomainToOriginal_coe
     (A : ClosedOperator (𝕜 := 𝕜) (E := E)) (e : E ≃L[𝕜] E)
@@ -59,11 +53,10 @@ def pullbackDomainToOriginal
   rfl
 
 /-- Action of the pulled-back operator on its explicit transported domain. -/
-def pullbackLinearMap
+abbrev pullbackLinearMap
     (A : ClosedOperator (𝕜 := 𝕜) (E := E)) (e : E ≃L[𝕜] E) :
     pullbackDomain A e →ₗ[𝕜] E :=
-  e.symm.toLinearMap.comp
-    (A.toLinearMap.comp (pullbackDomainToOriginal A e))
+  TauCeti.LinearPMap.pullbackLinearMap A.toLinearPMap e
 
 @[simp] theorem pullbackLinearMap_apply
     (A : ClosedOperator (𝕜 := 𝕜) (E := E)) (e : E ≃L[𝕜] E)
