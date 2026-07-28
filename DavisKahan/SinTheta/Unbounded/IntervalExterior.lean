@@ -56,6 +56,20 @@ def GenuineUnboundedIntervalExteriorGapPMap
     ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
       lam ∉ Spectra.Resolvent.spectrum A)
 
+namespace GenuineUnboundedIntervalExteriorGap
+
+omit [CompleteSpace F] [CompleteSpace G] in
+/-- View a source-facing interval/exterior gap through its canonical partial
+maps. -/
+theorem toPMap
+    {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := F)}
+    {B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := G)}
+    {β α δ : ℝ} (h : GenuineUnboundedIntervalExteriorGap A B β α δ) :
+    GenuineUnboundedIntervalExteriorGapPMap A.toLinearPMap B.toLinearPMap β α δ := by
+  exact h
+
+end GenuineUnboundedIntervalExteriorGap
+
 /-- Generalized finite-interval unbounded sine-theta theorem at ideal-gauge
 scope, using genuine Spectra hypotheses and no ordered half-line dependency. -/
 theorem generalizedSinTheta_unbounded_of_genuineIntervalExteriorGap
