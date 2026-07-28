@@ -41,7 +41,7 @@ abbrev IsOffDiagonal (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
 abbrev IsOrthogonalProjection (P : E →L[𝕜] E) :=
   DavisKahan.Experimental.Foundation.IsOrthogonalProjection P
 abbrev IsUnitaryOperator (W : E →L[𝕜] E) :=
-  DavisKahan.Experimental.Foundation.IsUnitaryOperator W
+  TauCeti.LinearPMap.IsUnitaryOperator W
 abbrev IsOffDiagonalRelativeToProjection (P H : E →L[𝕜] E) :=
   DavisKahan.Experimental.Foundation.IsOffDiagonalRelativeToProjection P H
 abbrev InvariantFor (A : E →L[𝕜] E) (U : Submodule 𝕜 E) :=
