@@ -147,6 +147,35 @@ theorem generalizedSinTheta_unbounded_exact_of_genuineSpectrumGap
   rw [hAngle.2]
   exact hBlock.2
 
+/-- Raw partial-map exact directed-angle endpoint for the genuine all-gap
+Spectra boundary. -/
+theorem linearPMap_generalizedSinTheta_unbounded_exact_of_genuineSpectrumGap
+    (N : UnitaryInvariantIdealFamily (𝕜 := ℂ))
+    (D : UnboundedSinThetaDataPMap (𝕜 := ℂ) (E := E) (F := F) (G := G))
+    (F₀ : H →L[ℂ] E)
+    (hA : _root_.IsSelfAdjoint D.A)
+    (hA₀ : _root_.IsSelfAdjoint D.A₀)
+    (hΛ₁ : _root_.IsSelfAdjoint D.Λ₁)
+    (hdecomp : OrthogonalExactDecomposition F₀ D.F₁)
+    {δ ε : ℝ}
+    (hδ : 0 < δ) (hε : 0 < ε)
+    (hframe : LowerFrameBound D.X ε)
+    (hgap : GenuineUnboundedSylvesterGapPMap D.A₀ D.Λ₁ δ)
+    (hR : N.Mem D.residual) :
+    N.Mem
+        (directedSinThetaOperator D.X F₀ hframe hε) ∧
+      δ * ε * N.gauge
+          (directedSinThetaOperator D.X F₀ hframe hε)
+        ≤ N.gauge D.residual := by
+  have hBlock := linearPMap_generalizedSinTheta_unbounded_of_genuineSpectrumGap
+    N D hA hA₀ hΛ₁ hdecomp.isometry₁ hδ hε hframe hgap hR
+  have hAngle := sinThetaBlock_mem_and_gauge_eq_directedSinThetaOperator
+    N.toRectangularSymmetricIdealFamily D.X F₀ D.F₁ hframe hε hdecomp hBlock.1
+  refine ⟨hAngle.1, ?_⟩
+  simp only [KyFanDominantIdealFamily.gauge]
+  rw [hAngle.2]
+  exact hBlock.2
+
 /-- Exact isometric specialization of the genuine all-gap theorem. -/
 theorem sinTheta_unbounded_exact_of_genuineSpectrumGap
     (N : UnitaryInvariantIdealFamily (𝕜 := ℂ))
