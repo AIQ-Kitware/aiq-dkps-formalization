@@ -122,13 +122,19 @@ theorem exists_finiteRank_gaugeApproximation_of_kyFan_dominated
     -- number inequality and finite weak-majorization theorem reduce the tail
     -- estimate to the chosen approximation `R` of `B`.
     have hfiniteGauge := N.mul_gauge_le_of_all_mul_kyFan_le
+      (𝕜 := 𝕜) (E := E) (F := F)
+      (A := A) (B := B) (c := (1 : ℝ))
     have hadd := ContinuousLinearMap.approximationNumber_add_le
-    have hnear := ContinuousLinearMap.exists_rank_le_norm_sub_lt_approximationNumber_add
+      (𝕜 := 𝕜) (E := E) (F := F)
+    have hnear :=
+      ContinuousLinearMap.exists_rank_le_norm_sub_lt_approximationNumber_add
+        (𝕜 := 𝕜) (E := E) (F := F)
     have hfiniteMajorization := N.prefixGauge_le_of_all_kyFan_le
+      (𝕜 := 𝕜) (E := E) (F := F)
     aesop
   obtain ⟨n, S, hSrank, hSmem, hSsmall⟩ := htail
   refine ⟨S, ?_, hSmem, hSsmall⟩
-  exact hSrank.trans_lt (Cardinal.nat_lt_aleph0 (m + n))
+  exact hSrank.trans_lt (Cardinal.natCast_lt_aleph0 (n := m + n))
 
 /-- Fan dominance preserves the actual minimal finite-rank closure. -/
 theorem finiteRankApproximable_of_kyFan_dominated
@@ -161,10 +167,11 @@ theorem standard_fanDominance
       cases completion with
       | maximal =>
           change N.Mem A ∧ N.gauge A ≤ N.gauge B
-          exact N.mul_gauge_le_of_all_mul_kyFan_le
-            (c := 1) (by norm_num) hB (by
-              intro k
-              simpa using hAB k)
+          simpa only [one_mul] using
+            (N.mul_gauge_le_of_all_mul_kyFan_le
+              (c := 1) (by norm_num) hB (by
+                intro k
+                simpa using hAB k))
       | minimal =>
           change FiniteRankApproximable N A ∧ N.gauge A ≤ N.gauge B
           exact finiteRankApproximable_of_kyFan_dominated N hB hAB
