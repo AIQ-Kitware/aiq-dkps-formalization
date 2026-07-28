@@ -96,13 +96,15 @@ theorem finitePrefixSum_sequencePrefixVector
     FiniteVector.prefixSum k (sequencePrefixVector n x) =
       sequencePrefixSum k x := by
   unfold FiniteVector.prefixSum sequencePrefixSum sequencePrefixVector
-  have hfilter :
-      Finset.univ.filter (fun i : Fin n => (i : ℕ) < k) =
-        Finset.univ.map (Fin.castLEEmb n hk) := by
-    ext i
-    simp [Fin.castLEEmb, Fin.lt_iff_val_lt_val]
-  rw [hfilter, Finset.sum_map]
-  rfl
+  rw [show (∑ i ∈ Finset.univ.filter (fun i : Fin n => (i : ℕ) < k), x (i : ℕ)) =
+        ∑ i : Fin n, if (i : ℕ) < k then x (i : ℕ) else 0 from
+      Finset.sum_filter _ _,
+    Fin.sum_univ_eq_sum_range (fun i => if i < k then x i else 0) n,
+    ← Finset.sum_filter]
+  congr 1
+  ext i
+  simp only [Finset.mem_filter, Finset.mem_range]
+  omega
 
 /-- Every finite prefix of weakly submajorized sequences is weakly majorized
 in the existing finite-vector sense. -/
