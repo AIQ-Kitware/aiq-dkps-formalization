@@ -3,180 +3,146 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import FinishTanTwoTheta.OperatorIdeal.SchattenFanDominance
-import ForTauCeti.Analysis.OperatorIdeal.Family.OperatorNorm
+import FinishTanTwoTheta.GroundedImports
+import FinishTanTwoTheta.OperatorIdeal.StandardFanDominance
+import DavisKahan.Sources.DavisKahan1970.Ideals.UnitaryInvariantNormInstances
+import ForTauCeti.Analysis.Normed.FiniteLpGauge
 
 /-!
-# Standard symmetric-ideal instances
+# Standard coherent norming-function instances
 
-This file records the standard examples needed by Davis--Kahan and verifies
-that the maximal/minimal distinction is represented rather than erased.
-
-* maximal `ell-infinity`: every bounded operator with operator norm;
-* minimal `ell-infinity`: compact operators with operator norm;
-* fixed finite Ky Fan norm, in maximal and minimal forms;
-* Schatten, trace, and Hilbert--Schmidt are supplied by the preceding file.
+This file constructs the finite `ell^p` and `ell^infinity` coherent source
+norms from the existing proved finite symmetric gauges.  The generic Fan
+result then applies to both their maximal and minimal completions.
 -/
 
 namespace TauCeti
 namespace FinishTanTwoTheta
 
-open scoped ENNReal Topology
-open Filter
+open scoped BigOperators
+open DavisKahan.Experimental.ExactSinTheta
 
-universe u v
+noncomputable section
 
-/-- The coherent finite `ell-infinity` norming function. -/
-noncomputable def linftyNormingFunction : SymmetricNormingFunction where
-  finiteGauge := fun n => FiniteVector.linftySymmetricGauge (n := n)
-  zeroPad := by
-    intro n m x
-    exact FiniteVector.linftyGauge_zeroPadRight x
-  normalized := by simp [FiniteVector.linftySymmetricGauge,
-    FiniteVector.linftyGauge]
+/-- The two zero-padding implementations used by the existing finite-gauge and
+paper-norm layers agree. -/
+theorem paperZeroPad_eq_zeroPadRight {n : ℕ} (x : Fin n → ℝ) :
+    paperZeroPad x = FiniteVector.zeroPadRight (m := 1) x := by
+  funext i
+  refine Fin.lastCases ?_ (fun j => ?_) i
+  · simp [paperZeroPad, FiniteVector.zeroPadRight]
+  · simp [paperZeroPad, FiniteVector.zeroPadRight]
 
-/-- The maximal extension of finite `ell-infinity` gauges is the operator
-norm. -/
-theorem linfty_sequenceGauge_approximationNumbers_eq_enorm
-    {𝕜 : Type u} [RCLike 𝕜]
-    {E F : Type v}
-    [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
-    [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
-    (A : E →L[𝕜] F) :
-    linftyNormingFunction.sequenceGauge (approximationNumberSequence A) =
-      ‖A‖ₑ := by
-  rw [← ENNReal.ofReal_norm, ← A.approximationNumber_index_zero]
-  exact linfty_sequenceGauge_of_antitone_nonneg_eq_first
-    (approximationNumberSequence_antitone_nonneg A)
-
-/-- The minimal `ell-infinity` condition is exactly convergence of
-approximation numbers to zero, hence compactness on Hilbert spaces. -/
-theorem linfty_isMinimalSequence_iff_tendsto_approximationNumber_zero
-    {𝕜 : Type u} [RCLike 𝕜]
-    {E F : Type v}
-    [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
-    [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
-    (A : E →L[𝕜] F) :
-    linftyNormingFunction.IsMinimalSequence (approximationNumberSequence A) ↔
-      Tendsto (approximationNumberSequence A) atTop (𝓝 0) := by
-  unfold SymmetricNormingFunction.IsMinimalSequence
-  have htail : ∀ n, linftyNormingFunction.sequenceGauge
-      (SymmetricNormingFunction.sequenceTail n
-        (approximationNumberSequence A)) =
-      ENNReal.ofReal (A.approximationNumber n) := by
-    intro n
-    exact linfty_sequenceGauge_antitone_tail_eq_first
-      (approximationNumberSequence_antitone_nonneg A) n
-  simp_rw [htail]
-  exact ENNReal.tendsto_ofReal_zero_iff
-    (fun n => A.approximationNumber_nonneg n)
-
-/-- Maximal operator-norm family: all bounded operators. -/
-noncomputable def standardOperatorNormFamily
-    (𝕜 : Type u) [RCLike 𝕜] : StandardSymmetricIdealFamily.{u, v} 𝕜 where
-  toSymmetricOperatorIdealFamily := operatorNormFamily 𝕜
-  normingFunction := linftyNormingFunction
-  completion := SymmetricIdealCompletion.maximal
-  gauge_eq_standardSequenceGauge := by
-    intro E F _ _ _ _ _ A
-    change ‖A‖ₑ = linftyNormingFunction.sequenceGauge
-      (approximationNumberSequence A)
-    symm
-    exact linfty_sequenceGauge_approximationNumbers_eq_enorm A
-
-/-- Extended operator norm which is finite exactly when approximation numbers
-tend to zero. -/
-noncomputable def compactOperatorNormGauge
-    {𝕜 : Type u} [RCLike 𝕜]
-    {E F : Type v}
-    [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
-    [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
-    (A : E →L[𝕜] F) : ℝ≥0∞ :=
-  if Tendsto (approximationNumberSequence A) atTop (𝓝 0) then ‖A‖ₑ else ∞
-
-/-- Minimal operator-norm ideal: compact operators with the operator norm. -/
-noncomputable def compactOperatorNormFamily
-    (𝕜 : Type u) [RCLike 𝕜] : SymmetricOperatorIdealFamily.{u, v} 𝕜 :=
-  generatedSymmetricIdealFamily (𝕜 := 𝕜) linftyNormingFunction
-    SymmetricIdealCompletion.minimal
-
-/-- Compact operators with operator norm form the minimal standard
-`ell-infinity` ideal. -/
-noncomputable def standardCompactOperatorNormFamily
-    (𝕜 : Type u) [RCLike 𝕜] : StandardSymmetricIdealFamily.{u, v} 𝕜 :=
-  generatedMinimalStandardIdeal (𝕜 := 𝕜) (v := v) linftyNormingFunction
-
-/-- Operator-norm Fan dominance. -/
-theorem opNorm_le_of_approximationNumberPrefix_le
-    {𝕜 : Type u} [RCLike 𝕜]
-    {E F : Type v}
-    [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
-    [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
-    (A B : E →L[𝕜] F)
-    (h : ∀ k, approximationNumberPrefix k A ≤ approximationNumberPrefix k B) :
-    ‖A‖ ≤ ‖B‖ := by
-  have h1 := h 1
-  simpa [approximationNumberPrefix, sequencePrefixSum,
-    approximationNumberSequence] using h1
-
-/-- Fixed finite Ky Fan symmetric norming function: on a finite vector it is
-the sum of the `q` largest absolute coordinates, padding with zero when the
-ambient vector has fewer than `q` coordinates. -/
-noncomputable def kyFanNormingFunction (q : ℕ) (hq : 0 < q) :
-    SymmetricNormingFunction where
-  finiteGauge := fun n => FiniteVector.kyFanSymmetricGauge q n
-  zeroPad := by
-    intro n m x
-    exact FiniteVector.kyFanGauge_zeroPadRight q x
+/-- The coherent finite `ell^p` symmetric norming function, `1 ≤ p < ∞`. -/
+noncomputable def paperLpSymmetricNormingFunction
+    (p : ℝ) (hp : 1 ≤ p) : PaperSymmetricNormingFunction where
+  gauge := fun _ x => FiniteVector.lpGauge p x
+  nonneg := FiniteVector.lpGauge_nonneg p
+  definite := by
+    intro n x
+    exact FiniteVector.lpGauge_eq_zero_iff (lt_of_lt_of_le zero_lt_one hp) x
+  add_le := by
+    intro n x y
+    exact FiniteVector.lpGauge_add_le hp x y
+  smul := by
+    intro n c x
+    exact FiniteVector.lpGauge_smul (lt_of_lt_of_le zero_lt_one hp) c x
+  perm := by
+    intro n x π
+    exact FiniteVector.lpGauge_perm p x π
+  abs := by
+    intro n x
+    unfold FiniteVector.lpGauge
+    congr 2
+    apply Finset.sum_congr rfl
+    intro i hi
+    simp
+  zero_pad := by
+    intro n x
+    rw [paperZeroPad_eq_zeroPadRight]
+    exact FiniteVector.lpGauge_zeroPadRight p x
   normalized := by
-    simpa [FiniteVector.kyFanSymmetricGauge, hq] using
-      FiniteVector.kyFanGauge_singleton_one q hq
+    simp [FiniteVector.lpGauge, lt_of_lt_of_le zero_lt_one hp]
+  weak_majorization := by
+    intro n x y hx h0x h0y hprefix
+    exact (FiniteVector.lpSymmetricGauge (n := n) p hp).le_of_prefixSum_le
+      hx h0x h0y hprefix
 
-/-- The maximal fixed-Ky-Fan gauge is finite on all bounded operators and is
-the usual first-`q` approximation-number sum. -/
-theorem kyFan_standardSequenceGauge_maximal_eq_prefix
-    {𝕜 : Type u} [RCLike 𝕜]
-    {E F : Type v}
-    [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
-    [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
-    (q : ℕ) (hq : 0 < q) (A : E →L[𝕜] F) :
-    (kyFanNormingFunction q hq).standardSequenceGauge
-        SymmetricIdealCompletion.maximal (approximationNumberSequence A) =
-      ENNReal.ofReal (approximationNumberPrefix q A) := by
-  unfold SymmetricNormingFunction.standardSequenceGauge
-    SymmetricNormingFunction.sequenceGauge
-  exact FiniteVector.iSup_kyFanPrefixGauge_eq_prefix q hq
-    (approximationNumberSequence_antitone_nonneg A)
+/-- Coherent Schatten/`ell^p` source norm. -/
+noncomputable def paperLpNorm (p : ℝ) (hp : 1 ≤ p) :
+    PaperUnitaryInvariantNorm :=
+  (paperLpSymmetricNormingFunction p hp).toPaperNorm
 
-/-- Maximal fixed-Ky-Fan ideal: all bounded operators with the first-`q`
-approximation-number sum. -/
-noncomputable def boundedKyFanIdealFamily
-    (𝕜 : Type u) [RCLike 𝕜] (q : ℕ) (hq : 0 < q) :
-    SymmetricOperatorIdealFamily.{u, v} 𝕜 :=
-  generatedSymmetricIdealFamily (𝕜 := 𝕜) (kyFanNormingFunction q hq)
-    SymmetricIdealCompletion.maximal
+/-- The finite `ell^infinity` gauge vanishes exactly on the zero vector. -/
+theorem linftyGauge_eq_zero_iff {n : ℕ} (x : Fin n → ℝ) :
+    FiniteVector.linftyGauge x = 0 ↔ x = 0 := by
+  constructor
+  · intro h
+    funext i
+    have hi : |x i| ≤ FiniteVector.linftyGauge x := by
+      unfold FiniteVector.linftyGauge
+      exact le_ciSup (Finite.bddAbove_range (fun j : Fin n => |x j|)) i
+    have habs : |x i| = 0 := le_antisymm (by simpa [h] using hi) (abs_nonneg _)
+    exact abs_eq_zero.mp habs
+  · rintro rfl
+    exact FiniteVector.linftyGauge_zero
 
-/-- Maximal fixed-Ky-Fan family as a standard symmetric ideal. -/
-noncomputable def standardBoundedKyFanIdealFamily
-    (𝕜 : Type u) [RCLike 𝕜] (q : ℕ) (hq : 0 < q) :
-    StandardSymmetricIdealFamily.{u, v} 𝕜 :=
-  generatedMaximalStandardIdeal (𝕜 := 𝕜) (v := v)
-    (kyFanNormingFunction q hq)
+/-- The coherent finite `ell^infinity` symmetric norming function. -/
+noncomputable def paperLinftySymmetricNormingFunction :
+    PaperSymmetricNormingFunction where
+  gauge := fun _ x => FiniteVector.linftyGauge x
+  nonneg := FiniteVector.linftyGauge_nonneg
+  definite := linftyGauge_eq_zero_iff
+  add_le := FiniteVector.linftyGauge_add_le
+  smul := FiniteVector.linftyGauge_smul
+  perm := FiniteVector.linftyGauge_perm
+  abs := by
+    intro n x
+    unfold FiniteVector.linftyGauge
+    congr 1
+    funext i
+    simp
+  zero_pad := by
+    intro n x
+    rw [paperZeroPad_eq_zeroPadRight]
+    exact FiniteVector.linftyGauge_zeroPadRight x
+  normalized := by
+    simp [FiniteVector.linftyGauge]
+  weak_majorization := by
+    intro n x y hx h0x h0y hprefix
+    exact (FiniteVector.linftySymmetricGauge (n := n)).le_of_prefixSum_le
+      hx h0x h0y hprefix
 
-/-- The minimal fixed-Ky-Fan completion is again the compact operators, now
-with the fixed Ky Fan norm. -/
-noncomputable def compactKyFanIdealFamily
-    (𝕜 : Type u) [RCLike 𝕜] (q : ℕ) (hq : 0 < q) :
-    SymmetricOperatorIdealFamily.{u, v} 𝕜 :=
-  generatedSymmetricIdealFamily (𝕜 := 𝕜) (kyFanNormingFunction q hq)
-    SymmetricIdealCompletion.minimal
+/-- Coherent operator norm as the `ell^infinity` source norm. -/
+noncomputable def paperOperatorNorm : PaperUnitaryInvariantNorm :=
+  paperLinftySymmetricNormingFunction.toPaperNorm
 
-/-- Fixed Ky Fan compact ideal as a standard minimal ideal. -/
-noncomputable def standardCompactKyFanIdealFamily
-    (𝕜 : Type u) [RCLike 𝕜] (q : ℕ) (hq : 0 < q) :
-    StandardSymmetricIdealFamily.{u, v} 𝕜 :=
-  generatedMinimalStandardIdeal (𝕜 := 𝕜) (v := v)
-    (kyFanNormingFunction q hq)
+/-- Maximal Schatten ideal. -/
+noncomputable def maximalSchattenIdeal (p : ℝ) (hp : 1 ≤ p) :
+    StandardSymmetricIdeal :=
+  ⟨paperLpNorm p hp, .maximal⟩
+
+/-- Minimal Schatten ideal.  For finite `p` this is expected to coincide with
+its maximal completion; the equality is a separate density theorem. -/
+noncomputable def minimalSchattenIdeal (p : ℝ) (hp : 1 ≤ p) :
+    StandardSymmetricIdeal :=
+  ⟨paperLpNorm p hp, .minimal⟩
+
+/-- All bounded operators with operator norm. -/
+noncomputable def boundedOperatorNormIdeal : StandardSymmetricIdeal :=
+  ⟨paperOperatorNorm, .maximal⟩
+
+/-- Compact-operator-norm ideal, represented by the minimal fully symmetric
+completion of the `ell^infinity` norming function. -/
+noncomputable def compactOperatorNormIdeal : StandardSymmetricIdeal :=
+  ⟨paperOperatorNorm, .minimal⟩
+
+/-- Trace/nuclear ideal using the repository's already compiled `ell^1`
+coherent source norm. -/
+noncomputable def nuclearIdeal : StandardSymmetricIdeal :=
+  ⟨paperNuclearNorm, .maximal⟩
+
+end
 
 end FinishTanTwoTheta
 end TauCeti

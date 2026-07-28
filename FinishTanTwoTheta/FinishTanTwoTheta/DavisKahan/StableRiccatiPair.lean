@@ -3,131 +3,236 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
+import FinishTanTwoTheta.GroundedImports
 import FinishTanTwoTheta.FunctionalCalculus.DoubleAngleTangent
-import DavisKahan.Experimental.Scratch.Section7.InfiniteTanTwoThetaCore
+import DavisKahan.Experimental.InfiniteDimensional.TanTwoTheta.BoundedRiccatiEstimate
 
 /-!
-# Stable approximate singular-pair Riccati estimate
+# Stable paired-singular-vector Riccati estimate
 
-The existing proof gives the sharp coefficient estimate for an exact singular
-pair.  This file records the uniform stability theorem needed to use the
-approximate leading singular families available for arbitrary bounded
-operators.  The stability constant is selected *before* the approximation
-tolerance, so the final epsilon limit is logically valid.
+The existing exact Section 7 proof retains the paired coefficient needed for a
+Ky Fan sum, while the existing near-singular-pair proof replaces it by the
+operator norm.  This file supplies the missing stable coefficient estimate.
+Both singular equations may have residual at most `ε`; every error term is
+written explicitly and vanishes with `ε`.
 -/
 
 namespace TauCeti
 namespace DavisKahan
 namespace FinishTanTwoTheta
 
-open scoped InnerProductSpace BigOperators
-open DavisKahanExt DavisKahanTheory
-open Experimental.Scratch.Section7
+open scoped InnerProductSpace
+open DavisKahanExt
+open Experimental.ExactSinTheta
 
-universe u v
+noncomputable section
 
-variable {E0 : Type u} [NormedAddCommGroup E0] [InnerProductSpace ℂ E0]
+variable {E0 : Type*} [NormedAddCommGroup E0] [InnerProductSpace ℂ E0]
   [CompleteSpace E0]
-variable {E1 : Type v} [NormedAddCommGroup E1] [InnerProductSpace ℂ E1]
+variable {E1 : Type*} [NormedAddCommGroup E1] [InnerProductSpace ℂ E1]
   [CompleteSpace E1]
 
-/-- Residual size for an approximate left/right singular pair. -/
-def singularPairResidual (X : E0 →L[ℂ] E1)
-    (s : ℝ) (x : E0) (y : E1) : ℝ :=
-  ‖X x - (s : ℂ) • y‖ +
-    ‖X.adjoint y - (s : ℂ) • x‖
-
-/-- Predicate asserting that `C` is one uniform stability constant for every
-unit approximate singular pair with singular parameter in `[0,r]`. -/
-def IsStableRiccatiConstant
+/-- Explicit error in the stable scalar estimate. -/
+def stablePairError
     (B : BlockOperatorData (𝕜 := ℂ) (E0 := E0) (E1 := E1))
-    (d r : ℝ)
-    (X : E0 →L[ℂ] E1) (C : ℝ) : Prop :=
-  0 ≤ C ∧
-    ∀ (s : ℝ) (x : E0) (y : E1),
-      0 ≤ s → s ≤ r → ‖x‖ = 1 → ‖y‖ = 1 →
-      d * TauCeti.FinishTanTwoTheta.doubleAngleTangentScalar s ≤
-        2 * (-RCLike.re ⟪x, B.B01 y⟫_ℂ) +
-          C * singularPairResidual X s x y
+    (s ε : ℝ) : ℝ :=
+  2 * (((‖B.A0‖ + ‖B.A1‖) * ε) +
+      2 * s * ‖B.B01‖ * ε + ‖B.B01‖ * ε ^ 2) /
+    (1 - s ^ 2)
 
-/-- **Uniform stability of equation (7.6).**
+/-- The stable form of equation (7.6), retaining the paired coefficient.
 
-On a fixed contraction interval `0 <= s <= r < 1`, there is one constant valid
-for every approximate pair and every later approximation tolerance. -/
-theorem exists_stableRiccatiPair_constant
+For `ε = 0` this reduces to the existing exact singular-pair theorem.
+-/
+theorem stableSingularPair_doubleAngleTangent_le
     (B : BlockOperatorData (𝕜 := ℂ) (E0 := E0) (E1 := E1))
-    {d r : ℝ} (hd0 : 0 ≤ d) (hr0 : 0 ≤ r) (hr1 : r < 1)
+    {d s ε : ℝ} (hd0 : 0 ≤ d) (hs0 : 0 ≤ s) (hs1 : s < 1)
+    (hε0 : 0 ≤ ε)
     (hA0 : ∀ z : E0, RCLike.re ⟪B.A0 z, z⟫_ℂ ≤ 0)
     (hA1 : ∀ z : E1, d * ‖z‖ ^ 2 ≤ RCLike.re ⟪B.A1 z, z⟫_ℂ)
-    {X : E0 →L[ℂ] E1} (hX : SolvesRiccati B X) (hXr : ‖X‖ ≤ r) :
-    ∃ C : ℝ, IsStableRiccatiConstant B d r X C := by
-  let C : ℝ := (8 * (‖B.A0‖ + ‖B.A1‖ + ‖B.B01‖ +
-    ‖B.B10‖ + d + 1)) / (1 - r ^ 2)
-  have hden : 0 < 1 - r ^ 2 := by nlinarith
-  refine ⟨C, ?_, ?_⟩
-  · unfold C
-    positivity
-  · intro s x y hs0 hsr hx hy
-    exact stable_exactSingularPair_doubleAngleTangent_le
-      B hd0 hr0 hr1 hA0 hA1 hX hXr
-      (s := s) (x := x) (y := y) hs0 hsr hx hy
+    {X : E0 →L[ℂ] E1} (hX : SolvesRiccati B X)
+    {x : E0} {y : E1}
+    (hxnorm : ‖x‖ = 1) (hynorm : ‖y‖ = 1)
+    (hXx : ‖X x - (s : ℂ) • y‖ ≤ ε)
+    (hXay : ‖X.adjoint y - (s : ℂ) • x‖ ≤ ε) :
+    d * DavisKahanTheory.doubleAngleTangent s ≤
+      2 * (-RCLike.re ⟪x, B.B01 y⟫_ℂ) + stablePairError B s ε := by
+  set e0 : E1 := X x - (s : ℂ) • y with he0
+  set e1 : E0 := X.adjoint y - (s : ℂ) • x with he1
+  have he0norm : ‖e0‖ ≤ ε := by simpa [he0] using hXx
+  have he1norm : ‖e1‖ ≤ ε := by simpa [he1] using hXay
+  have hXexpand : X x = (s : ℂ) • y + e0 := by
+    rw [he0]
+    abel
+  have hXadjExpand : X.adjoint y = (s : ℂ) • x + e1 := by
+    rw [he1]
+    abel
+  have hden : 0 < 1 - s ^ 2 := by nlinarith
 
-/-- Summed stable estimate for one approximate leading singular family, using
-a constant chosen independently of the family and its tolerance. -/
-theorem transformed_selected_sum_le_kyFan_add_error
-    (B : BlockOperatorData (𝕜 := ℂ) (E0 := E0) (E1 := E1))
-    {d r ε C : ℝ} (hr0 : 0 ≤ r)
-    {X : E0 →L[ℂ] E1} (hXr : ‖X‖ ≤ r)
-    (hC : IsStableRiccatiConstant B d r X C)
-    {k : ℕ}
-    (F : TauCeti.FinishTanTwoTheta.ApproximateLeadingSingularFamily X k ε) :
-    d * ∑ i : Fin F.count,
-        TauCeti.FinishTanTwoTheta.doubleAngleTangentScalar
-          (X.approximationNumber i) ≤
-      2 * kyFanApproximationGauge F.count B.B01 +
-        (2 * C) * F.count * ε := by
-  have hs_le : ∀ i : Fin F.count, X.approximationNumber i ≤ r := by
-    intro i
-    exact (X.approximationNumber_le_norm i).trans hXr
-  have hpoint : ∀ i : Fin F.count,
-      d * TauCeti.FinishTanTwoTheta.doubleAngleTangentScalar
-          (X.approximationNumber i) ≤
-        2 * (-RCLike.re ⟪F.right i, B.B01 (F.left i)⟫_ℂ) +
-          (2 * C) * ε := by
-    intro i
-    have hi := hC.2 (X.approximationNumber i) (F.right i) (F.left i)
-      (X.approximationNumber_nonneg i) (hs_le i)
-      (F.norm_right i) (F.norm_left i)
-    have hres : singularPairResidual X (X.approximationNumber i)
-        (F.right i) (F.left i) ≤ 2 * ε := by
-      unfold singularPairResidual
-      linarith [F.apply_residual i, F.adjoint_residual i]
-    exact hi.trans (by gcongr; nlinarith [hC.1])
-  have hcoeff :
-      (∑ i : Fin F.count, -RCLike.re
-        ⟪F.right i, B.B01 (F.left i)⟫_ℂ) ≤
-        kyFanApproximationGauge F.count B.B01 := by
-    simpa [neg_re_inner_eq_re_inner_neg] using
-      sum_re_inner_le_kyFanApproximationGauge
-        B.B01 F.left (fun i => -F.right i)
-        F.left_orthonormal F.orthonormal_neg_right
-  calc
-    d * ∑ i : Fin F.count,
-        TauCeti.FinishTanTwoTheta.doubleAngleTangentScalar
-          (X.approximationNumber i)
-        = ∑ i : Fin F.count, d *
-            TauCeti.FinishTanTwoTheta.doubleAngleTangentScalar
-              (X.approximationNumber i) := by rw [Finset.mul_sum]
-    _ ≤ ∑ i : Fin F.count,
-          (2 * (-RCLike.re ⟪F.right i, B.B01 (F.left i)⟫_ℂ) +
-            (2 * C) * ε) := Finset.sum_le_sum fun i _ => hpoint i
-    _ = 2 * (∑ i : Fin F.count,
-          -RCLike.re ⟪F.right i, B.B01 (F.left i)⟫_ℂ) +
-          (2 * C) * F.count * ε := by
-      simp [Finset.sum_add_distrib, Finset.mul_sum, mul_assoc, mul_left_comm]
-    _ ≤ 2 * kyFanApproximationGauge F.count B.B01 +
-          (2 * C) * F.count * ε := by
-      gcongr
+  have hA1err : |RCLike.re ⟪B.A1 e0, y⟫_ℂ| ≤ ‖B.A1‖ * ε := by
+    calc
+      |RCLike.re ⟪B.A1 e0, y⟫_ℂ| ≤ ‖⟪B.A1 e0, y⟫_ℂ‖ :=
+        RCLike.abs_re_le_norm _
+      _ ≤ ‖B.A1 e0‖ * ‖y‖ := norm_inner_le_norm _ _
+      _ ≤ (‖B.A1‖ * ‖e0‖) * ‖y‖ := by
+        gcongr
+        exact B.A1.le_opNorm e0
+      _ ≤ (‖B.A1‖ * ε) * ‖y‖ := by
+        gcongr
+      _ = ‖B.A1‖ * ε := by rw [hynorm, mul_one]
+  have hA0err : |RCLike.re ⟪B.A0 x, e1⟫_ℂ| ≤ ‖B.A0‖ * ε := by
+    calc
+      |RCLike.re ⟪B.A0 x, e1⟫_ℂ| ≤ ‖⟪B.A0 x, e1⟫_ℂ‖ :=
+        RCLike.abs_re_le_norm _
+      _ ≤ ‖B.A0 x‖ * ‖e1‖ := norm_inner_le_norm _ _
+      _ ≤ (‖B.A0‖ * ‖x‖) * ‖e1‖ := by
+        gcongr
+        exact B.A0.le_opNorm x
+      _ ≤ (‖B.A0‖ * ‖x‖) * ε := by
+        gcongr
+      _ = ‖B.A0‖ * ε := by rw [hxnorm, mul_one]
+
+  have hA1lower :
+      d * s - ‖B.A1‖ * ε ≤ RCLike.re ⟪B.A1 (X x), y⟫_ℂ := by
+    have hy := hA1 y
+    rw [hynorm, one_pow, mul_one] at hy
+    rw [hXexpand, map_add, map_smul, inner_add_left,
+      inner_smul_left, Complex.conj_ofReal,
+      ← Complex.real_smul, RCLike.smul_re]
+    have herrlower : -‖B.A1‖ * ε ≤ RCLike.re ⟪B.A1 e0, y⟫_ℂ := by
+      exact (neg_le_of_abs_le hA1err)
+    nlinarith [mul_le_mul_of_nonneg_left hy hs0]
+
+  have hA0upper :
+      RCLike.re ⟪X (B.A0 x), y⟫_ℂ ≤ ‖B.A0‖ * ε := by
+    rw [ContinuousLinearMap.adjoint_inner_right, hXadjExpand,
+      inner_add_right, inner_smul_right,
+      ← Complex.real_smul, RCLike.smul_re]
+    have hmain : s * RCLike.re ⟪B.A0 x, x⟫_ℂ ≤ 0 :=
+      mul_nonpos_of_nonneg_of_nonpos hs0 (hA0 x)
+    have herr : RCLike.re ⟪B.A0 x, e1⟫_ℂ ≤ ‖B.A0‖ * ε :=
+      (le_abs_self _).trans hA0err
+    linarith
+
+  have hleftLower :
+      d * s - (‖B.A0‖ + ‖B.A1‖) * ε ≤
+        RCLike.re ⟪B.A1 (X x) - X (B.A0 x), y⟫_ℂ := by
+    rw [inner_sub_left, map_sub]
+    linarith
+
+  have hpoint := (solvesRiccati_iff_pointwise B X).1 hX x
+  have heq : B.A1 (X x) - X (B.A0 x) =
+      X (B.B01 (X x)) - B.B10 x := by
+    rw [map_add] at hpoint
+    calc
+      B.A1 (X x) - X (B.A0 x) =
+          (B.B10 x + B.A1 (X x)) -
+            (B.B10 x + X (B.A0 x)) := by abel
+      _ = (X (B.A0 x) + X (B.B01 (X x))) -
+            (B.B10 x + X (B.A0 x)) := by rw [hpoint]
+      _ = X (B.B01 (X x)) - B.B10 x := by abel
+
+  have hB10real :
+      RCLike.re ⟪B.B10 x, y⟫_ℂ =
+        RCLike.re ⟪B.B01 y, x⟫_ℂ := by
+    rw [← RCLike.conj_re ⟪B.B10 x, y⟫_ℂ, inner_conj_symm,
+      ← B.offDiagonalAdjoint x y]
+
+  have hBlin1 : |RCLike.re ⟪B.B01 y, e1⟫_ℂ| ≤ ‖B.B01‖ * ε := by
+    calc
+      |RCLike.re ⟪B.B01 y, e1⟫_ℂ| ≤ ‖⟪B.B01 y, e1⟫_ℂ‖ :=
+        RCLike.abs_re_le_norm _
+      _ ≤ ‖B.B01 y‖ * ‖e1‖ := norm_inner_le_norm _ _
+      _ ≤ (‖B.B01‖ * ‖y‖) * ‖e1‖ := by
+        gcongr
+        exact B.B01.le_opNorm y
+      _ ≤ (‖B.B01‖ * ‖y‖) * ε := by gcongr
+      _ = ‖B.B01‖ * ε := by rw [hynorm, mul_one]
+  have hBlin0 : |RCLike.re ⟪B.B01 e0, x⟫_ℂ| ≤ ‖B.B01‖ * ε := by
+    calc
+      |RCLike.re ⟪B.B01 e0, x⟫_ℂ| ≤ ‖⟪B.B01 e0, x⟫_ℂ‖ :=
+        RCLike.abs_re_le_norm _
+      _ ≤ ‖B.B01 e0‖ * ‖x‖ := norm_inner_le_norm _ _
+      _ ≤ (‖B.B01‖ * ‖e0‖) * ‖x‖ := by
+        gcongr
+        exact B.B01.le_opNorm e0
+      _ ≤ (‖B.B01‖ * ε) * ‖x‖ := by gcongr
+      _ = ‖B.B01‖ * ε := by rw [hxnorm, mul_one]
+  have hBquad : |RCLike.re ⟪B.B01 e0, e1⟫_ℂ| ≤ ‖B.B01‖ * ε ^ 2 := by
+    calc
+      |RCLike.re ⟪B.B01 e0, e1⟫_ℂ| ≤ ‖⟪B.B01 e0, e1⟫_ℂ‖ :=
+        RCLike.abs_re_le_norm _
+      _ ≤ ‖B.B01 e0‖ * ‖e1‖ := norm_inner_le_norm _ _
+      _ ≤ (‖B.B01‖ * ‖e0‖) * ‖e1‖ := by
+        gcongr
+        exact B.B01.le_opNorm e0
+      _ ≤ (‖B.B01‖ * ε) * ε := by gcongr
+      _ = ‖B.B01‖ * ε ^ 2 := by ring
+
+  have hBexpand :
+      RCLike.re ⟪X (B.B01 (X x)) - B.B10 x, y⟫_ℂ =
+        (s ^ 2 - 1) * RCLike.re ⟪B.B01 y, x⟫_ℂ +
+          s * RCLike.re ⟪B.B01 y, e1⟫_ℂ +
+          s * RCLike.re ⟪B.B01 e0, x⟫_ℂ +
+          RCLike.re ⟪B.B01 e0, e1⟫_ℂ := by
+    have hXterm :
+        RCLike.re ⟪X (B.B01 (X x)), y⟫_ℂ =
+          s ^ 2 * RCLike.re ⟪B.B01 y, x⟫_ℂ +
+            s * RCLike.re ⟪B.B01 y, e1⟫_ℂ +
+            s * RCLike.re ⟪B.B01 e0, x⟫_ℂ +
+            RCLike.re ⟪B.B01 e0, e1⟫_ℂ := by
+      calc
+        RCLike.re ⟪X (B.B01 (X x)), y⟫_ℂ =
+            RCLike.re ⟪B.B01 (X x), X.adjoint y⟫_ℂ := by
+              rw [ContinuousLinearMap.adjoint_inner_right]
+        _ = RCLike.re
+            ⟪B.B01 ((s : ℂ) • y + e0), (s : ℂ) • x + e1⟫_ℂ := by
+              rw [hXexpand, hXadjExpand]
+        _ = _ := by
+              rw [map_add, map_smul, inner_add_left, inner_add_right,
+                inner_add_right, inner_smul_left, inner_smul_right,
+                inner_smul_left, inner_smul_right,
+                Complex.conj_ofReal,
+                ← Complex.real_smul, RCLike.smul_re,
+                ← Complex.real_smul, RCLike.smul_re,
+                ← Complex.real_smul, RCLike.smul_re]
+              ring
+    rw [inner_sub_left, map_sub, hXterm, hB10real]
+    ring
+
+  have hrightUpper :
+      RCLike.re ⟪X (B.B01 (X x)) - B.B10 x, y⟫_ℂ ≤
+        (s ^ 2 - 1) * RCLike.re ⟪B.B01 y, x⟫_ℂ +
+          2 * s * ‖B.B01‖ * ε + ‖B.B01‖ * ε ^ 2 := by
+    rw [hBexpand]
+    have h1 : s * RCLike.re ⟪B.B01 y, e1⟫_ℂ ≤
+        s * (‖B.B01‖ * ε) := by
+      exact mul_le_mul_of_nonneg_left ((le_abs_self _).trans hBlin1) hs0
+    have h0 : s * RCLike.re ⟪B.B01 e0, x⟫_ℂ ≤
+        s * (‖B.B01‖ * ε) := by
+      exact mul_le_mul_of_nonneg_left ((le_abs_self _).trans hBlin0) hs0
+    have hq : RCLike.re ⟪B.B01 e0, e1⟫_ℂ ≤ ‖B.B01‖ * ε ^ 2 :=
+      (le_abs_self _).trans hBquad
+    linarith
+
+  rw [heq] at hleftLower
+  have hraw :
+      d * s ≤ -(1 - s ^ 2) * RCLike.re ⟪B.B01 y, x⟫_ℂ +
+        ((‖B.A0‖ + ‖B.A1‖) * ε +
+          2 * s * ‖B.B01‖ * ε + ‖B.B01‖ * ε ^ 2) := by
+    have := hleftLower.trans hrightUpper
+    linarith
+  have hre : RCLike.re ⟪B.B01 y, x⟫_ℂ =
+      RCLike.re ⟪x, B.B01 y⟫_ℂ := inner_re_symm _ _
+  rw [hre] at hraw
+  unfold DavisKahanTheory.doubleAngleTangent stablePairError
+  rw [show d * (2 * s / (1 - s ^ 2)) =
+      (2 * (d * s)) / (1 - s ^ 2) by ring]
+  rw [div_le_iff₀ hden]
+  have hscale := mul_le_mul_of_nonneg_left hraw (show 0 ≤ (2 : ℝ) by norm_num)
+  nlinarith
+
+end
 
 end FinishTanTwoTheta
 end DavisKahan
