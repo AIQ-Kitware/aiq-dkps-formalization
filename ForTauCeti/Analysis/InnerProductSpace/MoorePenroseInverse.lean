@@ -75,13 +75,6 @@ noncomputable def moorePenroseInverse (A : E →ₗ[𝕜] F) : F →ₗ[𝕜] E 
         (TauCeti.rightSingularBasis A i)
         (A (TauCeti.rightSingularBasis A i))).toLinearMap
 
-/-- A hypothesis-carrying inverse on the range.  The total map is the
-Moore--Penrose inverse; injectivity identifies its initial projection with the
-identity on the domain. -/
-noncomputable def inverseOnRange (A : E →ₗ[𝕜] F) (_hA : Function.Injective A) :
-    F →ₗ[𝕜] E :=
-  moorePenroseInverse A
-
 /-- Gram orthogonality of the images of the right singular basis. -/
 theorem inner_apply_rightSingularBasis
     (A : E →ₗ[𝕜] F) (i j : Fin (finrank 𝕜 E)) :
@@ -339,23 +332,5 @@ theorem comp_moorePenroseInverse_comp_eq_of_ker_le
         (A (TauCeti.rightSingularBasis A i))) =
       B (TauCeti.rightSingularBasis A i)
     rw [moorePenroseInverse_apply_apply_rightSingularBasis A hi]
-
-/-- The hypothesis-carrying inverse is definitionally the pseudoinverse. -/
-@[simp] theorem inverseOnRange_eq_moorePenroseInverse
-    (A : E →ₗ[𝕜] F) (hA : Function.Injective A) :
-    inverseOnRange A hA = moorePenroseInverse A :=
-  rfl
-
-/-- An inverse on the range is a left inverse of an injective map. -/
-theorem inverseOnRange_comp_eq_id
-    (A : E →ₗ[𝕜] F) (hA : Function.Injective A) :
-    inverseOnRange A hA ∘ₗ A = LinearMap.id := by
-  simpa [inverseOnRange] using moorePenroseInverse_comp_eq_id_of_injective A hA
-
-/-- Compatibility name used by tangent-coordinate developments. -/
-theorem moorePenroseInverse_eq_inverseOnRange
-    (A : E →ₗ[𝕜] F) (hA : Function.Injective A) :
-    moorePenroseInverse A = inverseOnRange A hA :=
-  rfl
 
 end FiniteDimensional
