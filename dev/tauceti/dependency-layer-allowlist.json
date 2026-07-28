@@ -1,5 +1,5 @@
 {
-  "_comment": "Ratcheting allowlists for scripts/check_dependency_layers.py. These capture the pre-migration state as of Davis-Kahan fc38eb4 so the checker is green today and flags only NEW regressions. Entries are transitional backwards-dependencies that later extraction PRs remove; do not add to these lists to work around the architecture.",
+  "_comment": "Ratcheting allowlists for scripts/check_dependency_layers.py. These capture the pre-migration state as of Davis-Kahan fc38eb4 so the checker is green today and flags only NEW regressions. Entries are transitional backwards-dependencies that later extraction PRs remove; do not add to these lists to work around the architecture.  `production_imports_spectra` (added 2026-07-28) is the burn-down list for rule 7: production modules that reach Spectra directly rather than through DavisKahan.Interop.Spectra. AGENTS.md states the final migration target removes Spectra from the normal build, and three extraction clusters are blocked-on-spectra-removal; this list makes the coupling visible and, being ratcheting, keeps new coupling out. It may only shrink.",
   "generic_davis_kahan_prefixes": [
     "DavisKahan.OperatorIdeal",
     "DavisKahan.SpectralTheory",
@@ -14,5 +14,19 @@
     "DavisKahan.Experimental",
     "DavisKahan.FiniteDimensional.Generalized",
     "DavisKahan.Sources.DavisKahan1970.Audits.Theorem63Distillation"
+  ],
+  "production_imports_spectra": [
+    "DavisKahan.Alternative.OperatorIdeal.HilbertSchmidt.ColumnExpansion",
+    "DavisKahan.Geometry.Polar.PolarIsometryFinal",
+    "DavisKahan.Geometry.Polar.Section3Nonacute",
+    "DavisKahan.Sources.DavisKahan1970.Audits.SylvesterHilbertSchmidt",
+    "DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtBasis",
+    "DavisKahan.Sources.DavisKahan1970.Sylvester.HilbertSchmidtDefectFirst",
+    "DavisKahan.Sources.DavisKahan1970.Sylvester.HilbertSchmidtPairwise",
+    "DavisKahan.SpectralTheory.CayleySelectorBridge",
+    "DavisKahan.SpectralTheory.ClosedOperator.Complexification",
+    "DavisKahan.SpectralTheory.SelfAdjointBorelCalculus",
+    "DavisKahan.Sylvester.PairwiseHomogeneousUniqueness",
+    "DavisKahan.Sylvester.PairwiseSpectrumGap"
   ]
 }
