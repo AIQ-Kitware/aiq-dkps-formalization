@@ -83,7 +83,6 @@ theorem opNorm_sq_le_approximationEnergy
       (approximationSingularValue 0 T) ^ 2 = ‖T‖ ^ 2 := by
     unfold approximationSingularValue
     rw [T.approximationNumber_index_zero]
-    rfl
   calc
     ‖T‖ ^ 2 = (approximationSingularValue 0 T) ^ 2 := hzero.symm
     _ ≤ ∑ i ∈ Finset.range n,
@@ -101,26 +100,19 @@ theorem approximationEnergy_starProjection_comp_le
   unfold approximationEnergy
   apply Finset.sum_le_sum
   intro i hi
-  have hcompNN :
-      (Q.starProjection ∘L K).approximationNumber i ≤
-        ‖Q.starProjection‖₊ * K.approximationNumber i :=
-    ContinuousLinearMap.approximationNumber_comp_le_norm_mul
-      Q.starProjection K i
-  have hprojNN : ‖Q.starProjection‖₊ ≤ 1 := by
-    exact_mod_cast Q.starProjection_norm_le
   have hcomp :
       approximationSingularValue i (Q.starProjection ∘L K) ≤
         approximationSingularValue i K := by
     unfold approximationSingularValue
     calc
-      (((Q.starProjection ∘L K).approximationNumber i : NNReal) : ℝ)
-          ≤ ((‖Q.starProjection‖₊ *
-              K.approximationNumber i : NNReal) : ℝ) := by
-                exact_mod_cast hcompNN
-      _ ≤ ((1 * K.approximationNumber i : NNReal) : ℝ) := by
-            exact_mod_cast
-              (mul_le_mul_of_nonneg_right hprojNN bot_le)
-      _ = ((K.approximationNumber i : NNReal) : ℝ) := by simp
+      (Q.starProjection ∘L K).approximationNumber i
+          ≤ ‖Q.starProjection‖ * K.approximationNumber i :=
+            ContinuousLinearMap.approximationNumber_comp_le_norm_mul
+              Q.starProjection K i
+      _ ≤ 1 * K.approximationNumber i :=
+            mul_le_mul_of_nonneg_right Q.starProjection_norm_le
+              (K.approximationNumber_nonneg i)
+      _ = K.approximationNumber i := one_mul _
   exact pow_le_pow_left₀
     (approximationSingularValue_nonneg i _)
     hcomp 2

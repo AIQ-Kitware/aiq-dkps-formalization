@@ -8,7 +8,7 @@
       "title": "Compiled Halmos two-projection decomposition",
       "kind": "foundation",
       "module": "DavisKahan.Interop.Spectra.HalmosTwoProjections",
-      "declaration": "ForMathlib.DavisKahan.Experimental.SpectraBridge.halmosTrivialPart_sup_genericPart",
+      "declaration": "TauCeti.DavisKahan.Experimental.SpectraBridge.halmosTrivialPart_sup_genericPart",
       "dependencies": [],
       "source_census_ids": [],
       "priority": "high",
@@ -20,7 +20,7 @@
       "title": "Compiled Halmos cosine/sine Pythagoras",
       "kind": "foundation",
       "module": "DavisKahan.Interop.Spectra.HalmosTwoProjections",
-      "declaration": "ForMathlib.DavisKahan.Experimental.SpectraBridge.halmosCosineSq_add_sineSq",
+      "declaration": "TauCeti.DavisKahan.Experimental.SpectraBridge.halmosCosineSq_add_sineSq",
       "dependencies": [],
       "source_census_ids": [],
       "priority": "high",
@@ -32,7 +32,7 @@
       "title": "Compiled acute complex direct rotation",
       "kind": "foundation",
       "module": "DavisKahan.Interop.Spectra.DirectRotation",
-      "declaration": "ForMathlib.DavisKahan.Experimental.SpectraBridge.spectraDirectRotation",
+      "declaration": "TauCeti.DavisKahan.Experimental.SpectraBridge.spectraDirectRotation",
       "dependencies": [],
       "source_census_ids": [
         "DK-3.1-def"
@@ -46,7 +46,7 @@
       "title": "Compiled bounded self-adjoint spectral projection",
       "kind": "foundation",
       "module": "DavisKahan.Interop.Spectra.BoundedSelfAdjointSpectralProjection",
-      "declaration": "ForMathlib.DavisKahanExt.boundedSelfAdjointSpectralProjection",
+      "declaration": "TauCeti.DavisKahanExt.boundedSelfAdjointSpectralProjection",
       "dependencies": [],
       "source_census_ids": [],
       "priority": "high",
@@ -58,7 +58,7 @@
       "title": "Existing Section 8 selected branch core",
       "kind": "bridge",
       "module": "DavisKahan.Experimental.Sources.DavisKahan1970.Section8.SelectedBranch",
-      "declaration": "ForMathlib.DavisKahan1970.Section8.theorem81CoreConclusion",
+      "declaration": "TauCeti.DavisKahan1970.Section8.theorem81CoreConclusion",
       "dependencies": [],
       "source_census_ids": [],
       "priority": "high",
@@ -70,7 +70,7 @@
       "title": "Compiled Section 9 printed conclusion map",
       "kind": "bridge",
       "module": "DavisKahan.Sources.DavisKahan1970.Section9.FullExample",
-      "declaration": "ForMathlib.DavisKahan1970.Section9.PrintedConclusions",
+      "declaration": "TauCeti.DavisKahan1970.Section9.PrintedConclusions",
       "dependencies": [],
       "source_census_ids": [],
       "priority": "medium",
@@ -82,7 +82,7 @@
       "title": "Compiled Section 9 infinite-residual limitation example",
       "kind": "source",
       "module": "DavisKahan.Sources.DavisKahan1970.Section9.DomainLimitation",
-      "declaration": "ForMathlib.DavisKahan1970.Section9.rawDiagonalImage_eq_one",
+      "declaration": "TauCeti.DavisKahan1970.Section9.rawDiagonalImage_eq_one",
       "dependencies": [],
       "source_census_ids": [
         "DK-9-infinite-residual-counterexample"
@@ -96,7 +96,7 @@
       "title": "Existing semibounded Sylvester engine",
       "kind": "source",
       "module": "DavisKahan.Sources.DavisKahan1970.FullPartIII",
-      "declaration": "ForMathlib.DavisKahan1970.unbounded_sylvester_intervalExterior_uiNorm_genuineSpectrum",
+      "declaration": "TauCeti.DavisKahan1970.unbounded_sylvester_intervalExterior_uiNorm_genuineSpectrum",
       "dependencies": [],
       "source_census_ids": [
         "DK-5.2-thm"
@@ -110,7 +110,7 @@
       "title": "Existing constant optimality witness",
       "kind": "source",
       "module": "DavisKahan.FiniteDimensional.Sharpness",
-      "declaration": "ForMathlib.DavisKahanTheory.sinTheta_constant_optimal",
+      "declaration": "TauCeti.DavisKahanTheory.sinTheta_constant_optimal",
       "dependencies": [],
       "source_census_ids": [
         "S2-sharpness"
@@ -124,7 +124,7 @@
       "title": "Paper direct-rotation predicate",
       "kind": "foundation",
       "module": "DavisKahan.Geometry.Halmos.GenericRotationPredicates",
-      "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.IsPaperDirectRotation",
+      "declaration": "TauCeti.DavisKahan.Experimental.Frontier.IsPaperDirectRotation",
       "dependencies": [
         "base-acute-direct-rotation"
       ],
@@ -138,7 +138,7 @@
       "title": "Crossed-defect Hilbert equivalence",
       "kind": "foundation",
       "module": "DavisKahan.Geometry.Halmos.GenericRotationPredicates",
-      "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.CrossedDefectsEquivalent",
+      "declaration": "TauCeti.DavisKahan.Experimental.Frontier.CrossedDefectsEquivalent",
       "dependencies": [
         "base-halmos-decomposition"
       ],
@@ -152,7 +152,7 @@
       "title": "Generic Halmos cosine restriction",
       "kind": "foundation",
       "module": "DavisKahan.Geometry.Halmos.GenericRotationPredicates",
-      "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.genericHalmosCosineSq",
+      "declaration": "TauCeti.DavisKahan.Experimental.Frontier.genericHalmosCosineSq",
       "dependencies": [
         "base-halmos-decomposition",
         "base-halmos-pythagoras"
@@ -167,7 +167,7 @@
       "title": "Generic Halmos sine restriction",
       "kind": "foundation",
       "module": "DavisKahan.Geometry.Halmos.GenericRotationPredicates",
-      "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.genericHalmosSineSq",
+      "declaration": "TauCeti.DavisKahan.Experimental.Frontier.genericHalmosSineSq",
       "dependencies": [
         "base-halmos-decomposition",
         "base-halmos-pythagoras"
@@ -182,7 +182,7 @@
       "title": "Generic restriction Pythagoras",
       "kind": "bridge",
       "module": "DavisKahan.Geometry.Halmos.GenericRotationPredicates",
-      "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.genericHalmosCosineSq_add_sineSq",
+      "declaration": "TauCeti.DavisKahan.Experimental.Frontier.genericHalmosCosineSq_add_sineSq",
       "dependencies": [
         "s3-generic-cosine-restriction",
         "s3-generic-sine-restriction"
@@ -197,7 +197,7 @@
       "title": "Spectral multiplicity equivalence definition",
       "kind": "foundation",
       "module": "DavisKahan.Experimental.Frontier.Core",
-      "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.SameSpectralMultiplicity",
+      "declaration": "TauCeti.DavisKahan.Experimental.Frontier.SameSpectralMultiplicity",
       "dependencies": [],
       "source_census_ids": [],
       "priority": "hard",
@@ -209,7 +209,7 @@
       "title": "Spectral multiplicity completeness theorem",
       "kind": "foundation",
       "module": "DavisKahan.Experimental.Frontier.Core",
-      "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.sameSpectralMultiplicity_iff_unitarilyEquivalent",
+      "declaration": "TauCeti.DavisKahan.Experimental.Frontier.sameSpectralMultiplicity_iff_unitarilyEquivalent",
       "dependencies": [
         "s3-spectral-multiplicity-definition"
       ],
@@ -223,7 +223,7 @@
       "title": "Proposition 3.1 positivity characterization",
       "kind": "source",
       "module": "DavisKahan.Experimental.Frontier.Section3",
-      "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.Section3.proposition3_1_positivity_characterization",
+      "declaration": "TauCeti.DavisKahan.Experimental.Frontier.Section3.proposition3_1_positivity_characterization",
       "dependencies": [
         "s3-paper-direct-rotation-predicate",
         "base-acute-direct-rotation"
@@ -240,7 +240,7 @@
       "title": "Paper crossed intersections equal Halmos defects",
       "kind": "bridge",
       "module": "DavisKahan.Experimental.Frontier.Section3",
-      "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.Section3.crossed_intersections_are_halmos_defects",
+      "declaration": "TauCeti.DavisKahan.Experimental.Frontier.Section3.crossed_intersections_are_halmos_defects",
       "dependencies": [
         "base-halmos-decomposition"
       ],
@@ -254,7 +254,7 @@
       "title": "Proposition 3.2 existence criterion",
       "kind": "source",
       "module": "DavisKahan.Experimental.Frontier.Section3",
-      "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.Section3.proposition3_2_exists_iff_crossedDefectsEquivalent",
+      "declaration": "TauCeti.DavisKahan.Experimental.Frontier.Section3.proposition3_2_exists_iff_crossedDefectsEquivalent",
       "dependencies": [
         "s3-paper-direct-rotation-predicate",
         "s3-crossed-defect-equivalence",
@@ -272,7 +272,7 @@
       "title": "Proposition 3.2 nonuniqueness parameterization",
       "kind": "bridge",
       "module": "DavisKahan.Experimental.Frontier.Section3",
-      "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.Section3.proposition3_2_parameterized_nonuniqueness",
+      "declaration": "TauCeti.DavisKahan.Experimental.Frontier.Section3.proposition3_2_parameterized_nonuniqueness",
       "dependencies": [
         "s3-prop3-2-existence"
       ],
@@ -286,7 +286,7 @@
       "title": "Proposition 3.3 converse square-root characterization",
       "kind": "source",
       "module": "DavisKahan.Experimental.Frontier.Section3",
-      "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.Section3.proposition3_3_principalSquareRoot_converse",
+      "declaration": "TauCeti.DavisKahan.Experimental.Frontier.Section3.proposition3_3_principalSquareRoot_converse",
       "dependencies": [
         "s3-paper-direct-rotation-predicate",
         "s3-crossed-identification"
@@ -303,7 +303,7 @@
       "title": "Proposition 3.4 reflected square",
       "kind": "source",
       "module": "DavisKahan.Experimental.Frontier.Section3",
-      "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.Section3.proposition3_4_square_is_reflected_directRotation",
+      "declaration": "TauCeti.DavisKahan.Experimental.Frontier.Section3.proposition3_4_square_is_reflected_directRotation",
       "dependencies": [
         "base-acute-direct-rotation"
       ],
@@ -319,7 +319,7 @@
       "title": "Fixed-angle spectral subspace construction",
       "kind": "foundation",
       "module": "DavisKahan.Experimental.Frontier.Section3",
-      "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.Section3.fixedCosineSubspace",
+      "declaration": "TauCeti.DavisKahan.Experimental.Frontier.Section3.fixedCosineSubspace",
       "dependencies": [
         "s3-generic-cosine-restriction"
       ],
@@ -333,7 +333,7 @@
       "title": "Proposition 3.5 maximal fixed-angle subspace",
       "kind": "source",
       "module": "DavisKahan.Experimental.Frontier.Section3",
-      "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.Section3.proposition3_5_fixedAngle_maximal",
+      "declaration": "TauCeti.DavisKahan.Experimental.Frontier.Section3.proposition3_5_fixedAngle_maximal",
       "dependencies": [
         "s3-fixed-angle-subspace"
       ],
@@ -349,7 +349,7 @@
       "title": "Corollary 3.2 reversal source form",
       "kind": "source",
       "module": "DavisKahan.Experimental.Frontier.Section3",
-      "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.Section3.corollary3_2_reversal_source_form",
+      "declaration": "TauCeti.DavisKahan.Experimental.Frontier.Section3.corollary3_2_reversal_source_form",
       "dependencies": [
         "base-acute-direct-rotation"
       ],
@@ -365,7 +365,7 @@
       "title": "Operator-level two-projection classification",
       "kind": "bridge",
       "module": "DavisKahan.Experimental.Frontier.Section3",
-      "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.Section3.twoProjection_operator_classification",
+      "declaration": "TauCeti.DavisKahan.Experimental.Frontier.Section3.twoProjection_operator_classification",
       "dependencies": [
         "base-halmos-decomposition",
         "s3-generic-cosine-restriction"
@@ -380,7 +380,7 @@
       "title": "Theorem 3.1 spectral multiplicity classification",
       "kind": "source",
       "module": "DavisKahan.Experimental.Frontier.Section3",
-      "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.Section3.theorem3_1_spectralMultiplicity_classification",
+      "declaration": "TauCeti.DavisKahan.Experimental.Frontier.Section3.theorem3_1_spectralMultiplicity_classification",
       "dependencies": [
         "s3-operator-classification",
         "s3-spectral-multiplicity-complete"
@@ -397,7 +397,7 @@
       "title": "Compact angle eigenvalue list",
       "kind": "foundation",
       "module": "DavisKahan.Experimental.Frontier.Section3",
-      "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.Section3.compactAngleEigenvalueList",
+      "declaration": "TauCeti.DavisKahan.Experimental.Frontier.Section3.compactAngleEigenvalueList",
       "dependencies": [
         "s3-generic-cosine-restriction"
       ],
@@ -411,7 +411,7 @@
       "title": "Corollary 3.1 compact classification",
       "kind": "source",
       "module": "DavisKahan.Experimental.Frontier.Section3",
-      "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.Section3.corollary3_1_compact_angleList_classification",
+      "declaration": "TauCeti.DavisKahan.Experimental.Frontier.Section3.corollary3_1_compact_angleList_classification",
       "dependencies": [
         "s3-operator-classification",
         "s3-compact-angle-list"
@@ -428,7 +428,7 @@
       "title": "Proposition 4.1 infinite approximation-number form",
       "kind": "source",
       "module": "DavisKahan.Experimental.Frontier.Section4",
-      "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.Section4.proposition4_1_restrictedDisplacement_approximationNumbers",
+      "declaration": "TauCeti.DavisKahan.Experimental.Frontier.Section4.proposition4_1_restrictedDisplacement_approximationNumbers",
       "dependencies": [
         "base-acute-direct-rotation"
       ],
@@ -444,7 +444,7 @@
       "title": "Corollary 4.1 ideal-gauge form",
       "kind": "source",
       "module": "DavisKahan.Experimental.Frontier.Section4",
-      "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.Section4.corollary4_1_restrictedDisplacement_idealGauge",
+      "declaration": "TauCeti.DavisKahan.Experimental.Frontier.Section4.corollary4_1_restrictedDisplacement_idealGauge",
       "dependencies": [
         "s4-prop4-1"
       ],
@@ -460,7 +460,7 @@
       "title": "Proposition 4.2 orthonormal partial sums",
       "kind": "source",
       "module": "DavisKahan.Experimental.Frontier.Section4",
-      "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.Section4.proposition4_2_basisAngleSquareSum",
+      "declaration": "TauCeti.DavisKahan.Experimental.Frontier.Section4.proposition4_2_basisAngleSquareSum",
       "dependencies": [
         "base-acute-direct-rotation"
       ],
@@ -476,7 +476,7 @@
       "title": "Proposition 4.3 squared displacement",
       "kind": "source",
       "module": "DavisKahan.Experimental.Frontier.Section4",
-      "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.Section4.proposition4_3_squaredDisplacement_approximationNumbers",
+      "declaration": "TauCeti.DavisKahan.Experimental.Frontier.Section4.proposition4_3_squaredDisplacement_approximationNumbers",
       "dependencies": [
         "base-acute-direct-rotation"
       ],
@@ -492,7 +492,7 @@
       "title": "Approximation-number energy",
       "kind": "foundation",
       "module": "DavisKahan.Sources.DavisKahan1970.Section6AppendixLeakage",
-      "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.Section6Appendix.approximationEnergy",
+      "declaration": "TauCeti.DavisKahan.Experimental.Frontier.Section6Appendix.approximationEnergy",
       "dependencies": [],
       "source_census_ids": [],
       "priority": "high",
@@ -504,7 +504,7 @@
       "title": "Lemma 6.3 approximation-number form",
       "kind": "source",
       "module": "DavisKahan.Sources.DavisKahan1970.Section6AppendixLeakage",
-      "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.Section6Appendix.lemma6_3_approximationNumber_leakage",
+      "declaration": "TauCeti.DavisKahan.Experimental.Frontier.Section6Appendix.lemma6_3_approximationNumber_leakage",
       "dependencies": [
         "s6-approximation-energy"
       ],
@@ -520,7 +520,7 @@
       "title": "Lemma 6.3 singular-value specialization",
       "kind": "bridge",
       "module": "DavisKahan.Sources.DavisKahan1970.Section6AppendixLeakage",
-      "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.Section6Appendix.lemma6_3_singularValue_leakage",
+      "declaration": "TauCeti.DavisKahan.Experimental.Frontier.Section6Appendix.lemma6_3_singularValue_leakage",
       "dependencies": [
         "s6-lemma6-3-approx"
       ],
@@ -534,7 +534,7 @@
       "title": "Compatible cross-operator norm interface",
       "kind": "foundation",
       "module": "DavisKahan.Sources.DavisKahan1970.RemainingSourceSurface",
-      "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.RemainingSourceSurface.CompatibleCrossOperatorNorm",
+      "declaration": "TauCeti.DavisKahan.Experimental.Frontier.RemainingSourceSurface.CompatibleCrossOperatorNorm",
       "dependencies": [],
       "source_census_ids": [],
       "priority": "medium",
@@ -546,7 +546,7 @@
       "title": "Theorem 5.1 exact compatible-norm form",
       "kind": "source",
       "module": "DavisKahan.Sources.DavisKahan1970.RemainingSourceSurface",
-      "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.RemainingSourceSurface.theorem5_1_banach_sylvester",
+      "declaration": "TauCeti.DavisKahan.Experimental.Frontier.RemainingSourceSurface.theorem5_1_banach_sylvester",
       "dependencies": [
         "s5-compatible-cross-norm"
       ],
@@ -562,7 +562,7 @@
       "title": "Trial residual operator",
       "kind": "foundation",
       "module": "DavisKahan.Sources.DavisKahan1970.RemainingSourceSurface",
-      "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.RemainingSourceSurface.trialResidual",
+      "declaration": "TauCeti.DavisKahan.Experimental.Frontier.RemainingSourceSurface.trialResidual",
       "dependencies": [],
       "source_census_ids": [],
       "priority": "high",
@@ -574,7 +574,7 @@
       "title": "Theorem 6.3 directed sine cross block",
       "kind": "foundation",
       "module": "DavisKahan.TanTheta.Theorem63FiniteSource",
-      "declaration": "ForMathlib.DavisKahan.Experimental.ExactTanTheta.theorem63DirectedSineBlock",
+      "declaration": "TauCeti.DavisKahan.Experimental.ExactTanTheta.theorem63DirectedSineBlock",
       "dependencies": [],
       "source_census_ids": [],
       "priority": "high",
@@ -586,7 +586,7 @@
       "title": "Theorem 6.3 directed tangent approximation data",
       "kind": "foundation",
       "module": "DavisKahan.TanTheta.Theorem63FiniteSource",
-      "declaration": "ForMathlib.DavisKahan.Experimental.ExactTanTheta.HasTheorem63DirectedTangentApproximationNumbers",
+      "declaration": "TauCeti.DavisKahan.Experimental.ExactTanTheta.HasTheorem63DirectedTangentApproximationNumbers",
       "dependencies": [
         "s6-theorem6-3-directed-sine"
       ],
@@ -600,7 +600,7 @@
       "title": "Theorem 6.3 Ky Fan to ideal-gauge promotion",
       "kind": "bridge",
       "module": "DavisKahan.TanTheta.Theorem63FiniteSource",
-      "declaration": "ForMathlib.DavisKahan.Experimental.ExactTanTheta.theorem6_3_ideal_of_kyFan_core",
+      "declaration": "TauCeti.DavisKahan.Experimental.ExactTanTheta.theorem6_3_ideal_of_kyFan_core",
       "dependencies": [
         "s6-theorem6-3-directed-tangent-data"
       ],
@@ -614,7 +614,7 @@
       "title": "Theorem 6.3 source finite-Ky-Fan core",
       "kind": "bridge",
       "module": "DavisKahan.TanTheta.Theorem63FiniteSource",
-      "declaration": "ForMathlib.DavisKahan.Experimental.ExactTanTheta.theorem6_3_all_kyFan_core",
+      "declaration": "TauCeti.DavisKahan.Experimental.ExactTanTheta.theorem6_3_all_kyFan_core",
       "dependencies": [
         "s6-trial-residual",
         "s6-theorem6-3-directed-tangent-data"
@@ -629,7 +629,7 @@
       "title": "Theorem 6.3 finite strict-lower-rank specialization",
       "kind": "bridge",
       "module": "DavisKahan.Sources.DavisKahan1970.RemainingSourceSurface",
-      "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.RemainingSourceSurface.theorem6_3_finite_generalizedTanTheta_ideal",
+      "declaration": "TauCeti.DavisKahan.Experimental.Frontier.RemainingSourceSurface.theorem6_3_finite_generalizedTanTheta_ideal",
       "dependencies": [],
       "source_census_ids": [],
       "priority": "high",
@@ -641,7 +641,7 @@
       "title": "Theorem 6.3 generalized directed tangent theorem",
       "kind": "source",
       "module": "DavisKahan.TanTheta.Theorem63FiniteSource",
-      "declaration": "ForMathlib.DavisKahan.Experimental.ExactTanTheta.theorem6_3_generalizedTanTheta_source_ideal",
+      "declaration": "TauCeti.DavisKahan.Experimental.ExactTanTheta.theorem6_3_generalizedTanTheta_source_ideal",
       "dependencies": [
         "s6-theorem6-3-kyfan-core",
         "s6-theorem6-3-kyfan-promotion"
@@ -658,7 +658,7 @@
       "title": "Section 2 single-angle tangent theorem",
       "kind": "source",
       "module": "DavisKahan.Sources.DavisKahan1970.RemainingSourceSurface",
-      "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.RemainingSourceSurface.theorem6_3_equalRank_finite_tanTheta_ideal",
+      "declaration": "TauCeti.DavisKahan.Experimental.Frontier.RemainingSourceSurface.theorem6_3_equalRank_finite_tanTheta_ideal",
       "dependencies": [
         "s6-theorem6-3-kyfan-promotion"
       ],
@@ -675,7 +675,7 @@
       "title": "Theorem 6.3 unbounded graph-angle operator-norm partial",
       "kind": "bridge",
       "module": "DavisKahan.Sources.DavisKahan1970.RemainingSourceSurface",
-      "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.RemainingSourceSurface.theorem6_3_unbounded_graphAngle_opNorm_partial",
+      "declaration": "TauCeti.DavisKahan.Experimental.Frontier.RemainingSourceSurface.theorem6_3_unbounded_graphAngle_opNorm_partial",
       "dependencies": [],
       "source_census_ids": [],
       "priority": "high",
@@ -687,7 +687,7 @@
       "title": "Section 2 unbounded self-adjoint scope",
       "kind": "source",
       "module": "DavisKahan.Sources.DavisKahan1970.RemainingSourceSurface",
-      "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.RemainingSourceSurface.unbounded_angle_theorems_source_scope_partial_marker",
+      "declaration": "TauCeti.DavisKahan.Experimental.Frontier.RemainingSourceSurface.unbounded_angle_theorems_source_scope_partial_marker",
       "dependencies": [
         "base-theorem5-2",
         "s6-theorem6-3",
@@ -706,7 +706,7 @@
       "title": "Section 7 sine double-angle source ideal theorem",
       "kind": "source",
       "module": "DavisKahan.Sources.DavisKahan1970.RemainingSourceSurface",
-      "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.RemainingSourceSurface.section7_sinTwoTheta_source_ideal",
+      "declaration": "TauCeti.DavisKahan.Experimental.Frontier.RemainingSourceSurface.section7_sinTwoTheta_source_ideal",
       "dependencies": [
         "base-spectral-projection"
       ],
@@ -723,7 +723,7 @@
       "title": "Section 7 tangent double-angle source ideal theorem",
       "kind": "source",
       "module": "DavisKahan.Sources.DavisKahan1970.RemainingSourceSurface",
-      "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.RemainingSourceSurface.section7_tanTwoTheta_source_ideal",
+      "declaration": "TauCeti.DavisKahan.Experimental.Frontier.RemainingSourceSurface.section7_tanTwoTheta_source_ideal",
       "dependencies": [
         "s7-sin2"
       ],
@@ -740,7 +740,7 @@
       "title": "Circle resolvent integrand",
       "kind": "foundation",
       "module": "DavisKahan.Sources.DavisKahan1970.Section8RieszCircle",
-      "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.RieszCircle.circleResolventIntegrand",
+      "declaration": "TauCeti.DavisKahan.Experimental.Frontier.RieszCircle.circleResolventIntegrand",
       "dependencies": [],
       "source_census_ids": [],
       "priority": "high",
@@ -752,7 +752,7 @@
       "title": "Operator-valued circle Riesz integral",
       "kind": "foundation",
       "module": "DavisKahan.Sources.DavisKahan1970.Section8RieszCircle",
-      "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.RieszCircle.circleRieszProjectionIntegral",
+      "declaration": "TauCeti.DavisKahan.Experimental.Frontier.RieszCircle.circleRieszProjectionIntegral",
       "dependencies": [
         "s8-circle-integrand"
       ],
@@ -766,7 +766,7 @@
       "title": "Scalar circle Cauchy indicator formula",
       "kind": "foundation",
       "module": "DavisKahan.Sources.DavisKahan1970.Section8RieszCircle",
-      "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.RieszCircle.scalar_circleIntegral_resolvent_indicator",
+      "declaration": "TauCeti.DavisKahan.Experimental.Frontier.RieszCircle.scalar_circleIntegral_resolvent_indicator",
       "dependencies": [],
       "source_census_ids": [],
       "priority": "high",
@@ -778,7 +778,7 @@
       "title": "Circle Riesz equals spectral projection",
       "kind": "bridge",
       "module": "DavisKahan.Sources.DavisKahan1970.Section8RieszCircle",
-      "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.RieszCircle.circleRieszProjection_eq_boundedSelfAdjointSpectralProjection",
+      "declaration": "TauCeti.DavisKahan.Experimental.Frontier.RieszCircle.circleRieszProjection_eq_boundedSelfAdjointSpectralProjection",
       "dependencies": [
         "s8-circle-integral",
         "s8-scalar-cauchy",
@@ -794,7 +794,7 @@
       "title": "Circle Riesz perturbation norm bound",
       "kind": "bridge",
       "module": "DavisKahan.Sources.DavisKahan1970.Section8RieszCircle",
-      "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.RieszCircle.norm_circleRieszProjection_sub_le",
+      "declaration": "TauCeti.DavisKahan.Experimental.Frontier.RieszCircle.norm_circleRieszProjection_sub_le",
       "dependencies": [
         "s8-circle-integral"
       ],
@@ -808,7 +808,7 @@
       "title": "Circle Riesz path continuity",
       "kind": "bridge",
       "module": "DavisKahan.Sources.DavisKahan1970.Section8RieszCircle",
-      "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.RieszCircle.continuous_circleRieszProjection_path",
+      "declaration": "TauCeti.DavisKahan.Experimental.Frontier.RieszCircle.continuous_circleRieszProjection_path",
       "dependencies": [
         "s8-riesz-eq-spectral",
         "s8-riesz-norm-bound"
@@ -823,7 +823,7 @@
       "title": "Common-circle continuation data",
       "kind": "foundation",
       "module": "DavisKahan.Experimental.Frontier.Section8",
-      "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.Section8.CircleContinuationData",
+      "declaration": "TauCeti.DavisKahan.Experimental.Frontier.Section8.CircleContinuationData",
       "dependencies": [
         "s8-riesz-eq-spectral",
         "s8-riesz-path-continuity"
@@ -838,7 +838,7 @@
       "title": "Construct continuation witness from circle",
       "kind": "bridge",
       "module": "DavisKahan.Experimental.Frontier.Section8",
-      "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.Section8.spectralContinuationWitness_of_circle",
+      "declaration": "TauCeti.DavisKahan.Experimental.Frontier.Section8.spectralContinuationWitness_of_circle",
       "dependencies": [
         "s8-circle-continuation-data"
       ],
@@ -852,7 +852,7 @@
       "title": "Identify continuation endpoints",
       "kind": "bridge",
       "module": "DavisKahan.Experimental.Frontier.Section8",
-      "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.Section8.spectralContinuationWitness_of_circle_endpoints",
+      "declaration": "TauCeti.DavisKahan.Experimental.Frontier.Section8.spectralContinuationWitness_of_circle_endpoints",
       "dependencies": [
         "s8-continuation-witness",
         "base-spectral-projection"
@@ -867,7 +867,7 @@
       "title": "Continuation projection Lipschitz estimate",
       "kind": "bridge",
       "module": "DavisKahan.Experimental.Frontier.Section8",
-      "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.Section8.selectedBranchProjectionLipschitzConstant_of_circle",
+      "declaration": "TauCeti.DavisKahan.Experimental.Frontier.Section8.selectedBranchProjectionLipschitzConstant_of_circle",
       "dependencies": [
         "s8-continuation-witness",
         "s8-riesz-norm-bound"
@@ -882,7 +882,7 @@
       "title": "Direct-rotation upper compression data",
       "kind": "bridge",
       "module": "DavisKahan.Experimental.Frontier.Section8",
-      "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.Section8.upperCompressionRepulsionData_of_targetSplitting",
+      "declaration": "TauCeti.DavisKahan.Experimental.Frontier.Section8.upperCompressionRepulsionData_of_targetSplitting",
       "dependencies": [
         "s3-prop3-1"
       ],
@@ -896,7 +896,7 @@
       "title": "Direct-rotation lower compression data",
       "kind": "bridge",
       "module": "DavisKahan.Experimental.Frontier.Section8",
-      "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.Section8.lowerCompressionRepulsionData_of_targetSplitting",
+      "declaration": "TauCeti.DavisKahan.Experimental.Frontier.Section8.lowerCompressionRepulsionData_of_targetSplitting",
       "dependencies": [
         "s3-prop3-1"
       ],
@@ -910,7 +910,7 @@
       "title": "Theorem 8.1 full source conclusion",
       "kind": "source",
       "module": "DavisKahan.Experimental.Frontier.Section8",
-      "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.Section8.theorem8_1_selectedBranch_and_spectralRepulsion",
+      "declaration": "TauCeti.DavisKahan.Experimental.Frontier.Section8.theorem8_1_selectedBranch_and_spectralRepulsion",
       "dependencies": [
         "s8-continuation-witness",
         "s8-continuation-endpoints",
@@ -931,7 +931,7 @@
       "title": "Construct perturbation half-gap bridge",
       "kind": "bridge",
       "module": "DavisKahan.Experimental.Frontier.Section8",
-      "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.Section8.perturbationHalfGapBridge_of_sourceHypotheses",
+      "declaration": "TauCeti.DavisKahan.Experimental.Frontier.Section8.perturbationHalfGapBridge_of_sourceHypotheses",
       "dependencies": [
         "s8-continuation-witness",
         "s8-projection-lipschitz"
@@ -946,7 +946,7 @@
       "title": "Construct residual half-gap bridge",
       "kind": "bridge",
       "module": "DavisKahan.Experimental.Frontier.Section8",
-      "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.Section8.residualHalfGapBridge_of_sourceHypotheses",
+      "declaration": "TauCeti.DavisKahan.Experimental.Frontier.Section8.residualHalfGapBridge_of_sourceHypotheses",
       "dependencies": [
         "s8-continuation-witness",
         "s8-projection-lipschitz"
@@ -961,7 +961,7 @@
       "title": "Theorem 8.2 perturbation alternative",
       "kind": "source",
       "module": "DavisKahan.Experimental.Frontier.Section8",
-      "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.Section8.theorem8_2_perturbationHalfGap_selectedBranch",
+      "declaration": "TauCeti.DavisKahan.Experimental.Frontier.Section8.theorem8_2_perturbationHalfGap_selectedBranch",
       "dependencies": [
         "s8-perturbation-half-gap"
       ],
@@ -977,7 +977,7 @@
       "title": "Theorem 8.2 residual alternative",
       "kind": "source",
       "module": "DavisKahan.Experimental.Frontier.Section8",
-      "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.Section8.theorem8_2_residualHalfGap_selectedBranch",
+      "declaration": "TauCeti.DavisKahan.Experimental.Frontier.Section8.theorem8_2_residualHalfGap_selectedBranch",
       "dependencies": [
         "s8-residual-half-gap"
       ],
@@ -993,7 +993,7 @@
       "title": "Free-beam analytic semantic model",
       "kind": "foundation",
       "module": "DavisKahan.Experimental.Frontier.Section9Analytic",
-      "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.Section9.FreeBeamAnalyticModel",
+      "declaration": "TauCeti.DavisKahan.Experimental.Frontier.Section9.FreeBeamAnalyticModel",
       "dependencies": [],
       "source_census_ids": [],
       "priority": "high",
@@ -1005,7 +1005,7 @@
       "title": "Precise free-beam realization predicate",
       "kind": "foundation",
       "module": "DavisKahan.Experimental.Frontier.Section9Analytic",
-      "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.Section9.RepresentsFreeBeamProblem",
+      "declaration": "TauCeti.DavisKahan.Experimental.Frontier.Section9.RepresentsFreeBeamProblem",
       "dependencies": [
         "s9-semantic-model"
       ],
@@ -1019,7 +1019,7 @@
       "title": "Third eigenvalue identification predicate",
       "kind": "foundation",
       "module": "DavisKahan.Experimental.Frontier.Section9Analytic",
-      "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.Section9.ThirdEigenvalueIsCorrect",
+      "declaration": "TauCeti.DavisKahan.Experimental.Frontier.Section9.ThirdEigenvalueIsCorrect",
       "dependencies": [
         "s9-semantic-model"
       ],
@@ -1033,7 +1033,7 @@
       "title": "Closed fourth-derivative operator",
       "kind": "foundation",
       "module": "DavisKahan.Experimental.Frontier.Section9Analytic",
-      "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.Section9.freeBeamClosedFourthDerivative",
+      "declaration": "TauCeti.DavisKahan.Experimental.Frontier.Section9.freeBeamClosedFourthDerivative",
       "dependencies": [],
       "source_census_ids": [],
       "priority": "hard",
@@ -1045,7 +1045,7 @@
       "title": "Free-beam self-adjointness",
       "kind": "foundation",
       "module": "DavisKahan.Experimental.Frontier.Section9Analytic",
-      "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.Section9.freeBeamClosedFourthDerivative_isSelfAdjoint",
+      "declaration": "TauCeti.DavisKahan.Experimental.Frontier.Section9.freeBeamClosedFourthDerivative_isSelfAdjoint",
       "dependencies": [
         "s9-free-beam-operator"
       ],
@@ -1059,7 +1059,7 @@
       "title": "Canonical free-beam model",
       "kind": "bridge",
       "module": "DavisKahan.Experimental.Frontier.Section9Analytic",
-      "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.Section9.canonicalFreeBeamAnalyticModel",
+      "declaration": "TauCeti.DavisKahan.Experimental.Frontier.Section9.canonicalFreeBeamAnalyticModel",
       "dependencies": [
         "s9-free-beam-operator",
         "s9-free-beam-selfadjoint",
@@ -1075,7 +1075,7 @@
       "title": "Third free-beam eigenvalue greater than 500",
       "kind": "source",
       "module": "DavisKahan.Experimental.Frontier.Section9Analytic",
-      "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.Section9.freeBeam_thirdEigenvalue_gt_fiveHundred",
+      "declaration": "TauCeti.DavisKahan.Experimental.Frontier.Section9.freeBeam_thirdEigenvalue_gt_fiveHundred",
       "dependencies": [
         "s9-represents-free-beam",
         "s9-third-eigenvalue-correct"
@@ -1090,7 +1090,7 @@
       "title": "Exact Ritz and residual data from model",
       "kind": "bridge",
       "module": "DavisKahan.Experimental.Frontier.Section9Analytic",
-      "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.Section9.freeBeam_exact_finite_data",
+      "declaration": "TauCeti.DavisKahan.Experimental.Frontier.Section9.freeBeam_exact_finite_data",
       "dependencies": [
         "s9-represents-free-beam"
       ],
@@ -1104,7 +1104,7 @@
       "title": "Construct finite-data certificate",
       "kind": "bridge",
       "module": "DavisKahan.Experimental.Frontier.Section9Analytic",
-      "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.Section9.freeBeamFiniteDataCertificate_of_model",
+      "declaration": "TauCeti.DavisKahan.Experimental.Frontier.Section9.freeBeamFiniteDataCertificate_of_model",
       "dependencies": [
         "s9-third-eigenvalue-bound",
         "s9-exact-finite-data"
@@ -1121,7 +1121,7 @@
       "title": "Derive equations 9.1--9.4 from source theorems",
       "kind": "source",
       "module": "DavisKahan.Experimental.Frontier.Section9Analytic",
-      "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.Section9.section9_initial_angle_bounds",
+      "declaration": "TauCeti.DavisKahan.Experimental.Frontier.Section9.section9_initial_angle_bounds",
       "dependencies": [
         "s7-sin2",
         "s9-represents-free-beam"
@@ -1138,7 +1138,7 @@
       "title": "Derive equations 9.5--9.7 from source theorems",
       "kind": "source",
       "module": "DavisKahan.Experimental.Frontier.Section9Analytic",
-      "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.Section9.section9_tangent_angle_bounds",
+      "declaration": "TauCeti.DavisKahan.Experimental.Frontier.Section9.section9_tangent_angle_bounds",
       "dependencies": [
         "s6-theorem6-3",
         "s7-tan2",
@@ -1156,7 +1156,7 @@
       "title": "Construct theorem-output certificate from actual angles",
       "kind": "bridge",
       "module": "DavisKahan.Experimental.Frontier.Section9Analytic",
-      "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.Section9.theoremOutputCertificate_of_model",
+      "declaration": "TauCeti.DavisKahan.Experimental.Frontier.Section9.theoremOutputCertificate_of_model",
       "dependencies": [
         "s9-initial-angle-bounds",
         "s9-tangent-angle-bounds",
@@ -1175,7 +1175,7 @@
       "title": "Unconditional Section 9 numerical certificate",
       "kind": "source",
       "module": "DavisKahan.Experimental.Frontier.Section9Analytic",
-      "declaration": "ForMathlib.DavisKahan.Experimental.Frontier.Section9.section9_numericalExampleCertificate",
+      "declaration": "TauCeti.DavisKahan.Experimental.Frontier.Section9.section9_numericalExampleCertificate",
       "dependencies": [
         "s9-canonical-model",
         "s9-finite-certificate",
