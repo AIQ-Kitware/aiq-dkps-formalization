@@ -152,6 +152,38 @@ data structures that still quantify over the bundle.
 - The `Restriction.lean` and `ClosedSylvesterEquation.lean` facade blocks, once
   their remaining callers move.
 
+**Riccati sub-analysis (edward, 2026-07-28) — measured, not migrated.**  The
+table above lists `Riccati/UnboundedCore` as the largest un-migrated module at
+32 (re-measured: 34 occurrences).  That count overstates the work, and the
+blocker is not where the count suggests:
+
+- **8 of the declarations are pure facades**, not records:
+  `closedOperatorDirectSumDomain{,Fst,Snd,FstLinearMap,SndLinearMap}`,
+  `closedOperatorDirectSumLinearMap`, `unboundedBlockOperatorPMapCore`,
+  `unboundedBlockOperatorCorePMap`.  Every one already *delegates* to
+  `TauCeti.LinearPMap.*` through `A.toLinearPMap`; there is no mathematics in
+  them to migrate, only callers to move.
+- **The whole `closedOperatorDirectSum*` family has exactly 2 production
+  consumer sites**, both in `Riccati/UnboundedReduction.lean`.  The other 9 are
+  in `DavisKahan/Experimental/InfiniteDimensional/Riccati/**`.
+- `UnboundedBlockData` itself has 4 production consumers
+  (`Riccati/{UnboundedBasic,UnboundedCore,UnboundedExistence,UnboundedReduction}`),
+  6 Experimental ones, and 1 in the `FinishTanTwoTheta/` scratch tree.
+
+So the production side of this cluster is **two call sites away** from letting
+the `closedOperatorDirectSum*` facade be deleted outright.  What actually blocks
+the deletion is `Experimental/**`, which this lane's count *excludes* but which
+still has to compile for anyone who builds it — so deleting the facade is a
+decision about Experimental, not about Riccati, and it should be taken together
+with a policy call on whether Experimental migrates or is allowed to keep a
+documented compatibility layer.  Recording that here rather than half-migrating:
+a partial sweep would leave `UnboundedReduction` on the raw API and Experimental
+on the bundle, i.e. exactly the mid-development conversion boundary the phase-C
+ordering note warns about.
+
+`Riccati/UnboundedTransport.lean` (17) is in the same shape: all of it is the
+`ClosedOperator.pullback` facade over `TauCeti.LinearPMap.pullback*`.
+
 **Out of this lane's declared scope; needs its own claim.**  `Interop/Spectra/**`
 (6 modules, ~130 `ClosedOperator` occurrences, none in type position — they sit
 at the PVM/Borel/real-spectrum/cutoff boundary that "Explicitly excluded" names)
