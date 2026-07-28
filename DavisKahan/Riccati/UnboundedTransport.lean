@@ -73,38 +73,8 @@ private theorem pullbackDomain_dense
 private theorem pullbackLinearMap_closedGraph
     (A : ClosedOperator (𝕜 := 𝕜) (E := E)) (e : E ≃L[𝕜] E) :
     IsClosed (Set.range fun x : pullbackDomain A e =>
-      ((x : E), pullbackLinearMap A e x)) := by
-  let coords : E × E → E × E := fun p => (e p.1, e p.2)
-  have hcoords : Continuous coords := by
-    fun_prop
-  rw [show Set.range (fun x : pullbackDomain A e =>
-      ((x : E), pullbackLinearMap A e x)) =
-      coords ⁻¹' (Set.range fun x : A.domain =>
-        ((x : E), A.toLinearMap x)) by
-    ext p
-    constructor
-    · rintro ⟨x, rfl⟩
-      refine ⟨pullbackDomainToOriginal A e x, ?_⟩
-      apply Prod.ext
-      · rfl
-      · simp [coords]
-    · rintro ⟨x, hx⟩
-      have hfst : (x : E) = e p.1 := congrArg Prod.fst hx
-      have hsnd : A.toLinearMap x = e p.2 := congrArg Prod.snd hx
-      have hp1 : p.1 ∈ pullbackDomain A e := by
-        change e p.1 ∈ A.domain
-        rw [← hfst]
-        exact x.property
-      let z : pullbackDomain A e := ⟨p.1, hp1⟩
-      have hz : pullbackDomainToOriginal A e z = x := by
-        apply Subtype.ext
-        exact hfst.symm
-      refine ⟨z, Prod.ext rfl ?_⟩
-      apply e.injective
-      change e (pullbackLinearMap A e z) = e p.2
-      rw [pullbackLinearMap_apply, e.apply_symm_apply, hz]
-      exact hsnd]
-  exact A.closed_graph.preimage hcoords
+      ((x : E), pullbackLinearMap A e x)) :=
+  TauCeti.LinearPMap.pullback_closedGraph A.toLinearPMap e A.closed_graph
 
 /-- Pull a closed operator back through a continuous linear equivalence.  Its
  domain is exactly the inverse image of the original domain. -/

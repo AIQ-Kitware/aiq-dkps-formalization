@@ -462,6 +462,45 @@ theorem pullback_dense
       simpa using hy]
   exact himage
 
+/-- Pullback through a continuous linear equivalence preserves graph
+closedness. -/
+theorem pullback_closedGraph
+    (A : E →ₗ.[𝕜] E) (e : E ≃L[𝕜] E)
+    (hA : IsClosed (Set.range fun x : A.domain => ((x : E), A x))) :
+    IsClosed (Set.range fun x : (pullback A e).domain =>
+      ((x : E), pullback A e x)) := by
+  let coords : E × E → E × E := fun p => (e p.1, e p.2)
+  have hcoords : Continuous coords := by fun_prop
+  rw [show Set.range (fun x : (pullback A e).domain =>
+      ((x : E), pullback A e x)) =
+      coords ⁻¹' (Set.range fun x : A.domain => ((x : E), A x)) by
+    ext p
+    constructor
+    · rintro ⟨x, rfl⟩
+      refine ⟨pullbackDomainToOriginal A e x, ?_⟩
+      apply Prod.ext
+      · rfl
+      · change A (pullbackDomainToOriginal A e x) =
+          e (pullbackLinearMap A e x)
+        rw [pullbackLinearMap_apply, e.apply_symm_apply]
+    · rintro ⟨x, hx⟩
+      have hfst : (x : E) = e p.1 := congrArg Prod.fst hx
+      have hsnd : A x = e p.2 := congrArg Prod.snd hx
+      have hp1 : p.1 ∈ pullbackDomain A e := by
+        change e p.1 ∈ A.domain
+        rw [← hfst]
+        exact x.property
+      let z : (pullback A e).domain := ⟨p.1, hp1⟩
+      have hz : pullbackDomainToOriginal A e z = x := by
+        apply Subtype.ext
+        exact hfst.symm
+      refine ⟨z, Prod.ext rfl ?_⟩
+      apply e.injective
+      change e (pullbackLinearMap A e z) = e p.2
+      rw [pullbackLinearMap_apply, e.apply_symm_apply, hz]
+      exact hsnd]
+  exact hA.preimage hcoords
+
 /-- A partial linear map is symmetric on its operator domain. -/
 def IsSymmetric (A : E →ₗ.[𝕜] E) : Prop :=
   ∀ x y : A.domain, ⟪A x, (y : E)⟫_𝕜 = ⟪(x : E), A y⟫_𝕜
