@@ -174,6 +174,18 @@ noncomputable def unboundedOffDiagonalCoupling
 
 /-- The closed unbounded block operator obtained by adding the bounded
 coupling to the closed diagonal direct sum. -/
+noncomputable def unboundedBlockOperatorCorePMap
+    (H : UnboundedBlockData (𝕜 := 𝕜) (E0 := E0) (E1 := E1)) :
+    WithLp 2 (E0 × E1) →ₗ.[𝕜] WithLp 2 (E0 × E1) :=
+  TauCeti.LinearPMap.addBounded
+    (TauCeti.LinearPMap.directSum H.A0.toLinearPMap H.A1.toLinearPMap)
+    (unboundedOffDiagonalCoupling H)
+
+@[simp] theorem unboundedBlockOperatorCorePMap_domain
+    (H : UnboundedBlockData (𝕜 := 𝕜) (E0 := E0) (E1 := E1)) :
+    (unboundedBlockOperatorCorePMap H).domain =
+      closedOperatorDirectSumDomain H.A0 H.A1 := rfl
+
 noncomputable def unboundedBlockOperatorCore
     (H : UnboundedBlockData (𝕜 := 𝕜) (E0 := E0) (E1 := E1)) :
     ClosedOperator (𝕜 := 𝕜) (E := WithLp 2 (E0 × E1)) :=
