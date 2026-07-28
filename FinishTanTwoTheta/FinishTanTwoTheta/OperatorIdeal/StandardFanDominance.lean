@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import FinishTanTwoTheta.GroundedImports
-import FinishTanTwoTheta.Sequence.WeakSubmajorization
+import FinishTanTwoTheta.Sequence.MinimalCompletion
 import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.UnitaryInvariantNormLaws
 import DavisKahan.Sources.DavisKahan1970.Ideals.NormCorrespondence
 
@@ -131,6 +131,7 @@ theorem exists_finiteRank_gaugeApproximation_of_kyFan_dominated
         (𝕜 := 𝕜) (E := E) (F := F)
     have hfiniteMajorization := N.prefixGauge_le_of_all_kyFan_le
       (𝕜 := 𝕜) (E := E) (F := F)
+      (A := A) (B := B)
     aesop
   obtain ⟨n, S, hSrank, hSmem, hSsmall⟩ := htail
   refine ⟨S, ?_, hSmem, hSsmall⟩
