@@ -24,7 +24,13 @@ module violates the layering. The rules (see the campaign spec and
 5. a source-facing wrapper (`DavisKahan.Sources.*`) must not be imported by a
    lower-level generic module (`ForTauCeti`, `ForMathlib`, or a manifest-declared
    generic `DavisKahan` foundation).
-6. a Tau Ceti extraction cluster (from the manifest) must not import outside its
+6. a production module (`DavisKahan`, `DavisKahan.Sources`, or a paper library)
+   must reach `Spectra` only through the designated bridge
+   `DavisKahan.Interop.Spectra.*`, unless it is in the ratcheting allowlist.
+   AGENTS.md records that the final migration target removes Spectra from the
+   normal build, and three extraction clusters are `blocked-on-spectra-removal`;
+   this rule keeps the coupling visible and stops new coupling appearing.
+7. a Tau Ceti extraction cluster (from the manifest) must not import outside its
    declared extraction closure (Mathlib + TauCeti + its own staging modules).
 
 Violations are reported with the shortest offending import path, not just a
@@ -208,6 +214,22 @@ def check(graph: dict[str, list[str]], allowlist: dict,
                         "PRODUCTION_IMPORTS_EXPERIMENTAL", module,
                         f"production module imports Experimental {imp} "
                         f"without an allowlist entry"))
+
+    # Rule 7: Spectra reaches production only through the Interop bridge.
+    spectra_ok = set(allowlist.get("production_imports_spectra", []))
+    for module, imports in graph.items():
+        lyr = classify(module)
+        if lyr not in {"davis-kahan", "dk-source", "paper"}:
+            continue
+        if module.startswith("DavisKahan.Interop.Spectra"):
+            continue          # the designated bridge; this is where Spectra belongs
+        for imp in imports:
+            if classify(imp) == "spectra" and module not in spectra_ok:
+                violations.append(Violation(
+                    "PRODUCTION_IMPORTS_SPECTRA", module,
+                    f"production module imports {imp} directly instead of going "
+                    f"through DavisKahan.Interop.Spectra, and is not in the "
+                    f"ratcheting allowlist"))
 
     # Rule 6: cluster extraction closure (manifest-driven).
     for record in manifest.get("clusters", []):
