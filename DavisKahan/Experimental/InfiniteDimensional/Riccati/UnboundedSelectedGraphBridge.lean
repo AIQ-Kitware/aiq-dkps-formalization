@@ -116,17 +116,17 @@ theorem graphSubspace_eq_unboundedBlockGraph_rectangularAngularPart
 ambient angular graph.  The domain and reduction hypotheses are expressed over
 the raw block core, so this endpoint does not reconstruct local closed-operator
 bundles. -/
-noncomputable def ContractiveReducingGraphSelectionPMap.ofAmbientAngularGraph
-    (H : UnboundedBlockDataPMap (𝕜 := ℂ) (E0 := E0) (E1 := E1))
+noncomputable def ContractiveReducingGraphSelection.ofAmbientAngularGraph
+    (H : UnboundedBlockData (𝕜 := ℂ) (E0 := E0) (E1 := E1))
     (Y : DirectSum E0 E1 →L[ℂ] DirectSum E0 E1)
     (hY : IsAngularOperator
       (unboundedBlockGraph (0 : E0 →L[ℂ] E1)) Y)
-    (hdom : PreservesRiccatiPMapDomains H (rectangularAngularPart Y))
+    (hdom : PreservesRiccatiDomains H (rectangularAngularPart Y))
     (hnorm : ‖rectangularAngularPart Y‖ < 1)
     (hred : TauCeti.LinearPMap.ReducesSubspace
-      (unboundedBlockOperatorPMapCore H)
+      (unboundedBlockOperatorCore H)
       (graphSubspace (unboundedBlockGraph (0 : E0 →L[ℂ] E1)) Y)) :
-    ContractiveReducingGraphSelectionPMap H where
+    ContractiveReducingGraphSelection H where
   X := rectangularAngularPart Y
   preservesDomains := hdom
   norm_lt_one := hnorm
@@ -136,21 +136,21 @@ noncomputable def ContractiveReducingGraphSelectionPMap.ofAmbientAngularGraph
 
 /-- Canonical strong-solution conclusion from an ambient selected graph and
 its domain-aware partial-map reduction data. -/
-theorem exists_strongRiccatiPMap_solution_of_ambientAngularGraph
-    (H : UnboundedBlockDataPMap (𝕜 := ℂ) (E0 := E0) (E1 := E1))
+theorem exists_strongRiccati_solution_of_ambientAngularGraph
+    (H : UnboundedBlockData (𝕜 := ℂ) (E0 := E0) (E1 := E1))
     (Y : DirectSum E0 E1 →L[ℂ] DirectSum E0 E1)
     (hY : IsAngularOperator
       (unboundedBlockGraph (0 : E0 →L[ℂ] E1)) Y)
-    (hdom : PreservesRiccatiPMapDomains H (rectangularAngularPart Y))
+    (hdom : PreservesRiccatiDomains H (rectangularAngularPart Y))
     (hnorm : ‖rectangularAngularPart Y‖ < 1)
     (hred : TauCeti.LinearPMap.ReducesSubspace
-      (unboundedBlockOperatorPMapCore H)
+      (unboundedBlockOperatorCore H)
       (graphSubspace (unboundedBlockGraph (0 : E0 →L[ℂ] E1)) Y)) :
     ∃ X : E0 →L[ℂ] E1,
-      StrongSolvesRiccatiPMap H X ∧ ‖X‖ < 1 ∧
-      TauCeti.LinearPMap.ReducesSubspace (unboundedBlockOperatorPMapCore H)
+      StrongSolvesRiccati H X ∧ ‖X‖ < 1 ∧
+      TauCeti.LinearPMap.ReducesSubspace (unboundedBlockOperatorCore H)
         (unboundedBlockGraph X) := by
-  exact (ContractiveReducingGraphSelectionPMap.ofAmbientAngularGraph
+  exact (ContractiveReducingGraphSelection.ofAmbientAngularGraph
     H Y hY hdom hnorm hred).exists_strongRiccati_solution
 
 end DavisKahanExt
