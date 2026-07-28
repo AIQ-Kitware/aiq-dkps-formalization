@@ -97,6 +97,7 @@
         "ForTauCeti.Analysis.InnerProductSpace.Spectrum",
         "ForTauCeti.Analysis.InnerProductSpace.TwoDimensionalSingularValues",
         "ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantNorm",
+        "ForTauCeti.Analysis.Convex.Majorization",
         "ForTauCeti.Analysis.Normed.FiniteLpGauge",
         "ForTauCeti.Analysis.Normed.Operator.LinearIsometry"
       ]
@@ -1309,6 +1310,27 @@
       ],
       "blocked_dependencies": [],
       "downstream_users": [],
+      "status": "staged",
+      "upstream_pr": null
+    },
+    {
+      "source_module": "ForTauCeti.Analysis.Normed.FiniteLpGauge + ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantNorm + ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm.Majorization",
+      "source_declarations": [],
+      "current_namespace": "TauCeti",
+      "staging_module": "ForTauCeti.Analysis.Convex.Majorization",
+      "final_tauceti_module": "TauCeti.Analysis.Convex.Majorization",
+      "ownership_class": "tauceti",
+      "roadmap_target": "unitarily-invariant-norm",
+      "provenance_class": "split and generalized on 2026-07-28; the finite-vector majorization vocabulary and FiniteSymmetricGauge moved out of FiniteLpGauge, and the Hardy--Littlewood--Polya transfer descent -- which existed as three independent copies -- was restated once for a symmetric-convex set; authors Jon Crall, GPT-5.6 Thinking, Claude Fable 5, Claude Opus 5; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
+      "direct_dependencies": [
+        "Mathlib"
+      ],
+      "blocked_dependencies": [],
+      "downstream_users": [
+        "ForTauCeti.Analysis.Normed.FiniteLpGauge",
+        "ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantNorm",
+        "ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm.Majorization"
+      ],
       "status": "staged",
       "upstream_pr": null
     },

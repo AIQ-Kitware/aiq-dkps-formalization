@@ -14,14 +14,16 @@ finite-dimensional inner product space, the operator SVD factorization
 `A = U ∘ diag(σ(A)) ∘ V`, the symmetric-gauge representation `N A = Φ_N(σ(A))`,
 and the **Fan dominance principle**: Ky Fan domination
 `∀ k, kyFanSum k A ≤ kyFanSum k B` implies `N A ≤ N B` for every unitarily
-invariant norm `N`.  The engine is a T-transform descent performed *directly on
-the gauge* — no Hardy–Littlewood–Pólya theorem, no weak-majorization
-completion, no Birkhoff: each transform step costs one triangle inequality,
-one homogeneity, and one swap-permutation invariance of the gauge.
+invariant norm `N`.  The engine is the Hardy–Littlewood–Pólya transfer descent of
+`ForTauCeti.Analysis.Convex.Majorization`, applied to the gauge through
+`UnitarilyInvariantNorm.finiteSymmetricGauge`: no weak-majorization completion and no
+Birkhoff decomposition, each transform step costing one triangle inequality, one
+homogeneity, and one swap-permutation invariance of the gauge.
 To be re-authored per Mathlib's AI-contribution policy at PR time.
 -/
 
 import ForTauCeti.Analysis.InnerProductSpace.KyFan
+import ForTauCeti.Analysis.Convex.Majorization
 import Mathlib.Analysis.InnerProductSpace.Projection.Reflection
 
 
@@ -41,6 +43,8 @@ For a finite-dimensional inner product space `E` over `𝕜 = ℝ, ℂ`:
   axioms — positivity is never needed for Davis–Kahan);
 * `TauCeti.UnitarilyInvariantNorm.apply_eq_gauge` — the **symmetric-gauge
   representation** `N A = Φ_N(σ(A))` where `Φ_N x := N (diagOp b x)`;
+* `TauCeti.UnitarilyInvariantNorm.finiteSymmetricGauge` — the gauge as a
+  `TauCeti.FiniteSymmetricGauge`, which is what makes the majorization theory apply;
 * `TauCeti.UnitarilyInvariantNorm.gauge_le_gauge_of_prefix_sums_le` — the
   **T-transform descent**: for `z` antitone nonnegative and `y` nonnegative,
   prefix-sum domination `∀ m, ∑_{i<m} z ≤ ∑_{i<m} y` forces `Φ z ≤ Φ y`;
@@ -48,13 +52,14 @@ For a finite-dimensional inner product space `E` over `𝕜 = ℝ, ℂ`:
   **Fan dominance principle**;
 * `TauCeti.UnitarilyInvariantNorm.apply_adjoint` — `N (A⋆) = N A`.
 
-The descent replaces the classical majorization pipeline (weak-majorization
-completion + Hardy–Littlewood–Pólya + Birkhoff): given a violation `y l < z l`
-pick the least such `l`; prefix domination produces `j < l` with `z j < y j`;
-averaging `y` with its `(j l)`-swap by `c₂ = δ/(y j − y l)`,
-`δ = min (y j − z j) (z l − y l)`, moves `y j ↦ y j − δ` and `y l ↦ y l + δ`,
-kills a disagreement, preserves nonnegativity and prefix domination, and does
-not increase the gauge.
+The descent replaces the classical majorization pipeline (weak-majorization completion +
+the Hardy–Littlewood–Pólya *characterization* by doubly stochastic matrices + Birkhoff) by
+its transfer lemma alone: given a violation `y l < z l` pick the least such `l`; prefix
+domination produces `j < l` with `z j < y j`; averaging `y` with its `(j l)`-swap by
+`c₂ = δ/(y j − y l)`, `δ = min (y j − z j) (z l − y l)`, moves `y j ↦ y j − δ` and
+`y l ↦ y l + δ`, kills a disagreement, preserves nonnegativity and prefix domination, and
+does not increase the gauge.  That argument now lives once, for a general symmetric-convex
+set, in `ForTauCeti.Analysis.Convex.Majorization`.
 
 ## References
 
@@ -376,123 +381,37 @@ theorem eq_of_same_singularValues {A B : E →ₗ[𝕜] E}
   rw [N.apply_eq_gauge rfl (stdOrthonormalBasis 𝕜 E) A,
     N.apply_eq_gauge rfl (stdOrthonormalBasis 𝕜 E) B, h]
 
-/-! ### Coordinatewise monotonicity of the gauge -/
+/-! ### Monotonicity of the gauge -/
+
+/-- The gauge of a unitarily invariant norm, packaged as a `FiniteSymmetricGauge`.  Its four
+fields are exactly `gauge_add_le`, `gauge_real_smul`, `gauge_perm` and `gauge_neg_single`,
+which is what makes the Hardy--Littlewood--Pólya transfer theory
+(`ForTauCeti.Analysis.Convex.Majorization`) apply verbatim: everything below is that theory
+read through this packaging, not a second proof of it. -/
+noncomputable def finiteSymmetricGauge (N : UnitarilyInvariantNorm 𝕜 E)
+    (b : OrthonormalBasis (Fin n) 𝕜 E) : FiniteSymmetricGauge n where
+  toFun := N.gauge b
+  add_le' := N.gauge_add_le b
+  real_smul' := N.gauge_real_smul b
+  perm' := N.gauge_perm b
+  neg_single' := N.gauge_neg_single b
+
+@[simp] theorem finiteSymmetricGauge_apply (b : OrthonormalBasis (Fin n) 𝕜 E)
+    (x : Fin n → ℝ) : N.finiteSymmetricGauge b x = N.gauge b x := rfl
 
 /-- Shrinking one coordinate of `y` (in absolute value) does not increase the
 gauge: `update y j t` with `|t| ≤ y j` is a convex combination of `y` and its
 `j`-th sign flip. -/
 theorem gauge_update_le (b : OrthonormalBasis (Fin n) 𝕜 E) {y : Fin n → ℝ}
     {j : Fin n} {t : ℝ} (ht : |t| ≤ y j) :
-    N.gauge b (Function.update y j t) ≤ N.gauge b y := by
-  have hyj : 0 ≤ y j := le_trans (abs_nonneg t) ht
-  rcases hyj.eq_or_lt with h0 | hpos
-  · -- `y j = 0` forces `t = 0`: the update is trivial.
-    have ht0 : t = 0 := by
-      have h1 : |t| ≤ 0 := by rw [h0]; exact ht
-      exact abs_eq_zero.mp (le_antisymm h1 (abs_nonneg t))
-    have hupd : Function.update y j t = y := by
-      funext i
-      rcases eq_or_ne i j with rfl | hij
-      · rw [Function.update_self, ht0, ← h0]
-      · rw [Function.update_of_ne hij]
-    rw [hupd]
-  · set c₁ : ℝ := (y j + t) / (2 * y j) with hc₁
-    set c₂ : ℝ := (y j - t) / (2 * y j) with hc₂
-    obtain ⟨ht₁, ht₂⟩ := abs_le.mp ht
-    have h2yj : 0 < 2 * y j := by linarith
-    have hyj0 : (2 : ℝ) * y j ≠ 0 := ne_of_gt h2yj
-    have hc₁0 : 0 ≤ c₁ := div_nonneg (by linarith) h2yj.le
-    have hc₂0 : 0 ≤ c₂ := div_nonneg (by linarith) h2yj.le
-    have hsum : c₁ + c₂ = 1 := by
-      rw [hc₁, hc₂]
-      field_simp
-      ring
-    have hdecomp : Function.update y j t
-        = c₁ • y + c₂ • Function.update y j (-(y j)) := by
-      funext i
-      simp only [Pi.add_apply, Pi.smul_apply, smul_eq_mul]
-      rcases eq_or_ne i j with rfl | hij
-      · rw [Function.update_self, Function.update_self, hc₁, hc₂]
-        field_simp
-        ring
-      · rw [Function.update_of_ne hij, Function.update_of_ne hij, ← add_mul,
-          hsum, one_mul]
-    calc N.gauge b (Function.update y j t)
-        = N.gauge b (c₁ • y + c₂ • Function.update y j (-(y j))) := by
-          rw [hdecomp]
-      _ ≤ N.gauge b (c₁ • y) + N.gauge b (c₂ • Function.update y j (-(y j))) :=
-          N.gauge_add_le b _ _
-      _ = c₁ * N.gauge b y
-          + c₂ * N.gauge b (Function.update y j (-(y j))) := by
-          rw [N.gauge_real_smul, N.gauge_real_smul, abs_of_nonneg hc₁0,
-            abs_of_nonneg hc₂0]
-      _ = c₁ * N.gauge b y + c₂ * N.gauge b y := by
-          rw [N.gauge_neg_single]
-      _ = N.gauge b y := by
-          rw [← add_mul, hsum, one_mul]
+    N.gauge b (Function.update y j t) ≤ N.gauge b y :=
+  (N.finiteSymmetricGauge b).update_le ht
 
 /-- **Coordinatewise monotonicity of the gauge** on nonnegative vectors. -/
 theorem gauge_mono (b : OrthonormalBasis (Fin n) 𝕜 E) {x y : Fin n → ℝ}
     (hx0 : ∀ i, 0 ≤ x i) (hxy : ∀ i, x i ≤ y i) :
-    N.gauge b x ≤ N.gauge b y := by
-  -- Induct on the number of coordinates where `x` and `y` disagree.
-  have H : ∀ d (y : Fin n → ℝ),
-      (Finset.univ.filter fun i => x i ≠ y i).card ≤ d → (∀ i, x i ≤ y i) →
-      N.gauge b x ≤ N.gauge b y := by
-    intro d
-    induction d with
-    | zero =>
-      intro y hcard _
-      have hemp : (Finset.univ.filter fun i => x i ≠ y i) = ∅ :=
-        Finset.card_eq_zero.mp (Nat.le_zero.mp hcard)
-      have hxy_eq : x = y := funext fun i => by
-        by_contra hne
-        have hi : i ∈ Finset.univ.filter fun i => x i ≠ y i :=
-          Finset.mem_filter.mpr ⟨Finset.mem_univ _, hne⟩
-        rw [hemp] at hi
-        simp at hi
-      rw [hxy_eq]
-    | succ d ih =>
-      intro y hcard hxy
-      by_cases hx_eq : x = y
-      · rw [hx_eq]
-      · have hne : (Finset.univ.filter fun i => x i ≠ y i).Nonempty := by
-          rw [Finset.nonempty_iff_ne_empty]
-          intro hemp
-          refine hx_eq (funext fun i => ?_)
-          by_contra hne
-          have hi : i ∈ Finset.univ.filter fun i => x i ≠ y i :=
-            Finset.mem_filter.mpr ⟨Finset.mem_univ _, hne⟩
-          rw [hemp] at hi
-          simp at hi
-        obtain ⟨j, hj⟩ := hne
-        set y' := Function.update y j (x j) with hy'def
-        have hstep : N.gauge b y' ≤ N.gauge b y := by
-          refine N.gauge_update_le b ?_
-          rw [abs_of_nonneg (hx0 j)]
-          exact hxy j
-        have hxy' : ∀ i, x i ≤ y' i := fun i => by
-          rcases eq_or_ne i j with rfl | hij
-          · rw [hy'def, Function.update_self]
-          · rw [hy'def, Function.update_of_ne hij]
-            exact hxy i
-        have hsub : (Finset.univ.filter fun i => x i ≠ y' i)
-            ⊆ (Finset.univ.filter fun i => x i ≠ y i).erase j := by
-          intro i hi
-          obtain ⟨-, hine⟩ := Finset.mem_filter.mp hi
-          have hij : i ≠ j := by
-            rintro rfl
-            exact hine (by rw [hy'def, Function.update_self])
-          refine Finset.mem_erase.mpr
-            ⟨hij, Finset.mem_filter.mpr ⟨Finset.mem_univ _, ?_⟩⟩
-          rw [hy'def, Function.update_of_ne hij] at hine
-          exact hine
-        have hcard' : (Finset.univ.filter fun i => x i ≠ y' i).card ≤ d := by
-          have h1 := Finset.card_le_card hsub
-          have h2 := Finset.card_erase_of_mem hj
-          omega
-        exact le_trans (ih y' hcard' hxy') hstep
-  exact H _ y le_rfl hxy
+    N.gauge b x ≤ N.gauge b y :=
+  (N.finiteSymmetricGauge b).mono hx0 hxy
 
 /-! ### The T-transform descent -/
 
@@ -502,270 +421,18 @@ of `z` is dominated by the corresponding prefix sum of `y`, then
 `Φ_N(z) ≤ Φ_N(y)`.
 
 No total-sum equality is assumed, no majorization completion and no
-Hardy–Littlewood–Pólya theorem is used: each descent step averages `y` with a
-transposition of itself, which costs one triangle inequality, one
-homogeneity, and one swap invariance of the gauge. -/
+separation theorem is used: this is
+`TauCeti.FiniteSymmetricGauge.le_of_prefixSum_le`, whose descent averages `y` with a
+transposition of itself, at a cost of one triangle inequality, one homogeneity, and one
+swap invariance of the gauge per step. -/
 theorem gauge_le_gauge_of_prefix_sums_le (b : OrthonormalBasis (Fin n) 𝕜 E)
     {z y : Fin n → ℝ} (hz_anti : Antitone z) (hz0 : ∀ i, 0 ≤ z i)
     (hy0 : ∀ i, 0 ≤ y i)
     (hpre : ∀ m : ℕ,
       ∑ i ∈ Finset.univ.filter fun i : Fin n => (i : ℕ) < m, z i
         ≤ ∑ i ∈ Finset.univ.filter fun i : Fin n => (i : ℕ) < m, y i) :
-    N.gauge b z ≤ N.gauge b y := by
-  -- Induct on the number of coordinates where `z` and `y` disagree.
-  have H : ∀ d (y : Fin n → ℝ),
-      (Finset.univ.filter fun i => z i ≠ y i).card ≤ d → (∀ i, 0 ≤ y i) →
-      (∀ m : ℕ,
-        ∑ i ∈ Finset.univ.filter fun i : Fin n => (i : ℕ) < m, z i
-          ≤ ∑ i ∈ Finset.univ.filter fun i : Fin n => (i : ℕ) < m, y i) →
-      N.gauge b z ≤ N.gauge b y := by
-    intro d
-    induction d with
-    | zero =>
-      intro y hcard _ _
-      have hemp : (Finset.univ.filter fun i => z i ≠ y i) = ∅ :=
-        Finset.card_eq_zero.mp (Nat.le_zero.mp hcard)
-      have hzy : z = y := funext fun i => by
-        by_contra hne
-        have hi : i ∈ Finset.univ.filter fun i => z i ≠ y i :=
-          Finset.mem_filter.mpr ⟨Finset.mem_univ _, hne⟩
-        rw [hemp] at hi
-        simp at hi
-      rw [hzy]
-    | succ d ih =>
-      intro y hcard hy0 hpre
-      by_cases hall : ∀ i, z i ≤ y i
-      · exact N.gauge_mono b hz0 hall
-      push Not at hall
-      -- `l`: the least index where `y` drops below `z`.
-      have hSne : (Finset.univ.filter fun i : Fin n => y i < z i).Nonempty :=
-        hall.imp fun i hi => Finset.mem_filter.mpr ⟨Finset.mem_univ _, hi⟩
-      set l := (Finset.univ.filter fun i : Fin n => y i < z i).min' hSne
-        with hldef
-      have hlS : y l < z l :=
-        (Finset.mem_filter.mp
-          ((Finset.univ.filter fun i : Fin n => y i < z i).min'_mem hSne)).2
-      have hlmin : ∀ i, i < l → z i ≤ y i := by
-        intro i hil
-        by_contra hzy
-        push Not at hzy
-        exact absurd
-          (Finset.min'_le _ i (Finset.mem_filter.mpr ⟨Finset.mem_univ _, hzy⟩))
-          (not_le.mpr hil)
-      -- Prefix domination at `l + 1` produces `j < l` with `z j < y j`.
-      have hexj : ∃ j, j < l ∧ z j < y j := by
-        by_contra h
-        push Not at h
-        have heq : ∀ i, i < l → z i = y i := fun i hi =>
-          le_antisymm (hlmin i hi) (h i hi)
-        have hp := hpre ((l : ℕ) + 1)
-        have hset : (Finset.univ.filter fun i : Fin n => (i : ℕ) < (l : ℕ) + 1)
-            = insert l (Finset.univ.filter fun i : Fin n => (i : ℕ) < (l : ℕ))
-            := by
-          ext i
-          simp only [Finset.mem_filter, Finset.mem_univ, true_and,
-            Finset.mem_insert]
-          constructor
-          · intro hi
-            rcases eq_or_lt_of_le (Nat.lt_succ_iff.mp hi) with heq' | hlt
-            · exact Or.inl (Fin.ext heq')
-            · exact Or.inr hlt
-          · rintro (rfl | hi)
-            · omega
-            · omega
-        have hlnot :
-            l ∉ Finset.univ.filter fun i : Fin n => (i : ℕ) < (l : ℕ) := by
-          simp
-        rw [hset, Finset.sum_insert hlnot, Finset.sum_insert hlnot] at hp
-        have hsum_eq :
-            ∑ i ∈ Finset.univ.filter fun i : Fin n => (i : ℕ) < (l : ℕ), z i
-              = ∑ i ∈ Finset.univ.filter fun i : Fin n => (i : ℕ) < (l : ℕ),
-                  y i := by
-          refine Finset.sum_congr rfl fun i hi => heq i ?_
-          exact Fin.lt_def.mpr (Finset.mem_filter.mp hi).2
-        rw [hsum_eq] at hp
-        linarith
-      obtain ⟨j, hjl, hzj⟩ := hexj
-      have hjl_ne : j ≠ l := ne_of_lt hjl
-      have hjl_nat : (j : ℕ) < (l : ℕ) := Fin.lt_def.mp hjl
-      have hzlj : z l ≤ z j := hz_anti hjl.le
-      have hylj : y l < y j := by linarith
-      -- The transform: move `δ` from coordinate `j` to coordinate `l`.
-      set δ : ℝ := min (y j - z j) (z l - y l) with hδdef
-      have hδpos : 0 < δ := lt_min (by linarith) (by linarith)
-      have hδ₁ : δ ≤ y j - z j := min_le_left _ _
-      have hδ₂ : δ ≤ z l - y l := min_le_right _ _
-      have hδlt : δ < y j - y l := lt_of_le_of_lt hδ₁ (by linarith)
-      have hyjl_pos : 0 < y j - y l := by linarith
-      set c₂ : ℝ := δ / (y j - y l) with hc₂def
-      have hc₂pos : 0 < c₂ := div_pos hδpos hyjl_pos
-      have hc₂lt : c₂ < 1 := (div_lt_one hyjl_pos).mpr hδlt
-      have hc₂mul : c₂ * (y j - y l) = δ :=
-        div_mul_cancel₀ δ (ne_of_gt hyjl_pos)
-      set y' : Fin n → ℝ :=
-        Function.update (Function.update y j (y j - δ)) l (y l + δ)
-        with hy'def
-      have hy'j : y' j = y j - δ := by
-        rw [hy'def, Function.update_of_ne hjl_ne, Function.update_self]
-      have hy'l : y' l = y l + δ := by rw [hy'def, Function.update_self]
-      have hy'i : ∀ i, i ≠ j → i ≠ l → y' i = y i := fun i hij hil => by
-        rw [hy'def, Function.update_of_ne hil, Function.update_of_ne hij]
-      -- (i) `y'` is a convex combination of `y` and its `(j l)`-swap.
-      have hcomb : y' = (1 - c₂) • y + c₂ • (y ∘ Equiv.swap j l) := by
-        funext i
-        simp only [Pi.add_apply, Pi.smul_apply, smul_eq_mul,
-          Function.comp_apply]
-        rcases eq_or_ne i j with rfl | hij
-        · rw [hy'j, Equiv.swap_apply_left]
-          linear_combination hc₂mul
-        rcases eq_or_ne i l with rfl | hil
-        · rw [hy'l, Equiv.swap_apply_right]
-          linear_combination -hc₂mul
-        · rw [hy'i i hij hil, Equiv.swap_apply_of_ne_of_ne hij hil]
-          ring
-      -- (ii) `y'` stays nonnegative.
-      have hy'0 : ∀ i, 0 ≤ y' i := by
-        intro i
-        rcases eq_or_ne i j with heq | hij
-        · rw [heq, hy'j]
-          linarith [hz0 j]
-        rcases eq_or_ne i l with heq | hil
-        · rw [heq, hy'l]
-          linarith [hy0 l]
-        · rw [hy'i i hij hil]
-          exact hy0 i
-      -- (iii) prefix domination survives the transform.
-      have hpre' : ∀ m : ℕ,
-          ∑ i ∈ Finset.univ.filter fun i : Fin n => (i : ℕ) < m, z i
-            ≤ ∑ i ∈ Finset.univ.filter fun i : Fin n => (i : ℕ) < m, y' i := by
-        intro m
-        rcases le_or_gt m (j : ℕ) with hmj | hmj
-        · -- Neither `j` nor `l` lies in the prefix: sums unchanged.
-          have hcong : ∀ i ∈ (Finset.univ.filter
-              fun i : Fin n => (i : ℕ) < m), y' i = y i := by
-            intro i hi
-            have hivm : (i : ℕ) < m := (Finset.mem_filter.mp hi).2
-            have hij : i ≠ j := fun h => by subst h; omega
-            have hil : i ≠ l := fun h => by subst h; omega
-            exact hy'i i hij hil
-          rw [Finset.sum_congr rfl hcong]
-          exact hpre m
-        rcases le_or_gt m (l : ℕ) with hml | hml
-        · -- `j` in, `l` out: the prefix of `y'` lost exactly `δ`, but the
-          -- prefix gap was already at least `y j − z j ≥ δ`.
-          have hcong : ∀ i ∈ (Finset.univ.filter
-              fun i : Fin n => (i : ℕ) < m),
-              y' i = Function.update y j (y j - δ) i := by
-            intro i hi
-            have hivm : (i : ℕ) < m := (Finset.mem_filter.mp hi).2
-            have hil : i ≠ l := fun h => by subst h; omega
-            rw [hy'def, Function.update_of_ne hil]
-          have hjmem : j ∈ Finset.univ.filter
-              fun i : Fin n => (i : ℕ) < m :=
-            Finset.mem_filter.mpr ⟨Finset.mem_univ _, hmj⟩
-          rw [Finset.sum_congr rfl hcong, Finset.sum_update_of_mem hjmem]
-          have hysplit : ∑ i ∈ Finset.univ.filter
-                fun i : Fin n => (i : ℕ) < m, y i
-              = y j + ∑ i ∈ (Finset.univ.filter
-                  fun i : Fin n => (i : ℕ) < m) \ {j}, y i := by
-            rw [← Finset.erase_eq]
-            exact (Finset.add_sum_erase _ y hjmem).symm
-          have hterm : y j - z j ≤ ∑ i ∈ Finset.univ.filter
-              (fun i : Fin n => (i : ℕ) < m), (y i - z i) := by
-            refine Finset.single_le_sum (f := fun i => y i - z i) ?_ hjmem
-            intro i hi
-            have hivm : (i : ℕ) < m := (Finset.mem_filter.mp hi).2
-            have hil : i < l := Fin.lt_def.mpr (by omega)
-            linarith [hlmin i hil]
-          rw [Finset.sum_sub_distrib] at hterm
-          linarith [hpre m]
-        · -- Both `j` and `l` in the prefix: the transform is sum-preserving.
-          have hjmem : j ∈ Finset.univ.filter
-              fun i : Fin n => (i : ℕ) < m :=
-            Finset.mem_filter.mpr ⟨Finset.mem_univ _, by omega⟩
-          have hlmem : l ∈ Finset.univ.filter
-              fun i : Fin n => (i : ℕ) < m :=
-            Finset.mem_filter.mpr ⟨Finset.mem_univ _, hml⟩
-          have hjmem' : j ∈ (Finset.univ.filter
-              fun i : Fin n => (i : ℕ) < m) \ {l} :=
-            Finset.mem_sdiff.mpr ⟨hjmem, by simp [hjl_ne]⟩
-          have hEq : ∑ i ∈ Finset.univ.filter
-                fun i : Fin n => (i : ℕ) < m, y' i
-              = ∑ i ∈ Finset.univ.filter
-                fun i : Fin n => (i : ℕ) < m, y i := by
-            have h1 : ∑ i ∈ Finset.univ.filter
-                  fun i : Fin n => (i : ℕ) < m, y' i
-                = (y l + δ) + ∑ i ∈ (Finset.univ.filter
-                    fun i : Fin n => (i : ℕ) < m) \ {l},
-                    Function.update y j (y j - δ) i := by
-              rw [hy'def]
-              exact Finset.sum_update_of_mem hlmem _ _
-            have h2 : ∑ i ∈ (Finset.univ.filter
-                  fun i : Fin n => (i : ℕ) < m) \ {l},
-                  Function.update y j (y j - δ) i
-                = (y j - δ) + ∑ i ∈ ((Finset.univ.filter
-                    fun i : Fin n => (i : ℕ) < m) \ {l}) \ {j}, y i :=
-              Finset.sum_update_of_mem hjmem' _ _
-            have h3 : ∑ i ∈ Finset.univ.filter
-                  fun i : Fin n => (i : ℕ) < m, y i
-                = y l + ∑ i ∈ (Finset.univ.filter
-                    fun i : Fin n => (i : ℕ) < m) \ {l}, y i := by
-              rw [← Finset.erase_eq]
-              exact (Finset.add_sum_erase _ y hlmem).symm
-            have h4 : ∑ i ∈ (Finset.univ.filter
-                  fun i : Fin n => (i : ℕ) < m) \ {l}, y i
-                = y j + ∑ i ∈ ((Finset.univ.filter
-                    fun i : Fin n => (i : ℕ) < m) \ {l}) \ {j}, y i := by
-              rw [← Finset.erase_eq, ← Finset.erase_eq]
-              exact (Finset.add_sum_erase _ y (by rwa [Finset.erase_eq])).symm
-            rw [h1, h2, h3, h4]
-            ring
-          rw [hEq]
-          exact hpre m
-      -- (iv) the transform kills at least one disagreement.
-      have hsub : (Finset.univ.filter fun i => z i ≠ y' i)
-          ⊆ Finset.univ.filter fun i => z i ≠ y i := by
-        intro i hi
-        obtain ⟨-, hine⟩ := Finset.mem_filter.mp hi
-        refine Finset.mem_filter.mpr ⟨Finset.mem_univ _, fun heq => ?_⟩
-        have hij : i ≠ j := by
-          rintro rfl
-          exact absurd heq hzj.ne
-        have hil : i ≠ l := by
-          rintro rfl
-          exact absurd heq hlS.ne'
-        exact hine (by rw [hy'i i hij hil]; exact heq)
-      have hwitness : ∃ w ∈ Finset.univ.filter fun i => z i ≠ y i,
-          w ∉ Finset.univ.filter fun i => z i ≠ y' i := by
-        rcases min_choice (y j - z j) (z l - y l) with hmin | hmin
-        · refine ⟨j, Finset.mem_filter.mpr ⟨Finset.mem_univ _, hzj.ne⟩, ?_⟩
-          have hj' : y' j = z j := by
-            rw [hy'j, hδdef, hmin]
-            ring
-          simp [hj']
-        · refine ⟨l, Finset.mem_filter.mpr ⟨Finset.mem_univ _, hlS.ne'⟩, ?_⟩
-          have hl' : y' l = z l := by
-            rw [hy'l, hδdef, hmin]
-            ring
-          simp [hl']
-      have hcard' : (Finset.univ.filter fun i => z i ≠ y' i).card ≤ d := by
-        have hlt := Finset.card_lt_card
-          ((Finset.ssubset_iff_of_subset hsub).mpr hwitness)
-        omega
-      -- (v) one descent step does not increase the gauge; recurse.
-      have hstep : N.gauge b y' ≤ N.gauge b y := by
-        rw [hcomb]
-        calc N.gauge b ((1 - c₂) • y + c₂ • (y ∘ Equiv.swap j l))
-            ≤ N.gauge b ((1 - c₂) • y)
-              + N.gauge b (c₂ • (y ∘ Equiv.swap j l)) :=
-              N.gauge_add_le b _ _
-          _ = (1 - c₂) * N.gauge b y + c₂ * N.gauge b y := by
-              rw [N.gauge_real_smul, N.gauge_real_smul,
-                abs_of_nonneg (by linarith : (0:ℝ) ≤ 1 - c₂),
-                abs_of_nonneg hc₂pos.le, N.gauge_perm]
-          _ = N.gauge b y := by ring
-      exact le_trans (ih y' hcard' hy'0 hpre') hstep
-  exact H _ y le_rfl hy0 hpre
+    N.gauge b z ≤ N.gauge b y :=
+  (N.finiteSymmetricGauge b).le_of_prefixSum_le hz_anti hz0 hy0 hpre
 
 /-! ### The Fan dominance principle -/
 
