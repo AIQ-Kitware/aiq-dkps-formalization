@@ -119,31 +119,65 @@ ForTauCeti --include='*.lean'` returns 3 hits and all 3 are prose — two
 provenance lines in `LinearPMap/Closed.lean` and one docstring sentence in
 `LinearPMap/Sylvester.lean`.  No `ForTauCeti` declaration references the bundle.
 
-**Gate U1.4, second command: not met.**  171 type-position uses of
-`ClosedOperator` survive in production, across 18 modules outside
-`DavisKahan/SpectralTheory/ClosedOperator/**` and `DavisKahan/Experimental/**`:
+**Gate U1.4, second command: not met — and the figure it was stated with is not
+reproducible.**  The previous revision of this section said "171 type-position
+uses across 18 modules" and gave a per-module table, but **never stated the
+command that produced either number**, so nobody could check the gate they were
+being held to.  Both are re-stated here with their measurement.
 
-| module | uses | classification |
-| --- | --- | --- |
-| `Riccati/UnboundedCore.lean` | 32 | un-migrated |
-| `SpectralTheory/ReducingSubspace/Restriction.lean` | 23 | documented facade |
-| `Sylvester/ClosedSylvesterEquation.lean` | 18 | documented facade |
-| `Sources/DavisKahan1970/SineTheta/CommonCore.lean` | 17 | un-migrated |
-| `SinTheta/Natural/Reducing.lean` | 14 | un-migrated |
-| `Riccati/UnboundedTransport.lean` | 13 | un-migrated |
-| `SinTheta/Natural/Examples.lean` | 10 | un-migrated |
-| `Sylvester/PairwiseSpectrumGap.lean` | 8 | un-migrated |
-| `Sources/DavisKahan1970/Sylvester/HilbertSchmidtPairwise.lean` | 8 | un-migrated (complexification-blocked) |
-| `Sylvester/PairwiseHomogeneousUniqueness.lean` | 6 | un-migrated |
-| `Sources/DavisKahan1970/Sylvester/PaperHilbertSchmidt.lean` | 6 | un-migrated |
-| `Sources/DavisKahan1970/Sylvester/HilbertSchmidtDefectFirst.lean` | 4 | un-migrated |
-| `Sources/DavisKahan1970/SineTheta/{CommonDomainTheorems,CommonCoreTheorems}.lean` | 3 + 3 | un-migrated |
-| `Riccati/UnboundedBasic.lean` | 3 | un-migrated |
-| `Sylvester/Unbounded/{Neumann,Equation}.lean`, `ReducingSubspace/RestrictionExtras.lean` | 1 each | un-migrated |
+Raw occurrence count, which anyone can reproduce:
 
-So **41 of the 171 are already compatibility facades over raw proofs** — those
-are deletions, not proofs.  The other 130 are genuine records and source-facing
-data structures that still quantify over the bundle.
+```sh
+grep -rc ClosedOperator --include='*.lean' DavisKahan/ \
+  | grep -v 'DavisKahan/SpectralTheory/ClosedOperator/' \
+  | grep -v 'DavisKahan/Experimental/' | grep -v ':0$'
+```
+
+**744 occurrences across 77 modules** (2026-07-28, after the Riccati
+sweep).  This counts every mention, including docstrings and provenance prose,
+so it is an upper bound rather than the type-position count; it is recorded
+because it is checkable, whereas "171" was not.  Modules at 10 or more:
+
+| module (under `DavisKahan/`) | occurrences |
+| --- | --- |
+| `Interop/Spectra/RealSpectralRestriction.lean` | 104 |
+| `SinTheta/Natural/Bounded.lean` | 52 |
+| `Sources/DavisKahan1970/SineTheta/Symmetric.lean` | 42 |
+| `Sylvester/ClosedSylvesterEquation.lean` | 37 |
+| `SpectralTheory/ReducingSubspace/Restriction.lean` | 27 |
+| `SinTheta/Natural/Reducing.lean` | 27 |
+| `SinTheta/Natural/Examples.lean` | 25 |
+| `Sources/DavisKahan1970/SineTheta/CommonCore.lean` | 22 |
+| `Sylvester/Unbounded/OrderedCutoff.lean` | 19 |
+| `Sources/DavisKahan1970/SineTheta/CommonDomain.lean` | 19 |
+| `Sources/DavisKahan1970/Sylvester/HilbertSchmidtPairwise.lean` | 16 |
+| `SinTheta/Unbounded/Core.lean` | 16 |
+| `Interop/Spectra/SpectralRestrictionOperator.lean` | 15 |
+| `Sylvester/Unbounded/OrderedFromCutoffs.lean` | 13 |
+| `Interop/Spectra/SpectralRestriction.lean` | 13 |
+| `Interop/Spectra/BoundedPerturbationSinTheta.lean` | 13 |
+| `SinTheta/Natural/GapConvenience.lean` | 12 |
+| `Interop/Spectra/UnitaryConjugation.lean` | 12 |
+| `Sylvester/ShiftedInverse.lean` | 10 |
+| `Sylvester/PairwiseSpectrumGap.lean` | 10 |
+| `SinTheta/Specializations.lean` | 10 |
+| `Interop/Spectra/BoundedTruncation.lean` | 10 |
+
+**The Riccati cluster is closed and is no longer in this table.**  The previous
+revision listed `Riccati/UnboundedCore` (32), `Riccati/UnboundedTransport` (13)
+and `Riccati/UnboundedBasic` (3) as the largest un-migrated block.  All three are
+now **0**: `UnboundedTransport.lean` no longer exists, and
+`grep -R ClosedOperator DavisKahan/Riccati` returns nothing — in the declarations
+*and* in the import graph, since `UnboundedBasic` now imports
+`ForTauCeti/Analysis/InnerProductSpace/LinearPMap/Closed.lean` directly rather
+than reaching the bundle through `SpectralTheory/ReducingSubspace/Restriction`.
+
+Two entries above are still **documented facades** rather than genuine records —
+`SpectralTheory/ReducingSubspace/Restriction.lean` and
+`Sylvester/ClosedSylvesterEquation.lean` — i.e. deletions once their callers
+move, not proofs.  `Interop/Spectra/**` (led by `RealSpectralRestriction.lean`)
+sits at the PVM/Borel/real-spectrum boundary that "Explicitly excluded" names and
+is not this lane's to migrate.
 
 **Contractible right now, no new mathematics:**
 
