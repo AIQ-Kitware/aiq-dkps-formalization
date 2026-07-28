@@ -416,6 +416,20 @@ noncomputable def operatorNorm : RectangularSymmetricIdealFamily (𝕜 := 𝕜) 
         obtain ⟨L, hL⟩ := exists_opNorm_limit A hcauchy
         exact ⟨L, trivial, hL⟩ }
 
+variable {E F : Type v}
+  [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+  [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
+
+/-- Every operator lies in the operator-norm family: it is the whole of `E →L[𝕜] F`. -/
+@[simp] theorem operatorNorm_mem (A : E →L[𝕜] F) :
+    (operatorNorm (𝕜 := 𝕜)).Mem A := trivial
+
+/-- The gauge of the operator-norm family is the operator norm.  Together with
+`operatorNorm_mem` this is what lets an operator-norm statement be read off from its
+ideal-gauge counterpart instead of proved a second time. -/
+@[simp] theorem operatorNorm_gauge (A : E →L[𝕜] F) :
+    (operatorNorm (𝕜 := 𝕜)).gauge A = ‖A‖ := rfl
+
 end RectangularSymmetricIdealFamily
 end ExactSinTheta
 end Experimental
