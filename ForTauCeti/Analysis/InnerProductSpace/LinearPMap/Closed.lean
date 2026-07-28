@@ -67,7 +67,8 @@ def MapsDomainTo (A : E →ₗ.[𝕜] E) (B : F →ₗ.[𝕜] F)
 theorem MapsDomainTo.id (A : E →ₗ.[𝕜] E) :
     MapsDomainTo A A (ContinuousLinearMap.id 𝕜 E) := by
   intro x
-  simpa using x.property
+  change (x : E) ∈ A.domain
+  exact x.property
 
 /-- Domain transport composes with bounded maps. -/
 theorem MapsDomainTo.comp
@@ -144,14 +145,38 @@ domain.  Closedness remains a separate property of the resulting map. -/
 noncomputable def addBounded (A : E →ₗ.[𝕜] E) (V : E →L[𝕜] E) :
     E →ₗ.[𝕜] E where
   domain := A.domain
-  toFun := A.toLinearMap + V.toLinearMap.domRestrict A.domain
+  toFun := A.toFun + V.toLinearMap.domRestrict A.domain
 
 @[simp] theorem addBounded_domain (A : E →ₗ.[𝕜] E) (V : E →L[𝕜] E) :
-    (A.addBounded V).domain = A.domain := rfl
+    (TauCeti.LinearPMap.addBounded A V).domain = A.domain := rfl
 
 @[simp] theorem addBounded_apply (A : E →ₗ.[𝕜] E) (V : E →L[𝕜] E)
-    (x : (A.addBounded V).domain) :
-    A.addBounded V x = A x + V (x : E) := rfl
+    (x : (TauCeti.LinearPMap.addBounded A V).domain) :
+    TauCeti.LinearPMap.addBounded A V x = A x + V (x : E) := rfl
+
+/-- A bounded left inverse for the real shift of a partial map. -/
+def LeftShiftedInverseBound (A : E →ₗ.[𝕜] E) (c s : ℝ) : Prop :=
+  ∃ J : E →L[𝕜] E,
+    (∀ x : A.domain,
+      J (A x - ((c : ℝ) : 𝕜) • (x : E)) = (x : E)) ∧
+    ‖J‖ ≤ s⁻¹
+
+/-- A bounded two-sided inverse for the real shift of a partial map, with the
+domain transport required by the right-inverse leg. -/
+def TwoSidedShiftedInverseBound (A : E →ₗ.[𝕜] E) (c s : ℝ) : Prop :=
+  ∃ J : E →L[𝕜] E, ∃ hdom : ∀ z : E, J z ∈ A.domain,
+    (∀ x : A.domain,
+      J (A x - ((c : ℝ) : 𝕜) • (x : E)) = (x : E)) ∧
+    (∀ z : E, A ⟨J z, hdom z⟩ - ((c : ℝ) : 𝕜) • J z = z) ∧
+    ‖J‖ ≤ s⁻¹
+
+/-- A two-sided shifted inverse supplies its left-inverse component. -/
+theorem TwoSidedShiftedInverseBound.leftShiftedInverseBound
+    {A : E →ₗ.[𝕜] E} {c s : ℝ}
+    (h : TwoSidedShiftedInverseBound A c s) :
+    LeftShiftedInverseBound A c s := by
+  obtain ⟨J, _hdom, hleft, _hright, hnorm⟩ := h
+  exact ⟨J, hleft, hnorm⟩
 
 /-- Relative boundedness of a domain-defined perturbation with respect to a
 partial linear map. -/
