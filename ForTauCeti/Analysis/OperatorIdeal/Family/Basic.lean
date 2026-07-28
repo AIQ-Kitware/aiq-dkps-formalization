@@ -242,6 +242,20 @@ theorem gauge_comp_right_le (A : E →L[𝕜] F) (R : H →L[𝕜] E) :
     _ ≤ 1 * N.gauge A * ‖R‖ₑ := by gcongr; exact enorm_id_le
     _ = N.gauge A * ‖R‖ₑ := by rw [one_mul]
 
+/-- Left composition by a contraction does not increase the gauge. -/
+theorem gauge_comp_left_le_of_norm_le_one {L : F →L[𝕜] G} (hL : ‖L‖ₑ ≤ 1) (A : E →L[𝕜] F) :
+    N.gauge (L ∘L A) ≤ N.gauge A :=
+  (N.gauge_comp_left_le L A).trans (by
+    calc ‖L‖ₑ * N.gauge A ≤ 1 * N.gauge A := by gcongr
+      _ = N.gauge A := one_mul _)
+
+/-- Right composition by a contraction does not increase the gauge. -/
+theorem gauge_comp_right_le_of_norm_le_one (A : E →L[𝕜] F) {R : H →L[𝕜] E} (hR : ‖R‖ₑ ≤ 1) :
+    N.gauge (A ∘L R) ≤ N.gauge A :=
+  (N.gauge_comp_right_le A R).trans (by
+    calc N.gauge A * ‖R‖ₑ ≤ N.gauge A * 1 := by gcongr
+      _ = N.gauge A := mul_one _)
+
 /-- Two-sided composition by contractions does not increase the gauge. -/
 theorem gauge_comp_le_of_norm_le_one {L : F →L[𝕜] G} {A : E →L[𝕜] F} {R : H →L[𝕜] E}
     (hL : ‖L‖ₑ ≤ 1) (hR : ‖R‖ₑ ≤ 1) : N.gauge (L ∘L A ∘L R) ≤ N.gauge A :=
