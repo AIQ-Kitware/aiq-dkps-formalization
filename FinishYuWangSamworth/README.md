@@ -1,44 +1,44 @@
 # FinishYuWangSamworth
 
-An independent, citation-priority completion lane for:
+An independent completion lane for:
 
 > Yi Yu, Tengyao Wang, and Richard J. Samworth, *A useful variant of the
 > Davis--Kahan theorem for statisticians*, Biometrika 102 (2015), 315--323,
 > arXiv:1405.0680.
 
-## Current theorem coverage
+## Theorem coverage
 
-The lane now exposes the complete citation-critical subspace statements:
+The lane now represents every numbered mathematical result in the paper:
 
-1. symmetric Theorem 2 and its aligned-basis conclusion;
-2. rank-one symmetric Corollary 3;
-3. exact right-singular Theorem 4;
-4. the identical left-singular theorem;
-5. right and left aligned singular-frame conclusions.
+1. Theorem 1 in general unitarily invariant, Frobenius, and operator norm form;
+2. Theorem 2 and the aligned-basis conclusion;
+3. rank-one Corollary 3;
+4. exact right and left Theorem 4, including aligned frames;
+5. Appendix Lemma 5 in a basis-free compression API.
 
-The rectangular theorem is available in both an intrinsic operator-norm form
-and the paper's literal `2 * sigma_1 + ||Ahat - A||_op` form.
+It additionally exposes direct right and left rank-one singular-vector
+corollaries and a corrected form of equation (4).
 
 ## Architecture
 
-This is a non-default root Lake library. It has no nested `lakefile.toml`, no
-nested `lean-toolchain`, and no separate `.lake` directory.
+Theorem 4 is factored through one generic Gram transport result. Appendix
+Lemma 5 is factored through one two-sided Frobenius ideal theorem. Rank-one
+singular-vector results reuse the symmetric rank-one theorem on Gram operators.
+No perturbation argument is duplicated.
 
-`Rectangular.Theorem4` is intentionally factored through a private generic Gram
-transport theorem. Right and left wrappers only provide their Gram perturbation
-bounds. This prevents duplicated proofs and keeps all constants synchronized.
+The paper's printed equation (4) is missing a square on
+`2 - ‖v̂ - v‖²`; the lane records the corrected identity and documents this
+source defect rather than asserting the false printed formula.
 
-Existing production theorems are imported through
-`FinishYuWangSamworth.GroundedImports`. New mathematics remains under
-`FinishYuWangSamworth/**` until it is ready to migrate into the canonical
-`DavisKahan` or `ForTauCeti` layer.
+This is a non-default root Lake library with no nested workspace.
 
-## Build from the repository root
+## Build
 
 ```bash
-lake build FinishYuWangSamworth.Rectangular.FrobeniusGram
-lake build FinishYuWangSamworth.Rectangular.Theorem4
-lake build FinishYuWangSamworth.Rectangular
+lake build FinishYuWangSamworth.Symmetric.Theorem1
+lake build FinishYuWangSamworth.Symmetric.AngleIdentity
+lake build FinishYuWangSamworth.Appendix.Lemma5
+lake build FinishYuWangSamworth.Rectangular.RankOne
 lake build FinishYuWangSamworth
 ```
 

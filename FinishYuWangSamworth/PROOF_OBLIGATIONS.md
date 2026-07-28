@@ -1,42 +1,27 @@
 # Proof obligations
 
-## Completed citation-facing theorem
+## Numbered paper results
 
-### Exact Theorem 4
+All numbered mathematical statements now have a theorem surface:
 
-`FinishYuWangSamworth.Rectangular.Theorem4` now packages:
+* Theorem 1;
+* Theorem 2;
+* Corollary 3;
+* Theorem 4, right and left;
+* Lemma 5.
 
-* the exact right-singular sine bound;
-* the identical left-singular sine bound;
-* right and left aligned-frame conclusions with the paper's `2^(3/2)` factor;
-* both intrinsic operator-norm and literal top-singular-value (`sigma_1`) forms.
+## Additional completed source material
 
-The implementation is factored through one generic Gram-transport theorem, so
-right and left versions share the same proof and constant bookkeeping.
+* corrected equation (4), with the source typo documented;
+* direct right and left rank-one singular-vector corollaries;
+* exact operator/Frobenius minimum and aligned-frame constants.
 
-## P0: remaining citation-facing completion
+## Remaining non-numbered source-fidelity work
 
-### Rank-one singular-vector corollaries
+* package the smaller residual numerator mentioned after Theorem 2;
+* formalize the two sharpness examples;
+* add optional wrappers whose hypotheses are literal contiguous matrix indices
+  `r..s` rather than intrinsic corresponding-block predicates;
+* migrate reusable results from this completion lane into canonical modules.
 
-Expose direct right and left unit-vector statements with phase/sign alignment.
-These should be derived from the exact aligned-frame theorem at `d = 1`, not
-reproved through a separate perturbation argument.
-
-### Source-index wrappers
-
-Add optional wrappers taking an explicit contiguous index block `r..s` and
-constructing the corresponding Gram eigenblocks and squared-singular-value gap.
-The current exact theorem uses the more intrinsic and safer
-`CorrespondingRightSingularBlock` / `CorrespondingLeftSingularBlock` predicates.
-
-## P1: source fidelity and reusable infrastructure
-
-* Package Appendix Lemma 5 in a recognizable compression API if the current
-  intrinsic Frobenius lemmas are not directly discoverable.
-* Record the sharper residual numerator stated after Theorem 2.
-* Formalize equation (4) if useful to the independent `FinishTanTwoTheta` lane.
-
-## P2: non-citation-critical completeness
-
-* Formalize the two sharpness examples.
-* Audit the Section 3 application claims as prose or executable examples.
+These are no longer blockers for coverage of the paper's numbered theorems.
