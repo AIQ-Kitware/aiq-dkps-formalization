@@ -370,11 +370,15 @@ abbrev Mem (A : E →L[𝕜] F) : Prop :=
 noncomputable abbrev gauge (A : E →L[𝕜] F) : ℝ :=
   N.toRectangularSymmetricIdealFamily.gauge A
 
-@[simp]
+/-! The two bridges to the canonical gauge.  Deliberately **not** `@[simp]`: they
+rewrite the paper-facing `ℝ` view into the stored `ℝ≥0∞` one, which is the wrong
+normal form for this layer — the Davis--Kahan estimates are stated and proved in
+`ℝ`.  As `simp` lemmas they also shadow `kyFan_gauge`, whose left-hand side is
+the `ℝ` view, and that silently breaks `simpa` calls two libraries away. -/
+
 theorem mem_iff (A : E →L[𝕜] F) :
     N.Mem A ↔ N.toSymmetricOperatorIdealFamily.gauge A ≠ ∞ := Iff.rfl
 
-@[simp]
 theorem gauge_eq_toReal (A : E →L[𝕜] F) :
     N.gauge A = (N.toSymmetricOperatorIdealFamily.gauge A).toReal := rfl
 
