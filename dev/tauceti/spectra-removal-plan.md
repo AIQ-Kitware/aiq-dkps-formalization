@@ -492,21 +492,31 @@ modules touch it**, including `RealSpectralRestriction.lean`.
 Sizing it by imports says 74 modules / 16,915 lines. **That is wrong by an order
 of magnitude, in the same way every earlier import-based estimate was.** The
 declaration-level closure — `Expr.getUsedConstants`, transitively, over
-`spectralPVM` and `selfAdjointResolvent` — is:
+`spectralPVM` and `selfAdjointResolvent`, measured by
+`scripts/ExportSpectraDeclClosure.lean` — is:
 
-* **77 Spectra constants over 15 modules**, of which
-* roughly **half are `._proof_N` auxiliaries** that come free with their parent,
-  leaving **~39 real declarations**;
-* and the modules they live in total **4,996 lines**, of which
-  `ProjValMeasure/Basic.lean` (228) **is already ported**.
+* **99 Spectra constants over 18 modules**, a good share of them `._proof_N`
+  auxiliaries that come free with their parent;
+* the modules they live in total **~5,384 lines**, of which
+  `ProjValMeasure/Basic.lean` (228) and `OneParameterUnitaryGroup/Basic.lean`
+  (292) **are already ported**, leaving ~4,864.
 
-Most of each donor file is content this endpoint never touches — the proofs lean
-on Mathlib, not on other Spectra lemmas.
+Most of each donor file is content this endpoint never touches.
+
+> **Corrected 2026-07-28.** This first read **77 constants over 15 modules**, and
+> that number was wrong — it filtered candidates by the name prefix `Spectra.`,
+> which silently drops **private** declarations, whose names are mangled to
+> `_private.<module>.…`. The symptom that caught it: `exponential`'s body
+> obviously calls `exponentialFun` (36 mentions in the file) and yet
+> `exponentialFun` was absent from the closure. Filter by **defining module**
+> instead. Same class of mistake as trusting the word `namespace` inside a
+> docstring. The conclusion below is unaffected — 99 declarations is still far
+> less work than writing a new spectral theorem — but the figure is not.
 
 **Therefore: port faithfully, do not rebuild.** The alternative considered was
 reconstructing the spectral theorem on Mathlib's `cfc` plus
 `RieszMarkovKakutani` via the Cayley transform (both exist and it would work),
-but that is 500–1500 lines of *new* hard proof to replace ~39 declarations of
+but that is 500–1500 lines of *new* hard proof to replace ~99 declarations of
 existing, working, Apache-2.0 mathematics. The port is smaller, faithful, and
 attribution-clean.
 
