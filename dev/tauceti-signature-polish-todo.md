@@ -1876,7 +1876,7 @@ carry a transitional adapter whose deletion condition is stated.*
 | ~~operatorAbs~~ | **RETIRED 2026-07-27.** `ContinuousLinearMap.modulus` is the one modulus; the `OperatorAbsoluteValue.lean` shim is **deleted** and the word `operatorAbs` no longer appears in any declaration name in the repository | none — the duplicate name is gone | done — there was never anything here to submit | ~~P0~~ ~~adapter-retirement~~ **done** |
 | ClosedOperator | **ACTIVE / CLAIMED 2026-07-27.** Canonical representation fixed to `LinearPMap` + properties | Two competing closed-operator representations in production | Execute U1: build canonical core, adapter, consumer migration, then delete/demote bundle — see §12.2 | P0 |
 | Spectra SelfAdjointOperator | **Open.** Still consumed across `DavisKahan/Sources/**` and `DavisKahan/Alternative/**` | Potential donor wrapper competing with the Tau Ceti representation | Port useful lemmas; choose canonical Tau Ceti representation | P1 |
-| ~~specSubspace~~ | **Renamed (§6).** Canonical is `OrthonormalBasis.spanIndices` in `ForTauCeti/Analysis/InnerProductSpace/BasisSpan.lean`, generalized off `Fin`/predicates; `specSubspace` remains only inside `CourantFischerCompat.lean` | Compat shim is importable | Delete with the shim once the historical Courant–Fischer signatures are retired | ~~P0~~ adapter-retirement |
+| ~~specSubspace~~ | **RETIRED 2026-07-27.** Canonical is `OrthonormalBasis.spanIndices` in `ForTauCeti/Analysis/InnerProductSpace/BasisSpan.lean`; `CourantFischerCompat.lean` is **deleted** and no `specSubspace` survives outside the immutable `Challenge` conformance file and `Acharyya2025`'s own self-contained paper copy | none — the compat shim is gone | done | ~~P0~~ ~~adapter-retirement~~ **done** |
 | ~~appendFin~~ | **Deleted (§8.1).** It was exactly `Fin.snoc`; `Fin.snoc_castSucc` / `Fin.snoc_last` replace its two simp lemmas | none | done — no adapter was needed | ~~P0~~ |
 | **finiteMean** | **KEPT (§8.1) — the "likely generic duplicate" reading was wrong.** `Finset.expect` requires `Module ℚ≥0 E`, which does not synthesize for a general `𝕜`-inner-product space; `Finset.centroid` typechecks but is `Classical.arbitrary` junk on the empty family, whereas `finiteMean` returns `0` there and `finiteMean_append` is deliberately stated to hold *at* `n = 0` | none — it is not a duplicate | Keep. Open sub-item: generalize `Fin n` → `Finset`, which is a redesign of the add-one identity, not a signature edit | P2 (was P0) |
 | ~~RectangularSymmetricIdealFamily~~ | **Replaced (§12.1).** `TauCeti.SymmetricOperatorIdealFamily` | Legacy record still has 68 consumers | `SymmetricOperatorIdealFamily.toRectangular` (transitional; delete with the legacy structure) | ~~P0~~ adapter-retirement |
@@ -1890,13 +1890,25 @@ carry a transitional adapter whose deletion condition is stated.*
 
 - Avoid long-lived aliases before upstream review; they obscure which API reviewers are evaluating.
 
-> **~~Three adapters are now live at once~~ — down to two, 2026-07-27.** `operatorAbs` is
+> **~~Three adapters are now live at once~~ — down to ONE, 2026-07-27.** `operatorAbs` is
 > retired: its shim file is deleted and its call sites repointed to
-> `ContinuousLinearMap.modulus`. `CourantFischerCompat` and
-> `SymmetricOperatorIdealFamily.toRectangular` remain live and unclaimed, and both are
-> larger than `operatorAbs` was — `CourantFischerCompat` is referenced from 12 modules across
-> four libraries including a `Challenge` leaderboard, and the `toRectangular` row's own note
-> says the legacy structure still has 68 consumers.
+> `ContinuousLinearMap.modulus`. `CourantFischerCompat` is retired too: 14 wrappers, ~150 call
+> sites, shim file deleted. Only `SymmetricOperatorIdealFamily.toRectangular` remains live
+> and unclaimed, and the `toRectangular` row's own note says the legacy structure still has
+> 68 consumers.
+>
+> **What the `CourantFischerCompat` retirement added to the list below.** (3) An adapter can
+> hold a declaration that is **pinned as data** and therefore cannot be deleted at all:
+> `TauCeti.abs_eigenvalues_sub_le_opNorm` is named by
+> `comparator/candidate-02-courant-fischer-weyl.json` and by the immutable conformance
+> statement, so it moved into the canonical module keeping its off-convention name, with the
+> reason recorded on the declaration. Check `comparator/*.json` and `Challenge/**/Leaderboard.lean`
+> *before* planning a deletion, not after. (4) Half of that shim was not a rename at all but a
+> **representation** change (predicate `p : Fin n → Prop` → set `s`), which changes the shape
+> of every call site's hypotheses; a blind substitution silently renamed a *paper-facing*
+> `Acharyya2025` declaration that merely shared a name with a shim wrapper, and the resulting
+> self-reference showed up as "fail to show termination" rather than as an unknown identifier.
+> Diff the declaration headers after any repo-wide substitution.
 >
 > **What the `operatorAbs` retirement showed, worth knowing before taking the other two.**
 > Repointing names was the easy half. Two things were not mechanical: (1) the shim had
@@ -1999,10 +2011,15 @@ carry a transitional adapter whose deletion condition is stated.*
 | singularValues_le_norm_sub_of_rank_le | singularValue_le_norm_sub_of_rank_le | Sketch; verify adjacent Mathlib naming |
 | approximationNumber_eq_singularValues | approximationNumber_eq_singularValue | Sketch; verify adjacent Mathlib naming |
 | lowerBound_le_approximationNumber_of_finrank | le_approximationNumber_of_finrank_lt | Sketch; verify adjacent Mathlib naming |
-| specSubspace | OrthonormalBasis.spanIndices | Sketch; verify adjacent Mathlib naming |
-| forall_unit_vector_eigenvalue_le_re_inner | exists_submodule_forall_unit_eigenvalue_le_re_inner | Sketch; verify adjacent Mathlib naming |
-| abs_eigenvalues_sub_le_opNorm | abs_eigenvalue_sub_eigenvalue_le_norm | Sketch; verify adjacent Mathlib naming |
-| eigenvalues_le_eigenvalues_of_re_inner_le | eigenvalue_mono | Sketch; verify adjacent Mathlib naming |
+| specSubspace | **OrthonormalBasis.spanIndices** | **Done 2026-07-27** (§13); a representation change (predicate → set), not a rename — the compat shim is deleted |
+| finrank_specSubspace / orthogonal_specSubspace / map_mem_specSubspace / re_inner_map_self_*_of_mem_specSubspace | **OrthonormalBasis.finrank_spanIndices(_set) / orthogonal_spanIndices / LinearMap.IsSymmetric.map_mem_spanIndices / …_of_mem_spanIndices** | **Done 2026-07-27** (§13) |
+| re_inner_map_self_eq_sum_eigenvalues_mul_sq / re_inner_map_self_eq_sum_of_eigenbasis / eigenvalues_eq_of_eigenbasis | **LinearMap.IsSymmetric.re_inner_apply_self_eq_sum_eigenvalues_mul_sq / …_eq_sum_of_eigenbasis / eigenvalues_eq_of_eigenbasis** | **Done 2026-07-27** (§13); two of these keep their name and change only namespace |
+| abs_eigenvalues_sub_le | **TauCeti.abs_eigenvalue_sub_eigenvalue_le** | **Done 2026-07-27** (§13) |
+| abs_eigenvalues_sub_le_opNorm | *(name kept)* | **MOVED, not renamed, 2026-07-27** (§13) — pinned by `comparator/candidate-02-courant-fischer-weyl.json` and the immutable conformance statement, so it keeps its off-convention name and moved into `CourantFischer.lean` with the reason on the declaration |
+| DavisKahan.reduces_specSubspace | **DavisKahan.reduces_spanIndices** | **Done 2026-07-27** (§13); its selection datum became a `Set` |
+| forall_unit_vector_eigenvalue_le_re_inner | **LinearMap.IsSymmetric.exists_submodule_forall_unit_eigenvalue_le_re_inner** | **Done 2026-07-27** (§13); the old name misstated the quantifier |
+| abs_eigenvalues_sub_le_opNorm | abs_eigenvalue_sub_eigenvalue_le_norm | **Superseded** — see the `abs_eigenvalues_sub_le_opNorm` row above; the continuous-linear-map form landed under that name, and the `LinearMap` form kept the old name because the comparator pins it |
+| eigenvalues_le_eigenvalues_of_re_inner_le | **LinearMap.IsSymmetric.eigenvalue_mono** | **Done 2026-07-27** (§13) |
 | rectangularOperatorModulus | ContinuousLinearMap.modulus | Sketch; verify adjacent Mathlib naming |
 | operatorAbs | **deleted** — square specialization of `ContinuousLinearMap.modulus` | **Done 2026-07-27** (§13); shim file removed, call sites repointed, no alias kept |
 | operatorAbs_sameApproximationSingularValues | **modulus_sameApproximationSingularValues** | **Done 2026-07-27** (§13); the DKPS-side wrappers that still carried the retired word |

@@ -151,7 +151,34 @@ ForMathlib consumers once, to these names:
 | `ForMathlib.eigenvalues_le_eigenvalues_of_re_inner_le` | `LinearMap.IsSymmetric.eigenvalue_mono` |
 | `ForMathlib.map_mem_specSubspace` | `LinearMap.IsSymmetric.map_mem_spanIndices` |
 | `ForMathlib.abs_eigenvalues_sub_le` | `TauCeti.abs_eigenvalue_sub_eigenvalue_le` (LinearMap, pointwise bound) |
-| `ForMathlib.abs_eigenvalues_sub_le_opNorm` | `TauCeti.abs_eigenvalue_sub_eigenvalue_le_norm` (CLM; symmetry stated on the coerced linear maps so no `Star`/`CompleteSpace` instance is required; conclusion `‖T − S‖`, no `toContinuousLinearMap` in the signature) |
+| `ForMathlib.abs_eigenvalues_sub_le_opNorm` | `TauCeti.abs_eigenvalue_sub_eigenvalue_le_norm` (CLM; symmetry stated on the coerced linear maps so no `Star`/`CompleteSpace` instance is required; conclusion `‖T − S‖`, no `toContinuousLinearMap` in the signature) — **but the old name also survives**, see below |
+
+**The `CourantFischerCompat` shim is retired (2026-07-27).** Every name in the
+left column above is gone from the tree; the consumers listed in the shim's
+header have been repointed. Two things this map did not anticipate, both now
+settled in `CourantFischer.lean` and `BasisSpan.lean`:
+
+- **`TauCeti.abs_eigenvalues_sub_le_opNorm` could not be deleted**, because it is
+  pinned *as data*: `comparator/candidate-02-courant-fischer-weyl.json` lists it
+  in `theorem_names` and the immutable
+  `Challenge/MathlibCandidate/CourantFischerWeyl/Conformance.lean` declares it
+  under that name. It therefore moved out of the shim into the canonical
+  `CourantFischer.lean`, keeping its name and its `LinearMap` +
+  `toContinuousLinearMap` statement, with the reason recorded on the
+  declaration. It is not a duplicate of
+  `abs_eigenvalue_sub_eigenvalue_le_norm`: the eigenvalue API is stated for
+  `LinearMap.IsSymmetric`, so the `LinearMap` form needs no coercion in its
+  hypotheses where the continuous form needs two.
+- **The predicate-to-set change is not a rename.** `specSubspace b p` became
+  `b.spanIndices ↑s` with `s : Finset`, or `b.spanIndices {i | p i}` / `Set.univ`
+  / `Set.Ici i` where the selection was not a Finset, and each call site's
+  hypotheses changed shape with it. Three consequences worth knowing: `rw
+  [orthogonal_spanIndices]` produces `sᶜ`, so a site that wrote its two blocks as
+  `(· ∈ s)`/`(· ∉ s)` must use `↑s`/`(↑s)ᶜ` or the rewrite will not close;
+  `finrank_spanIndices` has both a `Finset` and a `Set` form and the `Set` one is
+  what a `Set.Ici`-style selection needs; and `DavisKahan/Specialized/Statistics.lean`
+  lost a private helper outright, because `spanIndices` *is* `Submodule.span 𝕜 (b '' s)`
+  by definition and the helper existed only to say so through a `Finset.filter`.
 
 ## Not for ForTauCeti
 

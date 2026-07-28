@@ -309,18 +309,18 @@ theorem sin_two_theta_starProjection_le_of_eigenvalues (N : UnitarilyInvariantNo
     {s s' : Finset (Fin n)} {a b : ℝ} (hab : a < b)
     (hb : ∀ i ∈ s, b ≤ hT.eigenvalues hn i)
     (ha : ∀ i ∉ s, hT.eigenvalues hn i ≤ a) :
-    N (((specSubspace (hT.eigenvectorBasis hn) (· ∈ s))ᗮ.starProjection ∘L
-        (specSubspace (hS.eigenvectorBasis hn) (· ∈ s')).starProjection ∘L
-        (specSubspace (hT.eigenvectorBasis hn) (· ∈ s)).starProjection
+    N ((((hT.eigenvectorBasis hn).spanIndices ↑s)ᗮ.starProjection ∘L
+        ((hS.eigenvectorBasis hn).spanIndices ↑s').starProjection ∘L
+        ((hT.eigenvectorBasis hn).spanIndices ↑s).starProjection
         : E →L[𝕜] E) : E →ₗ[𝕜] E)
       ≤ N (S - T) / (b - a) :=
   N.sin_two_theta_starProjection_le hT hS
-    (fun _ hx => map_mem_specSubspace hT hn _ hx)
-    (fun _ hx => map_mem_specSubspace hS hn _ hx) hab
-    (fun _ hx => le_re_inner_map_self_of_mem_specSubspace hT hn (fun i hi => hb i hi) hx)
+    (fun _ hx => LinearMap.IsSymmetric.map_mem_spanIndices hT hn _ hx)
+    (fun _ hx => LinearMap.IsSymmetric.map_mem_spanIndices hS hn _ hx) hab
+    (fun _ hx => LinearMap.IsSymmetric.le_re_inner_apply_self_of_mem_spanIndices hT hn (fun i hi => hb i hi) hx)
     (fun w hw => by
-      rw [orthogonal_specSubspace] at hw
-      exact re_inner_map_self_le_of_mem_specSubspace hT hn (fun i hi => ha i hi) hw)
+      rw [OrthonormalBasis.orthogonal_spanIndices] at hw
+      exact LinearMap.IsSymmetric.re_inner_apply_self_le_of_mem_spanIndices hT hn (fun i hi => ha i hi) hw)
 
 /-- **Mirror-defect sin 2Θ, spectral form.**  As
 `sin_two_theta_starProjection_le_of_eigenvalues` but with an arbitrary subspace
@@ -331,17 +331,17 @@ theorem sin_two_theta_reflection_le_of_eigenvalues (N : UnitarilyInvariantNorm �
     [W.HasOrthogonalProjection] {s : Finset (Fin n)} {a b : ℝ} (hab : a < b)
     (hb : ∀ i ∈ s, b ≤ hT.eigenvalues hn i)
     (ha : ∀ i ∉ s, hT.eigenvalues hn i ≤ a) :
-    2 * N (((specSubspace (hT.eigenvectorBasis hn) (· ∈ s))ᗮ.starProjection ∘L
+    2 * N ((((hT.eigenvectorBasis hn).spanIndices ↑s)ᗮ.starProjection ∘L
         W.starProjection ∘L
-        (specSubspace (hT.eigenvectorBasis hn) (· ∈ s)).starProjection
+        ((hT.eigenvectorBasis hn).spanIndices ↑s).starProjection
         : E →L[𝕜] E) : E →ₗ[𝕜] E)
       ≤ N (W.reflection.toLinearMap ∘ₗ T ∘ₗ W.reflection.toLinearMap - T) / (b - a) :=
   N.sin_two_theta_reflection_le hT
-    (fun _ hx => map_mem_specSubspace hT hn _ hx) hab
-    (fun _ hx => le_re_inner_map_self_of_mem_specSubspace hT hn (fun i hi => hb i hi) hx)
+    (fun _ hx => LinearMap.IsSymmetric.map_mem_spanIndices hT hn _ hx) hab
+    (fun _ hx => LinearMap.IsSymmetric.le_re_inner_apply_self_of_mem_spanIndices hT hn (fun i hi => hb i hi) hx)
     (fun w hw => by
-      rw [orthogonal_specSubspace] at hw
-      exact re_inner_map_self_le_of_mem_specSubspace hT hn (fun i hi => ha i hi) hw)
+      rw [OrthonormalBasis.orthogonal_spanIndices] at hw
+      exact LinearMap.IsSymmetric.re_inner_apply_self_le_of_mem_spanIndices hT hn (fun i hi => ha i hi) hw)
 
 end Spectral
 

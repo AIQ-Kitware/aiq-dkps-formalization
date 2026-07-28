@@ -7,9 +7,9 @@ Authors: Jon Crall, GPT-5.6 Thinking
 Wave-1 migration provenance: original module `ForMathlib.Analysis.InnerProductSpace.MoorePenroseInverse` at the
 Davis--Kahan repository; moved to `ForTauCeti` with the namespace
 `ForMathlib` renamed `TauCeti` (module-system conversion deferred to a
-later mechanical pass).  No mathematical change
-beyond routing historical Courant--Fischer names through the transitional
-`CourantFischerCompat` shim.
+later mechanical pass).  No mathematical change; the historical
+Courant--Fischer names it used were repointed to the canonical API when the
+`CourantFischerCompat` shim was retired.
 -/
 
 import ForTauCeti.Analysis.InnerProductSpace.SingularSystem
