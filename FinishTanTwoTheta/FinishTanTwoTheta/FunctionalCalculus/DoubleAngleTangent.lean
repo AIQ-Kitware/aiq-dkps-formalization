@@ -44,9 +44,16 @@ theorem doubleAngleTangentScalar_nonneg {t : ℝ}
 /-- Strict monotonicity on `[0,1)`. -/
 theorem doubleAngleTangentScalar_strictMonoOn :
     StrictMonoOn doubleAngleTangentScalar (Set.Ico 0 1) := by
-  /- Differentiate `2t/(1-t^2)`; its derivative is
-  `2(1+t^2)/(1-t^2)^2 > 0` on this interval. -/
-  sorry
+  intro a ha b hb hab
+  rcases ha with ⟨ha0, ha1⟩
+  rcases hb with ⟨hb0, hb1⟩
+  have hda : 0 < 1 - a ^ 2 := by nlinarith
+  have hdb : 0 < 1 - b ^ 2 := by nlinarith
+  have habpos : 0 < b - a := sub_pos.mpr hab
+  have habprod : 0 < 1 + a * b := by nlinarith [mul_nonneg ha0 hb0]
+  unfold doubleAngleTangentScalar
+  rw [div_lt_div_iff₀ hda hdb]
+  nlinarith [mul_pos habpos habprod]
 
 /-- Uniform linear domination on `[0,r]`, used to control omitted small
 approximation numbers. -/
@@ -73,8 +80,16 @@ def doubleAngleDenominator (X : E0 →L[𝕜] E1) : E0 →L[𝕜] E0 :=
 /-- A strict contraction has invertible double-angle denominator. -/
 theorem isUnit_doubleAngleDenominator (X : E0 →L[𝕜] E1)
     (hX : ‖X‖ < 1) : IsUnit (doubleAngleDenominator X) := by
-  /- Neumann series: `||X*X|| <= ||X||^2 < 1`. -/
-  sorry
+  have hcomp : ‖X.adjoint ∘L X‖ < 1 := by
+    calc
+      ‖X.adjoint ∘L X‖ ≤ ‖X.adjoint‖ * ‖X‖ :=
+        ContinuousLinearMap.opNorm_comp_le _ _
+      _ = ‖X‖ ^ 2 := by
+        rw [ContinuousLinearMap.adjoint.norm_map]
+        ring
+      _ < 1 := by nlinarith [norm_nonneg X]
+  change IsUnit (1 - X.adjoint ∘L X)
+  exact isUnit_one_sub_of_norm_lt_one hcomp
 
 /-- Canonical graph-coordinate tangent of twice the angle. -/
 noncomputable def doubleAngleTangentOperator
@@ -89,10 +104,24 @@ theorem doubleAngleTangentOperator_eq_polar_functionalCalculus
       doubleAngleTangentOperator X hX =
         U ∘L ((2 : 𝕜) • (P ∘L Ring.inverse
           (ContinuousLinearMap.id 𝕜 E0 - P ∘L P))) := by
-  /- Take `P=|X|` and `U` the canonical polar partial isometry.  The support
-  projection causes no difficulty because the scalar transform vanishes at
-  zero. -/
-  sorry
+  classical
+  let P : E0 →L[𝕜] E0 := X.modulus
+  obtain ⟨U, hUpartial, hpolar, hUstarU⟩ :=
+    ContinuousLinearMap.exists_polarFactor X
+  refine ⟨U, P, hpolar.symm, ?_⟩
+  have hgram : X.adjoint ∘L X = P ∘L P := by
+    simpa [P] using X.modulus_mul_self.symm
+  have hcomm : Commute P (Ring.inverse
+      (ContinuousLinearMap.id 𝕜 E0 - P ∘L P)) := by
+    apply Commute.ringInverse_right
+    exact (Commute.refl P).sub_right
+      ((Commute.refl P).mul_right (Commute.refl P))
+  unfold doubleAngleTangentOperator doubleAngleDenominator
+  rw [hgram, hpolar]
+  simp only [ContinuousLinearMap.comp_assoc, ContinuousLinearMap.smul_comp]
+  rw [← ContinuousLinearMap.comp_assoc U P,
+    hcomm.eq_iff, ContinuousLinearMap.comp_assoc]
+  rfl
 
 /-- **Approximation numbers under double-angle functional calculus.**
 For every bounded strict contraction, including noncompact operators,
@@ -102,17 +131,12 @@ theorem approximationNumber_doubleAngleTangentOperator
     (X : E0 →L[𝕜] E1) (hX : ‖X‖ < 1) (n : ℕ) :
     (doubleAngleTangentOperator X hX).approximationNumber n =
       doubleAngleTangentScalar (X.approximationNumber n) := by
-  /-
-  Proof plan:
-  * use polar decomposition to reduce to the positive modulus `|X|`;
-  * identify approximation numbers with the min--max values of `|X|`;
-  * apply the min--max functional-calculus theorem for the continuous strictly
-    increasing function `f(t)=2t/(1-t^2)` on `[0,||X||]`;
-  * use invariance under the polar partial isometry on the support.
-  The min--max argument handles the essential-spectrum plateau and therefore
-  does not require compactness or exact singular vectors.
-  -/
-  sorry
+  exact ContinuousLinearMap.approximationNumber_polarFunctionalCalculus
+    X (f := doubleAngleTangentScalar)
+    (doubleAngleTangentScalar_continuousOn hX)
+    (doubleAngleTangentScalar_strictMonoOn.mono fun t ht =>
+      ⟨ht.1, lt_of_le_of_lt ht.2 hX⟩)
+    (doubleAngleTangentOperator_eq_polar_functionalCalculus X hX) n
 
 /-- Ky Fan prefixes of the canonical tangent operator are exactly the sums of
 the transformed approximation numbers. -/

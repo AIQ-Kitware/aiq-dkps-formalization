@@ -64,16 +64,12 @@ theorem schattenGauge_eq_tsum_rpow
       ENNReal.rpow
         (∑' n : ℕ, ENNReal.ofReal ((A.approximationNumber n) ^ p))
         (1 / p) := by
-  /-
-  Proof plan:
-  * finite prefix gauges are increasing because zero padding and coordinatewise
-    monotonicity identify the `(n+1)` prefix with the `n` prefix plus one term;
-  * continuity of `rpow` converts the supremum of finite partial sums into the
-    `tsum` in `ℝ≥0∞`;
-  * `p >= 1` gives `p > 0`, so the outer `1/p` power is order-continuous;
-  * both sides are `∞` exactly when the `p`-power series diverges.
-  -/
-  sorry
+  have hp0 : 0 < p := lt_of_lt_of_le zero_lt_one hp
+  unfold schattenGauge SymmetricNormingFunction.sequenceGauge
+    SymmetricNormingFunction.prefixGauge lpNormingFunction
+  exact ENNReal.iSup_lpPrefix_eq_rpow_tsum
+    (f := fun n => A.approximationNumber n) hp0
+    (fun n => A.approximationNumber_nonneg n)
 
 /-- Schatten membership is equivalent to summability of the `p`th powers of
 approximation numbers. -/
@@ -84,9 +80,11 @@ theorem isSchatten_iff_summable_rpow
     [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
     (p : ℝ) (hp : 1 ≤ p) (A : E →L[𝕜] F) :
     IsSchatten p hp A ↔ Summable (fun n => (A.approximationNumber n) ^ p) := by
-  /- Derive from `schattenGauge_eq_tsum_rpow` and the ENNReal finiteness
-  criterion for a nonnegative series. -/
-  sorry
+  have hp0 : 0 < p := lt_of_lt_of_le zero_lt_one hp
+  rw [IsSchatten, schattenGauge_eq_tsum_rpow p hp A]
+  rw [ENNReal.rpow_ne_top_iff_of_pos hp0]
+  exact ENNReal.tsum_ofReal_ne_top_iff_summable
+    (fun n => Real.rpow_nonneg (A.approximationNumber n) p)
 
 
 /-- For finite `p`, the maximal `ell^p` space is order-continuous, so its
@@ -97,47 +95,30 @@ theorem lp_standardSequenceGauge_minimal_eq_maximal
         SymmetricIdealCompletion.minimal x =
       (lpNormingFunction p hp).standardSequenceGauge
         SymmetricIdealCompletion.maximal x := by
-  /- If the `p`-sum is finite, tails tend to zero by convergence of the
-  nonnegative series.  If it is infinite, both extended gauges are `∞`. -/
-  sorry
+  unfold SymmetricNormingFunction.standardSequenceGauge
+  by_cases hfin : (lpNormingFunction p hp).sequenceGauge x = ∞
+  · have hnot : ¬(lpNormingFunction p hp).IsMinimalSequence x := by
+      intro hmin
+      exact hfin ((lpNormingFunction p hp).sequenceGauge_ne_top_of_isMinimal hmin)
+    simp [hfin, hnot]
+  · have hmin : (lpNormingFunction p hp).IsMinimalSequence x :=
+      lp_tail_sequenceGauge_tendsto_zero_of_sequenceGauge_ne_top p hp x hfin
+    simp [hmin]
 
 /-- The approximation-number Schatten gauge satisfies the complete operator
 ideal laws. -/
 noncomputable def schattenIdealFamily
     (𝕜 : Type u) [RCLike 𝕜] (p : ℝ) (hp : 1 ≤ p) :
-    SymmetricOperatorIdealFamily.{u, v} 𝕜 where
-  gauge := fun A => schattenGauge p hp A
-  gauge_add_le := by
-    /- Use approximation-number Ky Fan submajorization for `A+B`, finite
-    Minkowski, and passage to the supremum. -/
-    sorry
-  gauge_smul := by
-    /- Approximation numbers are absolutely homogeneous. -/
-    sorry
-  enorm_le_gauge := by
-    /- The first approximation number is the operator norm and every finite
-    `ell^p` gauge dominates its first coordinate. -/
-    sorry
-  gauge_comp_le := by
-    /- Apply the two-sided approximation-number ideal inequality coordinatewise
-    and finite `ell^p` homogeneity, then take the supremum. -/
-    sorry
-  gauge_adjoint := by
-    /- Approximation numbers are invariant under adjoint. -/
-    sorry
+    SymmetricOperatorIdealFamily.{u, v} 𝕜 :=
+  generatedSymmetricIdealFamily (𝕜 := 𝕜) (lpNormingFunction p hp)
+    SymmetricIdealCompletion.maximal
 
 /-- Schatten ideals are standard symmetric ideals, hence Fan dominance is a
 theorem rather than an assumed structure field. -/
 noncomputable def standardSchattenIdealFamily
     (𝕜 : Type u) [RCLike 𝕜] (p : ℝ) (hp : 1 ≤ p) :
-    StandardSymmetricIdealFamily.{u, v} 𝕜 where
-  toSymmetricOperatorIdealFamily := schattenIdealFamily 𝕜 p hp
-  normingFunction := lpNormingFunction p hp
-  completion := SymmetricIdealCompletion.minimal
-  gauge_eq_standardSequenceGauge := by
-    intro E F _ _ _ _ _ A
-    rw [lp_standardSequenceGauge_minimal_eq_maximal p hp]
-    rfl
+    StandardSymmetricIdealFamily.{u, v} 𝕜 :=
+  generatedMaximalStandardIdeal (𝕜 := 𝕜) (v := v) (lpNormingFunction p hp)
 
 /-- Fan dominance for every Schatten class `S^p`, `1 <= p < infinity`. -/
 theorem schatten_fanDominance
