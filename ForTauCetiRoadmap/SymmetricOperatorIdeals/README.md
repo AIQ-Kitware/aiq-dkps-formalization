@@ -175,7 +175,12 @@ field.
    `‖T‖_Φ := Φ(a(T))`. The *target* is fixed: this construction produces a
    `TauCeti.SymmetricOperatorIdealFamily` whose gauge is `Φ ∘ a` read in
    `ℝ≥0∞`. This is the third instance of the interface.
-2. **S2 — Ky Fan dominance as a mixin.** `∀ k, ∑_{n<k} aₙ(S) ≤ ∑_{n<k} aₙ(T)`
+2. **S2 — Ky Fan dominance as a mixin.** *(The mixin itself landed 2026-07-28 as
+   `ForTauCeti/Analysis/OperatorIdeal/Family/KyFanDominance.lean`:
+   `TauCeti.IsKyFanDominant` is a class over the canonical family, with instances
+   for the operator-norm, Ky Fan and trace-class families, each proved directly.
+   What remains of S2 is the dominance **principle** — that every symmetric gauge
+   satisfies it — which is the majorization theorem.)* `∀ k, ∑_{n<k} aₙ(S) ≤ ∑_{n<k} aₙ(T)`
    implies `Φ`-domination for every symmetric gauge `Φ`, and the triangle
    inequality for each `‖·‖_Φ` follows. The Davis--Kahan library bundles this as
    `KyFanDominantIdealFamily`, a three-field `structure` over the canonical
