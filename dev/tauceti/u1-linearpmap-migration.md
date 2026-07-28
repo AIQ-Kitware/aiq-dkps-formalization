@@ -95,11 +95,11 @@ The remaining non-experimental references divide as follows:
 | one-unbounded/one-bounded equation and Neumann estimate | generic downstream result | `LinearPMap.UnboundedBoundedSylvesterEquation` embeds the bounded right block without a `ClosedOperator`; `linearPMapSylvester_mem_and_gauge_le_of_unbounded_bound_inverse` takes raw partial maps and equations, and the bounded `GenuineSpectrum` consumer now calls it directly | the historical theorem remains for source-facing callers; migrate those before deleting the bundle-shaped entry point |
 | shifted-inverse predicates and interval/exterior gauge estimate | production consumer migrated | `LinearPMap.{Left,TwoSided}ShiftedInverseBound`, raw `addBounded`, raw Sylvester equations, the raw Neumann theorem, `linearPMap_norm_shift_apply_le_of_form_bounds`, both raw `linearPMap_norm_sylvester_le_of_{intervalExterior,exteriorInterval}` estimates, `linearPMap_exists_bounded_shift_extension`, and `linearPMap_mem_and_gauge_le_of_exteriorLeft_intervalRight` now own the implementation | `ShiftedInverse` and `ShiftedInverseGauge` preserve historical names only as compatibility facades; migrate their source-facing callers before contracting those bundle-shaped entry points |
 | PVM, spectral restriction, cutoff, real-spectrum, and complexification bridges | Spectra/PVM boundary | none yet; depends on Spectra spectral-calculus APIs | retain downstream and list the exact Spectra import at each bridge; not a reason to retain the bundle in unrelated Sylvester or Riccati mathematics |
-| reducing restrictions and Riccati transport | production consumers still needing migration | `LinearPMap.InvariantSubspace`, `ReducesSubspace` (including orthogonal-complement closure), and `reducingRestriction` now own the complete restriction core: domain/action/map, density/closedness, adjoint-domain, symmetry, and self-adjointness; raw graph rotation exposes its pullback, exact domain, unitary equivalence, and reduction transport over `UnboundedBlockDataPMap`; historical closed-operator theorems delegate to it | migrate the remaining Riccati and sine-theta consumers to raw partial-map inputs; bundled constructions must be replaced rather than wrapped permanently |
-| Riccati transport pullback | generic downstream result | `LinearPMap.pullbackDomain`, `pullbackDomainToOriginal`, `pullbackLinearMap`, `pullback`, density/closedness, and `UnitaryEquivalent` own the raw construction and transport proof; `UnboundedTransport` and the historical Riccati relation delegate | migrate Riccati data records and direct consumers to raw partial-map inputs |
-| Riccati block data and direct sum | generic downstream result | `UnboundedBlockDataPMap` stores partial maps with explicit density, closed-graph, and self-adjointness properties; `UnboundedBlockData.toPMap` is the compatibility conversion. `LinearPMap.directSumDomain`, coordinate maps, component action, `directSum`, density, graph closedness, `unboundedOffDiagonalCouplingPMap`, and `unboundedBlockOperatorPMapCore` (with direct domain and coordinate-action lemmas) own the raw construction. `unboundedBlockOperatorCore_toLinearPMap` states the bundled core's canonical raw view, while its remaining package carries closedness | migrate graph reduction and selected-graph records to `UnboundedBlockDataPMap`, then contract the closedness-only facade |
-| Riccati graph reduction | production consumer migrated | `unboundedBlockGraph_invariantPMapData_iff_strongRiccatiPMapCore` proves the raw-data invariance equivalence over `UnboundedBlockDataPMap`; the historical theorem delegates to it | migrate selected-graph records and continue reducing bundled graph-domain helpers to documented facades |
-| selected reducing graph handoff | production consumer migrated | `ContractiveReducingGraphSelectionPMap` and its existential handoff store raw `LinearPMap.ReducesSubspace` and derive `StrongSolvesRiccatiPMap`; `UnboundedSelectedGraphBridge` now takes raw block data at its ambient-angular continuation endpoint, `UnboundedPublic` exposes matching raw aggregate and complex diagonalization endpoints, and the raw graph-rotation diagonal representative carries its reduction and unitary-equivalence conclusions; closed coordinate restrictions remain an explicitly documented closed-output adapter | migrate remaining source-facing diagonalization callers to the raw record, then contract historical graph-domain helpers not needed by the closed-output adapter |
+| reducing restrictions and Riccati transport | production consumers migrated | `LinearPMap.InvariantSubspace`, `ReducesSubspace` (including orthogonal-complement closure), and `reducingRestriction` now own the complete restriction core: domain/action/map, density/closedness, adjoint-domain, symmetry, and self-adjointness; raw graph rotation exposes its pullback, exact domain, unitary equivalence, and reduction transport over `UnboundedBlockDataPMap`; historical closed-operator theorems delegate to it | the Riccati half is done — see the Riccati row below; the remaining sine-theta consumers are the open half |
+| Riccati transport pullback | **complete** | `LinearPMap.pullbackDomain`, `pullbackDomainToOriginal`, `pullbackLinearMap`, `pullback`, density/closedness, and `UnitaryEquivalent` own the construction and the transport proof outright | `DavisKahan/Riccati/UnboundedTransport.lean` was **deleted** — it was 120 lines of facade with no production consumer at all |
+| Riccati block data and direct sum | **complete** | `UnboundedBlockData` stores partial maps with explicit density, closed-graph and self-adjointness properties, plus `isSymmetric0`/`isSymmetric1` for the estimates that consume symmetry rather than self-adjointness.  `LinearPMap.directSumDomain`, coordinate maps, component action, `directSum`, density and graph closedness own the direct sum; `unboundedOffDiagonalCoupling` and `unboundedBlockOperatorCore` own the block core | the `closedOperatorDirectSum*` facade family and the bundled core are **deleted**; `UnboundedCore.lean` went 279 → 100 lines |
+| Riccati graph reduction | **complete** | `unboundedBlockGraph_invariant_iff_strongRiccatiCore` proves the invariance equivalence over the canonical record; there is no second spelling left to delegate to it | nothing outstanding |
+| selected reducing graph handoff | **complete** | `ContractiveReducingGraphSelection` stores raw `LinearPMap.ReducesSubspace` and derives `StrongSolvesRiccati`; `UnboundedSelectedGraphBridge`, `UnboundedPublic` and `Unbounded` expose only raw endpoints, and the coordinate restrictions are `LinearPMap`s with density and closedness as separate theorems | nothing outstanding — the closed-output adapter that used to be documented here no longer exists |
 | unbounded sine-theta residual data | production consumer migration in progress | `UnboundedSinThetaDataPMap` now stores the three raw partial maps together with explicit density and closed-graph hypotheses; `UnboundedSinThetaData.toPMap` and the genuine interval/all-gap predicate views supply the canonical route for source facades. The natural complex isometric and generalized all-gap consumers, and the canonical `FiniteIntervalGeneralSinThetaProblem.{result,complementaryBlock_result}` source records, now call raw endpoints through those views; raw operator-norm and ideal-gauge endpoints (including raw Spectra resolvent-gap discharges), raw generalized/exact/isometric interval-exterior and all-gap endpoints, and the long `linearPMap_mem_and_gauge_le_of_boundedLeft_exteriorRight` Neumann proof are stated directly over `LinearPMap` domains and actions | the historical residual and Neumann entry points are source-facing compatibility wrappers. The raw interval/exterior and all-gap endpoints package only at the documented Spectra bounded-realization/resolvent boundary. `generalizedSinTheta_unbounded_{,exact_}of_genuineIntervalExteriorGap` now have **no production caller outside their own defining module**, so they are contractible once the `Sources/**` and `Real/**` records move; migrate the remaining interval/gauge callers through their raw views |
 | Sylvester bounded realization transfer | production consumer migrated | `linearPMapSylvesterEquation_boundedRealization` transfers a raw Sylvester equation using explicit closed-graph and dense-domain properties; the bundled theorem delegates to it, and `ShiftedInverseGauge` calls the raw theorem directly | migrate remaining shifted-inverse callers to raw partial-map hypotheses and contract their bundle-only entry points |
 
@@ -152,37 +152,54 @@ data structures that still quantify over the bundle.
 - The `Restriction.lean` and `ClosedSylvesterEquation.lean` facade blocks, once
   their remaining callers move.
 
-**Riccati sub-analysis (edward, 2026-07-28) — measured, not migrated.**  The
-table above lists `Riccati/UnboundedCore` as the largest un-migrated module at
-32 (re-measured: 34 occurrences).  That count overstates the work, and the
-blocker is not where the count suggests:
+**Riccati cluster (edward, aiq-gpu, 2026-07-28) — MIGRATED AND DELETED.**  The
+table above listed `Riccati/UnboundedCore` (32), `Riccati/UnboundedTransport`
+(13) and `Riccati/UnboundedBasic` (3) as un-migrated.  All three are now at
+**zero**: `grep -R ClosedOperator DavisKahan/Riccati` returns nothing.
 
-- **8 of the declarations are pure facades**, not records:
-  `closedOperatorDirectSumDomain{,Fst,Snd,FstLinearMap,SndLinearMap}`,
-  `closedOperatorDirectSumLinearMap`, `unboundedBlockOperatorPMapCore`,
-  `unboundedBlockOperatorCorePMap`.  Every one already *delegates* to
-  `TauCeti.LinearPMap.*` through `A.toLinearPMap`; there is no mathematics in
-  them to migrate, only callers to move.
-- **The whole `closedOperatorDirectSum*` family has exactly 2 production
-  consumer sites**, both in `Riccati/UnboundedReduction.lean`.  The other 9 are
-  in `DavisKahan/Experimental/InfiniteDimensional/Riccati/**`.
-- `UnboundedBlockData` itself has 4 production consumers
-  (`Riccati/{UnboundedBasic,UnboundedCore,UnboundedExistence,UnboundedReduction}`),
-  6 Experimental ones, and 1 in the `FinishTanTwoTheta/` scratch tree.
+What the earlier measurement got wrong, and it is worth recording because the
+same shape recurs elsewhere in this lane: the release note concluded that the
+`closedOperatorDirectSum*` facade was "two production call sites from
+deletion", with `Experimental/**` as the only blocker and therefore a *policy*
+question.  Reading the tree showed the blocker was structural instead.  The
+bundled core is consumed by a **complete parallel bundled stack five Experimental
+modules deep** — `UnboundedRotationTransport` → `UnboundedReductionTransport` →
+`UnboundedDiagonalRestrictions` → `UnboundedPublic` → `Unbounded` — ending at the
+public endpoint `complex_unbounded_blockDiagonalization`, plus
+`FinishTanTwoTheta/DavisKahan/Unbounded.lean`.  Every level carried both a raw
+and a bundled spelling of the same theorem.  Deleting the facade bottom-up would
+have stranded exactly the mid-development conversion boundary the phase-C
+ordering note warns about, which is why the two earlier attempts stopped.
 
-So the production side of this cluster is **two call sites away** from letting
-the `closedOperatorDirectSum*` facade be deleted outright.  What actually blocks
-the deletion is `Experimental/**`, which this lane's count *excludes* but which
-still has to compile for anyone who builds it — so deleting the facade is a
-decision about Experimental, not about Riccati, and it should be taken together
-with a policy call on whether Experimental migrates or is allowed to keep a
-documented compatibility layer.  Recording that here rather than half-migrating:
-a partial sweep would leave `UnboundedReduction` on the raw API and Experimental
-on the bundle, i.e. exactly the mid-development conversion boundary the phase-C
-ordering note warns about.
+**The sweep therefore ran top-down** — `FinishTanTwoTheta` first, then
+`Unbounded`, `UnboundedPublic`, the diagonal/coordinate restrictions, the two
+transport modules, and finally the production core — and the facade deletions
+fell out at the end with nothing left pointing at them.
 
-`Riccati/UnboundedTransport.lean` (17) is in the same shape: all of it is the
-`ClosedOperator.pullback` facade over `TauCeti.LinearPMap.pullback*`.
+Three things worth knowing for the next module that has this shape:
+
+- **The `ClosedOperator` bundle was hiding hypotheses that the mathematics does
+  not use.**  `UnboundedCoordinateRestrictions` (274 lines) took a
+  `ClosedOperator` throughout, i.e. assumed a dense domain and a closed graph,
+  but every one of its declarations uses only `D.domain` and `D.toFun`.  Retyped
+  over `LinearPMap` it needs *neither* hypothesis, and the two places that
+  genuinely need them — the coordinate restrictions' own density and closed
+  graph — now take them as named arguments and say so.  Weakening the
+  hypotheses was not an extra goal of the migration; it was a consequence of it.
+- **Three declarations were sitting in a `namespace ClosedOperator` and had
+  nothing to do with closed operators.**
+  `intertwines_orthogonal_projection_of_intertwines_projection`,
+  `map_mem_of_intertwines_projection` and
+  `symm_map_mem_of_intertwines_projection` are pure orthogonal-projection facts.
+  They survive the deletion of the namespace and are now visible at
+  `DavisKahanExt` level, where they read as what they are.  They are also
+  plausible `ForTauCeti` material for whoever takes a projection lane.
+- **Two coordinate restrictions lost an argument.**
+  `unboundedBlockDiagonalRestriction0/1` used to take the reduction proof
+  `hred`, because the bundled constructor needed it to fill `dense_domain` and
+  `closed_graph`.  The `LinearPMap` version is definable without it, so `hred`
+  moved to the theorems that actually use it and the two restrictions are now
+  functions of `H` and `X` alone.
 
 **Out of this lane's declared scope; needs its own claim.**  `Interop/Spectra/**`
 (6 modules, ~130 `ClosedOperator` occurrences, none in type position — they sit
