@@ -1,40 +1,33 @@
 # Proof obligations
 
-## P0: citation-facing completion
+## Completed citation-facing theorem
 
-### 1. Exact right-singular Theorem 4
+### Exact Theorem 4
 
-Construct a source-shaped corresponding-block predicate for ordered right
-singular subspaces, viewed as spectral blocks of `A.adjoint ∘ A`. Apply the
-already proved population-gap theorem to the two right Gram operators.
+`FinishYuWangSamworth.Rectangular.Theorem4` now packages:
 
-The quantitative Gram bridge is now isolated in
-`FinishYuWangSamworth.Rectangular.FrobeniusGram`:
+* the exact right-singular sine bound;
+* the identical left-singular sine bound;
+* right and left aligned-frame conclusions with the paper's `2^(3/2)` factor;
+* both intrinsic operator-norm and literal top-singular-value (`sigma_1`) forms.
 
-* operator branch from `opNorm_rightGram_sub_le`;
-* Frobenius branch
-  `||Ahat^* Ahat - A^* A||_F <=
-    (||Ahat||_op + ||A||_op) ||Ahat - A||_F`;
-* the paper coefficient
-  `2 * ||A||_op + ||Ahat - A||_op`.
+The implementation is factored through one generic Gram-transport theorem, so
+right and left versions share the same proof and constant bookkeeping.
 
-Remaining work is the source-shaped corresponding-block predicate and assembly
-through the symmetric population-gap theorem.
+## P0: remaining citation-facing completion
 
-### 2. Exact left-singular Theorem 4
+### Rank-one singular-vector corollaries
 
-Repeat the construction for `A ∘ A.adjoint`. Prefer an adjoint transfer theorem
-when it genuinely shortens the proof and preserves the source constant.
+Expose direct right and left unit-vector statements with phase/sign alignment.
+These should be derived from the exact aligned-frame theorem at `d = 1`, not
+reproved through a separate perturbation argument.
 
-### 3. Aligned singular frames
+### Source-index wrappers
 
-Use the existing aligned-basis/Procrustes theorem to derive the paper's
-`2^(3/2)` right and left frame bounds from the completed sine bounds.
-
-### 4. Rank-one singular-vector corollaries
-
-Expose direct right and left unit-vector statements, with phase/sign alignment,
-so forward citations do not need to reconstruct the `d = 1` specialization.
+Add optional wrappers taking an explicit contiguous index block `r..s` and
+constructing the corresponding Gram eigenblocks and squared-singular-value gap.
+The current exact theorem uses the more intrinsic and safer
+`CorrespondingRightSingularBlock` / `CorrespondingLeftSingularBlock` predicates.
 
 ## P1: source fidelity and reusable infrastructure
 

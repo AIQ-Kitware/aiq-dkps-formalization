@@ -174,8 +174,54 @@ theorem frobenius_leftGram_sub_le
     _ = (‖Â.toContinuousLinearMap‖ + ‖A.toContinuousLinearMap‖) *
           RectangularUnitarilyInvariantNorm.frobenius D := by ring
 
-/-- The source-shaped coefficient used by Yu--Wang--Samworth follows from the
-triangle inequality `‖Â‖ ≤ ‖A‖ + ‖Â - A‖`. -/
+omit [FiniteDimensional 𝕜 F] in
+/-- The common Gram coefficient is bounded by the source-shaped
+Yu--Wang--Samworth coefficient.  Keeping this arithmetic fact separate lets the
+operator and Frobenius branches share exactly the same normalization step. -/
+theorem sum_opNorm_le_paperCoefficient (A Â : E →ₗ[𝕜] F) :
+    ‖Â.toContinuousLinearMap‖ + ‖A.toContinuousLinearMap‖ ≤
+      2 * ‖A.toContinuousLinearMap‖ +
+        ‖(Â - A).toContinuousLinearMap‖ := by
+  have hÂ :
+      ‖Â.toContinuousLinearMap‖ ≤
+        ‖A.toContinuousLinearMap‖ +
+          ‖(Â - A).toContinuousLinearMap‖ := by
+    have h := norm_add_le A.toContinuousLinearMap
+      (Â - A).toContinuousLinearMap
+    have hadd :
+        A.toContinuousLinearMap + (Â - A).toContinuousLinearMap =
+          Â.toContinuousLinearMap := by
+      ext x
+      change A x + (Â x - A x) = Â x
+      abel
+    rwa [hadd] at h
+  linarith
+
+/-- Operator-norm perturbation bound with the exact coefficient displayed in
+Yu--Wang--Samworth Theorem 4. -/
+theorem opNorm_rightGram_sub_le_paperCoefficient
+    (A Â : E →ₗ[𝕜] F) :
+    ‖(rightGram Â - rightGram A).toContinuousLinearMap‖ ≤
+      (2 * ‖A.toContinuousLinearMap‖ +
+          ‖(Â - A).toContinuousLinearMap‖) *
+        ‖(Â - A).toContinuousLinearMap‖ := by
+  refine (opNorm_rightGram_sub_le A Â).trans ?_
+  exact mul_le_mul_of_nonneg_right
+    (sum_opNorm_le_paperCoefficient A Â) (norm_nonneg _)
+
+/-- Left-Gram operator-norm counterpart with the exact paper coefficient. -/
+theorem opNorm_leftGram_sub_le_paperCoefficient
+    (A Â : E →ₗ[𝕜] F) :
+    ‖(leftGram Â - leftGram A).toContinuousLinearMap‖ ≤
+      (2 * ‖A.toContinuousLinearMap‖ +
+          ‖(Â - A).toContinuousLinearMap‖) *
+        ‖(Â - A).toContinuousLinearMap‖ := by
+  refine (opNorm_leftGram_sub_le A Â).trans ?_
+  exact mul_le_mul_of_nonneg_right
+    (sum_opNorm_le_paperCoefficient A Â) (norm_nonneg _)
+
+/-- Frobenius perturbation bound for the right Gram operator with the exact
+coefficient displayed in Yu--Wang--Samworth Theorem 4. -/
 theorem frobenius_rightGram_sub_le_paperCoefficient
     (A Â : E →ₗ[𝕜] F) :
     UnitarilyInvariantNorm.frobenius 𝕜 E
@@ -184,24 +230,11 @@ theorem frobenius_rightGram_sub_le_paperCoefficient
           ‖(Â - A).toContinuousLinearMap‖) *
         RectangularUnitarilyInvariantNorm.frobenius (Â - A) := by
   refine (frobenius_rightGram_sub_le A Â).trans ?_
-  have hÂ :
-      ‖Â.toContinuousLinearMap‖ ≤
-        ‖A.toContinuousLinearMap‖ +
-          ‖(Â - A).toContinuousLinearMap‖ := by
-    have h := norm_add_le A.toContinuousLinearMap
-      (Â - A).toContinuousLinearMap
-    have hadd :
-        A.toContinuousLinearMap + (Â - A).toContinuousLinearMap =
-          Â.toContinuousLinearMap := by
-      ext x
-      change A x + (Â x - A x) = Â x
-      abel
-    rwa [hadd] at h
-  apply mul_le_mul_of_nonneg_right _
+  exact mul_le_mul_of_nonneg_right
+    (sum_opNorm_le_paperCoefficient A Â)
     ((RectangularUnitarilyInvariantNorm.frobenius (𝕜 := 𝕜)).nonneg _)
-  linarith
 
-/-- Left-Gram version of the source-shaped coefficient. -/
+/-- Left-Gram Frobenius counterpart with the exact paper coefficient. -/
 theorem frobenius_leftGram_sub_le_paperCoefficient
     (A Â : E →ₗ[𝕜] F) :
     UnitarilyInvariantNorm.frobenius 𝕜 F
@@ -210,22 +243,9 @@ theorem frobenius_leftGram_sub_le_paperCoefficient
           ‖(Â - A).toContinuousLinearMap‖) *
         RectangularUnitarilyInvariantNorm.frobenius (Â - A) := by
   refine (frobenius_leftGram_sub_le A Â).trans ?_
-  have hÂ :
-      ‖Â.toContinuousLinearMap‖ ≤
-        ‖A.toContinuousLinearMap‖ +
-          ‖(Â - A).toContinuousLinearMap‖ := by
-    have h := norm_add_le A.toContinuousLinearMap
-      (Â - A).toContinuousLinearMap
-    have hadd :
-        A.toContinuousLinearMap + (Â - A).toContinuousLinearMap =
-          Â.toContinuousLinearMap := by
-      ext x
-      change A x + (Â x - A x) = Â x
-      abel
-    rwa [hadd] at h
-  apply mul_le_mul_of_nonneg_right _
+  exact mul_le_mul_of_nonneg_right
+    (sum_opNorm_le_paperCoefficient A Â)
     ((RectangularUnitarilyInvariantNorm.frobenius (𝕜 := 𝕜)).nonneg _)
-  linarith
 
 end DavisKahanTheory
 end TauCeti
