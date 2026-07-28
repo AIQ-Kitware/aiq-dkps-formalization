@@ -33,35 +33,35 @@ variable {E1 : Type*} [NormedAddCommGroup E1] [InnerProductSpace 𝕜 E1]
   [CompleteSpace E1]
 
 /-- Canonical proof-complete block core over partial-map block data. -/
-noncomputable abbrev constructedUnboundedBlockOperatorPMap
-    (H : UnboundedBlockDataPMap (𝕜 := 𝕜) (E0 := E0) (E1 := E1)) :
+noncomputable abbrev constructedUnboundedBlockOperator
+    (H : UnboundedBlockData (𝕜 := 𝕜) (E0 := E0) (E1 := E1)) :
     WithLp 2 (E0 × E1) →ₗ.[𝕜] WithLp 2 (E0 × E1) :=
-  unboundedBlockOperatorPMapCore H
+  unboundedBlockOperatorCore H
 
 /-- Public aggregate form of the domain-controlled graph-invariance
 characterization. -/
-theorem constructedUnboundedBlockGraphPMap_invariant_iff_strongRiccati
-    (H : UnboundedBlockDataPMap (𝕜 := 𝕜) (E0 := E0) (E1 := E1))
+theorem constructedUnboundedBlockGraph_invariant_iff_strongRiccati
+    (H : UnboundedBlockData (𝕜 := 𝕜) (E0 := E0) (E1 := E1))
     (X : E0 →L[𝕜] E1) :
-    (PreservesRiccatiPMapDomains H X ∧
+    (PreservesRiccatiDomains H X ∧
       TauCeti.LinearPMap.InvariantSubspace
-        (constructedUnboundedBlockOperatorPMap H)
+        (constructedUnboundedBlockOperator H)
         (unboundedBlockGraph X)) ↔
-      StrongSolvesRiccatiPMap H X := by
-  exact unboundedBlockGraph_invariantPMapData_iff_strongRiccatiPMapCore H X
+      StrongSolvesRiccati H X := by
+  exact unboundedBlockGraph_invariant_iff_strongRiccatiCore H X
 
 /-- The continuation handoff, exposed from the aggregate module: once the
 selected branch is supplied as a contractive reducing graph, the complete
 strong Riccati package follows. -/
-theorem constructedStrongRiccatiPMapSolution_of_selectedGraph
-    (H : UnboundedBlockDataPMap (𝕜 := 𝕜) (E0 := E0) (E1 := E1))
-    (hselection : Nonempty (ContractiveReducingGraphSelectionPMap H)) :
+theorem constructedStrongRiccatiSolution_of_selectedGraph
+    (H : UnboundedBlockData (𝕜 := 𝕜) (E0 := E0) (E1 := E1))
+    (hselection : Nonempty (ContractiveReducingGraphSelection H)) :
     ∃ X : E0 →L[𝕜] E1,
-      StrongSolvesRiccatiPMap H X ∧ ‖X‖ < 1 ∧
+      StrongSolvesRiccati H X ∧ ‖X‖ < 1 ∧
       TauCeti.LinearPMap.ReducesSubspace
-        (constructedUnboundedBlockOperatorPMap H)
+        (constructedUnboundedBlockOperator H)
         (unboundedBlockGraph X) := by
-  exact exists_strongRiccatiPMap_solution_of_selected_reducing_graph H hselection
+  exact exists_strongRiccati_solution_of_selected_reducing_graph H hselection
 
 section Complex
 
@@ -76,60 +76,60 @@ The forward unitary maps the coordinate-diagonal pullback to the original
 block operator and carries the zero graph to the Riccati graph.  The last
 conjunct identifies the pullback with the direct sum of its two coordinate
 restrictions. -/
-theorem complex_unbounded_blockDiagonalizationPMap
-    (H : UnboundedBlockDataPMap (𝕜 := ℂ) (E0 := F0) (E1 := F1))
+theorem complex_unbounded_blockDiagonalization
+    (H : UnboundedBlockData (𝕜 := ℂ) (E0 := F0) (E1 := F1))
     (X : F0 →L[ℂ] F1)
     (hred : TauCeti.LinearPMap.ReducesSubspace
-      (unboundedBlockOperatorPMapCore H) (unboundedBlockGraph X)) :
+      (unboundedBlockOperatorCore H) (unboundedBlockGraph X)) :
     ∃ W Winv : WithLp 2 (F0 × F1) →L[ℂ] WithLp 2 (F0 × F1),
       TauCeti.LinearPMap.UnitaryEquivalent
-        (unboundedBlockDiagonalPMapCore H X)
-        (unboundedBlockOperatorPMapCore H) W Winv ∧
+        (unboundedBlockDiagonalCore H X)
+        (unboundedBlockOperatorCore H) W Winv ∧
       W ∘L projection (unboundedBlockGraph (0 : F0 →L[ℂ] F1)) =
         projection (unboundedBlockGraph X) ∘L W ∧
       TauCeti.LinearPMap.ReducesSubspace
-        (unboundedBlockDiagonalPMapCore H X)
+        (unboundedBlockDiagonalCore H X)
         (unboundedBlockGraph (0 : F0 →L[ℂ] F1)) ∧
       TauCeti.LinearPMap.UnitaryEquivalent
         (TauCeti.LinearPMap.directSum
           (unboundedBlockDiagonalRestriction0 H X)
           (unboundedBlockDiagonalRestriction1 H X))
-        (unboundedBlockDiagonalPMapCore H X)
+        (unboundedBlockDiagonalCore H X)
         (ContinuousLinearMap.id ℂ _)
         (ContinuousLinearMap.id ℂ _) := by
   let W := (unboundedGraphRotationEquiv X).toContinuousLinearMap
   let Winv := (unboundedGraphRotationEquiv X).symm.toContinuousLinearMap
   refine ⟨W, Winv, ?_, ?_, ?_, ?_⟩
-  · exact unboundedBlockDiagonalPMapCore_unitaryEquivalent H X
+  · exact unboundedBlockDiagonalCore_unitaryEquivalent H X
   · exact unboundedGraphRotationEquiv_intertwines_projection X
-  · exact unboundedBlockDiagonalPMapCore_reduces_zeroGraph H X hred
-  · exact unboundedBlockDiagonalPMapCore_coordinateDirectSum H X hred
+  · exact unboundedBlockDiagonalCore_reduces_zeroGraph H X hred
+  · exact unboundedBlockDiagonalCore_coordinateDirectSum H X hred
 
 /-- Strong-solution form of the complex diagonalization theorem.  Reduction is
 kept as a separate hypothesis because one-sided graph invariance alone does not
 supply the orthogonal-complement domain decomposition. -/
-theorem complex_unbounded_blockDiagonalizationPMap_of_strongSolution
-    (H : UnboundedBlockDataPMap (𝕜 := ℂ) (E0 := F0) (E1 := F1))
-    {X : F0 →L[ℂ] F1} (_hX : StrongSolvesRiccatiPMap H X)
+theorem complex_unbounded_blockDiagonalization_of_strongSolution
+    (H : UnboundedBlockData (𝕜 := ℂ) (E0 := F0) (E1 := F1))
+    {X : F0 →L[ℂ] F1} (_hX : StrongSolvesRiccati H X)
     (hred : TauCeti.LinearPMap.ReducesSubspace
-      (unboundedBlockOperatorPMapCore H) (unboundedBlockGraph X)) :
+      (unboundedBlockOperatorCore H) (unboundedBlockGraph X)) :
     ∃ W Winv : WithLp 2 (F0 × F1) →L[ℂ] WithLp 2 (F0 × F1),
       TauCeti.LinearPMap.UnitaryEquivalent
-        (unboundedBlockDiagonalPMapCore H X)
-        (unboundedBlockOperatorPMapCore H) W Winv ∧
+        (unboundedBlockDiagonalCore H X)
+        (unboundedBlockOperatorCore H) W Winv ∧
       W ∘L projection (unboundedBlockGraph (0 : F0 →L[ℂ] F1)) =
         projection (unboundedBlockGraph X) ∘L W ∧
       TauCeti.LinearPMap.ReducesSubspace
-        (unboundedBlockDiagonalPMapCore H X)
+        (unboundedBlockDiagonalCore H X)
         (unboundedBlockGraph (0 : F0 →L[ℂ] F1)) ∧
       TauCeti.LinearPMap.UnitaryEquivalent
         (TauCeti.LinearPMap.directSum
           (unboundedBlockDiagonalRestriction0 H X)
           (unboundedBlockDiagonalRestriction1 H X))
-        (unboundedBlockDiagonalPMapCore H X)
+        (unboundedBlockDiagonalCore H X)
         (ContinuousLinearMap.id ℂ _)
         (ContinuousLinearMap.id ℂ _) :=
-  complex_unbounded_blockDiagonalizationPMap H X hred
+  complex_unbounded_blockDiagonalization H X hred
 
 end Complex
 
