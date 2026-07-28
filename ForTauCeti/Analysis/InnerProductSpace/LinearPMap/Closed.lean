@@ -271,6 +271,85 @@ theorem reducingRestriction_closedGraph
       simpa [hxu] using hx1]
   exact hA.preimage hcoords
 
+/-- Adjoint-domain membership of a reducing restriction is exactly ambient
+adjoint-domain membership for the included vector. -/
+theorem mem_reducingRestriction_adjoint_domain_iff
+    (A : E →ₗ.[𝕜] E) (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
+    [CompleteSpace E] [CompleteSpace U]
+    (hred : ReducesSubspace A U) (y : U) :
+    y ∈ (reducingRestriction A U hred).adjoint.domain ↔
+      (y : E) ∈ A.adjoint.domain := by
+  rw [LinearPMap.mem_adjoint_domain_iff,
+    LinearPMap.mem_adjoint_domain_iff]
+  constructor
+  · intro hy
+    have hproject : Continuous (projectDomainToReducingRestriction A U hred) := by
+      have hproj : Continuous fun x : A.domain =>
+          U.starProjection (x : E) :=
+        U.starProjection.continuous.comp A.domain.subtypeL.continuous
+      have hprojU : Continuous fun x : A.domain =>
+          (⟨U.starProjection (x : E),
+            U.starProjection_apply_mem (x : E)⟩ : U) :=
+        hproj.subtype_mk _
+      exact hprojU.subtype_mk fun x => hred.projection_mem_domain x
+    have hcomp : Continuous fun x : A.domain =>
+        ⟪y, (reducingRestriction A U hred)
+          (projectDomainToReducingRestriction A U hred x)⟫_𝕜 :=
+      hy.comp hproject
+    have hfun : (fun x : A.domain =>
+        ⟪y, (reducingRestriction A U hred)
+          (projectDomainToReducingRestriction A U hred x)⟫_𝕜) =
+        fun x : A.domain => ⟪(y : E), A x⟫_𝕜 := by
+      funext x
+      let xu : A.domain :=
+        ⟨U.starProjection (x : E), hred.projection_mem_domain x⟩
+      let xo : A.domain :=
+        ⟨Uᗮ.starProjection (x : E), hred.orthogonalProjection_mem_domain x⟩
+      have hxsplit : x = xu + xo := by
+        apply Subtype.ext
+        exact (U.starProjection_add_starProjection_orthogonal (x : E)).symm
+      have horth : ⟪(y : E), A xo⟫_𝕜 = 0 := by
+        exact Submodule.inner_right_of_mem_orthogonal y.property
+          (hred.orthogonal_invariant xo
+            (Uᗮ.starProjection_apply_mem (x : E)))
+      calc
+        ⟪y, (reducingRestriction A U hred)
+            (projectDomainToReducingRestriction A U hred x)⟫_𝕜 =
+            ⟪(y : E), A xu⟫_𝕜 := rfl
+        _ = ⟪(y : E), A xu + A xo⟫_𝕜 := by
+              rw [inner_add_right, horth, add_zero]
+        _ = ⟪(y : E), A (xu + xo)⟫_𝕜 := by
+              congr 1
+              exact (A.toFun.map_add xu xo).symm
+        _ = ⟪(y : E), A x⟫_𝕜 := by rw [← hxsplit]
+    rw [hfun] at hcomp
+    exact hcomp
+  · intro hy
+    have hincl : Continuous fun x : (reducingRestriction A U hred).domain =>
+        reducingRestrictionDomainToAmbient A U x := by
+      have hcoe : Continuous fun x : (reducingRestriction A U hred).domain =>
+          (((x : (reducingRestriction A U hred).domain) : U) : E) :=
+        U.subtypeL.continuous.comp
+          (reducingRestriction A U hred).domain.subtypeL.continuous
+      exact hcoe.subtype_mk fun x => x.property
+    have hcomp := hy.comp hincl
+    have hcomp' : Continuous fun x : (reducingRestriction A U hred).domain =>
+        ⟪(y : E), A (reducingRestrictionDomainToAmbient A U x)⟫_𝕜 := hcomp
+    exact hcomp'
+
+/-- Symmetry passes to a reducing restriction of a partial map. -/
+theorem reducingRestriction_isSymmetric
+    (A : E →ₗ.[𝕜] E) (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
+    (hred : ReducesSubspace A U)
+    (hA : ∀ x y : A.domain,
+      ⟪A x, (y : E)⟫_𝕜 = ⟪(x : E), A y⟫_𝕜) :
+    ∀ x y : (reducingRestriction A U hred).domain,
+      ⟪reducingRestriction A U hred x, (y : U)⟫_𝕜 =
+        ⟪(x : U), reducingRestriction A U hred y⟫_𝕜 := by
+  intro x y
+  exact hA (reducingRestrictionDomainToAmbient A U x)
+    (reducingRestrictionDomainToAmbient A U y)
+
 /-- A linear map on a submodule has a bounded extension to the ambient space. -/
 structure BoundedExtension (D : Submodule 𝕜 F) (T : D →ₗ[𝕜] E) where
   operator : F →L[𝕜] E
