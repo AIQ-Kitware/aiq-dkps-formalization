@@ -176,11 +176,36 @@ Cheap now, impossible later. Nothing else starts until this lands.
    genuine fork of an upstream file, not a compatibility repair, so it cannot be
    unpicked by moving one file. Do `POVMCore` last, as its own step.
 
-   **DECIDED 2026-07-28 (jon): relocate all 11 to `ForTauCeti` now**, with DKPS
+   **DECIDED 2026-07-28 (jon): relocate all 11 to `ForTauCeti`**, with DKPS
    authorship restored and reconciled against Tau Ceti's API like any other
    staged module — rather than moving only the three in the port surface, or
    documenting and leaving them. Leaving them would mean `vendor/Spectra` can
    never be deleted at S6 and the attribution stays inverted.
+
+   **Ordering correction, measured 2026-07-28 — the relocation is *gated*, not
+   independent.** "They need no port" is true of their *authorship* and false of
+   their *dependencies*: **all 11 import genuine upstream Spectra modules**, and
+   `ForTauCeti` may import only Mathlib / TauCeti / ForTauCeti
+   (`scripts/check_dependency_layers.py`). So none of them can land in
+   `ForTauCeti` until its donor dependencies are ported. Measured deps:
+
+   | file | upstream Spectra deps |
+   |---|---|
+   | `Spaces/Tensor/HilbertSchmidt.lean` | 4 — `Tensor.Map`, `Antilinear.ConjugateSpace`, `Operator.AdjointClosure`, `BornRule.Joint.Basic` |
+   | `YosidaHille/RectangularIntertwining.lean` | 3 |
+   | `SpectralTheory/SeparatedIntertwiner.lean` | 3 |
+   | `Spaces/Tensor/HilbertSchmidtSpectralGap.lean` | 2 |
+   | the remaining 7 | 1 each, or 0 plus a sibling of ours |
+
+   Two consequences. First, **S0.3 cannot be finished before S4** — the
+   Hilbert–Schmidt tensor files sit on the PVM/Born-rule layer, which is Cluster
+   B. Second, if the deletion risk needs defusing sooner, there is a cheaper
+   intermediate: move the 11 out of `vendor/Spectra` into
+   `DavisKahan/Interop/Spectra/`, which *is* allowed to import Spectra. That ends
+   the attribution inversion and takes them out of reach of the `git archive`
+   refresh immediately, at the cost of renaming their namespaces (they are
+   declared into `Spectra.*`, so consumers move with them). The ratchet in
+   `check_spectra_vendor_authorship.py` measures either route.
 
    Sequencing note: `Spaces/Tensor/HilbertSchmidt.lean` (625 lines) is the
    biggest and is Cluster D's core, so this step and S3 are the same work — do
