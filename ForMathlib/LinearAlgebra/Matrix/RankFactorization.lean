@@ -1,9 +1,7 @@
 /-
-Staged for Mathlib: additions to `Mathlib/LinearAlgebra/Matrix/Rank.lean`
-(rank factorization).
-
-Formalized by Claude Fable 5 (claude-fable-5[1m]);
-to be re-authored per Mathlib's AI-contribution policy at PR time.
+Copyright (c) 2026 Kitware, Inc. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Jon Crall, Claude Fable 5
 -/
 
 import Mathlib.LinearAlgebra.Matrix.Rank
@@ -33,6 +31,43 @@ column of `M` in that basis.
   `M.rank ≤ r`.
 * `ForMathlib.Matrix.rank_le_iff_exists_eq_mul`: the characterization
   `M.rank ≤ r ↔ ∃ L R, M = L * R`.
+
+## Staging note
+
+Staged for Mathlib: additions to `Mathlib/LinearAlgebra/Matrix/Rank.lean`
+(rank factorization).
+Formalized by Claude Fable 5 (claude-fable-5[1m]);
+to be re-authored per Mathlib's AI-contribution policy at PR time.
+
+## Known linter warnings, and why they stay
+
+Mathlib's `unusedSectionVars` linter flags `[DecidableEq n]` on the three theorems below:
+it is in their type and never used, and the linter's advice is to drop it and call
+`classical` in the proof.  That advice is right for Mathlib and wrong for us, because the
+same three signatures are pinned as **data**: `Challenge/MathlibPending/RankFactorization/`
+restates them in an immutable `Conformance.lean` — with the identical
+`variable {𝕜 m n : Type*} [Field 𝕜] [Fintype n] [DecidableEq n]` line — and
+`Leaderboard.lean` names `ForMathlib.Matrix.rank_le_iff_exists_eq_mul` in `#print axioms`.
+Dropping the instance here would change the signature and desynchronise the two.
+
+So the fix belongs to whoever owns the challenge, not to this file: the conformance
+statement and the eventual Mathlib statement cannot both be right, and the Mathlib one is
+the one without `[DecidableEq n]`.  Until that is settled, `lean_lib ForMathlib` cannot
+carry `warningAsError`.
+
+## Provenance
+
+* Original repository: Davis--Kahan/DKPS formalization (Kitware, Inc.).
+* Original module: authored directly in `ForMathlib` at Davis--Kahan commit
+  `7bc63b8`; it has had no prior home.
+* Extraction class: **authored in place**, for upstreaming to Mathlib rather than
+  to Tau Ceti — see `ForTauCeti/README.md` on the split between the two staging
+  areas.
+* Intended Mathlib home: additions to `Mathlib/LinearAlgebra/Matrix/Rank.
+* Original authors / copyright: Jon Crall, Claude Fable 5; Copyright (c) 2026
+  Kitware, Inc.; Apache 2.0.
+* Spectra influence: **none** — the `ForMathlib` import firewall admits only
+  Mathlib and `ForMathlib` (enforced by `scripts/check_dependency_layers.py`).
 -/
 
 namespace ForMathlib.Matrix

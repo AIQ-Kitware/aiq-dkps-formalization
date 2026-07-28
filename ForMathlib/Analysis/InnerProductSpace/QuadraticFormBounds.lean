@@ -11,6 +11,19 @@ import Mathlib.Analysis.InnerProductSpace.Adjoint
 Scalar-generic lower and upper bounds for the real part of the quadratic form
 of a bounded operator, restricted to a subspace.  These predicates are useful
 well beyond Davis--Kahan perturbation theory.
+
+## Provenance
+
+* Original repository: Davis--Kahan/DKPS formalization (Kitware, Inc.).
+* Original module: authored directly in `ForMathlib` at Davis--Kahan commit
+  `df036cd`; it has had no prior home.
+* Extraction class: **authored in place**, for upstreaming to Mathlib rather than
+  to Tau Ceti — see `ForTauCeti/README.md` on the split between the two staging
+  areas.
+* Original authors / copyright: Jon Crall, GPT 5.6 High; Copyright (c) 2026
+  Kitware, Inc.; Apache 2.0.
+* Spectra influence: **none** — the `ForMathlib` import firewall admits only
+  Mathlib and `ForMathlib` (enforced by `scripts/check_dependency_layers.py`).
 -/
 
 

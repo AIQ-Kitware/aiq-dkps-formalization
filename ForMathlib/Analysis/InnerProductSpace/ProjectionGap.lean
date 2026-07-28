@@ -72,7 +72,21 @@ variable [CompleteSpace E]
 decomposition `(P−Q)² = P(1−Q)P + (1−P)Q(1−P)` and the C\*-norm identities.  This
 is the two-projection fact that upgrades two one-sided `sin Θ` estimates to the
 *sharp* (factor-one) projector-difference bound, without any equal-rank
-hypothesis.  The proof uses the `RCLike` Hilbert-space star structure and is scalar-generic. -/
+hypothesis.  The proof uses the `RCLike` Hilbert-space star structure and is scalar-generic.
+
+## Provenance
+
+* Original repository: Davis--Kahan/DKPS formalization (Kitware, Inc.).
+* Original module: authored directly in `ForMathlib` at Davis--Kahan commit
+  `df036cd`; it has had no prior home.
+* Extraction class: **authored in place**, for upstreaming to Mathlib rather than
+  to Tau Ceti — see `ForTauCeti/README.md` on the split between the two staging
+  areas.
+* Original authors / copyright: Jon Crall, GPT 5.6 High; Copyright (c) 2026
+  Kitware, Inc.; Apache 2.0.
+* Spectra influence: **none** — the `ForMathlib` import firewall admits only
+  Mathlib and `ForMathlib` (enforced by `scripts/check_dependency_layers.py`).
+-/
 
 
 namespace ContinuousLinearMap
