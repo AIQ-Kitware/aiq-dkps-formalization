@@ -1,0 +1,183 @@
+/-
+Copyright (c) 2026 Kitware, Inc. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Jon Crall, OpenAI GPT-5.6 Thinking, Claude Opus 5
+-/
+module
+
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.MinMaxUpper
+
+/-!
+# Finite-dimensional localization of approximation numbers
+
+The `n`th approximation number of a bounded operator between Hilbert spaces is already
+determined by the restrictions of the operator to `(n+1)`-generated subspaces of its source:
+
+```
+aₙ(T) = sSup { aₙ (T ∘L (span {v 0, …, v n}).subtypeL) | v : Fin (n + 1) → E }.
+```
+
+The supremum is a genuine least upper bound (`approximationNumber_isLUB_finiteRestrictions`),
+not merely a bound, and the family is indexed by *all* families of `n + 1` vectors —
+linearly dependent ones are harmless, contributing restrictions to smaller subspaces.
+
+## Main results
+
+* `ContinuousLinearMap.approximationNumber_comp_subtypeL_le`: restricting the source cannot
+  increase an approximation number.  Stated for a general `RCLike` field;
+* `ContinuousLinearMap.exists_finiteRestrictionApproximationNumber_gt_of_lt`: every strict
+  lower bound is exceeded by one of the restrictions;
+* `ContinuousLinearMap.approximationNumber_isLUB_finiteRestrictions`: the two together;
+* `ContinuousLinearMap.lt_approximationNumber_iff_exists_finiteDimensional_lowerBound`: the
+  epsilon form of the min--max characterisation, packaging
+  `ContinuousLinearMap.exists_linearIndependent_lowerBound_of_lt_approximationNumber` with
+  its converse `ContinuousLinearMap.le_approximationNumber_of_linearIndependent` into an
+  `Iff`.
+
+## Provenance
+
+* Original repository: Davis--Kahan/DKPS formalization (Kitware, Inc.).
+* Original module: `DavisKahan/Interop/Spectra/ApproximationNumberMinMax.lean`.
+* Original declarations: `TauCeti.DavisKahan.Experimental.SpectraBridge.{`
+  `approximationNumber_comp_subtypeL_le, finiteRestrictionApproximationNumbers,`
+  `finiteRestrictionApproximationNumbers_upperBound,`
+  `exists_finiteRestrictionApproximationNumber_gt_of_lt,`
+  `approximationNumber_isLUB_finiteRestrictions,`
+  `lt_approximationNumber_iff_exists_finiteDimensional_lowerBound}`.
+* Original authors / copyright: Jon Crall, OpenAI GPT-5.6 Thinking; Copyright (c) 2026
+  Kitware, Inc.; Apache 2.0.
+* Extraction class: **copied and renamespaced**.  The statements are unchanged apart from
+  the generalisation of `approximationNumber_comp_subtypeL_le` to an arbitrary `RCLike`
+  field; the declarations move from `TauCeti.DavisKahan.Experimental.SpectraBridge` to
+  `ContinuousLinearMap`, so that dot notation resolves.
+* Spectra influence: **none**.  The module was under `DavisKahan/Interop/Spectra/` because
+  its threshold theorem was once proved from `vendor/Spectra`'s projection-valued measures.
+  That proof was replaced on 2026-07-28 by
+  `ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/MinMaxUpper.lean`, after which
+  nothing here touched Spectra and the module belonged in the staging layer.
+-/
+
+@[expose] public section
+
+namespace ContinuousLinearMap
+
+open scoped InnerProductSpace
+
+noncomputable section
+
+universe u v w
+
+section Restriction
+
+variable {𝕜 : Type u} [RCLike 𝕜] {E : Type v} {F : Type w}
+  [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
+  [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
+
+/-- Restriction to a subspace cannot increase an approximation number. -/
+theorem approximationNumber_comp_subtypeL_le
+    (T : E →L[𝕜] F) (n : ℕ) (V : Submodule 𝕜 E) :
+    (T ∘L V.subtypeL).approximationNumber n ≤ T.approximationNumber n := by
+  have h := T.approximationNumber_comp_le_mul_norm V.subtypeL n
+  have hsub : ‖V.subtypeL‖ ≤ (1 : ℝ) := V.norm_subtypeL_le
+  calc
+    (T ∘L V.subtypeL).approximationNumber n
+        ≤ T.approximationNumber n * ‖V.subtypeL‖ := h
+    _ ≤ T.approximationNumber n * 1 :=
+      mul_le_mul_of_nonneg_left hsub (T.approximationNumber_nonneg n)
+    _ = T.approximationNumber n := by rw [mul_one]
+
+/-- The approximation numbers of the restrictions of `T` to the spans of `n + 1` vectors.
+
+Linearly dependent families are deliberately not excluded: they merely contribute
+restrictions to subspaces of smaller dimension, which the supremum ignores. -/
+def finiteRestrictionApproximationNumbers (T : E →L[𝕜] F) (n : ℕ) : Set ℝ :=
+  Set.range fun v : Fin (n + 1) → E =>
+    (T ∘L (Submodule.span 𝕜 (Set.range v)).subtypeL).approximationNumber n
+
+/-- The ambient approximation number bounds every finite restriction. -/
+theorem finiteRestrictionApproximationNumbers_upperBound (T : E →L[𝕜] F) (n : ℕ) :
+    T.approximationNumber n ∈ upperBounds (T.finiteRestrictionApproximationNumbers n) := by
+  rintro _ ⟨v, rfl⟩
+  exact T.approximationNumber_comp_subtypeL_le n (Submodule.span 𝕜 (Set.range v))
+
+end Restriction
+
+section Complex
+
+variable {E : Type v} {F : Type w}
+  [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
+  [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
+
+/-- Every strict lower threshold for the ambient approximation number is exceeded by an
+approximation number of an `(n+1)`-generated restriction. -/
+theorem exists_finiteRestrictionApproximationNumber_gt_of_lt
+    (T : E →L[ℂ] F) (n : ℕ) {r : ℝ} (hr0 : 0 ≤ r)
+    (hr : r < T.approximationNumber n) :
+    ∃ v : Fin (n + 1) → E,
+      r < (T ∘L (Submodule.span ℂ (Set.range v)).subtypeL).approximationNumber n := by
+  obtain ⟨s, hrs, v, hv, hV⟩ :=
+    T.exists_linearIndependent_lowerBound_of_lt_approximationNumber n hr0 hr
+  let V : Submodule ℂ E := Submodule.span ℂ (Set.range v)
+  let b : Module.Basis (Fin (n + 1)) ℂ V := Module.Basis.span hv
+  let w : Fin (n + 1) → V := fun i => b i
+  have hw : LinearIndependent ℂ w := by
+    simpa only [w] using b.linearIndependent
+  have hsNN : s ≤ (T ∘L V.subtypeL).approximationNumber n := by
+    apply ContinuousLinearMap.le_approximationNumber_of_linearIndependent
+      (T ∘L V.subtypeL) n w hw
+    intro x _ hxNorm
+    have hxV : ((x : V) : E) ∈ V := x.property
+    have hxNormE : ‖((x : V) : E)‖ = 1 := by simpa using hxNorm
+    change s ≤ ‖T ((x : V) : E)‖
+    calc
+      s = s * ‖((x : V) : E)‖ := by rw [hxNormE, mul_one]
+      _ ≤ ‖T ((x : V) : E)‖ := hV ((x : V) : E) hxV
+  exact ⟨v, by simpa only [V] using hrs.trans_le hsNN⟩
+
+/-- **Exact finite-dimensional localization.**  The ambient approximation number is the
+least upper bound of the approximation numbers of the restrictions to spans of `n + 1`
+vectors.
+
+Approximation numbers are real-valued, so `IsLUB` is the conditionally-complete
+formulation appropriate to `ℝ`; the family is nonempty and bounded above by the ambient
+approximation number. -/
+theorem approximationNumber_isLUB_finiteRestrictions (T : E →L[ℂ] F) (n : ℕ) :
+    IsLUB (T.finiteRestrictionApproximationNumbers n) (T.approximationNumber n) := by
+  refine ⟨T.finiteRestrictionApproximationNumbers_upperBound n, ?_⟩
+  intro b hb
+  -- Every upper bound of a nonempty family of nonnegative reals is nonnegative.
+  have hb0 : 0 ≤ b :=
+    (ContinuousLinearMap.approximationNumber_nonneg _ n).trans (hb ⟨fun _ => 0, rfl⟩)
+  by_contra hnot
+  obtain ⟨v, hv⟩ :=
+    T.exists_finiteRestrictionApproximationNumber_gt_of_lt n hb0 (lt_of_not_ge hnot)
+  exact (not_le_of_gt hv) (hb ⟨v, rfl⟩)
+
+/-- **Epsilon form of the min--max characterisation.**  `r` is strictly below `aₙ(T)`
+exactly when `T` has a strictly larger uniform lower modulus on some `(n+1)`-dimensional
+subspace.
+
+The forward direction is
+`ContinuousLinearMap.exists_linearIndependent_lowerBound_of_lt_approximationNumber` and the
+reverse is `ContinuousLinearMap.le_approximationNumber_of_linearIndependent`, so this is the
+statement in which both halves of the min--max theorem appear together. -/
+theorem lt_approximationNumber_iff_exists_finiteDimensional_lowerBound
+    (T : E →L[ℂ] F) (n : ℕ) {r : ℝ} (hr0 : 0 ≤ r) :
+    r < T.approximationNumber n ↔
+      ∃ s : ℝ, r < s ∧
+        ∃ v : Fin (n + 1) → E, LinearIndependent ℂ v ∧
+          ∀ x ∈ Submodule.span ℂ (Set.range v), s * ‖x‖ ≤ ‖T x‖ := by
+  refine ⟨T.exists_linearIndependent_lowerBound_of_lt_approximationNumber n hr0, ?_⟩
+  rintro ⟨s, hrs, v, hv, hV⟩
+  refine hrs.trans_le ?_
+  apply ContinuousLinearMap.le_approximationNumber_of_linearIndependent T n v hv
+  intro x hxV hxNorm
+  calc
+    s = s * ‖x‖ := by rw [hxNorm, mul_one]
+    _ ≤ ‖T x‖ := hV x hxV
+
+end Complex
+
+end
+
+end ContinuousLinearMap

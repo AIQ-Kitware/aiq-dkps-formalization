@@ -5,7 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
 import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SingularValueTransport
-import DavisKahan.Interop.Spectra.ApproximationNumberMinMax
+import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteRestriction
 import ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm
 import Mathlib.Analysis.InnerProductSpace.ProdL2
 
@@ -342,10 +342,10 @@ theorem min_le_approximationNumber_continuousOrthogonalBlockSum
     have := lt_of_lt_of_le hcon (min_le_right _ _)
     exact_mod_cast this
   obtain ⟨s, hms, v, hv, hV⟩ :=
-    SpectraBridge.exists_linearIndependent_lowerBound_of_lt_approximationNumber
+    ContinuousLinearMap.exists_linearIndependent_lowerBound_of_lt_approximationNumber
       A i hm0 hmA
   obtain ⟨t, hmt, w, hw, hW⟩ :=
-    SpectraBridge.exists_linearIndependent_lowerBound_of_lt_approximationNumber
+    ContinuousLinearMap.exists_linearIndependent_lowerBound_of_lt_approximationNumber
       B j hm0 hmB
   -- the combined witness family
   set f : Fin (i + 1) → WithLp 2 (E₀ × E₁) := fun k => WithLp.toLp 2 (v k, 0) with hf
@@ -444,7 +444,7 @@ theorem min_le_approximationNumber_continuousOrthogonalBlockSum
         mul_pow μ ‖(WithLp.ofLp x).2‖ 2]
     exact le_of_sq_le_sq hsq (norm_nonneg _)
   have hfinal : m < (T.approximationNumber (i + j + 1) : ℝ) :=
-    (SpectraBridge.lt_approximationNumber_iff_exists_finiteDimensional_lowerBound
+    (ContinuousLinearMap.lt_approximationNumber_iff_exists_finiteDimensional_lowerBound
       T (i + j + 1) hm0).mpr ⟨μ, hmμ, _, hu, hlower⟩
   exact absurd hfinal (by rw [← hm]; exact lt_irrefl m)
 

@@ -11,7 +11,6 @@ import DavisKahan.Interop.Spectra.SpectralRestrictionOperator
 import DavisKahan.Interop.Spectra.RealSpectralRestriction
 import DavisKahan.Interop.Spectra.SpectralRestrictionLocalization
 import DavisKahan.Interop.Spectra.OperatorAbsoluteValue
-import DavisKahan.Interop.Spectra.ApproximationNumberMinMax
 import DavisKahan.Interop.Spectra.SinAngle
 import DavisKahan.Interop.Spectra.DirectRotation
 import DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.DirectRotationAPI
