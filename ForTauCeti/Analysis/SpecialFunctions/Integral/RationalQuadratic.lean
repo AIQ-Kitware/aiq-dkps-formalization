@@ -240,7 +240,8 @@ private theorem integrable_sq_div_two_quadratics
   · filter_upwards [] with y
     by_cases hy : y = 0
     · subst y
-      simp
+      simp only [ne_eq, OfNat.ofNat_ne_zero, not_false_eq_true, zero_pow, zero_add,
+        zero_div, norm_zero, add_zero, inv_nonneg]
       positivity
     · have hySq : 0 < y ^ 2 := sq_pos_of_ne_zero hy
       have hC : 0 < y ^ 2 + c ^ 2 := by positivity

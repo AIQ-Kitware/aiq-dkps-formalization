@@ -176,15 +176,28 @@ theorem singularValues_orthogonalBlockSum_self
       simp only [b₂, OrthonormalBasis.reindex_apply]
       obtain ⟨⟨q, r⟩, rfl⟩ := finProdFinEquiv.surjective j
       fin_cases r
-      · simp [e, pairToSum, finTwoEquiv, μ, b, S,
-          hS.apply_eigenvectorBasis]
+      · simp only [finTwoEquiv, Fin.isValue, Equiv.symm_trans, Equiv.prodCongr_symm,
+          Equiv.symm_mk, Equiv.refl_symm, Equiv.prodComm_symm, Equiv.symm_symm, Fin.zero_eta,
+          Equiv.trans_apply, Equiv.symm_apply_apply, Equiv.prodComm_apply, Prod.swap_prod_mk,
+          Equiv.prodCongr_apply, Equiv.coe_fn_mk, Equiv.coe_refl, Prod.map_apply, Fin.reduceBEq,
+          id_eq, Equiv.boolProdEquivSum_apply, Bool.false_eq_true, ↓reduceIte,
+          OrthonormalBasis.prod_apply, LinearMap.coe_inl, LinearMap.coe_inr, Sum.elim_inl,
+          Function.comp_apply, orthogonalBlockSum_apply, WithLp.toLp_fst,
+          hS.apply_eigenvectorBasis, WithLp.toLp_snd, map_zero,
+          finProdFinEquiv_symm_apply, S, b, e, pairToSum, μ]
         have hidx : (finProdFinEquiv (q, (0 : Fin 2))).divNat = q :=
           congrArg Prod.fst (finProdFinEquiv.symm_apply_apply (q, (0 : Fin 2)))
         rw [hidx]
         apply WithLp.ofLp_injective 2
         simp
-      · simp [e, pairToSum, finTwoEquiv, μ, b, S,
-          hS.apply_eigenvectorBasis]
+      · simp only [finTwoEquiv, Fin.isValue, Equiv.symm_trans, Equiv.prodCongr_symm,
+          Equiv.symm_mk, Equiv.refl_symm, Equiv.prodComm_symm, Equiv.symm_symm, Fin.mk_one,
+          Equiv.trans_apply, Equiv.symm_apply_apply, Equiv.prodComm_apply, Prod.swap_prod_mk,
+          Equiv.prodCongr_apply, Equiv.coe_fn_mk, Equiv.coe_refl, Prod.map_apply, BEq.rfl, id_eq,
+          Equiv.boolProdEquivSum_apply, ↓reduceIte, OrthonormalBasis.prod_apply, LinearMap.coe_inl,
+          LinearMap.coe_inr, Sum.elim_inr, Function.comp_apply, orthogonalBlockSum_apply,
+          WithLp.toLp_fst, map_zero, WithLp.toLp_snd,
+          hS.apply_eigenvectorBasis, finProdFinEquiv_symm_apply, S, b, e, pairToSum, μ]
         have hidx : (finProdFinEquiv (q, (1 : Fin 2))).divNat = q :=
           congrArg Prod.fst (finProdFinEquiv.symm_apply_apply (q, (1 : Fin 2)))
         rw [hidx]
