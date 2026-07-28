@@ -22,7 +22,6 @@ import DavisKahan.Riccati.UnboundedBasic
 import DavisKahan.Riccati.UnboundedCore
 import DavisKahan.Riccati.UnboundedReduction
 import DavisKahan.Riccati.UnboundedExistence
-import DavisKahan.Riccati.UnboundedTransport
 import DavisKahan.Experimental.InfiniteDimensional.Riccati.UnboundedRotationTransport
 import DavisKahan.Experimental.InfiniteDimensional.Riccati.UnboundedReductionTransport
 import DavisKahan.Experimental.InfiniteDimensional.Riccati.UnboundedCoordinateRestrictions
