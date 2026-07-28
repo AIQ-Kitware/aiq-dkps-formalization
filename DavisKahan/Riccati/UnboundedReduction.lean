@@ -57,6 +57,14 @@ theorem mem_unboundedBlockGraph_iff
 
 /-- The graph vector associated with a vector in the first diagonal domain,
 carrying its membership witness in the full block-operator domain. -/
+noncomputable def unboundedBlockGraphDomainVectorPMap
+    (H : UnboundedBlockData (𝕜 := 𝕜) (E0 := E0) (E1 := E1))
+    (X : E0 →L[𝕜] E1) (hdom : PreservesRiccatiDomains H X)
+    (x : H.A0.domain) : (unboundedBlockOperatorCorePMap H).domain :=
+  ⟨WithLp.toLp 2 ((x : E0), X (x : E0)), by
+    rw [unboundedBlockOperatorCorePMap_domain]
+    exact ⟨x.property, hdom x⟩⟩
+
 noncomputable def unboundedBlockGraphDomainVector
     (H : UnboundedBlockData (𝕜 := 𝕜) (E0 := E0) (E1 := E1))
     (X : E0 →L[𝕜] E1) (hdom : PreservesRiccatiDomains H X)
