@@ -2,15 +2,22 @@
 
 The public statements should not be weakened. Repair in dependency order.
 
-## 1. Minimal fully symmetric completion
+## 1. Raw finite-rank closure density
 
-`exists_finiteRank_gaugeApproximation_of_kyFan_dominated`
+The standard `.minimal` branch is now represented by the fully symmetric
+envelope `MinimalFullySymmetricMem`.  Its Fan-dominance theorem is explicit and
+contains no automation.
 
-Prove that weak submajorization by an operator in the gauge closure of finite
-rank preserves that closure. The maximal/Fatou gauge inequality is already
-proved by `PaperUnitaryInvariantNorm.mul_gauge_le_of_all_mul_kyFan_le`. The new
-part is order continuity of the minimal completion, using finite truncations,
-the additive approximation-number inequality, and finite weak majorization.
+The remaining identification theorem is
+
+```lean
+MinimalFullySymmetricMem N A -> FiniteRankGaugeClosure N A
+```
+
+The converse is immediate.  Proving this implication identifies the envelope
+with the literal gauge closure of finite-rank operators.  It requires the
+infinite sequence compactness/diagonal passage and the operator truncation
+bridge; it must not be hidden in `aesop`, an assumption, or a structure field.
 
 ## 2. PVM spectral-band selection
 
@@ -67,3 +74,4 @@ there must be no factors `||A0||` or `||A1||`.
 - Do not assume compactness of the angular operator.
 - Do not use exact singular-vector attainment for an arbitrary bounded operator.
 - Do not apply the bounded Riccati estimate to unbounded diagonal blocks.
+
