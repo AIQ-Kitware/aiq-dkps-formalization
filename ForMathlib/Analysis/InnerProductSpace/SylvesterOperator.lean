@@ -22,9 +22,15 @@ import ForMathlib.Analysis.InnerProductSpace.SylvesterBound
 -/
 
 
+/-! The Sylvester operator is a statement about composition, so it is declared
+over normed spaces rather than inner product spaces: nothing here, and nothing
+proved about it downstream, uses an inner product.  Consumers that do work in a
+Hilbert space are unaffected, since `InnerProductSpace.toNormedSpace` supplies
+the instance. -/
+
 variable {𝕜 E F : Type*} [RCLike 𝕜]
-variable [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
-variable [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
+variable [NormedAddCommGroup E] [NormedSpace 𝕜 E]
+variable [NormedAddCommGroup F] [NormedSpace 𝕜 F]
 
 namespace ContinuousLinearMap
 

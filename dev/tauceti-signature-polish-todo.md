@@ -1835,6 +1835,37 @@ theorem existsUnique_sylvester_eq_of_spectraSeparated ...
 
 - Keep Davis-Kahan AX-XB=C wrappers downstream.
 
+#### Status 2026-07-28 — bounded case DONE, unbounded and gap-quantitative still open
+
+The three-way separation this section asks for now exists for **bounded**
+operators:
+
+| item | where |
+|---|---|
+| bundled operator | `ContinuousLinearMap.sylvesterOperatorL` (`ForMathlib/Analysis/InnerProductSpace/SylvesterOperator.lean`) |
+| explicit integral solution | `rosenblumSolution`, `comp_rosenblumSolution_sub_comp_eq` (`DavisKahan/Sylvester/RosenblumExistence.lean`) |
+| algebraic uniqueness | `rosenblumSolution_comp_sub_comp`, `existsUnique_comp_sub_comp_eq` (same module) |
+| bounded inverse | `sylvesterEquiv`, `norm_le_mul_norm_sylvesterOperator` (same module) |
+
+Notes on the spec as written:
+
+- `SpectraSeparated (A B) (δ : ℝ)` was **not** introduced. The separation
+  hypothesis used is geometric — a circle enclosing `spectrum A` and missing
+  `spectrum B` — because that is what the contour argument consumes, and it
+  composes with the existing `CircleSeparatesRealSpectrum`. A `δ`-quantitative
+  predicate is still the right thing for the *gap* estimates.
+- `norm_le_inv_gap_mul_norm_sylvester` is therefore still **open**. The contour
+  route gives a bound with a constant uniform in `X` but not `K = 1/gap`; the
+  gap-explicit estimates exist separately as the shifted-inverse gauge bounds
+  (`DavisKahan/Sylvester/ShiftedInverseGauge.lean`), and reconciling the two is
+  its own lane.
+- Everything above is over complex **Banach** spaces, not Hilbert spaces — the
+  contour argument never uses an inner product.
+- The unbounded (`LinearPMap` / `ClosedOperator`) existence theorem remains
+  open; only uniqueness exists there
+  (`DavisKahan/Sylvester/PairwiseHomogeneousUniqueness.lean`), so bounded and
+  unbounded are not yet plumbed together.
+
 ### 12.6 Projection geometry, directed angles, and graph subspaces
 
 ```lean
