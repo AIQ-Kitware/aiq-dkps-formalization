@@ -62,10 +62,15 @@ carries `IsUnit M.modulus` explicitly, exactly as `Ring.inverse` lemmas carry
 `IsUnit`.  This keeps `polarIsometry` a plain function of `M` — so it rewrites,
 `simp`s, and composes — instead of a proof-dependent bundled object.
 
-`TODO`: when a general polar decomposition (with a *partial* isometry, defined
-for every `M`) is available in this library, it should **replace** this
-definition under the same name, and `polarIsometry_comp_modulus` should become
-the unconditional statement.  All the results below are then recovered by adding
+The general polar decomposition — with a *partial* isometry, defined for every
+`M` and with no invertibility hypothesis — now exists, as
+`ContinuousLinearMap.polarPartial` in
+`ForTauCeti/Analysis/InnerProductSpace/PolarPartialIsometry.lean`; its
+`polarPartial_comp_modulus` is the unconditional form of the identity below.
+
+`TODO`: the two should be reconciled, by proving `polarIsometry = polarPartial`
+under `IsUnit M.modulus` and then retiring this definition in favour of the
+general one.  All the results below are then recovered by adding
 `IsUnit M.modulus`, so downstream users are unaffected.  The bounded-below case
 is separated out here only because it needs no polar-decomposition theory at
 all: `Ring.inverse` plus the pointwise isometry `‖|M| x‖ = ‖M x‖` suffice.
