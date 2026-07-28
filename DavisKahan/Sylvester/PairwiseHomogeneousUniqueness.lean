@@ -37,16 +37,15 @@ variable {E F : Type v}
   [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
   [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
 
-private theorem generatorIntertwines_of_closedHomogeneous
-    {A : ClosedOperator (𝕜 := ℂ) (E := E)}
-    {B : ClosedOperator (𝕜 := ℂ) (E := F)}
-    (hA : A.IsSelfAdjoint) (hB : B.IsSelfAdjoint)
+private theorem generatorIntertwines_of_linearPMapHomogeneous
+    {A : E →ₗ.[ℂ] E} {B : F →ₗ.[ℂ] F}
+    (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
     {X : F →L[ℂ] E}
-    (hEq : HasClosedSylvesterEquation A B X 0) :
+    (hEq : TauCeti.LinearPMap.SylvesterEquation A B X 0) :
     GeneratorIntertwines (genToGroup hA) (genToGroup hB) X := by
-  have hgenA : generator (genToGroup hA) = A.toLinearPMap :=
+  have hgenA : generator (genToGroup hA) = A :=
     generator_genToGroup hA
-  have hgenB : generator (genToGroup hB) = B.toLinearPMap :=
+  have hgenB : generator (genToGroup hB) = B :=
     generator_genToGroup hB
   have hdomA : (generator (genToGroup hA)).domain = A.domain :=
     congrArg LinearPMap.domain hgenA
@@ -74,14 +73,60 @@ private theorem generatorIntertwines_of_closedHomogeneous
     calc
       generator (genToGroup hA)
           ⟨X (x : F), (le_of_eq hdomA.symm) hmapA⟩
-          = A.toLinearPMap ⟨X (x : F), hmapA⟩ := hAapply
-      _ = X (B.toLinearPMap xb) := by
+          = A ⟨X (x : F), hmapA⟩ := hAapply
+      _ = X (B xb) := by
           simpa using sub_eq_zero.mp heq
       _ = X (generator (genToGroup hB) x) := by
           rw [hBapply]
           -- The two domain elements carry the same vector with different
           -- membership proofs, so they agree by extensionality.
           congr 2
+
+/-- A bounded homogeneous Sylvester solution for raw self-adjoint partial maps
+vanishes whenever their spectra are disjoint. -/
+theorem linearPMapSylvester_homogeneous_eq_zero_of_disjoint_spectrum
+    {A : E →ₗ.[ℂ] E} {B : F →ₗ.[ℂ] F}
+    (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
+    {X : F →L[ℂ] E}
+    (hdisj : Disjoint
+      (Spectra.Resolvent.spectrum A)
+      (Spectra.Resolvent.spectrum B))
+    (hEq : TauCeti.LinearPMap.SylvesterEquation A B X 0) :
+    X = 0 := by
+  let AO : SelfAdjointOperator E := ⟨A, hA⟩
+  let BO : SelfAdjointOperator F := ⟨B, hB⟩
+  exact Spectra.QuantumMechanics.SpectralTheory.generatorIntertwiner_eq_zero_of_disjoint_spectrum
+    AO BO X (generatorIntertwines_of_linearPMapHomogeneous hA hB hEq) hdisj
+
+/-- Positive pairwise spectral distance gives homogeneous uniqueness for raw
+self-adjoint partial maps. -/
+theorem linearPMapSylvester_homogeneous_eq_zero_of_pairwiseSpectrumGap
+    {A : E →ₗ.[ℂ] E} {B : F →ₗ.[ℂ] F}
+    (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
+    {X : F →L[ℂ] E} {δ : ℝ}
+    (hδ : 0 < δ)
+    (hgap : LinearPMap.GenuinePairwiseSpectrumGap A B δ)
+    (hEq : TauCeti.LinearPMap.SylvesterEquation A B X 0) :
+    X = 0 := by
+  exact linearPMapSylvester_homogeneous_eq_zero_of_disjoint_spectrum
+    hA hB (hgap.disjoint hδ) hEq
+
+/-- Two bounded raw partial-map Sylvester solutions coincide under positive
+pairwise spectral separation. -/
+theorem linearPMapSylvester_solution_unique_of_pairwiseSpectrumGap
+    {A : E →ₗ.[ℂ] E} {B : F →ₗ.[ℂ] F}
+    (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
+    {X Y C : F →L[ℂ] E} {δ : ℝ}
+    (hδ : 0 < δ)
+    (hgap : LinearPMap.GenuinePairwiseSpectrumGap A B δ)
+    (hX : TauCeti.LinearPMap.SylvesterEquation A B X C)
+    (hY : TauCeti.LinearPMap.SylvesterEquation A B Y C) :
+    X = Y := by
+  have hhom : TauCeti.LinearPMap.SylvesterEquation A B (X - Y) 0 := by
+    simpa using hX.sub hY
+  exact sub_eq_zero.mp
+    (linearPMapSylvester_homogeneous_eq_zero_of_pairwiseSpectrumGap
+      hA hB hδ hgap hhom)
 
 /-- A bounded homogeneous closed Sylvester solution vanishes whenever the two
 self-adjoint spectra are disjoint. -/
@@ -95,10 +140,8 @@ theorem closedSylvester_homogeneous_eq_zero_of_disjoint_spectrum
       (Spectra.Resolvent.spectrum B.toLinearPMap))
     (hEq : HasClosedSylvesterEquation A B X 0) :
     X = 0 := by
-  let AO : SelfAdjointOperator E := ⟨A.toLinearPMap, hA⟩
-  let BO : SelfAdjointOperator F := ⟨B.toLinearPMap, hB⟩
-  exact Spectra.QuantumMechanics.SpectralTheory.generatorIntertwiner_eq_zero_of_disjoint_spectrum
-    AO BO X (generatorIntertwines_of_closedHomogeneous hA hB hEq) hdisj
+  exact linearPMapSylvester_homogeneous_eq_zero_of_disjoint_spectrum
+    hA hB hdisj hEq
 
 /-- Positive pairwise spectral distance implies homogeneous uniqueness. -/
 theorem closedSylvester_homogeneous_eq_zero_of_pairwiseSpectrumGap
@@ -110,8 +153,8 @@ theorem closedSylvester_homogeneous_eq_zero_of_pairwiseSpectrumGap
     (hgap : GenuinePairwiseSpectrumGap A B δ)
     (hEq : HasClosedSylvesterEquation A B X 0) :
     X = 0 := by
-  exact closedSylvester_homogeneous_eq_zero_of_disjoint_spectrum
-    hA hB (hgap.disjoint hδ) hEq
+  exact linearPMapSylvester_homogeneous_eq_zero_of_pairwiseSpectrumGap
+    hA hB hδ hgap hEq
 
 /-- Two bounded solutions of the same closed Sylvester equation coincide under
 positive pairwise spectral separation. -/
@@ -125,11 +168,8 @@ theorem closedSylvester_solution_unique_of_pairwiseSpectrumGap
     (hX : HasClosedSylvesterEquation A B X C)
     (hY : HasClosedSylvesterEquation A B Y C) :
     X = Y := by
-  have hhom : HasClosedSylvesterEquation A B (X - Y) 0 := by
-    simpa using hX.sub hY
-  exact sub_eq_zero.mp
-    (closedSylvester_homogeneous_eq_zero_of_pairwiseSpectrumGap
-      hA hB hδ hgap hhom)
+  exact linearPMapSylvester_solution_unique_of_pairwiseSpectrumGap
+    hA hB hδ hgap hX hY
 
 end
 

@@ -25,6 +25,58 @@ universe v
 
 open TauCeti.DavisKahanExt
 
+/-- Every point of the spectra of two partial maps is separated by at least
+`delta`.  This is the canonical pairwise-gap predicate; the bundled
+`ClosedOperator` form below remains only for existing source-facing data. -/
+def LinearPMap.GenuinePairwiseSpectrumGap
+    {E F : Type v}
+    [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
+    [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
+    (A : E →ₗ.[ℂ] E) (B : F →ₗ.[ℂ] F) (δ : ℝ) : Prop :=
+  ∀ lam ∈ Spectra.Resolvent.spectrum A,
+    ∀ α ∈ Spectra.Resolvent.spectrum B,
+      δ ≤ |lam - α|
+
+namespace LinearPMap.GenuinePairwiseSpectrumGap
+
+/-- Pairwise spectral distance is symmetric. -/
+theorem symm
+    {E F : Type v}
+    [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
+    [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
+    {A : E →ₗ.[ℂ] E} {B : F →ₗ.[ℂ] F} {δ : ℝ}
+    (h : LinearPMap.GenuinePairwiseSpectrumGap A B δ) :
+    LinearPMap.GenuinePairwiseSpectrumGap B A δ := by
+  intro α hα lam hlam
+  simpa [abs_sub_comm] using h lam hlam α hα
+
+/-- Decreasing the requested distance preserves pairwise separation. -/
+theorem mono
+    {E F : Type v}
+    [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
+    [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
+    {A : E →ₗ.[ℂ] E} {B : F →ₗ.[ℂ] F} {δ ε : ℝ}
+    (h : LinearPMap.GenuinePairwiseSpectrumGap A B δ) (hεδ : ε ≤ δ) :
+    LinearPMap.GenuinePairwiseSpectrumGap A B ε := by
+  intro lam hlam α hα
+  exact hεδ.trans (h lam hlam α hα)
+
+/-- Positive pairwise separation implies disjoint spectra. -/
+theorem disjoint
+    {E F : Type v}
+    [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
+    [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
+    {A : E →ₗ.[ℂ] E} {B : F →ₗ.[ℂ] F} {δ : ℝ}
+    (h : LinearPMap.GenuinePairwiseSpectrumGap A B δ) (hδ : 0 < δ) :
+    Disjoint (Spectra.Resolvent.spectrum A)
+      (Spectra.Resolvent.spectrum B) := by
+  refine Set.disjoint_left.mpr ?_
+  intro lam hlamA hlamB
+  have hsep : δ ≤ |lam - lam| := h lam hlamA lam hlamB
+  exact (not_le_of_gt hδ) (by simpa using hsep)
+
+end LinearPMap.GenuinePairwiseSpectrumGap
+
 /-- Every point of the two real spectra is separated by at least `delta`. -/
 def GenuinePairwiseSpectrumGap
     {E F : Type v}
@@ -33,9 +85,7 @@ def GenuinePairwiseSpectrumGap
     (A : ClosedOperator (𝕜 := ℂ) (E := E))
     (B : ClosedOperator (𝕜 := ℂ) (E := F))
     (δ : ℝ) : Prop :=
-  ∀ lam ∈ Spectra.Resolvent.spectrum A.toLinearPMap,
-    ∀ α ∈ Spectra.Resolvent.spectrum B.toLinearPMap,
-      δ ≤ |lam - α|
+  LinearPMap.GenuinePairwiseSpectrumGap A.toLinearPMap B.toLinearPMap δ
 
 namespace GenuinePairwiseSpectrumGap
 
@@ -48,8 +98,7 @@ theorem symm
     {B : ClosedOperator (𝕜 := ℂ) (E := F)} {δ : ℝ}
     (h : GenuinePairwiseSpectrumGap A B δ) :
     GenuinePairwiseSpectrumGap B A δ := by
-  intro α hα lam hlam
-  simpa [abs_sub_comm] using h lam hlam α hα
+  exact LinearPMap.GenuinePairwiseSpectrumGap.symm h
 
 /-- Decreasing the requested distance preserves pairwise separation. -/
 theorem mono
@@ -60,8 +109,7 @@ theorem mono
     {B : ClosedOperator (𝕜 := ℂ) (E := F)} {δ ε : ℝ}
     (h : GenuinePairwiseSpectrumGap A B δ) (hεδ : ε ≤ δ) :
     GenuinePairwiseSpectrumGap A B ε := by
-  intro lam hlam α hα
-  exact hεδ.trans (h lam hlam α hα)
+  exact LinearPMap.GenuinePairwiseSpectrumGap.mono h hεδ
 
 /-- Positive pairwise separation implies disjoint spectra. -/
 theorem disjoint
@@ -73,10 +121,7 @@ theorem disjoint
     (h : GenuinePairwiseSpectrumGap A B δ) (hδ : 0 < δ) :
     Disjoint (Spectra.Resolvent.spectrum A.toLinearPMap)
       (Spectra.Resolvent.spectrum B.toLinearPMap) := by
-  refine Set.disjoint_left.mpr ?_
-  intro lam hlamA hlamB
-  have hsep : δ ≤ |lam - lam| := h lam hlamA lam hlamB
-  exact (not_le_of_gt hδ) (by simpa using hsep)
+  exact LinearPMap.GenuinePairwiseSpectrumGap.disjoint h hδ
 
 end GenuinePairwiseSpectrumGap
 

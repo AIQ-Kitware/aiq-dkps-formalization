@@ -123,13 +123,22 @@ Current homes:
 
 Main contributions:
 
-- `GenuinePairwiseSpectrumGap`, symmetry, monotonicity, and disjointness;
-- homogeneous uniqueness under separated spectra;
+- canonical `LinearPMap.GenuinePairwiseSpectrumGap`, symmetry, monotonicity,
+  and disjointness; the bundle-shaped `GenuinePairwiseSpectrumGap` is now a
+  source-compatibility facade over it;
+- raw-partial-map homogeneous uniqueness under separated spectra; the three
+  historical bundle signatures delegate to those proofs;
 - Hilbert--Schmidt Sylvester estimates at arbitrary pairwise spectral distance,
   including real descent.
 - source-facing square-energy, complex norm, and real norm declarations restored
   in `Sources/DavisKahan1970/Sylvester/PaperHilbertSchmidt.lean`, all derived from
   the completed defect-first pairwise-gap engine.
+
+Migration status: **raw `LinearPMap` core landed 2026-07-28.** This family stays
+downstream because its spectrum and separated-intertwiner dependencies are from
+Spectra.  Seven source/audit consumers still use the bundle-shaped predicate;
+their mechanical representation migration is the deletion condition for that
+facade.
 
 ### Finite-dimensional Sylvester multipliers
 
