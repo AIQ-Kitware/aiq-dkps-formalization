@@ -22,7 +22,7 @@ Routine core lemmas and tactics are omitted; no mathematical helper is omitted.
 | `ContinuousLinearMap.rank_comp_le_natCast_right` | `ForTauCeti/LinearAlgebra/Dimension/RankComp.lean` |
 | `approximationSingularValue`, `kyFanApproximationGauge`, scaling and positivity | `DavisKahan/OperatorIdeal/ApproximationNumbers/Core.lean` |
 | finite-source singular system | `DavisKahan/OperatorIdeal/ApproximationNumbers/FiniteSourceSingularSystem.lean` |
-| finite-restriction/PVM min--max threshold theorem | `DavisKahan/Interop/Spectra/ApproximationNumberMinMax.lean` |
+| `ContinuousLinearMap.exists_linearIndependent_lowerBound_of_lt_approximationNumber` | `ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/MinMaxUpper.lean` |
 | `pvmRangeSubspace`, projection-fixes-range theorem | `DavisKahan/Interop/Spectra/PVMSubspace.lean` |
 | exact Section 7 singular-family coefficient theorem | `DavisKahan/Experimental/Scratch/Section7/InfiniteTanTwoThetaCore.lean` |
 | orthonormal-family Ky Fan variational bound | `DavisKahan/DoubleAngle/KyFanOrthonormal.lean` |
