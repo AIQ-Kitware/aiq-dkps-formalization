@@ -482,3 +482,64 @@ For this cluster Spectra is a genuine donor and the port is a port: adapt the
 dependency-closed slice into `ForTauCeti` with declaration-level provenance,
 under Apache-2.0 §4(b)/(c). Everything else should be attacked with the bypass
 first, and only ported when the bypass demonstrably fails.
+
+## The last piece, measured properly (2026-07-28)
+
+Everything remaining funnels into **one** theorem: `spectralPVM`, the spectral
+theorem for unbounded self-adjoint operators. **12 of the 18 remaining consumer
+modules touch it**, including `RealSpectralRestriction.lean`.
+
+Sizing it by imports says 74 modules / 16,915 lines. **That is wrong by an order
+of magnitude, in the same way every earlier import-based estimate was.** The
+declaration-level closure — `Expr.getUsedConstants`, transitively, over
+`spectralPVM` and `selfAdjointResolvent` — is:
+
+* **77 Spectra constants over 15 modules**, of which
+* roughly **half are `._proof_N` auxiliaries** that come free with their parent,
+  leaving **~39 real declarations**;
+* and the modules they live in total **4,996 lines**, of which
+  `ProjValMeasure/Basic.lean` (228) **is already ported**.
+
+Most of each donor file is content this endpoint never touches — the proofs lean
+on Mathlib, not on other Spectra lemmas.
+
+**Therefore: port faithfully, do not rebuild.** The alternative considered was
+reconstructing the spectral theorem on Mathlib's `cfc` plus
+`RieszMarkovKakutani` via the Cayley transform (both exist and it would work),
+but that is 500–1500 lines of *new* hard proof to replace ~39 declarations of
+existing, working, Apache-2.0 mathematics. The port is smaller, faithful, and
+attribution-clean.
+
+**Port surgically, not by module.** Copying the 15 modules whole cascades into 16
+more (a further 3,855 lines); copying the ~39 declarations does not.
+
+### What is already done and must not be re-ported
+
+The leaves of that closure were built natively earlier in this campaign, and
+they are exactly Spectra's:
+
+| Spectra declaration | already in `ForTauCeti` |
+|---|---|
+| `Resolvent.resolvent` | `TauCeti.LinearPMap.resolvent` |
+| `Resolvent.resolventSolution` | subsumed by the same |
+| `Resolvent.resolvent_bound` | `norm_resolvent_le_of_im_ne_zero` |
+| `Resolvent.range_plus_i_eq_top`, `range_minus_i_eq_top` | `surjective_shiftMap` at `z = ±i` |
+| `ProjValMeasure` + fields | `TauCeti.ProjValMeasure` |
+
+### The remaining chain, in dependency order
+
+1. `OneParameterUnitaryGroup` — structure, `U`, `generatorDomain`, `generator`,
+   `genDiffQuot`, `generator_isFormalAdjoint` (~6 declarations).
+2. `YosidaHille.Approximation.exponential` + `_unitary`, `_strong_continuous` (3).
+3. `YosidaHille.genToGroup` — **Stone's theorem** (1, plus 6 proof auxiliaries).
+4. The Borel/Helly layer: `borelCDF`, `borelApproxCDF`, `borelHelly`,
+   `borelLimitCDF`(+`_mono`), `borelEps_pos`, `borelMeasure`(+finiteness),
+   `borelDensity`, `hellyLimitMeasure` (11).
+5. `spectralProjection`, `inner_spectralProjection_self`, `indicator_one_bdd`,
+   `spectralForm`(+`_add_left`/`_add_right`), `spectralFormBilin`,
+   `spectralCalculus`, `spectralProjection_univ`, `spectralProjection_inter` (10).
+6. `groupPVM`, `toPVM`, `isFormalAdjoint_of_isSelfAdjoint`,
+   `selfAdjointResolvent`, **`spectralPVM`** (5).
+
+Step 3 is Stone's theorem and step 4 is a Helly-selection argument; those are the
+two places where the port is real work rather than transcription.
