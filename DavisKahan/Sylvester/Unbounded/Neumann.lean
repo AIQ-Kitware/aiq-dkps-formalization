@@ -261,35 +261,46 @@ theorem sylvester_mem_and_gauge_le_of_unbounded_bound_inverse
   linearPMapSylvester_mem_and_gauge_le_of_unbounded_bound_inverse N hAinv B
     hρ hδ hInvNorm hB hEq hC
 
-/-- Transfer a closed Sylvester equation to a bounded realization of its
-right block.  Agreement on the dense domain extends to the whole space through
-the closed graph of the left block. -/
-theorem closedSylvesterEquation_boundedRealization
-    {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := E)}
-    {B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := F)}
+omit [CompleteSpace E] [CompleteSpace F] in
+/-- Transfer a partial-map Sylvester equation to a bounded realization of its
+right block.  Agreement on the dense right domain extends through the closed
+graph of the left partial map. -/
+theorem linearPMapSylvesterEquation_boundedRealization
+    {A : E →ₗ.[𝕜] E} {B : F →ₗ.[𝕜] F}
     {X C : F →L[𝕜] E} {T : F →L[𝕜] F}
-    (hEq : HasClosedSylvesterEquation A B X C)
-    (hT : ∀ y : B.domain, T (y : F) = B.toLinearMap y) :
-    HasUnboundedBoundedSylvesterEquation A T X C := by
+    (hAclosed : A.IsClosed) (hBdense : Dense (B.domain : Set F))
+    (hEq : TauCeti.LinearPMap.SylvesterEquation A B X C)
+    (hT : ∀ y : B.domain, T (y : F) = B y) :
+    TauCeti.LinearPMap.UnboundedBoundedSylvesterEquation A T X C := by
+  have hAclosedRange : IsClosed (Set.range fun z : A.domain => ((z : E), A z)) := by
+    have hgraph : (A.graph : Set (E × E)) =
+        Set.range (fun z : A.domain => ((z : E), A z)) := by
+      ext p
+      change p ∈ A.graph ↔ ∃ z : A.domain, ((z : E), A z) = p
+      rw [LinearPMap.mem_graph_iff]
+      constructor
+      · rintro ⟨z, hz, hAz⟩
+        exact ⟨z, Prod.ext hz hAz⟩
+      · rintro ⟨z, hz⟩
+        exact ⟨z, congrArg Prod.fst hz, congrArg Prod.snd hz⟩
+    rw [← hgraph]
+    exact hAclosed
   have key : ∀ x : F, ∃ hx : X x ∈ A.domain,
-      A.toLinearMap ⟨X x, hx⟩ = C x + X (T x) := by
+      A ⟨X x, hx⟩ = C x + X (T x) := by
     intro x
     have hx_closure : x ∈ closure (B.domain : Set F) := by
-      rw [B.dense_domain.closure_eq]
+      rw [hBdense.closure_eq]
       trivial
     obtain ⟨u, hu_mem, hu_tendsto⟩ := mem_closure_iff_seq_limit.mp hx_closure
     have hgraph_mem : ∀ n, (X (u n), C (u n) + X (T (u n))) ∈
-        Set.range (fun z : A.domain => ((z : E), A.toLinearMap z)) := by
+        Set.range (fun z : A.domain => ((z : E), A z)) := by
       intro n
       refine ⟨⟨X (u n), hEq.mapsTo_domain ⟨u n, hu_mem n⟩⟩, Prod.ext rfl ?_⟩
-      show A.toLinearMap ⟨X (u n), hEq.mapsTo_domain ⟨u n, hu_mem n⟩⟩ =
+      show A ⟨X (u n), hEq.mapsTo_domain ⟨u n, hu_mem n⟩⟩ =
         C (u n) + X (T (u n))
-      have heq := ClosedSylvesterEquation.equation_toLinearMap hEq ⟨u n, hu_mem n⟩
-        (hEq.mapsTo_domain ⟨u n, hu_mem n⟩)
-      have hval : A.toLinearMap
-          ⟨X (u n), hEq.mapsTo_domain ⟨u n, hu_mem n⟩⟩ =
-          C (u n) + X (B.toLinearMap ⟨u n, hu_mem n⟩) :=
-        sub_eq_iff_eq_add.mp heq
+      have hval : A ⟨X (u n), hEq.mapsTo_domain ⟨u n, hu_mem n⟩⟩ =
+          C (u n) + X (B ⟨u n, hu_mem n⟩) :=
+        sub_eq_iff_eq_add.mp (hEq.equation ⟨u n, hu_mem n⟩)
       rw [hval, hT ⟨u n, hu_mem n⟩]
     have hconv : Filter.Tendsto (fun n => (X (u n), C (u n) + X (T (u n))))
         Filter.atTop (nhds (X x, C x + X (T x))) := by
@@ -298,19 +309,31 @@ theorem closedSylvesterEquation_boundedRealization
       · refine Filter.Tendsto.add ?_ ?_
         · exact (C.continuous.tendsto x).comp hu_tendsto
         · exact ((X.comp T).continuous.tendsto x).comp hu_tendsto
-    obtain ⟨z, hz⟩ := A.closed_graph.isSeqClosed hgraph_mem hconv
+    obtain ⟨z, hz⟩ := hAclosedRange.isSeqClosed hgraph_mem hconv
     have hz1 : (z : E) = X x := congrArg Prod.fst hz
-    have hz2 : A.toLinearMap z = C x + X (T x) := congrArg Prod.snd hz
+    have hz2 : A z = C x + X (T x) := congrArg Prod.snd hz
     refine ⟨hz1 ▸ z.2, ?_⟩
     have hzz : z = ⟨X x, hz1 ▸ z.2⟩ := Subtype.ext hz1
     rw [← hzz]
     exact hz2
   refine ⟨fun x => (key (x : F)).choose, fun x => ?_⟩
   have h := (key (x : F)).choose_spec
-  change A.toLinearMap ⟨X (x : F), (key (x : F)).choose⟩ - X (T (x : F)) =
+  change A ⟨X (x : F), (key (x : F)).choose⟩ - X (T (x : F)) =
     C (x : F)
   rw [h]
   abel
+
+omit [CompleteSpace E] [CompleteSpace F] in
+/-- Compatibility entry point for the raw bounded-realization transfer. -/
+theorem closedSylvesterEquation_boundedRealization
+    {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := E)}
+    {B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := F)}
+    {X C : F →L[𝕜] E} {T : F →L[𝕜] F}
+    (hEq : HasClosedSylvesterEquation A B X C)
+    (hT : ∀ y : B.domain, T (y : F) = B.toLinearMap y) :
+    HasUnboundedBoundedSylvesterEquation A T X C :=
+  linearPMapSylvesterEquation_boundedRealization A.toLinearPMap_isClosed
+    B.toLinearPMap_dense hEq hT
 
 /-- **Ideal-gauge constant-one Sylvester estimate with the unbounded block on
     the right.**  This is the right-handed companion of
