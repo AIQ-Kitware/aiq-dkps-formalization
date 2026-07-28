@@ -377,40 +377,6 @@
       },
       "label": "PVMs, spectral measures and Borel functional calculus"
     },
-    "C": {
-      "disposition": {
-        "staged": "collides",
-        "upstream": "absent"
-      },
-      "donorModules": {
-        "Spectra.QuantumMechanics.Channels.PolarDecomp": {
-          "constants": {
-            "Spectra.QuantumMechanics.Channels.absOp": {
-              "consumerModules": [
-                "DavisKahan.Interop.Spectra.OperatorAbsoluteValue"
-              ],
-              "uses": 2
-            },
-            "Spectra.QuantumMechanics.Channels.polarIsometry": {
-              "consumerModules": [
-                "DavisKahan.Geometry.Polar.PolarIntertwining",
-                "DavisKahan.Interop.Spectra.OperatorAbsoluteValue"
-              ],
-              "uses": 2
-            },
-            "Spectra.QuantumMechanics.Channels.polarRange": {
-              "consumerModules": [
-                "DavisKahan.Interop.Spectra.OperatorAbsoluteValue"
-              ],
-              "uses": 1
-            }
-          },
-          "lines": 144,
-          "origin": "upstream"
-        }
-      },
-      "label": "polar decomposition and partial isometries"
-    },
     "D": {
       "disposition": {
         "staged": "collides",
@@ -642,15 +608,15 @@
       "label": "Cayley transform, Stone bridge and one-parameter groups"
     }
   },
-  "distinctSpectraConstants": 60,
+  "distinctSpectraConstants": 57,
   "dkpsAuthoredDonorModules": [
     "Spectra.Spaces.Tensor.HilbertSchmidt",
     "Spectra.Spaces.Tensor.HilbertSchmidtFlow",
     "Spectra.SpectralTheory.Calculus.SpectralGapInverse"
   ],
-  "donorModules": 26,
+  "donorModules": 25,
   "note": "Regenerate with scripts/ExportSpectraUsage.lean + scripts/spectra_port_surface.py.",
-  "productionConsumerDeclarations": 178,
+  "productionConsumerDeclarations": 173,
   "spectraUpstreamCommit": "8dbaaf6728d1342ae16acf79fd7eef7c59b37e63",
   "trackedTauCetiModules": 629
 }
