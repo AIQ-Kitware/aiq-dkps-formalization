@@ -51,7 +51,7 @@ structure GeneralSinThetaProblem
   frameLowerBound_pos : 0 < frameLowerBound
   lowerFrame : LowerFrameBound data.X frameLowerBound
   spectral_gap : UnboundedSylvesterGap data.A₀ data.Λ₁ gap
-  residual_mem : N.toRectangularSymmetricIdealFamily.Mem data.residual
+  residual_mem : N.Mem data.residual
 
 namespace GeneralSinThetaProblem
 
@@ -60,14 +60,14 @@ theorem result
     (N : UnitaryInvariantIdealFamily (𝕜 := ℂ))
     (P : GeneralSinThetaProblem (E := E) (F := F)
       (G := G) (H := H) N) :
-    N.toRectangularSymmetricIdealFamily.Mem
+    N.Mem
         (directedSinThetaOperator P.data.X P.exactMap
           P.lowerFrame P.frameLowerBound_pos) ∧
       P.gap * P.frameLowerBound *
-          N.toRectangularSymmetricIdealFamily.gauge
+          N.gauge
             (directedSinThetaOperator P.data.X P.exactMap
               P.lowerFrame P.frameLowerBound_pos)
-        ≤ N.toRectangularSymmetricIdealFamily.gauge P.data.residual :=
+        ≤ N.gauge P.data.residual :=
   generalizedSinTheta_unbounded_exact_complex
     N P.data P.exactMap P.ambient_selfAdjoint P.trial_selfAdjoint
       P.complement_selfAdjoint P.exact_decomposition P.gap_pos
@@ -79,14 +79,14 @@ theorem complementaryBlock_result
     (N : UnitaryInvariantIdealFamily (𝕜 := ℂ))
     (P : GeneralSinThetaProblem (E := E) (F := F)
       (G := G) (H := H) N) :
-    N.toRectangularSymmetricIdealFamily.Mem
+    N.Mem
         (sinThetaBlock P.data.X P.data.F₁
           P.lowerFrame P.frameLowerBound_pos) ∧
       P.gap * P.frameLowerBound *
-          N.toRectangularSymmetricIdealFamily.gauge
+          N.gauge
             (sinThetaBlock P.data.X P.data.F₁
               P.lowerFrame P.frameLowerBound_pos)
-        ≤ N.toRectangularSymmetricIdealFamily.gauge P.data.residual :=
+        ≤ N.gauge P.data.residual :=
   generalizedSinTheta_unbounded_complex
     N P.data P.ambient_selfAdjoint P.trial_selfAdjoint
       P.complement_selfAdjoint P.exact_decomposition.isometry₁ P.gap_pos
@@ -115,7 +115,7 @@ structure FiniteIntervalGeneralSinThetaProblem
   lowerFrame : LowerFrameBound data.X frameLowerBound
   spectral_gap : GenuineUnboundedIntervalExteriorGap data.A₀ data.Λ₁
     intervalLower intervalUpper gap
-  residual_mem : N.toRectangularSymmetricIdealFamily.Mem data.residual
+  residual_mem : N.Mem data.residual
 
 namespace FiniteIntervalGeneralSinThetaProblem
 
@@ -125,14 +125,14 @@ theorem result
     (N : UnitaryInvariantIdealFamily (𝕜 := ℂ))
     (P : FiniteIntervalGeneralSinThetaProblem (E := E) (F := F)
       (G := G) (H := H) N) :
-    N.toRectangularSymmetricIdealFamily.Mem
+    N.Mem
         (directedSinThetaOperator P.data.X P.exactMap
           P.lowerFrame P.frameLowerBound_pos) ∧
       P.gap * P.frameLowerBound *
-          N.toRectangularSymmetricIdealFamily.gauge
+          N.gauge
             (directedSinThetaOperator P.data.X P.exactMap
               P.lowerFrame P.frameLowerBound_pos)
-        ≤ N.toRectangularSymmetricIdealFamily.gauge P.data.residual :=
+        ≤ N.gauge P.data.residual :=
   generalizedSinTheta_unbounded_exact_of_genuineIntervalExteriorGap
     N.toRectangularSymmetricIdealFamily P.data P.exactMap
       P.ambient_selfAdjoint P.trial_selfAdjoint P.complement_selfAdjoint
@@ -145,14 +145,14 @@ theorem complementaryBlock_result
     (N : UnitaryInvariantIdealFamily (𝕜 := ℂ))
     (P : FiniteIntervalGeneralSinThetaProblem (E := E) (F := F)
       (G := G) (H := H) N) :
-    N.toRectangularSymmetricIdealFamily.Mem
+    N.Mem
         (sinThetaBlock P.data.X P.data.F₁
           P.lowerFrame P.frameLowerBound_pos) ∧
       P.gap * P.frameLowerBound *
-          N.toRectangularSymmetricIdealFamily.gauge
+          N.gauge
             (sinThetaBlock P.data.X P.data.F₁
               P.lowerFrame P.frameLowerBound_pos)
-        ≤ N.toRectangularSymmetricIdealFamily.gauge P.data.residual :=
+        ≤ N.gauge P.data.residual :=
   generalizedSinTheta_unbounded_of_genuineIntervalExteriorGap
     N.toRectangularSymmetricIdealFamily P.data
       P.ambient_selfAdjoint P.trial_selfAdjoint P.complement_selfAdjoint
@@ -187,7 +187,7 @@ structure IsometricSinThetaProblem
   gap : ℝ
   gap_pos : 0 < gap
   spectral_gap : UnboundedSylvesterGap data.A₀ data.Λ₁ gap
-  residual_mem : N.toRectangularSymmetricIdealFamily.Mem data.residual
+  residual_mem : N.Mem data.residual
 
 end GenericIsometric
 
@@ -209,13 +209,13 @@ theorem result_complex
     (N : UnitaryInvariantIdealFamily (𝕜 := ℂ))
     (P : IsometricSinThetaProblem (𝕜 := ℂ) (E := E) (F := F)
       (G := G) (H := H) N) :
-    N.toRectangularSymmetricIdealFamily.Mem
+    N.Mem
         ((ContinuousLinearMap.id ℂ E -
           P.exactMap ∘L P.exactMap.adjoint) ∘L P.data.X) ∧
-      P.gap * N.toRectangularSymmetricIdealFamily.gauge
+      P.gap * N.gauge
           ((ContinuousLinearMap.id ℂ E -
             P.exactMap ∘L P.exactMap.adjoint) ∘L P.data.X)
-        ≤ N.toRectangularSymmetricIdealFamily.gauge P.data.residual :=
+        ≤ N.gauge P.data.residual :=
   sinTheta_unbounded_exact_complex
     N P.data P.exactMap P.ambient_selfAdjoint P.trial_selfAdjoint
       P.complement_selfAdjoint P.trial_isometry P.exact_decomposition

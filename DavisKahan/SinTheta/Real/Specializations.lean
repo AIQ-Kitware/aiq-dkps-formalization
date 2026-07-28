@@ -51,7 +51,7 @@ structure RealBoundedGeneralSinThetaProblem
   spectral_gap : UnboundedSylvesterGap
     (TauCeti.DavisKahanExt.ClosedOperator.ofBounded A₀)
     (TauCeti.DavisKahanExt.ClosedOperator.ofBounded Λ₁) gap
-  residual_mem : N.toRectangularSymmetricIdealFamily.Mem
+  residual_mem : N.Mem
     (generalResidual A X A₀)
 
 namespace RealBoundedGeneralSinThetaProblem
@@ -111,14 +111,14 @@ theorem result
     (N : UnitaryInvariantIdealFamily (𝕜 := ℝ))
     (P : RealBoundedGeneralSinThetaProblem (E := E) (F := F)
       (G := G) (H := H) N) :
-    N.toRectangularSymmetricIdealFamily.Mem
+    N.Mem
         (directedSinThetaOperatorReal P.X P.F₀ P.lowerFrame
           P.frameLowerBound_pos) ∧
       P.gap * P.frameLowerBound *
-          N.toRectangularSymmetricIdealFamily.gauge
+          N.gauge
             (directedSinThetaOperatorReal P.X P.F₀ P.lowerFrame
               P.frameLowerBound_pos)
-        ≤ N.toRectangularSymmetricIdealFamily.gauge
+        ≤ N.gauge
             (generalResidual P.A P.X P.A₀) :=
   RealGeneralSinThetaProblem.result N (P.toGeneral N)
 

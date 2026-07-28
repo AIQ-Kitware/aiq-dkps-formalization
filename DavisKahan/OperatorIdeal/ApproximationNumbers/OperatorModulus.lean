@@ -92,10 +92,10 @@ and its positive modulus. -/
 theorem modulus_mem_and_gauge_eq
     (N : UnitaryInvariantIdealFamily (𝕜 := ℂ))
     {T : E →L[ℂ] E}
-    (hT : N.toRectangularSymmetricIdealFamily.Mem T) :
-    N.toRectangularSymmetricIdealFamily.Mem (ContinuousLinearMap.modulus T) ∧
-      N.toRectangularSymmetricIdealFamily.gauge (ContinuousLinearMap.modulus T) =
-        N.toRectangularSymmetricIdealFamily.gauge T :=
+    (hT : N.Mem T) :
+    N.Mem (ContinuousLinearMap.modulus T) ∧
+      N.gauge (ContinuousLinearMap.modulus T) =
+        N.gauge T :=
   (modulus_sameApproximationSingularValues T).mem_and_gauge_eq N hT
 
 /-- Every literal paper norm assigns exactly the same extended value to an

@@ -68,12 +68,12 @@ theorem corollary4_1_restrictedDisplacement_idealGauge
     (hacute : IsAcute U V) (W : H →L[ℂ] H)
     (hWunitary : W ∈ unitary (H →L[ℂ] H))
     (hWmap : W * projection U = projection V * W)
-    (hWmem : N.toRectangularSymmetricIdealFamily.Mem ((1 - W) ∘L projection U)) :
-    N.toRectangularSymmetricIdealFamily.Mem
+    (hWmem : N.Mem ((1 - W) ∘L projection U)) :
+    N.Mem
         ((1 - spectraDirectRotation U V hacute) ∘L projection U) ∧
-      N.toRectangularSymmetricIdealFamily.gauge
+      N.gauge
           ((1 - spectraDirectRotation U V hacute) ∘L projection U) ≤
-        N.toRectangularSymmetricIdealFamily.gauge ((1 - W) ∘L projection U) :=
+        N.gauge ((1 - W) ∘L projection U) :=
   MathAhead.Section4.restrictedDisplacement_idealGauge_le N
     (MathAhead.Section4.infinite_restrictedDisplacementDominance
       U V hacute W hWunitary hWmap)

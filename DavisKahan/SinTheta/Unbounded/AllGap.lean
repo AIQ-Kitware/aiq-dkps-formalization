@@ -47,27 +47,26 @@ theorem generalizedSinTheta_unbounded_of_genuineSpectrumGap
     (hδ : 0 < δ) (hε : 0 < ε)
     (hframe : LowerFrameBound D.X ε)
     (hgap : GenuineUnboundedSylvesterGap D.A₀ D.Λ₁ δ)
-    (hR : N.toRectangularSymmetricIdealFamily.Mem D.residual) :
-    N.toRectangularSymmetricIdealFamily.Mem
+    (hR : N.Mem D.residual) :
+    N.Mem
         (sinThetaBlock D.X D.F₁ hframe hε) ∧
-      δ * ε * N.toRectangularSymmetricIdealFamily.gauge
+      δ * ε * N.gauge
           (sinThetaBlock D.X D.F₁ hframe hε)
-        ≤ N.toRectangularSymmetricIdealFamily.gauge D.residual := by
-  let M := N.toRectangularSymmetricIdealFamily
+        ≤ N.gauge D.residual := by
   have hEq := unbounded_adjoint_residual_block_identity D hA hA₀ hΛ₁
-  have hC := adjointResidualBlock_mem_and_gauge_le M D hF₁ hR
+  have hC := adjointResidualBlock_mem_and_gauge_le N.toRectangularSymmetricIdealFamily D hF₁ hR
   have hRaw := davisKahan1970_sylvester_of_genuineSpectrumGap
     N hA₀ hΛ₁ hδ hgap hEq hC.1
   have hFrame := lowerFrame_sinThetaBlock_mem_and_gauge_le
-    M D.X D.F₁ hframe hε hRaw.1
+    N.toRectangularSymmetricIdealFamily D.X D.F₁ hframe hε hRaw.1
   refine ⟨hFrame.1, ?_⟩
   calc
-    δ * ε * M.gauge (sinThetaBlock D.X D.F₁ hframe hε)
-        = δ * (ε * M.gauge (sinThetaBlock D.X D.F₁ hframe hε)) := by ring
-    _ ≤ δ * M.gauge (D.X.adjoint ∘L D.F₁) :=
+    δ * ε * N.gauge (sinThetaBlock D.X D.F₁ hframe hε)
+        = δ * (ε * N.gauge (sinThetaBlock D.X D.F₁ hframe hε)) := by ring
+    _ ≤ δ * N.gauge (D.X.adjoint ∘L D.F₁) :=
       mul_le_mul_of_nonneg_left hFrame.2 hδ.le
-    _ ≤ M.gauge (-(D.residual.adjoint ∘L D.F₁)) := hRaw.2
-    _ ≤ M.gauge D.residual := hC.2
+    _ ≤ N.gauge (-(D.residual.adjoint ∘L D.F₁)) := hRaw.2
+    _ ≤ N.gauge D.residual := hC.2
 
 /-- Exact directed-angle form of the genuine all-gap generalized theorem. -/
 theorem generalizedSinTheta_unbounded_exact_of_genuineSpectrumGap
@@ -82,18 +81,18 @@ theorem generalizedSinTheta_unbounded_exact_of_genuineSpectrumGap
     (hδ : 0 < δ) (hε : 0 < ε)
     (hframe : LowerFrameBound D.X ε)
     (hgap : GenuineUnboundedSylvesterGap D.A₀ D.Λ₁ δ)
-    (hR : N.toRectangularSymmetricIdealFamily.Mem D.residual) :
-    N.toRectangularSymmetricIdealFamily.Mem
+    (hR : N.Mem D.residual) :
+    N.Mem
         (directedSinThetaOperator D.X F₀ hframe hε) ∧
-      δ * ε * N.toRectangularSymmetricIdealFamily.gauge
+      δ * ε * N.gauge
           (directedSinThetaOperator D.X F₀ hframe hε)
-        ≤ N.toRectangularSymmetricIdealFamily.gauge D.residual := by
-  let M := N.toRectangularSymmetricIdealFamily
+        ≤ N.gauge D.residual := by
   have hBlock := generalizedSinTheta_unbounded_of_genuineSpectrumGap
     N D hA hA₀ hΛ₁ hdecomp.isometry₁ hδ hε hframe hgap hR
   have hAngle := sinThetaBlock_mem_and_gauge_eq_directedSinThetaOperator
-    M D.X F₀ D.F₁ hframe hε hdecomp hBlock.1
+    N.toRectangularSymmetricIdealFamily D.X F₀ D.F₁ hframe hε hdecomp hBlock.1
   refine ⟨hAngle.1, ?_⟩
+  simp only [KyFanDominantIdealFamily.gauge]
   rw [hAngle.2]
   exact hBlock.2
 
@@ -109,20 +108,20 @@ theorem sinTheta_unbounded_exact_of_genuineSpectrumGap
     (hdecomp : OrthogonalExactDecomposition F₀ D.F₁)
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : GenuineUnboundedSylvesterGap D.A₀ D.Λ₁ δ)
-    (hR : N.toRectangularSymmetricIdealFamily.Mem D.residual) :
-    N.toRectangularSymmetricIdealFamily.Mem
+    (hR : N.Mem D.residual) :
+    N.Mem
         ((ContinuousLinearMap.id ℂ E - F₀ ∘L F₀.adjoint) ∘L D.X) ∧
-      δ * N.toRectangularSymmetricIdealFamily.gauge
+      δ * N.gauge
           ((ContinuousLinearMap.id ℂ E - F₀ ∘L F₀.adjoint) ∘L D.X)
-        ≤ N.toRectangularSymmetricIdealFamily.gauge D.residual := by
-  let M := N.toRectangularSymmetricIdealFamily
+        ≤ N.gauge D.residual := by
   have hEq := unbounded_adjoint_residual_block_identity D hA hA₀ hΛ₁
-  have hC := adjointResidualBlock_mem_and_gauge_le M D hdecomp.isometry₁ hR
+  have hC := adjointResidualBlock_mem_and_gauge_le N.toRectangularSymmetricIdealFamily D hdecomp.isometry₁ hR
   have hRaw := davisKahan1970_sylvester_of_genuineSpectrumGap
     N hA₀ hΛ₁ hδ hgap hEq hC.1
   have hAngle := isometricComplementaryBlock_mem_and_gauge_eq_directed
-    M D.X F₀ D.F₁ hX hdecomp hRaw.1
+    N.toRectangularSymmetricIdealFamily D.X F₀ D.F₁ hX hdecomp hRaw.1
   refine ⟨hAngle.1, ?_⟩
+  simp only [KyFanDominantIdealFamily.gauge]
   rw [hAngle.2]
   exact hRaw.2.trans hC.2
 
@@ -142,7 +141,7 @@ structure GenuineGeneralSinThetaProblem
   frameLowerBound_pos : 0 < frameLowerBound
   lowerFrame : LowerFrameBound data.X frameLowerBound
   spectral_gap : GenuineUnboundedSylvesterGap data.A₀ data.Λ₁ gap
-  residual_mem : N.toRectangularSymmetricIdealFamily.Mem data.residual
+  residual_mem : N.Mem data.residual
 
 namespace GenuineGeneralSinThetaProblem
 
@@ -151,14 +150,14 @@ theorem result
     (N : UnitaryInvariantIdealFamily (𝕜 := ℂ))
     (P : GenuineGeneralSinThetaProblem (E := E) (F := F)
       (G := G) (H := H) N) :
-    N.toRectangularSymmetricIdealFamily.Mem
+    N.Mem
         (directedSinThetaOperator P.data.X P.exactMap
           P.lowerFrame P.frameLowerBound_pos) ∧
       P.gap * P.frameLowerBound *
-          N.toRectangularSymmetricIdealFamily.gauge
+          N.gauge
             (directedSinThetaOperator P.data.X P.exactMap
               P.lowerFrame P.frameLowerBound_pos)
-        ≤ N.toRectangularSymmetricIdealFamily.gauge P.data.residual :=
+        ≤ N.gauge P.data.residual :=
   generalizedSinTheta_unbounded_exact_of_genuineSpectrumGap
     N P.data P.exactMap P.ambient_selfAdjoint P.trial_selfAdjoint
       P.complement_selfAdjoint P.exact_decomposition P.gap_pos
@@ -180,7 +179,7 @@ structure GenuineIsometricSinThetaProblem
   gap : ℝ
   gap_pos : 0 < gap
   spectral_gap : GenuineUnboundedSylvesterGap data.A₀ data.Λ₁ gap
-  residual_mem : N.toRectangularSymmetricIdealFamily.Mem data.residual
+  residual_mem : N.Mem data.residual
 
 namespace GenuineIsometricSinThetaProblem
 
@@ -189,13 +188,13 @@ theorem result
     (N : UnitaryInvariantIdealFamily (𝕜 := ℂ))
     (P : GenuineIsometricSinThetaProblem (E := E) (F := F)
       (G := G) (H := H) N) :
-    N.toRectangularSymmetricIdealFamily.Mem
+    N.Mem
         ((ContinuousLinearMap.id ℂ E -
           P.exactMap ∘L P.exactMap.adjoint) ∘L P.data.X) ∧
-      P.gap * N.toRectangularSymmetricIdealFamily.gauge
+      P.gap * N.gauge
           ((ContinuousLinearMap.id ℂ E -
             P.exactMap ∘L P.exactMap.adjoint) ∘L P.data.X)
-        ≤ N.toRectangularSymmetricIdealFamily.gauge P.data.residual :=
+        ≤ N.gauge P.data.residual :=
   sinTheta_unbounded_exact_of_genuineSpectrumGap
     N P.data P.exactMap P.ambient_selfAdjoint P.trial_selfAdjoint
       P.complement_selfAdjoint P.trial_isometry P.exact_decomposition
