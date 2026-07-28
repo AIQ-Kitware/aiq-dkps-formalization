@@ -82,6 +82,24 @@ noncomputable def unboundedBlockGraphDomainVector
       WithLp.toLp 2 ((x : E0), X (x : E0)) :=
   rfl
 
+@[simp] theorem unboundedBlockOperatorCorePMap_graphVector_fst
+    (H : UnboundedBlockData (𝕜 := 𝕜) (E0 := E0) (E1 := E1))
+    (X : E0 →L[𝕜] E1) (hdom : PreservesRiccatiDomains H X)
+    (x : H.A0.domain) :
+    WithLp.fst ((unboundedBlockOperatorCorePMap H)
+      (unboundedBlockGraphDomainVectorPMap H X hdom x)) =
+        H.A0.toLinearMap x + H.B01 (X (x : E0)) := by
+  rfl
+
+@[simp] theorem unboundedBlockOperatorCorePMap_graphVector_snd
+    (H : UnboundedBlockData (𝕜 := 𝕜) (E0 := E0) (E1 := E1))
+    (X : E0 →L[𝕜] E1) (hdom : PreservesRiccatiDomains H X)
+    (x : H.A0.domain) :
+    WithLp.snd ((unboundedBlockOperatorCorePMap H)
+      (unboundedBlockGraphDomainVectorPMap H X hdom x)) =
+        H.A1.toLinearMap ⟨X (x : E0), hdom x⟩ + H.B10 (x : E0) := by
+  rfl
+
 @[simp] theorem unboundedBlockGraphDomainVector_fst
     (H : UnboundedBlockData (𝕜 := 𝕜) (E0 := E0) (E1 := E1))
     (X : E0 →L[𝕜] E1) (hdom : PreservesRiccatiDomains H X)
