@@ -57,7 +57,9 @@ example
       ‖Rop‖ := by
   have hmain := sinTheta_unbounded_spectralSubspace_of_genuineSpectrumGap
     (KyFanDominantIdealFamily.operatorNorm (𝕜 := ℂ))
-      A hA S hS A0 hA0 X Rop hX hXdom hReq hδ hgap trivial
+      A hA S hS A0 hA0 X Rop hX hXdom hReq hδ hgap (by
+        rw [KyFanDominantIdealFamily.mem_iff]
+        simp [KyFanDominantIdealFamily.operatorNorm])
   exact hmain.2
 
 /-- The same natural theorem instantiated with the nontrivial two-term Ky Fan
@@ -112,7 +114,9 @@ example
       ‖Rop‖ := by
   have hmain := sinTheta_unbounded_real_spectralSubspace
     (KyFanDominantIdealFamily.operatorNorm (𝕜 := ℝ))
-      A hA S hS A0 hA0 X Rop hX hXdom hReq hδ hgap trivial
+      A hA S hS A0 hA0 X Rop hX hXdom hReq hδ hgap (by
+        rw [KyFanDominantIdealFamily.mem_iff]
+        simp [KyFanDominantIdealFamily.operatorNorm])
   exact hmain.2
 
 end AbstractRealUse
@@ -144,7 +148,9 @@ example
       ≤ ‖generalResidual A X A0‖ := by
   have hmain := sinTheta_bounded_spectralSubspace_of_genuineSpectrumGap
     (KyFanDominantIdealFamily.operatorNorm (𝕜 := ℂ))
-      A hA S hS A0 hA0 X hX hδ hgap trivial
+      A hA S hS A0 hA0 X hX hδ hgap (by
+        rw [KyFanDominantIdealFamily.mem_iff]
+        simp [KyFanDominantIdealFamily.operatorNorm])
   exact hmain.2
 
 end AbstractBoundedUse
@@ -176,9 +182,8 @@ theorem realPlane_zeroResidual_model :
     ClosedOperator.ofBounded (0 : RealPlane →L[ℝ] RealPlane)
   let U : Submodule ℝ RealPlane := ⊤
   have hred : A.ReducesSubspace U := by
-    simp [A, U, ClosedOperator.ReducesSubspace,
-      ClosedOperator.InvariantSubspace]
-    rfl
+    simp [A, U, TauCeti.LinearPMap.ReducesSubspace,
+      TauCeti.LinearPMap.InvariantSubspace]
   have hA : A.IsSelfAdjoint := by
     exact ClosedOperator.ofBounded_isSelfAdjoint
       (0 : RealPlane →L[ℝ] RealPlane) (by intro x y; simp)
@@ -214,7 +219,9 @@ theorem realPlane_zeroResidual_model :
     simp
   case hδ => exact zero_lt_one
   case hgap => exact hgap
-  case hR => trivial
+  case hR =>
+    rw [KyFanDominantIdealFamily.mem_iff]
+    simp
 
 end FiniteRealModel
 

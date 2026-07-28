@@ -49,8 +49,11 @@ theorem closedSylvester_homogeneous_eq_zero_complex
     (hEq : HasClosedSylvesterEquation A B X 0) :
     X = 0 := by
   let N := KyFanDominantIdealFamily.operatorNorm (𝕜 := ℂ)
+  have hzero : N.Mem (0 : F →L[ℂ] E) := by
+    rw [KyFanDominantIdealFamily.mem_iff]
+    simp [N]
   have hbound :=
-    (davisKahan1970_sylvester_complex N hA hB hδ hgap hEq (by trivial)).2
+    (davisKahan1970_sylvester_complex N hA hB hδ hgap hEq hzero).2
   change δ * ‖X‖ ≤ ‖(0 : F →L[ℂ] E)‖ at hbound
   have hle : ‖X‖ ≤ 0 := by
     -- The bound is against the norm of zero, which the arithmetic tactics do not
@@ -99,8 +102,11 @@ theorem closedSylvester_homogeneous_eq_zero_real
     (hEq : HasClosedSylvesterEquation A B X 0) :
     X = 0 := by
   let N := KyFanDominantIdealFamily.operatorNorm (𝕜 := ℝ)
+  have hzero : N.Mem (0 : F →L[ℝ] E) := by
+    rw [KyFanDominantIdealFamily.mem_iff]
+    simp [N]
   have hbound :=
-    (davisKahan1970_sylvester_real N hA hB hδ hgap hEq (by trivial)).2
+    (davisKahan1970_sylvester_real N hA hB hδ hgap hEq hzero).2
   change δ * ‖X‖ ≤ ‖(0 : F →L[ℝ] E)‖ at hbound
   have hle : ‖X‖ ≤ 0 := by
     -- The bound is against the norm of zero, which the arithmetic tactics do not

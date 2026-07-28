@@ -133,7 +133,8 @@ theorem unbounded_sylvester_mem_and_gauge_le_of_spectra_exteriorLeft_intervalRig
     refine hσA lam ?_
     rw [Set.mem_Ioo] at hlam ⊢
     exact ⟨by linarith [hlam.1], by linarith [hlam.2]⟩
-  exact mem_and_gauge_le_of_exteriorLeft_intervalRight N hβα hδ
+  exact linearPMap_mem_and_gauge_le_of_exteriorLeft_intervalRight N
+    A.toLinearPMap_isClosed B.toLinearPMap_dense hβα hδ
     hB.isSymmetric hBlow hBhigh hAres hEq hC
 
 /-- **Davis--Kahan Theorem 5.2, interval/exterior, interval block on the
