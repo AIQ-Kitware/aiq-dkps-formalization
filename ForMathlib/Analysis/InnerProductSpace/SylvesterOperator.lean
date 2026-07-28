@@ -33,5 +33,27 @@ def sylvesterOperator (A : F →L[𝕜] F) (B : E →L[𝕜] E)
     (X : E →L[𝕜] F) : E →L[𝕜] F :=
   A ∘L X - X ∘L B
 
+/-- The Sylvester operator `X ↦ A X - X B`, bundled as a continuous linear map.
+
+`sylvesterOperator` is its underlying function.  The bundled form is what lets
+the Sylvester operator be *called* injective, bounded below, or invertible:
+those are statements about an operator, not about a family of values.  It is a
+difference of the two one-sided composition maps, each of which is continuous
+and linear in `X`. -/
+noncomputable def sylvesterOperatorL (A : F →L[𝕜] F) (B : E →L[𝕜] E) :
+    (E →L[𝕜] F) →L[𝕜] (E →L[𝕜] F) :=
+  compL 𝕜 E F F A - (compL 𝕜 E E F).flip B
+
+@[simp]
+theorem sylvesterOperatorL_apply (A : F →L[𝕜] F) (B : E →L[𝕜] E) (X : E →L[𝕜] F) :
+    sylvesterOperatorL A B X = A ∘L X - X ∘L B :=
+  rfl
+
+/-- The bundled and unbundled Sylvester operators agree, definitionally.  Stated
+so the two cannot drift apart. -/
+theorem coe_sylvesterOperatorL (A : F →L[𝕜] F) (B : E →L[𝕜] E) :
+    ⇑(sylvesterOperatorL A B) = sylvesterOperator A B :=
+  rfl
+
 end ContinuousLinearMap
 
