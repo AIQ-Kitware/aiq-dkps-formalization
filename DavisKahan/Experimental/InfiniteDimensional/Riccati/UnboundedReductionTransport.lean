@@ -97,27 +97,27 @@ theorem pullback_reducesSubspace_of_intertwines_projection
   rcases hred with ⟨hVdom, hVOrthDom, hVinv, hVOrthInv⟩
   refine ⟨?_, ?_, ?_, ?_⟩
   · intro x
-    change e (U.starProjection (x : E)) ∈ A.domain
+    change e (U.starProjection (x : E)) ∈ A.toLinearPMap.domain
     have hintertwine := congrArg (fun T : E →L[𝕜] E => T (x : E)) hproj
     change e (U.starProjection (x : E)) =
       V.starProjection (e (x : E)) at hintertwine
     rw [hintertwine]
-    simpa only [pullbackDomainToOriginal_coe] using
-      hVdom (pullbackDomainToOriginal A e x)
+    exact hVdom (pullbackDomainToOriginal A e x)
   · intro x
-    change e (Uᗮ.starProjection (x : E)) ∈ A.domain
+    change e (Uᗮ.starProjection (x : E)) ∈ A.toLinearPMap.domain
     have hintertwine := congrArg (fun T : E →L[𝕜] E => T (x : E)) hprojOrth
     change e (Uᗮ.starProjection (x : E)) =
       Vᗮ.starProjection (e (x : E)) at hintertwine
     rw [hintertwine]
-    simpa only [pullbackDomainToOriginal_coe] using
-      hVOrthDom (pullbackDomainToOriginal A e x)
+    exact hVOrthDom (pullbackDomainToOriginal A e x)
   · intro x hx
+    change (pullback A e).toLinearMap x ∈ U
     rw [pullback_apply]
     apply symm_map_mem_of_intertwines_projection e U V hproj
     apply hVinv (pullbackDomainToOriginal A e x)
     exact map_mem_of_intertwines_projection e U V hproj hx
   · intro x hx
+    change (pullback A e).toLinearMap x ∈ Uᗮ
     rw [pullback_apply]
     apply symm_map_mem_of_intertwines_projection e Uᗮ Vᗮ hprojOrth
     apply hVOrthInv (pullbackDomainToOriginal A e x)

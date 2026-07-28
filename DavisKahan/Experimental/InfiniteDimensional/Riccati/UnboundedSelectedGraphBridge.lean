@@ -112,6 +112,47 @@ theorem graphSubspace_eq_unboundedBlockGraph_rectangularAngularPart
   exact (blockGraph_eq_range_zeroGraph_angularParam
     (rectangularAngularPart Y)).symm
 
+/-- Build the canonical partial-map continuation-to-Riccati handoff from an
+ambient angular graph.  The domain and reduction hypotheses are expressed over
+the raw block core, so this endpoint does not reconstruct local closed-operator
+bundles. -/
+noncomputable def ContractiveReducingGraphSelectionPMap.ofAmbientAngularGraph
+    (H : UnboundedBlockDataPMap (𝕜 := ℂ) (E0 := E0) (E1 := E1))
+    (Y : DirectSum E0 E1 →L[ℂ] DirectSum E0 E1)
+    (hY : IsAngularOperator
+      (unboundedBlockGraph (0 : E0 →L[ℂ] E1)) Y)
+    (hdom : PreservesRiccatiPMapDomains H (rectangularAngularPart Y))
+    (hnorm : ‖rectangularAngularPart Y‖ < 1)
+    (hred : TauCeti.LinearPMap.ReducesSubspace
+      (unboundedBlockOperatorPMapCore H)
+      (graphSubspace (unboundedBlockGraph (0 : E0 →L[ℂ] E1)) Y)) :
+    ContractiveReducingGraphSelectionPMap H where
+  X := rectangularAngularPart Y
+  preservesDomains := hdom
+  norm_lt_one := hnorm
+  reduces := by
+    simpa only [graphSubspace_eq_unboundedBlockGraph_rectangularAngularPart Y hY]
+      using hred
+
+/-- Canonical strong-solution conclusion from an ambient selected graph and
+its domain-aware partial-map reduction data. -/
+theorem exists_strongRiccatiPMap_solution_of_ambientAngularGraph
+    (H : UnboundedBlockDataPMap (𝕜 := ℂ) (E0 := E0) (E1 := E1))
+    (Y : DirectSum E0 E1 →L[ℂ] DirectSum E0 E1)
+    (hY : IsAngularOperator
+      (unboundedBlockGraph (0 : E0 →L[ℂ] E1)) Y)
+    (hdom : PreservesRiccatiPMapDomains H (rectangularAngularPart Y))
+    (hnorm : ‖rectangularAngularPart Y‖ < 1)
+    (hred : TauCeti.LinearPMap.ReducesSubspace
+      (unboundedBlockOperatorPMapCore H)
+      (graphSubspace (unboundedBlockGraph (0 : E0 →L[ℂ] E1)) Y)) :
+    ∃ X : E0 →L[ℂ] E1,
+      StrongSolvesRiccatiPMap H X ∧ ‖X‖ < 1 ∧
+      TauCeti.LinearPMap.ReducesSubspace (unboundedBlockOperatorPMapCore H)
+        (unboundedBlockGraph X) := by
+  exact (ContractiveReducingGraphSelectionPMap.ofAmbientAngularGraph
+    H Y hY hdom hnorm hred).exists_strongRiccati_solution
+
 /-- Build the continuation-to-Riccati handoff from an ambient angular graph.
 The remaining assumptions are precisely the unbounded domain and reduction
 facts; no additional graph-identification proof is required. -/
@@ -129,6 +170,9 @@ noncomputable def ContractiveReducingGraphSelection.ofAmbientAngularGraph
   preservesDomains := hdom
   norm_lt_one := hnorm
   reduces := by
+    change TauCeti.LinearPMap.ReducesSubspace
+      (unboundedBlockOperatorCorePMap H)
+      (graphSubspace (unboundedBlockGraph (0 : E0 →L[ℂ] E1)) Y) at hred
     simpa only [graphSubspace_eq_unboundedBlockGraph_rectangularAngularPart Y hY]
       using hred
 
