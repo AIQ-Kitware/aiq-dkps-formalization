@@ -433,3 +433,52 @@ because `comparator/*.json` stores declaration names as data — see AGENTS.md,
   coordinate before taking it. Keeping the misnomers is survivable; doing the
   rename inside a dependency-removal commit is not, because it would make the
   removal impossible to review.
+
+## The strategy that actually works (measured 2026-07-28)
+
+**Do not bulk-port the closure.** If the four remaining clusters are ported by
+following their imports, the job is **112 vendored modules / 28,364 lines** —
+Cluster A's closure alone is 17,568 lines, Cluster D's 22,492, and they overlap
+heavily. That is a Mathlib-scale contribution, and almost none of it is
+mathematics Davis--Kahan needs.
+
+**Port the *endpoint*, at the right altitude.** The worked example is phase S2's
+gap-resolvent bound:
+
+| | |
+|---|---|
+| what DK consumes | "spectrum avoids `(c-s, c+s)` ⟹ `‖(A-c)⁻¹‖ ≤ s⁻¹`" |
+| Spectra's route | Stone's theorem → unitary group → PVM → bounded Borel calculus → truncated symbol |
+| closure if ported | thousands of lines |
+| what it actually is | a C⋆-algebra fact about the **bounded** operator `R` |
+| native replacement | ~350 lines in `ForTauCeti/…/LinearPMap/{Resolvent,ResolventBound,SelfAdjointResolvent}.lean` |
+| effect | the whole sin-Θ / tan-2Θ chain came off Spectra; consumers 173 → 95 |
+
+The pattern generalises: **Spectra is a general-purpose spectral-theory library,
+so it proves DK's facts as corollaries of a much heavier apparatus.** Asking
+"what is this statement really about?" repeatedly finds it is about a bounded
+operator, where Mathlib is strong.
+
+### What Mathlib does and does not have (checked, not assumed)
+
+* **Has:** continuous functional calculus (`Analysis/CStarAlgebra/ContinuousFunctionalCalculus/**`),
+  `IsSelfAdjoint.spectralRadius_eq_nnnorm`, the `LinearPMap` adjoint API, and
+  `CStarAlgebra (E →L[ℂ] E)` — the last in
+  `Mathlib.Analysis.CStarAlgebra.ContinuousLinearMap`, which must be imported
+  explicitly or instance search **diverges** rather than failing (symptom: a
+  `whnf` timeout at 10⁶ heartbeats, not an unsolved instance goal).
+* **Does not have:** any Borel functional calculus, projection-valued measures,
+  or spectral projections onto Borel sets, for bounded *or* unbounded operators.
+
+That gap is real, and it is where the remaining work concentrates.
+
+### The one place the bypass will not reach
+
+`selfAdjointSpectralProjection A hA B hB` — the spectral projection of a
+self-adjoint operator onto a **Borel set** — is consumed by 15 production
+modules, and it is irreducibly a spectral-theorem statement. There is no
+bounded-operator reformulation, because the object *is* the spectral measure.
+For this cluster Spectra is a genuine donor and the port is a port: adapt the
+dependency-closed slice into `ForTauCeti` with declaration-level provenance,
+under Apache-2.0 §4(b)/(c). Everything else should be attacked with the bypass
+first, and only ported when the bypass demonstrably fails.
