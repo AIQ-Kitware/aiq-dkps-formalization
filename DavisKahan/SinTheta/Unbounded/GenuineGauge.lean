@@ -123,8 +123,7 @@ theorem linearPMap_sinTheta_unbounded_gauge
           (D.X.adjoint ∘L D.F₁) (D.Λ₁ y) := by abel
       _ = (-(D.residual.adjoint ∘L D.F₁)) (y : G) := h1
   have hmain := linearPMap_mem_and_gauge_le_of_boundedLeft_exteriorRight
-    N D.Λ₁_dense D.Λ₁_closed hρ hδ hSnorm hdom hright hJnorm hEq'
-      (N.neg_mem hC)
+    N hρ hδ hSnorm hdom hright hJnorm hEq' (N.neg_mem hC)
   refine ⟨hmain.1, ?_⟩
   have hgC : N.gauge (-(D.residual.adjoint ∘L D.F₁)) =
       N.gauge (D.residual.adjoint ∘L D.F₁) := N.gauge_neg hC
