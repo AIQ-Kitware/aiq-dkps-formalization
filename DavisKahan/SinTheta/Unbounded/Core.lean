@@ -127,6 +127,36 @@ noncomputable def toPMap
   residual_eq := D.residual_eq
   intertwines := D.intertwines
 
+omit [CompleteSpace F] [CompleteSpace G] in
+/-- A source-facing self-adjoint ambient operator has a self-adjoint raw
+partial-map view. -/
+theorem toPMap_A_isSelfAdjoint
+    (D : UnboundedSinThetaData (𝕜 := 𝕜) (E := E) (F := F) (G := G))
+    (hA : D.A.IsSelfAdjoint) : _root_.IsSelfAdjoint D.toPMap.A := by
+  change _root_.IsSelfAdjoint D.A.toLinearPMap
+  exact LinearPMap.isSelfAdjoint_def.mpr
+    ((D.A.isSelfAdjoint_iff_toLinearPMap_adjoint_eq).mp hA)
+
+omit [CompleteSpace E] [CompleteSpace G] in
+/-- A source-facing self-adjoint trial operator has a self-adjoint raw
+partial-map view. -/
+theorem toPMap_A₀_isSelfAdjoint
+    (D : UnboundedSinThetaData (𝕜 := 𝕜) (E := E) (F := F) (G := G))
+    (hA₀ : D.A₀.IsSelfAdjoint) : _root_.IsSelfAdjoint D.toPMap.A₀ := by
+  change _root_.IsSelfAdjoint D.A₀.toLinearPMap
+  exact LinearPMap.isSelfAdjoint_def.mpr
+    ((D.A₀.isSelfAdjoint_iff_toLinearPMap_adjoint_eq).mp hA₀)
+
+omit [CompleteSpace E] [CompleteSpace F] in
+/-- A source-facing self-adjoint complementary operator has a self-adjoint
+raw partial-map view. -/
+theorem toPMap_Λ₁_isSelfAdjoint
+    (D : UnboundedSinThetaData (𝕜 := 𝕜) (E := E) (F := F) (G := G))
+    (hΛ₁ : D.Λ₁.IsSelfAdjoint) : _root_.IsSelfAdjoint D.toPMap.Λ₁ := by
+  change _root_.IsSelfAdjoint D.Λ₁.toLinearPMap
+  exact LinearPMap.isSelfAdjoint_def.mpr
+    ((D.Λ₁.isSelfAdjoint_iff_toLinearPMap_adjoint_eq).mp hΛ₁)
+
 end UnboundedSinThetaData
 
 /-- The residual identity induces the domain-aware complementary Sylvester

@@ -63,10 +63,17 @@ theorem generalizedSinTheta_unbounded_spectralSubspace_of_genuineSpectrumGap
       (selfAdjointSpectralSubspaceInclusion A hA S hS) D.F₁ := by
     simpa only [D, unboundedSinThetaDataOfSpectralSubspace] using
       spectralSubspace_orthogonalExactDecomposition A hA S hS
-  have hmain := generalizedSinTheta_unbounded_exact_of_genuineSpectrumGap
-    N D (selfAdjointSpectralSubspaceInclusion A hA S hS)
-      hA hA0 hLambda hdecomp hδ hε hframe hgap hR
-  simpa only [D, unboundedSinThetaDataOfSpectralSubspace] using hmain
+  have hDA : D.A.IsSelfAdjoint := by
+    simpa only [D, unboundedSinThetaDataOfSpectralSubspace] using hA
+  have hDA₀ : D.A₀.IsSelfAdjoint := by
+    simpa only [D, unboundedSinThetaDataOfSpectralSubspace] using hA0
+  have hmain := linearPMap_generalizedSinTheta_unbounded_exact_of_genuineSpectrumGap
+    N D.toPMap (selfAdjointSpectralSubspaceInclusion A hA S hS)
+      (D.toPMap_A_isSelfAdjoint hDA)
+      (D.toPMap_A₀_isSelfAdjoint hDA₀)
+      (D.toPMap_Λ₁_isSelfAdjoint hLambda) hdecomp hδ hε hframe hgap.toPMap hR
+  simpa only [D, unboundedSinThetaDataOfSpectralSubspace,
+    UnboundedSinThetaData.toPMap] using hmain
 
 end ExactSinTheta
 end Experimental
