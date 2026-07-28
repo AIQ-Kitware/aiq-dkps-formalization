@@ -5,6 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Sylvester.Unbounded.AllGap
 import DavisKahan.Sylvester.Gap
+import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
 
 /-!
 # Source-oriented constructors for the three unbounded gap configurations
@@ -46,8 +47,10 @@ theorem trialAbove_complementBelow
     {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := E)}
     {B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := F)}
     {δ c : ℝ}
-    (hA : Spectra.Resolvent.spectrum A.toLinearPMap ⊆ Set.Ici (c + δ))
-    (hB : Spectra.Resolvent.spectrum B.toLinearPMap ⊆ Set.Iic c) :
+    (hA : Complex.ofReal ⁻¹' TauCeti.LinearPMap.spectrum A.toLinearPMap ⊆
+        Set.Ici (c + δ))
+    (hB : Complex.ofReal ⁻¹' TauCeti.LinearPMap.spectrum B.toLinearPMap ⊆
+        Set.Iic c) :
     GenuineUnboundedSylvesterGap A B δ :=
   .leftAboveRightBelow c hA hB
 
@@ -56,8 +59,10 @@ theorem trialBelow_complementAbove
     {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := E)}
     {B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := F)}
     {δ c : ℝ}
-    (hA : Spectra.Resolvent.spectrum A.toLinearPMap ⊆ Set.Iic c)
-    (hB : Spectra.Resolvent.spectrum B.toLinearPMap ⊆ Set.Ici (c + δ)) :
+    (hA : Complex.ofReal ⁻¹' TauCeti.LinearPMap.spectrum A.toLinearPMap ⊆
+        Set.Iic c)
+    (hB : Complex.ofReal ⁻¹' TauCeti.LinearPMap.spectrum B.toLinearPMap ⊆
+        Set.Ici (c + δ)) :
     GenuineUnboundedSylvesterGap A B δ :=
   .leftBelowRightAbove c hA hB
 

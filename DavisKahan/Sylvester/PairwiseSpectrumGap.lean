@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Interop.TauCeti.ClosedOperator
-import Spectra.Resolvent.Spectrum
+import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
 
 /-!
 # Pairwise spectral separation for two closed self-adjoint blocks
@@ -12,6 +12,18 @@ import Spectra.Resolvent.Spectrum
 This is the exact weak spectral hypothesis used by the square-norm Sylvester
 estimate and Davis--Kahan Theorem 6.2.  It is intentionally independent of the
 three stronger interval/exterior and ordered gap configurations.
+
+## Migration note (phase S2, 2026-07-28)
+
+The spectrum here was `Spectra.Resolvent.spectrum : Set ℝ` and is now
+`TauCeti.LinearPMap.spectrum : Set ℂ` (`dev/tauceti/spectra-removal-plan.md`).
+The separation is therefore measured by `‖lam - α‖` in `ℂ` rather than `|lam - α|`
+in `ℝ`.  This is the *same* condition whenever the operators are self-adjoint —
+their spectra are real — and it is the honest statement otherwise, which the
+real-valued version was not: Spectra's `spectrum` silently kept only the real
+slice, so two operators with separated real slices but colliding complex spectra
+satisfied the old predicate.  For the self-adjoint blocks Davis--Kahan actually
+uses, nothing changes.
 -/
 
 namespace TauCeti
@@ -33,9 +45,9 @@ def LinearPMap.GenuinePairwiseSpectrumGap
     [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
     [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
     (A : E →ₗ.[ℂ] E) (B : F →ₗ.[ℂ] F) (δ : ℝ) : Prop :=
-  ∀ lam ∈ Spectra.Resolvent.spectrum A,
-    ∀ α ∈ Spectra.Resolvent.spectrum B,
-      δ ≤ |lam - α|
+  ∀ lam ∈ TauCeti.LinearPMap.spectrum A,
+    ∀ α ∈ TauCeti.LinearPMap.spectrum B,
+      δ ≤ ‖lam - α‖
 
 namespace LinearPMap.GenuinePairwiseSpectrumGap
 
@@ -48,7 +60,7 @@ theorem symm
     (h : LinearPMap.GenuinePairwiseSpectrumGap A B δ) :
     LinearPMap.GenuinePairwiseSpectrumGap B A δ := by
   intro α hα lam hlam
-  simpa [abs_sub_comm] using h lam hlam α hα
+  simpa [norm_sub_rev] using h lam hlam α hα
 
 /-- Decreasing the requested distance preserves pairwise separation. -/
 theorem mono
@@ -68,11 +80,11 @@ theorem disjoint
     [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
     {A : E →ₗ.[ℂ] E} {B : F →ₗ.[ℂ] F} {δ : ℝ}
     (h : LinearPMap.GenuinePairwiseSpectrumGap A B δ) (hδ : 0 < δ) :
-    Disjoint (Spectra.Resolvent.spectrum A)
-      (Spectra.Resolvent.spectrum B) := by
+    Disjoint (TauCeti.LinearPMap.spectrum A)
+      (TauCeti.LinearPMap.spectrum B) := by
   refine Set.disjoint_left.mpr ?_
   intro lam hlamA hlamB
-  have hsep : δ ≤ |lam - lam| := h lam hlamA lam hlamB
+  have hsep : δ ≤ ‖lam - lam‖ := h lam hlamA lam hlamB
   exact (not_le_of_gt hδ) (by simpa using hsep)
 
 end LinearPMap.GenuinePairwiseSpectrumGap
@@ -119,8 +131,8 @@ theorem disjoint
     {A : ClosedOperator (𝕜 := ℂ) (E := E)}
     {B : ClosedOperator (𝕜 := ℂ) (E := F)} {δ : ℝ}
     (h : GenuinePairwiseSpectrumGap A B δ) (hδ : 0 < δ) :
-    Disjoint (Spectra.Resolvent.spectrum A.toLinearPMap)
-      (Spectra.Resolvent.spectrum B.toLinearPMap) := by
+    Disjoint (TauCeti.LinearPMap.spectrum A.toLinearPMap)
+      (TauCeti.LinearPMap.spectrum B.toLinearPMap) := by
   exact LinearPMap.GenuinePairwiseSpectrumGap.disjoint h hδ
 
 end GenuinePairwiseSpectrumGap

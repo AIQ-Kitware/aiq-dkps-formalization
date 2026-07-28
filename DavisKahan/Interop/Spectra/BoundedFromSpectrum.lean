@@ -7,6 +7,7 @@ import DavisKahan.Interop.Spectra.ClosedOperator
 import DavisKahan.SpectralTheory.ClosedOperator.BoundedRealization
 import Spectra.SpectralTheory.Essential.Discrete
 import Spectra.SpectralTheory.Measure.GeneratorLink
+import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
 
 /-!
 # Boundedness from a bounded spectrum
@@ -58,7 +59,8 @@ theorem exists_boundedRealization_of_spectrum_subset_Icc
     {A : SpectraBridge.DKClosedOperator (H := H)}
     (hA : IsSelfAdjoint A.toLinearPMap)
     {β α : ℝ} (hβα : β ≤ α)
-    (hσ : Spectra.Resolvent.spectrum A.toLinearPMap ⊆ Set.Icc β α) :
+    (hσ : Complex.ofReal ⁻¹' TauCeti.LinearPMap.spectrum A.toLinearPMap ⊆
+        Set.Icc β α) :
     ∃ R : BoundedRealization (𝕜 := ℂ) (E := H) A,
       ‖R.operator - (((β + α) / 2 : ℝ) : ℂ) •
         ContinuousLinearMap.id ℂ H‖ ≤ (α - β) / 2 := by

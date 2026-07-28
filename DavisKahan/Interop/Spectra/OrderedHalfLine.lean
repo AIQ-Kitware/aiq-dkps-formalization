@@ -6,6 +6,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 import DavisKahan.Interop.Spectra.ClosedOperator
 import DavisKahan.Sylvester.ClosedSylvesterEquation
 import Spectra.QuantumMechanics.BornRule.Observable
+import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
 
 /-!
 # Genuine spectral half-line localization
@@ -43,7 +44,8 @@ quadratic-form bound. -/
 theorem semiboundedBelow_of_spectrum_subset_Ici
     (A : DKClosedOperator (H := H)) (hA : A.IsSelfAdjoint)
     {c : ℝ}
-    (hσ : Spectra.Resolvent.spectrum A.toLinearPMap ⊆ Set.Ici c) :
+    (hσ : Complex.ofReal ⁻¹' TauCeti.LinearPMap.spectrum A.toLinearPMap ⊆
+        Set.Ici c) :
     SemiboundedBelow A c := by
   intro x
   let Aop := closedOperatorToSpectra A hA
@@ -81,7 +83,8 @@ quadratic-form bound. -/
 theorem semiboundedAbove_of_spectrum_subset_Iic
     (A : DKClosedOperator (H := H)) (hA : A.IsSelfAdjoint)
     {c : ℝ}
-    (hσ : Spectra.Resolvent.spectrum A.toLinearPMap ⊆ Set.Iic c) :
+    (hσ : Complex.ofReal ⁻¹' TauCeti.LinearPMap.spectrum A.toLinearPMap ⊆
+        Set.Iic c) :
     SemiboundedAbove A c := by
   intro x
   let Aop := closedOperatorToSpectra A hA
