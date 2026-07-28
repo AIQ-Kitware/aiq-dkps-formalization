@@ -1,17 +1,7 @@
 /-
-Staged for Mathlib: additions to `Mathlib/Analysis/InnerProductSpace/SylvesterBound.lean`
-(new file).
-
-Formalized by Claude Fable 5 (claude-fable-5[1m]), plan step W5.1 of
-`dev/davis-kahan-gap-closure-plan.md` (v3 reroute).  The classical proofs of
-this bound run through an operator-valued integral `∫₀^∞ e^{−tA} Y e^{−tB} dt`
-(Bhatia VII.2) or a contour integral (Sylvester–Rosenblum); the proof here is
-a purely algebraic absorption argument discovered while planning: writing
-`(a + b) • X = Y + (a • 1 − A) X + X (b • 1 − B)` with `a = ‖A‖`, `b = ‖B‖`
-and bounding the two correction terms by `(a − δ)‖X‖` and `(b − δ)‖X‖` lets
-the operator norm of `X` be solved for directly.  No integrals, no spectral
-theorem, no finite-dimensionality, no completeness.
-To be re-authored per Mathlib's AI-contribution policy at PR time.
+Copyright (c) 2026 Kitware, Inc. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Jon Crall, Claude Fable 5
 -/
 
 import Mathlib.Analysis.InnerProductSpace.Rayleigh
@@ -79,7 +69,7 @@ theorem norm_le_of_abs_re_inner_map_self_le {C : E →L[𝕜] E} (hC : C.IsSymme
     {κ : ℝ} (hκ : 0 ≤ κ) (h : ∀ x, |RCLike.re ⟪C x, x⟫_𝕜| ≤ κ * ‖x‖ ^ 2) : ‖C‖ ≤ κ := by
   rw [C.norm_eq_iSup_rayleighQuotient hC]
   refine ciSup_le fun x => ?_
-  show |C.reApplyInnerSelf x / ‖x‖ ^ 2| ≤ κ
+  change |C.reApplyInnerSelf x / ‖x‖ ^ 2| ≤ κ
   rcases eq_or_ne x 0 with rfl | hx
   · simpa [ContinuousLinearMap.reApplyInnerSelf_apply] using hκ
   · rw [ContinuousLinearMap.reApplyInnerSelf_apply, abs_div, abs_sq,
@@ -460,7 +450,37 @@ theorem le_div_of_comp_sub_comp_eq (hA : A.IsSymmetric) (hB : B.IsSymmetric)
 
 end AbstractSylvesterBound
 
-/-! ### Rectangular abstract Sylvester bounds -/
+/-! ### Rectangular abstract Sylvester bounds
+
+## Staging note
+
+Staged for Mathlib: additions to `Mathlib/Analysis/InnerProductSpace/SylvesterBound.lean`
+(new file).
+Formalized by Claude Fable 5 (claude-fable-5[1m]), plan step W5.1 of
+`dev/davis-kahan-gap-closure-plan.md` (v3 reroute).  The classical proofs of
+this bound run through an operator-valued integral `∫₀^∞ e^{−tA} Y e^{−tB} dt`
+(Bhatia VII.2) or a contour integral (Sylvester–Rosenblum); the proof here is
+a purely algebraic absorption argument discovered while planning: writing
+`(a + b) • X = Y + (a • 1 − A) X + X (b • 1 − B)` with `a = ‖A‖`, `b = ‖B‖`
+and bounding the two correction terms by `(a − δ)‖X‖` and `(b − δ)‖X‖` lets
+the operator norm of `X` be solved for directly.  No integrals, no spectral
+theorem, no finite-dimensionality, no completeness.
+To be re-authored per Mathlib's AI-contribution policy at PR time.
+
+## Provenance
+
+* Original repository: Davis--Kahan/DKPS formalization (Kitware, Inc.).
+* Original module: authored directly in `ForMathlib` at Davis--Kahan commit
+  `5c65c95`; it has had no prior home.
+* Extraction class: **authored in place**, for upstreaming to Mathlib rather than
+  to Tau Ceti — see `ForTauCeti/README.md` on the split between the two staging
+  areas.
+* Intended Mathlib home: additions to `Mathlib/Analysis/InnerProductSpace/SylvesterBound.
+* Original authors / copyright: Jon Crall, Claude Fable 5; Copyright (c) 2026
+  Kitware, Inc.; Apache 2.0.
+* Spectra influence: **none** — the `ForMathlib` import firewall admits only
+  Mathlib and `ForMathlib` (enforced by `scripts/check_dependency_layers.py`).
+-/
 
 section RectangularAbstractSylvesterBound
 

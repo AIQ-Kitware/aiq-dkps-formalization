@@ -148,6 +148,30 @@ and pruned. What is genuinely left:
 
 ## Cross-lane findings (post here to save another agent a re-derivation)
 
+- **The RankFactorization challenge statement is not Mathlib-clean, and both halves cannot
+  be right** (jon/namek, 2026-07-28). Building `ForMathlib` under Mathlib's own linter set
+  flags `[DecidableEq n]` on `exists_eq_mul_rank`, `exists_eq_mul_of_rank_le` and
+  `rank_le_iff_exists_eq_mul`: it is in the type, never used, and Mathlib's advice is to drop
+  it and call `classical` in the proof. But the same three signatures are pinned as **data** —
+  `Challenge/MathlibPending/RankFactorization/Conformance.lean` restates them with the
+  identical `variable … [DecidableEq n]` line, and `Leaderboard.lean` names one in
+  `#print axioms`. Dropping the instance desynchronises them; keeping it means a Mathlib PR
+  of this result would be asked to drop it anyway. Someone who owns the challenge lane has to
+  decide, and the Mathlib-facing answer is the one without `[DecidableEq n]`. Until then
+  `lean_lib ForMathlib` cannot carry `warningAsError`; the reasoning is recorded in the
+  module and in `lakefile.toml`.
+
+- **`ForMathlib` had the same two defects as `ForTauCeti`, and Mathlib's bar is higher**
+  (jon/namek, 2026-07-28). 6 of its 12 modules carried no copyright or licence header, all 12
+  lacked a `## Provenance` section, and the `lean_lib` set no `leanOptions` — so its warning
+  count was measured against this repository's default rather than Mathlib's. Census under
+  Mathlib's set: **22**, against 0 under ours; now **3** (the pinned ones above). One thing
+  learned that also applies to `ForTauCeti`: Mathlib's header linter requires the copyright
+  block to be **exactly** the four canonical lines, so the "Staged for Mathlib / Formalized
+  by" prose these files carried has to live in the module docstring, not the header. It is
+  now a `## Staging note` section. `ForTauCeti` has the same shape but does not see it,
+  because Tau Ceti sets `style.header = false`.
+
 - **~~Why the Spectra polar consumers cannot be repointed yet~~ — DONE, they are repointed**
   (jon/namek, 2026-07-28). The route recorded below worked exactly as written: prove
   `spectraPolarIsometry T = T.polarPartial` from the ForTauCeti uniqueness theorem — an

@@ -1,10 +1,7 @@
 /-
-Staged for Mathlib: the Berge maximum theorem (upper hemicontinuity of the
-parametric argmin correspondence over a fixed compact feasible set).
-
-Formalized by Claude Opus 4.8 (claude-opus-4-8[1m]); golfed a terminal
-`simp only [Function.comp_apply]; exact …` to `simpa using …` (rule 1.15).
-To be re-authored per Mathlib's AI-contribution policy at PR time.
+Copyright (c) 2026 Kitware, Inc. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Jon Crall, Claude Opus 4.8
 -/
 
 import ForMathlib.Topology.ApproxMinimizer
@@ -60,6 +57,28 @@ usable forms, building on the approximate-minimizer stability engine
 * `ForMathlib.upperHemicontinuousAt_isMinOn`
 * `ForMathlib.continuous_iInf_of_isCompact` — value-function continuity.
 * `ForMathlib.exists_modulus_isMinOn_family` / `ForMathlib.exists_modulus_isMinOn`
+
+## Staging note
+
+Staged for Mathlib: the Berge maximum theorem (upper hemicontinuity of the
+parametric argmin correspondence over a fixed compact feasible set).
+Formalized by Claude Opus 4.8 (claude-opus-4-8[1m]); golfed a terminal
+`simp only [Function.comp_apply]; exact …` to `simpa using …` (rule 1.15).
+To be re-authored per Mathlib's AI-contribution policy at PR time.
+
+## Provenance
+
+* Original repository: Davis--Kahan/DKPS formalization (Kitware, Inc.).
+* Original module: authored directly in `ForMathlib` at Davis--Kahan commit
+  `1ca2679`; it has had no prior home.
+* Extraction class: **authored in place**, for upstreaming to Mathlib rather than
+  to Tau Ceti — see `ForTauCeti/README.md` on the split between the two staging
+  areas.
+* Intended Mathlib home: the Berge maximum theorem (upper hemicontinuity of the.
+* Original authors / copyright: Jon Crall, Claude Opus 4.8; Copyright (c) 2026
+  Kitware, Inc.; Apache 2.0.
+* Spectra influence: **none** — the `ForMathlib` import firewall admits only
+  Mathlib and `ForMathlib` (enforced by `scripts/check_dependency_layers.py`).
 -/
 
 namespace ForMathlib
