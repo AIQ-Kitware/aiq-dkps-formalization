@@ -5,6 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.DoubleAngle.UnboundedIdeal
 import DavisKahan.TanTwoTheta.BoundedOffDiagonal
+import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
 
 /-!
 # Unbounded tangent two theta at operator-norm scope
@@ -66,7 +67,7 @@ theorem tanTwoTheta_addBounded_of_spectrum_gap
     (hBhigh : SemiboundedAbove
       (selfAdjointSpectralRestriction A hA B hB) α)
     (hBcomplSpec : ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
-      lam ∉ Spectra.Resolvent.spectrum
+      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum
         (selfAdjointSpectralRestriction A hA Bᶜ hB.compl).toLinearPMap)
     (hquarter : IsQuarterAcute
       (selfAdjointSpectralSubspace A hA B hB)

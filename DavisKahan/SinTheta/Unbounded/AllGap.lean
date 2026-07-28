@@ -6,6 +6,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 import DavisKahan.SinTheta.Unbounded.Core
 import DavisKahan.SinTheta.Unbounded.IntervalExterior
 import DavisKahan.Sylvester.Unbounded.AllGap
+import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
 
 /-!
 # Genuine-spectrum all-gap unbounded sine-theta theorem
@@ -41,11 +42,15 @@ inductive GenuineUnboundedSylvesterGapPMap
   | intervalExterior {β α : ℝ} (hβα : β ≤ α)
       (hgap : GenuineUnboundedIntervalExteriorGapPMap A B β α δ)
   | leftAboveRightBelow (c : ℝ)
-      (hA : Spectra.Resolvent.spectrum A ⊆ Set.Ici (c + δ))
-      (hB : Spectra.Resolvent.spectrum B ⊆ Set.Iic c)
+      (hA : Complex.ofReal ⁻¹' TauCeti.LinearPMap.spectrum A ⊆
+        Set.Ici (c + δ))
+      (hB : Complex.ofReal ⁻¹' TauCeti.LinearPMap.spectrum B ⊆
+        Set.Iic c)
   | leftBelowRightAbove (c : ℝ)
-      (hA : Spectra.Resolvent.spectrum A ⊆ Set.Iic c)
-      (hB : Spectra.Resolvent.spectrum B ⊆ Set.Ici (c + δ))
+      (hA : Complex.ofReal ⁻¹' TauCeti.LinearPMap.spectrum A ⊆
+        Set.Iic c)
+      (hB : Complex.ofReal ⁻¹' TauCeti.LinearPMap.spectrum B ⊆
+        Set.Ici (c + δ))
 
 namespace GenuineUnboundedSylvesterGapPMap
 
