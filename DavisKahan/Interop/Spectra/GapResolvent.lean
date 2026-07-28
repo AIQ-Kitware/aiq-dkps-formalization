@@ -18,9 +18,19 @@ that predicate from a genuine spectral hypothesis — the Spectra resolvent-set
 spectrum of the operator avoids the open interval `(c - s, c + s)` — using the
 spectral theorem for unbounded self-adjoint operators from the Spectra library.
 
-The first section is written in the Spectra idiom (group level, then
-self-adjoint level) and is intended for upstreaming into
-`Spectra/SpectralTheory/`:
+The first group of results is written in the Spectra idiom (group level, then
+self-adjoint level). It is **ours**, not Spectra's, and it lives in the
+`SpectraBridge` namespace like every other module under `DavisKahan/Interop/Spectra/`:
+
+> Until 2026-07-28 these three theorems were declared into
+> `namespace Spectra.QuantumMechanics.SpectralTheory`, on the reasoning that they
+> were destined for upstreaming into `Spectra/SpectralTheory/`. That destination
+> changed — `vendor/Spectra` is being retired from the build
+> (`dev/tauceti/spectra-removal-plan.md`), so these are Tau Ceti candidates, not
+> Spectra contributions. Leaving them in the donor's namespace would have made
+> them indistinguishable from donor material once the imports are gone, and the
+> attribution ledger would have credited Spectra for our theorems. Statements and
+> proofs are unchanged; only the enclosing namespace moved.
 
 * `spectralProjection_eq_zero_of_forall_mem_resolventSet`: a measurable set
   every point of which lies in the resolvent set carries no spectral mass, by
@@ -47,15 +57,22 @@ open Spectra.Borel
 open Spectra.OneParameterUnitaryGroup
 open Spectra.Resolvent
 open Spectra.YosidaHille
+-- Was implicit while the results below sat inside `Spectra.QuantumMechanics.SpectralTheory`;
+-- now that they are in our own namespace the donor names have to be opened explicitly.
+open Spectra.QuantumMechanics.SpectralTheory
 
 variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
   [CompleteSpace H]
 
-namespace Spectra.QuantumMechanics
+namespace TauCeti
+namespace DavisKahan
+namespace Experimental
+namespace SpectraBridge
 
-variable (U_grp : OneParameterUnitaryGroup (H := H))
-
-namespace SpectralTheory
+-- Fully qualified: the short name resolved only while this block sat inside
+-- `namespace Spectra.QuantumMechanics`.  `open Spectra.OneParameterUnitaryGroup`
+-- above opens that namespace's *members*, not the type of the same name.
+variable (U_grp : Spectra.OneParameterUnitaryGroup (H := H))
 
 /-- **Pointwise resolvent membership kills the spectral mass of a set.**  If
 every point of a measurable set `B` lies in the resolvent set of the
@@ -244,16 +261,6 @@ theorem exists_norm_le_two_sided_shifted_inverse_of_spectrum_gap
     exists_norm_le_two_sided_shifted_inverse_of_spectralProjection_Ioo_eq_zero
       (genToGroup hA) hs hproj
   rwa [generator_genToGroup hA] at h
-
-end SpectralTheory
-end Spectra.QuantumMechanics
-
-namespace TauCeti
-namespace DavisKahan
-namespace Experimental
-namespace SpectraBridge
-
-open Spectra.QuantumMechanics.SpectralTheory
 
 /-- **Genuine spectra discharge the shifted-inverse hypothesis.**  For a DK
 closed operator whose canonical `LinearPMap` view is self-adjoint and whose
