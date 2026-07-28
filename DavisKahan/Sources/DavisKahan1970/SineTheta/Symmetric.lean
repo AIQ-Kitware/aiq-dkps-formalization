@@ -164,7 +164,7 @@ theorem forward_all_kyFan
   intro k
   by_cases hk0 : k = 0
   · subst k
-    simp [kyFanApproximationGauge]
+    simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge]
   · have hk : 0 < k := Nat.pos_of_ne_zero hk0
     let N := KyFanDominantIdealFamily.kyFan (𝕜 := ℂ) k hk
     let D := P.forwardData
@@ -231,7 +231,7 @@ theorem reverse_all_kyFan
   intro k
   by_cases hk0 : k = 0
   · subst k
-    simp [kyFanApproximationGauge]
+    simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge]
   · have hk : 0 < k := Nat.pos_of_ne_zero hk0
     let N := KyFanDominantIdealFamily.kyFan (𝕜 := ℂ) k hk
     let D := P.reverseData

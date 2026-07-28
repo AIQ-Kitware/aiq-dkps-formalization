@@ -52,7 +52,7 @@ theorem real_unbounded_sylvester_kyFan
       kyFanApproximationGauge k C := by
   by_cases hk : k = 0
   · subst k
-    simp [kyFanApproximationGauge]
+    simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge]
   · have hkpos : 0 < k := Nat.pos_of_ne_zero hk
     let K := KyFanDominantIdealFamily.kyFan (𝕜 := ℂ) k hkpos
     have hcomplex := davisKahan1970_sylvester_complex K

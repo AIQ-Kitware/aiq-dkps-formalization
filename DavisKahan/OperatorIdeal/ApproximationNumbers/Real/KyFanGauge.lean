@@ -149,7 +149,7 @@ theorem kyFanApproximationGauge_comp_strongProjection_tendsto_real
     Tendsto
       (fun i => kyFanApproximationGauge k (K ∘L P i))
       l (𝓝 (kyFanApproximationGauge k K)) := by
-  simp only [kyFanApproximationGauge]
+  simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge]
   exact tendsto_finsetSum (Finset.range k)
     (fun n _ => approximationSingularValue_comp_strongProjection_tendsto_real
       hPproj hP n K)
@@ -237,7 +237,7 @@ theorem kyFanApproximationGauge_orthogonalProjectionOnto_comp_eq_real
     (A : V →L[ℝ] G) (hA : ∀ x, A x ∈ W) (k : ℕ) :
     kyFanApproximationGauge k (W.orthogonalProjectionOnto ∘L A) =
       kyFanApproximationGauge k A := by
-  unfold kyFanApproximationGauge
+  unfold kyFanApproximationGauge ContinuousLinearMap.kyFanGauge
   exact Finset.sum_congr rfl fun n _ =>
     approximationSingularValue_orthogonalProjectionOnto_comp_eq_real W A hA n
 
@@ -340,7 +340,7 @@ theorem kyFanApproximationGauge_add_le_real
   classical
   by_cases hk : k = 0
   · subst k
-    simp [kyFanApproximationGauge]
+    simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge]
   have hkpos : 0 < k := Nat.pos_of_ne_zero hk
   apply le_of_forall_pos_le_add
   intro ε hε
@@ -394,7 +394,7 @@ theorem kyFanApproximationGauge_add_le_real
         rw [hsumRestrict]
   have hlocal : kyFanApproximationGauge k (K + L) ≤
       kyFanApproximationGauge k (KV + LV) + ε := by
-    unfold kyFanApproximationGauge
+    unfold kyFanApproximationGauge ContinuousLinearMap.kyFanGauge
     calc
       ∑ n ∈ Finset.range k, approximationSingularValue n (K + L)
           ≤ ∑ n ∈ Finset.range k,
@@ -409,14 +409,14 @@ theorem kyFanApproximationGauge_add_le_real
         rw [mul_div_cancel₀ ε hkreal.ne']
   have htri := kyFanApproximationGauge_add_le_finiteSource_real k KV LV
   have hKrestrict : kyFanApproximationGauge k KV ≤ kyFanApproximationGauge k K := by
-    unfold kyFanApproximationGauge
+    unfold kyFanApproximationGauge ContinuousLinearMap.kyFanGauge
     apply Finset.sum_le_sum
     intro n _
     change ((K ∘L V.subtypeL).approximationNumber n : ℝ) ≤
       (K.approximationNumber n : ℝ)
     exact_mod_cast approximationNumber_comp_subtypeL_le_real K n V
   have hLrestrict : kyFanApproximationGauge k LV ≤ kyFanApproximationGauge k L := by
-    unfold kyFanApproximationGauge
+    unfold kyFanApproximationGauge ContinuousLinearMap.kyFanGauge
     apply Finset.sum_le_sum
     intro n _
     change ((L ∘L V.subtypeL).approximationNumber n : ℝ) ≤

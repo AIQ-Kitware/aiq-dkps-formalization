@@ -29,7 +29,8 @@
         "ForTauCeti.Analysis.OperatorIdeal.Family.HilbertSchmidt",
         "ForTauCeti.Analysis.InnerProductSpace.SpectralCutoff",
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.MinMaxUpper",
-        "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteRestriction"
+        "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteRestriction",
+        "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.KyFan"
       ]
     },
     {
@@ -1734,6 +1735,36 @@
         "DavisKahan.OperatorIdeal.ApproximationNumbers.Core",
         "DavisKahan.OperatorIdeal.ApproximationNumbers.BlockSum",
         "DavisKahan.OperatorIdeal.ApproximationNumbers.OperatorModulus"
+      ],
+      "status": "staged",
+      "upstream_pr": null
+    },
+    {
+      "source_module": "DavisKahan.OperatorIdeal.ApproximationNumbers.Core",
+      "source_declarations": [
+        "TauCeti.DavisKahan.Experimental.ExactSinTheta.kyFanApproximationGauge",
+        "TauCeti.DavisKahan.Experimental.ExactSinTheta.kyFanApproximationGauge_add_le_complex",
+        "TauCeti.DavisKahan.Experimental.ExactSinTheta.kyFanApproximationGauge_add_le_finiteDimensional",
+        "TauCeti.DavisKahan.Experimental.ExactSinTheta.kyFanApproximationGauge_add_le_finiteSource_complex",
+        "TauCeti.DavisKahan.Experimental.ExactSinTheta.kyFanApproximationGauge_comp_le",
+        "TauCeti.DavisKahan.Experimental.ExactSinTheta.kyFanApproximationGauge_adjoint"
+      ],
+      "current_namespace": "ContinuousLinearMap",
+      "staging_module": "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.KyFan",
+      "final_tauceti_module": "TauCeti.Analysis.OperatorIdeal.ApproximationNumber.KyFan",
+      "ownership_class": "tauceti",
+      "roadmap_target": "symmetric-operator-ideals",
+      "provenance_class": "copied and renamespaced 2026-07-28 from DavisKahan/OperatorIdeal/ApproximationNumbers/Core.lean, once the min-max theorem behind the triangle inequality became Spectra-free; the Davis-Kahan names remain as one-line delegations",
+      "direct_dependencies": [
+        "Mathlib",
+        "ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm",
+        "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Adjoint",
+        "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteDimensional",
+        "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteRestriction"
+      ],
+      "blocked_dependencies": [],
+      "downstream_users": [
+        "DavisKahan.OperatorIdeal.ApproximationNumbers.Core"
       ],
       "status": "staged",
       "upstream_pr": null

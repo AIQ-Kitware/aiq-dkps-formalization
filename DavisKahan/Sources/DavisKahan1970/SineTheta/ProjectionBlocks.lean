@@ -114,7 +114,7 @@ theorem paperDiagonalPair_all_kyFan_le
   intro k
   by_cases hk0 : k = 0
   · subst k
-    simp [kyFanApproximationGauge]
+    simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge]
   · have hk : 0 < k := Nat.pos_of_ne_zero hk0
     let N := KyFanDominantIdealFamily.kyFan (𝕜 := 𝕜) k hk
     have h := paperDiagonalPair_gauge_le

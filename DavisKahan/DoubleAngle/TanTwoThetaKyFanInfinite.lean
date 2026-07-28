@@ -339,7 +339,7 @@ theorem kyFan_doubleAngleTangent_offDiagonal_le_infinite
       hH'id]
   have hHgauge : kyFanApproximationGauge k H' ≤
       kyFanApproximationGauge k H := by
-    unfold kyFanApproximationGauge
+    unfold kyFanApproximationGauge ContinuousLinearMap.kyFanGauge
     refine Finset.sum_le_sum fun n _ => ?_
     rw [hH'def]
     exact approximationSingularValue_comp_contractions_le n
@@ -385,7 +385,7 @@ theorem kyFan_tanTwoTheta0_offDiagonal_le_infinite
   have hgauge : kyFanApproximationGauge k tanTwoTheta0 =
       ∑ n ∈ Finset.range k,
         doubleAngleTangent (approximationSingularValue n T) := by
-    unfold kyFanApproximationGauge
+    unfold kyFanApproximationGauge ContinuousLinearMap.kyFanGauge
     exact Finset.sum_congr rfl fun n _ => htan n
   rw [hgauge]
   exact kyFan_doubleAngleTangent_offDiagonal_le_infinite hA hH hAU hHU

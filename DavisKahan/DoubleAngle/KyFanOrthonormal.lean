@@ -96,7 +96,7 @@ theorem re_sum_inner_map_le_kyFanApproximationGauge
     rw [rectangularKyFanSum_eq_kyFanApproximationGauge, hK'id]
   -- the compression does not increase approximation numbers
   have hmono : kyFanApproximationGauge k K' ≤ kyFanApproximationGauge k K := by
-    unfold kyFanApproximationGauge
+    unfold kyFanApproximationGauge ContinuousLinearMap.kyFanGauge
     refine Finset.sum_le_sum fun n _ => ?_
     have hcomp := approximationSingularValue_comp_le n
       L₁.orthogonalProjectionOnto K L₂.subtypeL

@@ -512,7 +512,7 @@ theorem kyFan_unbounded_sylvester_le_of_semibounded
   intro k
   by_cases hk0 : k = 0
   · subst k
-    simp [kyFanApproximationGauge]
+    simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge]
   have hk : 0 < k := Nat.pos_of_ne_zero hk0
   apply kyFanApproximationGauge_le_of_leftSpectralCutoff_le hA k
   intro τA hτA
@@ -615,7 +615,7 @@ theorem kyFan_unbounded_sylvester_le_of_semibounded_swapped
   intro k
   by_cases hk0 : k = 0
   · subst k
-    simp [kyFanApproximationGauge]
+    simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge]
   have hk : 0 < k := Nat.pos_of_ne_zero hk0
   apply kyFanApproximationGauge_le_of_leftSpectralCutoff_le hA k
   intro τA hτA
