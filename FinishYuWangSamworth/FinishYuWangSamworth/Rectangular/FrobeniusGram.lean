@@ -90,6 +90,35 @@ theorem frobenius_comp_rectangular_le_opNorm_mul
     rfl
   rwa [hcomp] at h'
 
+/-- Two-sided rectangular Frobenius ideal inequality.  This is the reusable
+operator-ideal statement behind both the Gram estimates and Appendix Lemma 5. -/
+theorem rectangularFrobenius_twoSided_comp_le
+    {G : Type*} [NormedAddCommGroup G] [InnerProductSpace 𝕜 G]
+      [FiniteDimensional 𝕜 G]
+    {H : Type*} [NormedAddCommGroup H] [InnerProductSpace 𝕜 H]
+      [FiniteDimensional 𝕜 H]
+    (L : F →ₗ[𝕜] G) (A : E →ₗ[𝕜] F) (R : H →ₗ[𝕜] E) :
+    RectangularUnitarilyInvariantNorm.frobenius (L ∘ₗ A ∘ₗ R) ≤
+      ‖L.toContinuousLinearMap‖ *
+        RectangularUnitarilyInvariantNorm.frobenius A *
+          ‖R.toContinuousLinearMap‖ := by
+  letI : CompleteSpace E := FiniteDimensional.complete 𝕜 E
+  letI : CompleteSpace F := FiniteDimensional.complete 𝕜 F
+  letI : CompleteSpace G := FiniteDimensional.complete 𝕜 G
+  letI : CompleteSpace H := FiniteDimensional.complete 𝕜 H
+  have hA : IsPaperHilbertSchmidt A.toContinuousLinearMap :=
+    isPaperHilbertSchmidt_finite A.toContinuousLinearMap
+  have h := paperHilbertSchmidtNorm_comp_le
+    L.toContinuousLinearMap hA R.toContinuousLinearMap
+  rw [paperHilbertSchmidtNorm_eq_rectangularFrobenius,
+    paperHilbertSchmidtNorm_eq_rectangularFrobenius] at h
+  have hcomp :
+      (L.toContinuousLinearMap ∘L A.toContinuousLinearMap ∘L
+        R.toContinuousLinearMap).toLinearMap = L ∘ₗ A ∘ₗ R := by
+    ext x
+    rfl
+  rwa [hcomp] at h
+
 /-- Frobenius perturbation bound for the right Gram operator. -/
 theorem frobenius_rightGram_sub_le
     (A Â : E →ₗ[𝕜] F) :
