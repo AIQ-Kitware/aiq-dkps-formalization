@@ -13,5 +13,6 @@ import DavisKahan.SpectralTheory.SelfAdjointBorelCalculus
 import DavisKahan.SpectralTheory.Compatibility
 import DavisKahan.SpectralTheory.ResolventOperator
 import DavisKahan.SpectralTheory.CayleySelectorBridge
+import DavisKahan.SpectralTheory.CircleRieszEndpoints
 
 /-! # `DavisKahan/SpectralTheory` -/
