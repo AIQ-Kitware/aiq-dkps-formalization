@@ -7,6 +7,7 @@ import DavisKahan.OperatorIdeal.ApproximationNumbers.Core
 import DavisKahan.OperatorIdeal.UnitarilyInvariant.RectangularFamily
 import DavisKahan.OperatorIdeal.ApproximationNumbers.Real
 import DavisKahan.Interop.TauCeti.RectangularFamilyAdapter
+import ForTauCeti.Analysis.OperatorIdeal.Family.KyFan
 
 /-!
 # Scalar-generic approximation-number endpoints and ideal families
@@ -244,6 +245,14 @@ theorem carrier_kyFanSymmetricIdealFamily
       (E := E) (F := F) = ⊤ := by
   ext A
   simp
+
+/-- Over `ℂ` this family is the staged `TauCeti.kyFanIdealFamily`, which needs no
+capability hypothesis because `ContinuousLinearMap.kyFanGauge_add_le` is unconditional
+there.  The capability class survives only for the real-scalar case, whose triangle
+inequality is obtained by complexification. -/
+theorem kyFanSymmetricIdealFamily_eq_kyFanIdealFamily (k : ℕ) (hk : 0 < k) :
+    kyFanSymmetricIdealFamily.{0, v} (𝕜 := ℂ) k hk = TauCeti.kyFanIdealFamily.{v} k hk :=
+  rfl
 
 /-- The real-valued Ky Fan gauge is recovered from the canonical one. -/
 @[simp]

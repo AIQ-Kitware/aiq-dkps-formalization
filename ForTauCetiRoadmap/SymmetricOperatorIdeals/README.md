@@ -69,7 +69,22 @@ orthonormal expansions and shares no machinery with `operatorNormFamily`, so
 the two together are evidence that the structure is not shaped around a single
 example.
 
-A third instance exists but is **parked downstream**, in
+A third instance landed on 2026-07-28 in
+`ForTauCeti/Analysis/OperatorIdeal/Family/KyFan.lean`: `TauCeti.kyFanIdealFamily
+k hk`, over the gauge staged in
+`ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/KyFan.lean`. It is the
+instance the note below called "parked", now unparked, and it carries **no**
+`HasKyFanApproximationGaugeTriangle` hypothesis: over `ℂ` that triangle
+inequality is `ContinuousLinearMap.kyFanGauge_add_le`, proved outright, because
+the min–max theorem it rests on no longer needs `vendor/Spectra`'s
+projection-valued measures (see
+`ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/MinMaxUpper.lean`).
+
+The generic-scalar version below remains, `rfl`-equal to this one at `𝕜 = ℂ`;
+it is still needed for real scalars, whose triangle inequality is obtained by
+complexification.
+
+The historical note follows, describing the state before that:
 `DavisKahan/OperatorIdeal/ApproximationNumbers/ScalarGeneric.lean`:
 `kyFanSymmetricIdealFamily k hk`, the `ENNReal.ofReal` transport of
 `kyFanApproximationGauge k`, with a completeness instance proved from the
@@ -195,8 +210,9 @@ field.
 1. **The family interface** — `Family/{Basic,OperatorNorm}.lean` as staged.
    Dependency-closed on Mathlib alone. Can ship with the approximation-number
    PR or immediately after it.
-2. **Ky Fan** — the finite gauges as an instance, once `approximationNumber` is
-   upstream; this is the parked `kyFanSymmetricIdealFamily` moved into place.
+2. **Ky Fan** — *staged 2026-07-28* as `ForTauCeti/Analysis/OperatorIdeal/Family/KyFan.lean`
+   over `ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/KyFan.lean`, with
+   the capability class discharged rather than assumed. Ships with PR 1/2.
 3. **S1 + S2** — symmetric gauges and dominance.
 4. **S3** — Schatten and trace class. Hilbert--Schmidt is already staged and
    can ship with the family interface; the rest waits on S1.

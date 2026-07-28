@@ -30,7 +30,8 @@
         "ForTauCeti.Analysis.InnerProductSpace.SpectralCutoff",
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.MinMaxUpper",
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteRestriction",
-        "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.KyFan"
+        "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.KyFan",
+        "ForTauCeti.Analysis.OperatorIdeal.Family.KyFan"
       ]
     },
     {
@@ -1765,6 +1766,30 @@
       "blocked_dependencies": [],
       "downstream_users": [
         "DavisKahan.OperatorIdeal.ApproximationNumbers.Core"
+      ],
+      "status": "staged",
+      "upstream_pr": null
+    },
+    {
+      "source_module": "DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric",
+      "source_declarations": [
+        "TauCeti.DavisKahan.Experimental.ExactSinTheta.kyFanSymmetricIdealFamily",
+        "TauCeti.DavisKahan.Experimental.ExactSinTheta.isComplete_kyFanSymmetricIdealFamily"
+      ],
+      "current_namespace": "TauCeti",
+      "staging_module": "ForTauCeti.Analysis.OperatorIdeal.Family.KyFan",
+      "final_tauceti_module": "TauCeti.Analysis.OperatorIdeal.Family.KyFan",
+      "ownership_class": "tauceti",
+      "roadmap_target": "symmetric-operator-ideals",
+      "provenance_class": "copied and specialised 2026-07-28: the Ky Fan symmetric ideal family at 𝕜 = ℂ, with the HasKyFanApproximationGaugeTriangle capability hypothesis discharged rather than assumed; rfl-equal to the generic construction it came from",
+      "direct_dependencies": [
+        "Mathlib",
+        "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.KyFan",
+        "ForTauCeti.Analysis.OperatorIdeal.Family.Basic"
+      ],
+      "blocked_dependencies": [],
+      "downstream_users": [
+        "DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric"
       ],
       "status": "staged",
       "upstream_pr": null
