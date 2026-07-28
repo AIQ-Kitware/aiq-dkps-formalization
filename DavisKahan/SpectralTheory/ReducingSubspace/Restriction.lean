@@ -82,14 +82,11 @@ theorem orthogonal_invariant
 
 end ReducesSubspace
 
-/-- The operator domain inside a reducing subspace. -/
-def reducingRestrictionDomain
+/-- Compatibility facade for the raw restricted domain. -/
+abbrev reducingRestrictionDomain
     (A : ClosedOperator (𝕜 := 𝕜) (E := E))
     (U : Submodule 𝕜 E) : Submodule 𝕜 U where
-  carrier := {x | (x : E) ∈ A.domain}
-  zero_mem' := A.domain.zero_mem
-  add_mem' hx hy := A.domain.add_mem hx hy
-  smul_mem' c x hx := A.domain.smul_mem c hx
+  _ := TauCeti.LinearPMap.reducingRestrictionDomain A.toLinearPMap U
 
 @[simp]
 theorem mem_reducingRestrictionDomain_iff
@@ -98,12 +95,12 @@ theorem mem_reducingRestrictionDomain_iff
     x ∈ reducingRestrictionDomain A U ↔ (x : E) ∈ A.domain :=
   Iff.rfl
 
-/-- A restricted-domain vector viewed in the ambient operator domain. -/
-def reducingRestrictionDomainToAmbient
+/-- Compatibility facade for the ambient-domain inclusion. -/
+abbrev reducingRestrictionDomainToAmbient
     (A : ClosedOperator (𝕜 := 𝕜) (E := E))
     (U : Submodule 𝕜 E)
     (x : reducingRestrictionDomain A U) : A.domain :=
-  ⟨((x : reducingRestrictionDomain A U) : U), x.property⟩
+  TauCeti.LinearPMap.reducingRestrictionDomainToAmbient A.toLinearPMap U x
 
 @[simp]
 theorem reducingRestrictionDomainToAmbient_coe
@@ -114,29 +111,13 @@ theorem reducingRestrictionDomainToAmbient_coe
       ((x : reducingRestrictionDomain A U) : U) :=
   rfl
 
-/-- Action of the restriction, valued in the reducing subspace. -/
-def reducingRestrictionLinearMap
+/-- Compatibility facade for the raw restricted action. -/
+abbrev reducingRestrictionLinearMap
     (A : ClosedOperator (𝕜 := 𝕜) (E := E))
     (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     (hred : A.ReducesSubspace U) :
-    reducingRestrictionDomain A U →ₗ[𝕜] U where
-  toFun x :=
-    ⟨A.toLinearMap (reducingRestrictionDomainToAmbient A U x),
-      hred.invariant (reducingRestrictionDomainToAmbient A U x)
-        (((x : reducingRestrictionDomain A U) : U).property)⟩
-  map_add' x y := by
-    apply Subtype.ext
-    simp only [Submodule.coe_add]
-    rw [show reducingRestrictionDomainToAmbient A U (x + y) =
-      reducingRestrictionDomainToAmbient A U x +
-        reducingRestrictionDomainToAmbient A U y from rfl]
-    exact map_add A.toLinearMap _ _
-  map_smul' c x := by
-    apply Subtype.ext
-    simp only [Submodule.coe_smul, RingHom.id_apply]
-    rw [show reducingRestrictionDomainToAmbient A U (c • x) =
-      c • reducingRestrictionDomainToAmbient A U x from rfl]
-    exact map_smul A.toLinearMap c _
+    reducingRestrictionDomain A U →ₗ[𝕜] U :=
+  TauCeti.LinearPMap.reducingRestrictionLinearMap A.toLinearPMap U hred
 
 @[simp]
 theorem coe_reducingRestrictionLinearMap
@@ -148,14 +129,13 @@ theorem coe_reducingRestrictionLinearMap
       A.toLinearMap (reducingRestrictionDomainToAmbient A U x) :=
   rfl
 
-/-- Projection of an ambient domain vector into the restricted domain. -/
-noncomputable def projectDomainToReducingRestriction
+/-- Compatibility facade for projection into the raw restricted domain. -/
+noncomputable abbrev projectDomainToReducingRestriction
     (A : ClosedOperator (𝕜 := 𝕜) (E := E))
     (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     (hred : A.ReducesSubspace U) (x : A.domain) :
     reducingRestrictionDomain A U :=
-  ⟨⟨U.starProjection (x : E), U.starProjection_apply_mem (x : E)⟩,
-    hred.projection_mem_domain x⟩
+  TauCeti.LinearPMap.projectDomainToReducingRestriction A.toLinearPMap U hred x
 
 @[simp]
 theorem coe_projectDomainToReducingRestriction
@@ -232,8 +212,8 @@ noncomputable def reducingRestriction
     (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     (hred : A.ReducesSubspace U) :
     ClosedOperator (𝕜 := 𝕜) (E := U) where
-  domain := reducingRestrictionDomain A U
-  toLinearMap := reducingRestrictionLinearMap A U hred
+  domain := (TauCeti.LinearPMap.reducingRestriction A.toLinearPMap U hred).domain
+  toLinearMap := (TauCeti.LinearPMap.reducingRestriction A.toLinearPMap U hred).toFun
   dense_domain := reducingRestrictionDomain_dense A U hred
   closed_graph := reducingRestrictionLinearMap_closedGraph A U hred
 
