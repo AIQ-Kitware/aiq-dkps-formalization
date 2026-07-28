@@ -234,6 +234,8 @@ theorem norm_closedSylvester_le_of_intervalExterior
         sub_eq_iff_eq_add.mp heq
       rw [this]
       abel
+    change J (A.toLinearMap ⟨X (y : F), hEq.mapsTo_domain y⟩ -
+      ((c : ℝ) : 𝕜) • X (y : F)) = X (y : F) at hJ
     rw [hexpand] at hJ
     exact hJ.symm
   -- pointwise norm bound on the dense domain
