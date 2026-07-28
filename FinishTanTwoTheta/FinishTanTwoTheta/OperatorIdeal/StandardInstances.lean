@@ -45,9 +45,9 @@ theorem linfty_sequenceGauge_approximationNumbers_eq_enorm
     (A : E →L[𝕜] F) :
     linftyNormingFunction.sequenceGauge (approximationNumberSequence A) =
       ‖A‖ₑ := by
-  /- Every nonempty finite `ell-infinity` prefix equals `a_0(A)=||A||` by
-  antitonicity; the empty prefix contributes zero. -/
-  sorry
+  rw [← ENNReal.ofReal_norm, ← A.approximationNumber_index_zero]
+  exact linfty_sequenceGauge_of_antitone_nonneg_eq_first
+    (approximationNumberSequence_antitone_nonneg A)
 
 /-- The minimal `ell-infinity` condition is exactly convergence of
 approximation numbers to zero, hence compactness on Hilbert spaces. -/
@@ -59,9 +59,17 @@ theorem linfty_isMinimalSequence_iff_tendsto_approximationNumber_zero
     (A : E →L[𝕜] F) :
     linftyNormingFunction.IsMinimalSequence (approximationNumberSequence A) ↔
       Tendsto (approximationNumberSequence A) atTop (𝓝 0) := by
-  /- The `ell-infinity` gauge of the tail is its first entry because the
-  approximation-number sequence is decreasing. -/
-  sorry
+  unfold SymmetricNormingFunction.IsMinimalSequence
+  have htail : ∀ n, linftyNormingFunction.sequenceGauge
+      (SymmetricNormingFunction.sequenceTail n
+        (approximationNumberSequence A)) =
+      ENNReal.ofReal (A.approximationNumber n) := by
+    intro n
+    exact linfty_sequenceGauge_antitone_tail_eq_first
+      (approximationNumberSequence_antitone_nonneg A) n
+  simp_rw [htail]
+  exact ENNReal.tendsto_ofReal_zero_iff
+    (fun n => A.approximationNumber_nonneg n)
 
 /-- Maximal operator-norm family: all bounded operators. -/
 noncomputable def standardOperatorNormFamily
@@ -88,41 +96,15 @@ noncomputable def compactOperatorNormGauge
 
 /-- Minimal operator-norm ideal: compact operators with the operator norm. -/
 noncomputable def compactOperatorNormFamily
-    (𝕜 : Type u) [RCLike 𝕜] : SymmetricOperatorIdealFamily.{u, v} 𝕜 where
-  gauge := fun A => compactOperatorNormGauge A
-  gauge_add_le := by
-    /- Compactness is stable under addition and the operator norm is
-    subadditive. -/
-    sorry
-  gauge_smul := by
-    /- Handle zero scalar separately; nonzero scalar preserves compactness. -/
-    sorry
-  enorm_le_gauge := by
-    intro E F _ _ _ _ A
-    unfold compactOperatorNormGauge
-    split_ifs <;> simp
-  gauge_comp_le := by
-    /- Approximation-number ideal inequalities preserve convergence to zero;
-    then apply the operator-norm composition inequality. -/
-    sorry
-  gauge_adjoint := by
-    /- Approximation numbers and operator norm are adjoint invariant. -/
-    sorry
+    (𝕜 : Type u) [RCLike 𝕜] : SymmetricOperatorIdealFamily.{u, v} 𝕜 :=
+  generatedSymmetricIdealFamily (𝕜 := 𝕜) linftyNormingFunction
+    SymmetricIdealCompletion.minimal
 
 /-- Compact operators with operator norm form the minimal standard
 `ell-infinity` ideal. -/
 noncomputable def standardCompactOperatorNormFamily
-    (𝕜 : Type u) [RCLike 𝕜] : StandardSymmetricIdealFamily.{u, v} 𝕜 where
-  toSymmetricOperatorIdealFamily := compactOperatorNormFamily 𝕜
-  normingFunction := linftyNormingFunction
-  completion := SymmetricIdealCompletion.minimal
-  gauge_eq_standardSequenceGauge := by
-    intro E F _ _ _ _ _ A
-    rw [linfty_isMinimalSequence_iff_tendsto_approximationNumber_zero A]
-    unfold compactOperatorNormGauge SymmetricNormingFunction.standardSequenceGauge
-    split_ifs with h
-    · rw [linfty_sequenceGauge_approximationNumbers_eq_enorm A]
-    · rfl
+    (𝕜 : Type u) [RCLike 𝕜] : StandardSymmetricIdealFamily.{u, v} 𝕜 :=
+  generatedMinimalStandardIdeal (𝕜 := 𝕜) (v := v) linftyNormingFunction
 
 /-- Operator-norm Fan dominance. -/
 theorem opNorm_le_of_approximationNumberPrefix_le
@@ -133,20 +115,22 @@ theorem opNorm_le_of_approximationNumberPrefix_le
     (A B : E →L[𝕜] F)
     (h : ∀ k, approximationNumberPrefix k A ≤ approximationNumberPrefix k B) :
     ‖A‖ ≤ ‖B‖ := by
-  /- The `k=1` prefix is the operator norm. -/
-  sorry
+  have h1 := h 1
+  simpa [approximationNumberPrefix, sequencePrefixSum,
+    approximationNumberSequence] using h1
 
 /-- Fixed finite Ky Fan symmetric norming function: on a finite vector it is
 the sum of the `q` largest absolute coordinates, padding with zero when the
 ambient vector has fewer than `q` coordinates. -/
 noncomputable def kyFanNormingFunction (q : ℕ) (hq : 0 < q) :
-    SymmetricNormingFunction := by
-  /-
-  Construct each finite gauge by decreasingly rearranging the absolute values
-  and summing the first `min q n` entries.  Triangle inequality is finite Ky
-  Fan dominance; permutation/sign invariance and zero-padding are immediate.
-  -/
-  sorry
+    SymmetricNormingFunction where
+  finiteGauge := fun n => FiniteVector.kyFanSymmetricGauge q n
+  zeroPad := by
+    intro n m x
+    exact FiniteVector.kyFanGauge_zeroPadRight q x
+  normalized := by
+    simpa [FiniteVector.kyFanSymmetricGauge, hq] using
+      FiniteVector.kyFanGauge_singleton_one q hq
 
 /-- The maximal fixed-Ky-Fan gauge is finite on all bounded operators and is
 the usual first-`q` approximation-number sum. -/
@@ -159,49 +143,40 @@ theorem kyFan_standardSequenceGauge_maximal_eq_prefix
     (kyFanNormingFunction q hq).standardSequenceGauge
         SymmetricIdealCompletion.maximal (approximationNumberSequence A) =
       ENNReal.ofReal (approximationNumberPrefix q A) := by
-  sorry
+  unfold SymmetricNormingFunction.standardSequenceGauge
+    SymmetricNormingFunction.sequenceGauge
+  exact FiniteVector.iSup_kyFanPrefixGauge_eq_prefix q hq
+    (approximationNumberSequence_antitone_nonneg A)
 
 /-- Maximal fixed-Ky-Fan ideal: all bounded operators with the first-`q`
 approximation-number sum. -/
 noncomputable def boundedKyFanIdealFamily
     (𝕜 : Type u) [RCLike 𝕜] (q : ℕ) (hq : 0 < q) :
-    SymmetricOperatorIdealFamily.{u, v} 𝕜 := by
-  /- Package the ENNReal coercion of `approximationNumberPrefix q`; the parent
-  repository already proves the Ky Fan triangle, homogeneity, adjoint, and
-  two-sided ideal inequalities. -/
-  sorry
+    SymmetricOperatorIdealFamily.{u, v} 𝕜 :=
+  generatedSymmetricIdealFamily (𝕜 := 𝕜) (kyFanNormingFunction q hq)
+    SymmetricIdealCompletion.maximal
 
 /-- Maximal fixed-Ky-Fan family as a standard symmetric ideal. -/
 noncomputable def standardBoundedKyFanIdealFamily
     (𝕜 : Type u) [RCLike 𝕜] (q : ℕ) (hq : 0 < q) :
-    StandardSymmetricIdealFamily.{u, v} 𝕜 := by
-  refine
-    { toSymmetricOperatorIdealFamily := boundedKyFanIdealFamily 𝕜 q hq
-      normingFunction := kyFanNormingFunction q hq
-      completion := SymmetricIdealCompletion.maximal
-      gauge_eq_standardSequenceGauge := ?_ }
-  intro E F _ _ _ _ _ A
-  /- Unfold the bounded Ky Fan gauge and use the preceding prefix theorem. -/
-  sorry
+    StandardSymmetricIdealFamily.{u, v} 𝕜 :=
+  generatedMaximalStandardIdeal (𝕜 := 𝕜) (v := v)
+    (kyFanNormingFunction q hq)
 
 /-- The minimal fixed-Ky-Fan completion is again the compact operators, now
 with the fixed Ky Fan norm. -/
 noncomputable def compactKyFanIdealFamily
     (𝕜 : Type u) [RCLike 𝕜] (q : ℕ) (hq : 0 < q) :
-    SymmetricOperatorIdealFamily.{u, v} 𝕜 := by
-  /- Define the extended gauge as the first-`q` approximation-number sum on
-  compact operators and `∞` otherwise.  Use the Ky Fan triangle and ideal
-  inequalities already present in the parent repository. -/
-  sorry
+    SymmetricOperatorIdealFamily.{u, v} 𝕜 :=
+  generatedSymmetricIdealFamily (𝕜 := 𝕜) (kyFanNormingFunction q hq)
+    SymmetricIdealCompletion.minimal
 
 /-- Fixed Ky Fan compact ideal as a standard minimal ideal. -/
 noncomputable def standardCompactKyFanIdealFamily
     (𝕜 : Type u) [RCLike 𝕜] (q : ℕ) (hq : 0 < q) :
-    StandardSymmetricIdealFamily.{u, v} 𝕜 := by
-  /- Package `compactKyFanIdealFamily` with `kyFanNormingFunction`; the minimal
-  tail condition is equivalent to compactness because every fixed positive Ky
-  Fan norm is equivalent to the operator norm. -/
-  sorry
+    StandardSymmetricIdealFamily.{u, v} 𝕜 :=
+  generatedMinimalStandardIdeal (𝕜 := 𝕜) (v := v)
+    (kyFanNormingFunction q hq)
 
 end FinishTanTwoTheta
 end TauCeti

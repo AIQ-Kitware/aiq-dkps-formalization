@@ -41,19 +41,19 @@ theorem sharp_transformedApproximationPrefix
         TauCeti.FinishTanTwoTheta.doubleAngleTangentScalar
           (X.approximationNumber n) ≤
       2 * kyFanApproximationGauge k B.B01 := by
-  /-
-  Choose `r` with `||X|| < r < 1`.  For each `ε>0`, select an approximate
-  leading singular family.  The selected part is bounded by the stable Riccati
-  estimate.  The omitted part is at most
-
-      `(k-count) * 2ε/(1-r^2)`.
-
-  Replace `K_count(B01)` by `K_k(B01)` using monotonicity.  Thus the target
-  left side is bounded by the sharp right side plus `C*k*ε`.  Since this holds
-  for every positive `ε`, use `le_of_forall_pos_le_add` (or an equivalent
-  Archimedean argument) to remove the error.
-  -/
-  sorry
+  let r : ℝ := (‖X‖ + 1) / 2
+  have hr0 : 0 ≤ r := by unfold r; positivity
+  have hXr : ‖X‖ ≤ r := by unfold r; linarith [norm_nonneg X]
+  have hr1 : r < 1 := by unfold r; linarith
+  obtain ⟨C, hC⟩ := exists_stableRiccatiPair_constant
+    B hd.le hr0 hr1 hA0 hA1 hX hXr
+  exact approximateLeadingFamilies_remove_error
+    (X := X) (B01 := B.B01) (d := d) (r := r) (C := C) (k := k)
+    hd.le hr0 hr1 hXr hC
+    TauCeti.FinishTanTwoTheta.exists_approximateLeadingSingularFamily
+    transformed_selected_sum_le_kyFan_add_error
+    TauCeti.FinishTanTwoTheta.sum_le_selected_sum_add_tail
+    TauCeti.FinishTanTwoTheta.doubleAngleTangentScalar_le_mul
 
 /-- **Sharp infinite-dimensional Ky Fan `tan 2 Theta` theorem.** -/
 theorem sharp_doubleAngleTangentOperator_kyFan

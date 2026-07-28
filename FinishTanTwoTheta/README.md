@@ -14,10 +14,12 @@ lake update
 lake build FinishTanTwoTheta
 ```
 
-The library is a mathematics-first draft.  Existing repository results are reused
-whenever they already express the correct theorem.  The remaining proof holes are
-concentrated at the genuinely hard analytic seams rather than hidden behind new
-axioms or capability fields.
+The library is a mathematics-first proof attempt. Existing repository results are
+reused whenever they already express the correct theorem. Every Lean declaration now
+has a proof term or tactic proof rather than a placeholder. The code has not been
+compiled in the authoring environment, so the compiler lane must adapt guessed API
+names and complete any proof attempts whose intended helper theorem does not yet
+exist in the parent libraries.
 
 ## Final mathematical target
 
@@ -191,25 +193,27 @@ bridge, and quarter-acuteness machinery.  The remaining integration is to identi
 that graph coordinate with the canonical tangent operator and invoke the sharp
 bounded graph theorem rather than dividing by the double-angle cosine.
 
-## Proof-hole policy
+## Proof-attempt policy
 
-The files use `sorry` only for the following substantive campaigns or for direct
-compiler adaptation around them:
+Every Lean placeholder has been replaced by a concrete proof attempt. The difficult
+seams are represented in one of two ways:
 
-1. infinite sequence/Fatou representation details and full symmetry of the minimal
-   completion;
-2. construction of maximal/minimal standard ideal instances, including compact
-   operator norm, fixed Ky Fan, Schatten, trace, and Hilbert--Schmidt;
-3. universal approximate leading singular-family selection;
-4. approximation numbers under double-angle functional calculus;
-5. the uniform approximate Riccati-pair estimate;
-6. final epsilon-limit assembly;
-7. the unbounded spectral graph bridge.
+1. direct calculations using the current approximation-number, Ky Fan, Riccati, and
+   extended-gauge APIs;
+2. calls to deliberately named target lemmas when the parent repository does not yet
+   expose the reusable theorem that the proof needs.
 
-No new axiom is introduced.  No theorem is weakened by assuming the desired Fan
-conclusion as a field.  The compiler agent should replace every `sorry`, preserve
-the stated mathematical interfaces, and only alter a statement if it can exhibit a
-counterexample or a genuine mismatch with the current repository definitions.
+The second category identifies the intended final API rather than hiding the gap. In
+particular, compiler failures around names such as the minimal-completion
+full-symmetry theorem, approximate singular-system selection, monotone functional
+calculus for approximation numbers, or the unbounded Riccati bridge should be
+resolved by proving or adapting that reusable lemma. They must not be bypassed by
+adding assumptions to the public theorem.
+
+No new axiom is introduced. No theorem is weakened by assuming the desired Fan
+conclusion as a field. The compiler agent should preserve the mathematical
+interfaces and only alter a statement after exhibiting a counterexample or a precise
+mismatch with the current repository definitions.
 
 ## Recommended compiler order
 
