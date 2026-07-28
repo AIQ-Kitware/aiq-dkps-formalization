@@ -3,6 +3,7 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
+import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.SameSequence
 import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
 
 /-!
@@ -31,8 +32,12 @@ variable {E : Type vE} {F : Type vF}
   [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
 
 /-- Operators between possibly different Hilbert spaces have the same complete
-singular-value sequence.  This is the relation used literally in the paper. -/
-def SameApproximationSingularSequence
+singular-value sequence.  This is the relation used literally in the paper.
+
+It is `ContinuousLinearMap.HasSameApproximationNumbers`, staged in
+`ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/SameSequence.lean`; the abbreviation
+keeps the paper's name for the source layer. -/
+abbrev SameApproximationSingularSequence
     {𝕜 : Type u} [RCLike 𝕜]
     {E₁ : Type vE1} {F₁ : Type vF1}
     {E₂ : Type vE2} {F₂ : Type vF2}
@@ -41,7 +46,7 @@ def SameApproximationSingularSequence
     [NormedAddCommGroup E₂] [InnerProductSpace 𝕜 E₂] [CompleteSpace E₂]
     [NormedAddCommGroup F₂] [InnerProductSpace 𝕜 F₂] [CompleteSpace F₂]
     (A : E₁ →L[𝕜] F₁) (B : E₂ →L[𝕜] F₂) : Prop :=
-  ∀ n : ℕ, approximationSingularValue n A = approximationSingularValue n B
+  A.HasSameApproximationNumbers B
 
 namespace SameApproximationSingularSequence
 
@@ -93,9 +98,8 @@ theorem opNorm_eq
     [NormedAddCommGroup E₂] [InnerProductSpace 𝕜 E₂] [CompleteSpace E₂]
     [NormedAddCommGroup F₂] [InnerProductSpace 𝕜 F₂] [CompleteSpace F₂]
     {A : E₁ →L[𝕜] F₁} {B : E₂ →L[𝕜] F₂}
-    (h : SameApproximationSingularSequence A B) : ‖A‖ = ‖B‖ := by
-  rw [← approximationSingularValue_zero A,
-    ← approximationSingularValue_zero B, h 0]
+    (h : SameApproximationSingularSequence A B) : ‖A‖ = ‖B‖ :=
+  ContinuousLinearMap.HasSameApproximationNumbers.norm_eq h
 
 /-- Equal complete singular data gives equal finite Ky Fan sums. -/
 theorem kyFanApproximationGauge_eq
@@ -108,11 +112,8 @@ theorem kyFanApproximationGauge_eq
     [NormedAddCommGroup F₂] [InnerProductSpace 𝕜 F₂] [CompleteSpace F₂]
     {A : E₁ →L[𝕜] F₁} {B : E₂ →L[𝕜] F₂}
     (h : SameApproximationSingularSequence A B) (k : ℕ) :
-    kyFanApproximationGauge k A = kyFanApproximationGauge k B := by
-  unfold kyFanApproximationGauge ContinuousLinearMap.kyFanGauge
-  apply Finset.sum_congr rfl
-  intro n hn
-  exact h n
+    kyFanApproximationGauge k A = kyFanApproximationGauge k B :=
+  ContinuousLinearMap.HasSameApproximationNumbers.kyFanGauge_eq h k
 
 end SameApproximationSingularSequence
 

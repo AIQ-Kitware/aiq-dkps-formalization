@@ -108,7 +108,7 @@ theorem SameApproximationSingularSequence.paperHilbertSchmidtEnergy_eq
   unfold paperHilbertSchmidtEnergy
   congr 1
   funext n
-  rw [h n]
+  exact congrArg (fun x : ℝ => ENNReal.ofReal (x ^ 2)) (h n)
 
 /-- Complete singular-value equality preserves Hilbert--Schmidt membership. -/
 theorem SameApproximationSingularSequence.isPaperHilbertSchmidt_iff
@@ -286,7 +286,7 @@ theorem paperHilbertSchmidtNorm_neg
     paperHilbertSchmidtNorm (-A) = paperHilbertSchmidtNorm A := by
   apply SameApproximationSingularSequence.paperHilbertSchmidtNorm_eq
   intro n
-  rw [← neg_one_smul 𝕜 A, approximationSingularValue_smul]
+  rw [← neg_one_smul 𝕜 A, ContinuousLinearMap.approximationNumber_smul]
   simp
 
 
