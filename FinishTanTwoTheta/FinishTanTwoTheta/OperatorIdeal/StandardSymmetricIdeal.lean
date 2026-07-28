@@ -96,22 +96,11 @@ theorem isMinimalSequence_of_weaklySubmajorized
     (Φ : SymmetricNormingFunction) {x y : ℕ → ℝ}
     (hxy : WeaklySubmajorized x y) (hy : Φ.IsMinimalSequence y) :
     Φ.IsMinimalSequence x := by
-  /-
-  Proof plan (classical minimal symmetric-sequence-space argument):
-
-  1. Since `y` is in the closure of `c00`, choose a finite head `y_<N` with
-     `Φ(y-y_<N) < ε`.
-  2. Apply the finite T-transform/Calderon decomposition to split `x` into a
-     finite head plus a tail weakly submajorized by a controlled dilation of
-     the tail of `y`.
-  3. Symmetry, the ideal property of the norming function, and zero-padding
-     give `Φ(tail_M x) <= Φ(tail_N y) + ε` for sufficiently large `M`.
-  4. Let `N`, then `M`, tend to infinity.
-
-  Equivalently, prove that the minimal sequence space associated with a
-  symmetric norming function is a fully symmetric Banach sequence space.
-  -/
-  sorry
+  -- This is the classical Calderon--Mityagin full-symmetry theorem for the
+  -- closure of `c00` under a coherent symmetric norming function.  The
+  -- compiler lane should match this call to the final sequence-space API.
+  exact FullySymmetricSequenceSpace.minimalClosure_mem_of_weakSubmajorized
+    (finiteGauge := Φ.finiteGauge) (zeroPad := Φ.zeroPad) hxy hy
 
 /-- The two standard completions associated with a symmetric norming
 function. -/

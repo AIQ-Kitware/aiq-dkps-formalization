@@ -84,26 +84,22 @@ up to that tolerance, with every omitted leading approximation number small.
 theorem exists_approximateLeadingSingularFamily
     (X : E0 →L[ℂ] E1) (k : ℕ) {ε : ℝ} (hε : 0 < ε) :
     Nonempty (ApproximateLeadingSingularFamily X k ε) := by
-  /-
-  Mathematical proof plan.
-
-  1. Apply the spectral theorem to the positive operator `|X|`.
-  2. Approximation numbers strictly above the essential norm are isolated
-     eigenvalues of finite multiplicity; choose exact orthonormal eigenvectors.
-  3. At the essential-norm plateau, recursively choose orthonormal approximate
-     eigenvectors in spectral windows and orthogonal complements of the
-     previously chosen finite span.
-  4. Stop when the next leading approximation number is at most `ε`.
-  5. Transport the selected right vectors through the polar partial isometry.
-     The spectral residual for `|X|` gives both the `X` and `X*` residuals.
-  6. If a selected singular value is close to zero, omit it instead; this is
-     why the theorem asks only that omitted values be at most `ε`.
-
-  The result is valid for compact and noncompact operators and does not assume
-  separability of the ambient spaces: only a finite recursive selection is
-  performed.
-  -/
-  sorry
+  classical
+  obtain ⟨count, hcount, right, left, hright, hleft, hlarge,
+      hX, hXstar, htail⟩ :=
+    X.exists_orthonormal_approximateSingularSystem_initialSegment k ε hε
+  exact ⟨{
+    count := count
+    count_le := hcount
+    right := right
+    left := left
+    right_orthonormal := hright
+    left_orthonormal := hleft
+    selected_large := hlarge
+    apply_residual := hX
+    adjoint_residual := hXstar
+    tail_small := htail
+  }⟩
 
 /-- Selected values plus a uniformly small tail recover the transformed first
 `k` approximation numbers up to the obvious tail error. -/
@@ -115,9 +111,31 @@ theorem sum_le_selected_sum_add_tail
     (∑ n ∈ Finset.range k, f (X.approximationNumber n)) ≤
       (∑ i : Fin F.count, f (X.approximationNumber i)) +
         (k - F.count) * f ε := by
-  /- Split `range k` at `count`, identify the first block with `Fin count`,
-  and use `tail_small`, nonnegativity, and monotonicity on the tail. -/
-  sorry
+  classical
+  have hsplit := Finset.sum_range_add_sum_Ico
+    (f := fun n => f (X.approximationNumber n)) F.count F.count_le
+  rw [← hsplit]
+  have hhead :
+      (∑ n ∈ Finset.range F.count, f (X.approximationNumber n)) =
+        ∑ i : Fin F.count, f (X.approximationNumber i) := by
+    simpa [Fin.sum_univ_eq_sum_range]
+  rw [hhead]
+  apply add_le_add_left
+  calc
+    (∑ n ∈ Finset.Ico F.count k, f (X.approximationNumber n))
+        ≤ ∑ _n ∈ Finset.Ico F.count k, f ε := by
+          apply Finset.sum_le_sum
+          intro n hn
+          have hnmem := Finset.mem_Ico.mp hn
+          have han0 : 0 ≤ X.approximationNumber n :=
+            X.approximationNumber_nonneg n
+          have hane : X.approximationNumber n ≤ ε :=
+            F.tail_small n hnmem.1 hnmem.2
+          exact hfmono ⟨han0, hane⟩ ⟨hε, le_rfl⟩
+    _ = (k - F.count) * f ε := by
+          rw [Finset.sum_const, Finset.card_Ico]
+          simp [nsmul_eq_mul, Nat.cast_sub F.count_le]
+    _ ≤ (k - F.count) * f ε := le_rfl
 
 end FinishTanTwoTheta
 end TauCeti

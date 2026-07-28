@@ -42,9 +42,20 @@ theorem scaled_doubleAngleTangent_prefix_le
         (((d / 2 : ℝ) : ℂ) •
           TauCeti.FinishTanTwoTheta.doubleAngleTangentOperator X hcontractive) ≤
       TauCeti.FinishTanTwoTheta.approximationNumberPrefix k B.B01 := by
-  /- Use absolute homogeneity of approximation numbers and the sharp prefix
-  theorem, then divide the real inequality by `2`. -/
-  sorry
+  have hsharp := sharp_doubleAngleTangentOperator_prefix
+    B hd hA0 hA1 hX hcontractive k
+  have hscale :
+      TauCeti.FinishTanTwoTheta.approximationNumberPrefix k
+        (((d / 2 : ℝ) : ℂ) •
+          TauCeti.FinishTanTwoTheta.doubleAngleTangentOperator X hcontractive) =
+      (d / 2) * TauCeti.FinishTanTwoTheta.approximationNumberPrefix k
+        (TauCeti.FinishTanTwoTheta.doubleAngleTangentOperator X hcontractive) := by
+    simp [TauCeti.FinishTanTwoTheta.approximationNumberPrefix,
+      TauCeti.FinishTanTwoTheta.sequencePrefixSum,
+      TauCeti.FinishTanTwoTheta.approximationNumberSequence,
+      Finset.mul_sum, abs_of_pos hd]
+  rw [hscale]
+  nlinarith
 
 /-- **Fan-dominance endpoint for every standard symmetric ideal.** -/
 theorem sharp_standardIdeal
@@ -87,9 +98,10 @@ theorem sharp_standardIdeal_toReal
           (TauCeti.FinishTanTwoTheta.doubleAngleTangentOperator X hcontractive)).toReal ≤
         2 * (N.toSymmetricOperatorIdealFamily.toOperatorIdealFamily.gauge
           B.B01).toReal := by
-  /- Use the scaled theorem, homogeneity of the ENNReal gauge, finiteness of
-  both members, and `ENNReal.toReal_mul`. -/
-  sorry
+  exact unscale_positive_gauge_inequality
+    (N := N.toSymmetricOperatorIdealFamily.toOperatorIdealFamily)
+    (c := d / 2) hd
+    (sharp_standardIdeal N B hd hA0 hA1 hX hcontractive hBmem)
 
 
 /-- Sharp operator-norm specialization. -/
@@ -102,8 +114,11 @@ theorem sharp_operatorNorm
     (hcontractive : ‖X‖ < 1) :
     d * ‖TauCeti.FinishTanTwoTheta.doubleAngleTangentOperator X hcontractive‖ ≤
       2 * ‖B.B01‖ := by
-  /- The `k=1` prefix is the operator norm. -/
-  sorry
+  have h := sharp_doubleAngleTangentOperator_prefix
+    B hd hA0 hA1 hX hcontractive 1
+  simpa [TauCeti.FinishTanTwoTheta.approximationNumberPrefix,
+    TauCeti.FinishTanTwoTheta.sequencePrefixSum,
+    TauCeti.FinishTanTwoTheta.approximationNumberSequence] using h
 
 /-- Sharp fixed finite Ky Fan specialization. -/
 theorem sharp_fixedKyFan
@@ -137,9 +152,14 @@ theorem sharp_compactOperatorNorm
           (v := v) ℂ).toOperatorIdealFamily.carrier ∧
       d * ‖TauCeti.FinishTanTwoTheta.doubleAngleTangentOperator X hcontractive‖ ≤
         2 * ‖B.B01‖ := by
-  /- Membership and norm control are the minimal `ell-infinity` instance of
-  `sharp_standardIdeal_toReal`. -/
-  sorry
+  have h := sharp_standardIdeal_toReal
+    (TauCeti.FinishTanTwoTheta.standardCompactOperatorNormFamily
+      (v := v) ℂ) B hd hA0 hA1 hX hcontractive hcompact
+  simpa [TauCeti.FinishTanTwoTheta.standardCompactOperatorNormFamily,
+    TauCeti.FinishTanTwoTheta.compactOperatorNormFamily,
+    TauCeti.FinishTanTwoTheta.generatedIdealGauge,
+    TauCeti.FinishTanTwoTheta.linfty_sequenceGauge_approximationNumbers_eq_enorm]
+    using h
 
 /-- Sharp Schatten-`p` specialization for every `p >= 1`. -/
 theorem sharp_schatten

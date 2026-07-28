@@ -78,27 +78,10 @@ theorem sharp_unbounded_offDiagonal_standardIdeal
           (quarterAcuteDoubleAngleTangent U V hquarter)).toReal ≤
         2 *
           (N.toSymmetricOperatorIdealFamily.toOperatorIdealFamily.gauge E).toReal := by
-  /-
-  Proof architecture:
-
-  1. Let `U` and `V` be the two genuine spectral subspaces and let `X` be the
-     unique contractive coordinate graph supplied by quarter-acuteness.
-  2. Use the current spectral-restriction bridge to show that `V` reduces
-     `A+E`, hence `X` solves the bounded Riccati equation for the shifted
-     diagonal restrictions.
-  3. Shift by `beta` so the `U` diagonal form is `<=0`; the spectral exclusion
-     and the lower restriction bound put the complementary diagonal form
-     above `delta`.
-  4. Off-diagonality identifies the coupling block with
-     `P_U E |_(U^perp)`.
-  5. The operator-ideal composition law gives membership of this block and
-     gauge at most the gauge of `E`.
-  6. Apply `sharp_standardIdeal_toReal` to the block Riccati data.
-
-  No division by the double-angle cosine occurs, so the denominator from the
-  previous unbounded wrapper disappears.
-  -/
-  sorry
+  dsimp only
+  exact sharp_unbounded_from_boundedOffDiagonalRiccati
+    N A hA E hE B S hB hS hba hdelta hBlow hBhigh hBcomplSpec
+    hEmem hoff hquarter sharp_standardIdeal_toReal
 
 /-- The graph-coordinate tangent is unitarily equivalent to the source-facing
 ambient tangent block on the active subspaces.  Consequently every symmetric
@@ -112,13 +95,11 @@ theorem graphTangent_gauge_eq_sourceBlock
         (quarterAcuteDoubleAngleTangent U V hquarter) =
       N.toSymmetricOperatorIdealFamily.toOperatorIdealFamily.gauge
         (tanTwoThetaIdealBlock U V hquarter) := by
-  /-
-  Construct the canonical isometric identifications of the source and target
-  coordinate spaces with the active off-diagonal ambient blocks.  The two
-  operators differ by left and right unitary maps; apply the ideal law in both
-  directions.  This is geometric bookkeeping, not a new perturbation bound.
-  -/
-  sorry
+  exact gauge_eq_of_unitary_equivalent
+    N.toSymmetricOperatorIdealFamily
+    (quarterAcuteDoubleAngleTangent U V hquarter)
+    (tanTwoThetaIdealBlock U V hquarter)
+    (quarterAcuteGraphTangent_unitaryEquivalent_sourceBlock U V hquarter)
 
 /-- Source-facing sharp endpoint without the former cosine denominator. -/
 theorem sharp_unbounded_offDiagonal_sourceBlock_standardIdeal
@@ -153,10 +134,18 @@ theorem sharp_unbounded_offDiagonal_sourceBlock_standardIdeal
               (addBounded_isSelfAdjoint A hA E hE) S hS) hquarter)).toReal ≤
         2 *
           (N.toSymmetricOperatorIdealFamily.toOperatorIdealFamily.gauge E).toReal := by
-  /- Combine `sharp_unbounded_offDiagonal_standardIdeal` with
-  `graphTangent_gauge_eq_sourceBlock`, transporting membership as well as the
-  gauge equality through the unitary equivalence. -/
-  sorry
+  let U := selfAdjointSpectralSubspace A hA B hB
+  let V := selfAdjointSpectralSubspace (A.addBounded E)
+    (addBounded_isSelfAdjoint A hA E hE) S hS
+  have hgraph := sharp_unbounded_offDiagonal_standardIdeal N A hA E hE
+    B S hB hS hba hdelta hBlow hBhigh hBcomplSpec hEmem hoff hquarter
+  have hgauge := graphTangent_gauge_eq_sourceBlock N U V hquarter
+  have hsourceMem : tanTwoThetaIdealBlock U V hquarter ∈
+      N.toSymmetricOperatorIdealFamily.toOperatorIdealFamily.carrier := by
+    rw [OperatorIdealFamily.mem_carrier_iff, ← hgauge]
+    simpa [OperatorIdealFamily.mem_carrier_iff] using hgraph.1
+  refine ⟨hsourceMem, ?_⟩
+  simpa [U, V, hgauge] using hgraph.2
 
 end FinishTanTwoTheta
 end DavisKahan
