@@ -152,13 +152,19 @@ noncomputable def closedOperatorDirectSum
   rfl
 
 /-- The bounded off-diagonal coupling on the Hilbert direct sum. -/
-noncomputable def unboundedOffDiagonalCoupling
-    (H : UnboundedBlockData (𝕜 := 𝕜) (E0 := E0) (E1 := E1)) :
+noncomputable def unboundedOffDiagonalCouplingPMap
+    (B01 : E1 →L[𝕜] E0) (B10 : E0 →L[𝕜] E1) :
     WithLp 2 (E0 × E1) →L[𝕜] WithLp 2 (E0 × E1) :=
   ((WithLp.prodContinuousLinearEquiv 2 𝕜 E0 E1).symm :
       (E0 × E1) →L[𝕜] WithLp 2 (E0 × E1)) ∘L
-    ((H.B01 ∘L WithLp.sndL 2 𝕜 E0 E1).prod
-      (H.B10 ∘L WithLp.fstL 2 𝕜 E0 E1))
+    ((B01 ∘L WithLp.sndL 2 𝕜 E0 E1).prod
+      (B10 ∘L WithLp.fstL 2 𝕜 E0 E1))
+
+/-- The bundled-data spelling of the raw off-diagonal coupling. -/
+noncomputable abbrev unboundedOffDiagonalCoupling
+    (H : UnboundedBlockData (𝕜 := 𝕜) (E0 := E0) (E1 := E1)) :
+    WithLp 2 (E0 × E1) →L[𝕜] WithLp 2 (E0 × E1) :=
+  unboundedOffDiagonalCouplingPMap H.B01 H.B10
 
 @[simp] theorem unboundedOffDiagonalCoupling_fst
     (H : UnboundedBlockData (𝕜 := 𝕜) (E0 := E0) (E1 := E1))
@@ -172,14 +178,39 @@ noncomputable def unboundedOffDiagonalCoupling
     WithLp.snd (unboundedOffDiagonalCoupling H z) = H.B10 (WithLp.fst z) := by
   rfl
 
-/-- The closed unbounded block operator obtained by adding the bounded
-coupling to the closed diagonal direct sum. -/
-noncomputable def unboundedBlockOperatorCorePMap
-    (H : UnboundedBlockData (𝕜 := 𝕜) (E0 := E0) (E1 := E1)) :
+/-- The canonical partial-map block operator obtained by adding the bounded
+coupling to the diagonal direct sum. -/
+noncomputable def unboundedBlockOperatorPMapCore
+    (H : UnboundedBlockDataPMap (𝕜 := 𝕜) (E0 := E0) (E1 := E1)) :
     WithLp 2 (E0 × E1) →ₗ.[𝕜] WithLp 2 (E0 × E1) :=
   TauCeti.LinearPMap.addBounded
-    (TauCeti.LinearPMap.directSum H.A0.toLinearPMap H.A1.toLinearPMap)
-    (unboundedOffDiagonalCoupling H)
+    (TauCeti.LinearPMap.directSum H.A0 H.A1)
+    (unboundedOffDiagonalCoupling H.B01 H.B10)
+
+/-- The raw block core associated to historical bundled data. -/
+noncomputable abbrev unboundedBlockOperatorCorePMap
+    (H : UnboundedBlockData (𝕜 := 𝕜) (E0 := E0) (E1 := E1)) :
+    WithLp 2 (E0 × E1) →ₗ.[𝕜] WithLp 2 (E0 × E1) :=
+  unboundedBlockOperatorPMapCore H.toPMap
+
+@[simp] theorem unboundedBlockOperatorPMapCore_domain
+    (H : UnboundedBlockDataPMap (𝕜 := 𝕜) (E0 := E0) (E1 := E1)) :
+    (unboundedBlockOperatorPMapCore H).domain =
+      TauCeti.LinearPMap.directSumDomain H.A0 H.A1 := rfl
+
+@[simp] theorem unboundedBlockOperatorPMapCore_apply_fst
+    (H : UnboundedBlockDataPMap (𝕜 := 𝕜) (E0 := E0) (E1 := E1))
+    (z : (unboundedBlockOperatorPMapCore H).domain) :
+    WithLp.fst (unboundedBlockOperatorPMapCore H z) =
+      H.A0 (TauCeti.LinearPMap.directSumDomainFst H.A0 H.A1 z) +
+        H.B01 (WithLp.snd (z : WithLp 2 (E0 × E1))) := rfl
+
+@[simp] theorem unboundedBlockOperatorPMapCore_apply_snd
+    (H : UnboundedBlockDataPMap (𝕜 := 𝕜) (E0 := E0) (E1 := E1))
+    (z : (unboundedBlockOperatorPMapCore H).domain) :
+    WithLp.snd (unboundedBlockOperatorPMapCore H z) =
+      H.A1 (TauCeti.LinearPMap.directSumDomainSnd H.A0 H.A1 z) +
+        H.B10 (WithLp.fst (z : WithLp 2 (E0 × E1))) := rfl
 
 @[simp] theorem unboundedBlockOperatorCorePMap_domain
     (H : UnboundedBlockData (𝕜 := 𝕜) (E0 := E0) (E1 := E1)) :
