@@ -102,6 +102,33 @@ noncomputable def toClosed
 
 end UnboundedSinThetaDataPMap
 
+namespace UnboundedSinThetaData
+
+/-- Canonical view of the historical source-facing data record.  New generic
+proofs use this partial-map representation; the bundled record remains only
+at source and Spectra boundaries. -/
+noncomputable def toPMap
+    (D : UnboundedSinThetaData (𝕜 := 𝕜) (E := E) (F := F) (G := G)) :
+    UnboundedSinThetaDataPMap (𝕜 := 𝕜) (E := E) (F := F) (G := G) where
+  A := D.A.toLinearPMap
+  A₀ := D.A₀.toLinearPMap
+  Λ₁ := D.Λ₁.toLinearPMap
+  A_dense := D.A.toLinearPMap_dense
+  A₀_dense := D.A₀.toLinearPMap_dense
+  Λ₁_dense := D.Λ₁.toLinearPMap_dense
+  A_closed := D.A.toLinearPMap_isClosed
+  A₀_closed := D.A₀.toLinearPMap_isClosed
+  Λ₁_closed := D.Λ₁.toLinearPMap_isClosed
+  X := D.X
+  F₁ := D.F₁
+  residual := D.residual
+  X_maps_domain := D.X_maps_domain
+  F₁_maps_domain := D.F₁_maps_domain
+  residual_eq := D.residual_eq
+  intertwines := D.intertwines
+
+end UnboundedSinThetaData
+
 /-- The residual identity induces the domain-aware complementary Sylvester
 equation.  The right-hand side has a minus sign:
 `A₀ X*F₁ - X*F₁ Λ₁ = -R*F₁`. -/
