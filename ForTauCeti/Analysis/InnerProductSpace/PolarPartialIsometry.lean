@@ -54,7 +54,13 @@ subspace gives `polarPartial`.
 * `ContinuousLinearMap.adjoint_comp_polarPartial`: `W⋆ W` is the orthogonal projection onto
   the initial space;
 * `ContinuousLinearMap.polarInitial_orthogonal_eq_ker`: the orthogonal complement of the
-  initial space is exactly `ker M`, so the initial space is `(ker M)ᗮ`.
+  initial space is exactly `ker M`, so the initial space is `(ker M)ᗮ`;
+* `ContinuousLinearMap.range_polarPartial` and
+  `ContinuousLinearMap.isClosed_range_polarPartial`: the range of `W` is closed and is the
+  closure of `range M` — the **final** space;
+* `ContinuousLinearMap.isSelfAdjoint_polarPartial_comp_adjoint` and
+  `ContinuousLinearMap.isIdempotentElem_polarPartial_comp_adjoint`: `W W⋆` is the
+  orthogonal projection onto it.
 
 ## Relation to the rest of the library
 
@@ -324,5 +330,88 @@ invertibility or finite-dimensionality hypothesis.  This is the algebraic form o
 theorem polarPartial_comp_adjoint_comp_polarPartial (M : E →L[ℂ] F) :
     M.polarPartial ∘L M.polarPartial.adjoint ∘L M.polarPartial = M.polarPartial := by
   rw [M.adjoint_comp_polarPartial, M.polarPartial_comp_starProjection]
+
+/-- The adjoint form of the partial-isometry identity, `W⋆ W W⋆ = W⋆`. -/
+theorem adjoint_comp_polarPartial_comp_adjoint (M : E →L[ℂ] F) :
+    M.polarPartial.adjoint ∘L M.polarPartial ∘L M.polarPartial.adjoint =
+      M.polarPartial.adjoint := by
+  have h := congrArg ContinuousLinearMap.adjoint M.polarPartial_comp_adjoint_comp_polarPartial
+  simpa [ContinuousLinearMap.adjoint_comp, ContinuousLinearMap.comp_assoc] using h
+
+/-- `W W⋆` is an orthogonal projection: idempotent and self-adjoint.  It is the projection
+onto the *final* space of the polar decomposition. -/
+theorem isSelfAdjoint_polarPartial_comp_adjoint (M : E →L[ℂ] F) :
+    IsSelfAdjoint (M.polarPartial ∘L M.polarPartial.adjoint) := by
+  rw [IsSelfAdjoint, ContinuousLinearMap.star_eq_adjoint, ContinuousLinearMap.adjoint_comp,
+    ContinuousLinearMap.adjoint_adjoint]
+
+theorem isIdempotentElem_polarPartial_comp_adjoint (M : E →L[ℂ] F) :
+    IsIdempotentElem (M.polarPartial ∘L M.polarPartial.adjoint) := by
+  have h := M.adjoint_comp_polarPartial_comp_adjoint
+  change (M.polarPartial ∘L M.polarPartial.adjoint) ∘L
+    (M.polarPartial ∘L M.polarPartial.adjoint) = _
+  calc (M.polarPartial ∘L M.polarPartial.adjoint) ∘L
+        (M.polarPartial ∘L M.polarPartial.adjoint)
+      = M.polarPartial ∘L (M.polarPartial.adjoint ∘L M.polarPartial ∘L
+          M.polarPartial.adjoint) := by
+        simp only [ContinuousLinearMap.comp_assoc]
+    _ = M.polarPartial ∘L M.polarPartial.adjoint := by rw [h]
+
+/-- The partial isometry, bundled as a `LinearIsometry` on the initial space. -/
+noncomputable def polarLinearIsometryAux (M : E →L[ℂ] F) : M.polarInitial →ₗᵢ[ℂ] F where
+  toLinearMap := M.polarPartialAux.toLinearMap
+  norm_map' := M.norm_polarPartialAux_apply
+
+/-- Every vector in the range of the partial isometry already comes from the initial
+space, because the projection is the identity there. -/
+theorem range_polarPartial_eq_range_aux (M : E →L[ℂ] F) :
+    Set.range M.polarPartial = Set.range M.polarPartialAux := by
+  apply Set.Subset.antisymm
+  · rintro _ ⟨x, rfl⟩
+    exact ⟨M.polarInitial.orthogonalProjectionOnto x, rfl⟩
+  · rintro _ ⟨y, rfl⟩
+    refine ⟨(y : E), ?_⟩
+    rw [polarPartial_apply]
+    congr 1
+    apply Subtype.ext
+    simp
+
+/-- **The range of the partial isometry is closed.**  It is the isometric image of the
+initial space, and that space is complete. -/
+theorem isClosed_range_polarPartial (M : E →L[ℂ] F) :
+    IsClosed (Set.range M.polarPartial) := by
+  rw [M.range_polarPartial_eq_range_aux]
+  have hrange : Set.range M.polarPartialAux = Set.range M.polarLinearIsometryAux := rfl
+  rw [hrange, ← Set.image_univ]
+  exact ((LinearIsometry.isComplete_image_iff M.polarLinearIsometryAux).mpr
+    complete_univ).isClosed
+
+/-- **The range of the partial isometry is the closure of the range of `M`** — the *final*
+space of the polar decomposition. -/
+theorem range_polarPartial (M : E →L[ℂ] F) :
+    LinearMap.range M.polarPartial.toLinearMap =
+      (LinearMap.range M.toLinearMap).topologicalClosure := by
+  apply le_antisymm
+  · rintro _ ⟨y, rfl⟩
+    have hclosed : IsClosed
+        {w : M.polarInitial |
+          M.polarPartialAux w ∈ (LinearMap.range M.toLinearMap).topologicalClosure} :=
+      (Submodule.isClosed_topologicalClosure _).preimage M.polarPartialAux.continuous
+    have hgen : ∀ x : E, M.polarPartialAux (M.modulusCorestrict x)
+        ∈ (LinearMap.range M.toLinearMap).topologicalClosure := by
+      intro x
+      rw [polarPartialAux_modulusCorestrict]
+      exact Submodule.le_topologicalClosure _ ⟨x, rfl⟩
+    change M.polarPartial y ∈ _
+    rw [polarPartial_apply]
+    exact M.denseRange_modulusCorestrict.induction_on
+      (p := fun w => M.polarPartialAux w ∈
+        (LinearMap.range M.toLinearMap).topologicalClosure)
+      (M.polarInitial.orthogonalProjectionOnto y) hclosed hgen
+  · refine Submodule.topologicalClosure_minimal _ ?_ ?_
+    · rintro _ ⟨x, rfl⟩
+      exact ⟨M.modulus x, M.polarPartial_apply_modulus x⟩
+    · rw [LinearMap.coe_range]
+      exact M.isClosed_range_polarPartial
 
 end ContinuousLinearMap

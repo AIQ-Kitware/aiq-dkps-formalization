@@ -147,6 +147,30 @@ and pruned. What is genuinely left:
 
 ## Cross-lane findings (post here to save another agent a re-derivation)
 
+- **A production file declares its contents into the *vendored* library's namespace**
+  (jon/namek, 2026-07-28). `DavisKahan/Geometry/Polar/PolarIsometryFinal.lean` opens
+  `namespace Spectra` / `namespace QuantumMechanics` / `namespace Channels` and defines eight
+  declarations there — `polarFinalRange`, `polarPartial_mem_finalRange`,
+  `denseRange_polarPartial_final`, `polarPartial_final_surjective`, `polarPartialFinalEquiv`,
+  `polarIsometry_comp_adjoint_self`, `adjoint_polarIsometry`, and an instance. To a reader
+  they are indistinguishable from Spectra's own API, and `vendor/Spectra` is an upstream
+  snapshot we do not own. This is the same failure mode as the `operatorAbs` shim that had
+  accreted `operatorAbs_apply_eq_zero_iff` from a paper-side module, and it is worth a grep
+  gate: nothing outside `vendor/` should declare into `namespace Spectra`.
+
+- **Spectra's polar decomposition and the new `ForTauCeti` one are the *same construction*,
+  arrived at independently** (jon/namek, 2026-07-28). I built
+  `ForTauCeti/Analysis/InnerProductSpace/PolarPartialIsometry.lean` from the `TODO` in
+  `PolarIsometry.lean` plus Mathlib's `LinearMap.extendOfNorm`, and only afterwards read
+  `vendor/Spectra/Spectra/QuantumMechanics/Channels/PolarDecomp.lean`. The definitions line
+  up one for one: `polarRange` = `polarInitial`, `absOpCorestrict` = `modulusCorestrict`,
+  `polarPartial` = `polarPartialAux`, `polarIsometry` = `polarPartial`. Two differences
+  matter. Ours is **rectangular** — `E →L[ℂ] F` with different source and target, built on
+  our own `modulus`, where Spectra's is square-only and built on `CFC.abs`. And ours proves
+  the range identification (`range W` closed, `= closure (range M)`) which Spectra's file
+  leaves to the DavisKahan file above. So the replacement is a generalisation, not a
+  transcription.
+
 - **Two hard blockers stand between `ForTauCeti` and Tau Ceti acceptance, and neither is
   mathematical** (jon/namek, 2026-07-28). Found by reading `external/TauCeti/lakefile.toml`
   rather than by guessing at what upstream wants.
