@@ -28,7 +28,6 @@ namespace MathAhead
 namespace HiddenFoundations
 
 open SpectraBridge
-open Spectra.QuantumMechanics.Channels
 open DavisKahan.Experimental.Foundation
 
 noncomputable section
@@ -211,9 +210,8 @@ theorem canonicalPolarFactor_adjoint_swap_from_polar
     star (spectraCanonicalPolarFactor U V) =
       spectraCanonicalPolarFactor V U := by
   rw [spectraCanonicalPolarFactor, spectraCanonicalPolarFactor,
-    spectraPolarIsometry, spectraPolarIsometry,
     ContinuousLinearMap.star_eq_adjoint,
-    Spectra.QuantumMechanics.Channels.adjoint_polarIsometry,
+    adjoint_spectraPolarIsometry,
     ← ContinuousLinearMap.star_eq_adjoint, star_spectraCanonicalIntertwiner]
 
 end

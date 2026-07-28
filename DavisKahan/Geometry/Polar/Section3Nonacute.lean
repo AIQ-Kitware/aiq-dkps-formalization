@@ -7,7 +7,6 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 import DavisKahan.Geometry.Polar.Section3Elementary
 import DavisKahan.Geometry.Polar.PolarIsometryFinal
 import DavisKahan.Geometry.Polar.PolarIntertwining
-import Spectra.QuantumMechanics.Channels.TraceClass.PartialIsometry
 
 /-!
 # Nonacute direct rotations from crossed-defect data
@@ -319,30 +318,30 @@ theorem ker_canonicalIntertwiner_eq_crossedDefectSum :
 
 /-- The polar initial space is the regular block. -/
 theorem polarRange_canonicalIntertwiner_eq_regular :
-    Spectra.QuantumMechanics.Channels.polarRange
+    polarRange
         (spectraCanonicalIntertwiner U V) =
       (crossedDefectSum U V)ᗮ := by
-  have hker : LinearMap.ker (Spectra.QuantumMechanics.Channels.absOp
+  have hker : LinearMap.ker (absOp
       (spectraCanonicalIntertwiner U V)).toLinearMap = crossedDefectSum U V := by
     rw [← ker_canonicalIntertwiner_eq_crossedDefectSum U V]
     ext y
     simp only [LinearMap.mem_ker, ContinuousLinearMap.coe_coe]
     constructor
     · intro hy
-      have hn := Spectra.QuantumMechanics.Channels.norm_absOp_apply
+      have hn := norm_absOp_apply
         (spectraCanonicalIntertwiner U V) y
       rw [hy, norm_zero, eq_comm, norm_eq_zero] at hn
       exact hn
     · intro hy
-      have hn := Spectra.QuantumMechanics.Channels.norm_absOp_apply
+      have hn := norm_absOp_apply
         (spectraCanonicalIntertwiner U V) y
       rw [hy, norm_zero, norm_eq_zero] at hn
       exact hn
-  rw [Spectra.QuantumMechanics.Channels.polarRange,
+  rw [polarRange, ContinuousLinearMap.polarInitial,
     ← Submodule.orthogonal_orthogonal_eq_closure,
     ContinuousLinearMap.orthogonal_range,
     ← ContinuousLinearMap.star_eq_adjoint,
-    (Spectra.QuantumMechanics.Channels.absOp_isSelfAdjoint
+    (absOp_isSelfAdjoint
       (spectraCanonicalIntertwiner U V)).star_eq,
     hker]
 
@@ -350,22 +349,19 @@ theorem polarRange_canonicalIntertwiner_eq_regular :
 theorem canonicalPolarFactor_apply_crossedDefect_eq_zero
     {x : H} (hx : x ∈ crossedDefectSum U V) :
     spectraCanonicalPolarFactor U V x = 0 := by
-  rw [spectraCanonicalPolarFactor, spectraPolarIsometry,
-    Spectra.QuantumMechanics.Channels.polarIsometry_apply_eq]
-  have hxperp : x ∈ (Spectra.QuantumMechanics.Channels.polarRange
+  have hxperp : x ∈ (polarRange
       (spectraCanonicalIntertwiner U V))ᗮ := by
     rw [polarRange_canonicalIntertwiner_eq_regular U V]
     exact Submodule.le_orthogonal_orthogonal (crossedDefectSum U V) hx
-  rw [show (Spectra.QuantumMechanics.Channels.polarRange
-      (spectraCanonicalIntertwiner U V)).orthogonalProjectionOnto x = 0 from
-    Submodule.orthogonalProjectionOnto_eq_zero_iff.mpr hxperp, map_zero]
+  rw [spectraCanonicalPolarFactor, spectraPolarIsometry_eq_polarPartial]
+  exact ContinuousLinearMap.polarPartial_eq_zero_of_mem_orthogonal _ hxperp
 
 /-- The final range of the canonical intertwiner is the regular block. -/
 theorem polarFinalRange_canonicalIntertwiner_eq_regular :
-    Spectra.QuantumMechanics.Channels.polarFinalRange
+    polarFinalRange
         (spectraCanonicalIntertwiner U V) =
       (crossedDefectSum U V)ᗮ := by
-  rw [Spectra.QuantumMechanics.Channels.polarFinalRange,
+  rw [polarFinalRange, ContinuousLinearMap.polarFinal,
     ← Submodule.orthogonal_orthogonal_eq_closure,
     ContinuousLinearMap.orthogonal_range,
     ← ContinuousLinearMap.star_eq_adjoint,
@@ -383,12 +379,12 @@ theorem canonicalPolarFactor_initial_final_projection :
     spectraCanonicalPolarFactor U V *
         star (spectraCanonicalPolarFactor U V) = regularProjection U V := by
   constructor
-  · have h := Spectra.QuantumMechanics.Channels.polarIsometry_adjoint_comp_self
+  · have h := polarIsometry_adjoint_comp_self
       (spectraCanonicalIntertwiner U V)
     simp only [polarRange_canonicalIntertwiner_eq_regular U V] at h
     rw [ContinuousLinearMap.star_eq_adjoint]
     exact h
-  · have h := Spectra.QuantumMechanics.Channels.polarIsometry_comp_adjoint_self
+  · have h := polarIsometry_comp_adjoint_self
       (spectraCanonicalIntertwiner U V)
     simp only [polarFinalRange_canonicalIntertwiner_eq_regular U V] at h
     rw [ContinuousLinearMap.star_eq_adjoint]
@@ -398,9 +394,9 @@ theorem canonicalPolarFactor_initial_final_projection :
 theorem canonicalPolarFactor_mem_regular (x : H) :
     spectraCanonicalPolarFactor U V x ∈ (crossedDefectSum U V)ᗮ := by
   rw [← polarFinalRange_canonicalIntertwiner_eq_regular U V]
-  exact Spectra.QuantumMechanics.Channels.polarPartial_mem_finalRange
+  exact polarPartial_mem_finalRange
     (spectraCanonicalIntertwiner U V)
-    ((Spectra.QuantumMechanics.Channels.polarRange
+    ((polarRange
       (spectraCanonicalIntertwiner U V)).orthogonalProjectionOnto x)
 
 /-- The canonical polar factor and defect quarter-turn have orthogonal initial
