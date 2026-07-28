@@ -1,4 +1,8 @@
 /-
+Copyright (c) 2026 Kitware, Inc. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Jon Crall, Claude Opus 4.8
+
 Staged for Mathlib: a new `Mathlib/Analysis/InnerProductSpace/PolarDecomposition.lean`.
 
 Sub-dev III of the operator polar decomposition project — COMPLETE (proof-complete; reduction uses only:
@@ -332,7 +336,21 @@ theorem polarFactor_adjoint_of_isUnit {A : E →ₗ[𝕜] E} (hA : IsUnit A) :
   rw [hfac, ← R.adjoint_toLinearMap_eq_symm]
   exact congrArg LinearMap.adjoint (coe_polarUnitaryEquiv hA)
 
-/-! ### CFC bridge — the ℂ / ContinuousLinearMap headline (`|A| = CFC.abs A`) -/
+/-! ### CFC bridge — the ℂ / ContinuousLinearMap headline (`|A| = CFC.abs A`)
+
+## Provenance
+
+* Original repository: Davis--Kahan/DKPS formalization (Kitware, Inc.).
+* Original module: `ForMathlib.Analysis.InnerProductSpace.PolarDecomposition`, moved to
+  `ForTauCeti` in the Wave-1 staging migration; introduced at Davis--Kahan
+  commit `3676b55`.
+* Extraction class: **moved**.  The Wave-1 migration renamed the namespace
+  `ForMathlib` to `TauCeti`; declaration names and proofs are unchanged.
+* Original authors / copyright: Jon Crall, Claude Opus 4.8; Copyright (c) 2026 Kitware, Inc.;
+  Apache 2.0.
+* Spectra influence: **none** — this module imports only Mathlib and sibling
+  `ForTauCeti` staging modules.
+-/
 
 section CFCBridge
 

@@ -1,4 +1,8 @@
 /-
+Copyright (c) 2026 Kitware, Inc. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Jon Crall, Claude Opus 4.8
+
 Staged for Mathlib: sample-covariance eigenvalue concentration.
 
 Specializes the generic random-Hermitian eigenvalue-concentration engine
@@ -20,6 +24,23 @@ Courant--Fischer names it used were repointed to the canonical API when the
 
 import ForTauCeti.Probability.Moments.MatrixConcentration
 import ForTauCeti.Probability.Moments.SampleMean
+
+/-!
+# SampleCovariance
+
+## Provenance
+
+* Original repository: Davis--Kahan/DKPS formalization (Kitware, Inc.).
+* Original module: `ForMathlib.Probability.Moments.SampleCovariance`, moved to
+  `ForTauCeti` in the Wave-1 staging migration; introduced at Davis--Kahan
+  commit `f9309f7`.
+* Extraction class: **moved**.  The Wave-1 migration renamed the namespace
+  `ForMathlib` to `TauCeti`; declaration names and proofs are unchanged.
+* Original authors / copyright: Jon Crall, Claude Opus 4.8; Copyright (c) 2026 Kitware, Inc.;
+  Apache 2.0.
+* Spectra influence: **none** — this module imports only Mathlib and sibling
+  `ForTauCeti` staging modules.
+-/
 
 
 open scoped Matrix ENNReal

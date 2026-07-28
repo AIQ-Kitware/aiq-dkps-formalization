@@ -1,4 +1,8 @@
 /-
+Copyright (c) 2026 Kitware, Inc. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Jon Crall, Claude Opus 4.8
+
 Staged for Mathlib: addition to
 `Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/` (measurability of
 `ω ↦ cfc f (a ω)`) and `Mathlib/MeasureTheory/MeasurableSpace/` (a countable
@@ -46,6 +50,19 @@ sample matrix — is, and the events one cares about depend only on that Gram.
 * `TauCeti.measurable_of_iUnion_restrict` — measurability from a countable
   measurable cover on which the restrictions are measurable.
 * `TauCeti.measurable_cfc_comp` — `ω ↦ cfc f (a ω)` is measurable.
+
+## Provenance
+
+* Original repository: Davis--Kahan/DKPS formalization (Kitware, Inc.).
+* Original module: `ForMathlib.MeasureTheory.CfcMeasurable`, moved to
+  `ForTauCeti` in the Wave-1 staging migration; introduced at Davis--Kahan
+  commit `fab5250`.
+* Extraction class: **moved**.  The Wave-1 migration renamed the namespace
+  `ForMathlib` to `TauCeti`; declaration names and proofs are unchanged.
+* Original authors / copyright: Jon Crall, Claude Opus 4.8; Copyright (c) 2026 Kitware, Inc.;
+  Apache 2.0.
+* Spectra influence: **none** — this module imports only Mathlib and sibling
+  `ForTauCeti` staging modules.
 -/
 
 namespace TauCeti

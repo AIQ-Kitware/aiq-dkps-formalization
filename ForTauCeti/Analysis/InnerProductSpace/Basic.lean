@@ -1,4 +1,8 @@
 /-
+Copyright (c) 2026 Kitware, Inc. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Jon Crall, Claude Fable 5
+
 Staged for Mathlib: addition to `Mathlib/Analysis/InnerProductSpace/Basic.lean`.
 
 Formalized by Claude Fable 5 (claude-fable-5[1m]).  Placement history: originally
@@ -34,6 +38,19 @@ core behind the Gram-rigidity development in
 
 * `TauCeti.inner_linearCombination_linearCombination`: expands
   `⟪Σ aᵢ • v i, Σ bⱼ • v j⟫` as `Σᵢ Σⱼ conj aᵢ * bⱼ * ⟪v i, v j⟫`.
+
+## Provenance
+
+* Original repository: Davis--Kahan/DKPS formalization (Kitware, Inc.).
+* Original module: `ForMathlib.Analysis.InnerProductSpace.Basic`, moved to
+  `ForTauCeti` in the Wave-1 staging migration; introduced at Davis--Kahan
+  commit `6d8c37c`.
+* Extraction class: **moved**.  The Wave-1 migration renamed the namespace
+  `ForMathlib` to `TauCeti`; declaration names and proofs are unchanged.
+* Original authors / copyright: Jon Crall, Claude Fable 5; Copyright (c) 2026 Kitware, Inc.;
+  Apache 2.0.
+* Spectra influence: **none** — this module imports only Mathlib and sibling
+  `ForTauCeti` staging modules.
 -/
 
 namespace TauCeti

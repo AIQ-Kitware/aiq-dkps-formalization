@@ -26,6 +26,208 @@
         "ForTauCeti.Analysis.OperatorIdeal.Family.Basic",
         "ForTauCeti.Analysis.OperatorIdeal.Family.OperatorNorm"
       ]
+    },
+    {
+      "cluster": "operator-polar-decomposition",
+      "roadmap_target": "Polar decomposition of a bounded operator: `A = U |A|` with `U` a partial isometry, the positive square root, near-isometry perturbation, and the Moore--Penrose inverse with all four Penrose identities.",
+      "roadmap_focus": "operator-polar-decomposition",
+      "status": "staged-unreviewed",
+      "upstream_pr": null,
+      "tauceti_population": "Staged in `ForTauCeti`, not yet exported. Every module carries a `## Provenance` section and an Apache-2.0 Kitware header; the import firewall holds (Mathlib and sibling staging modules only), so the cluster is independently copyable. The module list is the import closure of the cluster's roots, so exporting it yields a self-contained Tau Ceti subtree.",
+      "tauceti_target_marker": null,
+      "staging_modules": [
+        "ForTauCeti.Analysis.InnerProductSpace.BasisSpan",
+        "ForTauCeti.Analysis.InnerProductSpace.CourantFischer",
+        "ForTauCeti.Analysis.InnerProductSpace.IntertwiningUnitary",
+        "ForTauCeti.Analysis.InnerProductSpace.MoorePenroseInverse",
+        "ForTauCeti.Analysis.InnerProductSpace.NearIsometry",
+        "ForTauCeti.Analysis.InnerProductSpace.OperatorModulus",
+        "ForTauCeti.Analysis.InnerProductSpace.PartialIsometry",
+        "ForTauCeti.Analysis.InnerProductSpace.PolarDecomposition",
+        "ForTauCeti.Analysis.InnerProductSpace.PolarIsometry",
+        "ForTauCeti.Analysis.InnerProductSpace.PositiveSqrt",
+        "ForTauCeti.Analysis.InnerProductSpace.RectangularSingularValues",
+        "ForTauCeti.Analysis.InnerProductSpace.SelfAdjointFunctionalCalculus",
+        "ForTauCeti.Analysis.InnerProductSpace.SingularSystem",
+        "ForTauCeti.Analysis.SpecialFunctions.Sqrt"
+      ]
+    },
+    {
+      "cluster": "unitarily-invariant-norm",
+      "roadmap_target": "Unitarily invariant and rectangular unitarily invariant norms, Ky Fan gauges, Schatten norms, the singular system, and frame factorization.",
+      "roadmap_focus": "unitarily-invariant-norms",
+      "status": "staged-unreviewed",
+      "upstream_pr": null,
+      "tauceti_population": "Staged in `ForTauCeti`, not yet exported. Every module carries a `## Provenance` section and an Apache-2.0 Kitware header; the import firewall holds (Mathlib and sibling staging modules only), so the cluster is independently copyable. The module list is the import closure of the cluster's roots, so exporting it yields a self-contained Tau Ceti subtree.",
+      "tauceti_target_marker": null,
+      "staging_modules": [
+        "ForTauCeti.Analysis.InnerProductSpace.AlignedBasis",
+        "ForTauCeti.Analysis.InnerProductSpace.Basic",
+        "ForTauCeti.Analysis.InnerProductSpace.BasisSpan",
+        "ForTauCeti.Analysis.InnerProductSpace.CourantFischer",
+        "ForTauCeti.Analysis.InnerProductSpace.FrameFactorization",
+        "ForTauCeti.Analysis.InnerProductSpace.GramMatrix",
+        "ForTauCeti.Analysis.InnerProductSpace.KyFan",
+        "ForTauCeti.Analysis.InnerProductSpace.PartialIsometry",
+        "ForTauCeti.Analysis.InnerProductSpace.PolarDecomposition",
+        "ForTauCeti.Analysis.InnerProductSpace.PositiveSqrt",
+        "ForTauCeti.Analysis.InnerProductSpace.PrincipalAngles",
+        "ForTauCeti.Analysis.InnerProductSpace.ProjectionGeometry",
+        "ForTauCeti.Analysis.InnerProductSpace.RectangularSingularValues",
+        "ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm",
+        "ForTauCeti.Analysis.InnerProductSpace.SchattenNorm",
+        "ForTauCeti.Analysis.InnerProductSpace.SchurHorn",
+        "ForTauCeti.Analysis.InnerProductSpace.SelfAdjointFunctionalCalculus",
+        "ForTauCeti.Analysis.InnerProductSpace.SingularSubspace",
+        "ForTauCeti.Analysis.InnerProductSpace.Spectrum",
+        "ForTauCeti.Analysis.InnerProductSpace.TwoDimensionalSingularValues",
+        "ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantNorm",
+        "ForTauCeti.Analysis.Normed.FiniteLpGauge",
+        "ForTauCeti.Analysis.Normed.Operator.LinearIsometry"
+      ]
+    },
+    {
+      "cluster": "principal-angles",
+      "roadmap_target": "Principal angles between subspaces, aligned bases, finite frames, and eigenvalue-change bounds.",
+      "roadmap_focus": "principal-angles",
+      "status": "staged-unreviewed",
+      "upstream_pr": null,
+      "tauceti_population": "Staged in `ForTauCeti`, not yet exported. Every module carries a `## Provenance` section and an Apache-2.0 Kitware header; the import firewall holds (Mathlib and sibling staging modules only), so the cluster is independently copyable. The module list is the import closure of the cluster's roots, so exporting it yields a self-contained Tau Ceti subtree.",
+      "tauceti_target_marker": null,
+      "staging_modules": [
+        "ForTauCeti.Analysis.InnerProductSpace.BasisSpan",
+        "ForTauCeti.Analysis.InnerProductSpace.CourantFischer",
+        "ForTauCeti.Analysis.InnerProductSpace.EigenvalueChange",
+        "ForTauCeti.Analysis.InnerProductSpace.FiniteFrame",
+        "ForTauCeti.Analysis.InnerProductSpace.RectangularSingularValues",
+        "ForTauCeti.Analysis.InnerProductSpace.SchurHorn"
+      ]
+    },
+    {
+      "cluster": "hoffman-wielandt",
+      "roadmap_target": "The Hoffman--Wielandt inequality and the sorted von Neumann trace bound.",
+      "roadmap_focus": "eigenvalue-perturbation",
+      "status": "staged-unreviewed",
+      "upstream_pr": null,
+      "tauceti_population": "Staged in `ForTauCeti`, not yet exported. Every module carries a `## Provenance` section and an Apache-2.0 Kitware header; the import firewall holds (Mathlib and sibling staging modules only), so the cluster is independently copyable. The module list is the import closure of the cluster's roots, so exporting it yields a self-contained Tau Ceti subtree.",
+      "tauceti_target_marker": null,
+      "staging_modules": [
+        "ForTauCeti.Analysis.InnerProductSpace.BasisSpan",
+        "ForTauCeti.Analysis.InnerProductSpace.CourantFischer",
+        "ForTauCeti.Analysis.InnerProductSpace.HoffmanWielandt",
+        "ForTauCeti.Analysis.InnerProductSpace.SchurHorn"
+      ]
+    },
+    {
+      "cluster": "matrix-spectral",
+      "roadmap_target": "Matrix spectrum, entrywise eigenvalue and operator-norm bounds, and measurability of spectral functions.",
+      "roadmap_focus": "matrix-spectral-theory",
+      "status": "staged-unreviewed",
+      "upstream_pr": null,
+      "tauceti_population": "Staged in `ForTauCeti`, not yet exported. Every module carries a `## Provenance` section and an Apache-2.0 Kitware header; the import firewall holds (Mathlib and sibling staging modules only), so the cluster is independently copyable. The module list is the import closure of the cluster's roots, so exporting it yields a self-contained Tau Ceti subtree.",
+      "tauceti_target_marker": null,
+      "staging_modules": [
+        "ForTauCeti.Analysis.InnerProductSpace.BasisSpan",
+        "ForTauCeti.Analysis.InnerProductSpace.CourantFischer",
+        "ForTauCeti.Analysis.Matrix.EntrywiseEigenvalue",
+        "ForTauCeti.Analysis.Matrix.EntrywiseOpNorm",
+        "ForTauCeti.Analysis.Matrix.SpectralFunctionMeasurable",
+        "ForTauCeti.Analysis.Matrix.Spectrum",
+        "ForTauCeti.MeasureTheory.CfcMeasurable"
+      ]
+    },
+    {
+      "cluster": "probability-concentration",
+      "roadmap_target": "Sample mean, variance, sample covariance, centered scatter, and matrix concentration.",
+      "roadmap_focus": "probability-concentration",
+      "status": "staged-unreviewed",
+      "upstream_pr": null,
+      "tauceti_population": "Staged in `ForTauCeti`, not yet exported. Every module carries a `## Provenance` section and an Apache-2.0 Kitware header; the import firewall holds (Mathlib and sibling staging modules only), so the cluster is independently copyable. The module list is the import closure of the cluster's roots, so exporting it yields a self-contained Tau Ceti subtree.",
+      "tauceti_target_marker": null,
+      "staging_modules": [
+        "ForTauCeti.Analysis.InnerProductSpace.BasisSpan",
+        "ForTauCeti.Analysis.InnerProductSpace.CenteredScatter",
+        "ForTauCeti.Analysis.InnerProductSpace.CourantFischer",
+        "ForTauCeti.Analysis.Matrix.EntrywiseEigenvalue",
+        "ForTauCeti.Analysis.Matrix.EntrywiseOpNorm",
+        "ForTauCeti.Analysis.Matrix.SpectralFunctionMeasurable",
+        "ForTauCeti.MeasureTheory.CfcMeasurable",
+        "ForTauCeti.Probability.Moments.MatrixConcentration",
+        "ForTauCeti.Probability.Moments.SampleCovariance",
+        "ForTauCeti.Probability.Moments.SampleMean",
+        "ForTauCeti.Probability.Moments.Variance"
+      ]
+    },
+    {
+      "cluster": "measure-theory-helpers",
+      "roadmap_target": "Measure-theoretic helpers: measurability of compactly-quantified events, convergence in measure, probability-measure typeclass lemmas, and CFC measurability.",
+      "roadmap_focus": "measure-theory",
+      "status": "staged-unreviewed",
+      "upstream_pr": null,
+      "tauceti_population": "Staged in `ForTauCeti`, not yet exported. Every module carries a `## Provenance` section and an Apache-2.0 Kitware header; the import firewall holds (Mathlib and sibling staging modules only), so the cluster is independently copyable. The module list is the import closure of the cluster's roots, so exporting it yields a self-contained Tau Ceti subtree.",
+      "tauceti_target_marker": null,
+      "staging_modules": [
+        "ForTauCeti.MeasureTheory.CfcMeasurable",
+        "ForTauCeti.MeasureTheory.CompactExists",
+        "ForTauCeti.MeasureTheory.Function.ConvergenceInMeasure",
+        "ForTauCeti.MeasureTheory.Measure.Typeclasses.Probability"
+      ]
+    },
+    {
+      "cluster": "fourier-haagerup-zsido",
+      "roadmap_target": "The Haagerup--Zsido kernel, its Fourier transform and integrability, the Poisson/Cauchy lattice summation, and the two supporting definite integrals.",
+      "roadmap_focus": "fourier-analysis",
+      "status": "staged-unreviewed",
+      "upstream_pr": null,
+      "tauceti_population": "Staged in `ForTauCeti`, not yet exported. Every module carries a `## Provenance` section and an Apache-2.0 Kitware header; the import firewall holds (Mathlib and sibling staging modules only), so the cluster is independently copyable. The module list is the import closure of the cluster's roots, so exporting it yields a self-contained Tau Ceti subtree.",
+      "tauceti_target_marker": null,
+      "staging_modules": [
+        "ForTauCeti.Analysis.Fourier.ExponentialAbs",
+        "ForTauCeti.Analysis.Fourier.HaagerupZsido.Defs",
+        "ForTauCeti.Analysis.Fourier.HaagerupZsido.Fourier",
+        "ForTauCeti.Analysis.Fourier.HaagerupZsido.Integrability",
+        "ForTauCeti.Analysis.Fourier.HaagerupZsidoKernel",
+        "ForTauCeti.Analysis.Fourier.Poisson.CauchyLattice",
+        "ForTauCeti.Analysis.SpecialFunctions.Integral.RationalQuadratic",
+        "ForTauCeti.Analysis.SpecialFunctions.Integral.SineLaplace"
+      ]
+    },
+    {
+      "cluster": "linear-pmap-sylvester",
+      "roadmap_target": "Closedness and Sylvester-equation API for Mathlib `LinearPMap`, the canonical unbounded-operator representation.",
+      "roadmap_focus": "unbounded-operators",
+      "status": "staged-unreviewed",
+      "upstream_pr": null,
+      "tauceti_population": "Staged in `ForTauCeti`, not yet exported. Every module carries a `## Provenance` section and an Apache-2.0 Kitware header; the import firewall holds (Mathlib and sibling staging modules only), so the cluster is independently copyable. The module list is the import closure of the cluster's roots, so exporting it yields a self-contained Tau Ceti subtree.",
+      "tauceti_target_marker": null,
+      "staging_modules": [
+        "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Closed",
+        "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Sylvester"
+      ]
+    },
+    {
+      "cluster": "cstar-gap-inverse",
+      "roadmap_target": "Invertibility of a self-adjoint element away from a spectral gap, in a C*-algebra.",
+      "roadmap_focus": "cstar-algebra",
+      "status": "staged-unreviewed",
+      "upstream_pr": null,
+      "tauceti_population": "Staged in `ForTauCeti`, not yet exported. Every module carries a `## Provenance` section and an Apache-2.0 Kitware header; the import firewall holds (Mathlib and sibling staging modules only), so the cluster is independently copyable. The module list is the import closure of the cluster's roots, so exporting it yields a self-contained Tau Ceti subtree.",
+      "tauceti_target_marker": null,
+      "staging_modules": [
+        "ForTauCeti.Analysis.CStarAlgebra.SelfAdjointGapInverse"
+      ]
+    },
+    {
+      "cluster": "orthogonal-series",
+      "roadmap_target": "Orthogonal series in a Hilbert space.",
+      "roadmap_focus": "inner-product-space",
+      "status": "staged-unreviewed",
+      "upstream_pr": null,
+      "tauceti_population": "Staged in `ForTauCeti`, not yet exported. Every module carries a `## Provenance` section and an Apache-2.0 Kitware header; the import firewall holds (Mathlib and sibling staging modules only), so the cluster is independently copyable. The module list is the import closure of the cluster's roots, so exporting it yields a self-contained Tau Ceti subtree.",
+      "tauceti_target_marker": null,
+      "staging_modules": [
+        "ForTauCeti.Analysis.InnerProductSpace.OrthogonalSeries"
+      ]
     }
   ],
   "records": [
@@ -278,6 +480,1045 @@
       "direct_dependencies": [
         "Mathlib",
         "ForTauCeti.Analysis.OperatorIdeal.Family.Basic"
+      ],
+      "blocked_dependencies": [],
+      "downstream_users": [],
+      "status": "staged",
+      "upstream_pr": null
+    },
+    {
+      "source_module": "ForTauCeti.Analysis.CStarAlgebra.SelfAdjointGapInverse",
+      "source_declarations": [],
+      "current_namespace": "TauCeti",
+      "staging_module": "ForTauCeti.Analysis.CStarAlgebra.SelfAdjointGapInverse",
+      "final_tauceti_module": "TauCeti.Analysis.CStarAlgebra.SelfAdjointGapInverse",
+      "ownership_class": "tauceti",
+      "roadmap_target": "cstar-gap-inverse",
+      "provenance_class": "copied; introduced at Davis--Kahan commit fc38eb4; authors Jon Crall; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
+      "direct_dependencies": [
+        "Mathlib"
+      ],
+      "blocked_dependencies": [],
+      "downstream_users": [],
+      "status": "staged",
+      "upstream_pr": null
+    },
+    {
+      "source_module": "ForTauCeti.Analysis.Fourier.ExponentialAbs",
+      "source_declarations": [],
+      "current_namespace": "TauCeti",
+      "staging_module": "ForTauCeti.Analysis.Fourier.ExponentialAbs",
+      "final_tauceti_module": "TauCeti.Analysis.Fourier.ExponentialAbs",
+      "ownership_class": "tauceti",
+      "roadmap_target": "fourier-haagerup-zsido",
+      "provenance_class": "authored in place; introduced at Davis--Kahan commit f35ffc0; authors Jon Crall, GPT 5.6 High; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
+      "direct_dependencies": [
+        "Mathlib"
+      ],
+      "blocked_dependencies": [],
+      "downstream_users": [],
+      "status": "staged",
+      "upstream_pr": null
+    },
+    {
+      "source_module": "ForTauCeti.Analysis.Fourier.HaagerupZsido.Defs",
+      "source_declarations": [],
+      "current_namespace": "TauCeti",
+      "staging_module": "ForTauCeti.Analysis.Fourier.HaagerupZsido.Defs",
+      "final_tauceti_module": "TauCeti.Analysis.Fourier.HaagerupZsido.Defs",
+      "ownership_class": "tauceti",
+      "roadmap_target": "fourier-haagerup-zsido",
+      "provenance_class": "authored in place; introduced at Davis--Kahan commit f35ffc0; authors Jon Crall, GPT 5.6 High; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
+      "direct_dependencies": [
+        "Mathlib"
+      ],
+      "blocked_dependencies": [],
+      "downstream_users": [],
+      "status": "staged",
+      "upstream_pr": null
+    },
+    {
+      "source_module": "ForTauCeti.Analysis.Fourier.HaagerupZsido.Fourier",
+      "source_declarations": [],
+      "current_namespace": "TauCeti",
+      "staging_module": "ForTauCeti.Analysis.Fourier.HaagerupZsido.Fourier",
+      "final_tauceti_module": "TauCeti.Analysis.Fourier.HaagerupZsido.Fourier",
+      "ownership_class": "tauceti",
+      "roadmap_target": "fourier-haagerup-zsido",
+      "provenance_class": "authored in place; introduced at Davis--Kahan commit f35ffc0; authors Jon Crall, GPT 5.6 High; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
+      "direct_dependencies": [
+        "Mathlib",
+        "ForTauCeti.Analysis.Fourier.ExponentialAbs",
+        "ForTauCeti.Analysis.Fourier.HaagerupZsido.Defs",
+        "ForTauCeti.Analysis.Fourier.HaagerupZsido.Integrability",
+        "ForTauCeti.Analysis.SpecialFunctions.Integral.RationalQuadratic"
+      ],
+      "blocked_dependencies": [],
+      "downstream_users": [],
+      "status": "staged",
+      "upstream_pr": null
+    },
+    {
+      "source_module": "ForTauCeti.Analysis.Fourier.HaagerupZsido.Integrability",
+      "source_declarations": [],
+      "current_namespace": "TauCeti",
+      "staging_module": "ForTauCeti.Analysis.Fourier.HaagerupZsido.Integrability",
+      "final_tauceti_module": "TauCeti.Analysis.Fourier.HaagerupZsido.Integrability",
+      "ownership_class": "tauceti",
+      "roadmap_target": "fourier-haagerup-zsido",
+      "provenance_class": "authored in place; introduced at Davis--Kahan commit f35ffc0; authors Jon Crall, GPT 5.6 High; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
+      "direct_dependencies": [
+        "Mathlib",
+        "ForTauCeti.Analysis.Fourier.HaagerupZsido.Defs",
+        "ForTauCeti.Analysis.SpecialFunctions.Integral.SineLaplace"
+      ],
+      "blocked_dependencies": [],
+      "downstream_users": [],
+      "status": "staged",
+      "upstream_pr": null
+    },
+    {
+      "source_module": "ForTauCeti.Analysis.Fourier.HaagerupZsidoKernel",
+      "source_declarations": [],
+      "current_namespace": "TauCeti",
+      "staging_module": "ForTauCeti.Analysis.Fourier.HaagerupZsidoKernel",
+      "final_tauceti_module": "TauCeti.Analysis.Fourier.HaagerupZsidoKernel",
+      "ownership_class": "tauceti",
+      "roadmap_target": "fourier-haagerup-zsido",
+      "provenance_class": "authored in place; introduced at Davis--Kahan commit ad75dd6; authors Jon Crall, GPT 5.6 High; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
+      "direct_dependencies": [
+        "Mathlib",
+        "ForTauCeti.Analysis.Fourier.ExponentialAbs",
+        "ForTauCeti.Analysis.Fourier.HaagerupZsido.Defs",
+        "ForTauCeti.Analysis.Fourier.HaagerupZsido.Fourier",
+        "ForTauCeti.Analysis.Fourier.HaagerupZsido.Integrability",
+        "ForTauCeti.Analysis.Fourier.Poisson.CauchyLattice",
+        "ForTauCeti.Analysis.SpecialFunctions.Integral.RationalQuadratic",
+        "ForTauCeti.Analysis.SpecialFunctions.Integral.SineLaplace"
+      ],
+      "blocked_dependencies": [],
+      "downstream_users": [],
+      "status": "staged",
+      "upstream_pr": null
+    },
+    {
+      "source_module": "ForTauCeti.Analysis.Fourier.Poisson.CauchyLattice",
+      "source_declarations": [],
+      "current_namespace": "TauCeti",
+      "staging_module": "ForTauCeti.Analysis.Fourier.Poisson.CauchyLattice",
+      "final_tauceti_module": "TauCeti.Analysis.Fourier.Poisson.CauchyLattice",
+      "ownership_class": "tauceti",
+      "roadmap_target": "fourier-haagerup-zsido",
+      "provenance_class": "authored in place; introduced at Davis--Kahan commit f35ffc0; authors Jon Crall, GPT 5.6 High; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
+      "direct_dependencies": [
+        "Mathlib",
+        "ForTauCeti.Analysis.Fourier.ExponentialAbs",
+        "ForTauCeti.Analysis.Fourier.HaagerupZsido.Defs"
+      ],
+      "blocked_dependencies": [],
+      "downstream_users": [],
+      "status": "staged",
+      "upstream_pr": null
+    },
+    {
+      "source_module": "ForMathlib.Analysis.InnerProductSpace.AlignedBasis",
+      "source_declarations": [],
+      "current_namespace": "TauCeti",
+      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.AlignedBasis",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.AlignedBasis",
+      "ownership_class": "tauceti",
+      "roadmap_target": "unitarily-invariant-norm",
+      "provenance_class": "moved; introduced at Davis--Kahan commit 75fdc44; authors Jon Crall, Claude Opus 4.8; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
+      "direct_dependencies": [
+        "Mathlib",
+        "ForTauCeti.Analysis.InnerProductSpace.SingularSubspace"
+      ],
+      "blocked_dependencies": [],
+      "downstream_users": [],
+      "status": "staged",
+      "upstream_pr": null
+    },
+    {
+      "source_module": "ForMathlib.Analysis.InnerProductSpace.Basic",
+      "source_declarations": [],
+      "current_namespace": "TauCeti",
+      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.Basic",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.Basic",
+      "ownership_class": "tauceti",
+      "roadmap_target": "unitarily-invariant-norm",
+      "provenance_class": "moved; introduced at Davis--Kahan commit 6d8c37c; authors Jon Crall, Claude Fable 5; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
+      "direct_dependencies": [
+        "Mathlib"
+      ],
+      "blocked_dependencies": [],
+      "downstream_users": [],
+      "status": "staged",
+      "upstream_pr": null
+    },
+    {
+      "source_module": "ForTauCeti.Analysis.InnerProductSpace.BasisSpan",
+      "source_declarations": [],
+      "current_namespace": "TauCeti",
+      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.BasisSpan",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.BasisSpan",
+      "ownership_class": "tauceti",
+      "roadmap_target": "operator-polar-decomposition",
+      "provenance_class": "generalized; authors Jon Crall; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
+      "direct_dependencies": [
+        "Mathlib"
+      ],
+      "blocked_dependencies": [],
+      "downstream_users": [],
+      "status": "staged",
+      "upstream_pr": null
+    },
+    {
+      "source_module": "ForTauCeti.Analysis.InnerProductSpace.CenteredScatter",
+      "source_declarations": [],
+      "current_namespace": "TauCeti",
+      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.CenteredScatter",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.CenteredScatter",
+      "ownership_class": "tauceti",
+      "roadmap_target": "probability-concentration",
+      "provenance_class": "copied; introduced at Davis--Kahan commit fc38eb4; authors Jon Crall; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
+      "direct_dependencies": [
+        "Mathlib"
+      ],
+      "blocked_dependencies": [],
+      "downstream_users": [],
+      "status": "staged",
+      "upstream_pr": null
+    },
+    {
+      "source_module": "ForMathlib.Analysis.InnerProductSpace.EigenvalueChange",
+      "source_declarations": [],
+      "current_namespace": "TauCeti",
+      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.EigenvalueChange",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.EigenvalueChange",
+      "ownership_class": "tauceti",
+      "roadmap_target": "principal-angles",
+      "provenance_class": "moved; introduced at Davis--Kahan commit 9543631; authors Jon Crall, Claude Opus 4.8; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
+      "direct_dependencies": [
+        "Mathlib",
+        "ForTauCeti.Analysis.InnerProductSpace.SchurHorn"
+      ],
+      "blocked_dependencies": [],
+      "downstream_users": [],
+      "status": "staged",
+      "upstream_pr": null
+    },
+    {
+      "source_module": "ForMathlib.Analysis.InnerProductSpace.FiniteFrame",
+      "source_declarations": [],
+      "current_namespace": "TauCeti",
+      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.FiniteFrame",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.FiniteFrame",
+      "ownership_class": "tauceti",
+      "roadmap_target": "principal-angles",
+      "provenance_class": "moved; introduced at Davis--Kahan commit 82d20de; authors Jon Crall, GPT-5.6 High, Claude Fable 5; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
+      "direct_dependencies": [
+        "Mathlib",
+        "ForTauCeti.Analysis.InnerProductSpace.RectangularSingularValues"
+      ],
+      "blocked_dependencies": [],
+      "downstream_users": [],
+      "status": "staged",
+      "upstream_pr": null
+    },
+    {
+      "source_module": "ForMathlib.Analysis.InnerProductSpace.FrameFactorization",
+      "source_declarations": [],
+      "current_namespace": "TauCeti",
+      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.FrameFactorization",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.FrameFactorization",
+      "ownership_class": "tauceti",
+      "roadmap_target": "unitarily-invariant-norm",
+      "provenance_class": "moved; introduced at Davis--Kahan commit b806b36; authors Jon Crall, GPT 5.6 High; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
+      "direct_dependencies": [
+        "Mathlib",
+        "ForTauCeti.Analysis.InnerProductSpace.PositiveSqrt",
+        "ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm"
+      ],
+      "blocked_dependencies": [],
+      "downstream_users": [],
+      "status": "staged",
+      "upstream_pr": null
+    },
+    {
+      "source_module": "ForMathlib.Analysis.InnerProductSpace.GramMatrix",
+      "source_declarations": [],
+      "current_namespace": "TauCeti",
+      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.GramMatrix",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.GramMatrix",
+      "ownership_class": "tauceti",
+      "roadmap_target": "unitarily-invariant-norm",
+      "provenance_class": "moved; introduced at Davis--Kahan commit 56f7495; authors Jon Crall, Claude Fable 5; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
+      "direct_dependencies": [
+        "Mathlib",
+        "ForTauCeti.Analysis.InnerProductSpace.Basic",
+        "ForTauCeti.Analysis.Normed.Operator.LinearIsometry"
+      ],
+      "blocked_dependencies": [],
+      "downstream_users": [],
+      "status": "staged",
+      "upstream_pr": null
+    },
+    {
+      "source_module": "ForMathlib.Analysis.InnerProductSpace.HoffmanWielandt",
+      "source_declarations": [],
+      "current_namespace": "TauCeti",
+      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.HoffmanWielandt",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.HoffmanWielandt",
+      "ownership_class": "tauceti",
+      "roadmap_target": "hoffman-wielandt",
+      "provenance_class": "moved; introduced at Davis--Kahan commit dd93e70; authors Jon Crall, Claude Opus 4.8; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
+      "direct_dependencies": [
+        "Mathlib",
+        "ForTauCeti.Analysis.InnerProductSpace.SchurHorn"
+      ],
+      "blocked_dependencies": [],
+      "downstream_users": [],
+      "status": "staged",
+      "upstream_pr": null
+    },
+    {
+      "source_module": "ForMathlib.Analysis.InnerProductSpace.IntertwiningUnitary",
+      "source_declarations": [],
+      "current_namespace": "TauCeti",
+      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.IntertwiningUnitary",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.IntertwiningUnitary",
+      "ownership_class": "tauceti",
+      "roadmap_target": "operator-polar-decomposition",
+      "provenance_class": "moved; introduced at Davis--Kahan commit 3676b55; authors Jon Crall, Claude Opus 4.8; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
+      "direct_dependencies": [
+        "Mathlib",
+        "ForTauCeti.Analysis.InnerProductSpace.PolarDecomposition"
+      ],
+      "blocked_dependencies": [],
+      "downstream_users": [],
+      "status": "staged",
+      "upstream_pr": null
+    },
+    {
+      "source_module": "ForMathlib.Analysis.InnerProductSpace.KyFan",
+      "source_declarations": [],
+      "current_namespace": "TauCeti",
+      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.KyFan",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.KyFan",
+      "ownership_class": "tauceti",
+      "roadmap_target": "unitarily-invariant-norm",
+      "provenance_class": "moved; introduced at Davis--Kahan commit 199390a; authors Jon Crall, Claude Fable 5; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
+      "direct_dependencies": [
+        "Mathlib",
+        "ForTauCeti.Analysis.InnerProductSpace.CourantFischer",
+        "ForTauCeti.Analysis.InnerProductSpace.PolarDecomposition",
+        "ForTauCeti.Analysis.InnerProductSpace.ProjectionGeometry",
+        "ForTauCeti.Analysis.InnerProductSpace.SingularSubspace",
+        "ForTauCeti.Analysis.InnerProductSpace.Spectrum"
+      ],
+      "blocked_dependencies": [],
+      "downstream_users": [],
+      "status": "staged",
+      "upstream_pr": null
+    },
+    {
+      "source_module": "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Closed",
+      "source_declarations": [],
+      "current_namespace": "TauCeti",
+      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Closed",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.LinearPMap.Closed",
+      "ownership_class": "tauceti",
+      "roadmap_target": "linear-pmap-sylvester",
+      "provenance_class": "representation migration; authors Jon Crall; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
+      "direct_dependencies": [
+        "Mathlib"
+      ],
+      "blocked_dependencies": [],
+      "downstream_users": [],
+      "status": "staged",
+      "upstream_pr": null
+    },
+    {
+      "source_module": "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Sylvester",
+      "source_declarations": [],
+      "current_namespace": "TauCeti",
+      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Sylvester",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.LinearPMap.Sylvester",
+      "ownership_class": "tauceti",
+      "roadmap_target": "linear-pmap-sylvester",
+      "provenance_class": "representation migration and generalization; authors Jon Crall; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
+      "direct_dependencies": [
+        "Mathlib",
+        "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Closed"
+      ],
+      "blocked_dependencies": [],
+      "downstream_users": [],
+      "status": "staged",
+      "upstream_pr": null
+    },
+    {
+      "source_module": "ForMathlib.Analysis.InnerProductSpace.MoorePenroseInverse",
+      "source_declarations": [],
+      "current_namespace": "TauCeti",
+      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.MoorePenroseInverse",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.MoorePenroseInverse",
+      "ownership_class": "tauceti",
+      "roadmap_target": "operator-polar-decomposition",
+      "provenance_class": "moved; introduced at Davis--Kahan commit caa0966; authors Jon Crall, GPT-5.6 Thinking; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
+      "direct_dependencies": [
+        "Mathlib",
+        "ForTauCeti.Analysis.InnerProductSpace.SingularSystem"
+      ],
+      "blocked_dependencies": [],
+      "downstream_users": [],
+      "status": "staged",
+      "upstream_pr": null
+    },
+    {
+      "source_module": "ForTauCeti.Analysis.InnerProductSpace.NearIsometry",
+      "source_declarations": [],
+      "current_namespace": "TauCeti",
+      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.NearIsometry",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.NearIsometry",
+      "ownership_class": "tauceti",
+      "roadmap_target": "operator-polar-decomposition",
+      "provenance_class": "moved; introduced at Davis--Kahan commit fc38eb4; authors Jon Crall; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
+      "direct_dependencies": [
+        "Mathlib",
+        "ForTauCeti.Analysis.SpecialFunctions.Sqrt"
+      ],
+      "blocked_dependencies": [],
+      "downstream_users": [],
+      "status": "staged",
+      "upstream_pr": null
+    },
+    {
+      "source_module": "ForTauCeti.Analysis.InnerProductSpace.OrthogonalSeries",
+      "source_declarations": [],
+      "current_namespace": "TauCeti",
+      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.OrthogonalSeries",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.OrthogonalSeries",
+      "ownership_class": "tauceti",
+      "roadmap_target": "orthogonal-series",
+      "provenance_class": "copied; introduced at Davis--Kahan commit fc38eb4; authors Jon Crall; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
+      "direct_dependencies": [
+        "Mathlib"
+      ],
+      "blocked_dependencies": [],
+      "downstream_users": [],
+      "status": "staged",
+      "upstream_pr": null
+    },
+    {
+      "source_module": "ForMathlib.Analysis.InnerProductSpace.PartialIsometry",
+      "source_declarations": [],
+      "current_namespace": "TauCeti",
+      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.PartialIsometry",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.PartialIsometry",
+      "ownership_class": "tauceti",
+      "roadmap_target": "operator-polar-decomposition",
+      "provenance_class": "moved; introduced at Davis--Kahan commit 3676b55; authors Jon Crall, Claude Opus 4.8; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
+      "direct_dependencies": [
+        "Mathlib"
+      ],
+      "blocked_dependencies": [],
+      "downstream_users": [],
+      "status": "staged",
+      "upstream_pr": null
+    },
+    {
+      "source_module": "ForMathlib.Analysis.InnerProductSpace.PolarDecomposition",
+      "source_declarations": [],
+      "current_namespace": "TauCeti",
+      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.PolarDecomposition",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.PolarDecomposition",
+      "ownership_class": "tauceti",
+      "roadmap_target": "operator-polar-decomposition",
+      "provenance_class": "moved; introduced at Davis--Kahan commit 3676b55; authors Jon Crall, Claude Opus 4.8; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
+      "direct_dependencies": [
+        "Mathlib",
+        "ForTauCeti.Analysis.InnerProductSpace.PartialIsometry",
+        "ForTauCeti.Analysis.InnerProductSpace.PositiveSqrt",
+        "ForTauCeti.Analysis.InnerProductSpace.SelfAdjointFunctionalCalculus"
+      ],
+      "blocked_dependencies": [],
+      "downstream_users": [],
+      "status": "staged",
+      "upstream_pr": null
+    },
+    {
+      "source_module": "ForTauCeti.Analysis.InnerProductSpace.PolarIsometry",
+      "source_declarations": [],
+      "current_namespace": "TauCeti",
+      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.PolarIsometry",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.PolarIsometry",
+      "ownership_class": "tauceti",
+      "roadmap_target": "operator-polar-decomposition",
+      "provenance_class": "new; authors Jon Crall; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
+      "direct_dependencies": [
+        "Mathlib",
+        "ForTauCeti.Analysis.InnerProductSpace.OperatorModulus",
+        "ForTauCeti.Analysis.SpecialFunctions.Sqrt"
+      ],
+      "blocked_dependencies": [],
+      "downstream_users": [],
+      "status": "staged",
+      "upstream_pr": null
+    },
+    {
+      "source_module": "ForMathlib.Analysis.InnerProductSpace.PositiveSqrt",
+      "source_declarations": [],
+      "current_namespace": "TauCeti",
+      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.PositiveSqrt",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.PositiveSqrt",
+      "ownership_class": "tauceti",
+      "roadmap_target": "operator-polar-decomposition",
+      "provenance_class": "moved; introduced at Davis--Kahan commit 3676b55; authors Jon Crall, Claude Opus 4.8; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
+      "direct_dependencies": [
+        "Mathlib"
+      ],
+      "blocked_dependencies": [],
+      "downstream_users": [],
+      "status": "staged",
+      "upstream_pr": null
+    },
+    {
+      "source_module": "ForMathlib.Analysis.InnerProductSpace.PrincipalAngles",
+      "source_declarations": [],
+      "current_namespace": "TauCeti",
+      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.PrincipalAngles",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.PrincipalAngles",
+      "ownership_class": "tauceti",
+      "roadmap_target": "unitarily-invariant-norm",
+      "provenance_class": "moved; introduced at Davis--Kahan commit 34319dc; authors Jon Crall, Claude Opus 4.8; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
+      "direct_dependencies": [
+        "Mathlib",
+        "ForTauCeti.Analysis.InnerProductSpace.AlignedBasis",
+        "ForTauCeti.Analysis.InnerProductSpace.KyFan",
+        "ForTauCeti.Analysis.InnerProductSpace.ProjectionGeometry"
+      ],
+      "blocked_dependencies": [],
+      "downstream_users": [],
+      "status": "staged",
+      "upstream_pr": null
+    },
+    {
+      "source_module": "ForMathlib.Analysis.InnerProductSpace.ProjectionGeometry",
+      "source_declarations": [],
+      "current_namespace": "TauCeti",
+      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.ProjectionGeometry",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.ProjectionGeometry",
+      "ownership_class": "tauceti",
+      "roadmap_target": "unitarily-invariant-norm",
+      "provenance_class": "moved; introduced at Davis--Kahan commit f44d966; authors Jon Crall, Claude Fable 5, Claude Opus 4.8; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
+      "direct_dependencies": [
+        "Mathlib"
+      ],
+      "blocked_dependencies": [],
+      "downstream_users": [],
+      "status": "staged",
+      "upstream_pr": null
+    },
+    {
+      "source_module": "ForMathlib.Analysis.InnerProductSpace.RectangularSingularValues",
+      "source_declarations": [],
+      "current_namespace": "TauCeti",
+      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.RectangularSingularValues",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.RectangularSingularValues",
+      "ownership_class": "tauceti",
+      "roadmap_target": "operator-polar-decomposition",
+      "provenance_class": "moved; introduced at Davis--Kahan commit 82d20de; authors Jon Crall, GPT-5.6 High, Claude Fable 5; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
+      "direct_dependencies": [
+        "Mathlib",
+        "ForTauCeti.Analysis.InnerProductSpace.CourantFischer"
+      ],
+      "blocked_dependencies": [],
+      "downstream_users": [],
+      "status": "staged",
+      "upstream_pr": null
+    },
+    {
+      "source_module": "ForMathlib.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm",
+      "source_declarations": [],
+      "current_namespace": "TauCeti",
+      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm",
+      "ownership_class": "tauceti",
+      "roadmap_target": "unitarily-invariant-norm",
+      "provenance_class": "moved; introduced at Davis--Kahan commit 3942779; authors Jon Crall, GPT 5.6 High; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
+      "direct_dependencies": [
+        "Mathlib",
+        "ForTauCeti.Analysis.InnerProductSpace.GramMatrix",
+        "ForTauCeti.Analysis.InnerProductSpace.KyFan",
+        "ForTauCeti.Analysis.InnerProductSpace.PrincipalAngles",
+        "ForTauCeti.Analysis.InnerProductSpace.RectangularSingularValues",
+        "ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantNorm"
+      ],
+      "blocked_dependencies": [],
+      "downstream_users": [],
+      "status": "staged",
+      "upstream_pr": null
+    },
+    {
+      "source_module": "ForMathlib.Analysis.InnerProductSpace.SchattenNorm",
+      "source_declarations": [],
+      "current_namespace": "TauCeti",
+      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.SchattenNorm",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.SchattenNorm",
+      "ownership_class": "tauceti",
+      "roadmap_target": "unitarily-invariant-norm",
+      "provenance_class": "moved; introduced at Davis--Kahan commit a8d4ea3; authors Jon Crall, GPT-5.6 Thinking; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
+      "direct_dependencies": [
+        "Mathlib",
+        "ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm",
+        "ForTauCeti.Analysis.Normed.FiniteLpGauge"
+      ],
+      "blocked_dependencies": [],
+      "downstream_users": [],
+      "status": "staged",
+      "upstream_pr": null
+    },
+    {
+      "source_module": "ForMathlib.Analysis.InnerProductSpace.SchurHorn",
+      "source_declarations": [],
+      "current_namespace": "TauCeti",
+      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.SchurHorn",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.SchurHorn",
+      "ownership_class": "tauceti",
+      "roadmap_target": "unitarily-invariant-norm",
+      "provenance_class": "moved; introduced at Davis--Kahan commit 9543631; authors Jon Crall, Claude Opus 4.8; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
+      "direct_dependencies": [
+        "Mathlib",
+        "ForTauCeti.Analysis.InnerProductSpace.CourantFischer"
+      ],
+      "blocked_dependencies": [],
+      "downstream_users": [],
+      "status": "staged",
+      "upstream_pr": null
+    },
+    {
+      "source_module": "ForMathlib.Analysis.InnerProductSpace.SelfAdjointFunctionalCalculus",
+      "source_declarations": [],
+      "current_namespace": "TauCeti",
+      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.SelfAdjointFunctionalCalculus",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.SelfAdjointFunctionalCalculus",
+      "ownership_class": "tauceti",
+      "roadmap_target": "operator-polar-decomposition",
+      "provenance_class": "moved; introduced at Davis--Kahan commit caa0966; authors Jon Crall, GPT-5.6 Thinking; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
+      "direct_dependencies": [
+        "Mathlib",
+        "ForTauCeti.Analysis.InnerProductSpace.CourantFischer",
+        "ForTauCeti.Analysis.InnerProductSpace.PositiveSqrt"
+      ],
+      "blocked_dependencies": [],
+      "downstream_users": [],
+      "status": "staged",
+      "upstream_pr": null
+    },
+    {
+      "source_module": "ForMathlib.Analysis.InnerProductSpace.SingularSubspace",
+      "source_declarations": [],
+      "current_namespace": "TauCeti",
+      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.SingularSubspace",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.SingularSubspace",
+      "ownership_class": "tauceti",
+      "roadmap_target": "unitarily-invariant-norm",
+      "provenance_class": "moved; introduced at Davis--Kahan commit 29506b0; authors Jon Crall, Claude Opus 4.8; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
+      "direct_dependencies": [
+        "Mathlib",
+        "ForTauCeti.Analysis.InnerProductSpace.CourantFischer",
+        "ForTauCeti.Analysis.InnerProductSpace.PolarDecomposition",
+        "ForTauCeti.Analysis.InnerProductSpace.SchurHorn"
+      ],
+      "blocked_dependencies": [],
+      "downstream_users": [],
+      "status": "staged",
+      "upstream_pr": null
+    },
+    {
+      "source_module": "ForMathlib.Analysis.InnerProductSpace.SingularSystem",
+      "source_declarations": [],
+      "current_namespace": "TauCeti",
+      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.SingularSystem",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.SingularSystem",
+      "ownership_class": "tauceti",
+      "roadmap_target": "operator-polar-decomposition",
+      "provenance_class": "moved; introduced at Davis--Kahan commit 82d20de; authors Jon Crall, GPT-5.6 High, Claude Fable 5; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
+      "direct_dependencies": [
+        "Mathlib",
+        "ForTauCeti.Analysis.InnerProductSpace.RectangularSingularValues"
+      ],
+      "blocked_dependencies": [],
+      "downstream_users": [],
+      "status": "staged",
+      "upstream_pr": null
+    },
+    {
+      "source_module": "ForTauCeti.Analysis.InnerProductSpace.SingularValues",
+      "source_declarations": [],
+      "current_namespace": "TauCeti",
+      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.SingularValues",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.SingularValues",
+      "ownership_class": "tauceti",
+      "roadmap_target": "approximation-number",
+      "provenance_class": "new; authors Jon Crall; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
+      "direct_dependencies": [
+        "Mathlib"
+      ],
+      "blocked_dependencies": [],
+      "downstream_users": [],
+      "status": "staged",
+      "upstream_pr": null
+    },
+    {
+      "source_module": "ForMathlib.Analysis.InnerProductSpace.Spectrum",
+      "source_declarations": [],
+      "current_namespace": "TauCeti",
+      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.Spectrum",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.Spectrum",
+      "ownership_class": "tauceti",
+      "roadmap_target": "unitarily-invariant-norm",
+      "provenance_class": "moved; introduced at Davis--Kahan commit 56f7495; authors Jon Crall, Claude Fable 5; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
+      "direct_dependencies": [
+        "Mathlib"
+      ],
+      "blocked_dependencies": [],
+      "downstream_users": [],
+      "status": "staged",
+      "upstream_pr": null
+    },
+    {
+      "source_module": "ForMathlib.Analysis.InnerProductSpace.TwoDimensionalSingularValues",
+      "source_declarations": [],
+      "current_namespace": "TauCeti",
+      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.TwoDimensionalSingularValues",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.TwoDimensionalSingularValues",
+      "ownership_class": "tauceti",
+      "roadmap_target": "unitarily-invariant-norm",
+      "provenance_class": "moved; introduced at Davis--Kahan commit cd7541b; authors Jon Crall, GPT-5.6 Thinking; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
+      "direct_dependencies": [
+        "Mathlib",
+        "ForTauCeti.Analysis.InnerProductSpace.KyFan",
+        "ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantNorm"
+      ],
+      "blocked_dependencies": [],
+      "downstream_users": [],
+      "status": "staged",
+      "upstream_pr": null
+    },
+    {
+      "source_module": "ForMathlib.Analysis.InnerProductSpace.UnitarilyInvariantNorm",
+      "source_declarations": [],
+      "current_namespace": "TauCeti",
+      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantNorm",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.UnitarilyInvariantNorm",
+      "ownership_class": "tauceti",
+      "roadmap_target": "unitarily-invariant-norm",
+      "provenance_class": "moved; introduced at Davis--Kahan commit 7481732; authors Jon Crall, Claude Fable 5; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
+      "direct_dependencies": [
+        "Mathlib",
+        "ForTauCeti.Analysis.InnerProductSpace.KyFan"
+      ],
+      "blocked_dependencies": [],
+      "downstream_users": [],
+      "status": "staged",
+      "upstream_pr": null
+    },
+    {
+      "source_module": "ForMathlib.Analysis.Matrix.EntrywiseEigenvalue",
+      "source_declarations": [],
+      "current_namespace": "TauCeti",
+      "staging_module": "ForTauCeti.Analysis.Matrix.EntrywiseEigenvalue",
+      "final_tauceti_module": "TauCeti.Analysis.Matrix.EntrywiseEigenvalue",
+      "ownership_class": "tauceti",
+      "roadmap_target": "matrix-spectral",
+      "provenance_class": "moved; introduced at Davis--Kahan commit 2356fd0; authors Jon Crall, Claude Opus 4.8; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
+      "direct_dependencies": [
+        "Mathlib",
+        "ForTauCeti.Analysis.InnerProductSpace.CourantFischer",
+        "ForTauCeti.Analysis.Matrix.EntrywiseOpNorm",
+        "ForTauCeti.Analysis.Matrix.SpectralFunctionMeasurable"
+      ],
+      "blocked_dependencies": [],
+      "downstream_users": [],
+      "status": "staged",
+      "upstream_pr": null
+    },
+    {
+      "source_module": "ForMathlib.Analysis.Matrix.EntrywiseOpNorm",
+      "source_declarations": [],
+      "current_namespace": "TauCeti",
+      "staging_module": "ForTauCeti.Analysis.Matrix.EntrywiseOpNorm",
+      "final_tauceti_module": "TauCeti.Analysis.Matrix.EntrywiseOpNorm",
+      "ownership_class": "tauceti",
+      "roadmap_target": "matrix-spectral",
+      "provenance_class": "moved; introduced at Davis--Kahan commit 7366186; authors Jon Crall, Claude Opus 4.8; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
+      "direct_dependencies": [
+        "Mathlib"
+      ],
+      "blocked_dependencies": [],
+      "downstream_users": [],
+      "status": "staged",
+      "upstream_pr": null
+    },
+    {
+      "source_module": "ForMathlib.Analysis.Matrix.SpectralFunctionMeasurable",
+      "source_declarations": [],
+      "current_namespace": "TauCeti",
+      "staging_module": "ForTauCeti.Analysis.Matrix.SpectralFunctionMeasurable",
+      "final_tauceti_module": "TauCeti.Analysis.Matrix.SpectralFunctionMeasurable",
+      "ownership_class": "tauceti",
+      "roadmap_target": "matrix-spectral",
+      "provenance_class": "moved; introduced at Davis--Kahan commit 82989e1; authors Jon Crall, Claude Fable 5; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
+      "direct_dependencies": [
+        "Mathlib",
+        "ForTauCeti.Analysis.Matrix.EntrywiseOpNorm",
+        "ForTauCeti.MeasureTheory.CfcMeasurable"
+      ],
+      "blocked_dependencies": [],
+      "downstream_users": [],
+      "status": "staged",
+      "upstream_pr": null
+    },
+    {
+      "source_module": "ForTauCeti.Analysis.Matrix.Spectrum",
+      "source_declarations": [],
+      "current_namespace": "TauCeti",
+      "staging_module": "ForTauCeti.Analysis.Matrix.Spectrum",
+      "final_tauceti_module": "TauCeti.Analysis.Matrix.Spectrum",
+      "ownership_class": "tauceti",
+      "roadmap_target": "matrix-spectral",
+      "provenance_class": "copied; introduced at Davis--Kahan commit fc38eb4; authors Jon Crall; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
+      "direct_dependencies": [
+        "Mathlib"
+      ],
+      "blocked_dependencies": [],
+      "downstream_users": [],
+      "status": "staged",
+      "upstream_pr": null
+    },
+    {
+      "source_module": "ForMathlib.Analysis.Normed.FiniteLpGauge",
+      "source_declarations": [],
+      "current_namespace": "TauCeti",
+      "staging_module": "ForTauCeti.Analysis.Normed.FiniteLpGauge",
+      "final_tauceti_module": "TauCeti.Analysis.Normed.FiniteLpGauge",
+      "ownership_class": "tauceti",
+      "roadmap_target": "unitarily-invariant-norm",
+      "provenance_class": "moved; introduced at Davis--Kahan commit a8d4ea3; authors Jon Crall, GPT-5.6 Thinking; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
+      "direct_dependencies": [
+        "Mathlib"
+      ],
+      "blocked_dependencies": [],
+      "downstream_users": [],
+      "status": "staged",
+      "upstream_pr": null
+    },
+    {
+      "source_module": "ForMathlib.Analysis.Normed.Operator.LinearIsometry",
+      "source_declarations": [],
+      "current_namespace": "TauCeti",
+      "staging_module": "ForTauCeti.Analysis.Normed.Operator.LinearIsometry",
+      "final_tauceti_module": "TauCeti.Analysis.Normed.Operator.LinearIsometry",
+      "ownership_class": "tauceti",
+      "roadmap_target": "unitarily-invariant-norm",
+      "provenance_class": "moved; introduced at Davis--Kahan commit 36d670a; authors Jon Crall, Claude Fable 5; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
+      "direct_dependencies": [
+        "Mathlib"
+      ],
+      "blocked_dependencies": [],
+      "downstream_users": [],
+      "status": "staged",
+      "upstream_pr": null
+    },
+    {
+      "source_module": "ForTauCeti.Analysis.SpecialFunctions.Integral.RationalQuadratic",
+      "source_declarations": [],
+      "current_namespace": "TauCeti",
+      "staging_module": "ForTauCeti.Analysis.SpecialFunctions.Integral.RationalQuadratic",
+      "final_tauceti_module": "TauCeti.Analysis.SpecialFunctions.Integral.RationalQuadratic",
+      "ownership_class": "tauceti",
+      "roadmap_target": "fourier-haagerup-zsido",
+      "provenance_class": "authored in place; introduced at Davis--Kahan commit f35ffc0; authors Jon Crall, GPT 5.6 High; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
+      "direct_dependencies": [
+        "Mathlib",
+        "ForTauCeti.Analysis.Fourier.HaagerupZsido.Defs",
+        "ForTauCeti.Analysis.Fourier.Poisson.CauchyLattice"
+      ],
+      "blocked_dependencies": [],
+      "downstream_users": [],
+      "status": "staged",
+      "upstream_pr": null
+    },
+    {
+      "source_module": "ForTauCeti.Analysis.SpecialFunctions.Integral.SineLaplace",
+      "source_declarations": [],
+      "current_namespace": "TauCeti",
+      "staging_module": "ForTauCeti.Analysis.SpecialFunctions.Integral.SineLaplace",
+      "final_tauceti_module": "TauCeti.Analysis.SpecialFunctions.Integral.SineLaplace",
+      "ownership_class": "tauceti",
+      "roadmap_target": "fourier-haagerup-zsido",
+      "provenance_class": "authored in place; introduced at Davis--Kahan commit f35ffc0; authors Jon Crall, GPT 5.6 High; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
+      "direct_dependencies": [
+        "Mathlib",
+        "ForTauCeti.Analysis.Fourier.ExponentialAbs"
+      ],
+      "blocked_dependencies": [],
+      "downstream_users": [],
+      "status": "staged",
+      "upstream_pr": null
+    },
+    {
+      "source_module": "ForTauCeti.Analysis.SpecialFunctions.Sqrt",
+      "source_declarations": [],
+      "current_namespace": "TauCeti",
+      "staging_module": "ForTauCeti.Analysis.SpecialFunctions.Sqrt",
+      "final_tauceti_module": "TauCeti.Analysis.SpecialFunctions.Sqrt",
+      "ownership_class": "tauceti",
+      "roadmap_target": "operator-polar-decomposition",
+      "provenance_class": "moved; introduced at Davis--Kahan commit fc38eb4; authors Jon Crall; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
+      "direct_dependencies": [
+        "Mathlib"
+      ],
+      "blocked_dependencies": [],
+      "downstream_users": [],
+      "status": "staged",
+      "upstream_pr": null
+    },
+    {
+      "source_module": "ForMathlib.MeasureTheory.CfcMeasurable",
+      "source_declarations": [],
+      "current_namespace": "TauCeti",
+      "staging_module": "ForTauCeti.MeasureTheory.CfcMeasurable",
+      "final_tauceti_module": "TauCeti.MeasureTheory.CfcMeasurable",
+      "ownership_class": "tauceti",
+      "roadmap_target": "matrix-spectral",
+      "provenance_class": "moved; introduced at Davis--Kahan commit fab5250; authors Jon Crall, Claude Opus 4.8; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
+      "direct_dependencies": [
+        "Mathlib"
+      ],
+      "blocked_dependencies": [],
+      "downstream_users": [],
+      "status": "staged",
+      "upstream_pr": null
+    },
+    {
+      "source_module": "ForTauCeti.MeasureTheory.CompactExists",
+      "source_declarations": [],
+      "current_namespace": "TauCeti",
+      "staging_module": "ForTauCeti.MeasureTheory.CompactExists",
+      "final_tauceti_module": "TauCeti.MeasureTheory.CompactExists",
+      "ownership_class": "tauceti",
+      "roadmap_target": "measure-theory-helpers",
+      "provenance_class": "copied; introduced at Davis--Kahan commit fc38eb4; authors Jon Crall; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
+      "direct_dependencies": [
+        "Mathlib"
+      ],
+      "blocked_dependencies": [],
+      "downstream_users": [],
+      "status": "staged",
+      "upstream_pr": null
+    },
+    {
+      "source_module": "ForTauCeti.MeasureTheory.Function.ConvergenceInMeasure",
+      "source_declarations": [],
+      "current_namespace": "TauCeti",
+      "staging_module": "ForTauCeti.MeasureTheory.Function.ConvergenceInMeasure",
+      "final_tauceti_module": "TauCeti.MeasureTheory.Function.ConvergenceInMeasure",
+      "ownership_class": "tauceti",
+      "roadmap_target": "measure-theory-helpers",
+      "provenance_class": "copied; introduced at Davis--Kahan commit fc38eb4; authors Jon Crall; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
+      "direct_dependencies": [
+        "Mathlib"
+      ],
+      "blocked_dependencies": [],
+      "downstream_users": [],
+      "status": "staged",
+      "upstream_pr": null
+    },
+    {
+      "source_module": "ForTauCeti.MeasureTheory.Measure.Typeclasses.Probability",
+      "source_declarations": [],
+      "current_namespace": "TauCeti",
+      "staging_module": "ForTauCeti.MeasureTheory.Measure.Typeclasses.Probability",
+      "final_tauceti_module": "TauCeti.MeasureTheory.Measure.Typeclasses.Probability",
+      "ownership_class": "tauceti",
+      "roadmap_target": "measure-theory-helpers",
+      "provenance_class": "copied; introduced at Davis--Kahan commit fc38eb4; authors Jon Crall; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
+      "direct_dependencies": [
+        "Mathlib"
+      ],
+      "blocked_dependencies": [],
+      "downstream_users": [],
+      "status": "staged",
+      "upstream_pr": null
+    },
+    {
+      "source_module": "ForMathlib.Probability.Moments.MatrixConcentration",
+      "source_declarations": [],
+      "current_namespace": "TauCeti",
+      "staging_module": "ForTauCeti.Probability.Moments.MatrixConcentration",
+      "final_tauceti_module": "TauCeti.Probability.Moments.MatrixConcentration",
+      "ownership_class": "tauceti",
+      "roadmap_target": "probability-concentration",
+      "provenance_class": "moved; introduced at Davis--Kahan commit 2356fd0; authors Jon Crall, Claude Opus 4.8; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
+      "direct_dependencies": [
+        "Mathlib",
+        "ForTauCeti.Analysis.Matrix.EntrywiseEigenvalue",
+        "ForTauCeti.Probability.Moments.Variance"
+      ],
+      "blocked_dependencies": [],
+      "downstream_users": [],
+      "status": "staged",
+      "upstream_pr": null
+    },
+    {
+      "source_module": "ForMathlib.Probability.Moments.SampleCovariance",
+      "source_declarations": [],
+      "current_namespace": "TauCeti",
+      "staging_module": "ForTauCeti.Probability.Moments.SampleCovariance",
+      "final_tauceti_module": "TauCeti.Probability.Moments.SampleCovariance",
+      "ownership_class": "tauceti",
+      "roadmap_target": "probability-concentration",
+      "provenance_class": "moved; introduced at Davis--Kahan commit f9309f7; authors Jon Crall, Claude Opus 4.8; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
+      "direct_dependencies": [
+        "Mathlib",
+        "ForTauCeti.Probability.Moments.MatrixConcentration",
+        "ForTauCeti.Probability.Moments.SampleMean"
+      ],
+      "blocked_dependencies": [],
+      "downstream_users": [],
+      "status": "staged",
+      "upstream_pr": null
+    },
+    {
+      "source_module": "ForMathlib.Probability.Moments.SampleMean",
+      "source_declarations": [],
+      "current_namespace": "TauCeti",
+      "staging_module": "ForTauCeti.Probability.Moments.SampleMean",
+      "final_tauceti_module": "TauCeti.Probability.Moments.SampleMean",
+      "ownership_class": "tauceti",
+      "roadmap_target": "probability-concentration",
+      "provenance_class": "moved; introduced at Davis--Kahan commit e9379f2; authors Jon Crall, Claude Opus 4.8; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
+      "direct_dependencies": [
+        "Mathlib"
+      ],
+      "blocked_dependencies": [],
+      "downstream_users": [],
+      "status": "staged",
+      "upstream_pr": null
+    },
+    {
+      "source_module": "ForMathlib.Probability.Moments.Variance",
+      "source_declarations": [],
+      "current_namespace": "TauCeti",
+      "staging_module": "ForTauCeti.Probability.Moments.Variance",
+      "final_tauceti_module": "TauCeti.Probability.Moments.Variance",
+      "ownership_class": "tauceti",
+      "roadmap_target": "probability-concentration",
+      "provenance_class": "moved; introduced at Davis--Kahan commit 56f7495; authors Jon Crall, Claude Fable 5; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
+      "direct_dependencies": [
+        "Mathlib"
       ],
       "blocked_dependencies": [],
       "downstream_users": [],

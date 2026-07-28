@@ -1,4 +1,8 @@
 /-
+Copyright (c) 2026 Kitware, Inc. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Jon Crall, Claude Fable 5
+
 Staged for Mathlib: additions to `Mathlib/Analysis/InnerProductSpace/` (new file
 `UnitarilyInvariantNorm.lean`).
 
@@ -838,7 +842,21 @@ homogeneity is pointwise, and two-sided unitary invariance is
 `sum_sq_norm_apply_unitary_comp` on the right and `LinearIsometryEquiv.norm_map`
 on the left.  This is the norm the paper's `…_hilbertSchmidt` bounds use, and it
 instantiates the every-UI-norm Davis–Kahan theorems to the Frobenius vocabulary
-(plan step OP2). -/
+(plan step OP2).
+
+## Provenance
+
+* Original repository: Davis--Kahan/DKPS formalization (Kitware, Inc.).
+* Original module: `ForMathlib.Analysis.InnerProductSpace.UnitarilyInvariantNorm`, moved to
+  `ForTauCeti` in the Wave-1 staging migration; introduced at Davis--Kahan
+  commit `7481732`.
+* Extraction class: **moved**.  The Wave-1 migration renamed the namespace
+  `ForMathlib` to `TauCeti`; declaration names and proofs are unchanged.
+* Original authors / copyright: Jon Crall, Claude Fable 5; Copyright (c) 2026 Kitware, Inc.;
+  Apache 2.0.
+* Spectra influence: **none** — this module imports only Mathlib and sibling
+  `ForTauCeti` staging modules.
+-/
 
 /-- `√(∑ (fᵢ + gᵢ)²) ≤ √(∑ fᵢ²) + √(∑ gᵢ²)` for nonnegative real vectors: the
 Minkowski inequality, obtained from `EuclideanSpace`'s triangle inequality by

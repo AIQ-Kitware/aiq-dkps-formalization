@@ -1,4 +1,8 @@
 /-
+Copyright (c) 2026 Kitware, Inc. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Jon Crall, Claude Opus 4.8
+
 Staged for Mathlib: a new `Mathlib/Analysis/InnerProductSpace/IntertwiningUnitary.lean`.
 
 Milestone 2 of the operator polar decomposition project — COMPLETE (proof-complete; reduction uses only:
@@ -382,7 +386,21 @@ noncomputable def blockPolar (hnd : P.NonDegenerate P') (j : Fin m) :
 `θᵢ = arccos ⟨U xᵢ, xᵢ⟩` for `xᵢ` an orthonormal basis adapted to `{Pⱼ}`; the "sum of squared
 sines" `∑ᵢ (1 - ‖⟨U xᵢ, xᵢ⟩‖²)` is the Frobenius off-diagonal size `‖𝒞⊥ U‖²_F`. Stated here at the
 inner-product level (the pinching/Frobenius identification joins the parent Result-B infrastructure
-in Milestone 3). Davis §2, lines 265–312. -/
+in Milestone 3). Davis §2, lines 265–312.
+
+## Provenance
+
+* Original repository: Davis--Kahan/DKPS formalization (Kitware, Inc.).
+* Original module: `ForMathlib.Analysis.InnerProductSpace.IntertwiningUnitary`, moved to
+  `ForTauCeti` in the Wave-1 staging migration; introduced at Davis--Kahan
+  commit `3676b55`.
+* Extraction class: **moved**.  The Wave-1 migration renamed the namespace
+  `ForMathlib` to `TauCeti`; declaration names and proofs are unchanged.
+* Original authors / copyright: Jon Crall, Claude Opus 4.8; Copyright (c) 2026 Kitware, Inc.;
+  Apache 2.0.
+* Spectra influence: **none** — this module imports only Mathlib and sibling
+  `ForTauCeti` staging modules.
+-/
 
 /-- The squared sine of the `i`-th rotation angle, `sin²θᵢ = 1 - ‖⟨U xᵢ, xᵢ⟩‖²`. -/
 noncomputable def sqSinAngle (hnd : P.NonDegenerate P') (b : OrthonormalBasis (Fin n) 𝕜 E)

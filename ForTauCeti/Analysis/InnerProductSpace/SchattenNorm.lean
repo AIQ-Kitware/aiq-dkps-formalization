@@ -36,6 +36,19 @@ The triangle inequality is factored into the two canonical ingredients:
 The resulting object is a `RectangularUnitarilyInvariantNorm`, so it inherits
 the existing two-sided unitary invariance, orbit-certificate bounds, Fan
 dominance bridges, and operator-ideal inequalities.
+
+## Provenance
+
+* Original repository: Davis--Kahan/DKPS formalization (Kitware, Inc.).
+* Original module: `ForMathlib.Analysis.InnerProductSpace.SchattenNorm`, moved to
+  `ForTauCeti` in the Wave-1 staging migration; introduced at Davis--Kahan
+  commit `a8d4ea3`.
+* Extraction class: **moved**.  The Wave-1 migration renamed the namespace
+  `ForMathlib` to `TauCeti`; declaration names and proofs are unchanged.
+* Original authors / copyright: Jon Crall, GPT-5.6 Thinking; Copyright (c) 2026 Kitware, Inc.;
+  Apache 2.0.
+* Spectra influence: **none** — this module imports only Mathlib and sibling
+  `ForTauCeti` staging modules.
 -/
 
 namespace TauCeti

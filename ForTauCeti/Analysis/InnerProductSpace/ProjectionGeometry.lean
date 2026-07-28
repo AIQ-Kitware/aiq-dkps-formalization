@@ -35,7 +35,21 @@ variable {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
 space: the span of a finite subfamily is finite-dimensional, so it always carries
 an orthogonal projection (the `HasOrthogonalProjection` instance is automatic when
 the ambient space is finite-dimensional, as in the spectral-subspace application
-below, and is requested explicitly otherwise). -/
+below, and is requested explicitly otherwise).
+
+## Provenance
+
+* Original repository: Davis--Kahan/DKPS formalization (Kitware, Inc.).
+* Original module: `ForMathlib.Analysis.InnerProductSpace.ProjectionGeometry`, moved to
+  `ForTauCeti` in the Wave-1 staging migration; introduced at Davis--Kahan
+  commit `f44d966`.
+* Extraction class: **moved**.  The Wave-1 migration renamed the namespace
+  `ForMathlib` to `TauCeti`; declaration names and proofs are unchanged.
+* Original authors / copyright: Jon Crall, Claude Fable 5, Claude Opus 4.8; Copyright (c) 2026 Kitware, Inc.;
+  Apache 2.0.
+* Spectra influence: **none** — this module imports only Mathlib and sibling
+  `ForTauCeti` staging modules.
+-/
 
 /--
 **Projection onto the span of an orthonormal subfamily.** For an orthonormal

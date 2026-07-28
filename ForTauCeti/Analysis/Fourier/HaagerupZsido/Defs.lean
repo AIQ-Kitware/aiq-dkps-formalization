@@ -68,7 +68,19 @@ theorem weight_eq_exp_quotient (y : ℝ) :
 The kernel is the sine multiple of the Laplace transform of the hyperbolic
 weight.  Its value at zero already vanishes through the sine factor, so no
 separate zero branch is required; the natural one-sided limits at zero are
-irrelevant for every integral computed below. -/
+irrelevant for every integral computed below.
+
+## Provenance
+
+* Original repository: Davis--Kahan/DKPS formalization (Kitware, Inc.).
+* Original module: authored directly in `ForTauCeti` at Davis--Kahan
+  commit `f35ffc0`; it has had no prior home.
+* Extraction class: **authored in place** for the Tau Ceti staging layer.
+* Original authors / copyright: Jon Crall, GPT 5.6 High; Copyright (c) 2026 Kitware, Inc.;
+  Apache 2.0.
+* Spectra influence: **none** — this module imports only Mathlib and sibling
+  `ForTauCeti` staging modules.
+-/
 
 /-- The Laplace transform of the hyperbolic weight at `|t|`, the inner factor of
 the limiting Haagerup--Zsidó kernel. -/

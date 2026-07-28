@@ -29,6 +29,17 @@ completeness of `E →L[𝕜] F`.
   universes.
 * `TauCeti.operatorNormFamily`: its symmetric (Hilbert, adjoint-invariant)
   refinement.
+
+## Provenance
+
+* Original repository: Davis--Kahan/DKPS formalization (Kitware, Inc.).
+* Original module: authored directly in `ForTauCeti` at Davis--Kahan
+  commit `b283d23`; it has had no prior home.
+* Extraction class: **authored in place** for the Tau Ceti staging layer.
+* Original authors / copyright: Jon Crall, Claude Opus 5, OpenAI GPT-5.6 Thinking; Copyright (c) 2026 Kitware, Inc.;
+  Apache 2.0.
+* Spectra influence: **none** — this module imports only Mathlib and sibling
+  `ForTauCeti` staging modules.
 -/
 
 @[expose] public section

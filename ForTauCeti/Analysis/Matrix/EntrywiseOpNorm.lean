@@ -1,4 +1,8 @@
 /-
+Copyright (c) 2026 Kitware, Inc. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Jon Crall, Claude Opus 4.8
+
 Staged for Mathlib: additions to `Mathlib/Analysis/InnerProductSpace/PiL2.lean`
 (the `ℓ¹ ≤ √card · ℓ²` bound) and `Mathlib/Analysis/Matrix/Normed.lean` (the
 entrywise → `ℓ²`-operator-norm bound).
@@ -39,6 +43,19 @@ The matrix bound's constant `n` is loose (the Frobenius bound gives `√(card)`)
 it is the form produced by an entrywise sup bound and consumed by operator-norm
 spectral-perturbation arguments. TODO(RCLike): the matrix bound is stated over
 `ℝ`; the `RCLike` generalization is routine (`‖A i j‖`, `RCLike.norm_ofReal`).
+
+## Provenance
+
+* Original repository: Davis--Kahan/DKPS formalization (Kitware, Inc.).
+* Original module: `ForMathlib.Analysis.Matrix.EntrywiseOpNorm`, moved to
+  `ForTauCeti` in the Wave-1 staging migration; introduced at Davis--Kahan
+  commit `7366186`.
+* Extraction class: **moved**.  The Wave-1 migration renamed the namespace
+  `ForMathlib` to `TauCeti`; declaration names and proofs are unchanged.
+* Original authors / copyright: Jon Crall, Claude Opus 4.8; Copyright (c) 2026 Kitware, Inc.;
+  Apache 2.0.
+* Spectra influence: **none** — this module imports only Mathlib and sibling
+  `ForTauCeti` staging modules.
 -/
 
 namespace TauCeti

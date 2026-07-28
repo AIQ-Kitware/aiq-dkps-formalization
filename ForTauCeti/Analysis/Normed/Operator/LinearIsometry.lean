@@ -1,4 +1,8 @@
 /-
+Copyright (c) 2026 Kitware, Inc. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Jon Crall, Claude Fable 5
+
 Staged for Mathlib: addition to `Mathlib/Analysis/Normed/Operator/LinearIsometry.lean`.
 
 Formalized by Claude Fable 5 (claude-fable-5[1m]).
@@ -24,6 +28,19 @@ the result in subtype form, so `simp` can push `ofEq` through explicit `Subtype.
 That matters when the result is fed to another bundled map (as in the Gram-rigidity
 composites in `TauCeti/Analysis/InnerProductSpace/GramMatrix.lean`), where no
 ambient coercion is available for `coe_ofEq_apply` to rewrite under.
+
+## Provenance
+
+* Original repository: Davis--Kahan/DKPS formalization (Kitware, Inc.).
+* Original module: `ForMathlib.Analysis.Normed.Operator.LinearIsometry`, moved to
+  `ForTauCeti` in the Wave-1 staging migration; introduced at Davis--Kahan
+  commit `36d670a`.
+* Extraction class: **moved**.  The Wave-1 migration renamed the namespace
+  `ForMathlib` to `TauCeti`; declaration names and proofs are unchanged.
+* Original authors / copyright: Jon Crall, Claude Fable 5; Copyright (c) 2026 Kitware, Inc.;
+  Apache 2.0.
+* Spectra influence: **none** — this module imports only Mathlib and sibling
+  `ForTauCeti` staging modules.
 -/
 
 namespace TauCeti

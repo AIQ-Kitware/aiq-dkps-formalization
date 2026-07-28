@@ -328,7 +328,21 @@ theorem hasEigenvalue_selfCompAdjoint_sq_singularValues
   exact (hasEigenvalue_adjointCompSelf_iff_selfCompAdjoint A
     (((A.singularValues i : ℝ) : 𝕜) ^ 2) hne).mp h0
 
-/-! ### Quadratic floors and Gram spectra -/
+/-! ### Quadratic floors and Gram spectra
+
+## Provenance
+
+* Original repository: Davis--Kahan/DKPS formalization (Kitware, Inc.).
+* Original module: `ForMathlib.Analysis.InnerProductSpace.RectangularSingularValues`, moved to
+  `ForTauCeti` in the Wave-1 staging migration; introduced at Davis--Kahan
+  commit `82d20de`.
+* Extraction class: **moved**.  The Wave-1 migration renamed the namespace
+  `ForMathlib` to `TauCeti`; declaration names and proofs are unchanged.
+* Original authors / copyright: Jon Crall, GPT-5.6 High, Claude Fable 5; Copyright (c) 2026 Kitware, Inc.;
+  Apache 2.0.
+* Spectra influence: **none** — this module imports only Mathlib and sibling
+  `ForTauCeti` staging modules.
+-/
 
 /-- The Gram quadratic form is the squared image norm:
 `re ⟪(A†A) x, x⟫ = ‖A x‖²`. -/

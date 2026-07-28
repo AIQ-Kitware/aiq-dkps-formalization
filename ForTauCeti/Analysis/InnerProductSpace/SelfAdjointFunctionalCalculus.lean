@@ -28,6 +28,19 @@ operator in the associated orthonormal eigenbasis.
 The construction is intended as a small `RCLike` counterpart of the continuous
 functional calculus.  It is sufficient for functions such as `arcsin` and the
 totalized tangent functions used by finite-dimensional operator-angle theory.
+
+## Provenance
+
+* Original repository: Davis--Kahan/DKPS formalization (Kitware, Inc.).
+* Original module: `ForMathlib.Analysis.InnerProductSpace.SelfAdjointFunctionalCalculus`, moved to
+  `ForTauCeti` in the Wave-1 staging migration; introduced at Davis--Kahan
+  commit `caa0966`.
+* Extraction class: **moved**.  The Wave-1 migration renamed the namespace
+  `ForMathlib` to `TauCeti`; declaration names and proofs are unchanged.
+* Original authors / copyright: Jon Crall, GPT-5.6 Thinking; Copyright (c) 2026 Kitware, Inc.;
+  Apache 2.0.
+* Spectra influence: **none** — this module imports only Mathlib and sibling
+  `ForTauCeti` staging modules.
 -/
 
 namespace FiniteDimensional

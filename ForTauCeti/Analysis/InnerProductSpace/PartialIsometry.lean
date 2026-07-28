@@ -1,4 +1,8 @@
 /-
+Copyright (c) 2026 Kitware, Inc. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Jon Crall, Claude Opus 4.8
+
 Staged for Mathlib: a new `Mathlib/Analysis/InnerProductSpace/PartialIsometry.lean`.
 
 Sub-dev II of the operator polar decomposition project — COMPLETE (proof-complete; reduction uses only:
@@ -32,6 +36,19 @@ of the polar decomposition `A = U |A|`.
 
 Source: Conway, *A Course in Functional Analysis*, 2nd ed., §VI.3 (partial isometries and the polar
 decomposition); Reed–Simon, *Methods of Modern Mathematical Physics I*, §VI (before Thm VI.10).
+
+## Provenance
+
+* Original repository: Davis--Kahan/DKPS formalization (Kitware, Inc.).
+* Original module: `ForMathlib.Analysis.InnerProductSpace.PartialIsometry`, moved to
+  `ForTauCeti` in the Wave-1 staging migration; introduced at Davis--Kahan
+  commit `3676b55`.
+* Extraction class: **moved**.  The Wave-1 migration renamed the namespace
+  `ForMathlib` to `TauCeti`; declaration names and proofs are unchanged.
+* Original authors / copyright: Jon Crall, Claude Opus 4.8; Copyright (c) 2026 Kitware, Inc.;
+  Apache 2.0.
+* Spectra influence: **none** — this module imports only Mathlib and sibling
+  `ForTauCeti` staging modules.
 -/
 
 open scoped InnerProductSpace

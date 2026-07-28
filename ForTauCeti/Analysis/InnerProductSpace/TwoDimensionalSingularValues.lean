@@ -201,7 +201,21 @@ theorem singularValues_lowerLeft_two_by_two (r : ℝ) :
   simpa using hgram
 
 
-/-! ### Trace--determinant recovery on a two-dimensional source -/
+/-! ### Trace--determinant recovery on a two-dimensional source
+
+## Provenance
+
+* Original repository: Davis--Kahan/DKPS formalization (Kitware, Inc.).
+* Original module: `ForMathlib.Analysis.InnerProductSpace.TwoDimensionalSingularValues`, moved to
+  `ForTauCeti` in the Wave-1 staging migration; introduced at Davis--Kahan
+  commit `cd7541b`.
+* Extraction class: **moved**.  The Wave-1 migration renamed the namespace
+  `ForMathlib` to `TauCeti`; declaration names and proofs are unchanged.
+* Original authors / copyright: Jon Crall, GPT-5.6 Thinking; Copyright (c) 2026 Kitware, Inc.;
+  Apache 2.0.
+* Spectra influence: **none** — this module imports only Mathlib and sibling
+  `ForTauCeti` staging modules.
+-/
 
 /-- The trace of the Gram operator, written in the standard planar basis.
 This is the squared Frobenius norm and is independent of the chosen
