@@ -190,6 +190,38 @@ is not this lane's to migrate.
 - The `Restriction.lean` and `ClosedSylvesterEquation.lean` facade blocks, once
   their remaining callers move.
 
+**`SinTheta/Natural/Reducing.lean` is off the bundle (edward, aiq-gpu,
+2026-07-28).**  27 `ClosedOperator` occurrences → **0**.  Both problem records,
+the data constructor, and all eight endpoints are stated over `LinearPMap`; the
+constructor now produces `UnboundedSinThetaDataPMap` directly.
+
+**A correction to the standing expectation about this migration.**  The Riccati
+sweep found that retyping off the bundle *drops* hypotheses, because the bundle
+was silently assuming density and closedness the mathematics never used.  **For a
+problem record the opposite holds.**  `UnboundedSinThetaDataPMap` genuinely needs
+density and closedness of `A` and `A₀` — the complementary restriction inherits
+both — so the two structures **gained** four fields (`A_dense`, `A_closed`,
+`A₀_dense`, `A₀_closed`) and the four record-free endpoints gained four binders.
+Nothing was weakened; the obligations were simply always there, discharged
+implicitly by the bundle.  Do not promise hypothesis reduction when migrating a
+*record*; that result belongs to migrating *operations*.
+
+**One conversion boundary is left deliberately, and it is visible in the source.**
+The four complex endpoints route through the raw engines added last lane.  The
+four **real** endpoints call `sinTheta_unbounded_exact_real` /
+`generalizedSinTheta_unbounded_exact_real` (`SinTheta/Real/{Unbounded,
+Generalized}.lean`), which have **no `linearPMap_` twin**, so those four proofs
+carry an explicit `D.toClosed` with a comment saying why.  The records themselves
+are fully raw either way.  Adding the two real twins — same one-line shape as the
+complex ones, since the transfer is definitional — removes the last four
+conversions.  Those two files are inside jon (namek)'s released rows, which is why
+this lane stopped at the boundary rather than crossing it.
+
+Reusable bit worth promoting some day: `linearPMap_isClosed_iff_range_isClosed`
+(currently `private` in this module) reconciles `LinearPMap.IsClosed`, which is
+stated on the graph, with the reducing-restriction API, which states closedness as
+a range.  They are the same set; every consumer of both needs this.
+
 **The manuscript sin-Θ engines have raw twins (edward, aiq-gpu, 2026-07-28).**
 `linearPMap_sinTheta_unbounded_exact_complex` and
 `linearPMap_generalizedSinTheta_unbounded_exact_complex`
