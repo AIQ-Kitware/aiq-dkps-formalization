@@ -225,6 +225,130 @@ theorem unbounded_adjoint_residual_block_identity
     unfold w
     abel
 
+/-- The raw partial-map form of the complementary residual Sylvester equation.
+Unlike the historical source-facing wrapper, this theorem is proved directly
+over `LinearPMap` domains and adjoints. -/
+theorem linearPMap_unbounded_adjoint_residual_block_identity
+    (D : UnboundedSinThetaDataPMap (𝕜 := 𝕜) (E := E) (F := F) (G := G))
+    (hA : _root_.IsSelfAdjoint D.A)
+    (hA₀ : _root_.IsSelfAdjoint D.A₀)
+    (_hΛ₁ : _root_.IsSelfAdjoint D.Λ₁) :
+    TauCeti.LinearPMap.SylvesterEquation D.A₀ D.Λ₁
+      (D.X.adjoint ∘L D.F₁)
+      (-(D.residual.adjoint ∘L D.F₁)) := by
+  have hA_symm : ∀ x y : D.A.domain,
+      ⟪D.A x, (y : E)⟫_𝕜 = ⟪(x : E), D.A y⟫_𝕜 := by
+    have hformal := LinearPMap.adjoint_isFormalAdjoint D.A_dense
+    rw [LinearPMap.isSelfAdjoint_def.mp hA] at hformal
+    intro x y
+    exact hformal x y
+  have hA₀P : D.A₀.adjoint = D.A₀ := LinearPMap.isSelfAdjoint_def.mp hA₀
+  have hA₀_symm : ∀ x y : D.A₀.domain,
+      ⟪D.A₀ x, (y : F)⟫_𝕜 = ⟪(x : F), D.A₀ y⟫_𝕜 := by
+    have hformal := LinearPMap.adjoint_isFormalAdjoint D.A₀_dense
+    rw [hA₀P] at hformal
+    intro x y
+    exact hformal x y
+  refine ⟨?_, ?_⟩
+  · intro y
+    let z : F := D.X.adjoint (D.F₁ (y : G))
+    let w : F :=
+      D.X.adjoint (D.F₁ (D.Λ₁ y)) -
+        D.residual.adjoint (D.F₁ (y : G))
+    have hw : ∀ x : D.A₀.domain,
+        ⟪w, (x : F)⟫_𝕜 = ⟪z, D.A₀ x⟫_𝕜 := by
+      intro x
+      let Fx : D.A.domain := ⟨D.X (x : F), D.X_maps_domain x⟩
+      let Fy : D.A.domain := ⟨D.F₁ (y : G), D.F₁_maps_domain y⟩
+      calc
+        ⟪w, (x : F)⟫_𝕜 =
+            ⟪D.F₁ (D.Λ₁ y), D.X (x : F)⟫_𝕜 -
+              ⟪D.F₁ (y : G), D.residual (x : F)⟫_𝕜 := by
+          rw [inner_sub_left,
+            D.X.adjoint_inner_left (x : F) (D.F₁ (D.Λ₁ y)),
+            D.residual.adjoint_inner_left (x : F) (D.F₁ (y : G))]
+        _ = ⟪D.A Fy, D.X (x : F)⟫_𝕜 -
+              ⟪D.F₁ (y : G), D.residual (x : F)⟫_𝕜 := by
+          rw [← D.intertwines y]
+        _ = ⟪D.F₁ (y : G), D.A Fx⟫_𝕜 -
+              ⟪D.F₁ (y : G), D.residual (x : F)⟫_𝕜 := by
+          have hsymm :
+              ⟪D.A Fy, D.X (x : F)⟫_𝕜 =
+                ⟪D.F₁ (y : G), D.A Fx⟫_𝕜 := by
+            simpa only [Fx, Fy] using hA_symm Fy Fx
+          rw [hsymm]
+        _ = ⟪D.F₁ (y : G), D.X (D.A₀ x)⟫_𝕜 := by
+          rw [← D.residual_eq x, inner_sub_right]
+          abel
+        _ = ⟪z, D.A₀ x⟫_𝕜 := by
+          rw [← D.X.adjoint_inner_left (D.A₀ x) (D.F₁ (y : G))]
+    have hzAdj : z ∈ D.A₀.adjoint.domain :=
+      LinearPMap.mem_adjoint_domain_of_exists z ⟨w, hw⟩
+    have hz : z ∈ D.A₀.domain := by
+      rw [← hA₀P]
+      exact hzAdj
+    simpa only [z, ContinuousLinearMap.comp_apply] using hz
+  · intro y
+    let z : F := D.X.adjoint (D.F₁ (y : G))
+    let w : F :=
+      D.X.adjoint (D.F₁ (D.Λ₁ y)) -
+        D.residual.adjoint (D.F₁ (y : G))
+    have hw : ∀ x : D.A₀.domain,
+        ⟪w, (x : F)⟫_𝕜 = ⟪z, D.A₀ x⟫_𝕜 := by
+      intro x
+      let Fx : D.A.domain := ⟨D.X (x : F), D.X_maps_domain x⟩
+      let Fy : D.A.domain := ⟨D.F₁ (y : G), D.F₁_maps_domain y⟩
+      calc
+        ⟪w, (x : F)⟫_𝕜 =
+            ⟪D.F₁ (D.Λ₁ y), D.X (x : F)⟫_𝕜 -
+              ⟪D.F₁ (y : G), D.residual (x : F)⟫_𝕜 := by
+          rw [inner_sub_left,
+            D.X.adjoint_inner_left (x : F) (D.F₁ (D.Λ₁ y)),
+            D.residual.adjoint_inner_left (x : F) (D.F₁ (y : G))]
+        _ = ⟪D.A Fy, D.X (x : F)⟫_𝕜 -
+              ⟪D.F₁ (y : G), D.residual (x : F)⟫_𝕜 := by
+          rw [← D.intertwines y]
+        _ = ⟪D.F₁ (y : G), D.A Fx⟫_𝕜 -
+              ⟪D.F₁ (y : G), D.residual (x : F)⟫_𝕜 := by
+          have hsymm :
+              ⟪D.A Fy, D.X (x : F)⟫_𝕜 =
+                ⟪D.F₁ (y : G), D.A Fx⟫_𝕜 := by
+            simpa only [Fx, Fy] using hA_symm Fy Fx
+          rw [hsymm]
+        _ = ⟪D.F₁ (y : G), D.X (D.A₀ x)⟫_𝕜 := by
+          rw [← D.residual_eq x, inner_sub_right]
+          abel
+        _ = ⟪z, D.A₀ x⟫_𝕜 := by
+          rw [← D.X.adjoint_inner_left (D.A₀ x) (D.F₁ (y : G))]
+    have hzAdj : z ∈ D.A₀.adjoint.domain :=
+      LinearPMap.mem_adjoint_domain_of_exists z ⟨w, hw⟩
+    have hzDom : z ∈ D.A₀.domain := by
+      simpa only [hA₀P] using hzAdj
+    have hA₀z : D.A₀ ⟨z, hzDom⟩ = w := by
+      have hinner :
+          (fun x : F => ⟪D.A₀ ⟨z, hzDom⟩, x⟫_𝕜) =
+            fun x : F => ⟪w, x⟫_𝕜 := by
+        apply Continuous.ext_on D.A₀_dense
+        · exact continuous_const.inner continuous_id
+        · exact continuous_const.inner continuous_id
+        · intro x hx
+          let xDom : D.A₀.domain := ⟨x, hx⟩
+          calc
+            ⟪D.A₀ ⟨z, hzDom⟩, x⟫_𝕜 =
+                ⟪z, D.A₀ xDom⟫_𝕜 := hA₀_symm ⟨z, hzDom⟩ xDom
+            _ = ⟪w, x⟫_𝕜 := (hw xDom).symm
+      have hzero :
+          ⟪D.A₀ ⟨z, hzDom⟩ - w,
+            D.A₀ ⟨z, hzDom⟩ - w⟫_𝕜 = 0 := by
+        rw [inner_sub_left,
+          congrFun hinner (D.A₀ ⟨z, hzDom⟩ - w), sub_self]
+      exact sub_eq_zero.mp (inner_self_eq_zero.mp hzero)
+    change D.A₀ ⟨z, hzDom⟩ - D.X.adjoint (D.F₁ (D.Λ₁ y)) =
+      -D.residual.adjoint (D.F₁ (y : G))
+    rw [hA₀z]
+    unfold w
+    abel
+
 /-- The projected residual block remains in the same rectangular ideal and its
  gauge is no larger than the original residual gauge. -/
 theorem adjointResidualBlock_mem_and_gauge_le
