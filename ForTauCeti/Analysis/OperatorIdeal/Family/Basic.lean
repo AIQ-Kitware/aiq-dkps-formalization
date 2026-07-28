@@ -121,9 +121,9 @@ set_option linter.checkUnivs false in
 
 `gauge A` is the ideal norm of `A`, taken in `ℝ≥0∞` so that it is defined on
 every bounded operator: `A` belongs to the ideal exactly when `gauge A ≠ ∞`
-(`OperatorIdealFamily.carrier`).  Source and target spaces range over
-independent universes; adjoint symmetry is added on the diagonal by
-`SymmetricOperatorIdealFamily`. -/
+(`OperatorIdealFamily.carrier`).  Source and target are Hilbert spaces in
+independent universes (see the module docstring for why Hilbert); adjoint
+symmetry is added on the diagonal by `SymmetricOperatorIdealFamily`. -/
 structure OperatorIdealFamily (𝕜 : Type u) [RCLike 𝕜] where
   /-- The ideal norm, extended by `∞` off the ideal. -/
   gauge : ∀ {E : Type v} {F : Type w}
