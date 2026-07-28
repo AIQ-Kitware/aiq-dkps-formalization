@@ -44,8 +44,14 @@ canonical `DavisKahan` or `ForTauCeti` layer.
 
 ```bash
 lake build FinishYuWangSamworth.Symmetric
+lake build FinishYuWangSamworth.Rectangular.FrobeniusGram
 lake build FinishYuWangSamworth.Rectangular
 lake build FinishYuWangSamworth
 ```
+
+The first new quantitative layer is
+`FinishYuWangSamworth.Rectangular.FrobeniusGram`. It proves the right and left
+Gram perturbation bounds in Frobenius norm and simplifies their coefficients to
+the exact `2 * ||A|| + ||Ahat - A||` form used in Theorem 4.
 
 Warnings are errors for this library.

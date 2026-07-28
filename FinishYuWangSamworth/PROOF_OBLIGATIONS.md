@@ -8,16 +8,18 @@ Construct a source-shaped corresponding-block predicate for ordered right
 singular subspaces, viewed as spectral blocks of `A.adjoint ∘ A`. Apply the
 already proved population-gap theorem to the two right Gram operators.
 
-The missing quantitative bridge must provide both branches:
+The quantitative Gram bridge is now isolated in
+`FinishYuWangSamworth.Rectangular.FrobeniusGram`:
 
-* operator branch from `opNorm_rightGram_sub_le` followed by
-  `||Ahat|| <= ||A|| + ||Ahat - A||`;
+* operator branch from `opNorm_rightGram_sub_le`;
 * Frobenius branch
   `||Ahat^* Ahat - A^* A||_F <=
-    (||Ahat||_op + ||A||_op) ||Ahat - A||_F`.
+    (||Ahat||_op + ||A||_op) ||Ahat - A||_F`;
+* the paper coefficient
+  `2 * ||A||_op + ||Ahat - A||_op`.
 
-Then simplify to the paper's directly usable coefficient
-`2 * sigma_1(A) + ||Ahat - A||_op`.
+Remaining work is the source-shaped corresponding-block predicate and assembly
+through the symmetric population-gap theorem.
 
 ### 2. Exact left-singular Theorem 4
 

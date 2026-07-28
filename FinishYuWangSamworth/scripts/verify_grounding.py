@@ -10,6 +10,8 @@ REQUIRED_FILES = [
     "DavisKahan/Specialized/SingularSubspace.lean",
     "ForTauCeti/Analysis/InnerProductSpace/AlignedBasis.lean",
     "ForTauCeti/Analysis/InnerProductSpace/SingularSubspace.lean",
+    "DavisKahan/Sources/DavisKahan1970/Ideals/HilbertSchmidt.lean",
+    "DavisKahan/Sources/DavisKahan1970/Ideals/HilbertSchmidtFrobenius.lean",
 ]
 
 REQUIRED_DECLARATIONS = {
@@ -22,6 +24,14 @@ REQUIRED_DECLARATIONS = {
         "theorem rightSingularSubspace_sinTheta_le",
         "theorem leftSingularSubspace_sinTheta_le",
         "theorem sq_gap_mul_sum_cross_singularVectors_le",
+    ],
+    "DavisKahan/Sources/DavisKahan1970/Ideals/HilbertSchmidt.lean": [
+        "theorem paperHilbertSchmidtNorm_adjoint",
+        "theorem paperHilbertSchmidtNorm_comp_le",
+    ],
+    "DavisKahan/Sources/DavisKahan1970/Ideals/HilbertSchmidtFrobenius.lean": [
+        "theorem paperHilbertSchmidtNorm_eq_rectangularFrobenius",
+        "theorem paperHilbertSchmidtNorm_eq_frobenius",
     ],
 }
 
