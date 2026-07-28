@@ -411,6 +411,26 @@ TanTwoThetaKyFanAmbient.lean
 
 This is a naming correction, not a demand to finish the unrestricted theorem first.
 
+### Resolution 2026-07-28 — RESOLVED
+
+All three declarations renamed and the module renamed to `DavisKahan/DoubleAngle/TanTwoThetaKyFanFiniteCarrier.lean` (the audit's own suggestion, and the one that matches the file's Method paragraph, which already said "Everything happens inside the finite-dimensional carrier `M := U ⊔ T '' U`").
+
+The suffix used is `_of_finiteDimensional_invariantSubspace`, **not** the table's `_of_finiteDimensional_invariantGraph`. The audit itself says to substitute the exact mathematical noun from the signature if it differs, and it does: the hypothesis is literally `[FiniteDimensional 𝕜 U]` on the invariant **subspace** `U`. The graph of `T` is what builds the carrier, but no object named `invariantGraph` appears in the statement.
+
+The module docstring, which previously advertised "infinite dimensions", now states the scope plainly: the ambient space may be infinite-dimensional, the active configuration may not, and this is an ambient-space lifting of the finite-dimensional theorem rather than the unrestricted one.
+
+---
+
+## Audit status summary (2026-07-28)
+
+| item | status |
+|---|---|
+| 1. `ContinuousLinearMap.polarIsometry` | superseded — `polarPartialIsometry` landed and `PolarIsometryFinal` now re-exports `polarPartial`; re-audit rather than act on the section as written |
+| 2. `TauCeti.polarUnitary` | **RESOLVED** — renamed `choosePolarUnitary`, `exists_polar_decomposition_unitary` added |
+| 3. `FiniteDimensional.inverseOnRange` | **RESOLVED** — alias family deleted |
+| 4. `UnitaryInvariantIdealFamily` | **OPEN** — mechanical but large: 94 references across 30 files, including `SinTheta/**` and `Sources/**` |
+| 5. `*_infinite` tan-two-theta names | **RESOLVED** — renamed, module renamed to `TanTwoThetaKyFanFiniteCarrier` |
+
 ---
 
 # Names that do not materially overclaim
