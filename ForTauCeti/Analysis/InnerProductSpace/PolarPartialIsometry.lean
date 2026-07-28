@@ -578,4 +578,48 @@ theorem polarPartial_adjoint (M : E →L[ℂ] F) :
       exact Submodule.starProjection_apply_mem _ _
     exact inner_self_eq_zero.mp (hperp _ hmem)
 
+/-- The **final space** of the polar decomposition: the closure of the range of `M`,
+equivalently the range of `W` (`range_polarPartial`). -/
+noncomputable def polarFinal (M : E →L[ℂ] F) : Submodule ℂ F :=
+  (LinearMap.range M.toLinearMap).topologicalClosure
+
+instance (M : E →L[ℂ] F) : CompleteSpace M.polarFinal :=
+  Submodule.topologicalClosure.completeSpace _
+
+theorem polarFinal_eq_range_polarPartial (M : E →L[ℂ] F) :
+    M.polarFinal = LinearMap.range M.polarPartial.toLinearMap :=
+  M.range_polarPartial.symm
+
+/-- `W⋆` vanishes off the final space. -/
+theorem adjoint_polarPartial_eq_zero_of_mem_orthogonal (M : E →L[ℂ] F) {y : F}
+    (hy : y ∈ M.polarFinalᗮ) : M.polarPartial.adjoint y = 0 := by
+  have hall : ∀ z : E, ⟪z, M.polarPartial.adjoint y⟫_ℂ = 0 := by
+    intro z
+    rw [ContinuousLinearMap.adjoint_inner_right]
+    refine hy _ ?_
+    rw [M.polarFinal_eq_range_polarPartial]
+    exact ⟨z, rfl⟩
+  exact inner_self_eq_zero.mp (hall _)
+
+/-- **`W W⋆` is the orthogonal projection onto the final space.** -/
+theorem polarPartial_comp_adjoint (M : E →L[ℂ] F) :
+    M.polarPartial ∘L M.polarPartial.adjoint = M.polarFinal.starProjection := by
+  ext y
+  obtain ⟨p, hp, q, hq, rfl⟩ := Submodule.exists_add_mem_mem_orthogonal (K := M.polarFinal) y
+  have hqz : M.polarFinal.starProjection q = 0 := by
+    have hmem : q ∈ (M.polarFinal.starProjection).ker := by
+      rw [Submodule.ker_starProjection]; exact hq
+    exact hmem
+  have hqW : M.polarPartial.adjoint q = 0 :=
+    M.adjoint_polarPartial_eq_zero_of_mem_orthogonal hq
+  have hpW : M.polarPartial (M.polarPartial.adjoint p) = p := by
+    rw [M.polarFinal_eq_range_polarPartial] at hp
+    obtain ⟨z, rfl⟩ := hp
+    simp only [ContinuousLinearMap.coe_coe]
+    have hz : M.polarPartial.adjoint (M.polarPartial z) = M.polarInitial.starProjection z := by
+      rw [← ContinuousLinearMap.comp_apply, M.adjoint_comp_polarPartial]
+    rw [hz, ← ContinuousLinearMap.comp_apply, M.polarPartial_comp_starProjection]
+  simp only [ContinuousLinearMap.comp_apply, map_add, hqW, hqz, map_zero, add_zero,
+    Submodule.starProjection_eq_self_iff.mpr hp, hpW]
+
 end ContinuousLinearMap
