@@ -97,27 +97,27 @@ theorem pullback_reducesSubspace_of_intertwines_projection
   rcases hred with ⟨hVdom, hVOrthDom, hVinv, hVOrthInv⟩
   refine ⟨?_, ?_, ?_, ?_⟩
   · intro x
-    change e (U.starProjection (x : E)) ∈ A.domain
+    change e (U.starProjection (x : E)) ∈ A.toLinearPMap.domain
     have hintertwine := congrArg (fun T : E →L[𝕜] E => T (x : E)) hproj
     change e (U.starProjection (x : E)) =
       V.starProjection (e (x : E)) at hintertwine
     rw [hintertwine]
-    simpa only [pullbackDomainToOriginal_coe] using
-      hVdom (pullbackDomainToOriginal A e x)
+    exact hVdom (pullbackDomainToOriginal A e x)
   · intro x
-    change e (Uᗮ.starProjection (x : E)) ∈ A.domain
+    change e (Uᗮ.starProjection (x : E)) ∈ A.toLinearPMap.domain
     have hintertwine := congrArg (fun T : E →L[𝕜] E => T (x : E)) hprojOrth
     change e (Uᗮ.starProjection (x : E)) =
       Vᗮ.starProjection (e (x : E)) at hintertwine
     rw [hintertwine]
-    simpa only [pullbackDomainToOriginal_coe] using
-      hVOrthDom (pullbackDomainToOriginal A e x)
+    exact hVOrthDom (pullbackDomainToOriginal A e x)
   · intro x hx
+    change (pullback A e).toLinearMap x ∈ U
     rw [pullback_apply]
     apply symm_map_mem_of_intertwines_projection e U V hproj
     apply hVinv (pullbackDomainToOriginal A e x)
     exact map_mem_of_intertwines_projection e U V hproj hx
   · intro x hx
+    change (pullback A e).toLinearMap x ∈ Uᗮ
     rw [pullback_apply]
     apply symm_map_mem_of_intertwines_projection e Uᗮ Vᗮ hprojOrth
     apply hVOrthInv (pullbackDomainToOriginal A e x)
@@ -125,10 +125,101 @@ theorem pullback_reducesSubspace_of_intertwines_projection
 
 end ClosedOperator
 
+/-- Reduction transports through a canonical partial-map pullback when the
+equivalence intertwines the corresponding orthogonal projections. -/
+theorem linearPMap_pullback_reducesSubspace_of_intertwines_projection
+    (A : E →ₗ.[𝕜] E)
+    (e : E ≃L[𝕜] E) (U V : Submodule 𝕜 E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hproj : e.toContinuousLinearMap ∘L U.starProjection =
+      V.starProjection ∘L e.toContinuousLinearMap)
+    (hred : TauCeti.LinearPMap.ReducesSubspace A V) :
+    TauCeti.LinearPMap.ReducesSubspace
+      (TauCeti.LinearPMap.pullback A e) U := by
+  have hprojOrth : e.toContinuousLinearMap ∘L Uᗮ.starProjection =
+      Vᗮ.starProjection ∘L e.toContinuousLinearMap :=
+    ClosedOperator.intertwines_orthogonal_projection_of_intertwines_projection
+      e U V hproj
+  rcases hred with ⟨hVdom, hVOrthDom, hVinv, hVOrthInv⟩
+  refine ⟨?_, ?_, ?_, ?_⟩
+  · intro x
+    change e (U.starProjection (x : E)) ∈ A.domain
+    have hintertwine := congrArg (fun T : E →L[𝕜] E => T (x : E)) hproj
+    change e (U.starProjection (x : E)) =
+      V.starProjection (e (x : E)) at hintertwine
+    rw [hintertwine]
+    exact hVdom (TauCeti.LinearPMap.pullbackDomainToOriginal A e x)
+  · intro x
+    change e (Uᗮ.starProjection (x : E)) ∈ A.domain
+    have hintertwine := congrArg (fun T : E →L[𝕜] E => T (x : E)) hprojOrth
+    change e (Uᗮ.starProjection (x : E)) =
+      Vᗮ.starProjection (e (x : E)) at hintertwine
+    rw [hintertwine]
+    exact hVOrthDom (TauCeti.LinearPMap.pullbackDomainToOriginal A e x)
+  · intro x hx
+    change TauCeti.LinearPMap.pullbackLinearMap A e x ∈ U
+    rw [TauCeti.LinearPMap.pullbackLinearMap_apply]
+    apply ClosedOperator.symm_map_mem_of_intertwines_projection e U V hproj
+    apply hVinv (TauCeti.LinearPMap.pullbackDomainToOriginal A e x)
+    exact ClosedOperator.map_mem_of_intertwines_projection e U V hproj hx
+  · intro x hx
+    change TauCeti.LinearPMap.pullbackLinearMap A e x ∈ Uᗮ
+    rw [TauCeti.LinearPMap.pullbackLinearMap_apply]
+    apply ClosedOperator.symm_map_mem_of_intertwines_projection e Uᗮ Vᗮ hprojOrth
+    apply hVOrthInv (TauCeti.LinearPMap.pullbackDomainToOriginal A e x)
+    exact ClosedOperator.map_mem_of_intertwines_projection e Uᗮ Vᗮ hprojOrth hx
+
 variable {E0 : Type*} [NormedAddCommGroup E0] [InnerProductSpace ℂ E0]
   [CompleteSpace E0]
 variable {E1 : Type*} [NormedAddCommGroup E1] [InnerProductSpace ℂ E1]
   [CompleteSpace E1]
+
+/-- Reduction of a raw Riccati graph transports to reduction of the first
+coordinate graph by the canonical graph-rotation pullback. -/
+theorem unboundedGraphRotationPullbackPMap_reduces_zeroGraph
+    (H : UnboundedBlockDataPMap (𝕜 := ℂ) (E0 := E0) (E1 := E1))
+    (X : E0 →L[ℂ] E1)
+    (hred : TauCeti.LinearPMap.ReducesSubspace
+      (unboundedBlockOperatorPMapCore H) (unboundedBlockGraph X)) :
+    TauCeti.LinearPMap.ReducesSubspace
+      (unboundedGraphRotationPullbackPMap H X)
+      (unboundedBlockGraph (0 : E0 →L[ℂ] E1)) := by
+  exact linearPMap_pullback_reducesSubspace_of_intertwines_projection
+    (unboundedBlockOperatorPMapCore H) (unboundedGraphRotationEquiv X)
+    (unboundedBlockGraph (0 : E0 →L[ℂ] E1)) (unboundedBlockGraph X)
+    (unboundedGraphRotationEquiv_intertwines_projection X) hred
+
+/-- The canonical partial-map coordinate-diagonal representative of a raw
+unbounded block core. -/
+noncomputable abbrev unboundedBlockDiagonalPMapCore
+    (H : UnboundedBlockDataPMap (𝕜 := ℂ) (E0 := E0) (E1 := E1))
+    (X : E0 →L[ℂ] E1) :
+    WithLp 2 (E0 × E1) →ₗ.[ℂ] WithLp 2 (E0 × E1) :=
+  unboundedGraphRotationPullbackPMap H X
+
+/-- The raw diagonal representative reduces both coordinate graphs when the
+original raw block core reduces the Riccati graph. -/
+theorem unboundedBlockDiagonalPMapCore_reduces_zeroGraph
+    (H : UnboundedBlockDataPMap (𝕜 := ℂ) (E0 := E0) (E1 := E1))
+    (X : E0 →L[ℂ] E1)
+    (hred : TauCeti.LinearPMap.ReducesSubspace
+      (unboundedBlockOperatorPMapCore H) (unboundedBlockGraph X)) :
+    TauCeti.LinearPMap.ReducesSubspace
+      (unboundedBlockDiagonalPMapCore H X)
+      (unboundedBlockGraph (0 : E0 →L[ℂ] E1)) :=
+  unboundedGraphRotationPullbackPMap_reduces_zeroGraph H X hred
+
+/-- The raw coordinate-diagonal representative is unitarily equivalent to
+the original raw block core. -/
+theorem unboundedBlockDiagonalPMapCore_unitaryEquivalent
+    (H : UnboundedBlockDataPMap (𝕜 := ℂ) (E0 := E0) (E1 := E1))
+    (X : E0 →L[ℂ] E1) :
+    TauCeti.LinearPMap.UnitaryEquivalent
+      (unboundedBlockDiagonalPMapCore H X)
+      (unboundedBlockOperatorPMapCore H)
+      (unboundedGraphRotationEquiv X).toContinuousLinearMap
+      (unboundedGraphRotationEquiv X).symm.toContinuousLinearMap :=
+  unboundedGraphRotationPullbackPMap_unitaryEquivalent H X
 
 /-- Reduction of a Riccati graph transports to reduction of the first
 coordinate summand by the graph-rotated pullback operator. -/
