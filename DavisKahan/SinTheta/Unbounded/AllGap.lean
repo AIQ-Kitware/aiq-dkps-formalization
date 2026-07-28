@@ -176,6 +176,31 @@ theorem linearPMap_generalizedSinTheta_unbounded_exact_of_genuineSpectrumGap
   rw [hAngle.2]
   exact hBlock.2
 
+/-- Raw partial-map isometric specialization of the genuine all-gap endpoint.
+It is derived from the raw lower-frame theorem at frame bound one. -/
+theorem linearPMap_sinTheta_unbounded_exact_of_genuineSpectrumGap
+    (N : UnitaryInvariantIdealFamily (𝕜 := ℂ))
+    (D : UnboundedSinThetaDataPMap (𝕜 := ℂ) (E := E) (F := F) (G := G))
+    (F₀ : H →L[ℂ] E)
+    (hA : _root_.IsSelfAdjoint D.A)
+    (hA₀ : _root_.IsSelfAdjoint D.A₀)
+    (hΛ₁ : _root_.IsSelfAdjoint D.Λ₁)
+    (hX : IsometricEmbedding D.X)
+    (hdecomp : OrthogonalExactDecomposition F₀ D.F₁)
+    {δ : ℝ} (hδ : 0 < δ)
+    (hgap : GenuineUnboundedSylvesterGapPMap D.A₀ D.Λ₁ δ)
+    (hR : N.Mem D.residual) :
+    N.Mem
+        ((ContinuousLinearMap.id ℂ E - F₀ ∘L F₀.adjoint) ∘L D.X) ∧
+      δ * N.gauge
+          ((ContinuousLinearMap.id ℂ E - F₀ ∘L F₀.adjoint) ∘L D.X)
+        ≤ N.gauge D.residual := by
+  have hGeneral := linearPMap_generalizedSinTheta_unbounded_exact_of_genuineSpectrumGap
+    N D F₀ hA hA₀ hΛ₁ hdecomp hδ zero_lt_one
+      (lowerFrameBound_one_of_isometry hX) hgap hR
+  rw [directedSinThetaOperator_eq_of_isometry D.X F₀ hX] at hGeneral
+  simpa using hGeneral
+
 /-- Exact isometric specialization of the genuine all-gap theorem. -/
 theorem sinTheta_unbounded_exact_of_genuineSpectrumGap
     (N : UnitaryInvariantIdealFamily (𝕜 := ℂ))
