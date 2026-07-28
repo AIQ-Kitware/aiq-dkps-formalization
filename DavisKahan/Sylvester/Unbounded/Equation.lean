@@ -35,8 +35,7 @@ the right block embedded as a full-domain closed operator. -/
 abbrev HasUnboundedBoundedSylvesterEquation
     (A : ClosedOperatorE (𝕜 := 𝕜) (E := E))
     (B : F →L[𝕜] F) (X C : F →L[𝕜] E) : Prop :=
-  HasClosedSylvesterEquation A
-    (TauCeti.DavisKahanExt.ClosedOperator.ofBounded B) X C
+  TauCeti.LinearPMap.UnboundedBoundedSylvesterEquation A.toLinearPMap B X C
 
 end ExactSinTheta
 end Experimental
