@@ -18,7 +18,9 @@ stages in `ForTauCeti/`, its roadmap stages here.
 
 1. [Approximation Numbers and Symmetric Operator Ideals](ApproximationNumbers/README.md)
    — the first, dependency-closed, paper-independent foundation. Maps to the
-   staged `ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/**` cluster.
+   staged `ForTauCeti/Analysis/OperatorIdeal/{ApproximationNumber,Family}/**`
+   cluster: the `s`-number layer and the canonical symmetric operator ideal
+   family both belong to this area.
 
 2. [Unbounded operators on `LinearPMap`](UnboundedOperators/README.md) — the
    active U1 representation-convergence roadmap. The canonical object is already

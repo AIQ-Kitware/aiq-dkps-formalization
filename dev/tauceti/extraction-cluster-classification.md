@@ -46,12 +46,18 @@ Ownership classes: `mathlib` · `tauceti` · `davis-kahan` · `spectra-bridge` �
 ## Tier 1 — broadly reusable functional analysis
 
 ### 1a. Rectangular symmetric ideal families
-* **Home**: `DavisKahan/OperatorIdeal/UnitarilyInvariant/RectangularFamily.lean`.
-* **Ownership**: `tauceti`. **Final**: `TauCeti/Analysis/OperatorIdeal/SymmetricIdeal/…`.
-* **Closure**: approximation-number foundation (PR 1) + Mathlib. No Spectra bridge.
-* **Status**: `blocked-on-tauceti` (needs PR 1 merged) → then `ready`.
-* **PR order**: **PR 2** (with Hilbert–Schmidt equivalences).
-* **Consumers**: `…/ApproximationNumbers/ScalarGeneric`, sine-theta UI-norm layer.
+* **Home**: `ForTauCeti/Analysis/OperatorIdeal/Family/{Basic,OperatorNorm}.lean`
+  (canonical, staged). `DavisKahan/OperatorIdeal/UnitarilyInvariant/RectangularFamily.lean`
+  is the historical record, pending deletion.
+* **Ownership**: `tauceti`. **Final**: `TauCeti/Analysis/OperatorIdeal/Family/…`.
+* **Closure**: Mathlib only — the structure imports no other staging module. It
+  joined the `approximation-number` cluster's `staging_modules` on 2026-07-28;
+  before that it was outside both the closure check and `export_for_tauceti.py`.
+* **Status**: `staged, building`.
+* **PR order**: **PR 1** for the abstraction itself; **PR 2** for the
+  symmetric-gauge/Calkin construction and Hilbert–Schmidt equivalences.
+* **Consumers**: `…/ApproximationNumbers/ScalarGeneric` (which stores it inside
+  `KyFanDominantIdealFamily`), sine-theta UI-norm layer.
 
 ### 1b. Orthogonal block sums / column reconstruction
 * **Home**: `DavisKahan/OperatorIdeal/ApproximationNumbers/BlockSum.lean`,

@@ -1659,8 +1659,11 @@ canonical representation decisions are closed.
 The extensionality defect is fixed. `ForTauCeti/Analysis/OperatorIdeal/Family/Basic.lean` carries the canonical replacement:
 
 ```lean
-structure OperatorIdealFamily (𝕜) [NontriviallyNormedField 𝕜] where
-  gauge : ∀ {E : Type v} {F : Type w} [...], (E →L[𝕜] F) → ℝ≥0∞
+structure OperatorIdealFamily (𝕜) [RCLike 𝕜] where
+  gauge : ∀ {E : Type v} {F : Type w}
+      [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+      [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F],
+      (E →L[𝕜] F) → ℝ≥0∞
   gauge_add_le  ...      -- four laws, all unconditional
   gauge_smul    ...
   enorm_le_gauge ...
@@ -1675,11 +1678,13 @@ What was executed, against each bullet of the original TODO:
 
 - *"Replace Mem plus gauge with a subtype element whose norm is the ideal norm."* Done, with one refinement that turned out to matter more: the **data** is a single total gauge into `ℝ≥0∞`, and the ideal `OperatorIdealFamily.carrier : Submodule 𝕜 (E →L[𝕜] F)` is *derived* as its finiteness domain. This is strictly better than a `(carrier, norm-on-carrier)` pair, because a pair still needs a coherence axiom between the two fields and still admits two records with the same carrier and norm but different bundled instances. A single field has `ext` for free, and the "gauge = ∞ off the ideal" convention is the classical Gohberg–Krein/Calkin one. The subtype-with-ideal-norm still exists, as the *derived* `OperatorIdealFamily.Elem` (a type synonym — the bare subtype already inherits the operator norm, and the two differ).
 
-- *"Express zero/add/smul/completeness through standard typeclasses."* Done. Closure under `0`, `+`, `•`, `-`, finite sums is `Submodule` membership; the ideal norm is a real `NormedAddCommGroup`/`NormedSpace` on `Elem`; completeness is the mixin `OperatorIdealFamily.IsComplete`, i.e. `CompleteSpace (N.Elem E F)` (with `[CompleteSpace F]`, exactly as for the ambient `E →L[𝕜] F`), replacing the hand-rolled ε–N `gauge_complete`.
+- *"Express zero/add/smul/completeness through standard typeclasses."* Done. Closure under `0`, `+`, `•`, `-`, finite sums is `Submodule` membership; the ideal norm is a real `NormedAddCommGroup`/`NormedSpace` on `Elem`; completeness is the mixin `OperatorIdealFamily.IsComplete`, i.e. `CompleteSpace (N.Elem E F)`, replacing the hand-rolled ε–N `gauge_complete`. (Completeness of the ambient spaces is part of the space parameters, so the mixin no longer has to assume it separately.)
 
-- *"Allow independent source and target universes."* Done for the base layer, **with a recorded obstruction**: the adjoint exchanges source and target, so a family closed under adjoints cannot keep them independent. Hence the split — `OperatorIdealFamily` over Banach spaces with universes `v`, `w`, and `SymmetricOperatorIdealFamily` extending its *diagonal* instantiation over Hilbert spaces. One structure with an optional adjoint field is not expressible.
+- *"Allow independent source and target universes."* Done for the base layer, **with a recorded obstruction**: the adjoint exchanges source and target, so a family closed under adjoints cannot keep them independent. Hence the split — `OperatorIdealFamily` with universes `v`, `w`, and `SymmetricOperatorIdealFamily` extending its *diagonal* instantiation. One structure with an optional adjoint field is not expressible.
 
-- *"Split the minimal normed operator ideal, symmetric structure, and Ky Fan dominance into layered classes."* First two layers done as above; Ky Fan dominance remains for Layer C.2 of the approximation-number roadmap and should be a mixin over `SymmetricOperatorIdealFamily`, not a fourteenth field.
+  **Correction, 2026-07-28.** This bullet used to say the base layer was "over Banach spaces". Both layers are now over Hilbert spaces (`[RCLike 𝕜]`, `InnerProductSpace`, `CompleteSpace`); only the universe independence survives from the original claim. The reason is recorded in `ForTauCeti/Analysis/OperatorIdeal/Family/Basic.lean` and in roadmap decision 7: the four laws are norm-only and hold verbatim over Banach spaces, but the *examples* do not — of the five gauges this development has (operator norm, finite Ky Fan, Schatten `p`, trace class, Hilbert–Schmidt) only the first survives outside Hilbert space, because Ky Fan subadditivity is proved through singular values and majorization and does **not** follow from the classical additivity `a_{m+n}(S+T) ≤ aₘ(S) + aₙ(T)` (at `k = 2` that only gives `a₀(S) + 2a₀(T) + a₁(S)`). A Banach-wide base is a structure with one instance and no route to the motivating ones. Re-widening is mechanical if an instance ever appears; no proof in the module uses the inner product.
+
+- *"Split the minimal normed operator ideal, symmetric structure, and Ky Fan dominance into layered classes."* All three layers now exist. Ky Fan dominance landed 2026-07-28 as `KyFanDominantIdealFamily`, a **three-field bundle over the canonical family** — `toSymmetricOperatorIdealFamily`, `isComplete`, and one dominance law — rather than a fourteenth field. It is still a `structure`, not a `class`; converting it to a genuine mixin is the item that remains.
 
 - *"Provide extensionality."* `OperatorIdealFamily.ext`: equal gauges ⟹ equal families.
 
@@ -1687,7 +1692,9 @@ What was executed, against each bullet of the original TODO:
 
 Axiom count went 14 fields → 4 laws: `gauge 0 = 0` follows from homogeneity at `c = 0` (which also excludes the everywhere-`∞` gauge), definiteness from `‖A‖ₑ ≤ gauge A`, and every closure property from the carrier submodule.
 
-**Validation and migration.** `DavisKahan/Interop/TauCeti/RectangularFamilyAdapter.lean` derives the entire historical record from the canonical one (`SymmetricOperatorIdealFamily.toRectangular`), including `gauge_complete`, so nothing the ~70 production consumers rely on was lost. There is deliberately no inverse — a historical record does not determine a canonical family, which *is* the defect. Remaining work is the incremental migration of those consumers, after which both the adapter and `RectangularSymmetricIdealFamily` are deleted. `KyFanDominantIdealFamily` (in `ApproximationNumbers.lean`) has the same free-data shape and should be redone as a mixin during that migration.
+**Validation and migration.** `DavisKahan/Interop/TauCeti/RectangularFamilyAdapter.lean` derives the entire historical record from the canonical one (`SymmetricOperatorIdealFamily.toRectangular`), including `gauge_complete`, so nothing the production consumers rely on was lost. There is deliberately no inverse — a historical record does not determine a canonical family, which *is* the defect.
+
+Since 2026-07-28 that derivation is load-bearing rather than a validation exercise: `KyFanDominantIdealFamily` (in `DavisKahan/OperatorIdeal/ApproximationNumbers/ScalarGeneric.lean` — **not** `ApproximationNumbers.lean`, which does not exist) now *stores* a `TauCeti.SymmetricOperatorIdealFamily` and reads it through `toRectangular`, so it no longer has the free-data shape this paragraph used to ascribe to it. Remaining work is the direct `RectangularSymmetricIdealFamily` type-position users — 106 occurrences in 30 production modules, 23 of them inside the concurrently-claimed U1 lane boundary — after which both the adapter and the structure are deleted.
 
 ### 12.2 Closed and self-adjoint unbounded operators — P0 ACTIVE / CLAIMED
 
@@ -1879,7 +1886,7 @@ carry a transitional adapter whose deletion condition is stated.*
 | ~~specSubspace~~ | **RETIRED 2026-07-27.** Canonical is `OrthonormalBasis.spanIndices` in `ForTauCeti/Analysis/InnerProductSpace/BasisSpan.lean`; `CourantFischerCompat.lean` is **deleted** and no `specSubspace` survives outside the immutable `Challenge` conformance file and `Acharyya2025`'s own self-contained paper copy | none — the compat shim is gone | done | ~~P0~~ ~~adapter-retirement~~ **done** |
 | ~~appendFin~~ | **Deleted (§8.1).** It was exactly `Fin.snoc`; `Fin.snoc_castSucc` / `Fin.snoc_last` replace its two simp lemmas | none | done — no adapter was needed | ~~P0~~ |
 | **finiteMean** | **KEPT (§8.1) — the "likely generic duplicate" reading was wrong.** `Finset.expect` requires `Module ℚ≥0 E`, which does not synthesize for a general `𝕜`-inner-product space; `Finset.centroid` typechecks but is `Classical.arbitrary` junk on the empty family, whereas `finiteMean` returns `0` there and `finiteMean_append` is deliberately stated to hold *at* `n = 0` | none — it is not a duplicate | Keep. Open sub-item: generalize `Fin n` → `Finset`, which is a redesign of the add-one identity, not a signature edit | P2 (was P0) |
-| ~~RectangularSymmetricIdealFamily~~ | **Replaced (§12.1); retirement STARTED 2026-07-27, step 1 of N landed.** The row below its old text was wrong about the size — see the callout under this table | The 376 call sites that named the legacy structure now go through `KyFanDominantIdealFamily.{Mem,gauge}`, so the remaining coupling is 73 production type-position uses in 30 modules, not 520 references in 60 | Swap the representation inside `KyFanDominantIdealFamily` (one file + proof repair), then delete the structure and the `toRectangular` adapter | ~~P0~~ adapter-retirement, **in progress** |
+| ~~RectangularSymmetricIdealFamily~~ | **Replaced (§12.1); steps 1 and 2 of the retirement landed 2026-07-27/28.** The row's original text was wrong about the size — see the callout under this table | `KyFanDominantIdealFamily` now **stores** the canonical `TauCeti.SymmetricOperatorIdealFamily`; the legacy record survives only as its derived real-valued view. Remaining coupling is 106 occurrences in 30 production modules, all of them direct type-position users, 23 of which are inside the concurrently-claimed U1 lane | Migrate the direct type-position users outside the U1 boundary (phase C), then delete `RectangularSymmetricIdealFamily` and `DavisKahan/Interop/TauCeti/RectangularFamilyAdapter.lean` (phase D) | ~~P0~~ adapter-retirement, **phases C/D remain** |
 | GenuinePairwiseSpectrumGap | **IN PROGRESS 2026-07-28.** The generic implementation is now raw `LinearPMap.GenuinePairwiseSpectrumGap` plus `linearPMapSylvester_*`; the bundled predicate remains at seven source/audit consumers, with `PairwiseSpectrumGap` still aliased to it | Spectrum/intertwiner layer is Spectra-dependent, so the raw implementation is downstream rather than a `ForTauCeti` candidate today | Migrate the seven source/audit data records to raw partial maps, then delete the bundled facade; a final Tau Ceti predicate waits on the exact Spectrum/SeparatedIntertwiner port | P1 |
 
 - Adapters must be visibly downstream and carry a deletion condition.
@@ -1893,9 +1900,12 @@ carry a transitional adapter whose deletion condition is stated.*
 > **~~Three adapters are now live at once~~ — down to ONE, and that one is started, 2026-07-27.** `operatorAbs` is
 > retired: its shim file is deleted and its call sites repointed to
 > `ContinuousLinearMap.modulus`. `CourantFischerCompat` is retired too: 14 wrappers, ~150 call
-> sites, shim file deleted. Only `SymmetricOperatorIdealFamily.toRectangular` remains live
-> and unclaimed, and the `toRectangular` row's own note says the legacy structure still has
-> 68 consumers.
+> sites, shim file deleted. Only `SymmetricOperatorIdealFamily.toRectangular` remains live.
+> It is **claimed and half-executed** as of 2026-07-28 (see `dev/LANES.md`): the
+> representation swap has landed and the adapter is now the *derived view* of the canonical
+> family rather than a parallel structure. The "68 consumers" figure this callout used to
+> quote was wrong twice over — see the correction two paragraphs down, and the table row
+> above for the current count.
 >
 > **What the `CourantFischerCompat` retirement added to the list below.** (3) An adapter can
 > hold a declaration that is **pinned as data** and therefore cannot be deleted at all:
@@ -1919,24 +1929,56 @@ carry a transitional adapter whose deletion condition is stated.*
 > origins, so the *structure* was never the obstacle — the 376 textual dependencies on its
 > name were.
 >
-> **Why a direct swap is a mathematical project and not a polish pass.** The canonical
-> replacement carries a single `ℝ≥0∞` gauge and **no membership predicate** — its laws are
-> unconditional, which is the whole point of the redesign. So the swap (a) deletes `Mem` as
-> data, removing a hypothesis from hundreds of statements, and (b) retypes `gauge` from `ℝ`
-> to `ℝ≥0∞`, which re-proves every downstream bound in a different ordered algebra:
-> subtraction is truncated, `linarith` does not apply, and statements of the shape
-> `gap * gauge (sinΘ) ≤ gauge residual` need the real `gap` moved across `ENNReal.ofReal`.
-> That is days of work with real risk of getting a bound subtly wrong, and it must not be
-> attempted as a flag day.
+> **Why a direct swap looked like a mathematical project — and what actually happened.**
+> The forecast was that the canonical replacement, carrying a single `ℝ≥0∞` gauge and **no
+> membership predicate**, would force the swap to (a) delete `Mem` as data, removing a
+> hypothesis from hundreds of statements, and (b) retype `gauge` from `ℝ` to `ℝ≥0∞`,
+> re-proving every downstream bound in a different ordered algebra — truncated subtraction,
+> no `linarith`, and `gap * gauge (sinΘ) ≤ gauge residual` needing the real `gap` moved
+> across `ENNReal.ofReal`.
 >
-> **Step 1, landed 2026-07-27:** `KyFanDominantIdealFamily` now exposes its own `Mem` and
+> Neither (a) nor (b) happened, and the reason is the design lesson worth keeping: **the
+> storage and the view do not have to agree.** `KyFanDominantIdealFamily` stores the
+> canonical family, so the ideal laws are the unconditional `ℝ≥0∞` ones; but `Mem` and
+> `gauge` remain the `ℝ`-valued accessors, obtained by reading the stored family through
+> `toRectangular`. Not one downstream statement changed, and the `ℝ` estimates keep their
+> `linarith` proofs. What (a) *did* buy is real but local: the dominance field lost both its
+> membership hypothesis and its membership conclusion, because in `ℝ≥0∞`
+> `gauge A ≤ gauge B` already gives `gauge B ≠ ∞ → gauge A ≠ ∞`; the historical two-part
+> form survives as a theorem.
+>
+> The one genuine prerequisite was not on this list at all: `KyFanDominantIdealFamily` has
+> **two** instances, and only `operatorNorm` had a canonical counterpart. Building the other
+> one — `kyFanSymmetricIdealFamily`, the `ENNReal.ofReal` transport of
+> `kyFanApproximationGauge` with a completeness instance — is what gated the swap, and it
+> forced the Hilbert narrowing recorded in §12.1.
+>
+> **Step 1, landed 2026-07-27:** `KyFanDominantIdealFamily` exposes its own `Mem` and
 > `gauge`, and all 376 call sites go through those instead of naming the field. Nothing
-> changed meaning; the point is that the representation swap is now a change to **one file**
-> plus proof repair, and the `ℝ`-valued interface can survive as a documented convenience of
-> the paper layer rather than as a second competing structure. One gotcha is recorded on the
-> accessors themselves: they are `abbrev`, so `exact` sees through them but `rw` does not —
-> five proofs needed a `simp only [KyFanDominantIdealFamily.gauge]` before a rewrite whose
-> supporting lemma is stated over the underlying ideal.
+> changed meaning; the point was to collapse the representation swap into a change to **one
+> file** plus proof repair. One gotcha is recorded on the accessors themselves: they are
+> `abbrev`, so `exact` sees through them but `rw` does not — five proofs needed a
+> `simp only [KyFanDominantIdealFamily.gauge]` before a rewrite whose supporting lemma is
+> stated over the underlying ideal.
+>
+> **Step 2, landed 2026-07-28.** The stored field is now
+> `toSymmetricOperatorIdealFamily : TauCeti.SymmetricOperatorIdealFamily`, plus an
+> `isComplete` field (the adapter needs it); `toRectangularSymmetricIdealFamily` is a derived
+> `def`; the dominance field is `gauge_le_of_forall_kyFanApproximationGauge_le` and the old
+> `majorization_mem_and_gauge_le` survives as a **theorem** of the same signature. The
+> 62-line inline legacy record inside `kyFan` and the helper `kyFan_gauge_complete` are both
+> gone — `operatorNorm` and `kyFan` are now three-line constructions. New in
+> `ScalarGeneric.lean`: `kyFanSymmetricIdealFamily`, `gauge_kyFanSymmetricIdealFamily`,
+> `gauge_kyFanSymmetricIdealFamily_ne_top`, `carrier_kyFanSymmetricIdealFamily`,
+> `toReal_gauge_kyFanSymmetricIdealFamily`, `isComplete_kyFanSymmetricIdealFamily`.
+>
+> **One gotcha, and it is the same class as the `abbrev`/`rw` one.** `kyFan_mem` and
+> `kyFan_gauge` must stay stated over `.toRectangularSymmetricIdealFamily.{Mem,gauge}`, not
+> over the accessors. Downstream `simpa only [N, kyFan_gauge]` calls arrive at goals that
+> `simp only [KyFanDominantIdealFamily.gauge]` has already unfolded, so an accessor-form
+> statement silently stops matching. Restating them cost one build cycle and one failing
+> module (`DavisKahan/Sylvester/Unbounded/OrderedCutoff.lean`), which was the *only* module
+> the swap broke.
 >
 > **What the `operatorAbs` retirement showed, worth knowing before taking the other two.**
 > Repointing names was the easy half. Two things were not mechanical: (1) the shim had
@@ -2043,6 +2085,11 @@ carry a transitional adapter whose deletion condition is stated.*
 | finrank_specSubspace / orthogonal_specSubspace / map_mem_specSubspace / re_inner_map_self_*_of_mem_specSubspace | **OrthonormalBasis.finrank_spanIndices(_set) / orthogonal_spanIndices / LinearMap.IsSymmetric.map_mem_spanIndices / …_of_mem_spanIndices** | **Done 2026-07-27** (§13) |
 | re_inner_map_self_eq_sum_eigenvalues_mul_sq / re_inner_map_self_eq_sum_of_eigenbasis / eigenvalues_eq_of_eigenbasis | **LinearMap.IsSymmetric.re_inner_apply_self_eq_sum_eigenvalues_mul_sq / …_eq_sum_of_eigenbasis / eigenvalues_eq_of_eigenbasis** | **Done 2026-07-27** (§13); two of these keep their name and change only namespace |
 | abs_eigenvalues_sub_le | **TauCeti.abs_eigenvalue_sub_eigenvalue_le** | **Done 2026-07-27** (§13) |
+| RectangularSymmetricIdealFamily | **TauCeti.SymmetricOperatorIdealFamily** | **Representation change, not a rename** (§12.1). Free `Mem` + `ℝ` gauge → a single `ℝ≥0∞` gauge with the ideal derived as its finiteness domain. Both names still exist: the legacy one is reached only through `SymmetricOperatorIdealFamily.toRectangular` and is deleted in phase D |
+| KyFanDominantIdealFamily.toRectangularSymmetricIdealFamily | **KyFanDominantIdealFamily.toSymmetricOperatorIdealFamily** (the stored field) | **Done 2026-07-28** (§13); the old name survives as a derived `def` — the real-valued view — and goes away with the legacy structure |
+| KyFanDominantIdealFamily.majorization_mem_and_gauge_le (field) | **gauge_le_of_forall_kyFanApproximationGauge_le** (field) | **Done 2026-07-28** (§13); the law is now unconditional — no membership hypothesis, no membership conclusion. The old name is **kept as a theorem** with its original signature, so no call site changed |
+| KyFanDominantIdealFamily.kyFan_gauge_complete | **deleted** | **Done 2026-07-28** (§13); subsumed by the `isComplete` field and the `isComplete_kyFanSymmetricIdealFamily` instance |
+| *(new)* | **kyFanSymmetricIdealFamily** + `gauge_`/`carrier_`/`toReal_gauge_`/`gauge_…_ne_top` + `isComplete_kyFanSymmetricIdealFamily` | **New 2026-07-28** (§13); the finite Ky Fan gauge as a canonical family. Parked in `DavisKahan/OperatorIdeal/ApproximationNumbers/ScalarGeneric.lean` until the approximation-number layer is extracted; intended home `ForTauCeti/Analysis/OperatorIdeal/Family/KyFan.lean` |
 | abs_eigenvalues_sub_le_opNorm | *(name kept)* | **MOVED, not renamed, 2026-07-27** (§13) — pinned by `comparator/candidate-02-courant-fischer-weyl.json` and the immutable conformance statement, so it keeps its off-convention name and moved into `CourantFischer.lean` with the reason on the declaration |
 | DavisKahan.reduces_specSubspace | **DavisKahan.reduces_spanIndices** | **Done 2026-07-27** (§13); its selection datum became a `Set` |
 | forall_unit_vector_eigenvalue_le_re_inner | **LinearMap.IsSymmetric.exists_submodule_forall_unit_eigenvalue_le_re_inner** | **Done 2026-07-27** (§13); the old name misstated the quantifier |
