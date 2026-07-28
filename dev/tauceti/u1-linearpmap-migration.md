@@ -190,6 +190,40 @@ is not this lane's to migrate.
 - The `Restriction.lean` and `ClosedSylvesterEquation.lean` facade blocks, once
   their remaining callers move.
 
+**The manuscript sin-Θ engines have raw twins (edward, aiq-gpu, 2026-07-28).**
+`linearPMap_sinTheta_unbounded_exact_complex` and
+`linearPMap_generalizedSinTheta_unbounded_exact_complex`
+(`SinTheta/Unbounded/LegacyGap.lean`) state the two exact complex endpoints over
+`UnboundedSinThetaDataPMap`.  Additive — neither bundled engine changed.
+
+**Read this together with the gap-predicate entry below: U1's remaining work is a
+*chain*, not a flat count, and the inventory table does not show that.**  The
+table lists `SinTheta/Natural/Reducing.lean` at 14 type-position uses and the four
+`Sources/**/SineTheta` records at 17, as though each could be taken on its own.
+Neither could.  `Natural/Reducing.lean` was blocked by the gap predicates; once
+those were canonical it was still blocked, one level higher, by these two engines;
+only now is it actually takeable.  Each link looked like the whole job from below.
+**When sizing a U1 slice, trace the consumer chain upward to a declaration that is
+already raw before claiming a line count.**
+
+Both twins are *definitional* transfers — each is a single application of its
+bundled counterpart at `D.toClosed`, with no tactic proof at all:
+
+- `ClosedOperator.IsSelfAdjoint A` is *by definition* `IsSelfAdjoint A.toLinearPMap`
+  (`ClosedOperator/Basic.lean:264`), so the three self-adjointness hypotheses pass
+  straight through.
+- `UnboundedSinThetaDataPMap.toClosed` round-trips by `rfl`
+  (`D.toClosed.Λ₁.toLinearPMap = D.Λ₁`), so `X`, `F₁` and `residual` are unchanged.
+- `UnboundedSylvesterGap D.toClosed.A₀ D.toClosed.Λ₁ δ` is *by `rfl`*
+  `linearPMap_UnboundedSylvesterGap D.A₀ D.Λ₁ δ` — **only true since the gap
+  predicates became canonical.**  Before that the twin could not have taken a raw
+  gap hypothesis without a conversion, which is precisely what made this the
+  blocking link rather than a cosmetic one.
+
+Still bundled, for whoever continues the chain: `sinTheta_unbounded_complex` and
+`generalizedSinTheta_unbounded_complex` (the non-exact block forms in the same
+module) have no raw twin, and the `Real` specializations are untouched.
+
 **The gap predicates are now canonical — and they were the keystone (edward,
 aiq-gpu, 2026-07-28).**  `UnboundedSylvesterGap` and
 `UnboundedIntervalExteriorGap` (`DavisKahan/Sylvester/Gap.lean`) are stated over
