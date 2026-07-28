@@ -181,10 +181,29 @@ is not this lane's to migrate.
 
 **Contractible right now, no new mathematics:**
 
-- `generalizedSinTheta_unbounded_{,exact_}of_genuineIntervalExteriorGap` have no
-  production caller outside `SinTheta/Unbounded/IntervalExterior.lean` itself.
+- `generalizedSinTheta_unbounded_exact_of_genuineIntervalExteriorGap` —
+  **done 2026-07-28 (edward, aiq-gpu): deleted.**  It was not merely
+  caller-free outside its module, it was **dead in the whole repository**,
+  including inside its own module: the raw
+  `linearPMap_generalizedSinTheta_unbounded_exact_of_genuineIntervalExteriorGap`
+  is proved from the *raw* non-exact theorem, never from the bundled one.
 - The `Restriction.lean` and `ClosedSylvesterEquation.lean` facade blocks, once
   their remaining callers move.
+
+**Correction — `generalizedSinTheta_unbounded_of_genuineIntervalExteriorGap` is
+NOT contractible, and was previously listed here as if it were.**  "No
+production caller outside its own module" is true of it and is also not the
+relevant test: the raw endpoint
+`linearPMap_generalizedSinTheta_unbounded_of_genuineIntervalExteriorGap` is
+proved by `apply`ing the bundled theorem at `D.toClosed`, so the module depends
+on it internally.  That delegation exists because the Spectra Sylvester lemmas
+underneath it —
+`SpectraBridge.unbounded_sylvester_mem_and_gauge_le_of_spectra_intervalLeft_exteriorRight`
+and its `exteriorLeft_intervalRight` twin — still take bundled `ClosedOperator`
+arguments.  Contracting the endpoint therefore requires raw `SpectraBridge`
+lemmas, i.e. work inside `Interop/Spectra/**`, which this lane **explicitly
+excludes**.  It is blocked on a boundary the lane does not own, not merely
+un-done, and should not be picked up as a quick win.
 
 **Riccati cluster (edward, aiq-gpu, 2026-07-28) — MIGRATED AND DELETED.**  The
 table above listed `Riccati/UnboundedCore` (32), `Riccati/UnboundedTransport`
