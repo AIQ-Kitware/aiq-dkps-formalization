@@ -28,7 +28,8 @@
         "ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidtEnergy",
         "ForTauCeti.Analysis.OperatorIdeal.Family.HilbertSchmidt",
         "ForTauCeti.Analysis.InnerProductSpace.SpectralCutoff",
-        "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.MinMaxUpper"
+        "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.MinMaxUpper",
+        "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteRestriction"
       ]
     },
     {
@@ -1704,6 +1705,35 @@
       "blocked_dependencies": [],
       "downstream_users": [
         "DavisKahan.Interop.Spectra.ApproximationNumberMinMax"
+      ],
+      "status": "staged",
+      "upstream_pr": null
+    },
+    {
+      "source_module": "DavisKahan.Interop.Spectra.ApproximationNumberMinMax",
+      "source_declarations": [
+        "TauCeti.DavisKahan.Experimental.SpectraBridge.approximationNumber_comp_subtypeL_le",
+        "TauCeti.DavisKahan.Experimental.SpectraBridge.finiteRestrictionApproximationNumbers",
+        "TauCeti.DavisKahan.Experimental.SpectraBridge.finiteRestrictionApproximationNumbers_upperBound",
+        "TauCeti.DavisKahan.Experimental.SpectraBridge.exists_finiteRestrictionApproximationNumber_gt_of_lt",
+        "TauCeti.DavisKahan.Experimental.SpectraBridge.approximationNumber_isLUB_finiteRestrictions",
+        "TauCeti.DavisKahan.Experimental.SpectraBridge.lt_approximationNumber_iff_exists_finiteDimensional_lowerBound"
+      ],
+      "current_namespace": "ContinuousLinearMap",
+      "staging_module": "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteRestriction",
+      "final_tauceti_module": "TauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteRestriction",
+      "ownership_class": "tauceti",
+      "roadmap_target": "approximation-numbers",
+      "provenance_class": "copied and renamespaced 2026-07-28 out of DavisKahan/Interop/Spectra/ApproximationNumberMinMax.lean, which became Spectra-free once MinMaxUpper.lean replaced its projection-valued-measure proof; the source module is deleted",
+      "direct_dependencies": [
+        "Mathlib",
+        "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.MinMaxUpper"
+      ],
+      "blocked_dependencies": [],
+      "downstream_users": [
+        "DavisKahan.OperatorIdeal.ApproximationNumbers.Core",
+        "DavisKahan.OperatorIdeal.ApproximationNumbers.BlockSum",
+        "DavisKahan.OperatorIdeal.ApproximationNumbers.OperatorModulus"
       ],
       "status": "staged",
       "upstream_pr": null

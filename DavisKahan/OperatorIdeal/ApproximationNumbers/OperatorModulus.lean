@@ -52,11 +52,11 @@ theorem approximationSingularValue_le_of_norm_apply_le
   have hB0 : 0 ≤ approximationSingularValue n B :=
     approximationSingularValue_nonneg n B
   obtain ⟨s, hrs, v, hv, hV⟩ :=
-    (SpectraBridge.lt_approximationNumber_iff_exists_finiteDimensional_lowerBound
+    (ContinuousLinearMap.lt_approximationNumber_iff_exists_finiteDimensional_lowerBound
       A n hB0).mp hlt
   have hself : approximationSingularValue n B <
       approximationSingularValue n B :=
-    (SpectraBridge.lt_approximationNumber_iff_exists_finiteDimensional_lowerBound
+    (ContinuousLinearMap.lt_approximationNumber_iff_exists_finiteDimensional_lowerBound
       B n hB0).mpr ⟨s, hrs, v, hv, fun x hx => (hV x hx).trans (h x)⟩
   exact lt_irrefl _ hself
 

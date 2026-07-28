@@ -3,7 +3,7 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.Interop.Spectra.ApproximationNumberMinMax
+import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteRestriction
 import Mathlib.Topology.Algebra.Module.FiniteDimension
 import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Adjoint
 import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteDimensional
@@ -287,7 +287,7 @@ theorem approximationSingularValue_comp_strongProjection_tendsto_complex
     intro r hr
     by_cases hr0 : 0 ≤ r
     · obtain ⟨s, hrs, v, hv, hV⟩ :=
-        SpectraBridge.exists_linearIndependent_lowerBound_of_lt_approximationNumber
+        ContinuousLinearMap.exists_linearIndependent_lowerBound_of_lt_approximationNumber
           K n hr0 hr
       let c : ℝ := (r + s) / 2
       have hrc : r < c := by dsimp only [c]; linarith
@@ -613,7 +613,7 @@ theorem exists_finiteRestrictionApproximationNumber_add_gt
     have hsub : T.approximationNumber n - ε < T.approximationNumber n :=
       sub_lt_self _ hε
     obtain ⟨v, hv⟩ :=
-      SpectraBridge.exists_finiteRestrictionApproximationNumber_gt_of_lt
+      ContinuousLinearMap.exists_finiteRestrictionApproximationNumber_gt_of_lt
         T n (sub_nonneg.mpr hεle) hsub
     refine ⟨v, ?_⟩
     calc
@@ -705,14 +705,14 @@ theorem kyFanApproximationGauge_add_le_complex
     intro n hn
     change ((K ∘L V.subtypeL).approximationNumber n : ℝ) ≤
       (K.approximationNumber n : ℝ)
-    exact_mod_cast SpectraBridge.approximationNumber_comp_subtypeL_le K n V
+    exact_mod_cast ContinuousLinearMap.approximationNumber_comp_subtypeL_le K n V
   have hLrestrict : kyFanApproximationGauge k LV ≤ kyFanApproximationGauge k L := by
     unfold kyFanApproximationGauge
     apply Finset.sum_le_sum
     intro n hn
     change ((L ∘L V.subtypeL).approximationNumber n : ℝ) ≤
       (L.approximationNumber n : ℝ)
-    exact_mod_cast SpectraBridge.approximationNumber_comp_subtypeL_le L n V
+    exact_mod_cast ContinuousLinearMap.approximationNumber_comp_subtypeL_le L n V
   calc
     kyFanApproximationGauge k (K + L)
         ≤ kyFanApproximationGauge k (KV + LV) + ε := hlocal
