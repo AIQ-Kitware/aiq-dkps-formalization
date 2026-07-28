@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.SinTheta.Unbounded.Core
+import DavisKahan.SinTheta.Unbounded.IntervalExterior
 import DavisKahan.Sylvester.Unbounded.AllGap
 
 /-!
@@ -33,6 +34,36 @@ variable {E F G H : Type v}
   [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
   [NormedAddCommGroup G] [InnerProductSpace ℂ G] [CompleteSpace G]
   [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
+
+/-- Raw partial-map presentation of the three genuine Spectra all-gap cases. -/
+inductive GenuineUnboundedSylvesterGapPMap
+    (A : F →ₗ.[ℂ] F) (B : G →ₗ.[ℂ] G) (δ : ℝ) : Prop where
+  | intervalExterior {β α : ℝ} (hβα : β ≤ α)
+      (hgap : GenuineUnboundedIntervalExteriorGapPMap A B β α δ)
+  | leftAboveRightBelow (c : ℝ)
+      (hA : Spectra.Resolvent.spectrum A ⊆ Set.Ici (c + δ))
+      (hB : Spectra.Resolvent.spectrum B ⊆ Set.Iic c)
+  | leftBelowRightAbove (c : ℝ)
+      (hA : Spectra.Resolvent.spectrum A ⊆ Set.Iic c)
+      (hB : Spectra.Resolvent.spectrum B ⊆ Set.Ici (c + δ))
+
+namespace GenuineUnboundedSylvesterGapPMap
+
+omit [CompleteSpace E] [CompleteSpace F] [CompleteSpace G] in
+/-- Package a raw all-gap condition at the current Spectra boundary. -/
+theorem toClosed
+    (D : UnboundedSinThetaDataPMap (𝕜 := ℂ) (E := E) (F := F) (G := G))
+    {δ : ℝ} (h : GenuineUnboundedSylvesterGapPMap D.A₀ D.Λ₁ δ) :
+    GenuineUnboundedSylvesterGap D.toClosed.A₀ D.toClosed.Λ₁ δ := by
+  cases h with
+  | intervalExterior hβα hgap =>
+      exact .intervalExterior hβα hgap
+  | leftAboveRightBelow c hA hB =>
+      exact .leftAboveRightBelow c hA hB
+  | leftBelowRightAbove c hA hB =>
+      exact .leftBelowRightAbove c hA hB
+
+end GenuineUnboundedSylvesterGapPMap
 
 /-- Generalized complementary-block theorem with a genuine all-gap spectral
 hypothesis. -/
@@ -67,6 +98,26 @@ theorem generalizedSinTheta_unbounded_of_genuineSpectrumGap
       mul_le_mul_of_nonneg_left hFrame.2 hδ.le
     _ ≤ N.gauge (-(D.residual.adjoint ∘L D.F₁)) := hRaw.2
     _ ≤ N.gauge D.residual := hC.2
+
+/-- Raw partial-map generalized sine-theta endpoint for the genuine all-gap
+Spectra boundary. -/
+theorem linearPMap_generalizedSinTheta_unbounded_of_genuineSpectrumGap
+    (N : UnitaryInvariantIdealFamily (𝕜 := ℂ))
+    (D : UnboundedSinThetaDataPMap (𝕜 := ℂ) (E := E) (F := F) (G := G))
+    (hA : _root_.IsSelfAdjoint D.A)
+    (hA₀ : _root_.IsSelfAdjoint D.A₀)
+    (hΛ₁ : _root_.IsSelfAdjoint D.Λ₁)
+    (hF₁ : IsometricEmbedding D.F₁)
+    {δ ε : ℝ}
+    (hδ : 0 < δ) (hε : 0 < ε)
+    (hframe : LowerFrameBound D.X ε)
+    (hgap : GenuineUnboundedSylvesterGapPMap D.A₀ D.Λ₁ δ)
+    (hR : N.Mem D.residual) :
+    N.Mem (sinThetaBlock D.X D.F₁ hframe hε) ∧
+      δ * ε * N.gauge (sinThetaBlock D.X D.F₁ hframe hε) ≤
+        N.gauge D.residual := by
+  exact generalizedSinTheta_unbounded_of_genuineSpectrumGap N D.toClosed
+    hA hA₀ hΛ₁ hF₁ hδ hε hframe hgap.toClosed hR
 
 /-- Exact directed-angle form of the genuine all-gap generalized theorem. -/
 theorem generalizedSinTheta_unbounded_exact_of_genuineSpectrumGap
