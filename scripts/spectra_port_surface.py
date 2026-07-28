@@ -201,6 +201,27 @@ def cluster_of(module: str) -> tuple[str, str]:
 
 # --------------------------------------------------------------------------
 
+def donor_origin(repo: Path, module: str) -> str:
+    """Is this donor module actually Spectra's, or ours living in `vendor/`?
+
+    `vendor/Spectra` is supposed to be a byte-identical snapshot of upstream, so
+    "it is in vendor, therefore Spectra wrote it" reads as obviously true and is
+    not: several modules were authored here and added to the vendored tree.  They
+    must not be credited to Spectra in the provenance ledger, and — since the
+    dependency is being removed — they have to move out rather than be ported.
+    """
+    if module == MISATTRIBUTED:
+        return "dkps-authored"
+    rel = module.replace(".", "/") + ".lean"
+    ref = repo / "external" / "Spectra"
+    if not (ref / ".git").exists():
+        return "unknown"
+    present = subprocess.run(
+        ["git", "-C", str(ref), "cat-file", "-e", "HEAD:" + rel],
+        capture_output=True, check=False).returncode == 0
+    return "upstream" if present else "dkps-authored-in-vendor"
+
+
 def tracked_tauceti_modules(repo: Path) -> list[str]:
     tc = repo / "external" / "TauCeti"
     if not (tc / ".git").exists():
@@ -255,6 +276,7 @@ def main() -> int:
             "donorModules": {},
         })
         entry["donorModules"][module] = {
+            "origin": donor_origin(repo, module),
             "lines": len((repo / "vendor" / "Spectra"
                           / (module.replace(".", "/") + ".lean")).read_text(
                               errors="ignore").splitlines())
@@ -270,6 +292,9 @@ def main() -> int:
         "distinctSpectraConstants": len(uses),
         "donorModules": len(by_module),
         "trackedTauCetiModules": len(tracked_tauceti_modules(repo)),
+        "dkpsAuthoredDonorModules": sorted(
+            m for c in clusters.values() for m, info in c["donorModules"].items()
+            if info.get("origin") == "dkps-authored-in-vendor"),
         "clusters": clusters,
     }
 

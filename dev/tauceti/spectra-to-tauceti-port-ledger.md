@@ -28,6 +28,12 @@ closure currently reaches 119 Spectra modules", in
 [`spectra-provenance-map.md`](spectra-provenance-map.md) — is now **152**, and
 nothing detected the drift.
 
+The constant count is also the campaign's progress meter and must fall
+monotonically. It was **61** when first measured; phase S0 of
+[`spectra-removal-plan.md`](spectra-removal-plan.md) took it to **60** by moving
+our own theorems out of `namespace Spectra.*`, which is why the cluster tables
+below no longer carry a cluster `X`.
+
 ## How the surface was measured
 
 From the **compiled environment**, not from import lines and not from textual
@@ -52,13 +58,13 @@ the normal build.
 |---|---|
 | vendored Spectra modules on disk | 464 |
 | Spectra modules in the **production** import closure | 152 (~39,200 lines) |
-| Spectra modules the production build actually **references** | **27** |
-| distinct Spectra **constants** referenced | **61** |
+| Spectra modules the production build actually **references** | **26** (was 27 before phase S0) |
+| distinct Spectra **constants** referenced | **60** (was 61 before phase S0) |
 | production declarations that reference one | **178**, in **42** modules — all under `DavisKahan/**` |
 | production modules that `import Spectra` directly | 35 (18 `Interop/Spectra`, 10 elsewhere, 7 Experimental) |
 | tracked upstream Tau Ceti modules | 629 |
 
-**The port surface is 61 declarations, not 464 files or 152 modules.** That is
+**The port surface is 60 declarations, not 464 files or 152 modules.** That is
 the single most useful fact in this document: the transitive closure is large
 because Spectra's own internal dependencies are large, not because Davis–Kahan
 consumes much of it. The mathematics we actually depend on is small enough to
@@ -105,81 +111,66 @@ lemma used once inside a 200-line proof counts once.
 
 `upstream: partial` · `staged: collides` · 22 constants · 6 donor modules · 1590 donor lines · 31 DKPS consumer modules
 
-| donor module | lines | constants used (uses) |
-|---|---|---|
-| `Spectra.Resolvent.Spectrum` | 90 | `spectrum` (75), `resolventSet` (6) |
-| `Spectra.Operator.SelfAdjoint` | 143 | `toLinearPMap` (20), `SelfAdjointOperator` (10), `selfAdjoint` (10), `domain` (5), `mk` (3), `bornMeasure` (1), `dense` (1), `spectralPVM` (1), `isFormalAdjoint_self_of_isSelfAdjoint` (1) |
-| `Spectra.Resolvent.SpecialCases` | 318 | `Rimag` (3), `resolventAtImaginary` (2), `resolventAtNegI` (2), `Rplus` (1), `_proof_1` (1), `_proof_2` (1), `_proof_3` (1) |
-| `Spectra.Operator.Unitary.Conjugation` | 191 | `unitaryConj` (4) |
-| `Spectra.Operator.Bounded` | 208 | `boundedExtension` (1), `ofBounded` (1) |
-| `Spectra.Operator.KatoRellich` | 640 | `perturbedOp` (1) |
+| donor module | origin | lines | constants used (uses) |
+|---|---|---|---|
+| `Spectra.Resolvent.Spectrum` | upstream | 90 | `spectrum` (75), `resolventSet` (6) |
+| `Spectra.Operator.SelfAdjoint` | upstream | 143 | `toLinearPMap` (20), `SelfAdjointOperator` (10), `selfAdjoint` (10), `domain` (5), `mk` (3), `bornMeasure` (1), `dense` (1), `spectralPVM` (1), `isFormalAdjoint_self_of_isSelfAdjoint` (1) |
+| `Spectra.Resolvent.SpecialCases` | upstream | 318 | `Rimag` (3), `resolventAtImaginary` (2), `resolventAtNegI` (2), `Rplus` (1), `_proof_1` (1), `_proof_2` (1), `_proof_3` (1) |
+| `Spectra.Operator.Unitary.Conjugation` | upstream | 191 | `unitaryConj` (4) |
+| `Spectra.Operator.Bounded` | upstream | 208 | `boundedExtension` (1), `ofBounded` (1) |
+| `Spectra.Operator.KatoRellich` | upstream | 640 | `perturbedOp` (1) |
+
 
 #### Cluster B — PVMs, spectral measures and Borel functional calculus
 
 `upstream: absent` · `staged: partial` · 14 constants · 9 donor modules · 1789 donor lines · 13 DKPS consumer modules
 
-| donor module | lines | constants used (uses) |
-|---|---|---|
-| `Spectra.ProjValMeasure.Basic` | 228 | `ProjValMeasure` (14), `proj` (9), `diag` (2), `mk` (1) |
-| `Spectra.SpectralTheory.Measure.Convergence` | 215 | `spectralProjection` (7), `indicator_one_bdd` (1) |
-| `Spectra.SpectralTheory.Calculus.Bounded` | 367 | `spectralCalculus` (5) |
-| `Spectra.Bochner.Borel.CDF` | 277 | `borelMeasure` (3) |
-| `Spectra.SpectralTheory.ResolventForm` | 208 | `spectralPVM` (2), `selfAdjointResolvent` (1) |
-| `Spectra.QuantumMechanics.BornRule.PVM` | 144 | `bornMeasure` (2) |
-| `Spectra.SpectralTheory.Calculus.SpectralGapInverse` | 224 | `HasVectorSpectralGap` (2) |
-| `Spectra.QuantumMechanics.BornRule.Moments` | 62 | `bornExpectation` (1) |
-| `Spectra.SpectralTheory.Measure.PVM` | 64 | `spectralPVM` (1) |
+| donor module | origin | lines | constants used (uses) |
+|---|---|---|---|
+| `Spectra.ProjValMeasure.Basic` | upstream | 228 | `ProjValMeasure` (14), `proj` (9), `diag` (2), `mk` (1) |
+| `Spectra.SpectralTheory.Measure.Convergence` | upstream | 215 | `spectralProjection` (7), `indicator_one_bdd` (1) |
+| `Spectra.SpectralTheory.Calculus.Bounded` | upstream | 367 | `spectralCalculus` (5) |
+| `Spectra.Bochner.Borel.CDF` | upstream | 277 | `borelMeasure` (3) |
+| `Spectra.SpectralTheory.ResolventForm` | upstream | 208 | `spectralPVM` (2), `selfAdjointResolvent` (1) |
+| `Spectra.QuantumMechanics.BornRule.PVM` | upstream | 144 | `bornMeasure` (2) |
+| `Spectra.SpectralTheory.Calculus.SpectralGapInverse` | **ours** | 224 | `HasVectorSpectralGap` (2) |
+| `Spectra.QuantumMechanics.BornRule.Moments` | upstream | 62 | `bornExpectation` (1) |
+| `Spectra.SpectralTheory.Measure.PVM` | upstream | 64 | `spectralPVM` (1) |
+
 
 #### Cluster C — polar decomposition and partial isometries
 
 `upstream: absent` · `staged: collides` · 3 constants · 1 donor modules · 144 donor lines · 2 DKPS consumer modules
 
-| donor module | lines | constants used (uses) |
-|---|---|---|
-| `Spectra.QuantumMechanics.Channels.PolarDecomp` | 144 | `absOp` (2), `polarIsometry` (2), `polarRange` (1) |
+| donor module | origin | lines | constants used (uses) |
+|---|---|---|---|
+| `Spectra.QuantumMechanics.Channels.PolarDecomp` | upstream | 144 | `absOp` (2), `polarIsometry` (2), `polarRange` (1) |
+
 
 #### Cluster D — Hilbert-Schmidt, tensor products and trace class
 
 `upstream: absent` · `staged: collides` · 11 constants · 4 donor modules · 1379 donor lines · 4 DKPS consumer modules
 
-| donor module | lines | constants used (uses) |
-|---|---|---|
-| `Spectra.Spaces.Tensor.HilbertSchmidt` | 625 | `Space` (16), `toOperator` (11), `columnTensor` (4), `ofOperator` (3) |
-| `Spectra.SpectralTheory.Antilinear.ConjugateSpace` | 151 | `Conj` (11), `instInnerProductSpace` (11), `instNormedAddCommGroup` (11), `toConj` (1) |
-| `Spectra.Spaces.Tensor.Hilbert` | 324 | `HilbertTensor` (1), `tmul` (1) |
-| `Spectra.Spaces.Tensor.HilbertSchmidtFlow` | 279 | `sylvesterGroup` (2) |
+| donor module | origin | lines | constants used (uses) |
+|---|---|---|---|
+| `Spectra.Spaces.Tensor.HilbertSchmidt` | **ours** | 625 | `Space` (16), `toOperator` (11), `columnTensor` (4), `ofOperator` (3) |
+| `Spectra.SpectralTheory.Antilinear.ConjugateSpace` | upstream | 151 | `Conj` (11), `instInnerProductSpace` (11), `instNormedAddCommGroup` (11), `toConj` (1) |
+| `Spectra.Spaces.Tensor.Hilbert` | upstream | 324 | `HilbertTensor` (1), `tmul` (1) |
+| `Spectra.Spaces.Tensor.HilbertSchmidtFlow` | **ours** | 279 | `sylvesterGroup` (2) |
+
 
 #### Cluster F — Cayley transform, Stone bridge and one-parameter groups
 
 `upstream: collides` · `staged: absent` · 10 constants · 6 donor modules · 1248 donor lines · 11 DKPS consumer modules
 
-| donor module | lines | constants used (uses) |
-|---|---|---|
-| `Spectra.YosidaHille.Basic` | 132 | `genToGroup` (22) |
-| `Spectra.OneParameterUnitaryGroup.Basic` | 292 | `generator` (6), `OneParameterUnitaryGroup` (5), `U` (4), `genDiffQuot` (2), `mk` (1) |
-| `Spectra.CayleyTransform.Generator.InverseAction` | 360 | `cayley` (6) |
-| `Spectra.CayleyTransform.Mobius` | 135 | `inverseMobius` (3) |
-| `Spectra.CayleyTransform.Generator.Pushforward` | 90 | `inverseMobiusReal` (1) |
-| `Spectra.YosidaHille.Helpers` | 239 | `isSelfAdjoint_to_surjective` (1) |
-
-#### Cluster X — DKPS-authored declarations living inside `namespace Spectra.*` — not donor material, and a provenance hazard until re-homed
-
-`upstream: n/a` · `staged: n/a` · 1 constants · 1 donor modules · 0 donor lines · 1 DKPS consumer modules
-
-| donor module | lines | constants used (uses) |
-|---|---|---|
-| `X` | — | `mathAhead_summable_column_norm_sq` (1) |
-
-**The census undercounts this cluster, by construction.** It reports constants
-that *cross declaration boundaries*, and only one of these theorems is consumed
-by a sibling declaration; the rest are used only inside the proof that follows
-them, so the kernel never records a reference. A source scan of the two files
-finds **14** declarations sitting in the donor's namespace — 11 `mathAhead_*`
-theorems under `namespace Spectra.HilbertSchmidtTensor`
-(`DavisKahan/Interop/Spectra/HilbertSchmidtColumnExpansion.lean:44`) and 3 under
-`namespace Spectra.QuantumMechanics.SpectralTheory`
-(`DavisKahan/Interop/Spectra/GapResolvent.lean:54`, closing at line 248). Treat
-14 as the number to re-home; the census entry is the tripwire, not the count.
+| donor module | origin | lines | constants used (uses) |
+|---|---|---|---|
+| `Spectra.YosidaHille.Basic` | upstream | 132 | `genToGroup` (22) |
+| `Spectra.OneParameterUnitaryGroup.Basic` | upstream | 292 | `generator` (6), `OneParameterUnitaryGroup` (5), `U` (4), `genDiffQuot` (2), `mk` (1) |
+| `Spectra.CayleyTransform.Generator.InverseAction` | upstream | 360 | `cayley` (6) |
+| `Spectra.CayleyTransform.Mobius` | upstream | 135 | `inverseMobius` (3) |
+| `Spectra.CayleyTransform.Generator.Pushforward` | upstream | 90 | `inverseMobiusReal` (1) |
+| `Spectra.YosidaHille.Helpers` | upstream | 239 | `isSelfAdjoint_to_surjective` (1) |
 
 ## What conflicts with Tau Ceti, and what does not
 
@@ -307,57 +298,105 @@ Spectra* — so "I reproved it" does not discharge the record.
 Three concrete hazards found while measuring, all of which corrupt attribution if
 left until port time:
 
-1. **DKPS theorems are being declared inside the donor's namespace.**
-   `DavisKahan/Interop/Spectra/HilbertSchmidtColumnExpansion.lean:44` opens
-   `namespace Spectra.HilbertSchmidtTensor` and declares **11 `mathAhead_*`
-   theorems** into it; `.../GapResolvent.lean:54` opens
-   `namespace Spectra.QuantumMechanics.SpectralTheory` and declares 3 more. These
-   are **ours**, and after a port they are indistinguishable from donor material
-   by name. The census flags them as cluster `X` precisely because they are the
-   one thing in the surface that must *not* be attributed to Spectra.
-   `LANES.md` already records the rule ("nothing outside `vendor/` should declare
-   into `namespace Spectra`") and notes a gate was wanted; it does not exist yet.
-2. **One vendored file carries an edit not recorded in the compatibility patch.**
-   `vendor/Spectra/Spectra/Spaces/Tensor/Hilbert.lean` differs from upstream (a
-   genuine and well-commented `notation`-elaboration fix), but
-   `vendor/patches/Spectra/0001-*.patch` does not list the file. `Spectra.UPSTREAM.md`
-   requires the snapshot to be byte-identical to upstream with all deltas in the
-   managed patch. This is a documentation defect, not a mathematical one, but it is
-   exactly the kind that makes a later "what did we change?" question unanswerable.
-3. **The Spectra toggle scripts are stale and would silently no-op.**
-   `scripts/{enable,disable}_spectra_lake_dependency.py` search for the markers
-   `# BEGIN local Spectra development dependency`; `lakefile.toml` has said
-   `# BEGIN vendored upstream Spectra snapshot` for some time, so `disable` prints
-   "Spectra Lake dependency was not enabled" and changes nothing.
-   `scripts/check_spectra_parent_only_bridge.sh` invokes two scripts that no longer
-   exist and builds `DavisKahan.Experimental.InfiniteDimensional.SpectraBridge.*`
-   modules that are gone. Anyone reaching for these to verify a de-Spectra step
-   will get a false pass.
+1. ~~**DKPS theorems declared inside the donor's namespace.**~~ **FIXED in phase
+   S0, 2026-07-28.** `HilbertSchmidtColumnExpansion.lean` held 11 `mathAhead_*`
+   theorems in `namespace Spectra.HilbertSchmidtTensor` and `GapResolvent.lean`
+   held 3 in `namespace Spectra.QuantumMechanics.SpectralTheory`. All 14 are
+   **ours**; after the port they would have been indistinguishable from donor
+   material by name. They now sit in
+   `TauCeti.DavisKahan.Experimental.SpectraBridge` with every other module under
+   `DavisKahan/Interop/Spectra/`; statements and proofs are unchanged, only the
+   enclosing namespace moved, and both files build warning-free.
 
-## Recommended order
+   `LANES.md` had recorded the rule ("nothing outside `vendor/` should declare
+   into `namespace Spectra`") with nothing enforcing it. It is now in AGENTS.md
+   and gated by `scripts/check_spectra_namespace.py`, which is careful to strip
+   block comments first (the word "namespace" occurs in prose) and to treat
+   `namespace SpectraBridge` as correct rather than as a violation.
+2. **2,589 lines of our own mathematics live inside `vendor/Spectra`.**
+   *(Corrected 2026-07-28: first written here as "one vendored file carries an
+   undocumented edit". Running `scripts/spectra_compatibility_patch.py status`
+   reports `diverged`, and the actual divergence is 172,661 bytes against a
+   23,378-byte recorded patch.)*
 
-Dependency order, not size order. Each step is independently green and
-independently reviewable.
+   **20 vendored files sit outside the managed patch: 9 upstream files edited,
+   and 11 files that do not exist upstream at all.** Those 11 — 2,589 lines —
+   carry `Copyright (c) 2026 Spectra Formalization Project` headers and
+   `Authors: Jon Crall, OpenAI GPT-5.6 Thinking` (three co-credited to Adam
+   Bornemann, one solely his). Inventory and ratchet:
+   [`spectra-vendor-authorship-baseline.json`](spectra-vendor-authorship-baseline.json),
+   checked by `scripts/check_spectra_vendor_authorship.py`.
 
-1. **Settle the `spectrum` codomain** (`Set ℂ` vs `Set ℝ`). Documentation only;
-   gates Cluster A and therefore 26 of the 31 Cluster-A consumer modules.
-2. **Fix the three provenance hazards above** — re-home the 14 DKPS theorems out
-   of `namespace Spectra.*`, record the `Hilbert.lean` delta in the managed patch,
-   and either repair or delete the stale toggle scripts. Cheap, and it is the work
-   that stops being possible once the port starts.
-3. **Cluster A core**: `Resolvent/Spectrum.lean` (90 lines, 2 defs, 2 lemmas) to a
-   canonical Tau Ceti location under the settled convention. Largest single
-   detachment on the surface.
-4. **Cluster C closeout** (3 constants) — nearly done already.
-5. **Cluster F**: rebuild on Tau Ceti's `Analysis/Semigroups`, then propose
-   Stone's theorem (`genToGroup`) as a focused upstream addition. Blocks the
-   unbounded Sylvester theory, per Wave 3.
-6. **Cluster D**: one canonical HS object; resolve the antilinear `Conj`
-   dependency against Mathlib.
-7. **Cluster B last, with its own roadmap.** It is the only cluster where Spectra
-   is a genuine donor with no counterpart anywhere, it is the largest
-   (1,789 donor lines), and it needs coordination with Spectra's author before a
-   line of it moves.
+   Two consequences:
+
+   - **Attribution inverts.** A file under `vendor/` reads as the donor's work.
+     Three of them are load-bearing in this very surface —
+     `Spaces/Tensor/HilbertSchmidt` (4 constants, 34 uses),
+     `Spaces/Tensor/HilbertSchmidtFlow` and
+     `SpectralTheory/Calculus/SpectralGapInverse` — so **6 of the 61 constants
+     were about to be recorded as ported *from* Spectra when they are ours.**
+     The surface JSON now carries an `origin` field per donor module for exactly
+     this reason.
+   - **The documented update procedure deletes them.** Step 3 of
+     `Spectra.UPSTREAM.md` is "replace `vendor/Spectra/` with
+     `git archive <new-upstream-commit>`". Anyone following the repository's own
+     instructions loses all 2,589 lines.
+
+   **Checked against the whole public history, not just the pin:** none of the 11
+   exists at any commit on any branch of `external/Spectra` (82 commits;
+   `origin/master` is not ahead of `8dbaaf67`), so they are not a newer upstream
+   revision that drifted in. Authorship is *not* uniform, and the difference
+   governs what may be submitted upstream: **7** are Jon Crall + GPT-5.6, **3**
+   are co-authored with Adam Bornemann, and **1** — `BornRule/POVMCore.lean`,
+   378 lines — is solely his, obtained outside the public repo. Relocating any of
+   them inside this repository is ours to do; submitting the last four to Tau Ceti
+   is not, and needs his sign-off first.
+
+   This makes most of the removal *cheaper*, not dearer: those modules need no
+   port and no donor negotiation. They are already ours; they only need to move to
+   `ForTauCeti` and be reconciled against Tau Ceti's API like any other staged
+   module. **Decided 2026-07-28: relocate all 11.** **Do not run `spectra_compatibility_patch.py refresh` to "fix" this** —
+   the patch is documented as compatibility-only and explicitly "not the place for
+   Davis–Kahan-specific mathematical APIs", so refreshing would launder our
+   mathematics into a compatibility record and hide the problem instead of
+   resolving it.
+3. **The Spectra toggle scripts encoded a superseded architecture.** All three
+   are now loud-failing stubs. Measured behaviour before the fix, since the three
+   differed and only one was actually dangerous:
+
+   - `disable_spectra_lake_dependency.py` — **exited 0 while changing nothing.**
+     It looked for `# BEGIN local Spectra development dependency`; the lakefile
+     says `# BEGIN vendored upstream Spectra snapshot`. A "disable Spectra and
+     confirm the build" check passed without disabling anything. *This* was the
+     false pass.
+   - `enable_spectra_lake_dependency.py` — worse than inert: it inserts
+     `path = "external/Spectra"`, which would repoint the build at the read-only
+     provenance submodule and undo the vendoring architecture.
+   - `check_spectra_parent_only_bridge.sh` — exited 2 on a missing script, so it
+     failed loudly; dead weight rather than a hazard.
+
+   Progress is measured instead by
+   `lake env lean --run scripts/ExportSpectraUsage.lean | wc -l` (target 0),
+   `check_spectra_namespace.py` and `check_spectra_vendor_authorship.py`.
+
+## Ordering — and the constraint that overrides intuition
+
+The execution contract is [`spectra-removal-plan.md`](spectra-removal-plan.md);
+phases S0–S6 live there. One finding belongs here because it is a property of the
+measured surface rather than of the plan:
+
+**Order is forced by chokepoints, not by cluster size.** Of the 42 consumer
+modules, **30 depend on exactly one cluster** and can be freed independently
+(Cluster A alone accounts for 24 of them); **12 span several**. Crucially,
+**Cluster F has no single-cluster consumers at all** — every module needing
+Stone/Cayley material also needs A or B. So F cannot be closed on its own, and
+the intuitive move of taking the small collision-heavy cluster early is wrong: B
+is the deepest chokepoint, and B and F converge at the end together.
+
+The 12 chokepoint modules are tabulated in the plan. `SelfAdjointBorelCalculus`,
+`CayleySelectorBridge`, `GapResolvent`, `BoundedSelfAdjointSpectralProjection` and
+`SpectralRestrictionLocalization` each span A, B and F; they go last by
+construction.
 
 ## Out of scope for this ledger
 
