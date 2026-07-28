@@ -189,6 +189,38 @@ theorem unboundedGraphRotationPullbackPMap_reduces_zeroGraph
     (unboundedBlockGraph (0 : E0 →L[ℂ] E1)) (unboundedBlockGraph X)
     (unboundedGraphRotationEquiv_intertwines_projection X) hred
 
+/-- The canonical partial-map coordinate-diagonal representative of a raw
+unbounded block core. -/
+noncomputable abbrev unboundedBlockDiagonalPMapCore
+    (H : UnboundedBlockDataPMap (𝕜 := ℂ) (E0 := E0) (E1 := E1))
+    (X : E0 →L[ℂ] E1) :
+    WithLp 2 (E0 × E1) →ₗ.[ℂ] WithLp 2 (E0 × E1) :=
+  unboundedGraphRotationPullbackPMap H X
+
+/-- The raw diagonal representative reduces both coordinate graphs when the
+original raw block core reduces the Riccati graph. -/
+theorem unboundedBlockDiagonalPMapCore_reduces_zeroGraph
+    (H : UnboundedBlockDataPMap (𝕜 := ℂ) (E0 := E0) (E1 := E1))
+    (X : E0 →L[ℂ] E1)
+    (hred : TauCeti.LinearPMap.ReducesSubspace
+      (unboundedBlockOperatorPMapCore H) (unboundedBlockGraph X)) :
+    TauCeti.LinearPMap.ReducesSubspace
+      (unboundedBlockDiagonalPMapCore H X)
+      (unboundedBlockGraph (0 : E0 →L[ℂ] E1)) :=
+  unboundedGraphRotationPullbackPMap_reduces_zeroGraph H X hred
+
+/-- The raw coordinate-diagonal representative is unitarily equivalent to
+the original raw block core. -/
+theorem unboundedBlockDiagonalPMapCore_unitaryEquivalent
+    (H : UnboundedBlockDataPMap (𝕜 := ℂ) (E0 := E0) (E1 := E1))
+    (X : E0 →L[ℂ] E1) :
+    TauCeti.LinearPMap.UnitaryEquivalent
+      (unboundedBlockDiagonalPMapCore H X)
+      (unboundedBlockOperatorPMapCore H)
+      (unboundedGraphRotationEquiv X).toContinuousLinearMap
+      (unboundedGraphRotationEquiv X).symm.toContinuousLinearMap :=
+  unboundedGraphRotationPullbackPMap_unitaryEquivalent H X
+
 /-- Reduction of a Riccati graph transports to reduction of the first
 coordinate summand by the graph-rotated pullback operator. -/
 theorem unboundedGraphRotationPullback_reduces_zeroGraph
