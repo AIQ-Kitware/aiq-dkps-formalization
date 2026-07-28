@@ -39,14 +39,24 @@ third of the whole surface — and Mathlib's convention is `spectrum 𝕜 a : Se
 A Tau Ceti PR proposing a real-valued spectrum for a complex `LinearPMap` will be
 asked to justify it, and "the donor did it" is not a justification.
 
-Two defensible outcomes:
+**DECIDED 2026-07-28 (jon): canonical `Set ℂ`, plus a real-containment lemma for
+self-adjoint operators. No `realSpectrum` abbreviation.**
 
-1. canonical `spectrum : (H →ₗ.[ℂ] H) → Set ℂ`, plus a lemma placing it in `ℝ`
-   for self-adjoint `A`; or
-2. canonical complex spectrum with a `realSpectrum` abbreviation derived from it.
+```lean
+def spectrum (A : H →ₗ.[ℂ] H) : Set ℂ
+theorem spectrum_subset_real (hA : IsSelfAdjoint A) : spectrum A ⊆ Complex.ofReal '' Set.univ
+```
 
-Either is a 26-module rewrite. **Doing it twice is the expensive failure mode**,
-which is why this is phase S0 and not an implementation detail of phase S2.
+Rationale: it is the form a Tau Ceti reviewer will expect, because it is
+Mathlib's (`spectrum 𝕜 a : Set 𝕜`). The cost is a coercion at the DK call sites —
+`(lam : ℂ) ∉ spectrum A` where they currently read `lam ∉ spectrum A` — which is
+mechanical. The rejected alternative (shipping `realSpectrum : Set ℝ` alongside)
+would have kept the call sites unchanged at the price of a second name for one
+object, which is the kind of parallel API the convergence matrix exists to
+eliminate.
+
+This is a 26-module rewrite. **Doing it twice is the expensive failure mode**,
+which is why it was settled before phase S2 rather than during it.
 
 ## Ordering is forced by chokepoints, not by cluster size
 
@@ -120,6 +130,35 @@ Cheap now, impossible later. Nothing else starts until this lands.
    mathematics into a compatibility record and make the problem invisible rather
    than smaller. The 9 genuine compatibility edits *should* be recorded that way;
    the 11 files should leave.
+
+   **Verified against the whole public history, not just the pin.** None of the
+   11 exists at *any* commit on *any* branch of `external/Spectra` (82 commits;
+   `origin/master` is not ahead of the pinned `8dbaaf67`). They are not a newer
+   upstream revision that drifted in. Authorship splits three ways and the
+   difference matters for what may be submitted upstream:
+
+   | authorship | files | disposition |
+   |---|---|---|
+   | Jon Crall + OpenAI GPT-5.6 Thinking | 7 | ours outright |
+   | Adam Bornemann + Jon Crall + GPT-5.6 | 3 | shared — needs his sign-off before a Tau Ceti PR |
+   | Adam Bornemann alone (`BornRule/POVMCore.lean`, 378 lines) | 1 | **his**, obtained outside the public repo |
+
+   Relocating any of them *within this repository* is ours to do; **submitting
+   the last four to Tau Ceti is not**, and that has to be settled with Adam
+   before those clusters reach a PR.
+
+   `POVMCore.lean` is also the only one with a structural complication: two
+   upstream files (`BornRule/POVM.lean`, `BornRule/Joint/Defs.lean`) import it,
+   and comparing them with upstream shows `POVM.lean` was **split** here — the
+   vendored copy is materially shorter and delegates to `POVMCore`. That is a
+   genuine fork of an upstream file, not a compatibility repair, so it cannot be
+   unpicked by moving one file. Do `POVMCore` last, as its own step.
+
+   **DECIDED 2026-07-28 (jon): relocate all 11 to `ForTauCeti` now**, with DKPS
+   authorship restored and reconciled against Tau Ceti's API like any other
+   staged module — rather than moving only the three in the port surface, or
+   documenting and leaving them. Leaving them would mean `vendor/Spectra` can
+   never be deleted at S6 and the attribution stays inverted.
 
    Sequencing note: `Spaces/Tensor/HilbertSchmidt.lean` (625 lines) is the
    biggest and is Cluster D's core, so this step and S3 are the same work — do
