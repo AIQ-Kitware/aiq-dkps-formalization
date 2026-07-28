@@ -139,6 +139,20 @@ theorem norm_apply_le_graphNorm (A : E →ₗ.[𝕜] E) (x : A.domain) :
   rw [graphNorm]
   exact Real.le_sqrt_of_sq_le (by nlinarith [sq_nonneg ‖(x : E)‖])
 
+/-- Add a bounded ambient perturbation to a partial map on its original
+domain.  Closedness remains a separate property of the resulting map. -/
+noncomputable def addBounded (A : E →ₗ.[𝕜] E) (V : E →L[𝕜] E) :
+    E →ₗ.[𝕜] E where
+  domain := A.domain
+  toFun := A.toLinearMap + V.toLinearMap.domRestrict A.domain
+
+@[simp] theorem addBounded_domain (A : E →ₗ.[𝕜] E) (V : E →L[𝕜] E) :
+    (A.addBounded V).domain = A.domain := rfl
+
+@[simp] theorem addBounded_apply (A : E →ₗ.[𝕜] E) (V : E →L[𝕜] E)
+    (x : (A.addBounded V).domain) :
+    A.addBounded V x = A x + V (x : E) := rfl
+
 /-- Relative boundedness of a domain-defined perturbation with respect to a
 partial linear map. -/
 def RelativelyBounded (A : E →ₗ.[𝕜] E)
