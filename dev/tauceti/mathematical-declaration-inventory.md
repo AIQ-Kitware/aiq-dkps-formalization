@@ -92,7 +92,8 @@ Main contributions:
 
 - invariant and reducing subspaces for domain-aware operators (now canonical
   `TauCeti.LinearPMap` predicates, with historical bundle names as facades);
-- preservation of domains by orthogonal projections;
+- preservation of domains by orthogonal projections, density, and graph
+  closedness (now raw `TauCeti.LinearPMap` lemmas);
 - restricted domains, restricted actions, projection back into the restricted
   domain, and the resulting raw partial map (all now canonical
   `TauCeti.LinearPMap` declarations);

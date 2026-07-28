@@ -151,25 +151,9 @@ private theorem reducingRestrictionDomain_dense
     (A : ClosedOperator (𝕜 := 𝕜) (E := E))
     (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     (hred : A.ReducesSubspace U) :
-    Dense ((reducingRestrictionDomain A U : Submodule 𝕜 U) : Set U) := by
-  rw [dense_iff_closure_eq]
-  ext u
-  simp only [Set.mem_univ, iff_true]
-  have hu : (u : E) ∈ closure (A.domain : Set E) := by
-    rw [A.dense_domain.closure_eq]
-    trivial
-  obtain ⟨s, hs, hs_lim⟩ := mem_closure_iff_seq_limit.mp hu
-  let t : ℕ → U := fun n =>
-    ⟨U.starProjection (s n), U.starProjection_apply_mem (s n)⟩
-  refine mem_closure_iff_seq_limit.mpr ⟨t, ?_, ?_⟩
-  · intro n
-    exact hred.projection_mem_domain ⟨s n, hs n⟩
-  · have hlim := (U.starProjection.continuous.tendsto (u : E)).comp hs_lim
-    have hfix : U.starProjection (u : E) = (u : E) :=
-      Submodule.starProjection_eq_self_iff.mpr u.property
-    change Tendsto (fun n => t n) atTop (𝓝 u)
-    apply tendsto_subtype_rng.mpr
-    simpa [t, hfix, Function.comp_def] using hlim
+    Dense ((reducingRestrictionDomain A U : Submodule 𝕜 U) : Set U) :=
+  TauCeti.LinearPMap.reducingRestriction_dense A.toLinearPMap U hred
+    A.toLinearPMap_dense
 
 private theorem reducingRestrictionLinearMap_closedGraph
     (A : ClosedOperator (𝕜 := 𝕜) (E := E))
@@ -177,34 +161,9 @@ private theorem reducingRestrictionLinearMap_closedGraph
     (hred : A.ReducesSubspace U) :
     IsClosed (Set.range fun x : reducingRestrictionDomain A U =>
       (((x : reducingRestrictionDomain A U) : U),
-        reducingRestrictionLinearMap A U hred x)) := by
-  let coords : U × U → E × E := fun p => ((p.1 : E), (p.2 : E))
-  have hcoords : Continuous coords :=
-    (U.subtypeL.continuous.comp continuous_fst).prodMk
-      (U.subtypeL.continuous.comp continuous_snd)
-  rw [show Set.range (fun x : reducingRestrictionDomain A U =>
-      (((x : reducingRestrictionDomain A U) : U),
-        reducingRestrictionLinearMap A U hred x)) =
-      coords ⁻¹' (Set.range fun x : A.domain =>
-        ((x : E), A.toLinearMap x)) by
-    ext p
-    constructor
-    · rintro ⟨x, rfl⟩
-      exact ⟨reducingRestrictionDomainToAmbient A U x, rfl⟩
-    · rintro ⟨x, hx⟩
-      have hx0 : (x : E) = (p.1 : E) := congrArg Prod.fst hx
-      have hx1 : A.toLinearMap x = (p.2 : E) := congrArg Prod.snd hx
-      have hpdom : (p.1 : E) ∈ A.domain := hx0 ▸ x.property
-      let u : reducingRestrictionDomain A U := ⟨p.1, hpdom⟩
-      refine ⟨u, Prod.ext rfl ?_⟩
-      apply Subtype.ext
-      change A.toLinearMap
-          (reducingRestrictionDomainToAmbient A U u) = (p.2 : E)
-      have hxu : reducingRestrictionDomainToAmbient A U u = x := by
-        apply Subtype.ext
-        exact hx0.symm
-      simpa [hxu] using hx1]
-  exact A.closed_graph.preimage hcoords
+        reducingRestrictionLinearMap A U hred x)) :=
+  TauCeti.LinearPMap.reducingRestriction_closedGraph A.toLinearPMap U hred
+    A.closed_graph
 
 /-- The closed operator induced on a reducing subspace. -/
 noncomputable def reducingRestriction
