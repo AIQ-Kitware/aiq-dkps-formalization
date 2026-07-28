@@ -119,20 +119,23 @@ theorem mem_and_gauge_le_of_exteriorLeft_intervalRight
     simp only [hTdef, add_apply, smul_apply, ContinuousLinearMap.id_apply]
     rw [hSeq y]
     abel
-  have hEqT : HasUnboundedBoundedSylvesterEquation A T X C :=
+  have hEqT : TauCeti.LinearPMap.SylvesterEquation
+      A.toLinearPMap (T.toLinearMap.toPMap ⊤) X C :=
     closedSylvesterEquation_boundedRealization hEq hT
   -- shift both blocks by the center
   set c𝕜 : 𝕜 := (((α + β) / 2 : ℝ) : 𝕜) with hc𝕜
-  set A' : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := E) :=
-    A.addBounded (-(c𝕜 • ContinuousLinearMap.id 𝕜 E)) with hA'def
+  set A' : E →ₗ.[𝕜] E :=
+    TauCeti.LinearPMap.addBounded A.toLinearPMap
+      (-(c𝕜 • ContinuousLinearMap.id 𝕜 E)) with hA'def
   have hA'domain : A'.domain = A.domain := rfl
   have hA'apply : ∀ x : A.domain,
-      A'.toLinearMap x = A.toLinearMap x - c𝕜 • (x : E) := by
+      A' x = A.toLinearMap x - c𝕜 • (x : E) := by
     intro x
     change A.toLinearMap x + (-(c𝕜 • ContinuousLinearMap.id 𝕜 E)) (x : E) =
       A.toLinearMap x - c𝕜 • (x : E)
     simp [sub_eq_add_neg]
-  have hEq' : HasUnboundedBoundedSylvesterEquation A' S X C := by
+  have hEq' : TauCeti.LinearPMap.SylvesterEquation
+      A' (S.toLinearMap.toPMap ⊤) X C := by
     refine ⟨fun x => hEqT.mapsTo_domain x, fun x => ?_⟩
     have h1 : A.toLinearMap ⟨X (x : F), hEqT.mapsTo_domain x⟩ -
         X (T (x : F)) = C (x : F) := hEqT.equation x
@@ -145,13 +148,13 @@ theorem mem_and_gauge_le_of_exteriorLeft_intervalRight
         simp only [hTdef, add_apply, smul_apply, ContinuousLinearMap.id_apply]
         abel
       rw [this, map_sub, map_smul]
-    change A'.toLinearMap ⟨X (x : F), hEqT.mapsTo_domain x⟩ -
+    change A' ⟨X (x : F), hEqT.mapsTo_domain x⟩ -
       X (S (x : F)) = C (x : F)
     rw [h2, h3, ← h1]
     abel
   -- the everywhere-defined inverse of the shifted exterior block
-  refine sylvester_mem_and_gauge_le_of_unbounded_bound_inverse N
-    (⟨J, hdom, ?_, ?_⟩ : HasBoundedEverywhereInverse A') S hr0 hδ
+  refine linearPMapSylvester_mem_and_gauge_le_of_unbounded_bound_inverse N
+    (⟨J, hdom, ?_, ?_⟩ : TauCeti.LinearPMap.HasBoundedEverywhereInverse A') S hr0 hδ
     hJnorm hSnorm hEq' hC
   · intro y
     change A.toLinearMap ⟨J y, hdom y⟩ + -(c𝕜 • J y) = y

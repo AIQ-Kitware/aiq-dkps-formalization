@@ -32,31 +32,23 @@ variable {E F G : Type v}
 /-- Bounded left inverse of the shifted operator `A - c` with norm at most
 `s⁻¹`: the one-sided resolvent surrogate for "the spectrum of the
 self-adjoint `A` avoids `(c - s, c + s)`". -/
-def LeftShiftedInverseBound
+abbrev LeftShiftedInverseBound
     (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := E))
     (c s : ℝ) : Prop :=
-  ∃ J : E →L[𝕜] E,
-    (∀ x : A.domain,
-      J (A.toLinearMap x - ((c : ℝ) : 𝕜) • (x : E)) = (x : E)) ∧
-    ‖J‖ ≤ s⁻¹
+  TauCeti.LinearPMap.LeftShiftedInverseBound A.toLinearPMap c s
 
 /-- Bounded two-sided inverse of the shifted operator `A - c` with norm at
 most `s⁻¹`, including the domain transport of the right-inverse leg. -/
-def TwoSidedShiftedInverseBound
+abbrev TwoSidedShiftedInverseBound
     (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := E))
     (c s : ℝ) : Prop :=
-  ∃ J : E →L[𝕜] E, ∃ hdom : ∀ z : E, J z ∈ A.domain,
-    (∀ x : A.domain,
-      J (A.toLinearMap x - ((c : ℝ) : 𝕜) • (x : E)) = (x : E)) ∧
-    (∀ z : E, A.toLinearMap ⟨J z, hdom z⟩ - ((c : ℝ) : 𝕜) • J z = z) ∧
-    ‖J‖ ≤ s⁻¹
+  TauCeti.LinearPMap.TwoSidedShiftedInverseBound A.toLinearPMap c s
 
 theorem TwoSidedShiftedInverseBound.leftShiftedInverseBound
     {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := E)} {c s : ℝ}
     (h : TwoSidedShiftedInverseBound A c s) :
     LeftShiftedInverseBound A c s := by
-  obtain ⟨J, _hdom, hleft, _hright, hnorm⟩ := h
-  exact ⟨J, hleft, hnorm⟩
+  exact TauCeti.LinearPMap.TwoSidedShiftedInverseBound.leftShiftedInverseBound h
 
 /-! ## Numerical radius controls the norm of a symmetric block -/
 
