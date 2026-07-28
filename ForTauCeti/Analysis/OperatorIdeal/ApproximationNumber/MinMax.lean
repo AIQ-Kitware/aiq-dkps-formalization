@@ -19,6 +19,10 @@ Courant--Fischer characterization for approximation numbers. A uniform lower
 modulus on an `(n+1)`-dimensional test subspace forces the `n`th approximation
 number to be at least that modulus.
 
+The other half — every strict lower bound for `aₙ(T)` is realized as such a
+modulus — is
+`ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/MinMaxUpper.lean`.
+
 ## Namespace note
 
 These declarations extend the existing Mathlib namespace `ContinuousLinearMap`
@@ -83,9 +87,14 @@ homogeneous rather than restricted to unit vectors.  Both matter:
   `c`.
 
 Unlike the finite-dimensional Eckart--Young identification, the ambient source
-and target spaces need not be finite-dimensional either.  Only this half of the
-min--max characterization is unconditional in infinite dimensions; see the
-module docstring. -/
+and target spaces need not be finite-dimensional either.
+
+The converse is
+`ContinuousLinearMap.exists_linearIndependent_lowerBound_of_lt_approximationNumber`
+in `ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/MinMaxUpper.lean`, so
+the characterization is complete; an earlier version of this docstring said only
+this half held unconditionally in infinite dimensions, which was a statement
+about the then-available proof, not about the mathematics. -/
 theorem le_approximationNumber_of_lt_rank
     (T : E₁ →L[𝕜] F₁) (n : ℕ) (V : Submodule 𝕜 E₁) {c : ℝ}
     (hVrank : (n : Cardinal) < Module.rank 𝕜 V)
