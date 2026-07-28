@@ -183,8 +183,12 @@ field.
    `SymmetricOperatorIdealFamily`, so that a family carries dominance as a
    property rather than as data.
 3. **S3 — Schatten instances.** `Φ_p(a) = (∑ aₙ^p)^{1/p}` and the Schatten
-   `p`-ideals as instances of S1, with trace class (`p = 1`) as the named
-   example still missing.
+   `p`-ideals as instances of S1. **`p = 1` landed on 2026-07-28** as
+   `ForTauCeti/Analysis/OperatorIdeal/Family/TraceClass.lean`
+   (`TauCeti.traceClassIdealFamily`), again by the direct route: the nuclear norm
+   is the supremum of the Ky Fan gauges, so its triangle inequality *is* the Ky
+   Fan one in the limit.  What is left of S3 is general `p`, which does need the
+   symmetric-gauge construction.
 
    Two corrections to the earlier text. First, **Mathlib has neither `Schatten`
    nor a Hilbert--Schmidt theory** — searched 2026-07-28, there is no file

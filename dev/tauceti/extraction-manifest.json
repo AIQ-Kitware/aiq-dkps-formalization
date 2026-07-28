@@ -31,7 +31,8 @@
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.MinMaxUpper",
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteRestriction",
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.KyFan",
-        "ForTauCeti.Analysis.OperatorIdeal.Family.KyFan"
+        "ForTauCeti.Analysis.OperatorIdeal.Family.KyFan",
+        "ForTauCeti.Analysis.OperatorIdeal.Family.TraceClass"
       ]
     },
     {
@@ -1791,6 +1792,24 @@
       "downstream_users": [
         "DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric"
       ],
+      "status": "staged",
+      "upstream_pr": null
+    },
+    {
+      "source_module": "ForTauCeti.Analysis.OperatorIdeal.Family.TraceClass",
+      "source_declarations": [],
+      "current_namespace": "ContinuousLinearMap",
+      "staging_module": "ForTauCeti.Analysis.OperatorIdeal.Family.TraceClass",
+      "final_tauceti_module": "TauCeti.Analysis.OperatorIdeal.Family.TraceClass",
+      "ownership_class": "tauceti",
+      "roadmap_target": "symmetric-operator-ideals",
+      "provenance_class": "authored in place 2026-07-28: the nuclear norm as the supremum of the Ky Fan gauges, and the trace-class ideal as a TauCeti.SymmetricOperatorIdealFamily; possible only once the Ky Fan triangle inequality became Spectra-free",
+      "direct_dependencies": [
+        "Mathlib",
+        "ForTauCeti.Analysis.OperatorIdeal.Family.KyFan"
+      ],
+      "blocked_dependencies": [],
+      "downstream_users": [],
       "status": "staged",
       "upstream_pr": null
     }
