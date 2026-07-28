@@ -444,6 +444,24 @@ noncomputable def pullback (A : E →ₗ.[𝕜] E) (e : E ≃L[𝕜] E) : E →�
     (pullback A e).domain = pullbackDomain A e :=
   rfl
 
+/-- Pullback through a continuous linear equivalence preserves a dense domain. -/
+theorem pullback_dense
+    (A : E →ₗ.[𝕜] E) (e : E ≃L[𝕜] E)
+    (hA : Dense (A.domain : Set E)) :
+    Dense ((pullback A e).domain : Set E) := by
+  rw [pullback_domain]
+  have himage : Dense (e.symm '' (A.domain : Set E)) :=
+    (e.symm.toHomeomorph.isDenseEmbedding.dense_image).2 hA
+  rw [show ((pullbackDomain A e : Submodule 𝕜 E) : Set E) =
+      e.symm '' (A.domain : Set E) by
+    ext x
+    constructor
+    · intro hx
+      exact ⟨e x, hx, e.symm_apply_apply x⟩
+    · rintro ⟨y, hy, rfl⟩
+      simpa using hy]
+  exact himage
+
 /-- A partial linear map is symmetric on its operator domain. -/
 def IsSymmetric (A : E →ₗ.[𝕜] E) : Prop :=
   ∀ x y : A.domain, ⟪A x, (y : E)⟫_𝕜 = ⟪(x : E), A y⟫_𝕜

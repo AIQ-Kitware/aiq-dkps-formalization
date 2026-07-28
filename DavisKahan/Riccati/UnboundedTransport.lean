@@ -67,18 +67,8 @@ abbrev pullbackLinearMap
 
 private theorem pullbackDomain_dense
     (A : ClosedOperator (𝕜 := 𝕜) (E := E)) (e : E ≃L[𝕜] E) :
-    Dense ((pullbackDomain A e : Submodule 𝕜 E) : Set E) := by
-  have himage : Dense (e.symm '' (A.domain : Set E)) :=
-    (e.symm.toHomeomorph.isDenseEmbedding.dense_image).2 A.dense_domain
-  rw [show ((pullbackDomain A e : Submodule 𝕜 E) : Set E) =
-      e.symm '' (A.domain : Set E) by
-    ext x
-    constructor
-    · intro hx
-      exact ⟨e x, hx, e.symm_apply_apply x⟩
-    · rintro ⟨y, hy, rfl⟩
-      simpa using hy]
-  exact himage
+    Dense ((pullbackDomain A e : Submodule 𝕜 E) : Set E) :=
+  TauCeti.LinearPMap.pullback_dense A.toLinearPMap e A.toLinearPMap_dense
 
 private theorem pullbackLinearMap_closedGraph
     (A : ClosedOperator (𝕜 := 𝕜) (E := E)) (e : E ≃L[𝕜] E) :
