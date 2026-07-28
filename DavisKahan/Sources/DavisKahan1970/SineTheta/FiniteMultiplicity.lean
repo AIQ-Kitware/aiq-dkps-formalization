@@ -111,8 +111,8 @@ theorem finiteMultiplicityTrialMap_isometry (m : ℕ) (theta : ℝ) :
   have hval : finiteMultiplicityTrialMap (𝕜 := 𝕜) m theta x =
       WithLp.toLp 2 (((Real.cos theta : ℝ) : 𝕜) • x,
         ((Real.sin theta : ℝ) : 𝕜) • x) := by
-    simp only [finiteMultiplicityTrialMap, ContinuousLinearMap.add_apply,
-      ContinuousLinearMap.smul_apply, finiteMultiplicityExactMap_apply,
+    simp only [finiteMultiplicityTrialMap, add_apply,
+      smul_apply, finiteMultiplicityExactMap_apply,
       finiteMultiplicityComplementMap_apply, ← WithLp.toLp_smul,
       ← WithLp.toLp_add]
     simp
@@ -349,7 +349,7 @@ theorem finiteMultiplicitySineBlock_injective
   apply_fun WithLp.sndL 2 𝕜
       (FiniteMultiplicitySpace 𝕜 m)
       (FiniteMultiplicitySpace 𝕜 m) at hxy
-  simp only [finiteMultiplicitySineBlock, ContinuousLinearMap.smul_apply,
+  simp only [finiteMultiplicitySineBlock, smul_apply,
     finiteMultiplicityComplementMap_apply, map_smul, WithLp.sndL_apply,
     WithLp.toLp_snd] at hxy
   -- Cancel in `𝕜`.  Letting the scalar normalise to the real action instead

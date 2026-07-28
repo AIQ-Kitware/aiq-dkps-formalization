@@ -261,7 +261,7 @@ theorem resolventAtNegI_boundedSelfAdjointOperator_eq
     change
       A (resolventOperator A (-Complex.I) x) +
         Complex.I • resolventOperator A (-Complex.I) x = x
-    simpa [ContinuousLinearMap.mul_apply] using hcancel
+    simpa [mul_apply_eq_comp] using hcancel
 
 /-- For a bounded self-adjoint operator, Spectra's Cayley transform is the
 Mathlib continuous functional calculus of the scalar Möbius map. -/

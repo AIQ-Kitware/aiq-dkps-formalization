@@ -330,7 +330,7 @@ private theorem projection_sub_model_eq_matrix (θ : ℝ) :
       rotatedModelSubspace_starProjection_e1]
     ext i
     fin_cases i <;>
-      simp [uθ, e0, e1, Matrix.toEuclideanLin_apply, PiLp.single_apply] <;>
+      simp [uθ, e0, e1, Matrix.toLpLin_apply, PiLp.single_apply] <;>
       (try push_cast) <;>
       (try simp only [RCLike.real_smul_eq_coe_mul, RCLike.algebraMap_eq_ofReal,
         smul_eq_mul, mul_one, RCLike.ofReal_mul, RCLike.ofReal_one]) <;>
@@ -346,7 +346,7 @@ private theorem projection_sub_model_eq_matrix (θ : ℝ) :
       rotatedModelSubspace_starProjection_e1]
     ext i
     fin_cases i <;>
-      simp [uθ, e0, e1, Matrix.toEuclideanLin_apply, PiLp.single_apply] <;>
+      simp [uθ, e0, e1, Matrix.toLpLin_apply, PiLp.single_apply] <;>
       (try push_cast) <;>
       (try simp only [RCLike.real_smul_eq_coe_mul, RCLike.algebraMap_eq_ofReal,
         smul_eq_mul, mul_one, RCLike.ofReal_mul, RCLike.ofReal_one]) <;>
@@ -378,7 +378,7 @@ private theorem sinThetaMap_model_eq_matrix (θ : ℝ) :
       Submodule.starProjection_orthogonal_val]
     ext i
     fin_cases i <;>
-      simp [uθ, e0, e1, Matrix.toEuclideanLin_apply, PiLp.single_apply] <;>
+      simp [uθ, e0, e1, Matrix.toLpLin_apply, PiLp.single_apply] <;>
       (try push_cast) <;>
       (try simp only [RCLike.real_smul_eq_coe_mul, RCLike.algebraMap_eq_ofReal,
         smul_eq_mul, mul_one, RCLike.ofReal_mul, RCLike.ofReal_one]) <;>
@@ -397,7 +397,7 @@ private theorem sinThetaMap_model_eq_matrix (θ : ℝ) :
       Submodule.starProjection_orthogonal_val]
     ext i
     fin_cases i <;>
-      simp [uθ, e0, e1, Matrix.toEuclideanLin_apply, PiLp.single_apply] <;>
+      simp [uθ, e0, e1, Matrix.toLpLin_apply, PiLp.single_apply] <;>
       (try push_cast) <;>
       (try simp only [RCLike.real_smul_eq_coe_mul, RCLike.algebraMap_eq_ofReal,
         smul_eq_mul, mul_one, RCLike.ofReal_mul, RCLike.ofReal_one]) <;>
@@ -429,7 +429,7 @@ private theorem sinTwoAngleOperator_model_eq_matrix (θ : ℝ) :
       Submodule.starProjection_orthogonal_val]
     ext i
     fin_cases i <;>
-      simp [uθ, e0, e1, Matrix.toEuclideanLin_apply, PiLp.single_apply,
+      simp [uθ, e0, e1, Matrix.toLpLin_apply, PiLp.single_apply,
         Real.sin_two_mul] <;>
       (try push_cast) <;>
       (try simp only [RCLike.real_smul_eq_coe_mul, RCLike.algebraMap_eq_ofReal,
@@ -449,7 +449,7 @@ private theorem sinTwoAngleOperator_model_eq_matrix (θ : ℝ) :
       Submodule.starProjection_orthogonal_val]
     ext i
     fin_cases i <;>
-      simp [uθ, e0, e1, Matrix.toEuclideanLin_apply, PiLp.single_apply,
+      simp [uθ, e0, e1, Matrix.toLpLin_apply, PiLp.single_apply,
         Real.sin_two_mul] <;>
       (try push_cast) <;>
       (try simp only [RCLike.real_smul_eq_coe_mul, RCLike.algebraMap_eq_ofReal,
@@ -477,7 +477,7 @@ private theorem projection_sub_model_sq (θ : ℝ) :
   rw [projection_sub_model_eq_matrix]
   ext x i
   fin_cases i <;>
-    simp [Matrix.toEuclideanLin_apply, Fin.sum_univ_two] <;>
+    simp [Matrix.toLpLin_apply, Fin.sum_univ_two] <;>
     (try push_cast) <;>
     (try simp only [RCLike.algebraMap_eq_ofReal, Matrix.vecHead,
       Matrix.vecTail, Function.comp_apply, Fin.succ_zero_eq_one]) <;>
@@ -505,7 +505,7 @@ private theorem modelSinThetaPerturbation_sq (a b θ : ℝ) :
     exact h
   ext x i
   fin_cases i <;>
-    simp [modelSinThetaPerturbation, Matrix.toEuclideanLin_apply,
+    simp [modelSinThetaPerturbation, Matrix.toLpLin_apply,
       Fin.sum_univ_two] <;>
     (try push_cast) <;>
     (try simp only [RCLike.algebraMap_eq_ofReal, Matrix.vecHead,
@@ -551,7 +551,7 @@ private theorem singularValues_sinThetaMap_model
   fin_cases i <;>
     rw [diagOp_apply_basis] <;>
     ext j <;> fin_cases j <;>
-    simp [LinearMap.comp_apply, Matrix.toEuclideanLin_apply,
+    simp [LinearMap.comp_apply, Matrix.toLpLin_apply,
       Matrix.vecHead, Matrix.vecTail, EuclideanSpace.basisFun_apply,
       PiLp.single_apply] <;>
     (try push_cast) <;>

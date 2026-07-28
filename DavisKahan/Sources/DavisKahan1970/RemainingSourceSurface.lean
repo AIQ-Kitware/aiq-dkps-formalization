@@ -155,7 +155,7 @@ theorem theorem5_1_banach_sylvester
     apply ContinuousLinearMap.ext
     intro x
     have heqpoint := congrArg (fun S : X →L[ℂ] Y => S x) hEq
-    simp only [ContinuousLinearMap.sub_apply, ContinuousLinearMap.comp_apply] at heqpoint
+    simp only [sub_apply, ContinuousLinearMap.comp_apply] at heqpoint
     change T x = L (C x) + L (T (B x))
     have hLA : L (A (T x)) = T x := by
       have hp := congrArg (fun S : Y →L[ℂ] Y => S (T x)) hcancel

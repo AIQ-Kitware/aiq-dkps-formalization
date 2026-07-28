@@ -256,7 +256,7 @@ theorem hasDerivAt_ordered_solution_orbit
       rw [hpt]
       simp
     rw [h1]
-    simp only [ContinuousLinearMap.sub_apply, ContinuousLinearMap.comp_apply,
+    simp only [sub_apply, ContinuousLinearMap.comp_apply,
       map_sub]
     abel
   exact hval ▸ hfd'

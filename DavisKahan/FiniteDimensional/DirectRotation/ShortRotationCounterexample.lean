@@ -67,11 +67,11 @@ def Wlin' : E4 →ₗ[ℝ] E4 := Matrix.toEuclideanLin Wmat.transpose
 
 theorem Wlin_apply (x : E4) (i : Fin 4) :
     Wlin x i = ∑ j, Wmat i j * x j := by
-  simp [Wlin, Matrix.toEuclideanLin_apply, Matrix.mulVec, dotProduct]
+  simp [Wlin, Matrix.toLpLin_apply, Matrix.mulVec, dotProduct]
 
 theorem Wlin'_apply (x : E4) (i : Fin 4) :
     Wlin' x i = ∑ j, Wmat j i * x j := by
-  simp [Wlin', Matrix.toEuclideanLin_apply, Matrix.mulVec, dotProduct,
+  simp [Wlin', Matrix.toLpLin_apply, Matrix.mulVec, dotProduct,
     Matrix.transpose_apply]
 
 theorem Wlin'_comp_Wlin : Wlin' ∘ₗ Wlin = LinearMap.id := by
@@ -124,12 +124,12 @@ def V4 : Submodule ℝ E4 := U4.map Wequiv.toLinearMap
 theorem mem_U4 {x : E4} (hx : x ∈ U4) : x = x 0 • sv 0 + x 1 • sv 1 := by
   obtain ⟨a, b, rfl⟩ := Submodule.mem_span_pair.mp hx
   ext i
-  fin_cases i <;> simp [sv, EuclideanSpace.single_apply]
+  fin_cases i <;> simp [sv, PiLp.single_apply]
 
 theorem coord_eq_zero_of_mem_U4 {x : E4} (hx : x ∈ U4) :
     x 2 = 0 ∧ x 3 = 0 := by
   obtain ⟨a, b, rfl⟩ := Submodule.mem_span_pair.mp hx
-  constructor <;> simp [sv, EuclideanSpace.single_apply]
+  constructor <;> simp [sv, PiLp.single_apply]
 
 theorem projection_U4_apply (x : E4) :
     projection U4 x = x 0 • sv 0 + x 1 • sv 1 := by
@@ -143,12 +143,12 @@ theorem projection_U4_apply (x : E4) :
     rw [mem_U4 hu]
     simp [sv, inner_add_left, inner_sub_right, real_inner_smul_left,
       EuclideanSpace.inner_single_left, EuclideanSpace.inner_single_right,
-      EuclideanSpace.single_apply]
+      PiLp.single_apply]
 
 theorem projection_U4_coord (x : E4) (i : Fin 4) :
     projection U4 x i = if i = 0 then x 0 else if i = 1 then x 1 else 0 := by
   rw [projection_U4_apply]
-  fin_cases i <;> simp [sv, EuclideanSpace.single_apply]
+  fin_cases i <;> simp [sv, PiLp.single_apply]
 
 theorem projection_V4_apply (x : E4) :
     projection V4 x = Wequiv (projection U4 (Wequiv.symm x)) := by
@@ -177,14 +177,14 @@ theorem projection_V4_coord (x : E4) (i : Fin 4) :
 theorem inner_Wlin_sv0 (x : E4) :
     ⟪Wlin (sv 0), x⟫_ℝ = (x 0 + x 1 - x 2 + x 3) / 2 := by
   simp only [PiLp.inner_apply, RCLike.inner_apply, conj_trivial, Wlin_apply]
-  simp [sv, Wmat, EuclideanSpace.single_apply, Fin.sum_univ_four,
+  simp [sv, Wmat, PiLp.single_apply, Fin.sum_univ_four,
     Matrix.smul_apply]
   ring
 
 theorem inner_Wlin_sv1 (x : E4) :
     ⟪Wlin (sv 1), x⟫_ℝ = (-x 0 + x 1 - x 2 - x 3) / 2 := by
   simp only [PiLp.inner_apply, RCLike.inner_apply, conj_trivial, Wlin_apply]
-  simp [sv, Wmat, EuclideanSpace.single_apply, Fin.sum_univ_four,
+  simp [sv, Wmat, PiLp.single_apply, Fin.sum_univ_four,
     Matrix.smul_apply]
   ring
 
@@ -357,7 +357,7 @@ theorem orthonormal_mv : Orthonormal ℝ mv := by
           Matrix.head_cons, PiLp.inner_apply, RCLike.inner_apply, conj_trivial,
           Fin.sum_univ_four, PiLp.smul_apply, PiLp.add_apply, PiLp.sub_apply,
           smul_eq_mul]
-        simp [sv, EuclideanSpace.single_apply]
+        simp [sv, PiLp.single_apply]
         nlinarith [hh]
   · intro i j hij
     fin_cases i <;> fin_cases j <;> first
@@ -365,7 +365,7 @@ theorem orthonormal_mv : Orthonormal ℝ mv := by
       | simp [mv, sv, inner_add_left, inner_add_right, inner_sub_left,
           inner_sub_right, real_inner_smul_left, real_inner_smul_right,
           EuclideanSpace.inner_single_left, EuclideanSpace.inner_single_right,
-          EuclideanSpace.single_apply, hh]
+          PiLp.single_apply, hh]
 
 /-- The family as an orthonormal basis. -/
 def mbasis : OrthonormalBasis (Fin 4) ℝ E4 :=
@@ -396,7 +396,7 @@ theorem Wlin_mv0 : Wlin (mv 0) = mv 1 := by
   rw [map_smul]
   rw [show Wlin (sv 0 + sv 2) = Wlin (sv 0) + Wlin (sv 2) from map_add _ _ _]
   fin_cases i <;>
-    simp [Wlin_apply, Wmat, sv, EuclideanSpace.single_apply,
+    simp [Wlin_apply, Wmat, sv, PiLp.single_apply,
       Fin.sum_univ_four, Matrix.smul_apply] <;> ring
 
 theorem Wlin_mv1 : Wlin (mv 1) = -mv 0 := by
@@ -407,7 +407,7 @@ theorem Wlin_mv1 : Wlin (mv 1) = -mv 0 := by
       Fin 4 → E4) 1 = (Real.sqrt 2)⁻¹ • (sv 1 + sv 3) from rfl]
   rw [map_smul]
   fin_cases i <;>
-    simp [Wlin_apply, Wmat, sv, EuclideanSpace.single_apply,
+    simp [Wlin_apply, Wmat, sv, PiLp.single_apply,
       Fin.sum_univ_four, Matrix.smul_apply] <;> ring
 
 theorem Wlin_mv2 : Wlin (mv 2) = mv 2 := by
@@ -418,7 +418,7 @@ theorem Wlin_mv2 : Wlin (mv 2) = mv 2 := by
       Fin 4 → E4) 2 = (Real.sqrt 2)⁻¹ • (sv 0 - sv 2) from rfl]
   rw [map_smul]
   fin_cases i <;>
-    simp [Wlin_apply, Wmat, sv, EuclideanSpace.single_apply,
+    simp [Wlin_apply, Wmat, sv, PiLp.single_apply,
       Fin.sum_univ_four, Matrix.smul_apply] <;> ring
 
 theorem Wlin_mv3 : Wlin (mv 3) = mv 3 := by
@@ -429,7 +429,7 @@ theorem Wlin_mv3 : Wlin (mv 3) = mv 3 := by
       Fin 4 → E4) 3 = (Real.sqrt 2)⁻¹ • (sv 1 - sv 3) from rfl]
   rw [map_smul]
   fin_cases i <;>
-    simp [Wlin_apply, Wmat, sv, EuclideanSpace.single_apply,
+    simp [Wlin_apply, Wmat, sv, PiLp.single_apply,
       Fin.sum_univ_four, Matrix.smul_apply] <;> ring
 
 theorem Wlin'_mv0 : Wlin' (mv 0) = -mv 1 := by
@@ -549,7 +549,7 @@ theorem gram_sinThetaMap_apply (i : Fin 4) :
   simp only [LinearMap.comp_apply, hcV, map_sub, LinearMap.smul_apply]
   fin_cases i <;> fin_cases k <;>
     simp [projection_U4_coord, projection_V4_coord,
-      EuclideanSpace.basisFun_apply, EuclideanSpace.single_apply] <;> ring
+      EuclideanSpace.basisFun_apply, PiLp.single_apply] <;> ring
 
 theorem antitone_half_half_zero_zero :
     Antitone (![2⁻¹, 2⁻¹, 0, 0] : Fin 4 → ℝ) := by

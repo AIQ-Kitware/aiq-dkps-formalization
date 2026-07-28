@@ -93,8 +93,8 @@ theorem paperDirectRotation_hermitianPart_blockDiagonal
   have hPQ : P + Q = 1 := by
     apply ContinuousLinearMap.ext
     intro x
-    simpa only [P, Q, ContinuousLinearMap.add_apply,
-      ContinuousLinearMap.one_apply] using
+    simpa only [P, Q, add_apply,
+      one_apply_eq_self] using
       U.starProjection_add_starProjection_orthogonal x
   change A = P * A * P + Q * A * Q
   calc
@@ -139,7 +139,7 @@ theorem paperDirectRotation_hermitianPart_nonnegative
     rw [← inner_re_symm x (C x)]
     simpa only [C, Q] using hT.complement_compression_nonnegative x
   rw [hdiag]
-  simp only [ContinuousLinearMap.add_apply, inner_add_left, map_add,
+  simp only [add_apply, inner_add_left, map_add,
     re_inner_star_apply]
   linarith
 
@@ -159,7 +159,7 @@ theorem paperDirectRotation_add_star_apply_eq_zero
     simpa only [A] using
       paperDirectRotation_hermitianPart_nonnegative U V T hT z
   have hAform : RCLike.re ⟪A x, x⟫_ℂ = 0 := by
-    simp only [A, ContinuousLinearMap.add_apply, inner_add_left, map_add,
+    simp only [A, add_apply, inner_add_left, map_add,
       re_inner_star_apply, hx, add_zero]
   have hsq := ContinuousLinearMap.norm_apply_sq_le_of_positive
     hAsym hApos x
@@ -180,7 +180,7 @@ theorem paperDirectRotation_maps_sourceDefect
   have hPx : projection U (x : H) = x :=
     Submodule.starProjection_eq_self_iff.mpr x.property.1
   have hinter := DFunLike.congr_fun hT.intertwines (x : H)
-  rw [ContinuousLinearMap.mul_apply, ContinuousLinearMap.mul_apply, hPx] at hinter
+  rw [mul_apply_eq_comp, mul_apply_eq_comp, hPx] at hinter
   have hTxV : T (x : H) ∈ V :=
     Submodule.starProjection_eq_self_iff.mp hinter.symm
   constructor
@@ -191,7 +191,7 @@ theorem paperDirectRotation_maps_sourceDefect
     have hsum := paperDirectRotation_add_star_apply_eq_zero U V T hT hre
     have hTneg : T (x : H) = -star T (x : H) := by
       apply eq_neg_of_add_eq_zero_left
-      simpa only [ContinuousLinearMap.add_apply] using hsum
+      simpa only [add_apply] using hsum
     have hstar := congrArg star hT.intertwines
     have hrel : projection U * star T = star T * projection V := by
       simpa only [star_mul,
@@ -201,7 +201,7 @@ theorem paperDirectRotation_maps_sourceDefect
       (Submodule.starProjection_apply_eq_zero_iff V).mpr x.property.2
     have hPstarx : projection U (star T (x : H)) = 0 := by
       have h := DFunLike.congr_fun hrel (x : H)
-      rw [ContinuousLinearMap.mul_apply, ContinuousLinearMap.mul_apply,
+      rw [mul_apply_eq_comp, mul_apply_eq_comp,
         hVx, map_zero] at h
       exact h
     have hPTx : projection U (T (x : H)) = 0 := by
@@ -226,7 +226,7 @@ theorem paperDirectRotation_adjoint_maps_targetDefect
     Submodule.starProjection_eq_self_iff.mpr y.property.2
   have hstarTyU : star T (y : H) ∈ U := by
     have h := DFunLike.congr_fun hrel (y : H)
-    rw [ContinuousLinearMap.mul_apply, ContinuousLinearMap.mul_apply, hVy] at h
+    rw [mul_apply_eq_comp, mul_apply_eq_comp, hVy] at h
     exact Submodule.starProjection_eq_self_iff.mp h
   constructor
   · exact hstarTyU
@@ -240,12 +240,12 @@ theorem paperDirectRotation_adjoint_maps_targetDefect
     have hsum := paperDirectRotation_add_star_apply_eq_zero U V T hT hre
     have hstarTneg : star T (y : H) = -T (y : H) := by
       apply eq_neg_of_add_eq_zero_right
-      simpa only [ContinuousLinearMap.add_apply] using hsum
+      simpa only [add_apply] using hsum
     have hUy : projection U (y : H) = 0 :=
       (Submodule.starProjection_apply_eq_zero_iff U).mpr y.property.1
     have hVTy : projection V (T (y : H)) = 0 := by
       have h := DFunLike.congr_fun hT.intertwines (y : H)
-      rw [ContinuousLinearMap.mul_apply, ContinuousLinearMap.mul_apply,
+      rw [mul_apply_eq_comp, mul_apply_eq_comp,
         hUy, map_zero] at h
       exact h.symm
     have hVstarTy : projection V (star T (y : H)) = 0 := by
@@ -263,13 +263,13 @@ noncomputable def crossedDefectEquivOfPaperDirectRotationScratch
   left_inv x := by
     apply Subtype.ext
     have h := DFunLike.congr_fun hT.unitary_mem.1 (x : H)
-    simpa only [ContinuousLinearMap.mul_apply,
-      ContinuousLinearMap.one_apply] using h
+    simpa only [mul_apply_eq_comp,
+      one_apply_eq_self] using h
   right_inv y := by
     apply Subtype.ext
     have h := DFunLike.congr_fun hT.unitary_mem.2 (y : H)
-    simpa only [ContinuousLinearMap.mul_apply,
-      ContinuousLinearMap.one_apply] using h
+    simpa only [mul_apply_eq_comp,
+      one_apply_eq_self] using h
   map_add' x y := by
     apply Subtype.ext
     exact map_add T (x : H) (y : H)

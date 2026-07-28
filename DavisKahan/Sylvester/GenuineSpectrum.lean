@@ -485,8 +485,8 @@ theorem starProjection_sub_eq_cross_sub_cross_adjoint
   rw [hadj, Submodule.starProjection_orthogonal' V,
     Submodule.starProjection_orthogonal' U]
   ext x
-  simp only [ContinuousLinearMap.comp_apply, ContinuousLinearMap.sub_apply,
-    ContinuousLinearMap.sub_apply, ContinuousLinearMap.one_apply, map_sub]
+  simp only [ContinuousLinearMap.comp_apply, sub_apply,
+    sub_apply, one_apply_eq_self, map_sub]
   abel
 
 /-- **The symmetric two-sided bounded `sin Θ` theorem at unitary-invariant
