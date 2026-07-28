@@ -308,6 +308,24 @@ theorem approximationNumber_eq_singularValues
   · exact approximationNumber_le_singularValues T n
   · exact singularValues_le_approximationNumber T n
 
+/-- **Weyl's inequality for singular values:** `|σₙ(T) − σₙ(S)| ≤ ‖T − S‖`.
+
+Every singular value is `1`-Lipschitz in the operator norm — the singular-value
+counterpart of Weyl's eigenvalue inequality, and the standard sharp form: there
+is no auxiliary bound on `T` or `S`, and no factor depending on their size.
+
+The proof is not an argument about singular values at all.  It is
+`abs_approximationNumber_sub_approximationNumber_le`, which holds over any
+normed space with no inner product, transported through the Eckart--Young
+identification above.  That is the payoff of stating the `s`-number layer
+field-generically: the Hilbert-space theorem is a corollary of a Banach-space
+one. -/
+theorem abs_singularValues_sub_singularValues_le (T S : E →L[𝕜] F) (n : ℕ) :
+    |T.singularValues n - S.singularValues n| ≤ ‖T - S‖ := by
+  rw [← T.approximationNumber_eq_singularValues n,
+    ← S.approximationNumber_eq_singularValues n]
+  exact abs_approximationNumber_sub_approximationNumber_le T S n
+
 end
 
 end ContinuousLinearMap

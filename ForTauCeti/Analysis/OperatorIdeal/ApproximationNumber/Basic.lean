@@ -274,6 +274,26 @@ theorem approximationNumber_add_le_add_norm (T S : E →L[𝕜] F) (n : ℕ) :
     _ = T.approximationNumber n + ‖S‖ + ε := by
       ac_rfl
 
+/-- **Each approximation number is `1`-Lipschitz in the operator norm:**
+`|aₙ(T) − aₙ(S)| ≤ ‖T − S‖`.
+
+This is the reverse-triangle form of `approximationNumber_add_le_add_norm`, and
+it is the perturbation statement downstream arguments actually want: it says the
+whole `s`-sequence moves no faster than the operator does.  In finite dimensions
+it specializes to Weyl's inequality for singular values, via
+`approximationNumber_eq_singularValues`. -/
+theorem abs_approximationNumber_sub_approximationNumber_le (T S : E →L[𝕜] F) (n : ℕ) :
+    |T.approximationNumber n - S.approximationNumber n| ≤ ‖T - S‖ := by
+  have key : ∀ A B : E →L[𝕜] F,
+      A.approximationNumber n - B.approximationNumber n ≤ ‖A - B‖ := by
+    intro A B
+    have h := B.approximationNumber_add_le_add_norm (A - B) n
+    have hAB : B + (A - B) = A := by abel
+    rw [hAB] at h
+    linarith
+  rw [abs_sub_le_iff]
+  exact ⟨key T S, by simpa only [norm_sub_rev] using key S T⟩
+
 /-- The additive ideal inequality: `a_{m+n}(T + S) ≤ aₘ(T) + aₙ(S)`, because two
 approximants of ranks at most `m` and `n` add to one of rank at most `m + n`.
 The index shift is exact in the zero-based convention — one-based `s`-numbers
