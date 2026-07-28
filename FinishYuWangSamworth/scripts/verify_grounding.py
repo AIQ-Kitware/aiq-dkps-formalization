@@ -8,12 +8,15 @@ REQUIRED_FILES = [
     "DavisKahan/Sources/YuWangSamworth2015.lean",
     "DavisKahan/Specialized/Statistics.lean",
     "DavisKahan/Specialized/SingularSubspace.lean",
-    "ForTauCeti/Analysis/InnerProductSpace/AlignedBasis.lean",
-    "ForTauCeti/Analysis/InnerProductSpace/SingularSubspace.lean",
+    "DavisKahan/FiniteDimensional/SinTheta/Perturbation.lean",
     "DavisKahan/Sources/DavisKahan1970/Ideals/HilbertSchmidt.lean",
     "DavisKahan/Sources/DavisKahan1970/Ideals/HilbertSchmidtFrobenius.lean",
+    "FinishYuWangSamworth/FinishYuWangSamworth/Symmetric/Theorem1.lean",
+    "FinishYuWangSamworth/FinishYuWangSamworth/Symmetric/AngleIdentity.lean",
     "FinishYuWangSamworth/FinishYuWangSamworth/Rectangular/FrobeniusGram.lean",
     "FinishYuWangSamworth/FinishYuWangSamworth/Rectangular/Theorem4.lean",
+    "FinishYuWangSamworth/FinishYuWangSamworth/Rectangular/RankOne.lean",
+    "FinishYuWangSamworth/FinishYuWangSamworth/Appendix/Lemma5.lean",
 ]
 
 REQUIRED_DECLARATIONS = {
@@ -22,24 +25,35 @@ REQUIRED_DECLARATIONS = {
         "theorem yuWangSamworth_alignedBasis_le",
         "theorem yuWangSamworth_eigenvector_le",
     ],
-    "DavisKahan/Specialized/SingularSubspace.lean": [
-        "theorem rightSingularSubspace_sinTheta_le",
-        "theorem leftSingularSubspace_sinTheta_le",
-        "theorem sq_gap_mul_sum_cross_singularVectors_le",
+    "DavisKahan/FiniteDimensional/SinTheta/Perturbation.lean": [
+        "theorem sinTheta_perturbation_le",
+        "theorem opNorm_sinThetaMap_le_of_intervalGap",
     ],
-    "DavisKahan/Sources/DavisKahan1970/Ideals/HilbertSchmidt.lean": [
-        "theorem paperHilbertSchmidtNorm_adjoint",
-        "theorem paperHilbertSchmidtNorm_comp_le",
+    "FinishYuWangSamworth/FinishYuWangSamworth/Symmetric/Theorem1.lean": [
+        "theorem yuWangSamworth_theorem1_uiNorm_le",
+        "theorem yuWangSamworth_theorem1_frobenius_le",
+        "theorem yuWangSamworth_theorem1_opNorm_le",
     ],
-    "DavisKahan/Sources/DavisKahan1970/Ideals/HilbertSchmidtFrobenius.lean": [
-        "theorem paperHilbertSchmidtNorm_eq_rectangularFrobenius",
-        "theorem paperHilbertSchmidtNorm_eq_frobenius",
+    "FinishYuWangSamworth/FinishYuWangSamworth/Symmetric/AngleIdentity.lean": [
+        "theorem yuWangSamworth_equation4",
+        "theorem yuWangSamworth_equation4_printed_counterexample",
     ],
     "FinishYuWangSamworth/FinishYuWangSamworth/Rectangular/Theorem4.lean": [
         "theorem yuWangSamworth_rightSingularSubspace_le",
         "theorem yuWangSamworth_leftSingularSubspace_le",
         "theorem yuWangSamworth_rightSingularAlignedBasis_le",
         "theorem yuWangSamworth_leftSingularAlignedBasis_le",
+    ],
+    "FinishYuWangSamworth/FinishYuWangSamworth/Rectangular/RankOne.lean": [
+        "theorem yuWangSamworth_rightSingularVector_le",
+        "theorem yuWangSamworth_leftSingularVector_le",
+    ],
+    "FinishYuWangSamworth/FinishYuWangSamworth/Appendix/Lemma5.lean": [
+        "theorem yuWangSamworth_lemma5_columns",
+        "theorem yuWangSamworth_lemma5_isometricColumns",
+        "theorem yuWangSamworth_lemma5_orthonormalColumns",
+        "theorem yuWangSamworth_lemma5_rows",
+        "theorem yuWangSamworth_lemma5_orthonormalRows",
     ],
 }
 
@@ -53,5 +67,12 @@ for rel, needles in REQUIRED_DECLARATIONS.items():
     for needle in needles:
         if needle not in text:
             raise SystemExit(f"missing grounded declaration in {rel}: {needle}")
+
+lane = ROOT / "FinishYuWangSamworth"
+for path in lane.rglob("*.lean"):
+    text = path.read_text()
+    for forbidden in ("sorry", "axiom "):
+        if forbidden in text:
+            raise SystemExit(f"forbidden placeholder in {path.relative_to(ROOT)}: {forbidden}")
 
 print("FinishYuWangSamworth grounding audit: OK")
