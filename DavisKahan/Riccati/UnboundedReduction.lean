@@ -65,6 +65,44 @@ noncomputable def unboundedBlockGraphDomainVectorPMap
     rw [unboundedBlockOperatorCorePMap_domain]
     exact ⟨x.property, hdom x⟩⟩
 
+/-- The raw-data graph vector in the canonical block-core domain. -/
+noncomputable def unboundedBlockGraphPMapDataDomainVector
+    (H : UnboundedBlockDataPMap (𝕜 := 𝕜) (E0 := E0) (E1 := E1))
+    (X : E0 →L[𝕜] E1) (hdom : PreservesRiccatiPMapDomains H X)
+    (x : H.A0.domain) : (unboundedBlockOperatorPMapCore H).domain :=
+  ⟨WithLp.toLp 2 ((x : E0), X (x : E0)), by
+    rw [unboundedBlockOperatorPMapCore_domain]
+    exact ⟨x.property, hdom x⟩⟩
+
+/-- Every raw-data graph vector belongs to the angular graph. -/
+theorem unboundedBlockGraphPMapDataDomainVector_mem_graph
+    (H : UnboundedBlockDataPMap (𝕜 := 𝕜) (E0 := E0) (E1 := E1))
+    (X : E0 →L[𝕜] E1) (hdom : PreservesRiccatiPMapDomains H X)
+    (x : H.A0.domain) :
+    ((unboundedBlockGraphPMapDataDomainVector H X hdom x :
+        (unboundedBlockOperatorPMapCore H).domain) : WithLp 2 (E0 × E1)) ∈
+      unboundedBlockGraph X := by
+  change WithLp.toLp 2 ((x : E0), X (x : E0)) ∈ unboundedBlockGraph X
+  exact (toLp_mem_unboundedBlockGraph_iff X (x : E0) (X (x : E0))).2 rfl
+
+@[simp] theorem unboundedBlockOperatorPMapCore_graphVector_fst
+    (H : UnboundedBlockDataPMap (𝕜 := 𝕜) (E0 := E0) (E1 := E1))
+    (X : E0 →L[𝕜] E1) (hdom : PreservesRiccatiPMapDomains H X)
+    (x : H.A0.domain) :
+    WithLp.fst ((unboundedBlockOperatorPMapCore H)
+      (unboundedBlockGraphPMapDataDomainVector H X hdom x)) =
+        H.A0 x + H.B01 (X (x : E0)) := by
+  rfl
+
+@[simp] theorem unboundedBlockOperatorPMapCore_graphVector_snd
+    (H : UnboundedBlockDataPMap (𝕜 := 𝕜) (E0 := E0) (E1 := E1))
+    (X : E0 →L[𝕜] E1) (hdom : PreservesRiccatiPMapDomains H X)
+    (x : H.A0.domain) :
+    WithLp.snd ((unboundedBlockOperatorPMapCore H)
+      (unboundedBlockGraphPMapDataDomainVector H X hdom x)) =
+        H.A1 ⟨X (x : E0), hdom x⟩ + H.B10 (x : E0) := by
+  rfl
+
 /-- Compatibility spelling of the raw graph-domain vector. -/
 noncomputable abbrev unboundedBlockGraphDomainVector
     (H : UnboundedBlockData (𝕜 := 𝕜) (E0 := E0) (E1 := E1))
