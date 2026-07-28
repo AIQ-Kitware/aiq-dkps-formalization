@@ -147,6 +147,35 @@ and pruned. What is genuinely left:
 
 ## Cross-lane findings (post here to save another agent a re-derivation)
 
+- **Why the Spectra polar consumers cannot be repointed yet, and what would unblock them**
+  (jon/namek, 2026-07-28). With `ForTauCeti/Analysis/InnerProductSpace/PolarPartialIsometry.lean`
+  now covering every declaration the consumers use, I rewrote
+  `DavisKahan/Geometry/Polar/PolarIsometryFinal.lean` over it — 332 lines to 135,
+  Spectra-free, in the Davis--Kahan namespace instead of Spectra's — and it **built clean**.
+  The swap still had to be reverted, for one reason worth knowing before anyone retries it.
+
+  `DavisKahan/Geometry/Polar/PolarIntertwining.lean` consumes the polar isometry through
+  the *Interop bridge* (`spectraPolarIsometry` in
+  `DavisKahan/Interop/Spectra/OperatorAbsoluteValue.lean`, a thin alias for Spectra's), which
+  is architecturally correct and is **not** on the rule-7 burn-down list. It needs
+  `adjoint (spectraPolarIsometry T) = spectraPolarIsometry T⋆`, and the only proof of that
+  lived in the file I rewrote. So repointing `PolarIsometryFinal` orphans it.
+
+  Bridging is harder than it looks. `Spectra.QuantumMechanics.Channels.absOp T = CFC.abs T =
+  CFC.sqrt (star T * T)` and our `T.modulus = CFC.sqrt (T.adjoint ∘L T)` are the same
+  operator and the equality should be short. But `polarRange T` and `T.polarInitial` are then
+  *propositionally equal submodules of different syntactic types*, so
+  `Spectra.polarPartial T : polarRange T →L H` does not transport to
+  `T.polarPartialAux : T.polarInitial →L H` without dependent-type surgery.
+
+  **The clean route avoids the transport entirely.** Both `polarIsometry T` and
+  `T.polarPartial` are plain `H →L[ℂ] H`, so prove `spectraPolarIsometry T = T.polarPartial`
+  directly from `ContinuousLinearMap.eq_polarPartial_of_comp_modulus` (the uniqueness theorem
+  added today): Spectra's own `polar_decomposition` gives `U |T| = T` once `absOp = modulus`,
+  and vanishing off the initial space is Spectra's projection identity. One equation between
+  non-dependent types, and then every ForTauCeti polar result transfers to the bridge by
+  rewriting. Budget an hour, not a day — but do that lemma *first*, not the file rewrite.
+
 - **A production file declares its contents into the *vendored* library's namespace**
   (jon/namek, 2026-07-28). `DavisKahan/Geometry/Polar/PolarIsometryFinal.lean` opens
   `namespace Spectra` / `namespace QuantumMechanics` / `namespace Channels` and defines eight
