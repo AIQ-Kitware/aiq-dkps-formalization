@@ -334,30 +334,24 @@ left until port time:
    modules that are gone. Anyone reaching for these to verify a de-Spectra step
    will get a false pass.
 
-## Recommended order
+## Ordering — and the constraint that overrides intuition
 
-Dependency order, not size order. Each step is independently green and
-independently reviewable.
+The execution contract is [`spectra-removal-plan.md`](spectra-removal-plan.md);
+phases S0–S6 live there. One finding belongs here because it is a property of the
+measured surface rather than of the plan:
 
-1. **Settle the `spectrum` codomain** (`Set ℂ` vs `Set ℝ`). Documentation only;
-   gates Cluster A and therefore 26 of the 31 Cluster-A consumer modules.
-2. **Fix the three provenance hazards above** — re-home the 14 DKPS theorems out
-   of `namespace Spectra.*`, record the `Hilbert.lean` delta in the managed patch,
-   and either repair or delete the stale toggle scripts. Cheap, and it is the work
-   that stops being possible once the port starts.
-3. **Cluster A core**: `Resolvent/Spectrum.lean` (90 lines, 2 defs, 2 lemmas) to a
-   canonical Tau Ceti location under the settled convention. Largest single
-   detachment on the surface.
-4. **Cluster C closeout** (3 constants) — nearly done already.
-5. **Cluster F**: rebuild on Tau Ceti's `Analysis/Semigroups`, then propose
-   Stone's theorem (`genToGroup`) as a focused upstream addition. Blocks the
-   unbounded Sylvester theory, per Wave 3.
-6. **Cluster D**: one canonical HS object; resolve the antilinear `Conj`
-   dependency against Mathlib.
-7. **Cluster B last, with its own roadmap.** It is the only cluster where Spectra
-   is a genuine donor with no counterpart anywhere, it is the largest
-   (1,789 donor lines), and it needs coordination with Spectra's author before a
-   line of it moves.
+**Order is forced by chokepoints, not by cluster size.** Of the 42 consumer
+modules, **30 depend on exactly one cluster** and can be freed independently
+(Cluster A alone accounts for 24 of them); **12 span several**. Crucially,
+**Cluster F has no single-cluster consumers at all** — every module needing
+Stone/Cayley material also needs A or B. So F cannot be closed on its own, and
+the intuitive move of taking the small collision-heavy cluster early is wrong: B
+is the deepest chokepoint, and B and F converge at the end together.
+
+The 12 chokepoint modules are tabulated in the plan. `SelfAdjointBorelCalculus`,
+`CayleySelectorBridge`, `GapResolvent`, `BoundedSelfAdjointSpectralProjection` and
+`SpectralRestrictionLocalization` each span A, B and F; they go last by
+construction.
 
 ## Out of scope for this ledger
 

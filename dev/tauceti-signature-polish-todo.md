@@ -1891,6 +1891,21 @@ theorem approximationNumber_tangentOperator ...
 
 ### 12.7 Spectra PVM and functional-calculus port
 
+> **No longer design-stage — this is phase S4 of a claimed campaign, 2026-07-28.**
+> The inventory this section opens by asking for is done and generated:
+> [`spectra-to-tauceti-port-ledger.md`](tauceti/spectra-to-tauceti-port-ledger.md)
+> + [`spectra-port-surface.json`](tauceti/spectra-port-surface.json); the
+> execution contract is
+> [`spectra-removal-plan.md`](tauceti/spectra-removal-plan.md). Measured facts
+> that change how this section reads: the PVM/Borel-calculus cluster is **14
+> constants over 9 donor modules (1,789 donor lines)**, it is the **only** cluster
+> with no counterpart in tracked Tau Ceti — so it is a genuine donor port needing
+> its own roadmap target, not an approximation-number rider — and it is the
+> **deepest chokepoint**, so it lands late rather than early. Two `ForTauCeti`
+> modules look like coverage and are not:
+> `SelfAdjointFunctionalCalculus.lean` is finite-dimensional (`eigenvectorBasis`)
+> and `SpectralCutoff.lean` is CFC over bounded positive operators.
+
 - Inventory only the declarations actually used by production Davis-Kahan modules.
 
 - For each donor declaration, classify copied, generalized, specialized, or redesigned and retain exact provenance.
