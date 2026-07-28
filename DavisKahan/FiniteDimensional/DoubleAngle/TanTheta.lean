@@ -20,7 +20,6 @@ To be re-authored per Mathlib's AI-contribution policy at PR time.
 -/
 
 import ForTauCeti.Analysis.InnerProductSpace.CourantFischer
-import ForTauCeti.Analysis.InnerProductSpace.CourantFischerCompat
 import DavisKahan.FiniteDimensional.DoubleAngle.Vector
 
 /-! # The subspace tan 2Θ theorem: block identities and the gated statement
@@ -897,7 +896,7 @@ theorem tan_two_theta_norm_sub_le (hT : T.IsSymmetric) (hS : S.IsSymmetric)
         exact (hYsym.eigenvectorBasis rfl).sum_sq_norm_inner_right w
       calc ‖X w‖ ^ 2 = RCLike.re ⟪Y w, w⟫_𝕜 := h1.symm
         _ = ∑ i, hYsym.eigenvalues rfl i * ‖(hYsym.eigenvectorBasis rfl).repr w i‖ ^ 2 :=
-            re_inner_map_self_eq_sum_eigenvalues_mul_sq hYsym rfl w
+            LinearMap.IsSymmetric.re_inner_apply_self_eq_sum_eigenvalues_mul_sq hYsym rfl w
         _ ≤ ∑ i, ν * ‖(hYsym.eigenvectorBasis rfl).repr w i‖ ^ 2 :=
             Finset.sum_le_sum fun i _ =>
               mul_le_mul_of_nonneg_right (hi₀ i (Finset.mem_univ i)) (sq_nonneg _)

@@ -20,14 +20,13 @@ To be re-authored per Mathlib's AI-contribution policy at PR time.
 Wave-1 migration provenance: original module `ForMathlib.Analysis.InnerProductSpace.SingularSubspace` at the
 Davis--Kahan repository; moved to `ForTauCeti` with the namespace
 `ForMathlib` renamed `TauCeti` (module-system conversion deferred to a
-later mechanical pass).  No mathematical change
-beyond routing historical Courant--Fischer names through the transitional
-`CourantFischerCompat` shim.
+later mechanical pass).  No mathematical change; the historical
+Courant--Fischer names it used were repointed to the canonical API when the
+`CourantFischerCompat` shim was retired.
 -/
 
 import Mathlib.Analysis.InnerProductSpace.SingularValues
 import ForTauCeti.Analysis.InnerProductSpace.CourantFischer
-import ForTauCeti.Analysis.InnerProductSpace.CourantFischerCompat
 import ForTauCeti.Analysis.InnerProductSpace.SchurHorn
 import ForTauCeti.Analysis.InnerProductSpace.PolarDecomposition
 
@@ -221,7 +220,7 @@ theorem abs_sq_singularValues_sub_le {A Â : E →ₗ[𝕜] F} {a â ε : ℝ}
     {n : ℕ} (hn : finrank 𝕜 E = n) (k : Fin n) :
     |Â.singularValues k ^ 2 - A.singularValues k ^ 2| ≤ (a + â) * ε := by
   rw [Â.sq_singularValues_fin hn, A.sq_singularValues_fin hn]
-  exact abs_eigenvalues_sub_le Â.isSymmetric_adjoint_comp_self A.isSymmetric_adjoint_comp_self hn
+  exact abs_eigenvalue_sub_eigenvalue_le Â.isSymmetric_adjoint_comp_self A.isSymmetric_adjoint_comp_self hn
     (fun x => norm_gram_sub_gram_apply_le hâ hε hA hÂ hE x) k
 
 /-! ### Extreme singular values: variational characterization
@@ -249,7 +248,7 @@ theorem singularValues_last_mul_norm_le (A : E →ₗ[𝕜] F) (hn : finrank �
   have hsym := A.isSymmetric_adjoint_comp_self
   have hsq : (A.singularValues (n - 1) * ‖x‖) ^ 2 ≤ ‖A x‖ ^ 2 := by
     rw [sq_norm_apply_eq_re_inner_gram,
-      re_inner_map_self_eq_sum_eigenvalues_mul_sq hsym hn x, mul_pow,
+      LinearMap.IsSymmetric.re_inner_apply_self_eq_sum_eigenvalues_mul_sq hsym hn x, mul_pow,
       A.sq_singularValues_of_lt hn hlast]
     have hpars : ∑ i : Fin n, ‖(hsym.eigenvectorBasis hn).repr x i‖ ^ 2 = ‖x‖ ^ 2 := by
       simp_rw [(hsym.eigenvectorBasis hn).repr_apply_apply]
@@ -286,7 +285,7 @@ theorem norm_apply_le_singularValues_zero_mul (A : E →ₗ[𝕜] F) (hn : finra
   have hsym := A.isSymmetric_adjoint_comp_self
   have hsq : ‖A x‖ ^ 2 ≤ (A.singularValues 0 * ‖x‖) ^ 2 := by
     rw [sq_norm_apply_eq_re_inner_gram,
-      re_inner_map_self_eq_sum_eigenvalues_mul_sq hsym hn x, mul_pow,
+      LinearMap.IsSymmetric.re_inner_apply_self_eq_sum_eigenvalues_mul_sq hsym hn x, mul_pow,
       A.sq_singularValues_of_lt hn hn0]
     have hpars : ∑ i : Fin n, ‖(hsym.eigenvectorBasis hn).repr x i‖ ^ 2 = ‖x‖ ^ 2 := by
       simp_rw [(hsym.eigenvectorBasis hn).repr_apply_apply]
@@ -356,11 +355,11 @@ recur. -/
 private theorem eigenvalues_conj_unitary_le {S : E →ₗ[𝕜] E} (hS : S.IsSymmetric)
     (hn : finrank 𝕜 E = n) (U : E ≃ₗᵢ[𝕜] E) (k : Fin n) :
     hS.eigenvalues hn k ≤ (isSymmetric_conj_unitary hS U).eigenvalues hn k := by
-  obtain ⟨V, hVdim, hVlow⟩ := forall_unit_vector_eigenvalue_le_re_inner hS hn k
+  obtain ⟨V, hVdim, hVlow⟩ := LinearMap.IsSymmetric.exists_submodule_forall_unit_eigenvalue_le_re_inner hS hn k
   have hmapfin : finrank 𝕜 (V.map U.toLinearMap) = (k : ℕ) + 1 := by
     rw [show (U.toLinearMap : E →ₗ[𝕜] E) = (U.toLinearEquiv : E →ₗ[𝕜] E) from rfl,
       LinearEquiv.finrank_map_eq, hVdim]
-  obtain ⟨y, hyV', hny, hup⟩ := exists_unit_vector_re_inner_le_eigenvalue
+  obtain ⟨y, hyV', hny, hup⟩ := LinearMap.IsSymmetric.exists_unit_vector_re_inner_le_eigenvalue
     (isSymmetric_conj_unitary hS U) hn k (V.map U.toLinearMap) hmapfin
   obtain ⟨x, hxV, hUxy⟩ := Submodule.mem_map.mp hyV'
   simp only [LinearIsometryEquiv.coe_toLinearEquiv, LinearEquiv.coe_coe] at hUxy

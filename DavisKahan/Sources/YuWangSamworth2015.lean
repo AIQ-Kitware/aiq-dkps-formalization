@@ -15,7 +15,6 @@ To be re-authored per Mathlib's AI-contribution policy at PR time.
 -/
 
 import ForTauCeti.Analysis.InnerProductSpace.CourantFischer
-import ForTauCeti.Analysis.InnerProductSpace.CourantFischerCompat
 import ForTauCeti.Analysis.InnerProductSpace.HoffmanWielandt
 
 /-! # The Yu–Wang–Samworth Davis–Kahan variant (Frobenius, population gap)
@@ -213,7 +212,7 @@ theorem sum_sq_norm_residualColumn_le_of_opNorm (hT : T.IsSymmetric) (hS : S.IsS
       have := hε (hS.eigenvectorBasis hn j)
       rwa [(hS.eigenvectorBasis hn).orthonormal.norm_eq_one j, mul_one] at this
     have hδ : |hS.eigenvalues hn j - hT.eigenvalues hn j| ≤ ε :=
-      abs_eigenvalues_sub_le hS hT hn hε j
+      abs_eigenvalue_sub_eigenvalue_le hS hT hn hε j
     have htri : ‖residualColumn hT hS hn j‖ ≤ 2 * ε := by
       rw [residualColumn_eq]
       refine (norm_sub_le _ _).trans ?_

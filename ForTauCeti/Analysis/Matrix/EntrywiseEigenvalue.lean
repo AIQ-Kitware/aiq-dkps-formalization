@@ -10,13 +10,12 @@ To be re-authored per Mathlib's AI-contribution policy at PR time.
 Wave-1 migration provenance: original module `ForMathlib.Analysis.Matrix.EntrywiseEigenvalue` at the
 Davis--Kahan repository; moved to `ForTauCeti` with the namespace
 `ForMathlib` renamed `TauCeti` (module-system conversion deferred to a
-later mechanical pass).  No mathematical change
-beyond routing historical Courant--Fischer names through the transitional
-`CourantFischerCompat` shim.
+later mechanical pass).  No mathematical change; the historical
+Courant--Fischer names it used were repointed to the canonical API when the
+`CourantFischerCompat` shim was retired.
 -/
 
 import ForTauCeti.Analysis.InnerProductSpace.CourantFischer
-import ForTauCeti.Analysis.InnerProductSpace.CourantFischerCompat
 import ForTauCeti.Analysis.Matrix.EntrywiseOpNorm
 import ForTauCeti.Analysis.Matrix.SpectralFunctionMeasurable
 
@@ -58,6 +57,6 @@ theorem abs_sortedEig_sub_le_of_entry_le {A Ahat : Matrix (Fin n) (Fin n) ℝ}
       intro i j; simpa [Matrix.sub_apply] using hentry i j
     exact TauCeti.norm_toEuclideanLin_le_of_entry_le hentry' x
   -- Weyl on the symmetric operators.
-  exact abs_eigenvalues_sub_le (opSym hAhat) (opSym hA) finrank_euclideanSpace_fin hop k
+  exact abs_eigenvalue_sub_eigenvalue_le (opSym hAhat) (opSym hA) finrank_euclideanSpace_fin hop k
 
 end TauCeti.Matrix

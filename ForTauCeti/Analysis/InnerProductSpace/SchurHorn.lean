@@ -13,7 +13,7 @@ Proof strategy read from and credited to rjwalters/lean-genius,
 `proofs/Proofs/SchurHornMajorization.lean` (commit
 3e09c97392dc68d068becb89e2068b1830234661, retrieved 2026-07-04; no license
 declared upstream).  Independently re-derived here on this project's existing
-`re_inner_map_self_eq_sum_eigenvalues_mul_sq`.  See
+`LinearMap.IsSymmetric.re_inner_apply_self_eq_sum_eigenvalues_mul_sq`.  See
 `dev/external-lean-references.md`.
 To be re-authored per Mathlib's AI-contribution policy at PR time.
 
@@ -21,15 +21,14 @@ To be re-authored per Mathlib's AI-contribution policy at PR time.
 Wave-1 migration provenance: original module `ForMathlib.Analysis.InnerProductSpace.SchurHorn` at the
 Davis--Kahan repository; moved to `ForTauCeti` with the namespace
 `ForMathlib` renamed `TauCeti` (module-system conversion deferred to a
-later mechanical pass).  No mathematical change
-beyond routing historical Courant--Fischer names through the transitional
-`CourantFischerCompat` shim.
+later mechanical pass).  No mathematical change; the historical
+Courant--Fischer names it used were repointed to the canonical API when the
+`CourantFischerCompat` shim was retired.
 -/
 
 import Mathlib.Analysis.Convex.Jensen
 import Mathlib.Analysis.Convex.Mul
 import ForTauCeti.Analysis.InnerProductSpace.CourantFischer
-import ForTauCeti.Analysis.InnerProductSpace.CourantFischerCompat
 
 
 /-! # Schur–Horn majorization (forward direction, Karamata form)
@@ -122,7 +121,7 @@ theorem re_inner_orthonormalBasis_self_eq_sum_eigenvalues_mul
     (e : OrthonormalBasis (Fin n) 𝕜 E) (k : Fin n) :
     RCLike.re ⟪T (e k), e k⟫_𝕜
       = ∑ i, hT.eigenvalues hn i * schurWeight hT hn e i k := by
-  rw [re_inner_map_self_eq_sum_eigenvalues_mul_sq hT hn (e k)]
+  rw [LinearMap.IsSymmetric.re_inner_apply_self_eq_sum_eigenvalues_mul_sq hT hn (e k)]
   refine Finset.sum_congr rfl fun i _ => ?_
   rw [schurWeight, OrthonormalBasis.repr_apply_apply]
 

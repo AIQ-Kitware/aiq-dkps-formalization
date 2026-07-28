@@ -20,9 +20,9 @@ To be re-authored per Mathlib's AI-contribution policy at PR time.
 Wave-1 migration provenance: original module `ForMathlib.Analysis.InnerProductSpace.UnitarilyInvariantNorm` at the
 Davis--Kahan repository; moved to `ForTauCeti` with the namespace
 `ForMathlib` renamed `TauCeti` (module-system conversion deferred to a
-later mechanical pass).  No mathematical change
-beyond routing historical Courant--Fischer names through the transitional
-`CourantFischerCompat` shim.
+later mechanical pass).  No mathematical change; the historical
+Courant--Fischer names it used were repointed to the canonical API when the
+`CourantFischerCompat` shim was retired.
 -/
 
 import ForTauCeti.Analysis.InnerProductSpace.KyFan
@@ -180,7 +180,7 @@ theorem singularValues_diagOp (hn : finrank 𝕜 E = n)
       = fun i => x i ^ 2 :=
     (eigenvalues_congr hgram (diagOp b x).isSymmetric_adjoint_comp_self
       (isSymmetric_diagOp b (x * x)) hn).trans
-      (eigenvalues_eq_of_eigenbasis _ hn b hsq_anti fun i => by
+      (LinearMap.IsSymmetric.eigenvalues_eq_of_eigenbasis _ hn b hsq_anti fun i => by
         rw [diagOp_apply_basis]
         congr 1
         rw [Pi.mul_apply]

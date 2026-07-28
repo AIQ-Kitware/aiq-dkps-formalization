@@ -5,7 +5,6 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking, Claude Fable 5
 -/
 import DavisKahan.FiniteDimensional.DirectRotation.PrincipalPlanes.Spectrum
 import ForTauCeti.Analysis.InnerProductSpace.CourantFischer
-import ForTauCeti.Analysis.InnerProductSpace.CourantFischerCompat
 import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantNorm
 
 /-!
@@ -96,7 +95,7 @@ theorem principalPlaneChord_le_singularValues_restrictedDisplacement
     exact principalSourceVector_mem U V hacute _
   -- Courant–Fischer gives a unit test vector in `L`.
   obtain ⟨x, hxL, hxnorm, hxbound⟩ :=
-    exists_unit_vector_re_inner_le_eigenvalue
+    LinearMap.IsSymmetric.exists_unit_vector_re_inner_le_eigenvalue
       AW.isSymmetric_adjoint_comp_self rfl ⟨(i : ℕ), hiE⟩ L hLdim
   -- The quadratic form at `x` is the squared displacement of `x`.
   have hform : RCLike.re ⟪(AW.adjoint ∘ₗ AW) x, x⟫_𝕜 = ‖x - W x‖ ^ 2 := by
@@ -304,7 +303,7 @@ theorem singularValues_restrictedDisplacement_directRotation
         LinearMap.smul_apply, LinearMap.sub_apply, LinearMap.id_apply, habs,
         sub_self, smul_zero, map_zero, hμ]
       simp [dif_neg hk]
-  have heig := eigenvalues_eq_of_eigenbasis AR.isSymmetric_adjoint_comp_self rfl b
+  have heig := LinearMap.IsSymmetric.eigenvalues_eq_of_eigenbasis AR.isSymmetric_adjoint_comp_self rfl b
     hμanti hdiag
   rcases lt_or_ge n (finrank 𝕜 E) with hnE | hnE
   · rw [AR.singularValues_of_lt rfl hnE, heig]

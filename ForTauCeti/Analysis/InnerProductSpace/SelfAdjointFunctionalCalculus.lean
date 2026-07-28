@@ -7,15 +7,14 @@ Authors: Jon Crall, GPT-5.6 Thinking
 Wave-1 migration provenance: original module `ForMathlib.Analysis.InnerProductSpace.SelfAdjointFunctionalCalculus` at the
 Davis--Kahan repository; moved to `ForTauCeti` with the namespace
 `ForMathlib` renamed `TauCeti` (module-system conversion deferred to a
-later mechanical pass).  No mathematical change
-beyond routing historical Courant--Fischer names through the transitional
-`CourantFischerCompat` shim.
+later mechanical pass).  No mathematical change; the historical
+Courant--Fischer names it used were repointed to the canonical API when the
+`CourantFischerCompat` shim was retired.
 -/
 
 import Mathlib.Analysis.InnerProductSpace.Positive
 import Mathlib.Analysis.InnerProductSpace.Spectrum
 import ForTauCeti.Analysis.InnerProductSpace.CourantFischer
-import ForTauCeti.Analysis.InnerProductSpace.CourantFischerCompat
 import ForTauCeti.Analysis.InnerProductSpace.PositiveSqrt
 
 
@@ -154,7 +153,7 @@ theorem selfAdjointFunctionalCalculus_real_smul_id
     simp only [LinearMap.smul_apply, LinearMap.id_apply, inner_smul_left,
       inner_smul_right, RCLike.conj_ofReal]
   have heig : hS.eigenvalues rfl = fun _ => r := by
-    apply TauCeti.eigenvalues_eq_of_eigenbasis hS rfl (stdOrthonormalBasis 𝕜 E)
+    apply LinearMap.IsSymmetric.eigenvalues_eq_of_eigenbasis hS rfl (stdOrthonormalBasis 𝕜 E)
     · exact antitone_const
     · intro i
       simp
