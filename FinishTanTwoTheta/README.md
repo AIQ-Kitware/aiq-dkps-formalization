@@ -1,229 +1,55 @@
 # FinishTanTwoTheta
 
-This is a standalone nested Lean library for finishing the sharp infinite-dimensional
-Davis--Kahan `tan 2 Theta` theorem and the operator-ideal theory needed to state it
-for every standard symmetric ideal.
+This is a temporary, mathematics-first Lean library for completing the sharp
+infinite-dimensional `tan 2Theta` theory before moving the polished declarations
+into their final Tau Ceti and Davis--Kahan modules.
 
-It is intentionally delivered as **new files only**.  The nested `lakefile.toml`
-requires the parent `aiq_dkps_formalization` package, so a compiler agent can work
-inside this directory without editing the parent build configuration:
+The package is intentionally isolated under `FinishTanTwoTheta/`. It changes no
+existing repository file.
+
+## Mathematical scope
+
+The library develops four layers.
+
+1. **Standard symmetric ideals.** It uses the repository's proved coherent
+   finite-gauge/Fatou theory for maximal ideals and states the missing fully
+   symmetric finite-rank-closure theorem for minimal ideals locally. Fan
+   dominance is a theorem, not a field hidden in the definition.
+2. **Approximate leading singular families.** A PVM spectral-band construction
+   for `X*X` supplies simultaneous approximate right/left singular vectors for
+   arbitrary bounded operators.
+3. **Canonical tangent operator.** For `||X|| < 1`, the operator
+   `2 X (I - X*X)^-1` is constructed and its approximation numbers are shown to
+   be `2 a_n(X) / (1-a_n(X)^2)`.
+4. **Sharp Davis--Kahan estimate.** The stable Riccati coefficient estimate is
+   summed and the error removed. A separate unbounded proof uses graph-norm
+   residuals, rather than invalid bounded norms of the closed diagonal blocks.
+
+## Grounding policy
+
+Every nonlocal theorem used here was located in either:
+
+- the repository snapshot at merge commit `4285a6e`; or
+- Mathlib commit `3dffaf2f18b47d11948f6390838ea6f2ae662aaf`, the commit pinned by the
+  repository's Lean 4.32.0 toolchain.
+
+No speculative helper theorem is referenced. New mathematical seams are local
+theorems in this library with proof bodies. See `GROUNDING.md` and run:
 
 ```bash
-cd FinishTanTwoTheta
+python3 FinishTanTwoTheta/scripts/verify_grounding.py
+```
+
+## Build order
+
+From this directory:
+
+```bash
 lake update
-lake build FinishTanTwoTheta
-```
-
-The library is a mathematics-first proof attempt. Existing repository results are
-reused whenever they already express the correct theorem. Every Lean declaration now
-has a proof term or tactic proof rather than a placeholder. The code has not been
-compiled in the authoring environment, so the compiler lane must adapt guessed API
-names and complete any proof attempts whose intended helper theorem does not yet
-exist in the parent libraries.
-
-## Final mathematical target
-
-For an off-diagonal self-adjoint perturbation with spectral gap `d > 0`, and a
-quarter-acute invariant graph coordinate `X`, define the canonical bounded operator
-
-```text
-Tan2(X) = 2 X (I - X* X)^(-1).
-```
-
-The desired Ky Fan root is
-
-```text
-d K_k(Tan2(X)) <= 2 K_k(B01)     for every k.
-```
-
-For every standard symmetric operator ideal `N`, Fan dominance should then give
-
-```text
-Tan2(X) in N,
-d N(Tan2(X)) <= 2 N(B01).
-```
-
-The phrase **standard symmetric ideal** is made precise here: it is represented by
-a coherent symmetric norming function applied to the approximation-number sequence,
-together with either its maximal/Fatou completion or its minimal finite-rank closure.
-The distinction matters: for the `ell-infinity` norming function the maximal ideal is
-all bounded operators, whereas the minimal ideal is the compact operators with the
-operator norm.  Fan dominance is proved for both completions from the finite
-T-transform theorem and the full-symmetry theorem for the minimal completion.  It is
-not included as a field of the ideal structure.
-
-## Existing repository mathematics reused
-
-The library imports and relies on the following proof-complete work already present
-in the parent repository:
-
-- `ForTauCeti.Analysis.Normed.FiniteLpGauge`
-  - finite weak majorization;
-  - finite symmetric gauges;
-  - the T-transform proof that every finite symmetric gauge is monotone under weak
-    majorization;
-  - finite `ell^p` and `ell^infinity` instances.
-- `ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.*`
-  - zero-based approximation numbers;
-  - antitonicity, nonnegativity, composition, adjoint, finite-dimensional
-    Eckart--Young, and min--max infrastructure.
-- `DavisKahan.DoubleAngle.KyFanOrthonormal`
-  - the dimension-free Ky Fan variational bound for finite orthonormal families.
-- `DavisKahan.Experimental.Scratch.Section7.InfiniteTanTwoThetaCore`
-  - the exact singular-pair Riccati coefficient inequality;
-  - the dimension-free exact-family Ky Fan summation.
-- `DavisKahan.Experimental.InfiniteDimensional.TanTwoTheta.BoundedRiccatiEstimate`
-  - canonical block/Riccati data and the normalized gap formulation.
-
-## New theory in this library
-
-### 1. Infinite weak submajorization
-
-`Sequence/WeakSubmajorization.lean` defines weak submajorization for decreasing
-nonnegative sequences by all finite prefix inequalities and transports it to every
-finite prefix vector.
-
-### 2. Standard symmetric ideals and general Fan dominance
-
-`OperatorIdeal/StandardSymmetricIdeal.lean` defines:
-
-- coherent symmetric norming functions as compatible finite symmetric gauges;
-- the maximal extended sequence gauge as the supremum of finite prefix gauges;
-- the minimal completion, characterized by vanishing norming-function tails;
-- standard symmetric ideal families represented by either completion;
-- a separate `HasFanDominance` property;
-- a proof that both maximal and minimal standard symmetric ideal families have Fan
-  dominance.
-
-This is the intended replacement for bundling
-`majorization_mem_and_gauge_le` directly into a broad ideal-family structure.
-
-### 3. Generic generated ideals
-
-`OperatorIdeal/GeneratedFamilies.lean` constructs both the maximal/Fatou and
-minimal/finite-rank-closure operator ideals generated by any coherent symmetric
-norming function.  This is the general bridge that covers classical Lorentz,
-Orlicz, Marcinkiewicz, and related ideals once their finite norming functions are
-provided.  Both generated families inherit Fan dominance.
-
-### 4. Schatten, trace, and Hilbert--Schmidt ideals
-
-`OperatorIdeal/SchattenFanDominance.lean` develops the `ell^p` sequence gauge,
-its Fatou/partial-sum description, the approximation-number Schatten family, and
-Fan-dominance instances for every `p >= 1`.  Trace class and Hilbert--Schmidt are
-the `p = 1` and `p = 2` specializations.
-
-The hard proof is the infinite Fatou passage from finite `ell^p` majorization to
-summability and full `tsum` control.  This is exactly the extra ideal-theory lane
-requested by Jon.
-
-### 5. Leading approximate singular families
-
-`ApproximationNumber/LeadingSingularFamilies.lean` states the correct universal
-replacement for finite singular-vector attainment.  For fixed `k` and `epsilon`,
-it selects finitely many orthonormal approximate singular pairs corresponding to
-all leading approximation numbers larger than `epsilon`; omitted leading values
-are at most `epsilon`.
-
-The intended proof is:
-
-1. apply the spectral theorem to the positive modulus `|X|`;
-2. identify the approximation-number sequence with the discrete eigenvalues above
-   the essential norm followed by the essential-norm plateau;
-3. choose exact eigenvectors in discrete spectral subspaces;
-4. choose mutually orthogonal approximate eigenvectors in the essential spectral
-   subspace;
-5. transport them through the rectangular polar partial isometry.
-
-This formulation handles finite rank, finite-dimensional source or target, and
-noncompact essential spectrum without demanding nonexistent singular vectors for
-zero tail entries.
-
-### 6. Canonical double-angle tangent operator
-
-`FunctionalCalculus/DoubleAngleTangent.lean` defines
-
-```text
-2 X (I - X* X)^(-1)
-```
-
-and states the key transformed approximation-number theorem
-
-```text
-a_n(Tan2(X)) = 2 a_n(X) / (1 - a_n(X)^2).
-```
-
-The proof should use the polar decomposition and monotone functional calculus on
-`|X|`.  The theorem is valid for arbitrary bounded operators with `||X|| < 1`,
-including the noncompact case; approximation numbers transform through the
-increasing continuous function on the spectral interval.
-
-### 7. Stable Riccati singular-pair estimate
-
-`DavisKahan/StableRiccatiPair.lean` upgrades the existing exact-pair calculation to
-approximate singular pairs.  It deliberately exposes a single uniform stability
-constant on `0 <= s <= r < 1`.  Expanding the Riccati identity gives an error linear
-in the two singular-pair residuals; uniformity follows because the denominator
-`1 - s^2` is bounded below by `1 - r^2`.
-
-### 8. Full sharp Ky Fan theorem
-
-`DavisKahan/SharpKyFan.lean` combines:
-
-- approximate leading singular families;
-- the stable one-pair Riccati estimate;
-- the dimension-free orthonormal Ky Fan variational inequality;
-- control of omitted small approximation numbers;
-- `epsilon -> 0`;
-- the canonical transformed-operator theorem.
-
-No finite-dimensional active carrier remains.
-
-### 9. Every standard ideal
-
-`DavisKahan/SharpIdeal.lean` applies the general Fan-dominance theorem.  It also
-provides Schatten, trace-class, Hilbert--Schmidt, operator-norm, and fixed-Ky-Fan
-specializations.
-
-### 10. Unbounded spectral-subspace wrapper
-
-`DavisKahan/Unbounded.lean` states the final unbounded spectral-subspace theorem.
-The existing repository already supplies the spectral restrictions, graph/Riccati
-bridge, and quarter-acuteness machinery.  The remaining integration is to identify
-that graph coordinate with the canonical tangent operator and invoke the sharp
-bounded graph theorem rather than dividing by the double-angle cosine.
-
-## Proof-attempt policy
-
-Every Lean placeholder has been replaced by a concrete proof attempt. The difficult
-seams are represented in one of two ways:
-
-1. direct calculations using the current approximation-number, Ky Fan, Riccati, and
-   extended-gauge APIs;
-2. calls to deliberately named target lemmas when the parent repository does not yet
-   expose the reusable theorem that the proof needs.
-
-The second category identifies the intended final API rather than hiding the gap. In
-particular, compiler failures around names such as the minimal-completion
-full-symmetry theorem, approximate singular-system selection, monotone functional
-calculus for approximation numbers, or the unbounded Riccati bridge should be
-resolved by proving or adapting that reusable lemma. They must not be bypassed by
-adding assumptions to the public theorem.
-
-No new axiom is introduced. No theorem is weakened by assuming the desired Fan
-conclusion as a field. The compiler agent should preserve the mathematical
-interfaces and only alter a statement after exhibiting a counterexample or a precise
-mismatch with the current repository definitions.
-
-## Recommended compiler order
-
-```bash
 lake build FinishTanTwoTheta.Sequence.WeakSubmajorization
-lake build FinishTanTwoTheta.OperatorIdeal.StandardSymmetricIdeal
-lake build FinishTanTwoTheta.OperatorIdeal.GeneratedFamilies
-lake build FinishTanTwoTheta.OperatorIdeal.SchattenFanDominance
+lake build FinishTanTwoTheta.OperatorIdeal.StandardFanDominance
 lake build FinishTanTwoTheta.OperatorIdeal.StandardInstances
-lake build FinishTanTwoTheta.ApproximationNumber.LeadingSingularFamilies
+lake build FinishTanTwoTheta.ApproximationNumber.SpectralSelection
 lake build FinishTanTwoTheta.FunctionalCalculus.DoubleAngleTangent
 lake build FinishTanTwoTheta.DavisKahan.StableRiccatiPair
 lake build FinishTanTwoTheta.DavisKahan.SharpKyFan
@@ -232,22 +58,7 @@ lake build FinishTanTwoTheta.DavisKahan.Unbounded
 lake build FinishTanTwoTheta
 ```
 
-## Intended final ownership
-
-Reusable declarations belong in final `TauCeti` modules:
-
-- weak submajorization and symmetric norming functions;
-- standard symmetric ideal families;
-- Schatten/trace/Hilbert--Schmidt families;
-- Fan dominance;
-- approximate leading singular systems;
-- approximation-number functional calculus;
-- canonical graph double-angle tangent operator.
-
-Davis--Kahan-specific declarations belong downstream:
-
-- the Riccati coefficient estimate;
-- gap/off-diagonal Ky Fan inequality;
-- perturbation ideal theorem;
-- unbounded spectral-subspace instantiation;
-- source-facing theorem aliases and audit correspondence.
+The authoring environment did not contain Lean, so this overlay is not claimed
+to elaborate. The compiler agent's remaining work should be local proof,
+coercion, namespace, or tactic repair. It should not encounter an unknown
+constant caused by an invented helper theorem.
