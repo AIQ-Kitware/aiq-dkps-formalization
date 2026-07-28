@@ -63,10 +63,11 @@ theorem real_unbounded_sylvester_kyFan
       (KyFanDominantIdealFamily.kyFan_mem k hkpos
         (RealComplexification.complexify C))
     have hbound := hcomplex.2
-    change δ * kyFanApproximationGauge k
-        (RealComplexification.complexify X) ≤
-      kyFanApproximationGauge k
-        (RealComplexification.complexify C) at hbound
+    simp only [K, KyFanDominantIdealFamily.gauge] at hbound
+    rw [KyFanDominantIdealFamily.kyFan_gauge (𝕜 := ℂ) k hkpos
+      (RealComplexification.complexify X),
+      KyFanDominantIdealFamily.kyFan_gauge (𝕜 := ℂ) k hkpos
+        (RealComplexification.complexify C)] at hbound
     simpa only [kyFanApproximationGauge_complexify] using hbound
 
 /-- Real specialization of the full source-facing unbounded Sylvester theorem.
