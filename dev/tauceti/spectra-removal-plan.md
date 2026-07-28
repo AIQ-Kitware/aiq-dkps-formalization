@@ -12,7 +12,7 @@ document assumes them and states only what to *do*.
 
 ## Decision
 
-Spectra leaves the normal build by **re-homing 61 declarations**, cluster by
+Spectra leaves the normal build by **re-homing the remaining 57 declarations**, cluster by
 cluster, each cluster landing green, with a per-declaration provenance record.
 It does not leave by a bulk copy of `vendor/Spectra` into Tau Ceti, and it does
 not leave by reproving everything from scratch — the attribution policy in
@@ -24,8 +24,8 @@ proof architecture came from Spectra.
 
 | | |
 |---|---|
-| port surface | **61 constants**, 27 donor modules |
-| consumers | **178 declarations in 42 modules**, all under `DavisKahan/**` |
+| port surface | **57 constants**, 25 donor modules (was 61 / 27 before S0) |
+| consumers | **173 declarations**, all under `DavisKahan/**` |
 | `ForTauCeti` / `ForMathlib` | **already entirely Spectra-free** |
 | vendored tree | 464 modules; 152 in the production closure; 27 referenced |
 | default build | 9290 jobs green |
@@ -178,14 +178,33 @@ Cheap now, impossible later. Nothing else starts until this lands.
    - `check_spectra_parent_only_bridge.sh` exited 2 on a missing script — loud,
      dead, not hazardous.
 
-### S1 — Cluster C closeout (polar), 3 constants
+### S1 — Cluster C closeout (polar), 3 constants — **DONE 2026-07-28**
 
-Smallest, already nearly done: the polar consumers were repointed to
-`ForTauCeti/.../PolarPartialIsometry.lean` and `operatorAbs` is deleted. What
-remains is `absOp`, `polarIsometry`, `polarRange` in
-`Interop/Spectra/OperatorAbsoluteValue.lean` and one consumer
-(`Geometry/Polar/PolarIntertwining.lean`). Do it first as the rehearsal for the
-per-declaration provenance record.
+Surface **60 → 57 constants**, 26 → 25 donor modules, 178 → 173 consumers.
+
+`Interop/Spectra/OperatorAbsoluteValue.lean` already proved
+`spectraOperatorAbsoluteValue = T.modulus` and
+`spectraPolarIsometry = T.polarPartial` against `ForTauCeti`, so the work was
+to make those the *definitions* rather than theorems: the two bridge lemmas
+collapse to `rfl` and the `Spectra.QuantumMechanics.Channels.PolarDecomp` import
+is gone. `absOp`, `polarIsometry` and `polarRange` left the surface, and
+`Geometry/Polar/PolarIntertwining.lean` came off Spectra with them without being
+edited at all — its dependency was inherited through the bridge.
+
+Two things worth carrying forward:
+
+- **`ForTauCeti`'s polar API is strictly more general than the donor's**
+  (rectangular `E →L[ℂ] F`, not square), so this was a strict improvement rather
+  than a like-for-like swap. Where a cluster has a `staged: collides` disposition,
+  check which side is more general before assuming the donor is the richer one.
+- **Orientation bites.** `polarPartial_adjoint` is stated `W(M⋆) = W(M)⋆` while
+  the bridge name is stated the other way round; the fix is `.symm`, but it is the
+  kind of mismatch that reads as a broken port if you are not expecting it.
+
+Deliberately **not** done: the `spectra*` names are now misnomers with ~400 call
+sites across ten modules. Renaming them is a naming-audit sweep that would
+collide with edward's active naming rows, so it is a follow-on, not part of the
+dependency removal. Tracked below under "Follow-ons".
 
 ### S2 — Cluster A core, 22 constants, 31 consumer modules
 
@@ -328,3 +347,13 @@ because `comparator/*.json` stores declaration names as data — see AGENTS.md,
 - `external/Spectra` as a provenance reference (it is not a build input).
 - Any change to Spectra's own mathematics. Compatibility-only edits go in the
   managed patch, never as an undocumented fork.
+
+## Follow-ons (not part of the dependency removal)
+
+- **Rename the `spectra*` bridge names.** After S1 they no longer denote anything
+  Spectra-backed: `spectraOperatorAbsoluteValue` (105 occurrences, 9 files),
+  `spectraCanonicalIntertwiner` (285, 8 files), `spectraPolarIsometry` (18, 4
+  files). This is a naming-audit sweep and overlaps edward's active naming rows —
+  coordinate before taking it. Keeping the misnomers is survivable; doing the
+  rename inside a dependency-removal commit is not, because it would make the
+  removal impossible to review.
