@@ -5,7 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidt
 import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtFiniteRank
-import ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidtEnergy
+import ForTauCeti.Analysis.OperatorIdeal.Family.HilbertSchmidt
 
 /-!
 # Basis and tensor models of the paper square norm
@@ -51,6 +51,7 @@ def paperHilbertSchmidtBasisEnergy {ι : Type*}
     (b : HilbertBasis ι ℂ F) (A : F →L[ℂ] E) : ENNReal :=
   ∑' i, (‖A (b i)‖₊ : ENNReal) ^ 2
 
+omit [CompleteSpace E] [CompleteSpace F] in
 /-- The paper column energy is the staged `ContinuousLinearMap.hilbertSchmidtEnergy`. -/
 theorem paperHilbertSchmidtBasisEnergy_eq_hilbertSchmidtEnergy {ι : Type*}
     (b : HilbertBasis ι ℂ F) (A : F →L[ℂ] E) :
@@ -454,6 +455,57 @@ theorem paperHilbertSchmidtNorm_eq_sqrt_tsum_basis {ι : Type*}
   congr 1
   rw [NNReal.coe_tsum]
   simp only [NNReal.coe_pow, coe_nnnorm]
+
+/-! ## Reconciliation with the staged Hilbert--Schmidt ideal
+
+`ForTauCeti/Analysis/OperatorIdeal/Family/HilbertSchmidt.lean` builds the Hilbert--Schmidt
+ideal from orthonormal expansions alone, deliberately never mentioning approximation
+numbers, so that it needs no spectral theory.  The identity that reconciles the two
+definitions is exactly `paperHilbertSchmidtEnergy_eq_basisEnergy` above, and the four
+statements below record what it buys: the staged ideal, its membership predicate and its
+gauge agree with the paper ones, so the paper development may be reread through the staged
+API without reproving anything. -/
+
+/-- **The singular-value energy is the column energy.**  This is the obligation recorded
+against item S3 of `ForTauCetiRoadmap/SymmetricOperatorIdeals/README.md`. -/
+theorem tsum_approximationSingularValue_sq_eq_hilbertSchmidtEnergy {ι : Type*}
+    (b : HilbertBasis ι ℂ F) (A : F →L[ℂ] E) :
+    ∑' n : ℕ, ENNReal.ofReal (approximationSingularValue n A ^ 2) =
+      A.hilbertSchmidtEnergy b :=
+  paperHilbertSchmidtEnergy_eq_basisEnergy b A
+
+/-- The staged Hilbert--Schmidt predicate is the paper one. -/
+theorem isHilbertSchmidt_iff_isPaperHilbertSchmidt (A : F →L[ℂ] E) :
+    A.IsHilbertSchmidt ↔ IsPaperHilbertSchmidt A := by
+  obtain ⟨w, b, -⟩ := exists_hilbertBasis ℂ F
+  rw [A.isHilbertSchmidt_iff_energy_ne_top b, IsPaperHilbertSchmidt,
+    paperHilbertSchmidtEnergy_eq_basisEnergy b A]
+  rfl
+
+/-- The staged Hilbert--Schmidt norm is the paper square norm. -/
+theorem hilbertSchmidtENorm_eq_ofReal_paperHilbertSchmidtNorm (A : F →L[ℂ] E)
+    (hA : IsPaperHilbertSchmidt A) :
+    A.hilbertSchmidtENorm = ENNReal.ofReal (paperHilbertSchmidtNorm A) := by
+  obtain ⟨w, b, -⟩ := exists_hilbertBasis ℂ F
+  have henergy : A.hilbertSchmidtEnergy b = paperHilbertSchmidtEnergy A :=
+    (paperHilbertSchmidtEnergy_eq_basisEnergy b A).symm
+  have hne : paperHilbertSchmidtEnergy A ≠ ⊤ := hA
+  rw [A.hilbertSchmidtENorm_eq b, henergy, paperHilbertSchmidtNorm,
+    Real.sqrt_eq_rpow, ← ENNReal.ofReal_rpow_of_nonneg ENNReal.toReal_nonneg (by norm_num),
+    ENNReal.ofReal_toReal hne, one_div]
+
+/-- Consequently the gauge of the staged symmetric ideal family, read on the paper ideal,
+is the paper square norm.
+
+`TauCeti.SymmetricOperatorIdealFamily` is the diagonal layer, so it constrains the source
+and target to one universe; the rectangular statements above are the general ones. -/
+theorem hilbertSchmidtIdealFamily_gauge_eq_paperHilbertSchmidtNorm {G K : Type vE}
+    [NormedAddCommGroup G] [InnerProductSpace ℂ G] [CompleteSpace G]
+    [NormedAddCommGroup K] [InnerProductSpace ℂ K] [CompleteSpace K]
+    (A : G →L[ℂ] K) (hA : IsPaperHilbertSchmidt A) :
+    (TauCeti.hilbertSchmidtIdealFamily ℂ).toOperatorIdealFamily.gauge A =
+      ENNReal.ofReal (paperHilbertSchmidtNorm A) :=
+  hilbertSchmidtENorm_eq_ofReal_paperHilbertSchmidtNorm A hA
 
 end
 
