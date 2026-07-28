@@ -108,8 +108,31 @@ theorem linearPMapSylvester_homogeneous_eq_zero_of_pairwiseSpectrumGap
   exact linearPMapSylvester_homogeneous_eq_zero_of_disjoint_spectrum
     hA hB (hgap.disjoint hδ) hEq
 
+/-- **Sylvester--Rosenblum uniqueness for raw self-adjoint partial maps.**  Two bounded
+solutions of the same Sylvester equation coincide as soon as the two spectra are
+*disjoint*; no quantitative gap is needed.
+
+The gap version below is this statement composed with
+`GenuinePairwiseSpectrumGap.disjoint`, so a positive separation buys nothing here — it is
+needed only where a *bound* on the solution is wanted. -/
+theorem linearPMapSylvester_solution_unique_of_disjoint_spectrum
+    {A : E →ₗ.[ℂ] E} {B : F →ₗ.[ℂ] F}
+    (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
+    {X Y C : F →L[ℂ] E}
+    (hdisj : Disjoint
+      (Spectra.Resolvent.spectrum A)
+      (Spectra.Resolvent.spectrum B))
+    (hX : TauCeti.LinearPMap.SylvesterEquation A B X C)
+    (hY : TauCeti.LinearPMap.SylvesterEquation A B Y C) :
+    X = Y := by
+  have hhom : TauCeti.LinearPMap.SylvesterEquation A B (X - Y) 0 := by
+    simpa using hX.sub hY
+  exact sub_eq_zero.mp
+    (linearPMapSylvester_homogeneous_eq_zero_of_disjoint_spectrum hA hB hdisj hhom)
+
 /-- Two bounded raw partial-map Sylvester solutions coincide under positive
-pairwise spectral separation. -/
+pairwise spectral separation.  A corollary of
+`linearPMapSylvester_solution_unique_of_disjoint_spectrum`, which is the sharp form. -/
 theorem linearPMapSylvester_solution_unique_of_pairwiseSpectrumGap
     {A : E →ₗ.[ℂ] E} {B : F →ₗ.[ℂ] F}
     (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
@@ -118,12 +141,8 @@ theorem linearPMapSylvester_solution_unique_of_pairwiseSpectrumGap
     (hgap : LinearPMap.GenuinePairwiseSpectrumGap A B δ)
     (hX : TauCeti.LinearPMap.SylvesterEquation A B X C)
     (hY : TauCeti.LinearPMap.SylvesterEquation A B Y C) :
-    X = Y := by
-  have hhom : TauCeti.LinearPMap.SylvesterEquation A B (X - Y) 0 := by
-    simpa using hX.sub hY
-  exact sub_eq_zero.mp
-    (linearPMapSylvester_homogeneous_eq_zero_of_pairwiseSpectrumGap
-      hA hB hδ hgap hhom)
+    X = Y :=
+  linearPMapSylvester_solution_unique_of_disjoint_spectrum hA hB (hgap.disjoint hδ) hX hY
 
 /-- A bounded homogeneous closed Sylvester solution vanishes whenever the two
 self-adjoint spectra are disjoint. -/
@@ -153,8 +172,24 @@ theorem closedSylvester_homogeneous_eq_zero_of_pairwiseSpectrumGap
   exact linearPMapSylvester_homogeneous_eq_zero_of_pairwiseSpectrumGap
     hA hB hδ hgap hEq
 
+/-- **Sylvester--Rosenblum uniqueness for closed operators.**  Two bounded solutions of the
+same closed Sylvester equation coincide as soon as the two spectra are *disjoint*. -/
+theorem closedSylvester_solution_unique_of_disjoint_spectrum
+    {A : ClosedOperator (𝕜 := ℂ) (E := E)}
+    {B : ClosedOperator (𝕜 := ℂ) (E := F)}
+    (hA : A.IsSelfAdjoint) (hB : B.IsSelfAdjoint)
+    {X Y C : F →L[ℂ] E}
+    (hdisj : Disjoint
+      (Spectra.Resolvent.spectrum A.toLinearPMap)
+      (Spectra.Resolvent.spectrum B.toLinearPMap))
+    (hX : HasClosedSylvesterEquation A B X C)
+    (hY : HasClosedSylvesterEquation A B Y C) :
+    X = Y :=
+  linearPMapSylvester_solution_unique_of_disjoint_spectrum hA hB hdisj hX hY
+
 /-- Two bounded solutions of the same closed Sylvester equation coincide under
-positive pairwise spectral separation. -/
+positive pairwise spectral separation.  A corollary of
+`closedSylvester_solution_unique_of_disjoint_spectrum`, which is the sharp form. -/
 theorem closedSylvester_solution_unique_of_pairwiseSpectrumGap
     {A : ClosedOperator (𝕜 := ℂ) (E := E)}
     {B : ClosedOperator (𝕜 := ℂ) (E := F)}
@@ -164,9 +199,8 @@ theorem closedSylvester_solution_unique_of_pairwiseSpectrumGap
     (hgap : GenuinePairwiseSpectrumGap A B δ)
     (hX : HasClosedSylvesterEquation A B X C)
     (hY : HasClosedSylvesterEquation A B Y C) :
-    X = Y := by
-  exact linearPMapSylvester_solution_unique_of_pairwiseSpectrumGap
-    hA hB hδ hgap hX hY
+    X = Y :=
+  closedSylvester_solution_unique_of_disjoint_spectrum hA hB (hgap.disjoint hδ) hX hY
 
 end
 
