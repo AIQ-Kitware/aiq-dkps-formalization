@@ -36,13 +36,11 @@ tends to `0` at infinity.  The deformation is what turns "small for large
 circles" into "zero for the given circle": the remainder integral does not
 depend on the radius.
 
-## Implementation note
+## Ambient generality
 
-The ambient space is an inner product space only because
-`circleRieszProjection` is stated that way where it is defined
-(`DavisKahan.Interop.Spectra.CircleRieszProjection`).  Nothing below uses the
-inner product, and every proof here goes through verbatim for a complex Banach
-space; generalising the definition would generalise these statements for free.
+Everything here is stated for a complex **Banach** space.  No proof below uses
+an inner product: they run on `Ring.inverse`, `DiffContOnCl.circleIntegral_eq_zero`,
+the annulus deformation, and `spectrum.resolvent_tendsto_cobounded`.
 -/
 
 open Metric Set Filter Complex
@@ -55,8 +53,7 @@ namespace Frontier
 
 universe u
 
-variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
-  [CompleteSpace H]
+variable {H : Type u} [NormedAddCommGroup H] [NormedSpace ℂ H] [CompleteSpace H]
 
 section Pencil
 
@@ -140,6 +137,7 @@ theorem ringInverse_smul_one_sub_eq_principal_add_remainder
     exact sub_eq_iff_eq_add.mp hcancel
   rw [← smul_add, ← hkey, smul_smul, inv_mul_cancel₀ hne, one_smul]
 
+omit [CompleteSpace H] in
 /-- The remainder term is bounded by the resolvent, uniformly on a circle. -/
 theorem norm_remainder_le {z : ℂ} (hz : z ∉ spectrum ℂ A) (hzc : z ≠ (center : ℂ)) :
     ‖Ring.inverse (z • (1 : H →L[ℂ] H) - A) -

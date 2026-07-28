@@ -55,8 +55,8 @@ namespace Frontier
 universe u
 
 variable {E F : Type u}
-  [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
-  [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
+  [NormedAddCommGroup E] [NormedSpace ℂ E] [CompleteSpace E]
+  [NormedAddCommGroup F] [NormedSpace ℂ F] [CompleteSpace F]
 
 section Definitions
 
@@ -198,6 +198,7 @@ private theorem comp_circleIntegral (L : E →L[ℂ] E) (f : ℂ → F →L[ℂ]
     L ∘L (∮ z in C(c, R), f z) = ∮ z in C(c, R), L ∘L f z := by
   simpa using (circleIntegral_map (ContinuousLinearMap.compL ℂ F E E L) f c R hf).symm
 
+omit [CompleteSpace F] in
 /-- Pre-composition passes through a circle integral. -/
 private theorem circleIntegral_comp (M : F →L[ℂ] F) (f : ℂ → F →L[ℂ] E) (c : ℂ)
     (R : ℝ) (hf : CircleIntegrable f c R) :
