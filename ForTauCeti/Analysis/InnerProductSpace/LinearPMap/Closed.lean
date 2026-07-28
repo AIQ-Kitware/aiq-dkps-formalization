@@ -123,6 +123,92 @@ theorem orthogonal_invariant
 
 end ReducesSubspace
 
+/-- The operator domain inside a reducing subspace. -/
+def reducingRestrictionDomain
+    (A : E →ₗ.[𝕜] E) (U : Submodule 𝕜 E) : Submodule 𝕜 U where
+  carrier := {x | (x : E) ∈ A.domain}
+  zero_mem' := A.domain.zero_mem
+  add_mem' hx hy := A.domain.add_mem hx hy
+  smul_mem' c _ hx := A.domain.smul_mem c hx
+
+@[simp] theorem mem_reducingRestrictionDomain_iff
+    (A : E →ₗ.[𝕜] E) (U : Submodule 𝕜 E) (x : U) :
+    x ∈ reducingRestrictionDomain A U ↔ (x : E) ∈ A.domain :=
+  Iff.rfl
+
+/-- A restricted-domain vector viewed in the ambient partial-map domain. -/
+def reducingRestrictionDomainToAmbient
+    (A : E →ₗ.[𝕜] E) (U : Submodule 𝕜 E)
+    (x : reducingRestrictionDomain A U) : A.domain :=
+  ⟨((x : reducingRestrictionDomain A U) : U), x.property⟩
+
+@[simp] theorem reducingRestrictionDomainToAmbient_coe
+    (A : E →ₗ.[𝕜] E) (U : Submodule 𝕜 E)
+    (x : reducingRestrictionDomain A U) :
+    ((reducingRestrictionDomainToAmbient A U x : A.domain) : E) =
+      ((x : reducingRestrictionDomain A U) : U) :=
+  rfl
+
+/-- Action of a partial map restricted to a reducing subspace. -/
+def reducingRestrictionLinearMap
+    (A : E →ₗ.[𝕜] E) (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
+    (hred : ReducesSubspace A U) :
+    reducingRestrictionDomain A U →ₗ[𝕜] U where
+  toFun x :=
+    ⟨A (reducingRestrictionDomainToAmbient A U x),
+      hred.invariant (reducingRestrictionDomainToAmbient A U x)
+        (((x : reducingRestrictionDomain A U) : U).property)⟩
+  map_add' x y := by
+    apply Subtype.ext
+    simp only [Submodule.coe_add]
+    rw [show reducingRestrictionDomainToAmbient A U (x + y) =
+      reducingRestrictionDomainToAmbient A U x +
+        reducingRestrictionDomainToAmbient A U y from rfl]
+    exact A.toFun.map_add _ _
+  map_smul' c x := by
+    apply Subtype.ext
+    simp only [Submodule.coe_smul, RingHom.id_apply]
+    rw [show reducingRestrictionDomainToAmbient A U (c • x) =
+      c • reducingRestrictionDomainToAmbient A U x from rfl]
+    exact A.toFun.map_smul c _
+
+@[simp] theorem coe_reducingRestrictionLinearMap
+    (A : E →ₗ.[𝕜] E) (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
+    (hred : ReducesSubspace A U) (x : reducingRestrictionDomain A U) :
+    ((reducingRestrictionLinearMap A U hred x : U) : E) =
+      A (reducingRestrictionDomainToAmbient A U x) :=
+  rfl
+
+/-- Projection of an ambient domain vector into the restricted domain. -/
+noncomputable def projectDomainToReducingRestriction
+    (A : E →ₗ.[𝕜] E) (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
+    (hred : ReducesSubspace A U) (x : A.domain) :
+    reducingRestrictionDomain A U :=
+  ⟨⟨U.starProjection (x : E), U.starProjection_apply_mem (x : E)⟩,
+    hred.projection_mem_domain x⟩
+
+@[simp] theorem coe_projectDomainToReducingRestriction
+    (A : E →ₗ.[𝕜] E) (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
+    (hred : ReducesSubspace A U) (x : A.domain) :
+    (((projectDomainToReducingRestriction A U hred x :
+        reducingRestrictionDomain A U) : U) : E) =
+      U.starProjection (x : E) :=
+  rfl
+
+/-- The partial map induced on a reducing subspace.  Density and closedness
+are properties supplied separately by the theorem using this construction. -/
+noncomputable def reducingRestriction
+    (A : E →ₗ.[𝕜] E) (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
+    (hred : ReducesSubspace A U) : U →ₗ.[𝕜] U where
+  domain := reducingRestrictionDomain A U
+  toFun := reducingRestrictionLinearMap A U hred
+
+@[simp] theorem reducingRestriction_domain
+    (A : E →ₗ.[𝕜] E) (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
+    (hred : ReducesSubspace A U) :
+    (reducingRestriction A U hred).domain = reducingRestrictionDomain A U :=
+  rfl
+
 /-- A linear map on a submodule has a bounded extension to the ambient space. -/
 structure BoundedExtension (D : Submodule 𝕜 F) (T : D →ₗ[𝕜] E) where
   operator : F →L[𝕜] E
