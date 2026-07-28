@@ -179,6 +179,31 @@ theorem sinTheta_unbounded_exact_of_genuineIntervalExteriorGap
   rw [hAngle.2]
   exact hBlock.2
 
+/-- Raw exact directed-angle form of the interval/exterior sine-theta bound. -/
+theorem linearPMap_generalizedSinTheta_unbounded_exact_of_genuineIntervalExteriorGap
+    (N : RectangularSymmetricIdealFamily (𝕜 := ℂ))
+    (D : UnboundedSinThetaDataPMap (𝕜 := ℂ) (E := E) (F := F) (G := G))
+    (F₀ : H →L[ℂ] E)
+    (hA : _root_.IsSelfAdjoint D.A)
+    (hA₀ : _root_.IsSelfAdjoint D.A₀)
+    (hΛ₁ : _root_.IsSelfAdjoint D.Λ₁)
+    (hdecomp : OrthogonalExactDecomposition F₀ D.F₁)
+    {β α δ ε : ℝ}
+    (hβα : β ≤ α) (hδ : 0 < δ) (hε : 0 < ε)
+    (hframe : LowerFrameBound D.X ε)
+    (hgap : GenuineUnboundedIntervalExteriorGapPMap D.A₀ D.Λ₁ β α δ)
+    (hR : N.Mem D.residual) :
+    N.Mem (directedSinThetaOperator D.X F₀ hframe hε) ∧
+      δ * ε * N.gauge (directedSinThetaOperator D.X F₀ hframe hε)
+        ≤ N.gauge D.residual := by
+  have hBlock := linearPMap_generalizedSinTheta_unbounded_of_genuineIntervalExteriorGap
+    N D hA hA₀ hΛ₁ hdecomp.isometry₁ hβα hδ hε hframe hgap hR
+  have hAngle := sinThetaBlock_mem_and_gauge_eq_directedSinThetaOperator
+    N D.X F₀ D.F₁ hframe hε hdecomp hBlock.1
+  refine ⟨hAngle.1, ?_⟩
+  rw [hAngle.2]
+  exact hBlock.2
+
 end ExactSinTheta
 end Experimental
 end DavisKahan
