@@ -32,7 +32,8 @@
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteRestriction",
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.KyFan",
         "ForTauCeti.Analysis.OperatorIdeal.Family.KyFan",
-        "ForTauCeti.Analysis.OperatorIdeal.Family.TraceClass"
+        "ForTauCeti.Analysis.OperatorIdeal.Family.TraceClass",
+        "ForTauCeti.Analysis.OperatorIdeal.Family.KyFanDominance"
       ]
     },
     {
@@ -1807,6 +1808,27 @@
       "direct_dependencies": [
         "Mathlib",
         "ForTauCeti.Analysis.OperatorIdeal.Family.KyFan"
+      ],
+      "blocked_dependencies": [],
+      "downstream_users": [],
+      "status": "staged",
+      "upstream_pr": null
+    },
+    {
+      "source_module": "DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric",
+      "source_declarations": [
+        "TauCeti.DavisKahan.Experimental.ExactSinTheta.KyFanDominantIdealFamily"
+      ],
+      "current_namespace": "TauCeti",
+      "staging_module": "ForTauCeti.Analysis.OperatorIdeal.Family.KyFanDominance",
+      "final_tauceti_module": "TauCeti.Analysis.OperatorIdeal.Family.KyFanDominance",
+      "ownership_class": "tauceti",
+      "roadmap_target": "symmetric-operator-ideals",
+      "provenance_class": "restructured 2026-07-28: the Fan-dominance field of KyFanDominantIdealFamily becomes a class over the canonical family, as item S2 of the symmetric-ideals roadmap specifies, with instances for the operator-norm, Ky Fan and trace-class families",
+      "direct_dependencies": [
+        "Mathlib",
+        "ForTauCeti.Analysis.OperatorIdeal.Family.OperatorNorm",
+        "ForTauCeti.Analysis.OperatorIdeal.Family.TraceClass"
       ],
       "blocked_dependencies": [],
       "downstream_users": [],
