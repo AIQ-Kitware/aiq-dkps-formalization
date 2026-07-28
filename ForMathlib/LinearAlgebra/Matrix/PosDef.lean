@@ -1,9 +1,7 @@
 /-
-Staged for Mathlib: additions to `Mathlib/LinearAlgebra/Matrix/PosDef.lean`.
-
-Formalized by Claude Opus 4.8 (claude-opus-4-8[1m]); rank-controlled direction
-reproved through the rank-factorization API by Claude Fable 5 (claude-fable-5[1m]).
-To be re-authored per Mathlib's AI-contribution policy at PR time.
+Copyright (c) 2026 Kitware, Inc. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Jon Crall, Claude Opus 4.8
 -/
 
 import Mathlib.LinearAlgebra.Matrix.PosDef
@@ -45,6 +43,27 @@ rank-controlled Gram factor `(S * R)ᴴ * (S * R)`.  The reverse direction is
 * Cox & Cox, *Multidimensional Scaling*, 2nd ed., §2.2–2.3 (classical scaling).
 * Horn & Johnson, *Matrix Analysis*, 2nd ed. (spectral theorem and PSD Gram
   factorizations).
+
+## Staging note
+
+Staged for Mathlib: additions to `Mathlib/LinearAlgebra/Matrix/PosDef.lean`.
+Formalized by Claude Opus 4.8 (claude-opus-4-8[1m]); rank-controlled direction
+reproved through the rank-factorization API by Claude Fable 5 (claude-fable-5[1m]).
+To be re-authored per Mathlib's AI-contribution policy at PR time.
+
+## Provenance
+
+* Original repository: Davis--Kahan/DKPS formalization (Kitware, Inc.).
+* Original module: authored directly in `ForMathlib` at Davis--Kahan commit
+  `e9379f2`; it has had no prior home.
+* Extraction class: **authored in place**, for upstreaming to Mathlib rather than
+  to Tau Ceti — see `ForTauCeti/README.md` on the split between the two staging
+  areas.
+* Intended Mathlib home: additions to `Mathlib/LinearAlgebra/Matrix/PosDef.
+* Original authors / copyright: Jon Crall, Claude Opus 4.8; Copyright (c) 2026
+  Kitware, Inc.; Apache 2.0.
+* Spectra influence: **none** — the `ForMathlib` import firewall admits only
+  Mathlib and `ForMathlib` (enforced by `scripts/check_dependency_layers.py`).
 -/
 
 namespace ForMathlib.Matrix
