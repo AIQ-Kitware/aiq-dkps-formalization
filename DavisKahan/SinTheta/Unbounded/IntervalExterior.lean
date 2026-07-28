@@ -5,6 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.SinTheta.Unbounded.Core
 import DavisKahan.Sylvester.Unbounded.IntervalExterior
+import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
 
 /-!
 # Source-shaped finite-interval unbounded sine-theta theorem
@@ -36,12 +37,14 @@ def GenuineUnboundedIntervalExteriorGap
     (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := F))
     (B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := G))
     (β α δ : ℝ) : Prop :=
-  (Spectra.Resolvent.spectrum A.toLinearPMap ⊆ Set.Icc β α ∧
+  (Complex.ofReal ⁻¹' TauCeti.LinearPMap.spectrum A.toLinearPMap ⊆
+        Set.Icc β α ∧
     ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
-      lam ∉ Spectra.Resolvent.spectrum B.toLinearPMap) ∨
-  (Spectra.Resolvent.spectrum B.toLinearPMap ⊆ Set.Icc β α ∧
+      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum B.toLinearPMap) ∨
+  (Complex.ofReal ⁻¹' TauCeti.LinearPMap.spectrum B.toLinearPMap ⊆
+        Set.Icc β α ∧
     ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
-      lam ∉ Spectra.Resolvent.spectrum A.toLinearPMap)
+      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum A.toLinearPMap)
 
 /-- Raw partial-map presentation of the Spectra interval/exterior boundary.
 The spectrum calls are the remaining Spectra dependency; no bundled operator is
@@ -49,12 +52,14 @@ part of the mathematical input. -/
 def GenuineUnboundedIntervalExteriorGapPMap
     (A : F →ₗ.[ℂ] F) (B : G →ₗ.[ℂ] G)
     (β α δ : ℝ) : Prop :=
-  (Spectra.Resolvent.spectrum A ⊆ Set.Icc β α ∧
+  (Complex.ofReal ⁻¹' TauCeti.LinearPMap.spectrum A ⊆
+        Set.Icc β α ∧
     ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
-      lam ∉ Spectra.Resolvent.spectrum B) ∨
-  (Spectra.Resolvent.spectrum B ⊆ Set.Icc β α ∧
+      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum B) ∨
+  (Complex.ofReal ⁻¹' TauCeti.LinearPMap.spectrum B ⊆
+        Set.Icc β α ∧
     ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
-      lam ∉ Spectra.Resolvent.spectrum A)
+      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum A)
 
 namespace GenuineUnboundedIntervalExteriorGap
 

@@ -8,6 +8,7 @@ import DavisKahan.Sylvester.Unbounded.IntervalExterior
 import DavisKahan.Interop.Spectra.OrderedHalfLine
 import DavisKahan.Sylvester.CutoffInterface
 import DavisKahan.Sylvester.Unbounded.OrderedEngineDirect
+import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
 
 /-!
 # Genuine-spectrum all-gap unbounded Sylvester theorem
@@ -40,12 +41,14 @@ def GenuineSylvesterIntervalExteriorGap
     (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := E))
     (B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := F))
     (β α δ : ℝ) : Prop :=
-  (Spectra.Resolvent.spectrum A.toLinearPMap ⊆ Set.Icc β α ∧
+  (Complex.ofReal ⁻¹' TauCeti.LinearPMap.spectrum A.toLinearPMap ⊆
+        Set.Icc β α ∧
     ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
-      lam ∉ Spectra.Resolvent.spectrum B.toLinearPMap) ∨
-  (Spectra.Resolvent.spectrum B.toLinearPMap ⊆ Set.Icc β α ∧
+      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum B.toLinearPMap) ∨
+  (Complex.ofReal ⁻¹' TauCeti.LinearPMap.spectrum B.toLinearPMap ⊆
+        Set.Icc β α ∧
     ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
-      lam ∉ Spectra.Resolvent.spectrum A.toLinearPMap)
+      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum A.toLinearPMap)
 
 /-- All three source gap configurations, stated with genuine Spectra spectra. -/
 inductive GenuineUnboundedSylvesterGap
@@ -58,12 +61,16 @@ inductive GenuineUnboundedSylvesterGap
       (hgap : GenuineSylvesterIntervalExteriorGap A B β α δ)
   | leftAboveRightBelow
       (c : ℝ)
-      (hA : Spectra.Resolvent.spectrum A.toLinearPMap ⊆ Set.Ici (c + δ))
-      (hB : Spectra.Resolvent.spectrum B.toLinearPMap ⊆ Set.Iic c)
+      (hA : Complex.ofReal ⁻¹' TauCeti.LinearPMap.spectrum A.toLinearPMap ⊆
+        Set.Ici (c + δ))
+      (hB : Complex.ofReal ⁻¹' TauCeti.LinearPMap.spectrum B.toLinearPMap ⊆
+        Set.Iic c)
   | leftBelowRightAbove
       (c : ℝ)
-      (hA : Spectra.Resolvent.spectrum A.toLinearPMap ⊆ Set.Iic c)
-      (hB : Spectra.Resolvent.spectrum B.toLinearPMap ⊆ Set.Ici (c + δ))
+      (hA : Complex.ofReal ⁻¹' TauCeti.LinearPMap.spectrum A.toLinearPMap ⊆
+        Set.Iic c)
+      (hB : Complex.ofReal ⁻¹' TauCeti.LinearPMap.spectrum B.toLinearPMap ⊆
+        Set.Ici (c + δ))
 
 /-- Source-facing Theorem 5.2 wrapper with genuine spectra in every branch. -/
 theorem davisKahan1970_sylvester_of_genuineSpectrumGap

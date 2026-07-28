@@ -13,6 +13,7 @@ import Spectra.SpectralTheory.SeparatedIntertwiner
 import Spectra.Modular.Cocycle.ModularSqrtSquare
 import Spectra.Modular.Tomita.BoundedPicture
 import Spectra.QuantumMechanics.BornRule.Observable
+import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
 
 /-!
 # Bounded Borel calculus for bounded self-adjoint operators
@@ -74,7 +75,7 @@ theorem boundedSelfAdjointOperator_toLinearPMap_apply
 invertibility locus of `A - z` in the bounded operator algebra. -/
 theorem mem_resolventSet_toLinearPMap_iff
     (A : H →L[ℂ] H) (hA : IsSelfAdjointOperator A) (z : ℂ) :
-    z ∈ Spectra.Resolvent.resolventSet (boundedSelfAdjointOperator A hA).toLinearPMap ↔
+    z ∈ TauCeti.LinearPMap.resolventSet (boundedSelfAdjointOperator A hA).toLinearPMap ↔
       IsUnit (A - z • (1 : H →L[ℂ] H)) := by
   constructor
   · rintro ⟨R, hleft, hright⟩
@@ -104,9 +105,10 @@ its full-domain self-adjoint realization. -/
 theorem realSpectrum_eq_boundedSelfAdjoint_spectrum
     (A : H →L[ℂ] H) (hA : IsSelfAdjointOperator A) :
     realSpectrum A =
-      Spectra.Resolvent.spectrum (boundedSelfAdjointOperator A hA).toLinearPMap := by
+      Complex.ofReal ⁻¹'
+        TauCeti.LinearPMap.spectrum (boundedSelfAdjointOperator A hA).toLinearPMap := by
   ext r
-  show (r : ℂ) ∈ spectrum ℂ A ↔ (r : ℂ) ∉ Spectra.Resolvent.resolventSet _
+  show (r : ℂ) ∈ spectrum ℂ A ↔ (r : ℂ) ∉ TauCeti.LinearPMap.resolventSet _
   rw [spectrum.mem_iff, Algebra.algebraMap_eq_smul_one,
     ← IsUnit.neg_iff, neg_sub, mem_resolventSet_toLinearPMap_iff A hA (r : ℂ)]
 
