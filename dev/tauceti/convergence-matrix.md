@@ -360,6 +360,12 @@ transitive closure. These form distinct donor clusters, handled separately.
 > Wave 5 folded into Wave 3 but which has its own DKPS consumer surface, and
 > **Cluster X**, the 14 DKPS-authored theorems currently declared into
 > `namespace Spectra.*` — a provenance defect, not donor material.
+>
+> Wave 5's *execution* now lives in
+> [`spectra-removal-plan.md`](spectra-removal-plan.md) (phases S0–S6, claimed).
+> One correction to Wave 5's implied ordering: **Cluster F has no single-cluster
+> consumers**, so it cannot be closed independently of B — B and F converge last,
+> and the size-ordered intuition is wrong.
 
 Concrete rows we already know; expand each into the full schema during phase 0.
 
