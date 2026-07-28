@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
 import ForTauCeti.Analysis.InnerProductSpace.OperatorModulus
+import ForTauCeti.Analysis.InnerProductSpace.PartialIsometry
 import Mathlib.Analysis.InnerProductSpace.Projection.Basic
 import Mathlib.Analysis.Normed.Operator.Extend
 
@@ -42,8 +43,16 @@ subspace gives `polarPartial`.
 * `ContinuousLinearMap.polarPartial`: the partial isometry;
 * `ContinuousLinearMap.polarPartial_comp_modulus`: the polar identity
   `M.polarPartial ∘L |M| = M`, **unconditional**;
-* `ContinuousLinearMap.norm_polarPartial_apply_of_mem`: isometry on the initial space;
-* `ContinuousLinearMap.polarPartial_eq_zero_of_mem_orthogonal`: vanishing off it;
+* `ContinuousLinearMap.polarPartial_comp_adjoint_comp_polarPartial`: the algebraic
+  partial-isometry identity `W W⋆ W = W`, also unconditional;
+* `ContinuousLinearMap.norm_polarPartial_apply_of_mem` and
+  `ContinuousLinearMap.inner_polarPartial_apply_of_mem`: `W` preserves norms, and in fact
+  inner products, on the initial space;
+* `ContinuousLinearMap.polarPartial_eq_zero_of_mem_orthogonal` and
+  `ContinuousLinearMap.ker_polarPartial`: `W` vanishes off the initial space, and nowhere
+  else;
+* `ContinuousLinearMap.adjoint_comp_polarPartial`: `W⋆ W` is the orthogonal projection onto
+  the initial space;
 * `ContinuousLinearMap.polarInitial_orthogonal_eq_ker`: the orthogonal complement of the
   initial space is exactly `ker M`, so the initial space is `(ker M)ᗮ`.
 
@@ -220,5 +229,100 @@ theorem polarInitial_orthogonal_eq_ker (M : E →L[ℂ] F) :
     have := hle hu
     rw [Submodule.mem_orthogonal_singleton_iff_inner_left] at this
     exact this
+
+/-- The kernel of the polar partial isometry is exactly the orthogonal complement of the
+initial space — it kills nothing else. -/
+theorem ker_polarPartial (M : E →L[ℂ] F) :
+    LinearMap.ker M.polarPartial.toLinearMap = M.polarInitialᗮ := by
+  apply le_antisymm
+  · intro y hy
+    have hWy : M.polarPartial y = 0 := hy
+    obtain ⟨p, hp, q, hq, rfl⟩ :=
+      Submodule.exists_add_mem_mem_orthogonal (K := M.polarInitial) y
+    have hWq : M.polarPartial q = 0 := M.polarPartial_eq_zero_of_mem_orthogonal hq
+    have hWp : M.polarPartial p = 0 := by
+      have := hWy
+      rw [map_add, hWq, add_zero] at this
+      exact this
+    have hp0 : p = 0 := by
+      have := M.norm_polarPartial_apply_of_mem hp
+      rw [hWp, norm_zero] at this
+      exact norm_eq_zero.mp this.symm
+    rw [hp0, zero_add]
+    exact hq
+  · intro y hy
+    exact M.polarPartial_eq_zero_of_mem_orthogonal hy
+
+/-- The initial space is the orthogonal complement of the kernel of the partial isometry,
+which is the shape the abstract partial-isometry API expects. -/
+theorem orthogonal_ker_polarPartial (M : E →L[ℂ] F) :
+    (LinearMap.ker M.polarPartial.toLinearMap)ᗮ = M.polarInitial := by
+  rw [M.ker_polarPartial, Submodule.orthogonal_orthogonal]
+
+/-- On the initial space the partial isometry preserves inner products, not just norms. -/
+theorem inner_polarPartial_apply_of_mem (M : E →L[ℂ] F) {p q : E}
+    (hp : p ∈ M.polarInitial) (hq : q ∈ M.polarInitial) :
+    ⟪M.polarPartial p, M.polarPartial q⟫_ℂ = ⟪p, q⟫_ℂ := by
+  have hnorm : ∀ w : M.polarInitial,
+      ‖(M.polarPartial.toLinearMap ∘ₗ M.polarInitial.subtype) w‖ = ‖w‖ := by
+    intro w
+    simpa using M.norm_polarPartial_apply_of_mem w.2
+  have hmap := (LinearMap.norm_map_iff_inner_map_map
+    (M.polarPartial.toLinearMap ∘ₗ M.polarInitial.subtype)).mp hnorm
+  simpa using hmap ⟨p, hp⟩ ⟨q, hq⟩
+
+/-- `W⋆ W` fixes the initial space pointwise. -/
+theorem adjoint_polarPartial_polarPartial_apply_of_mem (M : E →L[ℂ] F) {p : E}
+    (hp : p ∈ M.polarInitial) :
+    M.polarPartial.adjoint (M.polarPartial p) = p := by
+  have hall : ∀ z : E, ⟪M.polarPartial.adjoint (M.polarPartial p) - p, z⟫_ℂ = 0 := by
+    intro z
+    obtain ⟨z₁, hz₁, z₂, hz₂, rfl⟩ :=
+      Submodule.exists_add_mem_mem_orthogonal (K := M.polarInitial) z
+    have h₁ : ⟪M.polarPartial.adjoint (M.polarPartial p) - p, z₁⟫_ℂ = 0 := by
+      rw [inner_sub_left, ContinuousLinearMap.adjoint_inner_left,
+        M.inner_polarPartial_apply_of_mem hp hz₁, sub_self]
+    have h₂ : ⟪M.polarPartial.adjoint (M.polarPartial p) - p, z₂⟫_ℂ = 0 := by
+      rw [inner_sub_left, ContinuousLinearMap.adjoint_inner_left,
+        M.polarPartial_eq_zero_of_mem_orthogonal hz₂, inner_zero_right,
+        (Submodule.mem_orthogonal _ _).mp hz₂ p hp, sub_zero]
+    rw [inner_add_right, h₁, h₂, add_zero]
+  exact sub_eq_zero.mp (inner_self_eq_zero.mp (hall _))
+
+/-- `W⋆ W` is the orthogonal projection onto the initial space. -/
+theorem adjoint_comp_polarPartial (M : E →L[ℂ] F) :
+    M.polarPartial.adjoint ∘L M.polarPartial = M.polarInitial.starProjection := by
+  ext x
+  obtain ⟨p, hp, q, hq, rfl⟩ := Submodule.exists_add_mem_mem_orthogonal (K := M.polarInitial) x
+  have hqz : M.polarInitial.starProjection q = 0 := by
+    have hmem : q ∈ (M.polarInitial.starProjection).ker := by
+      rw [Submodule.ker_starProjection]; exact hq
+    exact hmem
+  simp only [ContinuousLinearMap.comp_apply, map_add,
+    M.polarPartial_eq_zero_of_mem_orthogonal hq, map_zero, add_zero,
+    M.adjoint_polarPartial_polarPartial_apply_of_mem hp, hqz,
+    Submodule.starProjection_eq_self_iff.mpr hp]
+
+/-- The partial isometry is unchanged by first projecting onto its initial space. -/
+theorem polarPartial_comp_starProjection (M : E →L[ℂ] F) :
+    M.polarPartial ∘L M.polarInitial.starProjection = M.polarPartial := by
+  ext x
+  obtain ⟨p, hp, q, hq, rfl⟩ := Submodule.exists_add_mem_mem_orthogonal (K := M.polarInitial) x
+  have hqz : M.polarInitial.starProjection q = 0 := by
+    have hmem : q ∈ (M.polarInitial.starProjection).ker := by
+      rw [Submodule.ker_starProjection]; exact hq
+    exact hmem
+  simp only [ContinuousLinearMap.comp_apply, map_add, hqz, add_zero,
+    Submodule.starProjection_eq_self_iff.mpr hp,
+    M.polarPartial_eq_zero_of_mem_orthogonal hq, map_zero]
+
+/-- **The partial-isometry identity `W W⋆ W = W`**, for every bounded operator and with no
+invertibility or finite-dimensionality hypothesis.  This is the algebraic form of
+"`W` is a partial isometry"; the analytic form is
+`norm_polarPartial_apply_of_mem` together with
+`polarPartial_eq_zero_of_mem_orthogonal`. -/
+theorem polarPartial_comp_adjoint_comp_polarPartial (M : E →L[ℂ] F) :
+    M.polarPartial ∘L M.polarPartial.adjoint ∘L M.polarPartial = M.polarPartial := by
+  rw [M.adjoint_comp_polarPartial, M.polarPartial_comp_starProjection]
 
 end ContinuousLinearMap
