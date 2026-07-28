@@ -21,10 +21,15 @@ corollaries and a corrected form of equation (4).
 
 ## Architecture
 
-Theorem 4 is factored through one generic Gram transport result. Appendix
-Lemma 5 is factored through one two-sided Frobenius ideal theorem. Rank-one
+Theorem 4 is factored through one generic Gram transport result. The
+`FrobeniusGram` module owns the shared finite-dimensional Hilbert--Schmidt
+foundation and the general two-sided ideal theorem consumed by Appendix Lemma
+5. Bundled linear-isometry wrappers expose the paper's
+orthonormal-column and orthonormal-row hypotheses directly. Rank-one
 singular-vector results reuse the symmetric rank-one theorem on Gram operators.
 No perturbation argument is duplicated.
+
+See `ELEGANCE_AUDIT.md` for the in-place API and factoring review.
 
 The paper's printed equation (4) is missing a square on
 `2 - ‖v̂ - v‖²`; the lane records the corrected identity and documents this
