@@ -65,13 +65,12 @@ noncomputable def unboundedBlockGraphDomainVectorPMap
     rw [unboundedBlockOperatorCorePMap_domain]
     exact ⟨x.property, hdom x⟩⟩
 
-noncomputable def unboundedBlockGraphDomainVector
+/-- Compatibility spelling of the raw graph-domain vector. -/
+noncomputable abbrev unboundedBlockGraphDomainVector
     (H : UnboundedBlockData (𝕜 := 𝕜) (E0 := E0) (E1 := E1))
     (X : E0 →L[𝕜] E1) (hdom : PreservesRiccatiDomains H X)
     (x : H.A0.domain) : (unboundedBlockOperatorCore H).domain :=
-  ⟨WithLp.toLp 2 ((x : E0), X (x : E0)), by
-    rw [mem_unboundedBlockOperatorCore_domain_iff]
-    exact ⟨x.property, hdom x⟩⟩
+  unboundedBlockGraphDomainVectorPMap H X hdom x
 
 /-- Every raw-domain graph vector belongs to the angular graph. -/
 theorem unboundedBlockGraphDomainVectorPMap_mem_graph
