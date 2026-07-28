@@ -43,6 +43,19 @@ def GenuineUnboundedIntervalExteriorGap
     ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
       lam ∉ Spectra.Resolvent.spectrum A.toLinearPMap)
 
+/-- Raw partial-map presentation of the Spectra interval/exterior boundary.
+The spectrum calls are the remaining Spectra dependency; no bundled operator is
+part of the mathematical input. -/
+def GenuineUnboundedIntervalExteriorGapPMap
+    (A : F →ₗ.[ℂ] F) (B : G →ₗ.[ℂ] G)
+    (β α δ : ℝ) : Prop :=
+  (Spectra.Resolvent.spectrum A ⊆ Set.Icc β α ∧
+    ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
+      lam ∉ Spectra.Resolvent.spectrum B) ∨
+  (Spectra.Resolvent.spectrum B ⊆ Set.Icc β α ∧
+    ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
+      lam ∉ Spectra.Resolvent.spectrum A)
+
 /-- Generalized finite-interval unbounded sine-theta theorem at ideal-gauge
 scope, using genuine Spectra hypotheses and no ordered half-line dependency. -/
 theorem generalizedSinTheta_unbounded_of_genuineIntervalExteriorGap
@@ -80,6 +93,29 @@ theorem generalizedSinTheta_unbounded_of_genuineIntervalExteriorGap
       mul_le_mul_of_nonneg_left hFrame.2 hδ.le
     _ ≤ N.gauge (-(D.residual.adjoint ∘L D.F₁)) := hRaw.2
     _ ≤ N.gauge D.residual := hC.2
+
+/-- Raw partial-map form of the interval/exterior unbounded sine-theta bound.
+The conversion to the historical bundle is confined to the current Spectra
+Sylvester boundary. -/
+theorem linearPMap_generalizedSinTheta_unbounded_of_genuineIntervalExteriorGap
+    (N : RectangularSymmetricIdealFamily (𝕜 := ℂ))
+    (D : UnboundedSinThetaDataPMap (𝕜 := ℂ) (E := E) (F := F) (G := G))
+    (hA : _root_.IsSelfAdjoint D.A)
+    (hA₀ : _root_.IsSelfAdjoint D.A₀)
+    (hΛ₁ : _root_.IsSelfAdjoint D.Λ₁)
+    (hF₁ : IsometricEmbedding D.F₁)
+    {β α δ ε : ℝ}
+    (hβα : β ≤ α) (hδ : 0 < δ) (hε : 0 < ε)
+    (hframe : LowerFrameBound D.X ε)
+    (hgap : GenuineUnboundedIntervalExteriorGapPMap D.A₀ D.Λ₁ β α δ)
+    (hR : N.Mem D.residual) :
+    N.Mem (sinThetaBlock D.X D.F₁ hframe hε) ∧
+      δ * ε * N.gauge (sinThetaBlock D.X D.F₁ hframe hε)
+        ≤ N.gauge D.residual := by
+  apply generalizedSinTheta_unbounded_of_genuineIntervalExteriorGap
+    N D.toClosed hA hA₀ hΛ₁ hF₁ hβα hδ hε hframe
+  · exact hgap
+  · exact hR
 
 /-- Exact directed-angle form of the genuine-spectrum finite-interval theorem. -/
 theorem generalizedSinTheta_unbounded_exact_of_genuineIntervalExteriorGap
