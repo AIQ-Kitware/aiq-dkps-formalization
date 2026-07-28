@@ -1,173 +1,277 @@
 import Mathlib
 
 /-!
-# Approximation numbers and symmetric operator ideals: target signatures
+# Approximation numbers and Hilbert-space singular values: suggested signatures
 
-**This file is not the roadmap and is not exhaustive.** The definitive document
-is `README.md`. The statements here suggest Lean forms for particular milestones,
-so that contributors and reviewers converge on names and signatures; discharging
-all of them finishes neither a layer nor the roadmap.
+This file is not the roadmap and is not exhaustive.  The definitive
+specification is `README.md`.  These declarations illustrate concrete Lean
+shapes for the central milestones and prevent the roadmap from hiding an
+unstated object behind prose.
 
-The narrative roadmap, the generality bar, the layers (A–C), and the pinned
-conventions are in `README.md`. Mathlib already carries the prerequisite static
-stack — `ContinuousLinearMap` and the operator (semi)norm, `LinearMap.rank`, the
-`ℝ≥0`/`ℝ` continuous functional calculus and `CFC.sqrt`, finite-dimensional
-self-adjoint spectral theory and Courant–Fischer, `ContinuousLinearMap.adjoint`,
-and the `NNReal`/`ENNReal`/`tsum` order and summability API. This roadmap builds
-the approximation-number (`s`-number) layer and the symmetric-ideal theory on
-top.
-
-`sorry` is used honestly for milestone statements whose full form is settled but
-not proved here; where a milestone needs a notion whose API does not yet exist,
-the condition is omitted rather than named as an empty `Prop`.
-
-**This file is not compiled.** `ForTauCetiRoadmap` is not a `lean_lib`, so
-nothing here is checked by `lake build` and it can only be kept honest by hand.
-Where a milestone has since *landed*, the signature below is synchronized with
-the shipped one — currently all of Layer A, in
-`ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/`, which is the
-authority. Last synchronized 2026-07-27 against the §5.1 signature-polish lane:
-the codomain is `ℝ` (README decision 2), not the `ℝ≥0` this file was drafted
-with, and the names are the landed ones.
+The final implementation may adjust names to match Mathlib or Tau Ceti review.
+In particular, active Mathlib PR #32126 must be reconciled before a competing
+public definition is introduced.
 -/
 
 namespace TauCetiRoadmap.ApproximationNumbers
 
-open scoped ENNReal
+open Module (finrank)
+open scoped InnerProductSpace
+open Filter Topology
 
-/-! ## Layer A — the approximation number and its ideal theory (field-generic)
+universe u v w x y
 
-Over a `NontriviallyNormedField`, seminormed source and target, independent
-universes. No inner product. -/
+/-! ## Part A -- approximation numbers on normed spaces -/
 
-section LayerA
+section ApproximationNumbers
 
-variable {𝕜 : Type*} [NontriviallyNormedField 𝕜]
-variable {E : Type*} [SeminormedAddCommGroup E] [NormedSpace 𝕜 E]
-variable {F : Type*} [SeminormedAddCommGroup F] [NormedSpace 𝕜 F]
-variable {G : Type*} [SeminormedAddCommGroup G] [NormedSpace 𝕜 G]
+variable {𝕜 : Type u} [NontriviallyNormedField 𝕜]
+variable {E : Type v} [SeminormedAddCommGroup E] [NormedSpace 𝕜 E]
+variable {F : Type w} [SeminormedAddCommGroup F] [NormedSpace 𝕜 F]
+variable {G : Type x} [SeminormedAddCommGroup G] [NormedSpace 𝕜 G]
+variable {H : Type y} [SeminormedAddCommGroup H] [NormedSpace 𝕜 H]
 
-/-- A.1 — Zero-based approximation number: operator-norm distance to maps of
-rank at most `n`, valued in `ℝ` (README decision 2). (Extends the Mathlib
-`ContinuousLinearMap` namespace for dot notation; a global-namespace
-commitment, see README.) -/
+/-- Zero-based approximation number: the operator-norm distance to maps of rank
+at most `n`.  The intended public declaration extends
+`ContinuousLinearMap`. -/
 noncomputable def approximationNumber (T : E →L[𝕜] F) (n : ℕ) : ℝ :=
   ⨅ R : {R : E →L[𝕜] F // R.rank ≤ (n : Cardinal)}, ‖T - R.1‖
 
+/-- A1 -- exposed defining infimum. -/
+theorem approximationNumber_eq_iInf (T : E →L[𝕜] F) (n : ℕ) :
+    approximationNumber T n =
+      ⨅ R : {R : E →L[𝕜] F // R.rank ≤ (n : Cardinal)}, ‖T - R.1‖ :=
+  rfl
+
+/-- A1 -- every admissible approximation gives an upper bound. -/
+theorem approximationNumber_le_norm_sub
+    (T : E →L[𝕜] F) {R : E →L[𝕜] F} {n : ℕ}
+    (hR : R.rank ≤ (n : Cardinal)) :
+    approximationNumber T n ≤ ‖T - R‖ := by
+  sorry
+
+/-- A1 -- intrinsic lower-bound characterization. -/
+theorem le_approximationNumber_iff
+    (T : E →L[𝕜] F) {n : ℕ} {c : ℝ} :
+    c ≤ approximationNumber T n ↔
+      ∀ R : E →L[𝕜] F, R.rank ≤ (n : Cardinal) → c ≤ ‖T - R‖ := by
+  sorry
+
+/-- A1 -- the zeroth approximation number is the operator norm. -/
 @[simp]
 theorem approximationNumber_index_zero (T : E →L[𝕜] F) :
-    approximationNumber T 0 = ‖T‖ := sorry
+    approximationNumber T 0 = ‖T‖ := by
+  sorry
 
-/-- A.1 — antitone in the allowed rank. -/
+/-- A1 -- approximation numbers decrease as more rank is allowed. -/
 theorem approximationNumber_antitone (T : E →L[𝕜] F) :
-    Antitone (approximationNumber T) := sorry
+    Antitone (approximationNumber T) := by
+  sorry
 
-/-- A.2 — the additive ideal inequality. -/
-theorem approximationNumber_add_le (S T : E →L[𝕜] F) (m n : ℕ) :
+/-- A1 -- approximation numbers are nonnegative. -/
+theorem approximationNumber_nonneg (T : E →L[𝕜] F) (n : ℕ) :
+    0 ≤ approximationNumber T n := by
+  sorry
+
+/-- A1 -- near-minimizers exist for every positive error tolerance. -/
+theorem exists_rank_le_norm_sub_lt_approximationNumber_add
+    (T : E →L[𝕜] F) (n : ℕ) {ε : ℝ} (hε : 0 < ε) :
+    ∃ R : E →L[𝕜] F,
+      R.rank ≤ (n : Cardinal) ∧
+        ‖T - R‖ < approximationNumber T n + ε := by
+  sorry
+
+/-- A2 -- exact zero-based additive inequality. -/
+theorem approximationNumber_add_le
+    (S T : E →L[𝕜] F) (m n : ℕ) :
     approximationNumber (S + T) (m + n) ≤
-      approximationNumber S m + approximationNumber T n := sorry
+      approximationNumber S m + approximationNumber T n := by
+  sorry
 
-/-- A.2 — Lipschitz in the operator norm. -/
-theorem dist_approximationNumber_le (S T : E →L[𝕜] F) (n : ℕ) :
-    dist (approximationNumber S n) (approximationNumber T n) ≤ ‖S - T‖ := sorry
+/-- A2 -- perturbation by an arbitrary bounded map. -/
+theorem approximationNumber_add_le_add_norm
+    (S T : E →L[𝕜] F) (n : ℕ) :
+    approximationNumber (S + T) n ≤ approximationNumber S n + ‖T‖ := by
+  sorry
 
-/-- A.3 — two-sided ideal (multiplicativity), right factor. -/
+/-- A2 -- each approximation number is `1`-Lipschitz in operator norm. -/
+theorem dist_approximationNumber_le
+    (S T : E →L[𝕜] F) (n : ℕ) :
+    dist (approximationNumber S n) (approximationNumber T n) ≤ ‖S - T‖ := by
+  sorry
+
+/-- A3 -- right ideal inequality. -/
 theorem approximationNumber_comp_le_mul_norm
-    (T : F →L[𝕜] G) (B : E →L[𝕜] F) (n : ℕ) :
-    approximationNumber (T ∘L B) n ≤ approximationNumber T n * ‖B‖ := sorry
+    (T : E →L[𝕜] F) (R : G →L[𝕜] E) (n : ℕ) :
+    approximationNumber (T ∘L R) n ≤ approximationNumber T n * ‖R‖ := by
+  sorry
 
-/-- A.3 — two-sided ideal (multiplicativity), left factor. -/
+/-- A3 -- left ideal inequality. -/
 theorem approximationNumber_comp_le_norm_mul
-    (A : F →L[𝕜] G) (T : E →L[𝕜] F) (n : ℕ) :
-    approximationNumber (A ∘L T) n ≤ ‖A‖ * approximationNumber T n := sorry
+    (L : F →L[𝕜] G) (T : E →L[𝕜] F) (n : ℕ) :
+    approximationNumber (L ∘L T) n ≤ ‖L‖ * approximationNumber T n := by
+  sorry
 
-/-- A.3 — absolute homogeneity. -/
+/-- A3 -- two-sided ideal inequality. -/
+theorem approximationNumber_comp_comp_le
+    (L : F →L[𝕜] G) (T : E →L[𝕜] F) (R : H →L[𝕜] E)
+    (n : ℕ) :
+    approximationNumber (L ∘L T ∘L R) n ≤
+      ‖L‖ * approximationNumber T n * ‖R‖ := by
+  sorry
+
+/-- A3 -- absolute homogeneity. -/
 @[simp]
-theorem approximationNumber_smul (c : 𝕜) (T : E →L[𝕜] F) (n : ℕ) :
-    approximationNumber (c • T) n = ‖c‖ * approximationNumber T n := sorry
+theorem approximationNumber_smul
+    (c : 𝕜) (T : E →L[𝕜] F) (n : ℕ) :
+    approximationNumber (c • T) n = ‖c‖ * approximationNumber T n := by
+  sorry
 
-end LayerA
+/-- A4 -- a map of rank at most `n` has vanishing `n`th approximation number. -/
+theorem approximationNumber_eq_zero_of_rank_le
+    (T : E →L[𝕜] F) {n : ℕ} (hT : T.rank ≤ (n : Cardinal)) :
+    approximationNumber T n = 0 := by
+  sorry
 
-/-! ## Layer B — Hilbert-space identification (adjoint, singular values)
+/-- A4 -- decay to zero is exactly norm approximability by finite-rank maps. -/
+theorem tendsto_approximationNumber_zero_iff_exists_finiteRank_approximation
+    (T : E →L[𝕜] F) :
+    Tendsto (approximationNumber T) atTop (𝓝 0) ↔
+      ∃ R : ℕ → E →L[𝕜] F,
+        (∀ n, (R n).rank < Cardinal.aleph0) ∧ Tendsto R atTop (𝓝 T) := by
+  sorry
 
-Inner-product source and target over `[RCLike 𝕜]`; real and complex are the two
-instances of a single `RCLike` statement. -/
+end ApproximationNumbers
 
-section LayerB
+section Compactness
 
-variable {𝕜 : Type*} [RCLike 𝕜]
-variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
-variable {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
+variable {𝕜 : Type u} [NontriviallyNormedField 𝕜]
+variable {E : Type v} [NormedAddCommGroup E] [NormedSpace 𝕜 E]
+variable {F : Type w} [NormedAddCommGroup F] [NormedSpace 𝕜 F]
+  [CompleteSpace F]
 
-/-- B.1 — adjoint invariance. -/
+/-- A4 -- norm-approximability by finite-rank maps implies compactness. -/
+theorem isCompactOperator_of_tendsto_approximationNumber_zero
+    (T : E →L[𝕜] F)
+    (hT : Tendsto (approximationNumber T) atTop (𝓝 0)) :
+    IsCompactOperator T := by
+  sorry
+
+end Compactness
+
+/-! ## Part B -- Hilbert-space singular-value theory -/
+
+section Adjoint
+
+variable {𝕜 : Type u} [RCLike 𝕜]
+variable {E : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
+  [CompleteSpace E]
+variable {F : Type w} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
+  [CompleteSpace F]
+
+/-- B1 -- approximation numbers are invariant under adjoint. -/
+@[simp]
 theorem approximationNumber_adjoint (T : E →L[𝕜] F) (n : ℕ) :
-    approximationNumber (ContinuousLinearMap.adjoint T) n
-      = approximationNumber T n := sorry
+    approximationNumber T.adjoint n = approximationNumber T n := by
+  sorry
 
-/-- B.2 — the rectangular operator modulus `|T| = (T⋆T)^{1/2}`, a positive
-self-adjoint operator on the source with `‖ |T| x‖ = ‖T x‖`. -/
-noncomputable def operatorModulus (T : E →L[𝕜] F) : E →L[𝕜] E := sorry
+/-- A4, Hilbert-space converse -- compact Hilbert-space operators are
+approximable by finite-rank maps. -/
+theorem tendsto_approximationNumber_zero_of_isCompactOperator
+    (T : E →L[𝕜] F) (hT : IsCompactOperator T) :
+    Tendsto (approximationNumber T) atTop (𝓝 0) := by
+  sorry
 
-theorem norm_operatorModulus_apply (T : E →L[𝕜] F) (x : E) :
-    ‖operatorModulus T x‖ = ‖T x‖ := sorry
+end Adjoint
 
-/-- B.2 — approximation numbers are computed from the modulus. -/
-theorem approximationNumber_operatorModulus (T : E →L[𝕜] F) (n : ℕ) :
-    approximationNumber (operatorModulus T) n = approximationNumber T n := sorry
+section ComplexModulus
 
-end LayerB
+variable {E : Type v} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
+  [CompleteSpace E]
+variable {F : Type w} [NormedAddCommGroup F] [InnerProductSpace ℂ F]
+  [CompleteSpace F]
 
-section LayerBFiniteDim
+/-- B2 -- rectangular modulus `|T| = (T⋆T)^(1/2)` on the source. -/
+noncomputable def modulus (T : E →L[ℂ] F) : E →L[ℂ] E :=
+  CFC.sqrt (T.adjoint ∘L T)
 
-variable {𝕜 : Type*} [RCLike 𝕜]
-variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [FiniteDimensional 𝕜 E]
-variable {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [FiniteDimensional 𝕜 F]
+/-- B2 -- the modulus is nonnegative. -/
+theorem modulus_nonneg (T : E →L[ℂ] F) : 0 ≤ modulus T := by
+  sorry
 
-/-- B.3 — `n`th zero-based singular value: sorted eigenvalues of `|T|`. Reuses
-the finite-dimensional eigenvalue enumeration; no private singular-value
-predicate. -/
-noncomputable def singularValue (T : E →L[𝕜] F) (n : ℕ) : ℝ := sorry
+/-- B2 -- the modulus squares to the Gram operator. -/
+theorem modulus_mul_self (T : E →L[ℂ] F) :
+    modulus T * modulus T = T.adjoint ∘L T := by
+  sorry
 
-/-- B.3 — Eckart–Young: approximation numbers are the singular values. -/
-theorem approximationNumber_eq_singularValue (T : E →L[𝕜] F) (n : ℕ) :
-    approximationNumber T n = singularValue T n := sorry
+/-- B2 -- pointwise norm identity. -/
+@[simp]
+theorem norm_modulus_apply (T : E →L[ℂ] F) (x : E) :
+    ‖modulus T x‖ = ‖T x‖ := by
+  sorry
 
-/-- B.4 — Courant–Fischer min–max for `s`-numbers (finite-dimensional form). -/
-theorem approximationNumber_eq_minmax (T : E →L[𝕜] F) (n : ℕ) :
-    True := sorry  -- statement pending the subspace-quantifier API; see README B.4
+/-- B2 -- equality of operator norms. -/
+@[simp]
+theorem norm_modulus (T : E →L[ℂ] F) :
+    ‖modulus T‖ = ‖T‖ := by
+  sorry
 
-end LayerBFiniteDim
+end ComplexModulus
 
-/-! ## Layer C — symmetric operator ideals
+section FiniteDimensional
 
-Symmetric gauge on finitely supported `ℝ≥0` sequences is the primitive; Ky Fan
-`k`-norms and Schatten `p`-norms are instances. Signatures below are deliberately
-schematic — the gauge structure is a Layer-C design target, not yet pinned to a
-Mathlib class. -/
+variable {𝕜 : Type u} [RCLike 𝕜]
+variable {E : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
+  [FiniteDimensional 𝕜 E]
+variable {F : Type w} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
+  [FiniteDimensional 𝕜 F]
 
-section LayerC
+/-- B3 -- finite-dimensional Eckart--Young, zero-based and rectangular. -/
+theorem approximationNumber_eq_singularValues
+    (T : E →L[𝕜] F) (n : ℕ) :
+    approximationNumber T n = T.singularValues n := by
+  sorry
 
-variable {𝕜 : Type*} [RCLike 𝕜]
-variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
-variable {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
+/-- The operator norm remaining after discarding a finite-dimensional source
+subspace. -/
+noncomputable def orthogonalTailNorm
+    (T : E →L[𝕜] F) (V : Submodule 𝕜 E) : ℝ :=
+  ‖T ∘L Vᗮ.starProjection‖
 
-/-- C.2 — Ky Fan `k`-norm: the sum of the first `k` approximation numbers. -/
-noncomputable def kyFanNorm (T : E →L[𝕜] F) (k : ℕ) : ℝ :=
-  ∑ n ∈ Finset.range k, approximationNumber T n
+/-- B4 -- exact finite-dimensional min--max in orthogonal-tail form. -/
+theorem approximationNumber_eq_iInf_orthogonalTailNorm
+    (T : E →L[𝕜] F) (n : ℕ) :
+    approximationNumber T n =
+      ⨅ V : {V : Submodule 𝕜 E // finrank 𝕜 V ≤ n},
+        orthogonalTailNorm T V.1 := by
+  sorry
 
-/-- C.2 — Ky Fan dominance implies domination by every symmetric gauge. Stated
-here only for the Ky Fan norms themselves; the general symmetric-gauge statement
-is the Layer-C target (README C.1–C.2). -/
-theorem kyFanNorm_mono_of_forall_le {S T : E →L[𝕜] F}
-    (h : ∀ k, kyFanNorm S k ≤ kyFanNorm T k) (k : ℕ) :
-    kyFanNorm S k ≤ kyFanNorm T k := h k
+end FiniteDimensional
 
-/-- C.3 — Hilbert–Schmidt via the `ℓ²` gauge on the approximation-number
-sequence; the basis-column identity `∑ ‖T eᵢ‖²` is an equivalence theorem for
-this one object (README C.3). -/
-noncomputable def hilbertSchmidtNorm (T : E →L[𝕜] F) : ℝ≥0∞ :=
-  ∑' n : ℕ, ENNReal.ofReal (approximationNumber T n) ^ 2
+section InfiniteDimensionalLowerBound
 
-end LayerC
+variable {𝕜 : Type u} [RCLike 𝕜]
+variable {E : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
+variable {F : Type w} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
+
+/-- B5 -- an `(n+1)`-dimensional lower-modulus test forces a lower bound on the
+`n`th approximation number. -/
+theorem le_approximationNumber_of_lt_rank
+    (T : E →L[𝕜] F) (n : ℕ) (V : Submodule 𝕜 E) {c : ℝ}
+    (hVrank : (n : Cardinal) < Module.rank 𝕜 V)
+    (hV : ∀ x : V, c * ‖(x : E)‖ ≤ ‖T (x : E)‖) :
+    c ≤ approximationNumber T n := by
+  sorry
+
+/-- B5 -- finite-dimensional unit-vector form. -/
+theorem le_approximationNumber_of_finrank_lt
+    (T : E →L[𝕜] F) (n : ℕ) (V : Submodule 𝕜 E)
+    [FiniteDimensional 𝕜 V] {c : ℝ}
+    (hVdim : n < finrank 𝕜 V)
+    (hV : ∀ x : V, ‖(x : E)‖ = 1 → c ≤ ‖T (x : E)‖) :
+    c ≤ approximationNumber T n := by
+  sorry
+
+end InfiniteDimensionalLowerBound
 
 end TauCetiRoadmap.ApproximationNumbers
