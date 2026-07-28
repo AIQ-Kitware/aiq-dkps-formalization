@@ -33,6 +33,19 @@ correspondence between lower frame bounds and spectral floors of the Gram operat
   forces the first `finrank 𝕜 E` sorted Gram eigenvalues to be at least the bound;
 * `TauCeti.sum_sq_floor_of_le_eigenvalues_finiteGramOperator`: conversely, a spectral
   floor on those Gram eigenvalues recovers the lower frame bound.
+
+## Provenance
+
+* Original repository: Davis--Kahan/DKPS formalization (Kitware, Inc.).
+* Original module: `ForMathlib.Analysis.InnerProductSpace.FiniteFrame`, moved to
+  `ForTauCeti` in the Wave-1 staging migration; introduced at Davis--Kahan
+  commit `82d20de`.
+* Extraction class: **moved**.  The Wave-1 migration renamed the namespace
+  `ForMathlib` to `TauCeti`; declaration names and proofs are unchanged.
+* Original authors / copyright: Jon Crall, GPT-5.6 High, Claude Fable 5; Copyright (c) 2026 Kitware, Inc.;
+  Apache 2.0.
+* Spectra influence: **none** — this module imports only Mathlib and sibling
+  `ForTauCeti` staging modules.
 -/
 
 namespace TauCeti

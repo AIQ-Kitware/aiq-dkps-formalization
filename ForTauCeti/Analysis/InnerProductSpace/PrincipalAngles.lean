@@ -1,4 +1,8 @@
 /-
+Copyright (c) 2026 Kitware, Inc. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Jon Crall, Claude Opus 4.8
+
 Staged for Mathlib: additions to `Mathlib/Analysis/InnerProductSpace/` (new file
 `PrincipalAngles.lean`).
 
@@ -643,7 +647,21 @@ symmetry is subtler: the two coordinate sine maps have Gram operators
 `I - M⋆M` and `I - MM⋆`, where `M` is the overlap operator.  The polar unitary
 of `M` conjugates those complementary Gram operators, so the coordinate maps
 have identical singular values.  Coisometry padding then transports the result
-to the ambient cross projections. -/
+to the ambient cross projections.
+
+## Provenance
+
+* Original repository: Davis--Kahan/DKPS formalization (Kitware, Inc.).
+* Original module: `ForMathlib.Analysis.InnerProductSpace.PrincipalAngles`, moved to
+  `ForTauCeti` in the Wave-1 staging migration; introduced at Davis--Kahan
+  commit `34319dc`.
+* Extraction class: **moved**.  The Wave-1 migration renamed the namespace
+  `ForMathlib` to `TauCeti`; declaration names and proofs are unchanged.
+* Original authors / copyright: Jon Crall, Claude Opus 4.8; Copyright (c) 2026 Kitware, Inc.;
+  Apache 2.0.
+* Spectra influence: **none** — this module imports only Mathlib and sibling
+  `ForTauCeti` staging modules.
+-/
 
 /-- The coordinate sine maps associated with two equal-length orthonormal
 families have the same singular values in the two directions. -/

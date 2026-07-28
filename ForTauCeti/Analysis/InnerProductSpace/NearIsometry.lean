@@ -1,4 +1,8 @@
 /-
+Copyright (c) 2026 Kitware, Inc. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Jon Crall, Claude Fable 5, Claude Opus 4.8, Claude Opus 5
+
 Staged for Mathlib: a proposed new file `Mathlib/Analysis/InnerProductSpace/NearIsometry.lean`.
 
 Formalized by Claude Fable 5 (claude-fable-5[1m]); golf pass by Claude Opus 4.8

@@ -1,4 +1,8 @@
 /-
+Copyright (c) 2026 Kitware, Inc. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Jon Crall, Claude Fable 5
+
 Staged for Mathlib: additions to `Mathlib/Analysis/InnerProductSpace/` (new file
 `KyFan.lean`).
 
@@ -444,7 +448,21 @@ theorem exists_orthonormal_re_sum_inner_map_eq (A : E →ₗ[𝕜] E) {k : ℕ}
       = ((∑ i : Fin k, A.singularValues (i : ℕ) : ℝ) : 𝕜) by push_cast; rfl,
     RCLike.ofReal_re]
 
-/-! ### Ky Fan sums and weak majorization (F2) -/
+/-! ### Ky Fan sums and weak majorization (F2)
+
+## Provenance
+
+* Original repository: Davis--Kahan/DKPS formalization (Kitware, Inc.).
+* Original module: `ForMathlib.Analysis.InnerProductSpace.KyFan`, moved to
+  `ForTauCeti` in the Wave-1 staging migration; introduced at Davis--Kahan
+  commit `199390a`.
+* Extraction class: **moved**.  The Wave-1 migration renamed the namespace
+  `ForMathlib` to `TauCeti`; declaration names and proofs are unchanged.
+* Original authors / copyright: Jon Crall, Claude Fable 5; Copyright (c) 2026 Kitware, Inc.;
+  Apache 2.0.
+* Spectra influence: **none** — this module imports only Mathlib and sibling
+  `ForTauCeti` staging modules.
+-/
 
 /-- **The Ky Fan `k`-sum** of an operator: the sum of its `k` largest singular
 values.  `kyFanSum 1 A = ‖A‖`, `kyFanSum (finrank 𝕜 E) A` is the trace norm. -/

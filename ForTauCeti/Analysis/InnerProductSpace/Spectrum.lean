@@ -1,4 +1,8 @@
 /-
+Copyright (c) 2026 Kitware, Inc. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Jon Crall, Claude Fable 5
+
 Staged for Mathlib: additions to `Mathlib/Analysis/InnerProductSpace/Spectrum.lean`.
 
 Formalized by Claude Fable 5 (claude-fable-5[1m]);
@@ -27,6 +31,19 @@ with `u i` the `i`-th eigenvector of `T` (eigenvalue `λ i`) and `v j` the
 This three-line identity is the seed of every Davis–Kahan-style subspace
 perturbation bound: cross terms between well-separated parts of the spectra
 are controlled by the perturbation `S - T` divided by the eigenvalue gap.
+
+## Provenance
+
+* Original repository: Davis--Kahan/DKPS formalization (Kitware, Inc.).
+* Original module: `ForMathlib.Analysis.InnerProductSpace.Spectrum`, moved to
+  `ForTauCeti` in the Wave-1 staging migration; introduced at Davis--Kahan
+  commit `56f7495`.
+* Extraction class: **moved**.  The Wave-1 migration renamed the namespace
+  `ForMathlib` to `TauCeti`; declaration names and proofs are unchanged.
+* Original authors / copyright: Jon Crall, Claude Fable 5; Copyright (c) 2026 Kitware, Inc.;
+  Apache 2.0.
+* Spectra influence: **none** — this module imports only Mathlib and sibling
+  `ForTauCeti` staging modules.
 -/
 
 namespace TauCeti

@@ -1,4 +1,8 @@
 /-
+Copyright (c) 2026 Kitware, Inc. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Jon Crall, Claude Opus 4.8
+
 Staged for Mathlib: additions to `Mathlib/Analysis/InnerProductSpace/` (new file
 `SchurHorn.lean`).
 
@@ -73,6 +77,19 @@ forward direction in the self-contained convex-function form.
   Determinantentheorie*, Sitzungsber. Berl. Math. Ges. 22 (1923), 9–20.
 * A. W. Marshall, I. Olkin, B. C. Arnold, *Inequalities: Theory of Majorization
   and Its Applications*, 2nd ed., Theorem 9.B.1.
+
+## Provenance
+
+* Original repository: Davis--Kahan/DKPS formalization (Kitware, Inc.).
+* Original module: `ForMathlib.Analysis.InnerProductSpace.SchurHorn`, moved to
+  `ForTauCeti` in the Wave-1 staging migration; introduced at Davis--Kahan
+  commit `9543631`.
+* Extraction class: **moved**.  The Wave-1 migration renamed the namespace
+  `ForMathlib` to `TauCeti`; declaration names and proofs are unchanged.
+* Original authors / copyright: Jon Crall, Claude Opus 4.8; Copyright (c) 2026 Kitware, Inc.;
+  Apache 2.0.
+* Spectra influence: **none** — this module imports only Mathlib and sibling
+  `ForTauCeti` staging modules.
 -/
 
 namespace TauCeti

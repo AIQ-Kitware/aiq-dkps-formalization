@@ -1,4 +1,8 @@
 /-
+Copyright (c) 2026 Kitware, Inc. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Jon Crall, Claude Opus 4.8
+
 Staged for Mathlib: eigenvalue concentration for a random Hermitian matrix from
 per-entry second-moment control (the elementary, no-matrix-Bernstein route:
 entrywise Chebyshev + union bound, then entrywise → operator-norm → Weyl).
@@ -37,6 +41,19 @@ concentration — no matrix Bernstein/Hoeffding needed (at the cost of the loose
 
 * `TauCeti.measure_exists_entry_gt_le` — entrywise concentration (union bound).
 * `TauCeti.measure_forall_abs_sortedEig_sub_le_ge` — eigenvalue concentration.
+
+## Provenance
+
+* Original repository: Davis--Kahan/DKPS formalization (Kitware, Inc.).
+* Original module: `ForMathlib.Probability.Moments.MatrixConcentration`, moved to
+  `ForTauCeti` in the Wave-1 staging migration; introduced at Davis--Kahan
+  commit `2356fd0`.
+* Extraction class: **moved**.  The Wave-1 migration renamed the namespace
+  `ForMathlib` to `TauCeti`; declaration names and proofs are unchanged.
+* Original authors / copyright: Jon Crall, Claude Opus 4.8; Copyright (c) 2026 Kitware, Inc.;
+  Apache 2.0.
+* Spectra influence: **none** — this module imports only Mathlib and sibling
+  `ForTauCeti` staging modules.
 -/
 
 open scoped Matrix ENNReal

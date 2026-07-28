@@ -1,4 +1,8 @@
 /-
+Copyright (c) 2026 Kitware, Inc. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Jon Crall, Claude Opus 4.8
+
 Staged for Mathlib: additions to `Mathlib/Analysis/InnerProductSpace/Positive.lean`
 (and a new `Mathlib/Analysis/InnerProductSpace/PositiveSqrt.lean`).
 
@@ -31,6 +35,19 @@ semidefinite square root) and **Theorem 7.2.7(b)** (`ker (A⋆A) = ker A`).
 This is the `𝕜`-generic (ℝ and ℂ) `LinearMap` counterpart of mathlib's ℂ-only `CFC.sqrt`/`CFC.abs`
 on `E →L[ℂ] E`; the RCLike operator route needs it because the C⋆-algebra/CFC instances on
 `E →L[𝕜] E` are registered only for `𝕜 = ℂ`.
+
+## Provenance
+
+* Original repository: Davis--Kahan/DKPS formalization (Kitware, Inc.).
+* Original module: `ForMathlib.Analysis.InnerProductSpace.PositiveSqrt`, moved to
+  `ForTauCeti` in the Wave-1 staging migration; introduced at Davis--Kahan
+  commit `3676b55`.
+* Extraction class: **moved**.  The Wave-1 migration renamed the namespace
+  `ForMathlib` to `TauCeti`; declaration names and proofs are unchanged.
+* Original authors / copyright: Jon Crall, Claude Opus 4.8; Copyright (c) 2026 Kitware, Inc.;
+  Apache 2.0.
+* Spectra influence: **none** — this module imports only Mathlib and sibling
+  `ForTauCeti` staging modules.
 -/
 
 open scoped InnerProductSpace

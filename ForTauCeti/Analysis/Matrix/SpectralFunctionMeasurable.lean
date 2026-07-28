@@ -1,4 +1,8 @@
 /-
+Copyright (c) 2026 Kitware, Inc. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Jon Crall, Claude Fable 5
+
 Staged for Mathlib: addition to `Mathlib/Analysis/Matrix/Spectrum.lean`
 (measurability of a continuous spectral function of a measurable Hermitian-matrix
 family).
@@ -211,7 +215,21 @@ theorem aeval_entry_eq_sum {B : Matrix (Fin n) (Fin n) ℝ} (hB : B.IsHermitian)
   rw [this]
   ring
 
-/-! ### The spectral `h`-transform and its measurability -/
+/-! ### The spectral `h`-transform and its measurability
+
+## Provenance
+
+* Original repository: Davis--Kahan/DKPS formalization (Kitware, Inc.).
+* Original module: `ForMathlib.Analysis.Matrix.SpectralFunctionMeasurable`, moved to
+  `ForTauCeti` in the Wave-1 staging migration; introduced at Davis--Kahan
+  commit `82989e1`.
+* Extraction class: **moved**.  The Wave-1 migration renamed the namespace
+  `ForMathlib` to `TauCeti`; declaration names and proofs are unchanged.
+* Original authors / copyright: Jon Crall, Claude Fable 5; Copyright (c) 2026 Kitware, Inc.;
+  Apache 2.0.
+* Spectra influence: **none** — this module imports only Mathlib and sibling
+  `ForTauCeti` staging modules.
+-/
 
 /-- The spectral `h`-transform `Σₖ h(λₖ) uₖ(i) uₖ(j)` of a Hermitian matrix.
 For `h = id` this is `B` itself (the spectral theorem); for the ramp `h` it is

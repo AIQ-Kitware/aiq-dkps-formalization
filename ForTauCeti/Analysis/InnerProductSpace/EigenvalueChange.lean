@@ -1,4 +1,8 @@
 /-
+Copyright (c) 2026 Kitware, Inc. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Jon Crall, Claude Opus 4.8
+
 Staged for Mathlib: additions to `Mathlib/Analysis/InnerProductSpace/` (new file
 `EigenvalueChange.lean`).
 
@@ -109,7 +113,21 @@ theorem two_mul_sq_le_sum_sq_sub_perm {n : ℕ} (w : Fin n → ℝ)
 The geometric core (L2) and algebra (L4) live over `EuclideanSpace ℝ (Fin n)` — Davis's
 pinching subspace `𝒞𝓕 ≅ ℝⁿ` — where the norm, inner product, and convexity of the
 permutation orbit are native; the operator wrapper (L3, L5) lifts the eigenvalue tuples of
-`S`, `T` through `WithLp.equiv` and restates the bound for `hT.eigenvalues`. -/
+`S`, `T` through `WithLp.equiv` and restates the bound for `hT.eigenvalues`.
+
+## Provenance
+
+* Original repository: Davis--Kahan/DKPS formalization (Kitware, Inc.).
+* Original module: `ForMathlib.Analysis.InnerProductSpace.EigenvalueChange`, moved to
+  `ForTauCeti` in the Wave-1 staging migration; introduced at Davis--Kahan
+  commit `9543631`.
+* Extraction class: **moved**.  The Wave-1 migration renamed the namespace
+  `ForMathlib` to `TauCeti`; declaration names and proofs are unchanged.
+* Original authors / copyright: Jon Crall, Claude Opus 4.8; Copyright (c) 2026 Kitware, Inc.;
+  Apache 2.0.
+* Spectra influence: **none** — this module imports only Mathlib and sibling
+  `ForTauCeti` staging modules.
+-/
 
 open scoped InnerProductSpace Matrix
 open Module (finrank)

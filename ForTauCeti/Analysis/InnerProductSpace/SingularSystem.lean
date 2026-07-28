@@ -42,6 +42,19 @@ The construction parallels the Apache-2.0 matrix-Euclidean development in
 `vendor/lean/lean-stat-learning-theory/SingularSystemGram.excerpt.lean` (Zhang–Lee–Liu),
 restated intrinsically for linear maps; the excerpt was used as a route map and no code was
 copied verbatim.
+
+## Provenance
+
+* Original repository: Davis--Kahan/DKPS formalization (Kitware, Inc.).
+* Original module: `ForMathlib.Analysis.InnerProductSpace.SingularSystem`, moved to
+  `ForTauCeti` in the Wave-1 staging migration; introduced at Davis--Kahan
+  commit `82d20de`.
+* Extraction class: **moved**.  The Wave-1 migration renamed the namespace
+  `ForMathlib` to `TauCeti`; declaration names and proofs are unchanged.
+* Original authors / copyright: Jon Crall, GPT-5.6 High, Claude Fable 5; Copyright (c) 2026 Kitware, Inc.;
+  Apache 2.0.
+* Spectra influence: **none** — this module imports only Mathlib and sibling
+  `ForTauCeti` staging modules.
 -/
 
 namespace TauCeti

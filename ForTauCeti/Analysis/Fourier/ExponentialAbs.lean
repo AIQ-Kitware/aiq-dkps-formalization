@@ -18,6 +18,17 @@ and the integrability certificates for the two-sided exponential.
 This is a topic split of `ForTauCeti/Analysis/Fourier/HaagerupZsidoKernel.lean`;
 declarations are moved verbatim and remain in the `TauCeti.HaagerupZsido`
 namespace.
+
+## Provenance
+
+* Original repository: Davis--Kahan/DKPS formalization (Kitware, Inc.).
+* Original module: authored directly in `ForTauCeti` at Davis--Kahan
+  commit `f35ffc0`; it has had no prior home.
+* Extraction class: **authored in place** for the Tau Ceti staging layer.
+* Original authors / copyright: Jon Crall, GPT 5.6 High; Copyright (c) 2026 Kitware, Inc.;
+  Apache 2.0.
+* Spectra influence: **none** — this module imports only Mathlib and sibling
+  `ForTauCeti` staging modules.
 -/
 
 @[expose] public section

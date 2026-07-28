@@ -1,4 +1,8 @@
 /-
+Copyright (c) 2026 Kitware, Inc. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Jon Crall, Claude Opus 4.8
+
 Staged for Mathlib: additions to `Mathlib/Probability/Moments/` (new file
 `SampleMean.lean`).
 
@@ -49,6 +53,19 @@ is the coordinatewise reduction over an orthonormal basis.
 * `TauCeti.integral_norm_sq_average_sub_of_iid`: identically-distributed
   collapse to `r⁻¹ ∫ ‖X 0 − μ‖²`.
 * `TauCeti.integral_norm_sq_average_sub_le_of_bound`: the `γ / r` bound.
+
+## Provenance
+
+* Original repository: Davis--Kahan/DKPS formalization (Kitware, Inc.).
+* Original module: `ForMathlib.Probability.Moments.SampleMean`, moved to
+  `ForTauCeti` in the Wave-1 staging migration; introduced at Davis--Kahan
+  commit `e9379f2`.
+* Extraction class: **moved**.  The Wave-1 migration renamed the namespace
+  `ForMathlib` to `TauCeti`; declaration names and proofs are unchanged.
+* Original authors / copyright: Jon Crall, Claude Opus 4.8; Copyright (c) 2026 Kitware, Inc.;
+  Apache 2.0.
+* Spectra influence: **none** — this module imports only Mathlib and sibling
+  `ForTauCeti` staging modules.
 -/
 
 namespace TauCeti

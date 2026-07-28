@@ -353,7 +353,21 @@ theorem mono {x y : Fin n → ℝ}
         exact le_trans (ih y' hcard' hxy') hstep
   exact H _ y le_rfl hxy
 
-/-! ### The T-transform descent -/
+/-! ### The T-transform descent
+
+## Provenance
+
+* Original repository: Davis--Kahan/DKPS formalization (Kitware, Inc.).
+* Original module: `ForMathlib.Analysis.Normed.FiniteLpGauge`, moved to
+  `ForTauCeti` in the Wave-1 staging migration; introduced at Davis--Kahan
+  commit `a8d4ea3`.
+* Extraction class: **moved**.  The Wave-1 migration renamed the namespace
+  `ForMathlib` to `TauCeti`; declaration names and proofs are unchanged.
+* Original authors / copyright: Jon Crall, GPT-5.6 Thinking; Copyright (c) 2026 Kitware, Inc.;
+  Apache 2.0.
+* Spectra influence: **none** — this module imports only Mathlib and sibling
+  `ForTauCeti` staging modules.
+-/
 
 /-- **The T-transform descent on the gauge** — the engine of Fan dominance.
 If `z` is antitone and nonnegative, `y` is nonnegative, and every prefix sum
