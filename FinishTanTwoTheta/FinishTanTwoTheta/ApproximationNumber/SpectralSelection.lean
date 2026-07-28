@@ -26,7 +26,6 @@ namespace FinishTanTwoTheta
 open scoped InnerProductSpace BigOperators
 open Set
 open DavisKahan.Experimental.ExactSinTheta
-open DavisKahan.Experimental.SpectraBridge
 open Spectra.OneParameterUnitaryGroup
 open Spectra.YosidaHille
 open Spectra.QuantumMechanics.SpectralTheory

@@ -1,5 +1,6 @@
 import FinishTanTwoTheta.GroundedImports
 import FinishTanTwoTheta.Sequence.WeakSubmajorization
+import FinishTanTwoTheta.Sequence.MinimalCompletion
 import FinishTanTwoTheta.OperatorIdeal.StandardFanDominance
 import FinishTanTwoTheta.OperatorIdeal.StandardInstances
 import FinishTanTwoTheta.ApproximationNumber.SpectralSelection
