@@ -146,6 +146,31 @@ and pruned. What is genuinely left:
 
 ## Cross-lane findings (post here to save another agent a re-derivation)
 
+- **Two hard blockers stand between `ForTauCeti` and Tau Ceti acceptance, and neither is
+  mathematical** (jon/namek, 2026-07-28). Found by reading `external/TauCeti/lakefile.toml`
+  rather than by guessing at what upstream wants.
+
+  1. **`ForTauCeti/Analysis/InnerProductSpace/RectangularUnitarilyInvariantNorm.lean` is 2131
+     lines.** Tau Ceti's `lean_lib` sets `weak.linter.style.longFile = 1500` as a *hard*
+     ceiling enforced in-build, and its PR workflow holds a **newly added** file to 1000.
+     That module is the single file over either limit — every other one of the 67 is under
+     1000. It cannot be accepted as-is and has to be split. This is invisible from inside
+     this repository, because our own `lean_lib ForTauCeti` sets no `longFile` option at all.
+
+  2. **Our `ForTauCeti` builds under weaker rules than upstream will apply.** Tau Ceti's
+     library options are
+     `warningAsError = true, weak.linter.mathlibStandardSet = true, weak.linter.style.longFile = 1500`.
+     Our `lakefile.toml` gives `ForTauCeti` *no* `leanOptions`. So "`lake build ForTauCeti`
+     is warning-free", which is true and which several lanes have reported, is measured
+     against a strictly weaker linter set than the one that will gate the PR. Until the
+     staging library is built with `mathlibStandardSet` on, the real upstream warning count
+     is unknown. Suggested order: turn on the linter set *without* `warningAsError`, fix the
+     census, then turn on `warningAsError` so it cannot regress.
+
+  Good news from the same audit: the export machinery itself is sound. `export_for_tauceti.py
+  --write` followed by `--check` round-trips **all 67 modules, MATCH, `export: OK`**, and none
+  of the 67 target paths collides with an existing upstream file.
+
 - **UPDATE 2026-07-28 (later): `main` is now red on more than four, and one is a *syntax* error.**
   After merging `78f2557`, `DavisKahan/SpectralTheory/ReducingSubspace/Restriction.lean` fails with ~20 errors
   starting at `:88` (`Fields missing: carrier, add_mem', zero_mem', smul_mem'`) and including
