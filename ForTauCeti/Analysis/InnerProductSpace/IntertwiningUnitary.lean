@@ -5,16 +5,9 @@ Authors: Jon Crall, Claude Opus 4.8
 
 Staged for Mathlib: a new `Mathlib/Analysis/InnerProductSpace/IntertwiningUnitary.lean`.
 
-Milestone 2 of the operator polar decomposition project — COMPLETE (proof-complete; reduction uses only:
+Milestone 2 of the operator polar decomposition project — COMPLETE
+(proof-complete; reduction uses only:
 `propext, Classical.choice, Quot.sound`). Tickets PD-13..PD-17.
-
-
-Wave-1 migration provenance: original module `ForMathlib.Analysis.InnerProductSpace.IntertwiningUnitary` at the
-Davis--Kahan repository; moved to `ForTauCeti` with the namespace
-`ForMathlib` renamed `TauCeti` (module-system conversion deferred to a
-later mechanical pass).  No mathematical change; the historical
-Courant--Fischer names it used were repointed to the canonical API when the
-`CourantFischerCompat` shim was retired.
 -/
 
 import ForTauCeti.Analysis.InnerProductSpace.PolarDecomposition
@@ -409,7 +402,8 @@ noncomputable def sqSinAngle (hnd : P.NonDegenerate P') (b : OrthonormalBasis (F
 
 /-- **Angle interpretation (PD-17):** the total squared rotation `∑ᵢ sin²θᵢ` equals
 `(finrank) - ∑ᵢ ‖⟨U xᵢ, xᵢ⟩‖²`, the pinch-off-diagonal Frobenius size of `U`. Davis §2 line 276.
-(The `‖𝒞⊥ U‖²_F` identification is completed in Milestone 3 against the parent's Frobenius setup.) -/
+(The `‖𝒞⊥ U‖²_F` identification is completed in Milestone 3 against the
+parent's Frobenius setup.) -/
 theorem sum_sqSinAngle (hnd : P.NonDegenerate P') (b : OrthonormalBasis (Fin n) 𝕜 E) :
     ∑ i, sqSinAngle hnd b i
       = (n : ℝ) - ∑ i, ‖⟪b i, intertwiningUnitary hnd (b i)⟫_𝕜‖ ^ 2 := by

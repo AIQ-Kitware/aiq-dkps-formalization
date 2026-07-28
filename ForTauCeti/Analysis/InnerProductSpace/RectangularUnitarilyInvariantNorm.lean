@@ -2,14 +2,6 @@
 Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
-
-
-Wave-1 migration provenance: original module `ForMathlib.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm` at the
-Davis--Kahan repository; moved to `ForTauCeti` with the namespace
-`ForMathlib` renamed `TauCeti` (module-system conversion deferred to a
-later mechanical pass).  No mathematical change; the historical
-Courant--Fischer names it used were repointed to the canonical API when the
-`CourantFischerCompat` shim was retired.
 -/
 import ForTauCeti.Analysis.InnerProductSpace.KyFan
 import ForTauCeti.Analysis.InnerProductSpace.PrincipalAngles
@@ -42,7 +34,8 @@ property.  Square norms should be recovered without duplicating the existing
 ## Provenance
 
 * Original repository: Davis--Kahan/DKPS formalization (Kitware, Inc.).
-* Original module: `ForMathlib.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm`, moved to
+* Original module: `ForMathlib.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm`, moved
+  to
   `ForTauCeti` in the Wave-1 staging migration; introduced at Davis--Kahan
   commit `3942779`.
 * Extraction class: **moved**.  The Wave-1 migration renamed the namespace

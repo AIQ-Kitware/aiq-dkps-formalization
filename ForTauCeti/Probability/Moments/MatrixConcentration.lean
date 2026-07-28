@@ -10,14 +10,6 @@ entrywise Chebyshev + union bound, then entrywise → operator-norm → Weyl).
 Formalized by Claude Opus 4.8 (claude-opus-4-8[1m]); prose symbol `Ŝ` → `Shat`
 (matching the Lean variable, clearing the Mathlib unicode-allowlist linter).
 To be re-authored per Mathlib's AI-contribution policy at PR time.
-
-
-Wave-1 migration provenance: original module `ForMathlib.Probability.Moments.MatrixConcentration` at the
-Davis--Kahan repository; moved to `ForTauCeti` with the namespace
-`ForMathlib` renamed `TauCeti` (module-system conversion deferred to a
-later mechanical pass).  No mathematical change; the historical
-Courant--Fischer names it used were repointed to the canonical API when the
-`CourantFischerCompat` shim was retired.
 -/
 
 import ForTauCeti.Analysis.Matrix.EntrywiseEigenvalue
@@ -132,7 +124,8 @@ theorem measure_forall_abs_sortedEig_sub_le_ge
       ext ω; simp only [Set.mem_setOf_eq, Set.mem_iUnion]
     rw [this]
     refine MeasurableSet.iUnion fun k => MeasurableSet.iUnion fun l => ?_
-    exact measurableSet_lt measurable_const (continuous_abs.measurable.comp ((hmeas k l).sub measurable_const))
+    exact measurableSet_lt measurable_const
+      (continuous_abs.measurable.comp ((hmeas k l).sub measurable_const))
   have hcompl : {ω | ∀ k l : Fin n, |Shat ω k l - A k l| ≤ η}
       = {ω | ∃ k l, η < |Shat ω k l - A k l|}ᶜ := by
     ext ω

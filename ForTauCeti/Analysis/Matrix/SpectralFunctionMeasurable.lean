@@ -13,14 +13,6 @@ Claude Opus 4.8 (name the two `MeasurableSpace`/`BorelSpace` instances so the
 auto-name carries no underscore; `opSym` `def` → `theorem` since it is
 Prop-valued; `rwa` consolidation).
 To be re-authored per Mathlib's AI-contribution policy at PR time.
-
-
-Wave-1 migration provenance: original module `ForMathlib.Analysis.Matrix.SpectralFunctionMeasurable` at the
-Davis--Kahan repository; moved to `ForTauCeti` with the namespace
-`ForMathlib` renamed `TauCeti` (module-system conversion deferred to a
-later mechanical pass).  No mathematical change; the historical
-Courant--Fischer names it used were repointed to the canonical API when the
-`CourantFischerCompat` shim was retired.
 -/
 
 import Mathlib.Analysis.Matrix.Spectrum

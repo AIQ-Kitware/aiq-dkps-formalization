@@ -19,14 +19,6 @@ Appl. 6 (1963), Theorem 4.1 (pp. 168–170).  See
 `TauCeti/prose/non-distributable/Davis-1963-...tex` lines 641–754 and the
 decomposition in `.mathlib-quality/decomposition.md`.
 To be re-authored per Mathlib's AI-contribution policy at PR time.
-
-
-Wave-1 migration provenance: original module `ForMathlib.Analysis.InnerProductSpace.EigenvalueChange` at the
-Davis--Kahan repository; moved to `ForTauCeti` with the namespace
-`ForMathlib` renamed `TauCeti` (module-system conversion deferred to a
-later mechanical pass).  No mathematical change; the historical
-Courant--Fischer names it used were repointed to the canonical API when the
-`CourantFischerCompat` shim was retired.
 -/
 
 import Mathlib.Analysis.Convex.Birkhoff

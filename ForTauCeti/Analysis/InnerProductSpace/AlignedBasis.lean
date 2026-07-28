@@ -14,14 +14,6 @@ the coordinate isometry `EuclideanSpace 𝕜 (Fin d) →ₗᵢ E` attached to an
 orthonormal family, used to build the `d × d` overlap operator whose singular
 values are the principal-angle cosines.
 To be re-authored per Mathlib's AI-contribution policy at PR time.
-
-
-Wave-1 migration provenance: original module `ForMathlib.Analysis.InnerProductSpace.AlignedBasis` at the
-Davis--Kahan repository; moved to `ForTauCeti` with the namespace
-`ForMathlib` renamed `TauCeti` (module-system conversion deferred to a
-later mechanical pass).  No mathematical change; the historical
-Courant--Fischer names it used were repointed to the canonical API when the
-`CourantFischerCompat` shim was retired.
 -/
 
 import Mathlib.LinearAlgebra.Basis.Defs
@@ -130,7 +122,9 @@ theorem overlapOp_contraction {u v : Fin d → E} (hu : Orthonormal 𝕜 u) (hv 
     (x : EuclideanSpace 𝕜 (Fin d)) : ‖overlapOp hu hv x‖ ≤ ‖x‖ := by
   rw [overlapOp_apply]
   have hiso : ∀ y : EuclideanSpace 𝕜 (Fin d), ‖(familyIsometry hu).toLinearMap y‖ ≤ 1 * ‖y‖ :=
-    fun y => by rw [one_mul, LinearIsometry.coe_toLinearMap]; exact le_of_eq ((familyIsometry hu).norm_map y)
+    fun y => by
+      rw [one_mul, LinearIsometry.coe_toLinearMap]
+      exact le_of_eq ((familyIsometry hu).norm_map y)
   calc ‖(familyIsometry hu).toLinearMap.adjoint (familyIsometry hv x)‖
       ≤ 1 * ‖familyIsometry hv x‖ := norm_adjoint_apply_le (by norm_num) hiso _
     _ = ‖x‖ := by rw [one_mul, (familyIsometry hv).norm_map]

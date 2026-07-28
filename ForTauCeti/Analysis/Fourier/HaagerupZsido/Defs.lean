@@ -121,7 +121,8 @@ theorem weightLaplaceTransform_nonneg (t : ℝ) : 0 ≤ weightLaplaceTransform t
   setIntegral_nonneg measurableSet_Ioi fun _y hy =>
     mul_nonneg (weight_nonneg (le_of_lt hy)) (Real.exp_pos _).le
 
-private theorem weightLaplaceTransform_neg (t : ℝ) : weightLaplaceTransform (-t) = weightLaplaceTransform t := by
+private theorem weightLaplaceTransform_neg (t : ℝ) :
+    weightLaplaceTransform (-t) = weightLaplaceTransform t := by
   simp only [weightLaplaceTransform_def, abs_neg]
 
 private theorem measurable_weightLaplaceTransform : Measurable weightLaplaceTransform := by

@@ -2,14 +2,6 @@
 Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
-
-
-Wave-1 migration provenance: original module `ForMathlib.Analysis.InnerProductSpace.FrameFactorization` at the
-Davis--Kahan repository; moved to `ForTauCeti` with the namespace
-`ForMathlib` renamed `TauCeti` (module-system conversion deferred to a
-later mechanical pass).  No mathematical change; the historical
-Courant--Fischer names it used were repointed to the canonical API when the
-`CourantFischerCompat` shim was retired.
 -/
 import ForTauCeti.Analysis.InnerProductSpace.PositiveSqrt
 import ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm

@@ -20,14 +20,6 @@ declared upstream).  Independently re-derived here on this project's existing
 `LinearMap.IsSymmetric.re_inner_apply_self_eq_sum_eigenvalues_mul_sq`.  See
 `dev/external-lean-references.md`.
 To be re-authored per Mathlib's AI-contribution policy at PR time.
-
-
-Wave-1 migration provenance: original module `ForMathlib.Analysis.InnerProductSpace.SchurHorn` at the
-Davis--Kahan repository; moved to `ForTauCeti` with the namespace
-`ForMathlib` renamed `TauCeti` (module-system conversion deferred to a
-later mechanical pass).  No mathematical change; the historical
-Courant--Fischer names it used were repointed to the canonical API when the
-`CourantFischerCompat` shim was retired.
 -/
 
 import Mathlib.Analysis.Convex.Jensen

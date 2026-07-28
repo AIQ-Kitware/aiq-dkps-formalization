@@ -11,14 +11,6 @@ Formalized by Claude Opus 4.8 (claude-opus-4-8[1m]), plan step W2 of
 Hoffman–Wielandt eigenvalue-perturbation inequality; it currently supplies the
 sorted-rearrangement ingredient (W2.1).
 To be re-authored per Mathlib's AI-contribution policy at PR time.
-
-
-Wave-1 migration provenance: original module `ForMathlib.Analysis.InnerProductSpace.HoffmanWielandt` at the
-Davis--Kahan repository; moved to `ForTauCeti` with the namespace
-`ForMathlib` renamed `TauCeti` (module-system conversion deferred to a
-later mechanical pass).  No mathematical change; the historical
-Courant--Fischer names it used were repointed to the canonical API when the
-`CourantFischerCompat` shim was retired.
 -/
 
 import Mathlib.Algebra.Order.Rearrangement
