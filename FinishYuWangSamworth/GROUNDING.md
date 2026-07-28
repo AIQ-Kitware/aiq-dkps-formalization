@@ -1,18 +1,37 @@
 # Grounding ledger
 
-## Paper theorem -> Lean foundation
+The completion lane builds only on repository-local, machine-checked results.
 
-| Paper surface | Declaration or module | Status |
-|---|---|---|
-| Theorem 2, Frobenius sine bound with population-only gap and `min` numerator | `TauCeti.DavisKahanTheory.yuWangSamworth_sinTheta_le` | proved |
-| Theorem 2, interval-block wrapper | `TauCeti.DavisKahanTheory.yuWangSamworth_intervalBlock_le` | proved |
-| Theorem 2, aligned-basis conclusion | `TauCeti.DavisKahanTheory.yuWangSamworth_alignedBasis_le` | proved |
-| Corollary 3, rank-one eigenvector conclusion | `TauCeti.DavisKahanTheory.yuWangSamworth_eigenvector_le` | proved |
-| Appendix residual sandwich | `DavisKahan/Sources/YuWangSamworth2015.lean` | proved |
-| Gram perturbation identities and base operator-norm bounds | `DavisKahan/Specialized/SingularSubspace.lean` | proved |
-| Right/left Frobenius and paper-coefficient Gram bounds | `FinishYuWangSamworth.Rectangular.FrobeniusGram` | proved |
-| Exact right Theorem 4 sine bound | `yuWangSamworth_rightSingularSubspace_le` | proved in lane; awaiting compiler verification |
-| Exact left Theorem 4 sine bound | `yuWangSamworth_leftSingularSubspace_le` | proved in lane; awaiting compiler verification |
-| Right aligned-frame conclusion | `yuWangSamworth_rightSingularAlignedBasis_le` | proved in lane; awaiting compiler verification |
-| Left aligned-frame conclusion | `yuWangSamworth_leftSingularAlignedBasis_le` | proved in lane; awaiting compiler verification |
-| Rank-one right/left singular-vector corollaries | future `Rectangular.RankOne` module | open |
+## Symmetric results
+
+* `DavisKahan.Specialized.Statistics`
+  * `yuWangSamworth_sinTheta_le`
+  * `yuWangSamworth_alignedBasis_le`
+  * `yuWangSamworth_eigenvector_le`
+* `DavisKahan.FiniteDimensional.SinTheta.Perturbation`
+  * `sinTheta_perturbation_le`
+  * `opNorm_sinThetaMap_le_of_intervalGap`
+
+## Rectangular results
+
+* `FinishYuWangSamworth.Rectangular.FrobeniusGram`
+* `FinishYuWangSamworth.Rectangular.Theorem4`
+* `DavisKahan.Specialized.SingularSubspace`
+
+## Appendix compression
+
+* `DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidt`
+  * `paperHilbertSchmidtNorm_comp_le`
+* `DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtFrobenius`
+  * finite-dimensional Frobenius realization
+
+No theorem in this lane uses `sorry`, `axiom`, or an ungrounded external result.
+
+## Source audit: equation (4)
+
+The printed equation (4) in arXiv:1405.0680 omits a square on the factor
+`2 - ‖v̂ - v‖²`.  Direct substitution of
+`‖v̂ - v‖² = 2 - 2⟪v̂,v⟫` shows that the correct identity contains
+`(2 - ‖v̂ - v‖²)²`.  The formal theorem records this corrected identity, and
+`yuWangSamworth_equation4_printed_counterexample` machine-checks a concrete
+failure of the printed polynomial formula.
