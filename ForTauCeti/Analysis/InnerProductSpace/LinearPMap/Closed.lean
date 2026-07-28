@@ -649,6 +649,49 @@ theorem directSum_dense
       exact hp]
   exact himage
 
+/-- The direct sum of closed partial-map graphs is closed. -/
+theorem directSum_closedGraph
+    (A : E →ₗ.[𝕜] E) (B : F →ₗ.[𝕜] F)
+    (hA : IsClosed (Set.range fun x : A.domain => ((x : E), A x)))
+    (hB : IsClosed (Set.range fun y : B.domain => ((y : F), B y))) :
+    IsClosed (Set.range fun z : (directSum A B).domain =>
+      ((z : WithLp 2 (E × F)), directSum A B z)) := by
+  let coords : (WithLp 2 (E × F) × WithLp 2 (E × F)) →
+      ((E × E) × (F × F)) := fun p =>
+    ((WithLp.fst p.1, WithLp.fst p.2),
+      (WithLp.snd p.1, WithLp.snd p.2))
+  have hcoords : Continuous coords := by fun_prop
+  have hclosed : IsClosed
+      ((Set.range fun x : A.domain => ((x : E), A x)) ×ˢ
+       (Set.range fun y : B.domain => ((y : F), B y))) := hA.prod hB
+  rw [show Set.range (fun z : (directSum A B).domain =>
+      ((z : WithLp 2 (E × F)), directSum A B z)) =
+      coords ⁻¹' ((Set.range fun x : A.domain => ((x : E), A x)) ×ˢ
+        (Set.range fun y : B.domain => ((y : F), B y))) by
+    ext p
+    constructor
+    · rintro ⟨z, rfl⟩
+      exact ⟨⟨directSumDomainFst A B z, by ext <;> rfl⟩,
+        ⟨directSumDomainSnd A B z, by ext <;> rfl⟩⟩
+    · rintro ⟨⟨x, hx⟩, ⟨y, hy⟩⟩
+      have hxf : (x : E) = WithLp.fst p.1 := congrArg Prod.fst hx
+      have hxa : A x = WithLp.fst p.2 := congrArg Prod.snd hx
+      have hyf : (y : F) = WithLp.snd p.1 := congrArg Prod.fst hy
+      have hyb : B y = WithLp.snd p.2 := congrArg Prod.snd hy
+      let z : (directSum A B).domain := ⟨p.1,
+        (mem_directSumDomain_iff A B p.1).2
+          ⟨hxf ▸ x.property, hyf ▸ y.property⟩⟩
+      have hzx : directSumDomainFst A B z = x := Subtype.ext hxf.symm
+      have hzy : directSumDomainSnd A B z = y := Subtype.ext hyf.symm
+      refine ⟨z, Prod.ext rfl ?_⟩
+      apply (WithLp.linearEquiv 2 𝕜 (E × F)).injective
+      apply Prod.ext
+      · change A (directSumDomainFst A B z) = WithLp.fst p.2
+        simpa [hzx] using hxa
+      · change B (directSumDomainSnd A B z) = WithLp.snd p.2
+        simpa [hzy] using hyb]
+  exact hclosed.preimage hcoords
+
 /-- A partial linear map is symmetric on its operator domain. -/
 def IsSymmetric (A : E →ₗ.[𝕜] E) : Prop :=
   ∀ x y : A.domain, ⟪A x, (y : E)⟫_𝕜 = ⟪(x : E), A y⟫_𝕜
