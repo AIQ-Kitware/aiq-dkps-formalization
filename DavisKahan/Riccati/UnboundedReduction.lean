@@ -237,8 +237,83 @@ theorem strongSolvesRiccati_iff_pointwise
         abel
       _ = 0 := sub_eq_zero.mpr hx
 
-/-- Invariance of the domain-controlled angular graph under the closed block
-operator is equivalent to the strong unbounded Riccati equation. -/
+/-- Pointwise coordinate form of the strong Riccati equation over raw block
+data. -/
+theorem strongSolvesRiccatiPMap_iff_pointwise
+    (H : UnboundedBlockDataPMap (𝕜 := 𝕜) (E0 := E0) (E1 := E1))
+    (X : E0 →L[𝕜] E1) :
+    StrongSolvesRiccatiPMap H X ↔
+      ∃ hdom : PreservesRiccatiPMapDomains H X,
+        ∀ x : H.A0.domain,
+          H.A1 ⟨X (x : E0), hdom x⟩ + H.B10 (x : E0) =
+            X (H.A0 x + H.B01 (X (x : E0))) := by
+  constructor
+  · rintro ⟨hdom, hric⟩
+    refine ⟨hdom, ?_⟩
+    intro x
+    rw [map_add]
+    have hx := hric x
+    calc
+      H.A1 ⟨X (x : E0), hdom x⟩ + H.B10 (x : E0) =
+          (H.A1 ⟨X (x : E0), hdom x⟩ -
+              X (H.A0 x) - X (H.B01 (X (x : E0))) + H.B10 (x : E0)) +
+            (X (H.A0 x) + X (H.B01 (X (x : E0)))) := by
+        abel
+      _ = 0 + (X (H.A0 x) + X (H.B01 (X (x : E0)))) := by
+        rw [hx]
+      _ = X (H.A0 x) + X (H.B01 (X (x : E0))) := zero_add _
+  · rintro ⟨hdom, hpoint⟩
+    refine ⟨hdom, ?_⟩
+    intro x
+    have hx := hpoint x
+    rw [map_add] at hx
+    calc
+      H.A1 ⟨X (x : E0), hdom x⟩ -
+            X (H.A0 x) - X (H.B01 (X (x : E0))) + H.B10 (x : E0) =
+          (H.A1 ⟨X (x : E0), hdom x⟩ + H.B10 (x : E0)) -
+            (X (H.A0 x) + X (H.B01 (X (x : E0)))) := by
+        abel
+      _ = 0 := sub_eq_zero.mpr hx
+
+/-- Invariance of the domain-controlled angular graph under the canonical raw
+block core is equivalent to the strong unbounded Riccati equation. -/
+theorem unboundedBlockGraph_invariantPMapData_iff_strongRiccatiPMapCore
+    (H : UnboundedBlockDataPMap (𝕜 := 𝕜) (E0 := E0) (E1 := E1))
+    (X : E0 →L[𝕜] E1) :
+    (PreservesRiccatiPMapDomains H X ∧
+      TauCeti.LinearPMap.InvariantSubspace (unboundedBlockOperatorPMapCore H)
+        (unboundedBlockGraph X)) ↔
+      StrongSolvesRiccatiPMap H X := by
+  rw [strongSolvesRiccatiPMap_iff_pointwise]
+  constructor
+  · rintro ⟨hdom, hinv⟩
+    refine ⟨hdom, ?_⟩
+    intro x
+    have hout := hinv (unboundedBlockGraphPMapDataDomainVector H X hdom x)
+      (unboundedBlockGraphPMapDataDomainVector_mem_graph H X hdom x)
+    simpa only [unboundedBlockOperatorPMapCore_graphVector_snd,
+      unboundedBlockOperatorPMapCore_graphVector_fst] using
+        (mem_unboundedBlockGraph_iff X _).1 hout
+  · rintro ⟨hdom, hpoint⟩
+    refine ⟨hdom, ?_⟩
+    intro z hz
+    rw [mem_unboundedBlockGraph_iff] at hz ⊢
+    rw [unboundedBlockOperatorPMapCore_apply_snd,
+      unboundedBlockOperatorPMapCore_apply_fst]
+    let x0 : H.A0.domain :=
+      TauCeti.LinearPMap.directSumDomainFst H.A0 H.A1 z
+    have hfst : WithLp.fst (z : WithLp 2 (E0 × E1)) = (x0 : E0) := by rfl
+    have hsnd : WithLp.snd (z : WithLp 2 (E0 × E1)) = X (x0 : E0) := by
+      rw [hz, hfst]
+    have hx1 : TauCeti.LinearPMap.directSumDomainSnd H.A0 H.A1 z =
+        ⟨X (x0 : E0), hdom x0⟩ := by
+      apply Subtype.ext
+      exact hsnd
+    rw [hx1, hfst, hsnd]
+    exact hpoint x0
+
+/-- Invariance of the domain-controlled angular graph under the historical
+raw core is equivalent to the strong unbounded Riccati equation. -/
 theorem unboundedBlockGraph_invariantPMap_iff_strongRiccatiCore
     (H : UnboundedBlockData (𝕜 := 𝕜) (E0 := E0) (E1 := E1))
     (X : E0 →L[𝕜] E1) :
@@ -246,33 +321,11 @@ theorem unboundedBlockGraph_invariantPMap_iff_strongRiccatiCore
       TauCeti.LinearPMap.InvariantSubspace (unboundedBlockOperatorCorePMap H)
         (unboundedBlockGraph X)) ↔
       StrongSolvesRiccati H X := by
-  rw [strongSolvesRiccati_iff_pointwise]
-  constructor
-  · rintro ⟨hdom, hinv⟩
-    refine ⟨hdom, ?_⟩
-    intro x
-    have hout := hinv (unboundedBlockGraphDomainVectorPMap H X hdom x)
-      (unboundedBlockGraphDomainVectorPMap_mem_graph H X hdom x)
-    simpa only [unboundedBlockOperatorCorePMap_graphVector_snd,
-      unboundedBlockOperatorCorePMap_graphVector_fst] using
-        (mem_unboundedBlockGraph_iff X _).1 hout
-  · rintro ⟨hdom, hpoint⟩
-    refine ⟨hdom, ?_⟩
-    intro z hz
-    rw [mem_unboundedBlockGraph_iff] at hz ⊢
-    rw [unboundedBlockOperatorCorePMap_apply_snd,
-      unboundedBlockOperatorCorePMap_apply_fst]
-    let x0 : H.A0.domain :=
-      closedOperatorDirectSumDomainFst H.A0 H.A1 z
-    have hfst : WithLp.fst (z : WithLp 2 (E0 × E1)) = (x0 : E0) := by rfl
-    have hsnd : WithLp.snd (z : WithLp 2 (E0 × E1)) = X (x0 : E0) := by
-      rw [hz, hfst]
-    have hx1 : closedOperatorDirectSumDomainSnd H.A0 H.A1 z =
-        ⟨X (x0 : E0), hdom x0⟩ := by
-      apply Subtype.ext
-      exact hsnd
-    rw [hx1, hfst, hsnd]
-    exact hpoint x0
+  change (PreservesRiccatiPMapDomains H.toPMap X ∧
+    TauCeti.LinearPMap.InvariantSubspace
+      (unboundedBlockOperatorPMapCore H.toPMap) (unboundedBlockGraph X)) ↔
+      StrongSolvesRiccatiPMap H.toPMap X
+  exact unboundedBlockGraph_invariantPMapData_iff_strongRiccatiPMapCore H.toPMap X
 
 theorem unboundedBlockGraph_invariant_iff_strongRiccatiCore
     (H : UnboundedBlockData (𝕜 := 𝕜) (E0 := E0) (E1 := E1))
