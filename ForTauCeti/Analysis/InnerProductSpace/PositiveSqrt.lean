@@ -6,16 +6,9 @@ Authors: Jon Crall, Claude Opus 4.8
 Staged for Mathlib: additions to `Mathlib/Analysis/InnerProductSpace/Positive.lean`
 (and a new `Mathlib/Analysis/InnerProductSpace/PositiveSqrt.lean`).
 
-Sub-dev I of the operator polar decomposition project — COMPLETE (proof-complete; reduction uses only:
+Sub-dev I of the operator polar decomposition project — COMPLETE
+(proof-complete; reduction uses only:
 `propext, Classical.choice, Quot.sound`). Tickets PD-01..PD-04.
-
-
-Wave-1 migration provenance: original module `ForMathlib.Analysis.InnerProductSpace.PositiveSqrt` at the
-Davis--Kahan repository; moved to `ForTauCeti` with the namespace
-`ForMathlib` renamed `TauCeti` (module-system conversion deferred to a
-later mechanical pass).  No mathematical change; the historical
-Courant--Fischer names it used were repointed to the canonical API when the
-`CourantFischerCompat` shim was retired.
 -/
 
 import Mathlib.Analysis.InnerProductSpace.Positive

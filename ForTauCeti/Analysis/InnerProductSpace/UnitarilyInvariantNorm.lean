@@ -19,14 +19,6 @@ the gauge* — no Hardy–Littlewood–Pólya theorem, no weak-majorization
 completion, no Birkhoff: each transform step costs one triangle inequality,
 one homogeneity, and one swap-permutation invariance of the gauge.
 To be re-authored per Mathlib's AI-contribution policy at PR time.
-
-
-Wave-1 migration provenance: original module `ForMathlib.Analysis.InnerProductSpace.UnitarilyInvariantNorm` at the
-Davis--Kahan repository; moved to `ForTauCeti` with the namespace
-`ForMathlib` renamed `TauCeti` (module-system conversion deferred to a
-later mechanical pass).  No mathematical change; the historical
-Courant--Fischer names it used were repointed to the canonical API when the
-`CourantFischerCompat` shim was retired.
 -/
 
 import ForTauCeti.Analysis.InnerProductSpace.KyFan

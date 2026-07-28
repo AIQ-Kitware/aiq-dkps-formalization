@@ -2,14 +2,6 @@
 Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-5.6 High, Claude Fable 5
-
-
-Wave-1 migration provenance: original module `ForMathlib.Analysis.InnerProductSpace.RectangularSingularValues` at the
-Davis--Kahan repository; moved to `ForTauCeti` with the namespace
-`ForMathlib` renamed `TauCeti` (module-system conversion deferred to a
-later mechanical pass).  No mathematical change; the historical
-Courant--Fischer names it used were repointed to the canonical API when the
-`CourantFischerCompat` shim was retired.
 -/
 
 import Mathlib.Analysis.InnerProductSpace.SingularValues
@@ -338,7 +330,8 @@ theorem hasEigenvalue_selfCompAdjoint_sq_singularValues
   commit `82d20de`.
 * Extraction class: **moved**.  The Wave-1 migration renamed the namespace
   `ForMathlib` to `TauCeti`; declaration names and proofs are unchanged.
-* Original authors / copyright: Jon Crall, GPT-5.6 High, Claude Fable 5; Copyright (c) 2026 Kitware, Inc.;
+* Original authors / copyright: Jon Crall, GPT-5.6 High, Claude Fable 5; Copyright (c) 2026
+  Kitware, Inc.;
   Apache 2.0.
 * Spectra influence: **none** — this module imports only Mathlib and sibling
   `ForTauCeti` staging modules.

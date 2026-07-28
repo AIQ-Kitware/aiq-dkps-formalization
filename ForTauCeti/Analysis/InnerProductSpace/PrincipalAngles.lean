@@ -16,14 +16,6 @@ flat overlap operator `overlapOp` (from `AlignedBasis.lean`).  This packages the
 two families (which needs `singularValues_adjoint`, W0.1(d)), and the bridge
 `‖sin Θ‖²_F = d − overlap` to the flat overlap sum.
 To be re-authored per Mathlib's AI-contribution policy at PR time.
-
-
-Wave-1 migration provenance: original module `ForMathlib.Analysis.InnerProductSpace.PrincipalAngles` at the
-Davis--Kahan repository; moved to `ForTauCeti` with the namespace
-`ForMathlib` renamed `TauCeti` (module-system conversion deferred to a
-later mechanical pass).  No mathematical change; the historical
-Courant--Fischer names it used were repointed to the canonical API when the
-`CourantFischerCompat` shim was retired.
 -/
 
 import ForTauCeti.Analysis.InnerProductSpace.AlignedBasis
@@ -400,7 +392,8 @@ theorem singularValues_comp_adjoint_linearIsometry
         hadj, hGX.apply_eigenvectorBasis rfl, map_smul, LinearIsometry.coe_toLinearMap]
     · rw [dif_neg h, hw_ge i h, LinearMap.comp_apply, LinearMap.comp_apply,
         hker _ (SetLike.coe_mem _), map_zero, map_zero, RCLike.ofReal_zero, zero_smul]
-  have heq := LinearMap.IsSymmetric.eigenvalues_eq_of_eigenbasis Y.isSymmetric_adjoint_comp_self rfl bE
+  have heq := LinearMap.IsSymmetric.eigenvalues_eq_of_eigenbasis
+    Y.isSymmetric_adjoint_comp_self rfl bE
     hμ'_anti heig
   refine Finsupp.ext fun i => ?_
   rcases lt_or_ge i (finrank 𝕜 D) with hid | hid
@@ -784,9 +777,11 @@ orthonormal families have identical singular-value sequences. -/
 theorem singularValues_orthogonal_starProjection_comp_starProjection_comm
     {u v : Fin d → E} (hu : Orthonormal 𝕜 u) (hv : Orthonormal 𝕜 v) :
     (((Submodule.span 𝕜 (Set.range v))ᗮ.starProjection ∘L
-        (Submodule.span 𝕜 (Set.range u)).starProjection : E →L[𝕜] E) : E →ₗ[𝕜] E).singularValues =
+        (Submodule.span 𝕜 (Set.range u)).starProjection : E →L[𝕜] E) :
+          E →ₗ[𝕜] E).singularValues =
       (((Submodule.span 𝕜 (Set.range u))ᗮ.starProjection ∘L
-        (Submodule.span 𝕜 (Set.range v)).starProjection : E →L[𝕜] E) : E →ₗ[𝕜] E).singularValues := by
+        (Submodule.span 𝕜 (Set.range v)).starProjection : E →L[𝕜] E) :
+          E →ₗ[𝕜] E).singularValues := by
   let Suv : EuclideanSpace 𝕜 (Fin d) →ₗ[𝕜] E :=
     (((Submodule.span 𝕜 (Set.range v))ᗮ.starProjection : E →L[𝕜] E) : E →ₗ[𝕜] E)
       ∘ₗ (familyIsometry hu).toLinearMap
@@ -822,7 +817,8 @@ theorem singularValues_orthogonal_starProjection_comp_starProjection_comm
     _ = Svu.singularValues := by
       simpa only [Suv, Svu] using singularValues_orthogonal_familyIsometry_comm hu hv
     _ = (((Submodule.span 𝕜 (Set.range u))ᗮ.starProjection ∘L
-          (Submodule.span 𝕜 (Set.range v)).starProjection : E →L[𝕜] E) : E →ₗ[𝕜] E).singularValues := by
+          (Submodule.span 𝕜 (Set.range v)).starProjection : E →L[𝕜] E) :
+            E →ₗ[𝕜] E).singularValues := by
       rw [hfactorVU,
         singularValues_comp_adjoint_linearIsometry (familyIsometry hv) Svu]
 

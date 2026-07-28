@@ -15,14 +15,6 @@ about an arbitrary pair of linear maps, whose `@[simp]` apply lemma carries an
 arbitrary membership proof so that every downstream proof is a short `simp`;
 the span, ambient, and `gram` statements are thin corollaries.
 To be re-authored per Mathlib's AI-contribution policy at PR time.
-
-
-Wave-1 migration provenance: original module `ForMathlib.Analysis.InnerProductSpace.GramMatrix` at the
-Davis--Kahan repository; moved to `ForTauCeti` with the namespace
-`ForMathlib` renamed `TauCeti` (module-system conversion deferred to a
-later mechanical pass).  No mathematical change; the historical
-Courant--Fischer names it used were repointed to the canonical API when the
-`CourantFischerCompat` shim was retired.
 -/
 
 import Mathlib.Analysis.InnerProductSpace.GramMatrix

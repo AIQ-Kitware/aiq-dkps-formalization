@@ -2,14 +2,6 @@
 Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Fable 5, Claude Opus 4.8
-
-
-Wave-1 migration provenance: original module `ForMathlib.Analysis.InnerProductSpace.ProjectionGeometry` at the
-Davis--Kahan repository; moved to `ForTauCeti` with the namespace
-`ForMathlib` renamed `TauCeti` (module-system conversion deferred to a
-later mechanical pass).  No mathematical change; the historical
-Courant--Fischer names it used were repointed to the canonical API when the
-`CourantFischerCompat` shim was retired.
 -/
 import Mathlib.Analysis.InnerProductSpace.Projection.Basic
 import Mathlib.Analysis.InnerProductSpace.PiL2
@@ -45,7 +37,8 @@ below, and is requested explicitly otherwise).
   commit `f44d966`.
 * Extraction class: **moved**.  The Wave-1 migration renamed the namespace
   `ForMathlib` to `TauCeti`; declaration names and proofs are unchanged.
-* Original authors / copyright: Jon Crall, Claude Fable 5, Claude Opus 4.8; Copyright (c) 2026 Kitware, Inc.;
+* Original authors / copyright: Jon Crall, Claude Fable 5, Claude Opus 4.8; Copyright (c) 2026
+  Kitware, Inc.;
   Apache 2.0.
 * Spectra influence: **none** — this module imports only Mathlib and sibling
   `ForTauCeti` staging modules.

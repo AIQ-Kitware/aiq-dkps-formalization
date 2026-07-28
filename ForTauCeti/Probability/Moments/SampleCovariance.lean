@@ -12,14 +12,6 @@ sample-mean second-moment identity applied to the coordinate products.
 
 Formalized by Claude Opus 4.8 (claude-opus-4-8[1m]);
 to be re-authored per Mathlib's AI-contribution policy at PR time.
-
-
-Wave-1 migration provenance: original module `ForMathlib.Probability.Moments.SampleCovariance` at the
-Davis--Kahan repository; moved to `ForTauCeti` with the namespace
-`ForMathlib` renamed `TauCeti` (module-system conversion deferred to a
-later mechanical pass).  No mathematical change; the historical
-Courant--Fischer names it used were repointed to the canonical API when the
-`CourantFischerCompat` shim was retired.
 -/
 
 import ForTauCeti.Probability.Moments.MatrixConcentration
@@ -108,7 +100,8 @@ theorem measure_forall_sampleCovariance_sortedEig_ge_ge {n d : ℕ}
     {v η : ℝ} (hη : 0 < η)
     (hmoment : ∀ k l, ∫ ω, (sampleCovariance V ω k l - Cov k l) ^ 2 ∂P ≤ v) :
     P {ω | ∀ k : Fin d,
-        Matrix.sortedEig hCovHerm k - (d : ℝ) * η ≤ Matrix.sortedEig (isHermitian_sampleCovariance V ω) k}
+        Matrix.sortedEig hCovHerm k - (d : ℝ) * η ≤
+          Matrix.sortedEig (isHermitian_sampleCovariance V ω) k}
       ≥ 1 - ENNReal.ofReal ((d : ℝ) ^ 2 * v / η ^ 2) := by
   have hmeas : ∀ k l : Fin d, Measurable fun ω => sampleCovariance V ω k l := by
     intro k l
