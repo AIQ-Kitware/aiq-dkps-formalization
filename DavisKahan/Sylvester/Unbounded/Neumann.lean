@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Sylvester.Unbounded.Equation
+import DavisKahan.Interop.TauCeti.ClosedOperator
 
 /-!
 # Neumann-series Sylvester estimates with one unbounded block
@@ -550,6 +551,32 @@ theorem mem_and_gauge_le_of_boundedLeft_exteriorRight
   have hkey := mul_le_mul_of_nonneg_left hgauge hρδ.le
   rw [← mul_assoc, mul_inv_cancel₀ hρδ.ne', one_mul] at hkey
   linarith
+
+/-- Transitional raw-signature boundary for the right-unbounded Neumann
+contraction.  Its hypotheses are canonical partial-map data; it packages the
+right block only while the long Neumann-series proof is being moved off the
+historical bundle.  Delete this bridge once that proof is direct. -/
+theorem linearPMap_mem_and_gauge_le_of_boundedLeft_exteriorRight
+    (N : RectangularSymmetricIdealFamily (𝕜 := 𝕜))
+    {G : Type v}
+    [NormedAddCommGroup G] [InnerProductSpace 𝕜 G] [CompleteSpace G]
+    {S : F →L[𝕜] F} {Λ : G →ₗ.[𝕜] G}
+    (hΛdense : Dense (Λ.domain : Set G)) (hΛclosed : Λ.IsClosed)
+    {Y C : G →L[𝕜] F} {c ρ δ : ℝ}
+    (hρ : 0 ≤ ρ) (hδ : 0 < δ)
+    (hSnorm : ‖S‖ ≤ ρ)
+    {J : G →L[𝕜] G} (hdom : ∀ z : G, J z ∈ Λ.domain)
+    (hres : ∀ z : G,
+      Λ ⟨J z, hdom z⟩ - ((c : ℝ) : 𝕜) • J z = z)
+    (hJnorm : ‖J‖ ≤ (ρ + δ)⁻¹)
+    (hEq : ∀ y : Λ.domain,
+      S (Y (y : G)) -
+        (Y (Λ y) - ((c : ℝ) : 𝕜) • Y (y : G)) = C (y : G))
+    (hC : N.Mem C) :
+    N.Mem Y ∧ δ * N.gauge Y ≤ N.gauge C := by
+  exact mem_and_gauge_le_of_boundedLeft_exteriorRight
+    (Λ := TauCeti.DavisKahanExt.ClosedOperator.ofLinearPMap Λ hΛdense hΛclosed)
+    N hρ hδ hSnorm hdom hres hJnorm hEq hC
 
 end ExactSinTheta
 end Experimental
