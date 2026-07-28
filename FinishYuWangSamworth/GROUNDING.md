@@ -32,4 +32,6 @@ No theorem in this lane uses `sorry`, `axiom`, or an ungrounded external result.
 The printed equation (4) in arXiv:1405.0680 omits a square on the factor
 `2 - ‖v̂ - v‖²`.  Direct substitution of
 `‖v̂ - v‖² = 2 - 2⟪v̂,v⟫` shows that the correct identity contains
-`(2 - ‖v̂ - v‖²)²`.  The formal theorem records this corrected identity.
+`(2 - ‖v̂ - v‖²)²`.  The formal theorem records this corrected identity, and
+`yuWangSamworth_equation4_printed_counterexample` machine-checks a concrete
+failure of the printed polynomial formula.

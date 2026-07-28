@@ -16,6 +16,13 @@ All numbered mathematical statements now have a theorem surface:
 * direct right and left rank-one singular-vector corollaries;
 * exact operator/Frobenius minimum and aligned-frame constants.
 
+## Elegance audit status
+
+The in-place audit consolidated the Frobenius ideal foundation, added bundled
+orthonormal-column/row Lemma 5 wrappers, removed manual dimension witnesses
+from the literal `sigma_1` API, and added a machine-checked counterexample to
+the printed equation (4).
+
 ## Remaining non-numbered source-fidelity work
 
 * package the smaller residual numerator mentioned after Theorem 2;

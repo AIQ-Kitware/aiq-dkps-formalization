@@ -269,14 +269,14 @@ theorem yuWangSamworth_leftSingularAlignedBasis_opNormCoefficient_le
 
 /-- In positive finite domain dimension, the population operator norm is its
 top singular value. -/
-theorem opNorm_eq_topSingularValue (A : E →ₗ[𝕜] F)
-    {n : ℕ} (hn : finrank 𝕜 E = n) (hn0 : 0 < n) :
+theorem opNorm_eq_topSingularValue [Nontrivial E] (A : E →ₗ[𝕜] F) :
     ‖A.toContinuousLinearMap‖ = A.singularValues 0 := by
   apply le_antisymm
   · refine A.toContinuousLinearMap.opNorm_le_bound
       (A.singularValues_nonneg 0) fun x => ?_
-    exact norm_apply_le_singularValues_zero_mul A hn hn0 x
-  · obtain ⟨x, hx, hAx⟩ := exists_norm_apply_eq_singularValues_zero A hn hn0
+    exact norm_apply_le_singularValues_zero_mul A rfl Module.finrank_pos x
+  · obtain ⟨x, hx, hAx⟩ :=
+      exists_norm_apply_eq_singularValues_zero A rfl Module.finrank_pos
     rw [← hAx]
     calc
       ‖A x‖ = ‖A.toContinuousLinearMap x‖ := rfl
@@ -286,45 +286,42 @@ theorem opNorm_eq_topSingularValue (A : E →ₗ[𝕜] F)
 
 /-- Literal source-coefficient form of the right-singular sine bound. -/
 theorem yuWangSamworth_rightSingularSubspace_le
-    {A Â : E →ₗ[𝕜] F} {U V : Submodule 𝕜 E}
+    {A Â : E →ₗ[𝕜] F} {U V : Submodule 𝕜 E} [Nontrivial E]
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hcorr : CorrespondingRightSingularBlock A Â U V)
-    {d n : ℕ} (hrank : finrank 𝕜 U = d)
-    (hn : finrank 𝕜 E = n) (hn0 : 0 < n)
+    {d : ℕ} (hrank : finrank 𝕜 U = d)
     {Δ : ℝ} (hΔ : 0 < Δ) (hgap : RightSingularPopulationGap A U Δ) :
     sinThetaFrobenius U V ≤
       2 * (2 * A.singularValues 0 +
           ‖(Â - A).toContinuousLinearMap‖) *
         min (Real.sqrt d * ‖(Â - A).toContinuousLinearMap‖)
           (RectangularUnitarilyInvariantNorm.frobenius (Â - A)) / Δ := by
-  simpa only [opNorm_eq_topSingularValue A hn hn0] using
+  simpa only [opNorm_eq_topSingularValue A] using
     yuWangSamworth_rightSingularSubspace_opNormCoefficient_le
       hcorr hrank hΔ hgap
 
 /-- Literal source-coefficient form of the left-singular sine bound. -/
 theorem yuWangSamworth_leftSingularSubspace_le
-    {A Â : E →ₗ[𝕜] F} {U V : Submodule 𝕜 F}
+    {A Â : E →ₗ[𝕜] F} {U V : Submodule 𝕜 F} [Nontrivial E]
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hcorr : CorrespondingLeftSingularBlock A Â U V)
-    {d n : ℕ} (hrank : finrank 𝕜 U = d)
-    (hn : finrank 𝕜 E = n) (hn0 : 0 < n)
+    {d : ℕ} (hrank : finrank 𝕜 U = d)
     {Δ : ℝ} (hΔ : 0 < Δ) (hgap : LeftSingularPopulationGap A U Δ) :
     sinThetaFrobenius U V ≤
       2 * (2 * A.singularValues 0 +
           ‖(Â - A).toContinuousLinearMap‖) *
         min (Real.sqrt d * ‖(Â - A).toContinuousLinearMap‖)
           (RectangularUnitarilyInvariantNorm.frobenius (Â - A)) / Δ := by
-  simpa only [opNorm_eq_topSingularValue A hn hn0] using
+  simpa only [opNorm_eq_topSingularValue A] using
     yuWangSamworth_leftSingularSubspace_opNormCoefficient_le
       hcorr hrank hΔ hgap
 
 /-- Literal source-coefficient right aligned-frame conclusion. -/
 theorem yuWangSamworth_rightSingularAlignedBasis_le
-    {A Â : E →ₗ[𝕜] F} {U V : Submodule 𝕜 E}
+    {A Â : E →ₗ[𝕜] F} {U V : Submodule 𝕜 E} [Nontrivial E]
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hcorr : CorrespondingRightSingularBlock A Â U V)
-    {d n : ℕ} (hrank : finrank 𝕜 U = d)
-    (hn : finrank 𝕜 E = n) (hn0 : 0 < n)
+    {d : ℕ} (hrank : finrank 𝕜 U = d)
     {Δ : ℝ} (hΔ : 0 < Δ) (hgap : RightSingularPopulationGap A U Δ) :
     ∃ (u v : Fin d → E), Orthonormal 𝕜 u ∧ Orthonormal 𝕜 v ∧
       Submodule.span 𝕜 (Set.range u) = U ∧
@@ -335,17 +332,16 @@ theorem yuWangSamworth_rightSingularAlignedBasis_le
             ‖(Â - A).toContinuousLinearMap‖) *
           min (Real.sqrt d * ‖(Â - A).toContinuousLinearMap‖)
             (RectangularUnitarilyInvariantNorm.frobenius (Â - A)) / Δ := by
-  simpa only [opNorm_eq_topSingularValue A hn hn0] using
+  simpa only [opNorm_eq_topSingularValue A] using
     yuWangSamworth_rightSingularAlignedBasis_opNormCoefficient_le
       hcorr hrank hΔ hgap
 
 /-- Literal source-coefficient left aligned-frame conclusion. -/
 theorem yuWangSamworth_leftSingularAlignedBasis_le
-    {A Â : E →ₗ[𝕜] F} {U V : Submodule 𝕜 F}
+    {A Â : E →ₗ[𝕜] F} {U V : Submodule 𝕜 F} [Nontrivial E]
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hcorr : CorrespondingLeftSingularBlock A Â U V)
-    {d n : ℕ} (hrank : finrank 𝕜 U = d)
-    (hn : finrank 𝕜 E = n) (hn0 : 0 < n)
+    {d : ℕ} (hrank : finrank 𝕜 U = d)
     {Δ : ℝ} (hΔ : 0 < Δ) (hgap : LeftSingularPopulationGap A U Δ) :
     ∃ (u v : Fin d → F), Orthonormal 𝕜 u ∧ Orthonormal 𝕜 v ∧
       Submodule.span 𝕜 (Set.range u) = U ∧
@@ -356,7 +352,7 @@ theorem yuWangSamworth_leftSingularAlignedBasis_le
             ‖(Â - A).toContinuousLinearMap‖) *
           min (Real.sqrt d * ‖(Â - A).toContinuousLinearMap‖)
             (RectangularUnitarilyInvariantNorm.frobenius (Â - A)) / Δ := by
-  simpa only [opNorm_eq_topSingularValue A hn hn0] using
+  simpa only [opNorm_eq_topSingularValue A] using
     yuWangSamworth_leftSingularAlignedBasis_opNormCoefficient_le
       hcorr hrank hΔ hgap
 

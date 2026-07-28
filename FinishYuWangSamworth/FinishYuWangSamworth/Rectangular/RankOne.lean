@@ -105,14 +105,13 @@ theorem yuWangSamworth_leftSingularVector_opNormCoefficient_le
 
 /-- Literal `σ₁(A)` form of the right singular-vector corollary. -/
 theorem yuWangSamworth_rightSingularVector_le
-    {A Â : E →ₗ[𝕜] F} {u v : E}
+    {A Â : E →ₗ[𝕜] F} {u v : E} [Nontrivial E]
     (hu : ‖u‖ = 1) (hv : ‖v‖ = 1)
     {σ σhat Δ : ℝ}
     (hAu : rightGram A u = ((σ ^ 2 : ℝ) : 𝕜) • u)
     (hÂv : rightGram Â v = ((σhat ^ 2 : ℝ) : 𝕜) • v)
     (hcorr : CorrespondingRightSingularBlock A Â
       (Submodule.span 𝕜 {u}) (Submodule.span 𝕜 {v}))
-    {n : ℕ} (hn : Module.finrank 𝕜 E = n) (hn0 : 0 < n)
     (hΔ : 0 < Δ)
     (hgap : ∀ ν ∈ restrictedSpectrum (rightGram A)
       (Submodule.span 𝕜 {u})ᗮ, Δ ≤ |σ ^ 2 - ν|) :
@@ -122,20 +121,19 @@ theorem yuWangSamworth_rightSingularVector_le
           (2 * A.singularValues 0 +
             ‖(Â - A).toContinuousLinearMap‖) *
           ‖(Â - A).toContinuousLinearMap‖ / Δ := by
-  simpa only [opNorm_eq_topSingularValue A hn hn0] using
+  simpa only [opNorm_eq_topSingularValue A] using
     yuWangSamworth_rightSingularVector_opNormCoefficient_le
       hu hv hAu hÂv hcorr hΔ hgap
 
 /-- Literal `σ₁(A)` form of the left singular-vector corollary. -/
 theorem yuWangSamworth_leftSingularVector_le
-    {A Â : E →ₗ[𝕜] F} {u v : F}
+    {A Â : E →ₗ[𝕜] F} {u v : F} [Nontrivial E]
     (hu : ‖u‖ = 1) (hv : ‖v‖ = 1)
     {σ σhat Δ : ℝ}
     (hAu : leftGram A u = ((σ ^ 2 : ℝ) : 𝕜) • u)
     (hÂv : leftGram Â v = ((σhat ^ 2 : ℝ) : 𝕜) • v)
     (hcorr : CorrespondingLeftSingularBlock A Â
       (Submodule.span 𝕜 {u}) (Submodule.span 𝕜 {v}))
-    {n : ℕ} (hn : Module.finrank 𝕜 E = n) (hn0 : 0 < n)
     (hΔ : 0 < Δ)
     (hgap : ∀ ν ∈ restrictedSpectrum (leftGram A)
       (Submodule.span 𝕜 {u})ᗮ, Δ ≤ |σ ^ 2 - ν|) :
@@ -145,7 +143,7 @@ theorem yuWangSamworth_leftSingularVector_le
           (2 * A.singularValues 0 +
             ‖(Â - A).toContinuousLinearMap‖) *
           ‖(Â - A).toContinuousLinearMap‖ / Δ := by
-  simpa only [opNorm_eq_topSingularValue A hn hn0] using
+  simpa only [opNorm_eq_topSingularValue A] using
     yuWangSamworth_leftSingularVector_opNormCoefficient_le
       hu hv hAu hÂv hcorr hΔ hgap
 

@@ -34,5 +34,15 @@ theorem yuWangSamworth_equation4
   rw [hdist]
   ring
 
+/-- The polynomial identity printed as equation (4), without the additional
+square, already fails at inner product `3 / 5`.  This regression theorem keeps
+the documented source correction machine checked. -/
+theorem yuWangSamworth_equation4_printed_counterexample :
+    (2 * (3 / 5 : ℝ)) ^ 2 * (1 - (3 / 5 : ℝ) ^ 2) ≠
+      (1 / 4 : ℝ) * (2 - 2 * (3 / 5 : ℝ)) *
+        (2 - (2 - 2 * (3 / 5 : ℝ))) *
+          (4 - (2 - 2 * (3 / 5 : ℝ))) := by
+  norm_num
+
 end DavisKahanTheory
 end TauCeti

@@ -36,6 +36,7 @@ REQUIRED_DECLARATIONS = {
     ],
     "FinishYuWangSamworth/FinishYuWangSamworth/Symmetric/AngleIdentity.lean": [
         "theorem yuWangSamworth_equation4",
+        "theorem yuWangSamworth_equation4_printed_counterexample",
     ],
     "FinishYuWangSamworth/FinishYuWangSamworth/Rectangular/Theorem4.lean": [
         "theorem yuWangSamworth_rightSingularSubspace_le",
@@ -50,7 +51,9 @@ REQUIRED_DECLARATIONS = {
     "FinishYuWangSamworth/FinishYuWangSamworth/Appendix/Lemma5.lean": [
         "theorem yuWangSamworth_lemma5_columns",
         "theorem yuWangSamworth_lemma5_isometricColumns",
+        "theorem yuWangSamworth_lemma5_orthonormalColumns",
         "theorem yuWangSamworth_lemma5_rows",
+        "theorem yuWangSamworth_lemma5_orthonormalRows",
     ],
 }
 
