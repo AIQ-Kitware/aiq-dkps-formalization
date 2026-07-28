@@ -19,6 +19,10 @@ compositions.  Because Davis--Kahan compares operators *between different
 spaces*, the ideal must be handled as a coherent family across all pairs at
 once, not as a norm on a single endomorphism algebra.
 
+The families here range over **Hilbert** spaces, with source and target still in
+independent universes.  See "Why Hilbert and not Banach" below: the restriction
+is forced by the examples, not by the laws.
+
 ## The single-field representation
 
 The family is presented by exactly one datum, an extended-real-valued **gauge**
@@ -47,13 +51,34 @@ ideal norm is finite.  Three things follow.
   `Submodule` membership for `carrier`), `gauge 0 = 0` follows from homogeneity
   at `c = 0`, and definiteness follows from `enorm_le_gauge`.
 
+## Why Hilbert and not Banach
+
+The four laws are statements about a norm, and every one of them is meaningful
+verbatim for Banach `E`, `F`.  The *examples* are not.  Of the five gauges this
+development has — the operator norm, the finite Ky Fan gauges, Schatten `p`,
+trace class and Hilbert--Schmidt — only the first survives outside Hilbert
+space, and the obstruction is `gauge_add_le`, not the definition.  Concretely,
+for the finite Ky Fan gauge `∑_{n < k} aₙ(A)` the *gauge* is defined at full
+Banach generality (`ContinuousLinearMap.approximationNumber` is stated for
+seminormed spaces over a `NontriviallyNormedField`) while its subadditivity is
+Hilbertian: the proof runs through singular values and majorization, and the
+classical additivity of approximation numbers,
+`a_{m+n}(S + T) ≤ aₘ(S) + aₙ(T)`, does **not** recover it — already at `k = 2`
+that bound only gives `a₀(S) + 2a₀(T) + a₁(S)`, which is not
+`∑_{n<2} aₙ(S) + ∑_{n<2} aₙ(T)`.
+
+So a Banach-wide version of this structure would be a notion with one instance
+and no way to acquire the motivating ones.  The parameters are therefore Hilbert
+throughout.  Re-widening is a purely mechanical edit should an instance ever
+appear: no proof in this file uses the inner product, only the norm.
+
 ## Layering
 
-`OperatorIdealFamily` is stated over Banach spaces with **independent source and
-target universes**.  Adjoint symmetry cannot be added at that generality: `A✝`
-swaps the roles of source and target, so a family closed under adjoints must be
-defined on a single universe and over Hilbert spaces.  That is
-`SymmetricOperatorIdealFamily`, which extends the diagonal instantiation.
+`OperatorIdealFamily` keeps **independent source and target universes**.  Adjoint
+symmetry cannot be added at that generality: `A✝` swaps the roles of source and
+target, so a family closed under adjoints must be defined on a single universe.
+That is `SymmetricOperatorIdealFamily`, which extends the diagonal
+instantiation.
 
 The two universes occur only through `max v w` in the type of the structure
 itself, so `linter.checkUnivs` flags them; they are nevertheless genuinely
@@ -99,47 +124,47 @@ every bounded operator: `A` belongs to the ideal exactly when `gauge A ≠ ∞`
 (`OperatorIdealFamily.carrier`).  Source and target spaces range over
 independent universes; adjoint symmetry is added on the diagonal by
 `SymmetricOperatorIdealFamily`. -/
-structure OperatorIdealFamily (𝕜 : Type u) [NontriviallyNormedField 𝕜] where
+structure OperatorIdealFamily (𝕜 : Type u) [RCLike 𝕜] where
   /-- The ideal norm, extended by `∞` off the ideal. -/
   gauge : ∀ {E : Type v} {F : Type w}
-      [NormedAddCommGroup E] [NormedSpace 𝕜 E]
-      [NormedAddCommGroup F] [NormedSpace 𝕜 F],
+      [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+      [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F],
       (E →L[𝕜] F) → ℝ≥0∞
   /-- The gauge is subadditive. -/
   gauge_add_le : ∀ {E : Type v} {F : Type w}
-      [NormedAddCommGroup E] [NormedSpace 𝕜 E]
-      [NormedAddCommGroup F] [NormedSpace 𝕜 F]
+      [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+      [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
       (A B : E →L[𝕜] F), gauge (A + B) ≤ gauge A + gauge B
   /-- The gauge is absolutely homogeneous.  At `c = 0` this forces
   `gauge 0 = 0`, ruling out the everywhere-infinite gauge. -/
   gauge_smul : ∀ {E : Type v} {F : Type w}
-      [NormedAddCommGroup E] [NormedSpace 𝕜 E]
-      [NormedAddCommGroup F] [NormedSpace 𝕜 F]
+      [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+      [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
       (c : 𝕜) (A : E →L[𝕜] F), gauge (c • A) = ‖c‖ₑ * gauge A
   /-- The gauge dominates the operator norm.  Together with `gauge_add_le` this
   makes the gauge a genuine norm on the ideal rather than a seminorm. -/
   enorm_le_gauge : ∀ {E : Type v} {F : Type w}
-      [NormedAddCommGroup E] [NormedSpace 𝕜 E]
-      [NormedAddCommGroup F] [NormedSpace 𝕜 F]
+      [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+      [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
       (A : E →L[𝕜] F), ‖A‖ₑ ≤ gauge A
   /-- The two-sided ideal law.  Finiteness of `‖L‖ₑ` and `‖R‖ₑ` makes this
   imply that the ideal is stable under outer composition. -/
   gauge_comp_le : ∀ {E H : Type v} {F G : Type w}
-      [NormedAddCommGroup E] [NormedSpace 𝕜 E]
-      [NormedAddCommGroup F] [NormedSpace 𝕜 F]
-      [NormedAddCommGroup G] [NormedSpace 𝕜 G]
-      [NormedAddCommGroup H] [NormedSpace 𝕜 H]
+      [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+      [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
+      [NormedAddCommGroup G] [InnerProductSpace 𝕜 G] [CompleteSpace G]
+      [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] [CompleteSpace H]
       (L : F →L[𝕜] G) (A : E →L[𝕜] F) (R : H →L[𝕜] E),
       gauge (L ∘L A ∘L R) ≤ ‖L‖ₑ * gauge A * ‖R‖ₑ
 
 namespace OperatorIdealFamily
 
-variable {𝕜 : Type u} [NontriviallyNormedField 𝕜]
+variable {𝕜 : Type u} [RCLike 𝕜]
 variable {E H : Type v} {F G : Type w}
-variable [NormedAddCommGroup E] [NormedSpace 𝕜 E]
-variable [NormedAddCommGroup F] [NormedSpace 𝕜 F]
-variable [NormedAddCommGroup G] [NormedSpace 𝕜 G]
-variable [NormedAddCommGroup H] [NormedSpace 𝕜 H]
+variable [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+variable [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
+variable [NormedAddCommGroup G] [InnerProductSpace 𝕜 G] [CompleteSpace G]
+variable [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] [CompleteSpace H]
 variable (N : OperatorIdealFamily.{u, v, w} 𝕜)
 
 /-- Two ideal families with the same gauge are equal.
@@ -150,13 +175,13 @@ thing the laws talk about — does not determine the structure. -/
 @[ext]
 theorem ext {N M : OperatorIdealFamily.{u, v, w} 𝕜}
     (h : ∀ {E : Type v} {F : Type w}
-      [NormedAddCommGroup E] [NormedSpace 𝕜 E]
-      [NormedAddCommGroup F] [NormedSpace 𝕜 F]
+      [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+      [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
       (A : E →L[𝕜] F), N.gauge A = M.gauge A) : N = M := by
   cases N
   cases M
   congr 1
-  funext E F _ _ _ _ A
+  funext E F _ _ _ _ _ _ A
   exact h A
 
 @[simp]
@@ -180,6 +205,7 @@ theorem gauge_neg (A : E →L[𝕜] F) : N.gauge (-A) = N.gauge A := by
 theorem gauge_sub_le (A B : E →L[𝕜] F) : N.gauge (A - B) ≤ N.gauge A + N.gauge B := by
   simpa [sub_eq_add_neg] using N.gauge_add_le A (-B)
 
+omit [CompleteSpace E] in
 /-- The identity is a contraction for the extended norm. -/
 private theorem enorm_id_le : ‖ContinuousLinearMap.id 𝕜 E‖ₑ ≤ 1 := by
   rw [← ofReal_norm]
@@ -263,8 +289,8 @@ This is deliberately a type synonym rather than the subtype itself: the subtype
 already inherits the *operator* norm from `E →L[𝕜] F`, and the two norms differ.
 -/
 def Elem (N : OperatorIdealFamily.{u, v, w} 𝕜) (E : Type v) (F : Type w)
-    [NormedAddCommGroup E] [NormedSpace 𝕜 E]
-    [NormedAddCommGroup F] [NormedSpace 𝕜 F] : Type max v w :=
+    [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+    [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F] : Type max v w :=
   _root_.Subtype fun A : E →L[𝕜] F => A ∈ N.carrier
 
 namespace Elem
@@ -340,15 +366,15 @@ end Elem
 /-- Completeness of an ideal family, stated as `CompleteSpace` for the ideal
 norm rather than as a hand-rolled Cauchy criterion.
 
-Completeness of the target is assumed, exactly as for the ambient
-`E →L[𝕜] F`: an ideal norm cannot repair an incomplete target. -/
+Completeness of the target is available from the ambient assumptions, exactly as
+for `E →L[𝕜] F`: an ideal norm cannot repair an incomplete target. -/
 class IsComplete (N : OperatorIdealFamily.{u, v, w} 𝕜) : Prop where
   completeSpace : ∀ {E : Type v} {F : Type w}
-    [NormedAddCommGroup E] [NormedSpace 𝕜 E]
-    [NormedAddCommGroup F] [NormedSpace 𝕜 F] [CompleteSpace F],
+    [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+    [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F],
     CompleteSpace (N.Elem E F)
 
-instance [N.IsComplete] [CompleteSpace F] : CompleteSpace (N.Elem E F) :=
+instance [N.IsComplete] : CompleteSpace (N.Elem E F) :=
   IsComplete.completeSpace
 
 end OperatorIdealFamily

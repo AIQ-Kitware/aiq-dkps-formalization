@@ -6,6 +6,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 import DavisKahan.OperatorIdeal.ApproximationNumbers.Core
 import DavisKahan.OperatorIdeal.UnitarilyInvariant.RectangularFamily
 import DavisKahan.OperatorIdeal.ApproximationNumbers.Real
+import ForTauCeti.Analysis.OperatorIdeal.Family.Basic
 
 /-!
 # Scalar-generic approximation-number endpoints and ideal families
@@ -23,6 +24,7 @@ namespace ExactSinTheta
 
 open scoped InnerProductSpace
 open scoped Topology
+open scoped ENNReal
 open Filter
 
 universe u v w
@@ -159,6 +161,118 @@ theorem kyFanApproximationGauge_comp_strongProjection_tendsto
   exact tendsto_finsetSum (Finset.range k)
     (fun n hn => approximationSingularValue_comp_strongProjection_tendsto
       hPproj hP n K)
+
+/-! ### The finite Ky Fan gauges as a canonical ideal family -/
+
+/-- The finite Ky Fan gauge `∑_{n < k} aₙ` as a **canonical** symmetric operator
+ideal family (`TauCeti.SymmetricOperatorIdealFamily`).
+
+The gauge is `ENNReal.ofReal` of `kyFanApproximationGauge k`, so it is finite
+everywhere — every bounded operator is a member
+(`carrier_kyFanSymmetricIdealFamily`) — and the four ideal laws are the
+real-valued ones transported along `ENNReal.ofReal`.  Only one of them,
+subadditivity, is mathematics rather than bookkeeping; it arrives through the
+`HasKyFanApproximationGaugeTriangle` capability class.
+
+`hk : 0 < k` is needed for exactly one law: `enorm_le_gauge`.  At `k = 0` the
+gauge is identically `0`, which satisfies the other three but is not a norm.
+
+**Intended destination.**  This belongs beside `TauCeti.operatorNormFamily` in
+`ForTauCeti/Analysis/OperatorIdeal/Family/`.  It cannot live there yet, because
+both `kyFanApproximationGauge` and the capability class supplying its triangle
+inequality are defined in this library; it moves when the approximation-number
+layer is extracted. -/
+noncomputable def kyFanSymmetricIdealFamily
+    [HasKyFanApproximationGaugeTriangle.{u, v} 𝕜] (k : ℕ) (hk : 0 < k) :
+    TauCeti.SymmetricOperatorIdealFamily.{u, v} 𝕜 where
+  gauge A := ENNReal.ofReal (kyFanApproximationGauge k A)
+  gauge_add_le A B := by
+    rw [← ENNReal.ofReal_add (kyFanApproximationGauge_nonneg k A)
+      (kyFanApproximationGauge_nonneg k B)]
+    exact ENNReal.ofReal_le_ofReal (kyFanApproximationGauge_add_le k A B)
+  gauge_smul c A := by
+    rw [kyFanApproximationGauge_smul, ENNReal.ofReal_mul (norm_nonneg c), ofReal_norm]
+  enorm_le_gauge A := by
+    rw [← ofReal_norm]
+    exact ENNReal.ofReal_le_ofReal (opNorm_le_kyFanApproximationGauge hk A)
+  gauge_comp_le L A R := by
+    rw [← ofReal_norm, ← ofReal_norm,
+      ← ENNReal.ofReal_mul (norm_nonneg L),
+      ← ENNReal.ofReal_mul (mul_nonneg (norm_nonneg L) (kyFanApproximationGauge_nonneg k A))]
+    exact ENNReal.ofReal_le_ofReal (kyFanApproximationGauge_comp_le k L A R)
+  gauge_adjoint A := by rw [kyFanApproximationGauge_adjoint]
+
+@[simp]
+theorem gauge_kyFanSymmetricIdealFamily
+    [HasKyFanApproximationGaugeTriangle.{u, v} 𝕜] (k : ℕ) (hk : 0 < k)
+    (A : E →L[𝕜] F) :
+    (kyFanSymmetricIdealFamily (𝕜 := 𝕜) k hk).gauge A =
+      ENNReal.ofReal (kyFanApproximationGauge k A) := rfl
+
+theorem gauge_kyFanSymmetricIdealFamily_ne_top
+    [HasKyFanApproximationGaugeTriangle.{u, v} 𝕜] (k : ℕ) (hk : 0 < k)
+    (A : E →L[𝕜] F) :
+    (kyFanSymmetricIdealFamily (𝕜 := 𝕜) k hk).gauge A ≠ ∞ :=
+  ENNReal.ofReal_ne_top
+
+/-- Every bounded operator lies in the finite Ky Fan ideal: the gauge is a
+finite sum of approximation numbers, so it never reaches `∞`. -/
+@[simp]
+theorem carrier_kyFanSymmetricIdealFamily
+    [HasKyFanApproximationGaugeTriangle.{u, v} 𝕜] (k : ℕ) (hk : 0 < k) :
+    (kyFanSymmetricIdealFamily (𝕜 := 𝕜) k hk).toOperatorIdealFamily.carrier
+      (E := E) (F := F) = ⊤ := by
+  ext A
+  simp
+
+/-- The real-valued Ky Fan gauge is recovered from the canonical one. -/
+@[simp]
+theorem toReal_gauge_kyFanSymmetricIdealFamily
+    [HasKyFanApproximationGaugeTriangle.{u, v} 𝕜] (k : ℕ) (hk : 0 < k)
+    (A : E →L[𝕜] F) :
+    ((kyFanSymmetricIdealFamily (𝕜 := 𝕜) k hk).gauge A).toReal =
+      kyFanApproximationGauge k A :=
+  ENNReal.toReal_ofReal (kyFanApproximationGauge_nonneg k A)
+
+/-- The finite Ky Fan ideal is complete.
+
+The ideal is all of `E →L[𝕜] F` and its norm is *equivalent* to the operator
+norm — `‖A‖ ≤ ∑_{n<k} aₙ(A) ≤ k‖A‖` — so completeness is inherited from the
+bounded operators.  Both inequalities are needed: the first turns an ideal-norm
+Cauchy sequence into an operator-norm one, the second turns the operator-norm
+limit back into an ideal-norm limit. -/
+instance isComplete_kyFanSymmetricIdealFamily
+    [HasKyFanApproximationGaugeTriangle.{u, v} 𝕜] (k : ℕ) (hk : 0 < k) :
+    (kyFanSymmetricIdealFamily (𝕜 := 𝕜) k hk).toOperatorIdealFamily.IsComplete where
+  completeSpace := by
+    intro E F _ _ _ _ _ _
+    have hnorm : ∀ x : (kyFanSymmetricIdealFamily (𝕜 := 𝕜) k hk).toOperatorIdealFamily.Elem E F,
+        ‖x‖ = kyFanApproximationGauge k x.val :=
+      fun x => ENNReal.toReal_ofReal (kyFanApproximationGauge_nonneg k _)
+    refine Metric.complete_of_cauchySeq_tendsto fun a ha => ?_
+    have hop : CauchySeq fun n => (a n).val := by
+      rw [Metric.cauchySeq_iff] at ha ⊢
+      intro ε hε
+      obtain ⟨M, hM⟩ := ha ε hε
+      refine ⟨M, fun m hm n hn => lt_of_le_of_lt ?_ (hM m hm n hn)⟩
+      rw [dist_eq_norm, dist_eq_norm, hnorm]
+      exact opNorm_le_kyFanApproximationGauge hk _
+    obtain ⟨L, hL⟩ := cauchySeq_tendsto_of_complete hop
+    refine ⟨TauCeti.OperatorIdealFamily.Elem.mk
+      (gauge_kyFanSymmetricIdealFamily_ne_top k hk L), ?_⟩
+    have hkR : (0 : ℝ) < k := by exact_mod_cast hk
+    rw [Metric.tendsto_atTop] at hL ⊢
+    intro ε hε
+    obtain ⟨M, hM⟩ := hL (ε / k) (div_pos hε hkR)
+    refine ⟨M, fun n hn => ?_⟩
+    rw [dist_eq_norm, hnorm]
+    calc kyFanApproximationGauge k ((a n).val - L)
+        ≤ (k : ℝ) * ‖(a n).val - L‖ :=
+          kyFanApproximationGauge_le_nat_mul_opNorm k _
+      _ < (k : ℝ) * (ε / k) := by
+          refine mul_lt_mul_of_pos_left ?_ hkR
+          simpa [dist_eq_norm] using hM n hn
+      _ = ε := by field_simp
 
 /-- A rectangular ideal family whose gauge is fully symmetric with respect
     to all finite Ky Fan approximation gauges. -/
