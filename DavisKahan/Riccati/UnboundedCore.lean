@@ -28,12 +28,11 @@ variable {E1 : Type*} [NormedAddCommGroup E1] [InnerProductSpace 𝕜 E1]
 
 /-- The explicit product domain of two closed operators, transported to the
 `L²` Hilbert direct sum. -/
-noncomputable def closedOperatorDirectSumDomain
+noncomputable abbrev closedOperatorDirectSumDomain
     (A0 : ClosedOperator (𝕜 := 𝕜) (E := E0))
     (A1 : ClosedOperator (𝕜 := 𝕜) (E := E1)) :
     Submodule 𝕜 (WithLp 2 (E0 × E1)) :=
-  (A0.domain.prod A1.domain).comap
-    (WithLp.linearEquiv 2 𝕜 (E0 × E1)).toLinearMap
+  TauCeti.LinearPMap.directSumDomain A0.toLinearPMap A1.toLinearPMap
 
 @[simp] theorem mem_closedOperatorDirectSumDomain_iff
     (A0 : ClosedOperator (𝕜 := 𝕜) (E := E0))
@@ -45,50 +44,40 @@ noncomputable def closedOperatorDirectSumDomain
 
 /-- The first coordinate of a vector in the product operator domain, carrying
 its membership witness in the first operator domain. -/
-def closedOperatorDirectSumDomainFst
+abbrev closedOperatorDirectSumDomainFst
     (A0 : ClosedOperator (𝕜 := 𝕜) (E := E0))
     (A1 : ClosedOperator (𝕜 := 𝕜) (E := E1))
     (z : closedOperatorDirectSumDomain A0 A1) : A0.domain :=
-  ⟨WithLp.fst (z : WithLp 2 (E0 × E1)),
-    (mem_closedOperatorDirectSumDomain_iff A0 A1 z).mp z.property |>.1⟩
+  TauCeti.LinearPMap.directSumDomainFst A0.toLinearPMap A1.toLinearPMap z
 
 /-- The second coordinate of a vector in the product operator domain, carrying
 its membership witness in the second operator domain. -/
-def closedOperatorDirectSumDomainSnd
+abbrev closedOperatorDirectSumDomainSnd
     (A0 : ClosedOperator (𝕜 := 𝕜) (E := E0))
     (A1 : ClosedOperator (𝕜 := 𝕜) (E := E1))
     (z : closedOperatorDirectSumDomain A0 A1) : A1.domain :=
-  ⟨WithLp.snd (z : WithLp 2 (E0 × E1)),
-    (mem_closedOperatorDirectSumDomain_iff A0 A1 z).mp z.property |>.2⟩
+  TauCeti.LinearPMap.directSumDomainSnd A0.toLinearPMap A1.toLinearPMap z
 
 /-- First-coordinate extraction as a linear map between the bundled domains. -/
-def closedOperatorDirectSumDomainFstLinearMap
+abbrev closedOperatorDirectSumDomainFstLinearMap
     (A0 : ClosedOperator (𝕜 := 𝕜) (E := E0))
     (A1 : ClosedOperator (𝕜 := 𝕜) (E := E1)) :
     closedOperatorDirectSumDomain A0 A1 →ₗ[𝕜] A0.domain where
-  toFun := closedOperatorDirectSumDomainFst A0 A1
-  map_add' _ _ := Subtype.ext rfl
-  map_smul' _ _ := Subtype.ext rfl
+  TauCeti.LinearPMap.directSumDomainFstLinearMap A0.toLinearPMap A1.toLinearPMap
 
 /-- Second-coordinate extraction as a linear map between the bundled domains. -/
-def closedOperatorDirectSumDomainSndLinearMap
+abbrev closedOperatorDirectSumDomainSndLinearMap
     (A0 : ClosedOperator (𝕜 := 𝕜) (E := E0))
     (A1 : ClosedOperator (𝕜 := 𝕜) (E := E1)) :
     closedOperatorDirectSumDomain A0 A1 →ₗ[𝕜] A1.domain where
-  toFun := closedOperatorDirectSumDomainSnd A0 A1
-  map_add' _ _ := Subtype.ext rfl
-  map_smul' _ _ := Subtype.ext rfl
+  TauCeti.LinearPMap.directSumDomainSndLinearMap A0.toLinearPMap A1.toLinearPMap
 
 /-- Componentwise action of the direct sum on its explicit product domain. -/
-noncomputable def closedOperatorDirectSumLinearMap
+noncomputable abbrev closedOperatorDirectSumLinearMap
     (A0 : ClosedOperator (𝕜 := 𝕜) (E := E0))
     (A1 : ClosedOperator (𝕜 := 𝕜) (E := E1)) :
     closedOperatorDirectSumDomain A0 A1 →ₗ[𝕜] WithLp 2 (E0 × E1) :=
-  (WithLp.linearEquiv 2 𝕜 (E0 × E1)).symm.toLinearMap.comp
-    ((A0.toLinearMap.comp
-      (closedOperatorDirectSumDomainFstLinearMap A0 A1)).prod
-     (A1.toLinearMap.comp
-      (closedOperatorDirectSumDomainSndLinearMap A0 A1)))
+  TauCeti.LinearPMap.directSumLinearMap A0.toLinearPMap A1.toLinearPMap
 
 @[simp] theorem closedOperatorDirectSumLinearMap_fst
     (A0 : ClosedOperator (𝕜 := 𝕜) (E := E0))

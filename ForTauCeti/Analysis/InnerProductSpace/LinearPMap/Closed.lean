@@ -564,6 +564,68 @@ theorem pullback_unitaryEquivalent
     apply Subtype.ext
     simp
 
+/-- The explicit product domain of two partial maps, transported to the
+`L²` Hilbert direct sum. -/
+noncomputable def directSumDomain
+    (A : E →ₗ.[𝕜] E) (B : F →ₗ.[𝕜] F) :
+    Submodule 𝕜 (WithLp 2 (E × F)) :=
+  (A.domain.prod B.domain).comap
+    (WithLp.linearEquiv 2 𝕜 (E × F)).toLinearMap
+
+@[simp] theorem mem_directSumDomain_iff
+    (A : E →ₗ.[𝕜] E) (B : F →ₗ.[𝕜] F) (z : WithLp 2 (E × F)) :
+    z ∈ directSumDomain A B ↔
+      WithLp.fst z ∈ A.domain ∧ WithLp.snd z ∈ B.domain :=
+  Iff.rfl
+
+/-- First coordinate of a direct-sum domain vector. -/
+def directSumDomainFst (A : E →ₗ.[𝕜] E) (B : F →ₗ.[𝕜] F)
+    (z : directSumDomain A B) : A.domain :=
+  ⟨WithLp.fst (z : WithLp 2 (E × F)),
+    (mem_directSumDomain_iff A B z).mp z.property |>.1⟩
+
+/-- Second coordinate of a direct-sum domain vector. -/
+def directSumDomainSnd (A : E →ₗ.[𝕜] E) (B : F →ₗ.[𝕜] F)
+    (z : directSumDomain A B) : B.domain :=
+  ⟨WithLp.snd (z : WithLp 2 (E × F)),
+    (mem_directSumDomain_iff A B z).mp z.property |>.2⟩
+
+/-- First-coordinate extraction as a linear map on a direct-sum domain. -/
+def directSumDomainFstLinearMap (A : E →ₗ.[𝕜] E) (B : F →ₗ.[𝕜] F) :
+    directSumDomain A B →ₗ[𝕜] A.domain where
+  toFun := directSumDomainFst A B
+  map_add' _ _ := Subtype.ext rfl
+  map_smul' _ _ := Subtype.ext rfl
+
+/-- Second-coordinate extraction as a linear map on a direct-sum domain. -/
+def directSumDomainSndLinearMap (A : E →ₗ.[𝕜] E) (B : F →ₗ.[𝕜] F) :
+    directSumDomain A B →ₗ[𝕜] B.domain where
+  toFun := directSumDomainSnd A B
+  map_add' _ _ := Subtype.ext rfl
+  map_smul' _ _ := Subtype.ext rfl
+
+/-- Componentwise partial-map action on a direct-sum domain. -/
+noncomputable def directSumLinearMap
+    (A : E →ₗ.[𝕜] E) (B : F →ₗ.[𝕜] F) :
+    directSumDomain A B →ₗ[𝕜] WithLp 2 (E × F) :=
+  (WithLp.linearEquiv 2 𝕜 (E × F)).symm.toLinearMap.comp
+    ((A.toFun.comp
+      (directSumDomainFstLinearMap A B)).prod
+     (B.toFun.comp
+      (directSumDomainSndLinearMap A B)))
+
+/-- The direct sum of two partial maps.  Density and closedness remain
+separate properties. -/
+noncomputable def directSum
+    (A : E →ₗ.[𝕜] E) (B : F →ₗ.[𝕜] F) :
+    WithLp 2 (E × F) →ₗ.[𝕜] WithLp 2 (E × F) where
+  domain := directSumDomain A B
+  toFun := directSumLinearMap A B
+
+@[simp] theorem directSum_domain
+    (A : E →ₗ.[𝕜] E) (B : F →ₗ.[𝕜] F) :
+    (directSum A B).domain = directSumDomain A B := rfl
+
 /-- A partial linear map is symmetric on its operator domain. -/
 def IsSymmetric (A : E →ₗ.[𝕜] E) : Prop :=
   ∀ x y : A.domain, ⟪A x, (y : E)⟫_𝕜 = ⟪(x : E), A y⟫_𝕜
