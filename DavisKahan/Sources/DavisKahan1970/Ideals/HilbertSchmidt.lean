@@ -173,7 +173,8 @@ theorem paperHilbertSchmidtNorm_operatorModulus
     (A : E →L[ℂ] F) :
     paperHilbertSchmidtNorm (ContinuousLinearMap.modulus A) =
       paperHilbertSchmidtNorm A :=
-  (sameApproximationSingularValues_rectangularOperatorModulus A).paperHilbertSchmidtNorm_eq
+  SameApproximationSingularSequence.paperHilbertSchmidtNorm_eq
+    (sameApproximationSingularValues_rectangularOperatorModulus A)
 
 
 /-- Real complexification preserves Hilbert--Schmidt energy exactly. -/

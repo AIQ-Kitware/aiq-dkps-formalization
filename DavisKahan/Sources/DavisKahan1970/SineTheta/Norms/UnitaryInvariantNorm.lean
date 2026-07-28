@@ -5,6 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantNorm
 import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SingularValueTransport
+import DavisKahan.OperatorIdeal.ApproximationNumbers.OperatorModulus
 import Mathlib.Data.ENNReal.Inv
 
 /-!
@@ -355,6 +356,43 @@ theorem gauge_eq_of_sameApproximationSingularValues
       le_of_eq (h.kyFanApproximationGauge_eq k).symm
 
 end PaperUnitaryInvariantNorm
+
+/-! ## The modulus and the paper norms
+
+These two were in `DavisKahan/OperatorIdeal/ApproximationNumbers/OperatorModulus.lean` until
+2026-07-28.  They are the only paper-facing statements that file had, and they were the
+whole reason a *generic* module imported this source facade — the backwards dependency the
+dependency-layer checker carries as `generic_imports_sources`.  Everything generic in that
+file is now staged in
+`ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/SameSequence.lean`, so the two
+paper-facing ones move here, where the objects they talk about live. -/
+
+section ModulusPaperNorms
+
+variable {E : Type v} [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
+
+/-- Every current ideal family assigns the same membership and gauge to `T`
+and its positive modulus. -/
+theorem modulus_mem_and_gauge_eq
+    (N : UnitaryInvariantIdealFamily (𝕜 := ℂ))
+    {T : E →L[ℂ] E}
+    (hT : N.Mem T) :
+    N.Mem (ContinuousLinearMap.modulus T) ∧
+      N.gauge (ContinuousLinearMap.modulus T) =
+        N.gauge T :=
+  SameApproximationSingularValues.mem_and_gauge_eq N
+    (modulus_sameApproximationSingularValues T) hT
+
+/-- Every literal paper norm assigns exactly the same extended value to an
+operator and its positive modulus. -/
+theorem paperNorm_modulus_eq
+    (N : PaperUnitaryInvariantNorm) (T : E →L[ℂ] E) :
+    N.extendedGauge (ContinuousLinearMap.modulus T) = N.extendedGauge T :=
+  N.gauge_eq_of_sameApproximationSingularValues
+    (modulus_sameApproximationSingularValues T)
+
+
+end ModulusPaperNorms
 
 end
 
