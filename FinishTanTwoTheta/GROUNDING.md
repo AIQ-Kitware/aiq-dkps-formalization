@@ -51,7 +51,8 @@ Routine core lemmas and tactics are omitted; no mathematical helper is omitted.
 
 The following are deliberately local declarations, not external references:
 
-- `exists_finiteRank_gaugeApproximation_of_kyFan_dominated`;
+- `exists_gauge_decomposition_of_weaklyMajorized`;
+- `minimalFullySymmetricMem_of_kyFan_dominated`;
 - `exists_gramSpectralBandModel`;
 - `exists_rank_le_norm_doubleAngleTangent_sub_lt`;
 - `doubleAngleTangent_approximationNumber_le`;
