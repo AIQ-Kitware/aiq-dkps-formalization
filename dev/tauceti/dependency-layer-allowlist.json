@@ -17,8 +17,6 @@
   ],
   "production_imports_spectra": [
     "DavisKahan.Alternative.OperatorIdeal.HilbertSchmidt.ColumnExpansion",
-    "DavisKahan.Geometry.Polar.PolarIsometryFinal",
-    "DavisKahan.Geometry.Polar.Section3Nonacute",
     "DavisKahan.Sources.DavisKahan1970.Audits.SylvesterHilbertSchmidt",
     "DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtBasis",
     "DavisKahan.Sources.DavisKahan1970.Sylvester.HilbertSchmidtDefectFirst",
