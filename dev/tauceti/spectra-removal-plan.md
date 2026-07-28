@@ -137,15 +137,37 @@ Cheap now, impossible later. Nothing else starts until this lands.
    upstream revision that drifted in. Authorship splits three ways and the
    difference matters for what may be submitted upstream:
 
-   | authorship | files | disposition |
-   |---|---|---|
-   | Jon Crall + OpenAI GPT-5.6 Thinking | 7 | ours outright |
-   | Adam Bornemann + Jon Crall + GPT-5.6 | 3 | shared — needs his sign-off before a Tau Ceti PR |
-   | Adam Bornemann alone (`BornRule/POVMCore.lean`, 378 lines) | 1 | **his**, obtained outside the public repo |
+   | authorship (from the file headers) | files |
+   |---|---|
+   | Jon Crall + OpenAI GPT-5.6 Thinking | 7 |
+   | Adam Bornemann + Jon Crall + GPT-5.6 | 3 |
+   | Adam Bornemann alone (`BornRule/POVMCore.lean`, 378 lines) | 1 |
 
-   Relocating any of them *within this repository* is ours to do; **submitting
-   the last four to Tau Ceti is not**, and that has to be settled with Adam
-   before those clusters reach a PR.
+   **Licensing: there is no permission problem.** Every one of the 11 carries
+   `Released under Apache 2.0 license as described in the file LICENSE`, and
+   `vendor/Spectra/LICENSE` is the real Apache License 2.0. Apache-2.0 §2 grants
+   a perpetual, worldwide, irrevocable licence to reproduce, prepare derivative
+   works of, and distribute the work. DKPS and Tau Ceti are both Apache-2.0 too,
+   so there is no compatibility question either. **No sign-off is required to
+   relocate these or to submit them upstream.** Telling Adam is a courtesy, and
+   worth doing because Spectra is a live collaboration — but it is not a gate.
+
+   What Apache-2.0 *does* require, and what this campaign is uniquely likely to
+   get wrong, is §4:
+
+   - **§4(b) — modified files must carry prominent notices stating you changed
+     them.** Reshaping a file into a new library's house style is a modification.
+   - **§4(c) — retain all copyright and attribution notices from the source.** So
+     `Copyright (c) 2026 Spectra Formalization Project` and the `Authors:` line
+     must survive relocation.
+   - §4(a) ship the licence (Tau Ceti already does); §4(d) N/A — Spectra has no
+     `NOTICE` file.
+
+   §4(c) is the trap. **Tau Ceti's header convention has no `Authors:` line** —
+   its files read `Copyright (c) 2026 The Tau Ceti contributors` and stop. Porting
+   one of these into that template verbatim silently drops the attribution the
+   licence requires. Put the retained notice in the module's `## Provenance`
+   section, which this repository already uses for exactly this.
 
    `POVMCore.lean` is also the only one with a structural complication: two
    upstream files (`BornRule/POVM.lean`, `BornRule/Joint/Defs.lean`) import it,

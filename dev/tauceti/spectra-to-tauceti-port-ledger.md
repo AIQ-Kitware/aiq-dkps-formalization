@@ -355,9 +355,16 @@ left until port time:
    revision that drifted in. Authorship is *not* uniform, and the difference
    governs what may be submitted upstream: **7** are Jon Crall + GPT-5.6, **3**
    are co-authored with Adam Bornemann, and **1** — `BornRule/POVMCore.lean`,
-   378 lines — is solely his, obtained outside the public repo. Relocating any of
-   them inside this repository is ours to do; submitting the last four to Tau Ceti
-   is not, and needs his sign-off first.
+   378 lines — is solely his.
+
+   **This is not a permission problem.** All 11 carry an Apache-2.0 grant in their
+   headers, and Spectra, DKPS and Tau Ceti are all Apache-2.0, so relocating and
+   upstreaming them is licensed outright — telling Adam is a courtesy, not a gate.
+   The binding obligations are Apache-2.0 §4(b) (modified files must say they were
+   changed) and §4(c) (retain the copyright and attribution notices). §4(c) is the
+   trap here: **Tau Ceti's header convention carries no `Authors:` line**, so
+   dropping one of these into that template verbatim silently discards the
+   attribution the licence requires.
 
    This makes most of the removal *cheaper*, not dearer: those modules need no
    port and no donor negotiation. They are already ours; they only need to move to
