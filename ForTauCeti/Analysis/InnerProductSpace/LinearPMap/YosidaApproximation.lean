@@ -51,8 +51,8 @@ self-adjoint operator (Stone's theorem):
 namespace TauCeti
 namespace LinearPMap
 
-open Complex
-open scoped InnerProductSpace
+open Complex Filter
+open scoped InnerProductSpace Topology
 
 variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
 
@@ -223,6 +223,86 @@ theorem norm_yosidaJNeg_le (hA : IsSelfAdjoint A) (n : ℕ+) : ‖yosidaJNeg hA 
     _ ≤ (n : ℝ) * ((n : ℝ))⁻¹ :=
         mul_le_mul_of_nonneg_left (norm_resolventAtNegIn_le hA n) hn.le
     _ = 1 := by field_simp
+
+/-! ### Strong convergence `Jₙ → 1`
+
+`Jₙ = -in·R(in)` converges strongly to the identity.  On the domain this is the
+algebraic identity `Jₙφ = φ - R(in)(Aφ)` together with `‖R(in)‖ ≤ 1/n`; the
+contraction bound `‖Jₙ‖ ≤ 1` then spreads it to all of `H` by density. -/
+
+/-- On the domain, `Jₙ` splits off a resolvent: `Jₙφ = φ - R(in)(Aφ)`. -/
+theorem yosidaJ_apply_of_mem_domain (hA : IsSelfAdjoint A) (n : ℕ+)
+    (φ : H) (hφ : φ ∈ A.domain) :
+    yosidaJ hA n φ = φ - resolventAtIn hA n (A ⟨φ, hφ⟩) := by
+  set hz := mem_resolventSet_of_im_ne_zero hA (I_mul_pnat_im_ne_zero n) with hz_def
+  have h1 : resolvent A hz (A ⟨φ, hφ⟩ - (I * (n : ℂ)) • φ) = φ :=
+    resolvent_apply_sub_smul hz ⟨φ, hφ⟩
+  -- rewrite inside `h1` rather than in the goal: `φ` occurs in `hφ`, so rewriting
+  -- it in the goal produces an ill-typed motive
+  have h2 : resolvent A hz (A ⟨φ, hφ⟩) - (I * (n : ℂ)) • resolvent A hz φ = φ := by
+    rwa [map_sub, map_smul] at h1
+  have h3 : resolvent A hz (A ⟨φ, hφ⟩) = φ + (I * (n : ℂ)) • resolvent A hz φ :=
+    eq_add_of_sub_eq h2
+  change (-I * (n : ℂ)) • resolvent A hz φ = φ - resolvent A hz (A ⟨φ, hφ⟩)
+  rw [h3, neg_mul, neg_smul]
+  abel
+
+/-- `Jₙφ → φ` for `φ` in the domain. -/
+theorem tendsto_yosidaJ_of_mem_domain (hA : IsSelfAdjoint A) (φ : H) (hφ : φ ∈ A.domain) :
+    Tendsto (fun n : ℕ+ => yosidaJ hA n φ) atTop (𝓝 φ) := by
+  rw [Metric.tendsto_atTop]
+  intro ε hε
+  by_cases hz : ‖A ⟨φ, hφ⟩‖ = 0
+  · refine ⟨1, fun n _ => ?_⟩
+    rw [yosidaJ_apply_of_mem_domain hA n φ hφ, norm_eq_zero.mp hz]
+    simpa using hε
+  · have hpos : 0 < ‖A ⟨φ, hφ⟩‖ := (norm_nonneg _).lt_of_ne' hz
+    refine ⟨⟨Nat.ceil (‖A ⟨φ, hφ⟩‖ / ε) + 1, Nat.add_one_pos _⟩, fun n hn => ?_⟩
+    have hnpos : (0 : ℝ) < (n : ℝ) := Nat.cast_pos.mpr n.pos
+    have heq : dist (yosidaJ hA n φ) φ = ‖resolventAtIn hA n (A ⟨φ, hφ⟩)‖ := by
+      rw [dist_eq_norm, yosidaJ_apply_of_mem_domain hA n φ hφ]
+      simp
+    rw [heq]
+    calc ‖resolventAtIn hA n (A ⟨φ, hφ⟩)‖
+        ≤ ‖resolventAtIn hA n‖ * ‖A ⟨φ, hφ⟩‖ := ContinuousLinearMap.le_opNorm _ _
+      _ ≤ ((n : ℝ))⁻¹ * ‖A ⟨φ, hφ⟩‖ := by
+          gcongr
+          exact norm_resolventAtIn_le hA n
+      _ < ε := by
+          rw [inv_mul_lt_iff₀ hnpos]
+          have h1 : (⌈‖A ⟨φ, hφ⟩‖ / ε⌉₊ + 1 : ℕ) ≤ (n : ℕ) := hn
+          calc ‖A ⟨φ, hφ⟩‖
+              = (‖A ⟨φ, hφ⟩‖ / ε) * ε := by field_simp
+            _ ≤ (⌈‖A ⟨φ, hφ⟩‖ / ε⌉₊ : ℝ) * ε := by gcongr; exact Nat.le_ceil _
+            _ < ((⌈‖A ⟨φ, hφ⟩‖ / ε⌉₊ : ℝ) + 1) * ε := by nlinarith
+            _ ≤ (n : ℝ) * ε := by gcongr; exact_mod_cast h1
+
+/-- `Jₙ → 1` strongly on all of `H`, by density and `‖Jₙ‖ ≤ 1`. -/
+theorem tendsto_yosidaJ (hA : IsSelfAdjoint A) (ψ : H) :
+    Tendsto (fun n : ℕ+ => yosidaJ hA n ψ) atTop (𝓝 ψ) := by
+  have hdense : Dense (A.domain : Set H) := hA.dense_domain
+  rw [Metric.tendsto_atTop]
+  intro ε hε
+  obtain ⟨φ, hφmem, hφclose⟩ := Metric.mem_closure_iff.mp
+    (hdense.closure_eq ▸ Set.mem_univ ψ) (ε / 3) (by linarith)
+  obtain ⟨N, hN⟩ := (Metric.tendsto_atTop.mp
+    (tendsto_yosidaJ_of_mem_domain hA φ hφmem)) (ε / 3) (by linarith)
+  refine ⟨N, fun n hn => ?_⟩
+  calc dist (yosidaJ hA n ψ) ψ
+      ≤ dist (yosidaJ hA n ψ) (yosidaJ hA n φ) + dist (yosidaJ hA n φ) φ + dist φ ψ :=
+        dist_triangle4 _ _ _ _
+    _ = ‖yosidaJ hA n (ψ - φ)‖ + dist (yosidaJ hA n φ) φ + dist φ ψ := by
+        rw [dist_eq_norm, ContinuousLinearMap.map_sub]
+    _ ≤ ‖yosidaJ hA n‖ * ‖ψ - φ‖ + dist (yosidaJ hA n φ) φ + dist φ ψ := by
+        gcongr; exact ContinuousLinearMap.le_opNorm _ _
+    _ ≤ 1 * ‖ψ - φ‖ + dist (yosidaJ hA n φ) φ + dist φ ψ := by
+        gcongr; exact norm_yosidaJ_le hA n
+    _ = dist ψ φ + dist (yosidaJ hA n φ) φ + dist φ ψ := by rw [one_mul, ← dist_eq_norm]
+    _ < ε / 3 + ε / 3 + ε / 3 := by
+        gcongr
+        · exact Metric.mem_ball.mp (hN n hn)
+        · exact Metric.mem_ball'.mp hφclose
+    _ = ε := by ring
 
 end LinearPMap
 end TauCeti
