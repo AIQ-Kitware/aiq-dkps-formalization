@@ -186,6 +186,22 @@ noncomputable def unboundedBlockOperatorCorePMap
     (unboundedBlockOperatorCorePMap H).domain =
       closedOperatorDirectSumDomain H.A0 H.A1 := rfl
 
+@[simp] theorem unboundedBlockOperatorCorePMap_apply_fst
+    (H : UnboundedBlockData (𝕜 := 𝕜) (E0 := E0) (E1 := E1))
+    (z : (unboundedBlockOperatorCorePMap H).domain) :
+    WithLp.fst (unboundedBlockOperatorCorePMap H z) =
+      H.A0.toLinearMap (closedOperatorDirectSumDomainFst H.A0 H.A1 z) +
+        H.B01 (WithLp.snd (z : WithLp 2 (E0 × E1))) := by
+  rfl
+
+@[simp] theorem unboundedBlockOperatorCorePMap_apply_snd
+    (H : UnboundedBlockData (𝕜 := 𝕜) (E0 := E0) (E1 := E1))
+    (z : (unboundedBlockOperatorCorePMap H).domain) :
+    WithLp.snd (unboundedBlockOperatorCorePMap H z) =
+      H.A1.toLinearMap (closedOperatorDirectSumDomainSnd H.A0 H.A1 z) +
+        H.B10 (WithLp.fst (z : WithLp 2 (E0 × E1))) := by
+  rfl
+
 noncomputable def unboundedBlockOperatorCore
     (H : UnboundedBlockData (𝕜 := 𝕜) (E0 := E0) (E1 := E1)) :
     ClosedOperator (𝕜 := 𝕜) (E := WithLp 2 (E0 × E1)) :=
