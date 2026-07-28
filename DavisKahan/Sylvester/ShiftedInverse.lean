@@ -233,17 +233,20 @@ theorem _root_.TauCeti.DavisKahanExt.ClosedOperator.norm_shift_apply_le_of_form_
 
 /-! ## Constant-one interval/exterior closed Sylvester estimates -/
 
+omit [CompleteSpace E] [CompleteSpace F] in
 /-- Constant-one estimate for `A X - X B = C` with the interval block `B`
 (quadratic form in `[β, α]`) and the exterior block `A` (bounded shifted left
 inverse at distance `δ` beyond the interval). -/
-theorem norm_closedSylvester_le_of_intervalExterior
-    {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := E)}
-    {B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := F)}
-    (hBsym : B.IsSymmetric)
+theorem linearPMap_norm_sylvester_le_of_intervalExterior
+    {A : E →ₗ.[𝕜] E} {B : F →ₗ.[𝕜] F}
+    (hBsym : TauCeti.LinearPMap.IsSymmetric B)
+    (hBdense : Dense (B.domain : Set F))
     {X C : F →L[𝕜] E} {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
-    (hBlow : SemiboundedBelow B β) (hBhigh : SemiboundedAbove B α)
-    (hAres : LeftShiftedInverseBound A ((α + β) / 2) ((α - β) / 2 + δ))
-    (hEq : HasClosedSylvesterEquation A B X C) :
+    (hBlow : TauCeti.LinearPMap.SemiboundedBelow B β)
+    (hBhigh : TauCeti.LinearPMap.SemiboundedAbove B α)
+    (hAres : TauCeti.LinearPMap.LeftShiftedInverseBound A
+      ((α + β) / 2) ((α - β) / 2 + δ))
+    (hEq : TauCeti.LinearPMap.SylvesterEquation A B X C) :
     δ * ‖X‖ ≤ ‖C‖ := by
   obtain ⟨J, hJleft, hJnorm⟩ := hAres
   set c : ℝ := (α + β) / 2 with hc
@@ -252,20 +255,20 @@ theorem norm_closedSylvester_le_of_intervalExterior
   have hrd : (0 : ℝ) < r + δ := by linarith
   -- pointwise absorption identity on the dense domain
   have hkey : ∀ y : B.domain, X (y : F) =
-      J (C (y : F) + X (B.toLinearMap y - ((c : ℝ) : 𝕜) • (y : F))) := by
+      J (C (y : F) + X (B y - ((c : ℝ) : 𝕜) • (y : F))) := by
     intro y
-    have heq := ClosedSylvesterEquation.equation_toLinearMap hEq y (hEq.mapsTo_domain y)
+    have heq := hEq.equation y
     have hJ := hJleft ⟨X (y : F), hEq.mapsTo_domain y⟩
-    have hexpand : A.toLinearMap ⟨X (y : F), hEq.mapsTo_domain y⟩ -
+    have hexpand : A ⟨X (y : F), hEq.mapsTo_domain y⟩ -
         ((c : ℝ) : 𝕜) • X (y : F) =
-        C (y : F) + X (B.toLinearMap y - ((c : ℝ) : 𝕜) • (y : F)) := by
+        C (y : F) + X (B y - ((c : ℝ) : 𝕜) • (y : F)) := by
       rw [map_sub, map_smul]
-      have : A.toLinearMap ⟨X (y : F), hEq.mapsTo_domain y⟩ =
-          C (y : F) + X (B.toLinearMap y) :=
+      have : A ⟨X (y : F), hEq.mapsTo_domain y⟩ =
+          C (y : F) + X (B y) :=
         sub_eq_iff_eq_add.mp heq
       rw [this]
       abel
-    change J (A.toLinearMap ⟨X (y : F), hEq.mapsTo_domain y⟩ -
+    change J (A ⟨X (y : F), hEq.mapsTo_domain y⟩ -
       ((c : ℝ) : 𝕜) • X (y : F)) = X (y : F) at hJ
     rw [hexpand] at hJ
     exact hJ.symm
@@ -273,12 +276,12 @@ theorem norm_closedSylvester_le_of_intervalExterior
   have hbound : ∀ y : B.domain, ‖X (y : F)‖ ≤
       (r + δ)⁻¹ * (‖C‖ + ‖X‖ * r) * ‖(y : F)‖ := by
     intro y
-    have hshift := TauCeti.DavisKahanExt.ClosedOperator.norm_shift_apply_le_of_form_bounds
-      hBsym hβα hBlow hBhigh y
+    have hshift := linearPMap_norm_shift_apply_le_of_form_bounds
+      hBsym hBdense hβα hBlow hBhigh y
     calc ‖X (y : F)‖
-        = ‖J (C (y : F) + X (B.toLinearMap y - ((c : ℝ) : 𝕜) • (y : F)))‖ := by
+        = ‖J (C (y : F) + X (B y - ((c : ℝ) : 𝕜) • (y : F)))‖ := by
           rw [← hkey y]
-      _ ≤ ‖J‖ * ‖C (y : F) + X (B.toLinearMap y - ((c : ℝ) : 𝕜) • (y : F))‖ :=
+      _ ≤ ‖J‖ * ‖C (y : F) + X (B y - ((c : ℝ) : 𝕜) • (y : F))‖ :=
           J.le_opNorm _
       _ ≤ ‖J‖ * (‖C‖ * ‖(y : F)‖ + ‖X‖ * (r * ‖(y : F)‖)) := by
           refine mul_le_mul_of_nonneg_left ?_ (norm_nonneg J)
@@ -303,7 +306,7 @@ theorem norm_closedSylvester_le_of_intervalExterior
       exact hbound ⟨z, hz⟩
     intro z
     have hz : z ∈ closure (B.domain : Set F) := by
-      rw [B.dense_domain.closure_eq]
+      rw [hBdense.closure_eq]
       trivial
     exact closure_minimal hsubset hclosed hz
   have hXnorm : ‖X‖ ≤ (r + δ)⁻¹ * (‖C‖ + ‖X‖ * r) :=
@@ -314,6 +317,21 @@ theorem norm_closedSylvester_le_of_intervalExterior
   have hmul := mul_le_mul_of_nonneg_left hXnorm hrd.le
   rw [← mul_assoc, mul_inv_cancel₀ hrd.ne', one_mul] at hmul
   nlinarith [norm_nonneg X]
+
+omit [CompleteSpace E] [CompleteSpace F] in
+/-- Compatibility entry point for the raw interval/exterior estimate. -/
+theorem norm_closedSylvester_le_of_intervalExterior
+    {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := E)}
+    {B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := F)}
+    (hBsym : B.IsSymmetric)
+    {X C : F →L[𝕜] E} {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
+    (hBlow : SemiboundedBelow B β) (hBhigh : SemiboundedAbove B α)
+    (hAres : LeftShiftedInverseBound A ((α + β) / 2) ((α - β) / 2 + δ))
+    (hEq : HasClosedSylvesterEquation A B X C) :
+    δ * ‖X‖ ≤ ‖C‖ :=
+  linearPMap_norm_sylvester_le_of_intervalExterior
+    (A := A.toLinearPMap) (B := B.toLinearPMap) hBsym B.toLinearPMap_dense
+    hβα hδ hBlow hBhigh hAres hEq
 
 /-- Constant-one estimate for `A X - X B = C` in the swapped orientation:
 interval block `A` (quadratic form in `[β, α]`) and exterior block `B`
