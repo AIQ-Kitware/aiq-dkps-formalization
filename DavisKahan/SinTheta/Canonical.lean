@@ -38,7 +38,7 @@ block, and `data.Λ₁` is the complementary exact block.  The residual is bound
 on the ambient Hilbert spaces even when the diagonal operators are unbounded.
 The lower frame bound permits a non-isometric trial map. -/
 structure GeneralSinThetaProblem
-    (N : UnitaryInvariantIdealFamily (𝕜 := ℂ)) where
+    (N : KyFanDominantIdealFamily (𝕜 := ℂ)) where
   data : UnboundedSinThetaData (𝕜 := ℂ) (E := E) (F := F) (G := G)
   exactMap : H →L[ℂ] E
   ambient_selfAdjoint : data.A.IsSelfAdjoint
@@ -57,7 +57,7 @@ namespace GeneralSinThetaProblem
 
 /-- The complete generalized source target. -/
 theorem result
-    (N : UnitaryInvariantIdealFamily (𝕜 := ℂ))
+    (N : KyFanDominantIdealFamily (𝕜 := ℂ))
     (P : GeneralSinThetaProblem (E := E) (F := F)
       (G := G) (H := H) N) :
     N.Mem
@@ -76,7 +76,7 @@ theorem result
 /-- The raw complementary-block form used before the final angle
 identification. -/
 theorem complementaryBlock_result
-    (N : UnitaryInvariantIdealFamily (𝕜 := ℂ))
+    (N : KyFanDominantIdealFamily (𝕜 := ℂ))
     (P : GeneralSinThetaProblem (E := E) (F := F)
       (G := G) (H := H) N) :
     N.Mem
@@ -98,7 +98,7 @@ end GeneralSinThetaProblem
 branch.  Unlike `GeneralSinThetaProblem.spectral_gap`, this uses the genuine
 `Spectra` spectrum and does not pass through the ordered half-line engine. -/
 structure FiniteIntervalGeneralSinThetaProblem
-    (N : UnitaryInvariantIdealFamily (𝕜 := ℂ)) where
+    (N : KyFanDominantIdealFamily (𝕜 := ℂ)) where
   data : UnboundedSinThetaData (𝕜 := ℂ) (E := E) (F := F) (G := G)
   exactMap : H →L[ℂ] E
   ambient_selfAdjoint : data.A.IsSelfAdjoint
@@ -122,7 +122,7 @@ namespace FiniteIntervalGeneralSinThetaProblem
 /-- Completed generalized finite interval/exterior theorem with the exact
 source-facing directed sine operator. -/
 theorem result
-    (N : UnitaryInvariantIdealFamily (𝕜 := ℂ))
+    (N : KyFanDominantIdealFamily (𝕜 := ℂ))
     (P : FiniteIntervalGeneralSinThetaProblem (E := E) (F := F)
       (G := G) (H := H) N) :
     N.Mem
@@ -146,7 +146,7 @@ theorem result
 /-- Complementary-overlap form of the completed finite interval/exterior
 branch. -/
 theorem complementaryBlock_result
-    (N : UnitaryInvariantIdealFamily (𝕜 := ℂ))
+    (N : KyFanDominantIdealFamily (𝕜 := ℂ))
     (P : FiniteIntervalGeneralSinThetaProblem (E := E) (F := F)
       (G := G) (H := H) N) :
     N.Mem
@@ -184,7 +184,7 @@ variable {E F G H : Type v}
 
 /-- Complete input package for the isometric specialization. -/
 structure IsometricSinThetaProblem
-    (N : UnitaryInvariantIdealFamily (𝕜 := 𝕜)) where
+    (N : KyFanDominantIdealFamily (𝕜 := 𝕜)) where
   data : UnboundedSinThetaData (𝕜 := 𝕜) (E := E) (F := F) (G := G)
   exactMap : H →L[𝕜] E
   ambient_selfAdjoint : data.A.IsSelfAdjoint
@@ -214,7 +214,7 @@ namespace IsometricSinThetaProblem
 /-- Complex specialization of the source-shaped isometric problem, routed
 through the direct manuscript gap engine. -/
 theorem result_complex
-    (N : UnitaryInvariantIdealFamily (𝕜 := ℂ))
+    (N : KyFanDominantIdealFamily (𝕜 := ℂ))
     (P : IsometricSinThetaProblem (𝕜 := ℂ) (E := E) (F := F)
       (G := G) (H := H) N) :
     N.Mem
@@ -232,7 +232,7 @@ theorem result_complex
 /-- Package a complex isometric problem as the generalized theorem with lower
 frame bound one. -/
 noncomputable def toGeneral
-    (N : UnitaryInvariantIdealFamily (𝕜 := ℂ))
+    (N : KyFanDominantIdealFamily (𝕜 := ℂ))
     (P : IsometricSinThetaProblem (𝕜 := ℂ) (E := E) (F := F)
       (G := G) (H := H) N) :
     GeneralSinThetaProblem (E := E) (F := F)

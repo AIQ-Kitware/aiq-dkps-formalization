@@ -12,7 +12,8 @@ import DavisKahan.Sylvester.RealUnbounded
 The complementary residual identity and exact-angle geometry are already
 scalar-generic.  Combining them with the real unbounded Sylvester theorem gives
 the full isometric sine-theta theorem over real Hilbert spaces for all three
-gap configurations and every real unitarily invariant ideal family.
+gap configurations and every real Ky-Fan-dominant unitarily invariant
+ideal family.
 -/
 
 namespace TauCeti
@@ -35,7 +36,7 @@ variable {E F G H : Type v}
 /-- Real isometric complementary-block theorem for the complete unbounded gap
 disjunction. -/
 theorem sinTheta_unbounded_real
-    (N : UnitaryInvariantIdealFamily (𝕜 := ℝ))
+    (N : KyFanDominantIdealFamily (𝕜 := ℝ))
     (D : UnboundedSinThetaData (𝕜 := ℝ) (E := E) (F := F) (G := G))
     (hA : D.A.IsSelfAdjoint)
     (hA₀ : D.A₀.IsSelfAdjoint)
@@ -56,7 +57,7 @@ theorem sinTheta_unbounded_real
 
 /-- Exact real isometric theorem in directed sine form. -/
 theorem sinTheta_unbounded_exact_real
-    (N : UnitaryInvariantIdealFamily (𝕜 := ℝ))
+    (N : KyFanDominantIdealFamily (𝕜 := ℝ))
     (D : UnboundedSinThetaData (𝕜 := ℝ) (E := E) (F := F) (G := G))
     (F₀ : H →L[ℝ] E)
     (hA : D.A.IsSelfAdjoint)

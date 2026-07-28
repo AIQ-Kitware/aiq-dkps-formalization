@@ -67,7 +67,7 @@ inductive GenuineUnboundedSylvesterGap
 
 /-- Source-facing Theorem 5.2 wrapper with genuine spectra in every branch. -/
 theorem davisKahan1970_sylvester_of_genuineSpectrumGap
-    (N : UnitaryInvariantIdealFamily (𝕜 := ℂ))
+    (N : KyFanDominantIdealFamily (𝕜 := ℂ))
     {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := E)}
     {B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := F)}
     (hA : A.IsSelfAdjoint) (hB : B.IsSelfAdjoint)

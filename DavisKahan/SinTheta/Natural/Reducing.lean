@@ -102,7 +102,7 @@ noncomputable def unboundedSinThetaDataOfReducingSubspace
 
 /-- Scalar-generic natural isometric problem over a reducing exact subspace. -/
 structure NaturalReducingIsometricSinThetaProblem
-    (N : UnitaryInvariantIdealFamily (𝕜 := 𝕜))
+    (N : KyFanDominantIdealFamily (𝕜 := 𝕜))
     (U : Submodule 𝕜 E) [U.HasOrthogonalProjection] where
   A : ClosedOperator (𝕜 := 𝕜) (E := E)
   ambient_selfAdjoint : A.IsSelfAdjoint
@@ -126,7 +126,7 @@ namespace NaturalReducingIsometricSinThetaProblem
 
 /-- Canonical internal data of a natural reducing-subspace problem. -/
 noncomputable def toData
-    (N : UnitaryInvariantIdealFamily (𝕜 := 𝕜))
+    (N : KyFanDominantIdealFamily (𝕜 := 𝕜))
     {U : Submodule 𝕜 E} [U.HasOrthogonalProjection]
     (P : NaturalReducingIsometricSinThetaProblem
       (𝕜 := 𝕜) (E := E) (F := F) N U) :
@@ -139,7 +139,7 @@ end NaturalReducingIsometricSinThetaProblem
 /-- Scalar-generic natural lower-frame problem over a reducing exact
 subspace. -/
 structure NaturalReducingGeneralSinThetaProblem
-    (N : UnitaryInvariantIdealFamily (𝕜 := 𝕜))
+    (N : KyFanDominantIdealFamily (𝕜 := 𝕜))
     (U : Submodule 𝕜 E) [U.HasOrthogonalProjection] where
   A : ClosedOperator (𝕜 := 𝕜) (E := E)
   ambient_selfAdjoint : A.IsSelfAdjoint
@@ -165,7 +165,7 @@ namespace NaturalReducingGeneralSinThetaProblem
 
 /-- Canonical internal data of a natural reducing lower-frame problem. -/
 noncomputable def toData
-    (N : UnitaryInvariantIdealFamily (𝕜 := 𝕜))
+    (N : KyFanDominantIdealFamily (𝕜 := 𝕜))
     {U : Submodule 𝕜 E} [U.HasOrthogonalProjection]
     (P : NaturalReducingGeneralSinThetaProblem
       (𝕜 := 𝕜) (E := E) (F := F) N U) :
@@ -185,7 +185,7 @@ namespace NaturalReducingIsometricSinThetaProblem
 
 /-- Complex result for the scalar-generic natural reducing problem. -/
 theorem result_complex
-    (N : UnitaryInvariantIdealFamily (𝕜 := ℂ))
+    (N : KyFanDominantIdealFamily (𝕜 := ℂ))
     {U : Submodule ℂ EC} [U.HasOrthogonalProjection]
     (P : NaturalReducingIsometricSinThetaProblem
       (𝕜 := ℂ) (E := EC) (F := FC) N U) :
@@ -214,7 +214,7 @@ namespace NaturalReducingGeneralSinThetaProblem
 
 /-- Complex lower-frame result for the scalar-generic natural problem. -/
 theorem result_complex
-    (N : UnitaryInvariantIdealFamily (𝕜 := ℂ))
+    (N : KyFanDominantIdealFamily (𝕜 := ℂ))
     {U : Submodule ℂ EC} [U.HasOrthogonalProjection]
     (P : NaturalReducingGeneralSinThetaProblem
       (𝕜 := ℂ) (E := EC) (F := FC) N U) :
@@ -246,7 +246,7 @@ end NaturalReducingGeneralSinThetaProblem
 /-- Complex natural reducing-subspace sine-theta theorem without a problem
 record at the call site. -/
 theorem sinTheta_unbounded_complex_reducingSubspace
-    (N : UnitaryInvariantIdealFamily (𝕜 := ℂ))
+    (N : KyFanDominantIdealFamily (𝕜 := ℂ))
     (A : ClosedOperator (𝕜 := ℂ) (E := EC))
     (hA : A.IsSelfAdjoint)
     (U : Submodule ℂ EC) [U.HasOrthogonalProjection]
@@ -286,7 +286,7 @@ theorem sinTheta_unbounded_complex_reducingSubspace
 
 /-- Complex natural lower-frame theorem over a supplied reducing subspace. -/
 theorem generalizedSinTheta_unbounded_complex_reducingSubspace
-    (N : UnitaryInvariantIdealFamily (𝕜 := ℂ))
+    (N : KyFanDominantIdealFamily (𝕜 := ℂ))
     (A : ClosedOperator (𝕜 := ℂ) (E := EC))
     (hA : A.IsSelfAdjoint)
     (U : Submodule ℂ EC) [U.HasOrthogonalProjection]
@@ -339,7 +339,7 @@ namespace NaturalReducingIsometricSinThetaProblem
 
 /-- Real result for the scalar-generic natural reducing problem. -/
 theorem result_real
-    (N : UnitaryInvariantIdealFamily (𝕜 := ℝ))
+    (N : KyFanDominantIdealFamily (𝕜 := ℝ))
     {U : Submodule ℝ ER} [U.HasOrthogonalProjection]
     (P : NaturalReducingIsometricSinThetaProblem
       (𝕜 := ℝ) (E := ER) (F := FR) N U) :
@@ -368,7 +368,7 @@ namespace NaturalReducingGeneralSinThetaProblem
 
 /-- Real lower-frame result for the scalar-generic natural problem. -/
 theorem result_real
-    (N : UnitaryInvariantIdealFamily (𝕜 := ℝ))
+    (N : KyFanDominantIdealFamily (𝕜 := ℝ))
     {U : Submodule ℝ ER} [U.HasOrthogonalProjection]
     (P : NaturalReducingGeneralSinThetaProblem
       (𝕜 := ℝ) (E := ER) (F := FR) N U) :
@@ -400,7 +400,7 @@ end NaturalReducingGeneralSinThetaProblem
 /-- Real natural reducing-subspace sine-theta theorem without a problem record
 at the call site. -/
 theorem sinTheta_unbounded_real_reducingSubspace
-    (N : UnitaryInvariantIdealFamily (𝕜 := ℝ))
+    (N : KyFanDominantIdealFamily (𝕜 := ℝ))
     (A : ClosedOperator (𝕜 := ℝ) (E := ER))
     (hA : A.IsSelfAdjoint)
     (U : Submodule ℝ ER) [U.HasOrthogonalProjection]
@@ -440,7 +440,7 @@ theorem sinTheta_unbounded_real_reducingSubspace
 
 /-- Real natural lower-frame theorem over a supplied reducing subspace. -/
 theorem generalizedSinTheta_unbounded_real_reducingSubspace
-    (N : UnitaryInvariantIdealFamily (𝕜 := ℝ))
+    (N : KyFanDominantIdealFamily (𝕜 := ℝ))
     (A : ClosedOperator (𝕜 := ℝ) (E := ER))
     (hA : A.IsSelfAdjoint)
     (U : Submodule ℝ ER) [U.HasOrthogonalProjection]

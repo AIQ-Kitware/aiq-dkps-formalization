@@ -75,7 +75,7 @@ Sylvester theorem.  The spectral constructor is routed through the genuine
 Spectra theorem, while the two ordered constructors retain their original
 form-bound hypotheses and call the direct engine verbatim. -/
 theorem davisKahan1970_sylvester_complex
-    (N : UnitaryInvariantIdealFamily (𝕜 := ℂ))
+    (N : KyFanDominantIdealFamily (𝕜 := ℂ))
     {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := E)}
     {B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := F)}
     (hA : A.IsSelfAdjoint) (hB : B.IsSelfAdjoint)

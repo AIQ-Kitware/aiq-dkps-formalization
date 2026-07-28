@@ -40,7 +40,7 @@ variable {E F G H : Type v}
 
 /-- The literal complex input package for Davis--Kahan Theorem 6.1. -/
 structure PaperGeneralSinThetaProblem
-    (N : UnitaryInvariantIdealFamily (𝕜 := ℂ)) where
+    (N : KyFanDominantIdealFamily (𝕜 := ℂ)) where
   problem : GeneralSinThetaProblem (E := E) (F := F) (G := G) (H := H) N
   sinTheta₀ : PaperSinThetaRepresentative
     (directedSinThetaOperator problem.data.X problem.exactMap
@@ -53,7 +53,7 @@ namespace PaperGeneralSinThetaProblem
 The chosen `sin Θ₀` may be any rectangular operator with the complete
 singular-value sequence prescribed in the paper. -/
 theorem result
-    (N : UnitaryInvariantIdealFamily (𝕜 := ℂ))
+    (N : KyFanDominantIdealFamily (𝕜 := ℂ))
     (P : PaperGeneralSinThetaProblem (E := E) (F := F)
       (G := G) (H := H) N) :
     N.Mem P.sinTheta₀.operator ∧
@@ -68,7 +68,7 @@ end PaperGeneralSinThetaProblem
 
 /-- Literal paper representative for the complex isometric theorem. -/
 structure PaperIsometricSinThetaProblem
-    (N : UnitaryInvariantIdealFamily (𝕜 := ℂ)) where
+    (N : KyFanDominantIdealFamily (𝕜 := ℂ)) where
   problem : IsometricSinThetaProblem (𝕜 := ℂ) (E := E) (F := F)
     (G := G) (H := H) N
   sinTheta₀ : PaperSinThetaRepresentative
@@ -80,7 +80,7 @@ namespace PaperIsometricSinThetaProblem
 /-- Original isometric sine theorem with the paper's freedom to choose any
 operator realizing the same complete singular-value sequence. -/
 theorem result
-    (N : UnitaryInvariantIdealFamily (𝕜 := ℂ))
+    (N : KyFanDominantIdealFamily (𝕜 := ℂ))
     (P : PaperIsometricSinThetaProblem (E := E) (F := F)
       (G := G) (H := H) N) :
     N.Mem P.sinTheta₀.operator ∧
@@ -105,7 +105,7 @@ variable {E F G H : Type v}
 
 /-- The literal real input package for Davis--Kahan Theorem 6.1. -/
 structure PaperRealGeneralSinThetaProblem
-    (N : UnitaryInvariantIdealFamily (𝕜 := ℝ)) where
+    (N : KyFanDominantIdealFamily (𝕜 := ℝ)) where
   problem : RealGeneralSinThetaProblem (E := E) (F := F)
     (G := G) (H := H) N
   sinTheta₀ : PaperSinThetaRepresentative
@@ -116,7 +116,7 @@ namespace PaperRealGeneralSinThetaProblem
 
 /-- **Davis--Kahan 1970, Theorem 6.1, literal real form.** -/
 theorem result
-    (N : UnitaryInvariantIdealFamily (𝕜 := ℝ))
+    (N : KyFanDominantIdealFamily (𝕜 := ℝ))
     (P : PaperRealGeneralSinThetaProblem (E := E) (F := F)
       (G := G) (H := H) N) :
     N.Mem P.sinTheta₀.operator ∧
@@ -131,7 +131,7 @@ end PaperRealGeneralSinThetaProblem
 
 /-- Literal paper representative for the real isometric theorem. -/
 structure PaperRealIsometricSinThetaProblem
-    (N : UnitaryInvariantIdealFamily (𝕜 := ℝ)) where
+    (N : KyFanDominantIdealFamily (𝕜 := ℝ)) where
   problem : IsometricSinThetaProblem (𝕜 := ℝ) (E := E) (F := F)
     (G := G) (H := H) N
   sinTheta₀ : PaperSinThetaRepresentative
@@ -142,7 +142,7 @@ namespace PaperRealIsometricSinThetaProblem
 
 /-- Original real isometric sine theorem in the literal paper formulation. -/
 theorem result
-    (N : UnitaryInvariantIdealFamily (𝕜 := ℝ))
+    (N : KyFanDominantIdealFamily (𝕜 := ℝ))
     (P : PaperRealIsometricSinThetaProblem (E := E) (F := F)
       (G := G) (H := H) N) :
     N.Mem P.sinTheta₀.operator ∧

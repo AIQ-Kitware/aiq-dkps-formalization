@@ -155,7 +155,7 @@ open DavisKahan.Experimental.SpectraBridge in
 form.**  The chosen `sin 2Θ₀` may be any operator with the complete
 singular-value sequence of the canonical reflected overlap block. -/
 theorem unbounded_sinTwoTheta_uiNorm_representative
-    (N : UnitaryInvariantIdealFamily (𝕜 := ℂ))
+    (N : KyFanDominantIdealFamily (𝕜 := ℂ))
     (A : DKClosedOperator (H := H)) (hA : A.IsSelfAdjoint)
     (E : H →L[ℂ] H) (hE : DavisKahan.IsSelfAdjointOperator E)
     (B S : Set ℝ) (hB : MeasurableSet B) (hS : MeasurableSet S)
@@ -191,7 +191,7 @@ domain; the chosen `sin 2Θ₀` may be any operator with the complete
 singular-value sequence of the canonical reflected overlap block, and it is
 controlled by the residual with constant one. -/
 theorem unbounded_sinTwoTheta_residual_uiNorm_representative
-    (N : UnitaryInvariantIdealFamily (𝕜 := ℂ))
+    (N : KyFanDominantIdealFamily (𝕜 := ℂ))
     (A : DKClosedOperator (H := H)) (hA : A.IsSelfAdjoint)
     (R : H →L[ℂ] H) (hR : DavisKahan.IsSelfAdjointOperator R)
     (B : Set ℝ) (hB : MeasurableSet B)
