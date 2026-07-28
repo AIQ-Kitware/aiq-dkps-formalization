@@ -4,8 +4,10 @@ This is a temporary, mathematics-first Lean library for completing the sharp
 infinite-dimensional `tan 2Theta` theory before moving the polished declarations
 into their final Tau Ceti and Davis--Kahan modules.
 
-The package is intentionally isolated under `FinishTanTwoTheta/`. It changes no
-existing repository file.
+The sources are grouped under `FinishTanTwoTheta/`, but they are registered as a
+non-default library in the repository's root `lakefile.toml`. They therefore use
+the root dependency graph and root `.lake/` build directory rather than a nested
+Lake workspace.
 
 ## Mathematical scope
 
@@ -42,10 +44,9 @@ python3 FinishTanTwoTheta/scripts/verify_grounding.py
 
 ## Build order
 
-From this directory:
+Run these commands from the repository root. No nested `lake update` is needed:
 
 ```bash
-lake update
 lake build FinishTanTwoTheta.Sequence.WeakSubmajorization
 lake build FinishTanTwoTheta.OperatorIdeal.StandardFanDominance
 lake build FinishTanTwoTheta.OperatorIdeal.StandardInstances
@@ -57,6 +58,9 @@ lake build FinishTanTwoTheta.DavisKahan.SharpIdeal
 lake build FinishTanTwoTheta.DavisKahan.Unbounded
 lake build FinishTanTwoTheta
 ```
+
+Because `FinishTanTwoTheta` is not in `defaultTargets`, an ordinary root
+`lake build` continues to omit this unfinished library.
 
 The authoring environment did not contain Lean, so this overlay is not claimed
 to elaborate. The compiler agent's remaining work should be local proof,
