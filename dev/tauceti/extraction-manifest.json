@@ -252,7 +252,7 @@
       "staging_module": "ForTauCeti.Analysis.OperatorIdeal.Family.Basic",
       "final_tauceti_module": "TauCeti.Analysis.OperatorIdeal.Family.Basic",
       "ownership_class": "tauceti",
-      "roadmap_target": "Part B / PR 1 (approximation-number roadmap decision 7: representation of an operator ideal family)",
+      "roadmap_target": "Part B / PR 1 (roadmap area ForTauCetiRoadmap/SymmetricOperatorIdeals: representation of an operator ideal family)",
       "provenance_class": "redesigned: the free-data presentation (membership plus a total real gauge constrained only on members, one universe, hand-rolled completeness, fourteen fields) is replaced by a single `ℝ≥0∞` gauge with the ideal derived as its finiteness domain, giving structural extensionality and unconditional laws; space parameters are Hilbert, see the module docstring for why the Banach setting has no instance beyond the operator norm",
       "direct_dependencies": [
         "Mathlib"
@@ -273,7 +273,7 @@
       "staging_module": "ForTauCeti.Analysis.OperatorIdeal.Family.OperatorNorm",
       "final_tauceti_module": "TauCeti.Analysis.OperatorIdeal.Family.OperatorNorm",
       "ownership_class": "tauceti",
-      "roadmap_target": "Part B / PR 1 (first instance of the canonical family; the Ky Fan instance is the second and is still parked in DavisKahan)",
+      "roadmap_target": "Part B / PR 1 (roadmap area ForTauCetiRoadmap/SymmetricOperatorIdeals: first instance of the canonical family; the Ky Fan instance is the second and is still parked in DavisKahan)",
       "provenance_class": "redesigned alongside `Family.Basic`: the operator norm as an `OperatorIdealFamily` and a `SymmetricOperatorIdealFamily`, with the ideal-norm isometry to `E →L[𝕜] F` and the resulting `IsComplete` instance replacing the hand-rolled Cauchy criterion",
       "direct_dependencies": [
         "Mathlib",

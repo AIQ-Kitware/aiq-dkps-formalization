@@ -16,13 +16,18 @@ stages in `ForTauCeti/`, its roadmap stages here.
 
 ## Areas
 
-1. [Approximation Numbers and Symmetric Operator Ideals](ApproximationNumbers/README.md)
+1. [Approximation numbers and Hilbert-space singular values](ApproximationNumbers/README.md)
    — the first, dependency-closed, paper-independent foundation. Maps to the
-   staged `ForTauCeti/Analysis/OperatorIdeal/{ApproximationNumber,Family}/**`
-   cluster: the `s`-number layer and the canonical symmetric operator ideal
-   family both belong to this area.
+   staged `ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/**` cluster.
 
-2. [Unbounded operators on `LinearPMap`](UnboundedOperators/README.md) — the
+2. [Symmetric operator ideals](SymmetricOperatorIdeals/README.md) — the
+   dependent roadmap area (1) explicitly disowns: the ideal-family interface,
+   symmetric norming functions, Ky Fan dominance, and the Schatten /
+   Hilbert--Schmidt / trace-class instances. The interface itself is already
+   staged as `ForTauCeti/Analysis/OperatorIdeal/Family/**`, so this area starts
+   with a landed decision record rather than a blank page.
+
+3. [Unbounded operators on `LinearPMap`](UnboundedOperators/README.md) — the
    active U1 representation-convergence roadmap. The canonical object is already
    fixed by Mathlib/Tau Ceti; local implementation proceeds now through a
    temporary Davis--Kahan adapter. This roadmap specifies the reusable API and
@@ -33,15 +38,15 @@ stages in `ForTauCeti/`, its roadmap stages here.
 These are gated on the remaining Track B convergence waves (see
 [`dev/tauceti/convergence-matrix.md`](../dev/tauceti/convergence-matrix.md)).
 
-3. **Projection-valued measures and Borel functional calculus** (its own
+4. **Projection-valued measures and Borel functional calculus** (its own
    roadmap) — PVMs, spectral projections, bounded/unbounded Borel calculus,
    spectral restriction and localization, real/complex descent. This is the
    largest genuinely *missing* foundational layer (Wave 5 Cluster B); Tau Ceti
    does not supersede it and Spectra is a real donor, so it is specified
    separately, coordinated with Spectra's author, and does not ride on the
    spectral-perturbation roadmap.
-4. **Spectral Subspaces, Sylvester Equations, and Davis–Kahan Perturbation
-   Bounds** — depends on (1), (2), and (3); coordinates its closed-operator layer with
+5. **Spectral Subspaces, Sylvester Equations, and Davis–Kahan Perturbation
+   Bounds** — depends on (1), (2), (3), and (4); coordinates its closed-operator layer with
    Tau Ceti's existing one-parameter-semigroup roadmap. Its APIs (reducing
    subspaces on `LinearPMap`, directed operator angles, bounded/unbounded
    Sylvester theory) must be dependency-closed via Waves 2–3 before they are
