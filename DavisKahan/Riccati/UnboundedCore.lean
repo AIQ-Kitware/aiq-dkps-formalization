@@ -99,25 +99,9 @@ private theorem closedOperatorDirectSumDomain_dense
     (A0 : ClosedOperator (𝕜 := 𝕜) (E := E0))
     (A1 : ClosedOperator (𝕜 := 𝕜) (E := E1)) :
     Dense ((closedOperatorDirectSumDomain A0 A1 :
-      Submodule 𝕜 (WithLp 2 (E0 × E1))) : Set (WithLp 2 (E0 × E1))) := by
-  have hprod : Dense
-      ((A0.domain : Set E0) ×ˢ (A1.domain : Set E1)) :=
-    A0.dense_domain.prod A1.dense_domain
-  have himage : Dense
-      ((WithLp.homeomorphProd 2 E0 E1).symm ''
-        ((A0.domain : Set E0) ×ˢ (A1.domain : Set E1))) :=
-    (((WithLp.homeomorphProd 2 E0 E1).symm.isDenseEmbedding.dense_image).2 hprod)
-  rw [show ((closedOperatorDirectSumDomain A0 A1 :
-      Submodule 𝕜 (WithLp 2 (E0 × E1))) : Set (WithLp 2 (E0 × E1))) =
-      (WithLp.homeomorphProd 2 E0 E1).symm ''
-        ((A0.domain : Set E0) ×ˢ (A1.domain : Set E1)) by
-    ext z
-    constructor
-    · intro hz
-      exact ⟨WithLp.ofLp z, hz, rfl⟩
-    · rintro ⟨p, hp, rfl⟩
-      exact hp]
-  exact himage
+      Submodule 𝕜 (WithLp 2 (E0 × E1))) : Set (WithLp 2 (E0 × E1))) :=
+  TauCeti.LinearPMap.directSum_dense A0.toLinearPMap A1.toLinearPMap
+    A0.toLinearPMap_dense A1.toLinearPMap_dense
 
 private theorem closedOperatorDirectSumLinearMap_closedGraph
     (A0 : ClosedOperator (𝕜 := 𝕜) (E := E0))

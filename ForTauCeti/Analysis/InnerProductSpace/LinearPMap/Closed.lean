@@ -626,6 +626,29 @@ noncomputable def directSum
     (A : E →ₗ.[𝕜] E) (B : F →ₗ.[𝕜] F) :
     (directSum A B).domain = directSumDomain A B := rfl
 
+/-- The direct sum of dense partial-map domains is dense. -/
+theorem directSum_dense
+    (A : E →ₗ.[𝕜] E) (B : F →ₗ.[𝕜] F)
+    (hA : Dense (A.domain : Set E)) (hB : Dense (B.domain : Set F)) :
+    Dense ((directSum A B).domain : Set (WithLp 2 (E × F))) := by
+  rw [directSum_domain]
+  have hprod : Dense ((A.domain : Set E) ×ˢ (B.domain : Set F)) := hA.prod hB
+  have himage : Dense
+      ((WithLp.homeomorphProd 2 E F).symm ''
+        ((A.domain : Set E) ×ˢ (B.domain : Set F))) :=
+    ((WithLp.homeomorphProd 2 E F).symm.isDenseEmbedding.dense_image).2 hprod
+  rw [show ((directSumDomain A B : Submodule 𝕜 (WithLp 2 (E × F))) :
+      Set (WithLp 2 (E × F))) =
+      (WithLp.homeomorphProd 2 E F).symm ''
+        ((A.domain : Set E) ×ˢ (B.domain : Set F)) by
+    ext z
+    constructor
+    · intro hz
+      exact ⟨WithLp.ofLp z, hz, rfl⟩
+    · rintro ⟨p, hp, rfl⟩
+      exact hp]
+  exact himage
+
 /-- A partial linear map is symmetric on its operator domain. -/
 def IsSymmetric (A : E →ₗ.[𝕜] E) : Prop :=
   ∀ x y : A.domain, ⟪A x, (y : E)⟫_𝕜 = ⟪(x : E), A y⟫_𝕜
