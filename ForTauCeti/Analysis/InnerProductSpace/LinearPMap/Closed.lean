@@ -34,6 +34,7 @@ namespace TauCeti
 namespace LinearPMap
 
 open scoped InnerProductSpace
+open Filter Topology
 
 universe u v w
 
@@ -121,7 +122,246 @@ theorem orthogonal_invariant
     (h : ReducesSubspace A U) : InvariantSubspace A Uᗮ :=
   h.2.2.2
 
+/-- Orthogonal complementation preserves the reducing-subspace property. -/
+theorem orthogonal
+    {A : E →ₗ.[𝕜] E} {U : Submodule 𝕜 E} [U.HasOrthogonalProjection]
+    (h : ReducesSubspace A U) : ReducesSubspace A Uᗮ := by
+  refine ⟨h.orthogonalProjection_mem_domain, ?_,
+    h.orthogonal_invariant, ?_⟩
+  · intro x
+    simpa only [Submodule.orthogonal_orthogonal] using
+      h.projection_mem_domain x
+  · intro x hx
+    rw [Submodule.orthogonal_orthogonal] at hx ⊢
+    exact h.invariant x hx
+
 end ReducesSubspace
+
+/-- The operator domain inside a reducing subspace. -/
+def reducingRestrictionDomain
+    (A : E →ₗ.[𝕜] E) (U : Submodule 𝕜 E) : Submodule 𝕜 U where
+  carrier := {x | (x : E) ∈ A.domain}
+  zero_mem' := A.domain.zero_mem
+  add_mem' hx hy := A.domain.add_mem hx hy
+  smul_mem' c _ hx := A.domain.smul_mem c hx
+
+@[simp] theorem mem_reducingRestrictionDomain_iff
+    (A : E →ₗ.[𝕜] E) (U : Submodule 𝕜 E) (x : U) :
+    x ∈ reducingRestrictionDomain A U ↔ (x : E) ∈ A.domain :=
+  Iff.rfl
+
+/-- A restricted-domain vector viewed in the ambient partial-map domain. -/
+def reducingRestrictionDomainToAmbient
+    (A : E →ₗ.[𝕜] E) (U : Submodule 𝕜 E)
+    (x : reducingRestrictionDomain A U) : A.domain :=
+  ⟨((x : reducingRestrictionDomain A U) : U), x.property⟩
+
+@[simp] theorem reducingRestrictionDomainToAmbient_coe
+    (A : E →ₗ.[𝕜] E) (U : Submodule 𝕜 E)
+    (x : reducingRestrictionDomain A U) :
+    ((reducingRestrictionDomainToAmbient A U x : A.domain) : E) =
+      ((x : reducingRestrictionDomain A U) : U) :=
+  rfl
+
+/-- Action of a partial map restricted to a reducing subspace. -/
+def reducingRestrictionLinearMap
+    (A : E →ₗ.[𝕜] E) (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
+    (hred : ReducesSubspace A U) :
+    reducingRestrictionDomain A U →ₗ[𝕜] U where
+  toFun x :=
+    ⟨A (reducingRestrictionDomainToAmbient A U x),
+      hred.invariant (reducingRestrictionDomainToAmbient A U x)
+        (((x : reducingRestrictionDomain A U) : U).property)⟩
+  map_add' x y := by
+    apply Subtype.ext
+    simp only [Submodule.coe_add]
+    rw [show reducingRestrictionDomainToAmbient A U (x + y) =
+      reducingRestrictionDomainToAmbient A U x +
+        reducingRestrictionDomainToAmbient A U y from rfl]
+    exact A.toFun.map_add _ _
+  map_smul' c x := by
+    apply Subtype.ext
+    simp only [Submodule.coe_smul, RingHom.id_apply]
+    rw [show reducingRestrictionDomainToAmbient A U (c • x) =
+      c • reducingRestrictionDomainToAmbient A U x from rfl]
+    exact A.toFun.map_smul c _
+
+@[simp] theorem coe_reducingRestrictionLinearMap
+    (A : E →ₗ.[𝕜] E) (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
+    (hred : ReducesSubspace A U) (x : reducingRestrictionDomain A U) :
+    ((reducingRestrictionLinearMap A U hred x : U) : E) =
+      A (reducingRestrictionDomainToAmbient A U x) :=
+  rfl
+
+/-- Projection of an ambient domain vector into the restricted domain. -/
+noncomputable def projectDomainToReducingRestriction
+    (A : E →ₗ.[𝕜] E) (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
+    (hred : ReducesSubspace A U) (x : A.domain) :
+    reducingRestrictionDomain A U :=
+  ⟨⟨U.starProjection (x : E), U.starProjection_apply_mem (x : E)⟩,
+    hred.projection_mem_domain x⟩
+
+@[simp] theorem coe_projectDomainToReducingRestriction
+    (A : E →ₗ.[𝕜] E) (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
+    (hred : ReducesSubspace A U) (x : A.domain) :
+    (((projectDomainToReducingRestriction A U hred x :
+        reducingRestrictionDomain A U) : U) : E) =
+      U.starProjection (x : E) :=
+  rfl
+
+/-- The partial map induced on a reducing subspace.  Density and closedness
+are properties supplied separately by the theorem using this construction. -/
+noncomputable def reducingRestriction
+    (A : E →ₗ.[𝕜] E) (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
+    (hred : ReducesSubspace A U) : U →ₗ.[𝕜] U where
+  domain := reducingRestrictionDomain A U
+  toFun := reducingRestrictionLinearMap A U hred
+
+@[simp] theorem reducingRestriction_domain
+    (A : E →ₗ.[𝕜] E) (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
+    (hred : ReducesSubspace A U) :
+    (reducingRestriction A U hred).domain = reducingRestrictionDomain A U :=
+  rfl
+
+/-- A dense partial-map domain remains dense after restriction to a reducing
+subspace. -/
+theorem reducingRestriction_dense
+    (A : E →ₗ.[𝕜] E) (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
+    (hred : ReducesSubspace A U) (hA : Dense (A.domain : Set E)) :
+    Dense ((reducingRestriction A U hred).domain : Set U) := by
+  rw [reducingRestriction_domain, dense_iff_closure_eq]
+  ext u
+  simp only [Set.mem_univ, iff_true]
+  have hu : (u : E) ∈ closure (A.domain : Set E) := by
+    rw [hA.closure_eq]
+    trivial
+  obtain ⟨s, hs, hs_lim⟩ := mem_closure_iff_seq_limit.mp hu
+  let t : ℕ → U := fun n =>
+    ⟨U.starProjection (s n), U.starProjection_apply_mem (s n)⟩
+  refine mem_closure_iff_seq_limit.mpr ⟨t, ?_, ?_⟩
+  · intro n
+    exact hred.projection_mem_domain ⟨s n, hs n⟩
+  · have hlim := (U.starProjection.continuous.tendsto (u : E)).comp hs_lim
+    have hfix : U.starProjection (u : E) = (u : E) :=
+      Submodule.starProjection_eq_self_iff.mpr u.property
+    change Tendsto (fun n => t n) atTop (𝓝 u)
+    apply tendsto_subtype_rng.mpr
+    simpa [t, hfix, Function.comp_def] using hlim
+
+/-- Closedness of the graph is preserved by restriction to a reducing
+subspace.  The hypothesis is stated as a graph range to make it directly
+applicable to compatibility records as well as raw partial maps. -/
+theorem reducingRestriction_closedGraph
+    (A : E →ₗ.[𝕜] E) (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
+    (hred : ReducesSubspace A U)
+    (hA : IsClosed (Set.range fun x : A.domain => ((x : E), A x))) :
+    IsClosed (Set.range fun x : (reducingRestriction A U hred).domain =>
+      (((x : (reducingRestriction A U hred).domain) : U),
+        reducingRestriction A U hred x)) := by
+  let coords : U × U → E × E := fun p => ((p.1 : E), (p.2 : E))
+  have hcoords : Continuous coords :=
+    (U.subtypeL.continuous.comp continuous_fst).prodMk
+      (U.subtypeL.continuous.comp continuous_snd)
+  rw [show Set.range (fun x : (reducingRestriction A U hred).domain =>
+      (((x : (reducingRestriction A U hred).domain) : U),
+        reducingRestriction A U hred x)) =
+      coords ⁻¹' (Set.range fun x : A.domain => ((x : E), A x)) by
+    ext p
+    constructor
+    · rintro ⟨x, rfl⟩
+      exact ⟨reducingRestrictionDomainToAmbient A U x, rfl⟩
+    · rintro ⟨x, hx⟩
+      have hx0 : (x : E) = (p.1 : E) := congrArg Prod.fst hx
+      have hx1 : A x = (p.2 : E) := congrArg Prod.snd hx
+      have hpdom : (p.1 : E) ∈ A.domain := hx0 ▸ x.property
+      let u : (reducingRestriction A U hred).domain := ⟨p.1, hpdom⟩
+      refine ⟨u, Prod.ext rfl ?_⟩
+      apply Subtype.ext
+      change A (reducingRestrictionDomainToAmbient A U u) = (p.2 : E)
+      have hxu : reducingRestrictionDomainToAmbient A U u = x := by
+        apply Subtype.ext
+        exact hx0.symm
+      simpa [hxu] using hx1]
+  exact hA.preimage hcoords
+
+/-- Adjoint-domain membership of a reducing restriction is exactly ambient
+adjoint-domain membership for the included vector. -/
+theorem mem_reducingRestriction_adjoint_domain_iff
+    (A : E →ₗ.[𝕜] E) (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
+    [CompleteSpace E] [CompleteSpace U]
+    (hred : ReducesSubspace A U) (y : U) :
+    y ∈ (reducingRestriction A U hred).adjoint.domain ↔
+      (y : E) ∈ A.adjoint.domain := by
+  rw [LinearPMap.mem_adjoint_domain_iff,
+    LinearPMap.mem_adjoint_domain_iff]
+  constructor
+  · intro hy
+    have hproject : Continuous (projectDomainToReducingRestriction A U hred) := by
+      have hproj : Continuous fun x : A.domain =>
+          U.starProjection (x : E) :=
+        U.starProjection.continuous.comp A.domain.subtypeL.continuous
+      have hprojU : Continuous fun x : A.domain =>
+          (⟨U.starProjection (x : E),
+            U.starProjection_apply_mem (x : E)⟩ : U) :=
+        hproj.subtype_mk _
+      exact hprojU.subtype_mk fun x => hred.projection_mem_domain x
+    have hcomp : Continuous fun x : A.domain =>
+        ⟪y, (reducingRestriction A U hred)
+          (projectDomainToReducingRestriction A U hred x)⟫_𝕜 :=
+      hy.comp hproject
+    have hfun : (fun x : A.domain =>
+        ⟪y, (reducingRestriction A U hred)
+          (projectDomainToReducingRestriction A U hred x)⟫_𝕜) =
+        fun x : A.domain => ⟪(y : E), A x⟫_𝕜 := by
+      funext x
+      let xu : A.domain :=
+        ⟨U.starProjection (x : E), hred.projection_mem_domain x⟩
+      let xo : A.domain :=
+        ⟨Uᗮ.starProjection (x : E), hred.orthogonalProjection_mem_domain x⟩
+      have hxsplit : x = xu + xo := by
+        apply Subtype.ext
+        exact (U.starProjection_add_starProjection_orthogonal (x : E)).symm
+      have horth : ⟪(y : E), A xo⟫_𝕜 = 0 := by
+        exact Submodule.inner_right_of_mem_orthogonal y.property
+          (hred.orthogonal_invariant xo
+            (Uᗮ.starProjection_apply_mem (x : E)))
+      calc
+        ⟪y, (reducingRestriction A U hred)
+            (projectDomainToReducingRestriction A U hred x)⟫_𝕜 =
+            ⟪(y : E), A xu⟫_𝕜 := rfl
+        _ = ⟪(y : E), A xu + A xo⟫_𝕜 := by
+              rw [inner_add_right, horth, add_zero]
+        _ = ⟪(y : E), A (xu + xo)⟫_𝕜 := by
+              congr 1
+              exact (A.toFun.map_add xu xo).symm
+        _ = ⟪(y : E), A x⟫_𝕜 := by rw [← hxsplit]
+    rw [hfun] at hcomp
+    exact hcomp
+  · intro hy
+    have hincl : Continuous fun x : (reducingRestriction A U hred).domain =>
+        reducingRestrictionDomainToAmbient A U x := by
+      have hcoe : Continuous fun x : (reducingRestriction A U hred).domain =>
+          (((x : (reducingRestriction A U hred).domain) : U) : E) :=
+        U.subtypeL.continuous.comp
+          (reducingRestriction A U hred).domain.subtypeL.continuous
+      exact hcoe.subtype_mk fun x => x.property
+    have hcomp := hy.comp hincl
+    have hcomp' : Continuous fun x : (reducingRestriction A U hred).domain =>
+        ⟪(y : E), A (reducingRestrictionDomainToAmbient A U x)⟫_𝕜 := hcomp
+    exact hcomp'
+
+/-- Symmetry passes to a reducing restriction of a partial map. -/
+theorem reducingRestriction_isSymmetric
+    (A : E →ₗ.[𝕜] E) (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
+    (hred : ReducesSubspace A U)
+    (hA : ∀ x y : A.domain,
+      ⟪A x, (y : E)⟫_𝕜 = ⟪(x : E), A y⟫_𝕜) :
+    ∀ x y : (reducingRestriction A U hred).domain,
+      ⟪reducingRestriction A U hred x, (y : U)⟫_𝕜 =
+        ⟪(x : U), reducingRestriction A U hred y⟫_𝕜 := by
+  intro x y
+  exact hA (reducingRestrictionDomainToAmbient A U x)
+    (reducingRestrictionDomainToAmbient A U y)
 
 /-- A linear map on a submodule has a bounded extension to the ambient space. -/
 structure BoundedExtension (D : Submodule 𝕜 F) (T : D →ₗ[𝕜] E) where
@@ -152,9 +392,354 @@ def Extends (A B : E →ₗ.[𝕜] E) : Prop :=
       hactBC ⟨(x : E), hdomAB x.property⟩
     _ = A x := hactAB x
 
+/-- Domain obtained by pulling a partial-map domain back through a continuous
+linear equivalence. -/
+def pullbackDomain (A : E →ₗ.[𝕜] E) (e : E ≃L[𝕜] E) : Submodule 𝕜 E :=
+  A.domain.comap e.toLinearMap
+
+@[simp] theorem mem_pullbackDomain_iff
+    (A : E →ₗ.[𝕜] E) (e : E ≃L[𝕜] E) (x : E) :
+    x ∈ pullbackDomain A e ↔ e x ∈ A.domain :=
+  Iff.rfl
+
+/-- A vector in a pulled-back domain, transported to the original domain. -/
+def pullbackDomainToOriginal
+    (A : E →ₗ.[𝕜] E) (e : E ≃L[𝕜] E) :
+    pullbackDomain A e →ₗ[𝕜] A.domain where
+  toFun x := ⟨e (x : E), x.property⟩
+  map_add' x y := by
+    apply Subtype.ext
+    exact e.map_add (x : E) (y : E)
+  map_smul' c x := by
+    apply Subtype.ext
+    exact e.map_smul c (x : E)
+
+@[simp] theorem pullbackDomainToOriginal_coe
+    (A : E →ₗ.[𝕜] E) (e : E ≃L[𝕜] E)
+    (x : pullbackDomain A e) :
+    ((pullbackDomainToOriginal A e x : A.domain) : E) = e (x : E) :=
+  rfl
+
+/-- Action of the partial map pulled back through a continuous linear
+equivalence. -/
+def pullbackLinearMap (A : E →ₗ.[𝕜] E) (e : E ≃L[𝕜] E) :
+    pullbackDomain A e →ₗ[𝕜] E :=
+  e.symm.toLinearMap.comp (A.toFun.comp (pullbackDomainToOriginal A e))
+
+@[simp] theorem pullbackLinearMap_apply
+    (A : E →ₗ.[𝕜] E) (e : E ≃L[𝕜] E)
+    (x : pullbackDomain A e) :
+    pullbackLinearMap A e x =
+      e.symm (A (pullbackDomainToOriginal A e x)) :=
+  rfl
+
+/-- Pull a partial map back through a continuous linear equivalence.  Density
+and graph closedness are separate properties of the resulting partial map. -/
+noncomputable def pullback (A : E →ₗ.[𝕜] E) (e : E ≃L[𝕜] E) : E →ₗ.[𝕜] E where
+  domain := pullbackDomain A e
+  toFun := pullbackLinearMap A e
+
+@[simp] theorem pullback_domain
+    (A : E →ₗ.[𝕜] E) (e : E ≃L[𝕜] E) :
+    (pullback A e).domain = pullbackDomain A e :=
+  rfl
+
+/-- Pullback through a continuous linear equivalence preserves a dense domain. -/
+theorem pullback_dense
+    (A : E →ₗ.[𝕜] E) (e : E ≃L[𝕜] E)
+    (hA : Dense (A.domain : Set E)) :
+    Dense ((pullback A e).domain : Set E) := by
+  rw [pullback_domain]
+  have himage : Dense (e.symm '' (A.domain : Set E)) :=
+    (e.symm.toHomeomorph.isDenseEmbedding.dense_image).2 hA
+  rw [show ((pullbackDomain A e : Submodule 𝕜 E) : Set E) =
+      e.symm '' (A.domain : Set E) by
+    ext x
+    constructor
+    · intro hx
+      exact ⟨e x, hx, e.symm_apply_apply x⟩
+    · rintro ⟨y, hy, rfl⟩
+      simpa using hy]
+  exact himage
+
+/-- Pullback through a continuous linear equivalence preserves graph
+closedness. -/
+theorem pullback_closedGraph
+    (A : E →ₗ.[𝕜] E) (e : E ≃L[𝕜] E)
+    (hA : IsClosed (Set.range fun x : A.domain => ((x : E), A x))) :
+    IsClosed (Set.range fun x : (pullback A e).domain =>
+      ((x : E), pullback A e x)) := by
+  let coords : E × E → E × E := fun p => (e p.1, e p.2)
+  have hcoords : Continuous coords := by fun_prop
+  rw [show Set.range (fun x : (pullback A e).domain =>
+      ((x : E), pullback A e x)) =
+      coords ⁻¹' (Set.range fun x : A.domain => ((x : E), A x)) by
+    ext p
+    constructor
+    · rintro ⟨x, rfl⟩
+      refine ⟨pullbackDomainToOriginal A e x, ?_⟩
+      apply Prod.ext
+      · rfl
+      · change A (pullbackDomainToOriginal A e x) =
+          e (pullbackLinearMap A e x)
+        rw [pullbackLinearMap_apply, e.apply_symm_apply]
+    · rintro ⟨x, hx⟩
+      have hfst : (x : E) = e p.1 := congrArg Prod.fst hx
+      have hsnd : A x = e p.2 := congrArg Prod.snd hx
+      have hp1 : p.1 ∈ pullbackDomain A e := by
+        change e p.1 ∈ A.domain
+        rw [← hfst]
+        exact x.property
+      let z : (pullback A e).domain := ⟨p.1, hp1⟩
+      have hz : pullbackDomainToOriginal A e z = x := by
+        apply Subtype.ext
+        exact hfst.symm
+      refine ⟨z, Prod.ext rfl ?_⟩
+      apply e.injective
+      change e (pullbackLinearMap A e z) = e p.2
+      rw [pullbackLinearMap_apply, e.apply_symm_apply, hz]
+      exact hsnd]
+  exact hA.preimage hcoords
+
+/-- A bounded operator is unitary when it is norm preserving and surjective. -/
+def IsUnitaryOperator (W : E →L[𝕜] E) : Prop :=
+  (∀ x, ‖W x‖ = ‖x‖) ∧ Function.Surjective W
+
+/-- Two partial maps are unitarily equivalent when mutually inverse unitary
+maps transport both domains and both actions. -/
+def UnitaryEquivalent (A B : E →ₗ.[𝕜] E)
+    (W Winv : E →L[𝕜] E) : Prop :=
+  IsUnitaryOperator W ∧ IsUnitaryOperator Winv ∧
+  Winv ∘L W = ContinuousLinearMap.id 𝕜 E ∧
+  W ∘L Winv = ContinuousLinearMap.id 𝕜 E ∧
+  ∃ hWdom : ∀ x : A.domain, W (x : E) ∈ B.domain,
+  ∃ hWinvdom : ∀ y : B.domain, Winv (y : E) ∈ A.domain,
+    (∀ x : A.domain,
+      B ⟨W (x : E), hWdom x⟩ = W (A x)) ∧
+    (∀ y : B.domain,
+      A ⟨Winv (y : E), hWinvdom y⟩ = Winv (B y))
+
+/-- Pullback through a unitary equivalence is unitarily equivalent to the
+original partial map. -/
+theorem pullback_unitaryEquivalent
+    (A : E →ₗ.[𝕜] E) (e : E ≃L[𝕜] E)
+    (he : IsUnitaryOperator e.toContinuousLinearMap) :
+    UnitaryEquivalent (pullback A e) A e.toContinuousLinearMap
+      e.symm.toContinuousLinearMap := by
+  have hesymm : IsUnitaryOperator e.symm.toContinuousLinearMap := by
+    constructor
+    · intro y
+      have h := he.1 (e.symm y)
+      simpa using h.symm
+    · exact e.symm.surjective
+  have hleft : e.symm.toContinuousLinearMap ∘L e.toContinuousLinearMap =
+      ContinuousLinearMap.id 𝕜 E := by
+    apply ContinuousLinearMap.ext
+    intro x
+    simp
+  have hright : e.toContinuousLinearMap ∘L e.symm.toContinuousLinearMap =
+      ContinuousLinearMap.id 𝕜 E := by
+    apply ContinuousLinearMap.ext
+    intro x
+    simp
+  refine ⟨he, hesymm, hleft, hright, ?_⟩
+  let hWdom : ∀ x : (pullback A e).domain,
+      e (x : E) ∈ A.domain := fun x => x.property
+  refine ⟨hWdom, ?_⟩
+  let hWinvdom : ∀ y : A.domain,
+      e.symm (y : E) ∈ (pullback A e).domain := fun y => by
+        change e (e.symm (y : E)) ∈ A.domain
+        simpa only [e.apply_symm_apply] using y.property
+  refine ⟨hWinvdom, ?_, ?_⟩
+  · intro x
+    change A ⟨e (x : E), hWdom x⟩ = e ((pullback A e) x)
+    change A ⟨e (x : E), hWdom x⟩ = e (pullbackLinearMap A e x)
+    rw [pullbackLinearMap_apply, e.apply_symm_apply]
+    rfl
+  · intro y
+    change (pullback A e) ⟨e.symm (y : E), hWinvdom y⟩ = e.symm (A y)
+    change pullbackLinearMap A e ⟨e.symm (y : E), hWinvdom y⟩ = e.symm (A y)
+    rw [pullbackLinearMap_apply]
+    congr 2
+    apply Subtype.ext
+    simp
+
+/-- The explicit product domain of two partial maps, transported to the
+`L²` Hilbert direct sum. -/
+noncomputable def directSumDomain
+    (A : E →ₗ.[𝕜] E) (B : F →ₗ.[𝕜] F) :
+    Submodule 𝕜 (WithLp 2 (E × F)) :=
+  (A.domain.prod B.domain).comap
+    (WithLp.linearEquiv 2 𝕜 (E × F)).toLinearMap
+
+@[simp] theorem mem_directSumDomain_iff
+    (A : E →ₗ.[𝕜] E) (B : F →ₗ.[𝕜] F) (z : WithLp 2 (E × F)) :
+    z ∈ directSumDomain A B ↔
+      WithLp.fst z ∈ A.domain ∧ WithLp.snd z ∈ B.domain :=
+  Iff.rfl
+
+/-- First coordinate of a direct-sum domain vector. -/
+def directSumDomainFst (A : E →ₗ.[𝕜] E) (B : F →ₗ.[𝕜] F)
+    (z : directSumDomain A B) : A.domain :=
+  ⟨WithLp.fst (z : WithLp 2 (E × F)),
+    (mem_directSumDomain_iff A B z).mp z.property |>.1⟩
+
+/-- Second coordinate of a direct-sum domain vector. -/
+def directSumDomainSnd (A : E →ₗ.[𝕜] E) (B : F →ₗ.[𝕜] F)
+    (z : directSumDomain A B) : B.domain :=
+  ⟨WithLp.snd (z : WithLp 2 (E × F)),
+    (mem_directSumDomain_iff A B z).mp z.property |>.2⟩
+
+/-- First-coordinate extraction as a linear map on a direct-sum domain. -/
+def directSumDomainFstLinearMap (A : E →ₗ.[𝕜] E) (B : F →ₗ.[𝕜] F) :
+    directSumDomain A B →ₗ[𝕜] A.domain where
+  toFun := directSumDomainFst A B
+  map_add' _ _ := Subtype.ext rfl
+  map_smul' _ _ := Subtype.ext rfl
+
+/-- Second-coordinate extraction as a linear map on a direct-sum domain. -/
+def directSumDomainSndLinearMap (A : E →ₗ.[𝕜] E) (B : F →ₗ.[𝕜] F) :
+    directSumDomain A B →ₗ[𝕜] B.domain where
+  toFun := directSumDomainSnd A B
+  map_add' _ _ := Subtype.ext rfl
+  map_smul' _ _ := Subtype.ext rfl
+
+/-- Componentwise partial-map action on a direct-sum domain. -/
+noncomputable def directSumLinearMap
+    (A : E →ₗ.[𝕜] E) (B : F →ₗ.[𝕜] F) :
+    directSumDomain A B →ₗ[𝕜] WithLp 2 (E × F) :=
+  (WithLp.linearEquiv 2 𝕜 (E × F)).symm.toLinearMap.comp
+    ((A.toFun.comp
+      (directSumDomainFstLinearMap A B)).prod
+     (B.toFun.comp
+      (directSumDomainSndLinearMap A B)))
+
+/-- The direct sum of two partial maps.  Density and closedness remain
+separate properties. -/
+noncomputable def directSum
+    (A : E →ₗ.[𝕜] E) (B : F →ₗ.[𝕜] F) :
+    WithLp 2 (E × F) →ₗ.[𝕜] WithLp 2 (E × F) where
+  domain := directSumDomain A B
+  toFun := directSumLinearMap A B
+
+@[simp] theorem directSum_domain
+    (A : E →ₗ.[𝕜] E) (B : F →ₗ.[𝕜] F) :
+    (directSum A B).domain = directSumDomain A B := rfl
+
+/-- The direct sum of dense partial-map domains is dense. -/
+theorem directSum_dense
+    (A : E →ₗ.[𝕜] E) (B : F →ₗ.[𝕜] F)
+    (hA : Dense (A.domain : Set E)) (hB : Dense (B.domain : Set F)) :
+    Dense ((directSum A B).domain : Set (WithLp 2 (E × F))) := by
+  rw [directSum_domain]
+  have hprod : Dense ((A.domain : Set E) ×ˢ (B.domain : Set F)) := hA.prod hB
+  have himage : Dense
+      ((WithLp.homeomorphProd 2 E F).symm ''
+        ((A.domain : Set E) ×ˢ (B.domain : Set F))) :=
+    ((WithLp.homeomorphProd 2 E F).symm.isDenseEmbedding.dense_image).2 hprod
+  rw [show ((directSumDomain A B : Submodule 𝕜 (WithLp 2 (E × F))) :
+      Set (WithLp 2 (E × F))) =
+      (WithLp.homeomorphProd 2 E F).symm ''
+        ((A.domain : Set E) ×ˢ (B.domain : Set F)) by
+    ext z
+    constructor
+    · intro hz
+      exact ⟨WithLp.ofLp z, hz, rfl⟩
+    · rintro ⟨p, hp, rfl⟩
+      exact hp]
+  exact himage
+
+/-- The direct sum of closed partial-map graphs is closed. -/
+theorem directSum_closedGraph
+    (A : E →ₗ.[𝕜] E) (B : F →ₗ.[𝕜] F)
+    (hA : IsClosed (Set.range fun x : A.domain => ((x : E), A x)))
+    (hB : IsClosed (Set.range fun y : B.domain => ((y : F), B y))) :
+    IsClosed (Set.range fun z : (directSum A B).domain =>
+      ((z : WithLp 2 (E × F)), directSum A B z)) := by
+  let coords : (WithLp 2 (E × F) × WithLp 2 (E × F)) →
+      ((E × E) × (F × F)) := fun p =>
+    ((WithLp.fst p.1, WithLp.fst p.2),
+      (WithLp.snd p.1, WithLp.snd p.2))
+  have hcoords : Continuous coords := by fun_prop
+  have hclosed : IsClosed
+      ((Set.range fun x : A.domain => ((x : E), A x)) ×ˢ
+       (Set.range fun y : B.domain => ((y : F), B y))) := hA.prod hB
+  rw [show Set.range (fun z : (directSum A B).domain =>
+      ((z : WithLp 2 (E × F)), directSum A B z)) =
+      coords ⁻¹' ((Set.range fun x : A.domain => ((x : E), A x)) ×ˢ
+        (Set.range fun y : B.domain => ((y : F), B y))) by
+    ext p
+    constructor
+    · rintro ⟨z, rfl⟩
+      exact ⟨⟨directSumDomainFst A B z, by ext <;> rfl⟩,
+        ⟨directSumDomainSnd A B z, by ext <;> rfl⟩⟩
+    · rintro ⟨⟨x, hx⟩, ⟨y, hy⟩⟩
+      have hxf : (x : E) = WithLp.fst p.1 := congrArg Prod.fst hx
+      have hxa : A x = WithLp.fst p.2 := congrArg Prod.snd hx
+      have hyf : (y : F) = WithLp.snd p.1 := congrArg Prod.fst hy
+      have hyb : B y = WithLp.snd p.2 := congrArg Prod.snd hy
+      let z : (directSum A B).domain := ⟨p.1,
+        (mem_directSumDomain_iff A B p.1).2
+          ⟨hxf ▸ x.property, hyf ▸ y.property⟩⟩
+      have hzx : directSumDomainFst A B z = x := Subtype.ext hxf.symm
+      have hzy : directSumDomainSnd A B z = y := Subtype.ext hyf.symm
+      refine ⟨z, Prod.ext rfl ?_⟩
+      apply (WithLp.linearEquiv 2 𝕜 (E × F)).injective
+      apply Prod.ext
+      · change A (directSumDomainFst A B z) = WithLp.fst p.2
+        simpa [hzx] using hxa
+      · change B (directSumDomainSnd A B z) = WithLp.snd p.2
+        simpa [hzy] using hyb]
+  exact hclosed.preimage hcoords
+
 /-- A partial linear map is symmetric on its operator domain. -/
 def IsSymmetric (A : E →ₗ.[𝕜] E) : Prop :=
   ∀ x y : A.domain, ⟪A x, (y : E)⟫_𝕜 = ⟪(x : E), A y⟫_𝕜
+
+/-- A self-adjoint partial map restricts to a self-adjoint partial map on every
+reducing subspace. -/
+theorem reducingRestriction_isSelfAdjoint
+    (A : E →ₗ.[𝕜] E) (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
+    [CompleteSpace E] [CompleteSpace U]
+    (hred : ReducesSubspace A U) (hDense : Dense (A.domain : Set E))
+    (hA : _root_.IsSelfAdjoint A) :
+    _root_.IsSelfAdjoint (reducingRestriction A U hred) := by
+  let R := reducingRestriction A U hred
+  change _root_.IsSelfAdjoint R
+  rw [LinearPMap.isSelfAdjoint_def] at hA ⊢
+  refine LinearPMap.ext_iff.mpr ⟨?_, ?_⟩
+  · ext y
+    change y ∈ R.adjoint.domain ↔ y ∈ R.domain
+    rw [show R = reducingRestriction A U hred by rfl,
+      mem_reducingRestriction_adjoint_domain_iff A U hred]
+    rw [hA]
+    rfl
+  · intro y hyAdj hyR
+    let yAdj : U := R.adjoint ⟨y, hyAdj⟩
+    let yAct : U := R ⟨y, hyR⟩
+    have hformal := LinearPMap.adjoint_isFormalAdjoint
+      (reducingRestriction_dense A U hred hDense) ⟨y, hyAdj⟩
+    have hAformal := LinearPMap.adjoint_isFormalAdjoint hDense
+    rw [hA] at hAformal
+    have hAsymm : IsSymmetric A := by
+      intro x z
+      exact hAformal x z
+    have hsymm := reducingRestriction_isSymmetric A U hred hAsymm
+    have hinner : (fun x : U => ⟪yAdj, x⟫_𝕜) =
+        fun x : U => ⟪yAct, x⟫_𝕜 := by
+      apply Continuous.ext_on (reducingRestriction_dense A U hred hDense)
+      · exact continuous_const.inner continuous_id
+      · exact continuous_const.inner continuous_id
+      · intro x hx
+        let xDom : R.domain := ⟨x, hx⟩
+        calc
+          ⟪yAdj, x⟫_𝕜 = ⟪y, R xDom⟫_𝕜 := by
+            simpa [yAdj, xDom] using hformal xDom
+          _ = ⟪yAct, x⟫_𝕜 := by
+            simpa [yAct, xDom, R] using (hsymm ⟨y, hyR⟩ xDom).symm
+    have hzero : ⟪yAdj - yAct, yAdj - yAct⟫_𝕜 = 0 := by
+      rw [inner_sub_left, congrFun hinner (yAdj - yAct), sub_self]
+    exact sub_eq_zero.mp (inner_self_eq_zero.mp hzero)
 
 /-- Graph norm associated with a partial linear map. -/
 noncomputable def graphNorm (A : E →ₗ.[𝕜] E) (x : A.domain) : ℝ :=

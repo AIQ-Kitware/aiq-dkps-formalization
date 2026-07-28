@@ -82,14 +82,11 @@ theorem orthogonal_invariant
 
 end ReducesSubspace
 
-/-- The operator domain inside a reducing subspace. -/
-def reducingRestrictionDomain
+/-- Compatibility facade for the raw restricted domain. -/
+abbrev reducingRestrictionDomain
     (A : ClosedOperator (𝕜 := 𝕜) (E := E))
     (U : Submodule 𝕜 E) : Submodule 𝕜 U where
-  carrier := {x | (x : E) ∈ A.domain}
-  zero_mem' := A.domain.zero_mem
-  add_mem' hx hy := A.domain.add_mem hx hy
-  smul_mem' c x hx := A.domain.smul_mem c hx
+  _ := TauCeti.LinearPMap.reducingRestrictionDomain A.toLinearPMap U
 
 @[simp]
 theorem mem_reducingRestrictionDomain_iff
@@ -98,12 +95,12 @@ theorem mem_reducingRestrictionDomain_iff
     x ∈ reducingRestrictionDomain A U ↔ (x : E) ∈ A.domain :=
   Iff.rfl
 
-/-- A restricted-domain vector viewed in the ambient operator domain. -/
-def reducingRestrictionDomainToAmbient
+/-- Compatibility facade for the ambient-domain inclusion. -/
+abbrev reducingRestrictionDomainToAmbient
     (A : ClosedOperator (𝕜 := 𝕜) (E := E))
     (U : Submodule 𝕜 E)
     (x : reducingRestrictionDomain A U) : A.domain :=
-  ⟨((x : reducingRestrictionDomain A U) : U), x.property⟩
+  TauCeti.LinearPMap.reducingRestrictionDomainToAmbient A.toLinearPMap U x
 
 @[simp]
 theorem reducingRestrictionDomainToAmbient_coe
@@ -114,29 +111,13 @@ theorem reducingRestrictionDomainToAmbient_coe
       ((x : reducingRestrictionDomain A U) : U) :=
   rfl
 
-/-- Action of the restriction, valued in the reducing subspace. -/
-def reducingRestrictionLinearMap
+/-- Compatibility facade for the raw restricted action. -/
+abbrev reducingRestrictionLinearMap
     (A : ClosedOperator (𝕜 := 𝕜) (E := E))
     (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     (hred : A.ReducesSubspace U) :
-    reducingRestrictionDomain A U →ₗ[𝕜] U where
-  toFun x :=
-    ⟨A.toLinearMap (reducingRestrictionDomainToAmbient A U x),
-      hred.invariant (reducingRestrictionDomainToAmbient A U x)
-        (((x : reducingRestrictionDomain A U) : U).property)⟩
-  map_add' x y := by
-    apply Subtype.ext
-    simp only [Submodule.coe_add]
-    rw [show reducingRestrictionDomainToAmbient A U (x + y) =
-      reducingRestrictionDomainToAmbient A U x +
-        reducingRestrictionDomainToAmbient A U y from rfl]
-    exact map_add A.toLinearMap _ _
-  map_smul' c x := by
-    apply Subtype.ext
-    simp only [Submodule.coe_smul, RingHom.id_apply]
-    rw [show reducingRestrictionDomainToAmbient A U (c • x) =
-      c • reducingRestrictionDomainToAmbient A U x from rfl]
-    exact map_smul A.toLinearMap c _
+    reducingRestrictionDomain A U →ₗ[𝕜] U :=
+  TauCeti.LinearPMap.reducingRestrictionLinearMap A.toLinearPMap U hred
 
 @[simp]
 theorem coe_reducingRestrictionLinearMap
@@ -148,14 +129,13 @@ theorem coe_reducingRestrictionLinearMap
       A.toLinearMap (reducingRestrictionDomainToAmbient A U x) :=
   rfl
 
-/-- Projection of an ambient domain vector into the restricted domain. -/
-noncomputable def projectDomainToReducingRestriction
+/-- Compatibility facade for projection into the raw restricted domain. -/
+noncomputable abbrev projectDomainToReducingRestriction
     (A : ClosedOperator (𝕜 := 𝕜) (E := E))
     (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     (hred : A.ReducesSubspace U) (x : A.domain) :
     reducingRestrictionDomain A U :=
-  ⟨⟨U.starProjection (x : E), U.starProjection_apply_mem (x : E)⟩,
-    hred.projection_mem_domain x⟩
+  TauCeti.LinearPMap.projectDomainToReducingRestriction A.toLinearPMap U hred x
 
 @[simp]
 theorem coe_projectDomainToReducingRestriction
@@ -171,25 +151,9 @@ private theorem reducingRestrictionDomain_dense
     (A : ClosedOperator (𝕜 := 𝕜) (E := E))
     (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     (hred : A.ReducesSubspace U) :
-    Dense ((reducingRestrictionDomain A U : Submodule 𝕜 U) : Set U) := by
-  rw [dense_iff_closure_eq]
-  ext u
-  simp only [Set.mem_univ, iff_true]
-  have hu : (u : E) ∈ closure (A.domain : Set E) := by
-    rw [A.dense_domain.closure_eq]
-    trivial
-  obtain ⟨s, hs, hs_lim⟩ := mem_closure_iff_seq_limit.mp hu
-  let t : ℕ → U := fun n =>
-    ⟨U.starProjection (s n), U.starProjection_apply_mem (s n)⟩
-  refine mem_closure_iff_seq_limit.mpr ⟨t, ?_, ?_⟩
-  · intro n
-    exact hred.projection_mem_domain ⟨s n, hs n⟩
-  · have hlim := (U.starProjection.continuous.tendsto (u : E)).comp hs_lim
-    have hfix : U.starProjection (u : E) = (u : E) :=
-      Submodule.starProjection_eq_self_iff.mpr u.property
-    change Tendsto (fun n => t n) atTop (𝓝 u)
-    apply tendsto_subtype_rng.mpr
-    simpa [t, hfix, Function.comp_def] using hlim
+    Dense ((reducingRestrictionDomain A U : Submodule 𝕜 U) : Set U) :=
+  TauCeti.LinearPMap.reducingRestriction_dense A.toLinearPMap U hred
+    A.toLinearPMap_dense
 
 private theorem reducingRestrictionLinearMap_closedGraph
     (A : ClosedOperator (𝕜 := 𝕜) (E := E))
@@ -197,34 +161,9 @@ private theorem reducingRestrictionLinearMap_closedGraph
     (hred : A.ReducesSubspace U) :
     IsClosed (Set.range fun x : reducingRestrictionDomain A U =>
       (((x : reducingRestrictionDomain A U) : U),
-        reducingRestrictionLinearMap A U hred x)) := by
-  let coords : U × U → E × E := fun p => ((p.1 : E), (p.2 : E))
-  have hcoords : Continuous coords :=
-    (U.subtypeL.continuous.comp continuous_fst).prodMk
-      (U.subtypeL.continuous.comp continuous_snd)
-  rw [show Set.range (fun x : reducingRestrictionDomain A U =>
-      (((x : reducingRestrictionDomain A U) : U),
-        reducingRestrictionLinearMap A U hred x)) =
-      coords ⁻¹' (Set.range fun x : A.domain =>
-        ((x : E), A.toLinearMap x)) by
-    ext p
-    constructor
-    · rintro ⟨x, rfl⟩
-      exact ⟨reducingRestrictionDomainToAmbient A U x, rfl⟩
-    · rintro ⟨x, hx⟩
-      have hx0 : (x : E) = (p.1 : E) := congrArg Prod.fst hx
-      have hx1 : A.toLinearMap x = (p.2 : E) := congrArg Prod.snd hx
-      have hpdom : (p.1 : E) ∈ A.domain := hx0 ▸ x.property
-      let u : reducingRestrictionDomain A U := ⟨p.1, hpdom⟩
-      refine ⟨u, Prod.ext rfl ?_⟩
-      apply Subtype.ext
-      change A.toLinearMap
-          (reducingRestrictionDomainToAmbient A U u) = (p.2 : E)
-      have hxu : reducingRestrictionDomainToAmbient A U u = x := by
-        apply Subtype.ext
-        exact hx0.symm
-      simpa [hxu] using hx1]
-  exact A.closed_graph.preimage hcoords
+        reducingRestrictionLinearMap A U hred x)) :=
+  TauCeti.LinearPMap.reducingRestriction_closedGraph A.toLinearPMap U hred
+    A.closed_graph
 
 /-- The closed operator induced on a reducing subspace. -/
 noncomputable def reducingRestriction
@@ -232,8 +171,8 @@ noncomputable def reducingRestriction
     (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     (hred : A.ReducesSubspace U) :
     ClosedOperator (𝕜 := 𝕜) (E := U) where
-  domain := reducingRestrictionDomain A U
-  toLinearMap := reducingRestrictionLinearMap A U hred
+  domain := (TauCeti.LinearPMap.reducingRestriction A.toLinearPMap U hred).domain
+  toLinearMap := (TauCeti.LinearPMap.reducingRestriction A.toLinearPMap U hred).toFun
   dense_domain := reducingRestrictionDomain_dense A U hred
   closed_graph := reducingRestrictionLinearMap_closedGraph A U hred
 
@@ -277,20 +216,6 @@ theorem reducingRestriction_inclusion_intertwines
         ((reducingRestriction A U hred).toLinearMap x) :=
   rfl
 
-private theorem continuous_projectDomainToReducingRestriction
-    (A : ClosedOperator (𝕜 := 𝕜) (E := E))
-    (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
-    (hred : A.ReducesSubspace U) :
-    Continuous (projectDomainToReducingRestriction A U hred) := by
-  have hproj : Continuous fun x : A.domain =>
-      U.starProjection (x : E) :=
-    U.starProjection.continuous.comp A.domain.subtypeL.continuous
-  have hprojU : Continuous fun x : A.domain =>
-      (⟨U.starProjection (x : E),
-        U.starProjection_apply_mem (x : E)⟩ : U) :=
-    hproj.subtype_mk _
-  exact hprojU.subtype_mk fun x => hred.projection_mem_domain x
-
 /-- Adjoint-domain membership of the restriction is exactly ambient
 adjoint-domain membership for the included vector. -/
 theorem mem_reducingRestriction_adjoint_domain_iff
@@ -298,54 +223,9 @@ theorem mem_reducingRestriction_adjoint_domain_iff
     (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     (hred : A.ReducesSubspace U) (y : U) :
     y ∈ (reducingRestriction A U hred).toLinearPMap.adjoint.domain ↔
-      (y : E) ∈ A.toLinearPMap.adjoint.domain := by
-  rw [LinearPMap.mem_adjoint_domain_iff,
-    LinearPMap.mem_adjoint_domain_iff]
-  constructor
-  · intro hy
-    have hcomp : Continuous fun x : A.domain =>
-        ⟪y, (reducingRestriction A U hred).toLinearPMap
-          (projectDomainToReducingRestriction A U hred x)⟫_𝕜 :=
-      hy.comp (continuous_projectDomainToReducingRestriction A U hred)
-    have hfun : (fun x : A.domain =>
-        ⟪y, (reducingRestriction A U hred).toLinearPMap
-          (projectDomainToReducingRestriction A U hred x)⟫_𝕜) =
-        fun x : A.domain => ⟪(y : E), A.toLinearMap x⟫_𝕜 := by
-      funext x
-      let xu : A.domain :=
-        ⟨U.starProjection (x : E), hred.projection_mem_domain x⟩
-      let xo : A.domain :=
-        ⟨Uᗮ.starProjection (x : E), hred.orthogonalProjection_mem_domain x⟩
-      have hxsplit : x = xu + xo := by
-        apply Subtype.ext
-        exact (U.starProjection_add_starProjection_orthogonal (x : E)).symm
-      have horth : ⟪(y : E), A.toLinearMap xo⟫_𝕜 = 0 := by
-        exact Submodule.inner_right_of_mem_orthogonal y.property
-          (hred.orthogonal_invariant xo
-            (Uᗮ.starProjection_apply_mem (x : E)))
-      calc
-        ⟪y, (reducingRestriction A U hred).toLinearPMap
-            (projectDomainToReducingRestriction A U hred x)⟫_𝕜 =
-            ⟪(y : E), A.toLinearMap xu⟫_𝕜 := rfl
-        _ = ⟪(y : E), A.toLinearMap xu + A.toLinearMap xo⟫_𝕜 := by
-              rw [inner_add_right, horth, add_zero]
-        _ = ⟪(y : E), A.toLinearMap (xu + xo)⟫_𝕜 := by rw [map_add]
-        _ = ⟪(y : E), A.toLinearMap x⟫_𝕜 := by rw [← hxsplit]
-    rw [hfun] at hcomp
-    exact hcomp
-  · intro hy
-    have hincl : Continuous fun x : (reducingRestriction A U hred).domain =>
-        reducingRestrictionDomainToAmbient A U x := by
-      have hcoe : Continuous fun x : (reducingRestriction A U hred).domain =>
-          (((x : (reducingRestriction A U hred).domain) : U) : E) :=
-        U.subtypeL.continuous.comp
-          (reducingRestriction A U hred).domain.subtypeL.continuous
-      exact hcoe.subtype_mk fun x => x.property
-    have hcomp := hy.comp hincl
-    have hcomp' : Continuous fun x : (reducingRestriction A U hred).domain =>
-        ⟪(y : E),
-          A.toLinearMap (reducingRestrictionDomainToAmbient A U x)⟫_𝕜 := hcomp
-    exact hcomp'
+      (y : E) ∈ A.toLinearPMap.adjoint.domain :=
+  TauCeti.LinearPMap.mem_reducingRestriction_adjoint_domain_iff
+    A.toLinearPMap U hred y
 
 /-- Symmetry passes to the reducing restriction. -/
 theorem reducingRestriction_isSymmetric
@@ -353,10 +233,8 @@ theorem reducingRestriction_isSymmetric
     (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     (hred : A.ReducesSubspace U)
     (hA : A.IsSymmetric) :
-    (reducingRestriction A U hred).IsSymmetric := by
-  intro x y
-  exact hA (reducingRestrictionDomainToAmbient A U x)
-    (reducingRestrictionDomainToAmbient A U y)
+    (reducingRestriction A U hred).IsSymmetric :=
+  TauCeti.LinearPMap.reducingRestriction_isSymmetric A.toLinearPMap U hred hA
 
 /-- A self-adjoint operator restricts to a self-adjoint operator on every
 reducing subspace. -/
@@ -365,36 +243,9 @@ theorem reducingRestriction_isSelfAdjoint
     (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     (hred : A.ReducesSubspace U)
     (hA : A.IsSelfAdjoint) :
-    (reducingRestriction A U hred).IsSelfAdjoint := by
-  let R := reducingRestriction A U hred
-  rw [R.isSelfAdjoint_iff_toLinearPMap_adjoint_eq]
-  refine LinearPMap.ext_iff.mpr ⟨?_, ?_⟩
-  · ext y
-    change y ∈ R.toLinearPMap.adjoint.domain ↔ y ∈ R.domain
-    rw [mem_reducingRestriction_adjoint_domain_iff A U hred]
-    rw [hA.toLinearPMap_adjoint_eq]
-    rfl
-  · intro y hyAdj hyR
-    let yAdj : U := R.toLinearPMap.adjoint ⟨y, hyAdj⟩
-    let yAct : U := R.toLinearPMap ⟨y, hyR⟩
-    have hformal := LinearPMap.adjoint_isFormalAdjoint
-      R.toLinearPMap_dense ⟨y, hyAdj⟩
-    have hsymm := reducingRestriction_isSymmetric A U hred hA.isSymmetric
-    have hinner : (fun x : U => ⟪yAdj, x⟫_𝕜) =
-        fun x : U => ⟪yAct, x⟫_𝕜 := by
-      apply Continuous.ext_on R.dense_domain
-      · exact continuous_const.inner continuous_id
-      · exact continuous_const.inner continuous_id
-      · intro x hx
-        let xDom : R.domain := ⟨x, hx⟩
-        calc
-          ⟪yAdj, x⟫_𝕜 = ⟪y, R.toLinearPMap xDom⟫_𝕜 := by
-            simpa [yAdj, xDom] using hformal xDom
-          _ = ⟪yAct, x⟫_𝕜 := by
-            simpa [yAct, xDom, R] using (hsymm ⟨y, hyR⟩ xDom).symm
-    have hzero : ⟪yAdj - yAct, yAdj - yAct⟫_𝕜 = 0 := by
-      rw [inner_sub_left, congrFun hinner (yAdj - yAct), sub_self]
-    exact sub_eq_zero.mp (inner_self_eq_zero.mp hzero)
+    (reducingRestriction A U hred).IsSelfAdjoint :=
+  TauCeti.LinearPMap.reducingRestriction_isSelfAdjoint A.toLinearPMap U hred
+    A.toLinearPMap_dense hA
 
 end ClosedOperator
 end DavisKahanExt
