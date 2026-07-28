@@ -6,7 +6,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 import DavisKahan.OperatorIdeal.ApproximationNumbers.Core
 import DavisKahan.OperatorIdeal.UnitarilyInvariant.RectangularFamily
 import DavisKahan.OperatorIdeal.ApproximationNumbers.Real
-import ForTauCeti.Analysis.OperatorIdeal.Family.Basic
+import DavisKahan.Interop.TauCeti.RectangularFamilyAdapter
 
 /-!
 # Scalar-generic approximation-number endpoints and ideal families
@@ -15,6 +15,26 @@ This public module assembles the lower approximation-number foundation with
 its complex and real analytic endpoints. The scalar-generic endpoint wrappers
 and the downstream Ky Fan dominant ideal families live here, above both
 scalar-specific implementations, avoiding the former real-proof import cycle.
+
+## Main definitions
+
+* `HasApproximationNumberStrongCutoff`, `HasKyFanApproximationGaugeTriangle`:
+  the two analytic capabilities, separated from `RCLike` because that class is
+  open while these facts are established for `ℝ` and `ℂ`.
+* `kyFanSymmetricIdealFamily`: the finite Ky Fan gauge as a **canonical**
+  `TauCeti.SymmetricOperatorIdealFamily`, with a completeness instance.
+* `KyFanDominantIdealFamily`: a complete symmetric ideal family dominated by
+  the finite Ky Fan gauges — the hypothesis of the infinite-dimensional
+  Davis--Kahan estimates — together with its two instances, `operatorNorm` and
+  `kyFan k`.
+
+## The two gauges
+
+The gauge is *stored* canonically in `ℝ≥0∞`, where the ideal laws are
+unconditional, and *read* in `ℝ` through `KyFanDominantIdealFamily.gauge`,
+because the Davis--Kahan estimates subtract gauges and finish with `linarith`.
+The bridge is `TauCeti.SymmetricOperatorIdealFamily.toRectangular`; see the
+"ideal interface" section below.
 -/
 
 namespace TauCeti
@@ -274,22 +294,37 @@ instance isComplete_kyFanSymmetricIdealFamily
           simpa [dist_eq_norm] using hM n hn
       _ = ε := by field_simp
 
-/-- A rectangular ideal family whose gauge is fully symmetric with respect
-    to all finite Ky Fan approximation gauges. -/
+/-- A **complete symmetric operator ideal family dominated by the finite Ky Fan
+gauges**: the ideal norm decreases whenever every finite Ky Fan gauge does.
+
+This is the hypothesis under which the infinite-dimensional Davis--Kahan
+estimates hold for a general unitarily invariant norm.  The gauge is carried by
+the canonical `TauCeti.SymmetricOperatorIdealFamily`, so the ideal laws are
+inherited rather than restated, and Fan dominance is the single extra field.
+
+Two fields disappeared when the storage moved from the historical record to the
+canonical family, and both for the same reason — in `ℝ≥0∞` the laws are
+unconditional.  Dominance no longer needs `B` to be a member as a *hypothesis*,
+and no longer has to conclude that `A` is one: `gauge A ≤ gauge B` already gives
+`gauge B ≠ ∞ → gauge A ≠ ∞`.  The historical two-part form survives as the
+theorem `majorization_mem_and_gauge_le`. -/
 structure KyFanDominantIdealFamily (𝕜 : Type u) [RCLike 𝕜] where
-  toRectangularSymmetricIdealFamily :
-    RectangularSymmetricIdealFamily (𝕜 := 𝕜)
-  majorization_mem_and_gauge_le :
+  /-- The canonical symmetric ideal family supplying the gauge and its laws. -/
+  toSymmetricOperatorIdealFamily : TauCeti.SymmetricOperatorIdealFamily.{u, v} 𝕜
+  /-- The ideal is complete for its own norm. -/
+  isComplete : toSymmetricOperatorIdealFamily.toOperatorIdealFamily.IsComplete
+  /-- **Fan dominance.**  Majorization of every finite Ky Fan gauge forces the
+  ideal gauge to be dominated too. -/
+  gauge_le_of_forall_kyFanApproximationGauge_le :
     ∀ {E F : Type v}
       [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
       [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
       {A B : E →L[𝕜] F},
-      toRectangularSymmetricIdealFamily.Mem B →
-      (∀ k, kyFanApproximationGauge k A ≤
-        kyFanApproximationGauge k B) →
-      toRectangularSymmetricIdealFamily.Mem A ∧
-        toRectangularSymmetricIdealFamily.gauge A ≤
-          toRectangularSymmetricIdealFamily.gauge B
+      (∀ k, kyFanApproximationGauge k A ≤ kyFanApproximationGauge k B) →
+      toSymmetricOperatorIdealFamily.gauge A ≤
+        toSymmetricOperatorIdealFamily.gauge B
+
+attribute [instance] KyFanDominantIdealFamily.isComplete
 
 /-- Source-facing name for the infinite-dimensional unitarily invariant norm
 families supported by the Davis--Kahan cutoff proof. -/
@@ -301,23 +336,30 @@ namespace KyFanDominantIdealFamily
 
 /-! ### The ideal interface
 
-`KyFanDominantIdealFamily` carries its ideal as a `RectangularSymmetricIdealFamily`
-field, but no consumer should have to say so.  These two accessors are the whole
-public surface the sin-Θ development uses, and everything downstream is stated
-through them rather than through the field.
+The gauge is stored canonically, in `ℝ≥0∞`, but the Davis--Kahan development is
+written in `ℝ`: its estimates multiply gauges by gap constants, subtract them,
+and finish with `linarith`, none of which survives truncated subtraction.  So
+the paper-facing view is a **real-valued** one, obtained by reading the
+canonical family through the historical record
+(`TauCeti.SymmetricOperatorIdealFamily.toRectangular`, which sets membership to
+finiteness of the gauge and the real gauge to `.toReal`).
 
-That indirection is deliberate and is the first half of the §13 retirement of
-`RectangularSymmetricIdealFamily` (see `dev/tauceti-signature-polish-todo.md`).
-The canonical replacement, `TauCeti.SymmetricOperatorIdealFamily`, carries a
-single `ℝ≥0∞` gauge and no membership predicate — its laws are unconditional —
-so swapping the representation changes the *type* of `gauge` and deletes
-`Mem` as data.  With ~376 call sites naming the field directly that swap was a
-sixty-module flag day; with them naming these accessors it is a change to this
-file plus whatever proof repair the `ℝ`-valued view needs, and the `ℝ`-valued
-interface below can survive as a documented convenience of the paper layer
-instead of as a second competing structure. -/
+`toRectangularSymmetricIdealFamily` is therefore no longer a field — it is a
+derived view, and the canonical family is the source of truth.  Nothing is
+duplicated: every law of the record is a theorem about the canonical gauge.
+
+`Mem` and `gauge` remain the whole public surface the sin-Θ development uses. -/
 
 variable (N : KyFanDominantIdealFamily.{u, v} 𝕜)
+
+/-- The historical real-valued view of the ideal.
+
+Transitional: it exists so that the `ℝ`-valued Davis--Kahan estimates keep
+working while they migrate.  It is a `def`, not data — see
+`dev/tauceti-signature-polish-todo.md` §13. -/
+noncomputable def toRectangularSymmetricIdealFamily :
+    RectangularSymmetricIdealFamily.{u, v} 𝕜 :=
+  N.toSymmetricOperatorIdealFamily.toRectangular
 
 /-- Membership in the ideal: the operator has finite ideal gauge. -/
 abbrev Mem (A : E →L[𝕜] F) : Prop :=
@@ -325,8 +367,16 @@ abbrev Mem (A : E →L[𝕜] F) : Prop :=
 
 /-- The ideal gauge, real-valued and meaningful only on members
 (`KyFanDominantIdealFamily.Mem`). -/
-abbrev gauge (A : E →L[𝕜] F) : ℝ :=
+noncomputable abbrev gauge (A : E →L[𝕜] F) : ℝ :=
   N.toRectangularSymmetricIdealFamily.gauge A
+
+@[simp]
+theorem mem_iff (A : E →L[𝕜] F) :
+    N.Mem A ↔ N.toSymmetricOperatorIdealFamily.gauge A ≠ ∞ := Iff.rfl
+
+@[simp]
+theorem gauge_eq_toReal (A : E →L[𝕜] F) :
+    N.gauge A = (N.toSymmetricOperatorIdealFamily.gauge A).toReal := rfl
 
 /-! Both accessors are `abbrev`, so they are reducible and `exact` sees through
 them.  `rw` does **not**: it keys on the head symbol, and
@@ -339,107 +389,53 @@ lemmas in `SinTheta/**` are the usual case — needs one
 needed exactly that when the call sites were repointed; there is no need to
 avoid the accessors on account of it. -/
 
+/-- Fan dominance in the historical two-part form: majorization of every finite
+Ky Fan gauge carries membership *and* the gauge bound.
+
+Both halves now follow from the single canonical inequality — in `ℝ≥0∞`,
+`gauge A ≤ gauge B` already implies `A` is a member as soon as `B` is. -/
+theorem majorization_mem_and_gauge_le {A B : E →L[𝕜] F} (hB : N.Mem B)
+    (h : ∀ k, kyFanApproximationGauge k A ≤ kyFanApproximationGauge k B) :
+    N.Mem A ∧ N.gauge A ≤ N.gauge B := by
+  have hle := N.gauge_le_of_forall_kyFanApproximationGauge_le h
+  exact ⟨ne_top_of_le_ne_top hB hle, ENNReal.toReal_mono hB hle⟩
+
 /-- The ordinary operator norm with its finite-Ky-Fan dominance property. -/
 noncomputable def operatorNorm :
-    KyFanDominantIdealFamily (𝕜 := 𝕜) where
-  toRectangularSymmetricIdealFamily :=
-    RectangularSymmetricIdealFamily.operatorNorm
-  majorization_mem_and_gauge_le := by
-    intro E F _ _ _ _ _ _ A B hB hmajor
-    refine ⟨trivial, ?_⟩
-    change ‖A‖ ≤ ‖B‖
-    simpa using hmajor 1
+    KyFanDominantIdealFamily.{u, v} 𝕜 where
+  toSymmetricOperatorIdealFamily := TauCeti.operatorNormFamily 𝕜
+  isComplete := inferInstance
+  gauge_le_of_forall_kyFanApproximationGauge_le := by
+    intro E F _ _ _ _ _ _ A B hmajor
+    have h : ‖A‖ ≤ ‖B‖ := by simpa using hmajor 1
+    simpa [TauCeti.gauge_operatorNormFamily, ← ofReal_norm] using
+      ENNReal.ofReal_le_ofReal h
 
-/-- Completeness of a fixed positive finite Ky Fan gauge. -/
-theorem kyFan_gauge_complete (k : ℕ) (hk : 0 < k)
-    {E F : Type v}
-    [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
-    [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
-    (A : ℕ → E →L[𝕜] F)
-    (hCauchy : ∀ ε : ℝ, 0 < ε → ∃ N, ∀ m n, N ≤ m → N ≤ n →
-      kyFanApproximationGauge k (A m - A n) < ε) :
-    ∃ L : E →L[𝕜] F, ∀ ε : ℝ, 0 < ε → ∃ N, ∀ n, N ≤ n →
-      kyFanApproximationGauge k (A n - L) < ε := by
-  have hopCauchy : ∀ ε : ℝ, 0 < ε → ∃ N, ∀ m n, N ≤ m → N ≤ n →
-      ‖A m - A n‖ < ε := by
-    intro ε hε
-    obtain ⟨N, hN⟩ := hCauchy ε hε
-    refine ⟨N, ?_⟩
-    intro m n hm hn
-    exact lt_of_le_of_lt
-      (opNorm_le_kyFanApproximationGauge hk (A m - A n))
-      (hN m n hm hn)
-  obtain ⟨L, hLmem, hL⟩ :=
-    RectangularSymmetricIdealFamily.operatorNorm.gauge_complete
-      A (fun n => trivial) hopCauchy
-  refine ⟨L, ?_⟩
-  intro ε hε
-  have hkR : 0 < (k : ℝ) := by exact_mod_cast hk
-  obtain ⟨N, hN⟩ := hL (ε / (k : ℝ)) (div_pos hε hkR)
-  refine ⟨N, ?_⟩
-  intro n hn
-  calc
-    kyFanApproximationGauge k (A n - L)
-        ≤ (k : ℝ) * ‖A n - L‖ :=
-      kyFanApproximationGauge_le_nat_mul_opNorm k (A n - L)
-    _ < (k : ℝ) * (ε / (k : ℝ)) :=
-      mul_lt_mul_of_pos_left (hN n hn) hkR
-    _ = ε := by field_simp
+/-- A fixed positive finite Ky Fan gauge with its own dominance property.
 
-/-- A fixed positive finite Ky Fan gauge with its own dominance property. -/
+Dominance is immediate: the gauge *is* the `k`-th Ky Fan gauge, so majorization
+at index `k` is the conclusion. -/
 noncomputable def kyFan [HasKyFanApproximationGaugeTriangle.{u, v} 𝕜]
     (k : ℕ) (hk : 0 < k) :
-    KyFanDominantIdealFamily (𝕜 := 𝕜) where
-  toRectangularSymmetricIdealFamily := {
-    Mem := fun _ => True
-    gauge := kyFanApproximationGauge k
-    zero_mem := trivial
-    add_mem := by intros; trivial
-    smul_mem := by intros; trivial
-    adjoint_mem := by intros; trivial
-    comp_mem := by intros; trivial
-    gauge_nonneg := by
-      intro E F _ _ _ _ _ _ A hA
-      exact kyFanApproximationGauge_nonneg k A
-    gauge_zero := by
-      intro E F _ _ _ _ _ _
-      exact kyFanApproximationGauge_zero_map k
-    gauge_eq_zero := by
-      intro E F _ _ _ _ _ _ A hA hzero
-      apply norm_eq_zero.mp
-      exact le_antisymm
-        ((opNorm_le_kyFanApproximationGauge hk A).trans_eq hzero)
-        (norm_nonneg A)
-    gauge_add_le := by
-      intro E F _ _ _ _ _ _ A B hA hB
-      exact kyFanApproximationGauge_add_le k A B
-    gauge_smul := by
-      intro E F _ _ _ _ _ _ c A hA
-      exact kyFanApproximationGauge_smul k c A
-    gauge_adjoint := by
-      intro E F _ _ _ _ _ _ A hA
-      exact kyFanApproximationGauge_adjoint k A
-    gauge_comp_le := by
-      intro E F G H _ _ _ _ _ _ _ _ _ _ _ _ L A R hA
-      exact kyFanApproximationGauge_comp_le k L A R
-    opNorm_le_gauge := by
-      intro E F _ _ _ _ _ _ A hA
-      exact opNorm_le_kyFanApproximationGauge hk A
-    gauge_complete := by
-      intro E F _ _ _ _ _ _ A hmem hCauchy
-      obtain ⟨L, hL⟩ := kyFan_gauge_complete k hk A hCauchy
-      exact ⟨L, trivial, hL⟩
-  }
-  majorization_mem_and_gauge_le := by
-    intro E F _ _ _ _ _ _ A B hB hmajor
-    exact ⟨trivial, hmajor k⟩
+    KyFanDominantIdealFamily.{u, v} 𝕜 where
+  toSymmetricOperatorIdealFamily := kyFanSymmetricIdealFamily k hk
+  isComplete := inferInstance
+  gauge_le_of_forall_kyFanApproximationGauge_le := by
+    intro E F _ _ _ _ _ _ A B hmajor
+    exact ENNReal.ofReal_le_ofReal (hmajor k)
+
+/-! The next two are stated through the *derived view* rather than through
+`Mem`/`gauge`.  That is deliberate: `simp` keys on the head symbol, and the
+downstream `simpa only [N, kyFan_gauge]` calls arrive with goals that have
+already been unfolded by `simp only [KyFanDominantIdealFamily.gauge]`.  Stating
+them over the accessor would silently stop matching at those sites. -/
 
 /-- Every bounded operator belongs to the fixed finite Ky Fan family. -/
 @[simp]
 theorem kyFan_mem [HasKyFanApproximationGaugeTriangle.{u, v} 𝕜]
     (k : ℕ) (hk : 0 < k) (K : E →L[𝕜] F) :
     (kyFan (𝕜 := 𝕜) k hk).toRectangularSymmetricIdealFamily.Mem K :=
-  trivial
+  gauge_kyFanSymmetricIdealFamily_ne_top k hk K
 
 /-- The concrete gauge of the fixed finite Ky Fan family. -/
 @[simp]
@@ -447,7 +443,7 @@ theorem kyFan_gauge [HasKyFanApproximationGaugeTriangle.{u, v} 𝕜]
     (k : ℕ) (hk : 0 < k) (K : E →L[𝕜] F) :
     (kyFan (𝕜 := 𝕜) k hk).toRectangularSymmetricIdealFamily.gauge K =
       kyFanApproximationGauge k K :=
-  rfl
+  toReal_gauge_kyFanSymmetricIdealFamily k hk K
 
 end KyFanDominantIdealFamily
 
@@ -455,12 +451,12 @@ end KyFanDominantIdealFamily
 theorem mem_and_gauge_le_of_all_kyFanApproximationGauge_le
     (N : KyFanDominantIdealFamily (𝕜 := 𝕜))
     {A B : E →L[𝕜] F}
-    (hB : N.toRectangularSymmetricIdealFamily.Mem B)
+    (hB : N.Mem B)
     (h : ∀ k, kyFanApproximationGauge k A ≤
       kyFanApproximationGauge k B) :
-    N.toRectangularSymmetricIdealFamily.Mem A ∧
-      N.toRectangularSymmetricIdealFamily.gauge A ≤
-        N.toRectangularSymmetricIdealFamily.gauge B :=
+    N.Mem A ∧
+      N.gauge A ≤
+        N.gauge B :=
   N.majorization_mem_and_gauge_le hB h
 
 /-- Scaled Fan dominance in the exact form consumed by the Sylvester theorem. -/
@@ -468,12 +464,12 @@ theorem mem_and_scaled_gauge_le_of_all_scaled_kyFan_le
     (N : KyFanDominantIdealFamily (𝕜 := 𝕜))
     {A B : E →L[𝕜] F} {δ : ℝ}
     (hδ : 0 < δ)
-    (hB : N.toRectangularSymmetricIdealFamily.Mem B)
+    (hB : N.Mem B)
     (h : ∀ k, δ * kyFanApproximationGauge k A ≤
       kyFanApproximationGauge k B) :
-    N.toRectangularSymmetricIdealFamily.Mem A ∧
-      δ * N.toRectangularSymmetricIdealFamily.gauge A ≤
-        N.toRectangularSymmetricIdealFamily.gauge B := by
+    N.Mem A ∧
+      δ * N.gauge A ≤
+        N.gauge B := by
   let d : 𝕜 := (δ : 𝕜)
   have hd : d ≠ 0 := RCLike.ofReal_ne_zero.mpr hδ.ne'
   have hdnorm : ‖d‖ = δ := by
@@ -485,7 +481,7 @@ theorem mem_and_scaled_gauge_le_of_all_scaled_kyFan_le
     rw [kyFanApproximationGauge_smul, hdnorm]
     exact h k
   obtain ⟨hdA, hgauge⟩ := N.majorization_mem_and_gauge_le hB hscaled
-  have hA : N.toRectangularSymmetricIdealFamily.Mem A := by
+  have hA : N.Mem A := by
     have hinv := N.toRectangularSymmetricIdealFamily.smul_mem d⁻¹ hdA
     rw [← mul_smul, inv_mul_cancel₀ hd, one_smul] at hinv
     exact hinv
