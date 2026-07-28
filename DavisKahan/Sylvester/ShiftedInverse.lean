@@ -333,58 +333,55 @@ theorem norm_closedSylvester_le_of_intervalExterior
     (A := A.toLinearPMap) (B := B.toLinearPMap) hBsym B.toLinearPMap_dense
     hβα hδ hBlow hBhigh hAres hEq
 
-/-- Constant-one estimate for `A X - X B = C` in the swapped orientation:
-interval block `A` (quadratic form in `[β, α]`) and exterior block `B`
-(bounded shifted two-sided inverse at distance `δ` beyond the interval). -/
-theorem norm_closedSylvester_le_of_exteriorInterval
-    {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := E)}
-    {B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := F)}
-    (hAsym : A.IsSymmetric)
+omit [CompleteSpace E] [CompleteSpace F] in
+/-- Raw partial-map form of the constant-one estimate in the swapped
+orientation: the interval block is `A` and the exterior block is `B`. -/
+theorem linearPMap_norm_sylvester_le_of_exteriorInterval
+    {A : E →ₗ.[𝕜] E} {B : F →ₗ.[𝕜] F}
+    (hAsym : TauCeti.LinearPMap.IsSymmetric A)
+    (hAdense : Dense (A.domain : Set E))
     {X C : F →L[𝕜] E} {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
-    (hAlow : SemiboundedBelow A β) (hAhigh : SemiboundedAbove A α)
-    (hBres : TwoSidedShiftedInverseBound B ((α + β) / 2) ((α - β) / 2 + δ))
-    (hEq : HasClosedSylvesterEquation A B X C) :
+    (hAlow : TauCeti.LinearPMap.SemiboundedBelow A β)
+    (hAhigh : TauCeti.LinearPMap.SemiboundedAbove A α)
+    (hBres : TauCeti.LinearPMap.TwoSidedShiftedInverseBound B
+      ((α + β) / 2) ((α - β) / 2 + δ))
+    (hEq : TauCeti.LinearPMap.SylvesterEquation A B X C) :
     δ * ‖X‖ ≤ ‖C‖ := by
   obtain ⟨J, hJdom, _hJleft, hJright, hJnorm⟩ := hBres
   set c : ℝ := (α + β) / 2 with hc
   set r : ℝ := (α - β) / 2 with hr
   have hr0 : 0 ≤ r := by rw [hr]; linarith
   have hrd : (0 : ℝ) < r + δ := by linarith
-  -- pointwise absorption identity, now on all of `F`
   have hkey : ∀ z : F, X z =
-      (A.toLinearMap ⟨X (J z), hEq.mapsTo_domain ⟨J z, hJdom z⟩⟩ -
+      (A ⟨X (J z), hEq.mapsTo_domain ⟨J z, hJdom z⟩⟩ -
         ((c : ℝ) : 𝕜) • X (J z)) - C (J z) := by
     intro z
-    have heq := ClosedSylvesterEquation.equation_toLinearMap hEq ⟨J z, hJdom z⟩
-      (hEq.mapsTo_domain ⟨J z, hJdom z⟩)
+    have heq := hEq.equation ⟨J z, hJdom z⟩
     have hres := hJright z
-    -- `B (J z) = z + c • J z`
-    have hBJ : B.toLinearMap ⟨J z, hJdom z⟩ = z + ((c : ℝ) : 𝕜) • J z :=
+    have hBJ : B ⟨J z, hJdom z⟩ = z + ((c : ℝ) : 𝕜) • J z :=
       sub_eq_iff_eq_add.mp hres
-    have hXB : X (B.toLinearMap ⟨J z, hJdom z⟩) =
+    have hXB : X (B ⟨J z, hJdom z⟩) =
         X z + ((c : ℝ) : 𝕜) • X (J z) := by
       rw [hBJ, map_add, map_smul]
     rw [hXB] at heq
-    -- `heq` is now the shifted equation in the historical `toLinearMap` view.
-    calc X z = A.toLinearMap
-          ⟨X (J z), hEq.mapsTo_domain ⟨J z, hJdom z⟩⟩ -
+    calc X z = A ⟨X (J z), hEq.mapsTo_domain ⟨J z, hJdom z⟩⟩ -
           (X z + ((c : ℝ) : 𝕜) • X (J z)) - C (J z) + X z := by
           rw [heq]
           abel
-      _ = (A.toLinearMap
-          ⟨X (J z), hEq.mapsTo_domain ⟨J z, hJdom z⟩⟩ -
+      _ = (A ⟨X (J z), hEq.mapsTo_domain ⟨J z, hJdom z⟩⟩ -
           ((c : ℝ) : 𝕜) • X (J z)) - C (J z) := by abel
   have hbound : ∀ z : F, ‖X z‖ ≤ (r + δ)⁻¹ * (‖X‖ * r + ‖C‖) * ‖z‖ := by
     intro z
-    have hshift := TauCeti.DavisKahanExt.ClosedOperator.norm_shift_apply_le_of_form_bounds
-      hAsym hβα hAlow hAhigh ⟨X (J z), hEq.mapsTo_domain ⟨J z, hJdom z⟩⟩
+    have hshift := linearPMap_norm_shift_apply_le_of_form_bounds
+      hAsym hAdense hβα hAlow hAhigh
+        ⟨X (J z), hEq.mapsTo_domain ⟨J z, hJdom z⟩⟩
     have hJz : ‖J z‖ ≤ (r + δ)⁻¹ * ‖z‖ := by
       refine (J.le_opNorm z).trans ?_
       exact mul_le_mul_of_nonneg_right hJnorm (norm_nonneg z)
     calc ‖X z‖
-        = ‖(A.toLinearMap ⟨X (J z), hEq.mapsTo_domain ⟨J z, hJdom z⟩⟩ -
+        = ‖(A ⟨X (J z), hEq.mapsTo_domain ⟨J z, hJdom z⟩⟩ -
             ((c : ℝ) : 𝕜) • X (J z)) - C (J z)‖ := by rw [← hkey z]
-      _ ≤ ‖A.toLinearMap ⟨X (J z), hEq.mapsTo_domain ⟨J z, hJdom z⟩⟩ -
+      _ ≤ ‖A ⟨X (J z), hEq.mapsTo_domain ⟨J z, hJdom z⟩⟩ -
             ((c : ℝ) : 𝕜) • X (J z)‖ + ‖C (J z)‖ := norm_sub_le _ _
       _ ≤ r * ‖X (J z)‖ + ‖C‖ * ‖J z‖ :=
           add_le_add hshift (C.le_opNorm _)
@@ -404,6 +401,21 @@ theorem norm_closedSylvester_le_of_exteriorInterval
   have hmul := mul_le_mul_of_nonneg_left hXnorm hrd.le
   rw [← mul_assoc, mul_inv_cancel₀ hrd.ne', one_mul] at hmul
   nlinarith [norm_nonneg X]
+
+omit [CompleteSpace E] [CompleteSpace F] in
+/-- Compatibility entry point for the raw exterior/interval estimate. -/
+theorem norm_closedSylvester_le_of_exteriorInterval
+    {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := E)}
+    {B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := F)}
+    (hAsym : A.IsSymmetric)
+    {X C : F →L[𝕜] E} {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
+    (hAlow : SemiboundedBelow A β) (hAhigh : SemiboundedAbove A α)
+    (hBres : TwoSidedShiftedInverseBound B ((α + β) / 2) ((α - β) / 2 + δ))
+    (hEq : HasClosedSylvesterEquation A B X C) :
+    δ * ‖X‖ ≤ ‖C‖ :=
+  linearPMap_norm_sylvester_le_of_exteriorInterval
+    (A := A.toLinearPMap) (B := B.toLinearPMap) hAsym A.toLinearPMap_dense
+    hβα hδ hAlow hAhigh hBres hEq
 
 /-! ## The unbounded `sin Θ` theorem, operator norm -/
 

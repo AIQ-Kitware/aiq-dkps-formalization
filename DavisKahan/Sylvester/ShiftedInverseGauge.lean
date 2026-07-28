@@ -30,30 +30,39 @@ variable {E F G : Type v}
   [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
   [NormedAddCommGroup G] [InnerProductSpace 𝕜 G] [CompleteSpace G]
 
-/-- **Bounded extension of the centered interval block.**  A symmetric closed
-operator whose quadratic form lies in `[β, α]` has a bounded shift `B - c`
-on its dense domain (`c = (α+β)/2`, radius `r = (α-β)/2`), which therefore
-extends to a bounded operator on the whole space with the same norm bound
-and agreeing with `B - c` on the domain. -/
-theorem exists_bounded_shift_extension
-    {B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := F)}
-    (hsym : B.IsSymmetric) {β α : ℝ} (hβα : β ≤ α)
-    (hlow : SemiboundedBelow B β) (hhigh : SemiboundedAbove B α) :
+/-- **Bounded extension of the centered interval block.**  A symmetric dense
+partial map whose quadratic form lies in `[β, α]` has a bounded shift `B - c`
+on its domain (`c = (α+β)/2`, radius `r = (α-β)/2`), which therefore extends
+to a bounded operator on the whole space with the same norm bound. -/
+theorem linearPMap_exists_bounded_shift_extension
+    {B : F →ₗ.[𝕜] F} (hsym : TauCeti.LinearPMap.IsSymmetric B)
+    (hBdense : Dense (B.domain : Set F)) {β α : ℝ} (hβα : β ≤ α)
+    (hlow : TauCeti.LinearPMap.SemiboundedBelow B β)
+    (hhigh : TauCeti.LinearPMap.SemiboundedAbove B α) :
     ∃ S : F →L[𝕜] F, ‖S‖ ≤ (α - β) / 2 ∧
       ∀ y : B.domain, S (y : F) =
-        B.toLinearMap y - (((α + β) / 2 : ℝ) : 𝕜) • (y : F) := by
+        B y - (((α + β) / 2 : ℝ) : 𝕜) • (y : F) := by
   have hr0 : (0 : ℝ) ≤ (α - β) / 2 := by linarith
   set g : B.domain →ₗ[𝕜] F :=
-    B.toLinearMap - (((α + β) / 2 : ℝ) : 𝕜) • B.domain.subtype with hgdef
+    { toFun := fun y => B y - (((α + β) / 2 : ℝ) : 𝕜) • (y : F)
+      map_add' := by
+        intro x y
+        rw [_root_.LinearPMap.map_add B x y]
+        simp only [Submodule.coe_add, smul_add]
+        abel
+      map_smul' := by
+        intro a y
+        rw [_root_.LinearPMap.map_smul B a y]
+        simp only [Submodule.coe_smul, smul_sub, RingHom.id_apply]
+        rw [smul_comm] } with hgdef
   have hgapply : ∀ y : B.domain,
-      g y = B.toLinearMap y - (((α + β) / 2 : ℝ) : 𝕜) • (y : F) := by
+      g y = B y - (((α + β) / 2 : ℝ) : 𝕜) • (y : F) := by
     intro y
-    simp [hgdef, LinearMap.sub_apply, LinearMap.smul_apply]
+    simp [hgdef]
   have hgbound : ∀ y : B.domain, ‖g y‖ ≤ (α - β) / 2 * ‖y‖ := by
     intro y
     rw [hgapply y]
-    exact TauCeti.DavisKahanExt.ClosedOperator.norm_shift_apply_le_of_form_bounds
-      hsym hβα hlow hhigh y
+    exact linearPMap_norm_shift_apply_le_of_form_bounds hsym hBdense hβα hlow hhigh y
   set f : B.domain →L[𝕜] F := g.mkContinuous ((α - β) / 2) hgbound with hfdef
   have hrange : Set.range ((B.domain.subtypeL : B.domain →L[𝕜] F)) =
       (B.domain : Set F) := by
@@ -66,7 +75,7 @@ theorem exists_bounded_shift_extension
   have hdense : DenseRange ((B.domain.subtypeL : B.domain →L[𝕜] F)) := by
     show Dense (Set.range _)
     rw [hrange]
-    exact B.dense_domain
+    exact hBdense
   have hui : IsUniformInducing ((B.domain.subtypeL : B.domain →L[𝕜] F)) :=
     isometry_subtype_coe.isUniformInducing
   refine ⟨f.extend (B.domain.subtypeL), ?_, ?_⟩
@@ -84,7 +93,20 @@ theorem exists_bounded_shift_extension
     have h := ContinuousLinearMap.extend_eq f hdense hui y
     calc (f.extend (B.domain.subtypeL)) (y : F)
         = f y := h
-      _ = B.toLinearMap y - (((α + β) / 2 : ℝ) : 𝕜) • (y : F) := hgapply y
+      _ = B y - (((α + β) / 2 : ℝ) : 𝕜) • (y : F) := hgapply y
+
+/-- Compatibility entry point for the raw bounded-shift extension. -/
+theorem exists_bounded_shift_extension
+    {B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := F)}
+    (hsym : B.IsSymmetric) {β α : ℝ} (hβα : β ≤ α)
+    (hlow : SemiboundedBelow B β) (hhigh : SemiboundedAbove B α) :
+    ∃ S : F →L[𝕜] F, ‖S‖ ≤ (α - β) / 2 ∧
+      ∀ y : B.domain, S (y : F) =
+        B.toLinearMap y - (((α + β) / 2 : ℝ) : 𝕜) • (y : F) := by
+  simpa only [TauCeti.DavisKahanExt.ClosedOperator.toLinearPMap_domain,
+    TauCeti.DavisKahanExt.ClosedOperator.toLinearPMap_apply] using
+    linearPMap_exists_bounded_shift_extension (B := B.toLinearPMap)
+      hsym B.toLinearPMap_dense hβα hlow hhigh
 
 /- The two one-unbounded Neumann engines and the bounded-realization
 transfer lemma live in `Core.UnboundedSpectral`, below this source-facing
@@ -95,53 +117,52 @@ the left.**  The interval block `B` (quadratic form in `[β, α]`) is realized
 bounded through its shift extension and the equation transfers by density;
 the exterior block `A` carries a proof-carrying two-sided shifted inverse.
 Both closed blocks may be genuinely unbounded a priori. -/
-theorem mem_and_gauge_le_of_exteriorLeft_intervalRight
+theorem linearPMap_mem_and_gauge_le_of_exteriorLeft_intervalRight
     (N : RectangularSymmetricIdealFamily (𝕜 := 𝕜))
-    {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := E)}
-    {B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := F)}
+    {A : E →ₗ.[𝕜] E} {B : F →ₗ.[𝕜] F}
+    (hAclosed : A.IsClosed) (hBdense : Dense (B.domain : Set F))
     {X C : F →L[𝕜] E} {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
-    (hBsym : B.IsSymmetric)
-    (hBlow : SemiboundedBelow B β) (hBhigh : SemiboundedAbove B α)
-    (hAres : TwoSidedShiftedInverseBound A ((α + β) / 2)
+    (hBsym : TauCeti.LinearPMap.IsSymmetric B)
+    (hBlow : TauCeti.LinearPMap.SemiboundedBelow B β)
+    (hBhigh : TauCeti.LinearPMap.SemiboundedAbove B α)
+    (hAres : TauCeti.LinearPMap.TwoSidedShiftedInverseBound A ((α + β) / 2)
       ((α - β) / 2 + δ))
-    (hEq : HasClosedSylvesterEquation A B X C)
+    (hEq : TauCeti.LinearPMap.SylvesterEquation A B X C)
     (hC : N.Mem C) :
     N.Mem X ∧ δ * N.gauge X ≤ N.gauge C := by
   have hr0 : (0 : ℝ) ≤ (α - β) / 2 := by linarith
   obtain ⟨S, hSnorm, hSeq⟩ :=
-    exists_bounded_shift_extension hBsym hβα hBlow hBhigh
+    linearPMap_exists_bounded_shift_extension hBsym hBdense hβα hBlow hBhigh
   obtain ⟨J, hdom, hleft, hright, hJnorm⟩ := hAres
   -- the bounded realization of `B` and the transferred equation
   set T : F →L[𝕜] F :=
     S + (((α + β) / 2 : ℝ) : 𝕜) • ContinuousLinearMap.id 𝕜 F with hTdef
-  have hT : ∀ y : B.domain, T (y : F) = B.toLinearMap y := by
+  have hT : ∀ y : B.domain, T (y : F) = B y := by
     intro y
     simp only [hTdef, add_apply, smul_apply, ContinuousLinearMap.id_apply]
     rw [hSeq y]
     abel
   have hEqT : TauCeti.LinearPMap.SylvesterEquation
-      A.toLinearPMap (T.toLinearMap.toPMap ⊤) X C :=
-    linearPMapSylvesterEquation_boundedRealization A.toLinearPMap_isClosed
-      B.toLinearPMap_dense hEq hT
+      A (T.toLinearMap.toPMap ⊤) X C :=
+    linearPMapSylvesterEquation_boundedRealization hAclosed hBdense hEq hT
   -- shift both blocks by the center
   set c𝕜 : 𝕜 := (((α + β) / 2 : ℝ) : 𝕜) with hc𝕜
   set A' : E →ₗ.[𝕜] E :=
-    TauCeti.LinearPMap.addBounded A.toLinearPMap
+    TauCeti.LinearPMap.addBounded A
       (-(c𝕜 • ContinuousLinearMap.id 𝕜 E)) with hA'def
-  have hA'domain : A'.domain = A.domain := rfl
   have hA'apply : ∀ x : A.domain,
-      A' x = A.toLinearMap x - c𝕜 • (x : E) := by
+      A' x = A x - c𝕜 • (x : E) := by
     intro x
-    change A.toLinearMap x + (-(c𝕜 • ContinuousLinearMap.id 𝕜 E)) (x : E) =
-      A.toLinearMap x - c𝕜 • (x : E)
+    change A x + (-(c𝕜 • ContinuousLinearMap.id 𝕜 E)) (x : E) =
+      A x - c𝕜 • (x : E)
     simp [sub_eq_add_neg]
   have hEq' : TauCeti.LinearPMap.SylvesterEquation
       A' (S.toLinearMap.toPMap ⊤) X C := by
     refine ⟨fun x => hEqT.mapsTo_domain x, fun x => ?_⟩
-    have h1 : A.toLinearMap ⟨X (x : F), hEqT.mapsTo_domain x⟩ -
+    have h1 : A ⟨X (x : F), hEqT.mapsTo_domain x⟩ -
         X (T (x : F)) = C (x : F) := hEqT.equation x
     have h2 : A' ⟨X (x : F), hEqT.mapsTo_domain x⟩ =
-        A.toLinearMap ⟨X (x : F), hEqT.mapsTo_domain x⟩ -
+        A ⟨X (x : F), hEqT.mapsTo_domain x⟩ -
           c𝕜 • X (x : F) :=
       hA'apply ⟨X (x : F), hEqT.mapsTo_domain x⟩
     have h3 : X (S (x : F)) = X (T (x : F)) - c𝕜 • X (x : F) := by
@@ -158,15 +179,32 @@ theorem mem_and_gauge_le_of_exteriorLeft_intervalRight
     (⟨J, hdom, ?_, ?_⟩ : TauCeti.LinearPMap.HasBoundedEverywhereInverse A') S hr0 hδ
     hJnorm hSnorm hEq' hC
   · intro y
-    change A.toLinearMap ⟨J y, hdom y⟩ + -(c𝕜 • J y) = y
+    change A ⟨J y, hdom y⟩ + -(c𝕜 • J y) = y
     have h := hright y
     rw [sub_eq_add_neg] at h
     exact h
   · intro x
-    change J (A.toLinearMap x + -(c𝕜 • (x : E))) = (x : E)
+    change J (A x + -(c𝕜 • (x : E))) = (x : E)
     have h := hleft x
     rw [sub_eq_add_neg] at h
     exact h
+
+/-- Compatibility entry point for the raw ideal-gauge shifted-inverse
+assembly theorem. -/
+theorem mem_and_gauge_le_of_exteriorLeft_intervalRight
+    (N : RectangularSymmetricIdealFamily (𝕜 := 𝕜))
+    {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := E)}
+    {B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := F)}
+    {X C : F →L[𝕜] E} {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
+    (hBsym : B.IsSymmetric)
+    (hBlow : SemiboundedBelow B β) (hBhigh : SemiboundedAbove B α)
+    (hAres : TwoSidedShiftedInverseBound A ((α + β) / 2)
+      ((α - β) / 2 + δ))
+    (hEq : HasClosedSylvesterEquation A B X C)
+    (hC : N.Mem C) :
+    N.Mem X ∧ δ * N.gauge X ≤ N.gauge C :=
+  linearPMap_mem_and_gauge_le_of_exteriorLeft_intervalRight N
+    A.toLinearPMap_isClosed B.toLinearPMap_dense hβα hδ hBsym hBlow hBhigh hAres hEq hC
 
 end ExactSinTheta
 end Experimental
