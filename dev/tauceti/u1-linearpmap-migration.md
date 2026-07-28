@@ -181,10 +181,52 @@ is not this lane's to migrate.
 
 **Contractible right now, no new mathematics:**
 
-- `generalizedSinTheta_unbounded_{,exact_}of_genuineIntervalExteriorGap` have no
-  production caller outside `SinTheta/Unbounded/IntervalExterior.lean` itself.
+- `generalizedSinTheta_unbounded_exact_of_genuineIntervalExteriorGap` —
+  **done 2026-07-28 (edward, aiq-gpu): deleted.**  It was not merely
+  caller-free outside its module, it was **dead in the whole repository**,
+  including inside its own module: the raw
+  `linearPMap_generalizedSinTheta_unbounded_exact_of_genuineIntervalExteriorGap`
+  is proved from the *raw* non-exact theorem, never from the bundled one.
 - The `Restriction.lean` and `ClosedSylvesterEquation.lean` facade blocks, once
   their remaining callers move.
+
+**Scan: bundled twins superseded by a `linearPMap_` version (edward, aiq-gpu,
+2026-07-28).**  Both deletions this lane made were the same shape — a bundled
+declaration whose `linearPMap_` twin had taken over every caller — so it is worth
+running as a check rather than noticing by accident.  Pair up `X` with
+`linearPMap_X` across `DavisKahan/**` (excluding `Experimental/**`), then count
+references to the bundled `X`.  There are **12 such pairs**; two came back with
+zero references and **one of those was wrong**.
+
+- `exists_bounded_shift_extension` (`Sylvester/ShiftedInverseGauge.lean`) — truly
+  dead, **deleted**.  Every caller, including the rest of its own module, uses
+  `linearPMap_exists_bounded_shift_extension`.
+- `mem_and_gauge_le_of_exteriorLeft_intervalRight` — **false positive, do not
+  delete.**  It is called from `Sources/DavisKahan1970/FullPartIII.lean` through
+  its *fully qualified* name
+  `DavisKahan.Experimental.ExactSinTheta.mem_and_gauge_le_of_exteriorLeft_intervalRight`.
+
+**The blind spot, because it is easy to re-introduce.**  A reference scan that
+ignores matches preceded by `.` — a natural way to avoid unrelated dot-notation —
+also hides every *qualified* reference, and qualified references are exactly how
+`Sources/**` reaches into `Experimental` namespaces.  Deleting on that signal
+would have broken a paper-facing module.  Always grep the bare name including
+dotted occurrences before believing a zero.
+
+**Correction — `generalizedSinTheta_unbounded_of_genuineIntervalExteriorGap` is
+NOT contractible, and was previously listed here as if it were.**  "No
+production caller outside its own module" is true of it and is also not the
+relevant test: the raw endpoint
+`linearPMap_generalizedSinTheta_unbounded_of_genuineIntervalExteriorGap` is
+proved by `apply`ing the bundled theorem at `D.toClosed`, so the module depends
+on it internally.  That delegation exists because the Spectra Sylvester lemmas
+underneath it —
+`SpectraBridge.unbounded_sylvester_mem_and_gauge_le_of_spectra_intervalLeft_exteriorRight`
+and its `exteriorLeft_intervalRight` twin — still take bundled `ClosedOperator`
+arguments.  Contracting the endpoint therefore requires raw `SpectraBridge`
+lemmas, i.e. work inside `Interop/Spectra/**`, which this lane **explicitly
+excludes**.  It is blocked on a boundary the lane does not own, not merely
+un-done, and should not be picked up as a quick win.
 
 **Riccati cluster (edward, aiq-gpu, 2026-07-28) — MIGRATED AND DELETED.**  The
 table above listed `Riccati/UnboundedCore` (32), `Riccati/UnboundedTransport`
