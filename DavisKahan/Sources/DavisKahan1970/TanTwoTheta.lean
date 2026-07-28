@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Fable 5
 -/
 import DavisKahan.DoubleAngle.TanTwoThetaKyFan
-import DavisKahan.DoubleAngle.TanTwoThetaKyFanInfinite
+import DavisKahan.DoubleAngle.TanTwoThetaKyFanFiniteCarrier
 import DavisKahan.FiniteDimensional.DoubleAngle.TanTheta
 import DavisKahan.TanTwoTheta.UnboundedIdeal
 import DavisKahan.TanTwoTheta.Unbounded
@@ -114,18 +114,18 @@ configuration): membership of the off-diagonal perturbation in the ideal
 transports to any `tan 2Θ₀` representative, with
 `(b - a) · N(tan 2Θ₀) ≤ 2 · N(H)`. -/
 alias tanTwoTheta_uiIdeal_infinite :=
-  DavisKahanTheory.tanTwoTheta0_offDiagonal_mem_and_gauge_le_infinite
+  DavisKahanTheory.tanTwoTheta0_offDiagonal_mem_and_gauge_le_of_finiteDimensional_invariantSubspace
 
 /-- The Ky Fan approximation-number root of the infinite-dimensional sharp
 form; holds for every `k` with no ideal hypothesis. -/
 alias tanTwoTheta_kyFan_infinite :=
-  DavisKahanTheory.kyFan_tanTwoTheta0_offDiagonal_le_infinite
+  DavisKahanTheory.kyFan_tanTwoTheta0_offDiagonal_le_of_finiteDimensional_invariantSubspace
 
 /-- Representative-free infinite-dimensional Ky Fan root, phrased directly
 in the double-angle tangents of the graph-coordinate approximation
 numbers. -/
 alias tanTwoTheta_kyFan_doubleAngleTangent_infinite :=
-  DavisKahanTheory.kyFan_doubleAngleTangent_offDiagonal_le_infinite
+  DavisKahanTheory.kyFan_doubleAngleTangent_offDiagonal_le_of_finiteDimensional_invariantSubspace
 
 /-- The Ky Fan variational bound for approximation-number prefixes: the
 infinite-dimensional max--min principle used alongside the compression

@@ -39,7 +39,7 @@ parallel real proof. -/
 theorem result
     [HasApproximationNumberStrongCutoff.{u, v, 0} 𝕜]
     [HasKyFanApproximationGaugeTriangle.{u, v} 𝕜]
-    (N : UnitaryInvariantIdealFamily (𝕜 := 𝕜))
+    (N : KyFanDominantIdealFamily (𝕜 := 𝕜))
     (P : IsometricSinThetaProblem (𝕜 := 𝕜) (E := E) (F := F)
       (G := G) (H := H) N) :
     N.Mem

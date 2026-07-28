@@ -41,7 +41,7 @@ noncomputable def directedSinThetaOperatorReal
 
 /-- Complete real generalized complementary-block theorem. -/
 theorem generalizedSinTheta_unbounded_real
-    (N : UnitaryInvariantIdealFamily (𝕜 := ℝ))
+    (N : KyFanDominantIdealFamily (𝕜 := ℝ))
     (D : UnboundedSinThetaData (𝕜 := ℝ) (E := E) (F := F) (G := G))
     (hA : D.A.IsSelfAdjoint)
     (hA₀ : D.A₀.IsSelfAdjoint)
@@ -79,7 +79,7 @@ theorem generalizedSinTheta_unbounded_real
 
 /-- Exact real generalized theorem in full directed sine form. -/
 theorem generalizedSinTheta_unbounded_exact_real
-    (N : UnitaryInvariantIdealFamily (𝕜 := ℝ))
+    (N : KyFanDominantIdealFamily (𝕜 := ℝ))
     (D : UnboundedSinThetaData (𝕜 := ℝ) (E := E) (F := F) (G := G))
     (F₀ : H →L[ℝ] E)
     (hA : D.A.IsSelfAdjoint)

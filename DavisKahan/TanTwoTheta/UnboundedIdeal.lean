@@ -193,7 +193,7 @@ theorem tanTwoTheta_addBounded_gauge_of_intervalExterior
 /-- Source-facing unitary-invariant-family wrapper for the spectrum-gap ideal
 form. -/
 theorem tanTwoTheta_addBounded_unitaryInvariant_of_spectrum_gap
-    (N : UnitaryInvariantIdealFamily (𝕜 := ℂ))
+    (N : KyFanDominantIdealFamily (𝕜 := ℂ))
     (A : DKClosedOperator (H := H)) (hA : A.IsSelfAdjoint)
     (E : H →L[ℂ] H) (hE : IsSelfAdjointOperator E)
     (B S : Set ℝ) (hB : MeasurableSet B) (hS : MeasurableSet S)
@@ -232,7 +232,7 @@ theorem tanTwoTheta_addBounded_unitaryInvariant_of_spectrum_gap
 /-- Source-facing unitary-invariant-family wrapper for the set-localized ideal
 form. -/
 theorem tanTwoTheta_addBounded_unitaryInvariant_of_intervalExterior
-    (N : UnitaryInvariantIdealFamily (𝕜 := ℂ))
+    (N : KyFanDominantIdealFamily (𝕜 := ℂ))
     (A : DKClosedOperator (H := H)) (hA : A.IsSelfAdjoint)
     (E : H →L[ℂ] H) (hE : IsSelfAdjointOperator E)
     (B S : Set ℝ) (hB : MeasurableSet B) (hS : MeasurableSet S)

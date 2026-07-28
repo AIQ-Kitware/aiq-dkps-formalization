@@ -31,7 +31,7 @@ variable {E F G H : Type v}
 
 /-- Bounded real source package for the generalized sine theorem. -/
 structure RealBoundedGeneralSinThetaProblem
-    (N : UnitaryInvariantIdealFamily (𝕜 := ℝ)) where
+    (N : KyFanDominantIdealFamily (𝕜 := ℝ)) where
   A : E →L[ℝ] E
   A₀ : F →L[ℝ] F
   Λ₁ : G →L[ℝ] G
@@ -58,7 +58,7 @@ namespace RealBoundedGeneralSinThetaProblem
 
 /-- Embed bounded real data into the real canonical unbounded package. -/
 noncomputable def toGeneral
-    (N : UnitaryInvariantIdealFamily (𝕜 := ℝ))
+    (N : KyFanDominantIdealFamily (𝕜 := ℝ))
     (P : RealBoundedGeneralSinThetaProblem (E := E) (F := F)
       (G := G) (H := H) N) :
     RealGeneralSinThetaProblem (E := E) (F := F)
@@ -108,7 +108,7 @@ noncomputable def toGeneral
 /-- Bounded real generalized theorem derived through the canonical real
 unbounded theorem. -/
 theorem result
-    (N : UnitaryInvariantIdealFamily (𝕜 := ℝ))
+    (N : KyFanDominantIdealFamily (𝕜 := ℝ))
     (P : RealBoundedGeneralSinThetaProblem (E := E) (F := F)
       (G := G) (H := H) N) :
     N.Mem

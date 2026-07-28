@@ -880,7 +880,7 @@ theorem unbounded_sylvester_mem_and_gauge_le_of_gap
  theorem.  The scoped name emphasizes that bounded Sylvester estimates are
  specializations or independent alternatives rather than the root theorem. -/
 theorem davisKahan1970_sylvester
-    (N : UnitaryInvariantIdealFamily (𝕜 := 𝕜))
+    (N : KyFanDominantIdealFamily (𝕜 := 𝕜))
     {A : ClosedOperatorOnE (𝕜 := 𝕜) (E := E)}
     {B : ClosedOperatorOnF (𝕜 := 𝕜) (F := F)}
     (hA : A.IsSelfAdjoint) (hB : B.IsSelfAdjoint)

@@ -105,7 +105,7 @@ noncomputable def unboundedSinThetaDataOfSpectralSubspace
 The complementary restriction and all exact-space bookkeeping are constructed
 internally. -/
 theorem sinTheta_unbounded_spectralSubspace_of_genuineSpectrumGap
-    (N : UnitaryInvariantIdealFamily (𝕜 := ℂ))
+    (N : KyFanDominantIdealFamily (𝕜 := ℂ))
     (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := E))
     (hA : A.IsSelfAdjoint) (S : Set ℝ) (hS : MeasurableSet S)
     (A0 : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := F))

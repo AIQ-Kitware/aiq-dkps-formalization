@@ -28,7 +28,7 @@ theorem legacyGenuineOrderedSylvesterEngine_lowerUpper
     {E F : Type v}
     [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
     [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
-    (N : UnitaryInvariantIdealFamily (𝕜 := ℂ))
+    (N : KyFanDominantIdealFamily (𝕜 := ℂ))
     {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := E)}
     {B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := F)}
     (hA : A.IsSelfAdjoint) (hB : B.IsSelfAdjoint)
@@ -50,7 +50,7 @@ theorem legacyGenuineOrderedSylvesterEngine_upperLower
     {E F : Type v}
     [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
     [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
-    (N : UnitaryInvariantIdealFamily (𝕜 := ℂ))
+    (N : KyFanDominantIdealFamily (𝕜 := ℂ))
     {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := E)}
     {B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := F)}
     (hA : A.IsSelfAdjoint) (hB : B.IsSelfAdjoint)
