@@ -31,8 +31,8 @@ nothing detected the drift.
 The constant count is also the campaign's progress meter and must fall
 monotonically. It was **61** when first measured; phase S0 of
 [`spectra-removal-plan.md`](spectra-removal-plan.md) took it to **60** by moving
-our own theorems out of `namespace Spectra.*`, which is why the cluster tables
-below no longer carry a cluster `X`.
+our own theorems out of `namespace Spectra.*`, and phase S1 to **57** by closing
+Cluster C. Clusters `X` and `C` are correspondingly gone from the tables below.
 
 ## How the surface was measured
 
@@ -58,13 +58,13 @@ the normal build.
 |---|---|
 | vendored Spectra modules on disk | 464 |
 | Spectra modules in the **production** import closure | 152 (~39,200 lines) |
-| Spectra modules the production build actually **references** | **26** (was 27 before phase S0) |
-| distinct Spectra **constants** referenced | **60** (was 61 before phase S0) |
-| production declarations that reference one | **178**, in **42** modules — all under `DavisKahan/**` |
+| Spectra modules the production build actually **references** | **25** (27 → 26 at S0 → 25 at S1) |
+| distinct Spectra **constants** referenced | **57** (61 → 60 at S0 → 57 at S1) |
+| production declarations that reference one | **173**, all under `DavisKahan/**` |
 | production modules that `import Spectra` directly | 35 (18 `Interop/Spectra`, 10 elsewhere, 7 Experimental) |
 | tracked upstream Tau Ceti modules | 629 |
 
-**The port surface is 60 declarations, not 464 files or 152 modules.** That is
+**The port surface is 57 declarations, not 464 files or 152 modules.** That is
 the single most useful fact in this document: the transitive closure is large
 because Spectra's own internal dependencies are large, not because Davis–Kahan
 consumes much of it. The mathematics we actually depend on is small enough to
@@ -138,15 +138,6 @@ lemma used once inside a 200-line proof counts once.
 | `Spectra.SpectralTheory.Measure.PVM` | upstream | 64 | `spectralPVM` (1) |
 
 
-#### Cluster C — polar decomposition and partial isometries
-
-`upstream: absent` · `staged: collides` · 3 constants · 1 donor modules · 144 donor lines · 2 DKPS consumer modules
-
-| donor module | origin | lines | constants used (uses) |
-|---|---|---|---|
-| `Spectra.QuantumMechanics.Channels.PolarDecomp` | upstream | 144 | `absOp` (2), `polarIsometry` (2), `polarRange` (1) |
-
-
 #### Cluster D — Hilbert-Schmidt, tensor products and trace class
 
 `upstream: absent` · `staged: collides` · 11 constants · 4 donor modules · 1379 donor lines · 4 DKPS consumer modules
@@ -171,6 +162,22 @@ lemma used once inside a 200-line proof counts once.
 | `Spectra.CayleyTransform.Mobius` | upstream | 135 | `inverseMobius` (3) |
 | `Spectra.CayleyTransform.Generator.Pushforward` | upstream | 90 | `inverseMobiusReal` (1) |
 | `Spectra.YosidaHille.Helpers` | upstream | 239 | `isSelfAdjoint_to_surjective` (1) |
+
+
+#### Cluster C — polar decomposition and partial isometries — **CLOSED**
+
+Closed in phase S1, 2026-07-28. `Interop/Spectra/OperatorAbsoluteValue.lean` had
+already proved `spectraOperatorAbsoluteValue = T.modulus` and
+`spectraPolarIsometry = T.polarPartial` against `ForTauCeti`; S1 made those the
+*definitions*, so the two bridge theorems collapsed to `rfl` and the
+`Spectra.QuantumMechanics.Channels.PolarDecomp` import went away. `absOp`,
+`polarIsometry` and `polarRange` left the surface, taking
+`Geometry/Polar/PolarIntertwining.lean` with them.
+
+Not done, deliberately: the `spectra*` names are now misnomers, with ~400 call
+sites across ten modules. Renaming them is a naming-audit sweep and would collide
+with edward's active naming rows, so it is a follow-on rather than part of the
+dependency removal.
 
 ## What conflicts with Tau Ceti, and what does not
 
@@ -348,9 +355,16 @@ left until port time:
    revision that drifted in. Authorship is *not* uniform, and the difference
    governs what may be submitted upstream: **7** are Jon Crall + GPT-5.6, **3**
    are co-authored with Adam Bornemann, and **1** — `BornRule/POVMCore.lean`,
-   378 lines — is solely his, obtained outside the public repo. Relocating any of
-   them inside this repository is ours to do; submitting the last four to Tau Ceti
-   is not, and needs his sign-off first.
+   378 lines — is solely his.
+
+   **This is not a permission problem.** All 11 carry an Apache-2.0 grant in their
+   headers, and Spectra, DKPS and Tau Ceti are all Apache-2.0, so relocating and
+   upstreaming them is licensed outright — telling Adam is a courtesy, not a gate.
+   The binding obligations are Apache-2.0 §4(b) (modified files must say they were
+   changed) and §4(c) (retain the copyright and attribution notices). §4(c) is the
+   trap here: **Tau Ceti's header convention carries no `Authors:` line**, so
+   dropping one of these into that template verbatim silently discards the
+   attribution the licence requires.
 
    This makes most of the removal *cheaper*, not dearer: those modules need no
    port and no donor negotiation. They are already ours; they only need to move to
