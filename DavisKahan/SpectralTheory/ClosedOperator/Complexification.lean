@@ -699,22 +699,26 @@ theorem unboundedSylvesterGap_complexify
       · left
         constructor
         · intro lam hlam
+          have hlamA : lam ∈ (complexify A).realSpectrum := hlam
           have hlam' : lam ∈ A.realSpectrum := by
-            rwa [closed_realSpectrum_complexify A] at hlam
+            rwa [closed_realSpectrum_complexify A] at hlamA
           exact hgap.1 hlam'
         · intro lam hlam
+          have hlamB : lam ∈ (complexify B).realSpectrum := hlam
           have hlam' : lam ∈ B.realSpectrum := by
-            rwa [closed_realSpectrum_complexify B] at hlam
+            rwa [closed_realSpectrum_complexify B] at hlamB
           exact hgap.2 hlam'
       · right
         constructor
         · intro lam hlam
+          have hlamB : lam ∈ (complexify B).realSpectrum := hlam
           have hlam' : lam ∈ B.realSpectrum := by
-            rwa [closed_realSpectrum_complexify B] at hlam
+            rwa [closed_realSpectrum_complexify B] at hlamB
           exact hgap.1 hlam'
         · intro lam hlam
+          have hlamA : lam ∈ (complexify A).realSpectrum := hlam
           have hlam' : lam ∈ A.realSpectrum := by
-            rwa [closed_realSpectrum_complexify A] at hlam
+            rwa [closed_realSpectrum_complexify A] at hlamA
           exact hgap.2 hlam'
   | leftAboveRightBelow c hA hB =>
       exact UnboundedSylvesterGap.leftAboveRightBelow c
