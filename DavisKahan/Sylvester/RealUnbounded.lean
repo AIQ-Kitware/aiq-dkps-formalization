@@ -75,7 +75,7 @@ It supports interval/exterior separation and both ordered half-line
 orientations, with the same sharp constant and an arbitrary real unitarily
 invariant ideal family. -/
 theorem davisKahan1970_sylvester_real
-    (N : UnitaryInvariantIdealFamily (𝕜 := ℝ))
+    (N : KyFanDominantIdealFamily (𝕜 := ℝ))
     {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E)}
     {B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := F)}
     (hA : A.IsSelfAdjoint) (hB : B.IsSelfAdjoint)

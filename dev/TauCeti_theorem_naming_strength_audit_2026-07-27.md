@@ -347,6 +347,16 @@ If the broad base object is not yet ready, do not introduce the broad alias. Con
 
 Source-facing Davis-Kahan wrappers may use prose such as "unitarily invariant ideal family satisfying Ky Fan dominance," but the Lean type should preserve the stronger name.
 
+### Resolution 2026-07-28 — RESOLVED by deletion
+
+The alias is gone and all 94 references across 30 files now name `KyFanDominantIdealFamily` directly, so every downstream signature states the Ky Fan dominance it actually requires.
+
+This was safe to do as one sweep because it was a **spelling change, not a migration**: `structure KyFanDominantIdealFamily (𝕜 : Type u) [RCLike 𝕜]` and the alias took identical arguments, and all 92 call sites used the single form `UnitaryInvariantIdealFamily (𝕜 := X)`. No statement, proof body, or elaboration changed.
+
+The audit's licence for prose was taken up rather than ignored: three docstrings that described the hypothesis as an "arbitrary/every real unitarily invariant ideal family" now say **Ky-Fan-dominant** unitarily invariant ideal family, which is what the theorems require.
+
+The longer-term separation the section also floats — a genuinely broad `UnitaryInvariantIdealFamily` structure plus a `HasKyFanDominance` mixin — was deliberately **not** attempted. The section itself says "If the broad base object is not yet ready, do not introduce the broad alias"; deleting is what it asks for now, and building the base structure is a design lane rather than a naming fix.
+
 ---
 
 ## 5. `*_infinite` tan-two-theta names
@@ -425,10 +435,10 @@ The module docstring, which previously advertised "infinite dimensions", now sta
 
 | item | status |
 |---|---|
-| 1. `ContinuousLinearMap.polarIsometry` | superseded — `polarPartialIsometry` landed and `PolarIsometryFinal` now re-exports `polarPartial`; re-audit rather than act on the section as written |
+| 1. `ContinuousLinearMap.polarIsometry` | **OPEN, and the situation has changed since the audit** — the general partial isometry now exists as `ContinuousLinearMap.polarPartial` (`ForTauCeti/Analysis/InnerProductSpace/PolarPartialIsometry.lean`, 44 declarations), and `PolarIsometry.lean` carries a live `TODO` to prove `polarIsometry = polarPartial` under `IsUnit M.modulus` and then **retire** `polarIsometry` in favour of the general one. That supersedes the section's own recommendation: the audit proposed renaming to `polarIsometricFactorOfIsUnitModulus` and keeping the definition, but if the general object is available the honest move is deletion, not a longer name. Retiring it is the open lane; renaming it would entrench a definition that is scheduled to go. |
 | 2. `TauCeti.polarUnitary` | **RESOLVED** — renamed `choosePolarUnitary`, `exists_polar_decomposition_unitary` added |
 | 3. `FiniteDimensional.inverseOnRange` | **RESOLVED** — alias family deleted |
-| 4. `UnitaryInvariantIdealFamily` | **OPEN** — mechanical but large: 94 references across 30 files, including `SinTheta/**` and `Sources/**` |
+| 4. `UnitaryInvariantIdealFamily` | **RESOLVED** — alias deleted, 94 references repointed to `KyFanDominantIdealFamily` |
 | 5. `*_infinite` tan-two-theta names | **RESOLVED** — renamed, module renamed to `TanTwoThetaKyFanFiniteCarrier` |
 
 ---

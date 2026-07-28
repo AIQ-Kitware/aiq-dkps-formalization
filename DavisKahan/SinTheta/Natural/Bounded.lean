@@ -38,7 +38,7 @@ variable {E F : Type v}
 
 /-- Bounded complex isometric theorem with a canonical spectral subspace. -/
 theorem sinTheta_bounded_spectralSubspace_of_genuineSpectrumGap
-    (N : UnitaryInvariantIdealFamily (𝕜 := ℂ))
+    (N : KyFanDominantIdealFamily (𝕜 := ℂ))
     (A : E →L[ℂ] E) (hA : A.IsSymmetric)
     (S : Set ℝ) (hS : MeasurableSet S)
     (A0 : F →L[ℂ] F) (hA0 : A0.IsSymmetric)
@@ -88,7 +88,7 @@ theorem sinTheta_bounded_spectralSubspace_of_genuineSpectrumGap
 
 /-- Bounded complex lower-frame theorem with a canonical spectral subspace. -/
 theorem generalizedSinTheta_bounded_spectralSubspace_of_genuineSpectrumGap
-    (N : UnitaryInvariantIdealFamily (𝕜 := ℂ))
+    (N : KyFanDominantIdealFamily (𝕜 := ℂ))
     (A : E →L[ℂ] E) (hA : A.IsSymmetric)
     (S : Set ℝ) (hS : MeasurableSet S)
     (A0 : F →L[ℂ] F) (hA0 : A0.IsSymmetric)
@@ -141,7 +141,7 @@ variable {E F : Type v}
 /-- Bounded real isometric theorem with a canonical descended spectral
 subspace. -/
 theorem sinTheta_bounded_real_spectralSubspace
-    (N : UnitaryInvariantIdealFamily (𝕜 := ℝ))
+    (N : KyFanDominantIdealFamily (𝕜 := ℝ))
     (A : E →L[ℝ] E) (hA : A.IsSymmetric)
     (S : Set ℝ) (hS : MeasurableSet S)
     (A0 : F →L[ℝ] F) (hA0 : A0.IsSymmetric)
@@ -192,7 +192,7 @@ theorem sinTheta_bounded_real_spectralSubspace
 /-- Bounded real lower-frame theorem with a canonical descended spectral
 subspace. -/
 theorem generalizedSinTheta_bounded_real_spectralSubspace
-    (N : UnitaryInvariantIdealFamily (𝕜 := ℝ))
+    (N : KyFanDominantIdealFamily (𝕜 := ℝ))
     (A : E →L[ℝ] E) (hA : A.IsSymmetric)
     (S : Set ℝ) (hS : MeasurableSet S)
     (A0 : F →L[ℝ] F) (hA0 : A0.IsSymmetric)

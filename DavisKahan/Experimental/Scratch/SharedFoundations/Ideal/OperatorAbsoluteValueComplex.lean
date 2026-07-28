@@ -116,7 +116,7 @@ theorem RectangularSymmetricIdealFamily.modulus_mem_and_gauge_eq
 /-- The approximation-number proof and the polar-factor proof agree on the
 current family abstraction. -/
 theorem operatorAbs_family_transport_two_routes
-    (N : UnitaryInvariantIdealFamily (𝕜 := ℂ))
+    (N : KyFanDominantIdealFamily (𝕜 := ℂ))
     {T : E →L[ℂ] E}
     (hT : N.Mem T) :
     N.Mem (ContinuousLinearMap.modulus T) ∧
