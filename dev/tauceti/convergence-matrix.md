@@ -150,6 +150,66 @@ NOT: `copy ForMathlib → ForTauCeti → submit`.
   Stale oleans masked this; it drops the frontier Lean-resolution probe to "not
   available". Being repaired.
 
+## Mechanical duplicate audit (edward, aiq-gpu, 2026-07-28)
+
+The matrix is supposed to carry one row per duplicate declaration.  These rows
+were found mechanically rather than by reading, and were not in the matrix.
+
+**The check, so it is repeatable.**  Normalise the body of every `def`/`abbrev`
+in `DavisKahan/`, `ForTauCeti/`, `ForMathlib/` (excluding `Experimental/**` and
+`Scratch/**`) to a single whitespace-collapsed string, keep bodies of 20–250
+characters, and group by body text.  640 bodies, **9 groups shared by more than
+one name**.  Body-text matching ignores types, so every hit needs confirming by
+hand — one did not survive that (below).
+
+### Row: `IsOrthogonalProjection` — exact duplicate, blocked on governance
+
+```text
+Local declaration        — TauCeti.DavisKahan.Experimental.Foundation.IsOrthogonalProjection
+                           (DavisKahan/SpectralTheory/AbstractSpectrum.lean:59)
+                         — IsOrthogonalProjectionMap
+                           (DavisKahan/OperatorIdeal/ApproximationNumbers/Core.lean:48)
+Tau Ceti counterpart     — none
+Spectra counterpart      — none
+Relationship             — Exact duplicate (identical type AND identical body,
+                           `P ∘L P = P ∧ P.IsSymmetric`)
+Canonical destination    — a ForTauCeti bounded-operator module, alongside
+                           `TauCeti.LinearPMap.IsUnitaryOperator`
+Required semantic changes — none; the two are already the same proposition
+Current downstream users  — both are live: 23 occurrences of the first, 26 of
+                           the second
+Temporary adapter         — none yet
+Deletion condition        — once a canonical declaration exists, both become
+                           reducible abbrevs over it and the duplicate `def`s go
+Upstream roadmap / PR     — needs an accepted roadmap target first (see below)
+```
+
+**Why this was not simply fixed.**  It is the same shape as the
+`IsUnitaryOperator` collapse landed earlier today — two byte-identical `def`s
+under different names — but the fix does not transfer.  `IsUnitaryOperator` had
+a canonical `ForTauCeti` copy already, so collapsing was a local edit.  Here
+there is none, and:
+
+- neither module reaches the other in the import graph, so making one an abbrev
+  of the other would introduce a `SpectralTheory` ↔ `OperatorIdeal` edge purely
+  to deduplicate a one-line predicate;
+- creating the canonical `ForTauCeti` declaration is the right answer, but
+  AGENTS.md gates that — "Tau Ceti admits new mathematical declarations only
+  against an accepted roadmap target, one topic per PR".
+
+So this is a roadmap question, not a cleanup.  Recorded here rather than
+actioned.
+
+### Other groups from the same audit
+
+| bodies shared by | verdict |
+| --- | --- |
+| `ClosedOperatorE` / `ClosedOperatorAmbient` / `DirectClosedOperatorOnE` (and the `F` variants), `ComplexClosedOperatorH` / `DKClosedOperator` | **not duplicates to collapse** — per-file local abbrevs for the same bundled type. They disappear with the bundle itself, so U1 subsumes them |
+| `Plane` / `PaperPlane` (`EuclideanSpace 𝕜 (Fin 2)`), `RealPlane` / `PaperRealPlane` | duplicate abbrevs across `FiniteDimensional/Sharpness`, `SinTheta/Natural/Examples` and `Sources/.../Sharpness`. Low value, but the paper-facing and general spellings should not both exist once the source layer settles |
+| `paperScalarColumn` / `finiteMultiplicityScalarColumn` (`(ContinuousLinearMap.id 𝕜 𝕜).smulRight v`) | genuine duplicate, both in `Sources/DavisKahan1970/SineTheta/`; one should be the other |
+| `directedSinThetaOperatorProseLike` / `directedSinThetaOperatorClassicalProseLike` | **intentional** — the `Alternative/**` prose-like API deliberately carries parallel spellings |
+| `RectangularUnitarilyInvariantNorm.toSquare` / `toRectangular` | **false positive, and worth recording as one.** Identical field-copying bodies, but *opposite directions* between `RectangularUnitarilyInvariantNorm 𝕜 E E` and `UnitarilyInvariantNorm 𝕜 E`. Body-text matching cannot see this; the types must be compared too |
+
 ## Refactor waves
 
 ### Wave 1 — internal deduplication (Track A; can begin immediately)
