@@ -154,5 +154,12 @@ forbidden-import-refusing).
 | --- | --- | --- |
 | `approximation-number` | staged, building | Part B (Approximation numbers & rectangular symmetric ideals) — PR 1 |
 
+The cluster covers `Analysis/OperatorIdeal/ApproximationNumber/**` (the
+`s`-number layer) and `Analysis/OperatorIdeal/Family/**` (the canonical
+symmetric operator ideal family, roadmap decision 7). The `Family/` modules were
+absent from the manifest until 2026-07-28, which put them outside both the
+dependency-closure check and `export_for_tauceti.py`; if you add a module here,
+add it to `staging_modules` in the same commit.
+
 See `dev/tauceti/extraction-manifest.json` for the per-module record and
 `dev/tauceti/extraction-cluster-classification.md` for the full Tier 1–3 queue.

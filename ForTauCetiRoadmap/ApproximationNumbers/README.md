@@ -28,8 +28,10 @@ Hilbert–Schmidt and trace-class examples) built *on top of it* rather than as
 isolated endpoints.
 
 Suggested home: `TauCeti/Analysis/OperatorIdeal/ApproximationNumber/` for the
-`s`-number layer, `TauCeti/Analysis/OperatorIdeal/Symmetric/` for the symmetric
-ideal theory. See `Suggested.lean` for prototype signatures.
+`s`-number layer, `TauCeti/Analysis/OperatorIdeal/Family/` for the symmetric
+ideal theory (this document once said `.../Symmetric/`; `Family/` is what
+shipped, and is what decision 7 and `ForTauCeti/README.md` name). See
+`Suggested.lean` for prototype signatures.
 
 ## Generality bar (decide these up front; do not silently specialize)
 
@@ -156,12 +158,25 @@ Builds the ideal theory on the `s`-number sequence.
    The *target* of this construction is fixed: it produces a
    `TauCeti.SymmetricOperatorIdealFamily` (decision 7 below), whose gauge is
    `Φ ∘ a` read in `ℝ≥0∞`. The abstract family structure is already staged in
-   `ForTauCeti/Analysis/OperatorIdeal/Family/`, with the operator norm as its
-   first instance; C.1's job is to add the Calkin construction as the second.
+   `ForTauCeti/Analysis/OperatorIdeal/Family/` and now has **two** instances,
+   the operator norm and the finite Ky Fan gauges (see C.2); C.1's job is to add
+   the Calkin construction as the third.
 10. **C.2 Ky Fan norms and dominance.** the Ky Fan `k`-norms
     `‖T‖_{(k)} = ∑_{n<k} aₙ(T)`; Ky Fan dominance (`∀k, ∑_{n<k} aₙ(S) ≤ ∑_{n<k}
     aₙ(T)` ⟹ `Φ`-domination for every symmetric gauge `Φ`); the triangle
     inequality for each `‖·‖_Φ` as a consequence.
+
+    **Partly landed 2026-07-28.** The `k`-norm is
+    `kyFanApproximationGauge k` and it now has a canonical family form,
+    `kyFanSymmetricIdealFamily k hk : TauCeti.SymmetricOperatorIdealFamily 𝕜`,
+    with a completeness instance. Both are parked in
+    `DavisKahan/OperatorIdeal/ApproximationNumbers/ScalarGeneric.lean` rather
+    than here, because `kyFanApproximationGauge` and the capability class
+    supplying its triangle inequality are not yet extracted; the intended home
+    is `ForTauCeti/Analysis/OperatorIdeal/Family/KyFan.lean` and the note is on
+    the declaration. Dominance is bundled as `KyFanDominantIdealFamily`, which
+    is a three-field structure over the canonical family — converting it to a
+    genuine mixin is the item that remains.
 11. **C.3 Schatten instances.** the `ℓ^p` gauge `Φ_p(a) = (∑ aₙ^p)^{1/p}` and the
     Schatten `p`-ideals as instances of C.1; Hilbert–Schmidt (`p = 2`,
     `∑ aₙ² = ∑ ‖T eᵢ‖²`, basis-independent) and trace class (`p = 1`) as named
@@ -333,19 +348,42 @@ harder to remove. The decisions (with this roadmap's current stance):
      `OperatorIdealFamily.Elem` — a type synonym, because the bare subtype already
      inherits the *operator* norm and the two differ — and completeness is
      `OperatorIdealFamily.IsComplete`, i.e. `CompleteSpace` for that norm.
-   * **Layering, with a genuine obstruction recorded.** The base layer is stated
-     over Banach spaces with **independent source and target universes**, per the
-     generality bar above. Adjoint symmetry cannot be added there: the adjoint
-     exchanges source and target, so a family closed under adjoints must live on
-     one universe over Hilbert spaces. Hence two structures —
+   * **Layering, with a genuine obstruction recorded.** The base layer keeps
+     **independent source and target universes**. Adjoint symmetry cannot be
+     added there: the adjoint exchanges source and target, so a family closed
+     under adjoints must live on one universe. Hence two structures —
      `OperatorIdealFamily` and `SymmetricOperatorIdealFamily`, the latter
      extending the diagonal instantiation — rather than one with an optional
      field.
-   * **Validation.** The historical Davis–Kahan record
-     `RectangularSymmetricIdealFamily` is *derivable*: every one of its fourteen
-     fields, including the hand-rolled `gauge_complete`, is a theorem about the
-     canonical family (`SymmetricOperatorIdealFamily.toRectangular`). The
-     converse map does not exist, which is the defect restated.
+   * **Hilbert, not Banach — corrected 2026-07-28.** This bullet previously read
+     "the base layer is stated over Banach spaces … per the generality bar
+     above", and both halves of that were wrong. The citation was a
+     mis-attribution: the generality bar in this document is scoped to the
+     **`s`-number layer** (`approximationNumber` over a
+     `NontriviallyNormedField`, seminormed spaces), which is unchanged and stays
+     field-generic. And the Banach setting cannot hold the examples. The four
+     laws are norm-only and are meaningful verbatim over Banach spaces, but of
+     the five gauges this development has — operator norm, finite Ky Fan,
+     Schatten `p`, trace class, Hilbert–Schmidt — only the first survives
+     outside Hilbert space, and the obstruction is `gauge_add_le`. The finite Ky
+     Fan gauge `∑_{n<k} aₙ` is *defined* at full Banach generality yet its
+     subadditivity is Hilbertian: the proof runs through singular values and
+     majorization, and the classical additivity of approximation numbers,
+     `a_{m+n}(S + T) ≤ aₘ(S) + aₙ(T)`, does not recover it — at `k = 2` it only
+     yields `a₀(S) + 2a₀(T) + a₁(S)`. A Banach-wide base would therefore be a
+     structure with one instance and no way to acquire the motivating ones. The
+     space parameters are `[RCLike 𝕜]`, `InnerProductSpace` and `CompleteSpace`
+     throughout; re-widening is mechanical (no proof in the module uses the
+     inner product, only the norm) should an instance ever appear.
+   * **Validation, and it is live in production.** The historical Davis–Kahan
+     record `RectangularSymmetricIdealFamily` is *derivable*: every one of its
+     fourteen fields, including the hand-rolled `gauge_complete`, is a theorem
+     about the canonical family (`SymmetricOperatorIdealFamily.toRectangular`).
+     The converse map does not exist, which is the defect restated. Since
+     2026-07-28 that derivation is not merely a validation exercise:
+     `KyFanDominantIdealFamily` stores the canonical family and *is* read
+     through `toRectangular`, so the historical record survives only as its
+     real-valued view.
 8. **API hygiene (per-declaration).** Hide definition bodies (drop blanket
    `@[expose] public section`; expose one `_eq_iInf` characterization instead);
    name every lemma from its conclusion outward with the quantifier matching the

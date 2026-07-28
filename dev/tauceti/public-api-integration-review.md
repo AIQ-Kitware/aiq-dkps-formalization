@@ -48,7 +48,7 @@ Before porting, compare these against current Tau Ceti/Mathlib definitions:
 - `ClosedOperator` versus the selected `LinearPMap`-based unbounded-operator API;
 - reducing subspaces and spectral restrictions;
 - spectral gap predicates;
-- rectangular unitarily invariant norm families;
+- ~~rectangular unitarily invariant norm families~~ — **resolved 2026-07-27/28**: the canonical object is `TauCeti.SymmetricOperatorIdealFamily` (`ForTauCeti/Analysis/OperatorIdeal/Family/`), a single `ℝ≥0∞` gauge with the ideal as its finiteness domain; the historical `RectangularSymmetricIdealFamily` is derived from it and is pending deletion;
 - Hilbert--Schmidt membership and norm;
 - graph-subspace and angular-operator structures;
 - source-specific data records such as `PaperTheorem61Data`.
@@ -58,14 +58,20 @@ the general public API unless they express a reusable mathematical object.
 
 ## Proposed PR sequence
 
-### PR 1 -- approximation numbers
+### PR 1 -- approximation numbers and the ideal-family abstraction
 
 Rectangular approximation numbers, basic inequalities, finite-dimensional
 agreement, and operator modulus.  No Davis--Kahan theorem in this PR.
 
-### PR 2 -- rectangular ideal families and Hilbert--Schmidt equivalences
+The ideal-family abstraction itself belongs here rather than in PR 2: it is
+already staged (`ForTauCeti/Analysis/OperatorIdeal/Family/`), it depends on
+Mathlib alone, and it is what the approximation-number layer's Ky Fan gauges
+instantiate.
 
-Ideal abstraction, column energy, tensor correspondence, adjoint symmetry, and
+### PR 2 -- symmetric gauges, Schatten instances, and Hilbert--Schmidt equivalences
+
+The Calkin/symmetric-gauge construction over the abstraction from PR 1, the
+Schatten instances, column energy, tensor correspondence, adjoint symmetry, and
 Frobenius specialization.
 
 ### PR 3 -- closed operators and reducing restrictions

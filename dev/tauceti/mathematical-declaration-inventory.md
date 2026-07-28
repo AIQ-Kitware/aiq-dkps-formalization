@@ -31,18 +31,31 @@ Davis--Kahan.
 
 ### Rectangular symmetric ideal families
 
-Current home:
-`DavisKahan/OperatorIdeal/UnitarilyInvariant/RectangularFamily.lean`.
+Canonical home:
+`ForTauCeti/Analysis/OperatorIdeal/Family/{Basic,OperatorNorm}.lean`.
+`DavisKahan/OperatorIdeal/UnitarilyInvariant/RectangularFamily.lean` holds the
+historical record, which is pending deletion.
 
 Main contributions:
 
-- a coherent family of ideal membership predicates and gauges over rectangular
-  Hilbert-space maps;
-- left and right ideal membership;
+- a coherent family of ideal gauges over rectangular Hilbert-space maps,
+  presented by a *single* `ℝ≥0∞`-valued gauge with the ideal derived as its
+  finiteness domain (`carrier : Submodule`) — membership as independent data is
+  exactly what the redesign removed;
+- left and right ideal membership as consequences of the two-sided gauge law;
 - multiplicative gauge estimates and contraction corollaries.
 
 Tau Ceti value: the abstraction used to state one theorem uniformly for
-operator, Schatten, Ky Fan, and other symmetric norms.
+operator, Schatten, Ky Fan, and other symmetric norms. Two instances exist
+today, `operatorNormFamily` and `kyFanSymmetricIdealFamily`; Schatten and
+trace class are roadmap C.1/C.3.
+
+Migration status: canonical structure landed 2026-07-27 (Hilbert spaces,
+`[RCLike 𝕜]`, single `ℝ≥0∞` gauge, independent source/target universes);
+`KyFanDominantIdealFamily` swapped onto it 2026-07-28, so the historical record
+is now reached only as its derived real-valued view; the record and the
+`toRectangular` adapter are deleted once the remaining direct type-position
+users migrate.
 
 ### Orthogonal block and column reconstruction
 
