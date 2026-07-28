@@ -190,6 +190,32 @@ is not this lane's to migrate.
 - The `Restriction.lean` and `ClosedSylvesterEquation.lean` facade blocks, once
   their remaining callers move.
 
+**Blocker map of the remaining bundle surface (edward, aiq-gpu, 2026-07-28).**
+**582 type-position uses across 67 files.**  Only ~30% sit in files that touch
+`Interop/Spectra`.  The point of this map is that the inventory's per-file counts
+do not distinguish takeable work from work gated on another agent's campaign, and
+sizing a lane off them has now produced two wrong claims (both corrected above).
+
+Largest, with their real blocker:
+
+| uses | file | blocker |
+| ---: | --- | --- |
+| 54 | `SpectralTheory/ClosedOperator/Basic.lean` | none — but it *is* the bundle; deleted last by construction |
+| 53 | `SpectralTheory/ClosedOperator/Complexification.lean` | none — genuinely takeable |
+| 52 | `SinTheta/Natural/Bounded.lean` | Spectra (28 refs) |
+| 38 | `Experimental/InfiniteDimensional/Core/UnboundedSpectral.lean` | Spectra (32 refs) |
+| 34 | `Sylvester/ClosedSylvesterEquation.lean` | facade; consumers include `Interop/Spectra` **and** `FinishTanTwoTheta` |
+| 32 | `Experimental/InfiniteDimensional/Sylvester/Unbounded.lean` | none — genuinely takeable |
+| 23 | `SpectralTheory/ReducingSubspace/Restriction.lean` | facade; blocked by `Interop/Spectra/RealSpectralRestriction.lean` (134 Spectra refs) |
+| 19 | `Sources/**/SineTheta/CommonDomain.lean` | none |
+| 19 | `Sources/**/SineTheta/CommonCore.lean` | none — `IsGraphCore` development |
+
+**The two genuinely unblocked large targets are
+`SpectralTheory/ClosedOperator/Complexification.lean` (53) and
+`Experimental/InfiniteDimensional/Sylvester/Unbounded.lean` (32)**, followed by the
+two `Sources/**/SineTheta` common-core files.  Everything else at scale is either
+the bundle itself or waits on the Spectra boundary.
+
 **`SinTheta/Natural` is 91/103 Spectra-gated — retire it as a U1 target
 (edward, aiq-gpu, 2026-07-28).**  The inventory lists this directory as one of
 the largest remaining bundle surfaces, and that number is misleading in a way
