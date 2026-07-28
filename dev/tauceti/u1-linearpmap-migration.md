@@ -190,6 +190,39 @@ is not this lane's to migrate.
 - The `Restriction.lean` and `ClosedSylvesterEquation.lean` facade blocks, once
   their remaining callers move.
 
+**`SinTheta/Natural` is 91/103 Spectra-gated — retire it as a U1 target
+(edward, aiq-gpu, 2026-07-28).**  The inventory lists this directory as one of
+the largest remaining bundle surfaces, and that number is misleading in a way
+that will cost someone a lane.  Five of its eight files —
+`{Bounded,Examples,Genuine,GenuineGeneralized,Real}.lean` — are built on
+`selfAdjointSpectralRestriction`, `realSelfAdjointSpectralRestriction` and
+`selfAdjointSpectralSubspaceInclusion`, every one of which lives in
+`DavisKahan/Interop/Spectra/**`.  That is jon (namek)'s Spectra-removal campaign
+and is **explicitly outside U1's declared scope**.  Their `ClosedOperator` uses
+are `ofBounded` lifts feeding those endpoints — *call-site adapters*, not records
+carrying the bundle, so they cannot migrate before the Spectra boundary moves.
+Spectra references per file: Bounded 20, Examples 15, Genuine 28,
+GenuineGeneralized 12, Real 37.
+
+**The honest takeable residual in `SinTheta/Natural` is 12 uses, not 88.**  Those
+are `GapConvenience.lean`, now served by six `linearPMap_` twins (three for
+`UnboundedSylvesterGap`, three for `GenuineUnboundedSylvesterGapPMap`).
+`Reducing.lean` is at 0 and no longer imports the bundled foundation at all.
+
+**Duplicate worth a convergence-matrix row, found on the way and not acted on.**
+`GenuineUnboundedSylvesterGap` (`Sylvester/Unbounded/AllGap.lean`) and
+`GenuineUnboundedSylvesterGapPMap` (`SinTheta/Unbounded/AllGap.lean`) are **two
+inductives for one predicate** — same three constructors, and the bundled
+version's hypotheses are *already* written as
+`TauCeti.LinearPMap.spectrum A.toLinearPMap`, so it is definitionally the raw one
+at `A.toLinearPMap`.  This is the identical situation `UnboundedSylvesterGap` was
+in before it was collapsed, and it admits the identical fix: keep the raw
+inductive, demote the bundled spelling to a reducible `abbrev`, alias the three
+constructors.  I did **not** take it — both files sit in jon (namek)'s released
+rows.  Note the `PMap` suffix is also against the convention the Riccati lane
+established (raw is canonical, so it should not be the one carrying a
+qualifier).
+
 **`SinTheta/Natural/Reducing.lean` is off the bundle (edward, aiq-gpu,
 2026-07-28).**  27 `ClosedOperator` occurrences → **0**.  Both problem records,
 the data constructor, and all eight endpoints are stated over `LinearPMap`; the
