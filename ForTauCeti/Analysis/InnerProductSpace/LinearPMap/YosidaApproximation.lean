@@ -52,6 +52,7 @@ namespace TauCeti
 namespace LinearPMap
 
 open Complex
+open scoped InnerProductSpace
 
 variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
 
@@ -124,6 +125,56 @@ noncomputable def yosidaJ (hA : IsSelfAdjoint A) (n : ℕ+) : H →L[ℂ] H :=
 /-- The contraction `Jₙ⁻ = in·R(-in)`. -/
 noncomputable def yosidaJNeg (hA : IsSelfAdjoint A) (n : ℕ+) : H →L[ℂ] H :=
   (I * (n : ℂ)) • resolventAtNegIn hA n
+
+/-! ### Adjoints: the two resolvents are each other's -/
+
+/-- `R(in)⋆ = R(-in)`. -/
+theorem adjoint_resolventAtIn (hA : IsSelfAdjoint A) (n : ℕ+) :
+    ContinuousLinearMap.adjoint (resolventAtIn hA n) = resolventAtNegIn hA n := by
+  have hsym : A.IsFormalAdjoint A := by
+    have h := _root_.LinearPMap.adjoint_isFormalAdjoint (T := A) hA.dense_domain
+    rwa [_root_.LinearPMap.isSelfAdjoint_def.mp hA] at h
+  symm
+  rw [ContinuousLinearMap.eq_adjoint_iff]
+  intro x y
+  set hin := mem_resolventSet_of_im_ne_zero hA (I_mul_pnat_im_ne_zero n) with hin_def
+  set hnin := mem_resolventSet_of_im_ne_zero hA (neg_I_mul_pnat_im_ne_zero n) with hnin_def
+  set u : A.domain := ⟨resolvent A hnin x, resolvent_mem_domain hnin x⟩ with hu
+  set v : A.domain := ⟨resolvent A hin y, resolvent_mem_domain hin y⟩ with hv
+  have hux : A u - (-I * (n : ℂ)) • (u : H) = x := sub_smul_resolvent hnin x
+  have hvy : A v - (I * (n : ℂ)) • (v : H) = y := sub_smul_resolvent hin y
+  have hconj : (starRingEnd ℂ) (-I * (n : ℂ)) = I * (n : ℂ) := by
+    rw [map_mul, map_neg, Complex.conj_I, Complex.conj_natCast, neg_neg]
+  calc ⟪resolventAtNegIn hA n x, y⟫_ℂ
+      = ⟪(u : H), A v - (I * (n : ℂ)) • (v : H)⟫_ℂ := by rw [hvy]; rfl
+    _ = ⟪A u - (-I * (n : ℂ)) • (u : H), (v : H)⟫_ℂ := by
+        rw [inner_sub_left, inner_sub_right, inner_smul_left, inner_smul_right,
+          hconj, hsym u v]
+    _ = ⟪x, resolventAtIn hA n y⟫_ℂ := by rw [hux]; rfl
+
+/-- `R(-in)⋆ = R(in)`. -/
+theorem adjoint_resolventAtNegIn (hA : IsSelfAdjoint A) (n : ℕ+) :
+    ContinuousLinearMap.adjoint (resolventAtNegIn hA n) = resolventAtIn hA n := by
+  rw [← adjoint_resolventAtIn hA n, ContinuousLinearMap.adjoint_adjoint]
+
+/-- **The symmetric Yosida approximant is self-adjoint.**  It is the `n²/2`-weighted
+average of two resolvents that are each other's adjoint. -/
+theorem isSelfAdjoint_yosidaApproxSym (hA : IsSelfAdjoint A) (n : ℕ+) :
+    _root_.IsSelfAdjoint (yosidaApproxSym hA n) := by
+  rw [ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric]
+  intro x y
+  have hscalar : (starRingEnd ℂ) ((n : ℂ) ^ 2 / 2) = (n : ℂ) ^ 2 / 2 := by
+    rw [map_div₀, map_pow, Complex.conj_natCast, map_ofNat]
+  have hIn : ⟪resolventAtIn hA n x, y⟫_ℂ = ⟪x, resolventAtNegIn hA n y⟫_ℂ := by
+    rw [← adjoint_resolventAtIn hA n, ContinuousLinearMap.adjoint_inner_right]
+  have hNIn : ⟪resolventAtNegIn hA n x, y⟫_ℂ = ⟪x, resolventAtIn hA n y⟫_ℂ := by
+    rw [← adjoint_resolventAtNegIn hA n, ContinuousLinearMap.adjoint_inner_right]
+  change ⟪yosidaApproxSym hA n x, y⟫_ℂ = ⟪x, yosidaApproxSym hA n y⟫_ℂ
+  unfold yosidaApproxSym
+  simp only [smul_apply, add_apply, inner_smul_left, inner_smul_right,
+    inner_add_left, inner_add_right, hscalar]
+  rw [hIn, hNIn]
+  ring
 
 /-! ### Norm bounds -/
 
