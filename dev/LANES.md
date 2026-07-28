@@ -147,8 +147,20 @@ and pruned. What is genuinely left:
 
 ## Cross-lane findings (post here to save another agent a re-derivation)
 
-- **Why the Spectra polar consumers cannot be repointed yet, and what would unblock them**
-  (jon/namek, 2026-07-28). With `ForTauCeti/Analysis/InnerProductSpace/PolarPartialIsometry.lean`
+- **~~Why the Spectra polar consumers cannot be repointed yet~~ — DONE, they are repointed**
+  (jon/namek, 2026-07-28). The route recorded below worked exactly as written: prove
+  `spectraPolarIsometry T = T.polarPartial` from the ForTauCeti uniqueness theorem — an
+  equation between plain `H →L[ℂ] H`, so the dependent-type transport never arises — and
+  let everything else follow by rewriting. `DavisKahan/Geometry/Polar/PolarIsometryFinal.lean`
+  is now 332 lines → 167, Spectra-free, and **out of the vendored namespace**;
+  `Section3Nonacute.lean` and `PolarIntertwining.lean` follow it. Rule-7 burn-down list:
+  **12 → 10**. Two gotchas for the next such swap: (1) replacing a `def` by an `abbrev`
+  changes what `rw [thatName]` unfolds to, so proofs that unfolded Spectra's `polarRange`
+  to reach `topologicalClosure` need the *next* definition named too; (2) a proof that
+  unfolds the bridge alias before rewriting (`rw [spectraPolarIsometry, …]`) defeats the
+  bridge lemma — rewrite *with* the alias, don't unfold it.
+
+- **(historical) Why the Spectra polar consumers could not be repointed** (jon/namek, 2026-07-28). With `ForTauCeti/Analysis/InnerProductSpace/PolarPartialIsometry.lean`
   now covering every declaration the consumers use, I rewrote
   `DavisKahan/Geometry/Polar/PolarIsometryFinal.lean` over it — 332 lines to 135,
   Spectra-free, in the Davis--Kahan namespace instead of Spectra's — and it **built clean**.
