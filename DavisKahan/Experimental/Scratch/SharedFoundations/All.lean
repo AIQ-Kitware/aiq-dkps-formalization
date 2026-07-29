@@ -6,9 +6,8 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 import DavisKahan.Experimental.Scratch.SharedFoundations.Ideal.TwoWayFactorization
 import DavisKahan.Experimental.Scratch.SharedFoundations.Ideal.OperatorAbsoluteValueComplex
 import DavisKahan.Experimental.Scratch.SharedFoundations.Ideal.ReflectionTransport
-import DavisKahan.Experimental.Scratch.SharedFoundations.Residual.IsometricRangeProjection
+import DavisKahan.BoundedOperator.IsometricRangeProjection
 import DavisKahan.Experimental.Scratch.SharedFoundations.Residual.TrialResidual
-import DavisKahan.Experimental.Scratch.SharedFoundations.Residual.IsometricRitzPair
 import DavisKahan.Experimental.Scratch.SharedFoundations.Residual.ReflectionDefect
 import DavisKahan.Experimental.Scratch.SharedFoundations.Residual.ReflectionDefectIdeal
 import DavisKahan.Experimental.Scratch.SharedFoundations.Spectral.BoundedSelection

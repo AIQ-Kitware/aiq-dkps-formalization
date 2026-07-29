@@ -8,5 +8,6 @@ import DavisKahan.BoundedOperator.Basic
 import DavisKahan.BoundedOperator.Projector
 import DavisKahan.BoundedOperator.Reflection
 import DavisKahan.BoundedOperator.SinTheta
+import DavisKahan.BoundedOperator.IsometricRangeProjection
 
 /-! # `DavisKahan/BoundedOperator` -/
