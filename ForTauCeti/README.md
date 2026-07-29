@@ -25,11 +25,25 @@ mistake it for one. The permanent public home is Tau Ceti.
 
 ## Relationship to `ForMathlib`
 
-`ForMathlib` is a *separate* staging area for declarations genuinely intended for
-Mathlib. It is not automatically upstream of Tau Ceti and is not a generic
-dumping ground. A declaration lives in `ForTauCeti` when its accepted home is the
-Tau Ceti library; it lives in `ForMathlib` when its accepted home is Mathlib
-itself.
+**`ForMathlib` is being retired into `ForTauCeti`** (jon's decision,
+2026-07-29). It is not a parallel staging area to be maintained alongside this
+one. Modules migrate here as their import closures allow, following the
+CourantFischer playbook recorded in `dev/tauceti/convergence-matrix.md`: move
+the closed component, repoint consumers, delete the old file. Mathlib is not the
+near-term target for this contribution; Tau Ceti is.
+
+**A module docstring reading `Extraction class: authored in place, for
+upstreaming to Mathlib rather than to Tau Ceti` is stale, and is not a bar to
+migrating that module.** Those lines predate the dual-track policy in
+`AGENTS.md` and have not been treated as blocking for comparable modules all
+week. Reading this section's *previous* wording as live policy cost one session
+two reversed lanes; that is why the wording is now explicit.
+
+The real constraint is the import firewall below, not a docstring. Because
+`ForTauCeti` may not import `ForMathlib`, a `ForMathlib` module becomes
+migratable only once no remaining `ForMathlib` file imports it — so components
+move whole, in dependency order, and the last `ForMathlib → ForTauCeti` edge
+must never exist even transiently.
 
 ## Hard rules
 
