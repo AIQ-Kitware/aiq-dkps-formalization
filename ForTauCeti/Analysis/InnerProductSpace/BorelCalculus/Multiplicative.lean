@@ -20,7 +20,7 @@ Three facts complete the bounded Borel functional calculus of a normal operator:
 Multiplicativity is the only step that needs the transport argument twice, and
 in a specific order: the continuous approximant `p` of `f` is chosen first, and
 the tolerance for the approximant `q` of `g` is then taken to be `ε / (1 + ‖p‖)`.
-There is no uniform bound on the approximants, so the second tolerance genuinely
+There is no uniform chooseBound on the approximants, so the second tolerance genuinely
 has to depend on the first approximant.
 
 ## Provenance
@@ -53,24 +53,25 @@ omit [CompleteSpace H] in
 /-- Products of admissible symbols are admissible. -/
 theorem mul (hf : IsBddMeasurable f) (hg : IsBddMeasurable g) :
     IsBddMeasurable (fun x => f x * g x) := by
-  refine ⟨hf.measurable.mul hg.measurable, hf.bound * hg.bound, ?_, fun x => ?_⟩
-  · have := hf.bound_nonneg; have := hg.bound_nonneg; positivity
+  refine ⟨hf.measurable.mul hg.measurable, hf.chooseBound * hg.chooseBound, ?_, fun x => ?_⟩
+  · have := hf.chooseBound_nonneg; have := hg.chooseBound_nonneg; positivity
   · rw [norm_mul]
-    exact mul_le_mul (hf.norm_le_bound x) (hg.norm_le_bound x) (norm_nonneg _) hf.bound_nonneg
+    exact mul_le_mul (hf.norm_le_chooseBound x) (hg.norm_le_chooseBound x) (norm_nonneg _)
+      hf.chooseBound_nonneg
 
 omit [CompleteSpace H] in
 /-- Admissible symbols are integrable against every finite measure on the
 spectrum. -/
 theorem integrable (hf : IsBddMeasurable f) (ν : Measure (spectrum ℂ a))
     [IsFiniteMeasure ν] : Integrable f ν :=
-  integrable_of_bounded hf.measurable hf.norm_le_bound ν
+  integrable_of_bounded hf.measurable hf.norm_le_chooseBound ν
 
 omit [CompleteSpace H] in
 /-- Conjugates of admissible symbols are admissible. -/
 theorem conj (hf : IsBddMeasurable f) :
     IsBddMeasurable (fun x => (starRingEnd ℂ) (f x)) :=
-  ⟨Complex.continuous_conj.measurable.comp hf.measurable, hf.bound, hf.bound_nonneg,
-    fun x => by rw [RCLike.norm_conj]; exact hf.norm_le_bound x⟩
+  ⟨Complex.continuous_conj.measurable.comp hf.measurable, hf.chooseBound, hf.chooseBound_nonneg,
+    fun x => by rw [RCLike.norm_conj]; exact hf.norm_le_chooseBound x⟩
 
 end IsBddMeasurable
 
@@ -110,7 +111,7 @@ theorem pair_self_eq_integral (hfm : Measurable f) {M : ℝ} (hfb : ∀ x, ‖f 
 /-- **The diagonal matrix elements of the Borel calculus.** -/
 theorem inner_borelCalculus_self (hf : IsBddMeasurable f) (ξ : H) :
     ⟪ξ, borelCalculus ha hf ξ⟫_ℂ = ∫ x, f x ∂(diagMeasure ha ξ) := by
-  rw [inner_borelCalculus, pair_self_eq_integral ha hf.measurable hf.norm_le_bound]
+  rw [inner_borelCalculus, pair_self_eq_integral ha hf.measurable hf.norm_le_chooseBound]
 
 end Diagonal
 
@@ -149,8 +150,8 @@ theorem pair_mul_eq_inner_comp (hf : IsBddMeasurable f) (hg : IsBddMeasurable g)
     pair ha (fun x => f x * g x) ψ ξ
       = ⟪ψ, borelCalculus ha hf (borelCalculus ha hg ξ)⟫_ℂ := by
   set η := borelCalculus ha hg ξ with hη
-  refine eq_of_forall_norm_sub_le (C := 3 + hg.bound)
-    (by have := hg.bound_nonneg; linarith) fun ε hε => ?_
+  refine eq_of_forall_norm_sub_le (C := 3 + hg.chooseBound)
+    (by have := hg.chooseBound_nonneg; linarith) fun ε hε => ?_
   -- the measure attached to the target pair `(ψ, ξ)`, common to all steps
   haveI : IsFiniteMeasure (∑ k : Fin 4, diagMeasure ha (pairVectors ψ ξ k)) :=
     isFiniteMeasure_sum_diagMeasure ha _
@@ -212,7 +213,8 @@ theorem pair_mul_eq_inner_comp (hf : IsBddMeasurable f) (hg : IsBddMeasurable g)
   have hpq : IsBddMeasurable (fun x => p x * q x) :=
     (IsBddMeasurable.of_continuous p).mul (IsBddMeasurable.of_continuous q)
   have hfg : IsBddMeasurable (fun x => f x * g x) := hf.mul hg
-  have hptwise : ∀ x, ‖p x * q x - f x * g x‖ ≤ ‖p‖ * ‖q x - g x‖ + hg.bound * ‖p x - f x‖ := by
+  have hptwise : ∀ x,
+      ‖p x * q x - f x * g x‖ ≤ ‖p‖ * ‖q x - g x‖ + hg.chooseBound * ‖p x - f x‖ := by
     intro x
     have hsplit : p x * q x - f x * g x = p x * (q x - g x) + (p x - f x) * g x := by ring
     rw [hsplit]
@@ -220,26 +222,26 @@ theorem pair_mul_eq_inner_comp (hf : IsBddMeasurable f) (hg : IsBddMeasurable g)
     rw [norm_mul, norm_mul]
     have e1 : ‖p x‖ * ‖q x - g x‖ ≤ ‖p‖ * ‖q x - g x‖ :=
       mul_le_mul_of_nonneg_right (p.norm_coe_le_norm x) (norm_nonneg _)
-    have e2 : ‖p x - f x‖ * ‖g x‖ ≤ hg.bound * ‖p x - f x‖ := by
+    have e2 : ‖p x - f x‖ * ‖g x‖ ≤ hg.chooseBound * ‖p x - f x‖ := by
       rw [mul_comm ‖p x - f x‖ ‖g x‖]
-      exact mul_le_mul_of_nonneg_right (hg.norm_le_bound x) (norm_nonneg _)
+      exact mul_le_mul_of_nonneg_right (hg.norm_le_chooseBound x) (norm_nonneg _)
     linarith
   have hintq : Integrable (fun x => ‖q x - g x‖) νP :=
     ((IsBddMeasurable.of_continuous q).integrable νP |>.sub (hg.integrable νP)).norm
   have hintp : Integrable (fun x => ‖p x - f x‖) νP :=
     ((IsBddMeasurable.of_continuous p).integrable νP |>.sub (hf.integrable νP)).norm
   have step5 : ‖pair ha (fun x => p x * q x) ψ ξ - pair ha (fun x => f x * g x) ψ ξ‖
-      ≤ ‖p‖ * ε' + hg.bound * ε := by
+      ≤ ‖p‖ * ε' + hg.chooseBound * ε := by
     refine le_trans (norm_pair_sub_pair_le ha νP ψ ξ hdomP (hpq.integrable νP)
       (hfg.integrable νP)) ?_
     calc ∫ x, ‖p x * q x - f x * g x‖ ∂νP
-        ≤ ∫ x, (‖p‖ * ‖q x - g x‖ + hg.bound * ‖p x - f x‖) ∂νP :=
+        ≤ ∫ x, (‖p‖ * ‖q x - g x‖ + hg.chooseBound * ‖p x - f x‖) ∂νP :=
           integral_mono ((hpq.integrable νP).sub (hfg.integrable νP)).norm
-            (((hintq.const_mul ‖p‖)).add (hintp.const_mul hg.bound)) hptwise
-      _ = ‖p‖ * (∫ x, ‖q x - g x‖ ∂νP) + hg.bound * (∫ x, ‖p x - f x‖ ∂νP) := by
-          rw [integral_add ((hintq.const_mul ‖p‖)) (hintp.const_mul hg.bound),
+            (((hintq.const_mul ‖p‖)).add (hintp.const_mul hg.chooseBound)) hptwise
+      _ = ‖p‖ * (∫ x, ‖q x - g x‖ ∂νP) + hg.chooseBound * (∫ x, ‖p x - f x‖ ∂νP) := by
+          rw [integral_add ((hintq.const_mul ‖p‖)) (hintp.const_mul hg.chooseBound),
             integral_const_mul, integral_const_mul]
-      _ ≤ ‖p‖ * ε' + hg.bound * ε := by
+      _ ≤ ‖p‖ * ε' + hg.chooseBound * ε := by
           have hq' : ∫ x, ‖q x - g x‖ ∂νP ≤ ε' := by
             have hmono : ∫ x, ‖q x - g x‖ ∂νP ≤ ∫ x, ‖g x - q x‖ ∂ν₂ := by
               have hrev : ∀ x, ‖q x - g x‖ = ‖g x - q x‖ := fun x => norm_sub_rev _ _
@@ -256,10 +258,10 @@ theorem pair_mul_eq_inner_comp (hf : IsBddMeasurable f) (hg : IsBddMeasurable g)
                 (Filter.Eventually.of_forall fun _ => norm_nonneg _)
                 ((hf.integrable ν₁).sub hpi).norm
             exact le_trans hmono hple
-          have hbnn := hg.bound_nonneg
+          have hbnn := hg.chooseBound_nonneg
           have t1 : ‖p‖ * (∫ x, ‖q x - g x‖ ∂νP) ≤ ‖p‖ * ε' :=
             mul_le_mul_of_nonneg_left hq' (norm_nonneg p)
-          have t2 : hg.bound * (∫ x, ‖p x - f x‖ ∂νP) ≤ hg.bound * ε :=
+          have t2 : hg.chooseBound * (∫ x, ‖p x - f x‖ ∂νP) ≤ hg.chooseBound * ε :=
             mul_le_mul_of_nonneg_left hp' hbnn
           linarith
   -- assemble
@@ -275,7 +277,7 @@ theorem pair_mul_eq_inner_comp (hf : IsBddMeasurable f) (hg : IsBddMeasurable g)
   rw [inner_borelCalculus, key, norm_neg]
   refine le_trans (norm_add_le _ _) ?_
   refine le_trans (add_le_add (norm_add_le _ _) le_rfl) ?_
-  have := hg.bound_nonneg
+  have := hg.chooseBound_nonneg
   nlinarith [step1, step3, step5, hpε, hε'le]
 
 /-- The image of the Borel calculus is commutative. -/
@@ -307,18 +309,19 @@ omit [CompleteSpace H] in
 /-- Sums of admissible symbols are admissible. -/
 theorem IsBddMeasurable.add (hf : IsBddMeasurable f) (hg : IsBddMeasurable g) :
     IsBddMeasurable (fun x => f x + g x) := by
-  refine ⟨hf.measurable.add hg.measurable, hf.bound + hg.bound, ?_, fun x => ?_⟩
-  · have := hf.bound_nonneg; have := hg.bound_nonneg; positivity
-  · exact le_trans (norm_add_le _ _) (add_le_add (hf.norm_le_bound x) (hg.norm_le_bound x))
+  refine ⟨hf.measurable.add hg.measurable, hf.chooseBound + hg.chooseBound, ?_, fun x => ?_⟩
+  · have := hf.chooseBound_nonneg; have := hg.chooseBound_nonneg; positivity
+  · exact le_trans (norm_add_le _ _)
+      (add_le_add (hf.norm_le_chooseBound x) (hg.norm_le_chooseBound x))
 
 omit [CompleteSpace H] in
 /-- Scalar multiples of admissible symbols are admissible. -/
 theorem IsBddMeasurable.const_smul (c : ℂ) (hf : IsBddMeasurable f) :
     IsBddMeasurable (fun x => c * f x) := by
-  refine ⟨measurable_const.mul hf.measurable, ‖c‖ * hf.bound, ?_, fun x => ?_⟩
-  · have := hf.bound_nonneg; positivity
+  refine ⟨measurable_const.mul hf.measurable, ‖c‖ * hf.chooseBound, ?_, fun x => ?_⟩
+  · have := hf.chooseBound_nonneg; positivity
   · rw [norm_mul]
-    exact mul_le_mul_of_nonneg_left (hf.norm_le_bound x) (norm_nonneg c)
+    exact mul_le_mul_of_nonneg_left (hf.norm_le_chooseBound x) (norm_nonneg c)
 
 /-- The Borel calculus is additive in the symbol. -/
 theorem borelCalculus_add (hf : IsBddMeasurable f) (hg : IsBddMeasurable g) :
@@ -414,9 +417,9 @@ theorem borelCalculus_conj (hf : IsBddMeasurable f) :
   refine ContinuousLinearMap.ext fun ξ => ext_inner_left ℂ fun ψ => ?_
   rw [inner_borelCalculus, ContinuousLinearMap.adjoint_inner_right, ← inner_conj_symm,
     inner_borelCalculus]
-  exact pair_conj ha hf.measurable hf.norm_le_bound ψ ξ
+  exact pair_conj ha hf.measurable hf.norm_le_chooseBound ψ ξ
 
-/-- **The sharp norm bound**: `‖borelCalculus f ξ‖ ≤ M ‖ξ‖` whenever `‖f‖ ≤ M`. -/
+/-- **The sharp norm chooseBound**: `‖borelCalculus f ξ‖ ≤ M ‖ξ‖` whenever `‖f‖ ≤ M`. -/
 theorem norm_borelCalculus_apply_le (hf : IsBddMeasurable f) {M : ℝ} (hM : 0 ≤ M)
     (hfb : ∀ x, ‖f x‖ ≤ M) (ξ : H) :
     ‖borelCalculus ha hf ξ‖ ≤ M * ‖ξ‖ := by
