@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.ContinuationQuarterAcute
-import DavisKahan.Experimental.InfiniteDimensional.GraphSubspace
+import DavisKahan.SpectralTheory.GraphSubspace
 
 /-!
 # Contractive graph representation of a selected continuation endpoint
