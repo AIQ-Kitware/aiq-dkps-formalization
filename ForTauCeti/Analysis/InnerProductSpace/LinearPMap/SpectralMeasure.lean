@@ -7,6 +7,7 @@ module
 
 public import ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.PVM
 public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SelfAdjointResolvent
+public import ForTauCeti.Analysis.InnerProductSpace.OneParameterUnitaryGroup.Basic
 
 /-!
 # The spectral measure of an unbounded self-adjoint operator
@@ -406,7 +407,172 @@ theorem specProjection_apply_domain (B : Set ℝ) (hB : MeasurableSet B) (x : A.
   rw [hPφ] at hsolve
   linear_combination (norm := module) hsolve
 
+/-- Spectral projections commute with the resolvent at **every** non-real
+point, not just at `-i`. -/
+theorem specProjection_comm_resolvent' {z : ℂ} (hz : z.im ≠ 0) (hzr : z ∈ resolventSet A)
+    (B : Set ℝ) (hB : MeasurableSet B) :
+    specProjection hA B hB * resolvent A hzr
+      = resolvent A hzr * specProjection hA B hB := by
+  have hs : BorelCalculus.IsBddMeasurable (fun w => resolventSymbol hA hz w) :=
+    BorelCalculus.IsBddMeasurable.of_continuous _
+  have hR : resolvent A hzr = BorelCalculus.borelCalculus (isStarNormal_cayley hA) hs := by
+    rw [BorelCalculus.borelCalculus_of_continuous, resolvent_eq_cfcHom hA hz hzr]
+  rw [hR, specProjection, spectralPVM, BorelCalculus.toProjValMeasure_proj,
+    BorelCalculus.specProj]
+  exact BorelCalculus.borelCalculus_comm _ _ _
+
+theorem specProjection_resolvent_apply' {z : ℂ} (hz : z.im ≠ 0) (hzr : z ∈ resolventSet A)
+    (B : Set ℝ) (hB : MeasurableSet B) (φ : H) :
+    specProjection hA B hB (resolvent A hzr φ)
+      = resolvent A hzr (specProjection hA B hB φ) := by
+  have h := congrArg (fun T : H →L[ℂ] H => T φ)
+    (specProjection_comm_resolvent' hA hz hzr B hB)
+  simpa only [_root_.mul_apply_eq_comp] using h
+
+theorem isIdempotentElem_specProjection (B : Set ℝ) (hB : MeasurableSet B) :
+    IsIdempotentElem (specProjection hA B hB) :=
+  (spectralPVM hA).proj_idem B hB
+
+theorem isSelfAdjoint_specProjection (B : Set ℝ) (hB : MeasurableSet B) :
+    IsSelfAdjoint (specProjection hA B hB) :=
+  (spectralPVM hA).isSelfAdjoint_proj B hB
+
 end Restriction
+
+section Reduce
+
+variable {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A) (B : Set ℝ) (hB : MeasurableSet B)
+
+/-- The **spectral range** of `A` over a Borel set: the range of the spectral
+projection, a closed, orthogonally complemented subspace. -/
+noncomputable def specRange : Submodule ℂ H := (specProjection hA B hB).range
+
+theorem mem_specRange_iff (x : H) :
+    x ∈ specRange hA B hB ↔ specProjection hA B hB x = x := by
+  constructor
+  · rintro ⟨y, rfl⟩
+    have h : specProjection hA B hB (specProjection hA B hB y) = specProjection hA B hB y := by
+      have h2 := congrArg (fun T : H →L[ℂ] H => T y)
+        (isIdempotentElem_specProjection hA B hB)
+      simpa only [_root_.mul_apply_eq_comp] using h2
+    exact h
+  · intro hx
+    exact ⟨x, hx⟩
+
+noncomputable instance instCompleteSpace_specRange : CompleteSpace (specRange hA B hB) := by
+  change CompleteSpace (specProjection hA B hB).range
+  exact (ContinuousLinearMap.IsIdempotentElem.isClosed_range
+    (isIdempotentElem_specProjection hA B hB)).completeSpace_coe
+
+noncomputable instance instHasOrthogonalProjection_specRange :
+    (specRange hA B hB).HasOrthogonalProjection := by
+  change (specProjection hA B hB).range.HasOrthogonalProjection
+  exact ContinuousLinearMap.IsIdempotentElem.hasOrthogonalProjection_range
+    (isIdempotentElem_specProjection hA B hB)
+
+/-- The image of a domain vector of the spectral range stays in the spectral
+range. -/
+theorem apply_mem_specRange {x : A.domain} (hx : (x : H) ∈ specRange hA B hB) :
+    A x ∈ specRange hA B hB := by
+  have hfix : specProjection hA B hB (x : H) = (x : H) := (mem_specRange_iff hA B hB _).mp hx
+  have h := specProjection_apply_domain hA B hB x
+  have hsub : (⟨specProjection hA B hB (x : H),
+      specProjection_mem_domain hA B hB x⟩ : A.domain) = x := Subtype.ext hfix
+  rw [hsub] at h
+  exact (mem_specRange_iff hA B hB _).mpr h.symm
+
+/-- **The restriction of a self-adjoint operator to one of its spectral
+ranges.** -/
+noncomputable def specRestrict : specRange hA B hB →ₗ.[ℂ] specRange hA B hB where
+  domain := A.domain.comap (specRange hA B hB).subtype
+  toFun :=
+    { toFun := fun x =>
+        ⟨A ⟨((x : specRange hA B hB) : H), x.2⟩,
+          apply_mem_specRange hA B hB (x : specRange hA B hB).2⟩
+      map_add' := fun x y => by
+        apply Subtype.ext
+        change (A ⟨_, (x + y).2⟩ : H) = ((A ⟨_, x.2⟩ : H) + (A ⟨_, y.2⟩ : H))
+        rw [← _root_.LinearPMap.map_add]
+        exact congrArg _ (Subtype.ext rfl)
+      map_smul' := fun c x => by
+        apply Subtype.ext
+        change (A ⟨_, (c • x).2⟩ : H) = (c • (A ⟨_, x.2⟩ : H))
+        rw [← _root_.LinearPMap.map_smul]
+        exact congrArg _ (Subtype.ext rfl) }
+
+@[simp] theorem specRestrict_domain :
+    (specRestrict hA B hB).domain = A.domain.comap (specRange hA B hB).subtype := rfl
+
+@[simp] theorem specRestrict_apply (x : (specRestrict hA B hB).domain) :
+    ((specRestrict hA B hB x : specRange hA B hB) : H)
+      = A ⟨((x : specRange hA B hB) : H), x.2⟩ := rfl
+
+theorem isFormalAdjoint_specRestrict :
+    (specRestrict hA B hB).IsFormalAdjoint (specRestrict hA B hB) := by
+  intro x y
+  have hsym : A.IsFormalAdjoint A := by
+    have h := _root_.LinearPMap.adjoint_isFormalAdjoint (T := A) hA.dense_domain
+    rwa [_root_.LinearPMap.isSelfAdjoint_def.mp hA] at h
+  have := hsym ⟨((x : specRange hA B hB) : H), x.2⟩ ⟨((y : specRange hA B hB) : H), y.2⟩
+  simpa only [Submodule.coe_inner, specRestrict_apply] using this
+
+/-- Every vector of the spectral range is a resolvent image *inside* the
+range. -/
+theorem exists_specRestrict_resolvent {z : ℂ} (hz : z.im ≠ 0) (hzr : z ∈ resolventSet A)
+    (φ : specRange hA B hB) :
+    ∃ ψ : (specRestrict hA B hB).domain,
+      (specRestrict hA B hB ψ : specRange hA B hB) - z • (ψ : specRange hA B hB) = φ := by
+  set x : H := resolvent A hzr (φ : H) with hx
+  have hxK : x ∈ specRange hA B hB := by
+    rw [mem_specRange_iff, hx, specProjection_resolvent_apply' hA hz hzr]
+    congr 1
+    exact (mem_specRange_iff hA B hB _).mp φ.2
+  have hxdom : x ∈ A.domain := resolvent_mem_domain hzr (φ : H)
+  refine ⟨⟨⟨x, hxK⟩, hxdom⟩, ?_⟩
+  apply Subtype.ext
+  have h := sub_smul_resolvent hzr (φ : H)
+  simpa only [Submodule.coe_sub, Submodule.coe_smul, specRestrict_apply] using h
+
+theorem dense_specRestrict_domain :
+    Dense (((specRestrict hA B hB).domain : Submodule ℂ (specRange hA B hB)) :
+      Set (specRange hA B hB)) := by
+  rw [Metric.dense_iff]
+  rintro φ ε hε
+  obtain ⟨y, hy, hyd⟩ := Metric.dense_iff.mp hA.dense_domain (φ : H) ε hε
+  have hyK : specProjection hA B hB y ∈ specRange hA B hB := ⟨y, rfl⟩
+  have hydom : specProjection hA B hB y ∈ A.domain :=
+    specProjection_mem_domain hA B hB ⟨y, hyd⟩
+  refine ⟨⟨specProjection hA B hB y, hyK⟩, ?_, hydom⟩
+  have hfix : specProjection hA B hB (φ : H) = (φ : H) :=
+    (mem_specRange_iff hA B hB _).mp φ.2
+  have hnorm : ‖specProjection hA B hB y - (φ : H)‖ ≤ ‖y - (φ : H)‖ := by
+    conv_lhs => rw [← hfix]
+    rw [← map_sub]
+    exact (spectralPVM hA).norm_proj_apply_le B hB _
+  have hdist : dist (⟨specProjection hA B hB y, hyK⟩ : specRange hA B hB) φ
+      = ‖specProjection hA B hB y - (φ : H)‖ := by
+    rw [Subtype.dist_eq, dist_eq_norm]
+  rw [Metric.mem_ball, hdist]
+  have hy' : ‖y - (φ : H)‖ < ε := by
+    rw [← dist_eq_norm]; exact hy
+  linarith
+
+/-- **The restriction of a self-adjoint operator to a spectral range is
+self-adjoint.**  Symmetry is inherited; the two surjectivities come from the
+resolvent, which preserves the range because it commutes with the projection. -/
+theorem isSelfAdjoint_specRestrict : IsSelfAdjoint (specRestrict hA B hB) := by
+  refine TauCeti.OneParameterUnitaryGroup.isSelfAdjoint_of_surjective_addSub _
+    (isFormalAdjoint_specRestrict hA B hB) (dense_specRestrict_domain hA B hB) ?_ ?_
+  · intro φ
+    obtain ⟨ψ, hψ⟩ := exists_specRestrict_resolvent hA B hB (z := -Complex.I) (by simp)
+      (negI_mem_resolventSet hA) φ
+    exact ⟨ψ, by simpa using hψ⟩
+  · intro φ
+    obtain ⟨ψ, hψ⟩ := exists_specRestrict_resolvent hA B hB (z := Complex.I) (by simp)
+      (I_mem_resolventSet hA) φ
+    exact ⟨ψ, hψ⟩
+
+end Reduce
 
 end LinearPMap
 end TauCeti
