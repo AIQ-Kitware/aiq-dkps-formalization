@@ -253,18 +253,132 @@ Replacing `aᵢ` by `sᵢ` costs only a **bounded-norm** bookkeeping step, becau
 `t ↦ 2t/(1-t²)` is Lipschitz on `[0,r]` for `r < 1` — the same estimate
 `sum_doubleAngleTangent_le_selected_add_tail` already performs.
 
-So the entire unbounded seam reduces to: *choose orthonormal
-`xᵢ ∈ dom A₀` with*
+In fact the defect vector drops out too. The only place the `A₀` side is used
+is `hA0upper : Re ⟪X(A₀x), y⟫ ≤ ε`, and with `y = X x / s` that is literally
 
 ```
-Re ⟪A₀ xᵢ , (T' - ⟪T'xᵢ, xᵢ⟫) xᵢ⟫  ≤  sᵢ · ε .
+Re ⟪X(A₀x), y⟫  =  Re ⟪A₀x, X*y⟫  =  Re ⟪A₀ x, X*X x⟫ / s .
 ```
 
-One inequality, no graph norms, no defect vectors, no Gram--Schmidt. If it is
-provable, the seam closes; if it is not, that inequality is the precise thing
-to exhibit a counterexample against. Either way it is a far better target than
-the twenty-field structure now in the file, and it is what I would rewrite
-`UnboundedApproximateLeadingSingularFamily` around.
+So **the entire unbounded seam is this one statement**:
+
+> For every `ε > 0` and `k`, there are orthonormal `x₁,…,x_m ∈ dom A₀`
+> (`m ≤ k`) whose values `sᵢ := ‖X xᵢ‖` track the leading approximation
+> numbers `aᵢ(X)` to within `ε`, and which satisfy
+> ```
+> Re ⟪A₀ xᵢ , X*X xᵢ⟫  ≤  sᵢ · ε .
+> ```
+
+No graph norms, no defect vectors, no Gram--Schmidt, no `A₁` clause at all —
+the `A₁` side is discharged exactly by `yᵢ := X xᵢ / sᵢ`, and the `sᵢ`-versus-`aᵢ`
+slack is bounded-norm bookkeeping because `t ↦ 2t/(1-t²)` is Lipschitz on
+`[0,r]`.
+
+Two remarks on that inequality:
+
+* It says `A₀` and `X*X` **approximately commute in the selected directions**.
+  If they commuted exactly it is free: `Re⟪A₀x, Tx⟫ = ⟪TA₀x, x⟫ ≤ 0` because a
+  product of commuting `≤ 0` and `≥ 0` operators is `≤ 0`.
+* It is *not* free in general. The relevant object is the symmetrised product
+  `W := (A₀T + TA₀)/2`, and the requirement is `⟪Wxᵢ, xᵢ⟫ ≤ sᵢε`. `W ≰ 0` in
+  general — already for `A₀ = -P`, `T = Q` with `P, Q` non-commuting
+  projections, `PQ + QP` has a negative eigenvalue and `W` a positive one. So
+  the whole content is the *choice* of `xᵢ`, and the commutator identity
+  `A₀T - TA₀ = G` gives no help: pairing it with `x` only reproduces
+  `Re⟪x, Gx⟫ = 0`, which is automatic.
+
+This is what I would rewrite `UnboundedApproximateLeadingSingularFamily` around.
+It is a far better target than the twenty-field structure now in the file, and
+it is small enough to attack a counterexample against if it is false.
+
+## The mechanism that makes it work — and the one gap left
+
+Work from the exact Riccati pairing rather than from defect vectors. For unit
+`x ∈ dom A₀`, pairing `A₁(Xx) = X(A₀x) + X B₀₁ Xx - B₁₀x` with `Xx` and taking
+real parts gives, with `T := X*X` and `s := ‖Xx‖`:
+
+```
+d s²  ≤  Re⟪A₀x, Tx⟫ + Re⟪B₀₁(Xx), Tx⟫ - Re⟪B₀₁(Xx), x⟫          (★)
+```
+
+If `Tx = s²x` **exactly**, (★) collapses to `d·2s/(1-s²) ≤ 2(-Re⟪x, B₀₁y⟫)`
+with `y = Xx/s` — the sharp estimate, **with no error term at all**. So the
+entire problem is how far `x` is from being an exact eigenvector of `T`, in two
+separate senses:
+
+* the `B₀₁` terms need `‖(T - s²)x‖ ≤ β` — costs only `‖B₀₁‖·β`, harmless;
+* the `A₀` term needs `Re⟪A₀x, (T - s²)x⟫` small — this is the whole difficulty,
+  because the naive bound is `‖A₀x‖·β` and `‖A₀x‖` is unbounded.
+
+**The mechanism.** Let `P := E_T(J)` be the spectral projection of `T` for a
+band `J` of half-width `β` and let `Ã` be the compression of `A₀` to `Ran P`.
+Because `P` commutes with `T`, the vector `(T - s²)x` stays in `Ran P` for
+`x ∈ Ran P`, so the component of `A₀x` orthogonal to `Ran P` drops out:
+
+```
+Re⟪A₀x, (T - s²)x⟫  =  Re⟪Ãx, (T - s²)x⟫          (x ∈ Ran P)
+```
+
+Now take `x` an **approximate eigenvector of `Ã`**, `‖Ãx - μx‖ ≤ ν`, and choose
+`s² := ⟪Tx, x⟫`. Then `⟪x, (T - s²)x⟫ = 0` identically, so
+
+```
+Re⟪A₀x, (T - s²)x⟫  =  μ·0 + O(ν·β)  =  O(ν·β).
+```
+
+**This breaks the circularity.** Choose the band `J` (hence `β`) first, from
+`‖B₀₁‖` and the target error; *then* choose `ν ≤ ε/β`, which is free because a
+self-adjoint operator has approximate eigenvectors at every spectral value.
+Nothing depends on `‖A₀x‖` at all. Disjoint bands give orthogonality for free —
+exactly what `gramBands_disjoint` and `GramSpectralBandModel` already do here —
+and multiplicity inside a band is handled by taking orthonormal approximate
+eigenvectors of `Ã` restricted to that band.
+
+**The remaining gap.** The argument needs `Ran P ∩ dom A₀` to be dense in
+`Ran P`, so that `Ã` is a densely defined symmetric operator there and its
+approximate eigenvectors lie in `dom A₀`. That is *not* automatic: `dom A₀` is
+dense in `E₀`, but a dense subspace need not meet a closed subspace densely, and
+`E_T(J)` need not preserve `dom A₀` — the commutator `A₀T - TA₀ = G` is bounded
+for the polynomial `T`, but sharp spectral projections are not polynomials.
+
+Two ways to close it, in order of preference:
+
+1. **Smooth band functions via the unitary group — the route I recommend.**
+   Replace the sharp `E_T(J)` by `φ(T)` for a smooth bump `φ` supported in `J`.
+   The usual justification is a Helffer--Sjöstrand commutator expansion, which
+   the pinned Mathlib does not have. **But `T = X*X` is bounded**, and that
+   makes the Fourier route sufficient and far more formalizable:
+
+   ```
+   ‖[A₀, e^{itT}]‖ ≤ |t|·‖G‖          (Duhamel:
+       [A₀, e^{itT}] = ∫₀ᵗ e^{isT} [A₀, iT] e^{i(t-s)T} ds)
+
+   φ(T) = (2π)^{-1/2} ∫ φ̂(t) e^{itT} dt
+
+   ⟹  φ(T) preserves dom A₀,  and  ‖[A₀, φ(T)]‖ ≤ ‖G‖ ∫ |t| |φ̂(t)| dt < ∞
+   ```
+
+   Every ingredient is elementary for a bounded self-adjoint `T`: `e^{itT}` is
+   an honest exponential series, Duhamel is an integration by parts, and the
+   only analytic input is Fourier inversion against a Schwartz bump. **The repo
+   already builds this object** — `gramUnitaryGroup X` in
+   `FinishTanTwoTheta/ApproximationNumber/`, with
+   `gramUnitaryGroup_generator_apply` and `gramUnitaryGroup_generator_domain`
+   already proved. Start there.
+
+2. **Show `E_T(J)` preserves `dom A₀` directly.** Cheaper if it works. The
+   resolvent does: for `|z| > ‖T‖` the Neumann series gives
+   `‖A₀Tⁿx‖ ≤ ‖T‖ⁿ‖A₀x‖ + n‖T‖ⁿ⁻¹‖G‖‖x‖`, which is summable against `z^{-n-1}`,
+   and `A₀` is closed, so `(T-z)⁻¹` preserves `dom A₀`; extend by the resolvent
+   identity. That upgrades to `E_T(J)` **only when the band endpoints lie in
+   the resolvent set**, via a Riesz contour projection. Since we choose the
+   bands, this is often arrangeable — but not always (`spec T` can contain an
+   interval), so (1) is the route that always works.
+
+I did **not** close this gap, so the seam is still open. But the shape of the
+proof is now fixed, the circularity is gone, and the remaining obligation is a
+standard operator-theory statement about one spectral projection rather than an
+open question about the whole theorem.
 
 5. **Record it as an open obligation** with an explicit `sorry` so the library
    is green and the debt is visible and greppable. `PROOF_OBLIGATIONS.md`
