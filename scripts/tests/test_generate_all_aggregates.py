@@ -132,24 +132,46 @@ class GenerateAllAggregatesTest(unittest.TestCase):
         self.assertEqual(len(dangling), 1)
         self.assertIn("ForTauCeti.Analysis.Deleted", dangling[0])
 
+    def sandboxed_script(self) -> Path:
+        """A copy of the generator whose `ROOT` resolves inside the sandbox.
+
+        The generator computes `ROOT` from `__file__.parents[1]`, so a copy at
+        `<sandbox>/scripts/` treats the sandbox as the repository.  The
+        subprocess cases below MUST use this rather than the real script: they
+        exist to prove that a *broken* entry point takes the write path, and
+        running that against the real tree is precisely the accident they are
+        pinning.  It happened once -- verifying these tests against the
+        pre-fix script rewrote 21 real aggregates.
+        """
+        target = self.root / "scripts" / "generate_all_aggregates.py"
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_text(SCRIPT.read_text())
+        self.write("DavisKahan/Core/Local.lean")
+        return target
+
     def test_help_does_not_write(self) -> None:
         """`--help` must print usage, not take the write path."""
+        script = self.sandboxed_script()
         result = subprocess.run(
-            [sys.executable, str(SCRIPT), "--help"],
+            [sys.executable, str(script), "--help"],
             capture_output=True, text=True, timeout=120,
         )
         self.assertEqual(result.returncode, 0)
         self.assertIn("--check", result.stdout)
         self.assertNotIn("regenerated", result.stdout)
+        # the decisive assertion: no aggregate was created by asking for usage
+        self.assertFalse((self.root / "DavisKahan/Core/All.lean").exists())
 
     def test_unknown_flag_is_rejected(self) -> None:
         """An unrecognised argument must fail, not fall through to writing."""
+        script = self.sandboxed_script()
         result = subprocess.run(
-            [sys.executable, str(SCRIPT), "--bogus"],
+            [sys.executable, str(script), "--bogus"],
             capture_output=True, text=True, timeout=120,
         )
         self.assertNotEqual(result.returncode, 0)
         self.assertNotIn("regenerated", result.stdout)
+        self.assertFalse((self.root / "DavisKahan/Core/All.lean").exists())
 
 
 if __name__ == "__main__":

@@ -6,5 +6,6 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 import DavisKahan.FiniteDimensional.DoubleAngle.SinTheta
 import DavisKahan.FiniteDimensional.DoubleAngle.SinTwoThetaResidual
 import DavisKahan.FiniteDimensional.DoubleAngle.TanTheta
+import ForTauCeti.Analysis.InnerProductSpace.DoubleAngle.Vector
 
 /-! # `DavisKahan/FiniteDimensional/DoubleAngle` -/

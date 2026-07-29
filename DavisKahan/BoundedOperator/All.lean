@@ -4,7 +4,10 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.BoundedOperator.Spectral.All
-import DavisKahan.BoundedOperator.IsometricRangeProjection
+import ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Basic
+import ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Projector
 import DavisKahan.BoundedOperator.Reflection
+import ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.SinTheta
+import DavisKahan.BoundedOperator.IsometricRangeProjection
 
 /-! # `DavisKahan/BoundedOperator` -/

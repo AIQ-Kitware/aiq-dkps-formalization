@@ -5,7 +5,6 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan
 import DavisKahan.Alternative.All
-import DavisKahan.Analysis.All
 import DavisKahan.BoundedOperator.All
 import DavisKahan.DoubleAngle.All
 import DavisKahan.FiniteDimensional.All
@@ -20,5 +19,6 @@ import DavisKahan.SpectralTheory.All
 import DavisKahan.Sylvester.All
 import DavisKahan.TanTheta.All
 import DavisKahan.TanTwoTheta.All
+import DavisKahan.Analysis.All
 
 /-! # `DavisKahan` -/
