@@ -416,7 +416,26 @@ A₀ T - T A₀ = G := (I + T)K - K*(I + T),   K := B₀₁X,  K* = X*B₁₀
 ‖G‖ ≤ 2(‖B₀₁‖ + ‖B₁₀‖) = 4‖B₀₁‖
 ```
 
-**T1.3 — smooth band functions preserve `dom A₀`.** *Needs T1.2.*
+**T1.3 — smooth band functions preserve `dom A₀`. — PART 1 DONE (2026-07-29).**
+The hard combinatorial core is landed and axiom-clean in
+`DavisKahan/Riccati/UnboundedAdjointRiccati.lean`: `riccatiGram`,
+`riccatiGram_pow_mem_domain`, `norm_riccatiGram_pow_apply_le`, and
+
+```
+‖A₀(Tⁿx) - Tⁿ(A₀x)‖ ≤ n · ‖G‖ · ‖x‖          (‖T‖ ≤ 1, free since ‖X‖ < 1)
+```
+
+which is Duhamel telescoped by hand (`r_{n+1} = T rₙ + G Tⁿ x`). The linear
+factor `n` is what `1/n!` absorbs.
+
+**Remaining in T1.3**, in order:
+1. Sum against `Σ (it)ⁿTⁿ/n!` to get
+   `‖A₀(e^{itT}x) - e^{itT}(A₀x)‖ ≤ |t|·‖G‖·e^{|t|‖T‖}·‖x‖`, using closedness of
+   `A₀` to conclude `e^{itT}x ∈ dom A₀`.
+2. Fourier inversion: `φ(T) = (2π)^{-1/2}∫ φ̂(t)e^{itT}dt` for Schwartz `φ`,
+   giving `φ(T)` preserving `dom A₀` and `‖[A₀, φ(T)]‖ ≤ ‖G‖∫|t||φ̂(t)|dt`.
+
+Original statement:
 Duhamel for the bounded self-adjoint `T`: `‖[A₀, e^{itT}]‖ ≤ |t|·‖G‖`, then
 `φ(T) = (2π)^{-1/2}∫ φ̂(t)e^{itT}dt` for Schwartz `φ`. Build on
 `gramUnitaryGroup X` and `gramUnitaryGroup_generator_{apply,domain}` in
@@ -438,8 +457,13 @@ Replace `UnboundedApproximateLeadingSingularFamily` by the one-condition form
 `sharp_unbounded_doubleAngleTangentOperator_kyFan` and
 `sharp_unbounded_standardSymmetricIdeal_scaled` verbatim.
 
-**T1.6 — the `sᵢ` versus `aᵢ(X)` bookkeeping.** *Independent of T1.1–T1.4, can
-be done in parallel.* `t ↦ 2t/(1-t²)` is Lipschitz on `[0,r]` for `r < 1`;
+**T1.6 — the `sᵢ` versus `aᵢ(X)` bookkeeping. — DONE (2026-07-29).**
+`doubleAngleTangent_sub` and `abs_doubleAngleTangent_sub_le` are proved and
+axiom-clean in `FinishTanTwoTheta/FunctionalCalculus/DoubleAngleTangent.lean`.
+No differentiation was needed: the difference factors exactly as
+`2(s-t)(1+st)/((1-s²)(1-t²))`, giving Lipschitz constant `2(1+r²)/(1-r²)²`.
+
+Original statement: `t ↦ 2t/(1-t²)` is Lipschitz on `[0,r]` for `r < 1`;
 `sum_doubleAngleTangent_le_selected_add_tail` already performs the analogous
 estimate and is the template.
 
