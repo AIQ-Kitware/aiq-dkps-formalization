@@ -55,7 +55,7 @@ theorem ideal_sylvester_le
     (hA : IsSelfAdjointOperator A) (hB : IsSelfAdjointOperator B)
     {d : ℝ} (hd : 0 < d)
     (hsep : ContinuousLinearMapBridge.SpectraSeparated A ⊤ B ⊤ d)
-    (hEq : sylvesterOperator A B X = C) :
+    (hEq : ContinuousLinearMap.sylvesterOperator A B X = C) :
     d * N X.toLinearMap ≤ (Real.pi / 2) * N C.toLinearMap := by
   let A' : F →ₗ[𝕜] F := A.toLinearMap
   let B' : E →ₗ[𝕜] E := B.toLinearMap
@@ -94,7 +94,7 @@ theorem ideal_sylvester_le_complex
     (hA : IsSelfAdjointOperator A) (hB : IsSelfAdjointOperator B)
     {d : ℝ} (hd : 0 < d)
     (hsep : ContinuousLinearMapBridge.SpectraSeparated A ⊤ B ⊤ d)
-    (hEq : sylvesterOperator A B X = C) :
+    (hEq : ContinuousLinearMap.sylvesterOperator A B X = C) :
     d * N X.toLinearMap ≤ (Real.pi / 2) * N C.toLinearMap := by
   let A' : FC →ₗ[ℂ] FC := A.toLinearMap
   let B' : EC →ₗ[ℂ] EC := B.toLinearMap
@@ -133,7 +133,7 @@ theorem ideal_sylvester_le_real
     (hA : IsSelfAdjointOperator A) (hB : IsSelfAdjointOperator B)
     {d : ℝ} (hd : 0 < d)
     (hsep : ContinuousLinearMapBridge.SpectraSeparated A ⊤ B ⊤ d)
-    (hEq : sylvesterOperator A B X = C) :
+    (hEq : ContinuousLinearMap.sylvesterOperator A B X = C) :
     d * N X.toLinearMap ≤ (Real.pi / 2) * N C.toLinearMap := by
   let A' : FR →ₗ[ℝ] FR := A.toLinearMap
   let B' : ER →ₗ[ℝ] ER := B.toLinearMap

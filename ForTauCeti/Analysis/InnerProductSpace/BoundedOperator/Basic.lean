@@ -76,14 +76,6 @@ noncomputable abbrev directedGap (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : ℝ :=
   U.directedProjectionGap V
 
-/-- Lower quadratic-form bound on a subspace. -/
-abbrev LowerFormBoundOn (A : E →L[𝕜] E) (U : Submodule 𝕜 E) (c : ℝ) : Prop :=
-  A.LowerFormBoundOn U c
-
-/-- Upper quadratic-form bound on a subspace. -/
-abbrev UpperFormBoundOn (A : E →L[𝕜] E) (U : Submodule 𝕜 E) (c : ℝ) : Prop :=
-  A.UpperFormBoundOn U c
-
 /-- The two subspaces are in the acute case. -/
 def IsAcute (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : Prop :=
@@ -105,11 +97,6 @@ def residual (A : E →L[𝕜] E) (X : F →L[𝕜] E)
 noncomputable def sinThetaEmbedding (U : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] (X : F →L[𝕜] E) : F →L[𝕜] E :=
   Uᗮ.starProjection ∘L X
-
-/-- The bounded Sylvester operator. -/
-abbrev sylvesterOperator (A : F →L[𝕜] F) (B : E →L[𝕜] E)
-    (X : E →L[𝕜] F) : E →L[𝕜] F :=
-  ContinuousLinearMap.sylvesterOperator A B X
 
 /-- A symmetric invariant subspace is reducing. -/
 theorem reduces_orthogonalComplement {A : E →L[𝕜] E}
@@ -156,7 +143,7 @@ theorem norm_sylvester_le_of_coercive
     {c g : ℝ} (hg : 0 < g)
     (hAc : ∀ x, (c + g) * ‖x‖ ^ 2 ≤ RCLike.re ⟪A x, x⟫_𝕜)
     (hBc : ∀ x, RCLike.re ⟪B x, x⟫_𝕜 ≤ c * ‖x‖ ^ 2)
-    (hEq : sylvesterOperator A B X = C) :
+    (hEq : ContinuousLinearMap.sylvesterOperator A B X = C) :
     ‖X‖ ≤ ‖C‖ / g :=
   TauCeti.ContinuousLinearMap.opNorm_le_div_of_comp_sub_comp_eq hA hB hg hAc hBc hEq
 

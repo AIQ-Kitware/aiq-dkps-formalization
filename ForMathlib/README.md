@@ -58,10 +58,14 @@ closed 8-module `Analysis/InnerProductSpace` component —
 `{ProjectionBlocks, ProjectionGap, QuadraticFormBounds, ReducingSubspace,
 SylvesterBound, SylvesterOperator, CoerciveUnit}.lean` and
 `SpectralOrder/Complex.lean` — into `ForTauCeti/Analysis/InnerProductSpace/`,
-taking `ForMathlib` from 12 modules to 4.  The four that remain are the
-genuinely Mathlib-shaped remainder: none of them is an inner-product-space
-module, and three of them (`RankFactorization`, `PosDef`, `Berge`) are pinned
-by comparator conformance statements.
+taking `ForMathlib` from 12 modules to 4.  ~~The four that remain are the
+genuinely Mathlib-shaped remainder~~ — **SUPERSEDED (jon, 2026-07-29): there is
+no Mathlib-shaped exemption and `ForMathlib` goes away entirely; the four move
+into `ForTauCeti` under lane FM-RETIRE. See `ForTauCeti/README.md`
+§*Relationship to `ForMathlib`*.** What remains true and matters to whoever
+takes that lane: three of the four (`RankFactorization`, `PosDef`, `Berge`)
+have declaration names pinned as *data* by comparator conformance statements,
+so the namespace rename is the cost, not the move.
 
 
 | Staged file | Destination | Candidate (mathlib-candidates.md) |
