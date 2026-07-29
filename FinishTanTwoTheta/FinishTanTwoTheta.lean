@@ -13,19 +13,23 @@ import FinishTanTwoTheta.FunctionalCalculus.DoubleAngleTangent
 import FinishTanTwoTheta.DavisKahan.StableRiccatiPair
 import FinishTanTwoTheta.DavisKahan.SharpKyFan
 import FinishTanTwoTheta.DavisKahan.SharpIdeal
+import FinishTanTwoTheta.DavisKahan.PaperFaithful
 import DavisKahan.Sources.DavisKahan1970.Audits.DoubleAngleTangent
 
 /-!
-# Sharp `tan 2Theta`: actual completed proof stack
+# Sharp `tan 2Theta`: proved core and paper-faithful target
 
-This aggregate imports the substantive bounded infinite-dimensional proof:
-approximation-number selection, the canonical double-angle tangent functional
-calculus, the stable Riccati estimate, the sharp Ky Fan inequality, and Fan
-promotion to maximal and minimal standard symmetric ideals.
+This aggregate imports the substantive bounded infinite-dimensional Riccati
+proof: approximation-number selection, the canonical double-angle tangent
+functional calculus, the stable Riccati estimate, the sharp Ky Fan inequality,
+and Fan promotion to maximal and minimal standard symmetric ideals.
 
-It also imports the focused source audit for the finite-dimensional Section 7
-unitarily invariant norm theorem and the arbitrary-space sharp operator-norm
-branch theorem.
+It also imports the focused source audit and the explicitly admitted
+`paperFaithful_tanTwoTheta_uiNorm` target.  The admitted theorem records the
+missing source-shaped endpoint: branch selection and the arbitrary-Hilbert-space
+unitary-invariant-norm estimate from the original off-diagonal perturbation and
+reducing-subspace hypotheses.  Consequently, a green build of this aggregate is
+not an axiom-clean claim that the paper theorem has been proved.
 
 `FinishTanTwoTheta.DavisKahan.Unbounded` is intentionally not imported here.
 Its proposed unrestricted unbounded ideal extension depends on a spectral-band
