@@ -42,10 +42,12 @@ Every theorem declaration in this directory has a docstring section titled
 part of the roadmap and should be kept synchronized with the actual dependency
 API as proofs close.
 
-See [`SIGNATURE_AUDIT.md`](SIGNATURE_AUDIT.md) for the theorem-surface audit,
+See [`finite-signature-audit.md`](finite-signature-audit.md) (archived here as
+`SIGNATURE_AUDIT.md`) for the theorem-surface audit,
 corrections made in this pass, and remaining design decisions.
 
 A timestamped `EXT_SIGNATURE_REVIEW_*.md` file is created here only when the
 finite agent discovers a concrete issue in an Ext theorem signature.  Such a
 file is a handoff for the Ext agent; this directory must not modify Ext source.
-See [`PROOF_STRATEGY_ROADMAP.md`](PROOF_STRATEGY_ROADMAP.md) for the dependency-ordered proof plan and signature safeguards.
+The dependency-ordered proof plan and signature safeguards lived in
+`PROOF_STRATEGY_ROADMAP.md`, which was not archived with this directory.
