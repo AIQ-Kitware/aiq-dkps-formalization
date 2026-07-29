@@ -227,6 +227,124 @@ theorem gram_commutator_eq
   simp only [map_add]
   abel
 
+/-- The Gram operator `X†X` of a reducing Riccati selection, bundled. -/
+noncomputable def riccatiGram (X : E0 →L[𝕜] E1) : E0 →L[𝕜] E0 :=
+  (ContinuousLinearMap.adjoint X) ∘L X
+
+section Powers
+
+variable (H : UnboundedBlockData (𝕜 := 𝕜) (E0 := E0) (E1 := E1))
+variable {X : E0 →L[𝕜] E1} (hdom : PreservesRiccatiDomains H X)
+variable (hadj : PreservesAdjointRiccatiDomains H X)
+
+include hdom hadj in
+/-- Every power of the Gram operator preserves the first diagonal domain. -/
+theorem riccatiGram_pow_mem_domain (n : ℕ) (x : H.A0.domain) :
+    ((riccatiGram X) ^ n) (x : E0) ∈ H.A0.domain := by
+  induction n with
+  | zero => simpa using x.property
+  | succ n ih =>
+      have hstep : ((riccatiGram X) ^ (n + 1)) (x : E0) =
+          riccatiGram X (((riccatiGram X) ^ n) (x : E0)) := by
+        rw [pow_succ']
+        rfl
+      rw [hstep]
+      exact gram_mem_domain H hdom hadj ⟨_, ih⟩
+
+/-- A contractive Gram operator stays contractive on every power. -/
+theorem norm_riccatiGram_pow_apply_le
+    {Y : E0 →L[𝕜] E1} (hY : ‖riccatiGram Y‖ ≤ 1) (n : ℕ) (y : E0) :
+    ‖((riccatiGram Y) ^ n) y‖ ≤ ‖y‖ := by
+  induction n with
+  | zero => simp
+  | succ n ih =>
+      have hstep : ((riccatiGram Y) ^ (n + 1)) y =
+          riccatiGram Y (((riccatiGram Y) ^ n) y) := by
+        rw [pow_succ']; rfl
+      rw [hstep]
+      refine (ContinuousLinearMap.le_opNorm _ _).trans ?_
+      calc ‖riccatiGram Y‖ * ‖((riccatiGram Y) ^ n) y‖
+          ≤ 1 * ‖((riccatiGram Y) ^ n) y‖ :=
+            mul_le_mul_of_nonneg_right hY (norm_nonneg _)
+        _ ≤ ‖y‖ := by simpa using ih
+
+include hdom hadj in
+/-- **Iterated Riccati commutator bound.**
+
+`A₀` commutes with the `n`-th power of a contractive Gram operator up to an
+error of size `n‖G‖`.  Summing this against the exponential series is what shows
+that smooth functions of `X†X` preserve `dom A₀` with a uniformly bounded
+commutator (ticket T1.3), which is what licenses the band construction: the
+factor `n` is exactly what the `1/n!` of the exponential absorbs. -/
+theorem norm_riccatiGram_pow_commutator_le
+    (hcontr : ‖riccatiGram X‖ ≤ 1)
+    (hinv : TauCeti.LinearPMap.InvariantSubspace (unboundedBlockOperatorCore H)
+      (unboundedBlockGraph X)ᗮ)
+    (hric : ∀ x : H.A0.domain,
+      H.A1 ⟨X (x : E0), hdom x⟩ + H.B10 (x : E0) =
+        X (H.A0 x + H.B01 (X (x : E0))))
+    (n : ℕ) (x : H.A0.domain) :
+    ‖H.A0 ⟨((riccatiGram X) ^ n) (x : E0),
+          riccatiGram_pow_mem_domain H hdom hadj n x⟩ -
+        ((riccatiGram X) ^ n) (H.A0 x)‖ ≤
+      n * ‖riccatiGramCommutator H X‖ * ‖(x : E0)‖ := by
+  induction n with
+  | zero =>
+      have h0 : (⟨((riccatiGram X) ^ 0) (x : E0),
+          riccatiGram_pow_mem_domain H hdom hadj 0 x⟩ : H.A0.domain) = x := by
+        apply Subtype.ext; simp
+      rw [h0]
+      simp
+  | succ n ih =>
+      have hmem := riccatiGram_pow_mem_domain H hdom hadj n x
+      have hstep : ((riccatiGram X) ^ (n + 1)) (x : E0) =
+          riccatiGram X (((riccatiGram X) ^ n) (x : E0)) := by
+        rw [pow_succ']; rfl
+      have hsub : (⟨((riccatiGram X) ^ (n + 1)) (x : E0),
+            riccatiGram_pow_mem_domain H hdom hadj (n + 1) x⟩ : H.A0.domain) =
+          ⟨(ContinuousLinearMap.adjoint X) (X (((riccatiGram X) ^ n) (x : E0))),
+            gram_mem_domain H hdom hadj ⟨_, hmem⟩⟩ := by
+        apply Subtype.ext; exact hstep
+      rw [hsub, gram_commutator_eq H hdom hadj hinv hric ⟨_, hmem⟩]
+      have hexp : ((riccatiGram X) ^ (n + 1)) (H.A0 x) =
+          riccatiGram X (((riccatiGram X) ^ n) (H.A0 x)) := by
+        rw [pow_succ']; rfl
+      rw [hexp]
+      have hrw :
+          (ContinuousLinearMap.adjoint X) (X (H.A0 ⟨_, hmem⟩)) +
+              riccatiGramCommutator H X (((riccatiGram X) ^ n) (x : E0)) -
+            riccatiGram X (((riccatiGram X) ^ n) (H.A0 x)) =
+          riccatiGram X (H.A0 ⟨_, hmem⟩ - ((riccatiGram X) ^ n) (H.A0 x)) +
+            riccatiGramCommutator H X (((riccatiGram X) ^ n) (x : E0)) := by
+        simp only [riccatiGram, map_sub, ContinuousLinearMap.coe_comp,
+          Function.comp_apply]
+        abel
+      rw [hrw]
+      refine (norm_add_le _ _).trans ?_
+      have h1 : ‖riccatiGram X (H.A0 ⟨_, hmem⟩ -
+            ((riccatiGram X) ^ n) (H.A0 x))‖ ≤
+          n * ‖riccatiGramCommutator H X‖ * ‖(x : E0)‖ := by
+        refine (ContinuousLinearMap.le_opNorm _ _).trans ?_
+        calc ‖riccatiGram X‖ * ‖H.A0 ⟨_, hmem⟩ -
+              ((riccatiGram X) ^ n) (H.A0 x)‖
+            ≤ 1 * ‖H.A0 ⟨_, hmem⟩ - ((riccatiGram X) ^ n) (H.A0 x)‖ :=
+              mul_le_mul_of_nonneg_right hcontr (norm_nonneg _)
+          _ ≤ n * ‖riccatiGramCommutator H X‖ * ‖(x : E0)‖ := by
+              simpa using ih
+      have h2 : ‖riccatiGramCommutator H X (((riccatiGram X) ^ n) (x : E0))‖ ≤
+          ‖riccatiGramCommutator H X‖ * ‖(x : E0)‖ := by
+        refine (ContinuousLinearMap.le_opNorm _ _).trans ?_
+        exact mul_le_mul_of_nonneg_left
+          (norm_riccatiGram_pow_apply_le hcontr n (x : E0)) (norm_nonneg _)
+      have hcast : ((n + 1 : ℕ) : ℝ) * ‖riccatiGramCommutator H X‖ * ‖(x : E0)‖ =
+          (n : ℝ) * ‖riccatiGramCommutator H X‖ * ‖(x : E0)‖ +
+            ‖riccatiGramCommutator H X‖ * ‖(x : E0)‖ := by
+        push_cast; ring
+      rw [hcast]
+      linarith [h1, h2]
+
+end Powers
+
 /-- The Riccati commutator is bounded by the off-diagonal coupling alone: no
 norm of a diagonal block appears.  This is what allows band projections of
 `X†X` to be used against the unbounded blocks. -/
