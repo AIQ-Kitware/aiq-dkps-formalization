@@ -41,6 +41,44 @@ someone else.
 `SelfAdjointOperator.ofBounded`; it should be taken **after** SR-A lands, or its
 `ofBounded` uses repointed onto whatever SR-A leaves behind.
 
+## Measured against the tree, 2026-07-29 (edward, aiq-gpu) — the board overstates progress
+
+`grep -rln '^import Spectra'` outside `vendor/`/`external/` returns **14 files on
+`main`**, not the 9 this board states.  The claim *"the nine remaining are
+exactly SR-D (5), SR-E (1) and SR-F (3)"* is not what the tree says, and the gap
+is not in the unclaimed lanes — it is in the lanes marked **DONE**:
+
+| file | lane | board says | tree says |
+|---|---|---|---|
+| `Interop/Spectra/Basic.lean` | SR-A | DONE | 1 `import Spectra` |
+| `SpectralTheory/CayleySelectorBridge.lean` | SR-A | DONE | 2 |
+| `.../SinTheta/ContinuationSpectralIdentification.lean` | SR-A | DONE | 2 |
+| `.../SinTheta/ContinuationSelectedReduction.lean` | SR-A | DONE | 1 |
+| `Interop/Spectra/BoundedFromSpectrum.lean` | SR-B | DONE, *"now Spectra-free"* | 2 |
+| `Interop/Spectra/OrderedHalfLine.lean` | SR-C | DONE | 2 |
+
+**The `BoundedFromSpectrum` dependency is real, not a stale import line.**  Its
+four `open Spectra.*` lines are what supply `generator`,
+`generator_genToGroup`, `spectralProjection` and
+`spectralPVM_proj_eq_zero_of_subset_resolventSet`; deleting the two imports and
+four opens and rebuilding gives **12 errors**, not zero.  `OrderedHalfLine.lean`
+likewise still calls `SelfAdjointOperator.bornMeasure` and
+`BornRule.Moments.bornExpectation` (11 body references).
+
+**This is a definition mismatch, not necessarily wrong work.**  If "DONE" means
+*the mathematics is ported and a final import sweep is deferred to S6*, then the
+board is consistent and only the phrasing misleads — but S6 criterion (1) is
+literally *"no `.lean` outside `vendor/` and `external/` imports Spectra"*, so
+the count that matters for completion is 14, and it should be stated that way.
+Recommend the board track **imports removed** rather than **lanes closed**, since
+those are the criterion and a proxy for it respectively.
+
+**One item is genuinely finished and the board under-credits it:**
+`Experimental/Scratch/.../OperatorAbsoluteValueComplex.lean`, listed as SR-F item
+3, has **zero** `import Spectra` and zero `Spectra.` references on `main`.  SR-F
+is two files, not three.  (It still imports Spectra on `namek-work`, which is
+behind `main` on that file.)
+
 ## The collision rule that matters
 
 Every lane's *DavisKahan* files are disjoint — that part is safe. The risk is in
@@ -292,6 +330,64 @@ SR-D can build on it; the two lanes share no files.
 **New ForTauCeti module:** `ForTauCeti/Analysis/InnerProductSpace/SeparatedIntertwiner.lean`.
 
 ---
+
+### SR-E: unblocked by SR-B, and the remaining gap measured (toothbrush, 2026-07-29)
+
+namek's SR-B landed `specProjection_eq_zero_of_subset_resolventSet`, which
+supplies **two of the three** ingredients the native proof needs:
+
+* `E_B(spec A) = 0` — immediate, since disjointness puts `spec A` inside
+  `resolventSet B`;
+* `E_A(spec A) = id` — from the same theorem applied to `(spec A)ᶜ` plus
+  `specProjection_compl`.
+
+**The third is missing and is the whole remaining lane:** projections of *two
+different* operators intertwine along `X`,
+
+```
+X ∘ E_B(S) = E_A(S) ∘ X      whenever   A(Xy) = X(By) on dom B.
+```
+
+`ForTauCeti`'s Borel layer has `borelCalculus_comm` and
+`specProjection_comm_resolvent`, but those are **same-operator** commutation.
+Nothing there is rectangular. Building it means carrying the intertwining down
+namek's construction: resolvents, then the Cayley transform, then
+`borelCalculus`, then `specProjection`.
+
+**Progress, and a correction to my own sizing.** I called all four "routine".
+The first two are, and they are **done and axiom-clean** in
+`ForTauCeti/Analysis/InnerProductSpace/SeparatedIntertwiner.lean`:
+
+* `resolvent_intertwines` / `resolvent_intertwines'` — `X R_B = R_A X`, from the
+  two defining properties of a resolvent alone;
+* `cayley_intertwines` — `X ∘ cayley hB = cayley hA ∘ X`, immediate at `z = -i`
+  since `cayley hA = 1 - 2i • R_A(-i)`.
+
+**The third is not routine, and calling it so was a mis-sizing.**
+`borelCalculus` is not a rewrite of the Cayley transform: it is built from a
+sesquilinear `pair` form against `diagMeasure ha ξ`. Intertwining *two
+different* operators through it means relating `diagMeasure` for `a` and for `b`
+along `X`, and the functions live on **different spectra**
+(`spectrum ℂ (cayley hA)` versus `spectrum ℂ (cayley hB)`), so there is not even
+a common domain on which to state a naive equality. The standard route is
+polynomials (trivial), then continuous functional calculus via
+Stone--Weierstrass on a set containing both spectra, then Borel by a
+monotone-class or dominated-convergence argument on the `pair` form. Expect a
+few hundred lines, not a few.
+
+The fourth step is genuinely short once the third exists, since
+`specProjection` is by definition the calculus at an indicator. After that the
+endgame is immediate: SR-B gives `E_B(spec A) = 0` from disjointness and
+`E_A(spec A) = id` from the same theorem on the complement.
+
+**Do not expect a shortcut through the spectral gap.** The sibling theorem
+`linearPMapSylvester_homogeneous_eq_zero_of_pairwiseSpectrumGap` handles
+positive distance, but *disjoint* closed subsets of `ℝ` can have distance zero,
+so the gap route does not cover this statement.
+
+Target to reprove, in `DavisKahan/Sylvester/PairwiseHomogeneousUniqueness.lean`:
+`linearPMapSylvester_homogeneous_eq_zero_of_disjoint_spectrum` — the only
+consumer of the donor constant, at line 103.
 
 ## SR-F — Experimental stragglers  *(namek — two of three done)*
 
