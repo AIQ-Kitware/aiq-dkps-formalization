@@ -158,3 +158,42 @@ the INVESTIGATE list, not a delete list.
    `DavisKahan/**` only (`ForMathlib`/`Mathlib`/`Spectra` imports were followed by name but those
    trees were not walked for further edges — irrelevant here since no sorry module is in the
    production closure anyway).
+
+## Definitional holes dominate, and they have dependents (edward/fable, 2026-07-29)
+
+Measured across `DavisKahan/**` excluding `vendor/` and `external/`:
+**31 `sorry`ed *definitions*** against **70 `sorry`ed theorems**.
+
+That ratio matters more than either number. A `sorry`ed theorem is an honest
+debt: the statement is meaningful and someone can prove it. A `sorry`ed
+*definition* is worse in kind — `sorryAx` makes the body opaque, so **every
+theorem stated about it asserts nothing checkable**, whether proved or not.
+
+### Two holes carry nine declarations between them
+
+| hole | dependent `sorry`s | what they are |
+|---|---:|---|
+| `operatorAbsoluteValue` (`SinTheta/General.lean:550`) | **5** | `operatorAbsoluteValue_sq`, `operatorAbsoluteValue_isSelfAdjoint`, `coe_canonicalAbsoluteValueUnit`, `canonicalAbsoluteValue_commutes_projection`, `SymmetricNormIdeal.operatorAbsoluteValue_mem_and_gauge_eq` |
+| `spectralSubspace` (same file) | **2** | `spectralSubspace_hasOrthogonalProjection`, `reduces_spectralSubspace` |
+
+None of those seven is independently workable. They are not seven open
+problems; they are **two**, plus seven consequences that become attemptable the
+moment the definitions are real.
+
+`operatorAbsoluteValue`'s blocker is recorded in `dev/LANES.md` and is
+**upstream**: the file is `RCLike`-general, `ContinuousLinearMap.modulus` is
+ℂ-only, `LinearMap.IsPositive.sqrt` is finite-dimensional only, and
+`PositiveSqrt.lean`'s own header names the cause — the C⋆-algebra/CFC instances
+on `E →L[𝕜] E` are registered only for `𝕜 = ℂ`.
+
+### Why this is worth stating
+
+Effort estimates built from `sorry` counts overstate this development's
+remaining work, because the counts treat consequences as independent problems.
+The honest reading of `SinTheta/General.lean` is **one scope decision** —
+restrict to `ℂ` and use `modulus`, or wait for an `RCLike` CFC — after which
+seven obligations become ordinary proof work.
+
+Corollary for anyone triaging: **check whether a `sorry` is a definition before
+estimating it**, and if it is, count its dependents before treating them as
+separate lanes.
