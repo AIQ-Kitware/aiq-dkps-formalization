@@ -149,5 +149,138 @@ theorem diagMeasure_cayley_preimage_one (ξ : H) :
 
 end Cayley
 
+section ResolventFormula
+
+/-- The Cayley denominator `(i - z) + (i + z) w` has no zero on the unit circle
+when `z` is not real: a zero would force `‖z - i‖ = ‖z + i‖`. -/
+theorem cayley_denom_ne_zero {z : ℂ} (hz : z.im ≠ 0) {w : ℂ} (hw : ‖w‖ = 1) :
+    (Complex.I - z) + (Complex.I + z) * w ≠ 0 := by
+  intro h
+  have hkey : (Complex.I + z) * w = z - Complex.I := by linear_combination h
+  have hn : ‖Complex.I + z‖ = ‖z - Complex.I‖ := by
+    have h' := congrArg norm hkey
+    rwa [norm_mul, hw, mul_one] at h'
+  have h2 : Complex.normSq (Complex.I + z) = Complex.normSq (z - Complex.I) := by
+    rw [Complex.normSq_eq_norm_sq, Complex.normSq_eq_norm_sq, hn]
+  simp only [Complex.normSq_apply, Complex.add_re, Complex.add_im, Complex.sub_re,
+    Complex.sub_im, Complex.I_re, Complex.I_im] at h2
+  exact hz (by nlinarith [h2])
+
+variable {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A) {z : ℂ} (hz : z.im ≠ 0)
+
+/-- The coordinate function on the spectrum of the Cayley transform. -/
+noncomputable def cayleyCoord : C(_root_.spectrum ℂ (cayley hA), ℂ) :=
+  (ContinuousMap.id ℂ).restrict (_root_.spectrum ℂ (cayley hA))
+
+@[simp] theorem cayleyCoord_apply (w : _root_.spectrum ℂ (cayley hA)) :
+    cayleyCoord hA w = (w : ℂ) := rfl
+
+include hz in
+theorem cayleyDenom_ne_zero (w : _root_.spectrum ℂ (cayley hA)) :
+    (Complex.I - z) + (Complex.I + z) * (w : ℂ) ≠ 0 :=
+  cayley_denom_ne_zero hz
+    (spectrum.norm_eq_one_of_unitary (cayley_mem_unitary hA) w.2)
+
+/-- The symbol of `1 - (z + i) R(-i)`, up to the factor `2i`. -/
+noncomputable def cayleyDenomCM : C(_root_.spectrum ℂ (cayley hA), ℂ) :=
+  ⟨fun w => (Complex.I - z) + (Complex.I + z) * (w : ℂ), by fun_prop⟩
+
+@[simp] theorem cayleyDenomCM_apply (w : _root_.spectrum ℂ (cayley hA)) :
+    cayleyDenomCM hA (z := z) w = (Complex.I - z) + (Complex.I + z) * (w : ℂ) := rfl
+
+/-- The **resolvent symbol** `g_z(w) = (1 - w) / ((i - z) + (i + z) w)`.  For
+non-real `z` it is continuous on the whole spectrum of the Cayley transform:
+its only pole is the Cayley image of `z`, which is off the unit circle. -/
+noncomputable def resolventSymbol : C(_root_.spectrum ℂ (cayley hA), ℂ) :=
+  ⟨fun w => (1 - (w : ℂ)) / ((Complex.I - z) + (Complex.I + z) * (w : ℂ)),
+    Continuous.div (by fun_prop) (by fun_prop) (cayleyDenom_ne_zero hA hz)⟩
+
+@[simp] theorem resolventSymbol_apply (w : _root_.spectrum ℂ (cayley hA)) :
+    resolventSymbol hA hz w
+      = (1 - (w : ℂ)) / ((Complex.I - z) + (Complex.I + z) * (w : ℂ)) := rfl
+
+/-- The reciprocal of the denominator symbol, scaled by `2i`. -/
+noncomputable def cayleyDenomInvCM : C(_root_.spectrum ℂ (cayley hA), ℂ) :=
+  ⟨fun w => (2 * Complex.I) / ((Complex.I - z) + (Complex.I + z) * (w : ℂ)),
+    Continuous.div (by fun_prop) (by fun_prop) (cayleyDenom_ne_zero hA hz)⟩
+
+@[simp] theorem cayleyDenomInvCM_apply (w : _root_.spectrum ℂ (cayley hA)) :
+    cayleyDenomInvCM hA hz w
+      = (2 * Complex.I) / ((Complex.I - z) + (Complex.I + z) * (w : ℂ)) := rfl
+
+theorem two_I_ne_zero : (2 * Complex.I : ℂ) ≠ 0 := by simp
+
+/-- `R(-i)` is the functional calculus of `(1 - w)/(2i)`. -/
+theorem resolvent_negI_eq_cfcHom :
+    resolvent A (negI_mem_resolventSet hA)
+      = cfcHom (isStarNormal_cayley hA) ((2 * Complex.I)⁻¹ • (1 - cayleyCoord hA)) := by
+  rw [map_smul, map_sub, map_one, cayleyCoord, cfcHom_id]
+  refine ContinuousLinearMap.ext fun ξ => ?_
+  rw [_root_.smul_apply, one_sub_cayley_apply, smul_smul, inv_mul_cancel₀ two_I_ne_zero,
+    one_smul]
+
+/-- `1 - (z + i) R(-i)` is the functional calculus of `((i - z) + (i + z)w)/(2i)`. -/
+theorem one_sub_smul_resolvent_eq_cfcHom :
+    (1 : H →L[ℂ] H) - (z + Complex.I) • resolvent A (negI_mem_resolventSet hA)
+      = cfcHom (isStarNormal_cayley hA) ((2 * Complex.I)⁻¹ • cayleyDenomCM hA (z := z)) := by
+  have hsplit : cayleyDenomCM hA (z := z)
+      = (Complex.I - z) • 1 + (Complex.I + z) • cayleyCoord hA := by
+    ext w
+    simp [cayleyDenomCM, smul_eq_mul]
+  rw [hsplit, map_smul, map_add, map_smul, map_smul, map_one, cayleyCoord, cfcHom_id]
+  refine ContinuousLinearMap.ext fun ξ => ?_
+  have h2 : (2 * Complex.I : ℂ) ≠ 0 := two_I_ne_zero
+  have hU : cayley hA ξ = ξ - (2 * Complex.I) • resolvent A (negI_mem_resolventSet hA) ξ := by
+    have h := one_sub_cayley_apply hA ξ
+    rw [_root_.sub_apply, one_apply_eq_self] at h
+    linear_combination (norm := module) -h
+  simp only [_root_.sub_apply, one_apply_eq_self, _root_.smul_apply, _root_.add_apply, hU]
+  match_scalars <;> (field_simp; try ring)
+
+include hz in
+/-- **The resolvent is the continuous functional calculus of `g_z`.**  Proved
+through the first resolvent identity, so no statement about `dom A` is
+needed. -/
+theorem resolvent_eq_cfcHom (hzr : z ∈ resolventSet A) :
+    resolvent A hzr = cfcHom (isStarNormal_cayley hA) (resolventSymbol hA hz) := by
+  set hni := negI_mem_resolventSet hA with hhni
+  set hU := isStarNormal_cayley hA with hhU
+  -- the two functional-calculus factors are mutually inverse
+  have hprod : ((2 * Complex.I)⁻¹ • cayleyDenomCM hA (z := z)) * cayleyDenomInvCM hA hz
+      = 1 := by
+    ext w
+    have hne := cayleyDenom_ne_zero hA hz w
+    have h2 : (2 * Complex.I : ℂ) ≠ 0 := two_I_ne_zero
+    simp only [ContinuousMap.mul_apply, ContinuousMap.smul_apply, cayleyDenomCM_apply,
+      cayleyDenomInvCM_apply, ContinuousMap.one_apply, smul_eq_mul]
+    field_simp
+  have hinv : cfcHom hU ((2 * Complex.I)⁻¹ • cayleyDenomCM hA (z := z))
+      * cfcHom hU (cayleyDenomInvCM hA hz) = 1 := by
+    rw [← map_mul, hprod, map_one]
+  -- the first resolvent identity, in operator form
+  have hVid : resolvent A hzr * ((1 : H →L[ℂ] H) - (z + Complex.I) • resolvent A hni)
+      = resolvent A hni := by
+    refine ContinuousLinearMap.ext fun φ => ?_
+    have h := resolvent_sub_resolvent hzr hni φ
+    have hz' : z - -Complex.I = z + Complex.I := by ring
+    rw [hz'] at h
+    simp only [_root_.mul_apply_eq_comp, _root_.sub_apply, one_apply_eq_self,
+      _root_.smul_apply, map_sub, map_smul]
+    linear_combination (norm := module) h
+  -- combine
+  have hR : resolvent A hzr
+      = resolvent A hni * cfcHom hU (cayleyDenomInvCM hA hz) := by
+    rw [← hVid, one_sub_smul_resolvent_eq_cfcHom hA (z := z), mul_assoc, hinv, mul_one]
+  rw [hR, resolvent_negI_eq_cfcHom hA, ← map_mul]
+  congr 1
+  ext w
+  have hne := cayleyDenom_ne_zero hA hz w
+  simp only [ContinuousMap.mul_apply, ContinuousMap.smul_apply, ContinuousMap.sub_apply,
+    ContinuousMap.one_apply, cayleyCoord_apply, cayleyDenomInvCM_apply,
+    resolventSymbol_apply, smul_eq_mul]
+  field_simp
+
+end ResolventFormula
+
 end LinearPMap
 end TauCeti
