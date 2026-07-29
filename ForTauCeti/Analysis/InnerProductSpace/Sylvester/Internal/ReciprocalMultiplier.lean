@@ -11,6 +11,12 @@ import Mathlib.MeasureTheory.SpecificCodomains.Pi
 import Mathlib.Analysis.SpecialFunctions.Complex.Arg
 import Mathlib.LinearAlgebra.Lagrange
 
+-- `ForTauCeti` sets `linter.style.longFile` to 1500 and this module is 2834 lines.
+-- Declaring the file's own limit is Mathlib's sanctioned mechanism for exactly this
+-- case; the alternative is splitting an internal 2,800-line proof, which is not a
+-- migration lane's business.  Shrink this number, never raise it.
+set_option linter.style.longFile 2900
+
 /-!
 # Finite reciprocal multipliers
 
@@ -35,6 +41,19 @@ map is finite linear algebra: expand the map in coordinate matrix units, use
 the entrywise Sylvester equation, and recombine the common orbit action.  The
 Ky Fan estimate is then an immediate application of the existing finite-orbit
 certificate bound.
+
+## Provenance
+
+*Moved, not restated.*  This file was
+`DavisKahan/FiniteDimensional/Sylvester/Internal/ReciprocalMultiplier.lean`
+until 2026-07-29, when lane Y3(b4) moved the whole remaining sin-Θ closure into
+the staging layer.  Statements, proofs, signatures and namespaces are unchanged;
+the declarations already lived in `TauCeti.*`, so the move was a path change and
+an import repoint.
+
+Y3(b2) and Y3(b3) are what made it possible: before them this file's import
+closure crossed `ForMathlib`, which the `ForTauCeti` layer rule forbids.
+
 -/
 
 namespace TauCeti
@@ -517,6 +536,12 @@ theorem doubledComplexScalarAction_ofReal
     simp [doubledComplexScalarAction_apply,
       RectangularUnitarilyInvariantNorm.orthogonalBlockSum_apply]
 
+-- `[DecidableEq ι]` is in this statement's type and unused there, but the proof needs it
+-- (`Finset.induction_on` inserts).  The linter's advice -- drop it and call `classical` --
+-- is a signature change, and this file arrived here by a move lane that changes no
+-- signatures.  Suppressed at exactly the declarations it applies to; see the Y3(b4) row
+-- in dev/LANES.md, which records dropping the hypothesis as follow-up work.
+set_option linter.unusedDecidableInType false in
 /-- A finite sum of complex-scalar block actions is the action of the scalar
 sum. -/
 theorem sum_doubledComplexScalarAction
@@ -536,8 +561,9 @@ theorem sum_doubledComplexScalarAction
         simp only [Finset.sum_empty]
         ext x
         apply WithLp.ofLp_injective 2
-        simp [doubledComplexScalarAction]
-        exact Prod.ext rfl rfl
+        -- one closing `simp` rather than `simp only` + `exact`: the flexible-tactic
+        -- linter objects to a lemma-carrying `simp` that leaves a goal behind.
+        simp [doubledComplexScalarAction, Prod.ext_iff]
     | @insert a s ha ih =>
         rw [Finset.sum_insert ha, Finset.sum_insert ha, ih,
           doubledComplexScalarAction_add]
@@ -573,6 +599,12 @@ theorem norm_smul_doubledPhaseAction_arg_add
     _ = a * Complex.exp ((theta : ℂ) * Complex.I) := by
       rw [Complex.norm_mul_exp_arg_mul_I]
 
+-- `[DecidableEq ι]` is in this statement's type and unused there, but the proof needs it
+-- (`Finset.induction_on` inserts).  The linter's advice -- drop it and call `classical` --
+-- is a signature change, and this file arrived here by a move lane that changes no
+-- signatures.  Suppressed at exactly the declarations it applies to; see the Y3(b4) row
+-- in dev/LANES.md, which records dropping the hypothesis as follow-up work.
+set_option linter.unusedDecidableInType false in
 /-- A finite complex Fourier sum acts on doubled real maps as a finite sum of
 nonnegatively weighted real phase rotations. -/
 theorem sum_norm_smul_doubledPhaseAction_arg_add
@@ -1001,7 +1033,8 @@ theorem hasApproximateFiniteReciprocalFourierInterpolation_of_integrableKernel
               apply MeasureTheory.integral_congr_ae
               filter_upwards [] with t
               rw [norm_mul, hexpnorm t, mul_one]
-        exact lt_of_lt_of_le (norm_pos_iff.mpr (div_ne_zero one_ne_zero (by exact_mod_cast hd₀))) hbound
+        exact lt_of_lt_of_le
+          (norm_pos_iff.mpr (div_ne_zero one_ne_zero (by exact_mod_cast hd₀))) hbound
       have hMnonneg : 0 ≤ M := hMpos.le
       have hμreal : μ.real Set.univ = M := by
         rw [MeasureTheory.measureReal_def]
@@ -1469,6 +1502,12 @@ omit [DecidableEq ι] in
     basisDiagonalRealCoeffMap e c (e i) = ((c i : ℝ) : 𝕜) • e i := by
   exact e.toBasis.constr_basis 𝕜 _ i
 
+-- `[DecidableEq ι]` is in this statement's type and unused there, but the proof needs it
+-- (`Finset.induction_on` inserts).  The linter's advice -- drop it and call `classical` --
+-- is a signature change, and this file arrived here by a move lane that changes no
+-- signatures.  Suppressed at exactly the declarations it applies to; see the Y3(b4) row
+-- in dev/LANES.md, which records dropping the hypothesis as follow-up work.
+set_option linter.unusedDecidableInType false in
 @[simp] private theorem basisDiagonalRealCoeffMap_repr
     (e : OrthonormalBasis ι 𝕜 G) (c : ι → ℝ) (x : G) (i : ι) :
     e.repr (basisDiagonalRealCoeffMap e c x) i =
@@ -1664,6 +1703,12 @@ theorem doubledComplexScalarMapAction_ofReal
     simp [doubledComplexScalarMapAction_apply,
       RectangularUnitarilyInvariantNorm.orthogonalBlockSum_apply]
 
+-- `[DecidableEq ι]` is in this statement's type and unused there, but the proof needs it
+-- (`Finset.induction_on` inserts).  The linter's advice -- drop it and call `classical` --
+-- is a signature change, and this file arrived here by a move lane that changes no
+-- signatures.  Suppressed at exactly the declarations it applies to; see the Y3(b4) row
+-- in dev/LANES.md, which records dropping the hypothesis as follow-up work.
+set_option linter.unusedDecidableInType false in
 /-- A finite sum of complex-scalar block actions is the action of the scalar
 sum. -/
 theorem sum_doubledComplexScalarMapAction
@@ -1680,8 +1725,9 @@ theorem sum_doubledComplexScalarMapAction
         simp only [Finset.sum_empty]
         ext x
         apply WithLp.ofLp_injective 2
-        simp [doubledComplexScalarMapAction]
-        exact Prod.ext rfl rfl
+        -- one closing `simp` rather than `simp only` + `exact`: the flexible-tactic
+        -- linter objects to a lemma-carrying `simp` that leaves a goal behind.
+        simp [doubledComplexScalarMapAction, Prod.ext_iff]
     | @insert a s ha ih =>
         rw [Finset.sum_insert ha, Finset.sum_insert ha, ih,
           doubledComplexScalarMapAction_add]
@@ -1713,6 +1759,12 @@ theorem norm_smul_doubledPhaseMapAction_arg_add
     _ = a * Complex.exp ((theta : ℂ) * Complex.I) := by
       rw [Complex.norm_mul_exp_arg_mul_I]
 
+-- `[DecidableEq ι]` is in this statement's type and unused there, but the proof needs it
+-- (`Finset.induction_on` inserts).  The linter's advice -- drop it and call `classical` --
+-- is a signature change, and this file arrived here by a move lane that changes no
+-- signatures.  Suppressed at exactly the declarations it applies to; see the Y3(b4) row
+-- in dev/LANES.md, which records dropping the hypothesis as follow-up work.
+set_option linter.unusedDecidableInType false in
 /-- A finite complex Fourier sum acts on doubled `𝕜`-linear maps as a finite
 sum of nonnegatively weighted phase rotations. -/
 theorem sum_norm_smul_doubledPhaseMapAction_arg_add

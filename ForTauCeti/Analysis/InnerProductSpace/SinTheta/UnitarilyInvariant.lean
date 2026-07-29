@@ -22,7 +22,7 @@ To be re-authored per Mathlib's AI-contribution policy at PR time.
 -/
 
 import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantNorm
-import DavisKahan.FiniteDimensional.SinTheta.OperatorNorm
+import ForTauCeti.Analysis.InnerProductSpace.SinTheta.OperatorNorm
 
 /-! # The unitarily-invariant-norm Davis–Kahan sin-Θ theorem
 
@@ -42,6 +42,19 @@ bounds the cross-projection:
 * C. Davis and W. M. Kahan, *The rotation of eigenvectors by a
   perturbation. III*, SIAM J. Numer. Anal. 7 (1970), 1–46.
 * R. Bhatia, *Matrix Analysis*, Chapter VII (the Davis–Kahan theorems).
+
+## Provenance
+
+*Moved, not restated.*  This file was
+`DavisKahan/FiniteDimensional/SinTheta/UnitarilyInvariant.lean`
+until 2026-07-29, when lane Y3(b4) moved the whole remaining sin-Θ closure into
+the staging layer.  Statements, proofs, signatures and namespaces are unchanged;
+the declarations already lived in `TauCeti.*`, so the move was a path change and
+an import repoint.
+
+Y3(b2) and Y3(b3) are what made it possible: before them this file's import
+closure crossed `ForMathlib`, which the `ForTauCeti` layer rule forbids.
+
 -/
 
 namespace TauCeti
@@ -114,7 +127,7 @@ theorem apply_starProjection_comp_starProjection_le (N : UnitarilyInvariantNorm 
     ext x
     simp [hY, map_sub]
   have hYbound : N' Y ≤ N (S - T) := by
-    show N (Y : E →ₗ[𝕜] E) ≤ N (S - T)
+    change N (Y : E →ₗ[𝕜] E) ≤ N (S - T)
     rw [hYcoe]
     calc N ((P : E →ₗ[𝕜] E) ∘ₗ ((T - S) ∘ₗ (Q : E →ₗ[𝕜] E)))
         ≤ 1 * N ((T - S) ∘ₗ (Q : E →ₗ[𝕜] E)) :=
