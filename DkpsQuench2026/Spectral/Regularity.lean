@@ -223,9 +223,9 @@ theorem highProb_referenceCoordinateMean_of_compact_iid
           by have := h j; rwa [if_neg (Ne.symm hij), if_pos rfl] at this⟩
       · rintro ⟨hi', hj'⟩ k
         rcases eq_or_ne k i with h1 | h1
-        · subst h1; simp only [if_pos rfl]; exact hi'
+        · subst h1; simp only [reduceIte]; exact hi'
         · rcases eq_or_ne k j with h2 | h2
-          · subst h2; simp only [if_neg h1, if_pos rfl]; exact hj'
+          · subst h2; simp only [if_neg h1]; exact hj'
           · simp only [if_neg h1, if_neg h2]; exact Set.mem_univ _
     rw [hset] at hj
     rw [hj]
@@ -450,9 +450,9 @@ theorem highProb_referenceCoordinateProductMean_of_compact_iid
           by have := h j; rwa [if_neg (Ne.symm hij), if_pos rfl] at this⟩
       · rintro ⟨hi', hj'⟩ k
         rcases eq_or_ne k i with h1 | h1
-        · subst h1; simp only [if_pos rfl]; exact hi'
+        · subst h1; simp only [reduceIte]; exact hi'
         · rcases eq_or_ne k j with h2 | h2
-          · subst h2; simp only [if_neg h1, if_pos rfl]; exact hj'
+          · subst h2; simp only [if_neg h1]; exact hj'
           · simp only [if_neg h1, if_neg h2]; exact Set.mem_univ _
     rw [hset] at hj
     rw [hj]

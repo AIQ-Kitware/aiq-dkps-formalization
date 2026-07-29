@@ -89,7 +89,7 @@ theorem infiniteFixedSubset
       (fun _ => H.raw_lipschitz.constant_nonneg)
       (fun n => (net.radius_pos n).le)
       (fun _ => le_rfl) (fun _ => le_rfl)
-      (fun n => by simpa [safePerspectiveRadius, hradius n]))
+      (fun n => by simp [safePerspectiveRadius, hradius n]))
   let hrealize :
       PerspectiveResponseRealization D.perspective
         (liftedReferenceSampler (Ωresp := Ωresp) f_ref)

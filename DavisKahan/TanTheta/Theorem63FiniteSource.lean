@@ -317,7 +317,7 @@ theorem orthonormal_theorem63ResidualWitness
           _ = ⟪v, ((sigma : ℝ) : ℂ) • v⟫_ℂ := by rw [hZadj]
           _ = ((sigma : ℝ) : ℂ) := by
             rw [inner_smul_right]
-            simp [Submodule.coe_inner, v]
+            simp [v]
       have hy_Zv : ⟪y, (v : H)⟫_ℂ = ((sigma : ℝ) : ℂ) := by
         calc
           ⟪y, (v : H)⟫_ℂ = ⟪Z.subtypeL.adjoint y, v⟫_ℂ :=
