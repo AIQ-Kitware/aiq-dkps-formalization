@@ -130,6 +130,49 @@ first; if a week later you still think the lesson is durable, move it in.
 
 ---
 
+## Build cache on slow filesystems
+
+If your checkout sits on a network or shared-folder filesystem (on the AIVM
+setup the repo is a **virtiofs** mount from the host, `/mnt/aivm-persistent`),
+`.lake` is the wrong thing to leave there. Lake stats every one of ~128k build
+artifacts on each invocation, and that metadata traffic — not compilation — is
+what the shared filesystem taxes.
+
+Measured 2026-07-29 on this VM, same tree, same 9269-job **fully cached** build:
+
+| `.lake` on | no-op `lake build` |
+| --- | --- |
+| virtiofs (repo default) | 47.9s |
+| ext4 (VM-local disk) | 10.5s |
+
+**4.6x**, paid back on every invocation including the ones that compile nothing.
+
+Fix — move the cache to VM-local storage and symlink it back:
+
+```sh
+cp -a .lake ~/.lake-cache/<repo>/.lake     # verify: du -sh, and find -type f | wc -l
+mv .lake .lake.old && ln -s ~/.lake-cache/<repo>/.lake .lake
+lake build                                 # must report all jobs cached, not rebuilt
+rm -rf .lake.old                           # only after the line above
+```
+
+Copy-verify-swap rather than `mv`, because a partially-moved cache costs a
+~90-minute cold rebuild. Check `findmnt -T . -o FSTYPE` first; if it already
+says `ext4`, there is nothing to do.
+
+**Two traps.**
+
+- `.gitignore` listed `.lake/` **with a trailing slash, which matches
+  directories only.** The moment `.lake` becomes a symlink it stops being
+  ignored and shows up as untracked — a machine-specific absolute path one
+  `git add -A` away from being committed. Both spellings are now in
+  `.gitignore`; leave them.
+- The VM-local disk is *not* the host-persistent mount. This cache does not
+  survive a VM rebuild, which is correct — it is regenerable — but do not put
+  anything there that isn't.
+
+---
+
 ## Davis--Kahan 1970 full source census
 
 The full-paper theorem-by-theorem source ledger:
