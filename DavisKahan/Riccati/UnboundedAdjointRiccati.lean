@@ -748,6 +748,53 @@ theorem riccatiGram_hasSum_mem_domain
   have := le_of_tendsto hrl.norm (Filter.Eventually.of_forall hrbound)
   simpa [hc, ← mul_assoc] using this
 
+include hdom hadj in
+/-- **The Riccati resolvent `(1 - X†X)⁻¹` preserves the first diagonal domain.**
+
+The Neumann series is where the *geometric* commutator bound is indispensable:
+its coefficients are all `1`, so the contractive summand `μ n = n` gives the
+divergent `Σ n`, while `μ n = n‖T‖ⁿ⁻¹` is summable because `‖T‖ = ‖X‖² < 1`.
+
+This is the domain half of `MapsDomainTo A₁ A₀ tan2Θ` for
+`tan2Θ = 2X(1 - X†X)⁻¹`, which is what the unbounded Sylvester estimate
+consumes. -/
+theorem riccatiGram_resolvent_mem_domain
+    (hlt : ‖riccatiGram X‖ < 1)
+    (hinv : TauCeti.LinearPMap.InvariantSubspace (unboundedBlockOperatorCore H)
+      (unboundedBlockGraph X)ᗮ)
+    (hric : ∀ x : H.A0.domain,
+      H.A1 ⟨X (x : E0), hdom x⟩ + H.B10 (x : E0) =
+        X (H.A0 x + H.B01 (X (x : E0))))
+    {R : E0 →L[𝕜] E0}
+    (hR : HasSum (fun n => (riccatiGram X) ^ n) R)
+    (x : H.A0.domain) :
+    ∃ h : R (x : E0) ∈ H.A0.domain,
+      ‖H.A0 ⟨R (x : E0), h⟩ - R (H.A0 x)‖ ≤
+        (∑' n : ℕ, ‖(1 : 𝕜)‖ *
+            ((n : ℝ) * ‖riccatiGram X‖ ^ (n - 1))) *
+          ‖riccatiGramCommutator H X‖ * ‖(x : E0)‖ := by
+  have hμ0 : ∀ n : ℕ, 0 ≤ (n : ℝ) * ‖riccatiGram X‖ ^ (n - 1) := fun n =>
+    mul_nonneg (Nat.cast_nonneg n) (pow_nonneg (norm_nonneg _) _)
+  have hgeom : Summable fun n : ℕ => (n : ℝ) * ‖riccatiGram X‖ ^ (n - 1) := by
+    have h1 : Summable fun n : ℕ => (n : ℝ) * ‖riccatiGram X‖ ^ n := by
+      simpa using
+        summable_pow_mul_geometric_of_norm_lt_one (R := ℝ) 1
+          (by simpa using hlt)
+    have h2 : Summable fun n : ℕ => ‖riccatiGram X‖ ^ n :=
+      summable_geometric_of_lt_one (norm_nonneg _) hlt
+    have hs1 : Summable fun n : ℕ => ((n : ℝ) + 1) * ‖riccatiGram X‖ ^ n := by
+      simpa [add_mul] using h1.add h2
+    rw [← summable_nat_add_iff 1]
+    simpa using hs1
+  have hsum : Summable fun n : ℕ =>
+      ‖(1 : 𝕜)‖ * ((n : ℝ) * ‖riccatiGram X‖ ^ (n - 1)) := hgeom.mul_left _
+  have hR' : HasSum (fun n : ℕ => (1 : 𝕜) • ((riccatiGram X) ^ n)) R := by
+    simpa using hR
+  exact riccatiGram_hasSum_mem_domain H hdom hadj
+    (fun n => (n : ℝ) * ‖riccatiGram X‖ ^ (n - 1)) hμ0
+    (norm_riccatiGram_pow_commutator_le_geom H hdom hadj hinv hric)
+    (fun _ => (1 : 𝕜)) hR' hsum x
+
 end Powers'
 
 /-- The Riccati commutator is bounded by the off-diagonal coupling alone: no
