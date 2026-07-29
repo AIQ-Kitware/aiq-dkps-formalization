@@ -53,21 +53,6 @@ theorem ofBounded_reducesSubspace
     show A (x : E) ∈ Uᗮ
     exact hred.2 (x : E) hx
 
-omit [CompleteSpace E] in
-/-- For a bounded operator, the closed reducing restriction has the same
-pointwise action as the ordinary bounded restriction. -/
-@[simp]
-theorem reducingRestriction_ofBounded_apply
-    (A : E →L[𝕜] E) (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
-    (hred : A.Reduces U)
-    (x : (reducingRestriction (ofBounded A) U
-      (ofBounded_reducesSubspace A U hred)).domain) :
-    (reducingRestriction (ofBounded A) U
-      (ofBounded_reducesSubspace A U hred)).toLinearMap x =
-        A.restrict hred.1 (x : U) := by
-  apply Subtype.ext
-  rfl
-
 end ClosedOperator
 end DavisKahanExt
 end TauCeti
