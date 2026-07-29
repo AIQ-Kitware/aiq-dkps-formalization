@@ -377,7 +377,7 @@ theorem principalCosines_rankOne {u v : E} (hu : ‖u‖ = 1) (hv : ‖v‖ = 1)
       simp only [cosPrincipalAngles] at hnonneg ⊢
       simp [uf, vf] at hsq
       nlinarith [hsq, hnonneg, hnorm]
-    simpa [heq]
+    simp [heq]
   · have hle : 1 ≤ i := Nat.one_le_iff_ne_zero.mpr hi
     rw [cosPrincipalAngles,
       (overlapOp huf hvf).singularValues_of_finrank_le]

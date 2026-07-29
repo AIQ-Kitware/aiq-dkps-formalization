@@ -61,8 +61,8 @@ theorem top (A : ClosedOperator (𝕜 := 𝕜) (E := E)) :
     ClosedOperator.IsGraphCore A ⊤ := by
   intro x
   refine ⟨fun _ => ⟨x, Submodule.mem_top⟩, ?_, ?_⟩
-  · simpa using tendsto_const_nhds
-  · simpa using tendsto_const_nhds
+  · simp
+  · simp
 
 omit [CompleteSpace E] in
 /-- A graph core is ambiently dense in the operator domain: every domain vector

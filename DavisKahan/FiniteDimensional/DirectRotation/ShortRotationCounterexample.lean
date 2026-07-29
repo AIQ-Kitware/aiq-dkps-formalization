@@ -260,7 +260,7 @@ theorem abs_canonicalIntertwiner_eq :
       rw [real_inner_smul_left]
       have := real_inner_self_nonneg (x := x)
       have := Real.sqrt_nonneg (2⁻¹ : ℝ)
-      simpa using mul_nonneg ‹0 ≤ Real.sqrt 2⁻¹› ‹0 ≤ ⟪x, x⟫_ℝ›
+      simp
   have hsq : (Real.sqrt 2⁻¹ • (LinearMap.id : E4 →ₗ[ℝ] E4)) ∘ₗ
       (Real.sqrt 2⁻¹ • LinearMap.id) =
       (canonicalIntertwiner U4 V4).adjoint ∘ₗ canonicalIntertwiner U4 V4 := by
@@ -539,7 +539,7 @@ theorem gram_sinThetaMap_apply (i : Fin 4) :
       projection U4 ∘ₗ complementaryProjection V4 := by
     rw [sinThetaMap, LinearMap.adjoint_comp, projection_adjoint]
     congr 1
-    simpa [complementaryProjection] using projection_adjoint (𝕜 := ℝ) V4ᗮ
+    simp [complementaryProjection]
   rw [hAadj, sinThetaMap]
   have hcV : ∀ y : E4, complementaryProjection V4 y = y - projection V4 y :=
     fun y => Submodule.starProjection_orthogonal_val y

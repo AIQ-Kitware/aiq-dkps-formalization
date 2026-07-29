@@ -185,8 +185,7 @@ theorem paperSineModulus_sq_add_paperCosineModulus_sq
   have hadjV : (V.orthogonalProjectionOnto).adjoint = V.subtypeL := by
     rw [← Submodule.adjoint_subtypeL, ContinuousLinearMap.adjoint_adjoint]
   have hsplit : Vᗮ.starProjection (x : E) + V.starProjection (x : E) = (x : E) := by
-    simpa [add_comm] using
-      Submodule.starProjection_add_starProjection_orthogonal V (x : E)
+    simp [add_comm]
   have hUx : U.starProjection (x : E) = (x : E) :=
     Submodule.starProjection_eq_self_iff.mpr x.2
   simp only [paperSineBlockC, paperCosineBlockC, add_apply,
