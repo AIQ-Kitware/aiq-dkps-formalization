@@ -468,14 +468,28 @@ private theorem tanTwoAngleOperatorC_eq_modulus_ambientGraphTangent
             (ContinuousLinearMap.isPositive_adjoint_comp_self Y).isSelfAdjoint
         · intro x
           rw [ContinuousLinearMap.reApplyInnerSelf_apply]
-          dsimp [D, G]
-          rw [sub_apply, ContinuousLinearMap.id_apply, inner_sub_left,
-            Complex.sub_re, ContinuousLinearMap.comp_apply,
-            ContinuousLinearMap.adjoint_inner_left,
-            inner_self_eq_norm_sq]
-          have hy := Y.le_opNorm x
-          nlinarith [norm_quarterAcuteAngularOperator_lt_one U V hquarter,
-            norm_nonneg x, norm_nonneg (Y x)]
+          -- Same trap as in `hNunit`: compute the form value as its own `have`
+          -- with `simp`, because after a `dsimp` collapses `RCLike.re` to
+          -- `Complex.re` neither `map_sub` nor `inner_self_eq_norm_sq` can match.
+          have hval : RCLike.re ⟪D x, x⟫_ℂ = ‖x‖ ^ 2 - ‖Y x‖ ^ 2 := by
+            have hD : D x = x - Y.adjoint (Y x) := by
+              show (ContinuousLinearMap.id ℂ E - G) x = x - Y.adjoint (Y x)
+              rw [ContinuousLinearMap.sub_apply, ContinuousLinearMap.id_apply,
+                ContinuousLinearMap.comp_apply]
+            rw [hD]
+            simp [inner_sub_left, ContinuousLinearMap.adjoint_inner_left,
+              inner_self_eq_norm_sq, ← Complex.ofReal_pow]
+          rw [hval]
+          -- `‖Y x‖ ≤ ‖Y‖ ‖x‖ ≤ ‖x‖` because `Y` is a contraction; squaring is then
+          -- monotone on the nonnegatives.
+          have hle : ‖Y x‖ ≤ ‖x‖ :=
+            calc ‖Y x‖ ≤ ‖Y‖ * ‖x‖ := Y.le_opNorm x
+              _ ≤ 1 * ‖x‖ :=
+                  mul_le_mul_of_nonneg_right
+                    (norm_quarterAcuteAngularOperator_lt_one U V hquarter).le
+                    (norm_nonneg x)
+              _ = ‖x‖ := one_mul _
+          nlinarith [hle, norm_nonneg (Y x), norm_nonneg x]
       -- `Ring.inverse` of a strictly positive element is its CFC `(-1)`-power,
       -- which is nonnegative.  `IsStrictlyPositive` is by definition
       -- `0 ≤ D ∧ IsUnit D`, both of which are already in hand.
