@@ -118,6 +118,10 @@ noncomputable def yosidaApprox (hA : IsSelfAdjoint A) (n : ℕ+) : H →L[ℂ] H
 noncomputable def yosidaApproxSym (hA : IsSelfAdjoint A) (n : ℕ+) : H →L[ℂ] H :=
   ((n : ℂ) ^ 2 / 2) • (resolventAtIn hA n + resolventAtNegIn hA n)
 
+/-- The mirrored Yosida approximant `Aₙ⁻ = n² R(-in) + in`. -/
+noncomputable def yosidaApproxNeg (hA : IsSelfAdjoint A) (n : ℕ+) : H →L[ℂ] H :=
+  (n : ℂ) ^ 2 • resolventAtNegIn hA n + (I * (n : ℂ)) • ContinuousLinearMap.id ℂ H
+
 /-- The contraction `Jₙ = -in·R(in)`. -/
 noncomputable def yosidaJ (hA : IsSelfAdjoint A) (n : ℕ+) : H →L[ℂ] H :=
   (-I * (n : ℂ)) • resolventAtIn hA n
@@ -378,6 +382,81 @@ theorem tendsto_yosidaJNeg (hA : IsSelfAdjoint A) (ψ : H) :
         · exact Metric.mem_ball.mp (hN n hn)
         · exact Metric.mem_ball'.mp hφclose
     _ = ε := by ring
+
+/-! ### The approximants factor through the contractions -/
+
+/-- `(-in)² = -n²`. -/
+private theorem negI_pnat_sq (n : ℕ+) :
+    (-I * (n : ℂ)) * (-I * (n : ℂ)) = -((n : ℂ) ^ 2) := by
+  rw [show (-I * (n : ℂ)) * (-I * (n : ℂ)) = (I * I) * (n : ℂ) ^ 2 by ring, Complex.I_mul_I]
+  ring
+
+/-- `(in)² = -n²`. -/
+private theorem I_pnat_sq (n : ℕ+) :
+    (I * (n : ℂ)) * (I * (n : ℂ)) = -((n : ℂ) ^ 2) := by
+  rw [show (I * (n : ℂ)) * (I * (n : ℂ)) = (I * I) * (n : ℂ) ^ 2 by ring, Complex.I_mul_I]
+  ring
+
+/-- On the domain, `Aₙ` factors through `Jₙ`: `Aₙφ = Jₙ(Aφ)`. -/
+theorem yosidaApprox_apply_of_mem_domain (hA : IsSelfAdjoint A) (n : ℕ+)
+    (φ : H) (hφ : φ ∈ A.domain) :
+    yosidaApprox hA n φ = yosidaJ hA n (A ⟨φ, hφ⟩) := by
+  set hz := mem_resolventSet_of_im_ne_zero hA (I_mul_pnat_im_ne_zero n) with hz_def
+  have h := yosidaJ_apply_of_mem_domain hA n φ hφ
+  have h' : (-I * (n : ℂ)) • resolvent A hz φ + resolvent A hz (A ⟨φ, hφ⟩) = φ := by
+    have : (-I * (n : ℂ)) • resolvent A hz φ = φ - resolvent A hz (A ⟨φ, hφ⟩) := h
+    rw [this]; abel
+  have hRA : resolvent A hz (A ⟨φ, hφ⟩) = φ - (-I * (n : ℂ)) • resolvent A hz φ :=
+    eq_sub_of_add_eq' h'
+  change (n : ℂ) ^ 2 • resolvent A hz φ - (I * (n : ℂ)) • φ
+    = (-I * (n : ℂ)) • resolvent A hz (A ⟨φ, hφ⟩)
+  rw [hRA, smul_sub, smul_smul, negI_pnat_sq]
+  module
+
+/-- `Aₙφ → Aφ` on the domain. -/
+theorem tendsto_yosidaApprox_of_mem_domain (hA : IsSelfAdjoint A) (ψ : H) (hψ : ψ ∈ A.domain) :
+    Tendsto (fun n : ℕ+ => yosidaApprox hA n ψ) atTop (𝓝 (A ⟨ψ, hψ⟩)) := by
+  simp only [fun n => yosidaApprox_apply_of_mem_domain hA n ψ hψ]
+  exact tendsto_yosidaJ hA (A ⟨ψ, hψ⟩)
+
+/-- On the domain, `Aₙ⁻` factors through `Jₙ⁻`. -/
+theorem yosidaApproxNeg_apply_of_mem_domain (hA : IsSelfAdjoint A) (n : ℕ+)
+    (φ : H) (hφ : φ ∈ A.domain) :
+    yosidaApproxNeg hA n φ = yosidaJNeg hA n (A ⟨φ, hφ⟩) := by
+  set hz := mem_resolventSet_of_im_ne_zero hA (neg_I_mul_pnat_im_ne_zero n) with hz_def
+  have h := yosidaJNeg_apply_of_mem_domain hA n φ hφ
+  have h' : (I * (n : ℂ)) • resolvent A hz φ + resolvent A hz (A ⟨φ, hφ⟩) = φ := by
+    have : (I * (n : ℂ)) • resolvent A hz φ = φ - resolvent A hz (A ⟨φ, hφ⟩) := h
+    rw [this]; abel
+  have hRA : resolvent A hz (A ⟨φ, hφ⟩) = φ - (I * (n : ℂ)) • resolvent A hz φ :=
+    eq_sub_of_add_eq' h'
+  change (n : ℂ) ^ 2 • resolvent A hz φ + (I * (n : ℂ)) • φ
+    = (I * (n : ℂ)) • resolvent A hz (A ⟨φ, hφ⟩)
+  rw [hRA, smul_sub, smul_smul, I_pnat_sq]
+  module
+
+/-- `Aₙ⁻φ → Aφ` on the domain. -/
+theorem tendsto_yosidaApproxNeg_of_mem_domain (hA : IsSelfAdjoint A) (φ : H) (hφ : φ ∈ A.domain) :
+    Tendsto (fun n : ℕ+ => yosidaApproxNeg hA n φ) atTop (𝓝 (A ⟨φ, hφ⟩)) := by
+  simp only [fun n => yosidaApproxNeg_apply_of_mem_domain hA n φ hφ]
+  exact tendsto_yosidaJNeg hA (A ⟨φ, hφ⟩)
+
+/-- The symmetric approximant is the average of the two one-sided ones. -/
+theorem yosidaApproxSym_eq_avg (hA : IsSelfAdjoint A) (n : ℕ+) :
+    yosidaApproxSym hA n = (1 / 2 : ℂ) • (yosidaApprox hA n + yosidaApproxNeg hA n) := by
+  unfold yosidaApproxSym yosidaApprox yosidaApproxNeg
+  module
+
+/-- `Aₙˢʸᵐφ → Aφ` on the domain. -/
+theorem tendsto_yosidaApproxSym_of_mem_domain (hA : IsSelfAdjoint A) (φ : H) (hφ : φ ∈ A.domain) :
+    Tendsto (fun n : ℕ+ => yosidaApproxSym hA n φ) atTop (𝓝 (A ⟨φ, hφ⟩)) := by
+  have hhalf : ((1 : ℂ) / 2) • (A ⟨φ, hφ⟩ + A ⟨φ, hφ⟩) = A ⟨φ, hφ⟩ := by module
+  have := ((tendsto_yosidaApprox_of_mem_domain hA φ hφ).add
+    (tendsto_yosidaApproxNeg_of_mem_domain hA φ hφ)).const_smul ((1 : ℂ) / 2)
+  rw [hhalf] at this
+  refine this.congr fun n => ?_
+  rw [yosidaApproxSym_eq_avg hA n]
+  rfl
 
 end LinearPMap
 end TauCeti
