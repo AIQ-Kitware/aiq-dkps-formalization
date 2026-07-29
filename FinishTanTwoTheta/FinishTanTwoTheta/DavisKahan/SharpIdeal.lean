@@ -26,9 +26,11 @@ open Experimental.ExactSinTheta
 
 noncomputable section
 
-variable {E0 : Type*} [NormedAddCommGroup E0] [InnerProductSpace ℂ E0]
+universe u
+
+variable {E0 : Type u} [NormedAddCommGroup E0] [InnerProductSpace ℂ E0]
   [CompleteSpace E0]
-variable {E1 : Type*} [NormedAddCommGroup E1] [InnerProductSpace ℂ E1]
+variable {E1 : Type u} [NormedAddCommGroup E1] [InnerProductSpace ℂ E1]
   [CompleteSpace E1]
 
 /-- Sharp endpoint for every standard symmetric completion, formulated in the
