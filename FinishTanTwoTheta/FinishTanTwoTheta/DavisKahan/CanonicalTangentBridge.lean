@@ -455,11 +455,17 @@ private theorem tanTwoAngleOperatorC_eq_modulus_ambientGraphTangent
       have hDnonneg : (0 : E →L[ℂ] E) ≤ D := by
         rw [ContinuousLinearMap.nonneg_iff_isPositive]
         refine ⟨ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp ?_, ?_⟩
-        · dsimp [D, G]
-          simpa only [map_one] using
-            (IsSelfAdjoint.algebraMap (E →L[ℂ] E)
-              (IsSelfAdjoint.all (1 : ℝ))).sub
-              (ContinuousLinearMap.isPositive_adjoint_comp_self Y).isSelfAdjoint
+        · -- Stay in the `ContinuousLinearMap` star instance throughout.  The
+          -- original route via `IsSelfAdjoint.algebraMap` produced the statement
+          -- at a *different* `Star` instance on the same type, which is why it
+          -- failed to typecheck against the goal.
+          show IsSelfAdjoint (ContinuousLinearMap.id ℂ E - G)
+          have hidsa : IsSelfAdjoint (ContinuousLinearMap.id ℂ E) := by
+            show star (ContinuousLinearMap.id ℂ E) = ContinuousLinearMap.id ℂ E
+            rw [ContinuousLinearMap.star_eq_adjoint,
+              ContinuousLinearMap.adjoint_id]
+          exact hidsa.sub
+            (ContinuousLinearMap.isPositive_adjoint_comp_self Y).isSelfAdjoint
         · intro x
           rw [ContinuousLinearMap.reApplyInnerSelf_apply]
           dsimp [D, G]
