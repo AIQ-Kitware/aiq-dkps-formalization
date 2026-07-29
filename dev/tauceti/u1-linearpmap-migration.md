@@ -190,6 +190,38 @@ is not this lane's to migrate.
 - The `Restriction.lean` and `ClosedSylvesterEquation.lean` facade blocks, once
   their remaining callers move.
 
+**Final warning census, and two targets that look inviting but are not
+(edward, aiq-gpu, 2026-07-29).**  Build warnings are **770 → ~425** over this
+session.  `unusedSectionVars` is at **0** in-scope, `unnecessarySimpa` at **0**
+in-scope, `unusedSimpArgs` at 8 documented exclusions.
+
+**Two measurements to stop anyone sizing a lane off the raw counts:**
+
+1. **The 215 deprecation warnings are almost entirely not ours.**  They are the
+   single largest category and each carries an exact Mathlib-supplied
+   replacement (`ContinuousLinearMap.mul_apply` → `mul_apply_eq_comp` 65,
+   `sub_apply` 41, `smul_apply` 35, …), so they look like the ideal mechanical
+   lane.  **214 of 215 are in vendored `Spectra/**`.  Exactly one is in
+   `DavisKahan/**`.**
+2. **`linter.unusedVariables` (36 in-scope) should be left as-is.**  They are
+   named hypothesis binders in structure fields — `(hA : A.IsSelfAdjoint)
+   (hB : B.IsSelfAdjoint)` in `GenuineOrderedSylvesterEngine.lowerUpper` and 13
+   more of that shape.  The linter fires because the *name* is unreferenced
+   inside the declaration, but the name is **API documentation** for the caller
+   who has to supply the argument.  Silencing it means rewriting them as `_`,
+   which makes the statement less readable.  That is worse mathlib quality, not
+   better.
+
+**`linter.unnecessarySeqFocus`: 4 of 18 done, 14 deliberately left.**  The fix
+re-parenthesises `tac1 <;> tac2` into `(tac1; tac2)`, which is **purely
+stylistic** — the two differ only in goal focusing, and the linter fires exactly
+when there is one goal.  The four taken were single-line `convert h using 1 <;>
+ring`.  The fourteen left are structural: eight are mid-chain continuations in
+`Sharpness.lean` where the `<;>` joins across lines, and four carry *two*
+combinators (`match_scalars <;> push_cast <;> ring`) where the warning's position
+does not say which one is redundant.  Restructuring multi-line tactic blocks for
+zero semantic gain is a bad trade.
+
 **`linter.unusedSimpArgs` swept: 162 → 17 (edward, aiq-gpu, 2026-07-29).**
 In-scope (everything under `DavisKahan/**` bar `Interop/Spectra/**`) went
 **153 → 8**.  The 9 out-of-scope are `Interop/Spectra/**`, vendored `Spectra/**`
