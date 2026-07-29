@@ -172,18 +172,26 @@ noncomputable def unitaryConj (U : H ≃ₗᵢ[𝕜] H') (A : H →ₗ.[𝕜] H)
         rw [hsub, A.map_smul, map_smul]
         rfl }
 
+/-- Membership in the conjugated domain is membership in the original domain after pulling back
+along `U`.  True by definition, but stated so call sites need not unfold `unitaryConj`. -/
 theorem mem_unitaryConj_domain_iff {U : H ≃ₗᵢ[𝕜] H'} {A : H →ₗ.[𝕜] H} {x : H'} :
     x ∈ (unitaryConj U A).domain ↔ U.symm x ∈ A.domain := Iff.rfl
 
+/-- The conjugated map acts by transporting to `H`, applying `A`, and pushing forward again. -/
 theorem unitaryConj_apply (U : H ≃ₗᵢ[𝕜] H') (A : H →ₗ.[𝕜] H)
     (x : (unitaryConj U A).domain) :
     unitaryConj U A x = U (A ⟨U.symm (x : H'), x.2⟩) := rfl
 
+/-- `U` carries the domain of `A` into the domain of the conjugate; this is the membership proof
+the next lemma needs in order to state its argument at all. -/
 theorem map_mem_unitaryConj_domain (U : H ≃ₗᵢ[𝕜] H') (A : H →ₗ.[𝕜] H) (y : A.domain) :
     U (y : H) ∈ (unitaryConj U A).domain := by
   rw [mem_unitaryConj_domain_iff, U.symm_apply_apply]
   exact y.2
 
+/-- The intertwining relation `(U A U⁻¹) (U y) = U (A y)` on the domain of `A`.  This is the form
+in which conjugation is actually used, `unitaryConj_apply` being stated at a bundled domain
+element rather than at `U y`. -/
 theorem unitaryConj_apply_map (U : H ≃ₗᵢ[𝕜] H') (A : H →ₗ.[𝕜] H) (y : A.domain) :
     unitaryConj U A ⟨U (y : H), map_mem_unitaryConj_domain U A y⟩ = U (A y) := by
   rw [unitaryConj_apply]

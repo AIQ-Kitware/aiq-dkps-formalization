@@ -80,6 +80,7 @@ theorem nuclearENorm_eq_iSup_kyFanGauge (T : E →L[ℂ] F) :
   rw [kyFanGauge, ENNReal.ofReal_sum_of_nonneg]
   exact fun n _ => T.approximationNumber_nonneg n
 
+/-- Every Ky Fan gauge is bounded by the nuclear norm, the latter being their supremum. -/
 theorem ofReal_kyFanGauge_le_nuclearENorm (T : E →L[ℂ] F) (k : ℕ) :
     ENNReal.ofReal (T.kyFanGauge k) ≤ T.nuclearENorm := by
   rw [nuclearENorm_eq_iSup_kyFanGauge]
@@ -111,6 +112,7 @@ theorem nuclearENorm_add_le (S T : E →L[ℂ] F) :
           (T.ofReal_kyFanGauge_le_nuclearENorm k)
 
 omit [CompleteSpace E] [CompleteSpace F] in
+/-- The nuclear norm is absolutely homogeneous. -/
 theorem nuclearENorm_smul (c : ℂ) (T : E →L[ℂ] F) :
     (c • T).nuclearENorm = ‖c‖ₑ * T.nuclearENorm := by
   simp only [nuclearENorm, approximationNumber_smul,
@@ -123,6 +125,8 @@ theorem enorm_le_nuclearENorm (T : E →L[ℂ] F) : ‖T‖ₑ ≤ T.nuclearENor
   rw [← ofReal_norm, ← T.approximationNumber_index_zero]
   exact ENNReal.le_tsum 0
 
+/-- The nuclear norm is adjoint-invariant, since the approximation numbers are.  This is the
+property that makes the trace-class family *symmetric* rather than merely an ideal. -/
 theorem nuclearENorm_adjoint (T : E →L[ℂ] F) : T.adjoint.nuclearENorm = T.nuclearENorm := by
   simp only [nuclearENorm, approximationNumber_adjoint]
 
@@ -196,6 +200,8 @@ variable {E F : Type v}
 @[simp] theorem gauge_traceClassIdealFamily (A : E →L[ℂ] F) :
     (traceClassIdealFamily.{v}).gauge A = A.nuclearENorm := rfl
 
+/-- Membership in the trace-class ideal is exactly `IsTraceClass`; true by definition, but stated
+so call sites need not unfold the family. -/
 theorem mem_traceClassIdealFamily_carrier_iff (A : E →L[ℂ] F) :
     A ∈ (traceClassIdealFamily.{v}).toOperatorIdealFamily.carrier ↔ A.IsTraceClass :=
   Iff.rfl

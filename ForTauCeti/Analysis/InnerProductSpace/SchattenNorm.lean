@@ -63,10 +63,13 @@ noncomputable def singularValueVector (A : E →ₗ[𝕜] F) :
     Fin (min (finrank 𝕜 E) (finrank 𝕜 F)) → ℝ :=
   fun i => A.singularValues (i : ℕ)
 
+/-- Singular values are nonnegative. -/
 theorem singularValueVector_nonneg (A : E →ₗ[𝕜] F) (i) :
     0 ≤ singularValueVector A i :=
   A.singularValues_nonneg _
 
+/-- Singular values are listed in decreasing order.  Stated for the `Fin`-indexed vector, where
+the order is `Fin.le_def` rather than the underlying order on `ℕ`. -/
 theorem singularValueVector_antitone (A : E →ₗ[𝕜] F) :
     Antitone (singularValueVector A) := by
   intro i j hij
@@ -181,6 +184,8 @@ theorem singularValueVector_unitary_comp
   -- coercion rather than applied with `congrFun`
   simp only [singularValueVector, singularValues_unitary_comp U A]
 
+/-- Precomposing with a unitary of the domain leaves the singular values unchanged; the
+counterpart of `singularValueVector_unitary_comp` on the codomain side. -/
 theorem singularValueVector_comp_unitary
     (A : E →ₗ[𝕜] F) (V : E ≃ₗᵢ[𝕜] E) :
     singularValueVector (A ∘ₗ V.toLinearMap) = singularValueVector A := by
@@ -215,6 +220,7 @@ noncomputable def schattenNorm (p : ℝ) (hp : 1 ≤ p) :
     schattenNorm p hp A = FiniteVector.lpGauge p (singularValueVector A) :=
   rfl
 
+/-- The Schatten `p` norm is nonnegative. -/
 theorem schattenNorm_nonneg (p : ℝ) (hp : 1 ≤ p) (A : E →ₗ[𝕜] F) :
     0 ≤ schattenNorm p hp A :=
   (schattenNorm p hp).nonneg A
@@ -223,15 +229,19 @@ theorem schattenNorm_nonneg (p : ℝ) (hp : 1 ≤ p) (A : E →ₗ[𝕜] F) :
     schattenNorm (𝕜 := 𝕜) (E := E) (F := F) p hp 0 = 0 :=
   (schattenNorm p hp).apply_zero
 
+/-- Triangle inequality for the Schatten `p` norm. -/
 theorem schattenNorm_add_le (p : ℝ) (hp : 1 ≤ p) (A B : E →ₗ[𝕜] F) :
     schattenNorm p hp (A + B) ≤ schattenNorm p hp A + schattenNorm p hp B :=
   (schattenNorm p hp).add_le A B
 
+/-- The Schatten `p` norm is absolutely homogeneous. -/
 theorem schattenNorm_smul (p : ℝ) (hp : 1 ≤ p) (a : 𝕜)
     (A : E →ₗ[𝕜] F) :
     schattenNorm p hp (a • A) = ‖a‖ * schattenNorm p hp A :=
   (schattenNorm p hp).smul_eq a A
 
+/-- The Schatten `p` norm is unchanged by unitaries on either side -- the defining property of a
+rectangular unitarily invariant norm, restated for direct use. -/
 theorem schattenNorm_invariant (p : ℝ) (hp : 1 ≤ p)
     (U : F ≃ₗᵢ[𝕜] F) (V : E ≃ₗᵢ[𝕜] E) (A : E →ₗ[𝕜] F) :
     schattenNorm p hp (U.toLinearMap ∘ₗ A ∘ₗ V.toLinearMap) =
