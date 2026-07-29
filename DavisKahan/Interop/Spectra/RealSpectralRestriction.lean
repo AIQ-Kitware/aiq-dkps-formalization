@@ -8,9 +8,6 @@ import DavisKahan.SpectralTheory.Complexification.FunctionalCalculus
 import DavisKahan.SpectralTheory.Complexification.Subspace
 import DavisKahan.SpectralTheory.ReducingSubspace.Restriction
 import DavisKahan.Interop.Spectra.SpectralRestrictionOperator
-import Spectra.Resolvent.Identities
-import Spectra.SpectralTheory.ResolventForm
-import Spectra.SpectralTheory.Essential.Weyl
 
 /-!
 # Real spectral projections and restrictions by complexification
@@ -36,11 +33,6 @@ namespace Experimental
 namespace SpectraBridge
 namespace RealSpectralRestriction
 
-open Spectra
-open Spectra.Resolvent
-open Spectra.YosidaHille
-open Spectra.Essential
-open Spectra.QuantumMechanics.SpectralTheory
 open ExactSinTheta
 open ExactSinTheta.ClosedOperatorComplexification
 open ExactSinTheta.RealComplexificationFunctionalCalculus
@@ -63,8 +55,8 @@ local notation "RealClosedOperator" =>
 
 /-- Conjugate a projection-valued measure by the canonical real-structure
 conjugation. -/
-noncomputable def conjugatePVM (P : Spectra.ProjValMeasure Eℂ) :
-    Spectra.ProjValMeasure Eℂ where
+noncomputable def conjugatePVM (P : TauCeti.ProjValMeasure Eℂ) :
+    TauCeti.ProjValMeasure Eℂ where
   proj B hB := conjugateOperator (P.proj B hB)
   diag z := P.diag (conjugation z)
   diag_finite z := P.diag_finite (conjugation z)
@@ -84,13 +76,13 @@ noncomputable def conjugatePVM (P : Spectra.ProjValMeasure Eℂ) :
     rw [← conjugateOperator_mul, P.proj_inter]
 
 @[simp]
-theorem conjugatePVM_proj (P : Spectra.ProjValMeasure Eℂ)
+theorem conjugatePVM_proj (P : TauCeti.ProjValMeasure Eℂ)
     (B : Set ℝ) (hB : MeasurableSet B) :
     (conjugatePVM P).proj B hB = conjugateOperator (P.proj B hB) :=
   rfl
 
 @[simp]
-theorem conjugatePVM_diag (P : Spectra.ProjValMeasure Eℂ) (z : Eℂ) :
+theorem conjugatePVM_diag (P : TauCeti.ProjValMeasure Eℂ) (z : Eℂ) :
     (conjugatePVM P).diag z = P.diag (conjugation z) :=
   rfl
 
@@ -130,113 +122,205 @@ theorem complexify_apply_conjugationDomain (A : RealClosedOperator)
     refine (ClosedOperatorComplexification.toLinearMap_congr ?_).trans (map_neg _ _)
     simp [conjugationDomain]
 
-private theorem selfAdjointResolvent_adjoint
-    {A : Eℂ →ₗ.[ℂ] Eℂ} (hA : IsSelfAdjoint A)
-    (z : ℂ) (hz : z.im ≠ 0) :
-    (selfAdjointResolvent hA z hz).adjoint =
-      selfAdjointResolvent hA (starRingEnd ℂ z)
-        (by simpa only [Complex.conj_im, neg_ne_zero] using hz) := by
-  unfold selfAdjointResolvent
-  exact resolvent_adjoint
-    (isFormalAdjoint_of_isSelfAdjoint hA)
-    (isSelfAdjoint_to_surjective hA).1
-    (isSelfAdjoint_to_surjective hA).2 z hz
-
-/-- Resolvents of a complexified real self-adjoint operator are exchanged by
-canonical conjugation and conjugation of the spectral parameter. -/
-theorem conjugateOperator_selfAdjointResolvent
+/-- Resolvents of a complexified real self-adjoint operator, in the native
+`TauCeti` sense, are exchanged by canonical conjugation and conjugation of the
+spectral parameter. -/
+theorem conjugateOperator_tauCetiResolvent
     (A : RealClosedOperator) (hA : A.IsSelfAdjoint)
-    (z : ℂ) (hz : z.im ≠ 0) :
-    conjugateOperator
-        (selfAdjointResolvent
-          (ClosedOperatorComplexification.isSelfAdjoint_complexify hA) z hz) =
-      selfAdjointResolvent
-        (ClosedOperatorComplexification.isSelfAdjoint_complexify hA)
-        (starRingEnd ℂ z)
-        (by simpa only [Complex.conj_im, neg_ne_zero] using hz) := by
-  let Aℂ := ClosedOperatorComplexification.complexify A
-  let hAℂ := ClosedOperatorComplexification.isSelfAdjoint_complexify hA
-  let zbar := starRingEnd ℂ z
-  have hzbar : zbar.im ≠ 0 := by
-    simpa [zbar] using hz
+    {z : ℂ} (hz : z.im ≠ 0)
+    (hzr : z ∈ TauCeti.LinearPMap.resolventSet
+      (ClosedOperatorComplexification.complexify A).toLinearPMap)
+    (hzbr : (starRingEnd ℂ) z ∈ TauCeti.LinearPMap.resolventSet
+      (ClosedOperatorComplexification.complexify A).toLinearPMap) :
+    conjugateOperator (TauCeti.LinearPMap.resolvent
+        (ClosedOperatorComplexification.complexify A).toLinearPMap hzr)
+      = TauCeti.LinearPMap.resolvent
+          (ClosedOperatorComplexification.complexify A).toLinearPMap hzbr := by
   apply ContinuousLinearMap.ext
   intro ξ
-  let r : Eℂ := selfAdjointResolvent hAℂ z hz (conjugation ξ)
+  set Aℂ := (ClosedOperatorComplexification.complexify A).toLinearPMap with hAc
+  set r : Eℂ := TauCeti.LinearPMap.resolvent Aℂ hzr (conjugation ξ) with hr
   have hrdom : r ∈ Aℂ.domain :=
-    selfAdjointResolvent_mem_domain hAℂ z hz (conjugation ξ)
-  let rDom : Aℂ.domain := ⟨r, hrdom⟩
-  let jrDom : Aℂ.domain := conjugationDomain A rDom
-  have hsolve :
-      (ClosedOperatorComplexification.complexify A).toLinearPMap rDom
-          - z • (rDom : Eℂ) = conjugation ξ :=
-    selfAdjointResolvent_solves hAℂ z hz (conjugation ξ)
-  have happ :
-      (ClosedOperatorComplexification.complexify A).toLinearPMap jrDom =
-        conjugation
-          ((ClosedOperatorComplexification.complexify A).toLinearPMap rDom) :=
-    complexify_apply_conjugationDomain A rDom
-  have hjsolve :
-      (ClosedOperatorComplexification.complexify A).toLinearPMap jrDom
-          - zbar • (jrDom : Eℂ) = ξ := by
-    have h1 :
-        (ClosedOperatorComplexification.complexify A).toLinearPMap jrDom
-            - zbar • (jrDom : Eℂ) =
-          conjugation
-            ((ClosedOperatorComplexification.complexify A).toLinearPMap rDom
-              - z • (rDom : Eℂ)) := by
+    TauCeti.LinearPMap.resolvent_mem_domain hzr (conjugation ξ)
+  have hsolve : Aℂ ⟨r, hrdom⟩ - z • r = conjugation ξ :=
+    TauCeti.LinearPMap.sub_smul_resolvent hzr (conjugation ξ)
+  set jr : Aℂ.domain := conjugationDomain A ⟨r, hrdom⟩ with hjr
+  have happ : Aℂ jr = conjugation (Aℂ ⟨r, hrdom⟩) :=
+    complexify_apply_conjugationDomain A ⟨r, hrdom⟩
+  have hjsolve : Aℂ jr - (starRingEnd ℂ) z • (jr : Eℂ) = ξ := by
+    have h1 : Aℂ jr - (starRingEnd ℂ) z • (jr : Eℂ)
+        = conjugation (Aℂ ⟨r, hrdom⟩ - z • r) := by
       rw [map_sub, conjugation_complex_smul, ← happ]
       rfl
     rw [h1, hsolve, conjugation_involutive]
-  have hleft := selfAdjointResolvent_left_inverse hAℂ zbar hzbar jrDom
-  change conjugation
-      (selfAdjointResolvent hAℂ z hz (conjugation ξ)) =
-    selfAdjointResolvent hAℂ zbar hzbar ξ
+  have hleft := TauCeti.LinearPMap.resolvent_apply_sub_smul hzbr jr
   rw [hjsolve] at hleft
+  change conjugation (TauCeti.LinearPMap.resolvent Aℂ hzr (conjugation ξ)) = _
   exact hleft.symm
 
+/-- The Cayley transform of a complexified real self-adjoint operator is sent to
+its adjoint by canonical conjugation. -/
+theorem conjugateOperator_cayley (A : RealClosedOperator) (hA : A.IsSelfAdjoint) :
+    conjugateOperator (TauCeti.LinearPMap.cayley
+        (ClosedOperatorComplexification.isSelfAdjoint_complexify hA))
+      = star (TauCeti.LinearPMap.cayley
+          (ClosedOperatorComplexification.isSelfAdjoint_complexify hA)) := by
+  set hAℂ := ClosedOperatorComplexification.isSelfAdjoint_complexify hA with hhAc
+  have hni := TauCeti.LinearPMap.negI_mem_resolventSet hAℂ
+  have hi := TauCeti.LinearPMap.I_mem_resolventSet hAℂ
+  have hconjI : ((starRingEnd ℂ) (-Complex.I)) ∈ TauCeti.LinearPMap.resolventSet
+      (ClosedOperatorComplexification.complexify A).toLinearPMap := by simpa using hi
+  have hkey : conjugateOperator
+      (TauCeti.LinearPMap.resolvent
+        (ClosedOperatorComplexification.complexify A).toLinearPMap hni)
+      = ContinuousLinearMap.adjoint
+        (TauCeti.LinearPMap.resolvent
+          (ClosedOperatorComplexification.complexify A).toLinearPMap hni) := by
+    rw [conjugateOperator_tauCetiResolvent A hA (by simp) hni hconjI,
+      TauCeti.LinearPMap.adjoint_resolvent hAℂ hni hconjI]
+  rw [TauCeti.LinearPMap.cayley, conjugateOperator_sub, conjugateOperator_one,
+    conjugateOperator_complex_smul, hkey, star_sub, star_one, star_smul,
+    ContinuousLinearMap.star_eq_adjoint]
+  rfl
+
+/-- **Canonical conjugation conjugates the symbol.**  If a normal operator on a
+complexification satisfies `J U J = U⋆`, then `J Φ(f) J = Φ(f⋆)` for its
+continuous functional calculus.  The map `f ↦ J Φ(f⋆) J` is a continuous unital
+`⋆`-algebra homomorphism — conjugate-linear twice is linear — sending the
+coordinate function to `J U⋆ J = U`, so uniqueness of the continuous functional
+calculus identifies it with `Φ`. -/
+theorem conjugateOperator_cfcHom {U : Eℂ →L[ℂ] Eℂ} (hU : IsStarNormal U)
+    (hUc : conjugateOperator U = star U) (f : C(spectrum ℂ U, ℂ)) :
+    conjugateOperator (cfcHom hU f) = cfcHom hU (star f) := by
+  let Ψ : C(spectrum ℂ U, ℂ) →⋆ₐ[ℂ] (Eℂ →L[ℂ] Eℂ) :=
+    { toFun := fun g => conjugateOperator (cfcHom hU (star g))
+      map_one' := by rw [star_one, map_one, conjugateOperator_one]
+      map_mul' := fun g h => by
+        rw [star_mul', map_mul, conjugateOperator_mul]
+      map_zero' := by rw [star_zero, map_zero, conjugateOperator_zero]
+      map_add' := fun g h => by rw [star_add, map_add, conjugateOperator_add]
+      commutes' := fun c => by
+        rw [Algebra.algebraMap_eq_smul_one, star_smul, star_one, map_smul, map_one,
+          conjugateOperator_complex_smul, conjugateOperator_one,
+          Algebra.algebraMap_eq_smul_one]
+        congr 1
+        simp
+      map_star' := fun g => by
+        change conjugateOperator (cfcHom hU (star (star g)))
+          = star (conjugateOperator (cfcHom hU (star g)))
+        rw [star_star, ContinuousLinearMap.star_eq_adjoint,
+          ← conjugateOperator_adjoint, ← ContinuousLinearMap.star_eq_adjoint,
+          ← map_star, star_star] }
+  have hdist : ∀ g h : C(spectrum ℂ U, ℂ), dist (star g) (star h) ≤ dist g h := by
+    intro g h
+    refine (ContinuousMap.dist_le dist_nonneg).mpr fun x => ?_
+    have hx : dist ((star g) x) ((star h) x) = dist (g x) (h x) := by
+      simp only [ContinuousMap.star_apply, Complex.dist_eq, ← star_sub, norm_star]
+    rw [hx]
+    exact ContinuousMap.dist_apply_le_dist x
+  have hstarcont : Continuous (star : C(spectrum ℂ U, ℂ) → C(spectrum ℂ U, ℂ)) := by
+    refine (Isometry.of_dist_eq fun g h => le_antisymm (hdist g h) ?_).continuous
+    simpa only [star_star] using hdist (star g) (star h)
+  have hcont : Continuous Ψ :=
+    continuous_conjugateOperatorHom.comp ((cfcHom_continuous hU).comp hstarcont)
+  have hid : Ψ ((ContinuousMap.id ℂ).restrict (spectrum ℂ U)) = U := by
+    change conjugateOperator (cfcHom hU (star ((ContinuousMap.id ℂ).restrict _))) = U
+    rw [map_star, cfcHom_id hU, ← hUc, conjugateOperator_involutive]
+  have heq : cfcHom hU = Ψ := cfcHom_eq_of_continuous_of_map_id hU Ψ hcont hid
+  have happ : cfcHom hU (star f) = conjugateOperator (cfcHom hU (star (star f))) :=
+    DFunLike.congr_fun heq (star f)
+  rw [star_star] at happ
+  exact happ.symm
+
+/-- The diagonal spectral measures of the Cayley transform are conjugation
+invariant: real symbols have conjugation-invariant calculus images. -/
+theorem diagMeasure_conjugation (A : RealClosedOperator) (hA : A.IsSelfAdjoint) (η : Eℂ) :
+    TauCeti.BorelCalculus.diagMeasure (TauCeti.LinearPMap.isStarNormal_cayley
+        (ClosedOperatorComplexification.isSelfAdjoint_complexify hA)) (conjugation η)
+      = TauCeti.BorelCalculus.diagMeasure (TauCeti.LinearPMap.isStarNormal_cayley
+          (ClosedOperatorComplexification.isSelfAdjoint_complexify hA)) η := by
+  have hUc := conjugateOperator_cayley A hA
+  refine TauCeti.BorelCalculus.diagMeasure_congr _ (DFunLike.ext _ _ fun g => ?_)
+  change (⟪conjugation η, cfcHom _ (TauCeti.BorelCalculus.ofRealLM g.toContinuousMap)
+      (conjugation η)⟫_ℂ).re
+    = (⟪η, cfcHom _ (TauCeti.BorelCalculus.ofRealLM g.toContinuousMap) η⟫_ℂ).re
+  set T := cfcHom (TauCeti.LinearPMap.isStarNormal_cayley
+    (ClosedOperatorComplexification.isSelfAdjoint_complexify hA))
+    (TauCeti.BorelCalculus.ofRealLM g.toContinuousMap) with hT
+  have hfix : conjugateOperator T = T := by
+    rw [hT, conjugateOperator_cfcHom _ hUc, TauCeti.BorelCalculus.star_ofRealLM]
+  have hstep : ⟪conjugation η, T (conjugation η)⟫_ℂ = ⟪T η, η⟫_ℂ := by
+    have h1 : T (conjugation η) = conjugation (conjugateOperator T η) := by
+      rw [conjugateOperator_apply, conjugation_involutive]
+    rw [h1, hfix, inner_conjugation]
+  rw [hstep, ← inner_conj_symm]
+  simp
+
+/-- **Spectral projections of a complexified real operator are conjugation
+invariant.**  Conjugation permutes the four polarisation points (`k ↔ -k`) and
+fixes the diagonal measures; since indicator symbols are real, the four
+integrals are real and the polarisation sum is its own conjugate. -/
+theorem conjugateOperator_specProjection (A : RealClosedOperator) (hA : A.IsSelfAdjoint)
+    (S : Set ℝ) (hS : MeasurableSet S) :
+    conjugateOperator (TauCeti.LinearPMap.specProjection
+        (ClosedOperatorComplexification.isSelfAdjoint_complexify hA) S hS)
+      = TauCeti.LinearPMap.specProjection
+          (ClosedOperatorComplexification.isSelfAdjoint_complexify hA) S hS := by
+  set hAℂ := ClosedOperatorComplexification.isSelfAdjoint_complexify hA with hhAc
+  set hU := TauCeti.LinearPMap.isStarNormal_cayley hAℂ with hhU
+  set κ := TauCeti.LinearPMap.cayleyInv hAℂ with hκ
+  have hSm : MeasurableSet (κ ⁻¹' S) := TauCeti.LinearPMap.measurable_cayleyInv hAℂ hS
+  set ind : _root_.spectrum ℂ (TauCeti.LinearPMap.cayley hAℂ) → ℂ :=
+    (κ ⁻¹' S).indicator (fun _ => (1 : ℂ)) with hind
+  -- the four polarisation integrals are real
+  have hIreal : ∀ η : Eℂ,
+      (starRingEnd ℂ) (∫ w, ind w ∂(TauCeti.BorelCalculus.diagMeasure hU η))
+        = ∫ w, ind w ∂(TauCeti.BorelCalculus.diagMeasure hU η) := by
+    intro η
+    rw [hind, MeasureTheory.integral_indicator_const _ hSm]
+    simp
+  refine ContinuousLinearMap.ext fun ξ => ext_inner_left ℂ fun ψ => ?_
+  rw [conjugateOperator_apply, inner_conjugation_right, ← inner_conj_symm,
+    TauCeti.LinearPMap.specProjection, TauCeti.LinearPMap.spectralPVM,
+    TauCeti.BorelCalculus.toProjValMeasure_proj, TauCeti.BorelCalculus.specProj,
+    TauCeti.BorelCalculus.inner_borelCalculus, TauCeti.BorelCalculus.inner_borelCalculus]
+  -- move the conjugation through the four diagonal measures
+  have h1 : conjugation ξ + conjugation ψ = conjugation (ξ + ψ) := (map_add _ _ _).symm
+  have h2 : conjugation ξ + Complex.I • conjugation ψ
+      = conjugation (ξ - Complex.I • ψ) := by
+    rw [map_sub, conjugation_complex_smul, Complex.conj_I]
+    module
+  have h3 : conjugation ξ - conjugation ψ = conjugation (ξ - ψ) := (map_sub _ _ _).symm
+  have h4 : conjugation ξ - Complex.I • conjugation ψ
+      = conjugation (ξ + Complex.I • ψ) := by
+    rw [map_add, conjugation_complex_smul, Complex.conj_I]
+    module
+  rw [TauCeti.BorelCalculus.pair, TauCeti.BorelCalculus.pair, h1, h2, h3, h4,
+    diagMeasure_conjugation A hA, diagMeasure_conjugation A hA,
+    diagMeasure_conjugation A hA, diagMeasure_conjugation A hA]
+  have e1 := hIreal (ξ + ψ)
+  have e2 := hIreal (ξ + Complex.I • ψ)
+  have e3 := hIreal (ξ - ψ)
+  have e4 := hIreal (ξ - Complex.I • ψ)
+  simp only [map_mul, map_sub, map_add, map_one, map_div₀, Complex.conj_I,
+    Complex.conj_ofNat]
+  rw [e1, e2, e3, e4]
+  ring
+
 /-- The spectral PVM of a complexified real self-adjoint operator is fixed by
-canonical conjugation. -/
+canonical conjugation.  A PVM is determined by its diagonal measures, and those
+are conjugation invariant. -/
 theorem conjugatePVM_spectralPVM
     (A : RealClosedOperator) (hA : A.IsSelfAdjoint) :
     conjugatePVM
-        (Spectra.QuantumMechanics.SpectralTheory.spectralPVM
+        (TauCeti.LinearPMap.spectralPVM
           (ClosedOperatorComplexification.isSelfAdjoint_complexify hA)) =
-      Spectra.QuantumMechanics.SpectralTheory.spectralPVM
-        (ClosedOperatorComplexification.isSelfAdjoint_complexify hA) := by
-  let Aℂ := ClosedOperatorComplexification.complexify A
-  let hAℂ := ClosedOperatorComplexification.isSelfAdjoint_complexify hA
-  let P := Spectra.QuantumMechanics.SpectralTheory.spectralPVM hAℂ
-  apply spectralPVM_unique hAℂ (conjugatePVM P)
-  intro z hz ξ
-  have hzbar : (starRingEnd ℂ z).im ≠ 0 := by
-    simpa only [Complex.conj_im, neg_ne_zero] using hz
-  have hres := congrArg
-    (fun T : Eℂ →L[ℂ] Eℂ => T (conjugation ξ))
-    (conjugateOperator_selfAdjointResolvent A hA
-      (starRingEnd ℂ z) hzbar)
-  have hresPoint :
-      selfAdjointResolvent hAℂ z hz (conjugation ξ) =
-        conjugation
-          (selfAdjointResolvent hAℂ (starRingEnd ℂ z) hzbar ξ) := by
-    simpa [Aℂ, hAℂ, conjugateOperator_apply] using hres.symm
-  calc
-    ⟪ξ, selfAdjointResolvent hAℂ z hz ξ⟫_ℂ =
-        ⟪(selfAdjointResolvent hAℂ z hz).adjoint ξ, ξ⟫_ℂ := by
-      rw [ContinuousLinearMap.adjoint_inner_left]
-    _ = ⟪selfAdjointResolvent hAℂ (starRingEnd ℂ z) hzbar ξ, ξ⟫_ℂ := by
-      rw [selfAdjointResolvent_adjoint]
-    _ = ⟪conjugation ξ,
-          conjugation
-            (selfAdjointResolvent hAℂ (starRingEnd ℂ z) hzbar ξ)⟫_ℂ := by
-      rw [inner_conjugation]
-    _ = ⟪conjugation ξ,
-          selfAdjointResolvent hAℂ z hz (conjugation ξ)⟫_ℂ := by
-      rw [hresPoint]
-    _ = ∫ s, ((s : ℂ) - z)⁻¹ ∂((conjugatePVM P).diag ξ) := by
-      change ⟪conjugation ξ,
-          selfAdjointResolvent hAℂ z hz (conjugation ξ)⟫_ℂ =
-        ∫ s, ((s : ℂ) - z)⁻¹ ∂(P.diag (conjugation ξ))
-      exact spectralPVM_resolvent_formula hAℂ z hz (conjugation ξ)
+      TauCeti.LinearPMap.spectralPVM
+        (ClosedOperatorComplexification.isSelfAdjoint_complexify hA) :=
+  TauCeti.ProjValMeasure.ext_of_diag fun ξ =>
+    congrArg (MeasureTheory.Measure.map (TauCeti.LinearPMap.cayleyInv
+      (ClosedOperatorComplexification.isSelfAdjoint_complexify hA)))
+      (diagMeasure_conjugation A hA ξ)
 
 /-- Every measurable spectral projection of a complexified real self-adjoint
 operator is fixed by canonical conjugation. -/
@@ -250,10 +334,7 @@ theorem conjugateOperator_selfAdjointSpectralProjection
       selfAdjointSpectralProjection
         (ClosedOperatorComplexification.complexify A)
         (ClosedOperatorComplexification.isSelfAdjoint_complexify hA) S hS := by
-  let hP := conjugatePVM_spectralPVM A hA
-  have hproj := congrArg
-    (fun P : Spectra.ProjValMeasure Eℂ => P.proj S hS) hP
-  exact hproj
+  exact conjugateOperator_specProjection A hA S hS
 
 /-- The canonical real spectral projection, obtained by descending the complex
 spectral projection of the complexified operator. -/
@@ -310,7 +391,7 @@ theorem realSelfAdjointSpectralProjection_idem
     selfAdjointSpectralProjection
       (ClosedOperatorComplexification.complexify A)
       (ClosedOperatorComplexification.isSelfAdjoint_complexify hA) S hS = _
-  exact (Spectra.QuantumMechanics.SpectralTheory.PVM.spectralPVM
+  exact (TauCeti.LinearPMap.spectralPVM
     (ClosedOperatorComplexification.isSelfAdjoint_complexify hA)).proj_idem S hS
 
 /-- The descended real spectral projection is self-adjoint. -/
@@ -322,7 +403,7 @@ theorem realSelfAdjointSpectralProjection_isSelfAdjoint
   apply RealComplexification.complexify_injective
   rw [RealComplexificationFunctionalCalculus.complexify_adjoint,
     complexify_realSelfAdjointSpectralProjection]
-  exact (Spectra.QuantumMechanics.SpectralTheory.PVM.spectralPVM
+  exact (TauCeti.LinearPMap.spectralPVM
     (ClosedOperatorComplexification.isSelfAdjoint_complexify hA)).isSelfAdjoint_proj S hS
     |>.adjoint_eq
 
@@ -435,8 +516,8 @@ theorem realSelfAdjointSpectralProjection_compl
     RealComplexification.complexify_sub,
     RealComplexification.complexify_id,
     complexify_realSelfAdjointSpectralProjection]
-  exact spectralProjection_compl
-    (genToGroup (ClosedOperatorComplexification.isSelfAdjoint_complexify hA)) S hS
+  exact (TauCeti.LinearPMap.spectralPVM
+    (ClosedOperatorComplexification.isSelfAdjoint_complexify hA)).proj_compl S hS
 
 /-- The range selected by the complement set is the orthogonal complement of
 the selected real spectral range. -/

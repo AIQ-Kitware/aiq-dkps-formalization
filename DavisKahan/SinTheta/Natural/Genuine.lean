@@ -43,10 +43,11 @@ theorem spectralSubspace_orthogonalExactDecomposition
   let Uc := selfAdjointSpectralSubspace A hA Sᶜ hS.compl
   have hUcProjection : Uc.starProjection =
       ContinuousLinearMap.id ℂ E - U.starProjection := by
-    rw [← selfAdjointSpectralProjection_eq_starProjection A hA Sᶜ hS.compl]
-    change spectralProjection (genToGroup hA) Sᶜ hS.compl =
-      ContinuousLinearMap.id ℂ E - U.starProjection
-    rw [spectralProjection_compl (genToGroup hA) S hS]
+    rw [← selfAdjointSpectralProjection_eq_starProjection A hA Sᶜ hS.compl,
+      show SpectraBridge.selfAdjointSpectralProjection A hA Sᶜ hS.compl
+          = ContinuousLinearMap.id ℂ E -
+            SpectraBridge.selfAdjointSpectralProjection A hA S hS from
+        (TauCeti.LinearPMap.spectralPVM hA).proj_compl S hS]
     change ContinuousLinearMap.id ℂ E -
         SpectraBridge.selfAdjointSpectralProjection A hA S hS =
       ContinuousLinearMap.id ℂ E - U.starProjection

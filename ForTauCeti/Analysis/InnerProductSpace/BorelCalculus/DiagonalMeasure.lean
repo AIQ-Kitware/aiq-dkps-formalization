@@ -160,6 +160,10 @@ noncomputable def diagFunctional (ξ : H) :
 noncomputable def diagMeasure (ξ : H) : Measure (spectrum ℂ a) :=
   RealRMK.rieszMeasure (diagFunctional ha ξ)
 
+theorem diagMeasure_congr {ξ η : H} (h : diagFunctional ha ξ = diagFunctional ha η) :
+    diagMeasure ha ξ = diagMeasure ha η := by
+  rw [diagMeasure, diagMeasure, h]
+
 instance instIsFiniteMeasure_diagMeasure (ξ : H) :
     IsFiniteMeasure (diagMeasure ha ξ) := by
   unfold diagMeasure; infer_instance
