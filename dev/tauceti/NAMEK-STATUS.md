@@ -625,3 +625,38 @@ on this cluster have been wrong in both directions four times today, while the
 *measurements* — build counts, importer counts, closure sizes — have held up
 every time.  Treat the inventory above as the reliable artefact and ignore any
 schedule I attach to it.
+
+---
+
+## Update 2026-07-29 — D4b inventory: item 1 proved, item 2 already existed
+
+* **Item 1 — done.** `specProjection_expLimit_apply`
+  (`LinearPMap/SpectralProjectionGroup.lean`): spectral projections commute with
+  the unitary group.  This one was genuinely absent; the proof composes the
+  resolvent commutation, the Yosida approximant's shape, exponentials of
+  commuting operators, and the strong limit — all of which existed separately.
+* **Item 2 — already in the tree.**  `specProjection_apply_domain`
+  (`SpectralMeasure.lean:396`, "spectral projections intertwine the operator")
+  is exactly `A ⟨P x, _⟩ = P (A x)`, with `specProjection_mem_domain` next to it
+  for the domain half.  **Do not build it.**
+
+### Process note, because this is the third time
+
+Today I have listed three things as missing that were already present:
+`norm_sub_smul_le_of_mem_specRange`, the bounded-operator form of `A - c` on a
+spectral range, and now `specProjection_apply_domain`.  Each time the pattern was
+the same — I reasoned forward from what the argument *needs* and wrote the
+inventory from that, without grepping for it first.
+
+The tree is large enough that "I would have to prove X" is not a reliable
+judgement, and the cost of checking is seconds.  **Grep before adding an item to
+any inventory**, and prefer searching by the statement's shape (`norm_.*_le`,
+`_comm_`, `_mem_domain`) rather than by the name it would have if I had written
+it.
+
+### Remaining, revised
+
+3. The block operator identity, extended by density from `dom B` to all of `F`.
+4. The partition `Ico (kε) ((k+1)ε)` for `k : ℤ`, plus "nonzero projection ⟹ its
+   interval meets the spectrum".
+5. The `ε → 0` limit and the shift `σ(B + s) = σ(B) + s`.
