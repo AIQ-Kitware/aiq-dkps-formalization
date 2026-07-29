@@ -1,27 +1,44 @@
-# ForTauCeti — temporary Tau Ceti extraction staging layer
+# ForTauCeti — the reusable-mathematics package
 
-`ForTauCeti` is a **temporary** Lean library. It holds reusable, paper-agnostic
-mathematics whose accepted Tau Ceti roadmap target and public API are settled,
-but whose code has not yet merged into the Tau Ceti repository
-(`external/TauCeti`). It is the middle layer of the staged extraction
-architecture:
+> **EXECUTIVE DECISION — jon, 2026-07-29. This section replaces the "temporary
+> staging layer" framing this file used to open with, and it changes what the
+> work is.**
+>
+> **`ForTauCeti` is the product, not a holding pen.** The goal is an *elegant
+> package* here: coherent API, one canonical spelling per concept, provenance
+> on every module. That package is what **polished roadmaps are generated
+> from**, and the roadmaps are then satisfied by **mechanical ports**.
+>
+> Two consequences, both the opposite of what this file said before:
+>
+> * **Deleting `ForTauCeti` is not on the roadmap.** There is no terminal state
+>   in which it is empty. Do not write a lane that ends in its deletion, and do
+>   not re-add a "delete the staging files" step to the lifecycle below.
+> * **`external/TauCeti` is a read-only provenance reference** (`AGENTS.md`).
+>   Stage here; do not write into the submodule. `export_for_tauceti.py --write`
+>   belongs to an actual submission, not to ordinary work — run `--check`
+>   freely, and expect `--write` to leave untracked, silently-staling copies in
+>   the submodule if you run it otherwise. That has happened twice.
+
+`ForTauCeti` holds reusable, paper-agnostic mathematics extracted from the
+Davis--Kahan development. The layering is:
 
 ```text
 Mathlib
    ↓
-TauCeti           (external/TauCeti, the permanent generic library)
+TauCeti           (external/TauCeti, read-only provenance reference)
    ↓
-ForTauCeti        (this library — temporary staging, PR-ready clusters)
+ForTauCeti        (this library — the package, organised into
+                   dependency-closed clusters)
    ↓
 DavisKahan        (paper-facing perturbation theory)
 ```
 
-Its successful terminal state is **empty or deleted**: every cluster here is
-destined to move into `external/TauCeti/TauCeti/...`, after which its staging
-files are removed and its `ForTauCeti.*` importers are repointed at `TauCeti.*`.
-
-`ForTauCeti` is **not** the intended permanent public library, and no one should
-mistake it for one. The permanent public home is Tau Ceti.
+**The clusters are the roadmap units.** `dev/tauceti/extraction-manifest.json`
+declares all 156 modules across 18 dependency-closed clusters, each computed as
+an import closure and each passing the import firewall — so any one of them can
+be read, reviewed, or ported as a self-contained unit. A module that is not in
+the manifest is invisible to that machinery; keep it at 156/156.
 
 ## Relationship to `ForMathlib`
 
@@ -31,6 +48,26 @@ one. Modules migrate here as their import closures allow, following the
 CourantFischer playbook recorded in `dev/tauceti/convergence-matrix.md`: move
 the closed component, repoint consumers, delete the old file. Mathlib is not the
 near-term target for this contribution; Tau Ceti is.
+
+**The end state is settled: `ForMathlib` goes away entirely** (jon,
+2026-07-29). Whatever the elegant package needs moves here; anything left over
+is not retained as a Mathlib-bound remainder. `ForTauCeti` is *the* mathematics
+library this repository builds, and **every paper proof is built on it** —
+`DavisKahan`, `Acharyya2024`, `Acharyya2025`, `Helm2025`, `DkpsQuench2026`,
+`FinishTanTwoTheta`, `FinishYuWangSamworth`. There is no second staging area and
+no "genuinely Mathlib-shaped" exemption. Earlier text describing the four
+survivors as a deliberate Mathlib-bound remainder is superseded by this
+paragraph.
+
+Four modules remain (799 lines), and they are **not** blocked by the import
+firewall — the internal edges are only `PosDef → RankFactorization` and
+`Berge → ApproxMinimizer`, so they move as two independent pairs. What makes the
+lane non-trivial is downstream: five declaration names are pinned as *data* in
+`comparator/pending-{berge,rank-factorization,rank-psd-realization}.json`, and
+three `Challenge/MathlibPending/**/Leaderboard.lean` files name them in
+`#print axioms`. `Challenge` is outside `defaultTargets`, so a green default
+build proves nothing about them — see the comparator challenge rule in
+`AGENTS.md`. The measured lane is posted in `dev/LANES.md`.
 
 **A module docstring reading `Extraction class: authored in place, for
 upstreaming to Mathlib rather than to Tau Ceti` is stale, and is not a bar to
@@ -148,15 +185,82 @@ generalized / specialized / re-proved), whether Spectra influenced the selection
 or proof, and any semantic change from the Davis–Kahan version. Kitware and
 third-party attribution is **preserved**, never erased.
 
+## `ForTauCeti` is the deliverable — do not "finish" by deleting it
+
+**Read this before the lifecycle steps below.** Agents have repeatedly tried to
+complete this work by merging code directly into `TauCeti` and deleting
+`ForTauCeti` (jon, 2026-07-29). That is not the goal and it destroys the
+actual product.
+
+The goal is to make `ForTauCeti` **an elegant, self-consistent package**, and
+then use that package to generate two things:
+
+1. **polished roadmaps** — drafted in [`../ForTauCetiRoadmap/`](../ForTauCetiRoadmap/README.md),
+   mirroring the sibling `TauCetiRoadmap` layout; and
+2. **mechanical ports** that satisfy those roadmaps.
+
+The `TauCeti/` copy is an **output**, produced on demand by
+`scripts/export_for_tauceti.py` — it is generated, never hand-applied. This is
+why `AGENTS.md` says not to commit the `external/TauCeti` submodule pointer yet.
+
+So: improvements go **into** `ForTauCeti`. A task that sounds like "move
+`ForTauCeti` into `TauCeti`" is asking for an *export*. Never empty or delete
+`ForTauCeti/` as a way of declaring the migration done.
+
+### The readiness standard — the platonic ideal roadmap
+
+When a Tau Ceti roadmap is **accepted**, we use `ForTauCeti` to open a PR
+against Tau Ceti. The work before that point is not "wait for acceptance"; it is
+to get `ForTauCeti` to the state where it **satisfies the platonic ideal Tau
+Ceti roadmap** — so that whatever roadmap is actually accepted, we are already
+confident we have everything needed to satisfy it (jon, 2026-07-29).
+
+That is a deliberately higher bar than "our own roadmap draft is met." Writing
+the roadmap ourselves and then meeting it proves nothing about what a Tau Ceti
+reviewer will ask for. The target is the roadmap a reviewer *would* write.
+
+Readiness therefore includes, and is not complete without:
+
+- **paper references** — every result traceable to its source, with the
+  provenance block §5 requires;
+- **Tau Ceti adversarial review** — the statement attacked before submission,
+  not after: wrong generality, a hypothesis that trivializes the conclusion, a
+  name that overclaims, a result Mathlib or Tau Ceti already has;
+- **elegance at Mathlib quality** — the API shape, naming, proof locality,
+  docstring coverage, import minimality, and warning-cleanliness that survive an
+  unsympathetic reviewer.
+
+Concretely: a cluster is ready when nothing in it would be sent back. Until
+then, polishing `ForTauCeti` *is* the submission work — not a prelude to it.
+
 ## Lifecycle (per cluster)
+
+**Precondition — this sequence applies only *after* a cluster has actually been
+accepted upstream by Tau Ceti.** No cluster has been accepted yet: every row in
+*Current contents* below reads `staged-*`, and the governance gate in
+`AGENTS.md` (accepted roadmap target, one topic per PR, green build, standard
+axiom allowlist) has not yet been cleared by anything. Until an acceptance
+exists, **step 3 is not work that is available to do**, and an agent that runs
+it is deleting the package rather than shipping it.
 
 When a cluster is accepted into Tau Ceti:
 
 1. update the `external/TauCeti` submodule pin to the merge commit;
 2. replace this repo's `ForTauCeti.*` imports of the cluster with `TauCeti.*`;
-3. delete the corresponding `ForTauCeti/...` staging files;
+3. ~~delete the corresponding `ForTauCeti/...` staging files~~ — **struck by
+   executive decision (jon, 2026-07-29): the staging files stay.** Do not
+   delete them, and do not re-add this step;
 4. remove compatibility aliases that no longer have downstream users;
 5. rerun the Davis–Kahan grounding, layering, and build audits.
+
+**On `external/TauCeti`.** It is a **read-only provenance reference**, as
+`AGENTS.md` says. Work is staged in `ForTauCeti` and nothing is written into
+the submodule outside an actual submission. `scripts/export_for_tauceti.py
+--write` reproduces the `TauCeti/` copy *at submission time* — running it
+otherwise leaves untracked copies in the submodule working tree that go stale
+against staging, which has already happened twice and is what made
+`--check` fail for `principal-angles`. **Use `--check` freely; treat `--write`
+as part of a submission, not part of a build.**
 
 Use `scripts/export_for_tauceti.py --cluster <name> --check|--write` to perform
 the deterministic staging→Tau Ceti copy (manifest-driven, import-rewriting,
