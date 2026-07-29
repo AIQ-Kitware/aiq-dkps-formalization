@@ -5,7 +5,8 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Interop.Spectra.SpectralRestrictionLocalization
 import DavisKahan.SinTheta.Unbounded.SpectrumGap
-import Spectra.Operator.KatoRellich
+import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
+import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Constructions
 
 /-!
 # Bounded-perturbation adapter for the unbounded sine-theta theorem
@@ -40,12 +41,16 @@ variable {H F G : Type v}
   [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
   [NormedAddCommGroup G] [InnerProductSpace ℂ G] [CompleteSpace G]
 
-/-- The DK bounded sum is exactly Spectra's partial-map perturbation. -/
+/-- The DK bounded sum is exactly the canonical partial-map perturbation.
+
+Was stated over `Spectra.Operator.perturbedOp` until 2026-07-28; the canonical
+object is now `TauCeti.LinearPMap.perturb`
+(`dev/tauceti/spectra-removal-plan.md`). -/
 theorem toLinearPMap_addBounded_eq_perturbedOp
     (A : DKClosedOperator (H := H)) (V : H →L[ℂ] H) :
     (A.addBounded V).toLinearPMap =
-      Spectra.Operator.perturbedOp A.toLinearPMap
-        (V.comp (Submodule.subtypeL A.domain)).toLinearMap := by
+      TauCeti.LinearPMap.perturb A.toLinearPMap
+        (TauCeti.LinearPMap.boundedPerturbation A.toLinearPMap V) := by
   refine LinearPMap.ext_iff.mpr ⟨rfl, ?_⟩
   intro x hx hy
   rfl
@@ -60,7 +65,7 @@ theorem addBounded_isSelfAdjoint
     ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hV
   change _root_.IsSelfAdjoint (A.addBounded V).toLinearPMap
   rw [toLinearPMap_addBounded_eq_perturbedOp]
-  exact Spectra.Operator.kato_rellich_bounded hA hV'
+  exact TauCeti.LinearPMap.isSelfAdjoint_perturb_bounded hA hV'
 
 /-- Package a bounded perturbation and two invariant block embeddings as the
 paper-shaped unbounded residual data.  The residual identity is automatic and
@@ -139,7 +144,7 @@ theorem sinTheta_addBounded_opNorm_of_spectrum_gap
     {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
     (hA₀low : SemiboundedBelow A₀ β) (hA₀high : SemiboundedAbove A₀ α)
     (hΛspec : ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
-      lam ∉ Spectra.Resolvent.spectrum Λ₁.toLinearPMap) :
+      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum Λ₁.toLinearPMap) :
     δ * ‖X.adjoint ∘L F₁‖ ≤ ‖V‖ := by
   let D := boundedPerturbationSinThetaData A V A₀ Λ₁ X F₁
     hXdom hXintertwines hF₁dom hF₁intertwines
@@ -175,7 +180,7 @@ theorem sinTheta_addBounded_opNorm_of_spectrum_gap_isometric
     {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
     (hA₀low : SemiboundedBelow A₀ β) (hA₀high : SemiboundedAbove A₀ α)
     (hΛspec : ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
-      lam ∉ Spectra.Resolvent.spectrum Λ₁.toLinearPMap) :
+      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum Λ₁.toLinearPMap) :
     δ * ‖X.adjoint ∘L F₁‖ ≤ ‖V‖ := by
   exact sinTheta_addBounded_opNorm_of_spectrum_gap A hA V hV
     A₀ hA₀ Λ₁ hΛ₁ X F₁ hXdom hXintertwines hF₁dom hF₁intertwines
@@ -221,7 +226,7 @@ theorem sinTheta_addBounded_spectralSubspaces_opNorm_of_spectrum_gap
     (hA₀high : SemiboundedAbove
       (selfAdjointSpectralRestriction A hA B hB) α)
     (hΛspec : ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
-      lam ∉ Spectra.Resolvent.spectrum
+      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum
         (selfAdjointSpectralRestriction (A.addBounded V)
           (addBounded_isSelfAdjoint A hA V hV) T hT).toLinearPMap) :
     δ * ‖(selfAdjointSpectralSubspaceInclusion A hA B hB).adjoint ∘L

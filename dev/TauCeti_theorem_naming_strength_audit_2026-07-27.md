@@ -264,7 +264,18 @@ noncomputable def linearEquivRangeOfInjective
 
 **Remove or redesign before the Moore-Penrose module is upstreamed.**
 
-The definition `moorePenroseInverse` itself is honest: it is explicitly finite-dimensional and computes the standard pseudoinverse. The API is incomplete, but the name does not claim that all four Penrose equations have already been proved.
+The definition `moorePenroseInverse` itself is honest: it is explicitly finite-dimensional and computes the standard pseudoinverse.
+
+### Resolution 2026-07-28 — RESOLVED by deletion
+
+All four declarations are gone: `inverseOnRange`, `inverseOnRange_eq_moorePenroseInverse`, `inverseOnRange_comp_eq_id`, `moorePenroseInverse_eq_inverseOnRange`. The surviving content is `moorePenroseInverse_comp_eq_id_of_injective`, which the audit already identified as the honest form of the left-inverse law.
+
+Two corrections to the section as written:
+
+- The suggested replacement `linearEquivRangeOfInjective : E ≃ₗ[𝕜] LinearMap.range A` did **not** need to be built — it is Mathlib's `LinearEquiv.ofInjective`. So the redesign was a pure deletion.
+- The three consumers in `DavisKahan/FiniteDimensional/Residual/AngleEmbeddings.lean` were not renamed but **deleted**, because they were weaker than the audit realised: since `inverseOnRange A hA` was a definitional alias for `moorePenroseInverse A`, and `tanThetaEmbedding` is *defined* by `moorePenroseInverse`, all three "compatibility" theorems were restatements of `rfl` and carried no content. The one genuinely useful fact buried in them — the translation of transversality into injectivity — is now stated on its own as `cosThetaMagnitude_injective_of_isTransverse`.
+
+The closing caveat this section used to carry, that the API did not yet have all four Penrose equations, is also out of date: they were proved (with uniqueness) on 2026-07-28, so `moorePenroseInverse` is now certified to *be* the Moore-Penrose inverse rather than merely some generalized inverse.
 
 ---
 

@@ -5,6 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.DoubleAngle.UnboundedIdeal
 import DavisKahan.TanTwoTheta.Unbounded
+import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
 
 /-!
 # Ideal-gauge unbounded tangent two theta
@@ -108,7 +109,7 @@ theorem tanTwoTheta_addBounded_gauge_of_spectrum_gap
     (hBhigh : SemiboundedAbove
       (selfAdjointSpectralRestriction A hA B hB) α)
     (hBcomplSpec : ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
-      lam ∉ Spectra.Resolvent.spectrum
+      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum
         (selfAdjointSpectralRestriction A hA Bᶜ hB.compl).toLinearPMap)
     (hEmem : N.Mem E)
     (hquarter : IsQuarterAcute
@@ -203,7 +204,7 @@ theorem tanTwoTheta_addBounded_unitaryInvariant_of_spectrum_gap
     (hBhigh : SemiboundedAbove
       (selfAdjointSpectralRestriction A hA B hB) α)
     (hBcomplSpec : ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
-      lam ∉ Spectra.Resolvent.spectrum
+      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum
         (selfAdjointSpectralRestriction A hA Bᶜ hB.compl).toLinearPMap)
     (hEmem : N.Mem E)
     (hquarter : IsQuarterAcute

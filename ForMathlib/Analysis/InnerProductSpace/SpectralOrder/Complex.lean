@@ -105,7 +105,8 @@ theorem re_inner_le_on_subspace_of_restriction_spectrum_subset_Iic
   letI : CompleteSpace U :=
     completeSpace_coe_iff_isComplete.mpr U.isComplete_coe_of_hasOrthogonalProjection
   have hres : IsSelfAdjoint (A.restrict hU) :=
-    ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr (ContinuousLinearMap.IsSymmetric.restrict_of_invariant (A := A) hA hU)
+    ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr
+      (ContinuousLinearMap.IsSymmetric.restrict_of_invariant (A := A) hA hU)
   have h := re_inner_le_of_spectrum_subset_Iic
     (A.restrict hU) hres hσ (⟨x, hx⟩ : U)
   change RCLike.re ⟪A x, x⟫_ℂ ≤ c * ‖x‖ ^ 2 at h
@@ -123,7 +124,8 @@ theorem le_re_inner_on_subspace_of_restriction_spectrum_subset_Ici
   letI : CompleteSpace U :=
     completeSpace_coe_iff_isComplete.mpr U.isComplete_coe_of_hasOrthogonalProjection
   have hres : IsSelfAdjoint (A.restrict hU) :=
-    ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr (ContinuousLinearMap.IsSymmetric.restrict_of_invariant (A := A) hA hU)
+    ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr
+      (ContinuousLinearMap.IsSymmetric.restrict_of_invariant (A := A) hA hU)
   have h := le_re_inner_of_spectrum_subset_Ici
     (A.restrict hU) hres hσ (⟨x, hx⟩ : U)
   change c * ‖x‖ ^ 2 ≤ RCLike.re ⟪A x, x⟫_ℂ at h

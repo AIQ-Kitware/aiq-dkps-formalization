@@ -5,21 +5,22 @@ Authors: Jon Crall, Claude Fable 5
 -/
 import DavisKahan.Interop.Spectra.GapResolvent
 import DavisKahan.SinTheta.Unbounded.GenuineGauge
+import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
 
 /-!
-# `sin Θ` endpoints from a Spectra spectrum gap
+# `sin Θ` endpoints from a spectrum gap
 
 The resolvent construction lives in `DavisKahan.Interop.Spectra.GapResolvent`;
 these are the two `sin Θ` endpoints it feeds, in operator norm and in an
-arbitrary unitarily invariant ideal gauge.
+arbitrary unitarily invariant ideal gauge.  Both are Spectra-free since
+2026-07-28 — the gap resolvent is now built from
+`TauCeti.LinearPMap.exists_norm_le_two_sided_shifted_inverse_of_spectrum_gap`.
 -/
 
 namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace SpectraBridge
-
-open Spectra.QuantumMechanics.SpectralTheory
 
 section SinTheta
 
@@ -46,7 +47,7 @@ theorem sinTheta_unbounded_opNorm_of_spectrum_gap
     {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
     (hA₀low : SemiboundedBelow D.A₀ β) (hA₀high : SemiboundedAbove D.A₀ α)
     (hΛspec : ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
-      lam ∉ Spectra.Resolvent.spectrum D.Λ₁.toLinearPMap) :
+      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum D.Λ₁.toLinearPMap) :
     δ * ‖D.X.adjoint ∘L D.F₁‖ ≤ ‖D.residual.adjoint ∘L D.F₁‖ := by
   have hΛsa : IsSelfAdjoint D.Λ₁.toLinearPMap :=
     LinearPMap.isSelfAdjoint_def.mpr
@@ -68,7 +69,7 @@ theorem linearPMap_sinTheta_unbounded_opNorm_of_spectrum_gap
     (hA₀low : TauCeti.LinearPMap.SemiboundedBelow D.A₀ β)
     (hA₀high : TauCeti.LinearPMap.SemiboundedAbove D.A₀ α)
     (hΛspec : ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
-      lam ∉ Spectra.Resolvent.spectrum D.Λ₁) :
+      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum D.Λ₁) :
     δ * ‖D.X.adjoint ∘L D.F₁‖ ≤ ‖D.residual.adjoint ∘L D.F₁‖ := by
   have hΛsa : _root_.IsSelfAdjoint D.toClosed.Λ₁.toLinearPMap := by
     simpa only [UnboundedSinThetaDataPMap.toClosed,
@@ -100,7 +101,7 @@ theorem sinTheta_unbounded_gauge_of_spectrum_gap
     {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
     (hA₀low : SemiboundedBelow D.A₀ β) (hA₀high : SemiboundedAbove D.A₀ α)
     (hΛspec : ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
-      lam ∉ Spectra.Resolvent.spectrum D.Λ₁.toLinearPMap)
+      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum D.Λ₁.toLinearPMap)
     (hC : N.Mem (D.residual.adjoint ∘L D.F₁)) :
     N.Mem (D.X.adjoint ∘L D.F₁) ∧
       δ * N.gauge (D.X.adjoint ∘L D.F₁) ≤
@@ -127,7 +128,7 @@ theorem linearPMap_sinTheta_unbounded_gauge_of_spectrum_gap
     (hA₀low : TauCeti.LinearPMap.SemiboundedBelow D.A₀ β)
     (hA₀high : TauCeti.LinearPMap.SemiboundedAbove D.A₀ α)
     (hΛspec : ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
-      lam ∉ Spectra.Resolvent.spectrum D.Λ₁)
+      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum D.Λ₁)
     (hC : N.Mem (D.residual.adjoint ∘L D.F₁)) :
     N.Mem (D.X.adjoint ∘L D.F₁) ∧
       δ * N.gauge (D.X.adjoint ∘L D.F₁) ≤

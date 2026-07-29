@@ -8,10 +8,13 @@ import DavisKahan.Riccati.UnboundedBasic
 /-!
 # Product-domain core for unbounded block operators
 
-This leaf constructs the closed direct sum of two closed operators on the
-Hilbert direct sum and then adds the bounded off-diagonal coupling.  The
-operator domain is kept explicit, and coordinate membership and action are
-exposed as separate lemmas for the later strong Riccati reduction.
+This leaf adds the bounded off-diagonal coupling to the direct sum of the two
+diagonal partial maps.  The operator domain is kept explicit, and coordinate
+membership and action are exposed as separate lemmas for the later strong
+Riccati reduction.
+
+The direct sum itself, together with its density and closed-graph facts, is
+the canonical `TauCeti.LinearPMap.directSum`; nothing is re-derived here.
 -/
 
 namespace TauCeti
@@ -26,131 +29,6 @@ variable {E0 : Type*} [NormedAddCommGroup E0] [InnerProductSpace 𝕜 E0]
 variable {E1 : Type*} [NormedAddCommGroup E1] [InnerProductSpace 𝕜 E1]
   [CompleteSpace E1]
 
-/-- The explicit product domain of two closed operators, transported to the
-`L²` Hilbert direct sum. -/
-noncomputable abbrev closedOperatorDirectSumDomain
-    (A0 : ClosedOperator (𝕜 := 𝕜) (E := E0))
-    (A1 : ClosedOperator (𝕜 := 𝕜) (E := E1)) :
-    Submodule 𝕜 (WithLp 2 (E0 × E1)) :=
-  TauCeti.LinearPMap.directSumDomain A0.toLinearPMap A1.toLinearPMap
-
-@[simp] theorem mem_closedOperatorDirectSumDomain_iff
-    (A0 : ClosedOperator (𝕜 := 𝕜) (E := E0))
-    (A1 : ClosedOperator (𝕜 := 𝕜) (E := E1))
-    (z : WithLp 2 (E0 × E1)) :
-    z ∈ closedOperatorDirectSumDomain A0 A1 ↔
-      WithLp.fst z ∈ A0.domain ∧ WithLp.snd z ∈ A1.domain := by
-  rfl
-
-/-- The first coordinate of a vector in the product operator domain, carrying
-its membership witness in the first operator domain. -/
-abbrev closedOperatorDirectSumDomainFst
-    (A0 : ClosedOperator (𝕜 := 𝕜) (E := E0))
-    (A1 : ClosedOperator (𝕜 := 𝕜) (E := E1))
-    (z : closedOperatorDirectSumDomain A0 A1) : A0.domain :=
-  TauCeti.LinearPMap.directSumDomainFst A0.toLinearPMap A1.toLinearPMap z
-
-/-- The second coordinate of a vector in the product operator domain, carrying
-its membership witness in the second operator domain. -/
-abbrev closedOperatorDirectSumDomainSnd
-    (A0 : ClosedOperator (𝕜 := 𝕜) (E := E0))
-    (A1 : ClosedOperator (𝕜 := 𝕜) (E := E1))
-    (z : closedOperatorDirectSumDomain A0 A1) : A1.domain :=
-  TauCeti.LinearPMap.directSumDomainSnd A0.toLinearPMap A1.toLinearPMap z
-
-/-- First-coordinate extraction as a linear map between the bundled domains. -/
-abbrev closedOperatorDirectSumDomainFstLinearMap
-    (A0 : ClosedOperator (𝕜 := 𝕜) (E := E0))
-    (A1 : ClosedOperator (𝕜 := 𝕜) (E := E1)) :
-    closedOperatorDirectSumDomain A0 A1 →ₗ[𝕜] A0.domain :=
-  TauCeti.LinearPMap.directSumDomainFstLinearMap A0.toLinearPMap A1.toLinearPMap
-
-/-- Second-coordinate extraction as a linear map between the bundled domains. -/
-abbrev closedOperatorDirectSumDomainSndLinearMap
-    (A0 : ClosedOperator (𝕜 := 𝕜) (E := E0))
-    (A1 : ClosedOperator (𝕜 := 𝕜) (E := E1)) :
-    closedOperatorDirectSumDomain A0 A1 →ₗ[𝕜] A1.domain :=
-  TauCeti.LinearPMap.directSumDomainSndLinearMap A0.toLinearPMap A1.toLinearPMap
-
-/-- Componentwise action of the direct sum on its explicit product domain. -/
-noncomputable abbrev closedOperatorDirectSumLinearMap
-    (A0 : ClosedOperator (𝕜 := 𝕜) (E := E0))
-    (A1 : ClosedOperator (𝕜 := 𝕜) (E := E1)) :
-    closedOperatorDirectSumDomain A0 A1 →ₗ[𝕜] WithLp 2 (E0 × E1) :=
-  TauCeti.LinearPMap.directSumLinearMap A0.toLinearPMap A1.toLinearPMap
-
-@[simp] theorem closedOperatorDirectSumLinearMap_fst
-    (A0 : ClosedOperator (𝕜 := 𝕜) (E := E0))
-    (A1 : ClosedOperator (𝕜 := 𝕜) (E := E1))
-    (z : closedOperatorDirectSumDomain A0 A1) :
-    WithLp.fst (closedOperatorDirectSumLinearMap A0 A1 z) =
-      A0.toLinearMap (closedOperatorDirectSumDomainFst A0 A1 z) := by
-  rfl
-
-@[simp] theorem closedOperatorDirectSumLinearMap_snd
-    (A0 : ClosedOperator (𝕜 := 𝕜) (E := E0))
-    (A1 : ClosedOperator (𝕜 := 𝕜) (E := E1))
-    (z : closedOperatorDirectSumDomain A0 A1) :
-    WithLp.snd (closedOperatorDirectSumLinearMap A0 A1 z) =
-      A1.toLinearMap (closedOperatorDirectSumDomainSnd A0 A1 z) := by
-  rfl
-
-private theorem closedOperatorDirectSumDomain_dense
-    (A0 : ClosedOperator (𝕜 := 𝕜) (E := E0))
-    (A1 : ClosedOperator (𝕜 := 𝕜) (E := E1)) :
-    Dense ((closedOperatorDirectSumDomain A0 A1 :
-      Submodule 𝕜 (WithLp 2 (E0 × E1))) : Set (WithLp 2 (E0 × E1))) :=
-  TauCeti.LinearPMap.directSum_dense A0.toLinearPMap A1.toLinearPMap
-    A0.toLinearPMap_dense A1.toLinearPMap_dense
-
-private theorem closedOperatorDirectSumLinearMap_closedGraph
-    (A0 : ClosedOperator (𝕜 := 𝕜) (E := E0))
-    (A1 : ClosedOperator (𝕜 := 𝕜) (E := E1)) :
-    IsClosed (Set.range fun z : closedOperatorDirectSumDomain A0 A1 =>
-      ((z : WithLp 2 (E0 × E1)), closedOperatorDirectSumLinearMap A0 A1 z)) :=
-  TauCeti.LinearPMap.directSum_closedGraph A0.toLinearPMap A1.toLinearPMap
-    A0.closed_graph A1.closed_graph
-
-/-- The closed direct sum of two closed operators on the Hilbert direct sum. -/
-noncomputable def closedOperatorDirectSum
-    (A0 : ClosedOperator (𝕜 := 𝕜) (E := E0))
-    (A1 : ClosedOperator (𝕜 := 𝕜) (E := E1)) :
-    ClosedOperator (𝕜 := 𝕜) (E := WithLp 2 (E0 × E1)) where
-  domain := closedOperatorDirectSumDomain A0 A1
-  toLinearMap := closedOperatorDirectSumLinearMap A0 A1
-  dense_domain := closedOperatorDirectSumDomain_dense A0 A1
-  closed_graph := closedOperatorDirectSumLinearMap_closedGraph A0 A1
-
-@[simp] theorem closedOperatorDirectSum_domain
-    (A0 : ClosedOperator (𝕜 := 𝕜) (E := E0))
-    (A1 : ClosedOperator (𝕜 := 𝕜) (E := E1)) :
-    (closedOperatorDirectSum A0 A1).domain =
-      closedOperatorDirectSumDomain A0 A1 := rfl
-
-@[simp] theorem mem_closedOperatorDirectSum_domain_iff
-    (A0 : ClosedOperator (𝕜 := 𝕜) (E := E0))
-    (A1 : ClosedOperator (𝕜 := 𝕜) (E := E1))
-    (z : WithLp 2 (E0 × E1)) :
-    z ∈ (closedOperatorDirectSum A0 A1).domain ↔
-      WithLp.fst z ∈ A0.domain ∧ WithLp.snd z ∈ A1.domain := by
-  rfl
-
-@[simp] theorem closedOperatorDirectSum_apply_fst
-    (A0 : ClosedOperator (𝕜 := 𝕜) (E := E0))
-    (A1 : ClosedOperator (𝕜 := 𝕜) (E := E1))
-    (z : (closedOperatorDirectSum A0 A1).domain) :
-    WithLp.fst ((closedOperatorDirectSum A0 A1).toLinearMap z) =
-      A0.toLinearMap (closedOperatorDirectSumDomainFst A0 A1 z) := by
-  rfl
-
-@[simp] theorem closedOperatorDirectSum_apply_snd
-    (A0 : ClosedOperator (𝕜 := 𝕜) (E := E0))
-    (A1 : ClosedOperator (𝕜 := 𝕜) (E := E1))
-    (z : (closedOperatorDirectSum A0 A1).domain) :
-    WithLp.snd ((closedOperatorDirectSum A0 A1).toLinearMap z) =
-      A1.toLinearMap (closedOperatorDirectSumDomainSnd A0 A1 z) := by
-  rfl
-
 /-- The bounded off-diagonal coupling on the Hilbert direct sum. -/
 noncomputable def unboundedOffDiagonalCouplingPMap
     (B01 : E1 →L[𝕜] E0) (B10 : E0 →L[𝕜] E1) :
@@ -160,22 +38,20 @@ noncomputable def unboundedOffDiagonalCouplingPMap
     ((B01 ∘L WithLp.sndL 2 𝕜 E0 E1).prod
       (B10 ∘L WithLp.fstL 2 𝕜 E0 E1))
 
-/-- The bundled-data spelling of the raw off-diagonal coupling. -/
-noncomputable abbrev unboundedOffDiagonalCoupling
-    (H : UnboundedBlockData (𝕜 := 𝕜) (E0 := E0) (E1 := E1)) :
-    WithLp 2 (E0 × E1) →L[𝕜] WithLp 2 (E0 × E1) :=
-  unboundedOffDiagonalCouplingPMap H.B01 H.B10
-
-@[simp] theorem unboundedOffDiagonalCoupling_fst
-    (H : UnboundedBlockData (𝕜 := 𝕜) (E0 := E0) (E1 := E1))
+omit [CompleteSpace E0] [CompleteSpace E1] in
+@[simp] theorem unboundedOffDiagonalCouplingPMap_fst
+    (B01 : E1 →L[𝕜] E0) (B10 : E0 →L[𝕜] E1)
     (z : WithLp 2 (E0 × E1)) :
-    WithLp.fst (unboundedOffDiagonalCoupling H z) = H.B01 (WithLp.snd z) := by
+    WithLp.fst (unboundedOffDiagonalCouplingPMap B01 B10 z) =
+      B01 (WithLp.snd z) := by
   rfl
 
-@[simp] theorem unboundedOffDiagonalCoupling_snd
-    (H : UnboundedBlockData (𝕜 := 𝕜) (E0 := E0) (E1 := E1))
+omit [CompleteSpace E0] [CompleteSpace E1] in
+@[simp] theorem unboundedOffDiagonalCouplingPMap_snd
+    (B01 : E1 →L[𝕜] E0) (B10 : E0 →L[𝕜] E1)
     (z : WithLp 2 (E0 × E1)) :
-    WithLp.snd (unboundedOffDiagonalCoupling H z) = H.B10 (WithLp.fst z) := by
+    WithLp.snd (unboundedOffDiagonalCouplingPMap B01 B10 z) =
+      B10 (WithLp.fst z) := by
   rfl
 
 /-- The canonical partial-map block operator obtained by adding the bounded
@@ -192,6 +68,13 @@ noncomputable abbrev unboundedBlockOperatorPMapCore
     (unboundedBlockOperatorPMapCore H).domain =
       TauCeti.LinearPMap.directSumDomain H.A0 H.A1 := rfl
 
+@[simp] theorem mem_unboundedBlockOperatorPMapCore_domain_iff
+    (H : UnboundedBlockDataPMap (𝕜 := 𝕜) (E0 := E0) (E1 := E1))
+    (z : WithLp 2 (E0 × E1)) :
+    z ∈ (unboundedBlockOperatorPMapCore H).domain ↔
+      WithLp.fst z ∈ H.A0.domain ∧ WithLp.snd z ∈ H.A1.domain := by
+  rfl
+
 @[simp] theorem unboundedBlockOperatorPMapCore_apply_fst
     (H : UnboundedBlockDataPMap (𝕜 := 𝕜) (E0 := E0) (E1 := E1))
     (z : (unboundedBlockOperatorPMapCore H).domain) :
@@ -205,75 +88,6 @@ noncomputable abbrev unboundedBlockOperatorPMapCore
     WithLp.snd (unboundedBlockOperatorPMapCore H z) =
       H.A1 (TauCeti.LinearPMap.directSumDomainSnd H.A0 H.A1 z) +
         H.B10 (WithLp.fst (z : WithLp 2 (E0 × E1))) := rfl
-
-/-- The raw block core associated to historical bundled data. -/
-noncomputable def unboundedBlockOperatorCorePMap
-    (H : UnboundedBlockData (𝕜 := 𝕜) (E0 := E0) (E1 := E1)) :
-    WithLp 2 (E0 × E1) →ₗ.[𝕜] WithLp 2 (E0 × E1) :=
-  TauCeti.LinearPMap.addBounded
-    (TauCeti.LinearPMap.directSum H.A0.toLinearPMap H.A1.toLinearPMap)
-    (unboundedOffDiagonalCoupling H)
-
-@[simp] theorem unboundedBlockOperatorCorePMap_domain
-    (H : UnboundedBlockData (𝕜 := 𝕜) (E0 := E0) (E1 := E1)) :
-    (unboundedBlockOperatorCorePMap H).domain =
-      closedOperatorDirectSumDomain H.A0 H.A1 := rfl
-
-@[simp] theorem unboundedBlockOperatorCorePMap_apply_fst
-    (H : UnboundedBlockData (𝕜 := 𝕜) (E0 := E0) (E1 := E1))
-    (z : (unboundedBlockOperatorCorePMap H).domain) :
-    WithLp.fst (unboundedBlockOperatorCorePMap H z) =
-      H.A0.toLinearMap (closedOperatorDirectSumDomainFst H.A0 H.A1 z) +
-        H.B01 (WithLp.snd (z : WithLp 2 (E0 × E1))) := by
-  rfl
-
-@[simp] theorem unboundedBlockOperatorCorePMap_apply_snd
-    (H : UnboundedBlockData (𝕜 := 𝕜) (E0 := E0) (E1 := E1))
-    (z : (unboundedBlockOperatorCorePMap H).domain) :
-    WithLp.snd (unboundedBlockOperatorCorePMap H z) =
-      H.A1.toLinearMap (closedOperatorDirectSumDomainSnd H.A0 H.A1 z) +
-        H.B10 (WithLp.fst (z : WithLp 2 (E0 × E1))) := by
-  rfl
-
-noncomputable def unboundedBlockOperatorCore
-    (H : UnboundedBlockData (𝕜 := 𝕜) (E0 := E0) (E1 := E1)) :
-    ClosedOperator (𝕜 := 𝕜) (E := WithLp 2 (E0 × E1)) :=
-  (closedOperatorDirectSum H.A0 H.A1).addBounded
-    (unboundedOffDiagonalCoupling H)
-
-/-- The closed compatibility package has the raw block core as its canonical
-partial-map view. -/
-@[simp] theorem unboundedBlockOperatorCore_toLinearPMap
-    (H : UnboundedBlockData (𝕜 := 𝕜) (E0 := E0) (E1 := E1)) :
-    (unboundedBlockOperatorCore H).toLinearPMap = unboundedBlockOperatorCorePMap H := rfl
-
-@[simp] theorem unboundedBlockOperatorCore_domain
-    (H : UnboundedBlockData (𝕜 := 𝕜) (E0 := E0) (E1 := E1)) :
-    (unboundedBlockOperatorCore H).domain =
-      closedOperatorDirectSumDomain H.A0 H.A1 := rfl
-
-@[simp] theorem mem_unboundedBlockOperatorCore_domain_iff
-    (H : UnboundedBlockData (𝕜 := 𝕜) (E0 := E0) (E1 := E1))
-    (z : WithLp 2 (E0 × E1)) :
-    z ∈ (unboundedBlockOperatorCore H).domain ↔
-      WithLp.fst z ∈ H.A0.domain ∧ WithLp.snd z ∈ H.A1.domain := by
-  rfl
-
-@[simp] theorem unboundedBlockOperatorCore_apply_fst
-    (H : UnboundedBlockData (𝕜 := 𝕜) (E0 := E0) (E1 := E1))
-    (z : (unboundedBlockOperatorCore H).domain) :
-    WithLp.fst ((unboundedBlockOperatorCore H).toLinearMap z) =
-      H.A0.toLinearMap (closedOperatorDirectSumDomainFst H.A0 H.A1 z) +
-        H.B01 (WithLp.snd (z : WithLp 2 (E0 × E1))) := by
-  rfl
-
-@[simp] theorem unboundedBlockOperatorCore_apply_snd
-    (H : UnboundedBlockData (𝕜 := 𝕜) (E0 := E0) (E1 := E1))
-    (z : (unboundedBlockOperatorCore H).domain) :
-    WithLp.snd ((unboundedBlockOperatorCore H).toLinearMap z) =
-      H.A1.toLinearMap (closedOperatorDirectSumDomainSnd H.A0 H.A1 z) +
-        H.B10 (WithLp.fst (z : WithLp 2 (E0 × E1))) := by
-  rfl
 
 end DavisKahanExt
 end TauCeti

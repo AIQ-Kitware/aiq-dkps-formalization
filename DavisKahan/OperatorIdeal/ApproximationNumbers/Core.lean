@@ -248,20 +248,26 @@ theorem tendsto_opNorm_zero_of_finiteDimensional
           ring
   exact squeeze_zero (fun i => norm_nonneg (T i)) hbound hC
 
-section ComplexStrongCutoff
+section StrongCutoff
 
 variable {E₀ : Type vE0} {F₀ : Type vF0}
-  [NormedAddCommGroup E₀] [InnerProductSpace ℂ E₀] [CompleteSpace E₀]
-  [NormedAddCommGroup F₀] [InnerProductSpace ℂ F₀] [CompleteSpace F₀]
+  [NormedAddCommGroup E₀] [InnerProductSpace 𝕜 E₀] [CompleteSpace E₀]
+  [NormedAddCommGroup F₀] [InnerProductSpace 𝕜 F₀] [CompleteSpace F₀]
 
-/-- Complex-Hilbert-space cutoff convergence, obtained from the generalized
-Courant--Fischer localization theorem and uniform convergence on each finite
-witness subspace. -/
-theorem approximationSingularValue_comp_strongProjection_tendsto_complex
-    {ι : Type w} {P : ι → E₀ →L[ℂ] E₀} {l : Filter ι}
+/-- **Cutoff convergence.**  Along a net of orthogonal projections converging strongly to the
+identity, every approximation number of `K ∘L P i` converges to the corresponding
+approximation number of `K`.
+
+Upper semicontinuity is free (`P i` is a contraction); the lower bound is where the
+generalized Courant--Fischer localization enters, and it is the only step that depends on the
+scalar field, so it is taken as the hypothesis
+`ContinuousLinearMap.HasMinMaxLowerBound`. -/
+theorem approximationSingularValue_comp_strongProjection_tendsto_of_minMax
+    (hlb : ContinuousLinearMap.HasMinMaxLowerBound 𝕜 E₀ F₀)
+    {ι : Type w} {P : ι → E₀ →L[𝕜] E₀} {l : Filter ι}
     (hPproj : ∀ i, IsOrthogonalProjectionMap (P i))
-    (hP : StronglyTendsto P l (ContinuousLinearMap.id ℂ E₀))
-    (n : ℕ) (K : E₀ →L[ℂ] F₀) :
+    (hP : StronglyTendsto P l (ContinuousLinearMap.id 𝕜 E₀))
+    (n : ℕ) (K : E₀ →L[𝕜] F₀) :
     Tendsto
       (fun i => approximationSingularValue n (K ∘L P i))
       l (𝓝 (approximationSingularValue n K)) := by
@@ -286,17 +292,15 @@ theorem approximationSingularValue_comp_strongProjection_tendsto_complex
       ∀ᶠ i in l, r < approximationSingularValue n (K ∘L P i) := by
     intro r hr
     by_cases hr0 : 0 ≤ r
-    · obtain ⟨s, hrs, v, hv, hV⟩ :=
-        ContinuousLinearMap.exists_linearIndependent_lowerBound_of_lt_approximationNumber
-          K n hr0 hr
+    · obtain ⟨s, hrs, v, hv, hV⟩ := hlb K n hr0 hr
       let c : ℝ := (r + s) / 2
       have hrc : r < c := by dsimp only [c]; linarith
       have hcs : c < s := by dsimp only [c]; linarith
       have hc0 : 0 ≤ c := hr0.trans hrc.le
-      let V : Submodule ℂ E₀ := Submodule.span ℂ (Set.range v)
-      let b : Module.Basis (Fin (n + 1)) ℂ V := Module.Basis.span hv
-      letI : FiniteDimensional ℂ V := b.finiteDimensional_of_finite
-      let D : ι → V →L[ℂ] F₀ := fun i =>
+      let V : Submodule 𝕜 E₀ := Submodule.span 𝕜 (Set.range v)
+      let b : Module.Basis (Fin (n + 1)) 𝕜 V := Module.Basis.span hv
+      letI : FiniteDimensional 𝕜 V := b.finiteDimensional_of_finite
+      let D : ι → V →L[𝕜] F₀ := fun i =>
         (K ∘L P i ∘L V.subtypeL) - (K ∘L V.subtypeL)
       have hDpoint : ∀ x : V, Tendsto (fun i => D i x) l (𝓝 0) := by
         intro x
@@ -351,7 +355,22 @@ theorem approximationSingularValue_comp_strongProjection_tendsto_complex
   · have := hUpper i
     linarith
 
-end ComplexStrongCutoff
+/-- Cutoff convergence over `ℂ`. -/
+theorem approximationSingularValue_comp_strongProjection_tendsto_complex
+    {E₀ : Type vE0} {F₀ : Type vF0}
+    [NormedAddCommGroup E₀] [InnerProductSpace ℂ E₀] [CompleteSpace E₀]
+    [NormedAddCommGroup F₀] [InnerProductSpace ℂ F₀] [CompleteSpace F₀]
+    {ι : Type w} {P : ι → E₀ →L[ℂ] E₀} {l : Filter ι}
+    (hPproj : ∀ i, IsOrthogonalProjectionMap (P i))
+    (hP : StronglyTendsto P l (ContinuousLinearMap.id ℂ E₀))
+    (n : ℕ) (K : E₀ →L[ℂ] F₀) :
+    Tendsto
+      (fun i => approximationSingularValue n (K ∘L P i))
+      l (𝓝 (approximationSingularValue n K)) :=
+  approximationSingularValue_comp_strongProjection_tendsto_of_minMax
+    ContinuousLinearMap.hasMinMaxLowerBound_complex hPproj hP n K
+
+end StrongCutoff
 
 /-- Finite Ky Fan gauge built from approximation singular values.
 
@@ -371,28 +390,45 @@ theorem kyFanApproximationGauge_neg (k : ℕ) (K : E →L[𝕜] F) :
     kyFanApproximationGauge k (-K) = kyFanApproximationGauge k K :=
   K.kyFanGauge_neg k
 
-section ComplexKyFanStrongCutoff
+section KyFanStrongCutoff
 
 variable {E₀ : Type vE0} {F₀ : Type vF0}
-  [NormedAddCommGroup E₀] [InnerProductSpace ℂ E₀] [CompleteSpace E₀]
-  [NormedAddCommGroup F₀] [InnerProductSpace ℂ F₀] [CompleteSpace F₀]
+  [NormedAddCommGroup E₀] [InnerProductSpace 𝕜 E₀] [CompleteSpace E₀]
+  [NormedAddCommGroup F₀] [InnerProductSpace 𝕜 F₀] [CompleteSpace F₀]
 
-/-- Finite Ky Fan approximation gauges converge under complex strong
-orthogonal cutoffs. -/
-theorem kyFanApproximationGauge_comp_strongProjection_tendsto_complex
-    {ι : Type w} {P : ι → E₀ →L[ℂ] E₀} {l : Filter ι}
+/-- Finite Ky Fan approximation gauges converge under strong orthogonal cutoffs: the
+termwise statement summed over `Finset.range k`. -/
+theorem kyFanApproximationGauge_comp_strongProjection_tendsto_of_minMax
+    (hlb : ContinuousLinearMap.HasMinMaxLowerBound 𝕜 E₀ F₀)
+    {ι : Type w} {P : ι → E₀ →L[𝕜] E₀} {l : Filter ι}
     (hPproj : ∀ i, IsOrthogonalProjectionMap (P i))
-    (hP : StronglyTendsto P l (ContinuousLinearMap.id ℂ E₀))
-    (k : ℕ) (K : E₀ →L[ℂ] F₀) :
+    (hP : StronglyTendsto P l (ContinuousLinearMap.id 𝕜 E₀))
+    (k : ℕ) (K : E₀ →L[𝕜] F₀) :
     Tendsto
       (fun i => kyFanApproximationGauge k (K ∘L P i))
       l (𝓝 (kyFanApproximationGauge k K)) := by
   simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge]
   exact tendsto_finsetSum (Finset.range k)
-    (fun n hn => approximationSingularValue_comp_strongProjection_tendsto_complex
-      hPproj hP n K)
+    (fun n hn => approximationSingularValue_comp_strongProjection_tendsto_of_minMax
+      hlb hPproj hP n K)
 
-end ComplexKyFanStrongCutoff
+/-- Finite Ky Fan approximation gauges converge under complex strong
+orthogonal cutoffs. -/
+theorem kyFanApproximationGauge_comp_strongProjection_tendsto_complex
+    {E₁ : Type vE0} {F₁ : Type vF0}
+    [NormedAddCommGroup E₁] [InnerProductSpace ℂ E₁] [CompleteSpace E₁]
+    [NormedAddCommGroup F₁] [InnerProductSpace ℂ F₁] [CompleteSpace F₁]
+    {ι : Type w} {P : ι → E₁ →L[ℂ] E₁} {l : Filter ι}
+    (hPproj : ∀ i, IsOrthogonalProjectionMap (P i))
+    (hP : StronglyTendsto P l (ContinuousLinearMap.id ℂ E₁))
+    (k : ℕ) (K : E₁ →L[ℂ] F₁) :
+    Tendsto
+      (fun i => kyFanApproximationGauge k (K ∘L P i))
+      l (𝓝 (kyFanApproximationGauge k K)) :=
+  kyFanApproximationGauge_comp_strongProjection_tendsto_of_minMax
+    ContinuousLinearMap.hasMinMaxLowerBound_complex hPproj hP k K
+
+end KyFanStrongCutoff
 
 theorem rectangularKyFanSum_le_kyFanApproximationGauge
     {E₀ : Type vE0} {F₀ : Type vF0}
@@ -429,14 +465,14 @@ theorem kyFanApproximationGauge_add_le_finiteDimensional
   ContinuousLinearMap.kyFanGauge_add_le_of_finiteDimensional k A B
 
 
-section ComplexKyFanTriangle
+section KyFanTriangle
 
 variable {E₀ : Type vE0} {F₀ : Type vF0}
-  [NormedAddCommGroup E₀] [InnerProductSpace ℂ E₀] [CompleteSpace E₀]
-  [NormedAddCommGroup F₀] [InnerProductSpace ℂ F₀] [CompleteSpace F₀]
+  [NormedAddCommGroup E₀] [InnerProductSpace 𝕜 E₀] [CompleteSpace E₀]
+  [NormedAddCommGroup F₀] [InnerProductSpace 𝕜 F₀] [CompleteSpace F₀]
 
-theorem approximationSingularValue_restrict_mono_complex
-    (T : E₀ →L[ℂ] F₀) (n : ℕ) {U V : Submodule ℂ E₀}
+theorem approximationSingularValue_restrict_mono
+    (T : E₀ →L[𝕜] F₀) (n : ℕ) {U V : Submodule 𝕜 E₀}
     (hUV : U ≤ V) :
     approximationSingularValue n (T ∘L U.subtypeL) ≤
       approximationSingularValue n (T ∘L V.subtypeL) :=
@@ -444,33 +480,60 @@ theorem approximationSingularValue_restrict_mono_complex
 
 theorem approximationSingularValue_orthogonalProjectionOnto_comp_eq
     {V : Type vG} {G : Type vH}
-    [NormedAddCommGroup V] [InnerProductSpace ℂ V] [CompleteSpace V]
-    [NormedAddCommGroup G] [InnerProductSpace ℂ G] [CompleteSpace G]
-    (W : Submodule ℂ G) [W.HasOrthogonalProjection]
-    (A : V →L[ℂ] G) (hA : ∀ x, A x ∈ W) (n : ℕ) :
+    [NormedAddCommGroup V] [InnerProductSpace 𝕜 V] [CompleteSpace V]
+    [NormedAddCommGroup G] [InnerProductSpace 𝕜 G] [CompleteSpace G]
+    (W : Submodule 𝕜 G) [W.HasOrthogonalProjection]
+    (A : V →L[𝕜] G) (hA : ∀ x, A x ∈ W) (n : ℕ) :
     approximationSingularValue n (W.orthogonalProjectionOnto ∘L A) =
       approximationSingularValue n A :=
   ContinuousLinearMap.approximationNumber_orthogonalProjectionOnto_comp_eq W A hA n
 
 theorem kyFanApproximationGauge_orthogonalProjectionOnto_comp_eq
     {V : Type vG} {G : Type vH}
-    [NormedAddCommGroup V] [InnerProductSpace ℂ V] [CompleteSpace V]
-    [NormedAddCommGroup G] [InnerProductSpace ℂ G] [CompleteSpace G]
-    (W : Submodule ℂ G) [W.HasOrthogonalProjection]
-    (A : V →L[ℂ] G) (hA : ∀ x, A x ∈ W) (k : ℕ) :
+    [NormedAddCommGroup V] [InnerProductSpace 𝕜 V] [CompleteSpace V]
+    [NormedAddCommGroup G] [InnerProductSpace 𝕜 G] [CompleteSpace G]
+    (W : Submodule 𝕜 G) [W.HasOrthogonalProjection]
+    (A : V →L[𝕜] G) (hA : ∀ x, A x ∈ W) (k : ℕ) :
     kyFanApproximationGauge k (W.orthogonalProjectionOnto ∘L A) =
       kyFanApproximationGauge k A :=
   ContinuousLinearMap.kyFanGauge_orthogonalProjectionOnto_comp_eq W A hA k
 
-theorem kyFanApproximationGauge_add_le_finiteSource_complex
+theorem kyFanApproximationGauge_add_le_finiteSource
     {V : Type vG} {G : Type vH}
-    [NormedAddCommGroup V] [InnerProductSpace ℂ V]
-    [FiniteDimensional ℂ V]
-    [NormedAddCommGroup G] [InnerProductSpace ℂ G] [CompleteSpace G]
-    (k : ℕ) (A B : V →L[ℂ] G) :
+    [NormedAddCommGroup V] [InnerProductSpace 𝕜 V]
+    [FiniteDimensional 𝕜 V]
+    [NormedAddCommGroup G] [InnerProductSpace 𝕜 G] [CompleteSpace G]
+    (k : ℕ) (A B : V →L[𝕜] G) :
     kyFanApproximationGauge k (A + B) ≤
       kyFanApproximationGauge k A + kyFanApproximationGauge k B :=
   ContinuousLinearMap.kyFanGauge_add_le_of_finiteDimensional_source k A B
+
+/-- **The Ky Fan triangle inequality**, at whichever field supplies the min--max lower
+bound.  The localization argument is `kyFanGauge_add_le_of_exists_finiteRestriction`; the
+field enters only through `hlb`. -/
+theorem kyFanApproximationGauge_add_le_of_minMax
+    (hlb : ContinuousLinearMap.HasMinMaxLowerBound 𝕜 E₀ F₀)
+    (k : ℕ) (K L : E₀ →L[𝕜] F₀) :
+    kyFanApproximationGauge k (K + L) ≤
+      kyFanApproximationGauge k K + kyFanApproximationGauge k L :=
+  ContinuousLinearMap.kyFanGauge_add_le_of_exists_finiteRestriction
+    (fun n ε hε => by
+      by_cases hsmall : (K + L).approximationNumber n < ε
+      · exact ⟨fun _ => 0, hsmall.trans_le
+          (le_add_of_nonneg_left
+            (ContinuousLinearMap.approximationNumber_nonneg _ n))⟩
+      · obtain ⟨v, hv⟩ := hlb.exists_finiteRestrictionApproximationNumber_gt_of_lt (K + L) n
+          (sub_nonneg.mpr (le_of_not_gt hsmall)) (sub_lt_self _ hε)
+        exact ⟨v, by linarith⟩)
+    k
+
+end KyFanTriangle
+
+section ComplexKyFanTriangle
+
+variable {E₀ : Type vE0} {F₀ : Type vF0}
+  [NormedAddCommGroup E₀] [InnerProductSpace ℂ E₀] [CompleteSpace E₀]
+  [NormedAddCommGroup F₀] [InnerProductSpace ℂ F₀] [CompleteSpace F₀]
 
 theorem exists_finiteRestrictionApproximationNumber_add_gt
     (T : E₀ →L[ℂ] F₀) (n : ℕ) (ε : ℝ) (hε : 0 < ε) :
