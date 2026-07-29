@@ -69,6 +69,30 @@ noncomputable local instance completeSpaceOfHasOrthogonalProjection
     (W : Submodule ℂ E) [W.HasOrthogonalProjection] : CompleteSpace W :=
   (Submodule.isComplete_coe_of_hasOrthogonalProjection W).completeSpace_coe
 
+/-- `J⋆ J = 1` for the inclusion `J = W.subtypeL` of an orthogonally complemented
+subspace.  This is the *only* coercion-level fact the block decompositions below
+need: with it, and with `J J⋆ = W.starProjection` (which is definitional, since
+`starProjection` *is* `subtypeL ∘L orthogonalProjectionOnto`), every block identity
+becomes operator algebra in `E` with no `⟨_, _⟩` bookkeeping. -/
+private theorem adjoint_subtypeL_comp_subtypeL
+    (W : Submodule ℂ E) [W.HasOrthogonalProjection] :
+    W.subtypeL.adjoint ∘L W.subtypeL = ContinuousLinearMap.id ℂ W := by
+  ext x
+  rw [ContinuousLinearMap.comp_apply, ContinuousLinearMap.id_apply,
+    Submodule.adjoint_subtypeL, Submodule.subtypeL_apply]
+  -- `ext` has already descended to the coercion level, so take the coercion of
+  -- the subspace-level identity.
+  exact congrArg (fun z : W => (z : E))
+    (Submodule.orthogonalProjectionOnto_mem_subspace_eq_self x)
+
+/-- `J J⋆ = P`, the projection onto `W`.  True by definition of `starProjection`
+once `adjoint_subtypeL` rewrites `J⋆` to `orthogonalProjectionOnto`. -/
+private theorem subtypeL_comp_adjoint_subtypeL
+    (W : Submodule ℂ E) [W.HasOrthogonalProjection] :
+    W.subtypeL ∘L W.subtypeL.adjoint = W.starProjection := by
+  rw [Submodule.adjoint_subtypeL]
+  rfl
+
 private theorem ambientAngularOperator_eq_extendCoordinate
     (U : Submodule ℂ E) [U.HasOrthogonalProjection]
     (Y : E →L[ℂ] E) (hY : IsAngularOperator U Y) :
@@ -129,43 +153,47 @@ private theorem ambient_doubleAngleTangent_eq_extendCoordinate
   have hPG : P ∘L G = G := by
     dsimp [G]
     rw [← ContinuousLinearMap.comp_assoc, hPYstar]
+  -- `Y⋆` in block form: `(J⊥ X J⋆)⋆ = J X⋆ J⊥⋆`.
+  have hYadj : Y.adjoint
+      = U.subtypeL ∘L X.adjoint ∘L Uᗮ.subtypeL.adjoint := by
+    rw [hYext, ContinuousLinearMap.adjoint_comp,
+      ContinuousLinearMap.adjoint_comp, ContinuousLinearMap.adjoint_adjoint,
+      ContinuousLinearMap.comp_assoc]
+  -- `J⊥⋆ J⊥ = 1`, stated pointwise so that it can be used as a `simp` rule
+  -- inside applications (where composition brackets are not an obstacle).
+  have hperp : ∀ y : Uᗮ, Uᗮ.subtypeL.adjoint (Uᗮ.subtypeL y) = y := by
+    intro y
+    have h := congrArg (fun T : Uᗮ →L[ℂ] Uᗮ => T y)
+      (adjoint_subtypeL_comp_subtypeL Uᗮ)
+    simpa using h
+  -- `G = Y⋆Y = J X⋆X J⋆`: the `J⊥` factors cancel.
+  have hG : G = U.subtypeL ∘L (X.adjoint ∘L X) ∘L U.subtypeL.adjoint := by
+    ext x
+    show Y.adjoint (Y x)
+      = U.subtypeL ((X.adjoint ∘L X) (U.subtypeL.adjoint x))
+    rw [hYadj, hYext]
+    simp only [ContinuousLinearMap.comp_apply, hperp]
+  -- `P + P⊥ = 1` as operators.
+  have hPsum : U.starProjection + Uᗮ.starProjection
+      = ContinuousLinearMap.id ℂ E := by
+    ext x
+    rw [ContinuousLinearMap.add_apply, ContinuousLinearMap.id_apply]
+    exact U.starProjection_add_starProjection_orthogonal x
+  -- Now the block identity is pure algebra: `J DX J⋆ = J J⋆ - J X⋆X J⋆ = P - G`,
+  -- so `D = 1 - G = (P - G) + P⊥` reduces to `P + P⊥ = 1`.  No coercions.
   have hDblock : D =
       U.subtypeL ∘L DX ∘L U.subtypeL.adjoint + Uᗮ.starProjection := by
-    apply ContinuousLinearMap.ext
-    intro x
-    change x - Y.adjoint (Y x) =
-      ((U.subtypeL ∘L DX ∘L U.subtypeL.adjoint) x) + Uᗮ.starProjection x
-    have hsplit : x = U.starProjection x + Uᗮ.starProjection x := by
-      rw [U.starProjection_add_starProjection_orthogonal]
-    have hYperp : Y (Uᗮ.starProjection x) = 0 := by
-      have h := DFunLike.congr_fun hYP (Uᗮ.starProjection x)
-      -- `K` is implicit in `starProjection_apply_eq_zero_iff`, and with it
-      -- unresolved Lean reports the whole dotted name as an unknown constant.
-      rw [ContinuousLinearMap.comp_apply,
-        (Submodule.starProjection_apply_eq_zero_iff (K := U)).mpr
-          (Uᗮ.starProjection_apply_mem x)] at h
-      simpa using h.symm
-    -- after `hYperp` the residue is `Y (P x) + 0`, so it is `add_zero` that
-    -- applies, not `map_zero` (there is no `f 0` subterm to match).
-    rw [hsplit, map_add, hYperp, add_zero]
-    apply congrArg (fun z : U => (z : E))
-    ext
-    simp only [DX, D, doubleAngleDenominator,
-      ContinuousLinearMap.comp_apply, sub_apply, ContinuousLinearMap.id_apply,
-      Submodule.coe_sub, Submodule.coe_mk]
-    rw [coe_subspaceAngularCoordinate_apply U Y hY]
-    have hAdj :
-        (((X.adjoint (X
-          ⟨U.starProjection x, U.starProjection_apply_mem x⟩) : U) : E)) =
-          Y.adjoint (Y (U.starProjection x)) := by
-      apply Subtype.ext
-      intro
-      rw [ContinuousLinearMap.adjoint_inner_left,
-        ContinuousLinearMap.adjoint_inner_left]
-      simp only [X]
-      rw [coe_subspaceAngularCoordinate_apply U Y hY]
-      rfl
-    rw [hAdj]
+    have hJDXJ : U.subtypeL ∘L DX ∘L U.subtypeL.adjoint
+        = U.starProjection - G := by
+      show U.subtypeL ∘L (ContinuousLinearMap.id ℂ U - X.adjoint ∘L X) ∘L
+          U.subtypeL.adjoint = U.starProjection - G
+      rw [ContinuousLinearMap.sub_comp, ContinuousLinearMap.comp_sub,
+        ContinuousLinearMap.id_comp,
+        subtypeL_comp_adjoint_subtypeL U, hG]
+    show ContinuousLinearMap.id ℂ E - G
+        = U.subtypeL ∘L DX ∘L U.subtypeL.adjoint + Uᗮ.starProjection
+    rw [hJDXJ, ← hPsum]
+    abel
   have hDunit := isUnit_doubleAngleDenominator Y hcontractive
   have hDXcontractive : ‖X‖ < 1 :=
     (norm_subspaceAngularCoordinate_le U Y).trans_lt hcontractive
