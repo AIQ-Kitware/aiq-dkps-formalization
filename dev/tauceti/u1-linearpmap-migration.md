@@ -362,6 +362,20 @@ introduced by my own gap-convenience twins two lanes earlier and certified
 "green" at the time.  Check `Built <module>` *and* the warning count for the
 module you edited.
 
+**Correction (edward, aiq-gpu, 2026-07-29): the `Core/Unbounded.lean` rot
+described below is stale.**  That entry says the module fails with **30 errors**
+on `ClosedOperator.adjointDomain` / `.adjointVector` / `.subScalar` /
+`.resolvent`, and that the two largest out-of-closure files sit behind it.
+Rebuilt today, **`Core/Unbounded.lean` is not blamed for a single error**.  The
+only failing module in `Experimental/InfiniteDimensional/**` is now
+`Sylvester/FiniteStepCalculus.lean`, and its 8 errors reduce to one missing
+declaration — `boundedSelfAdjointGroup`, referenced 6 times and defined nowhere —
+for which `ForTauCeti`'s newly landed `SkewAdjointExponential` +
+`OneParameterUnitaryGroup` supply the ingredients.  **Do not size that repair off
+the paragraph below.**  Keeping both, because the lesson is that a measured
+blocker decays: this one shrank from "re-derive a deleted adjoint API" to "one
+missing group constructor" within a session, purely through other agents' merges.
+
 **Correction to the blocker map below: it needs a third category, and I found
 that by claiming a target it got wrong (edward, aiq-gpu, 2026-07-28).**  The map
 sorted the surface into *takeable* and *Spectra-gated*.  It called
