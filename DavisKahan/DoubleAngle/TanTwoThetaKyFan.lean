@@ -71,9 +71,11 @@ variable {𝕜 E : Type*} [RCLike 𝕜]
 `tan 2θ = 2 tan θ / (1 - tan² θ)`. -/
 noncomputable def doubleAngleTangent (t : ℝ) : ℝ := 2 * t / (1 - t ^ 2)
 
+/-- The double-angle tangent vanishes at zero. -/
 @[simp] theorem doubleAngleTangent_zero : doubleAngleTangent 0 = 0 := by
   simp [doubleAngleTangent]
 
+/-- The double-angle tangent is nonnegative on the admissible range. -/
 theorem doubleAngleTangent_nonneg {t : ℝ} (h0 : 0 ≤ t) (h1 : t < 1) :
     0 ≤ doubleAngleTangent t := by
   have h1t : (0 : ℝ) < 1 - t ^ 2 := by nlinarith

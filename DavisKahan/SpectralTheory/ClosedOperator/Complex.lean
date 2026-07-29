@@ -22,6 +22,7 @@ universe v
 variable {H : Type v}
   [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
 
+/-- Local shorthand for a complex closed operator on `H`. -/
 abbrev ComplexClosedOperatorH :=
   TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := H)
 

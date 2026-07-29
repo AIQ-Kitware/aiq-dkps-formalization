@@ -53,25 +53,32 @@ namespace RealComplexification
 
 variable {E F G : Type*}
 
+/-- Additive structure, inherited from the underlying `WithLp 2 (E × E)`. -/
 instance instAddCommGroup [AddCommGroup E] :
     AddCommGroup (RealComplexification E) :=
   inferInstanceAs (AddCommGroup (WithLp 2 (E × E)))
 
+/-- The `L²` product norm, inherited from `WithLp 2 (E × E)`.  This is the choice that makes the
+complexification an inner-product space rather than merely a normed one. -/
 instance instNormedAddCommGroup [NormedAddCommGroup E] :
     NormedAddCommGroup (RealComplexification E) :=
   inferInstanceAs (NormedAddCommGroup (WithLp 2 (E × E)))
 
+/-- Completeness is inherited from `E`. -/
 instance instCompleteSpace [NormedAddCommGroup E] [CompleteSpace E] :
     CompleteSpace (RealComplexification E) :=
   inferInstanceAs (CompleteSpace (WithLp 2 (E × E)))
 
+/-- Real scalar action, coordinatewise. -/
 instance instSMulReal [SMul ℝ E] : SMul ℝ (RealComplexification E) :=
   inferInstanceAs (SMul ℝ (WithLp 2 (E × E)))
 
+/-- Real module structure, inherited from the product. -/
 instance instModuleReal [AddCommGroup E] [Module ℝ E] :
     Module ℝ (RealComplexification E) :=
   inferInstanceAs (Module ℝ (WithLp 2 (E × E)))
 
+/-- The `L²` norm is compatible with real scaling. -/
 instance instNormedSpaceReal [NormedAddCommGroup E] [NormedSpace ℝ E] :
     NormedSpace ℝ (RealComplexification E) :=
   inferInstanceAs (NormedSpace ℝ (WithLp 2 (E × E)))
@@ -88,32 +95,47 @@ def re (z : RealComplexification E) : E :=
 def im (z : RealComplexification E) : E :=
   (WithLp.ofLp z).2
 
+/-- The real part of a vector built from coordinates. -/
 @[simp] theorem re_mk (x y : E) : re (mk x y) = x := rfl
+/-- The imaginary part of a vector built from coordinates. -/
 @[simp] theorem im_mk (x y : E) : im (mk x y) = y := rfl
+/-- Rebuilding a vector from its own coordinates is the identity. -/
 @[simp] theorem mk_re_im (z : RealComplexification E) : mk (re z) (im z) = z := by
   exact WithLp.toLp_ofLp 2 z
 
+/-- Two complexified vectors are equal when their real and imaginary coordinates agree.  Tagged
+`@[ext]`, so `ext` splits any goal about them into two real goals. -/
 @[ext]
 theorem ext {z w : RealComplexification E} (hre : re z = re w) (him : im z = im w) : z = w := by
   apply WithLp.ofLp_injective
   exact Prod.ext hre him
 
+/-- Zero has zero real part. -/
 @[simp] theorem re_zero [AddCommGroup E] : re (0 : RealComplexification E) = 0 := rfl
+/-- Zero has zero imaginary part. -/
 @[simp] theorem im_zero [AddCommGroup E] : im (0 : RealComplexification E) = 0 := rfl
+/-- Addition is coordinatewise on real parts. -/
 @[simp] theorem re_add [AddCommGroup E] (z w : RealComplexification E) :
     re (z + w) = re z + re w := rfl
+/-- Addition is coordinatewise on imaginary parts. -/
 @[simp] theorem im_add [AddCommGroup E] (z w : RealComplexification E) :
     im (z + w) = im z + im w := rfl
+/-- Negation on real parts. -/
 @[simp] theorem re_neg [AddCommGroup E] (z : RealComplexification E) :
     re (-z) = -re z := rfl
+/-- Negation on imaginary parts. -/
 @[simp] theorem im_neg [AddCommGroup E] (z : RealComplexification E) :
     im (-z) = -im z := rfl
+/-- Subtraction on real parts. -/
 @[simp] theorem re_sub [AddCommGroup E] (z w : RealComplexification E) :
     re (z - w) = re z - re w := rfl
+/-- Subtraction on imaginary parts. -/
 @[simp] theorem im_sub [AddCommGroup E] (z w : RealComplexification E) :
     im (z - w) = im z - im w := rfl
+/-- Real scaling acts on the real part. -/
 @[simp] theorem re_real_smul [AddCommGroup E] [Module ℝ E]
     (r : ℝ) (z : RealComplexification E) : re (r • z) = r • re z := rfl
+/-- Real scaling acts on the imaginary part. -/
 @[simp] theorem im_real_smul [AddCommGroup E] [Module ℝ E]
     (r : ℝ) (z : RealComplexification E) : im (r • z) = r • im z := rfl
 
@@ -122,14 +144,20 @@ instance instSMulComplex [AddCommGroup E] [Module ℝ E] :
     SMul ℂ (RealComplexification E) where
   smul c z := mk (c.re • re z - c.im • im z) (c.im • re z + c.re • im z)
 
+/-- Real part of a complex scaling: `re (c • z) = c.re • re z - c.im • im z`, the real half of
+complex multiplication. -/
 @[simp] theorem re_complex_smul [AddCommGroup E] [Module ℝ E]
     (c : ℂ) (z : RealComplexification E) :
     re (c • z) = c.re • re z - c.im • im z := rfl
 
+/-- Imaginary part of a complex scaling: `im (c • z) = c.im • re z + c.re • im z`. -/
 @[simp] theorem im_complex_smul [AddCommGroup E] [Module ℝ E]
     (c : ℂ) (z : RealComplexification E) :
     im (c • z) = c.im • re z + c.re • im z := rfl
 
+/-- **The complex module structure**, where the complexification earns its name: `i` acts by
+`(x, y) ↦ (-y, x)`.  Built from minimal axioms because the four laws are exactly the four real
+identities that have to be checked coordinatewise. -/
 instance instModuleComplex [AddCommGroup E] [Module ℝ E] :
     Module ℂ (RealComplexification E) :=
   Module.ofMinimalAxioms
@@ -142,6 +170,8 @@ instance instModuleComplex [AddCommGroup E] [Module ℝ E] :
         simp [sub_eq_add_neg, Complex.mul_re, Complex.mul_im] <;> module)
     (fun z => by apply RealComplexification.ext <;> simp)
 
+/-- Real and complex scalar actions are compatible, so `ℝ`-linear statements can be read inside
+`ℂ`-linear ones without transport. -/
 instance instIsScalarTower [AddCommGroup E] [Module ℝ E] :
     IsScalarTower ℝ ℂ (RealComplexification E) where
   smul_assoc r c z := by
@@ -172,6 +202,9 @@ theorem norm_complex_smul [NormedAddCommGroup E] [InnerProductSpace ℝ E]
     hsq c.im ‖re z‖, hsq c.re ‖im z‖]
   ring
 
+/-- The `L²` norm is compatible with *complex* scaling.  This is the non-formal instance of the
+group: it needs `‖c • z‖ = ‖c‖ ‖z‖` for complex `c`, which is the Pythagorean computation above and
+not a consequence of the real case. -/
 instance instNormedSpaceComplex [NormedAddCommGroup E] [InnerProductSpace ℝ E] :
     NormedSpace ℂ (RealComplexification E) :=
   { (instModuleComplex (E := E)) with
@@ -195,6 +228,8 @@ instance instInnerProductSpaceComplex [NormedAddCommGroup E] [InnerProductSpace 
       simp [inner_add_left, inner_sub_left, real_inner_smul_left,
         Complex.mul_re, Complex.mul_im] <;> ring
 
+/-- The complex inner product in coordinates: real part `⟪re z, re w⟫ + ⟪im z, im w⟫`, imaginary
+part `⟪re z, im w⟫ - ⟪im z, re w⟫`.  True by `rfl`, and the form every computation unfolds to. -/
 @[simp]
 theorem inner_apply [NormedAddCommGroup E] [InnerProductSpace ℝ E]
     (z w : RealComplexification E) :
@@ -213,10 +248,14 @@ def ofReal [NormedAddCommGroup E] [InnerProductSpace ℝ E] :
     rw [← sq_eq_sq₀ (norm_nonneg _) (norm_nonneg _), norm_sq]
     simp
 
+/-- The real part of a real vector is itself. -/
 @[simp] theorem re_ofReal [NormedAddCommGroup E] [InnerProductSpace ℝ E] (x : E) :
     re (ofReal x) = x := rfl
+/-- A real vector has zero imaginary part. -/
 @[simp] theorem im_ofReal [NormedAddCommGroup E] [InnerProductSpace ℝ E] (x : E) :
     im (ofReal x) = 0 := rfl
+/-- The complex inner product of two real vectors is the real one, coerced -- so the embedding
+`E → RealComplexification E` is isometric. -/
 @[simp] theorem inner_ofReal [NormedAddCommGroup E] [InnerProductSpace ℝ E] (x y : E) :
     ⟪ofReal x, ofReal y⟫_ℂ = (⟪x, y⟫_ℝ : ℂ) := by
   apply Complex.ext <;> simp
@@ -238,16 +277,21 @@ def conjugation [NormedAddCommGroup E] [InnerProductSpace ℝ E] :
     rw [← sq_eq_sq₀ (norm_nonneg _) (norm_nonneg _), norm_sq, norm_sq]
     simp
 
+/-- Conjugation fixes the real part. -/
 @[simp] theorem re_conj [NormedAddCommGroup E] [InnerProductSpace ℝ E]
     (z : RealComplexification E) : re (conjugation z) = re z := rfl
+/-- Conjugation negates the imaginary part. -/
 @[simp] theorem im_conj [NormedAddCommGroup E] [InnerProductSpace ℝ E]
     (z : RealComplexification E) : im (conjugation z) = -im z := rfl
+/-- Conjugation is an involution. -/
 @[simp] theorem conjugation_involutive [NormedAddCommGroup E] [InnerProductSpace ℝ E]
     (z : RealComplexification E) : conjugation (conjugation z) = z := by
   apply RealComplexification.ext <;> simp
+/-- Conjugation fixes real vectors, which characterises the real subspace. -/
 @[simp] theorem conjugation_ofReal [NormedAddCommGroup E] [InnerProductSpace ℝ E] (x : E) :
     conjugation (ofReal x) = ofReal x := by
   apply RealComplexification.ext <;> simp
+/-- Conjugation is **conjugate**-linear, not linear: the scalar comes out starred. -/
 @[simp] theorem conjugation_complex_smul [NormedAddCommGroup E] [InnerProductSpace ℝ E]
     (c : ℂ) (z : RealComplexification E) :
     conjugation (c • z) = conj c • conjugation z := by
@@ -277,22 +321,26 @@ def complexify [NormedAddCommGroup E] [InnerProductSpace ℝ E]
       ‖T‖ ^ 2 * (‖re z‖ ^ 2 + ‖im z‖ ^ 2)
     nlinarith)
 
+/-- The complexified operator acts on real parts by the original operator. -/
 @[simp] theorem re_complexify [NormedAddCommGroup E] [InnerProductSpace ℝ E]
     [NormedAddCommGroup F] [InnerProductSpace ℝ F]
     (T : E →L[ℝ] F) (z : RealComplexification E) :
     re (complexify T z) = T (re z) := rfl
 
+/-- The complexified operator acts on imaginary parts by the original operator. -/
 @[simp] theorem im_complexify [NormedAddCommGroup E] [InnerProductSpace ℝ E]
     [NormedAddCommGroup F] [InnerProductSpace ℝ F]
     (T : E →L[ℝ] F) (z : RealComplexification E) :
     im (complexify T z) = T (im z) := rfl
 
+/-- Complexification agrees with the original operator on real vectors. -/
 @[simp] theorem complexify_ofReal [NormedAddCommGroup E] [InnerProductSpace ℝ E]
     [NormedAddCommGroup F] [InnerProductSpace ℝ F]
     (T : E →L[ℝ] F) (x : E) :
     complexify T (ofReal x) = ofReal (T x) := by
   apply RealComplexification.ext <;> simp
 
+/-- The complexification of the zero operator is zero. -/
 @[simp] theorem complexify_zero [NormedAddCommGroup E] [InnerProductSpace ℝ E]
     [NormedAddCommGroup F] [InnerProductSpace ℝ F] :
     complexify (0 : E →L[ℝ] F) = 0 := by
@@ -300,12 +348,14 @@ def complexify [NormedAddCommGroup E] [InnerProductSpace ℝ E]
   intro z
   apply RealComplexification.ext <;> simp
 
+/-- The complexification of the identity is the identity. -/
 @[simp] theorem complexify_id [NormedAddCommGroup E] [InnerProductSpace ℝ E] :
     complexify (ContinuousLinearMap.id ℝ E) = ContinuousLinearMap.id ℂ (RealComplexification E) := by
   apply ContinuousLinearMap.ext
   intro z
   apply RealComplexification.ext <;> simp
 
+/-- Complexification is additive. -/
 @[simp] theorem complexify_add [NormedAddCommGroup E] [InnerProductSpace ℝ E]
     [NormedAddCommGroup F] [InnerProductSpace ℝ F]
     (S T : E →L[ℝ] F) : complexify (S + T) = complexify S + complexify T := by
@@ -313,6 +363,7 @@ def complexify [NormedAddCommGroup E] [InnerProductSpace ℝ E]
   intro z
   apply RealComplexification.ext <;> simp
 
+/-- Complexification commutes with negation. -/
 @[simp] theorem complexify_neg [NormedAddCommGroup E] [InnerProductSpace ℝ E]
     [NormedAddCommGroup F] [InnerProductSpace ℝ F]
     (T : E →L[ℝ] F) : complexify (-T) = -complexify T := by
@@ -320,6 +371,7 @@ def complexify [NormedAddCommGroup E] [InnerProductSpace ℝ E]
   intro z
   apply RealComplexification.ext <;> simp
 
+/-- Complexification commutes with subtraction. -/
 @[simp] theorem complexify_sub [NormedAddCommGroup E] [InnerProductSpace ℝ E]
     [NormedAddCommGroup F] [InnerProductSpace ℝ F]
     (S T : E →L[ℝ] F) : complexify (S - T) = complexify S - complexify T := by
@@ -327,6 +379,8 @@ def complexify [NormedAddCommGroup E] [InnerProductSpace ℝ E]
   intro z
   apply RealComplexification.ext <;> simp
 
+/-- Complexification is **real**-homogeneous.  It is not complex-homogeneous -- the complexified
+operator is `ℂ`-linear, but `complexify` itself only transports real scalars. -/
 @[simp] theorem complexify_real_smul [NormedAddCommGroup E] [InnerProductSpace ℝ E]
     [NormedAddCommGroup F] [InnerProductSpace ℝ F]
     (r : ℝ) (T : E →L[ℝ] F) :
@@ -341,6 +395,7 @@ def complexify [NormedAddCommGroup E] [InnerProductSpace ℝ E]
       (r : ℂ).im • T (re z) + (r : ℂ).re • T (im z)
     simp
 
+/-- Complexification is functorial: it commutes with composition. -/
 @[simp] theorem complexify_comp [NormedAddCommGroup E] [InnerProductSpace ℝ E]
     [NormedAddCommGroup F] [InnerProductSpace ℝ F]
     [NormedAddCommGroup G] [InnerProductSpace ℝ G]

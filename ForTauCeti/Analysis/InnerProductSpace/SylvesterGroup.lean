@@ -126,6 +126,7 @@ noncomputable def ofOperator (b : HilbertBasis ι 𝕜 F) (T : F →L[𝕜] E)
   ⟨columns b T, (memLp_columns_iff b T).mpr hT⟩
 
 omit [CompleteSpace F] in
+/-- Rebuilding an operator from its columns is the identity. -/
 @[simp] theorem ofLp_ofOperator (b : HilbertBasis ι 𝕜 F) (T : F →L[𝕜] E)
     (hT : T.hilbertSchmidtEnergy b ≠ ⊤) : ofLp b (ofOperator b T hT) = T :=
   ofLp_columns b T _
@@ -214,6 +215,7 @@ theorem energy_conjOp_ne_top (t : ℝ) (f : lp (fun _ : ι => E) 2) :
 noncomputable def sylvesterFun (t : ℝ) (f : lp (fun _ : ι => E) 2) : lp (fun _ : ι => E) 2 :=
   ofOperator b (conjOp U V b t f) (energy_conjOp_ne_top U V b t f)
 
+/-- The Sylvester flow, seen through the operator model. -/
 @[simp] theorem ofLp_sylvesterFun (t : ℝ) (f : lp (fun _ : ι => E) 2) :
     ofLp b (sylvesterFun U V b t f) = conjOp U V b t f :=
   ofLp_ofOperator _ _ _
@@ -272,6 +274,7 @@ noncomputable def sylvesterOp (t : ℝ) :
       map_smul' := fun c f => sylvesterFun_smul U V b t c f } 1
     (fun f => by rw [one_mul]; exact le_of_eq (norm_sylvesterFun U V b t f))
 
+/-- The bundled Sylvester operator acts as `sylvesterFun`. -/
 @[simp] theorem sylvesterOp_apply (t : ℝ) (f : lp (fun _ : ι => E) 2) :
     sylvesterOp U V b t f = sylvesterFun U V b t f := rfl
 
@@ -368,6 +371,7 @@ noncomputable def sylvesterGroup : OneParameterUnitaryGroup (lp (fun _ : ι => E
       simpa using h
     exact (tendsto_norm_sylvesterFun_sub_zero U V b f).comp hsub
 
+/-- The bundled group acts as the Sylvester operator at each time. -/
 @[simp] theorem sylvesterGroup_apply (t : ℝ) :
     (sylvesterGroup U V b).U t = sylvesterOp U V b t := rfl
 

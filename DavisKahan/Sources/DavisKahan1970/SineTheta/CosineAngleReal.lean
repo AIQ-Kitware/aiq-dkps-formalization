@@ -47,6 +47,7 @@ noncomputable def paperSourceDirectedSinR
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :=
   paperSourceDirectedSinC (complexifySubmodule U) (complexifySubmodule V)
 
+/-- The paper's real directed cosine agrees with the canonical one. -/
 @[simp]
 theorem paperSourceDirectedCosR_eq
     (U V : Submodule ℝ E)
@@ -55,6 +56,7 @@ theorem paperSourceDirectedCosR_eq
       paperCosineModulusC (complexifySubmodule U) (complexifySubmodule V) :=
   paperSourceDirectedCosC_eq _ _
 
+/-- The paper's real directed sine agrees with the canonical one. -/
 @[simp]
 theorem paperSourceDirectedSinR_eq
     (U V : Submodule ℝ E)

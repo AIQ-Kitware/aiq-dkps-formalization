@@ -416,6 +416,7 @@ noncomputable def finiteSymmetricGauge (N : UnitarilyInvariantNorm 𝕜 E)
   perm' := N.gauge_perm b
   neg_single' := N.gauge_neg_single b
 
+/-- The induced finite symmetric gauge, unfolded. -/
 @[simp] theorem finiteSymmetricGauge_apply (b : OrthonormalBasis (Fin n) 𝕜 E)
     (x : Fin n → ℝ) : N.finiteSymmetricGauge b x = N.gauge b x := rfl
 

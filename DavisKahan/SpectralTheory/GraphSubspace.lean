@@ -96,6 +96,7 @@ noncomputable def graphSubspace (U : Submodule 𝕜 E)
   (LinearMap.range
     (projection U + X ∘L projection U).toLinearMap).topologicalClosure
 
+/-- The graph of a bounded operator is orthogonally complemented, being closed. -/
 noncomputable instance graphSubspace_hasOrthogonalProjection
     (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     (X : E →L[𝕜] E) : (graphSubspace U X).HasOrthogonalProjection := by

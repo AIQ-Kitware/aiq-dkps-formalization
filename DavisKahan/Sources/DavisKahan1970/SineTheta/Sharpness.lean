@@ -386,9 +386,11 @@ along `e₀ - e₁`, i.e. at `π/4` to the exact subspace. -/
 noncomputable def paperCounterexampleTrial : Submodule ℝ PaperRealPlane :=
   Submodule.span ℝ {paperCounterexampleTrialVector}
 
+/-- The counterexample's exact subspace is orthogonally complemented. -/
 noncomputable instance paperCounterexampleExact_projection :
     paperCounterexampleExact.HasOrthogonalProjection := inferInstance
 
+/-- The counterexample's trial subspace is orthogonally complemented. -/
 noncomputable instance paperCounterexampleTrial_projection :
     paperCounterexampleTrial.HasOrthogonalProjection := inferInstance
 

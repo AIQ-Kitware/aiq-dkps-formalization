@@ -77,12 +77,14 @@ noncomputable def gramBlockDiagonal (A : E →ₗ[𝕜] F) :
     gramBlockDiagonalProd A ∘ₗ
       (WithLp.linearEquiv 2 𝕜 (E × F)).toLinearMap
 
+/-- The Hermitian dilation `[[0, A⋆], [A, 0]]`, unfolded to its two coordinates. -/
 @[simp] theorem hermitianDilation_apply (A : E →ₗ[𝕜] F)
     (x : WithLp 2 (E × F)) :
     hermitianDilation A x =
       WithLp.toLp 2 (A.adjoint (WithLp.ofLp x).2, A (WithLp.ofLp x).1) := by
   rfl
 
+/-- The block-diagonal Gram operator `[[A⋆A, 0], [0, AA⋆]]`, unfolded. -/
 @[simp] theorem gramBlockDiagonal_apply (A : E →ₗ[𝕜] F)
     (x : WithLp 2 (E × F)) :
     gramBlockDiagonal A x =

@@ -117,6 +117,7 @@ noncomputable def toRectangular (N : SymmetricOperatorIdealFamily.{u, v} 𝕜)
     rwa [dist_eq_norm, OperatorIdealFamily.Elem.norm_def, show (a n - l).val = A n - l.val from
       by simp [ha]] at this
 
+/-- Membership transfers across the rectangular adapter. -/
 @[simp]
 theorem toRectangular_mem (N : SymmetricOperatorIdealFamily.{u, v} 𝕜)
     [N.toOperatorIdealFamily.IsComplete] {E F : Type v}
@@ -124,6 +125,8 @@ theorem toRectangular_mem (N : SymmetricOperatorIdealFamily.{u, v} 𝕜)
     [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
     (A : E →L[𝕜] F) : N.toRectangular.Mem A ↔ N.gauge A ≠ ∞ := Iff.rfl
 
+/-- The gauge is unchanged by the rectangular adapter -- the property that makes it an adapter
+rather than a different family. -/
 @[simp]
 theorem toRectangular_gauge (N : SymmetricOperatorIdealFamily.{u, v} 𝕜)
     [N.toOperatorIdealFamily.IsComplete] {E F : Type v}

@@ -61,6 +61,7 @@ noncomputable def finiteSourceLeftSingularVector (A : E →L[ℂ] F)
   (leftSingularVector A.rangeRestrict.toLinearMap i : A.range)
 
 omit [CompleteSpace F] in
+/-- Finite-source singular values are nonnegative. -/
 @[simp]
 theorem finiteSourceSingularValue_nonneg (A : E →L[ℂ] F)
     (i : Fin (finrank ℂ E)) :

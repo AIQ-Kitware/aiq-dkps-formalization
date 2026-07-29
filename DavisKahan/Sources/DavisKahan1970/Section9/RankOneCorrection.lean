@@ -47,6 +47,7 @@ def offDiagonalSwap (q : ℝ) : SymmetricTwoByTwo where
   a₀₁ := q
   a₁₁ := 0
 
+/-- Entries of the Schur-reduced 2x2 block, computed explicitly. -/
 lemma schurReducedTwoByTwo_entries (d₀ d₁ q : ℝ) :
     (schurReducedTwoByTwo d₀ d₁ q).a₀₀ =
         (shiftedRitzDiagonal d₀ d₁ q).a₀₀ + (offDiagonalSwap q).a₀₀ ∧

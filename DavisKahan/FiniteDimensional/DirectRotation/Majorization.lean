@@ -52,10 +52,12 @@ noncomputable def hermitianPart (A : E →ₗ[𝕜] E) : E →ₗ[𝕜] E :=
 noncomputable def displacementSquare (W : E →ₗ[𝕜] E) : E →ₗ[𝕜] E :=
   (LinearMap.id - W.adjoint) ∘ₗ (LinearMap.id - W)
 
+/-- The Hermitian part, unfolded to `(A + A⋆)/2`. -/
 @[simp] theorem hermitianPart_apply (A : E →ₗ[𝕜] E) (x : E) :
     hermitianPart A x = (((2 : ℝ)⁻¹ : ℝ) : 𝕜) • (A x + A.adjoint x) := by
   simp [hermitianPart]
 
+/-- The Hermitian part is symmetric -- the property its name claims. -/
 theorem hermitianPart_isSymmetric (A : E →ₗ[𝕜] E) :
     (hermitianPart A).IsSymmetric := by
   intro x y
@@ -64,6 +66,8 @@ theorem hermitianPart_isSymmetric (A : E →ₗ[𝕜] E) :
     LinearMap.adjoint_inner_left, LinearMap.adjoint_inner_right]
   ring
 
+/-- The Hermitian part has the same real quadratic form as the original operator; the skew part
+contributes nothing to `re ⟪A x, x⟫`. -/
 theorem re_inner_hermitianPart (A : E →ₗ[𝕜] E) (x : E) :
     RCLike.re ⟪hermitianPart A x, x⟫_𝕜 = RCLike.re ⟪A x, x⟫_𝕜 := by
   have hconj : RCLike.re ⟪x, A x⟫_𝕜 = RCLike.re ⟪A x, x⟫_𝕜 := by
@@ -73,6 +77,7 @@ theorem re_inner_hermitianPart (A : E →ₗ[𝕜] E) (x : E) :
     map_add, hconj]
   ring
 
+/-- The displacement square `(1 - W)⋆(1 - W)` is positive, being a Gram operator. -/
 theorem displacementSquare_positive (W : E →ₗ[𝕜] E) :
     (displacementSquare W).IsPositive := by
   have h := LinearMap.isPositive_adjoint_comp_self (LinearMap.id - W)
@@ -81,6 +86,8 @@ theorem displacementSquare_positive (W : E →ₗ[𝕜] E) :
     rw [map_sub, LinearMap.adjoint_id]
   rwa [he] at h
 
+/-- Its quadratic form is the squared displacement `‖W x - x‖²`, which is what makes it the right
+object to minimise over rotations. -/
 theorem displacementSquare_apply_inner (W : E →ₗ[𝕜] E) (x : E) :
     RCLike.re ⟪displacementSquare W x, x⟫_𝕜 = ‖W x - x‖ ^ 2 := by
   have he : (LinearMap.id : E →ₗ[𝕜] E) - W.adjoint =
@@ -91,6 +98,8 @@ theorem displacementSquare_apply_inner (W : E →ₗ[𝕜] E) (x : E) :
     LinearMap.adjoint_inner_left, inner_self_eq_norm_sq,
     LinearMap.sub_apply, LinearMap.id_apply, norm_sub_rev]
 
+/-- For a *unitary* `W` the displacement square collapses to `2(1 - Re W)`.  This is the identity
+that converts the minimisation into a statement about the Hermitian part alone. -/
 theorem displacementSquare_unitary (W : E ≃ₗᵢ[𝕜] E) :
     displacementSquare W.toLinearMap =
       (2 : 𝕜) • (LinearMap.id - hermitianPart W.toLinearMap) := by

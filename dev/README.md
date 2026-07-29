@@ -220,6 +220,50 @@ hand-maintaining, because a recorded status drifts the moment someone moves a
 module and nobody notices. Run it after any namespace move, then re-render the
 markdown view.
 
+## Docstring coverage
+
+`scripts/check_docstring_coverage.py` gates the one quality invariant that had no
+check: every public declaration on the submission surface carries a docstring.
+Docstrings are a Tau Ceti reviewer gate, so this sits on the critical path.
+
+```sh
+python3 scripts/check_docstring_coverage.py           # gate; exit 1 on new findings
+python3 scripts/check_docstring_coverage.py --list    # show every finding
+python3 scripts/check_docstring_coverage.py --json    # machine-readable
+python3 scripts/check_docstring_coverage.py --write-baseline
+```
+
+**Why a gate rather than another sweep.** Measured 2026-07-29: two sweep lanes drove
+`ForTauCeti/**` and production `DavisKahan/**` to *zero* undocumented, and merges from
+other agents put the count back to six **within the hour**. Sweeps cannot hold a line
+that four agents are moving.
+
+**Three things it gets right that a naive scan does not.** Each is here because it
+already cost a mistake:
+
+- **It tracks `/-` … `-/` depth.** Module-docstring prose that wraps so a line begins
+  with `theorem`/`instance`/`structure`/`lemma` at column 0 is not a declaration.
+  Missing this inflated a reported figure from 46 to 96 — and the inflated numbers
+  were published before the cause was found.
+- **It reports anonymous `instance`s** as `<anonymous>`. A scan keyed on declaration
+  names cannot see them; six of one lane's 91 were anonymous.
+- **Its exclusions are rules with reasons, not a hand-list**, so they survive tree
+  movement. `DavisKahan/Experimental/**` is outside `defaultTargets`;
+  `DavisKahan/Interop/Spectra/**` is being deleted; and
+  `DavisKahan/SpectralTheory/Compatibility.lean` is a migration shim of `abbrev`
+  re-exports — **documenting its 45 declarations would entrench a file scheduled for
+  deletion**, which is why "undocumented" is the wrong metric for it.
+
+**The baseline** (`dev/docstring-coverage-baseline.json`) tolerates findings that
+existed when the gate landed, so it could be adopted without a flag day. It currently
+holds 7, all in a file with a live lane row. Shrink it; do not grow it.
+
+**Verified to fail, not merely to pass:** injecting an undocumented theorem *and* an
+anonymous instance makes it exit 1 and name both, while prose beginning with a keyword
+inside a block comment is correctly ignored.
+
+---
+
 ## Declaration-name drift
 
 Three places in this repository assert declaration names as **data**, where no

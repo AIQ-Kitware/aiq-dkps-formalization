@@ -119,10 +119,12 @@ theorem hilbertSchmidtEnergy_eq_iSup_sum (T : E →L[𝕜] F) (b : HilbertBasis 
     T.hilbertSchmidtEnergy b = ⨆ s : Finset ι, ∑ i ∈ s, ‖T (b i)‖ₑ ^ 2 :=
   ENNReal.tsum_eq_iSup_sum
 
+/-- The zero operator has zero energy. -/
 @[simp] theorem hilbertSchmidtEnergy_zero (b : HilbertBasis ι 𝕜 E) :
     (0 : E →L[𝕜] F).hilbertSchmidtEnergy b = 0 := by
   simp [hilbertSchmidtEnergy]
 
+/-- Energy is unchanged by negation. -/
 @[simp] theorem hilbertSchmidtEnergy_neg (T : E →L[𝕜] F) (b : HilbertBasis ι 𝕜 E) :
     (-T).hilbertSchmidtEnergy b = T.hilbertSchmidtEnergy b := by
   simp [hilbertSchmidtEnergy]
