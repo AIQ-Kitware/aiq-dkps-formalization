@@ -5,16 +5,24 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Sylvester.PairwiseSpectrumGap
 import DavisKahan.Sylvester.ClosedSylvesterEquation
-import Spectra.SpectralTheory.SeparatedIntertwiner
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
+import ForTauCeti.Analysis.InnerProductSpace.Rosenblum
 
 /-!
 # Homogeneous Sylvester uniqueness at arbitrary spectral separation
 
-This file converts a domain-aware closed Sylvester equation into the generator
-intertwining relation used by the rectangular Stone theorem.  Disjoint spectra
-then force the bounded intertwiner to vanish.  Unlike the older uniqueness
-lemma, no interval/exterior or ordered half-line geometry is required.
+A domain-aware closed Sylvester equation says exactly that its solution
+intertwines the two operators, and Rosenblum's theorem then forces a bounded
+intertwiner of disjoint spectra to vanish.  Unlike the older uniqueness lemma,
+no interval/exterior or ordered half-line geometry is required.
+
+Until 2026-07-29 this ran through Spectra: the Sylvester equation was converted
+into `GeneratorIntertwines` between the two Yosida groups, and the donor's
+`generatorIntertwiner_eq_zero_of_disjoint_spectrum` closed it.  The generator
+layer was pure overhead — the intertwining relation *is* the Sylvester equation
+— so the conversion is gone and the native
+`TauCeti.LinearPMap.eq_zero_of_intertwines_of_disjoint_spectrum` is applied
+directly.
 -/
 
 namespace TauCeti
@@ -24,11 +32,6 @@ namespace ExactSinTheta
 
 open scoped InnerProductSpace
 open TauCeti.DavisKahanExt
-open Spectra.YosidaHille
-open Spectra.Operator
--- `generator` belongs to the one-parameter unitary group namespace, which none of
--- the namespaces above re-exports.
-open Spectra.OneParameterUnitaryGroup
 
 noncomputable section
 
@@ -37,48 +40,6 @@ universe v
 variable {E F : Type v}
   [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
   [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
-
-private theorem generatorIntertwines_of_linearPMapHomogeneous
-    {A : E →ₗ.[ℂ] E} {B : F →ₗ.[ℂ] F}
-    (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
-    {X : F →L[ℂ] E}
-    (hEq : TauCeti.LinearPMap.SylvesterEquation A B X 0) :
-    GeneratorIntertwines (genToGroup hA) (genToGroup hB) X := by
-  have hgenA : generator (genToGroup hA) = A :=
-    generator_genToGroup hA
-  have hgenB : generator (genToGroup hB) = B :=
-    generator_genToGroup hB
-  have hdomA : (generator (genToGroup hA)).domain = A.domain :=
-    congrArg LinearPMap.domain hgenA
-  have hdomB : (generator (genToGroup hB)).domain = B.domain :=
-    congrArg LinearPMap.domain hgenB
-  refine ⟨?_, ?_⟩
-  · intro x
-    let xb : B.domain := ⟨(x : F), (le_of_eq hdomB) x.property⟩
-    exact (le_of_eq hdomA.symm) (hEq.mapsTo_domain xb)
-  · intro x
-    let xb : B.domain := ⟨(x : F), (le_of_eq hdomB) x.property⟩
-    have hmapA := hEq.mapsTo_domain xb
-    have hAapply := (LinearPMap.ext_iff.mp hgenA).2
-      (x := X (x : F))
-      (hf := (le_of_eq hdomA.symm) hmapA)
-      (hg := hmapA)
-    have hBapply := (LinearPMap.ext_iff.mp hgenB).2
-      (x := (x : F))
-      (hf := x.property)
-      (hg := xb.property)
-    have heq := hEq.equation xb
-    change generator (genToGroup hA)
-        ⟨X (x : F), (le_of_eq hdomA.symm) hmapA⟩
-      = X (generator (genToGroup hB) x)
-    calc
-      generator (genToGroup hA)
-          ⟨X (x : F), (le_of_eq hdomA.symm) hmapA⟩
-          = A ⟨X (x : F), hmapA⟩ := hAapply
-      _ = X (B xb) := by
-          simpa using sub_eq_zero.mp heq
-      _ = X (generator (genToGroup hB) x) := by
-          rw [hBapply]
 
 /-- A bounded homogeneous Sylvester solution for raw self-adjoint partial maps
 vanishes whenever their spectra are disjoint. -/
@@ -91,17 +52,9 @@ theorem linearPMapSylvester_homogeneous_eq_zero_of_disjoint_spectrum
       (TauCeti.LinearPMap.spectrum B))
     (hEq : TauCeti.LinearPMap.SylvesterEquation A B X 0) :
     X = 0 := by
-  let AO : SelfAdjointOperator E := ⟨A, hA⟩
-  let BO : SelfAdjointOperator F := ⟨B, hB⟩
-  -- The donor lemma is stated over Spectra's *real* spectrum, which is the
-  -- `Complex.ofReal` preimage of the canonical one; disjointness transfers along
-  -- a preimage, so no realness of either spectrum is needed here.
-  have hdisjReal : Disjoint (Spectra.Resolvent.spectrum A)
-      (Spectra.Resolvent.spectrum B) := by
-    refine Set.disjoint_left.mpr fun lam hlamA hlamB => ?_
-    exact Set.disjoint_left.mp hdisj hlamA hlamB
-  exact Spectra.QuantumMechanics.SpectralTheory.generatorIntertwiner_eq_zero_of_disjoint_spectrum
-    AO BO X (generatorIntertwines_of_linearPMapHomogeneous hA hB hEq) hdisjReal
+  refine TauCeti.LinearPMap.eq_zero_of_intertwines_of_disjoint_spectrum hA hB
+    (fun y => hEq.mapsTo_domain y) (fun y => ?_) hdisj
+  simpa using sub_eq_zero.mp (hEq.equation y)
 
 /-- Positive pairwise spectral distance gives homogeneous uniqueness for raw
 self-adjoint partial maps. -/

@@ -1,6 +1,6 @@
 # Spectra removal — open parallel lanes
 
-**Purpose.** The Spectra removal campaign is down to **6 files** carrying
+**Purpose.** The Spectra removal campaign is down to **5 files** carrying
 `import Spectra` (15 when this document was written), and they no longer form a
 chain: the spectral-measure chokepoint is built and green, so what is left
 splits into **lanes that touch disjoint files**. This document opens them for
@@ -15,25 +15,25 @@ below, commit it, then work. One agent per lane. Do not take two lanes at once �
 the lanes are sized so that each is a session's work, and holding two blocks
 someone else.
 
-## Status board (updated 2026-07-29, after SR-A/B/C/F landed)
+## Status board (updated 2026-07-29, after SR-A/B/C/E/F landed)
 
 | lane | files | blocker | holder |
 |---|---|---|---|
 | **SR-A** Cayley / Möbius / `SelfAdjointOperator` bridge | 5 | — | **DONE** (namek) |
 | **SR-B** spectral support | 1 | — | **DONE** (namek) |
 | **SR-C** half-line form bounds | 1 | — | **DONE** (namek) |
-| **SR-D** Hilbert–Schmidt tensor | 5 | **21,581-line donor closure — needs re-plan + author coordination** | *open (measured by edward, aiq-gpu — see lane)* |
-| **SR-E** Rosenblum | 1 | Borel upgrade of the intertwining (continuous case DONE) | *open — take in serial (partial landed by toothbrush)* |
+| **SR-D** Hilbert–Schmidt tensor | 5 | **a genuine port — the bypass gives the wrong constant, see below** | **namek (serial)** |
+| **SR-E** Rosenblum | 1 | — | **DONE** (toothbrush + namek) |
 | **SR-F** Experimental stragglers | 3 | — | **DONE** (edward + namek) |
 
-**The number that matters is the S6 criterion's, and it is 11.**  Measured on
-namek-work at the SR-A/B/C/F merge, over everything outside `vendor/` and
+**The number that matters is the S6 criterion's, and it is 7 — of which 6 are in scope.**  Measured on
+namek-work after SR-E closed, over everything outside `vendor/` and
 `external/` — which is what S6 criterion (1) actually says:
 
 | where | count | what |
 |---|---|---|
-| `DavisKahan/**` | **6** | SR-D (5) + SR-E (1) — the only real lanes left |
-| `FinishTanTwoTheta/**` | **4** | a package that does not build at all, for an unrelated stale import (`a8992fd`) |
+| `DavisKahan/**` | **5** | SR-D only — the last real lane |
+| `FinishTanTwoTheta/**` | **1** | was 4; three were cleared by another agent on 2026-07-29. **The survivor (`GroundedImports.lean`) is explicitly out of scope — jon, 2026-07-29: "leave FinishTanTwoTheta alone, we will fix that later."** Do not touch it as part of this campaign |
 | `scripts/ExportSpectraDeclClosure.lean` | **1** | the measurement tool; it *should* import Spectra, and it goes at S6 with the dependency |
 
 Tracking **imports removed in that scope**, not lanes closed, is edward's
@@ -132,8 +132,67 @@ package does not build at all — `SpectralSelection.lean` imports
 `scripts/ExportSpectraDeclClosure.lean` is the tool that measures the surface,
 so it is supposed to import Spectra and is deleted at S6 with the dependency.
 
-## SR-E: the CFC shortcut works after all — stop before starting the Borel step
+## SR-D, measured 2026-07-29 (namek) — the bypass does not collapse this one
 
+Five times in this campaign, asking *"what is the consumer actually consuming?"*
+turned a donor port into a few lines against Mathlib.  **It does not work here,
+and it is worth recording why, because the shape of the failure is the plan.**
+
+What `paperHilbertSchmidt_sylvester_defectFirst` delivers is: if `A X - X B = C`
+with a spectral gap `δ` and `C` Hilbert--Schmidt, then `X` is Hilbert--Schmidt
+and `δ ‖X‖_HS ≤ ‖C‖_HS`.  Spectra gets it by realising `HS(F, E)` as a Hilbert
+tensor product, building the Sylvester group `U_A ⊗ conj V_B` on it, and
+inverting its generator across the gap.
+
+The obvious bypass is the Fourier/semigroup formula, which this repository
+already has (`Experimental/…/Sylvester/FourierSemigroup.lean`):
+`X = ∫ μ_δ(t) U(-t) C V(t) dt`, and `U(-t) · V(t)` acts isometrically on
+Hilbert--Schmidt operators, so `‖X‖_HS ≤ ‖μ_δ‖_{L¹} ‖C‖_HS`.  **That route gives
+the wrong constant.**  The exact `L¹` mass of the Haagerup--Zsidó kernel is
+`π/(2δ)`, not `1/δ` — the removal plan already flags that "an `L¹` mass of `1/δ`
+would assert a false general separated-spectrum estimate".  So the bypass proves
+a strictly weaker theorem, and the sharp `δ⁻¹` really does come from the
+spectral-gap inverse.
+
+**Therefore SR-D is a port, not a restatement**, and its first step is the one
+Wave 5 Cluster D already specifies: *Tau Ceti owns **one** Hilbert--Schmidt
+predicate and norm*, with the basis-column, tensor and approximation-number
+descriptions as equivalence theorems for it.  Today `IsPaperHilbertSchmidt` and
+`paperHilbertSchmidtNorm` are the DKPS-side objects and
+`Spectra.HilbertSchmidtTensor.Space` is the donor's; the bridge between them is
+`DavisKahan/Interop/Spectra/HilbertSchmidtTensor.lean`.  Making `HS(F, E)` a
+Hilbert space natively in `ForTauCeti` is what unblocks everything above it.
+
+**But the Hilbert tensor product does not have to be built.**  Measured
+2026-07-29: with a Hilbert basis `(e_i)` of `F`, the column map
+`T ↦ fun i => T (e_i)` identifies the Hilbert--Schmidt operators `F →L[𝕜] E`
+with **`lp (fun _ : ι => E) 2`**, and Mathlib already has that space with
+
+* `lp.instInnerProductSpace` (`Analysis/InnerProductSpace/l2Space.lean:110`), and
+* completeness for `1 ≤ p`.
+
+So `HS(F, E)` can be *defined* as an `lp` space rather than constructed, and the
+inner product and completeness — the expensive half of any from-scratch
+Hilbert--Schmidt development, and the reason edward measured the donor closure at
+21,581 lines — come for free.  What remains is the column bijection, and
+`DavisKahan/Interop/Spectra/HilbertSchmidtColumnExpansion.lean` already contains
+it: `mathAhead_summable_columnSeries`, `mathAhead_toOperator_ofOperator` and
+`mathAhead_ofOperator_toOperator` are exactly the two directions and their round
+trips.  Those eleven declarations are **DKPS-authored** (they live in
+`SpectraBridge`, and edward measured them as externally unused but deliberately
+retained for upstreaming), so they are re-based onto `lp`, not re-proved.
+
+Ordering inside the lane, forced by that:
+
+1. `HS(F, E)` as an inner-product space over the native predicate — the object
+   Cluster D says must be unique;
+2. the Sylvester operator on it, self-adjoint when `A` and `B` are;
+3. its spectral-gap inverse (this is where the sharp `δ⁻¹` lives);
+4. repoint `HilbertSchmidt{DefectFirst,Pairwise}` and `SylvesterHilbertSchmidt`;
+5. relocate `HilbertSchmidtColumnExpansion` — edward measured its eleven
+   declarations as **externally unused but deliberately retained** for
+   upstreaming, so it moves last and is not deleted.
+## SR-E: the CFC shortcut works after all — stop before starting the Borel step
 **For fable (sylvester-upstream-leaves), who ruled it out 33 minutes before this
 was written.**  Your diagnosis is exactly right and worth keeping: the Cayley
 map sends `λ → ±∞` to `1`, so an unbounded spectrum puts `1` in the Cayley
@@ -141,40 +200,33 @@ spectrum; when both generators are unbounded `1` lies in both, the two Cayley
 spectra are *not* disjoint in the circle, and **no continuous separating
 function exists**.  A gap hypothesis does not repair it, for the reason you
 give — it constrains the two sets in `ℝ` and says nothing at infinity.
-
 **The conclusion is one step short, and the missing step is cheap.**  You do not
 need a continuous function that separates; you need a *sequence* of them whose
 failure is confined to `{1}`.  Damp the separator:
-
 ```
 g n w = f (κ w) * min 1 (n ‖w - 1‖)
 ```
-
 `g n` is continuous on the whole circle **including at `1`**, because the
 damping factor squeezes it to `0` there regardless of what `κ` does.  And `{1}`
 is a null set for every diagonal measure — `diagMeasure_cayley_preimage_one`,
 which has been in `LinearPMap/SpectralMeasure.lean` since the PVM landed.  So
 the one point that blocks a *single* continuous separator is exactly the point
 that cannot affect any integral.
-
 Two dominated-convergence limits then replace the entire monotone-class
 argument, and one of them is not even a limit: on the `A` side the damped symbol
 is **a.e. zero for every `n`**, because the separator vanishes on `σ(A)` and
 almost every Cayley point has its coordinate there (that is SR-B, transported
 through the pushforward that defines `spectralPVM`).
-
 **Landed 2026-07-29 (namek):** `ForTauCeti/Analysis/InnerProductSpace/Rosenblum.lean`,
 `eq_zero_of_intertwines_of_disjoint_spectrum`, built on your
 `cfcHom_cayley_intertwines`.  `PairwiseHomogeneousUniqueness.lean:103` is
 repointed — and your measurement that the whole Spectra dependency of SR-E sat
 on that one call site was correct.
-
 One enabling lemma was missing and is now in the tree:
 **`isOpen_resolventSet` for a `LinearPMap`** (Mathlib has it only for bounded
 operators), hence `isClosed_spectrum` and `measurableSet_realSpectrum`.  Urysohn
 needs the two real spectra closed, and `specProjection` will not take a
 non-measurable set.
-
 Worth generalising from this: *a Borel step that exists only to reach one null
 point can be replaced by a damped sequence.*
 
@@ -592,3 +644,47 @@ must fall monotonically. It is **15** at the time of writing.
 * The final removal step (drop `[[require]] Spectra` from `lakefile.toml`,
   delete `vendor/Spectra`, complete the provenance ledger). That is S6 and it
   belongs to whoever closes the last lane.
+
+## SR-E: the CFC shortcut does not work, and here is why (edward, 2026-07-29)
+
+Before taking the Borel step, it is natural to ask whether it can be skipped —
+`cfcHom_cayley_intertwines` already landed, and the classical bounded proof of
+Rosenblum needs nothing more than a continuous separating function:
+
+> if `X` intertwines `A` and `B`, it intertwines `f(A)` and `f(B)`; pick `f`
+> continuous with `f = 1` on `spec A` and `f = 0` on `spec B`; then
+> `X = f(A) X = X f(B) = 0`.
+
+**That argument cannot be made to work here, for a specific and checkable
+reason.** The continuous calculus available in this module is the one carried
+through the Cayley transform, so the separating function must be continuous on
+`spec (cayley A) ∪ spec (cayley B)` inside the unit circle. For a self-adjoint
+`A`, `cayley A = (A - i)(A + i)⁻¹` and `(λ - i)/(λ + i) → 1` as `λ → ±∞`.
+So whenever `spec A` is **unbounded**, `1 ∈ spec (cayley A)`, since the spectrum
+of the Cayley transform is the closure of the image.
+
+If both `spec A` and `spec B` are unbounded — the normal situation for the
+unbounded generators this lane is about — then `1` lies in *both* Cayley
+spectra. The two spectra are therefore **not disjoint as subsets of the
+circle**, no function can be `1` on one and `0` on the other and continuous at
+`1`, and Tietze has nothing to extend. Disjointness of `spec A` and `spec B` in
+`ℝ` does not survive the Cayley transform as disjointness of compacta.
+
+**A gap hypothesis does not rescue it.** `GenuinePairwiseSpectrumGap` bounds
+`dist (spec A) (spec B)` below, and that is a statement about the two sets in
+`ℝ`; it says nothing about their behaviour at infinity. The ordered
+Davis--Kahan configuration `spec A ⊆ [b, ∞)`, `spec B ⊆ (-∞, a]` with `a < b`
+is exactly a case where the gap is as clean as it gets and *both* images still
+accumulate at `1`.
+
+So the Borel step is genuinely required, and toothbrush's assessment stands.
+The shortcut is only available when one of the two spectra is bounded, which is
+not a hypothesis any consumer has.
+
+**Consumer note, relevant to sequencing.** Every production consumer reaches
+this result through the `_of_pairwiseSpectrumGap` variants; the bare
+disjointness form is used in exactly one place —
+`DavisKahan/Sylvester/PairwiseHomogeneousUniqueness.lean:103` — as the base the
+gap corollaries are derived from. So the whole Spectra dependency of SR-E rests
+on that single call site, and the consumer swap is one `exact` line once the
+ForTauCeti statement exists. Nothing else in `DavisKahan/**` needs touching.
