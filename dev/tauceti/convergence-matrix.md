@@ -442,6 +442,162 @@ Concrete rows we already know; expand each into the full schema during phase 0.
 | Hilbert–Schmidt / trace class (column-expansion + approx-number + Spectra tensor) | partial | HS/trace tensor layer | Parallel | one HS predicate+norm; others are equivalence theorems | ApproximationNumbers (C) + Cluster D |
 | Sylvester uniqueness/estimates + `GenuinePairwiseSpectrumGap` | `LinearPMap` equation/domain API; no canonical spectrum API yet | separated-intertwiner results | Spectra-dependent parallel formulation | **2026-07-28:** raw `LinearPMap.GenuinePairwiseSpectrumGap` and `linearPMapSylvester_*` now own the implementation in `DavisKahan/Sylvester`; keep the bundled predicate and three old theorem signatures only for the seven source/audit consumers until those data records migrate | (spectral-perturbation, later) |
 
+## Completion-lane seed rows: `FinishTanTwoTheta` and `FinishYuWangSamworth`
+
+Added 2026-07-28 by jon (toothbrush). Neither completion lane had a single row
+in this matrix, so both were invisible to the convergence plan even though they
+are the two libraries that carry the remaining paper mathematics. Declaration
+lists below are **measured from the trees**, not guessed; the classifications
+are first-pass and each one flagged *(verify)* still needs the counterpart
+diffed before any code moves.
+
+Both libraries are non-default Lake targets sharing the root dependency graph.
+`FinishYuWangSamworth` builds clean and sorry-free; `FinishTanTwoTheta` builds
+except for one declaration (see
+[`../finishtantwotheta-completion-lane.md`](../finishtantwotheta-completion-lane.md)).
+
+### `FinishYuWangSamworth` (37 declarations, 1207 lines)
+
+| Local declaration | Tau Ceti / ForTauCeti counterpart | Class | Canonical destination |
+| --- | --- | --- | --- |
+| `yuWangSamworth_theorem1_{uiNorm,frobenius,opNorm}_le` | none | Paper-specific | paper package (`YuWangSamworth/`), not `ForTauCeti` |
+| `yuWangSamworth_{right,left}SingularSubspace{,_opNormCoefficient}_le` | `…/InnerProductSpace/SingularSubspace` *(verify)* | Paper-specific conclusion over reusable core | paper package; core to `SingularSubspace` |
+| `yuWangSamworth_{right,left}SingularAlignedBasis{,_opNormCoefficient}_le` | `…/InnerProductSpace/AlignedBasis` *(verify)* | Paper-specific conclusion over reusable core | paper package; core to `AlignedBasis` |
+| `yuWangSamworth_{right,left}SingularVector{,_opNormCoefficient}_le` | none | Paper-specific | paper package |
+| `yuWangSamworth_lemma5_{columns,rows,isometricColumns,orthonormalColumns,orthonormalRows}` | `…/InnerProductSpace/{FrameFactorization,NearIsometry}` *(verify)* | Parallel formulation | reusable core to `ForTauCeti`; wrappers stay |
+| `yuWangSamworth_equation4`, `yuWangSamworth_equation4_printed_counterexample` | none | Paper-specific | paper package — this is a **source-defect record** and must not be silently dropped |
+| `CorrespondingRightSingularBlock`, `CorrespondingLeftSingularBlock`, `RightSingularPopulationGap`, `LeftSingularPopulationGap` | none | Paper-specific predicates | paper package |
+| `rectangularFrobenius_adjoint`, `rectangularFrobenius_twoSided_comp_le`, `frobenius_comp_rectangular_le_opNorm_mul` — **BLOCKED, see note below the table** | **none — verified 2026-07-29.** `ForTauCeti/…/RectangularUnitarilyInvariantNorm/Instances` has `frobenius_apply`, `frobenius_linearIsometry_comp`, `frobenius_projection_comp_le`, `frobenius_subtype_comp`, `frobenius_eq_sqrt_sum_sq_singularValues` — but no adjoint-invariance and no two-sided ideal bound | **Missing reusable result** (not a duplicate; my first-pass guess was wrong) | `…/RectangularUnitarilyInvariantNorm/Instances`, beside the existing `frobenius_*` family |
+| `frobenius_{right,left}Gram_sub_le{,_paperCoefficient}`, `opNorm_{right,left}Gram_sub_le_paperCoefficient` | `…/InnerProductSpace/GramMatrix` *(verify)* | Missing reusable result | Gram-perturbation layer |
+| `opNorm_eq_topSingularValue` | `TauCeti.opNorm_eq_singularValues_zero` in `…/InnerProductSpace/TwoDimensionalSingularValues` — **verified duplicate 2026-07-29**, identical proof, strictly more general (dimension explicit rather than `[Nontrivial E]`) | Wrapper duplicate — **DEDUPED 2026-07-29** | now a one-line wrapper carrying no proof; inline it at migration |
+| `sum_opNorm_le_paperCoefficient` | none | Paper-specific coefficient | paper package |
+
+### `FinishTanTwoTheta`
+
+| Local declaration | Tau Ceti / ForTauCeti counterpart | Class | Canonical destination |
+| --- | --- | --- | --- |
+| `WeaklySubmajorized` (on `ℕ → ℝ`), `sequencePrefixSum`, `sequencePrefixVector`, `finitePrefixSum_sequencePrefixVector`, `finite_weaklyMajorized_of_weaklySubmajorized` | `ForTauCeti/Analysis/Convex/Majorization.WeaklyMajorized` (on `Fin n → ℝ`) — landed by jon (namek) | **Missing reusable result — the infinite-sequence extension.** *Not* a duplicate: checked 2026-07-28, the Tau Ceti object is indexed by `Fin n`, this one by `ℕ`, and `finite_weaklyMajorized_of_weaklySubmajorized` is the bridge between them | `Analysis/Convex/Majorization` as a second section. The four order lemmas (`refl`, `trans`, `of_pointwise`, `nonneg_smul`) are stated twice, once per index type — that lemma-level parallelism is the only real duplication, and it is the kind that is normally left alone rather than unified |
+| `exists_gauge_decomposition_of_weaklyMajorized`, `exists_l1_paperGauge_decomposition_of_weaklyMajorized` | none | Missing reusable result | gauge-decomposition layer beside `FiniteSymmetricGauge` |
+| `sequenceGauge`, `sequencePrefixGauge`, `sequenceExtendedGauge`, `SequenceMem`, `paperFiniteSymmetricGauge` | `ForTauCeti/Analysis/Normed/FiniteLpGauge` *(verify)* | Parallel formulation | one symmetric-gauge API |
+| `StandardSymmetricIdeal` (+ `Mem`, `gauge`, `mem_adjoint`, `gauge_adjoint`), `StandardSymmetricCompletion` | `RectangularSymmetricIdealFamily` / `SymmetricOperatorIdealFamily` | Parallel formulation — **collides with §13.2 adapter retirement** | one canonical symmetric-ideal family; coordinate with the §13.2 sweep before moving |
+| `FiniteRankGaugeClosure`, `MinimalFullySymmetricMem`, `standard_fanDominance`, `minimalFullySymmetricMem_of_kyFan_dominated` | none | **Missing reusable result** | operator-ideal layer — Fan dominance as a theorem is genuinely new |
+| `paperLpNorm`, `paperOperatorNorm`, `paperLinftySymmetricNormingFunction`, `{maximal,minimal}SchattenIdeal`, `nuclearIdeal`, `{bounded,compact}OperatorNormIdeal` | `…/InnerProductSpace/SchattenNorm`, ideal `Instances` *(verify)* | Parallel / wrapper | one ideal-instances module |
+| `doubleAngleTangentOperator`, `doubleAngleDenominator`, `approximationNumber_doubleAngleTangentOperator`, `doubleAngleTangent_approximationNumber_le` | none | **Missing reusable result** | the tangent operator and its approximation numbers are reusable spectral-perturbation material |
+| `ApproximateLeadingSingularFamily`, `exists_approximateLeadingSingularFamily`, `GramSpectralBandModel`, `exists_gramSpectralBandModel` | none | **Missing reusable result — the most valuable thing in this library** | approximate simultaneous singular systems for an *arbitrary* bounded operator, with no compactness and no attainment assumption |
+| `gramOperator`, `gramPVM`, `gramSelfAdjointOperator`, `gramUnitaryGroup` | Spectra PVM / Borel calculus | Spectra-dependent | folds into Wave 5 / spectral-calculus area; a Spectra consumer, so it gates on the removal plan |
+| `finiteValue*` family, `gramBands_disjoint`, `exists_uniform_positive_separation` | none | Missing reusable (small) | finite-value/band combinatorics; low priority |
+| `sharp_*` (bounded and unbounded, `stableSingularPair_*`, `unboundedStableSingularPair_*`) | none | Paper-specific | `DavisKahan/` — Davis--Kahan Section 7 |
+| `UnboundedApproximateLeadingSingularFamily`, `exists_unboundedApproximateLeadingSingularFamily` | none | **BLOCKED — not proved** | do not migrate; see the lane document |
+
+### Y3 is not independent: the Frobenius items are gated on the Hilbert--Schmidt wave
+
+Measured 2026-07-29. The three missing-reusable Frobenius results above cannot
+move to `ForTauCeti` yet. Their proofs all route through the `paperHilbertSchmidt*`
+layer — `IsPaperHilbertSchmidt`, `paperHilbertSchmidtNorm`,
+`paperHilbertSchmidtNorm_comp_le`, `paperHilbertSchmidtNorm_adjoint`,
+`paperHilbertSchmidtNorm_eq_rectangularFrobenius`,
+`paperHilbertSchmidtNorm_eq_frobenius` — which lives in
+`DavisKahan/Sources/DavisKahan1970/Ideals/HilbertSchmidt.lean`.
+
+`ForTauCeti` may import only `Mathlib` / `TauCeti` / `ForTauCeti`, so moving the
+Frobenius lemmas requires the **Hilbert--Schmidt / trace-class row** of the seed
+matrix ("one HS predicate+norm; others are equivalence theorems", Cluster D /
+Wave 5) to land first.
+
+**Correction, measured 2026-07-29: that row is NOT gated on the Spectra removal
+plan.** I computed the import closure of
+`DavisKahan/Sources/DavisKahan1970/Ideals/HilbertSchmidt.lean`:
+
+```
+23 DavisKahan modules · 14 Mathlib roots · 12 ForTauCeti roots · 6 ForMathlib modules
+Spectra modules in the closure: ZERO
+```
+
+Cluster D was placed in Wave 5 alongside the Spectra donor material, but this
+particular chain touches no Spectra constant at all. The real blocker is the
+**six `ForMathlib` modules** in the closure, since `ForTauCeti` may not import
+`ForMathlib`:
+
+| module | importers repo-wide |
+| --- | --- |
+| `ForMathlib/Analysis/InnerProductSpace/SylvesterBound` | 10 |
+| `ForMathlib/Analysis/InnerProductSpace/ProjectionGap` | 6 |
+| `ForMathlib/Analysis/InnerProductSpace/ReducingSubspace` | 4 |
+| `ForMathlib/Analysis/InnerProductSpace/ProjectionBlocks` | 2 |
+| `ForMathlib/Analysis/InnerProductSpace/QuadraticFormBounds` | 2 |
+| `ForMathlib/Analysis/InnerProductSpace/SylvesterOperator` | 2 |
+
+`ForMathlib` is down to twelve modules, so this is **half of what remains** —
+and moving these six is the same kind of `ForMathlib → ForTauCeti` migration
+that Wave 1 already executed successfully for the approximation-number and
+CourantFischer clusters. It does not wait on anything.
+
+So the ordering is different from what was recorded — but **not simply better.**
+
+**Second correction, same day, after reading the six modules rather than just
+counting them.** They cannot be migrated to `ForTauCeti` at all:
+
+* every one of them declares
+  `Extraction class: **authored in place**, for upstreaming to Mathlib rather
+  than to Tau Ceti`. They are Mathlib-bound by design. Moving them into
+  `ForTauCeti` would contradict their own recorded destination;
+* four of them have **`ForMathlib` importers** — `ProjectionGap`,
+  `SpectralOrder/Complex`, `ProjectionBlocks`, `CoerciveUnit`,
+  `SylvesterOperator` — so moving them would force `ForMathlib → ForTauCeti`
+  imports, which `scripts/check_dependency_layers.py` forbids.
+
+So the honest statement of the blocker is: **the Hilbert--Schmidt chain, and
+with it the YWS reusable core, depends on six results whose declared home is
+Mathlib, and `ForTauCeti` cannot reach them.** That is an architectural
+question, not a scheduling one, and the options are policy calls:
+
+1. **Upstream the six to Mathlib first.** Correct per their stated class, but
+   puts Y3 behind an external review cycle.
+2. **Reclassify them as Tau Ceti-bound** and migrate, accepting that Tau Ceti
+   rather than Mathlib becomes their home. A deliberate change to the
+   `ForMathlib` / `ForTauCeti` split, and it must move their `ForMathlib`
+   consumers too.
+3. **Keep the Hilbert--Schmidt layer downstream in `DavisKahan`** and migrate
+   only the parts of Yu--Wang--Samworth that do not touch it — which excludes
+   the Frobenius ideal results, i.e. most of the reusable core.
+4. **Re-derive the needed HS facts inside `ForTauCeti`** from Mathlib directly.
+   Contradicts the deduplication policy and would create a fourth parallel
+   stack; listed only to be ruled out explicitly.
+
+None of these is mine to pick. Until one is picked, "the complete YWS set as a
+mathlib-quality Tau Ceti contribution" is not reachable, and any plan that
+schedules it should say which option it assumes.
+
+Consequence for sequencing: **Y3 cannot be completed as an independent lane.**
+What Y3 *can* do now, without waiting:
+
+- the paper-specific rows (Theorem 1, Theorem 4 right/left, aligned-frame and
+  rank-one corollaries, Lemma 5 wrappers, equation (4) and its counterexample) —
+  these stay downstream by classification, so they need a paper package, not
+  `ForTauCeti`, and that move is unblocked;
+- the wrapper dedups against results `ForTauCeti` already has
+  (`opNorm_eq_topSingularValue` is done);
+- the Gram-perturbation rows, once checked the same way — they may or may not
+  share the HS dependency.
+
+The reusable *core* of Yu--Wang--Samworth reaches `ForTauCeti` only after the HS
+wave. That is a real ordering constraint, not a scheduling preference, and it
+should be reflected in any plan that promises "the complete YWS set" upstream.
+
+### Ordering note
+
+The `Majorization` row is the one that should move first: it lands beside a
+module that is already in `ForTauCeti`, it is independent of the blocked seam,
+and it is independent of the §13.2 ideal-family sweep. Move it as an
+**addition** — the `ℕ`-indexed `WeaklySubmajorized` is new mathematics, not a
+copy of the `Fin n`-indexed `WeaklyMajorized`, and deleting it would lose the
+infinite-sequence theory the operator-ideal work depends on.
+
+The `StandardSymmetricIdeal` row is the opposite — it must **not** move until
+§13.2 phase C/D settles which symmetric-ideal family is canonical, or the two
+efforts will produce a third parallel stack.
+
+
 ## Declaration-level deletion / adapter rows (from the signature audit §13)
 
 The adversarial-review audit `dev/tauceti-signature-polish-todo.md` (baseline
