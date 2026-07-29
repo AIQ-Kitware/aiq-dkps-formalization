@@ -1,0 +1,11 @@
+{
+  "tolerated": [
+    "DavisKahan/OperatorIdeal/ApproximationNumbers/ScalarGeneric.lean:realHasApproximationNumberStrongCutoff",
+    "DavisKahan/OperatorIdeal/ApproximationNumbers/ScalarGeneric.lean:complexHasApproximationNumberStrongCutoff",
+    "DavisKahan/OperatorIdeal/ApproximationNumbers/ScalarGeneric.lean:realHasKyFanApproximationGaugeTriangle",
+    "DavisKahan/OperatorIdeal/ApproximationNumbers/ScalarGeneric.lean:complexHasKyFanApproximationGaugeTriangle",
+    "DavisKahan/OperatorIdeal/ApproximationNumbers/ScalarGeneric.lean:gauge_kyFanSymmetricIdealFamily",
+    "DavisKahan/OperatorIdeal/ApproximationNumbers/ScalarGeneric.lean:gauge_kyFanSymmetricIdealFamily_ne_top",
+    "DavisKahan/OperatorIdeal/ApproximationNumbers/ScalarGeneric.lean:gauge_eq_toReal"
+  ]
+}
