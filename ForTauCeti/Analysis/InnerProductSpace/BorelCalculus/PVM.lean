@@ -117,9 +117,11 @@ noncomputable def toProjValMeasure : TauCeti.ProjValMeasure H where
   proj_univ := specProj_univ ha hκ
   proj_inter := specProj_inter ha hκ
 
+/-- The projections of the derived PVM are the spectral projections. -/
 @[simp] theorem toProjValMeasure_proj (B : Set ℝ) (hB : MeasurableSet B) :
     (toProjValMeasure (H := H) ha hκ).proj B hB = specProj ha hκ B hB := rfl
 
+/-- Its diagonal measures are the spectral diagonal measures. -/
 @[simp] theorem toProjValMeasure_diag (ξ : H) :
     (toProjValMeasure (H := H) ha hκ).diag ξ = specDiag ha κ ξ := rfl
 

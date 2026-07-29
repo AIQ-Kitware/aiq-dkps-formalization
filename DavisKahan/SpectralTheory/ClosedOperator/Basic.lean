@@ -55,11 +55,13 @@ def toLinearPMap (A : ClosedOperator (𝕜 := 𝕜) (E := E)) : E →ₗ.[𝕜] 
   toFun := A.toLinearMap
 
 omit [CompleteSpace E] in
+/-- The domain of the underlying partial map is the closed operator's domain. -/
 @[simp] theorem toLinearPMap_domain
     (A : ClosedOperator (𝕜 := 𝕜) (E := E)) :
     A.toLinearPMap.domain = A.domain := rfl
 
 omit [CompleteSpace E] in
+/-- The underlying partial map acts as the closed operator. -/
 @[simp] theorem toLinearPMap_apply
     (A : ClosedOperator (𝕜 := 𝕜) (E := E)) (x : A.domain) :
     A.toLinearPMap x = A.toLinearMap x := rfl
@@ -192,10 +194,12 @@ noncomputable def ofBounded (A : E →L[𝕜] E) :
     · simp [hyeq]
 
 omit [CompleteSpace E] in
+/-- A bounded operator, viewed as closed, has full domain. -/
 @[simp] theorem ofBounded_domain (A : E →L[𝕜] E) :
     (ofBounded A).domain = ⊤ := rfl
 
 omit [CompleteSpace E] in
+/-- A bounded operator, viewed as closed, acts as itself. -/
 @[simp] theorem ofBounded_apply (A : E →L[𝕜] E)
     (x : (ofBounded A).domain) :
     (ofBounded A) x = A (x : E) := rfl
@@ -377,10 +381,13 @@ noncomputable def addBounded (A : ClosedOperator (𝕜 := 𝕜) (E := E))
       abel
 
 omit [CompleteSpace E] in
+/-- Adding a bounded operator does not change the domain -- which is the whole point of the
+construction, and why bounded perturbation preserves closedness. -/
 @[simp] theorem addBounded_domain (A : ClosedOperator (𝕜 := 𝕜) (E := E))
     (V : E →L[𝕜] E) : (A.addBounded V).domain = A.domain := rfl
 
 omit [CompleteSpace E] in
+/-- Adding a bounded operator acts pointwise. -/
 @[simp] theorem addBounded_apply (A : ClosedOperator (𝕜 := 𝕜) (E := E))
     (V : E →L[𝕜] E) (x : (A.addBounded V).domain) :
     (A.addBounded V) x = A.toLinearMap x + V (x : E) := rfl

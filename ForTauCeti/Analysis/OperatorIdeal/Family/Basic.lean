@@ -334,8 +334,11 @@ theorem gauge_val_ne_top (A : N.Elem E F) : N.gauge A.val ≠ ∞ := A.val_mem
 /-- An operator of finite gauge, as an element of the ideal. -/
 def mk {A : E →L[𝕜] F} (hA : A ∈ N.carrier) : N.Elem E F := ⟨A, hA⟩
 
+/-- Building an ideal element and taking its value is the identity. -/
 @[simp] theorem val_mk {A : E →L[𝕜] F} (hA : A ∈ N.carrier) : (mk (N := N) hA).val = A := rfl
 
+/-- Ideal elements are equal when their underlying operators are.  Tagged `@[ext]`, so `ext`
+reduces any such goal to the operators. -/
 @[ext] theorem ext {A B : N.Elem E F} (h : A.val = B.val) : A = B := Subtype.ext h
 
 /-- The ideal is an additive subgroup of the bounded operators, inherited from its carrier. -/
@@ -346,10 +349,15 @@ instance : AddCommGroup (N.Elem E F) :=
 instance : Module 𝕜 (N.Elem E F) :=
   inferInstanceAs (Module 𝕜 (N.carrier : Submodule 𝕜 (E →L[𝕜] F)))
 
+/-- The zero ideal element is the zero operator. -/
 @[simp] theorem val_zero : (0 : N.Elem E F).val = 0 := rfl
+/-- Addition of ideal elements is addition of operators. -/
 @[simp] theorem val_add (A B : N.Elem E F) : (A + B).val = A.val + B.val := rfl
+/-- Negation of an ideal element is negation of the operator. -/
 @[simp] theorem val_neg (A : N.Elem E F) : (-A).val = -A.val := rfl
+/-- Subtraction of ideal elements is subtraction of operators. -/
 @[simp] theorem val_sub (A B : N.Elem E F) : (A - B).val = A.val - B.val := rfl
+/-- Scaling an ideal element scales the operator. -/
 @[simp] theorem val_smul (c : 𝕜) (A : N.Elem E F) : (c • A).val = c • A.val := rfl
 
 /-- The ideal norm, as a real-valued norm on the ideal. -/

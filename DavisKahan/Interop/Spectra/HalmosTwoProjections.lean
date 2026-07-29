@@ -56,6 +56,7 @@ noncomputable instance instHasOrthogonalProjectionInf
   letI : CompleteSpace ↥(K ⊓ L) := hclosed.completeSpace_coe
   exact Submodule.HasOrthogonalProjection.ofCompleteSpace (K ⊓ L)
 
+omit [CompleteSpace H] in
 /-- An orthogonal sum of complemented subspaces is complemented. -/
 theorem hasOrthogonalProjection_sup_of_le_orthogonal
     (K L : Submodule ℂ H) [K.HasOrthogonalProjection]
@@ -105,6 +106,7 @@ noncomputable abbrev halmosTrivialPart (U V : Submodule ℂ H) : Submodule ℂ H
 noncomputable abbrev halmosGenericPart (U V : Submodule ℂ H) : Submodule ℂ H :=
   (halmosTrivialPart U V)ᗮ
 
+/-- The common part `U ⊓ V` is orthogonally complemented. -/
 noncomputable instance instHasOrthogonalProjectionHalmosCommonPart
     (U V : Submodule ℂ H) [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] :
@@ -112,6 +114,7 @@ noncomputable instance instHasOrthogonalProjectionHalmosCommonPart
   change (U ⊓ V).HasOrthogonalProjection
   infer_instance
 
+/-- The source defect `U ⊓ Vᗮ` is orthogonally complemented. -/
 noncomputable instance instHasOrthogonalProjectionHalmosSourceDefect
     (U V : Submodule ℂ H) [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] :
@@ -119,6 +122,7 @@ noncomputable instance instHasOrthogonalProjectionHalmosSourceDefect
   change (U ⊓ Vᗮ).HasOrthogonalProjection
   infer_instance
 
+/-- The target defect `Uᗮ ⊓ V` is orthogonally complemented. -/
 noncomputable instance instHasOrthogonalProjectionHalmosTargetDefect
     (U V : Submodule ℂ H) [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] :
@@ -126,6 +130,9 @@ noncomputable instance instHasOrthogonalProjectionHalmosTargetDefect
   change (Uᗮ ⊓ V).HasOrthogonalProjection
   infer_instance
 
+/-- The exterior part `Uᗮ ⊓ Vᗮ` is orthogonally complemented.  These four
+instances are what let the elementary summands carry projections of their own,
+which the decomposition argument then adds up. -/
 noncomputable instance instHasOrthogonalProjectionHalmosExteriorPart
     (U V : Submodule ℂ H) [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] :
@@ -133,22 +140,33 @@ noncomputable instance instHasOrthogonalProjectionHalmosExteriorPart
   change (Uᗮ ⊓ Vᗮ).HasOrthogonalProjection
   infer_instance
 
+omit [CompleteSpace H] in
+/-- The common part is where both subspaces meet. -/
 @[simp]
 theorem mem_halmosCommonPart {U V : Submodule ℂ H} {x : H} :
     x ∈ halmosCommonPart U V ↔ x ∈ U ∧ x ∈ V := Iff.rfl
 
+omit [CompleteSpace H] in
+/-- The source defect is the part of `U` missed by `V`. -/
 @[simp]
 theorem mem_halmosSourceDefect {U V : Submodule ℂ H} {x : H} :
     x ∈ halmosSourceDefect U V ↔ x ∈ U ∧ x ∈ Vᗮ := Iff.rfl
 
+omit [CompleteSpace H] in
+/-- The target defect is the part of `V` missed by `U`. -/
 @[simp]
 theorem mem_halmosTargetDefect {U V : Submodule ℂ H} {x : H} :
     x ∈ halmosTargetDefect U V ↔ x ∈ Uᗮ ∧ x ∈ V := Iff.rfl
 
+omit [CompleteSpace H] in
+/-- The exterior part is where neither subspace reaches.  With the previous
+three, these are the four *elementary* summands on which both projections act as
+`0` or `1`; everything nontrivial happens on the generic remainder. -/
 @[simp]
 theorem mem_halmosExteriorPart {U V : Submodule ℂ H} {x : H} :
     x ∈ halmosExteriorPart U V ↔ x ∈ Uᗮ ∧ x ∈ Vᗮ := Iff.rfl
 
+omit [CompleteSpace H] in
 /-- Projection values on the common Halmos summand. -/
 theorem projections_apply_of_mem_halmosCommonPart
     {U V : Submodule ℂ H} [U.HasOrthogonalProjection]
@@ -157,6 +175,7 @@ theorem projections_apply_of_mem_halmosCommonPart
   ⟨U.starProjection_eq_self_iff.mpr hx.1,
     V.starProjection_eq_self_iff.mpr hx.2⟩
 
+omit [CompleteSpace H] in
 /-- Projection values on the source-defect Halmos summand. -/
 theorem projections_apply_of_mem_halmosSourceDefect
     {U V : Submodule ℂ H} [U.HasOrthogonalProjection]
@@ -165,6 +184,7 @@ theorem projections_apply_of_mem_halmosSourceDefect
   ⟨U.starProjection_eq_self_iff.mpr hx.1,
     (Submodule.starProjection_apply_eq_zero_iff V).mpr hx.2⟩
 
+omit [CompleteSpace H] in
 /-- Projection values on the target-defect Halmos summand. -/
 theorem projections_apply_of_mem_halmosTargetDefect
     {U V : Submodule ℂ H} [U.HasOrthogonalProjection]
@@ -173,6 +193,7 @@ theorem projections_apply_of_mem_halmosTargetDefect
   ⟨(Submodule.starProjection_apply_eq_zero_iff U).mpr hx.1,
     V.starProjection_eq_self_iff.mpr hx.2⟩
 
+omit [CompleteSpace H] in
 /-- Projection values on the exterior Halmos summand. -/
 theorem projections_apply_of_mem_halmosExteriorPart
     {U V : Submodule ℂ H} [U.HasOrthogonalProjection]
@@ -181,6 +202,7 @@ theorem projections_apply_of_mem_halmosExteriorPart
   ⟨(Submodule.starProjection_apply_eq_zero_iff U).mpr hx.1,
     (Submodule.starProjection_apply_eq_zero_iff V).mpr hx.2⟩
 
+omit [CompleteSpace H] in
 /-- The common and source-defect pieces are orthogonal. -/
 theorem halmosCommon_le_sourceDefect_orthogonal
     (U V : Submodule ℂ H) :
@@ -188,6 +210,7 @@ theorem halmosCommon_le_sourceDefect_orthogonal
   intro x hx y hy
   exact inner_eq_zero_symm.mp (hy.2 x hx.2)
 
+omit [CompleteSpace H] in
 /-- The common and target-defect pieces are orthogonal. -/
 theorem halmosCommon_le_targetDefect_orthogonal
     (U V : Submodule ℂ H) :
@@ -195,6 +218,7 @@ theorem halmosCommon_le_targetDefect_orthogonal
   intro x hx y hy
   exact inner_eq_zero_symm.mp (hy.1 x hx.1)
 
+omit [CompleteSpace H] in
 /-- The common and exterior pieces are orthogonal. -/
 theorem halmosCommon_le_exterior_orthogonal
     (U V : Submodule ℂ H) :
@@ -202,6 +226,7 @@ theorem halmosCommon_le_exterior_orthogonal
   intro x hx y hy
   exact inner_eq_zero_symm.mp (hy.1 x hx.1)
 
+omit [CompleteSpace H] in
 /-- The two defect pieces are orthogonal. -/
 theorem halmosSourceDefect_le_targetDefect_orthogonal
     (U V : Submodule ℂ H) :
@@ -209,6 +234,7 @@ theorem halmosSourceDefect_le_targetDefect_orthogonal
   intro x hx y hy
   exact inner_eq_zero_symm.mp (hy.1 x hx.1)
 
+omit [CompleteSpace H] in
 /-- The source defect and exterior pieces are orthogonal. -/
 theorem halmosSourceDefect_le_exterior_orthogonal
     (U V : Submodule ℂ H) :
@@ -216,6 +242,7 @@ theorem halmosSourceDefect_le_exterior_orthogonal
   intro x hx y hy
   exact inner_eq_zero_symm.mp (hy.1 x hx.1)
 
+omit [CompleteSpace H] in
 /-- The target defect and exterior pieces are orthogonal. -/
 theorem halmosTargetDefect_le_exterior_orthogonal
     (U V : Submodule ℂ H) :
@@ -223,6 +250,9 @@ theorem halmosTargetDefect_le_exterior_orthogonal
   intro x hx y hy
   exact inner_eq_zero_symm.mp (hy.2 x hx.2)
 
+/-- The trivial part — the join of all four elementary summands — is
+orthogonally complemented.  Built from the four component instances, using that
+the summands are mutually orthogonal, which is what makes the join well behaved. -/
 noncomputable instance instHasOrthogonalProjectionHalmosTrivialPart
     (U V : Submodule ℂ H) [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] :
@@ -257,6 +287,7 @@ theorem halmosTrivialPart_sup_genericPart
     halmosTrivialPart U V ⊔ halmosGenericPart U V = ⊤ :=
   Submodule.sup_orthogonal_of_hasOrthogonalProjection
 
+omit [CompleteSpace H] in
 /-- The elementary and generic Halmos pieces are disjoint. -/
 theorem halmosTrivialPart_disjoint_genericPart
     (U V : Submodule ℂ H) [U.HasOrthogonalProjection]
@@ -264,6 +295,7 @@ theorem halmosTrivialPart_disjoint_genericPart
     Disjoint (halmosTrivialPart U V) (halmosGenericPart U V) :=
   (halmosTrivialPart U V).orthogonal_disjoint
 
+omit [CompleteSpace H] in
 /-- Any elementary subspace contained in the trivial part meets the generic
 part only at zero. -/
 theorem halmosGenericPart_inf_eq_bot_of_le_trivial
@@ -274,6 +306,7 @@ theorem halmosGenericPart_inf_eq_bot_of_le_trivial
   intro x hx
   exact inner_self_eq_zero.mp (hx.1 x (hK hx.2))
 
+omit [CompleteSpace H] in
 /-- The common part is contained in the elementary Halmos summand. -/
 theorem halmosCommonPart_le_trivial
     (U V : Submodule ℂ H) :
@@ -285,6 +318,7 @@ theorem halmosCommonPart_le_trivial
     ((le_sup_left : halmosCommonPart U V ≤
       halmosCommonPart U V ⊔ halmosSourceDefect U V) hx)
 
+omit [CompleteSpace H] in
 /-- The source defect is contained in the elementary Halmos summand. -/
 theorem halmosSourceDefect_le_trivial
     (U V : Submodule ℂ H) :
@@ -296,6 +330,7 @@ theorem halmosSourceDefect_le_trivial
     ((le_sup_right : halmosSourceDefect U V ≤
       halmosCommonPart U V ⊔ halmosSourceDefect U V) hx)
 
+omit [CompleteSpace H] in
 /-- The target defect is contained in the elementary Halmos summand. -/
 theorem halmosTargetDefect_le_trivial
     (U V : Submodule ℂ H) :
@@ -307,6 +342,7 @@ theorem halmosTargetDefect_le_trivial
     ((le_sup_left : halmosTargetDefect U V ≤
       halmosTargetDefect U V ⊔ halmosExteriorPart U V) hx)
 
+omit [CompleteSpace H] in
 /-- The exterior part is contained in the elementary Halmos summand. -/
 theorem halmosExteriorPart_le_trivial
     (U V : Submodule ℂ H) :
@@ -320,6 +356,7 @@ theorem halmosExteriorPart_le_trivial
 
 /-! ## Reduction by the two projections -/
 
+omit [CompleteSpace H] in
 /-- A linear map preserving two subspaces preserves their supremum. -/
 theorem map_mem_sup_of_invariant
     (T : H →L[ℂ] H) {K L : Submodule ℂ H}
@@ -329,6 +366,7 @@ theorem map_mem_sup_of_invariant
   rw [map_add]
   exact Submodule.mem_sup.mpr ⟨T k, hK k hk, T l, hL l hl, rfl⟩
 
+omit [CompleteSpace H] in
 /-- The source projection preserves the elementary Halmos summand. -/
 theorem projection_mem_halmosTrivialPart_left
     (U V : Submodule ℂ H) [U.HasOrthogonalProjection]
@@ -356,6 +394,7 @@ theorem projection_mem_halmosTrivialPart_left
     · exact hy
   · exact hx
 
+omit [CompleteSpace H] in
 /-- The target projection preserves the elementary Halmos summand. -/
 theorem projection_mem_halmosTrivialPart_right
     (U V : Submodule ℂ H) [U.HasOrthogonalProjection]
@@ -383,6 +422,7 @@ theorem projection_mem_halmosTrivialPart_right
     · exact hy
   · exact hx
 
+omit [CompleteSpace H] in
 /-- The source projection preserves the generic Halmos summand. -/
 theorem projection_mem_halmosGenericPart_left
     (U V : Submodule ℂ H) [U.HasOrthogonalProjection]
@@ -395,6 +435,7 @@ theorem projection_mem_halmosGenericPart_left
       (fun y hy => projection_mem_halmosTrivialPart_left U V (x := y) hy)
   exact hred.2 x hx
 
+omit [CompleteSpace H] in
 /-- The target projection preserves the generic Halmos summand. -/
 theorem projection_mem_halmosGenericPart_right
     (U V : Submodule ℂ H) [U.HasOrthogonalProjection]
@@ -407,6 +448,7 @@ theorem projection_mem_halmosGenericPart_right
       (fun y hy => projection_mem_halmosTrivialPart_right U V (x := y) hy)
   exact hred.2 x hx
 
+omit [CompleteSpace H] in
 /-- The generic Halmos summand reduces the source projection. -/
 theorem projection_left_reduces_halmosGenericPart
     (U V : Submodule ℂ H) [U.HasOrthogonalProjection]
@@ -416,6 +458,7 @@ theorem projection_left_reduces_halmosGenericPart
     U.starProjection_isSymmetric
     (fun x hx => projection_mem_halmosGenericPart_left U V (x := x) hx)
 
+omit [CompleteSpace H] in
 /-- The generic Halmos summand reduces the target projection. -/
 theorem projection_right_reduces_halmosGenericPart
     (U V : Submodule ℂ H) [U.HasOrthogonalProjection]
@@ -425,6 +468,7 @@ theorem projection_right_reduces_halmosGenericPart
     V.starProjection_isSymmetric
     (fun x hx => projection_mem_halmosGenericPart_right U V (x := x) hx)
 
+omit [CompleteSpace H] in
 /-- The source defect vanishes for an acute pair. -/
 theorem halmosSourceDefect_eq_bot_of_isAcute
     (U V : Submodule ℂ H) [U.HasOrthogonalProjection]
@@ -444,6 +488,7 @@ theorem halmosSourceDefect_eq_bot_of_isAcute
   have hgap : ‖projection U - projection V‖ < 1 := hacute
   nlinarith
 
+omit [CompleteSpace H] in
 /-- The target defect vanishes for an acute pair. -/
 theorem halmosTargetDefect_eq_bot_of_isAcute
     (U V : Submodule ℂ H) [U.HasOrthogonalProjection]
@@ -463,6 +508,7 @@ theorem halmosTargetDefect_eq_bot_of_isAcute
   have hgap : ‖projection U - projection V‖ < 1 := hacute
   nlinarith
 
+omit [CompleteSpace H] in
 /-- For an acute pair the elementary part consists only of the common and
 exterior summands. -/
 theorem halmosTrivialPart_eq_common_sup_exterior_of_isAcute
@@ -479,12 +525,20 @@ theorem halmosTrivialPart_eq_common_sup_exterior_of_isAcute
 
 /-! ## Projection algebra -/
 
+omit [CompleteSpace H] in
+/-- An orthogonal projection is idempotent: `P_U * P_U = P_U`.
+
+This is the multiplicative form of `Submodule.orthogonalProjection` idempotence,
+stated for the bundled operator `projection U` so that the two-projection
+calculations below can rewrite inside products without unfolding. -/
 @[simp]
 theorem projection_sq
     (U : Submodule ℂ H) [U.HasOrthogonalProjection] :
     projection U * projection U = projection U :=
   U.isIdempotentElem_starProjection
 
+omit [CompleteSpace H] in
+/-- `P Pᗮ = 0`: a projection annihilates its own complement. -/
 @[simp]
 theorem projection_mul_complementaryProjection
     (U : Submodule ℂ H) [U.HasOrthogonalProjection] :
@@ -494,6 +548,8 @@ theorem projection_mul_complementaryProjection
   have hP := projection_sq U
   noncomm_ring [hP]
 
+omit [CompleteSpace H] in
+/-- `Pᗮ P = 0`, the other order. -/
 @[simp]
 theorem complementaryProjection_mul_projection
     (U : Submodule ℂ H) [U.HasOrthogonalProjection] :
@@ -503,6 +559,10 @@ theorem complementaryProjection_mul_projection
   have hP := projection_sq U
   noncomm_ring [hP]
 
+omit [CompleteSpace H] in
+/-- The complementary projection is idempotent.  With the two annihilation
+lemmas above, these are the rewrites the `noncomm_ring` steps in the cosine and
+sine identities run on. -/
 @[simp]
 theorem complementaryProjection_sq
     (U : Submodule ℂ H) [U.HasOrthogonalProjection] :
@@ -527,6 +587,7 @@ noncomputable def halmosSineSq
   projection U * complementaryProjection V * projection U +
     complementaryProjection U * projection V * complementaryProjection U
 
+omit [CompleteSpace H] in
 /-- The sine square is the square of the projection difference. -/
 theorem halmosSineSq_eq_projection_sub_sq
     (U V : Submodule ℂ H) [U.HasOrthogonalProjection]
@@ -544,6 +605,7 @@ theorem halmosSineSq_eq_projection_sub_sq
   have hQ := projection_sq V
   noncomm_ring [hP, hQ]
 
+omit [CompleteSpace H] in
 /-- The cosine and sine squares resolve the identity. -/
 theorem halmosCosineSq_add_sineSq
     (U V : Submodule ℂ H) [U.HasOrthogonalProjection]
@@ -560,6 +622,7 @@ theorem halmosCosineSq_add_sineSq
   have hQ := projection_sq V
   noncomm_ring [hP, hQ]
 
+omit [CompleteSpace H] in
 /-- The squared cosine is `1 - (P-Q)²`. -/
 theorem halmosCosineSq_eq_one_sub_projection_sub_sq
     (U V : Submodule ℂ H) [U.HasOrthogonalProjection]
@@ -584,6 +647,7 @@ theorem halmosSineSq_nonneg
       (isSelfAdjoint_starProjection V).star_eq]
   simpa only [hAstar] using star_mul_self_nonneg A
 
+omit [CompleteSpace H] in
 /-- The squared cosine commutes with the source projection. -/
 theorem halmosCosineSq_commute_projection
     (U V : Submodule ℂ H) [U.HasOrthogonalProjection]
@@ -596,11 +660,11 @@ theorem halmosCosineSq_commute_projection
   let Qc : H →L[ℂ] H := complementaryProjection V
   change (P * Q * P + Pc * Qc * Pc) * P =
     P * (P * Q * P + Pc * Qc * Pc)
-  have hP : P * P = P := by simpa [P] using projection_sq U
+  have hP : P * P = P := by simp [P]
   have hPPc : P * Pc = 0 := by
-    simpa [P, Pc] using projection_mul_complementaryProjection U
+    simp [P, Pc]
   have hPcP : Pc * P = 0 := by
-    simpa [P, Pc] using complementaryProjection_mul_projection U
+    simp [P, Pc]
   have hleft : (P * Q * P + Pc * Qc * Pc) * P = P * Q * P := by
     rw [add_mul]
     have h₁ : (P * Q * P) * P = P * Q * P := by
@@ -617,6 +681,7 @@ theorem halmosCosineSq_commute_projection
     rw [h₁, h₂, add_zero]
   exact hleft.trans hright.symm
 
+omit [CompleteSpace H] in
 /-- The squared sine commutes with the source projection. -/
 theorem halmosSineSq_commute_projection
     (U V : Submodule ℂ H) [U.HasOrthogonalProjection]
@@ -644,13 +709,13 @@ theorem spectraCanonicalAbsoluteValue_sq_eq_halmosCosineSq
   let Qc : H →L[ℂ] H := complementaryProjection V
   change (P * Q + Pc * Qc) * (Q * P + Qc * Pc) =
     P * Q * P + Pc * Qc * Pc
-  have hQ : Q * Q = Q := by simpa [Q] using projection_sq V
+  have hQ : Q * Q = Q := by simp [Q]
   have hQQc : Q * Qc = 0 := by
-    simpa [Q, Qc] using projection_mul_complementaryProjection V
+    simp [Q, Qc]
   have hQcQ : Qc * Q = 0 := by
-    simpa [Q, Qc] using complementaryProjection_mul_projection V
+    simp [Q, Qc]
   have hQc : Qc * Qc = Qc := by
-    simpa [Qc] using complementaryProjection_sq V
+    simp [Qc]
   have h11 : (P * Q) * (Q * P) = P * Q * P := by
     calc
       (P * Q) * (Q * P) = P * ((Q * Q) * P) := by

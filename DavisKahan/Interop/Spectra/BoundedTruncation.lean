@@ -45,7 +45,7 @@ variable {H : Type v}
 
 /-- The interval `[-τ, τ]` keeps the spectral parameter bounded by `max 0 τ`. -/
 private theorem abs_le_max_zero_of_mem_Icc (τ : ℝ) :
-    ∀ s ∈ Set.Icc (-τ) τ, |s| ≤ max 0 τ := fun s hs =>
+    ∀ s ∈ Set.Icc (-τ) τ, |s| ≤ max 0 τ := fun _ hs =>
   le_trans (abs_le.mpr ⟨hs.1, hs.2⟩) (le_max_right 0 τ)
 
 /-- The bounded truncation `A · E_A([-τ,τ])`. -/

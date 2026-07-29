@@ -158,3 +158,77 @@ the INVESTIGATE list, not a delete list.
    `DavisKahan/**` only (`ForMathlib`/`Mathlib`/`Spectra` imports were followed by name but those
    trees were not walked for further edges — irrelevant here since no sorry module is in the
    production closure anyway).
+
+## Definitional holes dominate, and they have dependents (edward/fable, 2026-07-29)
+
+Measured across `DavisKahan/**` excluding `vendor/` and `external/`:
+**31 `sorry`ed *definitions*** against **70 `sorry`ed theorems**.
+
+That ratio matters more than either number. A `sorry`ed theorem is an honest
+debt: the statement is meaningful and someone can prove it. A `sorry`ed
+*definition* is worse in kind — `sorryAx` makes the body opaque, so **every
+theorem stated about it asserts nothing checkable**, whether proved or not.
+
+### Two holes carry nine declarations between them
+
+| hole | dependent `sorry`s | what they are |
+|---|---:|---|
+| `operatorAbsoluteValue` (`SinTheta/General.lean:550`) | **5** | `operatorAbsoluteValue_sq`, `operatorAbsoluteValue_isSelfAdjoint`, `coe_canonicalAbsoluteValueUnit`, `canonicalAbsoluteValue_commutes_projection`, `SymmetricNormIdeal.operatorAbsoluteValue_mem_and_gauge_eq` |
+| `spectralSubspace` (same file) | **2** | `spectralSubspace_hasOrthogonalProjection`, `reduces_spectralSubspace` |
+
+None of those seven is independently workable. They are not seven open
+problems; they are **two**, plus seven consequences that become attemptable the
+moment the definitions are real.
+
+`operatorAbsoluteValue`'s blocker is recorded in `dev/LANES.md` and is
+**upstream**: the file is `RCLike`-general, `ContinuousLinearMap.modulus` is
+ℂ-only, `LinearMap.IsPositive.sqrt` is finite-dimensional only, and
+`PositiveSqrt.lean`'s own header names the cause — the C⋆-algebra/CFC instances
+on `E →L[𝕜] E` are registered only for `𝕜 = ℂ`.
+
+### Why this is worth stating
+
+Effort estimates built from `sorry` counts overstate this development's
+remaining work, because the counts treat consequences as independent problems.
+The honest reading of `SinTheta/General.lean` is **one scope decision** —
+restrict to `ℂ` and use `modulus`, or wait for an `RCLike` CFC — after which
+seven obligations become ordinary proof work.
+
+Corollary for anyone triaging: **check whether a `sorry` is a definition before
+estimating it**, and if it is, count its dependents before treating them as
+separate lanes.
+
+
+## Gate audit: which measuring instruments can be trusted (edward/fable, 2026-07-29)
+
+Three separate instruments were found wrong in one session, and in **every case
+the error pointed toward "looks fine"**:
+
+| instrument | defect | what it reported |
+|---|---|---|
+| `check_davis_kahan_frontier.py` Lean probe | three stacked causes (orphan `.olean`s, a root that did not compile, pre-Wave-1 `ForMathlib.*` names) | `status unknown` — for as long as anyone had looked |
+| `check_docstring_coverage.py` | `DECL` anchored the keyword after *modifiers*; an attribute bracket is not a modifier, so `@[simp] theorem foo` was **skipped entirely** | `OK` over **158** undocumented declarations |
+| an ad-hoc `finddoc` scan (mine) | did not strip comment interiors | inflated `ForTauCeti` roughly 2× and produced four prose false positives |
+
+All three are fixed. Because the pattern is a *parser* problem rather than three
+unrelated bugs, the remaining gates were audited on the same axis:
+
+* **`check_declaration_name_drift.py` — clean, and verified empirically, not by
+  reading the regex.** Its `_MODIFIERS` opens with `(?:@\[[^\]]*\]\s*)*`, so
+  inline attributes are matched; `@[simp] theorem foo`, `@[simp, norm_cast]
+  noncomputable def baz` and the plain form all resolve to the right name. This
+  matters more than the others: name-drift is what protects renames, so a blind
+  spot there would let a rename of any `@[simp]` lemma pass unnoticed.
+* **`check_library_structure.py` — not exposed.** It parses *imports* and scans
+  for `sorry`/`admit` on comment-stripped text; it never parses declarations, so
+  the axis does not apply. Its `load()` does strip block and line comments
+  correctly (checked when I wrongly accused it of the opposite).
+* **`check_dependency_layers.py` — not exposed**, same reason.
+
+**The generalisable rule.** Every one of these gates parses Lean with regexes,
+and every failure was on the same question: *what counts as the start of a
+declaration?* Attributes, block comments, `omit`/`set_option` lines between a
+docstring and its declaration, and `end`/`section` on consecutive lines have each
+broken a scanner here. When adding a gate, test it against those four shapes
+before trusting a green result — and prefer a green result you have tried to
+falsify over one you have merely observed.

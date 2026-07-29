@@ -71,6 +71,7 @@ def HasSameApproximationNumbers (A : E₁ →L[𝕜] F₁) (B : E₂ →L[𝕜] 
 
 namespace HasSameApproximationNumbers
 
+/-- Having the same approximation numbers is reflexive. -/
 @[refl] theorem refl (A : E₁ →L[𝕜] F₁) : A.HasSameApproximationNumbers A := fun _ => rfl
 
 /-- Having the same approximation numbers is symmetric. -/

@@ -43,6 +43,8 @@ section Defs
 
 variable (b : HilbertBasis ι 𝕜 F) (P : E →L[𝕜] E) (Q : F →L[𝕜] F)
 
+/-- Sandwiching a Hilbert--Schmidt operator between two bounded operators keeps its energy finite,
+so the block map lands back in the Hilbert--Schmidt class. -/
 theorem energy_block_ne_top (f : lp (fun _ : ι => E) 2) :
     (((P.comp (ofLp b f)).comp Q)).hilbertSchmidtEnergy b ≠ ⊤ := by
   have h1 : ((P.comp (ofLp b f)).comp Q).hilbertSchmidtEnergy b
@@ -62,10 +64,12 @@ theorem energy_block_ne_top (f : lp (fun _ : ι => E) 2) :
 noncomputable def blockFun (f : lp (fun _ : ι => E) 2) : lp (fun _ : ι => E) 2 :=
   ofOperator b ((P.comp (ofLp b f)).comp Q) (energy_block_ne_top b P Q f)
 
+/-- The block map, seen through the operator model. -/
 @[simp] theorem ofLp_blockFun (f : lp (fun _ : ι => E) 2) :
     ofLp b (blockFun b P Q f) = (P.comp (ofLp b f)).comp Q :=
   ofLp_ofOperator _ _ _
 
+/-- The two-sided block map is additive. -/
 theorem blockFun_add (f g : lp (fun _ : ι => E) 2) :
     blockFun b P Q (f + g) = blockFun b P Q f + blockFun b P Q g := by
   refine ofLp_injective b ?_
@@ -73,6 +77,8 @@ theorem blockFun_add (f g : lp (fun _ : ι => E) 2) :
   ext x
   simp
 
+/-- The two-sided block map is homogeneous.  With `blockFun_add` this makes it linear on the `lp`
+model, which is what lets it be bundled as a continuous linear map. -/
 theorem blockFun_smul (c : 𝕜) (f : lp (fun _ : ι => E) 2) :
     blockFun b P Q (c • f) = c • blockFun b P Q f := by
   refine ofLp_injective b ?_
@@ -80,6 +86,8 @@ theorem blockFun_smul (c : 𝕜) (f : lp (fun _ : ι => E) 2) :
   ext x
   simp
 
+/-- The block map is bounded by `‖P‖ ‖Q‖` -- the two-sided ideal bound, in the form needed to bundle
+it continuously. -/
 theorem norm_blockFun_le (f : lp (fun _ : ι => E) 2) :
     ‖blockFun b P Q f‖ ≤ ‖P‖ * ‖Q‖ * ‖f‖ := by
   have hE : ENNReal.ofReal (‖blockFun b P Q f‖ ^ 2)
@@ -112,6 +120,7 @@ noncomputable def blockCLM :
       map_smul' := fun c f => blockFun_smul b P Q c f } (‖P‖ * ‖Q‖)
     (fun f => by simpa [mul_assoc] using norm_blockFun_le b P Q f)
 
+/-- The bundled block map acts as `blockFun`. -/
 @[simp] theorem blockCLM_apply (f : lp (fun _ : ι => E) 2) :
     blockCLM b P Q f = blockFun b P Q f := rfl
 

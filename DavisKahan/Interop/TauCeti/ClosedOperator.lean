@@ -49,6 +49,9 @@ noncomputable def ofLinearPMap
     exact hclosed
 
 omit [CompleteSpace E] in
+/-- Bundling a dense closed partial map and unbundling it is the identity.
+This is the round trip that lets the bundled `ClosedOperator` view and the raw
+`LinearPMap` view be used interchangeably without tracking a conversion. -/
 @[simp] theorem ofLinearPMap_toLinearPMap
     (A : E →ₗ.[𝕜] E)
     (hdense : Dense (A.domain : Set E))

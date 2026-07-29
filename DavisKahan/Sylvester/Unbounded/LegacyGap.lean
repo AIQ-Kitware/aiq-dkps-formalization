@@ -29,6 +29,7 @@ variable {E F : Type v}
   [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
   [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
 
+omit [CompleteSpace E] [CompleteSpace F] in
 /-- A legacy interval/exterior hypothesis becomes the genuine Spectra
 interval/exterior hypothesis after identifying the two real spectra. -/
 theorem genuineSylvesterIntervalExteriorGap_of_legacy
@@ -59,6 +60,7 @@ theorem genuineSylvesterIntervalExteriorGap_of_legacy
       · exact (not_lt_of_ge hleft) hlam.1
       · exact (not_lt_of_ge hright) hlam.2
 
+omit [CompleteSpace E] [CompleteSpace F] in
 /-- The interval/exterior constructor of the manuscript gap embeds into the
 genuine all-gap predicate.  Ordered constructors are intentionally handled by
 their form bounds rather than translated into spectral containments. -/

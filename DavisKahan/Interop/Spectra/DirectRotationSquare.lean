@@ -7,7 +7,7 @@ import DavisKahan.Interop.Spectra.DirectRotation
 import DavisKahan.Interop.Spectra.HalmosTwoProjections
 import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Unitary
 import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Commute
-import ForMathlib.Analysis.InnerProductSpace.CoerciveUnit
+import ForTauCeti.Analysis.InnerProductSpace.CoerciveUnit
 
 /-!
 # Principal-square-root completion of the Spectra direct rotation
@@ -42,7 +42,7 @@ open scoped InnerProductSpace ComplexConjugate ComplexOrder
 
 namespace TauCeti
 
-open ForMathlib
+open TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace SpectraBridge
@@ -119,7 +119,7 @@ theorem star_principalHalfPhase (z : ℂ) :
     have hnorm : ‖(1 : ℂ) + star z‖ = ‖1 + z‖ := by
       rw [show (1 : ℂ) + star z = star (1 + z) by simp, norm_star]
     rw [principalHalfPhase, principalHalfPhase, if_neg hz, if_neg hstarz, hnorm]
-    simp [star_div₀, Complex.star_def, Complex.conj_ofReal]
+    simp [star_div₀, Complex.conj_ofReal]
 
 /-- The midpoint is invertible exactly when the reflection product avoids the
 branch point `-1`.  Acuteness provides that exclusion. -/
@@ -165,7 +165,7 @@ theorem spectrum_spectraReflectionProduct_abs_eq_one
 noncomputable def spectraReflectionProductHalfPhase
     (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) : H →L[ℂ] H :=
+    (_hacute : IsAcute U V) : H →L[ℂ] H :=
   cfc (principalHalfPhase : ℂ → ℂ) (spectraReflectionProduct U V)
 
 /-- The half-phase is unitary. -/
@@ -217,6 +217,7 @@ theorem spectraReflectionProductHalfPhase_sq
           (fun h => hneg (h ▸ hz))
     _ = spectraReflectionProduct U V := cfc_id' ℂ _
 
+omit [CompleteSpace H] in
 /-- Acuteness is symmetric in the two subspaces. -/
 theorem _root_.TauCeti.DavisKahan.IsAcute.symm
     {U V : Submodule ℂ H}
@@ -229,6 +230,7 @@ theorem _root_.TauCeti.DavisKahan.IsAcute.symm
 /-- The scalar cosine gauge `‖1 + z‖ / 2` of the reflection product. -/
 noncomputable def cosineGauge (z : ℂ) : ℂ := ((‖1 + z‖ / 2 : ℝ) : ℂ)
 
+/-- The cosine gauge is continuous. -/
 theorem continuous_cosineGauge : Continuous cosineGauge :=
   Complex.continuous_ofReal.comp
     ((continuous_const.add continuous_id).norm.div_const 2)
@@ -580,7 +582,7 @@ theorem spectraCanonicalAbsoluteValue_inner_pos
       (isUnit_spectraCanonicalAbsoluteValue U V hacute)).1
   have hne : RCLike.re ⟪B x, x⟫_ℂ ≠ 0 := by
     intro hzero
-    have hsq := ForMathlib.ContinuousLinearMap.norm_apply_sq_le_of_positive
+    have hsq := TauCeti.ContinuousLinearMap.norm_apply_sq_le_of_positive
       hBsym hBform x
     have hsq0 : ‖B x‖ ^ 2 ≤ 0 := by
       calc
@@ -755,7 +757,7 @@ nonnegative real part, so its displacement from `1` is the smaller of the
 two. -/
 theorem principalHalfPhase_displacement_minimal_scalar
     {z w : ℂ} (hz : ‖z‖ = 1) (hzneg : z ≠ -1)
-    (hw : ‖w‖ = 1) (htransport : w * w = z) :
+    (_hw : ‖w‖ = 1) (htransport : w * w = z) :
     ‖principalHalfPhase z - 1‖ ≤ ‖w - 1‖ := by
   have hsq := principalHalfPhase_sq_of_abs_eq_one hz hzneg
   have hfactor : (w - principalHalfPhase z) * (w + principalHalfPhase z)
@@ -1350,7 +1352,7 @@ theorem spectraDirectRotation_minimal
   have hCcoer : ∀ z : H,
       c * ‖z‖ ^ 2 ≤ RCLike.re ⟪C z, z⟫_ℂ := by
     intro z
-    have hRbound := ForMathlib.ContinuousLinearMap.norm_apply_sq_le_of_positive
+    have hRbound := TauCeti.ContinuousLinearMap.norm_apply_sq_le_of_positive
       hRsa.isSymmetric hRpos (C z)
     have hRCz : R (C z) = z := by
       have h := congrArg (fun T : H →L[ℂ] H => T z) hRC

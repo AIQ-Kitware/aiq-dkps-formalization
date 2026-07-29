@@ -39,6 +39,7 @@ noncomputable def unitaryConjugate
   closedOperatorOfSelfAdjointPMap (TauCeti.LinearPMap.unitaryConj W A.toLinearPMap)
     (TauCeti.LinearPMap.isSelfAdjoint_unitaryConj hA)
 
+/-- The domain of a unitary conjugate is the image of the original domain. -/
 @[simp] theorem unitaryConjugate_domain
     (W : H ≃ₗᵢ[ℂ] K) (A : DKClosedOperator (H := H))
     (hA : A.IsSelfAdjoint) :
@@ -67,6 +68,7 @@ theorem unitaryConjugate_domain_eq_map
     change W.symm (W z) ∈ A.domain
     simpa using hz
 
+/-- The unitary conjugate acts by transporting, applying, and transporting back. -/
 @[simp] theorem unitaryConjugate_apply
     (W : H ≃ₗᵢ[ℂ] K) (A : DKClosedOperator (H := H))
     (hA : A.IsSelfAdjoint) (x : (unitaryConjugate W A hA).domain) :
@@ -101,6 +103,7 @@ noncomputable def unitaryConjugateBounded
     W.symm.toLinearIsometry.toContinuousLinearMap
 
 omit [CompleteSpace H] [CompleteSpace K] in
+/-- The bounded unitary conjugate, unfolded. -/
 @[simp] theorem unitaryConjugateBounded_apply
     (W : H ≃ₗᵢ[ℂ] K) (R : H →L[ℂ] H) (x : K) :
     unitaryConjugateBounded W R x = W (R (W.symm x)) := rfl
@@ -213,12 +216,14 @@ noncomputable def submoduleMapIsometry
       hcoe, W.norm_map]
     rfl
 
+/-- The induced submodule isometry acts as the underlying map. -/
 @[simp] theorem submoduleMapIsometry_coe_apply
     {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
     (W : E ≃ₗᵢ[ℂ] E) (U : Submodule ℂ E) (x : U) :
     ((submoduleMapIsometry W U x :
       U.map (W.toLinearEquiv : E →ₗ[ℂ] E)) : E) = W (x : E) := rfl
 
+/-- Its inverse acts as the inverse map. -/
 @[simp] theorem submoduleMapIsometry_symm_coe_apply
     {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
     (W : E ≃ₗᵢ[ℂ] E) (U : Submodule ℂ E)

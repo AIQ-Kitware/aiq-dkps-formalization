@@ -4,11 +4,11 @@ The completion lane builds only on repository-local, machine-checked results.
 
 ## Symmetric results
 
-* `DavisKahan.Specialized.Statistics`
+* `ForTauCeti.Analysis.InnerProductSpace.YuWangSamworth.Statistics`
   * `yuWangSamworth_sinTheta_le`
   * `yuWangSamworth_alignedBasis_le`
   * `yuWangSamworth_eigenvector_le`
-* `DavisKahan.FiniteDimensional.SinTheta.Perturbation`
+* `ForTauCeti.Analysis.InnerProductSpace.SinTheta.Perturbation`
   * `sinTheta_perturbation_le`
   * `opNorm_sinThetaMap_le_of_intervalGap`
 
@@ -16,7 +16,7 @@ The completion lane builds only on repository-local, machine-checked results.
 
 * `FinishYuWangSamworth.Rectangular.FrobeniusGram`
 * `FinishYuWangSamworth.Rectangular.Theorem4`
-* `DavisKahan.Specialized.SingularSubspace`
+* `ForTauCeti.Analysis.InnerProductSpace.YuWangSamworth.SingularSubspace`
 
 ## Appendix compression
 

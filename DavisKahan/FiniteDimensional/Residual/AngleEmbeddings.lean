@@ -3,10 +3,10 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
-import DavisKahan.FiniteDimensional.Core.SpectralGap
-import DavisKahan.FiniteDimensional.Residual.AngleEmbedding
+import ForTauCeti.Analysis.InnerProductSpace.SpectralGap
+import ForTauCeti.Analysis.InnerProductSpace.Residual.AngleEmbedding
 import DavisKahan.FiniteDimensional.TanTheta.RitzResidual
-import DavisKahan.FiniteDimensional.Sylvester.Internal.SpectralBounds
+import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Internal.SpectralBounds
 import ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm
 import ForTauCeti.Analysis.InnerProductSpace.MoorePenroseInverse
 import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantNorm

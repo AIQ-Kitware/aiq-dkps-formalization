@@ -1,5 +1,14 @@
 # Tau Ceti PR 1 package — rectangular approximation numbers
 
+> **Status: DRAFT, AND MIS-SCOPED — do not submit as written.** Measured 2026-07-29:
+> this PR's dependency-closed slice is **37 `ForTauCeti` modules**, 29 of them outside
+> the approximation-number tree (Schur--Horn, convex majorization, Courant--Fischer,
+> principal angles, polar decomposition, rectangular UI norms). Tau Ceti accepts one
+> topic per PR; this is roughly six. See **`submission-ladder.md`** — the same content
+> re-sliced along the existing import graph is six PRs of 2--12 modules, and *this*
+> topic becomes a **3-module** rung once its two prerequisites land. Keep this file as
+> that rung's narrative.
+>
 > **Status: DRAFT — API narrative synchronized; current validation pending.**
 >
 > The July 24 export/build log predates the real-valued approximation-number

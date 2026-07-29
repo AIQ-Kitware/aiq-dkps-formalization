@@ -3,9 +3,9 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.Sources.YuWangSamworth2015
-import DavisKahan.Specialized.Statistics
-import DavisKahan.Specialized.SingularSubspace
+import ForTauCeti.Analysis.InnerProductSpace.YuWangSamworth.Residual
+import ForTauCeti.Analysis.InnerProductSpace.YuWangSamworth.Statistics
+import ForTauCeti.Analysis.InnerProductSpace.YuWangSamworth.SingularSubspace
 import ForTauCeti.Analysis.InnerProductSpace.AlignedBasis
 import ForTauCeti.Analysis.InnerProductSpace.SingularSubspace
 import ForTauCeti.Analysis.InnerProductSpace.TwoDimensionalSingularValues
