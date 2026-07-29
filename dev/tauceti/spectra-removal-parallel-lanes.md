@@ -22,9 +22,9 @@ someone else.
 | **SR-A** Cayley / Möbius / `SelfAdjointOperator` bridge | 5 | — | **DONE** (namek) |
 | **SR-B** spectral support | 1 | — | **DONE** (namek) |
 | **SR-C** half-line form bounds | 1 | — | **DONE** (namek) |
-| **SR-D** Hilbert–Schmidt tensor | 5 | the HS tensor development itself | *open* |
+| **SR-D** Hilbert–Schmidt tensor | 5 | **21,581-line donor closure — needs re-plan + author coordination** | *open (measured by edward, aiq-gpu — see lane)* |
 | **SR-E** Rosenblum | 1 | intertwiner of disjoint spectra vanishes | claimed |
-| **SR-F** Experimental stragglers | 3 | three unrelated small items | *open* |
+| **SR-F** Experimental stragglers | 3 | three unrelated small items | **edward (aiq-gpu)** |
 
 `import Spectra` in `DavisKahan/**`: **15 → 9**.  The nine remaining are exactly
 SR-D (5), SR-E (1) and SR-F (3).
