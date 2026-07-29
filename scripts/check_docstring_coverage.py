@@ -59,8 +59,16 @@ EXCLUDED = [
 ]
 
 KEYWORDS = "theorem|lemma|def|abbrev|instance|structure|class|opaque|axiom"
+# 4.  **An inline attribute prefix is matched.**  `@[simp] theorem foo ...` on a
+#     single line is the dominant style in this repository, and an attribute
+#     bracket is not a modifier -- so anchoring the keyword after modifiers alone
+#     made the scanner skip such lines ENTIRELY rather than report them.  That is
+#     the worst failure mode available to a gate: it reported `OK` over 158
+#     undocumented declarations across 59 files, including ones in modules that
+#     had landed the same day.  A gate that reports green stops people looking.
 DECL = re.compile(
-    r"^(?P<mods>(?:noncomputable\s+|partial\s+|protected\s+|scoped\s+|unsafe\s+)*)"
+    r"^(?P<attr>(?:@\[[^\]]*\]\s*)*)"
+    r"(?P<mods>(?:noncomputable\s+|partial\s+|protected\s+|scoped\s+|unsafe\s+)*)"
     r"(?P<private>private\s+)?"
     rf"(?P<kw>{KEYWORDS})\b"
     r"\s*(?P<name>[^\s({\[:]*)"

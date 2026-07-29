@@ -64,6 +64,9 @@ noncomputable def summandEquiv (e : H₁ ≃ₗᵢ[ℂ] H₂) (K : Submodule ℂ
   (e.submoduleMap K).trans (LinearIsometryEquiv.ofEq _ _ hmap)
 
 omit [CompleteSpace H₁] [CompleteSpace H₂] in
+/-- The restricted equivalence acts by the ambient one; restricting to a
+summand does not change where a vector goes.  This is what lets the four
+elementary-summand equivalences be glued without tracking coercions. -/
 @[simp] theorem coe_summandEquiv (e : H₁ ≃ₗᵢ[ℂ] H₂) (K : Submodule ℂ H₁)
     {K' : Submodule ℂ H₂} (hmap : K.map e.toLinearMap = K') (x : K) :
     (summandEquiv e K hmap x : H₂) = e (x : H₁) := rfl
