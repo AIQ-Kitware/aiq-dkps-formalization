@@ -13,9 +13,9 @@ import ForTauCeti.Analysis.InnerProductSpace.YuWangSamworth.Residual
 
 Literature map:
 
-* `ForMathlib/prose/Yu-Wang-Samworth-2014-core-arguments.tex`, Section
+* `prose/core-arguments/Yu-Wang-Samworth-2014-core-arguments.tex`, Section
   "The singular-vector extension".
-* `ForMathlib/prose/Horn-Johnson-2013-Gram-core-arguments.tex`, Sections on
+* `prose/core-arguments/Horn-Johnson-2013-Gram-core-arguments.tex`, Sections on
   Gram factorization and isometric freedom.
 * `papers/DavisKahan-formalized-vs-literature.tex`, paragraph
   "The singular-subspace extension".

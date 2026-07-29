@@ -125,7 +125,7 @@ Date: 2026-06-14 · Tags: `comparator-statement-match`, `instance-arg-order`,
 A conformance restates a topology lemma; the source is:
 
 ```lean
--- ForMathlib/Topology/Berge.lean
+-- ForTauCeti/Topology/Berge.lean
 variable {P X : Type*} [TopologicalSpace P] [TopologicalSpace X]
 -- … earlier in the section, before this theorem, the file adds:
 --     variable [FirstCountableTopology X]   (used by the proof)

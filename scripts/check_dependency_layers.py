@@ -13,7 +13,9 @@ This script parses Lean `import` / `public import` lines and fails when a
 module violates the layering. The rules (see the campaign spec and
 `ForTauCeti/README.md`) are:
 
-1. `ForMathlib` must import only `Mathlib` and `ForMathlib` — never a paper
+1. (`ForMathlib` is retired as of 2026-07-29; the rule below is kept so the checker
+   still rejects the library if anyone recreates it.)  `ForMathlib` must import only
+   `Mathlib` and `ForMathlib` — never a paper
    library, `DavisKahan`, `TauCeti`, `ForTauCeti`, or `Spectra`.
 2. `ForTauCeti` must import only `Mathlib`, `TauCeti`, and `ForTauCeti`.
 3. a generic-foundation `DavisKahan` module must not import a source facade
@@ -22,7 +24,7 @@ module violates the layering. The rules (see the campaign spec and
 4. a production (non-`Experimental`) module must not import
    `DavisKahan.Experimental.*` unless it is in the reviewed allowlist.
 5. a source-facing wrapper (`DavisKahan.Sources.*`) must not be imported by a
-   lower-level generic module (`ForTauCeti`, `ForMathlib`, or a manifest-declared
+   lower-level generic module (`ForTauCeti`, or a manifest-declared
    generic `DavisKahan` foundation).
 6. a production module (`DavisKahan`, `DavisKahan.Sources`, or a paper library)
    must reach `Spectra` only through the designated bridge
@@ -194,7 +196,7 @@ def check(graph: dict[str, list[str]], allowlist: dict,
                     violations.append(Violation(
                         "FORMATHLIB_FIREWALL", module,
                         f"imports {imp} ({classify(imp)}); allowed: "
-                        f"Mathlib, ForMathlib", p))
+                        f"Mathlib, ForMathlib", p))  # ForMathlib retired 2026-07-29
 
         # Rule 3 & 5: generic DavisKahan foundation importing a source facade.
         if layer == "davis-kahan" and module.startswith(generic_dk_prefixes):

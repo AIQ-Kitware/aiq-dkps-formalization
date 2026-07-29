@@ -107,7 +107,7 @@ libraries: results are restated in Mathlib idiom (e.g. generalized from `ℝ` to
 `RCLike 𝕜`), placed in files mirroring their proposed Mathlib destination
 paths, and import only Mathlib.  The paper libraries import these general
 versions and keep only thin paper-facing specializations.  See
-`ForMathlib/README.md` for the contribution workflow and
+`ForTauCeti/README.md` for the package policy and
 `planning/mathlib-candidates.md` for the ranked candidate list.
 
 ### `DavisKahan`
