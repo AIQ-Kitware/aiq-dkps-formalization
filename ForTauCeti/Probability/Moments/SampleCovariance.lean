@@ -91,7 +91,7 @@ per-entry mean-square bound `v` for `Σ̂ − Σ` (e.g. `v = σ²/n` from
 exceeds the corresponding eigenvalue of the population covariance `Σ` minus
 `d · η`.  Taking `η = c / (2d)` keeps a population eigenvalue floored at `c`
 above `c / 2` with high probability — the eigengap the DKPS `halign` route needs. -/
-theorem measure_forall_sampleCovariance_sortedEig_ge_ge {n d : ℕ}
+theorem measure_forall_sampleCovariance_sortedEigenvalues_ge_ge {n d : ℕ}
     (P : Measure Ω) [IsProbabilityMeasure P]
     (V : Fin n → Ω → EuclideanSpace ℝ (Fin d))
     (Cov : Matrix (Fin d) (Fin d) ℝ) (hCovHerm : Cov.IsHermitian)
@@ -100,14 +100,14 @@ theorem measure_forall_sampleCovariance_sortedEig_ge_ge {n d : ℕ}
     {v η : ℝ} (hη : 0 < η)
     (hmoment : ∀ k l, ∫ ω, (sampleCovariance V ω k l - Cov k l) ^ 2 ∂P ≤ v) :
     P {ω | ∀ k : Fin d,
-        Matrix.sortedEig hCovHerm k - (d : ℝ) * η ≤
-          Matrix.sortedEig (isHermitian_sampleCovariance V ω) k}
+        Matrix.sortedEigenvalues hCovHerm k - (d : ℝ) * η ≤
+          Matrix.sortedEigenvalues (isHermitian_sampleCovariance V ω) k}
       ≥ 1 - ENNReal.ofReal ((d : ℝ) ^ 2 * v / η ^ 2) := by
   have hmeas : ∀ k l : Fin d, Measurable fun ω => sampleCovariance V ω k l := by
     intro k l
     refine Measurable.const_mul ?_ _
     exact Finset.measurable_sum _ fun i _ => (hVmeas i k).mul (hVmeas i l)
-  exact measure_forall_sortedEig_ge_ge P (sampleCovariance V) Cov
+  exact measure_forall_sortedEigenvalues_ge_ge P (sampleCovariance V) Cov
     (isHermitian_sampleCovariance V) hCovHerm hmeas hint hη hmoment
 
 end TauCeti

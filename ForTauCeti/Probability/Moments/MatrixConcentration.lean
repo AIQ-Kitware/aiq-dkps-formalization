@@ -32,7 +32,7 @@ concentration — no matrix Bernstein/Hoeffding needed (at the cost of the loose
 ## Main results
 
 * `TauCeti.measure_exists_entry_gt_le` — entrywise concentration (union bound).
-* `TauCeti.measure_forall_abs_sortedEig_sub_le_ge` — eigenvalue concentration.
+* `TauCeti.measure_forall_abs_sortedEigenvalues_sub_le_ge` — eigenvalue concentration.
 
 ## Provenance
 
@@ -95,7 +95,7 @@ theorem measure_exists_entry_gt_le
 /-- **Eigenvalue concentration of a random Hermitian matrix.**  With probability
 `≥ 1 − n² v / η²`, every sorted eigenvalue of `Shat(ω)` is within `n · η` of the
 corresponding eigenvalue of `A`. -/
-theorem measure_forall_abs_sortedEig_sub_le_ge
+theorem measure_forall_abs_sortedEigenvalues_sub_le_ge
     (P : Measure Ω) [IsProbabilityMeasure P]
     (Shat : Ω → Matrix (Fin n) (Fin n) ℝ) (A : Matrix (Fin n) (Fin n) ℝ)
     (hSherm : ∀ ω, (Shat ω).IsHermitian) (hAherm : A.IsHermitian)
@@ -103,15 +103,16 @@ theorem measure_forall_abs_sortedEig_sub_le_ge
     (hint : ∀ k l, Integrable (fun ω => (Shat ω k l - A k l) ^ 2) P)
     {v η : ℝ} (hη : 0 < η) (hmoment : ∀ k l, ∫ ω, (Shat ω k l - A k l) ^ 2 ∂P ≤ v) :
     P {ω | ∀ k : Fin n,
-        |Matrix.sortedEig (hSherm ω) k - Matrix.sortedEig hAherm k| ≤ (n : ℝ) * η}
+        |Matrix.sortedEigenvalues (hSherm ω) k - Matrix.sortedEigenvalues hAherm k| ≤ (n : ℝ) * η}
       ≥ 1 - ENNReal.ofReal ((n : ℝ) ^ 2 * v / η ^ 2) := by
   -- the good (all-entries-close) event is contained in the eigenvalue event
   have hcontain :
       {ω | ∀ k l : Fin n, |Shat ω k l - A k l| ≤ η}
         ⊆ {ω | ∀ k : Fin n,
-            |Matrix.sortedEig (hSherm ω) k - Matrix.sortedEig hAherm k| ≤ (n : ℝ) * η} := by
+            |Matrix.sortedEigenvalues (hSherm ω) k
+              - Matrix.sortedEigenvalues hAherm k| ≤ (n : ℝ) * η} := by
     intro ω hω k
-    exact Matrix.abs_sortedEig_sub_le_of_entry_le hAherm (hSherm ω)
+    exact Matrix.abs_sortedEigenvalues_sub_le_of_entry_le hAherm (hSherm ω)
       (fun i j => hω i j) k
   -- the bad (some-entry-far) event, bounded above
   have hbad : P {ω | ∃ k l, η < |Shat ω k l - A k l|}
@@ -140,7 +141,7 @@ theorem measure_forall_abs_sortedEig_sub_le_ge
 `≥ 1 − n² v / η²`, every sorted eigenvalue of `Shat(ω)` is at least the corresponding
 eigenvalue of `A` minus `n · η`.  (Take `η := c / (2n)` to keep a top-block
 eigenvalue floored at `c` above `c / 2`.) -/
-theorem measure_forall_sortedEig_ge_ge
+theorem measure_forall_sortedEigenvalues_ge_ge
     (P : Measure Ω) [IsProbabilityMeasure P]
     (Shat : Ω → Matrix (Fin n) (Fin n) ℝ) (A : Matrix (Fin n) (Fin n) ℝ)
     (hSherm : ∀ ω, (Shat ω).IsHermitian) (hAherm : A.IsHermitian)
@@ -148,10 +149,11 @@ theorem measure_forall_sortedEig_ge_ge
     (hint : ∀ k l, Integrable (fun ω => (Shat ω k l - A k l) ^ 2) P)
     {v η : ℝ} (hη : 0 < η) (hmoment : ∀ k l, ∫ ω, (Shat ω k l - A k l) ^ 2 ∂P ≤ v) :
     P {ω | ∀ k : Fin n,
-        Matrix.sortedEig hAherm k - (n : ℝ) * η ≤ Matrix.sortedEig (hSherm ω) k}
+        Matrix.sortedEigenvalues hAherm k - (n : ℝ) * η ≤ Matrix.sortedEigenvalues (hSherm ω) k}
       ≥ 1 - ENNReal.ofReal ((n : ℝ) ^ 2 * v / η ^ 2) := by
-  refine le_trans (measure_forall_abs_sortedEig_sub_le_ge P Shat A hSherm hAherm hmeas hint hη
-    hmoment) (measure_mono ?_)
+  refine le_trans
+    (measure_forall_abs_sortedEigenvalues_sub_le_ge P Shat A hSherm hAherm hmeas hint hη hmoment)
+    (measure_mono ?_)
   intro ω hω k
   have hk := abs_le.mp (hω k)
   linarith [hk.1]
