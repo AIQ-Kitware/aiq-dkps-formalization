@@ -1018,3 +1018,18 @@ deleted in `a8992fd` when the min-max development moved to ForTauCeti.
 it.  Its Spectra use is one `spectralPVM` scaffolding block inside a proof that
 ends in `aesop`; the block looks removable, but that cannot be checked until the
 stale import is repaired.
+
+## 2026-07-29: the remaining work is parallel — see the lane document
+
+With the bounded selector calculus ported (commit `b2c8927`), **15** files carry
+`import Spectra` and they no longer form a chain.  The six remaining work
+packages touch **disjoint** `DavisKahan` files and are opened for other agents in
+[`spectra-removal-parallel-lanes.md`](spectra-removal-parallel-lanes.md), with
+per-lane blockers, proof plans and the ForTauCeti module each lane must create
+so that no two lanes edit the same file.  `dev/LANES.md` carries the claim rows
+(`SR-A` … `SR-F`).
+
+The one collision rule worth repeating here: **no lane appends to
+`ForTauCeti/Analysis/InnerProductSpace/LinearPMap/SpectralMeasure.lean`.**  Three
+of them want to, and each would conflict with the others; each creates its own
+module and imports that one instead.
