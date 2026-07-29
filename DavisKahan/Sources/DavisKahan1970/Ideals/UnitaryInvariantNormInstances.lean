@@ -36,14 +36,17 @@ def paperL1Gauge (n : ℕ) (x : Fin n → ℝ) : ℝ :=
 
 namespace PaperL1Gauge
 
+/-- The `l1` gauge of the zero list is `0`. -/
 @[simp]
 theorem zero (n : ℕ) : paperL1Gauge n (0 : Fin n → ℝ) = 0 := by
   simp [paperL1Gauge]
 
+/-- The `l1` gauge is nonnegative. -/
 theorem nonneg {n : ℕ} (x : Fin n → ℝ) :
     0 ≤ paperL1Gauge n x :=
   Finset.sum_nonneg fun i _ => abs_nonneg (x i)
 
+/-- The `l1` gauge is definite: it vanishes exactly at the zero list. -/
 theorem definite {n : ℕ} (x : Fin n → ℝ) :
     paperL1Gauge n x = 0 ↔ x = 0 := by
   constructor
@@ -60,6 +63,7 @@ theorem definite {n : ℕ} (x : Fin n → ℝ) :
   · rintro rfl
     exact zero n
 
+/-- Triangle inequality for the `l1` gauge. -/
 theorem add_le {n : ℕ} (x y : Fin n → ℝ) :
     paperL1Gauge n (x + y) ≤ paperL1Gauge n x + paperL1Gauge n y := by
   calc
@@ -71,30 +75,39 @@ theorem add_le {n : ℕ} (x y : Fin n → ℝ) :
     _ = paperL1Gauge n x + paperL1Gauge n y := by
       simp [paperL1Gauge, Finset.sum_add_distrib]
 
+/-- Absolute homogeneity: scaling a list scales its gauge by the absolute value. -/
 theorem smul {n : ℕ} (c : ℝ) (x : Fin n → ℝ) :
     paperL1Gauge n (c • x) = |c| * paperL1Gauge n x := by
   simp_rw [paperL1Gauge, Pi.smul_apply, smul_eq_mul, abs_mul]
   exact (Finset.mul_sum _ _ _).symm
 
+/-- The `l1` gauge is invariant under permuting the entries — it is a *symmetric*
+norming function. -/
 theorem perm {n : ℕ} (x : Fin n → ℝ) (π : Equiv.Perm (Fin n)) :
     paperL1Gauge n (x ∘ π) = paperL1Gauge n x := by
   simpa [paperL1Gauge, Function.comp_apply] using
     Equiv.sum_comp π (fun i => |x i|)
 
+/-- The `l1` gauge depends only on the absolute values of the entries. -/
 @[simp]
 theorem abs {n : ℕ} (x : Fin n → ℝ) :
     paperL1Gauge n (fun i => |x i|) = paperL1Gauge n x := by
   simp [paperL1Gauge]
 
+/-- Padding a list with one extra zero entry leaves the `l1` gauge unchanged.  This is
+the coherence condition linking the gauges at successive lengths. -/
 theorem zero_pad {n : ℕ} (x : Fin n → ℝ) :
     paperL1Gauge (n + 1) (paperZeroPad x) = paperL1Gauge n x := by
   rw [paperL1Gauge, Fin.sum_univ_castSucc]
   simp [paperL1Gauge, paperZeroPad]
 
+/-- Normalization: the one-entry list `(1)` has gauge `1`. -/
 @[simp]
 theorem normalized : paperL1Gauge 1 (fun _ => 1) = 1 := by
   simp [paperL1Gauge]
 
+/-- The `l1` gauge is monotone under weak majorization of nonnegative lists — for this
+gauge the prefix-sum hypothesis at the final index *is* the conclusion. -/
 theorem weak_majorization {n : ℕ} {x y : Fin n → ℝ}
     (_hx : Antitone x) (h0x : ∀ i, 0 ≤ x i) (h0y : ∀ i, 0 ≤ y i)
     (hpre : ∀ m : ℕ,
