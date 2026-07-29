@@ -271,6 +271,18 @@ theorem pair_mul_eq_inner_comp (hf : IsBddMeasurable f) (hg : IsBddMeasurable g)
   have := hg.bound_nonneg
   nlinarith [step1, step3, step5, hpε, hε'le]
 
+/-- The image of the Borel calculus is commutative. -/
+theorem borelCalculus_comm (hf : IsBddMeasurable f) (hg : IsBddMeasurable g) :
+    borelCalculus ha hf * borelCalculus ha hg
+      = borelCalculus ha hg * borelCalculus ha hf := by
+  refine ContinuousLinearMap.ext fun ξ => ext_inner_left ℂ fun ψ => ?_
+  have h1 : ⟪ψ, (borelCalculus ha hf * borelCalculus ha hg) ξ⟫_ℂ
+      = pair ha (fun x => f x * g x) ψ ξ := (pair_mul_eq_inner_comp ha hf hg ψ ξ).symm
+  have h2 : ⟪ψ, (borelCalculus ha hg * borelCalculus ha hf) ξ⟫_ℂ
+      = pair ha (fun x => g x * f x) ψ ξ := (pair_mul_eq_inner_comp ha hg hf ψ ξ).symm
+  have hfun : (fun x => f x * g x) = (fun x => g x * f x) := by funext x; ring
+  rw [h1, h2, hfun]
+
 /-- **The Borel calculus is multiplicative.** -/
 theorem borelCalculus_mul (hf : IsBddMeasurable f) (hg : IsBddMeasurable g) :
     borelCalculus ha (hf.mul hg) = borelCalculus ha hf * borelCalculus ha hg := by
