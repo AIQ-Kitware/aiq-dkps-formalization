@@ -83,11 +83,15 @@ private theorem ambientAngularOperator_eq_extendCoordinate
     -- goal's `U.starProjection` to match.
     simpa only [ContinuousLinearMap.comp_apply, DavisKahanExt.projection,
       DavisKahan.projection] using h
-  have hcoord := coe_subspaceAngularCoordinate_apply U Y hY
-    ⟨U.starProjection x, U.starProjection_apply_mem x⟩
-  change Y x = (((subspaceAngularCoordinate U Y)
-    ⟨U.starProjection x, U.starProjection_apply_mem x⟩ : Uᗮ) : E)
-  rw [← hcoord, hYP]
+  -- Rewrite the ambient right-hand side instead of `change`-ing the goal.  The
+  -- adjoint of `subtypeL` is the orthogonal projection *into* the subspace
+  -- (`Submodule.adjoint_subtypeL`) and its coercion back to `E` is
+  -- `starProjection`; neither step is definitional, so `change` cannot bridge
+  -- them and the old `⟨U.starProjection x, _⟩` pattern never matched.
+  rw [ContinuousLinearMap.comp_apply, ContinuousLinearMap.comp_apply,
+    Submodule.subtypeL_apply,
+    coe_subspaceAngularCoordinate_apply U Y hY (U.subtypeL.adjoint x),
+    Submodule.adjoint_subtypeL, ← Submodule.starProjection_apply, hYP]
 
 private theorem ambient_doubleAngleTangent_eq_extendCoordinate
     (U : Submodule ℂ E) [U.HasOrthogonalProjection]
