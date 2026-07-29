@@ -108,6 +108,11 @@ theorem spectraPolar_decomposition (T : H →L[ℂ] H) :
 These were bridge *theorems* while the definitions above were Spectra's; they are
 now definitional.  They are kept because downstream proofs rewrite with them. -/
 
+/-- The donor development's operator absolute value is the canonical
+`ContinuousLinearMap.modulus`.
+
+Definitional after the repointing, so the proof is `rfl`; the theorem is kept as
+a `simp` lemma because downstream proofs still rewrite along the old name. -/
 @[simp]
 theorem spectraOperatorAbsoluteValue_eq_modulus (T : H →L[ℂ] H) :
     spectraOperatorAbsoluteValue T = T.modulus :=
