@@ -156,6 +156,15 @@ lemma proj_union (P : ProjValMeasure H) {B₁ B₂ : Set ℝ}
     push_cast
     ring
 
+/-- **Complementation**: the projection of a complement is the complementary
+projection. -/
+lemma proj_compl (P : ProjValMeasure H) (B : Set ℝ) (hB : MeasurableSet B) :
+    P.proj Bᶜ hB.compl = ContinuousLinearMap.id ℂ H - P.proj B hB := by
+  have hsum := P.proj_union hB hB.compl disjoint_compl_right
+  rw [P.proj_congr (Set.union_compl_self B) (hB.union hB.compl) MeasurableSet.univ,
+    P.proj_univ] at hsum
+  linear_combination (norm := module) -hsum
+
 /-- The fundamental quadratic identity `‖proj B ξ‖ ^ 2 = diag ξ B` — idempotence
 and self-adjointness, two birds with one Stone. -/
 lemma norm_sq_proj_apply (P : ProjValMeasure H) (B : Set ℝ) (hB : MeasurableSet B)

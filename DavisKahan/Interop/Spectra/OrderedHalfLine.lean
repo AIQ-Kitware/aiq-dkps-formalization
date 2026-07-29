@@ -5,6 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Interop.Spectra.ClosedOperator
 import DavisKahan.Sylvester.ClosedSylvesterEquation
+import Spectra.Operator.SelfAdjoint
 import Spectra.QuantumMechanics.BornRule.Observable
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
 
@@ -38,6 +39,24 @@ universe v
 
 variable {H : Type v}
   [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
+
+/-- Upgrade a DK closed operator to a Spectra self-adjoint operator.  This lane
+is the last consumer of the outbound Spectra adapter, so the adapter lives here
+rather than in `DavisKahan.Interop.Spectra.ClosedOperator`. -/
+noncomputable def closedOperatorToSpectra
+    (A : DKClosedOperator (H := H))
+    (hA : IsSelfAdjoint A.toLinearPMap) :
+    Spectra.Operator.SelfAdjointOperator H where
+  toLinearPMap := A.toLinearPMap
+  selfAdjoint := hA
+
+@[simp] theorem closedOperatorToSpectra_toLinearPMap
+    (A : DKClosedOperator (H := H)) (hA : IsSelfAdjoint A.toLinearPMap) :
+    (closedOperatorToSpectra A hA).toLinearPMap = A.toLinearPMap := rfl
+
+@[simp] theorem closedOperatorToSpectra_domain
+    (A : DKClosedOperator (H := H)) (hA : IsSelfAdjoint A.toLinearPMap) :
+    (closedOperatorToSpectra A hA).domain = A.domain := rfl
 
 /-- Genuine spectral containment in `[c, ∞)` implies the matching lower
 quadratic-form bound. -/

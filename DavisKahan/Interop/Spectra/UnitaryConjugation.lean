@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Interop.Spectra.ClosedOperator
-import Spectra.Operator.Unitary.Conjugation
+import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Constructions
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
 
 /-!
@@ -23,7 +23,6 @@ namespace DavisKahan
 namespace Experimental
 namespace SpectraBridge
 
-open Spectra.Operator
 
 universe u v
 
@@ -33,13 +32,12 @@ variable {H : Type u} {K : Type v}
 
 /-- Conjugate a self-adjoint DK closed operator by a linear isometry
  equivalence.  The resulting DK operator is obtained by forgetting the
- self-adjoint Spectra operator built from the conjugated partial operator. -/
+ self-adjoint partial operator built from the conjugated partial operator. -/
 noncomputable def unitaryConjugate
     (W : H ≃ₗᵢ[ℂ] K) (A : DKClosedOperator (H := H))
     (hA : A.IsSelfAdjoint) : DKClosedOperator (H := K) :=
-  closedOperatorOfSpectra
-    { toLinearPMap := Spectra.Operator.unitaryConj W A.toLinearPMap
-      selfAdjoint := Spectra.Operator.unitaryConj_isSelfAdjoint W hA }
+  closedOperatorOfSelfAdjointPMap (TauCeti.LinearPMap.unitaryConj W A.toLinearPMap)
+    (TauCeti.LinearPMap.isSelfAdjoint_unitaryConj hA)
 
 @[simp] theorem unitaryConjugate_domain
     (W : H ≃ₗᵢ[ℂ] K) (A : DKClosedOperator (H := H))
@@ -102,62 +100,66 @@ noncomputable def unitaryConjugateBounded
   W.toLinearIsometry.toContinuousLinearMap ∘L R ∘L
     W.symm.toLinearIsometry.toContinuousLinearMap
 
+omit [CompleteSpace H] [CompleteSpace K] in
 @[simp] theorem unitaryConjugateBounded_apply
     (W : H ≃ₗᵢ[ℂ] K) (R : H →L[ℂ] H) (x : K) :
     unitaryConjugateBounded W R x = W (R (W.symm x)) := rfl
 
+omit [CompleteSpace H] [CompleteSpace K] in
 /-- A resolvent of a partial operator transports to its unitary conjugate. -/
 theorem mem_resolventSet_unitaryConj_of_mem
     (W : H ≃ₗᵢ[ℂ] K) (A : H →ₗ.[ℂ] H) {z : ℂ}
     (hz : z ∈ TauCeti.LinearPMap.resolventSet A) :
     z ∈ TauCeti.LinearPMap.resolventSet
-      (Spectra.Operator.unitaryConj W A) := by
+      (TauCeti.LinearPMap.unitaryConj W A) := by
   obtain ⟨R, hleft, hright⟩ := hz
   refine ⟨unitaryConjugateBounded W R, ?_, ?_⟩
   · intro ψ
     let x : A.domain := ⟨W.symm (ψ : K), ψ.property⟩
     have hx := congrArg W (hleft x)
     simpa only [x, unitaryConjugateBounded_apply,
-      Spectra.Operator.unitaryConj_apply, map_sub, map_smul,
+      TauCeti.LinearPMap.unitaryConj_apply, map_sub, map_smul,
       W.symm_apply_apply, W.apply_symm_apply] using hx
   · intro φ
     obtain ⟨hmem, hrightφ⟩ := hright (W.symm φ)
     have htransport : W (R (W.symm φ)) ∈
-        (Spectra.Operator.unitaryConj W A).domain := by
-      rw [Spectra.Operator.mem_unitaryConj_domain_iff,
+        (TauCeti.LinearPMap.unitaryConj W A).domain := by
+      rw [TauCeti.LinearPMap.mem_unitaryConj_domain_iff,
         W.symm_apply_apply]
       exact hmem
     refine ⟨htransport, ?_⟩
     have hφ := congrArg W hrightφ
-    simpa only [Spectra.Operator.unitaryConj_apply,
+    simpa only [TauCeti.LinearPMap.unitaryConj_apply,
       unitaryConjugateBounded_apply, map_sub, map_smul,
       W.symm_apply_apply, W.apply_symm_apply] using hφ
 
+omit [CompleteSpace H] [CompleteSpace K] in
 /-- Conjugation first by `W` and then by `W⁻¹` returns the original partial
 operator. -/
 theorem unitaryConj_symm_unitaryConj
     (W : H ≃ₗᵢ[ℂ] K) (A : H →ₗ.[ℂ] H) :
-    Spectra.Operator.unitaryConj W.symm
-        (Spectra.Operator.unitaryConj W A) = A := by
+    TauCeti.LinearPMap.unitaryConj W.symm
+        (TauCeti.LinearPMap.unitaryConj W A) = A := by
   refine LinearPMap.ext_iff.mpr ⟨?_, ?_⟩
   · ext x
-    simp only [Spectra.Operator.mem_unitaryConj_domain_iff,
+    simp only [TauCeti.LinearPMap.mem_unitaryConj_domain_iff,
       LinearIsometryEquiv.symm_symm, W.symm_apply_apply]
   · intro x hx hy
-    rw [Spectra.Operator.unitaryConj_apply,
-      Spectra.Operator.unitaryConj_apply]
+    rw [TauCeti.LinearPMap.unitaryConj_apply,
+      TauCeti.LinearPMap.unitaryConj_apply]
     simp only [LinearIsometryEquiv.symm_symm, W.symm_apply_apply]
 
+omit [CompleteSpace H] [CompleteSpace K] in
 /-- Resolvent membership is invariant under unitary conjugation. -/
 theorem mem_resolventSet_unitaryConj_iff
     (W : H ≃ₗᵢ[ℂ] K) (A : H →ₗ.[ℂ] H) {z : ℂ} :
     z ∈ TauCeti.LinearPMap.resolventSet
-        (Spectra.Operator.unitaryConj W A) ↔
+        (TauCeti.LinearPMap.unitaryConj W A) ↔
       z ∈ TauCeti.LinearPMap.resolventSet A := by
   constructor
   · intro hz
     have hz' := mem_resolventSet_unitaryConj_of_mem
-      W.symm (Spectra.Operator.unitaryConj W A) hz
+      W.symm (TauCeti.LinearPMap.unitaryConj W A) hz
     rwa [unitaryConj_symm_unitaryConj W A] at hz'
   · exact mem_resolventSet_unitaryConj_of_mem W A
 
@@ -170,7 +172,7 @@ theorem mem_resolventSet_unitaryConjugate_iff
         (unitaryConjugate W A hA).toLinearPMap ↔
       z ∈ TauCeti.LinearPMap.resolventSet A.toLinearPMap := by
   change z ∈ TauCeti.LinearPMap.resolventSet
-      (Spectra.Operator.unitaryConj W A.toLinearPMap) ↔
+      (TauCeti.LinearPMap.unitaryConj W A.toLinearPMap) ↔
     z ∈ TauCeti.LinearPMap.resolventSet A.toLinearPMap
   exact mem_resolventSet_unitaryConj_iff W A.toLinearPMap
 
@@ -178,8 +180,8 @@ theorem mem_resolventSet_unitaryConjugate_iff
 theorem unitaryConjugate_isSelfAdjoint
     (W : H ≃ₗᵢ[ℂ] K) (A : DKClosedOperator (H := H))
     (hA : A.IsSelfAdjoint) : (unitaryConjugate W A hA).IsSelfAdjoint := by
-  change IsSelfAdjoint (Spectra.Operator.unitaryConj W A.toLinearPMap)
-  exact Spectra.Operator.unitaryConj_isSelfAdjoint W hA
+  change IsSelfAdjoint (TauCeti.LinearPMap.unitaryConj W A.toLinearPMap)
+  exact TauCeti.LinearPMap.isSelfAdjoint_unitaryConj hA
 
 /-- The real spectrum is invariant under unitary conjugation. -/
 theorem unitaryConjugate_spectrum_eq
