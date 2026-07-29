@@ -47,34 +47,6 @@ namespace SpectraBridge
 variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
   [CompleteSpace H]
 
-/-- Package a self-adjoint partial map as a DK closed operator. -/
-noncomputable def closedOperatorOfSelfAdjointPMap {K : Type*} [NormedAddCommGroup K]
-    [InnerProductSpace ℂ K] [CompleteSpace K]
-    (T : K →ₗ.[ℂ] K) (hT : IsSelfAdjoint T) : DKClosedOperator (H := K) where
-  domain := T.domain
-  toLinearMap := T.toFun
-  dense_domain := hT.dense_domain
-  closed_graph := by
-    have hclosed : T.IsClosed := hT.isClosed
-    change IsClosed (T.graph : Set (K × K)) at hclosed
-    have hgraph : (T.graph : Set (K × K)) =
-        Set.range (fun x : T.domain => ((x : K), T x)) := by
-      ext p
-      change p ∈ T.graph ↔ ∃ x : T.domain, ((x : K), T x) = p
-      rw [LinearPMap.mem_graph_iff]
-      constructor
-      · rintro ⟨x, hx, hAx⟩
-        exact ⟨x, Prod.ext hx hAx⟩
-      · rintro ⟨x, hx⟩
-        exact ⟨x, congrArg Prod.fst hx, congrArg Prod.snd hx⟩
-    rw [hgraph] at hclosed
-    exact hclosed
-
-@[simp] theorem closedOperatorOfSelfAdjointPMap_toLinearPMap {K : Type*}
-    [NormedAddCommGroup K] [InnerProductSpace ℂ K] [CompleteSpace K]
-    (T : K →ₗ.[ℂ] K) (hT : IsSelfAdjoint T) :
-    (closedOperatorOfSelfAdjointPMap T hT).toLinearPMap = T := rfl
-
 /-- The restriction of a self-adjoint operator to one of its spectral ranges,
 as a DK closed operator. -/
 noncomputable def selfAdjointSpectralRestriction
