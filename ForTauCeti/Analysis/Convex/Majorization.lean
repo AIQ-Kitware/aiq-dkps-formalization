@@ -88,14 +88,17 @@ its full sum. -/
 def prefixSum (k : ℕ) (x : Fin n → ℝ) : ℝ :=
   ∑ i ∈ Finset.univ.filter (fun i : Fin n => (i : ℕ) < k), x i
 
+/-- Prefix sums of the zero vector vanish. -/
 @[simp] theorem prefixSum_zero (k : ℕ) :
     prefixSum k (0 : Fin n → ℝ) = 0 := by
   simp [prefixSum]
 
+/-- Prefix sums are additive. -/
 @[simp] theorem prefixSum_add (k : ℕ) (x y : Fin n → ℝ) :
     prefixSum k (x + y) = prefixSum k x + prefixSum k y := by
   simp [prefixSum, Finset.sum_add_distrib]
 
+/-- Prefix sums are homogeneous. -/
 @[simp] theorem prefixSum_smul (k : ℕ) (c : ℝ) (x : Fin n → ℝ) :
     prefixSum k (c • x) = c * prefixSum k x := by
   simp [prefixSum, Finset.mul_sum]
@@ -192,10 +195,12 @@ end WeaklyMajorized
 def zeroPadRight (x : Fin n → ℝ) : Fin (n + m) → ℝ :=
   fun i => if hi : (i : ℕ) < n then x ⟨i, hi⟩ else 0
 
+/-- Zero padding leaves the original coordinates alone. -/
 @[simp] theorem zeroPadRight_left (x : Fin n → ℝ) (i : Fin n) :
     zeroPadRight (m := m) x (Fin.castAdd m i) = x i := by
   simp [zeroPadRight]
 
+/-- The padded coordinates are zero. -/
 @[simp] theorem zeroPadRight_right (x : Fin n → ℝ) (i : Fin m) :
     zeroPadRight (m := m) x (Fin.natAdd n i) = 0 := by
   simp [zeroPadRight]
@@ -267,6 +272,7 @@ theorem transfer_apply_of_ne {q : Fin n → ℝ} {i j l : Fin n} (hij : i ≠ j)
     (δ : ℝ) : transfer q j l δ i = q i := by
   rw [transfer, Function.update_of_ne hil, Function.update_of_ne hij]
 
+/-- A transfer of nothing is the identity. -/
 @[simp] theorem transfer_zero (q : Fin n → ℝ) (j l : Fin n) : transfer q j l 0 = q := by
   simp [transfer]
 
