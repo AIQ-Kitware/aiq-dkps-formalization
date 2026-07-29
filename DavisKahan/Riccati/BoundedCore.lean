@@ -33,6 +33,7 @@ noncomputable def boundedBlockGraphVector (X : E0 →L[𝕜] E1) (u : E0) :
   WithLp.toLp 2 (u, X u)
 
 omit [CompleteSpace E0] [CompleteSpace E1] in
+/-- The block graph vector, unfolded to its two coordinates. -/
 @[simp]
 theorem boundedBlockGraphVector_apply
     (X : E0 →L[𝕜] E1) (u : E0) :

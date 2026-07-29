@@ -45,6 +45,7 @@ abbrev TwoSidedShiftedInverseBound
   TauCeti.LinearPMap.TwoSidedShiftedInverseBound A.toLinearPMap c s
 
 omit [CompleteSpace E] in
+/-- A two-sided shifted-inverse bound yields the left-hand bound. -/
 theorem TwoSidedShiftedInverseBound.leftShiftedInverseBound
     {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := E)} {c s : ℝ}
     (h : TwoSidedShiftedInverseBound A c s) :

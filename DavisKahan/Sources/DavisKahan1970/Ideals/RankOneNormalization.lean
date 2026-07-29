@@ -32,6 +32,7 @@ namespace PaperUnitaryInvariantNorm
 def firstCoordinateVector (n : ℕ) : Fin (n + 1) → ℝ :=
   fun i => if (i : ℕ) = 0 then 1 else 0
 
+/-- The first coordinate vector of the zero map is zero. -/
 @[simp]
 theorem firstCoordinateVector_zero :
     firstCoordinateVector 0 = (fun _ : Fin 1 => 1) := by

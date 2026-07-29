@@ -292,6 +292,7 @@ structure PaperRealTheorem62Data where
 
 namespace PaperRealTheorem62Data
 
+/-- The canonical sine-theta operator of a Theorem 6.2 configuration. -/
 noncomputable def canonicalSinTheta
     (P : PaperRealTheorem62Data (E := E) (F := F) (G := G) (H := H)) :
     G →L[ℝ] F :=
@@ -299,10 +300,12 @@ noncomputable def canonicalSinTheta
     (lowerFramePolarDataReal P.data.X P.lowerFrame P.frameLowerBound_pos)
     P.data.F₁
 
+/-- The raw overlap block `X⋆ F₁`, before any frame normalization. -/
 def rawOverlap
     (P : PaperRealTheorem62Data (E := E) (F := F) (G := G) (H := H)) :
     G →L[ℝ] F := P.data.X.adjoint ∘L P.data.F₁
 
+/-- The residual projected onto the complementary block. -/
 def projectedResidual
     (P : PaperRealTheorem62Data (E := E) (F := F) (G := G) (H := H)) :
     G →L[ℝ] F := -(P.data.residual.adjoint ∘L P.data.F₁)

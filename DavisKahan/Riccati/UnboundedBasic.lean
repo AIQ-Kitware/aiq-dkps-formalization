@@ -92,6 +92,7 @@ noncomputable def unboundedBlockGraph (X : E0 →L[𝕜] E1) :
   LinearMap.range ((WithLp.linearEquiv 2 𝕜 (E0 × E1)).symm.toLinearMap ∘ₗ
     LinearMap.id.prod X.toLinearMap)
 
+/-- The block graph of an unbounded Riccati configuration is orthogonally complemented. -/
 noncomputable instance unboundedBlockGraph_hasOrthogonalProjection
     (X : E0 →L[𝕜] E1) :
     (unboundedBlockGraph X).HasOrthogonalProjection := by

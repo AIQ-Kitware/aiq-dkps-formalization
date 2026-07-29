@@ -44,6 +44,8 @@ noncomputable def restrictToInvariantSubspace
     hA (x : H) x.property
 
 omit [CompleteSpace H] in
+/-- The restriction to an invariant subspace acts as the original operator on the underlying
+vector. -/
 @[simp]
 theorem coe_restrictToInvariantSubspace_apply
     (A : H →L[ℂ] H) (M : Submodule ℂ H)
