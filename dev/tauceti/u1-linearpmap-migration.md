@@ -442,15 +442,35 @@ Sorted by who can actually move them:
 | the `UnboundedSinThetaData` block — `SinTheta/Unbounded/**`, `SinTheta/Real/**`, `Sources/…/SineTheta/{Symmetric, CommonCore, CommonDomain, …}` | ~130 | one structure, **26 consuming modules**; most of its files are on namek's §13.2 phase-C list |
 | `Sylvester/**` | ~60 | released to namek for phase C (see `dev/LANES.md`) |
 | `Experimental/**` | — | excluded by the gate, and largely unbuildable |
-| **genuinely free** — `TanTheta/{UnboundedVector, UnboundedGenuineSpectrum, UnboundedGraphAngle}`, `TanTwoTheta/{Unbounded, UnboundedVector}` | **13 across ~1,200 lines** | unclaimed by anyone |
+| `TanTheta/{UnboundedVector, UnboundedGenuineSpectrum, UnboundedGraphAngle}`, `TanTwoTheta/{Unbounded, UnboundedVector}` | 13 | **claimed by nobody, and still not takeable** — see below |
 
-The consequence worth stating plainly, because the raw census hides it: **U1
-cannot be finished by U1's owner working alone.** Every large remaining block is
-either behind namek's two active lanes or behind the Spectra boundary that U1's
-own scope excludes. The free remainder is 13 positions in the `TanTheta` /
-`TanTwoTheta` unbounded records, and those are genuine retypings (a
-`DKClosedOperator` binder becomes a `LinearPMap` plus explicit density /
-closedness / self-adjointness hypotheses), not substitutions.
+**Correction, made the same hour, to the row above.** I first recorded these 13
+as "genuinely free" on the strength of *ownership* — no open lane names those
+files — and then read the files. All five sit in `namespace SpectraBridge` and
+every one of them references `selfAdjointSpectralRestriction` /
+`selfAdjointSpectralSubspace`, which are defined in
+`DavisKahan/Interop/Spectra/SpectralRestrictionOperator.lean` (10, 2, 2, 19 and
+19 references respectively). Their `DKClosedOperator` binders are **call-site
+adapters feeding Spectra endpoints** — structurally identical to the 91
+`SinTheta/Natural` positions edward measured as un-takeable, and blocked by the
+same boundary. Unclaimed is not the same test as unblocked.
+
+The consequence, stated plainly, because the raw census hides it: **U1 has no
+remaining slice its owner can take without a coordination decision.** All 530
+positions are behind namek's Spectra campaign, behind namek's §13.2 phase C,
+behind the 26-module `UnboundedSinThetaData` structure that spans both, or in an
+Experimental subtree that does not build. The productive next step is therefore
+not another U1 slice — it is one of:
+
+1. **namek finishes the Spectra removal**, which unfreezes `SinTheta/Natural`
+   (103), the `TanTheta`/`TanTwoTheta` records (13) and much of `Interop/**` in
+   one go. This is the single highest-leverage unblock in the lane.
+2. **A negotiated handover of the `UnboundedSinThetaData` block** (26 consuming
+   modules) from phase C to U1, or the reverse — it is one structure and should
+   have one owner, and today it is split across two lanes' file lists.
+3. **Repair or retire the Experimental `InfiniteDimensional` subtree**, whose
+   `ClosedOperator.adjointDomain` errors are the only thing keeping
+   `Sylvester/Unbounded/Equation.lean` alive.
 
 **The paper-completion census was passing vacuously; it now certifies the code
 (edward, aiq-gpu, 2026-07-29).**  `scripts/probe_census_declarations.py` reported
