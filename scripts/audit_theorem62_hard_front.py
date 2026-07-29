@@ -8,6 +8,23 @@ import re
 import subprocess
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
+
+
+def _spectra_snapshot(root: Path) -> Path:
+    """Path to the vendored Spectra snapshot.
+
+    S6 relocates `vendor/Spectra` to `retired/Spectra`.  Resolving the location
+    here rather than hard-coding it makes that move a `git mv` and nothing else.
+    Falls back to `vendor` when neither exists, so each caller's own "missing"
+    diagnostics fire rather than being masked by a path error.
+    """
+    for parent in ("vendor", "retired"):
+        if (root / parent / "Spectra").is_dir():
+            return root / parent / "Spectra"
+    return root / "vendor" / "Spectra"
+
+SNAPSHOT = _spectra_snapshot(ROOT)
+
 MODULES = [
     "Spectra.Spaces.Tensor.HilbertSchmidt",
     "DavisKahan.Experimental.InfiniteDimensional.Ideals.PaperHilbertSchmidtBasis",
@@ -40,10 +57,10 @@ def run(cmd: list[str]) -> str:
 
 def static_check() -> None:
     paths = [
-        ROOT / "vendor/Spectra/Spectra/Spaces/Tensor/HilbertSchmidt.lean",
-        ROOT / "vendor/Spectra/Spectra/YosidaHille/RectangularIntertwining.lean",
-        ROOT / "vendor/Spectra/Spectra/SpectralTheory/SeparatedIntertwiner.lean",
-        ROOT / "vendor/Spectra/Spectra/Spaces/Tensor/HilbertSchmidtSpectralGap.lean",
+        SNAPSHOT / "Spectra/Spaces/Tensor/HilbertSchmidt.lean",
+        SNAPSHOT / "Spectra/YosidaHille/RectangularIntertwining.lean",
+        SNAPSHOT / "Spectra/SpectralTheory/SeparatedIntertwiner.lean",
+        SNAPSHOT / "Spectra/Spaces/Tensor/HilbertSchmidtSpectralGap.lean",
         ROOT / "DavisKahan/Experimental/InfiniteDimensional/Sylvester/PairwiseSpectrumGap.lean",
         ROOT / "DavisKahan/Sylvester/PairwiseHomogeneousUniqueness.lean",
         ROOT / "DavisKahan/Experimental/InfiniteDimensional/Sylvester/PaperHilbertSchmidtPairwise.lean",
@@ -55,7 +72,7 @@ def static_check() -> None:
         for line_no, line in enumerate(text.splitlines(), 1):
             if forbidden.search(line):
                 failures.append(f"{path.relative_to(ROOT)}:{line_no}: {line.strip()}")
-    tensor = (ROOT / "vendor/Spectra/Spectra/Spaces/Tensor/"
+    tensor = (SNAPSHOT / "Spectra/Spaces/Tensor/"
         "HilbertSchmidt.lean").read_text()
     stale_identifiers = [
         "norm_noninc",
