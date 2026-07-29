@@ -20,9 +20,33 @@ hand-count). The ledger `.llm_resource_tally/ledger/` (at this repo's root) is a
 per-session, concurrency-safe, and stores measurements only.
 <!-- END llm_resource_tally -->
 
+## Parallel agent coordination
+
+Several agents work this repository at once, on separate branches. Coordination
+lives in [`dev/LANES.md`](dev/LANES.md); read its `## Rules` and
+`## Branch and sync protocol` before autonomous work.
+
+The three that cost the most when skipped:
+
+- **Claim → commit → push → then edit.** A row you have committed but not pushed
+  is invisible to every other agent. Two agents once claimed the same lane three
+  minutes apart and both did all of it.
+- **`git fetch --all` and check every remote branch before claiming**, then merge
+  what is ahead of you so the row lands on current state. Re-fetch more often
+  while you have a channel open with another agent — their branch moves while
+  you work.
+- **Never resolve a `.lean` conflict with a blanket take-theirs/take-mine.** Both
+  sides compile, so no gate catches what it drops; this has silently lost
+  docstrings once and nearly lost a 161-line port.
+
+**These rules bind autonomous lane work.** If your human handed you a specific
+task, you are not required to claim a row for it — but if a live row already
+names your files, coordinate rather than overwrite, and claim once a direct task
+grows into a multi-file campaign.
+
 ## Lean proof-engineering rules
 
-Before substantial work in `ForMathlib/Analysis/InnerProductSpace/`, read
+Before substantial work in `ForTauCeti/Analysis/InnerProductSpace/`, read
 [`dev/lean-proof-engineering-lessons.md`](dev/lean-proof-engineering-lessons.md).
 It records the project's recurring failures around bundled composition,
 projection representations, semilinear scalars, adjoints, dependent `if`s,
@@ -80,35 +104,53 @@ every unbounded arbitrary-ideal endpoint.
 
 ### Dependency rules (unchanged where still valid)
 
-Current build graph:
+Current build graph, after the Spectra removal completed 2026-07-29:
 
 ```text
 Mathlib      TauCeti
    ↑            ↑
-vendor/Spectra  ForTauCeti
-   ↑            ↑
-DavisKahan  ←────┘   (DavisKahan / paper may import ForTauCeti)
+   └── ForTauCeti
+            ↑
+        DavisKahan   (DavisKahan / paper may import ForTauCeti)
 ```
 
 - `ForTauCeti` may import only `Mathlib` / `TauCeti` / `ForTauCeti`. `ForMathlib`
   may import only `Mathlib` / `ForMathlib`. Enforced by
   `scripts/check_dependency_layers.py`; this firewall shapes migration order (a
   `ForMathlib` file migrates only once no remaining `ForMathlib` file imports it).
+  **`ForMathlib` is being retired entirely** — 4 modules remain; see lane
+  `FM-RETIRE` in `dev/LANES.md`.
 - `DavisKahan` remains its own package and the paper-facing home of the work; it
   may consume `ForTauCeti`.
-- `vendor/Spectra` is an accepted temporary production dependency. The final
-  migration target removes Spectra from the normal build. That removal now has a
-  measured surface and an execution contract — read
-  [`dev/tauceti/spectra-removal-plan.md`](dev/tauceti/spectra-removal-plan.md)
-  and its ledger
-  [`dev/tauceti/spectra-to-tauceti-port-ledger.md`](dev/tauceti/spectra-to-tauceti-port-ledger.md)
-  before doing Spectra-facing work, and **do not re-measure the surface by
-  counting import lines**; it is 61 declarations, generated and drift-gated.
+- **Spectra is gone from the build.** In-scope `import Spectra` is **0**, the
+  vendored tree is `retired/Spectra`, and the `external/Spectra` submodule was
+  removed on 2026-07-29. `dev/tauceti/spectra-removal-plan.md` and its ledger
+  `dev/tauceti/spectra-to-tauceti-port-ledger.md` are now history of a completed
+  campaign, not instructions. Provenance survives in
+  `retired/Spectra.UPSTREAM.md`, `dev/tauceti/spectra-provenance-map.md`, and
+  nine Lean provenance headers. The one module still reaching Spectra is
+  `FinishTanTwoTheta/**/GroundedImports.lean`, which jon placed out of scope.
 - **Do not commit the `external/TauCeti` submodule pointer yet.** Stage
   everything in `ForTauCeti`; `scripts/export_for_tauceti.py` reproduces the
-  `TauCeti/` copy on demand at submission time. `external/Spectra` and
-  `external/TauCeti` remain read-only provenance references for the ordinary
-  build.
+  `TauCeti/` copy on demand at submission time. `external/TauCeti` remains a
+  read-only provenance reference and a build input for the ordinary build.
+- **EXECUTIVE DECISION — JON, 2026-07-29. `ForTauCeti` is the product, and it
+  is never deleted.** The goal is an *elegant package* in `ForTauCeti`:
+  coherent API, one canonical spelling per concept, provenance on every module.
+  **That package is what polished roadmaps are generated from, and mechanical
+  ports are then built to satisfy those roadmaps.** It is not a holding pen,
+  and there is no terminal state in which it is empty.
+  **This mistake has now been made twice by agents, which is why it is written
+  here rather than only in `ForTauCeti/README.md`.** Both times an agent read
+  the older "temporary staging layer / successful terminal state is empty or
+  deleted" wording — since superseded in `lakefile.toml` and
+  `ForTauCeti/README.md` — and planned toward draining the library into
+  `external/TauCeti` and deleting it. **If you are about to write a lane, a
+  task, or a doc that ends in deleting `ForTauCeti`, or that treats it as
+  something to be emptied: stop.** The related failure is running
+  `scripts/export_for_tauceti.py --write` as part of ordinary work; it belongs
+  to an actual submission, and run otherwise it leaves untracked copies in the
+  submodule that silently go stale against staging. `--check` is free.
 - Reusable mathematics is written for extraction: keep paper-specific wrappers
   downstream, avoid unnecessary Spectra coupling, record exact provenance.
 - A source claim shown false is completed by a machine-checked counterexample,
@@ -163,6 +205,27 @@ Overall ordering: `0` inventory/equivalence map → `1` internal dedup → `2`
 refactor onto Tau Ceti structures → `3` port missing Spectra foundations → `4`
 rewrite DavisKahan consumers → `5` delete old APIs → `6` polish and submit the
 residual new mathematics.
+
+### `ForTauCeti` is the deliverable, and the bar is the platonic ideal roadmap
+
+**`ForTauCeti` is the elegant mathematics library this repository builds, and
+every paper proof is built on it.** `ForMathlib` is retired into it entirely
+(jon, 2026-07-29) — there is no second staging area and no "genuinely
+Mathlib-shaped" remainder.
+
+**Do not finish by deleting it.** Agents have repeatedly tried to complete this
+work by merging code into `TauCeti` and removing `ForTauCeti`. The `TauCeti/`
+copy is an *output* of `scripts/export_for_tauceti.py`, generated and never
+hand-applied; `ForTauCeti` is the thing being built, and the roadmaps and
+mechanical ports are generated **from** it.
+
+When a Tau Ceti roadmap is accepted we open a PR from `ForTauCeti`. The work
+before that is to make `ForTauCeti` satisfy the **platonic ideal Tau Ceti
+roadmap** — the roadmap a reviewer *would* write — so that whatever is accepted,
+we already have what it needs. That includes paper references, adversarial
+review of the statements, and everything that makes a library elegant at Mathlib
+quality. Meeting a roadmap we wrote ourselves does not clear this bar. See
+[`ForTauCeti/README.md`](ForTauCeti/README.md).
 
 ### Governance gate before upstreaming (Tau Ceti)
 
@@ -239,36 +302,36 @@ See [`docs/planning/davis-kahan-full-paper-goal.md`](docs/planning/davis-kahan-f
 for the maintained scope ledger and completion standard.
 
 <!-- BEGIN Spectra collaboration policy -->
-## Spectra collaboration and dependency policy
+## Spectra collaboration and dependency policy — CLOSED 2026-07-29
 
-`Spectra` is the preferred external foundation for complex Hilbert-space
-spectral theory. Davis–Kahan geometry and paper-facing perturbation theorems
-remain owned by this repository.
+**The Spectra dependency is retired. This section is history, not policy.** Do
+not start Spectra-facing work from it, and do not re-vendor.
 
-- Keep `external/Spectra` as a read-only upstream reference. The build must not
-  depend on it.
-- Vendor only the Spectra files actually needed by this repository into
-  `vendor/Spectra`.
-- Import files by first copying the exact upstream version. Preserve upstream
-  module names, copyright headers, and record the source commit in
-  `vendor/Spectra.UPSTREAM.md`.
-- After a file is vendored, edit it normally when necessary. Keep general
-  Spectra improvements in focused commits so they can be proposed upstream.
-- Prefer thin bridges in `DavisKahan/` for DKPS-specific APIs rather than
-  modifying Spectra.
-- Import the narrowest required Spectra modules; never import the root
-  `Spectra` module.
-- **Never declare into `namespace Spectra` (or any `Spectra.*` sub-namespace)
-  from outside `vendor/`.** A DKPS theorem parked in the donor's namespace
-  becomes indistinguishable from donor material the moment the imports are
-  removed, and the attribution ledger then credits Spectra for our work. Two
-  files currently violate this and are being repaired under phase S0 of the
-  removal plan.
+Final state: in-scope `import Spectra` is **0** (down from 26); the vendored
+tree moved to `retired/Spectra`; the `external/Spectra` submodule was removed;
+`vendor/Spectra` no longer exists. The single module still reaching Spectra is
+`FinishTanTwoTheta/**/GroundedImports.lean`, which jon placed out of scope.
 
-See [`dev/spectra-integration-survey-2026-07-14.md`](dev/spectra-integration-survey-2026-07-14.md)
-for the audited capability map, ownership boundary, and contribution plan, and
-[`dev/tauceti/spectra-removal-plan.md`](dev/tauceti/spectra-removal-plan.md) for
-how the dependency is actually being retired.
+**One rule outlives the dependency and is still enforced:** never declare into
+`namespace Spectra` (or any `Spectra.*` sub-namespace). A DKPS theorem parked in
+the donor's namespace becomes indistinguishable from donor material now that the
+imports are gone, and the attribution ledger would credit Spectra for our work.
+`namespace SpectraBridge` is the correct pattern and is not a violation. Gated by
+`scripts/check_spectra_namespace.py`; the two files that violated it were
+repaired under phase S0.
+
+Attribution survives the removal and must be preserved:
+[`retired/Spectra.UPSTREAM.md`](retired/Spectra.UPSTREAM.md) (upstream identity
+and pinned commit `8dbaaf67`),
+[`dev/tauceti/spectra-provenance-map.md`](dev/tauceti/spectra-provenance-map.md)
+with `dev/tauceti/spectra-vendor-authorship-baseline.json`, and the provenance
+headers in nine Lean modules.
+
+For the completed campaign's record — the audited capability map and how the
+dependency was actually retired — see
+[`dev/spectra-integration-survey-2026-07-14.md`](dev/spectra-integration-survey-2026-07-14.md)
+and [`dev/tauceti/spectra-removal-plan.md`](dev/tauceti/spectra-removal-plan.md).
+Both describe finished work.
 <!-- END Spectra collaboration policy -->
 
 ## Lean source conventions

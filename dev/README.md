@@ -11,7 +11,7 @@ pattern of past mistakes, and take fewer of them.
 
 | File | What it answers |
 |---|---|
-| [`LANES.md`](LANES.md) | Who holds what. **Claim your row and commit it before your first edit.** Unlisted means unclaimed. |
+| [`LANES.md`](LANES.md) | Who holds what. **Claim your row, commit it, and push it before your first edit** — unpushed is invisible to the other agents. Unlisted means unclaimed. Its `Branch and sync protocol` covers fetching, merging and conflict resolution across agent branches. |
 | [`tauceti/README.md`](tauceti/README.md) | The active migration: polishing foundations into `ForTauCeti`, retiring `vendor/Spectra`, converging three operator-theory stacks. |
 | [`SEARCH.md`](SEARCH.md) | How to *search* this memory instead of reading it all. Grep patterns and routing rules by symptom. |
 
@@ -127,6 +127,44 @@ entries hidden between filler. The strongest entries are the ones where the code
 `#print axioms`, kernel — still rejected it. Those are the non-obvious,
 transferable traps. If unsure whether something belongs, write it in scratch
 first; if a week later you still think the lesson is durable, move it in.
+
+---
+
+## Retired tooling — the Spectra lifecycle scripts
+
+**Sixteen scripts were deleted on 2026-07-29** when the Spectra dependency was
+retired. They are listed here because a reader who finds them cited in an older
+document should know they are gone on purpose, not missing by accident:
+
+`apply_spectra_submodule_overlay.py`, `bootstrap_spectra_submodule.sh`,
+`restore_spectra_reference_submodule.sh`, `finalize_vendored_spectra_snapshot.sh`,
+`spectra_compatibility_patch.py`, `spectra_import_smoke.sh`,
+`verify_spectra_reference.py`, `verify_vendored_spectra.py`,
+`check_spectra_vendor_authorship.py`, `enable_spectra_lake_dependency.py`,
+`disable_spectra_lake_dependency.py`, `spectra_port_surface.py`,
+`check_spectra_parent_only_bridge.sh`, `ExportSpectraDeclClosure.lean`,
+`ExportSpectraUsage.lean`, `remove_redundant_mathlib_vendor_snapshots.py`.
+
+Three had stopped telling the truth rather than failing, which is the worse
+mode: `verify_spectra_reference.py` printed the *superproject* commit as the
+submodule's pin (it reported this repository's own HEAD as Spectra's SHA),
+`verify_vendored_spectra.py` diffed `vendor/Spectra`, a tree that no longer
+exists, and `check_spectra_vendor_authorship.py` refused to classify anything
+because its `external/Spectra` reference checkout was gone. One was actively
+dangerous: `apply_spectra_submodule_overlay.py` regenerates the managed
+`Spectra collaboration policy` block in `AGENTS.md`, so running it would have
+reinstated the retired policy over the notice that replaced it.
+
+**One is kept and still has a job:** `scripts/check_spectra_namespace.py`. The
+rule it enforces — never declare into `namespace Spectra` — *outlives* the
+dependency. With the imports gone, a DKPS theorem parked in the donor namespace
+is no longer distinguishable from donor material by anything, so the attribution
+ledger would silently credit Spectra for our work. `namespace SpectraBridge` is
+the correct pattern and is not a violation.
+
+Attribution survives all of this: `retired/Spectra.UPSTREAM.md`,
+`tauceti/spectra-provenance-map.md`, `tauceti/spectra-vendor-authorship-baseline.json`,
+and the provenance headers in nine Lean modules.
 
 ---
 

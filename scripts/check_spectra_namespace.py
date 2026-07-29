@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Fail if any file outside `vendor/` declares into Spectra's namespace.
+"""Fail if any production file declares into Spectra's namespace.
 
 A DKPS theorem parked in `namespace Spectra.*` is indistinguishable from donor
 material by name.  That is survivable while `import Spectra` is still in the
@@ -102,7 +102,7 @@ def main() -> int:
                 violations.append((rel, lineno, line.strip()))
 
     if violations:
-        print("Declarations into Spectra's namespace from outside vendor/:", file=sys.stderr)
+        print("Declarations into Spectra's namespace from production code:", file=sys.stderr)
         for rel, lineno, text in violations:
             print(f"  {rel}:{lineno}: {text}", file=sys.stderr)
         print(
@@ -113,7 +113,7 @@ def main() -> int:
         )
         return 1
 
-    print("no declarations into Spectra's namespace outside vendor/")
+    print("no declarations into Spectra's namespace in production code")
     return 0
 
 
