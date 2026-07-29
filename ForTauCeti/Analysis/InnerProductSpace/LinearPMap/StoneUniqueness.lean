@@ -82,5 +82,135 @@ theorem integral_expTime_apply (B : H →L[ℂ] H) (ψ : H) (t : ℝ) :
   rw [integral_eq_sub_of_hasDerivAt hderiv hint]
   simp
 
+/-! ### Passing the identity to the limit -/
+
+/-- The identity, for the Yosida approximants. -/
+theorem integral_expApprox (hA : IsSelfAdjoint A) (n : ℕ+) (ψ : H) (t : ℝ) :
+    (∫ s in (0 : ℝ)..t, (I : ℂ) • expApprox hA n s (yosidaApproxSym hA n ψ))
+      = expApprox hA n t ψ - ψ := by
+  have h := integral_expTime_apply ((I : ℂ) • yosidaApproxSym hA n) ψ t
+  simp only [smul_apply, map_smul, ← expApprox_eq_expTime] at h
+  exact h
+
+/-- `s ↦ expApprox hA n s w` is continuous. -/
+theorem continuous_expApprox_apply (hA : IsSelfAdjoint A) (n : ℕ+) (w : H) :
+    Continuous fun s : ℝ => expApprox hA n s w := by
+  simp only [expApprox_eq_expTime]
+  exact continuous_expTime_apply _ w
+
+/-- **The integral identity for the limit flow.**  The approximants converge
+pointwise in `s` and are bounded by a constant, because a convergent sequence of
+vectors is bounded and each `expApprox` is unitary. -/
+theorem integral_expLimit (hA : IsSelfAdjoint A) {ψ : H} (hψ : ψ ∈ A.domain) (t : ℝ) :
+    (∫ s in (0 : ℝ)..t, (I : ℂ) • expLimit hA s (A ⟨ψ, hψ⟩)) = expLimit hA t ψ - ψ := by
+  have hconv := tendsto_yosidaApproxSym_of_mem_domain hA ψ hψ
+  -- a uniform bound on the approximant images
+  have hnorm : Tendsto (fun n : ℕ+ => ‖yosidaApproxSym hA n ψ‖) atTop (𝓝 ‖A ⟨ψ, hψ⟩‖) :=
+    hconv.norm
+  set C : ℝ := ‖A ⟨ψ, hψ⟩‖ + 1 with hCdef
+  have hCle : ∀ᶠ n : ℕ+ in atTop, ‖yosidaApproxSym hA n ψ‖ ≤ C :=
+    hnorm.eventually_le_const (by rw [hCdef]; linarith)
+  -- the integrands converge pointwise
+  have hlim : ∀ s : ℝ, Tendsto
+      (fun n : ℕ+ => (I : ℂ) • expApprox hA n s (yosidaApproxSym hA n ψ)) atTop
+      (𝓝 ((I : ℂ) • expLimit hA s (A ⟨ψ, hψ⟩))) := by
+    intro s
+    refine Filter.Tendsto.const_smul ?_ (I : ℂ)
+    rw [tendsto_iff_norm_sub_tendsto_zero]
+    have hsplit : ∀ n : ℕ+,
+        ‖expApprox hA n s (yosidaApproxSym hA n ψ) - expLimit hA s (A ⟨ψ, hψ⟩)‖
+          ≤ ‖yosidaApproxSym hA n ψ - A ⟨ψ, hψ⟩‖
+            + ‖expApprox hA n s (A ⟨ψ, hψ⟩) - expLimit hA s (A ⟨ψ, hψ⟩)‖ := by
+      intro n
+      calc ‖expApprox hA n s (yosidaApproxSym hA n ψ) - expLimit hA s (A ⟨ψ, hψ⟩)‖
+          = ‖expApprox hA n s (yosidaApproxSym hA n ψ - A ⟨ψ, hψ⟩)
+              + (expApprox hA n s (A ⟨ψ, hψ⟩) - expLimit hA s (A ⟨ψ, hψ⟩))‖ := by
+            rw [map_sub]; congr 1; abel
+        _ ≤ ‖expApprox hA n s (yosidaApproxSym hA n ψ - A ⟨ψ, hψ⟩)‖
+              + ‖expApprox hA n s (A ⟨ψ, hψ⟩) - expLimit hA s (A ⟨ψ, hψ⟩)‖ := norm_add_le _ _
+        _ = ‖yosidaApproxSym hA n ψ - A ⟨ψ, hψ⟩‖
+              + ‖expApprox hA n s (A ⟨ψ, hψ⟩) - expLimit hA s (A ⟨ψ, hψ⟩)‖ := by
+            rw [norm_expApprox]
+    refine squeeze_zero (fun n => norm_nonneg _) hsplit ?_
+    have h1 : Tendsto (fun n : ℕ+ => ‖yosidaApproxSym hA n ψ - A ⟨ψ, hψ⟩‖) atTop (𝓝 0) :=
+      tendsto_iff_norm_sub_tendsto_zero.mp hconv
+    have h2 : Tendsto
+        (fun n : ℕ+ => ‖expApprox hA n s (A ⟨ψ, hψ⟩) - expLimit hA s (A ⟨ψ, hψ⟩)‖)
+        atTop (𝓝 0) :=
+      tendsto_iff_norm_sub_tendsto_zero.mp (tendsto_expLimitFun hA s (A ⟨ψ, hψ⟩))
+    simpa using h1.add h2
+  -- dominated convergence
+  have hint : Tendsto
+      (fun n : ℕ+ => ∫ s in (0 : ℝ)..t, (I : ℂ) • expApprox hA n s (yosidaApproxSym hA n ψ))
+      atTop (𝓝 (∫ s in (0 : ℝ)..t, (I : ℂ) • expLimit hA s (A ⟨ψ, hψ⟩))) := by
+    refine intervalIntegral.tendsto_integral_filter_of_dominated_convergence
+      (fun _ => C) ?_ ?_ ?_ ?_
+    · exact Eventually.of_forall fun n =>
+        (((continuous_expApprox_apply hA n (yosidaApproxSym hA n ψ)).const_smul
+          (I : ℂ)).aestronglyMeasurable)
+    · filter_upwards [hCle] with n hn
+      refine Eventually.of_forall fun s _ => ?_
+      rw [norm_smul, Complex.norm_I, one_mul, norm_expApprox]
+      exact hn
+    · exact intervalIntegrable_const
+    · exact Eventually.of_forall fun s _ => hlim s
+  -- and the right-hand sides converge too
+  have hrhs : Tendsto (fun n : ℕ+ => expApprox hA n t ψ - ψ) atTop
+      (𝓝 (expLimit hA t ψ - ψ)) :=
+    (tendsto_expLimitFun hA t ψ).sub tendsto_const_nhds
+  refine tendsto_nhds_unique hint ?_
+  refine hrhs.congr fun n => ?_
+  exact (integral_expApprox hA n ψ t).symm
+
+/-- The difference quotient of the limit flow converges to `A ψ` on the domain:
+the integral identity turns it into the *average* of a continuous integrand. -/
+theorem tendsto_genDiffQuot_genToGroup (hA : IsSelfAdjoint A) {ψ : H} (hψ : ψ ∈ A.domain) :
+    Tendsto (TauCeti.OneParameterUnitaryGroup.genDiffQuot (genToGroup hA) ψ)
+      (𝓝[≠] (0 : ℝ)) (𝓝 (A ⟨ψ, hψ⟩)) := by
+  set g : ℝ → H := fun s => (I : ℂ) • expLimit hA s (A ⟨ψ, hψ⟩) with hg
+  have hgcont : Continuous g := (continuous_expLimit hA (A ⟨ψ, hψ⟩)).const_smul (I : ℂ)
+  have hg0 : g 0 = (I : ℂ) • A ⟨ψ, hψ⟩ := by rw [hg]; simp
+  have hderiv : HasDerivAt (fun u : ℝ => ∫ s in (0 : ℝ)..u, g s) ((I : ℂ) • A ⟨ψ, hψ⟩) 0 := by
+    have h := (hgcont.integral_hasStrictDerivAt 0 0).hasDerivAt
+    rwa [hg0] at h
+  have hderiv' : HasDerivAt (fun u : ℝ => expLimit hA u ψ - ψ) ((I : ℂ) • A ⟨ψ, hψ⟩) 0 := by
+    refine hderiv.congr_of_eventuallyEq ?_
+    filter_upwards with u
+    exact (integral_expLimit hA hψ u).symm
+  rw [hasDerivAt_iff_tendsto_slope] at hderiv'
+  have hres := hderiv'.const_smul (-(I : ℂ))
+  have hval : (-(I : ℂ)) • ((I : ℂ) • A ⟨ψ, hψ⟩) = A ⟨ψ, hψ⟩ := by
+    rw [smul_smul, neg_mul, Complex.I_mul_I, neg_neg, one_smul]
+  rw [hval] at hres
+  refine hres.congr fun t => ?_
+  have hf0 : expLimit hA 0 ψ - ψ = 0 := by rw [expLimit_zero]; simp
+  simp only [slope_def_module, hf0, sub_zero,
+    TauCeti.OneParameterUnitaryGroup.genDiffQuot_apply]
+  have hcast : (t⁻¹ : ℝ) • ((expLimit hA t) ψ - ψ)
+      = (((t : ℂ))⁻¹) • ((expLimit hA t) ψ - ψ) := by
+    rw [RCLike.real_smul_eq_coe_smul (K := ℂ) (t⁻¹ : ℝ) ((expLimit hA t) ψ - ψ)]
+    norm_cast
+  rw [hcast, smul_smul, mul_inv, Complex.inv_I]
+  rfl
+
+/-! ### The derivative at zero, and the identification -/
+
+/-- **Stone's theorem, uniqueness half.**  The generator of the unitary group of
+a self-adjoint operator is that operator again. -/
+theorem generator_genToGroup (hA : IsSelfAdjoint A) :
+    TauCeti.OneParameterUnitaryGroup.generator (genToGroup hA) = A := by
+  refine (eq_of_le_of_isSelfAdjoint hA
+    (TauCeti.OneParameterUnitaryGroup.isSelfAdjoint_generator (genToGroup hA)) ?_).symm
+  refine ⟨fun ψ hψ => ?_, ?_⟩
+  · -- the domain inclusion, which is the same limit computation
+    refine ⟨A ⟨ψ, hψ⟩, ?_⟩
+    exact tendsto_genDiffQuot_genToGroup hA hψ
+  · rintro ⟨ψ, hψ⟩ ⟨ψ', hψ'⟩ hEq
+    simp only at hEq
+    subst hEq
+    exact (tendsto_nhds_unique
+      (TauCeti.OneParameterUnitaryGroup.generator_tendsto (genToGroup hA) ⟨ψ, hψ'⟩)
+      (tendsto_genDiffQuot_genToGroup hA hψ)).symm
+
 end LinearPMap
 end TauCeti
