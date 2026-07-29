@@ -54,6 +54,22 @@ modules that *should* stay. Two honest options:
 
 Doing (1) first is cheaper and makes (2) measurable as it proceeds.
 
+## Option (1) is done, 2026-07-29
+
+Rule 3 now asks the upward question and is renamed to match:
+*"every Experimental module supports admission-bearing work"*.
+
+**The baseline moves 76 → 59.** Other agents track this number, so: a rule-3
+count of 59 is the new expected state, not a regression. Rules 1, 2, 4 and 5
+are untouched and still read 3 / ok / 3 / ok.
+
+The gate reports 59 where the independent scan above found 57. The gap is the
+gate's `sorry` detection, which also matches the words "sorry-free" and
+"sorries" in prose, so two modules are classified differently. That is a
+pre-existing looseness in `load()`, not something introduced here, and it is
+worth a separate tidy — it makes the admission set slightly too large, which is
+the safe direction for a gate.
+
 ## What this does *not* claim
 
 That the 57 are ready to be production modules as they stand. They are proved
