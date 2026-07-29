@@ -335,12 +335,6 @@ structure KyFanDominantIdealFamily (𝕜 : Type u) [RCLike 𝕜] where
 
 attribute [instance] KyFanDominantIdealFamily.isComplete
 
-/-- Source-facing name for the infinite-dimensional unitarily invariant norm
-families supported by the Davis--Kahan cutoff proof. -/
-abbrev UnitaryInvariantIdealFamily
-    (𝕜 : Type u) [RCLike 𝕜] :=
-  KyFanDominantIdealFamily (𝕜 := 𝕜)
-
 namespace KyFanDominantIdealFamily
 
 /-! ### The ideal interface

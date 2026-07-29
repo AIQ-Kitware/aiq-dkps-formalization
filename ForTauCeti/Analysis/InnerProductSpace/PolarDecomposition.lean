@@ -197,7 +197,7 @@ theorem polar_decomposition_of_isUnit {A : E →ₗ[𝕜] E} (hA : IsUnit A) :
   rw [coe_polarUnitaryEquiv]
   exact polar_decomposition A
 
-/-! ### General square case: the kernel-completed unitary
+/-! ### General square case: a kernel-completed unitary
 
 Even for a singular `A`, the partial isometry `polarFactor A` extends to a
 genuine unitary `E ≃ₗᵢ[𝕜] E` — map the initial space `(ker A)ᗮ` by
@@ -205,7 +205,18 @@ genuine unitary `E ≃ₗᵢ[𝕜] E` — map the initial space `(ker A)ᗮ` by
 isometrically onto `(range A)ᗮ` (equal dimensions by rank–nullity).  The
 identity `A = U |A|` survives, and `U` is a true unitary; this is the factor the
 orthogonal-Procrustes alignment argument needs (`polarUnitaryEquiv` above
-requires invertibility). -/
+requires invertibility).
+
+**The completion is a choice, not a canonical construction.**  When `ker A ≠ ⊥`
+*any* unitary from `ker A` onto `(range A)ᗮ` completes `polarFactor A`, and
+`LinearIsometry.extend` merely selects one; only the restriction to `(ker A)ᗮ`
+is determined by `A`.  Hence the name `choosePolarUnitary` rather than
+`polarUnitary`: the invertible case, where the unitary factor really is unique,
+is `polarUnitaryEquiv` above.
+
+Users who need only *some* unitary factor should prefer
+`exists_polar_decomposition_unitary`, which states the theorem without
+committing to the selection. -/
 
 /-- The polar factor restricted to `(ker A)ᗮ`, its initial space, where it is a
 genuine linear isometry. -/
@@ -214,27 +225,43 @@ private noncomputable def polarIsometryOnOrthogonal (A : E →ₗ[𝕜] E) :
   toLinearMap := (polarFactor A) ∘ₗ ((ker A)ᗮ).subtype
   norm_map' x := norm_polarFactor_apply_of_mem x.2
 
-/-- **The polar unitary (general square case).** The kernel-completed unitary
-extending `polarFactor A`; unitary for every `A`, singular or not. -/
-noncomputable def polarUnitary (A : E →ₗ[𝕜] E) : E ≃ₗᵢ[𝕜] E :=
+/-- **A selected polar unitary (general square case).** A kernel-completed
+unitary extending `polarFactor A`; unitary for every `A`, singular or not.
+
+Not canonical when `A` is singular — see the section note above. -/
+noncomputable def choosePolarUnitary (A : E →ₗ[𝕜] E) : E ≃ₗᵢ[𝕜] E :=
   LinearIsometryEquiv.ofSurjective (polarIsometryOnOrthogonal A).extend
     (LinearMap.injective_iff_surjective.mp (polarIsometryOnOrthogonal A).extend.injective)
 
-theorem polarUnitary_apply_abs_apply (A : E →ₗ[𝕜] E) (x : E) :
-    polarUnitary A (abs A x) = A x := by
+theorem choosePolarUnitary_apply_abs_apply (A : E →ₗ[𝕜] E) (x : E) :
+    choosePolarUnitary A (abs A x) = A x := by
   have hmem : abs A x ∈ (ker A)ᗮ := abs_apply_mem_orthogonal_ker A x
-  rw [polarUnitary, LinearIsometryEquiv.coe_ofSurjective,
+  rw [choosePolarUnitary, LinearIsometryEquiv.coe_ofSurjective,
     show abs A x = ((⟨abs A x, hmem⟩ : ↥((ker A)ᗮ)) : E) from rfl,
     LinearIsometry.extend_apply]
   exact polarFactor_apply_abs_apply A x
 
 /-- **Polar decomposition with a unitary factor** (general square case),
-`A = U |A|` with `U = polarUnitary A` a genuine unitary. -/
-theorem polar_decomposition_unitary (A : E →ₗ[𝕜] E) :
-    A = (polarUnitary A : E →ₗ[𝕜] E) ∘ₗ abs A := by
+`A = U |A|` at the selected witness `U = choosePolarUnitary A`.
+
+For the statement that does not name a witness, use
+`exists_polar_decomposition_unitary`. -/
+theorem polar_decomposition_choosePolarUnitary (A : E →ₗ[𝕜] E) :
+    A = (choosePolarUnitary A : E →ₗ[𝕜] E) ∘ₗ abs A := by
   ext x
   simp only [LinearMap.comp_apply]
-  exact (polarUnitary_apply_abs_apply A x).symm
+  exact (choosePolarUnitary_apply_abs_apply A x).symm
+
+/-- **Polar decomposition with a unitary factor**, existential form.
+
+This is the honest general-case statement: every square operator on a
+finite-dimensional space factors as a unitary times its modulus.  It says
+nothing about *which* unitary, which is the point — for singular `A` the factor
+is not unique.  `choosePolarUnitary` provides a witness when a concrete one is
+needed. -/
+theorem exists_polar_decomposition_unitary (A : E →ₗ[𝕜] E) :
+    ∃ U : E ≃ₗᵢ[𝕜] E, A = (U : E →ₗ[𝕜] E) ∘ₗ abs A :=
+  ⟨choosePolarUnitary A, polar_decomposition_choosePolarUnitary A⟩
 
 /-- The modulus of a normal finite-dimensional operator commutes with the
 operator.  This is the finite `RCLike` substitute for the corresponding CFC

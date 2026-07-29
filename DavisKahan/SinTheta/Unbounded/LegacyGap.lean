@@ -36,7 +36,7 @@ variable {E F G H : Type v}
 /-- Complex isometric complementary-block theorem routed through the direct
 manuscript-shaped Sylvester engine. -/
 theorem sinTheta_unbounded_complex
-    (N : UnitaryInvariantIdealFamily (𝕜 := ℂ))
+    (N : KyFanDominantIdealFamily (𝕜 := ℂ))
     (D : UnboundedSinThetaData (𝕜 := ℂ) (E := E) (F := F) (G := G))
     (hA : D.A.IsSelfAdjoint)
     (hA₀ : D.A₀.IsSelfAdjoint)
@@ -58,7 +58,7 @@ theorem sinTheta_unbounded_complex
 /-- Exact complex isometric theorem with the directed sine operator used by
 the manuscript surface. -/
 theorem sinTheta_unbounded_exact_complex
-    (N : UnitaryInvariantIdealFamily (𝕜 := ℂ))
+    (N : KyFanDominantIdealFamily (𝕜 := ℂ))
     (D : UnboundedSinThetaData (𝕜 := ℂ) (E := E) (F := F) (G := G))
     (F₀ : H →L[ℂ] E)
     (hA : D.A.IsSelfAdjoint)
@@ -86,7 +86,7 @@ theorem sinTheta_unbounded_exact_complex
 /-- Complex generalized complementary-block theorem for all three manuscript
 gap configurations. -/
 theorem generalizedSinTheta_unbounded_complex
-    (N : UnitaryInvariantIdealFamily (𝕜 := ℂ))
+    (N : KyFanDominantIdealFamily (𝕜 := ℂ))
     (D : UnboundedSinThetaData (𝕜 := ℂ) (E := E) (F := F) (G := G))
     (hA : D.A.IsSelfAdjoint)
     (hA₀ : D.A₀.IsSelfAdjoint)
@@ -120,7 +120,7 @@ theorem generalizedSinTheta_unbounded_complex
 /-- Exact complex generalized theorem for all three manuscript gap
 configurations. -/
 theorem generalizedSinTheta_unbounded_exact_complex
-    (N : UnitaryInvariantIdealFamily (𝕜 := ℂ))
+    (N : KyFanDominantIdealFamily (𝕜 := ℂ))
     (D : UnboundedSinThetaData (𝕜 := ℂ) (E := E) (F := F) (G := G))
     (F₀ : H →L[ℂ] E)
     (hA : D.A.IsSelfAdjoint)

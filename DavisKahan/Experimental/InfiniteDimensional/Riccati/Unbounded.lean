@@ -37,31 +37,31 @@ variable {E1 : Type*} [NormedAddCommGroup E1] [InnerProductSpace 𝕜 E1]
 
 /-- Unbounded block operator on the explicit product domain. -/
 noncomputable abbrev unboundedBlockOperator
-    (H : UnboundedBlockDataPMap (𝕜 := 𝕜) (E0 := E0) (E1 := E1)) :
+    (H : UnboundedBlockData (𝕜 := 𝕜) (E0 := E0) (E1 := E1)) :
     WithLp 2 (E0 × E1) →ₗ.[𝕜] WithLp 2 (E0 × E1) :=
-  constructedUnboundedBlockOperatorPMap H
+  constructedUnboundedBlockOperator H
 
 /-- Domain-controlled graph invariance is equivalent to the strong Riccati
 equation. -/
 theorem graph_invariant_iff_strongRiccati
-    (H : UnboundedBlockDataPMap (𝕜 := 𝕜) (E0 := E0) (E1 := E1))
+    (H : UnboundedBlockData (𝕜 := 𝕜) (E0 := E0) (E1 := E1))
     (X : E0 →L[𝕜] E1) :
-    (PreservesRiccatiPMapDomains H X ∧
+    (PreservesRiccatiDomains H X ∧
       TauCeti.LinearPMap.InvariantSubspace (unboundedBlockOperator H)
         (unboundedBlockGraph X)) ↔
-      StrongSolvesRiccatiPMap H X := by
-  exact constructedUnboundedBlockGraphPMap_invariant_iff_strongRiccati H X
+      StrongSolvesRiccati H X := by
+  exact constructedUnboundedBlockGraph_invariant_iff_strongRiccati H X
 
 /-- A continuation-selected contractive reducing graph yields the complete
 strong unbounded Riccati solution package. -/
 theorem exists_strongRiccati_solution
-    (H : UnboundedBlockDataPMap (𝕜 := 𝕜) (E0 := E0) (E1 := E1))
-    (hselection : Nonempty (ContractiveReducingGraphSelectionPMap H)) :
+    (H : UnboundedBlockData (𝕜 := 𝕜) (E0 := E0) (E1 := E1))
+    (hselection : Nonempty (ContractiveReducingGraphSelection H)) :
     ∃ X : E0 →L[𝕜] E1,
-      StrongSolvesRiccatiPMap H X ∧ ‖X‖ < 1 ∧
+      StrongSolvesRiccati H X ∧ ‖X‖ < 1 ∧
       TauCeti.LinearPMap.ReducesSubspace (unboundedBlockOperator H)
         (unboundedBlockGraph X) := by
-  exact constructedStrongRiccatiPMapSolution_of_selectedGraph H hselection
+  exact constructedStrongRiccatiSolution_of_selectedGraph H hselection
 
 section Complex
 
@@ -73,16 +73,16 @@ variable {F1 : Type*} [NormedAddCommGroup F1] [InnerProductSpace ℂ F1]
 /-- Coordinate-diagonal pullback of the complex unbounded block operator by
 the canonical graph rotation. -/
 noncomputable abbrev unboundedBlockDiagonalOperator
-    (H : UnboundedBlockDataPMap (𝕜 := ℂ) (E0 := F0) (E1 := F1))
+    (H : UnboundedBlockData (𝕜 := ℂ) (E0 := F0) (E1 := F1))
     (X : F0 →L[ℂ] F1) :
     WithLp 2 (F0 × F1) →ₗ.[ℂ] WithLp 2 (F0 × F1) :=
-  unboundedBlockDiagonalPMapCore H X
+  unboundedBlockDiagonalCore H X
 
 /-- Strong Riccati reduction gives domain-controlled complex block
 diagonalization and identifies the two coordinate restrictions. -/
 theorem unbounded_blockDiagonalization
-    (H : UnboundedBlockDataPMap (𝕜 := ℂ) (E0 := F0) (E1 := F1))
-    {X : F0 →L[ℂ] F1} (hX : StrongSolvesRiccatiPMap H X)
+    (H : UnboundedBlockData (𝕜 := ℂ) (E0 := F0) (E1 := F1))
+    {X : F0 →L[ℂ] F1} (hX : StrongSolvesRiccati H X)
     (hred : TauCeti.LinearPMap.ReducesSubspace (unboundedBlockOperator H)
       (unboundedBlockGraph X)) :
     ∃ W Winv : WithLp 2 (F0 × F1) →L[ℂ] WithLp 2 (F0 × F1),
@@ -101,7 +101,7 @@ theorem unbounded_blockDiagonalization
         (unboundedBlockDiagonalOperator H X)
         (ContinuousLinearMap.id ℂ _)
         (ContinuousLinearMap.id ℂ _) := by
-  exact complex_unbounded_blockDiagonalizationPMap_of_strongSolution H hX hred
+  exact complex_unbounded_blockDiagonalization_of_strongSolution H hX hred
 
 end Complex
 

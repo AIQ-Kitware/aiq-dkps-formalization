@@ -60,7 +60,7 @@ theorem sinTheta_unbounded_of_intervalExteriorGap
 theorem sinTheta_unbounded
     [HasApproximationNumberStrongCutoff.{u, v, 0} 𝕜]
     [HasKyFanApproximationGaugeTriangle.{u, v} 𝕜]
-    (N : UnitaryInvariantIdealFamily (𝕜 := 𝕜))
+    (N : KyFanDominantIdealFamily (𝕜 := 𝕜))
     (D : UnboundedSinThetaData (𝕜 := 𝕜) (E := E) (F := F) (G := G))
     (hA : D.A.IsSelfAdjoint)
     (hA₀ : D.A₀.IsSelfAdjoint)
@@ -152,7 +152,7 @@ theorem generalizedSinTheta_unbounded_exact_of_intervalExteriorGap
 /-- Complete generalized unbounded complementary-block theorem.  The gap may
 be finite interval/exterior or either ordered half-line orientation. -/
 theorem generalizedSinTheta_unbounded
-    (N : UnitaryInvariantIdealFamily (𝕜 := ℂ))
+    (N : KyFanDominantIdealFamily (𝕜 := ℂ))
     (D : UnboundedSinThetaData (𝕜 := ℂ) (E := E) (F := F) (G := G))
     (hA : D.A.IsSelfAdjoint)
     (hA₀ : D.A₀.IsSelfAdjoint)
@@ -185,7 +185,7 @@ theorem generalizedSinTheta_unbounded
 directed sine operator identified through a complete orthogonal exact-space
 decomposition. -/
 theorem generalizedSinTheta_unbounded_exact
-    (N : UnitaryInvariantIdealFamily (𝕜 := ℂ))
+    (N : KyFanDominantIdealFamily (𝕜 := ℂ))
     (D : UnboundedSinThetaData (𝕜 := ℂ) (E := E) (F := F) (G := G))
     (F₀ : H →L[ℂ] E)
     (hA : D.A.IsSelfAdjoint)
@@ -254,7 +254,7 @@ theorem sinTheta_unbounded_exact_of_intervalExteriorGap
 theorem sinTheta_unbounded_exact
     [HasApproximationNumberStrongCutoff.{u, v, 0} 𝕜]
     [HasKyFanApproximationGaugeTriangle.{u, v} 𝕜]
-    (N : UnitaryInvariantIdealFamily (𝕜 := 𝕜))
+    (N : KyFanDominantIdealFamily (𝕜 := 𝕜))
     (D : UnboundedSinThetaData (𝕜 := 𝕜) (E := E) (F := F) (G := G))
     (F₀ : H →L[𝕜] E)
     (hA : D.A.IsSelfAdjoint)

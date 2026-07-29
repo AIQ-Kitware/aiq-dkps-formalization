@@ -68,12 +68,21 @@ The general polar decomposition — with a *partial* isometry, defined for every
 `ForTauCeti/Analysis/InnerProductSpace/PolarPartialIsometry.lean`; its
 `polarPartial_comp_modulus` is the unconditional form of the identity below.
 
-`TODO`: the two should be reconciled, by proving `polarIsometry = polarPartial`
-under `IsUnit M.modulus` and then retiring this definition in favour of the
-general one.  All the results below are then recovered by adding
-`IsUnit M.modulus`, so downstream users are unaffected.  The bounded-below case
-is separated out here only because it needs no polar-decomposition theory at
-all: `Ring.inverse` plus the pointwise isometry `‖|M| x‖ = ‖M x‖` suffice.
+The reconciliation is **proved**:
+`ContinuousLinearMap.polarPartial_eq_comp_ringInverse_modulus` says
+`polarPartial M = M ∘L Ring.inverse M.modulus` whenever `|M|` is a unit, which
+is `polarIsometry M` by definition.  So the two constructions agree exactly
+where this one is meaningful, and this module is a specialisation rather than a
+rival.
+
+What is *not* done, and is deliberately left as its own lane: retiring this
+definition outright.  That is more than a deletion, because the module also
+carries results with nothing to do with polar decomposition — the two
+criteria for `|M|` to be a unit, and the operator inequality
+`‖|M| - 1‖ ≤ ‖M⋆M - 1‖` — which would have to be rehoused first.  The
+bounded-below case is separated out here because it needs no
+polar-decomposition theory at all: `Ring.inverse` plus the pointwise isometry
+`‖|M| x‖ = ‖M x‖` suffice.
 
 Complex scalars are required because Mathlib registers the continuous functional
 calculus on Hilbert-space operators only over `ℂ`; see

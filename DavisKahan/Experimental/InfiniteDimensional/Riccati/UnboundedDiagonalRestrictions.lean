@@ -346,35 +346,35 @@ theorem reducedCoordinateDirectSum_unitaryEquivalent
 /-- The first coordinate restriction of the graph-rotated unbounded block
 core. -/
 noncomputable def unboundedBlockDiagonalRestriction0
-    (H : UnboundedBlockDataPMap (𝕜 := ℂ) (E0 := E0) (E1 := E1))
+    (H : UnboundedBlockData (𝕜 := ℂ) (E0 := E0) (E1 := E1))
     (X : E0 →L[ℂ] E1) : E0 →ₗ.[ℂ] E0 :=
-  coordinateRestriction0 (unboundedBlockDiagonalPMapCore H X)
+  coordinateRestriction0 (unboundedBlockDiagonalCore H X)
 
 /-- The second coordinate restriction of the graph-rotated unbounded block
 core. -/
 noncomputable def unboundedBlockDiagonalRestriction1
-    (H : UnboundedBlockDataPMap (𝕜 := ℂ) (E0 := E0) (E1 := E1))
+    (H : UnboundedBlockData (𝕜 := ℂ) (E0 := E0) (E1 := E1))
     (X : E0 →L[ℂ] E1) : E1 →ₗ.[ℂ] E1 :=
-  coordinateRestriction1 (unboundedBlockDiagonalPMapCore H X)
+  coordinateRestriction1 (unboundedBlockDiagonalCore H X)
 
 /-- The graph-rotated block core is exactly represented, up to identity
 transport of the common domain, by the direct sum of its two coordinate
 restrictions. -/
-theorem unboundedBlockDiagonalPMapCore_coordinateDirectSum
-    (H : UnboundedBlockDataPMap (𝕜 := ℂ) (E0 := E0) (E1 := E1))
+theorem unboundedBlockDiagonalCore_coordinateDirectSum
+    (H : UnboundedBlockData (𝕜 := ℂ) (E0 := E0) (E1 := E1))
     (X : E0 →L[ℂ] E1)
     (hred : TauCeti.LinearPMap.ReducesSubspace
-      (unboundedBlockOperatorPMapCore H) (unboundedBlockGraph X)) :
+      (unboundedBlockOperatorCore H) (unboundedBlockGraph X)) :
     TauCeti.LinearPMap.UnitaryEquivalent
       (TauCeti.LinearPMap.directSum
         (unboundedBlockDiagonalRestriction0 H X)
         (unboundedBlockDiagonalRestriction1 H X))
-      (unboundedBlockDiagonalPMapCore H X)
+      (unboundedBlockDiagonalCore H X)
       (ContinuousLinearMap.id ℂ _)
       (ContinuousLinearMap.id ℂ _) :=
   reducedCoordinateDirectSum_unitaryEquivalent
-    (unboundedBlockDiagonalPMapCore H X)
-    (unboundedBlockDiagonalPMapCore_reduces_zeroGraph H X hred)
+    (unboundedBlockDiagonalCore H X)
+    (unboundedBlockDiagonalCore_reduces_zeroGraph H X hred)
 
 end DavisKahanExt
 end TauCeti
