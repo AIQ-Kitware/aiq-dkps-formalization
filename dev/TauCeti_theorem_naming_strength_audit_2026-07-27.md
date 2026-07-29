@@ -435,11 +435,60 @@ The module docstring, which previously advertised "infinite dimensions", now sta
 
 | item | status |
 |---|---|
-| 1. `ContinuousLinearMap.polarIsometry` | **PARTIAL — reconciliation proved 2026-07-28** (`polarPartial_eq_comp_ringInverse_modulus`: the two agree wherever the light one is meaningful). Retirement still open, and larger than it looks: the module also carries two `IsUnit \|M\|` criteria and `‖\|M\| - 1‖ ≤ ‖M⋆M - 1‖`, none of them polar-decomposition results, which need rehousing before anything is deleted. Original situation: — the general partial isometry now exists as `ContinuousLinearMap.polarPartial` (`ForTauCeti/Analysis/InnerProductSpace/PolarPartialIsometry.lean`, 44 declarations), and `PolarIsometry.lean` carries a live `TODO` to prove `polarIsometry = polarPartial` under `IsUnit M.modulus` and then **retire** `polarIsometry` in favour of the general one. That supersedes the section's own recommendation: the audit proposed renaming to `polarIsometricFactorOfIsUnitModulus` and keeping the definition, but if the general object is available the honest move is deletion, not a longer name. Retiring it is the open lane; renaming it would entrench a definition that is scheduled to go. |
+| 1. `ContinuousLinearMap.polarIsometry` | **VERDICT CORRECTED 2026-07-29 — see the item-1 addendum; do not delete this module on the strength of the text below.** The three results named as blockers have zero references and are trivially rehoused; the content actually at risk is the sharp near-isometry estimate, which `polarPartial` does **not** carry. Original text follows. **PARTIAL — reconciliation proved 2026-07-28** (`polarPartial_eq_comp_ringInverse_modulus`: the two agree wherever the light one is meaningful). Retirement still open, and larger than it looks: the module also carries two `IsUnit \|M\|` criteria and `‖\|M\| - 1‖ ≤ ‖M⋆M - 1‖`, none of them polar-decomposition results, which need rehousing before anything is deleted. Original situation: — the general partial isometry now exists as `ContinuousLinearMap.polarPartial` (`ForTauCeti/Analysis/InnerProductSpace/PolarPartialIsometry.lean`, 44 declarations), and `PolarIsometry.lean` carries a live `TODO` to prove `polarIsometry = polarPartial` under `IsUnit M.modulus` and then **retire** `polarIsometry` in favour of the general one. That supersedes the section's own recommendation: the audit proposed renaming to `polarIsometricFactorOfIsUnitModulus` and keeping the definition, but if the general object is available the honest move is deletion, not a longer name. Retiring it is the open lane; renaming it would entrench a definition that is scheduled to go. |
 | 2. `TauCeti.polarUnitary` | **RESOLVED** — renamed `choosePolarUnitary`, `exists_polar_decomposition_unitary` added |
 | 3. `FiniteDimensional.inverseOnRange` | **RESOLVED** — alias family deleted |
 | 4. `UnitaryInvariantIdealFamily` | **RESOLVED** — alias deleted, 94 references repointed to `KyFanDominantIdealFamily` |
 | 5. `*_infinite` tan-two-theta names | **RESOLVED** — renamed, module renamed to `TanTwoThetaKyFanFiniteCarrier` |
+
+---
+
+# Addendum: item 1 re-measured, 2026-07-29 — the recorded verdict is wrong
+
+Item 1 is the only finding from the original audit still open, and its status-table entry
+records a verdict that the tree does not support. Correcting it here rather than acting on it,
+because the correction changes what the right action *is*.
+
+**What the status table says.** That retirement is *"larger than it looks"* because the module
+also carries two `IsUnit |M|` criteria and `‖|M| - 1‖ ≤ ‖M⋆M - 1‖`, *"none of them
+polar-decomposition results, which need rehousing before anything is deleted"*, and that since
+`polarPartial` exists, *"the honest move is deletion, not a longer name."*
+
+**Measurement, 2026-07-29.** Both halves are off, in opposite directions.
+
+1. **The three "blocking" results are not a blocker.** `isUnit_modulus_iff`,
+   `isUnit_modulus_of_norm_adjoint_comp_self_sub_one_lt_one` and `norm_modulus_sub_one_le` are
+   self-contained on `modulus` — none mentions `polarIsometry` — and each has **zero references
+   anywhere in the repository**. Rehousing them is a copy, not a migration.
+
+2. **The actual content at risk is the near-isometry estimate, which the entry does not mention.**
+   `PolarIsometry.lean` proves `‖M - M.polarIsometry‖ ≤ ‖M⋆M - 1‖` (`norm_sub_polarIsometry_le`),
+   sharp, over arbitrary complex Hilbert spaces. **`polarPartial` does not have this.**
+   `PolarPartialIsometry.lean` contains no `norm_sub_*` bound at all. So "delete in favour of the
+   general object" would delete a theorem the general object does not provide.
+
+3. **The module reads as dead and is not.** Nothing imports
+   `ForTauCeti.Analysis.InnerProductSpace.PolarIsometry`; its only mentions outside itself are
+   three lines of prose. That looks like textbook dead code — but it is a *terminal* statement,
+   and `NearIsometry.lean`, which **is** consumed and is pinned by
+   `comparator/pending-near-isometry.json`, carries a design note naming it *"the general theorem
+   and the canonical object"* and directing readers to it for the complex case. Deleting it
+   orphans a cross-reference from a comparator-pinned module and removes the general form of a
+   result the real case only approximates.
+
+**Corrected recommendation.** Deletion is not the honest move; the audit's *original* proposal was
+closer. Either (a) restate the near-isometry estimate over `polarPartial` — the reconciliation
+theorem `polarPartial_eq_comp_ringInverse_modulus` makes this available under `IsUnit |M|` — and
+only then delete, or (b) keep the definition and rename it to expose the hypothesis, moving the
+three `modulus` results to `PolarDecomposition.lean` where `modulus` is defined. Both are real
+work; neither is "delete it". What is **not** acceptable is deleting the module on the strength of
+the current entry, which is why this correction is filed before anyone acts on it.
+
+**Why the entry was wrong is worth keeping.** It was written when `polarPartial` had just appeared
+and the reconciliation theorem had not been proved. "The general object exists, so the special one
+is redundant" is true of the *object* and false of the *theorems stated about it* — generality of a
+definition does not transfer the lemmas. That failure mode is easy to repeat anywhere this
+repository supersedes a bundled notion with a raw one.
 
 ---
 
