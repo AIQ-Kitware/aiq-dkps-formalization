@@ -59,8 +59,9 @@ an avoidable `‖M‖ ≤ √(1 + δ)` factor and needs `δ ≤ 1 / 2`.
 ## Design note: why an existential here and a definition over `ℂ`
 
 `ForTauCeti/Analysis/InnerProductSpace/PolarIsometry.lean` defines the polar isometry
-*canonically*, as `ContinuousLinearMap.polarIsometry M = M ∘L Ring.inverse |M|`, for arbitrary
-complex Hilbert spaces and with the same sharp constant; that is the general theorem and the
+*canonically*, as `ContinuousLinearMap.polarIsometryOfIsUnitModulus M = M ∘L Ring.inverse |M|`,
+for arbitrary complex Hilbert spaces and with the same sharp constant; that is the general
+theorem and the
 canonical object.  It cannot be stated over `ℝ` because it needs the operator square root
 `|M| = (M⋆ M)^(1/2)`, which Mathlib provides only through the continuous functional calculus,
 i.e. only over `ℂ`.  Rather than leave the real case with a bare existential, the statement
@@ -379,7 +380,7 @@ private theorem abs_inner_sub_le_of_norm_adjoint_mul_self_sub_one_le (M : E →L
 a finite-dimensional real inner product space satisfies `‖Mᵀ M - 1‖ ≤ δ` with `δ < 1`, then `M`
 lies within `δ` of a genuine linear isometry equivalence.
 
-See `ContinuousLinearMap.norm_sub_polarIsometry_le` in
+See `ContinuousLinearMap.norm_sub_polarIsometryOfIsUnitModulus_le` in
 `ForTauCeti/Analysis/InnerProductSpace/PolarIsometry.lean` for the version over arbitrary
 complex Hilbert spaces, which additionally names the isometry. -/
 theorem exists_linearIsometryEquiv_norm_sub_apply_le (M : E →L[ℝ] E) {δ : ℝ} (hδ : δ < 1)
