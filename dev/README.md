@@ -11,7 +11,7 @@ pattern of past mistakes, and take fewer of them.
 
 | File | What it answers |
 |---|---|
-| [`LANES.md`](LANES.md) | Who holds what. **Claim your row and commit it before your first edit.** Unlisted means unclaimed. |
+| [`LANES.md`](LANES.md) | Who holds what. **Claim your row, commit it, and push it before your first edit** — unpushed is invisible to the other agents. Unlisted means unclaimed. Its `Branch and sync protocol` covers fetching, merging and conflict resolution across agent branches. |
 | [`tauceti/README.md`](tauceti/README.md) | The active migration: polishing foundations into `ForTauCeti`, retiring `vendor/Spectra`, converging three operator-theory stacks. |
 | [`SEARCH.md`](SEARCH.md) | How to *search* this memory instead of reading it all. Grep patterns and routing rules by symptom. |
 
