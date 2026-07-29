@@ -42,102 +42,102 @@
   "restored_declarations": [
     {
       "name": "angleOperator",
-      "path": "DavisKahan/Experimental/FiniteDimensional/Core/AngleOperators.lean",
+      "path": "DavisKahan/FiniteDimensional/Core/AngleOperators.lean",
       "signature_sha256": "2c8b148eaee8a66f20a3eab5c5b44802d840c6a305487178a657b3821908dfb1"
     },
     {
       "name": "principalAngles_orthogonal",
-      "path": "DavisKahan/Experimental/FiniteDimensional/Core/AngleOperators.lean",
+      "path": "DavisKahan/FiniteDimensional/Core/AngleOperators.lean",
       "signature_sha256": "dd5dfe2560bf46f8030cfc76425b35838ccd42470fae77f3b21e6ebf57123337"
     },
     {
       "name": "tanAngleOperator",
-      "path": "DavisKahan/Experimental/FiniteDimensional/Core/AngleOperators.lean",
+      "path": "DavisKahan/FiniteDimensional/Core/AngleOperators.lean",
       "signature_sha256": "423f8f9e842cf139808186dd492560b455e4dd7bf0b8109993ef34c13e6f4b36"
     },
     {
       "name": "tanThetaMap",
-      "path": "DavisKahan/Experimental/FiniteDimensional/Core/AngleOperators.lean",
+      "path": "DavisKahan/FiniteDimensional/Core/AngleOperators.lean",
       "signature_sha256": "a8ca0d15ea3f0c886fb2c5a3978e2dc256d21b4899e0927335aa322de4e04c30"
     },
     {
       "name": "tanTwoAngleOperator",
-      "path": "DavisKahan/Experimental/FiniteDimensional/Core/AngleOperators.lean",
+      "path": "DavisKahan/FiniteDimensional/Core/AngleOperators.lean",
       "signature_sha256": "62fcb59b3fe556b0a16de9e44e24c153f014866546104233b1299d4831a6ae0c"
     },
     {
       "name": "angleComplexStructure",
-      "path": "DavisKahan/Experimental/FiniteDimensional/DirectRotation.lean",
+      "path": "DavisKahan/FiniteDimensional/DirectRotation.lean",
       "signature_sha256": "b0f63b4a131de11b0b679e2488fc78d969fd582f423fe37ecc42da798183d354"
     },
     {
       "name": "directRotation_apply_eq_self_of_mem_common",
-      "path": "DavisKahan/Experimental/FiniteDimensional/DirectRotation.lean",
+      "path": "DavisKahan/FiniteDimensional/DirectRotation.lean",
       "signature_sha256": "5b780779cda0b52d6d3d7ce4f07f191b28ad9be99b036600e221a929c56b089b"
     },
     {
       "name": "directRotation_comm_cosine",
-      "path": "DavisKahan/Experimental/FiniteDimensional/DirectRotation.lean",
+      "path": "DavisKahan/FiniteDimensional/DirectRotation.lean",
       "signature_sha256": "aa5c6363b29ad73660a364816fa1be1c0b9f03a65b5c39e0859dfa359f95bfee"
     },
     {
       "name": "directRotation_eq_cos_add_J_sin",
-      "path": "DavisKahan/Experimental/FiniteDimensional/DirectRotation.lean",
+      "path": "DavisKahan/FiniteDimensional/DirectRotation.lean",
       "signature_sha256": "b90bd07002f460f1d8d7647a8e560d0f4e90f4170c3015799ccfdc14cbd5263e"
     },
     {
       "name": "directRotation_eq_polarFactor",
-      "path": "DavisKahan/Experimental/FiniteDimensional/DirectRotation.lean",
+      "path": "DavisKahan/FiniteDimensional/DirectRotation.lean",
       "signature_sha256": "0e903e8e53de2d092a43051b513d103156257ad41d711202b665384007996132"
     },
     {
       "name": "directRotation_minimizes_displacementSquare_uiNorm",
-      "path": "DavisKahan/Experimental/FiniteDimensional/DirectRotation.lean",
+      "path": "DavisKahan/FiniteDimensional/DirectRotation.lean",
       "signature_sha256": "b05418a2f84628bb5e0610a3e7fd2936a4f07c46117e0240b080c9bf6e5093a8"
     },
     {
       "name": "directRotation_minimizes_max_displacement",
-      "path": "DavisKahan/Experimental/FiniteDimensional/DirectRotation.lean",
+      "path": "DavisKahan/FiniteDimensional/DirectRotation.lean",
       "signature_sha256": "cbcb7a5641fac713352d8dccef9a0ac4c3a251890843a36720c07c490359c5e9"
     },
     {
       "name": "directRotation_minimizes_sum_sq_basis_angles",
-      "path": "DavisKahan/Experimental/FiniteDimensional/DirectRotation.lean",
+      "path": "DavisKahan/FiniteDimensional/DirectRotation.lean",
       "signature_sha256": "b3d99748f90396b00536f490f94e346987cdf08e61ded4592833029e41052364"
     },
     {
       "name": "directRotation_minimizes_restrictedDisplacement_uiNorm",
-      "path": "DavisKahan/Experimental/FiniteDimensional/DirectRotation.lean",
+      "path": "DavisKahan/FiniteDimensional/DirectRotation.lean",
       "signature_sha256": "ced59543ae843374ad99259f96f0858f21aec06167b3063757f8b46132a1a6c0"
     },
     {
       "name": "directRotationCosine",
-      "path": "DavisKahan/Experimental/FiniteDimensional/DirectRotation.lean",
+      "path": "DavisKahan/FiniteDimensional/DirectRotation.lean",
       "signature_sha256": "fa96644a77eb569c0269a6db3b99a9d25ef508d0231c46bdb3304173236da2eb"
     },
     {
       "name": "directRotation_symm",
-      "path": "DavisKahan/Experimental/FiniteDimensional/DirectRotation.lean",
+      "path": "DavisKahan/FiniteDimensional/DirectRotation.lean",
       "signature_sha256": "d176101ed142bf3e08620a168d1874f1e129c83204798bfc8f77d5118b368a7c"
     },
     {
       "name": "directRotation_unique",
-      "path": "DavisKahan/Experimental/FiniteDimensional/DirectRotation.lean",
+      "path": "DavisKahan/FiniteDimensional/DirectRotation.lean",
       "signature_sha256": "5b404b97255566854bd0fdc1434b539fdc3b5312553bcfd8fcd5e8e8eeb36c33"
     },
     {
       "name": "sinTwoTheta_residual_le",
-      "path": "DavisKahan/Experimental/FiniteDimensional/DoubleAngle/SinTheta.lean",
+      "path": "DavisKahan/FiniteDimensional/DoubleAngle/SinTwoThetaResidual.lean",
       "signature_sha256": "232abc91b0b055169c9cc99cb22128cdc91c957f785c953ea1810796617f9c5e"
     },
     {
       "name": "generalizedSinTheta_frobenius_le_of_spectralDistance",
-      "path": "DavisKahan/Experimental/FiniteDimensional/Generalized.lean",
+      "path": "DavisKahan/FiniteDimensional/Generalized.lean",
       "signature_sha256": "ef4f6c1f8c5938c677e8c1986784a7e65443b0948159da0aef5587a59d0373f2"
     },
     {
       "name": "generalizedSinTheta_nuclear_le_of_spectralDistance",
-      "path": "DavisKahan/Experimental/FiniteDimensional/Generalized.lean",
+      "path": "DavisKahan/FiniteDimensional/Generalized.lean",
       "signature_sha256": "e3c4955aab4f5cb3cf67a80b158183e248f1f1812c0435c32cec7f88be9e6a96"
     },
     {
@@ -152,87 +152,87 @@
     },
     {
       "name": "schatten",
-      "path": "DavisKahan/Experimental/FiniteDimensional/Norms/Rectangular.lean",
+      "path": "DavisKahan/FiniteDimensional/Norms/Rectangular.lean",
       "signature_sha256": "c5237f6c040f60bfd86941c2081054a2bc21afc0dd19de2855cb19ef28358476"
     },
     {
       "name": "isTransverse_of_tanTheta_residual_gap",
-      "path": "DavisKahan/Experimental/FiniteDimensional/Residual/AngleEmbeddings.lean",
+      "path": "DavisKahan/FiniteDimensional/Residual/AngleEmbeddings.lean",
       "signature_sha256": "5b8c034b36d8eaa6fbb2e4d683f5c8a802e0d6dd7214f25d363fc394e0ede0f7"
     },
     {
       "name": "singularValues_graphOperator",
-      "path": "DavisKahan/Experimental/FiniteDimensional/Residual/AngleEmbeddings.lean",
+      "path": "DavisKahan/FiniteDimensional/Residual/AngleEmbeddings.lean",
       "signature_sha256": "6d87cfda9586aa23d0d9d779d7e7fefc0940fe05f9430bf9e21cd1c8c6d0ffc6"
     },
     {
       "name": "tanThetaEmbedding",
-      "path": "DavisKahan/Experimental/FiniteDimensional/Residual/AngleEmbeddings.lean",
+      "path": "DavisKahan/FiniteDimensional/Residual/AngleEmbeddings.lean",
       "signature_sha256": "024d9ab4f5d6298a3c81bd54851d46dd20a7b5cb33693d31a9c068ad69d53c1e"
     },
     {
       "name": "tanTheta_residual_le",
-      "path": "DavisKahan/Experimental/FiniteDimensional/Residual/AngleEmbeddings.lean",
+      "path": "DavisKahan/FiniteDimensional/Residual/AngleEmbeddings.lean",
       "signature_sha256": "03b3f8b5ecda7e45167790ba7cb2e1e13cf149b981cd2c9cb8651a9ea7a8bbe4"
     },
     {
       "name": "tanTheta_vector_le",
-      "path": "DavisKahan/Experimental/FiniteDimensional/Residual/AngleEmbeddings.lean",
+      "path": "DavisKahan/FiniteDimensional/Residual/AngleEmbeddings.lean",
       "signature_sha256": "c22b6e3dc4aa3011942a5088afb9d9490ffc19b6e909cb19b09eaac0fd71f92b"
     },
     {
       "name": "tanTwoThetaEmbedding",
-      "path": "DavisKahan/Experimental/FiniteDimensional/Residual/AngleEmbeddings.lean",
+      "path": "DavisKahan/FiniteDimensional/Residual/AngleEmbeddings.lean",
       "signature_sha256": "024ae49f98dd4714ed4f426014e9b0aa073851d376c59d0a0825f2d4372058d9"
     },
     {
       "name": "modelTanThetaPerturbation",
-      "path": "DavisKahan/Experimental/FiniteDimensional/Sharpness.lean",
+      "path": "DavisKahan/FiniteDimensional/Sharpness.lean",
       "signature_sha256": "f78fb6a0a482de6338a8fa9f6975c738cd17590888439c8056b88938664f330f"
     },
     {
       "name": "principalAngles_model",
-      "path": "DavisKahan/Experimental/FiniteDimensional/Sharpness.lean",
+      "path": "DavisKahan/FiniteDimensional/Sharpness.lean",
       "signature_sha256": "a15d42ddc1b80eaed395192d64901a7ebaddcdef67c7031c81c54b31dbbf2060"
     },
     {
       "name": "sinTheta_constant_optimal",
-      "path": "DavisKahan/Experimental/FiniteDimensional/Sharpness.lean",
+      "path": "DavisKahan/FiniteDimensional/Sharpness.lean",
       "signature_sha256": "c98bc4ec7e152faaa8671c798c863f177f38aaf99dfa0e87444190cde43bd730"
     },
     {
       "name": "sinTheta_model_equality",
-      "path": "DavisKahan/Experimental/FiniteDimensional/Sharpness.lean",
+      "path": "DavisKahan/FiniteDimensional/Sharpness.lean",
       "signature_sha256": "66f02f7523f8fe4fe4dabad4d79b53280a8e7f1237c1ca9dc8f7909fd799695e"
     },
     {
       "name": "sinTwoTheta_constant_optimal",
-      "path": "DavisKahan/Experimental/FiniteDimensional/Sharpness.lean",
+      "path": "DavisKahan/FiniteDimensional/Sharpness.lean",
       "signature_sha256": "85e188be3605525b1ea366ad9fddc0ea9d4235a8c8b410be20bd46f02e0b4594"
     },
     {
       "name": "sinTwoTheta_model_operatorNorm_equality",
-      "path": "DavisKahan/Experimental/FiniteDimensional/Sharpness.lean",
+      "path": "DavisKahan/FiniteDimensional/Sharpness.lean",
       "signature_sha256": "f35025fdb37811347fb3e26da0a9fdf4bf13c2f4233a866e21059e32b15c4253"
     },
     {
       "name": "tanTheta_model_equality",
-      "path": "DavisKahan/Experimental/FiniteDimensional/Sharpness.lean",
+      "path": "DavisKahan/FiniteDimensional/Sharpness.lean",
       "signature_sha256": "2040bafe9218c74c2f0b56e3fd40ae53df4be095db965dfe471a11be0c0a0e05"
     },
     {
       "name": "tanTwoTheta_model_equality",
-      "path": "DavisKahan/Experimental/FiniteDimensional/Sharpness.lean",
+      "path": "DavisKahan/FiniteDimensional/Sharpness.lean",
       "signature_sha256": "aa3885c2b21d45dd056dfed10e2626a6f284c3b106f3e33da815ef66190e3d16"
     },
     {
       "name": "tanThetaMap_perturbation_le",
-      "path": "DavisKahan/Experimental/FiniteDimensional/TanTheta/GraphOperator.lean",
+      "path": "DavisKahan/FiniteDimensional/TanTheta/GraphOperator.lean",
       "signature_sha256": "a68fac28a11313179258452d37546b1aa829207fc555fa024cf11fb881f61a97"
     },
     {
       "name": "tanTheta_perturbation_le",
-      "path": "DavisKahan/Experimental/FiniteDimensional/TanTheta/GraphOperator.lean",
+      "path": "DavisKahan/FiniteDimensional/TanTheta/GraphOperator.lean",
       "signature_sha256": "86a933e25e2803f3244ad0aa73e3b488ed7b7a5c9cf9a1f09db491cb744147c9"
     }
   ],
