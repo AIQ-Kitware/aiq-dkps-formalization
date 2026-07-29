@@ -190,6 +190,36 @@ is not this lane's to migrate.
 - The `Restriction.lean` and `ClosedSylvesterEquation.lean` facade blocks, once
   their remaining callers move.
 
+**Linter census across the default build (edward, aiq-gpu, 2026-07-28).**
+`lake build` emits **770 warnings**, the largest classes being
+`linter.unusedSectionVars` **214**, `linter.unusedSimpArgs` **162**,
+`linter.unusedVariables` 39, `linter.unusedTactic` 39,
+`linter.unnecessarySimpa` 27, `linter.unreachableTactic` 21,
+`linter.unnecessarySeqFocus` 19.  This is a standing mathlib-quality gap that no
+gate currently covers — `check_dependency_layers.py` and
+`check_declaration_name_drift.py` both pass with all 770 present.
+
+Per-file `unusedSectionVars` concentration (top of the list):
+`Interop/Spectra/HalmosTwoProjections.lean` 26,
+`OperatorIdeal/ApproximationNumbers/Core.lean` 21,
+`SpectralTheory/ReducingSubspace/Restriction.lean` 11,
+`SpectralTheory/Complexification/FunctionalCalculus.lean` 10,
+`OperatorIdeal/ApproximationNumbers/Real/Threshold.lean` 10,
+`SpectralTheory/ClosedOperator/Complexification.lean` 8,
+`FiniteDimensional/DirectRotation/Basic.lean` 8.  A further 11 are in vendored
+`Spectra/**` and are not ours to touch.
+
+The fix is mechanical and local — `omit [instances] in` above the docstring, per
+AGENTS.md placement — so these are cheap lanes for whoever owns each file.
+`SinTheta/Natural/GapConvenience.lean` (12) and
+`Sylvester/ClosedSylvesterEquation.lean` (7) are now at zero.
+
+**Process note, learned the hard way:** gating a lane on `grep -c 'error:'`
+lets warning regressions through.  Six of `GapConvenience.lean`'s twelve were
+introduced by my own gap-convenience twins two lanes earlier and certified
+"green" at the time.  Check `Built <module>` *and* the warning count for the
+module you edited.
+
 **Correction to the blocker map below: it needs a third category, and I found
 that by claiming a target it got wrong (edward, aiq-gpu, 2026-07-28).**  The map
 sorted the surface into *takeable* and *Spectra-gated*.  It called
