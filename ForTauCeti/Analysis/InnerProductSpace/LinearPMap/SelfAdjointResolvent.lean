@@ -8,6 +8,7 @@ module
 public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.ResolventBound
 public import Mathlib.Analysis.InnerProductSpace.LinearPMap
 public import Mathlib.Analysis.CStarAlgebra.ContinuousLinearMap
+public import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Unitary
 
 /-!
 # A self-adjoint operator has real spectrum
@@ -515,6 +516,12 @@ theorem cayley_mem_unitary {A : E →ₗ.[ℂ] E} (hA : IsSelfAdjoint A) :
     rfl
   rw [Unitary.mem_iff, ContinuousLinearMap.star_eq_adjoint]
   exact ⟨hstar, hmul⟩
+
+/-- The Cayley transform is star-normal, so Mathlib's continuous functional
+calculus applies to it. -/
+instance isStarNormal_cayley {A : E →ₗ.[ℂ] E} (hA : IsSelfAdjoint A) :
+    IsStarNormal (cayley hA) :=
+  isStarNormal_of_mem_unitary (cayley_mem_unitary hA)
 
 end SelfAdjoint
 
