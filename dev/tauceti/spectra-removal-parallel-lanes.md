@@ -375,6 +375,33 @@ Stone--Weierstrass on a set containing both spectra, then Borel by a
 monotone-class or dominated-convergence argument on the `pair` form. Expect a
 few hundred lines, not a few.
 
+**Update: the continuous half of step 3 is done, and it was much cheaper than
+that estimate.** Mathlib already packages the Stone--Weierstrass induction as
+`ContinuousMap.induction_on_of_compact`, stated for `C(↑s, 𝕜)` on an *arbitrary*
+compact `s` — which is exactly what dissolves the different-spectra problem:
+take `s = σ(u) ∪ σ(v)` and restrict the symbol into each spectrum. Mathlib's own
+`Commute.cfcHom` is proved this way; the rectangular analogue is the same
+induction with a different predicate. Landed, axiom-clean:
+
+* `symbolRestrict` — restriction along an inclusion of compacts, bundled as a
+  `StarAlgHom` so `+`, `*` and `star` cross it definitionally (all four
+  reductions are `rfl`);
+* `cfcHom_intertwines` — `X · g(v) = g(u) · X` for every continuous symbol `g`
+  on a common compact `K ⊇ σ(u) ∪ σ(v)`, given `Xv = uX` and `Xv⋆ = u⋆X`;
+* `star_intertwines_of_mem_unitary` — for unitaries the second hypothesis is
+  *derivable* from the first, so it need not be assumed;
+* `cfcHom_cayley_intertwines` — the specialisation to Cayley transforms, with
+  every hypothesis discharged.
+
+**What is actually left is only the Borel upgrade**, `cfcHom` → `borelCalculus`
+→ `specProjection`. That is still a monotone-class argument on the `pair` form
+and still must go through the diagonal measures, so it keeps the "not routine"
+label — but it now starts from continuous intertwining rather than from nothing.
+
+**Lane released for a single serial owner.** Everything above is committed and
+green; the remaining Borel step is one coherent piece of work that does not
+parallelise, so it should be taken by one agent in serial rather than split.
+
 The fourth step is genuinely short once the third exists, since
 `specProjection` is by definition the calculus at an indicator. After that the
 endgame is immediate: SR-B gives `E_B(spec A) = 0` from disjointness and
