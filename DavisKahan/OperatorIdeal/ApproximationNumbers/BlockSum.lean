@@ -636,7 +636,7 @@ theorem approximationSingularValue_eq_kyFan_succ_sub
       kyFanApproximationGauge (n + 1) A - kyFanApproximationGauge n A := by
   unfold kyFanApproximationGauge ContinuousLinearMap.kyFanGauge
   rw [Finset.sum_range_succ]
-  simp [approximationSingularValue]
+  simp []
 
 /-- Orthogonal block sums preserve complete singular-value equality component
 by component. -/

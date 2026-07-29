@@ -845,7 +845,7 @@ theorem norm_cosTwoAngleOperatorC_apply_ge (U V : Submodule ℂ E)
             ⟪sinAngleOperatorDirectedC U V
               (sinAngleOperatorDirectedC U V x), x⟫_ℂ := by
           rw [cosTwoAngleOperatorC]
-          simp [inner_sub_left, sub_apply, mul_apply]
+          simp [sub_apply]
       _ = ⟪cosAngleOperatorC U V x, cosAngleOperatorC U V x⟫_ℂ -
             ⟪sinAngleOperatorDirectedC U V x,
               sinAngleOperatorDirectedC U V x⟫_ℂ := by

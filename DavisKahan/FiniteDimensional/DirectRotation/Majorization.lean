@@ -282,9 +282,9 @@ theorem uiNorm_pinch_le
         (Submodule.starProjection_add_starProjection_orthogonal (K := U) y)
     simp only [pinch, complementaryProjection, projection,
       ContinuousLinearMap.coe_coe, LinearMap.add_apply, LinearMap.comp_apply,
-      LinearMap.smul_apply, hQ, LinearIsometryEquiv.coe_toLinearEquiv,
+      hQ, LinearIsometryEquiv.coe_toLinearEquiv,
       LinearEquiv.coe_coe, Submodule.reflection_apply, two_smul,
-      map_add, map_sub, map_smul]
+      map_add, map_sub]
     module
   have htri := N.add_le A
     (U.reflection.toLinearMap ∘ₗ A ∘ₗ U.reflection.toLinearMap)
@@ -386,7 +386,7 @@ theorem kyFanSum_pinch_le
       ContinuousLinearMap.coe_coe, LinearMap.add_apply, LinearMap.comp_apply,
       LinearMap.smul_apply, hQ, LinearIsometryEquiv.coe_toLinearEquiv,
       LinearEquiv.coe_coe, Submodule.reflection_apply, two_smul,
-      map_add, map_sub, map_smul]
+      map_add, map_sub]
     push_cast
     module
   have htri := kyFanSum_add_le k A

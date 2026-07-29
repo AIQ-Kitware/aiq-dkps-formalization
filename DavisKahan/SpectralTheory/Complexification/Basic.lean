@@ -185,7 +185,7 @@ instance instInnerProductSpaceComplex [NormedAddCommGroup E] [InnerProductSpace 
       ⟪re z, im w⟫_ℝ - ⟪im z, re w⟫_ℝ⟩
   norm_sq_eq_re_inner z := by
     rw [norm_sq]
-    simp [inner_self_eq_norm_sq]
+    simp []
   conj_inner_symm z w := by
     apply Complex.ext <;> simp [real_inner_comm]
   add_left z w u := by

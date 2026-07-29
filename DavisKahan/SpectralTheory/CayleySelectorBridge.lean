@@ -492,7 +492,7 @@ theorem spectralCalculus_selector_eq_cfcL_of_agrees
         ((spectrum ℂ U).restrict G) := by
       apply (continuous_cayleySelectorPullback_of_agrees A hA s g hg).congr
       intro w
-      simp only [Set.restrict_apply, G, U, hSA,
+      simp only [Set.restrict_apply, G, U,
         Spectra.Cayley.inverseMobiusReal]
     have hGcont : ContinuousOn G (spectrum ℂ U) :=
       continuousOn_iff_continuous_restrict.mpr hGrestrict
