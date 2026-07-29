@@ -36,16 +36,18 @@ namespace ExactSinTheta
 
 #check paperNuclearNorm
 #check paperUnitaryInvariantNorm_nonempty
-#check Spectra.HilbertSchmidtTensor.toOperator
+#check TauCeti.HilbertSchmidt.ofLp
 #check isPaperHilbertSchmidt_iff_existsUnique_tensor
 #check paperHilbertSchmidtNorm_toOperator
-#check Spectra.HilbertSchmidtTensor.sylvesterGroup
-#check Spectra.HilbertSchmidtTensor.toOperator_hasGeneratorSylvesterEquation
-#check Spectra.QuantumMechanics.SpectralTheory.generator_spectralGapSolution
+#check TauCeti.HilbertSchmidt.sylvesterGroup
+#check TauCeti.HilbertSchmidt.generator_sylvesterGroup_apply
+#check TauCeti.OneParameterUnitaryGroup.isSelfAdjoint_generator
+#check TauCeti.LinearPMap.generator_genToGroup
+#check TauCeti.HilbertSchmidt.isSelfAdjoint_generator_sylvesterGroup
+#check TauCeti.LinearPMap.apply_gapInverse
 #check TauCeti.LinearPMap.eq_zero_of_intertwines_of_disjoint_spectrum
 #check closedSylvester_homogeneous_eq_zero_of_pairwiseSpectrumGap
-#check Spectra.HilbertSchmidtTensor.borelMeasure_sylvesterGroup_tmul
-#check Spectra.HilbertSchmidtTensor.spectralProjection_gap_eq_zero
+#check TauCeti.HilbertSchmidt.hasVectorSpectralGap_sylvesterGroup
 #check paperHilbertSchmidtTensor_hasVectorSpectralGap
 #check paperHilbertSchmidt_sylvester_defectFirst
 #check paperHilbertSchmidt_sylvester_le_of_pairwiseSpectrumGap_direct
@@ -54,12 +56,14 @@ namespace ExactSinTheta
 #print axioms paperUnitaryInvariantNorm_nonempty
 #print axioms isPaperHilbertSchmidt_iff_existsUnique_tensor
 #print axioms paperHilbertSchmidtNorm_toOperator
-#print axioms Spectra.HilbertSchmidtTensor.toOperator_hasGeneratorSylvesterEquation
-#print axioms Spectra.QuantumMechanics.SpectralTheory.generator_spectralGapSolution
+#print axioms TauCeti.HilbertSchmidt.generator_sylvesterGroup_apply
+#print axioms TauCeti.OneParameterUnitaryGroup.isSelfAdjoint_generator
+#print axioms TauCeti.LinearPMap.generator_genToGroup
+#print axioms TauCeti.HilbertSchmidt.isSelfAdjoint_generator_sylvesterGroup
+#print axioms TauCeti.LinearPMap.apply_gapInverse
 #print axioms TauCeti.LinearPMap.eq_zero_of_intertwines_of_disjoint_spectrum
 #print axioms closedSylvester_homogeneous_eq_zero_of_pairwiseSpectrumGap
-#print axioms Spectra.HilbertSchmidtTensor.borelMeasure_sylvesterGroup_tmul
-#print axioms Spectra.HilbertSchmidtTensor.spectralProjection_gap_eq_zero
+#print axioms TauCeti.HilbertSchmidt.hasVectorSpectralGap_sylvesterGroup
 #print axioms paperHilbertSchmidtTensor_hasVectorSpectralGap
 #print axioms paperHilbertSchmidt_sylvester_defectFirst
 #print axioms paperHilbertSchmidt_sylvester_le_of_pairwiseSpectrumGap_direct
