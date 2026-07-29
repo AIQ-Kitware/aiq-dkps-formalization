@@ -1,13 +1,22 @@
 # Remaining work tracker
 
-Fresh as of 2026-06-14 (Opus). The active phase is the **Mathlib-readiness pass**:
-getting the strong staged candidates into *mechanically-droppable-into-a-PR*
-shape. Cross-refs: `mathlib-candidates.md` (candidate dossiers),
-`prep_mathlib_review_and_readiness.md` (the readiness audit),
-`pr-decisions.md` (R6 decisions awaiting sign-off, with recommendations),
-`spectral-pr-decomposition.md` (spectral PR plan), `acharyya-plan.md`
-(formalization-phase map — that phase is complete), `historical/` (archived
-completed-phase docs).
+> **Read this banner before the body.** The header below described a
+> **Mathlib-readiness pass**, which is no longer the active phase. Since
+> 2026-07-24 the repository runs the **dual-track Tau Ceti policy** in
+> `AGENTS.md`: the primary track polishes paper-independent foundations into
+> `ForTauCeti`, and **Mathlib is not the near-term target**. For what is
+> actually in flight, read `tauceti-adaptation-and-spectra-extraction.md` (the
+> roadmap and acceptance gates) and `../../dev/LANES.md` (who holds what right
+> now). The R-numbered items below remain a correct record of the readiness
+> work and its results; read them as inventory, not as the current plan.
+
+Originally fresh as of 2026-06-14 (Opus), then extended in place. Cross-refs:
+`mathlib-candidates.md` (candidate dossiers), `pr-decisions.md` (R6 decisions
+awaiting sign-off, with recommendations), `spectral-pr-decomposition.md`
+(spectral PR plan), `acharyya-plan.md` (formalization-phase map — that phase is
+complete), `historical/` (archived completed-phase docs). The readiness audit
+that this tracker used to name is superseded and kept at
+`topurge/docs/planning/prep_mathlib_review_and_readiness.md`.
 
 ## Update 2026-07-18 -- infinite-dimensional approximation numbers
 

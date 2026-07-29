@@ -767,7 +767,7 @@ and the identification with the functional-calculus
 `sinTwoAngleOperatorC` is also proved
 (`subspaceGap_map_reflection_eq_norm_sinTwoAngle`; see the double-angle
 identification progress note) — the `sin 2Θ` family is closed at the
-operator level. See `dev/sorry-difficulty-ranking.md` for the evolving proof-obligation ranking; verify its totals against the source tree before using them in status claims.
+operator level. See `dev/tauceti/experimental-sorry-triage.md` for the current proof-obligation inventory; every remaining obligation lives in `DavisKahan/Experimental/**`, which is outside `defaultTargets`. Verify its totals against the source tree before using them in status claims. The older and much larger ranking it superseded is kept at `topurge/dev/sorry-difficulty-ranking.md`.
 
 ### Progress note (2026-07-17, the infinite-dimensional `tan Θ` theorem)
 
