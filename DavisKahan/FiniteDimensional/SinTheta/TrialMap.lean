@@ -18,7 +18,7 @@ after the four headline theorems in Davis--Kahan (1970).
 
 Literature map:
 
-* `ForMathlib/prose/Davis-Kahan-1970-part-III-core-arguments.tex`,
+* `prose/core-arguments/Davis-Kahan-1970-part-III-core-arguments.tex`,
   Sections 5--11.
 * Davis--Kahan (1970), Theorems 6.1--6.3 and 8.2.
 

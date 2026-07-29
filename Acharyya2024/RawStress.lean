@@ -26,7 +26,7 @@ Formalized by Claude Fable 5 (claude-fable-5[1m]).
 -/
 
 import Acharyya2024.Common
-import ForMathlib.Topology.ApproxMinimizer
+import ForTauCeti.Topology.ApproxMinimizer
 
 open scoped BigOperators Topology RealInnerProductSpace InnerProductSpace
 open Filter

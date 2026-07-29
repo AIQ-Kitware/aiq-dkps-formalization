@@ -8,7 +8,7 @@ import Mathlib.LinearAlgebra.Matrix.PosDef
 import Mathlib.LinearAlgebra.Matrix.Rank
 import Mathlib.Analysis.Matrix.Spectrum
 import Mathlib.Analysis.Matrix.PosDef
-import ForMathlib.LinearAlgebra.Matrix.RankFactorization
+import ForTauCeti.LinearAlgebra.Matrix.RankFactorization
 
 /-! # Rank-constrained positive-semidefinite factorization
 
@@ -64,6 +64,23 @@ To be re-authored per Mathlib's AI-contribution policy at PR time.
   Kitware, Inc.; Apache 2.0.
 * Spectra influence: **none** — the `ForMathlib` import firewall admits only
   Mathlib and `ForMathlib` (enforced by `scripts/check_dependency_layers.py`).
+
+## Provenance
+
+*Moved, not restated.*  This file was `ForMathlib/LinearAlgebra/Matrix/PosDef.lean`
+until 2026-07-29, when lane FM-RETIRE retired `ForMathlib` entirely: its four
+surviving modules moved here and the library, its root module and its directory
+were deleted.  Statements, proofs and signatures are unchanged.
+
+**The declarations deliberately keep their `ForMathlib` namespace**, which is
+the one thing this move could not fix.  `Challenge/**/Conformance.lean` files
+are *immutable challenge statements* (`AGENTS.md`), and the ones paired with
+this module name their leaf theorems inside `ForMathlib` / `ForMathlib.Matrix`;
+the comparator matches implementation to statement by fully-qualified name.
+Renaming the namespace would orphan those pins.  Re-issuing the immutable
+statements under `TauCeti.*` names is a decision, not a task — until it is
+taken, these names stay and this note records why.
+
 -/
 
 namespace ForMathlib.Matrix
