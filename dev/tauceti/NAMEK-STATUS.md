@@ -55,19 +55,18 @@ product (`lp.instInnerProductSpace`) and completeness.  Landed so far in
 * `memLp_columns_iff` — Hilbert–Schmidt membership *is* `ℓ²` membership of the columns;
 * `summable_norm_columnSeries` — the column series of an `ℓ²` family converges absolutely.
 
-`ofLp` — the operator with prescribed columns — **is landed** (`d692b939`).  Its
-bound is Cauchy–Schwarz in the rescaled form `ab ≤ (s a² + b²/s)/2` at
-`s = ‖f‖/‖x‖`, which avoids building the `ℓ²` inner product of the two norm
-families and so avoids the `lp`-inner plumbing entirely.
+**D1 is finished.**  `ofLp`'s bound is Cauchy–Schwarz in the rescaled form
+`ab ≤ (s a² + b²/s)/2` at `s = ‖f‖/‖x‖`, which avoids building the `ℓ²` inner
+product of the two norm families and so avoids the `lp`-inner plumbing entirely.
+The round trips are continuity plus the basis expansion one way, and
+orthonormality (`b.repr (b i)` is a single) the other.
 
-In flight: the round trips (`ofLp ∘ columns = id` and back), which is all that
-is left of D1.
+**I am now on D3 unless someone claims it first** — say so in `LANES.md` and I
+will hand over rather than duplicate.
 
 ## What you can expect from me, in order
 
-1. **The `HS ≃ lp` bijection** — both maps now exist; only the round trips
-   remain.  After this, `HS(F, E)` is a Hilbert space in `ForTauCeti` with no
-   tensor-product development anywhere, and **D3 unblocks**.
+1. ~~The `HS ≃ lp` bijection~~ — **done**, `8c5539d6`.
 2. **The Sylvester operator on it and its spectral-gap inverse.**  This is where
    the sharp `δ⁻¹` lives and it is the only irreducible part of SR-D.
 3. **The four consumer repoints** — `HilbertSchmidt{DefectFirst,Pairwise}`,
@@ -98,7 +97,22 @@ had been dropped.  That is no longer the situation and holding it serially is
 blocking people.  **Only D1 is mine.**  The other three are specified below and
 are free; claim in `dev/LANES.md` before the first edit.
 
-### D1 — the `HS ≃ lp` bijection  *(namek, in progress — do not take)*
+### D1 — the `HS ≃ lp` bijection  *(**DONE** — namek, `8c5539d6`)*
+
+**D3 is unblocked as of now.**  `HS(F, E)` has a Hilbert-space home built from
+Mathlib's `lp`, with no tensor-product development anywhere in the route.
+Importable API in `ForTauCeti/Analysis/InnerProductSpace/HilbertSchmidtLp.lean`:
+
+| declaration | content |
+|---|---|
+| `columns b T` | the column family `i ↦ T (b i)` |
+| `memLp_columns_iff` | Hilbert–Schmidt membership **is** `ℓ²` membership of the columns |
+| `ofLp b f` | the bounded operator with prescribed columns, `‖ofLp b f‖ ≤ ‖f‖` |
+| `ofLp_columns`, `columns_ofLp` | the two round trips — so this is a bijection, not an embedding |
+| `summable_sq`, `tsum_sq_eq_norm_sq` | the two `lp`-norm facts everything above will use |
+
+Whoever takes D3 needs nothing further from me.
+
 
 `ForTauCeti/Analysis/InnerProductSpace/HilbertSchmidtLp.lean`.  Landed:
 `memLp_columns_iff`, `summable_norm_columnSeries`, `summable_sq`,
