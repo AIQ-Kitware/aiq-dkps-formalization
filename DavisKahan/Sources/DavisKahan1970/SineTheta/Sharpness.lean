@@ -203,10 +203,10 @@ theorem paperPlanar_exact_decomposition :
   · intro z
     simp [paperPlanarComplementMap, paperScalarColumn, norm_smul]
   · ext
-    simp [paperPlaneE0, paperPlaneE1, PiLp.single_apply]
+    simp [paperPlaneE1]
   · ext x i
     fin_cases i <;>
-      simp [paperPlaneE0, paperPlaneE1, PiLp.single_apply]
+      simp [paperPlaneE0, paperPlaneE1]
 
 /-- Direct matrix calculation of the planar residual identity. -/
 theorem paperPlanar_residual_identity (delta theta : ℝ) :
@@ -219,7 +219,7 @@ theorem paperPlanar_residual_identity (delta theta : ℝ) :
   fin_cases i <;>
     simp [paperPlanarAmbient, paperPlanarTrialOperator, paperPlanarResidual,
       paperPlaneE0, paperPlaneE1, Matrix.toLpLin_apply,
-      PiLp.single_apply, mul_comm] <;>
+      mul_comm] <;>
     push_cast <;> ring
 
 /-- The projection residual is literally the rank-one sine block. -/
@@ -256,7 +256,7 @@ theorem paperTheorem61_planar_equality_every_norm
   have hVmem := N.mem_rankOne hV.1 hV.2
   rw [paperPlanarResidual, paperPlanarSineBlock,
     N.gauge_smul _ hVmem, N.gauge_smul _ hVmem]
-  simp [RCLike.norm_ofReal, abs_of_nonneg hdelta, abs_mul]
+  simp [abs_of_nonneg hdelta]
   ring
 
 /-- At every nonzero acute angle the sine block has strictly positive source
@@ -299,7 +299,7 @@ theorem paperFiniteDimensional_scalar_homogeneity
     {delta : ℝ} (hdelta : 0 ≤ delta) (hS : N.Mem S) :
     N.gauge (((delta : ℝ) : 𝕜) • S) = delta * N.gauge S := by
   rw [N.gauge_smul _ hS]
-  simp [RCLike.norm_ofReal, abs_of_nonneg hdelta]
+  simp [abs_of_nonneg hdelta]
 
 section Counterexample
 
@@ -392,7 +392,7 @@ private theorem starProjection_span_singleton_apply_of_norm_one
         have hyv : y = v := by simpa using hy
         subst y
         simp [inner_sub_left, inner_smul_left,
-          inner_self_eq_norm_sq, hv, real_inner_comm]
+          hv, real_inner_comm]
     | zero => simp
     | add a b _ _ ha hb => rw [inner_add_right, ha, hb, add_zero]
     | smul c a _ ha => rw [inner_smul_right, ha, mul_zero]
@@ -426,7 +426,7 @@ theorem paperCounterexampleExact_starProjection_e0 :
         paperPlaneE0 (𝕜 := ℝ) :=
     starProjection_span_singleton_apply_of_norm_one _ _ norm_paperPlaneE0
   rw [h]
-  simp [paperPlaneE0, EuclideanSpace.inner_single_left]
+  simp [paperPlaneE0]
 
 @[simp]
 theorem paperCounterexampleExact_starProjection_e1 :
@@ -517,7 +517,7 @@ theorem paperCounterexampleH_e0 :
   ext i
   fin_cases i <;>
     simp [paperCounterexampleH, paperPlaneE0, paperPlaneE1,
-      Matrix.toLpLin_apply, PiLp.single_apply]
+      Matrix.toLpLin_apply]
 
 /-- The printed perturbation on the second coordinate vector. -/
 theorem paperCounterexampleH_e1 :
@@ -526,7 +526,7 @@ theorem paperCounterexampleH_e1 :
   ext i
   fin_cases i <;>
     simp [paperCounterexampleH, paperPlaneE0, paperPlaneE1,
-      Matrix.toLpLin_apply, PiLp.single_apply]
+      Matrix.toLpLin_apply]
 
 /-- The real complexified sine operator has the same paper square norm as the
 real projection difference from which it is constructed. -/
