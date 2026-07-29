@@ -117,6 +117,22 @@ noncomputable def blockCLM :
 
 end Defs
 
+/-! ### A block is fixed by its own projections -/
+
+/-- An idempotent left factor fixes the block it cuts.  This is one of the two
+hypotheses the per-block Sylvester estimate takes. -/
+theorem comp_ofLp_blockFun_left (b : HilbertBasis ι 𝕜 F) {P : E →L[𝕜] E}
+    (hP : P.comp P = P) (Q : F →L[𝕜] F) (f : lp (fun _ : ι => E) 2) :
+    P.comp (ofLp b (blockFun b P Q f)) = ofLp b (blockFun b P Q f) := by
+  rw [ofLp_blockFun, ← ContinuousLinearMap.comp_assoc, ← ContinuousLinearMap.comp_assoc, hP]
+
+/-- An idempotent right factor fixes the block it cuts. -/
+theorem comp_ofLp_blockFun_right (b : HilbertBasis ι 𝕜 F) (P : E →L[𝕜] E)
+    {Q : F →L[𝕜] F} (hQ : Q.comp Q = Q) (f : lp (fun _ : ι => E) 2) :
+    (ofLp b (blockFun b P Q f)).comp Q = ofLp b (blockFun b P Q f) := by
+  rw [ofLp_blockFun, ContinuousLinearMap.comp_assoc, hQ]
+
+
 /-! ### Blocks split the norm -/
 
 omit [CompleteSpace F] in
