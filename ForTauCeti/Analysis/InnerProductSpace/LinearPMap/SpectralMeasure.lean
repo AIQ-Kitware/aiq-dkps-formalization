@@ -598,11 +598,11 @@ on `B`, then the spectral projection lands in `dom A` and `A - c` is bounded by
 `r` there.  Both facts come from one identity: `(A + i) E_A(B)` is the Borel
 calculus of `(κ + i) 1_B`, because the resolvent's symbol `(1-w)/(2i)` is the
 pointwise inverse of `κ + i` away from the Cayley singularity. -/
-theorem specProjection_mem_domain_and_norm_le {M c r : ℝ}
-    (hbnd : ∀ s ∈ B, |s| ≤ M) (hr : 0 ≤ r) (hcr : ∀ s ∈ B, |s - c| ≤ r) (y : H) :
-    ∃ hy : specProjection hA B hB y ∈ A.domain,
-      ‖A ⟨specProjection hA B hB y, hy⟩ - (c : ℂ) • specProjection hA B hB y‖
-        ≤ r * ‖y‖ := by
+theorem exists_shifted_truncation {M c r : ℝ}
+    (hbnd : ∀ s ∈ B, |s| ≤ M) (hr : 0 ≤ r) (hcr : ∀ s ∈ B, |s - c| ≤ r) :
+    ∃ T : H →L[ℂ] H, (∀ y : H, ‖T y‖ ≤ r * ‖y‖) ∧
+      ∀ y : H, ∃ hy : specProjection hA B hB y ∈ A.domain,
+        A ⟨specProjection hA B hB y, hy⟩ - (c : ℂ) • specProjection hA B hB y = T y := by
   classical
   set hU := isStarNormal_cayley hA with hhU
   set hni := negI_mem_resolventSet hA with hhni
@@ -668,22 +668,6 @@ theorem specProjection_mem_domain_and_norm_le {M c r : ℝ}
     have hqw : q w = ((κ w : ℂ) + Complex.I) * ind w := rfl
     rw [hgval, hqw, hκval]
     field_simp
-  -- hence `(A + i) E(B)` is the Borel calculus of `(κ + i) 1_B`
-  set T := BorelCalculus.borelCalculus hU hqb with hT
-  have hPy : resolvent A hni (T y) = specProjection hA B hB y := by
-    have h := congrArg (fun L : H →L[ℂ] H => L y)
-      ((BorelCalculus.borelCalculus_mul hU hgb hqb).symm.trans hprod)
-    simp only [_root_.mul_apply_eq_comp] at h
-    rw [hRg]
-    exact h
-  have hy : specProjection hA B hB y ∈ A.domain := by
-    rw [← hPy]; exact resolvent_mem_domain hni (T y)
-  refine ⟨hy, ?_⟩
-  -- solve for `A` on the range
-  have hsolve := sub_smul_resolvent hni (T y)
-  have hcongr : (⟨resolvent A hni (T y), resolvent_mem_domain hni (T y)⟩ : A.domain)
-      = ⟨specProjection hA B hB y, hy⟩ := Subtype.ext hPy
-  rw [hcongr, hPy] at hsolve
   -- the shifted symbol is the difference of the two Borel-calculus images
   have hpfb : ∀ w, ‖pf w‖ ≤ r := by
     intro w
@@ -703,6 +687,24 @@ theorem specProjection_mem_domain_and_norm_le {M c r : ℝ}
       Filter.Eventually.of_forall fun w => ?_
     change pf w = q w + -(Complex.I + (c : ℂ)) * ind w
     rw [hpf, hq]; ring
+  refine ⟨BorelCalculus.borelCalculus hU hpb, fun y =>
+    BorelCalculus.norm_borelCalculus_apply_le hU hpb hr hpfb y, fun y => ?_⟩
+  -- hence `(A + i) E(B)` is the Borel calculus of `(κ + i) 1_B`
+  set T := BorelCalculus.borelCalculus hU hqb with hT
+  have hPy : resolvent A hni (T y) = specProjection hA B hB y := by
+    have h := congrArg (fun L : H →L[ℂ] H => L y)
+      ((BorelCalculus.borelCalculus_mul hU hgb hqb).symm.trans hprod)
+    simp only [_root_.mul_apply_eq_comp] at h
+    rw [hRg]
+    exact h
+  have hy : specProjection hA B hB y ∈ A.domain := by
+    rw [← hPy]; exact resolvent_mem_domain hni (T y)
+  refine ⟨hy, ?_⟩
+  -- solve for `A` on the range
+  have hsolve := sub_smul_resolvent hni (T y)
+  have hcongr : (⟨resolvent A hni (T y), resolvent_mem_domain hni (T y)⟩ : A.domain)
+      = ⟨specProjection hA B hB y, hy⟩ := Subtype.ext hPy
+  rw [hcongr, hPy] at hsolve
   have hval : BorelCalculus.borelCalculus hU hpb y
       = T y - (Complex.I + (c : ℂ)) • specProjection hA B hB y := by
     rw [heq, BorelCalculus.borelCalculus_add hU hqb hsm,
@@ -714,16 +716,29 @@ theorem specProjection_mem_domain_and_norm_le {M c r : ℝ}
       = BorelCalculus.borelCalculus hU hpb y := by
     rw [hval]
     linear_combination (norm := module) hsolve
-  rw [hgoal]
-  exact BorelCalculus.norm_borelCalculus_apply_le hU hpb hr hpfb y
+  exact hgoal
+
+/-- **The bounded truncation of `A` at a bounded spectral set.**  There is a
+bounded operator that agrees with `A` on the spectral range. -/
+theorem exists_truncation {M : ℝ} (hbnd : ∀ s ∈ B, |s| ≤ M) :
+    ∃ T : H →L[ℂ] H, (∀ y : H, ‖T y‖ ≤ max 0 M * ‖y‖) ∧
+      ∀ y : H, ∃ hy : specProjection hA B hB y ∈ A.domain,
+        A ⟨specProjection hA B hB y, hy⟩ = T y := by
+  obtain ⟨T, hTn, hTid⟩ := exists_shifted_truncation hA B hB hbnd (c := 0)
+    (r := max 0 M) (le_max_left 0 M)
+    (fun s hs => by simpa using le_trans (hbnd s hs) (le_max_right 0 M))
+  refine ⟨T, hTn, fun y => ?_⟩
+  obtain ⟨hy, hb⟩ := hTid y
+  exact ⟨hy, by simpa using hb⟩
 
 /-- A bounded spectral range lies inside the operator domain. -/
 theorem mem_domain_of_mem_specRange_of_bounded {M : ℝ} (hbnd : ∀ s ∈ B, |s| ≤ M)
     {x : H} (hx : x ∈ specRange hA B hB) : x ∈ A.domain := by
   have hfix : specProjection hA B hB x = x := (mem_specRange_iff hA B hB x).mp hx
-  obtain ⟨hy, -⟩ := specProjection_mem_domain_and_norm_le hA B hB hbnd
+  obtain ⟨T, -, hTid⟩ := exists_shifted_truncation hA B hB hbnd
     (c := 0) (r := max 0 M) (le_max_left 0 M)
-    (fun s hs => by simpa using le_trans (hbnd s hs) (le_max_right 0 M)) x
+    (fun s hs => by simpa using le_trans (hbnd s hs) (le_max_right 0 M))
+  obtain ⟨hy, -⟩ := hTid x
   rwa [hfix] at hy
 
 /-- On a spectral range over a set within `r` of `c`, the operator differs from
@@ -733,10 +748,12 @@ theorem norm_sub_smul_le_of_mem_specRange {M c r : ℝ} (hbnd : ∀ s ∈ B, |s|
     (hmem : x ∈ A.domain) :
     ‖A ⟨x, hmem⟩ - (c : ℂ) • x‖ ≤ r * ‖x‖ := by
   have hfix : specProjection hA B hB x = x := (mem_specRange_iff hA B hB x).mp hx
-  obtain ⟨hy, hb⟩ := specProjection_mem_domain_and_norm_le hA B hB hbnd hr hcr x
+  obtain ⟨T, hTnorm, hTid⟩ := exists_shifted_truncation hA B hB hbnd hr hcr
+  obtain ⟨hy, hb⟩ := hTid x
   have hsub : (⟨specProjection hA B hB x, hy⟩ : A.domain) = ⟨x, hmem⟩ := Subtype.ext hfix
   rw [hsub, hfix] at hb
-  exact hb
+  rw [hb]
+  exact hTnorm x
 
 /-- **The interval cutoffs converge strongly to the identity.** -/
 theorem tendsto_specProjection_Icc (x : H) :
