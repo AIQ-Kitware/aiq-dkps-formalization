@@ -206,6 +206,16 @@ private theorem ambient_doubleAngleTangent_eq_extendCoordinate
     rw [← hmul] at hcand
     exact hcand
   unfold doubleAngleTangentOperator
+  -- NOTE on ordering, both directions are wrong and this is the lesser evil:
+  --   `rw [hYext, hDinvblock]` (this order) leaves `Ring.inverse D` unmatched,
+  --      because `hYext` has already rewritten the `Y` inside
+  --      `D = doubleAngleDenominator Y`;
+  --   `rw [hDinvblock, hYext]` fires both, but then `hYext` also rewrites the `Y`
+  --      inside `X := subspaceAngularCoordinate U Y`, producing the
+  --      self-referential `subspaceAngularCoordinate U (Uᗮ.subtypeL ∘ X ∘ …)` that
+  --      no longer folds back to `X` — strictly worse.
+  -- The real fix is to generalise `X` (and `D`) before rewriting, or to state
+  -- `hYext` for a fresh variable rather than for `Y` itself.
   rw [hYext, hDinvblock]
   apply ContinuousLinearMap.ext
   intro x
