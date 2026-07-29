@@ -104,7 +104,7 @@ theorem comp_le_mul (N : CompatibleCrossOperatorNorm (X := X) (Y := Y))
       L ∘L T ∘L R = ((‖L‖ * ‖R‖ : ℝ) : ℂ) • (Ln ∘L T ∘L Rn) := by
     ext x
     simp [Ln, Rn, hLcomplex, hRcomplex, smul_smul,
-      mul_assoc, mul_left_comm, mul_comm]
+      mul_left_comm, mul_comm]
   rw [hfactor, N.smul]
   calc
     ‖((‖L‖ * ‖R‖ : ℝ) : ℂ)‖ * N (Ln ∘L T ∘L Rn)

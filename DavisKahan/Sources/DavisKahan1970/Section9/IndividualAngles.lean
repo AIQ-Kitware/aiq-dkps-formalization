@@ -49,7 +49,7 @@ bounded by the squared in-plane and out-of-plane contributions, then a common
 positive denominator yields the `sqrt 7 / 10` envelope. -/
 theorem individual_angle_le_exact_envelope
     {omega psi eta ε denominator : ℝ}
-    (homega0 : 0 ≤ omega)
+    (_homega0 : 0 ≤ omega)
     (hpsi0 : 0 ≤ psi) (heta0 : 0 ≤ eta)
     (hden : 0 < denominator)
     (homega : omega ^ 2 ≤ psi ^ 2 + eta ^ 2)

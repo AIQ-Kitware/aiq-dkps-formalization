@@ -176,7 +176,7 @@ theorem tanTheta_unbounded_exactSpectralIcc_genuineTrialBlock
       x ≤ α - δ ∨ β + δ ≤ x) :
     let W := selfAdjointSpectralSubspace A hA (Set.Icc α β)
       measurableSet_Icc
-    ∀ x : H, ∀ hx : x ∈ Z,
+    ∀ x : H, ∀ _hx : x ∈ Z,
       δ * ‖x - Wᗮ.starProjection x‖ ≤
         ‖D.residual‖ * ‖Wᗮ.starProjection x‖ := by
   let W := selfAdjointSpectralSubspace A hA (Set.Icc α β)
