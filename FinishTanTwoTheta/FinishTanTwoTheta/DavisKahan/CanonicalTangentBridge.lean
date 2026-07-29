@@ -145,7 +145,9 @@ private theorem ambient_doubleAngleTangent_eq_extendCoordinate
         (Submodule.starProjection_apply_eq_zero_iff (K := U)).mpr
           (Uᗮ.starProjection_apply_mem x)] at h
       simpa using h.symm
-    rw [hsplit, map_add, hYperp, map_zero, add_zero]
+    -- after `hYperp` the residue is `Y (P x) + 0`, so it is `add_zero` that
+    -- applies, not `map_zero` (there is no `f 0` subterm to match).
+    rw [hsplit, map_add, hYperp, add_zero]
     apply congrArg (fun z : U => (z : E))
     ext
     simp only [DX, D, doubleAngleDenominator,
