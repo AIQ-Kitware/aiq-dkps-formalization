@@ -112,10 +112,14 @@ and it is exactly `(ker M)ᗮ` (`polarInitial_orthogonal_eq_ker`). -/
 noncomputable def polarInitial (M : E →L[ℂ] F) : Submodule ℂ E :=
   (LinearMap.range M.modulus.toLinearMap).topologicalClosure
 
+/-- Every value of the modulus lies in the initial space, which is the closure
+of its range. -/
 theorem modulus_apply_mem_polarInitial (M : E →L[ℂ] F) (x : E) :
     M.modulus x ∈ M.polarInitial :=
   Submodule.le_topologicalClosure _ ⟨x, rfl⟩
 
+/-- The initial space is complete, being a topological closure.  This is what
+lets `polarPartialAux` be built by continuous extension. -/
 instance (M : E →L[ℂ] F) : CompleteSpace M.polarInitial :=
   Submodule.topologicalClosure.completeSpace _
 
@@ -123,10 +127,16 @@ instance (M : E →L[ℂ] F) : CompleteSpace M.polarInitial :=
 noncomputable def modulusCorestrict (M : E →L[ℂ] F) : E →ₗ[ℂ] M.polarInitial :=
   LinearMap.codRestrict M.polarInitial M.modulus.toLinearMap M.modulus_apply_mem_polarInitial
 
+/-- The corestriction has the same values as the modulus; only its codomain
+changes. -/
 @[simp]
 theorem coe_modulusCorestrict_apply (M : E →L[ℂ] F) (x : E) :
     (M.modulusCorestrict x : E) = M.modulus x := rfl
 
+/-- The corestricted modulus has **dense** range in the initial space — the
+initial space is defined as that closure.  This density is the hypothesis
+`extendOfNorm` needs, and is why `polarPartial` is determined on all of
+`polarInitial` by its values on `range |M|`. -/
 theorem denseRange_modulusCorestrict (M : E →L[ℂ] F) :
     DenseRange M.modulusCorestrict := by
   rw [DenseRange, Subtype.dense_iff]
@@ -151,6 +161,8 @@ initial space. -/
 noncomputable def polarPartialAux (M : E →L[ℂ] F) : M.polarInitial →L[ℂ] F :=
   M.toLinearMap.extendOfNorm M.modulusCorestrict
 
+/-- The extension undoes the modulus on the dense range: `W₀ (|M| x) = M x`.
+This is the defining property carried across by continuity. -/
 @[simp]
 theorem polarPartialAux_modulusCorestrict (M : E →L[ℂ] F) (x : E) :
     M.polarPartialAux (M.modulusCorestrict x) = M x :=
@@ -164,6 +176,9 @@ Isometric on `M.polarInitial` and zero on its orthogonal complement, with
 noncomputable def polarPartial (M : E →L[ℂ] F) : E →L[ℂ] F :=
   M.polarPartialAux ∘L M.polarInitial.orthogonalProjectionOnto
 
+/-- `polarPartial` unfolded: project onto the initial space, then apply the
+continuous extension.  The projection is what makes `W` vanish off the initial
+space, i.e. on `ker M`. -/
 theorem polarPartial_apply (M : E →L[ℂ] F) (x : E) :
     M.polarPartial x = M.polarPartialAux (M.polarInitial.orthogonalProjectionOnto x) := rfl
 
@@ -180,6 +195,9 @@ theorem polarPartial_apply_modulus (M : E →L[ℂ] F) (x : E) :
     simpa using Submodule.starProjection_eq_self_iff.mpr hmem
   rw [hproj, polarPartialAux_modulusCorestrict]
 
+/-- **The polar identity in composed form**: `W ∘L |M| = M`, unconditionally.
+The pointwise version is `polarPartial_apply_modulus`; this is the form that
+composes, and the one `eq_polarPartial_of_comp_modulus` characterises `W` by. -/
 theorem polarPartial_comp_modulus (M : E →L[ℂ] F) :
     M.polarPartial ∘L M.modulus = M := by
   ext x
@@ -355,6 +373,9 @@ theorem isSelfAdjoint_polarPartial_comp_adjoint (M : E →L[ℂ] F) :
   rw [IsSelfAdjoint, ContinuousLinearMap.star_eq_adjoint, ContinuousLinearMap.adjoint_comp,
     ContinuousLinearMap.adjoint_adjoint]
 
+/-- `W W⋆` is idempotent.  With `isSelfAdjoint_polarPartial_comp_adjoint` this
+makes it the orthogonal projection onto the final space — the second half of
+`W` being a partial isometry. -/
 theorem isIdempotentElem_polarPartial_comp_adjoint (M : E →L[ℂ] F) :
     IsIdempotentElem (M.polarPartial ∘L M.polarPartial.adjoint) := by
   have h := M.adjoint_comp_polarPartial_comp_adjoint
@@ -583,9 +604,13 @@ equivalently the range of `W` (`range_polarPartial`). -/
 noncomputable def polarFinal (M : E →L[ℂ] F) : Submodule ℂ F :=
   (LinearMap.range M.toLinearMap).topologicalClosure
 
+/-- The final space is complete, being a topological closure. -/
 instance (M : E →L[ℂ] F) : CompleteSpace M.polarFinal :=
   Submodule.topologicalClosure.completeSpace _
 
+/-- The final space is exactly the range of `W`: closing the range of `M` and
+taking the range of the partial isometry give the same subspace.  This is the
+counterpart of `polarInitial` being the closed range of `|M|`. -/
 theorem polarFinal_eq_range_polarPartial (M : E →L[ℂ] F) :
     M.polarFinal = LinearMap.range M.polarPartial.toLinearMap :=
   M.range_polarPartial.symm
