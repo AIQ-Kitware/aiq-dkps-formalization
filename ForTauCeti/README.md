@@ -1,27 +1,44 @@
-# ForTauCeti — temporary Tau Ceti extraction staging layer
+# ForTauCeti — the reusable-mathematics package
 
-`ForTauCeti` is a **temporary** Lean library. It holds reusable, paper-agnostic
-mathematics whose accepted Tau Ceti roadmap target and public API are settled,
-but whose code has not yet merged into the Tau Ceti repository
-(`external/TauCeti`). It is the middle layer of the staged extraction
-architecture:
+> **EXECUTIVE DECISION — jon, 2026-07-29. This section replaces the "temporary
+> staging layer" framing this file used to open with, and it changes what the
+> work is.**
+>
+> **`ForTauCeti` is the product, not a holding pen.** The goal is an *elegant
+> package* here: coherent API, one canonical spelling per concept, provenance
+> on every module. That package is what **polished roadmaps are generated
+> from**, and the roadmaps are then satisfied by **mechanical ports**.
+>
+> Two consequences, both the opposite of what this file said before:
+>
+> * **Deleting `ForTauCeti` is not on the roadmap.** There is no terminal state
+>   in which it is empty. Do not write a lane that ends in its deletion, and do
+>   not re-add a "delete the staging files" step to the lifecycle below.
+> * **`external/TauCeti` is a read-only provenance reference** (`AGENTS.md`).
+>   Stage here; do not write into the submodule. `export_for_tauceti.py --write`
+>   belongs to an actual submission, not to ordinary work — run `--check`
+>   freely, and expect `--write` to leave untracked, silently-staling copies in
+>   the submodule if you run it otherwise. That has happened twice.
+
+`ForTauCeti` holds reusable, paper-agnostic mathematics extracted from the
+Davis--Kahan development. The layering is:
 
 ```text
 Mathlib
    ↓
-TauCeti           (external/TauCeti, the permanent generic library)
+TauCeti           (external/TauCeti, read-only provenance reference)
    ↓
-ForTauCeti        (this library — temporary staging, PR-ready clusters)
+ForTauCeti        (this library — the package, organised into
+                   dependency-closed clusters)
    ↓
 DavisKahan        (paper-facing perturbation theory)
 ```
 
-Its successful terminal state is **empty or deleted**: every cluster here is
-destined to move into `external/TauCeti/TauCeti/...`, after which its staging
-files are removed and its `ForTauCeti.*` importers are repointed at `TauCeti.*`.
-
-`ForTauCeti` is **not** the intended permanent public library, and no one should
-mistake it for one. The permanent public home is Tau Ceti.
+**The clusters are the roadmap units.** `dev/tauceti/extraction-manifest.json`
+declares all 156 modules across 18 dependency-closed clusters, each computed as
+an import closure and each passing the import firewall — so any one of them can
+be read, reviewed, or ported as a self-contained unit. A module that is not in
+the manifest is invisible to that machinery; keep it at 156/156.
 
 ## Relationship to `ForMathlib`
 
@@ -230,9 +247,20 @@ When a cluster is accepted into Tau Ceti:
 
 1. update the `external/TauCeti` submodule pin to the merge commit;
 2. replace this repo's `ForTauCeti.*` imports of the cluster with `TauCeti.*`;
-3. delete the corresponding `ForTauCeti/...` staging files;
+3. ~~delete the corresponding `ForTauCeti/...` staging files~~ — **struck by
+   executive decision (jon, 2026-07-29): the staging files stay.** Do not
+   delete them, and do not re-add this step;
 4. remove compatibility aliases that no longer have downstream users;
 5. rerun the Davis–Kahan grounding, layering, and build audits.
+
+**On `external/TauCeti`.** It is a **read-only provenance reference**, as
+`AGENTS.md` says. Work is staged in `ForTauCeti` and nothing is written into
+the submodule outside an actual submission. `scripts/export_for_tauceti.py
+--write` reproduces the `TauCeti/` copy *at submission time* — running it
+otherwise leaves untracked copies in the submodule working tree that go stale
+against staging, which has already happened twice and is what made
+`--check` fail for `principal-angles`. **Use `--check` freely; treat `--write`
+as part of a submission, not part of a build.**
 
 Use `scripts/export_for_tauceti.py --cluster <name> --check|--write` to perform
 the deterministic staging→Tau Ceti copy (manifest-driven, import-rewriting,

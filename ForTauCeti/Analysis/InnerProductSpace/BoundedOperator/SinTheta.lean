@@ -155,7 +155,7 @@ theorem sinTheta_directed_coercive
     rw [hre, h1, h2, hpyth]
     nlinarith [hVc (Q x) hqx]
   -- Sylvester relation A' X - X B' = Y
-  have hsylv : sylvesterOperator A' B' X = Y := by
+  have hsylv : ContinuousLinearMap.sylvesterOperator A' B' X = Y := by
     change A' ∘L X - X ∘L B' = Y
     ext x
     have hQxV : Q x ∈ V := V.starProjection_apply_mem x
@@ -208,8 +208,8 @@ theorem sinTheta_directed_of_formBounds
     {U V : Submodule 𝕜 E} [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hU : Reduces A U) (hV : Reduces B V)
     {c g : ℝ} (hg : 0 < g)
-    (hUhi : LowerFormBoundOn A U (c + g))
-    (hVlo : UpperFormBoundOn B V c) :
+    (hUhi : A.LowerFormBoundOn U (c + g))
+    (hVlo : B.UpperFormBoundOn V c) :
     ‖(projection V ∘L projection U : E →L[𝕜] E)‖ ≤ ‖B - A‖ / g :=
   sinTheta_directed_coercive hA hB hU hV hg hUhi hVlo
 
