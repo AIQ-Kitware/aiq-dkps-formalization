@@ -1046,13 +1046,23 @@ theorem theorem3_1_spectralMultiplicity_classification :
         (genericHalmosCosineSq U₂ V₂) := by
   sorry
 
-/-- Ordered eigenvalue data for a compact positive contraction.  The eventual
-implementation should use approximation numbers or compact self-adjoint
-spectral theory and record multiplicities. -/
+/-- Ordered eigenvalue data for a compact positive contraction: the
+approximation-number sequence of `A`.
+
+For a compact **positive** operator this is exactly the ordered eigenvalue list
+*with multiplicity* — `aₙ(A)` is the `n`-th largest singular value, and singular
+values coincide with eigenvalues when the operator is positive, so a repeated
+eigenvalue is repeated in the sequence.  That is the implementation this
+declaration's earlier `sorry` body was documented as wanting.
+
+Note the definition is total: it is stated for every `A`, and only *means* the
+angle eigenvalue list under the compactness and positivity hypotheses that the
+consumers carry.  This mirrors `approximationNumber` itself, which is total in
+the same way. -/
 noncomputable def compactAngleEigenvalueList
     {K : Type*} [NormedAddCommGroup K] [InnerProductSpace ℂ K]
-    [CompleteSpace K] (A : K →L[ℂ] K) : ℕ → ℝ := by
-  sorry
+    [CompleteSpace K] (A : K →L[ℂ] K) : ℕ → ℝ :=
+  fun n => A.approximationNumber n
 
 /-- Davis--Kahan 1970, Corollary 3.1: when the cross-projection is compact, the
 angle eigenvalue lists and elementary multiplicities classify the pair. -/
