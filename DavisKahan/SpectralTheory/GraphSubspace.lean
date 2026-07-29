@@ -568,6 +568,7 @@ theorem subspaceGap_graphSubspace
   norm_projection_sub_projection_graphSubspace U X hX
 
 
+omit [CompleteSpace E] in
 /-- The coordinate projection from an acute subspace onto the base is
 injective.  The estimate is the elementary gap argument
 `norm v <= norm(P_U-P_V) * norm v`. -/
