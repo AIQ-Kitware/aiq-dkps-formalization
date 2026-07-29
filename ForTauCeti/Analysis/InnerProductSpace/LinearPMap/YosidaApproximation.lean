@@ -14,6 +14,9 @@ module
 public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SelfAdjointResolvent
 public import Mathlib.Analysis.Complex.Norm
 public import Mathlib.Data.PNat.Basic
+public import Mathlib.Algebra.Star.Unitary
+public import Mathlib.Analysis.CStarAlgebra.Exponential
+public import Mathlib.Analysis.CStarAlgebra.ContinuousLinearMap
 
 /-!
 # The Yosida approximation of a self-adjoint operator
@@ -457,6 +460,62 @@ theorem tendsto_yosidaApproxSym_of_mem_domain (hA : IsSelfAdjoint A) (φ : H) (h
   refine this.congr fun n => ?_
   rw [yosidaApproxSym_eq_avg hA n]
   rfl
+
+/-! ### The approximating unitary groups `exp(i t Aₙˢʸᵐ)`
+
+Spectra builds the bounded exponential from its power series and proves
+summability, the group law, and unitarity by hand
+(`YosidaHille/Approximation/ExpBounded/{Helpers,Adjoint,Unitary}.lean`, 576
+lines).  **Mathlib already has all of it**: `NormedSpace.exp` on the C⋆-algebra
+`H →L[ℂ] H`, and `selfAdjoint.expUnitary a = exp (I • a)`, which is by
+construction a term of `unitary`.  So none of those three modules is ported. -/
+
+/-- `t • Aₙˢʸᵐ` as an element of the self-adjoint subspace. -/
+noncomputable def yosidaApproxSymSA (hA : IsSelfAdjoint A) (n : ℕ+) (t : ℝ) :
+    selfAdjoint (H →L[ℂ] H) :=
+  ⟨(t : ℂ) • yosidaApproxSym hA n, by
+    rw [selfAdjoint.mem_iff, star_smul, (isSelfAdjoint_yosidaApproxSym hA n).star_eq,
+      Complex.star_def, Complex.conj_ofReal]⟩
+
+/-- The approximating unitary `exp(i t Aₙˢʸᵐ)`. -/
+noncomputable def expApprox (hA : IsSelfAdjoint A) (n : ℕ+) (t : ℝ) : H →L[ℂ] H :=
+  (selfAdjoint.expUnitary (yosidaApproxSymSA hA n t) : H →L[ℂ] H)
+
+/-- `exp(i·0·Aₙˢʸᵐ) = 1`. -/
+@[simp] theorem expApprox_zero (hA : IsSelfAdjoint A) (n : ℕ+) :
+    expApprox hA n 0 = 1 := by
+  have h : yosidaApproxSymSA hA n 0 = 0 := by
+    ext
+    simp [yosidaApproxSymSA]
+  simp [expApprox, h]
+
+/-- The group law in `t`. -/
+theorem expApprox_add (hA : IsSelfAdjoint A) (n : ℕ+) (s t : ℝ) :
+    expApprox hA n (s + t) = expApprox hA n s * expApprox hA n t := by
+  have hcomm : Commute ((yosidaApproxSymSA hA n s : H →L[ℂ] H))
+      ((yosidaApproxSymSA hA n t : H →L[ℂ] H)) := by
+    change ((s : ℂ) • yosidaApproxSym hA n) * ((t : ℂ) • yosidaApproxSym hA n)
+       = ((t : ℂ) • yosidaApproxSym hA n) * ((s : ℂ) • yosidaApproxSym hA n)
+    rw [smul_mul_smul_comm, smul_mul_smul_comm, mul_comm ((s : ℂ)) ((t : ℂ))]
+  have hsum : yosidaApproxSymSA hA n (s + t)
+      = yosidaApproxSymSA hA n s + yosidaApproxSymSA hA n t := by
+    ext
+    simp [yosidaApproxSymSA, Complex.ofReal_add, add_smul]
+  change ((selfAdjoint.expUnitary (yosidaApproxSymSA hA n (s + t))) : H →L[ℂ] H) = _
+  rw [hsum, hcomm.expUnitary_add]
+  rfl
+
+/-- `exp(i t Aₙˢʸᵐ)` is unitary, hence preserves the inner product. -/
+theorem inner_expApprox (hA : IsSelfAdjoint A) (n : ℕ+) (t : ℝ) (x y : H) :
+    ⟪expApprox hA n t x, expApprox hA n t y⟫_ℂ = ⟪x, y⟫_ℂ := by
+  have hstar : (ContinuousLinearMap.adjoint (expApprox hA n t)) * expApprox hA n t = 1 := by
+    have := Unitary.coe_star_mul_self (selfAdjoint.expUnitary (yosidaApproxSymSA hA n t))
+    rwa [ContinuousLinearMap.star_eq_adjoint] at this
+  calc ⟪expApprox hA n t x, expApprox hA n t y⟫_ℂ
+      = ⟪(ContinuousLinearMap.adjoint (expApprox hA n t)) (expApprox hA n t x), y⟫_ℂ := by
+        rw [ContinuousLinearMap.adjoint_inner_left]
+    _ = ⟪((ContinuousLinearMap.adjoint (expApprox hA n t)) * expApprox hA n t) x, y⟫_ℂ := rfl
+    _ = ⟪x, y⟫_ℂ := by rw [hstar]; rfl
 
 end LinearPMap
 end TauCeti
