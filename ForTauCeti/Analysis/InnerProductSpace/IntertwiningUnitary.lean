@@ -54,6 +54,8 @@ noncomputable def spectralProjection (b : OrthonormalBasis (Fin n) 𝕜 E) (S : 
 
 omit [FiniteDimensional 𝕜 E] in
 /-- The spectral projection acts by the Fourier expansion restricted to `S`. -/
+/-- The defining formula: `spectralProjection b S` expands `y` in the basis and keeps the
+coefficients indexed by `S`. -/
 theorem spectralProjection_apply (b : OrthonormalBasis (Fin n) 𝕜 E) (S : Finset (Fin n))
     (y : E) : spectralProjection b S y = ∑ i ∈ S, ⟪b i, y⟫_𝕜 • b i := by
   unfold spectralProjection
@@ -62,6 +64,7 @@ theorem spectralProjection_apply (b : OrthonormalBasis (Fin n) 𝕜 E) (S : Fins
 
 omit [FiniteDimensional 𝕜 E] in
 /-- At a singleton the projection is the rank-one projection onto `b i`. -/
+/-- On a singleton index set the spectral projection is the rank-one projection onto `b i`. -/
 theorem spectralProjection_singleton_apply (b : OrthonormalBasis (Fin n) 𝕜 E) (i : Fin n)
     (y : E) : spectralProjection b {i} y = ⟪b i, y⟫_𝕜 • b i := by
   rw [spectralProjection_apply, Finset.sum_singleton]
@@ -70,6 +73,8 @@ omit [FiniteDimensional 𝕜 E] in
 /-- On basis vectors the projection is the indicator of `S`: it fixes `b k` when
 `k ∈ S` and kills it otherwise.  This is the form used to check that the family
 is orthogonal and complete. -/
+/-- A spectral projection fixes the basis vectors it selects and kills the others; this is the
+form used to compare two projections by testing them on a basis. -/
 theorem spectralProjection_apply_basis (b : OrthonormalBasis (Fin n) 𝕜 E) (S : Finset (Fin n))
     (k : Fin n) : spectralProjection b S (b k) = if k ∈ S then b k else 0 := by
   rw [spectralProjection_apply]
@@ -169,21 +174,25 @@ variable {P P' : OrthoProjFamily 𝕜 E m}
 
 /-- Each component is a star projection.  Field accessor, restated so downstream
 files need not reach for the primed structure field. -/
+/-- Each member of the family is a star projection: idempotent and self-adjoint. -/
 theorem isStarProjection (P : OrthoProjFamily 𝕜 E m) (j : Fin m) :
     IsStarProjection (P.proj j) :=
   P.isStarProjection' j
 
 /-- Distinct components annihilate each other. -/
+/-- Distinct members of the family have orthogonal ranges, expressed as a vanishing composite. -/
 theorem orthogonal (P : OrthoProjFamily 𝕜 E m) {j k : Fin m} (h : j ≠ k) :
     P.proj j ∘ₗ P.proj k = 0 :=
   P.orthogonal' j k h
 
 /-- Each component is idempotent. -/
+/-- Idempotence of a single member of the family. -/
 theorem proj_comp_self (P : OrthoProjFamily 𝕜 E m) (j : Fin m) :
     P.proj j ∘ₗ P.proj j = P.proj j :=
   (P.isStarProjection j).isIdempotentElem
 
 /-- Each component is self-adjoint — the *ortho* in `OrthoProjFamily`. -/
+/-- Each member of the family is self-adjoint. -/
 theorem adjoint_proj (P : OrthoProjFamily 𝕜 E m) (j : Fin m) :
     (P.proj j).adjoint = P.proj j := by
   rw [← LinearMap.star_eq_adjoint]
@@ -191,6 +200,8 @@ theorem adjoint_proj (P : OrthoProjFamily 𝕜 E m) (j : Fin m) :
 
 /-- Self-adjointness in the `IsSymmetric` phrasing, which is the one the inner
 product lemmas consume. -/
+/-- Each member of the family is symmetric -- the bilinear form of `adjoint_proj`, which is the
+shape most inner-product arguments need. -/
 theorem isSymmetric_proj (P : OrthoProjFamily 𝕜 E m) (j : Fin m) :
     (P.proj j).IsSymmetric := by
   intro x y
@@ -198,18 +209,22 @@ theorem isSymmetric_proj (P : OrthoProjFamily 𝕜 E m) (j : Fin m) :
   rw [LinearMap.adjoint_inner_left]
 
 /-- A projection fixes its own range. -/
+/-- A projection fixes its own range pointwise. -/
 theorem proj_apply_of_mem_range {j : Fin m} {x : E} (hx : x ∈ range (P.proj j)) :
     P.proj j x = x := by
   obtain ⟨y, rfl⟩ := hx
   exact congrArg (fun f : E →ₗ[𝕜] E => f y) (P.proj_comp_self j)
 
 /-- A projection kills the range of any *other* component. -/
+/-- A projection annihilates the range of any *other* member of the family. -/
 theorem proj_apply_of_mem_range_of_ne {j k : Fin m} (h : j ≠ k) {x : E}
     (hx : x ∈ range (P.proj k)) : P.proj j x = 0 := by
   obtain ⟨y, rfl⟩ := hx
   exact congrArg (fun f : E →ₗ[𝕜] E => f y) (P.orthogonal h)
 
 /-- **Completeness**, pointwise: the components resolve the identity. -/
+/-- The family resolves the identity: the projections of a vector sum back to it.  This is the
+pointwise form of the `complete'` field. -/
 theorem sum_proj_apply (P : OrthoProjFamily 𝕜 E m) (x : E) : ∑ j, P.proj j x = x := by
   have h := congrArg (fun f : E →ₗ[𝕜] E => f x) P.complete'
   simpa using h
@@ -222,6 +237,7 @@ theorem inner_eq_zero_of_ne {j k : Fin m} (h : j ≠ k) {x y : E}
 
 /-- Kernel and range of a component are orthogonal complements, which is what
 self-adjointness buys over mere idempotence. -/
+/-- The kernel of a member is the orthogonal complement of its range. -/
 theorem ker_proj (P : OrthoProjFamily 𝕜 E m) (j : Fin m) :
     ker (P.proj j) = (range (P.proj j))ᗮ := by
   rw [LinearMap.orthogonal_range, adjoint_proj]
@@ -327,6 +343,9 @@ isometry equivalence.  `simp` normal form for moving between the two views. -/
 factor of `P'ⱼ Pⱼ` and apply it to the `j`-th component of `x`.  This is the
 formula the intertwining property is checked against — it is *not* definitional,
 since the construction goes through `LinearEquiv.ofBijective`. -/
+/-- The intertwining unitary acts blockwise: on each block it is the polar factor of `P'\_j P\_j`
+applied to the `j`-th component of `x`.  Unfolds the bundled `LinearIsometryEquiv` to the sum
+that defines it. -/
 theorem intertwiningUnitary_apply (hnd : P.NonDegenerate P') (x : E) :
     intertwiningUnitary hnd x = ∑ j, polarFactor (P'.proj j ∘ₗ P.proj j) (P.proj j x) := by
   have h : intertwiningUnitary hnd x

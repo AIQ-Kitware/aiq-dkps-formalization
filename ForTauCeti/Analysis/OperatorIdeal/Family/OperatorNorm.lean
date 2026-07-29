@@ -141,7 +141,10 @@ noncomputable def operatorNormFamily (𝕜 : Type u) [RCLike 𝕜] :
     rw [ContinuousLinearMap.adjoint.norm_map]
 
 /-- Completeness transfers to the symmetric view, which shares its underlying
-family with `operatorNormIdealFamily`. -/
+family with `operatorNormIdealFamily`.  The instance has to be restated rather
+than inherited: `instIsCompleteOperatorNormIdealFamily` is stated at three
+independent universes, and the symmetric family constrains the last two to be
+equal, so instance search does not find it without this specialization. -/
 instance : (operatorNormFamily.{u, v} 𝕜).toOperatorIdealFamily.IsComplete :=
   inferInstanceAs (operatorNormIdealFamily.{u, v, v} 𝕜).IsComplete
 
