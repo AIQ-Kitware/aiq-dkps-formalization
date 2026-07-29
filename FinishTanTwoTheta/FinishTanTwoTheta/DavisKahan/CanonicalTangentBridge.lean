@@ -320,8 +320,10 @@ private theorem tanTwoAngleOperatorC_eq_modulus_ambientGraphTangent
       dsimp [N] at hNRP
       simp only [ContinuousLinearMap.add_comp,
         ContinuousLinearMap.id_comp, ContinuousLinearMap.comp_assoc] at hNRP
-      rw [hGR] at hNRP
-      module
+      -- `hNRP : R P + G R P = P`.  The `rw [hGR]` that used to sit here was
+      -- superfluous and could not fire; the goal is pure additive rearrangement.
+      calc P - R ∘L P = (R ∘L P + G ∘L R ∘L P) - R ∘L P := by rw [hNRP]
+        _ = G ∘L R ∘L P := by abel
     exact hidentity
   let Cang : E →L[ℂ] E := cosAngleOperatorC U V
   let Sang : E →L[ℂ] E := sinAngleOperatorDirectedC U V
