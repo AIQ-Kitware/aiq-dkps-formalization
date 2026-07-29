@@ -4,36 +4,38 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import FinishTanTwoTheta.DavisKahan.SharpIdeal
+import FinishTanTwoTheta.DavisKahan.InfiniteQuarterAcute
+import FinishTanTwoTheta.DavisKahan.CanonicalTangentBridge
 import DavisKahan.FiniteDimensional.DoubleAngle.TanTheta
 import DavisKahan.Experimental.InfiniteDimensional.TanTwoTheta.BoundedOffDiagonalReverseGap
 import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.HeterogeneousRepresentative
 import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SubspaceSingularTransport
 
 /-!
-# Paper-faithful finite-dimensional `tan 2Theta` theorem
+# Full bounded paper-facing `tan 2Theta` theorem
 
-The literal Section 7 unitarily-invariant-norm theorem is a finite-dimensional
-statement and allows any operator whose singular values are the double-angle
-tangents of the principal angles.  It is therefore not the arbitrary-Hilbert,
-canonical ambient-operator statement that an earlier version of this file
-recorded.
+This module now has two deliberately distinct results.
 
-This module proves the source-shaped result at its audited scope:
+* `paperTanTwoTheta_uiNorm_finite_alternate` retains the independently compiled
+  finite-dimensional Riccati/approximation-number derivation.  The main
+  Davis--Kahan tree already proves the finite Section 7 theorem, so this result
+  is explicitly a duplicate regression proof rather than the completion target.
+* `paperFaithful_tanTwoTheta_uiNorm` states the unrestricted bounded target used
+  by this package: no finite-dimensional or finite-carrier hypothesis, the
+  quarter-acute branch derived from the original form-gap/off-diagonal data,
+  and the sharp source-ideal estimate for the canonical ambient
+  `tanTwoAngleOperatorC`.
 
-* `A` and `A + H` are self-adjoint;
-* `H` is fully off-diagonal for `U + U-perp`;
-* `U` and `V` are the corresponding reducing subspaces on the two sides of the
-  same ordered form gap `[a,b]`;
-* the strict quarter-turn branch is derived, not assumed;
-* the graph-coordinate representative of `tan 2Theta` belongs to every source
-  norm ideal containing `H`, with the sharp factor-two estimate.
+The unrestricted proof is split into two genuine bridges:
 
-The strict branch is supplied by the finite-dimensional GKMV/Davis--Kahan
-operator-norm theorem.  Once the branch is known, the graph coordinate solves
-the bounded Riccati equation.  The approximation-number proof in
-`SharpIdeal` supplies the sharp source-norm estimate.  The upper-right block is
-compared with the full perturbation by extending it by zero to the ambient
-space; this preserves every approximation singular value.
+1. `InfiniteQuarterAcute` proves the dimension-free branch by a
+   reflection-product Lyapunov identity and a strict accretivity/spectrum
+   argument, replacing the finite proof's norm-attaining eigenvector.
+2. `CanonicalTangentBridge` identifies the complete approximation-number
+   sequence of the canonical ambient tangent with the graph-coordinate tangent.
+
+The post-branch Riccati/Ky-Fan/Fan-dominance estimate is then supplied by the
+already proved `sharp_paperUnitaryInvariantNorm` stack.
 -/
 
 namespace TauCeti
@@ -180,22 +182,12 @@ private theorem ambientUpperRightBlock_eq
   intro x
   rfl
 
-/-- **Paper-faithful Davis--Kahan `tan 2Theta` theorem at the audited Section
-7 scope.**
 
-For a finite-dimensional Hilbert space and a fully off-diagonal self-adjoint
-perturbation across a common ordered gap, the reducing subspaces are strictly
-quarter-acute.  Every source unitary-invariant norm that contains the full
-perturbation also contains the graph-coordinate `tan 2Theta` representative,
-and
-
-`(b - a) * N(tan 2Theta_0) <= 2 * N(H)`.
-
-The representative freedom is exactly the one stated in the paper: no claim is
-made here that the rectangular graph-coordinate operator is definitionally the
-ambient canonical operator `tanTwoAngleOperatorC`. -/
-theorem paperFaithful_tanTwoTheta_uiNorm
-    [FiniteDimensional ℂ E]
+/-- Post-branch paper estimate.  This is the genuinely arbitrary-Hilbert-space
+part of the proof: once the strict quarter-acute graph branch is known, the
+Riccati equation, approximation-number Ky Fan estimate, and Fan-dominance
+promotion require no finite-dimensional hypothesis. -/
+private theorem graphCoordinate_paper_bound_of_quarterAcute
     (N : PaperUnitaryInvariantNorm)
     (A H : E →L[ℂ] E)
     (U V : Submodule ℂ E)
@@ -210,25 +202,17 @@ theorem paperFaithful_tanTwoTheta_uiNorm
       b * ‖x‖ ^ 2 ≤ RCLike.re ⟪A x, x⟫_ℂ)
     (hUperpLow : ∀ x ∈ Uᗮ,
       RCLike.re ⟪A x, x⟫_ℂ ≤ a * ‖x‖ ^ 2)
-    (hVhigh : ∀ x ∈ V,
-      b * ‖x‖ ^ 2 ≤ RCLike.re ⟪(A + H) x, x⟫_ℂ)
-    (hVperpLow : ∀ x ∈ Vᗮ,
-      RCLike.re ⟪(A + H) x, x⟫_ℂ ≤ a * ‖x‖ ^ 2)
     (hHU : ∀ x ∈ U, H x ∈ Uᗮ)
     (hHUperp : ∀ x ∈ Uᗮ, H x ∈ U)
-    (hHmem : N.Mem H) :
-    ∃ hquarter : IsQuarterAcute U V,
-      N.Mem (paperTanTwoThetaRepresentative U V hquarter) ∧
-        (b - a) * N.gauge (paperTanTwoThetaRepresentative U V hquarter) ≤
-          2 * N.gauge H := by
+    (hHmem : N.Mem H)
+    (hquarter : IsQuarterAcute U V) :
+    N.Mem (paperTanTwoThetaRepresentative U V hquarter) ∧
+      (b - a) * N.gauge (paperTanTwoThetaRepresentative U V hquarter) ≤
+        2 * N.gauge H := by
   letI : CompleteSpace U :=
     (U.isComplete_coe_of_hasOrthogonalProjection).completeSpace_coe
   letI : CompleteSpace (Uᗮ : Submodule ℂ E) :=
     (Uᗮ.isComplete_coe_of_hasOrthogonalProjection).completeSpace_coe
-  have hquarter : IsQuarterAcute U V :=
-    isQuarterAcute_of_paper_form_gap A H U V hA hH hAU hAplusH_V hab
-      hUhigh hUperpLow hVhigh hVperpLow hHU hHUperp
-  refine ⟨hquarter, ?_⟩
   have hAsym : IsSelfAdjointOperator A :=
     ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hA
   have hHsym : IsSelfAdjointOperator H :=
@@ -251,10 +235,10 @@ theorem paperFaithful_tanTwoTheta_uiNorm
     simpa only [B, X] using
       TauCeti.DavisKahanExt.quarterAcuteAngularCoordinate_solvesRiccati
         A H hAsym hHsym U V hVreduces hquarter
-  have hsolveC : SolvesRiccati C X := by
-    exact (TauCeti.DavisKahanExt.solvesRiccati_negBlockOperatorData_iff B X).2 hsolveB
-  have hsolveD : SolvesRiccati D X := by
-    exact (TauCeti.DavisKahanExt.solvesRiccati_shiftBlockOperatorData_iff C (-b) X).2 hsolveC
+  have hsolveC : SolvesRiccati C X :=
+    (TauCeti.DavisKahanExt.solvesRiccati_negBlockOperatorData_iff B X).2 hsolveB
+  have hsolveD : SolvesRiccati D X :=
+    (TauCeti.DavisKahanExt.solvesRiccati_shiftBlockOperatorData_iff C (-b) X).2 hsolveC
   have hB0 : B.A0 = compressOperator U A := by
     simpa only [B] using
       TauCeti.DavisKahanExt.subspaceBlockOperatorData_A0_add_offDiagonal
@@ -321,8 +305,7 @@ theorem paperFaithful_tanTwoTheta_uiNorm
       U.starProjection Uᗮ.starProjection
       U.starProjection_norm_le Uᗮ.starProjection_norm_le
   have hseqB : SameApproximationSingularSequence Camb B.B01 := by
-    have hseq := sameApproximationSingularValues_ambientSubspaceBlock
-      Uᗮ U B.B01
+    have hseq := sameApproximationSingularValues_ambientSubspaceBlock Uᗮ U B.B01
     have hext : U.subtypeL ∘L B.B01 ∘L Uᗮ.subtypeL.adjoint = Camb := by
       simpa only [Camb] using ambientUpperRightBlock_eq H U B.B01 hB01
     rw [hext] at hseq
@@ -336,21 +319,19 @@ theorem paperFaithful_tanTwoTheta_uiNorm
       rw [N.extendedGauge_smul]
       norm_num
       exact hBmem
-    simpa only [C, TauCeti.DavisKahanExt.negBlockOperatorData, neg_one_smul] using hnegmem
+    simpa only [C, TauCeti.DavisKahanExt.negBlockOperatorData,
+      neg_one_smul] using hnegmem
   have hC_B01_gauge : N.gauge C.B01 = N.gauge B.B01 := by
-    have hnegGauge :
-        N.gauge ((-1 : ℂ) • B.B01) = N.gauge B.B01 := by
+    have hnegGauge : N.gauge ((-1 : ℂ) • B.B01) = N.gauge B.B01 := by
       rw [N.gauge_smul (-1 : ℂ) hBmem]
       norm_num
-    simpa only [C, TauCeti.DavisKahanExt.negBlockOperatorData, neg_one_smul] using hnegGauge
+    simpa only [C, TauCeti.DavisKahanExt.negBlockOperatorData,
+      neg_one_smul] using hnegGauge
   have hDB01 : D.B01 = C.B01 := rfl
-  have hDmem : N.Mem D.B01 := by
-    rw [hDB01]
-    exact hCmem
+  have hDmem : N.Mem D.B01 := by rw [hDB01]; exact hCmem
   have hcontractive : ‖X‖ < 1 := by
     simpa only [X] using
-      TauCeti.DavisKahanExt.norm_quarterAcuteAngularCoordinate_lt_one
-        U V hquarter
+      TauCeti.DavisKahanExt.norm_quarterAcuteAngularCoordinate_lt_one U V hquarter
   have hsharp := sharp_paperUnitaryInvariantNorm
     N D (sub_pos.mpr hab) hD0 hD1 hsolveD hcontractive hDmem
   change N.Mem (paperTanTwoThetaRepresentative U V hquarter) ∧
@@ -358,8 +339,7 @@ theorem paperFaithful_tanTwoTheta_uiNorm
         2 * N.gauge H
   have hrepresentative :
       paperTanTwoThetaRepresentative U V hquarter =
-        TauCeti.FinishTanTwoTheta.doubleAngleTangentOperator X hcontractive := by
-    rfl
+        TauCeti.FinishTanTwoTheta.doubleAngleTangentOperator X hcontractive := rfl
   rw [hrepresentative]
   refine ⟨hsharp.1, hsharp.2.trans ?_⟩
   calc
@@ -368,6 +348,96 @@ theorem paperFaithful_tanTwoTheta_uiNorm
     _ = 2 * N.gauge Camb := by rw [hBgauge]
     _ ≤ 2 * N.gauge H :=
       mul_le_mul_of_nonneg_left hCambGauge (by norm_num)
+
+/-- **Duplicate finite derivation retained as a regression proof.**
+
+The main Davis--Kahan tree already contains the finite-dimensional Section 7
+unitarily-invariant-norm theorem.  This theorem is deliberately retained
+because it independently routes the same finite source hypotheses through the
+new approximation-number/Riccati stack.  It is not the completion target and
+must not be cited as the arbitrary-Hilbert-space theorem. -/
+theorem paperTanTwoTheta_uiNorm_finite_alternate
+    [FiniteDimensional ℂ E]
+    (N : PaperUnitaryInvariantNorm)
+    (A H : E →L[ℂ] E)
+    (U V : Submodule ℂ E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    {a b : ℝ}
+    (hA : IsSelfAdjoint A)
+    (hH : IsSelfAdjoint H)
+    (hAU : ∀ x ∈ U, A x ∈ U)
+    (hAplusH_V : ∀ x ∈ V, (A + H) x ∈ V)
+    (hab : a < b)
+    (hUhigh : ∀ x ∈ U,
+      b * ‖x‖ ^ 2 ≤ RCLike.re ⟪A x, x⟫_ℂ)
+    (hUperpLow : ∀ x ∈ Uᗮ,
+      RCLike.re ⟪A x, x⟫_ℂ ≤ a * ‖x‖ ^ 2)
+    (hVhigh : ∀ x ∈ V,
+      b * ‖x‖ ^ 2 ≤ RCLike.re ⟪(A + H) x, x⟫_ℂ)
+    (hVperpLow : ∀ x ∈ Vᗮ,
+      RCLike.re ⟪(A + H) x, x⟫_ℂ ≤ a * ‖x‖ ^ 2)
+    (hHU : ∀ x ∈ U, H x ∈ Uᗮ)
+    (hHUperp : ∀ x ∈ Uᗮ, H x ∈ U)
+    (hHmem : N.Mem H) :
+    ∃ hquarter : IsQuarterAcute U V,
+      N.Mem (paperTanTwoThetaRepresentative U V hquarter) ∧
+        (b - a) * N.gauge (paperTanTwoThetaRepresentative U V hquarter) ≤
+          2 * N.gauge H := by
+  have hquarter : IsQuarterAcute U V :=
+    isQuarterAcute_of_paper_form_gap A H U V hA hH hAU hAplusH_V hab
+      hUhigh hUperpLow hVhigh hVperpLow hHU hHUperp
+  exact ⟨hquarter,
+    graphCoordinate_paper_bound_of_quarterAcute N A H U V hA hH hAU
+      hAplusH_V hab hUhigh hUperpLow hHU hHUperp hHmem hquarter⟩
+
+/-- **Full bounded Davis--Kahan 1970 `tan 2Theta` theorem.**
+
+No finite-dimensional or finite-carrier hypothesis is present.  The theorem
+starts from the two reducing subspaces and the fully off-diagonal perturbation,
+derives the strict quarter-angle branch, and proves the sharp estimate for the
+canonical ambient `tanTwoAngleOperatorC` in every source unitary-invariant norm.
+-/
+theorem paperFaithful_tanTwoTheta_uiNorm
+    (N : PaperUnitaryInvariantNorm)
+    (A H : E →L[ℂ] E)
+    (U V : Submodule ℂ E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    {a b : ℝ}
+    (hA : IsSelfAdjoint A)
+    (hH : IsSelfAdjoint H)
+    (hAU : ∀ x ∈ U, A x ∈ U)
+    (hAplusH_V : ∀ x ∈ V, (A + H) x ∈ V)
+    (hab : a < b)
+    (hUhigh : ∀ x ∈ U,
+      b * ‖x‖ ^ 2 ≤ RCLike.re ⟪A x, x⟫_ℂ)
+    (hUperpLow : ∀ x ∈ Uᗮ,
+      RCLike.re ⟪A x, x⟫_ℂ ≤ a * ‖x‖ ^ 2)
+    (hVhigh : ∀ x ∈ V,
+      b * ‖x‖ ^ 2 ≤ RCLike.re ⟪(A + H) x, x⟫_ℂ)
+    (hVperpLow : ∀ x ∈ Vᗮ,
+      RCLike.re ⟪(A + H) x, x⟫_ℂ ≤ a * ‖x‖ ^ 2)
+    (hHU : ∀ x ∈ U, H x ∈ Uᗮ)
+    (hHUperp : ∀ x ∈ Uᗮ, H x ∈ U)
+    (hHmem : N.Mem H) :
+    ∃ hquarter : IsQuarterAcute U V,
+      N.Mem (tanTwoAngleOperatorC U V hquarter) ∧
+        (b - a) * N.gauge (tanTwoAngleOperatorC U V hquarter) ≤
+          2 * N.gauge H := by
+  have hquarter : IsQuarterAcute U V :=
+    isQuarterAcute_of_paper_form_gap_infinite A H U V hA hH hAU hAplusH_V
+      hab hUhigh hUperpLow hVhigh hVperpLow hHU hHUperp
+  have hgraph := graphCoordinate_paper_bound_of_quarterAcute
+    N A H U V hA hH hAU hAplusH_V hab hUhigh hUperpLow
+      hHU hHUperp hHmem hquarter
+  have hseq : SameApproximationSingularSequence
+      (tanTwoAngleOperatorC U V hquarter)
+      (paperTanTwoThetaRepresentative U V hquarter) := by
+    simpa only [paperTanTwoThetaRepresentative] using
+      canonicalTanTwoAngle_hasSameApproximationNumbers_graphCoordinate U V hquarter
+  have htransport := hseq.paperMem_iff_and_gauge_eq N
+  refine ⟨hquarter, htransport.1.mpr hgraph.1, ?_⟩
+  rw [htransport.2]
+  exact hgraph.2
 
 end
 
