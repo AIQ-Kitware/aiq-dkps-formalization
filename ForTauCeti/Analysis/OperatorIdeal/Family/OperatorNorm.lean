@@ -82,10 +82,13 @@ noncomputable def operatorNormIdealFamily (𝕜 : Type u) [RCLike 𝕜] :
           rw [Real.norm_eq_abs, abs_of_nonneg (by positivity),
             ENNReal.ofReal_mul (by positivity), ENNReal.ofReal_mul (norm_nonneg _)]
 
+/-- The gauge of the operator-norm family is the operator norm itself, by definition. -/
 @[simp]
 theorem gauge_operatorNormIdealFamily (A : E →L[𝕜] F) :
     (operatorNormIdealFamily.{u, v, w} 𝕜).gauge A = ‖A‖ₑ := rfl
 
+/-- Every bounded operator belongs to the operator-norm ideal: its carrier is `⊤`.  This is what
+makes the family the trivial (largest) operator ideal. -/
 @[simp]
 theorem carrier_operatorNormIdealFamily :
     (operatorNormIdealFamily.{u, v, w} 𝕜).carrier (E := E) (F := F) = ⊤ := by
@@ -106,6 +109,8 @@ noncomputable def operatorNormIdealFamilyElemEquiv :
     change ‖A.val‖ = ‖A‖
     rw [OperatorIdealFamily.Elem.norm_def, gauge_operatorNormIdealFamily, toReal_enorm]
 
+/-- The operator-norm ideal is complete, transported along the isometry
+`operatorNormIdealFamilyElemEquiv` from completeness of `E →L[𝕜] F`. -/
 instance instIsCompleteOperatorNormIdealFamily :
     (operatorNormIdealFamily.{u, v, w} 𝕜).IsComplete where
   completeSpace := by
@@ -131,9 +136,14 @@ noncomputable def operatorNormFamily (𝕜 : Type u) [RCLike 𝕜] :
     simp only [gauge_operatorNormIdealFamily, ← ofReal_norm]
     rw [ContinuousLinearMap.adjoint.norm_map]
 
+/-- Completeness of the symmetric operator-norm family.  It is the same statement as
+`instIsCompleteOperatorNormIdealFamily`, but that instance is stated at three independent
+universes and the symmetric family fixes the last two to be equal, so the specialization has to
+be given explicitly for instance search to find it. -/
 instance : (operatorNormFamily.{u, v} 𝕜).toOperatorIdealFamily.IsComplete :=
   inferInstanceAs (operatorNormIdealFamily.{u, v, v} 𝕜).IsComplete
 
+/-- The gauge of the symmetric operator-norm family is the operator norm, by definition. -/
 @[simp]
 theorem gauge_operatorNormFamily (A : E →L[𝕜] F) :
     (operatorNormFamily.{u, v} 𝕜).gauge A = ‖A‖ₑ := rfl
