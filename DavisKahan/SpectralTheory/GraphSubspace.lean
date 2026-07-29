@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
 import DavisKahan.SpectralTheory.OperatorAngle
-import ForMathlib.Analysis.InnerProductSpace.CoerciveUnit
+import ForTauCeti.Analysis.InnerProductSpace.CoerciveUnit
 import Mathlib.Analysis.Normed.Operator.Banach
 import Mathlib.Analysis.Normed.Ring.Units
 import Mathlib.Topology.Algebra.Module.LinearPMap
@@ -74,7 +74,7 @@ Expand this identity blockwise and only afterward package the ambient
 
 namespace TauCeti
 
-open ForMathlib
+open TauCeti
 namespace DavisKahanExt
 
 open scoped InnerProductSpace
@@ -198,7 +198,7 @@ theorem projection_graphSubspace_formula
     rw [hinner, map_add, inner_self_eq_norm_sq, inner_self_eq_norm_sq]
     nlinarith [sq_nonneg ‖X z‖]
   have hNunit : IsUnit N :=
-    ForMathlib.ContinuousLinearMap.isUnit_of_coercive one_pos hNcoer
+    TauCeti.ContinuousLinearMap.isUnit_of_coercive one_pos hNcoer
   have hNR : N * R = 1 := Ring.mul_inverse_cancel N hNunit
   have hRN : R * N = 1 := Ring.inverse_mul_cancel N hNunit
   have hPN : P * N = N * P := by
@@ -280,9 +280,9 @@ theorem norm_projection_sub_projection_graphSubspace
   -- units and inverses
   have hNunit : IsUnit N := by
     rw [hN]
-    exact ForMathlib.ContinuousLinearMap.isUnit_one_add_star_mul_self X
+    exact TauCeti.ContinuousLinearMap.isUnit_one_add_star_mul_self X
   have hMunit : IsUnit M := by
-    have h := ForMathlib.ContinuousLinearMap.isUnit_one_add_star_mul_self (star X)
+    have h := TauCeti.ContinuousLinearMap.isUnit_one_add_star_mul_self (star X)
     rwa [star_star, ← hMdef] at h
   have hNR : N * R = 1 := Ring.mul_inverse_cancel N hNunit
   have hRN : R * N = 1 := Ring.inverse_mul_cancel N hNunit
@@ -432,13 +432,13 @@ theorem norm_projection_sub_projection_graphSubspace
     positivity
   have hnormB : ‖star X * X‖ = ‖X‖ * ‖X‖ := CStarRing.norm_star_mul_self
   have h1Rnorm : ‖(1 : E →L[𝕜] E) - R‖ = ‖X‖ ^ 2 / (1 + ‖X‖ ^ 2) := by
-    have h := ForMathlib.ContinuousLinearMap.norm_one_sub_inverse_one_add
+    have h := TauCeti.ContinuousLinearMap.norm_one_sub_inverse_one_add
       hBsa hBpos
     rw [← hN, ← hRdef, hnormB] at h
     rw [h]
     ring
   have h1R'norm : ‖(1 : E →L[𝕜] E) - R'‖ = ‖X‖ ^ 2 / (1 + ‖X‖ ^ 2) := by
-    have h := ForMathlib.ContinuousLinearMap.norm_one_sub_inverse_one_add
+    have h := TauCeti.ContinuousLinearMap.norm_one_sub_inverse_one_add
       hB'sa hB'pos
     rw [← hMdef, ← hR'def] at h
     have h2 : ‖star (star X) * star X‖ = ‖star X‖ * ‖star X‖ :=

@@ -7,7 +7,7 @@ import DavisKahan.Interop.Spectra.DirectRotation
 import DavisKahan.Interop.Spectra.HalmosTwoProjections
 import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Unitary
 import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Commute
-import ForMathlib.Analysis.InnerProductSpace.CoerciveUnit
+import ForTauCeti.Analysis.InnerProductSpace.CoerciveUnit
 
 /-!
 # Principal-square-root completion of the Spectra direct rotation
@@ -42,7 +42,7 @@ open scoped InnerProductSpace ComplexConjugate ComplexOrder
 
 namespace TauCeti
 
-open ForMathlib
+open TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace SpectraBridge
@@ -580,7 +580,7 @@ theorem spectraCanonicalAbsoluteValue_inner_pos
       (isUnit_spectraCanonicalAbsoluteValue U V hacute)).1
   have hne : RCLike.re ⟪B x, x⟫_ℂ ≠ 0 := by
     intro hzero
-    have hsq := ForMathlib.ContinuousLinearMap.norm_apply_sq_le_of_positive
+    have hsq := TauCeti.ContinuousLinearMap.norm_apply_sq_le_of_positive
       hBsym hBform x
     have hsq0 : ‖B x‖ ^ 2 ≤ 0 := by
       calc
@@ -1350,7 +1350,7 @@ theorem spectraDirectRotation_minimal
   have hCcoer : ∀ z : H,
       c * ‖z‖ ^ 2 ≤ RCLike.re ⟪C z, z⟫_ℂ := by
     intro z
-    have hRbound := ForMathlib.ContinuousLinearMap.norm_apply_sq_le_of_positive
+    have hRbound := TauCeti.ContinuousLinearMap.norm_apply_sq_le_of_positive
       hRsa.isSymmetric hRpos (C z)
     have hRCz : R (C z) = z := by
       have h := congrArg (fun T : H →L[ℂ] H => T z) hRC

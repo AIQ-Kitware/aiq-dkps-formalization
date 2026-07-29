@@ -6,7 +6,7 @@ Authors: Jon Crall, GPT 5.6 High
 import DavisKahan.FiniteDimensional.Sylvester.Basic
 import DavisKahan.FiniteDimensional.Sylvester.Internal.SpectralBounds
 import ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm
-import ForMathlib.Analysis.InnerProductSpace.SylvesterBound
+import ForTauCeti.Analysis.InnerProductSpace.SylvesterBound
 
 /-!
 # Ordered and interval/exterior Sylvester estimates
@@ -17,7 +17,7 @@ under ordered or interval/exterior spectral separation.
 
 namespace TauCeti
 
-open ForMathlib
+open TauCeti
 namespace DavisKahanTheory
 
 open scoped InnerProductSpace BigOperators
@@ -188,7 +188,7 @@ private theorem uiNorm_sylvester_le_of_form_bounds_aux
     simpa [A', B', X', C', ContinuousLinearMap.comp_apply] using
       LinearMap.congr_fun hEq x
   have hbound : N' X' ≤ N' C' / δ :=
-    ForMathlib.ContinuousLinearMap.le_div_of_comp_sub_comp_eq_rectangular
+    TauCeti.ContinuousLinearMap.le_div_of_comp_sub_comp_eq_rectangular
       hadd hsmul hidealL hidealR hA' hB' hδ hAform hBform hEq'
   have hbound' : N X ≤ N C / δ := by
     simpa [N', X', C'] using hbound

@@ -7,7 +7,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 import DavisKahan.Sources.DavisKahan1970.Section8RieszCircle
 import DavisKahan.Experimental.Frontier.CircleContour
 import DavisKahan.Experimental.Sources.DavisKahan1970.Section8.All
-import ForMathlib.Analysis.InnerProductSpace.SpectralOrder.Complex
+import ForTauCeti.Analysis.InnerProductSpace.SpectralOrder.Complex
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.ContinuationSharpDiagonalResolvents
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.ContinuationSharpSchurComplement
 import DavisKahan.Experimental.InfiniteDimensional.Riccati.ContinuationWitnessOrientedBlocks
@@ -26,7 +26,7 @@ open Set Filter
 
 namespace TauCeti
 
-open ForMathlib
+open TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace Frontier
