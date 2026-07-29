@@ -53,15 +53,23 @@ The staged library is mathematically substantial, but it is not yet a single Tau
 >
 > Do not run a blanket rename pass. First decide the canonical mathematical object and namespace, then redesign signatures around that object, then rename the surviving declarations. Renaming a parallel abstraction only makes the duplication harder to remove.
 
+> **Table reconciled 2026-07-29 (edward, aiq-gpu).**  Three rows below still read
+> **P0** while this document's own Contents list marks the same items *"RESOLVED,
+> removed from backlog"* (§6 Courant-Fischer, §7 operator modulus, §11
+> Haagerup-Zsido).  Each was checked **against the tree**, not just against the
+> Contents list, and is struck through with that evidence inline.  The summary
+> table is a proxy; the sections and the tree are the criterion — a reader sizing
+> work off this table alone would have chased three P0s that do not exist.
+
 | **Cluster** | **Current state** | **Signature risk** | **Upstream action** | **Priority** |
 | --- | --- | --- | --- | --- |
 | Approximation numbers | Staged and Mathlib-only | ~~Codomain~~ (settled: ℝ); indexing pinned; characteristic API still P1 | Split into small PRs | P1 |
-| Courant-Fischer | Staged helper layer | Misleading specSubspace and missing min-max endpoint | Refactor around basis spans and actual min-max theorem | P0 |
-| Operator modulus / operatorAbs | Two overlapping APIs | Duplicate definitions and noncanonical names | Unify into one modulus API | P0 |
+| Courant-Fischer | Staged helper layer | ~~Misleading specSubspace and missing min-max endpoint~~ | ~~Refactor around basis spans~~ **RESOLVED** — §6 is marked *RESOLVED, removed from backlog* at its own section header | ~~P0~~ |
+| Operator modulus / operatorAbs | ~~Two overlapping APIs~~ | ~~Duplicate definitions~~ | ~~Unify into one modulus API~~ **RESOLVED** — §7 closed; `grep 'def operatorAbs'` now returns **one** definition (`SinTheta/General.lean:550`) | ~~P0~~ |
 | Near isometry | Staged real finite-dimensional result | Existential instead of canonical polar factor; wrong generality split | ~~Define canonical object; derive finite equiv~~ **RESOLVED 2026-07-27** (§8.2): canonical `ContinuousLinearMap.polarIsometry` over arbitrary complex Hilbert spaces, sharp constant `δ`, real finite-dimensional statement returns the polar factorization | ~~P0~~ |
 | Centered scatter | Staged | Custom finite mean and append family | Refactor to Finset/Fintype and reuse average/cons | P1 |
 | Orthogonal series | Staged | Likely duplicate helpers; proof-shaped names | Reuse Orthogonal predicate and existing summability API | P1 |
-| Haagerup-Zsido kernel | Staged monolith, 1673 lines | File size, public helper explosion, generic lemmas mixed in | Split into 7-8 modules; privatize/move helpers | P0 |
+| Haagerup-Zsido kernel | ~~Staged monolith, 1673 lines~~ | ~~File size~~ | ~~Split into 7-8 modules~~ **RESOLVED** — §11 closed; `HaagerupZsidoKernel.lean` is now **50 lines** beside a split `Analysis/Fourier/HaagerupZsido/` directory | ~~P0~~ |
 | Closed operators / semigroups | Production local API | Parallel to Tau Ceti LinearPMap architecture | Rewrite over LinearPMap properties | P0 |
 | Symmetric ideal families | Production local structure | Unconstrained gauge off carrier; fixed universes | ~~Redesign as normed subtype/family~~ **RESOLVED 2026-07-27** (§12.1): single `ℝ≥0∞` gauge, carrier derived, adjoint layer split off | ~~P0~~ |
 | Spectra spectral calculus | Vendored donor dependency | Needs provenance-preserving canonical port | Port minimal dependency-closed slices | P1 |
