@@ -250,10 +250,24 @@ private theorem tanTwoAngleOperatorC_eq_modulus_ambientGraphTangent
   have hNunit : IsUnit N := by
     refine ForMathlib.ContinuousLinearMap.isUnit_of_coercive one_pos ?_
     intro x
-    dsimp [N, G]
-    rw [add_apply, ContinuousLinearMap.id_apply, inner_add_left, map_add,
-      ContinuousLinearMap.adjoint_inner_left, inner_self_eq_norm_sq]
-    nlinarith [sq_nonneg ‖Y x‖]
+    -- Compute the form value first, then conclude numerically.  Doing it with a
+    -- `rw` chain does not work: `isUnit_of_coercive` states its hypothesis with
+    -- `RCLike.re`, `dsimp` collapses that to `Complex.re`, and after the collapse
+    -- neither `map_add` (which wants a bundled additive map) nor
+    -- `inner_self_eq_norm_sq` (which is stated for `RCLike.re`) can match.
+    have hval : RCLike.re ⟪N x, x⟫_ℂ = ‖x‖ ^ 2 + ‖Y x‖ ^ 2 := by
+      have hN : N x = x + Y.adjoint (Y x) := by
+        show (ContinuousLinearMap.id ℂ E + Y.adjoint ∘L Y) x
+            = x + Y.adjoint (Y x)
+        rw [ContinuousLinearMap.add_apply, ContinuousLinearMap.id_apply,
+          ContinuousLinearMap.comp_apply]
+      rw [hN]
+      -- `← ofReal_pow` pulls `(↑‖x‖) ^ 2` back to `↑(‖x‖ ^ 2)` so that
+      -- `Complex.ofReal_re` can strip the coercion.
+      simp [inner_add_left, ContinuousLinearMap.adjoint_inner_left,
+        inner_self_eq_norm_sq, ← Complex.ofReal_pow]
+    rw [hval]
+    nlinarith [sq_nonneg ‖Y x‖, norm_nonneg x]
   have hNR : N ∘L R = ContinuousLinearMap.id ℂ E :=
     Ring.mul_inverse_cancel N hNunit
   have hRN : R ∘L N = ContinuousLinearMap.id ℂ E :=
@@ -414,7 +428,8 @@ private theorem tanTwoAngleOperatorC_eq_modulus_ambientGraphTangent
           rw [ContinuousLinearMap.reApplyInnerSelf_apply]
           dsimp [D, G]
           rw [sub_apply, ContinuousLinearMap.id_apply, inner_sub_left,
-            map_sub, ContinuousLinearMap.adjoint_inner_left,
+            Complex.sub_re, ContinuousLinearMap.comp_apply,
+            ContinuousLinearMap.adjoint_inner_left,
             inner_self_eq_norm_sq]
           have hy := Y.le_opNorm x
           nlinarith [norm_quarterAcuteAngularOperator_lt_one U V hquarter,
