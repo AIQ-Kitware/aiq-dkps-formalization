@@ -60,6 +60,31 @@ archive, its `README.md` explains each file's disposition, and
 `scripts/check_distilled_literature_index.py` — names a file inside it. It is not
 what made the tree confusing; unlabelled stale notes in `dev/` were.
 
+## Second review pass — 2026-07-29, `edward (aiq-gpu)` lane COORD
+
+**Three files restored. The allowlist was right; it just could not see them.**
+
+The rule "it is listed in a manifest a script validates for existence" was
+applied to *paths*. These were named as a **string**, in the live
+`roadmap_target` field of `dev/tauceti/extraction-manifest.json` — the manifest
+`scripts/refresh_tauceti_pr1_consistency.py` validates:
+
+> `SpectralSubspacePerturbation Part B (Approximation numbers and rectangular
+> symmetric ideals) / public-api-integration-review PR 1`
+
+No path resolution could catch that, which makes it the same trap this
+repository already documents for declaration names: **something asserted as
+data, where no checker looks.**
+
+| restored | to | why |
+|---|---|---|
+| `dev/tauceti/SpectralSubspacePerturbation/README.md` | `ForTauCetiRoadmap/SpectralSubspacePerturbation/README.md` | It **is a Tau Ceti roadmap draft** — it says so in its own first section. `AGENTS.md` says roadmaps are drafted in `ForTauCetiRoadmap/`, so it is restored *there*, not to `dev/tauceti/`. Purging the roadmap for the cluster the live manifest points at, while the project's goal is to generate polished roadmaps, was backwards. |
+| `dev/tauceti/SpectralSubspacePerturbation/Suggested.lean.md` | alongside it | The API sketch its README calls definitive-modulo-prose. Matches the `ApproximationNumbers/Suggested.lean` pattern. |
+| `dev/tauceti/public-api-integration-review.md` | `dev/tauceti/` (original path) | Its analysis binds under this file's own restoration lesson. It specifies *API shape* — generic mathematics in canonical namespaces, paper numbering in source-facing wrappers, one roadmap target per PR — which transfers to Tau Ceti unchanged. Its `ForMathlib` namespace section is now directly load-bearing for lane `FM-RETIRE`. |
+
+Everything else in this directory was re-checked against the same lesson and
+stays purged.
+
 ## Judgement calls worth a second look
 
 These are the moves most likely to be wrong. Check these first.
