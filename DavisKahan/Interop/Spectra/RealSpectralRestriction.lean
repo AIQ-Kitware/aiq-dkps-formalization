@@ -75,12 +75,14 @@ noncomputable def conjugatePVM (P : TauCeti.ProjValMeasure Eℂ) :
   proj_inter B₁ B₂ hB₁ hB₂ := by
     rw [← conjugateOperator_mul, P.proj_inter]
 
+/-- Conjugating a PVM conjugates each of its projections. -/
 @[simp]
 theorem conjugatePVM_proj (P : TauCeti.ProjValMeasure Eℂ)
     (B : Set ℝ) (hB : MeasurableSet B) :
     (conjugatePVM P).proj B hB = conjugateOperator (P.proj B hB) :=
   rfl
 
+/-- Conjugating a PVM conjugates each of its diagonal measures. -/
 @[simp]
 theorem conjugatePVM_diag (P : TauCeti.ProjValMeasure Eℂ) (z : Eℂ) :
     (conjugatePVM P).diag z = P.diag (conjugation z) :=
@@ -95,6 +97,7 @@ def conjugationDomain (A : RealClosedOperator)
     simpa using
       (ClosedOperatorComplexification.mem_complexify_domain_iff A z).mp z.property⟩
 
+/-- The conjugation domain, unfolded to the underlying vector. -/
 @[simp]
 theorem conjugationDomain_coe (A : RealClosedOperator)
     (z : (ClosedOperatorComplexification.complexify A).domain) :
@@ -413,6 +416,7 @@ noncomputable def realSelfAdjointSpectralSubspace
     (S : Set ℝ) (hS : MeasurableSet S) : Submodule ℝ E :=
   (realSelfAdjointSpectralProjection A hA S hS).range
 
+/-- The real self-adjoint spectral subspace is the range of its spectral projection. -/
 @[simp]
 theorem realSelfAdjointSpectralSubspace_eq_range
     (A : RealClosedOperator) (hA : A.IsSelfAdjoint)
@@ -421,6 +425,7 @@ theorem realSelfAdjointSpectralSubspace_eq_range
       (realSelfAdjointSpectralProjection A hA S hS).range :=
   rfl
 
+/-- It is complete, being the range of an idempotent bounded operator. -/
 noncomputable instance realSelfAdjointSpectralSubspace_completeSpace
     (A : RealClosedOperator) (hA : A.IsSelfAdjoint)
     (S : Set ℝ) (hS : MeasurableSet S) :
@@ -429,6 +434,7 @@ noncomputable instance realSelfAdjointSpectralSubspace_completeSpace
   exact (ContinuousLinearMap.IsIdempotentElem.isClosed_range
     (realSelfAdjointSpectralProjection_idem A hA S hS)).completeSpace_coe
 
+/-- It is orthogonally complemented, so the operator reduces to it. -/
 noncomputable instance realSelfAdjointSpectralSubspace_hasOrthogonalProjection
     (A : RealClosedOperator) (hA : A.IsSelfAdjoint)
     (S : Set ℝ) (hS : MeasurableSet S) :

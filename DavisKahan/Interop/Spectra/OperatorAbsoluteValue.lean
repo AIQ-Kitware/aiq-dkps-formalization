@@ -113,6 +113,9 @@ theorem spectraOperatorAbsoluteValue_eq_modulus (T : H →L[ℂ] H) :
     spectraOperatorAbsoluteValue T = T.modulus :=
   rfl
 
+/-- The polar isometry of the donor development agrees with `polarPartial`.  This is the
+reconciliation that lets the donor-derived results be read as statements about the canonical
+partial isometry. -/
 @[simp]
 theorem spectraPolarIsometry_eq_polarPartial (T : H →L[ℂ] H) :
     spectraPolarIsometry T = T.polarPartial :=
