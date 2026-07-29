@@ -53,10 +53,13 @@ noncomputable def chooseBound {f : spectrum ℂ a → ℂ} (hf : IsBddMeasurable
   hf.exists_bound.choose
 
 omit [CompleteSpace H] in
+/-- The chosen bound is nonnegative. -/
 theorem chooseBound_nonneg {f : spectrum ℂ a → ℂ} (hf : IsBddMeasurable f) : 0 ≤ hf.chooseBound :=
   hf.exists_bound.choose_spec.1
 
 omit [CompleteSpace H] in
+/-- The chosen bound does bound the symbol.  It is *a* bound, not the supremum -- see
+`chooseBound`. -/
 theorem norm_le_chooseBound {f : spectrum ℂ a → ℂ} (hf : IsBddMeasurable f) (x : spectrum ℂ a) :
     ‖f x‖ ≤ hf.chooseBound :=
   hf.exists_bound.choose_spec.2 x
@@ -341,6 +344,8 @@ noncomputable def pairFunctional (hf : IsBddMeasurable f) (ξ : H) : H →L[ℂ]
 @[simp] theorem pairFunctional_apply (hf : IsBddMeasurable f) (ξ ψ : H) :
     pairFunctional ha hf ξ ψ = (starRingEnd ℂ) (pair ha f ψ ξ) := rfl
 
+/-- The polarised functional is bounded by `‖f‖ ‖x‖ ‖y‖`, which is what makes it the matrix-element
+form of a bounded operator. -/
 theorem norm_pairFunctional_le (hf : IsBddMeasurable f) (ξ : H) :
     ‖pairFunctional ha hf ξ‖ ≤ 2 * hf.chooseBound * ‖ξ‖ :=
   LinearMap.mkContinuous_norm_le _
@@ -350,12 +355,14 @@ theorem norm_pairFunctional_le (hf : IsBddMeasurable f) (ξ : H) :
 noncomputable def borelVector (hf : IsBddMeasurable f) (ξ : H) : H :=
   (InnerProductSpace.toDual ℂ H).symm (pairFunctional ha hf ξ)
 
+/-- The defining property of the Riesz vector: its inner products reproduce the functional. -/
 theorem inner_borelVector (hf : IsBddMeasurable f) (ψ ξ : H) :
     ⟪ψ, borelVector ha hf ξ⟫_ℂ = pair ha f ψ ξ := by
   have h : ⟪borelVector ha hf ξ, ψ⟫_ℂ = (starRingEnd ℂ) (pair ha f ψ ξ) := by
     rw [borelVector, InnerProductSpace.toDual_symm_apply, pairFunctional_apply]
   rw [← inner_conj_symm, h, Complex.conj_conj]
 
+/-- Norm bound on the Riesz vector, inherited from the functional's bound. -/
 theorem norm_borelVector_le (hf : IsBddMeasurable f) (ξ : H) :
     ‖borelVector ha hf ξ‖ ≤ 2 * hf.chooseBound * ‖ξ‖ := by
   rw [borelVector, LinearIsometryEquiv.norm_map]

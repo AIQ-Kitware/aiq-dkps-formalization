@@ -96,6 +96,8 @@ theorem inner_cfcHom_ofReal_conj (g : C(spectrum ℂ a, ℝ)) (ξ : H) :
   conv_lhs => rw [← (isSelfAdjoint_cfcHom_ofReal ha g).star_eq]
   rw [ContinuousLinearMap.star_eq_adjoint, ContinuousLinearMap.adjoint_inner_left]
 
+/-- For a real symbol the diagonal matrix element is real, so taking `re` and coercing back is the
+identity.  This is what lets the diagonal functional be defined over `ℝ`. -/
 theorem inner_cfcHom_ofReal_re (g : C(spectrum ℂ a, ℝ)) (ξ : H) :
     (((⟪ξ, cfcHom ha (ofRealLM g) ξ⟫_ℂ).re : ℝ) : ℂ) =
       ⟪ξ, cfcHom ha (ofRealLM g) ξ⟫_ℂ :=
@@ -160,14 +162,19 @@ noncomputable def diagFunctional (ξ : H) :
 noncomputable def diagMeasure (ξ : H) : Measure (spectrum ℂ a) :=
   RealRMK.rieszMeasure (diagFunctional ha ξ)
 
+/-- Equal diagonal functionals give equal diagonal measures, since the measure is produced from the
+functional by Riesz representation. -/
 theorem diagMeasure_congr {ξ η : H} (h : diagFunctional ha ξ = diagFunctional ha η) :
     diagMeasure ha ξ = diagMeasure ha η := by
   rw [diagMeasure, diagMeasure, h]
 
+/-- Diagonal measures are finite, inherited from the Riesz measure of a bounded functional. -/
 instance instIsFiniteMeasure_diagMeasure (ξ : H) :
     IsFiniteMeasure (diagMeasure ha ξ) := by
   unfold diagMeasure; infer_instance
 
+/-- Diagonal measures are regular, which is what allows continuous symbols to be approximated by
+simple ones in the Borel calculus. -/
 instance instRegular_diagMeasure (ξ : H) : (diagMeasure ha ξ).Regular := by
   unfold diagMeasure; infer_instance
 

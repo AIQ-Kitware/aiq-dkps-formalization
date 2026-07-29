@@ -58,6 +58,8 @@ measurable structure at PR time.) -/
 instance instMeasurableSpaceMatrix : MeasurableSpace (Matrix (Fin n) (Fin n) ℝ) :=
   inferInstanceAs (MeasurableSpace (Fin n → Fin n → ℝ))
 
+/-- Matrices carry the Borel σ-algebra of their entrywise topology, so spectral functions of a
+matrix can be shown measurable entrywise. -/
 instance instBorelSpaceMatrix : BorelSpace (Matrix (Fin n) (Fin n) ℝ) :=
   inferInstanceAs (BorelSpace (Fin n → Fin n → ℝ))
 

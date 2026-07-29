@@ -71,11 +71,14 @@ omit [CompleteSpace E] [CompleteSpace F] in
   funext i; simp [columns]
 
 omit [CompleteSpace E] [CompleteSpace F] in
+/-- Taking columns is additive. -/
 theorem columns_add (b : HilbertBasis ι 𝕜 F) (S T : F →L[𝕜] E) :
     columns b (S + T) = columns b S + columns b T := by
   funext i; simp [columns]
 
 omit [CompleteSpace E] [CompleteSpace F] in
+/-- Taking columns is homogeneous.  With `columns_add` this makes the column map linear, which is
+what lets `HS(F, E)` inherit its vector-space structure from `lp`. -/
 theorem columns_smul (b : HilbertBasis ι 𝕜 F) (c : 𝕜) (T : F →L[𝕜] E) :
     columns b (c • T) = c • columns b T := by
   funext i; simp [columns]
@@ -199,6 +202,8 @@ noncomputable def ofLp (b : HilbertBasis ι 𝕜 F) (f : lp (fun _ : ι => E) 2)
       · exact hsq1)
 
 omit [CompleteSpace F] in
+/-- The operator rebuilt from a column vector acts by summing the columns against the basis
+coefficients. -/
 theorem ofLp_apply (b : HilbertBasis ι 𝕜 F) (f : lp (fun _ : ι => E) 2) (x : F) :
     ofLp b f x = ∑' i, (b.repr x i) • f i := rfl
 

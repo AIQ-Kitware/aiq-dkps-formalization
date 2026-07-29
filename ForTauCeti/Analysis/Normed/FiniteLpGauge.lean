@@ -54,6 +54,7 @@ variable {n m : ℕ}
 noncomputable def lpGauge (p : ℝ) (x : Fin n → ℝ) : ℝ :=
   (∑ i, |x i| ^ p) ^ (1 / p)
 
+/-- The `ℓᵖ` gauge is nonnegative. -/
 theorem lpGauge_nonneg (p : ℝ) (x : Fin n → ℝ) :
     0 ≤ lpGauge p x := by
   exact Real.rpow_nonneg (Finset.sum_nonneg fun _ _ => Real.rpow_nonneg (abs_nonneg _) _) _
@@ -164,6 +165,7 @@ theorem lpGauge_zeroPadRight (p : ℝ) (x : Fin n → ℝ) :
 noncomputable def linftyGauge (x : Fin n → ℝ) : ℝ :=
   ⨆ i, |x i|
 
+/-- The `ℓ∞` gauge is nonnegative. -/
 theorem linftyGauge_nonneg (x : Fin n → ℝ) : 0 ≤ linftyGauge x := by
   rcases n with _ | n
   · simp [linftyGauge]
