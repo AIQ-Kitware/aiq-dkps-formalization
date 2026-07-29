@@ -16,6 +16,12 @@ build/
 __pycache__
 *.pyc
 
+# Agent worktrees. `.claude/settings.json` is tracked, so ignore the worktree
+# subtree only. These hold a full second checkout: one subagent worktree put
+# ~1259 extra `.lean` files inside the repo, which every gate that walks the
+# repo root then scanned as if they were sources.
+.claude/worktrees/
+
 # Local reference clones of external Lean repos (not vendored; see dev/external-lean-references.md)
 dev/reference-repos/
 *.toc

@@ -162,10 +162,16 @@ def check_names(items: list[dict]) -> None:
     reference in the wrong namespace passes.  It is here to catch deletions and
     renames without a Lean build; ``--probe`` is the authoritative check.
     """
+    # Dot-directories are skipped by rule rather than by name.  Like the
+    # DavisKahan1970 census this only *adds* to `declared`, so an extra checkout
+    # in range cannot fail the gate -- it can only satisfy a pin the real tree
+    # has stopped satisfying.  `.claude/worktrees/` is a full second copy of
+    # this repo and would do precisely that.
     text = "\n".join(
         path.read_text(errors="ignore")
         for path in ROOT.rglob("*.lean")
-        if ".lake" not in path.parts and "external" not in path.parts
+        if "external" not in path.parts
+        and not any(part.startswith(".") for part in path.relative_to(ROOT).parts)
     )
     declared = set(DECL_RE.findall(text))
     for item in items:
@@ -192,7 +198,9 @@ def private_declarations() -> dict[str, str]:
     """Short name -> file, for every `private` declaration in the tree."""
     out: dict[str, str] = {}
     for path in ROOT.rglob("*.lean"):
-        if ".lake" in path.parts or "external" in path.parts:
+        if "external" in path.parts or any(
+            part.startswith(".") for part in path.relative_to(ROOT).parts
+        ):
             continue
         for name in PRIVATE_RE.findall(path.read_text(errors="ignore")):
             out.setdefault(name, str(path.relative_to(ROOT)))

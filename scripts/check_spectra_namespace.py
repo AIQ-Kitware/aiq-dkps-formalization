@@ -40,7 +40,24 @@ FORBIDDEN = re.compile(r"^\s*namespace\s+(Spectra)(\.[A-Za-z0-9_.'₀-₉]+)?\s*
 # reported violations, and the gate would fail on a commit that changed no Lean
 # source at all.  Adding it now rather than in the move commit keeps the two
 # concerns separable.
-EXEMPT_PREFIXES = ("vendor/", "external/", ".lake/", "retired/")
+EXEMPT_PREFIXES = ("vendor/", "external/", "retired/")
+
+
+def in_hidden_dir(rel: str) -> bool:
+    """Is any component of `rel` a dot-directory?
+
+    Structural, not a hand-list, because the hand-list was wrong the moment the
+    tree grew a directory nobody had thought of.  This gate carried `.lake/` in
+    `EXEMPT_PREFIXES`; when a subagent worktree appeared at `.claude/worktrees/`
+    it brought ~1259 `.lean` files -- a second full checkout of this repo -- and
+    the gate reported violations at paths like
+    `.claude/worktrees/aiq-gpu-docs/retired/Spectra/...`, i.e. inside *another
+    agent's* working copy, on a commit that changed no Lean source at all.
+
+    Every dot-directory at the repo root is tooling state (`.lake`, `.git`,
+    `.claude`), never submission surface, so the rule covers the next one too.
+    """
+    return any(part.startswith(".") for part in Path(rel).parts)
 
 
 def strip_block_comments(text: str) -> list[str]:
@@ -77,7 +94,7 @@ def main() -> int:
     violations: list[tuple[str, int, str]] = []
     for path in sorted(repo.rglob("*.lean")):
         rel = path.relative_to(repo).as_posix()
-        if rel.startswith(EXEMPT_PREFIXES):
+        if rel.startswith(EXEMPT_PREFIXES) or in_hidden_dir(rel):
             continue
         for lineno, line in enumerate(strip_block_comments(path.read_text(errors="ignore")), 1):
             m = FORBIDDEN.match(line)
