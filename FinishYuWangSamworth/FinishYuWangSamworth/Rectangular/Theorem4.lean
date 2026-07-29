@@ -268,21 +268,16 @@ theorem yuWangSamworth_leftSingularAlignedBasis_opNormCoefficient_le
   · exact frobenius_leftGram_sub_le_paperCoefficient A Â
 
 /-- In positive finite domain dimension, the population operator norm is its
-top singular value. -/
+top singular value.
+
+Paper-facing specialization of
+`TauCeti.opNorm_eq_singularValues_zero`, which states the same identity with the
+dimension supplied explicitly.  Kept only because the Yu--Wang--Samworth
+statements are phrased with `[Nontrivial E]` rather than a named dimension; it
+carries no proof of its own and should be inlined when this lane migrates. -/
 theorem opNorm_eq_topSingularValue [Nontrivial E] (A : E →ₗ[𝕜] F) :
-    ‖A.toContinuousLinearMap‖ = A.singularValues 0 := by
-  apply le_antisymm
-  · refine A.toContinuousLinearMap.opNorm_le_bound
-      (A.singularValues_nonneg 0) fun x => ?_
-    exact norm_apply_le_singularValues_zero_mul A rfl Module.finrank_pos x
-  · obtain ⟨x, hx, hAx⟩ :=
-      exists_norm_apply_eq_singularValues_zero A rfl Module.finrank_pos
-    rw [← hAx]
-    calc
-      ‖A x‖ = ‖A.toContinuousLinearMap x‖ := rfl
-      _ ≤ ‖A.toContinuousLinearMap‖ * ‖x‖ :=
-        A.toContinuousLinearMap.le_opNorm x
-      _ = ‖A.toContinuousLinearMap‖ := by rw [hx, mul_one]
+    ‖A.toContinuousLinearMap‖ = A.singularValues 0 :=
+  TauCeti.opNorm_eq_singularValues_zero A rfl Module.finrank_pos
 
 /-- Literal source-coefficient form of the right-singular sine bound. -/
 theorem yuWangSamworth_rightSingularSubspace_le

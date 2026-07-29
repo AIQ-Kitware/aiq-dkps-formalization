@@ -467,9 +467,9 @@ except for one declaration (see
 | `yuWangSamworth_lemma5_{columns,rows,isometricColumns,orthonormalColumns,orthonormalRows}` | `…/InnerProductSpace/{FrameFactorization,NearIsometry}` *(verify)* | Parallel formulation | reusable core to `ForTauCeti`; wrappers stay |
 | `yuWangSamworth_equation4`, `yuWangSamworth_equation4_printed_counterexample` | none | Paper-specific | paper package — this is a **source-defect record** and must not be silently dropped |
 | `CorrespondingRightSingularBlock`, `CorrespondingLeftSingularBlock`, `RightSingularPopulationGap`, `LeftSingularPopulationGap` | none | Paper-specific predicates | paper package |
-| `rectangularFrobenius_adjoint`, `rectangularFrobenius_twoSided_comp_le`, `frobenius_comp_rectangular_le_opNorm_mul` | `…/InnerProductSpace/HilbertSchmidtEnergy`, `…/SchattenNorm` *(verify)* | Likely duplicate / wrapper | single Frobenius–HS ideal foundation |
+| `rectangularFrobenius_adjoint`, `rectangularFrobenius_twoSided_comp_le`, `frobenius_comp_rectangular_le_opNorm_mul` | **none — verified 2026-07-29.** `ForTauCeti/…/RectangularUnitarilyInvariantNorm/Instances` has `frobenius_apply`, `frobenius_linearIsometry_comp`, `frobenius_projection_comp_le`, `frobenius_subtype_comp`, `frobenius_eq_sqrt_sum_sq_singularValues` — but no adjoint-invariance and no two-sided ideal bound | **Missing reusable result** (not a duplicate; my first-pass guess was wrong) | `…/RectangularUnitarilyInvariantNorm/Instances`, beside the existing `frobenius_*` family |
 | `frobenius_{right,left}Gram_sub_le{,_paperCoefficient}`, `opNorm_{right,left}Gram_sub_le_paperCoefficient` | `…/InnerProductSpace/GramMatrix` *(verify)* | Missing reusable result | Gram-perturbation layer |
-| `opNorm_eq_topSingularValue` | `…/InnerProductSpace/RectangularSingularValues` *(verify)* | Likely exact duplicate | delete ours; repoint |
+| `opNorm_eq_topSingularValue` | `TauCeti.opNorm_eq_singularValues_zero` in `…/InnerProductSpace/TwoDimensionalSingularValues` — **verified duplicate 2026-07-29**, identical proof, strictly more general (dimension explicit rather than `[Nontrivial E]`) | Wrapper duplicate — **DEDUPED 2026-07-29** | now a one-line wrapper carrying no proof; inline it at migration |
 | `sum_opNorm_le_paperCoefficient` | none | Paper-specific coefficient | paper package |
 
 ### `FinishTanTwoTheta`
