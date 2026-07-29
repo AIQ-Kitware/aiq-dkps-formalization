@@ -32,13 +32,12 @@ variable {H : Type u} {K : Type v}
 
 /-- Conjugate a self-adjoint DK closed operator by a linear isometry
  equivalence.  The resulting DK operator is obtained by forgetting the
- self-adjoint Spectra operator built from the conjugated partial operator. -/
+ self-adjoint partial operator built from the conjugated partial operator. -/
 noncomputable def unitaryConjugate
     (W : H ≃ₗᵢ[ℂ] K) (A : DKClosedOperator (H := H))
     (hA : A.IsSelfAdjoint) : DKClosedOperator (H := K) :=
-  closedOperatorOfSpectra
-    { toLinearPMap := TauCeti.LinearPMap.unitaryConj W A.toLinearPMap
-      selfAdjoint := TauCeti.LinearPMap.isSelfAdjoint_unitaryConj hA }
+  closedOperatorOfSelfAdjointPMap (TauCeti.LinearPMap.unitaryConj W A.toLinearPMap)
+    (TauCeti.LinearPMap.isSelfAdjoint_unitaryConj hA)
 
 @[simp] theorem unitaryConjugate_domain
     (W : H ≃ₗᵢ[ℂ] K) (A : DKClosedOperator (H := H))
