@@ -91,6 +91,8 @@ of the spectrum of the Cayley transform.  Its value at `w = 1` is junk; see
 noncomputable def cayleyInv (w : _root_.spectrum ℂ (cayley hA)) : ℝ :=
   (Complex.I * (1 + (w : ℂ)) / (1 - (w : ℂ))).re
 
+/-- The inverse Cayley relabelling is measurable.  Measurability, not continuity, is all that is
+available and all that is needed: the map is genuinely singular at `w = 1`. -/
 theorem measurable_cayleyInv : Measurable (cayleyInv hA) := by
   unfold cayleyInv
   fun_prop
@@ -178,6 +180,9 @@ noncomputable def cayleyCoord : C(_root_.spectrum ℂ (cayley hA), ℂ) :=
     cayleyCoord hA w = (w : ℂ) := rfl
 
 include hz in
+/-- The resolvent symbol's denominator never vanishes on the spectrum of the Cayley transform,
+because that spectrum lies on the unit circle and `z` is non-real.  This is what makes the symbol
+continuous rather than merely measurable. -/
 theorem cayleyDenom_ne_zero (w : _root_.spectrum ℂ (cayley hA)) :
     (Complex.I - z) + (Complex.I + z) * (w : ℂ) ≠ 0 :=
   cayley_denom_ne_zero hz
@@ -210,6 +215,7 @@ noncomputable def cayleyDenomInvCM : C(_root_.spectrum ℂ (cayley hA), ℂ) :=
     cayleyDenomInvCM hA hz w
       = (2 * Complex.I) / ((Complex.I - z) + (Complex.I + z) * (w : ℂ)) := rfl
 
+/-- `2i ≠ 0`, needed to divide by it when inverting the Cayley symbol. -/
 theorem two_I_ne_zero : (2 * Complex.I : ℂ) ≠ 0 := by simp
 
 /-- `R(-i)` is the functional calculus of `(1 - w)/(2i)`. -/
@@ -422,6 +428,9 @@ theorem specProjection_comm_resolvent' {z : ℂ} (hz : z.im ≠ 0) (hzr : z ∈ 
     BorelCalculus.specProj]
   exact BorelCalculus.borelCalculus_comm _ _ _
 
+/-- Spectral projections commute with the resolvent, pointwise.  The operator-level statement is
+`specProjection_comm_resolvent'`; this is the form applied to a vector, which is what the
+reducing-subspace arguments use. -/
 theorem specProjection_resolvent_apply' {z : ℂ} (hz : z.im ≠ 0) (hzr : z ∈ resolventSet A)
     (B : Set ℝ) (hB : MeasurableSet B) (φ : H) :
     specProjection hA B hB (resolvent A hzr φ)
@@ -430,10 +439,13 @@ theorem specProjection_resolvent_apply' {z : ℂ} (hz : z.im ≠ 0) (hzr : z ∈
     (specProjection_comm_resolvent' hA hz hzr B hB)
   simpa only [_root_.mul_apply_eq_comp] using h
 
+/-- Spectral projections are idempotent. -/
 theorem isIdempotentElem_specProjection (B : Set ℝ) (hB : MeasurableSet B) :
     IsIdempotentElem (specProjection hA B hB) :=
   (spectralPVM hA).proj_idem B hB
 
+/-- Spectral projections are self-adjoint.  With idempotence this makes them *orthogonal*
+projections, which is what gives `specRange` an orthogonal complement. -/
 theorem isSelfAdjoint_specProjection (B : Set ℝ) (hB : MeasurableSet B) :
     IsSelfAdjoint (specProjection hA B hB) :=
   (spectralPVM hA).isSelfAdjoint_proj B hB
@@ -448,6 +460,8 @@ variable {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A) (B : Set ℝ) (hB : Measu
 projection, a closed, orthogonally complemented subspace. -/
 noncomputable def specRange : Submodule ℂ H := (specProjection hA B hB).range
 
+/-- A vector lies in the spectral range exactly when the spectral projection fixes it -- the usable
+criterion, since the range is defined as an image. -/
 theorem mem_specRange_iff (x : H) :
     x ∈ specRange hA B hB ↔ specProjection hA B hB x = x := by
   constructor
@@ -460,11 +474,15 @@ theorem mem_specRange_iff (x : H) :
   · intro hx
     exact ⟨x, hx⟩
 
+/-- The spectral range is complete, being the range of an idempotent bounded operator and hence
+closed in `H`. -/
 noncomputable instance instCompleteSpace_specRange : CompleteSpace (specRange hA B hB) := by
   change CompleteSpace (specProjection hA B hB).range
   exact (ContinuousLinearMap.IsIdempotentElem.isClosed_range
     (isIdempotentElem_specProjection hA B hB)).completeSpace_coe
 
+/-- The spectral range is orthogonally complemented, so `A` genuinely *reduces* to it rather than
+merely restricting. -/
 noncomputable instance instHasOrthogonalProjection_specRange :
     (specRange hA B hB).HasOrthogonalProjection := by
   change (specProjection hA B hB).range.HasOrthogonalProjection
@@ -508,6 +526,8 @@ noncomputable def specRestrict : specRange hA B hB →ₗ.[ℂ] specRange hA B h
     ((specRestrict hA B hB x : specRange hA B hB) : H)
       = A ⟨((x : specRange hA B hB) : H), x.2⟩ := rfl
 
+/-- The restriction of `A` to a spectral range is symmetric on its domain, inherited from
+self-adjointness of `A`. -/
 theorem isFormalAdjoint_specRestrict :
     (specRestrict hA B hB).IsFormalAdjoint (specRestrict hA B hB) := by
   intro x y
@@ -534,6 +554,9 @@ theorem exists_specRestrict_resolvent {z : ℂ} (hz : z.im ≠ 0) (hzr : z ∈ r
   have h := sub_smul_resolvent hzr (φ : H)
   simpa only [Submodule.coe_sub, Submodule.coe_smul, specRestrict_apply] using h
 
+/-- The restricted domain is dense in the spectral range.  This is the non-obvious half of the
+reduction: density of `A.domain` in `H` does not automatically survive intersecting with a
+subspace, and the proof goes through the projection rather than by restriction. -/
 theorem dense_specRestrict_domain :
     Dense (((specRestrict hA B hB).domain : Submodule ℂ (specRange hA B hB)) :
       Set (specRange hA B hB)) := by
@@ -598,6 +621,8 @@ noncomputable def truncSymbol (c : ℝ) : _root_.spectrum ℂ (cayley hA) → �
   fun w => ((cayleyInv hA w : ℂ) - (c : ℂ)) *
     (cayleyInv hA ⁻¹' B).indicator (fun _ => (1 : ℂ)) w
 
+/-- The truncation symbol is bounded by `r` whenever `B` sits within `r` of `c`.  Both branches
+matter: off `B` the indicator kills the symbol, so the bound needs only `0 ≤ r`. -/
 theorem norm_truncSymbol_le {c r : ℝ} (hr : 0 ≤ r) (hcr : ∀ s ∈ B, |s - c| ≤ r)
     (w : _root_.spectrum ℂ (cayley hA)) : ‖truncSymbol hA B c w‖ ≤ r := by
   by_cases hw : w ∈ cayleyInv hA ⁻¹' B
@@ -614,6 +639,8 @@ theorem norm_truncSymbol_le {c r : ℝ} (hr : 0 ≤ r) (hcr : ∀ s ∈ B, |s - 
     exact hr
 
 include hB in
+/-- The truncation symbol is admissible for the bounded Borel calculus -- measurable, from
+measurability of the relabelling and of `B`, and bounded by the previous lemma. -/
 theorem isBddMeasurable_truncSymbol {c r : ℝ} (hr : 0 ≤ r)
     (hcr : ∀ s ∈ B, |s - c| ≤ r) :
     BorelCalculus.IsBddMeasurable (truncSymbol hA B c) := by
@@ -900,6 +927,9 @@ noncomputable def truncation {M : ℝ} (hbnd : ∀ s ∈ B, |s| ≤ M) : H →L[
     (isBddMeasurable_truncSymbol hA B hB (c := 0) (r := max 0 M) (le_max_left 0 M)
       (fun s hs => by simpa using le_trans (hbnd s hs) (le_max_right 0 M)))
 
+/-- **The truncation agrees with `A` on the spectral range.**  This is the point of the
+construction: `A` is unbounded, but on a bounded spectral set it is implemented by a bounded
+operator, and the existential carries the domain membership that lets `A` be applied at all. -/
 theorem truncation_eq_on_specProjection {M : ℝ} (hbnd : ∀ s ∈ B, |s| ≤ M) (y : H) :
     ∃ hy : specProjection hA B hB y ∈ A.domain,
       A ⟨specProjection hA B hB y, hy⟩ = truncation hA B hB hbnd y := by
@@ -908,6 +938,7 @@ theorem truncation_eq_on_specProjection {M : ℝ} (hbnd : ∀ s ∈ B, |s| ≤ M
     (fun s hs => by simpa using le_trans (hbnd s hs) (le_max_right 0 M)) y
   exact ⟨hy, by simpa [truncation] using hb⟩
 
+/-- The truncation is bounded by the spectral bound of `B`. -/
 theorem norm_truncation_apply_le {M : ℝ} (hbnd : ∀ s ∈ B, |s| ≤ M) (y : H) :
     ‖truncation hA B hB hbnd y‖ ≤ max 0 M * ‖y‖ :=
   BorelCalculus.norm_borelCalculus_apply_le _ _ (le_max_left 0 M)
@@ -954,6 +985,8 @@ theorem truncation_mul_specProjection {M : ℝ} (hbnd : ∀ s ∈ B, |s| ≤ M) 
   rw [truncSymbol]
   by_cases hw : w ∈ cayleyInv hA ⁻¹' B <;> simp [hw]
 
+/-- The spectral projection is a left identity for the truncation: the truncation already lands in
+the spectral range, so projecting again changes nothing. -/
 theorem specProjection_mul_truncation {M : ℝ} (hbnd : ∀ s ∈ B, |s| ≤ M) :
     specProjection hA B hB * truncation hA B hB hbnd = truncation hA B hB hbnd := by
   rw [← truncation_comm_specProjection hA B hB hbnd B hB]

@@ -40,6 +40,7 @@ namespace TauCeti
 variable {E R' : Type*} [SeminormedAddCommGroup E] [Ring R'] [Module R' E]
   {p q : Submodule R' E}
 
+/-- Transporting along an equality of submodules does not move the underlying vector. -/
 @[simp]
 theorem LinearIsometryEquiv.ofEq_apply_mk (h : p = q) (x : E) (hx : x ∈ p) :
     LinearIsometryEquiv.ofEq p q h ⟨x, hx⟩ = ⟨x, h ▸ hx⟩ :=

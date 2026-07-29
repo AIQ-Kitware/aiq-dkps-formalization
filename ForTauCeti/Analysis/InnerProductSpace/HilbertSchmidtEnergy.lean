@@ -110,6 +110,7 @@ Hilbert--Schmidt norm, and by `hilbertSchmidtEnergy_indep` it does not in fact d
 noncomputable def hilbertSchmidtEnergy (T : E →L[𝕜] F) (b : HilbertBasis ι 𝕜 E) : ℝ≥0∞ :=
   ∑' i, ‖T (b i)‖ₑ ^ 2
 
+/-- Rewrite form of the Hilbert--Schmidt energy as the sum of squared column norms. -/
 theorem hilbertSchmidtEnergy_def (T : E →L[𝕜] F) (b : HilbertBasis ι 𝕜 E) :
     T.hilbertSchmidtEnergy b = ∑' i, ‖T (b i)‖ₑ ^ 2 := rfl
 
@@ -126,6 +127,8 @@ theorem hilbertSchmidtEnergy_eq_iSup_sum (T : E →L[𝕜] F) (b : HilbertBasis 
     (-T).hilbertSchmidtEnergy b = T.hilbertSchmidtEnergy b := by
   simp [hilbertSchmidtEnergy]
 
+/-- The energy is quadratically homogeneous: scaling the operator by `c` scales the energy by
+`‖c‖²`, not `‖c‖`. -/
 theorem hilbertSchmidtEnergy_smul (c : 𝕜) (T : E →L[𝕜] F) (b : HilbertBasis ι 𝕜 E) :
     (c • T).hilbertSchmidtEnergy b = ‖c‖ₑ ^ 2 * T.hilbertSchmidtEnergy b := by
   simp only [hilbertSchmidtEnergy, smul_apply, enorm_smul, mul_pow]

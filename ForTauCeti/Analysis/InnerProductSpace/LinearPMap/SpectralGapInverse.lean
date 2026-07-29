@@ -65,6 +65,7 @@ section GapSymbol
 noncomputable def gapSymbol (δ : ℝ) (s : ℝ) : ℂ :=
   if δ ≤ |s| then ((s : ℂ))⁻¹ else 0
 
+/-- The cut-off reciprocal symbol is measurable. -/
 theorem measurable_gapSymbol (δ : ℝ) : Measurable (gapSymbol δ) := by
   unfold gapSymbol
   refine Measurable.ite ?_ ?_ measurable_const
@@ -102,6 +103,9 @@ noncomputable def gapSymbolCayley (δ : ℝ) :
     _root_.spectrum ℂ (cayley hA) → ℂ :=
   fun w => gapSymbol δ (cayleyInv hA w)
 
+/-- The gap symbol, pulled back along the Cayley relabelling, is admissible for the bounded Borel
+calculus.  Boundedness is where the gap is used: off `(-δ, δ)` the reciprocal is bounded by
+`δ⁻¹`. -/
 theorem isBddMeasurable_gapSymbolCayley {δ : ℝ} (hδ : 0 < δ) :
     BorelCalculus.IsBddMeasurable (gapSymbolCayley hA δ) :=
   ⟨(measurable_gapSymbol δ).comp (measurable_cayleyInv hA), δ⁻¹,
@@ -123,6 +127,8 @@ theorem norm_gapInverse_apply_le {δ : ℝ} (hδ : 0 < δ) (ξ : H) :
   BorelCalculus.norm_borelCalculus_apply_le _ _ (by positivity)
     (fun w => norm_gapSymbol_le hδ _) ξ
 
+/-- **The sharp bound `‖𝒮⁻¹‖ ≤ δ⁻¹`.**  It is immediate rather than deep: the symbol is bounded by
+`δ⁻¹` pointwise, so no spectral theory enters the estimate itself. -/
 theorem norm_gapInverse_le {δ : ℝ} (hδ : 0 < δ) :
     ‖gapInverse hA hδ‖ ≤ δ⁻¹ :=
   ContinuousLinearMap.opNorm_le_bound _ (by positivity)
@@ -190,9 +196,11 @@ theorem borelCalculus_mem_domain_of_coord_mul
 /-- The set of spectral points at distance at least `δ` from the origin. -/
 def gapSet (δ : ℝ) : Set ℝ := {s : ℝ | δ ≤ |s|}
 
+/-- The gap set is measurable, so it admits a spectral projection. -/
 theorem measurableSet_gapSet (δ : ℝ) : MeasurableSet (gapSet δ) :=
   (isClosed_le continuous_const continuous_abs).measurableSet
 
+/-- The complement of the gap set is the open interval `(-δ, δ)`. -/
 theorem compl_gapSet (δ : ℝ) : (gapSet δ)ᶜ = Set.Ioo (-δ) δ := by
   ext s
   simp only [gapSet, Set.mem_compl_iff, Set.mem_setOf_eq, not_le, Set.mem_Ioo,

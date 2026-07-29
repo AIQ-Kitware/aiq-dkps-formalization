@@ -461,10 +461,12 @@ values.  `kyFanSum 1 A = ‖A‖`, `kyFanSum (finrank 𝕜 E) A` is the trace no
 noncomputable def kyFanSum (k : ℕ) (A : E →ₗ[𝕜] E) : ℝ :=
   ∑ i ∈ Finset.range k, A.singularValues i
 
+/-- The Ky Fan `k`-sum as a sum over `Fin k` rather than over `Finset.range k`. -/
 theorem kyFanSum_eq_sum_fin (k : ℕ) (A : E →ₗ[𝕜] E) :
     kyFanSum k A = ∑ i : Fin k, A.singularValues (i : ℕ) :=
   (Fin.sum_univ_eq_sum_range (fun i => A.singularValues i) k).symm
 
+/-- Ky Fan sums are nonnegative, being sums of singular values. -/
 theorem kyFanSum_nonneg (k : ℕ) (A : E →ₗ[𝕜] E) : 0 ≤ kyFanSum k A :=
   Finset.sum_nonneg fun i _ => A.singularValues_nonneg i
 
@@ -507,21 +509,26 @@ theorem kyFanSum_le_of_singularValues_le {A B : E →ₗ[𝕜] E}
     kyFanSum k A ≤ kyFanSum k B :=
   Finset.sum_le_sum fun i _ => h i
 
+/-- Ky Fan sums are adjoint-invariant, since the singular values are. -/
 theorem kyFanSum_adjoint (k : ℕ) (A : E →ₗ[𝕜] E) :
     kyFanSum k A.adjoint = kyFanSum k A := by
   unfold kyFanSum
   rw [singularValues_adjoint]
 
+/-- Ky Fan sums are unchanged by a unitary on the codomain. -/
 theorem kyFanSum_unitary_comp (k : ℕ) (U : E ≃ₗᵢ[𝕜] E) (A : E →ₗ[𝕜] E) :
     kyFanSum k (U.toLinearMap ∘ₗ A) = kyFanSum k A := by
   unfold kyFanSum
   rw [singularValues_unitary_comp]
 
+/-- Ky Fan sums are unchanged by a unitary on the domain.  With `kyFanSum_unitary_comp` this is
+the two-sided unitary invariance that makes each Ky Fan sum a unitarily invariant norm. -/
 theorem kyFanSum_comp_unitary (k : ℕ) (A : E →ₗ[𝕜] E) (U : E ≃ₗᵢ[𝕜] E) :
     kyFanSum k (A ∘ₗ U.toLinearMap) = kyFanSum k A := by
   unfold kyFanSum
   rw [singularValues_comp_unitary]
 
+/-- Ky Fan sums are absolutely homogeneous under real scaling. -/
 theorem kyFanSum_real_smul (k : ℕ) (A : E →ₗ[𝕜] E) {r : ℝ} (hr : 0 ≤ r) :
     kyFanSum k (((r : 𝕜)) • A) = r * kyFanSum k A := by
   unfold kyFanSum

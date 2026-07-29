@@ -69,6 +69,7 @@ namespace RectangularUnitarilyInvariantNorm
 noncomputable def rectangularKyFanSum (k : ℕ) (A : E →ₗ[𝕜] F) : ℝ :=
   ∑ i : Fin k, A.singularValues (i : ℕ)
 
+/-- Apply a rectangular UI seminorm directly to a map, writing `N A` for `N.toFun A`. -/
 instance : CoeFun (RectangularUnitarilyInvariantNorm 𝕜 E F)
     fun _ => (E →ₗ[𝕜] F) → ℝ :=
   ⟨RectangularUnitarilyInvariantNorm.toFun⟩
@@ -81,6 +82,8 @@ variable (N : RectangularUnitarilyInvariantNorm 𝕜 E F)
   simpa using h
 
 
+/-- A rectangular UI seminorm is nonnegative -- derived from subadditivity applied to `A` and `-A`,
+not assumed as a field. -/
 theorem nonneg (A : E →ₗ[𝕜] F) : 0 ≤ N A := by
   have h := N.add_le' A (-A)
   rw [add_neg_cancel] at h
@@ -92,6 +95,7 @@ theorem nonneg (A : E →ₗ[𝕜] F) : 0 ≤ N A := by
   linarith
 
 
+/-- Subadditivity. -/
 theorem add_le (A B : E →ₗ[𝕜] F) : N (A + B) ≤ N A + N B :=
   N.add_le' A B
 
@@ -242,6 +246,7 @@ theorem hasFiniteUnitaryOrbitCertificate_of_smul_mem_convexHull
       _ ≤ mass := hmass
 
 
+/-- Absolute homogeneity. -/
 theorem smul_eq (a : 𝕜) (A : E →ₗ[𝕜] F) : N (a • A) = ‖a‖ * N A :=
   N.smul' a A
 
@@ -251,6 +256,8 @@ theorem smul_eq (a : 𝕜) (A : E →ₗ[𝕜] F) : N (a • A) = ‖a‖ * N A 
   simpa using h
 
 
+/-- Two-sided unitary invariance, with `U` acting on the codomain and `V` on the domain.  Note the
+argument order follows the composition `U ∘ A ∘ V`, not the alphabet. -/
 theorem invariant (U : F ≃ₗᵢ[𝕜] F) (V : E ≃ₗᵢ[𝕜] E)
     (A : E →ₗ[𝕜] F) :
     N (U.toLinearMap ∘ₗ A ∘ₗ V.toLinearMap) = N A :=

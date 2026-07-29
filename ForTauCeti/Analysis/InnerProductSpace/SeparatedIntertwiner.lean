@@ -135,6 +135,8 @@ noncomputable def symbolRestrict {K s : Set ℂ} (h : s ⊆ K) :
     C(K, ℂ) →⋆ₐ[ℂ] C(s, ℂ) :=
   ContinuousMap.compStarAlgHom' ℂ ℂ ⟨Set.inclusion h, continuous_inclusion h⟩
 
+/-- The restricted separator symbol is continuous, so it lands in the continuous functional calculus
+rather than needing the Borel one. -/
 theorem continuous_symbolRestrict {K s : Set ℂ} (h : s ⊆ K) :
     Continuous (symbolRestrict h) :=
   ContinuousMap.continuous_precomp _

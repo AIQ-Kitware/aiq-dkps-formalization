@@ -110,6 +110,8 @@ structure ProjValMeasure (H : Type*) [NormedAddCommGroup H]
 
 namespace ProjValMeasure
 
+/-- Every diagonal measure is finite, with total mass `‖ξ‖²`; unpacked from the `diag_finite`
+field so instance search can use it. -/
 instance instIsFiniteMeasureDiag (P : ProjValMeasure H) (ξ : H) :
     IsFiniteMeasure (P.diag ξ) :=
   P.diag_finite ξ
@@ -123,6 +125,8 @@ lemma proj_congr (P : ProjValMeasure H) {B₁ B₂ : Set ℝ} (h : B₁ = B₂)
     P.proj B₁ h₁ = P.proj B₂ h₂ := by
   subst h; rfl
 
+/-- The projection of the empty set is zero -- the first classical PVM axiom, recovered here from
+the diagonal-measure characterisation rather than assumed. -/
 @[simp]
 lemma proj_empty (P : ProjValMeasure H) : P.proj ∅ MeasurableSet.empty = 0 :=
   op_ext_of_inner_self fun ξ => by
@@ -236,10 +240,13 @@ theorem ext_of_proj {P Q : ProjValMeasure H}
   exact (ENNReal.toReal_eq_toReal_iff' (measure_ne_top _ _) (measure_ne_top _ _)).mp
     (by exact_mod_cast hr)
 
+/-- Two projection-valued measures are equal exactly when all their diagonal measures agree.  This
+is the practical extensionality principle: diagonal measures are scalar and comparable. -/
 theorem ext_iff_diag {P Q : ProjValMeasure H} :
     P = Q ↔ ∀ ξ : H, P.diag ξ = Q.diag ξ :=
   ⟨fun h ξ => by rw [h], ext_of_diag⟩
 
+/-- Two projection-valued measures are equal exactly when they agree on every measurable set. -/
 theorem ext_iff_proj {P Q : ProjValMeasure H} :
     P = Q ↔ ∀ (B : Set ℝ) (hB : MeasurableSet B), P.proj B hB = Q.proj B hB :=
   ⟨fun h B hB => by rw [h], ext_of_proj⟩

@@ -251,14 +251,18 @@ gives it to the poorer one. -/
 def transfer (q : Fin n → ℝ) (j l : Fin n) (δ : ℝ) : Fin n → ℝ :=
   Function.update (Function.update q j (q j - δ)) l (q l + δ)
 
+/-- At the donor coordinate the transfer removes `δ`.  Needs `j ≠ l`, since a self-transfer would
+have the receiving update overwrite the donating one. -/
 theorem transfer_apply_left {q : Fin n → ℝ} {j l : Fin n} (hjl : j ≠ l) (δ : ℝ) :
     transfer q j l δ j = q j - δ := by
   rw [transfer, Function.update_of_ne hjl, Function.update_self]
 
+/-- At the receiving coordinate the transfer adds `δ`. -/
 theorem transfer_apply_right (q : Fin n → ℝ) (j l : Fin n) (δ : ℝ) :
     transfer q j l δ l = q l + δ := by
   rw [transfer, Function.update_self]
 
+/-- A transfer leaves every coordinate other than the two it moves mass between unchanged. -/
 theorem transfer_apply_of_ne {q : Fin n → ℝ} {i j l : Fin n} (hij : i ≠ j) (hil : i ≠ l)
     (δ : ℝ) : transfer q j l δ i = q i := by
   rw [transfer, Function.update_of_ne hil, Function.update_of_ne hij]
@@ -606,22 +610,30 @@ namespace FiniteSymmetricGauge
 
 variable {n : ℕ}
 
+/-- Apply a finite symmetric gauge directly to a vector, writing `Φ x` for `Φ.toFun x`. -/
 instance : CoeFun (FiniteSymmetricGauge n) fun _ => (Fin n → ℝ) → ℝ :=
   ⟨FiniteSymmetricGauge.toFun⟩
 
 variable (Φ : FiniteSymmetricGauge n)
 
+/-- Subadditivity of a finite symmetric gauge. -/
 theorem add_le (x y : Fin n → ℝ) : Φ (x + y) ≤ Φ x + Φ y :=
   Φ.add_le' x y
 
+/-- Absolute homogeneity of a finite symmetric gauge. -/
 theorem real_smul (c : ℝ) (x : Fin n → ℝ) :
     Φ (c • x) = |c| * Φ x :=
   Φ.real_smul' c x
 
+/-- A finite symmetric gauge is invariant under permuting coordinates -- the *symmetric* half of
+the name. -/
 theorem perm (x : Fin n → ℝ) (π : Equiv.Perm (Fin n)) :
     Φ (x ∘ π) = Φ x :=
   Φ.perm' x π
 
+/-- A finite symmetric gauge is invariant under flipping the sign of a single coordinate.  With
+`perm` this gives invariance under all signed permutations, which is what makes the sublevel sets
+symmetric-convex. -/
 theorem neg_single (x : Fin n → ℝ) (j : Fin n) :
     Φ (Function.update x j (-(x j))) = Φ x :=
   Φ.neg_single' x j
