@@ -795,6 +795,30 @@ theorem riccatiGram_resolvent_mem_domain
     (norm_riccatiGram_pow_commutator_le_geom H hdom hadj hinv hric)
     (fun _ => (1 : 𝕜)) hR' hsum x
 
+include hdom hadj in
+/-- **The double-angle tangent operator transports the diagonal domains.**
+
+`tan 2Theta = 2X(1 - X†X)⁻¹` maps `dom A₀` into `dom A₁`, which is the
+`MapsDomainTo` half of `TauCeti.LinearPMap.SylvesterEquation A₁ A₀ tan2Θ C`.
+It follows immediately once the resolvent is known to preserve `dom A₀`:
+the tangent operator is the resolvent followed by `X`, and `X` transports the
+domains by hypothesis. -/
+theorem doubleAngleTangent_mapsDomainTo
+    (hlt : ‖riccatiGram X‖ < 1)
+    (hinv : TauCeti.LinearPMap.InvariantSubspace (unboundedBlockOperatorCore H)
+      (unboundedBlockGraph X)ᗮ)
+    (hric : ∀ x : H.A0.domain,
+      H.A1 ⟨X (x : E0), hdom x⟩ + H.B10 (x : E0) =
+        X (H.A0 x + H.B01 (X (x : E0))))
+    {R : E0 →L[𝕜] E0}
+    (hR : HasSum (fun n => (riccatiGram X) ^ n) R)
+    (x : H.A0.domain) :
+    ((2 : 𝕜) • (X ∘L R)) (x : E0) ∈ H.A1.domain := by
+  obtain ⟨hmem, -⟩ :=
+    riccatiGram_resolvent_mem_domain H hdom hadj hlt hinv hric hR x
+  have hXmem : X (R (x : E0)) ∈ H.A1.domain := hdom ⟨R (x : E0), hmem⟩
+  simpa using Submodule.smul_mem _ (2 : 𝕜) hXmem
+
 end Powers'
 
 /-- The Riccati commutator is bounded by the off-diagonal coupling alone: no
