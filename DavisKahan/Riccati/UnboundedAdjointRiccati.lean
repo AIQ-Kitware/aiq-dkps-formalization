@@ -485,6 +485,44 @@ theorem norm_riccatiGram_pow_succ_commutator_le
       linarith [h1, h2]
 
 include hdom hadj in
+/-- The geometric commutator bound with the degree written directly.
+
+`n * ‖T‖^(n-1)` uses natural subtraction, which is exactly right here: at
+`n = 0` it reads `0 * ‖T‖^0 = 0`, matching the vanishing commutator, and at
+`n ≥ 1` it is the intended `n‖T‖ⁿ⁻¹`.  This is the summand form, so it is what
+gets summed over a `Finset` and then over `ℕ`. -/
+theorem norm_riccatiGram_pow_commutator_le_geom
+    (hinv : TauCeti.LinearPMap.InvariantSubspace (unboundedBlockOperatorCore H)
+      (unboundedBlockGraph X)ᗮ)
+    (hric : ∀ x : H.A0.domain,
+      H.A1 ⟨X (x : E0), hdom x⟩ + H.B10 (x : E0) =
+        X (H.A0 x + H.B01 (X (x : E0))))
+    (n : ℕ) (x : H.A0.domain) :
+    ‖H.A0 ⟨((riccatiGram X) ^ n) (x : E0),
+          riccatiGram_pow_mem_domain H hdom hadj n x⟩ -
+        ((riccatiGram X) ^ n) (H.A0 x)‖ ≤
+      (n * ‖riccatiGram X‖ ^ (n - 1)) *
+        ‖riccatiGramCommutator H X‖ * ‖(x : E0)‖ := by
+  cases n with
+  | zero =>
+      have h0 : (⟨((riccatiGram X) ^ 0) (x : E0),
+          riccatiGram_pow_mem_domain H hdom hadj 0 x⟩ : H.A0.domain) = x := by
+        apply Subtype.ext; simp
+      rw [h0]
+      simp
+  | succ n =>
+      have h := norm_riccatiGram_pow_succ_commutator_le H hdom hadj hinv hric n x
+      simpa using h
+
+end Powers
+
+section Powers'
+
+variable (H : UnboundedBlockData (𝕜 := 𝕜) (E0 := E0) (E1 := E1))
+variable {X : E0 →L[𝕜] E1} (hdom : PreservesRiccatiDomains H X)
+variable (hadj : PreservesAdjointRiccatiDomains H X)
+
+include hdom hadj in
 /-- A polynomial in the Gram operator, indexed by an arbitrary finite set of
 degrees, preserves the first diagonal domain. -/
 theorem riccatiGram_finsetPoly_mem_domain (a : ℕ → 𝕜) (s : Finset ℕ)
@@ -790,7 +828,7 @@ theorem riccatiGram_hasSum_mem_domain
   have := le_of_tendsto hrl.norm (Filter.Eventually.of_forall hrbound)
   simpa [hc, ← mul_assoc] using this
 
-end Powers
+end Powers'
 
 /-- The Riccati commutator is bounded by the off-diagonal coupling alone: no
 norm of a diagonal block appears.  This is what allows band projections of
