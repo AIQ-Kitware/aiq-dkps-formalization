@@ -30,20 +30,30 @@ leave the repository and nothing said so.** Now 156/156 across 18 clusters, and
 
 **What is left, in order.**
 
-1. **The dependency switch, and it is the last step.** `lakefile.toml` already
-   requires `TauCeti` at `external/TauCeti`. Measured: **261 `import
-   ForTauCeti.X` lines across 167 files** (DavisKahan 204, Challenge 23,
-   FinishTanTwoTheta 11, Acharyya2025 7, DkpsQuench2026 6,
-   FinishYuWangSamworth 6, Acharyya2024 3), plus the `lean_lib` block and
-   `scripts/check_dependency_layers.py`, which encodes `ForTauCeti` as a layer.
-   There are **no qualified `ForTauCeti.` references in proof bodies** — the
-   only other occurrences are two prose comments in root modules. Gated on
-   `lake build TauCeti` going green over all 785 modules.
-2. **Publishing the export upstream.** The exported files are *untracked* in
-   the submodule. Committing and pushing them into the shared Tau Ceti
-   repository is an outward-facing act and is jon's call, not a build step.
+1. **Submission to Tau Ceti — and this is the only thing left, and it is not an
+   agent's to do.** `external/TauCeti` is
+   `github.com/TauCetiProject/TauCeti`, a **separate project** with its own PR
+   workflow; our 156 modules are *untracked* there against upstream HEAD
+   `92c79e5e`, and the manifest's `upstream_pr` is null for every cluster.
+2. **The dependency switch, which is gated on (1) and cannot precede it.**
+   Measured and ready: **261 `import ForTauCeti.X` lines across 167 files**
+   (DavisKahan 204, Challenge 23, FinishTanTwoTheta 11, Acharyya2025 7,
+   DkpsQuench2026 6, FinishYuWangSamworth 6, Acharyya2024 3), plus the
+   `lean_lib` block and `scripts/check_dependency_layers.py`. **No proof body
+   references `ForTauCeti`.** It cannot go first: repointing would make this
+   repository's build depend on submodule content that exists in one working
+   tree, so a fresh clone would break, and deleting `ForTauCeti/` on top of
+   that would leave ~20,000 lines of proof with no tracked copy anywhere.
 3. Lane P-EXP (§13.2 phase C, 117 lines across 30 modules) and convergence
    Waves 4–5.
+
+**The exports are verified, and the package's own failures are not ours.**
+`lake build TauCeti` fails on two *upstream* modules —
+`AlgebraicGeometry.WeilDivisor.Basic` (a `Finsupp` deprecation) and
+`NumberTheory.Multiquadratic.Subfield.Degree` (a stale `rewrite`) — broken
+against the newer root Mathlib pin. Neither is imported by anything we export,
+and **building exactly our 156 through the TauCeti package is green at 8,819
+jobs**.
 
 **Two findings worth carrying.**
 
