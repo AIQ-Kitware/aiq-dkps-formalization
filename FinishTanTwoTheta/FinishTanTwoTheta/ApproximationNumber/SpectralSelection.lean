@@ -32,7 +32,6 @@ namespace FinishTanTwoTheta
 
 open scoped InnerProductSpace BigOperators
 open Set
-open TauCeti.DavisKahan.Experimental.SpectraBridge
 
 noncomputable section
 
@@ -175,7 +174,7 @@ theorem exists_gramSpectralBandModel
       exact hε.trans (hselected i)
     obtain ⟨η, hη0, hηε, hηa, hηsep⟩ :=
       exists_uniform_positive_separation a ha hε
-    let P := gramPVM X
+    let P := gramSpectralPVM X
     let band : FiniteValueLabel a → Set ℝ := fun label =>
       Set.Icc ((label.1 - η) ^ 2) ((label.1 + η) ^ 2)
     have hbandRank : ∀ label : FiniteValueLabel a,
@@ -202,26 +201,15 @@ theorem exists_gramSpectralBandModel
         linarith
       have hlowRank : ((q + 1 : ℕ) : Cardinal) ≤
           (P.proj (Set.Ici ((label.1 - η) ^ 2)) measurableSet_Ici).rank := by
-        change ((q + 1 : ℕ) : Cardinal) ≤
-          (Spectra.QuantumMechanics.SpectralTheory.spectralProjection
-            (Spectra.YosidaHille.genToGroup
-              (Spectra.Operator.SelfAdjointOperator.ofBounded
-                (gramOperator X) (gramOperator_isSelfAdjoint X)).selfAdjoint)
-            (Set.Ici ((label.1 - η) ^ 2)) measurableSet_Ici).rank
-        exact natCast_succ_le_rank_gramProjection_Ici_of_lt_approximationNumber
-          X q hlow0 hlowlt
+        simpa only [P] using
+          natCast_succ_le_rank_gramProjection_Ici_of_lt_approximationNumber
+            X q hlow0 hlowlt
       have hupRank :
           (P.proj (Set.Ioi ((label.1 + η) ^ 2)) measurableSet_Ioi).rank ≤
             (p : Cardinal) := by
-        change
-          (Spectra.QuantumMechanics.SpectralTheory.spectralProjection
-            (Spectra.YosidaHille.genToGroup
-              (Spectra.Operator.SelfAdjointOperator.ofBounded
-                (gramOperator X) (gramOperator_isSelfAdjoint X)).selfAdjoint)
-            (Set.Ioi ((label.1 + η) ^ 2)) measurableSet_Ioi).rank ≤
-              (p : Cardinal)
-        exact rank_gramProjection_Ioi_le_natCast_of_approximationNumber_lt
-          X p (by linarith) huplt
+        simpa only [P] using
+          rank_gramProjection_Ioi_le_natCast_of_approximationNumber_lt
+            X p (by linarith) huplt
       have hspanRank : (((q + 1) - p : ℕ) : Cardinal) ≤
           (P.proj (Set.Icc ((label.1 - η) ^ 2) ((label.1 + η) ^ 2))
             measurableSet_Icc).rank :=
@@ -236,7 +224,7 @@ theorem exists_gramSpectralBandModel
     have hselect : ∀ label : FiniteValueLabel a,
         ∃ v : Fin (finiteValueFiber a label).card → E0,
           Orthonormal ℂ v ∧
-          ∀ i, v i ∈ pvmRangeSubspace P (band label) measurableSet_Icc := by
+          ∀ i, v i ∈ (P.proj (band label) measurableSet_Icc).range := by
       intro label
       exact exists_orthonormal_mem_pvmRange_of_natCast_le_rank
         P (band label) measurableSet_Icc _ (hbandRank label)
@@ -307,8 +295,7 @@ theorem exists_gramSpectralBandModel
     have hrightOrtho : Orthonormal ℂ right :=
       hallOrtho.comp indexEquiv.symm indexEquiv.symm.injective
     have hrightBand : ∀ i : Fin count,
-        right i ∈ pvmRangeSubspace P
-          (band (indexEquiv.symm i).1) measurableSet_Icc := by
+        right i ∈ (P.proj (band (indexEquiv.symm i).1) measurableSet_Icc).range := by
       intro i
       exact hblockMem (indexEquiv.symm i).1
         ((finiteValueFiber a (indexEquiv.symm i).1).equivFin
