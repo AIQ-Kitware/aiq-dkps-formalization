@@ -237,6 +237,79 @@ theorem gauge_unitary_conjugation
       I.gauge (U ∘L A ∘L Uinv) = I.gauge A :=
   ⟨I.ideal_mem U Uinv hA, I.unitary_invariant U Uinv A hU hUinv hleft hright hA⟩
 
+/-- A unitary operator has operator norm at most `1`.
+
+Stated as `≤ 1` rather than `= 1` on purpose: that is all the two-sided
+invariance argument needs, and it avoids the nonzero-space side condition the
+equality would carry. -/
+theorem norm_le_one_of_isUnitaryOperator {W : E →L[𝕜] E}
+    (hW : IsUnitaryOperator W) : ‖W‖ ≤ 1 :=
+  ContinuousLinearMap.opNorm_le_bound _ zero_le_one fun x => by
+    rw [hW.1 x, one_mul]
+
+/-- **Two-sided unitary invariance of a symmetric ideal norm**: for *independent*
+unitaries `U` and `V`, `gauge (U A V) = gauge A`.
+
+`gauge_unitary_conjugation` above is the special case `V = U⁻¹`.  The two-sided
+form is the one singular-value arguments need — two operators with the same
+singular values are related by `A = U B V` with `U` and `V` unrelated, which
+conjugation invariance does not cover.
+
+No new structure field is required: `ideal_bound` gives `≤` because a unitary has
+norm at most one, and applying it again to `A = U⁻¹ (U A V) V⁻¹` gives `≥`. -/
+theorem gauge_two_sided_unitary
+    (I : SymmetricNormIdeal (𝕜 := 𝕜) (E := E))
+    (U Uinv V Vinv A : E →L[𝕜] E) (hA : I.mem A)
+    (hU : IsUnitaryOperator U) (hUinv : IsUnitaryOperator Uinv)
+    (hV : IsUnitaryOperator V) (hVinv : IsUnitaryOperator Vinv)
+    (hUl : Uinv ∘L U = ContinuousLinearMap.id 𝕜 E)
+    (hVr : V ∘L Vinv = ContinuousLinearMap.id 𝕜 E) :
+    I.mem (U ∘L A ∘L V) ∧ I.gauge (U ∘L A ∘L V) = I.gauge A := by
+  refine ⟨I.ideal_mem U V hA, le_antisymm ?_ ?_⟩
+  · calc I.gauge (U ∘L A ∘L V)
+        ≤ ‖U‖ * I.gauge A * ‖V‖ := I.ideal_bound U V hA
+      _ ≤ I.gauge A := by
+          have h0 := I.nonneg hA
+          have hUg : ‖U‖ * I.gauge A ≤ I.gauge A := by
+            calc ‖U‖ * I.gauge A
+                ≤ 1 * I.gauge A :=
+                  mul_le_mul_of_nonneg_right
+                    (norm_le_one_of_isUnitaryOperator hU) h0
+              _ = I.gauge A := one_mul _
+          calc ‖U‖ * I.gauge A * ‖V‖
+              ≤ I.gauge A * ‖V‖ :=
+                mul_le_mul_of_nonneg_right hUg (norm_nonneg V)
+            _ ≤ I.gauge A * 1 :=
+                mul_le_mul_of_nonneg_left
+                  (norm_le_one_of_isUnitaryOperator hV) h0
+            _ = I.gauge A := mul_one _
+  · have hback : Uinv ∘L (U ∘L A ∘L V) ∘L Vinv = A := by
+      have h : Uinv ∘L (U ∘L A ∘L V) ∘L Vinv
+          = (Uinv ∘L U) ∘L A ∘L (V ∘L Vinv) := by
+        ext x; rfl
+      rw [h, hUl, hVr, ContinuousLinearMap.id_comp,
+        ContinuousLinearMap.comp_id]
+    calc I.gauge A
+        = I.gauge (Uinv ∘L (U ∘L A ∘L V) ∘L Vinv) := by rw [hback]
+      _ ≤ ‖Uinv‖ * I.gauge (U ∘L A ∘L V) * ‖Vinv‖ :=
+          I.ideal_bound Uinv Vinv (I.ideal_mem U V hA)
+      _ ≤ I.gauge (U ∘L A ∘L V) := by
+          have h0 := I.nonneg (I.ideal_mem U V hA)
+          have hUg : ‖Uinv‖ * I.gauge (U ∘L A ∘L V)
+              ≤ I.gauge (U ∘L A ∘L V) := by
+            calc ‖Uinv‖ * I.gauge (U ∘L A ∘L V)
+                ≤ 1 * I.gauge (U ∘L A ∘L V) :=
+                  mul_le_mul_of_nonneg_right
+                    (norm_le_one_of_isUnitaryOperator hUinv) h0
+              _ = I.gauge (U ∘L A ∘L V) := one_mul _
+          calc ‖Uinv‖ * I.gauge (U ∘L A ∘L V) * ‖Vinv‖
+              ≤ I.gauge (U ∘L A ∘L V) * ‖Vinv‖ :=
+                mul_le_mul_of_nonneg_right hUg (norm_nonneg Vinv)
+            _ ≤ I.gauge (U ∘L A ∘L V) * 1 :=
+                mul_le_mul_of_nonneg_left
+                  (norm_le_one_of_isUnitaryOperator hVinv) h0
+            _ = I.gauge (U ∘L A ∘L V) := mul_one _
+
 /-- Pinching is contractive for every symmetric norm ideal. 
 
 Lean proof route for a weaker agent:
