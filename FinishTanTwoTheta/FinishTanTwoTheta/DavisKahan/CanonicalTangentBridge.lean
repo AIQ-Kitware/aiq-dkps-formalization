@@ -559,13 +559,29 @@ private theorem tanTwoAngleOperatorC_eq_modulus_ambientGraphTangent
     have hprod : (0 : E →L[ℂ] E) ≤
         ContinuousLinearMap.modulus Y ∘L Ring.inverse D :=
       hcomm.mul_nonneg hmodYnonneg hDinvNonneg
-    simpa only [Complex.ofReal_ofNat] using
-      smul_nonneg (show (0 : ℝ) ≤ 2 by norm_num) hprod
+    -- The scalar is ℂ, so `smul_nonneg` -- which supplies the ℝ-action -- is the
+    -- wrong lemma.  The two statements print *identically* and differ only in the
+    -- `SMul` instance, which is why the mismatch looked like a no-op.
+    rw [ContinuousLinearMap.nonneg_iff_isPositive]
+    -- `0 ≤ (2 : ℂ)` is an order on ℂ (`re` compared, `im` equal), so it needs
+    -- `Complex.le_def`; `norm_num` alone does not unfold it.
+    exact ((ContinuousLinearMap.nonneg_iff_isPositive _).mp hprod).smul_of_nonneg
+      (by simp [Complex.le_def])
   have hMformula :
       M = (2 : ℂ) • (ContinuousLinearMap.modulus Y ∘L Ring.inverse D) := by
-    apply ContinuousLinearMap.eq_modulus_of_nonneg_of_mul_self_eq hCandidateNonneg
-    rw [hMsq]
-    noncomm_ring
+    -- the lemma concludes `b = |T|`, the goal is `|T| = b`, hence `.symm`
+    refine (ContinuousLinearMap.eq_modulus_of_nonneg_of_mul_self_eq
+      hCandidateNonneg ?_).symm
+    rw [← ContinuousLinearMap.mul_def, ← ContinuousLinearMap.modulus_mul_self]
+    -- `hMsq` is stated with `∘SL`; restate it with `*` so it matches here.
+    rw [show M * M = (4 : ℂ) • (ContinuousLinearMap.modulus Y ∘L
+          Ring.inverse D ∘L ContinuousLinearMap.modulus Y ∘L Ring.inverse D)
+        from hMsq]
+    rw [smul_mul_assoc, mul_smul_comm, smul_smul,
+      show (2 : ℂ) * 2 = 4 by norm_num]
+    -- `congr 1` discharges the remaining associativity itself; no `noncomm_ring`
+    -- is needed (adding one reports "no goals to be solved").
+    congr 1
   have hSCformula : Sang ∘L Cang =
       ContinuousLinearMap.modulus Y ∘L R ∘L P := by
     have hleftNonneg : (0 : E →L[ℂ] E) ≤ Sang ∘L Cang :=
