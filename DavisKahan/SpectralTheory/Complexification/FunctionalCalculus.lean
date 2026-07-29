@@ -188,6 +188,15 @@ theorem conjugateOperator_real_smul (r : ℝ) (A : RealComplexification E →L[�
   intro z
   apply RealComplexification.ext <;> simp [conjugateOperator_apply]
 
+/-- Conjugation of operators is **conjugate**-linear over `ℂ`. -/
+theorem conjugateOperator_complex_smul (c : ℂ)
+    (A : RealComplexification E →L[ℂ] RealComplexification E) :
+    conjugateOperator (c • A) = (starRingEnd ℂ) c • conjugateOperator A := by
+  apply ContinuousLinearMap.ext
+  intro z
+  simp only [conjugateOperator_apply, ContinuousLinearMap.smul_apply,
+    conjugation_complex_smul]
+
 omit [CompleteSpace E] in
 @[simp]
 theorem conjugateOperator_involutive (A : RealComplexification E →L[ℂ] RealComplexification E) :

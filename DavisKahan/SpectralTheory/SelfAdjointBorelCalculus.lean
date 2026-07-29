@@ -54,7 +54,7 @@ variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
 /-- The Spectra one-parameter group attached to a bounded self-adjoint map. -/
 noncomputable def boundedSelfAdjointGroup
     (A : H →L[ℂ] H) (hA : IsSelfAdjointOperator A) :
-    OneParameterUnitaryGroup (H := H) :=
+    Spectra.OneParameterUnitaryGroup (H := H) :=
   genToGroup (boundedSelfAdjointOperator A hA).selfAdjoint
 
 /-- Complex-valued globally bounded Borel calculus of a bounded self-adjoint

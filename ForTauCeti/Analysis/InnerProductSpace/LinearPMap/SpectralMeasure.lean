@@ -942,6 +942,23 @@ theorem truncation_comm_specProjection {M : ℝ} (hbnd : ∀ s ∈ B, |s| ≤ M)
     BorelCalculus.specProj]
   exact BorelCalculus.borelCalculus_comm _ _ _
 
+/-- The truncation absorbs its own spectral projection. -/
+theorem truncation_mul_specProjection {M : ℝ} (hbnd : ∀ s ∈ B, |s| ≤ M) :
+    truncation hA B hB hbnd * specProjection hA B hB = truncation hA B hB hbnd := by
+  rw [truncation, specProjection, spectralPVM, BorelCalculus.toProjValMeasure_proj,
+    BorelCalculus.specProj, ← BorelCalculus.borelCalculus_mul]
+  refine BorelCalculus.borelCalculus_congr_ae _ _ _ fun η =>
+    Filter.Eventually.of_forall fun w => ?_
+  change truncSymbol hA B 0 w
+      * (cayleyInv hA ⁻¹' B).indicator (fun _ => (1 : ℂ)) w = truncSymbol hA B 0 w
+  rw [truncSymbol]
+  by_cases hw : w ∈ cayleyInv hA ⁻¹' B <;> simp [hw]
+
+theorem specProjection_mul_truncation {M : ℝ} (hbnd : ∀ s ∈ B, |s| ≤ M) :
+    specProjection hA B hB * truncation hA B hB hbnd = truncation hA B hB hbnd := by
+  rw [← truncation_comm_specProjection hA B hB hbnd B hB]
+  exact truncation_mul_specProjection hA B hB hbnd
+
 end BoundedSet
 
 section ResolventGap
