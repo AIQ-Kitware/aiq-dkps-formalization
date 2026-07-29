@@ -69,7 +69,7 @@ theorem genuineCutoff_complement_identities
     (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := H))
     (hA : A.IsSelfAdjoint)
     (Pcut : GenuineSpectralCutoffInterface A hA)
-    (Tcut : GenuineBoundedTruncationInterface A hA Pcut)
+    (_Tcut : GenuineBoundedTruncationInterface A hA Pcut)
     (τ : ℝ) (x : H) :
     let P := Pcut.cutoff τ
     ⟪P x, x - P x⟫_𝕜 = 0 ∧

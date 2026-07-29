@@ -106,6 +106,8 @@ part of the definition. -/
 def spectrum (A : E →ₗ.[𝕜] E) : Set 𝕜 :=
   (resolventSet A)ᶜ
 
+/-- Unfolds membership in the resolvent set: `z` is a resolvent point exactly when `A - z` has a
+bounded two-sided inverse. -/
 theorem mem_resolventSet_iff {A : E →ₗ.[𝕜] E} {z : 𝕜} :
     z ∈ resolventSet A ↔
       ∃ R : E →L[𝕜] E,
@@ -113,26 +115,35 @@ theorem mem_resolventSet_iff {A : E →ₗ.[𝕜] E} {z : 𝕜} :
         (∀ φ : E, ∃ h : R φ ∈ A.domain, A ⟨R φ, h⟩ - z • R φ = φ) :=
   Iff.rfl
 
+/-- Unfolds membership in the spectrum: `z` is spectral exactly when `A - z` fails to have a
+bounded two-sided inverse. -/
 @[simp]
 theorem mem_spectrum_iff {A : E →ₗ.[𝕜] E} {z : 𝕜} :
     z ∈ spectrum A ↔ z ∉ resolventSet A :=
   Iff.rfl
 
+/-- The negation of `mem_spectrum_iff`, stated so proofs need not push the negation by hand. -/
 theorem notMem_spectrum_iff {A : E →ₗ.[𝕜] E} {z : 𝕜} :
     z ∉ spectrum A ↔ z ∈ resolventSet A :=
   not_not
 
+/-- The spectrum is the complement of the resolvent set -- the definition, as a set equation. -/
 theorem spectrum_eq_compl (A : E →ₗ.[𝕜] E) : spectrum A = (resolventSet A)ᶜ :=
   rfl
 
+/-- The resolvent set is the complement of the spectrum, the converse reading of
+`spectrum_eq_compl`. -/
 theorem resolventSet_eq_compl (A : E →ₗ.[𝕜] E) : resolventSet A = (spectrum A)ᶜ :=
   (compl_compl _).symm
 
+/-- Spectrum and resolvent set cover the whole plane. -/
 @[simp]
 theorem union_spectrum_resolventSet (A : E →ₗ.[𝕜] E) :
     spectrum A ∪ resolventSet A = Set.univ :=
   Set.compl_union_self _
 
+/-- Spectrum and resolvent set are disjoint.  With `union_spectrum_resolventSet` they partition
+the plane, which is the form spectral arguments actually use. -/
 @[simp]
 theorem disjoint_spectrum_resolventSet (A : E →ₗ.[𝕜] E) :
     Disjoint (spectrum A) (resolventSet A) :=

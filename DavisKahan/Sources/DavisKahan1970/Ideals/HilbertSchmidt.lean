@@ -64,6 +64,7 @@ def paperHilbertSchmidtNorm
     (A : E →L[𝕜] F) : ℝ :=
   Real.sqrt (paperHilbertSchmidtEnergy A).toReal
 
+/-- The zero operator has zero Hilbert--Schmidt energy. -/
 @[simp]
 theorem paperHilbertSchmidtEnergy_zero
     {𝕜 : Type u} [RCLike 𝕜]
@@ -74,6 +75,7 @@ theorem paperHilbertSchmidtEnergy_zero
   unfold paperHilbertSchmidtEnergy
   simp
 
+/-- The zero operator has zero Hilbert--Schmidt norm. -/
 @[simp]
 theorem paperHilbertSchmidtNorm_zero
     {𝕜 : Type u} [RCLike 𝕜]
@@ -235,7 +237,7 @@ theorem paperHilbertSchmidtNorm_smul
     [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
     [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
     (c : 𝕜) (A : E →L[𝕜] F)
-    (hA : IsPaperHilbertSchmidt A) :
+    (_hA : IsPaperHilbertSchmidt A) :
     paperHilbertSchmidtNorm (c • A) = ‖c‖ * paperHilbertSchmidtNorm A := by
   rw [paperHilbertSchmidtNorm, paperHilbertSchmidtEnergy_smul,
     ENNReal.toReal_mul, ENNReal.toReal_ofReal (sq_nonneg _),
@@ -399,7 +401,7 @@ theorem sq_paperHilbertSchmidtNorm
     {E : Type vE} {F : Type vF}
     [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
     [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
-    {A : E →L[𝕜] F} (hA : IsPaperHilbertSchmidt A) :
+    {A : E →L[𝕜] F} (_hA : IsPaperHilbertSchmidt A) :
     paperHilbertSchmidtNorm A ^ 2 =
       (paperHilbertSchmidtEnergy A).toReal := by
   unfold paperHilbertSchmidtNorm

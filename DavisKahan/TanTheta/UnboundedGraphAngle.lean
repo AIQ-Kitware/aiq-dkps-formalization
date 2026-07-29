@@ -120,7 +120,7 @@ bound for its graph angular map. -/
 theorem norm_angularMap_le_div
     (C : TrialExactCoordinates Z V)
     {δ ρ : ℝ} (hδ : 0 < δ) (hρ0 : 0 ≤ ρ)
-    (hvec : ∀ x : H, ∀ hx : x ∈ Z,
+    (hvec : ∀ x : H, ∀ _hx : x ∈ Z,
       δ * ‖x - V.starProjection x‖ ≤
         ρ * ‖V.starProjection x‖) :
     ‖C.angularMap‖ ≤ ρ / δ := by
@@ -145,7 +145,7 @@ omit [CompleteSpace H] in
 theorem mul_norm_angularMap_le
     (C : TrialExactCoordinates Z V)
     {δ ρ : ℝ} (hδ : 0 < δ) (hρ0 : 0 ≤ ρ)
-    (hvec : ∀ x : H, ∀ hx : x ∈ Z,
+    (hvec : ∀ x : H, ∀ _hx : x ∈ Z,
       δ * ‖x - V.starProjection x‖ ≤
         ρ * ‖V.starProjection x‖) :
     δ * ‖C.angularMap‖ ≤ ρ := by

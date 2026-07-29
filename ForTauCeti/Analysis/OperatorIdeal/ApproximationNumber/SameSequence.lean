@@ -73,10 +73,13 @@ namespace HasSameApproximationNumbers
 
 @[refl] theorem refl (A : E₁ →L[𝕜] F₁) : A.HasSameApproximationNumbers A := fun _ => rfl
 
+/-- Having the same approximation numbers is symmetric. -/
 theorem symm {A : E₁ →L[𝕜] F₁} {B : E₂ →L[𝕜] F₂}
     (h : A.HasSameApproximationNumbers B) : B.HasSameApproximationNumbers A :=
   fun n => (h n).symm
 
+/-- Having the same approximation numbers is transitive.  With `refl` and `symm` it is an
+equivalence, which is what lets it be used to transport ideal membership. -/
 theorem trans {A : E₁ →L[𝕜] F₁} {B : E₂ →L[𝕜] F₂} {C : E₃ →L[𝕜] F₃}
     (hAB : A.HasSameApproximationNumbers B) (hBC : B.HasSameApproximationNumbers C) :
     A.HasSameApproximationNumbers C :=

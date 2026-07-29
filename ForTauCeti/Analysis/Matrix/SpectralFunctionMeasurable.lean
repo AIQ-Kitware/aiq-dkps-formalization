@@ -58,6 +58,8 @@ measurable structure at PR time.) -/
 instance instMeasurableSpaceMatrix : MeasurableSpace (Matrix (Fin n) (Fin n) ℝ) :=
   inferInstanceAs (MeasurableSpace (Fin n → Fin n → ℝ))
 
+/-- Matrices carry the Borel σ-algebra of their entrywise topology, so spectral functions of a
+matrix can be shown measurable entrywise. -/
 instance instBorelSpaceMatrix : BorelSpace (Matrix (Fin n) (Fin n) ℝ) :=
   inferInstanceAs (BorelSpace (Fin n → Fin n → ℝ))
 
@@ -67,7 +69,7 @@ theorem opSym {B : Matrix (Fin n) (Fin n) ℝ} (hB : B.IsHermitian) :
   Matrix.isSymmetric_toEuclideanLin_iff.mpr hB
 
 /-- The sorted (decreasing) eigenvalues of `toEuclideanLin B` for Hermitian `B`. -/
-noncomputable def sortedEig {B : Matrix (Fin n) (Fin n) ℝ} (hB : B.IsHermitian) :
+noncomputable def sortedEigenvalues {B : Matrix (Fin n) (Fin n) ℝ} (hB : B.IsHermitian) :
     Fin n → ℝ :=
   (opSym hB).eigenvalues finrank_euclideanSpace_fin
 
@@ -111,12 +113,12 @@ theorem abs_coord_le_norm (x : EuclideanSpace ℝ (Fin n)) (i : Fin n) :
         simp [Real.norm_eq_abs, sq_abs]
 
 /-- Entrywise bound on a Hermitian matrix bounds all its sorted eigenvalues. -/
-theorem abs_sortedEig_le_of_entry_le {B : Matrix (Fin n) (Fin n) ℝ}
+theorem abs_sortedEigenvalues_le_of_entry_le {B : Matrix (Fin n) (Fin n) ℝ}
     (hB : B.IsHermitian) {β : ℝ} (hβ : ∀ i j, |B i j| ≤ β) (k : Fin n) :
-    |sortedEig hB k| ≤ (n : ℝ) * β := by
+    |sortedEigenvalues hB k| ≤ (n : ℝ) * β := by
   set u := (opSym hB).eigenvectorBasis finrank_euclideanSpace_fin with hu
   have hnorm1 : ‖u k‖ = 1 := u.orthonormal.1 k
-  have happly : Matrix.toEuclideanLin B (u k) = sortedEig hB k • u k := by
+  have happly : Matrix.toEuclideanLin B (u k) = sortedEigenvalues hB k • u k := by
     rw [hu]
     exact (opSym hB).apply_eigenvectorBasis finrank_euclideanSpace_fin k
   have hle : ‖Matrix.toEuclideanLin B (u k)‖ ≤ (n : ℝ) * β * ‖u k‖ :=
@@ -152,7 +154,7 @@ theorem aeval_mulVec_eigenvector {B : Matrix (Fin n) (Fin n) ℝ} {v : Fin n →
 theorem mulVec_eigenvectorBasis {B : Matrix (Fin n) (Fin n) ℝ} (hB : B.IsHermitian)
     (k : Fin n) :
     B *ᵥ WithLp.ofLp ((opSym hB).eigenvectorBasis finrank_euclideanSpace_fin k)
-      = sortedEig hB k
+      = sortedEigenvalues hB k
           • WithLp.ofLp ((opSym hB).eigenvectorBasis finrank_euclideanSpace_fin k) := by
   have happly := (opSym hB).apply_eigenvectorBasis finrank_euclideanSpace_fin k
   have h1 : WithLp.ofLp (Matrix.toEuclideanLin B
@@ -166,7 +168,7 @@ theorem mulVec_eigenvectorBasis {B : Matrix (Fin n) (Fin n) ℝ} (hB : B.IsHermi
 theorem aeval_entry_eq_sum {B : Matrix (Fin n) (Fin n) ℝ} (hB : B.IsHermitian)
     (p : Polynomial ℝ) (i j : Fin n) :
     (aeval B p) i j
-      = ∑ k : Fin n, p.eval (sortedEig hB k)
+      = ∑ k : Fin n, p.eval (sortedEigenvalues hB k)
           * ((opSym hB).eigenvectorBasis finrank_euclideanSpace_fin k i)
           * ((opSym hB).eigenvectorBasis finrank_euclideanSpace_fin k j) := by
   set u := (opSym hB).eigenvectorBasis finrank_euclideanSpace_fin with hu
@@ -191,12 +193,12 @@ theorem aeval_entry_eq_sum {B : Matrix (Fin n) (Fin n) ℝ} (hB : B.IsHermitian)
     simp [Matrix.mulVec, dotProduct, Pi.single_apply]
   rw [hentry, hsingle, Matrix.mulVec_sum]
   have haction : ∀ k, (aeval B p) *ᵥ (v k j • v k)
-      = (v k j * p.eval (sortedEig hB k)) • v k := by
+      = (v k j * p.eval (sortedEigenvalues hB k)) • v k := by
     intro k
     rw [Matrix.mulVec_smul, aeval_mulVec_eigenvector (mulVec_eigenvectorBasis hB k) p,
       smul_smul]
   rw [show ∑ k, (aeval B p) *ᵥ (v k j • v k)
-      = ∑ k, (v k j * p.eval (sortedEig hB k)) • v k from
+      = ∑ k, (v k j * p.eval (sortedEigenvalues hB k)) • v k from
     Finset.sum_congr rfl fun k _ => haction k]
   rw [Finset.sum_apply]
   refine Finset.sum_congr rfl fun k _ => ?_
@@ -229,7 +231,7 @@ the rank-`d` truncation that the Gram matrix of `spectralConfig` computes on
 the spectral-split event. -/
 noncomputable def specTransform (h : ℝ → ℝ) {B : Matrix (Fin n) (Fin n) ℝ}
     (hB : B.IsHermitian) : Matrix (Fin n) (Fin n) ℝ :=
-  fun i j => ∑ k : Fin n, h (sortedEig hB k)
+  fun i j => ∑ k : Fin n, h (sortedEigenvalues hB k)
       * ((opSym hB).eigenvectorBasis finrank_euclideanSpace_fin k i)
       * ((opSym hB).eigenvectorBasis finrank_euclideanSpace_fin k j)
 
@@ -244,18 +246,18 @@ theorem abs_specTransform_sub_aeval_le (h : ℝ → ℝ) {B : Matrix (Fin n) (Fi
   set u := (opSym hB).eigenvectorBasis finrank_euclideanSpace_fin with hu
   rw [specTransform, aeval_entry_eq_sum hB p i j, ← Finset.sum_sub_distrib]
   have hterm : ∀ k : Fin n,
-      |h (sortedEig hB k) * (u k i) * (u k j)
-        - p.eval (sortedEig hB k) * (u k i) * (u k j)| ≤ ε := by
+      |h (sortedEigenvalues hB k) * (u k i) * (u k j)
+        - p.eval (sortedEigenvalues hB k) * (u k i) * (u k j)| ≤ ε := by
     intro k
-    have hfactor : h (sortedEig hB k) * (u k i) * (u k j)
-        - p.eval (sortedEig hB k) * (u k i) * (u k j)
-        = (h (sortedEig hB k) - p.eval (sortedEig hB k))
+    have hfactor : h (sortedEigenvalues hB k) * (u k i) * (u k j)
+        - p.eval (sortedEigenvalues hB k) * (u k i) * (u k j)
+        = (h (sortedEigenvalues hB k) - p.eval (sortedEigenvalues hB k))
             * (u k i) * (u k j) := by ring
     rw [hfactor, abs_mul, abs_mul]
-    have hμ : sortedEig hB k ∈ Set.Icc (-((n : ℝ) * β)) ((n : ℝ) * β) := by
-      have := abs_sortedEig_le_of_entry_le hB hβ k
+    have hμ : sortedEigenvalues hB k ∈ Set.Icc (-((n : ℝ) * β)) ((n : ℝ) * β) := by
+      have := abs_sortedEigenvalues_le_of_entry_le hB hβ k
       exact Set.mem_Icc.mpr (abs_le.mp this)
-    have h1 : |h (sortedEig hB k) - p.eval (sortedEig hB k)| ≤ ε :=
+    have h1 : |h (sortedEigenvalues hB k) - p.eval (sortedEigenvalues hB k)| ≤ ε :=
       hp _ hμ
     have hui : |u k i| ≤ 1 := by
       have := abs_coord_le_norm (u k) i
@@ -263,19 +265,19 @@ theorem abs_specTransform_sub_aeval_le (h : ℝ → ℝ) {B : Matrix (Fin n) (Fi
     have huj : |u k j| ≤ 1 := by
       have := abs_coord_le_norm (u k) j
       rwa [u.orthonormal.1 k] at this
-    have habs : (0:ℝ) ≤ |h (sortedEig hB k) - p.eval (sortedEig hB k)| :=
+    have habs : (0:ℝ) ≤ |h (sortedEigenvalues hB k) - p.eval (sortedEigenvalues hB k)| :=
       abs_nonneg _
-    have h2 : |h (sortedEig hB k) - p.eval (sortedEig hB k)| * |u k i|
-        ≤ |h (sortedEig hB k) - p.eval (sortedEig hB k)| :=
+    have h2 : |h (sortedEigenvalues hB k) - p.eval (sortedEigenvalues hB k)| * |u k i|
+        ≤ |h (sortedEigenvalues hB k) - p.eval (sortedEigenvalues hB k)| :=
       mul_le_of_le_one_right habs hui
-    have h3 : |h (sortedEig hB k) - p.eval (sortedEig hB k)| * |u k i| * |u k j|
-        ≤ |h (sortedEig hB k) - p.eval (sortedEig hB k)| * |u k i| :=
+    have h3 : |h (sortedEigenvalues hB k) - p.eval (sortedEigenvalues hB k)| * |u k i| * |u k j|
+        ≤ |h (sortedEigenvalues hB k) - p.eval (sortedEigenvalues hB k)| * |u k i| :=
       mul_le_of_le_one_right (mul_nonneg habs (abs_nonneg _)) huj
     linarith
-  calc |∑ k : Fin n, (h (sortedEig hB k) * (u k i) * (u k j)
-          - p.eval (sortedEig hB k) * (u k i) * (u k j))|
-      ≤ ∑ k : Fin n, |h (sortedEig hB k) * (u k i) * (u k j)
-          - p.eval (sortedEig hB k) * (u k i) * (u k j)| :=
+  calc |∑ k : Fin n, (h (sortedEigenvalues hB k) * (u k i) * (u k j)
+          - p.eval (sortedEigenvalues hB k) * (u k i) * (u k j))|
+      ≤ ∑ k : Fin n, |h (sortedEigenvalues hB k) * (u k i) * (u k j)
+          - p.eval (sortedEigenvalues hB k) * (u k i) * (u k j)| :=
         Finset.abs_sum_le_sum_abs _ _
     _ ≤ ∑ _k : Fin n, ε := Finset.sum_le_sum fun k _ => hterm k
     _ = (n : ℝ) * ε := by simp [mul_comm]

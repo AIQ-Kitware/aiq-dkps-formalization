@@ -44,6 +44,7 @@ namespace ClosedOperator
 def apply (A : ClosedOperator (𝕜 := 𝕜) (E := E)) (x : A.domain) : E :=
   A.toLinearMap x
 
+/-- The domain of a closed operator, as a submodule. -/
 instance : CoeFun (ClosedOperator (𝕜 := 𝕜) (E := E))
     (fun A => A.domain → E) where
   coe A := A.apply

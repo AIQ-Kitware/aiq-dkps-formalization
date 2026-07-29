@@ -34,12 +34,15 @@ variable {E F G H : Type v}
   [NormedAddCommGroup G] [InnerProductSpace 𝕜 G] [CompleteSpace G]
   [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] [CompleteSpace H]
 
+/-- Local shorthand for the ambient closed operator. -/
 abbrev ClosedOperatorAmbient :=
   TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := E)
 
+/-- Local shorthand for the trial closed operator. -/
 abbrev ClosedOperatorTrial :=
   TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := F)
 
+/-- Local shorthand for the complementary closed operator. -/
 abbrev ClosedOperatorComplement :=
   TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := G)
 

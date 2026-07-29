@@ -50,6 +50,9 @@ abbrev SameApproximationSingularSequence
 
 namespace SameApproximationSingularSequence
 
+/-- Reflexivity.  This is the cross-space relation -- unlike the same-space version later in
+the file, the two operators may live between *different* spaces, which is why the binders are
+so long. -/
 @[refl]
 theorem refl
     {𝕜 : Type u} [RCLike 𝕜]
@@ -58,6 +61,7 @@ theorem refl
     [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
     (A : E →L[𝕜] F) : SameApproximationSingularSequence A A := fun _ => rfl
 
+/-- Symmetry, swapping two independently-typed pairs of spaces. -/
 @[symm]
 theorem symm
     {𝕜 : Type u} [RCLike 𝕜]
@@ -71,6 +75,7 @@ theorem symm
     (h : SameApproximationSingularSequence A B) :
     SameApproximationSingularSequence B A := fun n => (h n).symm
 
+/-- Transitivity, across three independently-typed pairs of spaces. -/
 @[trans]
 theorem trans
     {𝕜 : Type u} [RCLike 𝕜]
@@ -212,16 +217,20 @@ theorem of_isometricEquiv_comp
   rw [h] at hkey
   exact hkey.symm
 
+/-- Reflexivity.  With `symm` and `trans` this makes `SameApproximationSingularValues` an
+equivalence usable by `refl`/`symm`/`trans` via the attributes. -/
 @[refl]
 theorem refl (A : E →L[𝕜] F) : SameApproximationSingularValues A A :=
   fun _ => rfl
 
+/-- Symmetry. -/
 @[symm]
 theorem symm {A B : E →L[𝕜] F}
     (h : SameApproximationSingularValues A B) :
     SameApproximationSingularValues B A :=
   fun n => (h n).symm
 
+/-- Transitivity. -/
 @[trans]
 theorem trans {A B C : E →L[𝕜] F}
     (hAB : SameApproximationSingularValues A B)

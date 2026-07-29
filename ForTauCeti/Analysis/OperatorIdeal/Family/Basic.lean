@@ -184,24 +184,30 @@ theorem ext {N M : OperatorIdealFamily.{u, v, w} 𝕜}
   funext E F _ _ _ _ _ _ A
   exact h A
 
+/-- The gauge of the zero operator is zero. -/
 @[simp]
 theorem gauge_zero : N.gauge (0 : E →L[𝕜] F) = 0 := by
   have h := N.gauge_smul (0 : 𝕜) (0 : E →L[𝕜] F)
   simpa using h
 
+/-- The gauge is definite: only the zero operator has gauge zero.  This is forced rather than
+assumed -- it follows from `enorm_le_gauge`, since the operator norm is already definite. -/
 theorem gauge_eq_zero {A : E →L[𝕜] F} (h : N.gauge A = 0) : A = 0 := by
   have hle : ‖A‖ₑ ≤ 0 := h ▸ N.enorm_le_gauge A
   have hz : ‖A‖ₑ = 0 := le_antisymm hle (by simp)
   rwa [enorm_eq_nnnorm, ENNReal.coe_eq_zero, nnnorm_eq_zero] at hz
 
+/-- Definiteness as an iff. -/
 theorem gauge_eq_zero_iff {A : E →L[𝕜] F} : N.gauge A = 0 ↔ A = 0 :=
   ⟨N.gauge_eq_zero, fun h => h ▸ N.gauge_zero⟩
 
+/-- The gauge is unchanged by negation. -/
 @[simp]
 theorem gauge_neg (A : E →L[𝕜] F) : N.gauge (-A) = N.gauge A := by
   have h := N.gauge_smul (-1 : 𝕜) A
   simpa using h
 
+/-- Triangle inequality in subtracted form, the shape convergence arguments use. -/
 theorem gauge_sub_le (A B : E →L[𝕜] F) : N.gauge (A - B) ≤ N.gauge A + N.gauge B := by
   simpa [sub_eq_add_neg] using N.gauge_add_le A (-B)
 
@@ -277,11 +283,15 @@ def carrier : Submodule 𝕜 (E →L[𝕜] F) where
     rw [Set.mem_setOf_eq, N.gauge_smul]
     exact ENNReal.mul_ne_top (by simp) hA
 
+/-- Membership in the ideal is exactly finiteness of the gauge; the carrier is defined that way,
+so this is `Iff.rfl` and exists only to spare call sites the unfolding. -/
 @[simp]
 theorem mem_carrier_iff {A : E →L[𝕜] F} : A ∈ N.carrier ↔ N.gauge A ≠ ∞ := Iff.rfl
 
+/-- Members of the ideal have finite gauge. -/
 theorem gauge_ne_top_of_mem {A : E →L[𝕜] F} (hA : A ∈ N.carrier) : N.gauge A ≠ ∞ := hA
 
+/-- Members of the ideal have gauge `< ∞`, the strict form. -/
 theorem gauge_lt_top_of_mem {A : E →L[𝕜] F} (hA : A ∈ N.carrier) : N.gauge A < ∞ :=
   lt_top_iff_ne_top.mpr hA
 
@@ -314,8 +324,11 @@ variable {N}
 /-- The underlying operator of an ideal element. -/
 def val (A : N.Elem E F) : E →L[𝕜] F := Subtype.val (p := fun A => A ∈ N.carrier) A
 
+/-- The underlying operator of an ideal element lies in the ideal. -/
 theorem val_mem (A : N.Elem E F) : A.val ∈ N.carrier := Subtype.property (p := _) A
 
+/-- An ideal element has finite gauge -- the fact that makes `toReal` lossless on it, and hence
+the reason the ideal norm can be real-valued while the gauge is `ℝ≥0∞`-valued. -/
 theorem gauge_val_ne_top (A : N.Elem E F) : N.gauge A.val ≠ ∞ := A.val_mem
 
 /-- An operator of finite gauge, as an element of the ideal. -/
@@ -325,9 +338,11 @@ def mk {A : E →L[𝕜] F} (hA : A ∈ N.carrier) : N.Elem E F := ⟨A, hA⟩
 
 @[ext] theorem ext {A B : N.Elem E F} (h : A.val = B.val) : A = B := Subtype.ext h
 
+/-- The ideal is an additive subgroup of the bounded operators, inherited from its carrier. -/
 instance : AddCommGroup (N.Elem E F) :=
   inferInstanceAs (AddCommGroup (N.carrier : Submodule 𝕜 (E →L[𝕜] F)))
 
+/-- The ideal is a `𝕜`-submodule, inherited from its carrier. -/
 instance : Module 𝕜 (N.Elem E F) :=
   inferInstanceAs (Module 𝕜 (N.carrier : Submodule 𝕜 (E →L[𝕜] F)))
 
@@ -359,11 +374,16 @@ noncomputable instance : NormedAddCommGroup (N.Elem E F) :=
         exact N.gauge_eq_zero
           (((ENNReal.toReal_eq_zero_iff _).mp hA).resolve_right A.gauge_val_ne_top) }
 
+/-- The ideal norm is the gauge, brought down to `ℝ`.  Lossless because `gauge_val_ne_top`. -/
 theorem norm_def (A : N.Elem E F) : ‖A‖ = (N.gauge A.val).toReal := rfl
 
+/-- Going back up: the extended norm of an ideal element is its gauge exactly, with no `toReal`
+round-trip loss. -/
 theorem enorm_eq_gauge (A : N.Elem E F) : ‖A‖ₑ = N.gauge A.val := by
   rw [← ofReal_norm, norm_def, ENNReal.ofReal_toReal A.gauge_val_ne_top]
 
+/-- The ideal norm is a norm on a `𝕜`-vector space; homogeneity transfers from `gauge_smul`
+through `toReal`. -/
 noncomputable instance : NormedSpace 𝕜 (N.Elem E F) where
   norm_smul_le c A := by
     rw [norm_def, norm_def, val_smul, N.gauge_smul, ENNReal.toReal_mul]
@@ -388,6 +408,8 @@ class IsComplete (N : OperatorIdealFamily.{u, v, w} 𝕜) : Prop where
     [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F],
     CompleteSpace (N.Elem E F)
 
+/-- Unpacks `IsComplete` into the `CompleteSpace` instance that instance search needs; the class
+quantifies over the two spaces, so it cannot be used directly. -/
 instance [N.IsComplete] : CompleteSpace (N.Elem E F) :=
   IsComplete.completeSpace
 

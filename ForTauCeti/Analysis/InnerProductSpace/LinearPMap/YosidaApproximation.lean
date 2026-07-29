@@ -73,16 +73,21 @@ theorem neg_I_mul_pnat_im_ne_zero (n : ℕ+) : (-I * (n : ℂ)).im ≠ 0 := by
   simp only [neg_mul, neg_im]
   exact neg_ne_zero.mpr (I_mul_pnat_im_ne_zero n)
 
+/-- The imaginary part of `i·n` is `n`. -/
 theorem I_mul_pnat_im (n : ℕ+) : (I * (n : ℂ)).im = (n : ℝ) := by
   simp [mul_im]
 
+/-- `|Im (i·n)| = n`.  The absolute value form is what the resolvent norm bound `‖R(z)‖ ≤ |Im z|⁻¹`
+consumes. -/
 theorem abs_I_mul_pnat_im (n : ℕ+) : |(I * (n : ℂ)).im| = (n : ℝ) := by
   rw [I_mul_pnat_im]
   exact abs_of_pos (Nat.cast_pos.mpr n.pos)
 
+/-- `‖n²‖ = n²` for a positive natural cast into `ℂ`. -/
 theorem norm_pnat_sq (n : ℕ+) : ‖((n : ℂ) ^ 2)‖ = (n : ℝ) ^ 2 := by
   rw [Complex.norm_pow, Complex.norm_natCast]
 
+/-- `‖i·n‖ = n`. -/
 theorem norm_I_mul_pnat (n : ℕ+) : ‖I * (n : ℂ)‖ = (n : ℝ) := by
   rw [Complex.norm_mul, Complex.norm_I, one_mul, Complex.norm_natCast]
 
@@ -620,21 +625,28 @@ theorem cauchySeq_expApprox (hA : IsSelfAdjoint A) (t : ℝ) (ψ : H) :
 noncomputable def expLimitFun (hA : IsSelfAdjoint A) (t : ℝ) (ψ : H) : H :=
   limUnder atTop (fun n : ℕ+ => expApprox hA n t ψ)
 
+/-- The approximating flows converge to `expLimitFun`.  This is the defining property: the limit is
+defined as `limUnder`, which only names a value, so every fact about it is proved by transporting a
+fact about the approximants along this convergence. -/
 theorem tendsto_expLimitFun (hA : IsSelfAdjoint A) (t : ℝ) (ψ : H) :
     Tendsto (fun n : ℕ+ => expApprox hA n t ψ) atTop (𝓝 (expLimitFun hA t ψ)) :=
   (cauchySeq_expApprox hA t ψ).tendsto_limUnder
 
+/-- The limit flow is additive, by uniqueness of limits applied to the additive approximants. -/
 theorem expLimitFun_add (hA : IsSelfAdjoint A) (t : ℝ) (x y : H) :
     expLimitFun hA t (x + y) = expLimitFun hA t x + expLimitFun hA t y := by
   refine tendsto_nhds_unique (tendsto_expLimitFun hA t (x + y)) ?_
   simpa only [map_add] using
     (tendsto_expLimitFun hA t x).add (tendsto_expLimitFun hA t y)
 
+/-- The limit flow is complex-homogeneous. -/
 theorem expLimitFun_smul (hA : IsSelfAdjoint A) (t : ℝ) (c : ℂ) (x : H) :
     expLimitFun hA t (c • x) = c • expLimitFun hA t x := by
   refine tendsto_nhds_unique (tendsto_expLimitFun hA t (c • x)) ?_
   simpa only [map_smul] using (tendsto_expLimitFun hA t x).const_smul c
 
+/-- The limit flow is norm-preserving: the approximants all are, and the norm passes to the
+limit. -/
 theorem norm_expLimitFun (hA : IsSelfAdjoint A) (t : ℝ) (ψ : H) :
     ‖expLimitFun hA t ψ‖ = ‖ψ‖ := by
   refine tendsto_nhds_unique ((tendsto_expLimitFun hA t ψ).norm) ?_
@@ -652,6 +664,7 @@ noncomputable def expLimit (hA : IsSelfAdjoint A) (t : ℝ) : H →L[ℂ] H :=
 @[simp] theorem expLimit_apply (hA : IsSelfAdjoint A) (t : ℝ) (ψ : H) :
     expLimit hA t ψ = expLimitFun hA t ψ := rfl
 
+/-- Norm preservation, restated for the bundled operator `expLimit`. -/
 theorem norm_expLimit_apply (hA : IsSelfAdjoint A) (t : ℝ) (ψ : H) :
     ‖expLimit hA t ψ‖ = ‖ψ‖ := norm_expLimitFun hA t ψ
 
@@ -662,12 +675,16 @@ theorem norm_expLimit_apply (hA : IsSelfAdjoint A) (t : ℝ) (ψ : H) :
   refine tendsto_nhds_unique (tendsto_expLimitFun hA 0 ψ) ?_
   simp [expApprox_zero]
 
+/-- The limit flow preserves inner products.  With `norm_expLimit_apply` and the group law this
+is what makes `expLimit` unitary rather than merely isometric. -/
 theorem inner_expLimit (hA : IsSelfAdjoint A) (t : ℝ) (ψ φ : H) :
     ⟪expLimit hA t ψ, expLimit hA t φ⟫_ℂ = ⟪ψ, φ⟫_ℂ := by
   refine tendsto_nhds_unique
     (((tendsto_expLimitFun hA t ψ).inner (tendsto_expLimitFun hA t φ))) ?_
   simpa only [inner_expApprox] using tendsto_const_nhds
 
+/-- The group law `exp(i(s+t)A) = exp(isA) ∘ exp(itA)`.  Proved by splitting the approximation
+error in two, since the approximants satisfy it only in the limit. -/
 theorem expLimit_add (hA : IsSelfAdjoint A) (s t : ℝ) :
     expLimit hA (s + t) = (expLimit hA s).comp (expLimit hA t) := by
   ext ψ

@@ -98,6 +98,7 @@ noncomputable def schurWeight (hT : T.IsSymmetric) (hn : finrank 𝕜 E = n)
     (e : OrthonormalBasis (Fin n) 𝕜 E) (i k : Fin n) : ℝ :=
   ‖⟪hT.eigenvectorBasis hn i, e k⟫_𝕜‖ ^ 2
 
+/-- Schur--Horn weights are nonnegative, being squared moduli of basis coefficients. -/
 theorem schurWeight_nonneg (hT : T.IsSymmetric) (hn : finrank 𝕜 E = n)
     (e : OrthonormalBasis (Fin n) 𝕜 E) (i k : Fin n) :
     0 ≤ schurWeight hT hn e i k :=

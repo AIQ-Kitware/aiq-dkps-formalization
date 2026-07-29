@@ -25,6 +25,8 @@ variable {𝕜 : Type*} [RCLike 𝕜]
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
   [FiniteDimensional 𝕜 E]
 
+/-- Every eigenvalue is a point of the restricted spectrum on the whole space, witnessed by its own
+eigenvector. -/
 theorem eigenvalue_mem_restrictedSpectrum_top
     {T : E →ₗ[𝕜] E} (hT : T.IsSymmetric)
     (i : Fin (Module.finrank 𝕜 E)) :
@@ -33,6 +35,8 @@ theorem eigenvalue_mem_restrictedSpectrum_top
     (hT.eigenvectorBasis rfl).orthonormal.ne_zero i,
     hT.apply_eigenvectorBasis rfl i⟩
 
+/-- An upper bound on all eigenvalues gives an upper bound on the quadratic form, via the
+eigenbasis expansion. -/
 theorem re_inner_le_of_eigenvalues_le
     {T : E →ₗ[𝕜] E} (hT : T.IsSymmetric) {c : ℝ}
     (hc : ∀ i : Fin (Module.finrank 𝕜 E), hT.eigenvalues rfl i ≤ c)
@@ -51,6 +55,7 @@ theorem re_inner_le_of_eigenvalues_le
           simp_rw [OrthonormalBasis.repr_apply_apply]
           exact (hT.eigenvectorBasis rfl).sum_sq_norm_inner_right x
 
+/-- The lower-bound counterpart of `re_inner_le_of_eigenvalues_le`. -/
 theorem le_re_inner_of_le_eigenvalues
     {T : E →ₗ[𝕜] E} (hT : T.IsSymmetric) {c : ℝ}
     (hc : ∀ i : Fin (Module.finrank 𝕜 E), c ≤ hT.eigenvalues rfl i)
@@ -68,6 +73,8 @@ theorem le_re_inner_of_le_eigenvalues
           exact Finset.sum_le_sum fun i _ =>
             mul_le_mul_of_nonneg_right (hc i) (sq_nonneg _)
 
+/-- **Spectrum in `[a, b]` bounds the shifted operator norm by the half-width.**  Centring at the
+midpoint is what turns a two-sided spectral bound into a single norm bound. -/
 theorem opNorm_shift_le_of_spectrumIn_Icc
     {T : E →ₗ[𝕜] E} (hT : T.IsSymmetric) {a b : ℝ} (hab : a ≤ b)
     (hsp : SpectrumIn T ⊤ (Set.Icc a b)) :
@@ -99,6 +106,8 @@ theorem opNorm_shift_le_of_spectrumIn_Icc
   exact ContinuousLinearMap.norm_le_of_abs_re_inner_map_self_le
     (fun x y => hS x y) hr hform
 
+/-- The converse shape: spectrum avoiding a `δ`-enlarged interval bounds the shifted operator
+*below*.  This is the separation hypothesis in the form the Sylvester estimates consume. -/
 theorem norm_shift_lower_of_spectrumOutside
     {T : E →ₗ[𝕜] E} (hT : T.IsSymmetric) {a b δ : ℝ}
     (hab : a ≤ b) (hδ : 0 < δ)

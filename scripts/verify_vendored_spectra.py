@@ -7,8 +7,27 @@ import pathlib
 import sys
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
-SNAPSHOT = ROOT / "vendor" / "Spectra"
-MANIFEST = ROOT / "vendor" / "Spectra.SHA256SUMS"
+
+
+def _snapshot_parent(root: "pathlib.Path") -> "pathlib.Path":
+    """Directory holding the vendored Spectra snapshot.
+
+    S6 relocates `vendor/Spectra` to `retired/Spectra` so that agents stop
+    reusing it.  Resolving the location here instead of hard-coding it makes
+    that move a `git mv` and nothing else -- this script keeps working on either
+    side of it.  If neither exists we fall back to `vendor`, so the script's own
+    "snapshot is missing" diagnostics fire as before rather than being masked by
+    a path error.
+    """
+    for parent in ("vendor", "retired"):
+        if (root / parent / "Spectra").is_dir():
+            return root / parent
+    return root / "vendor"
+
+
+_PARENT = _snapshot_parent(ROOT)
+SNAPSHOT = _PARENT / "Spectra"
+MANIFEST = _PARENT / "Spectra.SHA256SUMS"
 
 
 def sha256(path: pathlib.Path) -> str:

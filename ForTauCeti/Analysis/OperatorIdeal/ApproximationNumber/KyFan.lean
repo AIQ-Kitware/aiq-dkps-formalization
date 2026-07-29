@@ -122,11 +122,13 @@ def kyFanGauge (T : E →L[𝕜] F) (k : ℕ) : ℝ :=
 @[simp] theorem kyFanGauge_one (T : E →L[𝕜] F) : T.kyFanGauge 1 = ‖T‖ := by
   simp [kyFanGauge]
 
+/-- Ky Fan gauges are absolutely homogeneous. -/
 theorem kyFanGauge_smul (c : 𝕜) (T : E →L[𝕜] F) (k : ℕ) :
     (c • T).kyFanGauge k = ‖c‖ * T.kyFanGauge k := by
   simp only [kyFanGauge, approximationNumber_smul]
   rw [Finset.mul_sum]
 
+/-- Ky Fan gauges are nonnegative. -/
 theorem kyFanGauge_nonneg (T : E →L[𝕜] F) (k : ℕ) : 0 ≤ T.kyFanGauge k :=
   Finset.sum_nonneg fun n _ => T.approximationNumber_nonneg n
 
@@ -167,6 +169,7 @@ variable {E : Type v} {F : Type w}
   [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
   [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
 
+/-- Ky Fan gauges are adjoint-invariant, since the approximation numbers are. -/
 theorem kyFanGauge_adjoint (T : E →L[𝕜] F) (k : ℕ) :
     T.adjoint.kyFanGauge k = T.kyFanGauge k := by
   simp only [kyFanGauge, approximationNumber_adjoint]

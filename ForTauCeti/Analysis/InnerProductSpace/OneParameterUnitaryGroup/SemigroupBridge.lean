@@ -120,6 +120,10 @@ theorem mem_domain_toSemigroup (U : OneParameterUnitaryGroup H) {x : H}
   filter_upwards [self_mem_nhdsWithin] with t ht
   exact (realQuot_eq_smul_genDiffQuot U x ht).symm
 
+/-- **The generators agree.**  Restricting a one-parameter unitary group to `t ≥ 0` gives a
+strongly continuous semigroup whose generator is the original one, up to the factor `i`.  This is
+what makes the unitary-group layer a specialization of the semigroup theory rather than a parallel
+stack. -/
 theorem generator_toSemigroup (U : OneParameterUnitaryGroup H) {x : H}
     (hx : x ∈ generatorDomain U) :
     (toSemigroup U).generator ⟨x, by

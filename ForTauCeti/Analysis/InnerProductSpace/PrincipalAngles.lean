@@ -69,6 +69,7 @@ noncomputable def cosPrincipalAngles {u v : Fin d → E} (hu : Orthonormal 𝕜 
     (hv : Orthonormal 𝕜 v) : ℕ →₀ ℝ :=
   (overlapOp hu hv).singularValues
 
+/-- Principal-angle cosines are nonnegative, being singular values. -/
 theorem cosPrincipalAngles_nonneg {u v : Fin d → E} (hu : Orthonormal 𝕜 u)
     (hv : Orthonormal 𝕜 v) (i : ℕ) : 0 ≤ cosPrincipalAngles hu hv i :=
   (overlapOp hu hv).singularValues_nonneg i
@@ -80,6 +81,7 @@ theorem cosPrincipalAngles_le_one {u v : Fin d → E} (hu : Orthonormal 𝕜 u)
   singularValues_le_one_of_contraction (overlapOp_contraction hu hv)
     finrank_euclideanSpace_fin i
 
+/-- The principal angles are listed in increasing order, so their cosines decrease. -/
 theorem cosPrincipalAngles_antitone {u v : Fin d → E} (hu : Orthonormal 𝕜 u)
     (hv : Orthonormal 𝕜 v) : Antitone (cosPrincipalAngles hu hv) :=
   (overlapOp hu hv).singularValues_antitone
@@ -115,6 +117,8 @@ theorem sinThetaSq_eq_sub_overlap {u v : Fin d → E} (hu : Orthonormal 𝕜 u)
   unfold cosPrincipalAngles
   exact sum_sq_singularValues_overlapOp hu hv
 
+/-- The squared sine of the principal angles is nonnegative: each summand `1 - cos²θₖ` is, because
+the cosines lie in `[0, 1]`. -/
 theorem sinThetaSq_nonneg {u v : Fin d → E} (hu : Orthonormal 𝕜 u) (hv : Orthonormal 𝕜 v) :
     0 ≤ sinThetaSq hu hv :=
   Finset.sum_nonneg fun k _ => by
@@ -157,11 +161,14 @@ noncomputable def blockFamily (b : OrthonormalBasis (Fin n) 𝕜 E) (s : Finset 
     (hd : s.card = d) : Fin d → E := fun i => b (s.orderIsoOfFin hd i)
 
 omit [FiniteDimensional 𝕜 E] in
+/-- Selecting a subset of an orthonormal basis leaves an orthonormal family. -/
 theorem orthonormal_blockFamily (b : OrthonormalBasis (Fin n) 𝕜 E) (s : Finset (Fin n))
     (hd : s.card = d) : Orthonormal 𝕜 (blockFamily b s hd) :=
   b.orthonormal.comp _ (Subtype.coe_injective.comp (s.orderIsoOfFin hd).injective)
 
 omit [FiniteDimensional 𝕜 E] in
+/-- The selected family enumerates exactly the basis vectors indexed by `s`; this is what lets a
+block be described either by its index set or by its span. -/
 theorem range_blockFamily (b : OrthonormalBasis (Fin n) 𝕜 E) (s : Finset (Fin n))
     (hd : s.card = d) : Set.range (blockFamily b s hd) = b '' ↑s := by
   ext x

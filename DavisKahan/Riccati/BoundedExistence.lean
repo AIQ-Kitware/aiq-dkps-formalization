@@ -3,7 +3,7 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 Thinking
 -/
-import DavisKahan.Experimental.InfiniteDimensional.Riccati.BoundedSharpEstimates
+import DavisKahan.Riccati.BoundedSharpEstimates
 import Mathlib.Topology.MetricSpace.Contracting
 
 /-!
@@ -39,6 +39,7 @@ noncomputable def riccatiIterationMap
     (X : E0 →L[ℂ] E1) : E0 →L[ℂ] E1 :=
   J ∘L (X ∘L H.B01 ∘L X - H.B10 + X ∘L B0)
 
+omit [CompleteSpace E0] [CompleteSpace E1] in
 /-- Difference identity for the local Riccati iteration map. -/
 theorem riccatiIterationMap_sub
     (H : BlockOperatorData (𝕜 := ℂ) (E0 := E0) (E1 := E1))
@@ -104,6 +105,7 @@ theorem norm_riccatiIterationMap_lt_one
     exact (div_lt_one hrd).2 (by linarith)
   exact lt_of_le_of_lt (hmain.trans hinside) hratio
 
+omit [CompleteSpace E0] [CompleteSpace E1] in
 /-- Lipschitz estimate for the iteration map on the closed unit ball. -/
 theorem norm_riccatiIterationMap_sub_le
     (H : BlockOperatorData (𝕜 := ℂ) (E0 := E0) (E1 := E1))
@@ -150,6 +152,7 @@ theorem norm_riccatiIterationMap_sub_le
       rw [div_eq_inv_mul]
       ring
 
+omit [CompleteSpace E0] [CompleteSpace E1] in
 /-- A fixed point of the shifted iteration map solves the original Riccati
 equation. -/
 theorem solvesRiccati_of_fixedPoint_riccatiIterationMap

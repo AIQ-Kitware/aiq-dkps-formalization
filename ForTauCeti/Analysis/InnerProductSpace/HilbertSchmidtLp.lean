@@ -26,11 +26,17 @@ so identifying the Hilbert–Schmidt operators with `lp (fun _ : ι => E) 2` giv
 the inner product and completeness — the expensive half of any from-scratch
 development — for free, and leaves only the column bijection to prove.
 
-This module supplies the membership half of that identification.  The bijection
-itself is the content of
-`DavisKahan/Interop/Spectra/HilbertSchmidtColumnExpansion.lean`, whose eleven
-`mathAhead_*` declarations are DKPS-authored and are re-based onto `lp` rather
-than re-proved.
+This module supplies the membership half of that identification.  The three
+facts a consumer of the space actually needs are in
+`HilbertSchmidtSpace.lean`.
+
+An earlier version of this docstring said the eleven `mathAhead_*` declarations
+of `DavisKahan/Interop/Spectra/HilbertSchmidtColumnExpansion.lean` would be
+*re-based* onto `lp`.  That is not what happened: they were re-proved from the
+round trips below, at which point the whole file was redundant and was deleted
+(2026-07-29).  Five of the eleven had no `lp` analogue at all — they were the
+scaffolding of the tensor-model column bijection, and in the `lp` model
+square-summability *is* the definition of the space.
 
 ## Provenance
 
@@ -65,11 +71,14 @@ omit [CompleteSpace E] [CompleteSpace F] in
   funext i; simp [columns]
 
 omit [CompleteSpace E] [CompleteSpace F] in
+/-- Taking columns is additive. -/
 theorem columns_add (b : HilbertBasis ι 𝕜 F) (S T : F →L[𝕜] E) :
     columns b (S + T) = columns b S + columns b T := by
   funext i; simp [columns]
 
 omit [CompleteSpace E] [CompleteSpace F] in
+/-- Taking columns is homogeneous.  With `columns_add` this makes the column map linear, which is
+what lets `HS(F, E)` inherit its vector-space structure from `lp`. -/
 theorem columns_smul (b : HilbertBasis ι 𝕜 F) (c : 𝕜) (T : F →L[𝕜] E) :
     columns b (c • T) = c • columns b T := by
   funext i; simp [columns]
@@ -193,6 +202,8 @@ noncomputable def ofLp (b : HilbertBasis ι 𝕜 F) (f : lp (fun _ : ι => E) 2)
       · exact hsq1)
 
 omit [CompleteSpace F] in
+/-- The operator rebuilt from a column vector acts by summing the columns against the basis
+coefficients. -/
 theorem ofLp_apply (b : HilbertBasis ι 𝕜 F) (f : lp (fun _ : ι => E) 2) (x : F) :
     ofLp b f x = ∑' i, (b.repr x i) • f i := rfl
 

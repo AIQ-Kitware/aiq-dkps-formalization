@@ -96,6 +96,7 @@ noncomputable def graphSubspace (U : Submodule 𝕜 E)
   (LinearMap.range
     (projection U + X ∘L projection U).toLinearMap).topologicalClosure
 
+/-- The graph of a bounded operator is orthogonally complemented, being closed. -/
 noncomputable instance graphSubspace_hasOrthogonalProjection
     (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     (X : E →L[𝕜] E) : (graphSubspace U X).HasOrthogonalProjection := by
@@ -568,6 +569,7 @@ theorem subspaceGap_graphSubspace
   norm_projection_sub_projection_graphSubspace U X hX
 
 
+omit [CompleteSpace E] in
 /-- The coordinate projection from an acute subspace onto the base is
 injective.  The estimate is the elementary gap argument
 `norm v <= norm(P_U-P_V) * norm v`. -/

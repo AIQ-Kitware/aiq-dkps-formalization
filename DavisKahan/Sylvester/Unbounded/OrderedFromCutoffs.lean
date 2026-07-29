@@ -30,8 +30,10 @@ variable {E F : Type v}
   [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
   [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
 
+/-- Local shorthand for a complex closed operator on `E`. -/
 abbrev ComplexClosedOperatorOnE :=
   TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := E)
+/-- Local shorthand for a complex closed operator on `F`. -/
 abbrev ComplexClosedOperatorOnF :=
   TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := F)
 

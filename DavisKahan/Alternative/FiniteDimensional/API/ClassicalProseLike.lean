@@ -60,6 +60,7 @@ noncomputable def directedSinThetaOperatorClassicalProseLike
   V.starProjection ∘L U.starProjection
 
 omit [FiniteDimensional 𝕜 E] [CompleteSpace E] in
+/-- The prose-like directed sine-theta operator agrees with the canonical one. -/
 @[simp]
 theorem directedSinThetaOperatorClassicalProseLike_apply
     (U V : Submodule 𝕜 E) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
@@ -83,6 +84,7 @@ noncomputable def directedHalfSinTwoThetaOperatorClassicalProseLike
   (Uᗮ.starProjection ∘L V.starProjection) ∘L U.starProjection
 
 omit [FiniteDimensional 𝕜 E] [CompleteSpace E] in
+/-- The prose-like directed half-sine-two-theta operator agrees with the canonical one. -/
 @[simp]
 theorem directedHalfSinTwoThetaOperatorClassicalProseLike_apply
     (U V : Submodule 𝕜 E) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
@@ -98,6 +100,7 @@ noncomputable def projectorDifferenceOperatorClassicalProseLike
   U.starProjection - V.starProjection
 
 omit [FiniteDimensional 𝕜 E] [CompleteSpace E] in
+/-- The prose-like projector-difference operator agrees with the canonical one. -/
 @[simp]
 theorem projectorDifferenceOperatorClassicalProseLike_apply
     (U V : Submodule 𝕜 E) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]

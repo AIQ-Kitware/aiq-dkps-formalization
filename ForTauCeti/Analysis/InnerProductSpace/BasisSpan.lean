@@ -65,10 +65,12 @@ noncomputable def spanIndices (b : OrthonormalBasis ι 𝕜 E) (s : Set ι) :
     Submodule 𝕜 E :=
   Submodule.span 𝕜 (b '' s)
 
+/-- Selecting more indices spans more. -/
 theorem spanIndices_mono (b : OrthonormalBasis ι 𝕜 E) {s t : Set ι} (h : s ⊆ t) :
     b.spanIndices s ≤ b.spanIndices t :=
   Submodule.span_mono (Set.image_mono h)
 
+/-- A selected basis vector lies in the span of its index set. -/
 theorem mem_spanIndices_of_mem (b : OrthonormalBasis ι 𝕜 E) {s : Set ι} {i : ι}
     (hi : i ∈ s) : b i ∈ b.spanIndices s :=
   Submodule.subset_span ⟨i, hi, rfl⟩

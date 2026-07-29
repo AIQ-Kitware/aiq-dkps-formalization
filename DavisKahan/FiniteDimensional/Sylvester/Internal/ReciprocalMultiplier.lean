@@ -102,6 +102,7 @@ noncomputable def unitaryOrbitAction
     simp only [LinearMap.comp_apply, LinearMap.smul_apply, map_smul, RingHom.id_apply]
 
 omit [FiniteDimensional 𝕜 E] [FiniteDimensional 𝕜 F] in
+/-- The two-sided unitary orbit action, unfolded to the composition it is. -/
 @[simp]
 theorem unitaryOrbitAction_apply
     (U : F ≃ₗᵢ[𝕜] F) (V : E ≃ₗᵢ[𝕜] E) (T : E →ₗ[𝕜] F) :
@@ -181,12 +182,15 @@ noncomputable def complexFourierPhase (x : ℝ) : unitary ℂ := by
     rw [RCLike.mul_conj, hz]
     norm_num
 
+/-- The Fourier phase as a complex number is `exp(ix)`. -/
 @[simp]
 theorem complexFourierPhase_coe (x : ℝ) :
     (complexFourierPhase x : ℂ) =
       Complex.exp ((x : ℂ) * Complex.I) :=
   rfl
 
+/-- Fourier phases multiply by adding arguments -- the group law of the circle, in the coerced
+complex form the estimates use. -/
 @[simp]
 theorem complexFourierPhase_mul (x y : ℝ) :
     (complexFourierPhase x : ℂ) * (complexFourierPhase y : ℂ) =
@@ -1604,6 +1608,7 @@ noncomputable def doubledPhaseMapAction (theta : ℝ) (T : E' →ₗ[𝕜] F') :
   doubledComplexScalarMapAction
     (Complex.exp ((theta : ℂ) * Complex.I)) T
 
+/-- The doubled phase action, unfolded. -/
 theorem doubledPhaseMapAction_apply (theta : ℝ) (T : E' →ₗ[𝕜] F')
     (x : WithLp 2 (E' × E')) :
     doubledPhaseMapAction theta T x = WithLp.toLp 2

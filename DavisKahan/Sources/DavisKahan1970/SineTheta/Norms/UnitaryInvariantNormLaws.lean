@@ -284,7 +284,7 @@ theorem comp_mem (N : PaperUnitaryInvariantNorm)
 
 /-- The real gauge is absolutely homogeneous on its ideal. -/
 theorem gauge_smul (N : PaperUnitaryInvariantNorm)
-    (c : 𝕜) {A : E →L[𝕜] F} (hA : N.Mem A) :
+    (c : 𝕜) {A : E →L[𝕜] F} (_hA : N.Mem A) :
     N.gauge (c • A) = ‖c‖ * N.gauge A := by
   simp only [gauge]
   rw [N.extendedGauge_smul, ENNReal.toReal_mul,

@@ -73,6 +73,8 @@ section Separator
 /-- The scalar inverse Cayley map on all of `ℂ`, with junk value at `1`. -/
 noncomputable def cayleyCoordFun (w : ℂ) : ℝ := (Complex.I * (1 + w) / (1 - w)).re
 
+/-- The inverse Cayley map is continuous away from `w = 1`.  Only `ContinuousOn` is available: the
+singularity at `1` is genuine, and removing it is what `damp` exists for. -/
 theorem continuousOn_cayleyCoordFun : ContinuousOn cayleyCoordFun {w : ℂ | w ≠ 1} := by
   refine Complex.continuous_re.comp_continuousOn ?_
   refine ContinuousOn.div (by fun_prop) (by fun_prop) ?_
@@ -83,16 +85,23 @@ theorem continuousOn_cayleyCoordFun : ContinuousOn cayleyCoordFun {w : ℂ | w �
 zero at `w = 1`, and tending to `1` at every `w ≠ 1`. -/
 noncomputable def damp (n : ℕ) (w : ℂ) : ℝ := min 1 ((n : ℝ) * ‖w - 1‖)
 
+/-- The damping factor is continuous, including at `w = 1`. -/
 theorem continuous_damp (n : ℕ) : Continuous (damp n) := by
   unfold damp; fun_prop
 
+/-- The damping factor is nonnegative. -/
 theorem damp_nonneg (n : ℕ) (w : ℂ) : 0 ≤ damp n w :=
   le_min zero_le_one (by positivity)
 
+/-- The damping factor is at most `1`, so damping never increases a symbol's size. -/
 theorem damp_le_one (n : ℕ) (w : ℂ) : damp n w ≤ 1 := min_le_left _ _
 
+/-- The damping factor is at most `n ‖w - 1‖`.  This is the bound that forces it to `0` at the
+singularity, which is what makes the damped symbol continuous there. -/
 theorem damp_le (n : ℕ) (w : ℂ) : damp n w ≤ (n : ℝ) * ‖w - 1‖ := min_le_right _ _
 
+/-- Away from the singularity the damping switches off in the limit -- eventually *equal* to `1`,
+not merely convergent, since `min` saturates once `n ‖w - 1‖ ≥ 1`. -/
 theorem tendsto_damp {w : ℂ} (hw : w ≠ 1) :
     Tendsto (fun n : ℕ => damp n w) atTop (nhds 1) := by
   have hpos : 0 < ‖w - 1‖ := by
@@ -114,6 +123,8 @@ factor squeezes it to zero. -/
 noncomputable def cayleySymbolFun (f : C(ℝ, ℝ)) (n : ℕ) (w : ℂ) : ℂ :=
   ((f (cayleyCoordFun w) * damp n w : ℝ) : ℂ)
 
+/-- A damped separator symbol is bounded by `1` when the separator is, both factors lying in
+`[0, 1]`. -/
 theorem norm_cayleySymbolFun_le (f : C(ℝ, ℝ)) (hf : ∀ x, f x ∈ Set.Icc (0 : ℝ) 1)
     (n : ℕ) (w : ℂ) : ‖cayleySymbolFun f n w‖ ≤ 1 := by
   rw [cayleySymbolFun, Complex.norm_real, Real.norm_eq_abs, abs_mul]
@@ -125,6 +136,9 @@ theorem norm_cayleySymbolFun_le (f : C(ℝ, ℝ)) (hf : ∀ x, f x ∈ Set.Icc (
     exact damp_le_one n w
   nlinarith [abs_nonneg (f (cayleyCoordFun w)), abs_nonneg (damp n w)]
 
+/-- **The damped symbol is continuous everywhere, including at `w = 1`.**  This is the point of the
+construction: `cayleyCoordFun` alone is only `ContinuousOn {w ≠ 1}`, and the damping squeezes the
+product to zero at the singularity so the two branches agree. -/
 theorem continuous_cayleySymbolFun (f : C(ℝ, ℝ)) (hf : ∀ x, f x ∈ Set.Icc (0 : ℝ) 1)
     (n : ℕ) : Continuous (cayleySymbolFun f n) := by
   rw [continuous_iff_continuousAt]
@@ -156,6 +170,9 @@ theorem continuous_cayleySymbolFun (f : C(ℝ, ℝ)) (hf : ∀ x, f x ∈ Set.Ic
       (f.continuous.continuousAt.comp hcoord).mul (continuous_damp n).continuousAt
     exact Complex.continuous_ofReal.continuousAt.comp hprod
 
+/-- Off the singularity the damped symbols converge to the undamped one, so the damping is
+recovered in the limit.  With the uniform bound this is what lets dominated convergence replace the
+monotone-class argument. -/
 theorem tendsto_cayleySymbolFun (f : C(ℝ, ℝ)) {w : ℂ} (hw : w ≠ 1) :
     Tendsto (fun n : ℕ => cayleySymbolFun f n w) atTop
       (nhds ((f (cayleyCoordFun w) : ℝ) : ℂ)) := by
