@@ -265,7 +265,7 @@ variable {E₀ : Type vE0} {F₀ : Type vF0}
   [NormedAddCommGroup E₀] [InnerProductSpace 𝕜 E₀] [CompleteSpace E₀]
   [NormedAddCommGroup F₀] [InnerProductSpace 𝕜 F₀] [CompleteSpace F₀]
 
-omit [CompleteSpace F₀] in
+omit [CompleteSpace F₀] [CompleteSpace E₀] in
 /-- **Cutoff convergence.**  Along a net of orthogonal projections converging strongly to the
 identity, every approximation number of `K ∘L P i` converges to the corresponding
 approximation number of `K`.
@@ -344,7 +344,7 @@ theorem approximationSingularValue_comp_strongProjection_tendsto_of_minMax
         have htri : ‖K x‖ ≤ ‖K (P i x)‖ + ‖D i ⟨x, hxV⟩‖ := by
           rw [hDapply]
           have h := norm_sub_le (K (P i x)) (K (P i x) - K x)
-          convert h using 1 <;> abel
+          (convert h using 1; abel)
         have hsx : s ≤ ‖K x‖ := by
           have := hV x hxV
           simpa only [hxNorm, mul_one] using this
@@ -410,6 +410,7 @@ variable {E₀ : Type vE0} {F₀ : Type vF0}
   [NormedAddCommGroup E₀] [InnerProductSpace 𝕜 E₀] [CompleteSpace E₀]
   [NormedAddCommGroup F₀] [InnerProductSpace 𝕜 F₀] [CompleteSpace F₀]
 
+omit [CompleteSpace F₀] [CompleteSpace E₀] in
 /-- Finite Ky Fan approximation gauges converge under strong orthogonal cutoffs: the
 termwise statement summed over `Finset.range k`. -/
 theorem kyFanApproximationGauge_comp_strongProjection_tendsto_of_minMax

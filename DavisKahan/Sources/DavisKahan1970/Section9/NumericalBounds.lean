@@ -221,7 +221,7 @@ theorem equation_9_2
     (ε sinTwoTheta₁ : ℝ)
     (h : sinTwoTheta₁ < 2 * ε / 500) :
     sinTwoTheta₁ < (1 : ℝ) / 250 * ε := by
-  convert h using 1 <;> ring
+  (convert h using 1; ring)
 
 /-- Equation (9.3). -/
 theorem equation_9_3
@@ -235,7 +235,7 @@ theorem equation_9_4
     (ε sinTwoThetaSum : ℝ)
     (h : sinTwoThetaSum < 4 * ε / 500) :
     sinTwoThetaSum < (1 : ℝ) / 125 * ε := by
-  convert h using 1 <;> ring
+  (convert h using 1; ring)
 
 /-- Equation (9.5), lower Ritz value. -/
 theorem equation_9_5_low (ε : ℝ) :

@@ -39,7 +39,7 @@ variable {E : Type v} {F : Type vF}
   [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
   [NormedAddCommGroup F] [InnerProductSpace ℝ F] [CompleteSpace F]
 
-omit [CompleteSpace E] in
+omit [CompleteSpace E] [CompleteSpace F] in
 /-- The range of a complexified operator is the complexification of its real
 range. -/
 theorem range_complexify
@@ -144,6 +144,7 @@ theorem rank_complexification
       by simpa using (complexificationBasis b).mk_eq_rank.symm
     _ = Module.rank ℝ V := by simpa using b.mk_eq_rank
 
+omit [CompleteSpace E] in
 /-- Complexifying a real submodule preserves its dimension. -/
 theorem rank_complexifySubmodule
     (U : Submodule ℝ E) :
@@ -167,7 +168,7 @@ theorem rank_complexifySubmodule
         Module.rank ℂ (RealComplexification U) := e.rank_eq.symm
     _ = Module.rank ℝ U := rank_complexification
 
-omit [CompleteSpace E] in
+omit [CompleteSpace E] [CompleteSpace F] in
 /-- Complexification preserves the rank of a bounded operator. -/
 theorem rank_complexify
     (T : E →L[ℝ] F) :
@@ -254,7 +255,7 @@ theorem lowerBound_complex_span
     ‖T (re z)‖ ^ 2 + ‖T (im z)‖ ^ 2
   nlinarith
 
-omit [CompleteSpace E] in
+omit [CompleteSpace E] [CompleteSpace F] in
 /-- Complexification cannot increase an approximation number: complexify a
 near-optimal real approximant and preserve both its rank and error norm. -/
 theorem approximationNumber_complexify_le
