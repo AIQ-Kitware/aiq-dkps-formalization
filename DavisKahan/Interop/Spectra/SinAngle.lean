@@ -3,7 +3,7 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.BoundedOperator.Basic
+import ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Basic
 import DavisKahan.Interop.Spectra.OperatorAbsoluteValue
 
 /-!
@@ -80,8 +80,7 @@ theorem norm_spectraSinAngleOperator_apply
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] (x : H) :
     ‖spectraSinAngleOperator U V x‖ =
       ‖(projection U - projection V) x‖ := by
-  simpa [spectraSinAngleOperator] using
-    norm_spectraOperatorAbsoluteValue_apply (projection U - projection V) x
+  simp [spectraSinAngleOperator]
 
 /-- The operator norm of the Spectra-backed sine-angle operator is exactly the
 existing DKPS symmetric subspace gap. -/

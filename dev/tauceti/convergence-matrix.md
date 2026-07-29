@@ -737,3 +737,58 @@ share in its "Open representation decisions" section.
   policy and acceptance gates; this matrix is its phase-0 instrument.
 - `ForTauCetiRoadmap/` — the roadmap drafts; the "Roadmap / PR" column points
   here.
+
+## Y3(b2) — the `ForMathlib` inner-product-space component (namek, 2026-07-29)
+
+**DONE. `ForMathlib` is down to 4 modules.** The CourantFischer wave above took
+it 49 → 12; this is the same operation at 8 modules and it takes it 12 → 4.
+
+**What moved:** `ForMathlib/Analysis/InnerProductSpace/{ProjectionBlocks,
+ProjectionGap, QuadraticFormBounds, ReducingSubspace, SylvesterBound,
+SylvesterOperator, CoerciveUnit}.lean` and `SpectralOrder/Complex.lean`, to the
+matching `ForTauCeti/Analysis/InnerProductSpace/**` paths. 1,773 lines, 60
+declarations. **No statement, proof, signature or declaration base name
+changed.**
+
+**Why all eight and not the six that were wanted:** the last two are in only
+because they import members of the first six. Moving the whole weakly-connected
+component is what leaves **no `ForMathlib → ForTauCeti` edge**, which was the
+sole technical objection to the earlier, narrower route.
+
+**The namespace rename is the substance of the lane, not the `git mv`.**
+`scripts/export_for_tauceti.py` rewrites import lines only and requires
+declarations to already carry their final `TauCeti`/`ContinuousLinearMap`
+names, so a module living in `ForTauCeti` cannot keep a `namespace ForMathlib`
+wrapper — it would export `ForMathlib.*` names into the Tau Ceti package. Five
+of the eight were already in root `ContinuousLinearMap`/`Submodule` and moved
+verbatim; `SylvesterBound`, `CoerciveUnit` and `SpectralOrder/Complex` were
+wrapped, so `ForMathlib` → `TauCeti` there, plus **36 qualified references and
+21 `open ForMathlib` lines** in consumers. All 21 of those consumers turned out
+to import *no* surviving `ForMathlib` module, so each became `open TauCeti`
+outright rather than needing both.
+
+**Two collision checks worth recording, because the specifying row did not run
+them and both could have sunk the move:** no moved file's basename already
+existed under `ForTauCeti/Analysis/InnerProductSpace/`, and **none of the 60
+declarations shares a base name** with anything already in that directory.
+
+**One thing the move surfaced that a build alone would not:** `ForMathlib` and
+`ForTauCeti` carry *different* `leanOptions`. Both set `warningAsError = true`
+and the Mathlib standard linter set, but `ForTauCeti` disables the
+style-header linter and — more to the point — the **docstring-coverage gate
+does not scan `ForMathlib`**. Three declarations that had been undocumented for
+their whole life in `ForMathlib` failed the gate the moment they landed in
+`ForTauCeti`. Anyone moving a component between these two libraries should
+expect the destination's gates to find things the source's never looked for.
+
+**Gates:** full build 9198 jobs 0 errors (unchanged — the move adds no
+modules); `lake build ForTauCeti` 8801 jobs and `lake build ForMathlib` 2640
+jobs, both **0 warnings** under `warningAsError`; layers OK (752 modules, 0
+violations); name-drift 0 findings over 23 comparator configs; docstring
+coverage OK; Davis–Kahan census CLEAN (48). `check_library_structure` remains
+red on rule 3, which is pre-existing and unrelated (the parked `Experimental`
+promotion backlog).
+
+**Payoff:** this unblocks Y3 slice (b) — the 1,097-line
+`SinTheta/Perturbation.lean` and the sin-Θ core behind it — which is the
+prerequisite for the Yu–Wang–Samworth theorems.

@@ -108,7 +108,7 @@
     {
       "id": "orthogonal-decomposition-equivalence",
       "title": "Coordinates for a closed subspace and its orthogonal complement",
-      "module": "DavisKahan.Experimental.MathAhead.HiddenFoundations.OrthogonalSummandCoordinates",
+      "module": "DavisKahan.Geometry.Polar.OrthogonalSummandCoordinates",
       "file": "DavisKahan/Experimental/MathAhead/HiddenFoundations/OrthogonalSummandCoordinates.lean",
       "declaration": "ForMathlib.DavisKahan.Experimental.MathAhead.HiddenFoundations.orthogonalDecompositionEquiv",
       "kind": "construction",
@@ -120,7 +120,7 @@
     {
       "id": "orthogonal-sum-equivalence",
       "title": "Assemble isometries on complementary orthogonal summands",
-      "module": "DavisKahan.Experimental.MathAhead.HiddenFoundations.OrthogonalSummandCoordinates",
+      "module": "DavisKahan.Geometry.Polar.OrthogonalSummandCoordinates",
       "file": "DavisKahan/Experimental/MathAhead/HiddenFoundations/OrthogonalSummandCoordinates.lean",
       "declaration": "ForMathlib.DavisKahan.Experimental.MathAhead.HiddenFoundations.orthogonalSumEquiv",
       "kind": "proof_candidate",
@@ -230,7 +230,7 @@
     {
       "id": "two-projection-equivalence-data",
       "title": "Operator-level equivalence data for two projection pairs",
-      "module": "DavisKahan.Experimental.MathAhead.HiddenFoundations.TwoProjectionOperatorClassification",
+      "module": "DavisKahan.Geometry.Polar.TwoProjectionOperatorClassification",
       "file": "DavisKahan/Experimental/MathAhead/HiddenFoundations/TwoProjectionOperatorClassification.lean",
       "declaration": "ForMathlib.DavisKahan.Experimental.MathAhead.HiddenFoundations.TwoProjectionOperatorEquivalence",
       "kind": "construction",
@@ -244,7 +244,7 @@
     {
       "id": "two-projection-ambient-unitary",
       "title": "Assemble the ambient unitary from Halmos summands",
-      "module": "DavisKahan.Experimental.MathAhead.HiddenFoundations.TwoProjectionOperatorClassification",
+      "module": "DavisKahan.Geometry.Polar.TwoProjectionOperatorClassification",
       "file": "DavisKahan/Experimental/MathAhead/HiddenFoundations/TwoProjectionOperatorClassification.lean",
       "declaration": "ForMathlib.DavisKahan.Experimental.MathAhead.HiddenFoundations.TwoProjectionOperatorEquivalence.ambient",
       "kind": "proof_candidate",
@@ -261,7 +261,7 @@
     {
       "id": "two-projection-classification",
       "title": "Modern operator-level two-projection classification",
-      "module": "DavisKahan.Experimental.MathAhead.HiddenFoundations.TwoProjectionOperatorClassification",
+      "module": "DavisKahan.Geometry.Polar.TwoProjectionOperatorClassification",
       "file": "DavisKahan/Experimental/MathAhead/HiddenFoundations/TwoProjectionOperatorClassification.lean",
       "declaration": "ForMathlib.DavisKahan.Experimental.MathAhead.HiddenFoundations.twoProjection_operator_classification",
       "kind": "proof_candidate",
@@ -693,7 +693,7 @@
     {
       "id": "free-beam-mode-ode",
       "title": "Explicit fourth-order free-beam mode solves the ODE",
-      "module": "DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeamCharacteristic",
+      "module": "DavisKahan.Sources.DavisKahan1970.Section9.FreeBeamCharacteristic",
       "file": "DavisKahan/Experimental/MathAhead/HiddenFoundations/FreeBeamCharacteristic.lean",
       "declaration": "ForMathlib.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.mode_fourth_derivative",
       "kind": "proof_candidate",
@@ -705,7 +705,7 @@
     {
       "id": "free-beam-boundary-determinant",
       "title": "Free-end boundary determinant is 2(1-cos beta cosh beta)",
-      "module": "DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeamCharacteristic",
+      "module": "DavisKahan.Sources.DavisKahan1970.Section9.FreeBeamCharacteristic",
       "file": "DavisKahan/Experimental/MathAhead/HiddenFoundations/FreeBeamCharacteristic.lean",
       "declaration": "ForMathlib.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.boundaryDet_eq",
       "kind": "proof_candidate",
@@ -719,7 +719,7 @@
     {
       "id": "free-beam-characteristic",
       "title": "Nontrivial free mode satisfies cos beta cosh beta = 1",
-      "module": "DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeamCharacteristic",
+      "module": "DavisKahan.Sources.DavisKahan1970.Section9.FreeBeamCharacteristic",
       "file": "DavisKahan/Experimental/MathAhead/HiddenFoundations/FreeBeamCharacteristic.lean",
       "declaration": "ForMathlib.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.characteristic_eq_zero_of_freeBoundary",
       "kind": "proof_candidate",
@@ -733,7 +733,7 @@
     {
       "id": "free-beam-numeric-bound",
       "title": "Exact arithmetic 4.73^4 > 500",
-      "module": "DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeamCharacteristic",
+      "module": "DavisKahan.Sources.DavisKahan1970.Section9.FreeBeamCharacteristic",
       "file": "DavisKahan/Experimental/MathAhead/HiddenFoundations/FreeBeamCharacteristic.lean",
       "declaration": "ForMathlib.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.four_seventy_three_pow_four_gt_five_hundred",
       "kind": "proof_candidate",
@@ -745,7 +745,7 @@
     {
       "id": "free-beam-root-localization",
       "title": "Interface for localizing the first positive characteristic root",
-      "module": "DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeamCharacteristic",
+      "module": "DavisKahan.Sources.DavisKahan1970.Section9.FreeBeamCharacteristic",
       "file": "DavisKahan/Experimental/MathAhead/HiddenFoundations/FreeBeamCharacteristic.lean",
       "declaration": "ForMathlib.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.PositiveRootLocalization",
       "kind": "interface",
@@ -757,7 +757,7 @@
     {
       "id": "free-beam-root-bound",
       "title": "Positive characteristic root gives beta^4 > 500",
-      "module": "DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeamCharacteristic",
+      "module": "DavisKahan.Sources.DavisKahan1970.Section9.FreeBeamCharacteristic",
       "file": "DavisKahan/Experimental/MathAhead/HiddenFoundations/FreeBeamCharacteristic.lean",
       "declaration": "ForMathlib.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.positive_root_fourth_power_gt_five_hundred",
       "kind": "proof_candidate",

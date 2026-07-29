@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Sylvester.Bounded
-import ForMathlib.Analysis.InnerProductSpace.CoerciveUnit
+import ForTauCeti.Analysis.InnerProductSpace.CoerciveUnit
 import Mathlib.Analysis.InnerProductSpace.StarOrder
 import Mathlib.Analysis.Normed.Group.Uniform
 import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Rpow.Basic
@@ -19,7 +19,7 @@ and ideal-norm transport seams separately.
 
 namespace TauCeti
 
-open ForMathlib
+open TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace ExactSinTheta
@@ -203,7 +203,7 @@ theorem lowerFramePolarData_nonempty
     exact (ContinuousLinearMap.nonneg_iff_isPositive gram).2
       (ContinuousLinearMap.isPositive_adjoint_comp_self X)
   have hgram_unit : IsUnit gram := by
-    refine ForMathlib.ContinuousLinearMap.isUnit_of_coercive
+    refine TauCeti.ContinuousLinearMap.isUnit_of_coercive
       (sq_pos_of_pos hε) ?_
     simpa [gram] using gram_coercive hX hε.le
   let sqrt : F →L[ℂ] F := gram ^ (1 / 2 : ℝ)

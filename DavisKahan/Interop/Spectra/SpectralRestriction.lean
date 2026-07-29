@@ -67,6 +67,7 @@ noncomputable def selfAdjointSpectralSubspace
     (B : Set ℝ) (hB : MeasurableSet B) : Submodule ℂ H :=
   pvmRangeSubspace (TauCeti.LinearPMap.spectralPVM hA) B hB
 
+/-- The self-adjoint spectral subspace is the range of its spectral projection. -/
 @[simp]
 theorem selfAdjointSpectralSubspace_eq_range
     (A : DKClosedOperator (H := H)) (hA : A.IsSelfAdjoint)
@@ -99,6 +100,7 @@ noncomputable def selfAdjointSpectralSubspaceInclusion
     selfAdjointSpectralSubspace A hA B hB →L[ℂ] H :=
   Submodule.subtypeL (selfAdjointSpectralSubspace A hA B hB)
 
+/-- The inclusion of the spectral subspace acts as the underlying vector. -/
 @[simp]
 theorem selfAdjointSpectralSubspaceInclusion_apply
     (A : DKClosedOperator (H := H)) (hA : A.IsSelfAdjoint)
