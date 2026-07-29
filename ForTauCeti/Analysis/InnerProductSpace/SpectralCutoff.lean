@@ -118,6 +118,7 @@ theorem spectralCutoff_mul_spectralCocutoff (A : E →L[ℂ] E) (hA : 0 ≤ A) (
     · rw [max_eq_right (a := s - t) (by linarith)]; ring
   rw [hzero, cfc_const_zero]
 
+/-- The complementary spectral cut-off is self-adjoint, hence an orthogonal projection. -/
 theorem isSelfAdjoint_spectralCocutoff (A : E →L[ℂ] E) (hA : 0 ≤ A) (s : ℝ) :
     IsSelfAdjoint (A.spectralCocutoff s) := by
   have hsa : IsSelfAdjoint A := IsSelfAdjoint.of_nonneg hA

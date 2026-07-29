@@ -57,6 +57,7 @@ noncomputable def neumannFactor (z : 𝕜) : E →L[𝕜] E :=
   1 - (z - z₀) • resolvent A hz₀
 
 omit [CompleteSpace E] in
+/-- The Neumann factor acts as the geometric series `∑ ((z - w) R(z))ⁿ`. -/
 theorem neumannFactor_apply (z : 𝕜) (ψ : E) :
     neumannFactor hz₀ z ψ = ψ - (z - z₀) • resolvent A hz₀ ψ := by
   simp [neumannFactor]
@@ -81,6 +82,8 @@ theorem resolvent_sub_smul_shift (z : 𝕜) (x : A.domain) :
     map_sub, h, map_smul]
 
 omit [CompleteSpace E] in
+/-- The resolvent commutes with its own Neumann factor, which is what lets the perturbed resolvent
+be written as a product in either order. -/
 theorem commute_resolvent_neumannFactor (z : 𝕜) :
     Commute (resolvent A hz₀) (neumannFactor hz₀ z) := by
   rw [neumannFactor]
@@ -141,6 +144,8 @@ theorem isClosed_realSpectrum (A : F →ₗ.[ℂ] F) :
     IsClosed (Complex.ofReal ⁻¹' spectrum A) :=
   (isClosed_spectrum A).preimage Complex.continuous_ofReal
 
+/-- The real spectrum is measurable, being closed.  This is the enabling fact for defining spectral
+measures on it; Mathlib has the open-resolvent-set statement only for bounded operators. -/
 theorem measurableSet_realSpectrum (A : F →ₗ.[ℂ] F) :
     MeasurableSet (Complex.ofReal ⁻¹' spectrum A) :=
   (isClosed_realSpectrum A).measurableSet
