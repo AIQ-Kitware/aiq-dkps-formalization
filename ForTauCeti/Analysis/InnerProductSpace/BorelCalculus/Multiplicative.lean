@@ -65,6 +65,13 @@ theorem integrable (hf : IsBddMeasurable f) (ν : Measure (spectrum ℂ a))
     [IsFiniteMeasure ν] : Integrable f ν :=
   integrable_of_bounded hf.measurable hf.norm_le_bound ν
 
+omit [CompleteSpace H] in
+/-- Conjugates of admissible symbols are admissible. -/
+theorem conj (hf : IsBddMeasurable f) :
+    IsBddMeasurable (fun x => (starRingEnd ℂ) (f x)) :=
+  ⟨Complex.continuous_conj.measurable.comp hf.measurable, hf.bound, hf.bound_nonneg,
+    fun x => by rw [RCLike.norm_conj]; exact hf.norm_le_bound x⟩
+
 end IsBddMeasurable
 
 section Diagonal
@@ -291,6 +298,168 @@ theorem borelCalculus_mul (hf : IsBddMeasurable f) (hg : IsBddMeasurable g) :
   rfl
 
 end Multiplicative
+
+section Linear
+
+variable (ha : IsStarNormal a) {f g : spectrum ℂ a → ℂ}
+
+omit [CompleteSpace H] in
+/-- Sums of admissible symbols are admissible. -/
+theorem IsBddMeasurable.add (hf : IsBddMeasurable f) (hg : IsBddMeasurable g) :
+    IsBddMeasurable (fun x => f x + g x) := by
+  refine ⟨hf.measurable.add hg.measurable, hf.bound + hg.bound, ?_, fun x => ?_⟩
+  · have := hf.bound_nonneg; have := hg.bound_nonneg; positivity
+  · exact le_trans (norm_add_le _ _) (add_le_add (hf.norm_le_bound x) (hg.norm_le_bound x))
+
+omit [CompleteSpace H] in
+/-- Scalar multiples of admissible symbols are admissible. -/
+theorem IsBddMeasurable.const_smul (c : ℂ) (hf : IsBddMeasurable f) :
+    IsBddMeasurable (fun x => c * f x) := by
+  refine ⟨measurable_const.mul hf.measurable, ‖c‖ * hf.bound, ?_, fun x => ?_⟩
+  · have := hf.bound_nonneg; positivity
+  · rw [norm_mul]
+    exact mul_le_mul_of_nonneg_left (hf.norm_le_bound x) (norm_nonneg c)
+
+/-- The Borel calculus is additive in the symbol. -/
+theorem borelCalculus_add (hf : IsBddMeasurable f) (hg : IsBddMeasurable g) :
+    borelCalculus ha (hf.add hg) = borelCalculus ha hf + borelCalculus ha hg := by
+  refine ContinuousLinearMap.ext fun ξ => ext_inner_left ℂ fun ψ => ?_
+  rw [_root_.add_apply, inner_add_right, inner_borelCalculus, inner_borelCalculus,
+    inner_borelCalculus]
+  simp only [pair]
+  rw [integral_add (hf.integrable _) (hg.integrable _),
+    integral_add (hf.integrable _) (hg.integrable _),
+    integral_add (hf.integrable _) (hg.integrable _),
+    integral_add (hf.integrable _) (hg.integrable _)]
+  ring
+
+/-- The Borel calculus is homogeneous in the symbol. -/
+theorem borelCalculus_const_smul (c : ℂ) (hf : IsBddMeasurable f) :
+    borelCalculus ha (hf.const_smul c) = c • borelCalculus ha hf := by
+  refine ContinuousLinearMap.ext fun ξ => ext_inner_left ℂ fun ψ => ?_
+  rw [_root_.smul_apply, inner_smul_right, inner_borelCalculus, inner_borelCalculus]
+  simp only [pair]
+  rw [integral_const_mul, integral_const_mul, integral_const_mul, integral_const_mul]
+  ring
+
+/-- The Borel calculus only sees the symbol up to sets that are null for every
+diagonal measure. -/
+theorem borelCalculus_congr_ae (hf : IsBddMeasurable f) (hg : IsBddMeasurable g)
+    (h : ∀ η : H, f =ᵐ[diagMeasure ha η] g) :
+    borelCalculus ha hf = borelCalculus ha hg := by
+  refine ContinuousLinearMap.ext fun ξ => ext_inner_left ℂ fun ψ => ?_
+  rw [inner_borelCalculus, inner_borelCalculus]
+  simp only [pair]
+  rw [integral_congr_ae (h _), integral_congr_ae (h _), integral_congr_ae (h _),
+    integral_congr_ae (h _)]
+
+end Linear
+
+section Adjoint
+
+variable (ha : IsStarNormal a) {f : spectrum ℂ a → ℂ}
+
+/-- Conjugating the symbol transposes the polarised integral. -/
+theorem pair_conj (hfm : Measurable f) {M : ℝ} (hfb : ∀ x, ‖f x‖ ≤ M) (ψ ξ : H) :
+    pair ha (fun x => (starRingEnd ℂ) (f x)) ψ ξ = (starRingEnd ℂ) (pair ha f ξ ψ) := by
+  refine eq_of_forall_norm_sub_le (C := 2) (by norm_num) fun ε hε => ?_
+  classical
+  set v : Fin 4 ⊕ Fin 4 → H := Sum.elim (pairVectors ψ ξ) (pairVectors ξ ψ) with hv
+  set ν : Measure (spectrum ℂ a) := ∑ j, diagMeasure ha (v j) with hν
+  haveI : IsFiniteMeasure ν := isFiniteMeasure_sum_diagMeasure ha v
+  have hfi : Integrable f ν := integrable_of_bounded hfm hfb ν
+  obtain ⟨g, hgi, hgle⟩ := exists_continuous_integral_norm_sub_le ν hfi hε
+  have hcfi : Integrable (fun x => (starRingEnd ℂ) (f x)) ν :=
+    integrable_of_bounded (f := fun x => (starRingEnd ℂ) (f x))
+      (Complex.continuous_conj.measurable.comp hfm)
+      (fun x => by rw [RCLike.norm_conj]; exact hfb x) ν
+  have hcgi : Integrable (fun x => (starRingEnd ℂ) (g x)) ν :=
+    (IsBddMeasurable.of_continuous (star g)).integrable ν
+  have hnormeq : ∫ x, ‖(starRingEnd ℂ) (f x) - (starRingEnd ℂ) (g x)‖ ∂ν
+      = ∫ x, ‖f x - g x‖ ∂ν := by
+    congr 1
+    funext x
+    rw [← map_sub, RCLike.norm_conj]
+  have h1 : ‖pair ha (fun x => (starRingEnd ℂ) (f x)) ψ ξ
+      - pair ha (fun x => (starRingEnd ℂ) (g x)) ψ ξ‖ ≤ ε := by
+    refine le_trans (norm_pair_sub_pair_le ha ν ψ ξ
+      (fun k => diagMeasure_le_sum ha v (Sum.inl k)) hcfi hcgi) ?_
+    rw [hnormeq]; exact hgle
+  have h2 : ‖pair ha f ξ ψ - pair ha (fun x => g x) ξ ψ‖ ≤ ε :=
+    le_trans (norm_pair_sub_pair_le ha ν ξ ψ
+      (fun k => diagMeasure_le_sum ha v (Sum.inr k)) hfi hgi) hgle
+  have hmid : pair ha (fun x => (starRingEnd ℂ) (g x)) ψ ξ
+      = (starRingEnd ℂ) (pair ha (fun x => g x) ξ ψ) := by
+    have hstar : pair ha (fun x => (starRingEnd ℂ) (g x)) ψ ξ
+        = ⟪ψ, cfcHom ha (star g) ξ⟫_ℂ := pair_of_continuous ha (star g) ψ ξ
+    rw [hstar, pair_of_continuous, map_star, ContinuousLinearMap.star_eq_adjoint,
+      ContinuousLinearMap.adjoint_inner_right, ← inner_conj_symm]
+  have hkey : pair ha (fun x => (starRingEnd ℂ) (f x)) ψ ξ
+      - (starRingEnd ℂ) (pair ha f ξ ψ)
+      = (pair ha (fun x => (starRingEnd ℂ) (f x)) ψ ξ
+          - pair ha (fun x => (starRingEnd ℂ) (g x)) ψ ξ)
+        - ((starRingEnd ℂ) (pair ha f ξ ψ)
+          - (starRingEnd ℂ) (pair ha (fun x => g x) ξ ψ)) := by
+    rw [hmid]; ring
+  rw [hkey]
+  refine le_trans (norm_sub_le _ _) ?_
+  have h2' : ‖(starRingEnd ℂ) (pair ha f ξ ψ)
+      - (starRingEnd ℂ) (pair ha (fun x => g x) ξ ψ)‖ ≤ ε := by
+    rw [← map_sub, RCLike.norm_conj]; exact h2
+  linarith
+
+/-- The Borel calculus is `⋆`-preserving. -/
+theorem borelCalculus_conj (hf : IsBddMeasurable f) :
+    borelCalculus ha hf.conj = ContinuousLinearMap.adjoint (borelCalculus ha hf) := by
+  refine ContinuousLinearMap.ext fun ξ => ext_inner_left ℂ fun ψ => ?_
+  rw [inner_borelCalculus, ContinuousLinearMap.adjoint_inner_right, ← inner_conj_symm,
+    inner_borelCalculus]
+  exact pair_conj ha hf.measurable hf.norm_le_bound ψ ξ
+
+/-- **The sharp norm bound**: `‖borelCalculus f ξ‖ ≤ M ‖ξ‖` whenever `‖f‖ ≤ M`. -/
+theorem norm_borelCalculus_apply_le (hf : IsBddMeasurable f) {M : ℝ} (hM : 0 ≤ M)
+    (hfb : ∀ x, ‖f x‖ ≤ M) (ξ : H) :
+    ‖borelCalculus ha hf ξ‖ ≤ M * ‖ξ‖ := by
+  have hsq : ‖borelCalculus ha hf ξ‖ ^ 2
+      = ∫ x, ((starRingEnd ℂ) (f x) * f x).re ∂(diagMeasure ha ξ) := by
+    have hinner : ⟪borelCalculus ha hf ξ, borelCalculus ha hf ξ⟫_ℂ
+        = ⟪ξ, (borelCalculus ha hf.conj * borelCalculus ha hf) ξ⟫_ℂ := by
+      rw [borelCalculus_conj, _root_.mul_apply_eq_comp,
+        ContinuousLinearMap.adjoint_inner_right]
+    rw [← borelCalculus_mul, inner_borelCalculus_self] at hinner
+    have hnorm : ⟪borelCalculus ha hf ξ, borelCalculus ha hf ξ⟫_ℂ
+        = ((‖borelCalculus ha hf ξ‖ ^ 2 : ℝ) : ℂ) := by
+      rw [inner_self_eq_norm_sq_to_K]; norm_cast
+    rw [hnorm] at hinner
+    have hre := congrArg Complex.re hinner
+    rw [Complex.ofReal_re] at hre
+    have hint : (∫ x, (starRingEnd ℂ) (f x) * f x ∂(diagMeasure ha ξ)).re
+        = ∫ x, ((starRingEnd ℂ) (f x) * f x).re ∂(diagMeasure ha ξ) :=
+      (integral_re ((hf.conj.mul hf).integrable _)).symm
+    rw [← hint]
+    exact hre
+  have hptwise : ∀ x, ((starRingEnd ℂ) (f x) * f x).re ≤ M ^ 2 := by
+    intro x
+    rw [Complex.mul_re, Complex.conj_re, Complex.conj_im]
+    have h := hfb x
+    have hnn : ‖f x‖ ^ 2 ≤ M ^ 2 := by nlinarith [norm_nonneg (f x)]
+    have : ‖f x‖ ^ 2 = (f x).re ^ 2 + (f x).im ^ 2 := by
+      rw [← Complex.normSq_eq_norm_sq, Complex.normSq_apply]; ring
+    nlinarith
+  have hbound : ∫ x, ((starRingEnd ℂ) (f x) * f x).re ∂(diagMeasure ha ξ)
+      ≤ M ^ 2 * ‖ξ‖ ^ 2 := by
+    calc ∫ x, ((starRingEnd ℂ) (f x) * f x).re ∂(diagMeasure ha ξ)
+        ≤ ∫ _x, M ^ 2 ∂(diagMeasure ha ξ) :=
+          integral_mono ((hf.conj.mul hf).integrable _).re (integrable_const _) hptwise
+      _ = ‖ξ‖ ^ 2 * M ^ 2 := by
+          rw [integral_const, smul_eq_mul, MeasureTheory.measureReal_def,
+            diagMeasure_univ_toReal]
+      _ = M ^ 2 * ‖ξ‖ ^ 2 := by ring
+  have hfinal : ‖borelCalculus ha hf ξ‖ ^ 2 ≤ (M * ‖ξ‖) ^ 2 := by
+    rw [hsq, mul_pow]; exact hbound
+  nlinarith [norm_nonneg (borelCalculus ha hf ξ), hfinal, mul_nonneg hM (norm_nonneg ξ)]
+
+end Adjoint
 
 end BorelCalculus
 end TauCeti
