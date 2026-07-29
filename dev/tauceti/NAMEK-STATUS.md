@@ -74,6 +74,50 @@ will hand over rather than duplicate.
 4. **S6**: drop `[[require]] Spectra` from `lakefile.toml`, confirm green, and
    relocate the DKPS-authored `vendor/` files that have an API home.
 
+## D3's crux, measured — and the two routes compose
+
+**The remaining obstacle in D3 is self-adjointness of the Sylvester operator**
+`𝒮 : Z ↦ A Z - Z B` on `HS(F, E)`.  Everything downstream needs it, because
+`spectralPVM` and therefore `gapInverse` are stated for self-adjoint operators.
+
+Spectra gets it from Stone: `𝒮` is the generator of the unitary group
+`W t Z = U_A t ∘ Z ∘ (U_B t)⋆`, and generators of one-parameter unitary groups
+are self-adjoint.  **The tree does not have that direction.**  `genToGroup` is
+the converse (self-adjoint → group), and searching `ForTauCeti` for
+`IsSelfAdjoint (generator …)` returns nothing.  Proving it would need the
+Hille–Yosida resolvent integral `R(∓i) = ∓i ∫₀^∞ e^{∓t} U(t) dt`.
+
+**That is avoidable, and the way round is the pleasing part.**  What the tree
+*does* have is von Neumann's criterion,
+`OneParameterUnitaryGroup.isSelfAdjoint_of_surjective_addSub`: a symmetric
+operator whose `A + i` and `A - i` are both surjective is self-adjoint.  So `𝒮`
+is self-adjoint as soon as `𝒮 ± i` are surjective — and **surjectivity is exactly
+what the Fourier/semigroup formula already in the tree provides**
+(`Experimental/…/Sylvester/FourierSemigroup.lean`):
+`X = ∫ μ_δ(t) U(-t) C V(t) dt` solves `A X - X B = C` whenever the two spectra
+are separated, and for `𝒮 ± i` they are separated by `1` in the imaginary
+direction for free.
+
+**The constant does not matter there.**  The Fourier route was ruled out for the
+*theorem* because it yields `π/(2δ)` instead of the sharp `δ⁻¹` — but
+surjectivity is a existence statement and is indifferent to constants.  So:
+
+* **Fourier** ⟹ `𝒮 ± i` surjective ⟹ `𝒮` self-adjoint (von Neumann);
+* **spectral** ⟹ the sharp `δ⁻¹` (`apply_gapInverse`, landed).
+
+The two routes compose, each used for the thing it is actually good at, and
+Stone's forward direction is not needed anywhere.
+
+**Remaining concrete steps in D3:**
+
+1. `𝒮` as a `LinearPMap` on `lp (fun _ : ι => E) 2` via D1's bijection — no new
+   type is needed, since `lp` already carries the inner product and
+   completeness;
+2. symmetry of `𝒮` (a two-line computation from self-adjointness of `A` and `B`);
+3. surjectivity of `𝒮 ± i` from the Fourier formula;
+4. self-adjointness by `isSelfAdjoint_of_surjective_addSub`;
+5. the vector gap from the pairwise spectral gap, then `apply_gapInverse`.
+
 ## Two things worth taking from the closed lanes
 
 **The bypass keeps working, and three times the advertised blocker did not
