@@ -516,15 +516,43 @@ private theorem tanTwoAngleOperatorC_eq_modulus_ambientGraphTangent
   have hMsq : M ∘L M =
       (4 : ℂ) • (ContinuousLinearMap.modulus Y ∘L
         Ring.inverse D ∘L ContinuousLinearMap.modulus Y ∘L Ring.inverse D) := by
+    -- `|T|² = T⋆ T` with `T = 2 • (Y D⁻¹)`, hence
+    --   T⋆ T = 4 • (D⁻¹ Y⋆ Y D⁻¹) = 4 • (D⁻¹ |Y| |Y| D⁻¹) = 4 • (|Y| D⁻¹ |Y| D⁻¹),
+    -- the last step by `[|Y|, D⁻¹] = 0`.  The old script called `star_smul` and
+    -- `star_mul` *after* `modulus_mul_self` had already put the goal in `adjoint`
+    -- form, so neither could ever fire.
+    have hDinvAdj :
+        ContinuousLinearMap.adjoint (Ring.inverse D) = Ring.inverse D := by
+      simpa only [ContinuousLinearMap.star_eq_adjoint] using hDinvSA.star_eq
+    have hYsq : ContinuousLinearMap.adjoint Y * Y
+        = ContinuousLinearMap.modulus Y * ContinuousLinearMap.modulus Y :=
+      (ContinuousLinearMap.modulus_mul_self Y).symm
     dsimp [M]
-    -- same `*` vs `∘SL` bridge as in `hCangSq`
-    rw [← ContinuousLinearMap.mul_def, ContinuousLinearMap.modulus_mul_self]
-    rw [hTformula, star_smul, star_mul,
-      ContinuousLinearMap.star_eq_adjoint,
-      (CFC.rpow_nonneg (a := D) (y := (-1 : ℝ))).isSelfAdjoint.star_eq]
-    simp only [map_ofNat, mul_smul_comm, smul_mul_assoc]
-    rw [← ContinuousLinearMap.modulus_mul_self Y]
-    noncomm_ring
+    rw [← ContinuousLinearMap.mul_def, ContinuousLinearMap.modulus_mul_self,
+      hTformula]
+    -- `adjoint` is a *conjugate*-linear isometry equiv (`≃ₗᵢ⋆`), so the scalar
+    -- comes out through `map_smulₛₗ` as `star 2`, not as `2`.
+    rw [map_smulₛₗ, ContinuousLinearMap.adjoint_comp, hDinvAdj]
+    show (starRingEnd ℂ) 2 • (Ring.inverse D * ContinuousLinearMap.adjoint Y) *
+          ((2 : ℂ) • (Y * Ring.inverse D))
+        = (4 : ℂ) • (ContinuousLinearMap.modulus Y *
+            (Ring.inverse D * (ContinuousLinearMap.modulus Y * Ring.inverse D)))
+    rw [map_ofNat, smul_mul_assoc, mul_smul_comm, smul_smul]
+    rw [show (2 : ℂ) * 2 = 4 by norm_num]
+    congr 1
+    calc Ring.inverse D * ContinuousLinearMap.adjoint Y * (Y * Ring.inverse D)
+        = Ring.inverse D * (ContinuousLinearMap.adjoint Y * Y) * Ring.inverse D := by
+          noncomm_ring
+      _ = Ring.inverse D * (ContinuousLinearMap.modulus Y *
+            ContinuousLinearMap.modulus Y) * Ring.inverse D := by rw [hYsq]
+      _ = (Ring.inverse D * ContinuousLinearMap.modulus Y) *
+            (ContinuousLinearMap.modulus Y * Ring.inverse D) := by noncomm_ring
+      _ = (ContinuousLinearMap.modulus Y * Ring.inverse D) *
+            (ContinuousLinearMap.modulus Y * Ring.inverse D) := by
+          rw [hcomm.symm.eq]
+      _ = ContinuousLinearMap.modulus Y *
+            (Ring.inverse D * (ContinuousLinearMap.modulus Y * Ring.inverse D)) := by
+          noncomm_ring
   have hCandidateNonneg :
       (0 : E →L[ℂ] E) ≤
         (2 : ℂ) • (ContinuousLinearMap.modulus Y ∘L Ring.inverse D) := by
