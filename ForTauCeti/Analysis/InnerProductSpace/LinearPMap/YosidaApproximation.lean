@@ -517,5 +517,20 @@ theorem inner_expApprox (hA : IsSelfAdjoint A) (n : ℕ+) (t : ℝ) (x y : H) :
     _ = ⟪((ContinuousLinearMap.adjoint (expApprox hA n t)) * expApprox hA n t) x, y⟫_ℂ := rfl
     _ = ⟪x, y⟫_ℂ := by rw [hstar]; rfl
 
+/-! ### The approximants commute
+
+Each `Aₙˢʸᵐ` is a scalar combination of resolvents, and resolvents commute, so
+the symmetric approximants pairwise commute.  This is what lets the Duhamel
+estimate be applied to the pair `(Aₘˢʸᵐ, Aₙˢʸᵐ)`. -/
+
+theorem commute_yosidaApproxSym (hA : IsSelfAdjoint A) (m n : ℕ+) :
+    Commute (yosidaApproxSym hA m) (yosidaApproxSym hA n) := by
+  have hres : ∀ (z w : ℂ) (hz : z ∈ resolventSet A) (hw : w ∈ resolventSet A),
+      Commute (resolvent A hz) (resolvent A hw) := fun _ _ hz hw => resolvent_commute hz hw
+  unfold yosidaApproxSym
+  refine Commute.smul_left ?_ _ |>.smul_right _
+  refine Commute.add_left ?_ ?_ <;> refine Commute.add_right ?_ ?_ <;>
+    exact hres _ _ _ _
+
 end LinearPMap
 end TauCeti
