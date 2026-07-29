@@ -31,10 +31,6 @@ namespace FinishTanTwoTheta
 open scoped InnerProductSpace BigOperators
 open Set
 open DavisKahan.Experimental.ExactSinTheta
-open DavisKahan.Experimental.SpectraBridge
-open Spectra.OneParameterUnitaryGroup
-open Spectra.YosidaHille
-open Spectra.QuantumMechanics.SpectralTheory
 
 noncomputable section
 
@@ -452,99 +448,21 @@ theorem exists_rank_le_norm_doubleAngleTangent_sub_lt
   have hv0 : 0 ≤ v := hu0.trans huv.le
   have hu1 : u < 1 := huv.trans hv1
   let C : E0 →L[ℂ] E0 := gramOperator X
-  have hC : IsSelfAdjoint C := gramOperator_isSelfAdjoint X
-  let A : Spectra.Operator.SelfAdjointOperator E0 :=
-    Spectra.Operator.SelfAdjointOperator.ofBounded C hC
-  have hA : IsSelfAdjoint A.toLinearPMap := A.selfAdjoint
-  let U := genToGroup hA
-  let PVM : Spectra.ProjValMeasure E0 := spectralPVM hA
+  let PVM : ProjValMeasure E0 := gramSpectralPVM X
   let P : E0 →L[ℂ] E0 := PVM.proj (Set.Ioi (u ^ 2)) measurableSet_Ioi
   let Q : E0 →L[ℂ] E0 := PVM.proj (Set.Iic (u ^ 2)) measurableSet_Iic
   let T := doubleAngleTangentOperator X hcontractive
   let R : E0 →L[ℂ] E1 := T ∘L P
   have hPrank : P.rank ≤ (n : Cardinal) := by
-    by_contra hnot
-    have hlt : (n : Cardinal) < P.rank := lt_of_not_ge hnot
-    let W : Submodule ℂ E0 :=
-      pvmRangeSubspace PVM (Set.Ioi (u ^ 2)) measurableSet_Ioi
-    have hWrank : ((n + 1 : ℕ) : Cardinal) ≤ Module.rank ℂ W := by
-      change ((n + 1 : ℕ) : Cardinal) ≤ P.rank
-      rw [← Cardinal.natCast_add_one_le_iff, ← Nat.cast_add_one] at hlt
-      exact hlt
-    obtain ⟨basisVec, hbasisVec⟩ := (Module.le_rank_iff).mp hWrank
-    let vectors : Fin (n + 1) → E0 := W.subtype ∘ basisVec
-    have hlin : LinearIndependent ℂ vectors := by
-      exact hbasisVec.map' W.subtype
-        (LinearMap.ker_eq_bot.mpr W.injective_subtype)
-    have hlower : u ≤ X.approximationNumber n := by
-      apply ContinuousLinearMap.le_approximationNumber_of_linearIndependent
-        X n vectors hlin
-      intro z hz hznorm
-      have hzW : z ∈ W := by
-        apply (Submodule.span_le.2 ?_) hz
-        rintro _ ⟨i, rfl⟩
-        change (basisVec i : E0) ∈ W
-        exact (basisVec i).property
-      have hhighFix :
-          PVM.proj (Set.Ioi (u ^ 2)) measurableSet_Ioi z = z :=
-        pvmProjection_eq_self_of_mem_rangeSubspace
-          PVM (Set.Ioi (u ^ 2)) measurableSet_Ioi hzW
-      have hhighFix' :
-          Spectra.QuantumMechanics.SpectralTheory.spectralProjection U
-              (Set.Ioi (u ^ 2)) measurableSet_Ioi z = z := by
-        simpa only [PVM, U,
-          Spectra.QuantumMechanics.SpectralTheory.spectralPVM_proj] using hhighFix
-      have hlowZero :
-          Spectra.QuantumMechanics.SpectralTheory.spectralProjection U
-              (Set.Iic (u ^ 2)) measurableSet_Iic z = 0 := by
-        have hcompl := DFunLike.congr_fun
-          (Spectra.QuantumMechanics.SpectralTheory.spectralProjection_compl U
-            (Set.Ioi (u ^ 2)) measurableSet_Ioi) z
-        simpa only [Set.compl_Ioi, sub_apply, ContinuousLinearMap.id_apply,
-          hhighFix', sub_self] using hcompl
-      have hgen : generator U = A.toLinearPMap := by
-        dsimp only [U]
-        exact generator_genToGroup hA
-      have hAdom : A.toLinearPMap.domain = ⊤ := by
-        dsimp only [A]
-        exact Spectra.Operator.SelfAdjointOperator.domain_ofBounded C hC
-      have hzDom : z ∈ (generator U).domain := by
-        rw [hgen, hAdom]
-        exact Submodule.mem_top
-      have hzA : z ∈ A.toLinearPMap.domain := by
-        rw [hAdom]
-        exact Submodule.mem_top
-      have hgenApply : generator U ⟨z, hzDom⟩ = C z := by
-        have happly := (LinearPMap.ext_iff.mp hgen).2
-        calc
-          generator U ⟨z, hzDom⟩ = A.toLinearPMap ⟨z, hzA⟩ :=
-            happly (x := z) (hf := hzDom) (hg := hzA)
-          _ = C z := rfl
-      have henergy := energy_lower_bound_of_spectralProjection_Iic_eq_zero
-        U (u ^ 2) (⟨z, hzDom⟩ : (generator U).domain) hlowZero
-      have hsquare : u ^ 2 ≤ ‖X z‖ ^ 2 := by
-        calc
-          u ^ 2 = u ^ 2 * ‖z‖ ^ 2 := by rw [hznorm, one_pow, mul_one]
-          _ ≤ (⟪generator U ⟨z, hzDom⟩, z⟫_ℂ).re := henergy
-          _ = ‖X z‖ ^ 2 := by
-            rw [hgenApply]
-            dsimp only [C, gramOperator]
-            rw [ContinuousLinearMap.comp_apply,
-              ContinuousLinearMap.adjoint_inner_left]
-            exact inner_self_eq_norm_sq (𝕜 := ℂ) (X z)
-      exact (sq_le_sq₀ (ha0.trans hau.le) (norm_nonneg _)).mp hsquare
-    exact (not_le_of_gt hau) hlower
+    simpa only [P, PVM] using
+      rank_gramProjection_Ioi_le_natCast_of_approximationNumber_lt
+        X n hu0 hau
   have hRrank : R.rank ≤ (n : Cardinal) :=
     ContinuousLinearMap.rank_comp_le_natCast_right P T hPrank
   have hQeq : Q = ContinuousLinearMap.id ℂ E0 - P := by
-    change Spectra.QuantumMechanics.SpectralTheory.spectralProjection U
-        (Set.Iic (u ^ 2)) measurableSet_Iic =
-      ContinuousLinearMap.id ℂ E0 -
-        Spectra.QuantumMechanics.SpectralTheory.spectralProjection U
-          (Set.Ioi (u ^ 2)) measurableSet_Ioi
+    dsimp only [Q, P, PVM]
     simpa only [Set.compl_Ioi] using
-      (Spectra.QuantumMechanics.SpectralTheory.spectralProjection_compl U
-        (Set.Ioi (u ^ 2)) measurableSet_Ioi)
+      (gramSpectralPVM X).proj_compl (Set.Ioi (u ^ 2)) measurableSet_Ioi
   have herr : T - R = T ∘L Q := by
     ext x
     change T x - T (P x) = T (Q x)
@@ -559,46 +477,20 @@ theorem exists_rank_le_norm_doubleAngleTangent_sub_lt
     let D : E0 →L[ℂ] E0 := doubleAngleDenominator X
     let Dinv : E0 →L[ℂ] E0 := Ring.inverse D
     let w : E0 := Dinv q
-    have hgen : generator U = A.toLinearPMap := by
-      dsimp only [U]
-      exact generator_genToGroup hA
-    have hAdom : A.toLinearPMap.domain = ⊤ := by
-      dsimp only [A]
-      exact Spectra.Operator.SelfAdjointOperator.domain_ofBounded C hC
-    have hUDom : (generator U).domain = ⊤ := by
-      rw [hgen, hAdom]
-    have hgenApply (y : E0) (hy : y ∈ (generator U).domain) :
-        generator U ⟨y, hy⟩ = C y := by
-      have hyA : y ∈ A.toLinearPMap.domain := by
-        rw [hAdom]
-        exact Submodule.mem_top
-      have happly := (LinearPMap.ext_iff.mp hgen).2
-      calc
-        generator U ⟨y, hy⟩ = A.toLinearPMap ⟨y, hyA⟩ :=
-          happly (x := y) (hf := hy) (hg := hyA)
-        _ = C y := rfl
     have hQidem : Q q = q := by
       have hidem := PVM.proj_idem (Set.Iic (u ^ 2)) measurableSet_Iic
       have happly := congrArg (fun S : E0 →L[ℂ] E0 => S x) hidem
       simpa only [q, Q, mul_apply_eq_comp,
         ContinuousLinearMap.comp_apply] using happly
     have hCQ (y : E0) : C (Q y) = Q (C y) := by
-      have hyDom : y ∈ (generator U).domain := by
-        rw [hUDom]
+      have hyDom : y ∈ (gramLinearPMap X).domain := by
+        rw [gramLinearPMap_domain]
         exact Submodule.mem_top
-      have hQyDom : Q y ∈ (generator U).domain := by
-        rw [hUDom]
-        exact Submodule.mem_top
-      have hcomm := generator_spectralProjection_comm U
-        (B := Set.Iic (u ^ 2)) measurableSet_Iic
-        (⟨y, hyDom⟩ : (generator U).domain)
-      calc
-        C (Q y) = generator U ⟨Q y, hQyDom⟩ :=
-          (hgenApply (Q y) hQyDom).symm
-        _ = Q (generator U ⟨y, hyDom⟩) := by
-          simpa only [Q, PVM,
-            Spectra.QuantumMechanics.SpectralTheory.spectralPVM_proj] using hcomm
-        _ = Q (C y) := by rw [hgenApply y hyDom]
+      have hcomm := LinearPMap.specProjection_apply_domain
+        (gramLinearPMap_isSelfAdjoint X) (Set.Iic (u ^ 2)) measurableSet_Iic
+        (⟨y, hyDom⟩ : (gramLinearPMap X).domain)
+      change gramOperator X (Q y) = Q (gramOperator X y) at hcomm
+      simpa only [C] using hcomm
     have hDQ (y : E0) : D (Q y) = Q (D y) := by
       have hCQ' :
           (ContinuousLinearMap.adjoint X ∘SL X) (Q y) =
@@ -620,41 +512,40 @@ theorem exists_rank_le_norm_doubleAngleTangent_sub_lt
     have hQw : Q w = w := by
       apply hinj
       rw [hDQ, hDw, hQidem]
-    have hlowFix :
-        Spectra.QuantumMechanics.SpectralTheory.spectralProjection U
-            (Set.Iic (u ^ 2)) measurableSet_Iic w = w := by
-      simpa only [Q, PVM,
-        Spectra.QuantumMechanics.SpectralTheory.spectralPVM_proj] using hQw
     have huvSq : u ^ 2 < v ^ 2 := by nlinarith
     have hhighZero :
-        Spectra.QuantumMechanics.SpectralTheory.spectralProjection U
-            (Set.Ici (v ^ 2)) measurableSet_Ici w = 0 := by
-      rw [← hlowFix]
+        (gramSpectralPVM X).proj (Set.Ici (v ^ 2)) measurableSet_Ici w = 0 := by
+      rw [← hQw]
       have hinter : Set.Ici (v ^ 2) ∩ Set.Iic (u ^ 2) = ∅ := by
         ext t
         simp only [Set.mem_inter_iff, Set.mem_Ici, Set.mem_Iic,
           Set.mem_empty_iff_false, iff_false]
         exact fun ht => (not_le_of_gt huvSq) (ht.1.trans ht.2)
+      change (gramSpectralPVM X).proj (Set.Ici (v ^ 2)) measurableSet_Ici
+        ((gramSpectralPVM X).proj (Set.Iic (u ^ 2)) measurableSet_Iic w) = 0
       rw [← mul_apply_eq_comp,
-        Spectra.QuantumMechanics.SpectralTheory.spectralProjection_inter,
-        Spectra.QuantumMechanics.SpectralTheory.spectralProjection_congr _ hinter
+        (gramSpectralPVM X).proj_inter,
+        (gramSpectralPVM X).proj_congr hinter
           (measurableSet_Ici.inter measurableSet_Iic) MeasurableSet.empty,
-        Spectra.QuantumMechanics.SpectralTheory.spectralProjection_empty,
-        zero_apply]
-    have hwDom : w ∈ (generator U).domain := by
-      rw [hUDom]
+        (gramSpectralPVM X).proj_empty, zero_apply]
+    have hwDom : w ∈ (gramLinearPMap X).domain := by
+      rw [gramLinearPMap_domain]
       exact Submodule.mem_top
-    have henergy := energy_upper_bound_of_spectralProjection_Ici_eq_zero
-      U (v ^ 2) (⟨w, hwDom⟩ : (generator U).domain) hhighZero
+    have hhighZero' :
+        LinearPMap.specProjection (gramLinearPMap_isSelfAdjoint X)
+            (Set.Ici (v ^ 2)) measurableSet_Ici w = 0 := by
+      change (gramSpectralPVM X).proj (Set.Ici (v ^ 2)) measurableSet_Ici w = 0
+      exact hhighZero
+    have henergy := LinearPMap.re_inner_le_of_specProjection_Ici_apply_eq_zero
+      (gramLinearPMap_isSelfAdjoint X)
+      (⟨w, hwDom⟩ : (gramLinearPMap X).domain) hhighZero'
     have hXenergy : ‖X w‖ ^ 2 ≤ v ^ 2 * ‖w‖ ^ 2 := by
       calc
-        ‖X w‖ ^ 2 = (⟪C w, w⟫_ℂ).re := by
-          dsimp only [C, gramOperator]
-          rw [ContinuousLinearMap.comp_apply,
-            ContinuousLinearMap.adjoint_inner_left]
-          exact (inner_self_eq_norm_sq (𝕜 := ℂ) (X w)).symm
-        _ = (⟪generator U ⟨w, hwDom⟩, w⟫_ℂ).re := by
-          rw [hgenApply w hwDom]
+        ‖X w‖ ^ 2 = (⟪gramOperator X w, w⟫_ℂ).re :=
+          (re_inner_gramOperator X w).symm
+        _ = (⟪gramLinearPMap X
+            (⟨w, hwDom⟩ : (gramLinearPMap X).domain), w⟫_ℂ).re := by
+          rw [gramLinearPMap_apply]
         _ ≤ v ^ 2 * ‖w‖ ^ 2 := henergy
     have hDcoercive :
         (1 - v ^ 2) * ‖w‖ ^ 2 ≤ (⟪D w, w⟫_ℂ).re := by

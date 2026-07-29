@@ -39,6 +39,7 @@ universe u
 
 variable {𝕜 : Type u} [RCLike 𝕜]
 
+/-- The two-dimensional model space `𝕜²` carrying the planar equality configuration. -/
 abbrev PaperPlane (𝕜 : Type u) [RCLike 𝕜] := EuclideanSpace 𝕜 (Fin 2)
 
 /-- First standard vector of the planar equality model. -/
@@ -90,10 +91,12 @@ noncomputable def paperPlanarResidual (delta theta : ℝ) :
     𝕜 →L[𝕜] PaperPlane 𝕜 :=
   ((delta * Real.sin theta : ℝ) : 𝕜) • paperPlanarComplementMap
 
+/-- The first model vector is a unit vector. -/
 @[simp]
 theorem norm_paperPlaneE0 : ‖paperPlaneE0 (𝕜 := 𝕜)‖ = 1 := by
   simp [paperPlaneE0]
 
+/-- The second model vector is a unit vector. -/
 @[simp]
 theorem norm_paperPlaneE1 : ‖paperPlaneE1 (𝕜 := 𝕜)‖ = 1 := by
   simp [paperPlaneE1]
@@ -121,29 +124,36 @@ theorem adjoint_paperScalarColumn_apply (i : Fin 2) (x : PaperPlane 𝕜) :
   rw [paperScalarColumn, this]
   rfl
 
+/-- Pointwise formula: the scalar column sends `z` to `z • v`. -/
 @[simp]
 theorem paperScalarColumn_apply (v : PaperPlane 𝕜) (z : 𝕜) :
     paperScalarColumn v z = z • v := rfl
 
+/-- Pointwise formula for the exact-subspace embedding: `z ↦ z • e₀`. -/
 @[simp]
 theorem paperPlanarExactMap_apply (z : 𝕜) :
     paperPlanarExactMap (𝕜 := 𝕜) z = z • paperPlaneE0 := rfl
 
+/-- Pointwise formula for the complement embedding: `z ↦ z • e₁`. -/
 @[simp]
 theorem paperPlanarComplementMap_apply (z : 𝕜) :
     paperPlanarComplementMap (𝕜 := 𝕜) z = z • paperPlaneE1 := rfl
 
+/-- Pointwise formula for the trial embedding: `z` times the unit vector at angle
+`theta` in the `e₀`-`e₁` frame. -/
 @[simp]
 theorem paperPlanarTrialMap_apply (theta : ℝ) (z : 𝕜) :
     paperPlanarTrialMap (𝕜 := 𝕜) theta z =
       z • ((Real.cos theta : 𝕜) • paperPlaneE0 +
         (Real.sin theta : 𝕜) • paperPlaneE1) := rfl
 
+/-- The adjoint of the exact embedding reads off the zeroth coordinate. -/
 @[simp]
 theorem adjoint_paperPlanarExactMap_apply (x : PaperPlane 𝕜) :
     (paperPlanarExactMap (𝕜 := 𝕜)).adjoint x = x.ofLp 0 :=
   adjoint_paperScalarColumn_apply 0 x
 
+/-- The adjoint of the complement embedding reads off the first coordinate. -/
 @[simp]
 theorem adjoint_paperPlanarComplementMap_apply (x : PaperPlane 𝕜) :
     (paperPlanarComplementMap (𝕜 := 𝕜)).adjoint x = x.ofLp 1 :=
@@ -301,8 +311,10 @@ theorem paperFiniteDimensional_scalar_homogeneity
 
 section Counterexample
 
+/-- The real two-dimensional model space `ℝ²` carrying the one-gap counterexample. -/
 abbrev PaperRealPlane := EuclideanSpace ℝ (Fin 2)
 
+/-- The real model plane is two-dimensional. -/
 theorem paperRealPlane_finrank : Module.finrank ℝ PaperRealPlane = 2 := by simp
 
 /-!
@@ -350,14 +362,17 @@ private theorem paperReal_inner_diff_e1 :
   rw [inner_sub_left]
   simp [paperPlaneE0, paperPlaneE1, EuclideanSpace.inner_single_left]
 
+/-- The perturbed operator of the counterexample: `diag(0, 1)`. -/
 noncomputable def paperCounterexampleA :
     PaperRealPlane →L[ℝ] PaperRealPlane :=
   (Matrix.toEuclideanLin !![(0 : ℝ), 0; 0, 1]).toContinuousLinearMap
 
+/-- The perturbation of the counterexample: the off-diagonal involution `!![1,1;1,0]`. -/
 noncomputable def paperCounterexampleH :
     PaperRealPlane →L[ℝ] PaperRealPlane :=
   (Matrix.toEuclideanLin !![(1 : ℝ), 1; 1, 0]).toContinuousLinearMap
 
+/-- The exact subspace of the counterexample: the line spanned by `e₀`. -/
 noncomputable def paperCounterexampleExact : Submodule ℝ PaperRealPlane :=
   Submodule.span ℝ {paperPlaneE0 (𝕜 := ℝ)}
 
@@ -366,6 +381,8 @@ noncomputable def paperCounterexampleTrialVector : PaperRealPlane :=
   (1 / Real.sqrt 2) •
     (paperPlaneE0 (𝕜 := ℝ) - paperPlaneE1 (𝕜 := ℝ))
 
+/-- The trial subspace of the counterexample: the line spanned by the unit vector
+along `e₀ - e₁`, i.e. at `π/4` to the exact subspace. -/
 noncomputable def paperCounterexampleTrial : Submodule ℝ PaperRealPlane :=
   Submodule.span ℝ {paperCounterexampleTrialVector}
 
@@ -412,6 +429,7 @@ theorem norm_paperCounterexampleTrialVector :
     Real.norm_eq_abs, abs_of_pos (one_div_pos.mpr hsqrt2)]
   field_simp [ne_of_gt hsqrt2]
 
+/-- The exact subspace fixes `e₀`, being the line it spans. -/
 @[simp]
 theorem paperCounterexampleExact_starProjection_e0 :
     paperCounterexampleExact.starProjection (paperPlaneE0 (𝕜 := ℝ)) =
@@ -426,6 +444,7 @@ theorem paperCounterexampleExact_starProjection_e0 :
   rw [h]
   simp [paperPlaneE0]
 
+/-- The exact subspace annihilates `e₁`, which is orthogonal to it. -/
 @[simp]
 theorem paperCounterexampleExact_starProjection_e1 :
     paperCounterexampleExact.starProjection (paperPlaneE1 (𝕜 := ℝ)) = 0 := by
@@ -435,6 +454,7 @@ theorem paperCounterexampleExact_starProjection_e1 :
     starProjection_span_singleton_apply_of_norm_one _ _ norm_paperPlaneE0
   rw [h, paperReal_inner_e0_e1, zero_smul]
 
+/-- Pointwise formula for the orthogonal projection onto the trial line. -/
 @[simp]
 theorem paperCounterexampleTrial_starProjection_apply (x : PaperRealPlane) :
     paperCounterexampleTrial.starProjection x =
@@ -443,6 +463,7 @@ theorem paperCounterexampleTrial_starProjection_apply (x : PaperRealPlane) :
   starProjection_span_singleton_apply_of_norm_one _ _
     norm_paperCounterexampleTrialVector
 
+/-- Value of the trial projection at `e₀`: the `π/4` angle splits it evenly. -/
 @[simp]
 theorem paperCounterexampleTrial_starProjection_e0 :
     paperCounterexampleTrial.starProjection (paperPlaneE0 (𝕜 := ℝ)) =
@@ -464,6 +485,7 @@ theorem paperCounterexampleTrial_starProjection_e0 :
     nlinarith
   rw [hcoeff]
 
+/-- Value of the trial projection at `e₁`: the `π/4` angle splits it evenly. -/
 @[simp]
 theorem paperCounterexampleTrial_starProjection_e1 :
     paperCounterexampleTrial.starProjection (paperPlaneE1 (𝕜 := ℝ)) =
