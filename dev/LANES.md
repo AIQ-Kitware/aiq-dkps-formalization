@@ -27,17 +27,31 @@ RESUMED (2026-07-23) and claims lanes under `edward (resumed)` below.
 
 ## Board state — 2026-07-29, read this first
 
-**13 lanes are held, across 5 agents** (`edward (aiq-gpu)` 6, `jon (yardrat)` 3,
-`edward (fable)` 2, `jon (toothbrush)` 1, `jon (namek)` 1). The 2026-07-27 note
+**12 lanes are held, across 4 agents** (`edward (aiq-gpu)` 7 — including D-DOC,
+`jon (yardrat)` 3, `edward (fable)` 1, `jon (namek)` 1). The 2026-07-27 note
 below says the opposite — *"every row is done, no lane is held by anyone"* — and
 that has been false for two days. It is kept for its still-accurate backlog
 detail; **do not read its first paragraph as current.**
 
+**Refreshed 2026-07-29 after merging `origin/main`, `origin/namek-work` and
+`origin/fable/sylvester-upstream-leaves` into `yardrat-work`** (all four remote
+branches now merged; `doop/ols-quench` and `jonwork` were already contained).
+Two lanes listed as open below had been claimed on other branches and are struck
+through here rather than deleted. The count is derived from status-cell text
+across the 163 rows, so treat it as a close estimate, not a parse.
+
 ### Genuinely open, in the order they are worth taking
 
-1. **SR-D3** — the Sylvester operator on `HS` and its spectral-gap inverse.
-   namek names it "the clean parallel lane"; blocked only on D1's API, which
-   namek is finishing. **Do not derive it from the Fourier/semigroup route** in
+1. ~~**SR-D3** — the Sylvester operator on `HS` and its spectral-gap inverse.~~
+   **CLAIMED by `jon (namek)`, core theorem already landed — do not take.**
+   Corroborated 2026-07-29 against the tree, not against the row: namek's own
+   row reports `apply_gapInverse` done at `34d6146d`, and
+   `ForTauCeti/Analysis/InnerProductSpace/LinearPMap/SpectralGapInverse.lean`
+   **exists on disk** (298 lines, arrived in this merge). The remaining target
+   named by the row, `ForTauCeti/…/HilbertSchmidt/Sylvester.lean`, does **not**
+   exist yet — that is the unfinished part, and it is namek's.
+   The Fourier warning still stands for whoever finishes it: **do not derive it
+   from the Fourier/semigroup route** in
    `Experimental/…/Sylvester/FourierSemigroup.lean`: that gives `π/(2δ)`, not
    the sharp `δ⁻¹`, and asserting `1/δ` from that `L¹` mass would be false.
 2. **Y3(b2)** — move the closed 8-module `ForMathlib/Analysis/InnerProductSpace`
@@ -51,21 +65,28 @@ detail; **do not read its first paragraph as current.**
 4. **Lane P-EXP — §13.2 phase C**, the last live adapter. 117 matching lines
    across 30 production modules. Released twice by namek without being started,
    and the ordering reason no longer applies.
-5. **Lane D-DOC — `ForTauCeti` docstrings**, 47 declarations across 7
-   uncontested files. Small, no build needed, and it is the one item here a
-   waiting agent can finish in a single session. It exists because `ForTauCeti`
-   is **16%** undocumented against `DavisKahan`'s **6%** — the submission
-   surface is documented worse than the paper library, and no docstring lane has
-   ever targeted it.
+5. ~~**Lane D-DOC — `ForTauCeti` docstrings**, 47 declarations across 7
+   uncontested files.~~ **CLAIMED 2026-07-29 by `edward (aiq-gpu)` — do not
+   take.** Taken exactly as posted, scope unwidened; their row commits to
+   reporting the *triage split* (documented / privatized / left) rather than a
+   count. The motivating measurement stands and is why the lane mattered:
+   `ForTauCeti` is **16%** undocumented against `DavisKahan`'s **6%** — the
+   submission surface is documented worse than the paper library, and until this
+   lane no docstring lane had ever targeted it.
 6. **SR-D2** — open but **not free, and not mechanical**; it needs a retention
    decision that is edward's to make. Ask before starting.
 7. **The `CayleySelectorBridge.lean` cross-agent flag** needs one sentence from
    namek or edward, not a lane.
 
 The three `P-`/`D-` lanes above were posted as open tasks on 2026-07-29 by
-`jon (yardrat)` and are **not claimed by anyone** — each row carries the
-measurement it was specified from, and the collision checks that were run against
-the currently-held lanes. Claim the row before your first edit, as usual.
+`jon (yardrat)`. **D-DOC has since been claimed by `edward (aiq-gpu)`; P-EXP and
+P-PROMOTE remain unclaimed.** Each row carries the measurement it was specified
+from, and the collision checks that were run against the currently-held lanes.
+Claim the row before your first edit, as usual.
+
+**So the genuinely takeable lanes are now #2 Y3(b2), #3 P-PROMOTE and #4 P-EXP**
+— #1 and #5 are claimed, #6 needs edward's retention decision before it is work
+at all, and #7 is a question, not a lane.
 
 ### Rows that are closed but still read as open
 
@@ -77,6 +98,58 @@ which 5 are the remaining SR-D files, one is `scripts/ExportSpectraDeclClosure.l
 (the measuring tool, which is supposed to import Spectra) and one is
 `FinishTanTwoTheta/**/GroundedImports.lean` (out of scope per jon). That matches
 `dev/tauceti/NAMEK-STATUS.md` exactly.
+
+### Path references in this file, audited 2026-07-29 — no false completions
+
+Every backticked repo path in this file was resolved against the tree after the
+four-branch merge. **382 distinct paths named; 367 resolvable (15 are elided with
+`...`); 18 match no tracked file.** Resolution is by *suffix* against
+`git ls-files`, because rows routinely write a path relative to its library root.
+
+**The headline is negative, and that is the useful part: not one `done` row
+claims a deliverable that does not exist.** All 18 were triaged individually and
+every one is explained — 3 are Mathlib paths, not repo paths
+(`Analysis/Normed/Operator/Extend.lean`, `LinearAlgebra/AffineSpace/Centroid.lean`,
+`Analysis/InnerProductSpace/Subspace.lean`, all present under
+`.lake/packages/mathlib/Mathlib/`); several are *pre-rename* names whose work
+landed under the new name; one (`Interop/Spectra/Basic.lean`) is absent because
+its row deleted it on purpose; the rest sit on rows marked RETRACTED, WITHDRAWN,
+SUPERSEDED or open, where naming a not-yet-created file is correct.
+
+**Two worth a word from their owners** — neither is a wrong claim, only a stale
+path a reader would chase:
+
+- **SR-C (`jon (namek)`) — the filename discrepancy is still live.** The
+  `~~UNCLAIMED~~ lane SR-C — TAKEN AND DONE` row names NEW
+  `ForTauCeti/…/LinearPMap/SpectralMoments.lean`. **No file of that basename
+  exists anywhere in the repo.** What landed is
+  `ForTauCeti/…/LinearPMap/SpectralFormBounds.lean` (10,929 bytes), which the
+  later `jon (namek)` SR-C row names correctly and explains: the consumer wanted
+  a *form* bound, so no second moment was needed. The work is done and correct;
+  only the earlier row's filename is wrong. Flagged, not corrected — it is
+  namek's text.
+- **`edward` — `ForMathlib/…/SylvesterOperatorL.lean`** is named by a `done` row,
+  but `sylvesterOperatorL` actually lives in `ForMathlib/…/SylvesterOperator.lean`
+  (and `DavisKahan/Sylvester/RosenblumExistence.lean`). Declaration exists; path
+  in the row does not.
+
+Reproduce with the suffix-resolution check rather than `Path.exists()` — a naive
+existence test reports **213** false positives on this file, which is what makes
+this audit worth writing down once instead of re-running badly.
+
+### Cross-lane flag: 12 `ForMathlib` files still assert the retired policy
+
+`ForMathlib` is **RETIRED into `ForTauCeti`** (jon, 2026-07-29), yet all 12
+`ForMathlib/**/*.lean` files still carry the docstring
+`Extraction class: **authored in place**, for upstreaming to Mathlib rather than …`.
+Per the standing decision that text is **stale, not policy** — misreading it
+already cost one session two reversed lanes, and the `jon (toothbrush)` row above
+was RETRACTED for exactly this reason ("the lane was scoped on a false premise").
+
+`D1` is documentation-only and does not edit `.lean`, so this is flagged, not
+fixed. It belongs to whoever holds the hygiene row or takes **Y3(b2)**, which
+moves this component anyway. Count is exact: `git grep -l 'upstreaming to
+Mathlib' -- 'ForMathlib/**/*.lean'` → 12.
 
 ### Editing someone else's row
 
