@@ -313,6 +313,31 @@ theorem isSelfAdjoint_resolvent_ofReal {A : E →ₗ.[ℂ] E} (hA : IsSelfAdjoin
     _ = ⟪A px - (c : ℂ) • (px : E), (py : E)⟫_ℂ := hstep
     _ = ⟪x, resolvent A hc y⟫_ℂ := by rw [hx]
 
+/-- **The adjoint of the resolvent is the resolvent at the conjugate point:**
+`R(z)⋆ = R(z̄)`.
+
+Both sides are pinned by the two-sided inverse property: writing `u = R(z) x` and
+`v = R(z̄) y`, symmetry of `A` turns `⟪u, (A - z̄) v⟫` into `⟪(A - z) u, v⟫`. -/
+theorem adjoint_resolvent {A : E →ₗ.[ℂ] E} (hA : IsSelfAdjoint A) {z : ℂ}
+    (hz : z ∈ resolventSet A) (hzc : (starRingEnd ℂ) z ∈ resolventSet A) :
+    ContinuousLinearMap.adjoint (resolvent A hz) = resolvent A hzc := by
+  have hsym : A.IsFormalAdjoint A := by
+    have h := _root_.LinearPMap.adjoint_isFormalAdjoint (T := A) hA.dense_domain
+    rwa [_root_.LinearPMap.isSelfAdjoint_def.mp hA] at h
+  symm
+  rw [ContinuousLinearMap.eq_adjoint_iff]
+  intro x y
+  set u : A.domain := ⟨resolvent A hzc x, resolvent_mem_domain hzc x⟩ with hu
+  set v : A.domain := ⟨resolvent A hz y, resolvent_mem_domain hz y⟩ with hv
+  have hux : A u - (starRingEnd ℂ) z • (u : E) = x := sub_smul_resolvent hzc x
+  have hvy : A v - z • (v : E) = y := sub_smul_resolvent hz y
+  calc ⟪resolvent A hzc x, y⟫_ℂ
+      = ⟪(u : E), A v - z • (v : E)⟫_ℂ := by rw [hvy]
+    _ = ⟪A u - (starRingEnd ℂ) z • (u : E), (v : E)⟫_ℂ := by
+        rw [inner_sub_left, inner_sub_right, inner_smul_left, inner_smul_right,
+          starRingEnd_self_apply, hsym u v]
+    _ = ⟪x, resolvent A hz y⟫_ℂ := by rw [hux]
+
 /-- **The Davis--Kahan gap-resolvent bound.**  If the spectrum of a self-adjoint
 `A` avoids the open interval `(c - s, c + s)` then `A - c` has a bounded
 two-sided inverse of norm at most `s⁻¹`.
