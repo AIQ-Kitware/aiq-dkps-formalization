@@ -78,6 +78,7 @@ theorem isSkewAdjointCLM_I_smul {S : H →L[ℂ] H} (hS : IsSelfAdjoint S) :
 noncomputable def expTime (B : H →L[ℂ] H) (t : ℝ) : H →L[ℂ] H :=
   exp (t • B)
 
+/-- The flow is the identity at time zero. -/
 @[simp] theorem expTime_zero (B : H →L[ℂ] H) : expTime B 0 = 1 := by
   simp [expTime]
 
