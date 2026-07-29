@@ -437,11 +437,76 @@ through it; closedness of `A₀` supplies the limit. Use Gaussian bumps
 `exp(-(t-λ)²/β²)` — entire, super-geometric coefficient decay, width `~β` at
 `λ`.
 
-**T1.4 — band-compressed approximate eigenvectors.** *Needs T1.3.*
-For a smooth band `φ` supported in `J`, the compression `Ã` of `A₀` to
-`Ran φ(T)` is densely defined and symmetric; produce orthonormal
-`x₁,…,x_m ∈ dom A₀` in the band with `‖Ãxᵢ - μᵢxᵢ‖ ≤ ν` for prescribed `ν`.
-Disjoint bands give orthogonality across bands — reuse `gramBands_disjoint`.
+**T1.4 — band-compressed approximate eigenvectors. — OPEN. This is now the
+whole problem.** Everything else on the board is done or is rewiring.
+
+What is needed, in the cleanest form: a unit `x ∈ dom A₀` with
+`s² := ⟪Tx, x⟫` such that
+
+```
+(i)  ‖(T - s²)x‖ ≤ β            (cheap: only costs ‖B₀₁‖·β downstream)
+(ii) Re⟪A₀x, (T - s²)x⟫ ≤ ε'    (the entire difficulty)
+```
+
+plus orthogonality across bands and `sᵢ ≈ aᵢ(X)`.
+
+**The mechanism that would close it, and exactly where it fails.** With
+`P := E_T(J)` a *sharp* spectral projection and `Ã := PA₀P` its compression,
+`P` commutes with `T`, so `(T - s²)x ∈ Ran P` for `x ∈ Ran P` and the component
+of `A₀x` orthogonal to `Ran P` drops out:
+
+```
+Re⟪A₀x, (T - s²)x⟫ = Re⟪Ãx, (T - s²)x⟫
+```
+
+Taking `x` an approximate eigenvector of `Ã` (`‖Ãx - μx‖ ≤ ν`) and
+`s² := ⟪Tx,x⟫` makes `⟪x, (T - s²)x⟫ = 0` identically, so the whole thing is
+`O(νβ)` with **no dependence on `‖A₀x‖`** — and `β` is chosen before `ν`, so
+there is no circularity. That is a complete argument *given* that
+`Ran P ∩ dom A₀` is dense in `Ran P`, so that `Ã` is densely defined and its
+approximate eigenvectors lie in `dom A₀`.
+
+**I could not establish that density, and two natural routes to it fail:**
+
+1. *Replace `P` by a smooth `Q = φ(T)` (which T1.3 does give on `dom A₀`).*
+   This loses the cancellation, and the loss is not repairable. Writing
+   `x = Qy/‖Qy‖` and `A₀Qy = QA₀y + [A₀,Q]y`,
+   ```
+   Re⟪A₀x,(T-s²)x⟫ = Re⟪A₀y, Q(T-s²)Q y⟫/‖Qy‖² + O(‖[A₀,Q]‖ β)
+   ```
+   and `Q(T-s²)Q = ψ(T)` is again a small self-adjoint operator commuting with
+   `T`. The first term is bounded only by `‖A₀y‖·2β` — the same unbounded
+   factor the whole construction exists to avoid. Smoothing does not help;
+   the cancellation needs an *idempotent*.
+2. *Get `E_T(J)` on `dom A₀` from the holomorphic calculus.* The resolvent does
+   preserve `dom A₀`: for `|z| > ‖T‖` the Neumann series has
+   `Σ n|aₙ| = Σ n/|z|ⁿ⁺¹ < ∞`, so `riccatiGram_hasSum_mem_domain` applies, and
+   `spec T ⊆ [0,‖X‖²]` with `‖X‖ < 1` makes the resolvent set connected, so
+   this extends by analytic continuation. But upgrading to `E_T(J)` needs `J`
+   to be a **spectral set** — relatively clopen in `spec T` — and if `spec T`
+   contains an interval, no band strictly inside it qualifies. Sharp bands cut
+   through continuous spectrum are simply not in the holomorphic calculus.
+
+**Also ruled out**, so nobody re-derives it: asking instead for `x` to be an
+approximate eigenvector of `T` in the *graph norm* of `A₀` does give (ii) in one
+line, since `Re⟪A₀x,(T-s²)x⟫ = Re⟪x, A₀((T-s²)x)⟫` by symmetry. But
+`A₀((T-s²)x) = (T-s²)A₀x + Gx` by T1.2, so graph-smallness of the residual
+demands `(T-s²)A₀x ≈ -Gx` with `‖Gx‖` of order `‖B₀₁‖` and not shrinking — the
+original obstruction recorded at the top of this document, reached by a
+different road.
+
+**Where I would go next.** The question has been reduced to a clean and
+self-contained one, worth asking an operator theorist directly:
+
+> Let `A ≤ 0` be self-adjoint on a Hilbert space, `T ≥ 0` bounded, with `T`
+> preserving `dom A` and `[A,T]` bounded. Is `Ran E_T(J) ∩ dom A` dense in
+> `Ran E_T(J)` for every interval `J`? If not in general, what does the
+> Riccati structure add that makes it true here?
+
+A positive answer closes T1.4 immediately via the mechanism above. A negative
+answer means the sharp constant needs a genuinely different route, and the
+Sylvester defect form (option 4, with its explicit `2R''DR`) becomes the honest
+best available theorem.
 
 **T1.5 — restate the selection structure and rewire.** *Needs T1.4.*
 Replace `UnboundedApproximateLeadingSingularFamily` by the one-condition form
