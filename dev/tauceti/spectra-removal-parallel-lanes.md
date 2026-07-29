@@ -145,7 +145,22 @@ whether it ports or dissolves against Mathlib before touching the tensor model.
 
 ---
 
-## SR-E — Rosenblum  *(open)*
+## SR-E — Rosenblum  *(claimed: jon (toothbrush))*
+
+> **Cross-lane dependency found 2026-07-29: SR-E's native route needs SR-B's
+> theorem.** The donor proof of
+> `generatorIntertwiner_eq_zero_of_disjoint_spectrum` rests on **seven** Spectra
+> constants, and **none of them exists in `ForTauCeti`**:
+> `spectralProjection_eq_zero_iff_measure_zero`, `spectralProjection_compl`,
+> `spectralProjection_intertwines_of_generator`, `GeneratorIntertwines`,
+> `bornMeasure_support_subset_spectrum`, `borelMeasure` (44 Spectra files),
+> `isOpen_resolventSet`. So this is not a one-file relocation: relocating it
+> verbatim would drag the whole Borel-measure stack across.
+>
+> The native route is the right one, and it is short — but both of its
+> projection facts (`E_A(spec A) = id` and `E_B(S) = 0` for `S` disjoint from
+> `spec B`) are corollaries of exactly the statement SR-B is chartered to prove,
+> that the spectral measure gives no mass off the spectrum. **Do SR-B first.**
 
 **File.** `DavisKahan/Sylvester/PairwiseHomogeneousUniqueness.lean` (218 lines).
 
