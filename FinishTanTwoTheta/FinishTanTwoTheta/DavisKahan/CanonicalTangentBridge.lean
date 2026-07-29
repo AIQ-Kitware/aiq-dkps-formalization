@@ -406,13 +406,16 @@ private theorem tanTwoAngleOperatorC_eq_modulus_ambientGraphTangent
     commute_sinAngleOperatorDirectedC_cosAngleOperatorC U V
   have hSinTwo : sinTwoAngleOperatorC U V = (2 : ℂ) • (Sang ∘L Cang) := rfl
   have hCosTwo : cosTwoAngleOperatorC U V = D ∘L R ∘L P := by
-    dsimp [cosTwoAngleOperatorC, Cang, Sang, D]
-    rw [hCangSq, hSangSq]
-    rw [← ContinuousLinearMap.sub_comp, ← ContinuousLinearMap.comp_sub]
-    dsimp [D]
-    rw [ContinuousLinearMap.sub_comp, ContinuousLinearMap.id_comp]
-    congr 1
-    rw [hGR]
+    -- `dsimp` unfolds the `let`s, after which `hCangSq`/`hSangSq` (stated in terms
+    -- of `Cang`/`Sang`) no longer match.  Keep the abbreviations and restate the
+    -- squares with `*` instead.
+    show Cang * Cang - Sang * Sang = D ∘L R ∘L P
+    rw [show Cang * Cang = R ∘L P from hCangSq,
+      show Sang * Sang = G ∘L R ∘L P from hSangSq]
+    -- state the identity with `1`, not `ContinuousLinearMap.id`: they are the same
+    -- element, but `noncomm_ring` only knows `one_mul` for the former.
+    show R * P - G * (R * P) = ((1 : E →L[ℂ] E) - G) * (R * P)
+    noncomm_ring
   have hDunit : IsUnit D :=
     isUnit_doubleAngleDenominator Y
       (norm_quarterAcuteAngularOperator_lt_one U V hquarter)
@@ -435,7 +438,8 @@ private theorem tanTwoAngleOperatorC_eq_modulus_ambientGraphTangent
       (4 : ℂ) • (ContinuousLinearMap.modulus Y ∘L
         Ring.inverse D ∘L ContinuousLinearMap.modulus Y ∘L Ring.inverse D) := by
     dsimp [M]
-    rw [ContinuousLinearMap.modulus_mul_self]
+    -- same `*` vs `∘SL` bridge as in `hCangSq`
+    rw [← ContinuousLinearMap.mul_def, ContinuousLinearMap.modulus_mul_self]
     rw [hTformula, star_smul, star_mul,
       ContinuousLinearMap.star_eq_adjoint,
       (CFC.rpow_nonneg (a := D) (y := (-1 : ℝ))).isSelfAdjoint.star_eq]
