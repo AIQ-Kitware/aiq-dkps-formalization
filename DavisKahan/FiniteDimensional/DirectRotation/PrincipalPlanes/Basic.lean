@@ -103,7 +103,7 @@ theorem principalPlaneSine_le_one
 theorem principalSourceVector_mem
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V)
+    (_hacute : IsAcute U V)
     (i : Fin (nontrivialAngleCount U V)) :
     principalSourceVector U V i ∈ U := by
   let A := sinThetaMap U V

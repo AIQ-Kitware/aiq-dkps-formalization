@@ -147,9 +147,9 @@ omit [CompleteSpace H] in
 injective.  This is the unequal-dimensional, directed replacement for the
 false symmetric `IsAcute Z V` claim. -/
 theorem theorem63_directed_transverse_of_form_gap
-    (T : H →L[ℂ] H) (hT : T.IsSymmetric)
+    (T : H →L[ℂ] H) (_hT : T.IsSymmetric)
     (V Z : Submodule ℂ H) [V.HasOrthogonalProjection]
-    [Z.HasOrthogonalProjection] (hV : T.Reduces V)
+    [Z.HasOrthogonalProjection] (_hV : T.Reduces V)
     {alpha delta : ℝ} (hdelta : 0 < delta)
     (hCompressionUpper : ∀ z : Z,
       RCLike.re ⟪theorem63Compression T Z z, z⟫_ℂ ≤ alpha * ‖z‖ ^ 2)

@@ -243,7 +243,7 @@ theorem canonicalIntertwiner_isUnit_of_acute
 theorem canonicalIntertwiner_normal_of_acute
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) :
+    (_hacute : IsAcute U V) :
     (canonicalIntertwiner U V).adjoint ∘ₗ canonicalIntertwiner U V =
       canonicalIntertwiner U V ∘ₗ (canonicalIntertwiner U V).adjoint := by
   have hS := two_smul_canonicalIntertwiner U V
