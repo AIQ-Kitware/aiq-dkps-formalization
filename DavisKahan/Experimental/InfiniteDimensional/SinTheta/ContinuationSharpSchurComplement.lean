@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.ContinuationSharpDiagonalResolvents
-import Spectra.Resolvent.Defs
+import Mathlib.Analysis.Normed.Ring.Units
 
 /-!
 # Schur-complement inversion for the sharp continuation argument
@@ -446,13 +446,14 @@ theorem secondSchurComplement_has_inverse_of_norm_lt_one
       secondSchurComplement l1 c r0 b * q = 1 := by
   let n : E1 →L[ℂ] E1 := r1 ∘L c ∘L r0 ∘L b
   have hsmall' : ‖n‖ < 1 := by simpa only [n] using hsmall
-  let q : E1 →L[ℂ] E1 := Spectra.Resolvent.neumannSeries n hsmall' * r1
-  have hright :
-      Spectra.Resolvent.neumannSeries n hsmall' * (1 - n) = 1 :=
-    Spectra.Resolvent.neumannSeries_mul_right n hsmall'
-  have hleft :
-      (1 - n) * Spectra.Resolvent.neumannSeries n hsmall' = 1 :=
-    Spectra.Resolvent.neumannSeries_mul_left n hsmall'
+  -- Mathlib's `Units.oneSub` is the Neumann series: `1 - n` is a unit when `‖n‖ < 1`.
+  let u : (E1 →L[ℂ] E1)ˣ := Units.oneSub n hsmall'
+  have hval : (↑u : E1 →L[ℂ] E1) = 1 - n := Units.val_oneSub n hsmall'
+  let q : E1 →L[ℂ] E1 := (↑u⁻¹ : E1 →L[ℂ] E1) * r1
+  have hright : (↑u⁻¹ : E1 →L[ℂ] E1) * (1 - n) = 1 := by
+    rw [← hval]; exact u.inv_mul
+  have hleft : (1 - n) * (↑u⁻¹ : E1 →L[ℂ] E1) = 1 := by
+    rw [← hval]; exact u.mul_inv
   have hr1l1x (x : E1) : r1 (l1 x) = x :=
     apply_apply_eq_of_mul_eq_one r1 l1 hr1l1 x
   have hl1r1x (x : E1) : l1 (r1 x) = x :=
@@ -470,18 +471,18 @@ theorem secondSchurComplement_has_inverse_of_norm_lt_one
   refine ⟨q, ?_, ?_⟩
   · unfold q
     calc
-      (Spectra.Resolvent.neumannSeries n hsmall' * r1) *
+      ((↑u⁻¹ : E1 →L[ℂ] E1) * r1) *
           secondSchurComplement l1 c r0 b =
-        Spectra.Resolvent.neumannSeries n hsmall' *
+        (↑u⁻¹ : E1 →L[ℂ] E1) *
           (r1 * secondSchurComplement l1 c r0 b) := by noncomm_ring
-      _ = Spectra.Resolvent.neumannSeries n hsmall' * (1 - n) := by rw [hr1S]
+      _ = (↑u⁻¹ : E1 →L[ℂ] E1) * (1 - n) := by rw [hr1S]
       _ = 1 := hright
   · unfold q
     rw [hSfactor]
     calc
       (l1 * (1 - n)) *
-          (Spectra.Resolvent.neumannSeries n hsmall' * r1) =
-        l1 * ((1 - n) * Spectra.Resolvent.neumannSeries n hsmall') * r1 := by
+          ((↑u⁻¹ : E1 →L[ℂ] E1) * r1) =
+        l1 * ((1 - n) * (↑u⁻¹ : E1 →L[ℂ] E1)) * r1 := by
           noncomm_ring
       _ = l1 * 1 * r1 := by rw [hleft]
       _ = 1 := by simpa only [mul_one] using hl1r1
