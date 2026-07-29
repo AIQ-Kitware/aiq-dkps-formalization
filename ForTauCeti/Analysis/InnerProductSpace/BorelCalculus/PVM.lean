@@ -124,5 +124,38 @@ noncomputable def toProjValMeasure : TauCeti.ProjValMeasure H where
 
 end Projections
 
+section BoundedSelfAdjoint
+
+variable {T : H →L[ℂ] H} (hT : IsSelfAdjoint T)
+
+/-- The real part, as a measurable relabelling of the spectrum of a bounded
+self-adjoint operator.  Its spectrum is real, so this is a bijection onto the
+spectrum and no Cayley detour is needed. -/
+noncomputable def reCoord (w : spectrum ℂ T) : ℝ := (w : ℂ).re
+
+omit [CompleteSpace H] in
+theorem measurable_reCoord : Measurable (reCoord (T := T)) :=
+  Complex.measurable_re.comp measurable_subtype_coe
+
+/-- **The spectral measure of a bounded self-adjoint operator**, indexed along
+the real part of its spectrum. -/
+noncomputable def boundedPVM : TauCeti.ProjValMeasure H :=
+  toProjValMeasure hT.isStarNormal measurable_reCoord
+
+/-- **The bridge to the continuous functional calculus.**  A spectral projection
+of a bounded self-adjoint operator is the continuous functional calculus of any
+continuous symbol agreeing with the indicator on the spectrum — which is all the
+bounded-operator lane ever needs from a Borel calculus. -/
+theorem boundedPVM_proj_eq_cfcHom (s : Set ℝ) (hs : MeasurableSet s)
+    (g : C(spectrum ℂ T, ℂ))
+    (hg : ∀ w, g w = (reCoord ⁻¹' s).indicator (fun _ => (1 : ℂ)) w) :
+    (boundedPVM hT).proj s hs = cfcHom hT.isStarNormal g := by
+  rw [boundedPVM, toProjValMeasure_proj, specProj,
+    ← borelCalculus_of_continuous hT.isStarNormal g (IsBddMeasurable.of_continuous g)]
+  exact borelCalculus_congr_ae _ _ _ fun η =>
+    Filter.Eventually.of_forall fun w => (hg w).symm
+
+end BoundedSelfAdjoint
+
 end BorelCalculus
 end TauCeti
