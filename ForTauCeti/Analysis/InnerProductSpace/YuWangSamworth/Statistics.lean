@@ -3,8 +3,8 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
-import DavisKahan.FiniteDimensional.SinTheta.Perturbation
-import DavisKahan.Sources.YuWangSamworth2015
+import ForTauCeti.Analysis.InnerProductSpace.SinTheta.Perturbation
+import ForTauCeti.Analysis.InnerProductSpace.YuWangSamworth.Residual
 import ForTauCeti.Analysis.InnerProductSpace.AlignedBasis
 
 /-!
@@ -19,6 +19,19 @@ Literature map:
 
 This file gives the existing YWS results a canonical subspace-facing API and
 records the full interval-block, aligned-basis, and single-vector surfaces.
+
+## Provenance
+
+*Moved, not restated.*  This file was `DavisKahan/Specialized/Statistics.lean`
+until 2026-07-29, when lane Y3(c) moved the last three `DavisKahan` modules of
+the Yu--Wang--Samworth payload into the staging layer, finishing Y3.  Statements,
+proofs, signatures and namespaces are unchanged; the declarations already lived
+in `TauCeti.*`.
+
+Y3(b2)/(b3)/(b4) are what made it possible: they took the sin-Θ perturbation
+closure this file rests on out of `ForMathlib` and `DavisKahan` entirely, so the
+last edge to sever was this one.
+
 -/
 
 namespace TauCeti
@@ -51,9 +64,18 @@ noncomputable def sinThetaFrobenius (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : ℝ :=
   UnitarilyInvariantNorm.frobenius 𝕜 E (sinThetaMap U V)
 
-/-- The canonical Frobenius sine of two equally indexed eigenblocks is exactly
-    the square root of the cross-block overlap sum used by Yu--Wang--Samworth. -/
-private theorem sinThetaFrobenius_eq_sqrt_sum_cross {n : ℕ}
+/-- **The complement identity.**  The canonical Frobenius sine of two equally
+indexed eigenblocks is exactly the square root of the cross-block overlap sum
+used by Yu--Wang--Samworth: in the paper's matrix notation,
+`‖V₁ᵀ V̂‖_F = ‖sin Θ(V̂, V)‖_F`.
+
+Public, and deliberately so.  It was `private` until 2026-07-29, which made this
+the one Yu--Wang--Samworth result the repository proved and no reader could
+cite — recorded as item `YWS-S1-complement-identity` of
+`dev/yu-wang-samworth-2015-full-source-census.json`.  Every bound in that paper
+is proved as a statement about cross-block energy and read back as an angle, so
+this is the bridge the whole development turns on and it belongs in the API. -/
+theorem sinThetaFrobenius_eq_sqrt_sum_cross {n : ℕ}
     (bT bS : OrthonormalBasis (Fin n) 𝕜 E) (s : Finset (Fin n)) :
     sinThetaFrobenius
         (Submodule.span 𝕜 (bT '' (↑s : Set (Fin n))))
