@@ -849,6 +849,98 @@ theorem doubleAngleTangent_sylvester_pointwise
   rw [map_sub]
   linear_combination (norm := module) h
 
+include hdom hadj in
+/-- **The resolvent commutator is explicitly `R G R`.**
+
+`A₀R - RA₀ = R G R` on `dom A₀`, where `R = (1 - X†X)⁻¹` and `G` is the Riccati
+commutator.  Formally this is
+`A₀R - RA₀ = R(R⁻¹A₀ - A₀R⁻¹)R = R((1-T)A₀ - A₀(1-T))R = R(A₀T - TA₀)R`.
+
+This matters because it makes the right-hand side of the Sylvester equation for
+`tan 2Theta` an **explicit bounded operator**:
+
+```
+C = 2·(X ∘ R ∘ G  +  X ∘ B₀₁ ∘ X  -  B₁₀) ∘ R
+```
+
+with no density extension anywhere — every factor is already a continuous linear
+map.  Without it one would have to extend the commutator from `dom A₀` by
+density just to name `C`. -/
+theorem riccatiGram_resolvent_commutator_eq
+    (hinv : TauCeti.LinearPMap.InvariantSubspace (unboundedBlockOperatorCore H)
+      (unboundedBlockGraph X)ᗮ)
+    (hric : ∀ x : H.A0.domain,
+      H.A1 ⟨X (x : E0), hdom x⟩ + H.B10 (x : E0) =
+        X (H.A0 x + H.B01 (X (x : E0))))
+    {R : E0 →L[𝕜] E0}
+    (hRmem : ∀ y : H.A0.domain, R (y : E0) ∈ H.A0.domain)
+    (hRight : ∀ u : E0, ((1 : E0 →L[𝕜] E0) - riccatiGram X) (R u) = u)
+    (hLeft : ∀ u : E0, R (((1 : E0 →L[𝕜] E0) - riccatiGram X) u) = u)
+    (x : H.A0.domain) :
+    H.A0 ⟨R (x : E0), hRmem x⟩ - R (H.A0 x) =
+      R (riccatiGramCommutator H X (R (x : E0))) := by
+  set y : H.A0.domain := ⟨R (x : E0), hRmem x⟩ with hy
+  have hTy : (riccatiGram X) (y : E0) ∈ H.A0.domain :=
+    gram_mem_domain H hdom hadj y
+  -- `x = (1 - T) y` as elements of the domain.
+  have hxy : x = y - ⟨(riccatiGram X) (y : E0), hTy⟩ := by
+    apply Subtype.ext
+    have := hRight (x : E0)
+    simpa [hy, sub_eq_iff_eq_add] using this.symm
+  have hcomm : H.A0 ⟨(riccatiGram X) (y : E0), hTy⟩ =
+      (riccatiGram X) (H.A0 y) + riccatiGramCommutator H X (y : E0) := by
+    have h := gram_commutator_eq H hdom hadj hinv hric y
+    simpa [riccatiGram] using h
+  have hA0x : H.A0 x =
+      ((1 : E0 →L[𝕜] E0) - riccatiGram X) (H.A0 y) -
+        riccatiGramCommutator H X (y : E0) := by
+    rw [hxy, LinearPMap.map_sub, hcomm]
+    simp only [ContinuousLinearMap.sub_apply, ContinuousLinearMap.one_apply]
+    abel
+  rw [hA0x, map_sub, hLeft]
+  abel
+
+include hdom hadj in
+/-- **The Sylvester equation satisfied by the double-angle tangent, with an
+explicit bounded right-hand side.**
+
+For `R = (1 - X†X)⁻¹` and every `x ∈ dom A₀`,
+
+```
+A₁(X R x) - (X R)(A₀ x) = C x,
+C := (X ∘ R ∘ G  +  X ∘ B₀₁ ∘ X  -  B₁₀) ∘ R
+```
+
+Every factor of `C` is a continuous linear map, so this is the `equation` field
+of `TauCeti.LinearPMap.SylvesterEquation A₁ A₀ (X ∘ R) C`; the `mapsTo_domain`
+field is `doubleAngleTangent_mapsDomainTo`.  Doubling gives `tan 2Theta`.
+
+Feeding this to `kyFan_unbounded_sylvester_le_of_semibounded_direct` with
+`c = 0`, `δ = d` yields an unbounded, arbitrary-ideal Ky Fan estimate for
+`tan 2Theta`.  Note `C` is *not* `-B₁₀`: the discrepancy is the commutator term
+`X ∘ R ∘ G`, and it is exactly why this route gives a defect form rather than
+the sharp constant — see `dev/finishtantwotheta-completion-lane.md`. -/
+theorem doubleAngleTangent_sylvester_eq
+    (hinv : TauCeti.LinearPMap.InvariantSubspace (unboundedBlockOperatorCore H)
+      (unboundedBlockGraph X)ᗮ)
+    (hric : ∀ x : H.A0.domain,
+      H.A1 ⟨X (x : E0), hdom x⟩ + H.B10 (x : E0) =
+        X (H.A0 x + H.B01 (X (x : E0))))
+    {R : E0 →L[𝕜] E0}
+    (hRmem : ∀ y : H.A0.domain, R (y : E0) ∈ H.A0.domain)
+    (hRight : ∀ u : E0, ((1 : E0 →L[𝕜] E0) - riccatiGram X) (R u) = u)
+    (hLeft : ∀ u : E0, R (((1 : E0 →L[𝕜] E0) - riccatiGram X) u) = u)
+    (x : H.A0.domain) :
+    H.A1 ⟨X (R (x : E0)), hdom ⟨R (x : E0), hRmem x⟩⟩ - X (R (H.A0 x)) =
+      ((X ∘L R ∘L riccatiGramCommutator H X +
+          X ∘L H.B01 ∘L X - H.B10) ∘L R) (x : E0) := by
+  rw [doubleAngleTangent_sylvester_pointwise H hdom hric R x (hRmem x),
+    riccatiGram_resolvent_commutator_eq H hdom hadj hinv hric hRmem hRight
+      hLeft x]
+  simp only [ContinuousLinearMap.coe_comp', Function.comp_apply,
+    ContinuousLinearMap.add_apply, ContinuousLinearMap.sub_apply]
+  abel
+
 end Powers'
 
 /-- The Riccati commutator is bounded by the off-diagonal coupling alone: no
