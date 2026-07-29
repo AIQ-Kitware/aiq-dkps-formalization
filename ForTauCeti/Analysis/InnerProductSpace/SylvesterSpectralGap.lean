@@ -48,6 +48,7 @@ variable [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
 variable [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
 
 omit [CompleteSpace F] in
+/-- The zero column vector rebuilds to the zero operator. -/
 @[simp] theorem ofLp_zero (b : HilbertBasis ι ℂ F) :
     ofLp b (0 : lp (fun _ : ι => E) 2) = 0 := by
   ext x
@@ -61,6 +62,7 @@ theorem blockFun_eq_zero_left (b : HilbertBasis ι ℂ F) (Q : F →L[ℂ] F)
   ext x
   simp
 
+/-- A block with a zero right factor vanishes. -/
 theorem blockFun_eq_zero_right (b : HilbertBasis ι ℂ F) (P : E →L[ℂ] E)
     (f : lp (fun _ : ι => E) 2) : blockFun b P (0 : F →L[ℂ] F) f = 0 := by
   refine ofLp_injective b ?_

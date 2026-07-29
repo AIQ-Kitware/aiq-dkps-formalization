@@ -37,6 +37,7 @@ def blockOperator : (E × F) →ₗ[𝕜] (E × F) where
   map_add' x y := by ext <;> simp <;> abel
   map_smul' c x := by ext <;> simp
 
+/-- The block operator, unfolded to its two coordinates. -/
 @[simp] lemma blockOperator_apply (x : E) (y : F) :
     blockOperator A₀ A₁ B Bstar (x, y) =
       (A₀ x + Bstar y, B x + A₁ y) := rfl

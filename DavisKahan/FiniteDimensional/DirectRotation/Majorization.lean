@@ -52,6 +52,7 @@ noncomputable def hermitianPart (A : E →ₗ[𝕜] E) : E →ₗ[𝕜] E :=
 noncomputable def displacementSquare (W : E →ₗ[𝕜] E) : E →ₗ[𝕜] E :=
   (LinearMap.id - W.adjoint) ∘ₗ (LinearMap.id - W)
 
+/-- The Hermitian part, unfolded to `(A + A⋆)/2`. -/
 @[simp] theorem hermitianPart_apply (A : E →ₗ[𝕜] E) (x : E) :
     hermitianPart A x = (((2 : ℝ)⁻¹ : ℝ) : 𝕜) • (A x + A.adjoint x) := by
   simp [hermitianPart]
