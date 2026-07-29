@@ -3,7 +3,7 @@
 # so Claude Code can query this repository's Lean proof state directly: goals at a
 # `sorry`, diagnostics, hover types, mathlib search, and tactic trial runs.
 #
-# This complements setup_lean.sh, which installs the toolchain itself. Run that first.
+# The Lean toolchain itself is not installed here; elan/lake must already be present.
 #
 # The MCP server is registered against an absolute --lean-project-path pointing at this
 # repository, so it resolves this project regardless of where Claude Code is launched
@@ -37,6 +37,7 @@ SKIP_REASON=""
 # Filled in by build_server_cmd.
 SERVER_CMD=()
 UVX_PREFIX=()
+MCP_PATH_DIRS=()
 MCP_PATH=""
 
 log() {
@@ -164,15 +165,25 @@ install_uv_if_needed() {
     command -v uvx >/dev/null 2>&1 || fail "uv install completed, but uvx is not on PATH"
 }
 
+# Not every repo carrying this script ships a toolchain installer, so point at whichever
+# one is actually here instead of naming a file that may not exist.
+toolchain_hint() {
+    if [ -x "$REPO_ROOT/setup_lean.sh" ]; then
+        printf 'Run ./setup_lean.sh first.'
+    else
+        printf 'Install elan first: https://lean-lang.org/install/'
+    fi
+}
+
 verify_lean_tools() {
-    command -v lake >/dev/null 2>&1 || fail "lake not found on PATH. Run ./setup_lean.sh first."
-    command -v lean >/dev/null 2>&1 || fail "lean not found on PATH. Run ./setup_lean.sh first."
+    command -v lake >/dev/null 2>&1 || fail "lake not found on PATH. $(toolchain_hint)"
+    command -v lean >/dev/null 2>&1 || fail "lean not found on PATH. $(toolchain_hint)"
     log "lake: $(lake --version | head -1)"
 }
 
 # --lean-project-path must point at a Lake project root or the server starts, connects,
-# and then fails every tool call. Catch a misplaced copy of this script before it
-# installs packages or edits anyone's Claude config.
+# and then fails every tool call. Runs first in main(), so a misplaced copy of this
+# script is caught before anything is installed or written.
 verify_lean_project() {
     [ -f "$REPO_ROOT/lean-toolchain" ] ||
         fail "$REPO_ROOT has no lean-toolchain; it is not a Lean project root."
@@ -183,7 +194,7 @@ verify_lean_project() {
 
 check_ripgrep() {
     if command -v rg >/dev/null 2>&1; then
-        log "ripgrep found; lean_local_search will be available"
+        log "ripgrep found at $(command -v rg); lean_local_search will be available"
     else
         warn "ripgrep (rg) not found. The lean_local_search tool will be degraded or unavailable."
     fi
@@ -202,15 +213,38 @@ check_build_artifacts() {
     warn "compiles dependencies. Run 'lake build' in $REPO_ROOT before using the server."
 }
 
+# Append a directory to the registered PATH, ignoring blanks and duplicates.
+path_add() {
+    local dir="$1" existing
+    [ -n "$dir" ] || return 0
+    for existing in "${MCP_PATH_DIRS[@]}"; do
+        if [ "$existing" = "$dir" ]; then
+            return 0
+        fi
+    done
+    MCP_PATH_DIRS+=("$dir")
+}
+
+# Add the directory holding $1, if $1 resolves at all.
+path_add_tool() {
+    local resolved
+    resolved="$(command -v "$1" 2>/dev/null)" || return 0
+    path_add "$(dirname "$resolved")"
+}
+
 # Claude Code spawns the server from its own environment. When Claude is launched from a
 # desktop or VS Code process rather than a login shell, that environment need not contain
 # elan's bin or uv's install directory: a bare `uvx` would not resolve, and even if it did
 # the server could not find `lake`/`lean` to drive the Lean LSP. That failure presents as
 # 'Connected' plus tool calls that never return, so pin both the binary and the PATH.
+#
+# The PATH is built from where the dependencies actually resolved, not from a fixed list.
+# A fixed list silently drops tools installed under ~/.cargo/bin, a Homebrew prefix, or
+# any other custom location — which would make the checks above report a dependency as
+# present and then register an environment that cannot see it.
 build_server_cmd() {
-    local uvx_bin uvx_dir
+    local uvx_bin tool
     uvx_bin="$(command -v uvx)"
-    uvx_dir="$(dirname "$uvx_bin")"
 
     UVX_PREFIX=("$uvx_bin")
     if [ -n "$LEAN_LSP_MCP_VERSION" ]; then
@@ -219,7 +253,18 @@ build_server_cmd() {
     UVX_PREFIX+=(lean-lsp-mcp)
 
     SERVER_CMD=("${UVX_PREFIX[@]}" --lean-project-path "$REPO_ROOT")
-    MCP_PATH="$ELAN_HOME/bin:$uvx_dir:/usr/local/bin:/usr/bin:/bin"
+
+    MCP_PATH_DIRS=()
+    path_add "$ELAN_HOME/bin"
+    path_add "$(dirname "$uvx_bin")"
+    # lake/lean drive the LSP; rg backs lean_local_search; git is used for project lookups.
+    for tool in lake lean rg git; do
+        path_add_tool "$tool"
+    done
+    path_add /usr/local/bin
+    path_add /usr/bin
+    path_add /bin
+    MCP_PATH="$(IFS=:; printf '%s' "${MCP_PATH_DIRS[*]}")"
 }
 
 # Populate the uv tool cache now, so the first tool call inside Claude Code is not
@@ -244,6 +289,50 @@ config_path_for() {
     fi
 }
 
+# The hand-editing instructions for when the claude CLI is unavailable. The three scopes
+# use two different layouts: `local` entries are nested under their launch directory in
+# projects{}, while `project` and `user` entries sit at the top level of their own file.
+# Printing the top-level shape for `local` — the default — would send most users to the
+# wrong place, so branch on scope and let json.dumps handle quoting.
+print_manual_config() {
+    local target
+    target="$(config_path_for "${CLAUDE_DIRS[0]}")"
+
+    printf '\nAdd this by hand to %s:\n\n' "$target"
+
+    if ! command -v python3 >/dev/null 2>&1; then
+        printf '  server name: %s\n  command:     %s\n  args:        %s\n' \
+            "$SERVER_NAME" "${SERVER_CMD[0]}" "${SERVER_CMD[*]:1}"
+        printf '  env:         PATH=%s\n               ELAN_HOME=%s\n\n' "$MCP_PATH" "$ELAN_HOME"
+        if [ "$SCOPE" = local ]; then
+            printf '  Nest it under projects -> %s -> mcpServers.\n\n' "${CLAUDE_DIRS[0]}"
+        else
+            printf '  Put it under the top-level mcpServers object.\n\n'
+        fi
+        return
+    fi
+
+    SERVER_NAME="$SERVER_NAME" SCOPE="$SCOPE" MCP_PATH="$MCP_PATH" \
+    ELAN_HOME="$ELAN_HOME" CLAUDE_DIR="${CLAUDE_DIRS[0]}" \
+        python3 - "${SERVER_CMD[@]}" <<'PY'
+import json, os, sys
+
+cmd = sys.argv[1:]
+servers = {os.environ["SERVER_NAME"]: {
+    "type": "stdio",
+    "command": cmd[0],
+    "args": cmd[1:],
+    "env": {"PATH": os.environ["MCP_PATH"], "ELAN_HOME": os.environ["ELAN_HOME"]},
+}}
+if os.environ["SCOPE"] == "local":
+    doc = {"projects": {os.environ["CLAUDE_DIR"]: {"mcpServers": servers}}}
+else:
+    doc = {"mcpServers": servers}
+print("\n".join("  " + line for line in json.dumps(doc, indent=2).splitlines()))
+print()
+PY
+}
+
 register_one() {
     # Already validated and made absolute by parse_args.
     local claude_dir="$1"
@@ -258,9 +347,10 @@ register_one() {
     # re-run has to remove first or it would silently leave a stale entry behind. That
     # makes the sequence non-atomic: back the config up so a failed add cannot leave the
     # user with neither the old entry nor the new one.
-    local cfg backup=""
+    local cfg backup="" cfg_existed=0
     cfg="$(config_path_for "$claude_dir")"
     if [ -f "$cfg" ]; then
+        cfg_existed=1
         backup="$(mktemp "${TMPDIR:-/tmp}/setup_lean_lsp_mcp.XXXXXX")"
         cp -p "$cfg" "$backup"
     fi
@@ -272,13 +362,22 @@ register_one() {
     fi
 
     if ! ( cd "$claude_dir" &&
-           claude mcp add "$SERVER_NAME" -s "$SCOPE" -e "PATH=$MCP_PATH" -- "${SERVER_CMD[@]}" ); then
-        if [ -n "$backup" ]; then
+           claude mcp add "$SERVER_NAME" -s "$SCOPE" \
+               -e "PATH=$MCP_PATH" -e "ELAN_HOME=$ELAN_HOME" -- "${SERVER_CMD[@]}" ); then
+        if [ "$cfg_existed" -eq 1 ]; then
+            # The backup holds live Claude configuration, so it is deleted as soon as it
+            # has served its purpose and kept only when it is the sole surviving copy.
             if cp -p "$backup" "$cfg"; then
-                warn "restored $cfg from $backup (kept for inspection)"
+                rm -f "$backup"
+                warn "restored $cfg to its pre-run contents"
             else
                 warn "could not restore $cfg; your pre-run config is saved at $backup"
             fi
+        elif [ -e "$cfg" ]; then
+            # There was no config here before this run, so a file now is one a failed add
+            # left behind — possibly half-written. Nothing of the user's is lost with it.
+            rm -f "$cfg"
+            warn "removed $cfg, which the failed registration created"
         fi
         fail "claude mcp add failed for $claude_dir"
     fi
@@ -298,22 +397,7 @@ register_server() {
     if ! command -v claude >/dev/null 2>&1; then
         SKIP_REASON="the 'claude' CLI is not on PATH"
         warn "the 'claude' CLI is not on PATH; skipping automatic registration."
-        warn "Add this to your MCP config by hand:"
-
-        local args_json
-        args_json="$(printf '"%s", ' "${SERVER_CMD[@]:1}")"
-        args_json="${args_json%, }"
-        cat >&2 <<EOF
-
-  "mcpServers": {
-    "$SERVER_NAME": {
-      "command": "${SERVER_CMD[0]}",
-      "args": [$args_json],
-      "env": { "PATH": "$MCP_PATH" }
-    }
-  }
-
-EOF
+        print_manual_config >&2
         return
     fi
 
@@ -390,7 +474,10 @@ def read_reply(want_id):
         try:
             msg = json.loads(line)
         except json.JSONDecodeError:
-            continue  # servers are permitted to log non-JSON noise
+            # Under the stdio transport the server may log freely to stderr but must not
+            # write anything to stdout that is not an MCP message. Tolerating noise here
+            # would pass a server that a strict client rejects.
+            raise ProtocolError(f"non-MCP output on stdout: {line[:200]!r}")
         if msg.get("id") != want_id:
             continue
         if "error" in msg:
@@ -512,10 +599,8 @@ No Claude Code session will see '$SERVER_NAME' until it is registered.
   To register now:
       ./setup_lean_lsp_mcp.sh
 
-  Or add the server to your MCP config by hand, using this command and PATH:
-      ${SERVER_CMD[*]}
-      PATH=$MCP_PATH
-
+  Or add it by hand:
+$(print_manual_config)
 EOF
 }
 
@@ -571,9 +656,10 @@ $(scope_troubleshooting)
 $(registration_summary)
 Lean project resolved by the server (absolute, independent of launch dir):
     $REPO_ROOT
-Server command and PATH as registered (independent of your shell environment):
+Server command and environment as registered (independent of your shell):
     ${SERVER_CMD[*]}
     PATH=$MCP_PATH
+    ELAN_HOME=$ELAN_HOME
 --------------------------------------------------------------------------------
 
 Useful tools for this repo's remaining proof debt:
@@ -588,9 +674,11 @@ EOF
 
 main() {
     parse_args "$@"
+    # Cheapest and most fundamental check first: refuse a non-Lean root before this
+    # script installs a package manager or touches anyone's configuration.
+    verify_lean_project
     install_uv_if_needed
     verify_lean_tools
-    verify_lean_project
     check_ripgrep
     check_build_artifacts
     build_server_cmd
