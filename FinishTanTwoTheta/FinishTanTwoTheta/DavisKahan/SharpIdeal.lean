@@ -49,13 +49,22 @@ theorem sharp_standardSymmetricIdeal_scaled
       I.gauge (((d / 2 : ℝ) : ℂ) •
           TauCeti.FinishTanTwoTheta.doubleAngleTangentOperator X hcontractive) ≤
         I.gauge B.B01 := by
-  apply TauCeti.FinishTanTwoTheta.standard_fanDominance I hB
-  intro k
-  rw [kyFanApproximationGauge_smul,
-    RCLike.norm_ofReal, abs_of_nonneg (by positivity : 0 ≤ d / 2)]
-  have hsharp := sharp_doubleAngleTangentOperator_kyFan
-    B hd.le hA0 hA1 hX hcontractive k
-  nlinarith
+  have hfan : ∀ k : ℕ,
+      kyFanApproximationGauge k
+          (((d / 2 : ℝ) : ℂ) •
+            TauCeti.FinishTanTwoTheta.doubleAngleTangentOperator X hcontractive) ≤
+        kyFanApproximationGauge k B.B01.adjoint := by
+    intro k
+    rw [kyFanApproximationGauge_adjoint, kyFanApproximationGauge_smul,
+      Complex.norm_real, Real.norm_eq_abs,
+      abs_of_nonneg (by positivity : (0 : ℝ) ≤ d / 2)]
+    have hsharp := sharp_doubleAngleTangentOperator_kyFan
+      B hd.le hA0 hA1 hX hcontractive k
+    linarith
+  obtain ⟨hmem, hgauge⟩ :=
+    TauCeti.FinishTanTwoTheta.standard_fanDominance I (I.mem_adjoint hB) hfan
+  exact ⟨hmem, by
+    rwa [TauCeti.FinishTanTwoTheta.StandardSymmetricIdeal.gauge_adjoint] at hgauge⟩
 
 /-- Maximal/Fatou source-norm endpoint in the paper's conventional scaling. -/
 theorem sharp_paperUnitaryInvariantNorm
@@ -74,15 +83,16 @@ theorem sharp_paperUnitaryInvariantNorm
   have hfan : ∀ k : ℕ,
       (d / 2) * kyFanApproximationGauge k
           (TauCeti.FinishTanTwoTheta.doubleAngleTangentOperator X hcontractive) ≤
-        kyFanApproximationGauge k B.B01 := by
+        kyFanApproximationGauge k B.B01.adjoint := by
     intro k
+    rw [kyFanApproximationGauge_adjoint]
     have hsharp := sharp_doubleAngleTangentOperator_kyFan
       B hd.le hA0 hA1 hX hcontractive k
-    nlinarith
+    linarith
   have h := N.mul_gauge_le_of_all_mul_kyFan_le
-    (c := d / 2) (by positivity) hB hfan
-  refine ⟨h.1, ?_⟩
-  nlinarith [h.2]
+    (c := d / 2) (by positivity) ((N.mem_adjoint_iff B.B01).mpr hB) hfan
+  rw [N.gauge_adjoint] at h
+  exact ⟨h.1, by linarith [h.2]⟩
 
 /-- Schatten-`p` maximal ideal endpoint for every `1 ≤ p`. -/
 theorem sharp_schattenMaximal
