@@ -527,3 +527,51 @@ licenses `|λ_k - α_l| ≥ δ` on the surviving blocks.  Sum with
 the closed-range argument of `SelfAdjointResolvent.lean` to get resolvent
 membership — after which `diag_eq_zero_of_subset_resolventSet` gives the vector
 gap for every `f` at once.
+
+---
+
+## Correction 2026-07-29 — the "21,581-line tensor closure" figure is misattributed
+
+I have cited **21,581 lines** repeatedly — in commit messages, in `dev/LANES.md`,
+and in module docstrings — as the cost of the donor's Hilbert tensor product,
+and used it to justify modelling the Hilbert–Schmidt space as `lp` instead.
+**The number is real but it is not the tensor product's.**  Measured:
+
+`Spectra/Spaces/Tensor/HilbertSchmidt.lean` has four Spectra imports:
+
+| import | closure |
+| --- | --- |
+| `Spaces.Tensor.Map` (the tensor product itself) | 2 modules, 599 lines |
+| `SpectralTheory.Antilinear.ConjugateSpace` | 1 module, 151 lines |
+| `Operator.AdjointClosure` | 4 modules, 908 lines |
+| **`QuantumMechanics.BornRule.Joint.Basic`** | **86 modules, 20,268 lines** |
+
+So ~20k of the ~21.6k is a *single* import — the joint Born-rule stack — and the
+genuine tensor machinery is about 2,300 lines.
+
+**And the Hilbert tensor product proper is 324 lines in one file that imports
+only Mathlib.**  `Spectra/Spaces/Tensor/Hilbert.lean` is essentially
+`abbrev HilbertTensor := Completion (E ⊗[𝕜] F)` plus a convenience API, resting
+on `Mathlib.Analysis.InnerProductSpace.TensorProduct` and
+`Mathlib.Analysis.InnerProductSpace.Completion`, both of which exist.
+
+### What this does and does not change
+
+It does **not** rescue the donor's spectral-gap proof: that proof is the thing
+that reaches into the Born-rule stack (joint PVMs, product measures), so porting
+the tensor product would not have unlocked SR-D4b.  The `lp` model remains the
+right way to finish D4b.
+
+It **does** mean the reason I gave was wrong.  The honest reason is *"the
+donor's gap proof drags in 20k lines of quantum-measurement machinery"*, not
+*"tensor products are expensive"*.  Those are different claims and I conflated
+them, then repeated the conflation as established fact.
+
+### A separate, cheap opportunity — not part of this campaign
+
+A Hilbert tensor product in `ForTauCeti` would be ~324 lines over Mathlib, is
+not an API break (it is a Mathlib-shaped construction Mathlib simply lacks), and
+is worth having on its own merits.  It would need a Tau Ceti roadmap entry,
+since the roadmap gates *new* mathematics.  **Deliberately not bundled into the
+Spectra removal** — Davis–Kahan does not need it, and tying it to this campaign
+is what produced the confusion above in the first place.
