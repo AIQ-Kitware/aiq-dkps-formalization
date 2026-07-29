@@ -144,6 +144,7 @@ private theorem conjugateOperator_apply
     conjugateOperator A z = conjugation (A (conjugation z)) := by
   simp [conjugateOperator]
 
+omit [CompleteSpace E] in
 @[simp]
 private theorem conjugateOperator_zero :
     conjugateOperator (0 : RealComplexification E →L[ℂ] RealComplexification E) = 0 := by
@@ -151,6 +152,7 @@ private theorem conjugateOperator_zero :
   intro z
   apply RealComplexification.ext <;> simp [conjugateOperator_apply]
 
+omit [CompleteSpace E] in
 @[simp]
 private theorem conjugateOperator_add (A B : RealComplexification E →L[ℂ] RealComplexification E) :
     conjugateOperator (A + B) = conjugateOperator A + conjugateOperator B := by
@@ -158,6 +160,7 @@ private theorem conjugateOperator_add (A B : RealComplexification E →L[ℂ] Re
   intro z
   apply RealComplexification.ext <;> simp [conjugateOperator_apply]
 
+omit [CompleteSpace E] in
 @[simp]
 private theorem conjugateOperator_neg (A : RealComplexification E →L[ℂ] RealComplexification E) :
     conjugateOperator (-A) = -conjugateOperator A := by
@@ -165,6 +168,7 @@ private theorem conjugateOperator_neg (A : RealComplexification E →L[ℂ] Real
   intro z
   apply RealComplexification.ext <;> simp [conjugateOperator_apply]
 
+omit [CompleteSpace E] in
 @[simp]
 private theorem conjugateOperator_sub (A B : RealComplexification E →L[ℂ] RealComplexification E) :
     conjugateOperator (A - B) = conjugateOperator A - conjugateOperator B := by
@@ -172,6 +176,7 @@ private theorem conjugateOperator_sub (A B : RealComplexification E →L[ℂ] Re
   intro z
   apply RealComplexification.ext <;> simp [conjugateOperator_apply]
 
+omit [CompleteSpace E] in
 @[simp]
 private theorem conjugateOperator_one :
     conjugateOperator (1 : RealComplexification E →L[ℂ] RealComplexification E) = 1 := by
@@ -179,6 +184,7 @@ private theorem conjugateOperator_one :
   intro z
   apply RealComplexification.ext <;> simp [conjugateOperator_apply]
 
+omit [CompleteSpace E] in
 @[simp]
 private theorem conjugateOperator_mul (A B : RealComplexification E →L[ℂ] RealComplexification E) :
     conjugateOperator (A * B) = conjugateOperator A * conjugateOperator B := by
@@ -187,6 +193,7 @@ private theorem conjugateOperator_mul (A B : RealComplexification E →L[ℂ] Re
   apply RealComplexification.ext <;>
     simp [conjugateOperator_apply, mul_apply_eq_comp]
 
+omit [CompleteSpace E] in
 @[simp]
 private theorem conjugateOperator_real_smul (r : ℝ) (A : RealComplexification E →L[ℂ] RealComplexification E) :
     conjugateOperator (r • A) = r • conjugateOperator A := by
@@ -194,6 +201,7 @@ private theorem conjugateOperator_real_smul (r : ℝ) (A : RealComplexification 
   intro z
   apply RealComplexification.ext <;> simp [conjugateOperator_apply]
 
+omit [CompleteSpace E] in
 @[simp]
 private theorem conjugateOperator_involutive (A : RealComplexification E →L[ℂ] RealComplexification E) :
     conjugateOperator (conjugateOperator A) = A := by
@@ -217,6 +225,7 @@ private theorem conjugateOperator_adjoint (A : RealComplexification E →L[ℂ] 
       rw [inner_conjugation_right]
     _ = ⟪x, conjugateOperator A y⟫_ℂ := by rw [conjugateOperator_apply]
 
+omit [CompleteSpace E] in
 private theorem norm_conjugateOperator_le (A : RealComplexification E →L[ℂ] RealComplexification E) :
     ‖conjugateOperator A‖ ≤ ‖A‖ := by
   refine (conjugateOperator A).opNorm_le_bound (norm_nonneg A) ?_
@@ -226,6 +235,7 @@ private theorem norm_conjugateOperator_le (A : RealComplexification E →L[ℂ] 
     _ ≤ ‖A‖ * ‖conjugation z‖ := A.le_opNorm _
     _ = ‖A‖ * ‖z‖ := by rw [conjugation.norm_map]
 
+omit [CompleteSpace E] in
 private theorem norm_conjugateOperator (A : RealComplexification E →L[ℂ] RealComplexification E) :
     ‖conjugateOperator A‖ = ‖A‖ := by
   apply le_antisymm (norm_conjugateOperator_le A)
@@ -346,6 +356,7 @@ private theorem fixed_operator_maps_real_to_real
       _ = 0 := neg_add_cancel _
   exact (smul_eq_zero.mp htwo).resolve_left (by norm_num)
 
+omit [CompleteSpace E] in
 private theorem fixed_operator_on_ofReal
     {A : RealComplexification E →L[ℂ] RealComplexification E} (hfix : conjugateOperator A = A) (x : E) :
     A (ofReal x) = ofReal (realPartOperator A x) := by
@@ -353,6 +364,7 @@ private theorem fixed_operator_on_ofReal
   · simp
   · simp [fixed_operator_maps_real_to_real hfix x]
 
+omit [CompleteSpace E] in
 /-- A conjugation-fixed complex operator is exactly the complexification of its
 restriction to the real copy. -/
 private theorem complexify_realPartOperator

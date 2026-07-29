@@ -60,6 +60,7 @@ noncomputable def finiteSourceLeftSingularVector (A : E →L[ℂ] F)
     (i : Fin (finrank ℂ E)) : F :=
   (leftSingularVector A.rangeRestrict.toLinearMap i : A.range)
 
+omit [CompleteSpace F] in
 @[simp]
 theorem finiteSourceSingularValue_nonneg (A : E →L[ℂ] F)
     (i : Fin (finrank ℂ E)) :
@@ -97,11 +98,13 @@ theorem approximationSingularValue_eq_finiteSourceSingularValue
       rw [hAW]
       rfl
 
+omit [CompleteSpace F] in
 /-- The right singular basis is orthonormal. -/
 theorem finiteSourceRightSingularBasis_orthonormal (A : E →L[ℂ] F) :
     Orthonormal ℂ (finiteSourceRightSingularBasis A) :=
   (finiteSourceRightSingularBasis A).orthonormal
 
+omit [CompleteSpace F] in
 /-- The image of a finite-source right singular vector has norm equal to its singular
 value. -/
 theorem norm_apply_finiteSourceRightSingularBasis
@@ -110,6 +113,7 @@ theorem norm_apply_finiteSourceRightSingularBasis
   have h := norm_apply_rightSingularBasis A.rangeRestrict.toLinearMap i
   simpa [finiteSourceRightSingularBasis, finiteSourceSingularValue] using h
 
+omit [CompleteSpace F] in
 /-- A zero finite-source singular value gives a zero image. -/
 theorem apply_finiteSourceRightSingularBasis_eq_zero_of_singularValue_eq_zero
     (A : E →L[ℂ] F) {i : Fin (finrank ℂ E)}
@@ -119,6 +123,7 @@ theorem apply_finiteSourceRightSingularBasis_eq_zero_of_singularValue_eq_zero
     A.rangeRestrict.toLinearMap hi
   exact congrArg Subtype.val h
 
+omit [CompleteSpace F] in
 /-- The finite-source singular relation `A vᵢ = σᵢ uᵢ`. -/
 theorem apply_finiteSourceRightSingularBasis_eq_smul_leftSingularVector
     (A : E →L[ℂ] F) (i : Fin (finrank ℂ E)) :
@@ -129,12 +134,14 @@ theorem apply_finiteSourceRightSingularBasis_eq_smul_leftSingularVector
     A.rangeRestrict.toLinearMap i
   exact congrArg Subtype.val h
 
+omit [CompleteSpace F] in
 /-- Every ambient left singular vector lies in the range of the original operator. -/
 theorem finiteSourceLeftSingularVector_mem_range
     (A : E →L[ℂ] F) (i : Fin (finrank ℂ E)) :
     finiteSourceLeftSingularVector A i ∈ A.range :=
   (leftSingularVector A.rangeRestrict.toLinearMap i).property
 
+omit [CompleteSpace F] in
 /-- Ambient left singular vectors attached to nonzero singular values are orthonormal. -/
 theorem orthonormal_finiteSourceLeftSingularVector_subtype (A : E →L[ℂ] F) :
     Orthonormal ℂ
@@ -191,6 +198,7 @@ theorem adjoint_apply_finiteSourceLeftSingularVector
     _ = ⟪((finiteSourceSingularValue A i : ℝ) : ℂ) •
           finiteSourceRightSingularBasis A i, x⟫_ℂ := by rw [hur]
 
+omit [CompleteSpace F] in
 /-- A contraction has every finite-source singular value at most one. -/
 theorem finiteSourceSingularValue_le_one_of_contraction
     (A : E →L[ℂ] F) (hA : ∀ x, ‖A x‖ ≤ ‖x‖)
