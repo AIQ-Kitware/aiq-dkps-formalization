@@ -157,6 +157,7 @@ end AbstractBoundedUse
 
 section FiniteRealModel
 
+/-- The real Euclidean plane, the concrete space these examples are stated over. -/
 abbrev RealPlane := EuclideanSpace ℝ (Fin 2)
 
 /-- A concrete finite-dimensional, zero-residual use of the natural reducing

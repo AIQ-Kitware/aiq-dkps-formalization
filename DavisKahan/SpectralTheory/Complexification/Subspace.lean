@@ -64,6 +64,7 @@ def complexifySubmodule (U : Submodule ℝ E) :
         U.add_mem (U.smul_mem c.im hz.1) (U.smul_mem c.re hz.2)⟩
 
 omit [CompleteSpace E] in
+/-- Membership in a complexified submodule, in terms of the real and imaginary coordinates. -/
 @[simp]
 theorem mem_complexifySubmodule {U : Submodule ℝ E}
     {z : RealComplexification E} :
@@ -72,6 +73,7 @@ theorem mem_complexifySubmodule {U : Submodule ℝ E}
   rfl
 
 omit [CompleteSpace E] in
+/-- Membership criterion for a vector given by its coordinates. -/
 @[simp]
 theorem mk_mem_complexifySubmodule_iff (U : Submodule ℝ E) (x y : E) :
     mk x y ∈ complexifySubmodule U ↔ x ∈ U ∧ y ∈ U := by
@@ -79,6 +81,7 @@ theorem mk_mem_complexifySubmodule_iff (U : Submodule ℝ E) (x y : E) :
   simp
 
 omit [CompleteSpace E] in
+/-- A real vector lies in the complexification exactly when it lies in the original submodule. -/
 @[simp]
 theorem ofReal_mem_complexifySubmodule_iff (U : Submodule ℝ E) (x : E) :
     ofReal x ∈ complexifySubmodule U ↔ x ∈ U := by

@@ -119,6 +119,7 @@ def gauge
     (N : PaperUnitaryInvariantNorm) (A : E →L[𝕜] F) : ℝ :=
   (N.extendedGauge A).toReal
 
+/-- Rewrite form of the finite gauge as a sum over the first `k` singular values. -/
 @[simp]
 theorem finiteGauge_def (N : PaperUnitaryInvariantNorm) (n : ℕ)
     (x : Fin n → ℝ) :

@@ -161,6 +161,8 @@ structure PaperIsometricTheoremData where
 
 namespace PaperIsometricTheoremData
 
+/-- Forget the isometry hypothesis: an isometric embedding has lower frame bound `1`, so the
+isometric record is the general one with `frameLowerBound := 1`. -/
 noncomputable def toGeneral
     (P : PaperIsometricTheoremData (E := E) (F := F) (G := G) (H := H)) :
     PaperTheorem61Data (E := E) (F := F) (G := G) (H := H) where
@@ -177,6 +179,7 @@ noncomputable def toGeneral
   lowerFrame := lowerFrameBound_one_of_isometry P.trial_isometry
   spectral_gap := P.spectral_gap
 
+/-- The canonical sine-theta operator of an isometric configuration, read off the general record. -/
 def canonicalSinTheta
     (P : PaperIsometricTheoremData (E := E) (F := F) (G := G) (H := H)) :=
   P.toGeneral.canonicalSinTheta
@@ -323,6 +326,7 @@ structure PaperRealIsometricTheoremData where
 
 namespace PaperRealIsometricTheoremData
 
+/-- Forget the isometry hypothesis, real-scalar case. -/
 noncomputable def toGeneral
     (P : PaperRealIsometricTheoremData
       (E := E) (F := F) (G := G) (H := H)) :
@@ -340,6 +344,7 @@ noncomputable def toGeneral
   lowerFrame := lowerFrameBound_one_of_isometry P.trial_isometry
   spectral_gap := P.spectral_gap
 
+/-- The canonical sine-theta operator of a real isometric configuration. -/
 def canonicalSinTheta
     (P : PaperRealIsometricTheoremData
       (E := E) (F := F) (G := G) (H := H)) :=

@@ -67,6 +67,7 @@ noncomputable def approximationEnergy
   ∑ i ∈ Finset.range n, (approximationSingularValue i T) ^ 2
 
 omit [CompleteSpace E] [CompleteSpace F] in
+/-- The prefix square energy is a sum of squares, hence nonnegative. -/
 theorem approximationEnergy_nonneg
     (T : E →L[ℂ] F) (n : ℕ) :
     0 ≤ approximationEnergy T n := by

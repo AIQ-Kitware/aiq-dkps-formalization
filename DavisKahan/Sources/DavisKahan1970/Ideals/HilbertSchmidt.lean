@@ -64,6 +64,7 @@ def paperHilbertSchmidtNorm
     (A : E →L[𝕜] F) : ℝ :=
   Real.sqrt (paperHilbertSchmidtEnergy A).toReal
 
+/-- The zero operator has zero Hilbert--Schmidt energy. -/
 @[simp]
 theorem paperHilbertSchmidtEnergy_zero
     {𝕜 : Type u} [RCLike 𝕜]
@@ -74,6 +75,7 @@ theorem paperHilbertSchmidtEnergy_zero
   unfold paperHilbertSchmidtEnergy
   simp
 
+/-- The zero operator has zero Hilbert--Schmidt norm. -/
 @[simp]
 theorem paperHilbertSchmidtNorm_zero
     {𝕜 : Type u} [RCLike 𝕜]

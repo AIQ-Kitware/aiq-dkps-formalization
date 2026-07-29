@@ -74,6 +74,7 @@ noncomputable def doubleAngleTangent (t : ℝ) : ℝ := 2 * t / (1 - t ^ 2)
 @[simp] theorem doubleAngleTangent_zero : doubleAngleTangent 0 = 0 := by
   simp [doubleAngleTangent]
 
+/-- The double-angle tangent is nonnegative on the admissible range. -/
 theorem doubleAngleTangent_nonneg {t : ℝ} (h0 : 0 ≤ t) (h1 : t < 1) :
     0 ≤ doubleAngleTangent t := by
   have h1t : (0 : ℝ) < 1 - t ^ 2 := by nlinarith

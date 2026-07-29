@@ -44,6 +44,7 @@ def boundedPullbackDomain
   {x | X x ∈ A.domain}
 
 omit [CompleteSpace E] [CompleteSpace F] in
+/-- Membership in the bounded pullback domain, in terms of the underlying vector. -/
 @[simp]
 theorem mem_boundedPullbackDomain
     (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := E))
