@@ -179,6 +179,59 @@ move, not proofs.  `Interop/Spectra/**` (led by `RealSpectralRestriction.lean`)
 sits at the PVM/Borel/real-spectrum boundary that "Explicitly excluded" names and
 is not this lane's to migrate.
 
+### Gate U1.4 second command: now measurable (jon (toothbrush), 2026-07-29)
+
+The gate is stated in type-position uses, the "171" figure came with no command,
+and the reproducible fallback (`grep -rc ClosedOperator`) counts every mention.
+`scripts/closed_operator_census.py` measures both, so the gate is checkable:
+
+```sh
+python3 scripts/closed_operator_census.py --verbose
+```
+
+```
+raw mentions      : 594 across 77 modules
+type-position uses: 558 across 69 modules
+prose/import/#check overcount: 36
+```
+
+**Two corrections follow, and they point in opposite directions.**
+
+*The grep fallback overcounts badly, and the per-module table above inherits the
+error.* It matches substrings, so it conflates the bundle with things that are
+not the bundle: `ClosedOperatorComplexification` (a **namespace**, 86 hits),
+`RealClosedOperator` (a **different type**, 35), and function names such as
+`inverseClosedOperator` / `toClosedOperator`. The starkest case is
+`Interop/Spectra/RealSpectralRestriction.lean`, listed above at **104** — of
+which 68 are the namespace and 35 the other type. It names the bundle **8**
+times. It is not the largest consumer; it is not close.
+
+*But the gate is further from being met than "171" implied.* The real
+type-position count is **558**, not 171. Whatever 171 measured, it was not this.
+The lane is roughly three times the size the release note recorded.
+
+The census also excludes imports, docstrings, `#check` and `--` comments (36
+mentions), since none of those are signatures to migrate.
+
+Corrected largest consumers, by genuine type positions:
+
+| module (under `DavisKahan/`) | type positions |
+| --- | --- |
+| `SinTheta/Natural/Bounded.lean` | 52 |
+| `Sources/DavisKahan1970/SineTheta/Symmetric.lean` | 50 |
+| `Sylvester/ClosedSylvesterEquation.lean` | 30 |
+| `SpectralTheory/ReducingSubspace/Restriction.lean` | 26 |
+| `SinTheta/Natural/Examples.lean` | 25 |
+| `Sources/DavisKahan1970/SineTheta/CommonCore.lean` | 22 |
+| `Sources/DavisKahan1970/SineTheta/CommonDomain.lean` | 19 |
+| `Sylvester/Unbounded/OrderedCutoff.lean` | 19 |
+| `Interop/Spectra/BoundedPerturbationSinTheta.lean` | 14 |
+| `Sylvester/Unbounded/OrderedFromCutoffs.lean` | 13 |
+
+Note the two documented facades (`ClosedSylvesterEquation` 30,
+`Restriction` 26) are now the 3rd and 4th largest entries, so retiring them is
+worth more than the old table suggested.
+
 **Contractible right now, no new mathematics:**
 
 - `generalizedSinTheta_unbounded_exact_of_genuineIntervalExteriorGap` —
