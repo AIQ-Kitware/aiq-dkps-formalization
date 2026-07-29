@@ -124,6 +124,12 @@ theorem borelCalculus_one (h1 : IsBddMeasurable (fun _ : spectrum ℂ a => (1 : 
   have h := borelCalculus_of_continuous ha (1 : C(spectrum ℂ a, ℂ)) h1
   exact h.trans (map_one _)
 
+/-- The Borel calculus kills the zero symbol. -/
+theorem borelCalculus_zero (h0 : IsBddMeasurable (fun _ : spectrum ℂ a => (0 : ℂ))) :
+    borelCalculus ha h0 = 0 := by
+  have h := borelCalculus_of_continuous ha (0 : C(spectrum ℂ a, ℂ)) h0
+  exact h.trans (map_zero _)
+
 end Continuous
 
 section Multiplicative
