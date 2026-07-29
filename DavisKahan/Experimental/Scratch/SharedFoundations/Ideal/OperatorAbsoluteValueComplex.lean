@@ -3,13 +3,13 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 
-Portions of the proof route use the bounded polar decomposition from Spectra,
+The proof route uses the bounded polar decomposition, taken from `ForTauCeti`,
 originally authored by Adam Bornemann.  The declaration-level mapping is
 recorded in the accompanying provenance ledger.
 -/
 import DavisKahan.Experimental.Scratch.SharedFoundations.Ideal.TwoWayFactorization
 import DavisKahan.OperatorIdeal.ApproximationNumbers.OperatorModulus
-import Spectra.QuantumMechanics.Channels.TraceClass.PartialIsometry
+import ForTauCeti.Analysis.InnerProductSpace.PolarPartialIsometry
 
 /-!
 # Absolute-value transport for square symmetric ideals
@@ -27,40 +27,29 @@ namespace SharedFoundations
 
 open scoped InnerProductSpace
 open ExactSinTheta
-open Spectra.QuantumMechanics.Channels
 
 universe u
 
 variable {E : Type u} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
   [CompleteSpace E]
 
-/-- Spectra's CFC absolute value agrees with the local square-root definition. -/
-theorem spectra_absOp_eq_operatorAbs (T : E →L[ℂ] E) :
-    absOp T = ContinuousLinearMap.modulus T := by
-  apply ContinuousLinearMap.eq_modulus_of_nonneg_of_mul_self_eq (T := T)
-  · exact absOp_nonneg T
-  · exact absOp_mul_absOp T
+/-- The polar partial isometry is a contraction.
 
-/-- The local absolute value has the Spectra polar factorization. -/
-theorem polarIsometry_comp_operatorAbs (T : E →L[ℂ] E) :
-    polarIsometry T ∘L ContinuousLinearMap.modulus T = T := by
-  rw [← spectra_absOp_eq_operatorAbs]
-  exact Spectra.QuantumMechanics.Channels.polar_decomposition T
-
-/-- The adjoint polar factor recovers the local absolute value. -/
-theorem polarIsometry_adjoint_comp_operator (T : E →L[ℂ] E) :
-    (polarIsometry T).adjoint ∘L T = ContinuousLinearMap.modulus T := by
-  rw [← spectra_absOp_eq_operatorAbs]
-  exact Spectra.QuantumMechanics.Channels.polarIsometry_adjoint_comp T
+`polarPartial` is an isometry on the initial space precomposed with the
+orthogonal projection onto it, so it is norm non-increasing everywhere. -/
+theorem norm_polarPartial_le_one (T : E →L[ℂ] E) : ‖T.polarPartial‖ ≤ 1 := by
+  refine ContinuousLinearMap.opNorm_le_bound _ zero_le_one fun x => ?_
+  rw [one_mul, T.polarPartial_apply, T.norm_polarPartialAux_apply]
+  exact T.polarInitial.norm_orthogonalProjectionOnto_apply_le x
 
 /-- The polar factor and its adjoint are contractions. -/
-theorem polarIsometry_and_adjoint_norm_le_one (T : E →L[ℂ] E) :
-    ‖polarIsometry T‖ ≤ 1 ∧ ‖(polarIsometry T).adjoint‖ ≤ 1 := by
-  refine ⟨norm_polarIsometry_le_one T, ?_⟩
+theorem polarPartial_and_adjoint_norm_le_one (T : E →L[ℂ] E) :
+    ‖T.polarPartial‖ ≤ 1 ∧ ‖T.polarPartial.adjoint‖ ≤ 1 := by
+  refine ⟨norm_polarPartial_le_one T, ?_⟩
   calc
-    ‖(polarIsometry T).adjoint‖ = ‖polarIsometry T‖ :=
+    ‖T.polarPartial.adjoint‖ = ‖T.polarPartial‖ :=
       ContinuousLinearMap.adjoint.norm_map _
-    _ ≤ 1 := norm_polarIsometry_le_one T
+    _ ≤ 1 := norm_polarPartial_le_one T
 
 /-- Every square symmetric ideal contains `|T|` exactly when it contains `T`,
 and assigns them equal gauge. -/
@@ -69,16 +58,16 @@ theorem SymmetricNormIdeal.operatorAbs_mem_iff_and_gauge_eq
     (T : E →L[ℂ] E) :
     (I.mem (ContinuousLinearMap.modulus T) ↔ I.mem T) ∧
       (I.mem T → I.gauge (ContinuousLinearMap.modulus T) = I.gauge T) := by
-  let U : E →L[ℂ] E := polarIsometry T
+  let U : E →L[ℂ] E := T.polarPartial
   let J : E →L[ℂ] E := ContinuousLinearMap.id ℂ E
   have hTfactor : T = U ∘L ContinuousLinearMap.modulus T ∘L J := by
     rw [ContinuousLinearMap.comp_id]
-    exact (polarIsometry_comp_operatorAbs T).symm
+    exact (T.polarPartial_comp_modulus).symm
   have hAbsfactor : ContinuousLinearMap.modulus T = U.adjoint ∘L T ∘L J := by
     rw [ContinuousLinearMap.comp_id]
-    exact (polarIsometry_adjoint_comp_operator T).symm
-  have hU := (polarIsometry_and_adjoint_norm_le_one T).1
-  have hUa := (polarIsometry_and_adjoint_norm_le_one T).2
+    exact (T.adjoint_polarPartial_comp_self).symm
+  have hU := (polarPartial_and_adjoint_norm_le_one T).1
+  have hUa := (polarPartial_and_adjoint_norm_le_one T).2
   have hJ : ‖J‖ ≤ 1 := ContinuousLinearMap.norm_id_le
   constructor
   · constructor
