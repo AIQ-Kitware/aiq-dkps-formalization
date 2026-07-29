@@ -90,3 +90,56 @@ promoting it alone would move code without giving production anything.
 
 **Promotion is not claimed by this measurement.** It is released with the
 inventory attached.
+
+## The bounded Riccati block was the exception, not the template (edward, 2026-07-29)
+
+The Riccati promotion landed as a **path-only** move — `git mv` plus import
+lines, no declaration renamed, name-drift 0 findings. The P-PROMOTE row states
+the principle that made it safe: *"A move that changes only a module's file
+path, not its declaration namespace, is audit-safe — the census and comparator
+key on names. Rename nothing unless forced."*
+
+**For every remaining block, it is forced.** Measured across the candidates:
+
+| block | modules | admitted | namespace contains `Experimental`/`Scratch` |
+|---|---:|---:|---:|
+| `Riccati.Bounded*` (**promoted**) | 10 | 0 | **0** — declares into `TauCeti.DavisKahanExt` |
+| `HiddenFoundations.FreeBeam.**` | 23 | 0 | 21 of 23 |
+| `Scratch.SharedFoundations` | 13 | 0 | 12 of 13 |
+| `Scratch.RectangularHilbertSchmidt` | 3 | 0 | 2 of 3 |
+| `Scratch.IdealBanach` | 2 | 0 | 1 of 2 |
+| `Scratch.Section3` | 2 | 0 | 1 of 2 |
+| `Scratch.Section6` | 2 | 0 | 1 of 2 |
+
+Riccati was promotable by path alone **because its namespace was already
+production-shaped**. Every other block declares into a namespace containing
+`Experimental` or `Scratch`, so moving the file alone would leave production
+modules whose *declaration names* still say `Experimental`. That is precisely
+the class of defect `dev/TauCeti_theorem_naming_strength_audit_2026-07-27.md`
+exists to catch, and shipping it would be worse than leaving the modules where
+they are.
+
+**So the remaining blocks are rename lanes, not move lanes**, and they carry the
+rename obligations from `AGENTS.md`: build `Challenge` explicitly and run
+`scripts/check_declaration_name_drift.py`.
+
+### What a taker should know before starting FreeBeam
+
+FreeBeam is the most attractive remaining block — **23 seeds, transitive
+`Experimental` closure of exactly 23, zero admissions**, so it has no cascade at
+all and only two consumers outside itself (`HiddenFoundations.All`,
+`MathAhead.Section9All`). Its obstacles are bookkeeping, not mathematics:
+
+* **Nothing in `comparator/*.json` mentions FreeBeam, Scratch or
+  HiddenFoundations** — checked. So the rename is *gated*, not *forbidden*; the
+  immutable-conformance rule does not bite.
+* **`dev/davis-kahan-hidden-foundations.json` does** — 167 mentions of
+  `HiddenFoundations` and 33 of `FreeBeam`, validated by
+  `scripts/check_davis_kahan_hidden_foundations.py`. A namespace rename must
+  update it in the same commit or that gate goes red.
+* The three frontier nodes matching "FreeBeam" (`s9-semantic-model`,
+  `s9-represents-free-beam`, `s9-canonical-model`) live in
+  `Frontier.Section9`, a **different** namespace, and are not affected.
+
+**Not claimed.** Recorded so the next taker sizes it as a rename campaign with a
+JSON to keep in step, rather than discovering that after moving 23 files.
