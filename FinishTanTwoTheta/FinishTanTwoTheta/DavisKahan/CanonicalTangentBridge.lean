@@ -173,8 +173,6 @@ private theorem ambient_doubleAngleTangent_eq_extendCoordinate
   have hDinvblock : Ring.inverse D =
       U.subtypeL ∘L Ring.inverse DX ∘L U.subtypeL.adjoint +
         Uᗮ.starProjection := by
-    apply (ContinuousLinearMap.isUnit_iff_bijective.mp hDunit).1
-    have hmul := Ring.mul_inverse_cancel D hDunit
     have hcandidate :
         D ∘L (U.subtypeL ∘L Ring.inverse DX ∘L U.subtypeL.adjoint +
           Uᗮ.starProjection) = ContinuousLinearMap.id ℂ E := by
@@ -202,9 +200,23 @@ private theorem ambient_doubleAngleTangent_eq_extendCoordinate
         U.isIdempotentElem_starProjection_orthogonal.eq]
       ext x
       simp
-    have hcand := congrArg (fun T : E →L[ℂ] E => T) hcandidate
-    rw [← hmul] at hcand
-    exact hcand
+    -- From `D B = 1` and `D⁻¹ D = 1`, cancel `D` on the left.  The old script
+    -- applied *injectivity* of `D` (`isUnit_iff_bijective.mp hDunit |>.1`) to an
+    -- *equation*, and that conclusion shape cannot match the goal.
+    calc Ring.inverse D
+        = Ring.inverse D * 1 := (mul_one _).symm
+      _ = Ring.inverse D *
+            (D * (U.subtypeL ∘L Ring.inverse DX ∘L U.subtypeL.adjoint +
+              Uᗮ.starProjection)) := by
+          rw [show D * (U.subtypeL ∘L Ring.inverse DX ∘L U.subtypeL.adjoint +
+            Uᗮ.starProjection) = 1 from hcandidate]
+      _ = (Ring.inverse D * D) *
+            (U.subtypeL ∘L Ring.inverse DX ∘L U.subtypeL.adjoint +
+              Uᗮ.starProjection) := (mul_assoc _ _ _).symm
+      _ = 1 * (U.subtypeL ∘L Ring.inverse DX ∘L U.subtypeL.adjoint +
+              Uᗮ.starProjection) := by
+          rw [Ring.inverse_mul_cancel D hDunit]
+      _ = _ := one_mul _
   unfold doubleAngleTangentOperator
   -- NOTE on ordering, both directions are wrong and this is the lesser evil:
   --   `rw [hYext, hDinvblock]` (this order) leaves `Ring.inverse D` unmatched,
