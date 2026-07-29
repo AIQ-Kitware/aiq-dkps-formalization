@@ -447,34 +447,26 @@ private theorem spectralCutoff_lower_bound
 /-! ## The real threshold theorem -/
 
 omit [CompleteSpace E] [CompleteSpace F] in
-/-- Restriction to a real subspace cannot increase an approximation number. -/
+/-- Restriction to a real subspace cannot increase an approximation number.
+
+The staged statement is already field-generic; this is it at `ℝ`. -/
 theorem approximationNumber_comp_subtypeL_le_real
     (T : E →L[ℝ] F) (n : ℕ) (V : Submodule ℝ E) :
-    (T ∘L V.subtypeL).approximationNumber n ≤ T.approximationNumber n := by
-  have h := T.approximationNumber_comp_le_mul_norm V.subtypeL n
-  have hsub : ‖V.subtypeL‖ ≤ (1 : ℝ) := V.norm_subtypeL_le
-  calc
-    (T ∘L V.subtypeL).approximationNumber n
-        ≤ T.approximationNumber n * ‖V.subtypeL‖ := h
-    _ ≤ T.approximationNumber n * 1 :=
-      mul_le_mul_of_nonneg_left hsub (T.approximationNumber_nonneg n)
-    _ = T.approximationNumber n := by rw [mul_one]
+    (T ∘L V.subtypeL).approximationNumber n ≤ T.approximationNumber n :=
+  T.approximationNumber_comp_subtypeL_le n V
 
 /-- Approximation numbers of restrictions to real spans of `n+1` vectors. -/
 def finiteRestrictionApproximationNumbersReal
     (T : E →L[ℝ] F) (n : ℕ) : Set ℝ :=
-  Set.range fun v : Fin (n + 1) → E =>
-    (T ∘L (Submodule.span ℝ (Set.range v)).subtypeL).approximationNumber n
+  T.finiteRestrictionApproximationNumbers n
 
 omit [CompleteSpace E] [CompleteSpace F] in
 /-- The ambient real approximation number bounds all finite restrictions. -/
 theorem finiteRestrictionApproximationNumbersReal_upperBound
     (T : E →L[ℝ] F) (n : ℕ) :
     T.approximationNumber n ∈
-      upperBounds (finiteRestrictionApproximationNumbersReal T n) := by
-  rintro _ ⟨v, rfl⟩
-  exact approximationNumber_comp_subtypeL_le_real T n
-    (Submodule.span ℝ (Set.range v))
+      upperBounds (finiteRestrictionApproximationNumbersReal T n) :=
+  T.finiteRestrictionApproximationNumbers_upperBound n
 
 /-- Real spectral-threshold form of infinite-dimensional Courant--Fischer.
 Every strict nonnegative lower bound for `a_n(T)` is improved to a uniform
@@ -744,34 +736,22 @@ theorem exists_linearIndependent_lowerBound_of_lt_approximationNumber_real
   rw [← hy]
   exact hPLower y
 
+/-- Over `ℝ` the min--max lower-bound property is the real threshold theorem above, which
+is where the complexification is paid for.  Everything the localization theory needs from the
+scalar field is this one fact — see `ContinuousLinearMap.HasMinMaxLowerBound`. -/
+theorem hasMinMaxLowerBound_real :
+    ContinuousLinearMap.HasMinMaxLowerBound ℝ E F :=
+  fun T n _ hr0 hr =>
+    exists_linearIndependent_lowerBound_of_lt_approximationNumber_real T n hr0 hr
+
 /-- Every strict real lower threshold for the ambient approximation number is
 exceeded by an approximation number of an `(n+1)`-generated real restriction. -/
 theorem exists_finiteRestrictionApproximationNumber_gt_of_lt_real
     (T : E →L[ℝ] F) (n : ℕ) {r : ℝ} (hr0 : 0 ≤ r)
     (hr : r < T.approximationNumber n) :
     ∃ v : Fin (n + 1) → E,
-      r < (T ∘L (Submodule.span ℝ (Set.range v)).subtypeL).approximationNumber n := by
-  obtain ⟨s, hrs, v, hv, hV⟩ :=
-    exists_linearIndependent_lowerBound_of_lt_approximationNumber_real T n hr0 hr
-  have hs0 : 0 ≤ s := hr0.trans hrs.le
-  let V : Submodule ℝ E := Submodule.span ℝ (Set.range v)
-  let b : Module.Basis (Fin (n + 1)) ℝ V := Module.Basis.span hv
-  let w : Fin (n + 1) → V := fun i => b i
-  have hw : LinearIndependent ℝ w := by
-    simpa only [w] using b.linearIndependent
-  have hsNN : s ≤ (T ∘L V.subtypeL).approximationNumber n := by
-    apply ContinuousLinearMap.le_approximationNumber_of_linearIndependent
-      (T ∘L V.subtypeL) n w hw
-    intro x _ hxNorm
-    have hxV : ((x : V) : E) ∈ V := x.property
-    have hxNormE : ‖((x : V) : E)‖ = 1 := by
-      simpa using hxNorm
-    change s ≤ ‖T ((x : V) : E)‖
-    calc
-      s = s * ‖((x : V) : E)‖ := by rw [hxNormE, mul_one]
-      _ ≤ ‖T ((x : V) : E)‖ := hV ((x : V) : E) hxV
-  refine ⟨v, ?_⟩
-  simpa only [V] using hrs.trans_le hsNN
+      r < (T ∘L (Submodule.span ℝ (Set.range v)).subtypeL).approximationNumber n :=
+  hasMinMaxLowerBound_real.exists_finiteRestrictionApproximationNumber_gt_of_lt T n hr0 hr
 
 /-- Exact real finite-dimensional localization: the ambient approximation
 number is the least upper bound of the approximation numbers of restrictions
@@ -779,21 +759,8 @@ to spans of `n+1` real vectors. -/
 theorem approximationNumber_isLUB_finiteRestrictions_real
     (T : E →L[ℝ] F) (n : ℕ) :
     IsLUB (finiteRestrictionApproximationNumbersReal T n)
-      (T.approximationNumber n) := by
-  refine ⟨finiteRestrictionApproximationNumbersReal_upperBound T n, ?_⟩
-  intro b hb
-  -- Every upper bound of a nonempty family of nonnegative reals is nonnegative.
-  have hb0 : 0 ≤ b :=
-    (ContinuousLinearMap.approximationNumber_nonneg _ n).trans
-      (hb ⟨fun _ => 0, rfl⟩)
-  by_contra hnot
-  have hlt : b < T.approximationNumber n := lt_of_not_ge hnot
-  obtain ⟨v, hv⟩ :=
-    exists_finiteRestrictionApproximationNumber_gt_of_lt_real T n hb0 hlt
-  have hle := hb (show
-    (T ∘L (Submodule.span ℝ (Set.range v)).subtypeL).approximationNumber n ∈
-      finiteRestrictionApproximationNumbersReal T n from ⟨v, rfl⟩)
-  exact (not_le_of_gt hv) hle
+      (T.approximationNumber n) :=
+  hasMinMaxLowerBound_real.approximationNumber_isLUB_finiteRestrictions T n
 
 /-- Epsilon-form real generalized Courant--Fischer characterization. -/
 theorem lt_approximationNumber_iff_exists_finiteDimensional_lowerBound_real
@@ -802,21 +769,9 @@ theorem lt_approximationNumber_iff_exists_finiteDimensional_lowerBound_real
       ∃ s : ℝ, r < s ∧
         ∃ v : Fin (n + 1) → E, LinearIndependent ℝ v ∧
           ∀ x ∈ Submodule.span ℝ (Set.range v),
-            s * ‖x‖ ≤ ‖T x‖ := by
-  constructor
-  · exact exists_linearIndependent_lowerBound_of_lt_approximationNumber_real
-      T n hr0
-  · rintro ⟨s, hrs, v, hv, hV⟩
-    have hs0 : 0 ≤ s := hr0.trans hrs.le
-    have hsNN : s ≤ T.approximationNumber n := by
-      apply ContinuousLinearMap.le_approximationNumber_of_linearIndependent
-        T n v hv
-      intro x hxV hxNorm
-      change s ≤ ‖T x‖
-      calc
-        s = s * ‖x‖ := by rw [hxNorm, mul_one]
-        _ ≤ ‖T x‖ := hV x hxV
-    exact hrs.trans_le hsNN
+            s * ‖x‖ ≤ ‖T x‖ :=
+  hasMinMaxLowerBound_real.lt_approximationNumber_iff_exists_finiteDimensional_lowerBound
+    T n hr0
 
 end
 

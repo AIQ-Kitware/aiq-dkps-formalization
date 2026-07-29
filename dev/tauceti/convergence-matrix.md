@@ -348,6 +348,25 @@ transitive closure. These form distinct donor clusters, handled separately.
 
 ## Seed matrix (to be filled to the declaration level)
 
+> **The Spectra half of this is now filled** — see
+> [`spectra-to-tauceti-port-ledger.md`](spectra-to-tauceti-port-ledger.md) and its
+> machine-readable companion [`spectra-port-surface.json`](spectra-port-surface.json)
+> (2026-07-28). Measured from the compiled environment rather than from import
+> lines: the production surface is **61 Spectra constants** across **27 donor
+> modules**, consumed by **178 declarations in 42 `DavisKahan` modules** — not the
+> "≈59 direct Spectra import lines" over a 152-module closure that Wave 5 sizes
+> it by. `ForTauCeti` and `ForMathlib` are already entirely Spectra-free. The
+> ledger also adds **Cluster F** (Cayley / Stone / one-parameter groups), which
+> Wave 5 folded into Wave 3 but which has its own DKPS consumer surface, and
+> **Cluster X**, the 14 DKPS-authored theorems currently declared into
+> `namespace Spectra.*` — a provenance defect, not donor material.
+>
+> Wave 5's *execution* now lives in
+> [`spectra-removal-plan.md`](spectra-removal-plan.md) (phases S0–S6, claimed).
+> One correction to Wave 5's implied ordering: **Cluster F has no single-cluster
+> consumers**, so it cannot be closed independently of B — B and F converge last,
+> and the size-ordered intuition is wrong.
+
 Concrete rows we already know; expand each into the full schema during phase 0.
 
 | Local declaration | Tau Ceti counterpart | Spectra counterpart | Class | Canonical destination | Roadmap |

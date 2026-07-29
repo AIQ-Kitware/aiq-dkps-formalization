@@ -1,39 +1,28 @@
 #!/usr/bin/env python3
-"""Remove the staged local Spectra path dependency from lakefile.toml."""
+"""RETIRED 2026-07-28 — refuses to run.  See dev/tauceti/spectra-removal-plan.md.
 
-from __future__ import annotations
+This script targeted the marker ``# BEGIN local Spectra development dependency``
+and a Lake requirement of ``path = "external/Spectra"``.  Neither exists any
+more: the build takes Spectra from the vendored snapshot
+(``# BEGIN vendored upstream Spectra snapshot``, ``path = "vendor/Spectra"``) and
+``external/Spectra`` is a read-only provenance reference that is deliberately
+*not* a build input (``vendor/Spectra.UPSTREAM.md``).
 
-import argparse
-import re
-from pathlib import Path
+It was not merely inert.  It **exited 0 while changing nothing** — so a
+"disable Spectra and confirm the build still works" check passed without ever
+disabling anything.  For a campaign whose whole purpose is removing this
+dependency, a verification step that silently succeeds is the worst available
+failure mode, which is why this is now a hard error rather than a repair.
 
-BEGIN = "# BEGIN local Spectra development dependency"
-END = "# END local Spectra development dependency"
+To measure removal progress, use the real instruments:
 
+    lake env lean --run scripts/ExportSpectraUsage.lean | wc -l   # target 0
+    python3 scripts/check_spectra_namespace.py
+    python3 scripts/check_spectra_vendor_authorship.py
 
-def find_repo_root(start: Path) -> Path:
-    for candidate in (start, *start.parents):
-        if (candidate / "lakefile.toml").exists():
-            return candidate
-    raise SystemExit("could not locate lakefile.toml")
+The dependency block is removed by hand in phase S6, once that count is zero.
+"""
 
+import sys
 
-def main() -> int:
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--repo", type=Path, default=Path.cwd())
-    args = parser.parse_args()
-    root = find_repo_root(args.repo.resolve())
-    path = root / "lakefile.toml"
-    text = path.read_text()
-    pattern = rf"\n?{re.escape(BEGIN)}.*?{re.escape(END)}\n?"
-    new = re.sub(pattern, "\n", text, flags=re.DOTALL)
-    if new == text:
-        print("Spectra Lake dependency was not enabled")
-        return 0
-    path.write_text(new)
-    print("disabled local Spectra path dependency in lakefile.toml")
-    return 0
-
-
-if __name__ == "__main__":
-    raise SystemExit(main())
+sys.exit(__doc__)

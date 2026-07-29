@@ -153,46 +153,5 @@ theorem exists_strongRiccatiPMap_solution_of_ambientAngularGraph
   exact (ContractiveReducingGraphSelectionPMap.ofAmbientAngularGraph
     H Y hY hdom hnorm hred).exists_strongRiccati_solution
 
-/-- Build the continuation-to-Riccati handoff from an ambient angular graph.
-The remaining assumptions are precisely the unbounded domain and reduction
-facts; no additional graph-identification proof is required. -/
-noncomputable def ContractiveReducingGraphSelection.ofAmbientAngularGraph
-    (H : UnboundedBlockData (𝕜 := ℂ) (E0 := E0) (E1 := E1))
-    (Y : DirectSum E0 E1 →L[ℂ] DirectSum E0 E1)
-    (hY : IsAngularOperator
-      (unboundedBlockGraph (0 : E0 →L[ℂ] E1)) Y)
-    (hdom : PreservesRiccatiDomains H (rectangularAngularPart Y))
-    (hnorm : ‖rectangularAngularPart Y‖ < 1)
-    (hred : (unboundedBlockOperatorCore H).ReducesSubspace
-      (graphSubspace (unboundedBlockGraph (0 : E0 →L[ℂ] E1)) Y)) :
-    ContractiveReducingGraphSelection H where
-  X := rectangularAngularPart Y
-  preservesDomains := hdom
-  norm_lt_one := hnorm
-  reduces := by
-    change TauCeti.LinearPMap.ReducesSubspace
-      (unboundedBlockOperatorCorePMap H)
-      (graphSubspace (unboundedBlockGraph (0 : E0 →L[ℂ] E1)) Y) at hred
-    simpa only [graphSubspace_eq_unboundedBlockGraph_rectangularAngularPart Y hY]
-      using hred
-
-/-- Existential strong-solution conclusion from an ambient selected graph and
-its genuinely unbounded compatibility properties. -/
-theorem exists_strongRiccati_solution_of_ambientAngularGraph
-    (H : UnboundedBlockData (𝕜 := ℂ) (E0 := E0) (E1 := E1))
-    (Y : DirectSum E0 E1 →L[ℂ] DirectSum E0 E1)
-    (hY : IsAngularOperator
-      (unboundedBlockGraph (0 : E0 →L[ℂ] E1)) Y)
-    (hdom : PreservesRiccatiDomains H (rectangularAngularPart Y))
-    (hnorm : ‖rectangularAngularPart Y‖ < 1)
-    (hred : (unboundedBlockOperatorCore H).ReducesSubspace
-      (graphSubspace (unboundedBlockGraph (0 : E0 →L[ℂ] E1)) Y)) :
-    ∃ X : E0 →L[ℂ] E1,
-      StrongSolvesRiccati H X ∧ ‖X‖ < 1 ∧
-      (unboundedBlockOperatorCore H).ReducesSubspace
-        (unboundedBlockGraph X) := by
-  exact (ContractiveReducingGraphSelection.ofAmbientAngularGraph
-    H Y hY hdom hnorm hred).exists_strongRiccati_solution
-
 end DavisKahanExt
 end TauCeti

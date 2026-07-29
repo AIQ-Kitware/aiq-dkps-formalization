@@ -5,7 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.SpectralTheory.Complexification.Subspace
 import DavisKahan.Sylvester.Gap
-import Spectra.Resolvent.Spectrum
+import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
 
 /-!
 # Complexification of real closed operators
@@ -680,7 +680,9 @@ theorem closed_realSpectrum_complexify
 of its complexification. -/
 theorem realSpectrum_complexify
     (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E)) :
-    A.realSpectrum = Spectra.Resolvent.spectrum (complexify A).toLinearPMap := by
+    A.realSpectrum
+      = Complex.ofReal ⁻¹'
+          TauCeti.LinearPMap.spectrum (complexify A).toLinearPMap := by
   rw [← closed_realSpectrum_complexify A]
   ext lam
   rfl

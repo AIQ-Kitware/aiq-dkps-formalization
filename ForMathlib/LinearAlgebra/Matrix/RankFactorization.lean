@@ -41,19 +41,25 @@ to be re-authored per Mathlib's AI-contribution policy at PR time.
 
 ## Known linter warnings, and why they stay
 
-Mathlib's `unusedSectionVars` linter flags `[DecidableEq n]` on the three theorems below:
-it is in their type and never used, and the linter's advice is to drop it and call
+Mathlib's `linter.unusedDecidableInType` flags `[DecidableEq n]` on the three theorems
+below: it is in their type and never used, and the linter's advice is to drop it and call
 `classical` in the proof.  That advice is right for Mathlib and wrong for us, because the
 same three signatures are pinned as **data**: `Challenge/MathlibPending/RankFactorization/`
 restates them in an immutable `Conformance.lean` — with the identical
 `variable {𝕜 m n : Type*} [Field 𝕜] [Fintype n] [DecidableEq n]` line — and
 `Leaderboard.lean` names `ForMathlib.Matrix.rank_le_iff_exists_eq_mul` in `#print axioms`.
-Dropping the instance here would change the signature and desynchronise the two.
+Dropping the instance here would change the signature and desynchronise the two, and
+`AGENTS.md` makes a `Conformance.lean` statement immutable, so it cannot move to meet us.
 
-So the fix belongs to whoever owns the challenge, not to this file: the conformance
+The disagreement is therefore real and is not this file's to settle: the conformance
 statement and the eventual Mathlib statement cannot both be right, and the Mathlib one is
-the one without `[DecidableEq n]`.  Until that is settled, `lean_lib ForMathlib` cannot
-carry `warningAsError`.
+the one without `[DecidableEq n]`.  What this file *can* do is stop the disagreement from
+costing the whole library its gate.  Each of the three carries a
+`set_option linter.unusedDecidableInType false in` naming this note, so the exception is
+exactly three declarations wide and visible at the point it applies — and
+`lean_lib ForMathlib` can then carry `warningAsError`, which it now does.  Before that,
+three known warnings kept the gate off and so let *every* new warning through as well; six
+had accumulated unnoticed in the modules the target was not even building.
 
 ## Provenance
 
@@ -77,6 +83,8 @@ open _root_.Matrix
 
 variable {𝕜 m n : Type*} [Field 𝕜] [Fintype n] [DecidableEq n]
 
+-- `[DecidableEq n]` is pinned by an immutable Challenge statement; see the module note.
+set_option linter.unusedDecidableInType false in
 /--
 **Rank factorization (exact).** Every matrix factors as `M = L * R` with inner
 dimension `Fin M.rank`: `L` lists a basis of the column space of `M` and `R` the
@@ -105,6 +113,8 @@ theorem exists_eq_mul_rank (M : Matrix m n 𝕜) :
   rw [Finset.sum_congr rfl fun k _ => mul_comm ((b k : m → 𝕜) i) (b.repr ⟨_, hcol j⟩ k)]
   exact this.symm
 
+-- `[DecidableEq n]` is pinned by an immutable Challenge statement; see the module note.
+set_option linter.unusedDecidableInType false in
 /--
 **Rank factorization (padded).** A matrix `M` with `M.rank ≤ r` factors as
 `M = L * R` with `L : Matrix m (Fin r) 𝕜` and `R : Matrix (Fin r) n 𝕜`
@@ -138,6 +148,8 @@ theorem exists_eq_mul_of_rank_le (M : Matrix m n 𝕜) {r : ℕ} (h : M.rank ≤
       fun k _ hk => dif_neg (by simpa using hk)).symm
   rw [Matrix.mul_apply, hsum, ← Matrix.mul_apply, ← hM]
 
+-- `[DecidableEq n]` is pinned by an immutable Challenge statement; see the module note.
+set_option linter.unusedDecidableInType false in
 /--
 **Rank-`r` factorization characterization.** A matrix has rank at most `r` if
 and only if it factors through `Fin r`: `M.rank ≤ r ↔ ∃ L R, M = L * R`.
