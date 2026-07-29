@@ -5,6 +5,7 @@ Authors: Jon Crall
 -/
 import Mathlib.Analysis.InnerProductSpace.Adjoint
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
+import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SelfAdjointResolvent
 
 /-!
 # Intertwiners of spectrally separated operators
@@ -73,6 +74,42 @@ theorem resolvent_intertwines
   have := hRA ⟨X (RB φ), hmaps ⟨RB φ, hmem⟩⟩
   rw [hXpush] at this
   simpa using this.symm
+
+/-- `resolvent`-specialised form of `resolvent_intertwines`. -/
+theorem resolvent_intertwines' {A : E →ₗ.[𝕜] E} {B : F →ₗ.[𝕜] F}
+    {X : F →L[𝕜] E} {z : 𝕜}
+    (hzA : z ∈ resolventSet A) (hzB : z ∈ resolventSet B)
+    (hmaps : ∀ y : B.domain, X (y : F) ∈ A.domain)
+    (hint : ∀ y : B.domain, A ⟨X (y : F), hmaps y⟩ = X (B y)) :
+    X ∘L resolvent B hzB = resolvent A hzA ∘L X :=
+  resolvent_intertwines (fun ψ => resolvent_apply_sub_smul hzA ψ)
+    (fun φ => ⟨resolvent_mem_domain hzB φ, sub_smul_resolvent hzB φ⟩) hmaps hint
+
+section Complex
+
+variable {E F : Type*}
+  [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
+  [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
+
+/-- **An intertwiner intertwines the Cayley transforms.**
+
+Immediate from `resolvent_intertwines'` at `z = -i`, since
+`cayley hA = 1 - 2i • R_A(-i)`.  This is the step that carries the intertwining
+into the bounded world, where the Borel calculus lives. -/
+theorem cayley_intertwines {A : E →ₗ.[ℂ] E} {B : F →ₗ.[ℂ] F}
+    (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B) {X : F →L[ℂ] E}
+    (hmaps : ∀ y : B.domain, X (y : F) ∈ A.domain)
+    (hint : ∀ y : B.domain, A ⟨X (y : F), hmaps y⟩ = X (B y)) :
+    X ∘L cayley hB = cayley hA ∘L X := by
+  have hres := resolvent_intertwines' (A := A) (B := B) (X := X)
+    (negI_mem_resolventSet hA) (negI_mem_resolventSet hB) hmaps hint
+  refine ContinuousLinearMap.ext fun φ => ?_
+  have hr := congrArg (fun T : F →L[ℂ] E => T φ) hres
+  simp only [ContinuousLinearMap.coe_comp, Function.comp_apply] at hr
+  simp only [cayley, ContinuousLinearMap.coe_comp, Function.comp_apply,
+    sub_apply, one_apply_eq_self, smul_apply, map_sub, map_smul, hr]
+
+end Complex
 
 end LinearPMap
 end TauCeti
