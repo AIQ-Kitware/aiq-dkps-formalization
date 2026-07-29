@@ -371,6 +371,86 @@ theorem norm_riccatiGram_pow_commutator_le
       rw [hcast]
       linarith [h1, h2]
 
+include hdom hadj in
+/-- A polynomial in the Gram operator preserves the first diagonal domain. -/
+theorem riccatiGram_poly_mem_domain (a : ℕ → 𝕜) (N : ℕ) (x : H.A0.domain) :
+    (∑ n ∈ Finset.range N, a n • ((riccatiGram X) ^ n)) (x : E0) ∈
+      H.A0.domain := by
+  simp only [ContinuousLinearMap.coe_sum', Finset.sum_apply,
+    ContinuousLinearMap.coe_smul', Pi.smul_apply]
+  exact Submodule.sum_mem _ fun n _ =>
+    Submodule.smul_mem _ _ (riccatiGram_pow_mem_domain H hdom hadj n x)
+
+include hdom hadj in
+/-- **Polynomial Riccati commutator bound.**
+
+The per-power bound summed over a polynomial.  Together with
+`mem_domain_of_tendsto` this is everything needed for entire functions of the
+Gram operator: apply it to the partial sums of a power series, note the right
+side is Cauchy exactly when `Σ n‖aₙ‖` converges, and close the limit. -/
+theorem norm_riccatiGram_poly_commutator_le
+    (hcontr : ‖riccatiGram X‖ ≤ 1)
+    (hinv : TauCeti.LinearPMap.InvariantSubspace (unboundedBlockOperatorCore H)
+      (unboundedBlockGraph X)ᗮ)
+    (hric : ∀ x : H.A0.domain,
+      H.A1 ⟨X (x : E0), hdom x⟩ + H.B10 (x : E0) =
+        X (H.A0 x + H.B01 (X (x : E0))))
+    (a : ℕ → 𝕜) (N : ℕ) (x : H.A0.domain) :
+    ‖H.A0 ⟨(∑ n ∈ Finset.range N, a n • ((riccatiGram X) ^ n)) (x : E0),
+          riccatiGram_poly_mem_domain H hdom hadj a N x⟩ -
+        (∑ n ∈ Finset.range N, a n • ((riccatiGram X) ^ n)) (H.A0 x)‖ ≤
+      (∑ n ∈ Finset.range N, ‖a n‖ * n) *
+        ‖riccatiGramCommutator H X‖ * ‖(x : E0)‖ := by
+  induction N with
+  | zero =>
+      have h0 : (⟨(∑ n ∈ Finset.range 0, a n • ((riccatiGram X) ^ n)) (x : E0),
+          riccatiGram_poly_mem_domain H hdom hadj a 0 x⟩ : H.A0.domain) = 0 := by
+        apply Subtype.ext; simp
+      rw [h0]
+      simp
+  | succ N ih =>
+      have hmemN := riccatiGram_poly_mem_domain H hdom hadj a N x
+      have hmemP := riccatiGram_pow_mem_domain H hdom hadj N x
+      have hsplit : (⟨(∑ n ∈ Finset.range (N + 1),
+              a n • ((riccatiGram X) ^ n)) (x : E0),
+            riccatiGram_poly_mem_domain H hdom hadj a (N + 1) x⟩ :
+              H.A0.domain) =
+          (⟨(∑ n ∈ Finset.range N, a n • ((riccatiGram X) ^ n)) (x : E0),
+            hmemN⟩ : H.A0.domain) +
+            a N • (⟨((riccatiGram X) ^ N) (x : E0), hmemP⟩ : H.A0.domain) := by
+        apply Subtype.ext
+        simp [Finset.sum_range_succ]
+      rw [hsplit, LinearPMap.map_add, LinearPMap.map_smul]
+      have hexp : (∑ n ∈ Finset.range (N + 1),
+            a n • ((riccatiGram X) ^ n)) (H.A0 x) =
+          (∑ n ∈ Finset.range N, a n • ((riccatiGram X) ^ n)) (H.A0 x) +
+            a N • (((riccatiGram X) ^ N) (H.A0 x)) := by
+        simp [Finset.sum_range_succ]
+      rw [hexp]
+      have hrw : ∀ p q r s : E0, p + a N • q - (r + a N • s) =
+          (p - r) + a N • (q - s) := by
+        intro p q r s
+        rw [smul_sub]
+        abel
+      rw [hrw]
+      refine (norm_add_le _ _).trans ?_
+      have h2 : ‖a N • (H.A0 ⟨((riccatiGram X) ^ N) (x : E0), hmemP⟩ -
+            ((riccatiGram X) ^ N) (H.A0 x))‖ ≤
+          ‖a N‖ * (N * ‖riccatiGramCommutator H X‖ * ‖(x : E0)‖) := by
+        rw [norm_smul]
+        exact mul_le_mul_of_nonneg_left
+          (norm_riccatiGram_pow_commutator_le H hdom hadj hcontr hinv hric N x)
+          (norm_nonneg _)
+      have hcast : (∑ n ∈ Finset.range (N + 1), ‖a n‖ * (n : ℝ)) *
+            ‖riccatiGramCommutator H X‖ * ‖(x : E0)‖ =
+          (∑ n ∈ Finset.range N, ‖a n‖ * (n : ℝ)) *
+              ‖riccatiGramCommutator H X‖ * ‖(x : E0)‖ +
+            ‖a N‖ * ((N : ℝ) * ‖riccatiGramCommutator H X‖ * ‖(x : E0)‖) := by
+        rw [Finset.sum_range_succ]
+        ring
+      rw [hcast]
+      linarith [ih, h2]
+
 end Powers
 
 /-- The Riccati commutator is bounded by the off-diagonal coupling alone: no
