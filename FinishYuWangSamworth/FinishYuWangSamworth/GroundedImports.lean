@@ -8,6 +8,7 @@ import DavisKahan.Specialized.Statistics
 import DavisKahan.Specialized.SingularSubspace
 import ForTauCeti.Analysis.InnerProductSpace.AlignedBasis
 import ForTauCeti.Analysis.InnerProductSpace.SingularSubspace
+import ForTauCeti.Analysis.InnerProductSpace.TwoDimensionalSingularValues
 
 /-!
 # Grounded imports for the Yu--Wang--Samworth completion lane
