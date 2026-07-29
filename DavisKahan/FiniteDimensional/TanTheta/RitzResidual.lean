@@ -5,8 +5,8 @@ Authors: Jon Crall, GPT 5.6 High
 -/
 import ForTauCeti.Analysis.InnerProductSpace.SpectralSubspace
 import ForTauCeti.Analysis.InnerProductSpace.AngleGeometry
-import DavisKahan.FiniteDimensional.Residual.Ritz
-import DavisKahan.FiniteDimensional.Residual.AngleEmbedding
+import ForTauCeti.Analysis.InnerProductSpace.Residual.Ritz
+import ForTauCeti.Analysis.InnerProductSpace.Residual.AngleEmbedding
 import ForTauCeti.Analysis.InnerProductSpace.SingularSystem
 import ForTauCeti.Analysis.InnerProductSpace.SingularSubspace
 

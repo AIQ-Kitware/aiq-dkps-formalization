@@ -3,10 +3,10 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
-import DavisKahan.Specialized.Statistics
+import ForTauCeti.Analysis.InnerProductSpace.YuWangSamworth.Statistics
 import ForTauCeti.Analysis.InnerProductSpace.SingularSubspace
 import ForTauCeti.Analysis.InnerProductSpace.GramOperator
-import DavisKahan.Sources.YuWangSamworth2015
+import ForTauCeti.Analysis.InnerProductSpace.YuWangSamworth.Residual
 
 /-!
 # Singular-subspace Davis--Kahan and Wedin-style corollaries
@@ -25,6 +25,19 @@ are spectral subspaces of `AA⋆`, and the Hermitian dilation packages both at
 once.  `ForMathlib.Analysis.InnerProductSpace.SingularSubspace` contains much
 of the scalar and Frobenius infrastructure; this file records the final
 canonical subspace API.
+
+## Provenance
+
+*Moved, not restated.*  This file was `DavisKahan/Specialized/SingularSubspace.lean`
+until 2026-07-29, when lane Y3(c) moved the last three `DavisKahan` modules of
+the Yu--Wang--Samworth payload into the staging layer, finishing Y3.  Statements,
+proofs, signatures and namespaces are unchanged; the declarations already lived
+in `TauCeti.*`.
+
+Y3(b2)/(b3)/(b4) are what made it possible: they took the sin-Θ perturbation
+closure this file rests on out of `ForMathlib` and `DavisKahan` entirely, so the
+last edge to sever was this one.
+
 -/
 
 namespace TauCeti

@@ -6,7 +6,7 @@ Authors: Jon Crall, GPT 5.6 High
 import DavisKahan.Sources.Davis1963.RotationEnergy
 import ForTauCeti.Analysis.InnerProductSpace.AngleGeometry
 import ForTauCeti.Analysis.InnerProductSpace.SpectralGap
-import DavisKahan.FiniteDimensional.SinTheta.UnitarilyInvariant
+import ForTauCeti.Analysis.InnerProductSpace.SinTheta.UnitarilyInvariant
 import DavisKahan.FiniteDimensional.Core.AngleOperators
 import ForTauCeti.Analysis.InnerProductSpace.TwoDimensionalSingularValues
 import ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm
