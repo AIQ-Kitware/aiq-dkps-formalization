@@ -434,24 +434,9 @@ theorem selfAdjointSpectralIcc_mem_domain
     {x : H}
     (hx : x ∈ selfAdjointSpectralSubspace A hA (Set.Icc α β)
       measurableSet_Icc) :
-    x ∈ A.domain := by
-  let U := genToGroup hA
-  have hgen : generator U = A.toLinearPMap := generator_genToGroup hA
-  have hdom : (generator U).domain = A.domain :=
-    congrArg LinearPMap.domain hgen
-  have habs : ∀ s ∈ Set.Icc α β, |s| ≤ max |α| |β| := by
-    intro s hs
-    exact abs_le_max_of_mem_Icc hs
-  have hfix : spectralProjection U (Set.Icc α β) measurableSet_Icc x = x := by
-    change selfAdjointSpectralProjection A hA (Set.Icc α β)
-      measurableSet_Icc x = x
-    rw [selfAdjointSpectralProjection_eq_starProjection]
-    exact Submodule.starProjection_eq_self_iff.mpr hx
-  have hxU : spectralProjection U (Set.Icc α β) measurableSet_Icc x ∈
-      (generator U).domain :=
-    spectralProjection_mem_generatorDomain U measurableSet_Icc habs x
-  rw [hfix] at hxU
-  exact (le_of_eq hdom) hxU
+    x ∈ A.domain :=
+  TauCeti.LinearPMap.mem_domain_of_mem_specRange_of_bounded hA _ measurableSet_Icc
+    (M := max |α| |β|) (fun _ hs => abs_le_max_of_mem_Icc hs) hx
 
 /-- The canonical interval spectral range satisfies the sharp centered norm
 bound required by the unbounded tangent theorem. -/
@@ -464,57 +449,14 @@ theorem selfAdjointSpectralIcc_centered_norm_le
     ‖A.toLinearMap
           ⟨x, selfAdjointSpectralIcc_mem_domain A hA hαβ hx⟩ -
         (((α + β) / 2 : ℝ) : ℂ) • x‖ ≤
-      (β - α) / 2 * ‖x‖ := by
-  let U := genToGroup hA
-  have hgen : generator U = A.toLinearPMap := generator_genToGroup hA
-  have habs : ∀ s ∈ Set.Icc α β, |s| ≤ max |α| |β| := by
-    intro s hs
-    exact abs_le_max_of_mem_Icc hs
-  have hfix : spectralProjection U (Set.Icc α β) measurableSet_Icc x = x := by
-    change selfAdjointSpectralProjection A hA (Set.Icc α β)
-      measurableSet_Icc x = x
-    rw [selfAdjointSpectralProjection_eq_starProjection]
-    exact Submodule.starProjection_eq_self_iff.mpr hx
-  have hprojDom : spectralProjection U (Set.Icc α β) measurableSet_Icc x ∈
-      (generator U).domain :=
-    spectralProjection_mem_generatorDomain U measurableSet_Icc habs x
-  have hxU : x ∈ (generator U).domain := by
-    rw [hfix] at hprojDom
-    exact hprojDom
-  have hbound := generator_sub_smul_norm_le_Icc U α β ((α + β) / 2)
-    (by linarith) (by linarith) x hprojDom
-  have hsub :
-      (⟨spectralProjection U (Set.Icc α β) measurableSet_Icc x, hprojDom⟩ :
-        (generator U).domain) = ⟨x, hxU⟩ :=
-    Subtype.ext hfix
-  have hmax : max ((α + β) / 2 - α) (β - (α + β) / 2) =
-      (β - α) / 2 := by
-    rw [show (α + β) / 2 - α = (β - α) / 2 by ring,
-      show β - (α + β) / 2 = (β - α) / 2 by ring, max_self]
-  rw [hsub, hfix, hmax] at hbound
-  have happly := (LinearPMap.ext_iff.mp hgen).2
-  have htransport :
-      generator U ⟨x, hxU⟩ =
-        A.toLinearPMap
-          ⟨x, selfAdjointSpectralIcc_mem_domain A hA hαβ hx⟩ :=
-    happly
-      (x := x)
-      (hf := hxU)
-      (hg := selfAdjointSpectralIcc_mem_domain A hA hαβ hx)
-  have hsmul : ((((α + β) / 2 : ℝ) : ℂ) • x) =
-      ((α + β) / 2 : ℝ) • x :=
-    (RCLike.real_smul_eq_coe_smul (K := ℂ) _ x).symm
-  calc
-    ‖A.toLinearMap
-          ⟨x, selfAdjointSpectralIcc_mem_domain A hA hαβ hx⟩ -
-        (((α + β) / 2 : ℝ) : ℂ) • x‖ =
-        ‖generator U ⟨x, hxU⟩ - (((α + β) / 2 : ℝ) : ℂ) • x‖ :=
-      congrArg
-        (fun y : H => ‖y - (((α + β) / 2 : ℝ) : ℂ) • x‖)
-        htransport.symm
-    _ = ‖generator U ⟨x, hxU⟩ - ((α + β) / 2 : ℝ) • x‖ := by
-      rw [hsmul]
-    _ ≤ (β - α) / 2 * ‖x‖ := hbound
+      (β - α) / 2 * ‖x‖ :=
+  TauCeti.LinearPMap.norm_sub_smul_le_of_mem_specRange hA _ measurableSet_Icc
+    (M := max |α| |β|) (fun _ hs => abs_le_max_of_mem_Icc hs)
+    (by linarith)
+    (fun s hs => by
+      rw [abs_le]
+      exact ⟨by linarith [hs.1, hs.2], by linarith [hs.1, hs.2]⟩)
+    hx _
 
 /-- Canonical exact-subspace specialization of the unbounded tangent theorem.
 

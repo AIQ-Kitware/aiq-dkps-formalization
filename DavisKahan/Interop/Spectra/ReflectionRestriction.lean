@@ -449,14 +449,10 @@ theorem selfAdjointSpectralSubspace_compl_eq_orthogonal
   let U := selfAdjointSpectralSubspace A hA B hB
   let Uc := selfAdjointSpectralSubspace A hA Bᶜ hB.compl
   have hproj : Uc.starProjection = Uᗮ.starProjection := by
-    rw [← selfAdjointSpectralProjection_eq_starProjection A hA Bᶜ hB.compl]
-    change Spectra.QuantumMechanics.SpectralTheory.spectralProjection
-        (Spectra.YosidaHille.genToGroup hA) Bᶜ hB.compl =
-      Uᗮ.starProjection
-    rw [Spectra.QuantumMechanics.SpectralTheory.spectralProjection_compl
-      (Spectra.YosidaHille.genToGroup hA) B hB]
-    change ContinuousLinearMap.id ℂ H -
-        selfAdjointSpectralProjection A hA B hB = Uᗮ.starProjection
+    rw [← selfAdjointSpectralProjection_eq_starProjection A hA Bᶜ hB.compl,
+      show selfAdjointSpectralProjection A hA Bᶜ hB.compl
+          = ContinuousLinearMap.id ℂ H - selfAdjointSpectralProjection A hA B hB from
+        (TauCeti.LinearPMap.spectralPVM hA).proj_compl B hB]
     rw [selfAdjointSpectralProjection_eq_starProjection A hA B hB]
     exact (Submodule.starProjection_orthogonal' U).symm
   apply le_antisymm
