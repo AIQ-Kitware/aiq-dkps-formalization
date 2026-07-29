@@ -91,10 +91,10 @@ theorem opNorm_starProjection_sub_le_of_formBounds
     {U W : Submodule 𝕜 H} [U.HasOrthogonalProjection] [W.HasOrthogonalProjection]
     (hU : Reduces A U) (hW : Reduces B W)
     {c g : ℝ} (hg : 0 < g)
-    (hUhi : LowerFormBoundOn A U (c + g))
-    (hUlo : UpperFormBoundOn A Uᗮ c)
-    (hWhi : LowerFormBoundOn B W (c + g))
-    (hWlo : UpperFormBoundOn B Wᗮ c) :
+    (hUhi : A.LowerFormBoundOn U (c + g))
+    (hUlo : A.UpperFormBoundOn Uᗮ c)
+    (hWhi : B.LowerFormBoundOn W (c + g))
+    (hWlo : B.UpperFormBoundOn Wᗮ c) :
     ‖(U.starProjection - W.starProjection : H →L[𝕜] H)‖ ≤ ‖B - A‖ / g :=
   opNorm_starProjection_sub_le_of_coercive hA hB hU hW hg hUhi hUlo hWhi hWlo
 

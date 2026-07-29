@@ -17,8 +17,9 @@ Yu--Wang--Samworth stack out of `ForMathlib` and `DavisKahan`:
 | Y3(b4) | the remaining 12 modules of the sin-Θ closure | 6,912 |
 | Y3(c)  | the last 3 Yu--Wang--Samworth modules | 1,028 |
 
-`ForMathlib` is **12 → 4 modules**, and the four that remain are genuinely
-Mathlib-shaped (two matrix, two topology) rather than migration debt. The
+`ForMathlib` is **12 → 4 modules**. ~~The four that remain are genuinely
+Mathlib-shaped rather than migration debt.~~ **Superseded (jon, 2026-07-29):
+`ForMathlib` goes away entirely — the four move too, under lane FM-RETIRE.** The
 transitive non-Mathlib closure of `SinTheta/Perturbation.lean` and of every
 Yu--Wang--Samworth result is now **entirely `ForTauCeti`**.
 
@@ -57,22 +58,57 @@ agent's uncommitted `--write` left stale copies, which is what made
 **Where the package stands.** 156 modules; all declared in
 `dev/tauceti/extraction-manifest.json` across 18 dependency-closed clusters;
 all passing the import firewall; 0 warnings under `warningAsError`; 0
-undocumented declarations. `ForMathlib` is down to 4 Mathlib-shaped modules.
+undocumented declarations. `ForMathlib` is down to 4 modules, and **all four are going too** — jon has settled that `ForMathlib` goes away entirely (lane FM-RETIRE); my earlier "Mathlib-shaped remainder" reading of them is superseded.
 **The structural work is done, so the remaining work is coherence** — see the
 defects listed below.
 
-**Coherence defects, measured 2026-07-29, none yet fixed.**
+**Coherence defects, measured 2026-07-29, none yet fixed. Ordered by what a
+roadmap reader hits first.**
 
-- **Duplicate spellings.** Base names living in two `ForTauCeti` namespaces at
-  once, because the sin-Θ and bounded-operator lines arrived separately:
-  `residual` (`TauCeti.DavisKahan` vs `TauCeti.DavisKahanTheory`),
-  `sylvesterOperator` (**three**: root `ContinuousLinearMap`,
-  `TauCeti.DavisKahan`, `TauCeti.DavisKahanTheory`), `sinThetaEmbedding`,
-  `spectralProjection`, `reflectionOperator`, `diagonalPart`/`offDiagonalPart`,
-  `Reduces`, `opNorm`, `LowerFormBoundOn`/`UpperFormBoundOn`. Each compiles
-  because the namespaces differ; each is a reader asking *which one do I want?*
-- **Two namespace families for one subject**, `TauCeti.DavisKahan` and
-  `TauCeti.DavisKahanTheory`, with no stated rule for which gets what.
+**1. The package contains a live compatibility-alias layer, and it is the root
+cause of the duplicate spellings.**
+`ForTauCeti/Analysis/InnerProductSpace/BoundedOperator/Basic.lean` says so
+itself, in its own docstrings: *"Compatibility-friendly name for symmetry of a
+bounded operator"*, *"Compatibility-friendly name for a reducing subspace"*.
+Of its 24 declarations, **17 are `abbrev`s onto a canonical spelling that
+already exists elsewhere in `ForTauCeti`**:
+
+| alias in `TauCeti.DavisKahan` | canonical spelling |
+| --- | --- |
+| `IsSelfAdjointOperator` | `A.IsSymmetric` |
+| `Reduces` | `ContinuousLinearMap.Reduces` |
+| `projection` / `complementaryProjection` | `U.starProjection` / `Uᗮ.starProjection` |
+| `reflectionOperator` | `Submodule.reflectionOperator` |
+| `diagonalPart` / `offDiagonalPart` | `Submodule.diagonalPart` / `.offDiagonalPart` |
+| `subspaceGap` / `directedGap` | `Submodule.projectionGap` / `.directedProjectionGap` |
+| `LowerFormBoundOn` / `UpperFormBoundOn` | `ContinuousLinearMap.LowerFormBoundOn` / `.UpperFormBoundOn` |
+| `sylvesterOperator` | `ContinuousLinearMap.sylvesterOperator` |
+
+**This is exactly the "compatibility aliases" that `ForTauCeti/README.md`'s own
+lifecycle step 4 says to remove — and it is why `Reduces` and
+`sylvesterOperator` each have *three* spellings in the package.**
+
+**It is not dead code, so it is a migration and not a deletion.** Measured
+consumers: `IsometricEmbedding` 31 files, `IsSelfAdjointOperator` 22,
+`Reduces` 17, `directedGap` 9 qualified, `IsAcute` 8. **The cheap end is real
+though**: `sylvesterOperator` and `LowerFormBoundOn`/`UpperFormBoundOn` have
+**zero** qualified consumers, and `offDiagonalPart` and `sinThetaEmbedding`
+have one each. Retire those first and the three-way `sylvesterOperator` split
+collapses immediately.
+
+**2. Two namespace families for one subject**, `TauCeti.DavisKahan` and
+`TauCeti.DavisKahanTheory`, with no stated rule for which gets what — the first
+is the bounded-operator vocabulary, the second the finite-dimensional theory,
+but nothing says so and the overlap (`Reduces`, `residual`, `projection`,
+`IsAcute`, `spectralProjection`) is where readers will guess wrong. **Write the
+rule down before moving any declaration between them.**
+
+**Not defects, and worth saying so** — a raw duplicate-base-name scan reports
+**46**, but most are idiomatic structure-namespace lemmas (`add`, `refl`,
+`trans`, `zero`, `smul`, `neg`, `sub`, `mono`, `nonneg`, `ext`, `add_le`,
+`sum_le`), exactly as Mathlib does. Counting those as duplication would send
+the next reader after 30 non-problems. **The real list is the 17-alias table
+above plus item 2.**
 - **Five `set_option linter.unusedDecidableInType false`** in
   `Sylvester/Internal/ReciprocalMultiplier.lean`; the honest fix is dropping
   `[DecidableEq ι]` from those five types and calling `classical`.
