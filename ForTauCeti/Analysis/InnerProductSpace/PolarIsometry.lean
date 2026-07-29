@@ -125,6 +125,7 @@ and so does this definition; every result below therefore carries the hypothesis
 noncomputable def polarIsometry (M : E →L[ℂ] F) : E →L[ℂ] F :=
   M ∘L Ring.inverse M.modulus
 
+/-- The defining formula: the polar isometry sends `x` to `M (|M|⁻¹ x)`. -/
 theorem polarIsometry_apply (M : E →L[ℂ] F) (x : E) :
     M.polarIsometry x = M (Ring.inverse M.modulus x) := rfl
 
@@ -154,6 +155,7 @@ modulus. -/
 theorem polarIsometry_comp_modulus : M.polarIsometry ∘L M.modulus = M := by
   rw [polarIsometry, comp_assoc, ← mul_def, Ring.inverse_mul_cancel _ hM, one_def, comp_id]
 
+/-- The polar identity, pointwise: the polar isometry carries `|M| x` back to `M x`. -/
 theorem polarIsometry_modulus_apply (x : E) : M.polarIsometry (M.modulus x) = M x := by
   rw [← comp_apply, polarIsometry_comp_modulus hM]
 
@@ -168,9 +170,12 @@ theorem norm_polarIsometry_apply (x : E) : ‖M.polarIsometry x‖ = ‖x‖ := 
   rw [polarIsometry_apply, ← M.norm_modulus_apply, ← comp_apply, ← mul_def,
     Ring.mul_inverse_cancel _ hM, one_apply_eq_self]
 
+/-- The polar isometry is an isometry -- the property its name claims, and the reason `IsUnit |M|`
+is required. -/
 theorem isometry_polarIsometry : Isometry M.polarIsometry :=
   AddMonoidHomClass.isometry_of_norm _ fun x => norm_polarIsometry_apply hM x
 
+/-- An isometry is injective. -/
 theorem polarIsometry_injective : Function.Injective M.polarIsometry :=
   (isometry_polarIsometry hM).injective
 
@@ -184,6 +189,8 @@ theorem norm_sub_polarIsometry_apply_eq (x : E) :
     ‖M x - M.polarIsometry x‖ = ‖M.modulus x - x‖ := by
   rw [← polarIsometry_modulus_apply hM x, ← map_sub, norm_polarIsometry_apply hM]
 
+/-- Pointwise near-isometry bound in terms of `‖|M| - 1‖`.  Composing it with
+`norm_modulus_sub_one_le` gives the sharp form stated over the Gram operator. -/
 theorem norm_sub_polarIsometry_apply_le_norm_modulus_sub_one (x : E) :
     ‖M x - M.polarIsometry x‖ ≤ ‖M.modulus - 1‖ * ‖x‖ := by
   rw [norm_sub_polarIsometry_apply_eq hM x,
@@ -254,6 +261,8 @@ noncomputable def polarLinearIsometryEquiv {M : E →L[ℂ] F} (hM : IsUnit M.mo
     (hsurj : Function.Surjective M.polarIsometry) : E ≃ₗᵢ[ℂ] F :=
   .ofSurjective (polarLinearIsometry hM) hsurj
 
+/-- The polar isometry inherits surjectivity from `M`, which is what upgrades it from a
+`LinearIsometry` to a `LinearIsometryEquiv`. -/
 theorem surjective_polarIsometry_of_surjective {M : E →L[ℂ] F} (hM : IsUnit M.modulus)
     (hsurj : Function.Surjective M) : Function.Surjective M.polarIsometry := by
   intro y

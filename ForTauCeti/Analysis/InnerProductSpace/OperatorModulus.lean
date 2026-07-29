@@ -95,6 +95,7 @@ theorem modulus_nonneg (T : E →L[ℂ] F) : 0 ≤ T.modulus :=
 theorem modulus_isSelfAdjoint (T : E →L[ℂ] F) : IsSelfAdjoint T.modulus :=
   .of_nonneg T.modulus_nonneg
 
+/-- The modulus is self-adjoint, being a positive square root. -/
 @[simp]
 theorem adjoint_modulus (T : E →L[ℂ] F) : T.modulus.adjoint = T.modulus := by
   rw [← star_eq_adjoint]

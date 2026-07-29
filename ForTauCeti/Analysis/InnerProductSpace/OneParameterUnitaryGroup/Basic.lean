@@ -87,10 +87,13 @@ lemma inverse_eq_adjoint (U : OneParameterUnitaryGroup (H := H)) (t : ℝ) :
   intro x y
   rw [← U.unitary t (U.U (-t) x) y, h_inv x]
 
+/-- Each `U t` preserves norms, from preservation of inner products. -/
 lemma norm_preserving (U : OneParameterUnitaryGroup (H := H)) (t : ℝ) (ψ : H) :
     ‖U.U t ψ‖ = ‖ψ‖ :=
   (LinearMap.norm_map_iff_inner_map_map (U.U t)).mpr (U.unitary t) ψ
 
+/-- Each `U t` has operator norm exactly `1`.  Needs `Nontrivial H`: on the zero space every
+operator has norm `0`. -/
 lemma norm_one [Nontrivial H] (U : OneParameterUnitaryGroup (H := H)) (t : ℝ) :
     ‖U.U t‖ = 1 := by
   refine le_antisymm ?_ ?_
@@ -115,12 +118,15 @@ noncomputable def genDiffQuot (U : OneParameterUnitaryGroup (H := H)) (ψ : H) :
     genDiffQuot U (0 : H) = fun _ => 0 := by
   funext t; simp [genDiffQuot]
 
+/-- The difference quotient is additive in the vector, for each fixed `t`. -/
 lemma genDiffQuot_add (U : OneParameterUnitaryGroup (H := H)) (a b : H) :
     genDiffQuot U (a + b) = genDiffQuot U a + genDiffQuot U b := by
   funext t
   simp only [genDiffQuot_apply, Pi.add_apply, map_add]
   rw [show U.U t a + U.U t b - (a + b) = (U.U t a - a) + (U.U t b - b) by abel, smul_add]
 
+/-- The difference quotient is complex-homogeneous in the vector.  With `genDiffQuot_add` this is
+what makes the generator linear on the domain where the limit exists. -/
 lemma genDiffQuot_smul (U : OneParameterUnitaryGroup (H := H)) (c : ℂ) (a : H) :
     genDiffQuot U (c • a) = c • genDiffQuot U a := by
   funext t

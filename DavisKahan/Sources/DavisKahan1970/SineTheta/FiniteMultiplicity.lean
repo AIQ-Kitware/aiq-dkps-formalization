@@ -89,6 +89,7 @@ def finiteMultiplicityResidual (m : ℕ) (delta theta : ℝ) :
   (((delta * Real.sin theta : ℝ) : 𝕜) •
     finiteMultiplicityComplementMap (𝕜 := 𝕜) m)
 
+/-- The finite-multiplicity exact embedding, unfolded. -/
 @[simp]
 theorem finiteMultiplicityExactMap_apply (m : ℕ)
     (x : FiniteMultiplicitySpace 𝕜 m) :
@@ -96,6 +97,7 @@ theorem finiteMultiplicityExactMap_apply (m : ℕ)
       WithLp.toLp 2 (x, 0) :=
   rfl
 
+/-- The finite-multiplicity complementary embedding, unfolded. -/
 @[simp]
 theorem finiteMultiplicityComplementMap_apply (m : ℕ)
     (x : FiniteMultiplicitySpace 𝕜 m) :

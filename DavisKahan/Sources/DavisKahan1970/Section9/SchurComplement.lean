@@ -50,6 +50,7 @@ theorem block_eigenproblem_iff (x : E) (y : F) :
 /-- The shifted lower block `lam I - A₁`. -/
 def lowerShift : F →ₗ[𝕜] F := lam • LinearMap.id - A₁
 
+/-- The lower shift acts by moving each coordinate down one index. -/
 lemma lowerShift_apply (y : F) :
     lowerShift A₁ lam y = lam • y - A₁ y := by
   rfl

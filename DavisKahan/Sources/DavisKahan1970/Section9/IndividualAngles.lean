@@ -27,6 +27,7 @@ noncomputable def halfTanTwoPsiCoefficient : ℝ := Real.sqrt 3 / 30
 /-- Coefficient multiplying the complementary-coordinate tangent bound. -/
 noncomputable def tanEtaCoefficient : ℝ := Real.sqrt 15 / 15
 
+/-- The squared combined coefficient of the individual-angle decomposition. -/
 lemma combined_individual_coefficient_sq :
     halfTanTwoPsiCoefficient ^ 2 + tanEtaCoefficient ^ 2 = (7 : ℝ) / 100 := by
   have h3 : Real.sqrt (3 : ℝ) ^ 2 = 3 := Real.sq_sqrt (by norm_num)
@@ -34,6 +35,7 @@ lemma combined_individual_coefficient_sq :
   unfold halfTanTwoPsiCoefficient tanEtaCoefficient
   nlinarith
 
+/-- The combined coefficient itself, the nonnegative square root of the previous. -/
 lemma combined_individual_coefficient :
     Real.sqrt (halfTanTwoPsiCoefficient ^ 2 + tanEtaCoefficient ^ 2) =
       Real.sqrt 7 / 10 := by
@@ -49,7 +51,7 @@ bounded by the squared in-plane and out-of-plane contributions, then a common
 positive denominator yields the `sqrt 7 / 10` envelope. -/
 theorem individual_angle_le_exact_envelope
     {omega psi eta ε denominator : ℝ}
-    (homega0 : 0 ≤ omega)
+    (_homega0 : 0 ≤ omega)
     (hpsi0 : 0 ≤ psi) (heta0 : 0 ≤ eta)
     (hden : 0 < denominator)
     (homega : omega ^ 2 ≤ psi ^ 2 + eta ^ 2)

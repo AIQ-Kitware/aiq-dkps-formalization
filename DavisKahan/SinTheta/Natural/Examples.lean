@@ -157,15 +157,16 @@ end AbstractBoundedUse
 
 section FiniteRealModel
 
+/-- The real Euclidean plane, the concrete space these examples are stated over. -/
 abbrev RealPlane := EuclideanSpace ℝ (Fin 2)
 
 /-- A concrete finite-dimensional, zero-residual use of the natural reducing
 API. The whole plane is the exact subspace and the complementary block is the
 zero Hilbert space. -/
 theorem realPlane_zeroResidual_model :
-    let A : ClosedOperator (𝕜 := ℝ) (E := RealPlane) :=
+    let _A : ClosedOperator (𝕜 := ℝ) (E := RealPlane) :=
       ClosedOperator.ofBounded (0 : RealPlane →L[ℝ] RealPlane)
-    let A0 : ClosedOperator (𝕜 := ℝ) (E := RealPlane) :=
+    let _A0 : ClosedOperator (𝕜 := ℝ) (E := RealPlane) :=
       ClosedOperator.ofBounded (0 : RealPlane →L[ℝ] RealPlane)
     let U : Submodule ℝ RealPlane := ⊤
     let X : RealPlane →L[ℝ] RealPlane := ContinuousLinearMap.id ℝ RealPlane

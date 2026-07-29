@@ -129,6 +129,7 @@ noncomputable def paperSinAngleOperatorC (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →L[ℂ] E :=
   cfc Real.sin (paperAngleOperatorC U V)
 
+/-- The paper's complex sine-angle operator agrees with the canonical one. -/
 @[simp]
 theorem paperSinAngleOperatorC_eq (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :

@@ -3,7 +3,7 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 Thinking
 -/
-import DavisKahan.Experimental.InfiniteDimensional.Riccati.BoundedCanonicalSolution
+import DavisKahan.Riccati.BoundedCanonicalSolution
 
 /-!
 # A posteriori stability for bounded Riccati equations
@@ -27,6 +27,7 @@ variable {E0 : Type*} [NormedAddCommGroup E0] [InnerProductSpace ℂ E0]
 variable {E1 : Type*} [NormedAddCommGroup E1] [InnerProductSpace ℂ E1]
   [CompleteSpace E1]
 
+omit [CompleteSpace E0] [CompleteSpace E1] in
 /-- Difference equation for arbitrary angular operators, with the difference
 of their Riccati defects retained as an inhomogeneous residual. -/
 theorem riccati_defect_sub_sylvester_equation

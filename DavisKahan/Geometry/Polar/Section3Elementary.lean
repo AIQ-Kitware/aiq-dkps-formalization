@@ -44,6 +44,8 @@ noncomputable def restrictToInvariantSubspace
     hA (x : H) x.property
 
 omit [CompleteSpace H] in
+/-- The restriction to an invariant subspace acts as the original operator on the underlying
+vector. -/
 @[simp]
 theorem coe_restrictToInvariantSubspace_apply
     (A : H →L[ℂ] H) (M : Submodule ℂ H)
@@ -111,7 +113,7 @@ noncomputable def genericHalmosCosineSqCompleted
     [V.HasOrthogonalProjection] :
     halmosGenericPart U V →L[ℂ] halmosGenericPart U V :=
   restrictToInvariantSubspace (halmosCosineSq U V)
-    (halmosGenericPart U V) fun x hx =>
+    (halmosGenericPart U V) fun _ hx =>
       halmosCosineSq_mem_generic U V hx
 
 /-- Concrete restriction of the Halmos sine square to the generic part. -/
@@ -120,7 +122,7 @@ noncomputable def genericHalmosSineSqCompleted
     [V.HasOrthogonalProjection] :
     halmosGenericPart U V →L[ℂ] halmosGenericPart U V :=
   restrictToInvariantSubspace (halmosSineSq U V)
-    (halmosGenericPart U V) fun x hx =>
+    (halmosGenericPart U V) fun _ hx =>
       halmosSineSq_mem_generic U V hx
 
 /-- The restricted generic cosine and sine squares resolve the identity. -/

@@ -3,7 +3,7 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 Thinking
 -/
-import DavisKahan.Experimental.InfiniteDimensional.Riccati.BoundedReduction
+import DavisKahan.Riccati.BoundedReduction
 import DavisKahan.Sylvester.GenuineSpectrum
 
 /-!
@@ -46,6 +46,7 @@ theorem offDiagonalBlock_norm_eq
       exact ContinuousLinearMap.adjoint.norm_map _
     _ = ‖H.B01‖ := by rw [← hAdj]
 
+omit [CompleteSpace E0] [CompleteSpace E1] in
 /-- A bounded Riccati solution satisfies a linear Sylvester equation whose
 right-hand side contains the quadratic correction and the lower-left block. -/
 theorem riccati_sylvester_equation
@@ -135,6 +136,7 @@ theorem norm_riccati_solution_le_two_mul_div_of_contractive_spectrum_gap
     exact hquad.trans hrhs
   exact (le_div_iff₀ hd).2 hmul
 
+omit [CompleteSpace E0] [CompleteSpace E1] in
 /-- Difference equation for two bounded Riccati solutions. -/
 theorem riccati_solution_sub_sylvester_equation
     (H : BlockOperatorData (𝕜 := ℂ) (E0 := E0) (E1 := E1))
@@ -161,6 +163,7 @@ theorem riccati_solution_sub_sylvester_equation
       simp only [sub_apply, add_apply, ContinuousLinearMap.comp_apply, map_sub]
       abel
 
+omit [CompleteSpace E0] [CompleteSpace E1] in
 /-- Norm control for the difference-equation right-hand side. -/
 theorem norm_riccati_solution_sub_rhs_le
     (H : BlockOperatorData (𝕜 := ℂ) (E0 := E0) (E1 := E1))

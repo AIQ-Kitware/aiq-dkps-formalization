@@ -47,6 +47,7 @@ def offDiagonalSwap (q : ℝ) : SymmetricTwoByTwo where
   a₀₁ := q
   a₁₁ := 0
 
+/-- Entries of the Schur-reduced 2x2 block, computed explicitly. -/
 lemma schurReducedTwoByTwo_entries (d₀ d₁ q : ℝ) :
     (schurReducedTwoByTwo d₀ d₁ q).a₀₀ =
         (shiftedRitzDiagonal d₀ d₁ q).a₀₀ + (offDiagonalSwap q).a₀₀ ∧
@@ -86,7 +87,7 @@ The theorem is deliberately stated without trigonometry: the Section 7
 angle bound. -/
 theorem half_tanTwoPsi_ratio_lt
     {ε D q : ℝ} (hε : 0 < ε) (hD : 0 < D)
-    (hq0 : 0 ≤ q) (hq : q < ε ^ 2 / (30 * D)) :
+    (_hq0 : 0 ≤ q) (hq : q < ε ^ 2 / (30 * D)) :
     q / (ritzHigh ε - ritzLow ε) <
       (Real.sqrt 3 / 30) * ε / D := by
   have hs : 0 < Real.sqrt (3 : ℝ) := Real.sqrt_pos.2 (by norm_num)

@@ -105,6 +105,7 @@ open Filter
 
 variable {𝕜 : Type*} [RCLike 𝕜]
 
+/-- The model two-dimensional space in which the sharpness counterexamples live. -/
 abbrev Plane (𝕜 : Type*) [RCLike 𝕜] := EuclideanSpace 𝕜 (Fin 2)
 
 /-- First standard basis vector of the planar model. -/

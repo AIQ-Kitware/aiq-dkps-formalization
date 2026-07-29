@@ -217,6 +217,8 @@ theorem circleIntegrable_ringInverse (hr : 0 ≤ radius)
   exact (differentiableAt_ringInverse_smul_one_sub A
     (hA z hz)).continuousAt.continuousWithinAt
 
+/-- The Rosenblum integrand is circle-integrable, which is what makes the contour integral defining
+the solution well-posed. -/
 theorem circleIntegrable_rosenblumIntegrand (C : F →L[ℂ] E) (hr : 0 ≤ radius)
     (hA : ∀ z : ℂ, ‖z - (center : ℂ)‖ = radius → z ∉ spectrum ℂ A)
     (hB : ∀ z : ℂ, ‖z - (center : ℂ)‖ = radius → z ∉ spectrum ℂ B) :
@@ -375,6 +377,7 @@ section BoundedInverse
 variable (A : E →L[ℂ] E) (B : F →L[ℂ] F) {center radius : ℝ}
 
 omit [CompleteSpace E] [CompleteSpace F] in
+/-- The Rosenblum solution of the homogeneous equation is zero. -/
 @[simp]
 theorem rosenblumSolution_zero (center radius : ℝ) :
     rosenblumSolution A B 0 center radius = 0 := by
@@ -406,6 +409,7 @@ noncomputable def sylvesterEquiv (hr : 0 < radius)
       ⟨rosenblumSolution A B C center radius,
         comp_rosenblumSolution_sub_comp_eq A B C hr hA hB⟩)
 
+/-- The Sylvester equivalence, unfolded to its underlying map. -/
 @[simp]
 theorem sylvesterEquiv_apply (hr : 0 < radius)
     (hA : spectrum ℂ A ⊆ ball ((center : ℂ)) radius)

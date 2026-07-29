@@ -3,7 +3,7 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 Thinking
 -/
-import DavisKahan.Experimental.InfiniteDimensional.Riccati.BoundedBasic
+import DavisKahan.Riccati.BoundedBasic
 
 /-!
 # Bounded graph invariance and the operator Riccati equation
@@ -32,12 +32,15 @@ noncomputable def boundedBlockGraphVector (X : E0 →L[𝕜] E1) (u : E0) :
     WithLp 2 (E0 × E1) :=
   WithLp.toLp 2 (u, X u)
 
+omit [CompleteSpace E0] [CompleteSpace E1] in
+/-- The block graph vector, unfolded to its two coordinates. -/
 @[simp]
 theorem boundedBlockGraphVector_apply
     (X : E0 →L[𝕜] E1) (u : E0) :
     boundedBlockGraphVector X u = WithLp.toLp 2 (u, X u) :=
   rfl
 
+omit [CompleteSpace E0] [CompleteSpace E1] in
 /-- Coordinate action of the bounded block operator. -/
 @[simp]
 theorem blockOperator_toLp_apply
@@ -47,6 +50,7 @@ theorem blockOperator_toLp_apply
       WithLp.toLp 2 (H.A0 u + H.B01 v, H.B10 u + H.A1 v) := by
   rfl
 
+omit [CompleteSpace E0] [CompleteSpace E1] in
 /-- A direct-sum vector belongs to the graph exactly when its second coordinate
 is the angular operator applied to its first coordinate. -/
 theorem toLp_mem_blockGraph_iff
@@ -74,6 +78,7 @@ def BoundedBlockGraphInvariant
     (X : E0 →L[𝕜] E1) : Prop :=
   ∀ z ∈ blockGraph X, blockOperator H z ∈ blockGraph X
 
+omit [CompleteSpace E0] [CompleteSpace E1] in
 /-- Pointwise form of the bounded Riccati equation. -/
 theorem solvesRiccati_iff_pointwise
     (H : BlockOperatorData (𝕜 := 𝕜) (E0 := E0) (E1 := E1))
@@ -110,6 +115,7 @@ theorem solvesRiccati_iff_pointwise
               abel
       _ = 0 := sub_eq_zero.mpr hu
 
+omit [CompleteSpace E0] [CompleteSpace E1] in
 /-- A bounded block graph is invariant exactly when its angular operator solves
 the operator Riccati equation. -/
 theorem blockGraph_invariant_iff_solvesRiccati

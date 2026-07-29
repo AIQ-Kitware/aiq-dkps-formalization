@@ -5,7 +5,6 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Sources.DavisKahan1970.Ideals.UnitaryInvariantNormInstances
 import DavisKahan.Sources.DavisKahan1970.Sylvester.HilbertSchmidtPairwise
-import Spectra.QuantumMechanics.BornRule.Joint.ProjectivePVM
 
 /-!
 # Audit surface for the literal square-norm Sylvester theorem
@@ -22,6 +21,12 @@ was auditing constants the theorem no longer depends on.  They are replaced by
 the single native endpoint
 `TauCeti.LinearPMap.eq_zero_of_intertwines_of_disjoint_spectrum`.  The remaining
 `Spectra.HilbertSchmidtTensor.*` entries are SR-D's, and are still load-bearing.
+
+Also 2026-07-29: the direct `Spectra.QuantumMechanics.BornRule.Joint.ProjectivePVM`
+import was dropped.  Nothing in this file referenced a declaration from it — the
+Born-rule module was reached anyway, transitively, through
+`Sylvester.HilbertSchmidtPairwise`, so the explicit import bought nothing and
+made this file look like an independent Spectra consumer when it is not.
 -/
 
 namespace TauCeti

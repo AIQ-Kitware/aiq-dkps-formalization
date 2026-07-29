@@ -3,8 +3,8 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 Thinking
 -/
-import DavisKahan.Experimental.InfiniteDimensional.Riccati.BoundedCanonicalSolution
-import DavisKahan.Experimental.InfiniteDimensional.Riccati.BoundedReduction
+import DavisKahan.Riccati.BoundedCanonicalSolution
+import DavisKahan.Riccati.BoundedReduction
 
 /-!
 # Canonical local bounded Riccati graph

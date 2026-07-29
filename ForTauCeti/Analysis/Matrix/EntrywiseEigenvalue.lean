@@ -27,7 +27,7 @@ matrices are entrywise `ε`-close, their sorted eigenvalues differ by at most
 
 ## Main result
 
-* `TauCeti.Matrix.abs_sortedEig_sub_le_of_entry_le`
+* `TauCeti.Matrix.abs_sortedEigenvalues_sub_le_of_entry_le`
 
 ## Provenance
 
@@ -53,10 +53,10 @@ variable {n : ℕ}
 /-- **Entrywise eigenvalue perturbation.**  If two real symmetric matrices `A`,
 `Ahat` are entrywise `ε`-close, their `k`-th sorted eigenvalues differ by at most
 `n · ε` (Weyl's inequality through the entrywise → operator-norm comparison). -/
-theorem abs_sortedEig_sub_le_of_entry_le {A Ahat : Matrix (Fin n) (Fin n) ℝ}
+theorem abs_sortedEigenvalues_sub_le_of_entry_le {A Ahat : Matrix (Fin n) (Fin n) ℝ}
     (hA : A.IsHermitian) (hAhat : Ahat.IsHermitian)
     {ε : ℝ} (hentry : ∀ i j, |Ahat i j - A i j| ≤ ε) (k : Fin n) :
-    |sortedEig hAhat k - sortedEig hA k| ≤ (n : ℝ) * ε := by
+    |sortedEigenvalues hAhat k - sortedEigenvalues hA k| ≤ (n : ℝ) * ε := by
   -- Operator-norm bound on the difference, from the entrywise bound.
   have hop : ∀ x : EuclideanSpace ℝ (Fin n),
       ‖(Matrix.toEuclideanLin Ahat - Matrix.toEuclideanLin A) x‖ ≤ ((n : ℝ) * ε) * ‖x‖ := by

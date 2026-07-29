@@ -5,7 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Experimental.InfiniteDimensional.Sylvester.Basic
 import DavisKahan.Experimental.InfiniteDimensional.Core.CompatibilitySinTwoTheta
-import DavisKahan.Experimental.InfiniteDimensional.GraphSubspace
+import DavisKahan.SpectralTheory.GraphSubspace
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.Continuation
 
 /-!

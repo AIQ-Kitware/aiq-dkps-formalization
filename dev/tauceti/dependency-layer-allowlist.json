@@ -15,11 +15,6 @@
   "production_imports_spectra": [
     "DavisKahan.Sources.DavisKahan1970.Audits.SylvesterHilbertSchmidt",
     "DavisKahan.Sources.DavisKahan1970.Sylvester.HilbertSchmidtDefectFirst",
-    "DavisKahan.Sources.DavisKahan1970.Sylvester.HilbertSchmidtPairwise",
-    "DavisKahan.SpectralTheory.CayleySelectorBridge",
-    "DavisKahan.SpectralTheory.ClosedOperator.Complexification",
-    "DavisKahan.SpectralTheory.SelfAdjointBorelCalculus",
-    "DavisKahan.Sylvester.PairwiseHomogeneousUniqueness",
-    "DavisKahan.Sylvester.PairwiseSpectrumGap"
+    "DavisKahan.Sources.DavisKahan1970.Sylvester.HilbertSchmidtPairwise"
   ]
 }

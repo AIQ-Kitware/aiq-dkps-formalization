@@ -74,6 +74,21 @@ def strip_comments(text: str) -> list[str]:
     return out
 
 
+
+def _spectra_snapshot(repo: Path) -> Path:
+    """Path to the vendored Spectra snapshot.
+
+    S6 relocates `vendor/Spectra` to `retired/Spectra`.  Resolving the location
+    here rather than hard-coding it makes that move a `git mv` and nothing else.
+    Falls back to `vendor` when neither exists, so each caller's own "missing"
+    diagnostics fire rather than being masked by a path error.
+    """
+    for parent in ("vendor", "retired"):
+        if (repo / parent / "Spectra").is_dir():
+            return repo / parent / "Spectra"
+    return repo / "vendor" / "Spectra"
+
+
 def declared_names(root: Path) -> dict[str, str]:
     """Map fully-qualified declaration name -> module name, for a Lean library root."""
     found: dict[str, str] = {}
@@ -244,7 +259,7 @@ def main() -> int:
     repo = args.repo
 
     rows = [json.loads(line) for line in args.jsonl.read_text().splitlines() if line.strip()]
-    declared = declared_names(repo / "vendor" / "Spectra")
+    declared = declared_names(_spectra_snapshot(repo))
 
     uses: collections.Counter[str] = collections.Counter()
     consumers: dict[str, set[str]] = collections.defaultdict(set)
@@ -277,10 +292,10 @@ def main() -> int:
         })
         entry["donorModules"][module] = {
             "origin": donor_origin(repo, module),
-            "lines": len((repo / "vendor" / "Spectra"
+            "lines": len((_spectra_snapshot(repo)
                           / (module.replace(".", "/") + ".lean")).read_text(
                               errors="ignore").splitlines())
-            if (repo / "vendor" / "Spectra" / (module.replace(".", "/") + ".lean")).exists()
+            if (_spectra_snapshot(repo) / (module.replace(".", "/") + ".lean")).exists()
             else None,
             "constants": consts,
         }

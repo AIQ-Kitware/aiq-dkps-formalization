@@ -72,6 +72,7 @@ noncomputable def toUnboundedSinThetaData
     P.A P.A₀ P.Λ₁ P.E₀ P.F₁ P.R P.common_domain
     P.F₁_maps_domain P.residual_on_common_domain P.F₁_intertwines
 
+/-- The residual of the derived unbounded sine-theta data is the source's residual. -/
 @[simp]
 theorem toUnboundedSinThetaData_residual
     {𝕜 : Type u} [RCLike 𝕜]
@@ -105,6 +106,7 @@ structure PaperCommonDomainTheorem61Data where
 
 namespace PaperCommonDomainTheorem61Data
 
+/-- Package common-domain Theorem 6.1 source data as the general Theorem 6.1 record. -/
 noncomputable def toPaperTheorem61Data
     (P : PaperCommonDomainTheorem61Data
       (E := E) (F := F) (G := G) (H := H)) :
@@ -166,6 +168,7 @@ structure PaperCommonDomainTheorem62Data where
 
 namespace PaperCommonDomainTheorem62Data
 
+/-- Package common-domain Theorem 6.2 source data as the general Theorem 6.2 record. -/
 noncomputable def toPaperTheorem62Data
     (P : PaperCommonDomainTheorem62Data
       (E := E) (F := F) (G := G) (H := H)) :
@@ -249,6 +252,7 @@ structure PaperRealCommonDomainTheorem61Data where
 
 namespace PaperRealCommonDomainTheorem61Data
 
+/-- Real-scalar packaging of common-domain Theorem 6.1 source data. -/
 noncomputable def toPaperTheorem61Data
     (P : PaperRealCommonDomainTheorem61Data
       (E := E) (F := F) (G := G) (H := H)) :
@@ -311,6 +315,7 @@ structure PaperRealCommonDomainTheorem62Data where
 
 namespace PaperRealCommonDomainTheorem62Data
 
+/-- Real-scalar packaging of common-domain Theorem 6.2 source data. -/
 noncomputable def toPaperTheorem62Data
     (P : PaperRealCommonDomainTheorem62Data
       (E := E) (F := F) (G := G) (H := H)) :

@@ -87,12 +87,14 @@ theorem norm_boundedSelfAdjointBorelCalculusC_le'
   rw [coe_reCoord A hA w]
   exact w.2
 
+omit [CompleteSpace H] in
 /-- Application of the full-domain realization is the original map. -/
 theorem toPMap_top_apply
     (A : H →L[ℂ] H) (y : H)
     (hy : y ∈ ((A : H →ₗ[ℂ] H).toPMap ⊤).domain) :
     ((A : H →ₗ[ℂ] H).toPMap ⊤) ⟨y, hy⟩ = A y := rfl
 
+omit [CompleteSpace H] in
 /-- The resolvent set of the full-domain realization is exactly the
 invertibility locus of `A - z` in the bounded operator algebra. -/
 theorem mem_resolventSet_toPMap_top_iff
@@ -122,6 +124,7 @@ theorem mem_resolventSet_toPMap_top_iff
         rw [← hval]; exact u.mul_inv
       exact ContinuousLinearMap.ext_iff.mp hinv φ
 
+omit [CompleteSpace H] in
 /-- The real spectrum of the bounded map agrees with the `LinearPMap` spectrum
 of its full-domain realization. -/
 theorem realSpectrum_eq_toPMap_top_spectrum
@@ -136,7 +139,7 @@ theorem realSpectrum_eq_toPMap_top_spectrum
 
 /-- The real spectrum of a bounded self-adjoint operator is closed. -/
 theorem isClosed_realSpectrum_boundedSelfAdjoint
-    (A : H →L[ℂ] H) (hA : IsSelfAdjointOperator A) :
+    (A : H →L[ℂ] H) (_hA : IsSelfAdjointOperator A) :
     IsClosed (realSpectrum A) := by
   have hpre : realSpectrum A = (fun r : ℝ => (r : ℂ)) ⁻¹' spectrum ℂ A := rfl
   rw [hpre]

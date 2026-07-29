@@ -52,6 +52,7 @@ noncomputable def directedSinThetaOperatorProseLike
   V.starProjection ∘L U.starProjection
 
 omit [FiniteDimensional 𝕜 E] [CompleteSpace E] in
+/-- The prose-like directed sine-theta operator agrees with the canonical one. -/
 @[simp]
 theorem directedSinThetaOperatorProseLike_apply
     (U V : Submodule 𝕜 E) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
