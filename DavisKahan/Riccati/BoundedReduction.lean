@@ -28,6 +28,7 @@ variable {E0 : Type*} [NormedAddCommGroup E0] [InnerProductSpace 𝕜 E0]
 variable {E1 : Type*} [NormedAddCommGroup E1] [InnerProductSpace 𝕜 E1]
   [CompleteSpace E1]
 
+omit [CompleteSpace E0] [CompleteSpace E1] in
 /-- Coordinate action of the bounded block operator on an arbitrary direct-sum
 vector. -/
 @[simp]
@@ -40,6 +41,7 @@ theorem blockOperator_apply
           H.B10 (WithLp.fst z) + H.A1 (WithLp.snd z)) :=
   rfl
 
+omit [CompleteSpace E0] [CompleteSpace E1] in
 /-- The bounded block operator associated with self-adjoint diagonal blocks
 and mutually adjoint off-diagonal blocks is symmetric. -/
 theorem blockOperator_isSelfAdjoint
@@ -88,6 +90,7 @@ theorem blockOperator_isSelfAdjoint
           (⟪x1, H.B10 y0⟫_𝕜 + ⟪x1, H.A1 y1⟫_𝕜) := by
       abel
 
+omit [CompleteSpace E0] [CompleteSpace E1] in
 /-- A bounded angular graph reduces the self-adjoint block operator exactly
 when the angular operator solves the bounded Riccati equation. -/
 theorem blockGraph_reduces_iff_solvesRiccati
