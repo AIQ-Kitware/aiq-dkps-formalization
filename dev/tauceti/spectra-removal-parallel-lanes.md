@@ -26,14 +26,14 @@ someone else.
 | **SR-E** Rosenblum | 1 | — | **DONE** (toothbrush + namek) |
 | **SR-F** Experimental stragglers | 3 | — | **DONE** (edward + namek) |
 
-**The number that matters is the S6 criterion's, and it is 7.**  Measured on
+**The number that matters is the S6 criterion's, and it is 7 — of which 6 are in scope.**  Measured on
 namek-work after SR-E closed, over everything outside `vendor/` and
 `external/` — which is what S6 criterion (1) actually says:
 
 | where | count | what |
 |---|---|---|
 | `DavisKahan/**` | **5** | SR-D only — the last real lane |
-| `FinishTanTwoTheta/**` | **1** | was 4; three were cleared by another agent on 2026-07-29, and the survivor is `GroundedImports.lean` |
+| `FinishTanTwoTheta/**` | **1** | was 4; three were cleared by another agent on 2026-07-29. **The survivor (`GroundedImports.lean`) is explicitly out of scope — jon, 2026-07-29: "leave FinishTanTwoTheta alone, we will fix that later."** Do not touch it as part of this campaign |
 | `scripts/ExportSpectraDeclClosure.lean` | **1** | the measurement tool; it *should* import Spectra, and it goes at S6 with the dependency |
 
 Tracking **imports removed in that scope**, not lanes closed, is edward's
