@@ -63,12 +63,29 @@ def upstream_paths(repo: Path) -> set[str] | None:
     return paths
 
 
+
+def _snapshot_parent(root: "Path") -> "Path":
+    """Directory holding the vendored Spectra snapshot.
+
+    S6 relocates `vendor/Spectra` to `retired/Spectra` so that agents stop
+    reusing it.  Resolving the location here instead of hard-coding it makes
+    that move a `git mv` and nothing else -- this script keeps working on either
+    side of it.  If neither exists we fall back to `vendor`, so the script's own
+    "snapshot is missing" diagnostics fire as before rather than being masked by
+    a path error.
+    """
+    for parent in ("vendor", "retired"):
+        if (root / parent / "Spectra").is_dir():
+            return root / parent
+    return root / "vendor"
+
+
 def scan(repo: Path) -> list[dict]:
     """Vendored .lean files that do not exist at the pinned upstream commit."""
     upstream = upstream_paths(repo)
     if upstream is None:
         raise SystemExit("external/Spectra reference checkout is missing; cannot classify")
-    vendor = repo / "vendor" / "Spectra"
+    vendor = _snapshot_parent(repo) / "Spectra"
     rows = []
     for path in sorted(vendor.rglob("*.lean")):
         rel = path.relative_to(vendor).as_posix()
