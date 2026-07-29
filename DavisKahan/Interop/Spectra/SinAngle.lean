@@ -80,8 +80,7 @@ theorem norm_spectraSinAngleOperator_apply
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] (x : H) :
     ‖spectraSinAngleOperator U V x‖ =
       ‖(projection U - projection V) x‖ := by
-  simpa [spectraSinAngleOperator] using
-    norm_spectraOperatorAbsoluteValue_apply (projection U - projection V) x
+  simp [spectraSinAngleOperator]
 
 /-- The operator norm of the Spectra-backed sine-angle operator is exactly the
 existing DKPS symmetric subspace gap. -/

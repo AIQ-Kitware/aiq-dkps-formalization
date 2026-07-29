@@ -548,7 +548,7 @@ theorem perturbedSpectralReflection_mem_domain
       A.domain := by
   let C := A.addBounded E
   let hC : C.IsSelfAdjoint := addBounded_isSelfAdjoint A hA E hE
-  let xc : C.domain := ⟨(x : H), by simpa [C] using x.property⟩
+  let xc : C.domain := ⟨(x : H), by simp [C]⟩
   have h := spectralReflection_mem_domain C hC S hS xc
   simpa [C] using h
 
@@ -576,7 +576,7 @@ theorem add_reflectionPerturbation_intertwines
   have hJdomA : J (x : H) ∈ A.domain := by
     simpa [J, V, C] using
       perturbedSpectralReflection_mem_domain A hA E hE S hS x
-  let xc : C.domain := ⟨(x : H), by simpa [C] using x.property⟩
+  let xc : C.domain := ⟨(x : H), by simp [C]⟩
   have hcommC := selfAdjoint_apply_spectralReflection C hC S hS xc
   have hcomm :
       A.toLinearMap ⟨J (x : H), hJdomA⟩ + E (J (x : H)) =

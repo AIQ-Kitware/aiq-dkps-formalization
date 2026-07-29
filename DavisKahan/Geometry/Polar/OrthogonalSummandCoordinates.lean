@@ -41,7 +41,8 @@ noncomputable def orthogonalCoordinates
       ⟨Kᗮ.starProjection x, (Kᗮ).starProjection_apply_mem x⟩)
   map_add' x y := by
     apply WithLp.ofLp_injective 2
-    ext <;> simp <;> abel
+    ext <;> simp
+    abel
   map_smul' c x := by
     apply WithLp.ofLp_injective 2
     ext <;> simp
@@ -95,7 +96,7 @@ omit [CompleteSpace H] in
       (((WithLp.fst z : K) : H) + ((WithLp.snd z : Kᗮ) : H)) =
         ((WithLp.snd z : Kᗮ) : H)
     have hfst : ((WithLp.fst z : K) : H) ∈ (Kᗮ)ᗮ := by
-      simpa using (WithLp.fst z).property
+      simp
     rw [map_add, (Kᗮ).starProjection_apply_eq_zero_iff.mpr hfst,
       (Kᗮ).starProjection_eq_self_iff.mpr (WithLp.snd z).property,
       zero_add]
