@@ -23,7 +23,7 @@ someone else.
 | **SR-B** spectral support | 1 | — | **DONE** (namek) |
 | **SR-C** half-line form bounds | 1 | — | **DONE** (namek) |
 | **SR-D** Hilbert–Schmidt tensor | 5 | **21,581-line donor closure — needs re-plan + author coordination** | *open (measured by edward, aiq-gpu — see lane)* |
-| **SR-E** Rosenblum | 1 | intertwiner of disjoint spectra vanishes | claimed |
+| **SR-E** Rosenblum | 1 | Borel upgrade of the intertwining (continuous case DONE) | *open — take in serial (partial landed by toothbrush)* |
 | **SR-F** Experimental stragglers | 3 | — | **DONE** (edward + namek) |
 
 `import Spectra` in `DavisKahan/**`: **15 → 6**.  The six remaining are exactly
