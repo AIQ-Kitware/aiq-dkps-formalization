@@ -679,9 +679,11 @@ private theorem tanTwoAngleOperatorC_eq_modulus_ambientGraphTangent
         ContinuousLinearMap.modulus Y ∘L R ∘L P :=
       hmodRP.mul_nonneg hmodYnonneg hRPnonneg
     -- Both sides are nonnegative with the same square, so they agree.
-    have hsq : (Sang ∘L Cang) * (Sang ∘L Cang)
-        = (ContinuousLinearMap.modulus Y ∘L R ∘L P) *
-          (ContinuousLinearMap.modulus Y ∘L R ∘L P) := by
+    -- Stay in `*` notation throughout: the goal carries `∘L`, which is defeq but
+    -- not syntactically equal, so mixing the two makes every `rw` miss.
+    have hsq : (Sang * Cang) * (Sang * Cang)
+        = (ContinuousLinearMap.modulus Y * (R * P)) *
+          (ContinuousLinearMap.modulus Y * (R * P)) := by
       have hL : (Sang * Cang) * (Sang * Cang)
           = (Sang * Sang) * (Cang * Cang) := by
         rw [mul_assoc, ← mul_assoc Cang Sang Cang,
@@ -700,12 +702,13 @@ private theorem tanTwoAngleOperatorC_eq_modulus_ambientGraphTangent
         show ContinuousLinearMap.modulus Y * ContinuousLinearMap.modulus Y = G
           from ContinuousLinearMap.modulus_mul_self Y]
       noncomm_ring
-    have h1 : CFC.sqrt ((Sang ∘L Cang) * (Sang ∘L Cang)) = Sang ∘L Cang :=
+    have h1 : CFC.sqrt ((Sang * Cang) * (Sang * Cang)) = Sang * Cang :=
       CFC.sqrt_unique rfl hleftNonneg
-    have h2 : CFC.sqrt ((ContinuousLinearMap.modulus Y ∘L R ∘L P) *
-          (ContinuousLinearMap.modulus Y ∘L R ∘L P))
-        = ContinuousLinearMap.modulus Y ∘L R ∘L P :=
+    have h2 : CFC.sqrt ((ContinuousLinearMap.modulus Y * (R * P)) *
+          (ContinuousLinearMap.modulus Y * (R * P)))
+        = ContinuousLinearMap.modulus Y * (R * P) :=
       CFC.sqrt_unique rfl hrightNonneg
+    show Sang * Cang = ContinuousLinearMap.modulus Y * (R * P)
     rw [← h1, ← h2, hsq]
   have hCandidateComp :
       M ∘L cosTwoAngleExtendedC U V = sinTwoAngleOperatorC U V := by
