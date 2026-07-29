@@ -819,6 +819,36 @@ theorem doubleAngleTangent_mapsDomainTo
   have hXmem : X (R (x : E0)) ∈ H.A1.domain := hdom ⟨R (x : E0), hmem⟩
   simpa using Submodule.smul_mem _ (2 : 𝕜) hXmem
 
+include hdom in
+/-- **Pointwise Sylvester identity for the double-angle tangent.**
+
+For `x ∈ dom A₀` and any `R` preserving `dom A₀`,
+
+```
+A₁(X R x) - X R (A₀ x)
+   = X (A₀(Rx) - R(A₀x))  +  (X B₀₁ X - B₁₀)(Rx)
+```
+
+The first summand is `X` applied to the *resolvent commutator*, which
+`riccatiGram_resolvent_mem_domain` bounds by `‖G‖·Σ n‖T‖ⁿ⁻¹`; the second is
+manifestly bounded. Multiplying by `2` and taking `R = (1 - X†X)⁻¹` turns this
+into the Sylvester equation satisfied by `tan 2Theta`, with a right-hand side
+that is `-2B₁₀` plus an explicit defect.
+
+Only the forward Riccati equation is used, at the vector `Rx`. -/
+theorem doubleAngleTangent_sylvester_pointwise
+    (hric : ∀ x : H.A0.domain,
+      H.A1 ⟨X (x : E0), hdom x⟩ + H.B10 (x : E0) =
+        X (H.A0 x + H.B01 (X (x : E0))))
+    (R : E0 →L[𝕜] E0) (x : H.A0.domain) (hRx : R (x : E0) ∈ H.A0.domain) :
+    H.A1 ⟨X (R (x : E0)), hdom ⟨R (x : E0), hRx⟩⟩ - X (R (H.A0 x)) =
+      X (H.A0 ⟨R (x : E0), hRx⟩ - R (H.A0 x)) +
+        (X (H.B01 (X (R (x : E0)))) - H.B10 (R (x : E0))) := by
+  have h := hric ⟨R (x : E0), hRx⟩
+  rw [map_add] at h
+  rw [map_sub]
+  linear_combination (norm := module) h
+
 end Powers'
 
 /-- The Riccati commutator is bounded by the off-diagonal coupling alone: no
