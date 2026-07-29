@@ -331,6 +331,40 @@ SR-D can build on it; the two lanes share no files.
 
 ---
 
+### SR-E: unblocked by SR-B, and the remaining gap measured (toothbrush, 2026-07-29)
+
+namek's SR-B landed `specProjection_eq_zero_of_subset_resolventSet`, which
+supplies **two of the three** ingredients the native proof needs:
+
+* `E_B(spec A) = 0` — immediate, since disjointness puts `spec A` inside
+  `resolventSet B`;
+* `E_A(spec A) = id` — from the same theorem applied to `(spec A)ᶜ` plus
+  `specProjection_compl`.
+
+**The third is missing and is the whole remaining lane:** projections of *two
+different* operators intertwine along `X`,
+
+```
+X ∘ E_B(S) = E_A(S) ∘ X      whenever   A(Xy) = X(By) on dom B.
+```
+
+`ForTauCeti`'s Borel layer has `borelCalculus_comm` and
+`specProjection_comm_resolvent`, but those are **same-operator** commutation.
+Nothing there is rectangular. Building it means carrying the intertwining down
+the construction namek used: resolvents (`X R_B(z) = R_A(z) X`, which follows in
+a few lines from the Sylvester equation and surjectivity of `B - z`), then the
+Cayley transform, then `borelCalculus`, then `specProjection`. Four lemmas, each
+routine, none currently present.
+
+**Do not expect a shortcut through the spectral gap.** The sibling theorem
+`linearPMapSylvester_homogeneous_eq_zero_of_pairwiseSpectrumGap` handles
+positive distance, but *disjoint* closed subsets of `ℝ` can have distance zero,
+so the gap route does not cover this statement.
+
+Target to reprove, in `DavisKahan/Sylvester/PairwiseHomogeneousUniqueness.lean`:
+`linearPMapSylvester_homogeneous_eq_zero_of_disjoint_spectrum` — the only
+consumer of the donor constant, at line 103.
+
 ## SR-F — Experimental stragglers  *(namek — two of three done)*
 
 **Done.**
