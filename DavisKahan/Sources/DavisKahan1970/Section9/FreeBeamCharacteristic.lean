@@ -59,6 +59,10 @@ def modeD3 (beta a b c d x : ℝ) : ℝ :=
 /-- Closed form of the fourth derivative. -/
 def modeD4 (beta a b c d x : ℝ) : ℝ := beta ^ 4 * mode beta a b c d x
 
+-- `(try rfl) <;> ring` cannot become `(try rfl); ring`, which is what the
+-- linter suggests: on the branches where `rfl` closes the goal, `<;>` over zero
+-- goals is a no-op while `;` raises "No goals to be solved".  Verified by build.
+set_option linter.unnecessarySeqFocus false in
 /-- The displayed first derivative is correct. -/
 theorem hasDerivAt_mode (beta a b c d x : ℝ) :
     HasDerivAt (mode beta a b c d) (modeD1 beta a b c d x) x := by
@@ -74,6 +78,10 @@ theorem hasDerivAt_mode (beta a b c d x : ℝ) :
           ((hasDerivAt_const x beta).mul (hasDerivAt_id x))).const_mul d)
     using 1 <;> (try rfl) <;> ring
 
+-- `(try rfl) <;> ring` cannot become `(try rfl); ring`, which is what the
+-- linter suggests: on the branches where `rfl` closes the goal, `<;>` over zero
+-- goals is a no-op while `;` raises "No goals to be solved".  Verified by build.
+set_option linter.unnecessarySeqFocus false in
 /-- The displayed second derivative is the derivative of `modeD1`. -/
 theorem hasDerivAt_modeD1 (beta a b c d x : ℝ) :
     HasDerivAt (modeD1 beta a b c d) (modeD2 beta a b c d x) x := by

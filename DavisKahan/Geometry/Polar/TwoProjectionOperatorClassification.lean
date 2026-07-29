@@ -153,7 +153,7 @@ private theorem ambient_apply_trivial
     rw [(halmosTrivialPart U V).starProjection_orthogonal_apply, hfix, sub_self]
   simp [ambient, LinearIsometryEquiv.trans_apply,
     orthogonalCoordinates, orthogonalCoordinatesInv,
-    hfix, hperp, Subtype.coe_eta]
+    hfix, Subtype.coe_eta]
 
 private theorem ambient_apply_generic
     (D : TwoProjectionOperatorEquivalence U V U' V')
@@ -165,7 +165,7 @@ private theorem ambient_apply_generic
     (Submodule.starProjection_apply_eq_zero_iff (halmosTrivialPart U V)).mpr x.2
   simp [ambient, LinearIsometryEquiv.trans_apply,
     orthogonalCoordinates, orthogonalCoordinatesInv,
-    hfix, hK0, Subtype.coe_eta]
+    hK0, Subtype.coe_eta]
 
 /-- The assembled ambient unitary intertwines the left projections. -/
 theorem ambient_intertwines_left

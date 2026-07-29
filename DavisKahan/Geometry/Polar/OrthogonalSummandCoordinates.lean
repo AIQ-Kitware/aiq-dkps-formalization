@@ -171,7 +171,7 @@ omit [CompleteSpace H] in
     rw [K.starProjection_orthogonal_apply, hfix, sub_self]
   simp [orthogonalSumEquiv, LinearIsometryEquiv.trans_apply,
     orthogonalCoordinates, orthogonalCoordinatesInv,
-    hfix, hperp, Subtype.coe_eta]
+    hfix, Subtype.coe_eta]
 
 omit [CompleteSpace H] in
 /-- On the orthogonal complement it acts by the second factor.  With the previous lemma this
@@ -188,7 +188,7 @@ pins the joined isometry down summand-wise. -/
     (Submodule.starProjection_apply_eq_zero_iff K).mpr x.2
   simp [orthogonalSumEquiv, LinearIsometryEquiv.trans_apply,
     orthogonalCoordinates, orthogonalCoordinatesInv,
-    hfix, hK, Subtype.coe_eta]
+    hK, Subtype.coe_eta]
 
 omit [CompleteSpace H] in
 /-- The joined equivalence conjugates the first orthogonal projection. -/
