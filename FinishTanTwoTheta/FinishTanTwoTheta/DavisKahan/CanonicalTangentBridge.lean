@@ -6,7 +6,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 import FinishTanTwoTheta.FunctionalCalculus.DoubleAngleTangent
 import DavisKahan.Experimental.InfiniteDimensional.TanTwoTheta.BoundedOffDiagonalRiccati
 import DavisKahan.Geometry.Angle.OperatorAngleComplex
-import DavisKahan.Experimental.InfiniteDimensional.GraphSubspace
+import DavisKahan.SpectralTheory.GraphSubspace
 import DavisKahan.OperatorIdeal.ApproximationNumbers.OperatorModulus
 import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SubspaceSingularTransport
 
@@ -47,6 +47,12 @@ namespace FinishTanTwoTheta
 open scoped InnerProductSpace
 open TauCeti.DavisKahanExt
 open TauCeti.DavisKahan.Experimental.ExactSinTheta
+-- `doubleAngleTangentOperator` and its denominator API live in the *sibling*
+-- namespace `TauCeti.FinishTanTwoTheta` (see `FunctionalCalculus/DoubleAngleTangent.lean`),
+-- not under `TauCeti.DavisKahan.FinishTanTwoTheta`, so they are not in scope here by
+-- enclosure. `SharpIdeal.lean` fully qualifies every use instead; this open is the
+-- same fix in one line. The namespace split itself is a library-organisation defect.
+open TauCeti.FinishTanTwoTheta
 
 noncomputable section
 
@@ -54,6 +60,14 @@ universe u
 
 variable {E : Type u} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
   [CompleteSpace E]
+
+/-- An orthogonally complemented subspace is complete.  `DavisKahan.SinTheta.Natural.Reducing`
+declares the same instance, but `local`, so it is not exported to importing modules and has to
+be repeated here.  Without it every `ContinuousLinearMap.adjoint` on a subspace in this file
+fails to elaborate with `failed to synthesize CompleteSpace ↥U`. -/
+noncomputable local instance completeSpaceOfHasOrthogonalProjection
+    (W : Submodule ℂ E) [W.HasOrthogonalProjection] : CompleteSpace W :=
+  (Submodule.isComplete_coe_of_hasOrthogonalProjection W).completeSpace_coe
 
 private theorem ambientAngularOperator_eq_extendCoordinate
     (U : Submodule ℂ E) [U.HasOrthogonalProjection]
@@ -85,14 +99,18 @@ private theorem ambient_doubleAngleTangent_eq_extendCoordinate
     ambientAngularOperator_eq_extendCoordinate U Y hY
   have hYP : Y ∘L P = Y := hY.1
   have hPY : P ∘L Y = 0 := hY.2
+  -- `star_mul` cannot fire on `P ∘L Y`: for endomorphisms `∘L` is *defeq* to `*`
+  -- but not syntactically equal, so `simp only` never matches.  Go through
+  -- `adjoint_comp`, which is stated for `∘L` directly.
+  have hPadj : ContinuousLinearMap.adjoint P = P := by
+    simpa only [ContinuousLinearMap.star_eq_adjoint] using
+      (isSelfAdjoint_starProjection U).star_eq
   have hYstarP : Y.adjoint ∘L P = 0 := by
-    have h := congrArg star hPY
-    simpa only [star_mul, star_zero, ContinuousLinearMap.star_eq_adjoint,
-      (isSelfAdjoint_starProjection U).star_eq] using h
+    have h := congrArg ContinuousLinearMap.adjoint hPY
+    rwa [ContinuousLinearMap.adjoint_comp, hPadj, map_zero] at h
   have hPYstar : P ∘L Y.adjoint = Y.adjoint := by
-    have h := congrArg star hYP
-    simpa only [star_mul, ContinuousLinearMap.star_eq_adjoint,
-      (isSelfAdjoint_starProjection U).star_eq] using h
+    have h := congrArg ContinuousLinearMap.adjoint hYP
+    rwa [ContinuousLinearMap.adjoint_comp, hPadj] at h
   let G : E →L[ℂ] E := Y.adjoint ∘L Y
   let D : E →L[ℂ] E := doubleAngleDenominator Y
   let DX : U →L[ℂ] U := doubleAngleDenominator X
@@ -208,14 +226,17 @@ private theorem tanTwoAngleOperatorC_eq_modulus_ambientGraphTangent
     quarterAcuteAngularOperator_isAngularOperator U V hquarter
   have hYP : Y ∘L P = Y := hY.1
   have hPY : P ∘L Y = 0 := hY.2
+  -- See the note on the same pair in `ambientAngularOperator_eq_extendCoordinate`:
+  -- `star_mul` does not match `P ∘L Y`, so route through `adjoint_comp`.
+  have hPadj : ContinuousLinearMap.adjoint P = P := by
+    simpa only [ContinuousLinearMap.star_eq_adjoint] using
+      (isSelfAdjoint_starProjection U).star_eq
   have hYstarP : Y.adjoint ∘L P = 0 := by
-    have h := congrArg star hPY
-    simpa only [star_mul, star_zero, ContinuousLinearMap.star_eq_adjoint,
-      (isSelfAdjoint_starProjection U).star_eq] using h
+    have h := congrArg ContinuousLinearMap.adjoint hPY
+    rwa [ContinuousLinearMap.adjoint_comp, hPadj, map_zero] at h
   have hPYstar : P ∘L Y.adjoint = Y.adjoint := by
-    have h := congrArg star hYP
-    simpa only [star_mul, ContinuousLinearMap.star_eq_adjoint,
-      (isSelfAdjoint_starProjection U).star_eq] using h
+    have h := congrArg ContinuousLinearMap.adjoint hYP
+    rwa [ContinuousLinearMap.adjoint_comp, hPadj] at h
   have hGnonneg : (0 : E →L[ℂ] E) ≤ G := by
     dsimp [G]
     exact (ContinuousLinearMap.nonneg_iff_isPositive _).2
@@ -287,14 +308,35 @@ private theorem tanTwoAngleOperatorC_eq_modulus_ambientGraphTangent
     exact hidentity
   let Cang : E →L[ℂ] E := cosAngleOperatorC U V
   let Sang : E →L[ℂ] E := sinAngleOperatorDirectedC U V
+  -- `modulus_mul_self` is stated with `*`; these goals carry `∘SL`, which is
+  -- defeq but not syntactically equal, so `← mul_def` has to bridge it first.
+  -- Then `|Q P|² = (QP)⋆(QP) = P Q Q P = P Q P` by self-adjointness and
+  -- idempotence of the two star-projections, which is exactly `hPQP`.
+  have hQQ : V.starProjection ∘L V.starProjection = V.starProjection :=
+    V.isIdempotentElem_starProjection
+  have hQperpQperp :
+      Vᗮ.starProjection ∘L Vᗮ.starProjection = Vᗮ.starProjection :=
+    Vᗮ.isIdempotentElem_starProjection
   have hCangSq : Cang ∘L Cang = R ∘L P := by
     dsimp [Cang, cosAngleOperatorC]
-    rw [ContinuousLinearMap.modulus_mul_self]
-    simpa only [ContinuousLinearMap.star_eq_adjoint] using hPQP
+    rw [← ContinuousLinearMap.mul_def, ContinuousLinearMap.modulus_mul_self,
+      ContinuousLinearMap.adjoint_comp,
+      (isSelfAdjoint_starProjection U).adjoint_eq,
+      (isSelfAdjoint_starProjection V).adjoint_eq,
+      ContinuousLinearMap.comp_assoc,
+      ← ContinuousLinearMap.comp_assoc V.starProjection V.starProjection
+        U.starProjection, hQQ]
+    exact hPQP
   have hSangSq : Sang ∘L Sang = G ∘L R ∘L P := by
     dsimp [Sang, sinAngleOperatorDirectedC]
-    rw [ContinuousLinearMap.modulus_mul_self]
-    simpa only [ContinuousLinearMap.star_eq_adjoint] using hPQperpP
+    rw [← ContinuousLinearMap.mul_def, ContinuousLinearMap.modulus_mul_self,
+      ContinuousLinearMap.adjoint_comp,
+      (isSelfAdjoint_starProjection U).adjoint_eq,
+      (isSelfAdjoint_starProjection Vᗮ).adjoint_eq,
+      ContinuousLinearMap.comp_assoc,
+      ← ContinuousLinearMap.comp_assoc Vᗮ.starProjection Vᗮ.starProjection
+        U.starProjection, hQperpQperp]
+    exact hPQperpP
   have hSCcomm : Commute Sang Cang :=
     commute_sinAngleOperatorDirectedC_cosAngleOperatorC U V
   have hSinTwo : sinTwoAngleOperatorC U V = (2 : ℂ) • (Sang ∘L Cang) := rfl
@@ -313,8 +355,13 @@ private theorem tanTwoAngleOperatorC_eq_modulus_ambientGraphTangent
     dsimp [D]
     rw [ContinuousLinearMap.sub_comp, ContinuousLinearMap.comp_sub,
       ContinuousLinearMap.id_comp, ContinuousLinearMap.comp_id]
+  -- `Commute.units_inv_left` is stated for a `Units` coercion, not for
+  -- `Ring.inverse`; `Ring.inverse_of_isUnit` converts between them.
   have hDinvcommG : Ring.inverse D ∘L G = G ∘L Ring.inverse D := by
-    exact (show Commute D G from hDcommG).units_inv_left
+    have hu : Commute ((hDunit.unit : E →L[ℂ] E)) G := by
+      rw [hDunit.unit_spec]; exact hDcommG
+    rw [Ring.inverse_of_isUnit hDunit]
+    exact hu.units_inv_left
   have hTformula :
       doubleAngleTangentOperator Y
           (norm_quarterAcuteAngularOperator_lt_one U V hquarter) =
@@ -353,30 +400,42 @@ private theorem tanTwoAngleOperatorC_eq_modulus_ambientGraphTangent
           have hy := Y.le_opNorm x
           nlinarith [norm_quarterAcuteAngularOperator_lt_one U V hquarter,
             norm_nonneg x, norm_nonneg (Y x)]
-      exact CFC.rpow_nonneg (a := D) (y := (-1 : ℝ))
+      -- `Ring.inverse` of a strictly positive element is its CFC `(-1)`-power,
+      -- which is nonnegative.  `IsStrictlyPositive` is by definition
+      -- `0 ≤ D ∧ IsUnit D`, both of which are already in hand.
+      have hDsp : IsStrictlyPositive D := ⟨hDnonneg, hDunit⟩
+      rw [CFC.inverse_eq_rpow_neg_one hDsp]
+      exact CFC.rpow_nonneg
     have hcomm : Commute (ContinuousLinearMap.modulus Y) (Ring.inverse D) := by
       have hmodG : Commute (ContinuousLinearMap.modulus Y) G := by
+        show Commute (ContinuousLinearMap.modulus Y) (Y.adjoint ∘L Y)
         rw [← ContinuousLinearMap.modulus_mul_self Y]
-        exact Commute.self_mul_left _
+        exact (Commute.refl _).mul_right (Commute.refl _)
       have hmodD : Commute (ContinuousLinearMap.modulus Y) D := by
-        dsimp [D]
-        exact hmodG.sub_right (Commute.one_right _)
-      exact hmodD.units_inv_right
+        show Commute (ContinuousLinearMap.modulus Y)
+          (ContinuousLinearMap.id ℂ E - G)
+        exact (Commute.one_right _).sub_right hmodG
+      -- as above: cross from `Ring.inverse` to the `Units` inverse.
+      have hu : Commute (ContinuousLinearMap.modulus Y)
+          ((hDunit.unit : E →L[ℂ] E)) := by
+        rw [hDunit.unit_spec]; exact hmodD
+      rw [Ring.inverse_of_isUnit hDunit]
+      exact hu.units_inv_right
     have hprod : (0 : E →L[ℂ] E) ≤
         ContinuousLinearMap.modulus Y ∘L Ring.inverse D :=
-      hmod.mul_of_commute hDinvNonneg hcomm
-    simpa only [ofReal_ofNat] using
+      hcomm.mul_nonneg hmod hDinvNonneg
+    simpa only [Complex.ofReal_ofNat] using
       smul_nonneg (show (0 : ℝ) ≤ 2 by norm_num) hprod
   have hMformula :
       M = (2 : ℂ) • (ContinuousLinearMap.modulus Y ∘L Ring.inverse D) := by
-    apply eq_modulus_of_nonneg_of_mul_self_eq hCandidateNonneg
+    apply ContinuousLinearMap.eq_modulus_of_nonneg_of_mul_self_eq hCandidateNonneg
     rw [hMsq]
     noncomm_ring
   have hSCformula : Sang ∘L Cang =
       ContinuousLinearMap.modulus Y ∘L R ∘L P := by
     have hleftNonneg : (0 : E →L[ℂ] E) ≤ Sang ∘L Cang :=
-      (sinAngleOperatorDirectedC_nonneg U V).mul_of_commute
-        (cosAngleOperatorC_nonneg U V) hSCcomm
+      hSCcomm.mul_nonneg (sinAngleOperatorDirectedC_nonneg U V)
+        (cosAngleOperatorC_nonneg U V)
     have hrightNonneg : (0 : E →L[ℂ] E) ≤
         ContinuousLinearMap.modulus Y ∘L R ∘L P := by
       -- all three factors are nonnegative functions of `G` on `U`
