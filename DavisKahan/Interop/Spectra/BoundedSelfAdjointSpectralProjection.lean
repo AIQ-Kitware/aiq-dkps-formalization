@@ -4,7 +4,6 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Interop.Spectra.Basic
-import DavisKahan.Interop.Spectra.PVMSubspace
 import DavisKahan.Interop.Spectra.RealSpectralRestriction
 import Spectra.SpectralTheory.ResolventForm
 import Spectra.StoneBridge.CalculusBridge
@@ -53,11 +52,18 @@ noncomputable def boundedSelfAdjointSpectralProjection
     (s : Set ℝ) (hs : MeasurableSet s) : H →L[ℂ] H :=
   (boundedSelfAdjointSpectralPVM A hA).proj s hs
 
-/-- The selected spectral range of a bounded self-adjoint operator. -/
+/-- The selected spectral range of a bounded self-adjoint operator.
+
+This lane still runs on `vendor/Spectra`: it needs the spectral measure of a
+*bounded* operator to agree with that operator's own continuous functional
+calculus, which the native Cayley construction does not yet supply.  The range
+API is therefore kept local here rather than shared with
+`DavisKahan.Interop.Spectra.PVMSubspace`, which has moved to
+`TauCeti.ProjValMeasure`. -/
 noncomputable def boundedSelfAdjointSpectralSubspace
     (A : H →L[ℂ] H) (hA : IsSelfAdjointOperator A)
     (s : Set ℝ) (hs : MeasurableSet s) : Submodule ℂ H :=
-  pvmRangeSubspace (boundedSelfAdjointSpectralPVM A hA) s hs
+  (boundedSelfAdjointSpectralProjection A hA s hs).range
 
 /-- The selected bounded spectral range has the canonical orthogonal
 projection supplied by the underlying PVM projection. -/
@@ -65,9 +71,10 @@ noncomputable instance boundedSelfAdjointSpectralSubspace_hasOrthogonalProjectio
     (A : H →L[ℂ] H) (hA : IsSelfAdjointOperator A)
     (s : Set ℝ) (hs : MeasurableSet s) :
     (boundedSelfAdjointSpectralSubspace A hA s hs).HasOrthogonalProjection := by
-  change
-    (pvmRangeSubspace (boundedSelfAdjointSpectralPVM A hA) s hs).HasOrthogonalProjection
-  infer_instance
+  change (boundedSelfAdjointSpectralProjection A hA s hs).range.HasOrthogonalProjection
+  exact ContinuousLinearMap.IsIdempotentElem.hasOrthogonalProjection_range
+    (show IsIdempotentElem (boundedSelfAdjointSpectralProjection A hA s hs) from
+      (boundedSelfAdjointSpectralPVM A hA).proj_idem s hs)
 
 /-- The bounded spectral projection is the group-calculus spectral projection
 used by Spectra. -/
@@ -96,11 +103,24 @@ theorem boundedSelfAdjointSpectralProjection_eq_starProjection
     (s : Set ℝ) (hs : MeasurableSet s) :
     boundedSelfAdjointSpectralProjection A hA s hs =
       (boundedSelfAdjointSpectralSubspace A hA s hs).starProjection := by
-  change
-    (boundedSelfAdjointSpectralPVM A hA).proj s hs =
-      (pvmRangeSubspace (boundedSelfAdjointSpectralPVM A hA) s hs).starProjection
-  exact pvmProjection_eq_starProjection_rangeSubspace
-    (boundedSelfAdjointSpectralPVM A hA) s hs
+  set P := boundedSelfAdjointSpectralPVM A hA with hP
+  set Q := boundedSelfAdjointSpectralProjection A hA s hs with hQ
+  have hidem : ∀ y : H, Q (Q y) = Q y := fun y => by
+    have h := congrArg (fun T : H →L[ℂ] H => T y) (P.proj_idem s hs)
+    simp only [mul_apply_eq_comp] at h
+    exact h
+  apply ContinuousLinearMap.ext
+  intro x
+  symm
+  apply Submodule.eq_starProjection_of_mem_of_inner_eq_zero
+  · exact ⟨x, rfl⟩
+  · intro y hy
+    obtain ⟨z, rfl⟩ := hy
+    change ⟪x - Q x, Q z⟫_ℂ = 0
+    have hstarQ : star Q = Q := (P.isSelfAdjoint_proj s hs).star_eq
+    have hadj := ContinuousLinearMap.adjoint_inner_right Q (x - Q x) z
+    rw [← ContinuousLinearMap.star_eq_adjoint, hstarQ] at hadj
+    rw [hadj, map_sub, hidem, sub_self, inner_zero_left]
 
 /-- Every genuine bounded spectral projection is an orthogonal projection in
 the continuation-facing predicate. -/
