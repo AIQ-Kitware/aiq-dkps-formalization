@@ -5,6 +5,7 @@ Authors: Jon Crall, Claude Opus 5
 -/
 import ForTauCeti.Analysis.InnerProductSpace.SylvesterGroup
 import ForTauCeti.Analysis.InnerProductSpace.OneParameterUnitaryGroup.Commutant
+import ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidtPythagoras
 
 /-!
 # Two-sided blocks on the Hilbert–Schmidt space
@@ -34,7 +35,7 @@ namespace TauCeti
 namespace HilbertSchmidt
 
 variable {𝕜 : Type*} [RCLike 𝕜]
-variable {ι : Type*} {E F : Type*}
+variable {ι κ : Type*} {E F : Type*}
 variable [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
 variable [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
 
@@ -115,6 +116,48 @@ noncomputable def blockCLM :
     blockCLM b P Q f = blockFun b P Q f := rfl
 
 end Defs
+
+/-! ### A block is fixed by its own projections -/
+
+/-- An idempotent left factor fixes the block it cuts.  This is one of the two
+hypotheses the per-block Sylvester estimate takes. -/
+theorem comp_ofLp_blockFun_left (b : HilbertBasis ι 𝕜 F) {P : E →L[𝕜] E}
+    (hP : P.comp P = P) (Q : F →L[𝕜] F) (f : lp (fun _ : ι => E) 2) :
+    P.comp (ofLp b (blockFun b P Q f)) = ofLp b (blockFun b P Q f) := by
+  rw [ofLp_blockFun, ← ContinuousLinearMap.comp_assoc, ← ContinuousLinearMap.comp_assoc, hP]
+
+/-- An idempotent right factor fixes the block it cuts. -/
+theorem comp_ofLp_blockFun_right (b : HilbertBasis ι 𝕜 F) (P : E →L[𝕜] E)
+    {Q : F →L[𝕜] F} (hQ : Q.comp Q = Q) (f : lp (fun _ : ι => E) 2) :
+    (ofLp b (blockFun b P Q f)).comp Q = ofLp b (blockFun b P Q f) := by
+  rw [ofLp_blockFun, ContinuousLinearMap.comp_assoc, hQ]
+
+
+/-! ### Blocks split the norm -/
+
+omit [CompleteSpace F] in
+/-- The `ℓ²` norm squared is the Hilbert–Schmidt energy, in `ℝ≥0∞`. -/
+theorem enorm_sq_eq_energy (b : HilbertBasis ι 𝕜 F) (f : lp (fun _ : ι => E) 2) :
+    ‖f‖ₑ ^ 2 = (ofLp b f).hilbertSchmidtEnergy b := by
+  rw [energy_ofLp, enorm_eq_nnnorm, ← ENNReal.ofReal_coe_nnreal, coe_nnnorm,
+    ← ENNReal.ofReal_pow (norm_nonneg _)]
+
+/-- **Two-sided blocks split the `ℓ²` norm.**  This is the hypothesis
+`TauCeti.enorm_ge_of_blocks` takes, for the block family of a pair of
+norm-splitting families. -/
+theorem tsum_enorm_sq_blockFun {ι' : Type*} (b : HilbertBasis ι 𝕜 F) (c : HilbertBasis κ 𝕜 E)
+    (P : ι' → (E →L[𝕜] E)) (Q : ι' → (F →L[𝕜] F))
+    (hP : ∀ v : E, ∑' i, ‖P i v‖ₑ ^ 2 = ‖v‖ₑ ^ 2)
+    (hQ : ∀ v : F, ∑' j, ‖(Q j).adjoint v‖ₑ ^ 2 = ‖v‖ₑ ^ 2)
+    (f : lp (fun _ : ι => E) 2) :
+    ∑' p : ι' × ι', ‖blockFun b (P p.1) (Q p.2) f‖ₑ ^ 2 = ‖f‖ₑ ^ 2 := by
+  have hterm : ∀ p : ι' × ι', ‖blockFun b (P p.1) (Q p.2) f‖ₑ ^ 2
+      = (((P p.1).comp (ofLp b f)).comp (Q p.2)).hilbertSchmidtEnergy b := by
+    intro p
+    rw [enorm_sq_eq_energy b, ofLp_blockFun]
+  rw [tsum_congr hterm, ENNReal.tsum_prod', ENNReal.tsum_comm, enorm_sq_eq_energy b f]
+  exact tsum_tsum_energy_blocks b c (ofLp b f) P Q hP hQ
+
 
 /-- **A block commutes with the Sylvester flow** when each side commutes with
 its own group. -/
