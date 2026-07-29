@@ -231,8 +231,7 @@ theorem paperPlanar_directedSine_identity (theta : ℝ) :
         paperPlanarSineBlock (𝕜 := 𝕜) theta := by
   ext i
   fin_cases i <;>
-    simp [paperPlanarSineBlock, paperPlaneE0, paperPlaneE1,
-      PiLp.single_apply]
+    simp [paperPlanarSineBlock, paperPlaneE0, paperPlaneE1]
 
 /-- The complement inclusion is a norm-one rank-one map. -/
 theorem paperPlanarComplementMap_norm_rank :
