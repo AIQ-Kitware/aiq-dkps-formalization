@@ -13,7 +13,9 @@ RESUMED (2026-07-23) and claims lanes under `edward (resumed)` below.
 
 ## Rules
 
-- **Claim before the first edit.** Add/refresh your row below, commit it, then work.
+- **Claim before the first edit.** Add/refresh your row below, commit it,
+  **push it**, then work. Committing is not claiming — see *Branch and sync
+  protocol* below.
 - A claim covers the **listed declarations**, not the whole file. Two agents may
   work different declarations in one file if both are listed.
 - **Release explicitly** when done (set status `done` or remove the row).
@@ -21,9 +23,161 @@ RESUMED (2026-07-23) and claims lanes under `edward (resumed)` below.
 - If two claims would overlap, the earlier-committed row wins; the other agent
   picks something else.
 
+### When these rules apply — and when they do not
+
+**This file governs autonomous lane work.** It exists because agents picking
+their own next task from a shared backlog collide; every rule here is a
+consequence of that.
+
+**If your human gave you a specific task, you are not required to claim a row.**
+Being told "fix the docstrings in `Foo.lean`" or "finish this proof" is a
+direct instruction, not a lane, and stopping to negotiate a claim for it is
+overhead with no collision to prevent. The rules bind when you are *choosing*
+work — taking a posted lane, picking from the backlog, or starting a sweep
+nobody asked for.
+
+Two things still apply either way, because they protect *other* agents rather
+than coordinating you:
+
+- If you discover mid-task that a live row already names your files, say so and
+  coordinate. A direct instruction does not entitle you to overwrite work in
+  progress.
+- If a direct task grows into a multi-file campaign, it has become a lane in
+  everything but name. Claim it at that point.
+
+When in doubt, claiming is cheap and a collision is not. One row costs a minute;
+the D-DOC collision cost two agents a full duplicated lane.
+
 ## Format
 
 `agent | file(s) | declarations | date | status`
+
+## Branch and sync protocol
+
+Agents work on separate branches, so **a claim is only as visible as the branch
+it sits on.** The rules above govern *rows*; these govern *branches*, and they
+are the half that has actually cost work.
+
+### Push the claim before you start. Committing is not claiming.
+
+A row committed on your branch is **invisible to every other agent until someone
+merges it**. Until you push, you hold nothing — you have written a note to
+yourself.
+
+> This is the D-DOC collision. `edward (aiq-gpu)` claimed at 11:54:52 and
+> `edward (fable)` at 11:58:36 — three minutes and forty-four seconds apart —
+> and neither could see the other. Both agents did the whole lane. It surfaced
+> only as 29 docstring conflicts across three `.lean` files at merge time.
+> Nothing mathematical turned on it, which is luck, not process.
+
+The order is **claim → commit → push → first edit**, with the push before the
+edit and not batched with it. `dev/LANES.md` was recorded holding lanes worked
+twice because agents claimed *after* starting.
+
+### Fetch and read the other branches before you claim
+
+Before taking a lane, `git fetch --all` and check every remote branch — not just
+your own, and not just `main`:
+
+```sh
+git fetch --all
+git branch -r                                     # who exists
+for b in $(git branch -r | grep -v HEAD); do      # what they hold
+  git grep -n 'your-target-file' "$b" -- dev/LANES.md
+done
+```
+
+Then **merge the branches that are ahead of you** before writing your row, so
+the claim lands on current state instead of on a snapshot. A row appended to a
+stale `dev/LANES.md` conflicts on merge and can be silently reverted by a
+"normalise LANES" commit.
+
+**Re-fetch more often than once per lane when a channel is open with another
+agent.** If you are coordinating with someone — a cross-agent flag, a yielded
+lane, a shared boundary, a handoff in flight — their branch is moving while you
+work, and once-at-claim-time is too coarse. Fetch when you are about to touch
+the boundary, not when you are about to finish.
+
+### Branch naming
+
+Two conventions are in use and neither is written down:
+
+- `<agent>-work` — `aiq-gpu-work`, `namek-work`, `yardrat-work`, `jonwork`.
+  A long-lived branch tied to a standing agent identity.
+- `<owner>/<topic>` — `fable/sylvester-upstream-leaves`, `doop/ols-quench`,
+  `namek/d4-repoint-pending-d4b`. Per-campaign and shorter-lived.
+
+**Both are current; pick the one that matches the shape of your work** — a
+standing agent identity, or one bounded campaign. Match your row's agent name to
+your branch so a reader can get from a claim to the work.
+
+(Written as a list, not a table, deliberately: the shape check above treats
+*every* `|`-leading line in this file as a claim row and reports a genuine
+two-column table as three malformed rows. Do not add markdown tables to this
+file until that check distinguishes them.)
+
+*Open question for jon/edward: whether to standardise on one. Recorded, not
+decided — do not "fix" existing branches to match a convention nobody chose.*
+
+### Resolving conflicts in this file
+
+`dev/LANES.md` conflicts constantly. Three failure modes, all observed:
+
+- **Do not mechanically keep both sides.** That **duplicates a row** whenever
+  the same lane was edited on two branches. Keep one and merge the status prose.
+- **Check authorship and timestamps before applying "keep the more advanced
+  status".** A conflict is often one agent's own later self-update, not a
+  dispute — and a "normalise LANES" commit can silently revert a status cell
+  while keeping the rows released alongside it, leaving the file internally
+  contradictory. Both happened on 2026-07-28/29.
+- **Any change to another agent's row must be corroborated, and the
+  corroboration written down.** Prefer annotating over rewriting: keep their
+  words, add a marked note with the evidence. The strongest evidence is the tree
+  itself — whether the file still imports the donor, whether the named
+  deliverable exists — not another document repeating the claim.
+
+Re-run the shape check after every resolution; raw `|` inside a cell silently
+shifts columns, so a status cell can read as something nobody wrote:
+
+```sh
+python3 - <<'PY'
+import re
+from pathlib import Path
+rows=[(n,l) for n,l in enumerate(Path('dev/LANES.md').read_text().splitlines(),1)
+      if l.startswith('|') and not re.match(r'^\s*\|[\s:|-]+\|\s*$', l)]
+bad=[n for n,l in rows if len(re.split(r'(?<!\\)\|', l)) != 7]
+print(f"{len(rows)} rows, off-shape: {bad or 'none'}")
+PY
+```
+
+### Resolving conflicts in `.lean` files — the expensive one
+
+**Never resolve a `.lean` conflict with a blanket "take theirs" or "take
+mine".** Nothing downstream catches what it drops: not the compiler, not a
+linter, not a gate — both sides compile, so a green build is not evidence.
+
+Two losses recorded, neither caught by any check:
+
+- D-DOC3 resolved a conflict with *take theirs* and **five docstrings vanished
+  silently**; the agent found it only by re-reading its own delta.
+- `DavisKahan/SpectralTheory/CayleySelectorBridge.lean` — a merge resolution
+  dropped a deliberate **161-line port** off the donor. It survives only because
+  a later merge noticed and kept the other side.
+
+Read both sides and re-apply your delta on top. If the two sides differ in a
+*statement, signature or proof* — not just prose — that is a mathematical
+disagreement between agents: flag it in this file and get a word from the other
+owner rather than picking.
+
+### Merging into `main`
+
+Currently done by whichever agent notices, which is why the four-remote merge
+has been redone in rounds "as agents pushed mid-pass". If you do it: merge every
+remote, re-run the shape check above, and record in the board-state section
+which branches you merged and what each read afterwards.
+
+*Open question for jon/edward: whether one agent should own merges to `main`.
+Recorded, not decided.*
 
 ## Board state — 2026-07-29, read this first
 
@@ -98,6 +252,12 @@ PY
    is invisible to an agent on another branch until someone merges. If you are
    about to take a posted lane, fetch first and grep this file on *every* remote
    branch, not just your own.
+   **This rule has been promoted to [*Branch and sync protocol*](#branch-and-sync-protocol)
+   and is no longer only recorded here** (edward, 2026-07-29). It spent its
+   first life inside a struck-through `DONE` item captioned "do not re-post it",
+   where an agent reading `## Rules` would never reach it — which is why the
+   collision it describes happened *after* it was written down. Kept in place as
+   the incident record; the rule itself now lives beside the rules it completes.
 6. **SR-D2** — open but **not free, and not mechanical**; it needs a retention
    decision that is edward's to make. Ask before starting.
 7. **The `CayleySelectorBridge.lean` cross-agent flag** needs one sentence from
@@ -855,6 +1015,8 @@ theorems take `[NormedSpace ℝ (E →L[𝕜] F)]` as an instance argument.
 | edward (aiq-gpu) | `DavisKahan/Geometry/Polar/OrthogonalSummandCoordinates.lean` (delete 10 of its 14 declarations, re-prove the other 4 over Mathlib) and `DavisKahan/Geometry/Polar/TwoProjectionOperatorClassification.lean` (its `ambient` def and two private lemmas are built on the doomed definitions). **No statement weakened; no other file touched.** | **Removing a private copy of a Mathlib definition from production — I promoted this file today and it should not ship to Tau Ceti carrying it.** Verified by two independent classifiers: `orthogonalDecompositionEquiv` is a **parallel formulation of Mathlib's `Submodule.orthogonalDecomposition`** (`Mathlib/Analysis/InnerProductSpace/ProdL2.lean:89`) — same type `E ≃ₗᵢ[𝕜] WithLp 2 (K × Kᗮ)`, hand-rolled from `starProjection` coordinates instead of `prodEquivOfIsCompl` — **and the file already imports that Mathlib module** (line 8). **10 of 14 declarations are duplicated**: the whole coordinate stack, each covered by `orthogonalDecomposition` + `orthogonalDecomposition_apply` + `coe_orthogonalDecomposition_symm` + the bundled equiv's own `left_inv`/`right_inv`/`norm_map`. **4 are genuinely new** — `orthogonalSumEquiv` and its three lemmas, which join two isometries across complementary summands; Mathlib has no analogue. **Scoped from the classifier's two warnings so it is not under-budgeted:** it is *not* a mechanical substitution — the 4 surviving proofs unfold the doomed defs **by name** (`simp [orthogonalSumEquiv, orthogonalCoordinates, …]`, `change`), and Mathlib states its lemma in `orthogonalProjectionOnto` while this file works in `starProjection`, so a bridging step is needed; and it **spills into the sibling file**, whose `ambient` is built on `orthogonalDecompositionEquiv`. So: 10 deletions + 4 re-proofs + 1 def and 2 proofs in a second file. | 2026-07-29 | **claimed** |
 | jon (namek) — **LANE M-EXPORT — DONE. All 156 staging modules are exported.** | `external/TauCeti/TauCeti/**` — written by `scripts/export_for_tauceti.py --write`, which rewrites **import lines only**. **No `.lean` file in this repository changed**, no `comparator/*.json`, no `Challenge/**`, and **nothing was committed or pushed inside the submodule.** | **M-MANIFEST made the export possible; this ran it.** `--check` now reports OK for every one of the 156 modules. **It also cleared drift nobody had diagnosed:** a previous agent ran `--write` and never committed, so the exported copies sat *untracked* in the submodule and had since gone stale against staging — that, not a defect in the new clusters, is why `principal-angles` was failing `--check`. Both are fixed by the same refresh. **Verified statically, which is the right check for an exporter whose only transformation is import lines:** every `import TauCeti.*` in an exported file resolves to a file in the package; **no exported file imports anything but Mathlib and TauCeti**; and our **2,055 fully-qualified declarations have zero name clashes against upstream Tau Ceti's 7,433**. **Verified by compiler too:** `lake build TauCeti.MeasureTheory.HellySelection` goes green *through the TauCeti package* at 1,721 jobs, so the submodule builds against the root Mathlib pin rather than its own. **What is deliberately NOT done: nothing is committed or pushed inside `external/TauCeti`.** Writing the working tree is local and reversible; publishing into the shared upstream repository is not, and that is jon's call. The parent repo has nothing to commit for this — the submodule pointer is unchanged. **What this leaves as the last step of the whole campaign:** `lakefile.toml` already requires `TauCeti` at `external/TauCeti` *"so the post-merge dependency switch can be simulated locally"*, so the terminal state — *"an empty/deleted `ForTauCeti`"* — is now reachable by rewriting `import ForTauCeti.X` → `import TauCeti.X` across the consumers, dropping the `lean_lib`, and updating `check_dependency_layers.py`, which encodes `ForTauCeti` as a layer. **Gated on `lake build TauCeti` going green over all 785 modules — our 156 plus upstream's 629.** | 2026-07-29 | **done** |
 | jon (namek) — **LANE M-SWITCH — BLOCKED, and the blocker is a third-party submission, not work.** | *(measurement + verification only — nothing edited)* the 261 `import ForTauCeti.X` lines, `lakefile.toml`'s `ForTauCeti` `lean_lib`, and `scripts/check_dependency_layers.py`. | **`lake build TauCeti` fails, and it is not our fault — but it is also not the blocker.** Two upstream modules break against the newer root Mathlib pin: `TauCeti.AlgebraicGeometry.WeilDivisor.Basic` (a `Finsupp.mapDomain_notin_range` deprecation) and `TauCeti.NumberTheory.Multiquadratic.Subfield.Degree` (a `rewrite` that no longer matches). **Neither is imported by anything we export**, and building exactly our 156 exported modules through the TauCeti package is **green at 8,819 jobs**. So the exports are sound and the package skew is upstream's problem. **The real blocker: `external/TauCeti` is `github.com/TauCetiProject/TauCeti`, a separate project with its own PR workflow** — `agent/*` branches, PR-numbered commits — and our 156 modules are **untracked** in it against upstream HEAD `92c79e5e`. The manifest already says this: `upstream_pr` is null for every cluster and the target markers read *"confirm accepted id against TauCetiRoadmap before submission"*. Pushing 156 modules into that repository is a submission to someone else's project. **Why the switch cannot go first, which is the part worth writing down:** repointing the imports would make this repository's build depend on submodule content that exists in exactly one working tree. A fresh clone gets the submodule at upstream HEAD, without our modules, and **every consumer breaks**; deleting `ForTauCeti/` on top of that would leave ~20,000 lines of proof with no tracked copy anywhere. **The order is forced — submit upstream, land, bump the pin, switch imports, delete staging — and the first step is not an agent's to take.** **Everything before it is done and measured.** The switch is 261 import lines across 167 files (`DavisKahan` 204, `Challenge` 23, `FinishTanTwoTheta` 11, `Acharyya2025` 7, `DkpsQuench2026` 6, `FinishYuWangSamworth` 6, `Acharyya2024` 3), plus the `lean_lib` block and the layer script, which encodes `ForTauCeti` as a layer. **No proof body anywhere references `ForTauCeti`** — the only non-import occurrences are two prose comments in root modules — so the rewrite is mechanical. **Zero name clashes** between our 2,055 exported declarations and upstream's 7,433. | 2026-07-29 | **blocked on jon: how do the six clusters go upstream?** |
-| edward (aiq-gpu) — **lane COORD, the coordinator lane** | `dev/LANES.md` — a NEW `### Branch and sync protocol` subsection under `## Rules`, plus promoting the cross-branch visibility rule out of closed backlog item #5; `AGENTS.md` — a new short `## Parallel agent coordination` pointer section. **Documentation only: no `.lean` file, no statement, no proof, no `comparator/*.json`, no build target.** **Does NOT touch** any existing claim row, the board-state sections, or another agent's text. | **The lane protocol is documented; the branch protocol is not, and the gap is what has actually cost work.** Audited 2026-07-29 across the tree: `AGENTS.md` has **zero** git guidance (every `branch`/`merge`/`push` match is mathematical or the tally hook); `dev/README.md`'s "read these three" cold-start table never mentions branches; root `README.md` covers only a fresh checkout and the Spectra submodule remotes. §Rules (`:14-22`) governs **rows**, not **branches** — so it is silent on the step that makes a row visible. The rule that closes that gap **is already written and is filed where readers are told not to look**: `:97-100` says "a claim row committed on a branch is invisible to an agent on another branch until someone merges … fetch first and grep this file on *every* remote branch", but it sits inside backlog item #5, a struck-through **DONE** lane captioned "Do not take, and do not re-post it." That is why D-DOC was claimed twice 3m44s apart and surfaced only as 29 docstring conflicts at merge. Three further hazards are likewise recorded only as incidents, never as rules: duplicate-row merges (`:268`), authorship-before-status (`:194`), and take-theirs `.lean` resolution silently dropping another agent's work — D-DOC3 lost five docstrings that way, and `CayleySelectorBridge.lean` (`:272`) may have lost a 161-line port. Also unwritten: branch naming, already inconsistent across `aiq-gpu-work`/`namek-work`/`yardrat-work`/`jonwork` vs `fable/sylvester-upstream-leaves`/`doop/ols-quench`/`namek/d4-repoint-pending-d4b`. **Going in `dev/LANES.md` and not a new file** on `dev/README.md:59-63`'s own instruction — ~90 dated one-off notes went stale there and cost a session two reversed lanes; the rules belong beside the rules they complete. **Scope caveat this section will state explicitly** (edward, 2026-07-29): the lane protocol binds **autonomous** lane work only. An agent given a direct task by its human is not required to claim a row. **Claimed after `git fetch --all` and a grep of all 8 remote branches for a competing workflow-doc lane (none), and after merging `origin/namek-work`'s 8 new commits** so this row lands on current state rather than re-creating the D-DOC collision in the very lane that documents it. | 2026-07-29 | claimed — row pushed before the first edit |
+| edward (aiq-gpu) — **lane COORD — the coordinator and documentation-revision lane** | **Part 1, done in this commit:** `dev/LANES.md` — a NEW `## Branch and sync protocol` section and a `### When these rules apply` scope note, plus a promotion pointer on closed backlog item #5; `AGENTS.md` — a NEW `## Parallel agent coordination` section; `dev/README.md` — the `LANES.md` cold-start row (one line, it asserted the now-corrected commit-don't-push rule). **Part 2, IN PROGRESS** (edward's instruction, 2026-07-29): standing ownership of **repo-wide documentation and tooling hygiene under a holistic lens** — repairing what other or stopped agents left behind, where no single agent's local view catches the contradiction. **Other agents still write their own documentation; this lane does not take that from them** and does not pre-empt a live row. Scope: (a) **broken metadata scripts** — measured today, 4 of the 30 build-free scripts fail: `generate_all_aggregates.py --check` (stale `DavisKahan.All`), `refresh_tauceti_pr1_consistency.py --check` (extraction manifest stale), `check_davis_kahan_rebased_mathahead.py` (12 of 40 manifest files absent), and `check_spectra_vendor_authorship.py` (its subject `vendor/Spectra` no longer exists); (b) **stale scripts** — ~16 of 51 are Spectra-lifecycle tooling for a dependency that is retired with 0 in-scope imports, and two of them report *falsely* rather than failing (`verify_spectra_reference.py` prints the superproject SHA as the submodule's; `verify_vendored_spectra.py` diffs a deleted tree); (c) **stale docs** — `dev/topurge/` backlog, the 8 migrated `ForTauCeti/**` modules still asserting `upstreaming to Mathlib rather than to Tau Ceti`, `dev/tauceti/spectra-removal-parallel-lanes.md`'s stacked triple measurement, and the `Conventions` bullet at `:264` pinning agent git identity to a value agents no longer commit as; (d) **re-deriving `dev/tauceti/submission-ladder.md`**, measured at 127 `ForTauCeti` modules on the day 29 more landed — it is 156 now, so every statistic in it is against a tree that no longer exists; (e) **opening prioritized lanes** by adversarial review for other agents to claim. **No `.lean` statement, proof, signature, name or attribute is changed by this lane**; aggregate `All.lean` import lists are regenerated by their own generator only, and any such change is called out separately. **Does NOT touch** another agent's claim row or prose except by marked annotation with evidence, and does not build — Lean is owned by another agent on this machine. | **The lane protocol is documented; the branch protocol is not, and the gap is what has actually cost work.** Audited 2026-07-29 across the tree: `AGENTS.md` has **zero** git guidance (every `branch`/`merge`/`push` match is mathematical or the tally hook); `dev/README.md`'s "read these three" cold-start table never mentions branches; root `README.md` covers only a fresh checkout and the Spectra submodule remotes. §Rules (`:14-22`) governs **rows**, not **branches** — so it is silent on the step that makes a row visible. The rule that closes that gap **is already written and is filed where readers are told not to look**: `:97-100` says "a claim row committed on a branch is invisible to an agent on another branch until someone merges … fetch first and grep this file on *every* remote branch", but it sits inside backlog item #5, a struck-through **DONE** lane captioned "Do not take, and do not re-post it." That is why D-DOC was claimed twice 3m44s apart and surfaced only as 29 docstring conflicts at merge. Three further hazards are likewise recorded only as incidents, never as rules: duplicate-row merges (`:268`), authorship-before-status (`:194`), and take-theirs `.lean` resolution silently dropping another agent's work — D-DOC3 lost five docstrings that way, and `CayleySelectorBridge.lean` (`:272`) may have lost a 161-line port. Also unwritten: branch naming, already inconsistent across `aiq-gpu-work`/`namek-work`/`yardrat-work`/`jonwork` vs `fable/sylvester-upstream-leaves`/`doop/ols-quench`/`namek/d4-repoint-pending-d4b`. **Going in `dev/LANES.md` and not a new file** on `dev/README.md:59-63`'s own instruction — ~90 dated one-off notes went stale there and cost a session two reversed lanes; the rules belong beside the rules they complete. **Scope caveat this section will state explicitly** (edward, 2026-07-29): the lane protocol binds **autonomous** lane work only. An agent given a direct task by its human is not required to claim a row. **Claimed after `git fetch --all` and a grep of all 8 remote branches for a competing workflow-doc lane (none), and after merging `origin/namek-work`'s 8 new commits** so this row lands on current state rather than re-creating the D-DOC collision in the very lane that documents it. | 2026-07-29 | claimed — row pushed before the first edit |
 | **EXECUTIVE DECISION — JON, 2026-07-29. Not an agent's judgement. Read before writing any lane that touches `ForTauCeti` or `external/TauCeti`.** | `AGENTS.md`, `lakefile.toml`, `ForTauCeti/README.md`, `dev/tauceti/NAMEK-STATUS.md` — each annotated in place, nothing silently rewritten. | **Jon's rulings, verbatim in effect.** (1) **`ForTauCeti` is THE PRODUCT.** The goal is an *elegant package* there — coherent API, one canonical spelling per concept, provenance on every module — **because that package is what polished roadmaps are generated from, and mechanical ports are then built to satisfy those roadmaps.** (2) **It is never deleted and never drained.** There is no terminal state in which it is empty. (3) **`external/TauCeti` is a read-only provenance reference**; stage in `ForTauCeti` and do not write into the submodule. **Every text in the tree that said otherwise is superseded in place, struck rather than erased**: `lakefile.toml`'s `lean_lib` comment and `ForTauCeti/README.md`'s headline both read *"the successful terminal state of the campaign is an empty/deleted `ForTauCeti`"*, and the README's per-cluster lifecycle had a *"delete the staging files"* step. **Do not re-add any of them.** **Jon's own note, and the reason this is in `AGENTS.md` and not only in the library's README: agents have now made this mistake twice.** Both read the superseded wording and planned toward draining the library. **I am the second.** I ran `scripts/export_for_tauceti.py --write`, putting 156 files into the `external/TauCeti` working tree — nothing committed, nothing pushed, the pin never moved, and the copies are now removed and the submodule is a clean upstream checkout again. The first instance is still legible in this file: an earlier agent's uncommitted `--write` left stale copies, and that is what made `principal-angles` fail `--check` — the symptom `edward (fable)` correctly flagged on 2026-07-28 without the cause being found. **`--check` is free to run; `--write` belongs to a submission, not to ordinary work.** **Consequence for the board: my M-SWITCH row above is void.** Its premise — that the campaign ends by repointing 261 imports and deleting the staging tree — is precisely what ruling (2) strikes. Its *measurements* stand and remain useful; its *conclusion* does not. **The work is now coherence in `ForTauCeti`**, and the measured defects are listed in `dev/tauceti/NAMEK-STATUS.md`: nine duplicate base-name spellings across two namespace families, five `unusedDecidableInType` suppressions, one over-length module. | 2026-07-29 | **standing — supersedes any contrary text** |
 | **UNCLAIMED — lane E-ALIAS, the first elegance lane. Measured by `jon (namek)` 2026-07-29, not started.** | `ForTauCeti/Analysis/InnerProductSpace/BoundedOperator/Basic.lean` and the consumers of whichever aliases are retired. **Does NOT touch** `DavisKahan/Experimental/**`, `comparator/*.json`, or `Challenge/**`. | **Under jon's decision that `ForTauCeti` is the product, the package's own README already names this defect and nobody has acted on it.** Lifecycle step 4 says *"remove compatibility aliases that no longer have downstream users"*. `BoundedOperator/Basic.lean` **is** that alias layer, and says so in its own docstrings — *"Compatibility-friendly name for symmetry of a bounded operator"*, *"Compatibility-friendly name for a reducing subspace"*. **17 of its 24 declarations are `abbrev`s onto a canonical spelling that already exists elsewhere in `ForTauCeti`**: `IsSelfAdjointOperator`→`A.IsSymmetric`, `Reduces`→`ContinuousLinearMap.Reduces`, `projection`→`U.starProjection`, `reflectionOperator`→`Submodule.reflectionOperator`, `diagonalPart`/`offDiagonalPart`, `subspaceGap`/`directedGap`→`Submodule.projectionGap`/`.directedProjectionGap`, `LowerFormBoundOn`/`UpperFormBoundOn`, `sylvesterOperator`. **That layer is why `Reduces` and `sylvesterOperator` each have three spellings in the package.** **It is live, so this is a migration, not a deletion** — `IsometricEmbedding` has 31 consuming files, `IsSelfAdjointOperator` 22, `Reduces` 17, `directedGap` 9 qualified, `IsAcute` 8. **But the cheap end is genuinely cheap and worth taking first:** `sylvesterOperator` and `LowerFormBoundOn`/`UpperFormBoundOn` have **zero** qualified consumers and `offDiagonalPart`/`sinThetaEmbedding` one each, so retiring those four collapses the three-way `sylvesterOperator` split on its own. **Read this before quoting a duplicate count.** A raw duplicate-base-name scan over `ForTauCeti` reports **46**, and most are idiomatic structure-namespace lemmas — `add`, `refl`, `trans`, `zero`, `smul`, `neg`, `sub`, `mono`, `nonneg`, `ext`, `add_le`, `sum_le` — exactly what Mathlib does. **Counting those as duplication would send the next agent after thirty non-problems.** The real surface is the 17-alias table plus the unstated `TauCeti.DavisKahan` vs `TauCeti.DavisKahanTheory` split. **Write that namespace rule down before moving any declaration between the two families.** | 2026-07-29 | **open — measured; FIRST SLICE DONE by `jon (namek)`.** `TauCeti.DavisKahan.sylvesterOperator` is retired and its 5 call sites use `ContinuousLinearMap.sylvesterOperator`, so **the three-way split is now two — and the two that remain are not duplicates**: `ContinuousLinearMap.sylvesterOperator` is the bounded version and `TauCeti.DavisKahanTheory.sylvesterOperator` the `LinearMap` one, genuinely different types. **That distinction is the lesson for the rest of the lane: a duplicate base name is a question, not a verdict** — check whether the two spellings denote the same object before retiring either, because `Reduces` (still three: `ContinuousLinearMap`, `TauCeti.DavisKahan`, `TauCeti.DavisKahanTheory`) may not collapse the same way. Build 9219 jobs 0 errors, `ForTauCeti` 0 warnings, all gates green. **Remaining: 16 aliases, of which `LowerFormBoundOn`/`UpperFormBoundOn`, `offDiagonalPart` and `sinThetaEmbedding` are the next cheapest.** |
+| **UNCLAIMED — lane FM-RETIRE. Finishes the `ForMathlib` retirement.** Posted by `edward (aiq-gpu)` (lane COORD), 2026-07-29 | Move the **4 remaining** `ForMathlib` modules into `ForTauCeti`, repoint consumers, **delete `ForMathlib/` and `ForMathlib.lean`**. Files: `ForMathlib/LinearAlgebra/Matrix/{PosDef,RankFactorization}.lean`, `ForMathlib/Topology/{ApproxMinimizer,Berge}.lean` (799 lines total); consumers `Acharyya2025/GramRealization.lean`, `Acharyya2024/RawStress.lean`; **`comparator/pending-{berge,rank-factorization,rank-psd-realization}.json`** and **`Challenge/MathlibPending/{Berge,RankFactorization,RankPsdRealization}/Leaderboard.lean`**. | **The end state is decided, so this is execution, not design** (edward, 2026-07-29): `ForMathlib` goes away entirely; whatever the elegant package needs moves to `ForTauCeti`, and nothing is retained as a Mathlib-bound remainder. Earlier text calling these four "the genuinely Mathlib-shaped remainder" is superseded — see `ForTauCeti/README.md` §*Relationship to `ForMathlib`*. **The import firewall does not block this.** Measured: the only internal edges are `PosDef → RankFactorization` and `Berge → ApproxMinimizer`, so the four move as **two independent pairs** and no `ForMathlib → ForTauCeti` edge is ever created. **Do not size this from the 799 lines — the cost is downstream and it is the documented rename trap.** Five declaration names are pinned as *data*: `ForMathlib.upperHemicontinuousAt_isMinOn`, `ForMathlib.continuous_iInf_of_isCompact`, `ForMathlib.exists_modulus_isMinOn` (berge), `ForMathlib.Matrix.rank_le_iff_exists_eq_mul`, `ForMathlib.Matrix.posSemidef_and_rank_le_iff_exists_conjTranspose_mul_self`. Renaming the namespace orphans all five plus three `#print axioms` targets, and **`Challenge` is outside `defaultTargets`, so a fully green default build proves nothing about them** — this is exactly the failure AGENTS.md records ("a rename that passed a green 9272-job default build still broke a Leaderboard"). **Required gates, in order:** `python3 scripts/check_declaration_name_drift.py` (fast, build-free, run first — currently green at 23 configs / 7455 declarations / 0 findings), then `lake build Challenge`, then `python3 scripts/check_comparator_signatures.py --no-build <config>`. **Open question for the taker, not a blocker:** the directory name `Challenge/MathlibPending/` becomes a misnomer for these three once the destination is Tau Ceti; the other 20 subdirectories may or may not be genuinely Mathlib-pending, so renaming the tree is a separate question — do not fold it in. **Needs a Lean build, which is why COORD posted it rather than took it.** | 2026-07-29 | **unclaimed — measured and ready to take** |
+| **UNCLAIMED — lane AGG-NORM. Apply the aggregate normalization the fixed generator now reports.** Posted by `edward (aiq-gpu)` (lane COORD), 2026-07-29 | `python3 scripts/generate_all_aggregates.py` (no flags), then build. Touches ~17 `DavisKahan/**/All.lean` files and creates 3: `FiniteDimensional/DirectRotation/PrincipalPlanes/All.lean`, `Geometry/Halmos/All.lean`, `OperatorIdeal/ApproximationNumbers/Real/All.lean`. | **This is a normalization, NOT a coverage fix — do not sell it as one.** Measured 2026-07-29: **311 of 312** production `DavisKahan` modules are already reachable from `DavisKahan.All`; the single exception is `DavisKahan.Experimental`, which is parked deliberately. The three directories without an aggregate are reached today by direct import from their parent (e.g. `Geometry/All.lean` imports `Geometry.Halmos.{Classification,GenericRotationPredicates,UnitaryEquivalence}`), so nothing is unprotected. What the run buys is that the generator's invariant becomes true again, so `--check` can be used as a gate instead of being permanently red. **Safe to run only since `c70ecb9f`/`2d904928`** — before that fix the generator **deleted all 21 cross-library `ForTauCeti` re-exports** from these same files, silently dropping namek's migrated sin-Θ/Sylvester/YuWangSamworth modules from the default build. Verify after running: `find DavisKahan -name All.lean \| xargs grep -h '^import ForTauCeti' \| wc -l` must still be **21**. **Needs a build** — it changes build inputs, which is the only reason COORD did not apply it. | 2026-07-29 | **unclaimed — measured and ready to take** |
