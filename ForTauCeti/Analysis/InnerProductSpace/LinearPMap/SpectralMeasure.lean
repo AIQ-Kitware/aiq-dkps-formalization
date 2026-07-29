@@ -809,6 +809,58 @@ theorem tendsto_specProjection_Icc (x : H) :
   have hfin := (Real.continuous_sqrt.tendsto 0).comp hsq'
   simpa only [Function.comp_def, Real.sqrt_sq (norm_nonneg _), Real.sqrt_zero] using hfin
 
+/-- **Form bounds on a spectral range.**  If `B ⊆ [β, α]` then the quadratic
+form of `A` on the spectral range of `B` is confined to `[β, α]`. -/
+theorem re_inner_apply_bounds_of_subset_Icc {β α : ℝ} (hBsub : B ⊆ Set.Icc β α)
+    {y : H} (hyK : y ∈ specRange hA B hB) (hy : y ∈ A.domain) :
+    β * ‖y‖ ^ 2 ≤ (⟪A ⟨y, hy⟩, y⟫_ℂ).re ∧ (⟪A ⟨y, hy⟩, y⟫_ℂ).re ≤ α * ‖y‖ ^ 2 := by
+  rcases le_or_gt β α with hβα | hβα
+  · have hM : ∀ s ∈ B, |s| ≤ max |β| |α| := fun s hs => by
+      obtain ⟨h1, h2⟩ := hBsub hs
+      rw [abs_le]
+      refine ⟨?_, ?_⟩
+      · have h3 := neg_abs_le β
+        have h4 := le_max_left |β| |α|
+        linarith
+      · have h3 := le_abs_self α
+        have h4 := le_max_right |β| |α|
+        linarith
+    have hr : (0 : ℝ) ≤ (α - β) / 2 := by linarith
+    have hcr : ∀ s ∈ B, |s - (β + α) / 2| ≤ (α - β) / 2 := fun s hs => by
+      obtain ⟨h1, h2⟩ := hBsub hs
+      rw [abs_le]
+      constructor <;> linarith
+    have hbound := norm_sub_smul_le_of_mem_specRange hA B hB hM hr hcr hyK hy
+    have hyy : (⟪y, y⟫_ℂ).re = ‖y‖ ^ 2 := by
+      rw [inner_self_eq_norm_sq_to_K]
+      norm_cast
+    have hexp : (⟪A ⟨y, hy⟩ - (((β + α) / 2 : ℝ) : ℂ) • y, y⟫_ℂ).re
+        = (⟪A ⟨y, hy⟩, y⟫_ℂ).re - (β + α) / 2 * ‖y‖ ^ 2 := by
+      rw [inner_sub_left, inner_smul_left, Complex.sub_re, Complex.conj_ofReal,
+        Complex.re_ofReal_mul, hyy]
+    have hcs : |(⟪A ⟨y, hy⟩ - (((β + α) / 2 : ℝ) : ℂ) • y, y⟫_ℂ).re|
+        ≤ (α - β) / 2 * ‖y‖ ^ 2 := by
+      calc |(⟪A ⟨y, hy⟩ - (((β + α) / 2 : ℝ) : ℂ) • y, y⟫_ℂ).re|
+          ≤ ‖⟪A ⟨y, hy⟩ - (((β + α) / 2 : ℝ) : ℂ) • y, y⟫_ℂ‖ := Complex.abs_re_le_norm _
+        _ ≤ ‖A ⟨y, hy⟩ - (((β + α) / 2 : ℝ) : ℂ) • y‖ * ‖y‖ := norm_inner_le_norm _ _
+        _ ≤ ((α - β) / 2 * ‖y‖) * ‖y‖ := by gcongr
+        _ = (α - β) / 2 * ‖y‖ ^ 2 := by ring
+    rw [hexp, abs_le] at hcs
+    constructor <;> nlinarith [hcs.1, hcs.2]
+  · -- `Set.Icc β α` is empty, hence so is `B`, hence the spectral range is trivial
+    have hIcc : Set.Icc β α = (∅ : Set ℝ) := Set.Icc_eq_empty (not_le.mpr hβα)
+    have hBempty : B = (∅ : Set ℝ) := Set.eq_empty_of_subset_empty (hIcc ▸ hBsub)
+    have hfix : specProjection hA B hB y = y := (mem_specRange_iff hA B hB y).mp hyK
+    have hzero : ‖y‖ ^ 2 = 0 := by
+      conv_lhs => rw [← hfix]
+      rw [show specProjection hA B hB y = (spectralPVM hA).proj B hB y from rfl,
+        (spectralPVM hA).norm_sq_proj_apply, hBempty, measure_empty, ENNReal.toReal_zero]
+    have hy0 : y = 0 := norm_eq_zero.mp (pow_eq_zero_iff (n := 2) (by norm_num) |>.mp hzero)
+    subst hy0
+    have h0 : (⟨(0 : H), hy⟩ : A.domain) = 0 := Subtype.ext rfl
+    rw [h0, _root_.LinearPMap.map_zero]
+    simp
+
 end BoundedSet
 
 end LinearPMap
