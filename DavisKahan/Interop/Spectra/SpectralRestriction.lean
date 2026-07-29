@@ -5,8 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Interop.Spectra.ClosedOperator
 import DavisKahan.Interop.Spectra.PVMSubspace
-import Spectra.SpectralTheory.Measure.GeneratorLink
-import Spectra.SpectralTheory.Measure.PVM
+import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralMeasure
 
 /-!
 # Spectral-subspace domain and intertwining adapters
@@ -26,6 +25,24 @@ orthogonally complemented subspace.  The main analytic facts proved here are:
 
 These are the exact domain/intertwining obligations needed before the operator
 part on the spectral range can be bundled as a self-adjoint closed operator.
+
+## Provenance
+
+Until 2026-07-28 the projections came from `vendor/Spectra` through Stone's
+theorem: `genToGroup hA` produced a one-parameter unitary group, and
+`spectralProjection`/`PVM.spectralPVM` its projection-valued measure, with
+`spectralProjection_mem_generatorDomain_of_mem` and
+`generator_spectralProjection_comm` supplying the two facts below.
+
+The native replacement is `TauCeti.LinearPMap.spectralPVM`, built from the
+bounded Borel functional calculus of the *Cayley transform* rather than from
+Stone's theorem — see
+`ForTauCeti/Analysis/InnerProductSpace/BorelCalculus/` and
+`ForTauCeti/Analysis/InnerProductSpace/LinearPMap/SpectralMeasure.lean`.  The
+two facts become `specProjection_mem_domain` and `specProjection_apply_domain`,
+both of which fall out of one observation: the spectral projections and the
+resolvent `(A + i)⁻¹` are both images of the same (commutative) Borel calculus.
+The statements here are unchanged.
 -/
 
 open scoped InnerProductSpace
@@ -35,26 +52,20 @@ namespace DavisKahan
 namespace Experimental
 namespace SpectraBridge
 
-open Spectra.OneParameterUnitaryGroup
-open Spectra.YosidaHille
-open Spectra.QuantumMechanics.SpectralTheory
-
 variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
   [CompleteSpace H]
 
-/-- The canonical Spectra spectral projection of a self-adjoint DK closed
-operator. -/
+/-- The canonical spectral projection of a self-adjoint DK closed operator. -/
 noncomputable def selfAdjointSpectralProjection
     (A : DKClosedOperator (H := H)) (hA : A.IsSelfAdjoint)
     (B : Set ℝ) (hB : MeasurableSet B) : H →L[ℂ] H :=
-  spectralProjection (genToGroup hA) B hB
+  TauCeti.LinearPMap.specProjection hA B hB
 
 /-- The range subspace of a canonical self-adjoint spectral projection. -/
 noncomputable def selfAdjointSpectralSubspace
     (A : DKClosedOperator (H := H)) (hA : A.IsSelfAdjoint)
     (B : Set ℝ) (hB : MeasurableSet B) : Submodule ℂ H :=
-  pvmRangeSubspace
-    (Spectra.QuantumMechanics.SpectralTheory.PVM.spectralPVM hA) B hB
+  pvmRangeSubspace (TauCeti.LinearPMap.spectralPVM hA) B hB
 
 @[simp]
 theorem selfAdjointSpectralSubspace_eq_range
@@ -112,25 +123,15 @@ theorem selfAdjointSpectralProjection_eq_starProjection
     selfAdjointSpectralProjection A hA B hB =
       (selfAdjointSpectralSubspace A hA B hB).starProjection := by
   exact pvmProjection_eq_starProjection_rangeSubspace
-    (Spectra.QuantumMechanics.SpectralTheory.PVM.spectralPVM hA) B hB
+    (TauCeti.LinearPMap.spectralPVM hA) B hB
 
 /-- Every measurable spectral projection preserves the domain of its
 self-adjoint operator. -/
 theorem selfAdjointSpectralProjection_mem_domain
     (A : DKClosedOperator (H := H)) (hA : A.IsSelfAdjoint)
     {B : Set ℝ} (hB : MeasurableSet B) (x : A.domain) :
-    selfAdjointSpectralProjection A hA B hB (x : H) ∈ A.domain := by
-  let U := genToGroup hA
-  have hgen : generator U = A.toLinearPMap := generator_genToGroup hA
-  have hdom : (generator U).domain = A.domain :=
-    congrArg LinearPMap.domain hgen
-  have hxU : (x : H) ∈ (generator U).domain :=
-    (le_of_eq hdom.symm) x.property
-  have hxUproj :
-      spectralProjection U B hB (x : H) ∈ (generator U).domain :=
-    spectralProjection_mem_generatorDomain_of_mem U hB
-      (⟨(x : H), hxU⟩ : (generator U).domain)
-  exact (le_of_eq hdom) hxUproj
+    selfAdjointSpectralProjection A hA B hB (x : H) ∈ A.domain :=
+  TauCeti.LinearPMap.specProjection_mem_domain hA B hB x
 
 /-- A self-adjoint operator commutes with each measurable spectral projection
 on its full operator domain. -/
@@ -140,42 +141,8 @@ theorem selfAdjoint_apply_spectralProjection
     A.toLinearMap
         ⟨selfAdjointSpectralProjection A hA B hB (x : H),
           selfAdjointSpectralProjection_mem_domain A hA hB x⟩ =
-      selfAdjointSpectralProjection A hA B hB (A.toLinearMap x) := by
-  let U := genToGroup hA
-  have hgen : generator U = A.toLinearPMap := generator_genToGroup hA
-  have hdom : (generator U).domain = A.domain :=
-    congrArg LinearPMap.domain hgen
-  have hxU : (x : H) ∈ (generator U).domain :=
-    (le_of_eq hdom.symm) x.property
-  let xU : (generator U).domain := ⟨(x : H), hxU⟩
-  have hprojU : spectralProjection U B hB (x : H) ∈ (generator U).domain :=
-    spectralProjection_mem_generatorDomain_of_mem U hB xU
-  have hcomm := generator_spectralProjection_comm U hB xU
-  have happly := (LinearPMap.ext_iff.mp hgen).2
-  have hleft :
-      generator U ⟨spectralProjection U B hB (x : H), hprojU⟩ =
-        A.toLinearPMap
-          ⟨spectralProjection U B hB (x : H),
-            selfAdjointSpectralProjection_mem_domain A hA hB x⟩ :=
-    happly
-      (x := spectralProjection U B hB (x : H))
-      (hf := hprojU)
-      (hg := selfAdjointSpectralProjection_mem_domain A hA hB x)
-  have hright : generator U xU = A.toLinearPMap x :=
-    happly (x := (x : H)) (hf := hxU) (hg := x.property)
-  change A.toLinearPMap
-      ⟨spectralProjection U B hB (x : H),
-        selfAdjointSpectralProjection_mem_domain A hA hB x⟩ =
-    spectralProjection U B hB (A.toLinearPMap x)
-  calc
-    A.toLinearPMap
-        ⟨spectralProjection U B hB (x : H),
-          selfAdjointSpectralProjection_mem_domain A hA hB x⟩ =
-        generator U ⟨spectralProjection U B hB (x : H), hprojU⟩ :=
-      hleft.symm
-    _ = spectralProjection U B hB (generator U xU) := hcomm
-    _ = spectralProjection U B hB (A.toLinearPMap x) :=
-      congrArg (fun z : H => spectralProjection U B hB z) hright
+      selfAdjointSpectralProjection A hA B hB (A.toLinearMap x) :=
+  TauCeti.LinearPMap.specProjection_apply_domain hA B hB x
 
 /-- The domain-aware image of a vector in a spectral range remains in that
 spectral range. -/
@@ -184,7 +151,7 @@ theorem selfAdjoint_maps_spectralSubspace
     {B : Set ℝ} (hB : MeasurableSet B) (x : A.domain)
     (hx : (x : H) ∈ selfAdjointSpectralSubspace A hA B hB) :
     A.toLinearMap x ∈ selfAdjointSpectralSubspace A hA B hB := by
-  let P := Spectra.QuantumMechanics.SpectralTheory.PVM.spectralPVM hA
+  let P := TauCeti.LinearPMap.spectralPVM hA
   change A.toLinearMap x ∈ pvmRangeSubspace P B hB
   rw [mem_pvmRangeSubspace_iff P B hB]
   change selfAdjointSpectralProjection A hA B hB (A.toLinearMap x) =
