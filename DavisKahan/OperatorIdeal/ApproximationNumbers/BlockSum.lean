@@ -65,6 +65,8 @@ noncomputable def continuousOrthogonalBlockSum
     ((WithLp.prodContinuousLinearEquiv 2 𝕜 E₀ E₁) :
       WithLp 2 (E₀ × E₁) →L[𝕜] E₀ × E₁)
 
+/-- Pointwise formula for the orthogonal block sum: it acts as `A` on the first
+summand and `B` on the second. -/
 @[simp]
 theorem continuousOrthogonalBlockSum_apply
     {E₀ E₁ F₀ F₁ : Type v}
@@ -78,6 +80,7 @@ theorem continuousOrthogonalBlockSum_apply
       WithLp.toLp 2 (A x.fst, B x.snd) :=
   rfl
 
+/-- A block sum with zero first block keeps only the second block. -/
 @[simp]
 theorem continuousOrthogonalBlockSum_zero_left
     {E₀ E₁ F₀ F₁ : Type v}
@@ -113,28 +116,34 @@ def blockInr : E₁ →L[𝕜] WithLp 2 (E₀ × E₁) :=
       (E₀ × E₁) →L[𝕜] WithLp 2 (E₀ × E₁)) ∘L ContinuousLinearMap.inr 𝕜 E₀ E₁
 
 omit [CompleteSpace E₀] [CompleteSpace E₁] in
+/-- The left inclusion embeds `x` as `(x, 0)`. -/
 @[simp]
 theorem blockInl_apply (x : E₀) :
     (blockInl (E₁ := E₁) (𝕜 := 𝕜) x) = WithLp.toLp 2 (x, (0 : E₁)) := rfl
 
 omit [CompleteSpace E₀] [CompleteSpace E₁] in
+/-- The right inclusion embeds `y` as `(0, y)`. -/
 @[simp]
 theorem blockInr_apply (y : E₁) :
     (blockInr (E₀ := E₀) (𝕜 := 𝕜) y) = WithLp.toLp 2 ((0 : E₀), y) := rfl
 
 omit [CompleteSpace E₀] [CompleteSpace E₁] in
+/-- The left inclusion is norm-nonexpanding — in fact isometric, which is what makes
+the block sum orthogonal rather than merely direct. -/
 theorem norm_blockInl_le : ‖(blockInl : E₀ →L[𝕜] WithLp 2 (E₀ × E₁))‖ ≤ 1 := by
   apply ContinuousLinearMap.opNorm_le_bound _ zero_le_one
   intro x
   simp
 
 omit [CompleteSpace E₀] [CompleteSpace E₁] in
+/-- The right inclusion is norm-nonexpanding. -/
 theorem norm_blockInr_le : ‖(blockInr : E₁ →L[𝕜] WithLp 2 (E₀ × E₁))‖ ≤ 1 := by
   apply ContinuousLinearMap.opNorm_le_bound _ zero_le_one
   intro x
   simp
 
 omit [CompleteSpace F₀] [CompleteSpace F₁] in
+/-- The first coordinate projection is norm-nonexpanding. -/
 theorem norm_fstL_le : ‖(WithLp.fstL 2 𝕜 F₀ F₁)‖ ≤ 1 := by
   apply ContinuousLinearMap.opNorm_le_bound _ zero_le_one
   intro x
@@ -145,6 +154,7 @@ theorem norm_fstL_le : ‖(WithLp.fstL 2 𝕜 F₀ F₁)‖ ≤ 1 := by
   simpa using h2
 
 omit [CompleteSpace F₀] [CompleteSpace F₁] in
+/-- The second coordinate projection is norm-nonexpanding. -/
 theorem norm_sndL_le : ‖(WithLp.sndL 2 𝕜 F₀ F₁)‖ ≤ 1 := by
   apply ContinuousLinearMap.opNorm_le_bound _ zero_le_one
   intro x
