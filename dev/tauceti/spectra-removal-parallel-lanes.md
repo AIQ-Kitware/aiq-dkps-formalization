@@ -22,9 +22,9 @@ someone else.
 | **SR-A** Cayley / Möbius / `SelfAdjointOperator` bridge | 5 | — | **DONE** (namek) |
 | **SR-B** spectral support | 1 | — | **DONE** (namek) |
 | **SR-C** half-line form bounds | 1 | — | **DONE** (namek) |
-| **SR-D** Hilbert–Schmidt tensor | 5 | the HS tensor development itself | *open* |
+| **SR-D** Hilbert–Schmidt tensor | 5 | **21,581-line donor closure — needs re-plan + author coordination** | *open (measured by edward, aiq-gpu — see lane)* |
 | **SR-E** Rosenblum | 1 | intertwiner of disjoint spectra vanishes | claimed |
-| **SR-F** Experimental stragglers | 3 | three unrelated small items | *open* |
+| **SR-F** Experimental stragglers | 3 | three unrelated small items | **edward (aiq-gpu)** |
 
 `import Spectra` in `DavisKahan/**`: **15 → 9**.  The nine remaining are exactly
 SR-D (5), SR-E (1) and SR-F (3).
@@ -239,14 +239,26 @@ closures are:
 | `Operator.AdjointClosure` | 4 | 912 | **none — import line only** |
 | `QuantumMechanics.BornRule.Joint.Basic` | 86 | 20,354 | **none — import line only** |
 
-**If the two unused imports drop, the donor material this lane must port falls
-from 21,581 lines to ~753.**  That is the difference between "coordinate a
-multi-thousand-line port with Spectra's author" and "port two small Bornemann
-modules".  It is not yet proven: a Lean import can supply *instances* used
-implicitly, so zero name references does not establish removability.  The
-empirical test is free and belongs in this lane — relocate `HilbertSchmidt.lean`
-out of `vendor/` without those two imports and compile.  **Do that before
-sizing anything else here.**
+It looked as though dropping the two unused imports would cut the donor material
+from 21,581 lines to ~753.  **Tested, and it does not: they are not removable.**
+
+Method: compile `HilbertSchmidt.lean` standalone via `lake env lean`, once as-is
+and once with both imports deleted.  Control **1 error**, probe **29** — and the
+control's single error (an `apply` unification failure at line 119) appears in
+the probe too, shifted to 117 by the two deleted lines, so it is a
+standalone-compile artifact rather than an effect of the edit.  The differential
+is **+28 errors**, dominated by **19 × "Function expected at"** plus 8 unsolved
+goals — the signature of missing *instances*, not missing names.  That is exactly
+why a name-reference count cannot establish removability: `AdjointClosure` and
+`BornRule.Joint.Basic` are referenced nowhere in the body yet supply
+instances the file's elaboration depends on.
+
+**So SR-D's donor cost stands at the full closure: 92 modules, 21,581 lines**,
+of which one module (626 lines) is ours.  Per the plan that means
+coordinate-and-port with Spectra's author, not a relocation — and it is not a
+single session's work.  Anyone re-planning this lane should start from that
+number, and should treat "imported but never named" as *unproven* until compiled,
+in either direction.
 
 **New ForTauCeti modules:** under
 `ForTauCeti/Analysis/InnerProductSpace/HilbertSchmidt/`.
