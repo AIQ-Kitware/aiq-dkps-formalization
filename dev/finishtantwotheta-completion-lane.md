@@ -380,6 +380,65 @@ proof is now fixed, the circularity is gone, and the remaining obligation is a
 standard operator-theory statement about one spectral projection rather than an
 open question about the whole theorem.
 
+## Ticket board
+
+Ordered, each self-contained. T1.1 is the only one with no prerequisite and it
+is the one to start on: nothing downstream can be stated without it.
+
+**T1.1 — the adjoint Riccati equation.** *Blocks everything.*
+`ContractiveReducingGraphSelection.reduces` is
+`ReducesSubspace (unboundedBlockOperatorCorePMap H) (unboundedBlockGraph X)`,
+which by definition includes `InvariantSubspace _ (unboundedBlockGraph X)ᗮ`.
+The orthogonal complement of the graph is `{(-X*z, z) : z ∈ E₁}`. Unfolding
+invariance there gives, for `z ∈ dom A₁`:
+
+```
+X* z ∈ dom A₀     and     A₀(X* z) = B₀₁ z + X*(A₁ z) - X*(B₁₀ (X* z))
+```
+
+The forward direction already exists in the shape to copy —
+`strongSolvesRiccati_iff_pointwise` in
+`DavisKahan/Riccati/UnboundedReduction.lean` — so this is the same derivation
+run against `ᗮ` instead of the graph. It belongs beside it, in
+`DavisKahan/Riccati/`, not in this completion lane: it is a general fact about
+reducing Riccati graphs and other consumers will want it.
+
+**T1.2 — the bounded commutator.** *Needs T1.1. Pure algebra after it.*
+For `x ∈ dom A₀`, feeding `z := Xx` into T1.1 and eliminating `A₁(Xx)` with the
+forward Riccati gives `T := X*X` preserving `dom A₀` and
+
+```
+A₀ T - T A₀ = G := (I + T)K - K*(I + T),   K := B₀₁X,  K* = X*B₁₀
+‖G‖ ≤ 2(‖B₀₁‖ + ‖B₁₀‖) = 4‖B₀₁‖
+```
+
+**T1.3 — smooth band functions preserve `dom A₀`.** *Needs T1.2.*
+Duhamel for the bounded self-adjoint `T`: `‖[A₀, e^{itT}]‖ ≤ |t|·‖G‖`, then
+`φ(T) = (2π)^{-1/2}∫ φ̂(t)e^{itT}dt` for Schwartz `φ`. Build on
+`gramUnitaryGroup X` and `gramUnitaryGroup_generator_{apply,domain}` in
+`FinishTanTwoTheta/ApproximationNumber/GramBandPolar.lean`. This is the largest
+ticket and the only one needing real analysis.
+
+**T1.4 — band-compressed approximate eigenvectors.** *Needs T1.3.*
+For a smooth band `φ` supported in `J`, the compression `Ã` of `A₀` to
+`Ran φ(T)` is densely defined and symmetric; produce orthonormal
+`x₁,…,x_m ∈ dom A₀` in the band with `‖Ãxᵢ - μᵢxᵢ‖ ≤ ν` for prescribed `ν`.
+Disjoint bands give orthogonality across bands — reuse `gramBands_disjoint`.
+
+**T1.5 — restate the selection structure and rewire.** *Needs T1.4.*
+Replace `UnboundedApproximateLeadingSingularFamily` by the one-condition form
+(`sᵢ := ‖Xxᵢ‖`, `yᵢ := Xxᵢ/sᵢ`, single inequality
+`Re⟪A₀xᵢ, X*X xᵢ⟫ ≤ sᵢ·ε`), reprove
+`unboundedStableSingularPair_doubleAngleTangent_le` against it — it gets
+*shorter*, since the `A₁` side is now identically zero — and keep
+`sharp_unbounded_doubleAngleTangentOperator_kyFan` and
+`sharp_unbounded_standardSymmetricIdeal_scaled` verbatim.
+
+**T1.6 — the `sᵢ` versus `aᵢ(X)` bookkeeping.** *Independent of T1.1–T1.4, can
+be done in parallel.* `t ↦ 2t/(1-t²)` is Lipschitz on `[0,r]` for `r < 1`;
+`sum_doubleAngleTangent_le_selected_add_tail` already performs the analogous
+estimate and is the template.
+
 5. **Record it as an open obligation** with an explicit `sorry` so the library
    is green and the debt is visible and greppable. `PROOF_OBLIGATIONS.md`
    currently forbids `sorry` in this library; that guard was written on the
