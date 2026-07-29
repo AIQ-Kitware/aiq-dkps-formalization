@@ -716,23 +716,66 @@ private theorem tanTwoAngleOperatorC_eq_modulus_ambientGraphTangent
     have hMperp : ContinuousLinearMap.modulus Y ∘L Uᗮ.starProjection = 0 := by
       apply ContinuousLinearMap.ext
       intro x
-      rw [ContinuousLinearMap.comp_apply,
+      -- `zero_apply` is needed: after `comp_apply` the right-hand side is still
+      -- `(0 : E →L[ℂ] E) x`, so `modulus_apply_eq_zero_iff` has nothing to match.
+      rw [ContinuousLinearMap.comp_apply, ContinuousLinearMap.zero_apply,
         ContinuousLinearMap.modulus_apply_eq_zero_iff]
       have hzero : Y (Uᗮ.starProjection x) = 0 := by
         have h := DFunLike.congr_fun hYP (Uᗮ.starProjection x)
         rw [ContinuousLinearMap.comp_apply,
-          Submodule.starProjection_apply_eq_zero_iff.mpr
+          (Submodule.starProjection_apply_eq_zero_iff (K := U)).mpr
             (Uᗮ.starProjection_apply_mem x)] at h
         simpa using h.symm
       exact hzero
-    rw [ContinuousLinearMap.comp_add, hMperp, add_zero]
-    rw [ContinuousLinearMap.comp_assoc, ContinuousLinearMap.comp_assoc,
-      Ring.inverse_mul_cancel D hDunit, ContinuousLinearMap.id_comp]
-    noncomm_ring
+    -- `D` is the identity on `Uᗮ` (because `G` kills it), hence so is `D⁻¹`; that
+    -- is what makes the `Uᗮ` block of the product vanish.  `hMperp` alone cannot
+    -- fire: the second summand is `(2 • |Y| D⁻¹) ∘ P⊥`, in which `|Y| ∘ P⊥` is not
+    -- a subterm.
+    have hPsumOp : P + Uᗮ.starProjection = ContinuousLinearMap.id ℂ E := by
+      ext z
+      rw [ContinuousLinearMap.add_apply, ContinuousLinearMap.id_apply]
+      exact U.starProjection_add_starProjection_orthogonal z
+    have hGPerp : G ∘L Uᗮ.starProjection = 0 := by
+      have h : G ∘L P + G ∘L Uᗮ.starProjection = G := by
+        rw [← ContinuousLinearMap.comp_add, hPsumOp,
+          ContinuousLinearMap.comp_id]
+      rw [hGP] at h
+      -- `h : G P⊥ + G = G`, so `(G P⊥ + G) - G = 0`, i.e. `G P⊥ = 0`.
+      simpa using sub_eq_zero_of_eq h
+    have hDPerp : D ∘L Uᗮ.starProjection = Uᗮ.starProjection := by
+      show (ContinuousLinearMap.id ℂ E - G) ∘L Uᗮ.starProjection = _
+      rw [ContinuousLinearMap.sub_comp, ContinuousLinearMap.id_comp, hGPerp,
+        sub_zero]
+    have hDinvPerp : Ring.inverse D ∘L Uᗮ.starProjection
+        = Uᗮ.starProjection := by
+      -- keep `∘L` in the first step: `hDPerp` is stated with `∘L`, and `*` would
+      -- not match it syntactically.
+      calc Ring.inverse D ∘L Uᗮ.starProjection
+          = Ring.inverse D ∘L (D ∘L Uᗮ.starProjection) := by rw [hDPerp]
+        _ = (Ring.inverse D * D) * Uᗮ.starProjection := by noncomm_ring
+        _ = Uᗮ.starProjection := by
+            rw [Ring.inverse_mul_cancel D hDunit, one_mul]
+    rw [ContinuousLinearMap.comp_add]
+    rw [show ((2 : ℂ) • (ContinuousLinearMap.modulus Y ∘L Ring.inverse D)) ∘L
+          Uᗮ.starProjection = 0 by
+      rw [ContinuousLinearMap.smul_comp, ContinuousLinearMap.comp_assoc,
+        hDinvPerp, hMperp, smul_zero], add_zero]
+    show ((2 : ℂ) • (ContinuousLinearMap.modulus Y * Ring.inverse D)) *
+        (D * (R * P))
+      = (2 : ℂ) • (ContinuousLinearMap.modulus Y * (R * P))
+    rw [smul_mul_assoc]
+    congr 1
+    calc (ContinuousLinearMap.modulus Y * Ring.inverse D) * (D * (R * P))
+        = ContinuousLinearMap.modulus Y * ((Ring.inverse D * D) * (R * P)) := by
+          noncomm_ring
+      _ = ContinuousLinearMap.modulus Y * (R * P) := by
+          rw [Ring.inverse_mul_cancel D hDunit, one_mul]
   have hcanonical := tanTwoAngleOperatorC_comp_cosTwoAngleExtendedC U V hquarter
   have hcosSurj : Function.Surjective (cosTwoAngleExtendedC U V) := by
-    rw [← LinearMap.range_eq_top]
-    exact (cosTwoAngleExtendedC_ker_bot_range_top U V hquarter).2
+    -- `range_eq_top` is stated for `LinearMap`; the goal's coercion is the
+    -- `ContinuousLinearMap` one, so rewrite backwards through `.mp` instead.
+    exact LinearMap.range_eq_top.mp
+      (cosTwoAngleExtendedC_ker_bot_range_top U V hquarter).2
   apply ContinuousLinearMap.ext
   intro x
   obtain ⟨y, rfl⟩ := hcosSurj x
