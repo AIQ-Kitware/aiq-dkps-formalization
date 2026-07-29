@@ -137,5 +137,5 @@ bodies compile, the queue should be recomputed: some mixed files may become
 wholly production-ready, making a larger canonical promotion preferable to the
 original declaration-by-declaration split.
 
-See `topurge/dev/full-part-iii-admission-elimination-math-ahead-2026-07-20.md`
+See `dev/topurge/dev/full-part-iii-admission-elimination-math-ahead-2026-07-20.md`
 and the machine-checked signature manifest for the candidate scope.

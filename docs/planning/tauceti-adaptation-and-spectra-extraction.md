@@ -170,7 +170,7 @@ docs/planning/opus-next-paper-completion-campaign.md
 
 The prompt that campaign shipped with is retired; it named commits and a
 worktree that have since moved on. It is kept at
-`topurge/dev/opus-next-agent-prompt.md` for reference only.
+`dev/topurge/dev/opus-next-agent-prompt.md` for reference only.
 
 The campaign should close real paper obligations, not merely write an audit or
 prototype a future Tau Ceti API.

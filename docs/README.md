@@ -9,8 +9,16 @@ Engineering memory and live agent coordination live in
 
 The repository has run a **dual-track policy since 2026-07-24**: Tau Ceti
 extraction is the primary track, Davis--Kahan source fidelity is maintenance.
-Mathlib is **not** the near-term target. Several documents here predate that
-switch and describe a Mathlib-readiness phase; each carries a banner saying so.
+
+**The Mathlib track is closed and is not resuming.** Several documents here
+predate that decision and were written against Mathlib; each carries a banner
+saying so. Do not read them as evidence that a Mathlib PR is planned — but do
+not discount their analysis either. **Tau Ceti holds a comparable bar** (accepted
+roadmap target, one topic per PR, green build, standard axiom allowlist), so
+statement clarity, API shape, proof locality, naming, and reviewer-objection
+analysis all carry over. What does *not* carry over is any claim about what
+Mathlib does or does not already contain; re-check against `external/TauCeti`
+and `vendor/Spectra`.
 
 | Read | For |
 |---|---|
@@ -38,10 +46,12 @@ docs/
 `opus-next-paper-completion-campaign.md`.
 
 **Candidate dossiers and PR shaping** — `mathlib-candidates.md` (the dossiers),
-`pr-decisions.md`, `spectral-pr-decomposition.md`,
-`rectangular-singular-values-and-frames.md`. These were written for the Mathlib
-track. The mathematics and the reviewer analysis remain valid; the *destination*
-has changed to Tau Ceti.
+`upstream-readiness-audit.md` (per-candidate reviewer objections, readiness
+ratings, and the PR sequencing), `pr-decisions.md`,
+`spectral-pr-decomposition.md`, `rectangular-singular-values-and-frames.md`.
+These were written for the Mathlib track. The mathematics and the reviewer
+analysis remain valid against Tau Ceti's comparable bar; only the *destination*
+changed.
 
 **Trackers** — `remaining-work.md` (R-numbered inventory; its header phase is
 superseded, see its banner), `acharyya-plan.md` (formalization-phase map, that
@@ -69,5 +79,5 @@ When a phase ends, **update the document in place with a banner** saying what
 superseded it, or move it to `historical/` with an entry in that README. Do not
 leave a finished plan looking active — that is precisely the failure the
 2026-07-29 purge was cleaning up, and it had already caused two reversed lanes.
-Files removed in that purge are staged in [`../topurge/`](../topurge/MANIFEST.md)
+Files removed in that purge are staged in [`../dev/topurge/`](../dev/topurge/MANIFEST.md)
 pending review and deletion.

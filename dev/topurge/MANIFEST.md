@@ -1,11 +1,11 @@
-# `topurge/` — staged for deletion, not yet deleted
+# `dev/topurge/` — staged for deletion, not yet deleted
 
 Everything here was moved out of `dev/` or `docs/` by lane D1 on 2026-07-29
 (`jon (yardrat)`), because it read as current documentation while describing
 work that has since been finished, abandoned, or superseded.
 
 **Nothing here has been deleted.** Each file sits at its original path under
-`topurge/`, moved with `git mv`, so the diff is rename-only and every file keeps
+`dev/topurge/`, moved with `git mv`, so the diff is rename-only and every file keeps
 its full history. The point of this directory is to make one review pass cheap:
 skim it, pull back anything that should not have gone, then delete the rest in a
 single commit.
@@ -25,12 +25,16 @@ lane.
 ## Restoring a file
 
 ```bash
-git mv topurge/<path> <path>
+git mv dev/topurge/<path> <path>
 ```
 
 `<path>` is the file's original location — it is exactly the path under
-`topurge/`. Nothing else has to be undone; no surviving document links into
-`topurge/`.
+`dev/topurge/`.
+
+A handful of surviving documents carry an explicit `dev/topurge/…` pointer where
+a link used to resolve, so a reader who needs the superseded detail can still
+find it. Those pointers are the only thing to clean up when this directory is
+finally deleted; `git grep topurge` finds them all.
 
 ## What was NOT purged, and why
 
@@ -67,10 +71,26 @@ These are the moves most likely to be wrong. Check these first.
   are KEEP. The ranking was still linked from
   `docs/planning/davis-kahan-full-paper-goal.md`; that link now points at the
   triage.
-- **`docs/planning/prep_mathlib_review_and_readiness.md`** (20 KB) — a genuine
-  reviewer-objection analysis, but anchored to a source tarball and commit from
-  2026-06-12, and aimed at Mathlib, which `AGENTS.md` now states is *not* the
-  near-term target. Worth keeping if the Mathlib track is ever reopened.
+- ~~`docs/planning/prep_mathlib_review_and_readiness.md`~~ — **RESTORED
+  2026-07-29 (jon), and the reasoning that purged it was wrong.** I moved it as
+  Mathlib-track material and wrote that it would be worth keeping "if the
+  Mathlib track is ever reopened." It will not reopen — but **Tau Ceti holds a
+  comparable bar**, so the readiness checklist, per-candidate reviewer
+  objections, readiness ratings and PR sequencing transfer as-is; only the
+  destination library changed. It now lives at
+  `docs/planning/upstream-readiness-audit.md`, renamed off the dead track and
+  retargeted. **The lesson for the rest of this review: judge a document by
+  whether its *analysis* still binds, not by whether its stated destination is
+  still live.** Anything else here purged on "aimed at Mathlib" grounds deserves
+  the same second look.
+- **`docs/planning/fable-options.md`** — **re-checked 2026-07-29 under the
+  lesson above, and it stays purged.** It differs in kind from the readiness
+  audit: that one analyses *how a reviewer receives a result*, which transfers to
+  Tau Ceti unchanged, while this one ranks *which task to pick next* under a
+  priority that no longer holds. Items 1 and 2 are marked DONE in the file
+  itself, items 3–5 are explicitly "marginal or disproportionate effort, not
+  recommended", and task selection is now the lane system's job. Nothing in it
+  binds.
 - **`dev/full-unbounded-sin-theta/README.md`** — a completion guide whose stated
   audit gate, `SinTheta/FullUnboundedAudit.lean`, does not exist anywhere in the
   tree, while its target endpoints have reached production
@@ -135,13 +155,12 @@ These are the moves most likely to be wrong. Check these first.
 | `dev/tauceti/public-api-integration-review.md` | 2026-07-27 | 3 | 5 KB |
 | `dev/tauceti/source-sine-theta-completion-audit.md` | 2026-07-20 | 1 | 3 KB |
 
-### Superseded planning docs (`docs/planning/`) — 3 files, 36 KB
+### Superseded planning docs (`docs/planning/`) — 2 files, 15 KB
 
 | file | last commit | commits | size |
 |---|---|---|---|
 | `docs/planning/fable-options.md` | 2026-06-12 | 2 | 5 KB |
 | `docs/planning/opus-next-polar-extraction-campaign.md` | 2026-07-23 | 1 | 10 KB |
-| `docs/planning/prep_mathlib_review_and_readiness.md` | 2026-07-13 | 5 | 20 KB |
 
 ### Dated Davis--Kahan campaign notes (`dev/`) — 40 files, 318 KB
 
