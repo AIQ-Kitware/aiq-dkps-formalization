@@ -144,11 +144,13 @@ theorem hilbertSchmidtENorm_sq (T : E →L[𝕜] F) (b : HilbertBasis ι 𝕜 E)
   rw [← ENNReal.rpow_two, T.hilbertSchmidtENorm_rpow_two b]
 
 omit [CompleteSpace F] in
+/-- The zero operator has zero Hilbert--Schmidt norm. -/
 @[simp] theorem hilbertSchmidtENorm_zero : (0 : E →L[𝕜] F).hilbertSchmidtENorm = 0 := by
   rw [hilbertSchmidtENorm, hilbertSchmidtEnergy_zero]
   exact ENNReal.zero_rpow_of_pos (by norm_num)
 
 omit [CompleteSpace F] in
+/-- The Hilbert--Schmidt norm is unchanged by negation. -/
 @[simp] theorem hilbertSchmidtENorm_neg (T : E →L[𝕜] F) :
     (-T).hilbertSchmidtENorm = T.hilbertSchmidtENorm := by
   rw [hilbertSchmidtENorm, hilbertSchmidtENorm, hilbertSchmidtEnergy_neg]
@@ -272,6 +274,7 @@ theorem mem_hilbertSchmidtIdealFamily_carrier_iff {𝕜 : Type u} [RCLike 𝕜] 
     A ∈ (hilbertSchmidtIdealFamily.{u, v} 𝕜).toOperatorIdealFamily.carrier ↔
       A.IsHilbertSchmidt := Iff.rfl
 
+/-- The gauge of the Hilbert--Schmidt family is the Hilbert--Schmidt norm. -/
 @[simp] theorem hilbertSchmidtIdealFamily_gauge {𝕜 : Type u} [RCLike 𝕜] {E F : Type v}
     [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
     [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F] (A : E →L[𝕜] F) :
