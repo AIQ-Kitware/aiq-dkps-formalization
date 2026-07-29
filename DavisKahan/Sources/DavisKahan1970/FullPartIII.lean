@@ -136,13 +136,13 @@ alias complex_directRotation_minimal :=
 
 /-! ## Graph and Riccati theory -/
 alias bounded_coercive_isUnit :=
-  ForMathlib.ContinuousLinearMap.isUnit_of_coercive
+  TauCeti.ContinuousLinearMap.isUnit_of_coercive
 alias bounded_one_add_star_mul_self_isUnit :=
-  ForMathlib.ContinuousLinearMap.isUnit_one_add_star_mul_self
+  TauCeti.ContinuousLinearMap.isUnit_one_add_star_mul_self
 alias bounded_positive_cauchy_schwarz :=
-  ForMathlib.ContinuousLinearMap.norm_apply_sq_le_of_positive
+  TauCeti.ContinuousLinearMap.norm_apply_sq_le_of_positive
 alias bounded_inverse_defect_norm :=
-  ForMathlib.ContinuousLinearMap.norm_one_sub_inverse_one_add
+  TauCeti.ContinuousLinearMap.norm_one_sub_inverse_one_add
 
 /-! ## Unbounded and form theorems -/
 alias unbounded_boundedPerturbation_selfAdjoint_spectra :=

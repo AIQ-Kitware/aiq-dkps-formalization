@@ -3,7 +3,7 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
-import ForMathlib.Analysis.InnerProductSpace.ProjectionBlocks
+import ForTauCeti.Analysis.InnerProductSpace.ProjectionBlocks
 
 /-!
 # Gap geometry for orthogonally complemented subspaces
@@ -84,13 +84,20 @@ hypothesis.  The proof uses the `RCLike` Hilbert-space star structure and is sca
   areas.
 * Original authors / copyright: Jon Crall, GPT 5.6 High; Copyright (c) 2026
   Kitware, Inc.; Apache 2.0.
-* Spectra influence: **none** — the `ForMathlib` import firewall admits only
-  Mathlib and `ForMathlib` (enforced by `scripts/check_dependency_layers.py`).
+* Spectra influence: **none** — the `ForTauCeti` import firewall admits only
+  Mathlib, `TauCeti` and `ForTauCeti` (enforced by `scripts/check_dependency_layers.py`).
+* Moved from `ForMathlib/Analysis/InnerProductSpace/` to `ForTauCeti/` on
+  2026-07-29 under lane Y3(b2), with the rest of its 8-module component.
+  Statements, proofs and signatures are unchanged.
 -/
 
 
 namespace ContinuousLinearMap
 
+/-- **A block-diagonal sum has the max of the two norms.**  If `P` is an
+orthogonal projection, `A` lives on its range on both sides (`A P = P A = A`) and
+`B` is annihilated by it on both sides (`B P = P B = 0`), then `A` and `B` act on
+orthogonal blocks and `‖A + B‖ = max ‖A‖ ‖B‖`. -/
 theorem norm_add_eq_max_of_block {P A B : E →L[𝕜] E}
     (hPsa : IsSelfAdjoint P) (hPid : IsIdempotentElem P)
     (hPnorm : ∀ x, ‖P x‖ ≤ ‖x‖) (hcompnorm : ∀ x, ‖(1 - P) x‖ ≤ ‖x‖)
@@ -165,6 +172,10 @@ end ContinuousLinearMap
 
 namespace Submodule
 
+/-- **The gap between two subspaces is the max of the two one-sided defects.**
+`‖P_U - P_V‖` equals the larger of `‖(1 - P_V) P_U‖` and `‖(1 - P_U) P_V‖` — the
+norms of the parts of each subspace that the other does not see.  This is the
+identity behind the two-sided form of the sin-Θ theorem. -/
 theorem norm_starProjection_sub_eq_max (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     ‖(U.starProjection - V.starProjection : E →L[𝕜] E)‖ =

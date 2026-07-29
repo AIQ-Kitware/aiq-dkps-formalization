@@ -15,7 +15,7 @@ Hilbert–Schmidt and spectral instances.
 The norm-free construction of `A, B, X, Y` is shared verbatim with the
 operator-norm theorem (`exists_isSymmetric_comp_sub_comp_eq`); only the final
 estimate differs — here it is the abstract Sylvester bound
-`ForMathlib.ContinuousLinearMap.le_div_of_comp_sub_comp_eq`, fed the operator seminorm
+`TauCeti.ContinuousLinearMap.le_div_of_comp_sub_comp_eq`, fed the operator seminorm
 induced by `N`, whose operator-ideal property is `UnitarilyInvariantNorm`'s
 `apply_comp_le`.
 To be re-authored per Mathlib's AI-contribution policy at PR time.
@@ -107,7 +107,7 @@ theorem apply_starProjection_comp_starProjection_le (N : UnitarilyInvariantNorm 
     exact N.apply_comp_le' (norm_nonneg C) fun y => C.le_opNorm y
   -- The abstract Sylvester bound gives `N' X ≤ N' Y / g`.
   have hbound : N' X ≤ N' Y / g :=
-    ForMathlib.ContinuousLinearMap.le_div_of_comp_sub_comp_eq hadd hsmul hidealL hidealR
+    TauCeti.ContinuousLinearMap.le_div_of_comp_sub_comp_eq hadd hsmul hidealL hidealR
       hAsym hBsym hg hAc hBc hsylv
   -- `N' Y ≤ N (S − T)` by the ideal property (both projections are contractions).
   have hYcoe : (Y : E →ₗ[𝕜] E) = (P : E →ₗ[𝕜] E) ∘ₗ ((T - S) ∘ₗ (Q : E →ₗ[𝕜] E)) := by

@@ -5,7 +5,7 @@ Authors: Jon Crall, GPT 5.6 High
 -/
 import DavisKahan.FiniteDimensional.Core.SpectralSubspace
 import DavisKahan.FiniteDimensional.Core.SpectralGap
-import ForMathlib.Analysis.InnerProductSpace.SylvesterBound
+import ForTauCeti.Analysis.InnerProductSpace.SylvesterBound
 
 /-!
 # Finite-dimensional Sylvester equations
@@ -16,7 +16,7 @@ canonical finite-dimensional solution.
 
 namespace TauCeti
 
-open ForMathlib
+open TauCeti
 namespace DavisKahanTheory
 
 open scoped InnerProductSpace BigOperators

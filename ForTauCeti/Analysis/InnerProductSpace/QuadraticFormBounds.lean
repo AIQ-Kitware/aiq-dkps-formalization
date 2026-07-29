@@ -22,8 +22,11 @@ well beyond Davis--Kahan perturbation theory.
   areas.
 * Original authors / copyright: Jon Crall, GPT 5.6 High; Copyright (c) 2026
   Kitware, Inc.; Apache 2.0.
-* Spectra influence: **none** — the `ForMathlib` import firewall admits only
-  Mathlib and `ForMathlib` (enforced by `scripts/check_dependency_layers.py`).
+* Spectra influence: **none** — the `ForTauCeti` import firewall admits only
+  Mathlib, `TauCeti` and `ForTauCeti` (enforced by `scripts/check_dependency_layers.py`).
+* Moved from `ForMathlib/Analysis/InnerProductSpace/` to `ForTauCeti/` on
+  2026-07-29 under lane Y3(b2), with the rest of its 8-module component.
+  Statements, proofs and signatures are unchanged.
 -/
 
 
