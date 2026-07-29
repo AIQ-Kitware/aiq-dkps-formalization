@@ -82,13 +82,17 @@ noncomputable def operatorNormIdealFamily (𝕜 : Type u) [RCLike 𝕜] :
           rw [Real.norm_eq_abs, abs_of_nonneg (by positivity),
             ENNReal.ofReal_mul (by positivity), ENNReal.ofReal_mul (norm_nonneg _)]
 
-/-- The gauge of the operator-norm family is the operator norm itself, by definition. -/
+/-- The gauge of the operator-norm family *is* the operator norm, definitionally.
+This is the lemma that lets the generic ideal-family API be read as ordinary
+operator-norm statements. -/
 @[simp]
 theorem gauge_operatorNormIdealFamily (A : E →L[𝕜] F) :
     (operatorNormIdealFamily.{u, v, w} 𝕜).gauge A = ‖A‖ₑ := rfl
 
-/-- Every bounded operator belongs to the operator-norm ideal: its carrier is `⊤`.  This is what
-makes the family the trivial (largest) operator ideal. -/
+/-- The operator-norm family is the *largest* ideal: every bounded operator
+belongs to it, because every bounded operator has finite operator norm.  It is
+the top element against which the other families (Ky Fan, Hilbert--Schmidt,
+trace class) are proper. -/
 @[simp]
 theorem carrier_operatorNormIdealFamily :
     (operatorNormIdealFamily.{u, v, w} 𝕜).carrier (E := E) (F := F) = ⊤ := by
@@ -136,14 +140,16 @@ noncomputable def operatorNormFamily (𝕜 : Type u) [RCLike 𝕜] :
     simp only [gauge_operatorNormIdealFamily, ← ofReal_norm]
     rw [ContinuousLinearMap.adjoint.norm_map]
 
-/-- Completeness of the symmetric operator-norm family.  It is the same statement as
-`instIsCompleteOperatorNormIdealFamily`, but that instance is stated at three independent
-universes and the symmetric family fixes the last two to be equal, so the specialization has to
-be given explicitly for instance search to find it. -/
+/-- Completeness transfers to the symmetric view, which shares its underlying
+family with `operatorNormIdealFamily`.  The instance has to be restated rather
+than inherited: `instIsCompleteOperatorNormIdealFamily` is stated at three
+independent universes, and the symmetric family constrains the last two to be
+equal, so instance search does not find it without this specialization. -/
 instance : (operatorNormFamily.{u, v} 𝕜).toOperatorIdealFamily.IsComplete :=
   inferInstanceAs (operatorNormIdealFamily.{u, v, v} 𝕜).IsComplete
 
-/-- The gauge of the symmetric operator-norm family is the operator norm, by definition. -/
+/-- The symmetric operator-norm family has the same gauge as the plain one; the
+symmetric structure adds adjoint-invariance, not a different norm. -/
 @[simp]
 theorem gauge_operatorNormFamily (A : E →L[𝕜] F) :
     (operatorNormFamily.{u, v} 𝕜).gauge A = ‖A‖ₑ := rfl

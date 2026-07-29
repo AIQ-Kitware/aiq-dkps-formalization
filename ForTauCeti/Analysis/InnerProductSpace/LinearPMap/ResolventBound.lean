@@ -65,18 +65,24 @@ noncomputable def resolvent (A : E →ₗ.[𝕜] E) {z : 𝕜} (hz : z ∈ resol
     E →L[𝕜] E :=
   hz.choose
 
-/-- The resolvent is a left inverse of `A - z` on the domain of `A`. -/
+/-- `resolvent A hz` is a **left** inverse of `A - z` on the domain: it undoes
+`A - z` on every `ψ ∈ A.domain`.  Together with `sub_smul_resolvent` this is the
+two-sided inverse property that defines the resolvent. -/
 theorem resolvent_apply_sub_smul {A : E →ₗ.[𝕜] E} {z : 𝕜} (hz : z ∈ resolventSet A)
     (ψ : A.domain) : resolvent A hz (A ψ - z • (ψ : E)) = (ψ : E) :=
   hz.choose_spec.1 ψ
 
-/-- The resolvent maps into the domain of `A`, so that `A` may be applied to its output. -/
+/-- The resolvent maps the whole space **into the domain** of `A`.  This is what
+makes the right-inverse statement `sub_smul_resolvent` typecheck: `A` may only
+be applied to elements of `A.domain`, so a witness of membership is needed
+before `A` can be applied to `resolvent A hz φ`. -/
 theorem resolvent_mem_domain {A : E →ₗ.[𝕜] E} {z : 𝕜} (hz : z ∈ resolventSet A)
     (φ : E) : resolvent A hz φ ∈ A.domain :=
   (hz.choose_spec.2 φ).choose
 
-/-- The resolvent is a right inverse of `A - z` on all of `E`.  Together with
-`resolvent_apply_sub_smul` this is the two-sided inverse property packaged in `resolventSet`. -/
+/-- `resolvent A hz` is a **right** inverse of `A - z`: applying `A - z` to it
+recovers the original vector, for every `φ` in the whole space.  The domain
+membership is supplied by `resolvent_mem_domain`. -/
 theorem sub_smul_resolvent {A : E →ₗ.[𝕜] E} {z : 𝕜} (hz : z ∈ resolventSet A) (φ : E) :
     A ⟨resolvent A hz φ, resolvent_mem_domain hz φ⟩ - z • resolvent A hz φ = φ :=
   (hz.choose_spec.2 φ).choose_spec
