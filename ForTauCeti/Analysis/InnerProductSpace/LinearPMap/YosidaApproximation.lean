@@ -662,6 +662,7 @@ noncomputable def expLimit (hA : IsSelfAdjoint A) (t : ℝ) : H →L[ℂ] H :=
     1
     (fun ψ => by simp [norm_expLimitFun])
 
+/-- The bundled limit flow acts as `expLimitFun`. -/
 @[simp] theorem expLimit_apply (hA : IsSelfAdjoint A) (t : ℝ) (ψ : H) :
     expLimit hA t ψ = expLimitFun hA t ψ := rfl
 

@@ -25,6 +25,7 @@ namespace SpectraBridge
 variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
   [CompleteSpace H]
 
+/-- Local shorthand for the DKPS closed-operator bundle. -/
 abbrev DKClosedOperator :=
   TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := H)
 
@@ -56,11 +57,13 @@ noncomputable def closedOperatorOfSelfAdjointPMap {K : Type*} [NormedAddCommGrou
     rw [hgraph] at hclosed
     exact hclosed
 
+/-- The closed operator built from a self-adjoint partial map has that map as its underlying `LinearPMap`. -/
 @[simp] theorem closedOperatorOfSelfAdjointPMap_toLinearPMap {K : Type*}
     [NormedAddCommGroup K] [InnerProductSpace ℂ K] [CompleteSpace K]
     (T : K →ₗ.[ℂ] K) (hT : IsSelfAdjoint T) :
     (closedOperatorOfSelfAdjointPMap T hT).toLinearPMap = T := rfl
 
+/-- Its domain is the partial map's domain. -/
 @[simp] theorem closedOperatorOfSelfAdjointPMap_domain {K : Type*}
     [NormedAddCommGroup K] [InnerProductSpace ℂ K] [CompleteSpace K]
     (T : K →ₗ.[ℂ] K) (hT : IsSelfAdjoint T) :

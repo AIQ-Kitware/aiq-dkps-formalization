@@ -94,6 +94,7 @@ noncomputable def reflectionProduct (U V : Submodule 𝕜 E)
   U.reflection.trans V.reflection
 
 omit [FiniteDimensional 𝕜 E] in
+/-- The product of the two reflections, unfolded. -/
 @[simp] theorem reflectionProduct_apply (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] (x : E) :
     reflectionProduct U V x = V.reflection (U.reflection x) := rfl
@@ -344,6 +345,7 @@ noncomputable def directRotation (U V : Submodule 𝕜 E)
     (hacute : IsAcute U V) : E ≃ₗᵢ[𝕜] E :=
   polarUnitaryEquiv (canonicalIntertwiner_isUnit_of_acute U V hacute)
 
+/-- The direct rotation, as a plain linear map. -/
 @[simp] theorem directRotation_toLinearMap (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hacute : IsAcute U V) :

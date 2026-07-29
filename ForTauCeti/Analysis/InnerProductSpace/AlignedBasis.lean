@@ -63,6 +63,7 @@ basis vector to `v j` (extended linearly): `x ↦ ∑ j, x j • v j`. -/
 noncomputable def familyMap (v : Fin d → E) : EuclideanSpace 𝕜 (Fin d) →ₗ[𝕜] E :=
   (Fintype.linearCombination 𝕜 v).comp (WithLp.linearEquiv 2 𝕜 (Fin d → 𝕜)).toLinearMap
 
+/-- The family map, unfolded to its expansion in the family. -/
 @[simp] theorem familyMap_apply (v : Fin d → E) (x : EuclideanSpace 𝕜 (Fin d)) :
     familyMap v x = ∑ i, x i • v i := by
   rw [familyMap, LinearMap.comp_apply, Fintype.linearCombination_apply]
@@ -89,10 +90,12 @@ noncomputable def familyIsometry {v : Fin d → E} (hv : Orthonormal 𝕜 v) :
     EuclideanSpace 𝕜 (Fin d) →ₗᵢ[𝕜] E :=
   (familyMap v).isometryOfInner (familyMap_inner_map_map hv)
 
+/-- The bundled isometry acts as the family map. -/
 @[simp] theorem familyIsometry_apply {v : Fin d → E} (hv : Orthonormal 𝕜 v)
     (x : EuclideanSpace 𝕜 (Fin d)) : familyIsometry hv x = ∑ i, x i • v i := by
   rw [familyIsometry, LinearMap.coe_isometryOfInner, familyMap_apply]
 
+/-- It sends the `k`-th standard basis vector to `v k`. -/
 @[simp] theorem familyIsometry_single {v : Fin d → E} (hv : Orthonormal 𝕜 v) (k : Fin d) :
     familyIsometry hv (EuclideanSpace.single k 1) = v k := by
   rw [familyIsometry_apply]

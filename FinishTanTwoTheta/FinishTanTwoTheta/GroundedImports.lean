@@ -5,8 +5,6 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.All
 import Mathlib.Analysis.Normed.Ring.Units
-import Spectra.SpectralTheory.Algebra
-import Spectra.SpectralTheory.Essential.Discrete
 
 /-!
 # Grounded imports for the finishing library

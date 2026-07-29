@@ -254,6 +254,7 @@ noncomputable def doubledRealRotation
     linear_combination
       (⟪x.fst, x.fst⟫_ℝ + ⟪x.snd, x.snd⟫_ℝ) * htrig
 
+/-- The doubled real rotation, unfolded. -/
 @[simp] theorem doubledRealRotation_apply
     {G : Type*} [NormedAddCommGroup G] [InnerProductSpace ℝ G]
     (theta : ℝ) (x : WithLp 2 (G × G)) :
@@ -369,6 +370,7 @@ noncomputable def basisDoubledRealRotation
     linear_combination
       ((e.repr x.fst i) ^ 2 + (e.repr x.snd i) ^ 2) * htrig
 
+/-- The doubled real rotation on a basis vector. -/
 @[simp] theorem basisDoubledRealRotation_apply
     {G ι : Type*} [NormedAddCommGroup G] [InnerProductSpace ℝ G]
     [Fintype ι] [DecidableEq ι]
@@ -381,6 +383,7 @@ noncomputable def basisDoubledRealRotation
           basisDiagonalRealMap e (fun i => Real.cos (theta i)) x.snd) := by
   rfl
 
+/-- Its action on the first summand. -/
 @[simp] theorem basisDoubledRealRotation_apply_first
     {G ι : Type*} [NormedAddCommGroup G] [InnerProductSpace ℝ G]
     [Fintype ι] [DecidableEq ι]
@@ -395,6 +398,7 @@ noncomputable def basisDoubledRealRotation
         basisDiagonalRealMap e (fun q => Real.cos (theta q)) 0) = _
   simp
 
+/-- Its action on the second summand. -/
 @[simp] theorem basisDoubledRealRotation_apply_second
     {G ι : Type*} [NormedAddCommGroup G] [InnerProductSpace ℝ G]
     [Fintype ι] [DecidableEq ι]
@@ -420,6 +424,7 @@ noncomputable def doubledPhaseAction
   (doubledRealRotation (G := FR) theta).toLinearMap ∘ₗ
     RectangularUnitarilyInvariantNorm.orthogonalBlockSum T T
 
+/-- The doubled phase action, unfolded. -/
 @[simp] theorem doubledPhaseAction_apply
     {ER FR : Type*}
     [NormedAddCommGroup ER] [InnerProductSpace ℝ ER]
@@ -447,6 +452,7 @@ def doubledComplexScalarAction
     apply WithLp.ofLp_injective 2
     apply Prod.ext <;> simp [smul_smul] <;> module
 
+/-- The doubled complex scalar action, unfolded. -/
 @[simp] theorem doubledComplexScalarAction_apply
     {ER FR : Type*}
     [NormedAddCommGroup ER] [InnerProductSpace ℝ ER]
@@ -1562,6 +1568,7 @@ noncomputable def basisDoubledPhaseRotation
       (by nlinarith [Real.sin_sq_add_cos_sq (theta i)])
       (e.repr x.fst i) (e.repr x.snd i)
 
+/-- The doubled phase rotation on a basis vector. -/
 @[simp] theorem basisDoubledPhaseRotation_apply
     (e : OrthonormalBasis ι 𝕜 G) (theta : ι → ℝ) (x : WithLp 2 (G × G)) :
     basisDoubledPhaseRotation e theta x = WithLp.toLp 2
@@ -1594,6 +1601,7 @@ def doubledComplexScalarMapAction (z : ℂ) (T : E' →ₗ[𝕜] F') :
     apply WithLp.ofLp_injective 2
     apply Prod.ext <;> simp [smul_smul] <;> module
 
+/-- The doubled complex scalar map action, unfolded. -/
 @[simp] theorem doubledComplexScalarMapAction_apply
     (z : ℂ) (T : E' →ₗ[𝕜] F') (x : WithLp 2 (E' × E')) :
     doubledComplexScalarMapAction z T x = WithLp.toLp 2
