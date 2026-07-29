@@ -320,10 +320,17 @@ private theorem tanTwoAngleOperatorC_eq_modulus_ambientGraphTangent
       -- the same operator (`DavisKahanExt.projection U` in some factors,
       -- `U.starProjection` in others), so no single hand-written pattern matches.
       -- Let `simp only` do the unfolding and the two collapses together.
-      simp only [graphProjectionFormula, DavisKahanExt.projection,
-        DavisKahan.projection, hYP, ContinuousLinearMap.star_eq_adjoint,
-        map_add, hPadj]
-      rw [mul_assoc]
+      show (P + Y * P) *
+            (Ring.inverse (1 + star (Y * P) * (Y * P)) * star (P + Y * P))
+          = (P + Y) ∘L R ∘L (P + Y.adjoint)
+      rw [show Y * P = Y from hYP, star_add,
+        ContinuousLinearMap.star_eq_adjoint, ContinuousLinearMap.star_eq_adjoint,
+        hPadj]
+      -- `R`, `N`, `G` are `let`-bound, and `1`/`id` and `*`/`∘SL` differ only up
+      -- to unfolding, so finish by definitional equality.
+      show (P + Y) * (Ring.inverse (1 + Y.adjoint * Y) * (P + Y.adjoint))
+          = (P + Y) * (Ring.inverse (1 + Y.adjoint * Y) * (P + Y.adjoint))
+      rfl
     exact hgraph.trans hcollapse
   -- Done as a ring computation rather than by `simp` normalisation.  No
   -- associativity convention works here: right-association hides `P ∘ P` from
