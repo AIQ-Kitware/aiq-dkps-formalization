@@ -355,8 +355,13 @@ private theorem tanTwoAngleOperatorC_eq_modulus_ambientGraphTangent
     dsimp [D]
     rw [ContinuousLinearMap.sub_comp, ContinuousLinearMap.comp_sub,
       ContinuousLinearMap.id_comp, ContinuousLinearMap.comp_id]
+  -- `Commute.units_inv_left` is stated for a `Units` coercion, not for
+  -- `Ring.inverse`; `Ring.inverse_of_isUnit` converts between them.
   have hDinvcommG : Ring.inverse D ∘L G = G ∘L Ring.inverse D := by
-    exact (show Commute D G from hDcommG).units_inv_left
+    have hu : Commute ((hDunit.unit : E →L[ℂ] E)) G := by
+      rw [hDunit.unit_spec]; exact hDcommG
+    rw [Ring.inverse_of_isUnit hDunit]
+    exact hu.units_inv_left
   have hTformula :
       doubleAngleTangentOperator Y
           (norm_quarterAcuteAngularOperator_lt_one U V hquarter) =
@@ -410,7 +415,12 @@ private theorem tanTwoAngleOperatorC_eq_modulus_ambientGraphTangent
         show Commute (ContinuousLinearMap.modulus Y)
           (ContinuousLinearMap.id ℂ E - G)
         exact (Commute.one_right _).sub_right hmodG
-      exact hmodD.units_inv_right
+      -- as above: cross from `Ring.inverse` to the `Units` inverse.
+      have hu : Commute (ContinuousLinearMap.modulus Y)
+          ((hDunit.unit : E →L[ℂ] E)) := by
+        rw [hDunit.unit_spec]; exact hmodD
+      rw [Ring.inverse_of_isUnit hDunit]
+      exact hu.units_inv_right
     have hprod : (0 : E →L[ℂ] E) ≤
         ContinuousLinearMap.modulus Y ∘L Ring.inverse D :=
       hcomm.mul_nonneg hmod hDinvNonneg
