@@ -30,8 +30,17 @@ from pathlib import Path
 FORBIDDEN = re.compile(r"^\s*namespace\s+(Spectra)(\.[A-Za-z0-9_.'₀-₉]+)?\s*$")
 
 # Directories that are allowed to declare into the donor namespace: the vendored
-# snapshot itself and the read-only upstream reference checkouts.
-EXEMPT_PREFIXES = ("vendor/", "external/", ".lake/")
+# snapshot itself, the read-only upstream reference checkouts, and the retirement
+# location.
+#
+# `retired/` is listed ahead of the move it exists for.  The S6 plan relocates
+# `vendor/Spectra` to `retired/Spectra` so that agents stop reusing it, and this
+# gate walks every `.lean` file in the repo.  Without the prefix the move would
+# turn 427 vendored files that legitimately say `namespace Spectra...` into
+# reported violations, and the gate would fail on a commit that changed no Lean
+# source at all.  Adding it now rather than in the move commit keeps the two
+# concerns separable.
+EXEMPT_PREFIXES = ("vendor/", "external/", ".lake/", "retired/")
 
 
 def strip_block_comments(text: str) -> list[str]:

@@ -374,3 +374,53 @@ One caveat to check rather than assume: `Audits/SylvesterHilbertSchmidt.lean`
 and `Sylvester/HilbertSchmidtPairwise.lean` also import Spectra's BornRule /
 PVM / Observable modules, which are **not** Hilbert–Schmidt infrastructure and
 may need a different replacement or may turn out to be unused `open`s.
+
+---
+
+## Update 2026-07-29 — S6 groundwork: the authorship debt is measurably shrinking
+
+Two S6 steps that do **not** wait on SR-D4b, both landed.
+
+### 1. The namespace gate is future-proofed
+
+`scripts/check_spectra_namespace.py` walks every `.lean` file in the repo and
+forbids declaring into `namespace Spectra` outside an exempt prefix.  The S6
+plan moves `vendor/Spectra` to `retired/Spectra`; without `retired/` in
+`EXEMPT_PREFIXES` **that move alone would turn 427 legitimately-vendored files
+into reported violations**, failing the gate on a commit that changes no Lean
+source. `retired/` is now listed, ahead of the move, so the two concerns stay
+separable.  Gate still green today (the prefix matches nothing yet).
+
+### 2. Four of the eleven DKPS-authored vendor files are now unreachable
+
+`dev/tauceti/spectra-vendor-authorship-baseline.json` lists 11 files inside
+`vendor/Spectra` that are ours rather than the donor's.  Computing the
+transitive import closure of the **three** remaining in-scope consumers into the
+vendored tree (100 vendored modules reachable) gives:
+
+| authored file | still reachable? |
+| --- | --- |
+| `Spaces/Tensor/HilbertSchmidt.lean` | reachable |
+| `Spaces/Tensor/HilbertSchmidtFlow.lean` | reachable |
+| `Spaces/Tensor/HilbertSchmidtGeneratorBridge.lean` | reachable |
+| `Spaces/Tensor/HilbertSchmidtSpectralGap.lean` | reachable |
+| `SpectralTheory/Calculus/SpectralGapInverse.lean` | reachable |
+| `OneParameterUnitaryGroup/Product.lean` | reachable |
+| `QuantumMechanics/BornRule/POVMCore.lean` | reachable |
+| `ProjValMeasure/GeneralMap.lean` | **dead** |
+| `QuantumMechanics/BornRule/Joint/ProjectivePVM.lean` | **dead** |
+| `SpectralTheory/SeparatedIntertwiner.lean` | **dead** |
+| `YosidaHille/RectangularIntertwining.lean` | **dead** |
+
+`ProjectivePVM.lean` became dead today, when the vestigial Born-rule import was
+dropped from `Audits/SylvesterHilbertSchmidt.lean`.
+`SeparatedIntertwiner.lean` was already superseded by
+`ForTauCeti/Analysis/InnerProductSpace/SeparatedIntertwiner.lean`.
+
+Per jon's instruction the bar for these is *"nothing depends on it"*, not
+deletion — so the four dead ones are **done**, and porting them to `ForTauCeti`
+is optional rather than required.
+
+**All seven survivors are the SR-D4b cluster.**  That is the useful conclusion:
+there is no separate authorship backlog left to work off.  Closing D4b closes
+the authorship ledger at the same time.
