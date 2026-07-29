@@ -280,6 +280,61 @@ theorem resolvent_eq_cfcHom (hzr : z ∈ resolventSet A) :
     resolventSymbol_apply, smul_eq_mul]
   field_simp
 
+/-- On the unit circle away from `1`, the inverse Cayley map is real. -/
+theorem inverseCayley_im_eq_zero {w : ℂ} (hw : ‖w‖ = 1) (hw1 : w ≠ 1) :
+    (Complex.I * (1 + w) / (1 - w)).im = 0 := by
+  have hw0 : w ≠ 0 := by
+    intro h; rw [h] at hw; simp at hw
+  have hd : (1 : ℂ) - w ≠ 0 := sub_ne_zero.mpr (Ne.symm hw1)
+  have hmul : w * (starRingEnd ℂ) w = 1 := by
+    rw [Complex.mul_conj, Complex.normSq_eq_norm_sq, hw]
+    norm_num
+  have hconj : (starRingEnd ℂ) w = w⁻¹ := by
+    field_simp
+    linear_combination hmul
+  rw [← Complex.conj_eq_iff_im, map_div₀, map_mul, Complex.conj_I, map_add, map_one,
+    map_sub, map_one, hconj]
+  field_simp
+  ring
+
+include hz in
+/-- **The resolvent formula** — the property that characterises the spectral
+measure. -/
+theorem spectralPVM_resolvent_formula (hzr : z ∈ resolventSet A) (ξ : H) :
+    ⟪ξ, resolvent A hzr ξ⟫_ℂ
+      = ∫ s, ((s : ℂ) - z)⁻¹ ∂((spectralPVM hA).diag ξ) := by
+  set hU := isStarNormal_cayley hA with hhU
+  have hlhs : ⟪ξ, resolvent A hzr ξ⟫_ℂ
+      = ∫ w, resolventSymbol hA hz w ∂(BorelCalculus.diagMeasure hU ξ) := by
+    rw [resolvent_eq_cfcHom hA hz hzr, BorelCalculus.integral_diagMeasure]
+  have hdiag : (spectralPVM hA).diag ξ
+      = Measure.map (cayleyInv hA) (BorelCalculus.diagMeasure hU ξ) := rfl
+  have hne : ∀ s : ℝ, (s : ℂ) - z ≠ 0 := by
+    intro s hc
+    exact hz (by simpa using congrArg Complex.im (sub_eq_zero.mp hc).symm)
+  have hcont : Continuous (fun s : ℝ => ((s : ℂ) - z)⁻¹) :=
+    Continuous.inv₀ (by fun_prop) hne
+  rw [hlhs, hdiag, integral_map (measurable_cayleyInv hA).aemeasurable
+    hcont.aestronglyMeasurable]
+  refine integral_congr_ae ?_
+  have hnull := diagMeasure_cayley_preimage_one hA ξ
+  have hae : ∀ᵐ w ∂(BorelCalculus.diagMeasure hU ξ),
+      w ∉ ((Subtype.val : _root_.spectrum ℂ (cayley hA) → ℂ) ⁻¹' {1}) :=
+    MeasureTheory.compl_mem_ae_iff.mpr hnull
+  filter_upwards [hae] with w hw
+  have hw1 : (w : ℂ) ≠ 1 := hw
+  have hnorm : ‖(w : ℂ)‖ = 1 :=
+    spectrum.norm_eq_one_of_unitary (cayley_mem_unitary hA) w.2
+  have hd : (1 : ℂ) - (w : ℂ) ≠ 0 := sub_ne_zero.mpr (Ne.symm hw1)
+  have hden := cayleyDenom_ne_zero hA hz w
+  have hcast : ((cayleyInv hA w : ℝ) : ℂ) = Complex.I * (1 + (w : ℂ)) / (1 - (w : ℂ)) :=
+    Complex.ext rfl (by simpa using (inverseCayley_im_eq_zero hnorm hw1).symm)
+  have key : Complex.I * (1 + (w : ℂ)) / (1 - (w : ℂ)) - z
+      = ((Complex.I - z) + (Complex.I + z) * (w : ℂ)) / (1 - (w : ℂ)) := by
+    field_simp
+    ring
+  rw [resolventSymbol_apply, hcast, key, inv_div]
+
 end ResolventFormula
 
 end LinearPMap
