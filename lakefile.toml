@@ -103,14 +103,16 @@ name = "DkpsQuench2026"
 [[lean_lib]]
 name = "Helm2025"
 
-# Temporary mathematics-first completion workspace for the sharp tan(2Theta)
-# theory.  Its source remains grouped under FinishTanTwoTheta/, but it is a
-# non-default library in this root Lake package so it shares the repository's
-# dependency resolution and .lake build directory.
+# Literature-certified completion facade for the proved tan(2Theta) surface.
+# Historical proof experiments remain under FinishTanTwoTheta/, but the library
+# target follows only the aggregate import closure rather than glob-building
+# unsupported research modules as if they were completed theorems.
 [[lean_lib]]
 name = "FinishTanTwoTheta"
 srcDir = "FinishTanTwoTheta"
-globs = ["FinishTanTwoTheta.*"]
+# The completion target is the aggregate import closure.  Historical proof
+# experiments remain individually buildable, but are not glob-built as if they
+# were part of the certified theorem surface.
 
 
 # Citation-priority completion lane for Yu--Wang--Samworth (2015).  The source

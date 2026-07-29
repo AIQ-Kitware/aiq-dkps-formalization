@@ -1,11 +1,11 @@
-import FinishTanTwoTheta.GroundedImports
-import FinishTanTwoTheta.Sequence.WeakSubmajorization
-import FinishTanTwoTheta.Sequence.MinimalCompletion
-import FinishTanTwoTheta.OperatorIdeal.StandardFanDominance
-import FinishTanTwoTheta.OperatorIdeal.StandardInstances
-import FinishTanTwoTheta.ApproximationNumber.SpectralSelection
-import FinishTanTwoTheta.FunctionalCalculus.DoubleAngleTangent
-import FinishTanTwoTheta.DavisKahan.StableRiccatiPair
-import FinishTanTwoTheta.DavisKahan.SharpKyFan
-import FinishTanTwoTheta.DavisKahan.SharpIdeal
-import FinishTanTwoTheta.DavisKahan.Unbounded
+import FinishTanTwoTheta.DavisKahan.LiteratureComplete
+
+/-!
+# Completed `FinishTanTwoTheta` target
+
+The aggregate now exposes exactly the `tan 2Theta` results proved by the
+source-distilled Davis--Kahan/GKMV development.  The former approximate
+singular-family completion modules remain explicit experimental targets, but
+are not part of this completed theorem surface because their unrestricted
+unbounded sharp conclusion is not presently proved.
+-/
