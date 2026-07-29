@@ -582,3 +582,47 @@ they are exactly Spectra's:
 
 Step 3 is Stone's theorem and step 4 is a Helly-selection argument; those are the
 two places where the port is real work rather than transcription.
+
+## Stone block: what Mathlib already provides (checked, 2026-07-28)
+
+The Stone/Yosida block was sized at **6,338 lines** by import closure. Most of it
+does not need porting, and this table is why. Verify before writing anything in
+this area.
+
+| Spectra module | lines | disposition |
+|---|---|---|
+| `Resolvent.*` subtree (Range, Orthogonal, ClosedRange, Surjectivity, Diagonal.IntegralZ.\*, Identities, SpecialCases, NormExpansion, LowerBound, Integral.\*) | **2,947** | **already replaced** by the native resolvent in `LinearPMap/{Resolvent,ResolventBound,SelfAdjointResolvent}.lean` |
+| `Approximation/ExpBounded/{Helpers,Adjoint,Unitary}` | **576** | **Mathlib**: `NormedSpace.exp` on `H →L[ℂ] H`, and `selfAdjoint.expUnitary a = exp (I • a)` which lands in `unitary` by construction |
+| `Approximation/{Helpers,Defs,Bounds,Symmetry}`, `Convergence/{JOperator,JNegOperator,Approximants}` | ~940 | **ported** → `LinearPMap/YosidaApproximation.lean` |
+| `Approximation/Commutation`, `Approximation/Exponential` | 830 | **remaining** — the strong-limit argument |
+| `YosidaHille/{Basic,Helpers,Unique}` | 564 | **remaining** — `genToGroup` packaging |
+
+### Mathlib substitutions, by name
+
+* `expBounded B t` ⇒ `NormedSpace.exp ((t : ℂ) • B)`. Spectra proves the agreement
+  itself (`expBounded_eq_exp`), so this is not a judgement call.
+* `expBounded_at_zero'`, `expBounded_add_smul` ⇒ `NormedSpace.exp_zero`,
+  `NormedSpace.exp_add_of_commute`.
+* unitarity of `exp(i t B)` for self-adjoint `B` ⇒ `selfAdjoint.expUnitary`, with
+  `selfAdjoint.expUnitary_zero` and `Commute.expUnitary_add`.
+* `norm_expBounded_skewAdjoint` (`‖exp(skew) ψ‖ = ‖ψ‖`) ⇒ follows from the
+  `unitary` membership above.
+* **`expBounded_hasDerivAt` ⇒ `hasFDerivAt_exp_smul_const`** — Mathlib has the
+  derivative of `t ↦ exp (t • x)` in a *non-commutative* algebra, which is the
+  analytic input the Duhamel estimate in `Commutation` needs. This is the one
+  that makes the remaining strong-limit argument tractable rather than a
+  from-scratch analysis development.
+
+### Lean traps in this area, all hit more than once
+
+* The bound variable occurs in the domain-membership proof, so rewriting it in
+  the goal gives an ill-typed motive — rewrite inside the hypothesis instead.
+* The scalar (`I*n`, `-I*n`) occurs inside the resolvent-set membership proof, so
+  `neg_mul`/`neg_smul` break the motive — leave it alone and let `module` finish.
+* `module` normalises scalars with `ring`, which does **not** know `I * I = -1`;
+  pull `(±in)² = -n²` out as a separate rewrite first.
+* The unitary API is in namespace **`Unitary`** (capital); `unitary` is the
+  submonoid. `Unitary.coe_star_mul_self` is usually the lemma wanted.
+* `E →L[ℂ] E` is a `CStarAlgebra`, but the instance lives in
+  `Mathlib.Analysis.CStarAlgebra.ContinuousLinearMap`; without that import,
+  instance search **diverges** rather than failing.
