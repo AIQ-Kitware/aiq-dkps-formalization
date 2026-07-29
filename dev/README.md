@@ -220,6 +220,64 @@ hand-maintaining, because a recorded status drifts the moment someone moves a
 module and nobody notices. Run it after any namespace move, then re-render the
 markdown view.
 
+## Yu--Wang--Samworth 2015 full source census
+
+The same instrument for the second paper the campaign carries end to end: Yu,
+Wang & Samworth, *A useful variant of the Davis--Kahan theorem for
+statisticians*, Biometrika 102(2), 2015.
+
+- `yu-wang-samworth-2015-full-source-census.json` — authoritative structured data;
+- `yu-wang-samworth-2015-full-source-census.md` — generated human-readable view.
+
+```bash
+python3 scripts/check_yu_wang_samworth_source_census.py            # fast gate
+python3 scripts/check_yu_wang_samworth_source_census.py --probe    # + build resolution
+python3 scripts/check_yu_wang_samworth_source_census.py --probe --sync
+```
+
+**It is keyed on the paper, not on the Lean tree**, so every result the paper
+proves has a row whether or not anything formalizes it. A census assembled from
+the Lean side enumerates what someone happened to write and cannot report an
+absence; this one can, and does.
+
+It currently reports **22 items; 18 formalized, of which 9 are guarded by the
+default build; 3 unformalized and still proof debt.** The gap between 18 and 9
+is the finding: `FinishYuWangSamworth` is a `lean_lib` but **not a default
+target**, so Theorem 1's three norm forms, most of Theorem 4, Lemma 5 and the
+corrected equation (4) are proved and unprotected — a refactor can break them
+while CI stays green. Adding one target closes most of that gap with no new
+mathematics.
+
+Three things this gate does that a name-grep cannot, each of which changed a
+row when it was first run:
+
+1. **It distinguishes `private` from missing.** Both fail a `#check`
+   identically and mean opposite things. Three declarations the census
+   initially cited are `private`; two have public siblings, and one does not —
+   the Section 1 complement identity `‖V_1ᵀV̂‖_F = ‖sin Θ‖_F` is proved and
+   uncitable, so its row reads `absent`, which is the only honest reading.
+2. **It carries a canary.** A name that must never resolve is appended to every
+   probe; if it does resolve, the diagnostic parser is broken and the run
+   refuses to report rather than reporting universal success. It fired on the
+   first run — the path anchor was wrong — which is precisely the failure a
+   canary exists to catch.
+3. **It separates `status` from `verification`.** The first is a judgement about
+   the printed source, the second is measured from the build and is rewritten by
+   `--sync`. Hand-maintaining the second is how a census drifts.
+
+Two source-level findings are recorded in the census's `gaps` table and are
+worth knowing before quoting this paper:
+
+- **The printed equation (4) is false.** It omits a square on `2 - ‖v̂ - v‖²`.
+  The corrected identity and a `norm_num` refutation of the printed polynomial
+  are both formalized.
+- **The repository carries two incompatible numberings for this paper.** The
+  Lean names and `FinishYuWangSamworth` use a flat sequence (Theorem 1,
+  Theorem 2, Corollary 3, Theorem 4, Lemma 5); the distilled tex restarts the
+  counter per environment type and calls the same results Corollary 1,
+  Theorem 3 and Appendix Lemma 1. They agree only on Theorems 1 and 2.
+  Resolving it needs one look at the published article.
+
 ## Docstring coverage
 
 `scripts/check_docstring_coverage.py` gates the one quality invariant that had no
