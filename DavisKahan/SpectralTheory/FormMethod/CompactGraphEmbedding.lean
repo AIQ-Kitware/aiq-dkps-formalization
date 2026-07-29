@@ -163,7 +163,6 @@ theorem compact_of_inverse_graph_embedding_compact
     exact graph_bound_of_bounded_preimage R hR hinj y hC
   obtain ⟨phi, hphi, hcauchy⟩ := hgraph x hxbound
   refine ⟨phi, hphi, ?_⟩
-  change CauchySeq (fun n => R (y (phi n)))
   exact hcauchy
 
 /-- For inverse realizations, bounded-resolvent compactness and graph-embedding

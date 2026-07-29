@@ -655,11 +655,11 @@ theorem halmosCosineSq_commute_projection
   let Qc : H →L[ℂ] H := complementaryProjection V
   change (P * Q * P + Pc * Qc * Pc) * P =
     P * (P * Q * P + Pc * Qc * Pc)
-  have hP : P * P = P := by simpa [P] using projection_sq U
+  have hP : P * P = P := by simp [P]
   have hPPc : P * Pc = 0 := by
-    simpa [P, Pc] using projection_mul_complementaryProjection U
+    simp [P, Pc]
   have hPcP : Pc * P = 0 := by
-    simpa [P, Pc] using complementaryProjection_mul_projection U
+    simp [P, Pc]
   have hleft : (P * Q * P + Pc * Qc * Pc) * P = P * Q * P := by
     rw [add_mul]
     have h₁ : (P * Q * P) * P = P * Q * P := by
@@ -704,13 +704,13 @@ theorem spectraCanonicalAbsoluteValue_sq_eq_halmosCosineSq
   let Qc : H →L[ℂ] H := complementaryProjection V
   change (P * Q + Pc * Qc) * (Q * P + Qc * Pc) =
     P * Q * P + Pc * Qc * Pc
-  have hQ : Q * Q = Q := by simpa [Q] using projection_sq V
+  have hQ : Q * Q = Q := by simp [Q]
   have hQQc : Q * Qc = 0 := by
-    simpa [Q, Qc] using projection_mul_complementaryProjection V
+    simp [Q, Qc]
   have hQcQ : Qc * Q = 0 := by
-    simpa [Q, Qc] using complementaryProjection_mul_projection V
+    simp [Q, Qc]
   have hQc : Qc * Qc = Qc := by
-    simpa [Qc] using complementaryProjection_sq V
+    simp [Qc]
   have h11 : (P * Q) * (Q * P) = P * Q * P := by
     calc
       (P * Q) * (Q * P) = P * ((Q * Q) * P) := by

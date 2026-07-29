@@ -50,6 +50,7 @@ omit [CompleteSpace H] in
     (hK : ∀ x ∈ K, T x ∈ K) (x : K) :
     restrictToInvariant T K hK x = ⟨T x, hK x x.property⟩ := rfl
 
+omit [CompleteSpace H] in
 /-- The left projection preserves the trivial Halmos part. -/
 theorem projection_left_invariant_halmosTrivialPart
     (U V : Submodule ℂ H) [U.HasOrthogonalProjection]
@@ -57,6 +58,7 @@ theorem projection_left_invariant_halmosTrivialPart
     ∀ x ∈ halmosTrivialPart U V, projection U x ∈ halmosTrivialPart U V :=
   fun _ hx => projection_mem_halmosTrivialPart_left U V hx
 
+omit [CompleteSpace H] in
 /-- The right projection preserves the trivial Halmos part. -/
 theorem projection_right_invariant_halmosTrivialPart
     (U V : Submodule ℂ H) [U.HasOrthogonalProjection]
@@ -175,8 +177,7 @@ theorem ambient_intertwines_left
   let T := halmosTrivialPart U V
   let G := halmosGenericPart U V
   have hsplit : x = T.starProjection x + G.starProjection x := by
-    simpa [T, G] using (halmosTrivialPart U V).
-      starProjection_add_starProjection_orthogonal x |>.symm
+    simp [T, G]
   rw [hsplit]
   simp only [map_add, ContinuousLinearMap.comp_apply,
     ContinuousLinearEquiv.coe_coe, LinearIsometryEquiv.coe_coe]
@@ -216,8 +217,7 @@ theorem ambient_intertwines_right
   let T := halmosTrivialPart U V
   let G := halmosGenericPart U V
   have hsplit : x = T.starProjection x + G.starProjection x := by
-    simpa [T, G] using (halmosTrivialPart U V).
-      starProjection_add_starProjection_orthogonal x |>.symm
+    simp [T, G]
   rw [hsplit]
   simp only [map_add, ContinuousLinearMap.comp_apply,
     ContinuousLinearEquiv.coe_coe, LinearIsometryEquiv.coe_coe]

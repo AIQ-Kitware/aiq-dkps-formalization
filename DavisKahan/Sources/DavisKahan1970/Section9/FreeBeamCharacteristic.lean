@@ -72,7 +72,7 @@ theorem hasDerivAt_mode (beta a b c d x : ℝ) :
           ((hasDerivAt_const x beta).mul (hasDerivAt_id x))).const_mul c)).add
       (((Real.hasDerivAt_sinh (beta * x)).comp x
           ((hasDerivAt_const x beta).mul (hasDerivAt_id x))).const_mul d)
-    using 1 <;> (try rfl) <;> (try funext y) <;> (try simp only [Function.comp_apply, Pi.add_apply]) <;> ring
+    using 1 <;> (try rfl) <;> ring
 
 /-- The displayed second derivative is the derivative of `modeD1`. -/
 theorem hasDerivAt_modeD1 (beta a b c d x : ℝ) :
@@ -87,7 +87,7 @@ theorem hasDerivAt_modeD1 (beta a b c d x : ℝ) :
           ((hasDerivAt_const x beta).mul (hasDerivAt_id x))).const_mul c)).add
       (((Real.hasDerivAt_cosh (beta * x)).comp x
           ((hasDerivAt_const x beta).mul (hasDerivAt_id x))).const_mul d)).const_mul beta
-    using 1 <;> (try rfl) <;> (try funext y) <;> (try simp only [Function.comp_apply, Pi.add_apply]) <;> ring
+    using 1 <;> (try rfl) <;> ring
 
 /-- The displayed third derivative is the derivative of `modeD2`. -/
 theorem hasDerivAt_modeD2 (beta a b c d x : ℝ) :
