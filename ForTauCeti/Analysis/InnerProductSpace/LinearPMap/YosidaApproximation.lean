@@ -14,6 +14,9 @@ module
 public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SelfAdjointResolvent
 public import Mathlib.Analysis.Complex.Norm
 public import Mathlib.Data.PNat.Basic
+public import Mathlib.Algebra.Star.Unitary
+public import Mathlib.Analysis.CStarAlgebra.Exponential
+public import Mathlib.Analysis.CStarAlgebra.ContinuousLinearMap
 
 /-!
 # The Yosida approximation of a self-adjoint operator
@@ -117,6 +120,10 @@ noncomputable def yosidaApprox (hA : IsSelfAdjoint A) (n : ℕ+) : H →L[ℂ] H
 /-- The symmetric Yosida approximant `(n²/2)(R(in) + R(-in))`. -/
 noncomputable def yosidaApproxSym (hA : IsSelfAdjoint A) (n : ℕ+) : H →L[ℂ] H :=
   ((n : ℂ) ^ 2 / 2) • (resolventAtIn hA n + resolventAtNegIn hA n)
+
+/-- The mirrored Yosida approximant `Aₙ⁻ = n² R(-in) + in`. -/
+noncomputable def yosidaApproxNeg (hA : IsSelfAdjoint A) (n : ℕ+) : H →L[ℂ] H :=
+  (n : ℂ) ^ 2 • resolventAtNegIn hA n + (I * (n : ℂ)) • ContinuousLinearMap.id ℂ H
 
 /-- The contraction `Jₙ = -in·R(in)`. -/
 noncomputable def yosidaJ (hA : IsSelfAdjoint A) (n : ℕ+) : H →L[ℂ] H :=
@@ -303,6 +310,212 @@ theorem tendsto_yosidaJ (hA : IsSelfAdjoint A) (ψ : H) :
         · exact Metric.mem_ball.mp (hN n hn)
         · exact Metric.mem_ball'.mp hφclose
     _ = ε := by ring
+
+/-! ### The mirror statements for `Jₙ⁻` -/
+
+/-- On the domain, `Jₙ⁻φ = φ - R(-in)(Aφ)`. -/
+theorem yosidaJNeg_apply_of_mem_domain (hA : IsSelfAdjoint A) (n : ℕ+)
+    (φ : H) (hφ : φ ∈ A.domain) :
+    yosidaJNeg hA n φ = φ - resolventAtNegIn hA n (A ⟨φ, hφ⟩) := by
+  set hz := mem_resolventSet_of_im_ne_zero hA (neg_I_mul_pnat_im_ne_zero n) with hz_def
+  have h1 : resolvent A hz (A ⟨φ, hφ⟩ - (-I * (n : ℂ)) • φ) = φ :=
+    resolvent_apply_sub_smul hz ⟨φ, hφ⟩
+  have h2 : resolvent A hz (A ⟨φ, hφ⟩) - (-I * (n : ℂ)) • resolvent A hz φ = φ := by
+    rwa [map_sub, map_smul] at h1
+  have h3 : resolvent A hz (A ⟨φ, hφ⟩) = φ + (-I * (n : ℂ)) • resolvent A hz φ :=
+    eq_add_of_sub_eq h2
+  change (I * (n : ℂ)) • resolvent A hz φ = φ - resolvent A hz (A ⟨φ, hφ⟩)
+  -- `-I * n` occurs in `hz`, so do not rewrite it; let `module` do the scalar arithmetic
+  rw [h3]
+  module
+
+/-- `Jₙ⁻φ → φ` for `φ` in the domain. -/
+theorem tendsto_yosidaJNeg_of_mem_domain (hA : IsSelfAdjoint A) (φ : H) (hφ : φ ∈ A.domain) :
+    Tendsto (fun n : ℕ+ => yosidaJNeg hA n φ) atTop (𝓝 φ) := by
+  rw [Metric.tendsto_atTop]
+  intro ε hε
+  by_cases hz : ‖A ⟨φ, hφ⟩‖ = 0
+  · refine ⟨1, fun n _ => ?_⟩
+    rw [yosidaJNeg_apply_of_mem_domain hA n φ hφ, norm_eq_zero.mp hz]
+    simpa using hε
+  · have hpos : 0 < ‖A ⟨φ, hφ⟩‖ := (norm_nonneg _).lt_of_ne' hz
+    refine ⟨⟨Nat.ceil (‖A ⟨φ, hφ⟩‖ / ε) + 1, Nat.add_one_pos _⟩, fun n hn => ?_⟩
+    have hnpos : (0 : ℝ) < (n : ℝ) := Nat.cast_pos.mpr n.pos
+    have heq : dist (yosidaJNeg hA n φ) φ = ‖resolventAtNegIn hA n (A ⟨φ, hφ⟩)‖ := by
+      rw [dist_eq_norm, yosidaJNeg_apply_of_mem_domain hA n φ hφ]
+      simp
+    rw [heq]
+    calc ‖resolventAtNegIn hA n (A ⟨φ, hφ⟩)‖
+        ≤ ‖resolventAtNegIn hA n‖ * ‖A ⟨φ, hφ⟩‖ := ContinuousLinearMap.le_opNorm _ _
+      _ ≤ ((n : ℝ))⁻¹ * ‖A ⟨φ, hφ⟩‖ := by
+          gcongr
+          exact norm_resolventAtNegIn_le hA n
+      _ < ε := by
+          rw [inv_mul_lt_iff₀ hnpos]
+          have h1 : (⌈‖A ⟨φ, hφ⟩‖ / ε⌉₊ + 1 : ℕ) ≤ (n : ℕ) := hn
+          calc ‖A ⟨φ, hφ⟩‖
+              = (‖A ⟨φ, hφ⟩‖ / ε) * ε := by field_simp
+            _ ≤ (⌈‖A ⟨φ, hφ⟩‖ / ε⌉₊ : ℝ) * ε := by gcongr; exact Nat.le_ceil _
+            _ < ((⌈‖A ⟨φ, hφ⟩‖ / ε⌉₊ : ℝ) + 1) * ε := by nlinarith
+            _ ≤ (n : ℝ) * ε := by gcongr; exact_mod_cast h1
+
+/-- `Jₙ⁻ → 1` strongly on all of `H`. -/
+theorem tendsto_yosidaJNeg (hA : IsSelfAdjoint A) (ψ : H) :
+    Tendsto (fun n : ℕ+ => yosidaJNeg hA n ψ) atTop (𝓝 ψ) := by
+  have hdense : Dense (A.domain : Set H) := hA.dense_domain
+  rw [Metric.tendsto_atTop]
+  intro ε hε
+  obtain ⟨φ, hφmem, hφclose⟩ := Metric.mem_closure_iff.mp
+    (hdense.closure_eq ▸ Set.mem_univ ψ) (ε / 3) (by linarith)
+  obtain ⟨N, hN⟩ := (Metric.tendsto_atTop.mp
+    (tendsto_yosidaJNeg_of_mem_domain hA φ hφmem)) (ε / 3) (by linarith)
+  refine ⟨N, fun n hn => ?_⟩
+  calc dist (yosidaJNeg hA n ψ) ψ
+      ≤ dist (yosidaJNeg hA n ψ) (yosidaJNeg hA n φ) + dist (yosidaJNeg hA n φ) φ
+          + dist φ ψ := dist_triangle4 _ _ _ _
+    _ = ‖yosidaJNeg hA n (ψ - φ)‖ + dist (yosidaJNeg hA n φ) φ + dist φ ψ := by
+        rw [dist_eq_norm, ContinuousLinearMap.map_sub]
+    _ ≤ ‖yosidaJNeg hA n‖ * ‖ψ - φ‖ + dist (yosidaJNeg hA n φ) φ + dist φ ψ := by
+        gcongr; exact ContinuousLinearMap.le_opNorm _ _
+    _ ≤ 1 * ‖ψ - φ‖ + dist (yosidaJNeg hA n φ) φ + dist φ ψ := by
+        gcongr; exact norm_yosidaJNeg_le hA n
+    _ = dist ψ φ + dist (yosidaJNeg hA n φ) φ + dist φ ψ := by rw [one_mul, ← dist_eq_norm]
+    _ < ε / 3 + ε / 3 + ε / 3 := by
+        gcongr
+        · exact Metric.mem_ball.mp (hN n hn)
+        · exact Metric.mem_ball'.mp hφclose
+    _ = ε := by ring
+
+/-! ### The approximants factor through the contractions -/
+
+/-- `(-in)² = -n²`. -/
+private theorem negI_pnat_sq (n : ℕ+) :
+    (-I * (n : ℂ)) * (-I * (n : ℂ)) = -((n : ℂ) ^ 2) := by
+  rw [show (-I * (n : ℂ)) * (-I * (n : ℂ)) = (I * I) * (n : ℂ) ^ 2 by ring, Complex.I_mul_I]
+  ring
+
+/-- `(in)² = -n²`. -/
+private theorem I_pnat_sq (n : ℕ+) :
+    (I * (n : ℂ)) * (I * (n : ℂ)) = -((n : ℂ) ^ 2) := by
+  rw [show (I * (n : ℂ)) * (I * (n : ℂ)) = (I * I) * (n : ℂ) ^ 2 by ring, Complex.I_mul_I]
+  ring
+
+/-- On the domain, `Aₙ` factors through `Jₙ`: `Aₙφ = Jₙ(Aφ)`. -/
+theorem yosidaApprox_apply_of_mem_domain (hA : IsSelfAdjoint A) (n : ℕ+)
+    (φ : H) (hφ : φ ∈ A.domain) :
+    yosidaApprox hA n φ = yosidaJ hA n (A ⟨φ, hφ⟩) := by
+  set hz := mem_resolventSet_of_im_ne_zero hA (I_mul_pnat_im_ne_zero n) with hz_def
+  have h := yosidaJ_apply_of_mem_domain hA n φ hφ
+  have h' : (-I * (n : ℂ)) • resolvent A hz φ + resolvent A hz (A ⟨φ, hφ⟩) = φ := by
+    have : (-I * (n : ℂ)) • resolvent A hz φ = φ - resolvent A hz (A ⟨φ, hφ⟩) := h
+    rw [this]; abel
+  have hRA : resolvent A hz (A ⟨φ, hφ⟩) = φ - (-I * (n : ℂ)) • resolvent A hz φ :=
+    eq_sub_of_add_eq' h'
+  change (n : ℂ) ^ 2 • resolvent A hz φ - (I * (n : ℂ)) • φ
+    = (-I * (n : ℂ)) • resolvent A hz (A ⟨φ, hφ⟩)
+  rw [hRA, smul_sub, smul_smul, negI_pnat_sq]
+  module
+
+/-- `Aₙφ → Aφ` on the domain. -/
+theorem tendsto_yosidaApprox_of_mem_domain (hA : IsSelfAdjoint A) (ψ : H) (hψ : ψ ∈ A.domain) :
+    Tendsto (fun n : ℕ+ => yosidaApprox hA n ψ) atTop (𝓝 (A ⟨ψ, hψ⟩)) := by
+  simp only [fun n => yosidaApprox_apply_of_mem_domain hA n ψ hψ]
+  exact tendsto_yosidaJ hA (A ⟨ψ, hψ⟩)
+
+/-- On the domain, `Aₙ⁻` factors through `Jₙ⁻`. -/
+theorem yosidaApproxNeg_apply_of_mem_domain (hA : IsSelfAdjoint A) (n : ℕ+)
+    (φ : H) (hφ : φ ∈ A.domain) :
+    yosidaApproxNeg hA n φ = yosidaJNeg hA n (A ⟨φ, hφ⟩) := by
+  set hz := mem_resolventSet_of_im_ne_zero hA (neg_I_mul_pnat_im_ne_zero n) with hz_def
+  have h := yosidaJNeg_apply_of_mem_domain hA n φ hφ
+  have h' : (I * (n : ℂ)) • resolvent A hz φ + resolvent A hz (A ⟨φ, hφ⟩) = φ := by
+    have : (I * (n : ℂ)) • resolvent A hz φ = φ - resolvent A hz (A ⟨φ, hφ⟩) := h
+    rw [this]; abel
+  have hRA : resolvent A hz (A ⟨φ, hφ⟩) = φ - (I * (n : ℂ)) • resolvent A hz φ :=
+    eq_sub_of_add_eq' h'
+  change (n : ℂ) ^ 2 • resolvent A hz φ + (I * (n : ℂ)) • φ
+    = (I * (n : ℂ)) • resolvent A hz (A ⟨φ, hφ⟩)
+  rw [hRA, smul_sub, smul_smul, I_pnat_sq]
+  module
+
+/-- `Aₙ⁻φ → Aφ` on the domain. -/
+theorem tendsto_yosidaApproxNeg_of_mem_domain (hA : IsSelfAdjoint A) (φ : H) (hφ : φ ∈ A.domain) :
+    Tendsto (fun n : ℕ+ => yosidaApproxNeg hA n φ) atTop (𝓝 (A ⟨φ, hφ⟩)) := by
+  simp only [fun n => yosidaApproxNeg_apply_of_mem_domain hA n φ hφ]
+  exact tendsto_yosidaJNeg hA (A ⟨φ, hφ⟩)
+
+/-- The symmetric approximant is the average of the two one-sided ones. -/
+theorem yosidaApproxSym_eq_avg (hA : IsSelfAdjoint A) (n : ℕ+) :
+    yosidaApproxSym hA n = (1 / 2 : ℂ) • (yosidaApprox hA n + yosidaApproxNeg hA n) := by
+  unfold yosidaApproxSym yosidaApprox yosidaApproxNeg
+  module
+
+/-- `Aₙˢʸᵐφ → Aφ` on the domain. -/
+theorem tendsto_yosidaApproxSym_of_mem_domain (hA : IsSelfAdjoint A) (φ : H) (hφ : φ ∈ A.domain) :
+    Tendsto (fun n : ℕ+ => yosidaApproxSym hA n φ) atTop (𝓝 (A ⟨φ, hφ⟩)) := by
+  have hhalf : ((1 : ℂ) / 2) • (A ⟨φ, hφ⟩ + A ⟨φ, hφ⟩) = A ⟨φ, hφ⟩ := by module
+  have := ((tendsto_yosidaApprox_of_mem_domain hA φ hφ).add
+    (tendsto_yosidaApproxNeg_of_mem_domain hA φ hφ)).const_smul ((1 : ℂ) / 2)
+  rw [hhalf] at this
+  refine this.congr fun n => ?_
+  rw [yosidaApproxSym_eq_avg hA n]
+  rfl
+
+/-! ### The approximating unitary groups `exp(i t Aₙˢʸᵐ)`
+
+Spectra builds the bounded exponential from its power series and proves
+summability, the group law, and unitarity by hand
+(`YosidaHille/Approximation/ExpBounded/{Helpers,Adjoint,Unitary}.lean`, 576
+lines).  **Mathlib already has all of it**: `NormedSpace.exp` on the C⋆-algebra
+`H →L[ℂ] H`, and `selfAdjoint.expUnitary a = exp (I • a)`, which is by
+construction a term of `unitary`.  So none of those three modules is ported. -/
+
+/-- `t • Aₙˢʸᵐ` as an element of the self-adjoint subspace. -/
+noncomputable def yosidaApproxSymSA (hA : IsSelfAdjoint A) (n : ℕ+) (t : ℝ) :
+    selfAdjoint (H →L[ℂ] H) :=
+  ⟨(t : ℂ) • yosidaApproxSym hA n, by
+    rw [selfAdjoint.mem_iff, star_smul, (isSelfAdjoint_yosidaApproxSym hA n).star_eq,
+      Complex.star_def, Complex.conj_ofReal]⟩
+
+/-- The approximating unitary `exp(i t Aₙˢʸᵐ)`. -/
+noncomputable def expApprox (hA : IsSelfAdjoint A) (n : ℕ+) (t : ℝ) : H →L[ℂ] H :=
+  (selfAdjoint.expUnitary (yosidaApproxSymSA hA n t) : H →L[ℂ] H)
+
+/-- `exp(i·0·Aₙˢʸᵐ) = 1`. -/
+@[simp] theorem expApprox_zero (hA : IsSelfAdjoint A) (n : ℕ+) :
+    expApprox hA n 0 = 1 := by
+  have h : yosidaApproxSymSA hA n 0 = 0 := by
+    ext
+    simp [yosidaApproxSymSA]
+  simp [expApprox, h]
+
+/-- The group law in `t`. -/
+theorem expApprox_add (hA : IsSelfAdjoint A) (n : ℕ+) (s t : ℝ) :
+    expApprox hA n (s + t) = expApprox hA n s * expApprox hA n t := by
+  have hcomm : Commute ((yosidaApproxSymSA hA n s : H →L[ℂ] H))
+      ((yosidaApproxSymSA hA n t : H →L[ℂ] H)) := by
+    change ((s : ℂ) • yosidaApproxSym hA n) * ((t : ℂ) • yosidaApproxSym hA n)
+       = ((t : ℂ) • yosidaApproxSym hA n) * ((s : ℂ) • yosidaApproxSym hA n)
+    rw [smul_mul_smul_comm, smul_mul_smul_comm, mul_comm ((s : ℂ)) ((t : ℂ))]
+  have hsum : yosidaApproxSymSA hA n (s + t)
+      = yosidaApproxSymSA hA n s + yosidaApproxSymSA hA n t := by
+    ext
+    simp [yosidaApproxSymSA, Complex.ofReal_add, add_smul]
+  change ((selfAdjoint.expUnitary (yosidaApproxSymSA hA n (s + t))) : H →L[ℂ] H) = _
+  rw [hsum, hcomm.expUnitary_add]
+  rfl
+
+/-- `exp(i t Aₙˢʸᵐ)` is unitary, hence preserves the inner product. -/
+theorem inner_expApprox (hA : IsSelfAdjoint A) (n : ℕ+) (t : ℝ) (x y : H) :
+    ⟪expApprox hA n t x, expApprox hA n t y⟫_ℂ = ⟪x, y⟫_ℂ := by
+  have hstar : (ContinuousLinearMap.adjoint (expApprox hA n t)) * expApprox hA n t = 1 := by
+    have := Unitary.coe_star_mul_self (selfAdjoint.expUnitary (yosidaApproxSymSA hA n t))
+    rwa [ContinuousLinearMap.star_eq_adjoint] at this
+  calc ⟪expApprox hA n t x, expApprox hA n t y⟫_ℂ
+      = ⟪(ContinuousLinearMap.adjoint (expApprox hA n t)) (expApprox hA n t x), y⟫_ℂ := by
+        rw [ContinuousLinearMap.adjoint_inner_left]
+    _ = ⟪((ContinuousLinearMap.adjoint (expApprox hA n t)) * expApprox hA n t) x, y⟫_ℂ := rfl
+    _ = ⟪x, y⟫_ℂ := by rw [hstar]; rfl
 
 end LinearPMap
 end TauCeti
