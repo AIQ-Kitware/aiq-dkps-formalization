@@ -3,10 +3,10 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
-import DavisKahan.FiniteDimensional.Core.SpectralSubspace
-import DavisKahan.FiniteDimensional.Core.SpectralGap
+import ForTauCeti.Analysis.InnerProductSpace.SpectralSubspace
+import ForTauCeti.Analysis.InnerProductSpace.SpectralGap
 import DavisKahan.FiniteDimensional.Residual.Ritz
-import DavisKahan.FiniteDimensional.Core.AngleGeometry
+import ForTauCeti.Analysis.InnerProductSpace.AngleGeometry
 import DavisKahan.FiniteDimensional.Sylvester.Interval
 import DavisKahan.FiniteDimensional.Sylvester.SpectralDistance
 import DavisKahan.FiniteDimensional.Residual.AngleEmbedding
@@ -14,8 +14,8 @@ import ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm
 import ForTauCeti.Analysis.InnerProductSpace.RectangularSingularValues
 import DavisKahan.FiniteDimensional.SinTheta.UnitarilyInvariant
 import DavisKahan.FiniteDimensional.SinTheta.OperatorNorm
-import DavisKahan.BoundedOperator.SinTheta
-import DavisKahan.BoundedOperator.Projector
+import ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.SinTheta
+import ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Projector
 
 /-!
 # The complete finite-dimensional `sin Θ` theorem family

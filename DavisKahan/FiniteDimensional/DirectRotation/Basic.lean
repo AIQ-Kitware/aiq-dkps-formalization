@@ -3,7 +3,7 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.FiniteDimensional.Core.AngleGeometry
+import ForTauCeti.Analysis.InnerProductSpace.AngleGeometry
 import ForTauCeti.Analysis.InnerProductSpace.PolarDecomposition
 import ForTauCeti.Analysis.InnerProductSpace.SelfAdjointFunctionalCalculus
 
