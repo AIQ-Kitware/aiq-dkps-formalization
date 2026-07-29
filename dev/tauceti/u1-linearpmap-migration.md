@@ -256,7 +256,30 @@ structure that must move first, so none is a one-liner:
 | `Sylvester/Unbounded/Equation.lean` | one `abbrev` facade, `HasUnboundedBoundedSylvesterEquation`, with five call sites in `Sylvester/Unbounded/Neumann.lean` and `Experimental/…/Sylvester/Unbounded.lean`. The Experimental caller retypes a whole proof (`A.addBounded`, `A.toLinearMap` throughout), so this is a genuine consumer migration, not a substitution. |
 | `Interop/Spectra/BoundedFromSpectrum.lean` | held by SR-B (namek). |
 
-**Conclusion for planning: U1's remaining 557 positions do not decompose into
+**Correction to that conclusion, measured 2026-07-29 after writing it.** I said
+below that the remaining positions "do not decompose"; that is too strong. It is
+right for the two 50-position modules, but **`CommonCore` is bounded and is the
+best next unit**:
+
+```
+DavisKahan/Sources/DavisKahan1970/SineTheta/CommonCore.lean   231 lines, 22 positions
+consumers: FullSineTheta.lean (2 refs), CommonCoreTheorems.lean (1), Audits/Correspondence.lean (2)
+```
+
+Three consumers, five references. The content is one structure
+(`PaperCommonCoreResidualData`, whose fields are `ClosedOperator`-typed) plus
+`IsGraphCore` and about eight theorems. Retyping the structure onto `LinearPMap`
+plus property fields carries the rest. Doing it also unblocks
+`FullSineTheta.lean`'s `alias IsGraphCore := ClosedOperator.IsGraphCore`, which
+is the only thing keeping that module on the bundle.
+
+**One caution before anyone takes it:** these are `Sources/DavisKahan1970/**`
+paper-facing files, so the source census is a gate here in a way it was not for
+`SpectralBridge`. The mathematics does not change — only the carrier — but run
+the census before and after and make sure the recorded statements still match
+the paper.
+
+**Original conclusion, still right for the large modules:** **Conclusion for planning: U1's remaining 557 positions do not decompose into
 cheap independent pieces.** They are held by a handful of defining structures —
 `CommonCore`/`CommonDomain` (41 between them), `SinTheta/Natural/Bounded` (52),
 `Sources/…/SineTheta/Symmetric` (50), and the two documented facades
