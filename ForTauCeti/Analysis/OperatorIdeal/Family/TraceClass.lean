@@ -80,11 +80,16 @@ theorem nuclearENorm_eq_iSup_kyFanGauge (T : E →L[ℂ] F) :
   rw [kyFanGauge, ENNReal.ofReal_sum_of_nonneg]
   exact fun n _ => T.approximationNumber_nonneg n
 
+/-- Every finite Ky Fan gauge is dominated by the nuclear norm, of which it is a
+partial sum.  This is the inequality that makes the nuclear norm the supremum of
+the Ky Fan family rather than merely an upper bound for it. -/
 theorem ofReal_kyFanGauge_le_nuclearENorm (T : E →L[ℂ] F) (k : ℕ) :
     ENNReal.ofReal (T.kyFanGauge k) ≤ T.nuclearENorm := by
   rw [nuclearENorm_eq_iSup_kyFanGauge]
   exact le_iSup (fun j : ℕ => ENNReal.ofReal (T.kyFanGauge j)) k
 
+/-- The nuclear norm vanishes on the zero operator: all of its approximation
+numbers are `0`. -/
 @[simp] theorem nuclearENorm_zero : (0 : E →L[ℂ] F).nuclearENorm = 0 := by
   simp [nuclearENorm]
 
@@ -111,6 +116,8 @@ theorem nuclearENorm_add_le (S T : E →L[ℂ] F) :
           (T.ofReal_kyFanGauge_le_nuclearENorm k)
 
 omit [CompleteSpace E] [CompleteSpace F] in
+/-- **Absolute homogeneity.**  Scaling an operator scales every approximation
+number, hence the whole sum. -/
 theorem nuclearENorm_smul (c : ℂ) (T : E →L[ℂ] F) :
     (c • T).nuclearENorm = ‖c‖ₑ * T.nuclearENorm := by
   simp only [nuclearENorm, approximationNumber_smul,
@@ -123,6 +130,8 @@ theorem enorm_le_nuclearENorm (T : E →L[ℂ] F) : ‖T‖ₑ ≤ T.nuclearENor
   rw [← ofReal_norm, ← T.approximationNumber_index_zero]
   exact ENNReal.le_tsum 0
 
+/-- **Adjoint invariance**, immediate from invariance of the approximation
+numbers.  This is the field that makes the trace-class family *symmetric*. -/
 theorem nuclearENorm_adjoint (T : E →L[ℂ] F) : T.adjoint.nuclearENorm = T.nuclearENorm := by
   simp only [nuclearENorm, approximationNumber_adjoint]
 
@@ -193,9 +202,12 @@ variable {E F : Type v}
   [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
   [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
 
+/-- The gauge of the trace-class family *is* the nuclear norm, definitionally. -/
 @[simp] theorem gauge_traceClassIdealFamily (A : E →L[ℂ] F) :
     (traceClassIdealFamily.{v}).gauge A = A.nuclearENorm := rfl
 
+/-- Membership in the trace-class ideal is exactly `IsTraceClass`, so the generic
+carrier and the named predicate never diverge. -/
 theorem mem_traceClassIdealFamily_carrier_iff (A : E →L[ℂ] F) :
     A ∈ (traceClassIdealFamily.{v}).toOperatorIdealFamily.carrier ↔ A.IsTraceClass :=
   Iff.rfl
