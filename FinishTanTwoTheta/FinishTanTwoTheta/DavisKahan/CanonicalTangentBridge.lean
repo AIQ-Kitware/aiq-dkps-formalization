@@ -201,33 +201,52 @@ private theorem ambient_doubleAngleTangent_eq_extendCoordinate
   have hDinvblock : Ring.inverse D =
       U.subtypeL ∘L Ring.inverse DX ∘L U.subtypeL.adjoint +
         Uᗮ.starProjection := by
+    -- Every cancellation is stated POINTWISE: under application the brackets are
+    -- automatic, whereas no associativity convention brackets `J⋆ J` together
+    -- inside a composition chain.  Same technique as `hG` above.
+    have hJU : ∀ u : U, U.subtypeL.adjoint (U.subtypeL u) = u := by
+      intro u
+      have h := congrArg (fun T : U →L[ℂ] U => T u)
+        (adjoint_subtypeL_comp_subtypeL U)
+      simpa using h
+    have hJJadjApp : ∀ y : E,
+        U.subtypeL (U.subtypeL.adjoint y) = U.starProjection y := by
+      intro y
+      have h := congrArg (fun T : E →L[ℂ] E => T y)
+        (subtypeL_comp_adjoint_subtypeL U)
+      simpa using h
+    have hJadjPerpApp : ∀ y : E,
+        U.subtypeL.adjoint (Uᗮ.starProjection y) = 0 := by
+      intro y
+      apply Subtype.ext
+      rw [Submodule.adjoint_subtypeL, ← Submodule.starProjection_apply]
+      simpa using (Submodule.starProjection_apply_eq_zero_iff (K := U)).mpr
+        (Uᗮ.starProjection_apply_mem y)
+    have hPerpJApp : ∀ u : U, Uᗮ.starProjection (U.subtypeL u) = 0 := by
+      intro u
+      rw [Submodule.subtypeL_apply]
+      exact (Submodule.starProjection_apply_eq_zero_iff (K := Uᗮ)).mpr
+        (Submodule.le_orthogonal_orthogonal U u.2)
+    have hDXinv : ∀ u : U, DX (Ring.inverse DX u) = u := by
+      intro u
+      have h := congrArg (fun T : U →L[ℂ] U => T u)
+        (Ring.mul_inverse_cancel DX hDXunit)
+      simpa using h
+    have hPerpIdem : ∀ y : E,
+        Uᗮ.starProjection (Uᗮ.starProjection y) = Uᗮ.starProjection y := by
+      intro y
+      exact Submodule.starProjection_eq_self_iff.mpr
+        (Uᗮ.starProjection_apply_mem y)
     have hcandidate :
         D ∘L (U.subtypeL ∘L Ring.inverse DX ∘L U.subtypeL.adjoint +
           Uᗮ.starProjection) = ContinuousLinearMap.id ℂ E := by
-      rw [hDblock, ContinuousLinearMap.add_comp,
-        ContinuousLinearMap.comp_add]
-      have hUU : U.subtypeL.adjoint ∘L U.subtypeL =
-          ContinuousLinearMap.id ℂ U := by
-        ext x
-        apply Subtype.ext
-        simp
-      have hXX := Ring.mul_inverse_cancel DX hDXunit
-      have hcross1 :
-          (U.subtypeL ∘L DX ∘L U.subtypeL.adjoint) ∘L
-            Uᗮ.starProjection = 0 := by
-        ext x
-        simp
-      have hcross2 : Uᗮ.starProjection ∘L
-          (U.subtypeL ∘L Ring.inverse DX ∘L U.subtypeL.adjoint) = 0 := by
-        ext x
-        simp
-      rw [hcross1, hcross2, add_zero, zero_add,
-        ContinuousLinearMap.comp_assoc, ← ContinuousLinearMap.comp_assoc DX,
-        hUU, ContinuousLinearMap.id_comp, hXX,
-        ContinuousLinearMap.comp_assoc,
-        U.isIdempotentElem_starProjection_orthogonal.eq]
       ext x
-      simp
+      rw [ContinuousLinearMap.comp_apply, ContinuousLinearMap.id_apply,
+        ContinuousLinearMap.add_apply, hDblock]
+      simp only [ContinuousLinearMap.add_apply, ContinuousLinearMap.comp_apply,
+        map_add, hJU, hJadjPerpApp, hPerpJApp, hDXinv, hPerpIdem, hJJadjApp,
+        map_zero, add_zero, zero_add]
+      exact U.starProjection_add_starProjection_orthogonal x
     -- From `D B = 1` and `D⁻¹ D = 1`, cancel `D` on the left.  The old script
     -- applied *injectivity* of `D` (`isUnit_iff_bijective.mp hDunit |>.1`) to an
     -- *equation*, and that conclusion shape cannot match the goal.
