@@ -715,3 +715,133 @@ and 4 are assembly against verified Mathlib API.
 `spectrum ℂ U ⊆ unitary ℂ` (the unit circle) directly, but applying it stalls
 instance search on `ContinuousFunctionalCalculus ℂ ?m IsStarNormal`. That is an
 import gap, not a mathematical one; it will need fixing for step 3.
+
+---
+
+## Borel calculus and PVM: BUILT (2026-07-28)
+
+Everything under "The spectral measure: build it via Cayley" above is now Lean
+that compiles.  The route that worked is **not** the one sketched there (Riesz
+plus a monotone-class argument for multiplicativity); the monotone-class step
+was replaced by a single *transport* lemma, which is what made the whole thing
+short.  What exists, in dependency order, all under
+`ForTauCeti/Analysis/InnerProductSpace/BorelCalculus/`:
+
+| module | endpoint |
+| --- | --- |
+| `DiagonalMeasure.lean` | `diagMeasure ha ξ`, `integral_diagMeasure`, `diagMeasure_univ_toReal` |
+| `Polarization.lean` | `pair ha f ψ ξ`, `pair_of_continuous`, `norm_pair_sub_pair_le`, `exists_continuous_integral_norm_sub_le` |
+| `Operator.lean` | `IsBddMeasurable`, sesquilinearity of `pair`, `norm_pair_le`, `borelCalculus ha hf`, `inner_borelCalculus` |
+| `Multiplicative.lean` | `inner_borelCalculus_self`, `borelCalculus_of_continuous`, `borelCalculus_one`, `borelCalculus_mul` |
+| `PVM.lean` | `specProj`, `specDiag`, `toProjValMeasure ha hκ : TauCeti.ProjValMeasure H` |
+
+### The transport principle — the reason this is ~1400 lines and not ~4000
+
+`norm_pair_sub_pair_le` says: the difference of `pair ha f ψ ξ` and
+`pair ha g ψ ξ` is at most the `L¹` distance of `f` and `g` measured against
+*any* finite measure dominating the four diagonal measures at
+`pairVectors ψ ξ`.  Any identity to be proved involves only finitely many
+vectors, so one takes the finite **sum** of all diagonal measures occurring in
+it (`isFiniteMeasure_sum_diagMeasure`, `diagMeasure_le_sum`), approximates once
+in that single `L¹` (`MemLp.exists_boundedContinuous_eLpNorm_sub_le`), and reads
+the identity off `cfcHom`, where it is free.
+
+Consequences avoided entirely: no monotone-class / Dynkin induction over Borel
+functions, no Jordan–von Neumann recovery of additivity from the parallelogram
+law, no strong limits of monotone operator sequences, and no complex measures
+(only finite positive ones, combined four at a time by polarisation).
+
+Two places where the order of quantifiers matters and cost real work:
+
+* **The product bound.**  The approximants carry no uniform sup bound, so
+  `‖pair f ψ ξ‖ ≤ M ‖ψ‖ ‖ξ‖` cannot be read off `‖cfcHom g‖ = ‖g‖∞`.  It is
+  obtained instead from the crude `M (‖ψ‖² + ‖ξ‖²)` (total mass of
+  `diagMeasure ha v` is `‖v‖²`) by rescaling `ψ ↦ t • ψ`, `ξ ↦ t⁻¹ • ξ` with
+  `t = √(‖ξ‖/‖ψ‖)`, which leaves `pair` invariant — `norm_pair_le`.
+* **Multiplicativity.**  The approximant `p` of `f` must be chosen *first*, and
+  the tolerance for the approximant `q` of `g` is then `ε / (1 + ‖p‖)`.  Doing
+  it in the other order does not close.
+
+### Mathlib pieces this leans on (all verified present)
+
+* `RealRMK.rieszMeasure` + `RealRMK.integral_rieszMeasure` + the `Regular` and
+  `IsFiniteMeasure` instances (`MeasureTheory/Integral/RieszMarkovKakutani/Real.lean`).
+* `MemLp.exists_boundedContinuous_eLpNorm_sub_le`
+  (`MeasureTheory/Function/ContinuousMapDense.lean`).
+* `InnerProductSpace.toDual` for the Riesz step.
+* `IsStarNormal.instContinuousFunctionalCalculus` — **a theorem, not a global
+  instance.**  Every module here opens with
+  `attribute [local instance] IsStarNormal.instContinuousFunctionalCalculus`;
+  without it `ContinuousFunctionalCalculus ℂ (H →L[ℂ] H) IsStarNormal` fails to
+  synthesise even though `CStarAlgebra (H →L[ℂ] H)` succeeds.
+
+## Remaining: `spectralPVM` for an unbounded self-adjoint `LinearPMap`
+
+`toProjValMeasure` is stated for a *bounded normal* operator plus a measurable
+relabelling `κ` of its spectrum.  To reach the Spectra endpoint
+`Spectra.QuantumMechanics.SpectralTheory.spectralPVM hA` for
+`hA : IsSelfAdjoint (A : H →ₗ.[ℂ] H)`, instantiate at the Cayley transform
+(already built, `LinearPMap/SelfAdjointResolvent.lean`: `cayley`,
+`cayley_mem_unitary`, `isStarNormal_cayley`) with
+
+`κ w = (Complex.I * (1 + w) / (1 - w)).re`  (junk value at `w = 1`).
+
+### The five compatibility theorems the consumers actually use
+
+Measured across the tree: `spectralPVM` appears 31 times, and exactly five
+lemmas about it are consumed —
+
+| lemma | where |
+| --- | --- |
+| `spectralPVM_resolvent_formula` | `RealSpectralRestriction.lean` |
+| `spectralPVM_unique` | `RealSpectralRestriction.lean` |
+| `spectralPVM_integrable_id` | `OrderedHalfLine.lean` (×2) |
+| `spectralPVM_proj_eq_zero_of_subset_resolventSet` | `BoundedFromSpectrum.lean` (×2) |
+| `spectralPVM_proj_congr_of_inter_spectrum_eq` | `SpectralRestrictionLocalization.lean` (×2) |
+
+The resolvent formula is the characterising one; the other four should follow
+from it plus the general `ProjValMeasure` API.
+
+### The resolvent formula reduces to a *continuous* calculus identity
+
+Write `U = cayley A`, `κ` as above.  For `z ∉ ℝ`,
+
+`R(z) = (A - z)⁻¹ = (1 - U) · [(i - z) + U (i + z)]⁻¹`,
+
+so the symbol is `g_z(w) = (1 - w) / ((i - z) + w (i + z))`.  Its only pole is
+at `w = (z - i)/(z + i)`, the Cayley image of `z`, which for non-real `z` is
+**off the unit circle** and hence off `spectrum ℂ U`.  So `g_z` is *continuous*
+on the spectrum and the formula is an identity about `cfcHom`, not about the
+Borel calculus.  Prove `R(z) = cfcHom hU g_z` through `resolvent_unique`
+(already available) by checking the two-sided inverse property.
+
+At the special point `z = -i` this is essentially definitional: `κ(w) + i =
+2i/(1 - w)`, so `(κ(w) + i)⁻¹ = (1 - w)/(2i)`, which is exactly `resolvent A (-i)`
+read off the definition of `cayley`.
+
+### The `{1}`-null-set fact, and its (short) proof
+
+The pushforward along `κ` is only faithful because `diagMeasure ha ξ ({1}) = 0`.
+Proof, entirely inside the Borel calculus already built:
+
+* `borelCalculus` of the pointwise product `(1 - w) · 1_{{1}}(w)` is `0`, since
+  that product is the zero function; by `borelCalculus_mul` and
+  `borelCalculus_of_continuous` this says `(1 - U) ∘ P_{{1}} = 0`.
+* `1 - U = 2i · resolvent A (-i)` is **injective** — it is the inverse of the
+  bijection `A + i : dom A → H`.
+* Hence `P_{{1}} = 0`, and `diagMeasure ha ξ ({1}) = ⟪ξ, P_{{1}} ξ⟫ = 0`.
+
+### After that
+
+Repoint, in this order (each is then unblocked):
+`PVMSubspace` → `SpectralRestriction` → `SpectralRestrictionOperator` →
+`SpectralRestrictionLocalization` → `RealSpectralRestriction` (the one another
+agent is waiting on) → `BoundedSelfAdjointSpectralProjection` →
+`BoundedFromSpectrum` → `BoundedTruncation` → `SpectralCutoff` →
+`CayleySelectorBridge` → `SelfAdjointBorelCalculus` → the three
+`Experimental/InfiniteDimensional` files → `InfiniteProposition41`.
+
+The independent clusters — Hilbert–Schmidt tensor (5 files) and the small
+`Operator.Bounded` / `BornRule.Observable` / `TraceClass` / `SeparatedIntertwiner`
+/ `ExpBounded.Helpers` items — do not touch any of this and can be done in any
+order.
