@@ -7,13 +7,6 @@ import DavisKahan.Interop.Spectra.BoundedSelfAdjointSpectralProjection
 import DavisKahan.Interop.Spectra.Basic
 import DavisKahan.Interop.Spectra.BoundedFromSpectrum
 import DavisKahan.Interop.Spectra.RealSpectrumBridge
-import Spectra.SpectralTheory.Calculus.Bounded
-import Spectra.SpectralTheory.Calculus.PMapBounded
-import Spectra.SpectralTheory.Calculus.SquareBridge
-import Spectra.SpectralTheory.SeparatedIntertwiner
-import Spectra.Modular.Cocycle.ModularSqrtSquare
-import Spectra.Modular.Tomita.BoundedPicture
-import Spectra.QuantumMechanics.BornRule.Observable
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
 
 /-!
@@ -39,9 +32,6 @@ namespace DavisKahanExt
 open MeasureTheory Set Filter
 open scoped InnerProductSpace BigOperators
 open Spectra
-open Spectra.Borel
-open Spectra.YosidaHille
-open Spectra.QuantumMechanics.BornRule.Observable
 open Spectra.QuantumMechanics.SpectralTheory
 open DavisKahan.Experimental.SpectraBridge
 
@@ -51,12 +41,6 @@ universe u
 
 variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
   [CompleteSpace H]
-
-/-- The Spectra one-parameter group attached to a bounded self-adjoint map. -/
-noncomputable def boundedSelfAdjointGroup
-    (A : H →L[ℂ] H) (hA : IsSelfAdjointOperator A) :
-    Spectra.OneParameterUnitaryGroup (H := H) :=
-  genToGroup (boundedSelfAdjointOperator A hA).selfAdjoint
 
 omit [CompleteSpace H] in
 /-- The bounded symbol, pulled back to the spectrum, is admissible. -/
@@ -159,8 +143,9 @@ theorem realSpectrum_eq_boundedSelfAdjoint_spectrum
 theorem isClosed_realSpectrum_boundedSelfAdjoint
     (A : H →L[ℂ] H) (hA : IsSelfAdjointOperator A) :
     IsClosed (realSpectrum A) := by
-  rw [realSpectrum_eq_boundedSelfAdjoint_spectrum A hA]
-  exact isClosed_spectrum_of_isSelfAdjoint (boundedSelfAdjointOperator A hA)
+  have hpre : realSpectrum A = (fun r : ℝ => (r : ℂ)) ⁻¹' spectrum ℂ A := rfl
+  rw [hpre]
+  exact (spectrum.isClosed A).preimage Complex.continuous_ofReal
 
 /-- The real spectrum is measurable. -/
 theorem measurableSet_realSpectrum_boundedSelfAdjoint
@@ -216,13 +201,6 @@ theorem boundedSelfAdjointBorelCalculusC_indicator
       (indicator_one_bdd s) =
       boundedSelfAdjointSpectralProjection A hA s hs := by
   rfl
-
-/-- The spectral measure of every vector is supported on the real spectrum. -/
-theorem boundedSelfAdjoint_borelMeasure_support
-    (A : H →L[ℂ] H) (hA : IsSelfAdjointOperator A) (x : H) :
-    (borelMeasure (boundedSelfAdjointGroup A hA) x).support ⊆ realSpectrum A := by
-  rw [realSpectrum_eq_boundedSelfAdjoint_spectrum A hA]
-  exact bornMeasure_support_subset_spectrum (boundedSelfAdjointOperator A hA) x
 
 /-- Symbols agreeing on the real spectrum have the same bounded calculus. -/
 theorem boundedSelfAdjointBorelCalculusC_congr_on_spectrum
