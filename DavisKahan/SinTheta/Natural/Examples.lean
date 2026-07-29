@@ -163,9 +163,9 @@ abbrev RealPlane := EuclideanSpace ℝ (Fin 2)
 API. The whole plane is the exact subspace and the complementary block is the
 zero Hilbert space. -/
 theorem realPlane_zeroResidual_model :
-    let A : ClosedOperator (𝕜 := ℝ) (E := RealPlane) :=
+    let _A : ClosedOperator (𝕜 := ℝ) (E := RealPlane) :=
       ClosedOperator.ofBounded (0 : RealPlane →L[ℝ] RealPlane)
-    let A0 : ClosedOperator (𝕜 := ℝ) (E := RealPlane) :=
+    let _A0 : ClosedOperator (𝕜 := ℝ) (E := RealPlane) :=
       ClosedOperator.ofBounded (0 : RealPlane →L[ℝ] RealPlane)
     let U : Submodule ℝ RealPlane := ⊤
     let X : RealPlane →L[ℝ] RealPlane := ContinuousLinearMap.id ℝ RealPlane
