@@ -575,3 +575,53 @@ is worth having on its own merits.  It would need a Tau Ceti roadmap entry,
 since the roadmap gates *new* mathematics.  **Deliberately not bundled into the
 Spectra removal** — Davis–Kahan does not need it, and tying it to this campaign
 is what produced the confusion above in the first place.
+
+---
+
+## Update 2026-07-29 — SR-D4b instantiation: an honest inventory
+
+I have twice called the remaining D4b work "connecting the pieces" or
+"bookkeeping".  Working it through, that is wrong again, and the pattern is
+worth naming: **the reusable pieces were the easy part, and each one I finish
+makes the remainder look smaller than it is.**  Here is the actual inventory.
+
+### What is genuinely done (8 files, all green, all axiom-clean)
+
+`HilbertSchmidtPythagoras`, `Commutant`, `HilbertSchmidtBlock`,
+`ProjValMeasure/Additivity`, `SpectralCutOperator`, `RealLowerBound`,
+`BlockLowerBound` — plus the per-block estimate and the resolvent-to-gap step,
+which were already in the tree.  The *chain* is complete and every link is
+proved:
+
+`partition norm split → blockwise bound → global lower bound → resolvent point → gap for every vector`
+
+### What instantiating it at the Sylvester operator still needs
+
+Each of these is standard mathematics and none is hard, but each is a Lean
+lemma that does not yet exist:
+
+1. **Spectral projections of `generator V` commute with `V t`.**  The block map
+   only commutes with the Sylvester flow (`blockCLM_comm_sylvesterGroup`) if `P`
+   and `Q` commute with their groups.  For a spectral projection that is
+   standard but needs the Borel calculus to be shown commuting with the group —
+   which is *not* in the tree.
+2. **`Q` commutes with the unbounded `B` on its domain**, and maps `dom B` into
+   itself.  Follows from (1) via `generator_commute`, once (1) exists.
+3. **The block operator identity**, extended by density.
+   `generator_sylvesterGroup_apply` gives the Sylvester equation only at
+   `x ∈ dom B`; the identity wanted is between *bounded operators* on all of `F`.
+   Both sides are continuous and `dom B` is dense, so this is an `ext_on`
+   argument — but it has to be written.
+4. **The partition itself**: `I k = Ico (kε) ((k+1)ε)` for `k : ℤ`, with
+   measurability, pairwise disjointness and covering, and the fact that a
+   *nonzero* projection forces its interval to meet the spectrum
+   (`specProjection_eq_zero_of_subset_resolventSet`, contrapositive).
+5. **The `ε → 0` limit**, and the shift `σ(B + s) = σ(B) + s`.
+
+### Estimate, stated as a range rather than a point
+
+Three to five more files.  I am not going to give a tighter number: my estimates
+on this cluster have been wrong in both directions four times today, while the
+*measurements* — build counts, importer counts, closure sizes — have held up
+every time.  Treat the inventory above as the reliable artefact and ignore any
+schedule I attach to it.
