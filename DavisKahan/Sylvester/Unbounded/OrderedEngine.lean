@@ -25,7 +25,11 @@ namespace ExactSinTheta
 universe v
 
 /-- The two ordered orientations of the fully unbounded ideal-gauge Sylvester
-estimate. -/
+estimate.
+
+The hypothesis binders are `_`-prefixed because they are proof-valued and the
+conclusion `N.Mem X ∧ δ * N.gauge X ≤ N.gauge C` cannot mention them; the names
+are kept for documentation rather than dropped to `_`. -/
 structure GenuineOrderedSylvesterEngine : Prop where
   lowerUpper :
     ∀ {E F : Type v}
@@ -34,13 +38,13 @@ structure GenuineOrderedSylvesterEngine : Prop where
       (N : KyFanDominantIdealFamily (𝕜 := ℂ))
       {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := E)}
       {B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := F)}
-      (hA : A.IsSelfAdjoint) (hB : B.IsSelfAdjoint)
+      (_hA : A.IsSelfAdjoint) (_hB : B.IsSelfAdjoint)
       {X C : F →L[ℂ] E} {c δ : ℝ}
-      (hδ : 0 < δ)
-      (hAc : SemiboundedBelow A (c + δ))
-      (hBc : SemiboundedAbove B c)
-      (hEq : HasClosedSylvesterEquation A B X C)
-      (hC : N.Mem C),
+      (_hδ : 0 < δ)
+      (_hAc : SemiboundedBelow A (c + δ))
+      (_hBc : SemiboundedAbove B c)
+      (_hEq : HasClosedSylvesterEquation A B X C)
+      (_hC : N.Mem C),
       N.Mem X ∧
         δ * N.gauge X ≤
           N.gauge C
@@ -51,13 +55,13 @@ structure GenuineOrderedSylvesterEngine : Prop where
       (N : KyFanDominantIdealFamily (𝕜 := ℂ))
       {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := E)}
       {B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := F)}
-      (hA : A.IsSelfAdjoint) (hB : B.IsSelfAdjoint)
+      (_hA : A.IsSelfAdjoint) (_hB : B.IsSelfAdjoint)
       {X C : F →L[ℂ] E} {c δ : ℝ}
-      (hδ : 0 < δ)
-      (hAc : SemiboundedAbove A c)
-      (hBc : SemiboundedBelow B (c + δ))
-      (hEq : HasClosedSylvesterEquation A B X C)
-      (hC : N.Mem C),
+      (_hδ : 0 < δ)
+      (_hAc : SemiboundedAbove A c)
+      (_hBc : SemiboundedBelow B (c + δ))
+      (_hEq : HasClosedSylvesterEquation A B X C)
+      (_hC : N.Mem C),
       N.Mem X ∧
         δ * N.gauge X ≤
           N.gauge C
