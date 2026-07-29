@@ -476,7 +476,8 @@ except for one declaration (see
 
 | Local declaration | Tau Ceti / ForTauCeti counterpart | Class | Canonical destination |
 | --- | --- | --- | --- |
-| `WeaklySubmajorized`, `sequencePrefixSum`, `sequencePrefixVector`, `finite_weaklyMajorized_of_weaklySubmajorized`, `exists_gauge_decomposition_of_weaklyMajorized` | `ForTauCeti/Analysis/Convex/Majorization` (landed by jon (namek)) | **Duplicate — highest-priority dedup in this lane** | `Analysis/Convex/Majorization`; delete local copies |
+| `WeaklySubmajorized` (on `ℕ → ℝ`), `sequencePrefixSum`, `sequencePrefixVector`, `finitePrefixSum_sequencePrefixVector`, `finite_weaklyMajorized_of_weaklySubmajorized` | `ForTauCeti/Analysis/Convex/Majorization.WeaklyMajorized` (on `Fin n → ℝ`) — landed by jon (namek) | **Missing reusable result — the infinite-sequence extension.** *Not* a duplicate: checked 2026-07-28, the Tau Ceti object is indexed by `Fin n`, this one by `ℕ`, and `finite_weaklyMajorized_of_weaklySubmajorized` is the bridge between them | `Analysis/Convex/Majorization` as a second section. The four order lemmas (`refl`, `trans`, `of_pointwise`, `nonneg_smul`) are stated twice, once per index type — that lemma-level parallelism is the only real duplication, and it is the kind that is normally left alone rather than unified |
+| `exists_gauge_decomposition_of_weaklyMajorized`, `exists_l1_paperGauge_decomposition_of_weaklyMajorized` | none | Missing reusable result | gauge-decomposition layer beside `FiniteSymmetricGauge` |
 | `sequenceGauge`, `sequencePrefixGauge`, `sequenceExtendedGauge`, `SequenceMem`, `paperFiniteSymmetricGauge` | `ForTauCeti/Analysis/Normed/FiniteLpGauge` *(verify)* | Parallel formulation | one symmetric-gauge API |
 | `StandardSymmetricIdeal` (+ `Mem`, `gauge`, `mem_adjoint`, `gauge_adjoint`), `StandardSymmetricCompletion` | `RectangularSymmetricIdealFamily` / `SymmetricOperatorIdealFamily` | Parallel formulation — **collides with §13.2 adapter retirement** | one canonical symmetric-ideal family; coordinate with the §13.2 sweep before moving |
 | `FiniteRankGaugeClosure`, `MinimalFullySymmetricMem`, `standard_fanDominance`, `minimalFullySymmetricMem_of_kyFan_dominated` | none | **Missing reusable result** | operator-ideal layer — Fan dominance as a theorem is genuinely new |
@@ -490,12 +491,16 @@ except for one declaration (see
 
 ### Ordering note
 
-The `Majorization` row is the one that should move first: it is a
-straight internal duplicate against a module that already landed, it is
-independent of the blocked seam, and it is independent of the §13.2 ideal-family
-sweep. The `StandardSymmetricIdeal` row is the opposite — it must **not** move
-until §13.2 phase C/D settles which symmetric-ideal family is canonical, or the
-two efforts will produce a third parallel stack.
+The `Majorization` row is the one that should move first: it lands beside a
+module that is already in `ForTauCeti`, it is independent of the blocked seam,
+and it is independent of the §13.2 ideal-family sweep. Move it as an
+**addition** — the `ℕ`-indexed `WeaklySubmajorized` is new mathematics, not a
+copy of the `Fin n`-indexed `WeaklyMajorized`, and deleting it would lose the
+infinite-sequence theory the operator-ideal work depends on.
+
+The `StandardSymmetricIdeal` row is the opposite — it must **not** move until
+§13.2 phase C/D settles which symmetric-ideal family is canonical, or the two
+efforts will produce a third parallel stack.
 
 
 ## Declaration-level deletion / adapter rows (from the signature audit §13)
