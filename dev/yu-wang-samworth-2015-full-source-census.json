@@ -56,7 +56,7 @@
     "private-helper-only": {
       "kind": "mechanical",
       "title": "Some source content exists only as a `private` helper",
-      "detail": "Three declarations this census initially cited turned out to be `private`: `sinThetaFrobenius_eq_sqrt_sum_cross` (ForTauCeti/Analysis/InnerProductSpace/YuWangSamworth/Statistics.lean), `yuWangSamworth_gram_alignedBasis_le` and `rectangularFrobenius_comp_adjoint_linearIsometry` (FinishYuWangSamworth). They compile and are correct, and they cannot be cited from outside their module. **A `#check` cannot tell a private declaration from a deleted one** -- both fail identically -- which is why the probe now reports the two cases separately; conflating them would let a census report proved mathematics as absent, or absent mathematics as proved. For two of the three the row has a public sibling and nothing is lost. For `YWS-S1-complement-identity` there is no public sibling: the identity `‖V_1^T V-hat‖_F = ‖sin Theta‖_F` is proved and unciteable, which is the one place in this paper where the repository has the mathematics and a reader cannot use it."
+      "detail": "Three declarations this census initially cited turned out to be `private`: `sinThetaFrobenius_eq_sqrt_sum_cross` (ForTauCeti/Analysis/InnerProductSpace/YuWangSamworth/Statistics.lean), `yuWangSamworth_gram_alignedBasis_le` and `rectangularFrobenius_comp_adjoint_linearIsometry` (FinishYuWangSamworth). They compile and are correct, and they cannot be cited from outside their module. **A `#check` cannot tell a private declaration from a deleted one** -- both fail identically -- which is why the probe now reports the two cases separately; conflating them would let a census report proved mathematics as absent, or absent mathematics as proved. For two of the three the row has a public sibling and nothing is lost. `YWS-S1-complement-identity` had no public sibling -- the identity `‖V_1^T V-hat‖_F = ‖sin Theta‖_F` was proved and unciteable -- and was **fixed on 2026-07-29** by making that one declaration public. The remaining two are genuine internal factoring steps and should stay private."
     }
   },
   "items": [
@@ -71,12 +71,11 @@
       "verification": "proved_in_build",
       "lean_declarations": [
         "TauCeti.DavisKahanTheory.sinThetaFrobenius",
-        "TauCeti.DavisKahanTheory.sinThetaSq_eq_sinThetaFrobenius_sq_of_spans"
+        "TauCeti.DavisKahanTheory.sinThetaSq_eq_sinThetaFrobenius_sq_of_spans",
+        "TauCeti.DavisKahanTheory.sinThetaFrobenius_eq_sqrt_sum_cross"
       ],
-      "gap_refs": [
-        "private-helper-only"
-      ],
-      "notes": "The Lean development defines the sine distance intrinsically on subspaces rather than on a matrix of chosen columns, and then proves it agrees with the span-based form. That is why no basis is a hypothesis anywhere downstream. The bridge lemma `sinThetaFrobenius_eq_sqrt_sum_cross` is `private`, so it backs this row's mathematics without being citable; see gap `private-helper-only`.",
+      "gap_refs": [],
+      "notes": "The Lean development defines the sine distance intrinsically on subspaces rather than on a matrix of chosen columns, and then proves it agrees with the span-based form. That is why no basis is a hypothesis anywhere downstream. The bridge lemma `sinThetaFrobenius_eq_sqrt_sum_cross` was `private` until 2026-07-29 and is now public.",
       "next_action": "None."
     },
     {
@@ -87,16 +86,13 @@
       "title": "‖V_1^T V-hat‖_F = ‖sin Theta(V-hat, V)‖_F",
       "summary": "The cross-block energy against an orthonormal complement of V equals the Frobenius sine distance.",
       "status": "compiled_generalized",
-      "verification": "absent",
-      "lean_declarations": [],
-      "gap_refs": [
-        "private-helper-only"
+      "verification": "proved_in_build",
+      "lean_declarations": [
+        "TauCeti.DavisKahanTheory.sinThetaFrobenius_eq_sqrt_sum_cross"
       ],
-      "notes": "The identity is proved -- it is `sinThetaFrobenius_eq_sqrt_sum_cross` in ForTauCeti/Analysis/InnerProductSpace/YuWangSamworth/Statistics.lean -- but that declaration is `private`, so nothing outside that module can cite it. This row is therefore `absent` in the only sense a census should mean: the repository cannot be used to justify the paper's identity. It is the one item in this census where the mathematics exists and the API does not.",
-      "next_action": "Make the bridge lemma public, or state a public wrapper; the proof already exists.",
-      "planned_declarations": [
-        "TauCeti.DavisKahanTheory.sinThetaFrobenius_eq_sqrt_sum_cross_public"
-      ]
+      "gap_refs": [],
+      "notes": "Closed 2026-07-29. The identity was proved all along but the declaration was `private`, so nothing outside its module could cite it and this row correctly read `absent` -- the one item in this census where the mathematics existed and the API did not. It is now public, with a docstring saying why. **The census is what found it**: a coverage claim assembled from the Lean side would have counted the proof and never noticed that no reader could reach it.",
+      "next_action": "None."
     },
     {
       "id": "YWS-S1-procrustes",
