@@ -428,12 +428,40 @@ The hard combinatorial core is landed and axiom-clean in
 which is Duhamel telescoped by hand (`r_{n+1} = T rₙ + G Tⁿ x`). The linear
 factor `n` is what `1/n!` absorbs.
 
-**Remaining in T1.3**, in order:
-1. Sum against `Σ (it)ⁿTⁿ/n!` to get
-   `‖A₀(e^{itT}x) - e^{itT}(A₀x)‖ ≤ |t|·‖G‖·e^{|t|‖T‖}·‖x‖`, using closedness of
-   `A₀` to conclude `e^{itT}x ∈ dom A₀`.
-2. Fourier inversion: `φ(T) = (2π)^{-1/2}∫ φ̂(t)e^{itT}dt` for Schwartz `φ`,
-   giving `φ(T)` preserving `dom A₀` and `‖[A₀, φ(T)]‖ ≤ ‖G‖∫|t||φ̂(t)|dt`.
+**Remaining in T1.3 — and it is much smaller than first estimated.**
+Neither Fourier inversion nor Helffer--Sjöstrand is needed. The power-series
+bound already proved sums *directly* against any entire function.
+
+Let `φ(t) = Σ aₙ tⁿ` be entire with `Σ n|aₙ| Rⁿ < ∞` for some `R > ‖T‖`, and
+put `φ(T) := Σ aₙ Tⁿ` (norm-convergent). For `x ∈ dom A₀` the partial sums
+`S_N(T)x` lie in `dom A₀`, and by the landed bound
+
+```
+‖A₀ S_N(T)x - S_N(T)A₀x - (A₀ S_M(T)x - S_M(T)A₀x)‖
+    ≤ (Σ_{M<n≤N} n|aₙ|‖T‖ⁿ⁻¹) ‖G‖ ‖x‖  →  0,
+```
+
+so `A₀ S_N(T)x` is Cauchy. Since **`A₀` is closed**, `φ(T)x ∈ dom A₀` and
+
+```
+‖A₀ φ(T)x - φ(T) A₀x‖  ≤  (Σ n|aₙ|‖T‖ⁿ⁻¹) · ‖G‖ · ‖x‖ .
+```
+
+That is the whole of T1.3: an absolutely convergent series plus closedness.
+
+**Use Gaussian bumps, not compactly supported ones.** `φ(t) = exp(-(t-λ)²/β²)`
+is entire, its coefficients decay super-geometrically so `Σ n|aₙ|Rⁿ < ∞` for
+every `R`, and it is a bump of width `~β` at `λ` — everything the band
+construction needs. Compact support buys nothing here and costs the entire
+smooth-functional-calculus apparatus.
+
+**Why sharp band projections cannot be used instead.** Worth recording so nobody
+retries it: a polynomial `p(T)` trivially preserves `dom A₀`, and if the band
+endpoints avoid `spec T` then `1_J` is continuous on `spec T`, so Weierstrass
+gives `‖p(T) - E_T(J)‖ ≤ δ`. But the commutator bound costs `Σ n|aₙ|`, and
+uniform approximation gives no control on that. Requiring both `‖p - 1_J‖_∞`
+small and `Σ n|aₙ|` bounded forces `p` to be uniformly Lipschitz, which `1_J`
+is not. Smooth bumps are not a convenience here; they are forced.
 
 Original statement:
 Duhamel for the bounded self-adjoint `T`: `‖[A₀, e^{itT}]‖ ≤ |t|·‖G‖`, then
