@@ -49,6 +49,26 @@ CourantFischer playbook recorded in `dev/tauceti/convergence-matrix.md`: move
 the closed component, repoint consumers, delete the old file. Mathlib is not the
 near-term target for this contribution; Tau Ceti is.
 
+**The end state is settled: `ForMathlib` goes away entirely** (jon,
+2026-07-29). Whatever the elegant package needs moves here; anything left over
+is not retained as a Mathlib-bound remainder. `ForTauCeti` is *the* mathematics
+library this repository builds, and **every paper proof is built on it** —
+`DavisKahan`, `Acharyya2024`, `Acharyya2025`, `Helm2025`, `DkpsQuench2026`,
+`FinishTanTwoTheta`, `FinishYuWangSamworth`. There is no second staging area and
+no "genuinely Mathlib-shaped" exemption. Earlier text describing the four
+survivors as a deliberate Mathlib-bound remainder is superseded by this
+paragraph.
+
+Four modules remain (799 lines), and they are **not** blocked by the import
+firewall — the internal edges are only `PosDef → RankFactorization` and
+`Berge → ApproxMinimizer`, so they move as two independent pairs. What makes the
+lane non-trivial is downstream: five declaration names are pinned as *data* in
+`comparator/pending-{berge,rank-factorization,rank-psd-realization}.json`, and
+three `Challenge/MathlibPending/**/Leaderboard.lean` files name them in
+`#print axioms`. `Challenge` is outside `defaultTargets`, so a green default
+build proves nothing about them — see the comparator challenge rule in
+`AGENTS.md`. The measured lane is posted in `dev/LANES.md`.
+
 **A module docstring reading `Extraction class: authored in place, for
 upstreaming to Mathlib rather than to Tau Ceti` is stale, and is not a bar to
 migrating that module.** Those lines predate the dual-track policy in
@@ -165,7 +185,63 @@ generalized / specialized / re-proved), whether Spectra influenced the selection
 or proof, and any semantic change from the Davis–Kahan version. Kitware and
 third-party attribution is **preserved**, never erased.
 
+## `ForTauCeti` is the deliverable — do not "finish" by deleting it
+
+**Read this before the lifecycle steps below.** Agents have repeatedly tried to
+complete this work by merging code directly into `TauCeti` and deleting
+`ForTauCeti` (jon, 2026-07-29). That is not the goal and it destroys the
+actual product.
+
+The goal is to make `ForTauCeti` **an elegant, self-consistent package**, and
+then use that package to generate two things:
+
+1. **polished roadmaps** — drafted in [`../ForTauCetiRoadmap/`](../ForTauCetiRoadmap/README.md),
+   mirroring the sibling `TauCetiRoadmap` layout; and
+2. **mechanical ports** that satisfy those roadmaps.
+
+The `TauCeti/` copy is an **output**, produced on demand by
+`scripts/export_for_tauceti.py` — it is generated, never hand-applied. This is
+why `AGENTS.md` says not to commit the `external/TauCeti` submodule pointer yet.
+
+So: improvements go **into** `ForTauCeti`. A task that sounds like "move
+`ForTauCeti` into `TauCeti`" is asking for an *export*. Never empty or delete
+`ForTauCeti/` as a way of declaring the migration done.
+
+### The readiness standard — the platonic ideal roadmap
+
+When a Tau Ceti roadmap is **accepted**, we use `ForTauCeti` to open a PR
+against Tau Ceti. The work before that point is not "wait for acceptance"; it is
+to get `ForTauCeti` to the state where it **satisfies the platonic ideal Tau
+Ceti roadmap** — so that whatever roadmap is actually accepted, we are already
+confident we have everything needed to satisfy it (jon, 2026-07-29).
+
+That is a deliberately higher bar than "our own roadmap draft is met." Writing
+the roadmap ourselves and then meeting it proves nothing about what a Tau Ceti
+reviewer will ask for. The target is the roadmap a reviewer *would* write.
+
+Readiness therefore includes, and is not complete without:
+
+- **paper references** — every result traceable to its source, with the
+  provenance block §5 requires;
+- **Tau Ceti adversarial review** — the statement attacked before submission,
+  not after: wrong generality, a hypothesis that trivializes the conclusion, a
+  name that overclaims, a result Mathlib or Tau Ceti already has;
+- **elegance at Mathlib quality** — the API shape, naming, proof locality,
+  docstring coverage, import minimality, and warning-cleanliness that survive an
+  unsympathetic reviewer.
+
+Concretely: a cluster is ready when nothing in it would be sent back. Until
+then, polishing `ForTauCeti` *is* the submission work — not a prelude to it.
+
 ## Lifecycle (per cluster)
+
+**Precondition — this sequence applies only *after* a cluster has actually been
+accepted upstream by Tau Ceti.** No cluster has been accepted yet: every row in
+*Current contents* below reads `staged-*`, and the governance gate in
+`AGENTS.md` (accepted roadmap target, one topic per PR, green build, standard
+axiom allowlist) has not yet been cleared by anything. Until an acceptance
+exists, **step 3 is not work that is available to do**, and an agent that runs
+it is deleting the package rather than shipping it.
 
 When a cluster is accepted into Tau Ceti:
 
