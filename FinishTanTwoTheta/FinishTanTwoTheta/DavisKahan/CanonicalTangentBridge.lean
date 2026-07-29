@@ -295,11 +295,31 @@ private theorem tanTwoAngleOperatorC_eq_modulus_ambientGraphTangent
       _ = (R ∘L G) ∘L (N ∘L R) := by simp only [ContinuousLinearMap.comp_assoc]
       _ = R ∘L G := by rw [hNR, ContinuousLinearMap.comp_id]
   have hQformula : Q = (P + Y) ∘L R ∘L (P + Y.adjoint) := by
-    have hgraph := projection_graphSubspace_formula U Y hY
-    rw [graphSubspace_quarterAcuteAngularOperator U V hquarter] at hgraph
-    dsimp [Q, graphProjectionFormula, P, N, R, G] at hgraph ⊢
-    simpa only [hYP, ContinuousLinearMap.star_eq_adjoint,
-      (isSelfAdjoint_starProjection U).star_eq, star_add, star_mul] using hgraph
+    -- Transporting `projection (graphSubspace U Y)` to `projection V` needs care:
+    -- `rw` fails with "motive is not type correct" because `projection` carries a
+    -- `HasOrthogonalProjection` instance *for the submodule being rewritten*, and
+    -- `simp only [lemma]` fails to match because `Y` is a `let`-bound fvar while
+    -- the lemma's LHS mentions `quarterAcuteAngularOperator` explicitly.  Naming
+    -- the equation as a local hypothesis fixes both: simp rewrites with an fvar
+    -- equation directly, and `HasOrthogonalProjection` is a `Prop` class, so the
+    -- instance argument is proof-irrelevant and congruence goes through.
+    have hV : graphSubspace U Y = V :=
+      graphSubspace_quarterAcuteAngularOperator U V hquarter
+    have hgraph : DavisKahanExt.projection V = graphProjectionFormula U Y := by
+      simpa only [hV] using projection_graphSubspace_formula U Y hY
+    -- `graphProjectionFormula` produces every factor decorated with `P`:
+    --   (P + Y P) · (1 + P Y⋆ (Y P))⁻¹ · (P + P Y⋆)
+    -- and the decorations collapse by `Y P = Y` and `P Y⋆ = Y⋆`, which are
+    -- exactly the two angular-operator identities.  `1` and `id` are the same
+    -- element of the endomorphism algebra, so the tail is `rfl`.
+    have hcollapse :
+        graphProjectionFormula U Y = (P + Y) ∘L R ∘L (P + Y.adjoint) := by
+      show (P + Y * P) * Ring.inverse (1 + P * Y.adjoint * (Y * P))
+              * (P + P * Y.adjoint)
+          = (P + Y) ∘L R ∘L (P + Y.adjoint)
+      rw [show Y * P = Y from hYP, show P * Y.adjoint = Y.adjoint from hPYstar,
+        mul_assoc]
+    exact hgraph.trans hcollapse
   -- Done as a ring computation rather than by `simp` normalisation.  No
   -- associativity convention works here: right-association hides `P ∘ P` from
   -- `hPP`, left-association hides `Y⋆ ∘ P` from `hYstarP`.  Collapsing the two
