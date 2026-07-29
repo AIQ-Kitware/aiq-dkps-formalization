@@ -1,6 +1,6 @@
 # Spectra removal — open parallel lanes
 
-**Purpose.** The Spectra removal campaign is down to **7 files** carrying
+**Purpose.** The Spectra removal campaign is down to **6 files** carrying
 `import Spectra` (15 when this document was written), and they no longer form a
 chain: the spectral-measure chokepoint is built and green, so what is left
 splits into **lanes that touch disjoint files**. This document opens them for
@@ -15,7 +15,7 @@ below, commit it, then work. One agent per lane. Do not take two lanes at once �
 the lanes are sized so that each is a session's work, and holding two blocks
 someone else.
 
-## Status board (updated 2026-07-29, after SR-A/B/C landed)
+## Status board (updated 2026-07-29, after SR-A/B/C/F landed)
 
 | lane | files | blocker | holder |
 |---|---|---|---|
@@ -24,10 +24,13 @@ someone else.
 | **SR-C** half-line form bounds | 1 | — | **DONE** (namek) |
 | **SR-D** Hilbert–Schmidt tensor | 5 | **21,581-line donor closure — needs re-plan + author coordination** | *open (measured by edward, aiq-gpu — see lane)* |
 | **SR-E** Rosenblum | 1 | intertwiner of disjoint spectra vanishes | claimed |
-| **SR-F** Experimental stragglers | 3 → **1** | `InfiniteProposition41` only | edward + namek (see below) |
+| **SR-F** Experimental stragglers | 3 | — | **DONE** (edward + namek) |
 
-`import Spectra` in `DavisKahan/**`: **15 → 7**.  The seven remaining are SR-D
-(5), SR-E (1) and the single SR-F straggler `InfiniteProposition41.lean`.
+`import Spectra` in `DavisKahan/**`: **15 → 6**.  The six remaining are exactly
+SR-D (5) and SR-E (1).  **Every lane except those two is closed**, and after
+them comes S6: drop `[[require]] Spectra` from `lakefile.toml`, delete or
+explicitly retain `vendor/Spectra`, and complete the per-declaration provenance
+ledger.
 
 > **SR-F was worked twice.**  edward and namek both took it, from different
 > branches, within the same hour.  No damage — they happened to split it:
@@ -389,9 +392,9 @@ Target to reprove, in `DavisKahan/Sylvester/PairwiseHomogeneousUniqueness.lean`:
 `linearPMapSylvester_homogeneous_eq_zero_of_disjoint_spectrum` — the only
 consumer of the donor constant, at line 103.
 
-## SR-F — Experimental stragglers  *(namek — two of three done)*
+## SR-F — Experimental stragglers  *(DONE — edward + namek)*
 
-**Done.**
+**Done, all three.**
 
 * `OperatorAbsoluteValueComplex.lean` — a straight swap onto `ForTauCeti`'s
   polar API, as predicted.  Two facts were missing and are proved locally:
@@ -412,11 +415,15 @@ consumer of the donor constant, at line 103.
   `‖exp x‖ ≤ Real.exp ‖x‖` for a general Banach algebra, only for `ℂ`, and the
   theorem had no consumers anywhere in the tree.
 
-**Remaining: `InfiniteProposition41.lean`.**  It builds its own PVM through
-`SelfAdjointOperator.ofBounded` and the Stone group, for a *bounded* `C`.  The
-native replacement is `boundedSelfAdjointSpectralPVM C hC`, after which the
-generator layer disappears entirely; the form bound it derives from Spectra
-should come from the bounded Borel calculus instead.
+* `InfiniteProposition41.lean` — the Stone-group scaffolding in both of its
+  proofs deleted outright.  It existed for two form bounds, now native in
+  `BorelCalculus/PVM.lean`: `re_inner_le_of_boundedPVM_proj_Ici_eq_zero` and
+  `le_re_inner_of_boundedPVM_proj_Iic_eq_zero`.  The observation that makes them
+  short: `E([c, ∞)) ξ = 0` *is* the statement that the diagonal measure gives
+  `[c, ∞)` no mass, and the quadratic form *is* the integral of the coordinate
+  against that same measure — so the bound is `∫ κ ≤ ∫ c = c ‖ξ‖²` and no
+  spectral theorem is involved.  The projection-disjointness steps became
+  `ProjValMeasure.proj_inter` + `proj_empty`.
 
 <details><summary>original lane description</summary>
 
