@@ -130,8 +130,10 @@ private theorem ambient_doubleAngleTangent_eq_extendCoordinate
       rw [U.starProjection_add_starProjection_orthogonal]
     have hYperp : Y (Uᗮ.starProjection x) = 0 := by
       have h := DFunLike.congr_fun hYP (Uᗮ.starProjection x)
+      -- `K` is implicit in `starProjection_apply_eq_zero_iff`, and with it
+      -- unresolved Lean reports the whole dotted name as an unknown constant.
       rw [ContinuousLinearMap.comp_apply,
-        Submodule.starProjection_apply_eq_zero_iff.mpr
+        (Submodule.starProjection_apply_eq_zero_iff (K := U)).mpr
           (Uᗮ.starProjection_apply_mem x)] at h
       simpa using h.symm
     rw [hsplit, map_add, hYperp, map_zero, add_zero]
