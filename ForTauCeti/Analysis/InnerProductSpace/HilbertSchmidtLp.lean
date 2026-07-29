@@ -89,5 +89,36 @@ theorem memLp_columns_iff (b : HilbertBasis ι 𝕜 F) (T : F →L[𝕜] E) :
   rw [show ((2 : ℝ≥0∞).toReal) = ((2 : ℕ) : ℝ) by simp]
   exact Real.rpow_natCast _ 2
 
+/-! ## The inverse direction: every square-summable column family is an operator -/
+
+section OfLp
+
+variable (b : HilbertBasis ι 𝕜 F) (f : lp (fun _ : ι => E) 2)
+
+omit [CompleteSpace E] [CompleteSpace F] in
+/-- The column series of an `ℓ²` family is absolutely summable at every vector:
+Cauchy--Schwarz against the basis coefficients, which are themselves `ℓ²`. -/
+theorem summable_norm_columnSeries (x : F) :
+    Summable fun i => ‖(b.repr x i) • f i‖ := by
+  have hcoef : Summable fun i => ‖b.repr x i‖ ^ 2 := by
+    have := lp.memℓp (b.repr x)
+    have h2 := (memℓp_gen_iff (by norm_num : (0 : ℝ) < (2 : ℝ≥0∞).toReal)).mp this
+    refine h2.congr fun i => ?_
+    rw [show ((2 : ℝ≥0∞).toReal) = ((2 : ℕ) : ℝ) by simp]
+    exact Real.rpow_natCast _ 2
+  have hcol : Summable fun i => ‖f i‖ ^ 2 := by
+    have h2 := (memℓp_gen_iff (by norm_num : (0 : ℝ) < (2 : ℝ≥0∞).toReal)).mp (lp.memℓp f)
+    refine h2.congr fun i => ?_
+    rw [show ((2 : ℝ≥0∞).toReal) = ((2 : ℕ) : ℝ) by simp]
+    exact Real.rpow_natCast _ 2
+  -- `ab ≤ (a² + b²)/2` avoids invoking Hölder for the one case that needs it
+  have hdom : Summable fun i => (‖b.repr x i‖ ^ 2 + ‖f i‖ ^ 2) / 2 :=
+    (hcoef.add hcol).div_const 2
+  refine Summable.of_nonneg_of_le (fun i => norm_nonneg _) (fun i => ?_) hdom
+  rw [norm_smul]
+  nlinarith [sq_nonneg (‖b.repr x i‖ - ‖f i‖), norm_nonneg (b.repr x i), norm_nonneg (f i)]
+
+end OfLp
+
 end HilbertSchmidt
 end TauCeti
