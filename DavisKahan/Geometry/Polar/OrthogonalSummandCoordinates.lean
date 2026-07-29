@@ -59,6 +59,7 @@ noncomputable def orthogonalCoordinatesInv
       RingHom.id_apply]
     module
 
+omit [CompleteSpace H] in
 /-- The inverse coordinate map recombines the two summands. -/
 @[simp] theorem orthogonalCoordinatesInv_apply
     (K : Submodule ℂ H) [K.HasOrthogonalProjection]
@@ -66,6 +67,7 @@ noncomputable def orthogonalCoordinatesInv
     orthogonalCoordinatesInv K z =
       ((WithLp.fst z : K) : H) + ((WithLp.snd z : Kᗮ) : H) := rfl
 
+omit [CompleteSpace H] in
 /-- Recombining the coordinates of a vector returns it. -/
 @[simp] theorem orthogonalCoordinatesInv_coordinates
     (K : Submodule ℂ H) [K.HasOrthogonalProjection] (x : H) :
@@ -73,6 +75,7 @@ noncomputable def orthogonalCoordinatesInv
   change K.starProjection x + Kᗮ.starProjection x = x
   exact K.starProjection_add_starProjection_orthogonal x
 
+omit [CompleteSpace H] in
 /-- Taking coordinates of a recombined pair returns the pair. -/
 @[simp] theorem orthogonalCoordinates_coordinatesInv
     (K : Submodule ℂ H) [K.HasOrthogonalProjection]
@@ -130,11 +133,13 @@ noncomputable def orthogonalDecompositionEquiv
       right_inv := orthogonalCoordinates_coordinatesInv K }
   norm_map' := norm_orthogonalCoordinates K
 
+omit [CompleteSpace H] in
 /-- The decomposition isometry acts by taking coordinates. -/
 @[simp] theorem orthogonalDecompositionEquiv_apply
     (K : Submodule ℂ H) [K.HasOrthogonalProjection] (x : H) :
     orthogonalDecompositionEquiv K x = orthogonalCoordinates K x := rfl
 
+omit [CompleteSpace H] in
 /-- Its inverse acts by recombining them. -/
 @[simp] theorem orthogonalDecompositionEquiv_symm_apply
     (K : Submodule ℂ H) [K.HasOrthogonalProjection]
@@ -151,6 +156,7 @@ noncomputable def orthogonalSumEquiv
     (LinearIsometryEquiv.withLpProdCongr 2 eK ePerp) |>.trans
       (orthogonalDecompositionEquiv L).symm
 
+omit [CompleteSpace H] in
 /-- On the first summand the joined isometry acts by the first factor. -/
 @[simp] theorem orthogonalSumEquiv_apply_mem
     (K L : Submodule ℂ H)
@@ -166,6 +172,7 @@ noncomputable def orthogonalSumEquiv
     orthogonalCoordinates, orthogonalCoordinatesInv,
     hfix, hperp, Subtype.coe_eta]
 
+omit [CompleteSpace H] in
 /-- On the orthogonal complement it acts by the second factor.  With the previous lemma this
 pins the joined isometry down summand-wise. -/
 @[simp] theorem orthogonalSumEquiv_apply_mem_orthogonal
@@ -182,6 +189,7 @@ pins the joined isometry down summand-wise. -/
     orthogonalCoordinates, orthogonalCoordinatesInv,
     hfix, hK, Subtype.coe_eta]
 
+omit [CompleteSpace H] in
 /-- The joined equivalence conjugates the first orthogonal projection. -/
 theorem orthogonalSumEquiv_intertwines_projection
     (K L : Submodule ℂ H)

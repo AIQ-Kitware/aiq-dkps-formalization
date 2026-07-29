@@ -59,6 +59,7 @@ noncomputable def maximalAmbientInverse
     D.maximalAmbientDomain →ₗ[ℂ] V :=
   D.maximalRangeEquiv.symm.toLinearMap
 
+omit [CompleteSpace H] [CompleteSpace V] in
 /-- The ambient inverse undoes the embedding. -/
 @[simp] theorem maximalAmbientInverse_embed
     (D : FourthOrderTraceModel (H := H) (V := V)) (x : V) :
@@ -67,6 +68,7 @@ noncomputable def maximalAmbientInverse
   change D.maximalRangeEquiv.symm (D.maximalRangeEquiv x) = x
   exact D.maximalRangeEquiv.symm_apply_apply x
 
+omit [CompleteSpace H] [CompleteSpace V] in
 /-- And the embedding undoes the ambient inverse, so the two are mutually inverse on the
 maximal domain. -/
 @[simp] theorem embed_maximalAmbientInverse
@@ -122,6 +124,7 @@ noncomputable def freeToMaximal
     D.freeAmbientDomain →ₗ[ℂ] D.maximalAmbientDomain :=
   Submodule.inclusion D.freeAmbientDomain_le_maximalAmbientDomain
 
+omit [CompleteSpace H] [CompleteSpace V] in
 /-- The maximal inverse of a free vector is the underlying free graph-space
 representative. -/
 theorem maximalAmbientInverse_freeToMaximal
@@ -135,6 +138,7 @@ theorem maximalAmbientInverse_freeToMaximal
   have h := D.freeRangeEquiv.apply_symm_apply x
   exact (congrArg Subtype.val h).symm
 
+omit [CompleteSpace H] [CompleteSpace V] in
 /-- The free fourth derivative agrees with the maximal fourth derivative after
 domain inclusion. -/
 theorem freeFourthAmbient_agrees
@@ -146,6 +150,7 @@ theorem freeFourthAmbient_agrees
     D.fourth (D.maximalAmbientInverse (D.freeToMaximal x))
   rw [D.maximalAmbientInverse_freeToMaximal]
 
+omit [CompleteSpace H] [CompleteSpace V] in
 /-- The free ambient domain is exactly the joint kernel of the four transported
 traces. -/
 theorem mem_freeAmbientDomain_iff_traces

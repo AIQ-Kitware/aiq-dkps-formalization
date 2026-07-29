@@ -43,6 +43,7 @@ noncomputable def restrictToInvariant
     (hK : ∀ x ∈ K, T x ∈ K) : K →L[ℂ] K :=
   (T ∘L K.subtypeL).codRestrict K (fun x => hK (x : H) x.property)
 
+omit [CompleteSpace H] in
 /-- The restriction to an invariant subspace acts as the original operator. -/
 @[simp] theorem restrictToInvariant_apply
     (T : H →L[ℂ] H) (K : Submodule ℂ H)

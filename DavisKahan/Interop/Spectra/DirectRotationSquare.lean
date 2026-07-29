@@ -217,6 +217,7 @@ theorem spectraReflectionProductHalfPhase_sq
           (fun h => hneg (h ▸ hz))
     _ = spectraReflectionProduct U V := cfc_id' ℂ _
 
+omit [CompleteSpace H] in
 /-- Acuteness is symmetric in the two subspaces. -/
 theorem _root_.TauCeti.DavisKahan.IsAcute.symm
     {U V : Submodule ℂ H}

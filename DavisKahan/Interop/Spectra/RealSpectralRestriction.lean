@@ -97,6 +97,7 @@ def conjugationDomain (A : RealClosedOperator)
     simpa using
       (ClosedOperatorComplexification.mem_complexify_domain_iff A z).mp z.property⟩
 
+omit [CompleteSpace E] in
 /-- The conjugation domain, unfolded to the underlying vector. -/
 @[simp]
 theorem conjugationDomain_coe (A : RealClosedOperator)
@@ -106,6 +107,7 @@ theorem conjugationDomain_coe (A : RealClosedOperator)
       conjugation (z : Eℂ) :=
   rfl
 
+omit [CompleteSpace E] in
 /-- The complexified closed operator commutes with canonical conjugation on its
 operator domain. -/
 theorem complexify_apply_conjugationDomain (A : RealClosedOperator)
@@ -541,6 +543,7 @@ theorem realSelfAdjointSpectralSubspace_compl
     Submodule.starProjection_orthogonal,
     ← realSelfAdjointSpectralProjection_eq_starProjection]
 
+omit [CompleteSpace E] in
 /-- The real copy of a domain vector has the expected underlying vector. -/
 private theorem coe_ofRealDomain (A : RealClosedOperator) (x : A.domain) :
     ((ClosedOperatorComplexification.ofRealDomain A x :
