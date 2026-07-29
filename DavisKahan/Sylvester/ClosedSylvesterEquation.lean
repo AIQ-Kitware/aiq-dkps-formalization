@@ -95,85 +95,6 @@ theorem equation_toLinearMap
   rw [harg]
   exact heq
 
-omit [CompleteSpace E] in
-/-- Extract the operator-domain transport from a Sylvester equation. -/
-theorem mapsTo
-    {A : ClosedOperatorE (𝕜 := 𝕜) (E := E)}
-    {B : ClosedOperatorF (𝕜 := 𝕜) (F := F)}
-    {X C : F →L[𝕜] E}
-    (h : HasClosedSylvesterEquation A B X C) :
-    A.MapsDomainTo B X :=
-  TauCeti.LinearPMap.SylvesterEquation.mapsTo h
-
-omit [CompleteSpace E] [CompleteSpace F] in
-/-- A bounded Sylvester equation is a full-domain closed Sylvester equation. -/
-theorem ofBounded
-    {A : E →L[𝕜] E} {B : F →L[𝕜] F} {X C : F →L[𝕜] E}
-    (hEq : A ∘L X - X ∘L B = C) :
-    HasClosedSylvesterEquation
-      (TauCeti.DavisKahanExt.ClosedOperator.ofBounded A)
-      (TauCeti.DavisKahanExt.ClosedOperator.ofBounded B) X C := by
-  refine {
-    mapsTo_domain := ?_
-    equation := ?_
-  }
-  · intro x
-    simp
-  · intro x
-    have hx := congrArg (fun T : F →L[𝕜] E => T (x : F)) hEq
-    change A (X (x : F)) - X (B (x : F)) = C (x : F)
-    simpa only [ContinuousLinearMap.comp_apply, sub_apply] using hx
-
-omit [CompleteSpace E] [CompleteSpace F] in
-/-- The zero map solves the homogeneous domain-aware equation. -/
-theorem zero
-    (A : ClosedOperatorE (𝕜 := 𝕜) (E := E))
-    (B : ClosedOperatorF (𝕜 := 𝕜) (F := F)) :
-    HasClosedSylvesterEquation A B 0 0 :=
-  TauCeti.LinearPMap.SylvesterEquation.zero A.toLinearPMap B.toLinearPMap
-
-omit [CompleteSpace E] [CompleteSpace F] in
-/-- Domain-aware Sylvester equations add. -/
-theorem add
-    {A : ClosedOperatorE (𝕜 := 𝕜) (E := E)}
-    {B : ClosedOperatorF (𝕜 := 𝕜) (F := F)}
-    {X Y C D : F →L[𝕜] E}
-    (hX : HasClosedSylvesterEquation A B X C)
-    (hY : HasClosedSylvesterEquation A B Y D) :
-    HasClosedSylvesterEquation A B (X + Y) (C + D) :=
-  TauCeti.LinearPMap.SylvesterEquation.add hX hY
-
-omit [CompleteSpace E] [CompleteSpace F] in
-/-- Domain-aware Sylvester equations are preserved by negation. -/
-theorem neg
-    {A : ClosedOperatorE (𝕜 := 𝕜) (E := E)}
-    {B : ClosedOperatorF (𝕜 := 𝕜) (F := F)}
-    {X C : F →L[𝕜] E}
-    (hX : HasClosedSylvesterEquation A B X C) :
-    HasClosedSylvesterEquation A B (-X) (-C) :=
-  TauCeti.LinearPMap.SylvesterEquation.neg hX
-
-omit [CompleteSpace E] [CompleteSpace F] in
-/-- Domain-aware Sylvester equations subtract. -/
-theorem sub
-    {A : ClosedOperatorE (𝕜 := 𝕜) (E := E)}
-    {B : ClosedOperatorF (𝕜 := 𝕜) (F := F)}
-    {X Y C D : F →L[𝕜] E}
-    (hX : HasClosedSylvesterEquation A B X C)
-    (hY : HasClosedSylvesterEquation A B Y D) :
-    HasClosedSylvesterEquation A B (X - Y) (C - D) :=
-  TauCeti.LinearPMap.SylvesterEquation.sub hX hY
-
-omit [CompleteSpace E] [CompleteSpace F] in
-/-- Domain-aware Sylvester equations commute with scalar multiplication. -/
-theorem smul
-    {A : ClosedOperatorE (𝕜 := 𝕜) (E := E)}
-    {B : ClosedOperatorF (𝕜 := 𝕜) (F := F)}
-    {X C : F →L[𝕜] E}
-    (hX : HasClosedSylvesterEquation A B X C) (c : 𝕜) :
-    HasClosedSylvesterEquation A B (c • X) (c • C) :=
-  TauCeti.LinearPMap.SylvesterEquation.smul hX c
-
 end ClosedSylvesterEquation
 
 /-- Compatibility facade for a bounded everywhere inverse of the canonical
@@ -182,25 +103,6 @@ abbrev HasBoundedEverywhereInverse
     (A : ClosedOperatorE (𝕜 := 𝕜) (E := E)) :=
   TauCeti.LinearPMap.HasBoundedEverywhereInverse A.toLinearPMap
 
-namespace HasBoundedEverywhereInverse
-
-omit [CompleteSpace E] in
-/-- A closed operator with an everywhere-defined two-sided inverse is injective. -/
-theorem injective
-    {A : ClosedOperatorE (𝕜 := 𝕜) (E := E)}
-    (hA : HasBoundedEverywhereInverse A) :
-    Function.Injective A.toLinearMap :=
-  TauCeti.LinearPMap.HasBoundedEverywhereInverse.injective hA
-
-omit [CompleteSpace E] in
-/-- The operator action is onto the ambient Hilbert space. -/
-theorem surjective
-    {A : ClosedOperatorE (𝕜 := 𝕜) (E := E)}
-    (hA : HasBoundedEverywhereInverse A) :
-    Function.Surjective A.toLinearMap :=
-  TauCeti.LinearPMap.HasBoundedEverywhereInverse.surjective hA
-
-end HasBoundedEverywhereInverse
 end ExactSinTheta
 end Experimental
 end DavisKahan

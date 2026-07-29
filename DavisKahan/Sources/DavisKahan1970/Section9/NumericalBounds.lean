@@ -56,22 +56,26 @@ private lemma sqrt7_lt_53_div_20 :
   nlinarith [Real.sqrt_nonneg (7 : ℝ),
     Real.sq_sqrt (by norm_num : (0 : ℝ) ≤ 7)]
 
+/-- The upper Ritz coefficient is below the printed `0.7887`. -/
 lemma ritzHighCoefficient_lt_printed :
     ritzHighCoefficient < (7887 : ℝ) / 10000 := by
   unfold ritzHighCoefficient
   nlinarith [sqrt3_lt_8661_div_5000]
 
+/-- The lower Ritz coefficient is below the printed `0.21135`. -/
 lemma ritzLowCoefficient_lt_printed :
     ritzLowCoefficient < (4227 : ℝ) / 20000 := by
   unfold ritzLowCoefficient
   nlinarith [sqrt3_gt_17319_div_10000]
 
+/-- The top residual root `√((11 + √76)/30)` is below the printed `0.811`. -/
 lemma residualTopRoot_lt_printed :
     Real.sqrt ((11 + Real.sqrt 76) / 30) < (811 : ℝ) / 1000 := by
   have hq : 0 ≤ (11 + Real.sqrt 76) / 30 := by positivity
   have hs := Real.sq_sqrt hq
   nlinarith [sqrt76_lt_4359_div_500, Real.sqrt_nonneg ((11 + Real.sqrt 76) / 30)]
 
+/-- The bottom residual root `√((11 - √76)/30)` is below the printed `0.279`. -/
 lemma residualBottomRoot_lt_printed :
     Real.sqrt ((11 - Real.sqrt 76) / 30) < (279 : ℝ) / 1000 := by
   have h76 := sqrt76_le_eleven
@@ -79,11 +83,14 @@ lemma residualBottomRoot_lt_printed :
   have hs := Real.sq_sqrt hq
   nlinarith [sqrt76_gt_87_div_10, Real.sqrt_nonneg ((11 - Real.sqrt 76) / 30)]
 
+/-- The initial `sin Θ` estimate is below the printed decimal, for every `ε > 0`. -/
 lemma initial_sin_exact_lt_printed (ε : ℝ) (hε : 0 < ε) :
     residualTopSingularValue ε / 500 < (811 : ℝ) / 500000 * ε := by
   rw [residualTopSingularValue, abs_of_pos hε]
   nlinarith [residualTopRoot_lt_printed]
 
+/-- The initial Ky Fan 2-norm estimate is below the printed decimal, for every
+`ε > 0`. -/
 lemma initial_kyFanTwo_exact_lt_printed (ε : ℝ) (hε : 0 < ε) :
     residualKyFanTwo ε / 500 < (109 : ℝ) / 50000 * ε := by
   rw [residualKyFanTwo, residualTopSingularValue, residualBottomSingularValue,
@@ -140,6 +147,8 @@ private theorem ratio_strict_mono
     exact mul_le_mul_of_nonneg_left hden hA0
   exact hfirst.trans_le hsecond
 
+/-- The exact `tan Θ` bound is below the printed rational bound `(a·ε)/(1 - b·ε)`.
+The hypothesis `ε < 100` is what keeps the denominator positive. -/
 lemma tangentThetaExactBound_lt_printed (ε : ℝ)
     (hε : 0 < ε) (hε100 : ε < 100) :
     tangentThetaExactBound ε <
@@ -151,6 +160,8 @@ lemma tangentThetaExactBound_lt_printed (ε : ℝ)
   · nlinarith [ritzHighCoefficient_lt_printed]
   · nlinarith
 
+/-- The exact `tan 2Θ` bound is below the printed rational bound — twice the
+`tan Θ` numerator over the same denominator, so it needs the same `ε < 100`. -/
 lemma tangentTwoThetaExactBound_lt_printed (ε : ℝ)
     (hε : 0 < ε) (hε100 : ε < 100) :
     tangentTwoThetaExactBound ε <
@@ -162,6 +173,8 @@ lemma tangentTwoThetaExactBound_lt_printed (ε : ℝ)
   · nlinarith [ritzHighCoefficient_lt_printed]
   · nlinarith
 
+/-- The exact lower individual-angle tangent bound is below its printed rational
+bound, on `0 < ε < 100`. -/
 lemma lowerIndividualTangentExactBound_lt_printed (ε : ℝ)
     (hε : 0 < ε) (hε100 : ε < 100) :
     lowerIndividualTangentExactBound ε <
@@ -173,6 +186,8 @@ lemma lowerIndividualTangentExactBound_lt_printed (ε : ℝ)
   · nlinarith [ritzLowCoefficient_lt_printed]
   · nlinarith
 
+/-- The exact upper individual-angle tangent bound is below its printed rational
+bound, on `0 < ε < 100`. -/
 lemma upperIndividualTangentExactBound_lt_printed (ε : ℝ)
     (hε : 0 < ε) (hε100 : ε < 100) :
     upperIndividualTangentExactBound ε <
@@ -184,6 +199,8 @@ lemma upperIndividualTangentExactBound_lt_printed (ε : ℝ)
   · nlinarith [ritzHighCoefficient_lt_printed]
   · nlinarith
 
+/-- The exact lower individual-angle bound is below its printed rational bound, on
+`0 < ε < 100`. -/
 lemma lowerIndividualAngleExactBound_lt_printed (ε : ℝ)
     (hε : 0 < ε) (hε100 : ε < 100) :
     lowerIndividualAngleExactBound ε <
@@ -195,6 +212,8 @@ lemma lowerIndividualAngleExactBound_lt_printed (ε : ℝ)
   · nlinarith [ritzLowCoefficient_lt_printed]
   · nlinarith
 
+/-- The exact upper individual-angle bound is below its printed rational bound, on
+`0 < ε < 100`. -/
 lemma upperIndividualAngleExactBound_lt_printed (ε : ℝ)
     (hε : 0 < ε) (hε100 : ε < 100) :
     upperIndividualAngleExactBound ε <
