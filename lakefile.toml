@@ -113,6 +113,19 @@ srcDir = "FinishTanTwoTheta"
 globs = ["FinishTanTwoTheta.*"]
 
 
+# Citation-priority completion lane for Yu--Wang--Samworth (2015).  The source
+# is isolated organizationally but shares the root dependency graph and .lake.
+[[lean_lib]]
+name = "FinishYuWangSamworth"
+srcDir = "FinishYuWangSamworth"
+globs = ["FinishYuWangSamworth.*"]
+# Measured against the option set Tau Ceti's own `lean_lib` applies, not this
+# repository's default: `warningAsError` alone says nothing about whether an
+# upstream PR would be accepted. Mirrors the `ForTauCeti` block above, including
+# `style.header = false` (Tau Ceti disables the copyright-header linter).
+leanOptions = { warningAsError = true, weak.linter.mathlibStandardSet = true, weak.linter.style.longFile = 1500, weak.linter.style.longFileDefValue = 1500, weak.linter.style.header = false }
+
+
 # Comparator/challenge modules for community calibration of AI-authored
 # ForMathlib candidates. These are intentionally not default targets.
 [[lean_lib]]

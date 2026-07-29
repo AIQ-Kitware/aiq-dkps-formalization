@@ -10,10 +10,15 @@ aₙ(T) = inf { ‖T - R‖ : rank R ≤ n }.
 
 They are defined on general normed spaces, while on finite-dimensional Hilbert
 spaces they coincide with the usual zero-based singular values.  This roadmap
-builds the complete reusable API connecting those two viewpoints: the
-field-generic approximation-number theory, its behavior under addition and
-composition, its relation to finite rank and compact approximation, adjoint
-invariance, finite-dimensional Eckart--Young, and the exact min--max theorem.
+builds the complete reusable API connecting those two viewpoints: 
+
+* the field-generic approximation-number theory,
+* its behavior under addition and composition,
+* its relation to finite rank and compact approximation,
+* adjoint invariance,
+* its identification with singular values in finite dimensions (Eckart--Young),
+* and finite- and infinite-dimensional min--max principles.
+
 
 Suggested homes:
 
@@ -26,34 +31,6 @@ TauCeti/Analysis/InnerProductSpace/CourantFischer.lean
 `Suggested.lean` gives prototype signatures.  The markdown specification is
 definitive; the prototypes are neither exhaustive nor prescriptive about proof
 architecture.
-
-## Scope boundary
-
-This roadmap owns:
-
-- approximation numbers of bounded linear maps between normed spaces;
-- their elementary order, additive, homogeneous, and two-sided ideal API;
-- the distinction between approximable and compact operators;
-- adjoint invariance on real and complex Hilbert spaces;
-- a rectangular operator-modulus API where Mathlib's functional calculus
-  supports it;
-- finite-dimensional singular-value identification and Eckart--Young;
-- an exact finite-dimensional min--max characterization;
-- the unconditional infinite-dimensional lower-bound half of min--max.
-
-This roadmap does **not** own:
-
-- symmetric norming functions or their extension to infinite sequences;
-- Ky Fan dominance;
-- Schatten, Hilbert--Schmidt, or trace-class ideals;
-- block-sum rearrangement theory;
-- general real/complex transport of operator ideals;
-- unbounded operators, spectral projections, or Davis--Kahan angle theorems;
-- a general partial-isometry polar decomposition.
-
-Those form a dependent roadmap on symmetric operator ideals.  They should be
-specified only after the approximation-number API below is settled, because
-their central objects are gauges of the sequence `n ↦ aₙ(T)`.
 
 ## Generality and pinned conventions
 
@@ -102,73 +79,66 @@ or a separately specified complexification argument.
 
 ### Namespace and normal forms
 
-The intended public declarations extend `ContinuousLinearMap`, enabling dot
-notation such as `T.approximationNumber n`.  This choice must be coordinated
-with active Mathlib work before implementation lands.
+The public primitive is
+`ContinuousLinearMap.approximationNumber T n : ℝ`, enabling dot notation such
+as `T.approximationNumber n`.  The real codomain matches Mathlib's norms,
+infima, and finite-dimensional singular values; nonnegativity is recorded by a
+theorem rather than in the type.
 
 The approximation number, not a finite-dimensional singular-value expression,
 is the normal form for the field-generic theory.  Consequently the
 finite-dimensional identification is a named theorem rather than a global
 `@[simp]` rule.
 
-## Existing Mathlib material to consume
+## Existing foundations
 
-- **Bounded maps and operator norm:** `ContinuousLinearMap`, `‖T‖`, composition,
-  adjoints, and the normed-space structure on bounded maps.
-- **Rank:** `LinearMap.rank`, finite-rank lemmas, rank bounds for sums and
-  compositions, and `Module.finrank` in finite dimension.
-- **Order completeness:** real infima and the `iInf`/`ciInf` API needed for the
-  defining distance.
-- **Hilbert-space spectral theory:** `ContinuousLinearMap.adjoint`,
-  finite-dimensional `ContinuousLinearMap.singularValues`, self-adjoint
-  eigenvalue enumeration, orthogonal projections, and Courant--Fischer tools.
-- **Positive square roots:** the continuous functional calculus and `CFC.sqrt`
-  on complex Hilbert-space operators, used to define
-  `|T| = (T⋆T)^(1/2)` on the source.
-- **Compact operators:** `IsCompactOperator` and closure properties for
-  finite-rank and norm-limit arguments.
+Mathlib supplies `ContinuousLinearMap`, operator norms, composition and
+adjoints; `LinearMap.rank`, `Module.rank`, and `Module.finrank`; real infima;
+finite-dimensional `LinearMap.singularValues`, self-adjoint eigenvalues and
+eigenvector bases; orthogonal projections; complex `CFC.sqrt`; and
+`IsCompactOperator` with its composition and norm-limit closure API.
 
-Do not introduce private wrappers around these notions merely to restate a
-single hypothesis.
+A sorry-free staged implementation under `ForTauCeti/` already contains the
+A1--A3 inequalities and laws, B1--B3, B5, the complex min--max converse and
+finite-restriction localization, and equality of the approximation-number
+sequences of `T` and `T.modulus`.
+These results still require Tau Ceti review and migration.
 
-## Work already in motion
+Do not introduce private wrappers around existing Mathlib or staged notions
+merely to restate a single hypothesis.
 
-As of 2026-07-27, Mathlib PR
+## Related Work
+
+As of 2026-07-28, Mathlib PR
 [#32126](https://github.com/leanprover-community/mathlib4/pull/32126) is an open
 draft developing a zero-based `ContinuousLinearMap.singularValue` for general
 normed spaces, valued in `ℝ≥0`, together with elementary approximation-number
 laws and finite-dimensional singular-value identification.
 
-Before implementation begins in Tau Ceti, coordinate with that PR's authors and
-Mathlib reviewers.  The acceptable outcomes are:
+This roadmap deliberately chooses
+`ContinuousLinearMap.approximationNumber : ℕ → ℝ`.  PR #32126 represents an
+alternative choice: `ContinuousLinearMap.singularValue : ℕ → ℝ≥0`.  The Tau
+Ceti choice keeps the API aligned with real-valued norms, infima, and Mathlib's
+finite-dimensional singular values, while exposing nonnegativity separately.
 
-1. consume the Mathlib API if it lands;
-2. help reconcile and land the Mathlib API;
-3. develop the missing Tau Ceti layer against the intended Mathlib interface
-   while avoiding a competing permanent definition.
+If the Mathlib proposal lands, a later migration or interoperability layer can
+be considered.  It is not a prerequisite for this roadmap, and Tau Ceti does
+not maintain both public APIs in the meantime.
 
-The zero-based convention is compatible.  The name and codomain differ from the
-current staged Tau Ceti proposal, so they must be resolved before the first code
-PR, not by maintaining both APIs.
+See also the
+[public Mathlib discussion of singular values and approximation numbers](https://leanprover-community.github.io/archive/stream/217875-Is-there-code-for-X%3F/topic/Singular.20Value.20Decomposition.html).
 
-## What is missing
+## What remains to land
 
-Mathlib does not currently provide a stable, complete approximation-number API
-with all of the following in one dependency chain:
+The staged results above must be reviewed and migrated.  The genuinely missing
+mathematics is narrower:
 
-- intrinsic characterization by rank-constrained approximants;
-- additive and two-sided composition inequalities;
-- operator-norm Lipschitz continuity;
-- the precise approximable/compact boundary;
-- adjoint invariance at Hilbert-space generality;
-- a reviewed rectangular modulus API;
-- finite-dimensional Eckart--Young at the chosen indexing convention;
-- an exact finite-dimensional min--max equality;
-- the general infinite-dimensional lower-bound principle used by perturbation
-  theory.
+- the finite-rank cutoff theorem and the approximable/compact boundary in A4;
+- the finite-dimensional orthogonal-tail infimum formula in B4;
+- theorem-level acceptance examples.
 
-This roadmap builds that chain without assuming the later symmetric-ideal
-layer.
+The complex-Hilbert min--max converse and finite-dimensional localization are
+already staged and are specified below as B6.
 
 ---
 
@@ -279,12 +249,15 @@ Develop the reusable object API, including:
 - the natural pre- and post-composition norm identities;
 - commutation of moduli when the Gram operators commute.
 
-This part does **not** claim a general polar decomposition and does not use one
-as an unstated input.  In particular, a general infinite-dimensional theorem
-`aₙ(T) = aₙ(|T|)` is not a target here unless the required partial-isometry
-infrastructure is separately grounded.  Finite-dimensional singular-value
-identification below provides the needed modulus connection in its valid
-setting.
+This part does **not** claim a polar decomposition.  It does include the
+heterogeneous sequence identity
+
+```text
+aₙ(|T|) = aₙ(T)
+```
+
+for complex Hilbert spaces, obtained from the pointwise norm identity and the
+min--max theory rather than from a partial isometry.
 
 ### B3 -- finite-dimensional Eckart--Young
 
@@ -292,7 +265,7 @@ For finite-dimensional real or complex inner-product spaces, use Mathlib's
 zero-based singular values and prove
 
 ```text
-aₙ(T) = T.singularValues n.
+aₙ(T) = T.toLinearMap.singularValues n
 ```
 
 The lower inequality must state that every rank-`≤ n` approximant has error at
@@ -300,7 +273,7 @@ least the `n`th singular value.  The upper inequality constructs the truncated
 singular approximation.  The theorem must cover rectangular maps and the range
 `n ≥ finrank 𝕜 E`, where both sides vanish.
 
-### B4 -- exact finite-dimensional min--max
+### B4 -- finite-dimensional min--max formula
 
 Prove an exact intrinsic equality, for example in the equivalent orthogonal-tail
 form
@@ -330,10 +303,15 @@ then c ≤ aₙ(T).
 ```
 
 Also provide the finite-dimensional unit-vector and linearly-independent-family
-forms used by applications.  Do not present this one-sided theorem as a full
-infinite-dimensional min--max equality.  An upper or equality theorem requires
-additional compactness or approximation hypotheses and belongs only after those
-hypotheses are stated explicitly.
+forms used by applications.
+
+### B6 -- converse and finite-dimensional localization
+
+For complex Hilbert spaces, prove that every strict lower bound for `aₙ(T)` is
+realized by a strictly larger uniform lower bound on a subspace generated by
+`n + 1` linearly independent vectors.  Deduce that `aₙ(T)` is the least upper
+bound of the `n`th approximation numbers of its restrictions to subspaces
+generated by `n + 1` vectors.
 
 ---
 
@@ -361,41 +339,52 @@ These examples are theorem-level tests of the API, not merely `#eval` checks.
 
 ## Ordering and PR slices
 
-1. **Coordination and conventions:** resolve the relationship with Mathlib
-   PR #32126 and confirm the public name/codomain.
-2. **A1:** definition and intrinsic characterization.
-3. **A2--A3:** additive, Lipschitz, composition, and homogeneity laws.
-4. **A4:** finite-rank vanishing and the approximable/compact boundary.
-5. **B1:** adjoint invariance.
-6. **B3 and Courant--Fischer support:** finite-dimensional Eckart--Young.
-7. **B4--B5:** exact finite-dimensional min--max and the general lower-bound
-   theorem.
-8. **B2:** the reviewed complex rectangular modulus API, if it has not already
-   landed independently.
+1. Review and migrate the staged elementary, Hilbert-space, and min--max layers
+   in dependency order.
+2. Add A4 and B4 as separate mathematical PRs.
+3. Add the acceptance examples after the public API settles.
 
-Each PR should be dependency-closed and should not mix a representation
-migration in downstream Davis--Kahan code with new Tau Ceti mathematics.
+Each PR should be dependency-closed and should not mix downstream
+Davis--Kahan migration with new Tau Ceti mathematics.
 
 ## References
 
-- A. Pietsch, *Operator Ideals*, North-Holland, 1980.
-- A. Pietsch, *Eigenvalues and s-Numbers*, Cambridge University Press, 1987.
-- I. C. Gohberg and M. G. Krein, *Introduction to the Theory of Linear
-  Nonselfadjoint Operators*, AMS, 1969.
-- R. Bhatia, *Matrix Analysis*, Springer, 1997, for finite-dimensional singular
-  values, Ky Fan inequalities, and min--max principles.
-- C. Eckart and G. Young, "The approximation of one matrix by another of lower
-  rank," *Psychometrika* 1 (1936), 211--218.
+- A. Pietsch, [*Operator Ideals*](https://www.sciencedirect.com/bookseries/north-holland-mathematical-library/vol/20/suppl/C), North-Holland Mathematical Library 20, North-Holland, 1980.
+
+- A. Pietsch, [*Eigenvalues and s-Numbers*](https://openlibrary.org/books/OL2708279M/Eigenvalues_and_s-numbers), Cambridge Studies in Advanced Mathematics 13, Cambridge University Press, 1987.
+
+- I. C. Gohberg and M. G. Kreĭn, [*Introduction to the Theory of Linear Nonselfadjoint Operators in Hilbert Space*](https://bookstore.ams.org/MMONO/18), Translations of Mathematical Monographs 18, American Mathematical Society, 1969.
+
+- R. Bhatia, [*Matrix Analysis*](https://doi.org/10.1007/978-1-4612-0653-8), Graduate Texts in Mathematics 169, Springer, 1997.
+
+- C. Eckart and G. Young, ["The Approximation of One Matrix by Another of Lower Rank"](https://doi.org/10.1007/BF02288367), *Psychometrika* 1(3) (1936), 211--218.
+
+- L. Mirsky, ["Symmetric Gauge Functions and Unitarily Invariant Norms"](https://doi.org/10.1093/qmath/11.1.50), *Quarterly Journal of Mathematics* 11(1) (1960), 50--59.
+
+- M. Ullrich, ["Inequalities between s-Numbers"](https://doi.org/10.1007/s43036-024-00386-x),
+  *Advances in Operator Theory* 9 (2024), article 75.
+
+- R. A. Horn and C. R. Johnson, *Matrix Analysis*, second edition,
+  Cambridge University Press, 2013, Theorem 4.2.6.
+
+
+## Mathlib References
+
+- **Adjoints:** [`ContinuousLinearMap.adjoint`](https://leanprover-community.github.io/mathlib4_docs/Mathlib/Analysis/InnerProductSpace/Adjoint.html).
+
+- **Finite-dimensional singular values:** [`LinearMap.singularValues`](https://leanprover-community.github.io/mathlib4_docs/Mathlib/Analysis/InnerProductSpace/SingularValues.html).
+
+- **Positive square roots:** [`CFC.sqrt`](https://leanprover-community.github.io/mathlib4_docs/Mathlib/Analysis/SpecialFunctions/ContinuousFunctionalCalculus/Rpow/Basic.html).
+
+- **Compact operators:** [`IsCompactOperator`](https://leanprover-community.github.io/mathlib4_docs/Mathlib/Analysis/Normed/Operator/Compact/Basic.html).
+
+- **Rank:** [`LinearMap.rank`](https://leanprover-community.github.io/mathlib4_docs/Mathlib/LinearAlgebra/Dimension/LinearMap.html).
 
 ## Provenance and coordination
 
 A sorry-free staged implementation of most of Parts A and B exists in the
-Davis--Kahan formalization repository under `ForTauCeti/`.  It was adapted in
-part from Mathlib PR #32126 and developed further for Davis--Kahan perturbation
-theory.  This is useful implementation evidence, not a prescriptive file map.
-Tau Ceti review should improve names, generality, and dependencies rather than
-canonizing the source layout.
-
-When code is migrated, preserve declaration-level provenance, authorship, and
-Apache-2.0 licensing.  Coordinate with the authors of Mathlib PR #32126 before
-copying or independently replacing overlapping declarations.
+Davis--Kahan [formalization repository](https://github.com/AIQ-Kitware/aiq-dkps-formalization)
+under `ForTauCeti/`.  It was adapted in part from Mathlib PR #32126 and developed
+further for Davis--Kahan perturbation theory.  Migration must preserve
+provenance, authorship, and licensing while allowing Tau Ceti review to improve
+the public API.

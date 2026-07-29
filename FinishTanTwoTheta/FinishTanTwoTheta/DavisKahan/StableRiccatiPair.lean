@@ -80,6 +80,15 @@ theorem stableSingularPair_doubleAngleTangent_le
       _ ≤ (‖B.A1‖ * ε) * ‖y‖ := by
         gcongr
       _ = ‖B.A1‖ * ε := by rw [hynorm, mul_one]
+  have re_ofReal_mul_complex (r : ℝ) (z : ℂ) :
+      RCLike.re ((r : ℂ) * z) = r * RCLike.re z := by
+    simp [RCLike.re_to_complex, Complex.mul_re]
+  have re_ofReal_sq_mul_complex (r : ℝ) (z : ℂ) :
+      RCLike.re ((r : ℂ) ^ 2 * z) = r ^ 2 * RCLike.re z := by
+    rw [pow_two, mul_assoc, re_ofReal_mul_complex,
+      re_ofReal_mul_complex]
+    ring
+
   have hA0err : |RCLike.re ⟪B.A0 x, e1⟫_ℂ| ≤ ‖B.A0‖ * ε := by
     calc
       |RCLike.re ⟪B.A0 x, e1⟫_ℂ| ≤ ‖⟪B.A0 x, e1⟫_ℂ‖ :=
@@ -96,18 +105,28 @@ theorem stableSingularPair_doubleAngleTangent_le
       d * s - ‖B.A1‖ * ε ≤ RCLike.re ⟪B.A1 (X x), y⟫_ℂ := by
     have hy := hA1 y
     rw [hynorm, one_pow, mul_one] at hy
-    rw [hXexpand, map_add, map_smul, inner_add_left,
-      inner_smul_left, Complex.conj_ofReal,
-      ← Complex.real_smul, RCLike.smul_re]
+    have hA1expand :
+        RCLike.re ⟪B.A1 (X x), y⟫_ℂ =
+          s * RCLike.re ⟪B.A1 y, y⟫_ℂ +
+            RCLike.re ⟪B.A1 e0, y⟫_ℂ := by
+      rw [hXexpand, map_add, map_smul, inner_add_left,
+        inner_smul_left, Complex.conj_ofReal, map_add,
+        re_ofReal_mul_complex]
+    rw [hA1expand]
     have herrlower : -‖B.A1‖ * ε ≤ RCLike.re ⟪B.A1 e0, y⟫_ℂ := by
-      exact (neg_le_of_abs_le hA1err)
+      simpa only [neg_mul] using neg_le_of_abs_le hA1err
     nlinarith [mul_le_mul_of_nonneg_left hy hs0]
 
   have hA0upper :
       RCLike.re ⟪X (B.A0 x), y⟫_ℂ ≤ ‖B.A0‖ * ε := by
-    rw [ContinuousLinearMap.adjoint_inner_right, hXadjExpand,
-      inner_add_right, inner_smul_right,
-      ← Complex.real_smul, RCLike.smul_re]
+    have hA0expand :
+        RCLike.re ⟪X (B.A0 x), y⟫_ℂ =
+          s * RCLike.re ⟪B.A0 x, x⟫_ℂ +
+            RCLike.re ⟪B.A0 x, e1⟫_ℂ := by
+      rw [← ContinuousLinearMap.adjoint_inner_right, hXadjExpand,
+        inner_add_right, inner_smul_right, map_add,
+        re_ofReal_mul_complex]
+    rw [hA0expand]
     have hmain : s * RCLike.re ⟪B.A0 x, x⟫_ℂ ≤ 0 :=
       mul_nonpos_of_nonneg_of_nonpos hs0 (hA0 x)
     have herr : RCLike.re ⟪B.A0 x, e1⟫_ℂ ≤ ‖B.A0‖ * ε :=
@@ -192,10 +211,9 @@ theorem stableSingularPair_doubleAngleTangent_le
               rw [map_add, map_smul, inner_add_left, inner_add_right,
                 inner_add_right, inner_smul_left, inner_smul_right,
                 inner_smul_left, inner_smul_right,
-                Complex.conj_ofReal,
-                ← Complex.real_smul, RCLike.smul_re,
-                ← Complex.real_smul, RCLike.smul_re,
-                ← Complex.real_smul, RCLike.smul_re]
+                Complex.conj_ofReal]
+              simp only [map_add, re_ofReal_mul_complex,
+                re_ofReal_sq_mul_complex]
               ring
     rw [inner_sub_left, map_sub, hXterm, hB10real]
     ring
@@ -229,8 +247,17 @@ theorem stableSingularPair_doubleAngleTangent_le
   rw [show d * (2 * s / (1 - s ^ 2)) =
       (2 * (d * s)) / (1 - s ^ 2) by ring]
   rw [div_le_iff₀ hden]
-  have hscale := mul_le_mul_of_nonneg_left hraw (show 0 ≤ (2 : ℝ) by norm_num)
-  nlinarith
+  calc
+    2 * (d * s) ≤
+        2 * (-(1 - s ^ 2) * RCLike.re ⟪x, B.B01 y⟫_ℂ +
+          ((‖B.A0‖ + ‖B.A1‖) * ε +
+            2 * s * ‖B.B01‖ * ε + ‖B.B01‖ * ε ^ 2)) :=
+      mul_le_mul_of_nonneg_left hraw (by norm_num)
+    _ = (2 * (-RCLike.re ⟪x, B.B01 y⟫_ℂ) +
+          2 * (((‖B.A0‖ + ‖B.A1‖) * ε) +
+            2 * s * ‖B.B01‖ * ε + ‖B.B01‖ * ε ^ 2) /
+              (1 - s ^ 2)) * (1 - s ^ 2) := by
+      field_simp [hden.ne'] <;> ring
 
 end
 

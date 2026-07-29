@@ -115,33 +115,33 @@ theorem unboundedGraphRotationEquiv_intertwines_projection
     (zeroUnboundedGraph_isAcute_unboundedBlockGraph X)
 
 /-- The graph-rotated block core in its canonical partial-map form. -/
-noncomputable abbrev unboundedGraphRotationPullbackPMap
-    (H : UnboundedBlockDataPMap (𝕜 := ℂ) (E0 := E0) (E1 := E1))
+noncomputable abbrev unboundedGraphRotationPullback
+    (H : UnboundedBlockData (𝕜 := ℂ) (E0 := E0) (E1 := E1))
     (X : E0 →L[ℂ] E1) :
     WithLp 2 (E0 × E1) →ₗ.[ℂ] WithLp 2 (E0 × E1) :=
-  TauCeti.LinearPMap.pullback (unboundedBlockOperatorPMapCore H)
+  TauCeti.LinearPMap.pullback (unboundedBlockOperatorCore H)
     (unboundedGraphRotationEquiv X)
 
 /-- Exact domain of the raw graph-rotated block core. -/
-@[simp] theorem mem_unboundedGraphRotationPullbackPMap_domain_iff
-    (H : UnboundedBlockDataPMap (𝕜 := ℂ) (E0 := E0) (E1 := E1))
+@[simp] theorem mem_unboundedGraphRotationPullback_domain_iff
+    (H : UnboundedBlockData (𝕜 := ℂ) (E0 := E0) (E1 := E1))
     (X : E0 →L[ℂ] E1) (z : WithLp 2 (E0 × E1)) :
-    z ∈ (unboundedGraphRotationPullbackPMap H X).domain ↔
-      unboundedGraphRotation X z ∈ (unboundedBlockOperatorPMapCore H).domain :=
+    z ∈ (unboundedGraphRotationPullback H X).domain ↔
+      unboundedGraphRotation X z ∈ (unboundedBlockOperatorCore H).domain :=
   Iff.rfl
 
 /-- The raw graph-rotated block core is unitarily equivalent to the original
 raw block core. -/
-theorem unboundedGraphRotationPullbackPMap_unitaryEquivalent
-    (H : UnboundedBlockDataPMap (𝕜 := ℂ) (E0 := E0) (E1 := E1))
+theorem unboundedGraphRotationPullback_unitaryEquivalent
+    (H : UnboundedBlockData (𝕜 := ℂ) (E0 := E0) (E1 := E1))
     (X : E0 →L[ℂ] E1) :
     TauCeti.LinearPMap.UnitaryEquivalent
-      (unboundedGraphRotationPullbackPMap H X)
-      (unboundedBlockOperatorPMapCore H)
+      (unboundedGraphRotationPullback H X)
+      (unboundedBlockOperatorCore H)
       (unboundedGraphRotationEquiv X).toContinuousLinearMap
       (unboundedGraphRotationEquiv X).symm.toContinuousLinearMap := by
   exact TauCeti.LinearPMap.pullback_unitaryEquivalent
-    (unboundedBlockOperatorPMapCore H)
+    (unboundedBlockOperatorCore H)
     (unboundedGraphRotationEquiv X)
     (unboundedGraphRotationEquiv_unitary X)
 

@@ -622,4 +622,40 @@ theorem polarPartial_comp_adjoint (M : E →L[ℂ] F) :
   simp only [ContinuousLinearMap.comp_apply, map_add, hqW, hqz, map_zero, add_zero,
     Submodule.starProjection_eq_self_iff.mpr hp, hpW]
 
+/-! ### The invertible case
+
+When `|M|` is invertible the partial isometry is given by the closed formula
+`M |M|⁻¹`, and its initial space is everything.  This reconciles the general
+construction with the light one in
+`ForTauCeti/Analysis/InnerProductSpace/PolarIsometry.lean`, which defines
+`polarIsometry M := M ∘L Ring.inverse M.modulus` directly and needs no
+polar-decomposition theory: the two agree exactly where the light one is
+meaningful, so it is a specialisation rather than a rival construction. -/
+
+/-- **The polar partial isometry in the invertible case.**  If `|M|` is a unit
+then `W = M |M|⁻¹`.
+
+Proved from uniqueness: `M |M|⁻¹` composes with `|M|` to give `M`, and it
+vanishes off the initial space vacuously, because invertibility of `|M|` forces
+`ker M = ⊥` and hence `polarInitialᗮ = ⊥`. -/
+theorem polarPartial_eq_comp_ringInverse_modulus (M : E →L[ℂ] F)
+    (hM : IsUnit M.modulus) :
+    M.polarPartial = M ∘L Ring.inverse M.modulus := by
+  refine (M.eq_polarPartial_of_comp_modulus _ ?_ ?_).symm
+  · rw [ContinuousLinearMap.comp_assoc, ← ContinuousLinearMap.mul_def,
+      Ring.inverse_mul_cancel _ hM, ContinuousLinearMap.one_def,
+      ContinuousLinearMap.comp_id]
+  · intro y hy
+    rw [M.polarInitial_orthogonal_eq_ker] at hy
+    have hMy : M y = 0 := hy
+    have hmod : M.modulus y = 0 := (M.modulus_apply_eq_zero_iff y).mpr hMy
+    have hy0 : y = 0 := by
+      have h1 : (Ring.inverse M.modulus * M.modulus) y = y := by
+        rw [Ring.inverse_mul_cancel _ hM]
+        rfl
+      rw [ContinuousLinearMap.mul_def, ContinuousLinearMap.comp_apply, hmod,
+        map_zero] at h1
+      exact h1.symm
+    simp [hy0]
+
 end ContinuousLinearMap

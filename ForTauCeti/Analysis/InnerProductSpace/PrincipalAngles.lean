@@ -133,8 +133,8 @@ Procrustes-rotated basis `wⱼ = (familyIsometry hv)(O⁻¹ eⱼ)` obeys
 `∑ⱼ ‖wⱼ − uⱼ‖² ≤ 2 ‖sin Θ‖²_F`. -/
 theorem sum_sq_norm_aligned_le_sinThetaSq {u v : Fin d → E} (hu : Orthonormal 𝕜 u)
     (hv : Orthonormal 𝕜 v) :
-    ∑ j, ‖familyIsometry hv ((polarUnitary (overlapOp hu hv)).symm (EuclideanSpace.single j 1))
-        - u j‖ ^ 2
+    ∑ j, ‖familyIsometry hv ((choosePolarUnitary (overlapOp hu hv)).symm
+          (EuclideanSpace.single j 1)) - u j‖ ^ 2
       ≤ 2 * sinThetaSq hu hv := by
   rw [sinThetaSq_eq_sub_overlap]
   exact sum_sq_norm_aligned_le hu hv
@@ -750,7 +750,7 @@ theorem singularValues_orthogonal_familyIsometry_comm
   have hgramVU' : LinearMap.adjoint Svu ∘ₗ Svu =
       LinearMap.id - M ∘ₗ LinearMap.adjoint M := by
     rw [hgramVU, ← hMadj, LinearMap.adjoint_adjoint]
-  let O := polarUnitary M
+  let O := choosePolarUnitary M
   have hconj : M ∘ₗ LinearMap.adjoint M =
       O.toLinearMap ∘ₗ (LinearMap.adjoint M ∘ₗ M) ∘ₗ O.symm.toLinearMap := by
     simpa only [O] using comp_adjoint_eq_conj_adjoint_comp M

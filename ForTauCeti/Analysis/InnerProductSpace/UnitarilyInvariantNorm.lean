@@ -223,9 +223,9 @@ theorem exists_unitary_diagOp_factorization (hn : finrank 𝕜 E = n)
     rw [OrthonormalBasis.coe_toBasis, habs_w i, LinearMap.comp_apply,
       LinearMap.comp_apply, coe_toLinearMap_apply, coe_toLinearMap_apply,
       hKsymm i, diagOp_apply_basis, map_smul, hKb i]
-  refine ⟨K.trans (polarUnitary A), K.symm, ?_⟩
+  refine ⟨K.trans (choosePolarUnitary A), K.symm, ?_⟩
   ext v
-  have hpolar := LinearMap.congr_fun (polar_decomposition_unitary A) v
+  have hpolar := LinearMap.congr_fun (polar_decomposition_choosePolarUnitary A) v
   rw [LinearMap.comp_apply] at hpolar
   have habsv := LinearMap.congr_fun habs v
   rw [LinearMap.comp_apply, LinearMap.comp_apply, coe_toLinearMap_apply,

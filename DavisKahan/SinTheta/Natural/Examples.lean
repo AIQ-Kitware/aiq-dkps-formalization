@@ -210,7 +210,8 @@ theorem realPlane_zeroResidual_model :
       (by simpa using hcompLower)
   apply sinTheta_unbounded_real_reducingSubspace
     (KyFanDominantIdealFamily.operatorNorm (𝕜 := ℝ))
-      A hA U hred A0 hA0
+      A.toLinearPMap A.toLinearPMap_dense A.toLinearPMap_isClosed hA U hred
+      A0.toLinearPMap A0.toLinearPMap_dense A0.toLinearPMap_isClosed hA0
       (ContinuousLinearMap.id ℝ RealPlane) 0 (fun _ => rfl)
   case hXdom => exact fun x => Submodule.mem_top
   case hReq =>
