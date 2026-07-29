@@ -136,7 +136,7 @@ theorem realSpectrum_eq_toPMap_top_spectrum
 
 /-- The real spectrum of a bounded self-adjoint operator is closed. -/
 theorem isClosed_realSpectrum_boundedSelfAdjoint
-    (A : H →L[ℂ] H) (hA : IsSelfAdjointOperator A) :
+    (A : H →L[ℂ] H) (_hA : IsSelfAdjointOperator A) :
     IsClosed (realSpectrum A) := by
   have hpre : realSpectrum A = (fun r : ℝ => (r : ℂ)) ⁻¹' spectrum ℂ A := rfl
   rw [hpre]
