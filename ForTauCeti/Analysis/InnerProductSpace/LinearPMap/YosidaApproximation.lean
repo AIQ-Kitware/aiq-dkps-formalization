@@ -304,5 +304,80 @@ theorem tendsto_yosidaJ (hA : IsSelfAdjoint A) (ψ : H) :
         · exact Metric.mem_ball'.mp hφclose
     _ = ε := by ring
 
+/-! ### The mirror statements for `Jₙ⁻` -/
+
+/-- On the domain, `Jₙ⁻φ = φ - R(-in)(Aφ)`. -/
+theorem yosidaJNeg_apply_of_mem_domain (hA : IsSelfAdjoint A) (n : ℕ+)
+    (φ : H) (hφ : φ ∈ A.domain) :
+    yosidaJNeg hA n φ = φ - resolventAtNegIn hA n (A ⟨φ, hφ⟩) := by
+  set hz := mem_resolventSet_of_im_ne_zero hA (neg_I_mul_pnat_im_ne_zero n) with hz_def
+  have h1 : resolvent A hz (A ⟨φ, hφ⟩ - (-I * (n : ℂ)) • φ) = φ :=
+    resolvent_apply_sub_smul hz ⟨φ, hφ⟩
+  have h2 : resolvent A hz (A ⟨φ, hφ⟩) - (-I * (n : ℂ)) • resolvent A hz φ = φ := by
+    rwa [map_sub, map_smul] at h1
+  have h3 : resolvent A hz (A ⟨φ, hφ⟩) = φ + (-I * (n : ℂ)) • resolvent A hz φ :=
+    eq_add_of_sub_eq h2
+  change (I * (n : ℂ)) • resolvent A hz φ = φ - resolvent A hz (A ⟨φ, hφ⟩)
+  -- `-I * n` occurs in `hz`, so do not rewrite it; let `module` do the scalar arithmetic
+  rw [h3]
+  module
+
+/-- `Jₙ⁻φ → φ` for `φ` in the domain. -/
+theorem tendsto_yosidaJNeg_of_mem_domain (hA : IsSelfAdjoint A) (φ : H) (hφ : φ ∈ A.domain) :
+    Tendsto (fun n : ℕ+ => yosidaJNeg hA n φ) atTop (𝓝 φ) := by
+  rw [Metric.tendsto_atTop]
+  intro ε hε
+  by_cases hz : ‖A ⟨φ, hφ⟩‖ = 0
+  · refine ⟨1, fun n _ => ?_⟩
+    rw [yosidaJNeg_apply_of_mem_domain hA n φ hφ, norm_eq_zero.mp hz]
+    simpa using hε
+  · have hpos : 0 < ‖A ⟨φ, hφ⟩‖ := (norm_nonneg _).lt_of_ne' hz
+    refine ⟨⟨Nat.ceil (‖A ⟨φ, hφ⟩‖ / ε) + 1, Nat.add_one_pos _⟩, fun n hn => ?_⟩
+    have hnpos : (0 : ℝ) < (n : ℝ) := Nat.cast_pos.mpr n.pos
+    have heq : dist (yosidaJNeg hA n φ) φ = ‖resolventAtNegIn hA n (A ⟨φ, hφ⟩)‖ := by
+      rw [dist_eq_norm, yosidaJNeg_apply_of_mem_domain hA n φ hφ]
+      simp
+    rw [heq]
+    calc ‖resolventAtNegIn hA n (A ⟨φ, hφ⟩)‖
+        ≤ ‖resolventAtNegIn hA n‖ * ‖A ⟨φ, hφ⟩‖ := ContinuousLinearMap.le_opNorm _ _
+      _ ≤ ((n : ℝ))⁻¹ * ‖A ⟨φ, hφ⟩‖ := by
+          gcongr
+          exact norm_resolventAtNegIn_le hA n
+      _ < ε := by
+          rw [inv_mul_lt_iff₀ hnpos]
+          have h1 : (⌈‖A ⟨φ, hφ⟩‖ / ε⌉₊ + 1 : ℕ) ≤ (n : ℕ) := hn
+          calc ‖A ⟨φ, hφ⟩‖
+              = (‖A ⟨φ, hφ⟩‖ / ε) * ε := by field_simp
+            _ ≤ (⌈‖A ⟨φ, hφ⟩‖ / ε⌉₊ : ℝ) * ε := by gcongr; exact Nat.le_ceil _
+            _ < ((⌈‖A ⟨φ, hφ⟩‖ / ε⌉₊ : ℝ) + 1) * ε := by nlinarith
+            _ ≤ (n : ℝ) * ε := by gcongr; exact_mod_cast h1
+
+/-- `Jₙ⁻ → 1` strongly on all of `H`. -/
+theorem tendsto_yosidaJNeg (hA : IsSelfAdjoint A) (ψ : H) :
+    Tendsto (fun n : ℕ+ => yosidaJNeg hA n ψ) atTop (𝓝 ψ) := by
+  have hdense : Dense (A.domain : Set H) := hA.dense_domain
+  rw [Metric.tendsto_atTop]
+  intro ε hε
+  obtain ⟨φ, hφmem, hφclose⟩ := Metric.mem_closure_iff.mp
+    (hdense.closure_eq ▸ Set.mem_univ ψ) (ε / 3) (by linarith)
+  obtain ⟨N, hN⟩ := (Metric.tendsto_atTop.mp
+    (tendsto_yosidaJNeg_of_mem_domain hA φ hφmem)) (ε / 3) (by linarith)
+  refine ⟨N, fun n hn => ?_⟩
+  calc dist (yosidaJNeg hA n ψ) ψ
+      ≤ dist (yosidaJNeg hA n ψ) (yosidaJNeg hA n φ) + dist (yosidaJNeg hA n φ) φ
+          + dist φ ψ := dist_triangle4 _ _ _ _
+    _ = ‖yosidaJNeg hA n (ψ - φ)‖ + dist (yosidaJNeg hA n φ) φ + dist φ ψ := by
+        rw [dist_eq_norm, ContinuousLinearMap.map_sub]
+    _ ≤ ‖yosidaJNeg hA n‖ * ‖ψ - φ‖ + dist (yosidaJNeg hA n φ) φ + dist φ ψ := by
+        gcongr; exact ContinuousLinearMap.le_opNorm _ _
+    _ ≤ 1 * ‖ψ - φ‖ + dist (yosidaJNeg hA n φ) φ + dist φ ψ := by
+        gcongr; exact norm_yosidaJNeg_le hA n
+    _ = dist ψ φ + dist (yosidaJNeg hA n φ) φ + dist φ ψ := by rw [one_mul, ← dist_eq_norm]
+    _ < ε / 3 + ε / 3 + ε / 3 := by
+        gcongr
+        · exact Metric.mem_ball.mp (hN n hn)
+        · exact Metric.mem_ball'.mp hφclose
+    _ = ε := by ring
+
 end LinearPMap
 end TauCeti
