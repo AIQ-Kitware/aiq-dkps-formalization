@@ -197,9 +197,9 @@ theorem tendsto_genDiffQuot_genToGroup (hA : IsSelfAdjoint A) {ψ : H} (hψ : ψ
 
 /-- **Stone's theorem, uniqueness half.**  The generator of the unitary group of
 a self-adjoint operator is that operator again. -/
-theorem generator_genToGroup (hA : IsSelfAdjoint A) (hdense : Dense (A.domain : Set H)) :
+theorem generator_genToGroup (hA : IsSelfAdjoint A) :
     TauCeti.OneParameterUnitaryGroup.generator (genToGroup hA) = A := by
-  refine (eq_of_le_of_isSelfAdjoint hdense hA
+  refine (eq_of_le_of_isSelfAdjoint hA
     (TauCeti.OneParameterUnitaryGroup.isSelfAdjoint_generator (genToGroup hA)) ?_).symm
   refine ⟨fun ψ hψ => ?_, ?_⟩
   · -- the domain inclusion, which is the same limit computation

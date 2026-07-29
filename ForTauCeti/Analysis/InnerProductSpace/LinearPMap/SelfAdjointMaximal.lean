@@ -58,9 +58,9 @@ theorem adjoint_le_adjoint {A B : H →ₗ.[ℂ] H} (hA : Dense (A.domain : Set 
 
 /-- **Self-adjoint operators are maximal.**  A self-adjoint operator has no
 proper self-adjoint extension, so either inclusion identifies the two. -/
-theorem eq_of_le_of_isSelfAdjoint {A B : H →ₗ.[ℂ] H} (hdense : Dense (A.domain : Set H))
+theorem eq_of_le_of_isSelfAdjoint {A B : H →ₗ.[ℂ] H}
     (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B) (h : A ≤ B) : A = B := by
-  have h1 : B.adjoint ≤ A.adjoint := adjoint_le_adjoint hdense h
+  have h1 : B.adjoint ≤ A.adjoint := adjoint_le_adjoint hA.dense_domain h
   rw [_root_.LinearPMap.isSelfAdjoint_def] at hA hB
   rw [hA, hB] at h1
   exact le_antisymm h h1
