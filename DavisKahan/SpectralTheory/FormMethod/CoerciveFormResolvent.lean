@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
-import DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Abstract.BoundedInverseRealization
+import DavisKahan.SpectralTheory.FormMethod.BoundedInverseRealization
 import ForTauCeti.Analysis.InnerProductSpace.CoerciveUnit
 import Mathlib.Tactic
 
@@ -90,10 +90,13 @@ noncomputable def resolvent
     H →L[ℂ] H :=
   D.embed ∘L D.solutionOperator
 
+/-- The solution operator of a coercive form, unfolded. -/
 @[simp] theorem solutionOperator_apply
     (D : CoerciveFormData (H := H) (V := V)) (f : H) :
     D.solutionOperator f = D.formInverse (D.embed.adjoint f) := rfl
 
+/-- The form's inverse, unfolded.  **Note this is `A⁻¹`, not a resolvent at a spectral
+parameter** -- it is unrelated to `TauCeti.LinearPMap.resolvent` despite the name. -/
 @[simp] theorem resolvent_apply
     (D : CoerciveFormData (H := H) (V := V)) (f : H) :
     D.resolvent f = D.embed (D.solutionOperator f) := rfl

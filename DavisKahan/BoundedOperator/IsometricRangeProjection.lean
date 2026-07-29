@@ -30,6 +30,7 @@ variable {E : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
 variable {F : Type v} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
   [CompleteSpace F]
 
+omit [CompleteSpace E] in
 /-- The range of an isometric bounded embedding is closed. -/
 theorem isClosed_range_of_isometric
     {X : F →L[𝕜] E} (hX : IsometricEmbedding X) :

@@ -8,5 +8,6 @@ import ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Basic
 import ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Projector
 import DavisKahan.BoundedOperator.Reflection
 import ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.SinTheta
+import DavisKahan.BoundedOperator.IsometricRangeProjection
 
 /-! # `DavisKahan/BoundedOperator` -/

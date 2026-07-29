@@ -7,18 +7,17 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 import DavisKahan.Experimental.MathAhead.HiddenFoundations.CircleContourGeometry
 import DavisKahan.Experimental.MathAhead.HiddenFoundations.ContourReuseBridge
 import DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeamAnalyticFoundation
-import DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeamCharacteristic
+import DavisKahan.Sources.DavisKahan1970.Section9.FreeBeamCharacteristic
 import DavisKahan.Experimental.MathAhead.HiddenFoundations.HilbertSchmidtComplexFamily
 import DavisKahan.Experimental.MathAhead.HiddenFoundations.KyFanBochner
-import DavisKahan.Experimental.MathAhead.HiddenFoundations.OrthogonalSummandCoordinates
+import DavisKahan.Geometry.Polar.OrthogonalSummandCoordinates
 import DavisKahan.Geometry.Polar.PolarIntertwining
 import DavisKahan.Geometry.Polar.PolarIsometryFinal
 import DavisKahan.Experimental.MathAhead.HiddenFoundations.RealSylvesterDescent
 import DavisKahan.Experimental.MathAhead.HiddenFoundations.SchattenApproximationFoundation
 import DavisKahan.Geometry.Polar.Section3Nonacute
 import DavisKahan.Experimental.MathAhead.HiddenFoundations.SpectralMultiplicityFoundation
-import DavisKahan.Experimental.MathAhead.HiddenFoundations.TwoProjectionOperatorClassification
-
+import DavisKahan.Geometry.Polar.TwoProjectionOperatorClassification
 /-!
 # Aggregate hidden-foundation mathematics-ahead layer
 
