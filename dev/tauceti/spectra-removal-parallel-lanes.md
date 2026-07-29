@@ -33,6 +33,44 @@ SR-D (5), SR-E (1) and SR-F (3).
 `SelfAdjointOperator.ofBounded`; it should be taken **after** SR-A lands, or its
 `ofBounded` uses repointed onto whatever SR-A leaves behind.
 
+## Measured against the tree, 2026-07-29 (edward, aiq-gpu) — the board overstates progress
+
+`grep -rln '^import Spectra'` outside `vendor/`/`external/` returns **14 files on
+`main`**, not the 9 this board states.  The claim *"the nine remaining are
+exactly SR-D (5), SR-E (1) and SR-F (3)"* is not what the tree says, and the gap
+is not in the unclaimed lanes — it is in the lanes marked **DONE**:
+
+| file | lane | board says | tree says |
+|---|---|---|---|
+| `Interop/Spectra/Basic.lean` | SR-A | DONE | 1 `import Spectra` |
+| `SpectralTheory/CayleySelectorBridge.lean` | SR-A | DONE | 2 |
+| `.../SinTheta/ContinuationSpectralIdentification.lean` | SR-A | DONE | 2 |
+| `.../SinTheta/ContinuationSelectedReduction.lean` | SR-A | DONE | 1 |
+| `Interop/Spectra/BoundedFromSpectrum.lean` | SR-B | DONE, *"now Spectra-free"* | 2 |
+| `Interop/Spectra/OrderedHalfLine.lean` | SR-C | DONE | 2 |
+
+**The `BoundedFromSpectrum` dependency is real, not a stale import line.**  Its
+four `open Spectra.*` lines are what supply `generator`,
+`generator_genToGroup`, `spectralProjection` and
+`spectralPVM_proj_eq_zero_of_subset_resolventSet`; deleting the two imports and
+four opens and rebuilding gives **12 errors**, not zero.  `OrderedHalfLine.lean`
+likewise still calls `SelfAdjointOperator.bornMeasure` and
+`BornRule.Moments.bornExpectation` (11 body references).
+
+**This is a definition mismatch, not necessarily wrong work.**  If "DONE" means
+*the mathematics is ported and a final import sweep is deferred to S6*, then the
+board is consistent and only the phrasing misleads — but S6 criterion (1) is
+literally *"no `.lean` outside `vendor/` and `external/` imports Spectra"*, so
+the count that matters for completion is 14, and it should be stated that way.
+Recommend the board track **imports removed** rather than **lanes closed**, since
+those are the criterion and a proxy for it respectively.
+
+**One item is genuinely finished and the board under-credits it:**
+`Experimental/Scratch/.../OperatorAbsoluteValueComplex.lean`, listed as SR-F item
+3, has **zero** `import Spectra` and zero `Spectra.` references on `main`.  SR-F
+is two files, not three.  (It still imports Spectra on `namek-work`, which is
+behind `main` on that file.)
+
 ## The collision rule that matters
 
 Every lane's *DavisKahan* files are disjoint — that part is safe. The risk is in
