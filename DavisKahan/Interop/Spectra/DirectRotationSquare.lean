@@ -119,7 +119,7 @@ theorem star_principalHalfPhase (z : ℂ) :
     have hnorm : ‖(1 : ℂ) + star z‖ = ‖1 + z‖ := by
       rw [show (1 : ℂ) + star z = star (1 + z) by simp, norm_star]
     rw [principalHalfPhase, principalHalfPhase, if_neg hz, if_neg hstarz, hnorm]
-    simp [star_div₀, Complex.star_def, Complex.conj_ofReal]
+    simp [star_div₀, Complex.conj_ofReal]
 
 /-- The midpoint is invertible exactly when the reflection product avoids the
 branch point `-1`.  Acuteness provides that exclusion. -/
@@ -165,7 +165,7 @@ theorem spectrum_spectraReflectionProduct_abs_eq_one
 noncomputable def spectraReflectionProductHalfPhase
     (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) : H →L[ℂ] H :=
+    (_hacute : IsAcute U V) : H →L[ℂ] H :=
   cfc (principalHalfPhase : ℂ → ℂ) (spectraReflectionProduct U V)
 
 /-- The half-phase is unitary. -/
@@ -757,7 +757,7 @@ nonnegative real part, so its displacement from `1` is the smaller of the
 two. -/
 theorem principalHalfPhase_displacement_minimal_scalar
     {z w : ℂ} (hz : ‖z‖ = 1) (hzneg : z ≠ -1)
-    (hw : ‖w‖ = 1) (htransport : w * w = z) :
+    (_hw : ‖w‖ = 1) (htransport : w * w = z) :
     ‖principalHalfPhase z - 1‖ ≤ ‖w - 1‖ := by
   have hsq := principalHalfPhase_sq_of_abs_eq_one hz hzneg
   have hfactor : (w - principalHalfPhase z) * (w + principalHalfPhase z)

@@ -131,8 +131,8 @@ theorem complexify_apply_conjugationDomain (A : RealClosedOperator)
 `TauCeti` sense, are exchanged by canonical conjugation and conjugation of the
 spectral parameter. -/
 theorem conjugateOperator_tauCetiResolvent
-    (A : RealClosedOperator) (hA : A.IsSelfAdjoint)
-    {z : ℂ} (hz : z.im ≠ 0)
+    (A : RealClosedOperator) (_hA : A.IsSelfAdjoint)
+    {z : ℂ} (_hz : z.im ≠ 0)
     (hzr : z ∈ TauCeti.LinearPMap.resolventSet
       (ClosedOperatorComplexification.complexify A).toLinearPMap)
     (hzbr : (starRingEnd ℂ) z ∈ TauCeti.LinearPMap.resolventSet
