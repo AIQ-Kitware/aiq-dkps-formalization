@@ -59,13 +59,14 @@ theorem inner_apply_self_isReal {A : E →ₗ.[ℂ] E} (hsym : A.IsFormalAdjoint
   rw [inner_conj_symm]
   exact (hsym x x).symm
 
-/-- **The basic estimate.**  `‖(A - z) x‖ ≥ |Im z| ‖x‖` for symmetric `A`.
+/-- **The exact norm identity.**  `‖(A - z)x‖² = ‖(A - Re z)x‖² + (Im z)²‖x‖²`.
 
-The cross term vanishes because `⟪A x - (Re z) x, x⟫` is real while the
-subtracted vector is `i (Im z) x`. -/
-theorem norm_sub_smul_ge_abs_im {A : E →ₗ.[ℂ] E} (hsym : A.IsFormalAdjoint A)
+The cross term vanishes because `⟪A x - (Re z) x, x⟫` is real while the vector
+subtracted from it is `i (Im z) x`. -/
+theorem norm_sub_smul_sq {A : E →ₗ.[ℂ] E} (hsym : A.IsFormalAdjoint A)
     (z : ℂ) (x : A.domain) :
-    |z.im| * ‖(x : E)‖ ≤ ‖A x - z • (x : E)‖ := by
+    ‖A x - z • (x : E)‖ ^ 2
+      = ‖A x - (z.re : ℂ) • (x : E)‖ ^ 2 + (z.im) ^ 2 * ‖(x : E)‖ ^ 2 := by
   set u : E := A x - (z.re : ℂ) • (x : E) with hu
   have hsplit : A x - z • (x : E) = u - ((z.im : ℂ) * Complex.I) • (x : E) := by
     rw [hu]
@@ -83,12 +84,17 @@ theorem norm_sub_smul_ge_abs_im {A : E →ₗ.[ℂ] E} (hsym : A.IsFormalAdjoint
     have hr : (⟪u, (x : E)⟫_ℂ).im = 0 := Complex.conj_eq_iff_im.mp hreal
     rw [inner_smul_right]
     simp [hr]
-  have hsq : ‖A x - z • (x : E)‖ ^ 2
-      = ‖u‖ ^ 2 + (z.im) ^ 2 * ‖(x : E)‖ ^ 2 := by
-    rw [hsplit, @norm_sub_sq ℂ, hcross, norm_smul]
-    simp [Complex.norm_I, Complex.norm_real, mul_pow, sq_abs]
-  nlinarith [norm_nonneg (A x - z • (x : E)), norm_nonneg u, norm_nonneg ((x : E)),
-    abs_nonneg z.im, sq_abs z.im, sq_nonneg ‖u‖, hsq,
+  rw [hsplit, @norm_sub_sq ℂ, hcross, norm_smul]
+  simp [Complex.norm_I, Complex.norm_real, mul_pow, sq_abs]
+
+/-- **The basic estimate.**  `‖(A - z) x‖ ≥ |Im z| ‖x‖` for symmetric `A`. -/
+theorem norm_sub_smul_ge_abs_im {A : E →ₗ.[ℂ] E} (hsym : A.IsFormalAdjoint A)
+    (z : ℂ) (x : A.domain) :
+    |z.im| * ‖(x : E)‖ ≤ ‖A x - z • (x : E)‖ := by
+  have hsq := norm_sub_smul_sq hsym z x
+  nlinarith [norm_nonneg (A x - z • (x : E)), norm_nonneg (A x - (z.re : ℂ) • (x : E)),
+    norm_nonneg ((x : E)), abs_nonneg z.im, sq_abs z.im,
+    sq_nonneg ‖A x - (z.re : ℂ) • (x : E)‖, hsq,
     mul_nonneg (abs_nonneg z.im) (norm_nonneg ((x : E)))]
 
 end Estimate
@@ -392,6 +398,68 @@ theorem exists_norm_le_two_sided_shifted_inverse_of_spectrum_gap
       = (spectralRadius ℂ (resolvent A hc)).toReal :=
         hsa.toReal_spectralRadius_complex_eq_norm.symm
     _ ≤ s⁻¹ := ENNReal.toReal_le_of_le_ofReal (by positivity) hrad
+
+/-! ### The Cayley transform
+
+`U = (A - i)(A + i)⁻¹`, written as `1 - 2i·R(-i)` so that boundedness is manifest
+and no domain bookkeeping is needed.  It is the bridge from the unbounded
+self-adjoint `A` to a *bounded unitary*, where Mathlib's continuous functional
+calculus applies. -/
+
+/-- `-i` is a resolvent point of a self-adjoint operator. -/
+theorem negI_mem_resolventSet {A : E →ₗ.[ℂ] E} (hA : IsSelfAdjoint A) :
+    (-Complex.I) ∈ resolventSet A :=
+  mem_resolventSet_of_im_ne_zero hA (by simp)
+
+/-- `i` is a resolvent point of a self-adjoint operator. -/
+theorem I_mem_resolventSet {A : E →ₗ.[ℂ] E} (hA : IsSelfAdjoint A) :
+    Complex.I ∈ resolventSet A :=
+  mem_resolventSet_of_im_ne_zero hA (by simp)
+
+/-- **The Cayley transform** `(A - i)(A + i)⁻¹`, in the manifestly bounded form
+`1 - 2i·R(-i)`. -/
+noncomputable def cayley {A : E →ₗ.[ℂ] E} (hA : IsSelfAdjoint A) : E →L[ℂ] E :=
+  1 - (2 * Complex.I) • resolvent A (negI_mem_resolventSet hA)
+
+/-- On a vector, `U ξ = (A + i) R(-i) ξ - 2i R(-i) ξ`, i.e. `(A - i)` applied to
+the preimage of `ξ` under `A + i`. -/
+theorem cayley_apply {A : E →ₗ.[ℂ] E} (hA : IsSelfAdjoint A) (ξ : E) :
+    cayley hA ξ
+      = A ⟨resolvent A (negI_mem_resolventSet hA) ξ,
+            resolvent_mem_domain (negI_mem_resolventSet hA) ξ⟩
+        - Complex.I • resolvent A (negI_mem_resolventSet hA) ξ := by
+  set h := negI_mem_resolventSet hA with hh
+  set x := resolvent A h ξ with hx
+  have hmem : x ∈ A.domain := resolvent_mem_domain h ξ
+  have hsolve : A ⟨x, hmem⟩ - (-Complex.I) • x = ξ := sub_smul_resolvent h ξ
+  have hAx : A ⟨x, hmem⟩ = ξ - Complex.I • x := by
+    rw [← hsolve]; module
+  change ξ - (2 * Complex.I) • x = A ⟨x, hmem⟩ - Complex.I • x
+  rw [hAx]
+  module
+
+/-- **The Cayley transform is isometric.**  Both `‖(A - i)x‖²` and `‖(A + i)x‖²`
+equal `‖Ax‖² + ‖x‖²`, by the exact norm identity. -/
+theorem norm_cayley_apply {A : E →ₗ.[ℂ] E} (hA : IsSelfAdjoint A) (ξ : E) :
+    ‖cayley hA ξ‖ = ‖ξ‖ := by
+  have hsym : A.IsFormalAdjoint A := by
+    have h := _root_.LinearPMap.adjoint_isFormalAdjoint (T := A) hA.dense_domain
+    rwa [_root_.LinearPMap.isSelfAdjoint_def.mp hA] at h
+  set h := negI_mem_resolventSet hA with hh
+  set x := resolvent A h ξ with hx
+  have hmem : x ∈ A.domain := resolvent_mem_domain h ξ
+  have hsolve : A ⟨x, hmem⟩ - (-Complex.I) • x = ξ := sub_smul_resolvent h ξ
+  -- both shifts have the same norm, by the exact identity at `z = ±i`
+  have hplus := norm_sub_smul_sq hsym (-Complex.I) ⟨x, hmem⟩
+  have hminus := norm_sub_smul_sq hsym Complex.I ⟨x, hmem⟩
+  simp only [Complex.neg_re, Complex.I_re, neg_zero, Complex.neg_im, Complex.I_im,
+    Complex.ofReal_zero, zero_smul, sub_zero, neg_one_sq, one_pow, one_mul] at hplus hminus
+  have hsq : ‖cayley hA ξ‖ ^ 2 = ‖ξ‖ ^ 2 := by
+    -- do not rewrite `ξ` in the goal: it occurs inside `x = R(-i) ξ`
+    have hxi : ‖ξ‖ ^ 2 = ‖A ⟨x, hmem⟩ - (-Complex.I) • x‖ ^ 2 := by rw [hsolve]
+    rw [cayley_apply hA ξ, hxi, hminus, hplus]
+  have h2 := congrArg Real.sqrt hsq
+  rwa [Real.sqrt_sq (norm_nonneg _), Real.sqrt_sq (norm_nonneg _)] at h2
 
 end SelfAdjoint
 
