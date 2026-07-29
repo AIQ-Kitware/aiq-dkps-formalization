@@ -81,6 +81,8 @@ noncomputable def paperHilbertSchmidtTensor (A : F →L[ℂ] E)
     (memLp_columns_iff_summable (paperHSBasis F) A).mpr
       ((isPaperHilbertSchmidt_iff_summable_basis (paperHSBasis F) A).1 hA)⟩
 
+/-- The tensor model's operator, unfolded.  This is the bridge between the tensor presentation of a
+Hilbert--Schmidt map and its operator form. -/
 @[simp]
 theorem toOperator_paperHilbertSchmidtTensor (A : F →L[ℂ] E)
     (hA : IsPaperHilbertSchmidt A) :
