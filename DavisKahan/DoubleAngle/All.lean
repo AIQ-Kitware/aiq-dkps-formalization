@@ -5,7 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.DoubleAngle.KyFanOrthonormal
 import DavisKahan.DoubleAngle.TanTwoThetaKyFan
-import DavisKahan.DoubleAngle.TanTwoThetaKyFanInfinite
+import DavisKahan.DoubleAngle.TanTwoThetaKyFanFiniteCarrier
 import DavisKahan.DoubleAngle.Unbounded
 import DavisKahan.DoubleAngle.UnboundedIdeal
 

@@ -49,8 +49,8 @@ variable {E1 : Type u} [NormedAddCommGroup E1] [InnerProductSpace ℂ E1]
  The graph-norm clauses are exactly what removes the invalid factors
  `‖A0‖` and `‖A1‖` from the bounded stability calculation. -/
 structure UnboundedApproximateLeadingSingularFamily
-    (H : UnboundedBlockDataPMap (𝕜 := ℂ) (E0 := E0) (E1 := E1))
-    (S : ContractiveReducingGraphSelectionPMap H) (k : ℕ) (ε : ℝ) where
+    (H : UnboundedBlockData (𝕜 := ℂ) (E0 := E0) (E1 := E1))
+    (S : ContractiveReducingGraphSelection H) (k : ℕ) (ε : ℝ) where
   count : ℕ
   count_le : count ≤ k
   right : Fin count → H.A0.domain
@@ -78,8 +78,8 @@ structure UnboundedApproximateLeadingSingularFamily
 
 namespace UnboundedApproximateLeadingSingularFamily
 
-variable {H : UnboundedBlockDataPMap (𝕜 := ℂ) (E0 := E0) (E1 := E1)}
-variable {S : ContractiveReducingGraphSelectionPMap H} {k : ℕ} {ε : ℝ}
+variable {H : UnboundedBlockData (𝕜 := ℂ) (E0 := E0) (E1 := E1)}
+variable {S : ContractiveReducingGraphSelection H} {k : ℕ} {ε : ℝ}
 
 @[simp] theorem norm_right
     (F : UnboundedApproximateLeadingSingularFamily H S k ε)
@@ -132,8 +132,8 @@ Schmidt correction preserves orthonormality and all strict inequalities.
 This theorem is deliberately local: it is the new reusable unbounded selection
 result, rather than a reference to an assumed helper. -/
 theorem exists_unboundedApproximateLeadingSingularFamily
-    (H : UnboundedBlockDataPMap (𝕜 := ℂ) (E0 := E0) (E1 := E1))
-    (S : ContractiveReducingGraphSelectionPMap H) (k : ℕ)
+    (H : UnboundedBlockData (𝕜 := ℂ) (E0 := E0) (E1 := E1))
+    (S : ContractiveReducingGraphSelection H) (k : ℕ)
     {ε : ℝ} (hε : 0 < ε) :
     Nonempty (UnboundedApproximateLeadingSingularFamily H S k ε) := by
   classical
@@ -144,7 +144,7 @@ theorem exists_unboundedApproximateLeadingSingularFamily
   have hpreserves := S.preservesDomains
   have hreduces := S.reduces
   have hstrong := S.strongSolvesRiccati
-  have hpoint := (strongSolvesRiccatiPMap_iff_pointwise H S.X).1 hstrong
+  have hpoint := (strongSolvesRiccati_iff_pointwise H S.X).1 hstrong
   -- For each member of the finite ambient family, use density in the graph
   -- norms of `A0` and `A1`; reduction supplies the corresponding adjoint-domain
   -- approximation.  Since the family is finite, choose all tolerances below
@@ -156,7 +156,7 @@ theorem exists_unboundedApproximateLeadingSingularFamily
 
 /-- Error term in the graph-norm stable scalar estimate. -/
 def unboundedStablePairError
-    (H : UnboundedBlockDataPMap (𝕜 := ℂ) (E0 := E0) (E1 := E1))
+    (H : UnboundedBlockData (𝕜 := ℂ) (E0 := E0) (E1 := E1))
     (s ε : ℝ) : ℝ :=
   2 * (2 * ε + 2 * s * ‖H.B01‖ * ε + ‖H.B01‖ * ε ^ 2) /
     (1 - s ^ 2)
@@ -167,12 +167,12 @@ The two diagonal residuals are estimated with the graph-norm hypotheses.  For
 `A0`, self-adjoint symmetry moves the unbounded operator from the selected
 right vector onto the graph-small adjoint defect. -/
 theorem unboundedStableSingularPair_doubleAngleTangent_le
-    (H : UnboundedBlockDataPMap (𝕜 := ℂ) (E0 := E0) (E1 := E1))
+    (H : UnboundedBlockData (𝕜 := ℂ) (E0 := E0) (E1 := E1))
     {d s ε : ℝ} (hd0 : 0 ≤ d) (hs0 : 0 ≤ s) (hs1 : s < 1)
     (hε0 : 0 ≤ ε)
     (hA0 : TauCeti.LinearPMap.SemiboundedAbove H.A0 0)
     (hA1 : TauCeti.LinearPMap.SemiboundedBelow H.A1 d)
-    (S : ContractiveReducingGraphSelectionPMap H)
+    (S : ContractiveReducingGraphSelection H)
     {x : H.A0.domain} {y : H.A1.domain}
     {e0 : H.A1.domain} {e1 : H.A0.domain}
     (hxnorm : ‖(x : E0)‖ = 1) (hynorm : ‖(y : E1)‖ = 1)
@@ -210,7 +210,7 @@ theorem unboundedStableSingularPair_doubleAngleTangent_le
       _ ≤ ‖(x : E0)‖ * ε := by gcongr
       _ = ε := by rw [hxnorm, one_mul]
   obtain ⟨hdom, hpoint⟩ :=
-    (strongSolvesRiccatiPMap_iff_pointwise H S.X).1 S.strongSolvesRiccati
+    (strongSolvesRiccati_iff_pointwise H S.X).1 S.strongSolvesRiccati
   have hXdomEq :
       (⟨S.X (x : E0), hdom x⟩ : H.A1.domain) =
         (s : ℂ) • y + e0 := by
@@ -357,14 +357,14 @@ theorem unboundedStableSingularPair_doubleAngleTangent_le
 
 /-- Uniform graph-norm error bound on `0 ≤ s ≤ r < 1`. -/
 def uniformUnboundedStablePairError
-    (H : UnboundedBlockDataPMap (𝕜 := ℂ) (E0 := E0) (E1 := E1))
+    (H : UnboundedBlockData (𝕜 := ℂ) (E0 := E0) (E1 := E1))
     (r ε : ℝ) : ℝ :=
   2 * (2 * ε + 2 * r * ‖H.B01‖ * ε + ‖H.B01‖ * ε ^ 2) /
     (1 - r ^ 2)
 
 /-- Pointwise graph-norm errors are controlled by the uniform error. -/
 theorem unboundedStablePairError_le_uniform
-    (H : UnboundedBlockDataPMap (𝕜 := ℂ) (E0 := E0) (E1 := E1))
+    (H : UnboundedBlockData (𝕜 := ℂ) (E0 := E0) (E1 := E1))
     {s r ε : ℝ} (hs0 : 0 ≤ s) (hsr : s ≤ r) (hr1 : r < 1)
     (hε0 : 0 ≤ ε) :
     unboundedStablePairError H s ε ≤ uniformUnboundedStablePairError H r ε := by
@@ -387,8 +387,8 @@ theorem unboundedStablePairError_le_uniform
 
 /-- Sum the unbounded stable estimate over a graph-domain approximate family. -/
 theorem selected_unbounded_doubleAngleTangent_le_kyFan_add_error
-    (H : UnboundedBlockDataPMap (𝕜 := ℂ) (E0 := E0) (E1 := E1))
-    (S : ContractiveReducingGraphSelectionPMap H)
+    (H : UnboundedBlockData (𝕜 := ℂ) (E0 := E0) (E1 := E1))
+    (S : ContractiveReducingGraphSelection H)
     {d r ε : ℝ} (hd0 : 0 ≤ d) (hr0 : 0 ≤ r) (hr1 : r < 1)
     (hε0 : 0 ≤ ε)
     (hA0 : TauCeti.LinearPMap.SemiboundedAbove H.A0 0)
@@ -453,8 +453,8 @@ private theorem eps_removal_bound
 
 /-- Sharp unrestricted unbounded Ky Fan theorem. -/
 theorem sharp_unbounded_doubleAngleTangentOperator_kyFan
-    (H : UnboundedBlockDataPMap (𝕜 := ℂ) (E0 := E0) (E1 := E1))
-    (S : ContractiveReducingGraphSelectionPMap H)
+    (H : UnboundedBlockData (𝕜 := ℂ) (E0 := E0) (E1 := E1))
+    (S : ContractiveReducingGraphSelection H)
     {d : ℝ} (hd0 : 0 ≤ d)
     (hA0 : TauCeti.LinearPMap.SemiboundedAbove H.A0 0)
     (hA1 : TauCeti.LinearPMap.SemiboundedBelow H.A1 d)
@@ -556,8 +556,8 @@ theorem sharp_unbounded_doubleAngleTangentOperator_kyFan
 ideal generated by a coherent symmetric norming function. -/
 theorem sharp_unbounded_standardSymmetricIdeal_scaled
     (I : TauCeti.FinishTanTwoTheta.StandardSymmetricIdeal)
-    (H : UnboundedBlockDataPMap (𝕜 := ℂ) (E0 := E0) (E1 := E1))
-    (S : ContractiveReducingGraphSelectionPMap H)
+    (H : UnboundedBlockData (𝕜 := ℂ) (E0 := E0) (E1 := E1))
+    (S : ContractiveReducingGraphSelection H)
     {d : ℝ} (hd : 0 < d)
     (hA0 : TauCeti.LinearPMap.SemiboundedAbove H.A0 0)
     (hA1 : TauCeti.LinearPMap.SemiboundedBelow H.A1 d)

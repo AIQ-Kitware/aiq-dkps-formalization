@@ -17,7 +17,7 @@ Plan step W0.1(d) added by Claude Opus 4.8 (claude-opus-4-8[1m]): the
 singular-value symmetry `σ(A⋆) = σ(A)` for a square operator, proved through the
 eigenvalue invariance of a symmetric operator under unitary conjugation
 (`eigenvalues_conj_unitary`, a Courant–Fischer consequence) applied to the polar
-identity `A A⋆ = U (A⋆A) U⁻¹` with `U = polarUnitary A`.
+identity `A A⋆ = U (A⋆A) U⁻¹` with `U = choosePolarUnitary A`.
 To be re-authored per Mathlib's AI-contribution policy at PR time.
 -/
 
@@ -328,7 +328,7 @@ end Extreme
 
 `σ(A⋆) = σ(A)` for a square operator `A : E →ₗ[𝕜] E`.  The Gram operators
 `A⋆A` and `A A⋆` are unitarily conjugate (`A A⋆ = U (A⋆A) U⁻¹` with
-`U = polarUnitary A`), so they have equal sorted eigenvalues, hence `A` and
+`U = choosePolarUnitary A`), so they have equal sorted eigenvalues, hence `A` and
 `A⋆` have equal singular values.  This is the symmetry `cosPrincipalAngles`
 needs (plan step W0.1(d)).
 
@@ -418,13 +418,13 @@ theorem eigenvalues_conj_unitary {S : E →ₗ[𝕜] E} (hS : S.IsSymmetric)
   rwa [hcong] at this
 
 /-- The Gram operators `A A⋆` and `A⋆A` are unitarily conjugate:
-`A A⋆ = U (A⋆A) U⁻¹` with `U = polarUnitary A`.  From `A = U |A|`,
+`A A⋆ = U (A⋆A) U⁻¹` with `U = choosePolarUnitary A`.  From `A = U |A|`,
 `A⋆ = |A| U⁻¹`, so `A A⋆ = U |A|² U⁻¹ = U (A⋆A) U⁻¹`. -/
 theorem comp_adjoint_eq_conj_adjoint_comp (A : E →ₗ[𝕜] E) :
-    A ∘ₗ A.adjoint = (polarUnitary A).toLinearMap ∘ₗ (A.adjoint ∘ₗ A)
-      ∘ₗ (polarUnitary A).symm.toLinearMap := by
-  set U := polarUnitary A with hU
-  have hpolar : A = U.toLinearMap ∘ₗ abs A := polar_decomposition_unitary A
+    A ∘ₗ A.adjoint = (choosePolarUnitary A).toLinearMap ∘ₗ (A.adjoint ∘ₗ A)
+      ∘ₗ (choosePolarUnitary A).symm.toLinearMap := by
+  set U := choosePolarUnitary A with hU
+  have hpolar : A = U.toLinearMap ∘ₗ abs A := polar_decomposition_choosePolarUnitary A
   have hadj : A.adjoint = abs A ∘ₗ U.symm.toLinearMap := by
     conv_lhs => rw [hpolar]
     rw [LinearMap.adjoint_comp, (isPositive_abs A).adjoint_eq, U.adjoint_toLinearMap_eq_symm]
@@ -438,12 +438,12 @@ theorem comp_adjoint_eq_conj_adjoint_comp (A : E →ₗ[𝕜] E) :
 theorem eigenvalues_gram_adjoint (A : E →ₗ[𝕜] E) (hn : finrank 𝕜 E = n) :
     A.adjoint.isSymmetric_adjoint_comp_self.eigenvalues hn
       = A.isSymmetric_adjoint_comp_self.eigenvalues hn := by
-  have hAA : A.adjoint.adjoint ∘ₗ A.adjoint = (polarUnitary A).toLinearMap
-      ∘ₗ (A.adjoint ∘ₗ A) ∘ₗ (polarUnitary A).symm.toLinearMap := by
+  have hAA : A.adjoint.adjoint ∘ₗ A.adjoint = (choosePolarUnitary A).toLinearMap
+      ∘ₗ (A.adjoint ∘ₗ A) ∘ₗ (choosePolarUnitary A).symm.toLinearMap := by
     rw [LinearMap.adjoint_adjoint]; exact comp_adjoint_eq_conj_adjoint_comp A
   have hcong := eigenvalues_congr hAA A.adjoint.isSymmetric_adjoint_comp_self
-    (isSymmetric_conj_unitary A.isSymmetric_adjoint_comp_self (polarUnitary A)) hn
-  rw [hcong, eigenvalues_conj_unitary A.isSymmetric_adjoint_comp_self hn (polarUnitary A)]
+    (isSymmetric_conj_unitary A.isSymmetric_adjoint_comp_self (choosePolarUnitary A)) hn
+  rw [hcong, eigenvalues_conj_unitary A.isSymmetric_adjoint_comp_self hn (choosePolarUnitary A)]
 
 /-- **Singular values of the adjoint (square case).** For `A : E →ₗ[𝕜] E`,
 `σ(A⋆) = σ(A)`: both `A⋆A` and `A A⋆` have the same nonzero spectrum.  Absent

@@ -93,7 +93,7 @@ end GenuineUnboundedSylvesterGap
 /-- Generalized complementary-block theorem with a genuine all-gap spectral
 hypothesis. -/
 theorem generalizedSinTheta_unbounded_of_genuineSpectrumGap
-    (N : UnitaryInvariantIdealFamily (𝕜 := ℂ))
+    (N : KyFanDominantIdealFamily (𝕜 := ℂ))
     (D : UnboundedSinThetaData (𝕜 := ℂ) (E := E) (F := F) (G := G))
     (hA : D.A.IsSelfAdjoint)
     (hA₀ : D.A₀.IsSelfAdjoint)
@@ -127,7 +127,7 @@ theorem generalizedSinTheta_unbounded_of_genuineSpectrumGap
 /-- Raw partial-map generalized sine-theta endpoint for the genuine all-gap
 Spectra boundary. -/
 theorem linearPMap_generalizedSinTheta_unbounded_of_genuineSpectrumGap
-    (N : UnitaryInvariantIdealFamily (𝕜 := ℂ))
+    (N : KyFanDominantIdealFamily (𝕜 := ℂ))
     (D : UnboundedSinThetaDataPMap (𝕜 := ℂ) (E := E) (F := F) (G := G))
     (hA : _root_.IsSelfAdjoint D.A)
     (hA₀ : _root_.IsSelfAdjoint D.A₀)
@@ -146,7 +146,7 @@ theorem linearPMap_generalizedSinTheta_unbounded_of_genuineSpectrumGap
 
 /-- Exact directed-angle form of the genuine all-gap generalized theorem. -/
 theorem generalizedSinTheta_unbounded_exact_of_genuineSpectrumGap
-    (N : UnitaryInvariantIdealFamily (𝕜 := ℂ))
+    (N : KyFanDominantIdealFamily (𝕜 := ℂ))
     (D : UnboundedSinThetaData (𝕜 := ℂ) (E := E) (F := F) (G := G))
     (F₀ : H →L[ℂ] E)
     (hA : D.A.IsSelfAdjoint)
@@ -175,7 +175,7 @@ theorem generalizedSinTheta_unbounded_exact_of_genuineSpectrumGap
 /-- Raw partial-map exact directed-angle endpoint for the genuine all-gap
 Spectra boundary. -/
 theorem linearPMap_generalizedSinTheta_unbounded_exact_of_genuineSpectrumGap
-    (N : UnitaryInvariantIdealFamily (𝕜 := ℂ))
+    (N : KyFanDominantIdealFamily (𝕜 := ℂ))
     (D : UnboundedSinThetaDataPMap (𝕜 := ℂ) (E := E) (F := F) (G := G))
     (F₀ : H →L[ℂ] E)
     (hA : _root_.IsSelfAdjoint D.A)
@@ -204,7 +204,7 @@ theorem linearPMap_generalizedSinTheta_unbounded_exact_of_genuineSpectrumGap
 /-- Raw partial-map isometric specialization of the genuine all-gap endpoint.
 It is derived from the raw lower-frame theorem at frame bound one. -/
 theorem linearPMap_sinTheta_unbounded_exact_of_genuineSpectrumGap
-    (N : UnitaryInvariantIdealFamily (𝕜 := ℂ))
+    (N : KyFanDominantIdealFamily (𝕜 := ℂ))
     (D : UnboundedSinThetaDataPMap (𝕜 := ℂ) (E := E) (F := F) (G := G))
     (F₀ : H →L[ℂ] E)
     (hA : _root_.IsSelfAdjoint D.A)
@@ -228,7 +228,7 @@ theorem linearPMap_sinTheta_unbounded_exact_of_genuineSpectrumGap
 
 /-- Exact isometric specialization of the genuine all-gap theorem. -/
 theorem sinTheta_unbounded_exact_of_genuineSpectrumGap
-    (N : UnitaryInvariantIdealFamily (𝕜 := ℂ))
+    (N : KyFanDominantIdealFamily (𝕜 := ℂ))
     (D : UnboundedSinThetaData (𝕜 := ℂ) (E := E) (F := F) (G := G))
     (F₀ : H →L[ℂ] E)
     (hA : D.A.IsSelfAdjoint)
@@ -258,7 +258,7 @@ theorem sinTheta_unbounded_exact_of_genuineSpectrumGap
 /-- Complete source-shaped input package for the generalized genuine all-gap
 theorem. -/
 structure GenuineGeneralSinThetaProblem
-    (N : UnitaryInvariantIdealFamily (𝕜 := ℂ)) where
+    (N : KyFanDominantIdealFamily (𝕜 := ℂ)) where
   data : UnboundedSinThetaData (𝕜 := ℂ) (E := E) (F := F) (G := G)
   exactMap : H →L[ℂ] E
   ambient_selfAdjoint : data.A.IsSelfAdjoint
@@ -277,7 +277,7 @@ namespace GenuineGeneralSinThetaProblem
 
 /-- Source-shaped generalized genuine all-gap endpoint. -/
 theorem result
-    (N : UnitaryInvariantIdealFamily (𝕜 := ℂ))
+    (N : KyFanDominantIdealFamily (𝕜 := ℂ))
     (P : GenuineGeneralSinThetaProblem (E := E) (F := F)
       (G := G) (H := H) N) :
     N.Mem
@@ -298,7 +298,7 @@ end GenuineGeneralSinThetaProblem
 /-- Complete source-shaped input package for the isometric genuine all-gap
 theorem. -/
 structure GenuineIsometricSinThetaProblem
-    (N : UnitaryInvariantIdealFamily (𝕜 := ℂ)) where
+    (N : KyFanDominantIdealFamily (𝕜 := ℂ)) where
   data : UnboundedSinThetaData (𝕜 := ℂ) (E := E) (F := F) (G := G)
   exactMap : H →L[ℂ] E
   ambient_selfAdjoint : data.A.IsSelfAdjoint
@@ -315,7 +315,7 @@ namespace GenuineIsometricSinThetaProblem
 
 /-- Source-shaped isometric genuine all-gap endpoint. -/
 theorem result
-    (N : UnitaryInvariantIdealFamily (𝕜 := ℂ))
+    (N : KyFanDominantIdealFamily (𝕜 := ℂ))
     (P : GenuineIsometricSinThetaProblem (E := E) (F := F)
       (G := G) (H := H) N) :
     N.Mem

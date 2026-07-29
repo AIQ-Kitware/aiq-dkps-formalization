@@ -32,7 +32,7 @@ variable {E F : Type v}
 spectral inputs. The lower-frame polar factorization and every complementary
 spectral restriction are constructed internally. -/
 theorem generalizedSinTheta_unbounded_spectralSubspace_of_genuineSpectrumGap
-    (N : UnitaryInvariantIdealFamily (𝕜 := ℂ))
+    (N : KyFanDominantIdealFamily (𝕜 := ℂ))
     (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := E))
     (hA : A.IsSelfAdjoint) (S : Set ℝ) (hS : MeasurableSet S)
     (A0 : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := F))

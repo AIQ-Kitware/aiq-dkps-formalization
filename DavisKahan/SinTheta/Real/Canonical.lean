@@ -33,7 +33,7 @@ variable {E F G H : Type v}
 
 /-- Complete real input package for the generalized unbounded theorem. -/
 structure RealGeneralSinThetaProblem
-    (N : UnitaryInvariantIdealFamily (𝕜 := ℝ)) where
+    (N : KyFanDominantIdealFamily (𝕜 := ℝ)) where
   data : UnboundedSinThetaData (𝕜 := ℝ) (E := E) (F := F) (G := G)
   exactMap : H →L[ℝ] E
   ambient_selfAdjoint : data.A.IsSelfAdjoint
@@ -52,7 +52,7 @@ namespace RealGeneralSinThetaProblem
 
 /-- Complete real generalized source target. -/
 theorem result
-    (N : UnitaryInvariantIdealFamily (𝕜 := ℝ))
+    (N : KyFanDominantIdealFamily (𝕜 := ℝ))
     (P : RealGeneralSinThetaProblem (E := E) (F := F)
       (G := G) (H := H) N) :
     N.Mem
@@ -70,7 +70,7 @@ theorem result
 
 /-- Real generalized complementary-block source target. -/
 theorem complementaryBlock_result
-    (N : UnitaryInvariantIdealFamily (𝕜 := ℝ))
+    (N : KyFanDominantIdealFamily (𝕜 := ℝ))
     (P : RealGeneralSinThetaProblem (E := E) (F := F)
       (G := G) (H := H) N) :
     N.Mem
@@ -92,7 +92,7 @@ namespace IsometricSinThetaProblem
 
 /-- Real specialization of the source-shaped isometric problem. -/
 theorem result_real
-    (N : UnitaryInvariantIdealFamily (𝕜 := ℝ))
+    (N : KyFanDominantIdealFamily (𝕜 := ℝ))
     (P : IsometricSinThetaProblem (𝕜 := ℝ) (E := E) (F := F)
       (G := G) (H := H) N) :
     N.Mem
@@ -110,7 +110,7 @@ theorem result_real
 /-- Regard a real isometric problem as a real generalized problem with lower
 frame constant one. -/
 noncomputable def toGeneralReal
-    (N : UnitaryInvariantIdealFamily (𝕜 := ℝ))
+    (N : KyFanDominantIdealFamily (𝕜 := ℝ))
     (P : IsometricSinThetaProblem (𝕜 := ℝ) (E := E) (F := F)
       (G := G) (H := H) N) :
     RealGeneralSinThetaProblem (E := E) (F := F)
