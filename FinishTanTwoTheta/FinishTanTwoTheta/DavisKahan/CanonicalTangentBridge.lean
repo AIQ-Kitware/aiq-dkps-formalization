@@ -99,14 +99,18 @@ private theorem ambient_doubleAngleTangent_eq_extendCoordinate
     ambientAngularOperator_eq_extendCoordinate U Y hY
   have hYP : Y ∘L P = Y := hY.1
   have hPY : P ∘L Y = 0 := hY.2
+  -- `star_mul` cannot fire on `P ∘L Y`: for endomorphisms `∘L` is *defeq* to `*`
+  -- but not syntactically equal, so `simp only` never matches.  Go through
+  -- `adjoint_comp`, which is stated for `∘L` directly.
+  have hPadj : ContinuousLinearMap.adjoint P = P := by
+    simpa only [ContinuousLinearMap.star_eq_adjoint] using
+      (isSelfAdjoint_starProjection U).star_eq
   have hYstarP : Y.adjoint ∘L P = 0 := by
-    have h := congrArg star hPY
-    simpa only [star_mul, star_zero, ContinuousLinearMap.star_eq_adjoint,
-      (isSelfAdjoint_starProjection U).star_eq] using h
+    have h := congrArg ContinuousLinearMap.adjoint hPY
+    rwa [ContinuousLinearMap.adjoint_comp, hPadj, map_zero] at h
   have hPYstar : P ∘L Y.adjoint = Y.adjoint := by
-    have h := congrArg star hYP
-    simpa only [star_mul, ContinuousLinearMap.star_eq_adjoint,
-      (isSelfAdjoint_starProjection U).star_eq] using h
+    have h := congrArg ContinuousLinearMap.adjoint hYP
+    rwa [ContinuousLinearMap.adjoint_comp, hPadj] at h
   let G : E →L[ℂ] E := Y.adjoint ∘L Y
   let D : E →L[ℂ] E := doubleAngleDenominator Y
   let DX : U →L[ℂ] U := doubleAngleDenominator X
@@ -222,14 +226,17 @@ private theorem tanTwoAngleOperatorC_eq_modulus_ambientGraphTangent
     quarterAcuteAngularOperator_isAngularOperator U V hquarter
   have hYP : Y ∘L P = Y := hY.1
   have hPY : P ∘L Y = 0 := hY.2
+  -- See the note on the same pair in `ambientAngularOperator_eq_extendCoordinate`:
+  -- `star_mul` does not match `P ∘L Y`, so route through `adjoint_comp`.
+  have hPadj : ContinuousLinearMap.adjoint P = P := by
+    simpa only [ContinuousLinearMap.star_eq_adjoint] using
+      (isSelfAdjoint_starProjection U).star_eq
   have hYstarP : Y.adjoint ∘L P = 0 := by
-    have h := congrArg star hPY
-    simpa only [star_mul, star_zero, ContinuousLinearMap.star_eq_adjoint,
-      (isSelfAdjoint_starProjection U).star_eq] using h
+    have h := congrArg ContinuousLinearMap.adjoint hPY
+    rwa [ContinuousLinearMap.adjoint_comp, hPadj, map_zero] at h
   have hPYstar : P ∘L Y.adjoint = Y.adjoint := by
-    have h := congrArg star hYP
-    simpa only [star_mul, ContinuousLinearMap.star_eq_adjoint,
-      (isSelfAdjoint_starProjection U).star_eq] using h
+    have h := congrArg ContinuousLinearMap.adjoint hYP
+    rwa [ContinuousLinearMap.adjoint_comp, hPadj] at h
   have hGnonneg : (0 : E →L[ℂ] E) ≤ G := by
     dsimp [G]
     exact (ContinuousLinearMap.nonneg_iff_isPositive _).2
