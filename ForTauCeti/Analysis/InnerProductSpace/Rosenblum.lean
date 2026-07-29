@@ -108,6 +108,63 @@ theorem tendsto_damp {w : ℂ} (hw : w ≠ 1) :
     exact min_eq_left hle
   exact tendsto_const_nhds.congr' (hev.mono fun n hn => hn.symm)
 
+/-- The damped, pulled-back separator as a scalar symbol on `ℂ`.  Continuous
+**everywhere**, including at the Cayley singularity `w = 1`, where the damping
+factor squeezes it to zero. -/
+noncomputable def cayleySymbolFun (f : C(ℝ, ℝ)) (n : ℕ) (w : ℂ) : ℂ :=
+  ((f (cayleyCoordFun w) * damp n w : ℝ) : ℂ)
+
+theorem norm_cayleySymbolFun_le (f : C(ℝ, ℝ)) (hf : ∀ x, f x ∈ Set.Icc (0 : ℝ) 1)
+    (n : ℕ) (w : ℂ) : ‖cayleySymbolFun f n w‖ ≤ 1 := by
+  rw [cayleySymbolFun, Complex.norm_real, Real.norm_eq_abs, abs_mul]
+  have h1 : |f (cayleyCoordFun w)| ≤ 1 := by
+    rw [abs_le]
+    exact ⟨by linarith [(hf (cayleyCoordFun w)).1], (hf (cayleyCoordFun w)).2⟩
+  have h2 : |damp n w| ≤ 1 := by
+    rw [abs_of_nonneg (damp_nonneg n w)]
+    exact damp_le_one n w
+  nlinarith [abs_nonneg (f (cayleyCoordFun w)), abs_nonneg (damp n w)]
+
+theorem continuous_cayleySymbolFun (f : C(ℝ, ℝ)) (hf : ∀ x, f x ∈ Set.Icc (0 : ℝ) 1)
+    (n : ℕ) : Continuous (cayleySymbolFun f n) := by
+  rw [continuous_iff_continuousAt]
+  intro w
+  by_cases hw : w = 1
+  · -- at the singularity: the damping factor squeezes the symbol to zero
+    subst hw
+    have hval : cayleySymbolFun f n 1 = 0 := by
+      simp [cayleySymbolFun, damp]
+    rw [ContinuousAt, hval]
+    refine squeeze_zero_norm (a := fun v : ℂ => (n : ℝ) * ‖v - 1‖) (fun v => ?_) ?_
+    · rw [cayleySymbolFun, Complex.norm_real, Real.norm_eq_abs, abs_mul]
+      have h1 : |f (cayleyCoordFun v)| ≤ 1 := by
+        rw [abs_le]
+        exact ⟨by linarith [(hf (cayleyCoordFun v)).1], (hf (cayleyCoordFun v)).2⟩
+      have h2 : |damp n v| ≤ (n : ℝ) * ‖v - 1‖ := by
+        rw [abs_of_nonneg (damp_nonneg n v)]
+        exact damp_le n v
+      nlinarith [abs_nonneg (f (cayleyCoordFun v)), abs_nonneg (damp n v),
+        mul_nonneg (Nat.cast_nonneg n : (0:ℝ) ≤ (n:ℝ)) (norm_nonneg (v - 1))]
+    · have : Continuous fun v : ℂ => (n : ℝ) * ‖v - 1‖ := by fun_prop
+      simpa using this.tendsto 1
+  · -- away from the singularity: an ordinary product of continuous functions
+    have hopen : IsOpen {v : ℂ | v ≠ 1} := isOpen_ne
+    have hmem : w ∈ {v : ℂ | v ≠ 1} := hw
+    have hcoord : ContinuousAt cayleyCoordFun w :=
+      (continuousOn_cayleyCoordFun.continuousAt (hopen.mem_nhds hmem))
+    have hprod : ContinuousAt (fun v : ℂ => (f (cayleyCoordFun v) * damp n v : ℝ)) w :=
+      (f.continuous.continuousAt.comp hcoord).mul (continuous_damp n).continuousAt
+    exact Complex.continuous_ofReal.continuousAt.comp hprod
+
+theorem tendsto_cayleySymbolFun (f : C(ℝ, ℝ)) {w : ℂ} (hw : w ≠ 1) :
+    Tendsto (fun n : ℕ => cayleySymbolFun f n w) atTop
+      (nhds ((f (cayleyCoordFun w) : ℝ) : ℂ)) := by
+  have h : Tendsto (fun n : ℕ => (f (cayleyCoordFun w) * damp n w : ℝ)) atTop
+      (nhds (f (cayleyCoordFun w) * 1)) :=
+    tendsto_const_nhds.mul (tendsto_damp hw)
+  rw [mul_one] at h
+  exact (Complex.continuous_ofReal.tendsto _).comp h
+
 end Separator
 
 section Rosenblum
