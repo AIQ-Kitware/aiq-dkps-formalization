@@ -3,8 +3,8 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
-import DavisKahan.FiniteDimensional.Sylvester.Basic
-import DavisKahan.FiniteDimensional.Sylvester.Internal.SpectralBounds
+import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Basic
+import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Internal.SpectralBounds
 import ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm
 import ForTauCeti.Analysis.InnerProductSpace.SylvesterBound
 
@@ -13,6 +13,19 @@ import ForTauCeti.Analysis.InnerProductSpace.SylvesterBound
 
 Sharp constant-one operator and rectangular unitarily invariant norm bounds
 under ordered or interval/exterior spectral separation.
+
+## Provenance
+
+*Moved, not restated.*  This file was
+`DavisKahan/FiniteDimensional/Sylvester/Interval.lean`
+until 2026-07-29, when lane Y3(b4) moved the whole remaining sin-Θ closure into
+the staging layer.  Statements, proofs, signatures and namespaces are unchanged;
+the declarations already lived in `TauCeti.*`, so the move was a path change and
+an import repoint.
+
+Y3(b2) and Y3(b3) are what made it possible: before them this file's import
+closure crossed `ForMathlib`, which the `ForTauCeti` layer rule forbids.
+
 -/
 
 namespace TauCeti

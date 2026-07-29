@@ -15,7 +15,7 @@ To be re-authored per Mathlib's AI-contribution policy at PR time.
 -/
 
 import ForTauCeti.Analysis.InnerProductSpace.SylvesterBound
-import DavisKahan.FiniteDimensional.DoubleAngle.Vector
+import ForTauCeti.Analysis.InnerProductSpace.DoubleAngle.Vector
 import ForTauCeti.Analysis.InnerProductSpace.CourantFischer
 import ForTauCeti.Analysis.InnerProductSpace.PrincipalAngles
 import Mathlib.Analysis.InnerProductSpace.Adjoint
@@ -49,6 +49,19 @@ self-adjointness of the projections.
 * R. Bhatia, *Matrix Analysis*, Chapter VII (the Davis–Kahan theorems).
 * C. Davis and W. M. Kahan, *The rotation of eigenvectors by a
   perturbation. III*, SIAM J. Numer. Anal. 7 (1970), 1–46.
+
+## Provenance
+
+*Moved, not restated.*  This file was
+`DavisKahan/FiniteDimensional/SinTheta/OperatorNorm.lean`
+until 2026-07-29, when lane Y3(b4) moved the whole remaining sin-Θ closure into
+the staging layer.  Statements, proofs, signatures and namespaces are unchanged;
+the declarations already lived in `TauCeti.*`, so the move was a path change and
+an import repoint.
+
+Y3(b2) and Y3(b3) are what made it possible: before them this file's import
+closure crossed `ForMathlib`, which the `ForTauCeti` layer rule forbids.
+
 -/
 
 namespace TauCeti
@@ -321,8 +334,10 @@ theorem norm_starProjection_comp_starProjection_le_of_eigenvalues
   norm_starProjection_comp_starProjection_le hT hS
     (fun _ hx => LinearMap.IsSymmetric.map_mem_spanIndices hT hn _ hx)
     (fun _ hx => LinearMap.IsSymmetric.map_mem_spanIndices hS hn _ hx) hg
-    (fun _ hx => LinearMap.IsSymmetric.le_re_inner_apply_self_of_mem_spanIndices hT hn (fun i hi => hs i hi) hx)
-    (fun _ hx => LinearMap.IsSymmetric.re_inner_apply_self_le_of_mem_spanIndices hS hn (fun j hj => hs' j hj) hx)
+    (fun _ hx => LinearMap.IsSymmetric.le_re_inner_apply_self_of_mem_spanIndices hT hn
+      (fun i hi => hs i hi) hx)
+    (fun _ hx => LinearMap.IsSymmetric.re_inner_apply_self_le_of_mem_spanIndices hS hn
+      (fun j hj => hs' j hj) hx)
     hε0 hε
 
 omit [CompleteSpace E] in
@@ -341,10 +356,12 @@ theorem sin_two_theta_le_of_eigenvalues
     (b - a) * (‖((hT.eigenvectorBasis hn).spanIndices ↑s).starProjection x‖
       * ‖x - ((hT.eigenvectorBasis hn).spanIndices ↑s).starProjection x‖) ≤ ε := by
   refine sin_two_theta_le hT hS (fun u hu => LinearMap.IsSymmetric.map_mem_spanIndices hT hn _ hu)
-    (fun u hu => LinearMap.IsSymmetric.le_re_inner_apply_self_of_mem_spanIndices hT hn (fun i hi => hb i hi) hu)
+    (fun u hu => LinearMap.IsSymmetric.le_re_inner_apply_self_of_mem_spanIndices hT hn
+      (fun i hi => hb i hi) hu)
     (fun w hw => ?_) hε hx hμ
   rw [OrthonormalBasis.orthogonal_spanIndices] at hw
-  exact LinearMap.IsSymmetric.re_inner_apply_self_le_of_mem_spanIndices hT hn (fun i hi => ha i hi) hw
+  exact LinearMap.IsSymmetric.re_inner_apply_self_le_of_mem_spanIndices hT hn
+    (fun i hi => ha i hi) hw
 
 omit [CompleteSpace E] in
 /-- **Davis's tan 2θ theorem, spectral form.**  As `sin_two_theta_le_of_eigenvalues`,
@@ -367,10 +384,12 @@ theorem tan_two_theta_le_of_eigenvalues
       ≤ |‖((hT.eigenvectorBasis hn).spanIndices ↑s).starProjection x‖ ^ 2
           - ‖x - ((hT.eigenvectorBasis hn).spanIndices ↑s).starProjection x‖ ^ 2| * ε := by
   refine tan_two_theta_le hT hS (fun u hu => LinearMap.IsSymmetric.map_mem_spanIndices hT hn _ hu)
-    (fun u hu => LinearMap.IsSymmetric.le_re_inner_apply_self_of_mem_spanIndices hT hn (fun i hi => hb i hi) hu)
+    (fun u hu => LinearMap.IsSymmetric.le_re_inner_apply_self_of_mem_spanIndices hT hn
+      (fun i hi => hb i hi) hu)
     (fun w hw => ?_) hε hSU (fun w hw w' hw' => ?_) hx hμ
   · rw [OrthonormalBasis.orthogonal_spanIndices] at hw
-    exact LinearMap.IsSymmetric.re_inner_apply_self_le_of_mem_spanIndices hT hn (fun i hi => ha i hi) hw
+    exact LinearMap.IsSymmetric.re_inner_apply_self_le_of_mem_spanIndices hT hn
+      (fun i hi => ha i hi) hw
   · rw [OrthonormalBasis.orthogonal_spanIndices] at hw hw'
     exact hSUperp w hw w' hw'
 

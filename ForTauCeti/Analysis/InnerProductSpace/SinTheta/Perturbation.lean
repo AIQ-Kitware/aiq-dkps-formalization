@@ -5,15 +5,15 @@ Authors: Jon Crall, GPT 5.6 High
 -/
 import ForTauCeti.Analysis.InnerProductSpace.SpectralSubspace
 import ForTauCeti.Analysis.InnerProductSpace.SpectralGap
-import DavisKahan.FiniteDimensional.Residual.Ritz
+import ForTauCeti.Analysis.InnerProductSpace.Residual.Ritz
 import ForTauCeti.Analysis.InnerProductSpace.AngleGeometry
-import DavisKahan.FiniteDimensional.Sylvester.Interval
-import DavisKahan.FiniteDimensional.Sylvester.SpectralDistance
-import DavisKahan.FiniteDimensional.Residual.AngleEmbedding
+import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Interval
+import ForTauCeti.Analysis.InnerProductSpace.Sylvester.SpectralDistance
+import ForTauCeti.Analysis.InnerProductSpace.Residual.AngleEmbedding
 import ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm
 import ForTauCeti.Analysis.InnerProductSpace.RectangularSingularValues
-import DavisKahan.FiniteDimensional.SinTheta.UnitarilyInvariant
-import DavisKahan.FiniteDimensional.SinTheta.OperatorNorm
+import ForTauCeti.Analysis.InnerProductSpace.SinTheta.UnitarilyInvariant
+import ForTauCeti.Analysis.InnerProductSpace.SinTheta.OperatorNorm
 import ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.SinTheta
 import ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Projector
 
@@ -33,6 +33,19 @@ The residual theorem is the numerical analyst's form.  The perturbation
 version is the operator theorist's form.  Both are stated for every relevant
 unitarily invariant norm, followed by the interval, spectral-projector, and
 concrete-norm corollaries expected from the final API.
+
+## Provenance
+
+*Moved, not restated.*  This file was
+`DavisKahan/FiniteDimensional/SinTheta/Perturbation.lean`
+until 2026-07-29, when lane Y3(b4) moved the whole remaining sin-Θ closure into
+the staging layer.  Statements, proofs, signatures and namespaces are unchanged;
+the declarations already lived in `TauCeti.*`, so the move was a path change and
+an import repoint.
+
+Y3(b2) and Y3(b3) are what made it possible: before them this file's import
+closure crossed `ForMathlib`, which the `ForTauCeti` layer rule forbids.
+
 -/
 
 namespace TauCeti
@@ -613,7 +626,7 @@ theorem sinAngleOperator_perturbation_le
   classical
   have hUperp : Reduces A Uᗮ := reduces_orthogonal_of_isSymmetric hA hU
   have hVperp : Reduces B Vᗮ := reduces_orthogonal_of_isSymmetric hB hV
-
+  -- Restrictions of `A` and `B` to the two reducing blocks.
   let AU : U →ₗ[𝕜] U := A.restrict hU
   let BVperp : Vᗮ →ₗ[𝕜] Vᗮ := B.restrict hVperp
   let XUV : U →ₗ[𝕜] Vᗮ :=
@@ -650,7 +663,7 @@ theorem sinAngleOperator_perturbation_le
       RCLike.norm_ofReal, abs_of_nonneg hδ.le]
     exact kyFan_sylvester_le_of_intervalGap
       hBVperp hAU hδ hgapUV' hEqUV k
-
+  -- The mirrored pair of restrictions, for the other diagonal.
   let BV : V →ₗ[𝕜] V := B.restrict hV
   let AUperp : Uᗮ →ₗ[𝕜] Uᗮ := A.restrict hUperp
   let XVU : V →ₗ[𝕜] Uᗮ :=
@@ -714,7 +727,7 @@ theorem sinAngleOperator_perturbation_le
       _ ≤ RectangularUnitarilyInvariantNorm.rectangularKyFanSum k CVU := hbase
       _ = RectangularUnitarilyInvariantNorm.rectangularKyFanSum k CVU.adjoint :=
         hright.symm
-
+  -- Orthogonal decompositions of the ambient space along each subspace.
   let EU : E ≃ₗᵢ[𝕜] WithLp 2 (U × Uᗮ) := U.orthogonalDecomposition
   let EV : E ≃ₗᵢ[𝕜] WithLp 2 (Vᗮ × V) :=
     V.orthogonalDecomposition.trans
@@ -742,7 +755,6 @@ theorem sinAngleOperator_perturbation_le
   have hNB : δ * NB Xblock ≤ NB Cblock := by
     rw [NB.smul_eq, RCLike.norm_ofReal, abs_of_nonneg hδ.le] at hNBscaled
     exact hNBscaled
-
   -- The ambient operator represented by a block map in the `U ⊕ Uᗮ` domain
   -- and `Vᗮ ⊕ V` codomain coordinates.  This uses the exact adjoint appearing
   -- in `domainIsometryTransport`, so the norm identity below is definitional.
@@ -788,7 +800,7 @@ theorem sinAngleOperator_perturbation_le
       LinearMap.comp_apply]; module)
   rw [hNB_apply, hNB_apply, hXlift, hClift] at hNB
   rw [uiNorm_projection_sub_eq_sinAngleOperator N U V] at hNB
-
+  -- The perturbation and the two block reflections.
   let H : E →ₗ[𝕜] E := B - A
   let JU : E ≃ₗᵢ[𝕜] E := U.reflection
   let JV : E ≃ₗᵢ[𝕜] E := V.reflection
