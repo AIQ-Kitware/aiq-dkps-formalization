@@ -148,7 +148,37 @@ generalized / specialized / re-proved), whether Spectra influenced the selection
 or proof, and any semantic change from the Davis–Kahan version. Kitware and
 third-party attribution is **preserved**, never erased.
 
+## `ForTauCeti` is the deliverable — do not "finish" by deleting it
+
+**Read this before the lifecycle steps below.** Agents have repeatedly tried to
+complete this work by merging code directly into `TauCeti` and deleting
+`ForTauCeti` (edward, 2026-07-29). That is not the goal and it destroys the
+actual product.
+
+The goal is to make `ForTauCeti` **an elegant, self-consistent package**, and
+then use that package to generate two things:
+
+1. **polished roadmaps** — drafted in [`../ForTauCetiRoadmap/`](../ForTauCetiRoadmap/README.md),
+   mirroring the sibling `TauCetiRoadmap` layout; and
+2. **mechanical ports** that satisfy those roadmaps.
+
+The `TauCeti/` copy is an **output**, produced on demand by
+`scripts/export_for_tauceti.py` — it is generated, never hand-applied. This is
+why `AGENTS.md` says not to commit the `external/TauCeti` submodule pointer yet.
+
+So: improvements go **into** `ForTauCeti`. A task that sounds like "move
+`ForTauCeti` into `TauCeti`" is asking for an *export*. Never empty or delete
+`ForTauCeti/` as a way of declaring the migration done.
+
 ## Lifecycle (per cluster)
+
+**Precondition — this sequence applies only *after* a cluster has actually been
+accepted upstream by Tau Ceti.** No cluster has been accepted yet: every row in
+*Current contents* below reads `staged-*`, and the governance gate in
+`AGENTS.md` (accepted roadmap target, one topic per PR, green build, standard
+axiom allowlist) has not yet been cleared by anything. Until an acceptance
+exists, **step 3 is not work that is available to do**, and an agent that runs
+it is deleting the package rather than shipping it.
 
 When a cluster is accepted into Tau Ceti:
 
