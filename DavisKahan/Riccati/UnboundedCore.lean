@@ -39,6 +39,9 @@ noncomputable def unboundedOffDiagonalCoupling
       (B10 ∘L WithLp.fstL 2 𝕜 E0 E1))
 
 omit [CompleteSpace E0] [CompleteSpace E1] in
+/-- First coordinate of the off-diagonal coupling: `B01` applied to the
+*second* coordinate.  Off-diagonal means each output coordinate reads the other
+input coordinate. -/
 @[simp] theorem unboundedOffDiagonalCoupling_fst
     (B01 : E1 →L[𝕜] E0) (B10 : E0 →L[𝕜] E1)
     (z : WithLp 2 (E0 × E1)) :
@@ -47,6 +50,7 @@ omit [CompleteSpace E0] [CompleteSpace E1] in
   rfl
 
 omit [CompleteSpace E0] [CompleteSpace E1] in
+/-- Second coordinate of the off-diagonal coupling: `B10` applied to the first. -/
 @[simp] theorem unboundedOffDiagonalCoupling_snd
     (B01 : E1 →L[𝕜] E0) (B10 : E0 →L[𝕜] E1)
     (z : WithLp 2 (E0 × E1)) :
@@ -63,11 +67,16 @@ noncomputable abbrev unboundedBlockOperatorCore
     (TauCeti.LinearPMap.directSum H.A0 H.A1)
     (unboundedOffDiagonalCoupling H.B01 H.B10)
 
+/-- The block operator keeps the direct-sum domain unchanged: the coupling is
+bounded and everywhere defined, so only the diagonal partial maps constrain the
+domain. -/
 @[simp] theorem unboundedBlockOperatorCore_domain
     (H : UnboundedBlockData (𝕜 := 𝕜) (E0 := E0) (E1 := E1)) :
     (unboundedBlockOperatorCore H).domain =
       TauCeti.LinearPMap.directSumDomain H.A0 H.A1 := rfl
 
+/-- Membership in the block domain is membership of each coordinate in its own
+diagonal domain. -/
 @[simp] theorem mem_unboundedBlockOperatorCore_domain_iff
     (H : UnboundedBlockData (𝕜 := 𝕜) (E0 := E0) (E1 := E1))
     (z : WithLp 2 (E0 × E1)) :
@@ -75,6 +84,8 @@ noncomputable abbrev unboundedBlockOperatorCore
       WithLp.fst z ∈ H.A0.domain ∧ WithLp.snd z ∈ H.A1.domain := by
   rfl
 
+/-- First coordinate of the block action: the diagonal term plus the coupling
+from the second coordinate. -/
 @[simp] theorem unboundedBlockOperatorCore_apply_fst
     (H : UnboundedBlockData (𝕜 := 𝕜) (E0 := E0) (E1 := E1))
     (z : (unboundedBlockOperatorCore H).domain) :
@@ -82,6 +93,7 @@ noncomputable abbrev unboundedBlockOperatorCore
       H.A0 (TauCeti.LinearPMap.directSumDomainFst H.A0 H.A1 z) +
         H.B01 (WithLp.snd (z : WithLp 2 (E0 × E1))) := rfl
 
+/-- Second coordinate of the block action. -/
 @[simp] theorem unboundedBlockOperatorCore_apply_snd
     (H : UnboundedBlockData (𝕜 := 𝕜) (E0 := E0) (E1 := E1))
     (z : (unboundedBlockOperatorCore H).domain) :

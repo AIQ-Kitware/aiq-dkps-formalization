@@ -78,6 +78,9 @@ theorem unboundedBlockGraphDomainVector_mem_graph
   change WithLp.toLp 2 ((x : E0), X (x : E0)) ∈ unboundedBlockGraph X
   exact (toLp_mem_unboundedBlockGraph_iff X (x : E0) (X (x : E0))).2 rfl
 
+/-- First coordinate of the block operator on a graph vector `(x, T x)`.  This
+is the form the Riccati reduction consumes: it is where the graph relation turns
+the block action into an equation in `T`. -/
 @[simp] theorem unboundedBlockOperatorCore_graphVector_fst
     (H : UnboundedBlockData (𝕜 := 𝕜) (E0 := E0) (E1 := E1))
     (X : E0 →L[𝕜] E1) (hdom : PreservesRiccatiDomains H X)
@@ -87,6 +90,7 @@ theorem unboundedBlockGraphDomainVector_mem_graph
         H.A0 x + H.B01 (X (x : E0)) := by
   rfl
 
+/-- Second coordinate of the block operator on a graph vector. -/
 @[simp] theorem unboundedBlockOperatorCore_graphVector_snd
     (H : UnboundedBlockData (𝕜 := 𝕜) (E0 := E0) (E1 := E1))
     (X : E0 →L[𝕜] E1) (hdom : PreservesRiccatiDomains H X)
