@@ -3,10 +3,8 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.Interop.Spectra.Basic
+import ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.PVM
 import DavisKahan.Interop.Spectra.RealSpectralRestriction
-import Spectra.SpectralTheory.ResolventForm
-import Spectra.StoneBridge.CalculusBridge
 
 /-!
 # Canonical spectral projections
@@ -30,7 +28,6 @@ namespace DavisKahanExt
 
 open Set
 open scoped InnerProductSpace
-open Spectra.QuantumMechanics.SpectralTheory
 open DavisKahan.Experimental.SpectraBridge
 
 universe v
@@ -38,12 +35,26 @@ universe v
 variable {H : Type v} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
   [CompleteSpace H]
 
+/-- A spectral point of a self-adjoint operator is its own real part. -/
+theorem coe_reCoord (A : H →L[ℂ] H) (hA : IsSelfAdjointOperator A)
+    (w : spectrum ℂ A) :
+    ((TauCeti.BorelCalculus.reCoord w : ℝ) : ℂ) = (w : ℂ) := by
+  have hAsa : IsSelfAdjoint A := ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hA
+  obtain ⟨z, hz⟩ := w
+  have hmem : z ∈ spectrum ℂ A := hz
+  rw [← hAsa.spectrumRestricts.algebraMap_image] at hmem
+  obtain ⟨lam, -, hlam⟩ := hmem
+  show ((z.re : ℝ) : ℂ) = z
+  rw [← hlam]
+  simp
+
 /-- The genuine Spectra projection-valued measure of a bounded self-adjoint
 operator. -/
 noncomputable def boundedSelfAdjointSpectralPVM
     (A : H →L[ℂ] H) (hA : IsSelfAdjointOperator A) :
-    Spectra.ProjValMeasure H :=
-  spectralPVM (boundedSelfAdjointOperator A hA).selfAdjoint
+    TauCeti.ProjValMeasure H :=
+  TauCeti.BorelCalculus.boundedPVM
+    ((ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric).mpr hA)
 
 /-- The genuine measurable spectral projection of a bounded self-adjoint
 operator. -/
@@ -76,16 +87,16 @@ noncomputable instance boundedSelfAdjointSpectralSubspace_hasOrthogonalProjectio
     (show IsIdempotentElem (boundedSelfAdjointSpectralProjection A hA s hs) from
       (boundedSelfAdjointSpectralPVM A hA).proj_idem s hs)
 
-/-- The bounded spectral projection is the group-calculus spectral projection
-used by Spectra. -/
-theorem boundedSelfAdjointSpectralProjection_eq_spectralProjection
+/-- **The bounded spectral projection is the continuous functional calculus of
+any continuous symbol agreeing with the indicator on the spectrum.** -/
+theorem boundedSelfAdjointSpectralProjection_eq_cfcL_of_agrees
     (A : H →L[ℂ] H) (hA : IsSelfAdjointOperator A)
-    (s : Set ℝ) (hs : MeasurableSet s) :
+    (s : Set ℝ) (hs : MeasurableSet s) (g : C(spectrum ℂ A, ℂ))
+    (hg : ∀ w : spectrum ℂ A,
+      g w = (TauCeti.BorelCalculus.reCoord ⁻¹' s).indicator (fun _ => (1 : ℂ)) w) :
     boundedSelfAdjointSpectralProjection A hA s hs =
-      Spectra.QuantumMechanics.SpectralTheory.spectralProjection
-        (Spectra.YosidaHille.genToGroup
-          (boundedSelfAdjointOperator A hA).selfAdjoint) s hs :=
-  rfl
+      cfcL ((ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric).mpr hA).isStarNormal g :=
+  TauCeti.BorelCalculus.boundedPVM_proj_eq_cfcHom _ s hs g hg
 
 /-- The selected spectral subspace is exactly the range of its spectral
 projection. -/
@@ -103,7 +114,7 @@ theorem boundedSelfAdjointSpectralProjection_eq_starProjection
     (s : Set ℝ) (hs : MeasurableSet s) :
     boundedSelfAdjointSpectralProjection A hA s hs =
       (boundedSelfAdjointSpectralSubspace A hA s hs).starProjection := by
-  set P := boundedSelfAdjointSpectralPVM A hA with hP
+  set P : TauCeti.ProjValMeasure H := boundedSelfAdjointSpectralPVM A hA with hP
   set Q := boundedSelfAdjointSpectralProjection A hA s hs with hQ
   have hidem : ∀ y : H, Q (Q y) = Q y := fun y => by
     have h := congrArg (fun T : H →L[ℂ] H => T y) (P.proj_idem s hs)
@@ -129,7 +140,7 @@ theorem boundedSelfAdjointSpectralProjection_isOrthogonalProjection
     (s : Set ℝ) (hs : MeasurableSet s) :
     IsOrthogonalProjection
       (boundedSelfAdjointSpectralProjection A hA s hs) := by
-  let P : Spectra.ProjValMeasure H := boundedSelfAdjointSpectralPVM A hA
+  let P : TauCeti.ProjValMeasure H := boundedSelfAdjointSpectralPVM A hA
   change IsOrthogonalProjection (P.proj s hs)
   constructor
   · apply ContinuousLinearMap.ext
