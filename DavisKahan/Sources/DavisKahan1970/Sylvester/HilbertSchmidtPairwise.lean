@@ -5,9 +5,8 @@ import DavisKahan.Sylvester.PairwiseSpectrumGap
 import DavisKahan.SpectralTheory.ClosedOperator.Complexification
 import DavisKahan.Sylvester.PairwiseHomogeneousUniqueness
 import DavisKahan.Sources.DavisKahan1970.Sylvester.HilbertSchmidtDefectFirst
-import Spectra.Spaces.Tensor.HilbertSchmidtSpectralGap
-import Spectra.QuantumMechanics.BornRule.Observable
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
+import ForTauCeti.Analysis.InnerProductSpace.SylvesterSpectralGap
 
 /-!
 # Pairwise-gap square-norm Sylvester theorem
@@ -28,12 +27,7 @@ namespace ExactSinTheta
 
 open scoped InnerProductSpace
 open TauCeti.DavisKahanExt
-open Spectra.Operator
-open Spectra.YosidaHille
--- The support estimate sits under the observable namespace, and the
--- complexification of a bounded operator under the foundation namespace.
-open Spectra.QuantumMechanics.BornRule.PVM
-open Spectra.QuantumMechanics.BornRule.Observable
+-- The complexification of a bounded operator sits under the foundation namespace.
 open Foundation
 
 noncomputable section
@@ -44,50 +38,28 @@ variable {E F : Type v}
   [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
   [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
 
-private theorem pairwiseScalarSupportGap_of_spectra
-    {A : ClosedOperator (𝕜 := ℂ) (E := E)}
-    {B : ClosedOperator (𝕜 := ℂ) (E := F)}
-    (hA : A.IsSelfAdjoint) (hB : B.IsSelfAdjoint)
-    {δ : ℝ} (hgap : GenuinePairwiseSpectrumGap A B δ) :
-    Spectra.HilbertSchmidtTensor.PairwiseScalarSupportGap
-      (genToGroup hA) (genToGroup hB) δ := by
-  intro u v lam hlam alpha halpha
-  let AO : SelfAdjointOperator E := ⟨A.toLinearPMap, hA⟩
-  let BO : SelfAdjointOperator F := ⟨B.toLinearPMap, hB⟩
-  have hlamSpec : (lam : ℂ) ∈ TauCeti.LinearPMap.spectrum A.toLinearPMap := by
-    have hsupp := bornMeasure_support_subset_spectrum AO u
-    exact hsupp (by
-      simpa [AO, bornMeasure,
-        SelfAdjointOperator.spectralPVM] using hlam)
-  have halphaSpec : (alpha : ℂ) ∈ TauCeti.LinearPMap.spectrum B.toLinearPMap := by
-    have hsupp := bornMeasure_support_subset_spectrum BO v
-    exact hsupp (by
-      simpa [BO, bornMeasure,
-        SelfAdjointOperator.spectralPVM] using halpha)
-  -- `hgap` now measures separation in `ℂ`; on real points that is the real
-  -- absolute value, via `‖(x : ℂ)‖ = |x|`.
-  have h := hgap (lam : ℂ) hlamSpec (alpha : ℂ) halphaSpec
-  rwa [← Complex.ofReal_sub, Complex.norm_real, Real.norm_eq_abs] at h
+/-- The defect has the vector spectral gap dictated by the pairwise separation
+of the original spectra.  In fact the Sylvester flow has this gap at every
+vector.
 
-/-- The defect tensor has the vector spectral gap dictated by the pairwise
-separation of the original spectra.  In fact the tensor flow has this gap at
-every vector. -/
+The pairwise gap is stated over `ℂ`; on real spectral points the complex norm is
+the real absolute value, which is the only conversion this needs. -/
 theorem paperHilbertSchmidtTensor_hasVectorSpectralGap
     {A : ClosedOperator (𝕜 := ℂ) (E := E)}
     {B : ClosedOperator (𝕜 := ℂ) (E := F)}
     (hA : A.IsSelfAdjoint) (hB : B.IsSelfAdjoint)
     {C : F →L[ℂ] E} {δ : ℝ}
-    (hδ : 0 < δ)
     (hgap : GenuinePairwiseSpectrumGap A B δ)
     (hC : IsPaperHilbertSchmidt C) :
-    Spectra.QuantumMechanics.SpectralTheory.HasVectorSpectralGap
-      (Spectra.HilbertSchmidtTensor.sylvesterGroup
-        (genToGroup hA) (genToGroup hB))
-      (paperHilbertSchmidtTensor C hC) δ := by
-  exact Spectra.HilbertSchmidtTensor.hasVectorSpectralGap
-    (genToGroup hA) (genToGroup hB) hδ.le
-    (pairwiseScalarSupportGap_of_spectra hA hB hgap)
-    (paperHilbertSchmidtTensor C hC)
+    TauCeti.LinearPMap.HasVectorSpectralGap
+      (TauCeti.HilbertSchmidt.isSelfAdjoint_generator_sylvesterGroup
+        (TauCeti.LinearPMap.genToGroup hA) (TauCeti.LinearPMap.genToGroup hB) (paperHSBasis F))
+      δ (paperHilbertSchmidtTensor C hC) := by
+  refine TauCeti.HilbertSchmidt.hasVectorSpectralGap_sylvesterGroup hA hB (paperHSBasis F)
+    ?_ (paperHilbertSchmidtTensor C hC)
+  intro lam hlam alp halp
+  have h := hgap (lam : ℂ) hlam (alp : ℂ) halp
+  rwa [← Complex.ofReal_sub, Complex.norm_real, Real.norm_eq_abs] at h
 
 /-- **Davis--Kahan square-norm Sylvester estimate at arbitrary pairwise
 spectral separation.**  This is the direct, non-circular completion of the
@@ -110,8 +82,7 @@ theorem paperHilbertSchmidt_sylvester_le_of_pairwiseSpectrumGap_direct
       hA hB hδ hgap hY
   -- Supplying the gap instantiates the tensor's own membership argument, so
   -- there is no further obligation.
-  · exact paperHilbertSchmidtTensor_hasVectorSpectralGap
-      hA hB hδ hgap hC
+  · exact paperHilbertSchmidtTensor_hasVectorSpectralGap hA hB hgap hC
 
 
 /-- Real closed-operator form of the direct pairwise-gap theorem, obtained by
