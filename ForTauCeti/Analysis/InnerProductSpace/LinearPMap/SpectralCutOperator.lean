@@ -47,6 +47,7 @@ theorem norm_specCutOp_apply_le {c r : ℝ} (hr : 0 ≤ r) (hcr : ∀ s ∈ B, |
     (y : H) : ‖specCutOp hA B hB hr hcr y‖ ≤ r * ‖y‖ :=
   BorelCalculus.norm_borelCalculus_apply_le _ _ hr (norm_truncSymbol_le hA B hr hcr) y
 
+/-- Operator-norm form of the cut bound, from the pointwise one. -/
 theorem norm_specCutOp_le {c r : ℝ} (hr : 0 ≤ r) (hcr : ∀ s ∈ B, |s - c| ≤ r) :
     ‖specCutOp hA B hB (c := c) hr hcr‖ ≤ r :=
   ContinuousLinearMap.opNorm_le_bound _ hr (norm_specCutOp_apply_le hA B hB hr hcr)
