@@ -190,6 +190,48 @@ is not this lane's to migrate.
 - The `Restriction.lean` and `ClosedSylvesterEquation.lean` facade blocks, once
   their remaining callers move.
 
+**`linter.unusedSimpArgs` swept: 162 → 17 (edward, aiq-gpu, 2026-07-29).**
+In-scope (everything under `DavisKahan/**` bar `Interop/Spectra/**`) went
+**153 → 8**.  The 9 out-of-scope are `Interop/Spectra/**`, vendored `Spectra/**`
+and `DkpsQuench2026/**`.
+
+**This class is *not* like `unusedSectionVars`, and the difference matters
+before anyone automates the rest.**  `omit` insertions are additive, so a
+35-file bulk change could be *proved* safe by asserting `git diff -U0` held zero
+non-`omit` lines.  Removing a simp argument edits proof text; no such check
+exists, and a bulk sweep would be unverifiable.  Done per file, with a build
+each, largest first.
+
+**The linter is advisory here, not authoritative.**  Its claim is *local* — this
+argument never fires as a rewrite at this call.  But `simp only` also fixes the
+**normal form handed to the next tactic**, and an argument can be essential to
+that without ever firing.  In `FiniteDimensional/Sharpness.lean` every
+continuation-line argument it flags is load-bearing for a downstream `ring1`:
+removing `smul_eq_mul` breaks it, and so do the projection-rewriting lemmas
+(`rotatedModelSubspace_starProjection_e1`,
+`Submodule.starProjection_orthogonal_val`) that I predicted would be safe
+precisely because they look unrelated to arithmetic.  Three attempts, same
+failure, same site.  **Treat `unusedSimpArgs` as a suggestion in any proof that
+chains `simp only` into `ring1`/`linear_combination`.**
+
+The 8 remaining in-scope sites are three distinct situations, not one backlog:
+
+1. **Load-bearing for `ring1`** — 5 in `Sharpness.lean`, 1 (`smul_eq_mul`) in
+   `ShortRotationCounterexample.lean`.  Verified by build failure, not guessed.
+2. **Term-mode arguments** — 2 in `DirectRotation/PrincipalPlanes/Spectrum.lean`,
+   where the "argument" is a whole inline proof:
+   `show (⟨(a : ℕ) % 2, by omega⟩ : Fin 2) = 0 from by ext; simp [hpar]`.  A
+   text-level tool must not touch these; the natural next move — widening the
+   pattern until all sites match — would delete a nested tactic block.
+3. (Cleared) continuation-line cases, where the delimiting comma sits on the
+   previous line so single-line patterns cannot see it.
+
+**Two patcher defects worth knowing if you reuse this approach:** removing a
+lemma that was alone on its line leaves a **whitespace-only line inside the
+`simp only [...]` bracket** — syntactically harmless, so it compiles green and
+slips through unless you read the diff (8 occurred, all cleaned); and matching
+must run **bottom-up per file** so earlier line numbers stay valid.
+
 **`linter.unusedSectionVars` is cleared to zero everywhere we own it (edward,
 aiq-gpu, 2026-07-29).**  Repo-wide **195 → 60**.  The 60 that remain are **all
 outside our edit rights**: 43 in `DavisKahan/Interop/Spectra/**` (jon (namek)'s
