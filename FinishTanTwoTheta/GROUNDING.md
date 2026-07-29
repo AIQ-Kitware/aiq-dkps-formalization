@@ -9,23 +9,42 @@ The source-facing checks are provided by:
 DavisKahan.Sources.DavisKahan1970.Audits.DoubleAngleTangent
 ```
 
-The bounded infinite-dimensional ideal theorem is a repository extension built
-from approximation numbers, the canonical double-angle tangent functional
-calculus, the Riccati identity, Ky Fan domination, and standard Fan dominance.
+The bounded ideal stack is built from approximation numbers, the canonical
+double-angle tangent functional calculus, the Riccati identity, Ky Fan
+domination, and source-norm Fan dominance.
 
-The unrestricted unbounded ideal statement is not marked grounded.  The valid
-production replacement currently available at that scope is the genuine
+## Paper-faithful theorem
+
+`TauCeti.DavisKahan.FinishTanTwoTheta.paperFaithful_tanTwoTheta_uiNorm` is proved
+at the audited finite-dimensional Section 7 scope.  Its proof begins with the
+full ambient data:
+
+- self-adjoint `A` and fully off-diagonal self-adjoint perturbation `H`;
+- a reducing subspace `U` for `A` and a reducing subspace `V` for `A + H`;
+- the same ordered form gap `[a,b]` for the two splittings.
+
+The proof then:
+
+1. invokes the verified finite-dimensional sharp operator-norm theorem to derive
+   the strict quarter-turn branch;
+2. obtains the contractive angular graph coordinate and its Riccati equation;
+3. reverses and shifts the block data so the sharp Riccati ideal theorem applies;
+4. identifies the upper-right block with the ambient double compression of `H`;
+5. uses zero-extension to prove equality of every approximation singular value
+   between the rectangular block and its ambient compression;
+6. transports source-norm membership and gauge exactly and applies the sharp
+   factor-two estimate.
+
+There is no `sorry` in the theorem or its local bridge lemmas.
+
+## Scope boundary
+
+The previously recorded arbitrary-Hilbert canonical-ambient theorem combined
+claims that the maintained literature audit keeps separate.  It is not asserted
+here.  The currently grounded source-shaped endpoint is the finite-dimensional
+graph-coordinate theorem above; the arbitrary infinite-dimensional-subspace
+extension remains open.
+
+The unrestricted unbounded ideal statement is also not marked grounded.  The
+valid production replacement currently available at that scope is the genuine
 unbounded Sylvester equation with its explicit commutator defect.
-
-## Paper-faithful target status
-
-The maintained source census says that the exact Section 2 / Section 7 endpoint
-is not merely the proved contractive-Riccati-coordinate estimate.  It must begin
-from the fully off-diagonal perturbation and the two reducing spectral splittings,
-derive the strict quarter-turn branch, and prove the sharp arbitrary-Hilbert-space
-source-norm estimate for the full perturbation.
-
-That exact target is now declared as
-`TauCeti.DavisKahan.FinishTanTwoTheta.paperFaithful_tanTwoTheta_uiNorm` in
-`FinishTanTwoTheta.DavisKahan.PaperFaithful`.  Its proof is intentionally `sorry`;
-it is a specification of the remaining theorem, not a grounded completion claim.
