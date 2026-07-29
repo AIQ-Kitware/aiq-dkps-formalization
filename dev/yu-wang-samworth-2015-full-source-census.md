@@ -73,7 +73,7 @@ Section 3's audit of statistical applications makes claims about other authors' 
 
 ### `private-helper-only` (mechanical) — Some source content exists only as a `private` helper
 
-Three declarations this census initially cited turned out to be `private`: `sinThetaFrobenius_eq_sqrt_sum_cross` (DavisKahan/Specialized/Statistics.lean), `yuWangSamworth_gram_alignedBasis_le` and `rectangularFrobenius_comp_adjoint_linearIsometry` (FinishYuWangSamworth). They compile and are correct, and they cannot be cited from outside their module. **A `#check` cannot tell a private declaration from a deleted one** -- both fail identically -- which is why the probe now reports the two cases separately; conflating them would let a census report proved mathematics as absent, or absent mathematics as proved. For two of the three the row has a public sibling and nothing is lost. For `YWS-S1-complement-identity` there is no public sibling: the identity `‖V_1^T V-hat‖_F = ‖sin Theta‖_F` is proved and unciteable, which is the one place in this paper where the repository has the mathematics and a reader cannot use it.
+Three declarations this census initially cited turned out to be `private`: `sinThetaFrobenius_eq_sqrt_sum_cross` (ForTauCeti/Analysis/InnerProductSpace/YuWangSamworth/Statistics.lean), `yuWangSamworth_gram_alignedBasis_le` and `rectangularFrobenius_comp_adjoint_linearIsometry` (FinishYuWangSamworth). They compile and are correct, and they cannot be cited from outside their module. **A `#check` cannot tell a private declaration from a deleted one** -- both fail identically -- which is why the probe now reports the two cases separately; conflating them would let a census report proved mathematics as absent, or absent mathematics as proved. For two of the three the row has a public sibling and nothing is lost. For `YWS-S1-complement-identity` there is no public sibling: the identity `‖V_1^T V-hat‖_F = ‖sin Theta‖_F` is proved and unciteable, which is the one place in this paper where the repository has the mathematics and a reader cannot use it.
 
 ## Detail
 
@@ -94,7 +94,7 @@ Three declarations this census initially cited turned out to be `private`: `sinT
 * **status**: `compiled_generalized` / **verification**: `absent`
 * **planned declarations**: `TauCeti.DavisKahanTheory.sinThetaFrobenius_eq_sqrt_sum_cross_public`
 * **gaps**: `private-helper-only`
-* **notes**: The identity is proved -- it is `sinThetaFrobenius_eq_sqrt_sum_cross` in DavisKahan/Specialized/Statistics.lean -- but that declaration is `private`, so nothing outside that module can cite it. This row is therefore `absent` in the only sense a census should mean: the repository cannot be used to justify the paper's identity. It is the one item in this census where the mathematics exists and the API does not.
+* **notes**: The identity is proved -- it is `sinThetaFrobenius_eq_sqrt_sum_cross` in ForTauCeti/Analysis/InnerProductSpace/YuWangSamworth/Statistics.lean -- but that declaration is `private`, so nothing outside that module can cite it. This row is therefore `absent` in the only sense a census should mean: the repository cannot be used to justify the paper's identity. It is the one item in this census where the mathematics exists and the API does not.
 * **next action**: Make the bridge lemma public, or state a public wrapper; the proof already exists.
 
 ### `YWS-S1-procrustes` — Procrustes alignment: ‖V-hat O - V‖_F <= sqrt 2 ‖sin Theta‖_F
@@ -219,7 +219,7 @@ Three declarations this census initially cited turned out to be `private`: `sinT
 * **status**: `compiled_exact` / **verification**: `partially_in_build`
 * **lean declarations**: `TauCeti.DavisKahanTheory.rightSingularSubspace`, `TauCeti.DavisKahanTheory.rightSingularSubspace_sinTheta_le`, `TauCeti.DavisKahanTheory.CorrespondingRightSingularBlock`, `TauCeti.DavisKahanTheory.RightSingularPopulationGap`, `TauCeti.DavisKahanTheory.yuWangSamworth_rightSingularSubspace_le`, `TauCeti.DavisKahanTheory.yuWangSamworth_rightSingularSubspace_opNormCoefficient_le`
 * **gaps**: `unguarded-completion-lane`, `numbering-conflict`
-* **notes**: Split across two homes, which is why this row is only partly guarded: the subspace definition and a sine bound are in the default build via DavisKahan/Specialized/SingularSubspace.lean, but the exact paper coefficient (2 sigma_1 + ‖D‖_op) lives in the completion lane. The route is the paper's own: transport to squared Gram operators, then apply the symmetric theorem.
+* **notes**: Split across two homes, which is why this row is only partly guarded: the subspace definition and a sine bound are in the default build via ForTauCeti/Analysis/InnerProductSpace/YuWangSamworth/SingularSubspace.lean, but the exact paper coefficient (2 sigma_1 + ‖D‖_op) lives in the completion lane. The route is the paper's own: transport to squared Gram operators, then apply the symmetric theorem.
 * **next action**: Guard the completion lane, or migrate the coefficient theorems into DavisKahan/Specialized.
 
 ### `YWS-T4-left` — Theorem 4 -- the identical statement for left singular subspaces

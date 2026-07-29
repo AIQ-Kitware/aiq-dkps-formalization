@@ -417,8 +417,8 @@
       "target_note": "Schoenemann1966_orthogonal_procrustes.tex",
       "repo_evidence": [
         "Acharyya2025/AlignedPipeline.lean",
-        "ForMathlib/Analysis/InnerProductSpace/AlignedBasis.lean",
-        "DavisKahan/Specialized/Statistics.lean"
+        "ForTauCeti/Analysis/InnerProductSpace/AlignedBasis.lean",
+        "ForTauCeti/Analysis/InnerProductSpace/YuWangSamworth/Statistics.lean"
       ],
       "existing_assets": [],
       "scope": "The orthogonal Procrustes minimizer and its SVD/polar-factor representation.",
@@ -490,7 +490,7 @@
       "primary_url": "https://arxiv.org/abs/1312.5393",
       "target_note": "ChienWaldron2016_finite_frame_gram_rigidity.tex",
       "repo_evidence": [
-        "ForMathlib/Analysis/InnerProductSpace/GramMatrix.lean",
+        "ForTauCeti/Analysis/InnerProductSpace/GramMatrix.lean",
         "papers/GramRigidity-formalized-vs-literature.tex"
       ],
       "existing_assets": [],
@@ -540,7 +540,7 @@
       "primary_url": "https://doi.org/10.1007/BF01456804",
       "target_note": "Weyl1912_eigenvalue_inequalities.tex",
       "repo_evidence": [
-        "ForMathlib/Analysis/InnerProductSpace/CourantFischer.lean",
+        "ForTauCeti/Analysis/InnerProductSpace/CourantFischer.lean",
         "papers/DavisKahan-formalized-vs-literature.tex"
       ],
       "existing_assets": [],
@@ -564,8 +564,8 @@
       "primary_url": "",
       "target_note": "Schur1923_diagonal_majorization.tex",
       "repo_evidence": [
-        "ForMathlib/Analysis/InnerProductSpace/SchurHorn.lean",
-        "ForMathlib/Analysis/InnerProductSpace/HoffmanWielandt.lean"
+        "ForTauCeti/Analysis/InnerProductSpace/SchurHorn.lean",
+        "ForTauCeti/Analysis/InnerProductSpace/HoffmanWielandt.lean"
       ],
       "existing_assets": [],
       "scope": "Majorization of diagonal entries by eigenvalues and the convex/Karamata consequences used downstream.",
@@ -613,8 +613,8 @@
       "primary_url": "",
       "target_note": "vonNeumann1937_trace_and_symmetric_norms.tex",
       "repo_evidence": [
-        "ForMathlib/Analysis/InnerProductSpace/HoffmanWielandt.lean",
-        "ForMathlib/Analysis/InnerProductSpace/UnitarilyInvariantNorm.lean",
+        "ForTauCeti/Analysis/InnerProductSpace/HoffmanWielandt.lean",
+        "ForTauCeti/Analysis/InnerProductSpace/UnitarilyInvariantNorm.lean",
         "papers/DavisKahan-formalized-vs-literature.tex"
       ],
       "existing_assets": [],
@@ -638,8 +638,8 @@
       "primary_url": "https://doi.org/10.1073/pnas.35.11.652",
       "target_note": "Fan1949_eigenvalue_sums.tex",
       "repo_evidence": [
-        "ForMathlib/Analysis/InnerProductSpace/KyFan.lean",
-        "ForMathlib/Analysis/InnerProductSpace/UnitarilyInvariantNorm.lean"
+        "ForTauCeti/Analysis/InnerProductSpace/KyFan.lean",
+        "ForTauCeti/Analysis/InnerProductSpace/UnitarilyInvariantNorm.lean"
       ],
       "existing_assets": [],
       "scope": "Extremal eigenvalue sums and the variational principles underlying Ky Fan norms and dominance.",
@@ -663,8 +663,8 @@
       "primary_url": "https://doi.org/10.1215/S0012-7094-53-02004-3",
       "target_note": "HoffmanWielandt1953_spectral_variation.tex",
       "repo_evidence": [
-        "ForMathlib/Analysis/InnerProductSpace/HoffmanWielandt.lean",
-        "DavisKahan/Sources/YuWangSamworth2015.lean"
+        "ForTauCeti/Analysis/InnerProductSpace/HoffmanWielandt.lean",
+        "ForTauCeti/Analysis/InnerProductSpace/YuWangSamworth/Residual.lean"
       ],
       "existing_assets": [],
       "scope": "The normal/symmetric Hoffman--Wielandt eigenvalue matching inequality and its use in the exact YWS proof.",
@@ -688,9 +688,9 @@
       "primary_url": "",
       "target_note": "FanHoffman1955_nearest_unitary.tex",
       "repo_evidence": [
-        "ForMathlib/Analysis/InnerProductSpace/NearIsometry.lean",
-        "ForMathlib/Analysis/InnerProductSpace/PolarDecomposition.lean",
-        "ForMathlib/Analysis/InnerProductSpace/AlignedBasis.lean"
+        "ForTauCeti/Analysis/InnerProductSpace/NearIsometry.lean",
+        "ForTauCeti/Analysis/InnerProductSpace/PolarDecomposition.lean",
+        "ForTauCeti/Analysis/InnerProductSpace/AlignedBasis.lean"
       ],
       "existing_assets": [],
       "scope": "Metric optimality of the unitary polar factor and related unitarily invariant norm inequalities.",
@@ -713,7 +713,7 @@
       "primary_url": "",
       "target_note": "Rosenblum1956_operator_equation.tex",
       "repo_evidence": [
-        "ForMathlib/Analysis/InnerProductSpace/SylvesterBound.lean",
+        "ForTauCeti/Analysis/InnerProductSpace/SylvesterBound.lean",
         "DavisKahan/Alternative/FiniteDimensional/Sylvester/ContinuousLinearMapBridge.lean"
       ],
       "existing_assets": [],
@@ -737,7 +737,7 @@
       "primary_url": "https://doi.org/10.1093/qmath/11.1.50",
       "target_note": "Mirsky1960_symmetric_gauge_ui_norms.tex",
       "repo_evidence": [
-        "ForMathlib/Analysis/InnerProductSpace/UnitarilyInvariantNorm.lean",
+        "ForTauCeti/Analysis/InnerProductSpace/UnitarilyInvariantNorm.lean",
         "ForMathlib/prose/Davis-Kahan-1970-part-III-core-arguments.tex"
       ],
       "existing_assets": [],
@@ -789,9 +789,9 @@
       "primary_url": "",
       "target_note": "Halmos1969_two_subspaces.tex",
       "repo_evidence": [
-        "ForMathlib/Analysis/InnerProductSpace/PrincipalAngles.lean",
-        "DavisKahan/Experimental/FiniteDimensional/DirectRotation.lean",
-        "DavisKahan/Experimental/InfiniteDimensional/Core/OperatorAngle.lean"
+        "ForTauCeti/Analysis/InnerProductSpace/PrincipalAngles.lean",
+        "DavisKahan/FiniteDimensional/DirectRotation.lean",
+        "DavisKahan/SpectralTheory/OperatorAngle.lean"
       ],
       "existing_assets": [],
       "scope": "Canonical decomposition of a pair of subspaces/projections and the generic two-subspace model.",
@@ -826,7 +826,7 @@
         "DavisKahan/Experimental/Sources/DavisKahan1970/Section8/SourceSurface.lean",
         "prose/distilled_literature/DavisKahan1970_section8_branch_selection.tex",
         "DavisKahan/Sources/DavisKahan1970/Audits/Theorem63Distillation.lean",
-        "DavisKahan/Experimental/Scratch/Section6/Theorem63SourceFaithful.lean",
+        "DavisKahan/TanTheta/Theorem63FiniteSource.lean",
         "dev/journals/davis-kahan-theorem63-distillation-error-2026-07-23.md",
         "DavisKahan/TanTheta/Theorem63FiniteSource.lean"
       ],
@@ -857,7 +857,7 @@
       "primary_url": "",
       "target_note": "Wedin1972_svd_perturbation.tex",
       "repo_evidence": [
-        "DavisKahan/Specialized/SingularSubspace.lean",
+        "ForTauCeti/Analysis/InnerProductSpace/YuWangSamworth/SingularSubspace.lean",
         "DavisKahan/Experimental/InfiniteDimensional/Ideals/CompactAndSingular.lean"
       ],
       "existing_assets": [],
@@ -912,7 +912,7 @@
       "primary_url": "https://arxiv.org/abs/math/0105142",
       "target_note": "AlbeverioMakarovMotovilov2001_sylvester_fourier_pi_over_two.tex",
       "repo_evidence": [
-        "DavisKahan/FiniteDimensional/Sylvester/Internal/ReciprocalMultiplier.lean",
+        "ForTauCeti/Analysis/InnerProductSpace/Sylvester/Internal/ReciprocalMultiplier.lean",
         "DavisKahan/Alternative/FiniteDimensional/Sylvester/ContinuousLinearMapBridge.lean",
         "papers/DavisKahan-formalized-vs-literature.tex"
       ],
@@ -939,8 +939,8 @@
       "primary_url": "https://doi.org/10.1137/0907079",
       "target_note": "Higham1986_polar_decomposition.tex",
       "repo_evidence": [
-        "ForMathlib/Analysis/InnerProductSpace/NearIsometry.lean",
-        "ForMathlib/Analysis/InnerProductSpace/PolarDecomposition.lean"
+        "ForTauCeti/Analysis/InnerProductSpace/NearIsometry.lean",
+        "ForTauCeti/Analysis/InnerProductSpace/PolarDecomposition.lean"
       ],
       "existing_assets": [],
       "scope": "Polar decomposition algorithms, perturbation behavior, and nearest-unitary applications.",
@@ -964,7 +964,7 @@
       "primary_url": "",
       "target_note": "BhatiaRosenthal1997_sylvester_equation.tex",
       "repo_evidence": [
-        "ForMathlib/Analysis/InnerProductSpace/SylvesterBound.lean",
+        "ForTauCeti/Analysis/InnerProductSpace/SylvesterBound.lean",
         "DavisKahan/Alternative/FiniteDimensional/Sylvester/ContinuousLinearMapBridge.lean"
       ],
       "existing_assets": [],
@@ -1015,8 +1015,8 @@
       "primary_url": "https://arxiv.org/abs/math/0508591",
       "target_note": "KnyazevArgentati2006_subspace_angle_majorization.tex",
       "repo_evidence": [
-        "ForMathlib/Analysis/InnerProductSpace/PrincipalAngles.lean",
-        "ForMathlib/Analysis/InnerProductSpace/KyFan.lean"
+        "ForTauCeti/Analysis/InnerProductSpace/PrincipalAngles.lean",
+        "ForTauCeti/Analysis/InnerProductSpace/KyFan.lean"
       ],
       "existing_assets": [],
       "scope": "Weak-majorization relations for principal angles and Ritz values.",
@@ -1041,7 +1041,7 @@
       "primary_url": "",
       "target_note": "KnyazevJujunashviliArgentati2010_infinite_subspace_angles.tex",
       "repo_evidence": [
-        "DavisKahan/Experimental/InfiniteDimensional/Core/OperatorAngle.lean",
+        "DavisKahan/SpectralTheory/OperatorAngle.lean",
         "docs/planning/historical/davis-kahan-pre-reorganization/infinite-proof-plan.md"
       ],
       "existing_assets": [],
@@ -1165,9 +1165,9 @@
       "primary_url": "https://arxiv.org/abs/1405.0680",
       "target_note": "YuWangSamworth2015_statistical_davis_kahan.tex",
       "repo_evidence": [
-        "DavisKahan/Sources/YuWangSamworth2015.lean",
-        "ForMathlib/Analysis/InnerProductSpace/AlignedBasis.lean",
-        "DavisKahan/Specialized/Statistics.lean"
+        "ForTauCeti/Analysis/InnerProductSpace/YuWangSamworth/Residual.lean",
+        "ForTauCeti/Analysis/InnerProductSpace/AlignedBasis.lean",
+        "ForTauCeti/Analysis/InnerProductSpace/YuWangSamworth/Statistics.lean"
       ],
       "existing_assets": [
         "ForMathlib/prose/Yu-Wang-Samworth-2014-core-arguments.tex",
@@ -1243,9 +1243,9 @@
       "primary_url": "",
       "target_note": "Bhatia1997_selected_matrix_analysis.tex",
       "repo_evidence": [
-        "ForMathlib/Analysis/InnerProductSpace/SylvesterBound.lean",
-        "DavisKahan/FiniteDimensional/SinTheta/UnitarilyInvariant.lean",
-        "ForMathlib/Analysis/InnerProductSpace/UnitarilyInvariantNorm.lean"
+        "ForTauCeti/Analysis/InnerProductSpace/SylvesterBound.lean",
+        "ForTauCeti/Analysis/InnerProductSpace/SinTheta/UnitarilyInvariant.lean",
+        "ForTauCeti/Analysis/InnerProductSpace/UnitarilyInvariantNorm.lean"
       ],
       "existing_assets": [],
       "scope": "Selected Chapters III, IV, and VII theorem chains used by the formalization.",
@@ -1319,8 +1319,8 @@
       "primary_url": "",
       "target_note": "Higham2008_selected_matrix_functions.tex",
       "repo_evidence": [
-        "ForMathlib/Analysis/InnerProductSpace/NearIsometry.lean",
-        "ForMathlib/Analysis/InnerProductSpace/PositiveSqrt.lean"
+        "ForTauCeti/Analysis/InnerProductSpace/NearIsometry.lean",
+        "ForTauCeti/Analysis/InnerProductSpace/PositiveSqrt.lean"
       ],
       "existing_assets": [],
       "scope": "Selected polar decomposition, positive square root, and nearest-isometry results.",
@@ -1345,8 +1345,8 @@
       "primary_url": "",
       "target_note": "MarshallOlkinArnold2011_selected_majorization.tex",
       "repo_evidence": [
-        "ForMathlib/Analysis/InnerProductSpace/SchurHorn.lean",
-        "ForMathlib/Analysis/InnerProductSpace/UnitarilyInvariantNorm.lean"
+        "ForTauCeti/Analysis/InnerProductSpace/SchurHorn.lean",
+        "ForTauCeti/Analysis/InnerProductSpace/UnitarilyInvariantNorm.lean"
       ],
       "existing_assets": [],
       "scope": "Selected Schur majorization, Karamata, and weak-majorization results.",
@@ -1370,11 +1370,11 @@
       "primary_url": "https://doi.org/10.1017/CBO9781139020411",
       "target_note": "HornJohnson2013_selected_matrix_analysis.tex",
       "repo_evidence": [
-        "ForMathlib/Analysis/InnerProductSpace/CourantFischer.lean",
-        "ForMathlib/Analysis/InnerProductSpace/KyFan.lean",
-        "ForMathlib/Analysis/InnerProductSpace/SchurHorn.lean",
-        "ForMathlib/Analysis/InnerProductSpace/SingularSubspace.lean",
-        "ForMathlib/Analysis/InnerProductSpace/GramMatrix.lean",
+        "ForTauCeti/Analysis/InnerProductSpace/CourantFischer.lean",
+        "ForTauCeti/Analysis/InnerProductSpace/KyFan.lean",
+        "ForTauCeti/Analysis/InnerProductSpace/SchurHorn.lean",
+        "ForTauCeti/Analysis/InnerProductSpace/SingularSubspace.lean",
+        "ForTauCeti/Analysis/InnerProductSpace/GramMatrix.lean",
         "papers/GramRigidity-formalized-vs-literature.tex"
       ],
       "existing_assets": [
@@ -1428,7 +1428,7 @@
       "primary_url": "https://doi.org/10.1007/s43036-024-00386-x",
       "target_note": "Ullrich2024_s_numbers.tex",
       "repo_evidence": [
-        "ForMathlib/Analysis/Normed/Operator/ApproximationNumber.lean",
+        "ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/Basic.lean",
         "DavisKahan/OperatorIdeal/ApproximationNumbers/Core.lean",
         "DavisKahan/OperatorIdeal/ApproximationNumbers/ScalarGeneric.lean"
       ],
