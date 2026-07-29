@@ -1,49 +1,49 @@
 # FinishTanTwoTheta
 
-This target builds the bounded sharp Riccati/ideal proof stack and now also
-contains the exact paper-facing theorem shape as an explicit admitted target.
-It is not an alias-only facade, but a green build is not yet an axiom-clean proof
-of the full paper-shaped `tan 2Theta` theorem.
+This target develops the sharp bounded `tan 2Theta` theorem through
+approximation numbers, Riccati coordinates, Ky Fan domination, and symmetric
+ideal promotion.
 
-## Compiled theorem scope
+## Current proof structure
 
-The aggregate target includes:
+The main Davis--Kahan repository already contains the finite-dimensional
+Section 7 UI-norm theorem.  The local theorem
+`paperTanTwoTheta_uiNorm_finite_alternate` is retained only as an independent
+regression derivation through the newer Riccati/approximation-number stack; it
+is intentionally labeled duplicate/alternate and is not evidence that the
+unrestricted target is complete.
 
-1. simultaneous approximate leading singular families for arbitrary bounded
-   operators;
-2. the canonical operator `2 X (I - X*X)^-1` and its approximation-number
-   transformation law;
-3. the stable Riccati scalar estimate and sharp Ky Fan prefix inequality;
-4. Fan-dominance promotion to maximal and minimal standard symmetric ideals;
-5. the source audit containing the finite-dimensional Section 7 UI-norm theorem
-   and the arbitrary-inner-product-space sharp operator-norm theorem with its
-   acute branch;
-6. `paperFaithful_tanTwoTheta_uiNorm`, an explicit `sorry`-backed statement of
-   the missing arbitrary-Hilbert-space source theorem, beginning from the full
-   off-diagonal perturbation and concluding both quarter-acuteness and the sharp
-   source-norm estimate.
+The exact unrestricted bounded target is
+`paperFaithful_tanTwoTheta_uiNorm`.  Its statement has no
+`FiniteDimensional` or finite-carrier hypothesis, derives quarter-acuteness
+from the original ordered-gap and fully off-diagonal perturbation hypotheses,
+and estimates the canonical ambient `tanTwoAngleOperatorC` in every source
+unitary-invariant ideal.
 
-This is stronger than an alias facade: the `FinishTanTwoTheta` modules that prove
-the bounded infinite-dimensional ideal result are imported and compiled.
+The new proof attempt contains all mathematical steps and no admission.  Its
+two new hard modules are:
 
-## Unbounded extension
+- `FinishTanTwoTheta.DavisKahan.InfiniteQuarterAcute`: a dimension-free
+  reflection/Lyapunov/spectral proof of the strict quarter-angle branch;
+- `FinishTanTwoTheta.DavisKahan.CanonicalTangentBridge`: graph-projection
+  algebra identifying the canonical tangent with the graph-coordinate tangent
+  at the level of the full approximation-number sequence.
 
-`FinishTanTwoTheta.DavisKahan.Unbounded` is a separate research target.  Its
-current approximate graph-domain selection theorem is not part of the aggregate
-because the proposed spectral-band/domain-density route is false.  The genuine
-unbounded Sylvester equation with its commutator defect remains available in the
-production Davis--Kahan library.
+This archive is ready for compiler review.  It must not be described as
+compiled or axiom-clean until those modules, `PaperFaithful`, the aggregate,
+and `#print axioms` all pass.
 
-The distinction is deliberate:
-
-- source theorem and bounded ideal completion: proof target;
-- unrestricted unbounded sharp ideal extension: open research target, not
-  silently weakened and not falsely certified.
-
-## Build
+## Build order
 
 ```bash
-lake build FinishTanTwoTheta.DavisKahan.SharpIdeal
-lake build FinishTanTwoTheta
-lake build DavisKahan.Sources.DavisKahan1970.Audits.DoubleAngleTangent
+scripts/lake_build_report.py --fail-fast \
+    FinishTanTwoTheta.DavisKahan.InfiniteQuarterAcute
+scripts/lake_build_report.py --fail-fast \
+    FinishTanTwoTheta.DavisKahan.CanonicalTangentBridge
+scripts/lake_build_report.py --fail-fast \
+    FinishTanTwoTheta.DavisKahan.PaperFaithful
+scripts/lake_build_report.py --fail-fast FinishTanTwoTheta
 ```
+
+`FinishTanTwoTheta.DavisKahan.Unbounded` remains a separate research target and
+is not silently included in this bounded theorem.
