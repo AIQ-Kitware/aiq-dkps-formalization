@@ -26,14 +26,14 @@ someone else.
 | **SR-E** Rosenblum | 1 | — | **DONE** (toothbrush + namek) |
 | **SR-F** Experimental stragglers | 3 | — | **DONE** (edward + namek) |
 
-**The number that matters is the S6 criterion's, and it is 10.**  Measured on
-namek-work at the SR-A/B/C/F merge, over everything outside `vendor/` and
+**The number that matters is the S6 criterion's, and it is 7 — of which 6 are in scope.**  Measured on
+namek-work after SR-E closed, over everything outside `vendor/` and
 `external/` — which is what S6 criterion (1) actually says:
 
 | where | count | what |
 |---|---|---|
 | `DavisKahan/**` | **5** | SR-D only — the last real lane |
-| `FinishTanTwoTheta/**` | **4** | a package that does not build at all, for an unrelated stale import (`a8992fd`) |
+| `FinishTanTwoTheta/**` | **1** | was 4; three were cleared by another agent on 2026-07-29. **The survivor (`GroundedImports.lean`) is explicitly out of scope — jon, 2026-07-29: "leave FinishTanTwoTheta alone, we will fix that later."** Do not touch it as part of this campaign |
 | `scripts/ExportSpectraDeclClosure.lean` | **1** | the measurement tool; it *should* import Spectra, and it goes at S6 with the dependency |
 
 Tracking **imports removed in that scope**, not lanes closed, is edward's
@@ -162,6 +162,25 @@ descriptions as equivalence theorems for it.  Today `IsPaperHilbertSchmidt` and
 `Spectra.HilbertSchmidtTensor.Space` is the donor's; the bridge between them is
 `DavisKahan/Interop/Spectra/HilbertSchmidtTensor.lean`.  Making `HS(F, E)` a
 Hilbert space natively in `ForTauCeti` is what unblocks everything above it.
+
+**But the Hilbert tensor product does not have to be built.**  Measured
+2026-07-29: with a Hilbert basis `(e_i)` of `F`, the column map
+`T ↦ fun i => T (e_i)` identifies the Hilbert--Schmidt operators `F →L[𝕜] E`
+with **`lp (fun _ : ι => E) 2`**, and Mathlib already has that space with
+
+* `lp.instInnerProductSpace` (`Analysis/InnerProductSpace/l2Space.lean:110`), and
+* completeness for `1 ≤ p`.
+
+So `HS(F, E)` can be *defined* as an `lp` space rather than constructed, and the
+inner product and completeness — the expensive half of any from-scratch
+Hilbert--Schmidt development, and the reason edward measured the donor closure at
+21,581 lines — come for free.  What remains is the column bijection, and
+`DavisKahan/Interop/Spectra/HilbertSchmidtColumnExpansion.lean` already contains
+it: `mathAhead_summable_columnSeries`, `mathAhead_toOperator_ofOperator` and
+`mathAhead_ofOperator_toOperator` are exactly the two directions and their round
+trips.  Those eleven declarations are **DKPS-authored** (they live in
+`SpectraBridge`, and edward measured them as externally unused but deliberately
+retained for upstreaming), so they are re-based onto `lp`, not re-proved.
 
 Ordering inside the lane, forced by that:
 
