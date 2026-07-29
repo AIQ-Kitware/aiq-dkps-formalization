@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall
 -/
 import DavisKahan.Riccati.UnboundedReduction
+import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.GraphCore
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Sylvester
 
 /-!
@@ -230,31 +231,19 @@ theorem gram_commutator_eq
 
 /-- Closedness of a self-adjoint diagonal block in sequential form.
 
-This is the step that turns the polynomial commutator bounds into statements
-about entire functions of the Gram operator: the partial sums of a power series
-lie in `dom A₀` and their `A₀`-images converge, so the limit is in `dom A₀` too
-(ticket T1.3). -/
+Thin specialisation of `LinearPMap.IsClosed.mem_domain_of_tendsto`
+(`ForTauCeti/…/LinearPMap/GraphCore.lean`) to the first diagonal block, whose
+closedness comes from self-adjointness.  It is what turns the polynomial
+commutator bounds into statements about entire functions of the Gram operator:
+the partial sums of a power series lie in `dom A₀` and their `A₀`-images
+converge, so the limit is in `dom A₀` too. -/
 theorem mem_domain_of_tendsto
     (H : UnboundedBlockData (𝕜 := 𝕜) (E0 := E0) (E1 := E1))
     {y : ℕ → E0} {yl w : E0} (hy : ∀ n, y n ∈ H.A0.domain)
     (hlim : Filter.Tendsto y Filter.atTop (nhds yl))
     (hAlim : Filter.Tendsto (fun n => H.A0 ⟨y n, hy n⟩) Filter.atTop (nhds w)) :
-    ∃ h : yl ∈ H.A0.domain, H.A0 ⟨yl, h⟩ = w := by
-  have hclosed : IsClosed (H.A0.graph : Set (E0 × E0)) :=
-    (IsSelfAdjoint.isClosed H.selfAdjoint0)
-  have hmem : ∀ n, (y n, H.A0 ⟨y n, hy n⟩) ∈ (H.A0.graph : Set (E0 × E0)) :=
-    fun n => H.A0.mem_graph ⟨y n, hy n⟩
-  have hpair : Filter.Tendsto
-      (fun n => (y n, H.A0 ⟨y n, hy n⟩)) Filter.atTop (nhds (yl, w)) :=
-    hlim.prodMk_nhds hAlim
-  have hlimmem : (yl, w) ∈ (H.A0.graph : Set (E0 × E0)) :=
-    hclosed.mem_of_tendsto hpair (Filter.Eventually.of_forall hmem)
-  obtain ⟨v, hv1, hv2⟩ := (LinearPMap.mem_graph_iff H.A0).1 hlimmem
-  dsimp only at hv1 hv2
-  have hylmem : yl ∈ H.A0.domain := hv1 ▸ v.property
-  refine ⟨hylmem, ?_⟩
-  have hveq : (⟨yl, hylmem⟩ : H.A0.domain) = v := Subtype.ext hv1.symm
-  rw [hveq, hv2]
+    ∃ h : yl ∈ H.A0.domain, H.A0 ⟨yl, h⟩ = w :=
+  (IsSelfAdjoint.isClosed H.selfAdjoint0).mem_domain_of_tendsto hy hlim hAlim
 
 /-- The Gram operator `X†X` of a reducing Riccati selection, bundled. -/
 noncomputable def riccatiGram (X : E0 →L[𝕜] E1) : E0 →L[𝕜] E0 :=
