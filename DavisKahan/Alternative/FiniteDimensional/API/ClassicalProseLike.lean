@@ -59,6 +59,7 @@ noncomputable def directedSinThetaOperatorClassicalProseLike
     E →L[𝕜] E :=
   V.starProjection ∘L U.starProjection
 
+omit [FiniteDimensional 𝕜 E] [CompleteSpace E] in
 @[simp]
 theorem directedSinThetaOperatorClassicalProseLike_apply
     (U V : Submodule 𝕜 E) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
@@ -81,6 +82,7 @@ noncomputable def directedHalfSinTwoThetaOperatorClassicalProseLike
     E →L[𝕜] E :=
   (Uᗮ.starProjection ∘L V.starProjection) ∘L U.starProjection
 
+omit [FiniteDimensional 𝕜 E] [CompleteSpace E] in
 @[simp]
 theorem directedHalfSinTwoThetaOperatorClassicalProseLike_apply
     (U V : Submodule 𝕜 E) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
@@ -95,6 +97,7 @@ noncomputable def projectorDifferenceOperatorClassicalProseLike
     E →L[𝕜] E :=
   U.starProjection - V.starProjection
 
+omit [FiniteDimensional 𝕜 E] [CompleteSpace E] in
 @[simp]
 theorem projectorDifferenceOperatorClassicalProseLike_apply
     (U V : Submodule 𝕜 E) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
@@ -193,6 +196,7 @@ structure TanThetaVectorGapClassicalProseLike (T : E →ₗ[𝕜] E)
   Vperp_upper : ∀ x ∈ Vᗮ, RCLike.re ⟪T x, x⟫_𝕜 ≤ β * ‖x‖ ^ 2
   residual_bound : ∀ x ∈ Z, ‖T x - Z.starProjection (T x)‖ ≤ ρ * ‖x‖
 
+omit [CompleteSpace E] in
 /-- Prose-like Davis--Kahan Part III `tan Θ` theorem in the currently proved
 pole-free vector form.
 
@@ -232,6 +236,7 @@ structure TanTwoThetaGapClassicalProseLike (T S : E →ₗ[𝕜] E)
   offdiag_Uperp : ∀ x ∈ Uᗮ, ∀ y ∈ Uᗮ, ⟪x, (S - T) y⟫_𝕜 = 0
   perturbation_bound : ∀ x, ‖(S - T) x‖ ≤ ε * ‖x‖
 
+omit [CompleteSpace E] in
 /-- Prose-like Davis--Kahan Part III `tan 2Θ` theorem in the proved sharp
 operator-norm form.
 
@@ -273,6 +278,7 @@ structure ProjectorDifferenceGapClassicalProseLike (A B : E →ₗ[𝕜] E)
   perturbation_nonneg : 0 ≤ ε
   perturbation_bound : ∀ x, ‖(B - A) x‖ ≤ ε * ‖x‖
 
+omit [CompleteSpace E] in
 /-- Prose-like sharp finite projector-difference theorem.
 
 This is a thin wrapper around `projector_difference_opNorm` with all spectral
@@ -307,6 +313,7 @@ structure CanonicalProjectorDifferenceGapClassicalProseLike (A B : E →ₗ[𝕜
   perturbation_nonneg : 0 ≤ ε
   perturbation_bound : ∀ x, ‖(B - A) x‖ ≤ ε * ‖x‖
 
+omit [CompleteSpace E] in
 /-- Prose-like sharp projector-difference theorem for canonical finite spectral
 subspaces. -/
 theorem spectralProjector_difference_opNorm_classical_prose_like

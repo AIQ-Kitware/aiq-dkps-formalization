@@ -29,6 +29,7 @@ variable {𝕜 : Type*} [RCLike 𝕜]
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
   [FiniteDimensional 𝕜 E]
 
+omit [FiniteDimensional 𝕜 E] in
 private theorem projection_comp_complementaryProjection (U : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] :
     projection U ∘ₗ complementaryProjection U = 0 := by
@@ -38,6 +39,7 @@ private theorem projection_comp_complementaryProjection (U : Submodule 𝕜 E)
   rw [Submodule.starProjection_apply_eq_zero_iff]
   exact Uᗮ.starProjection_apply_mem x
 
+omit [FiniteDimensional 𝕜 E] in
 private theorem complementaryProjection_comp_projection (U : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] :
     complementaryProjection U ∘ₗ projection U = 0 := by
@@ -47,12 +49,14 @@ private theorem complementaryProjection_comp_projection (U : Submodule 𝕜 E)
   rw [Submodule.starProjection_apply_eq_zero_iff]
   exact U.le_orthogonal_orthogonal (U.starProjection_apply_mem x)
 
+omit [FiniteDimensional 𝕜 E] in
 private theorem projection_comp_self (U : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] :
     projection U ∘ₗ projection U = projection U := by
   ext x
   exact Submodule.starProjection_eq_self_iff.mpr (U.starProjection_apply_mem x)
 
+omit [FiniteDimensional 𝕜 E] in
 private theorem complementaryProjection_comp_self (U : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] :
     complementaryProjection U ∘ₗ complementaryProjection U =
@@ -89,10 +93,12 @@ noncomputable def reflectionProduct (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E ≃ₗᵢ[𝕜] E :=
   U.reflection.trans V.reflection
 
+omit [FiniteDimensional 𝕜 E] in
 @[simp] theorem reflectionProduct_apply (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] (x : E) :
     reflectionProduct U V x = V.reflection (U.reflection x) := rfl
 
+omit [FiniteDimensional 𝕜 E] in
 /-- `2S = I + J_V J_U`. -/
 theorem two_smul_canonicalIntertwiner (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
@@ -156,6 +162,7 @@ theorem projection_comm_canonicalIntertwiner_gram (U V : Submodule 𝕜 E)
   simp only [LinearMap.comp_apply, LinearMap.add_apply, map_add, hUU, hUcU, hcUU,
     map_zero, add_zero, zero_add]
 
+omit [FiniteDimensional 𝕜 E] in
 /-- The canonical intertwiner sends source blocks to target blocks. -/
 theorem canonicalIntertwiner_comp_projection (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
@@ -174,6 +181,7 @@ theorem canonicalIntertwiner_comp_projection (U V : Submodule 𝕜 E)
   simp only [canonicalIntertwiner, LinearMap.comp_apply, LinearMap.add_apply,
     map_add, hUU, hcUU, hVV, hVcV, map_zero, add_zero, zero_add]
 
+omit [FiniteDimensional 𝕜 E] in
 /-- Acuteness makes the canonical intertwiner injective. -/
 theorem canonicalIntertwiner_injective_of_acute
     (U V : Submodule 𝕜 E)
@@ -280,6 +288,7 @@ theorem projection_comm_abs_canonicalIntertwiner
     (projection_comm_canonicalIntertwiner_gram U V)
 
 
+omit [FiniteDimensional 𝕜 E] in
 /-- If the two projections agree on a vector, the canonical intertwiner fixes
 that vector. -/
 theorem canonicalIntertwiner_apply_eq_self_of_projection_eq

@@ -85,6 +85,7 @@ noncomputable def paperBasisProjection {ι : Type*}
     (b : HilbertBasis ι ℂ F) (s : Finset ι) : F →L[ℂ] F :=
   (Submodule.span ℂ (b '' (s : Set ι))).starProjection
 
+omit [CompleteSpace F] in
 /-- The finite basis projection is an orthogonal projection. -/
 theorem paperBasisProjection_isOrthogonalProjection {ι : Type*}
     (b : HilbertBasis ι ℂ F) (s : Finset ι) :
@@ -92,6 +93,7 @@ theorem paperBasisProjection_isOrthogonalProjection {ι : Type*}
   ⟨Submodule.isIdempotentElem_starProjection _,
     fun x y => Submodule.starProjection_isSymmetric _ x y⟩
 
+omit [CompleteSpace F] in
 /-- The finite cutoff has rank at most the number of selected basis vectors. -/
 theorem rank_paperBasisProjection_le {ι : Type*}
     (b : HilbertBasis ι ℂ F) (s : Finset ι) :
@@ -109,6 +111,7 @@ theorem rank_paperBasisProjection_le {ι : Type*}
     _ ≤ (s.card : Cardinal) := by
           exact_mod_cast Finset.card_image_le (s := s) (f := b)
 
+omit [CompleteSpace F] in
 /-- The finite basis projection is the finite Fourier partial sum. -/
 theorem paperBasisProjection_apply {ι : Type*}
     (b : HilbertBasis ι ℂ F) (s : Finset ι) (x : F) :
@@ -137,6 +140,7 @@ theorem paperBasisProjection_apply {ι : Type*}
     | add u v _ _ hu hv => rw [inner_add_right, hu, hv, add_zero]
     | smul c u _ hu => rw [inner_smul_right, hu, mul_zero]
 
+omit [CompleteSpace E] [CompleteSpace F] in
 /-- The cutoff operator is the finite column expansion. -/
 theorem comp_paperBasisProjection_apply {ι : Type*}
     (b : HilbertBasis ι ℂ F) (s : Finset ι)
@@ -327,6 +331,7 @@ theorem paperHilbertSchmidtEnergy_comp_paperBasisProjection
     _ = ∑ i ∈ s, ENNReal.ofReal (‖A (b i)‖ ^ 2) :=
         Finset.sum_coe_sort s (fun i => ENNReal.ofReal (‖A (b i)‖ ^ 2))
 
+omit [CompleteSpace F] in
 /-- Finite basis projections converge strongly to the identity. -/
 theorem paperBasisProjection_stronglyTendsto {ι : Type*}
     (b : HilbertBasis ι ℂ F) :
@@ -404,6 +409,7 @@ theorem paperHilbertSchmidtEnergy_eq_iSup_cutoff {ι : Type*}
     exact ENNReal.ofReal_le_ofReal (pow_le_pow_left₀
       (approximationSingularValue_nonneg n _) (hle s n) 2)
 
+omit [CompleteSpace E] [CompleteSpace F] in
 /-- A nonnegative series is the supremum of its finite partial subsums. -/
 theorem paperHilbertSchmidtBasisEnergy_eq_iSup_finset {ι : Type*}
     (b : HilbertBasis ι ℂ F) (A : F →L[ℂ] E) :
