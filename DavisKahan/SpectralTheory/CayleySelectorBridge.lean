@@ -4,6 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Fable 5
 -/
 import DavisKahan.SpectralTheory.ResolventOperator
+import DavisKahan.Interop.Spectra.Basic
+import DavisKahan.Interop.Spectra.BoundedSelfAdjointSpectralProjection
 import Spectra.SpectralTheory.ResolventForm
 import Spectra.StoneBridge.CalculusBridge
 import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Integral
@@ -63,20 +65,35 @@ theorem spectralSelector_bounded (s : Set ℝ) :
   simpa only [spectralSelector] using
     Spectra.QuantumMechanics.SpectralTheory.indicator_one_bdd s
 
-/-- The genuine bounded spectral projection is the Spectra bounded functional
-calculus applied to the selected-set indicator. -/
-theorem boundedSelfAdjointSpectralProjection_eq_spectralCalculus_selector
+/-- **The genuine bounded spectral projection is the continuous functional
+calculus of any continuous symbol agreeing with the selector on the spectrum.**
+
+Until 2026-07-29 this went through Spectra in two steps — the projection was
+Spectra's group calculus of the selector, and that calculus was identified with
+`cfcL` by a Cayley-transform argument.  Both steps collapse into
+`TauCeti.BorelCalculus.boundedPVM_proj_eq_cfcHom`: the native Borel calculus of
+a bounded self-adjoint operator is indexed along the real part of its own
+spectrum, so a continuous symbol agreeing with the indicator *there* has the
+same calculus image, definitionally. -/
+theorem boundedSelfAdjointSpectralProjection_eq_cfcL_of_selector
     (A : H →L[ℂ] H) (hA : IsSelfAdjointOperator A)
-    (s : Set ℝ) (hs : MeasurableSet s) :
+    (s : Set ℝ) (hs : MeasurableSet s)
+    (g : C(spectrum ℂ A, ℂ))
+    (hg : ∀ (lam : ℝ) (hlam : (lam : ℂ) ∈ spectrum ℂ A),
+      g ⟨(lam : ℂ), hlam⟩ = spectralSelector s lam) :
     boundedSelfAdjointSpectralProjection A hA s hs =
-      Spectra.QuantumMechanics.SpectralTheory.spectralCalculus
-        (Spectra.YosidaHille.genToGroup
-          (boundedSelfAdjointOperator A hA).selfAdjoint)
-        (spectralSelector s)
-        (spectralSelector_measurable s hs)
-        (spectralSelector_bounded s) := by
-  rw [boundedSelfAdjointSpectralProjection_eq_spectralProjection]
-  rfl
+      cfcL (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hA).isStarNormal g := by
+  refine TauCeti.DavisKahanExt.boundedSelfAdjointSpectralProjection_eq_cfcL_of_agrees
+    A hA s hs g fun w => ?_
+  have hcoe := TauCeti.DavisKahanExt.coe_reCoord A hA w
+  have hmem : ((TauCeti.BorelCalculus.reCoord w : ℝ) : ℂ) ∈ spectrum ℂ A := by
+    rw [hcoe]; exact w.2
+  have h1 : g w = spectralSelector s (TauCeti.BorelCalculus.reCoord w) := by
+    rw [← hg (TauCeti.BorelCalculus.reCoord w) hmem]
+    congr 1
+    exact Subtype.ext hcoe.symm
+  rw [h1, spectralSelector]
+  by_cases hw : TauCeti.BorelCalculus.reCoord w ∈ s <;> simp [hw, Set.mem_preimage]
 
 /-! ## Resolvent through the bounded continuous functional calculus -/
 
