@@ -3,13 +3,26 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
-import DavisKahan.BoundedOperator.SinTheta
+import ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.SinTheta
 
 /-!
 # Sharp projector geometry for bounded Davis--Kahan theory
 
 The two-projection norm identity and the sharp factor-one coercive projector
 theorem over arbitrary `RCLike` scalars.
+
+## Provenance
+
+*Moved, not restated.*  This file was
+`DavisKahan/BoundedOperator/Projector.lean`
+until 2026-07-29, when lane Y3(b3) moved the dependency-closed base of the sin-Θ core
+into the staging layer.  Statements, proofs, signatures and namespaces are
+unchanged; the declarations already lived in `TauCeti.DavisKahan*`, so the move
+was a path change and an import repoint and nothing else.
+
+The move became possible only once Y3(b2) took the `ForMathlib`
+inner-product-space component into `ForTauCeti`: before that this file's import
+closure crossed `ForMathlib`, which the `ForTauCeti` layer rule forbids.
 -/
 
 namespace TauCeti
@@ -42,8 +55,9 @@ theorem norm_starProjection_sub_eq_max (U V : Submodule 𝕜 H)
 
 /-- **The sharp (factor-one) operator-norm Davis--Kahan projector theorem.**  With
 a two-sided coercive spectral gap — `A`'s form `≥ (c+g)` on `U` and `≤ c` on
-`Uᗮ`, `B`'s form `≥ (c+g)` on `W` and `≤ c` on `Wᗮ` — the orthogonal projectors onto these reducing subspaces on
-an arbitrary `RCLike` Hilbert space satisfy the sharp bound
+`Uᗮ`, `B`'s form `≥ (c+g)` on `W` and `≤ c` on `Wᗮ` — the orthogonal
+projectors onto these reducing subspaces on an arbitrary `RCLike` Hilbert space
+satisfy the sharp bound
 
 `‖P_U − P_W‖ ≤ ‖B − A‖ / g`
 
