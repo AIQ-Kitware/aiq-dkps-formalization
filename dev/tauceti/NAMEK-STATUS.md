@@ -527,3 +527,189 @@ licenses `|λ_k - α_l| ≥ δ` on the surviving blocks.  Sum with
 the closed-range argument of `SelfAdjointResolvent.lean` to get resolvent
 membership — after which `diag_eq_zero_of_subset_resolventSet` gives the vector
 gap for every `f` at once.
+
+---
+
+## Correction 2026-07-29 — the "21,581-line tensor closure" figure is misattributed
+
+I have cited **21,581 lines** repeatedly — in commit messages, in `dev/LANES.md`,
+and in module docstrings — as the cost of the donor's Hilbert tensor product,
+and used it to justify modelling the Hilbert–Schmidt space as `lp` instead.
+**The number is real but it is not the tensor product's.**  Measured:
+
+`Spectra/Spaces/Tensor/HilbertSchmidt.lean` has four Spectra imports:
+
+| import | closure |
+| --- | --- |
+| `Spaces.Tensor.Map` (the tensor product itself) | 2 modules, 599 lines |
+| `SpectralTheory.Antilinear.ConjugateSpace` | 1 module, 151 lines |
+| `Operator.AdjointClosure` | 4 modules, 908 lines |
+| **`QuantumMechanics.BornRule.Joint.Basic`** | **86 modules, 20,268 lines** |
+
+So ~20k of the ~21.6k is a *single* import — the joint Born-rule stack — and the
+genuine tensor machinery is about 2,300 lines.
+
+**And the Hilbert tensor product proper is 324 lines in one file that imports
+only Mathlib.**  `Spectra/Spaces/Tensor/Hilbert.lean` is essentially
+`abbrev HilbertTensor := Completion (E ⊗[𝕜] F)` plus a convenience API, resting
+on `Mathlib.Analysis.InnerProductSpace.TensorProduct` and
+`Mathlib.Analysis.InnerProductSpace.Completion`, both of which exist.
+
+### What this does and does not change
+
+It does **not** rescue the donor's spectral-gap proof: that proof is the thing
+that reaches into the Born-rule stack (joint PVMs, product measures), so porting
+the tensor product would not have unlocked SR-D4b.  The `lp` model remains the
+right way to finish D4b.
+
+It **does** mean the reason I gave was wrong.  The honest reason is *"the
+donor's gap proof drags in 20k lines of quantum-measurement machinery"*, not
+*"tensor products are expensive"*.  Those are different claims and I conflated
+them, then repeated the conflation as established fact.
+
+### A separate, cheap opportunity — not part of this campaign
+
+A Hilbert tensor product in `ForTauCeti` would be ~324 lines over Mathlib, is
+not an API break (it is a Mathlib-shaped construction Mathlib simply lacks), and
+is worth having on its own merits.  It would need a Tau Ceti roadmap entry,
+since the roadmap gates *new* mathematics.  **Deliberately not bundled into the
+Spectra removal** — Davis–Kahan does not need it, and tying it to this campaign
+is what produced the confusion above in the first place.
+
+---
+
+## Update 2026-07-29 — SR-D4b instantiation: an honest inventory
+
+I have twice called the remaining D4b work "connecting the pieces" or
+"bookkeeping".  Working it through, that is wrong again, and the pattern is
+worth naming: **the reusable pieces were the easy part, and each one I finish
+makes the remainder look smaller than it is.**  Here is the actual inventory.
+
+### What is genuinely done (8 files, all green, all axiom-clean)
+
+`HilbertSchmidtPythagoras`, `Commutant`, `HilbertSchmidtBlock`,
+`ProjValMeasure/Additivity`, `SpectralCutOperator`, `RealLowerBound`,
+`BlockLowerBound` — plus the per-block estimate and the resolvent-to-gap step,
+which were already in the tree.  The *chain* is complete and every link is
+proved:
+
+`partition norm split → blockwise bound → global lower bound → resolvent point → gap for every vector`
+
+### What instantiating it at the Sylvester operator still needs
+
+Each of these is standard mathematics and none is hard, but each is a Lean
+lemma that does not yet exist:
+
+1. **Spectral projections of `generator V` commute with `V t`.**  The block map
+   only commutes with the Sylvester flow (`blockCLM_comm_sylvesterGroup`) if `P`
+   and `Q` commute with their groups.  For a spectral projection that is
+   standard but needs the Borel calculus to be shown commuting with the group —
+   which is *not* in the tree.
+2. **`Q` commutes with the unbounded `B` on its domain**, and maps `dom B` into
+   itself.  Follows from (1) via `generator_commute`, once (1) exists.
+3. **The block operator identity**, extended by density.
+   `generator_sylvesterGroup_apply` gives the Sylvester equation only at
+   `x ∈ dom B`; the identity wanted is between *bounded operators* on all of `F`.
+   Both sides are continuous and `dom B` is dense, so this is an `ext_on`
+   argument — but it has to be written.
+4. **The partition itself**: `I k = Ico (kε) ((k+1)ε)` for `k : ℤ`, with
+   measurability, pairwise disjointness and covering, and the fact that a
+   *nonzero* projection forces its interval to meet the spectrum
+   (`specProjection_eq_zero_of_subset_resolventSet`, contrapositive).
+5. **The `ε → 0` limit**, and the shift `σ(B + s) = σ(B) + s`.
+
+### Estimate, stated as a range rather than a point
+
+Three to five more files.  I am not going to give a tighter number: my estimates
+on this cluster have been wrong in both directions four times today, while the
+*measurements* — build counts, importer counts, closure sizes — have held up
+every time.  Treat the inventory above as the reliable artefact and ignore any
+schedule I attach to it.
+
+---
+
+## Update 2026-07-29 — D4b inventory: item 1 proved, item 2 already existed
+
+* **Item 1 — done.** `specProjection_expLimit_apply`
+  (`LinearPMap/SpectralProjectionGroup.lean`): spectral projections commute with
+  the unitary group.  This one was genuinely absent; the proof composes the
+  resolvent commutation, the Yosida approximant's shape, exponentials of
+  commuting operators, and the strong limit — all of which existed separately.
+* **Item 2 — already in the tree.**  `specProjection_apply_domain`
+  (`SpectralMeasure.lean:396`, "spectral projections intertwine the operator")
+  is exactly `A ⟨P x, _⟩ = P (A x)`, with `specProjection_mem_domain` next to it
+  for the domain half.  **Do not build it.**
+
+### Process note, because this is the third time
+
+Today I have listed three things as missing that were already present:
+`norm_sub_smul_le_of_mem_specRange`, the bounded-operator form of `A - c` on a
+spectral range, and now `specProjection_apply_domain`.  Each time the pattern was
+the same — I reasoned forward from what the argument *needs* and wrote the
+inventory from that, without grepping for it first.
+
+The tree is large enough that "I would have to prove X" is not a reliable
+judgement, and the cost of checking is seconds.  **Grep before adding an item to
+any inventory**, and prefer searching by the statement's shape (`norm_.*_le`,
+`_comm_`, `_mem_domain`) rather than by the name it would have if I had written
+it.
+
+### Remaining, revised
+
+3. The block operator identity, extended by density from `dom B` to all of `F`.
+4. The partition `Ico (kε) ((k+1)ε)` for `k : ℤ`, plus "nonzero projection ⟹ its
+   interval meets the spectrum".
+5. The `ε → 0` limit and the shift `σ(B + s) = σ(B) + s`.
+
+---
+
+## Update 2026-07-29 — SR-D4b: what the assembly is actually blocked on
+
+Items 1–4 are done and item 5 shrank (the shift theorem is unnecessary — `s`
+carries through the block estimate directly).  Attempting the assembly turned up
+a concrete obstacle that is **not** more mathematics, and it is worth naming
+because it will cost whoever hits it an hour otherwise.
+
+### The obstacle: two proofs of self-adjointness that are not interchangeable
+
+`sylvester_block_identity` is stated with
+`isSelfAdjoint_generator U : IsSelfAdjoint (generator U)`, so the spectral
+projections in it are projections of `generator U`.
+
+The consumer works with `U = genToGroup hA` for a *given* `hA : IsSelfAdjoint A`,
+and wants projections of `A`.  By SR-D4a `generator (genToGroup hA) = A`, so the
+two operators are equal — but `isSelfAdjoint_generator (genToGroup hA)` and `hA`
+prove **different propositions**, interchangeable only across that equality.
+`specProjection` takes the self-adjointness proof as an argument, so swapping
+them is a dependent rewrite through the projection, the domain memberships, and
+the cut operator.
+
+The commutation has the same shape: `specProjection_expLimit_apply` is about
+`expLimit hA t`, and `(genToGroup hA).U t` *is* `expLimit hA t` definitionally —
+but only when the projection is built from `hA` rather than from
+`isSelfAdjoint_generator (genToGroup hA)`.
+
+### Two ways out; the first is much cheaper
+
+1. **Restate `sylvester_block_identity` (and `blockCLM_comm_sylvesterGroup`'s
+   spectral instance) to take `hA : IsSelfAdjoint A` together with
+   `hUA : generator U = A`**, instead of using `isSelfAdjoint_generator U`
+   internally.  Then every projection is a projection of `A`, the consumer
+   passes `generator_genToGroup hA`, and no dependent rewriting happens
+   anywhere.  This is a signature change to two files I wrote today.
+2. Prove **`U.U t = expLimit (isSelfAdjoint_generator U) t`** for an arbitrary
+   one-parameter unitary group — "a C₀ group is the exponential of its
+   generator".  True and worth having, but it is a real theorem (group
+   uniqueness from the generator, via the Laplace transform), and it is not
+   needed for anything else right now.
+
+**Take route 1.**  Route 2 is the more satisfying library result and should be
+recorded on the roadmap, but it is not on the critical path.
+
+### Where the spectra hypothesis lands
+
+State the final theorem in terms of `spectrum (generator U)` and
+`spectrum (generator V)`.  The consumer converts to `spectrum A` / `spectrum B`
+with a single `congrArg` through `generator_genToGroup` — `spectrum` is not
+dependent, so that direction is free.  It is only the *self-adjointness proof*
+that is awkward to move, not the operator.
