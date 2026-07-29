@@ -5,6 +5,7 @@ Authors: Jon Crall, GPT 5.6 High
 -/
 import DavisKahan.Specialized.Statistics
 import ForTauCeti.Analysis.InnerProductSpace.SingularSubspace
+import ForTauCeti.Analysis.InnerProductSpace.GramOperator
 import DavisKahan.Sources.YuWangSamworth2015
 
 /-!
@@ -37,22 +38,6 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
   [FiniteDimensional 𝕜 E]
 variable {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
   [FiniteDimensional 𝕜 F]
-
-/-- Right Gram operator `A⋆A`. -/
-noncomputable def rightGram (A : E →ₗ[𝕜] F) : E →ₗ[𝕜] E :=
-  A.adjoint ∘ₗ A
-
-/-- The right Gram operator is symmetric and positive semidefinite. -/
-theorem isSymmetric_rightGram (A : E →ₗ[𝕜] F) : (rightGram A).IsSymmetric := by
-  simpa [rightGram] using A.isSymmetric_adjoint_comp_self
-
-/-- Left Gram operator `AA⋆`. -/
-noncomputable def leftGram (A : E →ₗ[𝕜] F) : F →ₗ[𝕜] F :=
-  A ∘ₗ A.adjoint
-
-/-- The left Gram operator is symmetric and positive semidefinite. -/
-theorem isSymmetric_leftGram (A : E →ₗ[𝕜] F) : (leftGram A).IsSymmetric := by
-  simpa [leftGram] using A.adjoint.isSymmetric_adjoint_comp_self
 
 /-- Right singular subspace selected by squared singular values in `Ω`. -/
 noncomputable def rightSingularSubspace (A : E →ₗ[𝕜] F) (Ω : Set ℝ) :
@@ -119,70 +104,6 @@ theorem hermitianDilation_sq (A : E →ₗ[𝕜] F) :
   ext x
   apply WithLp.ofLp_injective 2
   ext <;> simp [rightGram, leftGram]
-
-/-- Gram perturbation identity.
--/
-theorem rightGram_sub_rightGram
-    (A Â : E →ₗ[𝕜] F) :
-    rightGram Â - rightGram A =
-      Â.adjoint ∘ₗ (Â - A) + (Â - A).adjoint ∘ₗ A := by
-  ext x
-  simp [rightGram, map_sub]
-
-/-- Left-Gram perturbation identity, dual to `rightGram_sub_rightGram`. -/
-theorem leftGram_sub_leftGram
-    (A Â : E →ₗ[𝕜] F) :
-    leftGram Â - leftGram A =
-      (Â - A) ∘ₗ Â.adjoint + A ∘ₗ (Â - A).adjoint := by
-  ext x
-  simp [leftGram, map_sub]
-
-/-- Operator-norm Gram perturbation bound.
--/
-theorem opNorm_rightGram_sub_le
-    (A Â : E →ₗ[𝕜] F) :
-    ‖(rightGram Â - rightGram A).toContinuousLinearMap‖ ≤
-      (‖Â.toContinuousLinearMap‖ + ‖A.toContinuousLinearMap‖) *
-        ‖(Â - A).toContinuousLinearMap‖ := by
-  refine (rightGram Â - rightGram A).toContinuousLinearMap.opNorm_le_bound
-    (by positivity) fun x => ?_
-  have h := norm_gram_sub_gram_apply_le
-    (a := ‖A.toContinuousLinearMap‖)
-    (â := ‖Â.toContinuousLinearMap‖)
-    (ε := ‖(Â - A).toContinuousLinearMap‖)
-    (norm_nonneg _) (norm_nonneg _)
-    (fun y => A.toContinuousLinearMap.le_opNorm y)
-    (fun y => Â.toContinuousLinearMap.le_opNorm y)
-    (fun y => (Â - A).toContinuousLinearMap.le_opNorm y) x
-  simpa [rightGram, add_comm] using h
-
-/-- Operator-norm perturbation bound for the left Gram operator. -/
-theorem opNorm_leftGram_sub_le
-    (A Â : E →ₗ[𝕜] F) :
-    ‖(leftGram Â - leftGram A).toContinuousLinearMap‖ ≤
-      (‖Â.toContinuousLinearMap‖ + ‖A.toContinuousLinearMap‖) *
-        ‖(Â - A).toContinuousLinearMap‖ := by
-  refine (leftGram Â - leftGram A).toContinuousLinearMap.opNorm_le_bound
-    (by positivity) fun x => ?_
-  have hAadj : ∀ y, ‖A.adjoint y‖ ≤ ‖A.toContinuousLinearMap‖ * ‖y‖ :=
-    fun y => norm_adjoint_apply_le (norm_nonneg _)
-      (fun z => A.toContinuousLinearMap.le_opNorm z) y
-  have hÂadj : ∀ y, ‖Â.adjoint y‖ ≤ ‖Â.toContinuousLinearMap‖ * ‖y‖ :=
-    fun y => norm_adjoint_apply_le (norm_nonneg _)
-      (fun z => Â.toContinuousLinearMap.le_opNorm z) y
-  have hdiffadj : ∀ y,
-      ‖(Â.adjoint - A.adjoint) y‖ ≤ ‖(Â - A).toContinuousLinearMap‖ * ‖y‖ :=
-    fun y => by
-      have h := norm_adjoint_apply_le (norm_nonneg _)
-        (fun z => (Â - A).toContinuousLinearMap.le_opNorm z) y
-      simpa [map_sub] using h
-  have h := norm_gram_sub_gram_apply_le
-    (A := A.adjoint) (Â := Â.adjoint)
-    (a := ‖A.toContinuousLinearMap‖)
-    (â := ‖Â.toContinuousLinearMap‖)
-    (ε := ‖(Â - A).toContinuousLinearMap‖)
-    (norm_nonneg _) (norm_nonneg _) hAadj hÂadj hdiffadj x
-  simpa [leftGram, map_sub, add_comm] using h
 
 /-- Right singular-subspace `sin Θ` theorem obtained from the Gram operators.
 -/
