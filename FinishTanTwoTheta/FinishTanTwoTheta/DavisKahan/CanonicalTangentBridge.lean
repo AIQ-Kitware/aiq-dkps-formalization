@@ -286,18 +286,35 @@ private theorem tanTwoAngleOperatorC_eq_modulus_ambientGraphTangent
     dsimp [Q, graphProjectionFormula, P, N, R, G] at hgraph ⊢
     simpa only [hYP, ContinuousLinearMap.star_eq_adjoint,
       (isSelfAdjoint_starProjection U).star_eq, star_add, star_mul] using hgraph
+  -- Done as a ring computation rather than by `simp` normalisation.  No
+  -- associativity convention works here: right-association hides `P ∘ P` from
+  -- `hPP`, left-association hides `Y⋆ ∘ P` from `hYstarP`.  Collapsing the two
+  -- outer factors *first* avoids the choice entirely.
+  have hPP : P ∘L P = P := U.isIdempotentElem_starProjection
   have hPQP : P ∘L Q ∘L P = R ∘L P := by
+    have hleft : P ∘L (P + Y) = P := by
+      rw [ContinuousLinearMap.comp_add, hPP, hPY, add_zero]
+    have hright : (P + Y.adjoint) ∘L P = P := by
+      rw [ContinuousLinearMap.add_comp, hPP, hYstarP, add_zero]
+    show P * (Q * P) = R * P
     rw [hQformula]
-    have hPP : P ∘L P = P := U.isIdempotentElem_starProjection
-    simp only [ContinuousLinearMap.comp_add, ContinuousLinearMap.add_comp,
-      ContinuousLinearMap.comp_assoc, hPY, hYstarP, hPP,
-      zero_add, add_zero, ContinuousLinearMap.zero_comp,
-      ContinuousLinearMap.comp_zero]
-    rw [hPR]
+    calc P * (((P + Y) * (R * (P + Y.adjoint))) * P)
+        = (P * (P + Y)) * (R * ((P + Y.adjoint) * P)) := by noncomm_ring
+      _ = P * (R * P) := by
+            rw [show P * (P + Y) = P from hleft,
+              show (P + Y.adjoint) * P = P from hright]
+      _ = (P * R) * P := by rw [mul_assoc]
+      _ = (R * P) * P := by rw [show P * R = R * P from hPR]
+      _ = R * (P * P) := by rw [mul_assoc]
+      _ = R * P := by rw [show P * P = P from hPP]
   have hPQperpP : P ∘L Vᗮ.starProjection ∘L P = G ∘L R ∘L P := by
-    rw [Submodule.starProjection_orthogonal' V,
-      ContinuousLinearMap.comp_sub, ContinuousLinearMap.sub_comp,
-      ContinuousLinearMap.comp_id, ContinuousLinearMap.id_comp, hPQP]
+    -- `starProjection_orthogonal'` yields `1 - Q` (not `id - Q`), so stay in
+    -- ring notation and let `noncomm_ring` distribute; that sidesteps both the
+    -- `1` vs `id` mismatch and the bracketing of `P ∘ ((1 - Q) ∘ P)`.
+    rw [Submodule.starProjection_orthogonal' V]
+    have hexpand : P * ((1 - Q) * P) = P * P - P * (Q * P) := by noncomm_ring
+    show P * ((1 - Q) * P) = G * (R * P)
+    rw [hexpand, show P * P = P from hPP, show P * (Q * P) = R * P from hPQP]
     have hidentity : P - R ∘L P = G ∘L R ∘L P := by
       have hNRP := congrArg (fun T : E →L[ℂ] E => T ∘L P) hNR
       dsimp [N] at hNRP
