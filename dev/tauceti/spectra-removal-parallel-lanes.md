@@ -163,6 +163,25 @@ descriptions as equivalence theorems for it.  Today `IsPaperHilbertSchmidt` and
 `DavisKahan/Interop/Spectra/HilbertSchmidtTensor.lean`.  Making `HS(F, E)` a
 Hilbert space natively in `ForTauCeti` is what unblocks everything above it.
 
+**But the Hilbert tensor product does not have to be built.**  Measured
+2026-07-29: with a Hilbert basis `(e_i)` of `F`, the column map
+`T ↦ fun i => T (e_i)` identifies the Hilbert--Schmidt operators `F →L[𝕜] E`
+with **`lp (fun _ : ι => E) 2`**, and Mathlib already has that space with
+
+* `lp.instInnerProductSpace` (`Analysis/InnerProductSpace/l2Space.lean:110`), and
+* completeness for `1 ≤ p`.
+
+So `HS(F, E)` can be *defined* as an `lp` space rather than constructed, and the
+inner product and completeness — the expensive half of any from-scratch
+Hilbert--Schmidt development, and the reason edward measured the donor closure at
+21,581 lines — come for free.  What remains is the column bijection, and
+`DavisKahan/Interop/Spectra/HilbertSchmidtColumnExpansion.lean` already contains
+it: `mathAhead_summable_columnSeries`, `mathAhead_toOperator_ofOperator` and
+`mathAhead_ofOperator_toOperator` are exactly the two directions and their round
+trips.  Those eleven declarations are **DKPS-authored** (they live in
+`SpectraBridge`, and edward measured them as externally unused but deliberately
+retained for upstreaming), so they are re-based onto `lp`, not re-proved.
+
 Ordering inside the lane, forced by that:
 
 1. `HS(F, E)` as an inner-product space over the native predicate — the object
