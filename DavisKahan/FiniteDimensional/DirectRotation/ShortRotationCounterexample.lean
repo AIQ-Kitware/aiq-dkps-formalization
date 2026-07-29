@@ -124,12 +124,12 @@ def V4 : Submodule ℝ E4 := U4.map Wequiv.toLinearMap
 theorem mem_U4 {x : E4} (hx : x ∈ U4) : x = x 0 • sv 0 + x 1 • sv 1 := by
   obtain ⟨a, b, rfl⟩ := Submodule.mem_span_pair.mp hx
   ext i
-  fin_cases i <;> simp [sv, PiLp.single_apply]
+  fin_cases i <;> simp [sv]
 
 theorem coord_eq_zero_of_mem_U4 {x : E4} (hx : x ∈ U4) :
     x 2 = 0 ∧ x 3 = 0 := by
   obtain ⟨a, b, rfl⟩ := Submodule.mem_span_pair.mp hx
-  constructor <;> simp [sv, PiLp.single_apply]
+  constructor <;> simp [sv]
 
 theorem projection_U4_apply (x : E4) :
     projection U4 x = x 0 • sv 0 + x 1 • sv 1 := by
@@ -142,13 +142,13 @@ theorem projection_U4_apply (x : E4) :
     intro u hu
     rw [mem_U4 hu]
     simp [sv, inner_add_left, inner_sub_right, real_inner_smul_left,
-      EuclideanSpace.inner_single_left, EuclideanSpace.inner_single_right,
+      EuclideanSpace.inner_single_left,
       PiLp.single_apply]
 
 theorem projection_U4_coord (x : E4) (i : Fin 4) :
     projection U4 x i = if i = 0 then x 0 else if i = 1 then x 1 else 0 := by
   rw [projection_U4_apply]
-  fin_cases i <;> simp [sv, PiLp.single_apply]
+  fin_cases i <;> simp [sv]
 
 theorem projection_V4_apply (x : E4) :
     projection V4 x = Wequiv (projection U4 (Wequiv.symm x)) := by
@@ -353,24 +353,24 @@ theorem orthonormal_mv : Orthonormal ℝ mv := by
       nlinarith [norm_nonneg v]
     fin_cases i <;>
       refine key _ ?_ <;>
-      · simp only [mv, Matrix.cons_val_zero, Matrix.cons_val_one,
-          Matrix.head_cons, PiLp.inner_apply, RCLike.inner_apply, conj_trivial,
-          Fin.sum_univ_four, PiLp.smul_apply, PiLp.add_apply, PiLp.sub_apply,
+      · simp only [mv,
+          PiLp.inner_apply, RCLike.inner_apply, conj_trivial,
+          Fin.sum_univ_four,
           smul_eq_mul]
-        simp [sv, PiLp.single_apply]
+        simp [sv]
         nlinarith [hh]
   · intro i j hij
     fin_cases i <;> fin_cases j <;> first
       | exact absurd rfl hij
-      | simp [mv, sv, inner_add_left, inner_add_right, inner_sub_left,
-          inner_sub_right, real_inner_smul_left, real_inner_smul_right,
-          EuclideanSpace.inner_single_left, EuclideanSpace.inner_single_right,
-          PiLp.single_apply, hh]
+      | simp [mv, sv, inner_add_left, inner_add_right,
+          inner_sub_right, real_inner_smul_right,
+          EuclideanSpace.inner_single_right,
+          hh]
 
 /-- The family as an orthonormal basis. -/
 def mbasis : OrthonormalBasis (Fin 4) ℝ E4 :=
   (basisOfLinearIndependentOfCardEqFinrank orthonormal_mv.linearIndependent
-    (by simp [finrank_euclideanSpace_fin])).toOrthonormalBasis
+    (by simp [])).toOrthonormalBasis
     (by
       rw [coe_basisOfLinearIndependentOfCardEqFinrank]
       exact orthonormal_mv)
@@ -379,10 +379,10 @@ theorem mbasis_coe (i : Fin 4) : mbasis i = mv i := by
   rw [mbasis]
   rw [show ⇑((basisOfLinearIndependentOfCardEqFinrank
       orthonormal_mv.linearIndependent
-      (by simp [finrank_euclideanSpace_fin])).toOrthonormalBasis _) =
+      (by simp [])).toOrthonormalBasis _) =
     ⇑(basisOfLinearIndependentOfCardEqFinrank
       orthonormal_mv.linearIndependent
-      (by simp [finrank_euclideanSpace_fin])) from
+      (by simp [])) from
     Module.Basis.coe_toOrthonormalBasis _ _,
     coe_basisOfLinearIndependentOfCardEqFinrank]
 
@@ -397,7 +397,7 @@ theorem Wlin_mv0 : Wlin (mv 0) = mv 1 := by
   rw [show Wlin (sv 0 + sv 2) = Wlin (sv 0) + Wlin (sv 2) from map_add _ _ _]
   fin_cases i <;>
     simp [Wlin_apply, Wmat, sv, PiLp.single_apply,
-      Fin.sum_univ_four, Matrix.smul_apply] <;> ring
+      Matrix.smul_apply] <;> ring
 
 theorem Wlin_mv1 : Wlin (mv 1) = -mv 0 := by
   ext i
@@ -408,7 +408,7 @@ theorem Wlin_mv1 : Wlin (mv 1) = -mv 0 := by
   rw [map_smul]
   fin_cases i <;>
     simp [Wlin_apply, Wmat, sv, PiLp.single_apply,
-      Fin.sum_univ_four, Matrix.smul_apply] <;> ring
+      Matrix.smul_apply] <;> ring
 
 theorem Wlin_mv2 : Wlin (mv 2) = mv 2 := by
   ext i
@@ -419,7 +419,7 @@ theorem Wlin_mv2 : Wlin (mv 2) = mv 2 := by
   rw [map_smul]
   fin_cases i <;>
     simp [Wlin_apply, Wmat, sv, PiLp.single_apply,
-      Fin.sum_univ_four, Matrix.smul_apply] <;> ring
+      Matrix.smul_apply] <;> ring
 
 theorem Wlin_mv3 : Wlin (mv 3) = mv 3 := by
   ext i
@@ -430,7 +430,7 @@ theorem Wlin_mv3 : Wlin (mv 3) = mv 3 := by
   rw [map_smul]
   fin_cases i <;>
     simp [Wlin_apply, Wmat, sv, PiLp.single_apply,
-      Fin.sum_univ_four, Matrix.smul_apply] <;> ring
+      Matrix.smul_apply] <;> ring
 
 theorem Wlin'_mv0 : Wlin' (mv 0) = -mv 1 := by
   have h : Wlin' (Wlin (mv 1)) = mv 1 := LinearMap.congr_fun Wlin'_comp_Wlin _
@@ -460,7 +460,7 @@ theorem gram_displacement_W_mv0 :
         (mbasis 0) = (2 : ℝ) • mbasis 0 := by
   rw [map_sub, LinearMap.adjoint_id, Wlin_adjoint]
   simp only [mbasis_coe, LinearMap.comp_apply, LinearMap.sub_apply,
-    LinearMap.id_apply, map_sub, Wlin_mv0, Wlin'_mv0, Wlin'_mv1, map_neg]
+    LinearMap.id_apply, map_sub, Wlin_mv0, Wlin'_mv0, Wlin'_mv1]
   module
 
 theorem gram_displacement_W_mv1 :
@@ -546,10 +546,10 @@ theorem gram_sinThetaMap_apply (i : Fin 4) :
     fun y => Submodule.starProjection_orthogonal_val y
   apply PiLp.ext
   intro k
-  simp only [LinearMap.comp_apply, hcV, map_sub, LinearMap.smul_apply]
+  simp only [LinearMap.comp_apply, hcV, map_sub]
   fin_cases i <;> fin_cases k <;>
     simp [projection_U4_coord, projection_V4_coord,
-      EuclideanSpace.basisFun_apply, PiLp.single_apply] <;> ring
+      EuclideanSpace.basisFun_apply] <;> ring
 
 theorem antitone_half_half_zero_zero :
     Antitone (![2⁻¹, 2⁻¹, 0, 0] : Fin 4 → ℝ) := by
