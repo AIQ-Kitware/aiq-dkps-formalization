@@ -6,6 +6,7 @@ Authors: Jon Crall, Claude Opus 5
 module
 
 public import ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.PVM
+public import Mathlib.MeasureTheory.Integral.DominatedConvergence
 public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SelfAdjointResolvent
 public import ForTauCeti.Analysis.InnerProductSpace.OneParameterUnitaryGroup.Basic
 
@@ -736,6 +737,77 @@ theorem norm_sub_smul_le_of_mem_specRange {M c r : ℝ} (hbnd : ∀ s ∈ B, |s|
   have hsub : (⟨specProjection hA B hB x, hy⟩ : A.domain) = ⟨x, hmem⟩ := Subtype.ext hfix
   rw [hsub, hfix] at hb
   exact hb
+
+/-- **The interval cutoffs converge strongly to the identity.** -/
+theorem tendsto_specProjection_Icc (x : H) :
+    Filter.Tendsto
+      (fun τ : ℝ => specProjection hA (Set.Icc (-τ) τ) measurableSet_Icc x)
+      Filter.atTop (nhds x) := by
+  classical
+  set hU := isStarNormal_cayley hA with hhU
+  set μ := BorelCalculus.diagMeasure hU x with hμ
+  set κ := cayleyInv hA with hκ
+  set F : ℝ → _root_.spectrum ℂ (cayley hA) → ℝ :=
+    fun τ => (κ ⁻¹' Set.Icc (-τ) τ).indicator (fun _ => (1 : ℝ)) with hF
+  -- the diagonal masses are the indicator integrals
+  have hd : ∀ τ : ℝ, (((spectralPVM hA).diag x) (Set.Icc (-τ) τ)).toReal
+      = ∫ w, F τ w ∂μ := by
+    intro τ
+    have hSm : MeasurableSet (κ ⁻¹' Set.Icc (-τ) τ) :=
+      measurable_cayleyInv hA measurableSet_Icc
+    rw [show ((spectralPVM hA).diag x) = Measure.map κ μ from rfl,
+      Measure.map_apply (measurable_cayleyInv hA) measurableSet_Icc, hF,
+      integral_indicator_const _ hSm, smul_eq_mul, mul_one,
+      MeasureTheory.measureReal_def]
+  -- dominated convergence
+  have hlim : Filter.Tendsto (fun τ : ℝ => ∫ w, F τ w ∂μ) Filter.atTop
+      (nhds (∫ _w, (1 : ℝ) ∂μ)) := by
+    refine tendsto_integral_filter_of_dominated_convergence (fun _ => (1 : ℝ))
+      (Filter.Eventually.of_forall fun τ =>
+        (measurable_const.indicator
+          (measurable_cayleyInv hA measurableSet_Icc)).aestronglyMeasurable)
+      (Filter.Eventually.of_forall fun τ => Filter.Eventually.of_forall fun w => ?_)
+      (integrable_const _)
+      (Filter.Eventually.of_forall fun w => ?_)
+    · by_cases hw : w ∈ κ ⁻¹' Set.Icc (-τ) τ <;> simp [hF, hw]
+    · refine Filter.Tendsto.congr' ?_ tendsto_const_nhds
+      filter_upwards [Filter.eventually_ge_atTop |κ w|] with τ hτ
+      have hmem : w ∈ κ ⁻¹' Set.Icc (-τ) τ :=
+        ⟨by linarith [neg_abs_le (κ w)], by linarith [le_abs_self (κ w)]⟩
+      simp [hF, hmem]
+  have htot : ∫ _w, (1 : ℝ) ∂μ = ‖x‖ ^ 2 := by
+    rw [integral_const, smul_eq_mul, mul_one, MeasureTheory.measureReal_def, hμ,
+      BorelCalculus.diagMeasure_univ_toReal]
+  -- the squared distance is the missing mass
+  have hsq : ∀ τ : ℝ,
+      ‖specProjection hA (Set.Icc (-τ) τ) measurableSet_Icc x - x‖ ^ 2
+        = ‖x‖ ^ 2 - (((spectralPVM hA).diag x) (Set.Icc (-τ) τ)).toReal := by
+    intro τ
+    have hnormP : ‖specProjection hA (Set.Icc (-τ) τ) measurableSet_Icc x‖ ^ 2
+        = (((spectralPVM hA).diag x) (Set.Icc (-τ) τ)).toReal :=
+      (spectralPVM hA).norm_sq_proj_apply _ _ x
+    have hinner : ⟪x, specProjection hA (Set.Icc (-τ) τ) measurableSet_Icc x⟫_ℂ
+        = ((((spectralPVM hA).diag x) (Set.Icc (-τ) τ)).toReal : ℂ) :=
+      (spectralPVM hA).inner_proj _ _ x
+    have hre : RCLike.re (⟪specProjection hA (Set.Icc (-τ) τ) measurableSet_Icc x, x⟫_ℂ)
+        = (((spectralPVM hA).diag x) (Set.Icc (-τ) τ)).toReal := by
+      rw [← inner_conj_symm, hinner]
+      simp
+    rw [norm_sub_sq (𝕜 := ℂ), hnormP, hre]
+    ring
+  -- conclude
+  refine tendsto_iff_norm_sub_tendsto_zero.mpr ?_
+  have hsq' : Filter.Tendsto
+      (fun τ : ℝ => ‖specProjection hA (Set.Icc (-τ) τ) measurableSet_Icc x - x‖ ^ 2)
+      Filter.atTop (nhds 0) := by
+    have hconv : Filter.Tendsto
+        (fun τ : ℝ => ‖x‖ ^ 2 - (((spectralPVM hA).diag x) (Set.Icc (-τ) τ)).toReal)
+        Filter.atTop (nhds (‖x‖ ^ 2 - ‖x‖ ^ 2)) := by
+      refine Filter.Tendsto.sub tendsto_const_nhds ?_
+      simpa only [hd, htot] using hlim
+    simpa only [hsq, sub_self] using hconv
+  have hfin := (Real.continuous_sqrt.tendsto 0).comp hsq'
+  simpa only [Function.comp_def, Real.sqrt_sq (norm_nonneg _), Real.sqrt_zero] using hfin
 
 end BoundedSet
 

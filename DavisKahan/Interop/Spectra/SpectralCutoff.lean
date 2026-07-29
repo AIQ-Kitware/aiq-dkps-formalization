@@ -6,7 +6,6 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 import DavisKahan.SpectralTheory.ClosedOperator.Complex
 import DavisKahan.Sylvester.CutoffInterface
 import DavisKahan.Interop.Spectra.SpectralRestriction
-import Spectra.SpectralTheory.Weak
 
 /-!
 # Direct Spectra cutoffs for the unbounded Sylvester argument
@@ -30,22 +29,18 @@ namespace DavisKahan
 namespace Experimental
 namespace ExactSinTheta
 
-open Spectra.OneParameterUnitaryGroup
-open Spectra.YosidaHille
-open Spectra.QuantumMechanics.SpectralTheory
-
 universe v
 
 variable {H : Type v}
   [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
 
-/-- The direct Spectra cutoff `E_A([-τ,τ])`. -/
+/-- The spectral cutoff `E_A([-τ,τ])`. -/
 noncomputable def spectraSpectralCutoff
     (A : ComplexClosedOperatorH (H := H))
     (hA : A.IsSelfAdjoint) (τ : ℝ) : H →L[ℂ] H :=
-  spectralProjection (genToGroup hA) (Set.Icc (-τ) τ) measurableSet_Icc
+  SpectraBridge.selfAdjointSpectralProjection A hA (Set.Icc (-τ) τ) measurableSet_Icc
 
-/-- Direct Spectra cutoffs are orthogonal projections. -/
+/-- Spectral cutoffs are orthogonal projections. -/
 theorem spectraSpectralCutoff_isOrthogonalProjection
     (A : ComplexClosedOperatorH (H := H))
     (hA : A.IsSelfAdjoint) (τ : ℝ) :
@@ -53,107 +48,41 @@ theorem spectraSpectralCutoff_isOrthogonalProjection
         spectraSpectralCutoff A hA τ ∧
       (spectraSpectralCutoff A hA τ).IsSymmetric := by
   constructor
-  · simpa only [spectraSpectralCutoff, ContinuousLinearMap.mul_def] using
-      spectralProjection_idem (genToGroup hA)
-        (Set.Icc (-τ) τ) measurableSet_Icc
-  · apply (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric).mp
-    change ContinuousLinearMap.adjoint
-        (spectraSpectralCutoff A hA τ) = spectraSpectralCutoff A hA τ
-    simpa only [spectraSpectralCutoff] using
-      spectralProjection_adjoint (genToGroup hA)
-        (Set.Icc (-τ) τ) measurableSet_Icc
+  · exact (TauCeti.LinearPMap.spectralPVM hA).proj_idem (Set.Icc (-τ) τ) measurableSet_Icc
+  · exact (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric).mp
+      ((TauCeti.LinearPMap.spectralPVM hA).isSelfAdjoint_proj
+        (Set.Icc (-τ) τ) measurableSet_Icc)
 
-/-- Every direct Spectra cutoff vector lies in the closed-operator domain. -/
+/-- Every spectral-cutoff vector lies in the closed-operator domain. -/
 theorem spectraSpectralCutoff_range_le_domain
     (A : ComplexClosedOperatorH (H := H))
     (hA : A.IsSelfAdjoint) (τ : ℝ) :
     LinearMap.range (spectraSpectralCutoff A hA τ).toLinearMap ≤ A.domain := by
-  let U := genToGroup hA
-  have hgen : generator U = A.toLinearPMap := generator_genToGroup hA
-  have hdom : (generator U).domain = A.domain :=
-    congrArg LinearPMap.domain hgen
   rintro y ⟨x, rfl⟩
-  apply (le_of_eq hdom)
-  change spectralProjection U (Set.Icc (-τ) τ) measurableSet_Icc x ∈
-    (generator U).domain
-  exact spectralProjection_mem_generatorDomain U measurableSet_Icc
-    (R := max |(-τ)| |τ|) (fun _ hx => abs_le_max_of_mem_Icc hx) x
+  exact TauCeti.LinearPMap.mem_domain_of_mem_specRange_of_bounded hA _ measurableSet_Icc
+    (M := max 0 τ) (fun s hs => le_trans (abs_le.mpr ⟨hs.1, hs.2⟩) (le_max_right 0 τ))
+    ⟨x, rfl⟩
 
-/-- Direct Spectra cutoffs preserve the domain and commute with the closed
-operator there. -/
+/-- Spectral cutoffs preserve the domain and commute with the closed operator
+there. -/
 theorem spectraSpectralCutoff_commutes_on_domain
     (A : ComplexClosedOperatorH (H := H))
     (hA : A.IsSelfAdjoint) (τ : ℝ) (x : A.domain) :
     ∃ hx : spectraSpectralCutoff A hA τ (x : H) ∈ A.domain,
       A.toLinearMap ⟨spectraSpectralCutoff A hA τ (x : H), hx⟩ =
-        spectraSpectralCutoff A hA τ (A.toLinearMap x) := by
-  change ∃ hx :
-      SpectraBridge.selfAdjointSpectralProjection A hA
-          (Set.Icc (-τ) τ) measurableSet_Icc (x : H) ∈ A.domain,
-    A.toLinearMap
-        ⟨SpectraBridge.selfAdjointSpectralProjection A hA
-          (Set.Icc (-τ) τ) measurableSet_Icc (x : H), hx⟩ =
-      SpectraBridge.selfAdjointSpectralProjection A hA
-        (Set.Icc (-τ) τ) measurableSet_Icc (A.toLinearMap x)
-  exact ⟨SpectraBridge.selfAdjointSpectralProjection_mem_domain
-      A hA measurableSet_Icc x,
-    SpectraBridge.selfAdjoint_apply_spectralProjection
-      A hA measurableSet_Icc x⟩
+        spectraSpectralCutoff A hA τ (A.toLinearMap x) :=
+  ⟨SpectraBridge.selfAdjointSpectralProjection_mem_domain A hA measurableSet_Icc x,
+    SpectraBridge.selfAdjoint_apply_spectralProjection A hA measurableSet_Icc x⟩
 
-/-- The indicator of `[-τ,τ]` converges pointwise to one as `τ → +∞`. -/
-private theorem tendsto_Icc_indicator_one (ω : ℝ) :
-    Tendsto
-      (fun τ : ℝ =>
-        Set.indicator (Set.Icc (-τ) τ) (fun _ => (1 : ℂ)) ω)
-      atTop (𝓝 1) := by
-  have heq :
-      (fun τ : ℝ =>
-          Set.indicator (Set.Icc (-τ) τ) (fun _ => (1 : ℂ)) ω) =ᶠ[atTop]
-        fun _ : ℝ => (1 : ℂ) := by
-    filter_upwards [eventually_ge_atTop |ω|] with τ hτ
-    rw [Set.indicator_of_mem]
-    exact ⟨by linarith [neg_abs_le ω], by linarith [le_abs_self ω]⟩
-  exact tendsto_const_nhds.congr' heq.symm
-
-/-- Direct Spectra cutoffs converge strongly to the identity. -/
+/-- Spectral cutoffs converge strongly to the identity. -/
 theorem spectraSpectralCutoff_tendsto_identity
     (A : ComplexClosedOperatorH (H := H))
     (hA : A.IsSelfAdjoint) (x : H) :
     Tendsto (fun τ : ℝ => spectraSpectralCutoff A hA τ x)
-      atTop (𝓝 x) := by
-  let U := genToGroup hA
-  let G : ℝ → ℝ → ℂ := fun τ ω =>
-    Set.indicator (Set.Icc (-τ) τ) (fun _ => (1 : ℂ)) ω
-  have hGmeas : ∀ τ, Measurable (G τ) := by
-    intro τ
-    dsimp only [G]
-    exact measurable_const.indicator measurableSet_Icc
-  have hGbdd : ∀ τ, ∃ C, ∀ ω, ‖G τ ω‖ ≤ C := by
-    intro τ
-    dsimp only [G]
-    exact indicator_one_bdd (Set.Icc (-τ) τ)
-  have hunif : ∀ τ ω, ‖G τ ω‖ ≤ (1 : ℝ) := by
-    intro τ ω
-    dsimp only [G]
-    by_cases hω : ω ∈ Set.Icc (-τ) τ
-    · rw [Set.indicator_of_mem hω]
-      simpa only [NormOneClass.norm_one] using (le_refl (1 : ℝ))
-    · rw [Set.indicator_of_notMem hω]
-      simpa only [norm_zero] using (zero_le_one : (0 : ℝ) ≤ 1)
-  have hlim : ∀ ω, Tendsto (fun τ => G τ ω) atTop (𝓝 (1 : ℂ)) := by
-    intro ω
-    simpa only [G] using tendsto_Icc_indicator_one ω
-  have h := tendsto_spectralCalculus_apply U
-    (G := G) (g := fun _ : ℝ => (1 : ℂ)) (C := 1)
-    hGmeas hGbdd measurable_const
-    (show ∃ C : ℝ, ∀ ω : ℝ, ‖(1 : ℂ)‖ ≤ C from
-      ⟨1, fun _ => by simp⟩)
-    hunif hlim x
-  simpa only [spectraSpectralCutoff, spectralProjection, G, U,
-    spectralCalculus_one, ContinuousLinearMap.id_apply] using h
+      atTop (𝓝 x) :=
+  TauCeti.LinearPMap.tendsto_specProjection_Icc hA x
 
-/-- The direct vendored-Spectra implementation of the coherent spectral cutoff
-interface. -/
+/-- The implementation of the coherent spectral cutoff interface. -/
 noncomputable def spectraSpectralCutoffInterface
     (A : ComplexClosedOperatorH (H := H))
     (hA : A.IsSelfAdjoint) :
