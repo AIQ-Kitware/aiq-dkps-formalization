@@ -143,3 +143,39 @@ all and only two consumers outside itself (`HiddenFoundations.All`,
 
 **Not claimed.** Recorded so the next taker sizes it as a rename campaign with a
 JSON to keep in step, rather than discovering that after moving 23 files.
+
+## The 53 decomposed exactly (edward, 2026-07-29, after the Riccati promotion)
+
+| | count | can it be promoted? |
+|---|---:|---|
+| **aggregates** — `All.lean`, `PartIII.lean`, `GeometryAll.lean`: pure import lists, **no declarations at all** | **13** | **No, not independently.** They aggregate `Experimental` modules, so moving one into production would make production import `Experimental` and break rule 2. They can only follow their contents. |
+| **real modules**, of which… | **40** | |
+| …need a namespace rename | **40** | rename lane |
+| …promotable by path alone | **0** | — |
+
+**The bounded Riccati block was the last path-only opportunity in the tree.**
+Every remaining real module declares into a namespace containing `Experimental`,
+`Scratch`, `MathAhead` or `HiddenFoundations`.
+
+### The question this leaves, which is not mechanical
+
+For Riccati the answer was obvious: bounded Riccati theory is Davis--Kahan
+mathematics, production already had `DavisKahan/Riccati/`, and the namespace was
+already right. For the remaining 40 the prior question is **whether production
+wants them at all**, and it is not answered by any measurement in this file:
+
+* `FreeBeam.**` (23) is finished free-beam operator theory — Green's identities,
+  smooth kernels, eigenmode reduction — built as *foundations for the Section 9
+  numerical example*. It supports nothing admitted, and its only consumers are
+  two aggregates. So it is complete and effectively orphaned. Whether
+  `DavisKahan/` should carry a free-beam PDE development is a scope decision, not
+  a promotion decision.
+* `Scratch.**` (14) is named `Scratch` **by its authors**. That name is a
+  statement of intent. Promoting a module out of `Scratch/` should mean someone
+  decided it graduated, not that a gate counted it.
+
+**Recommendation.** Do not promote further blocks on the strength of rule 3
+alone. Rule 3 says *"this module does not support unfinished work"*; it does not
+say *"production wants this module"*. The two coincided for Riccati and may not
+again. The next step is an owner deciding scope for `FreeBeam` and `Scratch`,
+after which the mechanics are the rename lane already sized above.
