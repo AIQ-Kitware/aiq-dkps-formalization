@@ -232,6 +232,37 @@ Note the two documented facades (`ClosedSylvesterEquation` 30,
 `Restriction` 26) are now the 3rd and 4th largest entries, so retiring them is
 worth more than the old table suggested.
 
+### Bottom-up survey of the census tail (jon (toothbrush), 2026-07-29)
+
+I worked the small end of the census looking for one-line retirements, on the
+theory that the bundle's members are `abbrev`s over raw `LinearPMap` forms so
+single-use consumers should fall for free. **That seam is real but thin — it
+yielded exactly one module.** Recording the survey so nobody repeats it.
+
+**Retired:** `DavisKahan/SinTheta/SpectralBridge.lean` → 0.
+`boundedRealSpectrum` wrapped a bounded operator into the bundle purely to reach
+`.realSpectrum`, which is itself an `abbrev` over
+`TauCeti.LinearPMap.realSpectrum A.toLinearPMap`, and `toLinearPMap_ofBounded`
+is `rfl`. One-line substitution, no proof changes, production module. Full
+default build green (9281 jobs).
+
+**Not contractible, and why** — each remaining single-use module is tied to a
+structure that must move first, so none is a one-liner:
+
+| module | blocked on |
+| --- | --- |
+| `Sources/DavisKahan1970/FullSineTheta.lean` | `alias IsGraphCore := ClosedOperator.IsGraphCore`, and `IsGraphCore` is *defined* in `Sources/…/SineTheta/CommonCore.lean` (22 positions). Retiring the alias needs `CommonCore` migrated first. |
+| `Interop/Spectra/GapResolvent.lean` | carries `A : DKClosedOperator` only as a carrier — everything inside already uses `A.toLinearPMap` — but its conclusion names `TwoSidedShiftedInverseBound A c s`, which is bundle-typed. Retiring needs that predicate moved. |
+| `Sylvester/Unbounded/Equation.lean` | one `abbrev` facade, `HasUnboundedBoundedSylvesterEquation`, with five call sites in `Sylvester/Unbounded/Neumann.lean` and `Experimental/…/Sylvester/Unbounded.lean`. The Experimental caller retypes a whole proof (`A.addBounded`, `A.toLinearMap` throughout), so this is a genuine consumer migration, not a substitution. |
+| `Interop/Spectra/BoundedFromSpectrum.lean` | held by SR-B (namek). |
+
+**Conclusion for planning: U1's remaining 557 positions do not decompose into
+cheap independent pieces.** They are held by a handful of defining structures —
+`CommonCore`/`CommonDomain` (41 between them), `SinTheta/Natural/Bounded` (52),
+`Sources/…/SineTheta/Symmetric` (50), and the two documented facades
+(`ClosedSylvesterEquation` 30, `ReducingSubspace/Restriction` 26). Retiring any
+of those moves a large block at once; nibbling at the tail does not.
+
 **Contractible right now, no new mathematics:**
 
 - `generalizedSinTheta_unbounded_exact_of_genuineIntervalExteriorGap` —
