@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall
 -/
 import DavisKahan.Riccati.UnboundedReduction
+import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Sylvester
 
 /-!
 # The complementary graph of a reducing Riccati selection
@@ -940,6 +941,45 @@ theorem doubleAngleTangent_sylvester_eq
   simp only [ContinuousLinearMap.coe_comp, Function.comp_apply,
     add_apply, sub_apply]
   abel
+
+include hdom hadj in
+/-- **`tan 2Theta` satisfies a genuine unbounded Sylvester equation.**
+
+Packages the two preceding results as the actual
+`TauCeti.LinearPMap.SylvesterEquation H.A1 H.A0 (X ∘L R) C` structure, with
+
+```
+C = (X ∘ R ∘ G  +  X ∘ B₀₁ ∘ X  -  B₁₀) ∘ R
+```
+
+an explicit continuous linear map.  This is the object the unbounded Ky Fan
+Sylvester machinery consumes: with `A₁ ≥ d` and `A₀ ≤ 0` it gives
+
+```
+d · kyFanApproximationGauge k (X ∘ R) ≤ kyFanApproximationGauge k C
+```
+
+and doubling both sides turns `X ∘ R` into `tan 2Theta`.
+
+`C` is *not* `-B₁₀`; the difference is the commutator term `X ∘ R ∘ G`, which is
+exactly why this yields a defect form rather than the sharp constant.  See
+`dev/finishtantwotheta-completion-lane.md`. -/
+theorem doubleAngleTangent_sylvesterEquation
+    (hinv : TauCeti.LinearPMap.InvariantSubspace (unboundedBlockOperatorCore H)
+      (unboundedBlockGraph X)ᗮ)
+    (hric : ∀ x : H.A0.domain,
+      H.A1 ⟨X (x : E0), hdom x⟩ + H.B10 (x : E0) =
+        X (H.A0 x + H.B01 (X (x : E0))))
+    {R : E0 →L[𝕜] E0}
+    (hRmem : ∀ y : H.A0.domain, R (y : E0) ∈ H.A0.domain)
+    (hRight : ∀ u : E0, ((1 : E0 →L[𝕜] E0) - riccatiGram X) (R u) = u)
+    (hLeft : ∀ u : E0, R (((1 : E0 →L[𝕜] E0) - riccatiGram X) u) = u) :
+    TauCeti.LinearPMap.SylvesterEquation H.A1 H.A0 (X ∘L R)
+      ((X ∘L R ∘L riccatiGramCommutator H X +
+        X ∘L H.B01 ∘L X - H.B10) ∘L R) where
+  mapsTo_domain := fun x => hdom ⟨R (x : E0), hRmem x⟩
+  equation := fun x =>
+    doubleAngleTangent_sylvester_eq H hdom hadj hinv hric hRmem hRight hLeft x
 
 end Powers'
 
