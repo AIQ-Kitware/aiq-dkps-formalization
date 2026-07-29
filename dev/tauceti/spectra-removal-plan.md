@@ -882,3 +882,48 @@ No statement about `dom A` is needed anywhere in this argument.
 The Mathlib fact to look up when starting: the spectrum of a unitary element is
 contained in the unit circle (`spectrum.subset_circle_of_unitary` or the
 `unitary`-namespace equivalent).
+
+## State at 2026-07-29: PVM built and green; repoint parked one step short
+
+`lake build` is green at 9301 jobs.  `import Spectra` in the main three
+packages: **24** (was 26 at the start of this stretch).
+
+### Landed in ForTauCeti (all additive, all green)
+
+* `BorelCalculus/{DiagonalMeasure,Polarization,Operator,Multiplicative,PVM}.lean`
+  — the bounded Borel functional calculus of a normal operator and the
+  projection-valued measure it generates.  Includes linearity in the symbol,
+  multiplicativity, `⋆`-preservation, the **sharp** norm bound
+  `‖T_f ξ‖ ≤ ‖f‖∞ ‖ξ‖`, and `borelCalculus_congr_ae` (only the a.e. class of the
+  symbol matters).
+* `LinearPMap/SpectralMeasure.lean` — `spectralPVM hA` for an unbounded
+  self-adjoint operator via the Cayley transform, the `{1}`-null fact, the
+  **resolvent formula**, spectral projections' commutation with every resolvent,
+  domain preservation and intertwining, `specRange`/`specRestrict` with
+  `isSelfAdjoint_specRestrict` (reducing subspaces), the bounded-spectral-set
+  theorem, and `tendsto_specProjection_Icc` (interval cutoffs → identity).
+
+### Parked
+
+Commit `e80e636` repoints `PVMSubspace`, `SpectralRestriction`,
+`SpectralRestrictionOperator`, `SpectralCutoff` and `TanTheta/UnboundedVector`
+onto the native PVM; commit `911af25` reverts the DavisKahan half of it to keep
+the tree green.  Recover with `git revert 911af25` (or `git show e80e636`).
+
+In that state five files are off Spectra and two are not:
+
+| file | what it still needs |
+| --- | --- |
+| `SpectralRestrictionLocalization.lean` | (a) form bounds for `specRestrict` when `B ⊆ [β,α]` — the quadratic form is `∫ κ 1_B` against a diagonal measure concentrated on `κ⁻¹B`, so no case analysis is needed beyond `B = ∅`; (b) `lam ∈ resolventSet (specRestrict)` when `B` avoids a neighbourhood of `lam`, with inverse the Borel calculus of `(κ - lam)⁻¹ 1_B` |
+| `RealSpectralRestriction.lean` | conjugation invariance of `spectralPVM`.  Spectra derives it from `spectralPVM_unique` (Stieltjes inversion); here it should come from the action of the canonical conjugation `J` on the Cayley transform — `J U J = U⋆`, so `J borelCalculus_U(f) J = borelCalculus_{U⋆}(f̄ ∘ conj)`, and the indicator symbols are invariant |
+
+Both are additive ForTauCeti work; nothing already landed has to change.
+
+### Worth keeping in mind
+
+`SpectralRestrictionOperator.lean` shrank from ~250 lines to ~60: the Stone
+group no longer has to be restricted to the spectral range and its generator
+identified with `A`.  `UnboundedVector`'s two interval-range theorems went from
+~50 lines each to 8, and all four spectral-cutoff interface laws became
+one-liners.  That is the shape of the remaining repoints too — the native PVM
+is a much shorter road than the Stone route it replaces.
