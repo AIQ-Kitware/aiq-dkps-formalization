@@ -593,10 +593,8 @@ theorem directRotation_apply_principalOrthogonalVector
     push_cast at h
     exact h
   match_scalars
-  · push_cast
-    linear_combination hpythK
-  · push_cast
-    ring
+  · linear_combination hpythK
+  · ring
 
 /-- The inverse direct rotation acts on the orthogonal partner by the second
 column of the transposed rotation block. -/
@@ -636,10 +634,8 @@ theorem directRotation_symm_apply_principalOrthogonalVector
     push_cast at h
     exact h
   match_scalars
-  · push_cast
-    linear_combination -hpythK
-  · push_cast
-    ring
+  · linear_combination -hpythK
+  · ring
 
 /-- The positive modulus of the canonical intertwiner acts by the principal
 cosine on the orthogonal partner as well. -/

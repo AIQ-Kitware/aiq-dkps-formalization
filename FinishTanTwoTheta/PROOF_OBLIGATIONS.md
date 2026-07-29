@@ -1,20 +1,23 @@
-# Completion status
+# Proof obligations
 
-The `FinishTanTwoTheta` aggregate has no remaining proof obligation.  It now
-exports the exact theorem scopes already proved and axiom-audited in the
-distilled Davis--Kahan/GKMV library.
+## Discharged by the aggregate target
 
-The following stronger statement is deliberately **not** part of the completed
-surface:
+- bounded approximation-number spectral selection;
+- double-angle tangent functional calculus;
+- stable bounded Riccati coefficient estimate;
+- sharp Ky Fan domination;
+- maximal/minimal standard symmetric ideal promotion;
+- finite-dimensional Section 7 UI-norm source theorem;
+- arbitrary-space sharp operator-norm theorem and acute branch.
 
-> an unrestricted sharp infinite-dimensional ideal estimate for an arbitrary
-> contractive unbounded Riccati graph.
+## Not discharged
 
-The old attempted proof required graph-domain approximate singular vectors.
-The needed spectral-band/domain-density assertion is false, and the genuine
-unbounded Sylvester equation contains a generally nonzero commutator defect.
-Consequently that statement remains an open research problem under the current
-hypotheses, not a compiler obligation.
+The unrestricted **unbounded** sharp ideal extension is not a theorem of the
+aggregate target.  Its former proof depended on obtaining domain-compatible
+approximate singular vectors from arbitrary spectral bands.  The repository now
+contains a counterexample to that density mechanism.
 
-The retained experimental files may still be built explicitly for research,
-but their status must not be inferred from `lake build FinishTanTwoTheta`.
+A future unbounded completion must use a different argument—most plausibly the
+source reflection reduction together with a genuinely unbounded single-angle
+ideal theorem, or a new compact/exact-singular-system route under additional
+hypotheses.  It must not reintroduce the refuted spectral-band selection claim.

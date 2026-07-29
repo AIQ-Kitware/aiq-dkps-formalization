@@ -499,7 +499,7 @@ theorem gram_displacement_W_apply (i : Fin 4) :
 theorem antitone_two_two_zero_zero :
     Antitone (![2, 2, 0, 0] : Fin 4 → ℝ) := by
   intro i j hij
-  fin_cases i <;> fin_cases j <;> simp_all <;> norm_num
+  fin_cases i <;> fin_cases j <;> simp_all
 
 /-- Singular values of the competitor displacement. -/
 theorem singularValues_displacement_W (j : Fin 4) :
@@ -553,7 +553,7 @@ theorem gram_sinThetaMap_apply (i : Fin 4) :
 theorem antitone_half_half_zero_zero :
     Antitone (![2⁻¹, 2⁻¹, 0, 0] : Fin 4 → ℝ) := by
   intro i j hij
-  fin_cases i <;> fin_cases j <;> simp_all <;> norm_num
+  fin_cases i <;> fin_cases j <;> simp_all
 
 /-- The largest principal sine is `√½`. -/
 theorem principalSines_zero : principalSines U4 V4 0 = Real.sqrt 2⁻¹ := by
