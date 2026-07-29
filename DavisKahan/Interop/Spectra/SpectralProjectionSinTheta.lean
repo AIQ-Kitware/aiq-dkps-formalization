@@ -98,10 +98,11 @@ theorem norm_spectralComplementaryOverlap_eq_directedGap
     ‖Wᗮ.starProjection ∘L U.starProjection‖
   rw [norm_adjoint_subtypeL_comp_subtypeL_eq U Wc]
   have hWc : Wc.starProjection = Wᗮ.starProjection := by
-    rw [← selfAdjointSpectralProjection_eq_starProjection C hC Sᶜ hS.compl]
-    change spectralProjection (genToGroup hC) Sᶜ hS.compl =
-      Wᗮ.starProjection
-    rw [spectralProjection_compl (genToGroup hC) S hS]
+    rw [← selfAdjointSpectralProjection_eq_starProjection C hC Sᶜ hS.compl,
+      show SpectraBridge.selfAdjointSpectralProjection C hC Sᶜ hS.compl
+          = ContinuousLinearMap.id ℂ H -
+            SpectraBridge.selfAdjointSpectralProjection C hC S hS from
+        (TauCeti.LinearPMap.spectralPVM hC).proj_compl S hS]
     change ContinuousLinearMap.id ℂ H -
         selfAdjointSpectralProjection C hC S hS =
       Wᗮ.starProjection

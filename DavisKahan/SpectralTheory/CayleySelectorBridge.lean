@@ -4,6 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Fable 5
 -/
 import DavisKahan.SpectralTheory.ResolventOperator
+import DavisKahan.Interop.Spectra.Basic
+import DavisKahan.Interop.Spectra.BoundedSelfAdjointSpectralProjection
 import Spectra.SpectralTheory.ResolventForm
 import Spectra.StoneBridge.CalculusBridge
 import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Integral
@@ -63,20 +65,35 @@ theorem spectralSelector_bounded (s : Set ℝ) :
   simpa only [spectralSelector] using
     Spectra.QuantumMechanics.SpectralTheory.indicator_one_bdd s
 
-/-- The genuine bounded spectral projection is the Spectra bounded functional
-calculus applied to the selected-set indicator. -/
-theorem boundedSelfAdjointSpectralProjection_eq_spectralCalculus_selector
+/-- **The genuine bounded spectral projection is the continuous functional
+calculus of any continuous symbol agreeing with the selector on the spectrum.**
+
+Until 2026-07-29 this went through Spectra in two steps — the projection was
+Spectra's group calculus of the selector, and that calculus was identified with
+`cfcL` by a Cayley-transform argument.  Both steps collapse into
+`TauCeti.BorelCalculus.boundedPVM_proj_eq_cfcHom`: the native Borel calculus of
+a bounded self-adjoint operator is indexed along the real part of its own
+spectrum, so a continuous symbol agreeing with the indicator *there* has the
+same calculus image, definitionally. -/
+theorem boundedSelfAdjointSpectralProjection_eq_cfcL_of_selector
     (A : H →L[ℂ] H) (hA : IsSelfAdjointOperator A)
-    (s : Set ℝ) (hs : MeasurableSet s) :
+    (s : Set ℝ) (hs : MeasurableSet s)
+    (g : C(spectrum ℂ A, ℂ))
+    (hg : ∀ (lam : ℝ) (hlam : (lam : ℂ) ∈ spectrum ℂ A),
+      g ⟨(lam : ℂ), hlam⟩ = spectralSelector s lam) :
     boundedSelfAdjointSpectralProjection A hA s hs =
-      Spectra.QuantumMechanics.SpectralTheory.spectralCalculus
-        (Spectra.YosidaHille.genToGroup
-          (boundedSelfAdjointOperator A hA).selfAdjoint)
-        (spectralSelector s)
-        (spectralSelector_measurable s hs)
-        (spectralSelector_bounded s) := by
-  rw [boundedSelfAdjointSpectralProjection_eq_spectralProjection]
-  rfl
+      cfcL (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hA).isStarNormal g := by
+  refine TauCeti.DavisKahanExt.boundedSelfAdjointSpectralProjection_eq_cfcL_of_agrees
+    A hA s hs g fun w => ?_
+  have hcoe := TauCeti.DavisKahanExt.coe_reCoord A hA w
+  have hmem : ((TauCeti.BorelCalculus.reCoord w : ℝ) : ℂ) ∈ spectrum ℂ A := by
+    rw [hcoe]; exact w.2
+  have h1 : g w = spectralSelector s (TauCeti.BorelCalculus.reCoord w) := by
+    rw [← hg (TauCeti.BorelCalculus.reCoord w) hmem]
+    congr 1
+    exact Subtype.ext hcoe.symm
+  rw [h1, spectralSelector]
+  by_cases hw : TauCeti.BorelCalculus.reCoord w ∈ s <;> simp [hw, Set.mem_preimage]
 
 /-! ## Resolvent through the bounded continuous functional calculus -/
 
@@ -431,167 +448,6 @@ noncomputable def boundedCayleySpectrumInverse
           inverseMobius_mem_spectrum_of_mem_cayley_bounded A hA w⟩
       continuous_toFun := hcont.restrict.subtype_mk
         (fun w => inverseMobius_mem_spectrum_of_mem_cayley_bounded A hA w) }
-
-theorem continuous_cayleySelectorPullback_of_agrees
-    (A : H →L[ℂ] H) (hA : IsSelfAdjointOperator A) (s : Set ℝ)
-    (g : C(spectrum ℂ A, ℂ))
-    (hg : ∀ (lam : ℝ) (hlam : (lam : ℂ) ∈ spectrum ℂ A),
-      g ⟨(lam : ℂ), hlam⟩ = spectralSelector s lam) :
-    Continuous (fun w : spectrum ℂ
-      (Spectra.Cayley.cayley
-        (boundedSelfAdjointOperator A hA).selfAdjoint) =>
-      spectralSelector s
-        (Spectra.Cayley.inverseMobiusReal
-          (boundedSelfAdjointOperator A hA).selfAdjoint w)) := by
-  let hSA := (boundedSelfAdjointOperator A hA).selfAdjoint
-  let invMap := boundedCayleySpectrumInverse A hA
-  have hcontinuous : Continuous (fun w => g (invMap w)) :=
-    g.continuous.comp invMap.continuous
-  apply hcontinuous.congr
-  intro w
-  let lam : ℝ := Spectra.Cayley.inverseMobiusReal hSA w
-  have hlamC : (lam : ℂ) ∈ spectrum ℂ A := by
-    rw [Spectra.Cayley.inverseMobiusReal_coe hSA w]
-    exact (invMap w).property
-  have hsub : invMap w = ⟨(lam : ℂ), hlamC⟩ := by
-    apply Subtype.ext
-    exact (Spectra.Cayley.inverseMobiusReal_coe hSA w).symm
-  simpa [lam, hsub] using hg lam hlamC
-
-/-- The Spectra bounded selector calculus equals the Mathlib continuous
-functional calculus of any continuous spectral function that agrees with the
-selected-set indicator at every real spectral point.  Contour-free
-generalization of `SpectralSeparatingContour.spectralCalculus_selector_eq_cfcL`;
-the function `g` plays the role of the integrated contour symbol. -/
-theorem spectralCalculus_selector_eq_cfcL_of_agrees
-    (A : H →L[ℂ] H) (hA : IsSelfAdjointOperator A)
-    (s : Set ℝ) (hs : MeasurableSet s)
-    (g : C(spectrum ℂ A, ℂ))
-    (hg : ∀ (lam : ℝ) (hlam : (lam : ℂ) ∈ spectrum ℂ A),
-      g ⟨(lam : ℂ), hlam⟩ = spectralSelector s lam) :
-    Spectra.QuantumMechanics.SpectralTheory.spectralCalculus
-        (Spectra.YosidaHille.genToGroup
-          (boundedSelfAdjointOperator A hA).selfAdjoint)
-        (spectralSelector s)
-        (spectralSelector_measurable s hs)
-        (spectralSelector_bounded s) =
-      cfcL
-        (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr
-          hA).isStarNormal
-        g := by
-  classical
-  by_cases hH : Nontrivial H
-  · letI : Nontrivial H := hH
-    let hSA :=
-      (boundedSelfAdjointOperator A hA).selfAdjoint
-    let U : H →L[ℂ] H := Spectra.Cayley.cayley hSA
-    let G : ℂ → ℂ := fun w =>
-      spectralSelector s (Spectra.Cayley.inverseMobius w).re
-    have hGrestrict : Continuous
-        ((spectrum ℂ U).restrict G) := by
-      apply (continuous_cayleySelectorPullback_of_agrees A hA s g hg).congr
-      intro w
-      simp only [Set.restrict_apply, G, U, hSA,
-        Spectra.Cayley.inverseMobiusReal]
-    have hGcont : ContinuousOn G (spectrum ℂ U) :=
-      continuousOn_iff_continuous_restrict.mpr hGrestrict
-    have hbridge :
-        Spectra.QuantumMechanics.SpectralTheory.spectralCalculus
-            (Spectra.YosidaHille.genToGroup hSA)
-            (spectralSelector s)
-            (spectralSelector_measurable s hs)
-            (spectralSelector_bounded s) =
-          cfc G U := by
-      rw [← Spectra.YosidaHille.stoneGroup_eq_genToGroup hSA]
-      calc
-        Spectra.QuantumMechanics.SpectralTheory.spectralCalculus
-            (Spectra.Cayley.stoneGroup hSA)
-            (spectralSelector s)
-            (spectralSelector_measurable s hs)
-            (spectralSelector_bounded s) =
-          cfcHom (Spectra.Cayley.cayley_isStarNormal hSA)
-            (⟨fun w => spectralSelector s
-                (Spectra.Cayley.inverseMobiusReal hSA w),
-              continuous_cayleySelectorPullback_of_agrees A hA s g hg⟩ :
-              C(spectrum ℂ (Spectra.Cayley.cayley hSA), ℂ)) :=
-          Spectra.QuantumMechanics.SpectralTheory.spectralCalculus_stoneGroup_eq_cfcHom
-            hSA (spectralSelector s)
-            (spectralSelector_measurable s hs)
-            (spectralSelector_bounded s)
-            (continuous_cayleySelectorPullback_of_agrees A hA s g hg)
-        _ = cfcHom (Spectra.Cayley.cayley_isStarNormal hSA)
-            (⟨(spectrum ℂ U).restrict G, hGrestrict⟩ :
-              C(spectrum ℂ U, ℂ)) := by
-          apply congrArg (cfcHom (Spectra.Cayley.cayley_isStarNormal hSA))
-          ext w
-          change spectralSelector s
-              (Spectra.Cayley.inverseMobius (w : ℂ)).re =
-            spectralSelector s
-              (Spectra.Cayley.inverseMobius (w : ℂ)).re
-          rfl
-        _ = cfc G U :=
-          (cfc_apply G U (Spectra.Cayley.cayley_isStarNormal hSA) hGcont).symm
-    have hmobcont : ContinuousOn boundedMobiusSymbol (spectrum ℂ A) :=
-      continuousOn_boundedMobiusSymbol_spectrum A hA
-    have hU : U = cfc boundedMobiusSymbol A := by
-      simpa [U, hSA] using
-        (cayley_boundedSelfAdjointOperator_eq_cfc A hA)
-    have hspec : spectrum ℂ U =
-        boundedMobiusSymbol '' spectrum ℂ A := by
-      rw [hU]
-      exact cfc_map_spectrum
-        (f := boundedMobiusSymbol) (a := A)
-        (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr
-          hA).isStarNormal hmobcont
-    have hGimage : ContinuousOn G
-        (boundedMobiusSymbol '' spectrum ℂ A) := by
-      rwa [← hspec]
-    have hcompcont : ContinuousOn (G ∘ boundedMobiusSymbol)
-        (spectrum ℂ A) :=
-      hGimage.comp hmobcont (fun z hz => ⟨z, hz, rfl⟩)
-    calc
-      Spectra.QuantumMechanics.SpectralTheory.spectralCalculus
-          (Spectra.YosidaHille.genToGroup hSA)
-          (spectralSelector s)
-          (spectralSelector_measurable s hs)
-          (spectralSelector_bounded s) =
-        cfc G U := hbridge
-      _ = cfc G (cfc boundedMobiusSymbol A) := by rw [← hU]
-      _ = cfc (G ∘ boundedMobiusSymbol) A := by
-        symm
-        exact cfc_comp
-          (g := G) (f := boundedMobiusSymbol) (a := A)
-          (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr
-            hA).isStarNormal hGimage hmobcont
-      _ = cfcL
-          (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr
-            hA).isStarNormal
-          g := by
-        rw [cfc_eq_cfcL
-          (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr
-            hA).isStarNormal hcompcont]
-        congr 1
-        ext z
-        have hAsa : IsSelfAdjoint A :=
-          ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hA
-        rcases z with ⟨z, hz⟩
-        obtain ⟨lam, hlam, rfl⟩ :=
-          hAsa.spectrumRestricts.algebraMap_image.symm ▸ hz
-        have hlamC : (lam : ℂ) ∈ spectrum ℂ A := by
-          rw [← hAsa.spectrumRestricts.algebraMap_image]
-          exact ⟨lam, hlam, rfl⟩
-        change
-          spectralSelector s
-              (Spectra.Cayley.inverseMobius
-                (boundedMobiusSymbol (lam : ℂ))).re =
-            g ⟨(lam : ℂ), by
-                rw [← hAsa.spectrumRestricts.algebraMap_image]
-                exact ⟨lam, hlam, rfl⟩⟩
-        rw [inverseMobius_boundedMobiusSymbol_ofReal]
-        simp only [Complex.ofReal_re]
-        exact (hg lam hlamC).symm
-  · haveI : Subsingleton H := not_nontrivial_iff_subsingleton.mp hH
-    exact Subsingleton.elim _ _
 
 end CayleySelectorBridge
 

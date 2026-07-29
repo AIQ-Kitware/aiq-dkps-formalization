@@ -715,3 +715,306 @@ and 4 are assembly against verified Mathlib API.
 `spectrum ℂ U ⊆ unitary ℂ` (the unit circle) directly, but applying it stalls
 instance search on `ContinuousFunctionalCalculus ℂ ?m IsStarNormal`. That is an
 import gap, not a mathematical one; it will need fixing for step 3.
+
+---
+
+## Borel calculus and PVM: BUILT (2026-07-28)
+
+Everything under "The spectral measure: build it via Cayley" above is now Lean
+that compiles.  The route that worked is **not** the one sketched there (Riesz
+plus a monotone-class argument for multiplicativity); the monotone-class step
+was replaced by a single *transport* lemma, which is what made the whole thing
+short.  What exists, in dependency order, all under
+`ForTauCeti/Analysis/InnerProductSpace/BorelCalculus/`:
+
+| module | endpoint |
+| --- | --- |
+| `DiagonalMeasure.lean` | `diagMeasure ha ξ`, `integral_diagMeasure`, `diagMeasure_univ_toReal` |
+| `Polarization.lean` | `pair ha f ψ ξ`, `pair_of_continuous`, `norm_pair_sub_pair_le`, `exists_continuous_integral_norm_sub_le` |
+| `Operator.lean` | `IsBddMeasurable`, sesquilinearity of `pair`, `norm_pair_le`, `borelCalculus ha hf`, `inner_borelCalculus` |
+| `Multiplicative.lean` | `inner_borelCalculus_self`, `borelCalculus_of_continuous`, `borelCalculus_one`, `borelCalculus_mul` |
+| `PVM.lean` | `specProj`, `specDiag`, `toProjValMeasure ha hκ : TauCeti.ProjValMeasure H` |
+
+### The transport principle — the reason this is ~1400 lines and not ~4000
+
+`norm_pair_sub_pair_le` says: the difference of `pair ha f ψ ξ` and
+`pair ha g ψ ξ` is at most the `L¹` distance of `f` and `g` measured against
+*any* finite measure dominating the four diagonal measures at
+`pairVectors ψ ξ`.  Any identity to be proved involves only finitely many
+vectors, so one takes the finite **sum** of all diagonal measures occurring in
+it (`isFiniteMeasure_sum_diagMeasure`, `diagMeasure_le_sum`), approximates once
+in that single `L¹` (`MemLp.exists_boundedContinuous_eLpNorm_sub_le`), and reads
+the identity off `cfcHom`, where it is free.
+
+Consequences avoided entirely: no monotone-class / Dynkin induction over Borel
+functions, no Jordan–von Neumann recovery of additivity from the parallelogram
+law, no strong limits of monotone operator sequences, and no complex measures
+(only finite positive ones, combined four at a time by polarisation).
+
+Two places where the order of quantifiers matters and cost real work:
+
+* **The product bound.**  The approximants carry no uniform sup bound, so
+  `‖pair f ψ ξ‖ ≤ M ‖ψ‖ ‖ξ‖` cannot be read off `‖cfcHom g‖ = ‖g‖∞`.  It is
+  obtained instead from the crude `M (‖ψ‖² + ‖ξ‖²)` (total mass of
+  `diagMeasure ha v` is `‖v‖²`) by rescaling `ψ ↦ t • ψ`, `ξ ↦ t⁻¹ • ξ` with
+  `t = √(‖ξ‖/‖ψ‖)`, which leaves `pair` invariant — `norm_pair_le`.
+* **Multiplicativity.**  The approximant `p` of `f` must be chosen *first*, and
+  the tolerance for the approximant `q` of `g` is then `ε / (1 + ‖p‖)`.  Doing
+  it in the other order does not close.
+
+### Mathlib pieces this leans on (all verified present)
+
+* `RealRMK.rieszMeasure` + `RealRMK.integral_rieszMeasure` + the `Regular` and
+  `IsFiniteMeasure` instances (`MeasureTheory/Integral/RieszMarkovKakutani/Real.lean`).
+* `MemLp.exists_boundedContinuous_eLpNorm_sub_le`
+  (`MeasureTheory/Function/ContinuousMapDense.lean`).
+* `InnerProductSpace.toDual` for the Riesz step.
+* `IsStarNormal.instContinuousFunctionalCalculus` — **a theorem, not a global
+  instance.**  Every module here opens with
+  `attribute [local instance] IsStarNormal.instContinuousFunctionalCalculus`;
+  without it `ContinuousFunctionalCalculus ℂ (H →L[ℂ] H) IsStarNormal` fails to
+  synthesise even though `CStarAlgebra (H →L[ℂ] H)` succeeds.
+
+## Remaining: `spectralPVM` for an unbounded self-adjoint `LinearPMap`
+
+`toProjValMeasure` is stated for a *bounded normal* operator plus a measurable
+relabelling `κ` of its spectrum.  To reach the Spectra endpoint
+`Spectra.QuantumMechanics.SpectralTheory.spectralPVM hA` for
+`hA : IsSelfAdjoint (A : H →ₗ.[ℂ] H)`, instantiate at the Cayley transform
+(already built, `LinearPMap/SelfAdjointResolvent.lean`: `cayley`,
+`cayley_mem_unitary`, `isStarNormal_cayley`) with
+
+`κ w = (Complex.I * (1 + w) / (1 - w)).re`  (junk value at `w = 1`).
+
+### The five compatibility theorems the consumers actually use
+
+Measured across the tree: `spectralPVM` appears 31 times, and exactly five
+lemmas about it are consumed —
+
+| lemma | where |
+| --- | --- |
+| `spectralPVM_resolvent_formula` | `RealSpectralRestriction.lean` |
+| `spectralPVM_unique` | `RealSpectralRestriction.lean` |
+| `spectralPVM_integrable_id` | `OrderedHalfLine.lean` (×2) |
+| `spectralPVM_proj_eq_zero_of_subset_resolventSet` | `BoundedFromSpectrum.lean` (×2) |
+| `spectralPVM_proj_congr_of_inter_spectrum_eq` | `SpectralRestrictionLocalization.lean` (×2) |
+
+The resolvent formula is the characterising one; the other four should follow
+from it plus the general `ProjValMeasure` API.
+
+### The resolvent formula reduces to a *continuous* calculus identity
+
+Write `U = cayley A`, `κ` as above.  For `z ∉ ℝ`,
+
+`R(z) = (A - z)⁻¹ = (1 - U) · [(i - z) + U (i + z)]⁻¹`,
+
+so the symbol is `g_z(w) = (1 - w) / ((i - z) + w (i + z))`.  Its only pole is
+at `w = (z - i)/(z + i)`, the Cayley image of `z`, which for non-real `z` is
+**off the unit circle** and hence off `spectrum ℂ U`.  So `g_z` is *continuous*
+on the spectrum and the formula is an identity about `cfcHom`, not about the
+Borel calculus.  Prove `R(z) = cfcHom hU g_z` through `resolvent_unique`
+(already available) by checking the two-sided inverse property.
+
+At the special point `z = -i` this is essentially definitional: `κ(w) + i =
+2i/(1 - w)`, so `(κ(w) + i)⁻¹ = (1 - w)/(2i)`, which is exactly `resolvent A (-i)`
+read off the definition of `cayley`.
+
+### The `{1}`-null-set fact, and its (short) proof
+
+The pushforward along `κ` is only faithful because `diagMeasure ha ξ ({1}) = 0`.
+Proof, entirely inside the Borel calculus already built:
+
+* `borelCalculus` of the pointwise product `(1 - w) · 1_{{1}}(w)` is `0`, since
+  that product is the zero function; by `borelCalculus_mul` and
+  `borelCalculus_of_continuous` this says `(1 - U) ∘ P_{{1}} = 0`.
+* `1 - U = 2i · resolvent A (-i)` is **injective** — it is the inverse of the
+  bijection `A + i : dom A → H`.
+* Hence `P_{{1}} = 0`, and `diagMeasure ha ξ ({1}) = ⟪ξ, P_{{1}} ξ⟫ = 0`.
+
+### After that
+
+Repoint, in this order (each is then unblocked):
+`PVMSubspace` → `SpectralRestriction` → `SpectralRestrictionOperator` →
+`SpectralRestrictionLocalization` → `RealSpectralRestriction` (the one another
+agent is waiting on) → `BoundedSelfAdjointSpectralProjection` →
+`BoundedFromSpectrum` → `BoundedTruncation` → `SpectralCutoff` →
+`CayleySelectorBridge` → `SelfAdjointBorelCalculus` → the three
+`Experimental/InfiniteDimensional` files → `InfiniteProposition41`.
+
+The independent clusters — Hilbert–Schmidt tensor (5 files) and the small
+`Operator.Bounded` / `BornRule.Observable` / `TraceClass` / `SeparatedIntertwiner`
+/ `ExpBounded.Helpers` items — do not touch any of this and can be done in any
+order.
+
+### Update: `spectralPVM` is built; the resolvent formula needs no domain theory
+
+`ForTauCeti/Analysis/InnerProductSpace/LinearPMap/SpectralMeasure.lean` now
+defines `TauCeti.LinearPMap.spectralPVM hA` and proves
+`diagMeasure_cayley_preimage_one` (the `{1}`-null fact, exactly as sketched
+above).  What remains is the resolvent formula, and the route sketched earlier
+— identify `cfcHom g_z` with `(A - z)⁻¹` by checking the two-sided inverse
+property — is **not** the cheap one, because it drags in `dom A = ran (1 - U)`.
+
+Use the **first resolvent identity instead**, which is already ported
+(`LinearPMap.resolvent_sub_resolvent`).  With `w := z`, `z := -i`:
+
+`R(z) - R(-i) = (z + i) • (R(z) ∘ R(-i))`, i.e. `R(z) ∘ V = R(-i)` where
+`V := 1 - (z + i) • R(-i)`.
+
+Now everything is bounded and lives in the C⋆-algebra:
+
+* `R(-i) = (2i)⁻¹ • (1 - U) = cfcHom hU ((1 - X)/(2i))`, straight off the
+  definition of `cayley` (`X` is `(ContinuousMap.id ℂ).restrict (spectrum ℂ U)`).
+* Hence `V = cfcHom hU h_z` with `h_z(w) = ((i - z) + (i + z) w) / (2i)`.
+* `h_z` has no zero on `spectrum ℂ U`: a zero forces `w = (z - i)/(z + i)`,
+  whence `|z - i| = |z + i|` (the spectrum of a unitary sits on the circle),
+  whence `(Im z - 1)² = (Im z + 1)²`, whence `Im z = 0` — excluded.
+* So `W := cfcHom hU (1 / h_z)` inverts `V` (`map_mul`, `map_one`), and
+  `R(z) = R(-i) ∘ W = cfcHom hU g_z` with
+  `g_z(w) = (1 - w) / ((i - z) + (i + z) w)`.
+
+Then `⟪ξ, R(z) ξ⟫ = ∫ g_z ∂(diagMeasure ξ)` is just `integral_diagMeasure`, and
+`∫_ℝ (s - z)⁻¹ ∂(map κ (diagMeasure ξ)) = ∫ (κ(w) - z)⁻¹ ∂(diagMeasure ξ)` is
+`integral_map`; the two integrands agree off `{1}`, which is null.
+
+No statement about `dom A` is needed anywhere in this argument.
+
+The Mathlib fact to look up when starting: the spectrum of a unitary element is
+contained in the unit circle (`spectrum.subset_circle_of_unitary` or the
+`unitary`-namespace equivalent).
+
+## State at 2026-07-29: PVM built and green; repoint parked one step short
+
+`lake build` is green at 9301 jobs.  `import Spectra` in the main three
+packages: **24** (was 26 at the start of this stretch).
+
+### Landed in ForTauCeti (all additive, all green)
+
+* `BorelCalculus/{DiagonalMeasure,Polarization,Operator,Multiplicative,PVM}.lean`
+  — the bounded Borel functional calculus of a normal operator and the
+  projection-valued measure it generates.  Includes linearity in the symbol,
+  multiplicativity, `⋆`-preservation, the **sharp** norm bound
+  `‖T_f ξ‖ ≤ ‖f‖∞ ‖ξ‖`, and `borelCalculus_congr_ae` (only the a.e. class of the
+  symbol matters).
+* `LinearPMap/SpectralMeasure.lean` — `spectralPVM hA` for an unbounded
+  self-adjoint operator via the Cayley transform, the `{1}`-null fact, the
+  **resolvent formula**, spectral projections' commutation with every resolvent,
+  domain preservation and intertwining, `specRange`/`specRestrict` with
+  `isSelfAdjoint_specRestrict` (reducing subspaces), the bounded-spectral-set
+  theorem, and `tendsto_specProjection_Icc` (interval cutoffs → identity).
+
+### Parked
+
+Commit `e80e636` repoints `PVMSubspace`, `SpectralRestriction`,
+`SpectralRestrictionOperator`, `SpectralCutoff` and `TanTheta/UnboundedVector`
+onto the native PVM; commit `911af25` reverts the DavisKahan half of it to keep
+the tree green.  Recover with `git revert 911af25` (or `git show e80e636`).
+
+In that state five files are off Spectra and two are not:
+
+| file | what it still needs |
+| --- | --- |
+| `SpectralRestrictionLocalization.lean` | (a) form bounds for `specRestrict` when `B ⊆ [β,α]` — the quadratic form is `∫ κ 1_B` against a diagonal measure concentrated on `κ⁻¹B`, so no case analysis is needed beyond `B = ∅`; (b) `lam ∈ resolventSet (specRestrict)` when `B` avoids a neighbourhood of `lam`, with inverse the Borel calculus of `(κ - lam)⁻¹ 1_B` |
+| `RealSpectralRestriction.lean` | conjugation invariance of `spectralPVM`.  Spectra derives it from `spectralPVM_unique` (Stieltjes inversion); here it should come from the action of the canonical conjugation `J` on the Cayley transform — `J U J = U⋆`, so `J borelCalculus_U(f) J = borelCalculus_{U⋆}(f̄ ∘ conj)`, and the indicator symbols are invariant |
+
+Both are additive ForTauCeti work; nothing already landed has to change.
+
+### Worth keeping in mind
+
+`SpectralRestrictionOperator.lean` shrank from ~250 lines to ~60: the Stone
+group no longer has to be restricted to the spectral range and its generator
+identified with `A`.  `UnboundedVector`'s two interval-range theorems went from
+~50 lines each to 8, and all four spectral-cutoff interface laws became
+one-liners.  That is the shape of the remaining repoints too — the native PVM
+is a much shorter road than the Stone route it replaces.
+
+## 2026-07-29: everything but conjugation invariance
+
+Green at 9301 jobs.  Landed since the last entry, all additive in ForTauCeti:
+
+* `re_inner_apply_bounds_of_subset_Icc` — form bounds on a spectral range.
+* `mem_resolventSet_specRestrict_of_gap` — a gap makes `lam` a resolvent point
+  of the restriction, inverse `(κ - lam)⁻¹ 1_B`.
+* `truncSymbol` / `isBddMeasurable_truncSymbol` / `truncation` — the bounded
+  truncation `κ·1_B`, with `truncation_eq_on_specProjection`, the norm bound,
+  self-adjointness and commutation with every spectral projection.
+* `specProjection_apply_sub_smul` — the shifted identity, now naming its
+  operator concretely so downstream definitions can be stated with it.
+* `ProjValMeasure.proj_compl`.
+
+`SpectralRestrictionLocalization.lean` is fully ported (240 → 120 lines, three
+Spectra imports → none) in the parked commit.
+
+### The one remaining blocker, with its proof plan
+
+`RealSpectralRestriction.lean` needs `conjugateOperator (E_A(S)) = E_A(S)` for
+the canonical conjugation `J` on a complexification.  Spectra gets it from
+`spectralPVM_unique`, i.e. Stieltjes inversion.  **That is not needed.**  Write
+`conjOp T := fun x ↦ J (T (J x))`; it is *conjugate*-linear in `T`,
+multiplicative, and `⋆`-preserving.
+
+1. `conjOp U = U⋆`.  `U = 1 - 2i R(-i)` and `J R(z) J = R(z̄)` — the latter is
+   already proved in that file as `conjugateOperator_selfAdjointResolvent` — so
+   `conjOp U = 1 + 2i R(i) = U⋆`.
+2. `f ↦ conjOp (cfcHom hU (star f))` is a **continuous unital `⋆`-algebra
+   homomorphism** `C(σ(U), ℂ) →⋆ₐ[ℂ] (Eℂ →L[ℂ] Eℂ)` (conjugate-linear twice is
+   linear) sending the coordinate function to `conjOp U⋆ = U`.  By
+   `cfcHom_eq_of_continuous_of_map_id` it *is* `cfcHom hU`.  Hence
+   `conjOp (cfcHom hU g) = cfcHom hU (star g)`, and for **real** `g` the
+   calculus image is `J`-invariant.
+3. Therefore `diagFunctional hU (J η) = diagFunctional hU η` — the functionals
+   are literally equal, so `diagMeasure hU (J η) = diagMeasure hU η` **by
+   definition**, with no measure-uniqueness argument.
+4. In `pair f (J ψ) (J ξ)` the four polarisation points are
+   `J ξ + iᵏ J ψ = J (ξ + i⁻ᵏ ψ)`, so the `k = 1` and `k = 3` terms swap.  The
+   diagonal measures are real, so for real `f` this says
+   `pair f (J ψ) (J ξ) = conj (pair f ψ ξ)`, whence
+   `⟪ψ, conjOp (T_f) ξ⟫ = ⟪ψ, T_f ξ⟫` — in particular for indicator symbols,
+   which is exactly the required projection invariance.
+
+Only step 2 is real work; the rest is bookkeeping.  Nothing else in the port
+depends on it.
+
+## 2026-07-29 (later): 26 → 17, and where the remaining files sit
+
+`lake build` green at 9280.  Ported off Spectra this session: `UnitaryConjugation`,
+`OrthogonalIdempotentExp`, `ContinuationSharpSchurComplement`, `PVMSubspace`,
+`SpectralRestriction`, `SpectralRestrictionOperator`, `SpectralCutoff`,
+`SpectralRestrictionLocalization`, `RealSpectralRestriction`, `BoundedTruncation`,
+`ClosedOperator`, `BoundedSelfAdjointSpectralProjection`,
+`SelfAdjointBorelCalculus` — plus `TanTheta/UnboundedVector`, which was coupled
+without importing.
+
+### Bounded operators do not need the Cayley transform
+
+`BorelCalculus/PVM.lean` now carries `reCoord` / `boundedPVM` /
+`boundedPVM_proj_eq_cfcHom`.  A self-adjoint operator's spectrum is already
+real, so its Borel calculus is indexed along the real part of its own spectrum
+and a spectral projection *is* the continuous functional calculus of any
+continuous symbol agreeing with the indicator there.  That one theorem replaced
+Spectra's two-step route (group calculus of the selector, then a Cayley-transform
+identification with `cfcL`) and carried `boundedSelfAdjointBorelCalculusC` with
+it.
+
+### The 17, by what they actually need
+
+| files | blocker |
+| --- | --- |
+| `CayleySelectorBridge`, `Basic`, and the two `Continuation*` | `Spectra.Cayley`'s Möbius helpers and `Spectra.Operator.SelfAdjointOperator.ofBounded`.  Elementary; the unbounded analogues (`cayleyInv`, `cayleyInv_add_I`) already exist |
+| `BoundedFromSpectrum` | `spectralPVM_proj_eq_zero_of_subset_resolventSet` — the diagonal measures are supported on the spectrum.  Native route: for `lam` in the resolvent set and `B` a small enough interval around it, `E(B) = R(lam) (A - lam) E(B)` and `‖(A-lam)E(B)‖ ≤ δ` force `E(B) = 0`; then cover |
+| `OrderedHalfLine` | `spectralPVM_integrable_id` — a second-moment fact (`∫ s² d(diag ξ) = ‖Aξ‖²`, then Cauchy–Schwarz) |
+| `PairwiseHomogeneousUniqueness` | Rosenblum: an intertwiner of self-adjoint operators with disjoint spectra vanishes |
+| `OperatorAbsoluteValueComplex` | polar decomposition of a bounded operator, which Mathlib does not have |
+| `HilbertSchmidt{ColumnExpansion,Tensor}`, `SylvesterHilbertSchmidt`, `HilbertSchmidtDefectFirst`, `HilbertSchmidtPairwise` | the Hilbert–Schmidt tensor development — a separate lane that never touches the spectral measure |
+| `FourierSemigroup`, `InfiniteProposition41` | `ExpBounded.Unitary` / `CayleyTransform.BorelCalculus` / `SpectralTheory.Algebra` |
+
+### Note: `FinishTanTwoTheta` does not build, and has not for a while
+
+Its two Spectra imports are real, but the library is unbuildable independently
+of this work: `FinishTanTwoTheta/ApproximationNumber/SpectralSelection.lean`
+imports `DavisKahan.Interop.Spectra.ApproximationNumberMinMax`, which was
+deleted in `a8992fd` when the min-max development moved to ForTauCeti.
+`FinishTanTwoTheta` is not in `defaultTargets`, so `lake build` does not catch
+it.  Its Spectra use is one `spectralPVM` scaffolding block inside a proof that
+ends in `aesop`; the block looks removable, but that cannot be checked until the
+stale import is repaired.

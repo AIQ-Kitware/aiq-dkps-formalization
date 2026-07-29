@@ -4,7 +4,6 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.SpectralTheory.ClosedOperator.Basic
-import Spectra.Operator.SelfAdjoint
 
 /-!
 # Closed-operator bridge to Mathlib and Spectra
@@ -29,22 +28,25 @@ variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
 abbrev DKClosedOperator :=
   TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := H)
 
-/-- Forget a Spectra self-adjoint operator to the scalar-generic DK closed
-operator wrapper. -/
-noncomputable def closedOperatorOfSpectra
-    (A : Spectra.Operator.SelfAdjointOperator H) :
-    DKClosedOperator (H := H) where
-  domain := A.domain
-  toLinearMap := A.toLinearPMap.toFun
-  dense_domain := A.dense
+/-- Package a self-adjoint partial map as a DK closed operator.
+
+Until 2026-07-29 this file carried a pair of adapters to and from Spectra's
+`Operator.SelfAdjointOperator`; the only remaining consumer of the outbound
+adapter is `DavisKahan.Interop.Spectra.OrderedHalfLine`, which now carries its
+own copy, so this module — imported by most of the bridge — is Spectra-free. -/
+noncomputable def closedOperatorOfSelfAdjointPMap {K : Type*} [NormedAddCommGroup K]
+    [InnerProductSpace ℂ K] [CompleteSpace K]
+    (T : K →ₗ.[ℂ] K) (hT : IsSelfAdjoint T) : DKClosedOperator (H := K) where
+  domain := T.domain
+  toLinearMap := T.toFun
+  dense_domain := hT.dense_domain
   closed_graph := by
-    have hclosed : A.toLinearPMap.IsClosed := A.selfAdjoint.isClosed
-    change IsClosed (A.toLinearPMap.graph : Set (H × H)) at hclosed
-    have hgraph : (A.toLinearPMap.graph : Set (H × H)) =
-        Set.range (fun x : A.domain => ((x : H), A.toLinearPMap x)) := by
+    have hclosed : T.IsClosed := hT.isClosed
+    change IsClosed (T.graph : Set (K × K)) at hclosed
+    have hgraph : (T.graph : Set (K × K)) =
+        Set.range (fun x : T.domain => ((x : K), T x)) := by
       ext p
-      change p ∈ A.toLinearPMap.graph ↔
-        ∃ x : A.domain, ((x : H), A.toLinearPMap x) = p
+      change p ∈ T.graph ↔ ∃ x : T.domain, ((x : K), T x) = p
       rw [LinearPMap.mem_graph_iff]
       constructor
       · rintro ⟨x, hx, hAx⟩
@@ -54,51 +56,15 @@ noncomputable def closedOperatorOfSpectra
     rw [hgraph] at hclosed
     exact hclosed
 
-@[simp] theorem closedOperatorOfSpectra_domain
-    (A : Spectra.Operator.SelfAdjointOperator H) :
-    (closedOperatorOfSpectra A).domain = A.domain := rfl
+@[simp] theorem closedOperatorOfSelfAdjointPMap_toLinearPMap {K : Type*}
+    [NormedAddCommGroup K] [InnerProductSpace ℂ K] [CompleteSpace K]
+    (T : K →ₗ.[ℂ] K) (hT : IsSelfAdjoint T) :
+    (closedOperatorOfSelfAdjointPMap T hT).toLinearPMap = T := rfl
 
-@[simp] theorem closedOperatorOfSpectra_apply
-    (A : Spectra.Operator.SelfAdjointOperator H) (x : A.domain) :
-    closedOperatorOfSpectra A x = A.toLinearPMap x := rfl
-
-/-- Passing through the DK wrapper preserves the underlying Mathlib partial
-linear map definitionally. -/
-@[simp] theorem toLinearPMap_closedOperatorOfSpectra
-    (A : Spectra.Operator.SelfAdjointOperator H) :
-    (closedOperatorOfSpectra A).toLinearPMap = A.toLinearPMap := rfl
-
-/-- Upgrade a DK closed operator to a Spectra self-adjoint operator once its
-canonical Mathlib partial-linear-map view is proved self-adjoint. -/
-noncomputable def closedOperatorToSpectra
-    (A : DKClosedOperator (H := H))
-    (hA : IsSelfAdjoint A.toLinearPMap) :
-    Spectra.Operator.SelfAdjointOperator H where
-  toLinearPMap := A.toLinearPMap
-  selfAdjoint := hA
-
-@[simp] theorem closedOperatorToSpectra_toLinearPMap
-    (A : DKClosedOperator (H := H))
-    (hA : IsSelfAdjoint A.toLinearPMap) :
-    (closedOperatorToSpectra A hA).toLinearPMap = A.toLinearPMap := rfl
-
-@[simp] theorem closedOperatorToSpectra_domain
-    (A : DKClosedOperator (H := H))
-    (hA : IsSelfAdjoint A.toLinearPMap) :
-    (closedOperatorToSpectra A hA).domain = A.domain := rfl
-
-/-- The upgraded operator inherits Spectra's derived symmetry law. -/
-theorem closedOperatorToSpectra_symmetric
-    (A : DKClosedOperator (H := H))
-    (hA : IsSelfAdjoint A.toLinearPMap)
-    (x y : A.domain) :
-    ⟪A.toLinearMap x, (y : H)⟫_ℂ =
-      ⟪(x : H), A.toLinearMap y⟫_ℂ := by
-  change
-    ⟪(closedOperatorToSpectra A hA).toLinearPMap x, (y : H)⟫_ℂ =
-      ⟪(x : H), (closedOperatorToSpectra A hA).toLinearPMap y⟫_ℂ
-  exact (closedOperatorToSpectra A hA).symmetric'
-    (ψ := (x : H)) (φ := (y : H)) x.property y.property
+@[simp] theorem closedOperatorOfSelfAdjointPMap_domain {K : Type*}
+    [NormedAddCommGroup K] [InnerProductSpace ℂ K] [CompleteSpace K]
+    (T : K →ₗ.[ℂ] K) (hT : IsSelfAdjoint T) :
+    (closedOperatorOfSelfAdjointPMap T hT).domain = T.domain := rfl
 
 end SpectraBridge
 end Experimental

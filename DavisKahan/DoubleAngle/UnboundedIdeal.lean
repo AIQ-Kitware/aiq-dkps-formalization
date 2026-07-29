@@ -283,13 +283,9 @@ theorem sinTwoTheta_reflectionResidual_gauge_of_spectrum_gap
   have hUcProjection : Uc.starProjection = Uᗮ.starProjection := by
     rw [← selfAdjointSpectralProjection_eq_starProjection
       A hA Bᶜ hB.compl]
-    change Spectra.QuantumMechanics.SpectralTheory.spectralProjection
-        (Spectra.YosidaHille.genToGroup hA) Bᶜ hB.compl =
-      Uᗮ.starProjection
-    rw [Spectra.QuantumMechanics.SpectralTheory.spectralProjection_compl
-      (Spectra.YosidaHille.genToGroup hA) B hB]
-    change ContinuousLinearMap.id ℂ H -
-        selfAdjointSpectralProjection A hA B hB = Uᗮ.starProjection
+    rw [show selfAdjointSpectralProjection A hA Bᶜ hB.compl
+          = ContinuousLinearMap.id ℂ H - selfAdjointSpectralProjection A hA B hB from
+        (TauCeti.LinearPMap.spectralPVM hA).proj_compl B hB]
     rw [selfAdjointSpectralProjection_eq_starProjection A hA B hB]
     exact (Submodule.starProjection_orthogonal' U).symm
   have hWcProjection : Wc.starProjection =
