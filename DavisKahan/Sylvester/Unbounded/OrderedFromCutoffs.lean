@@ -233,6 +233,7 @@ section ApproximationNumberEndpointAssumptions
 variable [HasApproximationNumberStrongCutoff.{0, v, 0} ℂ]
 variable [HasKyFanApproximationGaugeTriangle.{0, v} ℂ]
 
+omit [HasKyFanApproximationGaugeTriangle ℂ] in
 /-- Right interface-cutoff inequalities pass to the uncut operators. -/
 theorem kyFan_le_of_interfaceRightCutoff_le
     {B : ComplexClosedOperatorOnF (F := F)}
@@ -261,6 +262,7 @@ theorem kyFan_le_of_interfaceRightCutoff_le
   exact le_of_tendsto_of_tendsto
     (tendsto_const_nhds.mul hX) hC hcutEventually
 
+omit [HasKyFanApproximationGaugeTriangle ℂ] in
 /-- Finite Ky Fan gauges converge under strong orthogonal cutoffs on the target
 side. -/
 theorem kyFan_left_comp_interfaceCutoff_tendsto
@@ -285,6 +287,7 @@ theorem kyFan_left_comp_interfaceCutoff_tendsto
     exact kyFanApproximationGauge_adjoint k K
   simpa only [hpoint, hlimit] using hright
 
+omit [HasKyFanApproximationGaugeTriangle ℂ] in
 /-- Left interface-cutoff inequalities pass to the uncut operators. -/
 theorem kyFan_le_of_interfaceLeftCutoff_le
     {A : ComplexClosedOperatorOnE (E := E)}
@@ -311,6 +314,7 @@ theorem kyFan_le_of_interfaceLeftCutoff_le
   exact le_of_tendsto_of_tendsto
     (tendsto_const_nhds.mul hX) hC hcutEventually
 
+omit [HasApproximationNumberStrongCutoff ℂ] [HasKyFanApproximationGaugeTriangle ℂ] in
 /-- Double interface cutoff turns a domain-aware equation into a bounded
 Sylvester equation between the filled truncations. -/
 theorem interfaceDoubleCutoff_sylvester_equation

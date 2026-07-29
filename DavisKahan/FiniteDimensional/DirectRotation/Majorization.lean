@@ -103,6 +103,7 @@ theorem displacementSquare_unitary (W : E ≃ₗᵢ[𝕜] E) :
   -- the two sides carry `2` and `(2 : ℝ)⁻¹` as unrelated scalar atoms
   match_scalars <;> push_cast <;> ring
 
+omit [FiniteDimensional 𝕜 E] in
 /-- A unitary carrying `U` onto `V` intertwines their orthogonal projections. -/
 theorem projection_intertwines_of_map_eq
     (U V : Submodule 𝕜 E)

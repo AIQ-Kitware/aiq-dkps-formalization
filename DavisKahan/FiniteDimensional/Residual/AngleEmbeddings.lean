@@ -307,6 +307,7 @@ theorem singularValues_tanThetaEmbedding
 
 -- the top eigenvalue only exists on a nonzero coordinate space; every caller
 -- splits on `subsingleton_or_nontrivial F` before reaching here
+omit [FiniteDimensional 𝕜 E] in
 private theorem exists_intervalGap_of_orderedGap
     {A : E →ₗ[𝕜] E} {U : Submodule 𝕜 E}
     [U.HasOrthogonalProjection] [Nontrivial F]

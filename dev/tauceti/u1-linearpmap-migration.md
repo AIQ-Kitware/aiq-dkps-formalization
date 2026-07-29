@@ -190,6 +190,37 @@ is not this lane's to migrate.
 - The `Restriction.lean` and `ClosedSylvesterEquation.lean` facade blocks, once
   their remaining callers move.
 
+**`linter.unusedSectionVars` is cleared to zero everywhere we own it (edward,
+aiq-gpu, 2026-07-29).**  Repo-wide **195 → 60**.  The 60 that remain are **all
+outside our edit rights**: 43 in `DavisKahan/Interop/Spectra/**` (jon (namek)'s
+active campaign) and 17 in vendored `Spectra/**`.  Every `DavisKahan/**` file
+outside `Interop/Spectra` now builds free of this warning.
+
+**Method, because the naive version silently under-delivers.**  The linter
+reports only the instances it can see *at that moment*: omitting them can expose
+another instance in the same theorem, or a different theorem entirely, so the
+warning re-fires with a new list on the next build.  A single sweep therefore
+leaves a tail.  Run it as a **loop to a fixed point** — build → extract → patch →
+rebuild — with a guard that stops if the count fails to fall.  Observed sequence:
+**78 → 34 → 13 → 7 → 3 → 4**, i.e. five productive passes and then a rise that
+tripped the guard, followed by two sites finished by hand.
+
+Three mechanical rules, each of which cost a build cycle to learn:
+
+1. `omit … in` goes above the **docstring**, which is itself above any standalone
+   `@[simp]` line.  Putting it directly above the `theorem` lands it *between*
+   the attribute and its declaration: `unexpected token 'omit'; expected 'lemma'`.
+2. When a theorem already carries an `omit`, **merge** the new instances into
+   that line rather than stacking a second `omit` above it.
+3. Patch a file's sites **in reverse line order** so earlier line numbers stay
+   valid as lines are inserted.
+
+**Verification that makes this safe in bulk:** the change is purely additive, so
+`git diff -U0` must contain **zero non-`omit` changed lines** (it did),
+`check_declaration_name_drift.py` must stay at 0 findings with the declaration
+count unmoved (7176), and the full default build must stay green (9296 jobs).
+If any of those move, the sweep touched something it should not have.
+
 **Linter census across the default build (edward, aiq-gpu, 2026-07-28).**
 `lake build` emits **770 warnings**, the largest classes being
 `linter.unusedSectionVars` **214**, `linter.unusedSimpArgs` **162**,

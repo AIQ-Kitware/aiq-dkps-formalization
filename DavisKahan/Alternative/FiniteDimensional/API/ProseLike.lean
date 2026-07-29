@@ -51,6 +51,7 @@ noncomputable def directedSinThetaOperatorProseLike
     E →L[𝕜] E :=
   V.starProjection ∘L U.starProjection
 
+omit [FiniteDimensional 𝕜 E] [CompleteSpace E] in
 @[simp]
 theorem directedSinThetaOperatorProseLike_apply
     (U V : Submodule 𝕜 E) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
@@ -116,6 +117,7 @@ structure AboveBelowSpectralGapProseLike (T S : E →ₗ[𝕜] E)
   U_spectrum : SpectrumIn T U (Set.Ici (c + g))
   V_spectrum : SpectrumIn S V (Set.Iic c)
 
+omit [CompleteSpace E] in
 /-- Spectral-hypothesis prose-like Davis--Kahan Part III `sin Θ` theorem.
 
 This wrapper is one layer closer to the paper statement than
@@ -144,6 +146,7 @@ structure CanonicalSpectralGapProseLike (T S : E →ₗ[𝕜] E)
   U_spectrum : SpectrumIn T (spectralSubspace T s) (Set.Ici (c + g))
   V_spectrum : SpectrumIn S (spectralSubspace S t) (Set.Iic c)
 
+omit [CompleteSpace E] in
 /-- Canonical spectral-subspace prose-like Davis--Kahan Part III `sin Θ`
 theorem.
 

@@ -42,6 +42,7 @@ variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
 variable (U V : Submodule ℂ H) [U.HasOrthogonalProjection]
   [V.HasOrthogonalProjection]
 
+omit [CompleteSpace H] in
 private theorem projection_mul_projection_eq_zero_of_le_orthogonal
     (K L : Submodule ℂ H) [K.HasOrthogonalProjection]
     [L.HasOrthogonalProjection] (hKL : K ≤ Lᗮ) :
@@ -53,6 +54,7 @@ private theorem projection_mul_projection_eq_zero_of_le_orthogonal
     Submodule.starProjection_apply_eq_zero_iff]
   exact hxOrth
 
+omit [CompleteSpace H] in
 private theorem projection_mul_projection_eq_zero_of_ge_orthogonal
     (K L : Submodule ℂ H) [K.HasOrthogonalProjection]
     [L.HasOrthogonalProjection] (hKL : K ≤ Lᗮ) :
