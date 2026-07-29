@@ -467,7 +467,7 @@ except for one declaration (see
 | `yuWangSamworth_lemma5_{columns,rows,isometricColumns,orthonormalColumns,orthonormalRows}` | `…/InnerProductSpace/{FrameFactorization,NearIsometry}` *(verify)* | Parallel formulation | reusable core to `ForTauCeti`; wrappers stay |
 | `yuWangSamworth_equation4`, `yuWangSamworth_equation4_printed_counterexample` | none | Paper-specific | paper package — this is a **source-defect record** and must not be silently dropped |
 | `CorrespondingRightSingularBlock`, `CorrespondingLeftSingularBlock`, `RightSingularPopulationGap`, `LeftSingularPopulationGap` | none | Paper-specific predicates | paper package |
-| `rectangularFrobenius_adjoint`, `rectangularFrobenius_twoSided_comp_le`, `frobenius_comp_rectangular_le_opNorm_mul` | **none — verified 2026-07-29.** `ForTauCeti/…/RectangularUnitarilyInvariantNorm/Instances` has `frobenius_apply`, `frobenius_linearIsometry_comp`, `frobenius_projection_comp_le`, `frobenius_subtype_comp`, `frobenius_eq_sqrt_sum_sq_singularValues` — but no adjoint-invariance and no two-sided ideal bound | **Missing reusable result** (not a duplicate; my first-pass guess was wrong) | `…/RectangularUnitarilyInvariantNorm/Instances`, beside the existing `frobenius_*` family |
+| `rectangularFrobenius_adjoint`, `rectangularFrobenius_twoSided_comp_le`, `frobenius_comp_rectangular_le_opNorm_mul` — **BLOCKED, see note below the table** | **none — verified 2026-07-29.** `ForTauCeti/…/RectangularUnitarilyInvariantNorm/Instances` has `frobenius_apply`, `frobenius_linearIsometry_comp`, `frobenius_projection_comp_le`, `frobenius_subtype_comp`, `frobenius_eq_sqrt_sum_sq_singularValues` — but no adjoint-invariance and no two-sided ideal bound | **Missing reusable result** (not a duplicate; my first-pass guess was wrong) | `…/RectangularUnitarilyInvariantNorm/Instances`, beside the existing `frobenius_*` family |
 | `frobenius_{right,left}Gram_sub_le{,_paperCoefficient}`, `opNorm_{right,left}Gram_sub_le_paperCoefficient` | `…/InnerProductSpace/GramMatrix` *(verify)* | Missing reusable result | Gram-perturbation layer |
 | `opNorm_eq_topSingularValue` | `TauCeti.opNorm_eq_singularValues_zero` in `…/InnerProductSpace/TwoDimensionalSingularValues` — **verified duplicate 2026-07-29**, identical proof, strictly more general (dimension explicit rather than `[Nontrivial E]`) | Wrapper duplicate — **DEDUPED 2026-07-29** | now a one-line wrapper carrying no proof; inline it at migration |
 | `sum_opNorm_le_paperCoefficient` | none | Paper-specific coefficient | paper package |
@@ -488,6 +488,37 @@ except for one declaration (see
 | `finiteValue*` family, `gramBands_disjoint`, `exists_uniform_positive_separation` | none | Missing reusable (small) | finite-value/band combinatorics; low priority |
 | `sharp_*` (bounded and unbounded, `stableSingularPair_*`, `unboundedStableSingularPair_*`) | none | Paper-specific | `DavisKahan/` — Davis--Kahan Section 7 |
 | `UnboundedApproximateLeadingSingularFamily`, `exists_unboundedApproximateLeadingSingularFamily` | none | **BLOCKED — not proved** | do not migrate; see the lane document |
+
+### Y3 is not independent: the Frobenius items are gated on the Hilbert--Schmidt wave
+
+Measured 2026-07-29. The three missing-reusable Frobenius results above cannot
+move to `ForTauCeti` yet. Their proofs all route through the `paperHilbertSchmidt*`
+layer — `IsPaperHilbertSchmidt`, `paperHilbertSchmidtNorm`,
+`paperHilbertSchmidtNorm_comp_le`, `paperHilbertSchmidtNorm_adjoint`,
+`paperHilbertSchmidtNorm_eq_rectangularFrobenius`,
+`paperHilbertSchmidtNorm_eq_frobenius` — which lives in
+`DavisKahan/Sources/DavisKahan1970/Ideals/HilbertSchmidt.lean`.
+
+`ForTauCeti` may import only `Mathlib` / `TauCeti` / `ForTauCeti`, so moving the
+Frobenius lemmas requires the **Hilbert--Schmidt / trace-class row** of the seed
+matrix ("one HS predicate+norm; others are equivalence theorems", Cluster D /
+Wave 5) to land first. That row is itself gated on the Spectra removal plan.
+
+Consequence for sequencing: **Y3 cannot be completed as an independent lane.**
+What Y3 *can* do now, without waiting:
+
+- the paper-specific rows (Theorem 1, Theorem 4 right/left, aligned-frame and
+  rank-one corollaries, Lemma 5 wrappers, equation (4) and its counterexample) —
+  these stay downstream by classification, so they need a paper package, not
+  `ForTauCeti`, and that move is unblocked;
+- the wrapper dedups against results `ForTauCeti` already has
+  (`opNorm_eq_topSingularValue` is done);
+- the Gram-perturbation rows, once checked the same way — they may or may not
+  share the HS dependency.
+
+The reusable *core* of Yu--Wang--Samworth reaches `ForTauCeti` only after the HS
+wave. That is a real ordering constraint, not a scheduling preference, and it
+should be reflected in any plan that promises "the complete YWS set" upstream.
 
 ### Ordering note
 
