@@ -574,5 +574,170 @@ theorem isSelfAdjoint_specRestrict : IsSelfAdjoint (specRestrict hA B hB) := by
 
 end Reduce
 
+section BoundedSet
+
+variable {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A)
+
+/-- Off the Cayley singularity, `κ(w) + i = 2i/(1 - w)`. -/
+theorem cayleyInv_add_I {w : _root_.spectrum ℂ (cayley hA)} (hw1 : (w : ℂ) ≠ 1) :
+    ((cayleyInv hA w : ℝ) : ℂ) + Complex.I = (2 * Complex.I) / (1 - (w : ℂ)) := by
+  have hnorm : ‖(w : ℂ)‖ = 1 :=
+    spectrum.norm_eq_one_of_unitary (cayley_mem_unitary hA) w.2
+  have hd : (1 : ℂ) - (w : ℂ) ≠ 0 := sub_ne_zero.mpr (Ne.symm hw1)
+  have hcast : ((cayleyInv hA w : ℝ) : ℂ) = Complex.I * (1 + (w : ℂ)) / (1 - (w : ℂ)) :=
+    Complex.ext rfl (by simpa using (inverseCayley_im_eq_zero hnorm hw1).symm)
+  rw [hcast]
+  field_simp
+  ring
+
+variable (B : Set ℝ) (hB : MeasurableSet B)
+
+/-- **Bounded spectral sets.**  If the spectral parameter stays within `r` of `c`
+on `B`, then the spectral projection lands in `dom A` and `A - c` is bounded by
+`r` there.  Both facts come from one identity: `(A + i) E_A(B)` is the Borel
+calculus of `(κ + i) 1_B`, because the resolvent's symbol `(1-w)/(2i)` is the
+pointwise inverse of `κ + i` away from the Cayley singularity. -/
+theorem specProjection_mem_domain_and_norm_le {M c r : ℝ}
+    (hbnd : ∀ s ∈ B, |s| ≤ M) (hr : 0 ≤ r) (hcr : ∀ s ∈ B, |s - c| ≤ r) (y : H) :
+    ∃ hy : specProjection hA B hB y ∈ A.domain,
+      ‖A ⟨specProjection hA B hB y, hy⟩ - (c : ℂ) • specProjection hA B hB y‖
+        ≤ r * ‖y‖ := by
+  classical
+  set hU := isStarNormal_cayley hA with hhU
+  set hni := negI_mem_resolventSet hA with hhni
+  set κ := cayleyInv hA with hκ
+  set S : Set (_root_.spectrum ℂ (cayley hA)) := κ ⁻¹' B with hS
+  have hSm : MeasurableSet S := measurable_cayleyInv hA hB
+  set ind : _root_.spectrum ℂ (cayley hA) → ℂ := S.indicator (fun _ => 1) with hind
+  have hindb : BorelCalculus.IsBddMeasurable ind :=
+    BorelCalculus.isBddMeasurable_indicator (a := cayley hA) hSm
+  have hmeasκ : Measurable fun w => ((κ w : ℝ) : ℂ) :=
+    Complex.continuous_ofReal.measurable.comp (measurable_cayleyInv hA)
+  set q : _root_.spectrum ℂ (cayley hA) → ℂ :=
+    fun w => ((κ w : ℂ) + Complex.I) * ind w with hq
+  set pf : _root_.spectrum ℂ (cayley hA) → ℂ :=
+    fun w => ((κ w : ℂ) - (c : ℂ)) * ind w with hpf
+  have hqb : BorelCalculus.IsBddMeasurable q := by
+    refine ⟨(hmeasκ.add measurable_const).mul hindb.measurable, max 0 M + 1,
+      by positivity, fun w => ?_⟩
+    by_cases hw : w ∈ S
+    · have hκB : κ w ∈ B := hw
+      have h1 : ‖((κ w : ℂ) + Complex.I)‖ ≤ max 0 M + 1 := by
+        refine le_trans (norm_add_le _ _) ?_
+        rw [Complex.norm_real, Real.norm_eq_abs, Complex.norm_I]
+        have := hbnd _ hκB
+        have := le_max_right 0 M
+        linarith
+      have h2 : ind w = 1 := by simp [hind, hw]
+      rw [hq]; simp only [h2, mul_one]; exact h1
+    · have h2 : ind w = 0 := by simp [hind, hw]
+      rw [hq]; simp only [h2, mul_zero, norm_zero]; positivity
+  have hpb : BorelCalculus.IsBddMeasurable pf := by
+    refine ⟨(hmeasκ.sub measurable_const).mul hindb.measurable, r, hr, fun w => ?_⟩
+    by_cases hw : w ∈ S
+    · have hκB : κ w ∈ B := hw
+      have h2 : ind w = 1 := by simp [hind, hw]
+      rw [hpf]; simp only [h2, mul_one]
+      rw [show ((κ w : ℂ) - (c : ℂ)) = ((κ w - c : ℝ) : ℂ) by push_cast; ring,
+        Complex.norm_real, Real.norm_eq_abs]
+      exact hcr _ hκB
+    · have h2 : ind w = 0 := by simp [hind, hw]
+      rw [hpf]; simp only [h2, mul_zero, norm_zero]; exact hr
+  -- the resolvent as a Borel-calculus image
+  set gsym : C(_root_.spectrum ℂ (cayley hA), ℂ) :=
+    (2 * Complex.I)⁻¹ • (1 - cayleyCoord hA) with hgsym
+  have hgb : BorelCalculus.IsBddMeasurable (fun w => gsym w) :=
+    BorelCalculus.IsBddMeasurable.of_continuous gsym
+  have hRg : resolvent A hni = BorelCalculus.borelCalculus hU hgb :=
+    resolvent_negI_eq_borelCalculus hA hgb
+  -- the product symbol is the indicator, off the Cayley singularity
+  have hprod : BorelCalculus.borelCalculus hU (hgb.mul hqb)
+      = BorelCalculus.borelCalculus hU hindb := by
+    refine BorelCalculus.borelCalculus_congr_ae hU _ _ fun η => ?_
+    have hae : ∀ᵐ w ∂(BorelCalculus.diagMeasure hU η),
+        w ∉ ((Subtype.val : _root_.spectrum ℂ (cayley hA) → ℂ) ⁻¹' {1}) :=
+      MeasureTheory.compl_mem_ae_iff.mpr (diagMeasure_cayley_preimage_one hA η)
+    filter_upwards [hae] with w hw
+    have hw1 : (w : ℂ) ≠ 1 := hw
+    have hd : (1 : ℂ) - (w : ℂ) ≠ 0 := sub_ne_zero.mpr (Ne.symm hw1)
+    have hgval : gsym w = (2 * Complex.I)⁻¹ * (1 - (w : ℂ)) := rfl
+    have hκval : ((κ w : ℝ) : ℂ) + Complex.I = (2 * Complex.I) / (1 - (w : ℂ)) :=
+      cayleyInv_add_I hA hw1
+    change gsym w * q w = ind w
+    have hqw : q w = ((κ w : ℂ) + Complex.I) * ind w := rfl
+    rw [hgval, hqw, hκval]
+    field_simp
+  -- hence `(A + i) E(B)` is the Borel calculus of `(κ + i) 1_B`
+  set T := BorelCalculus.borelCalculus hU hqb with hT
+  have hPy : resolvent A hni (T y) = specProjection hA B hB y := by
+    have h := congrArg (fun L : H →L[ℂ] H => L y)
+      ((BorelCalculus.borelCalculus_mul hU hgb hqb).symm.trans hprod)
+    simp only [_root_.mul_apply_eq_comp] at h
+    rw [hRg]
+    exact h
+  have hy : specProjection hA B hB y ∈ A.domain := by
+    rw [← hPy]; exact resolvent_mem_domain hni (T y)
+  refine ⟨hy, ?_⟩
+  -- solve for `A` on the range
+  have hsolve := sub_smul_resolvent hni (T y)
+  have hcongr : (⟨resolvent A hni (T y), resolvent_mem_domain hni (T y)⟩ : A.domain)
+      = ⟨specProjection hA B hB y, hy⟩ := Subtype.ext hPy
+  rw [hcongr, hPy] at hsolve
+  -- the shifted symbol is the difference of the two Borel-calculus images
+  have hpfb : ∀ w, ‖pf w‖ ≤ r := by
+    intro w
+    by_cases hw : w ∈ S
+    · have hκB : κ w ∈ B := hw
+      have h2 : ind w = 1 := by simp [hind, hw]
+      rw [hpf]; simp only [h2, mul_one]
+      rw [show ((κ w : ℂ) - (c : ℂ)) = ((κ w - c : ℝ) : ℂ) by push_cast; ring,
+        Complex.norm_real, Real.norm_eq_abs]
+      exact hcr _ hκB
+    · have h2 : ind w = 0 := by simp [hind, hw]
+      rw [hpf]; simp only [h2, mul_zero, norm_zero]; exact hr
+  set hsm := hindb.const_smul (-(Complex.I + (c : ℂ))) with hhsm
+  have heq : BorelCalculus.borelCalculus hU hpb
+      = BorelCalculus.borelCalculus hU (hqb.add hsm) := by
+    refine BorelCalculus.borelCalculus_congr_ae hU _ _ fun η =>
+      Filter.Eventually.of_forall fun w => ?_
+    change pf w = q w + -(Complex.I + (c : ℂ)) * ind w
+    rw [hpf, hq]; ring
+  have hval : BorelCalculus.borelCalculus hU hpb y
+      = T y - (Complex.I + (c : ℂ)) • specProjection hA B hB y := by
+    rw [heq, BorelCalculus.borelCalculus_add hU hqb hsm,
+      BorelCalculus.borelCalculus_const_smul hU (-(Complex.I + (c : ℂ))) hindb]
+    simp only [_root_.add_apply, _root_.smul_apply, hT]
+    rw [neg_smul, ← sub_eq_add_neg]
+    rfl
+  have hgoal : A ⟨specProjection hA B hB y, hy⟩ - (c : ℂ) • specProjection hA B hB y
+      = BorelCalculus.borelCalculus hU hpb y := by
+    rw [hval]
+    linear_combination (norm := module) hsolve
+  rw [hgoal]
+  exact BorelCalculus.norm_borelCalculus_apply_le hU hpb hr hpfb y
+
+/-- A bounded spectral range lies inside the operator domain. -/
+theorem mem_domain_of_mem_specRange_of_bounded {M : ℝ} (hbnd : ∀ s ∈ B, |s| ≤ M)
+    {x : H} (hx : x ∈ specRange hA B hB) : x ∈ A.domain := by
+  have hfix : specProjection hA B hB x = x := (mem_specRange_iff hA B hB x).mp hx
+  obtain ⟨hy, -⟩ := specProjection_mem_domain_and_norm_le hA B hB hbnd
+    (c := 0) (r := max 0 M) (le_max_left 0 M)
+    (fun s hs => by simpa using le_trans (hbnd s hs) (le_max_right 0 M)) x
+  rwa [hfix] at hy
+
+/-- On a spectral range over a set within `r` of `c`, the operator differs from
+`c` by at most `r` in norm. -/
+theorem norm_sub_smul_le_of_mem_specRange {M c r : ℝ} (hbnd : ∀ s ∈ B, |s| ≤ M)
+    (hr : 0 ≤ r) (hcr : ∀ s ∈ B, |s - c| ≤ r) {x : H} (hx : x ∈ specRange hA B hB)
+    (hmem : x ∈ A.domain) :
+    ‖A ⟨x, hmem⟩ - (c : ℂ) • x‖ ≤ r * ‖x‖ := by
+  have hfix : specProjection hA B hB x = x := (mem_specRange_iff hA B hB x).mp hx
+  obtain ⟨hy, hb⟩ := specProjection_mem_domain_and_norm_le hA B hB hbnd hr hcr x
+  have hsub : (⟨specProjection hA B hB x, hy⟩ : A.domain) = ⟨x, hmem⟩ := Subtype.ext hfix
+  rw [hsub, hfix] at hb
+  exact hb
+
+end BoundedSet
+
 end LinearPMap
 end TauCeti
