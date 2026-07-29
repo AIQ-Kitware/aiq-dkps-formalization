@@ -360,6 +360,27 @@ inside a block comment is correctly ignored.
 
 ---
 
+## Tau Ceti submission ladder
+
+`scripts/derive_tauceti_submission_ladder.py` derives the rungs in
+`tauceti/submission-ladder.md` from the `ForTauCeti` import graph, so the
+document cannot silently go stale the way it did within hours of being written.
+
+```sh
+python3 scripts/derive_tauceti_submission_ladder.py          # report
+python3 scripts/derive_tauceti_submission_ladder.py --check  # exit 1 if the document disagrees
+python3 scripts/derive_tauceti_submission_ladder.py --json   # machine-readable
+```
+
+Rungs are defined by **seed** modules in the script's `RUNGS` table; everything
+else — the `new` count, the cumulative closed slice, what is off the ladder — is
+computed. Add a rung by adding seeds, not by writing a number.
+
+It currently reports **41 of 156 modules on the ladder**; the other 115 have no
+submission path, which is the measurement behind lane `LADDER-EXT`.
+
+---
+
 ## Declaration-name drift
 
 Three places in this repository assert declaration names as **data**, where no
