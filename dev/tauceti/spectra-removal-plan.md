@@ -666,3 +666,52 @@ gap-resolvent bound, bounded Kato--Rellich, the self-adjoint criterion, the
 provenance record must say so: extraction class *new*, with Spectra credited for
 theorem selection (its `spectralPVM` is what identified the endpoint) and the
 explicit note that the construction is independent.
+
+## Cayley route: state of construction and the exact remaining steps
+
+**Built and verified** (`ForTauCeti/Analysis/InnerProductSpace/LinearPMap/SelfAdjointResolvent.lean`):
+
+| result | name |
+|---|---|
+| `±i` are resolvent points | `I_mem_resolventSet`, `negI_mem_resolventSet` |
+| exact norm identity `‖(A-z)x‖² = ‖(A-Re z)x‖² + (Im z)²‖x‖²` | `norm_sub_smul_sq` |
+| Cayley transform, manifestly bounded as `1 - 2i·R(-i)` | `cayley` |
+| its action `Uξ = (A-i)·R(-i)ξ` | `cayley_apply` |
+| isometry | `norm_cayley_apply` |
+| inner-product preservation | `inner_cayley` |
+| surjectivity | `surjective_cayley` |
+| **unitarity** | `cayley_mem_unitary` |
+| star-normality, unlocking Mathlib `cfc` | `isStarNormal_cayley` |
+
+### Remaining, with the Mathlib API verified to exist
+
+1. **The positive functional.** `Λ_ξ f := re ⟪ξ, cfcHom (isStarNormal_cayley hA) f ξ⟫`
+   for `f : C(spectrum ℂ U, ℝ)`. `cfcHom : C(spectrum R a, R) →⋆ₐ[R] A` is in
+   `Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/Unital.lean:239`.
+   Positivity for `f ≥ 0` comes from the CFC order API
+   (`.../ContinuousFunctionalCalculus/Order.lean`).
+2. **`diag ξ` on the circle.** `MeasureTheory.rieszMeasure Λ_ξ`, with
+   `integral_rieszMeasure` (`.../RieszMarkovKakutani/Real.lean:343`) giving
+   `∫ f dμ = Λ_ξ f`. `spectrum ℂ U` is compact, so `C_c = C`.
+3. **Pushforward to `ℝ`** along the inverse Cayley map `w ↦ i(1 + w)/(1 - w)`.
+   **The subtlety, do not skip it:** the map blows up at `w = 1`, and `1` may lie
+   in `spectrum U`. What rescues it is that `U - 1` has dense range for
+   self-adjoint `A` — equivalently `1` is not an *eigenvalue* — so `diag ξ` gives
+   no mass to `{1}`. That fact needs proving; it is the one genuinely delicate
+   step left.
+4. **`proj B`** for Borel `B`: polarise `diag` to a complex measure `μ_{ξ,η}`,
+   then Riesz representation gives the operator from the sesquilinear form.
+5. **The `ProjValMeasure` axioms**: `inner_proj` (the weld) and `proj_univ` are
+   direct; **`proj_inter` (multiplicativity) is the hard one** and needs a
+   monotone-class/Dynkin argument lifting multiplicativity from continuous
+   functions to Borel sets.
+
+Estimated 1,000–1,400 lines. Steps 3 and 5 are where the mathematics is; 1, 2
+and 4 are assembly against verified Mathlib API.
+
+### One import gap to resolve on resumption
+
+`unitary_iff_isStarNormal_and_spectrum_subset_unitary` would give
+`spectrum ℂ U ⊆ unitary ℂ` (the unit circle) directly, but applying it stalls
+instance search on `ContinuousFunctionalCalculus ℂ ?m IsStarNormal`. That is an
+import gap, not a mathematical one; it will need fixing for step 3.
