@@ -660,3 +660,56 @@ it.
 4. The partition `Ico (kε) ((k+1)ε)` for `k : ℤ`, plus "nonzero projection ⟹ its
    interval meets the spectrum".
 5. The `ε → 0` limit and the shift `σ(B + s) = σ(B) + s`.
+
+---
+
+## Update 2026-07-29 — SR-D4b: what the assembly is actually blocked on
+
+Items 1–4 are done and item 5 shrank (the shift theorem is unnecessary — `s`
+carries through the block estimate directly).  Attempting the assembly turned up
+a concrete obstacle that is **not** more mathematics, and it is worth naming
+because it will cost whoever hits it an hour otherwise.
+
+### The obstacle: two proofs of self-adjointness that are not interchangeable
+
+`sylvester_block_identity` is stated with
+`isSelfAdjoint_generator U : IsSelfAdjoint (generator U)`, so the spectral
+projections in it are projections of `generator U`.
+
+The consumer works with `U = genToGroup hA` for a *given* `hA : IsSelfAdjoint A`,
+and wants projections of `A`.  By SR-D4a `generator (genToGroup hA) = A`, so the
+two operators are equal — but `isSelfAdjoint_generator (genToGroup hA)` and `hA`
+prove **different propositions**, interchangeable only across that equality.
+`specProjection` takes the self-adjointness proof as an argument, so swapping
+them is a dependent rewrite through the projection, the domain memberships, and
+the cut operator.
+
+The commutation has the same shape: `specProjection_expLimit_apply` is about
+`expLimit hA t`, and `(genToGroup hA).U t` *is* `expLimit hA t` definitionally —
+but only when the projection is built from `hA` rather than from
+`isSelfAdjoint_generator (genToGroup hA)`.
+
+### Two ways out; the first is much cheaper
+
+1. **Restate `sylvester_block_identity` (and `blockCLM_comm_sylvesterGroup`'s
+   spectral instance) to take `hA : IsSelfAdjoint A` together with
+   `hUA : generator U = A`**, instead of using `isSelfAdjoint_generator U`
+   internally.  Then every projection is a projection of `A`, the consumer
+   passes `generator_genToGroup hA`, and no dependent rewriting happens
+   anywhere.  This is a signature change to two files I wrote today.
+2. Prove **`U.U t = expLimit (isSelfAdjoint_generator U) t`** for an arbitrary
+   one-parameter unitary group — "a C₀ group is the exponential of its
+   generator".  True and worth having, but it is a real theorem (group
+   uniqueness from the generator, via the Laplace transform), and it is not
+   needed for anything else right now.
+
+**Take route 1.**  Route 2 is the more satisfying library result and should be
+recorded on the roadmap, but it is not on the critical path.
+
+### Where the spectra hypothesis lands
+
+State the final theorem in terms of `spectrum (generator U)` and
+`spectrum (generator V)`.  The consumer converts to `spectrum A` / `spectrum B`
+with a single `congrArg` through `generator_genToGroup` — `spectrum` is not
+dependent, so that direction is free.  It is only the *self-adjointness proof*
+that is awkward to move, not the operator.
