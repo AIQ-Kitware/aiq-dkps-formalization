@@ -88,17 +88,36 @@ are free; claim in `dev/LANES.md` before the first edit.
 `memLp_columns_iff`, `summable_norm_columnSeries`, `summable_sq`,
 `tsum_sq_eq_norm_sq`.  In flight: `ofLp` and the round trips.
 
-### D2 — re-base `HilbertSchmidtColumnExpansion` onto `lp`  *(OPEN)*
+### D2 — `HilbertSchmidtColumnExpansion`  *(OPEN, but **I mis-specified it — read this**)*
 
-`DavisKahan/Interop/Spectra/HilbertSchmidtColumnExpansion.lean`, 298 lines,
-11 `mathAhead_*` declarations.  **Independent of D1's endpoint** — it needs only
-`columns` and `memLp_columns_iff`, both landed.
+**Correction, same day.**  I released D2 as "independent of D1, needs only
+`columns` and `memLp_columns_iff`, a re-base rather than a port".  **That is
+wrong and I checked it after publishing.**  The eleven declarations are stated
+about the tensor model itself — `columnTensor b z i`, `HilbertTensor.mapL`,
+`HilbertTensor.{norm_tmul, norm_mapL, inner_tmul_tmul}` — and about the
+antilinear conjugate space `Conj.map`, which edward measured as **not
+dissolvable** against Mathlib.  So this is a *restatement*, not a substitution,
+and it is not independent of anything: it is the tensor model's own column
+theory.
 
-edward measured these as externally unused but **deliberately retained for
-upstreaming**, so they are carried across, not deleted.  They are DKPS-authored
-(`SpectraBridge` namespace), so this is a re-base onto Mathlib's `lp`, not a
-port: today each is stated about `Spectra.HilbertSchmidtTensor.Space`, and each
-has an `lp` counterpart with the same content.
+What that means for the lane:
+
+* under the `lp` route the *content* of these declarations — the column
+  expansion of a Hilbert–Schmidt operator — is what `HilbertSchmidtLp.lean`
+  supplies natively, so they are **superseded**, not re-based;
+* but edward measured them as externally unused and **deliberately retained for
+  upstreaming**, so deleting them silently is the wrong call;
+* and per jon the file must stop *depending* on `vendor/Spectra`, so leaving
+  them as they are is not an option either.
+
+**So D2 is a judgement call, not a mechanical job**, and it needs whoever takes
+it to decide between restating the eleven over `lp` (real work, and the honest
+preservation of the intent) and retiring them with a note pointing at the `lp`
+equivalents.  My view is the second, because the `lp` statements *are* the same
+mathematics in the representation Tau Ceti will actually take — but it is
+edward's retention call to overturn, not mine, so ask them.
+
+Estimated properly: **not** the free lane I advertised.
 
 ### D3 — the Sylvester operator on `HS` and its spectral-gap inverse  *(OPEN once D1 lands)*
 
@@ -124,6 +143,6 @@ estimate.  The gap inverse is genuine content.
 `paperHilbertSchmidt_sylvester_defectFirst` is the only real consumer and its
 proof is 40 lines.
 
-**If you take D2 you are not blocked on me at all.**  If you want D3, say so in
-`LANES.md` and I will land D1's remaining API first and tell you the moment it
-is importable.
+**D3 is the clean parallel lane**, not D2 — it is blocked only on D1's API, and
+I will say here the moment that is importable.  D2 needs a decision from edward
+first.
