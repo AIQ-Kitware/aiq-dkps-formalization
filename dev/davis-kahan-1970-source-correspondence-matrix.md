@@ -179,9 +179,9 @@ The former `PaperHilbertSchmidtSylvester` draft is no longer an open item.  Its
 three intended public square-norm Sylvester declarations are restored in
 `DavisKahan/Sources/DavisKahan1970/Sylvester/PaperHilbertSchmidt.lean` through
 the completed defect-first pairwise-gap proof.  The unrealized joint-PVM
-construction is documented separately in
-`dev/paper-hilbert-schmidt-history-recovery-2026-07-20.md` and is not claimed as
-an additional proof.
+construction was documented separately in
+`dev/topurge/dev/paper-hilbert-schmidt-history-recovery-2026-07-20.md` and is not
+claimed as an additional proof.
 
 ## Math-ahead full-Part-III repair batch
 
