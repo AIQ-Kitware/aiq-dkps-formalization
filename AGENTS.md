@@ -109,6 +109,23 @@ DavisKahan  ←────┘   (DavisKahan / paper may import ForTauCeti)
   `TauCeti/` copy on demand at submission time. `external/Spectra` and
   `external/TauCeti` remain read-only provenance references for the ordinary
   build.
+- **EXECUTIVE DECISION — JON, 2026-07-29. `ForTauCeti` is the product, and it
+  is never deleted.** The goal is an *elegant package* in `ForTauCeti`:
+  coherent API, one canonical spelling per concept, provenance on every module.
+  **That package is what polished roadmaps are generated from, and mechanical
+  ports are then built to satisfy those roadmaps.** It is not a holding pen,
+  and there is no terminal state in which it is empty.
+  **This mistake has now been made twice by agents, which is why it is written
+  here rather than only in `ForTauCeti/README.md`.** Both times an agent read
+  the older "temporary staging layer / successful terminal state is empty or
+  deleted" wording — since superseded in `lakefile.toml` and
+  `ForTauCeti/README.md` — and planned toward draining the library into
+  `external/TauCeti` and deleting it. **If you are about to write a lane, a
+  task, or a doc that ends in deleting `ForTauCeti`, or that treats it as
+  something to be emptied: stop.** The related failure is running
+  `scripts/export_for_tauceti.py --write` as part of ordinary work; it belongs
+  to an actual submission, and run otherwise it leaves untracked copies in the
+  submodule that silently go stale against staging. `--check` is free.
 - Reusable mathematics is written for extraction: keep paper-specific wrappers
   downstream, avoid unnecessary Spectra coupling, record exact provenance.
 - A source claim shown false is completed by a machine-checked counterexample,
