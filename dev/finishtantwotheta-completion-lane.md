@@ -385,7 +385,19 @@ open question about the whole theorem.
 Ordered, each self-contained. T1.1 is the only one with no prerequisite and it
 is the one to start on: nothing downstream can be stated without it.
 
-**T1.1 — the adjoint Riccati equation.** *Blocks everything.*
+**T1.1 — the adjoint Riccati equation. — MOSTLY DONE (2026-07-29).**
+Landed in `DavisKahan/Riccati/UnboundedAdjointRiccati.lean`, axiom-clean:
+`mem_unboundedBlockGraph_orthogonal_iff`, `PreservesAdjointRiccatiDomains`,
+`unboundedBlockGraphOrthogonalDomainVector`, and
+`adjoint_riccati_of_invariant_orthogonal`. **Still open:** deriving
+`PreservesAdjointRiccatiDomains` itself from the projection-preserves-domain
+half of `ReducesSubspace` — the projection onto the complement is
+`P(a,b) = (-X†w, w)` with `w = (I + XX†)⁻¹(b - Xa)`, so domain preservation of
+the projection gives `(I + XX†)⁻¹` preserving `dom A₁`, and `X†z = (I+T)X†w`
+then needs `T` preserving `dom A₀`, which T1.2 supplies. Until that is closed,
+it is an explicit hypothesis, not a `sorry`.
+
+Original statement:
 `ContractiveReducingGraphSelection.reduces` is
 `ReducesSubspace (unboundedBlockOperatorCorePMap H) (unboundedBlockGraph X)`,
 which by definition includes `InvariantSubspace _ (unboundedBlockGraph X)ᗮ`.
@@ -403,7 +415,9 @@ run against `ᗮ` instead of the graph. It belongs beside it, in
 `DavisKahan/Riccati/`, not in this completion lane: it is a general fact about
 reducing Riccati graphs and other consumers will want it.
 
-**T1.2 — the bounded commutator.** *Needs T1.1. Pure algebra after it.*
+**T1.2 — the bounded commutator. — DONE (2026-07-29).**
+`riccatiGramCommutator`, `gram_mem_domain`, `gram_commutator_eq` and
+`norm_riccatiGramCommutator_le` are proved and axiom-clean in the same file.
 For `x ∈ dom A₀`, feeding `z := Xx` into T1.1 and eliminating `A₁(Xx)` with the
 forward Riccati gives `T := X*X` preserving `dom A₀` and
 
