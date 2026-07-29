@@ -128,6 +128,170 @@ theorem norm_gapInverse_le {δ : ℝ} (hδ : 0 < δ) :
   ContinuousLinearMap.opNorm_le_bound _ (by positivity)
     (norm_gapInverse_apply_le hA hδ)
 
+/-- **The domain lemma, in general symbol form.**  If multiplying the symbol by
+`κ + i` leaves it bounded, then the Borel calculus of `h` lands in `dom A`, and
+`A + i` acts there by multiplying the symbol.
+
+`SpectralMeasure.specProjection_apply_sub_smul` is the indicator instance of
+this; a later cleanup can collapse the two. -/
+theorem borelCalculus_mem_domain_of_coord_mul
+    {h : _root_.spectrum ℂ (cayley hA) → ℂ}
+    (hh : BorelCalculus.IsBddMeasurable h)
+    (hq : BorelCalculus.IsBddMeasurable
+      (fun w => ((cayleyInv hA w : ℂ) + Complex.I) * h w)) (ξ : H) :
+    ∃ hmem : BorelCalculus.borelCalculus (isStarNormal_cayley hA) hh ξ ∈ A.domain,
+      A ⟨BorelCalculus.borelCalculus (isStarNormal_cayley hA) hh ξ, hmem⟩
+          + Complex.I • BorelCalculus.borelCalculus (isStarNormal_cayley hA) hh ξ
+        = BorelCalculus.borelCalculus (isStarNormal_cayley hA) hq ξ := by
+  set hU := isStarNormal_cayley hA with hhU
+  set hni := negI_mem_resolventSet hA with hhni
+  set κ := cayleyInv hA with hκ
+  set gsym : C(_root_.spectrum ℂ (cayley hA), ℂ) :=
+    (2 * Complex.I)⁻¹ • (1 - cayleyCoord hA) with hgsym
+  have hgb : BorelCalculus.IsBddMeasurable (fun w => gsym w) :=
+    BorelCalculus.IsBddMeasurable.of_continuous gsym
+  have hRg : resolvent A hni = BorelCalculus.borelCalculus hU hgb :=
+    resolvent_negI_eq_borelCalculus hA hgb
+  -- `gsym · ((κ + i) h) = h` off the Cayley singularity, which is null
+  have hprod : BorelCalculus.borelCalculus hU (hgb.mul hq)
+      = BorelCalculus.borelCalculus hU hh := by
+    refine BorelCalculus.borelCalculus_congr_ae hU _ _ fun η => ?_
+    have hae : ∀ᵐ w ∂(BorelCalculus.diagMeasure hU η),
+        w ∉ ((Subtype.val : _root_.spectrum ℂ (cayley hA) → ℂ) ⁻¹' {1}) :=
+      MeasureTheory.compl_mem_ae_iff.mpr (diagMeasure_cayley_preimage_one hA η)
+    filter_upwards [hae] with w hw
+    have hw1 : (w : ℂ) ≠ 1 := hw
+    have hd : (1 : ℂ) - (w : ℂ) ≠ 0 := sub_ne_zero.mpr (Ne.symm hw1)
+    have hgval : gsym w = (2 * Complex.I)⁻¹ * (1 - (w : ℂ)) := rfl
+    have hκval : ((κ w : ℝ) : ℂ) + Complex.I = (2 * Complex.I) / (1 - (w : ℂ)) :=
+      cayleyInv_add_I hA hw1
+    change gsym w * (((κ w : ℂ) + Complex.I) * h w) = h w
+    rw [hgval, hκval]
+    field_simp
+  set T := BorelCalculus.borelCalculus hU hq with hT
+  have hPy : resolvent A hni (T ξ)
+      = BorelCalculus.borelCalculus hU hh ξ := by
+    have hmul := congrArg (fun L : H →L[ℂ] H => L ξ)
+      ((BorelCalculus.borelCalculus_mul hU hgb hq).symm.trans hprod)
+    simp only [_root_.mul_apply_eq_comp] at hmul
+    rw [hRg]
+    exact hmul
+  have hmem : BorelCalculus.borelCalculus hU hh ξ ∈ A.domain := by
+    rw [← hPy]; exact resolvent_mem_domain hni (T ξ)
+  refine ⟨hmem, ?_⟩
+  have hsolve := sub_smul_resolvent hni (T ξ)
+  have hcongr : (⟨resolvent A hni (T ξ), resolvent_mem_domain hni (T ξ)⟩ : A.domain)
+      = ⟨BorelCalculus.borelCalculus hU hh ξ, hmem⟩ := Subtype.ext hPy
+  rw [hcongr, hPy] at hsolve
+  linear_combination (norm := module) hsolve
+
+/-! ## The vector spectral gap -/
+
+/-- The set of spectral points at distance at least `δ` from the origin. -/
+def gapSet (δ : ℝ) : Set ℝ := {s : ℝ | δ ≤ |s|}
+
+theorem measurableSet_gapSet (δ : ℝ) : MeasurableSet (gapSet δ) :=
+  (isClosed_le continuous_const continuous_abs).measurableSet
+
+theorem compl_gapSet (δ : ℝ) : (gapSet δ)ᶜ = Set.Ioo (-δ) δ := by
+  ext s
+  simp only [gapSet, Set.mem_compl_iff, Set.mem_setOf_eq, not_le, Set.mem_Ioo,
+    abs_lt]
+
+/-- **A vector spectral gap**: the diagonal measure of `ξ` gives no mass to
+`(-δ, δ)`.  This is the hypothesis under which `ξ` is in the range of `A` with
+the sharp bound. -/
+def HasVectorSpectralGap (δ : ℝ) (ξ : H) : Prop :=
+  (spectralPVM hA).diag ξ (Set.Ioo (-δ) δ) = 0
+
+/-- Under a vector gap the spectral projection of the gap set fixes `ξ`. -/
+theorem specProjection_gapSet_apply {δ : ℝ} {ξ : H}
+    (hgap : HasVectorSpectralGap hA δ ξ) :
+    specProjection hA (gapSet δ) (measurableSet_gapSet δ) ξ = ξ := by
+  have hcompl : (spectralPVM hA).diag ξ (gapSet δ)ᶜ = 0 := by
+    rw [compl_gapSet]; exact hgap
+  have hzero : specProjection hA (gapSet δ)ᶜ (measurableSet_gapSet δ).compl ξ = 0 := by
+    have hq := (spectralPVM hA).norm_sq_proj_apply (gapSet δ)ᶜ
+      (measurableSet_gapSet δ).compl ξ
+    rw [hcompl] at hq
+    simp only [ENNReal.toReal_zero] at hq
+    have hz : ‖specProjection hA (gapSet δ)ᶜ (measurableSet_gapSet δ).compl ξ‖ = 0 :=
+      pow_eq_zero_iff (n := 2) (by norm_num) |>.mp hq
+    exact norm_eq_zero.mp hz
+  have hc := (spectralPVM hA).proj_compl (gapSet δ) (measurableSet_gapSet δ)
+  have happ := congrArg (fun T : H →L[ℂ] H => T ξ) hc
+  simp only [sub_apply, ContinuousLinearMap.id_apply] at happ
+  rw [show (spectralPVM hA).proj (gapSet δ)ᶜ (measurableSet_gapSet δ).compl
+      = specProjection hA (gapSet δ)ᶜ (measurableSet_gapSet δ).compl from rfl,
+    hzero] at happ
+  rw [show specProjection hA (gapSet δ) (measurableSet_gapSet δ)
+      = (spectralPVM hA).proj (gapSet δ) (measurableSet_gapSet δ) from rfl]
+  linear_combination (norm := module) happ
+
+/-! ## The endpoint -/
+
+/-- Multiplying the cut-off reciprocal by `κ` gives the indicator of the gap
+set: that is the whole content of "cut-off reciprocal". -/
+theorem coord_mul_gapSymbolCayley {δ : ℝ} (hδ : 0 < δ) (w : _root_.spectrum ℂ (cayley hA)) :
+    ((cayleyInv hA w : ℂ)) * gapSymbolCayley hA δ w
+      = (cayleyInv hA ⁻¹' gapSet δ).indicator (fun _ => (1 : ℂ)) w := by
+  classical
+  by_cases hw : w ∈ cayleyInv hA ⁻¹' gapSet δ
+  · have hmem : δ ≤ |cayleyInv hA w| := hw
+    rw [Set.indicator_of_mem hw, gapSymbolCayley, coord_mul_gapSymbol hmem hδ]
+  · have hnot : ¬ δ ≤ |cayleyInv hA w| := hw
+    rw [Set.indicator_of_notMem hw, gapSymbolCayley, gapSymbol, if_neg hnot, mul_zero]
+
+/-- **Inversion across a vector spectral gap.**  If the diagonal measure of `ξ`
+avoids `(-δ, δ)` then `ξ` is in the range of `A`, and the preimage
+`gapInverse hA hδ ξ` has norm at most `δ⁻¹ ‖ξ‖`.
+
+This is the engine of the Davis--Kahan square-norm Sylvester estimate, and the
+constant is the sharp one. -/
+theorem apply_gapInverse {δ : ℝ} (hδ : 0 < δ) {ξ : H}
+    (hgap : HasVectorSpectralGap hA δ ξ) :
+    ∃ hmem : gapInverse hA hδ ξ ∈ A.domain,
+      A ⟨gapInverse hA hδ ξ, hmem⟩ = ξ := by
+  classical
+  set hU := isStarNormal_cayley hA with hhU
+  set κ := cayleyInv hA with hκ
+  set g := gapSymbolCayley hA δ with hg
+  have hgb : BorelCalculus.IsBddMeasurable g := isBddMeasurable_gapSymbolCayley hA hδ
+  set S : Set (_root_.spectrum ℂ (cayley hA)) := κ ⁻¹' gapSet δ with hS
+  have hSm : MeasurableSet S := measurable_cayleyInv hA (measurableSet_gapSet δ)
+  have hindb : BorelCalculus.IsBddMeasurable (S.indicator (fun _ => (1 : ℂ))) :=
+    BorelCalculus.isBddMeasurable_indicator (a := cayley hA) hSm
+  -- `(κ + i) g = 1_S + i g`
+  have hsplit : (fun w => ((κ w : ℂ) + Complex.I) * g w)
+      = fun w => S.indicator (fun _ => (1 : ℂ)) w + Complex.I * g w := by
+    funext w
+    rw [add_mul, coord_mul_gapSymbolCayley hA hδ w]
+  have hq : BorelCalculus.IsBddMeasurable
+      (fun w => ((κ w : ℂ) + Complex.I) * g w) := by
+    rw [hsplit]
+    exact hindb.add (hgb.const_smul Complex.I)
+  obtain ⟨hmem, hval⟩ := borelCalculus_mem_domain_of_coord_mul hA hgb hq ξ
+  refine ⟨hmem, ?_⟩
+  -- the right-hand side splits into the projection plus `i` times the inverse
+  have hrhs : BorelCalculus.borelCalculus hU hq ξ
+      = specProjection hA (gapSet δ) (measurableSet_gapSet δ) ξ
+        + Complex.I • BorelCalculus.borelCalculus hU hgb ξ := by
+    have hcongr : BorelCalculus.borelCalculus hU hq
+        = BorelCalculus.borelCalculus hU (hindb.add (hgb.const_smul Complex.I)) := by
+      refine BorelCalculus.borelCalculus_congr_ae hU _ _ fun η =>
+        Filter.Eventually.of_forall fun w => ?_
+      exact congrFun hsplit w
+    rw [hcongr, BorelCalculus.borelCalculus_add hU hindb (hgb.const_smul Complex.I),
+      BorelCalculus.borelCalculus_const_smul hU Complex.I hgb]
+    rfl
+  rw [hrhs, specProjection_gapSet_apply hA hgap] at hval
+  -- `gapInverse` and its unfolding are the same term but different atoms to
+  -- `module`, so the identity is proved in the unfolded form and transported by
+  -- definitional equality.
+  have hfinal : A ⟨BorelCalculus.borelCalculus hU hgb ξ, hmem⟩ = ξ := by
+    linear_combination (norm := module) hval
+  exact hfinal
+
 end GapInverse
 
 end LinearPMap
