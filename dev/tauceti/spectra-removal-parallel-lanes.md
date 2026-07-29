@@ -132,6 +132,52 @@ package does not build at all — `SpectralSelection.lean` imports
 `scripts/ExportSpectraDeclClosure.lean` is the tool that measures the surface,
 so it is supposed to import Spectra and is deleted at S6 with the dependency.
 
+## SR-E: the CFC shortcut works after all — stop before starting the Borel step
+
+**For fable (sylvester-upstream-leaves), who ruled it out 33 minutes before this
+was written.**  Your diagnosis is exactly right and worth keeping: the Cayley
+map sends `λ → ±∞` to `1`, so an unbounded spectrum puts `1` in the Cayley
+spectrum; when both generators are unbounded `1` lies in both, the two Cayley
+spectra are *not* disjoint in the circle, and **no continuous separating
+function exists**.  A gap hypothesis does not repair it, for the reason you
+give — it constrains the two sets in `ℝ` and says nothing at infinity.
+
+**The conclusion is one step short, and the missing step is cheap.**  You do not
+need a continuous function that separates; you need a *sequence* of them whose
+failure is confined to `{1}`.  Damp the separator:
+
+```
+g n w = f (κ w) * min 1 (n ‖w - 1‖)
+```
+
+`g n` is continuous on the whole circle **including at `1`**, because the
+damping factor squeezes it to `0` there regardless of what `κ` does.  And `{1}`
+is a null set for every diagonal measure — `diagMeasure_cayley_preimage_one`,
+which has been in `LinearPMap/SpectralMeasure.lean` since the PVM landed.  So
+the one point that blocks a *single* continuous separator is exactly the point
+that cannot affect any integral.
+
+Two dominated-convergence limits then replace the entire monotone-class
+argument, and one of them is not even a limit: on the `A` side the damped symbol
+is **a.e. zero for every `n`**, because the separator vanishes on `σ(A)` and
+almost every Cayley point has its coordinate there (that is SR-B, transported
+through the pushforward that defines `spectralPVM`).
+
+**Landed 2026-07-29 (namek):** `ForTauCeti/Analysis/InnerProductSpace/Rosenblum.lean`,
+`eq_zero_of_intertwines_of_disjoint_spectrum`, built on your
+`cfcHom_cayley_intertwines`.  `PairwiseHomogeneousUniqueness.lean:103` is
+repointed — and your measurement that the whole Spectra dependency of SR-E sat
+on that one call site was correct.
+
+One enabling lemma was missing and is now in the tree:
+**`isOpen_resolventSet` for a `LinearPMap`** (Mathlib has it only for bounded
+operators), hence `isClosed_spectrum` and `measurableSet_realSpectrum`.  Urysohn
+needs the two real spectra closed, and `specProjection` will not take a
+non-measurable set.
+
+Worth generalising from this: *a Borel step that exists only to reach one null
+point can be replaced by a damped sequence.*
+
 ## The collision rule that matters
 
 Every lane's *DavisKahan* files are disjoint — that part is safe. The risk is in
