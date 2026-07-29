@@ -584,6 +584,54 @@ The reusable *core* of Yu--Wang--Samworth reaches `ForTauCeti` only after the HS
 wave. That is a real ordering constraint, not a scheduling preference, and it
 should be reflected in any plan that promises "the complete YWS set" upstream.
 
+### Y3's unblocked half: the production migration (scoped 2026-07-29, unstarted)
+
+Separating what is blocked from what is not, since they were being conflated.
+
+**Blocked** (architectural decision above): the reusable core — the Frobenius
+ideal results and the Gram-perturbation layer — because it needs the
+Hilbert--Schmidt layer, which needs six Mathlib-bound `ForMathlib` modules that
+`ForTauCeti` cannot import.
+
+**Not blocked**: moving the *paper-facing* Yu--Wang--Samworth material out of the
+temporary completion lane into its production home. The lane's own README defers
+this "until proofs are complete", and they are: `lake build FinishYuWangSamworth`
+is green, sorry-free, and warning-free under the full mathlib standard linter
+set. Nothing about it waits on the `ForTauCeti` decision, because these rows are
+classified paper-specific and stay downstream either way.
+
+Shape of the move:
+
+```
+from  FinishYuWangSamworth/FinishYuWangSamworth/**        (11 modules, 1207 lines)
+to    DavisKahan/Sources/YuWangSamworth2015/**            (currently one 268-line
+                                                           file holding the
+                                                           residual-column layer)
+```
+
+The destination already exists as a single module carrying `residualColumn` and
+the Theorem 2 / Corollary 3 estimates; the numbered results (Theorem 1,
+Theorem 4 right/left, aligned-frame and rank-one corollaries, Lemma 5, and the
+equation (4) counterexample) are what would join it, turning the file into a
+directory.
+
+Checklist for whoever takes it:
+
+1. `Symmetric/`, `Rectangular/`, `Appendix/` become subdirectories of
+   `DavisKahan/Sources/YuWangSamworth2015/`; the existing file becomes
+   `.../ResidualColumn.lean` or similar.
+2. `FinishYuWangSamworth/GroundedImports.lean` disappears — production modules
+   import their real dependencies directly.
+3. Register the new modules in the `DavisKahan` aggregate; drop the
+   `FinishYuWangSamworth` `lean_lib` from `lakefile.toml` once empty.
+4. Re-run `scripts/check_dependency_layers.py` and the source census.
+5. `opNorm_eq_topSingularValue` is already a one-line wrapper over
+   `TauCeti.opNorm_eq_singularValues_zero`; inline it and delete it during the
+   move rather than carrying it across.
+
+This is a mechanical restructuring, not mathematics, but it is large enough that
+it wants its own session rather than the tail of one.
+
 ### Ordering note
 
 The `Majorization` row is the one that should move first: it lands beside a
