@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Interop.Spectra.BoundedSelfAdjointSpectralProjection
+import DavisKahan.Interop.Spectra.Basic
 import DavisKahan.Interop.Spectra.BoundedFromSpectrum
 import DavisKahan.Interop.Spectra.RealSpectrumBridge
 import Spectra.SpectralTheory.Calculus.Bounded
@@ -57,13 +58,55 @@ noncomputable def boundedSelfAdjointGroup
     Spectra.OneParameterUnitaryGroup (H := H) :=
   genToGroup (boundedSelfAdjointOperator A hA).selfAdjoint
 
+omit [CompleteSpace H] in
+/-- The bounded symbol, pulled back to the spectrum, is admissible. -/
+theorem isBddMeasurable_pullback (A : H →L[ℂ] H)
+    (f : ℝ → ℂ) (hf : Measurable f) (hfb : ∃ C : ℝ, ∀ x : ℝ, ‖f x‖ ≤ C) :
+    TauCeti.BorelCalculus.IsBddMeasurable
+      (fun w : spectrum ℂ A => f (TauCeti.BorelCalculus.reCoord w)) := by
+  obtain ⟨C, hC⟩ := hfb
+  exact ⟨hf.comp TauCeti.BorelCalculus.measurable_reCoord, max 0 C, le_max_left 0 C,
+    fun w => le_trans (hC _) (le_max_right 0 C)⟩
+
 /-- Complex-valued globally bounded Borel calculus of a bounded self-adjoint
-map.  This is a direct wrapper around Spectra's production calculus. -/
+map: the native Borel calculus of the (normal) operator, with the symbol pulled
+back along the real part of the spectrum. -/
 noncomputable def boundedSelfAdjointBorelCalculusC
     (A : H →L[ℂ] H) (hA : IsSelfAdjointOperator A)
     (f : ℝ → ℂ) (hf : Measurable f)
     (hfb : ∃ C : ℝ, ∀ x : ℝ, ‖f x‖ ≤ C) : H →L[ℂ] H :=
-  spectralCalculus (boundedSelfAdjointGroup A hA) f hf hfb
+  TauCeti.BorelCalculus.borelCalculus
+    (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hA).isStarNormal
+    (isBddMeasurable_pullback A f hf hfb)
+
+/-- Two symbols agreeing on the real spectrum give the same calculus. -/
+theorem boundedSelfAdjointBorelCalculusC_congr_on_spectrum'
+    (A : H →L[ℂ] H) (hA : IsSelfAdjointOperator A)
+    {f g : ℝ → ℂ}
+    (hf : Measurable f) (hfb : ∃ C : ℝ, ∀ x, ‖f x‖ ≤ C)
+    (hg : Measurable g) (hgb : ∃ C : ℝ, ∀ x, ‖g x‖ ≤ C)
+    (hfg : ∀ x ∈ realSpectrum A, f x = g x) :
+    boundedSelfAdjointBorelCalculusC A hA f hf hfb =
+      boundedSelfAdjointBorelCalculusC A hA g hg hgb := by
+  refine TauCeti.BorelCalculus.borelCalculus_congr_ae _ _ _ fun η =>
+    Filter.Eventually.of_forall fun w => ?_
+  refine hfg _ ?_
+  change ((TauCeti.BorelCalculus.reCoord w : ℝ) : ℂ) ∈ spectrum ℂ A
+  rw [coe_reCoord A hA w]
+  exact w.2
+
+/-- The operator norm of the calculus is controlled by a global symbol bound. -/
+theorem norm_boundedSelfAdjointBorelCalculusC_le'
+    (A : H →L[ℂ] H) (hA : IsSelfAdjointOperator A)
+    (f : ℝ → ℂ) (hf : Measurable f) (hfb : ∃ C : ℝ, ∀ x, ‖f x‖ ≤ C)
+    {C : ℝ} (hC0 : 0 ≤ C) (hC : ∀ x ∈ realSpectrum A, ‖f x‖ ≤ C) :
+    ‖boundedSelfAdjointBorelCalculusC A hA f hf hfb‖ ≤ C := by
+  refine ContinuousLinearMap.opNorm_le_bound _ hC0 fun x => ?_
+  refine TauCeti.BorelCalculus.norm_borelCalculus_apply_le _ _ hC0 (fun w => ?_) x
+  refine hC _ ?_
+  change ((TauCeti.BorelCalculus.reCoord w : ℝ) : ℂ) ∈ spectrum ℂ A
+  rw [coe_reCoord A hA w]
+  exact w.2
 
 /-- Application of the bridged full-domain self-adjoint pmap is the original map. -/
 theorem boundedSelfAdjointOperator_toLinearPMap_apply
@@ -189,13 +232,8 @@ theorem boundedSelfAdjointBorelCalculusC_congr_on_spectrum
     (hg : Measurable g) (hgb : ∃ C : ℝ, ∀ x, ‖g x‖ ≤ C)
     (hfg : ∀ x ∈ realSpectrum A, f x = g x) :
     boundedSelfAdjointBorelCalculusC A hA f hf hfb =
-      boundedSelfAdjointBorelCalculusC A hA g hg hgb := by
-  unfold boundedSelfAdjointBorelCalculusC
-  apply spectralCalculus_congr_ae_forall
-  intro x
-  have hsupp := boundedSelfAdjoint_borelMeasure_support A hA x
-  filter_upwards [Measure.support_mem_ae (μ := borelMeasure (boundedSelfAdjointGroup A hA) x)] with l hl
-  exact hfg l (hsupp hl)
+      boundedSelfAdjointBorelCalculusC A hA g hg hgb :=
+  boundedSelfAdjointBorelCalculusC_congr_on_spectrum' A hA hf hfb hg hgb hfg
 
 /-- Operator norm is bounded by a global pointwise symbol bound. -/
 theorem norm_boundedSelfAdjointBorelCalculusC_le
@@ -203,8 +241,9 @@ theorem norm_boundedSelfAdjointBorelCalculusC_le
     (f : ℝ → ℂ) (hf : Measurable f)
     (hfb : ∃ C : ℝ, ∀ x, ‖f x‖ ≤ C)
     {C : ℝ} (hC : ∀ x, ‖f x‖ ≤ C) :
-    ‖boundedSelfAdjointBorelCalculusC A hA f hf hfb‖ ≤ C := by
-  exact norm_spectralCalculus_le (boundedSelfAdjointGroup A hA) f hf hfb hC
+    ‖boundedSelfAdjointBorelCalculusC A hA f hf hfb‖ ≤ C :=
+  norm_boundedSelfAdjointBorelCalculusC_le' A hA f hf hfb
+    (le_trans (norm_nonneg (f 0)) (hC 0)) (fun x _ => hC x)
 
 /-- A spectrum-only pointwise bound controls a calculus difference. -/
 theorem boundedSelfAdjointBorelCalculusC_norm_sub_le
@@ -216,40 +255,33 @@ theorem boundedSelfAdjointBorelCalculusC_norm_sub_le
     (h : ∀ x ∈ realSpectrum A, ‖f x - g x‖ ≤ C) :
     ‖boundedSelfAdjointBorelCalculusC A hA f hf hfb -
       boundedSelfAdjointBorelCalculusC A hA g hg hgb‖ ≤ C := by
-  set q : ℝ → ℂ := Set.indicator (realSpectrum A) fun x => f x - g x with hq
-  have hqm : Measurable q :=
-    (hf.sub hg).indicator (measurableSet_realSpectrum_boundedSelfAdjoint A hA)
-  have hqb : ∃ D : ℝ, ∀ x, ‖q x‖ ≤ D := by
+  have hd : Measurable (fun x => f x - g x) := hf.sub hg
+  have hdb : ∃ D : ℝ, ∀ x, ‖f x - g x‖ ≤ D := by
     obtain ⟨Cf, hCf⟩ := hfb
     obtain ⟨Cg, hCg⟩ := hgb
-    refine ⟨Cf + Cg, fun x => ?_⟩
-    by_cases hx : x ∈ realSpectrum A
-    · rw [hq, Set.indicator_of_mem hx]
-      exact (norm_sub_le _ _).trans (add_le_add (hCf x) (hCg x))
-    · rw [hq, Set.indicator_of_notMem hx, norm_zero]
-      have hCf0 : 0 ≤ Cf := le_trans (norm_nonneg (f x)) (hCf x)
-      have hCg0 : 0 ≤ Cg := le_trans (norm_nonneg (g x)) (hCg x)
-      linarith
-  have hqC : ∀ x, ‖q x‖ ≤ C := by
-    intro x
-    by_cases hx : x ∈ realSpectrum A
-    · rw [hq, Set.indicator_of_mem hx]
-      exact h x hx
-    · rw [hq, Set.indicator_of_notMem hx, norm_zero]
-      exact hC0
+    exact ⟨Cf + Cg, fun x => (norm_sub_le _ _).trans (add_le_add (hCf x) (hCg x))⟩
   have hsub : boundedSelfAdjointBorelCalculusC A hA f hf hfb -
       boundedSelfAdjointBorelCalculusC A hA g hg hgb =
-      boundedSelfAdjointBorelCalculusC A hA q hqm hqb := by
-    unfold boundedSelfAdjointBorelCalculusC
-    rw [← spectralCalculus_sub (boundedSelfAdjointGroup A hA)
-      f g hf hfb hg hgb (hf.sub hg) (bounded_sub hfb hgb)]
-    apply spectralCalculus_congr_ae_forall
-    intro x
-    have hsupp := boundedSelfAdjoint_borelMeasure_support A hA x
-    filter_upwards [Measure.support_mem_ae (μ := borelMeasure (boundedSelfAdjointGroup A hA) x)] with l hl
-    rw [hq, Set.indicator_of_mem (hsupp hl)]
+      boundedSelfAdjointBorelCalculusC A hA (fun x => f x - g x) hd hdb := by
+    rw [boundedSelfAdjointBorelCalculusC, boundedSelfAdjointBorelCalculusC,
+      boundedSelfAdjointBorelCalculusC]
+    have hgneg : TauCeti.BorelCalculus.borelCalculus
+        (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hA).isStarNormal
+        ((isBddMeasurable_pullback A g hg hgb).const_smul (-1 : ℂ))
+        = -TauCeti.BorelCalculus.borelCalculus
+            (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hA).isStarNormal
+            (isBddMeasurable_pullback A g hg hgb) := by
+      rw [TauCeti.BorelCalculus.borelCalculus_const_smul
+        (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hA).isStarNormal (-1 : ℂ)
+        (isBddMeasurable_pullback A g hg hgb)]
+      module
+    rw [sub_eq_add_neg, ← hgneg, ← TauCeti.BorelCalculus.borelCalculus_add]
+    refine TauCeti.BorelCalculus.borelCalculus_congr_ae _ _ _ fun η =>
+      Filter.Eventually.of_forall fun w => ?_
+    change f _ + -1 * g _ = f _ - g _
+    ring
   rw [hsub]
-  exact norm_boundedSelfAdjointBorelCalculusC_le A hA q hqm hqb hqC
+  refine norm_boundedSelfAdjointBorelCalculusC_le' A hA _ hd hdb hC0 h
 
 /-- A globally bounded cut-off of the identity symbol. -/
 noncomputable def boundedIdentitySymbol (A : H →L[ℂ] H) : ℝ → ℂ :=
@@ -292,44 +324,23 @@ theorem boundedSelfAdjointBorelCalculusC_id [Nontrivial H]
     boundedSelfAdjointBorelCalculusC A hA (boundedIdentitySymbol A)
       (measurable_boundedIdentitySymbol A)
       (bounded_boundedIdentitySymbol A) = A := by
-  let T := boundedSelfAdjointOperator A hA
-  let U := boundedSelfAdjointGroup A hA
-  apply ContinuousLinearMap.ext
-  intro x
-  have hxdomT : x ∈ T.domain := by
-    rw [boundedSelfAdjointOperator_domain A hA]
-    exact Submodule.mem_top
-  have hgen : U.generator = T.toLinearPMap := by
-    simpa [U, boundedSelfAdjointGroup] using generator_genToGroup T.selfAdjoint
-  have hxdomU : x ∈ U.generator.domain := by
-    rw [hgen]
-    exact hxdomT
-  have hidmem := mem_pmapDomain_id_of_mem_generator U ⟨x, hxdomU⟩
-  have hcutmem : x ∈ ProjValMeasure.pmapDomain U.toPVM (boundedIdentitySymbol A) :=
-    mem_pmapDomain_of_bounded U (boundedIdentitySymbol A)
-      (measurable_boundedIdentitySymbol A) (bounded_boundedIdentitySymbol A) x
-  have hae : boundedIdentitySymbol A =ᵐ[borelMeasure U x] fun s => (s : ℂ) := by
-    have hsupp := boundedSelfAdjoint_borelMeasure_support A hA x
-    filter_upwards [Measure.support_mem_ae (μ := borelMeasure U x)] with s hs
-    exact boundedIdentitySymbol_eq A (hsupp hs)
-  have hcongr := pmapOfPVM_congr_ae U
-    (boundedIdentitySymbol A) (fun s => (s : ℂ))
-    (measurable_boundedIdentitySymbol A) Complex.measurable_ofReal
-    ((ProjValMeasure.mem_pmapDomain U.toPVM).mp hcutmem)
-    ((ProjValMeasure.mem_pmapDomain U.toPVM).mp hidmem) hae
-  have hbounded := pmapOfPVM_apply_eq_spectralCalculus_of_bounded U
-    (boundedIdentitySymbol A) (measurable_boundedIdentitySymbol A)
-    (bounded_boundedIdentitySymbol A) x hcutmem
-  have hid := pmapOfPVM_id_eq_generator U ⟨x, hxdomU⟩ hidmem
-  have hgenA : U.generator ⟨x, hxdomU⟩ = A x := by
-    have happly := (LinearPMap.ext_iff.mp hgen).2
-    have hT : T.toLinearPMap ⟨x, hxdomT⟩ = A x := rfl
-    exact (happly (x := x) (hf := hxdomU) (hg := hxdomT)).trans hT
-  unfold boundedSelfAdjointBorelCalculusC
-  change spectralCalculus U (boundedIdentitySymbol A)
-      (measurable_boundedIdentitySymbol A) (bounded_boundedIdentitySymbol A) x = A x
-  rw [← hbounded, hcongr, hid, hgenA]
-
+  set X : C(spectrum ℂ A, ℂ) := (ContinuousMap.id ℂ).restrict (spectrum ℂ A) with hX
+  have hXb : TauCeti.BorelCalculus.IsBddMeasurable (fun w => X w) :=
+    TauCeti.BorelCalculus.IsBddMeasurable.of_continuous X
+  have hstep : boundedSelfAdjointBorelCalculusC A hA (boundedIdentitySymbol A)
+      (measurable_boundedIdentitySymbol A) (bounded_boundedIdentitySymbol A)
+      = TauCeti.BorelCalculus.borelCalculus
+          (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hA).isStarNormal hXb := by
+    refine TauCeti.BorelCalculus.borelCalculus_congr_ae _ _ _ fun η =>
+      Filter.Eventually.of_forall fun w => ?_
+    have hmem : TauCeti.BorelCalculus.reCoord w ∈ realSpectrum A := by
+      change ((TauCeti.BorelCalculus.reCoord w : ℝ) : ℂ) ∈ spectrum ℂ A
+      rw [coe_reCoord A hA w]
+      exact w.2
+    change boundedIdentitySymbol A (TauCeti.BorelCalculus.reCoord w) = X w
+    rw [boundedIdentitySymbol_eq A hmem]
+    exact coe_reCoord A hA w
+  rw [hstep, TauCeti.BorelCalculus.borelCalculus_of_continuous, hX, cfcHom_id]
 
 /-- The real identity symbol is bounded on the real spectrum by the operator
 norm. -/
