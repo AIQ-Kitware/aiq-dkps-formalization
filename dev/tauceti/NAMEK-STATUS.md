@@ -220,3 +220,66 @@ proof is 40 lines.
 **D3 is the clean parallel lane**, not D2 — it is blocked only on D1's API, and
 I will say here the moment that is importable.  D2 needs a decision from edward
 first.
+
+---
+
+## Update 2026-07-29 — D3's crux is closed: Stone's theorem, forward direction
+
+`ForTauCeti/Analysis/InnerProductSpace/OneParameterUnitaryGroup/Stone.lean`
+(new, 11 declarations, tree green at 9277 jobs, axioms `propext` /
+`Classical.choice` / `Quot.sound` only).
+
+**`isSelfAdjoint_generator : IsSelfAdjoint (generator U)`** — the generator of a
+one-parameter unitary group is self-adjoint.
+
+Why this was the crux: everything spectral in the tree — `spectralPVM`, the
+Borel calculus, `apply_gapInverse` — is built from a *self-adjoint*
+`LinearPMap`, and nothing could produce one from a group.  Symmetry
+(`generator_isFormalAdjoint`) was already there and is a different statement.
+The earlier measurement recorded here said the tree lacked Stone's forward
+direction and that von Neumann's criterion was the way around it.  That was
+right; what the measurement missed is how little the criterion actually costs.
+
+### Two things other agents should take from this, independent of SR-D
+
+1. **Density is free.**  A symmetric `A` with `A + i` surjective has dense
+   domain: for `x ⊥ Dom A`, pick `ψ` with `A ψ + i ψ = x`; then
+   `0 = ⟪ψ, x⟫ = ⟪ψ, A ψ⟫ + i‖ψ‖²`, and symmetry makes the first term real, so
+   the imaginary part is `‖ψ‖²` and `ψ = 0`, hence `x = 0`.
+   **The Gårding/mollifier argument that normally carries half of Stone is not
+   needed anywhere.**  If you are reaching for
+   `isSelfAdjoint_of_surjective_addSub`, you no longer owe it a density proof —
+   use `dense_domain_of_surjective_add_I`.
+2. **`ℝ`-linearity of the upstream resolvent is not an obstacle.**  Tau Ceti's
+   `StronglyContinuousSemigroup.resolvent` is only `ℝ`-linear, which looks
+   fatal for a `ℂ`-scalar argument.  It is not: both surjectivity statements
+   come out by **choosing the input vector** `∓i • φ`, never by moving a scalar
+   through `R`.  Same trick should work for any other complex statement someone
+   wants off that library.
+
+The third supplied piece is the **converse of the Wave 3 generator bridge**: the
+semigroup sees only `t → 0⁺`, so its domain is a priori larger than the group's.
+For a unitary group it is not, because
+`genDiffQuot U ψ (-t) = U (-t) (genDiffQuot U ψ t)` and `U (-t) → 1` strongly.
+`SemigroupBridge.lean` named this as the deliberately-omitted direction when it
+was written; it is now supplied, and `SemigroupBridge.lean` itself was not
+touched.
+
+### What is left in D3
+
+The self-adjointness step is closed.  Remaining:
+
+* the Sylvester group `W t Z = U_A t ∘ Z ∘ (U_B t)⋆` as a
+  `OneParameterUnitaryGroup` on `HS(F, E)` — note this needs **no tensor
+  product**, only that conjugating by unitaries preserves the Hilbert–Schmidt
+  norm, which `hilbertSchmidtEnergy_indep` already gives;
+* identifying `-i · generator W` with `Z ↦ A Z - Z B`;
+* then `apply_gapInverse` applies directly.
+
+### The board warning was respected
+
+`dev/LANES.md` item 1 says not to derive SR-D3 from the Fourier/semigroup route,
+because it yields `π/(2δ)` rather than the sharp `δ⁻¹`.  That still stands.
+Stone uses the semigroup route **only for surjectivity**, which is indifferent
+to the constant — no bound in `Stone.lean` comes from an `L¹` mass, and the
+sharp `δ⁻¹` still comes from `SpectralGapInverse.lean`.
