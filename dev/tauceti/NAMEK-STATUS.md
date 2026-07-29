@@ -477,3 +477,53 @@ exactly what the argument consumes.  The Fourier route needs all four.
 In the `lp`-of-columns model the right-hand projections act on the index and the
 left-hand ones columnwise, so this is a genuine lemma and is the natural first
 commit of the lane — and it is worth having independently of D4b.
+
+---
+
+## Update 2026-07-29 — SR-D4b: the block estimate, worked out
+
+Five commits have landed toward D4b.  What follows is the remaining argument in
+executable detail, because the shape matters and one obvious version of it is
+**wrong**.
+
+### Do the estimate at the Hilbert–Schmidt level, not pointwise
+
+The tempting route is to use `generator_sylvesterGroup_apply` pointwise —
+`(𝒮 W)(x) = A (W x) - W (B x)` — and estimate vector by vector.  **That
+degrades**: the error terms come out as `‖Z‖_op ‖Q x‖`, which cannot be compared
+to `‖W‖_HS`, so the blocks do not reassemble.
+
+Do it at the operator level instead, using idempotence to keep every bound
+relative to the block's *own* Hilbert–Schmidt norm:
+
+* `W = P W`, so `(A - λ) W = ((A - λ) P) W` and hence
+  `‖(A - λ) W‖_HS ≤ ‖(A - λ) P‖_op · ‖W‖_HS ≤ ε ‖W‖_HS`;
+* `W = W Q`, so `W (B - α) = W ((B - α) Q)` and hence
+  `‖W (B - α)‖_HS ≤ ‖W‖_HS · ‖(B - α) Q‖_op ≤ ε ‖W‖_HS`;
+* subtracting, `𝒮 W - (λ - α) W = (A - λ) W - W (B - α)`, so
+  `‖𝒮 W‖_HS ≥ (|λ - α| - 2ε) ‖W‖_HS ≥ (δ - 2ε) ‖W‖_HS`.
+
+Both operator bounds are the two ideal properties
+(`hilbertSchmidtEnergy_comp_left_le`, `_comp_right_le`), already in the tree.
+
+### The one construction still missing
+
+`(A - λ) P` has to exist **as a bounded operator** of norm `≤ ε`.  The tree
+gives the estimate pointwise —
+`norm_sub_smul_le_of_mem_specRange : ‖A ⟨y, _⟩ - c • y‖ ≤ r ‖y‖` for `y` in the
+spectral range — so what is missing is only the bundling of `y ↦ A y - λ y` on
+`ran P` into a `→L`, with `specProjection_mem_domain` supplying that the range
+lands in `dom A`.  That is the next commit.
+
+### Then the assembly
+
+Partition `ℝ` into `[kε, (k+1)ε)` for `k : ℤ` (countable, which is why the
+Pythagoras lemmas were stated for an arbitrary index type rather than a
+`Finset`).  A block with `P_k = 0` or `Q_l = 0` contributes nothing, and a
+**nonzero** projection forces its interval to meet the spectrum
+(`specProjection_eq_zero_of_subset_resolventSet`, contrapositive), which is what
+licenses `|λ_k - α_l| ≥ δ` on the surviving blocks.  Sum with
+`tsum_tsum_energy_blocks`, let `ε → 0`, and feed the resulting lower bound into
+the closed-range argument of `SelfAdjointResolvent.lean` to get resolvent
+membership — after which `diag_eq_zero_of_subset_resolventSet` gives the vector
+gap for every `f` at once.
