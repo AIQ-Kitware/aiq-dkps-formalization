@@ -12,9 +12,5 @@
     "DavisKahan.FiniteDimensional.Generalized",
     "DavisKahan.Sources.DavisKahan1970.Audits.Theorem63Distillation"
   ],
-  "production_imports_spectra": [
-    "DavisKahan.Sources.DavisKahan1970.Audits.SylvesterHilbertSchmidt",
-    "DavisKahan.Sources.DavisKahan1970.Sylvester.HilbertSchmidtDefectFirst",
-    "DavisKahan.Sources.DavisKahan1970.Sylvester.HilbertSchmidtPairwise"
-  ]
+  "production_imports_spectra": []
 }
