@@ -358,6 +358,45 @@ subsystem wholesale.** Instead:
 `FourierSemigroup`, the Hilbert–Schmidt generator bridge, and parts of the
 unbounded Sylvester theory are **blocked** until this convergence is done.
 
+#### Wave 3 status (namek, 2026-07-29) — the stated obstacle is not the real one
+
+**Measured.** `dev/tauceti/spectra-removal-plan.md` §S5 records the Wave 3
+collision as *two `resolvent`s and two `generator`s, the same name over the same
+carrier*. At the Lean level that is false, and it matters because it made the
+wave look like a rename problem:
+
+| ours | upstream Tau Ceti |
+|---|---|
+| `TauCeti.LinearPMap.resolvent` — `(A - z)⁻¹` | `StronglyContinuousSemigroup.resolvent`, `ContractionSemigroup.resolvent` — the Laplace transform |
+| `TauCeti.OneParameterUnitaryGroup.generator` — `lim (U t x - x)/(i t)`, two-sided | `StronglyContinuousSemigroup.generator` — `lim (S t x - x)/t`, one-sided |
+
+Everything upstream is namespaced under its structure. **Nothing shadows
+anything and no rename is required.**
+
+What *is* unresolved is whether `OneParameterUnitaryGroup` should exist beside
+`StronglyContinuousSemigroup` at all — i.e. whether we are carrying a parallel
+stack. The theorem that settles it is the bridge, in
+`ForTauCeti/Analysis/InnerProductSpace/OneParameterUnitaryGroup/SemigroupBridge.lean`:
+
+* `toSemigroup U` — a unitary group restricted to `t ≥ 0`, with the complex
+  structure forgotten, **is** a `StronglyContinuousSemigroup`;
+* `generator_toSemigroup` — on the group's generator domain, the semigroup
+  generator is `Complex.I • ` the group generator.
+
+The factor `i` is the Stone convention (`U t = exp (i t A)` with `A`
+self-adjoint, so `i A` is skew-adjoint and generates a unitary semigroup), and
+stating it explicitly is the whole point of the bridge: it is the place the two
+conventions are reconciled rather than silently coexisting.
+
+**Not claimed:** the reverse domain inclusion. That a one-sided limit forces the
+two-sided one for a *unitary* group is true — it is the standard opening move of
+Stone's theorem — but it is a separate argument and no consumer needs it yet.
+
+**Side effect worth recording:** this is the first `ForTauCeti` module to import
+`TauCeti`. The dependency policy has always permitted it; nothing had needed it
+until convergence work started, which is itself evidence that the two stacks had
+been running independently.
+
 ### Wave 4 — coercivity, forms, PDE, and Fredholm reconciliation
 
 Tau Ceti already has Lax–Milgram, energy forms, ellipticity, PDE, and Fredholm
