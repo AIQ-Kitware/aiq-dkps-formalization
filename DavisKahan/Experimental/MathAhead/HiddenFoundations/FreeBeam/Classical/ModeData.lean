@@ -5,7 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
 import DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Classical.CharacteristicConverse
-import DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.SmoothGreenIdentity
+import DavisKahan.Analysis.FourthOrderODE.SmoothGreenIdentity
 import Mathlib.Tactic
 
 /-!

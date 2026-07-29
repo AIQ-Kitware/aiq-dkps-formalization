@@ -1,4 +1,4 @@
-import DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeamCharacteristic
+import DavisKahan.Sources.DavisKahan1970.Section9.FreeBeamCharacteristic
 import DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeamAnalyticFoundation
 import DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.All
 

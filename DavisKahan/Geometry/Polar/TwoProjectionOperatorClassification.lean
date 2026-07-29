@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
-import DavisKahan.Experimental.MathAhead.HiddenFoundations.OrthogonalSummandCoordinates
+import DavisKahan.Geometry.Polar.OrthogonalSummandCoordinates
 
 /-!
 # Operator-level classification of two projections
@@ -43,11 +43,14 @@ noncomputable def restrictToInvariant
     (hK : ∀ x ∈ K, T x ∈ K) : K →L[ℂ] K :=
   (T ∘L K.subtypeL).codRestrict K (fun x => hK (x : H) x.property)
 
+omit [CompleteSpace H] in
+/-- The restriction to an invariant subspace acts as the original operator. -/
 @[simp] theorem restrictToInvariant_apply
     (T : H →L[ℂ] H) (K : Submodule ℂ H)
     (hK : ∀ x ∈ K, T x ∈ K) (x : K) :
     restrictToInvariant T K hK x = ⟨T x, hK x x.property⟩ := rfl
 
+omit [CompleteSpace H] in
 /-- The left projection preserves the trivial Halmos part. -/
 theorem projection_left_invariant_halmosTrivialPart
     (U V : Submodule ℂ H) [U.HasOrthogonalProjection]
@@ -55,6 +58,7 @@ theorem projection_left_invariant_halmosTrivialPart
     ∀ x ∈ halmosTrivialPart U V, projection U x ∈ halmosTrivialPart U V :=
   fun _ hx => projection_mem_halmosTrivialPart_left U V hx
 
+omit [CompleteSpace H] in
 /-- The right projection preserves the trivial Halmos part. -/
 theorem projection_right_invariant_halmosTrivialPart
     (U V : Submodule ℂ H) [U.HasOrthogonalProjection]
@@ -149,7 +153,7 @@ private theorem ambient_apply_trivial
     rw [(halmosTrivialPart U V).starProjection_orthogonal_apply, hfix, sub_self]
   simp [ambient, LinearIsometryEquiv.trans_apply,
     orthogonalCoordinates, orthogonalCoordinatesInv,
-    hfix, hperp, Subtype.coe_eta]
+    hfix, Subtype.coe_eta]
 
 private theorem ambient_apply_generic
     (D : TwoProjectionOperatorEquivalence U V U' V')
@@ -161,7 +165,7 @@ private theorem ambient_apply_generic
     (Submodule.starProjection_apply_eq_zero_iff (halmosTrivialPart U V)).mpr x.2
   simp [ambient, LinearIsometryEquiv.trans_apply,
     orthogonalCoordinates, orthogonalCoordinatesInv,
-    hfix, hK0, Subtype.coe_eta]
+    hK0, Subtype.coe_eta]
 
 /-- The assembled ambient unitary intertwines the left projections. -/
 theorem ambient_intertwines_left
@@ -173,8 +177,7 @@ theorem ambient_intertwines_left
   let T := halmosTrivialPart U V
   let G := halmosGenericPart U V
   have hsplit : x = T.starProjection x + G.starProjection x := by
-    simpa [T, G] using (halmosTrivialPart U V).
-      starProjection_add_starProjection_orthogonal x |>.symm
+    simp [T, G]
   rw [hsplit]
   simp only [map_add, ContinuousLinearMap.comp_apply,
     ContinuousLinearEquiv.coe_coe, LinearIsometryEquiv.coe_coe]
@@ -214,8 +217,7 @@ theorem ambient_intertwines_right
   let T := halmosTrivialPart U V
   let G := halmosGenericPart U V
   have hsplit : x = T.starProjection x + G.starProjection x := by
-    simpa [T, G] using (halmosTrivialPart U V).
-      starProjection_add_starProjection_orthogonal x |>.symm
+    simp [T, G]
   rw [hsplit]
   simp only [map_add, ContinuousLinearMap.comp_apply,
     ContinuousLinearEquiv.coe_coe, LinearIsometryEquiv.coe_coe]

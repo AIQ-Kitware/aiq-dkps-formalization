@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
-import DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.SmoothKernel
+import DavisKahan.Analysis.FourthOrderODE.SmoothKernel
 import Mathlib.Analysis.Complex.RealDeriv
 import Mathlib.Tactic
 
@@ -44,18 +44,23 @@ noncomputable def realAffineData (a b : ℝ) : FourthOrderData where
   deriv2 := fun x => hasDerivAt_const x 0
   deriv3 := fun x => hasDerivAt_const x 0
 
+/-- Value of the real affine mode at `x`. -/
 @[simp] theorem realAffineData_f0 (a b x : ℝ) :
     (realAffineData a b).f0 x = a + b * x := rfl
 
+/-- Its first derivative is the slope. -/
 @[simp] theorem realAffineData_f1 (a b x : ℝ) :
     (realAffineData a b).f1 x = b := rfl
 
+/-- Its second derivative vanishes. -/
 @[simp] theorem realAffineData_f2 (a b x : ℝ) :
     (realAffineData a b).f2 x = 0 := rfl
 
+/-- Its third derivative vanishes. -/
 @[simp] theorem realAffineData_f3 (a b x : ℝ) :
     (realAffineData a b).f3 x = 0 := rfl
 
+/-- Its fourth derivative vanishes -- which is what makes it a kernel element of `u'''' = 0`. -/
 @[simp] theorem realAffineData_f4 (a b x : ℝ) :
     (realAffineData a b).f4 x = 0 := rfl
 
@@ -113,18 +118,23 @@ noncomputable def complexAffineData (a b : ℂ) : ComplexFourthOrderData where
   deriv2 := fun x => hasDerivAt_const x 0
   deriv3 := fun x => hasDerivAt_const x 0
 
+/-- Value of the complex affine mode at `x`. -/
 @[simp] theorem complexAffineData_f0 (a b : ℂ) (x : ℝ) :
     (complexAffineData a b).f0 x = a + (x : ℂ) * b := rfl
 
+/-- Its first derivative is the slope. -/
 @[simp] theorem complexAffineData_f1 (a b : ℂ) (x : ℝ) :
     (complexAffineData a b).f1 x = b := rfl
 
+/-- Its second derivative vanishes. -/
 @[simp] theorem complexAffineData_f2 (a b : ℂ) (x : ℝ) :
     (complexAffineData a b).f2 x = 0 := rfl
 
+/-- Its third derivative vanishes. -/
 @[simp] theorem complexAffineData_f3 (a b : ℂ) (x : ℝ) :
     (complexAffineData a b).f3 x = 0 := rfl
 
+/-- Its fourth derivative vanishes, the complex counterpart of `realAffineData_f4`. -/
 @[simp] theorem complexAffineData_f4 (a b : ℂ) (x : ℝ) :
     (complexAffineData a b).f4 x = 0 := rfl
 

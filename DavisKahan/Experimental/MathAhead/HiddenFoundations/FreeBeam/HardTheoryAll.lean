@@ -4,20 +4,20 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
-import DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Abstract.PositiveSurjectiveCriterion
-import DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Abstract.BoundedInverseRealization
-import DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Abstract.CompactGraphEmbedding
-import DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Abstract.TraceKernelModel
-import DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Abstract.GraphClosedness
-import DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Abstract.MaximalDomainTransport
-import DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Abstract.CoerciveFormResolvent
-import DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Abstract.FormCompactness
-import DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Abstract.BoundedGraphCompactness
+import DavisKahan.SpectralTheory.FormMethod.PositiveSurjectiveCriterion
+import DavisKahan.SpectralTheory.FormMethod.BoundedInverseRealization
+import DavisKahan.SpectralTheory.FormMethod.CompactGraphEmbedding
+import DavisKahan.SpectralTheory.FormMethod.TraceKernelModel
+import DavisKahan.SpectralTheory.FormMethod.GraphClosedness
+import DavisKahan.SpectralTheory.FormMethod.MaximalDomainTransport
+import DavisKahan.SpectralTheory.FormMethod.CoerciveFormResolvent
+import DavisKahan.SpectralTheory.FormMethod.FormCompactness
+import DavisKahan.SpectralTheory.FormMethod.BoundedGraphCompactness
 import DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Classical.CharacteristicConverse
 import DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Classical.ModeData
-import DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Classical.AffineModes
+import DavisKahan.Analysis.FourthOrderODE.AffineModes
 import DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Classical.RootLocalizationReduction
-import DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Analytic.ShiftedBeamRealization
+import DavisKahan.SpectralTheory.FormMethod.ShiftedBeamRealization
 import DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Analytic.EigenmodeReduction
 import DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Analytic.FoundationAssembler
 

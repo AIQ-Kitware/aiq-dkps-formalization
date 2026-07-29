@@ -19,5 +19,6 @@ import DavisKahan.SpectralTheory.All
 import DavisKahan.Sylvester.All
 import DavisKahan.TanTheta.All
 import DavisKahan.TanTwoTheta.All
+import DavisKahan.Analysis.All
 
 /-! # `DavisKahan` -/

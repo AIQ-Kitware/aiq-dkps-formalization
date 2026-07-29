@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
-import DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Abstract.CoerciveFormResolvent
-import DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Abstract.CompactGraphEmbedding
+import DavisKahan.SpectralTheory.FormMethod.CoerciveFormResolvent
+import DavisKahan.SpectralTheory.FormMethod.CompactGraphEmbedding
 import Mathlib.Tactic
 
 /-!
@@ -45,6 +45,7 @@ def SequentiallyCompactEmbedding (j : V →L[ℂ] H) : Prop :=
     ∃ phi : ℕ → ℕ, StrictMono phi ∧
       CauchySeq (fun n => j (u (phi n)))
 
+omit [CompleteSpace H] in
 /-- A bounded operator maps bounded sequences to bounded sequences. -/
 theorem bounded_sequence_comp
     {W : Type*} [NormedAddCommGroup W] [NormedSpace ℂ W]

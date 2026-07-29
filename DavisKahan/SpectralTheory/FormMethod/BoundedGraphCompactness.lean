@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
-import DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Abstract.CompactGraphEmbedding
+import DavisKahan.SpectralTheory.FormMethod.CompactGraphEmbedding
 import Mathlib.Tactic
 
 /-!
@@ -33,6 +33,7 @@ universe u
 variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
   [CompleteSpace H]
 
+omit [CompleteSpace H] in
 /-- A graph-bounded sequence for `A + V` is graph-bounded for `A`. -/
 theorem graph_bound_original_of_addBounded
     (A : DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := H))
@@ -78,6 +79,7 @@ theorem graph_bound_original_of_addBounded
     (sq_le_sq₀ (norm_nonneg _) hfac).2 hAx
   exact add_le_add hx_sq hAx_sq
 
+omit [CompleteSpace H] in
 /-- A graph-bounded sequence for `A` is graph-bounded for `A + V`. -/
 theorem graph_bound_addBounded_of_original
     (A : DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := H))
@@ -119,6 +121,7 @@ theorem graph_bound_addBounded_of_original
     (sq_le_sq₀ (norm_nonneg _) hfac).2 hsum
   exact add_le_add hx_sq hsum_sq
 
+omit [CompleteSpace H] in
 /-- Sequential graph compactness is preserved by a bounded perturbation. -/
 theorem graphCompact_addBounded
     (A : DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := H))
@@ -130,6 +133,7 @@ theorem graphCompact_addBounded
   obtain ⟨D, hD⟩ := graph_bound_original_of_addBounded A V x hC
   exact hA x ⟨D, hD⟩
 
+omit [CompleteSpace H] in
 /-- Sequential graph compactness of a bounded perturbation implies graph
 compactness of the original operator. -/
 theorem graphCompact_of_addBounded
@@ -142,6 +146,7 @@ theorem graphCompact_of_addBounded
   obtain ⟨D, hD⟩ := graph_bound_addBounded_of_original A V x hC
   exact hAV x ⟨D, hD⟩
 
+omit [CompleteSpace H] in
 /-- Bounded perturbations preserve sequential graph compactness exactly. -/
 theorem graphCompact_addBounded_iff
     (A : DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := H))

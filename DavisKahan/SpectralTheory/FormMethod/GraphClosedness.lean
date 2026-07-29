@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
-import DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Abstract.TraceKernelModel
+import DavisKahan.SpectralTheory.FormMethod.TraceKernelModel
 import Mathlib.Tactic
 
 /-!
@@ -51,11 +51,14 @@ noncomputable def freeGraphMap
     D.freeSubspace →L[ℂ] H × H :=
   D.freeEmbed.prod D.freeFourth
 
+omit [CompleteSpace H] [CompleteSpace V] in
+/-- The free graph map, unfolded. -/
 @[simp] theorem freeGraphMap_apply
     (D : FourthOrderTraceModel (H := H) (V := V))
     (x : D.freeSubspace) :
     D.freeGraphMap x = (D.freeEmbed x, D.freeFourth x) := rfl
 
+omit [CompleteSpace H] [CompleteSpace V] in
 /-- The ambient image of the inverse range equivalence is the original domain
 vector. -/
 @[simp] theorem freeEmbed_freeAmbientInverse
@@ -65,6 +68,7 @@ vector. -/
   have h := D.freeRangeEquiv.apply_symm_apply x
   exact congrArg Subtype.val h
 
+omit [CompleteSpace H] [CompleteSpace V] in
 /-- The fourth derivative transported to the ambient domain agrees with the
 free fourth derivative of the recovered graph-space vector. -/
 @[simp] theorem freeFourthAmbient_inverse
@@ -73,6 +77,7 @@ free fourth derivative of the recovered graph-space vector. -/
     D.freeFourthAmbient x = D.freeFourth (D.freeAmbientInverse x) := by
   rfl
 
+omit [CompleteSpace H] [CompleteSpace V] in
 /-- The graph-space range and the ambient partial-operator graph are the same
 subset of `H × H`. -/
 theorem range_freeGraphMap_eq_ambientGraph
@@ -95,6 +100,7 @@ theorem range_freeGraphMap_eq_ambientGraph
     · exact D.freeEmbed_freeAmbientInverse x
     · rfl
 
+omit [CompleteSpace H] in
 /-- An anti-Lipschitz graph embedding has closed ambient operator graph. -/
 theorem isClosed_ambientGraph_of_antilipschitz
     (D : FourthOrderTraceModel (H := H) (V := V))
@@ -105,6 +111,7 @@ theorem isClosed_ambientGraph_of_antilipschitz
   rw [← D.range_freeGraphMap_eq_ambientGraph]
   exact hanti.isClosed_range D.freeGraphMap.uniformContinuous
 
+omit [CompleteSpace H] [CompleteSpace V] in
 /-- A lower graph-norm estimate gives the anti-Lipschitz hypothesis needed for
 closedness. -/
 theorem freeGraphMap_antilipschitz_of_bound
@@ -119,6 +126,7 @@ theorem freeGraphMap_antilipschitz_of_bound
   rw [hcoe, le_inv_mul_iff₀ hc]
   exact hbound x
 
+omit [CompleteSpace H] in
 /-- A positive lower graph-norm estimate proves the transported operator graph
 closed. -/
 theorem isClosed_ambientGraph_of_graphNorm_bound
@@ -130,6 +138,7 @@ theorem isClosed_ambientGraph_of_graphNorm_bound
   D.isClosed_ambientGraph_of_antilipschitz
     (D.freeGraphMap_antilipschitz_of_bound hc hbound)
 
+omit [CompleteSpace H] in
 /-- A graph norm normalized so that `‖x‖ ≤ ‖(Jx,D⁴x)‖` immediately gives
 closedness. -/
 theorem isClosed_ambientGraph_of_normalized_graphNorm
