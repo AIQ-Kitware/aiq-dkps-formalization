@@ -337,5 +337,76 @@ theorem spectralPVM_resolvent_formula (hzr : z ∈ resolventSet A) (ξ : H) :
 
 end ResolventFormula
 
+section Restriction
+
+variable {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A)
+
+/-- The spectral projection of an unbounded self-adjoint operator onto a Borel
+set of the real line. -/
+noncomputable def specProjection (B : Set ℝ) (hB : MeasurableSet B) : H →L[ℂ] H :=
+  (spectralPVM hA).proj B hB
+
+/-- The resolvent at `-i` as an image of the Borel calculus of the Cayley
+transform — the bridge that makes spectral projections commute with it. -/
+theorem resolvent_negI_eq_borelCalculus
+    (hs : BorelCalculus.IsBddMeasurable
+      (fun w => ((2 * Complex.I)⁻¹ • (1 - cayleyCoord hA)) w)) :
+    resolvent A (negI_mem_resolventSet hA)
+      = BorelCalculus.borelCalculus (isStarNormal_cayley hA) hs := by
+  rw [BorelCalculus.borelCalculus_of_continuous, resolvent_negI_eq_cfcHom hA]
+
+/-- **Spectral projections commute with the resolvent.** -/
+theorem specProjection_comm_resolvent (B : Set ℝ) (hB : MeasurableSet B) :
+    specProjection hA B hB * resolvent A (negI_mem_resolventSet hA)
+      = resolvent A (negI_mem_resolventSet hA) * specProjection hA B hB := by
+  have hs : BorelCalculus.IsBddMeasurable
+      (fun w => ((2 * Complex.I)⁻¹ • (1 - cayleyCoord hA)) w) :=
+    BorelCalculus.IsBddMeasurable.of_continuous _
+  rw [resolvent_negI_eq_borelCalculus hA hs, specProjection, spectralPVM,
+    BorelCalculus.toProjValMeasure_proj, BorelCalculus.specProj]
+  exact BorelCalculus.borelCalculus_comm _ _ _
+
+/-- Pointwise form: `P (R φ) = R (P φ)`. -/
+theorem specProjection_resolvent_apply (B : Set ℝ) (hB : MeasurableSet B) (φ : H) :
+    specProjection hA B hB (resolvent A (negI_mem_resolventSet hA) φ)
+      = resolvent A (negI_mem_resolventSet hA) (specProjection hA B hB φ) := by
+  have h := congrArg (fun T : H →L[ℂ] H => T φ) (specProjection_comm_resolvent hA B hB)
+  simpa only [_root_.mul_apply_eq_comp] using h
+
+/-- Every vector of the domain is a resolvent image. -/
+theorem exists_resolvent_eq_of_mem_domain (x : A.domain) :
+    resolvent A (negI_mem_resolventSet hA) (A x - (-Complex.I) • (x : H)) = (x : H) :=
+  resolvent_apply_sub_smul (negI_mem_resolventSet hA) x
+
+/-- **Spectral projections preserve the domain.** -/
+theorem specProjection_mem_domain (B : Set ℝ) (hB : MeasurableSet B) (x : A.domain) :
+    specProjection hA B hB (x : H) ∈ A.domain := by
+  have hx := exists_resolvent_eq_of_mem_domain hA x
+  rw [← hx, specProjection_resolvent_apply]
+  exact resolvent_mem_domain (negI_mem_resolventSet hA) _
+
+/-- **Spectral projections intertwine the operator.** -/
+theorem specProjection_apply_domain (B : Set ℝ) (hB : MeasurableSet B) (x : A.domain) :
+    A ⟨specProjection hA B hB (x : H), specProjection_mem_domain hA B hB x⟩
+      = specProjection hA B hB (A x) := by
+  set hni := negI_mem_resolventSet hA with hhni
+  set P := specProjection hA B hB with hP
+  set φ : H := A x - (-Complex.I) • (x : H) with hφ
+  have hx : resolvent A hni φ = (x : H) := exists_resolvent_eq_of_mem_domain hA x
+  -- `P x` is the resolvent image of `P φ`
+  have hPx : resolvent A hni (P φ) = P (x : H) := by
+    rw [← hx, specProjection_resolvent_apply]
+  have hsolve := sub_smul_resolvent hni (P φ)
+  have hcongr : (⟨resolvent A hni (P φ), resolvent_mem_domain hni (P φ)⟩ : A.domain)
+      = ⟨P (x : H), specProjection_mem_domain hA B hB x⟩ := Subtype.ext hPx
+  rw [hcongr, hPx] at hsolve
+  -- and `P φ = P (A x) + i • P x`
+  have hPφ : P φ = P (A x) - (-Complex.I) • P (x : H) := by
+    rw [hφ, map_sub, map_smul]
+  rw [hPφ] at hsolve
+  linear_combination (norm := module) hsolve
+
+end Restriction
+
 end LinearPMap
 end TauCeti
