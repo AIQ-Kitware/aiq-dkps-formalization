@@ -37,6 +37,7 @@ noncomputable def boundedUnitaryConjugate
   W.toLinearIsometry.toContinuousLinearMap ∘L A ∘L
     W.symm.toLinearIsometry.toContinuousLinearMap
 
+/-- The bounded unitary conjugate, unfolded. -/
 @[simp] theorem boundedUnitaryConjugate_apply
     (W : H ≃ₗᵢ[ℂ] H) (A : H →L[ℂ] H) (x : H) :
     boundedUnitaryConjugate W A x = W (A (W.symm x)) := rfl
