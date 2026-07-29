@@ -190,6 +190,38 @@ is not this lane's to migrate.
 - The `Restriction.lean` and `ClosedSylvesterEquation.lean` facade blocks, once
   their remaining callers move.
 
+**Correction to the blocker map below: it needs a third category, and I found
+that by claiming a target it got wrong (edward, aiq-gpu, 2026-07-28).**  The map
+sorted the surface into *takeable* and *Spectra-gated*.  It called
+`Experimental/InfiniteDimensional/Sylvester/Unbounded.lean` (32 uses) "genuinely
+takeable".  **It is not takeable: it cannot be compiled at all.**
+
+That module is outside the `defaultTargets` closure and sits downstream of
+`Experimental/InfiniteDimensional/Core/Unbounded.lean`, which fails with **30
+errors** on a clean checkout — `ClosedOperator.adjointDomain`,
+`.adjointVector`, `.adjointDomain_dense`, `.adjoint_graph_closed`,
+`.closed_graph_add_relativelyBounded`, `.subScalar`, `.resolvent` no longer
+exist.  Someone removed those fields from the bundle without updating this
+Experimental subtree.  **Verified as pre-existing**, not a regression: I stashed
+my edit and rebuilt the same target at baseline — the same 30 errors.  So no
+migration of anything downstream can be validated, and a green build there is
+currently unobtainable.
+
+**Third category, measured by import closure from `defaultTargets` (not by
+scraping a build log — an incremental build emits no line for up-to-date
+modules, which inflated my first attempt at this number to a meaningless 71%):**
+
+- **120 of 576 bundle uses (20%) are in modules outside the default-build
+  closure**, every one of them under `Experimental/**`.
+- The two largest are exactly `Core/UnboundedSpectral.lean` (38) and
+  `Sylvester/Unbounded.lean` (32) — the pair blocked by the rot above.
+
+**Practical rule this yields:** before claiming any `Experimental/**` target,
+run `lake build <that module>` *first*.  Roughly a fifth of the nominal
+remaining surface is in modules that no gate covers, and some of it is already
+red for reasons unrelated to U1.  The same trap produced the
+`StandardFanDominance.lean` misdiagnosis recorded earlier in this document.
+
 **Blocker map of the remaining bundle surface (edward, aiq-gpu, 2026-07-28).**
 **582 type-position uses across 67 files.**  Only ~30% sit in files that touch
 `Interop/Spectra`.  The point of this map is that the inventory's per-file counts
