@@ -60,6 +60,8 @@ def ritzHighCoefficient : ℝ := (1 + Real.sqrt 3 / 3) / 2
 /-- The two Ritz values in equation (9.5). -/
 def ritzLow (ε : ℝ) : ℝ := ε * ritzLowCoefficient
 
+/-- The upper Ritz value of equation (9.5).  Stated separately from `ritzLow` so that
+each declaration carries its own documentation. -/
 def ritzHigh (ε : ℝ) : ℝ := ε * ritzHighCoefficient
 
 /-- The residual Gram matrix before Rayleigh--Ritz recentering. -/
@@ -72,6 +74,7 @@ def residualGram (ε : ℝ) : SymmetricTwoByTwo where
 def residualGramEigenvalueLow (ε : ℝ) : ℝ :=
   ε ^ 2 / 30 * (11 - Real.sqrt 76)
 
+/-- The larger eigenvalue of the initial residual Gram matrix. -/
 def residualGramEigenvalueHigh (ε : ℝ) : ℝ :=
   ε ^ 2 / 30 * (11 + Real.sqrt 76)
 
@@ -101,6 +104,8 @@ def orthogonalResidualSingularValue (ε : ℝ) : ℝ :=
 def orthogonalResidualColumnNorm (ε : ℝ) : ℝ :=
   |ε| * (Real.sqrt 30 / 30)
 
+/-- `(√3)⁻¹ = √3 / 3`.  The radical is kept in the numerator throughout this file, so
+this is the normalisation the Ritz coefficients are stated against. -/
 lemma inv_sqrt_three_eq : (Real.sqrt 3)⁻¹ = Real.sqrt 3 / 3 := by
   have hs : Real.sqrt (3 : ℝ) ^ 2 = 3 := Real.sq_sqrt (by norm_num)
   have hn : Real.sqrt (3 : ℝ) ≠ 0 := ne_of_gt (Real.sqrt_pos.2 (by norm_num))
@@ -108,20 +113,24 @@ lemma inv_sqrt_three_eq : (Real.sqrt 3)⁻¹ = Real.sqrt 3 / 3 := by
   field_simp [hn]
   nlinarith
 
+/-- The two Ritz values sum to `ε`: the pair is centred on `ε / 2`. -/
 lemma ritzLow_add_ritzHigh (ε : ℝ) : ritzLow ε + ritzHigh ε = ε := by
   unfold ritzLow ritzHigh ritzLowCoefficient ritzHighCoefficient
   ring
 
+/-- The Ritz gap is `ε · √3 / 3`, i.e. `ε / √3`. -/
 lemma ritzHigh_sub_ritzLow (ε : ℝ) :
     ritzHigh ε - ritzLow ε = ε * (Real.sqrt 3 / 3) := by
   unfold ritzLow ritzHigh ritzLowCoefficient ritzHighCoefficient
   ring
 
+/-- Trace of the initial residual Gram matrix: `11 ε² / 15`. -/
 lemma residualGram_trace (ε : ℝ) :
     (residualGram ε).trace = 11 * ε ^ 2 / 15 := by
   unfold residualGram SymmetricTwoByTwo.trace
   ring
 
+/-- Determinant of the initial residual Gram matrix: `ε⁴ / 20`. -/
 lemma residualGram_det (ε : ℝ) :
     (residualGram ε).det = ε ^ 4 / 20 := by
   have hs : Real.sqrt (75 : ℝ) ^ 2 = 75 := Real.sq_sqrt (by norm_num)
@@ -129,6 +138,8 @@ lemma residualGram_det (ε : ℝ) :
   -- `det = ε⁴/900 * (121 - √75²) - ε⁴/900 = ε⁴/900 * 45 = ε⁴/20`
   linear_combination (-(ε ^ 4) / 900) * hs
 
+/-- The lower eigenvalue satisfies the characteristic equation of the residual Gram
+matrix. -/
 lemma residualGram_eigenvalueLow_charAt (ε : ℝ) :
     (residualGram ε).charAt (residualGramEigenvalueLow ε) = 0 := by
   have h75 : Real.sqrt (75 : ℝ) ^ 2 = 75 := Real.sq_sqrt (by norm_num)
@@ -137,6 +148,8 @@ lemma residualGram_eigenvalueLow_charAt (ε : ℝ) :
   -- with `k = ε²/30` the product telescopes to `k²(√76² - √75²) - k²`
   linear_combination (-(ε ^ 4) / 900) * h75 + (ε ^ 4 / 900) * h76
 
+/-- The upper eigenvalue satisfies the characteristic equation of the residual Gram
+matrix. -/
 lemma residualGram_eigenvalueHigh_charAt (ε : ℝ) :
     (residualGram ε).charAt (residualGramEigenvalueHigh ε) = 0 := by
   have h75 : Real.sqrt (75 : ℝ) ^ 2 = 75 := Real.sq_sqrt (by norm_num)
@@ -145,40 +158,54 @@ lemma residualGram_eigenvalueHigh_charAt (ε : ℝ) :
   -- the high root gives the same reduction with both factors negated
   linear_combination (-(ε ^ 4) / 900) * h75 + (ε ^ 4 / 900) * h76
 
+/-- Trace of the orthogonal residual Gram matrix: `ε² / 15`. -/
 lemma orthogonalResidualGram_trace (ε : ℝ) :
     (orthogonalResidualGram ε).trace = ε ^ 2 / 15 := by
   unfold orthogonalResidualGram SymmetricTwoByTwo.trace
   ring
 
+/-- The orthogonal residual Gram matrix is singular — its determinant vanishes, so the
+residual has rank one. -/
 lemma orthogonalResidualGram_det (ε : ℝ) :
     (orthogonalResidualGram ε).det = 0 := by
   unfold orthogonalResidualGram SymmetricTwoByTwo.det
   ring
 
+/-- Zero is an eigenvalue of the orthogonal residual Gram matrix, as its vanishing
+determinant requires. -/
 lemma orthogonalResidualGram_zero_charAt (ε : ℝ) :
     (orthogonalResidualGram ε).charAt 0 = 0 := by
   unfold orthogonalResidualGram SymmetricTwoByTwo.charAt
   ring
 
+/-- `ε² / 15` is the other eigenvalue: with the zero eigenvalue it accounts for the
+whole trace. -/
 lemma orthogonalResidualGram_nonzero_charAt (ε : ℝ) :
     (orthogonalResidualGram ε).charAt (ε ^ 2 / 15) = 0 := by
   unfold orthogonalResidualGram SymmetricTwoByTwo.charAt
   ring
 
+/-- `√76 ≤ 11`.  This keeps `11 - √76` nonnegative, which is what makes the lower
+residual Gram eigenvalue nonnegative. -/
 lemma sqrt76_le_eleven : Real.sqrt 76 ≤ 11 := by
   nlinarith [Real.sqrt_nonneg (76 : ℝ), Real.sq_sqrt (by norm_num : (0 : ℝ) ≤ 76)]
 
+/-- The lower residual Gram eigenvalue is nonnegative, so it is the square of a real
+singular value. -/
 lemma residualGramEigenvalueLow_nonneg (ε : ℝ) :
     0 ≤ residualGramEigenvalueLow ε := by
   unfold residualGramEigenvalueLow
   -- `positivity` cannot see that the second factor is nonnegative
   exact mul_nonneg (by positivity) (by linarith [sqrt76_le_eleven])
 
+/-- The upper residual Gram eigenvalue is nonnegative, so it is the square of a real
+singular value. -/
 lemma residualGramEigenvalueHigh_nonneg (ε : ℝ) :
     0 ≤ residualGramEigenvalueHigh ε := by
   unfold residualGramEigenvalueHigh
   positivity
 
+/-- The top residual singular value squares to the upper Gram eigenvalue. -/
 lemma residualTopSingularValue_sq (ε : ℝ) :
     residualTopSingularValue ε ^ 2 = residualGramEigenvalueHigh ε := by
   have hq : 0 ≤ (11 + Real.sqrt 76) / 30 := by positivity
@@ -186,6 +213,7 @@ lemma residualTopSingularValue_sq (ε : ℝ) :
   rw [mul_pow, sq_abs, Real.sq_sqrt hq]
   ring
 
+/-- The bottom residual singular value squares to the lower Gram eigenvalue. -/
 lemma residualBottomSingularValue_sq (ε : ℝ) :
     residualBottomSingularValue ε ^ 2 = residualGramEigenvalueLow ε := by
   have hq : 0 ≤ (11 - Real.sqrt 76) / 30 := by
@@ -195,6 +223,7 @@ lemma residualBottomSingularValue_sq (ε : ℝ) :
   rw [mul_pow, sq_abs, Real.sq_sqrt hq]
   ring
 
+/-- The single nonzero orthogonal-residual singular value squares to `ε² / 15`. -/
 lemma orthogonalResidualSingularValue_sq (ε : ℝ) :
     orthogonalResidualSingularValue ε ^ 2 = ε ^ 2 / 15 := by
   have hs : Real.sqrt (15 : ℝ) ^ 2 = 15 := Real.sq_sqrt (by norm_num)
@@ -202,6 +231,8 @@ lemma orthogonalResidualSingularValue_sq (ε : ℝ) :
   rw [mul_pow, sq_abs]
   nlinarith
 
+/-- Each orthogonal-residual column has squared norm `ε² / 30` — half the nonzero
+singular value squared, the two columns splitting it evenly. -/
 lemma orthogonalResidualColumnNorm_sq (ε : ℝ) :
     orthogonalResidualColumnNorm ε ^ 2 = ε ^ 2 / 30 := by
   have hs : Real.sqrt (30 : ℝ) ^ 2 = 30 := Real.sq_sqrt (by norm_num)
