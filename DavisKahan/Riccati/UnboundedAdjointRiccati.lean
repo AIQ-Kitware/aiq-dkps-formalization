@@ -534,6 +534,149 @@ theorem norm_riccatiGram_poly_commutator_le
       rw [hcast]
       linarith [ih, h2]
 
+include hdom hadj in
+/-- **Entire functions of the Gram operator preserve `dom A₀`.**
+
+This completes ticket T1.3.  If `Σ aₙ Tⁿ` converges to `Φ` in operator norm and
+`Σ n‖aₙ‖` converges, then `Φ` maps `dom A₀` into itself and the commutator is
+bounded by `(Σ n‖aₙ‖)·‖G‖` — a quantity involving only the off-diagonal
+coupling.
+
+The intended instance is a Gaussian bump `exp(-(t-λ)²/β²)` in `T = X†X`, whose
+coefficients decay super-geometrically, giving a smooth spectral band of `X†X`
+that is compatible with the unbounded block.  Sharp band projections cannot be
+used in its place: uniform polynomial approximation of an indicator gives no
+control on `Σ n‖aₙ‖`. -/
+theorem riccatiGram_hasSum_mem_domain
+    (hcontr : ‖riccatiGram X‖ ≤ 1)
+    (hinv : TauCeti.LinearPMap.InvariantSubspace (unboundedBlockOperatorCore H)
+      (unboundedBlockGraph X)ᗮ)
+    (hric : ∀ x : H.A0.domain,
+      H.A1 ⟨X (x : E0), hdom x⟩ + H.B10 (x : E0) =
+        X (H.A0 x + H.B01 (X (x : E0))))
+    (a : ℕ → 𝕜) {Φ : E0 →L[𝕜] E0}
+    (hΦ : HasSum (fun n => a n • ((riccatiGram X) ^ n)) Φ)
+    (hsum : Summable fun n => ‖a n‖ * (n : ℝ))
+    (x : H.A0.domain) :
+    ∃ h : Φ (x : E0) ∈ H.A0.domain,
+      ‖H.A0 ⟨Φ (x : E0), h⟩ - Φ (H.A0 x)‖ ≤
+        (∑' n, ‖a n‖ * (n : ℝ)) *
+          ‖riccatiGramCommutator H X‖ * ‖(x : E0)‖ := by
+  classical
+  set S : ℕ → E0 →L[𝕜] E0 :=
+    fun N => ∑ n ∈ Finset.range N, a n • ((riccatiGram X) ^ n) with hS
+  have hStend : Filter.Tendsto S Filter.atTop (nhds Φ) := hΦ.tendsto_sum_nat
+  -- Evaluation at a fixed vector is continuous, so the partial sums converge
+  -- pointwise at both `x` and `A₀ x`.
+  have heval : ∀ v : E0, Filter.Tendsto (fun N => S N v) Filter.atTop
+      (nhds (Φ v)) := fun v =>
+    ((ContinuousLinearMap.apply 𝕜 E0 v).continuous.tendsto Φ).comp hStend
+  set G := riccatiGramCommutator H X with hG
+  set c := ‖riccatiGramCommutator H X‖ * ‖(x : E0)‖ with hc
+  have hc0 : 0 ≤ c := mul_nonneg (norm_nonneg _) (norm_nonneg _)
+  set r : ℕ → E0 :=
+    fun N => H.A0 ⟨S N (x : E0),
+        riccatiGram_finsetPoly_mem_domain H hdom hadj a (Finset.range N) x⟩ -
+      S N (H.A0 x) with hr
+  -- The commutator errors are Cauchy, by the `Finset.Ico` form of the bound.
+  have hrcauchy : CauchySeq r := by
+    refine cauchySeq_of_le_tendsto_0
+      (fun N => (∑' n, ‖a n‖ * (n : ℝ)) * c -
+        (∑ n ∈ Finset.range N, ‖a n‖ * (n : ℝ)) * c) ?_ ?_
+    · intro N M K hN hM
+      wlog hMN : M ≤ N generalizing M N
+      · rw [dist_comm]
+        exact this M N hM hN (le_of_not_ge hMN)
+      have hdiff : r N - r M =
+          H.A0 ⟨(∑ n ∈ Finset.Ico M N, a n • ((riccatiGram X) ^ n)) (x : E0),
+              riccatiGram_finsetPoly_mem_domain H hdom hadj a
+                (Finset.Ico M N) x⟩ -
+            (∑ n ∈ Finset.Ico M N, a n • ((riccatiGram X) ^ n)) (H.A0 x) := by
+        have hsplit : S N = S M +
+            ∑ n ∈ Finset.Ico M N, a n • ((riccatiGram X) ^ n) := by
+          rw [hS]
+          simp only
+          rw [← Finset.sum_range_add_sum_Ico _ hMN]
+        have hmemM := riccatiGram_finsetPoly_mem_domain H hdom hadj a
+          (Finset.range M) x
+        have hmemI := riccatiGram_finsetPoly_mem_domain H hdom hadj a
+          (Finset.Ico M N) x
+        have hsub : (⟨S N (x : E0),
+              riccatiGram_finsetPoly_mem_domain H hdom hadj a
+                (Finset.range N) x⟩ : H.A0.domain) =
+            (⟨S M (x : E0), hmemM⟩ : H.A0.domain) +
+              ⟨(∑ n ∈ Finset.Ico M N,
+                a n • ((riccatiGram X) ^ n)) (x : E0), hmemI⟩ := by
+          apply Subtype.ext
+          simp [hsplit]
+        rw [hr]
+        simp only
+        rw [hsub, LinearPMap.map_add, hsplit]
+        simp only [ContinuousLinearMap.add_apply]
+        abel
+      have hbound := norm_riccatiGram_finsetPoly_commutator_le H hdom hadj
+        hcontr hinv hric a (Finset.Ico M N) x
+      rw [dist_eq_norm, hdiff]
+      refine hbound.trans ?_
+      have hIco : (∑ n ∈ Finset.Ico M N, ‖a n‖ * (n : ℝ)) =
+          (∑ n ∈ Finset.range N, ‖a n‖ * (n : ℝ)) -
+            ∑ n ∈ Finset.range M, ‖a n‖ * (n : ℝ) := by
+        rw [← Finset.sum_range_add_sum_Ico _ hMN]; ring
+      rw [hIco]
+      have hnn : ∀ n : ℕ, 0 ≤ ‖a n‖ * (n : ℝ) := fun n =>
+        mul_nonneg (norm_nonneg _) (Nat.cast_nonneg n)
+      have hle : (∑ n ∈ Finset.range N, ‖a n‖ * (n : ℝ)) ≤
+          ∑' n, ‖a n‖ * (n : ℝ) :=
+        hsum.sum_le_tsum _ (fun n _ => hnn n)
+      have hsubset : Finset.range K ⊆ Finset.range M := by
+        intro n hn
+        simp only [Finset.mem_range] at hn ⊢
+        omega
+      have hKM : (∑ n ∈ Finset.range K, ‖a n‖ * (n : ℝ)) ≤
+          ∑ n ∈ Finset.range M, ‖a n‖ * (n : ℝ) :=
+        Finset.sum_le_sum_of_subset_of_nonneg hsubset (fun n _ _ => hnn n)
+      have h1 := mul_le_mul_of_nonneg_right hle hc0
+      have h2 := mul_le_mul_of_nonneg_right hKM hc0
+      nlinarith [hc0]
+    · have := hsum.hasSum.tendsto_sum_nat
+      have hmul : Filter.Tendsto
+          (fun N => (∑ n ∈ Finset.range N, ‖a n‖ * (n : ℝ)) * c)
+          Filter.atTop (nhds ((∑' n, ‖a n‖ * (n : ℝ)) * c)) :=
+        this.mul_const c
+      simpa using (tendsto_const_nhds (x := (∑' n, ‖a n‖ * (n : ℝ)) * c)
+        (f := Filter.atTop (α := ℕ))).sub hmul
+  obtain ⟨rl, hrl⟩ := cauchySeq_tendsto_of_complete hrcauchy
+  have hAtend : Filter.Tendsto
+      (fun N => H.A0 ⟨S N (x : E0),
+        riccatiGram_finsetPoly_mem_domain H hdom hadj a (Finset.range N) x⟩)
+      Filter.atTop (nhds (rl + Φ (H.A0 x))) := by
+    have hid : ∀ N, H.A0 ⟨S N (x : E0),
+        riccatiGram_finsetPoly_mem_domain H hdom hadj a
+          (Finset.range N) x⟩ = r N + S N (H.A0 x) := by
+      intro N; rw [hr]; simp
+    simpa only [hid] using hrl.add (heval (H.A0 x))
+  obtain ⟨hmem, hval⟩ := mem_domain_of_tendsto H
+    (y := fun N => S N (x : E0))
+    (hy := fun N => riccatiGram_finsetPoly_mem_domain H hdom hadj a
+      (Finset.range N) x)
+    (heval (x : E0)) hAtend
+  refine ⟨hmem, ?_⟩
+  rw [hval]
+  have hsimp : rl + Φ (H.A0 x) - Φ (H.A0 x) = rl := by abel
+  rw [hsimp]
+  have hrbound : ∀ N, ‖r N‖ ≤ (∑' n, ‖a n‖ * (n : ℝ)) * c := by
+    intro N
+    refine (norm_riccatiGram_finsetPoly_commutator_le H hdom hadj hcontr hinv
+      hric a (Finset.range N) x).trans ?_
+    have hle : (∑ n ∈ Finset.range N, ‖a n‖ * (n : ℝ)) ≤
+        ∑' n, ‖a n‖ * (n : ℝ) :=
+      hsum.sum_le_tsum _ (fun n _ =>
+        mul_nonneg (norm_nonneg _) (Nat.cast_nonneg n))
+    have := mul_le_mul_of_nonneg_right hle hc0
+    nlinarith [hc0]
+  have := le_of_tendsto hrl.norm (Filter.Eventually.of_forall hrbound)
+  simpa [hc, ← mul_assoc] using this
+
 end Powers
 
 /-- The Riccati commutator is bounded by the off-diagonal coupling alone: no
