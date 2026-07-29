@@ -154,6 +154,7 @@ omit [CompleteSpace F] in
   rw [hilbertSchmidtENorm, hilbertSchmidtENorm, hilbertSchmidtEnergy_neg]
 
 omit [CompleteSpace F] in
+/-- The Hilbert--Schmidt norm is absolutely homogeneous, in `ℝ≥0∞`. -/
 theorem hilbertSchmidtENorm_smul (c : 𝕜) (T : E →L[𝕜] F) :
     (c • T).hilbertSchmidtENorm = ‖c‖ₑ * T.hilbertSchmidtENorm := by
   rw [hilbertSchmidtENorm, hilbertSchmidtENorm, hilbertSchmidtEnergy_smul,
@@ -218,6 +219,8 @@ hypothesis so that it carries no choice of basis; `isHilbertSchmidt_iff_summable
 the concrete form. -/
 def IsHilbertSchmidt (T : E →L[𝕜] F) : Prop := T.hilbertSchmidtENorm ≠ ∞
 
+/-- An operator is Hilbert--Schmidt exactly when its energy is finite; this is the bridge between
+the predicate and the summability condition that is actually checked. -/
 theorem isHilbertSchmidt_iff_energy_ne_top (T : E →L[𝕜] F) (b : HilbertBasis ι 𝕜 E) :
     T.IsHilbertSchmidt ↔ T.hilbertSchmidtEnergy b ≠ ∞ := by
   rw [IsHilbertSchmidt, T.hilbertSchmidtENorm_eq b, Ne, Ne,
@@ -262,6 +265,7 @@ noncomputable def hilbertSchmidtIdealFamily (𝕜 : Type u) [RCLike 𝕜] :
   gauge_comp_le L A R := ContinuousLinearMap.hilbertSchmidtENorm_comp_le L A R
   gauge_adjoint A := A.hilbertSchmidtENorm_adjoint
 
+/-- Membership in the Hilbert--Schmidt ideal is exactly `IsHilbertSchmidt`. -/
 theorem mem_hilbertSchmidtIdealFamily_carrier_iff {𝕜 : Type u} [RCLike 𝕜] {E F : Type v}
     [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
     [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F] (A : E →L[𝕜] F) :

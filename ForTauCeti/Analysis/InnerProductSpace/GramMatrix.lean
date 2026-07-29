@@ -104,6 +104,8 @@ noncomputable def rangeEquivOfInnerEq : LinearMap.range S ≃ₗᵢ[𝕜] Linear
     obtain ⟨-, y, rfl⟩ := y
     simp [h x y]
 
+/-- The equivalence built from equal Gram data sends `φ i` to `ψ i`; this is the property that
+characterises it, the construction itself going through linear combinations. -/
 @[simp]
 theorem rangeEquivOfInnerEq_apply (x : M) (hx : S x ∈ LinearMap.range S) :
     (rangeEquivOfInnerEq S T h ⟨S x, hx⟩ : F) = T x := by

@@ -192,6 +192,8 @@ noncomputable def polarUnitaryEquiv {A : E →ₗ[𝕜] E} (hA : IsUnit A) : E �
     ((polarUnitaryEquiv hA : E →ₗ[𝕜] E)) = polarFactor A :=
   rfl
 
+/-- **Polar decomposition** for an operator with invertible modulus: `A = U |A|` with `U`
+unitary. -/
 theorem polar_decomposition_of_isUnit {A : E →ₗ[𝕜] E} (hA : IsUnit A) :
     A = (polarUnitaryEquiv hA : E →ₗ[𝕜] E) ∘ₗ abs A := by
   rw [coe_polarUnitaryEquiv]
@@ -233,6 +235,8 @@ noncomputable def choosePolarUnitary (A : E →ₗ[𝕜] E) : E ≃ₗᵢ[𝕜] 
   LinearIsometryEquiv.ofSurjective (polarIsometryOnOrthogonal A).extend
     (LinearMap.injective_iff_surjective.mp (polarIsometryOnOrthogonal A).extend.injective)
 
+/-- The chosen polar unitary satisfies the defining identity `U (|A| x) = A x`.  It is *a* choice --
+see `choosePolarUnitary` -- but every choice satisfies this. -/
 theorem choosePolarUnitary_apply_abs_apply (A : E →ₗ[𝕜] E) (x : E) :
     choosePolarUnitary A (abs A x) = A x := by
   have hmem : abs A x ∈ (ker A)ᗮ := abs_apply_mem_orthogonal_ker A x

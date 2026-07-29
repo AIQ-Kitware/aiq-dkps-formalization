@@ -204,6 +204,8 @@ theorem isClosed_range_shiftMap {A : E →ₗ.[ℂ] E} (hA : IsSelfAdjoint A)
   abel
 
 omit [CompleteSpace E] in
+/-- The shifted map `A - z` is injective for non-real `z`: the imaginary part of the quadratic form
+bounds it below. -/
 theorem injective_shiftMap {A : E →ₗ.[ℂ] E} (hsym : A.IsFormalAdjoint A)
     {z : ℂ} (hz : z.im ≠ 0) : Function.Injective (shiftMap A z) := by
   rw [← LinearMap.ker_eq_bot, Submodule.eq_bot_iff]
@@ -214,6 +216,8 @@ theorem injective_shiftMap {A : E →ₗ.[ℂ] E} (hsym : A.IsFormalAdjoint A)
     nlinarith [abs_pos.mpr hz, norm_nonneg ((x : E))]
   exact Subtype.ext (by simpa using hxz)
 
+/-- The shifted map is surjective.  This is the harder half -- it needs closed range, which comes
+from the same lower bound plus closedness of `A`. -/
 theorem surjective_shiftMap {A : E →ₗ.[ℂ] E} (hA : IsSelfAdjoint A)
     {z : ℂ} (hz : z.im ≠ 0) : Function.Surjective (shiftMap A z) := by
   have hclosed := isClosed_range_shiftMap hA hz

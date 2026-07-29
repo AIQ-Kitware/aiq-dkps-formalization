@@ -61,6 +61,7 @@ noncomputable def specDiag (κ' : spectrum ℂ a → ℝ) (ξ : H) : Measure ℝ
   Measure.map κ' (diagMeasure ha ξ)
 
 include hκ in
+/-- The spectral diagonal measures are finite. -/
 theorem isFiniteMeasure_specDiag (ξ : H) : IsFiniteMeasure (specDiag ha κ ξ) := by
   refine ⟨?_⟩
   rw [specDiag, Measure.map_apply hκ MeasurableSet.univ]
@@ -161,6 +162,8 @@ spectrum and no Cayley detour is needed. -/
 noncomputable def reCoord (w : spectrum ℂ T) : ℝ := (w : ℂ).re
 
 omit [CompleteSpace H] in
+/-- The real-part relabelling of the spectrum is measurable, which is what lets a PVM on `ℝ` be
+pushed forward from one on the spectrum. -/
 theorem measurable_reCoord : Measurable (reCoord (T := T)) :=
   Complex.measurable_re.comp measurable_subtype_coe
 

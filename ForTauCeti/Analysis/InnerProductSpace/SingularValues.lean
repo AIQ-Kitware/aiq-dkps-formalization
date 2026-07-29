@@ -89,9 +89,11 @@ theorem toLinearMap_singularValues (T : E →L[𝕜] F) :
     (T : E →ₗ[𝕜] F).singularValues = T.singularValues :=
   rfl
 
+/-- Singular values are nonnegative. -/
 theorem singularValues_nonneg (T : E →L[𝕜] F) (i : ℕ) : 0 ≤ T.singularValues i :=
   T.toLinearMap.singularValues_nonneg i
 
+/-- Singular values are listed in decreasing order. -/
 theorem singularValues_antitone (T : E →L[𝕜] F) : Antitone T.singularValues :=
   T.toLinearMap.singularValues_antitone
 
@@ -100,10 +102,13 @@ theorem singularValues_of_finrank_le (T : E →L[𝕜] F) {i : ℕ} (hi : finran
     T.singularValues i = 0 :=
   T.toLinearMap.singularValues_of_finrank_le hi
 
+/-- The zero map has all singular values zero. -/
 @[simp]
 theorem singularValues_zero : (0 : E →L[𝕜] F).singularValues = 0 :=
   LinearMap.singularValues_zero
 
+/-- Conversely, vanishing singular values force the map to be zero -- the definiteness that makes
+any gauge built from them a norm rather than a seminorm. -/
 @[simp]
 theorem singularValues_eq_zero_iff {T : E →L[𝕜] F} : T.singularValues = 0 ↔ T = 0 := by
   rw [singularValues, LinearMap.singularValues_eq_zero_iff, ← ContinuousLinearMap.toLinearMap_zero,
