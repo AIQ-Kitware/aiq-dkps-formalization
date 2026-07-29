@@ -927,3 +927,50 @@ identified with `A`.  `UnboundedVector`'s two interval-range theorems went from
 ~50 lines each to 8, and all four spectral-cutoff interface laws became
 one-liners.  That is the shape of the remaining repoints too — the native PVM
 is a much shorter road than the Stone route it replaces.
+
+## 2026-07-29: everything but conjugation invariance
+
+Green at 9301 jobs.  Landed since the last entry, all additive in ForTauCeti:
+
+* `re_inner_apply_bounds_of_subset_Icc` — form bounds on a spectral range.
+* `mem_resolventSet_specRestrict_of_gap` — a gap makes `lam` a resolvent point
+  of the restriction, inverse `(κ - lam)⁻¹ 1_B`.
+* `truncSymbol` / `isBddMeasurable_truncSymbol` / `truncation` — the bounded
+  truncation `κ·1_B`, with `truncation_eq_on_specProjection`, the norm bound,
+  self-adjointness and commutation with every spectral projection.
+* `specProjection_apply_sub_smul` — the shifted identity, now naming its
+  operator concretely so downstream definitions can be stated with it.
+* `ProjValMeasure.proj_compl`.
+
+`SpectralRestrictionLocalization.lean` is fully ported (240 → 120 lines, three
+Spectra imports → none) in the parked commit.
+
+### The one remaining blocker, with its proof plan
+
+`RealSpectralRestriction.lean` needs `conjugateOperator (E_A(S)) = E_A(S)` for
+the canonical conjugation `J` on a complexification.  Spectra gets it from
+`spectralPVM_unique`, i.e. Stieltjes inversion.  **That is not needed.**  Write
+`conjOp T := fun x ↦ J (T (J x))`; it is *conjugate*-linear in `T`,
+multiplicative, and `⋆`-preserving.
+
+1. `conjOp U = U⋆`.  `U = 1 - 2i R(-i)` and `J R(z) J = R(z̄)` — the latter is
+   already proved in that file as `conjugateOperator_selfAdjointResolvent` — so
+   `conjOp U = 1 + 2i R(i) = U⋆`.
+2. `f ↦ conjOp (cfcHom hU (star f))` is a **continuous unital `⋆`-algebra
+   homomorphism** `C(σ(U), ℂ) →⋆ₐ[ℂ] (Eℂ →L[ℂ] Eℂ)` (conjugate-linear twice is
+   linear) sending the coordinate function to `conjOp U⋆ = U`.  By
+   `cfcHom_eq_of_continuous_of_map_id` it *is* `cfcHom hU`.  Hence
+   `conjOp (cfcHom hU g) = cfcHom hU (star g)`, and for **real** `g` the
+   calculus image is `J`-invariant.
+3. Therefore `diagFunctional hU (J η) = diagFunctional hU η` — the functionals
+   are literally equal, so `diagMeasure hU (J η) = diagMeasure hU η` **by
+   definition**, with no measure-uniqueness argument.
+4. In `pair f (J ψ) (J ξ)` the four polarisation points are
+   `J ξ + iᵏ J ψ = J (ξ + i⁻ᵏ ψ)`, so the `k = 1` and `k = 3` terms swap.  The
+   diagonal measures are real, so for real `f` this says
+   `pair f (J ψ) (J ξ) = conj (pair f ψ ξ)`, whence
+   `⟪ψ, conjOp (T_f) ξ⟫ = ⟪ψ, T_f ξ⟫` — in particular for indicator symbols,
+   which is exactly the required projection invariance.
+
+Only step 2 is real work; the rest is bookkeeping.  Nothing else in the port
+depends on it.
