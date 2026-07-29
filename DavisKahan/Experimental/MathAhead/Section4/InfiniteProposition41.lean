@@ -9,7 +9,6 @@ import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteRestriction
 import DavisKahan.Interop.Spectra.DirectRotationSquare
 import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SubspaceSingularTransport
 import DavisKahan.Sylvester.GenuineSpectrum
-import Spectra.SpectralTheory.Algebra
 
 /-!
 # Infinite-dimensional Proposition 4.1 by spectral cutoff
@@ -46,9 +45,6 @@ namespace Experimental
 namespace MathAhead
 namespace Section4
 
-open Spectra.OneParameterUnitaryGroup
-open Spectra.YosidaHille
-open Spectra.QuantumMechanics.SpectralTheory
 open SpectraBridge
 open ExactSinTheta
 open DavisKahanExt
@@ -96,7 +92,7 @@ private theorem cosine_norm_le_on_low_range
     (hx : x ∈ boundedSelfAdjointSpectralSubspace C D.cosine_selfAdjoint
       (Set.Iic c₂) measurableSet_Iic) :
     ‖C x‖ ≤ c₁ * ‖x‖ := by
-  let PVM : Spectra.ProjValMeasure E :=
+  let PVM : TauCeti.ProjValMeasure E :=
     boundedSelfAdjointSpectralPVM C D.cosine_selfAdjoint
   let P : E →L[ℂ] E := PVM.proj (Set.Iic c₂) measurableSet_Iic
   have hPstar : P =
@@ -137,52 +133,20 @@ private theorem cosine_norm_le_on_low_range
     have hhighZero :
         boundedSelfAdjointSpectralProjection C D.cosine_selfAdjoint
           (Set.Ici c₁) measurableSet_Ici y = 0 := by
-      change spectralProjection
-        (genToGroup
-          (Spectra.Operator.SelfAdjointOperator.ofBounded C
-            (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr
-              D.cosine_selfAdjoint)).selfAdjoint)
-        (Set.Ici c₁) measurableSet_Ici
-        (spectralProjection
-          (genToGroup
-            (Spectra.Operator.SelfAdjointOperator.ofBounded C
-              (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr
-                D.cosine_selfAdjoint)).selfAdjoint)
-          (Set.Iic c₂) measurableSet_Iic z) = 0
       have hinter : Set.Ici c₁ ∩ Set.Iic c₂ = ∅ := by
         ext t
         simp only [Set.mem_inter_iff, Set.mem_Ici, Set.mem_Iic,
           Set.mem_empty_iff_false, iff_false]
         exact fun ht => (not_le_of_gt hc) (ht.1.trans ht.2)
-      rw [← mul_apply_eq_comp, spectralProjection_inter,
-        spectralProjection_congr _ hinter
-          (measurableSet_Ici.inter measurableSet_Iic) MeasurableSet.empty,
-        spectralProjection_empty, zero_apply]
-    let Csa : Spectra.Operator.SelfAdjointOperator E :=
-      Spectra.Operator.SelfAdjointOperator.ofBounded C
-      (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr
-        D.cosine_selfAdjoint)
-    have hsa : IsSelfAdjoint Csa.toLinearPMap := Csa.selfAdjoint
-    let G := genToGroup hsa
-    have hgen : generator G = Csa.toLinearPMap := generator_genToGroup hsa
-    have hCsaDom : Csa.toLinearPMap.domain = ⊤ := by
-      dsimp only [Csa]
-      exact Spectra.Operator.SelfAdjointOperator.domain_ofBounded C
-        (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr
-          D.cosine_selfAdjoint)
-    have hdom : (generator G).domain = ⊤ := by
-      rw [hgen, hCsaDom]
-    have hyDom : y ∈ (generator G).domain := by
-      rw [hdom]
-      exact Submodule.mem_top
-    have hgenApply : generator G ⟨y, hyDom⟩ = C y := by
-      have hEq := (LinearPMap.ext_iff.mp hgen).2
-      have hyC : y ∈ Csa.toLinearPMap.domain := by
-        rw [hCsaDom]
-        exact Submodule.mem_top
-      exact hEq (x := y) (hf := hyDom) (hg := hyC)
-    have henergy := energy_upper_bound_of_spectralProjection_Ici_eq_zero
-      G c₁ (⟨y, hyDom⟩ : (generator G).domain) hhighZero
+      have hmul := PVM.proj_inter (Set.Ici c₁) (Set.Iic c₂)
+        measurableSet_Ici measurableSet_Iic
+      rw [PVM.proj_congr hinter (measurableSet_Ici.inter measurableSet_Iic)
+        MeasurableSet.empty, PVM.proj_empty] at hmul
+      exact congrArg (fun T : E →L[ℂ] E => T z) hmul
+    have henergy :=
+      TauCeti.BorelCalculus.re_inner_le_of_boundedPVM_proj_Ici_eq_zero
+        (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr D.cosine_selfAdjoint)
+        c₁ hhighZero
     have hnonneg : 0 ≤ RCLike.re ⟪C y, y⟫_ℂ := D.cosine_nonnegative y
     have hmove : RCLike.re ⟪CP z, z⟫_ℂ =
         RCLike.re ⟪C y, y⟫_ℂ := by
@@ -210,8 +174,7 @@ private theorem cosine_norm_le_on_low_range
         _ = RCLike.re ⟪C y, y⟫_ℂ := rfl
     rw [hmove, abs_of_nonneg hnonneg]
     calc
-      RCLike.re ⟪C y, y⟫_ℂ =
-          RCLike.re ⟪generator G ⟨y, hyDom⟩, y⟫_ℂ := by rw [hgenApply]
+      RCLike.re ⟪C y, y⟫_ℂ = (⟪C y, y⟫_ℂ).re := rfl
       _ ≤ c₁ * ‖y‖ ^ 2 := henergy
       _ ≤ c₁ * ‖z‖ ^ 2 := by
         have hyNorm : ‖y‖ ≤ ‖z‖ := by
@@ -260,64 +223,38 @@ theorem lt_approximationNumber_competitor_of_lt_direct
     have hsquares : s₁ ^ 2 < s₂ ^ 2 := (sq_lt_sq₀ hs₁0 hs₂0).2 hs₁s₂
     linarith
 
-  let Csa : Spectra.Operator.SelfAdjointOperator E :=
-    Spectra.Operator.SelfAdjointOperator.ofBounded C
-      (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr
-        D.cosine_selfAdjoint)
-  have hsa : IsSelfAdjoint Csa.toLinearPMap := Csa.selfAdjoint
-  let G := genToGroup hsa
-  let PVM : Spectra.ProjValMeasure E := spectralPVM hsa
+  have hCsa : IsSelfAdjoint C :=
+    ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr D.cosine_selfAdjoint
+  let PVM : TauCeti.ProjValMeasure E :=
+    boundedSelfAdjointSpectralPVM C D.cosine_selfAdjoint
   let P : E →L[ℂ] E := PVM.proj (Set.Iic c₂) measurableSet_Iic
   let Q : E →L[ℂ] E := PVM.proj (Set.Ioi c₂) measurableSet_Ioi
-  have hgen : generator G = Csa.toLinearPMap := generator_genToGroup hsa
-  have hCsaDom : Csa.toLinearPMap.domain = ⊤ := by
-    dsimp only [Csa]
-    exact Spectra.Operator.SelfAdjointOperator.domain_ofBounded C
-      (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr
-        D.cosine_selfAdjoint)
-  have hdom : (generator G).domain = ⊤ := by
-    rw [hgen, hCsaDom]
-  have hgenApply (x : E) (hx : x ∈ (generator G).domain) :
-      generator G ⟨x, hx⟩ = C x := by
-    have hEq := (LinearPMap.ext_iff.mp hgen).2
-    have hxC : x ∈ Csa.toLinearPMap.domain := by
-      rw [hCsaDom]
-      exact Submodule.mem_top
-    exact hEq (x := x) (hf := hx) (hg := hxC)
   have hQeq : Q = ContinuousLinearMap.id ℂ E - P := by
-    change spectralProjection G (Set.Ioi c₂) measurableSet_Ioi =
-      ContinuousLinearMap.id ℂ E -
-        spectralProjection G (Set.Iic c₂) measurableSet_Iic
-    simpa only [Set.compl_Iic] using
-      spectralProjection_compl G (Set.Iic c₂) measurableSet_Iic
+    have h := PVM.proj_compl (Set.Iic c₂) measurableSet_Iic
+    rw [PVM.proj_congr Set.compl_Iic measurableSet_Iic.compl measurableSet_Ioi] at h
+    exact h
 
   have htailNorm : ‖A ∘L Q‖ ≤ s₂ := by
     refine (A ∘L Q).opNorm_le_bound hs₂0 ?_
     intro x
     let y : E := Q x
-    have hyDom : y ∈ (generator G).domain := by
-      rw [hdom]
-      exact Submodule.mem_top
-    have hlowZero :
-        spectralProjection G (Set.Iic c₂) measurableSet_Iic y = 0 := by
-      change spectralProjection G (Set.Iic c₂) measurableSet_Iic
-        (spectralProjection G (Set.Ioi c₂) measurableSet_Ioi x) = 0
+    have hlowZero : PVM.proj (Set.Iic c₂) measurableSet_Iic y = 0 := by
       have hinter : Set.Iic c₂ ∩ Set.Ioi c₂ = ∅ := by
         ext t
         simp only [Set.mem_inter_iff, Set.mem_Iic, Set.mem_Ioi,
           Set.mem_empty_iff_false, iff_false]
         exact fun ht => (not_lt_of_ge ht.1) ht.2
-      rw [← mul_apply_eq_comp, spectralProjection_inter G,
-        spectralProjection_congr G hinter
-          (measurableSet_Iic.inter measurableSet_Ioi) MeasurableSet.empty,
-        spectralProjection_empty G, zero_apply]
-    have henergy := energy_lower_bound_of_spectralProjection_Iic_eq_zero
-      G c₂ (⟨y, hyDom⟩ : (generator G).domain) hlowZero
+      have hmul := PVM.proj_inter (Set.Iic c₂) (Set.Ioi c₂)
+        measurableSet_Iic measurableSet_Ioi
+      rw [PVM.proj_congr hinter (measurableSet_Iic.inter measurableSet_Ioi)
+        MeasurableSet.empty, PVM.proj_empty] at hmul
+      exact congrArg (fun T : E →L[ℂ] E => T x) hmul
+    have henergy :=
+      TauCeti.BorelCalculus.le_re_inner_of_boundedPVM_proj_Iic_eq_zero
+        hCsa c₂ hlowZero
     have hform : c₂ * ‖y‖ ^ 2 ≤ RCLike.re ⟪C y, y⟫_ℂ := by
       rw [RCLike.re_eq_complex_re]
-      calc
-        c₂ * ‖y‖ ^ 2 ≤ (⟪generator G ⟨y, hyDom⟩, y⟫_ℂ).re := henergy
-        _ = (⟪C y, y⟫_ℂ).re := by rw [hgenApply y hyDom]
+      exact henergy
     have hsq : ‖A y‖ ^ 2 ≤ (s₂ * ‖y‖) ^ 2 := by
       rw [D.direct_norm_sq]
       calc
