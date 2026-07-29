@@ -17,6 +17,7 @@ public import Mathlib.Data.PNat.Basic
 public import Mathlib.Algebra.Star.Unitary
 public import Mathlib.Analysis.CStarAlgebra.Exponential
 public import Mathlib.Analysis.CStarAlgebra.ContinuousLinearMap
+public import ForTauCeti.Analysis.InnerProductSpace.SkewAdjointExponential
 
 /-!
 # The Yosida approximation of a self-adjoint operator
@@ -531,6 +532,52 @@ theorem commute_yosidaApproxSym (hA : IsSelfAdjoint A) (m n : ℕ+) :
   refine Commute.smul_left ?_ _ |>.smul_right _
   refine Commute.add_left ?_ ?_ <;> refine Commute.add_right ?_ ?_ <;>
     exact hres _ _ _ _
+
+/-! ### The approximating flows are Cauchy -/
+
+/-- `expApprox` is the skew-adjoint exponential of `i Aₙˢʸᵐ`. -/
+theorem expApprox_eq_expTime (hA : IsSelfAdjoint A) (n : ℕ+) (t : ℝ) :
+    expApprox hA n t = expTime (I • yosidaApproxSym hA n) t := by
+  rw [expTime, TauCeti.real_smul_I_smul]
+  rfl
+
+/-- The Duhamel estimate, specialised to two approximants. -/
+theorem norm_expApprox_sub_le (hA : IsSelfAdjoint A) (m n : ℕ+) (t : ℝ) (ψ : H) :
+    ‖expApprox hA m t ψ - expApprox hA n t ψ‖
+      ≤ |t| * ‖yosidaApproxSym hA m ψ - yosidaApproxSym hA n ψ‖ := by
+  rw [expApprox_eq_expTime, expApprox_eq_expTime]
+  have h := norm_expTime_sub_expTime_le (isSelfAdjoint_yosidaApproxSym hA m)
+    (isSelfAdjoint_yosidaApproxSym hA n) (commute_yosidaApproxSym hA m n) t ψ
+  refine h.trans (le_of_eq ?_)
+  congr 1
+  have : (I • yosidaApproxSym hA m - I • yosidaApproxSym hA n) ψ
+      = I • (yosidaApproxSym hA m ψ - yosidaApproxSym hA n ψ) := by
+    simp only [sub_apply, smul_apply, smul_sub]
+  rw [this, norm_smul, Complex.norm_I, one_mul]
+
+/-- On the domain, the approximating flows form a Cauchy sequence. -/
+theorem cauchySeq_expApprox_of_mem_domain (hA : IsSelfAdjoint A) (t : ℝ)
+    (ψ : H) (hψ : ψ ∈ A.domain) :
+    CauchySeq (fun n : ℕ+ => expApprox hA n t ψ) := by
+  have hconv := tendsto_yosidaApproxSym_of_mem_domain hA ψ hψ
+  have hCauchy : CauchySeq (fun n : ℕ+ => yosidaApproxSym hA n ψ) := hconv.cauchySeq
+  rw [Metric.cauchySeq_iff] at hCauchy ⊢
+  intro ε hε
+  by_cases ht0 : t = 0
+  · -- every term is `ψ`
+    refine ⟨1, fun m _ n _ => ?_⟩
+    subst ht0
+    simpa [expApprox_zero] using hε
+  · have ht : 0 < |t| := abs_pos.mpr ht0
+    obtain ⟨N, hN⟩ := hCauchy (ε / |t|) (by positivity)
+    refine ⟨N, fun m hm n hn => ?_⟩
+    have hd := hN m hm n hn
+    rw [dist_eq_norm] at hd ⊢
+    calc ‖expApprox hA m t ψ - expApprox hA n t ψ‖
+        ≤ |t| * ‖yosidaApproxSym hA m ψ - yosidaApproxSym hA n ψ‖ :=
+          norm_expApprox_sub_le hA m n t ψ
+      _ < |t| * (ε / |t|) := mul_lt_mul_of_pos_left hd ht
+      _ = ε := by field_simp
 
 end LinearPMap
 end TauCeti
