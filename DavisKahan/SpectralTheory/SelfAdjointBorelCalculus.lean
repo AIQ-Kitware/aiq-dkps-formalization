@@ -213,6 +213,51 @@ theorem boundedSelfAdjointBorelCalculusC_congr_on_spectrum
       boundedSelfAdjointBorelCalculusC A hA g hg hgb :=
   boundedSelfAdjointBorelCalculusC_congr_on_spectrum' A hA hf hfb hg hgb hfg
 
+/-- The calculus depends only on the symbol. -/
+theorem boundedSelfAdjointBorelCalculusC_congr
+    (A : H →L[ℂ] H) (hA : IsSelfAdjointOperator A)
+    {f g : ℝ → ℂ} (hfg : f = g)
+    (hf : Measurable f) (hfb : ∃ C : ℝ, ∀ x, ‖f x‖ ≤ C)
+    (hg : Measurable g) (hgb : ∃ C : ℝ, ∀ x, ‖g x‖ ≤ C) :
+    boundedSelfAdjointBorelCalculusC A hA f hf hfb =
+      boundedSelfAdjointBorelCalculusC A hA g hg hgb :=
+  boundedSelfAdjointBorelCalculusC_congr_on_spectrum' A hA hf hfb hg hgb
+    (fun x _ => by rw [hfg])
+
+/-- The calculus is additive in the symbol. -/
+theorem boundedSelfAdjointBorelCalculusC_add
+    (A : H →L[ℂ] H) (hA : IsSelfAdjointOperator A)
+    {f g : ℝ → ℂ}
+    (hf : Measurable f) (hfb : ∃ C : ℝ, ∀ x, ‖f x‖ ≤ C)
+    (hg : Measurable g) (hgb : ∃ C : ℝ, ∀ x, ‖g x‖ ≤ C)
+    (hs : Measurable (fun x => f x + g x))
+    (hsb : ∃ C : ℝ, ∀ x, ‖f x + g x‖ ≤ C) :
+    boundedSelfAdjointBorelCalculusC A hA (fun x => f x + g x) hs hsb =
+      boundedSelfAdjointBorelCalculusC A hA f hf hfb +
+        boundedSelfAdjointBorelCalculusC A hA g hg hgb := by
+  rw [boundedSelfAdjointBorelCalculusC, boundedSelfAdjointBorelCalculusC,
+    boundedSelfAdjointBorelCalculusC, ← TauCeti.BorelCalculus.borelCalculus_add]
+
+/-- The calculus is homogeneous in the symbol. -/
+theorem boundedSelfAdjointBorelCalculusC_smul
+    (A : H →L[ℂ] H) (hA : IsSelfAdjointOperator A) (c : ℂ)
+    {f : ℝ → ℂ} (hf : Measurable f) (hfb : ∃ C : ℝ, ∀ x, ‖f x‖ ≤ C)
+    (hs : Measurable (fun x => c * f x))
+    (hsb : ∃ C : ℝ, ∀ x, ‖c * f x‖ ≤ C) :
+    boundedSelfAdjointBorelCalculusC A hA (fun x => c * f x) hs hsb =
+      c • boundedSelfAdjointBorelCalculusC A hA f hf hfb := by
+  rw [boundedSelfAdjointBorelCalculusC, boundedSelfAdjointBorelCalculusC,
+    ← TauCeti.BorelCalculus.borelCalculus_const_smul]
+
+/-- The calculus of the zero symbol vanishes. -/
+theorem boundedSelfAdjointBorelCalculusC_zero
+    (A : H →L[ℂ] H) (hA : IsSelfAdjointOperator A)
+    (hm : Measurable (fun _ : ℝ => (0 : ℂ)))
+    (hb : ∃ C : ℝ, ∀ x, ‖(fun _ : ℝ => (0 : ℂ)) x‖ ≤ C) :
+    boundedSelfAdjointBorelCalculusC A hA (fun _ => (0 : ℂ)) hm hb = 0 := by
+  rw [← norm_le_zero_iff]
+  exact norm_boundedSelfAdjointBorelCalculusC_le' A hA _ hm hb le_rfl (fun _ _ => by simp)
+
 /-- Operator norm is bounded by a global pointwise symbol bound. -/
 theorem norm_boundedSelfAdjointBorelCalculusC_le
     (A : H →L[ℂ] H) (hA : IsSelfAdjointOperator A)

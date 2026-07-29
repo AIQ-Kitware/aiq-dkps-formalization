@@ -457,134 +457,6 @@ theorem SpectralSeparatingContour.continuous_cayleySelectorPullback
   simpa [lam, hsub] using
     Γ.integratedContourResolventSymbol_eq_selector hlam
 
-/-- The Spectra bounded selector calculus equals the Mathlib continuous
-functional calculus of the integrated contour symbol. -/
-theorem SpectralSeparatingContour.spectralCalculus_selector_eq_cfcL
-    {A : H →L[ℂ] H} {s : Set ℝ}
-    (Γ : SpectralSeparatingContour A s) :
-    Spectra.QuantumMechanics.SpectralTheory.spectralCalculus
-        (Spectra.YosidaHille.genToGroup
-          (boundedSelfAdjointOperator A Γ.selfAdjoint).selfAdjoint)
-        (spectralSelector s)
-        (spectralSelector_measurable s Γ.measurable_selected)
-        (spectralSelector_bounded s) =
-      cfcL
-        (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr
-          Γ.selfAdjoint).isStarNormal
-        Γ.integratedContourResolventSymbol := by
-  classical
-  by_cases hH : Nontrivial H
-  · letI : Nontrivial H := hH
-    let hSA :=
-      (boundedSelfAdjointOperator A Γ.selfAdjoint).selfAdjoint
-    let U : H →L[ℂ] H := Spectra.Cayley.cayley hSA
-    let G : ℂ → ℂ := fun w =>
-      spectralSelector s (Spectra.Cayley.inverseMobius w).re
-    have hGrestrict : Continuous
-        ((spectrum ℂ U).restrict G) := by
-      apply Γ.continuous_cayleySelectorPullback.congr
-      intro w
-      simp only [Set.restrict_apply, G, U, hSA,
-        Spectra.Cayley.inverseMobiusReal]
-    have hGcont : ContinuousOn G (spectrum ℂ U) :=
-      continuousOn_iff_continuous_restrict.mpr hGrestrict
-    have hbridge :
-        Spectra.QuantumMechanics.SpectralTheory.spectralCalculus
-            (Spectra.YosidaHille.genToGroup hSA)
-            (spectralSelector s)
-            (spectralSelector_measurable s Γ.measurable_selected)
-            (spectralSelector_bounded s) =
-          cfc G U := by
-      rw [← Spectra.YosidaHille.stoneGroup_eq_genToGroup hSA]
-      calc
-        Spectra.QuantumMechanics.SpectralTheory.spectralCalculus
-            (Spectra.Cayley.stoneGroup hSA)
-            (spectralSelector s)
-            (spectralSelector_measurable s Γ.measurable_selected)
-            (spectralSelector_bounded s) =
-          cfcHom (Spectra.Cayley.cayley_isStarNormal hSA)
-            (⟨fun w => spectralSelector s
-                (Spectra.Cayley.inverseMobiusReal hSA w),
-              Γ.continuous_cayleySelectorPullback⟩ :
-              C(spectrum ℂ (Spectra.Cayley.cayley hSA), ℂ)) :=
-          Spectra.QuantumMechanics.SpectralTheory.spectralCalculus_stoneGroup_eq_cfcHom
-            hSA (spectralSelector s)
-            (spectralSelector_measurable s Γ.measurable_selected)
-            (spectralSelector_bounded s)
-            Γ.continuous_cayleySelectorPullback
-        _ = cfcHom (Spectra.Cayley.cayley_isStarNormal hSA)
-            (⟨(spectrum ℂ U).restrict G, hGrestrict⟩ :
-              C(spectrum ℂ U, ℂ)) := by
-          apply congrArg (cfcHom (Spectra.Cayley.cayley_isStarNormal hSA))
-          ext w
-          change spectralSelector s
-              (Spectra.Cayley.inverseMobius (w : ℂ)).re =
-            spectralSelector s
-              (Spectra.Cayley.inverseMobius (w : ℂ)).re
-          rfl
-        _ = cfc G U :=
-          (cfc_apply G U (Spectra.Cayley.cayley_isStarNormal hSA) hGcont).symm
-    have hmobcont : ContinuousOn boundedMobiusSymbol (spectrum ℂ A) :=
-      continuousOn_boundedMobiusSymbol_spectrum A Γ.selfAdjoint
-    have hU : U = cfc boundedMobiusSymbol A := by
-      simpa [U, hSA] using
-        (cayley_boundedSelfAdjointOperator_eq_cfc A Γ.selfAdjoint)
-    have hspec : spectrum ℂ U =
-        boundedMobiusSymbol '' spectrum ℂ A := by
-      rw [hU]
-      exact cfc_map_spectrum
-        (f := boundedMobiusSymbol) (a := A)
-        (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr
-          Γ.selfAdjoint).isStarNormal hmobcont
-    have hGimage : ContinuousOn G
-        (boundedMobiusSymbol '' spectrum ℂ A) := by
-      rwa [← hspec]
-    have hcompcont : ContinuousOn (G ∘ boundedMobiusSymbol)
-        (spectrum ℂ A) :=
-      hGimage.comp hmobcont (fun z hz => ⟨z, hz, rfl⟩)
-    calc
-      Spectra.QuantumMechanics.SpectralTheory.spectralCalculus
-          (Spectra.YosidaHille.genToGroup hSA)
-          (spectralSelector s)
-          (spectralSelector_measurable s Γ.measurable_selected)
-          (spectralSelector_bounded s) =
-        cfc G U := hbridge
-      _ = cfc G (cfc boundedMobiusSymbol A) := by rw [← hU]
-      _ = cfc (G ∘ boundedMobiusSymbol) A := by
-        symm
-        exact cfc_comp
-          (g := G) (f := boundedMobiusSymbol) (a := A)
-          (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr
-            Γ.selfAdjoint).isStarNormal hGimage hmobcont
-      _ = cfcL
-          (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr
-            Γ.selfAdjoint).isStarNormal
-          Γ.integratedContourResolventSymbol := by
-        rw [cfc_eq_cfcL
-          (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr
-            Γ.selfAdjoint).isStarNormal hcompcont]
-        congr 1
-        ext z
-        have hAsa : IsSelfAdjoint A :=
-          ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr Γ.selfAdjoint
-        rcases z with ⟨z, hz⟩
-        obtain ⟨lam, hlam, rfl⟩ :=
-          hAsa.spectrumRestricts.algebraMap_image.symm ▸ hz
-        change
-          spectralSelector s
-              (Spectra.Cayley.inverseMobius
-                (boundedMobiusSymbol (lam : ℂ))).re =
-            Γ.integratedContourResolventSymbol
-              ⟨(lam : ℂ), by
-                rw [← hAsa.spectrumRestricts.algebraMap_image]
-                exact ⟨lam, hlam, rfl⟩⟩
-        rw [inverseMobius_boundedMobiusSymbol_ofReal]
-        simp only [Complex.ofReal_re]
-        exact (Γ.integratedContourResolventSymbol_eq_selector hlam).symm
-  · haveI : Subsingleton H := not_nontrivial_iff_subsingleton.mp hH
-    exact Subsingleton.elim _ _
-
-
 /-- The normalized contour Riesz operator is the genuine Spectra projection
 onto the selected bounded spectral subspace. -/
 theorem SpectralSeparatingContour.contourRieszProjection_eq_boundedSelfAdjointSpectralProjection
@@ -593,9 +465,10 @@ theorem SpectralSeparatingContour.contourRieszProjection_eq_boundedSelfAdjointSp
     Γ.contourRieszProjection =
       boundedSelfAdjointSpectralProjection
         A Γ.selfAdjoint s Γ.measurable_selected := by
-  rw [Γ.contourRieszProjection_eq_cfcL,
-    boundedSelfAdjointSpectralProjection_eq_spectralCalculus_selector]
-  exact Γ.spectralCalculus_selector_eq_cfcL.symm
+  rw [Γ.contourRieszProjection_eq_cfcL]
+  exact (boundedSelfAdjointSpectralProjection_eq_cfcL_of_selector A Γ.selfAdjoint s
+    Γ.measurable_selected Γ.integratedContourResolventSymbol
+    (fun _ hlam => Γ.integratedContourResolventSymbol_eq_selector hlam)).symm
 
 /-- Every spectrally separating contour produces an orthogonal projection. -/
 theorem SpectralSeparatingContour.contourRieszProjection_isOrthogonalProjection
