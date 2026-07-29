@@ -276,7 +276,6 @@ theorem singularValues_restrictedDisplacement_directRotation
       simp only [dif_pos hk]
       rw [principalPlaneChord_sq]
       match_scalars
-      push_cast
       ring
     · -- `b k` is orthogonal to the sources; `P_U (b k)` is fixed by `|S|`.
       have hperp_u : ∀ i, ⟪principalSourceVector U V i, b k⟫_𝕜 = 0 := by
