@@ -147,6 +147,8 @@ theorem tendsto_norm_of_tendsto_energy {α : Type*} {l : Filter α} (b : Hilbert
   simpa [Function.comp_def] using (Real.continuous_sqrt.tendsto (0 : ℝ)).comp h1
 
 omit [CompleteSpace F] in
+/-- The column-to-operator map is additive on differences.  Stated separately from `ofLp_add`
+because the subtraction form is what the convergence arguments use. -/
 theorem ofLp_sub (b : HilbertBasis ι 𝕜 F) (f g : lp (fun _ : ι => E) 2) :
     ofLp b (f - g) = ofLp b f - ofLp b g := by
   have h : ofLp b (f - g) + ofLp b g = ofLp b f := by rw [← ofLp_add]; congr 1; abel
@@ -194,12 +196,16 @@ theorem adjoint_U_neg (t : ℝ) : (V.U (-t)).adjoint = V.U t := by
 noncomputable def conjOp (t : ℝ) (f : lp (fun _ : ι => E) 2) : F →L[ℂ] E :=
   ((U.U t).comp (ofLp b f)).comp (V.U (-t))
 
+/-- **The Sylvester flow preserves Hilbert--Schmidt energy.**  Both conjugating factors are
+isometries, and the energy is invariant under composition with an isometry on either side.  This
+is what makes the flow a group of *unitaries* on `HS(F, E)`. -/
 theorem energy_conjOp (t : ℝ) (f : lp (fun _ : ι => E) 2) :
     (conjOp U V b t f).hilbertSchmidtEnergy b = (ofLp b f).hilbertSchmidtEnergy b := by
   rw [conjOp, hilbertSchmidtEnergy_comp_isometry _ b (V.U (-t))
       (fun x => by rw [adjoint_U_neg]; exact norm_preserving V t x),
     hilbertSchmidtEnergy_isometry_comp _ b (U.U t) (norm_preserving U t)]
 
+/-- The flow keeps the energy finite, so its image stays inside the Hilbert--Schmidt class. -/
 theorem energy_conjOp_ne_top (t : ℝ) (f : lp (fun _ : ι => E) 2) :
     (conjOp U V b t f).hilbertSchmidtEnergy b ≠ ⊤ := by
   rw [energy_conjOp, energy_ofLp]; exact ENNReal.ofReal_ne_top
@@ -212,12 +218,14 @@ noncomputable def sylvesterFun (t : ℝ) (f : lp (fun _ : ι => E) 2) : lp (fun 
     ofLp b (sylvesterFun U V b t f) = conjOp U V b t f :=
   ofLp_ofOperator _ _ _
 
+/-- The Sylvester flow is norm-preserving on the `lp` model. -/
 theorem norm_sylvesterFun (t : ℝ) (f : lp (fun _ : ι => E) 2) :
     ‖sylvesterFun U V b t f‖ = ‖f‖ :=
   norm_conj_eq b f (U.U t) (norm_preserving U t) (V.U (-t))
     (fun x => by rw [adjoint_U_neg]; exact norm_preserving V t x)
     _ (ofLp_sylvesterFun U V b t f)
 
+/-- The Sylvester flow is additive. -/
 theorem sylvesterFun_add (t : ℝ) (f g : lp (fun _ : ι => E) 2) :
     sylvesterFun U V b t (f + g) = sylvesterFun U V b t f + sylvesterFun U V b t g := by
   refine ofLp_injective b ?_
@@ -226,6 +234,8 @@ theorem sylvesterFun_add (t : ℝ) (f g : lp (fun _ : ι => E) 2) :
   ext x
   simp
 
+/-- The Sylvester flow is complex-linear.  Note it is linear, not conjugate-linear, even though
+the right factor is an adjoint: the scalar passes through `Z ↦ U t ∘ Z ∘ (V t)⋆` untouched. -/
 theorem sylvesterFun_smul (t : ℝ) (c : ℂ) (f : lp (fun _ : ι => E) 2) :
     sylvesterFun U V b t (c • f) = c • sylvesterFun U V b t f := by
   refine ofLp_injective b ?_
@@ -234,6 +244,7 @@ theorem sylvesterFun_smul (t : ℝ) (c : ℂ) (f : lp (fun _ : ι => E) 2) :
   ext x
   simp
 
+/-- At time zero the flow is the identity -- the group identity law. -/
 theorem sylvesterFun_zero (f : lp (fun _ : ι => E) 2) : sylvesterFun U V b 0 f = f := by
   refine ofLp_injective b ?_
   rw [ofLp_sylvesterFun]
@@ -241,6 +252,8 @@ theorem sylvesterFun_zero (f : lp (fun _ : ι => E) 2) : sylvesterFun U V b 0 f 
   ext x
   simp
 
+/-- The flow composes additively in time.  With `sylvesterFun_zero` this is the one-parameter
+group law. -/
 theorem sylvesterFun_add_time (s t : ℝ) (f : lp (fun _ : ι => E) 2) :
     sylvesterFun U V b (s + t) f = sylvesterFun U V b s (sylvesterFun U V b t f) := by
   refine ofLp_injective b ?_
