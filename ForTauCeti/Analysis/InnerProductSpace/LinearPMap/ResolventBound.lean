@@ -171,5 +171,47 @@ theorem notMem_spectrum_resolvent {A : E →ₗ.[𝕜] E} {z : 𝕜}
     all_goals field_simp
     all_goals ring
   exact (spectrum.notMem_iff).mpr ⟨⟨_, T, hleft, hright⟩, rfl⟩
+/-- **Resolvents at different points commute.**
+
+Both orders of the first resolvent identity give `(w - z) • R w ∘ R z` and
+`(z - w) • R z ∘ R w` for the same difference, so the two products agree once the
+nonzero scalar `w - z` is cancelled. -/
+theorem resolvent_comm {A : E →ₗ.[𝕜] E} {w z : 𝕜}
+    (hw : w ∈ resolventSet A) (hz : z ∈ resolventSet A) (hne : w ≠ z) (φ : E) :
+    resolvent A hw (resolvent A hz φ) = resolvent A hz (resolvent A hw φ) := by
+  have h1 := resolvent_sub_resolvent hw hz φ
+  have h2 := resolvent_sub_resolvent hz hw φ
+  -- `R w φ - R z φ = (w - z) • R w (R z φ)` and `R z φ - R w φ = (z - w) • R z (R w φ)`
+  have hsum : (w - z) • resolvent A hw (resolvent A hz φ)
+      + (z - w) • resolvent A hz (resolvent A hw φ) = 0 := by
+    rw [← h1, ← h2]; abel
+  have hzw : (w - z) ≠ 0 := sub_ne_zero_of_ne hne
+  have hstep : (w - z) • (resolvent A hw (resolvent A hz φ)
+      - resolvent A hz (resolvent A hw φ)) = 0 := by
+    rw [smul_sub]
+    rw [show (w - z) • resolvent A hz (resolvent A hw φ)
+        = -((z - w) • resolvent A hz (resolvent A hw φ)) by
+      rw [← neg_smul]; congr 1; ring]
+    rw [sub_neg_eq_add]
+    exact hsum
+  have := (smul_eq_zero.mp hstep).resolve_left hzw
+  exact sub_eq_zero.mp this
+
+/-- Resolvents always commute, including at a common point (where the two
+membership proofs are equal by proof irrelevance). -/
+theorem resolvent_comm' {A : E →ₗ.[𝕜] E} {w z : 𝕜}
+    (hw : w ∈ resolventSet A) (hz : z ∈ resolventSet A) (φ : E) :
+    resolvent A hw (resolvent A hz φ) = resolvent A hz (resolvent A hw φ) := by
+  by_cases h : w = z
+  · subst h; rfl
+  · exact resolvent_comm hw hz h φ
+
+/-- The composition form of `resolvent_comm'`. -/
+theorem resolvent_commute {A : E →ₗ.[𝕜] E} {w z : 𝕜}
+    (hw : w ∈ resolventSet A) (hz : z ∈ resolventSet A) :
+    Commute (resolvent A hw) (resolvent A hz) := by
+  ext φ
+  exact resolvent_comm' hw hz φ
+
 end LinearPMap
 end TauCeti

@@ -17,6 +17,8 @@ public import Mathlib.Data.PNat.Basic
 public import Mathlib.Algebra.Star.Unitary
 public import Mathlib.Analysis.CStarAlgebra.Exponential
 public import Mathlib.Analysis.CStarAlgebra.ContinuousLinearMap
+public import ForTauCeti.Analysis.InnerProductSpace.SkewAdjointExponential
+public import ForTauCeti.Analysis.InnerProductSpace.OneParameterUnitaryGroup.Basic
 
 /-!
 # The Yosida approximation of a self-adjoint operator
@@ -516,6 +518,284 @@ theorem inner_expApprox (hA : IsSelfAdjoint A) (n : ℕ+) (t : ℝ) (x y : H) :
         rw [ContinuousLinearMap.adjoint_inner_left]
     _ = ⟪((ContinuousLinearMap.adjoint (expApprox hA n t)) * expApprox hA n t) x, y⟫_ℂ := rfl
     _ = ⟪x, y⟫_ℂ := by rw [hstar]; rfl
+
+/-! ### The approximants commute
+
+Each `Aₙˢʸᵐ` is a scalar combination of resolvents, and resolvents commute, so
+the symmetric approximants pairwise commute.  This is what lets the Duhamel
+estimate be applied to the pair `(Aₘˢʸᵐ, Aₙˢʸᵐ)`. -/
+
+theorem commute_yosidaApproxSym (hA : IsSelfAdjoint A) (m n : ℕ+) :
+    Commute (yosidaApproxSym hA m) (yosidaApproxSym hA n) := by
+  have hres : ∀ (z w : ℂ) (hz : z ∈ resolventSet A) (hw : w ∈ resolventSet A),
+      Commute (resolvent A hz) (resolvent A hw) := fun _ _ hz hw => resolvent_commute hz hw
+  unfold yosidaApproxSym
+  refine Commute.smul_left ?_ _ |>.smul_right _
+  refine Commute.add_left ?_ ?_ <;> refine Commute.add_right ?_ ?_ <;>
+    exact hres _ _ _ _
+
+/-! ### The approximating flows are Cauchy -/
+
+/-- `expApprox` is the skew-adjoint exponential of `i Aₙˢʸᵐ`. -/
+theorem expApprox_eq_expTime (hA : IsSelfAdjoint A) (n : ℕ+) (t : ℝ) :
+    expApprox hA n t = expTime (I • yosidaApproxSym hA n) t := by
+  rw [expTime, TauCeti.real_smul_I_smul]
+  rfl
+
+/-- The Duhamel estimate, specialised to two approximants. -/
+theorem norm_expApprox_sub_le (hA : IsSelfAdjoint A) (m n : ℕ+) (t : ℝ) (ψ : H) :
+    ‖expApprox hA m t ψ - expApprox hA n t ψ‖
+      ≤ |t| * ‖yosidaApproxSym hA m ψ - yosidaApproxSym hA n ψ‖ := by
+  rw [expApprox_eq_expTime, expApprox_eq_expTime]
+  have h := norm_expTime_sub_expTime_le (isSelfAdjoint_yosidaApproxSym hA m)
+    (isSelfAdjoint_yosidaApproxSym hA n) (commute_yosidaApproxSym hA m n) t ψ
+  refine h.trans (le_of_eq ?_)
+  congr 1
+  have : (I • yosidaApproxSym hA m - I • yosidaApproxSym hA n) ψ
+      = I • (yosidaApproxSym hA m ψ - yosidaApproxSym hA n ψ) := by
+    simp only [sub_apply, smul_apply, smul_sub]
+  rw [this, norm_smul, Complex.norm_I, one_mul]
+
+/-- On the domain, the approximating flows form a Cauchy sequence. -/
+theorem cauchySeq_expApprox_of_mem_domain (hA : IsSelfAdjoint A) (t : ℝ)
+    (ψ : H) (hψ : ψ ∈ A.domain) :
+    CauchySeq (fun n : ℕ+ => expApprox hA n t ψ) := by
+  have hconv := tendsto_yosidaApproxSym_of_mem_domain hA ψ hψ
+  have hCauchy : CauchySeq (fun n : ℕ+ => yosidaApproxSym hA n ψ) := hconv.cauchySeq
+  rw [Metric.cauchySeq_iff] at hCauchy ⊢
+  intro ε hε
+  by_cases ht0 : t = 0
+  · -- every term is `ψ`
+    refine ⟨1, fun m _ n _ => ?_⟩
+    subst ht0
+    simpa [expApprox_zero] using hε
+  · have ht : 0 < |t| := abs_pos.mpr ht0
+    obtain ⟨N, hN⟩ := hCauchy (ε / |t|) (by positivity)
+    refine ⟨N, fun m hm n hn => ?_⟩
+    have hd := hN m hm n hn
+    rw [dist_eq_norm] at hd ⊢
+    calc ‖expApprox hA m t ψ - expApprox hA n t ψ‖
+        ≤ |t| * ‖yosidaApproxSym hA m ψ - yosidaApproxSym hA n ψ‖ :=
+          norm_expApprox_sub_le hA m n t ψ
+      _ < |t| * (ε / |t|) := mul_lt_mul_of_pos_left hd ht
+      _ = ε := by field_simp
+
+/-- The approximating flows are isometric. -/
+theorem norm_expApprox (hA : IsSelfAdjoint A) (n : ℕ+) (t : ℝ) (ψ : H) :
+    ‖expApprox hA n t ψ‖ = ‖ψ‖ := by
+  rw [expApprox_eq_expTime]
+  exact norm_expTime_I_smul _ (isSelfAdjoint_yosidaApproxSym hA n) t ψ
+
+/-- **The approximating flows are Cauchy at every vector**, by density and
+isometry. -/
+theorem cauchySeq_expApprox (hA : IsSelfAdjoint A) (t : ℝ) (ψ : H) :
+    CauchySeq (fun n : ℕ+ => expApprox hA n t ψ) := by
+  have hdense : Dense (A.domain : Set H) := hA.dense_domain
+  rw [Metric.cauchySeq_iff]
+  intro ε hε
+  obtain ⟨φ, hφmem, hφclose⟩ := Metric.mem_closure_iff.mp
+    (hdense.closure_eq ▸ Set.mem_univ ψ) (ε / 3) (by linarith)
+  obtain ⟨N, hN⟩ := (Metric.cauchySeq_iff.mp
+    (cauchySeq_expApprox_of_mem_domain hA t φ hφmem)) (ε / 3) (by linarith)
+  refine ⟨N, fun m hm n hn => ?_⟩
+  have hmφ : dist (expApprox hA m t ψ) (expApprox hA m t φ) = dist ψ φ := by
+    rw [dist_eq_norm, dist_eq_norm, ← ContinuousLinearMap.map_sub, norm_expApprox]
+  have hnφ : dist (expApprox hA n t φ) (expApprox hA n t ψ) = dist φ ψ := by
+    rw [dist_eq_norm, dist_eq_norm, ← ContinuousLinearMap.map_sub, norm_expApprox]
+  calc dist (expApprox hA m t ψ) (expApprox hA n t ψ)
+      ≤ dist (expApprox hA m t ψ) (expApprox hA m t φ)
+          + dist (expApprox hA m t φ) (expApprox hA n t φ)
+          + dist (expApprox hA n t φ) (expApprox hA n t ψ) := dist_triangle4 _ _ _ _
+    _ = dist ψ φ + dist (expApprox hA m t φ) (expApprox hA n t φ) + dist φ ψ := by
+        rw [hmφ, hnφ]
+    _ < ε / 3 + ε / 3 + ε / 3 := by
+        refine add_lt_add (add_lt_add hφclose (hN m hm n hn)) ?_
+        rw [dist_comm]
+        exact hφclose
+    _ = ε := by ring
+
+/-! ### The limit flow `exp(itA)` -/
+
+/-- The strong limit of the approximating flows, pointwise. -/
+noncomputable def expLimitFun (hA : IsSelfAdjoint A) (t : ℝ) (ψ : H) : H :=
+  limUnder atTop (fun n : ℕ+ => expApprox hA n t ψ)
+
+theorem tendsto_expLimitFun (hA : IsSelfAdjoint A) (t : ℝ) (ψ : H) :
+    Tendsto (fun n : ℕ+ => expApprox hA n t ψ) atTop (𝓝 (expLimitFun hA t ψ)) :=
+  (cauchySeq_expApprox hA t ψ).tendsto_limUnder
+
+theorem expLimitFun_add (hA : IsSelfAdjoint A) (t : ℝ) (x y : H) :
+    expLimitFun hA t (x + y) = expLimitFun hA t x + expLimitFun hA t y := by
+  refine tendsto_nhds_unique (tendsto_expLimitFun hA t (x + y)) ?_
+  simpa only [map_add] using
+    (tendsto_expLimitFun hA t x).add (tendsto_expLimitFun hA t y)
+
+theorem expLimitFun_smul (hA : IsSelfAdjoint A) (t : ℝ) (c : ℂ) (x : H) :
+    expLimitFun hA t (c • x) = c • expLimitFun hA t x := by
+  refine tendsto_nhds_unique (tendsto_expLimitFun hA t (c • x)) ?_
+  simpa only [map_smul] using (tendsto_expLimitFun hA t x).const_smul c
+
+theorem norm_expLimitFun (hA : IsSelfAdjoint A) (t : ℝ) (ψ : H) :
+    ‖expLimitFun hA t ψ‖ = ‖ψ‖ := by
+  refine tendsto_nhds_unique ((tendsto_expLimitFun hA t ψ).norm) ?_
+  simpa only [norm_expApprox] using tendsto_const_nhds
+
+/-- The limit flow `exp(itA)` as a bounded operator. -/
+noncomputable def expLimit (hA : IsSelfAdjoint A) (t : ℝ) : H →L[ℂ] H :=
+  LinearMap.mkContinuous
+    { toFun := expLimitFun hA t
+      map_add' := expLimitFun_add hA t
+      map_smul' := fun c x => by simpa using expLimitFun_smul hA t c x }
+    1
+    (fun ψ => by simp [norm_expLimitFun])
+
+@[simp] theorem expLimit_apply (hA : IsSelfAdjoint A) (t : ℝ) (ψ : H) :
+    expLimit hA t ψ = expLimitFun hA t ψ := rfl
+
+theorem norm_expLimit_apply (hA : IsSelfAdjoint A) (t : ℝ) (ψ : H) :
+    ‖expLimit hA t ψ‖ = ‖ψ‖ := norm_expLimitFun hA t ψ
+
+/-! ### The limit flow is a one-parameter unitary group -/
+
+@[simp] theorem expLimit_zero (hA : IsSelfAdjoint A) : expLimit hA 0 = 1 := by
+  ext ψ
+  refine tendsto_nhds_unique (tendsto_expLimitFun hA 0 ψ) ?_
+  simp [expApprox_zero]
+
+theorem inner_expLimit (hA : IsSelfAdjoint A) (t : ℝ) (ψ φ : H) :
+    ⟪expLimit hA t ψ, expLimit hA t φ⟫_ℂ = ⟪ψ, φ⟫_ℂ := by
+  refine tendsto_nhds_unique
+    (((tendsto_expLimitFun hA t ψ).inner (tendsto_expLimitFun hA t φ))) ?_
+  simpa only [inner_expApprox] using tendsto_const_nhds
+
+theorem expLimit_add (hA : IsSelfAdjoint A) (s t : ℝ) :
+    expLimit hA (s + t) = (expLimit hA s).comp (expLimit hA t) := by
+  ext ψ
+  refine tendsto_nhds_unique (tendsto_expLimitFun hA (s + t) ψ) ?_
+  -- `expApprox n s (expApprox n t ψ) → U s (U t ψ)`: split the error in two
+  have hstep : Tendsto (fun n : ℕ+ => expApprox hA n s (expApprox hA n t ψ)) atTop
+      (𝓝 (expLimit hA s (expLimit hA t ψ))) := by
+    rw [Metric.tendsto_atTop]
+    intro ε hε
+    obtain ⟨N₁, hN₁⟩ := (Metric.tendsto_atTop.mp (tendsto_expLimitFun hA t ψ)) (ε / 2)
+      (by linarith)
+    obtain ⟨N₂, hN₂⟩ := (Metric.tendsto_atTop.mp
+      (tendsto_expLimitFun hA s (expLimit hA t ψ))) (ε / 2) (by linarith)
+    refine ⟨max N₁ N₂, fun n hn => ?_⟩
+    have h1 : dist (expApprox hA n s (expApprox hA n t ψ))
+        (expApprox hA n s (expLimit hA t ψ)) < ε / 2 := by
+      rw [dist_eq_norm, ← ContinuousLinearMap.map_sub, norm_expApprox, ← dist_eq_norm]
+      exact hN₁ n (le_trans (le_max_left _ _) hn)
+    have h2 : dist (expApprox hA n s (expLimit hA t ψ))
+        (expLimit hA s (expLimit hA t ψ)) < ε / 2 :=
+      hN₂ n (le_trans (le_max_right _ _) hn)
+    calc dist (expApprox hA n s (expApprox hA n t ψ)) (expLimit hA s (expLimit hA t ψ))
+        ≤ dist (expApprox hA n s (expApprox hA n t ψ))
+            (expApprox hA n s (expLimit hA t ψ))
+          + dist (expApprox hA n s (expLimit hA t ψ))
+            (expLimit hA s (expLimit hA t ψ)) := dist_triangle _ _ _
+      _ < ε / 2 + ε / 2 := add_lt_add h1 h2
+      _ = ε := by ring
+  refine hstep.congr fun n => ?_
+  rw [expApprox_add]
+  rfl
+
+/-! ### Strong continuity -/
+
+/-- Duhamel against the zero generator: `‖exp(iτAₙˢʸᵐ)ψ - ψ‖ ≤ |τ| ‖Aₙˢʸᵐψ‖`. -/
+theorem norm_expApprox_sub_self_le (hA : IsSelfAdjoint A) (n : ℕ+) (τ : ℝ) (ψ : H) :
+    ‖expApprox hA n τ ψ - ψ‖ ≤ |τ| * ‖yosidaApproxSym hA n ψ‖ := by
+  have hzero : expTime ((I : ℂ) • (0 : H →L[ℂ] H)) τ = 1 := by
+    simp [expTime]
+  have h := norm_expTime_sub_expTime_le (isSelfAdjoint_yosidaApproxSym hA n)
+    (IsSelfAdjoint.zero (H →L[ℂ] H)) (Commute.zero_right _) τ ψ
+  rw [hzero] at h
+  simp only [one_apply_eq_self, smul_zero, sub_zero] at h
+  rw [← expApprox_eq_expTime] at h
+  refine h.trans (le_of_eq ?_)
+  congr 1
+  rw [show ((I : ℂ) • yosidaApproxSym hA n) ψ = (I : ℂ) • (yosidaApproxSym hA n ψ) from rfl,
+    norm_smul, Complex.norm_I, one_mul]
+
+/-- On the domain the limit flow is Lipschitz in `t`. -/
+theorem norm_expLimit_sub_self_le (hA : IsSelfAdjoint A) (τ : ℝ)
+    (ψ : H) (hψ : ψ ∈ A.domain) :
+    ‖expLimit hA τ ψ - ψ‖ ≤ |τ| * ‖A ⟨ψ, hψ⟩‖ := by
+  have hlim : Tendsto (fun n : ℕ+ => ‖expApprox hA n τ ψ - ψ‖) atTop
+      (𝓝 ‖expLimit hA τ ψ - ψ‖) :=
+    ((tendsto_expLimitFun hA τ ψ).sub tendsto_const_nhds).norm
+  have hbnd : Tendsto (fun n : ℕ+ => |τ| * ‖yosidaApproxSym hA n ψ‖) atTop
+      (𝓝 (|τ| * ‖A ⟨ψ, hψ⟩‖)) :=
+    ((tendsto_yosidaApproxSym_of_mem_domain hA ψ hψ).norm).const_mul _
+  exact le_of_tendsto_of_tendsto' hlim hbnd fun n => norm_expApprox_sub_self_le hA n τ ψ
+
+/-- `t ↦ exp(itA)ψ` is continuous for `ψ` in the domain. -/
+theorem continuous_expLimit_of_mem_domain (hA : IsSelfAdjoint A)
+    (ψ : H) (hψ : ψ ∈ A.domain) :
+    Continuous (fun t : ℝ => expLimit hA t ψ) := by
+  have hlip : ∀ s t : ℝ, ‖expLimit hA t ψ - expLimit hA s ψ‖ ≤ |t - s| * ‖A ⟨ψ, hψ⟩‖ := by
+    intro s t
+    have hsplit : expLimit hA t ψ = expLimit hA s (expLimit hA (t - s) ψ) := by
+      rw [← ContinuousLinearMap.comp_apply, ← expLimit_add]
+      congr 2
+      ring
+    rw [hsplit]
+    have : expLimit hA s (expLimit hA (t - s) ψ) - expLimit hA s ψ
+        = expLimit hA s (expLimit hA (t - s) ψ - ψ) := by
+      rw [ContinuousLinearMap.map_sub]
+    rw [this, norm_expLimit_apply]
+    exact norm_expLimit_sub_self_le hA (t - s) ψ hψ
+  rw [Metric.continuous_iff]
+  intro s ε hε
+  rcases eq_or_ne ‖A ⟨ψ, hψ⟩‖ 0 with h0 | h0
+  · refine ⟨1, one_pos, fun t _ => ?_⟩
+    have := hlip s t
+    rw [h0, mul_zero] at this
+    rw [dist_eq_norm]
+    exact lt_of_le_of_lt this hε
+  · have hpos : 0 < ‖A ⟨ψ, hψ⟩‖ := (norm_nonneg _).lt_of_ne' h0
+    refine ⟨ε / ‖A ⟨ψ, hψ⟩‖, by positivity, fun t ht => ?_⟩
+    rw [dist_eq_norm] at ht ⊢
+    calc ‖expLimit hA t ψ - expLimit hA s ψ‖
+        ≤ |t - s| * ‖A ⟨ψ, hψ⟩‖ := hlip s t
+      _ < (ε / ‖A ⟨ψ, hψ⟩‖) * ‖A ⟨ψ, hψ⟩‖ := by
+          exact mul_lt_mul_of_pos_right (by rwa [← Real.norm_eq_abs]) hpos
+      _ = ε := by field_simp
+
+/-- `t ↦ exp(itA)ψ` is continuous for every `ψ`, by density and isometry. -/
+theorem continuous_expLimit (hA : IsSelfAdjoint A) (ψ : H) :
+    Continuous (fun t : ℝ => expLimit hA t ψ) := by
+  have hdense : Dense (A.domain : Set H) := hA.dense_domain
+  rw [Metric.continuous_iff]
+  intro s ε hε
+  obtain ⟨φ, hφmem, hφclose⟩ := Metric.mem_closure_iff.mp
+    (hdense.closure_eq ▸ Set.mem_univ ψ) (ε / 3) (by linarith)
+  obtain ⟨δ, hδ, hcont⟩ := Metric.continuous_iff.mp
+    (continuous_expLimit_of_mem_domain hA φ hφmem) s (ε / 3) (by linarith)
+  refine ⟨δ, hδ, fun t ht => ?_⟩
+  have hshift : ∀ r : ℝ, dist (expLimit hA r ψ) (expLimit hA r φ) = dist ψ φ := by
+    intro r
+    rw [dist_eq_norm, dist_eq_norm, ← ContinuousLinearMap.map_sub, norm_expLimit_apply]
+  calc dist (expLimit hA t ψ) (expLimit hA s ψ)
+      ≤ dist (expLimit hA t ψ) (expLimit hA t φ)
+          + dist (expLimit hA t φ) (expLimit hA s φ)
+          + dist (expLimit hA s φ) (expLimit hA s ψ) := dist_triangle4 _ _ _ _
+    _ = dist ψ φ + dist (expLimit hA t φ) (expLimit hA s φ) + dist ψ φ := by
+        rw [hshift t, dist_comm (expLimit hA s φ) (expLimit hA s ψ), hshift s]
+    _ < ε / 3 + ε / 3 + ε / 3 :=
+        add_lt_add (add_lt_add hφclose (hcont t ht)) hφclose
+    _ = ε := by ring
+
+/-- **Stone's theorem, the construction half.**  A self-adjoint operator
+generates a one-parameter unitary group. -/
+noncomputable def genToGroup (hA : IsSelfAdjoint A) : TauCeti.OneParameterUnitaryGroup H where
+  U := expLimit hA
+  unitary := inner_expLimit hA
+  group_law := expLimit_add hA
+  identity := by
+    rw [expLimit_zero]
+    rfl
+  strong_continuous := continuous_expLimit hA
 
 end LinearPMap
 end TauCeti

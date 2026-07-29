@@ -626,3 +626,43 @@ this area.
 * `E →L[ℂ] E` is a `CStarAlgebra`, but the instance lives in
   `Mathlib.Analysis.CStarAlgebra.ContinuousLinearMap`; without that import,
   instance search **diverges** rather than failing.
+
+## The spectral measure: build it via Cayley, do not port the Herglotz route
+
+**Decision, 2026-07-28, on measured numbers.**
+
+Spectra constructs `spectralPVM` by Herglotz/Poisson inversion: the diagonal
+resolvent `Im⟪ξ, R(λ+iε)ξ⟫` is a Poisson density, its Fourier identity is proved
+against a Lorentzian kernel, and the spectral distribution function is recovered
+by Stieltjes inversion with Helly selection.
+
+**Measured cost of porting that route: 9,757 lines** (70-module closure of
+`Bochner/Borel/{Density,CDF}`, `SpectralTheory/{ResolventForm,Measure/Polarized,
+Calculus/Bounded}`, `OneParameterUnitaryGroup/PVM`, minus the 6,403 lines of
+`Resolvent.*`/`YosidaHille.*` this campaign has already replaced or ported). The
+named modules alone read as ~3,050 lines; the Fourier/Kernel/Herglotz sub-tree
+is what triples it.
+
+**Build it instead from the Cayley transform.** For self-adjoint `A`:
+
+* `U := 1 - 2i·R(-i)` is the Cayley transform `(A - i)(A + i)⁻¹`, and is
+  manifestly *bounded* in this form — no domain bookkeeping. `R(-i)` is the
+  native resolvent, which exists by `mem_resolventSet_of_im_ne_zero`.
+* `U` is **unitary**, so Mathlib's continuous functional calculus applies to it
+  directly (`Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/Unitary`).
+* For each `ξ`, `f ↦ ⟪ξ, cfc f U ξ⟫` is a positive linear functional on
+  `C(spectrum U)`; **Mathlib's `RieszMarkovKakutani`** turns it into a measure.
+* Push forward along the inverse Cayley map `w ↦ i(1 + w)/(1 - w)` to land on
+  `ℝ`. That is the `diag` field of `TauCeti.ProjValMeasure`; `proj` follows by
+  polarisation and Riesz representation.
+
+Estimated **~1,000–1,500 lines of new proof** against ~9,757 of transcription,
+and it produces something Mathlib and Tau Ceti both want. This is the same
+"ask what the statement is really about" move that has already collapsed the
+gap-resolvent bound, bounded Kato--Rellich, the self-adjoint criterion, the
+`Resolvent.*` subtree and the bounded exponential layer.
+
+**It is, unlike those, genuinely new mathematics rather than re-homing** — the
+provenance record must say so: extraction class *new*, with Spectra credited for
+theorem selection (its `spectralPVM` is what identified the endpoint) and the
+explicit note that the construction is independent.

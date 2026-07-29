@@ -99,7 +99,7 @@ theorem commute_expTime_of_commute {B C : H →L[ℂ] H} (h : Commute B C) (t : 
 
 omit [CompleteSpace H] in
 /-- `t • (I • S) = I • ((t : ℂ) • S)`: the real and complex scalings agree. -/
-private theorem real_smul_I_smul (S : H →L[ℂ] H) (t : ℝ) :
+theorem real_smul_I_smul (S : H →L[ℂ] H) (t : ℝ) :
     t • (I • S) = I • ((t : ℂ) • S) := by
   rw [smul_comm]
   congr 1
