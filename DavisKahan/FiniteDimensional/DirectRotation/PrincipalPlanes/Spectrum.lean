@@ -393,8 +393,7 @@ theorem singularValues_directRotation_displacement
       rw [hv]
       simp only [dif_pos ha']
       by_cases hpar : (a : ℕ) % 2 = 0
-      · simp [hpar, show (⟨(a:ℕ) % 2, by omega⟩ : Fin 2) = 0 from by
-          ext; simp [hpar]]
+      · simp [hpar]
       · have : (a : ℕ) % 2 = 1 := by omega
         simp [hpar, show (⟨(a:ℕ) % 2, by omega⟩ : Fin 2) ≠ 0 from by
           intro h; apply hpar; simpa [Fin.ext_iff] using h]
@@ -405,8 +404,7 @@ theorem singularValues_directRotation_displacement
       rw [hv]
       simp only [dif_pos hb']
       by_cases hpar : (b : ℕ) % 2 = 0
-      · simp [hpar, show (⟨(b:ℕ) % 2, by omega⟩ : Fin 2) = 0 from by
-          ext; simp [hpar]]
+      · simp [hpar]
       · have : (b : ℕ) % 2 = 1 := by omega
         simp [hpar, show (⟨(b:ℕ) % 2, by omega⟩ : Fin 2) ≠ 0 from by
           intro h; apply hpar; simpa [Fin.ext_iff] using h]

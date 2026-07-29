@@ -52,11 +52,8 @@ theorem realSpectralSubspace_orthogonalExactDecomposition
     rw [← realSelfAdjointSpectralProjection_eq_starProjection A hA Sᶜ hS.compl]
     change realSelfAdjointSpectralProjection A hA Sᶜ hS.compl =
       ContinuousLinearMap.id ℝ E - U.starProjection
-    rw [realSelfAdjointSpectralProjection_compl A hA S hS]
-    change ContinuousLinearMap.id ℝ E -
-        realSelfAdjointSpectralProjection A hA S hS =
-      ContinuousLinearMap.id ℝ E - U.starProjection
-    rw [realSelfAdjointSpectralProjection_eq_starProjection A hA S hS]
+    rw [realSelfAdjointSpectralProjection_compl A hA S hS,
+      realSelfAdjointSpectralProjection_eq_starProjection A hA S hS]
   refine
     { isometry₀ :=
         realSelfAdjointSpectralSubspaceInclusion_isometric A hA S hS
