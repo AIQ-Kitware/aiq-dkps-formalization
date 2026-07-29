@@ -14,7 +14,6 @@ import DavisKahan.Interop.Spectra.DirectRotation
 import DavisKahan.Interop.Spectra.DirectRotationSquare
 import DavisKahan.Interop.Spectra.GapResolvent
 import DavisKahan.Interop.Spectra.HalmosTwoProjections
-import DavisKahan.Interop.Spectra.HilbertSchmidtColumnExpansion
 import DavisKahan.Interop.Spectra.HilbertSchmidtTensor
 import DavisKahan.Interop.Spectra.OperatorAbsoluteValue
 import DavisKahan.Interop.Spectra.OrderedHalfLine
