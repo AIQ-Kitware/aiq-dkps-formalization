@@ -19,7 +19,8 @@ M = M.polarPartial ∘L |M|
 
 with `|M| = M.modulus` positive and `M.polarPartial` a **partial isometry**: isometric on
 the closure of the range of `|M|` and zero on its orthogonal complement.  Unlike
-`ContinuousLinearMap.polarIsometry`, which inverts `|M|` and therefore needs `|M|` to be
+`ContinuousLinearMap.polarIsometryOfIsUnitModulus`, which inverts `|M|` and therefore needs
+`|M|` to be
 invertible, this holds for *every* `M` with no side condition.
 
 ## The construction
@@ -653,7 +654,7 @@ When `|M|` is invertible the partial isometry is given by the closed formula
 `M |M|⁻¹`, and its initial space is everything.  This reconciles the general
 construction with the light one in
 `ForTauCeti/Analysis/InnerProductSpace/PolarIsometry.lean`, which defines
-`polarIsometry M := M ∘L Ring.inverse M.modulus` directly and needs no
+`polarIsometryOfIsUnitModulus M := M ∘L Ring.inverse M.modulus` directly and needs no
 polar-decomposition theory: the two agree exactly where the light one is
 meaningful, so it is a specialisation rather than a rival construction. -/
 
