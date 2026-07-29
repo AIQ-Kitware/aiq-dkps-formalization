@@ -104,12 +104,14 @@ noncomputable def freeFourth
     D.freeSubspace →L[ℂ] H :=
   D.fourth.comp (Submodule.subtypeL D.freeSubspace)
 
+omit [CompleteSpace H] [CompleteSpace V] in
 /-- The free embedding, unfolded. -/
 @[simp] theorem freeEmbed_apply
     (D : FourthOrderTraceModel (H := H) (V := V))
     (x : D.freeSubspace) :
     D.freeEmbed x = D.embed (x : V) := rfl
 
+omit [CompleteSpace H] [CompleteSpace V] in
 /-- The fourth-order operator on the free model, unfolded. -/
 @[simp] theorem freeFourth_apply
     (D : FourthOrderTraceModel (H := H) (V := V))
@@ -149,6 +151,7 @@ noncomputable def freeFourthAmbient
     D.freeAmbientDomain →ₗ[ℂ] H :=
   D.freeFourth.toLinearMap.comp D.freeAmbientInverse
 
+omit [CompleteSpace H] [CompleteSpace V] in
 /-- The ambient inverse undoes the free embedding. -/
 @[simp] theorem freeAmbientInverse_freeEmbed
     (D : FourthOrderTraceModel (H := H) (V := V))
@@ -159,6 +162,7 @@ noncomputable def freeFourthAmbient
   change D.freeRangeEquiv.symm (D.freeRangeEquiv x) = x
   exact D.freeRangeEquiv.symm_apply_apply x
 
+omit [CompleteSpace H] [CompleteSpace V] in
 /-- The ambient fourth-order operator agrees with the model one through the embedding. -/
 @[simp] theorem freeFourthAmbient_freeEmbed
     (D : FourthOrderTraceModel (H := H) (V := V))
@@ -208,6 +212,7 @@ noncomputable def toClosedOperator
   dense_domain := hdense
   closed_graph := hclosed
 
+omit [CompleteSpace H] [CompleteSpace V] in
 /-- The domain of the derived closed operator. -/
 @[simp] theorem toClosedOperator_domain
     (D : FourthOrderTraceModel (H := H) (V := V))
@@ -216,6 +221,7 @@ noncomputable def toClosedOperator
       ((x : H), D.freeFourthAmbient x))) :
     (D.toClosedOperator hdense hclosed).domain = D.freeAmbientDomain := rfl
 
+omit [CompleteSpace H] [CompleteSpace V] in
 /-- Its action, which is the model's fourth-order operator. -/
 @[simp] theorem toClosedOperator_apply
     (D : FourthOrderTraceModel (H := H) (V := V))

@@ -41,6 +41,7 @@ variable {H F G : Type v}
   [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
   [NormedAddCommGroup G] [InnerProductSpace ℂ G] [CompleteSpace G]
 
+omit [CompleteSpace H] in
 /-- The DK bounded sum is exactly the canonical partial-map perturbation.
 
 Was stated over `Spectra.Operator.perturbedOp` until 2026-07-28; the canonical
@@ -100,6 +101,7 @@ noncomputable def boundedPerturbationSinThetaData
     abel
   intertwines := hF₁intertwines
 
+omit [CompleteSpace G] in
 /-- The projected adjoint residual of a bounded perturbation is no larger than
 `V` when both block embeddings are contractions. -/
 theorem boundedPerturbation_adjointResidual_opNorm_le

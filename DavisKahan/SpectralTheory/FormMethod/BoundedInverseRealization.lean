@@ -80,12 +80,14 @@ noncomputable def rangeInverse (R : H →L[ℂ] H)
     inverseDomain R →ₗ[ℂ] H :=
   (rangeEquiv R hinj).symm.toLinearMap
 
+omit [CompleteSpace H] in
 /-- The range equivalence acts as the underlying vector. -/
 @[simp] theorem rangeEquiv_coe_apply
     (R : H →L[ℂ] H) (hinj : Function.Injective R) (x : H) :
     ((rangeEquiv R hinj x : inverseDomain R) : H) = R x := by
   rfl
 
+omit [CompleteSpace H] in
 /-- Applying the range inverse after `R` returns the input. -/
 @[simp] theorem rangeInverse_mk_apply
     (R : H →L[ℂ] H) (hinj : Function.Injective R) (x : H) :
@@ -94,6 +96,7 @@ noncomputable def rangeInverse (R : H →L[ℂ] H)
   change (rangeEquiv R hinj).symm (rangeEquiv R hinj x) = x
   exact (rangeEquiv R hinj).symm_apply_apply x
 
+omit [CompleteSpace H] in
 /-- Applying `R` after the range inverse returns the domain vector. -/
 @[simp] theorem apply_rangeInverse
     (R : H →L[ℂ] H) (hinj : Function.Injective R)
@@ -102,6 +105,7 @@ noncomputable def rangeInverse (R : H →L[ℂ] H)
   have h := (rangeEquiv R hinj).apply_symm_apply x
   exact congrArg Subtype.val h
 
+omit [CompleteSpace H] in
 /-- The graph of the range inverse is closed. -/
 theorem isClosed_graph_rangeInverse
     (R : H →L[ℂ] H) (hinj : Function.Injective R) :
