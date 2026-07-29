@@ -18,16 +18,25 @@ real work** and both others are deliberate:
 **Lanes SR-A, SR-B, SR-C, SR-E and SR-F are closed.**  Convergence Wave 3 is
 closed too.  Everything is on `origin/namek-work` and merged to `main`.
 
-## What S6 now requires — this changed, and it is easier than the plan says
+## What S6 now requires — this changed twice, read it
 
-jon, 2026-07-29: **`vendor/Spectra` does not have to be deleted.**  The
-requirement is that *nothing depends on it*.  Our own mathematics inside it
-moves to `ForTauCeti` where there is an API home; where there is not, it may stay
-in `vendor/` as inert provenance.
+jon, 2026-07-29:
 
-So the old worry — that deleting `vendor/` would destroy the 2,589 lines of
-DKPS-authored mathematics still sitting there — is no longer a hazard.  Do not
-plan around deleting the directory.
+1. **`vendor/Spectra` is not deleted.**  The requirement is that *nothing
+   depends on it*.
+2. **It is moved to a `retired/` folder**, not removed — *"that will prevent
+   other agents from reusing it"*, which is exactly the point.  Retiring stops
+   new dependencies forming while keeping every line available for reference and
+   for the ports still to come.
+
+So S6 is now: drop the `[[require]] Spectra` block from `lakefile.toml`, confirm
+green, move the vendored tree to `retired/`, and relocate to `ForTauCeti` the
+DKPS-authored files that have an API home there.
+
+**The old hazard is gone.**  Deleting `vendor/` would have destroyed the 2,589
+lines of our own mathematics still sitting in it; retiring destroys nothing.  Do
+not plan around deleting the directory, and do not treat "retired" as a synonym
+for "deleted" — the distinction is the whole reason for the move.
 
 Provenance was also scoped down: **authorship pointer plus divergence notes**,
 not the nine-field schema.  The record for all six lanes is in
@@ -46,12 +55,19 @@ product (`lp.instInnerProductSpace`) and completeness.  Landed so far in
 * `memLp_columns_iff` — Hilbert–Schmidt membership *is* `ℓ²` membership of the columns;
 * `summable_norm_columnSeries` — the column series of an `ℓ²` family converges absolutely.
 
-In flight: `ofLp`, the operator with prescribed columns, and the round trips.
+`ofLp` — the operator with prescribed columns — **is landed** (`d692b939`).  Its
+bound is Cauchy–Schwarz in the rescaled form `ab ≤ (s a² + b²/s)/2` at
+`s = ‖f‖/‖x‖`, which avoids building the `ℓ²` inner product of the two norm
+families and so avoids the `lp`-inner plumbing entirely.
+
+In flight: the round trips (`ofLp ∘ columns = id` and back), which is all that
+is left of D1.
 
 ## What you can expect from me, in order
 
-1. **The `HS ≃ lp` bijection** — next.  After this, `HS(F, E)` is a Hilbert
-   space in `ForTauCeti` with no tensor-product development anywhere.
+1. **The `HS ≃ lp` bijection** — both maps now exist; only the round trips
+   remain.  After this, `HS(F, E)` is a Hilbert space in `ForTauCeti` with no
+   tensor-product development anywhere, and **D3 unblocks**.
 2. **The Sylvester operator on it and its spectral-gap inverse.**  This is where
    the sharp `δ⁻¹` lives and it is the only irreducible part of SR-D.
 3. **The four consumer repoints** — `HilbertSchmidt{DefectFirst,Pairwise}`,
