@@ -4,15 +4,15 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Experimental.InfiniteDimensional.Riccati.Bounded
-import DavisKahan.Experimental.InfiniteDimensional.Riccati.BoundedBasic
-import DavisKahan.Experimental.InfiniteDimensional.Riccati.BoundedCore
-import DavisKahan.Experimental.InfiniteDimensional.Riccati.BoundedReduction
-import DavisKahan.Experimental.InfiniteDimensional.Riccati.BoundedEstimates
-import DavisKahan.Experimental.InfiniteDimensional.Riccati.BoundedSharpEstimates
-import DavisKahan.Experimental.InfiniteDimensional.Riccati.BoundedExistence
-import DavisKahan.Experimental.InfiniteDimensional.Riccati.BoundedCanonicalSolution
-import DavisKahan.Experimental.InfiniteDimensional.Riccati.BoundedCanonicalGraph
-import DavisKahan.Experimental.InfiniteDimensional.Riccati.BoundedStability
+import DavisKahan.Riccati.BoundedBasic
+import DavisKahan.Riccati.BoundedCore
+import DavisKahan.Riccati.BoundedReduction
+import DavisKahan.Riccati.BoundedEstimates
+import DavisKahan.Riccati.BoundedSharpEstimates
+import DavisKahan.Riccati.BoundedExistence
+import DavisKahan.Riccati.BoundedCanonicalSolution
+import DavisKahan.Riccati.BoundedCanonicalGraph
+import DavisKahan.Riccati.BoundedStability
 import DavisKahan.Experimental.InfiniteDimensional.Riccati.BoundedDiagonalization
 import DavisKahan.Experimental.InfiniteDimensional.Riccati.BoundedGraphAcute
 import DavisKahan.Experimental.InfiniteDimensional.Riccati.BoundedSpectralTransport
