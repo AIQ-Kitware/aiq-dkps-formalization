@@ -219,8 +219,7 @@ theorem paperPlanar_residual_identity (delta theta : ℝ) :
   fin_cases i <;>
     simp [paperPlanarAmbient, paperPlanarTrialOperator, paperPlanarResidual,
       paperPlaneE0, paperPlaneE1, Matrix.toLpLin_apply,
-      mul_comm] <;>
-    push_cast <;> ring
+      mul_comm]
 
 /-- The projection residual is literally the rank-one sine block. -/
 theorem paperPlanar_directedSine_identity (theta : ℝ) :

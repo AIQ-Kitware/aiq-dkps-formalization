@@ -1,19 +1,18 @@
-# Grounding ledger for the completed target
+# Grounding
 
-The completed facade `FinishTanTwoTheta.DavisKahan.LiteratureComplete` introduces
-no new mathematical proof.  It re-exports theorem families already proved and
-audited in the repository:
+The aggregate target imports the local proof modules themselves rather than
+re-exporting only previously compiled aliases.
 
-| Completed surface | Grounding module |
-|---|---|
-| finite-dimensional Section 7 UI-norm and Ky Fan theorem | `DavisKahan/Sources/DavisKahan1970/TanTwoTheta.lean` |
-| sharp operator norm and acute branch | `DavisKahan/Sources/DavisKahan1970/TanTwoTheta.lean` |
-| infinite-dimensional finite-carrier sharp ideal theorem | `DavisKahan/Sources/DavisKahan1970/TanTwoTheta.lean` |
-| genuine unbounded spectral-subspace companions | `DavisKahan/Sources/DavisKahan1970/TanTwoTheta.lean` |
-| unbounded Riccati Sylvester equation with explicit defect | `DavisKahan/Riccati/UnboundedAdjointRiccati.lean` |
-| ordered unbounded Sylvester Ky Fan estimate | `DavisKahan/Sylvester/Unbounded/OrderedCutoff.lean` |
-| axiom audit | `DavisKahan/Sources/DavisKahan1970/Audits/DoubleAngleTangent.lean` |
+The source-facing checks are provided by:
 
-The facade does not claim the unsupported unrestricted sharp unbounded ideal
-theorem.  Historical experimental modules remain outside the aggregate import
-closure and can be inspected or built explicitly.
+```text
+DavisKahan.Sources.DavisKahan1970.Audits.DoubleAngleTangent
+```
+
+The bounded infinite-dimensional ideal theorem is a repository extension built
+from approximation numbers, the canonical double-angle tangent functional
+calculus, the Riccati identity, Ky Fan domination, and standard Fan dominance.
+
+The unrestricted unbounded ideal statement is not marked grounded.  The valid
+production replacement currently available at that scope is the genuine
+unbounded Sylvester equation with its explicit commutator defect.
