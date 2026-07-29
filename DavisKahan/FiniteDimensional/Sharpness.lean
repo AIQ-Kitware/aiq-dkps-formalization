@@ -191,6 +191,7 @@ noncomputable def modelTanTwoThetaPerturbation (a b θ : ℝ) :
 
 /-! ## Explicit planar geometry -/
 
+/-- The first planar basis vector is a unit vector. -/
 @[simp] theorem norm_e0 : ‖e0 (𝕜 := 𝕜)‖ = 1 := by
   simp [e0]
 

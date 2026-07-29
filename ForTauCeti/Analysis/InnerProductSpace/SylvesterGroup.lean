@@ -277,6 +277,9 @@ noncomputable def sylvesterOp (t : ℝ) :
 
 /-! ### Strong continuity -/
 
+/-- **Strong continuity at zero**: `‖U(r) f - f‖ → 0` as `r → 0`.  Strong
+continuity at every other time follows from this by the group law, which is why
+only the origin is proved. -/
 theorem tendsto_norm_sylvesterFun_sub_zero (f : lp (fun _ : ι => E) 2) :
     Tendsto (fun r : ℝ => ‖sylvesterFun U V b r f - f‖) (𝓝 0) (𝓝 0) := by
   classical

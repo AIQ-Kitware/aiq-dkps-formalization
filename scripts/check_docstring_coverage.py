@@ -98,6 +98,25 @@ def comment_mask(lines: list[str]) -> list[bool]:
     return mask
 
 
+def module_docstring(lines: list[str], end: int) -> bool:
+    """Does the comment block ending at `lines[end]` open with `/-!` ?
+
+    Lean distinguishes a *declaration* docstring `/-- ... -/` from a *module or
+    section* docstring `/-! ... -/`.  The latter documents the file or the
+    section, **not** whatever declaration happens to follow it, so treating it as
+    documentation is a false negative: a declaration written directly under a
+    `/-! ## Heading -/` was silently counted as documented.  Seven declarations
+    in the submission surface were passing for that reason.
+    """
+    depth, k = 0, end
+    while k >= 0:
+        depth += lines[k].count("-/") - lines[k].count("/-")
+        if depth <= 0:
+            return lines[k].lstrip().startswith("/-!")
+        k -= 1
+    return False
+
+
 def scan(path: pathlib.Path, rel: str) -> list[dict]:
     lines = path.read_text().split("\n")
     mask = comment_mask(lines)
@@ -111,7 +130,7 @@ def scan(path: pathlib.Path, rel: str) -> list[dict]:
         j = i - 1
         while j >= 0 and SKIP.match(lines[j]) and not lines[j].rstrip().endswith("-/"):
             j -= 1
-        if j >= 0 and lines[j].rstrip().endswith("-/"):
+        if j >= 0 and lines[j].rstrip().endswith("-/") and not module_docstring(lines, j):
             continue
         name = m.group("name") or ""
         out.append({

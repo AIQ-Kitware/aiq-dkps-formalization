@@ -77,6 +77,9 @@ variable [CompleteSpace H]
 
 /-! ### Basic unitarity facts (reused from the prior compiling build) -/
 
+/-- Running the group backwards is the adjoint: `U(-t) = U(t)⋆`.  This is the
+form of unitarity the group law supplies, and it is what makes each `U t` an
+isometry with a two-sided inverse. -/
 lemma inverse_eq_adjoint (U : OneParameterUnitaryGroup (H := H)) (t : ℝ) :
     U.U (-t) = (U.U t).adjoint := by
   have h_inv : ∀ x : H, U.U t (U.U (-t) x) = x := fun x => by
