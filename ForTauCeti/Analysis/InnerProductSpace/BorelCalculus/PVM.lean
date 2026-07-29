@@ -124,6 +124,33 @@ noncomputable def toProjValMeasure : TauCeti.ProjValMeasure H where
 
 end Projections
 
+section Coordinate
+
+variable (ha : IsStarNormal a)
+
+/-- The coordinate symbol -- the inclusion of the spectrum into `ℂ` -- is an
+admissible symbol. -/
+theorem isBddMeasurable_coord :
+    IsBddMeasurable (fun w : spectrum ℂ a => (w : ℂ)) :=
+  IsBddMeasurable.of_continuous ((ContinuousMap.id ℂ).restrict (spectrum ℂ a))
+
+/-- **The Borel calculus of the coordinate symbol is the operator itself.**  It
+extends the continuous functional calculus, where this is `cfcHom_id`. -/
+theorem borelCalculus_coord :
+    borelCalculus ha (isBddMeasurable_coord (a := a)) = a :=
+  (borelCalculus_of_continuous ha ((ContinuousMap.id ℂ).restrict (spectrum ℂ a))
+    (isBddMeasurable_coord (a := a))).trans (cfcHom_id ha)
+
+/-- **Every value of the Borel calculus commutes with its operator.**  This is
+the reason spectral subspaces reduce their operator, and it needs no spectral
+theorem beyond multiplicativity: `a` is itself a value of the calculus. -/
+theorem borelCalculus_comm_self {f : spectrum ℂ a → ℂ} (hf : IsBddMeasurable f) :
+    a * borelCalculus ha hf = borelCalculus ha hf * a := by
+  have h := borelCalculus_comm ha (isBddMeasurable_coord (a := a)) hf
+  rwa [borelCalculus_coord ha] at h
+
+end Coordinate
+
 section BoundedSelfAdjoint
 
 variable {T : H →L[ℂ] H} (hT : IsSelfAdjoint T)
@@ -154,6 +181,14 @@ theorem boundedPVM_proj_eq_cfcHom (s : Set ℝ) (hs : MeasurableSet s)
     ← borelCalculus_of_continuous hT.isStarNormal g (IsBddMeasurable.of_continuous g)]
   exact borelCalculus_congr_ae _ _ _ fun η =>
     Filter.Eventually.of_forall fun w => (hg w).symm
+
+/-- **A spectral projection of a bounded self-adjoint operator commutes with
+it** -- so its range and the orthogonal complement of its range are both
+invariant, i.e. every spectral subspace reduces the operator. -/
+theorem boundedPVM_proj_comm (s : Set ℝ) (hs : MeasurableSet s) :
+    T * (boundedPVM hT).proj s hs = (boundedPVM hT).proj s hs * T := by
+  rw [boundedPVM, toProjValMeasure_proj, specProj]
+  exact borelCalculus_comm_self hT.isStarNormal _
 
 end BoundedSelfAdjoint
 

@@ -38,10 +38,18 @@ namespace DavisKahan
 namespace Experimental
 namespace TanTheta
 
-open Spectra.OneParameterUnitaryGroup
-open Spectra.YosidaHille
-open Spectra.QuantumMechanics.SpectralTheory
 open SpectraBridge
+
+/-- On a closed interval the absolute value is bounded by the larger endpoint
+modulus.  Local replacement for the donor lemma of the same name, which reached
+this file through `open Spectra.QuantumMechanics.SpectralTheory`. -/
+private theorem abs_le_max_of_mem_Icc {a b s : ℝ} (hs : s ∈ Set.Icc a b) :
+    |s| ≤ max |a| |b| := by
+  rw [abs_le]
+  refine ⟨?_, ?_⟩
+  · exact le_trans
+      (le_trans (neg_le_neg (le_max_left |a| |b|)) (neg_abs_le a)) hs.1
+  · exact le_trans hs.2 (le_trans (le_abs_self b) (le_max_right |a| |b|))
 
 variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
   [CompleteSpace H]
