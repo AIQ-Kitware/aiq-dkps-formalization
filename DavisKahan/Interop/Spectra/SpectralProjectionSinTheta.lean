@@ -29,9 +29,6 @@ namespace DavisKahan
 namespace Experimental
 namespace SpectraBridge
 
-open Spectra.OneParameterUnitaryGroup
-open Spectra.YosidaHille
-open Spectra.QuantumMechanics.SpectralTheory
 open TauCeti.DavisKahan.Experimental.ExactSinTheta
 
 universe v

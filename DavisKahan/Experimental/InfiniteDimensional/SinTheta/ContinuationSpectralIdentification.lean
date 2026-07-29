@@ -6,27 +6,24 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 import DavisKahan.Experimental.InfiniteDimensional.SinTheta.ContinuationAssembly
 import DavisKahan.Interop.Spectra.BoundedSelfAdjointSpectralProjection
 import DavisKahan.SpectralTheory.CayleySelectorBridge
-import Spectra.SpectralTheory.ResolventForm
-import Spectra.StoneBridge.CalculusBridge
 import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Integral
 import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Isometric
 
 /-!
 # Spectral-projection target for contour continuation
 
-This module packages the genuine Spectra projection-valued measure associated
-with a bounded self-adjoint operator.  It identifies each measurable spectral
-projection with the Mathlib orthogonal projection onto its range and records
-the exact orthogonal-projection property required by the continuation
-assembly.
+This module packages the projection-valued measure associated with a bounded
+self-adjoint operator.  It identifies each measurable spectral projection with
+the Mathlib orthogonal projection onto its range and records the exact
+orthogonal-projection property required by the continuation assembly.
 
 The scalar half of spectral identification is also recorded here: the
 sign-correct scalar Riesz transform equals normalized winding, normalized
 winding equals the selected-set indicator on the real spectrum, and the target
 projection is the bounded spectral calculus of that indicator.  The operator
 half transports the contour integral through Mathlib's continuous calculus and
-identifies it with Spectra's bounded measurable calculus through the Cayley
-transform.
+reads the identification straight off
+`boundedSelfAdjointSpectralProjection_eq_cfcL_of_selector`.
 -/
 
 namespace TauCeti
@@ -35,9 +32,7 @@ namespace DavisKahanExt
 open Set
 open MeasureTheory
 open scoped InnerProductSpace
-open Spectra.QuantumMechanics.SpectralTheory
 open DavisKahan.Experimental.Foundation
-open DavisKahan.Experimental.SpectraBridge
 
 universe v
 
@@ -424,40 +419,7 @@ theorem SpectralSeparatingContour.integratedContourResolventSymbol_eq_selector
   exact Γ.scalarRieszTransform_eq_spectralSelector hlam
 
 
-
-/-- The selector pulled back to the bounded Cayley spectrum is continuous,
-because on that spectrum it is the already continuous integrated contour
-symbol. -/
-theorem SpectralSeparatingContour.continuous_cayleySelectorPullback
-    {A : H →L[ℂ] H} {s : Set ℝ}
-    (Γ : SpectralSeparatingContour A s) :
-    Continuous (fun w : spectrum ℂ
-      (Spectra.Cayley.cayley
-        (boundedSelfAdjointOperator A Γ.selfAdjoint).selfAdjoint) =>
-      spectralSelector s
-        (Spectra.Cayley.inverseMobiusReal
-          (boundedSelfAdjointOperator A Γ.selfAdjoint).selfAdjoint w)) := by
-  let hSA :=
-    (boundedSelfAdjointOperator A Γ.selfAdjoint).selfAdjoint
-  let invMap := boundedCayleySpectrumInverse A Γ.selfAdjoint
-  have hcontinuous : Continuous
-      (fun w => Γ.integratedContourResolventSymbol (invMap w)) :=
-    Γ.integratedContourResolventSymbol.continuous.comp invMap.continuous
-  apply hcontinuous.congr
-  intro w
-  let lam : ℝ := Spectra.Cayley.inverseMobiusReal hSA w
-  have hlamC : (lam : ℂ) ∈ spectrum ℂ A := by
-    rw [Spectra.Cayley.inverseMobiusReal_coe hSA w]
-    exact (invMap w).property
-  have hlam : lam ∈ realSpectrum A :=
-    mem_realSpectrum_of_coe_mem_spectrum A Γ.selfAdjoint hlamC
-  have hsub : invMap w = ⟨(lam : ℂ), hlamC⟩ := by
-    apply Subtype.ext
-    exact (Spectra.Cayley.inverseMobiusReal_coe hSA w).symm
-  simpa [lam, hsub] using
-    Γ.integratedContourResolventSymbol_eq_selector hlam
-
-/-- The normalized contour Riesz operator is the genuine Spectra projection
+/-- The normalized contour Riesz operator is the genuine spectral projection
 onto the selected bounded spectral subspace. -/
 theorem SpectralSeparatingContour.contourRieszProjection_eq_boundedSelfAdjointSpectralProjection
     {A : H →L[ℂ] H} {s : Set ℝ}

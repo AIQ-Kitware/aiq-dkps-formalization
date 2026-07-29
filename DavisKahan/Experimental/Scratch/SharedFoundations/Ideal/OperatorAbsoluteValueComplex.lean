@@ -2,14 +2,10 @@
 Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
-
-Portions of the proof route use the bounded polar decomposition from Spectra,
-originally authored by Adam Bornemann.  The declaration-level mapping is
-recorded in the accompanying provenance ledger.
 -/
 import DavisKahan.Experimental.Scratch.SharedFoundations.Ideal.TwoWayFactorization
 import DavisKahan.OperatorIdeal.ApproximationNumbers.OperatorModulus
-import Spectra.QuantumMechanics.Channels.TraceClass.PartialIsometry
+import ForTauCeti.Analysis.InnerProductSpace.PolarPartialIsometry
 
 /-!
 # Absolute-value transport for square symmetric ideals
@@ -17,6 +13,13 @@ import Spectra.QuantumMechanics.Channels.TraceClass.PartialIsometry
 The equality of ideal gauges between `T` and its positive modulus follows from
 two contraction factorizations.  No unitary extension of the polar partial
 isometry is needed.
+
+Until 2026-07-29 the polar factorization came from Spectra
+(`QuantumMechanics.Channels.polar_decomposition`, originally authored by Adam
+Bornemann).  `ForTauCeti`'s polar API supersedes it and is strictly more general
+— it is stated for rectangular `E →L[ℂ] F` — so the three facts consumed here
+(`polarPartial_comp_modulus`, the adjoint identity, and the contraction bound)
+are read off it directly.
 -/
 
 namespace TauCeti
@@ -27,40 +30,50 @@ namespace SharedFoundations
 
 open scoped InnerProductSpace
 open ExactSinTheta
-open Spectra.QuantumMechanics.Channels
 
 universe u
 
 variable {E : Type u} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
   [CompleteSpace E]
 
-/-- Spectra's CFC absolute value agrees with the local square-root definition. -/
-theorem spectra_absOp_eq_operatorAbs (T : E →L[ℂ] E) :
-    absOp T = ContinuousLinearMap.modulus T := by
-  apply ContinuousLinearMap.eq_modulus_of_nonneg_of_mul_self_eq (T := T)
-  · exact absOp_nonneg T
-  · exact absOp_mul_absOp T
-
-/-- The local absolute value has the Spectra polar factorization. -/
+/-- The polar factorization `T = W |T|`. -/
 theorem polarIsometry_comp_operatorAbs (T : E →L[ℂ] E) :
-    polarIsometry T ∘L ContinuousLinearMap.modulus T = T := by
-  rw [← spectra_absOp_eq_operatorAbs]
-  exact Spectra.QuantumMechanics.Channels.polar_decomposition T
+    T.polarPartial ∘L ContinuousLinearMap.modulus T = T :=
+  T.polarPartial_comp_modulus
 
-/-- The adjoint polar factor recovers the local absolute value. -/
+/-- The adjoint polar factor recovers the absolute value: `W⋆ T = |T|`.  On the
+initial space `W⋆ W` is the identity, and `|T|` lands there. -/
 theorem polarIsometry_adjoint_comp_operator (T : E →L[ℂ] E) :
-    (polarIsometry T).adjoint ∘L T = ContinuousLinearMap.modulus T := by
-  rw [← spectra_absOp_eq_operatorAbs]
-  exact Spectra.QuantumMechanics.Channels.polarIsometry_adjoint_comp T
+    T.polarPartial.adjoint ∘L T = ContinuousLinearMap.modulus T := by
+  refine ContinuousLinearMap.ext fun x => ?_
+  have hT : T x = T.polarPartial (ContinuousLinearMap.modulus T x) := by
+    conv_lhs => rw [← T.polarPartial_comp_modulus]
+    rfl
+  rw [ContinuousLinearMap.comp_apply, hT,
+    T.adjoint_polarPartial_polarPartial_apply_of_mem
+      (T.modulus_apply_mem_polarInitial x)]
+
+/-- The polar partial isometry is a contraction: it is isometric on its initial
+space and kills the orthogonal complement. -/
+theorem norm_polarPartial_le_one (T : E →L[ℂ] E) : ‖T.polarPartial‖ ≤ 1 := by
+  refine ContinuousLinearMap.opNorm_le_bound _ zero_le_one fun y => ?_
+  obtain ⟨p, hp, q, hq, rfl⟩ :=
+    Submodule.exists_add_mem_mem_orthogonal (K := T.polarInitial) y
+  have hinner : ⟪p, q⟫_ℂ = 0 := (Submodule.mem_orthogonal _ _).mp hq p hp
+  have hpyth : ‖p + q‖ * ‖p + q‖ = ‖p‖ * ‖p‖ + ‖q‖ * ‖q‖ :=
+    norm_add_sq_eq_norm_sq_add_norm_sq_of_inner_eq_zero p q hinner
+  rw [map_add, T.polarPartial_eq_zero_of_mem_orthogonal hq, add_zero,
+    T.norm_polarPartial_apply_of_mem hp, one_mul]
+  nlinarith [norm_nonneg p, norm_nonneg q, norm_nonneg (p + q)]
 
 /-- The polar factor and its adjoint are contractions. -/
 theorem polarIsometry_and_adjoint_norm_le_one (T : E →L[ℂ] E) :
-    ‖polarIsometry T‖ ≤ 1 ∧ ‖(polarIsometry T).adjoint‖ ≤ 1 := by
-  refine ⟨norm_polarIsometry_le_one T, ?_⟩
+    ‖T.polarPartial‖ ≤ 1 ∧ ‖T.polarPartial.adjoint‖ ≤ 1 := by
+  refine ⟨norm_polarPartial_le_one T, ?_⟩
   calc
-    ‖(polarIsometry T).adjoint‖ = ‖polarIsometry T‖ :=
+    ‖T.polarPartial.adjoint‖ = ‖T.polarPartial‖ :=
       ContinuousLinearMap.adjoint.norm_map _
-    _ ≤ 1 := norm_polarIsometry_le_one T
+    _ ≤ 1 := norm_polarPartial_le_one T
 
 /-- Every square symmetric ideal contains `|T|` exactly when it contains `T`,
 and assigns them equal gauge. -/
@@ -69,7 +82,7 @@ theorem SymmetricNormIdeal.operatorAbs_mem_iff_and_gauge_eq
     (T : E →L[ℂ] E) :
     (I.mem (ContinuousLinearMap.modulus T) ↔ I.mem T) ∧
       (I.mem T → I.gauge (ContinuousLinearMap.modulus T) = I.gauge T) := by
-  let U : E →L[ℂ] E := polarIsometry T
+  let U : E →L[ℂ] E := T.polarPartial
   let J : E →L[ℂ] E := ContinuousLinearMap.id ℂ E
   have hTfactor : T = U ∘L ContinuousLinearMap.modulus T ∘L J := by
     rw [ContinuousLinearMap.comp_id]

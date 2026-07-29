@@ -5,21 +5,25 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Interop.Spectra.ClosedOperator
 import DavisKahan.Sylvester.ClosedSylvesterEquation
-import Spectra.Operator.SelfAdjoint
-import Spectra.QuantumMechanics.BornRule.Observable
-import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
+import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralFormBounds
 
 /-!
 # Genuine spectral half-line localization
 
-This leaf converts half-line containment of the genuine Spectra spectrum of a
-closed self-adjoint operator into the quadratic-form semibounds consumed by the
-ordered branches of the unbounded Sylvester theorem.
+This leaf converts half-line containment of the spectrum of a closed
+self-adjoint operator into the quadratic-form semibounds consumed by the ordered
+branches of the unbounded Sylvester theorem.
 
-The proof uses the Born measure of each domain vector.  Its support lies in the
-operator spectrum, while its first moment is the corresponding diagonal matrix
-element.  Integrating the pointwise half-line inequality therefore gives the
-required form bound.
+Until 2026-07-29 the proof ran through Spectra's Born measure: the measure of a
+domain vector has its support in the spectrum, its first moment is the diagonal
+matrix element, and integrating the pointwise half-line inequality gave the form
+bound.  That route needs the identity function to be integrable against the
+measure, which is a second-moment fact.
+
+The native route needs no integral at all.  `E((-∞, c)) = 0` is the support
+statement of `ForTauCeti/…/LinearPMap/SpectralSupport.lean`, and the form bound
+then comes from the *bounded* one on `[c, τ]` in the limit `τ → ∞` —
+`TauCeti.LinearPMap.le_re_inner_of_specProjection_Iio_eq_zero`.
 -/
 
 open scoped InnerProductSpace
@@ -30,33 +34,12 @@ namespace DavisKahan
 namespace Experimental
 namespace SpectraBridge
 
-open Spectra.QuantumMechanics
-open Spectra.QuantumMechanics.BornRule.Observable
-open Spectra.QuantumMechanics.SpectralTheory
 open TauCeti.DavisKahan.Experimental.ExactSinTheta
 
 universe v
 
 variable {H : Type v}
   [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
-
-/-- Upgrade a DK closed operator to a Spectra self-adjoint operator.  This lane
-is the last consumer of the outbound Spectra adapter, so the adapter lives here
-rather than in `DavisKahan.Interop.Spectra.ClosedOperator`. -/
-noncomputable def closedOperatorToSpectra
-    (A : DKClosedOperator (H := H))
-    (hA : IsSelfAdjoint A.toLinearPMap) :
-    Spectra.Operator.SelfAdjointOperator H where
-  toLinearPMap := A.toLinearPMap
-  selfAdjoint := hA
-
-@[simp] theorem closedOperatorToSpectra_toLinearPMap
-    (A : DKClosedOperator (H := H)) (hA : IsSelfAdjoint A.toLinearPMap) :
-    (closedOperatorToSpectra A hA).toLinearPMap = A.toLinearPMap := rfl
-
-@[simp] theorem closedOperatorToSpectra_domain
-    (A : DKClosedOperator (H := H)) (hA : IsSelfAdjoint A.toLinearPMap) :
-    (closedOperatorToSpectra A hA).domain = A.domain := rfl
 
 /-- Genuine spectral containment in `[c, ∞)` implies the matching lower
 quadratic-form bound. -/
@@ -67,35 +50,14 @@ theorem semiboundedBelow_of_spectrum_subset_Ici
         Set.Ici c) :
     SemiboundedBelow A c := by
   intro x
-  let Aop := closedOperatorToSpectra A hA
-  let μ : Measure ℝ := Aop.bornMeasure (x : H)
-  letI : IsFiniteMeasure μ := by
-    change IsFiniteMeasure (Aop.spectralPVM.diag (x : H))
-    exact Aop.spectralPVM.diag_finite (x : H)
-  have hint : Integrable (fun s : ℝ => s) μ := by
-    change Integrable (fun s : ℝ => s)
-      ((Spectra.QuantumMechanics.SpectralTheory.PVM.spectralPVM hA).diag (x : H))
-    exact spectralPVM_integrable_id hA (x : H) x.property
-  have hval : ∫ s, s ∂μ = (⟪(x : H), A.toLinearMap x⟫_ℂ).re := by
-    simpa [μ, Aop,
-      Spectra.Operator.SelfAdjointOperator.bornMeasure,
-      Spectra.QuantumMechanics.BornRule.Moments.bornExpectation] using
-      bornExpectation_eq_inner Aop x.property
-  have hsupp : μ.support ⊆ Set.Ici c := by
-    intro s hs
-    exact hσ (bornMeasure_support_subset_spectrum Aop (x : H) hs)
-  have hae : ∀ᵐ s ∂μ, c ≤ s := by
-    filter_upwards [Measure.support_mem_ae (μ := μ)] with s hs using hsupp hs
-  calc
-    c * ‖(x : H)‖ ^ 2 = ∫ _s, c ∂μ := by
-      rw [integral_const, smul_eq_mul, Measure.real_def]
-      change c * ‖(x : H)‖ ^ 2 =
-        ((Aop.spectralPVM.diag (x : H)) Set.univ).toReal * c
-      rw [Aop.spectralPVM.diag_univ_toReal, mul_comm]
-    _ ≤ ∫ s, s ∂μ := integral_mono_ae (integrable_const _) hint hae
-    _ = (⟪(x : H), A.toLinearMap x⟫_ℂ).re := hval
-    _ = (⟪A.toLinearMap x, (x : H)⟫_ℂ).re := by
-      rw [← inner_conj_symm, Complex.conj_re]
+  have hzero :
+      TauCeti.LinearPMap.specProjection hA (Set.Iio c) measurableSet_Iio = 0 := by
+    refine TauCeti.LinearPMap.specProjection_eq_zero_of_subset_resolventSet hA _
+      measurableSet_Iio fun lam hlam => ?_
+    by_contra hnot
+    exact absurd (hσ hnot) (by simpa using not_le.mpr hlam)
+  simpa using
+    TauCeti.LinearPMap.le_re_inner_of_specProjection_Iio_eq_zero hA hzero x
 
 /-- Genuine spectral containment in `(-∞, c]` implies the matching upper
 quadratic-form bound. -/
@@ -106,36 +68,14 @@ theorem semiboundedAbove_of_spectrum_subset_Iic
         Set.Iic c) :
     SemiboundedAbove A c := by
   intro x
-  let Aop := closedOperatorToSpectra A hA
-  let μ : Measure ℝ := Aop.bornMeasure (x : H)
-  letI : IsFiniteMeasure μ := by
-    change IsFiniteMeasure (Aop.spectralPVM.diag (x : H))
-    exact Aop.spectralPVM.diag_finite (x : H)
-  have hint : Integrable (fun s : ℝ => s) μ := by
-    change Integrable (fun s : ℝ => s)
-      ((Spectra.QuantumMechanics.SpectralTheory.PVM.spectralPVM hA).diag (x : H))
-    exact spectralPVM_integrable_id hA (x : H) x.property
-  have hval : ∫ s, s ∂μ = (⟪(x : H), A.toLinearMap x⟫_ℂ).re := by
-    simpa [μ, Aop,
-      Spectra.Operator.SelfAdjointOperator.bornMeasure,
-      Spectra.QuantumMechanics.BornRule.Moments.bornExpectation] using
-      bornExpectation_eq_inner Aop x.property
-  have hsupp : μ.support ⊆ Set.Iic c := by
-    intro s hs
-    exact hσ (bornMeasure_support_subset_spectrum Aop (x : H) hs)
-  have hae : ∀ᵐ s ∂μ, s ≤ c := by
-    filter_upwards [Measure.support_mem_ae (μ := μ)] with s hs using hsupp hs
-  calc
-    (⟪A.toLinearMap x, (x : H)⟫_ℂ).re =
-        (⟪(x : H), A.toLinearMap x⟫_ℂ).re := by
-      rw [← inner_conj_symm, Complex.conj_re]
-    _ = ∫ s, s ∂μ := hval.symm
-    _ ≤ ∫ _s, c ∂μ := integral_mono_ae hint (integrable_const _) hae
-    _ = c * ‖(x : H)‖ ^ 2 := by
-      rw [integral_const, smul_eq_mul, Measure.real_def]
-      change ((Aop.spectralPVM.diag (x : H)) Set.univ).toReal * c =
-        c * ‖(x : H)‖ ^ 2
-      rw [Aop.spectralPVM.diag_univ_toReal, mul_comm]
+  have hzero :
+      TauCeti.LinearPMap.specProjection hA (Set.Ioi c) measurableSet_Ioi = 0 := by
+    refine TauCeti.LinearPMap.specProjection_eq_zero_of_subset_resolventSet hA _
+      measurableSet_Ioi fun lam hlam => ?_
+    by_contra hnot
+    exact absurd (hσ hnot) (by simpa using not_le.mpr hlam)
+  simpa using
+    TauCeti.LinearPMap.re_inner_le_of_specProjection_Ioi_eq_zero hA hzero x
 
 end SpectraBridge
 end Experimental
