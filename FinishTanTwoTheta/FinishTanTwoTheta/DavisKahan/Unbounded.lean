@@ -45,9 +45,19 @@ variable {E1 : Type u} [NormedAddCommGroup E1] [InnerProductSpace ℂ E1]
   [CompleteSpace E1]
 
 /-- Approximate leading singular vectors lying in the two closed-operator
- domains, with both singular residuals small in the corresponding graph norms.
- The graph-norm clauses are exactly what removes the invalid factors
- `‖A0‖` and `‖A1‖` from the bounded stability calculation. -/
+ domains, with both singular residuals controlled against the unbounded blocks.
+
+ The two `_pairing` clauses are exactly what removes the invalid factors
+ `‖A0‖` and `‖A1‖` from the bounded stability calculation.
+
+ **They are deliberately pairings, not graph norms (weakened 2026-07-29).** The
+ consumer, `unboundedStableSingularPair_doubleAngleTangent_le`, uses
+ `‖A₁ e0‖ ≤ ε` only to reach `|Re ⟪A₁ e0, y⟫| ≤ ε`, and `‖A₀ e1‖ ≤ ε` only to
+ reach `|Re ⟪A₀ x, e1⟫| ≤ ε` via symmetry of `A₀`. Demanding the graph norms was
+ strictly stronger than anything used, and provably too strong: see
+ `dev/finishtantwotheta-completion-lane.md` for why no selection can supply
+ them. The public statements `sharp_unbounded_doubleAngleTangentOperator_kyFan`
+ and `sharp_unbounded_standardSymmetricIdeal_scaled` are unchanged. -/
 structure UnboundedApproximateLeadingSingularFamily
     (H : UnboundedBlockData (𝕜 := ℂ) (E0 := E0) (E1 := E1))
     (S : ContractiveReducingGraphSelection H) (k : ℕ) (ε : ℝ) where
@@ -64,16 +74,18 @@ structure UnboundedApproximateLeadingSingularFamily
       S.X ((right i : H.A0.domain) : E0) -
         (S.X.approximationNumber i : ℂ) • ((left i : H.A1.domain) : E1)
   applyDefect_norm : ∀ i, ‖((applyDefect i : H.A1.domain) : E1)‖ ≤ ε
-  applyDefect_apply_norm : ∀ i,
-    ‖H.A1 (applyDefect i)‖ ≤ ε
+  applyDefect_pairing : ∀ i,
+    |RCLike.re ⟪H.A1 (applyDefect i),
+      ((left i : H.A1.domain) : E1)⟫_ℂ| ≤ ε
   adjointDefect : Fin count → H.A0.domain
   adjointDefect_coe : ∀ i,
     ((adjointDefect i : H.A0.domain) : E0) =
       S.X.adjoint ((left i : H.A1.domain) : E1) -
         (S.X.approximationNumber i : ℂ) • ((right i : H.A0.domain) : E0)
   adjointDefect_norm : ∀ i, ‖((adjointDefect i : H.A0.domain) : E0)‖ ≤ ε
-  adjointDefect_apply_norm : ∀ i,
-    ‖H.A0 (adjointDefect i)‖ ≤ ε
+  adjointDefect_pairing : ∀ i,
+    |RCLike.re ⟪H.A0 (right i),
+      ((adjointDefect i : H.A0.domain) : E0)⟫_ℂ| ≤ ε
   tail_small : ∀ n, count ≤ n → n < k → S.X.approximationNumber n ≤ ε
 
 namespace UnboundedApproximateLeadingSingularFamily
@@ -163,9 +175,11 @@ def unboundedStablePairError
 
 /-- Stable equation-(7.6) estimate for closed diagonal blocks.
 
-The two diagonal residuals are estimated with the graph-norm hypotheses.  For
-`A0`, self-adjoint symmetry moves the unbounded operator from the selected
-right vector onto the graph-small adjoint defect. -/
+The two diagonal residuals enter only through the paired quantities
+`Re ⟪A₁ e0, y⟫` and `Re ⟪A₀ x, e1⟫`, which is why those are the hypotheses: no
+norm of a diagonal block appears anywhere, as required, and nothing stronger is
+assumed than the proof consumes.  For `A0`, self-adjoint symmetry is what lets
+the second pairing be read either as `Re ⟪A₀ x, e1⟫` or as `Re ⟪x, A₀ e1⟫`. -/
 theorem unboundedStableSingularPair_doubleAngleTangent_le
     (H : UnboundedBlockData (𝕜 := ℂ) (E0 := E0) (E1 := E1))
     {d s ε : ℝ} (hd0 : 0 ≤ d) (hs0 : 0 ≤ s) (hs1 : s < 1)
@@ -179,9 +193,9 @@ theorem unboundedStableSingularPair_doubleAngleTangent_le
     (he0 : (e0 : E1) = S.X (x : E0) - (s : ℂ) • (y : E1))
     (he1 : (e1 : E0) = S.X.adjoint (y : E1) - (s : ℂ) • (x : E0))
     (he0norm : ‖(e0 : E1)‖ ≤ ε)
-    (he0apply : ‖H.A1 e0‖ ≤ ε)
+    (he0pair : |RCLike.re ⟪H.A1 e0, (y : E1)⟫_ℂ| ≤ ε)
     (he1norm : ‖(e1 : E0)‖ ≤ ε)
-    (he1apply : ‖H.A0 e1‖ ≤ ε) :
+    (he1pair : |RCLike.re ⟪H.A0 x, (e1 : E0)⟫_ℂ| ≤ ε) :
     d * DavisKahanTheory.doubleAngleTangent s ≤
       2 * (-RCLike.re ⟪(x : E0), H.B01 (y : E1)⟫_ℂ) +
         unboundedStablePairError H s ε := by
@@ -193,22 +207,8 @@ theorem unboundedStableSingularPair_doubleAngleTangent_le
       (s : ℂ) • (x : E0) + (e1 : E0) := by
     rw [he1]
     abel
-  have hA1err : |RCLike.re ⟪H.A1 e0, (y : E1)⟫_ℂ| ≤ ε := by
-    calc
-      |RCLike.re ⟪H.A1 e0, (y : E1)⟫_ℂ| ≤
-          ‖⟪H.A1 e0, (y : E1)⟫_ℂ‖ := RCLike.abs_re_le_norm _
-      _ ≤ ‖H.A1 e0‖ * ‖(y : E1)‖ := norm_inner_le_norm _ _
-      _ ≤ ε * ‖(y : E1)‖ := by gcongr
-      _ = ε := by rw [hynorm, mul_one]
-  have hA0err : |RCLike.re ⟪H.A0 x, (e1 : E0)⟫_ℂ| ≤ ε := by
-    have hsym := H.isSymmetric0 x e1
-    rw [hsym]
-    calc
-      |RCLike.re ⟪(x : E0), H.A0 e1⟫_ℂ| ≤
-          ‖⟪(x : E0), H.A0 e1⟫_ℂ‖ := RCLike.abs_re_le_norm _
-      _ ≤ ‖(x : E0)‖ * ‖H.A0 e1‖ := norm_inner_le_norm _ _
-      _ ≤ ‖(x : E0)‖ * ε := by gcongr
-      _ = ε := by rw [hxnorm, one_mul]
+  have hA1err : |RCLike.re ⟪H.A1 e0, (y : E1)⟫_ℂ| ≤ ε := he0pair
+  have hA0err : |RCLike.re ⟪H.A0 x, (e1 : E0)⟫_ℂ| ≤ ε := he1pair
   obtain ⟨hdom, hpoint⟩ :=
     (strongSolvesRiccati_iff_pointwise H S.X).1 S.strongSolvesRiccati
   have hXdomEq :
@@ -411,8 +411,8 @@ theorem selected_unbounded_doubleAngleTangent_le_kyFan_add_error
     have hbase := unboundedStableSingularPair_doubleAngleTangent_le H hd0 hs0
       (hsr.trans_lt hr1) hε0 hA0 hA1 S (F.norm_right i) (F.norm_left i)
       (F.applyDefect_coe i) (F.adjointDefect_coe i)
-      (F.applyDefect_norm i) (F.applyDefect_apply_norm i)
-      (F.adjointDefect_norm i) (F.adjointDefect_apply_norm i)
+      (F.applyDefect_norm i) (F.applyDefect_pairing i)
+      (F.adjointDefect_norm i) (F.adjointDefect_pairing i)
     have huni := unboundedStablePairError_le_uniform H hs0 hsr hr1 hε0
     linarith
   have hsum := Finset.sum_le_sum fun i (_hi : i ∈ Finset.univ) => hpoint i
