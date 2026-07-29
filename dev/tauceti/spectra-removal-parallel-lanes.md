@@ -1,9 +1,10 @@
 # Spectra removal — open parallel lanes
 
-**Purpose.** The Spectra removal campaign is down to **15 files** carrying
-`import Spectra`, and they no longer form a chain: the spectral-measure
-chokepoint is built and green, so what is left splits into **six lanes that
-touch disjoint files**. This document opens them for other agents.
+**Purpose.** The Spectra removal campaign is down to **9 files** carrying
+`import Spectra` (15 when this document was written), and they no longer form a
+chain: the spectral-measure chokepoint is built and green, so what is left
+splits into **lanes that touch disjoint files**. This document opens them for
+other agents.
 
 Read [`spectra-removal-plan.md`](spectra-removal-plan.md) first for the campaign
 contract, the provenance schema and the S6 completion criteria. This file states
@@ -14,16 +15,19 @@ below, commit it, then work. One agent per lane. Do not take two lanes at once �
 the lanes are sized so that each is a session's work, and holding two blocks
 someone else.
 
-## Status board (2026-07-29)
+## Status board (updated 2026-07-29, after SR-A/B/C landed)
 
 | lane | files | blocker | holder |
 |---|---|---|---|
-| **SR-A** Cayley / Möbius / `SelfAdjointOperator` bridge | 5 | none — elementary, in progress | **namek (jon)** |
-| **SR-B** spectral support | 1 | `spectralPVM_proj_eq_zero_of_subset_resolventSet` | *open* |
-| **SR-C** second moments | 1 | `spectralPVM_integrable_id` | *open* |
+| **SR-A** Cayley / Möbius / `SelfAdjointOperator` bridge | 5 | — | **DONE** (namek) |
+| **SR-B** spectral support | 1 | — | **DONE** (namek) |
+| **SR-C** half-line form bounds | 1 | — | **DONE** (namek) |
 | **SR-D** Hilbert–Schmidt tensor | 5 | the HS tensor development itself | *open* |
-| **SR-E** Rosenblum | 1 | intertwiner of disjoint spectra vanishes | *open* |
+| **SR-E** Rosenblum | 1 | intertwiner of disjoint spectra vanishes | claimed |
 | **SR-F** Experimental stragglers | 3 | three unrelated small items | *open* |
+
+`import Spectra` in `DavisKahan/**`: **15 → 9**.  The nine remaining are exactly
+SR-D (5), SR-E (1) and SR-F (3).
 
 `InfiniteProposition41.lean` is counted in SR-F but also consumes
 `SelfAdjointOperator.ofBounded`; it should be taken **after** SR-A lands, or its
@@ -43,7 +47,24 @@ Existing modules may be *imported* freely; only edits collide.
 
 ---
 
-## SR-A — Cayley / Möbius / `SelfAdjointOperator` bridge  *(held: namek)*
+## SR-A — Cayley / Möbius / `SelfAdjointOperator` bridge  *(DONE, namek)*
+
+**Landed.**  `DavisKahan/Interop/Spectra/Basic.lean` is **deleted** — the whole
+`SelfAdjointOperator.ofBounded` bridge had no consumers left once the ~250 dead
+lines of bounded Cayley/Möbius scaffolding in `CayleySelectorBridge.lean` went.
+`SelfAdjointBorelCalculus`'s three `toLinearPMap` theorems are restated over
+Mathlib's `(A : H →ₗ[ℂ] H).toPMap ⊤`.  `ContinuationSelectedReduction`'s
+projection/operator commutation is now three lines against
+`TauCeti.BorelCalculus.boundedPVM_proj_comm`, new in `BorelCalculus/PVM.lean`
+alongside `borelCalculus_coord` and `borelCalculus_comm_self`.
+
+Worth carrying forward: **`linear_combination (norm := module)` treats
+`specProjection hA B hB` and `(spectralPVM hA).proj B hB` as different atoms**
+even though they are definitionally equal.  Rewrite the goal into whichever form
+the hypothesis uses *before* calling it, or it fails with "ring expressions not
+equal" for no visible reason.
+
+<details><summary>original lane description</summary>
 
 **Files.** `DavisKahan/Interop/Spectra/Basic.lean`,
 `DavisKahan/SpectralTheory/CayleySelectorBridge.lean`,
@@ -77,9 +98,31 @@ commutation. Native route — no Stone group, no generator:
 `ForTauCeti/Analysis/InnerProductSpace/BorelCalculus/PVM.lean`
 (`borelCalculus_coord`, `boundedPVM_proj_comm`).
 
+</details>
+
 ---
 
-## SR-B — spectral support  *(open)*
+## SR-B — spectral support  *(DONE, namek)*
+
+**Landed** as
+`ForTauCeti/Analysis/InnerProductSpace/LinearPMap/SpectralSupport.lean`, with
+the proof plan below unchanged, plus one addition that turned out to matter:
+the theorem is stated **first for the diagonal measures**
+(`diag_eq_zero_of_subset_resolventSet`) and only then for the projections.
+
+That ordering is the whole trick.  A projection statement cannot be proved by a
+covering argument — projections do not add up over a countable cover in any
+form you can quantify over.  The diagonal measures *are* honest finite Borel
+measures on `ℝ`, so `MeasureTheory.measure_null_of_locally_null` does the
+covering for free, and `ProjValMeasure.norm_sq_proj_apply`
+(`‖E(B) ξ‖² = diag ξ B`) carries the result back to the projection.  Local
+vanishing comes from `norm_sub_smul_le_of_mem_specRange` against
+`‖R(c)‖ r < 1` with `r := (‖R(c)‖ + 1)⁻¹`.
+
+`BoundedFromSpectrum.lean` is now Spectra-free and no longer mentions a Stone
+group at all.
+
+<details><summary>original lane description</summary>
 
 **File.** `DavisKahan/Interop/Spectra/BoundedFromSpectrum.lean` (195 lines).
 
@@ -96,9 +139,26 @@ then cover the set. The commutation of `E(B)` with every resolvent and the
 
 **New ForTauCeti module:** `ForTauCeti/Analysis/InnerProductSpace/LinearPMap/SpectralSupport.lean`.
 
+</details>
+
 ---
 
-## SR-C — second moments  *(open)*
+## SR-C — half-line form bounds  *(DONE, namek — and the plan below was wrong)*
+
+**The blocker named in the original plan does not exist.**  `OrderedHalfLine`
+does not need `spectralPVM_integrable_id`, a second moment, or any integral:
+what it needs is a *form* bound, and the bounded form bound
+`re_inner_apply_bounds_of_subset_Icc` was already sitting in
+`SpectralMeasure.lean`.  Apply it on `[c, τ]` and let `τ → ∞`; the cutoffs
+converge strongly by `tendsto_specProjection_Icc`, and `E([c, τ])` acts as
+`E([-τ, τ])` because `E([c, ∞)) = 1`, which is SR-B's support statement.
+
+So the module is `LinearPMap/SpectralFormBounds.lean`, **not** the advertised
+`SpectralMoments.lean`, and it states no integrability fact anywhere.  This is
+the fourth time in this campaign that asking "what is the consumer actually
+consuming?" collapsed a measure-theoretic obligation into an operator-norm one.
+
+<details><summary>original (wrong) lane description</summary>
 
 **File.** `DavisKahan/Interop/Spectra/OrderedHalfLine.lean` (142 lines).
 
@@ -112,6 +172,8 @@ integrability of `s` itself. The file also uses Spectra's `bornMeasure` /
 be restated over `TauCeti.ProjValMeasure.diag` rather than ported.
 
 **New ForTauCeti module:** `ForTauCeti/Analysis/InnerProductSpace/LinearPMap/SpectralMoments.lean`.
+
+</details>
 
 ---
 
