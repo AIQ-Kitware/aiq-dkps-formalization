@@ -125,7 +125,7 @@ theorem principalSourceVector_mem
           = projection U ∘ₗ complementaryProjection V
       rw [LinearMap.adjoint_comp, projection_adjoint]
       congr 1
-      simpa [complementaryProjection] using projection_adjoint (𝕜 := 𝕜) Vᗮ
+      simp [complementaryProjection]
     rw [hAadj]
     show (projection U ∘ₗ complementaryProjection V) ∘ₗ
         (complementaryProjection V ∘ₗ projection U) =
@@ -239,7 +239,7 @@ theorem abs_canonicalIntertwiner_apply_principalSourceVector
     have hAadj : (sinThetaMap U V).adjoint = projection U ∘ₗ complementaryProjection V := by
       rw [sinThetaMap, LinearMap.adjoint_comp, projection_adjoint]
       congr 1
-      simpa [complementaryProjection] using projection_adjoint (𝕜 := 𝕜) Vᗮ
+      simp [complementaryProjection]
     rw [hAadj, sinThetaMap]
     ext x
     simp only [LinearMap.comp_apply, LinearMap.sub_apply]

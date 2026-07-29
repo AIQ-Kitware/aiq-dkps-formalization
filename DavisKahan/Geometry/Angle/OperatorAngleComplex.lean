@@ -177,6 +177,7 @@ theorem sinAngleOperatorDirectedC_sq_add_cosAngleOperatorC_sq
           show U.starProjection ∘L U.starProjection = U.starProjection from
             U.isIdempotentElem_starProjection]
 
+omit [CompleteSpace E] in
 /-- Any two-sided compression by `P_U` commutes with `P_U`. -/
 theorem commute_compress_starProjection (U : Submodule ℂ E)
     [U.HasOrthogonalProjection] (T : E →L[ℂ] E) :
@@ -197,6 +198,7 @@ theorem commute_compress_starProjection (U : Submodule ℂ E)
           ((U.starProjection ∘L T ∘L U.starProjection)) := by
         simp only [ContinuousLinearMap.comp_assoc]
 
+omit [CompleteSpace E] in
 /-- The two compressed cross squares sum to the source projection. -/
 theorem cross_sq_add_cross_sq (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
@@ -328,6 +330,7 @@ theorem norm_sinTwoAngleOperatorC (U V : Submodule ℂ E)
   rw [sinTwoAngleOperatorC, norm_smul, hprod]
   norm_num
 
+omit [CompleteSpace E] in
 /-- **Pointwise Pythagoras for the directed sine and cosine.**  On vectors
 of `U`, the squared norms of the directed sine (`P_{Vᗮ} x`) and cosine
 (`P_V x`) data add to `‖x‖²` — the operator-level `sin² + cos² = 1` on the
@@ -702,6 +705,7 @@ theorem ker_bot_range_top_of_isSelfAdjoint_of_bounded_below
   have : ‖y‖ ≤ 0 := by nlinarith
   exact norm_eq_zero.mp (le_antisymm this (norm_nonneg y))
 
+omit [CompleteSpace E] in
 /-- Coercivity of an operator supported on `U`, extended by the identity on
 `Uᗮ`. -/
 theorem norm_add_starProjection_orthogonal_apply_ge
@@ -841,7 +845,7 @@ theorem norm_cosTwoAngleOperatorC_apply_ge (U V : Submodule ℂ E)
             ⟪sinAngleOperatorDirectedC U V
               (sinAngleOperatorDirectedC U V x), x⟫_ℂ := by
           rw [cosTwoAngleOperatorC]
-          simp [inner_sub_left, sub_apply, mul_apply]
+          simp [sub_apply]
       _ = ⟪cosAngleOperatorC U V x, cosAngleOperatorC U V x⟫_ℂ -
             ⟪sinAngleOperatorDirectedC U V x,
               sinAngleOperatorDirectedC U V x⟫_ℂ := by

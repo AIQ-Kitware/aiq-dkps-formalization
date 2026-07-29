@@ -75,6 +75,7 @@ variable (U₁ V₁ : Submodule ℂ H₁) [U₁.HasOrthogonalProjection]
 variable (U₂ V₂ : Submodule ℂ H₂) [U₂.HasOrthogonalProjection]
   [V₂.HasOrthogonalProjection]
 
+omit [CompleteSpace H₁] [CompleteSpace H₂] in
 /-- A pair-equivalence intertwines the Halmos cosine-square operators. -/
 theorem intertwines_halmosCosineSq (e : H₁ ≃ₗᵢ[ℂ] H₂)
     (hU : U₁.map e.toLinearMap = U₂) (hV : V₁.map e.toLinearMap = V₂) (v : H₁) :

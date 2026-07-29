@@ -55,6 +55,7 @@ noncomputable def angularMap
       (fun x => Vᗮ.starProjection_apply_mem x)) ∘L
     Z.subtypeL ∘L C.toExact.symm.toContinuousLinearMap
 
+omit [CompleteSpace H] in
 /-- The angular coordinate is the complementary projection of the unique
 trial vector with the prescribed exact coordinate. -/
 theorem angularMap_apply_coe
@@ -65,6 +66,7 @@ theorem angularMap_apply_coe
   change Vᗮ.starProjection (C.toExact.symm v : H) = _
   exact V.starProjection_orthogonal_apply _
 
+omit [CompleteSpace H] in
 /-- Reconstruct the unique trial vector from its exact and angular
 coordinates. -/
 theorem exact_add_angularMap
@@ -83,6 +85,7 @@ noncomputable def graphEmbedding
     (C : TrialExactCoordinates Z V) : V →L[ℂ] H :=
   V.subtypeL + Vᗮ.subtypeL ∘L C.angularMap
 
+omit [CompleteSpace H] in
 /-- The graph embedding is the inverse coordinate map viewed in the ambient
 Hilbert space. -/
 theorem graphEmbedding_apply
@@ -91,6 +94,7 @@ theorem graphEmbedding_apply
   change (v : H) + (C.angularMap v : H) = _
   exact C.exact_add_angularMap v
 
+omit [CompleteSpace H] in
 /-- The graph of the angular coordinate map is exactly the trial subspace. -/
 theorem range_graphEmbedding
     (C : TrialExactCoordinates Z V) :
@@ -110,6 +114,7 @@ theorem range_graphEmbedding
       _ = x := congrArg (fun w : Z => (w : H))
         (C.toExact.symm_apply_apply z)
 
+omit [CompleteSpace H] in
 /-- A per-vector tangent estimate on the trial subspace gives an operator-norm
 bound for its graph angular map. -/
 theorem norm_angularMap_le_div
@@ -135,6 +140,7 @@ theorem norm_angularMap_le_div
   apply (le_div_iff₀ hδ).2
   simpa [mul_comm] using hraw
 
+omit [CompleteSpace H] in
 /-- Multiplicative form of the graph-angle tangent bound. -/
 theorem mul_norm_angularMap_le
     (C : TrialExactCoordinates Z V)

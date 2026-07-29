@@ -243,6 +243,7 @@ private theorem norm_conjugateOperator (A : RealComplexification E →L[ℂ] Rea
     ‖A‖ = ‖conjugateOperator (conjugateOperator A)‖ := by simp
     _ ≤ ‖conjugateOperator A‖ := norm_conjugateOperator_le _
 
+omit [CompleteSpace E] in
 private theorem isometry_conjugateOperator :
     Isometry (conjugateOperator :
       (RealComplexification E →L[ℂ] RealComplexification E) →

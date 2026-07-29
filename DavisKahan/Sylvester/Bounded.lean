@@ -196,6 +196,7 @@ theorem gauge_sylvesterNeumannTerm_le
       exact mul_le_mul_of_nonneg_left hBpow
         (mul_nonneg (pow_nonneg (norm_nonneg hA.inv) _) hgauge)
 
+omit [CompleteSpace F] in
 /-- Operator-norm summability of the Neumann terms under the strict ratio. -/
 theorem sylvesterNeumannTerm_summable
     {A : E →L[𝕜] E}
@@ -246,7 +247,7 @@ theorem sylvesterNeumannPartialSum_cauchy
           ≤ ‖hA.inv‖ ^ (n + 1) * N.gauge C * ‖B‖ ^ n :=
         gauge_sylvesterNeumannTerm_le N hA B hC n
       _ = q ^ n * g₀ := by
-        simp only [t, q, g₀]
+        simp only [q, g₀]
         rw [pow_succ', mul_pow]
         ring
   have hgap : ∀ {m n : ℕ}, n ≤ m →
@@ -339,6 +340,7 @@ theorem sylvesterNeumannSolution_mem
   rw [← hEq]
   exact hLmem
 
+omit [CompleteSpace F] in
 /-- The Neumann solution satisfies the Sylvester equation. -/
 theorem sylvesterNeumannSolution_eq
     (N : RectangularSymmetricIdealFamily (𝕜 := 𝕜))

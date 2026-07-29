@@ -244,11 +244,11 @@ theorem directRotation_minimizes_sum_sq_basis_angles
   have hdispR : displacementSquare R = AR.adjoint ∘ₗ AR := by
     ext x
     simp [displacementSquare, AR, R, map_sub,
-      LinearMap.adjoint_id, LinearMap.comp_apply]
+      LinearMap.comp_apply]
   have hdispW : displacementSquare W.toLinearMap = AW.adjoint ∘ₗ AW := by
     ext x
     simp [displacementSquare, AW, map_sub,
-      LinearMap.adjoint_id, LinearMap.comp_apply]
+      LinearMap.comp_apply]
   change RectangularUnitarilyInvariantNorm.nuclear (displacementSquare R) ≤
     RectangularUnitarilyInvariantNorm.nuclear
       (displacementSquare W.toLinearMap) at h
