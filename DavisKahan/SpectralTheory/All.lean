@@ -15,5 +15,6 @@ import DavisKahan.SpectralTheory.ResolventOperator
 import DavisKahan.SpectralTheory.CayleySelectorBridge
 import DavisKahan.SpectralTheory.CircleRieszEndpoints
 import DavisKahan.SpectralTheory.GraphSubspace
+import DavisKahan.SpectralTheory.FormMethod.All
 
 /-! # `DavisKahan/SpectralTheory` -/

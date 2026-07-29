@@ -28,6 +28,7 @@ universe v
 variable {E : Type v}
   [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
 
+omit [CompleteSpace E] in
 /-- Membership in the closed-operator real resolvent is exactly membership of
 the real scalar in the Spectra resolvent. -/
 theorem mem_realResolventSet_iff_mem_spectraResolvent
@@ -37,6 +38,7 @@ theorem mem_realResolventSet_iff_mem_spectraResolvent
       (lam : ℂ) ∈ TauCeti.LinearPMap.resolventSet A.toLinearPMap := by
   rfl
 
+omit [CompleteSpace E] in
 /-- The generic closed-operator real spectrum agrees with the genuine Spectra
 spectrum after specializing the scalar field to `ℂ`. -/
 theorem realSpectrum_eq_spectraSpectrum

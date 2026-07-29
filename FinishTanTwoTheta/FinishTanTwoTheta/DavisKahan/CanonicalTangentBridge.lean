@@ -342,7 +342,7 @@ private theorem tanTwoAngleOperatorC_eq_modulus_ambientGraphTangent
     dsimp [G]
     rw [← ContinuousLinearMap.comp_assoc, hPYstar]
   have hNunit : IsUnit N := by
-    refine ForMathlib.ContinuousLinearMap.isUnit_of_coercive one_pos ?_
+    refine TauCeti.ContinuousLinearMap.isUnit_of_coercive one_pos ?_
     intro x
     -- Compute the form value first, then conclude numerically.  Doing it with a
     -- `rw` chain does not work: `isUnit_of_coercive` states its hypothesis with

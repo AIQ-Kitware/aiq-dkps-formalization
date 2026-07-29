@@ -16,25 +16,25 @@ public import Mathlib.Analysis.Normed.Ring.Units
 For a bounded operator `M : E →L[ℂ] F` between complex Hilbert spaces whose
 modulus `|M| = (M⋆ M)^(1/2)` is invertible, the **polar isometry**
 
-    `M.polarIsometry = M ∘ |M|⁻¹`
+    `M.polarIsometryOfIsUnitModulus = M ∘ |M|⁻¹`
 
 is a genuine isometry `E → F` and satisfies the polar identity
-`M.polarIsometry ∘L |M| = M`.  (Invertibility of `|M|` says exactly that `M` is
+`M.polarIsometryOfIsUnitModulus ∘L |M| = M`.  (Invertibility of `|M|` says exactly that `M` is
 bounded below, i.e. that `M` is injective with closed range.  Without it, the
 polar factor is only a *partial* isometry; the definition below then evaluates
 to the junk value `0`, in the style of `Ring.inverse`.)
 
 The point of isolating this object is quantitative.  From the polar identity,
 
-    `M x - M.polarIsometry x = M.polarIsometry (|M| x - x)`,
+    `M x - M.polarIsometryOfIsUnitModulus x = M.polarIsometryOfIsUnitModulus (|M| x - x)`,
 
 so the isometry property turns the distance from `M` to the isometry
-`M.polarIsometry` into the *scalar* problem of estimating `‖|M| - 1‖`.  That in
+`M.polarIsometryOfIsUnitModulus` into the *scalar* problem of estimating `‖|M| - 1‖`.  That in
 turn is bounded by `‖M⋆ M - 1‖` through the continuous functional calculus and
 the elementary square-root contraction `|√μ - 1| ≤ |μ - 1|`
 (`TauCeti.Real.abs_sqrt_sub_one_le_abs_sub_one`).  The resulting estimate
 
-    `‖M - M.polarIsometry‖ ≤ ‖M⋆ M - 1‖`
+    `‖M - M.polarIsometryOfIsUnitModulus‖ ≤ ‖M⋆ M - 1‖`
 
 is sharp: an operator whose Gram operator is `δ`-close to the identity is
 `δ`-close to an isometry, with no loss in the constant and with no
@@ -42,13 +42,13 @@ finite-dimensionality assumption.
 
 ## Main results
 
-* `ContinuousLinearMap.polarIsometry`: the canonical isometric polar factor;
-* `ContinuousLinearMap.polarIsometry_comp_modulus`: the polar identity
+* `ContinuousLinearMap.polarIsometryOfIsUnitModulus`: the canonical isometric polar factor;
+* `ContinuousLinearMap.polarIsometryOfIsUnitModulus_comp_modulus`: the polar identity
   `W ∘L |M| = M`;
-* `ContinuousLinearMap.norm_polarIsometry_apply`: `W` is an isometry;
+* `ContinuousLinearMap.norm_polarIsometryOfIsUnitModulus_apply`: `W` is an isometry;
 * `ContinuousLinearMap.norm_modulus_sub_one_le`: the square-root contraction
   `‖|M| - 1‖ ≤ ‖M⋆ M - 1‖`, valid for *every* `M`;
-* `ContinuousLinearMap.norm_sub_polarIsometry_le`: the sharp near-isometry
+* `ContinuousLinearMap.norm_sub_polarIsometryOfIsUnitModulus_le`: the sharp near-isometry
   estimate `‖M - W‖ ≤ ‖M⋆ M - 1‖`;
 * `ContinuousLinearMap.polarLinearIsometry` and
   `ContinuousLinearMap.polarLinearIsometryEquiv`: the bundled forms, the latter
@@ -56,10 +56,10 @@ finite-dimensionality assumption.
 
 ## Design notes
 
-The definition is *total*: `polarIsometry M = M ∘L Ring.inverse |M|`, which is
+The definition is *total*: `polarIsometryOfIsUnitModulus M = M ∘L Ring.inverse |M|`, which is
 `0` when `|M|` is not invertible.  Every theorem that uses the isometry property
 carries `IsUnit M.modulus` explicitly, exactly as `Ring.inverse` lemmas carry
-`IsUnit`.  This keeps `polarIsometry` a plain function of `M` — so it rewrites,
+`IsUnit`.  This keeps `polarIsometryOfIsUnitModulus` a plain function of `M` — so it rewrites,
 `simp`s, and composes — instead of a proof-dependent bundled object.
 
 The general polar decomposition — with a *partial* isometry, defined for every
@@ -71,7 +71,7 @@ The general polar decomposition — with a *partial* isometry, defined for every
 The reconciliation is **proved**:
 `ContinuousLinearMap.polarPartial_eq_comp_ringInverse_modulus` says
 `polarPartial M = M ∘L Ring.inverse M.modulus` whenever `|M|` is a unit, which
-is `polarIsometry M` by definition.  So the two constructions agree exactly
+is `polarIsometryOfIsUnitModulus M` by definition.  So the two constructions agree exactly
 where this one is meaningful, and this module is a specialisation rather than a
 rival.
 
@@ -118,16 +118,16 @@ variable {E : Type u} {F : Type v}
 spaces.
 
 When the modulus `|M|` is invertible — equivalently, when `M` is bounded below —
-this is an isometry `E → F` with `M.polarIsometry ∘L |M| = M`, the isometric
+this is an isometry `E → F` with `M.polarIsometryOfIsUnitModulus ∘L |M| = M`, the isometric
 factor of the polar decomposition of `M`.  Otherwise `Ring.inverse` returns `0`
 and so does this definition; every result below therefore carries the hypothesis
 `IsUnit M.modulus`. -/
-noncomputable def polarIsometry (M : E →L[ℂ] F) : E →L[ℂ] F :=
+noncomputable def polarIsometryOfIsUnitModulus (M : E →L[ℂ] F) : E →L[ℂ] F :=
   M ∘L Ring.inverse M.modulus
 
 /-- The defining formula: the polar isometry sends `x` to `M (|M|⁻¹ x)`. -/
-theorem polarIsometry_apply (M : E →L[ℂ] F) (x : E) :
-    M.polarIsometry x = M (Ring.inverse M.modulus x) := rfl
+theorem polarIsometryOfIsUnitModulus_apply (M : E →L[ℂ] F) (x : E) :
+    M.polarIsometryOfIsUnitModulus x = M (Ring.inverse M.modulus x) := rfl
 
 /-- The modulus of `M` is invertible exactly when the Gram operator `M⋆ M` is.
 
@@ -152,48 +152,54 @@ include hM
 
 /-- The **polar identity**: `M` factors as its polar isometry composed with its
 modulus. -/
-theorem polarIsometry_comp_modulus : M.polarIsometry ∘L M.modulus = M := by
-  rw [polarIsometry, comp_assoc, ← mul_def, Ring.inverse_mul_cancel _ hM, one_def, comp_id]
+theorem polarIsometryOfIsUnitModulus_comp_modulus :
+    M.polarIsometryOfIsUnitModulus ∘L M.modulus = M := by
+  rw [polarIsometryOfIsUnitModulus, comp_assoc, ← mul_def, Ring.inverse_mul_cancel _ hM,
+    one_def, comp_id]
 
 /-- The polar identity, pointwise: the polar isometry carries `|M| x` back to `M x`. -/
-theorem polarIsometry_modulus_apply (x : E) : M.polarIsometry (M.modulus x) = M x := by
-  rw [← comp_apply, polarIsometry_comp_modulus hM]
+theorem polarIsometryOfIsUnitModulus_modulus_apply (x : E) :
+    M.polarIsometryOfIsUnitModulus (M.modulus x) = M x := by
+  rw [← comp_apply, polarIsometryOfIsUnitModulus_comp_modulus hM]
 
 /-- The polar isometry is a pointwise isometry.
 
 Composing the pointwise identity `‖|M| y‖ = ‖M y‖`
 (`ContinuousLinearMap.norm_modulus_apply`) with `y = |M|⁻¹ x` turns the
-right-hand side into `‖M.polarIsometry x‖` and the left-hand side into
+right-hand side into `‖M.polarIsometryOfIsUnitModulus x‖` and the left-hand side into
 `‖x‖`. -/
 @[simp]
-theorem norm_polarIsometry_apply (x : E) : ‖M.polarIsometry x‖ = ‖x‖ := by
-  rw [polarIsometry_apply, ← M.norm_modulus_apply, ← comp_apply, ← mul_def,
+theorem norm_polarIsometryOfIsUnitModulus_apply (x : E) :
+    ‖M.polarIsometryOfIsUnitModulus x‖ = ‖x‖ := by
+  rw [polarIsometryOfIsUnitModulus_apply, ← M.norm_modulus_apply, ← comp_apply, ← mul_def,
     Ring.mul_inverse_cancel _ hM, one_apply_eq_self]
 
 /-- The polar isometry is an isometry -- the property its name claims, and the reason `IsUnit |M|`
 is required. -/
-theorem isometry_polarIsometry : Isometry M.polarIsometry :=
-  AddMonoidHomClass.isometry_of_norm _ fun x => norm_polarIsometry_apply hM x
+theorem isometry_polarIsometryOfIsUnitModulus : Isometry M.polarIsometryOfIsUnitModulus :=
+  AddMonoidHomClass.isometry_of_norm _ fun x => norm_polarIsometryOfIsUnitModulus_apply hM x
 
 /-- An isometry is injective. -/
-theorem polarIsometry_injective : Function.Injective M.polarIsometry :=
-  (isometry_polarIsometry hM).injective
+theorem polarIsometryOfIsUnitModulus_injective :
+    Function.Injective M.polarIsometryOfIsUnitModulus :=
+  (isometry_polarIsometryOfIsUnitModulus hM).injective
 
 /-- **The near-isometry estimate, sharp form.**  The distance from `M` to its
 polar isometry is controlled by the distance from the modulus to the identity.
 
-This is an equality in disguise: `M x - M.polarIsometry x` is the image under the
-isometry `M.polarIsometry` of `|M| x - x`, so the two sides even agree
+This is an equality in disguise: `M x - M.polarIsometryOfIsUnitModulus x` is the image under the
+isometry `M.polarIsometryOfIsUnitModulus` of `|M| x - x`, so the two sides even agree
 pointwise before taking operator norms. -/
-theorem norm_sub_polarIsometry_apply_eq (x : E) :
-    ‖M x - M.polarIsometry x‖ = ‖M.modulus x - x‖ := by
-  rw [← polarIsometry_modulus_apply hM x, ← map_sub, norm_polarIsometry_apply hM]
+theorem norm_sub_polarIsometryOfIsUnitModulus_apply_eq (x : E) :
+    ‖M x - M.polarIsometryOfIsUnitModulus x‖ = ‖M.modulus x - x‖ := by
+  rw [← polarIsometryOfIsUnitModulus_modulus_apply hM x, ← map_sub,
+    norm_polarIsometryOfIsUnitModulus_apply hM]
 
 /-- Pointwise near-isometry bound in terms of `‖|M| - 1‖`.  Composing it with
 `norm_modulus_sub_one_le` gives the sharp form stated over the Gram operator. -/
-theorem norm_sub_polarIsometry_apply_le_norm_modulus_sub_one (x : E) :
-    ‖M x - M.polarIsometry x‖ ≤ ‖M.modulus - 1‖ * ‖x‖ := by
-  rw [norm_sub_polarIsometry_apply_eq hM x,
+theorem norm_sub_polarIsometryOfIsUnitModulus_apply_le_norm_modulus_sub_one (x : E) :
+    ‖M x - M.polarIsometryOfIsUnitModulus x‖ ≤ ‖M.modulus - 1‖ * ‖x‖ := by
+  rw [norm_sub_polarIsometryOfIsUnitModulus_apply_eq hM x,
     show M.modulus x - x = (M.modulus - 1) x by simp]
   exact le_opNorm _ x
 
@@ -226,48 +232,50 @@ theorem norm_modulus_sub_one_le (M : E →L[ℂ] F) :
     _ ≤ ‖cfc (fun s : ℝ => s - 1) a‖ := norm_apply_le_norm_cfc (fun s : ℝ => s - 1) a ht
 
 /-- **The near-isometry estimate.**  If the Gram operator `M⋆ M` is within `δ` of
-the identity, then `M` is within `δ` of the isometry `M.polarIsometry`.
+the identity, then `M` is within `δ` of the isometry `M.polarIsometryOfIsUnitModulus`.
 
 The constant is sharp and there is no dimension or surjectivity hypothesis: the
 only assumption is that `M` is bounded below, which for `‖M⋆ M - 1‖ < 1` is
 automatic (`isUnit_modulus_of_norm_adjoint_comp_self_sub_one_lt_one`). -/
-theorem norm_sub_polarIsometry_apply_le {M : E →L[ℂ] F} (hM : IsUnit M.modulus) (x : E) :
-    ‖M x - M.polarIsometry x‖ ≤ ‖M.adjoint ∘L M - 1‖ * ‖x‖ :=
-  (norm_sub_polarIsometry_apply_le_norm_modulus_sub_one hM x).trans
+theorem norm_sub_polarIsometryOfIsUnitModulus_apply_le {M : E →L[ℂ] F}
+    (hM : IsUnit M.modulus) (x : E) :
+    ‖M x - M.polarIsometryOfIsUnitModulus x‖ ≤ ‖M.adjoint ∘L M - 1‖ * ‖x‖ :=
+  (norm_sub_polarIsometryOfIsUnitModulus_apply_le_norm_modulus_sub_one hM x).trans
     (mul_le_mul_of_nonneg_right M.norm_modulus_sub_one_le (norm_nonneg x))
 
 /-- The operator-norm form of the near-isometry estimate. -/
-theorem norm_sub_polarIsometry_le {M : E →L[ℂ] F} (hM : IsUnit M.modulus) :
-    ‖M - M.polarIsometry‖ ≤ ‖M.adjoint ∘L M - 1‖ :=
+theorem norm_sub_polarIsometryOfIsUnitModulus_le {M : E →L[ℂ] F} (hM : IsUnit M.modulus) :
+    ‖M - M.polarIsometryOfIsUnitModulus‖ ≤ ‖M.adjoint ∘L M - 1‖ :=
   opNorm_le_bound _ (norm_nonneg _) fun x => by
-    simpa using norm_sub_polarIsometry_apply_le hM x
+    simpa using norm_sub_polarIsometryOfIsUnitModulus_apply_le hM x
 
 /-- The polar isometry of a bounded-below operator, bundled as a
 `LinearIsometry`. -/
 @[simps! apply]
 noncomputable def polarLinearIsometry {M : E →L[ℂ] F} (hM : IsUnit M.modulus) : E →ₗᵢ[ℂ] F where
-  toLinearMap := M.polarIsometry
-  norm_map' := norm_polarIsometry_apply hM
+  toLinearMap := M.polarIsometryOfIsUnitModulus
+  norm_map' := norm_polarIsometryOfIsUnitModulus_apply hM
 
 /-- The polar isometry of a bounded-below operator with dense range, bundled as a
 `LinearIsometryEquiv`.
 
 Surjectivity is where a genuine hypothesis is needed and it is stated
-explicitly: `M.polarIsometry` is surjective as soon as `M` is (its range is that
+explicitly: `M.polarIsometryOfIsUnitModulus` is surjective as soon as `M` is (its range is that
 of `M`, since `|M|` is invertible), and in the finite-dimensional case with
 `finrank ℂ E = finrank ℂ F` it follows from injectivity. -/
 @[simps! apply]
 noncomputable def polarLinearIsometryEquiv {M : E →L[ℂ] F} (hM : IsUnit M.modulus)
-    (hsurj : Function.Surjective M.polarIsometry) : E ≃ₗᵢ[ℂ] F :=
+    (hsurj : Function.Surjective M.polarIsometryOfIsUnitModulus) : E ≃ₗᵢ[ℂ] F :=
   .ofSurjective (polarLinearIsometry hM) hsurj
 
 /-- The polar isometry inherits surjectivity from `M`, which is what upgrades it from a
 `LinearIsometry` to a `LinearIsometryEquiv`. -/
-theorem surjective_polarIsometry_of_surjective {M : E →L[ℂ] F} (hM : IsUnit M.modulus)
-    (hsurj : Function.Surjective M) : Function.Surjective M.polarIsometry := by
+theorem surjective_polarIsometryOfIsUnitModulus_of_surjective {M : E →L[ℂ] F}
+    (hM : IsUnit M.modulus)
+    (hsurj : Function.Surjective M) : Function.Surjective M.polarIsometryOfIsUnitModulus := by
   intro y
   obtain ⟨x, hx⟩ := hsurj y
-  exact ⟨M.modulus x, by rw [polarIsometry_modulus_apply hM, hx]⟩
+  exact ⟨M.modulus x, by rw [polarIsometryOfIsUnitModulus_modulus_apply hM, hx]⟩
 
 end ContinuousLinearMap
 

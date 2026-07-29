@@ -93,10 +93,31 @@ def _git_output(args: list[str], cwd: pathlib.Path) -> str:
 
 
 def observed_revisions() -> tuple[str, str]:
-    """Return the current repository and Tau Ceti checkout revisions."""
+    """Return the current repository and Tau Ceti checkout revisions.
+
+    Refuses to guess when `external/TauCeti` is not a populated checkout.  Git
+    walks *up* from a working directory to find a repository, so running
+    ``rev-parse HEAD`` inside an empty submodule directory silently answers with
+    the **superproject's** HEAD.  That is not a detectable error downstream: the
+    value is a well-formed SHA, so `--write` would stamp this repository's own
+    commit into the manifest as the Tau Ceti pin.  Observed 2026-07-29, where it
+    returned the commit that had just been made in this repository.
+    """
     dk = _git_output(["rev-parse", "HEAD"], ROOT)
     tc_root = ROOT / "external/TauCeti"
+    if not (tc_root / ".git").exists():
+        raise ConsistencyError(
+            f"{tc_root.relative_to(ROOT)} is not a populated checkout; "
+            "run `git submodule update --init external/TauCeti`. "
+            "Refusing to record this repository's own HEAD as the Tau Ceti pin."
+        )
     tc = _git_output(["rev-parse", "HEAD"], tc_root)
+    if tc == dk:
+        raise ConsistencyError(
+            "Tau Ceti checkout reports the same revision as this repository "
+            f"({tc}); that is the superproject HEAD leaking through an empty "
+            "submodule, not a real pin."
+        )
     return dk, tc
 
 

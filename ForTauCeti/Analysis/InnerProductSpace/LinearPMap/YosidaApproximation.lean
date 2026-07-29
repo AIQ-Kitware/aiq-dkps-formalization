@@ -530,6 +530,7 @@ Each `Aₙˢʸᵐ` is a scalar combination of resolvents, and resolvents commute
 the symmetric approximants pairwise commute.  This is what lets the Duhamel
 estimate be applied to the pair `(Aₘˢʸᵐ, Aₙˢʸᵐ)`. -/
 
+/-- The symmetric Yosida approximants commute pairwise. -/
 theorem commute_yosidaApproxSym (hA : IsSelfAdjoint A) (m n : ℕ+) :
     Commute (yosidaApproxSym hA m) (yosidaApproxSym hA n) := by
   have hres : ∀ (z w : ℂ) (hz : z ∈ resolventSet A) (hw : w ∈ resolventSet A),
@@ -661,6 +662,7 @@ noncomputable def expLimit (hA : IsSelfAdjoint A) (t : ℝ) : H →L[ℂ] H :=
     1
     (fun ψ => by simp [norm_expLimitFun])
 
+/-- The bundled limit flow acts as `expLimitFun`. -/
 @[simp] theorem expLimit_apply (hA : IsSelfAdjoint A) (t : ℝ) (ψ : H) :
     expLimit hA t ψ = expLimitFun hA t ψ := rfl
 
@@ -670,6 +672,7 @@ theorem norm_expLimit_apply (hA : IsSelfAdjoint A) (t : ℝ) (ψ : H) :
 
 /-! ### The limit flow is a one-parameter unitary group -/
 
+/-- The limit flow is the identity at time zero. -/
 @[simp] theorem expLimit_zero (hA : IsSelfAdjoint A) : expLimit hA 0 = 1 := by
   ext ψ
   refine tendsto_nhds_unique (tendsto_expLimitFun hA 0 ψ) ?_

@@ -47,6 +47,8 @@ theorem norm_blockFun_one_right (b : HilbertBasis ι ℂ F) (P : E →L[ℂ] E)
     _ ≤ ‖P‖ * 1 * ‖f‖ := by gcongr; exact ContinuousLinearMap.norm_id_le
     _ = ‖P‖ * ‖f‖ := by ring
 
+/-- One-sided bound with the identity on the left: `‖1 · Z · Q‖ ≤ ‖Q‖ ‖Z‖`.  The mirror of
+`norm_blockFun_one_right`; both exist because the Sylvester flow uses each side separately. -/
 theorem norm_blockFun_one_left (b : HilbertBasis ι ℂ F) (Q : F →L[ℂ] F)
     (f : lp (fun _ : ι => E) 2) :
     ‖blockFun b (1 : E →L[ℂ] E) Q f‖ ≤ ‖Q‖ * ‖f‖ := by

@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.SpectralTheory.ClosedOperator.Basic
-import ForMathlib.Analysis.InnerProductSpace.ReducingSubspace
+import ForTauCeti.Analysis.InnerProductSpace.ReducingSubspace
 
 /-!
 # Restrictions of closed operators to reducing subspaces

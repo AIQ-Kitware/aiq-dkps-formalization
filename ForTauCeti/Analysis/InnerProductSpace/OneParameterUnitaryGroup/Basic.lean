@@ -77,6 +77,9 @@ variable [CompleteSpace H]
 
 /-! ### Basic unitarity facts (reused from the prior compiling build) -/
 
+/-- Running the group backwards is the adjoint: `U(-t) = U(t)⋆`.  This is the
+form of unitarity the group law supplies, and it is what makes each `U t` an
+isometry with a two-sided inverse. -/
 lemma inverse_eq_adjoint (U : OneParameterUnitaryGroup (H := H)) (t : ℝ) :
     U.U (-t) = (U.U t).adjoint := by
   have h_inv : ∀ x : H, U.U t (U.U (-t) x) = x := fun x => by
@@ -111,9 +114,11 @@ lemma norm_one [Nontrivial H] (U : OneParameterUnitaryGroup (H := H)) (t : ℝ) 
 noncomputable def genDiffQuot (U : OneParameterUnitaryGroup (H := H)) (ψ : H) : ℝ → H :=
   fun t => ((I * (t : ℂ))⁻¹) • (U.U t ψ - ψ)
 
+/-- The difference quotient, unfolded. -/
 @[simp] lemma genDiffQuot_apply (U : OneParameterUnitaryGroup (H := H)) (ψ : H) (t : ℝ) :
     genDiffQuot U ψ t = ((I * (t : ℂ))⁻¹) • (U.U t ψ - ψ) := rfl
 
+/-- The difference quotient of the zero vector is identically zero. -/
 @[simp] lemma genDiffQuot_zero (U : OneParameterUnitaryGroup (H := H)) :
     genDiffQuot U (0 : H) = fun _ => 0 := by
   funext t; simp [genDiffQuot]
@@ -146,6 +151,8 @@ def generatorDomain (U : OneParameterUnitaryGroup (H := H)) : Submodule ℂ H wh
     exact ⟨c • ηa, by rw [genDiffQuot_smul]; exact ha.const_smul c⟩
   zero_mem' := ⟨0, by rw [genDiffQuot_zero]; exact tendsto_const_nhds⟩
 
+/-- Membership in the generator's domain is exactly convergence of the difference quotient -- the
+definition, stated so call sites need not unfold it. -/
 @[simp] lemma mem_generatorDomain {U : OneParameterUnitaryGroup (H := H)} {ψ : H} :
     ψ ∈ generatorDomain U ↔ ∃ η, Tendsto (genDiffQuot U ψ) (𝓝[≠] 0) (𝓝 η) := Iff.rfl
 
@@ -171,6 +178,7 @@ noncomputable def generator (U : OneParameterUnitaryGroup (H := H)) : H →ₗ.[
         rw [Submodule.coe_smul, genDiffQuot_smul]
       rw [h, RingHom.id_apply]; exact x.2.choose_spec.const_smul c }
 
+/-- The generator's domain, unfolded. -/
 @[simp] lemma generator_domain (U : OneParameterUnitaryGroup (H := H)) :
     (generator U).domain = generatorDomain U := rfl
 
@@ -296,6 +304,7 @@ def reversedGroup (U : OneParameterUnitaryGroup (H := H)) : OneParameterUnitaryG
   identity := by simp [U.identity]
   strong_continuous ψ := (U.strong_continuous ψ).comp continuous_neg
 
+/-- The reversed group runs the flow backwards: `U(-t)`. -/
 @[simp] lemma reversedGroup_apply (U : OneParameterUnitaryGroup (H := H)) (t : ℝ) :
     (reversedGroup U).U t = U.U (-t) := rfl
 

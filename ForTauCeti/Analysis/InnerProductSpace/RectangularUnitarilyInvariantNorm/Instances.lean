@@ -77,6 +77,8 @@ noncomputable def adjointTransport
       N.invariant V.symm U.symm A.adjoint
 
 
+/-- The transported norm evaluated at an adjoint returns the original norm of
+the operator — the defining property of `adjointTransport`. -/
 @[simp] theorem adjointTransport_apply (A : E →ₗ[𝕜] F) :
     (adjointTransport N).toFun A.adjoint = N.toFun A := by
   simp only [adjointTransport, LinearMap.adjoint_adjoint]
@@ -123,6 +125,9 @@ noncomputable def zeroExtension (A : E →ₗ[𝕜] F) :
       (WithLp.linearEquiv 2 𝕜 (E × F)).toLinearMap
 
 omit [FiniteDimensional 𝕜 E] [FiniteDimensional 𝕜 F] in
+/-- The zero extension places `A` in the second component and zero in the
+first, which is what makes a rectangular operator into a square one without
+changing its singular values. -/
 @[simp] theorem zeroExtension_apply (A : E →ₗ[𝕜] F)
     (z : WithLp 2 (E × F)) :
     zeroExtension A z = WithLp.toLp 2 (0, A (WithLp.ofLp z).1) := by
@@ -224,6 +229,8 @@ noncomputable def opNorm : RectangularUnitarilyInvariantNorm 𝕜 E F where
     rw [hcomp]
     simp
 
+/-- The rectangular operator norm is the ordinary operator norm of the
+continuous-linear-map view, definitionally. -/
 @[simp] theorem opNorm_apply (A : E →ₗ[𝕜] F) :
     opNorm A = ‖A.toContinuousLinearMap‖ := rfl
 
@@ -557,6 +564,8 @@ noncomputable def toRectangular
   invariant' := N.invariant'
 
 
+/-- A square unitarily invariant norm, read as a rectangular one, agrees with
+itself on square operators. -/
 @[simp] theorem toRectangular_apply
     (N : UnitarilyInvariantNorm 𝕜 E) (A : E →ₗ[𝕜] E) :
     N.toRectangular A = N A :=

@@ -11,7 +11,7 @@ pattern of past mistakes, and take fewer of them.
 
 | File | What it answers |
 |---|---|
-| [`LANES.md`](LANES.md) | Who holds what. **Claim your row and commit it before your first edit.** Unlisted means unclaimed. |
+| [`LANES.md`](LANES.md) | Who holds what. **Claim your row, commit it, and push it before your first edit** — unpushed is invisible to the other agents. Unlisted means unclaimed. Its `Branch and sync protocol` covers fetching, merging and conflict resolution across agent branches. |
 | [`tauceti/README.md`](tauceti/README.md) | The active migration: polishing foundations into `ForTauCeti`, retiring `vendor/Spectra`, converging three operator-theory stacks. |
 | [`SEARCH.md`](SEARCH.md) | How to *search* this memory instead of reading it all. Grep patterns and routing rules by symptom. |
 
@@ -130,6 +130,44 @@ first; if a week later you still think the lesson is durable, move it in.
 
 ---
 
+## Retired tooling — the Spectra lifecycle scripts
+
+**Sixteen scripts were deleted on 2026-07-29** when the Spectra dependency was
+retired. They are listed here because a reader who finds them cited in an older
+document should know they are gone on purpose, not missing by accident:
+
+`apply_spectra_submodule_overlay.py`, `bootstrap_spectra_submodule.sh`,
+`restore_spectra_reference_submodule.sh`, `finalize_vendored_spectra_snapshot.sh`,
+`spectra_compatibility_patch.py`, `spectra_import_smoke.sh`,
+`verify_spectra_reference.py`, `verify_vendored_spectra.py`,
+`check_spectra_vendor_authorship.py`, `enable_spectra_lake_dependency.py`,
+`disable_spectra_lake_dependency.py`, `spectra_port_surface.py`,
+`check_spectra_parent_only_bridge.sh`, `ExportSpectraDeclClosure.lean`,
+`ExportSpectraUsage.lean`, `remove_redundant_mathlib_vendor_snapshots.py`.
+
+Three had stopped telling the truth rather than failing, which is the worse
+mode: `verify_spectra_reference.py` printed the *superproject* commit as the
+submodule's pin (it reported this repository's own HEAD as Spectra's SHA),
+`verify_vendored_spectra.py` diffed `vendor/Spectra`, a tree that no longer
+exists, and `check_spectra_vendor_authorship.py` refused to classify anything
+because its `external/Spectra` reference checkout was gone. One was actively
+dangerous: `apply_spectra_submodule_overlay.py` regenerates the managed
+`Spectra collaboration policy` block in `AGENTS.md`, so running it would have
+reinstated the retired policy over the notice that replaced it.
+
+**One is kept and still has a job:** `scripts/check_spectra_namespace.py`. The
+rule it enforces — never declare into `namespace Spectra` — *outlives* the
+dependency. With the imports gone, a DKPS theorem parked in the donor namespace
+is no longer distinguishable from donor material by anything, so the attribution
+ledger would silently credit Spectra for our work. `namespace SpectraBridge` is
+the correct pattern and is not a violation.
+
+Attribution survives all of this: `retired/Spectra.UPSTREAM.md`,
+`tauceti/spectra-provenance-map.md`, `tauceti/spectra-vendor-authorship-baseline.json`,
+and the provenance headers in nine Lean modules.
+
+---
+
 ## Build cache on slow filesystems
 
 If your checkout sits on a network or shared-folder filesystem (on the AIVM
@@ -219,6 +257,108 @@ build`.
 hand-maintaining, because a recorded status drifts the moment someone moves a
 module and nobody notices. Run it after any namespace move, then re-render the
 markdown view.
+
+## Yu--Wang--Samworth 2015 full source census
+
+The same instrument for the second paper the campaign carries end to end: Yu,
+Wang & Samworth, *A useful variant of the Davis--Kahan theorem for
+statisticians*, Biometrika 102(2), 2015.
+
+- `yu-wang-samworth-2015-full-source-census.json` — authoritative structured data;
+- `yu-wang-samworth-2015-full-source-census.md` — generated human-readable view.
+
+```bash
+python3 scripts/check_yu_wang_samworth_source_census.py            # fast gate
+python3 scripts/check_yu_wang_samworth_source_census.py --probe    # + build resolution
+python3 scripts/check_yu_wang_samworth_source_census.py --probe --sync
+```
+
+**It is keyed on the paper, not on the Lean tree**, so every result the paper
+proves has a row whether or not anything formalizes it. A census assembled from
+the Lean side enumerates what someone happened to write and cannot report an
+absence; this one can, and does.
+
+It currently reports **22 items; 18 formalized, of which 9 are guarded by the
+default build; 3 unformalized and still proof debt.** The gap between 18 and 9
+is the finding: `FinishYuWangSamworth` is a `lean_lib` but **not a default
+target**, so Theorem 1's three norm forms, most of Theorem 4, Lemma 5 and the
+corrected equation (4) are proved and unprotected — a refactor can break them
+while CI stays green. Adding one target closes most of that gap with no new
+mathematics.
+
+Three things this gate does that a name-grep cannot, each of which changed a
+row when it was first run:
+
+1. **It distinguishes `private` from missing.** Both fail a `#check`
+   identically and mean opposite things. Three declarations the census
+   initially cited are `private`; two have public siblings, and one does not —
+   the Section 1 complement identity `‖V_1ᵀV̂‖_F = ‖sin Θ‖_F` is proved and
+   uncitable, so its row reads `absent`, which is the only honest reading.
+2. **It carries a canary.** A name that must never resolve is appended to every
+   probe; if it does resolve, the diagnostic parser is broken and the run
+   refuses to report rather than reporting universal success. It fired on the
+   first run — the path anchor was wrong — which is precisely the failure a
+   canary exists to catch.
+3. **It separates `status` from `verification`.** The first is a judgement about
+   the printed source, the second is measured from the build and is rewritten by
+   `--sync`. Hand-maintaining the second is how a census drifts.
+
+Two source-level findings are recorded in the census's `gaps` table and are
+worth knowing before quoting this paper:
+
+- **The printed equation (4) is false.** It omits a square on `2 - ‖v̂ - v‖²`.
+  The corrected identity and a `norm_num` refutation of the printed polynomial
+  are both formalized.
+- **The repository carries two incompatible numberings for this paper.** The
+  Lean names and `FinishYuWangSamworth` use a flat sequence (Theorem 1,
+  Theorem 2, Corollary 3, Theorem 4, Lemma 5); the distilled tex restarts the
+  counter per environment type and calls the same results Corollary 1,
+  Theorem 3 and Appendix Lemma 1. They agree only on Theorems 1 and 2.
+  Resolving it needs one look at the published article.
+
+## Docstring coverage
+
+`scripts/check_docstring_coverage.py` gates the one quality invariant that had no
+check: every public declaration on the submission surface carries a docstring.
+Docstrings are a Tau Ceti reviewer gate, so this sits on the critical path.
+
+```sh
+python3 scripts/check_docstring_coverage.py           # gate; exit 1 on new findings
+python3 scripts/check_docstring_coverage.py --list    # show every finding
+python3 scripts/check_docstring_coverage.py --json    # machine-readable
+python3 scripts/check_docstring_coverage.py --write-baseline
+```
+
+**Why a gate rather than another sweep.** Measured 2026-07-29: two sweep lanes drove
+`ForTauCeti/**` and production `DavisKahan/**` to *zero* undocumented, and merges from
+other agents put the count back to six **within the hour**. Sweeps cannot hold a line
+that four agents are moving.
+
+**Three things it gets right that a naive scan does not.** Each is here because it
+already cost a mistake:
+
+- **It tracks `/-` … `-/` depth.** Module-docstring prose that wraps so a line begins
+  with `theorem`/`instance`/`structure`/`lemma` at column 0 is not a declaration.
+  Missing this inflated a reported figure from 46 to 96 — and the inflated numbers
+  were published before the cause was found.
+- **It reports anonymous `instance`s** as `<anonymous>`. A scan keyed on declaration
+  names cannot see them; six of one lane's 91 were anonymous.
+- **Its exclusions are rules with reasons, not a hand-list**, so they survive tree
+  movement. `DavisKahan/Experimental/**` is outside `defaultTargets`;
+  `DavisKahan/Interop/Spectra/**` is being deleted; and
+  `DavisKahan/SpectralTheory/Compatibility.lean` is a migration shim of `abbrev`
+  re-exports — **documenting its 45 declarations would entrench a file scheduled for
+  deletion**, which is why "undocumented" is the wrong metric for it.
+
+**The baseline** (`dev/docstring-coverage-baseline.json`) tolerates findings that
+existed when the gate landed, so it could be adopted without a flag day. It currently
+holds 7, all in a file with a live lane row. Shrink it; do not grow it.
+
+**Verified to fail, not merely to pass:** injecting an undocumented theorem *and* an
+anonymous instance makes it exit 1 and name both, while prose beginning with a keyword
+inside a block comment is correctly ignored.
+
+---
 
 ## Declaration-name drift
 

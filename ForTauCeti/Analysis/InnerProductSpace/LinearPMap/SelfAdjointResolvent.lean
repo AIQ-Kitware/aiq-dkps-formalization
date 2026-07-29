@@ -150,6 +150,7 @@ def shiftMap (A : E →ₗ.[ℂ] E) (z : ℂ) : A.domain →ₗ[ℂ] E :=
   A.toFun - z • A.domain.subtype
 
 omit [CompleteSpace E] in
+/-- The shifted map `A - z`, unfolded. -/
 @[simp] theorem shiftMap_apply (A : E →ₗ.[ℂ] E) (z : ℂ) (x : A.domain) :
     shiftMap A z x = A x - z • (x : E) := rfl
 

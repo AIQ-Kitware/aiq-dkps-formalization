@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Experimental.InfiniteDimensional.Sylvester.FourierSemigroup
-import ForMathlib.Analysis.InnerProductSpace.SpectralOrder.Complex
+import ForTauCeti.Analysis.InnerProductSpace.SpectralOrder.Complex
 import Mathlib.MeasureTheory.Integral.ExpDecay
 
 /-!
@@ -24,7 +24,7 @@ constant is `pi/2`.
 
 namespace TauCeti
 
-open ForMathlib
+open TauCeti
 namespace DavisKahanExt
 
 open MeasureTheory Set Filter

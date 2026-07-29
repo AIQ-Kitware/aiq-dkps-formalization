@@ -24,11 +24,11 @@ commutes with `S`.
 To be re-authored per Mathlib's AI-contribution policy at PR time.
 -/
 
-import DavisKahan.FiniteDimensional.SinTheta.UnitarilyInvariant
+import ForTauCeti.Analysis.InnerProductSpace.SinTheta.UnitarilyInvariant
 import ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm
-import DavisKahan.FiniteDimensional.Core.AngleGeometry
-import DavisKahan.FiniteDimensional.Core.SpectralGap
-import DavisKahan.FiniteDimensional.Core.SpectralSubspace
+import ForTauCeti.Analysis.InnerProductSpace.AngleGeometry
+import ForTauCeti.Analysis.InnerProductSpace.SpectralGap
+import ForTauCeti.Analysis.InnerProductSpace.SpectralSubspace
 
 /-! # The subspace Davis–Kahan sin 2Θ theorem, every unitarily invariant norm
 

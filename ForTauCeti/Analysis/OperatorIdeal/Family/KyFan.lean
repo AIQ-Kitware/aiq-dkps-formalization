@@ -88,6 +88,7 @@ variable {E F : Type v}
   [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
   [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
 
+/-- The gauge of the Ky Fan family is the Ky Fan gauge at index `k`. -/
 @[simp] theorem gauge_kyFanIdealFamily (k : ℕ) (hk : 0 < k) (A : E →L[ℂ] F) :
     (kyFanIdealFamily.{v} k hk).gauge A = ENNReal.ofReal (A.kyFanGauge k) := rfl
 

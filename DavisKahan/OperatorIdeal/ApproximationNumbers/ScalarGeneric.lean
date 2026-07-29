@@ -85,20 +85,27 @@ class HasKyFanApproximationGaugeTriangle
       kyFanApproximationGauge k (K + L) ≤
         kyFanApproximationGauge k K + kyFanApproximationGauge k L
 
+/-- The strong-cutoff convergence holds over `ℝ`.  Supplied as an instance so
+the field-generic development can be used at `ℝ` without naming the real proof. -/
 instance realHasApproximationNumberStrongCutoff :
     HasApproximationNumberStrongCutoff.{0, v, w} ℝ where
   tendsto_comp_strongProjection :=
     ApproximationNumbersReal.approximationSingularValue_comp_strongProjection_tendsto_real
 
+/-- The strong-cutoff convergence holds over `ℂ`. -/
 instance complexHasApproximationNumberStrongCutoff :
     HasApproximationNumberStrongCutoff.{0, v, w} ℂ where
   tendsto_comp_strongProjection :=
     approximationSingularValue_comp_strongProjection_tendsto_complex
 
+/-- The Ky Fan gauge satisfies the triangle inequality over `ℝ`.  This is the
+capability the real and complex routes prove separately, which is why it is a
+class rather than a theorem. -/
 instance realHasKyFanApproximationGaugeTriangle :
     HasKyFanApproximationGaugeTriangle.{0, v} ℝ where
   add_le := ApproximationNumbersReal.kyFanApproximationGauge_add_le_real
 
+/-- The Ky Fan gauge satisfies the triangle inequality over `ℂ`. -/
 instance complexHasKyFanApproximationGaugeTriangle :
     HasKyFanApproximationGaugeTriangle.{0, v} ℂ where
   add_le := kyFanApproximationGauge_add_le_complex
@@ -223,6 +230,8 @@ noncomputable def kyFanSymmetricIdealFamily
     exact ENNReal.ofReal_le_ofReal (kyFanApproximationGauge_comp_le k L A R)
   gauge_adjoint A := by rw [kyFanApproximationGauge_adjoint]
 
+/-- The gauge of the Ky Fan symmetric family is the `ℝ≥0∞` transport of the Ky
+Fan approximation gauge, definitionally. -/
 @[simp]
 theorem gauge_kyFanSymmetricIdealFamily
     [HasKyFanApproximationGaugeTriangle.{u, v} 𝕜] (k : ℕ) (hk : 0 < k)
@@ -230,6 +239,8 @@ theorem gauge_kyFanSymmetricIdealFamily
     (kyFanSymmetricIdealFamily (𝕜 := 𝕜) k hk).gauge A =
       ENNReal.ofReal (kyFanApproximationGauge k A) := rfl
 
+/-- The Ky Fan gauge is never `∞`: it is `ENNReal.ofReal` of a real number.
+This is what makes every bounded operator a member of the finite Ky Fan ideal. -/
 theorem gauge_kyFanSymmetricIdealFamily_ne_top
     [HasKyFanApproximationGaugeTriangle.{u, v} 𝕜] (k : ℕ) (hk : 0 < k)
     (A : E →L[𝕜] F) :
@@ -379,9 +390,13 @@ normal form for this layer — the Davis--Kahan estimates are stated and proved 
 `ℝ`.  As `simp` lemmas they also shadow `kyFan_gauge`, whose left-hand side is
 the `ℝ` view, and that silently breaks `simpa` calls two libraries away. -/
 
+/-- Membership in the ideal is finiteness of the canonical `ℝ≥0∞` gauge.  The
+first of the two bridges described above, and deliberately not `@[simp]`. -/
 theorem mem_iff (A : E →L[𝕜] F) :
     N.Mem A ↔ N.toSymmetricOperatorIdealFamily.gauge A ≠ ∞ := Iff.rfl
 
+/-- The real-valued gauge is the `.toReal` of the stored `ℝ≥0∞` one.  The second
+of the two bridges described above, and like `mem_iff` deliberately not `@[simp]`. -/
 theorem gauge_eq_toReal (A : E →L[𝕜] F) :
     N.gauge A = (N.toSymmetricOperatorIdealFamily.gauge A).toReal := rfl
 

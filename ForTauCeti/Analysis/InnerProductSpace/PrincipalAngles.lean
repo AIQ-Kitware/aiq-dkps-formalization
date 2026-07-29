@@ -238,6 +238,9 @@ the largest principal angle between `U` and `W` (plan step E2 of
 operator-norm Davis–Kahan theorem (`SinThetaOpNorm.lean`) bounds a principal
 angle. -/
 
+/-- The cosines of the principal angles *are* the singular values of the
+overlap operator, definitionally.  This is the bridge that lets angle statements
+be proved by singular-value arguments. -/
 @[simp] theorem cosPrincipalAngles_eq {u v : Fin d → E} (hu : Orthonormal 𝕜 u)
     (hv : Orthonormal 𝕜 v) (i : ℕ) :
     cosPrincipalAngles hu hv i = (overlapOp hu hv).singularValues i := rfl

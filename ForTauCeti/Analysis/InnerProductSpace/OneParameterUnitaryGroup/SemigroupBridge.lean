@@ -76,9 +76,11 @@ noncomputable def toSemigroup (U : OneParameterUnitaryGroup H) :
       (U.strong_continuous x).comp NNReal.continuous_coe
     exact hcont.continuousAt
 
+/-- The derived semigroup acts as the group at nonnegative times. -/
 @[simp] theorem toSemigroup_apply (U : OneParameterUnitaryGroup H) (t : ℝ≥0) (x : H) :
     (toSemigroup U) t x = U.U (t : ℝ) x := rfl
 
+/-- Its underlying operator is the group's. -/
 @[simp] theorem toSemigroup_realOperator (U : OneParameterUnitaryGroup H)
     {t : ℝ} (ht : 0 ≤ t) (x : H) :
     (toSemigroup U).realOperator t x = U.U t x := by

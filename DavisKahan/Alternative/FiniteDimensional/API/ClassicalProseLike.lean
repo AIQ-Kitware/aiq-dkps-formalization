@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-5.5 Thinking
 -/
 
-import DavisKahan.FiniteDimensional.SinTheta.UnitarilyInvariant
-import DavisKahan.FiniteDimensional.SinTheta.Perturbation
+import ForTauCeti.Analysis.InnerProductSpace.SinTheta.UnitarilyInvariant
+import ForTauCeti.Analysis.InnerProductSpace.SinTheta.Perturbation
 import DavisKahan.FiniteDimensional.DoubleAngle.SinTheta
 import DavisKahan.FiniteDimensional.TanTheta.Vector
 import DavisKahan.FiniteDimensional.DoubleAngle.TanTheta
