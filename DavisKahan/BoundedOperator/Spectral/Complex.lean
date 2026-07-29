@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 4.8, GPT 5.6 High
 -/
 import DavisKahan.BoundedOperator.Projector
-import ForMathlib.Analysis.InnerProductSpace.SpectralOrder.Complex
+import ForTauCeti.Analysis.InnerProductSpace.SpectralOrder.Complex
 
 /-!
 # Complex spectral specialization of bounded Davis--Kahan theory
@@ -16,7 +16,7 @@ operators on complex Hilbert spaces.
 
 namespace TauCeti
 
-open ForMathlib
+open TauCeti
 namespace DavisKahan
 namespace Spectral
 namespace Complex

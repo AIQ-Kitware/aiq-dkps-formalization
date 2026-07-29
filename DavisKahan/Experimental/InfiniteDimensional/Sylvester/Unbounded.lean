@@ -7,7 +7,7 @@ import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
 import DavisKahan.Experimental.InfiniteDimensional.Core.UnboundedSpectral
 import DavisKahan.Sylvester.Bounded
 import DavisKahan.Sylvester.Gap
-import ForMathlib.Analysis.InnerProductSpace.CoerciveUnit
+import ForTauCeti.Analysis.InnerProductSpace.CoerciveUnit
 
 /-!
 # Fully unbounded Sylvester estimates
@@ -21,7 +21,7 @@ property is not derived from the ordinary ideal laws.
 
 namespace TauCeti
 
-open ForMathlib
+open TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace ExactSinTheta
@@ -213,7 +213,7 @@ theorem boundedInverseData_of_coercive
     (hcoer : ∀ x, a * ‖x‖ ^ 2 ≤ RCLike.re ⟪A x, x⟫_𝕜) :
     ∃ hInv : BoundedInverseData A, ‖hInv.inv‖ ≤ a⁻¹ := by
   have hunit : IsUnit A :=
-    ForMathlib.ContinuousLinearMap.isUnit_of_coercive ha hcoer
+    TauCeti.ContinuousLinearMap.isUnit_of_coercive ha hcoer
   let J : H →L[𝕜] H := Ring.inverse A
   have hJA : J ∘L A = ContinuousLinearMap.id 𝕜 H := by
     exact Ring.inverse_mul_cancel A hunit
@@ -223,7 +223,7 @@ theorem boundedInverseData_of_coercive
   refine ⟨hInv, ?_⟩
   refine ContinuousLinearMap.opNorm_le_bound J (inv_nonneg.mpr ha.le) ?_
   intro y
-  have hlow := ForMathlib.ContinuousLinearMap.norm_smul_le_norm_apply_of_coercive
+  have hlow := TauCeti.ContinuousLinearMap.norm_smul_le_norm_apply_of_coercive
     hcoer (J y)
   have hJy : A (J y) = y := by
     have h := congrArg (fun T : H →L[𝕜] H => T y) hAJ
@@ -242,7 +242,7 @@ theorem norm_add_opNorm_id_le_of_nonpos
     {B : H →L[𝕜] H} (hBsym : B.IsSymmetric)
     (hBnonpos : ∀ x, RCLike.re ⟪B x, x⟫_𝕜 ≤ 0) :
     ‖B + ((‖B‖ : ℝ) : 𝕜) • ContinuousLinearMap.id 𝕜 H‖ ≤ ‖B‖ := by
-  refine ForMathlib.ContinuousLinearMap.norm_le_of_abs_re_inner_map_self_le
+  refine TauCeti.ContinuousLinearMap.norm_le_of_abs_re_inner_map_self_le
     ?_ (norm_nonneg B) ?_
   · exact hBsym.add (LinearMap.IsSymmetric.smul
       (RCLike.conj_ofReal ‖B‖) LinearMap.IsSymmetric.id)

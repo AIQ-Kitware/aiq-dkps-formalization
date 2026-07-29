@@ -3,10 +3,10 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
-import ForMathlib.Analysis.InnerProductSpace.ReducingSubspace
-import ForMathlib.Analysis.InnerProductSpace.QuadraticFormBounds
-import ForMathlib.Analysis.InnerProductSpace.ProjectionGap
-import ForMathlib.Analysis.InnerProductSpace.SylvesterOperator
+import ForTauCeti.Analysis.InnerProductSpace.ReducingSubspace
+import ForTauCeti.Analysis.InnerProductSpace.QuadraticFormBounds
+import ForTauCeti.Analysis.InnerProductSpace.ProjectionGap
+import ForTauCeti.Analysis.InnerProductSpace.SylvesterOperator
 
 /-!
 # Supported bounded Davis--Kahan vocabulary
@@ -145,7 +145,7 @@ theorem norm_sylvester_le_of_coercive
     (hBc : ∀ x, RCLike.re ⟪B x, x⟫_𝕜 ≤ c * ‖x‖ ^ 2)
     (hEq : sylvesterOperator A B X = C) :
     ‖X‖ ≤ ‖C‖ / g :=
-  ForMathlib.ContinuousLinearMap.opNorm_le_div_of_comp_sub_comp_eq hA hB hg hAc hBc hEq
+  TauCeti.ContinuousLinearMap.opNorm_le_div_of_comp_sub_comp_eq hA hB hg hAc hBc hEq
 
 end DavisKahan
 end TauCeti

@@ -5,7 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
 import DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Abstract.BoundedInverseRealization
-import ForMathlib.Analysis.InnerProductSpace.CoerciveUnit
+import ForTauCeti.Analysis.InnerProductSpace.CoerciveUnit
 import Mathlib.Tactic
 
 /-!
@@ -33,7 +33,7 @@ open scoped InnerProductSpace
 
 namespace TauCeti
 
-open ForMathlib
+open TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace MathAhead
