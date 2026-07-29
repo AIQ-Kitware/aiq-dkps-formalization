@@ -48,70 +48,85 @@ variable [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
 
 /-- **The Sylvester operator on a spectral block.**  Both correction terms are
 bounded by the block radii, so this converts the pointwise Sylvester equation
-into something the Hilbert–Schmidt ideal properties can consume. -/
+into something the Hilbert–Schmidt ideal properties can consume.
+
+The self-adjointness proofs are taken as *arguments*, together with the
+identifications `generator U = A` and `generator V = B`, rather than being
+manufactured internally from `isSelfAdjoint_generator`.  That is deliberate: the
+consumer has a given `hA : IsSelfAdjoint A` and works with projections of `A`,
+and `isSelfAdjoint_generator U` proves a different proposition — equal only
+across `generator U = A`.  Since `specProjection` takes the proof as an
+argument, manufacturing it here would push a dependent rewrite through every
+projection, domain membership and cut operator at the call site.  Taking it as a
+hypothesis does the transport once, here. -/
 theorem sylvester_block_identity
     (U : TauCeti.OneParameterUnitaryGroup E) (V : TauCeti.OneParameterUnitaryGroup F)
     (b : HilbertBasis ι ℂ F)
+    {A : E →ₗ.[ℂ] E} {Bop : F →ₗ.[ℂ] F}
+    (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint Bop)
+    (hUA : generator U = A) (hVB : generator V = Bop)
     {SA SB : Set ℝ} (hSA : MeasurableSet SA) (hSB : MeasurableSet SB)
     {MA lam rA : ℝ} (hbndA : ∀ s ∈ SA, |s| ≤ MA) (hrA : 0 ≤ rA)
     (hcrA : ∀ s ∈ SA, |s - lam| ≤ rA)
     {MB alp rB : ℝ} (hbndB : ∀ s ∈ SB, |s| ≤ MB) (hrB : 0 ≤ rB)
     (hcrB : ∀ s ∈ SB, |s - alp| ≤ rB)
     (z : (generator (sylvesterGroup U V b)).domain)
-    (hZP : (TauCeti.LinearPMap.specProjection
-        (TauCeti.OneParameterUnitaryGroup.isSelfAdjoint_generator U) SA hSA).comp
+    (hZP : (TauCeti.LinearPMap.specProjection hA SA hSA).comp
         (ofLp b (z : lp (fun _ : ι => E) 2)) = ofLp b (z : lp (fun _ : ι => E) 2))
     (hZQ : (ofLp b (z : lp (fun _ : ι => E) 2)).comp
-        (TauCeti.LinearPMap.specProjection
-          (TauCeti.OneParameterUnitaryGroup.isSelfAdjoint_generator V) SB hSB)
+        (TauCeti.LinearPMap.specProjection hB SB hSB)
         = ofLp b (z : lp (fun _ : ι => E) 2)) :
     ofLp b (generator (sylvesterGroup U V b) z)
         - ((lam : ℂ) - (alp : ℂ)) • ofLp b (z : lp (fun _ : ι => E) 2)
-      = (TauCeti.LinearPMap.specCutOp
-            (TauCeti.OneParameterUnitaryGroup.isSelfAdjoint_generator U) SA hSA hrA hcrA).comp
+      = (TauCeti.LinearPMap.specCutOp hA SA hSA hrA hcrA).comp
           (ofLp b (z : lp (fun _ : ι => E) 2))
         - (ofLp b (z : lp (fun _ : ι => E) 2)).comp
-          (TauCeti.LinearPMap.specCutOp
-            (TauCeti.OneParameterUnitaryGroup.isSelfAdjoint_generator V) SB hSB hrB hcrB) := by
-  set hA := TauCeti.OneParameterUnitaryGroup.isSelfAdjoint_generator U with hAdef
-  set hB := TauCeti.OneParameterUnitaryGroup.isSelfAdjoint_generator V with hBdef
+          (TauCeti.LinearPMap.specCutOp hB SB hSB hrB hcrB) := by
   set Z := ofLp b (z : lp (fun _ : ι => E) 2) with hZ
   set P := TauCeti.LinearPMap.specProjection hA SA hSA with hP
   set Q := TauCeti.LinearPMap.specProjection hB SB hSB with hQ
-  have hdense : Dense ((generator V).domain : Set F) := hB.dense_domain
+  have hdomV : (generator V).domain = Bop.domain := congrArg LinearPMap.domain hVB
+  have hdense : Dense ((generator V).domain : Set F) := by
+    rw [hdomV]; exact hB.dense_domain
   refine ContinuousLinearMap.ext_on (R₁ := ℂ) (s := ((generator V).domain : Set F))
     (by rwa [Submodule.span_eq]) ?_
   intro x hx
+  have hx' : x ∈ Bop.domain := (le_of_eq hdomV) hx
   obtain ⟨hmem, heq⟩ := generator_sylvesterGroup_apply U V b z ⟨x, hx⟩
-  -- the left factor: `Z x` sits in the spectral range of `SA`, where `A - lam` is `specCutOp`
+  -- the left factor
   have hZx : Z x ∈ TauCeti.LinearPMap.specRange hA SA hSA := by
     rw [TauCeti.LinearPMap.mem_specRange_iff]
     have := congrArg (fun T : F →L[ℂ] E => T x) hZP
     simpa [hP] using this
-  have hZxdom : Z x ∈ (generator U).domain :=
+  have hZxdom : Z x ∈ A.domain :=
     TauCeti.LinearPMap.mem_domain_of_mem_specRange_of_bounded hA SA hSA hbndA hZx
   have hleft : TauCeti.LinearPMap.specCutOp hA SA hSA hrA hcrA (Z x)
-      = generator U ⟨Z x, hZxdom⟩ - (lam : ℂ) • Z x :=
+      = A ⟨Z x, hZxdom⟩ - (lam : ℂ) • Z x :=
     TauCeti.LinearPMap.specCutOp_apply hA SA hSA hbndA hrA hcrA hZx hZxdom
+  -- transport the generator values across the identifications
+  have hUval : generator U ⟨Z x, hmem⟩ = A ⟨Z x, hZxdom⟩ :=
+    (LinearPMap.ext_iff.mp hUA).2 (x := Z x) (hf := hmem) (hg := hZxdom)
+  have hVval : generator V ⟨x, hx⟩ = Bop ⟨x, hx'⟩ :=
+    (LinearPMap.ext_iff.mp hVB).2 (x := x) (hf := hx) (hg := hx')
   -- the right factor, valid at every vector
   obtain ⟨hQx, hright⟩ :=
     TauCeti.LinearPMap.specProjection_apply_sub_smul hB SB hSB hbndB hrB hcrB x
-  -- `Q` intertwines `B`, and `Z = Z ∘ Q`, so `Z (B x) = Z (B (Q x))`
-  have hQint : generator V ⟨Q x, TauCeti.LinearPMap.specProjection_mem_domain hB SB hSB ⟨x, hx⟩⟩
-      = Q (generator V ⟨x, hx⟩) :=
-    TauCeti.LinearPMap.specProjection_apply_domain hB SB hSB ⟨x, hx⟩
+  have hQint : Bop ⟨Q x, TauCeti.LinearPMap.specProjection_mem_domain hB SB hSB ⟨x, hx'⟩⟩
+      = Q (Bop ⟨x, hx'⟩) :=
+    TauCeti.LinearPMap.specProjection_apply_domain hB SB hSB ⟨x, hx'⟩
   have hZQx : ∀ y : F, Z (Q y) = Z y := by
     intro y
     have := congrArg (fun T : F →L[ℂ] E => T y) hZQ
     simpa [hQ] using this
   -- assemble
   have heq' : (ofLp b (generator (sylvesterGroup U V b) z)) x
-      = generator U ⟨Z x, hZxdom⟩ - Z (generator V ⟨x, hx⟩) := heq.symm
+      = A ⟨Z x, hZxdom⟩ - Z (Bop ⟨x, hx'⟩) := by
+    rw [← heq, hUval, hVval]
   have hcut : TauCeti.LinearPMap.specCutOp hB SB hSB hrB hcrB x
-      = generator V ⟨Q x, hQx⟩ - (alp : ℂ) • Q x := hright.symm
-  have hBQ : Z (generator V ⟨Q x, hQx⟩) = Z (generator V ⟨x, hx⟩) := by
-    rw [show (⟨Q x, hQx⟩ : (generator V).domain)
-        = ⟨Q x, TauCeti.LinearPMap.specProjection_mem_domain hB SB hSB ⟨x, hx⟩⟩ from rfl,
+      = Bop ⟨Q x, hQx⟩ - (alp : ℂ) • Q x := hright.symm
+  have hBQ : Z (Bop ⟨Q x, hQx⟩) = Z (Bop ⟨x, hx'⟩) := by
+    rw [show (⟨Q x, hQx⟩ : Bop.domain)
+        = ⟨Q x, TauCeti.LinearPMap.specProjection_mem_domain hB SB hSB ⟨x, hx'⟩⟩ from rfl,
       hQint, hZQx]
   simp only [sub_apply, ContinuousLinearMap.comp_apply, smul_apply, hleft, heq', hcut,
     map_sub, map_smul, hBQ, hZQx]
