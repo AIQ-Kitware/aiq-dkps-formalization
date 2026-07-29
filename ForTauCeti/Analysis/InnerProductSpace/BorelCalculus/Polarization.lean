@@ -98,6 +98,22 @@ theorem pair_of_continuous (f : C(spectrum ℂ a, ℂ)) (ψ ξ : H) :
     integral_diagMeasure]
   exact inner_polarization (cfcHom ha f) ψ ξ
 
+omit [CompleteSpace H] in
+/-- Two symbols close in `L¹` of a dominating measure have close integrals
+against the dominated one. -/
+theorem norm_integral_sub_integral_le {f g : spectrum ℂ a → ℂ}
+    {μ ν : Measure (spectrum ℂ a)} (hdom : μ ≤ ν)
+    (hf : Integrable f ν) (hg : Integrable g ν) :
+    ‖(∫ x, f x ∂μ) - (∫ x, g x ∂μ)‖ ≤ ∫ x, ‖f x - g x‖ ∂ν := by
+  have hfμ : Integrable f μ := hf.mono_measure hdom
+  have hgμ : Integrable g μ := hg.mono_measure hdom
+  calc ‖(∫ x, f x ∂μ) - (∫ x, g x ∂μ)‖
+      = ‖∫ x, (f x - g x) ∂μ‖ := by rw [integral_sub hfμ hgμ]
+    _ ≤ ∫ x, ‖f x - g x‖ ∂μ := norm_integral_le_integral_norm _
+    _ ≤ ∫ x, ‖f x - g x‖ ∂ν :=
+        integral_mono_measure hdom (Filter.Eventually.of_forall fun _ => norm_nonneg _)
+          (hf.sub hg).norm
+
 /-- The four diagonal measures entering `pair ha f ψ ξ`. -/
 noncomputable def pairVectors (ψ ξ : H) : Fin 4 → H :=
   ![ξ + ψ, ξ + Complex.I • ψ, ξ - ψ, ξ - Complex.I • ψ]
