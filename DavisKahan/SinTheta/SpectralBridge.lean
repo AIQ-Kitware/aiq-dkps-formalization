@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Sylvester.Bounded
-import DavisKahan.SpectralTheory.ClosedOperator.Basic
+import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Closed
 
 /-!
 # Bounded spectral bridge: definitions
@@ -34,7 +34,7 @@ spectral API used by the canonical unbounded theorem.  This avoids maintaining
 an unrelated bounded spectrum placeholder and makes bounded gap hypotheses
 eligible for a direct full-domain specialization bridge. -/
 noncomputable def boundedRealSpectrum (A : E →L[𝕜] E) : Set ℝ :=
-  (TauCeti.DavisKahanExt.ClosedOperator.ofBounded A).realSpectrum
+  TauCeti.LinearPMap.realSpectrum (A.toLinearMap.toPMap ⊤)
 
 /-- The real spectrum is contained in a set. -/
 def SpectrumInRealSet (A : E →L[𝕜] E) (s : Set ℝ) : Prop :=
