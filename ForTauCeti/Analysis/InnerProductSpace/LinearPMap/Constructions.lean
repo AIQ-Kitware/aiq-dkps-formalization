@@ -62,9 +62,12 @@ def perturb (A : H →ₗ.[𝕜] H) (V : A.domain →ₗ[𝕜] H) : H →ₗ.[�
   domain := A.domain
   toFun := A.toFun + V
 
+/-- Perturbing leaves the domain alone — that is the point of `perturb`, and
+what lets a perturbed operator be compared with the original on the nose. -/
 @[simp] theorem perturb_domain (A : H →ₗ.[𝕜] H) (V : A.domain →ₗ[𝕜] H) :
     (perturb A V).domain = A.domain := rfl
 
+/-- The perturbed map acts by `A + V` pointwise on the shared domain. -/
 @[simp] theorem perturb_apply (A : H →ₗ.[𝕜] H) (V : A.domain →ₗ[𝕜] H)
     (ψ : A.domain) : perturb A V ψ = A ψ + V ψ := rfl
 
@@ -87,6 +90,8 @@ def boundedPerturbation (A : H →ₗ.[𝕜] H) (T : H →L[𝕜] H) : A.domain 
   (T.comp (Submodule.subtypeL A.domain)).toLinearMap
 
 omit [CompleteSpace H] in
+/-- A bounded perturbation acts by `T` itself; restricting `T` to `A.domain`
+changes nothing about its values. -/
 @[simp] theorem boundedPerturbation_apply (A : H →ₗ.[𝕜] H) (T : H →L[𝕜] H)
     (x : A.domain) : boundedPerturbation A T x = T (x : H) := rfl
 
@@ -172,26 +177,30 @@ noncomputable def unitaryConj (U : H ≃ₗᵢ[𝕜] H') (A : H →ₗ.[𝕜] H)
         rw [hsub, A.map_smul, map_smul]
         rfl }
 
-/-- Membership in the conjugated domain is membership in the original domain after pulling back
-along `U`.  True by definition, but stated so call sites need not unfold `unitaryConj`. -/
+/-- The domain of the conjugated operator is the image of the original domain:
+`x` lies in it exactly when `U.symm x` lies in `A.domain`.  Stated as an `Iff`
+on the preimage because that is the form the definition produces and the one
+`rw` can use in either direction. -/
 theorem mem_unitaryConj_domain_iff {U : H ≃ₗᵢ[𝕜] H'} {A : H →ₗ.[𝕜] H} {x : H'} :
     x ∈ (unitaryConj U A).domain ↔ U.symm x ∈ A.domain := Iff.rfl
 
-/-- The conjugated map acts by transporting to `H`, applying `A`, and pushing forward again. -/
+/-- `U A U⁻¹` acting on a vector of the conjugated domain: pull back by `U.symm`,
+apply `A`, push forward by `U`. -/
 theorem unitaryConj_apply (U : H ≃ₗᵢ[𝕜] H') (A : H →ₗ.[𝕜] H)
     (x : (unitaryConj U A).domain) :
     unitaryConj U A x = U (A ⟨U.symm (x : H'), x.2⟩) := rfl
 
-/-- `U` carries the domain of `A` into the domain of the conjugate; this is the membership proof
-the next lemma needs in order to state its argument at all. -/
+/-- `U` carries `A.domain` into the conjugated domain.  This is the membership
+witness needed to state `unitaryConj_apply_map`, which is the form of the
+conjugation law that is usable from the *original* domain. -/
 theorem map_mem_unitaryConj_domain (U : H ≃ₗᵢ[𝕜] H') (A : H →ₗ.[𝕜] H) (y : A.domain) :
     U (y : H) ∈ (unitaryConj U A).domain := by
   rw [mem_unitaryConj_domain_iff, U.symm_apply_apply]
   exact y.2
 
-/-- The intertwining relation `(U A U⁻¹) (U y) = U (A y)` on the domain of `A`.  This is the form
-in which conjugation is actually used, `unitaryConj_apply` being stated at a bundled domain
-element rather than at `U y`. -/
+/-- **The intertwining law**, in the form consumers want: conjugation composed
+with `U` is `U` composed with `A`, indexed by the *original* domain rather than
+the conjugated one. -/
 theorem unitaryConj_apply_map (U : H ≃ₗᵢ[𝕜] H') (A : H →ₗ.[𝕜] H) (y : A.domain) :
     unitaryConj U A ⟨U (y : H), map_mem_unitaryConj_domain U A y⟩ = U (A y) := by
   rw [unitaryConj_apply]
