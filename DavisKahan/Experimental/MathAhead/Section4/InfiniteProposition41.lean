@@ -185,7 +185,7 @@ private theorem cosine_norm_le_on_low_range
           pow_le_pow_left₀ (norm_nonneg _) hyNorm 2
         exact mul_le_mul_of_nonneg_left hySq hc₁0
   have hCPnorm : ‖CP‖ ≤ c₁ :=
-    ForMathlib.ContinuousLinearMap.norm_le_of_abs_re_inner_map_self_le
+    TauCeti.ContinuousLinearMap.norm_le_of_abs_re_inner_map_self_le
       hCPsym hc₁0 hform
   calc
     ‖C x‖ = ‖CP x‖ := by rw [show CP x = C x by simp [CP, hPx]]

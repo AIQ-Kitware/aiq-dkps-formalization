@@ -7,7 +7,7 @@ import FinishTanTwoTheta.GroundedImports
 import DavisKahan.Interop.Spectra.DirectRotation
 import DavisKahan.Experimental.InfiniteDimensional.Riccati.BoundedSpectralTransport
 import DavisKahan.SinTheta.FrameFactorization
-import ForMathlib.Analysis.InnerProductSpace.CoerciveUnit
+import ForTauCeti.Analysis.InnerProductSpace.CoerciveUnit
 import ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.DiagonalMeasure
 
 /-!
@@ -262,7 +262,7 @@ private theorem spectrum_re_lower_of_coercive
     rw [hzinner]
     linarith
   have hunit : IsUnit (T - z • ContinuousLinearMap.id ℂ E) :=
-    ForMathlib.ContinuousLinearMap.isUnit_of_coercive hgap hshift
+    TauCeti.ContinuousLinearMap.isUnit_of_coercive hgap hshift
   rw [spectrum.mem_iff] at hz
   apply hz
   rw [Algebra.algebraMap_eq_smul_one]
@@ -381,7 +381,7 @@ theorem isQuarterAcute_of_paper_form_gap_infinite
     rw [ContinuousLinearMap.reApplyInnerSelf_apply]
     exact (mul_nonneg hδ.le (sq_nonneg ‖x‖)).trans (hCcoer x)
   have hCunit : IsUnit C :=
-    ForMathlib.ContinuousLinearMap.isUnit_of_coercive hδ hCcoer
+    TauCeti.ContinuousLinearMap.isUnit_of_coercive hδ hCcoer
   let R : E →L[ℂ] E := C ^ (1 / 2 : ℝ)
   let Rinv : E →L[ℂ] E := C ^ (-1 / 2 : ℝ)
   have hRinvR : Rinv ∘L R = ContinuousLinearMap.id ℂ E := by

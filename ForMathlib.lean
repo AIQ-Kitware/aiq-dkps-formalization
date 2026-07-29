@@ -6,8 +6,6 @@ Mathlib destination path.  See `ForMathlib/README.md` for the contribution
 workflow and `planning/mathlib-candidates.md` for the ranked candidate list.
 -/
 
-import ForMathlib.Analysis.InnerProductSpace.CoerciveUnit
-import ForMathlib.Analysis.InnerProductSpace.SylvesterBound
 import ForMathlib.LinearAlgebra.Matrix.PosDef
 import ForMathlib.LinearAlgebra.Matrix.RankFactorization
 import ForMathlib.Topology.ApproxMinimizer

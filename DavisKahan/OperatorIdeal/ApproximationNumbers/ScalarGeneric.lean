@@ -390,6 +390,8 @@ normal form for this layer — the Davis--Kahan estimates are stated and proved 
 `ℝ`.  As `simp` lemmas they also shadow `kyFan_gauge`, whose left-hand side is
 the `ℝ` view, and that silently breaks `simpa` calls two libraries away. -/
 
+/-- Membership in the ideal is finiteness of the canonical `ℝ≥0∞` gauge.  The
+first of the two bridges described above, and deliberately not `@[simp]`. -/
 theorem mem_iff (A : E →L[𝕜] F) :
     N.Mem A ↔ N.toSymmetricOperatorIdealFamily.gauge A ≠ ∞ := Iff.rfl
 

@@ -526,6 +526,11 @@ theorem halmosTrivialPart_eq_common_sup_exterior_of_isAcute
 /-! ## Projection algebra -/
 
 omit [CompleteSpace H] in
+/-- An orthogonal projection is idempotent: `P_U * P_U = P_U`.
+
+This is the multiplicative form of `Submodule.orthogonalProjection` idempotence,
+stated for the bundled operator `projection U` so that the two-projection
+calculations below can rewrite inside products without unfolding. -/
 @[simp]
 theorem projection_sq
     (U : Submodule ℂ H) [U.HasOrthogonalProjection] :
