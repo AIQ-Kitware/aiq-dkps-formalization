@@ -613,5 +613,91 @@ theorem cauchySeq_expApprox (hA : IsSelfAdjoint A) (t : ℝ) (ψ : H) :
         exact hφclose
     _ = ε := by ring
 
+/-! ### The limit flow `exp(itA)` -/
+
+/-- The strong limit of the approximating flows, pointwise. -/
+noncomputable def expLimitFun (hA : IsSelfAdjoint A) (t : ℝ) (ψ : H) : H :=
+  limUnder atTop (fun n : ℕ+ => expApprox hA n t ψ)
+
+theorem tendsto_expLimitFun (hA : IsSelfAdjoint A) (t : ℝ) (ψ : H) :
+    Tendsto (fun n : ℕ+ => expApprox hA n t ψ) atTop (𝓝 (expLimitFun hA t ψ)) :=
+  (cauchySeq_expApprox hA t ψ).tendsto_limUnder
+
+theorem expLimitFun_add (hA : IsSelfAdjoint A) (t : ℝ) (x y : H) :
+    expLimitFun hA t (x + y) = expLimitFun hA t x + expLimitFun hA t y := by
+  refine tendsto_nhds_unique (tendsto_expLimitFun hA t (x + y)) ?_
+  simpa only [map_add] using
+    (tendsto_expLimitFun hA t x).add (tendsto_expLimitFun hA t y)
+
+theorem expLimitFun_smul (hA : IsSelfAdjoint A) (t : ℝ) (c : ℂ) (x : H) :
+    expLimitFun hA t (c • x) = c • expLimitFun hA t x := by
+  refine tendsto_nhds_unique (tendsto_expLimitFun hA t (c • x)) ?_
+  simpa only [map_smul] using (tendsto_expLimitFun hA t x).const_smul c
+
+theorem norm_expLimitFun (hA : IsSelfAdjoint A) (t : ℝ) (ψ : H) :
+    ‖expLimitFun hA t ψ‖ = ‖ψ‖ := by
+  refine tendsto_nhds_unique ((tendsto_expLimitFun hA t ψ).norm) ?_
+  simpa only [norm_expApprox] using tendsto_const_nhds
+
+/-- The limit flow `exp(itA)` as a bounded operator. -/
+noncomputable def expLimit (hA : IsSelfAdjoint A) (t : ℝ) : H →L[ℂ] H :=
+  LinearMap.mkContinuous
+    { toFun := expLimitFun hA t
+      map_add' := expLimitFun_add hA t
+      map_smul' := fun c x => by simpa using expLimitFun_smul hA t c x }
+    1
+    (fun ψ => by simp [norm_expLimitFun])
+
+@[simp] theorem expLimit_apply (hA : IsSelfAdjoint A) (t : ℝ) (ψ : H) :
+    expLimit hA t ψ = expLimitFun hA t ψ := rfl
+
+theorem norm_expLimit_apply (hA : IsSelfAdjoint A) (t : ℝ) (ψ : H) :
+    ‖expLimit hA t ψ‖ = ‖ψ‖ := norm_expLimitFun hA t ψ
+
+/-! ### The limit flow is a one-parameter unitary group -/
+
+@[simp] theorem expLimit_zero (hA : IsSelfAdjoint A) : expLimit hA 0 = 1 := by
+  ext ψ
+  refine tendsto_nhds_unique (tendsto_expLimitFun hA 0 ψ) ?_
+  simp [expApprox_zero]
+
+theorem inner_expLimit (hA : IsSelfAdjoint A) (t : ℝ) (ψ φ : H) :
+    ⟪expLimit hA t ψ, expLimit hA t φ⟫_ℂ = ⟪ψ, φ⟫_ℂ := by
+  refine tendsto_nhds_unique
+    (((tendsto_expLimitFun hA t ψ).inner (tendsto_expLimitFun hA t φ))) ?_
+  simpa only [inner_expApprox] using tendsto_const_nhds
+
+theorem expLimit_add (hA : IsSelfAdjoint A) (s t : ℝ) :
+    expLimit hA (s + t) = (expLimit hA s).comp (expLimit hA t) := by
+  ext ψ
+  refine tendsto_nhds_unique (tendsto_expLimitFun hA (s + t) ψ) ?_
+  -- `expApprox n s (expApprox n t ψ) → U s (U t ψ)`: split the error in two
+  have hstep : Tendsto (fun n : ℕ+ => expApprox hA n s (expApprox hA n t ψ)) atTop
+      (𝓝 (expLimit hA s (expLimit hA t ψ))) := by
+    rw [Metric.tendsto_atTop]
+    intro ε hε
+    obtain ⟨N₁, hN₁⟩ := (Metric.tendsto_atTop.mp (tendsto_expLimitFun hA t ψ)) (ε / 2)
+      (by linarith)
+    obtain ⟨N₂, hN₂⟩ := (Metric.tendsto_atTop.mp
+      (tendsto_expLimitFun hA s (expLimit hA t ψ))) (ε / 2) (by linarith)
+    refine ⟨max N₁ N₂, fun n hn => ?_⟩
+    have h1 : dist (expApprox hA n s (expApprox hA n t ψ))
+        (expApprox hA n s (expLimit hA t ψ)) < ε / 2 := by
+      rw [dist_eq_norm, ← ContinuousLinearMap.map_sub, norm_expApprox, ← dist_eq_norm]
+      exact hN₁ n (le_trans (le_max_left _ _) hn)
+    have h2 : dist (expApprox hA n s (expLimit hA t ψ))
+        (expLimit hA s (expLimit hA t ψ)) < ε / 2 :=
+      hN₂ n (le_trans (le_max_right _ _) hn)
+    calc dist (expApprox hA n s (expApprox hA n t ψ)) (expLimit hA s (expLimit hA t ψ))
+        ≤ dist (expApprox hA n s (expApprox hA n t ψ))
+            (expApprox hA n s (expLimit hA t ψ))
+          + dist (expApprox hA n s (expLimit hA t ψ))
+            (expLimit hA s (expLimit hA t ψ)) := dist_triangle _ _ _
+      _ < ε / 2 + ε / 2 := add_lt_add h1 h2
+      _ = ε := by ring
+  refine hstep.congr fun n => ?_
+  rw [expApprox_add]
+  rfl
+
 end LinearPMap
 end TauCeti
