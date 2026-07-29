@@ -192,6 +192,44 @@ noncomputable def ofLp (b : HilbertBasis ι 𝕜 F) (f : lp (fun _ : ι => E) 2)
         norm_num
       · exact hsq1)
 
+omit [CompleteSpace F] in
+theorem ofLp_apply (b : HilbertBasis ι 𝕜 F) (f : lp (fun _ : ι => E) 2) (x : F) :
+    ofLp b f x = ∑' i, (b.repr x i) • f i := rfl
+
+omit [CompleteSpace F] in
+/-- **Round trip, operator side.**  `ofLp` recovers any bounded operator from
+its own columns: the basis expansion of `x` is carried across by continuity. -/
+theorem ofLp_columns (b : HilbertBasis ι 𝕜 F) (T : F →L[𝕜] E)
+    (hT : Memℓp (columns b T) 2) :
+    ofLp b ⟨columns b T, hT⟩ = T := by
+  refine ContinuousLinearMap.ext fun x => ?_
+  rw [ofLp_apply]
+  have hx : HasSum (fun i => (b.repr x i) • b i) x := b.hasSum_repr x
+  have hT' : HasSum (fun i => T ((b.repr x i) • b i)) (T x) := hx.mapL T
+  have hfun : (fun i => T ((b.repr x i) • b i))
+      = fun i => (b.repr x i) • (⟨columns b T, hT⟩ : lp (fun _ : ι => E) 2) i := by
+    funext i
+    rw [map_smul]
+    rfl
+  rw [hfun] at hT'
+  exact hT'.tsum_eq
+
+omit [CompleteSpace F] in
+/-- **Round trip, column side.**  The columns of `ofLp b f` are `f`. -/
+theorem columns_ofLp (b : HilbertBasis ι 𝕜 F)
+    (f : lp (fun _ : ι => E) 2) : columns b (ofLp b f) = f := by
+  classical
+  funext i
+  rw [columns_apply, ofLp_apply]
+  have hrepr : ∀ j, b.repr (b i) j = if j = i then (1 : 𝕜) else 0 := by
+    intro j
+    rw [b.repr_self]
+    by_cases h : j = i <;> simp [h, lp.single_apply]
+  have hzero : ∀ j, j ≠ i → (b.repr (b i) j) • f j = 0 := by
+    intro j hj
+    rw [hrepr j, if_neg hj, zero_smul]
+  rw [tsum_eq_single i hzero, hrepr i, if_pos rfl, one_smul]
+
 end OfLp
 
 end HilbertSchmidt
