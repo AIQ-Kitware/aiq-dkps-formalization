@@ -845,3 +845,40 @@ The independent clusters — Hilbert–Schmidt tensor (5 files) and the small
 `Operator.Bounded` / `BornRule.Observable` / `TraceClass` / `SeparatedIntertwiner`
 / `ExpBounded.Helpers` items — do not touch any of this and can be done in any
 order.
+
+### Update: `spectralPVM` is built; the resolvent formula needs no domain theory
+
+`ForTauCeti/Analysis/InnerProductSpace/LinearPMap/SpectralMeasure.lean` now
+defines `TauCeti.LinearPMap.spectralPVM hA` and proves
+`diagMeasure_cayley_preimage_one` (the `{1}`-null fact, exactly as sketched
+above).  What remains is the resolvent formula, and the route sketched earlier
+— identify `cfcHom g_z` with `(A - z)⁻¹` by checking the two-sided inverse
+property — is **not** the cheap one, because it drags in `dom A = ran (1 - U)`.
+
+Use the **first resolvent identity instead**, which is already ported
+(`LinearPMap.resolvent_sub_resolvent`).  With `w := z`, `z := -i`:
+
+`R(z) - R(-i) = (z + i) • (R(z) ∘ R(-i))`, i.e. `R(z) ∘ V = R(-i)` where
+`V := 1 - (z + i) • R(-i)`.
+
+Now everything is bounded and lives in the C⋆-algebra:
+
+* `R(-i) = (2i)⁻¹ • (1 - U) = cfcHom hU ((1 - X)/(2i))`, straight off the
+  definition of `cayley` (`X` is `(ContinuousMap.id ℂ).restrict (spectrum ℂ U)`).
+* Hence `V = cfcHom hU h_z` with `h_z(w) = ((i - z) + (i + z) w) / (2i)`.
+* `h_z` has no zero on `spectrum ℂ U`: a zero forces `w = (z - i)/(z + i)`,
+  whence `|z - i| = |z + i|` (the spectrum of a unitary sits on the circle),
+  whence `(Im z - 1)² = (Im z + 1)²`, whence `Im z = 0` — excluded.
+* So `W := cfcHom hU (1 / h_z)` inverts `V` (`map_mul`, `map_one`), and
+  `R(z) = R(-i) ∘ W = cfcHom hU g_z` with
+  `g_z(w) = (1 - w) / ((i - z) + (i + z) w)`.
+
+Then `⟪ξ, R(z) ξ⟫ = ∫ g_z ∂(diagMeasure ξ)` is just `integral_diagMeasure`, and
+`∫_ℝ (s - z)⁻¹ ∂(map κ (diagMeasure ξ)) = ∫ (κ(w) - z)⁻¹ ∂(diagMeasure ξ)` is
+`integral_map`; the two integrands agree off `{1}`, which is null.
+
+No statement about `dom A` is needed anywhere in this argument.
+
+The Mathlib fact to look up when starting: the spectrum of a unitary element is
+contained in the unit circle (`spectrum.subset_circle_of_unitary` or the
+`unitary`-namespace equivalent).
