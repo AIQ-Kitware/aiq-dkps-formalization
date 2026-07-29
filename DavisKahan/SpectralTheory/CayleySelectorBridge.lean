@@ -189,6 +189,7 @@ theorem inverseMobius_boundedMobiusSymbol_ofReal (lam : ℝ) :
     Spectra.Cayley.one_sub_mobius lam hne]
   field_simp [hne, Complex.I_ne_zero]
 
+omit [CompleteSpace H] in
 /-- A real point belongs to the real spectrum once its complex coercion belongs
  to the complex spectrum of a self-adjoint operator. -/
 theorem mem_realSpectrum_of_coe_mem_spectrum

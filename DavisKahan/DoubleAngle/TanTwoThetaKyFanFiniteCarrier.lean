@@ -58,6 +58,7 @@ variable {𝕜 : Type*} [RCLike 𝕜]
 
 section Helpers
 
+omit [CompleteSpace E] in
 /-- The difference of nested orthogonal projections lands in the orthogonal
 complement of the smaller subspace. -/
 private theorem starProjection_sub_mem_orthogonal
@@ -75,6 +76,7 @@ private theorem starProjection_sub_mem_orthogonal
       Submodule.starProjection_eq_self_iff.mpr hw]
   rw [h1, h2, sub_self]
 
+omit [CompleteSpace E] in
 /-- The orthogonal projection kills the orthogonal complement. -/
 private theorem starProjection_eq_zero_of_mem_orthogonal
     {U : Submodule 𝕜 E} [U.HasOrthogonalProjection]
@@ -85,6 +87,7 @@ private theorem starProjection_eq_zero_of_mem_orthogonal
     Submodule.starProjection_eq_self_iff.mpr hx] at h
   exact sub_eq_self.mp h.symm
 
+omit [CompleteSpace E] in
 /-- The projection onto an intermediate subspace preserves the orthogonal
 complement of a smaller subspace. -/
 private theorem starProjection_mem_orthogonal_of_le
@@ -95,6 +98,7 @@ private theorem starProjection_mem_orthogonal_of_le
   have h := starProjection_sub_mem_orthogonal (𝕜 := 𝕜) hUM x
   rwa [starProjection_eq_zero_of_mem_orthogonal hx, sub_zero] at h
 
+omit [CompleteSpace E] in
 /-- The residual of an orthogonal projection is orthogonal to the target. -/
 private theorem sub_starProjection_mem_orthogonal'
     {U : Submodule 𝕜 E} [U.HasOrthogonalProjection] (x : E) :

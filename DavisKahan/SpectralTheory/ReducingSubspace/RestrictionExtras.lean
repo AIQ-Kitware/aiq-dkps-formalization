@@ -25,6 +25,7 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
 namespace ClosedOperator
 namespace ReducesSubspace
 
+omit [CompleteSpace E] in
 /-- Orthogonal complementation preserves the reducing-subspace property. -/
 theorem orthogonal
     {A : ClosedOperator (𝕜 := 𝕜) (E := E)}
@@ -34,6 +35,7 @@ theorem orthogonal
 
 end ReducesSubspace
 
+omit [CompleteSpace E] in
 /-- A bounded reducing-subspace law induces the domain-aware law for the
 full-domain closed operator. -/
 theorem ofBounded_reducesSubspace
@@ -51,6 +53,7 @@ theorem ofBounded_reducesSubspace
     show A (x : E) ∈ Uᗮ
     exact hred.2 (x : E) hx
 
+omit [CompleteSpace E] in
 /-- For a bounded operator, the closed reducing restriction has the same
 pointwise action as the ordinary bounded restriction. -/
 @[simp]

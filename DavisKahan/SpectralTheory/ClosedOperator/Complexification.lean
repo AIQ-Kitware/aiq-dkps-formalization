@@ -206,16 +206,19 @@ def complexify
   dense_domain := domain_dense A
   closed_graph := linearMap_closedGraph A
 
+omit [CompleteSpace E] in
 @[simp] theorem complexify_domain
     (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E)) :
     (complexify A).domain = domain A := rfl
 
+omit [CompleteSpace E] in
 @[simp] theorem mem_complexify_domain_iff
     (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E))
     (z : Eℂ) :
     z ∈ (complexify A).domain ↔ re z ∈ A.domain ∧ im z ∈ A.domain := by
   rfl
 
+omit [CompleteSpace E] in
 @[simp] theorem complexify_apply_re
     (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E))
     (z : (complexify A).domain) :
@@ -223,6 +226,7 @@ def complexify
       A.toLinearMap ⟨re (z : Eℂ), (mem_complexify_domain_iff A z).mp z.property |>.1⟩ :=
   rfl
 
+omit [CompleteSpace E] in
 @[simp] theorem complexify_apply_im
     (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E))
     (z : (complexify A).domain) :
@@ -230,6 +234,7 @@ def complexify
       A.toLinearMap ⟨im (z : Eℂ), (mem_complexify_domain_iff A z).mp z.property |>.2⟩ :=
   rfl
 
+omit [CompleteSpace E] in
 /-- Membership in the canonical partial-map domain of a complexified closed
 operator separates coordinatewise.  This is the `LinearPMap`-native form of
 `mem_complexify_domain_iff`, used while the historical bundle remains as a
@@ -255,6 +260,7 @@ def domainImPMap
   ⟨im (z : Eℂ),
     (mem_complexify_toLinearPMap_domain_iff A z).mp z.property |>.2⟩
 
+omit [CompleteSpace E] in
 @[simp] theorem complexify_toLinearPMap_apply_re
     (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E))
     (z : (complexify A).toLinearPMap.domain) :
@@ -262,6 +268,7 @@ def domainImPMap
       A.toLinearPMap (domainRePMap A z) :=
   rfl
 
+omit [CompleteSpace E] in
 @[simp] theorem complexify_toLinearPMap_apply_im
     (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E))
     (z : (complexify A).toLinearPMap.domain) :
@@ -284,6 +291,7 @@ def ofRealDomain
     (x : A.domain) : (complexify A).domain :=
   ⟨ofReal (x : E), by simpa using x.property⟩
 
+omit [CompleteSpace E] in
 @[simp] theorem complexify_apply_ofReal
     (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E))
     (x : A.domain) :
@@ -304,6 +312,7 @@ def ofRealDomainPMap
     (x : A.toLinearPMap.domain) : (complexify A).toLinearPMap.domain :=
   ⟨ofReal (x : E), by simpa using x.property⟩
 
+omit [CompleteSpace E] in
 @[simp] theorem complexify_toLinearPMap_apply_ofReal
     (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E))
     (x : A.toLinearPMap.domain) :
@@ -330,6 +339,7 @@ def ofImaginaryDomain
     simp only [I_smul_ofReal, re_mk, im_mk]
     exact ⟨A.domain.zero_mem, x.property⟩⟩
 
+omit [CompleteSpace E] in
 @[simp] theorem complexify_apply_ofImaginary
     (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E))
     (x : A.domain) :
@@ -389,6 +399,7 @@ theorem complexify_ofBounded
         im (RealComplexification.complexify T (y : Eℂ))
       rw [im_complexify, hxy]
 
+omit [CompleteSpace E] in
 /-- A real domain map complexifies to a complex domain map. -/
 theorem mapsDomainTo_complexify
     {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E)}
@@ -405,6 +416,7 @@ theorem mapsDomainTo_complexify
   · rw [im_complexify]
     exact hX (domainImPMap B z)
 
+omit [CompleteSpace E] in
 /-- The domain-aware Sylvester equation complexifies coordinatewise. -/
 theorem closedSylvesterEquation_complexify
     {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E)}
@@ -427,6 +439,7 @@ theorem closedSylvesterEquation_complexify
         ⟨im (z : Fℂ), (mem_complexify_domain_iff B z).mp z.property |>.2⟩
     exact h
 
+omit [CompleteSpace E] in
 /-- A lower quadratic-form bound is preserved exactly by complexification. -/
 theorem semiboundedBelow_complexify
     {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E)}
@@ -443,6 +456,7 @@ theorem semiboundedBelow_complexify
       ⟪A.toLinearMap (domainIm A z), im (z : Eℂ)⟫_ℝ
   nlinarith [hr, hi]
 
+omit [CompleteSpace E] in
 /-- An upper quadratic-form bound is preserved exactly by complexification. -/
 theorem semiboundedAbove_complexify
     {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E)}
@@ -460,6 +474,7 @@ theorem semiboundedAbove_complexify
       c * (‖re (z : Eℂ)‖ ^ 2 + ‖im (z : Eℂ)‖ ^ 2)
   nlinarith [hr, hi]
 
+omit [CompleteSpace E] in
 /-- Symmetry is preserved by coordinatewise complexification. -/
 theorem isSymmetric_complexify
     {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E)}
@@ -482,6 +497,7 @@ theorem isSymmetric_complexify
     rw [hA (domainRePMap A z) (domainImPMap A w),
       hA (domainImPMap A z) (domainRePMap A w)]
 
+omit [CompleteSpace E] in
 /-- The real embedding of the domain is continuous.  `fun_prop` cannot see
 through the `WithLp` wrapper or the subtype, so this is proved by hand. -/
 private theorem continuous_ofRealDomain
@@ -489,6 +505,7 @@ private theorem continuous_ofRealDomain
     Continuous (ofRealDomain A) :=
   ((ofReal (E := E)).continuous.comp continuous_subtype_val).subtype_mk _
 
+omit [CompleteSpace E] in
 /-- The imaginary embedding of the domain is continuous. -/
 private theorem continuous_ofImaginaryDomain
     (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E)) :
@@ -615,6 +632,7 @@ theorem isSelfAdjoint_complexify
       rw [inner_sub_left, congrFun hinner (zAdj - zAct), sub_self]
     exact sub_eq_zero.mp (inner_self_eq_zero.mp hzero)
 
+omit [CompleteSpace E] in
 /-- A real bounded inverse complexifies to a complex bounded inverse of every
 real shift. -/
 theorem realResolvent_mem_complexify
@@ -642,6 +660,7 @@ theorem realResolvent_mem_complexify
     · rw [im_sub, complexify_toLinearPMap_apply_im, im_complex_smul]
       simpa [domainImPMap] using hi
 
+omit [CompleteSpace E] in
 /-- A complex resolvent of the coordinatewise complexification descends to a
 real resolvent by restricting to the real copy and taking real coordinates. -/
 theorem complexify_realResolvent_mem
@@ -672,6 +691,7 @@ theorem complexify_realResolvent_mem
     rw [re_sub, complexify_toLinearPMap_apply_re, re_complex_smul] at hre
     simpa [Rr, RrLinear, domainRePMap] using hre
 
+omit [CompleteSpace E] in
 /-- Real resolvent membership is exactly preserved by closed-operator
 complexification. -/
 theorem mem_realResolventSet_complexify_iff
@@ -680,6 +700,7 @@ theorem mem_realResolventSet_complexify_iff
     lam ∈ (complexify A).realResolventSet ↔ lam ∈ A.realResolventSet := by
   exact ⟨complexify_realResolvent_mem A, realResolvent_mem_complexify A⟩
 
+omit [CompleteSpace E] in
 /-- Closed-operator real spectrum is exactly preserved by
 coordinatewise complexification. -/
 theorem closed_realSpectrum_complexify
@@ -690,6 +711,7 @@ theorem closed_realSpectrum_complexify
     lam ∉ A.realResolventSet
   rw [mem_realResolventSet_complexify_iff A lam]
 
+omit [CompleteSpace E] in
 /-- The real spectrum of a real closed operator is the genuine real spectrum
 of its complexification. -/
 theorem realSpectrum_complexify
@@ -701,6 +723,7 @@ theorem realSpectrum_complexify
   ext lam
   rfl
 
+omit [CompleteSpace E] [CompleteSpace F] in
 /-- Complexification preserves every constructor of the manuscript gap
 predicate. -/
 theorem unboundedSylvesterGap_complexify

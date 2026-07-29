@@ -181,6 +181,7 @@ theorem theorem63_directed_transverse_of_form_gap
     nlinarith [sq_pos_of_pos hn]
   exact sub_eq_zero.mp hzero
 
+omit [CompleteSpace H] in
 /-- Under the source gap every directed sine singular value is strictly below
 one, so the tangent has no pole. -/
 theorem theorem63_singularValues_sine_lt_one

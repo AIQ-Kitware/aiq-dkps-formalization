@@ -58,6 +58,7 @@ namespace UnboundedTrialBlock
 variable {A : DKClosedOperator (H := H)}
   {Z : Submodule ℂ H} [Z.HasOrthogonalProjection] [CompleteSpace Z]
 
+omit [CompleteSpace H] in
 /-- The bundled residual is the part of the unbounded action orthogonal to the
 trial subspace. -/
 theorem residual_eq_sub_starProjection
@@ -68,6 +69,7 @@ theorem residual_eq_sub_starProjection
           (A.toLinearMap ⟨(x : H), D.domain_le x.property⟩) := by
   rw [D.residual_apply, D.operator_apply]
 
+omit [CompleteSpace H] in
 /-- The bundled trial residual is orthogonal to the trial subspace. -/
 theorem residual_mem_orthogonal
     (D : UnboundedTrialBlock A Z) (x : Z) :
@@ -75,6 +77,7 @@ theorem residual_mem_orthogonal
   rw [D.residual_eq_sub_starProjection]
   exact Z.sub_starProjection_mem_orthogonal _
 
+omit [CompleteSpace H] in
 /-- The operator norm of the bundled residual supplies the columnwise bound
 used by the vector tangent theorem. -/
 theorem norm_sub_starProjection_le
