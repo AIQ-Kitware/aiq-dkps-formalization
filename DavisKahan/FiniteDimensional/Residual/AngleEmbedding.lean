@@ -32,6 +32,9 @@ noncomputable def sinThetaEmbedding (U : Submodule 𝕜 E)
   complementaryProjection U ∘ₗ X.toLinearMap
 
 omit [FiniteDimensional 𝕜 E] [FiniteDimensional 𝕜 F] in
+/-- On an *isometric* trial map the complementary block is the sine-Θ
+embedding, definitionally.  The two names exist because the block is defined
+for an arbitrary linear trial map and the embedding only for an isometric one. -/
 @[simp] theorem complementaryTrialBlock_toLinearMap (U : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] (X : F →ₗᵢ[𝕜] E) :
     complementaryTrialBlock U X.toLinearMap = sinThetaEmbedding U X :=

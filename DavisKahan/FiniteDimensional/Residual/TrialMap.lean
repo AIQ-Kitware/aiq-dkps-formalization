@@ -36,6 +36,9 @@ noncomputable def complementaryTrialBlock (U : Submodule 𝕜 E)
   complementaryProjection U ∘ₗ X
 
 omit [FiniteDimensional 𝕜 E] [FiniteDimensional 𝕜 F] in
+/-- On an isometric trial map the general residual is the ordinary one,
+definitionally.  Same pattern as `complementaryTrialBlock_toLinearMap`: the
+general form takes an arbitrary linear map, the specific one an isometry. -/
 @[simp] theorem generalResidual_toLinearMap (A : E →ₗ[𝕜] E)
     (X : F →ₗᵢ[𝕜] E) (M : F →ₗ[𝕜] F) :
     generalResidual A X.toLinearMap M = residual A X M :=
