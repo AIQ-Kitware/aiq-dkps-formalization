@@ -198,45 +198,45 @@ private theorem ambient_doubleAngleTangent_eq_extendCoordinate
   have hDXcontractive : ‖X‖ < 1 :=
     (norm_subspaceAngularCoordinate_le U Y).trans_lt hcontractive
   have hDXunit := isUnit_doubleAngleDenominator X hDXcontractive
+  -- Every cancellation is stated POINTWISE: under application the brackets are
+  -- automatic, whereas no associativity convention brackets `J⋆ J` together
+  -- inside a composition chain.  Same technique as `hG` above.
+  have hJU : ∀ u : U, U.subtypeL.adjoint (U.subtypeL u) = u := by
+    intro u
+    have h := congrArg (fun T : U →L[ℂ] U => T u)
+      (adjoint_subtypeL_comp_subtypeL U)
+    simpa using h
+  have hJJadjApp : ∀ y : E,
+      U.subtypeL (U.subtypeL.adjoint y) = U.starProjection y := by
+    intro y
+    have h := congrArg (fun T : E →L[ℂ] E => T y)
+      (subtypeL_comp_adjoint_subtypeL U)
+    simpa using h
+  have hJadjPerpApp : ∀ y : E,
+      U.subtypeL.adjoint (Uᗮ.starProjection y) = 0 := by
+    intro y
+    apply Subtype.ext
+    rw [Submodule.adjoint_subtypeL, ← Submodule.starProjection_apply]
+    simpa using (Submodule.starProjection_apply_eq_zero_iff (K := U)).mpr
+      (Uᗮ.starProjection_apply_mem y)
+  have hPerpJApp : ∀ u : U, Uᗮ.starProjection (U.subtypeL u) = 0 := by
+    intro u
+    rw [Submodule.subtypeL_apply]
+    exact (Submodule.starProjection_apply_eq_zero_iff (K := Uᗮ)).mpr
+      (Submodule.le_orthogonal_orthogonal U u.2)
+  have hDXinv : ∀ u : U, DX (Ring.inverse DX u) = u := by
+    intro u
+    have h := congrArg (fun T : U →L[ℂ] U => T u)
+      (Ring.mul_inverse_cancel DX hDXunit)
+    simpa using h
+  have hPerpIdem : ∀ y : E,
+      Uᗮ.starProjection (Uᗮ.starProjection y) = Uᗮ.starProjection y := by
+    intro y
+    exact Submodule.starProjection_eq_self_iff.mpr
+      (Uᗮ.starProjection_apply_mem y)
   have hDinvblock : Ring.inverse D =
       U.subtypeL ∘L Ring.inverse DX ∘L U.subtypeL.adjoint +
         Uᗮ.starProjection := by
-    -- Every cancellation is stated POINTWISE: under application the brackets are
-    -- automatic, whereas no associativity convention brackets `J⋆ J` together
-    -- inside a composition chain.  Same technique as `hG` above.
-    have hJU : ∀ u : U, U.subtypeL.adjoint (U.subtypeL u) = u := by
-      intro u
-      have h := congrArg (fun T : U →L[ℂ] U => T u)
-        (adjoint_subtypeL_comp_subtypeL U)
-      simpa using h
-    have hJJadjApp : ∀ y : E,
-        U.subtypeL (U.subtypeL.adjoint y) = U.starProjection y := by
-      intro y
-      have h := congrArg (fun T : E →L[ℂ] E => T y)
-        (subtypeL_comp_adjoint_subtypeL U)
-      simpa using h
-    have hJadjPerpApp : ∀ y : E,
-        U.subtypeL.adjoint (Uᗮ.starProjection y) = 0 := by
-      intro y
-      apply Subtype.ext
-      rw [Submodule.adjoint_subtypeL, ← Submodule.starProjection_apply]
-      simpa using (Submodule.starProjection_apply_eq_zero_iff (K := U)).mpr
-        (Uᗮ.starProjection_apply_mem y)
-    have hPerpJApp : ∀ u : U, Uᗮ.starProjection (U.subtypeL u) = 0 := by
-      intro u
-      rw [Submodule.subtypeL_apply]
-      exact (Submodule.starProjection_apply_eq_zero_iff (K := Uᗮ)).mpr
-        (Submodule.le_orthogonal_orthogonal U u.2)
-    have hDXinv : ∀ u : U, DX (Ring.inverse DX u) = u := by
-      intro u
-      have h := congrArg (fun T : U →L[ℂ] U => T u)
-        (Ring.mul_inverse_cancel DX hDXunit)
-      simpa using h
-    have hPerpIdem : ∀ y : E,
-        Uᗮ.starProjection (Uᗮ.starProjection y) = Uᗮ.starProjection y := by
-      intro y
-      exact Submodule.starProjection_eq_self_iff.mpr
-        (Uᗮ.starProjection_apply_mem y)
     have hcandidate :
         D ∘L (U.subtypeL ∘L Ring.inverse DX ∘L U.subtypeL.adjoint +
           Uᗮ.starProjection) = ContinuousLinearMap.id ℂ E := by
@@ -264,25 +264,32 @@ private theorem ambient_doubleAngleTangent_eq_extendCoordinate
               Uᗮ.starProjection) := by
           rw [Ring.inverse_mul_cancel D hDunit]
       _ = _ := one_mul _
-  unfold doubleAngleTangentOperator
-  -- NOTE on ordering, both directions are wrong and this is the lesser evil:
-  --   `rw [hYext, hDinvblock]` (this order) leaves `Ring.inverse D` unmatched,
-  --      because `hYext` has already rewritten the `Y` inside
-  --      `D = doubleAngleDenominator Y`;
-  --   `rw [hDinvblock, hYext]` fires both, but then `hYext` also rewrites the `Y`
-  --      inside `X := subspaceAngularCoordinate U Y`, producing the
-  --      self-referential `subspaceAngularCoordinate U (Uᗮ.subtypeL ∘ X ∘ …)` that
-  --      no longer folds back to `X` — strictly worse.
-  -- The real fix is to generalise `X` (and `D`) before rewriting, or to state
-  -- `hYext` for a fresh variable rather than for `Y` itself.
-  rw [hYext, hDinvblock]
+  -- Finish POINTWISE.  At operator level neither rewrite order works: `hYext`
+  -- first also rewrites the `Y` hidden inside `X := subspaceAngularCoordinate U Y`
+  -- (making it self-referential), and `hDinvblock` first leaves `Ring.inverse D`
+  -- unmatched because `D = doubleAngleDenominator Y` still mentions `Y`.
+  -- Applying to a vector sidesteps both.
+  have hYPerpApp : ∀ y : E, Y (Uᗮ.starProjection y) = 0 := by
+    intro y
+    have h := DFunLike.congr_fun hYP (Uᗮ.starProjection y)
+    rw [ContinuousLinearMap.comp_apply,
+      (Submodule.starProjection_apply_eq_zero_iff (K := U)).mpr
+        (Uᗮ.starProjection_apply_mem y)] at h
+    simpa using h.symm
   apply ContinuousLinearMap.ext
   intro x
-  simp only [smul_apply, ContinuousLinearMap.comp_apply, add_apply]
-  have hcross : X (U.subtypeL.adjoint (Uᗮ.starProjection x)) = 0 := by
-    simp
-  rw [hcross, map_zero, add_zero]
-  rfl
+  have hDinvApp : Ring.inverse D x
+      = U.subtypeL (Ring.inverse DX (U.subtypeL.adjoint x))
+        + Uᗮ.starProjection x := by
+    have h := congrArg (fun T : E →L[ℂ] E => T x) hDinvblock
+    simpa using h
+  have hYJ : Y (U.subtypeL (Ring.inverse DX (U.subtypeL.adjoint x)))
+      = Uᗮ.subtypeL (X (Ring.inverse DX (U.subtypeL.adjoint x))) := by
+    rw [hYext]
+    simp only [ContinuousLinearMap.comp_apply, hJU]
+  show (2 : ℂ) • Y (Ring.inverse D x)
+      = Uᗮ.subtypeL ((2 : ℂ) • X (Ring.inverse DX (U.subtypeL.adjoint x)))
+  rw [hDinvApp, map_add, hYPerpApp, add_zero, hYJ, map_smul]
 
 /-- The canonical ambient double-angle tangent is the modulus of the ambient
 extension of the graph-coordinate double-angle tangent. -/
