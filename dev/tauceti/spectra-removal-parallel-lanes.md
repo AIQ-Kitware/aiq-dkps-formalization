@@ -1,6 +1,6 @@
 # Spectra removal — open parallel lanes
 
-**Purpose.** The Spectra removal campaign is down to **9 files** carrying
+**Purpose.** The Spectra removal campaign is down to **7 files** carrying
 `import Spectra` (15 when this document was written), and they no longer form a
 chain: the spectral-measure chokepoint is built and green, so what is left
 splits into **lanes that touch disjoint files**. This document opens them for
@@ -24,10 +24,18 @@ someone else.
 | **SR-C** half-line form bounds | 1 | — | **DONE** (namek) |
 | **SR-D** Hilbert–Schmidt tensor | 5 | **21,581-line donor closure — needs re-plan + author coordination** | *open (measured by edward, aiq-gpu — see lane)* |
 | **SR-E** Rosenblum | 1 | intertwiner of disjoint spectra vanishes | claimed |
-| **SR-F** Experimental stragglers | 3 | three unrelated small items | **edward (aiq-gpu)** |
+| **SR-F** Experimental stragglers | 3 → **1** | `InfiniteProposition41` only | edward + namek (see below) |
 
-`import Spectra` in `DavisKahan/**`: **15 → 9**.  The nine remaining are exactly
-SR-D (5), SR-E (1) and SR-F (3).
+`import Spectra` in `DavisKahan/**`: **15 → 7**.  The seven remaining are SR-D
+(5), SR-E (1) and the single SR-F straggler `InfiniteProposition41.lean`.
+
+> **SR-F was worked twice.**  edward and namek both took it, from different
+> branches, within the same hour.  No damage — they happened to split it:
+> edward ported `OperatorAbsoluteValueComplex` (that version survived the merge)
+> and namek ported `FourierSemigroup`.  The lesson is the one the claim protocol
+> already states and neither of us followed strictly enough: **push the claim
+> row before the first edit, not with the first result.**  A claim that lands
+> after the work is done is not a claim.
 
 `InfiniteProposition41.lean` is counted in SR-F but also consumes
 `SelfAdjointOperator.ofBounded`; it should be taken **after** SR-A lands, or its
@@ -323,7 +331,36 @@ SR-D can build on it; the two lanes share no files.
 
 ---
 
-## SR-F — Experimental stragglers  *(open)*
+## SR-F — Experimental stragglers  *(namek — two of three done)*
+
+**Done.**
+
+* `OperatorAbsoluteValueComplex.lean` — a straight swap onto `ForTauCeti`'s
+  polar API, as predicted.  Two facts were missing and are proved locally:
+  `W⋆ T = |T|` (from `adjoint_polarPartial_polarPartial_apply_of_mem` plus
+  `modulus_apply_mem_polarInitial`) and `‖W‖ ≤ 1` (isometric on the initial
+  space, zero on its complement, Pythagoras).
+* `FourierSemigroup.lean` — `unitaryGroup` and `semigroup` are now *defined* as
+  `NormedSpace.exp`, so the whole `ExpBounded` layer drops out.  Three traps:
+  (i) `NormedSpace.exp_add_of_commute` sits in a `section Rat` needing
+  `NormedAlgebra ℚ 𝔸`, which does **not** synthesise for `H →L[ℂ] H` — use
+  `exp_add_of_commute_of_mem_ball` with `expSeries_radius_eq_top` instead;
+  (ii) `HasDerivAt.comp_ofReal` is `ℂ → ℂ` only, so the real-parameter
+  derivative needs `HasDerivAt.scomp` against `Complex.ofRealCLM.hasDerivAt`;
+  (iii) `simpa` on those `HasDerivAt` goals produces an instance-path mismatch
+  (`Complex.instNormedAddCommGroup.toAddCommGroup` vs `Complex.addCommGroup`) —
+  finish with `exact`, not `simpa`.
+  **Dropped:** `norm_semigroup_le_exp_norm`.  Mathlib has no
+  `‖exp x‖ ≤ Real.exp ‖x‖` for a general Banach algebra, only for `ℂ`, and the
+  theorem had no consumers anywhere in the tree.
+
+**Remaining: `InfiniteProposition41.lean`.**  It builds its own PVM through
+`SelfAdjointOperator.ofBounded` and the Stone group, for a *bounded* `C`.  The
+native replacement is `boundedSelfAdjointSpectralPVM C hC`, after which the
+generator layer disappears entirely; the form bound it derives from Spectra
+should come from the bounded Borel calculus instead.
+
+<details><summary>original lane description</summary>
 
 Three unrelated small items, all outside `defaultTargets` — so `lake build` will
 not catch regressions here and each must be checked with an explicit
@@ -335,6 +372,8 @@ is "no `.lean` outside `vendor/` and `external/` imports Spectra".
 | `Experimental/InfiniteDimensional/Sylvester/FourierSemigroup.lean` (890) | `YosidaHille.Approximation.ExpBounded.Unitary`, `CayleyTransform.BorelCalculus`. Per the plan's Mathlib-substitution table, `expBounded B t` is `NormedSpace.exp ((t : ℂ) • B)` and unitarity is `selfAdjoint.expUnitary` — most of this is substitution, not proof |
 | `Experimental/MathAhead/Section4/InfiniteProposition41.lean` (700) | `SpectralTheory.Algebra`, plus `SelfAdjointOperator.ofBounded` (take after SR-A) |
 | `Experimental/Scratch/SharedFoundations/Ideal/OperatorAbsoluteValueComplex.lean` (131) | polar decomposition of a **bounded** operator, which Mathlib does not have. `ForTauCeti`'s polar API is rectangular and strictly more general than the donor's (see plan §S1) — check it covers this before porting anything |
+
+</details>
 
 ---
 

@@ -19,7 +19,6 @@ namespace DavisKahanExt
 
 open MeasureTheory Set Filter
 open scoped InnerProductSpace BigOperators
-open Spectra
 
 noncomputable section
 
