@@ -63,10 +63,14 @@ noncomputable def singularValueVector (A : E →ₗ[𝕜] F) :
     Fin (min (finrank 𝕜 E) (finrank 𝕜 F)) → ℝ :=
   fun i => A.singularValues (i : ℕ)
 
+/-- Singular values are nonnegative, in the finite-vector packaging. -/
 theorem singularValueVector_nonneg (A : E →ₗ[𝕜] F) (i) :
     0 ≤ singularValueVector A i :=
   A.singularValues_nonneg _
 
+/-- The singular-value vector is decreasing.  This is what makes it a legitimate
+argument to the `lpGauge`/majorization machinery, which is stated for ordered
+sequences. -/
 theorem singularValueVector_antitone (A : E →ₗ[𝕜] F) :
     Antitone (singularValueVector A) := by
   intro i j hij
@@ -181,6 +185,9 @@ theorem singularValueVector_unitary_comp
   -- coercion rather than applied with `congrFun`
   simp only [singularValueVector, singularValues_unitary_comp U A]
 
+/-- Precomposing with a unitary leaves the singular values unchanged.  Together
+with `singularValueVector_unitary_comp` this gives two-sided unitary invariance,
+which is the whole reason the Schatten norms are well defined. -/
 theorem singularValueVector_comp_unitary
     (A : E →ₗ[𝕜] F) (V : E ≃ₗᵢ[𝕜] E) :
     singularValueVector (A ∘ₗ V.toLinearMap) = singularValueVector A := by
@@ -211,27 +218,38 @@ noncomputable def schattenNorm (p : ℝ) (hp : 1 ≤ p) :
       rw [singularValueVector_unitary_comp,
         singularValueVector_comp_unitary]]
 
+/-- The Schatten `p` norm *is* the `ℓᵖ` gauge of the singular-value vector,
+definitionally.  This is the lemma that turns Schatten statements into
+finite-vector ones. -/
 @[simp] theorem schattenNorm_apply (p : ℝ) (hp : 1 ≤ p) (A : E →ₗ[𝕜] F) :
     schattenNorm p hp A = FiniteVector.lpGauge p (singularValueVector A) :=
   rfl
 
+/-- Nonnegativity, inherited from the underlying gauge. -/
 theorem schattenNorm_nonneg (p : ℝ) (hp : 1 ≤ p) (A : E →ₗ[𝕜] F) :
     0 ≤ schattenNorm p hp A :=
   (schattenNorm p hp).nonneg A
 
+/-- The zero operator has zero Schatten norm at every exponent. -/
 @[simp] theorem schattenNorm_zero (p : ℝ) (hp : 1 ≤ p) :
     schattenNorm (𝕜 := 𝕜) (E := E) (F := F) p hp 0 = 0 :=
   (schattenNorm p hp).apply_zero
 
+/-- **The triangle inequality.**  This is the substantive one: it is not
+pointwise in the singular values, and comes from the majorization argument
+behind the `ℓᵖ` gauge. -/
 theorem schattenNorm_add_le (p : ℝ) (hp : 1 ≤ p) (A B : E →ₗ[𝕜] F) :
     schattenNorm p hp (A + B) ≤ schattenNorm p hp A + schattenNorm p hp B :=
   (schattenNorm p hp).add_le A B
 
+/-- **Absolute homogeneity.** -/
 theorem schattenNorm_smul (p : ℝ) (hp : 1 ≤ p) (a : 𝕜)
     (A : E →ₗ[𝕜] F) :
     schattenNorm p hp (a • A) = ‖a‖ * schattenNorm p hp A :=
   (schattenNorm p hp).smul_eq a A
 
+/-- **Two-sided unitary invariance**: the Schatten norms are unitarily invariant
+norms, which is the property the Davis--Kahan estimates are stated against. -/
 theorem schattenNorm_invariant (p : ℝ) (hp : 1 ≤ p)
     (U : F ≃ₗᵢ[𝕜] F) (V : E ≃ₗᵢ[𝕜] E) (A : E →ₗ[𝕜] F) :
     schattenNorm p hp (U.toLinearMap ∘ₗ A ∘ₗ V.toLinearMap) =
@@ -358,6 +376,9 @@ theorem schattenNorm_two_apply (A : E →ₗ[𝕜] F) :
 noncomputable def schattenNormInf : RectangularUnitarilyInvariantNorm 𝕜 E F :=
   opNorm
 
+/-- The `S∞` norm evaluates to the ordinary operator norm, definitionally —
+`schattenNormInf` is `opNorm` under a name that places it at the end of the
+Schatten scale. -/
 @[simp] theorem schattenNormInf_apply (A : E →ₗ[𝕜] F) :
     schattenNormInf A = ‖A.toContinuousLinearMap‖ :=
   rfl
