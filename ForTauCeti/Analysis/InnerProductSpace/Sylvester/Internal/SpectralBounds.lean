@@ -12,6 +12,19 @@ import ForTauCeti.Analysis.InnerProductSpace.SylvesterBound
 Eigenvalue-to-quadratic-form conversions and centered spectral bounds shared by
 the interval and arbitrary-distance Sylvester arguments. These declarations are
 implementation support rather than part of the public theorem surface.
+
+## Provenance
+
+*Moved, not restated.*  This file was
+`DavisKahan/FiniteDimensional/Sylvester/Internal/SpectralBounds.lean`
+until 2026-07-29, when lane Y3(b4) moved the whole remaining sin-Θ closure into
+the staging layer.  Statements, proofs, signatures and namespaces are unchanged;
+the declarations already lived in `TauCeti.*`, so the move was a path change and
+an import repoint.
+
+Y3(b2) and Y3(b3) are what made it possible: before them this file's import
+closure crossed `ForMathlib`, which the `ForTauCeti` layer rule forbids.
+
 -/
 
 namespace TauCeti

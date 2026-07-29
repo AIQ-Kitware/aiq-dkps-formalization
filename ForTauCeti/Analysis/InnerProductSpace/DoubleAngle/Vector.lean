@@ -48,7 +48,8 @@ The proof is elementary and phase-free.  Decompose `x = y + z` with `y = P x`,
 resulting scalar equations combine (eliminating the eigenvalue) into the real
 identity
 
-`‖z‖² re ⟪y, T y⟫ - ‖y‖² re ⟪z, T z⟫ + ‖z‖² re ⟪y, H y⟫ - ‖y‖² re ⟪z, H z⟫ + (‖z‖² - ‖y‖²) re ⟪y, H z⟫ = 0`,
+`‖z‖² re ⟪y, T y⟫ - ‖y‖² re ⟪z, T z⟫ + ‖z‖² re ⟪y, H y⟫ - ‖y‖² re ⟪z, H z⟫
++ (‖z‖² - ‖y‖²) re ⟪y, H z⟫ = 0`,
 
 with no complex phase alignment needed (`re (c² w - s² conj w) = (c² - s²) re w`
 identically).  Testing the quadratic form of `H` against the two orthogonal
@@ -75,6 +76,19 @@ recovers the left-hand side of the identity and yields
   J. Math. Anal. Appl. 6 (1963), 159–173 (the sharp two-subspace estimate).
 * C. Davis and W. M. Kahan, *The rotation of eigenvectors by a
   perturbation. III*, SIAM J. Numer. Anal. 7 (1970), 1–46 (the sin 2Θ theorem).
+
+## Provenance
+
+*Moved, not restated.*  This file was
+`DavisKahan/FiniteDimensional/DoubleAngle/Vector.lean`
+until 2026-07-29, when lane Y3(b4) moved the whole remaining sin-Θ closure into
+the staging layer.  Statements, proofs, signatures and namespaces are unchanged;
+the declarations already lived in `TauCeti.*`, so the move was a path change and
+an import repoint.
+
+Y3(b2) and Y3(b3) are what made it possible: before them this file's import
+closure crossed `ForMathlib`, which the `ForTauCeti` layer rule forbids.
+
 -/
 
 namespace TauCeti
@@ -119,7 +133,8 @@ private theorem norm_smul_add_smul_sq {y z : E} (hyz : ⟪y, z⟫_𝕜 = 0) (γ 
 `y ∈ U`, `z ∈ Uᗮ` for a `T`-invariant subspace `U` of a symmetric operator,
 and `y + z` is an eigenvector of `T + H` with real eigenvalue `μ`, then
 
-`‖z‖² re ⟪y, T y⟫ - ‖y‖² re ⟪z, T z⟫ + ‖z‖² re ⟪y, H y⟫ - ‖y‖² re ⟪z, H z⟫ + (‖z‖² - ‖y‖²) re ⟪y, H z⟫ = 0`.
+`‖z‖² re ⟪y, T y⟫ - ‖y‖² re ⟪z, T z⟫ + ‖z‖² re ⟪y, H y⟫ - ‖y‖² re ⟪z, H z⟫
++ (‖z‖² - ‖y‖²) re ⟪y, H z⟫ = 0`.
 
 The eigenvalue `μ` is eliminated; no location assumption on it is ever used.
 This identity is the shared engine of the sin 2θ theorem below and of the

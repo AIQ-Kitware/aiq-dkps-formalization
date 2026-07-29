@@ -139,33 +139,23 @@ variable {U V : Submodule ℂ H} {U' V' : Submodule ℂ H'}
 /-- Assemble the elementary and generic equivalences into an ambient unitary. -/
 noncomputable def ambient
     (D : TwoProjectionOperatorEquivalence U V U' V') : H ≃ₗᵢ[ℂ] H' :=
-  (orthogonalDecompositionEquiv (halmosTrivialPart U V)).trans
+  (halmosTrivialPart U V).orthogonalDecomposition.trans
     (LinearIsometryEquiv.withLpProdCongr 2 D.trivialEquiv D.genericEquiv)
-      |>.trans (orthogonalDecompositionEquiv (halmosTrivialPart U' V')).symm
+      |>.trans (halmosTrivialPart U' V').orthogonalDecomposition.symm
 
 private theorem ambient_apply_trivial
     (D : TwoProjectionOperatorEquivalence U V U' V')
     (x : halmosTrivialPart U V) :
     D.ambient (x : H) = (D.trivialEquiv x : H') := by
-  have hfix : (halmosTrivialPart U V).starProjection (x : H) = (x : H) :=
-    (halmosTrivialPart U V).starProjection_eq_self_iff.mpr x.2
-  have hperp : (halmosTrivialPart U V)ᗮ.starProjection (x : H) = 0 := by
-    rw [(halmosTrivialPart U V).starProjection_orthogonal_apply, hfix, sub_self]
   simp [ambient, LinearIsometryEquiv.trans_apply,
-    orthogonalCoordinates, orthogonalCoordinatesInv,
-    hfix, Subtype.coe_eta]
+    Submodule.orthogonalProjectionOnto_orthogonal_apply_eq_zero x.2]
 
 private theorem ambient_apply_generic
     (D : TwoProjectionOperatorEquivalence U V U' V')
     (x : halmosGenericPart U V) :
     D.ambient (x : H) = (D.genericEquiv x : H') := by
-  have hfix : (halmosTrivialPart U V)ᗮ.starProjection (x : H) = (x : H) :=
-    (halmosTrivialPart U V)ᗮ.starProjection_eq_self_iff.mpr x.2
-  have hK0 : (halmosTrivialPart U V).starProjection (x : H) = 0 :=
-    (Submodule.starProjection_apply_eq_zero_iff (halmosTrivialPart U V)).mpr x.2
   simp [ambient, LinearIsometryEquiv.trans_apply,
-    orthogonalCoordinates, orthogonalCoordinatesInv,
-    hK0, Subtype.coe_eta]
+    Submodule.orthogonalProjectionOnto_eq_zero_iff.mpr x.2]
 
 /-- The assembled ambient unitary intertwines the left projections. -/
 theorem ambient_intertwines_left

@@ -3,15 +3,28 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
-import DavisKahan.FiniteDimensional.Sylvester.Interval
-import DavisKahan.FiniteDimensional.Sylvester.Internal.SpectralBounds
-import DavisKahan.FiniteDimensional.Sylvester.Internal.ReciprocalMultiplier
+import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Interval
+import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Internal.SpectralBounds
+import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Internal.ReciprocalMultiplier
 
 /-!
 # Sylvester estimates for arbitrary separated spectra
 
 The reciprocal spectral multiplier, finite orbit certificates, and the sharp
 `pi / 2` Ky Fan and arbitrary-UI-norm bounds over real and complex scalars.
+
+## Provenance
+
+*Moved, not restated.*  This file was
+`DavisKahan/FiniteDimensional/Sylvester/SpectralDistance.lean`
+until 2026-07-29, when lane Y3(b4) moved the whole remaining sin-Θ closure into
+the staging layer.  Statements, proofs, signatures and namespaces are unchanged;
+the declarations already lived in `TauCeti.*`, so the move was a path change and
+an import repoint.
+
+Y3(b2) and Y3(b3) are what made it possible: before them this file's import
+closure crossed `ForMathlib`, which the `ForTauCeti` layer rule forbids.
+
 -/
 
 namespace TauCeti
@@ -100,7 +113,7 @@ theorem sylvester_eigenbasis_coefficient_equation
     inner_smul_right, RCLike.conj_ofReal, sub_mul] using hinner
 
 /-- Restrict scalars on the Sylvester map space from `𝕜` to `ℝ` so the
-barycentric theorem can state real convex-hull membership.-/
+barycentric theorem can state real convex-hull membership. -/
 local instance realModuleSylvesterMap : Module ℝ (E →ₗ[𝕜] F) :=
   Module.compHom (E →ₗ[𝕜] F) (algebraMap ℝ 𝕜)
 
@@ -113,7 +126,7 @@ barycenter, exact finite certificate, arbitrary unitarily invariant norm,
 residual, and perturbation statements are formal consequences.
 
 This statement deliberately contains no convex-hull or finite-certificate
-bookkeeping.-/
+bookkeeping. -/
 theorem kyFan_sylvester_le_of_spectralDistance_analytic
     {A : F →ₗ[𝕜] F} {B : E →ₗ[𝕜] E} {X C : E →ₗ[𝕜] F}
     (hA : A.IsSymmetric) (hB : B.IsSymmetric)
@@ -206,7 +219,7 @@ unconditional reciprocal Ky Fan theorem; this barycentric theorem and the
 certificate extraction are finite-algebra and orbit-convexity
 consequences, and they attain the exact mass `π / 2` for the particular
 Sylvester solution even though the universal undoubled multiplier
-certificate at that mass is refuted.-/
+certificate at that mass is refuted. -/
 theorem sylvester_hasFiniteUnitaryOrbitCertificate_of_spectralDistance
     {A : F →ₗ[𝕜] F} {B : E →ₗ[𝕜] E} {X C : E →ₗ[𝕜] F}
     (hA : A.IsSymmetric) (hB : B.IsSymmetric)

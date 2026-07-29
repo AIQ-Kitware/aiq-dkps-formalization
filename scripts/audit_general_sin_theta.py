@@ -24,19 +24,19 @@ from typing import Iterable
 EXPECTED_FOUNDATIONS = frozenset({"propext", "Classical.choice", "Quot.sound"})
 
 BASE_BUILD_TARGETS = (
-    "DavisKahan.Experimental.InfiniteDimensional.SinTheta.RealSpecializations",
+    "DavisKahan.SinTheta.Real.Specializations",
     "DavisKahan.Sources.DavisKahan1970.GeneralSinTheta",
     "DavisKahan.Sources.DavisKahan1970.FullPartIII",
 )
 
 EXTENSION_BUILD_TARGETS = (
-    "DavisKahan.Experimental.InfiniteDimensional.Core.ReducingRestrictionExtras",
-    "DavisKahan.Experimental.InfiniteDimensional.SinTheta.NaturalGenuineGeneralized",
-    "DavisKahan.Experimental.InfiniteDimensional.SinTheta.NaturalReducing",
-    "DavisKahan.Experimental.InfiniteDimensional.SinTheta.NaturalBounded",
-    "DavisKahan.Experimental.InfiniteDimensional.SinTheta.NaturalGapConvenience",
-    "DavisKahan.Experimental.InfiniteDimensional.SinTheta.NaturalTwoSubspace",
-    "DavisKahan.Experimental.InfiniteDimensional.SinTheta.NaturalExamples",
+    "DavisKahan.SpectralTheory.ReducingSubspace.RestrictionExtras",
+    "DavisKahan.SinTheta.Natural.GenuineGeneralized",
+    "DavisKahan.SinTheta.Natural.Reducing",
+    "DavisKahan.SinTheta.Natural.Bounded",
+    "DavisKahan.SinTheta.Natural.GapConvenience",
+    "DavisKahan.SinTheta.NaturalTwoSubspace",
+    "DavisKahan.SinTheta.Natural.Examples",
     "DavisKahan.Sources.DavisKahan1970.GeneralSinThetaExtensions",
     "DavisKahan.Sources.DavisKahan1970.FullPartIIIExtensions",
 )
