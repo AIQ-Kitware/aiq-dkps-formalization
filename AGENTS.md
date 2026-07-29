@@ -20,6 +20,30 @@ hand-count). The ledger `.llm_resource_tally/ledger/` (at this repo's root) is a
 per-session, concurrency-safe, and stores measurements only.
 <!-- END llm_resource_tally -->
 
+## Parallel agent coordination
+
+Several agents work this repository at once, on separate branches. Coordination
+lives in [`dev/LANES.md`](dev/LANES.md); read its `## Rules` and
+`## Branch and sync protocol` before autonomous work.
+
+The three that cost the most when skipped:
+
+- **Claim → commit → push → then edit.** A row you have committed but not pushed
+  is invisible to every other agent. Two agents once claimed the same lane three
+  minutes apart and both did all of it.
+- **`git fetch --all` and check every remote branch before claiming**, then merge
+  what is ahead of you so the row lands on current state. Re-fetch more often
+  while you have a channel open with another agent — their branch moves while
+  you work.
+- **Never resolve a `.lean` conflict with a blanket take-theirs/take-mine.** Both
+  sides compile, so no gate catches what it drops; this has silently lost
+  docstrings once and nearly lost a 161-line port.
+
+**These rules bind autonomous lane work.** If your human handed you a specific
+task, you are not required to claim a row for it — but if a live row already
+names your files, coordinate rather than overwrite, and claim once a direct task
+grows into a multi-file campaign.
+
 ## Lean proof-engineering rules
 
 Before substantial work in `ForMathlib/Analysis/InnerProductSpace/`, read
