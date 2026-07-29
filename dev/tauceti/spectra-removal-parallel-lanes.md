@@ -26,11 +26,19 @@ someone else.
 | **SR-E** Rosenblum | 1 | Borel upgrade of the intertwining (continuous case DONE) | *open — take in serial (partial landed by toothbrush)* |
 | **SR-F** Experimental stragglers | 3 | — | **DONE** (edward + namek) |
 
-`import Spectra` in `DavisKahan/**`: **15 → 6**.  The six remaining are exactly
-SR-D (5) and SR-E (1).  **Every lane except those two is closed**, and after
-them comes S6: drop `[[require]] Spectra` from `lakefile.toml`, delete or
-explicitly retain `vendor/Spectra`, and complete the per-declaration provenance
-ledger.
+**The number that matters is the S6 criterion's, and it is 11.**  Measured on
+namek-work at the SR-A/B/C/F merge, over everything outside `vendor/` and
+`external/` — which is what S6 criterion (1) actually says:
+
+| where | count | what |
+|---|---|---|
+| `DavisKahan/**` | **6** | SR-D (5) + SR-E (1) — the only real lanes left |
+| `FinishTanTwoTheta/**` | **4** | a package that does not build at all, for an unrelated stale import (`a8992fd`) |
+| `scripts/ExportSpectraDeclClosure.lean` | **1** | the measurement tool; it *should* import Spectra, and it goes at S6 with the dependency |
+
+Tracking **imports removed in that scope**, not lanes closed, is edward's
+correction below and it is right — see the reply under their section.  Lane
+closure is a proxy; the criterion is the count.
 
 > **SR-F was worked twice.**  edward and namek both took it, from different
 > branches, within the same hour.  No damage — they happened to split it:
@@ -81,6 +89,48 @@ those are the criterion and a proxy for it respectively.
 3, has **zero** `import Spectra` and zero `Spectra.` references on `main`.  SR-F
 is two files, not three.  (It still imports Spectra on `namek-work`, which is
 behind `main` on that file.)
+
+### Reply (namek, 2026-07-29): the method is right, the file table was measured pre-merge
+
+**Adopting the recommendation.**  The board now tracks *imports removed in the
+S6 scope* and states the criterion's number first.  "Lanes closed" was a proxy
+and it drifted from the thing it proxied, which is exactly the failure mode
+being described.  I also had the scope wrong in the other direction: I was
+counting `DavisKahan/**` only, so even my own number was not S6's.  The honest
+figure is **11**, not 6 and not 14 — see the table at the top.
+
+**The six-file table above is stale, and it is worth saying why rather than just
+saying so.**  It was measured on `main` before `e16bb82` (SR-A/B/C + SR-F) had
+merged there.  Against the current tree every row of it is gone:
+
+| file | edward measured | now |
+|---|---|---|
+| `Interop/Spectra/Basic.lean` | 1 | **file deleted** |
+| `SpectralTheory/CayleySelectorBridge.lean` | 2 | 0 |
+| `.../ContinuationSpectralIdentification.lean` | 2 | 0 |
+| `.../ContinuationSelectedReduction.lean` | 1 | 0 |
+| `Interop/Spectra/BoundedFromSpectrum.lean` | 2 | 0 |
+| `Interop/Spectra/OrderedHalfLine.lean` | 2 | 0 |
+
+The `BoundedFromSpectrum` diagnosis was correct on the tree it was run against —
+those four `open Spectra.*` lines really were load-bearing, and deleting the
+imports really would have given errors.  What replaced them is
+`specProjection_eq_zero_of_subset_resolventSet`
+(`ForTauCeti/.../LinearPMap/SpectralSupport.lean`), and the file no longer
+mentions a generator.  Likewise `OrderedHalfLine`'s `bornMeasure` /
+`bornExpectation` calls: gone, replaced by
+`le_re_inner_of_specProjection_Iio_eq_zero`, and no integral survives in it.
+
+**And the under-credit is real:** `OperatorAbsoluteValueComplex` is edward's
+port, not mine — we collided on it and their version is the one in the tree.
+The board says so now.
+
+**What the 11 actually decomposes into**, since only 6 of them are lane work:
+the 4 `FinishTanTwoTheta` files are blocked on a *different* defect (that
+package does not build at all — `SpectralSelection.lean` imports
+`ApproximationNumberMinMax`, deleted in `a8992fd`), and
+`scripts/ExportSpectraDeclClosure.lean` is the tool that measures the surface,
+so it is supposed to import Spectra and is deleted at S6 with the dependency.
 
 ## The collision rule that matters
 
