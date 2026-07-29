@@ -61,6 +61,14 @@ universe u
 variable {E : Type u} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
   [CompleteSpace E]
 
+/-- An orthogonally complemented subspace is complete.  `DavisKahan.SinTheta.Natural.Reducing`
+declares the same instance, but `local`, so it is not exported to importing modules and has to
+be repeated here.  Without it every `ContinuousLinearMap.adjoint` on a subspace in this file
+fails to elaborate with `failed to synthesize CompleteSpace ↥U`. -/
+noncomputable local instance completeSpaceOfHasOrthogonalProjection
+    (W : Submodule ℂ E) [W.HasOrthogonalProjection] : CompleteSpace W :=
+  (Submodule.isComplete_coe_of_hasOrthogonalProjection W).completeSpace_coe
+
 private theorem ambientAngularOperator_eq_extendCoordinate
     (U : Submodule ℂ E) [U.HasOrthogonalProjection]
     (Y : E →L[ℂ] E) (hY : IsAngularOperator U Y) :
@@ -359,30 +367,37 @@ private theorem tanTwoAngleOperatorC_eq_modulus_ambientGraphTangent
           have hy := Y.le_opNorm x
           nlinarith [norm_quarterAcuteAngularOperator_lt_one U V hquarter,
             norm_nonneg x, norm_nonneg (Y x)]
-      exact CFC.rpow_nonneg (a := D) (y := (-1 : ℝ))
+      -- `Ring.inverse` of a strictly positive element is its CFC `(-1)`-power,
+      -- which is nonnegative.  `IsStrictlyPositive` is by definition
+      -- `0 ≤ D ∧ IsUnit D`, both of which are already in hand.
+      have hDsp : IsStrictlyPositive D := ⟨hDnonneg, hDunit⟩
+      rw [CFC.inverse_eq_rpow_neg_one hDsp]
+      exact CFC.rpow_nonneg
     have hcomm : Commute (ContinuousLinearMap.modulus Y) (Ring.inverse D) := by
       have hmodG : Commute (ContinuousLinearMap.modulus Y) G := by
+        show Commute (ContinuousLinearMap.modulus Y) (Y.adjoint ∘L Y)
         rw [← ContinuousLinearMap.modulus_mul_self Y]
-        exact Commute.self_mul_left _
+        exact (Commute.refl _).mul_right (Commute.refl _)
       have hmodD : Commute (ContinuousLinearMap.modulus Y) D := by
-        dsimp [D]
-        exact hmodG.sub_right (Commute.one_right _)
+        show Commute (ContinuousLinearMap.modulus Y)
+          (ContinuousLinearMap.id ℂ E - G)
+        exact (Commute.one_right _).sub_right hmodG
       exact hmodD.units_inv_right
     have hprod : (0 : E →L[ℂ] E) ≤
         ContinuousLinearMap.modulus Y ∘L Ring.inverse D :=
-      hmod.mul_of_commute hDinvNonneg hcomm
-    simpa only [ofReal_ofNat] using
+      hcomm.mul_nonneg hmod hDinvNonneg
+    simpa only [Complex.ofReal_ofNat] using
       smul_nonneg (show (0 : ℝ) ≤ 2 by norm_num) hprod
   have hMformula :
       M = (2 : ℂ) • (ContinuousLinearMap.modulus Y ∘L Ring.inverse D) := by
-    apply eq_modulus_of_nonneg_of_mul_self_eq hCandidateNonneg
+    apply ContinuousLinearMap.eq_modulus_of_nonneg_of_mul_self_eq hCandidateNonneg
     rw [hMsq]
     noncomm_ring
   have hSCformula : Sang ∘L Cang =
       ContinuousLinearMap.modulus Y ∘L R ∘L P := by
     have hleftNonneg : (0 : E →L[ℂ] E) ≤ Sang ∘L Cang :=
-      (sinAngleOperatorDirectedC_nonneg U V).mul_of_commute
-        (cosAngleOperatorC_nonneg U V) hSCcomm
+      hSCcomm.mul_nonneg (sinAngleOperatorDirectedC_nonneg U V)
+        (cosAngleOperatorC_nonneg U V)
     have hrightNonneg : (0 : E →L[ℂ] E) ≤
         ContinuousLinearMap.modulus Y ∘L R ∘L P := by
       -- all three factors are nonnegative functions of `G` on `U`
