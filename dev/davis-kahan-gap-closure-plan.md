@@ -1008,7 +1008,7 @@ the v5 remaining-work table above.)*
 | 16 | W0.1 | Singular-value glue (Frobenius², contraction, trace of abs) | 3/5 | Finsupp indexing friction; otherwise Parseval-level |
 | 17 | W4.2 | Singular-value Weyl + dictionary | 3/5 | Sorting/indexing alignment, Weyl already local |
 | 18 | W6.2 | tan2θ under vanishing pinch | 3/5 | Marginal cost over W6.1 |
-| 19 | W3.2 | `|tr(UA)| ≤ tr A` for positive A | 2/5 | One Cauchy–Schwarz + existing `sq_norm_sqrt_apply` |
+| 19 | W3.2 | `\|tr(UA)\| ≤ tr A` for positive A | 2/5 | One Cauchy–Schwarz + existing `sq_norm_sqrt_apply` |
 | 20 | W1.2 | Interval subspaces + two-sided Weyl bridge | 2/5 | Predicate plumbing over W1.1 |
 | 21 | W4.1 | Gram perturbation bound | 2/5 | Triangle inequality + adjoint norm |
 | 22 | W2.1 | Sorted rearrangement lemma | 2/5 | Mathlib rearrangement API plumbing |
