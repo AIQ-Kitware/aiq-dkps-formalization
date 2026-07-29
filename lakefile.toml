@@ -21,11 +21,20 @@ autoImplicit = false
 # Mathlib-staging library: paper-agnostic results restated in Mathlib idiom,
 # one file per proposed Mathlib destination path.  See ForMathlib/README.md.
 
-# BEGIN vendored upstream Spectra snapshot
+# BEGIN retired upstream Spectra snapshot
+#
+# RETIRED 2026-07-29.  Nothing in the production libraries imports Spectra any
+# more -- `DavisKahan`, `ForTauCeti` and the paper endpoints are Spectra-free,
+# and the transitive-closure check reports exactly one module still reaching it:
+# `FinishTanTwoTheta/**/GroundedImports.lean`, which jon has explicitly placed
+# out of scope.  The requirement is kept ONLY for that module, and the snapshot
+# has been moved from `vendor/` to `retired/` so that agents stop reaching for
+# it as a source of new work.  Delete this block once FinishTanTwoTheta is
+# repointed.
 [[require]]
 name = "Spectra"
-path = "vendor/Spectra"
-# END vendored upstream Spectra snapshot
+path = "retired/Spectra"
+# END retired upstream Spectra snapshot
 
 # BEGIN Tau Ceti local dependency (Milestone 2 extraction target)
 # Tau Ceti is the permanent generic-mathematics library the reusable Davis--Kahan
