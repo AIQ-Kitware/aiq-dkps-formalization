@@ -18,16 +18,25 @@ real work** and both others are deliberate:
 **Lanes SR-A, SR-B, SR-C, SR-E and SR-F are closed.**  Convergence Wave 3 is
 closed too.  Everything is on `origin/namek-work` and merged to `main`.
 
-## What S6 now requires — this changed, and it is easier than the plan says
+## What S6 now requires — this changed twice, read it
 
-jon, 2026-07-29: **`vendor/Spectra` does not have to be deleted.**  The
-requirement is that *nothing depends on it*.  Our own mathematics inside it
-moves to `ForTauCeti` where there is an API home; where there is not, it may stay
-in `vendor/` as inert provenance.
+jon, 2026-07-29:
 
-So the old worry — that deleting `vendor/` would destroy the 2,589 lines of
-DKPS-authored mathematics still sitting there — is no longer a hazard.  Do not
-plan around deleting the directory.
+1. **`vendor/Spectra` is not deleted.**  The requirement is that *nothing
+   depends on it*.
+2. **It is moved to a `retired/` folder**, not removed — *"that will prevent
+   other agents from reusing it"*, which is exactly the point.  Retiring stops
+   new dependencies forming while keeping every line available for reference and
+   for the ports still to come.
+
+So S6 is now: drop the `[[require]] Spectra` block from `lakefile.toml`, confirm
+green, move the vendored tree to `retired/`, and relocate to `ForTauCeti` the
+DKPS-authored files that have an API home there.
+
+**The old hazard is gone.**  Deleting `vendor/` would have destroyed the 2,589
+lines of our own mathematics still sitting in it; retiring destroys nothing.  Do
+not plan around deleting the directory, and do not treat "retired" as a synonym
+for "deleted" — the distinction is the whole reason for the move.
 
 Provenance was also scoped down: **authorship pointer plus divergence notes**,
 not the nine-field schema.  The record for all six lanes is in
@@ -46,18 +55,68 @@ product (`lp.instInnerProductSpace`) and completeness.  Landed so far in
 * `memLp_columns_iff` — Hilbert–Schmidt membership *is* `ℓ²` membership of the columns;
 * `summable_norm_columnSeries` — the column series of an `ℓ²` family converges absolutely.
 
-In flight: `ofLp`, the operator with prescribed columns, and the round trips.
+**D1 is finished.**  `ofLp`'s bound is Cauchy–Schwarz in the rescaled form
+`ab ≤ (s a² + b²/s)/2` at `s = ‖f‖/‖x‖`, which avoids building the `ℓ²` inner
+product of the two norm families and so avoids the `lp`-inner plumbing entirely.
+The round trips are continuity plus the basis expansion one way, and
+orthonormality (`b.repr (b i)` is a single) the other.
+
+**I am now on D3 unless someone claims it first** — say so in `LANES.md` and I
+will hand over rather than duplicate.
 
 ## What you can expect from me, in order
 
-1. **The `HS ≃ lp` bijection** — next.  After this, `HS(F, E)` is a Hilbert
-   space in `ForTauCeti` with no tensor-product development anywhere.
+1. ~~The `HS ≃ lp` bijection~~ — **done**, `8c5539d6`.
 2. **The Sylvester operator on it and its spectral-gap inverse.**  This is where
    the sharp `δ⁻¹` lives and it is the only irreducible part of SR-D.
 3. **The four consumer repoints** — `HilbertSchmidt{DefectFirst,Pairwise}`,
    `SylvesterHilbertSchmidt`, `HilbertSchmidtTensor`.
 4. **S6**: drop `[[require]] Spectra` from `lakefile.toml`, confirm green, and
    relocate the DKPS-authored `vendor/` files that have an API home.
+
+## D3's crux, measured — and the two routes compose
+
+**The remaining obstacle in D3 is self-adjointness of the Sylvester operator**
+`𝒮 : Z ↦ A Z - Z B` on `HS(F, E)`.  Everything downstream needs it, because
+`spectralPVM` and therefore `gapInverse` are stated for self-adjoint operators.
+
+Spectra gets it from Stone: `𝒮` is the generator of the unitary group
+`W t Z = U_A t ∘ Z ∘ (U_B t)⋆`, and generators of one-parameter unitary groups
+are self-adjoint.  **The tree does not have that direction.**  `genToGroup` is
+the converse (self-adjoint → group), and searching `ForTauCeti` for
+`IsSelfAdjoint (generator …)` returns nothing.  Proving it would need the
+Hille–Yosida resolvent integral `R(∓i) = ∓i ∫₀^∞ e^{∓t} U(t) dt`.
+
+**That is avoidable, and the way round is the pleasing part.**  What the tree
+*does* have is von Neumann's criterion,
+`OneParameterUnitaryGroup.isSelfAdjoint_of_surjective_addSub`: a symmetric
+operator whose `A + i` and `A - i` are both surjective is self-adjoint.  So `𝒮`
+is self-adjoint as soon as `𝒮 ± i` are surjective — and **surjectivity is exactly
+what the Fourier/semigroup formula already in the tree provides**
+(`Experimental/…/Sylvester/FourierSemigroup.lean`):
+`X = ∫ μ_δ(t) U(-t) C V(t) dt` solves `A X - X B = C` whenever the two spectra
+are separated, and for `𝒮 ± i` they are separated by `1` in the imaginary
+direction for free.
+
+**The constant does not matter there.**  The Fourier route was ruled out for the
+*theorem* because it yields `π/(2δ)` instead of the sharp `δ⁻¹` — but
+surjectivity is a existence statement and is indifferent to constants.  So:
+
+* **Fourier** ⟹ `𝒮 ± i` surjective ⟹ `𝒮` self-adjoint (von Neumann);
+* **spectral** ⟹ the sharp `δ⁻¹` (`apply_gapInverse`, landed).
+
+The two routes compose, each used for the thing it is actually good at, and
+Stone's forward direction is not needed anywhere.
+
+**Remaining concrete steps in D3:**
+
+1. `𝒮` as a `LinearPMap` on `lp (fun _ : ι => E) 2` via D1's bijection — no new
+   type is needed, since `lp` already carries the inner product and
+   completeness;
+2. symmetry of `𝒮` (a two-line computation from self-adjointness of `A` and `B`);
+3. surjectivity of `𝒮 ± i` from the Fourier formula;
+4. self-adjointness by `isSelfAdjoint_of_surjective_addSub`;
+5. the vector gap from the pairwise spectral gap, then `apply_gapInverse`.
 
 ## Two things worth taking from the closed lanes
 
@@ -82,7 +141,22 @@ had been dropped.  That is no longer the situation and holding it serially is
 blocking people.  **Only D1 is mine.**  The other three are specified below and
 are free; claim in `dev/LANES.md` before the first edit.
 
-### D1 — the `HS ≃ lp` bijection  *(namek, in progress — do not take)*
+### D1 — the `HS ≃ lp` bijection  *(**DONE** — namek, `8c5539d6`)*
+
+**D3 is unblocked as of now.**  `HS(F, E)` has a Hilbert-space home built from
+Mathlib's `lp`, with no tensor-product development anywhere in the route.
+Importable API in `ForTauCeti/Analysis/InnerProductSpace/HilbertSchmidtLp.lean`:
+
+| declaration | content |
+|---|---|
+| `columns b T` | the column family `i ↦ T (b i)` |
+| `memLp_columns_iff` | Hilbert–Schmidt membership **is** `ℓ²` membership of the columns |
+| `ofLp b f` | the bounded operator with prescribed columns, `‖ofLp b f‖ ≤ ‖f‖` |
+| `ofLp_columns`, `columns_ofLp` | the two round trips — so this is a bijection, not an embedding |
+| `summable_sq`, `tsum_sq_eq_norm_sq` | the two `lp`-norm facts everything above will use |
+
+Whoever takes D3 needs nothing further from me.
+
 
 `ForTauCeti/Analysis/InnerProductSpace/HilbertSchmidtLp.lean`.  Landed:
 `memLp_columns_iff`, `summable_norm_columnSeries`, `summable_sq`,
