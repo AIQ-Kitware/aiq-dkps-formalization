@@ -317,9 +317,7 @@ theorem orthonormal_theorem63ResidualWitness
           _ = ⟪v, ((sigma : ℝ) : ℂ) • v⟫_ℂ := by rw [hZadj]
           _ = ((sigma : ℝ) : ℂ) := by
             rw [inner_smul_right]
-            simpa [Submodule.coe_inner, v] using
-              (orthonormal_iff_ite.mp
-                (finiteSourceRightSingularBasis S).orthonormal i i)
+            simp [Submodule.coe_inner, v]
       have hy_Zv : ⟪y, (v : H)⟫_ℂ = ((sigma : ℝ) : ℂ) := by
         calc
           ⟪y, (v : H)⟫_ℂ = ⟪Z.subtypeL.adjoint y, v⟫_ℂ :=
@@ -327,9 +325,7 @@ theorem orthonormal_theorem63ResidualWitness
           _ = ⟪((sigma : ℝ) : ℂ) • v, v⟫_ℂ := by rw [hZadj]
           _ = ((sigma : ℝ) : ℂ) := by
             rw [inner_smul_left, Complex.conj_ofReal]
-            simpa [v] using
-              (orthonormal_iff_ite.mp
-                (finiteSourceRightSingularBasis S).orthonormal i i)
+            simp [v]
       have hsigma_nonneg : 0 ≤ sigma := finiteSourceSingularValue_nonneg S i
       have hsigma_lt : sigma < 1 := by
         simpa [S, sigma] using theorem63_singularValues_sine_lt_one

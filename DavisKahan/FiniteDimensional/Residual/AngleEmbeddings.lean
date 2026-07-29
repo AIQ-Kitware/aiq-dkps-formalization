@@ -282,7 +282,7 @@ theorem singularValues_tanThetaEmbedding
       push_cast
       ring
     · have hbji : ⟪b j, b i⟫_𝕜 = 0 := by
-        simpa [orthonormal_iff_ite.mp b.orthonormal j i, if_neg hji]
+        simp [orthonormal_iff_ite.mp b.orthonormal j i, if_neg hji]
       rw [hbji, mul_zero]
       simp []
   have hTD : T.singularValues = D.singularValues := singularValues_eq_of_gram_eq hgram

@@ -183,12 +183,12 @@ theorem paperHilbertSchmidtEnergy_comp_starProjection
   have hsubL : ‖L.subtypeL‖ ≤ 1 := by
     have h : ‖L.subtypeL‖ ≤ 1 :=
       ContinuousLinearMap.opNorm_le_bound _ zero_le_one fun x => by
-        simpa using le_rfl
+        simp
     exact_mod_cast h
   have hsubK : ‖K.subtypeL‖ ≤ 1 := by
     have h : ‖K.subtypeL‖ ≤ 1 :=
       ContinuousLinearMap.opNorm_le_bound _ zero_le_one fun x => by
-        simpa using le_rfl
+        simp
     exact_mod_cast h
   have hprojK : ‖K.orthogonalProjectionOnto‖ ≤ 1 := by
     exact_mod_cast K.orthogonalProjectionOnto_norm_le

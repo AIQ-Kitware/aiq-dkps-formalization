@@ -289,7 +289,7 @@ theorem toLinearMap_congr
 def ofRealDomain
     (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E))
     (x : A.domain) : (complexify A).domain :=
-  ⟨ofReal (x : E), by simpa using x.property⟩
+  ⟨ofReal (x : E), by simp⟩
 
 omit [CompleteSpace E] in
 @[simp] theorem complexify_apply_ofReal
@@ -310,7 +310,7 @@ omit [CompleteSpace E] in
 def ofRealDomainPMap
     (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E))
     (x : A.toLinearPMap.domain) : (complexify A).toLinearPMap.domain :=
-  ⟨ofReal (x : E), by simpa using x.property⟩
+  ⟨ofReal (x : E), by simp⟩
 
 omit [CompleteSpace E] in
 @[simp] theorem complexify_toLinearPMap_apply_ofReal

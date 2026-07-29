@@ -261,7 +261,7 @@ theorem resolventAtNegI_boundedSelfAdjointOperator_eq
   intro x
   have hdom : Aop.toLinearPMap.domain = ⊤ := by
     change Aop.domain = ⊤
-    simpa [Aop] using boundedSelfAdjointOperator_domain A hA
+    simp [Aop]
   refine Spectra.Resolvent.resolvent_at_neg_i_unique hsym x
     (Spectra.Resolvent.resolventAtNegI hsym hplus x)
     (resolventOperator A (-Complex.I) x) ?_ ?_ ?_ ?_
