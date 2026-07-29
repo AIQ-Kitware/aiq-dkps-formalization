@@ -142,8 +142,7 @@ theorem projection_U4_apply (x : E4) :
     intro u hu
     rw [mem_U4 hu]
     simp [sv, inner_add_left, inner_sub_right, real_inner_smul_left,
-      EuclideanSpace.inner_single_left,
-      PiLp.single_apply]
+      EuclideanSpace.inner_single_left]
 
 theorem projection_U4_coord (x : E4) (i : Fin 4) :
     projection U4 x i = if i = 0 then x 0 else if i = 1 then x 1 else 0 := by
