@@ -532,10 +532,41 @@ and moving these six is the same kind of `ForMathlib → ForTauCeti` migration
 that Wave 1 already executed successfully for the approximation-number and
 CourantFischer clusters. It does not wait on anything.
 
-So the ordering is materially better than recorded: **Y3 is gated on a
-six-module `ForMathlib` migration, not on Spectra removal.** That is a scoped,
-independent piece of work and it is the highest-leverage thing available for
-unblocking both the YWS reusable core and the Hilbert--Schmidt row.
+So the ordering is different from what was recorded — but **not simply better.**
+
+**Second correction, same day, after reading the six modules rather than just
+counting them.** They cannot be migrated to `ForTauCeti` at all:
+
+* every one of them declares
+  `Extraction class: **authored in place**, for upstreaming to Mathlib rather
+  than to Tau Ceti`. They are Mathlib-bound by design. Moving them into
+  `ForTauCeti` would contradict their own recorded destination;
+* four of them have **`ForMathlib` importers** — `ProjectionGap`,
+  `SpectralOrder/Complex`, `ProjectionBlocks`, `CoerciveUnit`,
+  `SylvesterOperator` — so moving them would force `ForMathlib → ForTauCeti`
+  imports, which `scripts/check_dependency_layers.py` forbids.
+
+So the honest statement of the blocker is: **the Hilbert--Schmidt chain, and
+with it the YWS reusable core, depends on six results whose declared home is
+Mathlib, and `ForTauCeti` cannot reach them.** That is an architectural
+question, not a scheduling one, and the options are policy calls:
+
+1. **Upstream the six to Mathlib first.** Correct per their stated class, but
+   puts Y3 behind an external review cycle.
+2. **Reclassify them as Tau Ceti-bound** and migrate, accepting that Tau Ceti
+   rather than Mathlib becomes their home. A deliberate change to the
+   `ForMathlib` / `ForTauCeti` split, and it must move their `ForMathlib`
+   consumers too.
+3. **Keep the Hilbert--Schmidt layer downstream in `DavisKahan`** and migrate
+   only the parts of Yu--Wang--Samworth that do not touch it — which excludes
+   the Frobenius ideal results, i.e. most of the reusable core.
+4. **Re-derive the needed HS facts inside `ForTauCeti`** from Mathlib directly.
+   Contradicts the deduplication policy and would create a fourth parallel
+   stack; listed only to be ruled out explicitly.
+
+None of these is mine to pick. Until one is picked, "the complete YWS set as a
+mathlib-quality Tau Ceti contribution" is not reachable, and any plan that
+schedules it should say which option it assumes.
 
 Consequence for sequencing: **Y3 cannot be completed as an independent lane.**
 What Y3 *can* do now, without waiting:
