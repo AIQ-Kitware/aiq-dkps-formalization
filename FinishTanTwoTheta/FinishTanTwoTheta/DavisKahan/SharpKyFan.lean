@@ -27,9 +27,7 @@ open Experimental.ExactSinTheta
 noncomputable section
 
 variable {E0 : Type*} [NormedAddCommGroup E0] [InnerProductSpace ℂ E0]
-  [CompleteSpace E0]
 variable {E1 : Type*} [NormedAddCommGroup E1] [InnerProductSpace ℂ E1]
-  [CompleteSpace E1]
 
 /-- Uniform version of the stable-pair error for singular values `s ≤ r`. -/
 def uniformStablePairError
@@ -56,23 +54,35 @@ theorem stablePairError_le_uniform
         ((‖B.A0‖ + ‖B.A1‖) * ε +
           2 * r * ‖B.B01‖ * ε + ‖B.B01‖ * ε ^ 2) := by
     gcongr
-  have hnonneg : 0 ≤
-      ((‖B.A0‖ + ‖B.A1‖) * ε +
-        2 * s * ‖B.B01‖ * ε + ‖B.B01‖ * ε ^ 2) := by positivity
   have hnonneg' : 0 ≤
       ((‖B.A0‖ + ‖B.A1‖) * ε +
         2 * r * ‖B.B01‖ * ε + ‖B.B01‖ * ε ^ 2) := by positivity
-  nlinarith
+  have hdenmono : 1 - r ^ 2 ≤ 1 - s ^ 2 := by nlinarith
+  calc
+    2 * ((‖B.A0‖ + ‖B.A1‖) * ε +
+          2 * s * ‖B.B01‖ * ε + ‖B.B01‖ * ε ^ 2) * (1 - r ^ 2)
+        ≤ 2 * ((‖B.A0‖ + ‖B.A1‖) * ε +
+          2 * r * ‖B.B01‖ * ε + ‖B.B01‖ * ε ^ 2) * (1 - r ^ 2) := by
+          exact mul_le_mul_of_nonneg_right
+            (mul_le_mul_of_nonneg_left hnum (by norm_num)) hdr.le
+    _ ≤ 2 * ((‖B.A0‖ + ‖B.A1‖) * ε +
+          2 * r * ‖B.B01‖ * ε + ‖B.B01‖ * ε ^ 2) * (1 - s ^ 2) := by
+          exact mul_le_mul_of_nonneg_left hdenmono
+            (mul_nonneg (by norm_num) hnonneg')
 
 /-- Ky Fan prefixes are monotone in the prefix length. -/
 theorem kyFanApproximationGauge_mono_length
     (K : E1 →L[ℂ] E0) {m k : ℕ} (hmk : m ≤ k) :
     kyFanApproximationGauge m K ≤ kyFanApproximationGauge k K := by
-  unfold kyFanApproximationGauge
+  unfold kyFanApproximationGauge ContinuousLinearMap.kyFanGauge
   rw [← Finset.sum_range_add_sum_Ico
-    (f := fun n => approximationSingularValue n K) hmk]
+    (f := fun n => K.approximationNumber n) hmk]
   exact le_add_of_nonneg_right (Finset.sum_nonneg fun n _ =>
-    approximationSingularValue_nonneg n K)
+    K.approximationNumber_nonneg n)
+
+section CompleteSpaces
+
+variable [CompleteSpace E0] [CompleteSpace E1]
 
 /-- Sum the stable scalar estimate over one approximate leading family. -/
 theorem selected_doubleAngleTangent_le_kyFan_add_error
@@ -99,20 +109,44 @@ theorem selected_doubleAngleTangent_le_kyFan_add_error
         2 * (-RCLike.re ⟪F.right i, B.B01 (F.left i)⟫_ℂ) +
           uniformStablePairError B r ε := by
     intro i
-    exact (stableSingularPair_doubleAngleTangent_le B hd0 (hs0 i) (hs1 i)
-      hε0 hA0 hA1 hX (F.norm_right i) (F.norm_left i)
-      (F.apply_residual i) (F.adjoint_residual i)).trans
-        (add_le_add_left
-          (stablePairError_le_uniform B (hs0 i) (hsr i) hr1 hε0) _)
+    calc
+      d * DavisKahanTheory.doubleAngleTangent (X.approximationNumber i)
+          ≤ 2 * (-RCLike.re ⟪F.right i, B.B01 (F.left i)⟫_ℂ) +
+              stablePairError B (X.approximationNumber i) ε :=
+        stableSingularPair_doubleAngleTangent_le B hd0 (hs0 i) (hs1 i)
+          hε0 hA0 hA1 hX (F.norm_right i) (F.norm_left i)
+          (F.apply_residual i) (F.adjoint_residual i)
+      _ ≤ 2 * (-RCLike.re ⟪F.right i, B.B01 (F.left i)⟫_ℂ) +
+              uniformStablePairError B r ε := by
+        gcongr
+        exact stablePairError_le_uniform B (hs0 i) (hsr i) hr1 hε0
   have hsum :
       d * (∑ i : Fin F.count,
           DavisKahanTheory.doubleAngleTangent (X.approximationNumber i)) ≤
         2 * (∑ i : Fin F.count,
           (-RCLike.re ⟪F.right i, B.B01 (F.left i)⟫_ℂ)) +
           (F.count : ℝ) * uniformStablePairError B r ε := by
-    rw [Finset.mul_sum, Finset.mul_sum]
-    have h := Finset.sum_le_sum fun i _ => hpoint i
-    simpa [Finset.sum_add_distrib, Finset.sum_const, nsmul_eq_mul] using h
+    calc
+      d * (∑ i : Fin F.count,
+          DavisKahanTheory.doubleAngleTangent (X.approximationNumber i))
+          = ∑ i : Fin F.count,
+              d * DavisKahanTheory.doubleAngleTangent
+                (X.approximationNumber i) := by
+              rw [Finset.mul_sum]
+      _ ≤ ∑ i : Fin F.count,
+            (2 * (-RCLike.re ⟪F.right i, B.B01 (F.left i)⟫_ℂ) +
+              uniformStablePairError B r ε) := by
+              exact Finset.sum_le_sum fun i _ => hpoint i
+      _ = 2 * (∑ i : Fin F.count,
+            (-RCLike.re ⟪F.right i, B.B01 (F.left i)⟫_ℂ)) +
+            (F.count : ℝ) * uniformStablePairError B r ε := by
+              rw [Finset.sum_add_distrib, Finset.mul_sum,
+                Finset.sum_const, nsmul_eq_mul]
+              have hcard :
+                  (((Finset.univ : Finset (Fin F.count)).card : ℕ) : ℝ) =
+                    (F.count : ℝ) := by
+                simp
+              rw [hcard]
   have hcoeff :
       (∑ i : Fin F.count,
         (-RCLike.re ⟪F.right i, B.B01 (F.left i)⟫_ℂ)) ≤
@@ -161,7 +195,9 @@ theorem transformed_prefix_le_kyFan_add_error
             (k - F.count) * ((2 / (1 - r ^ 2)) * ε)) := hmul
     _ = d * (∑ i : Fin F.count,
           DavisKahanTheory.doubleAngleTangent (X.approximationNumber i)) +
-        d * ((k - F.count : ℕ) : ℝ) * ((2 / (1 - r ^ 2)) * ε) := by ring
+        d * ((k - F.count : ℕ) : ℝ) * ((2 / (1 - r ^ 2)) * ε) := by
+          rw [Nat.cast_sub F.count_le]
+          ring
     _ ≤ 2 * kyFanApproximationGauge k B.B01 +
           (F.count : ℝ) * uniformStablePairError B r ε +
         d * ((k - F.count : ℕ) : ℝ) * ((2 / (1 - r ^ 2)) * ε) := by gcongr
@@ -187,9 +223,18 @@ theorem sharp_transformed_prefix
     (k : ℝ) * (2 * ((‖B.A0‖ + ‖B.A1‖) + 2 * r * ‖B.B01‖ + ‖B.B01‖) /
       (1 - r ^ 2)) +
       d * (k : ℝ) * (2 / (1 - r ^ 2))
+  have hdenr : 0 < 1 - r ^ 2 := by nlinarith
   have hC0 : 0 ≤ C := by
+    have hmainCoeff :
+        0 ≤ 2 * ((‖B.A0‖ + ‖B.A1‖) +
+          2 * r * ‖B.B01‖ + ‖B.B01‖) / (1 - r ^ 2) := by
+      exact div_nonneg (by positivity) hdenr.le
+    have htailCoeff : 0 ≤ 2 / (1 - r ^ 2) := by
+      exact div_nonneg (by norm_num) hdenr.le
     dsimp [C]
-    positivity
+    exact add_nonneg
+      (mul_nonneg (by positivity) hmainCoeff)
+      (mul_nonneg (mul_nonneg hd0 (by positivity)) htailCoeff)
   let ε : ℝ := min 1 (η / (C + 1))
   have hC1 : 0 < C + 1 := by linarith
   have hεpos : 0 < ε := by
@@ -214,11 +259,76 @@ theorem sharp_transformed_prefix
         ε * (C + 1) ≤ (η / (C + 1)) * (C + 1) :=
           mul_le_mul_of_nonneg_right hmin hC1.le
         _ = η := by field_simp
-    unfold uniformStablePairError
-    dsimp [C] at hεchoice ⊢
-    -- All coefficients are nonnegative, `count ≤ k`, `k-count ≤ k`, and
-    -- `ε² ≤ ε`; normalization to the single constant `C` is ring arithmetic.
-    nlinarith [hcountReal, hsubReal]
+    let A : ℝ := ‖B.A0‖ + ‖B.A1‖
+    let b : ℝ := ‖B.B01‖
+    have hquad : b * ε ^ 2 ≤ b * ε := by
+      exact mul_le_mul_of_nonneg_left hεsq (by dsimp [b]; positivity)
+    have hnum :
+        A * ε + 2 * r * b * ε + b * ε ^ 2 ≤
+          (A + 2 * r * b + b) * ε := by
+      calc
+        A * ε + 2 * r * b * ε + b * ε ^ 2
+            ≤ A * ε + 2 * r * b * ε + b * ε := by
+              linarith [hquad]
+        _ = (A + 2 * r * b + b) * ε := by ring
+    have huniform :
+        uniformStablePairError B r ε ≤
+          (2 * (A + 2 * r * b + b) / (1 - r ^ 2)) * ε := by
+      unfold uniformStablePairError
+      dsimp [A, b] at hnum ⊢
+      calc
+        2 * ((‖B.A0‖ + ‖B.A1‖) * ε +
+              2 * r * ‖B.B01‖ * ε + ‖B.B01‖ * ε ^ 2) /
+              (1 - r ^ 2)
+            ≤ 2 * (((‖B.A0‖ + ‖B.A1‖) +
+              2 * r * ‖B.B01‖ + ‖B.B01‖) * ε) /
+              (1 - r ^ 2) := by
+                exact div_le_div_of_nonneg_right
+                  (mul_le_mul_of_nonneg_left hnum (by norm_num)) hdenr.le
+        _ = (2 * ((‖B.A0‖ + ‖B.A1‖) +
+              2 * r * ‖B.B01‖ + ‖B.B01‖) /
+              (1 - r ^ 2)) * ε := by ring
+    have huniform0 : 0 ≤ uniformStablePairError B r ε := by
+      unfold uniformStablePairError
+      positivity
+    have hselectedError :
+        (F.count : ℝ) * uniformStablePairError B r ε ≤
+          ε * ((k : ℝ) *
+            (2 * (A + 2 * r * b + b) / (1 - r ^ 2))) := by
+      calc
+        (F.count : ℝ) * uniformStablePairError B r ε
+            ≤ (k : ℝ) * uniformStablePairError B r ε :=
+              mul_le_mul_of_nonneg_right hcountReal huniform0
+        _ ≤ (k : ℝ) *
+              ((2 * (A + 2 * r * b + b) / (1 - r ^ 2)) * ε) := by
+                exact mul_le_mul_of_nonneg_left huniform (by positivity)
+        _ = ε * ((k : ℝ) *
+              (2 * (A + 2 * r * b + b) / (1 - r ^ 2))) := by ring
+    have htailCoeff0 :
+        0 ≤ d * ((2 / (1 - r ^ 2)) * ε) := by positivity
+    have htailError :
+        d * ((k - F.count : ℕ) : ℝ) * ((2 / (1 - r ^ 2)) * ε) ≤
+          ε * (d * (k : ℝ) * (2 / (1 - r ^ 2))) := by
+      calc
+        d * ((k - F.count : ℕ) : ℝ) * ((2 / (1 - r ^ 2)) * ε)
+            = ((k - F.count : ℕ) : ℝ) *
+                (d * ((2 / (1 - r ^ 2)) * ε)) := by ring
+        _ ≤ (k : ℝ) * (d * ((2 / (1 - r ^ 2)) * ε)) :=
+              mul_le_mul_of_nonneg_right hsubReal htailCoeff0
+        _ = ε * (d * (k : ℝ) * (2 / (1 - r ^ 2))) := by ring
+    calc
+      (F.count : ℝ) * uniformStablePairError B r ε +
+          d * ((k - F.count : ℕ) : ℝ) * ((2 / (1 - r ^ 2)) * ε)
+          ≤ ε * ((k : ℝ) *
+                (2 * (A + 2 * r * b + b) / (1 - r ^ 2))) +
+              ε * (d * (k : ℝ) * (2 / (1 - r ^ 2))) :=
+            add_le_add hselectedError htailError
+      _ = ε * C := by
+            dsimp [C, A, b]
+            ring
+      _ ≤ ε * (C + 1) := by
+            exact mul_le_mul_of_nonneg_left (by linarith) hε0
+      _ ≤ η := hεchoice
   exact hraw.trans (by linarith)
 
 /-- Sharp Ky Fan theorem for the canonical tangent operator. -/
@@ -234,6 +344,8 @@ theorem sharp_doubleAngleTangentOperator_kyFan
       2 * kyFanApproximationGauge k B.B01 := by
   rw [TauCeti.FinishTanTwoTheta.kyFanApproximationGauge_doubleAngleTangentOperator]
   exact sharp_transformed_prefix B hd0 hA0 hA1 hX hcontractive k
+
+end CompleteSpaces
 
 end
 

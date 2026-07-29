@@ -7,6 +7,7 @@ import FinishTanTwoTheta.GroundedImports
 import FinishTanTwoTheta.ApproximationNumber.SpectralSelection
 import DavisKahan.DoubleAngle.TanTwoThetaKyFan
 import ForTauCeti.Analysis.CStarAlgebra.SelfAdjointGapInverse
+import ForTauCeti.Analysis.Matrix.EntrywiseOpNorm
 
 /-!
 # Canonical double-angle tangent operator
@@ -336,9 +337,9 @@ theorem exists_rank_le_norm_doubleAngleTangent_sub_lt
   let a := X.approximationNumber n
   have ha0 : 0 ≤ a := X.approximationNumber_nonneg n
   have ha1 : a < 1 := (X.approximationNumber_le_norm n).trans_lt hcontractive
-  obtain ⟨u, hau, hu1, hfu⟩ : ∃ u : ℝ,
-      a < u ∧ u < 1 ∧
-      DavisKahanTheory.doubleAngleTangent u <
+  obtain ⟨v, hav, hv1, hfv⟩ : ∃ v : ℝ,
+      a < v ∧ v < 1 ∧
+      DavisKahanTheory.doubleAngleTangent v <
         DavisKahanTheory.doubleAngleTangent a + ε := by
     -- The scalar transform is rational and continuous on `(-1,1)`.
     have hdena : 0 < 1 - a ^ 2 := by nlinarith
@@ -386,6 +387,12 @@ theorem exists_rank_le_norm_doubleAngleTangent_sub_lt
       rw [← sub_pos]
       rw [hdiff]
       exact div_pos (sub_pos.mpr hgap) hdena
+  let u : ℝ := (a + v) / 2
+  have hau : a < u := by dsimp only [u]; linarith
+  have huv : u < v := by dsimp only [u]; linarith
+  have hu0 : 0 ≤ u := ha0.trans hau.le
+  have hv0 : 0 ≤ v := hu0.trans huv.le
+  have hu1 : u < 1 := huv.trans hv1
   let C : E0 →L[ℂ] E0 := gramOperator X
   have hC : IsSelfAdjoint C := gramOperator_isSelfAdjoint X
   let A : Spectra.Operator.SelfAdjointOperator E0 :=
@@ -406,10 +413,11 @@ theorem exists_rank_le_norm_doubleAngleTangent_sub_lt
       change ((n + 1 : ℕ) : Cardinal) ≤ P.rank
       rw [← Cardinal.natCast_add_one_le_iff, ← Nat.cast_add_one] at hlt
       exact hlt
-    obtain ⟨v, hv⟩ := (Module.le_rank_iff).mp hWrank
-    let vectors : Fin (n + 1) → E0 := W.subtype ∘ v
+    obtain ⟨basisVec, hbasisVec⟩ := (Module.le_rank_iff).mp hWrank
+    let vectors : Fin (n + 1) → E0 := W.subtype ∘ basisVec
     have hlin : LinearIndependent ℂ vectors := by
-      exact hv.map' W.subtype (LinearMap.ker_eq_bot.mpr W.injective_subtype)
+      exact hbasisVec.map' W.subtype
+        (LinearMap.ker_eq_bot.mpr W.injective_subtype)
     have hlower : u ≤ X.approximationNumber n := by
       apply ContinuousLinearMap.le_approximationNumber_of_linearIndependent
         X n vectors hlin
@@ -417,8 +425,8 @@ theorem exists_rank_le_norm_doubleAngleTangent_sub_lt
       have hzW : z ∈ W := by
         apply (Submodule.span_le.2 ?_) hz
         rintro _ ⟨i, rfl⟩
-        change (v i : E0) ∈ W
-        exact (v i).property
+        change (basisVec i : E0) ∈ W
+        exact (basisVec i).property
       have hhighFix :
           PVM.proj (Set.Ioi (u ^ 2)) measurableSet_Ioi z = z :=
         pvmProjection_eq_self_of_mem_rangeSubspace
@@ -426,7 +434,8 @@ theorem exists_rank_le_norm_doubleAngleTangent_sub_lt
       have hhighFix' :
           Spectra.QuantumMechanics.SpectralTheory.spectralProjection U
               (Set.Ioi (u ^ 2)) measurableSet_Ioi z = z := by
-        simpa only [PVM, U] using hhighFix
+        simpa only [PVM, U,
+          Spectra.QuantumMechanics.SpectralTheory.spectralPVM_proj] using hhighFix
       have hlowZero :
           Spectra.QuantumMechanics.SpectralTheory.spectralProjection U
               (Set.Iic (u ^ 2)) measurableSet_Iic z = 0 := by
@@ -463,7 +472,8 @@ theorem exists_rank_le_norm_doubleAngleTangent_sub_lt
             rw [hgenApply]
             dsimp only [C, gramOperator]
             rw [ContinuousLinearMap.comp_apply,
-              ContinuousLinearMap.adjoint_inner_left, inner_self_eq_norm_sq]
+              ContinuousLinearMap.adjoint_inner_left]
+            exact inner_self_eq_norm_sq (𝕜 := ℂ) (X z)
       exact (sq_le_sq₀ (ha0.trans hau.le) (norm_nonneg _)).mp hsquare
     exact (not_le_of_gt hau) hlower
   have hRrank : R.rank ≤ (n : Cardinal) :=
@@ -481,19 +491,184 @@ theorem exists_rank_le_norm_doubleAngleTangent_sub_lt
     ext x
     change T x - T (P x) = T (Q x)
     rw [hQeq, sub_apply, ContinuousLinearMap.id_apply, map_sub]
-  have htail : ‖T ∘L Q‖ ≤ DavisKahanTheory.doubleAngleTangent u := by
-    -- On `range Q`, the Gram spectrum is contained in `[0,u^2]`.  The
-    -- denominator inverse preserves this reducing subspace and has norm at
-    -- most `(1-u^2)⁻¹` there, while `X` has norm at most `u` there.  This is
-    -- exactly the upper-energy argument already used in
-    -- `ApproximationNumberMinMax.lean`, now applied after the denominator.
-    have hupper := energy_upper_bound_of_spectralProjection_Ici_eq_zero
-    have hprojectionInter := spectralProjection_inter U
-    have hprojectionCompl := spectralProjection_compl U
-    aesop
+  have htail : ‖T ∘L Q‖ ≤ DavisKahanTheory.doubleAngleTangent v := by
+    have hdenv : 0 < 1 - v ^ 2 := by nlinarith
+    have htanv0 : 0 ≤ DavisKahanTheory.doubleAngleTangent v := by
+      unfold DavisKahanTheory.doubleAngleTangent
+      positivity
+    refine ContinuousLinearMap.opNorm_le_bound _ htanv0 fun x => ?_
+    let q : E0 := Q x
+    let D : E0 →L[ℂ] E0 := doubleAngleDenominator X
+    let Dinv : E0 →L[ℂ] E0 := Ring.inverse D
+    let w : E0 := Dinv q
+    have hgen : generator U = A.toLinearPMap := by
+      dsimp only [U]
+      exact generator_genToGroup hA
+    have hAdom : A.toLinearPMap.domain = ⊤ := by
+      dsimp only [A]
+      exact Spectra.Operator.SelfAdjointOperator.domain_ofBounded C hC
+    have hUDom : (generator U).domain = ⊤ := by
+      rw [hgen, hAdom]
+    have hgenApply (y : E0) (hy : y ∈ (generator U).domain) :
+        generator U ⟨y, hy⟩ = C y := by
+      have hyA : y ∈ A.toLinearPMap.domain := by
+        rw [hAdom]
+        exact Submodule.mem_top
+      have happly := (LinearPMap.ext_iff.mp hgen).2
+      calc
+        generator U ⟨y, hy⟩ = A.toLinearPMap ⟨y, hyA⟩ :=
+          happly (x := y) (hf := hy) (hg := hyA)
+        _ = C y := rfl
+    have hQidem : Q q = q := by
+      have hidem := PVM.proj_idem (Set.Iic (u ^ 2)) measurableSet_Iic
+      have happly := congrArg (fun S : E0 →L[ℂ] E0 => S x) hidem
+      simpa only [q, Q, mul_apply_eq_comp,
+        ContinuousLinearMap.comp_apply] using happly
+    have hCQ (y : E0) : C (Q y) = Q (C y) := by
+      have hyDom : y ∈ (generator U).domain := by
+        rw [hUDom]
+        exact Submodule.mem_top
+      have hQyDom : Q y ∈ (generator U).domain := by
+        rw [hUDom]
+        exact Submodule.mem_top
+      have hcomm := generator_spectralProjection_comm U
+        (B := Set.Iic (u ^ 2)) measurableSet_Iic
+        (⟨y, hyDom⟩ : (generator U).domain)
+      calc
+        C (Q y) = generator U ⟨Q y, hQyDom⟩ :=
+          (hgenApply (Q y) hQyDom).symm
+        _ = Q (generator U ⟨y, hyDom⟩) := by
+          simpa only [Q, PVM,
+            Spectra.QuantumMechanics.SpectralTheory.spectralPVM_proj] using hcomm
+        _ = Q (C y) := by rw [hgenApply y hyDom]
+    have hDQ (y : E0) : D (Q y) = Q (D y) := by
+      have hCQ' :
+          (ContinuousLinearMap.adjoint X ∘SL X) (Q y) =
+            Q ((ContinuousLinearMap.adjoint X ∘SL X) y) := by
+        simpa only [C, gramOperator] using hCQ y
+      dsimp only [D, doubleAngleDenominator]
+      rw [sub_apply, ContinuousLinearMap.id_apply, sub_apply,
+        ContinuousLinearMap.id_apply, map_sub, hCQ']
+    have hunit : IsUnit D := by
+      dsimp only [D]
+      exact isUnit_doubleAngleDenominator X hcontractive
+    have hinj : Function.Injective D :=
+      (ContinuousLinearMap.isUnit_iff_bijective.mp hunit).1
+    have hDw : D w = q := by
+      have hmul := Ring.mul_inverse_cancel D hunit
+      have happly := DFunLike.congr_fun hmul q
+      simpa only [w, Dinv, mul_apply_eq_comp,
+        ContinuousLinearMap.comp_apply, one_apply_eq_self] using happly
+    have hQw : Q w = w := by
+      apply hinj
+      rw [hDQ, hDw, hQidem]
+    have hlowFix :
+        Spectra.QuantumMechanics.SpectralTheory.spectralProjection U
+            (Set.Iic (u ^ 2)) measurableSet_Iic w = w := by
+      simpa only [Q, PVM,
+        Spectra.QuantumMechanics.SpectralTheory.spectralPVM_proj] using hQw
+    have huvSq : u ^ 2 < v ^ 2 := by nlinarith
+    have hhighZero :
+        Spectra.QuantumMechanics.SpectralTheory.spectralProjection U
+            (Set.Ici (v ^ 2)) measurableSet_Ici w = 0 := by
+      rw [← hlowFix]
+      have hinter : Set.Ici (v ^ 2) ∩ Set.Iic (u ^ 2) = ∅ := by
+        ext t
+        simp only [Set.mem_inter_iff, Set.mem_Ici, Set.mem_Iic,
+          Set.mem_empty_iff_false, iff_false]
+        exact fun ht => (not_le_of_gt huvSq) (ht.1.trans ht.2)
+      rw [← mul_apply_eq_comp,
+        Spectra.QuantumMechanics.SpectralTheory.spectralProjection_inter,
+        Spectra.QuantumMechanics.SpectralTheory.spectralProjection_congr _ hinter
+          (measurableSet_Ici.inter measurableSet_Iic) MeasurableSet.empty,
+        Spectra.QuantumMechanics.SpectralTheory.spectralProjection_empty,
+        zero_apply]
+    have hwDom : w ∈ (generator U).domain := by
+      rw [hUDom]
+      exact Submodule.mem_top
+    have henergy := energy_upper_bound_of_spectralProjection_Ici_eq_zero
+      U (v ^ 2) (⟨w, hwDom⟩ : (generator U).domain) hhighZero
+    have hXenergy : ‖X w‖ ^ 2 ≤ v ^ 2 * ‖w‖ ^ 2 := by
+      calc
+        ‖X w‖ ^ 2 = (⟪C w, w⟫_ℂ).re := by
+          dsimp only [C, gramOperator]
+          rw [ContinuousLinearMap.comp_apply,
+            ContinuousLinearMap.adjoint_inner_left]
+          exact (inner_self_eq_norm_sq (𝕜 := ℂ) (X w)).symm
+        _ = (⟪generator U ⟨w, hwDom⟩, w⟫_ℂ).re := by
+          rw [hgenApply w hwDom]
+        _ ≤ v ^ 2 * ‖w‖ ^ 2 := henergy
+    have hDcoercive :
+        (1 - v ^ 2) * ‖w‖ ^ 2 ≤ (⟪D w, w⟫_ℂ).re := by
+      have hwInner : (⟪w, w⟫_ℂ).re = ‖w‖ ^ 2 :=
+        inner_self_eq_norm_sq (𝕜 := ℂ) w
+      have hgramInner : (⟪C w, w⟫_ℂ).re = ‖X w‖ ^ 2 := by
+        dsimp only [C, gramOperator]
+        rw [ContinuousLinearMap.comp_apply,
+          ContinuousLinearMap.adjoint_inner_left]
+        exact inner_self_eq_norm_sq (𝕜 := ℂ) (X w)
+      have hgramInner' :
+          (⟪(ContinuousLinearMap.adjoint X ∘SL X) w, w⟫_ℂ).re =
+            ‖X w‖ ^ 2 := by
+        simpa only [C, gramOperator] using hgramInner
+      have hDform :
+          (⟪D w, w⟫_ℂ).re = ‖w‖ ^ 2 - ‖X w‖ ^ 2 := by
+        dsimp only [D, doubleAngleDenominator]
+        rw [sub_apply, ContinuousLinearMap.id_apply, inner_sub_left,
+          Complex.sub_re, hwInner, hgramInner']
+      rw [hDform]
+      nlinarith
+    have hinnerUpper :
+        (⟪D w, w⟫_ℂ).re ≤ ‖D w‖ * ‖w‖ := by
+      calc
+        (⟪D w, w⟫_ℂ).re ≤ ‖⟪D w, w⟫_ℂ‖ :=
+          RCLike.re_le_norm (⟪D w, w⟫_ℂ : ℂ)
+        _ ≤ ‖D w‖ * ‖w‖ := norm_inner_le_norm _ _
+    have hwBound : ‖w‖ ≤ (1 - v ^ 2)⁻¹ * ‖q‖ := by
+      by_cases hw : w = 0
+      · have hrhs : 0 ≤ (1 - v ^ 2)⁻¹ * ‖q‖ :=
+          mul_nonneg (inv_nonneg.mpr hdenv.le) (norm_nonneg q)
+        simpa only [hw, norm_zero] using hrhs
+      have hwnorm : 0 < ‖w‖ := norm_pos_iff.mpr hw
+      have hmain : (1 - v ^ 2) * ‖w‖ ^ 2 ≤ ‖q‖ * ‖w‖ := by
+        calc
+          (1 - v ^ 2) * ‖w‖ ^ 2 ≤ (⟪D w, w⟫_ℂ).re := hDcoercive
+          _ ≤ ‖D w‖ * ‖w‖ := hinnerUpper
+          _ = ‖q‖ * ‖w‖ := by rw [hDw]
+      have hcancel : (1 - v ^ 2) * ‖w‖ ≤ ‖q‖ := by
+        apply le_of_mul_le_mul_right
+        · simpa only [pow_two, mul_assoc] using hmain
+        · exact hwnorm
+      calc
+        ‖w‖ ≤ ‖q‖ / (1 - v ^ 2) := by
+          apply (le_div_iff₀ hdenv).2
+          simpa only [mul_comm] using hcancel
+        _ = (1 - v ^ 2)⁻¹ * ‖q‖ := by rw [div_eq_inv_mul]
+    have hqNorm : ‖q‖ ≤ ‖x‖ := by
+      dsimp only [q, Q]
+      exact PVM.norm_proj_apply_le (Set.Iic (u ^ 2)) measurableSet_Iic x
+    have hXw : ‖X w‖ ≤ v * ‖w‖ := by
+      apply (sq_le_sq₀ (norm_nonneg _) (mul_nonneg hv0 (norm_nonneg _))).mp
+      simpa only [mul_pow] using hXenergy
+    change ‖(2 : ℂ) • X w‖ ≤
+      DavisKahanTheory.doubleAngleTangent v * ‖x‖
+    rw [norm_smul]
+    have hnormTwo : ‖(2 : ℂ)‖ = 2 := by norm_num
+    rw [hnormTwo]
+    unfold DavisKahanTheory.doubleAngleTangent
+    calc
+      2 * ‖X w‖ ≤ 2 * (v * ‖w‖) :=
+        mul_le_mul_of_nonneg_left hXw (by norm_num)
+      _ ≤ 2 * (v * ((1 - v ^ 2)⁻¹ * ‖q‖)) := by
+        gcongr
+      _ ≤ 2 * (v * ((1 - v ^ 2)⁻¹ * ‖x‖)) := by
+        gcongr
+      _ = (2 * v / (1 - v ^ 2)) * ‖x‖ := by
+        rw [div_eq_mul_inv]
+        ring
   refine ⟨R, hRrank, ?_⟩
   rw [herr]
-  exact htail.trans_lt hfu
+  exact htail.trans_lt hfv
 
 /-- Lower min--max bound for the transformed approximation number. -/
 theorem doubleAngleTangent_approximationNumber_le
@@ -529,7 +704,7 @@ theorem doubleAngleTangent_approximationNumber_le
   obtain ⟨F⟩ := exists_approximateLeadingSingularFamily X (n + 1) hεpos
   rcases F with
     ⟨count, hcount_le, right, left, hrightOrtho, hleftOrtho,
-      hselected, happlyResidual, hadjointResidual, htailSmall⟩
+      _hselected, happlyResidual, hadjointResidual, htailSmall⟩
   have hcount : count = n + 1 := by
     apply le_antisymm hcount_le
     by_contra hnot
@@ -563,9 +738,153 @@ theorem doubleAngleTangent_approximationNumber_le
       · exact X.approximationNumber_nonneg n
       · exact hanti (Nat.le_of_lt_succ i.isLt)
       · exact (X.approximationNumber_le_norm i).trans_lt hcontractive
-    have horth := hleftOrtho
-    have hcoeff := hrightOrtho
-    aesop
+    have hspanRange :
+        Submodule.span ℂ (Set.range right) ≤
+          LinearMap.range (familyIsometry hrightOrtho).toLinearMap := by
+      refine Submodule.span_le.2 ?_
+      intro y hy
+      obtain ⟨i, rfl⟩ := hy
+      refine ⟨EuclideanSpace.single i 1, ?_⟩
+      exact familyIsometry_single hrightOrtho i
+    obtain ⟨coeff, hzCoord⟩ := hspanRange hz
+    have hzCoord' : familyIsometry hrightOrtho coeff = z := hzCoord
+    have hcoeffNorm : ‖coeff‖ = 1 := by
+      rw [← hznorm, ← hzCoord', (familyIsometry hrightOrtho).norm_map]
+    have hcoeffL1 :
+        (∑ i : Fin (n + 1), ‖coeff i‖) ≤ Real.sqrt (n + 1) := by
+      have h := TauCeti.sum_norm_le_sqrt_card_mul_norm coeff
+      rw [hcoeffNorm, mul_one] at h
+      simpa using h
+    let tau : Fin (n + 1) → ℝ := fun i =>
+      DavisKahanTheory.doubleAngleTangent (X.approximationNumber i)
+    let tau0 : ℝ :=
+      DavisKahanTheory.doubleAngleTangent (X.approximationNumber n)
+    have htau0 : 0 ≤ tau0 := by
+      dsimp only [tau0]
+      unfold DavisKahanTheory.doubleAngleTangent
+      have hden : 0 < 1 - (X.approximationNumber n) ^ 2 := by
+        nlinarith [X.approximationNumber_nonneg n,
+          (X.approximationNumber_le_norm n).trans_lt hcontractive]
+      exact div_nonneg
+        (mul_nonneg (by norm_num) (X.approximationNumber_nonneg n)) hden.le
+    have htauNonneg : ∀ i : Fin (n + 1), 0 ≤ tau i := by
+      intro i
+      dsimp only [tau]
+      unfold DavisKahanTheory.doubleAngleTangent
+      have hden : 0 < 1 - (X.approximationNumber i) ^ 2 := by
+        nlinarith [X.approximationNumber_nonneg (i : ℕ),
+          (X.approximationNumber_le_norm (i : ℕ)).trans_lt hcontractive]
+      exact div_nonneg
+        (mul_nonneg (by norm_num) (X.approximationNumber_nonneg (i : ℕ))) hden.le
+    have htauLower : ∀ i : Fin (n + 1), tau0 ≤ tau i := by
+      intro i
+      exact htanmono i
+    let diagonalCoeff : EuclideanSpace ℂ (Fin (n + 1)) :=
+      WithLp.toLp 2 (fun i => (tau i : ℂ) * coeff i)
+    let diagonal : E1 := familyIsometry hleftOrtho diagonalCoeff
+    have hcoeffSq :
+        (∑ i : Fin (n + 1), ‖coeff i‖ ^ 2) = 1 := by
+      rw [← EuclideanSpace.norm_sq_eq, hcoeffNorm, one_pow]
+    have hdiagonalCoeffSq :
+        ‖diagonalCoeff‖ ^ 2 =
+          ∑ i : Fin (n + 1), (tau i) ^ 2 * ‖coeff i‖ ^ 2 := by
+      rw [EuclideanSpace.norm_sq_eq]
+      apply Finset.sum_congr rfl
+      intro i _
+      change ‖(tau i : ℂ) * coeff i‖ ^ 2 =
+        tau i ^ 2 * ‖coeff i‖ ^ 2
+      rw [norm_mul, Complex.norm_real, Real.norm_eq_abs,
+        abs_of_nonneg (htauNonneg i)]
+      ring
+    have hdiagonalLower : tau0 ≤ ‖diagonal‖ := by
+      apply (sq_le_sq₀ htau0 (norm_nonneg diagonal)).mp
+      calc
+        tau0 ^ 2 = tau0 ^ 2 *
+            (∑ i : Fin (n + 1), ‖coeff i‖ ^ 2) := by
+              rw [hcoeffSq, mul_one]
+        _ = ∑ i : Fin (n + 1), tau0 ^ 2 * ‖coeff i‖ ^ 2 := by
+              rw [Finset.mul_sum]
+        _ ≤ ∑ i : Fin (n + 1), (tau i) ^ 2 * ‖coeff i‖ ^ 2 := by
+              apply Finset.sum_le_sum
+              intro i _
+              exact mul_le_mul_of_nonneg_right
+                (pow_le_pow_left₀ htau0 (htauLower i) 2)
+                (sq_nonneg ‖coeff i‖)
+        _ = ‖diagonalCoeff‖ ^ 2 := hdiagonalCoeffSq.symm
+        _ = ‖diagonal‖ ^ 2 := by
+              dsimp only [diagonal]
+              rw [(familyIsometry hleftOrtho).norm_map]
+    have hresidualIdentity :
+        doubleAngleTangentOperator X hcontractive z - diagonal =
+          ∑ i : Fin (n + 1), coeff i •
+            (doubleAngleTangentOperator X hcontractive (right i) -
+              (tau i : ℂ) • left i) := by
+      rw [← hzCoord']
+      dsimp only [diagonal]
+      rw [familyIsometry_apply, familyIsometry_apply, map_sum]
+      simp only [map_smul]
+      rw [← Finset.sum_sub_distrib]
+      apply Finset.sum_congr rfl
+      intro i _
+      change
+        coeff i • doubleAngleTangentOperator X hcontractive (right i) -
+            ((tau i : ℂ) * coeff i) • left i =
+          coeff i •
+            (doubleAngleTangentOperator X hcontractive (right i) -
+              (tau i : ℂ) • left i)
+      module
+    have hresidualBound :
+        ‖doubleAngleTangentOperator X hcontractive z - diagonal‖ ≤
+          Real.sqrt (n + 1) * (C * ε) := by
+      rw [hresidualIdentity]
+      calc
+        ‖∑ i : Fin (n + 1), coeff i •
+            (doubleAngleTangentOperator X hcontractive (right i) -
+              (tau i : ℂ) • left i)‖
+            ≤ ∑ i : Fin (n + 1),
+                ‖coeff i •
+                  (doubleAngleTangentOperator X hcontractive (right i) -
+                    (tau i : ℂ) • left i)‖ := norm_sum_le _ _
+        _ = ∑ i : Fin (n + 1), ‖coeff i‖ *
+              ‖doubleAngleTangentOperator X hcontractive (right i) -
+                (tau i : ℂ) • left i‖ := by
+              apply Finset.sum_congr rfl
+              intro i _
+              rw [norm_smul]
+        _ ≤ ∑ i : Fin (n + 1), ‖coeff i‖ * (C * ε) := by
+              apply Finset.sum_le_sum
+              intro i _
+              exact mul_le_mul_of_nonneg_left (hpair i) (norm_nonneg _)
+        _ = (∑ i : Fin (n + 1), ‖coeff i‖) * (C * ε) := by
+              rw [Finset.sum_mul]
+        _ ≤ Real.sqrt (n + 1) * (C * ε) :=
+              mul_le_mul_of_nonneg_right hcoeffL1
+                (mul_nonneg hC0 hεpos.le)
+    have hresidualEta :
+        ‖doubleAngleTangentOperator X hcontractive z - diagonal‖ ≤ η := by
+      have hsqrtPos : 0 < Real.sqrt (n + 1) := Real.sqrt_pos.2 (by positivity)
+      have hCplus : 0 < C + 1 := by linarith
+      have hεEta : ε ≤
+          η / (4 * Real.sqrt (n + 1) * (C + 1)) := by
+        exact min_le_right _ _
+      calc
+        ‖doubleAngleTangentOperator X hcontractive z - diagonal‖
+            ≤ Real.sqrt (n + 1) * (C * ε) := hresidualBound
+        _ ≤ Real.sqrt (n + 1) * ((C + 1) * ε) := by
+              gcongr
+              linarith
+        _ ≤ Real.sqrt (n + 1) *
+              ((C + 1) *
+                (η / (4 * Real.sqrt (n + 1) * (C + 1)))) := by
+              gcongr
+        _ = η / 4 := by
+              field_simp [ne_of_gt hsqrtPos, ne_of_gt hCplus]
+        _ ≤ η := by linarith
+    have hreverse := norm_sub_norm_le diagonal
+      (doubleAngleTangentOperator X hcontractive z)
+    rw [norm_sub_rev] at hreverse
+    dsimp only [tau0] at hdiagonalLower
+    linarith
   linarith
 
 /-- Approximation-number spectral mapping for the canonical double-angle
