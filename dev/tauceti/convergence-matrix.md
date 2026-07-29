@@ -502,7 +502,40 @@ layer — `IsPaperHilbertSchmidt`, `paperHilbertSchmidtNorm`,
 `ForTauCeti` may import only `Mathlib` / `TauCeti` / `ForTauCeti`, so moving the
 Frobenius lemmas requires the **Hilbert--Schmidt / trace-class row** of the seed
 matrix ("one HS predicate+norm; others are equivalence theorems", Cluster D /
-Wave 5) to land first. That row is itself gated on the Spectra removal plan.
+Wave 5) to land first.
+
+**Correction, measured 2026-07-29: that row is NOT gated on the Spectra removal
+plan.** I computed the import closure of
+`DavisKahan/Sources/DavisKahan1970/Ideals/HilbertSchmidt.lean`:
+
+```
+23 DavisKahan modules · 14 Mathlib roots · 12 ForTauCeti roots · 6 ForMathlib modules
+Spectra modules in the closure: ZERO
+```
+
+Cluster D was placed in Wave 5 alongside the Spectra donor material, but this
+particular chain touches no Spectra constant at all. The real blocker is the
+**six `ForMathlib` modules** in the closure, since `ForTauCeti` may not import
+`ForMathlib`:
+
+| module | importers repo-wide |
+| --- | --- |
+| `ForMathlib/Analysis/InnerProductSpace/SylvesterBound` | 10 |
+| `ForMathlib/Analysis/InnerProductSpace/ProjectionGap` | 6 |
+| `ForMathlib/Analysis/InnerProductSpace/ReducingSubspace` | 4 |
+| `ForMathlib/Analysis/InnerProductSpace/ProjectionBlocks` | 2 |
+| `ForMathlib/Analysis/InnerProductSpace/QuadraticFormBounds` | 2 |
+| `ForMathlib/Analysis/InnerProductSpace/SylvesterOperator` | 2 |
+
+`ForMathlib` is down to twelve modules, so this is **half of what remains** —
+and moving these six is the same kind of `ForMathlib → ForTauCeti` migration
+that Wave 1 already executed successfully for the approximation-number and
+CourantFischer clusters. It does not wait on anything.
+
+So the ordering is materially better than recorded: **Y3 is gated on a
+six-module `ForMathlib` migration, not on Spectra removal.** That is a scoped,
+independent piece of work and it is the highest-leverage thing available for
+unblocking both the YWS reusable core and the Hilbert--Schmidt row.
 
 Consequence for sequencing: **Y3 cannot be completed as an independent lane.**
 What Y3 *can* do now, without waiting:
