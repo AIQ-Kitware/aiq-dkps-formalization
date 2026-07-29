@@ -167,6 +167,30 @@ theorem tendsto_cayleySymbolFun (f : C(ℝ, ℝ)) {w : ℂ} (hw : w ≠ 1) :
 
 end Separator
 
+section NormSquare
+
+variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
+variable {a : H →L[ℂ] H} (ha : IsStarNormal a)
+
+/-- The norm of a continuous-calculus image, as an integral against the diagonal
+measure.  This is the only measure-theoretic interface the Rosenblum argument
+needs: everything is a *diagonal* matrix element, so no polarisation appears. -/
+theorem norm_sq_cfcHom_apply (g : C(_root_.spectrum ℂ a, ℂ)) (v : H) :
+    ((‖cfcHom ha g v‖ ^ 2 : ℝ) : ℂ)
+      = ∫ w, (starRingEnd ℂ) (g w) * g w ∂(BorelCalculus.diagMeasure ha v) := by
+  have hstar : (cfcHom ha g).adjoint = cfcHom ha (star g) := by
+    rw [← ContinuousLinearMap.star_eq_adjoint, ← map_star]
+  have hfun : (fun w => (starRingEnd ℂ) (g w) * g w)
+      = fun w => ((star g * g : C(_root_.spectrum ℂ a, ℂ)) w) := rfl
+  have key : ⟪v, cfcHom ha (star g * g) v⟫_ℂ = ⟪cfcHom ha g v, cfcHom ha g v⟫_ℂ := by
+    rw [map_mul]
+    change ⟪v, cfcHom ha (star g) (cfcHom ha g v)⟫_ℂ = _
+    rw [← hstar, ContinuousLinearMap.adjoint_inner_right]
+  rw [hfun, BorelCalculus.integral_diagMeasure, key, inner_self_eq_norm_sq_to_K]
+  norm_cast
+
+end NormSquare
+
 section Rosenblum
 
 variable {A : E →ₗ.[ℂ] E} {B : F →ₗ.[ℂ] F} (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
