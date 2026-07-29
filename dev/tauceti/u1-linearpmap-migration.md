@@ -256,6 +256,32 @@ structure that must move first, so none is a one-liner:
 | `Sylvester/Unbounded/Equation.lean` | one `abbrev` facade, `HasUnboundedBoundedSylvesterEquation`, with five call sites in `Sylvester/Unbounded/Neumann.lean` and `Experimental/…/Sylvester/Unbounded.lean`. The Experimental caller retypes a whole proof (`A.addBounded`, `A.toLinearMap` throughout), so this is a genuine consumer migration, not a substitution. |
 | `Interop/Spectra/BoundedFromSpectrum.lean` | held by SR-B (namek). |
 
+**Second correction to the CommonCore sizing, 2026-07-29 — it is NOT
+self-contained, and the boundary is `UnboundedSinThetaData`.** I sized it by
+counting modules that *name* `PaperCommonCoreResidualData` / `IsGraphCore` (three
+consumers, five references) and concluded it was bounded. That missed what the
+file **constructs**: its tail,
+`unboundedSinThetaDataOfPaperCommonCore`, builds an `UnboundedSinThetaData`,
+whose `A`, `A₀`, `Λ₁` fields are themselves `ClosedOperator`-typed. So
+retyping `PaperCommonCoreResidualData` onto `LinearPMap` forces
+`UnboundedSinThetaData` to move too, and that structure is consumed across the
+`SinTheta` tree.
+
+**The real migration boundary in this cluster is `UnboundedSinThetaData`**
+(`DavisKahan/SinTheta/Unbounded/Core.lean`), not `CommonCore`. Whoever takes it
+should start there and let `CommonCore` follow.
+
+What *did* migrate cleanly, because it depends on neither: `IsGraphCore` and its
+two lemmas, now raw in
+`ForTauCeti/Analysis/InnerProductSpace/LinearPMap/GraphCore.lean`, together with
+`LinearPMap.IsClosed.mem_domain_of_tendsto` — closedness in the sequential form
+the closed-graph arguments consume.
+
+**Method note for the next sizing.** Three times now I have sized a U1 unit by
+grepping for who *names* a declaration. That undercounts: what a module
+*constructs* binds it just as tightly as what it references. Size by the
+structures a module builds, not only by its callers.
+
 **Correction to that conclusion, measured 2026-07-29 after writing it.** I said
 below that the remaining positions "do not decompose"; that is too strong. It is
 right for the two 50-position modules, but **`CommonCore` is bounded and is the

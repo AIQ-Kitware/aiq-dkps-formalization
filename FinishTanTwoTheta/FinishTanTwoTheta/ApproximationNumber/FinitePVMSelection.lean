@@ -20,7 +20,6 @@ namespace FinishTanTwoTheta
 
 open scoped InnerProductSpace
 open Set
-open TauCeti.DavisKahan.Experimental.SpectraBridge
 
 noncomputable section
 
@@ -35,9 +34,9 @@ theorem exists_orthonormal_mem_pvmRange_of_natCast_le_rank
     (P : Spectra.ProjValMeasure H) (B : Set ℝ) (hB : MeasurableSet B)
     (m : ℕ) (hm : (m : Cardinal) ≤ (P.proj B hB).rank) :
     ∃ v : Fin m → H, Orthonormal ℂ v ∧
-      ∀ i, v i ∈ pvmRangeSubspace P B hB := by
+      ∀ i, v i ∈ (P.proj B hB).range := by
   classical
-  let W : Submodule ℂ H := pvmRangeSubspace P B hB
+  let W : Submodule ℂ H := (P.proj B hB).range
   have hmW : (m : Cardinal) ≤ Module.rank ℂ W := by
     change (m : Cardinal) ≤ (P.proj B hB).rank
     exact hm
@@ -68,8 +67,8 @@ theorem inner_eq_zero_of_mem_disjoint_pvmRanges
     (P : Spectra.ProjValMeasure H)
     {B₁ B₂ : Set ℝ} (hB₁ : MeasurableSet B₁) (hB₂ : MeasurableSet B₂)
     (hdisj : Disjoint B₁ B₂) {x y : H}
-    (hx : x ∈ pvmRangeSubspace P B₁ hB₁)
-    (hy : y ∈ pvmRangeSubspace P B₂ hB₂) :
+    (hx : x ∈ (P.proj B₁ hB₁).range)
+    (hy : y ∈ (P.proj B₂ hB₂).range) :
     ⟪x, y⟫_ℂ = 0 := by
   rcases hx with ⟨x₀, rfl⟩
   rcases hy with ⟨y₀, rfl⟩
@@ -87,9 +86,9 @@ theorem natCast_sub_le_rank_pvm_Icc_of_cutoff_bounds
     ((q - p : ℕ) : Cardinal) ≤
       (P.proj (Set.Icc lo hi) measurableSet_Icc).rank := by
   classical
-  let L : Submodule ℂ H := pvmRangeSubspace P (Set.Ici lo) measurableSet_Ici
-  let U : Submodule ℂ H := pvmRangeSubspace P (Set.Ioi hi) measurableSet_Ioi
-  let B : Submodule ℂ H := pvmRangeSubspace P (Set.Icc lo hi) measurableSet_Icc
+  let L : Submodule ℂ H := (P.proj (Set.Ici lo) measurableSet_Ici).range
+  let U : Submodule ℂ H := (P.proj (Set.Ioi hi) measurableSet_Ioi).range
+  let B : Submodule ℂ H := (P.proj (Set.Icc lo hi) measurableSet_Icc).range
   have hdisj : Disjoint (Set.Ioi hi) (Set.Icc lo hi) := by
     rw [Set.disjoint_left]
     intro x hxU hxB
@@ -145,9 +144,14 @@ theorem natCast_sub_le_rank_pvm_Icc_of_cutoff_bounds
       change P.proj (Set.Icc lo hi) measurableSet_Icc (x : H) =
         P.proj (Set.Icc lo hi) measurableSet_Icc (y : H) at h
       simpa only [z, map_sub, sub_eq_zero] using h
-    have hzfix : P.proj (Set.Ici lo) measurableSet_Ici z = z :=
-      pvmProjection_eq_self_of_mem_rangeSubspace P (Set.Ici lo)
-        measurableSet_Ici hzL
+    have hzfix : P.proj (Set.Ici lo) measurableSet_Ici z = z := by
+      rcases hzL with ⟨z₀, rfl⟩
+      change P.proj (Set.Ici lo) measurableSet_Ici
+          (P.proj (Set.Ici lo) measurableSet_Ici z₀) =
+        P.proj (Set.Ici lo) measurableSet_Ici z₀
+      simpa only [mul_apply_eq_comp] using
+        congrArg (fun T : H →L[ℂ] H => T z₀)
+          (P.proj_idem (Set.Ici lo) measurableSet_Ici)
     have hz0 : P.proj (Set.Ici lo) measurableSet_Ici z = 0 := by
       rw [hsplit, ContinuousLinearMap.add_apply, hUz, hBz, add_zero]
     have : z = 0 := by simpa only [hzfix] using hz0
