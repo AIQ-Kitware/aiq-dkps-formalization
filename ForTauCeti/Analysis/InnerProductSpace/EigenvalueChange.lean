@@ -124,43 +124,44 @@ permutation orbit are native; the operator wrapper (L3, L5) lifts the eigenvalue
 open scoped InnerProductSpace Matrix
 open Module (finrank)
 
-/-- Coordinate permutation of a Euclidean vector: `permEV w π` has `i`-th entry `w (π i)`. -/
-def permEV {n : ℕ} (w : EuclideanSpace ℝ (Fin n)) (π : Equiv.Perm (Fin n)) :
+/-- Coordinate permutation of a Euclidean vector: `permuteCoords w π` has `i`-th entry `w (π i)`. -/
+def permuteCoords {n : ℕ} (w : EuclideanSpace ℝ (Fin n)) (π : Equiv.Perm (Fin n)) :
     EuclideanSpace ℝ (Fin n) :=
   (WithLp.equiv 2 (Fin n → ℝ)).symm fun i => w (π i)
 
 @[simp] lemma permEV_apply {n : ℕ} (w : EuclideanSpace ℝ (Fin n)) (π : Equiv.Perm (Fin n))
-    (i : Fin n) : permEV w π i = w (π i) := rfl
+    (i : Fin n) : permuteCoords w π i = w (π i) := rfl
 
-/-- A coordinate permutation is an isometry: `‖permEV w π‖ = ‖w‖`. -/
+/-- A coordinate permutation is an isometry: `‖permuteCoords w π‖ = ‖w‖`. -/
 lemma norm_permEV {n : ℕ} (w : EuclideanSpace ℝ (Fin n)) (π : Equiv.Perm (Fin n)) :
-    ‖permEV w π‖ = ‖w‖ := by
+    ‖permuteCoords w π‖ = ‖w‖ := by
   rw [EuclideanSpace.norm_eq, EuclideanSpace.norm_eq]
   simp only [permEV_apply]
   exact congrArg _ (Equiv.sum_comp π fun j => ‖w j‖ ^ 2)
 
 /-- The squared displacement of a coordinate permutation, in the form L1 consumes. -/
 lemma norm_sub_permEV_sq {n : ℕ} (w : EuclideanSpace ℝ (Fin n)) (π : Equiv.Perm (Fin n)) :
-    ‖w - permEV w π‖ ^ 2 = ∑ i, (w i - w (π i)) ^ 2 := by
+    ‖w - permuteCoords w π‖ ^ 2 = ∑ i, (w i - w (π i)) ^ 2 := by
   rw [EuclideanSpace.norm_sq_eq]
   refine Finset.sum_congr rfl fun i _ => ?_
   rw [PiLp.sub_apply, permEV_apply, Real.norm_eq_abs, sq_abs]
 
-/-- Because a coordinate permutation preserves the norm, the residual `w − permEV w π` makes an
-exact right-triangle relation `2⟪w − permEV w π, w⟫ = ‖w − permEV w π‖²` (Davis's "both vertices
-on the unit sphere"). -/
+/-- Because a coordinate permutation preserves the norm, the residual
+`w − permuteCoords w π` makes an exact right-triangle relation
+`2⟪w − permuteCoords w π, w⟫ = ‖w − permuteCoords w π‖²`
+(Davis's "both vertices on the unit sphere"). -/
 lemma two_mul_inner_sub_permEV {n : ℕ} (w : EuclideanSpace ℝ (Fin n)) (π : Equiv.Perm (Fin n)) :
-    2 * ⟪w - permEV w π, w⟫_ℝ = ‖w - permEV w π‖ ^ 2 := by
-  have hv : ‖permEV w π‖ ^ 2 = ‖w‖ ^ 2 := by rw [norm_permEV]
+    2 * ⟪w - permuteCoords w π, w⟫_ℝ = ‖w - permuteCoords w π‖ ^ 2 := by
+  have hv : ‖permuteCoords w π‖ ^ 2 = ‖w‖ ^ 2 := by rw [norm_permEV]
   rw [norm_sub_sq_real, hv, inner_sub_left, real_inner_self_eq_norm_sq,
-    real_inner_comm (permEV w π) w]
+    real_inner_comm (permuteCoords w π) w]
   ring
 
 /-- **L2 — geometric core (Davis eq. 4.2), unnormalised.**  If the coordinates of `w` are
 `γ`-separated and `c` lies in the convex hull of the permutation orbit of `w`, then
 `(γ/√2)·‖w − c‖ ≤ ⟪w − c, w⟫`.
 
-Proof: extract `c = ∑ aₖ • pₖ` with each `pₖ = permEV w πₖ` a vertex (`mem_convexHull_iff…`).
+Proof: extract `c = ∑ aₖ • pₖ` with each `pₖ = permuteCoords w πₖ` a vertex (`mem_convexHull_iff…`).
 Then `⟪w − c, w⟫ = ∑ aₖ ⟪w − pₖ, w⟫` and, per vertex, `⟪w − pₖ, w⟫ = ½‖w − pₖ‖²`
 (`two_mul_inner_sub_permEV`) with `‖w − pₖ‖ ≥ √2 γ` (from `two_mul_sq_le_sum_sq_sub_perm` when
 `πₖ ≠ 1`, else `0`), giving `(γ/√2)‖w − pₖ‖ ≤ ⟪w − pₖ, w⟫`.  Summing and applying the triangle
@@ -168,12 +169,12 @@ inequality `‖w − c‖ ≤ ∑ aₖ‖w − pₖ‖` closes it. -/
 theorem sqrt_two_inv_mul_norm_le_inner_of_mem_convexHull_perm {n : ℕ}
     (w c : EuclideanSpace ℝ (Fin n)) {γ : ℝ} (hγ : 0 ≤ γ)
     (hgap : ∀ i j, i ≠ j → γ ≤ |w i - w j|)
-    (hc : c ∈ convexHull ℝ (Set.range fun π : Equiv.Perm (Fin n) => permEV w π)) :
+    (hc : c ∈ convexHull ℝ (Set.range fun π : Equiv.Perm (Fin n) => permuteCoords w π)) :
     γ / Real.sqrt 2 * ‖w - c‖ ≤ ⟪w - c, w⟫_ℝ := by
   obtain ⟨ι, _, a, p, ha0, ha1, hp, hpc⟩ := mem_convexHull_iff_exists_fintype.mp hc
-  -- Choose, for each vertex `p k`, a permutation `π k` with `permEV w (π k) = p k`.
+  -- Choose, for each vertex `p k`, a permutation `π k` with `permuteCoords w (π k) = p k`.
   choose π hπ using hp
-  replace hπ : ∀ k, permEV w (π k) = p k := hπ
+  replace hπ : ∀ k, permuteCoords w (π k) = p k := hπ
   have hγ2 : (0:ℝ) ≤ γ / Real.sqrt 2 := by positivity
   -- `w − c` is the convex combination `∑ aₖ • (w − p k)`.
   have hwc : w - c = ∑ k, a k • (w - p k) := by
@@ -237,7 +238,7 @@ over `dH` (Cauchy–Schwarz) at `−√2γ‖w−c‖ + ‖w−c‖²`; adding `
 `‖w−c‖²+‖w‖²−‖c‖² = 2⟪w−c,w⟫` reduces the claim to L2. -/
 theorem sum_sq_sub_pinch_ge {n : ℕ} (w c dH : EuclideanSpace ℝ (Fin n))
     {γ : ℝ} (hγ : 0 ≤ γ) (hgap : ∀ i j, i ≠ j → γ ≤ |w i - w j|)
-    (hc : c ∈ convexHull ℝ (Set.range fun π : Equiv.Perm (Fin n) => permEV w π))
+    (hc : c ∈ convexHull ℝ (Set.range fun π : Equiv.Perm (Fin n) => permuteCoords w π))
     (hdH : ‖dH‖ ≤ γ / Real.sqrt 2) :
     ‖dH‖ ^ 2 - (‖w‖ ^ 2 - ‖c‖ ^ 2) ≤ ‖w - (c - dH)‖ ^ 2 := by
   have hL2 := sqrt_two_inv_mul_norm_le_inner_of_mem_convexHull_perm w c hγ hgap hc
@@ -270,7 +271,7 @@ theorem diag_mem_convexHull_perm_spectrum (hT : T.IsSymmetric) (hS : S.IsSymmetr
     (WithLp.equiv 2 (Fin n → ℝ)).symm
         (fun k => RCLike.re ⟪hT.eigenvectorBasis hn k, S (hT.eigenvectorBasis hn k)⟫_𝕜)
       ∈ convexHull ℝ (Set.range fun π : Equiv.Perm (Fin n) =>
-          permEV ((WithLp.equiv 2 (Fin n → ℝ)).symm (hS.eigenvalues hn)) π) := by
+          permuteCoords ((WithLp.equiv 2 (Fin n → ℝ)).symm (hS.eigenvalues hn)) π) := by
   classical
   set e := WithLp.equiv 2 (Fin n → ℝ) with he
   set v := hT.eigenvectorBasis hn with hv
@@ -311,10 +312,10 @@ theorem diag_mem_convexHull_perm_spectrum (hT : T.IsSymmetric) (hS : S.IsSymmetr
   have hLimg := LinearMap.image_convexHull L (Set.range fun π : Equiv.Perm (Fin n) => W₀ ∘ (⇑π))
   have hmem1 : L c₀ ∈ convexHull ℝ (L '' Set.range fun π : Equiv.Perm (Fin n) => W₀ ∘ (⇑π)) := by
     rw [← hLimg]; exact Set.mem_image_of_mem L hmem0
-  -- Identify `L c₀` with the diagonal and `L '' orbit` with the `permEV` orbit.
+  -- Identify `L c₀` with the diagonal and `L '' orbit` with the `permuteCoords` orbit.
   have hLc : L c₀ = e.symm c₀ := rfl
   have hset : (L '' Set.range fun π : Equiv.Perm (Fin n) => W₀ ∘ (⇑π))
-      = Set.range fun π : Equiv.Perm (Fin n) => permEV (e.symm W₀) π := by
+      = Set.range fun π : Equiv.Perm (Fin n) => permuteCoords (e.symm W₀) π := by
     rw [← Set.range_comp]
     exact congrArg _ (funext fun π => rfl)
   rw [hLc, hset] at hmem1
