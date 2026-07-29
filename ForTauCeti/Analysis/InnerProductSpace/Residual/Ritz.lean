@@ -11,6 +11,19 @@ import ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm
 
 Finite-dimensional compressions, invariant-pair residuals, Galerkin
 orthogonality, covariance, and Frobenius minimality.
+
+## Provenance
+
+*Moved, not restated.*  This file was
+`DavisKahan/FiniteDimensional/Residual/Ritz.lean`
+until 2026-07-29, when lane Y3(b4) moved the whole remaining sin-Θ closure into
+the staging layer.  Statements, proofs, signatures and namespaces are unchanged;
+the declarations already lived in `TauCeti.*`, so the move was a path change and
+an import repoint.
+
+Y3(b2) and Y3(b3) are what made it possible: before them this file's import
+closure crossed `ForMathlib`, which the `ForTauCeti` layer rule forbids.
+
 -/
 
 namespace TauCeti
@@ -126,7 +139,7 @@ theorem residual_eq_perturbation_comp {A B : E →ₗ[𝕜] E}
     (X : F →ₗᵢ[𝕜] E) (M : F →ₗ[𝕜] F)
     (hBX : B ∘ₗ X.toLinearMap = X.toLinearMap ∘ₗ M) :
     residual A X M = (A - B) ∘ₗ X.toLinearMap := by
-  show A ∘ₗ X.toLinearMap - X.toLinearMap ∘ₗ M = (A - B) ∘ₗ X.toLinearMap
+  change A ∘ₗ X.toLinearMap - X.toLinearMap ∘ₗ M = (A - B) ∘ₗ X.toLinearMap
   rw [LinearMap.sub_comp, hBX]
 
 /-- A unitarily invariant norm of the invariant-pair residual is bounded by

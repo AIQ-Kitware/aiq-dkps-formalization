@@ -20,7 +20,7 @@ To be re-authored per Mathlib's AI-contribution policy at PR time.
 -/
 
 import ForTauCeti.Analysis.InnerProductSpace.CourantFischer
-import DavisKahan.FiniteDimensional.DoubleAngle.Vector
+import ForTauCeti.Analysis.InnerProductSpace.DoubleAngle.Vector
 
 /-! # The subspace tan 2Θ theorem: block identities and the gated statement
 

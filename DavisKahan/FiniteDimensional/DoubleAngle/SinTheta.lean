@@ -24,7 +24,7 @@ commutes with `S`.
 To be re-authored per Mathlib's AI-contribution policy at PR time.
 -/
 
-import DavisKahan.FiniteDimensional.SinTheta.UnitarilyInvariant
+import ForTauCeti.Analysis.InnerProductSpace.SinTheta.UnitarilyInvariant
 import ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm
 import ForTauCeti.Analysis.InnerProductSpace.AngleGeometry
 import ForTauCeti.Analysis.InnerProductSpace.SpectralGap

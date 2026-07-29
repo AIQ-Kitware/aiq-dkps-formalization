@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-5.6 Thinking
 -/
 import DavisKahan.FiniteDimensional.DoubleAngle.SinTheta
-import DavisKahan.FiniteDimensional.SinTheta.Perturbation
+import ForTauCeti.Analysis.InnerProductSpace.SinTheta.Perturbation
 import DavisKahan.FiniteDimensional.Residual.AngleEmbeddings
 
 /-!

@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
 import ForTauCeti.Analysis.InnerProductSpace.AngleGeometry
-import DavisKahan.FiniteDimensional.Residual.TrialMap
+import ForTauCeti.Analysis.InnerProductSpace.Residual.TrialMap
 import ForTauCeti.Analysis.InnerProductSpace.FrameFactorization
 
 /-!
@@ -12,6 +12,19 @@ import ForTauCeti.Analysis.InnerProductSpace.FrameFactorization
 
 Coordinate-space sine and cosine embeddings, their projected residual identity,
 and the singular-value dictionary relating them to directed principal angles.
+
+## Provenance
+
+*Moved, not restated.*  This file was
+`DavisKahan/FiniteDimensional/Residual/AngleEmbedding.lean`
+until 2026-07-29, when lane Y3(b4) moved the whole remaining sin-Θ closure into
+the staging layer.  Statements, proofs, signatures and namespaces are unchanged;
+the declarations already lived in `TauCeti.*`, so the move was a path change and
+an import repoint.
+
+Y3(b2) and Y3(b3) are what made it possible: before them this file's import
+closure crossed `ForMathlib`, which the `ForTauCeti` layer rule forbids.
+
 -/
 
 namespace TauCeti
