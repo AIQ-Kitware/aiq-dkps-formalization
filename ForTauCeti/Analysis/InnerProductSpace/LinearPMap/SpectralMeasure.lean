@@ -863,5 +863,243 @@ theorem re_inner_apply_bounds_of_subset_Icc {β α : ℝ} (hBsub : B ⊆ Set.Icc
 
 end BoundedSet
 
+section ResolventGap
+
+variable {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A) (B : Set ℝ) (hB : MeasurableSet B)
+
+/-- **A spectral gap gives a resolvent point of the restriction.**  If `B` keeps
+its distance `ε` from `lam`, then `lam` is in the resolvent set of the
+restriction of `A` to the spectral range of `B`; the inverse is the Borel
+calculus of `(κ - lam)⁻¹ 1_B`. -/
+theorem mem_resolventSet_specRestrict_of_gap {lam ε : ℝ} (hε : 0 < ε)
+    (hgap : ∀ s ∈ B, ε ≤ |s - lam|) :
+    (lam : ℂ) ∈ resolventSet (specRestrict hA B hB) := by
+  classical
+  set hU := isStarNormal_cayley hA with hhU
+  set hni := negI_mem_resolventSet hA with hhni
+  set κ := cayleyInv hA with hκ
+  set S : Set (_root_.spectrum ℂ (cayley hA)) := κ ⁻¹' B with hS
+  have hSm : MeasurableSet S := measurable_cayleyInv hA hB
+  set ind : _root_.spectrum ℂ (cayley hA) → ℂ := S.indicator (fun _ => (1 : ℂ)) with hind
+  have hindb : BorelCalculus.IsBddMeasurable ind :=
+    BorelCalculus.isBddMeasurable_indicator (a := cayley hA) hSm
+  have hmeasκ : Measurable fun w => ((κ w : ℝ) : ℂ) :=
+    Complex.continuous_ofReal.measurable.comp (measurable_cayleyInv hA)
+  have hindone : ∀ w ∈ S, ind w = 1 := fun w hw => by simp [hind, hw]
+  have hindnil : ∀ w, w ∉ S → ind w = 0 := fun w hw => by simp [hind, hw]
+  -- the gap, transported to the spectrum
+  have hgapS : ∀ w ∈ S, ε ≤ ‖((κ w : ℂ) - (lam : ℂ))‖ := by
+    intro w hw
+    have hκB : κ w ∈ B := hw
+    rw [show ((κ w : ℂ) - (lam : ℂ)) = ((κ w - lam : ℝ) : ℂ) by push_cast; ring,
+      Complex.norm_real, Real.norm_eq_abs]
+    exact hgap _ hκB
+  have hne : ∀ w ∈ S, ((κ w : ℂ) - (lam : ℂ)) ≠ 0 := by
+    intro w hw hzero
+    have := hgapS w hw
+    rw [hzero, norm_zero] at this
+    linarith
+  -- the inverting symbol and its `(κ + i)`-companion
+  set f : _root_.spectrum ℂ (cayley hA) → ℂ :=
+    fun w => ((κ w : ℂ) - (lam : ℂ))⁻¹ * ind w with hf
+  set hsym : _root_.spectrum ℂ (cayley hA) → ℂ :=
+    fun w => ((κ w : ℂ) + Complex.I) * f w with hhsym
+  have hfmeas : Measurable f :=
+    ((hmeasκ.sub measurable_const).inv).mul hindb.measurable
+  have hfb : BorelCalculus.IsBddMeasurable f := by
+    refine ⟨hfmeas, ε⁻¹, by positivity, fun w => ?_⟩
+    by_cases hw : w ∈ S
+    · rw [hf]
+      simp only [hindone w hw, mul_one, norm_inv]
+      simpa only [one_div] using one_div_le_one_div_of_le hε (hgapS w hw)
+    · rw [hf]
+      simp only [hindnil w hw, mul_zero, norm_zero]
+      positivity
+  have hhb : BorelCalculus.IsBddMeasurable hsym := by
+    refine ⟨(hmeasκ.add measurable_const).mul hfmeas, 1 + (|lam| + 1) / ε,
+      by positivity, fun w => ?_⟩
+    by_cases hw : w ∈ S
+    · have hgw := hgapS w hw
+      have hpos : 0 < ‖((κ w : ℂ) - (lam : ℂ))‖ := lt_of_lt_of_le hε hgw
+      have hb1 : ‖((κ w : ℂ) + Complex.I)‖
+          ≤ ‖((κ w : ℂ) - (lam : ℂ))‖ + (|lam| + 1) := by
+        have hsplit : ((κ w : ℂ) + Complex.I)
+            = ((κ w : ℂ) - (lam : ℂ)) + ((lam : ℂ) + Complex.I) := by ring
+        rw [hsplit]
+        refine le_trans (norm_add_le _ _) ?_
+        gcongr
+        refine le_trans (norm_add_le _ _) ?_
+        rw [Complex.norm_real, Real.norm_eq_abs, Complex.norm_I]
+      have hfw : ‖f w‖ = (‖((κ w : ℂ) - (lam : ℂ))‖)⁻¹ := by
+        rw [hf]
+        simp only [hindone w hw, mul_one, norm_inv]
+      have hinv : (‖((κ w : ℂ) - (lam : ℂ))‖)⁻¹ ≤ ε⁻¹ := by
+        simpa only [one_div] using one_div_le_one_div_of_le hε hgw
+      rw [hhsym, norm_mul, hfw]
+      have hstep : ‖((κ w : ℂ) + Complex.I)‖ * (‖((κ w : ℂ) - (lam : ℂ))‖)⁻¹
+          ≤ (‖((κ w : ℂ) - (lam : ℂ))‖ + (|lam| + 1))
+              * (‖((κ w : ℂ) - (lam : ℂ))‖)⁻¹ := by
+        gcongr
+      have hexp : (‖((κ w : ℂ) - (lam : ℂ))‖ + (|lam| + 1))
+          * (‖((κ w : ℂ) - (lam : ℂ))‖)⁻¹
+          = 1 + (|lam| + 1) * (‖((κ w : ℂ) - (lam : ℂ))‖)⁻¹ := by
+        rw [add_mul, mul_inv_cancel₀ (ne_of_gt hpos)]
+      have hlast : (|lam| + 1) * (‖((κ w : ℂ) - (lam : ℂ))‖)⁻¹
+          ≤ (|lam| + 1) / ε := by
+        rw [div_eq_mul_inv]
+        exact mul_le_mul_of_nonneg_left hinv (by positivity)
+      linarith
+    · have hfz : f w = 0 := by rw [hf]; simp [hindnil w hw]
+      change ‖((κ w : ℂ) + Complex.I) * f w‖ ≤ 1 + (|lam| + 1) / ε
+      rw [hfz, mul_zero, norm_zero]
+      positivity
+  -- the resolvent as a Borel-calculus image, and `g = (κ + i)⁻¹` almost everywhere
+  set gsym : C(_root_.spectrum ℂ (cayley hA), ℂ) :=
+    (2 * Complex.I)⁻¹ • (1 - cayleyCoord hA) with hgsym
+  have hgb : BorelCalculus.IsBddMeasurable (fun w => gsym w) :=
+    BorelCalculus.IsBddMeasurable.of_continuous gsym
+  have hRg : resolvent A hni = BorelCalculus.borelCalculus hU hgb :=
+    resolvent_negI_eq_borelCalculus hA hgb
+  have hgae : ∀ η : H, ∀ᵐ w ∂(BorelCalculus.diagMeasure hU η),
+      gsym w * ((κ w : ℂ) + Complex.I) = 1 := by
+    intro η
+    have hae := MeasureTheory.compl_mem_ae_iff.mpr (diagMeasure_cayley_preimage_one hA η)
+    filter_upwards [hae] with w hw
+    have hw1 : (w : ℂ) ≠ 1 := hw
+    have hd : (1 : ℂ) - (w : ℂ) ≠ 0 := sub_ne_zero.mpr (Ne.symm hw1)
+    have hgval : gsym w = (2 * Complex.I)⁻¹ * (1 - (w : ℂ)) := rfl
+    rw [hgval, cayleyInv_add_I hA hw1]
+    field_simp
+  -- `R(-i) ∘ T_hsym = T_f`
+  have hcomp : BorelCalculus.borelCalculus hU (hgb.mul hhb)
+      = BorelCalculus.borelCalculus hU hfb := by
+    refine BorelCalculus.borelCalculus_congr_ae hU _ _ fun η => ?_
+    filter_upwards [hgae η] with w hw
+    change gsym w * (((κ w : ℂ) + Complex.I) * f w) = f w
+    rw [← mul_assoc, hw, one_mul]
+  set Rop := BorelCalculus.borelCalculus hU hfb with hRop
+  have hRopdom : ∀ φ : H,
+      Rop φ = resolvent A hni (BorelCalculus.borelCalculus hU hhb φ) := by
+    intro φ
+    have hx := congrArg (fun L : H →L[ℂ] H => L φ)
+      ((BorelCalculus.borelCalculus_mul hU hgb hhb).symm.trans hcomp)
+    simp only [_root_.mul_apply_eq_comp] at hx
+    rw [hRg]
+    exact hx.symm
+  have hmemdom : ∀ φ : H, Rop φ ∈ A.domain := by
+    intro φ
+    rw [hRopdom φ]
+    exact resolvent_mem_domain hni _
+  have hAeq : ∀ φ : H, A ⟨Rop φ, hmemdom φ⟩
+      = BorelCalculus.borelCalculus hU hhb φ - Complex.I • Rop φ := by
+    intro φ
+    have hsolve := sub_smul_resolvent hni (BorelCalculus.borelCalculus hU hhb φ)
+    have hcongr : (⟨resolvent A hni (BorelCalculus.borelCalculus hU hhb φ),
+        resolvent_mem_domain hni _⟩ : A.domain) = ⟨Rop φ, hmemdom φ⟩ :=
+      Subtype.ext (hRopdom φ).symm
+    rw [hcongr, ← hRopdom φ] at hsolve
+    linear_combination (norm := module) hsolve
+  -- `(A - lam) T_f = E(B)`
+  set hsm2 := hfb.const_smul (-(Complex.I + (lam : ℂ))) with hhsm2
+  have hidsym : BorelCalculus.borelCalculus hU hindb
+      = BorelCalculus.borelCalculus hU (hhb.add hsm2) := by
+    refine BorelCalculus.borelCalculus_congr_ae hU _ _ fun η =>
+      Filter.Eventually.of_forall fun w => ?_
+    change ind w
+      = ((κ w : ℂ) + Complex.I) * f w + -(Complex.I + (lam : ℂ)) * f w
+    by_cases hw : w ∈ S
+    · have hfw : f w = ((κ w : ℂ) - (lam : ℂ))⁻¹ := by
+        rw [hf]; simp [hindone w hw]
+      rw [hindone w hw, hfw]
+      field_simp [hne w hw]
+      ring
+    · have hfz : f w = 0 := by rw [hf]; simp [hindnil w hw]
+      rw [hindnil w hw, hfz]
+      ring
+  have hright : ∀ φ : H, A ⟨Rop φ, hmemdom φ⟩ - (lam : ℂ) • Rop φ
+      = BorelCalculus.borelCalculus hU hindb φ := by
+    intro φ
+    rw [hAeq φ, hidsym, BorelCalculus.borelCalculus_add hU hhb hsm2,
+      BorelCalculus.borelCalculus_const_smul hU (-(Complex.I + (lam : ℂ))) hfb]
+    simp only [_root_.add_apply, _root_.smul_apply, ← hRop]
+    module
+  -- `T_f` lands in the spectral range
+  have hindf : BorelCalculus.borelCalculus hU (hindb.mul hfb)
+      = BorelCalculus.borelCalculus hU hfb := by
+    refine BorelCalculus.borelCalculus_congr_ae hU _ _ fun η =>
+      Filter.Eventually.of_forall fun w => ?_
+    change ind w * f w = f w
+    by_cases hw : w ∈ S
+    · rw [hindone w hw, one_mul]
+    · have hfz : f w = 0 := by rw [hf]; simp [hindnil w hw]
+      rw [hfz, mul_zero]
+  have hKmap : ∀ φ : H, Rop φ ∈ specRange hA B hB := by
+    intro φ
+    have hx := congrArg (fun L : H →L[ℂ] H => L φ)
+      ((BorelCalculus.borelCalculus_mul hU hindb hfb).symm.trans hindf)
+    simp only [_root_.mul_apply_eq_comp] at hx
+    exact ⟨Rop φ, hx⟩
+  -- the left inverse
+  have hkne : ∀ w : _root_.spectrum ℂ (cayley hA), ((κ w : ℂ) + Complex.I) ≠ 0 := by
+    intro w h0
+    have him := congrArg Complex.im h0
+    simp at him
+  have hlefts : BorelCalculus.borelCalculus hU
+        (hfb.add ((hfb.mul hgb).const_smul (-(Complex.I + (lam : ℂ)))))
+      = BorelCalculus.borelCalculus hU (hindb.mul hgb) := by
+    refine BorelCalculus.borelCalculus_congr_ae hU _ _ fun η => ?_
+    filter_upwards [hgae η] with w hw
+    have hgval : gsym w = ((κ w : ℂ) + Complex.I)⁻¹ := by
+      field_simp [hkne w]
+      linear_combination hw
+    by_cases hwS : w ∈ S
+    · have hfw : f w = ((κ w : ℂ) - (lam : ℂ))⁻¹ := by
+        rw [hf]; simp [hindone w hwS]
+      rw [hindone w hwS, hfw, hgval, one_mul]
+      field_simp [hne w hwS, hkne w]
+      ring
+    · have hfz : f w = 0 := by rw [hf]; simp [hindnil w hwS]
+      rw [hindnil w hwS, hfz]
+      ring
+  have hlefts' : Rop + (-(Complex.I + (lam : ℂ)))
+        • (Rop * BorelCalculus.borelCalculus hU hgb)
+      = BorelCalculus.borelCalculus hU hindb * BorelCalculus.borelCalculus hU hgb := by
+    rw [← BorelCalculus.borelCalculus_mul hU hfb hgb,
+      ← BorelCalculus.borelCalculus_const_smul hU (-(Complex.I + (lam : ℂ))) (hfb.mul hgb),
+      hRop, ← BorelCalculus.borelCalculus_add hU hfb ((hfb.mul hgb).const_smul _),
+      ← BorelCalculus.borelCalculus_mul hU hindb hgb]
+    exact hlefts
+  refine ⟨Rop.restrict (fun x _ => hKmap x), ?_, ?_⟩
+  · intro ψ
+    apply Subtype.ext
+    have hyK : ((ψ : specRange hA B hB) : H) ∈ specRange hA B hB :=
+      (ψ : specRange hA B hB).2
+    have hydom : ((ψ : specRange hA B hB) : H) ∈ A.domain := ψ.2
+    change Rop (A ⟨((ψ : specRange hA B hB) : H), hydom⟩
+        - (lam : ℂ) • ((ψ : specRange hA B hB) : H)) = ((ψ : specRange hA B hB) : H)
+    set y : H := ((ψ : specRange hA B hB) : H) with hy
+    set φ₀ : H := A ⟨y, hydom⟩ - (-Complex.I) • y with hφ₀
+    have hy0 : resolvent A hni φ₀ = y := resolvent_apply_sub_smul hni ⟨y, hydom⟩
+    have hsplit : A ⟨y, hydom⟩ - (lam : ℂ) • y = φ₀ - (Complex.I + (lam : ℂ)) • y := by
+      rw [hφ₀]; module
+    have hPy : BorelCalculus.borelCalculus hU hindb y = y :=
+      (mem_specRange_iff hA B hB y).mp hyK
+    have hfin := congrArg (fun L : H →L[ℂ] H => L φ₀) hlefts'
+    simp only [_root_.add_apply, _root_.smul_apply, _root_.mul_apply_eq_comp] at hfin
+    rw [← hRg, hy0, hPy] at hfin
+    rw [hsplit, map_sub, map_smul]
+    linear_combination (norm := module) hfin
+  · intro φ
+    refine ⟨hmemdom ((φ : specRange hA B hB) : H), ?_⟩
+    apply Subtype.ext
+    change A ⟨Rop ((φ : specRange hA B hB) : H),
+        hmemdom ((φ : specRange hA B hB) : H)⟩
+        - (lam : ℂ) • Rop ((φ : specRange hA B hB) : H)
+        = ((φ : specRange hA B hB) : H)
+    rw [hright]
+    exact (mem_specRange_iff hA B hB _).mp φ.2
+
+end ResolventGap
+
 end LinearPMap
 end TauCeti
