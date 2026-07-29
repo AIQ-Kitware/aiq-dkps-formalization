@@ -655,33 +655,58 @@ private theorem tanTwoAngleOperatorC_eq_modulus_ambientGraphTangent
     congr 1
   have hSCformula : Sang ∘L Cang =
       ContinuousLinearMap.modulus Y ∘L R ∘L P := by
+    -- `Commute G (R P)` from `G R = R G` and `G P = G = P G`; then
+    -- `Commute |Y| (R P)` because `|Y| = CFC.sqrt G` and `Commute.cfcₙ_nnreal`
+    -- transports commutation through the functional calculus.
+    have hGRP : Commute G (R ∘L P) := by
+      show G * (R * P) = (R * P) * G
+      calc G * (R * P) = (G * R) * P := (mul_assoc _ _ _).symm
+        _ = (R * G) * P := by rw [show G * R = R * G from hGR]
+        _ = R * (G * P) := mul_assoc _ _ _
+        _ = R * G := by rw [show G * P = G from hGP]
+        _ = R * (P * G) := by rw [show P * G = G from hPG]
+        _ = (R * P) * G := (mul_assoc _ _ _).symm
+    have hmodRP : Commute (ContinuousLinearMap.modulus Y) (R ∘L P) :=
+      Commute.cfcₙ_nnreal hGRP _
+    have hRPnonneg : (0 : E →L[ℂ] E) ≤ R ∘L P := by
+      rw [show R ∘L P = Cang ∘L Cang from hCangSq.symm]
+      exact (Commute.refl Cang).mul_nonneg (cosAngleOperatorC_nonneg U V)
+        (cosAngleOperatorC_nonneg U V)
     have hleftNonneg : (0 : E →L[ℂ] E) ≤ Sang ∘L Cang :=
       hSCcomm.mul_nonneg (sinAngleOperatorDirectedC_nonneg U V)
         (cosAngleOperatorC_nonneg U V)
     have hrightNonneg : (0 : E →L[ℂ] E) ≤
-        ContinuousLinearMap.modulus Y ∘L R ∘L P := by
-      -- all three factors are nonnegative functions of `G` on `U`
-      rw [ContinuousLinearMap.nonneg_iff_isPositive]
-      refine ⟨?_, ?_⟩
-      · rw [ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric]
-        intro x y
-        simp [ContinuousLinearMap.adjoint_inner_left]
-      · intro x
-        rw [ContinuousLinearMap.reApplyInnerSelf_apply]
-        positivity
-    apply CFC.sqrt_unique
-    · rw [← hSCcomm.eq, ContinuousLinearMap.comp_assoc,
-        ← ContinuousLinearMap.comp_assoc Sang, hSangSq,
-        ContinuousLinearMap.comp_assoc, hCangSq]
-      rw [hGR, hGP, hPR]
+        ContinuousLinearMap.modulus Y ∘L R ∘L P :=
+      hmodRP.mul_nonneg hmodYnonneg hRPnonneg
+    -- Both sides are nonnegative with the same square, so they agree.
+    have hsq : (Sang ∘L Cang) * (Sang ∘L Cang)
+        = (ContinuousLinearMap.modulus Y ∘L R ∘L P) *
+          (ContinuousLinearMap.modulus Y ∘L R ∘L P) := by
+      have hL : (Sang * Cang) * (Sang * Cang)
+          = (Sang * Sang) * (Cang * Cang) := by
+        rw [mul_assoc, ← mul_assoc Cang Sang Cang,
+          show Cang * Sang = Sang * Cang from hSCcomm.eq.symm, mul_assoc,
+          ← mul_assoc]
+      have hR : (ContinuousLinearMap.modulus Y * (R * P)) *
+            (ContinuousLinearMap.modulus Y * (R * P))
+          = (ContinuousLinearMap.modulus Y * ContinuousLinearMap.modulus Y) *
+            ((R * P) * (R * P)) := by
+        rw [mul_assoc, ← mul_assoc (R * P) (ContinuousLinearMap.modulus Y),
+          show (R * P) * ContinuousLinearMap.modulus Y
+            = ContinuousLinearMap.modulus Y * (R * P) from hmodRP.eq.symm,
+          mul_assoc, ← mul_assoc]
+      rw [hL, hR, show Sang * Sang = G * (R * P) from hSangSq,
+        show Cang * Cang = R * P from hCangSq,
+        show ContinuousLinearMap.modulus Y * ContinuousLinearMap.modulus Y = G
+          from ContinuousLinearMap.modulus_mul_self Y]
       noncomm_ring
-    · exact hleftNonneg
-    · rw [ContinuousLinearMap.comp_assoc,
-        ← ContinuousLinearMap.comp_assoc (ContinuousLinearMap.modulus Y),
-        ContinuousLinearMap.modulus_mul_self Y]
-      rw [hGR, hGP, hPR]
-      noncomm_ring
-    · exact hrightNonneg
+    have h1 : CFC.sqrt ((Sang ∘L Cang) * (Sang ∘L Cang)) = Sang ∘L Cang :=
+      CFC.sqrt_unique rfl hleftNonneg
+    have h2 : CFC.sqrt ((ContinuousLinearMap.modulus Y ∘L R ∘L P) *
+          (ContinuousLinearMap.modulus Y ∘L R ∘L P))
+        = ContinuousLinearMap.modulus Y ∘L R ∘L P :=
+      CFC.sqrt_unique rfl hrightNonneg
+    rw [← h1, ← h2, hsq]
   have hCandidateComp :
       M ∘L cosTwoAngleExtendedC U V = sinTwoAngleOperatorC U V := by
     rw [hMformula, cosTwoAngleExtendedC, hCosTwo, hSinTwo, hSCformula]
