@@ -190,6 +190,43 @@ is not this lane's to migrate.
 - The `Restriction.lean` and `ClosedSylvesterEquation.lean` facade blocks, once
   their remaining callers move.
 
+**The paper-completion census was passing vacuously; it now certifies the code
+(edward, aiq-gpu, 2026-07-29).**  `scripts/probe_census_declarations.py` reported
+**`0/87 resolve against DavisKahan.All`**.  Every row's `lean_declarations` named
+`ForMathlib.*` while the actual namespace is `TauCeti.*` — the census was never
+repointed after the namespace migration.  Repointed; the probe now reports
+**`78/87`**.
+
+**Why the gate did not catch this, which is the part worth remembering.**
+`check_davis_kahan_1970_source_census.py` reported **CLEAN (48 items)** before
+*and* after — and both are correct, because it validates *structure*: fields
+present, statuses in the allowed set, no declaration stranded outside
+`lean_declarations`.  It cannot tell you the names exist.  The probe's own
+docstring names the trap: *"a row naming a declaration in the wrong namespace
+passes vacuously"*, since a name-only grep matches the short name after the last
+dot.  **A green census gate is not evidence that the ledger describes the code —
+run the probe.**
+
+The 9 still unresolved are `DavisKahan1970.Section8.*`, and they are **not a
+defect**: their namespace is also `TauCeti.`, they live under `Experimental/**`
+outside the `DavisKahan.All` closure, and their two rows — `DK-8.1-thm`,
+`DK-8.2-thm` — are already marked `candidate_under_repair` / `not_compiling`.
+After the fix the probe *agrees with* the recorded statuses rather than
+contradicting every item.
+
+**Editing the JSON alone leaves the tree inconsistent:** the census has a
+generated companion `dev/davis-kahan-1970-full-source-census.md`, and the gate
+fails with `stale generated file` until
+`scripts/render_davis_kahan_1970_source_census.py` is re-run.  That check is
+doing real work — it caught this immediately.
+
+**Completeness facts established while investigating, worth having on record.**
+**Zero `sorry`** in `DavisKahan/` (production), `ForTauCeti/` and `ForMathlib/` —
+all 52 are confined to `Experimental/**`.  **All 157 audited declarations are
+axiom-clean**, depending only on `propext` / `Classical.choice` / `Quot.sound`,
+with **zero `sorryAx`** anywhere in the build.  The paper-facing proof is in
+considerably better shape than the raw warning counts suggest.
+
 **Final warning census, and two targets that look inviting but are not
 (edward, aiq-gpu, 2026-07-29).**  Build warnings are **770 → ~425** over this
 session.  `unusedSectionVars` is at **0** in-scope, `unnecessarySimpa` at **0**
