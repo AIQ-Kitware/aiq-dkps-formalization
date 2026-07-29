@@ -30,11 +30,29 @@ leave the repository and nothing said so.** Now 156/156 across 18 clusters, and
 
 **What is left, in order.**
 
-1. **Submission to Tau Ceti — and this is the only thing left, and it is not an
-   agent's to do.** `external/TauCeti` is
+1. **Submission to Tau Ceti — the only thing left, and the repository's own
+   written contract forbids an agent finishing it.** `AGENTS.md` says:
+   *"**Do not commit the `external/TauCeti` submodule pointer yet.** Stage
+   everything in `ForTauCeti`; `scripts/export_for_tauceti.py` reproduces the
+   `TauCeti/` copy **on demand at submission time**. `external/Spectra` and
+   `external/TauCeti` remain **read-only provenance references** for the
+   ordinary build."* And `ForTauCeti/README.md`'s per-cluster lifecycle begins
+   *"When a cluster is **accepted** into Tau Ceti: 1. update the
+   `external/TauCeti` submodule pin to the merge commit"* — steps 2 and 3, the
+   import repoint and the staging deletion, are explicitly downstream of
+   acceptance. So the export I ran is exactly what the contract asks for, and
+   the next step is acceptance by a third party.
+   Confirmed mechanically as well: `external/TauCeti` is
    `github.com/TauCetiProject/TauCeti`, a **separate project** with its own PR
    workflow; our 156 modules are *untracked* there against upstream HEAD
-   `92c79e5e`, and the manifest's `upstream_pr` is null for every cluster.
+   `92c79e5e`; the manifest's `upstream_pr` is null for every cluster; and this
+   environment has **no GitHub credentials**, so a push is not merely unwise
+   but impossible.
+   `edward (fable)` recorded half of this on 2026-07-28 — that
+   `export_for_tauceti.py --check` is checkout-local because the exports live
+   only in the submodule working tree, and that *"someone should decide whether
+   the submodule pin is supposed to carry the exports."* **`AGENTS.md` already
+   decided it: not yet.**
 2. **The dependency switch, which is gated on (1) and cannot precede it.**
    Measured and ready: **261 `import ForTauCeti.X` lines across 167 files**
    (DavisKahan 204, Challenge 23, FinishTanTwoTheta 11, Acharyya2025 7,
