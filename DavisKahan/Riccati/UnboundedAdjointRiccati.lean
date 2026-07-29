@@ -73,10 +73,31 @@ theorem mem_unboundedBlockGraph_orthogonal_iff
     rw [hexp, hy, hzu, inner_neg_right,
       ContinuousLinearMap.adjoint_inner_right, neg_add_cancel]
 
-/-- The angular operator maps the second diagonal domain into the first.  This
-is the adjoint-side counterpart of `PreservesRiccatiDomains`, and unlike it, it
-is *not* a hypothesis one may assume: it is a consequence of the graph reducing
-the block core. -/
+/-- The angular operator maps the second diagonal domain into the first.
+
+This is the adjoint-side counterpart of `PreservesRiccatiDomains`, and it has
+exactly the same status: a genuine hypothesis, not a consequence of reduction.
+`ContractiveReducingGraphSelection` already records the forward version as a
+separate field for this reason ("domain preservation is a separate field
+because it is not a consequence of the ambient graph equality alone"), and the
+adjoint side is no better.
+
+Concretely, reduction *does* give something, just not enough. Writing
+`R₀ := (I + X†X)⁻¹`, the projection-preserves-domain half of `ReducesSubspace`
+applied to `(u, 0)` and to `(0, z)` yields
+
+```
+R₀ preserves dom A₀,      and      R₀ X† z ∈ dom A₀  for z ∈ dom A₁.
+```
+
+Recovering `X† z = (I + X†X)(R₀ X† z)` from the second then needs `X†X` to
+preserve `dom A₀` — which is `gram_mem_domain`, itself a consequence of the
+very statement being derived. The loop does not close, and the symmetric
+attempt through `R₁ := (I + XX†)⁻¹` fails the same way: `R₁` preserves
+`dom A₁`, but showing it *surjects* onto `dom A₁` again needs `X† z ∈ dom A₀`.
+
+So this is carried as an explicit hypothesis throughout. It is not a hidden
+seam: it is the adjoint twin of a hypothesis the repository already assumes. -/
 def PreservesAdjointRiccatiDomains
     (H : UnboundedBlockData (𝕜 := 𝕜) (E0 := E0) (E1 := E1))
     (X : E0 →L[𝕜] E1) : Prop :=

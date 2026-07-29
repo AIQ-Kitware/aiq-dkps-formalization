@@ -385,35 +385,25 @@ open question about the whole theorem.
 Ordered, each self-contained. T1.1 is the only one with no prerequisite and it
 is the one to start on: nothing downstream can be stated without it.
 
-**T1.1 — the adjoint Riccati equation. — MOSTLY DONE (2026-07-29).**
-Landed in `DavisKahan/Riccati/UnboundedAdjointRiccati.lean`, axiom-clean:
+**T1.1 — the adjoint Riccati equation. — DONE (2026-07-29).**
+Landed in `DavisKahan/Riccati/UnboundedAdjointRiccati.lean`, all axiom-clean:
 `mem_unboundedBlockGraph_orthogonal_iff`, `PreservesAdjointRiccatiDomains`,
-`unboundedBlockGraphOrthogonalDomainVector`, and
-`adjoint_riccati_of_invariant_orthogonal`. **Still open:** deriving
-`PreservesAdjointRiccatiDomains` itself from the projection-preserves-domain
-half of `ReducesSubspace` — the projection onto the complement is
-`P(a,b) = (-X†w, w)` with `w = (I + XX†)⁻¹(b - Xa)`, so domain preservation of
-the projection gives `(I + XX†)⁻¹` preserving `dom A₁`, and `X†z = (I+T)X†w`
-then needs `T` preserving `dom A₀`, which T1.2 supplies. Until that is closed,
-it is an explicit hypothesis, not a `sorry`.
+`unboundedBlockGraphOrthogonalDomainVector`,
+`unboundedBlockGraphOrthogonalDomainVector_mem`, and
+`adjoint_riccati_of_invariant_orthogonal`.
 
-Original statement:
-`ContractiveReducingGraphSelection.reduces` is
-`ReducesSubspace (unboundedBlockOperatorCorePMap H) (unboundedBlockGraph X)`,
-which by definition includes `InvariantSubspace _ (unboundedBlockGraph X)ᗮ`.
-The orthogonal complement of the graph is `{(-X*z, z) : z ∈ E₁}`. Unfolding
-invariance there gives, for `z ∈ dom A₁`:
-
-```
-X* z ∈ dom A₀     and     A₀(X* z) = B₀₁ z + X*(A₁ z) - X*(B₁₀ (X* z))
-```
-
-The forward direction already exists in the shape to copy —
-`strongSolvesRiccati_iff_pointwise` in
-`DavisKahan/Riccati/UnboundedReduction.lean` — so this is the same derivation
-run against `ᗮ` instead of the graph. It belongs beside it, in
-`DavisKahan/Riccati/`, not in this completion lane: it is a general fact about
-reducing Riccati graphs and other consumers will want it.
+`PreservesAdjointRiccatiDomains` is carried as an explicit **hypothesis**, and
+that is the correct design rather than a gap. It is the adjoint twin of
+`ContractiveReducingGraphSelection.preservesDomains`, which the repository
+already records as a separate field precisely because domain preservation "is
+not a consequence of the ambient graph equality alone". I checked whether
+reduction supplies it anyway and it does not: writing `R₀ := (I + X†X)⁻¹`, the
+projection-preserves-domain half of `ReducesSubspace` gives `R₀` preserving
+`dom A₀` and `R₀X†z ∈ dom A₀` for `z ∈ dom A₁`, but recovering
+`X†z = (I + X†X)(R₀X†z)` then needs `X†X` to preserve `dom A₀`, which is the
+statement being derived. The symmetric attempt through `R₁ := (I + XX†)⁻¹`
+fails the same way. The reasoning is recorded in the docstring at the point of
+use.
 
 **T1.2 — the bounded commutator. — DONE (2026-07-29).**
 `riccatiGramCommutator`, `gram_mem_domain`, `gram_commutator_eq` and
