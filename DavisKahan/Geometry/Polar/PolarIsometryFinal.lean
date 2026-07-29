@@ -105,7 +105,7 @@ theorem polarPartial_mem_finalRange (T : H →L[ℂ] H) (x : T.polarInitial) :
     rw [ContinuousLinearMap.polarPartial_apply]
     congr 1
     exact (Subtype.ext (by
-      simp [Submodule.starProjection_eq_self_iff.mpr x.2])).symm
+      simp [])).symm
   rw [polarFinalRange, T.polarFinal_eq_range_polarPartial, hx]
   exact ⟨(x : H), rfl⟩
 

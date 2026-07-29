@@ -35,6 +35,7 @@ universe v
 variable {H : Type v}
   [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
 
+omit [CompleteSpace H] in
 /-- Quarter-acuteness makes the double-angle cosine denominator strictly
 positive: `1 - 2 * directedGap U V ^ 2 > 0`.
 

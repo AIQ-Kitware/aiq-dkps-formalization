@@ -49,6 +49,7 @@ abbrev ReducesSubspace
 
 namespace ReducesSubspace
 
+omit [CompleteSpace E] in
 /-- The projection onto a reducing subspace preserves the operator domain. -/
 theorem projection_mem_domain
     {A : ClosedOperator (𝕜 := 𝕜) (E := E)}
@@ -57,6 +58,7 @@ theorem projection_mem_domain
     U.starProjection (x : E) ∈ A.domain :=
   h.1 x
 
+omit [CompleteSpace E] in
 /-- The complementary projection of a reducing subspace preserves the
 operator domain. -/
 theorem orthogonalProjection_mem_domain
@@ -66,6 +68,7 @@ theorem orthogonalProjection_mem_domain
     Uᗮ.starProjection (x : E) ∈ A.domain :=
   h.2.1 x
 
+omit [CompleteSpace E] in
 /-- The selected summand of a reducing subspace is invariant. -/
 theorem invariant
     {A : ClosedOperator (𝕜 := 𝕜) (E := E)}
@@ -73,6 +76,7 @@ theorem invariant
     (h : A.ReducesSubspace U) : A.InvariantSubspace U :=
   h.2.2.1
 
+omit [CompleteSpace E] in
 /-- The complementary summand of a reducing subspace is invariant. -/
 theorem orthogonal_invariant
     {A : ClosedOperator (𝕜 := 𝕜) (E := E)}
@@ -88,6 +92,7 @@ abbrev reducingRestrictionDomain
     (U : Submodule 𝕜 E) : Submodule 𝕜 U :=
   TauCeti.LinearPMap.reducingRestrictionDomain A.toLinearPMap U
 
+omit [CompleteSpace E] in
 @[simp]
 theorem mem_reducingRestrictionDomain_iff
     (A : ClosedOperator (𝕜 := 𝕜) (E := E))
@@ -102,6 +107,7 @@ abbrev reducingRestrictionDomainToAmbient
     (x : reducingRestrictionDomain A U) : A.domain :=
   TauCeti.LinearPMap.reducingRestrictionDomainToAmbient A.toLinearPMap U x
 
+omit [CompleteSpace E] in
 @[simp]
 theorem reducingRestrictionDomainToAmbient_coe
     (A : ClosedOperator (𝕜 := 𝕜) (E := E))
@@ -119,6 +125,7 @@ abbrev reducingRestrictionLinearMap
     reducingRestrictionDomain A U →ₗ[𝕜] U :=
   TauCeti.LinearPMap.reducingRestrictionLinearMap A.toLinearPMap U hred
 
+omit [CompleteSpace E] in
 @[simp]
 theorem coe_reducingRestrictionLinearMap
     (A : ClosedOperator (𝕜 := 𝕜) (E := E))
@@ -137,6 +144,7 @@ noncomputable abbrev projectDomainToReducingRestriction
     reducingRestrictionDomain A U :=
   TauCeti.LinearPMap.projectDomainToReducingRestriction A.toLinearPMap U hred x
 
+omit [CompleteSpace E] in
 @[simp]
 theorem coe_projectDomainToReducingRestriction
     (A : ClosedOperator (𝕜 := 𝕜) (E := E))
@@ -147,6 +155,7 @@ theorem coe_projectDomainToReducingRestriction
       U.starProjection (x : E) :=
   rfl
 
+omit [CompleteSpace E] in
 private theorem reducingRestrictionDomain_dense
     (A : ClosedOperator (𝕜 := 𝕜) (E := E))
     (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
@@ -155,6 +164,7 @@ private theorem reducingRestrictionDomain_dense
   TauCeti.LinearPMap.reducingRestriction_dense A.toLinearPMap U hred
     A.toLinearPMap_dense
 
+omit [CompleteSpace E] in
 private theorem reducingRestrictionLinearMap_closedGraph
     (A : ClosedOperator (𝕜 := 𝕜) (E := E))
     (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
@@ -176,6 +186,7 @@ noncomputable def reducingRestriction
   dense_domain := reducingRestrictionDomain_dense A U hred
   closed_graph := reducingRestrictionLinearMap_closedGraph A U hred
 
+omit [CompleteSpace E] in
 @[simp]
 theorem reducingRestriction_domain
     (A : ClosedOperator (𝕜 := 𝕜) (E := E))
@@ -189,11 +200,13 @@ theorem reducingRestriction_domain
 def reducingSubspaceInclusion (U : Submodule 𝕜 E) : U →L[𝕜] E :=
   U.subtypeL
 
+omit [CompleteSpace E] in
 /-- The reducing-subspace inclusion is isometric. -/
 theorem reducingSubspaceInclusion_isometric (U : Submodule 𝕜 E) :
     IsometricEmbedding (reducingSubspaceInclusion U) :=
   fun _ => rfl
 
+omit [CompleteSpace E] in
 /-- The inclusion maps the restricted domain into the ambient domain. -/
 theorem reducingRestriction_inclusion_mem_domain
     (A : ClosedOperator (𝕜 := 𝕜) (E := E))
@@ -203,6 +216,7 @@ theorem reducingRestriction_inclusion_mem_domain
     reducingSubspaceInclusion U (x : U) ∈ A.domain :=
   x.property
 
+omit [CompleteSpace E] in
 /-- The inclusion intertwines the restricted and ambient operators. -/
 theorem reducingRestriction_inclusion_intertwines
     (A : ClosedOperator (𝕜 := 𝕜) (E := E))
@@ -227,6 +241,7 @@ theorem mem_reducingRestriction_adjoint_domain_iff
   TauCeti.LinearPMap.mem_reducingRestriction_adjoint_domain_iff
     A.toLinearPMap U hred y
 
+omit [CompleteSpace E] in
 /-- Symmetry passes to the reducing restriction. -/
 theorem reducingRestriction_isSymmetric
     (A : ClosedOperator (𝕜 := 𝕜) (E := E))

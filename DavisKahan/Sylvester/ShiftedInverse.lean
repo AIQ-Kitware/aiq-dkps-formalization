@@ -44,6 +44,7 @@ abbrev TwoSidedShiftedInverseBound
     (c s : ℝ) : Prop :=
   TauCeti.LinearPMap.TwoSidedShiftedInverseBound A.toLinearPMap c s
 
+omit [CompleteSpace E] in
 theorem TwoSidedShiftedInverseBound.leftShiftedInverseBound
     {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := E)} {c s : ℝ}
     (h : TwoSidedShiftedInverseBound A c s) :

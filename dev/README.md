@@ -178,17 +178,49 @@ Validate with:
 ```bash
 python3 scripts/render_davis_kahan_1970_source_census.py --check
 python3 scripts/check_davis_kahan_1970_source_census.py
+python3 scripts/probe_census_declarations.py           # do the names resolve?
 ```
+
+The first two validate *structure* — generated view in sync, fields present,
+statuses in the allowed set. Neither can tell you the declarations named by
+`lean_declarations` exist; the census reported `CLEAN (48 items)` throughout the
+period when **none of its 87 declarations resolved**. The probe compiles a
+`#check` of every fully-qualified name against `DavisKahan.All` and is the only
+one of the three that answers that question.
+
+It currently reports **78/87**. The nine that do not resolve are the
+`DavisKahan1970.Section8.*` names backing `DK-8.1-thm` and `DK-8.2-thm`, which
+live under `Experimental/**`, outside the `DavisKahan.All` closure; their rows
+are marked `candidate_under_repair` / `not_compiling`, so that is the expected
+answer, not a defect.
+
+**Use `--verify`, not `--check`, as the gate.** `--check` exits non-zero on any
+unresolved name and so fails permanently on those nine. `--verify` is the mode
+that understands them: it *derives* each row's verification from what the build
+actually resolves and compares it with the recorded value, treating
+`not_compiling` as a standing judgement — while refusing to let that judgement
+survive its declarations becoming reachable, so a package that gets fixed cannot
+stay under-reported. It currently exits 0 with `all 48 rows agree with the
+build`.
+
+`--sync` writes the derived values back, which is how `verification` and
+`declarations_outside_build` should be maintained: deriving beats
+hand-maintaining, because a recorded status drifts the moment someone moves a
+module and nobody notices. Run it after any namespace move, then re-render the
+markdown view.
 
 ## Declaration-name drift
 
-Two places in this repository assert declaration names as **data**, where no
-compiler checks them: the `theorem_names` lists in `comparator/*.json`, and the
+Three places in this repository assert declaration names as **data**, where no
+compiler checks them: the `theorem_names` lists in `comparator/*.json`; the
 `#print axioms` lines in `Challenge/**/Leaderboard.lean` (`Challenge` is not in
-`defaultTargets`, so `lake build` does not compile it). A rename that is green
-across the whole default build can therefore still leave the conformance gate
-pointing at nothing — which is exactly what happened after the Wave-1
-CourantFischer dedup, and again after the §9.2 sorted-eigenvalue rename.
+`defaultTargets`, so `lake build` does not compile it); and the
+`lean_declarations` entries in `dev/davis-kahan-1970-full-source-census.json`.
+A rename that is green across the whole default build can therefore still leave
+the conformance gate pointing at nothing — which is exactly what happened after
+the Wave-1 CourantFischer dedup, again after the §9.2 sorted-eigenvalue rename,
+and again in the census, where the `ForMathlib` → `TauCeti` move left **all 87**
+named declarations unresolvable while every gate stayed green.
 
 Run after any rename or namespace move:
 
@@ -201,3 +233,12 @@ It resolves names by parsing the sources, not by asking Lean, so it is fast and
 works on a tree that does not compile — but for the same reason a pass is a
 tripwire, not a proof. `scripts/check_comparator_signatures.py` (which does
 invoke Lean) remains ground truth.
+
+Note the precise question each tool answers, because a green tripwire reads as a
+stronger claim than it is. The drift check asks **"does a declaration with this
+name exist anywhere in the tree"**. It does *not* ask whether the declaration is
+reachable from `DavisKahan.All`. For the census those differ: the nine
+`DavisKahan1970.Section8.*` names exist under `Experimental/**` and so pass the
+drift check, while `scripts/probe_census_declarations.py` correctly reports them
+unresolved against the default build target. Renames are the tripwire's job;
+reachability is the probe's.

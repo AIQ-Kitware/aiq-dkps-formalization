@@ -43,6 +43,7 @@ noncomputable def restrictToInvariantSubspace
   (A ∘L M.subtypeL).codRestrict M fun x =>
     hA (x : H) x.property
 
+omit [CompleteSpace H] in
 @[simp]
 theorem coe_restrictToInvariantSubspace_apply
     (A : H →L[ℂ] H) (M : Submodule ℂ H)
@@ -79,7 +80,7 @@ theorem halmosCosineSq_mem_generic
     (hx : x ∈ halmosGenericPart U V) :
     halmosCosineSq U V x ∈ halmosGenericPart U V := by
   unfold halmosCosineSq
-  simp only [add_apply, mul_apply_eq_comp, Function.comp_apply]
+  simp only [add_apply, mul_apply_eq_comp]
   apply (halmosGenericPart U V).add_mem
   · exact projection_mem_halmosGenericPart_left U V
       (projection_mem_halmosGenericPart_right U V
@@ -95,7 +96,7 @@ theorem halmosSineSq_mem_generic
     (hx : x ∈ halmosGenericPart U V) :
     halmosSineSq U V x ∈ halmosGenericPart U V := by
   unfold halmosSineSq
-  simp only [add_apply, mul_apply_eq_comp, Function.comp_apply]
+  simp only [add_apply, mul_apply_eq_comp]
   apply (halmosGenericPart U V).add_mem
   · exact projection_mem_halmosGenericPart_left U V
       (complementaryProjection_mem_halmosGenericPart_right U V
@@ -139,6 +140,7 @@ theorem genericHalmosCosineSqCompleted_add_sineSq
     coe_restrictToInvariantSubspace_apply, ContinuousLinearMap.one_def,
     ContinuousLinearMap.id_apply] using h
 
+omit [CompleteSpace H] in
 /-- The paper's two crossed intersections are definitionally the two Halmos
 defect subspaces. -/
 theorem crossed_intersections_are_halmos_defects_completed
@@ -147,6 +149,7 @@ theorem crossed_intersections_are_halmos_defects_completed
       halmosTargetDefect U V = Uᗮ ⊓ V :=
   ⟨rfl, rfl⟩
 
+omit [CompleteSpace H] in
 /-- Real part of the quadratic form of a compression by an orthogonal
 projection. -/
 theorem re_inner_projection_compression

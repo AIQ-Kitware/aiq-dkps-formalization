@@ -59,6 +59,7 @@ theorem reflectionDefect_eq_perturbationDefect
       simp only [ContinuousLinearMap.comp_apply, sub_apply, map_sub]
       abel
 
+omit [CompleteSpace E] in
 /-- The reflection defect is bounded by twice the perturbation norm.
 -/
 theorem norm_reflectionDefect_le_two_mul

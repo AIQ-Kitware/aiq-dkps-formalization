@@ -54,6 +54,7 @@ private theorem abs_le_max_of_mem_Icc {a b s : ℝ} (hs : s ∈ Set.Icc a b) :
 variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
   [CompleteSpace H]
 
+omit [CompleteSpace H] in
 private theorem norm_sq_starProjection_add_norm_sq_sub
     (K : Submodule ℂ H) [K.HasOrthogonalProjection] (x : H) :
     ‖K.starProjection x‖ ^ 2 + ‖x - K.starProjection x‖ ^ 2 = ‖x‖ ^ 2 := by
@@ -69,6 +70,7 @@ private theorem norm_sq_starProjection_add_norm_sq_sub
       ring
     _ = ‖x‖ ^ 2 := by rw [hx]
 
+omit [CompleteSpace H] in
 /-- A residual bound on a domain-contained test subspace transfers to the
 opposite block of a symmetric closed operator.  Only the particular vector in
 the orthogonal complement is required to lie in the operator domain. -/
@@ -125,6 +127,7 @@ theorem norm_starProjection_closedOperator_le_of_mem_orthogonal
       lt_of_le_of_ne (norm_nonneg _) (Ne.symm h0)
     nlinarith [hsq, hzpos]
 
+omit [CompleteSpace H] in
 /-- The domain-aware, per-vector Davis--Kahan tangent theorem.
 
 The exact target is `V`; its orthogonal complement is required to lie in the

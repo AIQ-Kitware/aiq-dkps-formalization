@@ -124,7 +124,7 @@ theorem paperSourceCrossBlockSum_same_ambientCrossSum
       exact (sub_eq_zero.mp hzero).symm
     simp [paperSourceCrossBlockSumC, paperSineBlockC,
       paperCrossSineSum, Udom, Vcod, Submodule.adjoint_subtypeL,
-      hUb, hUbStar, hV1, hV2]
+      hUbStar, hV1, hV2]
   exact (SameApproximationSingularValues.of_isometricEquiv_comp
     Vcod Udom hfactor).symm
 

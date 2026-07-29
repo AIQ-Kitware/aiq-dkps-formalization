@@ -197,10 +197,10 @@ noncomputable def modelTanTwoThetaPerturbation (a b θ : ℝ) :
   simp [e1]
 
 @[simp] theorem inner_e0_e0 : ⟪e0 (𝕜 := 𝕜), e0⟫_𝕜 = 1 := by
-  simp [e0, EuclideanSpace.inner_single_left]
+  simp [e0]
 
 @[simp] theorem inner_e1_e1 : ⟪e1 (𝕜 := 𝕜), e1⟫_𝕜 = 1 := by
-  simp [e1, EuclideanSpace.inner_single_left]
+  simp [e1]
 
 @[simp] theorem inner_e0_e1 : ⟪e0 (𝕜 := 𝕜), e1⟫_𝕜 = 0 := by
   simp [e0, e1, EuclideanSpace.inner_single_left]
@@ -236,7 +236,7 @@ noncomputable def modelTanTwoThetaPerturbation (a b θ : ℝ) :
 private theorem plane_eq_coord_smul_e0_add_coord_smul_e1 (x : Plane 𝕜) :
     x = x 0 • e0 (𝕜 := 𝕜) + x 1 • e1 (𝕜 := 𝕜) := by
   ext i
-  fin_cases i <;> simp [e0, e1, PiLp.single_apply]
+  fin_cases i <;> simp [e0, e1]
 
 private theorem plane_linearMap_ext {F' : Type*} [AddCommMonoid F'] [Module 𝕜 F']
     {A B : Plane 𝕜 →ₗ[𝕜] F'}
@@ -260,7 +260,7 @@ private theorem starProjection_span_singleton_apply_of_norm_one
         have hyv : y = v := by simpa using hy
         subst y
         simp [inner_sub_left, inner_smul_left,
-          inner_self_eq_norm_sq, hv, inner_conj_symm]
+          hv, inner_conj_symm]
     | zero => simp
     | add a b _ _ ha hb => rw [inner_add_right, ha, hb, add_zero]
     | smul c a _ ha => rw [inner_smul_right, ha, mul_zero]
@@ -325,15 +325,15 @@ private theorem projection_sub_model_eq_matrix (θ : ℝ) :
   apply plane_linearMap_ext
   · -- reduce the projections *before* `e0`/`e1` are unfolded into coordinates
     simp only [LinearMap.sub_apply, projection, ContinuousLinearMap.coe_coe,
-      modelSubspace_starProjection_e0, modelSubspace_starProjection_e1,
+      modelSubspace_starProjection_e0,
       rotatedModelSubspace_starProjection_e0,
       rotatedModelSubspace_starProjection_e1]
     ext i
     fin_cases i <;>
-      simp [uθ, e0, e1, Matrix.toLpLin_apply, PiLp.single_apply] <;>
+      simp [uθ, e0, e1, Matrix.toLpLin_apply] <;>
       (try push_cast) <;>
       (try simp only [RCLike.real_smul_eq_coe_mul, RCLike.algebraMap_eq_ofReal,
-        smul_eq_mul, mul_one, RCLike.ofReal_mul, RCLike.ofReal_one]) <;>
+        mul_one]) <;>
       -- `ring` degrades to `ring_nf` and *succeeds*, so `first` would never
       -- reach the Pythagorean alternatives; `ring1` fails properly
       first
@@ -341,15 +341,14 @@ private theorem projection_sub_model_eq_matrix (θ : ℝ) :
         | linear_combination (-1 : 𝕜) * hpy
         | linear_combination hpy
   · simp only [LinearMap.sub_apply, projection, ContinuousLinearMap.coe_coe,
-      modelSubspace_starProjection_e0, modelSubspace_starProjection_e1,
-      rotatedModelSubspace_starProjection_e0,
+      modelSubspace_starProjection_e1,
       rotatedModelSubspace_starProjection_e1]
     ext i
     fin_cases i <;>
-      simp [uθ, e0, e1, Matrix.toLpLin_apply, PiLp.single_apply] <;>
+      simp [uθ, e0, e1, Matrix.toLpLin_apply] <;>
       (try push_cast) <;>
       (try simp only [RCLike.real_smul_eq_coe_mul, RCLike.algebraMap_eq_ofReal,
-        smul_eq_mul, mul_one, RCLike.ofReal_mul, RCLike.ofReal_one]) <;>
+        mul_one]) <;>
       -- `ring` degrades to `ring_nf` and *succeeds*, so `first` would never
       -- reach the Pythagorean alternatives; `ring1` fails properly
       first
@@ -370,18 +369,16 @@ private theorem sinThetaMap_model_eq_matrix (θ : ℝ) :
   apply plane_linearMap_ext
   · -- reduce the projections *before* `e0`/`e1` are unfolded into coordinates
     simp only [sinThetaMap, complementaryProjection, projection,
-      ContinuousLinearMap.coe_coe, LinearMap.comp_apply, LinearMap.sub_apply,
-      modelSubspace_starProjection_e0, modelSubspace_starProjection_e1,
+      ContinuousLinearMap.coe_coe, LinearMap.comp_apply,
+      modelSubspace_starProjection_e0,
       rotatedModelSubspace_starProjection_e0,
-      rotatedModelSubspace_starProjection_e1, map_smul, map_add,
-      modelSubspace_starProjection_uθ, rotatedModelSubspace_starProjection_uθ,
       Submodule.starProjection_orthogonal_val]
     ext i
     fin_cases i <;>
-      simp [uθ, e0, e1, Matrix.toLpLin_apply, PiLp.single_apply] <;>
+      simp [uθ, e0, e1, Matrix.toLpLin_apply] <;>
       (try push_cast) <;>
       (try simp only [RCLike.real_smul_eq_coe_mul, RCLike.algebraMap_eq_ofReal,
-        smul_eq_mul, mul_one, RCLike.ofReal_mul, RCLike.ofReal_one]) <;>
+        mul_one]) <;>
       -- `ring` degrades to `ring_nf` and *succeeds*, so `first` would never
       -- reach the Pythagorean alternatives; `ring1` fails properly
       first
@@ -389,15 +386,12 @@ private theorem sinThetaMap_model_eq_matrix (θ : ℝ) :
         | linear_combination (-1 : 𝕜) * hpy
         | linear_combination hpy
   · simp only [sinThetaMap, complementaryProjection, projection,
-      ContinuousLinearMap.coe_coe, LinearMap.comp_apply, LinearMap.sub_apply,
-      modelSubspace_starProjection_e0, modelSubspace_starProjection_e1,
-      rotatedModelSubspace_starProjection_e0,
-      rotatedModelSubspace_starProjection_e1, map_smul, map_add,
-      modelSubspace_starProjection_uθ, rotatedModelSubspace_starProjection_uθ,
+      ContinuousLinearMap.coe_coe, LinearMap.comp_apply,
+      modelSubspace_starProjection_e1,
       Submodule.starProjection_orthogonal_val]
     ext i
     fin_cases i <;>
-      simp [uθ, e0, e1, Matrix.toLpLin_apply, PiLp.single_apply] <;>
+      simp [e1, Matrix.toLpLin_apply] <;>
       (try push_cast) <;>
       (try simp only [RCLike.real_smul_eq_coe_mul, RCLike.algebraMap_eq_ofReal,
         smul_eq_mul, mul_one, RCLike.ofReal_mul, RCLike.ofReal_one]) <;>
@@ -420,36 +414,34 @@ private theorem sinTwoAngleOperator_model_eq_matrix (θ : ℝ) :
   apply plane_linearMap_ext
   · -- reduce the projections before `e0`/`e1` become coordinates
     simp only [sinTwoAngleOperator, complementaryProjection, projection,
-      ContinuousLinearMap.coe_coe, LinearMap.comp_apply, LinearMap.sub_apply,
+      ContinuousLinearMap.coe_coe, LinearMap.comp_apply,
       LinearMap.smul_apply,
-      modelSubspace_starProjection_e0, modelSubspace_starProjection_e1,
+      modelSubspace_starProjection_e0,
       rotatedModelSubspace_starProjection_e0,
-      rotatedModelSubspace_starProjection_e1, map_smul, map_add, map_zero,
-      modelSubspace_starProjection_uθ, rotatedModelSubspace_starProjection_uθ,
+      map_smul,
+      modelSubspace_starProjection_uθ,
       Submodule.starProjection_orthogonal_val]
     ext i
     fin_cases i <;>
-      simp [uθ, e0, e1, Matrix.toLpLin_apply, PiLp.single_apply,
+      simp [uθ, e0, e1, Matrix.toLpLin_apply,
         Real.sin_two_mul] <;>
       (try push_cast) <;>
       (try simp only [RCLike.real_smul_eq_coe_mul, RCLike.algebraMap_eq_ofReal,
-        smul_eq_mul, mul_one, RCLike.ofReal_mul, RCLike.ofReal_one]) <;>
+        smul_eq_mul]) <;>
       first
         | ring1
         | linear_combination (-1 : 𝕜) * hpy
         | linear_combination hpy
   ·
     simp only [sinTwoAngleOperator, complementaryProjection, projection,
-      ContinuousLinearMap.coe_coe, LinearMap.comp_apply, LinearMap.sub_apply,
+      ContinuousLinearMap.coe_coe, LinearMap.comp_apply,
       LinearMap.smul_apply,
-      modelSubspace_starProjection_e0, modelSubspace_starProjection_e1,
-      rotatedModelSubspace_starProjection_e0,
-      rotatedModelSubspace_starProjection_e1, map_smul, map_add, map_zero,
-      modelSubspace_starProjection_uθ, rotatedModelSubspace_starProjection_uθ,
+      modelSubspace_starProjection_e1,
+      map_zero,
       Submodule.starProjection_orthogonal_val]
     ext i
     fin_cases i <;>
-      simp [uθ, e0, e1, Matrix.toLpLin_apply, PiLp.single_apply,
+      simp [e1, Matrix.toLpLin_apply,
         Real.sin_two_mul] <;>
       (try push_cast) <;>
       (try simp only [RCLike.real_smul_eq_coe_mul, RCLike.algebraMap_eq_ofReal,
@@ -477,7 +469,7 @@ private theorem projection_sub_model_sq (θ : ℝ) :
   rw [projection_sub_model_eq_matrix]
   ext x i
   fin_cases i <;>
-    simp [Matrix.toLpLin_apply, Fin.sum_univ_two] <;>
+    simp [Matrix.toLpLin_apply] <;>
     (try push_cast) <;>
     (try simp only [RCLike.algebraMap_eq_ofReal, Matrix.vecHead,
       Matrix.vecTail, Function.comp_apply, Fin.succ_zero_eq_one]) <;>
@@ -824,9 +816,9 @@ theorem sinTheta_model_equality
       RectangularUnitarilyInvariantNorm.singularValues_smul,
       singularValues_sinAngle_model hθ0 (le_of_lt hθ1)]
     ext i
-    simp [pairSingularValues, abs_of_pos (sub_pos.mpr hab),
+    simp [pairSingularValues, 
       norm_ofReal_sub_of_lt hab,
-      mul_assoc, mul_left_comm, mul_comm]
+      mul_comm]
   calc
     (b-a) * N (sinAngleOperator (modelSubspace (𝕜 := 𝕜))
       (rotatedModelSubspace (𝕜 := 𝕜) θ))
@@ -862,9 +854,9 @@ theorem tanTheta_model_equality
       singularValues_tanAngle_model hθ0 hθ1,
       singularValues_modelTanThetaPerturbation hab htan]
     ext i
-    simp [pairSingularValues, abs_of_pos (sub_pos.mpr hab),
+    simp [pairSingularValues, 
       norm_ofReal_sub_of_lt hab,
-      mul_assoc, mul_left_comm, mul_comm]
+      mul_comm]
   calc
     (b - a) * N (tanAngleOperator (modelSubspace (𝕜 := 𝕜))
         (rotatedModelSubspace (𝕜 := 𝕜) θ)) =
@@ -930,8 +922,8 @@ theorem tanTwoTheta_model_equality
     -- simp normalizes to `θ * 2`, so orient the rewrite that way
     have htcomm : Real.tan (2 * θ) = Real.tan (θ * 2) := by rw [mul_comm]
     ext i
-    simp only [pairSingularValues, h2, hba, RCLike.algebraMap_eq_ofReal,
-      norm_ofReal_sub_of_lt hab, htcomm, Finsupp.smul_apply,
+    simp only [pairSingularValues, h2, hba,
+      htcomm, Finsupp.smul_apply,
       Finsupp.add_apply, Finsupp.single_apply, smul_eq_mul]
     split_ifs <;> ring
   calc

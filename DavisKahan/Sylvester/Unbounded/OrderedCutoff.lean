@@ -40,6 +40,7 @@ section ApproximationNumberEndpointAssumptions
 variable [HasApproximationNumberStrongCutoff.{u, v, 0} 𝕜]
 variable [HasKyFanApproximationGaugeTriangle.{u, v} 𝕜]
 
+omit [HasKyFanApproximationGaugeTriangle 𝕜] in
 /-- Finite Ky Fan inequalities for all right spectral cutoffs pass to the
 original operators.  This is the topological limit step in the two-unbounded
 ordered Sylvester argument; the remaining analytic input is the corresponding
@@ -79,6 +80,7 @@ theorem kyFanApproximationGauge_le_of_genuineCutoff_le
   exact le_of_tendsto_of_tendsto
     (tendsto_const_nhds.mul hX) hC hcutEventually
 
+omit [HasKyFanApproximationGaugeTriangle 𝕜] in
 /-- Finite Ky Fan gauges also converge under strong orthogonal cutoffs on
 the target side. -/
 theorem kyFanApproximationGauge_left_comp_strongProjection_tendsto_direct
@@ -104,6 +106,7 @@ theorem kyFanApproximationGauge_left_comp_strongProjection_tendsto_direct
     exact kyFanApproximationGauge_adjoint k K
   simpa only [hpoint, hlimit] using hright
 
+omit [HasKyFanApproximationGaugeTriangle 𝕜] in
 /-- Left-cutoff finite Ky Fan inequalities pass to the original operators. -/
 theorem kyFanApproximationGauge_le_of_leftGenuineCutoff_le
     {A : DirectClosedOperatorOnE (𝕜 := 𝕜) (E := E)}
@@ -140,6 +143,7 @@ theorem kyFanApproximationGauge_le_of_leftGenuineCutoff_le
   exact le_of_tendsto_of_tendsto
     (tendsto_const_nhds.mul hX) hC hcutEventually
 
+omit [HasApproximationNumberStrongCutoff 𝕜] [HasKyFanApproximationGaugeTriangle 𝕜] in
 /-- Double spectral cutoff turns a domain-aware equation into an ordinary
 bounded equation between the filled truncations. -/
 theorem doubleGenuineCutoff_filled_sylvester_equation
@@ -214,6 +218,7 @@ theorem doubleGenuineCutoff_filled_sylvester_equation
     simpa only [TB, PB] using hTBcut]
   simpa only [map_sub] using heqPA
 
+omit [HasKyFanApproximationGaugeTriangle 𝕜] in
 /-- Pointwise cutoff estimates for every finite Ky Fan gauge imply the full
 family of Ky Fan inequalities used by Fan dominance. -/
 theorem all_kyFanApproximationGauge_le_of_genuineCutoff_le
