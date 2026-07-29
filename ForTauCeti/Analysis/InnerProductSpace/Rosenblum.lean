@@ -205,7 +205,172 @@ theorem exists_spectralSeparator (hdisj : Disjoint (spectrum A) (spectrum B)) :
   refine Set.disjoint_left.mpr fun lam hlamA hlamB => ?_
   exact Set.disjoint_left.mp hdisj hlamA hlamB
 
+/-- The diagonal measures of `A` live over the spectrum of `A`: almost every
+point of the Cayley spectrum has its inverse-Cayley coordinate in the real
+spectrum.  This is `SpectralSupport`, transported through the pushforward that
+defines `spectralPVM`. -/
+theorem ae_cayleyInv_mem_spectrum (v : E) :
+    ∀ᵐ w ∂(BorelCalculus.diagMeasure (isStarNormal_cayley hA) v),
+      ((cayleyInv hA w : ℝ) : ℂ) ∈ spectrum A := by
+  have hmeas : MeasurableSet (Complex.ofReal ⁻¹' resolventSet A) :=
+    ((isOpen_resolventSet A).preimage Complex.continuous_ofReal).measurableSet
+  have hzero : (spectralPVM hA).diag v (Complex.ofReal ⁻¹' resolventSet A) = 0 :=
+    diag_eq_zero_of_subset_resolventSet hA _ hmeas (fun _ h => h) v
+  have hmap : (spectralPVM hA).diag v (Complex.ofReal ⁻¹' resolventSet A)
+      = BorelCalculus.diagMeasure (isStarNormal_cayley hA) v
+          (cayleyInv hA ⁻¹' (Complex.ofReal ⁻¹' resolventSet A)) := by
+    rw [show (spectralPVM hA).diag v
+        = Measure.map (cayleyInv hA) (BorelCalculus.diagMeasure (isStarNormal_cayley hA) v)
+      from rfl, Measure.map_apply (measurable_cayleyInv hA) hmeas]
+  rw [hmap] at hzero
+  have := MeasureTheory.compl_mem_ae_iff.mpr hzero
+  filter_upwards [this] with w hw
+  exact hw
+
 end Rosenblum
+
+section Main
+
+variable {A : E →ₗ.[ℂ] E} {B : F →ₗ.[ℂ] F}
+
+/-- On the `A` side the damped separator is **identically zero almost
+everywhere, for every `n`** — no limit is needed there.  The separator vanishes
+on `A`'s spectrum, and almost every point of the Cayley spectrum has its
+coordinate in that spectrum. -/
+theorem cfcHom_separator_eq_zero (hA : IsSelfAdjoint A) (f : C(ℝ, ℝ))
+    (hfA : Set.EqOn f 0 (Complex.ofReal ⁻¹' spectrum A)) (n : ℕ)
+    (g : C(_root_.spectrum ℂ (cayley hA), ℂ))
+    (hgval : ∀ w, g w = cayleySymbolFun f n (w : ℂ)) :
+    cfcHom (isStarNormal_cayley hA) g = 0 := by
+  refine ContinuousLinearMap.ext fun v => ?_
+  have hae : ∀ᵐ w ∂(BorelCalculus.diagMeasure (isStarNormal_cayley hA) v),
+      (starRingEnd ℂ) (g w) * g w = 0 := by
+    filter_upwards [ae_cayleyInv_mem_spectrum hA v] with w hw
+    have hf0 : f (cayleyInv hA w) = 0 := hfA hw
+    have : g w = 0 := by
+      rw [hgval w, cayleySymbolFun]
+      change ((f (cayleyInv hA w) * damp n (w : ℂ) : ℝ) : ℂ) = 0
+      rw [hf0, zero_mul, Complex.ofReal_zero]
+    rw [this, mul_zero]
+  have hnorm := norm_sq_cfcHom_apply (isStarNormal_cayley hA) g v
+  rw [MeasureTheory.integral_congr_ae hae, integral_zero] at hnorm
+  have hz : ‖cfcHom (isStarNormal_cayley hA) g v‖ = 0 := by
+    have h2 : (‖cfcHom (isStarNormal_cayley hA) g v‖ : ℝ) ^ 2 = 0 := by
+      exact_mod_cast hnorm
+    exact pow_eq_zero_iff (n := 2) (by norm_num) |>.mp h2
+  simpa using norm_eq_zero.mp hz
+
+/-- On the `B` side the damped separator converges strongly to the identity.
+The separator is `1` on `B`'s spectrum, almost every Cayley point has its
+coordinate there, and almost every Cayley point differs from the singularity
+`1`, where the damping factor would otherwise kill the symbol. -/
+theorem tendsto_cfcHom_separator (hB : IsSelfAdjoint B) (f : C(ℝ, ℝ))
+    (hfB : Set.EqOn f 1 (Complex.ofReal ⁻¹' spectrum B))
+    (hf01 : ∀ x, f x ∈ Set.Icc (0 : ℝ) 1)
+    (g : ℕ → C(_root_.spectrum ℂ (cayley hB), ℂ))
+    (hgval : ∀ n w, g n w = cayleySymbolFun f n (w : ℂ)) (ξ : F) :
+    Tendsto (fun n => cfcHom (isStarNormal_cayley hB) (g n) ξ) atTop (nhds ξ) := by
+  set hU := isStarNormal_cayley hB with hhU
+  set μ := BorelCalculus.diagMeasure hU ξ with hμ
+  have hlim : Tendsto
+      (fun n => ∫ w, (starRingEnd ℂ) ((g n - 1) w) * ((g n - 1) w) ∂μ) atTop (nhds 0) := by
+    have hae : ∀ᵐ w ∂μ, Tendsto
+        (fun n => (starRingEnd ℂ) ((g n - 1) w) * ((g n - 1) w)) atTop (nhds 0) := by
+      filter_upwards [ae_cayleyInv_mem_spectrum hB ξ,
+        MeasureTheory.compl_mem_ae_iff.mpr (diagMeasure_cayley_preimage_one hB ξ)]
+        with w hw hw1
+      have hfeq : f (cayleyCoordFun (w : ℂ)) = 1 := hfB hw
+      have hne : (w : ℂ) ≠ 1 := fun hc => hw1 (by simpa using hc)
+      have hconv : Tendsto (fun n => g n w) atTop (nhds 1) := by
+        have h2 := tendsto_cayleySymbolFun f hne
+        rw [hfeq, Complex.ofReal_one] at h2
+        exact h2.congr fun n => (hgval n w).symm
+      have hg : Tendsto (fun n => (g n - 1) w) atTop (nhds 0) := by
+        have hd := hconv.sub (tendsto_const_nhds (x := (1 : ℂ)) (f := atTop (α := ℕ)))
+        rw [sub_self] at hd
+        exact hd.congr fun n => by simp
+      have hc := (Complex.continuous_conj.tendsto (0 : ℂ)).comp hg
+      have hmul := hc.mul hg
+      rw [map_zero, zero_mul] at hmul
+      exact hmul
+    have hbound : ∀ n, ∀ᵐ w ∂μ,
+        ‖(starRingEnd ℂ) ((g n - 1) w) * ((g n - 1) w)‖ ≤ 4 := by
+      intro n
+      filter_upwards with w
+      have hle1 : ‖g n w‖ ≤ 1 := by
+        rw [hgval n w]; exact norm_cayleySymbolFun_le f hf01 n _
+      have h1 : ‖(g n - 1) w‖ ≤ 2 := by
+        have hval : (g n - 1) w = g n w - 1 := by simp
+        rw [hval]
+        calc ‖g n w - 1‖ ≤ ‖g n w‖ + ‖(1 : ℂ)‖ := norm_sub_le _ _
+          _ ≤ 2 := by rw [norm_one]; linarith
+      rw [norm_mul, RCLike.norm_conj]
+      nlinarith [norm_nonneg ((g n - 1) w)]
+    have hconv := MeasureTheory.tendsto_integral_of_dominated_convergence
+      (bound := fun _ => (4 : ℝ))
+      (fun n => (((g n - 1).continuous.star).mul (g n - 1).continuous).aestronglyMeasurable)
+      (integrable_const _) hbound hae
+    rw [integral_zero] at hconv
+    exact hconv
+  rw [tendsto_iff_norm_sub_tendsto_zero]
+  have hsq : ∀ n, ((‖cfcHom hU (g n) ξ - ξ‖ ^ 2 : ℝ) : ℂ)
+      = ∫ w, (starRingEnd ℂ) ((g n - 1) w) * ((g n - 1) w) ∂μ := by
+    intro n
+    have hsub : cfcHom hU (g n) ξ - ξ = cfcHom hU (g n - 1) ξ := by
+      rw [map_sub]
+      simp
+    rw [hsub]
+    exact norm_sq_cfcHom_apply hU (g n - 1) ξ
+  have hcx : Tendsto (fun n => ((‖cfcHom hU (g n) ξ - ξ‖ ^ 2 : ℝ) : ℂ)) atTop (nhds 0) := by
+    exact hlim.congr fun n => (hsq n).symm
+  have hreal : Tendsto (fun n => ‖cfcHom hU (g n) ξ - ξ‖ ^ 2) atTop (nhds 0) := by
+    have hre := (Complex.continuous_re.tendsto (0 : ℂ)).comp hcx
+    simpa [Function.comp_def, ← Complex.ofReal_pow, Complex.ofReal_re] using hre
+  have hsqrt := hreal.sqrt
+  simpa [Real.sqrt_sq (norm_nonneg _)] using hsqrt
+
+/-- **Rosenblum's theorem for self-adjoint partial maps.**  A bounded operator
+intertwining two self-adjoint operators with disjoint spectra is zero. -/
+theorem eq_zero_of_intertwines_of_disjoint_spectrum
+    (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B) {X : F →L[ℂ] E}
+    (hmaps : ∀ y : B.domain, X (y : F) ∈ A.domain)
+    (hint : ∀ y : B.domain, A ⟨X (y : F), hmaps y⟩ = X (B y))
+    (hdisj : Disjoint (spectrum A) (spectrum B)) :
+    X = 0 := by
+  obtain ⟨f, hfA, hfB, hf01⟩ := exists_spectralSeparator (A := A) (B := B) hdisj
+  set K : Set ℂ := _root_.spectrum ℂ (cayley hA) ∪ _root_.spectrum ℂ (cayley hB) with hKdef
+  have hKc : IsCompact K :=
+    (spectrum.isCompact (cayley hA)).union (spectrum.isCompact (cayley hB))
+  have huK : _root_.spectrum ℂ (cayley hA) ⊆ K := Set.subset_union_left
+  have hvK : _root_.spectrum ℂ (cayley hB) ⊆ K := Set.subset_union_right
+  have hcont : ∀ n : ℕ, Continuous fun w : K => cayleySymbolFun f n (w : ℂ) :=
+    fun n => (continuous_cayleySymbolFun f hf01 n).comp continuous_subtype_val
+  set G : ℕ → C(K, ℂ) := fun n => ⟨_, hcont n⟩ with hGdef
+  refine ContinuousLinearMap.ext fun ξ => ?_
+  -- the `A`-side calculus vanishes outright, for every `n`
+  have hAzero : ∀ n, cfcHom (isStarNormal_cayley hA) (symbolRestrict huK (G n)) = 0 := fun n =>
+    cfcHom_separator_eq_zero hA f hfA n _ (fun _ => rfl)
+  -- so the intertwining kills the `B`-side image
+  have hXzero : ∀ n,
+      X (cfcHom (isStarNormal_cayley hB) (symbolRestrict hvK (G n)) ξ) = 0 := by
+    intro n
+    have h := cfcHom_cayley_intertwines hA hB hmaps hint hKc huK hvK (G n)
+    have h2 := congrArg (fun T : F →L[ℂ] E => T ξ) h
+    simp only [ContinuousLinearMap.coe_comp, Function.comp_apply] at h2
+    rw [h2, hAzero n]
+    simp
+  -- while the `B`-side calculus converges strongly to the identity
+  have hBlim := tendsto_cfcHom_separator hB f hfB hf01
+    (fun n => symbolRestrict hvK (G n)) (fun _ _ => rfl) ξ
+  have hXlim : Tendsto
+      (fun n => X (cfcHom (isStarNormal_cayley hB) (symbolRestrict hvK (G n)) ξ))
+      atTop (nhds (X ξ)) := (X.continuous.tendsto _).comp hBlim
+  have hconst : Tendsto (fun _ : ℕ => (0 : E)) atTop (nhds (X ξ)) :=
+    hXlim.congr fun n => hXzero n
+  have hzero : X ξ = 0 := (tendsto_nhds_unique tendsto_const_nhds hconst).symm
+  simpa using hzero
+
+end Main
 
 end LinearPMap
 end TauCeti
