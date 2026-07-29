@@ -77,13 +77,13 @@ theorem directGenuineOrderedSylvesterEngine_upperLower
     hδ hAc hBc hEq hR
 
 /-- Direct implementation of both ordered orientations. -/
-noncomputable def directGenuineOrderedSylvesterEngine :
+theorem directGenuineOrderedSylvesterEngine :
     GenuineOrderedSylvesterEngine where
   lowerUpper := directGenuineOrderedSylvesterEngine_lowerUpper
   upperLower := directGenuineOrderedSylvesterEngine_upperLower
 
 /-- Canonical ordered engine used by the genuine all-gap capstone. -/
-noncomputable def canonicalGenuineOrderedSylvesterEngine :
+theorem canonicalGenuineOrderedSylvesterEngine :
     GenuineOrderedSylvesterEngine :=
   directGenuineOrderedSylvesterEngine
 

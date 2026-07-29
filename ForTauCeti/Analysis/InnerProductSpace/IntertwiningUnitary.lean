@@ -151,8 +151,6 @@ noncomputable def OrthoProjFamily.ofOrthonormalBasis (b : OrthonormalBasis (Fin 
     unfold spectralProjection
     exact Finset.sum_congr rfl fun i _ => Finset.sum_singleton _ _
 
-/-- The family built from an orthonormal basis has the singleton spectral
-projections as its components, definitionally. -/
 @[simp] theorem OrthoProjFamily.ofOrthonormalBasis_proj (b : OrthonormalBasis (Fin n) 𝕜 E)
     (i : Fin n) :
     (OrthoProjFamily.ofOrthonormalBasis b).proj i = spectralProjection b {i} :=
@@ -316,8 +314,6 @@ noncomputable def intertwiningUnitary (hnd : P.NonDegenerate P') : E ≃ₗᵢ[�
       ⟨hinj, LinearMap.injective_iff_surjective.mp hinj⟩ with
     norm_map' := hnorm }
 
-/-- The underlying linear map of the intertwining unitary agrees with the
-isometry equivalence.  `simp` normal form for moving between the two views. -/
 @[simp] theorem coe_toLinearMap_intertwiningUnitary_apply (hnd : P.NonDegenerate P') (y : E) :
     (intertwiningUnitary hnd : E →ₗ[𝕜] E) y = intertwiningUnitary hnd y :=
   rfl

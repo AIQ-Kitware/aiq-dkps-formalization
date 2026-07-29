@@ -66,12 +66,14 @@ noncomputable def approximationEnergy
     (T : E →L[ℂ] F) (n : ℕ) : ℝ :=
   ∑ i ∈ Finset.range n, (approximationSingularValue i T) ^ 2
 
+omit [CompleteSpace E] [CompleteSpace F] in
 theorem approximationEnergy_nonneg
     (T : E →L[ℂ] F) (n : ℕ) :
     0 ≤ approximationEnergy T n := by
   unfold approximationEnergy
   exact Finset.sum_nonneg fun i _ => sq_nonneg _
 
+omit [CompleteSpace E] [CompleteSpace F] in
 /-- The zeroth approximation number is the operator norm, so every nonempty
 prefix square energy dominates the squared operator norm. -/
 theorem opNorm_sq_le_approximationEnergy
@@ -90,6 +92,7 @@ theorem opNorm_sq_le_approximationEnergy
       exact Finset.single_le_sum
         (fun i hi => sq_nonneg (approximationSingularValue i T)) hmem
 
+omit [CompleteSpace E] [CompleteSpace F] in
 /-- Left composition by an orthogonal projection cannot increase the first
 `n` square energy. -/
 theorem approximationEnergy_starProjection_comp_le
@@ -132,6 +135,7 @@ theorem approximationEnergy_eq_paperEnergy_toReal_of_rank_le
   · intro i hi
     exact ENNReal.ofReal_ne_top
 
+omit [CompleteSpace E] [CompleteSpace F] in
 /-- Rank of a left-compressed operator is bounded by the rank of the
 compressing projection. -/
 theorem rank_starProjection_comp_le
@@ -146,7 +150,9 @@ domain.  This is the basis-free Pythagorean identity used in Lemma 6.3. -/
 theorem paperHilbertSchmidtEnergy_domain_projection_add
     (L : E →L[ℂ] F)
     (P : Submodule ℂ E) [P.HasOrthogonalProjection]
-    (hfinite : IsPaperHilbertSchmidt L) :
+    -- carried for source fidelity: Davis--Kahan Lemma 6.3 states this for
+    -- Hilbert--Schmidt `L`, and the proof happens not to need it
+    (_hfinite : IsPaperHilbertSchmidt L) :
     paperHilbertSchmidtEnergy L =
       paperHilbertSchmidtEnergy (L ∘L P.starProjection) +
       paperHilbertSchmidtEnergy
@@ -189,6 +195,7 @@ theorem paperHilbertSchmidtEnergy_domain_projection_add
   push_cast
   exact hpyth
 
+omit [CompleteSpace E] [CompleteSpace F] in
 /-- Under the paper's block-invariance hypothesis the selected source block
 is exactly the source restriction of the left-compressed operator. -/
 theorem leftCompressed_comp_source_eq
@@ -214,12 +221,12 @@ theorem lemma6_3_approximationNumber_leakage
     (Q : Submodule ℂ F) [Q.HasOrthogonalProjection]
     (n : ℕ) (hn : 0 < n) (η : ℝ) (hη : 0 < η)
     (hKP : K ∘L P.starProjection = Q.starProjection ∘L K ∘L P.starProjection)
-    (hrankP : P.starProjection.rank ≤ (n : Cardinal))
+    (_hrankP : P.starProjection.rank ≤ (n : Cardinal))
     (hrankQ : Q.starProjection.rank ≤ (n : Cardinal))
     (hnear : approximationEnergy (K ∘L P.starProjection) n >
       approximationEnergy K n - η ^ 2) :
     ‖Q.starProjection ∘L K ∘L (1 - P.starProjection)‖ < η := by
-  clear hrankP
+  clear _hrankP
   let L : E →L[ℂ] F := Q.starProjection ∘L K
   let A : E →L[ℂ] F := K ∘L P.starProjection
   let B : E →L[ℂ] F :=
@@ -289,6 +296,7 @@ theorem lemma6_3_approximationNumber_leakage
     nlinarith
   simpa only [B] using hnorm
 
+omit [CompleteSpace E] [CompleteSpace F] in
 /-- In finite dimensions, the approximation energy is the sum of the squared
 ordinary singular values over the same prefix. -/
 theorem approximationEnergy_eq_singularValues
