@@ -3,13 +3,26 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
-import DavisKahan.BoundedOperator.Basic
+import ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Basic
 
 /-!
 # Dimension-free Davis--Kahan `sin Θ`
 
 The supported scalar-generic coercive theorem.  Spectral hypotheses are
 converted to these form bounds in scalar-specific bridge modules.
+
+## Provenance
+
+*Moved, not restated.*  This file was
+`DavisKahan/BoundedOperator/SinTheta.lean`
+until 2026-07-29, when lane Y3(b3) moved the dependency-closed base of the sin-Θ core
+into the staging layer.  Statements, proofs, signatures and namespaces are
+unchanged; the declarations already lived in `TauCeti.DavisKahan*`, so the move
+was a path change and an import repoint and nothing else.
+
+The move became possible only once Y3(b2) took the `ForMathlib`
+inner-product-space component into `ForTauCeti`: before that this file's import
+closure crossed `ForMathlib`, which the `ForTauCeti` layer rule forbids.
 -/
 
 namespace TauCeti
@@ -143,7 +156,7 @@ theorem sinTheta_directed_coercive
     nlinarith [hVc (Q x) hqx]
   -- Sylvester relation A' X - X B' = Y
   have hsylv : sylvesterOperator A' B' X = Y := by
-    show A' ∘L X - X ∘L B' = Y
+    change A' ∘L X - X ∘L B' = Y
     ext x
     have hQxV : Q x ∈ V := V.starProjection_apply_mem x
     have hPP : P (P (Q x)) = P (Q x) :=

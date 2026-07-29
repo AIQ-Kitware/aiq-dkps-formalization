@@ -14,6 +14,19 @@ import ForTauCeti.Analysis.InnerProductSpace.SylvesterOperator
 This module is the scalar-generic `RCLike` surface for the supported bounded
 Davis--Kahan theory.  Spectral implementations and long-horizon literature
 scaffolds live in separate modules.
+
+## Provenance
+
+*Moved, not restated.*  This file was
+`DavisKahan/BoundedOperator/Basic.lean`
+until 2026-07-29, when lane Y3(b3) moved the dependency-closed base of the sin-Θ core
+into the staging layer.  Statements, proofs, signatures and namespaces are
+unchanged; the declarations already lived in `TauCeti.DavisKahan*`, so the move
+was a path change and an import repoint and nothing else.
+
+The move became possible only once Y3(b2) took the `ForMathlib`
+inner-product-space component into `ForTauCeti`: before that this file's import
+closure crossed `ForMathlib`, which the `ForTauCeti` layer rule forbids.
 -/
 
 namespace TauCeti
