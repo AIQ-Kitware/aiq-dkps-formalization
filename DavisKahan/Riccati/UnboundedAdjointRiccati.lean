@@ -152,5 +152,101 @@ theorem adjoint_riccati_of_invariant_orthogonal
   rw [hfstcoe, hsndcoe, map_add, map_neg, map_neg] at hout
   linear_combination (norm := module) -hout
 
+/-- The commutator of the first diagonal block with the Gram operator `X†X`.
+
+Both Riccati equations conspire so that this commutator, which a priori pairs an
+unbounded operator with a bounded one, is itself **bounded**: writing `K = B₀₁X`
+and `T = X†X` it is `(I + T)K - K†(I + T)`, so `‖G‖ ≤ 2(‖B₀₁‖ + ‖B₁₀‖)`. -/
+noncomputable def riccatiGramCommutator
+    (H : UnboundedBlockData (𝕜 := 𝕜) (E0 := E0) (E1 := E1))
+    (X : E0 →L[𝕜] E1) : E0 →L[𝕜] E0 :=
+  H.B01 ∘L X + ((ContinuousLinearMap.adjoint X) ∘L X) ∘L (H.B01 ∘L X) -
+    ((ContinuousLinearMap.adjoint X) ∘L H.B10) -
+      ((ContinuousLinearMap.adjoint X) ∘L H.B10) ∘L
+        ((ContinuousLinearMap.adjoint X) ∘L X)
+
+/-- The Gram operator of a reducing Riccati selection preserves the first
+diagonal domain. -/
+theorem gram_mem_domain
+    (H : UnboundedBlockData (𝕜 := 𝕜) (E0 := E0) (E1 := E1))
+    {X : E0 →L[𝕜] E1} (hdom : PreservesRiccatiDomains H X)
+    (hadj : PreservesAdjointRiccatiDomains H X) (x : H.A0.domain) :
+    (ContinuousLinearMap.adjoint X) (X (x : E0)) ∈ H.A0.domain :=
+  hadj ⟨X (x : E0), hdom x⟩
+
+/-- **The Riccati commutator identity.**
+
+`A₀` commutes with the Gram operator `X†X` up to the *bounded* operator
+`riccatiGramCommutator`.  This is ticket T1.2 of the sharp unbounded
+`tan 2Theta` lane: it is the reason the whole argument can be run with band
+projections of `X†X` while keeping the unbounded block under control. -/
+theorem gram_commutator_eq
+    (H : UnboundedBlockData (𝕜 := 𝕜) (E0 := E0) (E1 := E1))
+    {X : E0 →L[𝕜] E1} (hdom : PreservesRiccatiDomains H X)
+    (hadj : PreservesAdjointRiccatiDomains H X)
+    (hinv : TauCeti.LinearPMap.InvariantSubspace (unboundedBlockOperatorCore H)
+      (unboundedBlockGraph X)ᗮ)
+    (hric : ∀ x : H.A0.domain,
+      H.A1 ⟨X (x : E0), hdom x⟩ + H.B10 (x : E0) =
+        X (H.A0 x + H.B01 (X (x : E0))))
+    (x : H.A0.domain) :
+    H.A0 ⟨(ContinuousLinearMap.adjoint X) (X (x : E0)),
+        gram_mem_domain H hdom hadj x⟩ =
+      (ContinuousLinearMap.adjoint X) (X (H.A0 x)) +
+        riccatiGramCommutator H X (x : E0) := by
+  have hz := adjoint_riccati_of_invariant_orthogonal H X hadj hinv
+    ⟨X (x : E0), hdom x⟩
+  have hA1 : H.A1 ⟨X (x : E0), hdom x⟩ =
+      X (H.A0 x + H.B01 (X (x : E0))) - H.B10 (x : E0) := by
+    rw [← hric x]; abel
+  rw [hA1, map_sub, map_add] at hz
+  simp only [riccatiGramCommutator, add_apply, sub_apply,
+    ContinuousLinearMap.coe_comp, Function.comp_apply]
+  rw [hz]
+  simp only [map_add]
+  abel
+
+/-- The Riccati commutator is bounded by the off-diagonal coupling alone: no
+norm of a diagonal block appears.  This is what allows band projections of
+`X†X` to be used against the unbounded blocks. -/
+theorem norm_riccatiGramCommutator_le
+    (H : UnboundedBlockData (𝕜 := 𝕜) (E0 := E0) (E1 := E1))
+    {X : E0 →L[𝕜] E1} (hX : ‖X‖ ≤ 1) :
+    ‖riccatiGramCommutator H X‖ ≤ 2 * (‖H.B01‖ + ‖H.B10‖) := by
+  have hXa : ‖(ContinuousLinearMap.adjoint X)‖ = ‖X‖ :=
+    ContinuousLinearMap.adjoint.norm_map X
+  have hX0 : (0 : ℝ) ≤ ‖X‖ := norm_nonneg X
+  have hB01 : (0 : ℝ) ≤ ‖H.B01‖ := norm_nonneg _
+  have hB10 : (0 : ℝ) ≤ ‖H.B10‖ := norm_nonneg _
+  have h1 : ‖H.B01 ∘L X‖ ≤ ‖H.B01‖ := by
+    refine (ContinuousLinearMap.opNorm_comp_le _ _).trans ?_
+    nlinarith
+  have h2 : ‖((ContinuousLinearMap.adjoint X) ∘L X) ∘L (H.B01 ∘L X)‖ ≤
+      ‖H.B01‖ := by
+    refine (ContinuousLinearMap.opNorm_comp_le _ _).trans ?_
+    have hc : ‖(ContinuousLinearMap.adjoint X) ∘L X‖ ≤ 1 := by
+      refine (ContinuousLinearMap.opNorm_comp_le _ _).trans ?_
+      rw [hXa]; nlinarith
+    nlinarith [norm_nonneg (H.B01 ∘L X), norm_nonneg
+      ((ContinuousLinearMap.adjoint X) ∘L X)]
+  have h3 : ‖(ContinuousLinearMap.adjoint X) ∘L H.B10‖ ≤ ‖H.B10‖ := by
+    refine (ContinuousLinearMap.opNorm_comp_le _ _).trans ?_
+    rw [hXa]; nlinarith
+  have h4 : ‖((ContinuousLinearMap.adjoint X) ∘L H.B10) ∘L
+      ((ContinuousLinearMap.adjoint X) ∘L X)‖ ≤ ‖H.B10‖ := by
+    refine (ContinuousLinearMap.opNorm_comp_le _ _).trans ?_
+    have hc : ‖(ContinuousLinearMap.adjoint X) ∘L X‖ ≤ 1 := by
+      refine (ContinuousLinearMap.opNorm_comp_le _ _).trans ?_
+      rw [hXa]; nlinarith
+    nlinarith [norm_nonneg ((ContinuousLinearMap.adjoint X) ∘L H.B10),
+      norm_nonneg ((ContinuousLinearMap.adjoint X) ∘L X)]
+  refine (norm_sub_le _ _).trans ?_
+  have h5 := (norm_sub_le
+    (H.B01 ∘L X + ((ContinuousLinearMap.adjoint X) ∘L X) ∘L (H.B01 ∘L X))
+    ((ContinuousLinearMap.adjoint X) ∘L H.B10))
+  have h6 := norm_add_le (H.B01 ∘L X)
+    (((ContinuousLinearMap.adjoint X) ∘L X) ∘L (H.B01 ∘L X))
+  linarith
+
 end DavisKahanExt
 end TauCeti
