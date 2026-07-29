@@ -42,13 +42,29 @@ noncomputable def compactOperatorNorm :
 
 /-- Hilbert--Schmidt operators as a coherent rectangular family.
 
-Construction route: define membership by summability of `‖A e i‖ ^ 2` over a
-Hilbert basis (basis independence via Parseval), the gauge as the square root
-of that sum, adjoint invariance by the double-sum symmetry, ideal control by
-termwise operator-norm bounds, and completeness by a diagonal argument.  The
-required rectangular Hilbert--Schmidt theory over `RCLike` scalars is not yet
-available in this development, the pinned Mathlib, or the pinned Spectra
-checkout (Spectra's trace-class development is `ℂ`-only and square). -/
+**Status corrected 2026-07-29 — most of this is now done, and the one missing
+piece is much smaller than the paragraph below used to claim.**
+
+The family itself **exists and is `RCLike`-general**:
+`TauCeti.hilbertSchmidtIdealFamily` in
+`ForTauCeti/Analysis/OperatorIdeal/Family/HilbertSchmidt.lean` supplies
+membership, the gauge, adjoint invariance and the ideal bounds.
+
+What blocks filling this slot is a **single** obligation: `toRectangular`
+requires `[N.toOperatorIdealFamily.IsComplete]`, and that instance does not
+exist for the Hilbert--Schmidt family.  Substituting the staged family fails
+with `failed to synthesize (hilbertSchmidtIdealFamily 𝕜).IsComplete`.
+
+That obligation will **not** fall out the way `kyFan`'s did.  `kyFanIdealFamily`
+gets completeness from the two-sided comparison `‖A‖ ≤ ∑_{n<k} aₙ(A) ≤ k ‖A‖` —
+that is, because the Ky Fan gauge is *equivalent to the operator norm*.  The
+Hilbert--Schmidt gauge is not, so the diagonal argument really is needed.
+
+Original note, retained for the construction route it describes: membership by
+summability of `‖A eᵢ‖²` over a Hilbert basis (basis independence via Parseval),
+the gauge as the square root of that sum, adjoint invariance by the double-sum
+symmetry, ideal control by termwise operator-norm bounds, and completeness by a
+diagonal argument. -/
 noncomputable def hilbertSchmidt :
     RectangularSymmetricIdealFamily (𝕜 := 𝕜) :=
   -- Open obligation (separate analytic campaign): the rectangular
