@@ -145,6 +145,9 @@ def reducingRestrictionDomain
   add_mem' hx hy := A.domain.add_mem hx hy
   smul_mem' c _ hx := A.domain.smul_mem c hx
 
+/-- Membership in the restricted domain is membership of the ambient vector in
+`A.domain`: restricting the domain to `U` adds no condition beyond lying in `U`,
+which the subtype already carries. -/
 @[simp] theorem mem_reducingRestrictionDomain_iff
     (A : E →ₗ.[𝕜] E) (U : Submodule 𝕜 E) (x : U) :
     x ∈ reducingRestrictionDomain A U ↔ (x : E) ∈ A.domain :=
@@ -156,6 +159,8 @@ def reducingRestrictionDomainToAmbient
     (x : reducingRestrictionDomain A U) : A.domain :=
   ⟨((x : reducingRestrictionDomain A U) : U), x.property⟩
 
+/-- Viewing a restricted-domain vector in the ambient domain does not move it.
+The two subtypes differ only in which membership proof they carry. -/
 @[simp] theorem reducingRestrictionDomainToAmbient_coe
     (A : E →ₗ.[𝕜] E) (U : Submodule 𝕜 E)
     (x : reducingRestrictionDomain A U) :
@@ -186,6 +191,9 @@ def reducingRestrictionLinearMap
       c • reducingRestrictionDomainToAmbient A U x from rfl]
     exact A.toFun.map_smul c _
 
+/-- The restricted map acts by the ambient one: `A|_U x = A x`, read through the
+two coercions.  This is where `ReducesSubspace` earns its keep — it is what
+makes `A x` land back in `U` so the corestriction typechecks. -/
 @[simp] theorem coe_reducingRestrictionLinearMap
     (A : E →ₗ.[𝕜] E) (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     (hred : ReducesSubspace A U) (x : reducingRestrictionDomain A U) :
@@ -201,6 +209,9 @@ noncomputable def projectDomainToReducingRestriction
   ⟨⟨U.starProjection (x : E), U.starProjection_apply_mem (x : E)⟩,
     hred.projection_mem_domain x⟩
 
+/-- Projecting an ambient domain vector into the restricted domain is the
+orthogonal projection onto `U`.  It stays in the domain because `A` reduces
+`U`. -/
 @[simp] theorem coe_projectDomainToReducingRestriction
     (A : E →ₗ.[𝕜] E) (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     (hred : ReducesSubspace A U) (x : A.domain) :
@@ -217,6 +228,7 @@ noncomputable def reducingRestriction
   domain := reducingRestrictionDomain A U
   toFun := reducingRestrictionLinearMap A U hred
 
+/-- The restricted partial map has the restricted domain, definitionally. -/
 @[simp] theorem reducingRestriction_domain
     (A : E →ₗ.[𝕜] E) (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     (hred : ReducesSubspace A U) :
@@ -397,6 +409,8 @@ linear equivalence. -/
 def pullbackDomain (A : E →ₗ.[𝕜] E) (e : E ≃L[𝕜] E) : Submodule 𝕜 E :=
   A.domain.comap e.toLinearMap
 
+/-- `x` lies in the pulled-back domain exactly when `e x` lies in the original
+one — the pullback domain is the preimage, so the condition is on the image. -/
 @[simp] theorem mem_pullbackDomain_iff
     (A : E →ₗ.[𝕜] E) (e : E ≃L[𝕜] E) (x : E) :
     x ∈ pullbackDomain A e ↔ e x ∈ A.domain :=
@@ -414,6 +428,8 @@ def pullbackDomainToOriginal
     apply Subtype.ext
     exact e.map_smul c (x : E)
 
+/-- Transporting a pulled-back domain vector applies `e`.  Unlike the reducing
+restriction, this map genuinely moves the vector. -/
 @[simp] theorem pullbackDomainToOriginal_coe
     (A : E →ₗ.[𝕜] E) (e : E ≃L[𝕜] E)
     (x : pullbackDomain A e) :
@@ -426,6 +442,8 @@ def pullbackLinearMap (A : E →ₗ.[𝕜] E) (e : E ≃L[𝕜] E) :
     pullbackDomain A e →ₗ[𝕜] E :=
   e.symm.toLinearMap.comp (A.toFun.comp (pullbackDomainToOriginal A e))
 
+/-- The pulled-back action is `e⁻¹ ∘ A ∘ e`: push forward by `e`, apply `A`,
+pull back by `e⁻¹`.  Conjugation, written on the domain subtypes. -/
 @[simp] theorem pullbackLinearMap_apply
     (A : E →ₗ.[𝕜] E) (e : E ≃L[𝕜] E)
     (x : pullbackDomain A e) :
@@ -439,6 +457,7 @@ noncomputable def pullback (A : E →ₗ.[𝕜] E) (e : E ≃L[𝕜] E) : E →�
   domain := pullbackDomain A e
   toFun := pullbackLinearMap A e
 
+/-- The pulled-back partial map has the pulled-back domain, definitionally. -/
 @[simp] theorem pullback_domain
     (A : E →ₗ.[𝕜] E) (e : E ≃L[𝕜] E) :
     (pullback A e).domain = pullbackDomain A e :=
@@ -572,6 +591,9 @@ noncomputable def directSumDomain
   (A.domain.prod B.domain).comap
     (WithLp.linearEquiv 2 𝕜 (E × F)).toLinearMap
 
+/-- A vector lies in the direct-sum domain exactly when each coordinate lies in
+the corresponding domain.  The `WithLp 2` wrapper carries the Hilbert norm and
+changes nothing about membership. -/
 @[simp] theorem mem_directSumDomain_iff
     (A : E →ₗ.[𝕜] E) (B : F →ₗ.[𝕜] F) (z : WithLp 2 (E × F)) :
     z ∈ directSumDomain A B ↔
@@ -622,6 +644,7 @@ noncomputable def directSum
   domain := directSumDomain A B
   toFun := directSumLinearMap A B
 
+/-- The direct-sum partial map has the direct-sum domain, definitionally. -/
 @[simp] theorem directSum_domain
     (A : E →ₗ.[𝕜] E) (B : F →ₗ.[𝕜] F) :
     (directSum A B).domain = directSumDomain A B := rfl
@@ -775,9 +798,14 @@ noncomputable def addBounded (A : E →ₗ.[𝕜] E) (V : E →L[𝕜] E) :
   domain := A.domain
   toFun := A.toFun + V.toLinearMap.domRestrict A.domain
 
+/-- A bounded perturbation leaves the domain unchanged — `V` is everywhere
+defined, so `A + V` is defined exactly where `A` is.  This is what makes
+perturbation arguments comparable on the nose rather than up to a domain
+inclusion. -/
 @[simp] theorem addBounded_domain (A : E →ₗ.[𝕜] E) (V : E →L[𝕜] E) :
     (TauCeti.LinearPMap.addBounded A V).domain = A.domain := rfl
 
+/-- The perturbed map acts by `A x + V x`. -/
 @[simp] theorem addBounded_apply (A : E →ₗ.[𝕜] E) (V : E →L[𝕜] E)
     (x : (TauCeti.LinearPMap.addBounded A V).domain) :
     TauCeti.LinearPMap.addBounded A V x = A x + V (x : E) := rfl

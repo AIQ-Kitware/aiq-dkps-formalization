@@ -67,6 +67,8 @@ noncomputable def orthogonalBlockSum
     WithLp 2 (E₁ × E₂) →ₗ[𝕜] WithLp 2 (F₁ × F₂) :=
   LinearMap.withLpMap 2 (A.prodMap B)
 
+/-- The block sum acts componentwise: `A` on the first summand, `B` on the
+second. -/
 @[simp] theorem orthogonalBlockSum_apply
     {E₁ E₂ F₁ F₂ : Type*}
     [NormedAddCommGroup E₁] [InnerProductSpace 𝕜 E₁]
@@ -78,6 +80,7 @@ noncomputable def orthogonalBlockSum
     orthogonalBlockSum A B x = WithLp.toLp 2 (A x.fst, B x.snd) :=
   rfl
 
+/-- Scaling one block scales the block sum. -/
 @[simp] theorem orthogonalBlockSum_smul
     {E₁ E₂ F₁ F₂ : Type*}
     [NormedAddCommGroup E₁] [InnerProductSpace 𝕜 E₁]

@@ -57,6 +57,7 @@ noncomputable def finiteAnalysis (v : ι → E) : E →ₗ[𝕜] EuclideanSpace 
     LinearMap.pi fun i => (innerSL 𝕜 (v i)).toLinearMap
 
 omit [FiniteDimensional 𝕜 E] [Fintype ι] in
+/-- Analysis reads off the frame coefficients `⟪vᵢ, x⟫`. -/
 @[simp] theorem finiteAnalysis_apply (v : ι → E) (x : E) (i : ι) :
     finiteAnalysis 𝕜 v x i = inner 𝕜 (v i) x :=
   rfl
@@ -71,6 +72,7 @@ noncomputable def finiteSynthesis (v : ι → E) : EuclideanSpace 𝕜 ι →ₗ
     simp only [PiLp.smul_apply, smul_eq_mul, RingHom.id_apply, Finset.smul_sum, smul_smul]
 
 omit [FiniteDimensional 𝕜 E] in
+/-- Synthesis reassembles a coefficient vector as `∑ᵢ cᵢ • vᵢ`. -/
 @[simp] theorem finiteSynthesis_apply (v : ι → E) (c : EuclideanSpace 𝕜 ι) :
     finiteSynthesis 𝕜 v c = ∑ i, c i • v i :=
   rfl
