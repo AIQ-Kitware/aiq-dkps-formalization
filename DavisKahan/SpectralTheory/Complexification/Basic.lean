@@ -53,25 +53,32 @@ namespace RealComplexification
 
 variable {E F G : Type*}
 
+/-- Additive structure, inherited from the underlying `WithLp 2 (E × E)`. -/
 instance instAddCommGroup [AddCommGroup E] :
     AddCommGroup (RealComplexification E) :=
   inferInstanceAs (AddCommGroup (WithLp 2 (E × E)))
 
+/-- The `L²` product norm, inherited from `WithLp 2 (E × E)`.  This is the choice that makes the
+complexification an inner-product space rather than merely a normed one. -/
 instance instNormedAddCommGroup [NormedAddCommGroup E] :
     NormedAddCommGroup (RealComplexification E) :=
   inferInstanceAs (NormedAddCommGroup (WithLp 2 (E × E)))
 
+/-- Completeness is inherited from `E`. -/
 instance instCompleteSpace [NormedAddCommGroup E] [CompleteSpace E] :
     CompleteSpace (RealComplexification E) :=
   inferInstanceAs (CompleteSpace (WithLp 2 (E × E)))
 
+/-- Real scalar action, coordinatewise. -/
 instance instSMulReal [SMul ℝ E] : SMul ℝ (RealComplexification E) :=
   inferInstanceAs (SMul ℝ (WithLp 2 (E × E)))
 
+/-- Real module structure, inherited from the product. -/
 instance instModuleReal [AddCommGroup E] [Module ℝ E] :
     Module ℝ (RealComplexification E) :=
   inferInstanceAs (Module ℝ (WithLp 2 (E × E)))
 
+/-- The `L²` norm is compatible with real scaling. -/
 instance instNormedSpaceReal [NormedAddCommGroup E] [NormedSpace ℝ E] :
     NormedSpace ℝ (RealComplexification E) :=
   inferInstanceAs (NormedSpace ℝ (WithLp 2 (E × E)))
@@ -93,6 +100,8 @@ def im (z : RealComplexification E) : E :=
 @[simp] theorem mk_re_im (z : RealComplexification E) : mk (re z) (im z) = z := by
   exact WithLp.toLp_ofLp 2 z
 
+/-- Two complexified vectors are equal when their real and imaginary coordinates agree.  Tagged
+`@[ext]`, so `ext` splits any goal about them into two real goals. -/
 @[ext]
 theorem ext {z w : RealComplexification E} (hre : re z = re w) (him : im z = im w) : z = w := by
   apply WithLp.ofLp_injective
@@ -130,6 +139,9 @@ instance instSMulComplex [AddCommGroup E] [Module ℝ E] :
     (c : ℂ) (z : RealComplexification E) :
     im (c • z) = c.im • re z + c.re • im z := rfl
 
+/-- **The complex module structure**, where the complexification earns its name: `i` acts by
+`(x, y) ↦ (-y, x)`.  Built from minimal axioms because the four laws are exactly the four real
+identities that have to be checked coordinatewise. -/
 instance instModuleComplex [AddCommGroup E] [Module ℝ E] :
     Module ℂ (RealComplexification E) :=
   Module.ofMinimalAxioms
@@ -142,6 +154,8 @@ instance instModuleComplex [AddCommGroup E] [Module ℝ E] :
         simp [sub_eq_add_neg, Complex.mul_re, Complex.mul_im] <;> module)
     (fun z => by apply RealComplexification.ext <;> simp)
 
+/-- Real and complex scalar actions are compatible, so `ℝ`-linear statements can be read inside
+`ℂ`-linear ones without transport. -/
 instance instIsScalarTower [AddCommGroup E] [Module ℝ E] :
     IsScalarTower ℝ ℂ (RealComplexification E) where
   smul_assoc r c z := by
@@ -172,6 +186,9 @@ theorem norm_complex_smul [NormedAddCommGroup E] [InnerProductSpace ℝ E]
     hsq c.im ‖re z‖, hsq c.re ‖im z‖]
   ring
 
+/-- The `L²` norm is compatible with *complex* scaling.  This is the non-formal instance of the
+group: it needs `‖c • z‖ = ‖c‖ ‖z‖` for complex `c`, which is the Pythagorean computation above and
+not a consequence of the real case. -/
 instance instNormedSpaceComplex [NormedAddCommGroup E] [InnerProductSpace ℝ E] :
     NormedSpace ℂ (RealComplexification E) :=
   { (instModuleComplex (E := E)) with
@@ -195,6 +212,8 @@ instance instInnerProductSpaceComplex [NormedAddCommGroup E] [InnerProductSpace 
       simp [inner_add_left, inner_sub_left, real_inner_smul_left,
         Complex.mul_re, Complex.mul_im] <;> ring
 
+/-- The complex inner product in coordinates: real part `⟪re z, re w⟫ + ⟪im z, im w⟫`, imaginary
+part `⟪re z, im w⟫ - ⟪im z, re w⟫`.  True by `rfl`, and the form every computation unfolds to. -/
 @[simp]
 theorem inner_apply [NormedAddCommGroup E] [InnerProductSpace ℝ E]
     (z w : RealComplexification E) :
