@@ -69,28 +69,40 @@ abbrev absOp (T : H →L[ℂ] H) : H →L[ℂ] H := T.modulus
 /-- The modulus, corestricted to the initial space. -/
 abbrev absOpCorestrict (T : H →L[ℂ] H) : H →ₗ[ℂ] T.polarInitial := T.modulusCorestrict
 
+/-- The operator modulus `|T|` is self-adjoint. -/
 theorem absOp_isSelfAdjoint (T : H →L[ℂ] H) : IsSelfAdjoint (absOp T) :=
   T.modulus_isSelfAdjoint
 
+/-- The operator modulus is a positive operator. -/
 theorem absOp_nonneg (T : H →L[ℂ] H) : 0 ≤ absOp T := T.modulus_nonneg
 
+/-- `|T|` maps into the polar initial subspace, which is why the polar partial
+isometry is defined there. -/
 theorem absOp_mem_polarRange (T : H →L[ℂ] H) (x : H) : absOp T x ∈ polarRange T :=
   T.modulus_apply_mem_polarInitial x
 
+/-- The modulus preserves norms pointwise: `‖|T| x‖ = ‖T x‖`.  This is the identity
+the whole polar factorization rests on. -/
 theorem norm_absOp_apply (T : H →L[ℂ] H) (x : H) : ‖absOp T x‖ = ‖T x‖ :=
   T.norm_modulus_apply x
 
+/-- The corestriction of `|T|` to the polar initial subspace has dense range, so the
+partial isometry extends continuously from it. -/
 theorem denseRange_absOpCorestrict (T : H →L[ℂ] H) : DenseRange (absOpCorestrict T) :=
   T.denseRange_modulusCorestrict
 
+/-- The polar factorization: the partial isometry applied to `|T| x` returns `T x`. -/
 theorem polarPartial_absOpCorestrict (T : H →L[ℂ] H) (x : H) :
     polarPartial T (absOpCorestrict T x) = T x :=
   T.polarPartialAux_modulusCorestrict x
 
+/-- The polar partial isometry is isometric on the polar initial subspace. -/
 theorem norm_polarPartial_eq (T : H →L[ℂ] H) (x : T.polarInitial) :
     ‖polarPartial T x‖ = ‖x‖ :=
   T.norm_polarPartialAux_apply x
 
+/-- The polar isometry acts by first projecting onto the polar initial subspace and
+then applying the partial isometry. -/
 theorem polarIsometry_apply_eq (T : H →L[ℂ] H) (w : H) :
     polarIsometry T w = polarPartial T (T.polarInitial.orthogonalProjectionOnto w) := rfl
 
