@@ -22,12 +22,20 @@ someone else.
 | **SR-A** Cayley / Möbius / `SelfAdjointOperator` bridge | 5 | — | **DONE** (namek) |
 | **SR-B** spectral support | 1 | — | **DONE** (namek) |
 | **SR-C** half-line form bounds | 1 | — | **DONE** (namek) |
-| **SR-D** Hilbert–Schmidt tensor | 5 | the HS tensor development itself | **edward (aiq-gpu)** |
+| **SR-D** Hilbert–Schmidt tensor | 5 | **21,581-line donor closure — needs re-plan + author coordination** | *open (measured by edward, aiq-gpu — see lane)* |
 | **SR-E** Rosenblum | 1 | intertwiner of disjoint spectra vanishes | claimed |
-| **SR-F** Experimental stragglers | 3 → **1** | `InfiniteProposition41` only | **namek (jon)** |
+| **SR-F** Experimental stragglers | 3 → **1** | `InfiniteProposition41` only | edward + namek (see below) |
 
 `import Spectra` in `DavisKahan/**`: **15 → 7**.  The seven remaining are SR-D
 (5), SR-E (1) and the single SR-F straggler `InfiniteProposition41.lean`.
+
+> **SR-F was worked twice.**  edward and namek both took it, from different
+> branches, within the same hour.  No damage — they happened to split it:
+> edward ported `OperatorAbsoluteValueComplex` (that version survived the merge)
+> and namek ported `FourierSemigroup`.  The lesson is the one the claim protocol
+> already states and neither of us followed strictly enough: **push the claim
+> row before the first edit, not with the first result.**  A claim that lands
+> after the work is done is not a claim.
 
 `InfiniteProposition41.lean` is counted in SR-F but also consumes
 `SelfAdjointOperator.ofBounded`; it should be taken **after** SR-A lands, or its
@@ -201,6 +209,64 @@ basis-column, tensor, approximation-number and finite-Frobenius
 characterisations as equivalence theorems for it. The sharp dependency is the
 antilinear conjugate space (`Spectra.Conj` and its two instances); settle
 whether it ports or dissolves against Mathlib before touching the tensor model.
+
+**Measured 2026-07-29 (edward, aiq-gpu) — the two questions this lane says to
+settle first, answered, and the second one changes the lane's size by 28x.**
+
+*1. `Spectra.Conj` cannot dissolve against Mathlib; it must port.*  Across **all**
+of pinned Mathlib: **zero** files containing `HilbertSchmidt`, **zero**
+`Schatten`, **zero** `IsTraceClass`; in `Analysis/`, **zero** `ConjugateSpace`.
+Mathlib expresses antilinearity through `starRingEnd`-semilinear maps, not a
+conjugate-space type synonym, so there is no counterpart for
+`Conj E := E` with a conjugated scalar action and inner product.  (`TraceClass`
+matches 39 Mathlib files, but every hit is `registerTraceClass` — tactic tracing.
+A name-only grep reads that as operator-ideal support; it is not.)
+
+*2. The donor set is split by authorship, and that decides what may be relocated
+versus what must be ported.*  `Authors:` lines in the transitive closure:
+
+| file | author | status |
+|---|---|---|
+| `Spaces/Tensor/HilbertSchmidt.lean` (626) | Jon Crall, GPT-5.6 | **ours** — relocate per §S0.3 |
+| `Spaces/Tensor/HilbertSchmidt{GeneratorBridge,Flow}.lean` | Jon Crall, GPT-5.6 | **ours** |
+| `Spaces/Tensor/HilbertSchmidtSpectralGap.lean` | Bornemann + Crall | **mixed** |
+| `Spaces/Tensor/{Map,Hilbert,Basis,Power,PowerInner,PowerCongr}.lean` | Adam Bornemann | donor |
+| `SpectralTheory/Antilinear/{ConjugateSpace,Conjugation}.lean` | Adam Bornemann | donor |
+
+So the HS tensor object is ours, but it *rests on* third-party donor material —
+which per the plan means coordinate-and-port, not relocate.
+
+*3. The transitive closure is 21,581 lines, and one incidental import causes
+96% of it.*  `HilbertSchmidt.lean` has four Spectra imports; their individual
+closures are:
+
+| import | modules | lines | uses in the file body |
+|---|---:|---:|---|
+| `Spaces.Tensor.Map` | 2 | 601 | load-bearing (`HilbertTensor` ×23) |
+| `SpectralTheory.Antilinear.ConjugateSpace` | 1 | 152 | load-bearing (`Conj` ×92) |
+| `Operator.AdjointClosure` | 4 | 912 | **none — import line only** |
+| `QuantumMechanics.BornRule.Joint.Basic` | 86 | 20,354 | **none — import line only** |
+
+It looked as though dropping the two unused imports would cut the donor material
+from 21,581 lines to ~753.  **Tested, and it does not: they are not removable.**
+
+Method: compile `HilbertSchmidt.lean` standalone via `lake env lean`, once as-is
+and once with both imports deleted.  Control **1 error**, probe **29** — and the
+control's single error (an `apply` unification failure at line 119) appears in
+the probe too, shifted to 117 by the two deleted lines, so it is a
+standalone-compile artifact rather than an effect of the edit.  The differential
+is **+28 errors**, dominated by **19 × "Function expected at"** plus 8 unsolved
+goals — the signature of missing *instances*, not missing names.  That is exactly
+why a name-reference count cannot establish removability: `AdjointClosure` and
+`BornRule.Joint.Basic` are referenced nowhere in the body yet supply
+instances the file's elaboration depends on.
+
+**So SR-D's donor cost stands at the full closure: 92 modules, 21,581 lines**,
+of which one module (626 lines) is ours.  Per the plan that means
+coordinate-and-port with Spectra's author, not a relocation — and it is not a
+single session's work.  Anyone re-planning this lane should start from that
+number, and should treat "imported but never named" as *unproven* until compiled,
+in either direction.
 
 **New ForTauCeti modules:** under
 `ForTauCeti/Analysis/InnerProductSpace/HilbertSchmidt/`.

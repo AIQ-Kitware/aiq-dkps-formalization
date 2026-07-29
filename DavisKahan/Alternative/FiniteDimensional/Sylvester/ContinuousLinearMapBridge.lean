@@ -36,6 +36,7 @@ abbrev SpectraSeparated (A : E →L[𝕜] E) (U : Submodule 𝕜 E)
 
 end ContinuousLinearMapBridge
 
+omit [CompleteSpace E] [CompleteSpace F] in
 /-- Finite-dimensional rectangular unitarily invariant Sylvester estimate.
 
 For self-adjoint `A` and `B` with spectra separated by `d > 0`, every

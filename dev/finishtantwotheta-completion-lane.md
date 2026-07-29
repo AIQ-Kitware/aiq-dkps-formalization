@@ -1,5 +1,26 @@
 # FinishTanTwoTheta completion lane (T1/T2/T3)
 
+> **READ THIS FIRST — what is and is not refuted (clarified 2026-07-29).**
+>
+> Nothing in this document refutes `sharp_unbounded_doubleAngleTangentOperator_kyFan`
+> or any other tan-2Theta statement. **The theorem is not known to be false and I
+> have no counterexample to it.**
+>
+> What is refuted is a *lemma one proof route needs*: that
+> `Ran E_T(J) ∩ dom A₀` is dense in `Ran E_T(J)`, stated for a general
+> self-adjoint `A ≤ 0` and bounded `T ≥ 0` with `[A,T]` bounded. That statement
+> deliberately discards the Riccati structure — it keeps only the bounded
+> commutator and forgets that `T = X†X` for an `X` tied to `A₀`, `A₁`, `B₀₁` by
+> two equations. A counterexample there kills *my mechanism*, not the theorem.
+>
+> Separately, and not yet checked by anyone: **the local statements in this
+> library have not been audited against the paper's prose.** The structure
+> `UnboundedApproximateLeadingSingularFamily` was authored here, not transcribed
+> from the source, and it is over-specified in at least one way I already found
+> and fixed. Before concluding anything about what is or is not provable, someone
+> with the source text should check that the statements are the right ones. That
+> audit has priority over any further proof attempt.
+
 Owner: `jon (toothbrush)`. Inherited 2026-07-28 from the stopped `jon (yardrat)`
 agent. Read this before reclaiming any part of the lane.
 

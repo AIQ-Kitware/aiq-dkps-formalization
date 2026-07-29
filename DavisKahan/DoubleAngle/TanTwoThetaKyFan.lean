@@ -79,6 +79,7 @@ theorem doubleAngleTangent_nonneg {t : ℝ} (h0 : 0 ≤ t) (h1 : t < 1) :
   have h1t : (0 : ℝ) < 1 - t ^ 2 := by nlinarith
   exact div_nonneg (by linarith) h1t.le
 
+omit [FiniteDimensional 𝕜 E] in
 /-- A symmetric operator with an invariant subspace leaves the orthogonal
 complement invariant. -/
 theorem apply_mem_orthogonal_of_isSymmetric

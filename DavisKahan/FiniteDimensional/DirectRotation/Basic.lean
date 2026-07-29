@@ -160,7 +160,7 @@ theorem projection_comm_canonicalIntertwiner_gram (U V : Submodule 𝕜 E)
   rw [canonicalIntertwiner_adjoint_comp_self]
   ext x
   simp only [LinearMap.comp_apply, LinearMap.add_apply, map_add, hUU, hUcU, hcUU,
-    map_zero, add_zero, zero_add]
+    map_zero, add_zero]
 
 omit [FiniteDimensional 𝕜 E] in
 /-- The canonical intertwiner sends source blocks to target blocks. -/
@@ -179,7 +179,7 @@ theorem canonicalIntertwiner_comp_projection (U V : Submodule 𝕜 E)
     (Submodule.starProjection_apply_eq_zero_iff V).mpr (Vᗮ.starProjection_apply_mem y)
   ext x
   simp only [canonicalIntertwiner, LinearMap.comp_apply, LinearMap.add_apply,
-    map_add, hUU, hcUU, hVV, hVcV, map_zero, add_zero, zero_add]
+    map_add, hUU, hcUU, hVV, hVcV, map_zero, add_zero]
 
 omit [FiniteDimensional 𝕜 E] in
 /-- Acuteness makes the canonical intertwiner injective. -/
@@ -255,10 +255,10 @@ theorem canonicalIntertwiner_normal_of_acute
   have hstar := adjoint_canonicalIntertwiner U V
   have hRR : (reflectionProduct U V).toLinearMap ∘ₗ
       (reflectionProduct U V).symm.toLinearMap = LinearMap.id := by
-    ext x; simp [LinearEquiv.coe_coe, LinearIsometryEquiv.coe_toLinearEquiv]
+    ext x; simp []
   have hRR' : (reflectionProduct U V).symm.toLinearMap ∘ₗ
       (reflectionProduct U V).toLinearMap = LinearMap.id := by
-    ext x; simp [LinearEquiv.coe_coe, LinearIsometryEquiv.coe_toLinearEquiv]
+    ext x; simp []
   have key : ((2 : 𝕜) • canonicalIntertwiner V U) ∘ₗ
         ((2 : 𝕜) • canonicalIntertwiner U V) =
       ((2 : 𝕜) • canonicalIntertwiner U V) ∘ₗ
@@ -456,7 +456,7 @@ theorem canonicalIntertwiner_eq_reflectionProduct_comp_adjoint
   rw [hRrev] at hSrev
   have hRR : (reflectionProduct U V).toLinearMap ∘ₗ
       (reflectionProduct U V).symm.toLinearMap = LinearMap.id := by
-    ext x; simp [LinearEquiv.coe_coe, LinearIsometryEquiv.coe_toLinearEquiv]
+    ext x; simp []
   have hSadj : (2 : 𝕜) • (canonicalIntertwiner U V).adjoint
       = LinearMap.id + (reflectionProduct U V).symm.toLinearMap := by
     rw [hstar]; exact hSrev
@@ -490,10 +490,10 @@ theorem reflectionProduct_comm_canonicalIntertwiner_gram
   rw [hRrev] at hSrev
   have hRR : (reflectionProduct U V).toLinearMap ∘ₗ
       (reflectionProduct U V).symm.toLinearMap = LinearMap.id := by
-    ext x; simp [LinearEquiv.coe_coe, LinearIsometryEquiv.coe_toLinearEquiv]
+    ext x; simp []
   have hRR' : (reflectionProduct U V).symm.toLinearMap ∘ₗ
       (reflectionProduct U V).toLinearMap = LinearMap.id := by
-    ext x; simp [LinearEquiv.coe_coe, LinearIsometryEquiv.coe_toLinearEquiv]
+    ext x; simp []
   have hSadj : (2 : 𝕜) • (canonicalIntertwiner U V).adjoint
       = LinearMap.id + (reflectionProduct U V).symm.toLinearMap := by
     rw [hstar]; exact hSrev

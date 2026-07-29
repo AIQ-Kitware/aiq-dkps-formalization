@@ -38,6 +38,7 @@ variable {𝕜 : Type*} [RCLike 𝕜]
   {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
   {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
 
+omit [CompleteSpace E] [CompleteSpace F] in
 /-- **Ky Fan variational bound for approximation numbers.**  For orthonormal
 families `u : Fin k → F` and `v : Fin k → E`, the paired coefficient sum of a
 bounded operator is controlled by the `k`-th approximation-number prefix. -/
@@ -121,6 +122,7 @@ theorem re_sum_inner_map_le_kyFanApproximationGauge
     _ = kyFanApproximationGauge k K' := hbridge
     _ ≤ kyFanApproximationGauge k K := hmono
 
+omit [CompleteSpace E] [CompleteSpace F] in
 /-- Witness form of the variational bound: pointwise lower bounds by paired
 coefficients sum to at most the approximation-number prefix. -/
 theorem sum_le_kyFanApproximationGauge_of_orthonormal

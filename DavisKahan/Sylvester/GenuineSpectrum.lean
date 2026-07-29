@@ -198,6 +198,7 @@ theorem compress_sylvester_of_reduces
     ContinuousLinearMap.starProjection_apply_comm_of_reduces A U hU,
     Submodule.starProjection_eq_self_iff.mpr x.2, map_sub]
 
+omit [CompleteSpace E] in
 /-- The cross-block compression has the norm of the directed projection
 composition. -/
 theorem norm_crossCompression_eq

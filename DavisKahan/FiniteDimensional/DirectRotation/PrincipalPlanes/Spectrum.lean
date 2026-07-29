@@ -472,7 +472,6 @@ theorem singularValues_directRotation_displacement
         simp only [dif_pos hk]
         rw [principalPlaneChord_sq]
         match_scalars
-        push_cast
         ring
       · rw [if_neg hpar]
         rw [LinearMap.smul_apply, LinearMap.sub_apply, LinearMap.id_apply,
@@ -481,7 +480,6 @@ theorem singularValues_directRotation_displacement
         simp only [dif_pos hk]
         rw [principalPlaneChord_sq]
         match_scalars
-        push_cast
         ring
     · -- `b k` is orthogonal to the whole family, so `|S|` fixes it.
       have hperp_u : ∀ i, ⟪principalSourceVector U V i, b k⟫_𝕜 = 0 := by

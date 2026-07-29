@@ -61,8 +61,8 @@ theorem top (A : ClosedOperator (𝕜 := 𝕜) (E := E)) :
     ClosedOperator.IsGraphCore A ⊤ := by
   intro x
   refine ⟨fun _ => ⟨x, Submodule.mem_top⟩, ?_, ?_⟩
-  · simpa using tendsto_const_nhds
-  · simpa using tendsto_const_nhds
+  · simp
+  · simp
 
 omit [CompleteSpace E] in
 /-- A graph core is ambiently dense in the operator domain: every domain vector
@@ -95,6 +95,7 @@ structure PaperCommonCoreResidualData
 
 namespace PaperCommonCoreResidualData
 
+omit [CompleteSpace E] [CompleteSpace F] in
 /-- The core residual identity extends to every vector in the trial domain.
 This is the load-bearing closed-graph argument behind the literal appendix
 formulation. -/
@@ -154,6 +155,7 @@ theorem extends_to_domain
   rw [haction]
   abel
 
+omit [CompleteSpace E] [CompleteSpace F] in
 /-- Full-domain compatibility obtained from the graph-core hypothesis. -/
 theorem maps_domain
     {A : ClosedOperator (𝕜 := 𝕜) (E := E)}
@@ -164,6 +166,7 @@ theorem maps_domain
   intro x
   exact (C.extends_to_domain x).choose
 
+omit [CompleteSpace E] [CompleteSpace F] in
 /-- Full-domain residual identity obtained from the graph-core hypothesis. -/
 theorem residual_eq
     {A : ClosedOperator (𝕜 := 𝕜) (E := E)}
@@ -204,6 +207,7 @@ noncomputable def unboundedSinThetaDataOfPaperCommonCore
   residual_eq := C.residual_eq
   intertwines := hintertwines
 
+omit [CompleteSpace G] [CompleteSpace E] [CompleteSpace F] in
 /-- The constructed data carries the supplied residual unchanged.
 
 Downstream statements quote the source residual `R`, while the accepted engine

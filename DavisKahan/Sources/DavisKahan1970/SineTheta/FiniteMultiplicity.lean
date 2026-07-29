@@ -334,7 +334,7 @@ theorem Theorem6_1_finiteMultiplicity_equality_every_norm
   have hmem := finiteMultiplicityComplementMap_mem (𝕜 := 𝕜) m N
   rw [finiteMultiplicityResidual, finiteMultiplicitySineBlock,
     N.gauge_smul _ hmem, N.gauge_smul _ hmem]
-  simp [RCLike.norm_ofReal, abs_of_nonneg hdelta, abs_mul]
+  simp [abs_of_nonneg hdelta]
   ring
 
 /-- At a nonzero sine angle the model has an injective sine block on an

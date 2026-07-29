@@ -179,6 +179,150 @@ move, not proofs.  `Interop/Spectra/**` (led by `RealSpectralRestriction.lean`)
 sits at the PVM/Borel/real-spectrum boundary that "Explicitly excluded" names and
 is not this lane's to migrate.
 
+### Gate U1.4 second command: now measurable (jon (toothbrush), 2026-07-29)
+
+The gate is stated in type-position uses, the "171" figure came with no command,
+and the reproducible fallback (`grep -rc ClosedOperator`) counts every mention.
+`scripts/closed_operator_census.py` measures both, so the gate is checkable:
+
+```sh
+python3 scripts/closed_operator_census.py --verbose
+```
+
+```
+raw mentions      : 594 across 77 modules
+type-position uses: 558 across 69 modules
+prose/import/#check overcount: 36
+```
+
+**Two corrections follow, and they point in opposite directions.**
+
+*The grep fallback overcounts badly, and the per-module table above inherits the
+error.* It matches substrings, so it conflates the bundle with things that are
+not the bundle: `ClosedOperatorComplexification` (a **namespace**, 86 hits),
+`RealClosedOperator` (a **different type**, 35), and function names such as
+`inverseClosedOperator` / `toClosedOperator`. The starkest case is
+`Interop/Spectra/RealSpectralRestriction.lean`, listed above at **104** — of
+which 68 are the namespace and 35 the other type. It names the bundle **8**
+times. It is not the largest consumer; it is not close.
+
+*But the gate is further from being met than "171" implied.* The real
+type-position count is **558**, not 171. Whatever 171 measured, it was not this.
+The lane is roughly three times the size the release note recorded.
+
+The census also excludes imports, docstrings, `#check` and `--` comments (36
+mentions), since none of those are signatures to migrate.
+
+Corrected largest consumers, by genuine type positions:
+
+| module (under `DavisKahan/`) | type positions |
+| --- | --- |
+| `SinTheta/Natural/Bounded.lean` | 52 |
+| `Sources/DavisKahan1970/SineTheta/Symmetric.lean` | 50 |
+| `Sylvester/ClosedSylvesterEquation.lean` | 30 |
+| `SpectralTheory/ReducingSubspace/Restriction.lean` | 26 |
+| `SinTheta/Natural/Examples.lean` | 25 |
+| `Sources/DavisKahan1970/SineTheta/CommonCore.lean` | 22 |
+| `Sources/DavisKahan1970/SineTheta/CommonDomain.lean` | 19 |
+| `Sylvester/Unbounded/OrderedCutoff.lean` | 19 |
+| `Interop/Spectra/BoundedPerturbationSinTheta.lean` | 14 |
+| `Sylvester/Unbounded/OrderedFromCutoffs.lean` | 13 |
+
+Note the two documented facades (`ClosedSylvesterEquation` 30,
+`Restriction` 26) are now the 3rd and 4th largest entries, so retiring them is
+worth more than the old table suggested.
+
+### Bottom-up survey of the census tail (jon (toothbrush), 2026-07-29)
+
+I worked the small end of the census looking for one-line retirements, on the
+theory that the bundle's members are `abbrev`s over raw `LinearPMap` forms so
+single-use consumers should fall for free. **That seam is real but thin — it
+yielded exactly one module.** Recording the survey so nobody repeats it.
+
+**Retired:** `DavisKahan/SinTheta/SpectralBridge.lean` → 0.
+`boundedRealSpectrum` wrapped a bounded operator into the bundle purely to reach
+`.realSpectrum`, which is itself an `abbrev` over
+`TauCeti.LinearPMap.realSpectrum A.toLinearPMap`, and `toLinearPMap_ofBounded`
+is `rfl`. One-line substitution, no proof changes, production module. Full
+default build green (9281 jobs).
+
+**Not contractible, and why** — each remaining single-use module is tied to a
+structure that must move first, so none is a one-liner:
+
+| module | blocked on |
+| --- | --- |
+| `Sources/DavisKahan1970/FullSineTheta.lean` | `alias IsGraphCore := ClosedOperator.IsGraphCore`, and `IsGraphCore` is *defined* in `Sources/…/SineTheta/CommonCore.lean` (22 positions). Retiring the alias needs `CommonCore` migrated first. |
+| `Interop/Spectra/GapResolvent.lean` | carries `A : DKClosedOperator` only as a carrier — everything inside already uses `A.toLinearPMap` — but its conclusion names `TwoSidedShiftedInverseBound A c s`, which is bundle-typed. Retiring needs that predicate moved. |
+| `Sylvester/Unbounded/Equation.lean` | one `abbrev` facade, `HasUnboundedBoundedSylvesterEquation`, with five call sites in `Sylvester/Unbounded/Neumann.lean` and `Experimental/…/Sylvester/Unbounded.lean`. The Experimental caller retypes a whole proof (`A.addBounded`, `A.toLinearMap` throughout), so this is a genuine consumer migration, not a substitution. |
+| `Interop/Spectra/BoundedFromSpectrum.lean` | held by SR-B (namek). |
+
+**Correction to that conclusion, measured 2026-07-29 after writing it.** I said
+below that the remaining positions "do not decompose"; that is too strong. It is
+right for the two 50-position modules, but **`CommonCore` is bounded and is the
+best next unit**:
+
+```
+DavisKahan/Sources/DavisKahan1970/SineTheta/CommonCore.lean   231 lines, 22 positions
+consumers: FullSineTheta.lean (2 refs), CommonCoreTheorems.lean (1), Audits/Correspondence.lean (2)
+```
+
+Three consumers, five references. The content is one structure
+(`PaperCommonCoreResidualData`, whose fields are `ClosedOperator`-typed) plus
+`IsGraphCore` and about eight theorems. Retyping the structure onto `LinearPMap`
+plus property fields carries the rest. Doing it also unblocks
+`FullSineTheta.lean`'s `alias IsGraphCore := ClosedOperator.IsGraphCore`, which
+is the only thing keeping that module on the bundle.
+
+**One caution before anyone takes it:** these are `Sources/DavisKahan1970/**`
+paper-facing files, so the source census is a gate here in a way it was not for
+`SpectralBridge`. The mathematics does not change — only the carrier — but run
+the census before and after and make sure the recorded statements still match
+the paper.
+
+**Original conclusion, still right for the large modules:** **Conclusion for planning: U1's remaining 557 positions do not decompose into
+cheap independent pieces.** They are held by a handful of defining structures —
+`CommonCore`/`CommonDomain` (41 between them), `SinTheta/Natural/Bounded` (52),
+`Sources/…/SineTheta/Symmetric` (50), and the two documented facades
+(`ClosedSylvesterEquation` 30, `ReducingSubspace/Restriction` 26). Retiring any
+of those moves a large block at once; nibbling at the tail does not.
+
+### `ReducingSubspace/Restriction.lean`: eight dead theorems, measured but NOT removed
+
+Measured 2026-07-29 (jon (toothbrush)). Of the file's 23 declarations, **eight
+have no consumer anywhere — not in `DavisKahan`, and not inside the file
+either**:
+
+```
+coe_projectDomainToReducingRestriction    orthogonal_invariant
+coe_reducingRestrictionLinearMap          projection_mem_domain
+mem_reducingRestrictionDomain_iff         reducingRestrictionDomainToAmbient_coe
+orthogonalProjection_mem_domain           reducingRestriction_domain
+```
+
+Removing them is a real contraction of one of the two documented facades. **I did
+not do it**: two scripted attempts both broke the file and were reverted, and the
+file is back to its committed state, building clean.
+
+Three traps, so the next attempt is cheaper than mine:
+
+1. **A naive "who uses this" grep is wrong here.** These facades are `abbrev`s
+   over `ForTauCeti` declarations *with the same short names*, so grepping the
+   name finds the ForTauCeti originals and every facade looks used. Restrict the
+   search to `DavisKahan/`.
+2. **But excluding the defining file is also wrong.** Six further names
+   (`reducingRestrictionDomain`, `reducingRestrictionLinearMap`,
+   `reducingRestrictionDomainToAmbient`, `projectDomainToReducingRestriction`,
+   `mem_reducingRestriction_adjoint_domain_iff`,
+   `reducingRestriction_isSymmetric`) have no external consumer but *are* used
+   internally, mostly by `reducingRestriction`. They are not deletable. The
+   eight above survive both checks.
+3. **Do not delete by regex.** `reducingRestriction` carries a `where` block
+   whose fields (`reducingRestrictionDomain_dense`,
+   `reducingRestrictionLinearMap_closedGraph`) are invisible to a
+   `^(abbrev|def|theorem)` scan, and three of the eight sit inside
+   `namespace ReducesSubspace`, so a range-delete silently eats the `end`. This
+   wants a hand edit.
+
 **Contractible right now, no new mathematics:**
 
 - `generalizedSinTheta_unbounded_exact_of_genuineIntervalExteriorGap` —
@@ -189,6 +333,148 @@ is not this lane's to migrate.
   is proved from the *raw* non-exact theorem, never from the bundled one.
 - The `Restriction.lean` and `ClosedSylvesterEquation.lean` facade blocks, once
   their remaining callers move.
+
+**The paper-completion census was passing vacuously; it now certifies the code
+(edward, aiq-gpu, 2026-07-29).**  `scripts/probe_census_declarations.py` reported
+**`0/87 resolve against DavisKahan.All`**.  Every row's `lean_declarations` named
+`ForMathlib.*` while the actual namespace is `TauCeti.*` — the census was never
+repointed after the namespace migration.  Repointed; the probe now reports
+**`78/87`**.
+
+**Why the gate did not catch this, which is the part worth remembering.**
+`check_davis_kahan_1970_source_census.py` reported **CLEAN (48 items)** before
+*and* after — and both are correct, because it validates *structure*: fields
+present, statuses in the allowed set, no declaration stranded outside
+`lean_declarations`.  It cannot tell you the names exist.  The probe's own
+docstring names the trap: *"a row naming a declaration in the wrong namespace
+passes vacuously"*, since a name-only grep matches the short name after the last
+dot.  **A green census gate is not evidence that the ledger describes the code —
+run the probe.**
+
+The 9 still unresolved are `DavisKahan1970.Section8.*`, and they are **not a
+defect**: their namespace is also `TauCeti.`, they live under `Experimental/**`
+outside the `DavisKahan.All` closure, and their two rows — `DK-8.1-thm`,
+`DK-8.2-thm` — are already marked `candidate_under_repair` / `not_compiling`.
+After the fix the probe *agrees with* the recorded statuses rather than
+contradicting every item.
+
+**Editing the JSON alone leaves the tree inconsistent:** the census has a
+generated companion `dev/davis-kahan-1970-full-source-census.md`, and the gate
+fails with `stale generated file` until
+`scripts/render_davis_kahan_1970_source_census.py` is re-run.  That check is
+doing real work — it caught this immediately.
+
+**Completeness facts established while investigating, worth having on record.**
+**Zero `sorry`** in `DavisKahan/` (production), `ForTauCeti/` and `ForMathlib/` —
+all 52 are confined to `Experimental/**`.  **All 157 audited declarations are
+axiom-clean**, depending only on `propext` / `Classical.choice` / `Quot.sound`,
+with **zero `sorryAx`** anywhere in the build.  The paper-facing proof is in
+considerably better shape than the raw warning counts suggest.
+
+**Final warning census, and two targets that look inviting but are not
+(edward, aiq-gpu, 2026-07-29).**  Build warnings are **770 → ~425** over this
+session.  `unusedSectionVars` is at **0** in-scope, `unnecessarySimpa` at **0**
+in-scope, `unusedSimpArgs` at 8 documented exclusions.
+
+**Two measurements to stop anyone sizing a lane off the raw counts:**
+
+1. **The 215 deprecation warnings are almost entirely not ours.**  They are the
+   single largest category and each carries an exact Mathlib-supplied
+   replacement (`ContinuousLinearMap.mul_apply` → `mul_apply_eq_comp` 65,
+   `sub_apply` 41, `smul_apply` 35, …), so they look like the ideal mechanical
+   lane.  **214 of 215 are in vendored `Spectra/**`.  Exactly one is in
+   `DavisKahan/**`.**
+2. **`linter.unusedVariables` (36 in-scope) should be left as-is.**  They are
+   named hypothesis binders in structure fields — `(hA : A.IsSelfAdjoint)
+   (hB : B.IsSelfAdjoint)` in `GenuineOrderedSylvesterEngine.lowerUpper` and 13
+   more of that shape.  The linter fires because the *name* is unreferenced
+   inside the declaration, but the name is **API documentation** for the caller
+   who has to supply the argument.  Silencing it means rewriting them as `_`,
+   which makes the statement less readable.  That is worse mathlib quality, not
+   better.
+
+**`linter.unnecessarySeqFocus`: 4 of 18 done, 14 deliberately left.**  The fix
+re-parenthesises `tac1 <;> tac2` into `(tac1; tac2)`, which is **purely
+stylistic** — the two differ only in goal focusing, and the linter fires exactly
+when there is one goal.  The four taken were single-line `convert h using 1 <;>
+ring`.  The fourteen left are structural: eight are mid-chain continuations in
+`Sharpness.lean` where the `<;>` joins across lines, and four carry *two*
+combinators (`match_scalars <;> push_cast <;> ring`) where the warning's position
+does not say which one is redundant.  Restructuring multi-line tactic blocks for
+zero semantic gain is a bad trade.
+
+**`linter.unusedSimpArgs` swept: 162 → 17 (edward, aiq-gpu, 2026-07-29).**
+In-scope (everything under `DavisKahan/**` bar `Interop/Spectra/**`) went
+**153 → 8**.  The 9 out-of-scope are `Interop/Spectra/**`, vendored `Spectra/**`
+and `DkpsQuench2026/**`.
+
+**This class is *not* like `unusedSectionVars`, and the difference matters
+before anyone automates the rest.**  `omit` insertions are additive, so a
+35-file bulk change could be *proved* safe by asserting `git diff -U0` held zero
+non-`omit` lines.  Removing a simp argument edits proof text; no such check
+exists, and a bulk sweep would be unverifiable.  Done per file, with a build
+each, largest first.
+
+**The linter is advisory here, not authoritative.**  Its claim is *local* — this
+argument never fires as a rewrite at this call.  But `simp only` also fixes the
+**normal form handed to the next tactic**, and an argument can be essential to
+that without ever firing.  In `FiniteDimensional/Sharpness.lean` every
+continuation-line argument it flags is load-bearing for a downstream `ring1`:
+removing `smul_eq_mul` breaks it, and so do the projection-rewriting lemmas
+(`rotatedModelSubspace_starProjection_e1`,
+`Submodule.starProjection_orthogonal_val`) that I predicted would be safe
+precisely because they look unrelated to arithmetic.  Three attempts, same
+failure, same site.  **Treat `unusedSimpArgs` as a suggestion in any proof that
+chains `simp only` into `ring1`/`linear_combination`.**
+
+The 8 remaining in-scope sites are three distinct situations, not one backlog:
+
+1. **Load-bearing for `ring1`** — 5 in `Sharpness.lean`, 1 (`smul_eq_mul`) in
+   `ShortRotationCounterexample.lean`.  Verified by build failure, not guessed.
+2. **Term-mode arguments** — 2 in `DirectRotation/PrincipalPlanes/Spectrum.lean`,
+   where the "argument" is a whole inline proof:
+   `show (⟨(a : ℕ) % 2, by omega⟩ : Fin 2) = 0 from by ext; simp [hpar]`.  A
+   text-level tool must not touch these; the natural next move — widening the
+   pattern until all sites match — would delete a nested tactic block.
+3. (Cleared) continuation-line cases, where the delimiting comma sits on the
+   previous line so single-line patterns cannot see it.
+
+**Two patcher defects worth knowing if you reuse this approach:** removing a
+lemma that was alone on its line leaves a **whitespace-only line inside the
+`simp only [...]` bracket** — syntactically harmless, so it compiles green and
+slips through unless you read the diff (8 occurred, all cleaned); and matching
+must run **bottom-up per file** so earlier line numbers stay valid.
+
+**`linter.unusedSectionVars` is cleared to zero everywhere we own it (edward,
+aiq-gpu, 2026-07-29).**  Repo-wide **195 → 60**.  The 60 that remain are **all
+outside our edit rights**: 43 in `DavisKahan/Interop/Spectra/**` (jon (namek)'s
+active campaign) and 17 in vendored `Spectra/**`.  Every `DavisKahan/**` file
+outside `Interop/Spectra` now builds free of this warning.
+
+**Method, because the naive version silently under-delivers.**  The linter
+reports only the instances it can see *at that moment*: omitting them can expose
+another instance in the same theorem, or a different theorem entirely, so the
+warning re-fires with a new list on the next build.  A single sweep therefore
+leaves a tail.  Run it as a **loop to a fixed point** — build → extract → patch →
+rebuild — with a guard that stops if the count fails to fall.  Observed sequence:
+**78 → 34 → 13 → 7 → 3 → 4**, i.e. five productive passes and then a rise that
+tripped the guard, followed by two sites finished by hand.
+
+Three mechanical rules, each of which cost a build cycle to learn:
+
+1. `omit … in` goes above the **docstring**, which is itself above any standalone
+   `@[simp]` line.  Putting it directly above the `theorem` lands it *between*
+   the attribute and its declaration: `unexpected token 'omit'; expected 'lemma'`.
+2. When a theorem already carries an `omit`, **merge** the new instances into
+   that line rather than stacking a second `omit` above it.
+3. Patch a file's sites **in reverse line order** so earlier line numbers stay
+   valid as lines are inserted.
+
+**Verification that makes this safe in bulk:** the change is purely additive, so
+`git diff -U0` must contain **zero non-`omit` changed lines** (it did),
+`check_declaration_name_drift.py` must stay at 0 findings with the declaration
+count unmoved (7176), and the full default build must stay green (9296 jobs).
+If any of those move, the sweep touched something it should not have.
 
 **Linter census across the default build (edward, aiq-gpu, 2026-07-28).**
 `lake build` emits **770 warnings**, the largest classes being
@@ -219,6 +505,20 @@ lets warning regressions through.  Six of `GapConvenience.lean`'s twelve were
 introduced by my own gap-convenience twins two lanes earlier and certified
 "green" at the time.  Check `Built <module>` *and* the warning count for the
 module you edited.
+
+**Correction (edward, aiq-gpu, 2026-07-29): the `Core/Unbounded.lean` rot
+described below is stale.**  That entry says the module fails with **30 errors**
+on `ClosedOperator.adjointDomain` / `.adjointVector` / `.subScalar` /
+`.resolvent`, and that the two largest out-of-closure files sit behind it.
+Rebuilt today, **`Core/Unbounded.lean` is not blamed for a single error**.  The
+only failing module in `Experimental/InfiniteDimensional/**` is now
+`Sylvester/FiniteStepCalculus.lean`, and its 8 errors reduce to one missing
+declaration — `boundedSelfAdjointGroup`, referenced 6 times and defined nowhere —
+for which `ForTauCeti`'s newly landed `SkewAdjointExponential` +
+`OneParameterUnitaryGroup` supply the ingredients.  **Do not size that repair off
+the paragraph below.**  Keeping both, because the lesson is that a measured
+blocker decays: this one shrank from "re-derive a deleted adjoint API" to "one
+missing group constructor" within a session, purely through other agents' merges.
 
 **Correction to the blocker map below: it needs a third category, and I found
 that by claiming a target it got wrong (edward, aiq-gpu, 2026-07-28).**  The map

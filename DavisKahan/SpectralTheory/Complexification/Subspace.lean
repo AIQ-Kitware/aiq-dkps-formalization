@@ -63,6 +63,7 @@ def complexifySubmodule (U : Submodule ℝ E) :
       ⟨U.sub_mem (U.smul_mem c.re hz.1) (U.smul_mem c.im hz.2),
         U.add_mem (U.smul_mem c.im hz.1) (U.smul_mem c.re hz.2)⟩
 
+omit [CompleteSpace E] in
 @[simp]
 theorem mem_complexifySubmodule {U : Submodule ℝ E}
     {z : RealComplexification E} :
@@ -70,18 +71,21 @@ theorem mem_complexifySubmodule {U : Submodule ℝ E}
   change (re z ∈ U ∧ im z ∈ U) ↔ re z ∈ U ∧ im z ∈ U
   rfl
 
+omit [CompleteSpace E] in
 @[simp]
 theorem mk_mem_complexifySubmodule_iff (U : Submodule ℝ E) (x y : E) :
     mk x y ∈ complexifySubmodule U ↔ x ∈ U ∧ y ∈ U := by
   rw [mem_complexifySubmodule]
   simp
 
+omit [CompleteSpace E] in
 @[simp]
 theorem ofReal_mem_complexifySubmodule_iff (U : Submodule ℝ E) (x : E) :
     ofReal x ∈ complexifySubmodule U ↔ x ∈ U := by
   rw [mem_complexifySubmodule]
   simp
 
+omit [CompleteSpace E] in
 /-- Complexified subspaces are invariant under the canonical conjugation. -/
 theorem conjugation_mem_complexifySubmodule_iff (U : Submodule ℝ E)
     (z : RealComplexification E) :
@@ -91,6 +95,7 @@ theorem conjugation_mem_complexifySubmodule_iff (U : Submodule ℝ E)
 
 variable (U : Submodule ℝ E) [U.HasOrthogonalProjection]
 
+omit [CompleteSpace E] in
 /-- The coordinatewise real projection lands in the complexified subspace. -/
 theorem complexify_starProjection_mem (z : RealComplexification E) :
     complexify U.starProjection z ∈ complexifySubmodule U := by
@@ -99,6 +104,7 @@ theorem complexify_starProjection_mem (z : RealComplexification E) :
     ⟨U.starProjection_apply_mem (re z),
       U.starProjection_apply_mem (im z)⟩
 
+omit [CompleteSpace E] in
 /-- The residual from the coordinatewise projection is orthogonal to the
 complexified subspace. -/
 theorem sub_complexify_starProjection_mem_orthogonal
@@ -134,6 +140,7 @@ instance instHasOrthogonalProjectionComplexifySubmodule :
     ⟨complexify U.starProjection z, complexify_starProjection_mem U z,
       sub_complexify_starProjection_mem_orthogonal U z⟩
 
+omit [CompleteSpace E] in
 /-- The orthogonal projection onto a complexified real subspace is exactly the
 coordinatewise complexification of the real orthogonal projection. -/
 @[simp]
@@ -145,6 +152,7 @@ theorem starProjection_complexifySubmodule :
     (complexify_starProjection_mem U z)
     (sub_complexify_starProjection_mem_orthogonal U z)
 
+omit [U.HasOrthogonalProjection] [CompleteSpace E] in
 /-- Complexification commutes with orthogonal complement. -/
 theorem complexifySubmodule_orthogonal :
     complexifySubmodule Uᗮ = (complexifySubmodule U)ᗮ := by
@@ -180,6 +188,7 @@ theorem complexifySubmodule_orthogonal :
         ((ofReal_mem_complexifySubmodule_iff U u).2 hu)
       simpa [inner_apply] using congrArg Complex.im h
 
+omit [CompleteSpace E] in
 /-- Orthogonal-complement projection transport, in projection form. -/
 @[simp]
 theorem starProjection_complexifySubmodule_orthogonal :
@@ -199,6 +208,7 @@ theorem starProjection_complexifySubmodule_orthogonal :
 
 variable {U}
 
+omit [CompleteSpace E] in
 /-- Exact preservation of the symmetric projection gap. -/
 theorem projectionGap_complexifySubmodule
     (U V : Submodule ℝ E) [U.HasOrthogonalProjection]
@@ -209,6 +219,7 @@ theorem projectionGap_complexifySubmodule
   rw [starProjection_complexifySubmodule,
     starProjection_complexifySubmodule, ← complexify_sub, norm_complexify]
 
+omit [CompleteSpace E] in
 /-- Exact preservation of the directed projection gap. -/
 theorem directedProjectionGap_complexifySubmodule
     (U V : Submodule ℝ E) [U.HasOrthogonalProjection]
@@ -219,6 +230,7 @@ theorem directedProjectionGap_complexifySubmodule
   rw [starProjection_complexifySubmodule_orthogonal,
     starProjection_complexifySubmodule, ← complexify_comp, norm_complexify]
 
+omit [CompleteSpace E] in
 /-- Davis--Kahan symmetric gap is unchanged by complexification. -/
 theorem subspaceGap_complexifySubmodule
     (U V : Submodule ℝ E) [U.HasOrthogonalProjection]
@@ -228,6 +240,7 @@ theorem subspaceGap_complexifySubmodule
       TauCeti.DavisKahan.subspaceGap U V :=
   projectionGap_complexifySubmodule U V
 
+omit [CompleteSpace E] in
 /-- Davis--Kahan directed gap is unchanged by complexification. -/
 theorem directedGap_complexifySubmodule
     (U V : Submodule ℝ E) [U.HasOrthogonalProjection]
@@ -237,6 +250,7 @@ theorem directedGap_complexifySubmodule
       TauCeti.DavisKahan.directedGap U V :=
   directedProjectionGap_complexifySubmodule U V
 
+omit [CompleteSpace E] in
 /-- Acuteness is preserved and reflected by complexification. -/
 theorem isAcute_complexifySubmodule_iff
     (U V : Submodule ℝ E) [U.HasOrthogonalProjection]
@@ -247,6 +261,7 @@ theorem isAcute_complexifySubmodule_iff
   simp only [TauCeti.DavisKahan.IsAcute,
     subspaceGap_complexifySubmodule]
 
+omit [CompleteSpace E] in
 /-- Quarter-acuteness is preserved and reflected by complexification. -/
 theorem isQuarterAcute_complexifySubmodule_iff
     (U V : Submodule ℝ E) [U.HasOrthogonalProjection]
@@ -257,6 +272,7 @@ theorem isQuarterAcute_complexifySubmodule_iff
   simp only [TauCeti.DavisKahan.IsQuarterAcute,
     subspaceGap_complexifySubmodule]
 
+omit [CompleteSpace E] in
 /-- Reduction by a real operator is preserved and reflected by operator and
 subspace complexification. -/
 theorem complexify_reduces_iff (T : E →L[ℝ] E) (U : Submodule ℝ E)

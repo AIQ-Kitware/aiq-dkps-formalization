@@ -154,7 +154,7 @@ theorem interfaceFilledTruncation_lowerBound
       (a : ℂ) • (x - P.cutoff τ x), x⟫_ℂ
   have hre : ∀ w : ℂ, RCLike.re ((a : ℂ) * w) = a * RCLike.re w := by
     intro w
-    simp [RCLike.re_to_complex, Complex.mul_re]
+    simp [RCLike.re_to_complex]
   rw [inner_add_left, map_add, inner_smul_left, Complex.conj_ofReal,
     hre, hTinner, hQinner]
   rw [← hproj.2]
@@ -222,7 +222,7 @@ theorem interfaceFilledTruncation_upperBound
       (a : ℂ) • (x - P.cutoff τ x), x⟫_ℂ ≤ a * ‖x‖ ^ 2
   have hre : ∀ w : ℂ, RCLike.re ((a : ℂ) * w) = a * RCLike.re w := by
     intro w
-    simp [RCLike.re_to_complex, Complex.mul_re]
+    simp [RCLike.re_to_complex]
   rw [inner_add_left, map_add, inner_smul_left, Complex.conj_ofReal,
     hre, hTinner, hQinner]
   rw [← hproj.2]
@@ -233,6 +233,7 @@ section ApproximationNumberEndpointAssumptions
 variable [HasApproximationNumberStrongCutoff.{0, v, 0} ℂ]
 variable [HasKyFanApproximationGaugeTriangle.{0, v} ℂ]
 
+omit [HasKyFanApproximationGaugeTriangle ℂ] in
 /-- Right interface-cutoff inequalities pass to the uncut operators. -/
 theorem kyFan_le_of_interfaceRightCutoff_le
     {B : ComplexClosedOperatorOnF (F := F)}
@@ -261,6 +262,7 @@ theorem kyFan_le_of_interfaceRightCutoff_le
   exact le_of_tendsto_of_tendsto
     (tendsto_const_nhds.mul hX) hC hcutEventually
 
+omit [HasKyFanApproximationGaugeTriangle ℂ] in
 /-- Finite Ky Fan gauges converge under strong orthogonal cutoffs on the target
 side. -/
 theorem kyFan_left_comp_interfaceCutoff_tendsto
@@ -285,6 +287,7 @@ theorem kyFan_left_comp_interfaceCutoff_tendsto
     exact kyFanApproximationGauge_adjoint k K
   simpa only [hpoint, hlimit] using hright
 
+omit [HasKyFanApproximationGaugeTriangle ℂ] in
 /-- Left interface-cutoff inequalities pass to the uncut operators. -/
 theorem kyFan_le_of_interfaceLeftCutoff_le
     {A : ComplexClosedOperatorOnE (E := E)}
@@ -311,6 +314,7 @@ theorem kyFan_le_of_interfaceLeftCutoff_le
   exact le_of_tendsto_of_tendsto
     (tendsto_const_nhds.mul hX) hC hcutEventually
 
+omit [HasApproximationNumberStrongCutoff ℂ] [HasKyFanApproximationGaugeTriangle ℂ] in
 /-- Double interface cutoff turns a domain-aware equation into a bounded
 Sylvester equation between the filled truncations. -/
 theorem interfaceDoubleCutoff_sylvester_equation

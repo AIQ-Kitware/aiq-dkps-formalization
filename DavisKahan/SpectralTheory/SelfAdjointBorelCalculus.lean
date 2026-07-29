@@ -161,6 +161,7 @@ theorem measurable_spectrumRestrictedSymbol
   exact Complex.measurable_ofReal.comp hf |>.indicator
     (measurableSet_realSpectrum_boundedSelfAdjoint A hA)
 
+omit [CompleteSpace H] in
 /-- A spectral bound becomes a global bound after zero extension. -/
 theorem bounded_spectrumRestrictedSymbol
     (A : H →L[ℂ] H) (f : ℝ → ℝ)
@@ -312,11 +313,13 @@ theorem boundedSelfAdjointBorelCalculusC_norm_sub_le
 noncomputable def boundedIdentitySymbol (A : H →L[ℂ] H) : ℝ → ℂ :=
   Set.indicator (Set.Icc (-‖A‖) ‖A‖) fun x => (x : ℂ)
 
+omit [CompleteSpace H] in
 /-- The cut-off identity symbol is measurable. -/
 theorem measurable_boundedIdentitySymbol (A : H →L[ℂ] H) :
     Measurable (boundedIdentitySymbol A) := by
   exact Complex.measurable_ofReal.indicator measurableSet_Icc
 
+omit [CompleteSpace H] in
 /-- The cut-off identity symbol is globally bounded by `‖A‖`. -/
 theorem bounded_boundedIdentitySymbol (A : H →L[ℂ] H) :
     ∃ C : ℝ, ∀ x, ‖boundedIdentitySymbol A x‖ ≤ C := by

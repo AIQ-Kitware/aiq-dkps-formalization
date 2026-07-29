@@ -44,6 +44,7 @@ argument: for a unit vector `x ∈ U`, the image `W x` is a *unit* vector of
 `V`, so `‖x - W x‖² ≥ 2 - 2 ‖P_V x‖`, and on the span of the top source
 vectors the cosine bound `‖P_V x‖ ≤ c_j` is uniform. -/
 
+omit [FiniteDimensional 𝕜 E] in
 /-- Squared norms of orthonormal combinations. -/
 private theorem norm_sq_sum_smul_orthonormal
     {ι : Type*} [Fintype ι] {w : ι → E} (hw : Orthonormal 𝕜 w) (β : ι → 𝕜) :
@@ -275,7 +276,6 @@ theorem singularValues_restrictedDisplacement_directRotation
       simp only [dif_pos hk]
       rw [principalPlaneChord_sq]
       match_scalars
-      push_cast
       ring
     · -- `b k` is orthogonal to the sources; `P_U (b k)` is fixed by `|S|`.
       have hperp_u : ∀ i, ⟪principalSourceVector U V i, b k⟫_𝕜 = 0 := by

@@ -48,6 +48,7 @@ noncomputable def ofLinearPMap
     rw [← hgraph]
     exact hclosed
 
+omit [CompleteSpace E] in
 @[simp] theorem ofLinearPMap_toLinearPMap
     (A : E →ₗ.[𝕜] E)
     (hdense : Dense (A.domain : Set E))
