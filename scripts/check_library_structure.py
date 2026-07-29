@@ -54,6 +54,12 @@ IMPORT = re.compile(r"^\s*import\s+([A-Za-z0-9_.]+)", re.M)
 BLOCK_COMMENT = re.compile(r"/-.*?-/", re.S)
 LINE_COMMENT = re.compile(r"--.*?$", re.M)
 ADMISSION = re.compile(r"\b(?:sorry|admit)\b")
+# A module with no declaration of its own is an aggregate: a pure import list.
+DECLARATION = re.compile(
+    r"^(?:@\[[^\]]*\]\s*)*"
+    r"(?:noncomputable\s+|private\s+|protected\s+|scoped\s+|unsafe\s+|partial\s+)*"
+    r"(?:theorem|lemma|def|abbrev|instance|structure|class|inductive|opaque|axiom)\b",
+    re.MULTILINE)
 
 
 
@@ -178,15 +184,28 @@ def main() -> None:
         for dep in deps:
             consumers.setdefault(dep, set()).add(module)
     up_memo: dict[str, bool] = {}
-    check3 = report(
-        "3. every Experimental module supports admission-bearing work",
-        sorted(
-            m for m in files
-            if is_experimental(m)
-            and not in_admission_closure(m, imports, admitted, memo)
-            and not supports_admitted(m, consumers, admitted, up_memo)
-        ),
+    rule3 = sorted(
+        m for m in files
+        if is_experimental(m)
+        and not in_admission_closure(m, imports, admitted, memo)
+        and not supports_admitted(m, consumers, admitted, up_memo)
     )
+    check3 = report(
+        "3. every Experimental module supports admission-bearing work", rule3)
+    if rule3:
+        # Split the count so it is actionable.  An aggregate -- an `All.lean`,
+        # `PartIII.lean` or `GeometryAll.lean` with no declarations of its own --
+        # is a pure import list and cannot be promoted independently: moving one
+        # into production would make production import Experimental and break
+        # rule 2.  It can only follow its contents, so it duplicates a signal the
+        # contents already carry.  Reporting the two separately keeps the
+        # headline honest while showing how many findings are real modules.
+        aggregates = [m for m in rule3 if not DECLARATION.search(
+            files[m].read_text())]
+        modules = [m for m in rule3 if m not in set(aggregates)]
+        print(f"          ({len(modules)} real module(s), "
+              f"{len(aggregates)} aggregate(s) that can only follow their "
+              f"contents)")
 
     curated = reachable(imports, [CURATED_ROOT])
     facades = [m for m in files if m.startswith("DavisKahan.Sources.")
