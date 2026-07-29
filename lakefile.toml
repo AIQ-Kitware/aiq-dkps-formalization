@@ -119,7 +119,11 @@ globs = ["FinishTanTwoTheta.*"]
 name = "FinishYuWangSamworth"
 srcDir = "FinishYuWangSamworth"
 globs = ["FinishYuWangSamworth.*"]
-leanOptions = { warningAsError = true }
+# Measured against the option set Tau Ceti's own `lean_lib` applies, not this
+# repository's default: `warningAsError` alone says nothing about whether an
+# upstream PR would be accepted. Mirrors the `ForTauCeti` block above, including
+# `style.header = false` (Tau Ceti disables the copyright-header linter).
+leanOptions = { warningAsError = true, weak.linter.mathlibStandardSet = true, weak.linter.style.longFile = 1500, weak.linter.style.longFileDefValue = 1500, weak.linter.style.header = false }
 
 
 # Comparator/challenge modules for community calibration of AI-authored
