@@ -77,7 +77,12 @@ private theorem ambientAngularOperator_eq_extendCoordinate
   intro x
   have hYP : Y (U.starProjection x) = Y x := by
     have h := DFunLike.congr_fun hY.1 x
-    simpa only [ContinuousLinearMap.comp_apply] using h.symm
+    -- `h : (Y ∘ P) x = Y x` is already the right way round -- the `.symm` was
+    -- backwards -- and `IsAngularOperator` states its field with
+    -- `DavisKahanExt.projection`, so that abbreviation has to be unfolded for the
+    -- goal's `U.starProjection` to match.
+    simpa only [ContinuousLinearMap.comp_apply, DavisKahanExt.projection,
+      DavisKahan.projection] using h
   have hcoord := coe_subspaceAngularCoordinate_apply U Y hY
     ⟨U.starProjection x, U.starProjection_apply_mem x⟩
   change Y x = (((subspaceAngularCoordinate U Y)
