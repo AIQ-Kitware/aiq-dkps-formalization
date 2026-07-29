@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralSupport
+import ForTauCeti.Analysis.InnerProductSpace.ProjValMeasure.Additivity
 
 /-!
 # The `ε`-grid on the line, and which of its cells carry spectrum
@@ -89,6 +90,35 @@ theorem abs_sub_le_of_mem_gridCell (hε : 0 < ε) (k : ℤ) {s : ℝ} (hs : s �
 
 variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
 variable {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A)
+
+/-- **The grid's spectral projections split norms.**  This is the hypothesis the
+reassembly lemmas take, instantiated at the `ε`-grid. -/
+theorem tsum_enorm_sq_specProjection_gridCell (hε : 0 < ε) (v : H) :
+    ∑' k : ℤ, ‖specProjection hA (gridCell ε k) (measurableSet_gridCell ε k) v‖ₑ ^ 2
+      = ‖v‖ₑ ^ 2 :=
+  (spectralPVM hA).tsum_enorm_sq_proj (gridCell ε) (measurableSet_gridCell ε)
+    (pairwise_disjoint_gridCell hε) (iUnion_gridCell hε) v
+
+/-- The same, for the adjoints — which is the form the *right*-hand reassembly
+takes.  Spectral projections are self-adjoint, so it is the same statement. -/
+theorem tsum_enorm_sq_adjoint_specProjection_gridCell (hε : 0 < ε) (v : H) :
+    ∑' k : ℤ,
+        ‖(specProjection hA (gridCell ε k) (measurableSet_gridCell ε k)).adjoint v‖ₑ ^ 2
+      = ‖v‖ₑ ^ 2 := by
+  have hsa : ∀ k : ℤ,
+      (specProjection hA (gridCell ε k) (measurableSet_gridCell ε k)).adjoint
+        = specProjection hA (gridCell ε k) (measurableSet_gridCell ε k) := fun k =>
+    ((spectralPVM hA).isSelfAdjoint_proj _ _).adjoint_eq
+  simp_rw [hsa]
+  exact tsum_enorm_sq_specProjection_gridCell hA hε v
+
+/-- Spectral projections are idempotent, in the composition form the block
+lemmas take. -/
+theorem specProjection_comp_self (Bset : Set ℝ) (hBset : MeasurableSet Bset) :
+    (specProjection hA Bset hBset).comp (specProjection hA Bset hBset)
+      = specProjection hA Bset hBset :=
+  (spectralPVM hA).proj_idem Bset hBset
+
 
 /-- **A cell carrying a nonzero projection meets the spectrum.**  Contrapositive
 of `specProjection_eq_zero_of_subset_resolventSet`; it is what lets empty cells
