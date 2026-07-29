@@ -11,6 +11,19 @@ import ForTauCeti.Analysis.InnerProductSpace.ProjectionGap
 
 Restricted spectra, reducing subspaces, canonical spectral projectors, and the
 quadratic-form bridges used by finite Davis--Kahan theorems.
+
+## Provenance
+
+*Moved, not restated.*  This file was
+`DavisKahan/FiniteDimensional/Core/SpectralSubspace.lean`
+until 2026-07-29, when lane Y3(b3) moved the dependency-closed base of the sin-Θ core
+into the staging layer.  Statements, proofs, signatures and namespaces are
+unchanged; the declarations already lived in `TauCeti.DavisKahan*`, so the move
+was a path change and an import repoint and nothing else.
+
+The move became possible only once Y3(b2) took the `ForMathlib`
+inner-product-space component into `ForTauCeti`: before that this file's import
+closure crossed `ForMathlib`, which the `ForTauCeti` layer rule forbids.
 -/
 
 namespace TauCeti
@@ -166,7 +179,7 @@ theorem projection_apply_comm_of_reduces {A : E →ₗ[𝕜] E} (hA : A.IsSymmet
   have hArest : A (x - U.starProjection x) ∈ Uᗮ := hUperp _ hrest
   have hsplit : A x = A (U.starProjection x) + A (x - U.starProjection x) := by
     rw [← map_add]; congr 1; abel
-  show U.starProjection (A x) = A (U.starProjection x)
+  change U.starProjection (A x) = A (U.starProjection x)
   rw [hsplit, map_add, U.starProjection_eq_self_iff.mpr hApx,
     (Submodule.starProjection_apply_eq_zero_iff U).mpr hArest, add_zero]
 

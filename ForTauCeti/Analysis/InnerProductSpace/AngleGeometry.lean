@@ -3,7 +3,7 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
-import DavisKahan.FiniteDimensional.Core.SpectralSubspace
+import ForTauCeti.Analysis.InnerProductSpace.SpectralSubspace
 import ForTauCeti.Analysis.InnerProductSpace.PrincipalAngles
 import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantNorm
 import ForTauCeti.Analysis.InnerProductSpace.PolarDecomposition
@@ -14,6 +14,19 @@ import ForTauCeti.Analysis.InnerProductSpace.ProjectionGap
 
 Canonical finite-dimensional cosine, sine, angle, tangent, and double-angle
 objects, together with their singular-value and projector dictionaries.
+
+## Provenance
+
+*Moved, not restated.*  This file was
+`DavisKahan/FiniteDimensional/Core/AngleGeometry.lean`
+until 2026-07-29, when lane Y3(b3) moved the dependency-closed base of the sin-Θ core
+into the staging layer.  Statements, proofs, signatures and namespaces are
+unchanged; the declarations already lived in `TauCeti.DavisKahan*`, so the move
+was a path change and an import repoint and nothing else.
+
+The move became possible only once Y3(b2) took the `ForMathlib`
+inner-product-space component into `ForTauCeti`: before that this file's import
+closure crossed `ForMathlib`, which the `ForTauCeti` layer rule forbids.
 -/
 
 namespace TauCeti
