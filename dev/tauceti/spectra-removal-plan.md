@@ -974,3 +974,47 @@ multiplicative, and `⋆`-preserving.
 
 Only step 2 is real work; the rest is bookkeeping.  Nothing else in the port
 depends on it.
+
+## 2026-07-29 (later): 26 → 17, and where the remaining files sit
+
+`lake build` green at 9280.  Ported off Spectra this session: `UnitaryConjugation`,
+`OrthogonalIdempotentExp`, `ContinuationSharpSchurComplement`, `PVMSubspace`,
+`SpectralRestriction`, `SpectralRestrictionOperator`, `SpectralCutoff`,
+`SpectralRestrictionLocalization`, `RealSpectralRestriction`, `BoundedTruncation`,
+`ClosedOperator`, `BoundedSelfAdjointSpectralProjection`,
+`SelfAdjointBorelCalculus` — plus `TanTheta/UnboundedVector`, which was coupled
+without importing.
+
+### Bounded operators do not need the Cayley transform
+
+`BorelCalculus/PVM.lean` now carries `reCoord` / `boundedPVM` /
+`boundedPVM_proj_eq_cfcHom`.  A self-adjoint operator's spectrum is already
+real, so its Borel calculus is indexed along the real part of its own spectrum
+and a spectral projection *is* the continuous functional calculus of any
+continuous symbol agreeing with the indicator there.  That one theorem replaced
+Spectra's two-step route (group calculus of the selector, then a Cayley-transform
+identification with `cfcL`) and carried `boundedSelfAdjointBorelCalculusC` with
+it.
+
+### The 17, by what they actually need
+
+| files | blocker |
+| --- | --- |
+| `CayleySelectorBridge`, `Basic`, and the two `Continuation*` | `Spectra.Cayley`'s Möbius helpers and `Spectra.Operator.SelfAdjointOperator.ofBounded`.  Elementary; the unbounded analogues (`cayleyInv`, `cayleyInv_add_I`) already exist |
+| `BoundedFromSpectrum` | `spectralPVM_proj_eq_zero_of_subset_resolventSet` — the diagonal measures are supported on the spectrum.  Native route: for `lam` in the resolvent set and `B` a small enough interval around it, `E(B) = R(lam) (A - lam) E(B)` and `‖(A-lam)E(B)‖ ≤ δ` force `E(B) = 0`; then cover |
+| `OrderedHalfLine` | `spectralPVM_integrable_id` — a second-moment fact (`∫ s² d(diag ξ) = ‖Aξ‖²`, then Cauchy–Schwarz) |
+| `PairwiseHomogeneousUniqueness` | Rosenblum: an intertwiner of self-adjoint operators with disjoint spectra vanishes |
+| `OperatorAbsoluteValueComplex` | polar decomposition of a bounded operator, which Mathlib does not have |
+| `HilbertSchmidt{ColumnExpansion,Tensor}`, `SylvesterHilbertSchmidt`, `HilbertSchmidtDefectFirst`, `HilbertSchmidtPairwise` | the Hilbert–Schmidt tensor development — a separate lane that never touches the spectral measure |
+| `FourierSemigroup`, `InfiniteProposition41` | `ExpBounded.Unitary` / `CayleyTransform.BorelCalculus` / `SpectralTheory.Algebra` |
+
+### Note: `FinishTanTwoTheta` does not build, and has not for a while
+
+Its two Spectra imports are real, but the library is unbuildable independently
+of this work: `FinishTanTwoTheta/ApproximationNumber/SpectralSelection.lean`
+imports `DavisKahan.Interop.Spectra.ApproximationNumberMinMax`, which was
+deleted in `a8992fd` when the min-max development moved to ForTauCeti.
+`FinishTanTwoTheta` is not in `defaultTargets`, so `lake build` does not catch
+it.  Its Spectra use is one `spectralPVM` scaffolding block inside a proof that
+ends in `aesop`; the block looks removable, but that cannot be checked until the
+stale import is repaired.
