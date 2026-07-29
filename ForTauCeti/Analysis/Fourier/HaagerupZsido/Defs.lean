@@ -39,6 +39,13 @@ theorem weight_def (y : ℝ) : weight y = Real.tanh (Real.pi * y / 2) :=
 
 /-- The weight is nonnegative on `[0, ∞)`, where the kernel integral runs.
 `tanh` is odd, so this genuinely needs `0 ≤ y` rather than holding outright. -/
+/-- Rewrite form of `weight`, for `simp only` chains that must unfold the weight without
+unfolding the surrounding kernel. -/
+theorem weight_def (y : ℝ) : weight y = Real.tanh (Real.pi * y / 2) :=
+  rfl
+
+/-- The hyperbolic weight is nonnegative on the half-line `0 ≤ y`, which is the only range the
+Laplace transform integrates over. -/
 theorem weight_nonneg {y : ℝ} (hy : 0 ≤ y) : 0 ≤ weight y := by
   rw [weight, Real.tanh_eq]
   have hmono : Real.exp (- (Real.pi * y / 2)) ≤
@@ -91,6 +98,7 @@ def weightLaplaceTransform (t : ℝ) : ℝ :=
   ∫ y in Set.Ioi (0 : ℝ), weight y * Real.exp (-|t| * y)
 
 /-- Unfolding lemma for `weightLaplaceTransform`. -/
+/-- Rewrite form of `weightLaplaceTransform` as an integral over `Ioi 0`. -/
 theorem weightLaplaceTransform_def (t : ℝ) :
     weightLaplaceTransform t = ∫ y in Set.Ioi (0 : ℝ), weight y * Real.exp (-|t| * y) :=
   rfl
@@ -100,6 +108,7 @@ def realKernel (t : ℝ) : ℝ :=
   (Real.sin t / 2) * weightLaplaceTransform t
 
 /-- Unfolding lemma for `realKernel`. -/
+/-- Rewrite form of `realKernel` as the sine multiple of the weight's Laplace transform. -/
 theorem realKernel_def (t : ℝ) :
     realKernel t = (Real.sin t / 2) * weightLaplaceTransform t :=
   rfl
@@ -109,6 +118,7 @@ def reciprocalKernel (t : ℝ) : ℂ :=
   -Complex.I * (realKernel t : ℂ)
 
 /-- Unfolding lemma for `reciprocalKernel`. -/
+/-- Rewrite form of `reciprocalKernel` as `-i` times the real kernel. -/
 theorem reciprocalKernel_def (t : ℝ) :
     reciprocalKernel t = -Complex.I * (realKernel t : ℂ) :=
   rfl
@@ -116,6 +126,8 @@ theorem reciprocalKernel_def (t : ℝ) :
 /-- The weight is continuous.  Proved through the exponential-quotient form
 rather than from `Real.tanh` directly, because that form makes the positivity of
 the denominator visible to `positivity`. -/
+/-- The hyperbolic weight is continuous.  Proved through the exponential quotient form rather
+than from `Real.tanh` directly, since the quotient has a manifestly nonvanishing denominator. -/
 theorem continuous_weight : Continuous weight := by
   have h : weight = fun y =>
       (1 - Real.exp (-(Real.pi * y))) / (1 + Real.exp (-(Real.pi * y))) := by
@@ -128,6 +140,8 @@ theorem continuous_weight : Continuous weight := by
 
 /-- The Laplace transform is nonnegative: the integrand is a product of two
 nonnegative factors on `Ioi 0`. -/
+/-- The Laplace transform of the weight is nonnegative, being the integral of a nonnegative
+integrand over `Ioi 0`.  This is what lets `abs_realKernel` strip the absolute value. -/
 theorem weightLaplaceTransform_nonneg (t : ℝ) : 0 ≤ weightLaplaceTransform t :=
   setIntegral_nonneg measurableSet_Ioi fun _y hy =>
     mul_nonneg (weight_nonneg (le_of_lt hy)) (Real.exp_pos _).le
@@ -149,6 +163,11 @@ theorem measurable_realKernel : Measurable realKernel :=
   (Real.measurable_sin.div_const 2).mul measurable_weightLaplaceTransform
 
 /-- Measurability of the complex reciprocal kernel. -/
+/-- The real kernel is measurable. -/
+theorem measurable_realKernel : Measurable realKernel :=
+  (Real.measurable_sin.div_const 2).mul measurable_weightLaplaceTransform
+
+/-- The complex reciprocal kernel is measurable. -/
 theorem measurable_reciprocalKernel : Measurable reciprocalKernel :=
   (Complex.measurable_ofReal.comp measurable_realKernel).const_mul (-Complex.I)
 
@@ -159,6 +178,7 @@ private theorem realKernel_neg (t : ℝ) : realKernel (-t) = -realKernel t := by
 /-- The reciprocal kernel is **odd**.  This is the symmetry the Haagerup--Zsidó
 argument uses to pair `t` with `-t`; it comes from `sin` being odd while the
 Laplace transform, depending only on `|t|`, is even. -/
+/-- The reciprocal kernel is odd.  Parity is what makes its Fourier integral purely imaginary. -/
 theorem reciprocalKernel_neg (t : ℝ) :
     reciprocalKernel (-t) = -reciprocalKernel t := by
   simp only [reciprocalKernel_def, realKernel_neg, Complex.ofReal_neg]
@@ -172,6 +192,13 @@ theorem norm_reciprocalKernel (t : ℝ) : ‖reciprocalKernel t‖ = |realKernel
 /-- The modulus of the real kernel in closed form.  Only `sin` carries a sign —
 the Laplace transform is already nonnegative — which is what makes the `L¹` mass
 computable. -/
+/-- Multiplication by `-i` is an isometry, so the reciprocal kernel has the same modulus as the
+real kernel. -/
+theorem norm_reciprocalKernel (t : ℝ) : ‖reciprocalKernel t‖ = |realKernel t| := by
+  simp [reciprocalKernel_def]
+
+/-- Modulus of the real kernel, with the absolute value pushed onto the sine factor alone --
+the Laplace transform is already nonnegative. -/
 theorem abs_realKernel (t : ℝ) :
     |realKernel t| = |Real.sin t| / 2 * weightLaplaceTransform t := by
   rw [realKernel_def, abs_mul, abs_div, abs_two,

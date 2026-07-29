@@ -1,5 +1,9 @@
 # Lean / Lake build artifacts
+# Both spellings on purpose: `.lake/` matches only a real directory, so it stops
+# ignoring the cache the moment `.lake` is a symlink to a build dir on faster
+# storage (see dev/README.md "Build cache on slow filesystems").
 .lake/
+.lake
 build/
 *.fdb_latexmk
 *.fls
