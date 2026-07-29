@@ -216,6 +216,9 @@ noncomputable def schattenNorm (p : ℝ) (hp : 1 ≤ p) :
       rw [singularValueVector_unitary_comp,
         singularValueVector_comp_unitary]]
 
+/-- The Schatten `p` norm *is* the `ℓᵖ` gauge of the singular-value vector,
+definitionally.  This is the lemma that turns Schatten statements into
+finite-vector ones. -/
 @[simp] theorem schattenNorm_apply (p : ℝ) (hp : 1 ≤ p) (A : E →ₗ[𝕜] F) :
     schattenNorm p hp A = FiniteVector.lpGauge p (singularValueVector A) :=
   rfl
@@ -225,6 +228,7 @@ theorem schattenNorm_nonneg (p : ℝ) (hp : 1 ≤ p) (A : E →ₗ[𝕜] F) :
     0 ≤ schattenNorm p hp A :=
   (schattenNorm p hp).nonneg A
 
+/-- The zero operator has zero Schatten norm at every exponent. -/
 @[simp] theorem schattenNorm_zero (p : ℝ) (hp : 1 ≤ p) :
     schattenNorm (𝕜 := 𝕜) (E := E) (F := F) p hp 0 = 0 :=
   (schattenNorm p hp).apply_zero
@@ -368,6 +372,9 @@ theorem schattenNorm_two_apply (A : E →ₗ[𝕜] F) :
 noncomputable def schattenNormInf : RectangularUnitarilyInvariantNorm 𝕜 E F :=
   opNorm
 
+/-- The `S∞` norm evaluates to the ordinary operator norm, definitionally —
+`schattenNormInf` is `opNorm` under a name that places it at the end of the
+Schatten scale. -/
 @[simp] theorem schattenNormInf_apply (A : E →ₗ[𝕜] F) :
     schattenNormInf A = ‖A.toContinuousLinearMap‖ :=
   rfl

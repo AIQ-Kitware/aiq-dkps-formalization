@@ -161,6 +161,9 @@ noncomputable def trialGramSqrtEquiv (X : F →ₗ[𝕜] E)
   LinearEquiv.ofBijective (trialGramSqrt X)
     ⟨hinj, LinearMap.injective_iff_surjective.mp hinj⟩
 
+/-- The equivalence is the Gram square root as a linear map, definitionally.
+`trialGramSqrtEquiv` only adds the bijectivity that injectivity of `X` supplies
+in finite dimensions; it does not change the map. -/
 @[simp] theorem trialGramSqrtEquiv_toLinearMap (X : F →ₗ[𝕜] E)
     (hX : Function.Injective X) :
     (trialGramSqrtEquiv X hX).toLinearMap = trialGramSqrt X :=
@@ -235,12 +238,18 @@ noncomputable def trialMapFrameFactorizationOfLowerFrameBound
     (hε : 0 < ε) : TrialMapFrameFactorization X :=
   trialMapFrameFactorization X (hframe.injective hε)
 
+/-- The isometry factor of the frame factorization is the orthonormalized
+embedding, definitionally. -/
 @[simp] theorem trialMapFrameFactorization_isometry
     (X : F →ₗ[𝕜] E) (hX : Function.Injective X) :
     (trialMapFrameFactorization X hX).isometry =
       orthonormalizedEmbedding X hX :=
   rfl
 
+/-- The coordinate factor is the Gram square root, definitionally.  Together
+with `trialMapFrameFactorization_isometry` this is the whole content of the
+factorization `X = (orthonormalized embedding) ∘ (Gram square root)`: both
+factors are the ones already named, so `simp` can eliminate the bundled record. -/
 @[simp] theorem trialMapFrameFactorization_coordinate
     (X : F →ₗ[𝕜] E) (hX : Function.Injective X) :
     (trialMapFrameFactorization X hX).coordinate =
