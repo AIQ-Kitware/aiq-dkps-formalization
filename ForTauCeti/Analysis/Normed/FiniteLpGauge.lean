@@ -59,6 +59,7 @@ theorem lpGauge_nonneg (p : ℝ) (x : Fin n → ℝ) :
     0 ≤ lpGauge p x := by
   exact Real.rpow_nonneg (Finset.sum_nonneg fun _ _ => Real.rpow_nonneg (abs_nonneg _) _) _
 
+/-- The `ℓᵖ` gauge of zero is zero. -/
 @[simp] theorem lpGauge_zero {p : ℝ} (hp : 0 < p) :
     lpGauge p (0 : Fin n → ℝ) = 0 := by
   simp [lpGauge, Real.zero_rpow hp.ne', Real.zero_rpow (inv_ne_zero hp.ne')]
@@ -172,6 +173,7 @@ theorem linftyGauge_nonneg (x : Fin n → ℝ) : 0 ≤ linftyGauge x := by
   · exact (abs_nonneg (x 0)).trans
       (le_ciSup (Finite.bddAbove_range (fun j : Fin (n + 1) => |x j|)) 0)
 
+/-- The `ℓ∞` gauge of zero is zero. -/
 @[simp] theorem linftyGauge_zero :
     linftyGauge (0 : Fin n → ℝ) = 0 := by
   simp [linftyGauge]

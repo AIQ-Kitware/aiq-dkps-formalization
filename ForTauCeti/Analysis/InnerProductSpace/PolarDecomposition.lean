@@ -50,6 +50,7 @@ positive operator `A⋆A`. HJ 7.3.1 (`Q = (A⋆A)^{1/2}`). -/
 noncomputable def abs (A : E →ₗ[𝕜] E) : E →ₗ[𝕜] E :=
   (LinearMap.isPositive_adjoint_comp_self A).sqrt
 
+/-- The modulus is a positive operator, being a positive square root. -/
 @[simp] theorem isPositive_abs (A : E →ₗ[𝕜] E) : (abs A).IsPositive :=
   (LinearMap.isPositive_adjoint_comp_self A).sqrt_isPositive
 
@@ -188,6 +189,7 @@ noncomputable def polarUnitaryEquiv {A : E →ₗ[𝕜] E} (hA : IsUnit A) : E �
       rw [(LinearMap.isUnit_iff_ker_eq_bot A).mp hA, Submodule.bot_orthogonal_eq_top]
       exact Submodule.mem_top }
 
+/-- The bundled polar unitary acts as the chosen one. -/
 @[simp] theorem coe_polarUnitaryEquiv {A : E →ₗ[𝕜] E} (hA : IsUnit A) :
     ((polarUnitaryEquiv hA : E →ₗ[𝕜] E)) = polarFactor A :=
   rfl

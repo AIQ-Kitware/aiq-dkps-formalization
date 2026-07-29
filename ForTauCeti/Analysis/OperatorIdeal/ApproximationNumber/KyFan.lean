@@ -108,13 +108,16 @@ def kyFanGauge (T : E →L[𝕜] F) (k : ℕ) : ℝ :=
   rw [← neg_one_smul 𝕜 T, approximationNumber_smul]
   simp
 
+/-- Ky Fan gauges are unchanged by negation. -/
 @[simp] theorem kyFanGauge_neg (T : E →L[𝕜] F) (k : ℕ) :
     (-T).kyFanGauge k = T.kyFanGauge k :=
   Finset.sum_congr rfl fun n _ => T.approximationNumber_neg n
 
+/-- The zeroth Ky Fan gauge is the empty sum, hence zero. -/
 @[simp] theorem kyFanGauge_zero_index (T : E →L[𝕜] F) : T.kyFanGauge 0 = 0 := by
   simp [kyFanGauge]
 
+/-- The zero operator has zero Ky Fan gauge at every index. -/
 @[simp] theorem kyFanGauge_zero (k : ℕ) : (0 : E →L[𝕜] F).kyFanGauge k = 0 := by
   simp [kyFanGauge]
 

@@ -341,6 +341,7 @@ noncomputable def pairFunctional (hf : IsBddMeasurable f) (ξ : H) : H →L[ℂ]
             norm_pair_le ha hf.measurable hf.chooseBound_nonneg hf.norm_le_chooseBound ψ ξ
         _ = 2 * hf.chooseBound * ‖ξ‖ * ‖ψ‖ := by ring)
 
+/-- The polarised functional, unfolded. -/
 @[simp] theorem pairFunctional_apply (hf : IsBddMeasurable f) (ξ ψ : H) :
     pairFunctional ha hf ξ ψ = (starRingEnd ℂ) (pair ha f ψ ξ) := rfl
 
@@ -384,6 +385,7 @@ noncomputable def borelCalculus (hf : IsBddMeasurable f) : H →L[ℂ] H :=
     (2 * hf.chooseBound)
     (fun ξ => norm_borelVector_le ha hf ξ)
 
+/-- The Borel calculus acts through the Riesz vector of the polarised functional. -/
 @[simp] theorem borelCalculus_apply (hf : IsBddMeasurable f) (ξ : H) :
     borelCalculus ha hf ξ = borelVector ha hf ξ := rfl
 

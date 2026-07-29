@@ -69,9 +69,11 @@ noncomputable def ofRealLM : C(X, ℝ) →ₗ[ℝ] C(X, ℂ) where
   map_add' g g' := by ext x; simp
   map_smul' r g := by ext x; simp
 
+/-- The real-to-complex coercion of a continuous function, pointwise. -/
 @[simp] theorem ofRealLM_apply (g : C(X, ℝ)) (x : X) :
     ofRealLM g x = (g x : ℂ) := rfl
 
+/-- A real-valued symbol is star-invariant, which is why its calculus is self-adjoint. -/
 @[simp] theorem star_ofRealLM (g : C(X, ℝ)) : star (ofRealLM g) = ofRealLM g := by
   ext x; simp
 
@@ -155,6 +157,7 @@ noncomputable def diagFunctional (ξ : H) :
     rw [map_sub, map_sub, _root_.sub_apply, inner_sub_right, Complex.sub_re] at hpos
     linarith
 
+/-- The diagonal functional, unfolded to the integral it is. -/
 @[simp] theorem diagFunctional_apply (ξ : H) (g : C_c(spectrum ℂ a, ℝ)) :
     diagFunctional ha ξ g = (⟪ξ, cfcHom ha (ofRealLM g.toContinuousMap) ξ⟫_ℂ).re := rfl
 

@@ -64,6 +64,7 @@ theorem energy_block_ne_top (f : lp (fun _ : ι => E) 2) :
 noncomputable def blockFun (f : lp (fun _ : ι => E) 2) : lp (fun _ : ι => E) 2 :=
   ofOperator b ((P.comp (ofLp b f)).comp Q) (energy_block_ne_top b P Q f)
 
+/-- The block map, seen through the operator model. -/
 @[simp] theorem ofLp_blockFun (f : lp (fun _ : ι => E) 2) :
     ofLp b (blockFun b P Q f) = (P.comp (ofLp b f)).comp Q :=
   ofLp_ofOperator _ _ _
@@ -119,6 +120,7 @@ noncomputable def blockCLM :
       map_smul' := fun c f => blockFun_smul b P Q c f } (‖P‖ * ‖Q‖)
     (fun f => by simpa [mul_assoc] using norm_blockFun_le b P Q f)
 
+/-- The bundled block map acts as `blockFun`. -/
 @[simp] theorem blockCLM_apply (f : lp (fun _ : ι => E) 2) :
     blockCLM b P Q f = blockFun b P Q f := rfl
 

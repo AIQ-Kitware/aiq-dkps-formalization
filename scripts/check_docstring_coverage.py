@@ -26,6 +26,13 @@ mistake before it was written down:
     scaffolds keep compiling, and documenting its 45 declarations would entrench a
     file that is scheduled for deletion.
 
+    **A rule is only as good as its reason, and reasons expire.**  This file once
+    excluded `DavisKahan/Interop/Spectra/` because "Spectra removal deletes this
+    tree".  When the Spectra snapshot was retired the tree stayed, now containing
+    zero `import Spectra` -- so the reason became false while the rule kept
+    working, hiding 21 undocumented declarations.  When you add an exclusion,
+    write the condition that would end it.
+
 Usage:
     python3 scripts/check_docstring_coverage.py            # gate; exit 1 on findings
     python3 scripts/check_docstring_coverage.py --list     # show each finding
@@ -51,8 +58,6 @@ ROOTS = ["ForTauCeti", "DavisKahan"]
 EXCLUDED = [
     # Outside `defaultTargets`; deliberately parked (see dev/LANES.md).
     (re.compile(r"^DavisKahan/Experimental/"), "outside defaultTargets, parked"),
-    # Being deleted wholesale by the Spectra-removal campaign.
-    (re.compile(r"^DavisKahan/Interop/Spectra/"), "Spectra removal deletes this tree"),
     # Migration shim: documenting it would entrench a file scheduled for deletion.
     (re.compile(r"^DavisKahan/SpectralTheory/Compatibility\.lean$"),
      "migration shim of abbrev re-exports; delete, do not document"),

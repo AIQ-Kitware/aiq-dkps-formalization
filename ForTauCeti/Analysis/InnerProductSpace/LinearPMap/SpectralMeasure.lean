@@ -176,6 +176,7 @@ variable {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A) {z : ℂ} (hz : z.im ≠ 
 noncomputable def cayleyCoord : C(_root_.spectrum ℂ (cayley hA), ℂ) :=
   (ContinuousMap.id ℂ).restrict (_root_.spectrum ℂ (cayley hA))
 
+/-- The Cayley coordinate is the spectral point itself, coerced. -/
 @[simp] theorem cayleyCoord_apply (w : _root_.spectrum ℂ (cayley hA)) :
     cayleyCoord hA w = (w : ℂ) := rfl
 
@@ -192,6 +193,7 @@ theorem cayleyDenom_ne_zero (w : _root_.spectrum ℂ (cayley hA)) :
 noncomputable def cayleyDenomCM : C(_root_.spectrum ℂ (cayley hA), ℂ) :=
   ⟨fun w => (Complex.I - z) + (Complex.I + z) * (w : ℂ), by fun_prop⟩
 
+/-- The resolvent symbol's denominator, unfolded. -/
 @[simp] theorem cayleyDenomCM_apply (w : _root_.spectrum ℂ (cayley hA)) :
     cayleyDenomCM hA (z := z) w = (Complex.I - z) + (Complex.I + z) * (w : ℂ) := rfl
 
@@ -202,6 +204,7 @@ noncomputable def resolventSymbol : C(_root_.spectrum ℂ (cayley hA), ℂ) :=
   ⟨fun w => (1 - (w : ℂ)) / ((Complex.I - z) + (Complex.I + z) * (w : ℂ)),
     Continuous.div (by fun_prop) (by fun_prop) (cayleyDenom_ne_zero hA hz)⟩
 
+/-- The resolvent symbol, unfolded. -/
 @[simp] theorem resolventSymbol_apply (w : _root_.spectrum ℂ (cayley hA)) :
     resolventSymbol hA hz w
       = (1 - (w : ℂ)) / ((Complex.I - z) + (Complex.I + z) * (w : ℂ)) := rfl
@@ -211,6 +214,7 @@ noncomputable def cayleyDenomInvCM : C(_root_.spectrum ℂ (cayley hA), ℂ) :=
   ⟨fun w => (2 * Complex.I) / ((Complex.I - z) + (Complex.I + z) * (w : ℂ)),
     Continuous.div (by fun_prop) (by fun_prop) (cayleyDenom_ne_zero hA hz)⟩
 
+/-- The inverted denominator, unfolded. -/
 @[simp] theorem cayleyDenomInvCM_apply (w : _root_.spectrum ℂ (cayley hA)) :
     cayleyDenomInvCM hA hz w
       = (2 * Complex.I) / ((Complex.I - z) + (Complex.I + z) * (w : ℂ)) := rfl
@@ -519,9 +523,11 @@ noncomputable def specRestrict : specRange hA B hB →ₗ.[ℂ] specRange hA B h
         rw [← _root_.LinearPMap.map_smul]
         exact congrArg _ (Subtype.ext rfl) }
 
+/-- The domain of the spectral restriction, unfolded. -/
 @[simp] theorem specRestrict_domain :
     (specRestrict hA B hB).domain = A.domain.comap (specRange hA B hB).subtype := rfl
 
+/-- The spectral restriction acts as `A` on the underlying vector. -/
 @[simp] theorem specRestrict_apply (x : (specRestrict hA B hB).domain) :
     ((specRestrict hA B hB x : specRange hA B hB) : H)
       = A ⟨((x : specRange hA B hB) : H), x.2⟩ := rfl

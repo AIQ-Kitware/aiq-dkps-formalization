@@ -36,6 +36,7 @@ noncomputable def pvmRangeSubspace (P : TauCeti.ProjValMeasure H)
     (B : Set ℝ) (hB : MeasurableSet B) : Submodule ℂ H :=
   (P.proj B hB).range
 
+/-- The subspace attached to a projection-valued measure is the range of its projection. -/
 @[simp]
 theorem pvmRangeSubspace_eq_range (P : TauCeti.ProjValMeasure H)
     (B : Set ℝ) (hB : MeasurableSet B) :

@@ -9,6 +9,7 @@ import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralGrid
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.RealLowerBound
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.StoneUniqueness
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralProjectionGroup
+import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralGapInverse
 
 /-!
 # The Sylvester spectral gap
@@ -48,6 +49,7 @@ variable [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
 variable [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
 
 omit [CompleteSpace F] in
+/-- The zero column vector rebuilds to the zero operator. -/
 @[simp] theorem ofLp_zero (b : HilbertBasis ι ℂ F) :
     ofLp b (0 : lp (fun _ : ι => E) 2) = 0 := by
   ext x
@@ -61,6 +63,7 @@ theorem blockFun_eq_zero_left (b : HilbertBasis ι ℂ F) (Q : F →L[ℂ] F)
   ext x
   simp
 
+/-- A block with a zero right factor vanishes. -/
 theorem blockFun_eq_zero_right (b : HilbertBasis ι ℂ F) (P : E →L[ℂ] E)
     (f : lp (fun _ : ι => E) 2) : blockFun b P (0 : F →L[ℂ] F) f = 0 := by
   refine ofLp_injective b ?_
@@ -192,6 +195,99 @@ theorem norm_block_ge (U : TauCeti.OneParameterUnitaryGroup E)
   have hmul : (δ - |s| - 2 * ε) * ‖W‖ ≤ |(k : ℝ) * ε - (l : ℝ) * ε - s| * ‖W‖ :=
     mul_le_mul_of_nonneg_right hlow (norm_nonneg W)
   linarith [hest, htri, hmul]
+
+private theorem enorm_eq_ofReal_norm {X : Type*} [NormedAddCommGroup X] (x : X) :
+    ‖x‖ₑ = ENNReal.ofReal ‖x‖ := by
+  rw [enorm_eq_nnnorm, ← ENNReal.ofReal_coe_nnreal, coe_nnnorm]
+
+/-- **The global lower bound at a fixed grid width.**  The block bounds sum. -/
+theorem norm_sub_smul_ge_of_grid (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint Bop)
+    (b : HilbertBasis ι ℂ F) {δ ε : ℝ} (hε : 0 < ε)
+    (hgap : ∀ lam : ℝ, (lam : ℂ) ∈ TauCeti.LinearPMap.spectrum A →
+      ∀ alp : ℝ, (alp : ℂ) ∈ TauCeti.LinearPMap.spectrum Bop → δ ≤ |lam - alp|)
+    (s : ℝ)
+    (z : (generator (sylvesterGroup (TauCeti.LinearPMap.genToGroup hA)
+      (TauCeti.LinearPMap.genToGroup hB) b)).domain) :
+    (δ - |s| - 4 * ε) * ‖(z : lp (fun _ : ι => E) 2)‖
+      ≤ ‖generator (sylvesterGroup (TauCeti.LinearPMap.genToGroup hA)
+          (TauCeti.LinearPMap.genToGroup hB) b) z
+          - (s : ℂ) • (z : lp (fun _ : ι => E) 2)‖ := by
+  obtain ⟨w, c, -⟩ := exists_hilbertBasis ℂ E
+  set y := generator (sylvesterGroup (TauCeti.LinearPMap.genToGroup hA)
+    (TauCeti.LinearPMap.genToGroup hB) b) z
+    - (s : ℂ) • (z : lp (fun _ : ι => E) 2) with hy
+  -- the block family splits norms
+  have hsplit : ∀ g : lp (fun _ : ι => E) 2,
+      ∑' p : ℤ × ℤ, ‖blockCLM b (gridProj hA ε p.1) (gridProj hB ε p.2) g‖ₑ ^ 2 = ‖g‖ₑ ^ 2 := by
+    intro g
+    simpa using tsum_enorm_sq_blockFun b c (gridProj hA ε) (gridProj hB ε)
+      (TauCeti.LinearPMap.tsum_enorm_sq_specProjection_gridCell hA hε)
+      (TauCeti.LinearPMap.tsum_enorm_sq_adjoint_specProjection_gridCell hB hε) g
+  -- the block bounds, in `ℝ≥0∞`
+  have hblock : ∀ p : ℤ × ℤ,
+      ENNReal.ofReal (δ - |s| - 4 * ε)
+          * ‖blockCLM b (gridProj hA ε p.1) (gridProj hB ε p.2) (z : lp (fun _ : ι => E) 2)‖ₑ
+        ≤ ‖blockCLM b (gridProj hA ε p.1) (gridProj hB ε p.2) y‖ₑ := by
+    intro p
+    have hreal := norm_block_ge (TauCeti.LinearPMap.genToGroup hA)
+      (TauCeti.LinearPMap.genToGroup hB) hA hB
+      (TauCeti.LinearPMap.generator_genToGroup hA) (TauCeti.LinearPMap.generator_genToGroup hB)
+      b hε hgap s p.1 p.2 (gridProj_comm hA ε p.1) (gridProj_comm hB ε p.2) z
+    rw [hy]
+    rcases le_or_gt 0 (δ - |s| - 4 * ε) with hc | hc
+    · rw [enorm_eq_ofReal_norm, enorm_eq_ofReal_norm, ← ENNReal.ofReal_mul hc]
+      exact ENNReal.ofReal_le_ofReal hreal
+    · rw [ENNReal.ofReal_eq_zero.mpr hc.le, zero_mul]
+      simp
+  have hgoal := TauCeti.enorm_ge_of_blocks
+    (fun p : ℤ × ℤ => blockCLM b (gridProj hA ε p.1) (gridProj hB ε p.2)) hsplit hblock
+  -- back to `ℝ`
+  rcases le_or_gt 0 (δ - |s| - 4 * ε) with hc | hc
+  · rw [enorm_eq_ofReal_norm, enorm_eq_ofReal_norm, ← ENNReal.ofReal_mul hc,
+      ENNReal.ofReal_le_ofReal_iff (norm_nonneg _)] at hgoal
+    exact hgoal
+  · exact le_trans (by nlinarith [norm_nonneg ((z : lp (fun _ : ι => E) 2))]) (norm_nonneg y)
+
+/-- **The Sylvester spectral gap.**  Separated spectra give a gap at every
+vector. -/
+theorem hasVectorSpectralGap_sylvesterGroup (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint Bop)
+    (b : HilbertBasis ι ℂ F) {δ : ℝ}
+    (hgap : ∀ lam : ℝ, (lam : ℂ) ∈ TauCeti.LinearPMap.spectrum A →
+      ∀ alp : ℝ, (alp : ℂ) ∈ TauCeti.LinearPMap.spectrum Bop → δ ≤ |lam - alp|)
+    (f : lp (fun _ : ι => E) 2) :
+    TauCeti.LinearPMap.HasVectorSpectralGap
+      (isSelfAdjoint_generator_sylvesterGroup (TauCeti.LinearPMap.genToGroup hA)
+        (TauCeti.LinearPMap.genToGroup hB) b) δ f := by
+  set hS := isSelfAdjoint_generator_sylvesterGroup (TauCeti.LinearPMap.genToGroup hA)
+    (TauCeti.LinearPMap.genToGroup hB) b with hSdef
+  -- every real point inside the gap is a resolvent point
+  have hres : ∀ s ∈ Set.Ioo (-δ) δ, (s : ℂ) ∈ TauCeti.LinearPMap.resolventSet
+      (generator (sylvesterGroup (TauCeti.LinearPMap.genToGroup hA)
+        (TauCeti.LinearPMap.genToGroup hB) b)) := by
+    intro s hs
+    have hsabs : |s| < δ := abs_lt.mpr ⟨hs.1, hs.2⟩
+    refine TauCeti.LinearPMap.mem_resolventSet_of_lower_bound (c := δ - |s|) hS (by simp)
+      (by linarith) ?_
+    intro x
+    -- let the grid width go to zero
+    refine le_of_forall_pos_le_add fun η hη => ?_
+    set ε := η / (4 * (‖(x : lp (fun _ : ι => E) 2)‖ + 1)) with hεdef
+    have hεpos : 0 < ε := by
+      rw [hεdef]; positivity
+    have hb := norm_sub_smul_ge_of_grid hA hB b hεpos hgap s x
+    have hxn : (0 : ℝ) ≤ ‖(x : lp (fun _ : ι => E) 2)‖ := norm_nonneg _
+    have hden : (0 : ℝ) < 4 * (‖(x : lp (fun _ : ι => E) 2)‖ + 1) := by positivity
+    have hkey : 4 * ε * ‖(x : lp (fun _ : ι => E) 2)‖ ≤ η := by
+      set nx := ‖(x : lp (fun _ : ι => E) 2)‖ with hnx
+      have hrw : 4 * ε * nx = η * (4 * nx) / (4 * (nx + 1)) := by
+        rw [hεdef]; field_simp
+      rw [hrw, div_le_iff₀ hden]
+      nlinarith [hη.le, hxn, mul_nonneg hη.le (show (0:ℝ) ≤ 4 by norm_num)]
+    linarith [hb, hkey]
+  have := TauCeti.LinearPMap.diag_eq_zero_of_subset_resolventSet hS
+    (Set.Ioo (-δ) δ) measurableSet_Ioo hres f
+  exact this
+
 
 end Gap
 
