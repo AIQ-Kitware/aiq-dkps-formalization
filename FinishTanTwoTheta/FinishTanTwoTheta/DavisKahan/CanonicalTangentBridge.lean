@@ -291,6 +291,11 @@ private theorem ambient_doubleAngleTangent_eq_extendCoordinate
       = Uᗮ.subtypeL ((2 : ℂ) • X (Ring.inverse DX (U.subtypeL.adjoint x)))
   rw [hDinvApp, map_add, hYPerpApp, add_zero, hYJ, map_smul]
 
+-- This proof carries about forty `have`s over operators on `E`, several of them
+-- `Ring.inverse` and `CFC` terms whose defeq checks are expensive; it exhausts the
+-- default heartbeat budget during `whnf`.  The budget is raised rather than the
+-- proof weakened -- nothing here is `sorry`ed or `simp`-blasted.
+set_option maxHeartbeats 1600000 in
 /-- The canonical ambient double-angle tangent is the modulus of the ambient
 extension of the graph-coordinate double-angle tangent. -/
 private theorem tanTwoAngleOperatorC_eq_modulus_ambientGraphTangent
