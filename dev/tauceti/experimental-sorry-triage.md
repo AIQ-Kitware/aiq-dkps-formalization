@@ -197,3 +197,38 @@ seven obligations become ordinary proof work.
 Corollary for anyone triaging: **check whether a `sorry` is a definition before
 estimating it**, and if it is, count its dependents before treating them as
 separate lanes.
+
+
+## Gate audit: which measuring instruments can be trusted (edward/fable, 2026-07-29)
+
+Three separate instruments were found wrong in one session, and in **every case
+the error pointed toward "looks fine"**:
+
+| instrument | defect | what it reported |
+|---|---|---|
+| `check_davis_kahan_frontier.py` Lean probe | three stacked causes (orphan `.olean`s, a root that did not compile, pre-Wave-1 `ForMathlib.*` names) | `status unknown` — for as long as anyone had looked |
+| `check_docstring_coverage.py` | `DECL` anchored the keyword after *modifiers*; an attribute bracket is not a modifier, so `@[simp] theorem foo` was **skipped entirely** | `OK` over **158** undocumented declarations |
+| an ad-hoc `finddoc` scan (mine) | did not strip comment interiors | inflated `ForTauCeti` roughly 2× and produced four prose false positives |
+
+All three are fixed. Because the pattern is a *parser* problem rather than three
+unrelated bugs, the remaining gates were audited on the same axis:
+
+* **`check_declaration_name_drift.py` — clean, and verified empirically, not by
+  reading the regex.** Its `_MODIFIERS` opens with `(?:@\[[^\]]*\]\s*)*`, so
+  inline attributes are matched; `@[simp] theorem foo`, `@[simp, norm_cast]
+  noncomputable def baz` and the plain form all resolve to the right name. This
+  matters more than the others: name-drift is what protects renames, so a blind
+  spot there would let a rename of any `@[simp]` lemma pass unnoticed.
+* **`check_library_structure.py` — not exposed.** It parses *imports* and scans
+  for `sorry`/`admit` on comment-stripped text; it never parses declarations, so
+  the axis does not apply. Its `load()` does strip block and line comments
+  correctly (checked when I wrongly accused it of the opposite).
+* **`check_dependency_layers.py` — not exposed**, same reason.
+
+**The generalisable rule.** Every one of these gates parses Lean with regexes,
+and every failure was on the same question: *what counts as the start of a
+declaration?* Attributes, block comments, `omit`/`set_option` lines between a
+docstring and its declaration, and `end`/`section` on consecutive lines have each
+broken a scanner here. When adding a gate, test it against those four shapes
+before trusting a green result — and prefer a green result you have tried to
+falsify over one you have merely observed.
