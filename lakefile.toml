@@ -76,14 +76,25 @@ globs = ["ForMathlib.*"]
 # reasoning at the point of use -- see ForMathlib/LinearAlgebra/Matrix/RankFactorization.lean.
 leanOptions = { warningAsError = true, weak.linter.mathlibStandardSet = true, weak.linter.style.longFile = 1500, weak.linter.style.longFileDefValue = 1500 }
 
-# ForTauCeti: temporary staging library for reusable mathematics whose accepted
-# Tau Ceti roadmap target and API are settled but whose code has not yet merged
-# into Tau Ceti.  Declarations already live in their final `TauCeti.*` namespaces;
-# only the module path is temporarily `ForTauCeti.*`.  A ForTauCeti module may
-# import only `Mathlib.*`, `TauCeti.*`, and `ForTauCeti.*` (enforced by
-# scripts/check_dependency_layers.py).  The glob builds every staging file even
-# when no aggregate imports it, mirroring Tau Ceti's own source-tree glob.  The
-# successful terminal state of the campaign is an empty/deleted ForTauCeti.
+# ForTauCeti: the reusable-mathematics package.  Declarations live in their final
+# `TauCeti.*` namespaces.  A ForTauCeti module may import only `Mathlib.*`,
+# `TauCeti.*`, and `ForTauCeti.*` (enforced by scripts/check_dependency_layers.py).
+# The glob builds every file even when no aggregate imports it, mirroring Tau
+# Ceti's own source-tree glob.
+#
+# EXECUTIVE DECISION -- JON, 2026-07-29.  Two rulings, both his, both binding:
+#   (a) ForTauCeti is THE PRODUCT: an elegant package that polished roadmaps are
+#       generated from, and that mechanical ports are then built to satisfy.
+#   (b) It is NOT a holding pen and it is NOT deleted at the end.  There is no
+#       terminal state in which it is empty.
+# This SUPERSEDES the previous comment here, which read "the successful terminal
+# state of the campaign is an empty/deleted ForTauCeti".  Kept struck rather than
+# erased so the reversal is legible: ~~empty/deleted ForTauCeti~~.
+#
+# THIS MISTAKE HAS NOW BEEN MADE TWICE BY AGENTS (jon, 2026-07-29).  If you are
+# about to write a lane, a task, or a doc that ends in deleting ForTauCeti or in
+# draining it into external/TauCeti -- stop.  Read ForTauCeti/README.md and
+# AGENTS.md first.
 # See ForTauCeti/README.md.
 [[lean_lib]]
 name = "ForTauCeti"

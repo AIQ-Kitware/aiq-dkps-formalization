@@ -28,50 +28,60 @@ to export an undeclared module*, so **47% of the staging library could not
 leave the repository and nothing said so.** Now 156/156 across 18 clusters, and
 `--write` has put all 156 into `external/TauCeti` with `--check` OK.
 
-**What is left, in order.**
+**EXECUTIVE DECISION — JON, 2026-07-29. Two rulings, both his.**
 
-1. **Submission to Tau Ceti — the only thing left, and the repository's own
-   written contract forbids an agent finishing it.** `AGENTS.md` says:
-   *"**Do not commit the `external/TauCeti` submodule pointer yet.** Stage
-   everything in `ForTauCeti`; `scripts/export_for_tauceti.py` reproduces the
-   `TauCeti/` copy **on demand at submission time**. `external/Spectra` and
-   `external/TauCeti` remain **read-only provenance references** for the
-   ordinary build."* And `ForTauCeti/README.md`'s per-cluster lifecycle begins
-   *"When a cluster is **accepted** into Tau Ceti: 1. update the
-   `external/TauCeti` submodule pin to the merge commit"* — steps 2 and 3, the
-   import repoint and the staging deletion, are explicitly downstream of
-   acceptance. So the export I ran is exactly what the contract asks for, and
-   the next step is acceptance by a third party.
-   Confirmed mechanically as well: `external/TauCeti` is
-   `github.com/TauCetiProject/TauCeti`, a **separate project** with its own PR
-   workflow; our 156 modules are *untracked* there against upstream HEAD
-   `92c79e5e`; the manifest's `upstream_pr` is null for every cluster; and this
-   environment has **no GitHub credentials**, so a push is not merely unwise
-   but impossible.
-   `edward (fable)` recorded half of this on 2026-07-28 — that
-   `export_for_tauceti.py --check` is checkout-local because the exports live
-   only in the submodule working tree, and that *"someone should decide whether
-   the submodule pin is supposed to carry the exports."* **`AGENTS.md` already
-   decided it: not yet.**
-2. **The dependency switch, which is gated on (1) and cannot precede it.**
-   Measured and ready: **261 `import ForTauCeti.X` lines across 167 files**
-   (DavisKahan 204, Challenge 23, FinishTanTwoTheta 11, Acharyya2025 7,
-   DkpsQuench2026 6, FinishYuWangSamworth 6, Acharyya2024 3), plus the
-   `lean_lib` block and `scripts/check_dependency_layers.py`. **No proof body
-   references `ForTauCeti`.** It cannot go first: repointing would make this
-   repository's build depend on submodule content that exists in one working
-   tree, so a fresh clone would break, and deleting `ForTauCeti/` on top of
-   that would leave ~20,000 lines of proof with no tracked copy anywhere.
-3. Lane P-EXP (§13.2 phase C, 117 lines across 30 modules) and convergence
-   Waves 4–5.
+1. **`ForTauCeti` is the product.** The goal is an *elegant package* there —
+   coherent API, one canonical spelling per concept, provenance on every module
+   — because **that package is what polished roadmaps are generated from, and
+   mechanical ports are then built to satisfy those roadmaps.**
+2. **It is never deleted, and it is not drained into `external/TauCeti`.**
+   There is no terminal state in which it is empty. `external/TauCeti` is a
+   read-only provenance reference.
 
-**The exports are verified, and the package's own failures are not ours.**
-`lake build TauCeti` fails on two *upstream* modules —
-`AlgebraicGeometry.WeilDivisor.Basic` (a `Finsupp` deprecation) and
-`NumberTheory.Multiquadratic.Subfield.Degree` (a stale `rewrite`) — broken
-against the newer root Mathlib pin. Neither is imported by anything we export,
-and **building exactly our 156 through the TauCeti package is green at 8,819
-jobs**.
+Recorded in `AGENTS.md`, `lakefile.toml` and `ForTauCeti/README.md`, each
+superseding the older *"temporary staging layer / successful terminal state is
+empty or deleted"* wording in place rather than erasing it.
+
+**Jon notes this mistake has now been made twice by agents, so it is written
+where agents look first rather than only in the library's own README.** I made
+the second instance: I read the superseded wording, planned toward draining the
+library, and ran `scripts/export_for_tauceti.py --write`, which put 156 files
+into the `external/TauCeti` working tree. Nothing was committed or pushed and
+the pin never moved; the copies are removed and the submodule is a clean
+upstream checkout again. **`--check` is free to run; `--write` belongs to an
+actual submission.** The first instance is visible in the tree too — an earlier
+agent's uncommitted `--write` left stale copies, which is what made
+`principal-angles` fail `--check`, a symptom `edward (fable)` flagged on
+2026-07-28 without the cause being found.
+
+**Where the package stands.** 156 modules; all declared in
+`dev/tauceti/extraction-manifest.json` across 18 dependency-closed clusters;
+all passing the import firewall; 0 warnings under `warningAsError`; 0
+undocumented declarations. `ForMathlib` is down to 4 Mathlib-shaped modules.
+**The structural work is done, so the remaining work is coherence** — see the
+defects listed below.
+
+**Coherence defects, measured 2026-07-29, none yet fixed.**
+
+- **Duplicate spellings.** Base names living in two `ForTauCeti` namespaces at
+  once, because the sin-Θ and bounded-operator lines arrived separately:
+  `residual` (`TauCeti.DavisKahan` vs `TauCeti.DavisKahanTheory`),
+  `sylvesterOperator` (**three**: root `ContinuousLinearMap`,
+  `TauCeti.DavisKahan`, `TauCeti.DavisKahanTheory`), `sinThetaEmbedding`,
+  `spectralProjection`, `reflectionOperator`, `diagonalPart`/`offDiagonalPart`,
+  `Reduces`, `opNorm`, `LowerFormBoundOn`/`UpperFormBoundOn`. Each compiles
+  because the namespaces differ; each is a reader asking *which one do I want?*
+- **Two namespace families for one subject**, `TauCeti.DavisKahan` and
+  `TauCeti.DavisKahanTheory`, with no stated rule for which gets what.
+- **Five `set_option linter.unusedDecidableInType false`** in
+  `Sylvester/Internal/ReciprocalMultiplier.lean`; the honest fix is dropping
+  `[DecidableEq ι]` from those five types and calling `classical`.
+- **One file over the length limit** with its own
+  `set_option linter.style.longFile 2900` (`ReciprocalMultiplier`, 2,834 lines).
+
+**What is left beyond coherence.** Lane P-EXP — re-measured today and larger
+than the board says: a re-proof over an `ℝ≥0∞` gauge, not a retype, 117 sites
+across 30 modules. And convergence Waves 4–5.
 
 **Two findings worth carrying.**
 
