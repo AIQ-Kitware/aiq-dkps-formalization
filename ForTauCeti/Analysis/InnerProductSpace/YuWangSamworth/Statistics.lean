@@ -64,9 +64,18 @@ noncomputable def sinThetaFrobenius (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : ℝ :=
   UnitarilyInvariantNorm.frobenius 𝕜 E (sinThetaMap U V)
 
-/-- The canonical Frobenius sine of two equally indexed eigenblocks is exactly
-    the square root of the cross-block overlap sum used by Yu--Wang--Samworth. -/
-private theorem sinThetaFrobenius_eq_sqrt_sum_cross {n : ℕ}
+/-- **The complement identity.**  The canonical Frobenius sine of two equally
+indexed eigenblocks is exactly the square root of the cross-block overlap sum
+used by Yu--Wang--Samworth: in the paper's matrix notation,
+`‖V₁ᵀ V̂‖_F = ‖sin Θ(V̂, V)‖_F`.
+
+Public, and deliberately so.  It was `private` until 2026-07-29, which made this
+the one Yu--Wang--Samworth result the repository proved and no reader could
+cite — recorded as item `YWS-S1-complement-identity` of
+`dev/yu-wang-samworth-2015-full-source-census.json`.  Every bound in that paper
+is proved as a statement about cross-block energy and read back as an angle, so
+this is the bridge the whole development turns on and it belongs in the API. -/
+theorem sinThetaFrobenius_eq_sqrt_sum_cross {n : ℕ}
     (bT bS : OrthonormalBasis (Fin n) 𝕜 E) (s : Finset (Fin n)) :
     sinThetaFrobenius
         (Submodule.span 𝕜 (bT '' (↑s : Set (Fin n))))
