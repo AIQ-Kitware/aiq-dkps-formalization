@@ -80,7 +80,7 @@ theorem halmosCosineSq_mem_generic
     (hx : x ∈ halmosGenericPart U V) :
     halmosCosineSq U V x ∈ halmosGenericPart U V := by
   unfold halmosCosineSq
-  simp only [add_apply, mul_apply_eq_comp, Function.comp_apply]
+  simp only [add_apply, mul_apply_eq_comp]
   apply (halmosGenericPart U V).add_mem
   · exact projection_mem_halmosGenericPart_left U V
       (projection_mem_halmosGenericPart_right U V
@@ -96,7 +96,7 @@ theorem halmosSineSq_mem_generic
     (hx : x ∈ halmosGenericPart U V) :
     halmosSineSq U V x ∈ halmosGenericPart U V := by
   unfold halmosSineSq
-  simp only [add_apply, mul_apply_eq_comp, Function.comp_apply]
+  simp only [add_apply, mul_apply_eq_comp]
   apply (halmosGenericPart U V).add_mem
   · exact projection_mem_halmosGenericPart_left U V
       (complementaryProjection_mem_halmosGenericPart_right U V

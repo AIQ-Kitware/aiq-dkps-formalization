@@ -247,7 +247,7 @@ theorem sylvesterNeumannPartialSum_cauchy
           ≤ ‖hA.inv‖ ^ (n + 1) * N.gauge C * ‖B‖ ^ n :=
         gauge_sylvesterNeumannTerm_le N hA B hC n
       _ = q ^ n * g₀ := by
-        simp only [t, q, g₀]
+        simp only [q, g₀]
         rw [pow_succ', mul_pow]
         ring
   have hgap : ∀ {m n : ℕ}, n ≤ m →

@@ -347,13 +347,13 @@ theorem principalCosines_rankOne {u v : E} (hu : ‖u‖ = 1) (hv : ‖v‖ = 1)
     intro i j
     have hij : i = j := Subsingleton.elim _ _
     subst j
-    simp [uf, inner_self_eq_norm_sq, hu]
+    simp [uf, hu]
   have hvf : Orthonormal 𝕜 vf := by
     rw [orthonormal_iff_ite]
     intro i j
     have hij : i = j := Subsingleton.elim _ _
     subst j
-    simp [vf, inner_self_eq_norm_sq, hv]
+    simp [vf, hv]
   have hspanU : Submodule.span 𝕜 (Set.range uf) = Submodule.span 𝕜 {u} := by
     congr 1
     ext x
@@ -375,13 +375,13 @@ theorem principalCosines_rankOne {u v : E} (hu : ‖u‖ = 1) (hv : ‖v‖ = 1)
     have heq : cosPrincipalAngles huf hvf 0 = ‖⟪u, v⟫_𝕜‖ := by
       -- put the goal and both bounds on the same atom as `hsq`
       simp only [cosPrincipalAngles] at hnonneg ⊢
-      simp [cosPrincipalAngles, uf, vf] at hsq
+      simp [uf, vf] at hsq
       nlinarith [hsq, hnonneg, hnorm]
     simpa [heq]
   · have hle : 1 ≤ i := Nat.one_le_iff_ne_zero.mpr hi
     rw [cosPrincipalAngles,
       (overlapOp huf hvf).singularValues_of_finrank_le]
-    · simp [Finsupp.single_apply, hi]
+    · simp [hi]
     · simpa using hle
 
 

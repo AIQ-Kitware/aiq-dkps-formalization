@@ -154,7 +154,7 @@ theorem interfaceFilledTruncation_lowerBound
       (a : ℂ) • (x - P.cutoff τ x), x⟫_ℂ
   have hre : ∀ w : ℂ, RCLike.re ((a : ℂ) * w) = a * RCLike.re w := by
     intro w
-    simp [RCLike.re_to_complex, Complex.mul_re]
+    simp [RCLike.re_to_complex]
   rw [inner_add_left, map_add, inner_smul_left, Complex.conj_ofReal,
     hre, hTinner, hQinner]
   rw [← hproj.2]
@@ -222,7 +222,7 @@ theorem interfaceFilledTruncation_upperBound
       (a : ℂ) • (x - P.cutoff τ x), x⟫_ℂ ≤ a * ‖x‖ ^ 2
   have hre : ∀ w : ℂ, RCLike.re ((a : ℂ) * w) = a * RCLike.re w := by
     intro w
-    simp [RCLike.re_to_complex, Complex.mul_re]
+    simp [RCLike.re_to_complex]
   rw [inner_add_left, map_add, inner_smul_left, Complex.conj_ofReal,
     hre, hTinner, hQinner]
   rw [← hproj.2]

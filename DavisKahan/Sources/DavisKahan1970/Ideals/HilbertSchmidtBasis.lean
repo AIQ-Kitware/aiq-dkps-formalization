@@ -454,7 +454,7 @@ theorem paperHilbertSchmidtNorm_eq_sqrt_tsum_basis {ι : Type*}
     simpa only [NNReal.coe_pow, coe_nnnorm] using hsummable
   have hE : paperHilbertSchmidtBasisEnergy b A
       = ((∑' i, (‖A (b i)‖₊ ^ 2 : NNReal) : NNReal) : ENNReal) := by
-    simp only [paperHilbertSchmidtBasisEnergy, ENNReal.coe_pow]
+    simp only [paperHilbertSchmidtBasisEnergy]
     exact (ENNReal.coe_tsum hnn).symm
   rw [paperHilbertSchmidtNorm, paperHilbertSchmidtEnergy_eq_basisEnergy b A,
     hE, ENNReal.coe_toReal]

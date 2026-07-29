@@ -277,14 +277,14 @@ theorem singularValues_tanThetaEmbedding
         Real.sqrt_pos.2 (by nlinarith)
       have hcK : ((((Real.sqrt (1 - S.singularValues i ^ 2) : ℝ) : 𝕜))) ≠ 0 :=
         RCLike.ofReal_ne_zero.mpr hc.ne'
-      simp only [if_pos rfl, mul_one, d, S]
+      simp only [d, S]
       -- both sides are the same real quotient pushed through `ofReal`
       push_cast
       ring
     · have hbji : ⟪b j, b i⟫_𝕜 = 0 := by
         simpa [orthonormal_iff_ite.mp b.orthonormal j i, if_neg hji]
       rw [hbji, mul_zero]
-      simp [orthonormal_iff_ite.mp b.orthonormal j i, hji]
+      simp []
   have hTD : T.singularValues = D.singularValues := singularValues_eq_of_gram_eq hgram
   ext k
   rcases lt_or_ge k (finrank 𝕜 F) with hk | hk
