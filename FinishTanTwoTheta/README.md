@@ -1,56 +1,49 @@
 # FinishTanTwoTheta
 
-This target builds the bounded sharp Riccati/ideal proof stack and the complete
-finite-dimensional paper-facing `tan 2Theta` endpoint.  The aggregate imports
-the proof modules themselves; it is not an alias-only facade.
+This target develops the sharp bounded `tan 2Theta` theorem through
+approximation numbers, Riccati coordinates, Ky Fan domination, and symmetric
+ideal promotion.
 
-## Compiled theorem scope
+## Current proof structure
 
-The aggregate target includes:
+The main Davis--Kahan repository already contains the finite-dimensional
+Section 7 UI-norm theorem.  The local theorem
+`paperTanTwoTheta_uiNorm_finite_alternate` is retained only as an independent
+regression derivation through the newer Riccati/approximation-number stack; it
+is intentionally labeled duplicate/alternate and is not evidence that the
+unrestricted target is complete.
 
-1. simultaneous approximate leading singular families for arbitrary bounded
-   operators;
-2. the canonical graph-coordinate operator `2 X (I - X*X)^-1` and its
-   approximation-number transformation law;
-3. the stable Riccati scalar estimate and sharp Ky Fan prefix inequality;
-4. Fan-dominance promotion to maximal and minimal standard symmetric ideals;
-5. the finite-dimensional Davis--Kahan/GKMV acute-branch theorem;
-6. `paperFaithful_tanTwoTheta_uiNorm`, proved from the original self-adjoint,
-   reducing-subspace, common-form-gap, and fully off-diagonal perturbation
-   hypotheses.
+The exact unrestricted bounded target is
+`paperFaithful_tanTwoTheta_uiNorm`.  Its statement has no
+`FiniteDimensional` or finite-carrier hypothesis, derives quarter-acuteness
+from the original ordered-gap and fully off-diagonal perturbation hypotheses,
+and estimates the canonical ambient `tanTwoAngleOperatorC` in every source
+unitary-invariant ideal.
 
-The paper-facing theorem derives quarter-acuteness, constructs the canonical
-contractive graph coordinate, transports the source norm from the full ambient
-perturbation to its rectangular upper-right block through exact approximation-
-singular-value equality, and concludes
+The new proof attempt contains all mathematical steps and no admission.  Its
+two new hard modules are:
 
-```text
-(b - a) * N(tan 2Theta_0) <= 2 * N(H).
-```
+- `FinishTanTwoTheta.DavisKahan.InfiniteQuarterAcute`: a dimension-free
+  reflection/Lyapunov/spectral proof of the strict quarter-angle branch;
+- `FinishTanTwoTheta.DavisKahan.CanonicalTangentBridge`: graph-projection
+  algebra identifying the canonical tangent with the graph-coordinate tangent
+  at the level of the full approximation-number sequence.
 
-Here `tan 2Theta_0` is the graph-coordinate representative permitted by the
-Section 7 statement.  The theorem deliberately does not identify that
-rectangular representative definitionally with an ambient canonical angle
-operator.
+This archive is ready for compiler review.  It must not be described as
+compiled or axiom-clean until those modules, `PaperFaithful`, the aggregate,
+and `#print axioms` all pass.
 
-## Infinite-dimensional boundary
-
-The local Riccati/Ky-Fan machinery proves sharp bounded ideal estimates after a
-strictly contractive graph coordinate is supplied.  The source audit also has a
-sharp infinite-dimensional ideal theorem for finite-dimensional invariant
-configurations.  A source-shaped theorem with an arbitrary infinite-dimensional
-reference subspace still requires an independent acute-branch argument and is
-not claimed by this target.
-
-`FinishTanTwoTheta.DavisKahan.Unbounded` remains a separate research target. Its
-former spectral-band/domain-density route is false; the unrestricted unbounded
-sharp ideal extension is not silently weakened or certified here.
-
-## Build
+## Build order
 
 ```bash
-lake build FinishTanTwoTheta.DavisKahan.PaperFaithful
-lake build FinishTanTwoTheta.DavisKahan.SharpIdeal
-lake build FinishTanTwoTheta
-lake build DavisKahan.Sources.DavisKahan1970.Audits.DoubleAngleTangent
+scripts/lake_build_report.py --fail-fast \
+    FinishTanTwoTheta.DavisKahan.InfiniteQuarterAcute
+scripts/lake_build_report.py --fail-fast \
+    FinishTanTwoTheta.DavisKahan.CanonicalTangentBridge
+scripts/lake_build_report.py --fail-fast \
+    FinishTanTwoTheta.DavisKahan.PaperFaithful
+scripts/lake_build_report.py --fail-fast FinishTanTwoTheta
 ```
+
+`FinishTanTwoTheta.DavisKahan.Unbounded` remains a separate research target and
+is not silently included in this bounded theorem.
