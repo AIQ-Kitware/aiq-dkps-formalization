@@ -12,6 +12,16 @@
 
 ## Not discharged
 
+### Paper-faithful bounded source theorem
+
+`paperFaithful_tanTwoTheta_uiNorm` is intentionally admitted.  The proved
+`sharp_paperUnitaryInvariantNorm` theorem assumes an already selected strictly
+contractive Riccati graph coordinate and estimates its off-diagonal block.  The
+paper-facing theorem must instead construct the quarter-acute branch from the
+original reducing-subspace and fully off-diagonal perturbation hypotheses and
+then bound the canonical `tan 2Theta(U,V)` operator by the source norm of the
+full perturbation.
+
 The unrestricted **unbounded** sharp ideal extension is not a theorem of the
 aggregate target.  Its former proof depended on obtaining domain-compatible
 approximate singular vectors from arbitrary spectral bands.  The repository now
