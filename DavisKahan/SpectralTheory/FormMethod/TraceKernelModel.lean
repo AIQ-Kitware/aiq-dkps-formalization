@@ -66,6 +66,7 @@ noncomputable def freeSubspace (D : FourthOrderTraceModel (H := H) (V := V)) :
   D.traceSecondLeft.ker ⊓ D.traceThirdLeft.ker ⊓
     D.traceSecondRight.ker ⊓ D.traceThirdRight.ker
 
+omit [CompleteSpace H] [CompleteSpace V] in
 /-- Membership in the free subspace is exactly the four endpoint conditions. -/
 theorem mem_freeSubspace_iff
     (D : FourthOrderTraceModel (H := H) (V := V)) (x : V) :
@@ -76,6 +77,7 @@ theorem mem_freeSubspace_iff
       D.traceThirdRight x = 0 := by
   simp [freeSubspace, and_assoc]
 
+omit [CompleteSpace H] [CompleteSpace V] in
 /-- The joint trace kernel is closed in the graph Hilbert space. -/
 theorem isClosed_freeSubspace
     (D : FourthOrderTraceModel (H := H) (V := V)) :
@@ -102,16 +104,19 @@ noncomputable def freeFourth
     D.freeSubspace →L[ℂ] H :=
   D.fourth.comp (Submodule.subtypeL D.freeSubspace)
 
+/-- The free embedding, unfolded. -/
 @[simp] theorem freeEmbed_apply
     (D : FourthOrderTraceModel (H := H) (V := V))
     (x : D.freeSubspace) :
     D.freeEmbed x = D.embed (x : V) := rfl
 
+/-- The fourth-order operator on the free model, unfolded. -/
 @[simp] theorem freeFourth_apply
     (D : FourthOrderTraceModel (H := H) (V := V))
     (x : D.freeSubspace) :
     D.freeFourth x = D.fourth (x : V) := rfl
 
+omit [CompleteSpace H] [CompleteSpace V] in
 /-- The restricted ambient embedding remains injective. -/
 theorem freeEmbed_injective
     (D : FourthOrderTraceModel (H := H) (V := V)) :
@@ -144,6 +149,7 @@ noncomputable def freeFourthAmbient
     D.freeAmbientDomain →ₗ[ℂ] H :=
   D.freeFourth.toLinearMap.comp D.freeAmbientInverse
 
+/-- The ambient inverse undoes the free embedding. -/
 @[simp] theorem freeAmbientInverse_freeEmbed
     (D : FourthOrderTraceModel (H := H) (V := V))
     (x : D.freeSubspace) :
@@ -153,6 +159,7 @@ noncomputable def freeFourthAmbient
   change D.freeRangeEquiv.symm (D.freeRangeEquiv x) = x
   exact D.freeRangeEquiv.symm_apply_apply x
 
+/-- The ambient fourth-order operator agrees with the model one through the embedding. -/
 @[simp] theorem freeFourthAmbient_freeEmbed
     (D : FourthOrderTraceModel (H := H) (V := V))
     (x : D.freeSubspace) :
@@ -167,6 +174,7 @@ noncomputable def freeFourthAmbient
     D.freeFourth x
   rw [D.freeAmbientInverse_freeEmbed]
 
+omit [CompleteSpace H] [CompleteSpace V] in
 /-- Density of a concrete smooth free core inside the ambient Hilbert space is
  enough to prove density of the transported free operator domain. -/
 theorem dense_freeAmbientDomain_of_dense_subset_range
@@ -179,6 +187,7 @@ theorem dense_freeAmbientDomain_of_dense_subset_range
   obtain ⟨y, rfl⟩ := hsub hx
   exact LinearMap.mem_range_self D.freeEmbed.toLinearMap y
 
+omit [CompleteSpace H] [CompleteSpace V] in
 /-- A dense free embedding gives a dense ambient operator domain. -/
 theorem dense_freeAmbientDomain
     (D : FourthOrderTraceModel (H := H) (V := V))
@@ -199,6 +208,7 @@ noncomputable def toClosedOperator
   dense_domain := hdense
   closed_graph := hclosed
 
+/-- The domain of the derived closed operator. -/
 @[simp] theorem toClosedOperator_domain
     (D : FourthOrderTraceModel (H := H) (V := V))
     (hdense : Dense (D.freeAmbientDomain : Set H))
@@ -206,6 +216,7 @@ noncomputable def toClosedOperator
       ((x : H), D.freeFourthAmbient x))) :
     (D.toClosedOperator hdense hclosed).domain = D.freeAmbientDomain := rfl
 
+/-- Its action, which is the model's fourth-order operator. -/
 @[simp] theorem toClosedOperator_apply
     (D : FourthOrderTraceModel (H := H) (V := V))
     (hdense : Dense (D.freeAmbientDomain : Set H))

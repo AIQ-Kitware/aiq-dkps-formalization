@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
-import DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Abstract.TraceKernelModel
+import DavisKahan.SpectralTheory.FormMethod.TraceKernelModel
 import Mathlib.Tactic
 
 /-!
@@ -51,6 +51,7 @@ noncomputable def freeGraphMap
     D.freeSubspace →L[ℂ] H × H :=
   D.freeEmbed.prod D.freeFourth
 
+/-- The free graph map, unfolded. -/
 @[simp] theorem freeGraphMap_apply
     (D : FourthOrderTraceModel (H := H) (V := V))
     (x : D.freeSubspace) :
@@ -105,6 +106,7 @@ theorem isClosed_ambientGraph_of_antilipschitz
   rw [← D.range_freeGraphMap_eq_ambientGraph]
   exact hanti.isClosed_range D.freeGraphMap.uniformContinuous
 
+omit [CompleteSpace H] [CompleteSpace V] in
 /-- A lower graph-norm estimate gives the anti-Lipschitz hypothesis needed for
 closedness. -/
 theorem freeGraphMap_antilipschitz_of_bound

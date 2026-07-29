@@ -4,9 +4,9 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
-import DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Abstract.CoerciveFormResolvent
-import DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Abstract.FormCompactness
-import DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Abstract.BoundedGraphCompactness
+import DavisKahan.SpectralTheory.FormMethod.CoerciveFormResolvent
+import DavisKahan.SpectralTheory.FormMethod.FormCompactness
+import DavisKahan.SpectralTheory.FormMethod.BoundedGraphCompactness
 import DavisKahan.Interop.Spectra.BoundedPerturbationSinTheta
 import Mathlib.Tactic
 
@@ -71,10 +71,12 @@ noncomputable def beamOperator
     DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := H) :=
   D.shiftedOperator.addBounded (-(1 : H →L[ℂ] H))
 
+/-- The domain of the shifted beam operator is the form domain. -/
 @[simp] theorem beamOperator_domain
     (D : ShiftedBeamFormData (H := H) (V := V)) :
     D.beamOperator.domain = D.shiftedOperator.domain := rfl
 
+/-- The shifted beam operator acts as the form operator plus the identity shift. -/
 @[simp] theorem beamOperator_apply
     (D : ShiftedBeamFormData (H := H) (V := V))
     (x : D.beamOperator.domain) :
@@ -155,6 +157,7 @@ theorem shiftedOperator_isSelfAdjoint
     D.shiftedOperator.IsSelfAdjoint :=
   D.toCoerciveFormData.associatedOperator_isSelfAdjoint
 
+omit [CompleteSpace H] in
 /-- The identity perturbation is symmetric. -/
 theorem negIdentity_isSelfAdjointOperator :
     IsSelfAdjointOperator (-(1 : H →L[ℂ] H)) := by
