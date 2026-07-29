@@ -312,7 +312,15 @@ cheap independent pieces.** They are held by a handful of defining structures �
 (`ClosedSylvesterEquation` 30, `ReducingSubspace/Restriction` 26). Retiring any
 of those moves a large block at once; nibbling at the tail does not.
 
-### `ReducingSubspace/Restriction.lean`: eight dead theorems, measured but NOT removed
+### `ReducingSubspace/Restriction.lean`: eight dead theorems — REMOVED 2026-07-29
+
+**Done** (jon (toothbrush), later the same day, by hand). `Restriction.lean` is
+**267 → 190 lines, 27 → 19 `ClosedOperator` mentions**. The measurement below
+stood up to an independent repo-wide re-check before anything was deleted, and
+the three traps it records are exactly why the earlier scripted attempts failed;
+they are kept because the same shape recurs in every facade block.
+
+The original measurement, for the record:
 
 Measured 2026-07-29 (jon (toothbrush)). Of the file's 23 declarations, **eight
 have no consumer anywhere — not in `DavisKahan`, and not inside the file
@@ -325,11 +333,11 @@ mem_reducingRestrictionDomain_iff         reducingRestrictionDomainToAmbient_coe
 orthogonalProjection_mem_domain           reducingRestriction_domain
 ```
 
-Removing them is a real contraction of one of the two documented facades. **I did
-not do it**: two scripted attempts both broke the file and were reverted, and the
-file is back to its committed state, building clean.
+Removing them is a real contraction of one of the two documented facades. (The
+first session's two scripted attempts both broke the file and were reverted; the
+hand edit that followed landed all eight.)
 
-Three traps, so the next attempt is cheaper than mine:
+Three traps, and a fourth found on the way in:
 
 1. **A naive "who uses this" grep is wrong here.** These facades are `abbrev`s
    over `ForTauCeti` declarations *with the same short names*, so grepping the
@@ -348,6 +356,67 @@ Three traps, so the next attempt is cheaper than mine:
    `^(abbrev|def|theorem)` scan, and three of the eight sit inside
    `namespace ReducesSubspace`, so a range-delete silently eats the `end`. This
    wants a hand edit.
+4. **Five of the eight are `@[simp]`, and no grep can clear a `simp` lemma** — it
+   can be consumed with its name never written anywhere. Only a build settles
+   those. It did: full `lake build` 9270 jobs and `lake build Challenge` 8827
+   both green with all eight gone.
+
+### `Sylvester/ClosedSylvesterEquation.lean`: nine unreachable members — REMOVED 2026-07-29
+
+The second documented facade block, **207 → 108 lines, 31 → 15 mentions**.
+Deleted: `ClosedSylvesterEquation.{mapsTo, ofBounded, zero, add, neg, sub, smul}`
+and `HasBoundedEverywhereInverse.{injective, surjective}` (that namespace with
+them). **KEPT: `equation_toLinearMap`**, which has two live call sites in
+`Sylvester/Unbounded/{OrderedCutoff,OrderedFromCutoffs}.lean`.
+
+They were **unreachable, not merely unreferenced**, and the argument generalises
+to every facade block of this shape: the carriers are `abbrev`s, so dot notation
+on a `HasClosedSylvesterEquation` hypothesis unfolds past the facade namespace
+and resolves to `TauCeti.LinearPMap.SylvesterEquation.*`. A facade member of a
+*differently named* carrier can therefore only be reached by explicit
+qualification — so grepping for `Carrier.member` is a complete test, where
+grepping the bare member name is not. (The converse case is live and worth
+noting: `RestrictionExtras`' `ReducesSubspace.orthogonal` **is** reached by dot
+notation, because there the facade and the carrier share the name
+`ReducesSubspace`, so `hred.orthogonal` finds the facade first. It stays.)
+
+Unlike `Restriction.lean`, the rest of this file is live — `SemiboundedBelow`,
+`SemiboundedAbove`, `ClosedSylvesterEquation`, `HasClosedSylvesterEquation` and
+`HasBoundedEverywhereInverse` all have consumers across the tree.
+
+Also removed the same day: `RestrictionExtras.reducingRestriction_ofBounded_apply`
+(a `@[simp]` lemma with no consumer; build-verified). The other two declarations
+in that file are live — `ofBounded_reducesSubspace` has 14 call sites in
+`Sources/…/SineTheta/Symmetric.lean`.
+
+### `Sylvester/Unbounded/Equation.lean`: NOT retirable, and the reason is not U1's
+
+Measured 2026-07-29. The module is 43 lines holding one `abbrev`,
+`HasUnboundedBoundedSylvesterEquation`, with five call sites — and **neither
+group can be moved by this lane**:
+
+- **Two production sites**, both in `Sylvester/Unbounded/Neumann.lean`, which is
+  one of the seven `RectangularSymmetricIdealFamily` files released to namek for
+  §13.2 phase C. Both sites are themselves *"bundle-shaped compatibility entry
+  points"* delegating to raw `linearPMap_*` theorems that already exist, so they
+  are cheap — but they are phase C's to take, not U1's.
+- **Three sites in `Experimental/InfiniteDimensional/Sylvester/Unbounded.lean`**,
+  which **does not build**. Confirmed by running it: it fails in its dependency
+  `Experimental/InfiniteDimensional/Core/Unbounded.lean` with 30 errors, all of
+  the form *"the environment does not contain
+  `TauCeti.DavisKahanExt.ClosedOperator.adjointDomain`"* — i.e. that subtree has
+  been dead since an **earlier** U1 slice removed the bundle's adjoint fields.
+  None of the errors names anything deleted in this session.
+
+So `Equation.lean` is blocked on other lanes and on pre-existing Experimental rot,
+not on any mathematics. It should be deleted by whoever closes the last of those.
+
+### `Sources/…/FullSineTheta.lean` is not a U1 target at all
+
+The row that listed it had it at "one type position". It is one **`alias`**
+(`alias IsGraphCore := ClosedOperator.IsGraphCore`, line 154), which the census
+classifies as prose/import overcount rather than a type position — the module
+does not appear in `--verbose`'s type-position list. Nothing to do here.
 
 **Contractible right now, no new mathematics:**
 
@@ -357,8 +426,31 @@ Three traps, so the next attempt is cheaper than mine:
   including inside its own module: the raw
   `linearPMap_generalizedSinTheta_unbounded_exact_of_genuineIntervalExteriorGap`
   is proved from the *raw* non-exact theorem, never from the bundled one.
-- The `Restriction.lean` and `ClosedSylvesterEquation.lean` facade blocks, once
-  their remaining callers move.
+- ~~The `Restriction.lean` and `ClosedSylvesterEquation.lean` facade blocks, once
+  their remaining callers move.~~ **Done 2026-07-29** — the caller-free members of
+  both are gone (17 declarations); what is left in each file has live consumers.
+
+### Frontier map, 2026-07-29: U1's remainder is gated on other lanes, not on mathematics
+
+Census after this session: **530 type positions across 68 modules** (from 554).
+Sorted by who can actually move them:
+
+| block | positions | who |
+|---|---|---|
+| `Interop/Spectra/**` | ~80 | namek's Spectra-removal campaign; explicitly outside U1 |
+| `SinTheta/Natural/**` | 103, of which **91 not takeable under U1 at all** | edward measured them as `ofBounded` call-site adapters feeding `selfAdjointSpectralRestriction` &c. in `Interop/Spectra/**` — they cannot move before the Spectra boundary does |
+| the `UnboundedSinThetaData` block — `SinTheta/Unbounded/**`, `SinTheta/Real/**`, `Sources/…/SineTheta/{Symmetric, CommonCore, CommonDomain, …}` | ~130 | one structure, **26 consuming modules**; most of its files are on namek's §13.2 phase-C list |
+| `Sylvester/**` | ~60 | released to namek for phase C (see `dev/LANES.md`) |
+| `Experimental/**` | — | excluded by the gate, and largely unbuildable |
+| **genuinely free** — `TanTheta/{UnboundedVector, UnboundedGenuineSpectrum, UnboundedGraphAngle}`, `TanTwoTheta/{Unbounded, UnboundedVector}` | **13 across ~1,200 lines** | unclaimed by anyone |
+
+The consequence worth stating plainly, because the raw census hides it: **U1
+cannot be finished by U1's owner working alone.** Every large remaining block is
+either behind namek's two active lanes or behind the Spectra boundary that U1's
+own scope excludes. The free remainder is 13 positions in the `TanTheta` /
+`TanTwoTheta` unbounded records, and those are genuine retypings (a
+`DKClosedOperator` binder becomes a `LinearPMap` plus explicit density /
+closedness / self-adjointness hypotheses), not substitutions.
 
 **The paper-completion census was passing vacuously; it now certifies the code
 (edward, aiq-gpu, 2026-07-29).**  `scripts/probe_census_declarations.py` reported

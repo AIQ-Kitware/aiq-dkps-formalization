@@ -4,15 +4,14 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import FinishTanTwoTheta.ApproximationNumber.GramSpectralRank
-import DavisKahan.Interop.Spectra.PVMSubspace
-import Spectra.SpectralTheory.Essential.Discrete
+import Mathlib.Analysis.InnerProductSpace.Projection.Basic
 
 /-!
 # Finite selection from spectral projection ranges
 
-The Spectra library supplies projection algebra and spectral localization, but
-not the finite-dimensional selection wrapper needed by the approximation-number
-argument.  This file supplies that missing wrapper without tactic search.
+Tau Ceti supplies the native projection-valued measure and projection algebra,
+but not the finite-dimensional selection wrapper needed by the approximation-
+number argument.  This file supplies that wrapper without tactic search.
 -/
 
 namespace TauCeti
@@ -31,7 +30,7 @@ variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
 /-- A natural-number rank lower bound on a PVM projection yields an orthonormal
 family of that length inside its range. -/
 theorem exists_orthonormal_mem_pvmRange_of_natCast_le_rank
-    (P : Spectra.ProjValMeasure H) (B : Set ℝ) (hB : MeasurableSet B)
+    (P : TauCeti.ProjValMeasure H) (B : Set ℝ) (hB : MeasurableSet B)
     (m : ℕ) (hm : (m : Cardinal) ≤ (P.proj B hB).rank) :
     ∃ v : Fin m → H, Orthonormal ℂ v ∧
       ∀ i, v i ∈ (P.proj B hB).range := by
@@ -64,7 +63,7 @@ theorem exists_orthonormal_mem_pvmRange_of_natCast_le_rank
 
 /-- Vectors selected from disjoint PVM ranges are orthogonal. -/
 theorem inner_eq_zero_of_mem_disjoint_pvmRanges
-    (P : Spectra.ProjValMeasure H)
+    (P : TauCeti.ProjValMeasure H)
     {B₁ B₂ : Set ℝ} (hB₁ : MeasurableSet B₁) (hB₂ : MeasurableSet B₂)
     (hdisj : Disjoint B₁ B₂) {x y : H}
     (hx : x ∈ (P.proj B₁ hB₁).range)
@@ -72,14 +71,30 @@ theorem inner_eq_zero_of_mem_disjoint_pvmRanges
     ⟪x, y⟫_ℂ = 0 := by
   rcases hx with ⟨x₀, rfl⟩
   rcases hy with ⟨y₀, rfl⟩
-  exact P.inner_proj_eq_zero_of_disjoint hB₁ hB₂ hdisj x₀ y₀
+  have hinter : B₁ ∩ B₂ = (∅ : Set ℝ) := Set.disjoint_iff_inter_eq_empty.mp hdisj
+  have hcomp : P.proj B₁ hB₁ (P.proj B₂ hB₂ y₀) = 0 := by
+    have hmul := congrArg (fun T : H →L[ℂ] H => T y₀)
+      (P.proj_inter B₁ B₂ hB₁ hB₂)
+    rw [mul_apply_eq_comp] at hmul
+    rw [hmul, P.proj_congr hinter (hB₁.inter hB₂) MeasurableSet.empty,
+      P.proj_empty, zero_apply]
+  have hadj : ContinuousLinearMap.adjoint (P.proj B₁ hB₁) = P.proj B₁ hB₁ := by
+    have h := P.isSelfAdjoint_proj B₁ hB₁
+    rwa [ContinuousLinearMap.isSelfAdjoint_iff'] at h
+  calc
+    ⟪P.proj B₁ hB₁ x₀, P.proj B₂ hB₂ y₀⟫_ℂ =
+        ⟪x₀, ContinuousLinearMap.adjoint (P.proj B₁ hB₁)
+          (P.proj B₂ hB₂ y₀)⟫_ℂ :=
+      (ContinuousLinearMap.adjoint_inner_right _ _ _).symm
+    _ = ⟪x₀, P.proj B₁ hB₁ (P.proj B₂ hB₂ y₀)⟫_ℂ := by rw [hadj]
+    _ = 0 := by rw [hcomp, inner_zero_right]
 
 
 /-- Subtracting two cumulative spectral-rank bounds gives a rank lower bound
 for the intervening closed band.  The proof embeds the lower-cutoff range into
 the product of the upper and band ranges using finite additivity of the PVM. -/
 theorem natCast_sub_le_rank_pvm_Icc_of_cutoff_bounds
-    (P : Spectra.ProjValMeasure H) {lo hi : ℝ} (hlohi : lo ≤ hi)
+    (P : TauCeti.ProjValMeasure H) {lo hi : ℝ} (hlohi : lo ≤ hi)
     (p q : ℕ)
     (hlower : (q : Cardinal) ≤ (P.proj (Set.Ici lo) measurableSet_Ici).rank)
     (hupper : (P.proj (Set.Ioi hi) measurableSet_Ioi).rank ≤ (p : Cardinal)) :
@@ -145,7 +160,8 @@ theorem natCast_sub_le_rank_pvm_Icc_of_cutoff_bounds
         P.proj (Set.Icc lo hi) measurableSet_Icc (y : H) at h
       simpa only [z, map_sub, sub_eq_zero] using h
     have hzfix : P.proj (Set.Ici lo) measurableSet_Ici z = z := by
-      rcases hzL with ⟨z₀, rfl⟩
+      rcases hzL with ⟨z₀, hz₀⟩
+      rw [← hz₀]
       change P.proj (Set.Ici lo) measurableSet_Ici
           (P.proj (Set.Ici lo) measurableSet_Ici z₀) =
         P.proj (Set.Ici lo) measurableSet_Ici z₀
@@ -153,7 +169,7 @@ theorem natCast_sub_le_rank_pvm_Icc_of_cutoff_bounds
         congrArg (fun T : H →L[ℂ] H => T z₀)
           (P.proj_idem (Set.Ici lo) measurableSet_Ici)
     have hz0 : P.proj (Set.Ici lo) measurableSet_Ici z = 0 := by
-      rw [hsplit, ContinuousLinearMap.add_apply, hUz, hBz, add_zero]
+      rw [hsplit, add_apply, hUz, hBz, add_zero]
     have : z = 0 := by simpa only [hzfix] using hz0
     exact sub_eq_zero.mp this
   have hrank : Module.rank ℂ L ≤ Module.rank ℂ (U × B) := by

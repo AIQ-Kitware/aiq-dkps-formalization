@@ -33,91 +33,6 @@ variable {E0 : Type u} [NormedAddCommGroup E0] [InnerProductSpace ℂ E0]
 variable {E1 : Type u} [NormedAddCommGroup E1] [InnerProductSpace ℂ E1]
   [CompleteSpace E1]
 
-/-- Local adjoint invariance of maximal paper-ideal membership. -/
-private theorem paperMem_adjoint_local
-    (N : PaperUnitaryInvariantNorm) {A : E0 →L[ℂ] E1}
-    (hA : N.Mem A) : N.Mem A.adjoint := by
-  change N.extendedGauge A.adjoint ≠ ⊤
-  rw [N.extendedGauge_adjoint]
-  exact hA
-
-/-- Local adjoint invariance of the real paper gauge. -/
-private theorem paperGauge_adjoint_local
-    (N : PaperUnitaryInvariantNorm) (A : E0 →L[ℂ] E1) :
-    N.gauge A.adjoint = N.gauge A := by
-  unfold PaperUnitaryInvariantNorm.gauge
-  rw [N.extendedGauge_adjoint]
-
-/-- A natural-number rank bound passes to the adjoint. -/
-private theorem rank_adjoint_le_natCast_of_rank_le_local
-    (R : E0 →L[ℂ] E1) {n : ℕ} (hR : R.rank ≤ (n : Cardinal)) :
-    R.adjoint.rank ≤ (n : Cardinal) := by
-  have hlt : R.rank < Cardinal.aleph0 :=
-    hR.trans_lt Cardinal.natCast_lt_aleph0
-  have hrank_eq : R.rank = (R.rank.toNat : Cardinal) := by
-    exact (Cardinal.cast_toNat_of_lt_aleph0 hlt).symm
-  letI : FiniteDimensional ℂ R.range :=
-    Module.finite_of_rank_eq_nat hrank_eq
-  letI : CompleteSpace R.range := FiniteDimensional.complete ℂ R.range
-  have hadj : R.adjoint =
-      R.rangeRestrict.adjoint ∘L R.range.subtypeL.adjoint := by
-    rw [← ContinuousLinearMap.adjoint_comp]
-    congr 1
-  have hrestrict : R.rangeRestrict.adjoint.rank ≤ (n : Cardinal) :=
-    Cardinal.lift_le_natCast.mp
-      ((lift_rank_range_le R.rangeRestrict.adjoint.toLinearMap).trans
-        (Cardinal.lift_le_natCast.mpr hR))
-  rw [hadj]
-  exact (rank_comp_le_left _ _).trans hrestrict
-
-/-- Local adjoint invariance of the minimal finite-rank closure. -/
-private theorem finiteRankApproximable_adjoint_local
-    (N : PaperUnitaryInvariantNorm) {A : E0 →L[ℂ] E1}
-    (hA : TauCeti.FinishTanTwoTheta.FiniteRankApproximable N A) :
-    TauCeti.FinishTanTwoTheta.FiniteRankApproximable N A.adjoint := by
-  refine ⟨paperMem_adjoint_local N hA.1, ?_⟩
-  intro ε hε
-  obtain ⟨R, hRrank, hRmem, hRsmall⟩ := hA.2 ε hε
-  have hrank_eq : R.rank = (R.rank.toNat : Cardinal) := by
-    exact (Cardinal.cast_toNat_of_lt_aleph0 hRrank).symm
-  have hRadjRank : R.adjoint.rank < Cardinal.aleph0 :=
-    (rank_adjoint_le_natCast_of_rank_le_local R hrank_eq.le).trans_lt
-      Cardinal.natCast_lt_aleph0
-  have hsub : A.adjoint - R.adjoint = (A - R).adjoint := by
-    simpa only [map_sub]
-  have hRadjMem : N.Mem (A.adjoint - R.adjoint) := by
-    rw [hsub]
-    exact paperMem_adjoint_local N hRmem
-  have hRadjSmall : N.gauge (A.adjoint - R.adjoint) < ε := by
-    rw [hsub, paperGauge_adjoint_local]
-    exact hRsmall
-  exact ⟨R.adjoint, hRadjRank, hRadjMem, hRadjSmall⟩
-
-/-- Local adjoint invariance for either standard symmetric completion. -/
-private theorem standardMem_adjoint_local
-    (I : TauCeti.FinishTanTwoTheta.StandardSymmetricIdeal)
-    {A : E0 →L[ℂ] E1} (hA : I.Mem A) : I.Mem A.adjoint := by
-  cases I with
-  | mk N completion =>
-      cases completion with
-      | maximal =>
-          change N.Mem A at hA
-          change N.Mem A.adjoint
-          exact paperMem_adjoint_local N hA
-      | minimal =>
-          change TauCeti.FinishTanTwoTheta.FiniteRankApproximable N A at hA
-          change TauCeti.FinishTanTwoTheta.FiniteRankApproximable N A.adjoint
-          exact finiteRankApproximable_adjoint_local N hA
-
-/-- Local adjoint invariance of the common standard-ideal gauge. -/
-private theorem standardGauge_adjoint_local
-    (I : TauCeti.FinishTanTwoTheta.StandardSymmetricIdeal)
-    (A : E0 →L[ℂ] E1) : I.gauge A.adjoint = I.gauge A := by
-  cases I with
-  | mk N _ =>
-      change N.gauge A.adjoint = N.gauge A
-      exact paperGauge_adjoint_local N A
-
 /-- The sharp Ky Fan estimate in the orientation needed by Fan dominance. -/
 private theorem half_mul_kyFan_le_adjoint
     (B : BlockOperatorData (𝕜 := ℂ) (E0 := E0) (E1 := E1))
@@ -138,9 +53,8 @@ private theorem half_mul_kyFan_le_adjoint
         (d * kyFanApproximationGauge k
           (TauCeti.FinishTanTwoTheta.doubleAngleTangentOperator X hcontractive)) / 2 := by
       ring
-    _ ≤ (2 * kyFanApproximationGauge k B.B01) / 2 :=
-      (div_le_div_right (by norm_num : (0 : ℝ) < 2)).2 hsharp
-    _ = kyFanApproximationGauge k B.B01 := by ring
+    _ ≤ kyFanApproximationGauge k B.B01 := by
+      linarith
 
 /-- Sharp endpoint for every standard symmetric completion, formulated in the
 scale-invariant common form. -/
@@ -161,21 +75,23 @@ theorem sharp_standardSymmetricIdeal_scaled
   let T : E0 →L[ℂ] E1 :=
     TauCeti.FinishTanTwoTheta.doubleAngleTangentOperator X hcontractive
   let S : E0 →L[ℂ] E1 := (((d / 2 : ℝ) : ℂ) • T)
-  have hBadj : I.Mem B.B01.adjoint := standardMem_adjoint_local I hB
+  have hBadj : I.Mem B.B01.adjoint := I.mem_adjoint hB
+  have hscalarNorm : ‖(((d / 2 : ℝ) : ℂ))‖ = d / 2 := by
+    rw [Complex.norm_real, Real.norm_eq_abs,
+      abs_of_nonneg (by positivity : 0 ≤ d / 2)]
   have hdom : ∀ k : ℕ,
       kyFanApproximationGauge k S ≤
         kyFanApproximationGauge k B.B01.adjoint := by
     intro k
-    rw [S, kyFanApproximationGauge_smul,
-      RCLike.norm_ofReal, abs_of_nonneg (by positivity : 0 ≤ d / 2)]
-    exact half_mul_kyFan_le_adjoint B hd hA0 hA1 hX hcontractive k
+    simpa only [S, T, kyFanApproximationGauge_smul, hscalarNorm] using
+      half_mul_kyFan_le_adjoint B hd hA0 hA1 hX hcontractive k
   have hfan : I.Mem S ∧ I.gauge S ≤ I.gauge B.B01.adjoint :=
     TauCeti.FinishTanTwoTheta.standard_fanDominance I hBadj hdom
   change I.Mem S ∧ I.gauge S ≤ I.gauge B.B01
   refine ⟨hfan.1, ?_⟩
   calc
     I.gauge S ≤ I.gauge B.B01.adjoint := hfan.2
-    _ = I.gauge B.B01 := standardGauge_adjoint_local I B.B01
+    _ = I.gauge B.B01 := I.gauge_adjoint B.B01
 
 /-- Maximal/Fatou source-norm endpoint in the paper's conventional scaling. -/
 theorem sharp_paperUnitaryInvariantNorm
@@ -194,7 +110,7 @@ theorem sharp_paperUnitaryInvariantNorm
   let T : E0 →L[ℂ] E1 :=
     TauCeti.FinishTanTwoTheta.doubleAngleTangentOperator X hcontractive
   have hBadj : N.Mem B.B01.adjoint :=
-    paperMem_adjoint_local N hB
+    (N.mem_adjoint_iff B.B01).mpr hB
   have hfan : ∀ k : ℕ,
       (d / 2) * kyFanApproximationGauge k T ≤
         kyFanApproximationGauge k B.B01.adjoint := by
@@ -211,7 +127,7 @@ theorem sharp_paperUnitaryInvariantNorm
     _ ≤ 2 * N.gauge B.B01.adjoint :=
       mul_le_mul_of_nonneg_left h.2 (by norm_num)
     _ = 2 * N.gauge B.B01 := by
-      rw [paperGauge_adjoint_local]
+      rw [N.gauge_adjoint]
 
 /-- Schatten-`p` maximal ideal endpoint for every `1 ≤ p`. -/
 theorem sharp_schattenMaximal
