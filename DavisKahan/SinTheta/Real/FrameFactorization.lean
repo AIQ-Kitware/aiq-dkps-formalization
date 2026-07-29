@@ -5,7 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.SinTheta.FrameFactorizationGeneric
 import DavisKahan.SpectralTheory.Complexification.FunctionalCalculus
-import ForMathlib.Analysis.InnerProductSpace.CoerciveUnit
+import ForTauCeti.Analysis.InnerProductSpace.CoerciveUnit
 import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Basic
 import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Instances
 import Mathlib.Analysis.InnerProductSpace.StarOrder
@@ -22,7 +22,7 @@ are then reflected through the injective complexification functor.
 
 namespace TauCeti
 
-open ForMathlib
+open TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace ExactSinTheta
@@ -119,7 +119,7 @@ theorem lowerFramePolarData_real_nonempty
     exact (ContinuousLinearMap.nonneg_iff_isPositive gramC).2
       (ContinuousLinearMap.isPositive_adjoint_comp_self XC)
   have hgram_unit : IsUnit gramC := by
-    refine ForMathlib.ContinuousLinearMap.isUnit_of_coercive
+    refine TauCeti.ContinuousLinearMap.isUnit_of_coercive
       (sq_pos_of_pos hε) ?_
     simpa [gramC] using gram_coercive hframeC hε.le
   have hgram_fix : conjugateOperator gramC = gramC := by

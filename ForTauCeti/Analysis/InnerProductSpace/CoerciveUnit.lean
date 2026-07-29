@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Fable 5
 -/
 
-import ForMathlib.Analysis.InnerProductSpace.SylvesterBound
+import ForTauCeti.Analysis.InnerProductSpace.SylvesterBound
 import Mathlib.Analysis.InnerProductSpace.Adjoint
 import Mathlib.Analysis.Normed.Operator.Banach
 
@@ -39,11 +39,14 @@ To be re-authored per Mathlib's AI-contribution policy at PR time.
 * Intended Mathlib home: additions to `Mathlib/Analysis/InnerProductSpace/CoerciveUnit.
 * Original authors / copyright: Jon Crall, Claude Fable 5; Copyright (c) 2026
   Kitware, Inc.; Apache 2.0.
-* Spectra influence: **none** — the `ForMathlib` import firewall admits only
-  Mathlib and `ForMathlib` (enforced by `scripts/check_dependency_layers.py`).
+* Spectra influence: **none** — the `ForTauCeti` import firewall admits only
+  Mathlib, `TauCeti` and `ForTauCeti` (enforced by `scripts/check_dependency_layers.py`).
+* Moved from `ForMathlib/Analysis/InnerProductSpace/` to `ForTauCeti/` on
+  2026-07-29 under lane Y3(b2), with the rest of its 8-module component.
+  Statements, proofs and signatures are unchanged.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 namespace ContinuousLinearMap
 
 open scoped InnerProductSpace
@@ -338,4 +341,4 @@ theorem norm_one_sub_inverse_one_add {B : E →L[𝕜] E} (hB : IsSelfAdjoint B)
   exact le_antisymm hupper hlower
 
 end ContinuousLinearMap
-end ForMathlib
+end TauCeti

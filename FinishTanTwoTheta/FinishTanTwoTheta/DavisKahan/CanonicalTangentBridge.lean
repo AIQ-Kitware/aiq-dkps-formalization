@@ -248,7 +248,7 @@ private theorem tanTwoAngleOperatorC_eq_modulus_ambientGraphTangent
     dsimp [G]
     rw [← ContinuousLinearMap.comp_assoc, hPYstar]
   have hNunit : IsUnit N := by
-    refine ForMathlib.ContinuousLinearMap.isUnit_of_coercive one_pos ?_
+    refine TauCeti.ContinuousLinearMap.isUnit_of_coercive one_pos ?_
     intro x
     dsimp [N, G]
     rw [add_apply, ContinuousLinearMap.id_apply, inner_add_left, map_add,

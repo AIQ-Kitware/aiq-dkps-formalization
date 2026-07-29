@@ -3,7 +3,7 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Fable 5
 -/
-import ForMathlib.Analysis.InnerProductSpace.SylvesterBound
+import ForTauCeti.Analysis.InnerProductSpace.SylvesterBound
 import Mathlib.Analysis.InnerProductSpace.Symmetric
 import Mathlib.Analysis.InnerProductSpace.Projection.Basic
 import Mathlib.Analysis.Normed.Operator.NNNorm
@@ -32,7 +32,7 @@ the test side proceed exactly as in finite dimensions.
 
 namespace TauCeti
 
-open ForMathlib
+open TauCeti
 namespace DavisKahanExt
 
 open scoped InnerProductSpace
@@ -117,7 +117,7 @@ theorem norm_map_sub_midpoint_smul_le' (hT : T.IsSymmetric)
     rw [hmove, hval, abs_le]
     constructor <;> nlinarith [h1, h2, h4]
   have hnorm : ‖C‖ ≤ (β - α) / 2 :=
-    ForMathlib.ContinuousLinearMap.norm_le_of_abs_re_inner_map_self_le
+    TauCeti.ContinuousLinearMap.norm_le_of_abs_re_inner_map_self_le
       hCsym he0 hform
   have hCu : C u = S u := by
     rw [hCapp, Submodule.starProjection_eq_self_iff.mpr hu,

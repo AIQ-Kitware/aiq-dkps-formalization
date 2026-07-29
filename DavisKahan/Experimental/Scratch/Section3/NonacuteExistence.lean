@@ -5,7 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
 import DavisKahan.Geometry.Polar.Section3Nonacute
-import ForMathlib.Analysis.InnerProductSpace.CoerciveUnit
+import ForTauCeti.Analysis.InnerProductSpace.CoerciveUnit
 
 /-!
 # Nonacute direct rotations: the crossed-defect necessity theorem
@@ -35,7 +35,7 @@ open scoped InnerProductSpace
 
 namespace TauCeti
 
-open ForMathlib
+open TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace Scratch
