@@ -12,7 +12,7 @@ The original and adapted files are Apache-2.0 licensed.
 -/
 
 import DavisKahan.SpectralTheory.FormMethod.PositiveSurjectiveCriterion
-import ForMathlib.Analysis.InnerProductSpace.CoerciveUnit
+import ForTauCeti.Analysis.InnerProductSpace.CoerciveUnit
 import Mathlib.Tactic
 
 /-!
@@ -33,7 +33,7 @@ open Set Filter Topology
 
 namespace TauCeti
 
-open ForMathlib
+open TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace MathAhead

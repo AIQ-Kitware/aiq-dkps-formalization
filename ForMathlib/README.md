@@ -46,6 +46,24 @@ vendored code was copied into the build.
 
 ## Inventory
 
+**Current contents (2026-07-29): four modules.**
+`LinearAlgebra/Matrix/{PosDef,RankFactorization}.lean` and
+`Topology/{ApproxMinimizer,Berge}.lean`.  The table below is the *destination*
+table and is deliberately larger than the tree: most of its rows have already
+been migrated into `ForTauCeti` and are listed here for the Mathlib destination
+they were staged against, not as files on disk.
+
+The last such migration was lane **Y3(b2)** on 2026-07-29, which moved the
+closed 8-module `Analysis/InnerProductSpace` component —
+`{ProjectionBlocks, ProjectionGap, QuadraticFormBounds, ReducingSubspace,
+SylvesterBound, SylvesterOperator, CoerciveUnit}.lean` and
+`SpectralOrder/Complex.lean` — into `ForTauCeti/Analysis/InnerProductSpace/`,
+taking `ForMathlib` from 12 modules to 4.  The four that remain are the
+genuinely Mathlib-shaped remainder: none of them is an inner-product-space
+module, and three of them (`RankFactorization`, `PosDef`, `Berge`) are pinned
+by comparator conformance statements.
+
+
 | Staged file | Destination | Candidate (mathlib-candidates.md) |
 | --- | --- | --- |
 | `Analysis/InnerProductSpace/RectangularSingularValues.lean` | proposed additions near `Mathlib/Analysis/InnerProductSpace/SingularValues.lean` | nonzero eigenspace equivalence for `A†A`/`AA†`, multiplicities, and rectangular adjoint invariance |

@@ -36,11 +36,11 @@ taken in the `LinearMap.IsSymmetric` sense, with no reference to adjoints.
 
 ## Main results
 
-* `ForMathlib.ContinuousLinearMap.norm_le_of_abs_re_inner_map_self_le`: a
+* `TauCeti.ContinuousLinearMap.norm_le_of_abs_re_inner_map_self_le`: a
   symmetric operator with `|re ⟪C x, x⟫| ≤ κ * ‖x‖ ^ 2` has `‖C‖ ≤ κ`.
-* `ForMathlib.ContinuousLinearMap.opNorm_le_div_of_comp_add_comp_eq`: the
+* `TauCeti.ContinuousLinearMap.opNorm_le_div_of_comp_add_comp_eq`: the
   coercive (Lyapunov) form, `‖X‖ ≤ ‖Y‖ / (2 * δ)`.
-* `ForMathlib.ContinuousLinearMap.opNorm_le_div_of_comp_sub_comp_eq`: the
+* `TauCeti.ContinuousLinearMap.opNorm_le_div_of_comp_sub_comp_eq`: the
   separated (Davis–Kahan-facing) form, `‖X‖ ≤ ‖Y‖ / g`.
 
 ## References
@@ -52,7 +52,7 @@ taken in the `LinearMap.IsSymmetric` sense, with no reference to adjoints.
   perturbation. III*, SIAM J. Numer. Anal. 7 (1970), 1–46.
 -/
 
-namespace ForMathlib
+namespace TauCeti
 
 open scoped InnerProductSpace
 
@@ -478,8 +478,11 @@ To be re-authored per Mathlib's AI-contribution policy at PR time.
 * Intended Mathlib home: additions to `Mathlib/Analysis/InnerProductSpace/SylvesterBound.
 * Original authors / copyright: Jon Crall, Claude Fable 5; Copyright (c) 2026
   Kitware, Inc.; Apache 2.0.
-* Spectra influence: **none** — the `ForMathlib` import firewall admits only
-  Mathlib and `ForMathlib` (enforced by `scripts/check_dependency_layers.py`).
+* Spectra influence: **none** — the `ForTauCeti` import firewall admits only
+  Mathlib, `TauCeti` and `ForTauCeti` (enforced by `scripts/check_dependency_layers.py`).
+* Moved from `ForMathlib/Analysis/InnerProductSpace/` to `ForTauCeti/` on
+  2026-07-29 under lane Y3(b2), with the rest of its 8-module component.
+  Statements, proofs and signatures are unchanged.
 -/
 
 section RectangularAbstractSylvesterBound
@@ -696,4 +699,4 @@ end RectangularAbstractSylvesterBound
 
 end ContinuousLinearMap
 
-end ForMathlib
+end TauCeti

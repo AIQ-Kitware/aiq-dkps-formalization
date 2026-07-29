@@ -7,7 +7,7 @@ import DavisKahan.Experimental.InfiniteDimensional.Ideals.Symmetric
 import DavisKahan.Experimental.InfiniteDimensional.Ideals.CompactIntegral
 import DavisKahan.Experimental.InfiniteDimensional.Sylvester.FourierSemigroup
 import DavisKahan.Experimental.InfiniteDimensional.Sylvester.OrderedSemigroup
-import ForMathlib.Analysis.InnerProductSpace.SylvesterBound
+import ForTauCeti.Analysis.InnerProductSpace.SylvesterBound
 import ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm
 
 /-!
@@ -26,7 +26,7 @@ transported through complexification.
 
 namespace TauCeti
 
-open ForMathlib
+open TauCeti
 namespace DavisKahanExt
 
 open MeasureTheory Set Filter
@@ -94,7 +94,7 @@ theorem norm_sylvester_le_of_coercive
     (hBc : ∀ x, RCLike.re ⟪B x, x⟫_𝕜 ≤ c * ‖x‖ ^ 2)
     (hEq : sylvesterOperator A B X = C) :
     ‖X‖ ≤ ‖C‖ / g :=
-  ForMathlib.ContinuousLinearMap.opNorm_le_div_of_comp_sub_comp_eq hA hB hg hAc hBc hEq
+  TauCeti.ContinuousLinearMap.opNorm_le_div_of_comp_sub_comp_eq hA hB hg hAc hBc hEq
 
 
 section OrderedComplex

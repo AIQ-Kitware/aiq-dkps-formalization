@@ -14,7 +14,7 @@ without any dimension factor.
 To be re-authored per Mathlib's AI-contribution policy at PR time.
 -/
 
-import ForMathlib.Analysis.InnerProductSpace.SylvesterBound
+import ForTauCeti.Analysis.InnerProductSpace.SylvesterBound
 import DavisKahan.FiniteDimensional.DoubleAngle.Vector
 import ForTauCeti.Analysis.InnerProductSpace.CourantFischer
 import ForTauCeti.Analysis.InnerProductSpace.PrincipalAngles
@@ -53,7 +53,7 @@ self-adjointness of the projections.
 
 namespace TauCeti
 
-open ForMathlib
+open TauCeti
 open scoped InnerProductSpace
 open Module (finrank)
 
@@ -284,7 +284,7 @@ theorem norm_starProjection_comp_starProjection_le (hT : T.IsSymmetric) (hS : S.
   -- Sylvester bound: `‖X‖ ≤ ‖Y‖ / g ≤ ε / g`.
   have hXbound : ‖X‖ ≤ ε / g :=
     calc ‖X‖ ≤ ‖Y‖ / g :=
-          ForMathlib.ContinuousLinearMap.opNorm_le_div_of_comp_sub_comp_eq hAsym hBsym hg hAc hBc hsylv
+          TauCeti.ContinuousLinearMap.opNorm_le_div_of_comp_sub_comp_eq hAsym hBsym hg hAc hBc hsylv
       _ ≤ ε / g := by gcongr
   -- `‖Q ∘L P‖ = ‖P ∘L Q‖ = ‖X‖`.
   have hstar : star (Q ∘L P) = P ∘L Q := by

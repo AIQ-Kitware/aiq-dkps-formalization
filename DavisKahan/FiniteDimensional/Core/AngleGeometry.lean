@@ -7,7 +7,7 @@ import DavisKahan.FiniteDimensional.Core.SpectralSubspace
 import ForTauCeti.Analysis.InnerProductSpace.PrincipalAngles
 import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantNorm
 import ForTauCeti.Analysis.InnerProductSpace.PolarDecomposition
-import ForMathlib.Analysis.InnerProductSpace.ProjectionGap
+import ForTauCeti.Analysis.InnerProductSpace.ProjectionGap
 
 /-!
 # Directed principal-angle geometry
