@@ -8,6 +8,7 @@ module
 public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.ResolventBound
 public import Mathlib.Analysis.InnerProductSpace.LinearPMap
 public import Mathlib.Analysis.CStarAlgebra.ContinuousLinearMap
+public import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Unitary
 
 /-!
 # A self-adjoint operator has real spectrum
@@ -460,6 +461,67 @@ theorem norm_cayley_apply {A : E →ₗ.[ℂ] E} (hA : IsSelfAdjoint A) (ξ : E)
     rw [cayley_apply hA ξ, hxi, hminus, hplus]
   have h2 := congrArg Real.sqrt hsq
   rwa [Real.sqrt_sq (norm_nonneg _), Real.sqrt_sq (norm_nonneg _)] at h2
+
+/-- The Cayley transform preserves inner products (polarisation of isometry). -/
+theorem inner_cayley {A : E →ₗ.[ℂ] E} (hA : IsSelfAdjoint A) (ξ η : E) :
+    ⟪cayley hA ξ, cayley hA η⟫_ℂ = ⟪ξ, η⟫_ℂ := by
+  let L : E →ₗᵢ[ℂ] E :=
+    { toLinearMap := (cayley hA : E →ₗ[ℂ] E)
+      norm_map' := norm_cayley_apply hA }
+  exact L.inner_map_map ξ η
+
+/-- **The Cayley transform is surjective.**  Given `η`, solve `(A - i) y = η` —
+possible because `i` is a resolvent point — and take `ξ = (A + i) y`. -/
+theorem surjective_cayley {A : E →ₗ.[ℂ] E} (hA : IsSelfAdjoint A) :
+    Function.Surjective (cayley hA) := by
+  intro η
+  set hi := I_mem_resolventSet hA with hhi
+  set hni := negI_mem_resolventSet hA with hhni
+  set y : E := resolvent A hi η with hy
+  have hymem : y ∈ A.domain := resolvent_mem_domain hi η
+  have hsolve : A ⟨y, hymem⟩ - Complex.I • y = η := sub_smul_resolvent hi η
+  -- `ξ := (A + i) y`
+  refine ⟨A ⟨y, hymem⟩ - (-Complex.I) • y, ?_⟩
+  -- `R(-i)` inverts `A + i` on the domain
+  have hR : resolvent A hni (A ⟨y, hymem⟩ - (-Complex.I) • y) = y :=
+    resolvent_apply_sub_smul hni ⟨y, hymem⟩
+  rw [cayley_apply hA]
+  -- both the operator application and the shift collapse via `hR`
+  have hdom : (⟨resolvent A hni (A ⟨y, hymem⟩ - (-Complex.I) • y),
+      resolvent_mem_domain hni _⟩ : A.domain) = ⟨y, hymem⟩ := Subtype.ext hR
+  rw [hdom, hR]
+  exact hsolve
+
+/-- **The Cayley transform of a self-adjoint operator is unitary.** -/
+theorem cayley_mem_unitary {A : E →ₗ.[ℂ] E} (hA : IsSelfAdjoint A) :
+    cayley hA ∈ unitary (E →L[ℂ] E) := by
+  have hstar : ContinuousLinearMap.adjoint (cayley hA) * cayley hA = 1 := by
+    refine ContinuousLinearMap.ext fun ξ => ?_
+    refine ext_inner_right ℂ fun η => ?_
+    calc ⟪(ContinuousLinearMap.adjoint (cayley hA) * cayley hA) ξ, η⟫_ℂ
+        = ⟪cayley hA ξ, cayley hA η⟫_ℂ := by
+          rw [show (ContinuousLinearMap.adjoint (cayley hA) * cayley hA) ξ
+              = ContinuousLinearMap.adjoint (cayley hA) (cayley hA ξ) from rfl,
+            ContinuousLinearMap.adjoint_inner_left]
+      _ = ⟪ξ, η⟫_ℂ := inner_cayley hA ξ η
+      _ = ⟪(1 : E →L[ℂ] E) ξ, η⟫_ℂ := rfl
+  have hmul : cayley hA * ContinuousLinearMap.adjoint (cayley hA) = 1 := by
+    refine ContinuousLinearMap.ext fun ξ => ?_
+    obtain ⟨ζ, rfl⟩ := surjective_cayley hA ξ
+    have : ContinuousLinearMap.adjoint (cayley hA) (cayley hA ζ) = ζ := by
+      have := congrArg (fun T : E →L[ℂ] E => T ζ) hstar
+      simpa using this
+    change cayley hA (ContinuousLinearMap.adjoint (cayley hA) (cayley hA ζ)) = _
+    rw [this]
+    rfl
+  rw [Unitary.mem_iff, ContinuousLinearMap.star_eq_adjoint]
+  exact ⟨hstar, hmul⟩
+
+/-- The Cayley transform is star-normal, so Mathlib's continuous functional
+calculus applies to it. -/
+instance isStarNormal_cayley {A : E →ₗ.[ℂ] E} (hA : IsSelfAdjoint A) :
+    IsStarNormal (cayley hA) :=
+  isStarNormal_of_mem_unitary (cayley_mem_unitary hA)
 
 end SelfAdjoint
 
