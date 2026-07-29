@@ -202,6 +202,52 @@ characterisations as equivalence theorems for it. The sharp dependency is the
 antilinear conjugate space (`Spectra.Conj` and its two instances); settle
 whether it ports or dissolves against Mathlib before touching the tensor model.
 
+**Measured 2026-07-29 (edward, aiq-gpu) — the two questions this lane says to
+settle first, answered, and the second one changes the lane's size by 28x.**
+
+*1. `Spectra.Conj` cannot dissolve against Mathlib; it must port.*  Across **all**
+of pinned Mathlib: **zero** files containing `HilbertSchmidt`, **zero**
+`Schatten`, **zero** `IsTraceClass`; in `Analysis/`, **zero** `ConjugateSpace`.
+Mathlib expresses antilinearity through `starRingEnd`-semilinear maps, not a
+conjugate-space type synonym, so there is no counterpart for
+`Conj E := E` with a conjugated scalar action and inner product.  (`TraceClass`
+matches 39 Mathlib files, but every hit is `registerTraceClass` — tactic tracing.
+A name-only grep reads that as operator-ideal support; it is not.)
+
+*2. The donor set is split by authorship, and that decides what may be relocated
+versus what must be ported.*  `Authors:` lines in the transitive closure:
+
+| file | author | status |
+|---|---|---|
+| `Spaces/Tensor/HilbertSchmidt.lean` (626) | Jon Crall, GPT-5.6 | **ours** — relocate per §S0.3 |
+| `Spaces/Tensor/HilbertSchmidt{GeneratorBridge,Flow}.lean` | Jon Crall, GPT-5.6 | **ours** |
+| `Spaces/Tensor/HilbertSchmidtSpectralGap.lean` | Bornemann + Crall | **mixed** |
+| `Spaces/Tensor/{Map,Hilbert,Basis,Power,PowerInner,PowerCongr}.lean` | Adam Bornemann | donor |
+| `SpectralTheory/Antilinear/{ConjugateSpace,Conjugation}.lean` | Adam Bornemann | donor |
+
+So the HS tensor object is ours, but it *rests on* third-party donor material —
+which per the plan means coordinate-and-port, not relocate.
+
+*3. The transitive closure is 21,581 lines, and one incidental import causes
+96% of it.*  `HilbertSchmidt.lean` has four Spectra imports; their individual
+closures are:
+
+| import | modules | lines | uses in the file body |
+|---|---:|---:|---|
+| `Spaces.Tensor.Map` | 2 | 601 | load-bearing (`HilbertTensor` ×23) |
+| `SpectralTheory.Antilinear.ConjugateSpace` | 1 | 152 | load-bearing (`Conj` ×92) |
+| `Operator.AdjointClosure` | 4 | 912 | **none — import line only** |
+| `QuantumMechanics.BornRule.Joint.Basic` | 86 | 20,354 | **none — import line only** |
+
+**If the two unused imports drop, the donor material this lane must port falls
+from 21,581 lines to ~753.**  That is the difference between "coordinate a
+multi-thousand-line port with Spectra's author" and "port two small Bornemann
+modules".  It is not yet proven: a Lean import can supply *instances* used
+implicitly, so zero name references does not establish removability.  The
+empirical test is free and belongs in this lane — relocate `HilbertSchmidt.lean`
+out of `vendor/` without those two imports and compile.  **Do that before
+sizing anything else here.**
+
 **New ForTauCeti modules:** under
 `ForTauCeti/Analysis/InnerProductSpace/HilbertSchmidt/`.
 
