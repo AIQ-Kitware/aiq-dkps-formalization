@@ -1,13 +1,29 @@
 # Remaining work tracker
 
-Fresh as of 2026-06-14 (Opus). The active phase is the **Mathlib-readiness pass**:
-getting the strong staged candidates into *mechanically-droppable-into-a-PR*
-shape. Cross-refs: `mathlib-candidates.md` (candidate dossiers),
-`prep_mathlib_review_and_readiness.md` (the readiness audit),
-`pr-decisions.md` (R6 decisions awaiting sign-off, with recommendations),
-`spectral-pr-decomposition.md` (spectral PR plan), `acharyya-plan.md`
-(formalization-phase map — that phase is complete), `historical/` (archived
-completed-phase docs).
+> **Read this banner before the body.** The header below described a
+> **Mathlib-readiness pass**. That track is **closed and is not resuming.**
+> Since 2026-07-24 the repository runs the **dual-track Tau Ceti policy** in
+> `AGENTS.md`: the primary track polishes paper-independent foundations into
+> `ForTauCeti`.
+>
+> **The readiness work itself was not wasted.** Tau Ceti holds a comparable bar
+> — accepted roadmap target, one topic per PR, green build, standard axiom
+> allowlist — so the statement-clarity, API-shape and reviewer-objection
+> analysis transfers; only the destination changed. It is retargeted in
+> `upstream-readiness-audit.md`.
+>
+> For what is actually in flight, read
+> `tauceti-adaptation-and-spectra-extraction.md` (roadmap and acceptance gates)
+> and `../../dev/LANES.md` (who holds what right now). The R-numbered items
+> below remain a correct record of the readiness work and its results; read them
+> as inventory, not as the current plan.
+
+Originally fresh as of 2026-06-14 (Opus), then extended in place. Cross-refs:
+`mathlib-candidates.md` (candidate dossiers), `upstream-readiness-audit.md` (the
+readiness audit), `pr-decisions.md` (R6 decisions awaiting sign-off, with
+recommendations), `spectral-pr-decomposition.md` (spectral PR plan),
+`acharyya-plan.md` (formalization-phase map — that phase is complete),
+`historical/` (archived completed-phase docs).
 
 ## Update 2026-07-18 -- infinite-dimensional approximation numbers
 
