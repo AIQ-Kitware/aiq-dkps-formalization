@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
-import DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Abstract.BoundedInverseRealization
+import DavisKahan.SpectralTheory.FormMethod.BoundedInverseRealization
 import Mathlib.Tactic
 
 /-!
@@ -56,6 +56,7 @@ def SequentiallyCompactGraphEmbedding
     ∃ phi : ℕ → ℕ, StrictMono phi ∧
       CauchySeq (fun n => ((x (phi n) : A.domain) : H))
 
+omit [CompleteSpace H] in
 /-- A sum-of-squares graph bound gives a uniform bound on operator values. -/
 theorem operator_values_bounded_of_graph_bound
     (A : DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := H))
@@ -71,6 +72,7 @@ theorem operator_values_bounded_of_graph_bound
     exact hle.trans (le_max_left _ _)
   exact Real.le_sqrt_of_sq_le hsquare
 
+omit [CompleteSpace H] in
 /-- A sum-of-squares graph bound gives a uniform bound on ambient values. -/
 theorem ambient_values_bounded_of_graph_bound
     (A : DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := H))

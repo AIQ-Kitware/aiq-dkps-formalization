@@ -11,7 +11,7 @@ it is the exact bounded-to-unbounded bridge used by variational resolvents.
 The original and adapted files are Apache-2.0 licensed.
 -/
 
-import DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Abstract.PositiveSurjectiveCriterion
+import DavisKahan.SpectralTheory.FormMethod.PositiveSurjectiveCriterion
 import ForMathlib.Analysis.InnerProductSpace.CoerciveUnit
 import Mathlib.Tactic
 
@@ -80,6 +80,7 @@ noncomputable def rangeInverse (R : H →L[ℂ] H)
     inverseDomain R →ₗ[ℂ] H :=
   (rangeEquiv R hinj).symm.toLinearMap
 
+/-- The range equivalence acts as the underlying vector. -/
 @[simp] theorem rangeEquiv_coe_apply
     (R : H →L[ℂ] H) (hinj : Function.Injective R) (x : H) :
     ((rangeEquiv R hinj x : inverseDomain R) : H) = R x := by
@@ -163,11 +164,14 @@ noncomputable def inverseClosedOperator
     simpa [inverseDomain, DenseRange, LinearMap.coe_range] using hdense
   closed_graph := isClosed_graph_rangeInverse R hinj
 
+/-- The domain of the constructed inverse is the range of `R`. -/
 @[simp] theorem inverseClosedOperator_domain
     (R : H →L[ℂ] H) (hR : IsSelfAdjoint R)
     (hinj : Function.Injective R) :
     (inverseClosedOperator R hR hinj).domain = inverseDomain R := rfl
 
+/-- The constructed inverse undoes `R`; this is the defining property of the unbounded inverse
+of a bounded injective operator. -/
 @[simp] theorem inverseClosedOperator_apply
     (R : H →L[ℂ] H) (hR : IsSelfAdjoint R)
     (hinj : Function.Injective R)

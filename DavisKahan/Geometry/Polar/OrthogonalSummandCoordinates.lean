@@ -59,18 +59,21 @@ noncomputable def orthogonalCoordinatesInv
       RingHom.id_apply]
     module
 
+/-- The inverse coordinate map recombines the two summands. -/
 @[simp] theorem orthogonalCoordinatesInv_apply
     (K : Submodule ℂ H) [K.HasOrthogonalProjection]
     (z : WithLp 2 (K × Kᗮ)) :
     orthogonalCoordinatesInv K z =
       ((WithLp.fst z : K) : H) + ((WithLp.snd z : Kᗮ) : H) := rfl
 
+/-- Recombining the coordinates of a vector returns it. -/
 @[simp] theorem orthogonalCoordinatesInv_coordinates
     (K : Submodule ℂ H) [K.HasOrthogonalProjection] (x : H) :
     orthogonalCoordinatesInv K (orthogonalCoordinates K x) = x := by
   change K.starProjection x + Kᗮ.starProjection x = x
   exact K.starProjection_add_starProjection_orthogonal x
 
+/-- Taking coordinates of a recombined pair returns the pair. -/
 @[simp] theorem orthogonalCoordinates_coordinatesInv
     (K : Submodule ℂ H) [K.HasOrthogonalProjection]
     (z : WithLp 2 (K × Kᗮ)) :
@@ -94,6 +97,7 @@ noncomputable def orthogonalCoordinatesInv
       (Kᗮ).starProjection_eq_self_iff.mpr (WithLp.snd z).property,
       zero_add]
 
+omit [CompleteSpace H] in
 /-- Pythagoras for the coordinate map. -/
 theorem norm_sq_orthogonalCoordinates
     (K : Submodule ℂ H) [K.HasOrthogonalProjection] (x : H) :
@@ -102,6 +106,7 @@ theorem norm_sq_orthogonalCoordinates
   change ‖K.starProjection x‖ ^ 2 + ‖Kᗮ.starProjection x‖ ^ 2 = ‖x‖ ^ 2
   exact (K.norm_sq_eq_add_norm_sq_starProjection x).symm
 
+omit [CompleteSpace H] in
 /-- The coordinate map is norm preserving. -/
 theorem norm_orthogonalCoordinates
     (K : Submodule ℂ H) [K.HasOrthogonalProjection] (x : H) :
@@ -125,10 +130,12 @@ noncomputable def orthogonalDecompositionEquiv
       right_inv := orthogonalCoordinates_coordinatesInv K }
   norm_map' := norm_orthogonalCoordinates K
 
+/-- The decomposition isometry acts by taking coordinates. -/
 @[simp] theorem orthogonalDecompositionEquiv_apply
     (K : Submodule ℂ H) [K.HasOrthogonalProjection] (x : H) :
     orthogonalDecompositionEquiv K x = orthogonalCoordinates K x := rfl
 
+/-- Its inverse acts by recombining them. -/
 @[simp] theorem orthogonalDecompositionEquiv_symm_apply
     (K : Submodule ℂ H) [K.HasOrthogonalProjection]
     (z : WithLp 2 (K × Kᗮ)) :
@@ -144,6 +151,7 @@ noncomputable def orthogonalSumEquiv
     (LinearIsometryEquiv.withLpProdCongr 2 eK ePerp) |>.trans
       (orthogonalDecompositionEquiv L).symm
 
+/-- On the first summand the joined isometry acts by the first factor. -/
 @[simp] theorem orthogonalSumEquiv_apply_mem
     (K L : Submodule ℂ H)
     [K.HasOrthogonalProjection] [L.HasOrthogonalProjection]
@@ -158,6 +166,8 @@ noncomputable def orthogonalSumEquiv
     orthogonalCoordinates, orthogonalCoordinatesInv,
     hfix, hperp, Subtype.coe_eta]
 
+/-- On the orthogonal complement it acts by the second factor.  With the previous lemma this
+pins the joined isometry down summand-wise. -/
 @[simp] theorem orthogonalSumEquiv_apply_mem_orthogonal
     (K L : Submodule ℂ H)
     [K.HasOrthogonalProjection] [L.HasOrthogonalProjection]

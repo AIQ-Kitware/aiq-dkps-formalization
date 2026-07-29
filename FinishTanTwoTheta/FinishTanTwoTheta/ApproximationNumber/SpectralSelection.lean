@@ -11,7 +11,6 @@ import FinishTanTwoTheta.ApproximationNumber.FiniteValueSeparation
 import FinishTanTwoTheta.ApproximationNumber.FiniteValueFibers
 import FinishTanTwoTheta.ApproximationNumber.GramBandPolar
 import FinishTanTwoTheta.OperatorIdeal.StandardInstances
-import DavisKahan.Experimental.Scratch.Section7.InfiniteTanTwoThetaCore
 
 /-!
 # Approximate leading singular families

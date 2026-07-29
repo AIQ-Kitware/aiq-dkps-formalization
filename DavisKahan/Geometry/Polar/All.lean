@@ -7,5 +7,7 @@ import DavisKahan.Geometry.Polar.PolarIsometryFinal
 import DavisKahan.Geometry.Polar.PolarIntertwining
 import DavisKahan.Geometry.Polar.Section3Elementary
 import DavisKahan.Geometry.Polar.Section3Nonacute
+import DavisKahan.Geometry.Polar.OrthogonalSummandCoordinates
+import DavisKahan.Geometry.Polar.TwoProjectionOperatorClassification
 
 /-! # `DavisKahan/Geometry/Polar` -/
