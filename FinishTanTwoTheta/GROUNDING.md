@@ -1,31 +1,24 @@
 # Grounding
 
-The aggregate target imports the local proof modules themselves rather than
-re-exporting only previously compiled aliases.
+The package distinguishes three theorem layers.
 
-The source-facing checks are provided by:
+1. The main Davis--Kahan tree already supplies the finite-dimensional Section 7
+   theorem and the finite-carrier ambient extension.
+2. `paperTanTwoTheta_uiNorm_finite_alternate` duplicates the finite endpoint by
+   a different Riccati/approximation-number route and is retained only as a
+   regression proof.
+3. `paperFaithful_tanTwoTheta_uiNorm` is the actual unrestricted bounded target:
+   arbitrary Hilbert space, no finite carrier, a derived quarter-acute branch,
+   the canonical ambient tangent, and the sharp source-ideal estimate against
+   the full perturbation.
 
-```text
-DavisKahan.Sources.DavisKahan1970.Audits.DoubleAngleTangent
-```
+The unrestricted proof attempt is explicit and admission-free.  The branch
+argument is in `InfiniteQuarterAcute`; the canonical/graph approximation-number
+transport is in `CanonicalTangentBridge`; `PaperFaithful` composes those bridges
+with the existing arbitrary-Hilbert post-branch Riccati/Ky-Fan theorem.
 
-The bounded infinite-dimensional ideal theorem is a repository extension built
-from approximation numbers, the canonical double-angle tangent functional
-calculus, the Riccati identity, Ky Fan domination, and standard Fan dominance.
-
-The unrestricted unbounded ideal statement is not marked grounded.  The valid
-production replacement currently available at that scope is the genuine
-unbounded Sylvester equation with its explicit commutator defect.
-
-## Paper-faithful target status
-
-The maintained source census says that the exact Section 2 / Section 7 endpoint
-is not merely the proved contractive-Riccati-coordinate estimate.  It must begin
-from the fully off-diagonal perturbation and the two reducing spectral splittings,
-derive the strict quarter-turn branch, and prove the sharp arbitrary-Hilbert-space
-source-norm estimate for the full perturbation.
-
-That exact target is now declared as
-`TauCeti.DavisKahan.FinishTanTwoTheta.paperFaithful_tanTwoTheta_uiNorm` in
-`FinishTanTwoTheta.DavisKahan.PaperFaithful`.  Its proof is intentionally `sorry`;
-it is a specification of the remaining theorem, not a grounded completion claim.
+This document does **not** claim completion merely because the source is
+written.  Grounding requires successful compilation of the three modules and
+the aggregate, followed by an axiom audit of
+`paperFaithful_tanTwoTheta_uiNorm`.  Until then the status is “complete proof
+attempt ready for compiler review,” not “proved.”
