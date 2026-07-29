@@ -270,7 +270,7 @@ include hdom hadj in
 theorem riccatiGram_pow_mem_domain (n : ℕ) (x : H.A0.domain) :
     ((riccatiGram X) ^ n) (x : E0) ∈ H.A0.domain := by
   induction n with
-  | zero => simpa using x.property
+  | zero => simp [x.property]
   | succ n ih =>
       have hstep : ((riccatiGram X) ^ (n + 1)) (x : E0) =
           riccatiGram X (((riccatiGram X) ^ n) (x : E0)) := by
@@ -528,8 +528,8 @@ degrees, preserves the first diagonal domain. -/
 theorem riccatiGram_finsetPoly_mem_domain (a : ℕ → 𝕜) (s : Finset ℕ)
     (x : H.A0.domain) :
     (∑ n ∈ s, a n • ((riccatiGram X) ^ n)) (x : E0) ∈ H.A0.domain := by
-  simp only [ContinuousLinearMap.coe_sum', Finset.sum_apply,
-    ContinuousLinearMap.coe_smul', Pi.smul_apply]
+  simp only [FunLike.coe_sum, Finset.sum_apply,
+    FunLike.coe_smul, Pi.smul_apply]
   exact Submodule.sum_mem _ fun n _ =>
     Submodule.smul_mem _ _ (riccatiGram_pow_mem_domain H hdom hadj n x)
 
@@ -541,7 +541,7 @@ difference of two partial sums of a power series is itself covered: that is
 exactly what makes the `A₀`-images of the partial sums Cauchy, which is how
 entire functions of the Gram operator are reached. -/
 theorem norm_riccatiGram_finsetPoly_commutator_le
-    (μ : ℕ → ℝ) (hμ0 : ∀ n, 0 ≤ μ n)
+    (μ : ℕ → ℝ) (_hμ0 : ∀ n, 0 ≤ μ n)
     (hμ : ∀ (n : ℕ) (y : H.A0.domain),
       ‖H.A0 ⟨((riccatiGram X) ^ n) (y : E0),
             riccatiGram_pow_mem_domain H hdom hadj n y⟩ -
@@ -683,7 +683,7 @@ theorem riccatiGram_hasSum_mem_domain
         rw [hr]
         simp only
         rw [hsub, LinearPMap.map_add, hsplit]
-        simp only [ContinuousLinearMap.add_apply]
+        simp only [add_apply]
         abel
       have hbound := norm_riccatiGram_finsetPoly_commutator_le H hdom hadj
         μ hμ0 hμ a (Finset.Ico M N) x
@@ -895,7 +895,7 @@ theorem riccatiGram_resolvent_commutator_eq
       ((1 : E0 →L[𝕜] E0) - riccatiGram X) (H.A0 y) -
         riccatiGramCommutator H X (y : E0) := by
     rw [hxy, LinearPMap.map_sub, hcomm]
-    simp only [ContinuousLinearMap.sub_apply, ContinuousLinearMap.one_apply]
+    simp only [sub_apply, one_apply_eq_self]
     abel
   rw [hA0x, map_sub, hLeft]
   abel
@@ -937,8 +937,8 @@ theorem doubleAngleTangent_sylvester_eq
   rw [doubleAngleTangent_sylvester_pointwise H hdom hric R x (hRmem x),
     riccatiGram_resolvent_commutator_eq H hdom hadj hinv hric hRmem hRight
       hLeft x]
-  simp only [ContinuousLinearMap.coe_comp', Function.comp_apply,
-    ContinuousLinearMap.add_apply, ContinuousLinearMap.sub_apply]
+  simp only [ContinuousLinearMap.coe_comp, Function.comp_apply,
+    add_apply, sub_apply]
   abel
 
 end Powers'
