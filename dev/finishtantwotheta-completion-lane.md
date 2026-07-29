@@ -174,12 +174,97 @@ aim a real proof at.
    `X = diag(x₁,x₂)` with `x₁ ≠ x₂` and `B₀₁ = e₁₂`. The `(1,2)` entry of the
    left side is `2x₁x₂`; of the right side, `0`.
 
-   So the Sylvester route needs the **rotated** (block-diagonalised) diagonal
-   blocks, as in the classical Davis--Kahan tan 2Θ argument, not `A₀` and `A₁`
-   themselves. Establishing that the rotated blocks inherit
-   `SemiboundedAbove _ 0` / `SemiboundedBelow _ d` is then the real content, and
-   it is the same content the bounded proof gets for free. This is the route I
-   would bet on, and it reuses machinery that is already proved and green.
+   **What the Sylvester equation actually is.** I worked the identity out in
+   full rather than guessing. Write `T' := X*X` on `E₀`, `T'' := XX*` on `E₁`,
+   `R := (I-T')⁻¹`, `R'' := (I-T'')⁻¹`, `K := B₀₁X`, `tan2Θ = 2XR`. Two facts:
+
+   * `X` intertwines: `XT' = T''X`, hence `XR = R''X`.
+   * The commutator is bounded. Feeding `z := Xu` into the adjoint Riccati and
+     then eliminating `A₁(Xu)` with the Riccati gives, on `dom A₀`,
+
+     ```
+     A₀T' - T'A₀  =  G  :=  (I + T')K - K*(I + T')          (K* = X*B₁₀)
+     ```
+
+   Then for `u ∈ dom A₀`, using the Riccati at the vector `Ru` and
+   `A₀R - RA₀ = RGR`:
+
+   ```
+   A₁(tan2Θ · u) - tan2Θ · (A₀ u)  =  2[ XRG + XK - B₁₀ ] R u
+   ```
+
+   so `tan2Θ` **does** satisfy `SylvesterEquation A₁ A₀ tan2Θ C` with the
+   explicit **bounded** right-hand side `C = 2(XRG + XK - B₁₀)R`. Collapsing it
+   (`(I+T'')R'' + I = 2R''`) gives the clean form
+
+   ```
+   C  =  -2B₁₀ + 2 R'' D R,      D := 2XB₀₁X - XX*B₁₀ - B₁₀X*X
+                                    =  -(XS + S''X),
+       S  := X*B₁₀ - B₀₁X   (anti-self-adjoint on E₀)
+       S'' := B₁₀X* - XB₀₁  (anti-self-adjoint on E₁)
+   ```
+
+   `D = 0` exactly in the commuting/scalar case, which is why `C = -2B₁₀` looks
+   plausible. **`D ≠ 0` in general**: with `X = diag(x₁,x₂)` and `B₀₁ = e₁₂`,
+   `D₁₂ = 2x₁x₂` and `D₂₁ = -(x₁² + x₂²)`.
+
+   **Consequence — this route is sound but lossy.** `MapsDomainTo A₁ A₀ tan2Θ`
+   holds (`T'` preserves `dom A₀`, and `A₀(T')ⁿ = (T')ⁿA₀ + O(n‖X‖^{2(n-1)})`
+   from the commutator, so the Neumann series for `R` converges in the graph
+   norm and `R` preserves `dom A₀`). So
+   `kyFan_unbounded_sylvester_le_of_semibounded_direct` applies verbatim and
+   yields
+
+   ```
+   d · kyFan_k(tan2Θ)  ≤  kyFan_k(C)  ≤  2·kyFan_k(B₀₁) + 2·kyFan_k(R''DR)
+   ```
+
+   This is a genuine, fully unbounded, arbitrary-ideal theorem with an explicit
+   defect, and it is strictly better than the cosine-denominator surrogate in
+   `DavisKahan/TanTwoTheta/UnboundedIdeal.lean`. It is **not** the sharp
+   theorem: sharpness needs `kyFan_k(C) ≤ 2 kyFan_k(B₀₁)`, and `D ≠ 0` blocks
+   that. Rotating the blocks does not rescue it either — in the scalar case
+   `Ã₀ = A₀ + B₀₁X`, `Ã₁ = A₁ - B₁₀X*` give
+   `Ã₁·tan2Θ - tan2Θ·Ã₀ = -2b(1+x²)/(1-x²)` and the mixed pairs give
+   `-2b/(1-x²)`, none of which is `-2b`. Only the **original** `A₀, A₁` give the
+   sharp right-hand side, and only when `D = 0`.
+
+   Recommendation: land the Sylvester equation and the defect-form estimate as
+   real theorems (they are provable now and reusable), and treat
+   `kyFan_k(R''DR) = 0`-or-absorbable as the remaining sharpness question.
+
+## The seam collapses to a single scalar inequality
+
+This is the most useful thing I found. The four graph-norm clauses are an
+artefact of insisting that the selected scalar be `aᵢ(X)`. Take instead
+
+```
+xᵢ ∈ dom A₀ orthonormal,   sᵢ := ‖X xᵢ‖,   yᵢ := X xᵢ / sᵢ
+```
+
+Then `yᵢ ∈ dom A₁` automatically (domain preservation), and
+
+* `e0ᵢ = X xᵢ - sᵢ yᵢ = 0` **exactly** — both `‖e0ᵢ‖ ≤ ε` and `‖A₁ e0ᵢ‖ ≤ ε`
+  hold trivially, and the whole `A₁` side of the seam disappears;
+* `e1ᵢ = X* yᵢ - sᵢ xᵢ = (T' - sᵢ²) xᵢ / sᵢ`, and note `sᵢ² = ⟪T'xᵢ, xᵢ⟫`, so
+  `e1ᵢ ⊥ xᵢ`.
+
+Replacing `aᵢ` by `sᵢ` costs only a **bounded-norm** bookkeeping step, because
+`t ↦ 2t/(1-t²)` is Lipschitz on `[0,r]` for `r < 1` — the same estimate
+`sum_doubleAngleTangent_le_selected_add_tail` already performs.
+
+So the entire unbounded seam reduces to: *choose orthonormal
+`xᵢ ∈ dom A₀` with*
+
+```
+Re ⟪A₀ xᵢ , (T' - ⟪T'xᵢ, xᵢ⟫) xᵢ⟫  ≤  sᵢ · ε .
+```
+
+One inequality, no graph norms, no defect vectors, no Gram--Schmidt. If it is
+provable, the seam closes; if it is not, that inequality is the precise thing
+to exhibit a counterexample against. Either way it is a far better target than
+the twenty-field structure now in the file, and it is what I would rewrite
+`UnboundedApproximateLeadingSingularFamily` around.
 
 5. **Record it as an open obligation** with an explicit `sorry` so the library
    is green and the debt is visible and greppable. `PROOF_OBLIGATIONS.md`
