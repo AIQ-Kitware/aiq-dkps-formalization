@@ -135,7 +135,7 @@
       "notes": "Finite arbitrary-UI-norm and Hilbert-space operator-norm forms are compiled. The source Hilbert-space arbitrary-UI-norm residual and perturbation statements remain open.",
       "next_action": "Reuse the corrected directed Theorem 6.3 Ky-Fan core for the equal-rank source theorem and add the full perturbation companion.",
       "planned_declarations": [
-        "ForMathlib.DavisKahan.Experimental.Frontier.RemainingSourceSurface.tanTheta_source_ideal"
+        "TauCeti.DavisKahan.Experimental.Frontier.RemainingSourceSurface.tanTheta_source_ideal"
       ]
     },
     {
@@ -721,11 +721,11 @@
       "notes": "A source-facing candidate assembles the continuation-selected reducing branch, unitary transport, strict quarter-acuteness, full-spectrum gap exclusion, and restricted-spectrum separation.  The exact quadratic-form algebra behind part (i) is also proved from an abstract rotated-block decomposition and sine/cosine Pythagoras certificate.  The unrestricted construction from the exact tan(2 Theta) hypotheses, the converse branch characterization, the concrete direct-rotation instantiation of part (i), and parts (ii)--(iii) remain open.",
       "next_action": "Blocked, not merely unfinished. The package does not compile: it needs the operator-valued contour integration API (see blockers). Four named theorems were never written -- see planned_declarations. Only then instantiate the compression certificates with concrete direct-rotation blocks.",
       "declarations_outside_build": [
-        "ForMathlib.DavisKahan1970.Section8.maximalAngle_selectedSpectralSubspaces_lt_pi_div_four",
-        "ForMathlib.DavisKahan1970.Section8.orientedSpectralRepulsionConclusion",
-        "ForMathlib.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_of_rotatedBlockData",
-        "ForMathlib.DavisKahan1970.Section8.theorem8_1_selectedBranch_and_spectralRepulsion",
-        "ForMathlib.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_of_rotatedBlockData"
+        "TauCeti.DavisKahan1970.Section8.maximalAngle_selectedSpectralSubspaces_lt_pi_div_four",
+        "TauCeti.DavisKahan1970.Section8.orientedSpectralRepulsionConclusion",
+        "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_of_rotatedBlockData",
+        "TauCeti.DavisKahan1970.Section8.theorem8_1_selectedBranch_and_spectralRepulsion",
+        "TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_of_rotatedBlockData"
       ]
     },
     {
@@ -749,10 +749,10 @@
       "notes": "The strict selected-branch conclusion is now exposed under explicit perturbation and residual half-gap bridge records. The general continuation machinery behind the conclusion is admission-free. Constructing those bridges from the exact printed half-gap hypotheses, and the Krein replacement step for the residual alternative, remain open.",
       "next_action": "Blocked on the same contour-integration API. Then prove the half-gap spectral enclosure / common-contour constructor and formalize the Krein residual-to-perturbation replacement.",
       "declarations_outside_build": [
-        "ForMathlib.DavisKahan1970.Section8.PerturbationHalfGapBridge",
-        "ForMathlib.DavisKahan1970.Section8.ResidualHalfGapBridge",
-        "ForMathlib.DavisKahan1970.Section8.theorem82_branch_of_residualHalfGapBridge",
-        "ForMathlib.DavisKahan1970.Section8.theorem8_2_perturbationHalfGap_selectedBranch"
+        "TauCeti.DavisKahan1970.Section8.PerturbationHalfGapBridge",
+        "TauCeti.DavisKahan1970.Section8.ResidualHalfGapBridge",
+        "TauCeti.DavisKahan1970.Section8.theorem82_branch_of_residualHalfGapBridge",
+        "TauCeti.DavisKahan1970.Section8.theorem8_2_perturbationHalfGap_selectedBranch"
       ]
     },
     {

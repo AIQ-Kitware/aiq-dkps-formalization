@@ -188,15 +188,26 @@ period when **none of its 87 declarations resolved**. The probe compiles a
 `#check` of every fully-qualified name against `DavisKahan.All` and is the only
 one of the three that answers that question.
 
-It currently reports **78/87**, and its `--check` mode exits non-zero on the
-remainder, so it is a **report-and-review** step rather than a CI gate as it
-stands. The nine that do not resolve are the `DavisKahan1970.Section8.*` names
-backing `DK-8.1-thm` and `DK-8.2-thm`, whose census rows are already marked
-`candidate_under_repair` / `not_compiling`; they live under `Experimental/**`,
-outside the `DavisKahan.All` closure. Before `--check` can gate CI it needs to
-treat a declaration that is unresolved *and* whose row is marked not-compiling
-as expected rather than as a failure. Until then, the drift check above is the
-automatable half — it covers every census name and fails on a rename.
+It currently reports **78/87**. The nine that do not resolve are the
+`DavisKahan1970.Section8.*` names backing `DK-8.1-thm` and `DK-8.2-thm`, which
+live under `Experimental/**`, outside the `DavisKahan.All` closure; their rows
+are marked `candidate_under_repair` / `not_compiling`, so that is the expected
+answer, not a defect.
+
+**Use `--verify`, not `--check`, as the gate.** `--check` exits non-zero on any
+unresolved name and so fails permanently on those nine. `--verify` is the mode
+that understands them: it *derives* each row's verification from what the build
+actually resolves and compares it with the recorded value, treating
+`not_compiling` as a standing judgement — while refusing to let that judgement
+survive its declarations becoming reachable, so a package that gets fixed cannot
+stay under-reported. It currently exits 0 with `all 48 rows agree with the
+build`.
+
+`--sync` writes the derived values back, which is how `verification` and
+`declarations_outside_build` should be maintained: deriving beats
+hand-maintaining, because a recorded status drifts the moment someone moves a
+module and nobody notices. Run it after any namespace move, then re-render the
+markdown view.
 
 ## Declaration-name drift
 
