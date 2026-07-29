@@ -546,3 +546,47 @@ must fall monotonically. It is **15** at the time of writing.
 * The final removal step (drop `[[require]] Spectra` from `lakefile.toml`,
   delete `vendor/Spectra`, complete the provenance ledger). That is S6 and it
   belongs to whoever closes the last lane.
+
+## SR-E: the CFC shortcut does not work, and here is why (edward, 2026-07-29)
+
+Before taking the Borel step, it is natural to ask whether it can be skipped —
+`cfcHom_cayley_intertwines` already landed, and the classical bounded proof of
+Rosenblum needs nothing more than a continuous separating function:
+
+> if `X` intertwines `A` and `B`, it intertwines `f(A)` and `f(B)`; pick `f`
+> continuous with `f = 1` on `spec A` and `f = 0` on `spec B`; then
+> `X = f(A) X = X f(B) = 0`.
+
+**That argument cannot be made to work here, for a specific and checkable
+reason.** The continuous calculus available in this module is the one carried
+through the Cayley transform, so the separating function must be continuous on
+`spec (cayley A) ∪ spec (cayley B)` inside the unit circle. For a self-adjoint
+`A`, `cayley A = (A - i)(A + i)⁻¹` and `(λ - i)/(λ + i) → 1` as `λ → ±∞`.
+So whenever `spec A` is **unbounded**, `1 ∈ spec (cayley A)`, since the spectrum
+of the Cayley transform is the closure of the image.
+
+If both `spec A` and `spec B` are unbounded — the normal situation for the
+unbounded generators this lane is about — then `1` lies in *both* Cayley
+spectra. The two spectra are therefore **not disjoint as subsets of the
+circle**, no function can be `1` on one and `0` on the other and continuous at
+`1`, and Tietze has nothing to extend. Disjointness of `spec A` and `spec B` in
+`ℝ` does not survive the Cayley transform as disjointness of compacta.
+
+**A gap hypothesis does not rescue it.** `GenuinePairwiseSpectrumGap` bounds
+`dist (spec A) (spec B)` below, and that is a statement about the two sets in
+`ℝ`; it says nothing about their behaviour at infinity. The ordered
+Davis--Kahan configuration `spec A ⊆ [b, ∞)`, `spec B ⊆ (-∞, a]` with `a < b`
+is exactly a case where the gap is as clean as it gets and *both* images still
+accumulate at `1`.
+
+So the Borel step is genuinely required, and toothbrush's assessment stands.
+The shortcut is only available when one of the two spectra is bounded, which is
+not a hypothesis any consumer has.
+
+**Consumer note, relevant to sequencing.** Every production consumer reaches
+this result through the `_of_pairwiseSpectrumGap` variants; the bare
+disjointness form is used in exactly one place —
+`DavisKahan/Sylvester/PairwiseHomogeneousUniqueness.lean:103` — as the base the
+gap corollaries are derived from. So the whole Spectra dependency of SR-E rests
+on that single call site, and the consumer swap is one `exact` line once the
+ForTauCeti statement exists. Nothing else in `DavisKahan/**` needs touching.
