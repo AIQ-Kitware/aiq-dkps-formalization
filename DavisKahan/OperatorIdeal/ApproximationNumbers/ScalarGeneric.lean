@@ -375,14 +375,28 @@ noncomputable def toRectangularSymmetricIdealFamily :
     RectangularSymmetricIdealFamily.{u, v} 𝕜 :=
   N.toSymmetricOperatorIdealFamily.toRectangular
 
+/-! Both accessors below read the **canonical** family directly rather than going
+through `toRectangularSymmetricIdealFamily`.  They used to route through the
+historical record, which made every one of the ~28 modules that consume a
+`KyFanDominantIdealFamily` depend on the legacy structure definitionally, even
+though none of them mentions it.  Since `toRectangular` defines exactly
+`Mem A := gauge A ≠ ∞` and `gauge A := (gauge A).toReal`, going direct is
+definitionally the same term — `mem_iff` and `gauge_eq_toReal` below are still
+`Iff.rfl` and `rfl` — so no statement or proof downstream changes meaning.
+
+What *does* change is what these unfold to: `simp only [KyFanDominantIdealFamily.gauge]`
+now exposes `(N.toSymmetricOperatorIdealFamily.gauge A).toReal` instead of a
+`RectangularSymmetricIdealFamily.gauge` application, which is the normal form the
+migration is heading for. -/
+
 /-- Membership in the ideal: the operator has finite ideal gauge. -/
 abbrev Mem (A : E →L[𝕜] F) : Prop :=
-  N.toRectangularSymmetricIdealFamily.Mem A
+  N.toSymmetricOperatorIdealFamily.gauge A ≠ ∞
 
 /-- The ideal gauge, real-valued and meaningful only on members
 (`KyFanDominantIdealFamily.Mem`). -/
 noncomputable abbrev gauge (A : E →L[𝕜] F) : ℝ :=
-  N.toRectangularSymmetricIdealFamily.gauge A
+  (N.toSymmetricOperatorIdealFamily.gauge A).toReal
 
 /-! The two bridges to the canonical gauge.  Deliberately **not** `@[simp]`: they
 rewrite the paper-facing `ℝ` view into the stored `ℝ≥0∞` one, which is the wrong
@@ -405,11 +419,28 @@ them.  `rw` does **not**: it keys on the head symbol, and
 `KyFanDominantIdealFamily.gauge N A` and
 `RectangularSymmetricIdealFamily.gauge N.toRectangularSymmetricIdealFamily A`
 have different ones.  A proof whose goal is stated through these accessors but
-whose supporting lemmas are stated over the underlying ideal — the block
-lemmas in `SinTheta/**` are the usual case — needs one
-`simp only [KyFanDominantIdealFamily.gauge]` before the rewrite.  Five proofs
-needed exactly that when the call sites were repointed; there is no need to
-avoid the accessors on account of it. -/
+whose supporting lemmas are stated over the historical record — the block lemmas
+in `SinTheta/**` are the usual case — has to reconcile the two.
+
+**Reconcile by normalising the hypothesis upward, not the goal downward.**  The
+older idiom was `simp only [KyFanDominantIdealFamily.gauge]`, which unfolded the
+*goal* into whatever `gauge` was defined as.  That only ever worked by accident:
+it depended on `gauge` being defined through the historical record, so repointing
+the accessor at the canonical family broke thirteen proofs across eight files at
+once.  The two lemmas below rewrite the *hypothesis* into the accessor form
+instead, which is stable under any later change to what `gauge` unfolds to, and
+points the same way as the migration. -/
+
+/-- The historical record's gauge is `N.gauge` — the same term, different head
+symbol.  Use this to bring a legacy-stated hypothesis up to the accessor rather
+than unfolding the goal down to the record. -/
+theorem toRectangular_gauge (A : E →L[𝕜] F) :
+    N.toRectangularSymmetricIdealFamily.gauge A = N.gauge A := rfl
+
+/-- The historical record's membership is `N.Mem`; the companion of
+`toRectangular_gauge`. -/
+theorem toRectangular_mem (A : E →L[𝕜] F) :
+    N.toRectangularSymmetricIdealFamily.Mem A = N.Mem A := rfl
 
 /-- Fan dominance in the historical two-part form: majorization of every finite
 Ky Fan gauge carries membership *and* the gauge bound.
@@ -446,25 +477,29 @@ noncomputable def kyFan [HasKyFanApproximationGaugeTriangle.{u, v} 𝕜]
     intro E F _ _ _ _ _ _ A B hmajor
     exact ENNReal.ofReal_le_ofReal (hmajor k)
 
-/-! The next two are stated through the *derived view* rather than through
-`Mem`/`gauge`.  That is deliberate: `simp` keys on the head symbol, and the
-downstream `simpa only [N, kyFan_gauge]` calls arrive with goals that have
-already been unfolded by `simp only [KyFanDominantIdealFamily.gauge]`.  Stating
-them over the accessor would silently stop matching at those sites. -/
+/-! The next two are stated through `Mem`/`gauge`, the accessors.
+
+They used to be stated through the *derived view* instead, for a reason that has
+since expired: downstream `simpa only [N, kyFan_gauge]` calls arrived with goals
+already unfolded by `simp only [KyFanDominantIdealFamily.gauge]`, so an
+accessor-shaped left-hand side would have stopped matching.  Those unfoldings are
+gone — the sites now normalise their hypotheses up to the accessor via
+`toRectangular_gauge` rather than unfolding the goal down to the record — so the
+accessor is the shape that matches, and it is also the shape that survives the
+historical record being deleted. -/
 
 /-- Every bounded operator belongs to the fixed finite Ky Fan family. -/
 @[simp]
 theorem kyFan_mem [HasKyFanApproximationGaugeTriangle.{u, v} 𝕜]
     (k : ℕ) (hk : 0 < k) (K : E →L[𝕜] F) :
-    (kyFan (𝕜 := 𝕜) k hk).toRectangularSymmetricIdealFamily.Mem K :=
+    (kyFan (𝕜 := 𝕜) k hk).Mem K :=
   gauge_kyFanSymmetricIdealFamily_ne_top k hk K
 
 /-- The concrete gauge of the fixed finite Ky Fan family. -/
 @[simp]
 theorem kyFan_gauge [HasKyFanApproximationGaugeTriangle.{u, v} 𝕜]
     (k : ℕ) (hk : 0 < k) (K : E →L[𝕜] F) :
-    (kyFan (𝕜 := 𝕜) k hk).toRectangularSymmetricIdealFamily.gauge K =
-      kyFanApproximationGauge k K :=
+    (kyFan (𝕜 := 𝕜) k hk).gauge K = kyFanApproximationGauge k K :=
   toReal_gauge_kyFanSymmetricIdealFamily k hk K
 
 end KyFanDominantIdealFamily
@@ -508,7 +543,12 @@ theorem mem_and_scaled_gauge_le_of_all_scaled_kyFan_le
     rw [← mul_smul, inv_mul_cancel₀ hd, one_smul] at hinv
     exact hinv
   refine ⟨hA, ?_⟩
-  have hhom := N.toRectangularSymmetricIdealFamily.gauge_smul d hA
+  -- Ascribed to `N.gauge` rather than left at `N.toRectangularSymmetricIdealFamily.gauge`.
+  -- The two are the same term, but only the former shares an atom with the goal now that
+  -- `gauge` reads the canonical family: `linarith` identifies atoms up to *reducible*
+  -- defeq, and `toRectangularSymmetricIdealFamily` is a plain `def`.
+  have hhom : N.gauge (d • A) = ‖d‖ * N.gauge A :=
+    N.toRectangularSymmetricIdealFamily.gauge_smul d hA
   rw [hdnorm] at hhom
   linarith
 
