@@ -65,7 +65,7 @@ theorem opNorm_sylvester_le_of_intervalGap
   let S : F →ₗ[𝕜] F := A - (m : 𝕜) • LinearMap.id
   let T : E →ₗ[𝕜] E := B - (m : 𝕜) • LinearMap.id
   let H : F →ₗ[𝕜] F := TauCeti.abs S
-  let U : F ≃ₗᵢ[𝕜] F := polarUnitary S
+  let U : F ≃ₗᵢ[𝕜] F := choosePolarUnitary S
   let Z : E →ₗ[𝕜] F := U.symm.toLinearMap ∘ₗ X
   let Y : E →ₗ[𝕜] F := U.symm.toLinearMap ∘ₗ C
   have hr : 0 ≤ r := by simp only [r]; linarith
@@ -108,7 +108,7 @@ theorem opNorm_sylvester_le_of_intervalGap
             U.symm (S (X x) - X (T x)) := (map_sub U.symm _ _).symm
         _ = U.symm (C x) := congrArg U.symm hx
     have hSX : U.symm (S (X x)) = H (X x) := by
-      have hp := LinearMap.congr_fun (polar_decomposition_unitary S) (X x)
+      have hp := LinearMap.congr_fun (polar_decomposition_choosePolarUnitary S) (X x)
       change S (X x) = U (H (X x)) at hp
       rw [hp, U.symm_apply_apply]
     change H (X x) - U.symm (X (T x)) = U.symm (C x)
@@ -323,7 +323,7 @@ theorem uiNorm_sylvester_le_of_intervalGap
   let S : F →ₗ[𝕜] F := A - (m : 𝕜) • LinearMap.id
   let T : E →ₗ[𝕜] E := B - (m : 𝕜) • LinearMap.id
   let H : F →ₗ[𝕜] F := TauCeti.abs S
-  let U : F ≃ₗᵢ[𝕜] F := polarUnitary S
+  let U : F ≃ₗᵢ[𝕜] F := choosePolarUnitary S
   let Z : E →ₗ[𝕜] F := U.symm.toLinearMap ∘ₗ X
   let Y : E →ₗ[𝕜] F := U.symm.toLinearMap ∘ₗ C
   have hr : 0 ≤ r := by simp only [r]; linarith
@@ -366,7 +366,7 @@ theorem uiNorm_sylvester_le_of_intervalGap
             U.symm (S (X x) - X (T x)) := (map_sub U.symm _ _).symm
         _ = U.symm (C x) := congrArg U.symm hx
     have hSX : U.symm (S (X x)) = H (X x) := by
-      have hp := LinearMap.congr_fun (polar_decomposition_unitary S) (X x)
+      have hp := LinearMap.congr_fun (polar_decomposition_choosePolarUnitary S) (X x)
       change S (X x) = U (H (X x)) at hp
       rw [hp, U.symm_apply_apply]
     change H (X x) - U.symm (X (T x)) = U.symm (C x)

@@ -8,7 +8,7 @@ import DavisKahan.DoubleAngle.KyFanOrthonormal
 import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
 
 /-!
-# The `tan 2Θ` theorem at every unitary-invariant ideal, infinite dimensions
+# The `tan 2Θ` theorem at every unitary-invariant ideal, finite carrier
 
 The Davis--Kahan 1970 Section 7 tangent-double-angle estimate on an
 arbitrary `RCLike` Hilbert space, for a finite-dimensional invariant-graph
@@ -17,8 +17,17 @@ for `U ⊕ Uᗮ` in the quadratic-form sense, `H` is fully off-diagonal, and
 the graph coordinate `T` of the perturbed invariant subspace is supported
 on `U` with values in `Uᗮ`.
 
-The result is the source's norm scope in the repository's
-infinite-dimensional idiom: for every `k`, the `k`-th Ky Fan
+**Scope, stated plainly:** the *ambient* space may be infinite-dimensional,
+but the *active configuration* may not — `[FiniteDimensional 𝕜 U]` is a
+standing hypothesis, and the proof is a compression to the finite carrier
+`M := U ⊔ T '' U` followed by transport back. This is an ambient-space
+lifting of the finite-dimensional theorem, not the unrestricted
+infinite-dimensional one, which is why the declarations carry
+`_of_finiteDimensional_invariantSubspace` rather than the `_infinite` they
+were originally given.
+
+Within that scope the result is the source's norm statement: for every `k`,
+the `k`-th Ky Fan
 approximation-number prefix of any `tan 2Θ₀` representative is controlled
 by that of `H` with constant two over the form gap, and consequently every
 Fan-dominant unitary-invariant ideal family transports membership of `H`
@@ -127,7 +136,7 @@ space** (finite-dimensional invariant configuration).  Every prefix sum of
 the double-angle tangents of the graph-coordinate approximation numbers is
 controlled by the corresponding approximation-number prefix of the
 off-diagonal perturbation, with the sharp constant two. -/
-theorem kyFan_doubleAngleTangent_offDiagonal_le_infinite
+theorem kyFan_doubleAngleTangent_offDiagonal_le_of_finiteDimensional_invariantSubspace
     (hA : IsSelfAdjoint A) (hH : IsSelfAdjoint H)
     (hAU : ∀ x ∈ U, A x ∈ U)
     (hHU : ∀ x ∈ U, H x ∈ Uᗮ) (hHUperp : ∀ x ∈ Uᗮ, H x ∈ U)
@@ -364,7 +373,7 @@ theorem kyFan_doubleAngleTangent_offDiagonal_le_infinite
 operator between Hilbert spaces whose approximation numbers are the
 double-angle tangents of the graph-coordinate approximation numbers obeys
 the prefix bounds. -/
-theorem kyFan_tanTwoTheta0_offDiagonal_le_infinite
+theorem kyFan_tanTwoTheta0_offDiagonal_le_of_finiteDimensional_invariantSubspace
     {E₂ F₂ : Type*}
     [NormedAddCommGroup E₂] [InnerProductSpace 𝕜 E₂] [CompleteSpace E₂]
     [NormedAddCommGroup F₂] [InnerProductSpace 𝕜 F₂] [CompleteSpace F₂]
@@ -388,7 +397,7 @@ theorem kyFan_tanTwoTheta0_offDiagonal_le_infinite
     unfold kyFanApproximationGauge ContinuousLinearMap.kyFanGauge
     exact Finset.sum_congr rfl fun n _ => htan n
   rw [hgauge]
-  exact kyFan_doubleAngleTangent_offDiagonal_le_infinite hA hH hAU hHU
+  exact kyFan_doubleAngleTangent_offDiagonal_le_of_finiteDimensional_invariantSubspace hA hH hAU hHU
     hHUperp hTmem hTzero hUb hUa hinv hT1 k
 
 /-- **Davis--Kahan 1970, `tan 2Θ` theorem, every Fan-dominant
@@ -396,7 +405,7 @@ unitary-invariant ideal, arbitrary Hilbert space** (finite-dimensional
 invariant configuration).  If the off-diagonal perturbation `H` belongs to
 the ideal, then so does every `tan 2Θ₀` representative, and
 `(b - a) · N(tan 2Θ₀) ≤ 2 · N(H)`. -/
-theorem tanTwoTheta0_offDiagonal_mem_and_gauge_le_infinite
+theorem tanTwoTheta0_offDiagonal_mem_and_gauge_le_of_finiteDimensional_invariantSubspace
     (N : KyFanDominantIdealFamily (𝕜 := 𝕜))
     (hA : IsSelfAdjoint A) (hH : IsSelfAdjoint H)
     (hAU : ∀ x ∈ U, A x ∈ U)
@@ -419,7 +428,7 @@ theorem tanTwoTheta0_offDiagonal_mem_and_gauge_le_infinite
       (b - a) / 2 * kyFanApproximationGauge k tanTwoTheta0 ≤
         kyFanApproximationGauge k H := by
     intro k
-    have h := kyFan_tanTwoTheta0_offDiagonal_le_infinite hA hH hAU hHU
+    have h := kyFan_tanTwoTheta0_offDiagonal_le_of_finiteDimensional_invariantSubspace hA hH hAU hHU
       hHUperp hTmem hTzero hUb hUa hinv hT1 tanTwoTheta0 htan k
     linarith
   obtain ⟨hmem, hgauge⟩ :=

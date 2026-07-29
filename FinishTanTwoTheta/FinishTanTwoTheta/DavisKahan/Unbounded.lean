@@ -34,18 +34,33 @@ open Experimental.ExactSinTheta
 
 noncomputable section
 
-variable {E0 : Type*} [NormedAddCommGroup E0] [InnerProductSpace ℂ E0]
+-- The standard symmetric ideals of `StandardFanDominance` are indexed by a
+-- single universe, so the two Hilbert spaces share one universe here, exactly
+-- as in the bounded sibling file `SharpIdeal`.
+universe u
+
+variable {E0 : Type u} [NormedAddCommGroup E0] [InnerProductSpace ℂ E0]
   [CompleteSpace E0]
-variable {E1 : Type*} [NormedAddCommGroup E1] [InnerProductSpace ℂ E1]
+variable {E1 : Type u} [NormedAddCommGroup E1] [InnerProductSpace ℂ E1]
   [CompleteSpace E1]
 
 /-- Approximate leading singular vectors lying in the two closed-operator
- domains, with both singular residuals small in the corresponding graph norms.
- The graph-norm clauses are exactly what removes the invalid factors
- `‖A0‖` and `‖A1‖` from the bounded stability calculation. -/
+ domains, with both singular residuals controlled against the unbounded blocks.
+
+ The two `_pairing` clauses are exactly what removes the invalid factors
+ `‖A0‖` and `‖A1‖` from the bounded stability calculation.
+
+ **They are deliberately pairings, not graph norms (weakened 2026-07-29).** The
+ consumer, `unboundedStableSingularPair_doubleAngleTangent_le`, uses
+ `‖A₁ e0‖ ≤ ε` only to reach `|Re ⟪A₁ e0, y⟫| ≤ ε`, and `‖A₀ e1‖ ≤ ε` only to
+ reach `|Re ⟪A₀ x, e1⟫| ≤ ε` via symmetry of `A₀`. Demanding the graph norms was
+ strictly stronger than anything used, and provably too strong: see
+ `dev/finishtantwotheta-completion-lane.md` for why no selection can supply
+ them. The public statements `sharp_unbounded_doubleAngleTangentOperator_kyFan`
+ and `sharp_unbounded_standardSymmetricIdeal_scaled` are unchanged. -/
 structure UnboundedApproximateLeadingSingularFamily
-    (H : UnboundedBlockDataPMap (𝕜 := ℂ) (E0 := E0) (E1 := E1))
-    (S : ContractiveReducingGraphSelectionPMap H) (k : ℕ) (ε : ℝ) where
+    (H : UnboundedBlockData (𝕜 := ℂ) (E0 := E0) (E1 := E1))
+    (S : ContractiveReducingGraphSelection H) (k : ℕ) (ε : ℝ) where
   count : ℕ
   count_le : count ≤ k
   right : Fin count → H.A0.domain
@@ -59,22 +74,24 @@ structure UnboundedApproximateLeadingSingularFamily
       S.X ((right i : H.A0.domain) : E0) -
         (S.X.approximationNumber i : ℂ) • ((left i : H.A1.domain) : E1)
   applyDefect_norm : ∀ i, ‖((applyDefect i : H.A1.domain) : E1)‖ ≤ ε
-  applyDefect_apply_norm : ∀ i,
-    ‖H.A1 (applyDefect i)‖ ≤ ε
+  applyDefect_pairing : ∀ i,
+    |RCLike.re ⟪H.A1 (applyDefect i),
+      ((left i : H.A1.domain) : E1)⟫_ℂ| ≤ ε
   adjointDefect : Fin count → H.A0.domain
   adjointDefect_coe : ∀ i,
     ((adjointDefect i : H.A0.domain) : E0) =
       S.X.adjoint ((left i : H.A1.domain) : E1) -
         (S.X.approximationNumber i : ℂ) • ((right i : H.A0.domain) : E0)
   adjointDefect_norm : ∀ i, ‖((adjointDefect i : H.A0.domain) : E0)‖ ≤ ε
-  adjointDefect_apply_norm : ∀ i,
-    ‖H.A0 (adjointDefect i)‖ ≤ ε
+  adjointDefect_pairing : ∀ i,
+    |RCLike.re ⟪H.A0 (right i),
+      ((adjointDefect i : H.A0.domain) : E0)⟫_ℂ| ≤ ε
   tail_small : ∀ n, count ≤ n → n < k → S.X.approximationNumber n ≤ ε
 
 namespace UnboundedApproximateLeadingSingularFamily
 
-variable {H : UnboundedBlockDataPMap (𝕜 := ℂ) (E0 := E0) (E1 := E1)}
-variable {S : ContractiveReducingGraphSelectionPMap H} {k : ℕ} {ε : ℝ}
+variable {H : UnboundedBlockData (𝕜 := ℂ) (E0 := E0) (E1 := E1)}
+variable {S : ContractiveReducingGraphSelection H} {k : ℕ} {ε : ℝ}
 
 @[simp] theorem norm_right
     (F : UnboundedApproximateLeadingSingularFamily H S k ε)
@@ -127,8 +144,8 @@ Schmidt correction preserves orthonormality and all strict inequalities.
 This theorem is deliberately local: it is the new reusable unbounded selection
 result, rather than a reference to an assumed helper. -/
 theorem exists_unboundedApproximateLeadingSingularFamily
-    (H : UnboundedBlockDataPMap (𝕜 := ℂ) (E0 := E0) (E1 := E1))
-    (S : ContractiveReducingGraphSelectionPMap H) (k : ℕ)
+    (H : UnboundedBlockData (𝕜 := ℂ) (E0 := E0) (E1 := E1))
+    (S : ContractiveReducingGraphSelection H) (k : ℕ)
     {ε : ℝ} (hε : 0 < ε) :
     Nonempty (UnboundedApproximateLeadingSingularFamily H S k ε) := by
   classical
@@ -139,7 +156,7 @@ theorem exists_unboundedApproximateLeadingSingularFamily
   have hpreserves := S.preservesDomains
   have hreduces := S.reduces
   have hstrong := S.strongSolvesRiccati
-  have hpoint := (strongSolvesRiccatiPMap_iff_pointwise H S.X).1 hstrong
+  have hpoint := (strongSolvesRiccati_iff_pointwise H S.X).1 hstrong
   -- For each member of the finite ambient family, use density in the graph
   -- norms of `A0` and `A1`; reduction supplies the corresponding adjoint-domain
   -- approximation.  Since the family is finite, choose all tolerances below
@@ -151,32 +168,34 @@ theorem exists_unboundedApproximateLeadingSingularFamily
 
 /-- Error term in the graph-norm stable scalar estimate. -/
 def unboundedStablePairError
-    (H : UnboundedBlockDataPMap (𝕜 := ℂ) (E0 := E0) (E1 := E1))
+    (H : UnboundedBlockData (𝕜 := ℂ) (E0 := E0) (E1 := E1))
     (s ε : ℝ) : ℝ :=
   2 * (2 * ε + 2 * s * ‖H.B01‖ * ε + ‖H.B01‖ * ε ^ 2) /
     (1 - s ^ 2)
 
 /-- Stable equation-(7.6) estimate for closed diagonal blocks.
 
-The two diagonal residuals are estimated with the graph-norm hypotheses.  For
-`A0`, self-adjoint symmetry moves the unbounded operator from the selected
-right vector onto the graph-small adjoint defect. -/
+The two diagonal residuals enter only through the paired quantities
+`Re ⟪A₁ e0, y⟫` and `Re ⟪A₀ x, e1⟫`, which is why those are the hypotheses: no
+norm of a diagonal block appears anywhere, as required, and nothing stronger is
+assumed than the proof consumes.  For `A0`, self-adjoint symmetry is what lets
+the second pairing be read either as `Re ⟪A₀ x, e1⟫` or as `Re ⟪x, A₀ e1⟫`. -/
 theorem unboundedStableSingularPair_doubleAngleTangent_le
-    (H : UnboundedBlockDataPMap (𝕜 := ℂ) (E0 := E0) (E1 := E1))
+    (H : UnboundedBlockData (𝕜 := ℂ) (E0 := E0) (E1 := E1))
     {d s ε : ℝ} (hd0 : 0 ≤ d) (hs0 : 0 ≤ s) (hs1 : s < 1)
     (hε0 : 0 ≤ ε)
     (hA0 : TauCeti.LinearPMap.SemiboundedAbove H.A0 0)
     (hA1 : TauCeti.LinearPMap.SemiboundedBelow H.A1 d)
-    (S : ContractiveReducingGraphSelectionPMap H)
+    (S : ContractiveReducingGraphSelection H)
     {x : H.A0.domain} {y : H.A1.domain}
     {e0 : H.A1.domain} {e1 : H.A0.domain}
     (hxnorm : ‖(x : E0)‖ = 1) (hynorm : ‖(y : E1)‖ = 1)
     (he0 : (e0 : E1) = S.X (x : E0) - (s : ℂ) • (y : E1))
     (he1 : (e1 : E0) = S.X.adjoint (y : E1) - (s : ℂ) • (x : E0))
     (he0norm : ‖(e0 : E1)‖ ≤ ε)
-    (he0apply : ‖H.A1 e0‖ ≤ ε)
+    (he0pair : |RCLike.re ⟪H.A1 e0, (y : E1)⟫_ℂ| ≤ ε)
     (he1norm : ‖(e1 : E0)‖ ≤ ε)
-    (he1apply : ‖H.A0 e1‖ ≤ ε) :
+    (he1pair : |RCLike.re ⟪H.A0 x, (e1 : E0)⟫_ℂ| ≤ ε) :
     d * DavisKahanTheory.doubleAngleTangent s ≤
       2 * (-RCLike.re ⟪(x : E0), H.B01 (y : E1)⟫_ℂ) +
         unboundedStablePairError H s ε := by
@@ -188,24 +207,10 @@ theorem unboundedStableSingularPair_doubleAngleTangent_le
       (s : ℂ) • (x : E0) + (e1 : E0) := by
     rw [he1]
     abel
-  have hA1err : |RCLike.re ⟪H.A1 e0, (y : E1)⟫_ℂ| ≤ ε := by
-    calc
-      |RCLike.re ⟪H.A1 e0, (y : E1)⟫_ℂ| ≤
-          ‖⟪H.A1 e0, (y : E1)⟫_ℂ‖ := RCLike.abs_re_le_norm _
-      _ ≤ ‖H.A1 e0‖ * ‖(y : E1)‖ := norm_inner_le_norm _ _
-      _ ≤ ε * ‖(y : E1)‖ := by gcongr
-      _ = ε := by rw [hynorm, mul_one]
-  have hA0err : |RCLike.re ⟪H.A0 x, (e1 : E0)⟫_ℂ| ≤ ε := by
-    have hsym := H.isSymmetric0 x e1
-    rw [hsym]
-    calc
-      |RCLike.re ⟪(x : E0), H.A0 e1⟫_ℂ| ≤
-          ‖⟪(x : E0), H.A0 e1⟫_ℂ‖ := RCLike.abs_re_le_norm _
-      _ ≤ ‖(x : E0)‖ * ‖H.A0 e1‖ := norm_inner_le_norm _ _
-      _ ≤ ‖(x : E0)‖ * ε := by gcongr
-      _ = ε := by rw [hxnorm, one_mul]
+  have hA1err : |RCLike.re ⟪H.A1 e0, (y : E1)⟫_ℂ| ≤ ε := he0pair
+  have hA0err : |RCLike.re ⟪H.A0 x, (e1 : E0)⟫_ℂ| ≤ ε := he1pair
   obtain ⟨hdom, hpoint⟩ :=
-    (strongSolvesRiccatiPMap_iff_pointwise H S.X).1 S.strongSolvesRiccati
+    (strongSolvesRiccati_iff_pointwise H S.X).1 S.strongSolvesRiccati
   have hXdomEq :
       (⟨S.X (x : E0), hdom x⟩ : H.A1.domain) =
         (s : ℂ) • y + e0 := by
@@ -216,18 +221,19 @@ theorem unboundedStableSingularPair_doubleAngleTangent_le
         RCLike.re ⟪H.A1 ⟨S.X (x : E0), hdom x⟩, (y : E1)⟫_ℂ := by
     have hy := hA1 y
     rw [hynorm, one_pow, mul_one] at hy
-    rw [hXdomEq, map_add, map_smul, inner_add_left, inner_smul_left,
-      Complex.conj_ofReal, ← Complex.real_smul, RCLike.smul_re]
+    rw [hXdomEq, LinearPMap.map_add, LinearPMap.map_smul, inner_add_left,
+      inner_smul_left, Complex.conj_ofReal, ← Complex.real_smul, map_add,
+      RCLike.smul_re]
     have herrlower : -ε ≤ RCLike.re ⟪H.A1 e0, (y : E1)⟫_ℂ :=
       neg_le_of_abs_le hA1err
     nlinarith [mul_le_mul_of_nonneg_left hy hs0]
   have hA0upper :
       RCLike.re ⟪S.X (H.A0 x), (y : E1)⟫_ℂ ≤ ε := by
-    rw [ContinuousLinearMap.adjoint_inner_right, hXadjExpand,
+    rw [← ContinuousLinearMap.adjoint_inner_right, hXadjExpand,
       inner_add_right, inner_smul_right,
-      ← Complex.real_smul, RCLike.smul_re]
+      ← Complex.real_smul, map_add, RCLike.smul_re]
     have hx := hA0 x
-    rw [hxnorm, one_pow, mul_one, mul_zero] at hx
+    rw [hxnorm, one_pow, mul_one] at hx
     have hmain : s * RCLike.re ⟪H.A0 x, (x : E0)⟫_ℂ ≤ 0 :=
       mul_nonpos_of_nonneg_of_nonpos hs0 hx
     have herr : RCLike.re ⟪H.A0 x, (e1 : E0)⟫_ℂ ≤ ε :=
@@ -249,8 +255,8 @@ theorem unboundedStableSingularPair_doubleAngleTangent_le
     calc
       H.A1 ⟨S.X (x : E0), hdom x⟩ -
           S.X (H.A0 x) =
-        (H.B10 (x : E0) +
-            H.A1 ⟨S.X (x : E0), hdom x⟩) -
+        (H.A1 ⟨S.X (x : E0), hdom x⟩ +
+            H.B10 (x : E0)) -
           (H.B10 (x : E0) + S.X (H.A0 x)) := by abel
       _ = (S.X (H.A0 x) +
             S.X (H.B01 (S.X (x : E0)))) -
@@ -317,10 +323,8 @@ theorem unboundedStableSingularPair_doubleAngleTangent_le
         _ = _ := by
               rw [map_add, map_smul, inner_add_left, inner_add_right,
                 inner_add_right, inner_smul_left, inner_smul_right,
-                inner_smul_left, inner_smul_right, Complex.conj_ofReal,
-                ← Complex.real_smul, RCLike.smul_re,
-                ← Complex.real_smul, RCLike.smul_re,
-                ← Complex.real_smul, RCLike.smul_re]
+                inner_smul_left, inner_smul_right, Complex.conj_ofReal]
+              simp only [map_add, ← Complex.real_smul, RCLike.smul_re]
               ring
     rw [inner_sub_left, map_sub, hXterm, hB10real]
     ring
@@ -343,36 +347,48 @@ theorem unboundedStableSingularPair_doubleAngleTangent_le
   have hre : RCLike.re ⟪H.B01 (y : E1), (x : E0)⟫_ℂ =
       RCLike.re ⟪(x : E0), H.B01 (y : E1)⟫_ℂ := inner_re_symm _ _
   rw [hre] at hraw
+  have hne : (1 : ℝ) - s ^ 2 ≠ 0 := ne_of_gt hden
   unfold DavisKahanTheory.doubleAngleTangent unboundedStablePairError
   rw [show d * (2 * s / (1 - s ^ 2)) =
       2 * (d * s) / (1 - s ^ 2) by ring]
-  exact (div_le_div_of_nonneg_right
-    (mul_le_mul_of_nonneg_left hraw (by norm_num : (0 : ℝ) ≤ 2)) hden.le)
+  refine (div_le_div_of_nonneg_right
+    (mul_le_mul_of_nonneg_left hraw (by norm_num : (0 : ℝ) ≤ 2)) hden.le).trans_eq ?_
+  field_simp
 
 /-- Uniform graph-norm error bound on `0 ≤ s ≤ r < 1`. -/
 def uniformUnboundedStablePairError
-    (H : UnboundedBlockDataPMap (𝕜 := ℂ) (E0 := E0) (E1 := E1))
+    (H : UnboundedBlockData (𝕜 := ℂ) (E0 := E0) (E1 := E1))
     (r ε : ℝ) : ℝ :=
   2 * (2 * ε + 2 * r * ‖H.B01‖ * ε + ‖H.B01‖ * ε ^ 2) /
     (1 - r ^ 2)
 
 /-- Pointwise graph-norm errors are controlled by the uniform error. -/
 theorem unboundedStablePairError_le_uniform
-    (H : UnboundedBlockDataPMap (𝕜 := ℂ) (E0 := E0) (E1 := E1))
+    (H : UnboundedBlockData (𝕜 := ℂ) (E0 := E0) (E1 := E1))
     {s r ε : ℝ} (hs0 : 0 ≤ s) (hsr : s ≤ r) (hr1 : r < 1)
     (hε0 : 0 ≤ ε) :
     unboundedStablePairError H s ε ≤ uniformUnboundedStablePairError H r ε := by
   have hr0 : 0 ≤ r := hs0.trans hsr
   have hds : 0 < 1 - s ^ 2 := by nlinarith
   have hdr : 0 < 1 - r ^ 2 := by nlinarith
+  have hB := norm_nonneg H.B01
+  have hsε : 0 ≤ 2 * s * ‖H.B01‖ * ε :=
+    mul_nonneg (mul_nonneg (by linarith) hB) hε0
+  have hquad : 0 ≤ ‖H.B01‖ * ε ^ 2 := mul_nonneg hB (sq_nonneg ε)
+  have hNs : (0 : ℝ) ≤ 2 * (2 * ε + 2 * s * ‖H.B01‖ * ε + ‖H.B01‖ * ε ^ 2) := by
+    linarith
+  have hNle : 2 * (2 * ε + 2 * s * ‖H.B01‖ * ε + ‖H.B01‖ * ε ^ 2) ≤
+      2 * (2 * ε + 2 * r * ‖H.B01‖ * ε + ‖H.B01‖ * ε ^ 2) := by
+    nlinarith [mul_nonneg hB hε0]
+  have hdle : 1 - r ^ 2 ≤ 1 - s ^ 2 := by nlinarith
   unfold unboundedStablePairError uniformUnboundedStablePairError
-  apply (div_le_div_iff₀ hds hdr).2
-  nlinarith [norm_nonneg H.B01]
+  refine (div_le_div_iff₀ hds hdr).2 ?_
+  exact mul_le_mul hNle hdle hdr.le (hNs.trans hNle)
 
 /-- Sum the unbounded stable estimate over a graph-domain approximate family. -/
 theorem selected_unbounded_doubleAngleTangent_le_kyFan_add_error
-    (H : UnboundedBlockDataPMap (𝕜 := ℂ) (E0 := E0) (E1 := E1))
-    (S : ContractiveReducingGraphSelectionPMap H)
+    (H : UnboundedBlockData (𝕜 := ℂ) (E0 := E0) (E1 := E1))
+    (S : ContractiveReducingGraphSelection H)
     {d r ε : ℝ} (hd0 : 0 ≤ d) (hr0 : 0 ≤ r) (hr1 : r < 1)
     (hε0 : 0 ≤ ε)
     (hA0 : TauCeti.LinearPMap.SemiboundedAbove H.A0 0)
@@ -392,13 +408,13 @@ theorem selected_unbounded_doubleAngleTangent_le_kyFan_add_error
     intro i
     have hs0 := S.X.approximationNumber_nonneg i
     have hsr := (S.X.approximationNumber_le_norm i).trans hXr
-    exact (unboundedStableSingularPair_doubleAngleTangent_le H hd0 hs0
+    have hbase := unboundedStableSingularPair_doubleAngleTangent_le H hd0 hs0
       (hsr.trans_lt hr1) hε0 hA0 hA1 S (F.norm_right i) (F.norm_left i)
       (F.applyDefect_coe i) (F.adjointDefect_coe i)
-      (F.applyDefect_norm i) (F.applyDefect_apply_norm i)
-      (F.adjointDefect_norm i) (F.adjointDefect_apply_norm i)).trans
-        (add_le_add_left
-          (unboundedStablePairError_le_uniform H hs0 hsr hr1 hε0) _)
+      (F.applyDefect_norm i) (F.applyDefect_pairing i)
+      (F.adjointDefect_norm i) (F.adjointDefect_pairing i)
+    have huni := unboundedStablePairError_le_uniform H hs0 hsr hr1 hε0
+    linarith
   have hsum := Finset.sum_le_sum fun i (_hi : i ∈ Finset.univ) => hpoint i
   have hcoeff :
       (∑ i : Fin F.count,
@@ -411,14 +427,34 @@ theorem selected_unbounded_doubleAngleTangent_le_kyFan_add_error
     intro i
     simp
   have hlen := kyFanApproximationGauge_mono_length H.B01 F.count_le
-  rw [Finset.mul_sum, Finset.mul_sum] at hsum
-  simpa [Finset.sum_add_distrib, Finset.sum_const, nsmul_eq_mul] using
-    hsum.trans (by nlinarith [hcoeff, hlen])
+  rw [← Finset.mul_sum, Finset.sum_add_distrib, Finset.sum_const,
+    Finset.card_univ, Fintype.card_fin, nsmul_eq_mul, ← Finset.mul_sum] at hsum
+  linarith
+
+/-- Purely arithmetic bookkeeping for the epsilon-removal step.
+
+`U` is the uniform stable-pair error, `P` and `Q` are the two `ε`-free
+coefficients extracted from it, and `cnt`, `sub`, `kk` are the selected count,
+the unselected tail length, and the prefix length.  Isolating the inequality
+keeps the analytic argument free of the linear-arithmetic bookkeeping. -/
+private theorem eps_removal_bound
+    {P Q U d η ε cnt sub kk : ℝ}
+    (hP0 : 0 ≤ P) (hQ0 : 0 ≤ Q) (hd0 : 0 ≤ d) (hε0 : 0 ≤ ε)
+    (hU0 : 0 ≤ U) (hU : U ≤ ε * P)
+    (hcnt0 : 0 ≤ cnt) (hcnt : cnt ≤ kk)
+    (hsub0 : 0 ≤ sub) (hsub : sub ≤ kk) (hkk : 0 ≤ kk)
+    (hchoice : ε * (kk * P + d * kk * Q + 1) ≤ η) :
+    cnt * U + d * sub * (Q * ε) ≤ η := by
+  have h1 : cnt * U ≤ kk * (ε * P) := mul_le_mul hcnt hU hU0 hkk
+  have h2 : d * sub * (Q * ε) ≤ d * kk * (Q * ε) :=
+    mul_le_mul_of_nonneg_right (mul_le_mul_of_nonneg_left hsub hd0)
+      (mul_nonneg hQ0 hε0)
+  nlinarith [hε0]
 
 /-- Sharp unrestricted unbounded Ky Fan theorem. -/
 theorem sharp_unbounded_doubleAngleTangentOperator_kyFan
-    (H : UnboundedBlockDataPMap (𝕜 := ℂ) (E0 := E0) (E1 := E1))
-    (S : ContractiveReducingGraphSelectionPMap H)
+    (H : UnboundedBlockData (𝕜 := ℂ) (E0 := E0) (E1 := E1))
+    (S : ContractiveReducingGraphSelection H)
     {d : ℝ} (hd0 : 0 ≤ d)
     (hA0 : TauCeti.LinearPMap.SemiboundedAbove H.A0 0)
     (hA1 : TauCeti.LinearPMap.SemiboundedBelow H.A1 d)
@@ -426,31 +462,47 @@ theorem sharp_unbounded_doubleAngleTangentOperator_kyFan
     d * kyFanApproximationGauge k
         (TauCeti.FinishTanTwoTheta.doubleAngleTangentOperator S.X S.norm_lt_one) ≤
       2 * kyFanApproximationGauge k H.B01 := by
+  have hXlt : ‖S.X‖ < 1 := S.norm_lt_one
+  have hXnn : (0 : ℝ) ≤ ‖S.X‖ := norm_nonneg _
+  have hB : (0 : ℝ) ≤ ‖H.B01‖ := norm_nonneg _
+  have hkk : (0 : ℝ) ≤ (k : ℝ) := Nat.cast_nonneg k
   let r : ℝ := (‖S.X‖ + 1) / 2
-  have hr0 : 0 ≤ r := by dsimp [r]; positivity
-  have hXr : ‖S.X‖ ≤ r := by dsimp [r]; linarith
-  have hr1 : r < 1 := by dsimp [r]; linarith
+  have hr0 : 0 ≤ r := by dsimp only [r]; linarith
+  have hXr : ‖S.X‖ ≤ r := by dsimp only [r]; linarith
+  have hr1 : r < 1 := by dsimp only [r]; linarith
+  have hden : 0 < 1 - r ^ 2 := by nlinarith
   rw [TauCeti.FinishTanTwoTheta.kyFanApproximationGauge_doubleAngleTangentOperator]
   apply le_of_forall_pos_le_add
   intro η hη
+  have hP0 : (0 : ℝ) ≤ 2 * (2 + 2 * r * ‖H.B01‖ + ‖H.B01‖) / (1 - r ^ 2) :=
+    div_nonneg (by nlinarith) hden.le
+  have hQ0 : (0 : ℝ) ≤ 2 / (1 - r ^ 2) := div_nonneg (by norm_num) hden.le
   let C : ℝ :=
     (k : ℝ) *
       (2 * (2 + 2 * r * ‖H.B01‖ + ‖H.B01‖) / (1 - r ^ 2)) +
       d * (k : ℝ) * (2 / (1 - r ^ 2))
-  have hC0 : 0 ≤ C := by dsimp [C]; positivity
+  have hC0 : 0 ≤ C := by
+    dsimp only [C]
+    have h1 := mul_nonneg hkk hP0
+    have h2 := mul_nonneg (mul_nonneg hd0 hkk) hQ0
+    linarith
   let ε : ℝ := min 1 (η / (C + 1))
   have hC1 : 0 < C + 1 := by linarith
   have hεpos : 0 < ε := by
-    dsimp [ε]
+    dsimp only [ε]
     exact lt_min zero_lt_one (div_pos hη hC1)
   obtain ⟨F⟩ := exists_unboundedApproximateLeadingSingularFamily H S k hεpos
   have hselected := selected_unbounded_doubleAngleTangent_le_kyFan_add_error
     H S hd0 hr0 hr1 hεpos.le hA0 hA1 hXr F
   have hprefix := TauCeti.FinishTanTwoTheta.sum_doubleAngleTangent_le_selected_add_tail
     S.X k hεpos.le hr0 hr1 hXr F.toApproximateLeading
+  have hcountEq : F.toApproximateLeading.count = F.count := rfl
+  rw [hcountEq] at hprefix
   have hcountReal : (F.count : ℝ) ≤ (k : ℝ) := by exact_mod_cast F.count_le
   have hsubReal : ((k - F.count : ℕ) : ℝ) ≤ (k : ℝ) := by
     exact_mod_cast Nat.sub_le k F.count
+  have hcast : ((k - F.count : ℕ) : ℝ) = (k : ℝ) - (F.count : ℝ) := by
+    exact_mod_cast Nat.cast_sub F.count_le
   have hεsq : ε ^ 2 ≤ ε := by
     have hε1 : ε ≤ 1 := min_le_left _ _
     nlinarith
@@ -460,28 +512,52 @@ theorem sharp_unbounded_doubleAngleTangentOperator_kyFan
         2 * kyFanApproximationGauge k H.B01 +
           (F.count : ℝ) * uniformUnboundedStablePairError H r ε +
           d * ((k - F.count : ℕ) : ℝ) * ((2 / (1 - r ^ 2)) * ε) := by
+    rw [hcast]
     have hmul := mul_le_mul_of_nonneg_left hprefix hd0
     nlinarith [hselected]
   have herr :
       (F.count : ℝ) * uniformUnboundedStablePairError H r ε +
           d * ((k - F.count : ℕ) : ℝ) * ((2 / (1 - r ^ 2)) * ε) ≤ η := by
-    have hεchoice : ε * (C + 1) ≤ η := by
+    have hU0 : (0 : ℝ) ≤ uniformUnboundedStablePairError H r ε := by
+      unfold uniformUnboundedStablePairError
+      refine div_nonneg ?_ hden.le
+      have h1 : (0 : ℝ) ≤ 2 * r * ‖H.B01‖ * ε :=
+        mul_nonneg (mul_nonneg (by linarith) hB) hεpos.le
+      have h2 : (0 : ℝ) ≤ ‖H.B01‖ * ε ^ 2 := mul_nonneg hB (sq_nonneg ε)
+      linarith [hεpos.le]
+    have hU : uniformUnboundedStablePairError H r ε ≤
+        ε * (2 * (2 + 2 * r * ‖H.B01‖ + ‖H.B01‖) / (1 - r ^ 2)) := by
+      have hnum : 2 * (2 * ε + 2 * r * ‖H.B01‖ * ε + ‖H.B01‖ * ε ^ 2) ≤
+          ε * (2 * (2 + 2 * r * ‖H.B01‖ + ‖H.B01‖)) := by
+        nlinarith [mul_le_mul_of_nonneg_left hεsq hB]
+      calc uniformUnboundedStablePairError H r ε
+          = 2 * (2 * ε + 2 * r * ‖H.B01‖ * ε + ‖H.B01‖ * ε ^ 2) / (1 - r ^ 2) :=
+            rfl
+        _ ≤ ε * (2 * (2 + 2 * r * ‖H.B01‖ + ‖H.B01‖)) / (1 - r ^ 2) :=
+            div_le_div_of_nonneg_right hnum hden.le
+        _ = ε * (2 * (2 + 2 * r * ‖H.B01‖ + ‖H.B01‖) / (1 - r ^ 2)) :=
+            mul_div_assoc _ _ _
+    have hεchoice : ε * ((k : ℝ) *
+        (2 * (2 + 2 * r * ‖H.B01‖ + ‖H.B01‖) / (1 - r ^ 2)) +
+        d * (k : ℝ) * (2 / (1 - r ^ 2)) + 1) ≤ η := by
       have hmin : ε ≤ η / (C + 1) := min_le_right _ _
-      calc
-        ε * (C + 1) ≤ (η / (C + 1)) * (C + 1) :=
-          mul_le_mul_of_nonneg_right hmin hC1.le
-        _ = η := by field_simp
-    unfold uniformUnboundedStablePairError
-    dsimp [C] at hεchoice ⊢
-    nlinarith [hcountReal, hsubReal, norm_nonneg H.B01]
+      have hstep : ε * (C + 1) ≤ η := by
+        calc
+          ε * (C + 1) ≤ (η / (C + 1)) * (C + 1) :=
+            mul_le_mul_of_nonneg_right hmin hC1.le
+          _ = η := by field_simp
+      dsimp only [C] at hstep
+      exact hstep
+    exact eps_removal_bound hP0 hQ0 hd0 hεpos.le hU0 hU
+      (Nat.cast_nonneg _) hcountReal (Nat.cast_nonneg _) hsubReal hkk hεchoice
   exact hraw.trans (by linarith)
 
 /-- Sharp unbounded endpoint for every maximal or minimal standard symmetric
 ideal generated by a coherent symmetric norming function. -/
 theorem sharp_unbounded_standardSymmetricIdeal_scaled
     (I : TauCeti.FinishTanTwoTheta.StandardSymmetricIdeal)
-    (H : UnboundedBlockDataPMap (𝕜 := ℂ) (E0 := E0) (E1 := E1))
-    (S : ContractiveReducingGraphSelectionPMap H)
+    (H : UnboundedBlockData (𝕜 := ℂ) (E0 := E0) (E1 := E1))
+    (S : ContractiveReducingGraphSelection H)
     {d : ℝ} (hd : 0 < d)
     (hA0 : TauCeti.LinearPMap.SemiboundedAbove H.A0 0)
     (hA1 : TauCeti.LinearPMap.SemiboundedBelow H.A1 d)
@@ -491,13 +567,22 @@ theorem sharp_unbounded_standardSymmetricIdeal_scaled
       I.gauge (((d / 2 : ℝ) : ℂ) •
           TauCeti.FinishTanTwoTheta.doubleAngleTangentOperator S.X S.norm_lt_one) ≤
         I.gauge H.B01 := by
-  apply TauCeti.FinishTanTwoTheta.standard_fanDominance I hB
-  intro k
-  rw [kyFanApproximationGauge_smul, RCLike.norm_ofReal,
-    abs_of_nonneg (by positivity : 0 ≤ d / 2)]
-  have hsharp := sharp_unbounded_doubleAngleTangentOperator_kyFan
-    H S hd.le hA0 hA1 k
-  nlinarith
+  have hfan : ∀ k : ℕ,
+      kyFanApproximationGauge k
+          (((d / 2 : ℝ) : ℂ) •
+            TauCeti.FinishTanTwoTheta.doubleAngleTangentOperator S.X S.norm_lt_one) ≤
+        kyFanApproximationGauge k H.B01.adjoint := by
+    intro k
+    rw [kyFanApproximationGauge_adjoint, kyFanApproximationGauge_smul,
+      Complex.norm_real, Real.norm_eq_abs,
+      abs_of_nonneg (by positivity : (0 : ℝ) ≤ d / 2)]
+    have hsharp := sharp_unbounded_doubleAngleTangentOperator_kyFan
+      H S hd.le hA0 hA1 k
+    linarith
+  obtain ⟨hmem, hgauge⟩ :=
+    TauCeti.FinishTanTwoTheta.standard_fanDominance I (I.mem_adjoint hB) hfan
+  exact ⟨hmem, by
+    rwa [TauCeti.FinishTanTwoTheta.StandardSymmetricIdeal.gauge_adjoint] at hgauge⟩
 
 end
 

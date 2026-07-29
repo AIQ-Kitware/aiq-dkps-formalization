@@ -36,7 +36,7 @@ variable {E F G H : Type v}
 /-- Complex isometric complementary-block theorem routed through the direct
 manuscript-shaped Sylvester engine. -/
 theorem sinTheta_unbounded_complex
-    (N : UnitaryInvariantIdealFamily (𝕜 := ℂ))
+    (N : KyFanDominantIdealFamily (𝕜 := ℂ))
     (D : UnboundedSinThetaData (𝕜 := ℂ) (E := E) (F := F) (G := G))
     (hA : D.A.IsSelfAdjoint)
     (hA₀ : D.A₀.IsSelfAdjoint)
@@ -58,7 +58,7 @@ theorem sinTheta_unbounded_complex
 /-- Exact complex isometric theorem with the directed sine operator used by
 the manuscript surface. -/
 theorem sinTheta_unbounded_exact_complex
-    (N : UnitaryInvariantIdealFamily (𝕜 := ℂ))
+    (N : KyFanDominantIdealFamily (𝕜 := ℂ))
     (D : UnboundedSinThetaData (𝕜 := ℂ) (E := E) (F := F) (G := G))
     (F₀ : H →L[ℂ] E)
     (hA : D.A.IsSelfAdjoint)
@@ -86,7 +86,7 @@ theorem sinTheta_unbounded_exact_complex
 /-- Complex generalized complementary-block theorem for all three manuscript
 gap configurations. -/
 theorem generalizedSinTheta_unbounded_complex
-    (N : UnitaryInvariantIdealFamily (𝕜 := ℂ))
+    (N : KyFanDominantIdealFamily (𝕜 := ℂ))
     (D : UnboundedSinThetaData (𝕜 := ℂ) (E := E) (F := F) (G := G))
     (hA : D.A.IsSelfAdjoint)
     (hA₀ : D.A₀.IsSelfAdjoint)
@@ -120,7 +120,7 @@ theorem generalizedSinTheta_unbounded_complex
 /-- Exact complex generalized theorem for all three manuscript gap
 configurations. -/
 theorem generalizedSinTheta_unbounded_exact_complex
-    (N : UnitaryInvariantIdealFamily (𝕜 := ℂ))
+    (N : KyFanDominantIdealFamily (𝕜 := ℂ))
     (D : UnboundedSinThetaData (𝕜 := ℂ) (E := E) (F := F) (G := G))
     (F₀ : H →L[ℂ] E)
     (hA : D.A.IsSelfAdjoint)
@@ -145,6 +145,55 @@ theorem generalizedSinTheta_unbounded_exact_complex
   simp only [KyFanDominantIdealFamily.gauge]
   rw [hAngle.2]
   exact hBlock.2
+
+/-- Raw partial-map form of the exact complex isometric theorem.
+
+Every hypothesis of the bundled statement is definitionally the raw one at
+`D.toClosed`: `ClosedOperator.IsSelfAdjoint` unfolds to `IsSelfAdjoint` of the
+canonical partial map, `UnboundedSinThetaDataPMap.toClosed` round-trips by `rfl`,
+and `UnboundedSylvesterGap` is a facade for `linearPMap_UnboundedSylvesterGap`.
+So the transfer is a reindexing, not a proof. -/
+theorem linearPMap_sinTheta_unbounded_exact_complex
+    (N : KyFanDominantIdealFamily (𝕜 := ℂ))
+    (D : UnboundedSinThetaDataPMap (𝕜 := ℂ) (E := E) (F := F) (G := G))
+    (F₀ : H →L[ℂ] E)
+    (hA : _root_.IsSelfAdjoint D.A)
+    (hA₀ : _root_.IsSelfAdjoint D.A₀)
+    (hΛ₁ : _root_.IsSelfAdjoint D.Λ₁)
+    (hX : IsometricEmbedding D.X)
+    (hdecomp : OrthogonalExactDecomposition F₀ D.F₁)
+    {δ : ℝ} (hδ : 0 < δ)
+    (hgap : linearPMap_UnboundedSylvesterGap D.A₀ D.Λ₁ δ)
+    (hR : N.Mem D.residual) :
+    N.Mem
+      ((ContinuousLinearMap.id ℂ E - F₀ ∘L F₀.adjoint) ∘L D.X) ∧
+      δ * N.gauge
+        ((ContinuousLinearMap.id ℂ E - F₀ ∘L F₀.adjoint) ∘L D.X)
+        ≤ N.gauge D.residual :=
+  sinTheta_unbounded_exact_complex N D.toClosed F₀ hA hA₀ hΛ₁ hX hdecomp hδ hgap hR
+
+/-- Raw partial-map form of the exact complex generalized theorem.  Transfers
+along `UnboundedSinThetaDataPMap.toClosed` exactly as the isometric twin above. -/
+theorem linearPMap_generalizedSinTheta_unbounded_exact_complex
+    (N : KyFanDominantIdealFamily (𝕜 := ℂ))
+    (D : UnboundedSinThetaDataPMap (𝕜 := ℂ) (E := E) (F := F) (G := G))
+    (F₀ : H →L[ℂ] E)
+    (hA : _root_.IsSelfAdjoint D.A)
+    (hA₀ : _root_.IsSelfAdjoint D.A₀)
+    (hΛ₁ : _root_.IsSelfAdjoint D.Λ₁)
+    (hdecomp : OrthogonalExactDecomposition F₀ D.F₁)
+    {δ ε : ℝ}
+    (hδ : 0 < δ) (hε : 0 < ε)
+    (hframe : LowerFrameBound D.X ε)
+    (hgap : linearPMap_UnboundedSylvesterGap D.A₀ D.Λ₁ δ)
+    (hR : N.Mem D.residual) :
+    N.Mem
+        (directedSinThetaOperator D.X F₀ hframe hε) ∧
+      δ * ε * N.gauge
+          (directedSinThetaOperator D.X F₀ hframe hε)
+        ≤ N.gauge D.residual :=
+  generalizedSinTheta_unbounded_exact_complex
+    N D.toClosed F₀ hA hA₀ hΛ₁ hdecomp hδ hε hframe hgap hR
 
 end Complex
 

@@ -339,6 +339,27 @@ theorem mul_gauge_le_of_all_mul_kyFan_le
   rw [ENNReal.toReal_mul, ENNReal.toReal_ofReal hc.le] at hto
   exact hto
 
+/-- Approximation singular-value prefixes are invariant under adjoint. -/
+theorem approximationPrefix_adjoint
+    {𝕜 : Type u} [RCLike 𝕜]
+    {E F : Type v}
+    [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+    [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
+    (n : ℕ) (A : E →L[𝕜] F) :
+    approximationPrefix n A.adjoint = approximationPrefix n A := by
+  funext i
+  exact approximationSingularValue_adjoint (i : ℕ) A
+
+/-- Prefix source gauges are invariant under adjoint. -/
+theorem prefixGauge_adjoint
+    {𝕜 : Type u} [RCLike 𝕜]
+    {E F : Type v}
+    [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+    [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
+    (N : PaperUnitaryInvariantNorm) (n : ℕ) (A : E →L[𝕜] F) :
+    N.prefixGauge n A.adjoint = N.prefixGauge n A := by
+  rw [prefixGauge, prefixGauge, approximationPrefix_adjoint]
+
 /-- Equality of complete approximation singular-value sequences gives equality
 for every paper-defined norm, including simultaneous ideal membership. -/
 theorem gauge_eq_of_sameApproximationSingularValues
@@ -374,7 +395,7 @@ variable {E : Type v} [NormedAddCommGroup E] [InnerProductSpace ℂ E] [Complete
 /-- Every current ideal family assigns the same membership and gauge to `T`
 and its positive modulus. -/
 theorem modulus_mem_and_gauge_eq
-    (N : UnitaryInvariantIdealFamily (𝕜 := ℂ))
+    (N : KyFanDominantIdealFamily (𝕜 := ℂ))
     {T : E →L[ℂ] E}
     (hT : N.Mem T) :
     N.Mem (ContinuousLinearMap.modulus T) ∧

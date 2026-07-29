@@ -382,7 +382,7 @@ theorem exists_aligned_orthonormalBasis
       rintro _ ⟨i, rfl⟩
       exact (bV (Fin.cast hrankV.symm i)).2
     · rw [finrank_span_eq_card hv0.linearIndependent, Fintype.card_fin, hrankV]
-  let O := polarUnitary (overlapOp hu hv0)
+  let O := choosePolarUnitary (overlapOp hu hv0)
   let v : Fin d → E := fun i =>
     familyIsometry hv0 (O.symm (EuclideanSpace.single i 1))
   have hv : Orthonormal 𝕜 v := by

@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Sylvester.Unbounded.AllGap
+import DavisKahan.SinTheta.Unbounded.AllGap
 import DavisKahan.Sylvester.Gap
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
 
@@ -32,6 +33,7 @@ variable {E F : Type v}
   [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
   [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
 
+omit [CompleteSpace E] [CompleteSpace F] in
 /-- Genuine interval/exterior separation, named for a trial/complementary
 sine-theta application. -/
 theorem trialInterval_complementExterior
@@ -42,6 +44,7 @@ theorem trialInterval_complementExterior
     GenuineUnboundedSylvesterGap A B δ :=
   .intervalExterior hβα hgap
 
+omit [CompleteSpace E] [CompleteSpace F] in
 /-- The trial spectrum lies above the complementary spectrum. -/
 theorem trialAbove_complementBelow
     {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := E)}
@@ -54,6 +57,7 @@ theorem trialAbove_complementBelow
     GenuineUnboundedSylvesterGap A B δ :=
   .leftAboveRightBelow c hA hB
 
+omit [CompleteSpace E] [CompleteSpace F] in
 /-- The trial spectrum lies below the complementary spectrum. -/
 theorem trialBelow_complementAbove
     {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := E)}
@@ -66,6 +70,33 @@ theorem trialBelow_complementAbove
     GenuineUnboundedSylvesterGap A B δ :=
   .leftBelowRightAbove c hA hB
 
+omit [CompleteSpace E] [CompleteSpace F] in
+/-- Raw partial-map form of `trialInterval_complementExterior`. -/
+theorem linearPMap_trialInterval_complementExterior
+    {A : E →ₗ.[ℂ] E} {B : F →ₗ.[ℂ] F}
+    {β α δ : ℝ} (hβα : β ≤ α)
+    (hgap : GenuineUnboundedIntervalExteriorGapPMap A B β α δ) :
+    GenuineUnboundedSylvesterGapPMap A B δ :=
+  .intervalExterior hβα hgap
+
+omit [CompleteSpace E] [CompleteSpace F] in
+/-- Raw partial-map form of `trialAbove_complementBelow`. -/
+theorem linearPMap_trialAbove_complementBelow
+    {A : E →ₗ.[ℂ] E} {B : F →ₗ.[ℂ] F} {δ c : ℝ}
+    (hA : Complex.ofReal ⁻¹' TauCeti.LinearPMap.spectrum A ⊆ Set.Ici (c + δ))
+    (hB : Complex.ofReal ⁻¹' TauCeti.LinearPMap.spectrum B ⊆ Set.Iic c) :
+    GenuineUnboundedSylvesterGapPMap A B δ :=
+  .leftAboveRightBelow c hA hB
+
+omit [CompleteSpace E] [CompleteSpace F] in
+/-- Raw partial-map form of `trialBelow_complementAbove`. -/
+theorem linearPMap_trialBelow_complementAbove
+    {A : E →ₗ.[ℂ] E} {B : F →ₗ.[ℂ] F} {δ c : ℝ}
+    (hA : Complex.ofReal ⁻¹' TauCeti.LinearPMap.spectrum A ⊆ Set.Iic c)
+    (hB : Complex.ofReal ⁻¹' TauCeti.LinearPMap.spectrum B ⊆ Set.Ici (c + δ)) :
+    GenuineUnboundedSylvesterGapPMap A B δ :=
+  .leftBelowRightAbove c hA hB
+
 end GenuineUnboundedSylvesterGap
 
 namespace UnboundedSylvesterGap
@@ -75,6 +106,7 @@ variable {E F : Type v}
   [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
   [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
 
+omit [CompleteSpace E] [CompleteSpace F] in
 /-- Legacy-spectrum interval/exterior separation, named for a
 trial/complementary sine-theta application. -/
 theorem trialInterval_complementExterior
@@ -85,6 +117,7 @@ theorem trialInterval_complementExterior
     UnboundedSylvesterGap A B δ :=
   .intervalExterior hβα hgap
 
+omit [CompleteSpace E] [CompleteSpace F] in
 /-- The trial operator is semibounded above the complementary operator. -/
 theorem trialAbove_complementBelow
     {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := E)}
@@ -95,6 +128,7 @@ theorem trialAbove_complementBelow
     UnboundedSylvesterGap A B δ :=
   .leftAboveRightBelow c hA hB
 
+omit [CompleteSpace E] [CompleteSpace F] in
 /-- The trial operator is semibounded below the complementary operator. -/
 theorem trialBelow_complementAbove
     {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := E)}
@@ -103,6 +137,33 @@ theorem trialBelow_complementAbove
     (hA : SemiboundedAbove A c)
     (hB : SemiboundedBelow B (c + δ)) :
     UnboundedSylvesterGap A B δ :=
+  .leftBelowRightAbove c hA hB
+
+omit [CompleteSpace E] [CompleteSpace F] in
+/-- Raw partial-map form of `trialInterval_complementExterior`. -/
+theorem linearPMap_trialInterval_complementExterior
+    {A : E →ₗ.[𝕜] E} {B : F →ₗ.[𝕜] F}
+    {β α δ : ℝ} (hβα : β ≤ α)
+    (hgap : linearPMap_UnboundedIntervalExteriorGap A B β α δ) :
+    linearPMap_UnboundedSylvesterGap A B δ :=
+  .intervalExterior hβα hgap
+
+omit [CompleteSpace E] [CompleteSpace F] in
+/-- Raw partial-map form of `trialAbove_complementBelow`. -/
+theorem linearPMap_trialAbove_complementBelow
+    {A : E →ₗ.[𝕜] E} {B : F →ₗ.[𝕜] F} {δ c : ℝ}
+    (hA : TauCeti.LinearPMap.SemiboundedBelow A (c + δ))
+    (hB : TauCeti.LinearPMap.SemiboundedAbove B c) :
+    linearPMap_UnboundedSylvesterGap A B δ :=
+  .leftAboveRightBelow c hA hB
+
+omit [CompleteSpace E] [CompleteSpace F] in
+/-- Raw partial-map form of `trialBelow_complementAbove`. -/
+theorem linearPMap_trialBelow_complementAbove
+    {A : E →ₗ.[𝕜] E} {B : F →ₗ.[𝕜] F} {δ c : ℝ}
+    (hA : TauCeti.LinearPMap.SemiboundedAbove A c)
+    (hB : TauCeti.LinearPMap.SemiboundedBelow B (c + δ)) :
+    linearPMap_UnboundedSylvesterGap A B δ :=
   .leftBelowRightAbove c hA hB
 
 end UnboundedSylvesterGap

@@ -95,7 +95,7 @@ The remaining non-experimental references divide as follows:
 | one-unbounded/one-bounded equation and Neumann estimate | generic downstream result | `LinearPMap.UnboundedBoundedSylvesterEquation` embeds the bounded right block without a `ClosedOperator`; `linearPMapSylvester_mem_and_gauge_le_of_unbounded_bound_inverse` takes raw partial maps and equations, and the bounded `GenuineSpectrum` consumer now calls it directly | the historical theorem remains for source-facing callers; migrate those before deleting the bundle-shaped entry point |
 | shifted-inverse predicates and interval/exterior gauge estimate | production consumer migrated | `LinearPMap.{Left,TwoSided}ShiftedInverseBound`, raw `addBounded`, raw Sylvester equations, the raw Neumann theorem, `linearPMap_norm_shift_apply_le_of_form_bounds`, both raw `linearPMap_norm_sylvester_le_of_{intervalExterior,exteriorInterval}` estimates, `linearPMap_exists_bounded_shift_extension`, and `linearPMap_mem_and_gauge_le_of_exteriorLeft_intervalRight` now own the implementation | `ShiftedInverse` and `ShiftedInverseGauge` preserve historical names only as compatibility facades; migrate their source-facing callers before contracting those bundle-shaped entry points |
 | PVM, spectral restriction, cutoff, real-spectrum, and complexification bridges | Spectra/PVM boundary | none yet; depends on Spectra spectral-calculus APIs | retain downstream and list the exact Spectra import at each bridge; not a reason to retain the bundle in unrelated Sylvester or Riccati mathematics |
-| reducing restrictions and Riccati transport | production consumers migrated | `LinearPMap.InvariantSubspace`, `ReducesSubspace` (including orthogonal-complement closure), and `reducingRestriction` now own the complete restriction core: domain/action/map, density/closedness, adjoint-domain, symmetry, and self-adjointness; raw graph rotation exposes its pullback, exact domain, unitary equivalence, and reduction transport over `UnboundedBlockDataPMap`; historical closed-operator theorems delegate to it | the Riccati half is done — see the Riccati row below; the remaining sine-theta consumers are the open half |
+| reducing restrictions and Riccati transport | production consumers migrated | `LinearPMap.InvariantSubspace`, `ReducesSubspace` (including orthogonal-complement closure), and `reducingRestriction` now own the complete restriction core: domain/action/map, density/closedness, adjoint-domain, symmetry, and self-adjointness; raw graph rotation exposes its pullback, exact domain, unitary equivalence, and reduction transport over `UnboundedBlockData`; historical closed-operator theorems delegate to it | the Riccati half is done — see the Riccati row below; the remaining sine-theta consumers are the open half |
 | Riccati transport pullback | **complete** | `LinearPMap.pullbackDomain`, `pullbackDomainToOriginal`, `pullbackLinearMap`, `pullback`, density/closedness, and `UnitaryEquivalent` own the construction and the transport proof outright | `DavisKahan/Riccati/UnboundedTransport.lean` was **deleted** — it was 120 lines of facade with no production consumer at all |
 | Riccati block data and direct sum | **complete** | `UnboundedBlockData` stores partial maps with explicit density, closed-graph and self-adjointness properties, plus `isSymmetric0`/`isSymmetric1` for the estimates that consume symmetry rather than self-adjointness.  `LinearPMap.directSumDomain`, coordinate maps, component action, `directSum`, density and graph closedness own the direct sum; `unboundedOffDiagonalCoupling` and `unboundedBlockOperatorCore` own the block core | the `closedOperatorDirectSum*` facade family and the bundled core are **deleted**; `UnboundedCore.lean` went 279 → 100 lines |
 | Riccati graph reduction | **complete** | `unboundedBlockGraph_invariant_iff_strongRiccatiCore` proves the invariance equivalence over the canonical record; there is no second spelling left to delegate to it | nothing outstanding |
@@ -119,38 +119,370 @@ ForTauCeti --include='*.lean'` returns 3 hits and all 3 are prose — two
 provenance lines in `LinearPMap/Closed.lean` and one docstring sentence in
 `LinearPMap/Sylvester.lean`.  No `ForTauCeti` declaration references the bundle.
 
-**Gate U1.4, second command: not met.**  171 type-position uses of
-`ClosedOperator` survive in production, across 18 modules outside
-`DavisKahan/SpectralTheory/ClosedOperator/**` and `DavisKahan/Experimental/**`:
+**Gate U1.4, second command: not met — and the figure it was stated with is not
+reproducible.**  The previous revision of this section said "171 type-position
+uses across 18 modules" and gave a per-module table, but **never stated the
+command that produced either number**, so nobody could check the gate they were
+being held to.  Both are re-stated here with their measurement.
 
-| module | uses | classification |
-| --- | --- | --- |
-| `Riccati/UnboundedCore.lean` | 32 | un-migrated |
-| `SpectralTheory/ReducingSubspace/Restriction.lean` | 23 | documented facade |
-| `Sylvester/ClosedSylvesterEquation.lean` | 18 | documented facade |
-| `Sources/DavisKahan1970/SineTheta/CommonCore.lean` | 17 | un-migrated |
-| `SinTheta/Natural/Reducing.lean` | 14 | un-migrated |
-| `Riccati/UnboundedTransport.lean` | 13 | un-migrated |
-| `SinTheta/Natural/Examples.lean` | 10 | un-migrated |
-| `Sylvester/PairwiseSpectrumGap.lean` | 8 | un-migrated |
-| `Sources/DavisKahan1970/Sylvester/HilbertSchmidtPairwise.lean` | 8 | un-migrated (complexification-blocked) |
-| `Sylvester/PairwiseHomogeneousUniqueness.lean` | 6 | un-migrated |
-| `Sources/DavisKahan1970/Sylvester/PaperHilbertSchmidt.lean` | 6 | un-migrated |
-| `Sources/DavisKahan1970/Sylvester/HilbertSchmidtDefectFirst.lean` | 4 | un-migrated |
-| `Sources/DavisKahan1970/SineTheta/{CommonDomainTheorems,CommonCoreTheorems}.lean` | 3 + 3 | un-migrated |
-| `Riccati/UnboundedBasic.lean` | 3 | un-migrated |
-| `Sylvester/Unbounded/{Neumann,Equation}.lean`, `ReducingSubspace/RestrictionExtras.lean` | 1 each | un-migrated |
+Raw occurrence count, which anyone can reproduce:
 
-So **41 of the 171 are already compatibility facades over raw proofs** — those
-are deletions, not proofs.  The other 130 are genuine records and source-facing
-data structures that still quantify over the bundle.
+```sh
+grep -rc ClosedOperator --include='*.lean' DavisKahan/ \
+  | grep -v 'DavisKahan/SpectralTheory/ClosedOperator/' \
+  | grep -v 'DavisKahan/Experimental/' | grep -v ':0$'
+```
+
+**744 occurrences across 77 modules** (2026-07-28, after the Riccati
+sweep).  This counts every mention, including docstrings and provenance prose,
+so it is an upper bound rather than the type-position count; it is recorded
+because it is checkable, whereas "171" was not.  Modules at 10 or more:
+
+| module (under `DavisKahan/`) | occurrences |
+| --- | --- |
+| `Interop/Spectra/RealSpectralRestriction.lean` | 104 |
+| `SinTheta/Natural/Bounded.lean` | 52 |
+| `Sources/DavisKahan1970/SineTheta/Symmetric.lean` | 42 |
+| `Sylvester/ClosedSylvesterEquation.lean` | 37 |
+| `SpectralTheory/ReducingSubspace/Restriction.lean` | 27 |
+| `SinTheta/Natural/Reducing.lean` | 27 |
+| `SinTheta/Natural/Examples.lean` | 25 |
+| `Sources/DavisKahan1970/SineTheta/CommonCore.lean` | 22 |
+| `Sylvester/Unbounded/OrderedCutoff.lean` | 19 |
+| `Sources/DavisKahan1970/SineTheta/CommonDomain.lean` | 19 |
+| `Sources/DavisKahan1970/Sylvester/HilbertSchmidtPairwise.lean` | 16 |
+| `SinTheta/Unbounded/Core.lean` | 16 |
+| `Interop/Spectra/SpectralRestrictionOperator.lean` | 15 |
+| `Sylvester/Unbounded/OrderedFromCutoffs.lean` | 13 |
+| `Interop/Spectra/SpectralRestriction.lean` | 13 |
+| `Interop/Spectra/BoundedPerturbationSinTheta.lean` | 13 |
+| `SinTheta/Natural/GapConvenience.lean` | 12 |
+| `Interop/Spectra/UnitaryConjugation.lean` | 12 |
+| `Sylvester/ShiftedInverse.lean` | 10 |
+| `Sylvester/PairwiseSpectrumGap.lean` | 10 |
+| `SinTheta/Specializations.lean` | 10 |
+| `Interop/Spectra/BoundedTruncation.lean` | 10 |
+
+**The Riccati cluster is closed and is no longer in this table.**  The previous
+revision listed `Riccati/UnboundedCore` (32), `Riccati/UnboundedTransport` (13)
+and `Riccati/UnboundedBasic` (3) as the largest un-migrated block.  All three are
+now **0**: `UnboundedTransport.lean` no longer exists, and
+`grep -R ClosedOperator DavisKahan/Riccati` returns nothing — in the declarations
+*and* in the import graph, since `UnboundedBasic` now imports
+`ForTauCeti/Analysis/InnerProductSpace/LinearPMap/Closed.lean` directly rather
+than reaching the bundle through `SpectralTheory/ReducingSubspace/Restriction`.
+
+Two entries above are still **documented facades** rather than genuine records —
+`SpectralTheory/ReducingSubspace/Restriction.lean` and
+`Sylvester/ClosedSylvesterEquation.lean` — i.e. deletions once their callers
+move, not proofs.  `Interop/Spectra/**` (led by `RealSpectralRestriction.lean`)
+sits at the PVM/Borel/real-spectrum boundary that "Explicitly excluded" names and
+is not this lane's to migrate.
 
 **Contractible right now, no new mathematics:**
 
-- `generalizedSinTheta_unbounded_{,exact_}of_genuineIntervalExteriorGap` have no
-  production caller outside `SinTheta/Unbounded/IntervalExterior.lean` itself.
+- `generalizedSinTheta_unbounded_exact_of_genuineIntervalExteriorGap` —
+  **done 2026-07-28 (edward, aiq-gpu): deleted.**  It was not merely
+  caller-free outside its module, it was **dead in the whole repository**,
+  including inside its own module: the raw
+  `linearPMap_generalizedSinTheta_unbounded_exact_of_genuineIntervalExteriorGap`
+  is proved from the *raw* non-exact theorem, never from the bundled one.
 - The `Restriction.lean` and `ClosedSylvesterEquation.lean` facade blocks, once
   their remaining callers move.
+
+**Linter census across the default build (edward, aiq-gpu, 2026-07-28).**
+`lake build` emits **770 warnings**, the largest classes being
+`linter.unusedSectionVars` **214**, `linter.unusedSimpArgs` **162**,
+`linter.unusedVariables` 39, `linter.unusedTactic` 39,
+`linter.unnecessarySimpa` 27, `linter.unreachableTactic` 21,
+`linter.unnecessarySeqFocus` 19.  This is a standing mathlib-quality gap that no
+gate currently covers — `check_dependency_layers.py` and
+`check_declaration_name_drift.py` both pass with all 770 present.
+
+Per-file `unusedSectionVars` concentration (top of the list):
+`Interop/Spectra/HalmosTwoProjections.lean` 26,
+`OperatorIdeal/ApproximationNumbers/Core.lean` 21,
+`SpectralTheory/ReducingSubspace/Restriction.lean` 11,
+`SpectralTheory/Complexification/FunctionalCalculus.lean` 10,
+`OperatorIdeal/ApproximationNumbers/Real/Threshold.lean` 10,
+`SpectralTheory/ClosedOperator/Complexification.lean` 8,
+`FiniteDimensional/DirectRotation/Basic.lean` 8.  A further 11 are in vendored
+`Spectra/**` and are not ours to touch.
+
+The fix is mechanical and local — `omit [instances] in` above the docstring, per
+AGENTS.md placement — so these are cheap lanes for whoever owns each file.
+`SinTheta/Natural/GapConvenience.lean` (12) and
+`Sylvester/ClosedSylvesterEquation.lean` (7) are now at zero.
+
+**Process note, learned the hard way:** gating a lane on `grep -c 'error:'`
+lets warning regressions through.  Six of `GapConvenience.lean`'s twelve were
+introduced by my own gap-convenience twins two lanes earlier and certified
+"green" at the time.  Check `Built <module>` *and* the warning count for the
+module you edited.
+
+**Correction to the blocker map below: it needs a third category, and I found
+that by claiming a target it got wrong (edward, aiq-gpu, 2026-07-28).**  The map
+sorted the surface into *takeable* and *Spectra-gated*.  It called
+`Experimental/InfiniteDimensional/Sylvester/Unbounded.lean` (32 uses) "genuinely
+takeable".  **It is not takeable: it cannot be compiled at all.**
+
+That module is outside the `defaultTargets` closure and sits downstream of
+`Experimental/InfiniteDimensional/Core/Unbounded.lean`, which fails with **30
+errors** on a clean checkout — `ClosedOperator.adjointDomain`,
+`.adjointVector`, `.adjointDomain_dense`, `.adjoint_graph_closed`,
+`.closed_graph_add_relativelyBounded`, `.subScalar`, `.resolvent` no longer
+exist.  Someone removed those fields from the bundle without updating this
+Experimental subtree.  **Verified as pre-existing**, not a regression: I stashed
+my edit and rebuilt the same target at baseline — the same 30 errors.  So no
+migration of anything downstream can be validated, and a green build there is
+currently unobtainable.
+
+**Third category, measured by import closure from `defaultTargets` (not by
+scraping a build log — an incremental build emits no line for up-to-date
+modules, which inflated my first attempt at this number to a meaningless 71%):**
+
+- **120 of 576 bundle uses (20%) are in modules outside the default-build
+  closure**, every one of them under `Experimental/**`.
+- The two largest are exactly `Core/UnboundedSpectral.lean` (38) and
+  `Sylvester/Unbounded.lean` (32) — the pair blocked by the rot above.
+
+**Practical rule this yields:** before claiming any `Experimental/**` target,
+run `lake build <that module>` *first*.  Roughly a fifth of the nominal
+remaining surface is in modules that no gate covers, and some of it is already
+red for reasons unrelated to U1.  The same trap produced the
+`StandardFanDominance.lean` misdiagnosis recorded earlier in this document.
+
+**Blocker map of the remaining bundle surface (edward, aiq-gpu, 2026-07-28).**
+**582 type-position uses across 67 files.**  Only ~30% sit in files that touch
+`Interop/Spectra`.  The point of this map is that the inventory's per-file counts
+do not distinguish takeable work from work gated on another agent's campaign, and
+sizing a lane off them has now produced two wrong claims (both corrected above).
+
+Largest, with their real blocker:
+
+| uses | file | blocker |
+| ---: | --- | --- |
+| 54 | `SpectralTheory/ClosedOperator/Basic.lean` | none — but it *is* the bundle; deleted last by construction |
+| 53 | `SpectralTheory/ClosedOperator/Complexification.lean` | none — genuinely takeable |
+| 52 | `SinTheta/Natural/Bounded.lean` | Spectra (28 refs) |
+| 38 | `Experimental/InfiniteDimensional/Core/UnboundedSpectral.lean` | Spectra (32 refs) |
+| 34 | `Sylvester/ClosedSylvesterEquation.lean` | facade; consumers include `Interop/Spectra` **and** `FinishTanTwoTheta` |
+| 32 | `Experimental/InfiniteDimensional/Sylvester/Unbounded.lean` | none — genuinely takeable |
+| 23 | `SpectralTheory/ReducingSubspace/Restriction.lean` | facade; blocked by `Interop/Spectra/RealSpectralRestriction.lean` (134 Spectra refs) |
+| 19 | `Sources/**/SineTheta/CommonDomain.lean` | none |
+| 19 | `Sources/**/SineTheta/CommonCore.lean` | none — `IsGraphCore` development |
+
+**The two genuinely unblocked large targets are
+`SpectralTheory/ClosedOperator/Complexification.lean` (53) and
+`Experimental/InfiniteDimensional/Sylvester/Unbounded.lean` (32)**, followed by the
+two `Sources/**/SineTheta` common-core files.  Everything else at scale is either
+the bundle itself or waits on the Spectra boundary.
+
+**`SinTheta/Natural` is 91/103 Spectra-gated — retire it as a U1 target
+(edward, aiq-gpu, 2026-07-28).**  The inventory lists this directory as one of
+the largest remaining bundle surfaces, and that number is misleading in a way
+that will cost someone a lane.  Five of its eight files —
+`{Bounded,Examples,Genuine,GenuineGeneralized,Real}.lean` — are built on
+`selfAdjointSpectralRestriction`, `realSelfAdjointSpectralRestriction` and
+`selfAdjointSpectralSubspaceInclusion`, every one of which lives in
+`DavisKahan/Interop/Spectra/**`.  That is jon (namek)'s Spectra-removal campaign
+and is **explicitly outside U1's declared scope**.  Their `ClosedOperator` uses
+are `ofBounded` lifts feeding those endpoints — *call-site adapters*, not records
+carrying the bundle, so they cannot migrate before the Spectra boundary moves.
+Spectra references per file: Bounded 20, Examples 15, Genuine 28,
+GenuineGeneralized 12, Real 37.
+
+**The honest takeable residual in `SinTheta/Natural` is 12 uses, not 88.**  Those
+are `GapConvenience.lean`, now served by six `linearPMap_` twins (three for
+`UnboundedSylvesterGap`, three for `GenuineUnboundedSylvesterGapPMap`).
+`Reducing.lean` is at 0 and no longer imports the bundled foundation at all.
+
+**Duplicate worth a convergence-matrix row, found on the way and not acted on.**
+`GenuineUnboundedSylvesterGap` (`Sylvester/Unbounded/AllGap.lean`) and
+`GenuineUnboundedSylvesterGapPMap` (`SinTheta/Unbounded/AllGap.lean`) are **two
+inductives for one predicate** — same three constructors, and the bundled
+version's hypotheses are *already* written as
+`TauCeti.LinearPMap.spectrum A.toLinearPMap`, so it is definitionally the raw one
+at `A.toLinearPMap`.  This is the identical situation `UnboundedSylvesterGap` was
+in before it was collapsed, and it admits the identical fix: keep the raw
+inductive, demote the bundled spelling to a reducible `abbrev`, alias the three
+constructors.  I did **not** take it — both files sit in jon (namek)'s released
+rows.  Note the `PMap` suffix is also against the convention the Riccati lane
+established (raw is canonical, so it should not be the one carrying a
+qualifier).
+
+**`SinTheta/Natural/Reducing.lean` is off the bundle (edward, aiq-gpu,
+2026-07-28).**  27 `ClosedOperator` occurrences → **0**.  Both problem records,
+the data constructor, and all eight endpoints are stated over `LinearPMap`; the
+constructor now produces `UnboundedSinThetaDataPMap` directly.
+
+**A correction to the standing expectation about this migration.**  The Riccati
+sweep found that retyping off the bundle *drops* hypotheses, because the bundle
+was silently assuming density and closedness the mathematics never used.  **For a
+problem record the opposite holds.**  `UnboundedSinThetaDataPMap` genuinely needs
+density and closedness of `A` and `A₀` — the complementary restriction inherits
+both — so the two structures **gained** four fields (`A_dense`, `A_closed`,
+`A₀_dense`, `A₀_closed`) and the four record-free endpoints gained four binders.
+Nothing was weakened; the obligations were simply always there, discharged
+implicitly by the bundle.  Do not promise hypothesis reduction when migrating a
+*record*; that result belongs to migrating *operations*.
+
+**One conversion boundary is left deliberately, and it is visible in the source.**
+The four complex endpoints route through the raw engines added last lane.  The
+four **real** endpoints call `sinTheta_unbounded_exact_real` /
+`generalizedSinTheta_unbounded_exact_real` (`SinTheta/Real/{Unbounded,
+Generalized}.lean`), which have **no `linearPMap_` twin**, so those four proofs
+carry an explicit `D.toClosed` with a comment saying why.  The records themselves
+are fully raw either way.  Adding the two real twins — same one-line shape as the
+complex ones, since the transfer is definitional — removes the last four
+conversions.  Those two files are inside jon (namek)'s released rows, which is why
+this lane stopped at the boundary rather than crossing it.
+
+**Correction to the two entries above, made the same day and before anyone acted
+on it.**  Both said the four `Sources/**/SineTheta` records route through the
+exact complex engines and are unblocked by their raw twins.  **They do not and
+are not.**  Enumerating every caller of `sinTheta_unbounded_exact_complex` /
+`generalizedSinTheta_unbounded_exact_complex` repo-wide gives exactly three:
+`SinTheta/Canonical.lean` (two sites), `SinTheta/Natural/Reducing.lean` (now on
+the raw twins), and `Sources/**/Audits/Unbounded.lean` (`#check` / `#print
+axioms` only).  So **the genuinely unblocked consumer is
+`SinTheta/Canonical.lean`**, which sits in jon (namek)'s row.
+
+The Sources records have a *different* blocker, and naming it correctly should
+save someone a lane: `SineTheta/CommonCore.lean` (22 uses) is a
+`ClosedOperator.IsGraphCore` development, and `SineTheta/Symmetric.lean` (42
+uses) is `ClosedOperator.ofBounded` composed with the **bundled**
+`ClosedOperator.reducingRestriction`.  Their blocker is therefore
+`SpectralTheory/ReducingSubspace/Restriction.lean` — the 23-use facade U1 already
+classifies as a deletion rather than a proof — not the sin-Θ engines at all.
+
+The mistake came from reading U1's inventory, which lists `SineTheta/CommonCore`
+as one of the largest un-migrated records, and treating "large" as "blocked by
+the same thing".  **The inventory sizes files; it does not group them by
+blocker.**  Enumerate the callers.
+
+Reusable bit worth promoting some day: `linearPMap_isClosed_iff_range_isClosed`
+(currently `private` in this module) reconciles `LinearPMap.IsClosed`, which is
+stated on the graph, with the reducing-restriction API, which states closedness as
+a range.  They are the same set; every consumer of both needs this.
+
+**The manuscript sin-Θ engines have raw twins (edward, aiq-gpu, 2026-07-28).**
+`linearPMap_sinTheta_unbounded_exact_complex` and
+`linearPMap_generalizedSinTheta_unbounded_exact_complex`
+(`SinTheta/Unbounded/LegacyGap.lean`) state the two exact complex endpoints over
+`UnboundedSinThetaDataPMap`.  Additive — neither bundled engine changed.
+
+**Read this together with the gap-predicate entry below: U1's remaining work is a
+*chain*, not a flat count, and the inventory table does not show that.**  The
+table lists `SinTheta/Natural/Reducing.lean` at 14 type-position uses and the four
+`Sources/**/SineTheta` records at 17, as though each could be taken on its own.
+Neither could.  `Natural/Reducing.lean` was blocked by the gap predicates; once
+those were canonical it was still blocked, one level higher, by these two engines;
+only now is it actually takeable.  Each link looked like the whole job from below.
+**When sizing a U1 slice, trace the consumer chain upward to a declaration that is
+already raw before claiming a line count.**
+
+Both twins are *definitional* transfers — each is a single application of its
+bundled counterpart at `D.toClosed`, with no tactic proof at all:
+
+- `ClosedOperator.IsSelfAdjoint A` is *by definition* `IsSelfAdjoint A.toLinearPMap`
+  (`ClosedOperator/Basic.lean:264`), so the three self-adjointness hypotheses pass
+  straight through.
+- `UnboundedSinThetaDataPMap.toClosed` round-trips by `rfl`
+  (`D.toClosed.Λ₁.toLinearPMap = D.Λ₁`), so `X`, `F₁` and `residual` are unchanged.
+- `UnboundedSylvesterGap D.toClosed.A₀ D.toClosed.Λ₁ δ` is *by `rfl`*
+  `linearPMap_UnboundedSylvesterGap D.A₀ D.Λ₁ δ` — **only true since the gap
+  predicates became canonical.**  Before that the twin could not have taken a raw
+  gap hypothesis without a conversion, which is precisely what made this the
+  blocking link rather than a cosmetic one.
+
+Still bundled, for whoever continues the chain: `sinTheta_unbounded_complex` and
+`generalizedSinTheta_unbounded_complex` (the non-exact block forms in the same
+module) have no raw twin, and the `Real` specializations are untouched.
+
+**The gap predicates are now canonical — and they were the keystone (edward,
+aiq-gpu, 2026-07-28).**  `UnboundedSylvesterGap` and
+`UnboundedIntervalExteriorGap` (`DavisKahan/Sylvester/Gap.lean`) are stated over
+`LinearPMap`; the bundled spellings survive as reducible `abbrev`s at
+`A.toLinearPMap`, so **none of the 27 consumer modules changed**.
+
+Why this one mattered more than its size (67 lines) suggests: it is what
+*blocked* the rest of the unbounded sin-Θ cluster.  `SinTheta/Natural/Reducing.lean`
+— U1's second-largest un-migrated record at 14 type-position uses — carries a
+`spectral_gap : UnboundedSylvesterGap A₀ Λ₁ gap` field, so retyping its two
+problem structures over `LinearPMap` without first retyping the gap would have
+forced `.toClosed` round-trips *at the gap field*, reintroducing the bundle in
+the middle of the record that was supposed to leave it.  The same field blocks
+`Sources/**/SineTheta/{CommonCore,CommonDomain,Symmetric,Theorem61Universal}`
+(U1's 17-use entry).  **Those five records can now each migrate independently**;
+that is the point of this change.
+
+The restatement cost no mathematics.  Every component was *already* a reducible
+facade over the canonical layer — `ClosedOperator.realSpectrum`
+(`ClosedOperator/Basic.lean:469`) and `SemiboundedBelow`/`SemiboundedAbove`
+(`ClosedSylvesterEquation.lean:42,47`) — so the raw and bundled predicates are
+definitionally equal and `cases`/`rcases` see the canonical constructors
+directly.
+
+**Two gotchas for whoever repeats this shape.**
+
+1. **`cases` survives a reducible `abbrev`; `rw` does not.**  Demoting the
+   bundled predicate to an `abbrev` left every `cases hgap with | intervalExterior
+   ... =>` working untouched, and the three constructor `alias`es kept the
+   `UnboundedSylvesterGap.«ctor»` references resolving.  But four `rw`s in
+   `SpectralTheory/ClosedOperator/Complexification.lean` broke: `rw` matches on
+   the head symbol, and the goal's head became `LinearPMap.realSpectrum …
+   toLinearPMap` where the rewrite lemma still says `ClosedOperator.realSpectrum`.
+   Reducibility does not help — keyed matching has already failed by then.  Fix
+   is to bind the hypothesis at the facade type first (`have hlamA : lam ∈
+   (complexify A).realSpectrum := hlam`, which typechecks by defeq), making the
+   conversion boundary explicit at the one place it matters.
+2. **`lake build Challenge` fails spuriously on a cold cache.**  It reported 47
+   errors, 23 of them `failed to open file … .ir: Too many open files` — file-
+   descriptor exhaustion from cold-cache parallelism, not proof breakage, and
+   the paths in the message are stale absolute paths from another machine.  The
+   soft `ulimit -n` is already 1048576, so raising it is not the fix; simply
+   **re-running with the warm cache passes** (8827 jobs, 0 errors).  Do not read
+   a first-run `Challenge` failure as a regression without checking whether every
+   error is `Too many open files`.
+
+**Scan: bundled twins superseded by a `linearPMap_` version (edward, aiq-gpu,
+2026-07-28).**  Both deletions this lane made were the same shape — a bundled
+declaration whose `linearPMap_` twin had taken over every caller — so it is worth
+running as a check rather than noticing by accident.  Pair up `X` with
+`linearPMap_X` across `DavisKahan/**` (excluding `Experimental/**`), then count
+references to the bundled `X`.  There are **12 such pairs**; two came back with
+zero references and **one of those was wrong**.
+
+- `exists_bounded_shift_extension` (`Sylvester/ShiftedInverseGauge.lean`) — truly
+  dead, **deleted**.  Every caller, including the rest of its own module, uses
+  `linearPMap_exists_bounded_shift_extension`.
+- `mem_and_gauge_le_of_exteriorLeft_intervalRight` — **false positive, do not
+  delete.**  It is called from `Sources/DavisKahan1970/FullPartIII.lean` through
+  its *fully qualified* name
+  `DavisKahan.Experimental.ExactSinTheta.mem_and_gauge_le_of_exteriorLeft_intervalRight`.
+
+**The blind spot, because it is easy to re-introduce.**  A reference scan that
+ignores matches preceded by `.` — a natural way to avoid unrelated dot-notation —
+also hides every *qualified* reference, and qualified references are exactly how
+`Sources/**` reaches into `Experimental` namespaces.  Deleting on that signal
+would have broken a paper-facing module.  Always grep the bare name including
+dotted occurrences before believing a zero.
+
+**Correction — `generalizedSinTheta_unbounded_of_genuineIntervalExteriorGap` is
+NOT contractible, and was previously listed here as if it were.**  "No
+production caller outside its own module" is true of it and is also not the
+relevant test: the raw endpoint
+`linearPMap_generalizedSinTheta_unbounded_of_genuineIntervalExteriorGap` is
+proved by `apply`ing the bundled theorem at `D.toClosed`, so the module depends
+on it internally.  That delegation exists because the Spectra Sylvester lemmas
+underneath it —
+`SpectraBridge.unbounded_sylvester_mem_and_gauge_le_of_spectra_intervalLeft_exteriorRight`
+and its `exteriorLeft_intervalRight` twin — still take bundled `ClosedOperator`
+arguments.  Contracting the endpoint therefore requires raw `SpectraBridge`
+lemmas, i.e. work inside `Interop/Spectra/**`, which this lane **explicitly
+excludes**.  It is blocked on a boundary the lane does not own, not merely
+un-done, and should not be picked up as a quick win.
 
 **Riccati cluster (edward, aiq-gpu, 2026-07-28) — MIGRATED AND DELETED.**  The
 table above listed `Riccati/UnboundedCore` (32), `Riccati/UnboundedTransport`

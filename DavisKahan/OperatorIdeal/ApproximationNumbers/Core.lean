@@ -54,12 +54,14 @@ noncomputable def approximationSingularValue
     (n : ℕ) (K : E →L[𝕜] F) : ℝ :=
   K.approximationNumber n
 
+omit [CompleteSpace E] [CompleteSpace F] in
 /-- Approximation singular values are nonnegative. -/
 theorem approximationSingularValue_nonneg
     (n : ℕ) (K : E →L[𝕜] F) :
     0 ≤ approximationSingularValue n K := by
   exact_mod_cast K.approximationNumber_nonneg n
 
+omit [CompleteSpace E] [CompleteSpace F] in
 /-- Approximation singular values of the zero map vanish. -/
 @[simp]
 theorem approximationSingularValue_zero_map (n : ℕ) :
@@ -67,6 +69,7 @@ theorem approximationSingularValue_zero_map (n : ℕ) :
   exact (ContinuousLinearMap.approximationNumber_zero
       (𝕜 := 𝕜) (E := E) (F := F) n)
 
+omit [CompleteSpace E] [CompleteSpace F] in
 /-- The zero-based first approximation singular value is the operator norm. -/
 @[simp]
 theorem approximationSingularValue_zero
@@ -74,6 +77,7 @@ theorem approximationSingularValue_zero
     approximationSingularValue 0 K = ‖K‖ := by
   exact K.approximationNumber_index_zero
 
+omit [CompleteSpace E] [CompleteSpace F] in
 /-- Approximation singular values are absolutely homogeneous. -/
 theorem approximationSingularValue_smul
     (n : ℕ) (c : 𝕜) (K : E →L[𝕜] F) :
@@ -81,6 +85,7 @@ theorem approximationSingularValue_smul
       ‖c‖ * approximationSingularValue n K := by
   exact (ContinuousLinearMap.approximationNumber_smul c K n)
 
+omit [CompleteSpace E] [CompleteSpace F] in
 /-- Approximation singular values are unchanged by negation. -/
 @[simp]
 theorem approximationSingularValue_neg
@@ -89,6 +94,7 @@ theorem approximationSingularValue_neg
   have h := approximationSingularValue_smul n (-1 : 𝕜) K
   simpa using h
 
+omit [CompleteSpace E] [CompleteSpace F] in
 /-- Approximation singular values decrease with the index. -/
 theorem approximationSingularValue_antitone
     (K : E →L[𝕜] F) :
@@ -96,12 +102,14 @@ theorem approximationSingularValue_antitone
   intro n m hnm
   exact_mod_cast K.approximationNumber_antitone hnm
 
+omit [CompleteSpace E] [CompleteSpace F] in
 /-- Every approximation singular value is controlled by operator norm. -/
 theorem approximationSingularValue_le_opNorm
     (n : ℕ) (K : E →L[𝕜] F) :
     approximationSingularValue n K ≤ ‖K‖ := by
   exact_mod_cast K.approximationNumber_le_norm n
 
+omit [CompleteSpace E] [CompleteSpace F] in
 /-- Perturbation inequality at a fixed approximation index. -/
 theorem approximationSingularValue_add_le
     (n : ℕ) (K L : E →L[𝕜] F) :
@@ -116,6 +124,7 @@ theorem approximationSingularValue_adjoint
       approximationSingularValue n K := by
   exact (K.approximationNumber_adjoint n)
 
+omit [CompleteSpace E] [CompleteSpace F] in
 /-- Ideal inequality for approximation singular values. -/
 theorem approximationSingularValue_comp_le
     {G : Type vG} {H : Type vH}
@@ -165,6 +174,7 @@ theorem approximationSingularValue_eq_singularValues
     A.singularValues n
   exact hNN
 
+omit [CompleteSpace E] in
 /-- An orthogonal projection does not increase vector norms. -/
 theorem IsOrthogonalProjectionMap.norm_apply_le
     {P : E →L[𝕜] E} (hP : IsOrthogonalProjectionMap P) (x : E) :
@@ -187,6 +197,7 @@ theorem IsOrthogonalProjectionMap.norm_apply_le
     linarith
   nlinarith [sq_nonneg ‖x - P x‖, norm_nonneg (P x), norm_nonneg x]
 
+omit [CompleteSpace E] in
 /-- An orthogonal projection has operator norm at most one. -/
 theorem IsOrthogonalProjectionMap.norm_le_one
     {P : E →L[𝕜] E} (hP : IsOrthogonalProjectionMap P) :
@@ -254,6 +265,7 @@ variable {E₀ : Type vE0} {F₀ : Type vF0}
   [NormedAddCommGroup E₀] [InnerProductSpace 𝕜 E₀] [CompleteSpace E₀]
   [NormedAddCommGroup F₀] [InnerProductSpace 𝕜 F₀] [CompleteSpace F₀]
 
+omit [CompleteSpace F₀] in
 /-- **Cutoff convergence.**  Along a net of orthogonal projections converging strongly to the
 identity, every approximation number of `K ∘L P i` converges to the corresponding
 approximation number of `K`.
@@ -381,9 +393,11 @@ noncomputable def kyFanApproximationGauge
     (k : ℕ) (K : E →L[𝕜] F) : ℝ :=
   K.kyFanGauge k
 
+omit [CompleteSpace E] [CompleteSpace F] in
 theorem kyFanApproximationGauge_eq_kyFanGauge (k : ℕ) (K : E →L[𝕜] F) :
     kyFanApproximationGauge k K = K.kyFanGauge k := rfl
 
+omit [CompleteSpace E] [CompleteSpace F] in
 /-- Finite Ky Fan gauges are unchanged by negation. -/
 @[simp]
 theorem kyFanApproximationGauge_neg (k : ℕ) (K : E →L[𝕜] F) :
@@ -471,6 +485,7 @@ variable {E₀ : Type vE0} {F₀ : Type vF0}
   [NormedAddCommGroup E₀] [InnerProductSpace 𝕜 E₀] [CompleteSpace E₀]
   [NormedAddCommGroup F₀] [InnerProductSpace 𝕜 F₀] [CompleteSpace F₀]
 
+omit [CompleteSpace E₀] [CompleteSpace F₀] in
 theorem approximationSingularValue_restrict_mono
     (T : E₀ →L[𝕜] F₀) (n : ℕ) {U V : Submodule 𝕜 E₀}
     (hUV : U ≤ V) :
@@ -508,6 +523,7 @@ theorem kyFanApproximationGauge_add_le_finiteSource
       kyFanApproximationGauge k A + kyFanApproximationGauge k B :=
   ContinuousLinearMap.kyFanGauge_add_le_of_finiteDimensional_source k A B
 
+omit [CompleteSpace E₀] [CompleteSpace F₀] in
 /-- **The Ky Fan triangle inequality**, at whichever field supplies the min--max lower
 bound.  The localization argument is `kyFanGauge_add_le_of_exists_finiteRestriction`; the
 field enters only through `hlb`. -/
@@ -549,24 +565,28 @@ theorem kyFanApproximationGauge_add_le_complex
   K.kyFanGauge_add_le L k
 end ComplexKyFanTriangle
 
+omit [CompleteSpace E] [CompleteSpace F] in
 /-- The zero-term Ky Fan gauge vanishes. -/
 @[simp]
 theorem kyFanApproximationGauge_zero :
     kyFanApproximationGauge 0 (0 : E →L[𝕜] F) = 0 :=
   (0 : E →L[𝕜] F).kyFanGauge_zero_index
 
+omit [CompleteSpace E] [CompleteSpace F] in
 /-- Every finite Ky Fan gauge vanishes on the zero operator. -/
 @[simp]
 theorem kyFanApproximationGauge_zero_map (k : ℕ) :
     kyFanApproximationGauge k (0 : E →L[𝕜] F) = 0 :=
   ContinuousLinearMap.kyFanGauge_zero k
 
+omit [CompleteSpace E] [CompleteSpace F] in
 /-- The first positive Ky Fan gauge is operator norm. -/
 @[simp]
 theorem kyFanApproximationGauge_one (K : E →L[𝕜] F) :
     kyFanApproximationGauge 1 K = ‖K‖ :=
   K.kyFanGauge_one
 
+omit [CompleteSpace E] [CompleteSpace F] in
 /-- Ky Fan approximation gauges are absolutely homogeneous. -/
 theorem kyFanApproximationGauge_smul
     (k : ℕ) (c : 𝕜) (K : E →L[𝕜] F) :
@@ -574,6 +594,7 @@ theorem kyFanApproximationGauge_smul
       ‖c‖ * kyFanApproximationGauge k K :=
   ContinuousLinearMap.kyFanGauge_smul c K k
 
+omit [CompleteSpace E] [CompleteSpace F] in
 /-- Ky Fan approximation gauges are nonnegative. -/
 theorem kyFanApproximationGauge_nonneg
     (k : ℕ) (K : E →L[𝕜] F) :
@@ -587,6 +608,7 @@ theorem kyFanApproximationGauge_adjoint
       kyFanApproximationGauge k K :=
   K.kyFanGauge_adjoint k
 
+omit [CompleteSpace E] [CompleteSpace F] in
 /-- Two-sided ideal inequality for finite Ky Fan gauges. -/
 theorem kyFanApproximationGauge_comp_le
     {G H : Type v}
@@ -598,12 +620,14 @@ theorem kyFanApproximationGauge_comp_le
       ‖L‖ * kyFanApproximationGauge k K * ‖R‖ :=
   ContinuousLinearMap.kyFanGauge_comp_le L K R k
 
+omit [CompleteSpace E] [CompleteSpace F] in
 /-- The operator norm is the first term of every positive finite Ky Fan gauge. -/
 theorem opNorm_le_kyFanApproximationGauge
     {k : ℕ} (hk : 0 < k) (K : E →L[𝕜] F) :
     ‖K‖ ≤ kyFanApproximationGauge k K :=
   K.opNorm_le_kyFanGauge hk
 
+omit [CompleteSpace E] [CompleteSpace F] in
 /-- A finite Ky Fan gauge is bounded by `k` times operator norm. -/
 theorem kyFanApproximationGauge_le_nat_mul_opNorm
     (k : ℕ) (K : E →L[𝕜] F) :

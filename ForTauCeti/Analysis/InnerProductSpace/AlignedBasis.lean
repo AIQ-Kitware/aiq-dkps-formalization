@@ -166,19 +166,20 @@ theorem sum_overlap_le_sum_singularValues {u v : Fin d → E} (hu : Orthonormal 
         (sum_sq_singularValues_overlapOp hu hv).symm
     _ ≤ ∑ k : Fin d, (overlapOp hu hv).singularValues (k : ℕ) := hcore
 
-/-- **Cross-term identity** (Procrustes/polar).  With `O = polarUnitary
+/-- **Cross-term identity** (Procrustes/polar).  With `O = choosePolarUnitary
 (overlapOp hu hv)`, the aligned rotation `wⱼ = (familyIsometry hv)(O⁻¹ eⱼ)`
 satisfies `⟪uⱼ, wⱼ⟫ = ⟪O⁻¹ eⱼ, |M|(O⁻¹ eⱼ)⟫`, where `M = overlapOp hu hv`.
 Moves `familyIsometry hu` to its adjoint (giving `M`), then `M = O|M|` with `O`
 unitary. -/
 theorem inner_u_aligned_eq {u v : Fin d → E} (hu : Orthonormal 𝕜 u) (hv : Orthonormal 𝕜 v)
     (j : Fin d) :
-    ⟪u j, familyIsometry hv ((polarUnitary (overlapOp hu hv)).symm (EuclideanSpace.single j 1))⟫_𝕜
-      = ⟪(polarUnitary (overlapOp hu hv)).symm (EuclideanSpace.single j 1),
+    ⟪u j, familyIsometry hv ((choosePolarUnitary (overlapOp hu hv)).symm
+          (EuclideanSpace.single j 1))⟫_𝕜
+      = ⟪(choosePolarUnitary (overlapOp hu hv)).symm (EuclideanSpace.single j 1),
           abs (overlapOp hu hv)
-            ((polarUnitary (overlapOp hu hv)).symm (EuclideanSpace.single j 1))⟫_𝕜 := by
+            ((choosePolarUnitary (overlapOp hu hv)).symm (EuclideanSpace.single j 1))⟫_𝕜 := by
   set M := overlapOp hu hv with hM
-  set O := polarUnitary M with hO
+  set O := choosePolarUnitary M with hO
   have hstep : ⟪u j, familyIsometry hv (O.symm (EuclideanSpace.single j 1))⟫_𝕜
       = ⟪EuclideanSpace.single j 1, M (O.symm (EuclideanSpace.single j 1))⟫_𝕜 := by
     rw [← familyIsometry_single hu j, ← LinearIsometry.coe_toLinearMap,
@@ -188,7 +189,7 @@ theorem inner_u_aligned_eq {u v : Fin d → E} (hu : Orthonormal 𝕜 u) (hv : O
   -- `M = O ∘ |M|`, then `O` unitary moves across the inner product.
   have hpolar : M (O.symm (EuclideanSpace.single j 1))
       = O (abs M (O.symm (EuclideanSpace.single j 1))) := by
-    have h1 := LinearMap.congr_fun (polar_decomposition_unitary M)
+    have h1 := LinearMap.congr_fun (polar_decomposition_choosePolarUnitary M)
       (O.symm (EuclideanSpace.single j 1))
     rw [LinearMap.comp_apply] at h1
     rw [h1, hO]
@@ -200,33 +201,33 @@ theorem inner_u_aligned_eq {u v : Fin d → E} (hu : Orthonormal 𝕜 u) (hv : O
 trace of the modulus, `∑ⱼ re⟪uⱼ, wⱼ⟫ = ∑ⱼ σⱼ`, via `W0.1(c)` on the
 `O⁻¹`-image orthonormal basis. -/
 theorem sum_re_inner_u_aligned {u v : Fin d → E} (hu : Orthonormal 𝕜 u) (hv : Orthonormal 𝕜 v) :
-    ∑ j, RCLike.re ⟪u j,
-        familyIsometry hv ((polarUnitary (overlapOp hu hv)).symm (EuclideanSpace.single j 1))⟫_𝕜
+    ∑ j, RCLike.re ⟪u j, familyIsometry hv ((choosePolarUnitary (overlapOp hu hv)).symm
+          (EuclideanSpace.single j 1))⟫_𝕜
       = ∑ k : Fin d, (overlapOp hu hv).singularValues (k : ℕ) := by
   rw [← sum_re_inner_abs_self_eq_sum_singularValues (overlapOp hu hv) finrank_euclideanSpace_fin
-    ((EuclideanSpace.basisFun (Fin d) 𝕜).map (polarUnitary (overlapOp hu hv)).symm)]
+    ((EuclideanSpace.basisFun (Fin d) 𝕜).map (choosePolarUnitary (overlapOp hu hv)).symm)]
   refine Finset.sum_congr rfl fun j _ => ?_
   rw [inner_u_aligned_eq hu hv j, OrthonormalBasis.map_apply, EuclideanSpace.basisFun_apply,
     (isPositive_abs (overlapOp hu hv)).isSymmetric
-      ((polarUnitary (overlapOp hu hv)).symm (EuclideanSpace.single j 1))
-      ((polarUnitary (overlapOp hu hv)).symm (EuclideanSpace.single j 1))]
+      ((choosePolarUnitary (overlapOp hu hv)).symm (EuclideanSpace.single j 1))
+      ((choosePolarUnitary (overlapOp hu hv)).symm (EuclideanSpace.single j 1))]
 
 /-- **Yu–Wang–Samworth aligned-basis bound.** For orthonormal families `u, v`
 (bases of the two `d`-subspaces), the Procrustes-rotated basis
-`wⱼ = (familyIsometry hv)(O⁻¹ eⱼ)` (`O = polarUnitary (overlapOp hu hv)`) obeys
+`wⱼ = (familyIsometry hv)(O⁻¹ eⱼ)` (`O = choosePolarUnitary (overlapOp hu hv)`) obeys
 `∑ⱼ ‖wⱼ − uⱼ‖² ≤ 2 (d − ∑ⱼ ∑ᵢ ‖⟪uᵢ, vⱼ⟫‖²) = 2 ‖sinΘ‖²_F`.  From
 `∑‖wⱼ−uⱼ‖² = 2d − 2∑ cos θ` and the analytic core `overlap ≤ ∑ cos θ`. -/
 theorem sum_sq_norm_aligned_le {u v : Fin d → E} (hu : Orthonormal 𝕜 u) (hv : Orthonormal 𝕜 v) :
-    ∑ j, ‖familyIsometry hv ((polarUnitary (overlapOp hu hv)).symm (EuclideanSpace.single j 1))
-        - u j‖ ^ 2
+    ∑ j, ‖familyIsometry hv ((choosePolarUnitary (overlapOp hu hv)).symm
+          (EuclideanSpace.single j 1)) - u j‖ ^ 2
       ≤ 2 * ((d : ℝ) - ∑ k, ∑ i, ‖⟪u i, v k⟫_𝕜‖ ^ 2) := by
-  have hexp : ∀ j, ‖familyIsometry hv ((polarUnitary (overlapOp hu hv)).symm
+  have hexp : ∀ j, ‖familyIsometry hv ((choosePolarUnitary (overlapOp hu hv)).symm
         (EuclideanSpace.single j 1)) - u j‖ ^ 2
       = 2 - 2 * RCLike.re ⟪u j, familyIsometry hv
-          ((polarUnitary (overlapOp hu hv)).symm (EuclideanSpace.single j 1))⟫_𝕜 := by
+          ((choosePolarUnitary (overlapOp hu hv)).symm (EuclideanSpace.single j 1))⟫_𝕜 := by
     intro j
     rw [norm_sub_sq (𝕜 := 𝕜), (familyIsometry hv).norm_map,
-      (polarUnitary (overlapOp hu hv)).symm.norm_map, PiLp.norm_single 2, norm_one,
+      (choosePolarUnitary (overlapOp hu hv)).symm.norm_map, PiLp.norm_single 2, norm_one,
       hu.1 j, inner_re_symm]
     ring
   rw [Finset.sum_congr rfl fun j _ => hexp j, Finset.sum_sub_distrib, ← Finset.mul_sum,

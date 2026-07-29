@@ -44,7 +44,7 @@ REPO_LEDGER = {
     "ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/MinMax.lean": [
         "theorem le_approximationNumber_of_linearIndependent",
     ],
-    "DavisKahan/Interop/Spectra/ApproximationNumberMinMax.lean": [
+    "ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/MinMaxUpper.lean": [
         "theorem exists_linearIndependent_lowerBound_of_lt_approximationNumber",
     ],
     "DavisKahan/DoubleAngle/KyFanOrthonormal.lean": [

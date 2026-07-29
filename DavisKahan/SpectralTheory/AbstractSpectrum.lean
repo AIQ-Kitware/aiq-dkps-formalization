@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
 import DavisKahan.BoundedOperator.Basic
+import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Closed
 import Mathlib.Analysis.InnerProductSpace.Spectrum
 
 /-!
@@ -43,9 +44,16 @@ variable {𝕜 : Type*} [RCLike 𝕜]
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
 variable {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
 
-/-- Provisional compatibility predicate for a norm-preserving onto operator. -/
-def IsUnitaryOperator (W : E →L[𝕜] E) : Prop :=
-  (∀ x, ‖W x‖ = ‖x‖) ∧ Function.Surjective W
+/-- A norm-preserving onto operator.
+
+This is a reducible spelling of the canonical `TauCeti.LinearPMap.IsUnitaryOperator`,
+kept because the experimental spectral development reaches the predicate through
+this namespace.  It is deliberately **not** a second definition: the two used to
+be independent `def`s with byte-identical bodies, which meant the predicate that
+`TauCeti.LinearPMap.UnitaryEquivalent` is stated over was not the one the
+downstream call sites named. -/
+abbrev IsUnitaryOperator (W : E →L[𝕜] E) : Prop :=
+  TauCeti.LinearPMap.IsUnitaryOperator W
 
 /-- A bounded operator represented as an orthogonal projection. -/
 def IsOrthogonalProjection (P : E →L[𝕜] E) : Prop :=

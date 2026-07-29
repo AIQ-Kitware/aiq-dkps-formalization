@@ -158,14 +158,21 @@ vector space `Fin n → ℝ` regardless of the operators' domains. -/
 theorem extendedGauge_adjoint (N : PaperUnitaryInvariantNorm)
     (A : E →L[𝕜] F) :
     N.extendedGauge A.adjoint = N.extendedGauge A := by
-  have hprefix : ∀ n : ℕ,
-      N.prefixGauge n A.adjoint = N.prefixGauge n A := by
-    intro n
-    have hx : approximationPrefix n A.adjoint = approximationPrefix n A := by
-      funext i
-      exact approximationSingularValue_adjoint (i : ℕ) A
-    simp only [prefixGauge, hx]
-  simp only [extendedGauge, hprefix]
+  simp only [extendedGauge, N.prefixGauge_adjoint]
+
+/-- The canonical ideal of a source norm is adjoint-stable.
+
+Together with `gauge_adjoint` this is what lets a Fan-dominance estimate proved
+against one off-diagonal block be read off against its transpose partner, which
+lives between the *opposite* pair of spaces. -/
+theorem mem_adjoint_iff (N : PaperUnitaryInvariantNorm) (A : E →L[𝕜] F) :
+    N.Mem A.adjoint ↔ N.Mem A := by
+  rw [Mem, Mem, extendedGauge_adjoint]
+
+/-- The real-valued source norm is invariant under adjoint. -/
+theorem gauge_adjoint (N : PaperUnitaryInvariantNorm) (A : E →L[𝕜] F) :
+    N.gauge A.adjoint = N.gauge A := by
+  rw [gauge, gauge, extendedGauge_adjoint]
 
 /-- Unitary equivalences on either side preserve the complete source norm. -/
 theorem extendedGauge_unitary

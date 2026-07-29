@@ -49,20 +49,24 @@ uninferable implicit argument. -/
 local notation "Eℂ" => RealComplexification E
 local notation "Fℂ" => RealComplexification F
 
+omit [InnerProductSpace ℝ E] [CompleteSpace E] in
 /-- The real coordinate is continuous: it is the first projection composed
 with the L2 coordinate homeomorphism. -/
 theorem continuous_re : Continuous (re : Eℂ → E) :=
   continuous_fst.comp (WithLp.homeomorphProd 2 E E).continuous
 
+omit [InnerProductSpace ℝ E] [CompleteSpace E] in
 /-- The imaginary coordinate is continuous. -/
 theorem continuous_im : Continuous (im : Eℂ → E) :=
   continuous_snd.comp (WithLp.homeomorphProd 2 E E).continuous
 
+omit [InnerProductSpace ℝ E] [CompleteSpace E] in
 /-- Each coordinate norm is bounded by the L2 norm. -/
 theorem norm_re_le (z : Eℂ) : ‖re z‖ ≤ ‖z‖ := by
   rw [← sq_le_sq₀ (norm_nonneg _) (norm_nonneg _), RealComplexification.norm_sq]
   nlinarith [sq_nonneg ‖im z‖]
 
+omit [InnerProductSpace ℝ E] [CompleteSpace E] in
 /-- Each coordinate norm is bounded by the L2 norm. -/
 theorem norm_im_le (z : Eℂ) : ‖im z‖ ≤ ‖z‖ := by
   rw [← sq_le_sq₀ (norm_nonneg _) (norm_nonneg _), RealComplexification.norm_sq]
@@ -73,6 +77,7 @@ def domain (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E)) :
     Submodule ℂ Eℂ :=
   complexifySubmodule A.domain
 
+omit [CompleteSpace E] in
 @[simp] theorem mem_domain_iff
     (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E))
     (z : Eℂ) :
@@ -116,16 +121,19 @@ def linearMap
           c.re • A.toLinearMap (domainIm A z)
       rw [map_add, map_smul, map_smul]
 
+omit [CompleteSpace E] in
 @[simp] theorem re_linearMap
     (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E))
     (z : domain A) :
     re (linearMap A z) = A.toLinearMap (domainRe A z) := rfl
 
+omit [CompleteSpace E] in
 @[simp] theorem im_linearMap
     (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E))
     (z : domain A) :
     im (linearMap A z) = A.toLinearMap (domainIm A z) := rfl
 
+omit [CompleteSpace E] in
 private theorem domain_dense
     (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E)) :
     Dense ((domain A : Submodule ℂ Eℂ) : Set Eℂ) := by
@@ -147,6 +155,7 @@ private theorem domain_dense
       exact (mem_domain_iff A _).2 hp]
   exact himage
 
+omit [CompleteSpace E] in
 private theorem linearMap_closedGraph
     (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E)) :
     IsClosed (Set.range fun z : domain A =>
@@ -260,6 +269,7 @@ def domainImPMap
       A.toLinearPMap (domainImPMap A z) :=
   rfl
 
+omit [CompleteSpace E] in
 /-- Applying a closed operator depends only on the underlying vector, not on
 the domain-membership witness. -/
 theorem toLinearMap_congr
@@ -488,23 +498,27 @@ private theorem continuous_ofImaginaryDomain
       ((ofReal (E := E)).continuous.comp continuous_subtype_val)
   exact h.subtype_mk _
 
+omit [CompleteSpace E] in
 /-- The real coordinate of the complexified domain is continuous. -/
 private theorem continuous_domainRe
     (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E)) :
     Continuous (domainRe A) :=
   (continuous_re.comp continuous_subtype_val).subtype_mk _
 
+omit [CompleteSpace E] in
 /-- The imaginary coordinate of the complexified domain is continuous. -/
 private theorem continuous_domainIm
     (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E)) :
     Continuous (domainIm A) :=
   (continuous_im.comp continuous_subtype_val).subtype_mk _
 
+omit [CompleteSpace E] in
 /-- Real part of a complex inner product against a real-copy vector. -/
 private theorem inner_ofReal_right_re (z : Eℂ) (v : E) :
     (⟪z, ofReal v⟫_ℂ).re = ⟪re z, v⟫_ℝ := by
   simp [inner_apply]
 
+omit [CompleteSpace E] in
 /-- Real part of a complex inner product against an imaginary-copy vector. -/
 private theorem inner_I_ofReal_right_re (z : Eℂ) (v : E) :
     (⟪z, Complex.I • ofReal v⟫_ℂ).re = ⟪im z, v⟫_ℝ := by
@@ -701,22 +715,26 @@ theorem unboundedSylvesterGap_complexify
       · left
         constructor
         · intro lam hlam
+          have hlamA : lam ∈ (complexify A).realSpectrum := hlam
           have hlam' : lam ∈ A.realSpectrum := by
-            rwa [closed_realSpectrum_complexify A] at hlam
+            rwa [closed_realSpectrum_complexify A] at hlamA
           exact hgap.1 hlam'
         · intro lam hlam
+          have hlamB : lam ∈ (complexify B).realSpectrum := hlam
           have hlam' : lam ∈ B.realSpectrum := by
-            rwa [closed_realSpectrum_complexify B] at hlam
+            rwa [closed_realSpectrum_complexify B] at hlamB
           exact hgap.2 hlam'
       · right
         constructor
         · intro lam hlam
+          have hlamB : lam ∈ (complexify B).realSpectrum := hlam
           have hlam' : lam ∈ B.realSpectrum := by
-            rwa [closed_realSpectrum_complexify B] at hlam
+            rwa [closed_realSpectrum_complexify B] at hlamB
           exact hgap.1 hlam'
         · intro lam hlam
+          have hlamA : lam ∈ (complexify A).realSpectrum := hlam
           have hlam' : lam ∈ A.realSpectrum := by
-            rwa [closed_realSpectrum_complexify A] at hlam
+            rwa [closed_realSpectrum_complexify A] at hlamA
           exact hgap.2 hlam'
   | leftAboveRightBelow c hA hB =>
       exact UnboundedSylvesterGap.leftAboveRightBelow c

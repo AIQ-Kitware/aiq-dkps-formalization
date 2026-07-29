@@ -74,6 +74,7 @@ noncomputable def theorem63Residual
     [Z.HasOrthogonalProjection] : Z →L[ℂ] H :=
   T ∘L Z.subtypeL - Z.subtypeL ∘L theorem63Compression T Z
 
+omit [CompleteSpace H] in
 /-- The residual is the complementary projection of the ambient action. -/
 theorem theorem63Residual_eq_complementaryProjection
     (T : H →L[ℂ] H) (Z : Submodule ℂ H)
@@ -87,6 +88,7 @@ theorem theorem63Residual_eq_complementaryProjection
   rw [Submodule.starProjection_orthogonal_apply]
   rfl
 
+omit [CompleteSpace H] in
 /-- Every Ritz residual vector is orthogonal to the trial subspace. -/
 theorem theorem63Residual_apply_mem_orthogonal
     (T : H →L[ℂ] H) (Z : Submodule ℂ H)
@@ -95,6 +97,7 @@ theorem theorem63Residual_apply_mem_orthogonal
   rw [theorem63Residual_eq_complementaryProjection]
   exact Zᗮ.starProjection_apply_mem _
 
+omit [CompleteSpace H] in
 /-- The projected residual satisfies the source Sylvester identity. -/
 theorem theorem63_sylvester_identity
     (T : H →L[ℂ] H) (V Z : Submodule ℂ H)
@@ -115,6 +118,7 @@ theorem theorem63_sylvester_identity
   exact (ContinuousLinearMap.starProjection_apply_comm_of_reduces
     T Vᗮ (DavisKahanExt.Reduces.orthogonalComplement hV) (z : H)).symm
 
+omit [CompleteSpace H] in
 /-- The directed sine block is a contraction. -/
 theorem theorem63DirectedSineBlock_apply_norm_le
     (Z V : Submodule ℂ H) [Z.HasOrthogonalProjection]
@@ -126,6 +130,7 @@ theorem theorem63DirectedSineBlock_apply_norm_le
     _ ≤ ‖(z : H)‖ := Vᗮ.norm_starProjection_apply_le _
     _ = ‖z‖ := rfl
 
+omit [CompleteSpace H] in
 /-- The finite-source singular values of the directed sine block are at most
 one. -/
 theorem theorem63_singularValues_sine_le_one
@@ -137,6 +142,7 @@ theorem theorem63_singularValues_sine_le_one
     (theorem63DirectedSineBlock Z V)
     (theorem63DirectedSineBlock_apply_norm_le Z V) i
 
+omit [CompleteSpace H] in
 /-- The source spectral placement forces the directed cosine projection to be
 injective.  This is the unequal-dimensional, directed replacement for the
 false symmetric `IsAcute Z V` claim. -/

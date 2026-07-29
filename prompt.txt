@@ -1,0 +1,8 @@
+Your branch is "namek-work".
+
+* Goal is Tau Ceti API polish with the paper proof on hold; the ledger and planning docs are current so a fresh 
+  agent starts clean. Next: take section 5, reconciling it against the code first. 
+
+Note, as you work, there are other agents working in parallel, before you start a task, mark what you intend to do in `dev/LANES.md`, and push that change immediately. Fetch after to ensure there were no recent conflicts. When you see a branch from other agents, merge them into your branch, and they will do the same. Use the LANES to coordinate and converge on a polished tau ceti ready proof, that is extremely elegant and mathlib quality.
+
+Begin your work, commit work in logical chunks, especially when it unblocks new lanes for other agents, frequently pull in and merge changes from the other agents to ensure your working branch is generally in sync. Do not stop until the entire proof is completely polished. Keep picking new lanes and making high value improvements.

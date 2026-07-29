@@ -35,7 +35,13 @@ universe v
 variable {H : Type v}
   [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
 
-private theorem doubleCosineDenominator_pos
+/-- Quarter-acuteness makes the double-angle cosine denominator strictly
+positive: `1 - 2 * directedGap U V ^ 2 > 0`.
+
+Stated non-privately because the ideal-theoretic companion in
+`TanTwoTheta/UnboundedIdeal.lean` needs exactly this fact, and `private` had
+previously forced a byte-identical copy there. -/
+theorem doubleCosineDenominator_pos
     (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hquarter : IsQuarterAcute U V) :

@@ -34,7 +34,7 @@ variable {E F G H : Type v}
 /-- Bounded data packaged for derivation from the canonical generalized
 unbounded theorem. -/
 structure BoundedGeneralSinThetaProblem
-    (N : UnitaryInvariantIdealFamily (𝕜 := ℂ)) where
+    (N : KyFanDominantIdealFamily (𝕜 := ℂ)) where
   A : E →L[ℂ] E
   A₀ : F →L[ℂ] F
   Λ₁ : G →L[ℂ] G
@@ -62,7 +62,7 @@ namespace BoundedGeneralSinThetaProblem
 /-- Embed a bounded problem into the full-domain closed-operator problem used
 by the canonical theorem. -/
 noncomputable def toGeneral
-    (N : UnitaryInvariantIdealFamily (𝕜 := ℂ))
+    (N : KyFanDominantIdealFamily (𝕜 := ℂ))
     (P : BoundedGeneralSinThetaProblem (E := E) (F := F)
       (G := G) (H := H) N) :
     GeneralSinThetaProblem (E := E) (F := F)
@@ -111,7 +111,7 @@ noncomputable def toGeneral
 
 /-- Bounded generalized sine theorem derived from the canonical theorem. -/
 theorem result
-    (N : UnitaryInvariantIdealFamily (𝕜 := ℂ))
+    (N : KyFanDominantIdealFamily (𝕜 := ℂ))
     (P : BoundedGeneralSinThetaProblem (E := E) (F := F)
       (G := G) (H := H) N) :
     N.Mem
