@@ -18,6 +18,7 @@ public import Mathlib.Algebra.Star.Unitary
 public import Mathlib.Analysis.CStarAlgebra.Exponential
 public import Mathlib.Analysis.CStarAlgebra.ContinuousLinearMap
 public import ForTauCeti.Analysis.InnerProductSpace.SkewAdjointExponential
+public import ForTauCeti.Analysis.InnerProductSpace.OneParameterUnitaryGroup.Basic
 
 /-!
 # The Yosida approximation of a self-adjoint operator
@@ -698,6 +699,103 @@ theorem expLimit_add (hA : IsSelfAdjoint A) (s t : ℝ) :
   refine hstep.congr fun n => ?_
   rw [expApprox_add]
   rfl
+
+/-! ### Strong continuity -/
+
+/-- Duhamel against the zero generator: `‖exp(iτAₙˢʸᵐ)ψ - ψ‖ ≤ |τ| ‖Aₙˢʸᵐψ‖`. -/
+theorem norm_expApprox_sub_self_le (hA : IsSelfAdjoint A) (n : ℕ+) (τ : ℝ) (ψ : H) :
+    ‖expApprox hA n τ ψ - ψ‖ ≤ |τ| * ‖yosidaApproxSym hA n ψ‖ := by
+  have hzero : expTime ((I : ℂ) • (0 : H →L[ℂ] H)) τ = 1 := by
+    simp [expTime]
+  have h := norm_expTime_sub_expTime_le (isSelfAdjoint_yosidaApproxSym hA n)
+    (IsSelfAdjoint.zero (H →L[ℂ] H)) (Commute.zero_right _) τ ψ
+  rw [hzero] at h
+  simp only [one_apply_eq_self, smul_zero, sub_zero] at h
+  rw [← expApprox_eq_expTime] at h
+  refine h.trans (le_of_eq ?_)
+  congr 1
+  rw [show ((I : ℂ) • yosidaApproxSym hA n) ψ = (I : ℂ) • (yosidaApproxSym hA n ψ) from rfl,
+    norm_smul, Complex.norm_I, one_mul]
+
+/-- On the domain the limit flow is Lipschitz in `t`. -/
+theorem norm_expLimit_sub_self_le (hA : IsSelfAdjoint A) (τ : ℝ)
+    (ψ : H) (hψ : ψ ∈ A.domain) :
+    ‖expLimit hA τ ψ - ψ‖ ≤ |τ| * ‖A ⟨ψ, hψ⟩‖ := by
+  have hlim : Tendsto (fun n : ℕ+ => ‖expApprox hA n τ ψ - ψ‖) atTop
+      (𝓝 ‖expLimit hA τ ψ - ψ‖) :=
+    ((tendsto_expLimitFun hA τ ψ).sub tendsto_const_nhds).norm
+  have hbnd : Tendsto (fun n : ℕ+ => |τ| * ‖yosidaApproxSym hA n ψ‖) atTop
+      (𝓝 (|τ| * ‖A ⟨ψ, hψ⟩‖)) :=
+    ((tendsto_yosidaApproxSym_of_mem_domain hA ψ hψ).norm).const_mul _
+  exact le_of_tendsto_of_tendsto' hlim hbnd fun n => norm_expApprox_sub_self_le hA n τ ψ
+
+/-- `t ↦ exp(itA)ψ` is continuous for `ψ` in the domain. -/
+theorem continuous_expLimit_of_mem_domain (hA : IsSelfAdjoint A)
+    (ψ : H) (hψ : ψ ∈ A.domain) :
+    Continuous (fun t : ℝ => expLimit hA t ψ) := by
+  have hlip : ∀ s t : ℝ, ‖expLimit hA t ψ - expLimit hA s ψ‖ ≤ |t - s| * ‖A ⟨ψ, hψ⟩‖ := by
+    intro s t
+    have hsplit : expLimit hA t ψ = expLimit hA s (expLimit hA (t - s) ψ) := by
+      rw [← ContinuousLinearMap.comp_apply, ← expLimit_add]
+      congr 2
+      ring
+    rw [hsplit]
+    have : expLimit hA s (expLimit hA (t - s) ψ) - expLimit hA s ψ
+        = expLimit hA s (expLimit hA (t - s) ψ - ψ) := by
+      rw [ContinuousLinearMap.map_sub]
+    rw [this, norm_expLimit_apply]
+    exact norm_expLimit_sub_self_le hA (t - s) ψ hψ
+  rw [Metric.continuous_iff]
+  intro s ε hε
+  rcases eq_or_ne ‖A ⟨ψ, hψ⟩‖ 0 with h0 | h0
+  · refine ⟨1, one_pos, fun t _ => ?_⟩
+    have := hlip s t
+    rw [h0, mul_zero] at this
+    rw [dist_eq_norm]
+    exact lt_of_le_of_lt this hε
+  · have hpos : 0 < ‖A ⟨ψ, hψ⟩‖ := (norm_nonneg _).lt_of_ne' h0
+    refine ⟨ε / ‖A ⟨ψ, hψ⟩‖, by positivity, fun t ht => ?_⟩
+    rw [dist_eq_norm] at ht ⊢
+    calc ‖expLimit hA t ψ - expLimit hA s ψ‖
+        ≤ |t - s| * ‖A ⟨ψ, hψ⟩‖ := hlip s t
+      _ < (ε / ‖A ⟨ψ, hψ⟩‖) * ‖A ⟨ψ, hψ⟩‖ := by
+          exact mul_lt_mul_of_pos_right (by rwa [← Real.norm_eq_abs]) hpos
+      _ = ε := by field_simp
+
+/-- `t ↦ exp(itA)ψ` is continuous for every `ψ`, by density and isometry. -/
+theorem continuous_expLimit (hA : IsSelfAdjoint A) (ψ : H) :
+    Continuous (fun t : ℝ => expLimit hA t ψ) := by
+  have hdense : Dense (A.domain : Set H) := hA.dense_domain
+  rw [Metric.continuous_iff]
+  intro s ε hε
+  obtain ⟨φ, hφmem, hφclose⟩ := Metric.mem_closure_iff.mp
+    (hdense.closure_eq ▸ Set.mem_univ ψ) (ε / 3) (by linarith)
+  obtain ⟨δ, hδ, hcont⟩ := Metric.continuous_iff.mp
+    (continuous_expLimit_of_mem_domain hA φ hφmem) s (ε / 3) (by linarith)
+  refine ⟨δ, hδ, fun t ht => ?_⟩
+  have hshift : ∀ r : ℝ, dist (expLimit hA r ψ) (expLimit hA r φ) = dist ψ φ := by
+    intro r
+    rw [dist_eq_norm, dist_eq_norm, ← ContinuousLinearMap.map_sub, norm_expLimit_apply]
+  calc dist (expLimit hA t ψ) (expLimit hA s ψ)
+      ≤ dist (expLimit hA t ψ) (expLimit hA t φ)
+          + dist (expLimit hA t φ) (expLimit hA s φ)
+          + dist (expLimit hA s φ) (expLimit hA s ψ) := dist_triangle4 _ _ _ _
+    _ = dist ψ φ + dist (expLimit hA t φ) (expLimit hA s φ) + dist ψ φ := by
+        rw [hshift t, dist_comm (expLimit hA s φ) (expLimit hA s ψ), hshift s]
+    _ < ε / 3 + ε / 3 + ε / 3 :=
+        add_lt_add (add_lt_add hφclose (hcont t ht)) hφclose
+    _ = ε := by ring
+
+/-- **Stone's theorem, the construction half.**  A self-adjoint operator
+generates a one-parameter unitary group. -/
+noncomputable def genToGroup (hA : IsSelfAdjoint A) : TauCeti.OneParameterUnitaryGroup H where
+  U := expLimit hA
+  unitary := inner_expLimit hA
+  group_law := expLimit_add hA
+  identity := by
+    rw [expLimit_zero]
+    rfl
+  strong_continuous := continuous_expLimit hA
 
 end LinearPMap
 end TauCeti
