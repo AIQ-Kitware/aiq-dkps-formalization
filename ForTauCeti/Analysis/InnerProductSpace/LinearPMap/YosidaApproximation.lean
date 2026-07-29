@@ -579,5 +579,39 @@ theorem cauchySeq_expApprox_of_mem_domain (hA : IsSelfAdjoint A) (t : ℝ)
       _ < |t| * (ε / |t|) := mul_lt_mul_of_pos_left hd ht
       _ = ε := by field_simp
 
+/-- The approximating flows are isometric. -/
+theorem norm_expApprox (hA : IsSelfAdjoint A) (n : ℕ+) (t : ℝ) (ψ : H) :
+    ‖expApprox hA n t ψ‖ = ‖ψ‖ := by
+  rw [expApprox_eq_expTime]
+  exact norm_expTime_I_smul _ (isSelfAdjoint_yosidaApproxSym hA n) t ψ
+
+/-- **The approximating flows are Cauchy at every vector**, by density and
+isometry. -/
+theorem cauchySeq_expApprox (hA : IsSelfAdjoint A) (t : ℝ) (ψ : H) :
+    CauchySeq (fun n : ℕ+ => expApprox hA n t ψ) := by
+  have hdense : Dense (A.domain : Set H) := hA.dense_domain
+  rw [Metric.cauchySeq_iff]
+  intro ε hε
+  obtain ⟨φ, hφmem, hφclose⟩ := Metric.mem_closure_iff.mp
+    (hdense.closure_eq ▸ Set.mem_univ ψ) (ε / 3) (by linarith)
+  obtain ⟨N, hN⟩ := (Metric.cauchySeq_iff.mp
+    (cauchySeq_expApprox_of_mem_domain hA t φ hφmem)) (ε / 3) (by linarith)
+  refine ⟨N, fun m hm n hn => ?_⟩
+  have hmφ : dist (expApprox hA m t ψ) (expApprox hA m t φ) = dist ψ φ := by
+    rw [dist_eq_norm, dist_eq_norm, ← ContinuousLinearMap.map_sub, norm_expApprox]
+  have hnφ : dist (expApprox hA n t φ) (expApprox hA n t ψ) = dist φ ψ := by
+    rw [dist_eq_norm, dist_eq_norm, ← ContinuousLinearMap.map_sub, norm_expApprox]
+  calc dist (expApprox hA m t ψ) (expApprox hA n t ψ)
+      ≤ dist (expApprox hA m t ψ) (expApprox hA m t φ)
+          + dist (expApprox hA m t φ) (expApprox hA n t φ)
+          + dist (expApprox hA n t φ) (expApprox hA n t ψ) := dist_triangle4 _ _ _ _
+    _ = dist ψ φ + dist (expApprox hA m t φ) (expApprox hA n t φ) + dist φ ψ := by
+        rw [hmφ, hnφ]
+    _ < ε / 3 + ε / 3 + ε / 3 := by
+        refine add_lt_add (add_lt_add hφclose (hN m hm n hn)) ?_
+        rw [dist_comm]
+        exact hφclose
+    _ = ε := by ring
+
 end LinearPMap
 end TauCeti
