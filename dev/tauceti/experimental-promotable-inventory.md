@@ -63,12 +63,21 @@ Rule 3 now asks the upward question and is renamed to match:
 count of 59 is the new expected state, not a regression. Rules 1, 2, 4 and 5
 are untouched and still read 3 / ok / 3 / ok.
 
-The gate reports 59 where the independent scan above found 57. The gap is the
-gate's `sorry` detection, which also matches the words "sorry-free" and
-"sorries" in prose, so two modules are classified differently. That is a
-pre-existing looseness in `load()`, not something introduced here, and it is
-worth a separate tidy — it makes the admission set slightly too large, which is
-the safe direction for a gate.
+The gate reports 59 where the independent scan above found 57.
+
+**Correction, 2026-07-29.** An earlier revision of this file blamed that gap on
+the gate's `sorry` detection matching prose. **That was wrong, and the error was
+mine.** `load()` strips block and line comments before applying
+`ADMISSION = \b(?:sorry|admit)\b`, so it does not see prose at all. My own scan
+was the crude one: it skipped only lines *starting* with a comment marker, so it
+counted `DavisKahan.Experimental.Scratch.Section7.InfiniteTanTwoThetaCore` as
+admitted on the strength of a docstring line reading "...behind an axiom or
+`sorry`."
+
+The gate is right and there is **no `load()` defect to fix**. The correct
+figures are the gate's: **59**, not 57. The block counts above are approximate
+for the same reason and should be re-derived from the gate rather than from
+this file if an exact split is needed.
 
 ## What this does *not* claim
 
