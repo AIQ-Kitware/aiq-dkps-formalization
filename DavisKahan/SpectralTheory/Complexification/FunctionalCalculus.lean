@@ -50,6 +50,9 @@ noncomputable local instance realContinuousFunctionalCalculus :
   IsSelfAdjoint.instContinuousFunctionalCalculus
 
 omit [CompleteSpace E] in
+/-- The real scalar action inherited from the complex-operator algebra agrees with the
+ambient real action on operators.  This is the compatibility needed to run *real*
+continuous functional calculus inside the complex operator algebra. -/
 theorem restrictedReal_smul_operator_eq
     (r : ℝ) (A : RealComplexification E →L[ℂ] RealComplexification E) :
     @SMul.smul ℝ (RealComplexification E →L[ℂ] RealComplexification E)
@@ -80,11 +83,13 @@ noncomputable def canonicalConjugation :
   norm_map' := conjugation.norm_map
 
 omit [CompleteSpace E] in
+/-- The canonical conjugation acts pointwise as `conjugation`. -/
 @[simp]
 theorem canonicalConjugation_apply (z : RealComplexification E) :
     (canonicalConjugation (E := E)) z = conjugation z := rfl
 
 omit [CompleteSpace E] in
+/-- The canonical conjugation is its own inverse: conjugation is an involution. -/
 @[simp]
 theorem canonicalConjugation_symm_apply (z : RealComplexification E) :
     (canonicalConjugation (E := E)).symm z = conjugation z := by
@@ -101,6 +106,7 @@ theorem inner_conjugation (z w : RealComplexification E) :
     ring
 
 omit [CompleteSpace E] in
+/-- Conjugating the left slot exchanges the roles of the two arguments. -/
 theorem inner_conjugation_left (z w : RealComplexification E) :
     ⟪conjugation z, w⟫_ℂ = ⟪conjugation w, z⟫_ℂ := by
   calc
@@ -109,6 +115,7 @@ theorem inner_conjugation_left (z w : RealComplexification E) :
     _ = ⟪conjugation w, z⟫_ℂ := inner_conjugation z (conjugation w)
 
 omit [CompleteSpace E] in
+/-- Conjugating the right slot exchanges the roles of the two arguments. -/
 theorem inner_conjugation_right (z w : RealComplexification E) :
     ⟪z, conjugation w⟫_ℂ = ⟪w, conjugation z⟫_ℂ := by
   calc
@@ -124,6 +131,8 @@ noncomputable def conjugateOperator
     (A.comp (canonicalConjugation (E := E)).symm.toLinearIsometry.toContinuousLinearMap)
 
 omit [CompleteSpace E] in
+/-- Pointwise formula for the conjugated operator: conjugate the input, apply `A`,
+conjugate the output. -/
 @[simp]
 theorem conjugateOperator_apply
     (A : RealComplexification E →L[ℂ] RealComplexification E)
@@ -132,6 +141,7 @@ theorem conjugateOperator_apply
   simp [conjugateOperator]
 
 omit [CompleteSpace E] in
+/-- Conjugation fixes the zero operator. -/
 @[simp]
 theorem conjugateOperator_zero :
     conjugateOperator (0 : RealComplexification E →L[ℂ] RealComplexification E) = 0 := by
@@ -140,6 +150,7 @@ theorem conjugateOperator_zero :
   apply RealComplexification.ext <;> simp [conjugateOperator_apply]
 
 omit [CompleteSpace E] in
+/-- Conjugation of operators is additive. -/
 @[simp]
 theorem conjugateOperator_add (A B : RealComplexification E →L[ℂ] RealComplexification E) :
     conjugateOperator (A + B) = conjugateOperator A + conjugateOperator B := by
@@ -148,6 +159,7 @@ theorem conjugateOperator_add (A B : RealComplexification E →L[ℂ] RealComple
   apply RealComplexification.ext <;> simp [conjugateOperator_apply]
 
 omit [CompleteSpace E] in
+/-- Conjugation commutes with negation. -/
 @[simp]
 theorem conjugateOperator_neg (A : RealComplexification E →L[ℂ] RealComplexification E) :
     conjugateOperator (-A) = -conjugateOperator A := by
@@ -156,6 +168,7 @@ theorem conjugateOperator_neg (A : RealComplexification E →L[ℂ] RealComplexi
   apply RealComplexification.ext <;> simp [conjugateOperator_apply]
 
 omit [CompleteSpace E] in
+/-- Conjugation commutes with subtraction. -/
 @[simp]
 theorem conjugateOperator_sub (A B : RealComplexification E →L[ℂ] RealComplexification E) :
     conjugateOperator (A - B) = conjugateOperator A - conjugateOperator B := by
@@ -164,6 +177,7 @@ theorem conjugateOperator_sub (A B : RealComplexification E →L[ℂ] RealComple
   apply RealComplexification.ext <;> simp [conjugateOperator_apply]
 
 omit [CompleteSpace E] in
+/-- Conjugation fixes the identity operator. -/
 @[simp]
 theorem conjugateOperator_one :
     conjugateOperator (1 : RealComplexification E →L[ℂ] RealComplexification E) = 1 := by
@@ -172,6 +186,8 @@ theorem conjugateOperator_one :
   apply RealComplexification.ext <;> simp [conjugateOperator_apply]
 
 omit [CompleteSpace E] in
+/-- Conjugation is multiplicative, and preserves the order of composition — it is an
+algebra map, not an anti-map. -/
 @[simp]
 theorem conjugateOperator_mul (A B : RealComplexification E →L[ℂ] RealComplexification E) :
     conjugateOperator (A * B) = conjugateOperator A * conjugateOperator B := by
@@ -181,6 +197,8 @@ theorem conjugateOperator_mul (A B : RealComplexification E →L[ℂ] RealComple
     simp [conjugateOperator_apply, mul_apply_eq_comp]
 
 omit [CompleteSpace E] in
+/-- Conjugation is linear over `ℝ`.  Contrast `conjugateOperator_complex_smul`, where a
+complex scalar picks up a conjugate. -/
 @[simp]
 theorem conjugateOperator_real_smul (r : ℝ) (A : RealComplexification E →L[ℂ] RealComplexification E) :
     conjugateOperator (r • A) = r • conjugateOperator A := by
@@ -199,6 +217,7 @@ theorem conjugateOperator_complex_smul (c : ℂ)
     conjugation_complex_smul]
 
 omit [CompleteSpace E] in
+/-- Conjugating twice returns the original operator. -/
 @[simp]
 theorem conjugateOperator_involutive (A : RealComplexification E →L[ℂ] RealComplexification E) :
     conjugateOperator (conjugateOperator A) = A := by
@@ -223,6 +242,8 @@ theorem conjugateOperator_adjoint (A : RealComplexification E →L[ℂ] RealComp
     _ = ⟪x, conjugateOperator A y⟫_ℂ := by rw [conjugateOperator_apply]
 
 omit [CompleteSpace E] in
+/-- Conjugation does not increase the operator norm.  With `conjugateOperator_involutive`
+this one-sided bound upgrades to the equality `norm_conjugateOperator`. -/
 theorem norm_conjugateOperator_le (A : RealComplexification E →L[ℂ] RealComplexification E) :
     ‖conjugateOperator A‖ ≤ ‖A‖ := by
   refine (conjugateOperator A).opNorm_le_bound (norm_nonneg A) ?_
@@ -233,6 +254,7 @@ theorem norm_conjugateOperator_le (A : RealComplexification E →L[ℂ] RealComp
     _ = ‖A‖ * ‖z‖ := by rw [conjugation.norm_map]
 
 omit [CompleteSpace E] in
+/-- Conjugation preserves the operator norm. -/
 theorem norm_conjugateOperator (A : RealComplexification E →L[ℂ] RealComplexification E) :
     ‖conjugateOperator A‖ = ‖A‖ := by
   apply le_antisymm (norm_conjugateOperator_le A)
@@ -241,6 +263,8 @@ theorem norm_conjugateOperator (A : RealComplexification E →L[ℂ] RealComplex
     _ ≤ ‖conjugateOperator A‖ := norm_conjugateOperator_le _
 
 omit [CompleteSpace E] in
+/-- Conjugation is an isometry of the operator algebra.  It is only *conjugate*-linear
+over `ℂ`, so this is a metric statement rather than a linear-isometry one. -/
 theorem isometry_conjugateOperator :
     Isometry (conjugateOperator :
       (RealComplexification E →L[ℂ] RealComplexification E) →
@@ -273,6 +297,7 @@ noncomputable def conjugateOperatorHom :
     simpa only [ContinuousLinearMap.star_eq_adjoint] using
       conjugateOperator_adjoint A
 
+/-- The conjugation star-algebra map is continuous, being an isometry. -/
 theorem continuous_conjugateOperatorHom :
     Continuous (conjugateOperatorHom :
       (RealComplexification E →L[ℂ] RealComplexification E) → (RealComplexification E →L[ℂ] RealComplexification E)) :=
@@ -314,6 +339,7 @@ theorem conjugateOperator_cfc_eq
 /-! ## Descent of conjugation-fixed operators -/
 
 omit [InnerProductSpace ℝ E] [CompleteSpace E] in
+/-- Taking the real coordinate of a complexified vector does not increase the norm. -/
 theorem norm_re_le (z : RealComplexification E) : ‖re z‖ ≤ ‖z‖ := by
   rw [← sq_le_sq₀ (norm_nonneg _) (norm_nonneg _), norm_sq]
   nlinarith [sq_nonneg ‖im z‖]
@@ -333,11 +359,14 @@ noncomputable def realPartOperator
       _ = ‖A‖ * ‖x‖ := by rw [ofReal.norm_map]
 
 omit [CompleteSpace E] in
+/-- Pointwise formula for the real restriction: embed, apply, take the real coordinate. -/
 @[simp]
 theorem realPartOperator_apply (A : RealComplexification E →L[ℂ] RealComplexification E) (x : E) :
     realPartOperator A x = re (A (ofReal x)) := rfl
 
 omit [CompleteSpace E] in
+/-- A conjugation-fixed operator maps the real copy into itself: the imaginary coordinate
+of `A (ofReal x)` vanishes. -/
 theorem fixed_operator_maps_real_to_real
     {A : RealComplexification E →L[ℂ] RealComplexification E} (hfix : conjugateOperator A = A) (x : E) :
     im (A (ofReal x)) = 0 := by
@@ -355,6 +384,7 @@ theorem fixed_operator_maps_real_to_real
   exact (smul_eq_zero.mp htwo).resolve_left (by norm_num)
 
 omit [CompleteSpace E] in
+/-- On the real copy, a conjugation-fixed operator is determined by its real restriction. -/
 theorem fixed_operator_on_ofReal
     {A : RealComplexification E →L[ℂ] RealComplexification E} (hfix : conjugateOperator A = A) (x : E) :
     A (ofReal x) = ofReal (realPartOperator A x) := by
@@ -396,6 +426,7 @@ theorem complexify_adjoint (T : E →L[ℝ] F) :
     ContinuousLinearMap.adjoint_inner_left,
     ContinuousLinearMap.adjoint_inner_left]
 
+/-- Complexification commutes with forming the Gram operator `Tᵃ ∘ T`. -/
 theorem complexify_gram (T : E →L[ℝ] F) :
     complexify (T.adjoint ∘L T) =
       (complexify T).adjoint ∘L complexify T := by
