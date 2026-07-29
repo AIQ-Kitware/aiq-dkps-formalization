@@ -178,17 +178,38 @@ Validate with:
 ```bash
 python3 scripts/render_davis_kahan_1970_source_census.py --check
 python3 scripts/check_davis_kahan_1970_source_census.py
+python3 scripts/probe_census_declarations.py           # do the names resolve?
 ```
+
+The first two validate *structure* — generated view in sync, fields present,
+statuses in the allowed set. Neither can tell you the declarations named by
+`lean_declarations` exist; the census reported `CLEAN (48 items)` throughout the
+period when **none of its 87 declarations resolved**. The probe compiles a
+`#check` of every fully-qualified name against `DavisKahan.All` and is the only
+one of the three that answers that question.
+
+It currently reports **78/87**, and its `--check` mode exits non-zero on the
+remainder, so it is a **report-and-review** step rather than a CI gate as it
+stands. The nine that do not resolve are the `DavisKahan1970.Section8.*` names
+backing `DK-8.1-thm` and `DK-8.2-thm`, whose census rows are already marked
+`candidate_under_repair` / `not_compiling`; they live under `Experimental/**`,
+outside the `DavisKahan.All` closure. Before `--check` can gate CI it needs to
+treat a declaration that is unresolved *and* whose row is marked not-compiling
+as expected rather than as a failure. Until then, the drift check above is the
+automatable half — it covers every census name and fails on a rename.
 
 ## Declaration-name drift
 
-Two places in this repository assert declaration names as **data**, where no
-compiler checks them: the `theorem_names` lists in `comparator/*.json`, and the
+Three places in this repository assert declaration names as **data**, where no
+compiler checks them: the `theorem_names` lists in `comparator/*.json`; the
 `#print axioms` lines in `Challenge/**/Leaderboard.lean` (`Challenge` is not in
-`defaultTargets`, so `lake build` does not compile it). A rename that is green
-across the whole default build can therefore still leave the conformance gate
-pointing at nothing — which is exactly what happened after the Wave-1
-CourantFischer dedup, and again after the §9.2 sorted-eigenvalue rename.
+`defaultTargets`, so `lake build` does not compile it); and the
+`lean_declarations` entries in `dev/davis-kahan-1970-full-source-census.json`.
+A rename that is green across the whole default build can therefore still leave
+the conformance gate pointing at nothing — which is exactly what happened after
+the Wave-1 CourantFischer dedup, again after the §9.2 sorted-eigenvalue rename,
+and again in the census, where the `ForMathlib` → `TauCeti` move left **all 87**
+named declarations unresolvable while every gate stayed green.
 
 Run after any rename or namespace move:
 
@@ -201,3 +222,12 @@ It resolves names by parsing the sources, not by asking Lean, so it is fast and
 works on a tree that does not compile — but for the same reason a pass is a
 tripwire, not a proof. `scripts/check_comparator_signatures.py` (which does
 invoke Lean) remains ground truth.
+
+Note the precise question each tool answers, because a green tripwire reads as a
+stronger claim than it is. The drift check asks **"does a declaration with this
+name exist anywhere in the tree"**. It does *not* ask whether the declaration is
+reachable from `DavisKahan.All`. For the census those differ: the nine
+`DavisKahan1970.Section8.*` names exist under `Experimental/**` and so pass the
+drift check, while `scripts/probe_census_declarations.py` correctly reports them
+unresolved against the default build target. Renames are the tripwire's job;
+reachability is the probe's.
