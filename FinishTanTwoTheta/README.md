@@ -1,7 +1,9 @@
 # FinishTanTwoTheta
 
-This target now builds the **actual bounded sharp proof stack**, not an alias-only
-facade.
+This target builds the bounded sharp Riccati/ideal proof stack and now also
+contains the exact paper-facing theorem shape as an explicit admitted target.
+It is not an alias-only facade, but a green build is not yet an axiom-clean proof
+of the full paper-shaped `tan 2Theta` theorem.
 
 ## Compiled theorem scope
 
@@ -15,7 +17,11 @@ The aggregate target includes:
 4. Fan-dominance promotion to maximal and minimal standard symmetric ideals;
 5. the source audit containing the finite-dimensional Section 7 UI-norm theorem
    and the arbitrary-inner-product-space sharp operator-norm theorem with its
-   acute branch.
+   acute branch;
+6. `paperFaithful_tanTwoTheta_uiNorm`, an explicit `sorry`-backed statement of
+   the missing arbitrary-Hilbert-space source theorem, beginning from the full
+   off-diagonal perturbation and concluding both quarter-acuteness and the sharp
+   source-norm estimate.
 
 This is stronger than an alias facade: the `FinishTanTwoTheta` modules that prove
 the bounded infinite-dimensional ideal result are imported and compiled.
