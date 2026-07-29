@@ -53,6 +53,8 @@ noncomputable def spectralProjection (b : OrthonormalBasis (Fin n) 𝕜 E) (S : 
   ∑ i ∈ S, (InnerProductSpace.rankOne 𝕜 (b i) (b i)).toLinearMap
 
 omit [FiniteDimensional 𝕜 E] in
+/-- The defining formula: `spectralProjection b S` expands `y` in the basis and keeps the
+coefficients indexed by `S`. -/
 theorem spectralProjection_apply (b : OrthonormalBasis (Fin n) 𝕜 E) (S : Finset (Fin n))
     (y : E) : spectralProjection b S y = ∑ i ∈ S, ⟪b i, y⟫_𝕜 • b i := by
   unfold spectralProjection
@@ -60,11 +62,14 @@ theorem spectralProjection_apply (b : OrthonormalBasis (Fin n) 𝕜 E) (S : Fins
   exact Finset.sum_congr rfl fun i _ => by simp [InnerProductSpace.rankOne_apply]
 
 omit [FiniteDimensional 𝕜 E] in
+/-- On a singleton index set the spectral projection is the rank-one projection onto `b i`. -/
 theorem spectralProjection_singleton_apply (b : OrthonormalBasis (Fin n) 𝕜 E) (i : Fin n)
     (y : E) : spectralProjection b {i} y = ⟪b i, y⟫_𝕜 • b i := by
   rw [spectralProjection_apply, Finset.sum_singleton]
 
 omit [FiniteDimensional 𝕜 E] in
+/-- A spectral projection fixes the basis vectors it selects and kills the others; this is the
+form used to compare two projections by testing them on a basis. -/
 theorem spectralProjection_apply_basis (b : OrthonormalBasis (Fin n) 𝕜 E) (S : Finset (Fin n))
     (k : Fin n) : spectralProjection b S (b k) = if k ∈ S then b k else 0 := by
   rw [spectralProjection_apply]
@@ -160,39 +165,49 @@ def NonDegenerate (P P' : OrthoProjFamily 𝕜 E m) : Prop :=
 
 variable {P P' : OrthoProjFamily 𝕜 E m}
 
+/-- Each member of the family is a star projection: idempotent and self-adjoint. -/
 theorem isStarProjection (P : OrthoProjFamily 𝕜 E m) (j : Fin m) :
     IsStarProjection (P.proj j) :=
   P.isStarProjection' j
 
+/-- Distinct members of the family have orthogonal ranges, expressed as a vanishing composite. -/
 theorem orthogonal (P : OrthoProjFamily 𝕜 E m) {j k : Fin m} (h : j ≠ k) :
     P.proj j ∘ₗ P.proj k = 0 :=
   P.orthogonal' j k h
 
+/-- Idempotence of a single member of the family. -/
 theorem proj_comp_self (P : OrthoProjFamily 𝕜 E m) (j : Fin m) :
     P.proj j ∘ₗ P.proj j = P.proj j :=
   (P.isStarProjection j).isIdempotentElem
 
+/-- Each member of the family is self-adjoint. -/
 theorem adjoint_proj (P : OrthoProjFamily 𝕜 E m) (j : Fin m) :
     (P.proj j).adjoint = P.proj j := by
   rw [← LinearMap.star_eq_adjoint]
   exact (P.isStarProjection j).isSelfAdjoint
 
+/-- Each member of the family is symmetric -- the bilinear form of `adjoint_proj`, which is the
+shape most inner-product arguments need. -/
 theorem isSymmetric_proj (P : OrthoProjFamily 𝕜 E m) (j : Fin m) :
     (P.proj j).IsSymmetric := by
   intro x y
   conv_lhs => rw [← P.adjoint_proj j]
   rw [LinearMap.adjoint_inner_left]
 
+/-- A projection fixes its own range pointwise. -/
 theorem proj_apply_of_mem_range {j : Fin m} {x : E} (hx : x ∈ range (P.proj j)) :
     P.proj j x = x := by
   obtain ⟨y, rfl⟩ := hx
   exact congrArg (fun f : E →ₗ[𝕜] E => f y) (P.proj_comp_self j)
 
+/-- A projection annihilates the range of any *other* member of the family. -/
 theorem proj_apply_of_mem_range_of_ne {j k : Fin m} (h : j ≠ k) {x : E}
     (hx : x ∈ range (P.proj k)) : P.proj j x = 0 := by
   obtain ⟨y, rfl⟩ := hx
   exact congrArg (fun f : E →ₗ[𝕜] E => f y) (P.orthogonal h)
 
+/-- The family resolves the identity: the projections of a vector sum back to it.  This is the
+pointwise form of the `complete'` field. -/
 theorem sum_proj_apply (P : OrthoProjFamily 𝕜 E m) (x : E) : ∑ j, P.proj j x = x := by
   have h := congrArg (fun f : E →ₗ[𝕜] E => f x) P.complete'
   simpa using h
@@ -203,6 +218,7 @@ theorem inner_eq_zero_of_ne {j k : Fin m} (h : j ≠ k) {x y : E}
   rw [← proj_apply_of_mem_range hx, P.isSymmetric_proj j,
     proj_apply_of_mem_range_of_ne h hy, inner_zero_right]
 
+/-- The kernel of a member is the orthogonal complement of its range. -/
 theorem ker_proj (P : OrthoProjFamily 𝕜 E m) (j : Fin m) :
     ker (P.proj j) = (range (P.proj j))ᗮ := by
   rw [LinearMap.orthogonal_range, adjoint_proj]
@@ -302,6 +318,9 @@ noncomputable def intertwiningUnitary (hnd : P.NonDegenerate P') : E ≃ₗᵢ[�
     (intertwiningUnitary hnd : E →ₗ[𝕜] E) y = intertwiningUnitary hnd y :=
   rfl
 
+/-- The intertwining unitary acts blockwise: on each block it is the polar factor of `P'\_j P\_j`
+applied to the `j`-th component of `x`.  Unfolds the bundled `LinearIsometryEquiv` to the sum
+that defines it. -/
 theorem intertwiningUnitary_apply (hnd : P.NonDegenerate P') (x : E) :
     intertwiningUnitary hnd x = ∑ j, polarFactor (P'.proj j ∘ₗ P.proj j) (P.proj j x) := by
   have h : intertwiningUnitary hnd x

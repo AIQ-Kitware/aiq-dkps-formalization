@@ -43,7 +43,7 @@ operator angles between arbitrary closed Hilbert subspaces was found.
 | `Riccati graph subspace` | Returned this repository's bounded Riccati scaffolding; no external completed graph bridge. |
 | `LinearPMap.graph`, closed operator graph | Found the pinned Mathlib closed/closable graph infrastructure used by the unbounded-operator API. |
 | `AntilipschitzWith.isClosed_range` | Found the direct closed-range theorem needed for the graph embedding. |
-| `ContinuousLinearMap.equivRange`, bounded inverse, closed range | Found the Banach open-mapping and continuous-inverse packaging needed for `P_U|_V`. |
+| `ContinuousLinearMap.equivRange`, bounded inverse, closed range | Found the Banach open-mapping and continuous-inverse packaging needed for `P_U\|_V`. |
 | `Units.oneSub`, near-identity inverse | Found the Neumann-series route for the compressed projection. |
 | Mathlib Davis--Kahan pull requests | Found PR `#40771`, a finite eigenspace bound; useful context but not an infinite graph-subspace donor. |
 | External operator-theory Lean libraries | `Spectra` is the strongest future donor for PVM, unbounded, polar, and ideal infrastructure, but it does not eliminate the immediate two-projection graph proof. |
