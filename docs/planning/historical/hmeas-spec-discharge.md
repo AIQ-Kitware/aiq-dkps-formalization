@@ -33,7 +33,7 @@ blocker-by-blocker status); it is superseded by the entrywise-event discharge.
 ## STATUS UPDATE 2026-06-12 (Fable): blockers A–C are PROVED — only plumbing (D) remains
 
 All three blockers below are now proved in
-[`Acharyya2025/SpectralMeasurability.lean`](../../Acharyya2025/SpectralMeasurability.lean)
+[`Acharyya2025/SpectralMeasurability.lean`](../../../Acharyya2025/SpectralMeasurability.lean)
 (commit `4c10fb0`, 0 errors / 0 warnings / 0 sorry), via a **polynomial route
 that supersedes the cfc plan** — no C*-algebra instances, no `cfc`, no
 matrix-norm-scope wrangling (the "(b) instance risk" below never materializes):
@@ -99,7 +99,7 @@ superseded by the above.
 
 ## TL;DR
 
-`hmeas_spec` ([`DkpsQuench/AcharyyaBridge.lean`](../../DkpsQuench/AcharyyaBridge.lean), assumed in the four
+`hmeas_spec` (then `DkpsQuench/AcharyyaBridge.lean`, now [`DkpsQuench2026/Geometry/AlignedCMDS.lean`](../../../DkpsQuench2026/Geometry/AlignedCMDS.lean), assumed in the four
 `queryEfficient_nn_of_*` capstones) asserts measurability of the **raw spectral
 embedding** `ω ↦ spectralConfig (toEuclideanLin B̂(ω)) …` — an *eigenvector*-valued
 map. As literally stated it is **not provable**: `spectralConfig` is built from
@@ -153,14 +153,14 @@ Both `spectralConfig` and the eigendata use the SAME `eigenvectorBasis`, so the
 inner-product-preserving maps (a group). Replacing `spec ω` by `R ∘ spec ω`
 (`R ∈ S`) leaves the event unchanged (`W ↦ W R⁻¹`), and two configs share an
 `S`-orbit iff they have equal Gram (Gram rigidity —
-[`Acharyya2025/GramRigidity.lean`](../../Acharyya2025/GramRigidity.lean) `exists_linearIsometryEquiv_*` gives this).
+[`Acharyya2025/GramRigidity.lean`](../../../Acharyya2025/GramRigidity.lean) `exists_linearIsometryEquiv_*` gives this).
 Conclude `AlignExists ω = P(GramMatrix (spec ω))` for a predicate `P` on `n×n`
 matrices, where `P M := ∃ z, GramMatrix z = M ∧ ∃ W ∈ S, ∑ ‖W (z i) − ψ i‖ ≤ c`.
 
 ### (C) Re-prove `measurableSet_setOf_alignExists` from `Measurable Dhat`
 
 Replace the `hmeas` hypothesis of
-[`Acharyya2025/AlignedPipeline.lean`](../../Acharyya2025/AlignedPipeline.lean) `measurableSet_setOf_alignExists`
+[`Acharyya2025/AlignedPipeline.lean`](../../../Acharyya2025/AlignedPipeline.lean) `measurableSet_setOf_alignExists`
 by `hDhat : Measurable (fun ω => Dhat u ω)`. Then on `G`:
 `{ω ∈ G | AlignExists ω} = {ω ∈ G | P (cfc h B̂ω)}` by (A)+(B); and
 `ω ↦ cfc h B̂ω` is measurable by `measurable_cfc_comp` (with `B̂ = toEuclideanLin ∘

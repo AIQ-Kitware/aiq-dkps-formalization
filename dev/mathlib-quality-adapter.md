@@ -1,8 +1,14 @@
 # Using the `mathlib-quality` skill in this repo (house-rules adapter)
 
-The [`mathlib-quality`](../skills/mathlib-quality-main) skill (vendored at
-`skills/mathlib-quality-main/`) is a Lean-4 code-quality toolkit distilled from
-thousands of merged Mathlib PRs. **We use it for polishing the *code* of our
+The `mathlib-quality` skill is a Lean-4 code-quality toolkit distilled from
+thousands of merged Mathlib PRs.
+
+> **The skill is no longer vendored in this repository.** It used to live at
+> `skills/mathlib-quality-main/`; that directory is gone, so the reference paths
+> below name files inside the upstream skill package rather than paths you can
+> open here. Working artifacts it produced are kept in `.mathlib-quality/`. The
+> house rules in this document stand on their own and are what actually matter
+> when polishing our proofs. **We use it for polishing the *code* of our
 Mathlib-bound proofs** (golfing, structure, naming, style) — both the headline
 Gram proof and the rest of the `ForMathlib/` candidates.
 
@@ -40,9 +46,8 @@ Adapt both:
    happen **only at PR time, on the Mathlib fork** — never in this repo. (See the
    standing rule: provenance is preserved here; disclosure is done in the PR.)
 
-Everything else in the skill applies unchanged. The diff gates in
-[`cleanup-gates.md`](../skills/mathlib-quality-main/skills/mathlib-quality/references/cleanup-gates.md)
-(build-green, `definition_protected`, `theorem_statement_protected`, structure,
+Everything else in the skill applies unchanged. The diff gates in the skill's
+`references/cleanup-gates.md` (build-green, `definition_protected`, `theorem_statement_protected`, structure,
 naming, line-packing) are pure code-safety and are *desirable* here — they're the
 same "don't let golf drift the statement" discipline we already follow.
 
@@ -75,7 +80,7 @@ adds the Claude co-author footer — which is consistent with how we already com
 
 1. Baseline: `lake build` green (the skill's Phase-0 doctor; we already gate on
    8635 jobs).
-2. Per declaration, apply [`golfing-rules.md`](../skills/mathlib-quality-main/skills/mathlib-quality/references/golfing-rules.md)
+2. Per declaration, apply the skill's `references/golfing-rules.md`
    Phase 1 (instant wins) → Phase 2 (automation: `grind`/`simpa`/`positivity`/…)
    → Phase 3 (style), verifying compilation after each change. Honor the
    `theorem_statement_protected` gate: golf the *body*, never drift the
