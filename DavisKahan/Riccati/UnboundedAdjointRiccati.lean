@@ -372,6 +372,89 @@ theorem norm_riccatiGram_pow_commutator_le
       linarith [h1, h2]
 
 include hdom hadj in
+/-- A polynomial in the Gram operator, indexed by an arbitrary finite set of
+degrees, preserves the first diagonal domain. -/
+theorem riccatiGram_finsetPoly_mem_domain (a : ℕ → 𝕜) (s : Finset ℕ)
+    (x : H.A0.domain) :
+    (∑ n ∈ s, a n • ((riccatiGram X) ^ n)) (x : E0) ∈ H.A0.domain := by
+  simp only [ContinuousLinearMap.coe_sum', Finset.sum_apply,
+    ContinuousLinearMap.coe_smul', Pi.smul_apply]
+  exact Submodule.sum_mem _ fun n _ =>
+    Submodule.smul_mem _ _ (riccatiGram_pow_mem_domain H hdom hadj n x)
+
+include hdom hadj in
+/-- **Riccati commutator bound over an arbitrary finite degree set.**
+
+Stated over a general `Finset` rather than `Finset.range N` so that the
+difference of two partial sums of a power series is itself covered: that is
+exactly what makes the `A₀`-images of the partial sums Cauchy, which is how
+entire functions of the Gram operator are reached. -/
+theorem norm_riccatiGram_finsetPoly_commutator_le
+    (hcontr : ‖riccatiGram X‖ ≤ 1)
+    (hinv : TauCeti.LinearPMap.InvariantSubspace (unboundedBlockOperatorCore H)
+      (unboundedBlockGraph X)ᗮ)
+    (hric : ∀ x : H.A0.domain,
+      H.A1 ⟨X (x : E0), hdom x⟩ + H.B10 (x : E0) =
+        X (H.A0 x + H.B01 (X (x : E0))))
+    (a : ℕ → 𝕜) (s : Finset ℕ) (x : H.A0.domain) :
+    ‖H.A0 ⟨(∑ n ∈ s, a n • ((riccatiGram X) ^ n)) (x : E0),
+          riccatiGram_finsetPoly_mem_domain H hdom hadj a s x⟩ -
+        (∑ n ∈ s, a n • ((riccatiGram X) ^ n)) (H.A0 x)‖ ≤
+      (∑ n ∈ s, ‖a n‖ * n) *
+        ‖riccatiGramCommutator H X‖ * ‖(x : E0)‖ := by
+  classical
+  induction s using Finset.induction with
+  | empty =>
+      have h0 : (⟨(∑ n ∈ (∅ : Finset ℕ), a n • ((riccatiGram X) ^ n)) (x : E0),
+          riccatiGram_finsetPoly_mem_domain H hdom hadj a ∅ x⟩ :
+            H.A0.domain) = 0 := by
+        apply Subtype.ext; simp
+      rw [h0]
+      simp
+  | insert m s hms ih =>
+      have hmemS := riccatiGram_finsetPoly_mem_domain H hdom hadj a s x
+      have hmemP := riccatiGram_pow_mem_domain H hdom hadj m x
+      have hsplit : (⟨(∑ n ∈ insert m s,
+              a n • ((riccatiGram X) ^ n)) (x : E0),
+            riccatiGram_finsetPoly_mem_domain H hdom hadj a (insert m s) x⟩ :
+              H.A0.domain) =
+          a m • (⟨((riccatiGram X) ^ m) (x : E0), hmemP⟩ : H.A0.domain) +
+            (⟨(∑ n ∈ s, a n • ((riccatiGram X) ^ n)) (x : E0), hmemS⟩ :
+              H.A0.domain) := by
+        apply Subtype.ext
+        simp [Finset.sum_insert hms]
+      rw [hsplit, LinearPMap.map_add, LinearPMap.map_smul]
+      have hexp : (∑ n ∈ insert m s,
+            a n • ((riccatiGram X) ^ n)) (H.A0 x) =
+          a m • (((riccatiGram X) ^ m) (H.A0 x)) +
+            (∑ n ∈ s, a n • ((riccatiGram X) ^ n)) (H.A0 x) := by
+        simp [Finset.sum_insert hms]
+      rw [hexp]
+      have hrw : ∀ p q r t : E0, a m • p + q - (a m • r + t) =
+          a m • (p - r) + (q - t) := by
+        intro p q r t
+        rw [smul_sub]
+        abel
+      rw [hrw]
+      refine (norm_add_le _ _).trans ?_
+      have h1 : ‖a m • (H.A0 ⟨((riccatiGram X) ^ m) (x : E0), hmemP⟩ -
+            ((riccatiGram X) ^ m) (H.A0 x))‖ ≤
+          ‖a m‖ * ((m : ℝ) * ‖riccatiGramCommutator H X‖ * ‖(x : E0)‖) := by
+        rw [norm_smul]
+        exact mul_le_mul_of_nonneg_left
+          (norm_riccatiGram_pow_commutator_le H hdom hadj hcontr hinv hric m x)
+          (norm_nonneg _)
+      have hcast : (∑ n ∈ insert m s, ‖a n‖ * (n : ℝ)) *
+            ‖riccatiGramCommutator H X‖ * ‖(x : E0)‖ =
+          ‖a m‖ * ((m : ℝ) * ‖riccatiGramCommutator H X‖ * ‖(x : E0)‖) +
+            (∑ n ∈ s, ‖a n‖ * (n : ℝ)) *
+              ‖riccatiGramCommutator H X‖ * ‖(x : E0)‖ := by
+        rw [Finset.sum_insert hms]
+        ring
+      rw [hcast]
+      linarith [ih, h1]
+
+include hdom hadj in
 /-- A polynomial in the Gram operator preserves the first diagonal domain. -/
 theorem riccatiGram_poly_mem_domain (a : ℕ → 𝕜) (N : ℕ) (x : H.A0.domain) :
     (∑ n ∈ Finset.range N, a n • ((riccatiGram X) ^ n)) (x : E0) ∈
