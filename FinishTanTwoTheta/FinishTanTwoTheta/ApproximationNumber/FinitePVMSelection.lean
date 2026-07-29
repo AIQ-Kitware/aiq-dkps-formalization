@@ -75,6 +75,109 @@ theorem inner_eq_zero_of_mem_disjoint_pvmRanges
   rcases hy with ⟨y₀, rfl⟩
   exact P.inner_proj_eq_zero_of_disjoint hB₁ hB₂ hdisj x₀ y₀
 
+
+/-- Subtracting two cumulative spectral-rank bounds gives a rank lower bound
+for the intervening closed band.  The proof embeds the lower-cutoff range into
+the product of the upper and band ranges using finite additivity of the PVM. -/
+theorem natCast_sub_le_rank_pvm_Icc_of_cutoff_bounds
+    (P : Spectra.ProjValMeasure H) {lo hi : ℝ} (hlohi : lo ≤ hi)
+    (p q : ℕ)
+    (hlower : (q : Cardinal) ≤ (P.proj (Set.Ici lo) measurableSet_Ici).rank)
+    (hupper : (P.proj (Set.Ioi hi) measurableSet_Ioi).rank ≤ (p : Cardinal)) :
+    ((q - p : ℕ) : Cardinal) ≤
+      (P.proj (Set.Icc lo hi) measurableSet_Icc).rank := by
+  classical
+  let L : Submodule ℂ H := pvmRangeSubspace P (Set.Ici lo) measurableSet_Ici
+  let U : Submodule ℂ H := pvmRangeSubspace P (Set.Ioi hi) measurableSet_Ioi
+  let B : Submodule ℂ H := pvmRangeSubspace P (Set.Icc lo hi) measurableSet_Icc
+  have hdisj : Disjoint (Set.Ioi hi) (Set.Icc lo hi) := by
+    rw [Set.disjoint_left]
+    intro x hxU hxB
+    exact (not_lt_of_ge hxB.2) hxU
+  have hunion : Set.Ioi hi ∪ Set.Icc lo hi = Set.Ici lo := by
+    ext x
+    simp only [Set.mem_union, Set.mem_Ioi, Set.mem_Icc, Set.mem_Ici]
+    constructor
+    · rintro (hx | hx)
+      · exact hlohi.trans hx.le
+      · exact hx.1
+    · intro hx
+      by_cases hxh : hi < x
+      · exact Or.inl hxh
+      · exact Or.inr ⟨hx, le_of_not_gt hxh⟩
+  have hsplit :
+      P.proj (Set.Ici lo) measurableSet_Ici =
+        P.proj (Set.Ioi hi) measurableSet_Ioi +
+          P.proj (Set.Icc lo hi) measurableSet_Icc := by
+    calc
+      P.proj (Set.Ici lo) measurableSet_Ici =
+          P.proj (Set.Ioi hi ∪ Set.Icc lo hi)
+            (measurableSet_Ioi.union measurableSet_Icc) :=
+        P.proj_congr hunion.symm measurableSet_Ici
+          (measurableSet_Ioi.union measurableSet_Icc)
+      _ = P.proj (Set.Ioi hi) measurableSet_Ioi +
+          P.proj (Set.Icc lo hi) measurableSet_Icc :=
+        P.proj_union measurableSet_Ioi measurableSet_Icc hdisj
+  let f : L →ₗ[ℂ] U × B :=
+    { toFun := fun x =>
+        (⟨P.proj (Set.Ioi hi) measurableSet_Ioi x,
+            ⟨x, rfl⟩⟩,
+          ⟨P.proj (Set.Icc lo hi) measurableSet_Icc x,
+            ⟨x, rfl⟩⟩)
+      map_add' := by
+        intro x y
+        apply Prod.ext <;> apply Subtype.ext <;> simp
+      map_smul' := by
+        intro c x
+        apply Prod.ext <;> apply Subtype.ext <;> simp }
+  have hf : Function.Injective f := by
+    intro x y hxy
+    apply Subtype.ext
+    let z : H := (x : H) - (y : H)
+    have hzL : z ∈ L := L.sub_mem x.property y.property
+    have hUz : P.proj (Set.Ioi hi) measurableSet_Ioi z = 0 := by
+      have h := congrArg (fun w : U × B => (w.1 : H)) hxy
+      change P.proj (Set.Ioi hi) measurableSet_Ioi (x : H) =
+        P.proj (Set.Ioi hi) measurableSet_Ioi (y : H) at h
+      simpa only [z, map_sub, sub_eq_zero] using h
+    have hBz : P.proj (Set.Icc lo hi) measurableSet_Icc z = 0 := by
+      have h := congrArg (fun w : U × B => (w.2 : H)) hxy
+      change P.proj (Set.Icc lo hi) measurableSet_Icc (x : H) =
+        P.proj (Set.Icc lo hi) measurableSet_Icc (y : H) at h
+      simpa only [z, map_sub, sub_eq_zero] using h
+    have hzfix : P.proj (Set.Ici lo) measurableSet_Ici z = z :=
+      pvmProjection_eq_self_of_mem_rangeSubspace P (Set.Ici lo)
+        measurableSet_Ici hzL
+    have hz0 : P.proj (Set.Ici lo) measurableSet_Ici z = 0 := by
+      rw [hsplit, ContinuousLinearMap.add_apply, hUz, hBz, add_zero]
+    have : z = 0 := by simpa only [hzfix] using hz0
+    exact sub_eq_zero.mp this
+  have hrank : Module.rank ℂ L ≤ Module.rank ℂ (U × B) := by
+    calc
+      Module.rank ℂ L = Module.rank ℂ (LinearMap.range f) :=
+        (LinearEquiv.ofInjective f hf).rank_eq
+      _ ≤ Module.rank ℂ (U × B) := Submodule.rank_le _
+  change (q : Cardinal) ≤ Module.rank ℂ L at hlower
+  change Module.rank ℂ U ≤ (p : Cardinal) at hupper
+  change ((q - p : ℕ) : Cardinal) ≤ Module.rank ℂ B
+  have hq : (q : Cardinal) ≤ (p : Cardinal) + Module.rank ℂ B := by
+    calc
+      (q : Cardinal) ≤ Module.rank ℂ L := hlower
+      _ ≤ Module.rank ℂ (U × B) := hrank
+      _ = Module.rank ℂ U + Module.rank ℂ B := rank_prod'
+      _ ≤ (p : Cardinal) + Module.rank ℂ B :=
+        add_le_add hupper le_rfl
+  by_cases hBfin : Module.rank ℂ B < Cardinal.aleph0
+  · have hBcast : ((Module.rank ℂ B).toNat : Cardinal) = Module.rank ℂ B :=
+      Cardinal.cast_toNat_of_lt_aleph0 hBfin
+    rw [← hBcast] at hq ⊢
+    norm_cast at hq ⊢
+    omega
+  · have haleph : Cardinal.aleph0 ≤ Module.rank ℂ B := le_of_not_gt hBfin
+    have hfinite : ((q - p : ℕ) : Cardinal) < Cardinal.aleph0 :=
+      Cardinal.natCast_lt_aleph0
+    exact hfinite.le.trans haleph
+
 end
 
 end FinishTanTwoTheta
