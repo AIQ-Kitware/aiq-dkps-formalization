@@ -1,54 +1,81 @@
-# Tau Ceti contribution preparation
+# `dev/tauceti/` — Tau Ceti migration working set
 
-These files prepare the current Davis--Kahan development for discussion with
-Tau Ceti maintainers.  They are intentionally documentation-only and do not
-change any Lean module, aggregate, audit, or build target.
+The execution documents for the **primary track** in `AGENTS.md`: polishing
+paper-independent foundations into `ForTauCeti`, retiring the `vendor/Spectra`
+dependency, and converging three parallel operator-theory stacks into one.
 
-Baseline inspected: `7463ca25c64a46c48411a2769b47714889974a97`.
+These are documentation only. None of them changes a Lean module, aggregate,
+audit, or build target.
 
-## Files
+## Start here
 
-- `guidance-issue-draft.md`: proposed Meta issue asking humans how to structure
-  the contribution before opening an intention.
-- `SpectralSubspacePerturbation/README.md`: draft roadmap specification.
-- `SpectralSubspacePerturbation/Suggested.lean.md`: provisional declaration
-  shapes, kept subordinate to the prose roadmap.
-- `mathematical-declaration-inventory.md`: reusable mathematical content grouped
-  by portability and specialization level.
-- `source-sine-theta-completion-audit.md`: exact mathematical status of the
-  source-general Section 6 theorem and the small remaining audit-hardening queue.
-- `finite-dimensional-part-iii-audit.md`: exact claims supported by the stable
-  finite source facade, with exclusions.
-- `part-iii-production-extraction-queue.md`: the exact 33 proved aliases still
-  trapped behind coarse Experimental modules.
-- `spectra-provenance-map.md`: upstream, compatibility, dependency, attribution,
-  and proposed Tau Ceti treatment of Spectra-derived material.
-- `public-api-integration-review.md`: namespace, placement, and PR-boundary
-  recommendations for a Tau Ceti port.
-- `convergence-matrix.md`: canonical ownership and representation decisions across
-  DKPS, Tau Ceti, and Spectra; Wave 2 is the active `LinearPMap` migration.
-- `u1-linearpmap-migration.md`: executable contract for replacing the bundled
-  `ClosedOperator` foundation with `LinearPMap` plus properties.
+If you are picking up migration work cold, read in this order:
 
-The roadmap and issue draft should be revised after maintainers answer the
-scope and placement questions.  They should not be submitted as if the current
-repository layout were already the desired Tau Ceti layout.  The source-general
-Section 6 theorem is complete; the broader roadmap concerns full-paper completion,
-production extraction, and library integration rather than reopening that proof.
+1. **`convergence-matrix.md`** — the primary planning artifact. One row per
+   declaration, classified exact-duplicate / wrapper-duplicate /
+   parallel-formulation / missing-reusable-result / paper-specific, with a
+   canonical destination. Read it before declaring any layering question
+   undecidable; it is the record of what the repository has actually decided.
+2. **`spectra-removal-plan.md`** — the execution contract for retiring Spectra,
+   with its ledger **`spectra-to-tauceti-port-ledger.md`**. The surface is 61
+   declarations, generated and drift-gated. Do not re-measure it by counting
+   import lines.
+3. **`u1-linearpmap-migration.md`** — the U1 contract: replacing the bundled
+   `ClosedOperator` foundation with Mathlib `LinearPMap` plus property
+   predicates. The representation decision is closed, not design-stage.
+4. **`../LANES.md`** — who holds what right now. Claim before your first edit.
 
-## Full Part III math-ahead batch
+## The rest of the working set
 
-The repository now also carries a candidate full-Part-III proof-closure batch.
-It restores 174 exact-signature historical bodies and replaces an unused
-speculative continuation roadmap API with the completed proof-carrying
-continuation stack.  These candidates are not part of the Tau Ceti-ready
-accepted surface until compiled and structurally promoted.  See
-`dev/full-part-iii-admission-elimination-math-ahead-2026-07-20.md`.
+**Planning and classification**
+
+- `extraction-cluster-classification.md` — dependency-closed clusters, in the
+  order they can move.
+- `mathematical-declaration-inventory.md` — reusable content grouped by
+  portability and specialization level.
+- `formathlib-to-fortauceti-migration.md` — how a `ForMathlib` module is
+  actually moved and its consumers repointed.
+- `spectra-provenance-map.md` — upstream, compatibility, dependency, and
+  attribution treatment of Spectra-derived material.
+
+**Audits and inventories**
+
+- `finite-dimensional-part-iii-audit.md` — exactly what the stable finite source
+  facade supports, with exclusions.
+- `part-iii-production-extraction-queue.md` — proved aliases still behind coarse
+  `Experimental` modules.
+- `experimental-sorry-triage.md` — every open obligation in
+  `DavisKahan/Experimental/**`, with the owner's standing decision that they are
+  KEEP until a specific one is confirmed superseded by a sorry-free twin.
+
+**Submission packaging**
+
+- `tauceti-pr1-approximation-numbers.md` — the PR1 package.
+- `pr1-consistency-restoration-2026-07-27.md` — its consistency record,
+  maintained by `scripts/refresh_tauceti_pr1_consistency.py`.
+- `migration-baseline-2026-07-24.md` — the toolchain/pin baseline the migration
+  measures against; `lakefile.toml` refers to it.
+- `migration-build-log-2026-07-24.md` — build evidence for the staged moves.
+
+## `ForMathlib` is being retired
+
+`ForMathlib` is **wound down into `ForTauCeti`**, not maintained as a parallel
+Mathlib staging area (jon's decision, 2026-07-29). Modules migrate as their
+import closures allow, following the CourantFischer playbook recorded in
+`convergence-matrix.md`: move the closed component, repoint consumers, delete
+the old file.
+
+Module docstrings that still read `Extraction class: authored in place, for
+upstreaming to Mathlib rather than to Tau Ceti` are **stale, and are not a bar
+to migration.** Reading them as policy cost a previous session two lane
+reversals. The firewall in `scripts/check_dependency_layers.py` is the real
+constraint: `ForTauCeti` may import only Mathlib / TauCeti / ForTauCeti, so a
+`ForMathlib` file migrates only once no remaining `ForMathlib` file imports it.
 
 ## Active representation migration
 
-U1 is claimed and executable. The canonical unbounded-operator representation is
-Mathlib `LinearPMap`; the local `ClosedOperator` bundle is temporary compatibility
-infrastructure. Agents should preserve green builds through adapters while
-migrating consumers, not use green builds as a reason to leave the parallel
-foundation in place. See `u1-linearpmap-migration.md` and `dev/LANES.md`.
+U1 is executable. The canonical unbounded-operator representation is Mathlib
+`LinearPMap`; the local `ClosedOperator` bundle is temporary compatibility
+infrastructure. Preserve green builds through adapters while migrating
+consumers — a green build is an invariant to hold during the migration, not a
+reason to avoid it. See `u1-linearpmap-migration.md` and `../LANES.md`.
