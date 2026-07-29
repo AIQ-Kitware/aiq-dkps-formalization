@@ -316,11 +316,14 @@ private theorem tanTwoAngleOperatorC_eq_modulus_ambientGraphTangent
     -- element of the endomorphism algebra, so the tail is `rfl`.
     have hcollapse :
         graphProjectionFormula U Y = (P + Y) ∘L R ∘L (P + Y.adjoint) := by
-      show (P + Y * P) * Ring.inverse (1 + P * Y.adjoint * (Y * P))
-              * (P + P * Y.adjoint)
-          = (P + Y) ∘L R ∘L (P + Y.adjoint)
-      rw [show Y * P = Y from hYP, show P * Y.adjoint = Y.adjoint from hPYstar,
-        mul_assoc]
+      -- A literal `show` cannot state the expansion: it mixes two spellings of
+      -- the same operator (`DavisKahanExt.projection U` in some factors,
+      -- `U.starProjection` in others), so no single hand-written pattern matches.
+      -- Let `simp only` do the unfolding and the two collapses together.
+      simp only [graphProjectionFormula, DavisKahanExt.projection,
+        DavisKahan.projection, hYP, ContinuousLinearMap.star_eq_adjoint,
+        map_add, hPadj]
+      rw [mul_assoc]
     exact hgraph.trans hcollapse
   -- Done as a ring computation rather than by `simp` normalisation.  No
   -- associativity convention works here: right-association hides `P ∘ P` from
