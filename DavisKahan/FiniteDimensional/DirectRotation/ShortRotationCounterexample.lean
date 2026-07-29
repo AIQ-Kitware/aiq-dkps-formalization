@@ -65,16 +65,16 @@ def Wlin : E4 →ₗ[ℝ] E4 := Matrix.toEuclideanLin Wmat
 /-- The inverse (transpose) as a linear map. -/
 def Wlin' : E4 →ₗ[ℝ] E4 := Matrix.toEuclideanLin Wmat.transpose
 
-theorem Wlin_apply (x : E4) (i : Fin 4) :
+private theorem Wlin_apply (x : E4) (i : Fin 4) :
     Wlin x i = ∑ j, Wmat i j * x j := by
   simp [Wlin, Matrix.toLpLin_apply, Matrix.mulVec, dotProduct]
 
-theorem Wlin'_apply (x : E4) (i : Fin 4) :
+private theorem Wlin'_apply (x : E4) (i : Fin 4) :
     Wlin' x i = ∑ j, Wmat j i * x j := by
   simp [Wlin', Matrix.toLpLin_apply, Matrix.mulVec, dotProduct,
     Matrix.transpose_apply]
 
-theorem Wlin'_comp_Wlin : Wlin' ∘ₗ Wlin = LinearMap.id := by
+private theorem Wlin'_comp_Wlin : Wlin' ∘ₗ Wlin = LinearMap.id := by
   apply LinearMap.ext
   intro x
   ext i
@@ -84,7 +84,7 @@ theorem Wlin'_comp_Wlin : Wlin' ∘ₗ Wlin = LinearMap.id := by
   fin_cases i <;>
     simp [Wmat, Fin.sum_univ_four, Matrix.smul_apply] <;> ring
 
-theorem Wlin_comp_Wlin' : Wlin ∘ₗ Wlin' = LinearMap.id := by
+private theorem Wlin_comp_Wlin' : Wlin ∘ₗ Wlin' = LinearMap.id := by
   apply LinearMap.ext
   intro x
   ext i
@@ -94,7 +94,7 @@ theorem Wlin_comp_Wlin' : Wlin ∘ₗ Wlin' = LinearMap.id := by
   fin_cases i <;>
     simp [Wmat, Fin.sum_univ_four, Matrix.smul_apply] <;> ring
 
-theorem inner_Wlin_Wlin (x y : E4) : ⟪Wlin x, Wlin y⟫_ℝ = ⟪x, y⟫_ℝ := by
+private theorem inner_Wlin_Wlin (x y : E4) : ⟪Wlin x, Wlin y⟫_ℝ = ⟪x, y⟫_ℝ := by
   simp only [PiLp.inner_apply, RCLike.inner_apply, conj_trivial]
   simp only [Wlin_apply]
   simp only [Fin.sum_univ_four]
@@ -106,13 +106,13 @@ def Wequiv : E4 ≃ₗᵢ[ℝ] E4 :=
   (LinearEquiv.ofLinear Wlin Wlin' Wlin_comp_Wlin' Wlin'_comp_Wlin).isometryOfInner
     fun x y => inner_Wlin_Wlin x y
 
-theorem Wequiv_apply (x : E4) : Wequiv x = Wlin x := rfl
+private theorem Wequiv_apply (x : E4) : Wequiv x = Wlin x := rfl
 
-theorem Wequiv_symm_apply (x : E4) : Wequiv.symm x = Wlin' x := rfl
+private theorem Wequiv_symm_apply (x : E4) : Wequiv.symm x = Wlin' x := rfl
 
-theorem Wequiv_toLinearMap : Wequiv.toLinearMap = Wlin := rfl
+private theorem Wequiv_toLinearMap : Wequiv.toLinearMap = Wlin := rfl
 
-theorem Wlin_adjoint : LinearMap.adjoint Wlin = Wlin' :=
+private theorem Wlin_adjoint : LinearMap.adjoint Wlin = Wlin' :=
   Wequiv.adjoint_toLinearMap_eq_symm
 
 /-- The source subspace `span{e₀, e₁}`. -/
@@ -121,17 +121,17 @@ def U4 : Submodule ℝ E4 := Submodule.span ℝ {sv 0, sv 1}
 /-- The target subspace `W(U)`. -/
 def V4 : Submodule ℝ E4 := U4.map Wequiv.toLinearMap
 
-theorem mem_U4 {x : E4} (hx : x ∈ U4) : x = x 0 • sv 0 + x 1 • sv 1 := by
+private theorem mem_U4 {x : E4} (hx : x ∈ U4) : x = x 0 • sv 0 + x 1 • sv 1 := by
   obtain ⟨a, b, rfl⟩ := Submodule.mem_span_pair.mp hx
   ext i
   fin_cases i <;> simp [sv]
 
-theorem coord_eq_zero_of_mem_U4 {x : E4} (hx : x ∈ U4) :
+private theorem coord_eq_zero_of_mem_U4 {x : E4} (hx : x ∈ U4) :
     x 2 = 0 ∧ x 3 = 0 := by
   obtain ⟨a, b, rfl⟩ := Submodule.mem_span_pair.mp hx
   constructor <;> simp [sv]
 
-theorem projection_U4_apply (x : E4) :
+private theorem projection_U4_apply (x : E4) :
     projection U4 x = x 0 • sv 0 + x 1 • sv 1 := by
   show U4.starProjection x = _
   apply Submodule.eq_starProjection_of_mem_orthogonal
@@ -144,12 +144,12 @@ theorem projection_U4_apply (x : E4) :
     simp [sv, inner_add_left, inner_sub_right, real_inner_smul_left,
       EuclideanSpace.inner_single_left]
 
-theorem projection_U4_coord (x : E4) (i : Fin 4) :
+private theorem projection_U4_coord (x : E4) (i : Fin 4) :
     projection U4 x i = if i = 0 then x 0 else if i = 1 then x 1 else 0 := by
   rw [projection_U4_apply]
   fin_cases i <;> simp [sv]
 
-theorem projection_V4_apply (x : E4) :
+private theorem projection_V4_apply (x : E4) :
     projection V4 x = Wequiv (projection U4 (Wequiv.symm x)) := by
   have h := projection_intertwines_of_map_eq U4 V4 Wequiv rfl
   have hx := LinearMap.congr_fun h (Wequiv.symm x)
@@ -180,7 +180,7 @@ theorem inner_Wlin_sv0 (x : E4) :
     Matrix.smul_apply]
   ring
 
-theorem inner_Wlin_sv1 (x : E4) :
+private theorem inner_Wlin_sv1 (x : E4) :
     ⟪Wlin (sv 1), x⟫_ℝ = (-x 0 + x 1 - x 2 - x 3) / 2 := by
   simp only [PiLp.inner_apply, RCLike.inner_apply, conj_trivial, Wlin_apply]
   simp [sv, Wmat, PiLp.single_apply, Fin.sum_univ_four,
@@ -272,10 +272,10 @@ theorem abs_canonicalIntertwiner_eq :
     rw [Real.mul_self_sqrt (by norm_num : (0:ℝ) ≤ 2⁻¹)]
   exact ((LinearMap.isPositive_adjoint_comp_self _).sqrt_unique hpos hsq).symm
 
-theorem sqrt_two_mul_self : Real.sqrt 2 * Real.sqrt 2 = 2 :=
+private theorem sqrt_two_mul_self : Real.sqrt 2 * Real.sqrt 2 = 2 :=
   Real.mul_self_sqrt (by norm_num)
 
-theorem sqrt_half_eq : Real.sqrt 2⁻¹ = Real.sqrt 2 / 2 := by
+private theorem sqrt_half_eq : Real.sqrt 2⁻¹ = Real.sqrt 2 / 2 := by
   rw [Real.sqrt_inv]
   have h0 : Real.sqrt 2 ≠ 0 := by positivity
   field_simp
@@ -303,7 +303,7 @@ theorem gram_displacement_R :
   rw [map_sub, LinearMap.adjoint_id, ← displacementSquare_R]
   rfl
 
-theorem two_sub_sqrt_two_nonneg : (0:ℝ) ≤ 2 - Real.sqrt 2 := by
+private theorem two_sub_sqrt_two_nonneg : (0:ℝ) ≤ 2 - Real.sqrt 2 := by
   nlinarith [sqrt_two_mul_self, Real.sqrt_nonneg 2]
 
 /-- Every singular value of `I - R` is the constant chord `√(2-√2)`. -/
@@ -338,7 +338,7 @@ def mv : Fin 4 → E4 :=
   ![(Real.sqrt 2)⁻¹ • (sv 0 + sv 2), (Real.sqrt 2)⁻¹ • (sv 1 + sv 3),
     (Real.sqrt 2)⁻¹ • (sv 0 - sv 2), (Real.sqrt 2)⁻¹ • (sv 1 - sv 3)]
 
-theorem orthonormal_mv : Orthonormal ℝ mv := by
+private theorem orthonormal_mv : Orthonormal ℝ mv := by
   have h2 := sqrt_two_mul_self
   have h0 : Real.sqrt 2 ≠ 0 := by positivity
   have hh : (Real.sqrt 2)⁻¹ * (Real.sqrt 2)⁻¹ = 2⁻¹ := by
@@ -374,7 +374,7 @@ def mbasis : OrthonormalBasis (Fin 4) ℝ E4 :=
       rw [coe_basisOfLinearIndependentOfCardEqFinrank]
       exact orthonormal_mv)
 
-theorem mbasis_coe (i : Fin 4) : mbasis i = mv i := by
+private theorem mbasis_coe (i : Fin 4) : mbasis i = mv i := by
   rw [mbasis]
   rw [show ⇑((basisOfLinearIndependentOfCardEqFinrank
       orthonormal_mv.linearIndependent
@@ -398,7 +398,7 @@ theorem Wlin_mv0 : Wlin (mv 0) = mv 1 := by
     simp [Wlin_apply, Wmat, sv, PiLp.single_apply,
       Matrix.smul_apply] <;> ring
 
-theorem Wlin_mv1 : Wlin (mv 1) = -mv 0 := by
+private theorem Wlin_mv1 : Wlin (mv 1) = -mv 0 := by
   ext i
   simp only [mv]
   rw [show (![(Real.sqrt 2)⁻¹ • (sv 0 + sv 2), (Real.sqrt 2)⁻¹ • (sv 1 + sv 3),
@@ -409,7 +409,7 @@ theorem Wlin_mv1 : Wlin (mv 1) = -mv 0 := by
     simp [Wlin_apply, Wmat, sv, PiLp.single_apply,
       Matrix.smul_apply] <;> ring
 
-theorem Wlin_mv2 : Wlin (mv 2) = mv 2 := by
+private theorem Wlin_mv2 : Wlin (mv 2) = mv 2 := by
   ext i
   simp only [mv]
   rw [show (![(Real.sqrt 2)⁻¹ • (sv 0 + sv 2), (Real.sqrt 2)⁻¹ • (sv 1 + sv 3),
@@ -420,7 +420,7 @@ theorem Wlin_mv2 : Wlin (mv 2) = mv 2 := by
     simp [Wlin_apply, Wmat, sv, PiLp.single_apply,
       Matrix.smul_apply] <;> ring
 
-theorem Wlin_mv3 : Wlin (mv 3) = mv 3 := by
+private theorem Wlin_mv3 : Wlin (mv 3) = mv 3 := by
   ext i
   simp only [mv]
   rw [show (![(Real.sqrt 2)⁻¹ • (sv 0 + sv 2), (Real.sqrt 2)⁻¹ • (sv 1 + sv 3),
@@ -431,22 +431,22 @@ theorem Wlin_mv3 : Wlin (mv 3) = mv 3 := by
     simp [Wlin_apply, Wmat, sv, PiLp.single_apply,
       Matrix.smul_apply] <;> ring
 
-theorem Wlin'_mv0 : Wlin' (mv 0) = -mv 1 := by
+private theorem Wlin'_mv0 : Wlin' (mv 0) = -mv 1 := by
   have h : Wlin' (Wlin (mv 1)) = mv 1 := LinearMap.congr_fun Wlin'_comp_Wlin _
   rw [Wlin_mv1, map_neg] at h
   exact neg_eq_iff_eq_neg.mp h
 
-theorem Wlin'_mv1 : Wlin' (mv 1) = mv 0 := by
+private theorem Wlin'_mv1 : Wlin' (mv 1) = mv 0 := by
   have h : Wlin' (Wlin (mv 0)) = mv 0 := LinearMap.congr_fun Wlin'_comp_Wlin _
   rw [Wlin_mv0] at h
   exact h
 
-theorem Wlin'_mv2 : Wlin' (mv 2) = mv 2 := by
+private theorem Wlin'_mv2 : Wlin' (mv 2) = mv 2 := by
   have h : Wlin' (Wlin (mv 2)) = mv 2 := LinearMap.congr_fun Wlin'_comp_Wlin _
   rw [Wlin_mv2] at h
   exact h
 
-theorem Wlin'_mv3 : Wlin' (mv 3) = mv 3 := by
+private theorem Wlin'_mv3 : Wlin' (mv 3) = mv 3 := by
   have h : Wlin' (Wlin (mv 3)) = mv 3 := LinearMap.congr_fun Wlin'_comp_Wlin _
   rw [Wlin_mv3] at h
   exact h
@@ -462,7 +462,7 @@ theorem gram_displacement_W_mv0 :
     LinearMap.id_apply, map_sub, Wlin_mv0, Wlin'_mv0, Wlin'_mv1]
   module
 
-theorem gram_displacement_W_mv1 :
+private theorem gram_displacement_W_mv1 :
     (LinearMap.adjoint (LinearMap.id - Wlin) ∘ₗ (LinearMap.id - Wlin))
         (mbasis 1) = (2 : ℝ) • mbasis 1 := by
   rw [map_sub, LinearMap.adjoint_id, Wlin_adjoint]
@@ -470,7 +470,7 @@ theorem gram_displacement_W_mv1 :
     LinearMap.id_apply, map_sub, Wlin_mv1, Wlin'_mv1, Wlin'_mv0, map_neg]
   module
 
-theorem gram_displacement_W_mv2 :
+private theorem gram_displacement_W_mv2 :
     (LinearMap.adjoint (LinearMap.id - Wlin) ∘ₗ (LinearMap.id - Wlin))
         (mbasis 2) = (0 : ℝ) • mbasis 2 := by
   rw [map_sub, LinearMap.adjoint_id, Wlin_adjoint]
@@ -478,7 +478,7 @@ theorem gram_displacement_W_mv2 :
     LinearMap.id_apply, map_sub, Wlin_mv2, Wlin'_mv2]
   module
 
-theorem gram_displacement_W_mv3 :
+private theorem gram_displacement_W_mv3 :
     (LinearMap.adjoint (LinearMap.id - Wlin) ∘ₗ (LinearMap.id - Wlin))
         (mbasis 3) = (0 : ℝ) • mbasis 3 := by
   rw [map_sub, LinearMap.adjoint_id, Wlin_adjoint]
@@ -486,7 +486,7 @@ theorem gram_displacement_W_mv3 :
     LinearMap.id_apply, map_sub, Wlin_mv3, Wlin'_mv3]
   module
 
-theorem gram_displacement_W_apply (i : Fin 4) :
+private theorem gram_displacement_W_apply (i : Fin 4) :
     (LinearMap.adjoint (LinearMap.id - Wlin) ∘ₗ (LinearMap.id - Wlin))
         (mbasis i) =
       ((![2, 2, 0, 0] : Fin 4 → ℝ) i) • mbasis i := by
@@ -496,7 +496,7 @@ theorem gram_displacement_W_apply (i : Fin 4) :
   · exact gram_displacement_W_mv2
   · exact gram_displacement_W_mv3
 
-theorem antitone_two_two_zero_zero :
+private theorem antitone_two_two_zero_zero :
     Antitone (![2, 2, 0, 0] : Fin 4 → ℝ) := by
   intro i j hij
   fin_cases i <;> fin_cases j <;> simp_all
@@ -550,7 +550,7 @@ theorem gram_sinThetaMap_apply (i : Fin 4) :
     simp [projection_U4_coord, projection_V4_coord,
       EuclideanSpace.basisFun_apply] <;> ring
 
-theorem antitone_half_half_zero_zero :
+private theorem antitone_half_half_zero_zero :
     Antitone (![2⁻¹, 2⁻¹, 0, 0] : Fin 4 → ℝ) := by
   intro i j hij
   fin_cases i <;> fin_cases j <;> simp_all
