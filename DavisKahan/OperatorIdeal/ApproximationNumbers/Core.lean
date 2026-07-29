@@ -394,6 +394,7 @@ noncomputable def kyFanApproximationGauge
   K.kyFanGauge k
 
 omit [CompleteSpace E] [CompleteSpace F] in
+/-- The approximation-number Ky Fan gauge agrees definitionally with the Ky Fan gauge. -/
 theorem kyFanApproximationGauge_eq_kyFanGauge (k : ℕ) (K : E →L[𝕜] F) :
     kyFanApproximationGauge k K = K.kyFanGauge k := rfl
 
@@ -445,6 +446,7 @@ theorem kyFanApproximationGauge_comp_strongProjection_tendsto_complex
 
 end KyFanStrongCutoff
 
+/-- The rectangular Ky Fan sum is bounded by the approximation-number gauge. -/
 theorem rectangularKyFanSum_le_kyFanApproximationGauge
     {E₀ : Type vE0} {F₀ : Type vF0}
     [NormedAddCommGroup E₀] [InnerProductSpace 𝕜 E₀]
@@ -456,6 +458,8 @@ theorem rectangularKyFanSum_le_kyFanApproximationGauge
       kyFanApproximationGauge k A.toContinuousLinearMap :=
   (ContinuousLinearMap.rectangularKyFanSum_eq_kyFanGauge k A).le
 
+/-- In finite dimensions the two agree: the rectangular Ky Fan sum *is* the
+approximation-number gauge. -/
 theorem rectangularKyFanSum_eq_kyFanApproximationGauge
     {E₀ : Type vE0} {F₀ : Type vF0}
     [NormedAddCommGroup E₀] [InnerProductSpace 𝕜 E₀]
@@ -467,6 +471,7 @@ theorem rectangularKyFanSum_eq_kyFanApproximationGauge
       kyFanApproximationGauge k A.toContinuousLinearMap :=
   ContinuousLinearMap.rectangularKyFanSum_eq_kyFanGauge k A
 
+/-- Subadditivity of the Ky Fan gauge in finite dimensions. -/
 theorem kyFanApproximationGauge_add_le_finiteDimensional
     {E₀ : Type vE0} {F₀ : Type vF0}
     [NormedAddCommGroup E₀] [InnerProductSpace 𝕜 E₀]
@@ -487,6 +492,8 @@ variable {E₀ : Type vE0} {F₀ : Type vF0}
   [NormedAddCommGroup F₀] [InnerProductSpace 𝕜 F₀] [CompleteSpace F₀]
 
 omit [CompleteSpace E₀] [CompleteSpace F₀] in
+/-- Approximation singular values are monotone in the restricted subspace: enlarging
+the domain cannot decrease them. -/
 theorem approximationSingularValue_restrict_mono
     (T : E₀ →L[𝕜] F₀) (n : ℕ) {U V : Submodule 𝕜 E₀}
     (hUV : U ≤ V) :
@@ -494,6 +501,8 @@ theorem approximationSingularValue_restrict_mono
       approximationSingularValue n (T ∘L V.subtypeL) :=
   T.approximationNumber_restrict_mono n hUV
 
+/-- Composing with the orthogonal projection onto the range leaves every approximation
+singular value unchanged. -/
 theorem approximationSingularValue_orthogonalProjectionOnto_comp_eq
     {V : Type vG} {G : Type vH}
     [NormedAddCommGroup V] [InnerProductSpace 𝕜 V] [CompleteSpace V]
@@ -504,6 +513,8 @@ theorem approximationSingularValue_orthogonalProjectionOnto_comp_eq
       approximationSingularValue n A :=
   ContinuousLinearMap.approximationNumber_orthogonalProjectionOnto_comp_eq W A hA n
 
+/-- Composing with the orthogonal projection onto the range leaves the Ky Fan gauge
+unchanged. -/
 theorem kyFanApproximationGauge_orthogonalProjectionOnto_comp_eq
     {V : Type vG} {G : Type vH}
     [NormedAddCommGroup V] [InnerProductSpace 𝕜 V] [CompleteSpace V]
@@ -514,6 +525,7 @@ theorem kyFanApproximationGauge_orthogonalProjectionOnto_comp_eq
       kyFanApproximationGauge k A :=
   ContinuousLinearMap.kyFanGauge_orthogonalProjectionOnto_comp_eq W A hA k
 
+/-- Subadditivity of the Ky Fan gauge for finite-source operators. -/
 theorem kyFanApproximationGauge_add_le_finiteSource
     {V : Type vG} {G : Type vH}
     [NormedAddCommGroup V] [InnerProductSpace 𝕜 V]
@@ -552,6 +564,8 @@ variable {E₀ : Type vE0} {F₀ : Type vF0}
   [NormedAddCommGroup E₀] [InnerProductSpace ℂ E₀] [CompleteSpace E₀]
   [NormedAddCommGroup F₀] [InnerProductSpace ℂ F₀] [CompleteSpace F₀]
 
+/-- Approximation numbers are approached from below by finite restrictions: for every
+`ε > 0` some finitely-spanned restriction comes within `ε`. -/
 theorem exists_finiteRestrictionApproximationNumber_add_gt
     (T : E₀ →L[ℂ] F₀) (n : ℕ) (ε : ℝ) (hε : 0 < ε) :
     ∃ v : Fin (n + 1) → E₀,
@@ -559,6 +573,7 @@ theorem exists_finiteRestrictionApproximationNumber_add_gt
         (T ∘L (Submodule.span ℂ (Set.range v)).subtypeL).approximationNumber n + ε :=
   T.exists_finiteRestrictionApproximationNumber_add_gt n ε hε
 
+/-- Subadditivity of the Ky Fan gauge over `ℂ`. -/
 theorem kyFanApproximationGauge_add_le_complex
     (k : ℕ) (K L : E₀ →L[ℂ] F₀) :
     kyFanApproximationGauge k (K + L) ≤
