@@ -417,3 +417,54 @@ construction.
 `DavisKahan/Experimental` (outside `defaultTargets`), the 405-module
 `external/Spectra` reference checkout, and the 152-module transitive closure that
 production does not reference. None of those are port obligations.
+
+---
+
+## Authorship record for the 2026-07-29 lanes (SR-A … SR-F)
+
+**Scope of this section, per jon (2026-07-29):** *"We are tracking authorship,
+not a complete history trail — a pointer to where something came from is enough,
+along with notes on how it's deviated or diverged."*  So these rows give the
+donor pointer, the replacement, and the divergence; they do not repeat the
+nine-field schema above.
+
+Everything below was **re-proved natively**, not copied.  Spectra is credited
+for *theorem selection* — its statement is what identified the endpoint worth
+having — and the proofs are independent.  Where a native route is materially
+different from the donor's, that is said explicitly, because the difference is
+the interesting part.
+
+| donor constant (Spectra) | replacement (this repo) | authorship | divergence |
+|---|---|---|---|
+| `QuantumMechanics.SpectralTheory.spectralCalculus` + the Cayley selector bridge | `TauCeti.BorelCalculus.boundedPVM_proj_eq_cfcHom` | namek; Spectra: selection | Donor identified a bounded spectral projection in two steps — group calculus of the selector, then a Cayley identification with `cfcL`. Both collapse: a bounded self-adjoint operator's Borel calculus is indexed along the real part of *its own* spectrum, so the identification is definitional. ~250 lines of bridge deleted, not ported |
+| `spectralPVM_proj_eq_zero_of_subset_resolventSet` | `TauCeti.LinearPMap.{diag,specProjection}_eq_zero_of_subset_resolventSet` (`LinearPMap/SpectralSupport.lean`) | namek; Spectra: selection | Donor derives it from Stieltjes inversion of the Herglotz representation. Native route has no Herglotz layer: stated **first for the diagonal measures**, so `measure_null_of_locally_null` does the covering, then carried back to projections by `norm_sq_proj_apply` |
+| `spectralPVM_integrable_id`, `bornMeasure`, `bornExpectation` | `TauCeti.LinearPMap.{le_re_inner_of_specProjection_Iio_eq_zero, re_inner_le_of_specProjection_Ioi_eq_zero}` (`LinearPMap/SpectralFormBounds.lean`) | namek; Spectra: selection | **Statement deliberately weaker, and the donor statement is not reproduced.** The consumer wants a *form* bound, not a moment; the bounded form bound plus a limit gives it. No integrability fact is stated anywhere. If a second moment is ever wanted, it is new work |
+| `YosidaHille.Approximation.expBounded` and its seven lemmas | `NormedSpace.exp` directly (`Experimental/…/FourierSemigroup.lean`) | namek; Mathlib | Spectra itself proves `expBounded_eq_exp`, so this is substitution rather than a port. **`norm_semigroup_le_exp_norm` was dropped**: Mathlib has no `‖exp x‖ ≤ Real.exp ‖x‖` outside `ℂ`, and it had no consumers |
+| `QuantumMechanics.Channels.{polar_decomposition, polarIsometry_adjoint_comp, absOp}` | `ContinuousLinearMap.polarPartial` etc. (`ForTauCeti/…/PolarPartialIsometry.lean`) | edward (aiq-gpu); donor originally **Adam Bornemann** | `ForTauCeti`'s polar API is *rectangular* (`E →L[ℂ] F`), strictly more general than the donor's square version. Two facts were missing and were added |
+| `generatorIntertwiner_eq_zero_of_disjoint_spectrum` (Rosenblum) | `TauCeti.LinearPMap.eq_zero_of_intertwines_of_disjoint_spectrum` (`ForTauCeti/…/Rosenblum.lean`) | toothbrush (continuous half), namek (endgame); Spectra: selection | Donor goes through a Stone group and a generator-intertwiner structure. Native route has neither: the Sylvester equation **is** the intertwining relation. The Cayley singularity `1` — which blocks any single continuous separator when both operators are unbounded — is bought off by a damped sequence, because `{1}` is null for every diagonal measure. **No Borel functional calculus is used** |
+| `Operator.SelfAdjointOperator.ofBounded` | Mathlib `(A : H →ₗ[ℂ] H).toPMap ⊤` | namek; Mathlib | The donor's bundled `SelfAdjointOperator` stores a `LinearPMap`, i.e. the pattern U1 is deleting. Not re-introduced; `Interop/Spectra/Basic.lean` deleted outright |
+| `HilbertSchmidtTensor.Space` (SR-D, **in progress**) | `lp (fun _ : ι => E) 2` (`ForTauCeti/…/HilbertSchmidtLp.lean`) | namek; Mathlib | Donor builds the Hilbert tensor product by hand. Mathlib's `lp` already carries the inner product and completeness, so the space is *identified*, not constructed |
+
+### Enabling results that are ours outright
+
+Neither ported nor selected by Spectra — they came up because the native routes
+needed them, and Mathlib has them only for bounded operators or not at all:
+
+* `TauCeti.LinearPMap.isOpen_resolventSet` / `isClosed_spectrum` /
+  `measurableSet_realSpectrum` — namek.
+* `TauCeti.BorelCalculus.{borelCalculus_coord, borelCalculus_comm_self, boundedPVM_proj_comm}`
+  and the two half-line form bounds — namek.
+* `TauCeti.OneParameterUnitaryGroup.{toSemigroup, generator_toSemigroup}` — namek
+  (convergence Wave 3, not Spectra removal).
+
+### What still points at `vendor/Spectra`
+
+Per jon (2026-07-29): **`vendor/Spectra` does not have to be deleted.**  The
+requirement is that nothing *depends* on it.  Our own mathematics inside it
+should move to `ForTauCeti` where there is an API home; where there is not, it
+may stay in `vendor/` as inert provenance.
+
+Remaining dependencies: the five SR-D files, plus
+`scripts/ExportSpectraDeclClosure.lean` (the measurement tool, which is supposed
+to import Spectra) and `FinishTanTwoTheta/…/GroundedImports.lean` (explicitly out
+of scope).
