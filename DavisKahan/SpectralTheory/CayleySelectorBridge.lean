@@ -4,30 +4,31 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Fable 5
 -/
 import DavisKahan.SpectralTheory.ResolventOperator
-import DavisKahan.Interop.Spectra.Basic
 import DavisKahan.Interop.Spectra.BoundedSelfAdjointSpectralProjection
-import Spectra.SpectralTheory.ResolventForm
-import Spectra.StoneBridge.CalculusBridge
 import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Integral
 import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Isometric
 
 /-!
-# Cayley/selector bridge for bounded spectral projections
+# Selector bridge for bounded spectral projections
 
 The contour-free half of the spectral-identification machinery, split out of
 `ContinuationSpectralIdentification` so that consumers that produce their own
 continuous spectral symbol (for example the circle Riesz projection in
-`Frontier/RieszCircle.lean`) can identify the Spectra bounded selector calculus
-with a Mathlib continuous-functional-calculus value without importing the
+`Frontier/RieszCircle.lean`) can identify a bounded spectral projection with a
+Mathlib continuous-functional-calculus value without importing the
 contour-continuation chain (which is currently blocked on `SinTheta/General`).
 
 Contents: the selected-set spectral selector; the identification of the
-genuine bounded spectral projection with the Spectra selector calculus; the
-project resolvent as a continuous functional calculus; the interval-integral /
-calculus exchange; the bounded Cayley/Möbius bridge; and the contour-free
-generalization of the selector/cfcL identification, parametrized by any
-continuous spectral function that agrees with the selector on the real
-spectrum.
+genuine bounded spectral projection with the calculus of any continuous symbol
+agreeing with the selector on the real spectrum; the project resolvent as a
+continuous functional calculus; and the interval-integral / calculus exchange.
+
+The bounded Cayley/Möbius bridge that used to live here was deleted on
+2026-07-29 along with the Spectra dependency it existed to serve: it identified
+Spectra's `Cayley.cayley` with `cfc boundedMobiusSymbol` so that Spectra's
+group calculus of the selector could be recognised as `cfcL`.  The native
+`TauCeti.BorelCalculus.boundedPVM_proj_eq_cfcHom` states that identification
+directly, and no Cayley transform is needed for a bounded operator.
 -/
 
 namespace TauCeti
@@ -36,9 +37,7 @@ namespace DavisKahanExt
 open Set
 open MeasureTheory
 open scoped InnerProductSpace
-open Spectra.QuantumMechanics.SpectralTheory
 open DavisKahan.Experimental.Foundation
-open DavisKahan.Experimental.SpectraBridge
 
 universe v
 
@@ -62,8 +61,9 @@ theorem spectralSelector_measurable (s : Set ℝ) (hs : MeasurableSet s) :
 /-- The selected-set indicator is uniformly bounded by one. -/
 theorem spectralSelector_bounded (s : Set ℝ) :
     ∃ C : ℝ, ∀ lam : ℝ, ‖spectralSelector s lam‖ ≤ C := by
-  simpa only [spectralSelector] using
-    Spectra.QuantumMechanics.SpectralTheory.indicator_one_bdd s
+  classical
+  refine ⟨1, fun lam => ?_⟩
+  by_cases hlam : lam ∈ s <;> simp [spectralSelector, hlam]
 
 /-- **The genuine bounded spectral projection is the continuous functional
 calculus of any continuous symbol agreeing with the selector on the spectrum.**
@@ -189,265 +189,6 @@ theorem cfc_intervalIntegral_of_le'
       ∫ t in a..b, cfc (f t) A := by
   simpa only [intervalIntegral.integral_of_le hab] using
     (cfc_integral' f A hf_cont hf_int hA)
-
-/-! ## Compatibility of the bounded Spectra and Mathlib calculi -/
-
-/-- The scalar Möbius map used by the Cayley transform. -/
-noncomputable def boundedMobiusSymbol (z : ℂ) : ℂ :=
-  (z - Complex.I) * (z + Complex.I)⁻¹
-
-/-- The inverse Möbius map recovers every real scalar. -/
-theorem inverseMobius_boundedMobiusSymbol_ofReal (lam : ℝ) :
-    Spectra.Cayley.inverseMobius (boundedMobiusSymbol (lam : ℂ)) = (lam : ℂ) := by
-  have hne : (lam : ℂ) + Complex.I ≠ 0 :=
-    Spectra.Cayley.real_add_I_ne_zero lam
-  unfold boundedMobiusSymbol Spectra.Cayley.inverseMobius
-  rw [Spectra.Cayley.one_add_mobius lam hne,
-    Spectra.Cayley.one_sub_mobius lam hne]
-  field_simp [hne, Complex.I_ne_zero]
-
-/-- A real point belongs to the real spectrum once its complex coercion belongs
- to the complex spectrum of a self-adjoint operator. -/
-theorem mem_realSpectrum_of_coe_mem_spectrum
-    (A : H →L[ℂ] H) (_hA : IsSelfAdjointOperator A) {lam : ℝ}
-    (hlam : (lam : ℂ) ∈ spectrum ℂ A) :
-    lam ∈ realSpectrum A :=
-  hlam
-
-/-- The Möbius symbol is continuous on the spectrum of a bounded
-self-adjoint operator. -/
-theorem continuousOn_boundedMobiusSymbol_spectrum
-    (A : H →L[ℂ] H) (hA : IsSelfAdjointOperator A) :
-    ContinuousOn boundedMobiusSymbol (spectrum ℂ A) := by
-  have hAsa : IsSelfAdjoint A :=
-    ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hA
-  have hne : ∀ z ∈ spectrum ℂ A, z + Complex.I ≠ 0 := by
-    intro z hz
-    obtain ⟨lam, hlam, rfl⟩ :=
-      hAsa.spectrumRestricts.algebraMap_image.symm ▸ hz
-    exact Spectra.Cayley.real_add_I_ne_zero lam
-  unfold boundedMobiusSymbol
-  exact (continuous_id.sub continuous_const).continuousOn.mul
-    ((continuous_id.add continuous_const).continuousOn.inv₀ hne)
-
-/-- The Spectra resolvent at negative imaginary one agrees with the project
-resolvent of the original bounded operator. -/
-theorem resolventAtNegI_boundedSelfAdjointOperator_eq
-    (A : H →L[ℂ] H) (hA : IsSelfAdjointOperator A) :
-    Spectra.Resolvent.resolventAtNegI
-        (Spectra.Operator.isFormalAdjoint_self_of_isSelfAdjoint
-          (boundedSelfAdjointOperator A hA).selfAdjoint)
-        (Spectra.YosidaHille.isSelfAdjoint_to_surjective
-          (boundedSelfAdjointOperator A hA).selfAdjoint).1 =
-      resolventOperator A (-Complex.I) := by
-  let Aop := boundedSelfAdjointOperator A hA
-  let hSA := Aop.selfAdjoint
-  let hsym :=
-    Spectra.Operator.isFormalAdjoint_self_of_isSelfAdjoint hSA
-  let hplus := (Spectra.YosidaHille.isSelfAdjoint_to_surjective hSA).1
-  change Spectra.Resolvent.resolventAtNegI hsym hplus =
-    resolventOperator A (-Complex.I)
-  have hsep : ∀ lam ∈ realSpectrum A,
-      (1 : ℝ) ≤ ‖(-Complex.I : ℂ) - (lam : ℂ)‖ := by
-    intro lam hlam
-    calc
-      (1 : ℝ) = |((-Complex.I : ℂ) - (lam : ℂ)).im| := by simp
-      _ ≤ ‖(-Complex.I : ℂ) - (lam : ℂ)‖ :=
-        Complex.abs_im_le_norm _
-  have hz : InResolventSet A (-Complex.I) :=
-    complex_inResolventSet_of_distance A hA (-Complex.I) 1 zero_lt_one hsep
-  apply ContinuousLinearMap.ext
-  intro x
-  have hdom : Aop.toLinearPMap.domain = ⊤ := by
-    change Aop.domain = ⊤
-    simpa [Aop] using boundedSelfAdjointOperator_domain A hA
-  refine Spectra.Resolvent.resolvent_at_neg_i_unique hsym x
-    (Spectra.Resolvent.resolventAtNegI hsym hplus x)
-    (resolventOperator A (-Complex.I) x) ?_ ?_ ?_ ?_
-  · simpa [Spectra.Resolvent.resolventAtNegI,
-      Spectra.Resolvent.resolventAtImaginary, Spectra.Resolvent.Rplus] using
-      (Spectra.Resolvent.Rplus_mem hplus x)
-  · rw [hdom]
-    exact Submodule.mem_top
-  · simpa [Spectra.Resolvent.resolventAtNegI,
-      Spectra.Resolvent.resolventAtImaginary, Spectra.Resolvent.Rplus] using
-      (Spectra.Resolvent.Rplus_eq hplus x)
-  · have hcancel := congrArg
-        (fun T : H →L[ℂ] H => T x)
-        (mul_resolventOperator_cancel A hz)
-    change
-      A (resolventOperator A (-Complex.I) x) +
-        Complex.I • resolventOperator A (-Complex.I) x = x
-    simpa [mul_apply_eq_comp] using hcancel
-
-/-- For a bounded self-adjoint operator, Spectra's Cayley transform is the
-Mathlib continuous functional calculus of the scalar Möbius map. -/
-theorem cayley_boundedSelfAdjointOperator_eq_cfc
-    (A : H →L[ℂ] H) (hA : IsSelfAdjointOperator A) :
-    Spectra.Cayley.cayley (boundedSelfAdjointOperator A hA).selfAdjoint =
-      cfc boundedMobiusSymbol A := by
-  have hsep : ∀ lam ∈ realSpectrum A,
-      (1 : ℝ) ≤ ‖(-Complex.I : ℂ) - (lam : ℂ)‖ := by
-    intro lam hlam
-    calc
-      (1 : ℝ) = |((-Complex.I : ℂ) - (lam : ℂ)).im| := by simp
-      _ ≤ ‖(-Complex.I : ℂ) - (lam : ℂ)‖ :=
-        Complex.abs_im_le_norm _
-  have hres : resolventOperator A (-Complex.I) =
-      cfc (fun z : ℂ => (z + Complex.I)⁻¹) A := by
-    simpa only [sub_neg_eq_add] using
-      (resolventOperator_eq_cfc_resolventSymbol
-        A hA (-Complex.I) 1 zero_lt_one hsep)
-  have hAsa : IsSelfAdjoint A :=
-    ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hA
-  have hne : ∀ z ∈ spectrum ℂ A, z + Complex.I ≠ 0 := by
-    intro z hz
-    obtain ⟨lam, hlam, rfl⟩ :=
-      hAsa.spectrumRestricts.algebraMap_image.symm ▸ hz
-    exact Spectra.Cayley.real_add_I_ne_zero lam
-  have hinv : ContinuousOn (fun z : ℂ => (z + Complex.I)⁻¹)
-      (spectrum ℂ A) :=
-    (continuous_id.add continuous_const).continuousOn.inv₀ hne
-  have hscaled : ContinuousOn
-      (fun z : ℂ => (2 * Complex.I) * (z + Complex.I)⁻¹)
-      (spectrum ℂ A) := continuousOn_const.mul hinv
-  unfold Spectra.Cayley.cayley Spectra.Cayley.cayleyTransform
-  rw [resolventAtNegI_boundedSelfAdjointOperator_eq A hA, hres]
-  change
-    (1 : H →L[ℂ] H) -
-        (2 * Complex.I) • cfc (fun z : ℂ => (z + Complex.I)⁻¹) A =
-      cfc boundedMobiusSymbol A
-  calc
-    (1 : H →L[ℂ] H) -
-        (2 * Complex.I) • cfc (fun z : ℂ => (z + Complex.I)⁻¹) A =
-      cfc (fun z : ℂ => 1 - (2 * Complex.I) * (z + Complex.I)⁻¹) A := by
-        rw [cfc_sub (fun _ : ℂ => (1 : ℂ))
-          (fun z : ℂ => (2 * Complex.I) * (z + Complex.I)⁻¹) A
-          continuousOn_const hscaled,
-          cfc_const_one ℂ A,
-          cfc_const_mul (2 * Complex.I)
-            (fun z : ℂ => (z + Complex.I)⁻¹) A hinv]
-    _ = cfc boundedMobiusSymbol A := by
-      apply cfc_congr
-      intro z hz
-      have hzI : z + Complex.I ≠ 0 := hne z hz
-      unfold boundedMobiusSymbol
-      field_simp [hzI]
-      ring
-
-/-- The Möbius map bundled as a continuous function on the bounded complex
-spectrum. -/
-noncomputable def boundedMobiusSpectrumSymbol
-    (A : H →L[ℂ] H) (hA : IsSelfAdjointOperator A) :
-    C(spectrum ℂ A, ℂ) :=
-  ⟨fun z => boundedMobiusSymbol z,
-    (continuousOn_boundedMobiusSymbol_spectrum A hA).restrict⟩
-
-/-- Bundled form of the bounded Cayley/CFC identification. -/
-theorem cayley_boundedSelfAdjointOperator_eq_cfcHom
-    (A : H →L[ℂ] H) (hA : IsSelfAdjointOperator A) :
-    Spectra.Cayley.cayley (boundedSelfAdjointOperator A hA).selfAdjoint =
-      cfcHom
-        (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hA).isStarNormal
-        (boundedMobiusSpectrumSymbol A hA) := by
-  rw [cayley_boundedSelfAdjointOperator_eq_cfc A hA]
-  rw [cfc_apply boundedMobiusSymbol A
-    (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hA).isStarNormal
-    (continuousOn_boundedMobiusSymbol_spectrum A hA)]
-  rfl
-
-/-- The point one is absent from the Cayley spectrum of a bounded
-self-adjoint operator. -/
-theorem one_not_mem_spectrum_cayley_boundedSelfAdjointOperator
-    (A : H →L[ℂ] H) (hA : IsSelfAdjointOperator A) :
-    (1 : ℂ) ∉ spectrum ℂ
-      (Spectra.Cayley.cayley
-        (boundedSelfAdjointOperator A hA).selfAdjoint) := by
-  intro hone
-  let hnormal : IsStarNormal A :=
-    (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hA).isStarNormal
-  let f := boundedMobiusSpectrumSymbol A hA
-  have hone' : (1 : ℂ) ∈ spectrum ℂ (cfcHom hnormal f) := by
-    rw [← cayley_boundedSelfAdjointOperator_eq_cfcHom A hA]
-    exact hone
-  rw [cfcHom_map_spectrum] at hone'
-  obtain ⟨z, hz⟩ := hone'
-  have hAsa : IsSelfAdjoint A :=
-    ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hA
-  rcases z with ⟨z, hzspec⟩
-  obtain ⟨lam, hlam, rfl⟩ :=
-    hAsa.spectrumRestricts.algebraMap_image.symm ▸ hzspec
-  have hz' : boundedMobiusSymbol (lam : ℂ) = 1 := by
-    simpa [f, boundedMobiusSpectrumSymbol] using hz
-  have hne := Spectra.Cayley.one_sub_mobius_ne_zero lam
-    (Spectra.Cayley.real_add_I_ne_zero lam)
-  apply hne
-  change (1 : ℂ) - boundedMobiusSymbol (lam : ℂ) = 0
-  rw [hz']
-  simp
-
-/-- Inverse Möbius maps the bounded Cayley spectrum back into the complex
-spectrum of the original operator. -/
-theorem inverseMobius_mem_spectrum_of_mem_cayley_bounded
-    (A : H →L[ℂ] H) (hA : IsSelfAdjointOperator A)
-    (w : spectrum ℂ
-      (Spectra.Cayley.cayley
-        (boundedSelfAdjointOperator A hA).selfAdjoint)) :
-    Spectra.Cayley.inverseMobius (w : ℂ) ∈ spectrum ℂ A := by
-  let hnormal : IsStarNormal A :=
-    (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hA).isStarNormal
-  let f := boundedMobiusSpectrumSymbol A hA
-  have hw : (w : ℂ) ∈ spectrum ℂ (cfcHom hnormal f) := by
-    rw [← cayley_boundedSelfAdjointOperator_eq_cfcHom A hA]
-    exact w.property
-  rw [cfcHom_map_spectrum] at hw
-  obtain ⟨z, hz⟩ := hw
-  have hAsa : IsSelfAdjoint A :=
-    ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hA
-  rcases z with ⟨z, hzspec⟩
-  obtain ⟨lam, hlam, rfl⟩ :=
-    hAsa.spectrumRestricts.algebraMap_image.symm ▸ hzspec
-  have hlamC : (lam : ℂ) ∈ spectrum ℂ A := by
-    rw [← hAsa.spectrumRestricts.algebraMap_image]
-    exact ⟨lam, hlam, rfl⟩
-  have hz' : boundedMobiusSymbol (lam : ℂ) = (w : ℂ) := by
-    simpa [f, boundedMobiusSpectrumSymbol] using hz
-  change Spectra.Cayley.inverseMobius (w : ℂ) ∈ spectrum ℂ A
-  rw [← hz']
-  simpa using
-    (show Spectra.Cayley.inverseMobius
-        (boundedMobiusSymbol (lam : ℂ)) ∈ spectrum ℂ A by
-      rw [inverseMobius_boundedMobiusSymbol_ofReal]
-      exact hlamC)
-
-/-- The inverse Möbius map from the bounded Cayley spectrum to the original
-complex spectrum, bundled continuously. -/
-noncomputable def boundedCayleySpectrumInverse
-    (A : H →L[ℂ] H) (hA : IsSelfAdjointOperator A) :
-    C(spectrum ℂ
-        (Spectra.Cayley.cayley
-          (boundedSelfAdjointOperator A hA).selfAdjoint),
-      spectrum ℂ A) := by
-  let U := Spectra.Cayley.cayley
-    (boundedSelfAdjointOperator A hA).selfAdjoint
-  have hne : ∀ w ∈ spectrum ℂ U, (1 : ℂ) - w ≠ 0 := by
-    intro w hw
-    apply sub_ne_zero.mpr
-    intro h
-    apply one_not_mem_spectrum_cayley_boundedSelfAdjointOperator A hA
-    rw [h]
-    exact hw
-  have hcont : ContinuousOn Spectra.Cayley.inverseMobius
-      (spectrum ℂ U) := by
-    unfold Spectra.Cayley.inverseMobius
-    exact (continuous_const.mul (continuous_const.add continuous_id)).continuousOn.div
-      (continuous_const.sub continuous_id).continuousOn hne
-  exact
-    { toFun := fun w =>
-        ⟨Spectra.Cayley.inverseMobius (w : ℂ),
-          inverseMobius_mem_spectrum_of_mem_cayley_bounded A hA w⟩
-      continuous_toFun := hcont.restrict.subtype_mk
-        (fun w => inverseMobius_mem_spectrum_of_mem_cayley_bounded A hA w) }
 
 end CayleySelectorBridge
 

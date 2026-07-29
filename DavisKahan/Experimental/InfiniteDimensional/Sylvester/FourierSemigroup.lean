@@ -6,8 +6,8 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 import DavisKahan.Interop.Spectra.BoundedSelfAdjointSpectralProjection
 import DavisKahan.Experimental.InfiniteDimensional.Sylvester.FiniteBlockReconstruction
 import ForTauCeti.Analysis.Fourier.HaagerupZsidoKernel
-import Spectra.YosidaHille.Approximation.ExpBounded.Unitary
-import Spectra.CayleyTransform.BorelCalculus
+import Mathlib.Analysis.CStarAlgebra.ContinuousLinearMap
+import Mathlib.Analysis.SpecialFunctions.Exponential
 import Mathlib.MeasureTheory.Integral.Bochner.Basic
 import Mathlib.MeasureTheory.Integral.DominatedConvergence
 import Mathlib.MeasureTheory.Integral.ExpDecay
@@ -47,7 +47,6 @@ namespace DavisKahanExt
 open TauCeti
 open MeasureTheory Set Filter
 open scoped InnerProductSpace BigOperators
-open Spectra.YosidaHille.Approximation
 
 noncomputable section
 
@@ -134,38 +133,75 @@ section Exponentials
 variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
   [CompleteSpace H]
 
-/-- The unitary group `exp(i t A)` of a bounded complex operator. -/
+/-- The unitary group `exp(i t A)` of a bounded complex operator.
+
+Until 2026-07-29 this was Spectra's `expBounded (Complex.I • A) t`, which
+Spectra itself proves equal to `NormedSpace.exp ((t : ℂ) • (Complex.I • A))`
+(`expBounded_eq_exp`).  Mathlib's exponential is taken as the definition here,
+so the whole `ExpBounded` layer drops out.
+
+One casualty: `norm_semigroup_le_exp_norm` (`‖exp (tA)‖ ≤ exp (|t| ‖A‖)`) was a
+one-line wrapper of the donor's `expBounded_norm_bound`, and **Mathlib has no
+`‖exp x‖ ≤ Real.exp ‖x‖` for a general Banach algebra** — only for `ℂ`.  It had
+no consumers anywhere in the tree, so it was dropped rather than reproved from
+the exponential series. -/
 noncomputable def unitaryGroup (A : H →L[ℂ] H) (t : ℝ) : H →L[ℂ] H :=
-  expBounded (Complex.I • A) t
+  NormedSpace.exp ((t : ℂ) • (Complex.I • A))
 
 /-- The real exponential semigroup `exp(t A)`. -/
 noncomputable def semigroup (A : H →L[ℂ] H) (t : ℝ) : H →L[ℂ] H :=
-  expBounded A t
+  NormedSpace.exp ((t : ℂ) • A)
 
 @[simp] theorem unitaryGroup_zero (A : H →L[ℂ] H) :
     unitaryGroup A 0 = 1 := by
-  exact expBounded_at_zero' (Complex.I • A)
+  simp [unitaryGroup, NormedSpace.exp_zero]
 
 @[simp] theorem semigroup_zero (A : H →L[ℂ] H) :
     semigroup A 0 = 1 := by
-  exact expBounded_at_zero' A
+  simp [semigroup, NormedSpace.exp_zero]
 
 /-- Group law for `exp(i t A)`. -/
 theorem unitaryGroup_add (A : H →L[ℂ] H) (s t : ℝ) :
     unitaryGroup A (s + t) = unitaryGroup A s ∘L unitaryGroup A t := by
-  exact expBounded_add_smul (Complex.I • A) s t
+  have hcomm : Commute (((s : ℂ)) • (Complex.I • A)) (((t : ℂ)) • (Complex.I • A)) := by
+    simp [Commute, SemiconjBy, smul_smul, mul_comm, mul_left_comm]
+  rw [unitaryGroup, unitaryGroup, unitaryGroup, ← ContinuousLinearMap.mul_def,
+    ← NormedSpace.exp_add_of_commute_of_mem_ball (𝕂 := ℂ) hcomm
+      ((NormedSpace.expSeries_radius_eq_top ℂ (H →L[ℂ] H)).symm ▸ edist_lt_top _ _)
+      ((NormedSpace.expSeries_radius_eq_top ℂ (H →L[ℂ] H)).symm ▸ edist_lt_top _ _),
+    ← add_smul]
+  push_cast
+  rfl
 
 /-- Semigroup/group law for `exp(t A)`. -/
 theorem semigroup_add (A : H →L[ℂ] H) (s t : ℝ) :
     semigroup A (s + t) = semigroup A s ∘L semigroup A t := by
-  exact expBounded_add_smul A s t
+  have hcomm : Commute (((s : ℂ)) • A) (((t : ℂ)) • A) := by
+    simp [Commute, SemiconjBy, smul_smul, mul_comm, mul_left_comm]
+  rw [semigroup, semigroup, semigroup, ← ContinuousLinearMap.mul_def,
+    ← NormedSpace.exp_add_of_commute_of_mem_ball (𝕂 := ℂ) hcomm
+      ((NormedSpace.expSeries_radius_eq_top ℂ (H →L[ℂ] H)).symm ▸ edist_lt_top _ _)
+      ((NormedSpace.expSeries_radius_eq_top ℂ (H →L[ℂ] H)).symm ▸ edist_lt_top _ _),
+    ← add_smul]
+  push_cast
+  rfl
+
+/-- The generator commutes with its own semigroup. -/
+theorem commute_semigroup (A : H →L[ℂ] H) (t : ℝ) :
+    Commute A (semigroup A t) :=
+  ((Commute.refl A).smul_right ((t : ℂ))).exp_right
 
 /-- Self-adjoint generators give unitary exponentials. -/
 theorem unitaryGroup_mem_unitary (A : H →L[ℂ] H)
     (hA : IsSelfAdjointOperator A) (t : ℝ) :
     unitaryGroup A t ∈ unitary (H →L[ℂ] H) := by
-  apply expBounded_mem_unitary
-  exact smul_I_skewSelfAdjoint A hA.clm_adjoint_eq
+  have hsa : IsSelfAdjoint ((t : ℂ) • A) :=
+    IsSelfAdjoint.smul (Complex.conj_ofReal t)
+      (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hA)
+  have hrw : (t : ℂ) • (Complex.I • A) = Complex.I • ((t : ℂ) • A) := by
+    rw [smul_comm]
+  rw [unitaryGroup, hrw]
+  exact (selfAdjoint.expUnitary (⟨(t : ℂ) • A, hsa⟩ : selfAdjoint (H →L[ℂ] H))).2
 
 /-- The inverse of `exp(i t A)` is `exp(-i t A)`. -/
 theorem unitaryGroup_neg_mul (A : H →L[ℂ] H)
@@ -246,17 +282,18 @@ theorem norm_unitary_left_right
 theorem hasDerivAt_unitaryGroup (A : H →L[ℂ] H) (t : ℝ) :
     HasDerivAt (unitaryGroup A)
       ((Complex.I • A) ∘L unitaryGroup A t) t := by
-  exact expBounded_hasDerivAt (Complex.I • A) t
+  have hre : HasDerivAt (fun u : ℝ => (u : ℂ)) 1 t := Complex.ofRealCLM.hasDerivAt
+  have h := (hasDerivAt_exp_smul_const' (𝕂 := ℂ) (Complex.I • A) (t : ℂ)).scomp t hre
+  rw [one_smul] at h
+  exact h
 
 /-- Derivative of the real exponential group. -/
 theorem hasDerivAt_semigroup (A : H →L[ℂ] H) (t : ℝ) :
     HasDerivAt (semigroup A) (A ∘L semigroup A t) t := by
-  exact expBounded_hasDerivAt A t
-
-/-- Elementary norm estimate for the real exponential. -/
-theorem norm_semigroup_le_exp_norm (A : H →L[ℂ] H) (t : ℝ) :
-    ‖semigroup A t‖ ≤ Real.exp (|t| * ‖A‖) := by
-  exact expBounded_norm_bound A t
+  have hre : HasDerivAt (fun u : ℝ => (u : ℂ)) 1 t := Complex.ofRealCLM.hasDerivAt
+  have h := (hasDerivAt_exp_smul_const' (𝕂 := ℂ) A (t : ℂ)).scomp t hre
+  rw [one_smul] at h
+  exact h
 
 /-- The real exponential group is norm continuous in time. -/
 theorem continuous_semigroup (A : H →L[ℂ] H) :
@@ -274,7 +311,7 @@ theorem continuous_unitaryGroup_generator (t : ℝ) :
   have heq : (fun M : H →L[ℂ] H => unitaryGroup M t) =
       fun M => NormedSpace.exp ((t : ℂ) • (Complex.I • M)) := by
     funext M
-    exact expBounded_eq_exp (Complex.I • M) t
+    rfl
   rw [heq]
   have hexp : Continuous (NormedSpace.exp : (H →L[ℂ] H) → H →L[ℂ] H) :=
     continuous_iff_continuousAt.mpr fun x =>
@@ -532,7 +569,7 @@ theorem unitaryGroup_finiteSpectralStep
       ∑ i, Complex.exp (((t * S.representative i : ℝ) : ℂ) * Complex.I) •
         boundedSelfAdjointSpectralProjection A hA (S.cell i)
           (S.measurable_cell i) := by
-  rw [unitaryGroup, expBounded_eq_exp, smul_smul]
+  rw [unitaryGroup, smul_smul]
   exact unitaryGroup_finiteDiagonal
     (fun i => boundedSelfAdjointSpectralProjection A hA (S.cell i) (S.measurable_cell i))
     S.representative
@@ -554,10 +591,10 @@ theorem finiteSpectralStep_reconstruction
         unitaryGroup SB.operator (-t)) := by
   have hUA : ∀ s : ℝ, unitaryGroup SA.operator s =
       NormedSpace.exp (((s : ℂ) * Complex.I) • SA.operator) := fun s => by
-    rw [unitaryGroup, expBounded_eq_exp, smul_smul]
+    rw [unitaryGroup, smul_smul]
   have hUB : ∀ s : ℝ, unitaryGroup SB.operator s =
       NormedSpace.exp (((s : ℂ) * Complex.I) • SB.operator) := fun s => by
-    rw [unitaryGroup, expBounded_eq_exp, smul_smul]
+    rw [unitaryGroup, smul_smul]
   have hSAop : SA.operator = finiteDiagonalOperator
       (fun i => boundedSelfAdjointSpectralProjection A hA (SA.cell i) (SA.measurable_cell i))
       SA.representative := rfl
