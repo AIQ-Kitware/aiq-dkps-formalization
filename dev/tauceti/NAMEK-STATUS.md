@@ -374,3 +374,106 @@ One caveat to check rather than assume: `Audits/SylvesterHilbertSchmidt.lean`
 and `Sylvester/HilbertSchmidtPairwise.lean` also import Spectra's BornRule /
 PVM / Observable modules, which are **not** Hilbert–Schmidt infrastructure and
 may need a different replacement or may turn out to be unused `open`s.
+
+---
+
+## Update 2026-07-29 — S6 groundwork: the authorship debt is measurably shrinking
+
+Two S6 steps that do **not** wait on SR-D4b, both landed.
+
+### 1. The namespace gate is future-proofed
+
+`scripts/check_spectra_namespace.py` walks every `.lean` file in the repo and
+forbids declaring into `namespace Spectra` outside an exempt prefix.  The S6
+plan moves `vendor/Spectra` to `retired/Spectra`; without `retired/` in
+`EXEMPT_PREFIXES` **that move alone would turn 427 legitimately-vendored files
+into reported violations**, failing the gate on a commit that changes no Lean
+source. `retired/` is now listed, ahead of the move, so the two concerns stay
+separable.  Gate still green today (the prefix matches nothing yet).
+
+### 2. Four of the eleven DKPS-authored vendor files are now unreachable
+
+`dev/tauceti/spectra-vendor-authorship-baseline.json` lists 11 files inside
+`vendor/Spectra` that are ours rather than the donor's.  Computing the
+transitive import closure of the **three** remaining in-scope consumers into the
+vendored tree (100 vendored modules reachable) gives:
+
+| authored file | still reachable? |
+| --- | --- |
+| `Spaces/Tensor/HilbertSchmidt.lean` | reachable |
+| `Spaces/Tensor/HilbertSchmidtFlow.lean` | reachable |
+| `Spaces/Tensor/HilbertSchmidtGeneratorBridge.lean` | reachable |
+| `Spaces/Tensor/HilbertSchmidtSpectralGap.lean` | reachable |
+| `SpectralTheory/Calculus/SpectralGapInverse.lean` | reachable |
+| `OneParameterUnitaryGroup/Product.lean` | reachable |
+| `QuantumMechanics/BornRule/POVMCore.lean` | reachable |
+| `ProjValMeasure/GeneralMap.lean` | **dead** |
+| `QuantumMechanics/BornRule/Joint/ProjectivePVM.lean` | **dead** |
+| `SpectralTheory/SeparatedIntertwiner.lean` | **dead** |
+| `YosidaHille/RectangularIntertwining.lean` | **dead** |
+
+`ProjectivePVM.lean` became dead today, when the vestigial Born-rule import was
+dropped from `Audits/SylvesterHilbertSchmidt.lean`.
+`SeparatedIntertwiner.lean` was already superseded by
+`ForTauCeti/Analysis/InnerProductSpace/SeparatedIntertwiner.lean`.
+
+Per jon's instruction the bar for these is *"nothing depends on it"*, not
+deletion — so the four dead ones are **done**, and porting them to `ForTauCeti`
+is optional rather than required.
+
+**All seven survivors are the SR-D4b cluster.**  That is the useful conclusion:
+there is no separate authorship backlog left to work off.  Closing D4b closes
+the authorship ledger at the same time.
+
+---
+
+## Update 2026-07-29 — SR-D4b: a better attack than the one I posted earlier
+
+I earlier recommended extending `FourierSemigroup.lean` to unbounded generators
+and to the Hilbert–Schmidt norm.  **I now think that is the worse of the two
+routes**, and this supersedes it.  The reduction chain below is unchanged and
+still correct; only the final step's proof strategy is different.
+
+### The chain, restated
+
+1. `HasVectorSpectralGap hS δ f` unfolds to
+   `(spectralPVM hS).diag f (Ioo (-δ) δ) = 0`.
+2. `diag_eq_zero_of_subset_resolventSet` supplies that **for every `f` at once**
+   given `∀ real s, |s| < δ → (s : ℂ) ∈ resolventSet 𝒮`.
+3. `𝒮` is self-adjoint, so for **real** `s` the resolvent condition follows from
+   a **lower bound alone**: `𝒮 - s` bounded below is injective with closed
+   range, and self-adjointness makes `ran(𝒮-s)^⊥ = ker(𝒮-s) = 0`, so the range
+   is dense and therefore everything.  This is the pattern already written for
+   the imaginary-shift case in `SelfAdjointResolvent.lean`
+   (`isClosed_range_shiftMap`, `surjective_shiftMap`); only the input estimate
+   changes.
+4. So the entire lane is: **`(δ - |s|) ‖Z‖ ≤ ‖𝒮 Z - s Z‖` on `dom 𝒮`.**
+
+### The better proof of step 4: finite partitions, not product measures
+
+Let `P_i = E_A(S_i)` and `Q_j = E_B(T_j)` be the spectral projections of `A` and
+`B` for finite Borel partitions of the two spectra into pieces of diameter `≤ ε`.
+Then:
+
+* `P_i` commutes with `A` and `Q_j` with `B`, so `P_i (𝒮 Z) Q_j = 𝒮 (P_i Z Q_j)`
+  — the Sylvester operator preserves each block;
+* on the block, `A` is within `ε` of a scalar `λ_i` and `B` within `ε` of `α_j`,
+  so `‖𝒮 (P_i Z Q_j)‖ ≥ (|λ_i - α_j| - 2ε) ‖P_i Z Q_j‖ ≥ (δ - 2ε) ‖P_i Z Q_j‖`;
+* **Pythagoras in Hilbert–Schmidt**: since `∑_i P_i = 1` and `∑_j Q_j = 1` with
+  the pieces mutually orthogonal, `∑_{i,j} ‖P_i Z Q_j‖² = ‖Z‖²`, and likewise
+  for `𝒮 Z`.
+
+Summing the block estimates gives `‖𝒮 Z‖ ≥ (δ - 2ε) ‖Z‖`, and `ε → 0` finishes.
+Shifting `B` by `s` (`σ(B + s) = σ(B) + s`) gives the `s` version.
+
+**Why this is better than the Fourier route.**  It needs no operator-valued
+integral, no characteristic-function identity, no Haagerup–Zsidó multiplier, and
+no bounded-to-unbounded extension — the spectral projections of an unbounded
+self-adjoint operator are already in the tree (`specProjection`), and they are
+exactly what the argument consumes.  The Fourier route needs all four.
+
+**The one genuinely new ingredient** is the Hilbert–Schmidt Pythagoras identity
+`∑_{i,j} ‖P_i Z Q_j‖² = ‖Z‖²` for orthogonal families acting on the two sides.
+In the `lp`-of-columns model the right-hand projections act on the index and the
+left-hand ones columnwise, so this is a genuine lemma and is the natural first
+commit of the lane — and it is worth having independently of D4b.
