@@ -351,10 +351,34 @@ X ∘ E_B(S) = E_A(S) ∘ X      whenever   A(Xy) = X(By) on dom B.
 `ForTauCeti`'s Borel layer has `borelCalculus_comm` and
 `specProjection_comm_resolvent`, but those are **same-operator** commutation.
 Nothing there is rectangular. Building it means carrying the intertwining down
-the construction namek used: resolvents (`X R_B(z) = R_A(z) X`, which follows in
-a few lines from the Sylvester equation and surjectivity of `B - z`), then the
-Cayley transform, then `borelCalculus`, then `specProjection`. Four lemmas, each
-routine, none currently present.
+namek's construction: resolvents, then the Cayley transform, then
+`borelCalculus`, then `specProjection`.
+
+**Progress, and a correction to my own sizing.** I called all four "routine".
+The first two are, and they are **done and axiom-clean** in
+`ForTauCeti/Analysis/InnerProductSpace/SeparatedIntertwiner.lean`:
+
+* `resolvent_intertwines` / `resolvent_intertwines'` — `X R_B = R_A X`, from the
+  two defining properties of a resolvent alone;
+* `cayley_intertwines` — `X ∘ cayley hB = cayley hA ∘ X`, immediate at `z = -i`
+  since `cayley hA = 1 - 2i • R_A(-i)`.
+
+**The third is not routine, and calling it so was a mis-sizing.**
+`borelCalculus` is not a rewrite of the Cayley transform: it is built from a
+sesquilinear `pair` form against `diagMeasure ha ξ`. Intertwining *two
+different* operators through it means relating `diagMeasure` for `a` and for `b`
+along `X`, and the functions live on **different spectra**
+(`spectrum ℂ (cayley hA)` versus `spectrum ℂ (cayley hB)`), so there is not even
+a common domain on which to state a naive equality. The standard route is
+polynomials (trivial), then continuous functional calculus via
+Stone--Weierstrass on a set containing both spectra, then Borel by a
+monotone-class or dominated-convergence argument on the `pair` form. Expect a
+few hundred lines, not a few.
+
+The fourth step is genuinely short once the third exists, since
+`specProjection` is by definition the calculus at an indicator. After that the
+endgame is immediate: SR-B gives `E_B(spec A) = 0` from disjointness and
+`E_A(spec A) = id` from the same theorem on the complement.
 
 **Do not expect a shortcut through the spectral gap.** The sibling theorem
 `linearPMapSylvester_homogeneous_eq_zero_of_pairwiseSpectrumGap` handles
