@@ -27,14 +27,19 @@ variable {𝕜 : Type*} [RCLike 𝕜]
 noncomputable def pairSingularValues (s0 s1 : ℝ) : ℕ →₀ ℝ :=
   Finsupp.single 0 s0 + Finsupp.single 1 s1
 
+/-- The leading entry of the pair. -/
 @[simp] theorem pairSingularValues_zero (s0 s1 : ℝ) :
     pairSingularValues s0 s1 0 = s0 := by
   simp [pairSingularValues]
 
+/-- The second entry of the pair. -/
 @[simp] theorem pairSingularValues_one (s0 s1 : ℝ) :
     pairSingularValues s0 s1 1 = s1 := by
   simp [pairSingularValues]
 
+/-- The pair has no further entries: everything from index `2` on vanishes.
+This is what makes `pairSingularValues` usable as a *complete* singular-value
+sequence rather than a prefix. -/
 @[simp] theorem pairSingularValues_of_two_le (s0 s1 : ℝ) {i : ℕ} (hi : 2 ≤ i) :
     pairSingularValues s0 s1 i = 0 := by
   simp [pairSingularValues, Nat.ne_of_gt (lt_of_lt_of_le Nat.zero_lt_two hi),

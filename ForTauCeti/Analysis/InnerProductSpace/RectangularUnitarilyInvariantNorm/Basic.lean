@@ -77,6 +77,7 @@ instance : CoeFun (RectangularUnitarilyInvariantNorm 𝕜 E F)
 variable (N : RectangularUnitarilyInvariantNorm 𝕜 E F)
 
 
+/-- A rectangular UI seminorm vanishes at zero. -/
 @[simp] theorem apply_zero : N (0 : E →ₗ[𝕜] F) = 0 := by
   have h := N.smul' 0 (0 : E →ₗ[𝕜] F)
   simpa using h
@@ -397,6 +398,7 @@ noncomputable def codomainIsometryTransport
       _ = (ι.toLinearMap ∘ₗ A).singularValues :=
         (singularValues_linearIsometry_comp ι A).symm
 
+/-- Codomain transport, unfolded. -/
 @[simp] theorem codomainIsometryTransport_apply
     {H : Type*} [NormedAddCommGroup H] [InnerProductSpace 𝕜 H]
     [FiniteDimensional 𝕜 H]
@@ -442,6 +444,7 @@ noncomputable def domainIsometryTransport
       _ = (A ∘ₗ LinearMap.adjoint ι.toLinearMap).singularValues :=
         (singularValues_comp_adjoint_linearIsometry ι A).symm
 
+/-- Domain transport, unfolded. -/
 @[simp] theorem domainIsometryTransport_apply
     {H : Type*} [NormedAddCommGroup H] [InnerProductSpace 𝕜 H]
     [FiniteDimensional 𝕜 H]

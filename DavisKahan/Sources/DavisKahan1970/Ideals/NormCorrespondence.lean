@@ -379,6 +379,7 @@ noncomputable def toPaperNorm (Φ : PaperSymmetricNormingFunction) :
     rw [Φ.finiteNorm_gauge, Φ.finiteNorm_gauge]
     exact Φ.zero_pad x
 
+/-- The transported paper norm has finite gauge, so it lands in the ideal. -/
 @[simp]
 theorem toPaperNorm_finiteGauge (Φ : PaperSymmetricNormingFunction) (n : ℕ)
     (x : Fin n → ℝ) :

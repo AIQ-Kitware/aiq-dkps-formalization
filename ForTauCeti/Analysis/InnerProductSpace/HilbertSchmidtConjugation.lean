@@ -55,6 +55,7 @@ theorem eq_of_columns_eq {S T : F →L[𝕜] E} (b : HilbertBasis ι 𝕜 F)
   exact lp.ext h
 
 omit [CompleteSpace F] in
+/-- The column-to-operator map is additive. -/
 @[simp] theorem ofLp_add (b : HilbertBasis ι 𝕜 F) (f g : lp (fun _ : ι => E) 2) :
     ofLp b (f + g) = ofLp b f + ofLp b g := by
   refine eq_of_columns_eq b ?_ ?_ ?_
@@ -63,6 +64,7 @@ omit [CompleteSpace F] in
   · rw [columns_ofLp, columns_add, columns_ofLp, columns_ofLp]; rfl
 
 omit [CompleteSpace F] in
+/-- The column-to-operator map is homogeneous. -/
 @[simp] theorem ofLp_smul (b : HilbertBasis ι 𝕜 F) (c : 𝕜) (f : lp (fun _ : ι => E) 2) :
     ofLp b (c • f) = c • ofLp b f := by
   refine eq_of_columns_eq b ?_ ?_ ?_

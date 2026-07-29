@@ -1,33 +1,41 @@
 # Proof obligations
 
-## Discharged by the aggregate target
+## Already compiled before this proof attempt
 
-- bounded approximation-number spectral selection;
-- double-angle tangent functional calculus;
-- stable bounded Riccati coefficient estimate;
-- sharp Ky Fan domination;
-- maximal/minimal standard symmetric ideal promotion;
-- finite-dimensional Section 7 UI-norm source theorem;
-- arbitrary-space sharp operator-norm theorem and acute branch.
+- the finite-dimensional Section 7 UI-norm theorem in the main Davis--Kahan
+  tree;
+- the finite-carrier ambient extension;
+- the local approximation-number spectral-selection stack;
+- the arbitrary-Hilbert post-quarter Riccati/Ky-Fan/Fan-dominance estimate.
 
-## Not discharged
+The retained `paperTanTwoTheta_uiNorm_finite_alternate` is a duplicate finite
+regression derivation, not an open obligation and not the completion target.
 
-### Paper-faithful bounded source theorem
+## Exact bounded completion target
 
-`paperFaithful_tanTwoTheta_uiNorm` is intentionally admitted.  The proved
-`sharp_paperUnitaryInvariantNorm` theorem assumes an already selected strictly
-contractive Riccati graph coordinate and estimates its off-diagonal block.  The
-paper-facing theorem must instead construct the quarter-acute branch from the
-original reducing-subspace and fully off-diagonal perturbation hypotheses and
-then bound the canonical `tan 2Theta(U,V)` operator by the source norm of the
-full perturbation.
+`paperFaithful_tanTwoTheta_uiNorm` must compile exactly as stated, with:
 
-The unrestricted **unbounded** sharp ideal extension is not a theorem of the
-aggregate target.  Its former proof depended on obtaining domain-compatible
-approximate singular vectors from arbitrary spectral bands.  The repository now
-contains a counterexample to that density mechanism.
+- no `FiniteDimensional` or finite-carrier hypothesis;
+- quarter-acuteness derived from the original reducing-subspace, ordered-gap,
+  and full off-diagonal hypotheses;
+- the conclusion phrased for the canonical ambient
+  `tanTwoAngleOperatorC U V hquarter`;
+- membership and the sharp factor-two gauge inequality against the full
+  perturbation `H`;
+- no `sorry`, `admit`, or new axiom.
 
-A future unbounded completion must use a different argument—most plausibly the
-source reflection reduction together with a genuinely unbounded single-angle
-ideal theorem, or a new compact/exact-singular-system route under additional
-hypotheses.  It must not reintroduce the refuted spectral-band selection claim.
+The current proof attempt writes both missing bridges in full:
+
+1. dimension-free branch selection by reflected centered operators, a
+   Lyapunov identity, positive square-root similarity, spectral half-plane
+   separation, and reflection algebra;
+2. canonical-to-graph tangent transport by the graph projection formula,
+   source compressions of sine/cosine, modulus identification, zero extension,
+   and complete approximation-number preservation.
+
+The immediate remaining obligation is compiler validation and repair of these
+written arguments without narrowing the theorem.  After compilation, run the
+repository grounding checks and `#print axioms` on the unrestricted theorem.
+
+The unrestricted unbounded sharp ideal theorem remains separate from this
+bounded target.

@@ -62,10 +62,12 @@ variable [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
 noncomputable def columns (b : HilbertBasis ι 𝕜 F) (T : F →L[𝕜] E) : ι → E := fun i => T (b i)
 
 omit [CompleteSpace E] [CompleteSpace F] in
+/-- The `i`-th column is the operator applied to the `i`-th basis vector. -/
 @[simp] theorem columns_apply (b : HilbertBasis ι 𝕜 F) (T : F →L[𝕜] E) (i : ι) :
     columns b T i = T (b i) := rfl
 
 omit [CompleteSpace E] [CompleteSpace F] in
+/-- The zero operator has zero columns. -/
 @[simp] theorem columns_zero (b : HilbertBasis ι 𝕜 F) :
     columns b (0 : F →L[𝕜] E) = 0 := by
   funext i; simp [columns]

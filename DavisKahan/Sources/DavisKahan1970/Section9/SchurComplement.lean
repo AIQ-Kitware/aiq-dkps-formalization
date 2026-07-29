@@ -37,6 +37,7 @@ def blockOperator : (E × F) →ₗ[𝕜] (E × F) where
   map_add' x y := by ext <;> simp <;> abel
   map_smul' c x := by ext <;> simp
 
+/-- The block operator, unfolded to its two coordinates. -/
 @[simp] lemma blockOperator_apply (x : E) (y : F) :
     blockOperator A₀ A₁ B Bstar (x, y) =
       (A₀ x + Bstar y, B x + A₁ y) := rfl
@@ -50,6 +51,7 @@ theorem block_eigenproblem_iff (x : E) (y : F) :
 /-- The shifted lower block `lam I - A₁`. -/
 def lowerShift : F →ₗ[𝕜] F := lam • LinearMap.id - A₁
 
+/-- The lower shift acts by moving each coordinate down one index. -/
 lemma lowerShift_apply (y : F) :
     lowerShift A₁ lam y = lam • y - A₁ y := by
   rfl

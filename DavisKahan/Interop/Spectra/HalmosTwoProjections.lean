@@ -105,6 +105,7 @@ noncomputable abbrev halmosTrivialPart (U V : Submodule ℂ H) : Submodule ℂ H
 noncomputable abbrev halmosGenericPart (U V : Submodule ℂ H) : Submodule ℂ H :=
   (halmosTrivialPart U V)ᗮ
 
+/-- The common part `U ⊓ V` is orthogonally complemented. -/
 noncomputable instance instHasOrthogonalProjectionHalmosCommonPart
     (U V : Submodule ℂ H) [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] :
@@ -112,6 +113,7 @@ noncomputable instance instHasOrthogonalProjectionHalmosCommonPart
   change (U ⊓ V).HasOrthogonalProjection
   infer_instance
 
+/-- The source defect `U ⊓ Vᗮ` is orthogonally complemented. -/
 noncomputable instance instHasOrthogonalProjectionHalmosSourceDefect
     (U V : Submodule ℂ H) [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] :
@@ -119,6 +121,7 @@ noncomputable instance instHasOrthogonalProjectionHalmosSourceDefect
   change (U ⊓ Vᗮ).HasOrthogonalProjection
   infer_instance
 
+/-- The target defect `Uᗮ ⊓ V` is orthogonally complemented. -/
 noncomputable instance instHasOrthogonalProjectionHalmosTargetDefect
     (U V : Submodule ℂ H) [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] :
@@ -126,6 +129,9 @@ noncomputable instance instHasOrthogonalProjectionHalmosTargetDefect
   change (Uᗮ ⊓ V).HasOrthogonalProjection
   infer_instance
 
+/-- The exterior part `Uᗮ ⊓ Vᗮ` is orthogonally complemented.  These four
+instances are what let the elementary summands carry projections of their own,
+which the decomposition argument then adds up. -/
 noncomputable instance instHasOrthogonalProjectionHalmosExteriorPart
     (U V : Submodule ℂ H) [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] :
@@ -133,18 +139,24 @@ noncomputable instance instHasOrthogonalProjectionHalmosExteriorPart
   change (Uᗮ ⊓ Vᗮ).HasOrthogonalProjection
   infer_instance
 
+/-- The common part is where both subspaces meet. -/
 @[simp]
 theorem mem_halmosCommonPart {U V : Submodule ℂ H} {x : H} :
     x ∈ halmosCommonPart U V ↔ x ∈ U ∧ x ∈ V := Iff.rfl
 
+/-- The source defect is the part of `U` missed by `V`. -/
 @[simp]
 theorem mem_halmosSourceDefect {U V : Submodule ℂ H} {x : H} :
     x ∈ halmosSourceDefect U V ↔ x ∈ U ∧ x ∈ Vᗮ := Iff.rfl
 
+/-- The target defect is the part of `V` missed by `U`. -/
 @[simp]
 theorem mem_halmosTargetDefect {U V : Submodule ℂ H} {x : H} :
     x ∈ halmosTargetDefect U V ↔ x ∈ Uᗮ ∧ x ∈ V := Iff.rfl
 
+/-- The exterior part is where neither subspace reaches.  With the previous
+three, these are the four *elementary* summands on which both projections act as
+`0` or `1`; everything nontrivial happens on the generic remainder. -/
 @[simp]
 theorem mem_halmosExteriorPart {U V : Submodule ℂ H} {x : H} :
     x ∈ halmosExteriorPart U V ↔ x ∈ Uᗮ ∧ x ∈ Vᗮ := Iff.rfl
@@ -223,6 +235,9 @@ theorem halmosTargetDefect_le_exterior_orthogonal
   intro x hx y hy
   exact inner_eq_zero_symm.mp (hy.2 x hx.2)
 
+/-- The trivial part — the join of all four elementary summands — is
+orthogonally complemented.  Built from the four component instances, using that
+the summands are mutually orthogonal, which is what makes the join well behaved. -/
 noncomputable instance instHasOrthogonalProjectionHalmosTrivialPart
     (U V : Submodule ℂ H) [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] :
@@ -485,6 +500,7 @@ theorem projection_sq
     projection U * projection U = projection U :=
   U.isIdempotentElem_starProjection
 
+/-- `P Pᗮ = 0`: a projection annihilates its own complement. -/
 @[simp]
 theorem projection_mul_complementaryProjection
     (U : Submodule ℂ H) [U.HasOrthogonalProjection] :
@@ -494,6 +510,7 @@ theorem projection_mul_complementaryProjection
   have hP := projection_sq U
   noncomm_ring [hP]
 
+/-- `Pᗮ P = 0`, the other order. -/
 @[simp]
 theorem complementaryProjection_mul_projection
     (U : Submodule ℂ H) [U.HasOrthogonalProjection] :
@@ -503,6 +520,9 @@ theorem complementaryProjection_mul_projection
   have hP := projection_sq U
   noncomm_ring [hP]
 
+/-- The complementary projection is idempotent.  With the two annihilation
+lemmas above, these are the rewrites the `noncomm_ring` steps in the cosine and
+sine identities run on. -/
 @[simp]
 theorem complementaryProjection_sq
     (U : Submodule ℂ H) [U.HasOrthogonalProjection] :

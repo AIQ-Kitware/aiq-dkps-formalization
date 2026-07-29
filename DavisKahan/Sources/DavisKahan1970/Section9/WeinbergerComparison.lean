@@ -48,6 +48,7 @@ noncomputable def weinbergerComparisonMatrix (ε : ℝ) : ArrowheadThreeByThree 
   coupling₀ := ε * (Real.sqrt 30 / 30)
   coupling₁ := ε * (Real.sqrt 30 / 30)
 
+/-- Entries of the Weinberger comparison matrix. -/
 lemma weinbergerComparisonMatrix_charAt (ε lam : ℝ) :
     (weinbergerComparisonMatrix ε).charAt lam =
       (ritzLow ε - lam) * (ritzHigh ε - lam) * (500 - lam)

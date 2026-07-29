@@ -78,6 +78,7 @@ def domain (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E)) :
   complexifySubmodule A.domain
 
 omit [CompleteSpace E] in
+/-- Membership in the complexified domain, in terms of the two coordinates. -/
 @[simp] theorem mem_domain_iff
     (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E))
     (z : Eℂ) :
@@ -122,12 +123,14 @@ def linearMap
       rw [map_add, map_smul, map_smul]
 
 omit [CompleteSpace E] in
+/-- The real-part map, as a linear map. -/
 @[simp] theorem re_linearMap
     (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E))
     (z : domain A) :
     re (linearMap A z) = A.toLinearMap (domainRe A z) := rfl
 
 omit [CompleteSpace E] in
+/-- The imaginary-part map, as a linear map. -/
 @[simp] theorem im_linearMap
     (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E))
     (z : domain A) :
@@ -207,11 +210,13 @@ def complexify
   closed_graph := linearMap_closedGraph A
 
 omit [CompleteSpace E] in
+/-- The complexified domain, unfolded. -/
 @[simp] theorem complexify_domain
     (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E)) :
     (complexify A).domain = domain A := rfl
 
 omit [CompleteSpace E] in
+/-- Membership criterion for the complexified domain. -/
 @[simp] theorem mem_complexify_domain_iff
     (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E))
     (z : Eℂ) :
@@ -219,6 +224,7 @@ omit [CompleteSpace E] in
   rfl
 
 omit [CompleteSpace E] in
+/-- The complexified operator acts on the real coordinate by the original operator. -/
 @[simp] theorem complexify_apply_re
     (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E))
     (z : (complexify A).domain) :
@@ -227,6 +233,7 @@ omit [CompleteSpace E] in
   rfl
 
 omit [CompleteSpace E] in
+/-- The complexified operator acts on the imaginary coordinate by the original operator. -/
 @[simp] theorem complexify_apply_im
     (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E))
     (z : (complexify A).domain) :
@@ -261,6 +268,7 @@ def domainImPMap
     (mem_complexify_toLinearPMap_domain_iff A z).mp z.property |>.2⟩
 
 omit [CompleteSpace E] in
+/-- The same, through the underlying partial map. -/
 @[simp] theorem complexify_toLinearPMap_apply_re
     (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E))
     (z : (complexify A).toLinearPMap.domain) :
@@ -269,6 +277,7 @@ omit [CompleteSpace E] in
   rfl
 
 omit [CompleteSpace E] in
+/-- The same on the imaginary coordinate, through the underlying partial map. -/
 @[simp] theorem complexify_toLinearPMap_apply_im
     (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E))
     (z : (complexify A).toLinearPMap.domain) :
@@ -292,6 +301,8 @@ def ofRealDomain
   ⟨ofReal (x : E), by simp⟩
 
 omit [CompleteSpace E] in
+/-- Complexification agrees with the original operator on real vectors, so the real operator embeds
+in its complexification rather than merely mapping to it. -/
 @[simp] theorem complexify_apply_ofReal
     (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E))
     (x : A.domain) :
@@ -313,6 +324,7 @@ def ofRealDomainPMap
   ⟨ofReal (x : E), by simp⟩
 
 omit [CompleteSpace E] in
+/-- The real-vector agreement, through the underlying partial map. -/
 @[simp] theorem complexify_toLinearPMap_apply_ofReal
     (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E))
     (x : A.toLinearPMap.domain) :
@@ -340,6 +352,7 @@ def ofImaginaryDomain
     exact ⟨A.domain.zero_mem, x.property⟩⟩
 
 omit [CompleteSpace E] in
+/-- Action on a purely imaginary vector: the operator commutes with multiplication by `i`. -/
 @[simp] theorem complexify_apply_ofImaginary
     (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E))
     (x : A.domain) :

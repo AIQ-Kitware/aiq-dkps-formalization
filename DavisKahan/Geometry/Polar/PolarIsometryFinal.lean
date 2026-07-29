@@ -106,6 +106,7 @@ then applying the partial isometry. -/
 theorem polarIsometry_apply_eq (T : H →L[ℂ] H) (w : H) :
     polarIsometry T w = polarPartial T (T.polarInitial.orthogonalProjectionOnto w) := rfl
 
+/-- The polar partial isometry recovers `T` from its modulus: `U (|T| x) = T x`. -/
 @[simp] theorem polarIsometry_absOp (T : H →L[ℂ] H) (x : H) :
     polarIsometry T (absOp T x) = T x :=
   T.polarPartial_apply_modulus x

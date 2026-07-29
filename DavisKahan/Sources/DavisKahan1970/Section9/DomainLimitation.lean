@@ -31,6 +31,9 @@ noncomputable def diagonalMultiplier (μ : ℝ) (n : ℕ) : ℝ := (μ ^ n)⁻¹
 noncomputable def rawDiagonalImage (μ : ℝ) (n : ℕ) : ℝ :=
   diagonalMultiplier μ n * rawTrialSequence μ n
 
+/-- The diagonal multiplier exactly cancels the geometric trial sequence, so every entry of the
+image is `1`.  This is why the partial energies grow like `N` and the raw sequence is outside the
+domain. -/
 lemma rawDiagonalImage_eq_one {μ : ℝ} (hμ : μ ≠ 0) (n : ℕ) :
     rawDiagonalImage μ n = 1 := by
   unfold rawDiagonalImage diagonalMultiplier rawTrialSequence
@@ -52,20 +55,25 @@ def truncatedTrialSequence (μ : ℝ) (N n : ℕ) : ℝ :=
 noncomputable def truncatedDiagonalImage (μ : ℝ) (N n : ℕ) : ℝ :=
   diagonalMultiplier μ n * truncatedTrialSequence μ N n
 
+/-- Below the cut the truncation agrees with the raw sequence. -/
 lemma truncatedTrialSequence_eq_raw {μ : ℝ} {N n : ℕ} (hn : n < N) :
     truncatedTrialSequence μ N n = rawTrialSequence μ n := by
   simp [truncatedTrialSequence, rawTrialSequence, hn]
 
+/-- Above the cut the truncation vanishes, which is what puts it in the domain. -/
 lemma truncatedTrialSequence_eq_zero {μ : ℝ} {N n : ℕ} (hn : N ≤ n) :
     truncatedTrialSequence μ N n = 0 := by
   simp [truncatedTrialSequence, not_lt.mpr hn]
 
+/-- Below the cut the truncated image is still `1`. -/
 lemma truncatedDiagonalImage_eq_one
     {μ : ℝ} (hμ : μ ≠ 0) {N n : ℕ} (hn : n < N) :
     truncatedDiagonalImage μ N n = 1 := by
   simp [truncatedDiagonalImage, truncatedTrialSequence, diagonalMultiplier,
     hn, inv_mul_cancel₀ (pow_ne_zero n hμ)]
 
+/-- Above the cut it vanishes, so the truncated image has finite energy `N` -- finite for each `N`,
+unbounded in `N`, which is exactly the domain obstruction. -/
 lemma truncatedDiagonalImage_eq_zero
     {μ : ℝ} {N n : ℕ} (hn : N ≤ n) :
     truncatedDiagonalImage μ N n = 0 := by

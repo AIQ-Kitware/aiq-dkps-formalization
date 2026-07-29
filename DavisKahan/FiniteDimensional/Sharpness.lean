@@ -105,6 +105,7 @@ open Filter
 
 variable {𝕜 : Type*} [RCLike 𝕜]
 
+/-- The model two-dimensional space in which the sharpness counterexamples live. -/
 abbrev Plane (𝕜 : Type*) [RCLike 𝕜] := EuclideanSpace 𝕜 (Fin 2)
 
 /-- First standard basis vector of the planar model. -/
@@ -193,33 +194,41 @@ noncomputable def modelTanTwoThetaPerturbation (a b θ : ℝ) :
 @[simp] theorem norm_e0 : ‖e0 (𝕜 := 𝕜)‖ = 1 := by
   simp [e0]
 
+/-- `e1` is a unit vector. -/
 @[simp] theorem norm_e1 : ‖e1 (𝕜 := 𝕜)‖ = 1 := by
   simp [e1]
 
+/-- `e0` is normalised. -/
 @[simp] theorem inner_e0_e0 : ⟪e0 (𝕜 := 𝕜), e0⟫_𝕜 = 1 := by
   simp [e0]
 
+/-- `e1` is normalised. -/
 @[simp] theorem inner_e1_e1 : ⟪e1 (𝕜 := 𝕜), e1⟫_𝕜 = 1 := by
   simp [e1]
 
+/-- `e0` and `e1` are orthogonal. -/
 @[simp] theorem inner_e0_e1 : ⟪e0 (𝕜 := 𝕜), e1⟫_𝕜 = 0 := by
   simp [e0, e1, EuclideanSpace.inner_single_left]
 
+/-- Orthogonality in the other order, for `simp` to close either orientation. -/
 @[simp] theorem inner_e1_e0 : ⟪e1 (𝕜 := 𝕜), e0⟫_𝕜 = 0 := by
   simp [e0, e1, EuclideanSpace.inner_single_left]
 
+/-- The rotated generator's overlap with `e0` is `cos θ`. -/
 @[simp] theorem inner_uθ_e0 (θ : ℝ) :
     ⟪uθ (𝕜 := 𝕜) θ, e0⟫_𝕜 = (Real.cos θ : 𝕜) := by
   rw [uθ, inner_add_left, inner_smul_left, inner_smul_left,
     inner_e0_e0, inner_e1_e0, RCLike.conj_ofReal, RCLike.conj_ofReal]
   ring
 
+/-- The rotated generator's overlap with `e1` is `sin θ`. -/
 @[simp] theorem inner_uθ_e1 (θ : ℝ) :
     ⟪uθ (𝕜 := 𝕜) θ, e1⟫_𝕜 = (Real.sin θ : 𝕜) := by
   rw [uθ, inner_add_left, inner_smul_left, inner_smul_left,
     inner_e0_e1, inner_e1_e1, RCLike.conj_ofReal, RCLike.conj_ofReal]
   ring
 
+/-- The rotated generator is a unit vector: the rotation is by a genuine angle. -/
 @[simp] theorem norm_uθ (θ : ℝ) : ‖uθ (𝕜 := 𝕜) θ‖ = 1 := by
   have hsq : ‖uθ (𝕜 := 𝕜) θ‖ ^ 2 = 1 := by
     rw [norm_sq_eq_re_inner (𝕜 := 𝕜), uθ]
@@ -265,18 +274,22 @@ private theorem starProjection_span_singleton_apply_of_norm_one
     | add a b _ _ ha hb => rw [inner_add_right, ha, hb, add_zero]
     | smul c a _ ha => rw [inner_smul_right, ha, mul_zero]
 
+/-- The model subspace projects `e0` to itself. -/
 @[simp] theorem modelSubspace_starProjection_e0 :
     (modelSubspace (𝕜 := 𝕜)).starProjection (e0 (𝕜 := 𝕜)) = e0 := by
   have h := starProjection_span_singleton_apply_of_norm_one (𝕜 := 𝕜)
     (e0 (𝕜 := 𝕜)) (e0 (𝕜 := 𝕜)) norm_e0
   simpa [modelSubspace] using h
 
+/-- The model subspace annihilates `e1`. -/
 @[simp] theorem modelSubspace_starProjection_e1 :
     (modelSubspace (𝕜 := 𝕜)).starProjection (e1 (𝕜 := 𝕜)) = 0 := by
   have h := starProjection_span_singleton_apply_of_norm_one (𝕜 := 𝕜)
     (e0 (𝕜 := 𝕜)) (e1 (𝕜 := 𝕜)) norm_e0
   simpa [modelSubspace] using h
 
+/-- The rotated subspace sends `e0` to `cos θ • uθ`: the overlap is the cosine of the angle, which
+is what makes `θ` the principal angle between the two subspaces. -/
 @[simp] theorem rotatedModelSubspace_starProjection_e0 (θ : ℝ) :
     (rotatedModelSubspace (𝕜 := 𝕜) θ).starProjection (e0 (𝕜 := 𝕜)) =
       (Real.cos θ : 𝕜) • uθ θ := by
@@ -284,6 +297,7 @@ private theorem starProjection_span_singleton_apply_of_norm_one
     (uθ (𝕜 := 𝕜) θ) (e0 (𝕜 := 𝕜)) (norm_uθ θ)
   simpa [rotatedModelSubspace] using h
 
+/-- The rotated subspace sends `e1` to `sin θ • uθ`. -/
 @[simp] theorem rotatedModelSubspace_starProjection_e1 (θ : ℝ) :
     (rotatedModelSubspace (𝕜 := 𝕜) θ).starProjection (e1 (𝕜 := 𝕜)) =
       (Real.sin θ : 𝕜) • uθ θ := by

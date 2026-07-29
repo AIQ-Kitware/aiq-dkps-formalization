@@ -55,6 +55,7 @@ structure CompatibleCrossOperatorNorm where
     (R : X →L[ℂ] X), ‖L‖ ≤ 1 → ‖R‖ ≤ 1 →
       toFun (L ∘L T ∘L R) ≤ toFun T
 
+/-- The residual surface subspace is orthogonally complemented. -/
 instance : CoeFun (CompatibleCrossOperatorNorm (X := X) (Y := Y))
     (fun _ => (X →L[ℂ] Y) → ℝ) :=
   ⟨CompatibleCrossOperatorNorm.toFun⟩
