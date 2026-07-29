@@ -231,7 +231,8 @@ def conjugation [NormedAddCommGroup E] [InnerProductSpace ℝ E] :
     RealComplexification E →ₗᵢ[ℝ] RealComplexification E where
   toFun z := mk (re z) (-im z)
   map_add' z w := by
-    apply RealComplexification.ext <;> simp <;> abel
+    apply RealComplexification.ext <;> simp
+    abel
   map_smul' r z := by apply RealComplexification.ext <;> simp
   norm_map' z := by
     rw [← sq_eq_sq₀ (norm_nonneg _) (norm_nonneg _), norm_sq, norm_sq]
@@ -250,7 +251,8 @@ def conjugation [NormedAddCommGroup E] [InnerProductSpace ℝ E] :
 @[simp] theorem conjugation_complex_smul [NormedAddCommGroup E] [InnerProductSpace ℝ E]
     (c : ℂ) (z : RealComplexification E) :
     conjugation (c • z) = conj c • conjugation z := by
-  apply RealComplexification.ext <;> simp [Complex.conj_re, Complex.conj_im] <;> module
+  apply RealComplexification.ext <;> simp [Complex.conj_re, Complex.conj_im]
+  module
 
 /-- Coordinatewise extension of a bounded real-linear operator. -/
 def complexify [NormedAddCommGroup E] [InnerProductSpace ℝ E]

@@ -213,8 +213,7 @@ theorem conjugateOperator_complex_smul (c : ℂ)
     conjugateOperator (c • A) = (starRingEnd ℂ) c • conjugateOperator A := by
   apply ContinuousLinearMap.ext
   intro z
-  simp only [conjugateOperator_apply, ContinuousLinearMap.smul_apply,
-    conjugation_complex_smul]
+  simp only [conjugateOperator_apply, smul_apply, conjugation_complex_smul]
 
 omit [CompleteSpace E] in
 /-- Conjugating twice returns the original operator. -/
