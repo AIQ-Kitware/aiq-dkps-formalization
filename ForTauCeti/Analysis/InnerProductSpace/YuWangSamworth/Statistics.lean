@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
 import ForTauCeti.Analysis.InnerProductSpace.SinTheta.Perturbation
-import DavisKahan.Sources.YuWangSamworth2015
+import ForTauCeti.Analysis.InnerProductSpace.YuWangSamworth.Residual
 import ForTauCeti.Analysis.InnerProductSpace.AlignedBasis
 
 /-!
@@ -19,6 +19,19 @@ Literature map:
 
 This file gives the existing YWS results a canonical subspace-facing API and
 records the full interval-block, aligned-basis, and single-vector surfaces.
+
+## Provenance
+
+*Moved, not restated.*  This file was `DavisKahan/Specialized/Statistics.lean`
+until 2026-07-29, when lane Y3(c) moved the last three `DavisKahan` modules of
+the Yu--Wang--Samworth payload into the staging layer, finishing Y3.  Statements,
+proofs, signatures and namespaces are unchanged; the declarations already lived
+in `TauCeti.*`.
+
+Y3(b2)/(b3)/(b4) are what made it possible: they took the sin-Θ perturbation
+closure this file rests on out of `ForMathlib` and `DavisKahan` entirely, so the
+last edge to sever was this one.
+
 -/
 
 namespace TauCeti

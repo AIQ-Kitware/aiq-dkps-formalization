@@ -5,6 +5,6 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Sources.Davis1963.All
 import DavisKahan.Sources.DavisKahan1970.All
-import DavisKahan.Sources.YuWangSamworth2015
+import ForTauCeti.Analysis.InnerProductSpace.YuWangSamworth.Residual
 
 /-! # `DavisKahan/Sources` -/

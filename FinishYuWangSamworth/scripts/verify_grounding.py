@@ -5,10 +5,10 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 
 REQUIRED_FILES = [
-    "DavisKahan/Sources/YuWangSamworth2015.lean",
-    "DavisKahan/Specialized/Statistics.lean",
-    "DavisKahan/Specialized/SingularSubspace.lean",
-    "DavisKahan/FiniteDimensional/SinTheta/Perturbation.lean",
+    "ForTauCeti/Analysis/InnerProductSpace/YuWangSamworth/Residual.lean",
+    "ForTauCeti/Analysis/InnerProductSpace/YuWangSamworth/Statistics.lean",
+    "ForTauCeti/Analysis/InnerProductSpace/YuWangSamworth/SingularSubspace.lean",
+    "ForTauCeti/Analysis/InnerProductSpace/SinTheta/Perturbation.lean",
     "DavisKahan/Sources/DavisKahan1970/Ideals/HilbertSchmidt.lean",
     "DavisKahan/Sources/DavisKahan1970/Ideals/HilbertSchmidtFrobenius.lean",
     "FinishYuWangSamworth/FinishYuWangSamworth/Symmetric/Theorem1.lean",
@@ -20,12 +20,12 @@ REQUIRED_FILES = [
 ]
 
 REQUIRED_DECLARATIONS = {
-    "DavisKahan/Specialized/Statistics.lean": [
+    "ForTauCeti/Analysis/InnerProductSpace/YuWangSamworth/Statistics.lean": [
         "theorem yuWangSamworth_sinTheta_le",
         "theorem yuWangSamworth_alignedBasis_le",
         "theorem yuWangSamworth_eigenvector_le",
     ],
-    "DavisKahan/FiniteDimensional/SinTheta/Perturbation.lean": [
+    "ForTauCeti/Analysis/InnerProductSpace/SinTheta/Perturbation.lean": [
         "theorem sinTheta_perturbation_le",
         "theorem opNorm_sinThetaMap_le_of_intervalGap",
     ],
