@@ -308,14 +308,35 @@ private theorem tanTwoAngleOperatorC_eq_modulus_ambientGraphTangent
     exact hidentity
   let Cang : E →L[ℂ] E := cosAngleOperatorC U V
   let Sang : E →L[ℂ] E := sinAngleOperatorDirectedC U V
+  -- `modulus_mul_self` is stated with `*`; these goals carry `∘SL`, which is
+  -- defeq but not syntactically equal, so `← mul_def` has to bridge it first.
+  -- Then `|Q P|² = (QP)⋆(QP) = P Q Q P = P Q P` by self-adjointness and
+  -- idempotence of the two star-projections, which is exactly `hPQP`.
+  have hQQ : V.starProjection ∘L V.starProjection = V.starProjection :=
+    V.isIdempotentElem_starProjection
+  have hQperpQperp :
+      Vᗮ.starProjection ∘L Vᗮ.starProjection = Vᗮ.starProjection :=
+    Vᗮ.isIdempotentElem_starProjection
   have hCangSq : Cang ∘L Cang = R ∘L P := by
     dsimp [Cang, cosAngleOperatorC]
-    rw [ContinuousLinearMap.modulus_mul_self]
-    simpa only [ContinuousLinearMap.star_eq_adjoint] using hPQP
+    rw [← ContinuousLinearMap.mul_def, ContinuousLinearMap.modulus_mul_self,
+      ContinuousLinearMap.adjoint_comp,
+      (isSelfAdjoint_starProjection U).adjoint_eq,
+      (isSelfAdjoint_starProjection V).adjoint_eq,
+      ContinuousLinearMap.comp_assoc,
+      ← ContinuousLinearMap.comp_assoc V.starProjection V.starProjection
+        U.starProjection, hQQ]
+    exact hPQP
   have hSangSq : Sang ∘L Sang = G ∘L R ∘L P := by
     dsimp [Sang, sinAngleOperatorDirectedC]
-    rw [ContinuousLinearMap.modulus_mul_self]
-    simpa only [ContinuousLinearMap.star_eq_adjoint] using hPQperpP
+    rw [← ContinuousLinearMap.mul_def, ContinuousLinearMap.modulus_mul_self,
+      ContinuousLinearMap.adjoint_comp,
+      (isSelfAdjoint_starProjection U).adjoint_eq,
+      (isSelfAdjoint_starProjection Vᗮ).adjoint_eq,
+      ContinuousLinearMap.comp_assoc,
+      ← ContinuousLinearMap.comp_assoc Vᗮ.starProjection Vᗮ.starProjection
+        U.starProjection, hQperpQperp]
+    exact hPQperpP
   have hSCcomm : Commute Sang Cang :=
     commute_sinAngleOperatorDirectedC_cosAngleOperatorC U V
   have hSinTwo : sinTwoAngleOperatorC U V = (2 : ℂ) • (Sang ∘L Cang) := rfl
