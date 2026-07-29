@@ -1,3 +1,63 @@
+# namek status — the Tau Ceti migration
+
+## 2026-07-29, end of day: where the campaign actually is
+
+**Spectra removal is closed.** In-scope `import Spectra` went 26 → 0; the
+snapshot is `retired/Spectra`, kept only because `FinishTanTwoTheta`'s
+`GroundedImports.lean` still reaches it and jon placed that out of scope. The
+`production_imports_spectra` ratchet is `[]`.
+
+**Y3 is complete.** Four lanes moved the whole Davis--Kahan sin-Θ and
+Yu--Wang--Samworth stack out of `ForMathlib` and `DavisKahan`:
+
+| lane | what moved | lines |
+| --- | --- | --- |
+| Y3(b2) | the 8-module `ForMathlib/Analysis/InnerProductSpace` component | 1,773 |
+| Y3(b3) | the sin-Θ closure's dependency-closed base, 6 modules | 1,217 |
+| Y3(b4) | the remaining 12 modules of the sin-Θ closure | 6,912 |
+| Y3(c)  | the last 3 Yu--Wang--Samworth modules | 1,028 |
+
+`ForMathlib` is **12 → 4 modules**, and the four that remain are genuinely
+Mathlib-shaped (two matrix, two topology) rather than migration debt. The
+transitive non-Mathlib closure of `SinTheta/Perturbation.lean` and of every
+Yu--Wang--Samworth result is now **entirely `ForTauCeti`**.
+
+**The staging library is fully declared and fully exported.** The extraction
+manifest was covering 83 of 156 modules — and `export_for_tauceti.py` *refuses
+to export an undeclared module*, so **47% of the staging library could not
+leave the repository and nothing said so.** Now 156/156 across 18 clusters, and
+`--write` has put all 156 into `external/TauCeti` with `--check` OK.
+
+**What is left, in order.**
+
+1. **The dependency switch, and it is the last step.** `lakefile.toml` already
+   requires `TauCeti` at `external/TauCeti`. Measured: **261 `import
+   ForTauCeti.X` lines across 167 files** (DavisKahan 204, Challenge 23,
+   FinishTanTwoTheta 11, Acharyya2025 7, DkpsQuench2026 6,
+   FinishYuWangSamworth 6, Acharyya2024 3), plus the `lean_lib` block and
+   `scripts/check_dependency_layers.py`, which encodes `ForTauCeti` as a layer.
+   There are **no qualified `ForTauCeti.` references in proof bodies** — the
+   only other occurrences are two prose comments in root modules. Gated on
+   `lake build TauCeti` going green over all 785 modules.
+2. **Publishing the export upstream.** The exported files are *untracked* in
+   the submodule. Committing and pushing them into the shared Tau Ceti
+   repository is an outward-facing act and is jon's call, not a build step.
+3. Lane P-EXP (§13.2 phase C, 117 lines across 30 modules) and convergence
+   Waves 4–5.
+
+**Two findings worth carrying.**
+
+- **A previous `--write` was never committed**, so the exported copies sat
+  untracked and went stale against staging. That — not any defect in the new
+  clusters — is why `principal-angles` failed `--check`. If you export, commit
+  the submodule or the next reader inherits silent drift.
+- **`DavisKahan` and `ForTauCeti` build under different linter sets**, so
+  *every* module moving between them fails on arrival. Measured across three
+  lanes: 3 findings per 1,773 lines, 4 per 1,217, 20 per 6,912. Budget for it;
+  a red build straight after a `git mv` is the expected state.
+
+---
+
 # namek status — Spectra removal, serial phase
 
 **Updated 2026-07-29.  Read this before touching anything Spectra-facing.**
