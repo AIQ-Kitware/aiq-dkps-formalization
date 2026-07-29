@@ -88,6 +88,8 @@ noncomputable def diagOp (b : OrthonormalBasis (Fin n) 𝕜 E) (x : Fin n → �
   ∑ i, ((x i : ℝ) : 𝕜) • (InnerProductSpace.rankOne 𝕜 (b i) (b i)).toLinearMap
 
 omit [FiniteDimensional 𝕜 E] in
+/-- The defining formula: `diagOp b x` expands `v` in the basis and scales the `i`-th coefficient
+by `x i`. -/
 theorem diagOp_apply (b : OrthonormalBasis (Fin n) 𝕜 E) (x : Fin n → ℝ) (v : E) :
     diagOp b x v = ∑ i, ((x i : ℝ) : 𝕜) • ⟪b i, v⟫_𝕜 • b i := by
   unfold diagOp
@@ -96,6 +98,8 @@ theorem diagOp_apply (b : OrthonormalBasis (Fin n) 𝕜 E) (x : Fin n → ℝ) (
     simp [InnerProductSpace.rankOne_apply]
 
 omit [FiniteDimensional 𝕜 E] in
+/-- A diagonal operator scales each basis vector by its own entry.  This is the form used to
+compare two diagonal operators, since equality on a basis suffices. -/
 theorem diagOp_apply_basis (b : OrthonormalBasis (Fin n) 𝕜 E) (x : Fin n → ℝ)
     (j : Fin n) : diagOp b x (b j) = ((x j : ℝ) : 𝕜) • b j := by
   rw [diagOp_apply]
@@ -109,6 +113,7 @@ theorem diagOp_apply_basis (b : OrthonormalBasis (Fin n) 𝕜 E) (x : Fin n → 
   simp
 
 omit [FiniteDimensional 𝕜 E] in
+/-- `diagOp b` is additive in the diagonal. -/
 theorem diagOp_add (b : OrthonormalBasis (Fin n) 𝕜 E) (x y : Fin n → ℝ) :
     diagOp b (x + y) = diagOp b x + diagOp b y := by
   unfold diagOp
@@ -117,6 +122,7 @@ theorem diagOp_add (b : OrthonormalBasis (Fin n) 𝕜 E) (x y : Fin n → ℝ) :
   rw [Pi.add_apply, RCLike.ofReal_add, add_smul]
 
 omit [FiniteDimensional 𝕜 E] in
+/-- `diagOp b` is homogeneous in the diagonal, with the real scalar cast into `𝕜`. -/
 theorem diagOp_real_smul (b : OrthonormalBasis (Fin n) 𝕜 E) (c : ℝ)
     (x : Fin n → ℝ) : diagOp b (c • x) = ((c : ℝ) : 𝕜) • diagOp b x := by
   unfold diagOp
@@ -154,6 +160,8 @@ theorem isSymmetric_diagOp (b : OrthonormalBasis (Fin n) 𝕜 E) (x : Fin n → 
     inner_conj_symm]
   ring
 
+/-- A real diagonal operator is self-adjoint.  This is why a unitarily invariant norm applied to
+`diagOp` yields a *symmetric* gauge on vectors. -/
 theorem adjoint_diagOp (b : OrthonormalBasis (Fin n) 𝕜 E) (x : Fin n → ℝ) :
     (diagOp b x).adjoint = diagOp b x :=
   (isSymmetric_diagOp b x).adjoint_eq
@@ -259,15 +267,20 @@ structure UnitarilyInvariantNorm (𝕜 E : Type*) [RCLike 𝕜]
 
 namespace UnitarilyInvariantNorm
 
+/-- Apply a unitarily invariant norm directly to an operator, writing `N A` for `N.toFun A`. -/
 instance : CoeFun (UnitarilyInvariantNorm 𝕜 E) fun _ => (E →ₗ[𝕜] E) → ℝ :=
   ⟨UnitarilyInvariantNorm.toFun⟩
 
 variable (N : UnitarilyInvariantNorm 𝕜 E)
 
+/-- Subadditivity of a unitarily invariant norm. -/
 theorem add_le (A B : E →ₗ[𝕜] E) : N (A + B) ≤ N A + N B := N.add_le' A B
 
+/-- Absolute homogeneity of a unitarily invariant norm. -/
 theorem smul_eq (a : 𝕜) (A : E →ₗ[𝕜] E) : N (a • A) = ‖a‖ * N A := N.smul' a A
 
+/-- Two-sided unitary invariance -- the defining property, restated for direct use.  See
+`invariant_left` and `invariant_right` for the one-sided specializations. -/
 theorem invariant (U V : E ≃ₗᵢ[𝕜] E) (A : E →ₗ[𝕜] E) :
     N (U.toLinearMap ∘ₗ A ∘ₗ V.toLinearMap) = N A := N.invariant' U V A
 
@@ -288,14 +301,19 @@ theorem invariant_right (V : E ≃ₗᵢ[𝕜] E) (A : E →ₗ[𝕜] E) :
     ext v; rfl
   rwa [hid] at h
 
+/-- A unitarily invariant norm vanishes at zero.  Note this follows from homogeneity alone;
+definiteness is deliberately not bundled, so the converse does not hold. -/
 theorem apply_zero : N (0 : E →ₗ[𝕜] E) = 0 := by
   have h := N.smul' (0 : 𝕜) 0
   rwa [zero_smul, norm_zero, zero_mul] at h
 
+/-- A unitarily invariant norm is unchanged by negation. -/
 theorem apply_neg (A : E →ₗ[𝕜] E) : N (-A) = N A := by
   have h := N.smul' (-1 : 𝕜) A
   rwa [neg_one_smul, norm_neg, norm_one, one_mul] at h
 
+/-- A unitarily invariant norm is nonnegative -- from subadditivity applied to `A` and `-A`, not
+assumed as a field. -/
 theorem nonneg (A : E →ₗ[𝕜] E) : 0 ≤ N A := by
   have h := N.add_le' A (-A)
   rw [add_neg_cancel, N.apply_zero, N.apply_neg] at h
@@ -312,11 +330,13 @@ noncomputable def gauge (N : UnitarilyInvariantNorm 𝕜 E)
     (b : OrthonormalBasis (Fin n) 𝕜 E) (x : Fin n → ℝ) : ℝ :=
   N (diagOp b x)
 
+/-- The induced vector gauge is subadditive, inherited from the norm through `diagOp_add`. -/
 theorem gauge_add_le (b : OrthonormalBasis (Fin n) 𝕜 E) (x y : Fin n → ℝ) :
     N.gauge b (x + y) ≤ N.gauge b x + N.gauge b y := by
   rw [gauge, diagOp_add]
   exact N.add_le' _ _
 
+/-- The induced vector gauge is absolutely homogeneous over `ℝ`. -/
 theorem gauge_real_smul (b : OrthonormalBasis (Fin n) 𝕜 E) (c : ℝ)
     (x : Fin n → ℝ) : N.gauge b (c • x) = |c| * N.gauge b x := by
   rw [gauge, diagOp_real_smul, N.smul', RCLike.norm_ofReal]
