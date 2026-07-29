@@ -29,7 +29,6 @@ namespace DavisKahanExt
 
 open MeasureTheory Set Filter
 open scoped InnerProductSpace Topology
-open Spectra.YosidaHille.Approximation
 
 noncomputable section
 
@@ -88,7 +87,7 @@ theorem semigroup_eq_cfc
   rw [cfc_comp_const_mul (t : ℂ) Complex.exp T
       Complex.continuous_exp.continuousOn hst,
     CFC.complex_exp_eq_normedSpace_exp hsmul.isStarNormal]
-  exact expBounded_eq_exp T t
+  rfl
 
 set_option maxHeartbeats 800000 in
 /-- Upper spectral bound for a self-adjoint exponential. -/
@@ -232,7 +231,7 @@ theorem hasDerivAt_ordered_solution_orbit
     (hU.prodMk hW)
   have hpt : ∀ w, (-A) ((semigroup (-A) t) w) = (semigroup (-A) t) ((-A) w) := by
     intro w
-    have h := (B_commute_expBounded (-A) t).eq
+    have h := (commute_semigroup (-A) t).eq
     exact congrFun (congrArg DFunLike.coe h) w
   have hfd' : HasDerivAt (fun s => semigroup (-A) s ∘L X ∘L semigroup B s)
       ((ContinuousLinearMap.restrictScalars ℝ

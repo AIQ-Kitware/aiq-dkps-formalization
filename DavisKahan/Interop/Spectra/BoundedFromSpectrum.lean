@@ -5,35 +5,34 @@ Authors: Jon Crall, Claude Fable 5
 -/
 import DavisKahan.Interop.Spectra.ClosedOperator
 import DavisKahan.SpectralTheory.ClosedOperator.BoundedRealization
-import Spectra.SpectralTheory.Essential.Discrete
-import Spectra.SpectralTheory.Measure.GeneratorLink
-import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
+import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralSupport
 
 /-!
 # Boundedness from a bounded spectrum
 
-A closed densely defined self-adjoint operator whose Spectra spectrum lies
-in the bounded interval `[β, α]` is defined on the whole space and bounded,
-with the sharp centered estimate `‖A - (β+α)/2‖ ≤ (α-β)/2`.
+A closed densely defined self-adjoint operator whose spectrum lies in the
+bounded interval `[β, α]` is defined on the whole space and bounded, with the
+sharp centered estimate `‖A - (β+α)/2‖ ≤ (α-β)/2`.
 
-The proof assembles four Spectra bricks:
+The proof assembles three facts about the native spectral measure
+`TauCeti.LinearPMap.spectralPVM`:
 
-* `spectralPVM_proj_eq_zero_of_subset_resolventSet` — the spectral
-  projection vanishes off the spectrum, so `E([β,α]ᶜ) = 0`;
-* `spectralProjection_compl` — complementation gives `E([β,α]) = 1`;
-* `spectralProjection_mem_generatorDomain` — spectrally bounded vectors lie
-  in the generator's domain, so the domain is the whole space;
-* `generator_sub_smul_norm_le_Icc` — the centered norm bound on the
-  spectral interval.
+* `specProjection_eq_zero_of_subset_resolventSet` — the spectral projection
+  vanishes off the spectrum, so `E([β,α]ᶜ) = 0`;
+* `ProjValMeasure.proj_compl` — complementation gives `E([β,α]) = 1`, so every
+  vector lies in the spectral range of `[β, α]`;
+* `mem_domain_of_mem_specRange_of_bounded` and
+  `norm_sub_smul_le_of_mem_specRange` — a bounded spectral range sits inside
+  `dom A`, and there `A - c` is bounded by the radius of the set around `c`.
 
-The generator of the Yosida group of `A` is `A` itself
-(`generator_genToGroup`), which transports all four statements to `A`.
-This is the missing seam for the fully unbounded interval/exterior
-orientation of Davis--Kahan Theorem 5.2: the interval block of the
-configuration is secretly a bounded operator.
+Until 2026-07-29 this went through Spectra: the operator was realized as the
+generator of its Yosida group and the four bricks were Spectra's.  The Stone
+group is not needed — the spectral measure is constructed directly from the
+Cayley transform, and `A.toLinearPMap` is its own generator.
 
-Upstream candidate: the statement is Spectra-idiomatic and belongs next to
-the spectral-projection algebra.
+This is the missing seam for the fully unbounded interval/exterior orientation
+of Davis--Kahan Theorem 5.2: the interval block of the configuration is
+secretly a bounded operator.
 -/
 
 open scoped InnerProductSpace
@@ -42,11 +41,6 @@ namespace TauCeti
 namespace DavisKahan
 namespace Experimental
 namespace ExactSinTheta
-
-open Spectra.OneParameterUnitaryGroup
-open Spectra.YosidaHille
-open Spectra.Resolvent
-open Spectra.QuantumMechanics.SpectralTheory
 
 variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
   [CompleteSpace H]
@@ -65,129 +59,104 @@ theorem exists_boundedRealization_of_spectrum_subset_Icc
       ‖R.operator - (((β + α) / 2 : ℝ) : ℂ) •
         ContinuousLinearMap.id ℂ H‖ ≤ (α - β) / 2 := by
   classical
-  have hgen : generator (genToGroup hA) = A.toLinearPMap :=
-    generator_genToGroup hA
+  have hBm : MeasurableSet (Set.Icc β α) := measurableSet_Icc
   -- every point outside `[β, α]` is a resolvent point
   have hres : ∀ lam ∈ (Set.Icc β α)ᶜ,
-      (lam : ℂ) ∈ resolventSet A.toLinearPMap := by
+      (lam : ℂ) ∈ TauCeti.LinearPMap.resolventSet A.toLinearPMap := by
     intro lam hlam
     by_contra hnot
     exact hlam (hσ hnot)
   -- the spectral projection of the complement vanishes
-  have hprojc : spectralProjection (genToGroup hA) (Set.Icc β α)ᶜ
-      measurableSet_Icc.compl = 0 := by
-    have h := spectralPVM_proj_eq_zero_of_subset_resolventSet hA
-      measurableSet_Icc.compl hres
-    simpa using h
+  have hprojc :
+      TauCeti.LinearPMap.specProjection hA (Set.Icc β α)ᶜ hBm.compl = 0 :=
+    TauCeti.LinearPMap.specProjection_eq_zero_of_subset_resolventSet hA _
+      hBm.compl hres
   -- the interval carries the full projection
-  have hprojid : spectralProjection (genToGroup hA) (Set.Icc β α)
-      measurableSet_Icc = ContinuousLinearMap.id ℂ H := by
-    have hc := spectralProjection_compl (genToGroup hA) (Set.Icc β α)
-      measurableSet_Icc
-    rw [hprojc] at hc
-    exact (sub_eq_zero.mp hc.symm).symm
-  have hEfix : ∀ φ : H, spectralProjection (genToGroup hA) (Set.Icc β α)
-      measurableSet_Icc φ = φ := fun φ => by rw [hprojid]; rfl
-  -- absolute bound on the interval
-  have hRabs : ∀ x ∈ Set.Icc β α, |x| ≤ max |β| |α| := by
-    intro x hx
+  have hprojid :
+      TauCeti.LinearPMap.specProjection hA (Set.Icc β α) hBm
+        = ContinuousLinearMap.id ℂ H := by
+    have hc := (TauCeti.LinearPMap.spectralPVM hA).proj_compl (Set.Icc β α) hBm
+    rw [show (TauCeti.LinearPMap.spectralPVM hA).proj (Set.Icc β α)ᶜ hBm.compl
+        = TauCeti.LinearPMap.specProjection hA (Set.Icc β α)ᶜ hBm.compl from rfl,
+      hprojc] at hc
+    rw [show TauCeti.LinearPMap.specProjection hA (Set.Icc β α) hBm
+        = (TauCeti.LinearPMap.spectralPVM hA).proj (Set.Icc β α) hBm from rfl]
+    linear_combination (norm := module) hc
+  have hfix : ∀ φ : H,
+      TauCeti.LinearPMap.specProjection hA (Set.Icc β α) hBm φ = φ := by
+    intro φ; rw [hprojid]; rfl
+  have hrange : ∀ φ : H,
+      φ ∈ TauCeti.LinearPMap.specRange hA (Set.Icc β α) hBm := fun φ =>
+    (TauCeti.LinearPMap.mem_specRange_iff hA _ hBm φ).mpr (hfix φ)
+  -- absolute and centered bounds on the interval
+  have hbnd : ∀ s ∈ Set.Icc β α, |s| ≤ max |β| |α| := by
+    intro s hs
     rw [abs_le]
-    constructor
+    refine ⟨?_, ?_⟩
     · exact le_trans
-        (le_trans (neg_le_neg (le_max_left |β| |α|)) (neg_abs_le β)) hx.1
-    · exact le_trans hx.2 (le_trans (le_abs_self α) (le_max_right |β| |α|))
-  -- every vector lies in the generator's domain
-  have hdomAll : ∀ φ : H, φ ∈ (generator (genToGroup hA)).domain := by
-    intro φ
-    have h := spectralProjection_mem_generatorDomain (genToGroup hA)
-      measurableSet_Icc hRabs φ
-    rw [hEfix φ] at h
-    exact h
-  -- the centered pointwise estimate
+        (le_trans (neg_le_neg (le_max_left |β| |α|)) (neg_abs_le β)) hs.1
+    · exact le_trans hs.2 (le_trans (le_abs_self α) (le_max_right |β| |α|))
+  have hcr : ∀ s ∈ Set.Icc β α, |s - (β + α) / 2| ≤ (α - β) / 2 := by
+    intro s hs
+    rw [abs_le]
+    exact ⟨by linarith [hs.1], by linarith [hs.2]⟩
+  -- every vector lies in the domain, with the centered pointwise estimate
+  have hdomAll : ∀ φ : H, φ ∈ A.toLinearPMap.domain := fun φ =>
+    TauCeti.LinearPMap.mem_domain_of_mem_specRange_of_bounded hA _ hBm hbnd
+      (hrange φ)
   have hbound : ∀ φ : H,
-      ‖generator (genToGroup hA) ⟨φ, hdomAll φ⟩ -
-        ((β + α) / 2 : ℝ) • φ‖ ≤ (α - β) / 2 * ‖φ‖ := by
-    intro φ
-    have hmem : spectralProjection (genToGroup hA) (Set.Icc β α)
-        measurableSet_Icc φ ∈ (generator (genToGroup hA)).domain := by
-      rw [hEfix φ]
-      exact hdomAll φ
-    have h := generator_sub_smul_norm_le_Icc (genToGroup hA) β α
-      ((β + α) / 2) (by linarith) (by linarith) φ hmem
-    have hsub : (⟨spectralProjection (genToGroup hA) (Set.Icc β α)
-        measurableSet_Icc φ, hmem⟩ :
-        (generator (genToGroup hA)).domain) = ⟨φ, hdomAll φ⟩ :=
-      Subtype.ext (hEfix φ)
-    rw [hsub, hEfix φ] at h
-    have hmax : max ((β + α) / 2 - β) (α - (β + α) / 2) = (α - β) / 2 := by
-      rw [show (β + α) / 2 - β = (α - β) / 2 by ring,
-        show α - (β + α) / 2 = (α - β) / 2 by ring, max_self]
-    rwa [hmax] at h
+      ‖A.toLinearPMap ⟨φ, hdomAll φ⟩ - (((β + α) / 2 : ℝ) : ℂ) • φ‖
+        ≤ (α - β) / 2 * ‖φ‖ := fun φ =>
+    TauCeti.LinearPMap.norm_sub_smul_le_of_mem_specRange hA _ hBm hbnd
+      (by linarith) hcr (hrange φ) (hdomAll φ)
   -- the everywhere-defined linear realization
   let g : H →ₗ[ℂ] H :=
-    { toFun := fun φ => generator (genToGroup hA) ⟨φ, hdomAll φ⟩
+    { toFun := fun φ => A.toLinearPMap ⟨φ, hdomAll φ⟩
       map_add' := fun φ ψ => by
-        have h : (⟨φ + ψ, hdomAll (φ + ψ)⟩ :
-            (generator (genToGroup hA)).domain) =
+        have h : (⟨φ + ψ, hdomAll (φ + ψ)⟩ : A.toLinearPMap.domain) =
             ⟨φ, hdomAll φ⟩ + ⟨ψ, hdomAll ψ⟩ := rfl
-        rw [h, (generator (genToGroup hA)).map_add]
+        rw [h, A.toLinearPMap.map_add]
       map_smul' := fun c φ => by
-        have h : (⟨c • φ, hdomAll (c • φ)⟩ :
-            (generator (genToGroup hA)).domain) =
+        have h : (⟨c • φ, hdomAll (c • φ)⟩ : A.toLinearPMap.domain) =
             c • ⟨φ, hdomAll φ⟩ := rfl
-        rw [h, (generator (genToGroup hA)).map_smul]
+        rw [h, A.toLinearPMap.map_smul]
         rfl }
-  have hgφ : ∀ φ : H, g φ = generator (genToGroup hA) ⟨φ, hdomAll φ⟩ :=
-    fun _ => rfl
+  have hgφ : ∀ φ : H, g φ = A.toLinearPMap ⟨φ, hdomAll φ⟩ := fun _ => rfl
+  have hsm : ∀ φ : H, (((β + α) / 2 : ℝ) : ℂ) • φ = ((β + α) / 2 : ℝ) • φ :=
+    fun φ => (RCLike.real_smul_eq_coe_smul (K := ℂ) _ φ).symm
   -- continuity of the realization
   have hgbound : ∀ φ : H,
       ‖g φ‖ ≤ (|(β + α) / 2| + (α - β) / 2) * ‖φ‖ := by
     intro φ
     have h := hbound φ
-    rw [← hgφ φ] at h
+    rw [← hgφ φ, hsm φ] at h
     have h2 : ‖((β + α) / 2 : ℝ) • φ‖ = |(β + α) / 2| * ‖φ‖ := by
       rw [norm_smul, Real.norm_eq_abs]
     calc ‖g φ‖
         = ‖(g φ - ((β + α) / 2 : ℝ) • φ) + ((β + α) / 2 : ℝ) • φ‖ := by
           rw [sub_add_cancel]
-      _ ≤ ‖g φ - ((β + α) / 2 : ℝ) • φ‖ +
-            ‖((β + α) / 2 : ℝ) • φ‖ := norm_add_le _ _
+      _ ≤ ‖g φ - ((β + α) / 2 : ℝ) • φ‖ + ‖((β + α) / 2 : ℝ) • φ‖ :=
+          norm_add_le _ _
       _ ≤ (α - β) / 2 * ‖φ‖ + |(β + α) / 2| * ‖φ‖ := by
-          rw [h2]
-          exact add_le_add h le_rfl
+          rw [h2]; exact add_le_add h le_rfl
       _ = (|(β + α) / 2| + (α - β) / 2) * ‖φ‖ := by ring
   let T : H →L[ℂ] H := g.mkContinuous _ hgbound
-  have hTφ : ∀ φ : H, T φ = generator (genToGroup hA) ⟨φ, hdomAll φ⟩ :=
-    fun _ => rfl
-  -- application transport from the generator to `A`
-  have happly := (LinearPMap.ext_iff.mp hgen).2
+  have hTφ : ∀ φ : H, T φ = A.toLinearPMap ⟨φ, hdomAll φ⟩ := fun _ => rfl
   refine ⟨⟨T, ?_, ?_⟩, ?_⟩
   · -- the domain is everything
-    have hd : A.toLinearPMap.domain =
-        (generator (genToGroup hA)).domain :=
-      (congrArg LinearPMap.domain hgen).symm
-    refine Submodule.eq_top_iff'.mpr fun φ => ?_
-    have h := hdomAll φ
-    rw [← hd] at h
-    exact h
+    exact Submodule.eq_top_iff'.mpr hdomAll
   · -- the realization agrees with `A` on the domain
     intro x
-    have hx : (x : H) ∈ (generator (genToGroup hA)).domain :=
-      hdomAll (x : H)
-    have h : generator (genToGroup hA) ⟨(x : H), hx⟩ =
-        A.toLinearPMap ⟨(x : H), x.2⟩ :=
-      happly (x := (x : H)) (hf := hx) (hg := x.2)
     rw [hTφ (x : H)]
-    exact h
+    exact congrArg _ (Subtype.ext rfl)
   · -- the centered norm bound
     refine ContinuousLinearMap.opNorm_le_bound _ (by linarith) fun φ => ?_
     have h := hbound φ
-    rw [← hTφ φ] at h
-    have hsm : (((β + α) / 2 : ℝ) : ℂ) • φ = ((β + α) / 2 : ℝ) • φ :=
-      (RCLike.real_smul_eq_coe_smul (K := ℂ) _ φ).symm
+    rw [← hTφ φ, hsm φ] at h
     calc ‖(T - (((β + α) / 2 : ℝ) : ℂ) • ContinuousLinearMap.id ℂ H) φ‖
         = ‖T φ - ((β + α) / 2 : ℝ) • φ‖ := by
-          rw [sub_apply, smul_apply, ContinuousLinearMap.id_apply, hsm]
+          rw [ContinuousLinearMap.sub_apply, ContinuousLinearMap.smul_apply,
+            ContinuousLinearMap.id_apply, hsm φ]
       _ ≤ (α - β) / 2 * ‖φ‖ := h
 
 end ExactSinTheta
