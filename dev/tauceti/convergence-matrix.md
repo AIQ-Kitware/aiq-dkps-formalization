@@ -442,6 +442,62 @@ Concrete rows we already know; expand each into the full schema during phase 0.
 | Hilbert–Schmidt / trace class (column-expansion + approx-number + Spectra tensor) | partial | HS/trace tensor layer | Parallel | one HS predicate+norm; others are equivalence theorems | ApproximationNumbers (C) + Cluster D |
 | Sylvester uniqueness/estimates + `GenuinePairwiseSpectrumGap` | `LinearPMap` equation/domain API; no canonical spectrum API yet | separated-intertwiner results | Spectra-dependent parallel formulation | **2026-07-28:** raw `LinearPMap.GenuinePairwiseSpectrumGap` and `linearPMapSylvester_*` now own the implementation in `DavisKahan/Sylvester`; keep the bundled predicate and three old theorem signatures only for the seven source/audit consumers until those data records migrate | (spectral-perturbation, later) |
 
+## Completion-lane seed rows: `FinishTanTwoTheta` and `FinishYuWangSamworth`
+
+Added 2026-07-28 by jon (toothbrush). Neither completion lane had a single row
+in this matrix, so both were invisible to the convergence plan even though they
+are the two libraries that carry the remaining paper mathematics. Declaration
+lists below are **measured from the trees**, not guessed; the classifications
+are first-pass and each one flagged *(verify)* still needs the counterpart
+diffed before any code moves.
+
+Both libraries are non-default Lake targets sharing the root dependency graph.
+`FinishYuWangSamworth` builds clean and sorry-free; `FinishTanTwoTheta` builds
+except for one declaration (see
+[`../finishtantwotheta-completion-lane.md`](../finishtantwotheta-completion-lane.md)).
+
+### `FinishYuWangSamworth` (37 declarations, 1207 lines)
+
+| Local declaration | Tau Ceti / ForTauCeti counterpart | Class | Canonical destination |
+| --- | --- | --- | --- |
+| `yuWangSamworth_theorem1_{uiNorm,frobenius,opNorm}_le` | none | Paper-specific | paper package (`YuWangSamworth/`), not `ForTauCeti` |
+| `yuWangSamworth_{right,left}SingularSubspace{,_opNormCoefficient}_le` | `…/InnerProductSpace/SingularSubspace` *(verify)* | Paper-specific conclusion over reusable core | paper package; core to `SingularSubspace` |
+| `yuWangSamworth_{right,left}SingularAlignedBasis{,_opNormCoefficient}_le` | `…/InnerProductSpace/AlignedBasis` *(verify)* | Paper-specific conclusion over reusable core | paper package; core to `AlignedBasis` |
+| `yuWangSamworth_{right,left}SingularVector{,_opNormCoefficient}_le` | none | Paper-specific | paper package |
+| `yuWangSamworth_lemma5_{columns,rows,isometricColumns,orthonormalColumns,orthonormalRows}` | `…/InnerProductSpace/{FrameFactorization,NearIsometry}` *(verify)* | Parallel formulation | reusable core to `ForTauCeti`; wrappers stay |
+| `yuWangSamworth_equation4`, `yuWangSamworth_equation4_printed_counterexample` | none | Paper-specific | paper package — this is a **source-defect record** and must not be silently dropped |
+| `CorrespondingRightSingularBlock`, `CorrespondingLeftSingularBlock`, `RightSingularPopulationGap`, `LeftSingularPopulationGap` | none | Paper-specific predicates | paper package |
+| `rectangularFrobenius_adjoint`, `rectangularFrobenius_twoSided_comp_le`, `frobenius_comp_rectangular_le_opNorm_mul` | `…/InnerProductSpace/HilbertSchmidtEnergy`, `…/SchattenNorm` *(verify)* | Likely duplicate / wrapper | single Frobenius–HS ideal foundation |
+| `frobenius_{right,left}Gram_sub_le{,_paperCoefficient}`, `opNorm_{right,left}Gram_sub_le_paperCoefficient` | `…/InnerProductSpace/GramMatrix` *(verify)* | Missing reusable result | Gram-perturbation layer |
+| `opNorm_eq_topSingularValue` | `…/InnerProductSpace/RectangularSingularValues` *(verify)* | Likely exact duplicate | delete ours; repoint |
+| `sum_opNorm_le_paperCoefficient` | none | Paper-specific coefficient | paper package |
+
+### `FinishTanTwoTheta`
+
+| Local declaration | Tau Ceti / ForTauCeti counterpart | Class | Canonical destination |
+| --- | --- | --- | --- |
+| `WeaklySubmajorized`, `sequencePrefixSum`, `sequencePrefixVector`, `finite_weaklyMajorized_of_weaklySubmajorized`, `exists_gauge_decomposition_of_weaklyMajorized` | `ForTauCeti/Analysis/Convex/Majorization` (landed by jon (namek)) | **Duplicate — highest-priority dedup in this lane** | `Analysis/Convex/Majorization`; delete local copies |
+| `sequenceGauge`, `sequencePrefixGauge`, `sequenceExtendedGauge`, `SequenceMem`, `paperFiniteSymmetricGauge` | `ForTauCeti/Analysis/Normed/FiniteLpGauge` *(verify)* | Parallel formulation | one symmetric-gauge API |
+| `StandardSymmetricIdeal` (+ `Mem`, `gauge`, `mem_adjoint`, `gauge_adjoint`), `StandardSymmetricCompletion` | `RectangularSymmetricIdealFamily` / `SymmetricOperatorIdealFamily` | Parallel formulation — **collides with §13.2 adapter retirement** | one canonical symmetric-ideal family; coordinate with the §13.2 sweep before moving |
+| `FiniteRankGaugeClosure`, `MinimalFullySymmetricMem`, `standard_fanDominance`, `minimalFullySymmetricMem_of_kyFan_dominated` | none | **Missing reusable result** | operator-ideal layer — Fan dominance as a theorem is genuinely new |
+| `paperLpNorm`, `paperOperatorNorm`, `paperLinftySymmetricNormingFunction`, `{maximal,minimal}SchattenIdeal`, `nuclearIdeal`, `{bounded,compact}OperatorNormIdeal` | `…/InnerProductSpace/SchattenNorm`, ideal `Instances` *(verify)* | Parallel / wrapper | one ideal-instances module |
+| `doubleAngleTangentOperator`, `doubleAngleDenominator`, `approximationNumber_doubleAngleTangentOperator`, `doubleAngleTangent_approximationNumber_le` | none | **Missing reusable result** | the tangent operator and its approximation numbers are reusable spectral-perturbation material |
+| `ApproximateLeadingSingularFamily`, `exists_approximateLeadingSingularFamily`, `GramSpectralBandModel`, `exists_gramSpectralBandModel` | none | **Missing reusable result — the most valuable thing in this library** | approximate simultaneous singular systems for an *arbitrary* bounded operator, with no compactness and no attainment assumption |
+| `gramOperator`, `gramPVM`, `gramSelfAdjointOperator`, `gramUnitaryGroup` | Spectra PVM / Borel calculus | Spectra-dependent | folds into Wave 5 / spectral-calculus area; a Spectra consumer, so it gates on the removal plan |
+| `finiteValue*` family, `gramBands_disjoint`, `exists_uniform_positive_separation` | none | Missing reusable (small) | finite-value/band combinatorics; low priority |
+| `sharp_*` (bounded and unbounded, `stableSingularPair_*`, `unboundedStableSingularPair_*`) | none | Paper-specific | `DavisKahan/` — Davis--Kahan Section 7 |
+| `UnboundedApproximateLeadingSingularFamily`, `exists_unboundedApproximateLeadingSingularFamily` | none | **BLOCKED — not proved** | do not migrate; see the lane document |
+
+### Ordering note
+
+The `Majorization` row is the one that should move first: it is a
+straight internal duplicate against a module that already landed, it is
+independent of the blocked seam, and it is independent of the §13.2 ideal-family
+sweep. The `StandardSymmetricIdeal` row is the opposite — it must **not** move
+until §13.2 phase C/D settles which symmetric-ideal family is canonical, or the
+two efforts will produce a third parallel stack.
+
+
 ## Declaration-level deletion / adapter rows (from the signature audit §13)
 
 The adversarial-review audit `dev/tauceti-signature-polish-todo.md` (baseline
