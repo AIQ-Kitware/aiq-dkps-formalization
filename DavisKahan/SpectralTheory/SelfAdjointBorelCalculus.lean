@@ -4,26 +4,24 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Interop.Spectra.BoundedSelfAdjointSpectralProjection
-import DavisKahan.Interop.Spectra.Basic
 import DavisKahan.Interop.Spectra.BoundedFromSpectrum
 import DavisKahan.Interop.Spectra.RealSpectrumBridge
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
+import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Constructions
 
 /-!
 # Bounded Borel calculus for bounded self-adjoint operators
 
-Vendored Spectra already contains the required real-line bounded Borel
-functional calculus.  For a self-adjoint operator `T`,
-`Spectra.QuantumMechanics.SpectralTheory.spectralCalculus
-(genToGroup T.selfAdjoint)` integrates every globally bounded measurable symbol
-against the canonical real spectral measure.
+`TauCeti.BorelCalculus` supplies the real-line bounded Borel functional
+calculus of a normal operator, indexed along a measurable relabelling of its
+spectrum; for a self-adjoint operator that relabelling is the real part.  This
+module wraps it for a bounded self-adjoint `A : H →L[ℂ] H` with symbols defined
+on all of `ℝ`, which is the form the Sylvester finite-step argument consumes.
 
-The only missing layer for the Sylvester finite-step argument is a bridge from a
-bounded continuous linear map to that calculus, together with the fact that
-symbols need only be bounded on the actual spectrum.  We obtain the latter by
-zero-extending the symbol off the spectrum.  The bounded-on-spectrum hypothesis
-is explicit: measurability alone does not imply boundedness, even on a compact
-set.
+The one extra layer is the fact that symbols need only be bounded on the actual
+spectrum; we obtain it by zero-extending the symbol off the spectrum.  The
+bounded-on-spectrum hypothesis is explicit: measurability alone does not imply
+boundedness, even on a compact set.
 -/
 
 namespace TauCeti
@@ -31,9 +29,6 @@ namespace DavisKahanExt
 
 open MeasureTheory Set Filter
 open scoped InnerProductSpace BigOperators
-open Spectra
-open Spectra.QuantumMechanics.SpectralTheory
-open DavisKahan.Experimental.SpectraBridge
 
 noncomputable section
 
@@ -92,17 +87,17 @@ theorem norm_boundedSelfAdjointBorelCalculusC_le'
   rw [coe_reCoord A hA w]
   exact w.2
 
-/-- Application of the bridged full-domain self-adjoint pmap is the original map. -/
-theorem boundedSelfAdjointOperator_toLinearPMap_apply
-    (A : H →L[ℂ] H) (hA : IsSelfAdjointOperator A) (y : H)
-    (hy : y ∈ (boundedSelfAdjointOperator A hA).toLinearPMap.domain) :
-    (boundedSelfAdjointOperator A hA).toLinearPMap ⟨y, hy⟩ = A y := rfl
+/-- Application of the full-domain realization is the original map. -/
+theorem toPMap_top_apply
+    (A : H →L[ℂ] H) (y : H)
+    (hy : y ∈ ((A : H →ₗ[ℂ] H).toPMap ⊤).domain) :
+    ((A : H →ₗ[ℂ] H).toPMap ⊤) ⟨y, hy⟩ = A y := rfl
 
-/-- The Spectra resolvent set of the bridged full-domain realization is exactly the
+/-- The resolvent set of the full-domain realization is exactly the
 invertibility locus of `A - z` in the bounded operator algebra. -/
-theorem mem_resolventSet_toLinearPMap_iff
-    (A : H →L[ℂ] H) (hA : IsSelfAdjointOperator A) (z : ℂ) :
-    z ∈ TauCeti.LinearPMap.resolventSet (boundedSelfAdjointOperator A hA).toLinearPMap ↔
+theorem mem_resolventSet_toPMap_top_iff
+    (A : H →L[ℂ] H) (z : ℂ) :
+    z ∈ TauCeti.LinearPMap.resolventSet ((A : H →ₗ[ℂ] H).toPMap ⊤) ↔
       IsUnit (A - z • (1 : H →L[ℂ] H)) := by
   constructor
   · rintro ⟨R, hleft, hright⟩
@@ -127,17 +122,17 @@ theorem mem_resolventSet_toLinearPMap_iff
         rw [← hval]; exact u.mul_inv
       exact ContinuousLinearMap.ext_iff.mp hinv φ
 
-/-- The real spectrum of the bounded map agrees with the Spectra spectrum of
-its full-domain self-adjoint realization. -/
-theorem realSpectrum_eq_boundedSelfAdjoint_spectrum
-    (A : H →L[ℂ] H) (hA : IsSelfAdjointOperator A) :
+/-- The real spectrum of the bounded map agrees with the `LinearPMap` spectrum
+of its full-domain realization. -/
+theorem realSpectrum_eq_toPMap_top_spectrum
+    (A : H →L[ℂ] H) :
     realSpectrum A =
       Complex.ofReal ⁻¹'
-        TauCeti.LinearPMap.spectrum (boundedSelfAdjointOperator A hA).toLinearPMap := by
+        TauCeti.LinearPMap.spectrum ((A : H →ₗ[ℂ] H).toPMap ⊤) := by
   ext r
   show (r : ℂ) ∈ spectrum ℂ A ↔ (r : ℂ) ∉ TauCeti.LinearPMap.resolventSet _
   rw [spectrum.mem_iff, Algebra.algebraMap_eq_smul_one,
-    ← IsUnit.neg_iff, neg_sub, mem_resolventSet_toLinearPMap_iff A hA (r : ℂ)]
+    ← IsUnit.neg_iff, neg_sub, mem_resolventSet_toPMap_top_iff A (r : ℂ)]
 
 /-- The real spectrum of a bounded self-adjoint operator is closed. -/
 theorem isClosed_realSpectrum_boundedSelfAdjoint
@@ -191,6 +186,13 @@ noncomputable def boundedSelfAdjointBorelCalculus
     (spectrumRestrictedSymbol A f)
     (measurable_spectrumRestrictedSymbol A hA f hf)
     (bounded_spectrumRestrictedSymbol A f hfb)
+
+/-- The scalar indicator symbol is uniformly bounded by one. -/
+theorem indicator_one_bdd (s : Set ℝ) :
+    ∃ C : ℝ, ∀ x : ℝ, ‖Set.indicator s (fun _ => (1 : ℂ)) x‖ ≤ C := by
+  classical
+  refine ⟨1, fun x => ?_⟩
+  by_cases hx : x ∈ s <;> simp [hx]
 
 /-- The complex calculus of an indicator is the canonical spectral projection. -/
 theorem boundedSelfAdjointBorelCalculusC_indicator
