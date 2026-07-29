@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
-import DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeamCharacteristic
+import DavisKahan.Sources.DavisKahan1970.Section9.FreeBeamCharacteristic
 import DavisKahan.SpectralTheory.ClosedOperator.Basic
 import Mathlib.Analysis.InnerProductSpace.PiL2
 

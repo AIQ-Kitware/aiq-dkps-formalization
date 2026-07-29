@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
 import DavisKahan.Sources.Davis1963.RotationEnergy
-import DavisKahan.FiniteDimensional.Core.AngleGeometry
-import DavisKahan.FiniteDimensional.Core.SpectralGap
+import ForTauCeti.Analysis.InnerProductSpace.AngleGeometry
+import ForTauCeti.Analysis.InnerProductSpace.SpectralGap
 import DavisKahan.FiniteDimensional.SinTheta.UnitarilyInvariant
 import DavisKahan.FiniteDimensional.Core.AngleOperators
 import ForTauCeti.Analysis.InnerProductSpace.TwoDimensionalSingularValues
@@ -191,6 +191,7 @@ noncomputable def modelTanTwoThetaPerturbation (a b θ : ℝ) :
 
 /-! ## Explicit planar geometry -/
 
+/-- The first planar basis vector is a unit vector. -/
 @[simp] theorem norm_e0 : ‖e0 (𝕜 := 𝕜)‖ = 1 := by
   simp [e0]
 

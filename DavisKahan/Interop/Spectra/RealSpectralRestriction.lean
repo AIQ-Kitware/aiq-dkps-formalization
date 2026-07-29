@@ -75,12 +75,14 @@ noncomputable def conjugatePVM (P : TauCeti.ProjValMeasure Eℂ) :
   proj_inter B₁ B₂ hB₁ hB₂ := by
     rw [← conjugateOperator_mul, P.proj_inter]
 
+/-- Conjugating a PVM conjugates each of its projections. -/
 @[simp]
 theorem conjugatePVM_proj (P : TauCeti.ProjValMeasure Eℂ)
     (B : Set ℝ) (hB : MeasurableSet B) :
     (conjugatePVM P).proj B hB = conjugateOperator (P.proj B hB) :=
   rfl
 
+/-- Conjugating a PVM conjugates each of its diagonal measures. -/
 @[simp]
 theorem conjugatePVM_diag (P : TauCeti.ProjValMeasure Eℂ) (z : Eℂ) :
     (conjugatePVM P).diag z = P.diag (conjugation z) :=
@@ -95,6 +97,8 @@ def conjugationDomain (A : RealClosedOperator)
     simpa using
       (ClosedOperatorComplexification.mem_complexify_domain_iff A z).mp z.property⟩
 
+omit [CompleteSpace E] in
+/-- The conjugation domain, unfolded to the underlying vector. -/
 @[simp]
 theorem conjugationDomain_coe (A : RealClosedOperator)
     (z : (ClosedOperatorComplexification.complexify A).domain) :
@@ -103,6 +107,7 @@ theorem conjugationDomain_coe (A : RealClosedOperator)
       conjugation (z : Eℂ) :=
   rfl
 
+omit [CompleteSpace E] in
 /-- The complexified closed operator commutes with canonical conjugation on its
 operator domain. -/
 theorem complexify_apply_conjugationDomain (A : RealClosedOperator)
@@ -126,8 +131,8 @@ theorem complexify_apply_conjugationDomain (A : RealClosedOperator)
 `TauCeti` sense, are exchanged by canonical conjugation and conjugation of the
 spectral parameter. -/
 theorem conjugateOperator_tauCetiResolvent
-    (A : RealClosedOperator) (hA : A.IsSelfAdjoint)
-    {z : ℂ} (hz : z.im ≠ 0)
+    (A : RealClosedOperator) (_hA : A.IsSelfAdjoint)
+    {z : ℂ} (_hz : z.im ≠ 0)
     (hzr : z ∈ TauCeti.LinearPMap.resolventSet
       (ClosedOperatorComplexification.complexify A).toLinearPMap)
     (hzbr : (starRingEnd ℂ) z ∈ TauCeti.LinearPMap.resolventSet
@@ -413,6 +418,7 @@ noncomputable def realSelfAdjointSpectralSubspace
     (S : Set ℝ) (hS : MeasurableSet S) : Submodule ℝ E :=
   (realSelfAdjointSpectralProjection A hA S hS).range
 
+/-- The real self-adjoint spectral subspace is the range of its spectral projection. -/
 @[simp]
 theorem realSelfAdjointSpectralSubspace_eq_range
     (A : RealClosedOperator) (hA : A.IsSelfAdjoint)
@@ -421,6 +427,7 @@ theorem realSelfAdjointSpectralSubspace_eq_range
       (realSelfAdjointSpectralProjection A hA S hS).range :=
   rfl
 
+/-- It is complete, being the range of an idempotent bounded operator. -/
 noncomputable instance realSelfAdjointSpectralSubspace_completeSpace
     (A : RealClosedOperator) (hA : A.IsSelfAdjoint)
     (S : Set ℝ) (hS : MeasurableSet S) :
@@ -429,6 +436,7 @@ noncomputable instance realSelfAdjointSpectralSubspace_completeSpace
   exact (ContinuousLinearMap.IsIdempotentElem.isClosed_range
     (realSelfAdjointSpectralProjection_idem A hA S hS)).completeSpace_coe
 
+/-- It is orthogonally complemented, so the operator reduces to it. -/
 noncomputable instance realSelfAdjointSpectralSubspace_hasOrthogonalProjection
     (A : RealClosedOperator) (hA : A.IsSelfAdjoint)
     (S : Set ℝ) (hS : MeasurableSet S) :
@@ -535,6 +543,7 @@ theorem realSelfAdjointSpectralSubspace_compl
     Submodule.starProjection_orthogonal,
     ← realSelfAdjointSpectralProjection_eq_starProjection]
 
+omit [CompleteSpace E] in
 /-- The real copy of a domain vector has the expected underlying vector. -/
 private theorem coe_ofRealDomain (A : RealClosedOperator) (x : A.domain) :
     ((ClosedOperatorComplexification.ofRealDomain A x :

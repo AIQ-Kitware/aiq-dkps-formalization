@@ -89,7 +89,7 @@ this file should be replaced by a specialization of the complex development.
 * Original declarations: `ForMathlib.Real.abs_one_sub_inv_sqrt_le` (moved to
   `ForTauCeti/Analysis/SpecialFunctions/Sqrt.lean`),
   `ForMathlib.LinearMap.exists_linearIsometryEquiv_norm_sub_le`, and
-  `ForMathlib.ContinuousLinearMap.exists_linearIsometryEquiv_norm_sub_le`
+  `TauCeti.ContinuousLinearMap.exists_linearIsometryEquiv_norm_sub_le`
   (renamed here `ForMathlib.*` → `TauCeti.*`).
 * Original authorship: formalized by Claude Fable 5 (`claude-fable-5[1m]`), golf
   pass by Claude Opus 4.8 (`claude-opus-4-8[1m]`); staged for Mathlib (no

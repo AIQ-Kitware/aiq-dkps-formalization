@@ -155,7 +155,7 @@ theorem exists_boundedRealization_of_spectrum_subset_Icc
     rw [← hTφ φ, hsm φ] at h
     calc ‖(T - (((β + α) / 2 : ℝ) : ℂ) • ContinuousLinearMap.id ℂ H) φ‖
         = ‖T φ - ((β + α) / 2 : ℝ) • φ‖ := by
-          rw [ContinuousLinearMap.sub_apply, ContinuousLinearMap.smul_apply,
+          rw [sub_apply, smul_apply,
             ContinuousLinearMap.id_apply, hsm φ]
       _ ≤ (α - β) / 2 * ‖φ‖ := h
 

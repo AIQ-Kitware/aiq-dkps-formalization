@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Experimental.InfiniteDimensional.TanTwoTheta.BoundedOffDiagonalEstimate
-import ForMathlib.Analysis.InnerProductSpace.SpectralOrder.Complex
+import ForTauCeti.Analysis.InnerProductSpace.SpectralOrder.Complex
 
 /-!
 # Spectral half-line bridge for bounded off-diagonal tangent-two-theta
@@ -18,7 +18,7 @@ a center, including the degenerate-subspace cases and the reverse orientation.
 
 namespace TauCeti
 
-open ForMathlib
+open TauCeti
 namespace DavisKahanExt
 
 open scoped InnerProductSpace
@@ -44,7 +44,7 @@ theorem compressOperator_upperFormBound_of_spectrum_subset_Iic
   have hcompress : IsSelfAdjoint (compressOperator U A) :=
     isSelfAdjoint_compressOperator hAsa U
   intro z
-  exact ForMathlib.SpectralOrder.Complex.re_inner_le_of_spectrum_subset_Iic
+  exact TauCeti.SpectralOrder.Complex.re_inner_le_of_spectrum_subset_Iic
     (compressOperator U A) hcompress hspec z
 
 /-- A lower spectral half-line for a compressed self-adjoint operator gives
@@ -63,7 +63,7 @@ theorem compressOperator_lowerFormBound_of_spectrum_subset_Ici
   have hcompress : IsSelfAdjoint (compressOperator U A) :=
     isSelfAdjoint_compressOperator hAsa U
   intro z
-  exact ForMathlib.SpectralOrder.Complex.le_re_inner_of_spectrum_subset_Ici
+  exact TauCeti.SpectralOrder.Complex.le_re_inner_of_spectrum_subset_Ici
     (compressOperator U A) hcompress hspec z
 
 /-- Sharp contractive Riccati inequality for a quarter-acute reducing graph

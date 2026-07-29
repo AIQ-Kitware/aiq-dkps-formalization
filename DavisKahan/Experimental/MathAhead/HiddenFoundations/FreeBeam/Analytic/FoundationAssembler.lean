@@ -4,9 +4,9 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
-import DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Abstract.MaximalDomainTransport
-import DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Abstract.GraphClosedness
-import DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Abstract.CompactGraphEmbedding
+import DavisKahan.SpectralTheory.FormMethod.MaximalDomainTransport
+import DavisKahan.SpectralTheory.FormMethod.GraphClosedness
+import DavisKahan.SpectralTheory.FormMethod.CompactGraphEmbedding
 import DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeamAnalyticFoundation
 import Mathlib.Tactic
 

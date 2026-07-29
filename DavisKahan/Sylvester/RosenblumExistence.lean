@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Claude Opus 5
 -/
 import DavisKahan.SpectralTheory.CircleRieszEndpoints
-import ForMathlib.Analysis.InnerProductSpace.SylvesterOperator
+import ForTauCeti.Analysis.InnerProductSpace.SylvesterOperator
 
 /-!
 # Rosenblum's theorem: solving the Sylvester equation

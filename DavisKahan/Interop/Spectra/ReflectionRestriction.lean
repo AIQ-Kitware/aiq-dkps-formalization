@@ -6,7 +6,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 import DavisKahan.Interop.Spectra.UnitaryConjugation
 import DavisKahan.Interop.Spectra.SpectralProjectionSinTheta
 import DavisKahan.Geometry.Angle.OperatorAngleComplex
-import ForMathlib.Analysis.InnerProductSpace.ProjectionGap
+import ForTauCeti.Analysis.InnerProductSpace.ProjectionGap
 
 /-!
 # Reflection transport for unbounded spectral restrictions
@@ -37,6 +37,8 @@ noncomputable def boundedUnitaryConjugate
   W.toLinearIsometry.toContinuousLinearMap ∘L A ∘L
     W.symm.toLinearIsometry.toContinuousLinearMap
 
+omit [CompleteSpace H] in
+/-- The bounded unitary conjugate, unfolded. -/
 @[simp] theorem boundedUnitaryConjugate_apply
     (W : H ≃ₗᵢ[ℂ] H) (A : H →L[ℂ] H) (x : H) :
     boundedUnitaryConjugate W A x = W (A (W.symm x)) := rfl
@@ -66,6 +68,7 @@ noncomputable def boundedReflectionDefect
     (A : H →L[ℂ] H) : H →L[ℂ] H :=
   V.reflectionOperator ∘L A ∘L V.reflectionOperator - A
 
+omit [CompleteSpace H] in
 /-- The reflection defect is minus twice the sum of the two off-diagonal
 blocks. -/
 theorem boundedReflectionDefect_eq_neg_two_smul_offdiag
@@ -237,6 +240,7 @@ theorem norm_reflectedOffdiag_add_eq
         mul_le_mul_of_nonneg_left (V.norm_starProjection_apply_le z)
           (norm_nonneg _)
 
+omit [CompleteSpace H] in
 /-- Bounded unitary conjugation preserves the operator norm. -/
 theorem norm_boundedUnitaryConjugate
     (W : H ≃ₗᵢ[ℂ] H) (A : H →L[ℂ] H) :
@@ -268,6 +272,7 @@ theorem norm_boundedUnitaryConjugate
   rw [hdouble] at hback
   exact le_antisymm hle hback
 
+omit [CompleteSpace H] in
 /-- Orthogonal projection onto a unitary image is the conjugated original
 projection. -/
 theorem starProjection_map_unitary
@@ -279,6 +284,7 @@ theorem starProjection_map_unitary
   rw [Submodule.starProjection_map_apply]
   rfl
 
+omit [CompleteSpace H] in
 /-- Directed projection gaps are invariant under simultaneous unitary
 transport. -/
 theorem directedGap_map_unitary
@@ -310,6 +316,7 @@ theorem directedGap_map_unitary
     simp [boundedUnitaryConjugate_apply]
   rw [hcomp, norm_boundedUnitaryConjugate]
 
+omit [CompleteSpace H] in
 /-- Applying the same reflection twice returns the original subspace. -/
 theorem map_reflection_map_reflection
     (U V : Submodule ℂ H) [V.HasOrthogonalProjection] :
@@ -324,6 +331,7 @@ theorem map_reflection_map_reflection
     · exact ⟨x, hx, rfl⟩
     · exact V.reflection_reflection x
 
+omit [CompleteSpace H] in
 /-- The two directed gaps between a subspace and its reflected image are
 equal. -/
 theorem directedGap_reflection_symm
@@ -353,6 +361,7 @@ theorem subspaceGap_eq_directedGap_reflection
   change max (directedGap U W) (directedGap W U) = directedGap U W
   rw [← directedGap_reflection_symm U V, max_self]
 
+omit [CompleteSpace H] in
 /-- Conjugation by reflection carries the projection onto a subspace to the
 projection onto its reflected image. -/
 theorem starProjection_map_reflection
@@ -364,6 +373,7 @@ theorem starProjection_map_reflection
   rw [Submodule.starProjection_map_apply]
   rfl
 
+omit [CompleteSpace H] in
 /-- The projection gap to a reflected subspace is a reflection-defect norm. -/
 theorem subspaceGap_map_reflection
     (U V : Submodule ℂ H)
@@ -419,6 +429,7 @@ theorem reflectionPerturbation_isSelfAdjoint
     (isSelfAdjoint_boundedUnitaryConjugate V.reflection
       (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hE))
 
+omit [CompleteSpace H] in
 /-- The reflected perturbation costs at most twice the original operator
 norm. -/
 theorem norm_reflectionPerturbation_le
@@ -537,7 +548,7 @@ theorem perturbedSpectralReflection_mem_domain
       A.domain := by
   let C := A.addBounded E
   let hC : C.IsSelfAdjoint := addBounded_isSelfAdjoint A hA E hE
-  let xc : C.domain := ⟨(x : H), by simpa [C] using x.property⟩
+  let xc : C.domain := ⟨(x : H), by simp [C]⟩
   have h := spectralReflection_mem_domain C hC S hS xc
   simpa [C] using h
 
@@ -565,7 +576,7 @@ theorem add_reflectionPerturbation_intertwines
   have hJdomA : J (x : H) ∈ A.domain := by
     simpa [J, V, C] using
       perturbedSpectralReflection_mem_domain A hA E hE S hS x
-  let xc : C.domain := ⟨(x : H), by simpa [C] using x.property⟩
+  let xc : C.domain := ⟨(x : H), by simp [C]⟩
   have hcommC := selfAdjoint_apply_spectralReflection C hC S hS xc
   have hcomm :
       A.toLinearMap ⟨J (x : H), hJdomA⟩ + E (J (x : H)) =
