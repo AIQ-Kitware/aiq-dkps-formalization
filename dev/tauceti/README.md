@@ -50,6 +50,10 @@ If you are picking up migration work cold, read in this order:
 
 **Submission packaging**
 
+- `submission-ladder.md` — **read before planning any Tau Ceti PR.** Measures that the
+  PR1 draft's dependency-closed slice is 37 modules spanning six topics, and gives the
+  six-rung ladder the import graph already supports (2--12 modules per PR).
+
 - `tauceti-pr1-approximation-numbers.md` — the PR1 package.
 - `pr1-consistency-restoration-2026-07-27.md` — its consistency record,
   maintained by `scripts/refresh_tauceti_pr1_consistency.py`.

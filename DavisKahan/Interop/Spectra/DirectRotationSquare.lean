@@ -229,6 +229,7 @@ theorem _root_.TauCeti.DavisKahan.IsAcute.symm
 /-- The scalar cosine gauge `‖1 + z‖ / 2` of the reflection product. -/
 noncomputable def cosineGauge (z : ℂ) : ℂ := ((‖1 + z‖ / 2 : ℝ) : ℂ)
 
+/-- The cosine gauge is continuous. -/
 theorem continuous_cosineGauge : Continuous cosineGauge :=
   Complex.continuous_ofReal.comp
     ((continuous_const.add continuous_id).norm.div_const 2)
