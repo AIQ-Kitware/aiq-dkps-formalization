@@ -1,6 +1,6 @@
 # Spectra removal — open parallel lanes
 
-**Purpose.** The Spectra removal campaign is down to **6 files** carrying
+**Purpose.** The Spectra removal campaign is down to **5 files** carrying
 `import Spectra` (15 when this document was written), and they no longer form a
 chain: the spectral-measure chokepoint is built and green, so what is left
 splits into **lanes that touch disjoint files**. This document opens them for
@@ -15,24 +15,24 @@ below, commit it, then work. One agent per lane. Do not take two lanes at once �
 the lanes are sized so that each is a session's work, and holding two blocks
 someone else.
 
-## Status board (updated 2026-07-29, after SR-A/B/C/F landed)
+## Status board (updated 2026-07-29, after SR-A/B/C/E/F landed)
 
 | lane | files | blocker | holder |
 |---|---|---|---|
 | **SR-A** Cayley / Möbius / `SelfAdjointOperator` bridge | 5 | — | **DONE** (namek) |
 | **SR-B** spectral support | 1 | — | **DONE** (namek) |
 | **SR-C** half-line form bounds | 1 | — | **DONE** (namek) |
-| **SR-D** Hilbert–Schmidt tensor | 5 | **21,581-line donor closure — needs re-plan + author coordination** | *open (measured by edward, aiq-gpu — see lane)* |
-| **SR-E** Rosenblum | 1 | Borel upgrade of the intertwining (continuous case DONE) | *open — take in serial (partial landed by toothbrush)* |
+| **SR-D** Hilbert–Schmidt tensor | 5 | **a genuine port — the bypass gives the wrong constant, see below** | **namek (serial)** |
+| **SR-E** Rosenblum | 1 | — | **DONE** (toothbrush + namek) |
 | **SR-F** Experimental stragglers | 3 | — | **DONE** (edward + namek) |
 
-**The number that matters is the S6 criterion's, and it is 11.**  Measured on
+**The number that matters is the S6 criterion's, and it is 10.**  Measured on
 namek-work at the SR-A/B/C/F merge, over everything outside `vendor/` and
 `external/` — which is what S6 criterion (1) actually says:
 
 | where | count | what |
 |---|---|---|
-| `DavisKahan/**` | **6** | SR-D (5) + SR-E (1) — the only real lanes left |
+| `DavisKahan/**` | **5** | SR-D only — the last real lane |
 | `FinishTanTwoTheta/**` | **4** | a package that does not build at all, for an unrelated stale import (`a8992fd`) |
 | `scripts/ExportSpectraDeclClosure.lean` | **1** | the measurement tool; it *should* import Spectra, and it goes at S6 with the dependency |
 
@@ -131,6 +131,48 @@ package does not build at all — `SpectralSelection.lean` imports
 `ApproximationNumberMinMax`, deleted in `a8992fd`), and
 `scripts/ExportSpectraDeclClosure.lean` is the tool that measures the surface,
 so it is supposed to import Spectra and is deleted at S6 with the dependency.
+
+## SR-D, measured 2026-07-29 (namek) — the bypass does not collapse this one
+
+Five times in this campaign, asking *"what is the consumer actually consuming?"*
+turned a donor port into a few lines against Mathlib.  **It does not work here,
+and it is worth recording why, because the shape of the failure is the plan.**
+
+What `paperHilbertSchmidt_sylvester_defectFirst` delivers is: if `A X - X B = C`
+with a spectral gap `δ` and `C` Hilbert--Schmidt, then `X` is Hilbert--Schmidt
+and `δ ‖X‖_HS ≤ ‖C‖_HS`.  Spectra gets it by realising `HS(F, E)` as a Hilbert
+tensor product, building the Sylvester group `U_A ⊗ conj V_B` on it, and
+inverting its generator across the gap.
+
+The obvious bypass is the Fourier/semigroup formula, which this repository
+already has (`Experimental/…/Sylvester/FourierSemigroup.lean`):
+`X = ∫ μ_δ(t) U(-t) C V(t) dt`, and `U(-t) · V(t)` acts isometrically on
+Hilbert--Schmidt operators, so `‖X‖_HS ≤ ‖μ_δ‖_{L¹} ‖C‖_HS`.  **That route gives
+the wrong constant.**  The exact `L¹` mass of the Haagerup--Zsidó kernel is
+`π/(2δ)`, not `1/δ` — the removal plan already flags that "an `L¹` mass of `1/δ`
+would assert a false general separated-spectrum estimate".  So the bypass proves
+a strictly weaker theorem, and the sharp `δ⁻¹` really does come from the
+spectral-gap inverse.
+
+**Therefore SR-D is a port, not a restatement**, and its first step is the one
+Wave 5 Cluster D already specifies: *Tau Ceti owns **one** Hilbert--Schmidt
+predicate and norm*, with the basis-column, tensor and approximation-number
+descriptions as equivalence theorems for it.  Today `IsPaperHilbertSchmidt` and
+`paperHilbertSchmidtNorm` are the DKPS-side objects and
+`Spectra.HilbertSchmidtTensor.Space` is the donor's; the bridge between them is
+`DavisKahan/Interop/Spectra/HilbertSchmidtTensor.lean`.  Making `HS(F, E)` a
+Hilbert space natively in `ForTauCeti` is what unblocks everything above it.
+
+Ordering inside the lane, forced by that:
+
+1. `HS(F, E)` as an inner-product space over the native predicate — the object
+   Cluster D says must be unique;
+2. the Sylvester operator on it, self-adjoint when `A` and `B` are;
+3. its spectral-gap inverse (this is where the sharp `δ⁻¹` lives);
+4. repoint `HilbertSchmidt{DefectFirst,Pairwise}` and `SylvesterHilbertSchmidt`;
+5. relocate `HilbertSchmidtColumnExpansion` — edward measured its eleven
+   declarations as **externally unused but deliberately retained** for
+   upstreaming, so it moves last and is not deleted.
 
 ## The collision rule that matters
 
