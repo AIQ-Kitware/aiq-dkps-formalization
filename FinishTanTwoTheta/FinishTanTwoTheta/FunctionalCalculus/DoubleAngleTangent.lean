@@ -59,6 +59,64 @@ theorem doubleAngleTangent_mono {s t : ℝ}
   apply (div_le_div_iff₀ hds hdt).2
   nlinarith [mul_nonneg (sub_nonneg.mpr hst) (by nlinarith : 0 ≤ 1 + s * t)]
 
+/-- Exact difference formula for the scalar double-angle tangent.
+
+The numerator factors through `s - t`, which is what makes the function
+Lipschitz on every contractive interval without any differentiation. -/
+theorem doubleAngleTangent_sub {s t : ℝ} (hs1 : s ^ 2 ≠ 1) (ht1 : t ^ 2 ≠ 1) :
+    DavisKahanTheory.doubleAngleTangent s -
+        DavisKahanTheory.doubleAngleTangent t =
+      2 * (s - t) * (1 + s * t) / ((1 - s ^ 2) * (1 - t ^ 2)) := by
+  have hs : (1 : ℝ) - s ^ 2 ≠ 0 := sub_ne_zero_of_ne (Ne.symm hs1)
+  have ht : (1 : ℝ) - t ^ 2 ≠ 0 := sub_ne_zero_of_ne (Ne.symm ht1)
+  unfold DavisKahanTheory.doubleAngleTangent
+  field_simp
+  ring
+
+/-- **The scalar double-angle tangent is Lipschitz on `[0, r]` for `r < 1`.**
+
+This is what lets the selection argument report the *achieved* values
+`sᵢ = ‖X xᵢ‖` instead of the approximation numbers `aᵢ(X)` themselves: the
+resulting slack in the Ky Fan sum is bounded-norm bookkeeping, with no
+appearance of the unbounded diagonal blocks. -/
+theorem abs_doubleAngleTangent_sub_le {r s t : ℝ}
+    (hs0 : 0 ≤ s) (ht0 : 0 ≤ t) (hsr : s ≤ r) (htr : t ≤ r) (hr1 : r < 1) :
+    |DavisKahanTheory.doubleAngleTangent s -
+        DavisKahanTheory.doubleAngleTangent t| ≤
+      2 * (1 + r ^ 2) / (1 - r ^ 2) ^ 2 * |s - t| := by
+  have hr0 : 0 ≤ r := hs0.trans hsr
+  have hs1 : s < 1 := hsr.trans_lt hr1
+  have ht1 : t < 1 := htr.trans_lt hr1
+  have hds : 0 < 1 - s ^ 2 := by nlinarith
+  have hdt : 0 < 1 - t ^ 2 := by nlinarith
+  have hdr : 0 < 1 - r ^ 2 := by nlinarith
+  rw [doubleAngleTangent_sub (ne_of_lt (by nlinarith : s ^ 2 < 1))
+    (ne_of_lt (by nlinarith : t ^ 2 < 1))]
+  rw [abs_div, abs_of_pos (by positivity : 0 < (1 - s ^ 2) * (1 - t ^ 2))]
+  rw [div_le_iff₀ (by positivity)]
+  have hnum : |2 * (s - t) * (1 + s * t)| = 2 * |s - t| * (1 + s * t) := by
+    rw [abs_mul, abs_mul, abs_of_nonneg (by norm_num : (0 : ℝ) ≤ 2),
+      abs_of_nonneg (by nlinarith : (0 : ℝ) ≤ 1 + s * t)]
+  rw [hnum]
+  have habs : 0 ≤ |s - t| := abs_nonneg _
+  have hst : 1 + s * t ≤ 1 + r ^ 2 := by
+    nlinarith [mul_le_mul hsr htr ht0 hr0]
+  have hlow : (1 - r ^ 2) ^ 2 ≤ (1 - s ^ 2) * (1 - t ^ 2) := by
+    have h1 : 1 - r ^ 2 ≤ 1 - s ^ 2 := by nlinarith
+    have h2 : 1 - r ^ 2 ≤ 1 - t ^ 2 := by nlinarith
+    calc (1 - r ^ 2) ^ 2 = (1 - r ^ 2) * (1 - r ^ 2) := sq _
+      _ ≤ (1 - s ^ 2) * (1 - t ^ 2) :=
+        mul_le_mul h1 h2 hdr.le (by linarith)
+  have hne : ((1 : ℝ) - r ^ 2) ^ 2 ≠ 0 := by positivity
+  calc
+    2 * |s - t| * (1 + s * t) ≤ 2 * |s - t| * (1 + r ^ 2) :=
+      mul_le_mul_of_nonneg_left hst (by positivity)
+    _ = 2 * (1 + r ^ 2) / (1 - r ^ 2) ^ 2 * |s - t| * (1 - r ^ 2) ^ 2 := by
+        field_simp
+    _ ≤ 2 * (1 + r ^ 2) / (1 - r ^ 2) ^ 2 * |s - t| *
+        ((1 - s ^ 2) * (1 - t ^ 2)) :=
+      mul_le_mul_of_nonneg_left hlow (by positivity)
+
 /-- Positive denominator in graph coordinates. -/
 def doubleAngleDenominator (X : E0 →L[ℂ] E1) : E0 →L[ℂ] E0 :=
   ContinuousLinearMap.id ℂ E0 - X.adjoint ∘L X

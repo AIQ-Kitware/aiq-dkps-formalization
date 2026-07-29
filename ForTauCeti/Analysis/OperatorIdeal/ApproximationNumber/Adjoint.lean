@@ -67,7 +67,7 @@ The proof factors the operator through its finite-dimensional range.  After
 The two ranks live in different universes once the domain and codomain are
 allowed to move independently, so the conclusion is stated against the
 natural-number bound, which `Cardinal.lift` fixes. -/
-private theorem rank_adjoint_le_natCast_of_rank_le
+theorem rank_adjoint_le_natCast_of_rank_le
     (R : E →L[𝕜] F) {n : ℕ} (hR : R.rank ≤ (n : Cardinal)) :
     R.adjoint.rank ≤ (n : Cardinal) := by
   have hlt : R.rank < Cardinal.aleph0 :=
@@ -87,6 +87,17 @@ private theorem rank_adjoint_le_natCast_of_rank_le
         (Cardinal.lift_le_natCast.mpr hR))
   rw [hadj]
   exact (rank_comp_le_left _ _).trans hrestrict
+
+/-- Finite rank is preserved by the adjoint.
+
+Unlike a plain rank equality this is universe-safe: the two ranks are cardinals
+in different universes when the domain and codomain move independently, but
+finiteness transfers through the natural-number bound. -/
+theorem rank_adjoint_lt_aleph0 (R : E →L[𝕜] F) (hR : R.rank < Cardinal.aleph0) :
+    R.adjoint.rank < Cardinal.aleph0 := by
+  have hle : R.rank ≤ (R.rank.toNat : Cardinal) :=
+    le_of_eq (Cardinal.cast_toNat_of_lt_aleph0 hR).symm
+  exact (rank_adjoint_le_natCast_of_rank_le R hle).trans_lt Cardinal.natCast_lt_aleph0
 
 /-- One half of adjoint invariance for approximation numbers. -/
 private theorem approximationNumber_adjoint_le
