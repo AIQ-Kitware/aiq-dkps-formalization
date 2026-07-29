@@ -1,162 +1,130 @@
 # Developer notes — `dev/`
 
-Long-running engineering memory for the AIQ DKPS Lean formalization. Anything
-that **isn't** the formalization itself (`ForMathlib/`, the paper libraries
-`Acharyya2024/` … `Helm2025/`), the comparator challenge package (`Challenge/`,
-`comparator/`), or planning/status docs (`docs/`) lives here. The contents are
-deliberately agent-readable: an agent arriving cold should be able to read this
-folder, understand the project's pattern of past mistakes, and take fewer of
-them.
+Long-running engineering memory and live coordination for the AIQ DKPS Lean
+formalization. Anything that **isn't** the formalization itself, the comparator
+challenge package (`Challenge/`, `comparator/`), or paper-facing planning
+(`docs/`) lives here. The contents are deliberately agent-readable: an agent
+arriving cold should be able to read this folder, understand the project's
+pattern of past mistakes, and take fewer of them.
 
-The search entry point is [`SEARCH.md`](SEARCH.md). It gives grep patterns and
-routing rules so agents search this memory instead of reading it all.
+## If you are starting work right now, read these three
 
-The durable reference files and two subtrees:
+| File | What it answers |
+|---|---|
+| [`LANES.md`](LANES.md) | Who holds what. **Claim your row and commit it before your first edit.** Unlisted means unclaimed. |
+| [`tauceti/README.md`](tauceti/README.md) | The active migration: polishing foundations into `ForTauCeti`, retiring `vendor/Spectra`, converging three operator-theory stacks. |
+| [`SEARCH.md`](SEARCH.md) | How to *search* this memory instead of reading it all. Grep patterns and routing rules by symptom. |
+
+The governing policy is in [`../AGENTS.md`](../AGENTS.md), not here. It defines
+the dual-track split (Tau Ceti extraction primary, Davis--Kahan source fidelity
+maintenance), the dependency firewall, and the completion-claim discipline.
+
+## Layout
 
 ```text
 dev/
+  LANES.md                          # Live lane claims — read and claim before editing
   SEARCH.md                         # How to search engineering memory
   lean-proof-engineering-lessons.md # Recurring Lean elaboration/API/parser traps
   mathlib-proof-polishing.md        # Reference: "folding" proofs to Mathlib style
-  benchmark-candidates/       # Distilled hard questions from real formalization/comparator mistakes
+  mathlib-quality-adapter.md        # Reference: adapting local API to reviewer standard
+  external-lean-references.md       # Registry of external Lean repos consulted
+
+  tauceti/                    # The Tau Ceti migration working set (start at its README)
   journals/                   # Postmortems of bugs that took real effort to diagnose
+  benchmark-candidates/       # Hard questions distilled from real formalization mistakes
+  overlays/                   # Promotion manifests for the surviving Scratch/** sketches
+  alternates/                 # Non-building Lean files kept for proof-strategy comparison
+  upstream-extraction/        # Provenance JSON for extracted material
+  retired-full-part-iii-ambient-route-2026-07-21/   # Compressed archive of a retired route
 ```
 
-`dev/` is **not** a planning tracker (use `docs/planning/`), **not** the
-comparator/challenge how-to (use `docs/challenge/`), and **not** a place for WIP
-scratch (gitignore those).
+Alongside those, `dev/` holds the Davis--Kahan source-fidelity ledgers
+(census, correspondence matrix, frontier status, gap-closure and completion
+plans) and their paired `.json` data files. Several of the `.json` files are
+read or written by `scripts/check_*.py` — do not hand-edit one without running
+its checker.
 
----
+### Where a new note goes
+
+- A *lane claim or status* → a row in `LANES.md`, not a new file.
+- A *postmortem* of a bug that took effort → `journals/`.
+- A *transferable trap* another model would also fall into → `benchmark-candidates/`.
+- *Migration planning* → `tauceti/`, and record the decision in
+  `tauceti/convergence-matrix.md` where it belongs to a declaration.
+- *Paper-facing scope and roadmap* → `../docs/planning/`.
+- Anything that is only useful with the user in the loop → agent auto-memory,
+  not a file here.
+
+Resist adding a dated one-off note. The tree accumulated about ninety of them
+between 2026-07-18 and 07-24, they went stale within days, and reading them as
+current cost a later session two reversed lanes. They now sit in
+[`topurge/`](topurge/MANIFEST.md) awaiting deletion. If a note is worth
+writing, it is worth putting in the file that already owns the topic.
 
 ## `dev/benchmark-candidates/`
 
-**What it is.** A growing corpus of self-contained Lean 4 / Mathlib /
-comparator questions distilled from real mistakes made while building and
-upstreaming this project. Each question captures a *pre-error* setup — the
-context an agent had at the moment of the mistake — so a different model facing
-the same setup can be tested for the same failure mode.
+A corpus of self-contained Lean 4 / Mathlib / comparator questions distilled
+from real mistakes made while building and upstreaming this project. Each
+question captures a *pre-error* setup — the context an agent had at the moment
+of the mistake — so a different model facing the same setup can be tested for
+the same failure mode.
 
 This domain has an unusually rich supply of these: a Lean proof either checks or
 it doesn't, the comparator either matches or it doesn't, and `#print axioms`
 gives a crisp pass/fail. That makes the traps **mechanically checkable**, which
 is exactly what a benchmark needs.
 
-**Why an agent should care.**
-
 - **Read** these before a task that resembles one catalogued here (slimming a
   conformance, restating a theorem, choosing a leaf, minimizing imports,
   matching a comparator export). The "Why this was easy to miss" section names
   the cognitive trap so you can recognise it in your own reasoning.
-- **Write** here when you cause (or watch the user cause, or resolve) a mistake
-  whose root cause is a transferable invariant. The bar is: *another model in
-  the same situation could plausibly make the same mistake without this question
-  written down.*
-
-**Layout.**
-
-```text
-benchmark-candidates/
-  README.md          # Workflow, quality bar, prompt Levels A/B/C, tag taxonomy
-  index.md           # Router by failure-class invariant
-  lean-questions.md  # Main corpus (most entries land here)
-```
-
-Spin off a standalone `topic-YYYY-MM-DD.md` file (and link it from `index.md`)
-when a question is substantial and focused, or when parallel agents are editing
-`lean-questions.md` concurrently. When in doubt, add to `lean-questions.md`.
+- **Write** here when you cause, watch, or resolve a mistake whose root cause is
+  a transferable invariant. The bar is: *another model in the same situation
+  could plausibly make the same mistake without this question written down.*
 
 [`benchmark-candidates/README.md`](benchmark-candidates/README.md) is required
-reading before adding a question (write the failure evidence first, then distil;
+reading before adding a question: write the failure evidence first, then distil;
 pick the right Level A/B/C prompt; tag by *failure-class invariant*, not by
-surface API).
-
----
+surface API. Spin off a standalone `topic-YYYY-MM-DD.md` file (linked from
+`index.md`) only when a question is substantial and focused, or when parallel
+agents are editing `lean-questions.md` concurrently.
 
 ## `dev/journals/`
 
-**What it is.** Postmortem journal of bugs that took real effort to diagnose.
-Newest-first, written in the moment so the symptom language matches what a
-future debugger would search for.
-
-**Why an agent should care.**
+Postmortems of bugs that took real effort to diagnose. Newest-first, written in
+the moment so the symptom language matches what a future debugger would search
+for.
 
 - **Read** here first when you hit a confusing symptom in the same area as a
-  past entry. The grep target is the *symptom* (e.g. "statement do not match",
-  "motive is not type correct", "failed to synthesize", "no sorry remains"),
-  written the way you'd search for it from *inside* the bug — before you know
-  the technically-correct vocabulary.
+  past entry. The grep target is the *symptom* — "statement do not match",
+  "motive is not type correct", "failed to synthesize" — written the way you'd
+  search for it from *inside* the bug, before you know the technically-correct
+  vocabulary.
 - **Write** here after a fix that took effort. Skip the narrative; the canonical
   shape is **Symptom / What it was NOT / Root cause / Fix / Takeaway**.
 
-**Layout.**
+## `dev/overlays/`
 
-```text
-journals/
-  index.md             # Symptom router
-  lessons_learned.md   # Aggregate entries, newest first
-```
+Promotion manifests for the proof sketches under
+`DavisKahan/Experimental/Scratch/**`. Per `AGENTS.md`, a scratch file is **not
+required to build** — the task is to promote the sketch into its source-facing
+home module and fix it *there*. The manifest states what each declaration
+proves, where it should land, and the likely elaboration seams.
 
----
+Only the manifests whose sketches are still unpromoted remain here; the delivery
+receipts for overlays already applied were purged. Two of these are load-bearing
+beyond documentation: `pending-mathahead-rebased-53297a4-gpt56.manifest.txt` is
+existence-checked by `scripts/check_davis_kahan_rebased_mathahead.py`, and
+`lemma63-promotion-scratch-7f9f562-gpt56.md` is cited from two Lean sources.
 
-## `dev/lean-proof-engineering-lessons.md`
+## Quality bar
 
-A durable reference for recurring Lean failures encountered in the
-finite-dimensional Davis–Kahan development: bundled-map normalization,
-projection representation bridges, semilinear scalars, adjoint orientation,
-dependent branches, `NeZero` setup, subsingleton cases, parser-sensitive
-docstrings, and the decision to reduce through existing abstractions before
-starting coordinates. Search it by the exact API or symptom before reopening a
-known dead end.
-
----
-
-## `dev/mathlib-proof-polishing.md`
-
-A standalone **reference** (not a postmortem, not a test question) distilling how
-to "fold" a proof to Mathlib reviewer standard: replace low-level tactic traces
-with rewrite-friendly local lemmas and delegate bookkeeping to `simp`/`simpa`.
-Read it before a polishing pass on any upstream-bound proof (ForMathlib
-candidates first; the DKPS paper proofs later). It pairs with benchmark question
-Q4 (the fold-this-proof capability test). Distilled from real reviewer feedback,
-so it reflects what an actual Mathlib maintainer asked for.
-
----
-
-## How `dev/` relates to the rest of the repo
-
-```text
-docs/planning/   -> what's in flight, PR decisions, candidate dossiers
-docs/challenge/  -> how the comparator challenge package works
-Challenge/       -> the comparator challenges (MathlibCandidate / MathlibPending) + manifest
-comparator/      -> per-PR comparator configs
-ForMathlib/      -> the upstreamable, paper-agnostic Mathlib candidates
-Acharyya*/ …     -> the four DKPS paper theorem layers (end states)
-dev/             -> long-running engineering memory (you are here)
-  lean-proof-engineering-lessons.md -> durable Lean proof-construction rules
-  benchmark-candidates/               -> distilled "hard question" corpus
-  journals/                            -> effortful-debug postmortems
-```
-
-The auto-memory at
-`/home/agent/.claude/projects/-home-joncrall-code-aiq-dkps-formalization/memory/`
-is a parallel layer for **per-conversation** continuity (user preferences,
-recent project state, feedback rules). It cross-references `dev/` when relevant;
-the two don't duplicate. If a fact is true across many sessions → auto-memory.
-If it's a *question* or a *postmortem* → `dev/`.
-
-When unsure *where* to write: would a brand-new agent landing in this repo
-benefit from reading it cold, without conversation context? If yes → `dev/`. If
-it's only useful with the user in the loop → auto-memory.
-
----
-
-## Quality bar (one paragraph)
-
-Don't record trivia. Both subtrees are curated; an over-long file is a worse
+Don't record trivia. These subtrees are curated; an over-long file is a worse
 signal than a short one, because future readers won't believe the important
-entries hidden between filler. The strongest entries here are the ones where the
-code *built green and looked correct* but a downstream check (comparator,
-`#print axioms`, kernel) still rejected it — those are the non-obvious,
+entries hidden between filler. The strongest entries are the ones where the code
+*built green and looked correct* but a downstream check — comparator,
+`#print axioms`, kernel — still rejected it. Those are the non-obvious,
 transferable traps. If unsure whether something belongs, write it in scratch
 first; if a week later you still think the lesson is durable, move it in.
 
@@ -164,13 +132,13 @@ first; if a week later you still think the lesson is durable, move it in.
 
 ## Davis--Kahan 1970 full source census
 
-The full-paper theorem-by-theorem source ledger is maintained in:
+The full-paper theorem-by-theorem source ledger:
 
-- `davis-kahan-1970-full-source-census.json` -- authoritative structured data;
-- `davis-kahan-1970-full-source-census.md` -- generated human-readable view;
-- `davis-kahan-1970-missing-statements-math-ahead-2026-07-20.md` -- exact
+- `davis-kahan-1970-full-source-census.json` — authoritative structured data;
+- `davis-kahan-1970-full-source-census.md` — generated human-readable view;
+- `davis-kahan-1970-missing-statements-math-ahead-2026-07-20.md` — the exact
   missing-statement and Section 9 work plan;
-- `davis-kahan-1970-private-source-workflow.md` -- rules for using the local
+- `davis-kahan-1970-private-source-workflow.md` — rules for using the local
   transcription without redistributing it.
 
 Validate with:
