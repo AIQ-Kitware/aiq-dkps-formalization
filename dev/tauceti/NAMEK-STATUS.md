@@ -326,3 +326,51 @@ is done, so that is now a self-contained statement rather than a research step.
   carry no summability side conditions.  `tendsto_energy_sub_comp` is stated
   more generally than the application needs (no group structure assumed), so it
   should be reusable for any other Hilbert–Schmidt continuity argument.
+
+---
+
+## Update 2026-07-29 (final) — **SR-D3 is complete**
+
+`generator_sylvesterGroup_apply` landed.  Tree green at 9281 jobs; every
+declaration below depends only on `propext`, `Classical.choice`, `Quot.sound`.
+
+SR-D3 in full, all five files landed today, all in `ForTauCeti`:
+
+| file | statement |
+| --- | --- |
+| `OneParameterUnitaryGroup/Stone.lean` | Stone's theorem, forward direction |
+| `HilbertSchmidtLp.lean` (D1, earlier) | the column bijection |
+| `HilbertSchmidtSpace.lean` | the three representation facts |
+| `HilbertSchmidtConjugation.lean` | HS-norm invariance under conjugation |
+| `SylvesterGroup.lean` | the flow is a unitary group; **generator self-adjoint** |
+| `SylvesterGenerator.lean` | **the generator satisfies `A Z - Z B = C`** |
+
+**Nothing in SR-D3 is outstanding.**
+
+### SR-D4 is unblocked and is the next lane worth taking
+
+It is the re-point of the five remaining in-scope `import Spectra` files onto
+the API above, and it is the last thing between the tree and **zero** in-scope
+Spectra imports.  It is mechanical in the sense that the mathematics is done;
+it is not zero-effort, because the donor's names have to be mapped one by one.
+
+The mapping to start from:
+
+* `Spectra.HilbertSchmidtTensor.Space E F` → `lp (fun _ : ι => E) 2`, `ι` the
+  index of a Hilbert basis of `F`
+* `Spectra.HilbertSchmidtTensor.toOperator` → `TauCeti.HilbertSchmidt.ofLp b`
+* `toOperator_injective` → `ofLp_injective`
+* `existsUnique_tensor_iff_summable_columns` → `existsUnique_ofLp_iff_summable`
+* `norm_sq_eq_tsum_column_norm_sq` → `norm_sq_eq_tsum_norm_column_sq`
+* `Spectra.HilbertSchmidtTensor.sylvesterGroup` → `HilbertSchmidt.sylvesterGroup`
+* `Spectra.OneParameterUnitaryGroup.generator` → `TauCeti.OneParameterUnitaryGroup.generator`
+* `Spectra.QuantumMechanics.SpectralTheory.spectralGapSolution` and its three
+  companions → `LinearPMap/SpectralGapInverse.lean`'s `gapInverse` and
+  `apply_gapInverse`, applied to the self-adjoint operator supplied by
+  `isSelfAdjoint_generator_sylvesterGroup`
+* `toOperator_hasGeneratorSylvesterEquation` → `generator_sylvesterGroup_apply`
+
+One caveat to check rather than assume: `Audits/SylvesterHilbertSchmidt.lean`
+and `Sylvester/HilbertSchmidtPairwise.lean` also import Spectra's BornRule /
+PVM / Observable modules, which are **not** Hilbert–Schmidt infrastructure and
+may need a different replacement or may turn out to be unused `open`s.

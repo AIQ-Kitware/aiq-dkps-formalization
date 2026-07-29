@@ -26,11 +26,17 @@ so identifying the Hilbert–Schmidt operators with `lp (fun _ : ι => E) 2` giv
 the inner product and completeness — the expensive half of any from-scratch
 development — for free, and leaves only the column bijection to prove.
 
-This module supplies the membership half of that identification.  The bijection
-itself is the content of
-`DavisKahan/Interop/Spectra/HilbertSchmidtColumnExpansion.lean`, whose eleven
-`mathAhead_*` declarations are DKPS-authored and are re-based onto `lp` rather
-than re-proved.
+This module supplies the membership half of that identification.  The three
+facts a consumer of the space actually needs are in
+`HilbertSchmidtSpace.lean`.
+
+An earlier version of this docstring said the eleven `mathAhead_*` declarations
+of `DavisKahan/Interop/Spectra/HilbertSchmidtColumnExpansion.lean` would be
+*re-based* onto `lp`.  That is not what happened: they were re-proved from the
+round trips below, at which point the whole file was redundant and was deleted
+(2026-07-29).  Five of the eleven had no `lp` analogue at all — they were the
+scaffolding of the tensor-model column bijection, and in the `lp` model
+square-summability *is* the definition of the space.
 
 ## Provenance
 
