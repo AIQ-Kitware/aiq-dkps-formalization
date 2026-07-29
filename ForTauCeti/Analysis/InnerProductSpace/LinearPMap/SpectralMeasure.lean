@@ -593,16 +593,47 @@ theorem cayleyInv_add_I {w : _root_.spectrum ℂ (cayley hA)} (hw1 : (w : ℂ) �
 
 variable (B : Set ℝ) (hB : MeasurableSet B)
 
+/-- The symbol `(κ - c) · 1_B` of the shifted bounded truncation. -/
+noncomputable def truncSymbol (c : ℝ) : _root_.spectrum ℂ (cayley hA) → ℂ :=
+  fun w => ((cayleyInv hA w : ℂ) - (c : ℂ)) *
+    (cayleyInv hA ⁻¹' B).indicator (fun _ => (1 : ℂ)) w
+
+theorem norm_truncSymbol_le {c r : ℝ} (hr : 0 ≤ r) (hcr : ∀ s ∈ B, |s - c| ≤ r)
+    (w : _root_.spectrum ℂ (cayley hA)) : ‖truncSymbol hA B c w‖ ≤ r := by
+  by_cases hw : w ∈ cayleyInv hA ⁻¹' B
+  · have hκB : cayleyInv hA w ∈ B := hw
+    have h2 : (cayleyInv hA ⁻¹' B).indicator (fun _ => (1 : ℂ)) w = 1 := by simp [hw]
+    rw [truncSymbol]
+    simp only [h2, mul_one]
+    rw [show ((cayleyInv hA w : ℂ) - (c : ℂ)) = ((cayleyInv hA w - c : ℝ) : ℂ) by
+        push_cast; ring, Complex.norm_real, Real.norm_eq_abs]
+    exact hcr _ hκB
+  · have h2 : (cayleyInv hA ⁻¹' B).indicator (fun _ => (1 : ℂ)) w = 0 := by simp [hw]
+    rw [truncSymbol]
+    simp only [h2, mul_zero, norm_zero]
+    exact hr
+
+include hB in
+theorem isBddMeasurable_truncSymbol {c r : ℝ} (hr : 0 ≤ r)
+    (hcr : ∀ s ∈ B, |s - c| ≤ r) :
+    BorelCalculus.IsBddMeasurable (truncSymbol hA B c) := by
+  have hmeasκ : Measurable fun w => ((cayleyInv hA w : ℝ) : ℂ) :=
+    Complex.continuous_ofReal.measurable.comp (measurable_cayleyInv hA)
+  have hSm : MeasurableSet (cayleyInv hA ⁻¹' B) := measurable_cayleyInv hA hB
+  exact ⟨(hmeasκ.sub measurable_const).mul (measurable_const.indicator hSm), r, hr,
+    norm_truncSymbol_le hA B hr hcr⟩
+
 /-- **Bounded spectral sets.**  If the spectral parameter stays within `r` of `c`
 on `B`, then the spectral projection lands in `dom A` and `A - c` is bounded by
 `r` there.  Both facts come from one identity: `(A + i) E_A(B)` is the Borel
 calculus of `(κ + i) 1_B`, because the resolvent's symbol `(1-w)/(2i)` is the
 pointwise inverse of `κ + i` away from the Cayley singularity. -/
-theorem exists_shifted_truncation {M c r : ℝ}
-    (hbnd : ∀ s ∈ B, |s| ≤ M) (hr : 0 ≤ r) (hcr : ∀ s ∈ B, |s - c| ≤ r) :
-    ∃ T : H →L[ℂ] H, (∀ y : H, ‖T y‖ ≤ r * ‖y‖) ∧
-      ∀ y : H, ∃ hy : specProjection hA B hB y ∈ A.domain,
-        A ⟨specProjection hA B hB y, hy⟩ - (c : ℂ) • specProjection hA B hB y = T y := by
+theorem specProjection_apply_sub_smul {M c r : ℝ}
+    (hbnd : ∀ s ∈ B, |s| ≤ M) (hr : 0 ≤ r) (hcr : ∀ s ∈ B, |s - c| ≤ r) (y : H) :
+    ∃ hy : specProjection hA B hB y ∈ A.domain,
+      A ⟨specProjection hA B hB y, hy⟩ - (c : ℂ) • specProjection hA B hB y
+        = BorelCalculus.borelCalculus (isStarNormal_cayley hA)
+            (isBddMeasurable_truncSymbol hA B hB hr hcr) y := by
   classical
   set hU := isStarNormal_cayley hA with hhU
   set hni := negI_mem_resolventSet hA with hhni
@@ -687,8 +718,6 @@ theorem exists_shifted_truncation {M c r : ℝ}
       Filter.Eventually.of_forall fun w => ?_
     change pf w = q w + -(Complex.I + (c : ℂ)) * ind w
     rw [hpf, hq]; ring
-  refine ⟨BorelCalculus.borelCalculus hU hpb, fun y =>
-    BorelCalculus.norm_borelCalculus_apply_le hU hpb hr hpfb y, fun y => ?_⟩
   -- hence `(A + i) E(B)` is the Borel calculus of `(κ + i) 1_B`
   set T := BorelCalculus.borelCalculus hU hqb with hT
   have hPy : resolvent A hni (T y) = specProjection hA B hB y := by
@@ -718,27 +747,13 @@ theorem exists_shifted_truncation {M c r : ℝ}
     linear_combination (norm := module) hsolve
   exact hgoal
 
-/-- **The bounded truncation of `A` at a bounded spectral set.**  There is a
-bounded operator that agrees with `A` on the spectral range. -/
-theorem exists_truncation {M : ℝ} (hbnd : ∀ s ∈ B, |s| ≤ M) :
-    ∃ T : H →L[ℂ] H, (∀ y : H, ‖T y‖ ≤ max 0 M * ‖y‖) ∧
-      ∀ y : H, ∃ hy : specProjection hA B hB y ∈ A.domain,
-        A ⟨specProjection hA B hB y, hy⟩ = T y := by
-  obtain ⟨T, hTn, hTid⟩ := exists_shifted_truncation hA B hB hbnd (c := 0)
-    (r := max 0 M) (le_max_left 0 M)
-    (fun s hs => by simpa using le_trans (hbnd s hs) (le_max_right 0 M))
-  refine ⟨T, hTn, fun y => ?_⟩
-  obtain ⟨hy, hb⟩ := hTid y
-  exact ⟨hy, by simpa using hb⟩
-
 /-- A bounded spectral range lies inside the operator domain. -/
 theorem mem_domain_of_mem_specRange_of_bounded {M : ℝ} (hbnd : ∀ s ∈ B, |s| ≤ M)
     {x : H} (hx : x ∈ specRange hA B hB) : x ∈ A.domain := by
   have hfix : specProjection hA B hB x = x := (mem_specRange_iff hA B hB x).mp hx
-  obtain ⟨T, -, hTid⟩ := exists_shifted_truncation hA B hB hbnd
+  obtain ⟨hy, -⟩ := specProjection_apply_sub_smul hA B hB hbnd
     (c := 0) (r := max 0 M) (le_max_left 0 M)
-    (fun s hs => by simpa using le_trans (hbnd s hs) (le_max_right 0 M))
-  obtain ⟨hy, -⟩ := hTid x
+    (fun s hs => by simpa using le_trans (hbnd s hs) (le_max_right 0 M)) x
   rwa [hfix] at hy
 
 /-- On a spectral range over a set within `r` of `c`, the operator differs from
@@ -748,12 +763,12 @@ theorem norm_sub_smul_le_of_mem_specRange {M c r : ℝ} (hbnd : ∀ s ∈ B, |s|
     (hmem : x ∈ A.domain) :
     ‖A ⟨x, hmem⟩ - (c : ℂ) • x‖ ≤ r * ‖x‖ := by
   have hfix : specProjection hA B hB x = x := (mem_specRange_iff hA B hB x).mp hx
-  obtain ⟨T, hTnorm, hTid⟩ := exists_shifted_truncation hA B hB hbnd hr hcr
-  obtain ⟨hy, hb⟩ := hTid x
+  obtain ⟨hy, hb⟩ := specProjection_apply_sub_smul hA B hB hbnd hr hcr x
   have hsub : (⟨specProjection hA B hB x, hy⟩ : A.domain) = ⟨x, hmem⟩ := Subtype.ext hfix
   rw [hsub, hfix] at hb
   rw [hb]
-  exact hTnorm x
+  exact BorelCalculus.norm_borelCalculus_apply_le _ _ hr
+    (norm_truncSymbol_le hA B hr hcr) x
 
 /-- **The interval cutoffs converge strongly to the identity.** -/
 theorem tendsto_specProjection_Icc (x : H) :
@@ -877,6 +892,55 @@ theorem re_inner_apply_bounds_of_subset_Icc {β α : ℝ} (hBsub : B ⊆ Set.Icc
     have h0 : (⟨(0 : H), hy⟩ : A.domain) = 0 := Subtype.ext rfl
     rw [h0, _root_.LinearPMap.map_zero]
     simp
+
+/-- **The bounded truncation of `A` to a bounded spectral set** — the Borel
+calculus of `κ · 1_B`.  It agrees with `A` on the spectral range. -/
+noncomputable def truncation {M : ℝ} (hbnd : ∀ s ∈ B, |s| ≤ M) : H →L[ℂ] H :=
+  BorelCalculus.borelCalculus (isStarNormal_cayley hA)
+    (isBddMeasurable_truncSymbol hA B hB (c := 0) (r := max 0 M) (le_max_left 0 M)
+      (fun s hs => by simpa using le_trans (hbnd s hs) (le_max_right 0 M)))
+
+theorem truncation_eq_on_specProjection {M : ℝ} (hbnd : ∀ s ∈ B, |s| ≤ M) (y : H) :
+    ∃ hy : specProjection hA B hB y ∈ A.domain,
+      A ⟨specProjection hA B hB y, hy⟩ = truncation hA B hB hbnd y := by
+  obtain ⟨hy, hb⟩ := specProjection_apply_sub_smul hA B hB hbnd (c := 0)
+    (r := max 0 M) (le_max_left 0 M)
+    (fun s hs => by simpa using le_trans (hbnd s hs) (le_max_right 0 M)) y
+  exact ⟨hy, by simpa [truncation] using hb⟩
+
+theorem norm_truncation_apply_le {M : ℝ} (hbnd : ∀ s ∈ B, |s| ≤ M) (y : H) :
+    ‖truncation hA B hB hbnd y‖ ≤ max 0 M * ‖y‖ :=
+  BorelCalculus.norm_borelCalculus_apply_le _ _ (le_max_left 0 M)
+    (norm_truncSymbol_le hA B (c := 0) (r := max 0 M) (le_max_left 0 M)
+      (fun s hs => by simpa using le_trans (hbnd s hs) (le_max_right 0 M))) y
+
+/-- The truncation is self-adjoint: its symbol is real. -/
+theorem isSelfAdjoint_truncation {M : ℝ} (hbnd : ∀ s ∈ B, |s| ≤ M) :
+    IsSelfAdjoint (truncation hA B hB hbnd) := by
+  have hs := isBddMeasurable_truncSymbol hA B hB (c := 0) (r := max 0 M) (le_max_left 0 M)
+    (fun s hs => by simpa using le_trans (hbnd s hs) (le_max_right 0 M))
+  have hconj : BorelCalculus.borelCalculus (isStarNormal_cayley hA) hs.conj
+      = BorelCalculus.borelCalculus (isStarNormal_cayley hA) hs := by
+    refine BorelCalculus.borelCalculus_congr_ae _ _ _ fun η =>
+      Filter.Eventually.of_forall fun w => ?_
+    change (starRingEnd ℂ) (truncSymbol hA B 0 w) = truncSymbol hA B 0 w
+    rw [truncSymbol]
+    by_cases hw : w ∈ cayleyInv hA ⁻¹' B <;> simp [hw, Complex.conj_ofReal]
+  have hkey : ContinuousLinearMap.adjoint
+      (BorelCalculus.borelCalculus (isStarNormal_cayley hA) hs)
+      = BorelCalculus.borelCalculus (isStarNormal_cayley hA) hs := by
+    rw [← BorelCalculus.borelCalculus_conj (isStarNormal_cayley hA) hs, hconj]
+  rw [IsSelfAdjoint, ContinuousLinearMap.star_eq_adjoint]
+  exact hkey
+
+/-- The truncation commutes with every spectral projection. -/
+theorem truncation_comm_specProjection {M : ℝ} (hbnd : ∀ s ∈ B, |s| ≤ M)
+    (C : Set ℝ) (hC : MeasurableSet C) :
+    truncation hA B hB hbnd * specProjection hA C hC
+      = specProjection hA C hC * truncation hA B hB hbnd := by
+  rw [truncation, specProjection, spectralPVM, BorelCalculus.toProjValMeasure_proj,
+    BorelCalculus.specProj]
+  exact BorelCalculus.borelCalculus_comm _ _ _
 
 end BoundedSet
 
