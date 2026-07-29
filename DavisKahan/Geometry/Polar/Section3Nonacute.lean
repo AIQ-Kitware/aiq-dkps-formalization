@@ -68,6 +68,8 @@ private theorem projection_mul_projection_eq_zero_of_ge_orthogonal
 noncomputable def crossedDefectSum : Submodule ℂ H :=
   halmosSourceDefect U V ⊔ halmosTargetDefect U V
 
+/-- The sum of the two crossed defect subspaces is orthogonally complemented, so the nonacute
+decomposition has an orthogonal projection onto it. -/
 noncomputable instance crossedDefectSum_hasOrthogonalProjection :
     (crossedDefectSum U V).HasOrthogonalProjection :=
   hasOrthogonalProjection_sup_of_le_orthogonal
@@ -107,6 +109,7 @@ noncomputable def crossedDefectQuarterTurn
     H →L[ℂ] H :=
   sourceToTargetDefect U V J - targetToSourceDefect U V J
 
+/-- The crossed defect map on a source vector. -/
 @[simp]
 theorem sourceToTargetDefect_apply_source
     (J : halmosSourceDefect U V ≃ₗᵢ[ℂ] halmosTargetDefect U V)
@@ -115,6 +118,7 @@ theorem sourceToTargetDefect_apply_source
   simp [sourceToTargetDefect,
     Submodule.orthogonalProjectionOnto_mem_subspace_eq_self]
 
+/-- The crossed defect map on a target vector. -/
 @[simp]
 theorem targetToSourceDefect_apply_target
     (J : halmosSourceDefect U V ≃ₗᵢ[ℂ] halmosTargetDefect U V)
@@ -123,6 +127,8 @@ theorem targetToSourceDefect_apply_target
   simp [targetToSourceDefect,
     Submodule.orthogonalProjectionOnto_mem_subspace_eq_self]
 
+/-- The source-to-target defect annihilates target vectors -- the *crossed* half of the name, and
+what makes the two defects act on complementary summands. -/
 @[simp]
 theorem sourceToTargetDefect_apply_target
     (J : halmosSourceDefect U V ≃ₗᵢ[ℂ] halmosTargetDefect U V)
@@ -134,6 +140,7 @@ theorem sourceToTargetDefect_apply_target
   simp [sourceToTargetDefect,
     Submodule.orthogonalProjectionOnto_eq_zero_iff.mpr hy]
 
+/-- The target-to-source defect annihilates source vectors. -/
 @[simp]
 theorem targetToSourceDefect_apply_source
     (J : halmosSourceDefect U V ≃ₗᵢ[ℂ] halmosTargetDefect U V)
@@ -144,6 +151,7 @@ theorem targetToSourceDefect_apply_source
   simp [targetToSourceDefect,
     Submodule.orthogonalProjectionOnto_eq_zero_iff.mpr hx]
 
+/-- The quarter turn sends a source vector to its target-side defect. -/
 @[simp]
 theorem crossedDefectQuarterTurn_apply_source
     (J : halmosSourceDefect U V ≃ₗᵢ[ℂ] halmosTargetDefect U V)
@@ -151,6 +159,8 @@ theorem crossedDefectQuarterTurn_apply_source
     crossedDefectQuarterTurn U V J (x : H) = (J x : H) := by
   simp [crossedDefectQuarterTurn]
 
+/-- The quarter turn sends a target vector to the negative of its source-side defect; the sign is
+what makes it a quarter turn rather than a reflection. -/
 @[simp]
 theorem crossedDefectQuarterTurn_apply_target
     (J : halmosSourceDefect U V ≃ₗᵢ[ℂ] halmosTargetDefect U V)
