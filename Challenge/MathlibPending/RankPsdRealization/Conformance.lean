@@ -28,11 +28,11 @@ open Matrix
 variable {𝕜 n : Type*} [RCLike 𝕜] [Fintype n] [DecidableEq n]
 
 /-- **Vanishing tail of the sorted eigenvalues** of a PSD matrix of rank `≤ d`. -/
-theorem PosSemidef.eigenvalues₀_eq_zero_of_rank_le {B : Matrix n n 𝕜}
-    (hB : B.PosSemidef) {d : ℕ} (hrank : B.rank ≤ d)
+theorem PosSemidef.eigenvalues₀_eq_zero_of_rank_le {A : Matrix n n 𝕜}
+    (hA : A.PosSemidef) {d : ℕ} (hrank : A.rank ≤ d)
     {i : Fin (Fintype.card n)} (hi : d ≤ (i : ℕ)) :
-    hB.isHermitian.eigenvalues₀ i = 0 := by
-  set hH := hB.isHermitian
+    hA.isHermitian.eigenvalues₀ i = 0 := by
+  set hH := hA.isHermitian
   -- The index equivalence `eigenvalues₀ = eigenvalues ∘ e` from the definition.
   set e : Fin (Fintype.card n) ≃ n :=
     Fintype.equivOfCardEq (Fintype.card_fin (Fintype.card n)) with he
@@ -41,7 +41,7 @@ theorem PosSemidef.eigenvalues₀_eq_zero_of_rank_le {B : Matrix n n 𝕜}
     rw [Matrix.IsHermitian.eigenvalues, he, Equiv.symm_apply_apply]
   -- PSD ⇒ sorted eigenvalues are nonnegative.
   have hnonneg : ∀ k, 0 ≤ hH.eigenvalues₀ k := fun k => by
-    rw [heq0 k]; exact hB.eigenvalues_nonneg (e k)
+    rw [heq0 k]; exact hA.eigenvalues_nonneg (e k)
   by_contra hne
   have hipos : 0 < hH.eigenvalues₀ i := (hnonneg i).lt_of_ne' hne
   -- By antitonicity, every index `≤ i` also has a strictly positive eigenvalue.
@@ -55,7 +55,7 @@ theorem PosSemidef.eigenvalues₀_eq_zero_of_rank_le {B : Matrix n n 𝕜}
     calc (i : ℕ) + 1 = (Finset.Iic i).card := by rw [Fin.card_Iic]
       _ ≤ _ := Finset.card_le_card hsub
   -- That Finset has cardinality `rank` (count transported across `e`).
-  have hcount : (Finset.univ.filter (fun k => hH.eigenvalues₀ k ≠ 0)).card = B.rank := by
+  have hcount : (Finset.univ.filter (fun k => hH.eigenvalues₀ k ≠ 0)).card = A.rank := by
     have h1 : (Finset.univ.filter (fun k => hH.eigenvalues₀ k ≠ 0)).card
         = Fintype.card {k // hH.eigenvalues₀ k ≠ 0} := (Fintype.card_subtype _).symm
     have h2 : Fintype.card {k // hH.eigenvalues₀ k ≠ 0}
