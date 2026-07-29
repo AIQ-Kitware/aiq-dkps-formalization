@@ -354,8 +354,7 @@ private theorem orthonormal_mv : Orthonormal ℝ mv := by
       refine key _ ?_ <;>
       · simp only [mv,
           PiLp.inner_apply, RCLike.inner_apply, conj_trivial,
-          Fin.sum_univ_four,
-          smul_eq_mul]
+          Fin.sum_univ_four]
         simp [sv]
         nlinarith [hh]
   · intro i j hij

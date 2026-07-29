@@ -264,8 +264,7 @@ theorem highProbWitnessRiskTransfer_of_uniformCoordinateError
       (fun f => sqLoss (affineModel witness trueFeature f) (truth f)) Pf) :
     HighProbWitnessRiskTransfer μ hμ Pf truth trueFeature
       estimatedFeature witness := by
-  intro ε hε
-  intro δ hδ
+  intro ε hε δ hδ
   obtain ⟨Ncoord, hNcoord⟩ := hcoord δ hδ
   obtain ⟨Npenalty, hNpenalty⟩ := hpenalty ε hε
   refine ⟨max Ncoord Npenalty, ?_⟩

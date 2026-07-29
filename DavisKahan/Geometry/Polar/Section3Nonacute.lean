@@ -1046,7 +1046,7 @@ theorem proposition3_2_completed :
 
 /-- Explicit injective parameterization of all constructed extensions. -/
 theorem proposition3_2_parameterization_completed
-    (hdefect : CrossedDefectsEquivalent U V) :
+    (_hdefect : CrossedDefectsEquivalent U V) :
     ∃ build :
         (halmosSourceDefect U V ≃ₗᵢ[ℂ] halmosTargetDefect U V) →
           H →L[ℂ] H,

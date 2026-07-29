@@ -106,7 +106,6 @@ theorem exists_polynomial_perspective_covers_of_isCompact_range
     have hscaled_upper : 2 * B / δ = scale := by
       dsimp [δ, scale]
       field_simp [ne_of_gt hρ, ne_of_gt hDpos]
-      <;> ring
     have hkey_mem (f : Model Q X) : key f ∈ keys := by
       apply Finset.mem_Icc.mpr
       constructor
@@ -179,7 +178,8 @@ theorem exists_polynomial_perspective_covers_of_isCompact_range
             · rw [hfloor] at hg_lt
               linarith
           have habs_div : |(ψ (rep k) i - ψ f i) / δ| < 1 := by
-            convert habs_scaled using 1 <;> ring
+            convert habs_scaled using 1
+            ring
           rw [abs_div, abs_of_pos hδ] at habs_div
           have := (div_lt_iff₀ hδ).mp habs_div
           simpa using this

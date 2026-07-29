@@ -283,3 +283,46 @@ because it yields `π/(2δ)` rather than the sharp `δ⁻¹`.  That still stands
 Stone uses the semigroup route **only for surjectivity**, which is indifferent
 to the constant — no bound in `Stone.lean` comes from an `L¹` mass, and the
 sharp `δ⁻¹` still comes from `SpectralGapInverse.lean`.
+
+---
+
+## Update 2026-07-29 (later) — SR-D3 is done bar the generator formula
+
+Four ForTauCeti files landed today, all green, all axiom-clean:
+
+| file | what it gives |
+| --- | --- |
+| `OneParameterUnitaryGroup/Stone.lean` | Stone's theorem forward direction |
+| `HilbertSchmidtSpace.lean` | the three representation facts |
+| `HilbertSchmidtConjugation.lean` | HS-norm invariance under conjugation, `ofLp` linearity |
+| `SylvesterGroup.lean` | the Sylvester flow as a unitary group, **and its generator is self-adjoint** |
+
+The declaration to depend on is
+**`TauCeti.HilbertSchmidt.isSelfAdjoint_generator_sylvesterGroup`**.
+
+### What this means for whoever takes D4
+
+D4 was blocked on "D3 lands".  The blocking half has landed.  What is *not* yet
+proved is the identification of the generator with the Sylvester expression
+itself — i.e. that `-i · generator (sylvesterGroup U V b)` is `Z ↦ A Z - Z B`
+where `A`, `B` are the generators of `U`, `V`.  Everything structural around it
+is done, so that is now a self-contained statement rather than a research step.
+
+### Design points other agents should not re-litigate
+
+* **The Hilbert–Schmidt space is `lp (fun _ : ι => E) 2` over a basis of `F`,
+  not a new type.**  A subtype of `F →L[𝕜] E` inherits the *operator* norm from
+  Mathlib and then every Hilbert–Schmidt statement fights that instance.  `lp`
+  supplies `InnerProductSpace` and `CompleteSpace` already proved.
+* **No tensor product is built.**  The donor's model is `conj F ⊗ E`, measured
+  at a 21,581-line closure; it turned out to be load-bearing for exactly three
+  declarations, each of which follows directly from D1's round trips.
+* **Conjugation invariance needs no basis-independence argument.**  Both
+  computations happen in one fixed basis; the adjoint step is what moves
+  between the left and right cases.
+* **Hilbert–Schmidt strong continuity is the part with real content** — the
+  columns must go to zero together — and the `ε`-split is best done in `ℝ≥0∞`,
+  where `ENNReal.sum_add_tsum_compl` and `ENNReal.tendsto_tsum_compl_atTop_zero`
+  carry no summability side conditions.  `tendsto_energy_sub_comp` is stated
+  more generally than the application needs (no group structure assumed), so it
+  should be reusable for any other Hilbert–Schmidt continuity argument.

@@ -435,11 +435,124 @@ The module docstring, which previously advertised "infinite dimensions", now sta
 
 | item | status |
 |---|---|
-| 1. `ContinuousLinearMap.polarIsometry` | **PARTIAL — reconciliation proved 2026-07-28** (`polarPartial_eq_comp_ringInverse_modulus`: the two agree wherever the light one is meaningful). Retirement still open, and larger than it looks: the module also carries two `IsUnit |M|` criteria and `‖|M| - 1‖ ≤ ‖M⋆M - 1‖`, none of them polar-decomposition results, which need rehousing before anything is deleted. Original situation: — the general partial isometry now exists as `ContinuousLinearMap.polarPartial` (`ForTauCeti/Analysis/InnerProductSpace/PolarPartialIsometry.lean`, 44 declarations), and `PolarIsometry.lean` carries a live `TODO` to prove `polarIsometry = polarPartial` under `IsUnit M.modulus` and then **retire** `polarIsometry` in favour of the general one. That supersedes the section's own recommendation: the audit proposed renaming to `polarIsometricFactorOfIsUnitModulus` and keeping the definition, but if the general object is available the honest move is deletion, not a longer name. Retiring it is the open lane; renaming it would entrench a definition that is scheduled to go. |
+| 1. `ContinuousLinearMap.polarIsometry` | **PARTIAL — reconciliation proved 2026-07-28** (`polarPartial_eq_comp_ringInverse_modulus`: the two agree wherever the light one is meaningful). Retirement still open, and larger than it looks: the module also carries two `IsUnit \|M\|` criteria and `‖\|M\| - 1‖ ≤ ‖M⋆M - 1‖`, none of them polar-decomposition results, which need rehousing before anything is deleted. Original situation: — the general partial isometry now exists as `ContinuousLinearMap.polarPartial` (`ForTauCeti/Analysis/InnerProductSpace/PolarPartialIsometry.lean`, 44 declarations), and `PolarIsometry.lean` carries a live `TODO` to prove `polarIsometry = polarPartial` under `IsUnit M.modulus` and then **retire** `polarIsometry` in favour of the general one. That supersedes the section's own recommendation: the audit proposed renaming to `polarIsometricFactorOfIsUnitModulus` and keeping the definition, but if the general object is available the honest move is deletion, not a longer name. Retiring it is the open lane; renaming it would entrench a definition that is scheduled to go. |
 | 2. `TauCeti.polarUnitary` | **RESOLVED** — renamed `choosePolarUnitary`, `exists_polar_decomposition_unitary` added |
 | 3. `FiniteDimensional.inverseOnRange` | **RESOLVED** — alias family deleted |
 | 4. `UnitaryInvariantIdealFamily` | **RESOLVED** — alias deleted, 94 references repointed to `KyFanDominantIdealFamily` |
 | 5. `*_infinite` tan-two-theta names | **RESOLVED** — renamed, module renamed to `TanTwoThetaKyFanFiniteCarrier` |
+
+---
+
+# Addendum: re-sweep of 2026-07-29
+
+**Why this section exists.** Everything above is a snapshot of `4285a6e`, and four of its five
+findings are now resolved. Nothing had re-run the audit's policy against the tree since. The
+current `ForTauCeti` surface is **237 `def`/`abbrev`/`structure` and 1085 `theorem`/`lemma`**, a
+large fraction of it added after the original pass, so the resolved status table above should not
+be read as "the surface is clean".
+
+**Method.** The audit's own three defect patterns, applied mechanically and then checked by hand:
+(i) bare classical names on restricted objects, (ii) total definitions with junk behaviour outside
+their valid regime, (iii) names hiding a material hypothesis. Reference counts are over
+`ForTauCeti/**` and `DavisKahan/**` only, excluding `vendor/` and `external/`.
+
+**What did *not* turn up, recorded so the next sweep does not redo it.** `abs`, `sqrt`,
+`moorePenroseInverse`, `spectrum`, `resolvent` and the `schattenNorm` family all looked like
+candidates and all survive: each is either guarded by an explicit hypothesis (`sqrt` takes
+`T.IsPositive`), restricted by a visible `[FiniteDimensional …]` instance, or genuinely canonical.
+`chosenHilbertBasis`/`chosenHilbertBasisSet` are **models** of the convention, with a docstring that
+says outright that nothing depends on the choice.
+
+## 6. `TauCeti.IsBddMeasurable.bound` — arbitrary choice under a definite-article name
+
+**Location:** `ForTauCeti/Analysis/InnerProductSpace/BorelCalculus/Operator.lean:52`
+
+```lean
+noncomputable def bound {f : spectrum ℂ a → ℂ} (hf : IsBddMeasurable f) : ℝ :=
+  hf.exists_bound.choose
+```
+
+**The defect.** `bound` is *a* bound extracted by `Classical.choose`, not *the* bound. It is neither
+the supremum nor the least admissible constant, and nothing pins it down. A reader meeting
+`hf.bound`, `bound_nonneg` and `norm_le_bound` will reasonably take it for the sup-norm of the
+symbol, and every estimate stated in terms of it is therefore weaker than it looks.
+
+**Severity: rename before its PR.** What makes this more than style is that **the repository has
+already set the opposite convention twice, in resolving findings 2 and 4 of this very document** —
+`polarUnitary` became `choosePolarUnitary`, and the Hilbert basis is `chosenHilbertBasis` with an
+explicit "nothing depends on which" docstring. `bound` is the same construction under the naming the
+audit rejected.
+
+**Recommendation.** `chooseBound`, with `chooseBound_nonneg` / `norm_le_chooseBound`. If a canonical
+constant is wanted later, the honest object is `⨆ x, ‖f x‖`, which is a different declaration and
+should not silently inherit this name.
+
+## 7. `TauCeti.permEV` — abbreviation that reads as the wrong noun
+
+**Location:** `ForTauCeti/Analysis/InnerProductSpace/EigenvalueChange.lean:128` (19 references)
+
+**The defect.** `EV` abbreviates **Euclidean vector** — the docstring says "Coordinate permutation of
+a Euclidean vector". But the declaration lives in `EigenvalueChange.lean`, in a
+spectral-perturbation library, where `EV` is read as *eigenvalue* by default. The name says the
+opposite of what it means in the one context it appears in. Mathlib also does not use unexplained
+two-letter abbreviations in declaration names.
+
+**Severity: rename before its PR.** Mechanical, 19 call sites, no statement changes.
+
+**Recommendation.** `permuteCoords`, or `EuclideanSpace.permute` if it is worth namespacing.
+
+## 8. `sortedEig` — abbreviation only, and it is not the cheap rename it looks like
+
+**Location:** `ForTauCeti/Analysis/Matrix/SpectralFunctionMeasurable.lean:70` (30 references)
+
+`Eig` for eigenvalues. Honest, just not mathlib style. **Severity: optional polish.**
+**Recommendation:** `sortedEigenvalues`.
+
+**Correction — I attempted this rename and backed it out, and the reason is the useful part.**
+Renaming the `def` alone is 30 references in four files and takes ten minutes. But `sortedEig` is
+also embedded in **six theorem names** — `abs_sortedEig_sub_le_of_entry_le`,
+`abs_sortedEig_le_of_entry_le`, `measure_forall_sortedEig_ge_ge`,
+`measure_forall_abs_sortedEig_sub_le_ge`, `measure_forall_sampleCovariance_sortedEig_ge_ge` and the
+`Matrix.`-namespaced form — and one of those, `TauCeti.measure_forall_sortedEig_ge_ge`, is **pinned
+by name in `comparator/pending-matrix-concentration.json`**. So the real change is a `def`, six
+theorems and a comparator config, and renaming the `def` alone leaves the library incoherent: a
+`sortedEigenvalues` definition with a `sortedEig` theorem family around it, which is worse than the
+abbreviation was.
+
+**Whoever takes this must claim `comparator/*.json` as part of the lane.** Note also that the
+declaration-name-drift gate **passes** in the half-renamed state, because the comparator entry it
+checks is still literally correct — the gate compares pinned names against the build, and an
+incoherent-but-consistent pair of names is invisible to it. Coherence of a name *family* is not
+something any current gate measures.
+
+## 9. `leftSingularVector` — total, with a junk value, but with real mitigations
+
+**Location:** `ForTauCeti/Analysis/InnerProductSpace/SingularSystem.lean:71` (77 references)
+
+The definition is `σᵢ⁻¹ • A vᵢ`, and its own docstring says: "At a zero singular value this
+definition evaluates to zero because division in a field is total." A singular vector is by
+definition a unit vector, so at `σᵢ = 0` the name is false of the value.
+
+**This is deliberately *not* filed as a defect, and the reasons matter more than the finding.**
+Two mitigations are real: the surrounding API never asserts anything false — orthonormality is
+stated on the *subtype of nonzero singular values*
+(`orthonormal_leftSingularVector_subtype`, `selfCompAdjoint_apply_leftSingularVector`) — and the
+same name for the same total construction is already used for matrices in the vendored
+`lean-stat-learning-theory` excerpt, so a rename here diverges from an outside precedent.
+
+**Severity: document, do not rename.** The docstring already discloses the junk value; that is the
+correct fix for a total definition whose theorems are all guarded. Recorded here so the next
+auditor does not re-open it, and so that a reviewer who *does* raise it gets this answer rather than
+a rediscovery.
+
+## Status
+
+| item | status |
+|---|---|
+| 6. `IsBddMeasurable.bound` | **open** — rename to `chooseBound`; contradicts this document's own resolved convention |
+| 7. `permEV` | **open** — rename to `permuteCoords`; 19 refs, mechanical |
+| 8. `sortedEig` | **open, and larger than it looks** — the `def` plus six theorem names plus a pinned comparator entry; must be claimed together, see the correction in the section |
+| 9. `leftSingularVector` | **closed, deliberately** — junk value is real but disclosed and the guarded API is honest |
 
 ---
 

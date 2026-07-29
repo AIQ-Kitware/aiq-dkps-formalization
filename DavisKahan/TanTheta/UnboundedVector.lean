@@ -157,7 +157,7 @@ theorem tanTheta_unbounded_vector_of_centered_bounds
     (hρ : ∀ x : H, ∀ hx : x ∈ Z,
       ‖A.toLinearMap ⟨x, hZdom hx⟩ -
           Z.starProjection (A.toLinearMap ⟨x, hZdom hx⟩)‖ ≤ ρ * ‖x‖) :
-    ∀ x : H, ∀ hx : x ∈ Z,
+    ∀ x : H, ∀ _hx : x ∈ Z,
       δ * ‖x - V.starProjection x‖ ≤ ρ * ‖V.starProjection x‖ := by
   set Wop : (↥Vᗮ) →L[ℂ] H := Z.starProjection ∘L Vᗮ.subtypeL with hWop
   set κ : ℝ := ‖Wop‖ with hκdef
@@ -438,7 +438,7 @@ theorem tanTheta_unbounded_vector_of_centered_bounds
 the unbounded self-adjoint operator. -/
 theorem selfAdjointSpectralIcc_mem_domain
     (A : DKClosedOperator (H := H)) (hA : A.IsSelfAdjoint)
-    {α β : ℝ} (hαβ : α ≤ β)
+    {α β : ℝ} (_hαβ : α ≤ β)
     {x : H}
     (hx : x ∈ selfAdjointSpectralSubspace A hA (Set.Icc α β)
       measurableSet_Icc) :
@@ -487,7 +487,7 @@ theorem tanTheta_unbounded_exactSpectralIcc
           Z.starProjection (A.toLinearMap ⟨x, hZdom hx⟩)‖ ≤ ρ * ‖x‖) :
     let W := selfAdjointSpectralSubspace A hA (Set.Icc α β)
       measurableSet_Icc
-    ∀ x : H, ∀ hx : x ∈ Z,
+    ∀ x : H, ∀ _hx : x ∈ Z,
       δ * ‖x - Wᗮ.starProjection x‖ ≤ ρ * ‖Wᗮ.starProjection x‖ := by
   let W := selfAdjointSpectralSubspace A hA (Set.Icc α β)
     measurableSet_Icc

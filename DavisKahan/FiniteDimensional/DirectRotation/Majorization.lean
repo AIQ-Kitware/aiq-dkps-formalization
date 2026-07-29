@@ -101,7 +101,7 @@ theorem displacementSquare_unitary (W : E ≃ₗᵢ[𝕜] E) :
     LinearMap.sub_apply, LinearMap.add_apply, LinearMap.smul_apply,
     LinearMap.id_apply, W.adjoint_toLinearMap_eq_symm, map_sub, hcancel]
   -- the two sides carry `2` and `(2 : ℝ)⁻¹` as unrelated scalar atoms
-  match_scalars <;> push_cast <;> ring
+  match_scalars <;> ring
 
 omit [FiniteDimensional 𝕜 E] in
 /-- A unitary carrying `U` onto `V` intertwines their orthogonal projections. -/
@@ -429,7 +429,8 @@ theorem positive_affine_reverse_kyFanSum
     rw [hAC]
     simp [br, b, hC.apply_eigenvectorBasis]
     -- the left carries an `ℕ`-smul and the right a scalar-field one
-    match_scalars <;> push_cast <;> ring
+    match_scalars
+    ring
   have hanti : Antitone (fun i : Fin n =>
       2 * (1 - hC.eigenvalues rfl (Fin.rev i))) := by
     intro i j hij

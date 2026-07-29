@@ -48,17 +48,17 @@ structure IsBddMeasurable (f : spectrum ℂ a → ℂ) : Prop where
 
 namespace IsBddMeasurable
 
-/-- A nonnegative uniform bound for an admissible symbol. -/
-noncomputable def bound {f : spectrum ℂ a → ℂ} (hf : IsBddMeasurable f) : ℝ :=
+/-- A nonnegative uniform chooseBound for an admissible symbol. -/
+noncomputable def chooseBound {f : spectrum ℂ a → ℂ} (hf : IsBddMeasurable f) : ℝ :=
   hf.exists_bound.choose
 
 omit [CompleteSpace H] in
-theorem bound_nonneg {f : spectrum ℂ a → ℂ} (hf : IsBddMeasurable f) : 0 ≤ hf.bound :=
+theorem chooseBound_nonneg {f : spectrum ℂ a → ℂ} (hf : IsBddMeasurable f) : 0 ≤ hf.chooseBound :=
   hf.exists_bound.choose_spec.1
 
 omit [CompleteSpace H] in
-theorem norm_le_bound {f : spectrum ℂ a → ℂ} (hf : IsBddMeasurable f) (x : spectrum ℂ a) :
-    ‖f x‖ ≤ hf.bound :=
+theorem norm_le_chooseBound {f : spectrum ℂ a → ℂ} (hf : IsBddMeasurable f) (x : spectrum ℂ a) :
+    ‖f x‖ ≤ hf.chooseBound :=
   hf.exists_bound.choose_spec.2 x
 
 end IsBddMeasurable
@@ -220,7 +220,7 @@ section Bound
 
 variable (ha : IsStarNormal a) {f : spectrum ℂ a → ℂ}
 
-/-- The crude quadratic bound coming straight from the definition: the total
+/-- The crude quadratic chooseBound coming straight from the definition: the total
 mass of `diagMeasure ha v` is `‖v‖ ^ 2`. -/
 theorem norm_pair_le_crude (hfm : Measurable f) {M : ℝ} (hM : 0 ≤ M)
     (hfb : ∀ x, ‖f x‖ ≤ M) (ψ ξ : H) :
@@ -275,7 +275,7 @@ theorem norm_pair_le_crude (hfm : Measurable f) {M : ℝ} (hM : 0 ≤ M)
         rw [← hgoal]; gcongr
     _ = M * (‖ψ‖ ^ 2 + ‖ξ‖ ^ 2) := by ring
 
-/-- The product bound, obtained from the crude bound by rescaling `ψ ↦ t • ψ`,
+/-- The product chooseBound, obtained from the crude chooseBound by rescaling `ψ ↦ t • ψ`,
 `ξ ↦ t⁻¹ • ξ`, which leaves `pair` invariant. -/
 theorem norm_pair_le (hfm : Measurable f) {M : ℝ} (hM : 0 ≤ M)
     (hfb : ∀ x, ‖f x‖ ≤ M) (ψ ξ : H) :
@@ -327,24 +327,24 @@ noncomputable def pairFunctional (hf : IsBddMeasurable f) (ξ : H) : H →L[ℂ]
   LinearMap.mkContinuous
     { toFun := fun ψ => (starRingEnd ℂ) (pair ha f ψ ξ)
       map_add' := fun ψ₁ ψ₂ => by
-        rw [pair_add_left ha hf.measurable hf.norm_le_bound, map_add]
+        rw [pair_add_left ha hf.measurable hf.norm_le_chooseBound, map_add]
       map_smul' := fun c ψ => by
-        rw [pair_smul_left ha hf.measurable hf.norm_le_bound, map_mul, Complex.conj_conj,
+        rw [pair_smul_left ha hf.measurable hf.norm_le_chooseBound, map_mul, Complex.conj_conj,
           RingHom.id_apply, smul_eq_mul] }
-    (2 * hf.bound * ‖ξ‖)
+    (2 * hf.chooseBound * ‖ξ‖)
     (fun ψ => by
       simp only [LinearMap.coe_mk, AddHom.coe_mk, RCLike.norm_conj]
-      calc ‖pair ha f ψ ξ‖ ≤ 2 * hf.bound * ‖ψ‖ * ‖ξ‖ :=
-            norm_pair_le ha hf.measurable hf.bound_nonneg hf.norm_le_bound ψ ξ
-        _ = 2 * hf.bound * ‖ξ‖ * ‖ψ‖ := by ring)
+      calc ‖pair ha f ψ ξ‖ ≤ 2 * hf.chooseBound * ‖ψ‖ * ‖ξ‖ :=
+            norm_pair_le ha hf.measurable hf.chooseBound_nonneg hf.norm_le_chooseBound ψ ξ
+        _ = 2 * hf.chooseBound * ‖ξ‖ * ‖ψ‖ := by ring)
 
 @[simp] theorem pairFunctional_apply (hf : IsBddMeasurable f) (ξ ψ : H) :
     pairFunctional ha hf ξ ψ = (starRingEnd ℂ) (pair ha f ψ ξ) := rfl
 
 theorem norm_pairFunctional_le (hf : IsBddMeasurable f) (ξ : H) :
-    ‖pairFunctional ha hf ξ‖ ≤ 2 * hf.bound * ‖ξ‖ :=
+    ‖pairFunctional ha hf ξ‖ ≤ 2 * hf.chooseBound * ‖ξ‖ :=
   LinearMap.mkContinuous_norm_le _
-    (by have := hf.bound_nonneg; positivity) _
+    (by have := hf.chooseBound_nonneg; positivity) _
 
 /-- The vector representing the functional `ψ ↦ conj (pair f ψ ξ)`. -/
 noncomputable def borelVector (hf : IsBddMeasurable f) (ξ : H) : H :=
@@ -357,7 +357,7 @@ theorem inner_borelVector (hf : IsBddMeasurable f) (ψ ξ : H) :
   rw [← inner_conj_symm, h, Complex.conj_conj]
 
 theorem norm_borelVector_le (hf : IsBddMeasurable f) (ξ : H) :
-    ‖borelVector ha hf ξ‖ ≤ 2 * hf.bound * ‖ξ‖ := by
+    ‖borelVector ha hf ξ‖ ≤ 2 * hf.chooseBound * ‖ξ‖ := by
   rw [borelVector, LinearIsometryEquiv.norm_map]
   exact norm_pairFunctional_le ha hf ξ
 
@@ -369,12 +369,12 @@ noncomputable def borelCalculus (hf : IsBddMeasurable f) : H →L[ℂ] H :=
       map_add' := fun ξ₁ ξ₂ => by
         refine ext_inner_left ℂ fun ψ => ?_
         rw [inner_add_right, inner_borelVector, inner_borelVector, inner_borelVector,
-          pair_add_right ha hf.measurable hf.norm_le_bound]
+          pair_add_right ha hf.measurable hf.norm_le_chooseBound]
       map_smul' := fun c ξ => by
         refine ext_inner_left ℂ fun ψ => ?_
         rw [RingHom.id_apply, inner_smul_right, inner_borelVector, inner_borelVector,
-          pair_smul_right ha hf.measurable hf.norm_le_bound] }
-    (2 * hf.bound)
+          pair_smul_right ha hf.measurable hf.norm_le_chooseBound] }
+    (2 * hf.chooseBound)
     (fun ξ => norm_borelVector_le ha hf ξ)
 
 @[simp] theorem borelCalculus_apply (hf : IsBddMeasurable f) (ξ : H) :
@@ -385,10 +385,10 @@ noncomputable def borelCalculus (hf : IsBddMeasurable f) : H →L[ℂ] H :=
     ⟪ψ, borelCalculus ha hf ξ⟫_ℂ = pair ha f ψ ξ :=
   inner_borelVector ha hf ψ ξ
 
-/-- The norm bound for the Borel calculus. -/
+/-- The norm chooseBound for the Borel calculus. -/
 theorem norm_borelCalculus_le (hf : IsBddMeasurable f) :
-    ‖borelCalculus ha hf‖ ≤ 2 * hf.bound :=
-  LinearMap.mkContinuous_norm_le _ (by have := hf.bound_nonneg; positivity) _
+    ‖borelCalculus ha hf‖ ≤ 2 * hf.chooseBound :=
+  LinearMap.mkContinuous_norm_le _ (by have := hf.chooseBound_nonneg; positivity) _
 
 end Construction
 

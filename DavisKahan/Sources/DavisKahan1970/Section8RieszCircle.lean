@@ -49,6 +49,7 @@ noncomputable def circleRieszProjectionIntegral
   (2 * Real.pi * Complex.I)⁻¹ •
     ∫ θ : ℝ in (0 : ℝ)..2 * Real.pi, circleResolventIntegrand A center radius θ
 
+omit [CompleteSpace H] in
 /-- The core definition in `Core` agrees with the explicit operator-valued
 circle integral. -/
 theorem circleRieszProjection_eq_integral
@@ -166,6 +167,7 @@ private noncomputable def circleSpectrumSymbol
       deriv (circleMap (center : ℂ) radius) θ *
         (circleMap (center : ℂ) radius θ - w)⁻¹)) 0
 
+omit [CompleteSpace H] in
 /-- On a separating circle, every contour point avoids the spectrum. -/
 private theorem circleMap_notMem_spectrum
     {A : H →L[ℂ] H} {hA : IsSelfAdjointOperator A}
@@ -332,6 +334,7 @@ theorem circleRieszProjection_eq_boundedSelfAdjointSpectralProjection
   rw [hproj,
     boundedSelfAdjointSpectralProjection_eq_cfcL_of_selector A hA B hB g hagree]
 
+omit [CompleteSpace H] in
 /-- The second resolvent identity for the total `Ring.inverse` at two units. -/
 private theorem ringInverse_sub_ringInverse (T T' : H →L[ℂ] H)
     (hT : IsUnit T) (hT' : IsUnit T') :
@@ -347,7 +350,7 @@ private theorem ringInverse_sub_ringInverse (T T' : H →L[ℂ] H)
 /-- If a unit with inverse norm at most `margin⁻¹` becomes singular after adding
 a perturbation, the perturbation has norm at least `margin` (geometric series). -/
 private theorem margin_le_norm_perturbation
-    (T Epert : H →L[ℂ] H) {margin : ℝ} (hmargin : 0 < margin)
+    (T Epert : H →L[ℂ] H) {margin : ℝ} (_hmargin : 0 < margin)
     (hT : IsUnit T) (hTnorm : ‖Ring.inverse T‖ ≤ margin⁻¹)
     (hTE : ¬IsUnit (T + Epert)) : margin ≤ ‖Epert‖ := by
   by_contra hlt
