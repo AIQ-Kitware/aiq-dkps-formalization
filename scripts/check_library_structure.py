@@ -106,6 +106,34 @@ def in_admission_closure(
     return result
 
 
+def supports_admitted(module: str, consumers: dict[str, set[str]],
+                      admitted: dict[str, bool], memo: dict[str, bool],
+                      stack: frozenset[str] = frozenset()) -> bool:
+    """Does anything transitively importing `module` still rest on an admission?
+
+    This is the *upward* question, and it is the one that decides whether a
+    module belongs in `Experimental/`.  Rule 3 originally asked the downward
+    one — whether the module's own import closure contains an admission — which
+    flags every fully proved Experimental module, including proved scaffolding
+    whose only purpose is to support unfinished work.  Those are correctly
+    placed, so the rule could never be satisfied by moving files: measured
+    2026-07-29, 17 of its 74 findings were modules that should not move.
+    See `dev/tauceti/experimental-promotable-inventory.md`.
+    """
+    if module in memo:
+        return memo[module]
+    if module in stack:
+        return False
+    result = any(
+        admitted.get(consumer, False)
+        or supports_admitted(consumer, consumers, admitted, memo,
+                             stack | {module})
+        for consumer in consumers.get(module, ())
+    )
+    memo[module] = result
+    return result
+
+
 def report(name: str, violations: list[str], limit: int = 12) -> bool:
     if not violations:
         print(f"  ok    {name}")
@@ -145,12 +173,18 @@ def main() -> None:
     )
     check2 = report("2. no production module imports Experimental", crossing)
 
+    consumers: dict[str, set[str]] = {}
+    for module, deps in imports.items():
+        for dep in deps:
+            consumers.setdefault(dep, set()).add(module)
+    up_memo: dict[str, bool] = {}
     check3 = report(
-        "3. every Experimental module has an admission in its closure",
+        "3. every Experimental module supports admission-bearing work",
         sorted(
             m for m in files
             if is_experimental(m)
             and not in_admission_closure(m, imports, admitted, memo)
+            and not supports_admitted(m, consumers, admitted, up_memo)
         ),
     )
 
