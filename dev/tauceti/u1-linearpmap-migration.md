@@ -263,6 +263,43 @@ cheap independent pieces.** They are held by a handful of defining structures �
 (`ClosedSylvesterEquation` 30, `ReducingSubspace/Restriction` 26). Retiring any
 of those moves a large block at once; nibbling at the tail does not.
 
+### `ReducingSubspace/Restriction.lean`: eight dead theorems, measured but NOT removed
+
+Measured 2026-07-29 (jon (toothbrush)). Of the file's 23 declarations, **eight
+have no consumer anywhere — not in `DavisKahan`, and not inside the file
+either**:
+
+```
+coe_projectDomainToReducingRestriction    orthogonal_invariant
+coe_reducingRestrictionLinearMap          projection_mem_domain
+mem_reducingRestrictionDomain_iff         reducingRestrictionDomainToAmbient_coe
+orthogonalProjection_mem_domain           reducingRestriction_domain
+```
+
+Removing them is a real contraction of one of the two documented facades. **I did
+not do it**: two scripted attempts both broke the file and were reverted, and the
+file is back to its committed state, building clean.
+
+Three traps, so the next attempt is cheaper than mine:
+
+1. **A naive "who uses this" grep is wrong here.** These facades are `abbrev`s
+   over `ForTauCeti` declarations *with the same short names*, so grepping the
+   name finds the ForTauCeti originals and every facade looks used. Restrict the
+   search to `DavisKahan/`.
+2. **But excluding the defining file is also wrong.** Six further names
+   (`reducingRestrictionDomain`, `reducingRestrictionLinearMap`,
+   `reducingRestrictionDomainToAmbient`, `projectDomainToReducingRestriction`,
+   `mem_reducingRestriction_adjoint_domain_iff`,
+   `reducingRestriction_isSymmetric`) have no external consumer but *are* used
+   internally, mostly by `reducingRestriction`. They are not deletable. The
+   eight above survive both checks.
+3. **Do not delete by regex.** `reducingRestriction` carries a `where` block
+   whose fields (`reducingRestrictionDomain_dense`,
+   `reducingRestrictionLinearMap_closedGraph`) are invisible to a
+   `^(abbrev|def|theorem)` scan, and three of the eight sit inside
+   `namespace ReducesSubspace`, so a range-delete silently eats the `end`. This
+   wants a hand edit.
+
 **Contractible right now, no new mathematics:**
 
 - `generalizedSinTheta_unbounded_exact_of_genuineIntervalExteriorGap` —
