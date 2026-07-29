@@ -44,6 +44,7 @@ variable {ε : ℝ}
 /-- The `k`-th cell of the `ε`-grid on the line. -/
 def gridCell (ε : ℝ) (k : ℤ) : Set ℝ := Ico ((k : ℝ) * ε) (((k : ℝ) + 1) * ε)
 
+/-- Grid cells are measurable, being half-open intervals, so each admits a spectral projection. -/
 theorem measurableSet_gridCell (ε : ℝ) (k : ℤ) : MeasurableSet (gridCell ε k) :=
   measurableSet_Ico
 
