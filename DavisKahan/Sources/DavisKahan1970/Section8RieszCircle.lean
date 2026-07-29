@@ -330,8 +330,7 @@ theorem circleRieszProjection_eq_boundedSelfAdjointSpectralProjection
           · rw [if_neg (fun h => hmem (hiff.mp h)),
               Set.indicator_of_notMem hmem]
   rw [hproj,
-    boundedSelfAdjointSpectralProjection_eq_spectralCalculus_selector A hA B hB,
-    spectralCalculus_selector_eq_cfcL_of_agrees A hA B hB g hagree]
+    boundedSelfAdjointSpectralProjection_eq_cfcL_of_selector A hA B hB g hagree]
 
 /-- The second resolvent identity for the total `Ring.inverse` at two units. -/
 private theorem ringInverse_sub_ringInverse (T T' : H →L[ℂ] H)
