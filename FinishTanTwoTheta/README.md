@@ -1,9 +1,8 @@
 # FinishTanTwoTheta
 
-This target builds the bounded sharp Riccati/ideal proof stack and now also
-contains the exact paper-facing theorem shape as an explicit admitted target.
-It is not an alias-only facade, but a green build is not yet an axiom-clean proof
-of the full paper-shaped `tan 2Theta` theorem.
+This target builds the bounded sharp Riccati/ideal proof stack and the complete
+finite-dimensional paper-facing `tan 2Theta` endpoint.  The aggregate imports
+the proof modules themselves; it is not an alias-only facade.
 
 ## Compiled theorem scope
 
@@ -11,38 +10,46 @@ The aggregate target includes:
 
 1. simultaneous approximate leading singular families for arbitrary bounded
    operators;
-2. the canonical operator `2 X (I - X*X)^-1` and its approximation-number
-   transformation law;
+2. the canonical graph-coordinate operator `2 X (I - X*X)^-1` and its
+   approximation-number transformation law;
 3. the stable Riccati scalar estimate and sharp Ky Fan prefix inequality;
 4. Fan-dominance promotion to maximal and minimal standard symmetric ideals;
-5. the source audit containing the finite-dimensional Section 7 UI-norm theorem
-   and the arbitrary-inner-product-space sharp operator-norm theorem with its
-   acute branch;
-6. `paperFaithful_tanTwoTheta_uiNorm`, an explicit `sorry`-backed statement of
-   the missing arbitrary-Hilbert-space source theorem, beginning from the full
-   off-diagonal perturbation and concluding both quarter-acuteness and the sharp
-   source-norm estimate.
+5. the finite-dimensional Davis--Kahan/GKMV acute-branch theorem;
+6. `paperFaithful_tanTwoTheta_uiNorm`, proved from the original self-adjoint,
+   reducing-subspace, common-form-gap, and fully off-diagonal perturbation
+   hypotheses.
 
-This is stronger than an alias facade: the `FinishTanTwoTheta` modules that prove
-the bounded infinite-dimensional ideal result are imported and compiled.
+The paper-facing theorem derives quarter-acuteness, constructs the canonical
+contractive graph coordinate, transports the source norm from the full ambient
+perturbation to its rectangular upper-right block through exact approximation-
+singular-value equality, and concludes
 
-## Unbounded extension
+```text
+(b - a) * N(tan 2Theta_0) <= 2 * N(H).
+```
 
-`FinishTanTwoTheta.DavisKahan.Unbounded` is a separate research target.  Its
-current approximate graph-domain selection theorem is not part of the aggregate
-because the proposed spectral-band/domain-density route is false.  The genuine
-unbounded Sylvester equation with its commutator defect remains available in the
-production Davis--Kahan library.
+Here `tan 2Theta_0` is the graph-coordinate representative permitted by the
+Section 7 statement.  The theorem deliberately does not identify that
+rectangular representative definitionally with an ambient canonical angle
+operator.
 
-The distinction is deliberate:
+## Infinite-dimensional boundary
 
-- source theorem and bounded ideal completion: proof target;
-- unrestricted unbounded sharp ideal extension: open research target, not
-  silently weakened and not falsely certified.
+The local Riccati/Ky-Fan machinery proves sharp bounded ideal estimates after a
+strictly contractive graph coordinate is supplied.  The source audit also has a
+sharp infinite-dimensional ideal theorem for finite-dimensional invariant
+configurations.  A source-shaped theorem with an arbitrary infinite-dimensional
+reference subspace still requires an independent acute-branch argument and is
+not claimed by this target.
+
+`FinishTanTwoTheta.DavisKahan.Unbounded` remains a separate research target. Its
+former spectral-band/domain-density route is false; the unrestricted unbounded
+sharp ideal extension is not silently weakened or certified here.
 
 ## Build
 
 ```bash
+lake build FinishTanTwoTheta.DavisKahan.PaperFaithful
 lake build FinishTanTwoTheta.DavisKahan.SharpIdeal
 lake build FinishTanTwoTheta
 lake build DavisKahan.Sources.DavisKahan1970.Audits.DoubleAngleTangent
