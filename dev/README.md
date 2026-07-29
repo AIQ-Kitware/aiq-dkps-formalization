@@ -12,7 +12,7 @@ pattern of past mistakes, and take fewer of them.
 | File | What it answers |
 |---|---|
 | [`LANES.md`](LANES.md) | Who holds what. **Claim your row, commit it, and push it before your first edit** — unpushed is invisible to the other agents. Unlisted means unclaimed. Its `Branch and sync protocol` covers fetching, merging and conflict resolution across agent branches. |
-| [`tauceti/README.md`](tauceti/README.md) | The active migration: polishing foundations into `ForTauCeti`, retiring `vendor/Spectra`, converging three operator-theory stacks. |
+| [`tauceti/README.md`](tauceti/README.md) | The active migration: polishing foundations into `ForTauCeti` and converging the operator-theory stacks. The Spectra dependency is **retired** as of 2026-07-29 — see *Retired tooling* below. |
 | [`SEARCH.md`](SEARCH.md) | How to *search* this memory instead of reading it all. Grep patterns and routing rules by symptom. |
 
 The governing policy is in [`../AGENTS.md`](../AGENTS.md), not here. It defines
@@ -115,7 +115,9 @@ proves, where it should land, and the likely elaboration seams.
 Only the manifests whose sketches are still unpromoted remain here; the delivery
 receipts for overlays already applied were purged. Two of these are load-bearing
 beyond documentation: `pending-mathahead-rebased-53297a4-gpt56.manifest.txt` is
-existence-checked by `scripts/check_davis_kahan_rebased_mathahead.py`, and
+checked by `scripts/check_davis_kahan_rebased_mathahead.py` — which treats a
+sketch **promoted** out of `Experimental/` as success and fails only when a
+module is nowhere, so an entry may record a rename with `<scratch> -> <target>` — and
 `lemma63-promotion-scratch-7f9f562-gpt56.md` is cited from two Lean sources.
 
 ## Quality bar
