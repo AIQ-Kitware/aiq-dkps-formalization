@@ -495,18 +495,66 @@ demands `(T-s²)A₀x ≈ -Gx` with `‖Gx‖` of order `‖B₀₁‖` and not 
 original obstruction recorded at the top of this document, reached by a
 different road.
 
-**Where I would go next.** The question has been reduced to a clean and
-self-contained one, worth asking an operator theorist directly:
+**RESOLVED 2026-07-29 — and the answer is NO. The mechanism is refuted.**
 
-> Let `A ≤ 0` be self-adjoint on a Hilbert space, `T ≥ 0` bounded, with `T`
-> preserving `dom A` and `[A,T]` bounded. Is `Ran E_T(J) ∩ dom A` dense in
-> `Ran E_T(J)` for every interval `J`? If not in general, what does the
-> Riccati structure add that makes it true here?
+The question the mechanism reduces to was:
 
-A positive answer closes T1.4 immediately via the mechanism above. A negative
-answer means the sharp constant needs a genuinely different route, and the
-Sylvester defect form (option 4, with its explicit `2R''DR`) becomes the honest
-best available theorem.
+> Let `A ≤ 0` be self-adjoint, `T ≥ 0` bounded, `T` preserving `dom A`, and
+> `[A,T]` bounded. Is `Ran E_T(J) ∩ dom A` dense in `Ran E_T(J)`?
+
+**It is false**, and the counterexample satisfies every hypothesis the Riccati
+setting supplies at this level of generality.
+
+Take `H = L²(ℝ)`. Let `K ⊂ ℝ` be a fat Cantor set — compact, `|K| > 0`, empty
+interior. Choose `f : ℝ → ℝ` smooth and bounded with `f'` bounded, `f ≥ c > 0`,
+and `f⁻¹({c}) = K` (build `f` by placing smooth bumps on the complementary
+intervals of `K`). Put
+
+```
+T := M_f    (bounded, ≥ 0, preserves H¹ since f, f' ∈ L^∞)
+A := -|D| = -(-Δ)^{1/2}   (self-adjoint, ≤ 0, dom A = H¹(ℝ))
+```
+
+`[A, T] = -[|D|, M_f]` is **bounded**, by the Calderón commutator estimate
+`‖[|D|, M_f]‖ ≲ ‖f'‖_∞`. So all hypotheses hold.
+
+Now take `J` an interval meeting `ran f` exactly in `{c}` (e.g. `J = [0, c]`).
+Then `E_T(J) = M_{1_K}` and `Ran E_T(J) = L²(K)`, which is infinite-dimensional
+since `|K| > 0`. But
+
+```
+L²(K) ∩ H¹(ℝ) = {0}
+```
+
+because an `H¹(ℝ)` function is continuous, and one vanishing a.e. on `ℝ \ K` —
+an open **dense** set, as `K` has empty interior — vanishes identically.
+
+So `Ran E_T(J) ∩ dom A = {0}` while `Ran E_T(J) ≠ {0}`: not dense, maximally so.
+
+**What this does and does not kill.** It kills the band-plus-compression
+mechanism *as a general lemma*, which is how T1.4 was scoped. It does **not**
+refute `sharp_unbounded_doubleAngleTangentOperator_kyFan`: the counterexample
+uses only "`[A,T]` bounded", whereas the real setting has `T = X†X` for `X` the
+Riccati solution, tied to `A₀`, `A₁`, `B₀₁` by two equations. Any surviving
+proof must use that extra structure, not just the commutator bound.
+
+**Consequences for the lane, honestly stated.**
+
+* T1.4 as written should be closed as refuted, not left open. Do not spend more
+  effort trying to prove the density fact — it is false.
+* The three routes tried and eliminated are now: density + Gram--Schmidt (no
+  graph control), sharp bands (this refutation), smooth bands (no cancellation).
+  All three failures trace to the same place: nothing in the hypotheses couples
+  the spectral decomposition of `A₀` to that of `X†X`.
+* The **Sylvester defect form is now the best honest theorem available**:
+  `d·kyFan_k(tan2Θ) ≤ 2·kyFan_k(B₀₁) + 2·kyFan_k(R''DR)` with the explicit
+  `D = 2XB₀₁X - XX*B₁₀ - B₁₀X*X`, provable today from machinery that already
+  exists (option 4 above). It is strictly stronger than the cosine-denominator
+  surrogate in `DavisKahan/TanTwoTheta/UnboundedIdeal.lean`, which is what
+  `FinishTanTwoTheta` was created to beat.
+* Getting the **sharp** constant needs a new idea that consumes the Riccati
+  equations directly. That is a research question, not a formalization task, and
+  it should be labelled as one on any plan or paper outline.
 
 **T1.5 — restate the selection structure and rewire.** *Needs T1.4.*
 Replace `UnboundedApproximateLeadingSingularFamily` by the one-condition form
