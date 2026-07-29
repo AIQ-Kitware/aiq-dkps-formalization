@@ -118,6 +118,80 @@ theorem summable_norm_columnSeries (x : F) :
   rw [norm_smul]
   nlinarith [sq_nonneg (‖b.repr x i‖ - ‖f i‖), norm_nonneg (b.repr x i), norm_nonneg (f i)]
 
+/-- The squared norms of an `ℓ²` family are summable. -/
+theorem summable_sq {G : Type*} [NormedAddCommGroup G]
+    (g : lp (fun _ : ι => G) 2) : Summable fun i => ‖g i‖ ^ 2 := by
+  have h := (memℓp_gen_iff (by norm_num : (0 : ℝ) < (2 : ℝ≥0∞).toReal)).mp (lp.memℓp g)
+  refine h.congr fun i => ?_
+  rw [show ((2 : ℝ≥0∞).toReal) = ((2 : ℕ) : ℝ) by simp]
+  exact Real.rpow_natCast _ 2
+
+/-- The square-sum of an `ℓ²` family is the square of its norm. -/
+theorem tsum_sq_eq_norm_sq {G : Type*} [NormedAddCommGroup G]
+    (g : lp (fun _ : ι => G) 2) : ∑' i, ‖g i‖ ^ 2 = ‖g‖ ^ 2 := by
+  have h := lp.norm_rpow_eq_tsum (by norm_num : (0 : ℝ) < (2 : ℝ≥0∞).toReal) g
+  rw [show ((2 : ℝ≥0∞).toReal) = ((2 : ℕ) : ℝ) by simp] at h
+  rw [← Real.rpow_natCast ‖g‖ 2, h]
+  exact tsum_congr fun i => (Real.rpow_natCast _ 2).symm
+
+/-- **The operator with prescribed columns.**  The defining series converges
+absolutely by `summable_norm_columnSeries`; the bound is Cauchy--Schwarz in the
+rescaled form `ab ≤ (s a² + b²/s)/2`, sharp at `s = ‖f‖/‖x‖`. -/
+noncomputable def ofLp (b : HilbertBasis ι 𝕜 F) (f : lp (fun _ : ι => E) 2) :
+    F →L[𝕜] E :=
+  LinearMap.mkContinuous
+    { toFun := fun x => ∑' i, (b.repr x i) • f i
+      map_add' := fun x y => by
+        have hx := (summable_norm_columnSeries b f x).of_norm
+        have hy := (summable_norm_columnSeries b f y).of_norm
+        rw [← Summable.tsum_add hx hy]
+        exact tsum_congr fun i => by
+          rw [map_add, lp.coeFn_add, Pi.add_apply, add_smul]
+      map_smul' := fun c x => by
+        have hx := (summable_norm_columnSeries b f x).of_norm
+        rw [RingHom.id_apply, ← Summable.tsum_const_smul c hx]
+        exact tsum_congr fun i => by
+          rw [map_smul, lp.coeFn_smul, Pi.smul_apply, smul_assoc] }
+    ‖f‖ (by
+      intro x
+      have hsum := summable_norm_columnSeries b f x
+      refine (norm_tsum_le_tsum_norm hsum).trans ?_
+      have hcoef : ∑' i, ‖b.repr x i‖ ^ 2 = ‖x‖ ^ 2 := by
+        rw [tsum_sq_eq_norm_sq, b.repr.norm_map]
+      have hcol : ∑' i, ‖f i‖ ^ 2 = ‖f‖ ^ 2 := tsum_sq_eq_norm_sq f
+      have hsq1 : Summable fun i => ‖b.repr x i‖ ^ 2 := summable_sq _
+      have hsq2 : Summable fun i => ‖f i‖ ^ 2 := summable_sq f
+      rcases eq_or_lt_of_le (norm_nonneg f) with hf | hf
+      · have hf0 : f = 0 := norm_eq_zero.mp hf.symm
+        simp [hf0]
+      rcases eq_or_lt_of_le (norm_nonneg x) with hx0 | hx0
+      · have hxz : x = 0 := norm_eq_zero.mp hx0.symm
+        simp [hxz]
+      set s : ℝ := ‖f‖ / ‖x‖ with hs
+      have hspos : 0 < s := div_pos hf hx0
+      have hsne : s ≠ 0 := ne_of_gt hspos
+      have hterm : ∀ i, ‖(b.repr x i) • f i‖
+          ≤ (s * ‖b.repr x i‖ ^ 2 + ‖f i‖ ^ 2 / s) / 2 := by
+        intro i
+        rw [norm_smul, le_div_iff₀ (by norm_num : (0 : ℝ) < 2), ← sub_nonneg]
+        have hkey : 0 ≤ (s * ‖b.repr x i‖ - ‖f i‖) ^ 2 := sq_nonneg _
+        have hexp : s * ‖b.repr x i‖ ^ 2 + ‖f i‖ ^ 2 / s
+            - ‖b.repr x i‖ * ‖f i‖ * 2
+            = (s * ‖b.repr x i‖ - ‖f i‖) ^ 2 / s := by
+          field_simp
+          ring
+        rw [hexp]
+        positivity
+      have hdom : Summable fun i =>
+          (s * ‖b.repr x i‖ ^ 2 + ‖f i‖ ^ 2 / s) / 2 :=
+        (((hsq1.mul_left s).add (hsq2.div_const s)).div_const 2)
+      refine (Summable.tsum_le_tsum hterm hsum hdom).trans ?_
+      rw [tsum_div_const, Summable.tsum_add (hsq1.mul_left s) (hsq2.div_const s),
+        Summable.tsum_mul_left, tsum_div_const, hcoef, hcol, hs]
+      · field_simp
+        norm_num
+      · exact hsq1)
+
 end OfLp
 
 end HilbertSchmidt
