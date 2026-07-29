@@ -455,6 +455,64 @@ private theorem tanTwoAngleOperatorC_eq_modulus_ambientGraphTangent
       doubleAngleTangentOperator Y
           (norm_quarterAcuteAngularOperator_lt_one U V hquarter) =
         (2 : ℂ) • (Y ∘L Ring.inverse D) := rfl
+  -- Hoisted above `hMsq`.  `hMsq` needs the self-adjointness of `D⁻¹` and the
+  -- commutation `[|Y|, D⁻¹] = 0`; both were originally proved *below*, inside
+  -- `hCandidateNonneg`, i.e. after their first use.
+  have hmodYnonneg : (0 : E →L[ℂ] E) ≤ ContinuousLinearMap.modulus Y :=
+    ContinuousLinearMap.modulus_nonneg Y
+  have hDnonneg : (0 : E →L[ℂ] E) ≤ D := by
+    rw [ContinuousLinearMap.nonneg_iff_isPositive]
+    refine ⟨ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp ?_, ?_⟩
+    · -- Stay in the `ContinuousLinearMap` star instance throughout: the route via
+      -- `IsSelfAdjoint.algebraMap` states the fact at a *different* `Star`
+      -- instance on the same type, which is why it failed to typecheck.
+      show IsSelfAdjoint (ContinuousLinearMap.id ℂ E - G)
+      have hidsa : IsSelfAdjoint (ContinuousLinearMap.id ℂ E) := by
+        show star (ContinuousLinearMap.id ℂ E) = ContinuousLinearMap.id ℂ E
+        rw [ContinuousLinearMap.star_eq_adjoint, ContinuousLinearMap.adjoint_id]
+      exact hidsa.sub
+        (ContinuousLinearMap.isPositive_adjoint_comp_self Y).isSelfAdjoint
+    · intro x
+      rw [ContinuousLinearMap.reApplyInnerSelf_apply]
+      -- Same trap as in `hNunit`: compute the form value as its own `have` with
+      -- `simp`, because once a `dsimp` collapses `RCLike.re` to `Complex.re`
+      -- neither `map_sub` nor `inner_self_eq_norm_sq` can match.
+      have hval : RCLike.re ⟪D x, x⟫_ℂ = ‖x‖ ^ 2 - ‖Y x‖ ^ 2 := by
+        have hD : D x = x - Y.adjoint (Y x) := by
+          show (ContinuousLinearMap.id ℂ E - G) x = x - Y.adjoint (Y x)
+          rw [ContinuousLinearMap.sub_apply, ContinuousLinearMap.id_apply,
+            ContinuousLinearMap.comp_apply]
+        rw [hD]
+        simp [inner_sub_left, ContinuousLinearMap.adjoint_inner_left,
+          inner_self_eq_norm_sq, ← Complex.ofReal_pow]
+      rw [hval]
+      have hle : ‖Y x‖ ≤ ‖x‖ :=
+        calc ‖Y x‖ ≤ ‖Y‖ * ‖x‖ := Y.le_opNorm x
+          _ ≤ 1 * ‖x‖ :=
+              mul_le_mul_of_nonneg_right
+                (norm_quarterAcuteAngularOperator_lt_one U V hquarter).le
+                (norm_nonneg x)
+          _ = ‖x‖ := one_mul _
+      nlinarith [hle, norm_nonneg (Y x), norm_nonneg x]
+  have hDsp : IsStrictlyPositive D := ⟨hDnonneg, hDunit⟩
+  have hDinvNonneg : (0 : E →L[ℂ] E) ≤ Ring.inverse D := by
+    rw [CFC.inverse_eq_rpow_neg_one hDsp]
+    exact CFC.rpow_nonneg
+  have hDinvSA : IsSelfAdjoint (Ring.inverse D) := hDinvNonneg.isSelfAdjoint
+  have hcomm : Commute (ContinuousLinearMap.modulus Y) (Ring.inverse D) := by
+    have hmodG : Commute (ContinuousLinearMap.modulus Y) G := by
+      show Commute (ContinuousLinearMap.modulus Y) (Y.adjoint ∘L Y)
+      rw [← ContinuousLinearMap.modulus_mul_self Y]
+      exact (Commute.refl _).mul_right (Commute.refl _)
+    have hmodD : Commute (ContinuousLinearMap.modulus Y) D := by
+      show Commute (ContinuousLinearMap.modulus Y)
+        (ContinuousLinearMap.id ℂ E - G)
+      exact (Commute.one_right _).sub_right hmodG
+    have hu : Commute (ContinuousLinearMap.modulus Y)
+        ((hDunit.unit : E →L[ℂ] E)) := by
+      rw [hDunit.unit_spec]; exact hmodD
+    rw [Ring.inverse_of_isUnit hDunit]
+    exact hu.units_inv_right
   have hMsq : M ∘L M =
       (4 : ℂ) • (ContinuousLinearMap.modulus Y ∘L
         Ring.inverse D ∘L ContinuousLinearMap.modulus Y ∘L Ring.inverse D) := by
@@ -470,71 +528,9 @@ private theorem tanTwoAngleOperatorC_eq_modulus_ambientGraphTangent
   have hCandidateNonneg :
       (0 : E →L[ℂ] E) ≤
         (2 : ℂ) • (ContinuousLinearMap.modulus Y ∘L Ring.inverse D) := by
-    have hmod : (0 : E →L[ℂ] E) ≤ ContinuousLinearMap.modulus Y :=
-      ContinuousLinearMap.modulus_nonneg Y
-    have hDinvNonneg : (0 : E →L[ℂ] E) ≤ Ring.inverse D := by
-      have hDnonneg : (0 : E →L[ℂ] E) ≤ D := by
-        rw [ContinuousLinearMap.nonneg_iff_isPositive]
-        refine ⟨ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp ?_, ?_⟩
-        · -- Stay in the `ContinuousLinearMap` star instance throughout.  The
-          -- original route via `IsSelfAdjoint.algebraMap` produced the statement
-          -- at a *different* `Star` instance on the same type, which is why it
-          -- failed to typecheck against the goal.
-          show IsSelfAdjoint (ContinuousLinearMap.id ℂ E - G)
-          have hidsa : IsSelfAdjoint (ContinuousLinearMap.id ℂ E) := by
-            show star (ContinuousLinearMap.id ℂ E) = ContinuousLinearMap.id ℂ E
-            rw [ContinuousLinearMap.star_eq_adjoint,
-              ContinuousLinearMap.adjoint_id]
-          exact hidsa.sub
-            (ContinuousLinearMap.isPositive_adjoint_comp_self Y).isSelfAdjoint
-        · intro x
-          rw [ContinuousLinearMap.reApplyInnerSelf_apply]
-          -- Same trap as in `hNunit`: compute the form value as its own `have`
-          -- with `simp`, because after a `dsimp` collapses `RCLike.re` to
-          -- `Complex.re` neither `map_sub` nor `inner_self_eq_norm_sq` can match.
-          have hval : RCLike.re ⟪D x, x⟫_ℂ = ‖x‖ ^ 2 - ‖Y x‖ ^ 2 := by
-            have hD : D x = x - Y.adjoint (Y x) := by
-              show (ContinuousLinearMap.id ℂ E - G) x = x - Y.adjoint (Y x)
-              rw [ContinuousLinearMap.sub_apply, ContinuousLinearMap.id_apply,
-                ContinuousLinearMap.comp_apply]
-            rw [hD]
-            simp [inner_sub_left, ContinuousLinearMap.adjoint_inner_left,
-              inner_self_eq_norm_sq, ← Complex.ofReal_pow]
-          rw [hval]
-          -- `‖Y x‖ ≤ ‖Y‖ ‖x‖ ≤ ‖x‖` because `Y` is a contraction; squaring is then
-          -- monotone on the nonnegatives.
-          have hle : ‖Y x‖ ≤ ‖x‖ :=
-            calc ‖Y x‖ ≤ ‖Y‖ * ‖x‖ := Y.le_opNorm x
-              _ ≤ 1 * ‖x‖ :=
-                  mul_le_mul_of_nonneg_right
-                    (norm_quarterAcuteAngularOperator_lt_one U V hquarter).le
-                    (norm_nonneg x)
-              _ = ‖x‖ := one_mul _
-          nlinarith [hle, norm_nonneg (Y x), norm_nonneg x]
-      -- `Ring.inverse` of a strictly positive element is its CFC `(-1)`-power,
-      -- which is nonnegative.  `IsStrictlyPositive` is by definition
-      -- `0 ≤ D ∧ IsUnit D`, both of which are already in hand.
-      have hDsp : IsStrictlyPositive D := ⟨hDnonneg, hDunit⟩
-      rw [CFC.inverse_eq_rpow_neg_one hDsp]
-      exact CFC.rpow_nonneg
-    have hcomm : Commute (ContinuousLinearMap.modulus Y) (Ring.inverse D) := by
-      have hmodG : Commute (ContinuousLinearMap.modulus Y) G := by
-        show Commute (ContinuousLinearMap.modulus Y) (Y.adjoint ∘L Y)
-        rw [← ContinuousLinearMap.modulus_mul_self Y]
-        exact (Commute.refl _).mul_right (Commute.refl _)
-      have hmodD : Commute (ContinuousLinearMap.modulus Y) D := by
-        show Commute (ContinuousLinearMap.modulus Y)
-          (ContinuousLinearMap.id ℂ E - G)
-        exact (Commute.one_right _).sub_right hmodG
-      -- as above: cross from `Ring.inverse` to the `Units` inverse.
-      have hu : Commute (ContinuousLinearMap.modulus Y)
-          ((hDunit.unit : E →L[ℂ] E)) := by
-        rw [hDunit.unit_spec]; exact hmodD
-      rw [Ring.inverse_of_isUnit hDunit]
-      exact hu.units_inv_right
     have hprod : (0 : E →L[ℂ] E) ≤
         ContinuousLinearMap.modulus Y ∘L Ring.inverse D :=
-      hcomm.mul_nonneg hmod hDinvNonneg
+      hcomm.mul_nonneg hmodYnonneg hDinvNonneg
     simpa only [Complex.ofReal_ofNat] using
       smul_nonneg (show (0 : ℝ) ≤ 2 by norm_num) hprod
   have hMformula :
