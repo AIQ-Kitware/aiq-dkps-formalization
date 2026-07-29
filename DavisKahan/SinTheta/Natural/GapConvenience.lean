@@ -33,6 +33,7 @@ variable {E F : Type v}
   [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
   [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
 
+omit [CompleteSpace E] [CompleteSpace F] in
 /-- Genuine interval/exterior separation, named for a trial/complementary
 sine-theta application. -/
 theorem trialInterval_complementExterior
@@ -43,6 +44,7 @@ theorem trialInterval_complementExterior
     GenuineUnboundedSylvesterGap A B δ :=
   .intervalExterior hβα hgap
 
+omit [CompleteSpace E] [CompleteSpace F] in
 /-- The trial spectrum lies above the complementary spectrum. -/
 theorem trialAbove_complementBelow
     {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := E)}
@@ -55,6 +57,7 @@ theorem trialAbove_complementBelow
     GenuineUnboundedSylvesterGap A B δ :=
   .leftAboveRightBelow c hA hB
 
+omit [CompleteSpace E] [CompleteSpace F] in
 /-- The trial spectrum lies below the complementary spectrum. -/
 theorem trialBelow_complementAbove
     {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := E)}
@@ -67,6 +70,7 @@ theorem trialBelow_complementAbove
     GenuineUnboundedSylvesterGap A B δ :=
   .leftBelowRightAbove c hA hB
 
+omit [CompleteSpace E] [CompleteSpace F] in
 /-- Raw partial-map form of `trialInterval_complementExterior`. -/
 theorem linearPMap_trialInterval_complementExterior
     {A : E →ₗ.[ℂ] E} {B : F →ₗ.[ℂ] F}
@@ -75,6 +79,7 @@ theorem linearPMap_trialInterval_complementExterior
     GenuineUnboundedSylvesterGapPMap A B δ :=
   .intervalExterior hβα hgap
 
+omit [CompleteSpace E] [CompleteSpace F] in
 /-- Raw partial-map form of `trialAbove_complementBelow`. -/
 theorem linearPMap_trialAbove_complementBelow
     {A : E →ₗ.[ℂ] E} {B : F →ₗ.[ℂ] F} {δ c : ℝ}
@@ -83,6 +88,7 @@ theorem linearPMap_trialAbove_complementBelow
     GenuineUnboundedSylvesterGapPMap A B δ :=
   .leftAboveRightBelow c hA hB
 
+omit [CompleteSpace E] [CompleteSpace F] in
 /-- Raw partial-map form of `trialBelow_complementAbove`. -/
 theorem linearPMap_trialBelow_complementAbove
     {A : E →ₗ.[ℂ] E} {B : F →ₗ.[ℂ] F} {δ c : ℝ}
@@ -100,6 +106,7 @@ variable {E F : Type v}
   [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
   [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
 
+omit [CompleteSpace E] [CompleteSpace F] in
 /-- Legacy-spectrum interval/exterior separation, named for a
 trial/complementary sine-theta application. -/
 theorem trialInterval_complementExterior
@@ -110,6 +117,7 @@ theorem trialInterval_complementExterior
     UnboundedSylvesterGap A B δ :=
   .intervalExterior hβα hgap
 
+omit [CompleteSpace E] [CompleteSpace F] in
 /-- The trial operator is semibounded above the complementary operator. -/
 theorem trialAbove_complementBelow
     {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := E)}
@@ -120,6 +128,7 @@ theorem trialAbove_complementBelow
     UnboundedSylvesterGap A B δ :=
   .leftAboveRightBelow c hA hB
 
+omit [CompleteSpace E] [CompleteSpace F] in
 /-- The trial operator is semibounded below the complementary operator. -/
 theorem trialBelow_complementAbove
     {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := E)}
@@ -130,6 +139,7 @@ theorem trialBelow_complementAbove
     UnboundedSylvesterGap A B δ :=
   .leftBelowRightAbove c hA hB
 
+omit [CompleteSpace E] [CompleteSpace F] in
 /-- Raw partial-map form of `trialInterval_complementExterior`. -/
 theorem linearPMap_trialInterval_complementExterior
     {A : E →ₗ.[𝕜] E} {B : F →ₗ.[𝕜] F}
@@ -138,6 +148,7 @@ theorem linearPMap_trialInterval_complementExterior
     linearPMap_UnboundedSylvesterGap A B δ :=
   .intervalExterior hβα hgap
 
+omit [CompleteSpace E] [CompleteSpace F] in
 /-- Raw partial-map form of `trialAbove_complementBelow`. -/
 theorem linearPMap_trialAbove_complementBelow
     {A : E →ₗ.[𝕜] E} {B : F →ₗ.[𝕜] F} {δ c : ℝ}
@@ -146,6 +157,7 @@ theorem linearPMap_trialAbove_complementBelow
     linearPMap_UnboundedSylvesterGap A B δ :=
   .leftAboveRightBelow c hA hB
 
+omit [CompleteSpace E] [CompleteSpace F] in
 /-- Raw partial-map form of `trialBelow_complementAbove`. -/
 theorem linearPMap_trialBelow_complementAbove
     {A : E →ₗ.[𝕜] E} {B : F →ₗ.[𝕜] F} {δ c : ℝ}
