@@ -371,6 +371,119 @@ theorem norm_riccatiGram_pow_commutator_le
       rw [hcast]
       linarith [h1, h2]
 
+/-- Powers of the Gram operator obey the submultiplicative bound. -/
+theorem norm_riccatiGram_pow_apply_le' {Y : E0 →L[𝕜] E1} (n : ℕ) (y : E0) :
+    ‖((riccatiGram Y) ^ n) y‖ ≤ ‖riccatiGram Y‖ ^ n * ‖y‖ := by
+  induction n with
+  | zero => simp
+  | succ n ih =>
+      have hstep : ((riccatiGram Y) ^ (n + 1)) y =
+          riccatiGram Y (((riccatiGram Y) ^ n) y) := by
+        rw [pow_succ']; rfl
+      rw [hstep]
+      refine (ContinuousLinearMap.le_opNorm _ _).trans ?_
+      calc ‖riccatiGram Y‖ * ‖((riccatiGram Y) ^ n) y‖
+          ≤ ‖riccatiGram Y‖ * (‖riccatiGram Y‖ ^ n * ‖y‖) :=
+            mul_le_mul_of_nonneg_left ih (norm_nonneg _)
+        _ = ‖riccatiGram Y‖ ^ (n + 1) * ‖y‖ := by ring
+
+include hdom hadj in
+/-- **Geometric form of the iterated Riccati commutator bound.**
+
+Keeps the `‖T‖ⁿ` decay that `norm_riccatiGram_pow_commutator_le` discards under
+its contractivity hypothesis.  The decay is what makes the bound summable
+against a *geometric* series, so this — not the contractive form — is what
+reaches the Riccati resolvent `(1 - X†X)⁻¹`, where the coefficients are all `1`
+and `Σ n` diverges. Indexed at `n + 1` to avoid natural subtraction. -/
+theorem norm_riccatiGram_pow_succ_commutator_le
+    (hinv : TauCeti.LinearPMap.InvariantSubspace (unboundedBlockOperatorCore H)
+      (unboundedBlockGraph X)ᗮ)
+    (hric : ∀ x : H.A0.domain,
+      H.A1 ⟨X (x : E0), hdom x⟩ + H.B10 (x : E0) =
+        X (H.A0 x + H.B01 (X (x : E0))))
+    (n : ℕ) (x : H.A0.domain) :
+    ‖H.A0 ⟨((riccatiGram X) ^ (n + 1)) (x : E0),
+          riccatiGram_pow_mem_domain H hdom hadj (n + 1) x⟩ -
+        ((riccatiGram X) ^ (n + 1)) (H.A0 x)‖ ≤
+      (n + 1) * ‖riccatiGram X‖ ^ n *
+        ‖riccatiGramCommutator H X‖ * ‖(x : E0)‖ := by
+  induction n with
+  | zero =>
+      have hone : ((riccatiGram X) ^ (0 + 1)) (x : E0) =
+          (ContinuousLinearMap.adjoint X) (X (x : E0)) := by
+        simp [riccatiGram]
+      have hsub : (⟨((riccatiGram X) ^ (0 + 1)) (x : E0),
+            riccatiGram_pow_mem_domain H hdom hadj (0 + 1) x⟩ :
+              H.A0.domain) =
+          ⟨(ContinuousLinearMap.adjoint X) (X (x : E0)),
+            gram_mem_domain H hdom hadj x⟩ := by
+        apply Subtype.ext; exact hone
+      rw [hsub, gram_commutator_eq H hdom hadj hinv hric x]
+      have hexp : ((riccatiGram X) ^ (0 + 1)) (H.A0 x) =
+          (ContinuousLinearMap.adjoint X) (X (H.A0 x)) := by
+        simp [riccatiGram]
+      rw [hexp]
+      have : (ContinuousLinearMap.adjoint X) (X (H.A0 x)) +
+          riccatiGramCommutator H X (x : E0) -
+          (ContinuousLinearMap.adjoint X) (X (H.A0 x)) =
+          riccatiGramCommutator H X (x : E0) := by abel
+      rw [this]
+      simpa using ContinuousLinearMap.le_opNorm (riccatiGramCommutator H X)
+        (x : E0)
+  | succ n ih =>
+      have hmem := riccatiGram_pow_mem_domain H hdom hadj (n + 1) x
+      have hstep : ((riccatiGram X) ^ (n + 2)) (x : E0) =
+          riccatiGram X (((riccatiGram X) ^ (n + 1)) (x : E0)) := by
+        rw [pow_succ']; rfl
+      have hsub : (⟨((riccatiGram X) ^ (n + 2)) (x : E0),
+            riccatiGram_pow_mem_domain H hdom hadj (n + 2) x⟩ :
+              H.A0.domain) =
+          ⟨(ContinuousLinearMap.adjoint X)
+              (X (((riccatiGram X) ^ (n + 1)) (x : E0))),
+            gram_mem_domain H hdom hadj ⟨_, hmem⟩⟩ := by
+        apply Subtype.ext; exact hstep
+      rw [hsub, gram_commutator_eq H hdom hadj hinv hric ⟨_, hmem⟩]
+      have hexp : ((riccatiGram X) ^ (n + 2)) (H.A0 x) =
+          riccatiGram X (((riccatiGram X) ^ (n + 1)) (H.A0 x)) := by
+        rw [pow_succ']; rfl
+      rw [hexp]
+      have hrw :
+          (ContinuousLinearMap.adjoint X) (X (H.A0 ⟨_, hmem⟩)) +
+              riccatiGramCommutator H X
+                (((riccatiGram X) ^ (n + 1)) (x : E0)) -
+            riccatiGram X (((riccatiGram X) ^ (n + 1)) (H.A0 x)) =
+          riccatiGram X (H.A0 ⟨_, hmem⟩ -
+              ((riccatiGram X) ^ (n + 1)) (H.A0 x)) +
+            riccatiGramCommutator H X
+              (((riccatiGram X) ^ (n + 1)) (x : E0)) := by
+        simp only [riccatiGram, map_sub, ContinuousLinearMap.coe_comp,
+          Function.comp_apply]
+        abel
+      rw [hrw]
+      refine (norm_add_le _ _).trans ?_
+      have h1 : ‖riccatiGram X (H.A0 ⟨_, hmem⟩ -
+            ((riccatiGram X) ^ (n + 1)) (H.A0 x))‖ ≤
+          ‖riccatiGram X‖ * ((n + 1) * ‖riccatiGram X‖ ^ n *
+            ‖riccatiGramCommutator H X‖ * ‖(x : E0)‖) :=
+        (ContinuousLinearMap.le_opNorm _ _).trans
+          (mul_le_mul_of_nonneg_left ih (norm_nonneg _))
+      have h2 : ‖riccatiGramCommutator H X
+            (((riccatiGram X) ^ (n + 1)) (x : E0))‖ ≤
+          ‖riccatiGramCommutator H X‖ *
+            (‖riccatiGram X‖ ^ (n + 1) * ‖(x : E0)‖) :=
+        (ContinuousLinearMap.le_opNorm _ _).trans
+          (mul_le_mul_of_nonneg_left
+            (norm_riccatiGram_pow_apply_le' (n + 1) (x : E0)) (norm_nonneg _))
+      have hcast : (((n + 1 : ℕ) : ℝ) + 1) * ‖riccatiGram X‖ ^ (n + 1) *
+            ‖riccatiGramCommutator H X‖ * ‖(x : E0)‖ =
+          ‖riccatiGram X‖ * (((n : ℝ) + 1) * ‖riccatiGram X‖ ^ n *
+            ‖riccatiGramCommutator H X‖ * ‖(x : E0)‖) +
+            ‖riccatiGramCommutator H X‖ *
+              (‖riccatiGram X‖ ^ (n + 1) * ‖(x : E0)‖) := by
+        push_cast; ring
+      rw [hcast]
+      linarith [h1, h2]
+
 include hdom hadj in
 /-- A polynomial in the Gram operator, indexed by an arbitrary finite set of
 degrees, preserves the first diagonal domain. -/
