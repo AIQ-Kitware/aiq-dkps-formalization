@@ -1,4 +1,24 @@
-# Mathlib review and readiness audit for headline candidates
+# Upstream review and readiness audit for headline candidates
+
+> **Read the destination correction first (2026-07-29).** This audit was written
+> against **Mathlib**, and the Mathlib track is **closed — it is not resuming**.
+> The audit survives because **Tau Ceti holds a comparable bar**: new
+> mathematical declarations are admitted only against an accepted roadmap
+> target, one topic per PR, green build, standard axiom allowlist. Nearly
+> everything below is about *how a reviewer will receive the result* — statement
+> clarity, API shape, proof locality, naming, whether the constant is intended
+> API or merely sufficient downstream — and that transfers unchanged.
+>
+> Read "Mathlib" below as "the upstream library", and substitute Tau Ceti for
+> the destination. Two things do **not** transfer and are called out where they
+> appear: the specific claim that *Mathlib* does not already contain a result
+> (re-check against `external/TauCeti` instead), and the "Recommended Fable
+> task" blocks, which name a work assignment that has since been superseded by
+> the lane system in `../../dev/LANES.md`.
+>
+> The current roadmap, acceptance gates, and submission split are in
+> [`tauceti-adaptation-and-spectra-extraction.md`](tauceti-adaptation-and-spectra-extraction.md).
+> This file was previously named `prep_mathlib_review_and_readiness.md`.
 
 Validation anchor for this audit:
 
@@ -39,24 +59,39 @@ The first **big** result to target should be Gram rigidity.  It has
 the best combination of mathematical value, statement clarity, proof locality,
 and likely reviewer tractability.
 
-## General Mathlib-readiness checklist
+## General upstream-readiness checklist
 
-Before any PR, each candidate should be converted from a `ForMathlib` staging
-file into a Mathlib-style contribution:
+Before any PR, each candidate should be converted from a staging file into a
+contribution shaped for the destination library. **The destination is Tau Ceti**;
+staging happens in `ForTauCeti/`, and `ForMathlib` is being retired into it.
 
-- Remove the `ForMathlib` namespace wrapper.
-- Use a Mathlib copyright header and the module-system header style.
+- Remove the staging namespace wrapper; declarations should already carry their
+  final `TauCeti.*` namespace.
+- Use the destination library's copyright header and module-system header style.
 - Use `public import` / `import` grouping appropriate to the destination file.
 - Minimize imports and confirm the target file is the right home.
-- Re-check that Mathlib does not already contain the result under another name.
-- Add or update module docstrings and declaration docstrings in Mathlib style.
+- Re-check that the destination does not already contain the result under
+  another name. For Tau Ceti this means checking `external/TauCeti` **and**
+  `vendor/Spectra` — the whole point of
+  [`../../dev/tauceti/convergence-matrix.md`](../../dev/tauceti/convergence-matrix.md)
+  is that we carry three independently evolved stacks, so a "new" result is
+  quite often a parallel formulation of one that already exists.
+- Respect the import firewall: a `ForTauCeti` module may import only
+  Mathlib / TauCeti / ForTauCeti, enforced by
+  `scripts/check_dependency_layers.py`. A PR-ready cluster must be
+  independently copyable with only an import rewrite.
+- Add or update module docstrings and declaration docstrings in the destination
+  library's style.
 - Replace AI provenance comments in Lean files with normal author/copyright
-  metadata; AI provenance belongs in the PR description, not in Mathlib code.
+  metadata; AI provenance belongs in the PR description, not in library code.
 - Confirm theorem names fit local naming conventions.
 - Prefer reusable intermediate lemmas over large monolithic proofs.
 - Decide whether constants/generalizations are intended API or merely sufficient
   for the downstream DKPS application.
-- Verify with a dedicated comparator challenge for the exact theorem family.
+- Verify with a dedicated comparator challenge for the exact theorem family, and
+  run the axiom audit — Tau Ceti expects the standard allowlist.
+- Confirm the PR lands against an **accepted roadmap target**, one topic per PR.
+  Roadmaps are drafted in `ForTauCetiRoadmap/`.
 
 ## 1. Gram rigidity
 
