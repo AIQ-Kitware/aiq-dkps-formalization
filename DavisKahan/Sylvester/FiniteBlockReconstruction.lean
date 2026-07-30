@@ -3,7 +3,7 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.Experimental.InfiniteDimensional.Sylvester.OrthogonalIdempotentExp
+import DavisKahan.Sylvester.OrthogonalIdempotentExp
 import Mathlib.MeasureTheory.Integral.Bochner.Basic
 
 /-!
@@ -12,6 +12,10 @@ import Mathlib.MeasureTheory.Integral.Bochner.Basic
 This is the purely algebraic and scalar-Fourier core of the separated
 Sylvester theorem.  It is parameterized by a scalar kernel and its reciprocal
 identity, so it is independent of the particular Haagerup--Zsido construction.
+
+**Promoted 2026-07-30 under lane `EXP-PROMOTE-MISC`**, in the same cascade: it became
+promotable only after the modules it imported were promoted earlier in this lane.  Nothing is
+restated; names and namespace are unchanged.
 -/
 
 namespace TauCeti
@@ -59,6 +63,7 @@ theorem unitaryGroup_finiteDiagonal
     exp_finset_orthogonal_idempotents P
       (fun i => (a i : ℂ) * Complex.I) hidem horth hsum t
 
+omit [CompleteSpace F] in
 /-- A diagonal block selects the corresponding coefficient on the left. -/
 theorem finiteDiagonal_select_left
     {m : ℕ} (P : Fin m → F →L[ℂ] F) (a : Fin m → ℝ)
@@ -67,7 +72,7 @@ theorem finiteDiagonal_select_left
     (i : Fin m) :
     P i ∘L finiteDiagonalOperator P a = (a i : ℂ) • P i := by
   unfold finiteDiagonalOperator
-  rw [ContinuousLinearMap.comp_finset_sum,
+  rw [ContinuousLinearMap.comp_finsetSum,
     Finset.sum_eq_single_of_mem i (Finset.mem_univ i)]
   · rw [ContinuousLinearMap.comp_smul]
     change (a i : ℂ) • (P i * P i) = _
@@ -77,6 +82,7 @@ theorem finiteDiagonal_select_left
     change (a j : ℂ) • (P i * P j) = 0
     rw [horth i j hji.symm, smul_zero]
 
+omit [CompleteSpace E] in
 /-- A diagonal block selects the corresponding coefficient on the right. -/
 theorem finiteDiagonal_select_right
     {m : ℕ} (P : Fin m → E →L[ℂ] E) (a : Fin m → ℝ)
@@ -85,7 +91,7 @@ theorem finiteDiagonal_select_right
     (i : Fin m) :
     finiteDiagonalOperator P a ∘L P i = (a i : ℂ) • P i := by
   unfold finiteDiagonalOperator
-  rw [ContinuousLinearMap.finset_sum_comp,
+  rw [ContinuousLinearMap.finsetSum_comp,
     Finset.sum_eq_single_of_mem i (Finset.mem_univ i)]
   · rw [ContinuousLinearMap.smul_comp]
     change (a i : ℂ) • (P i * P i) = _
@@ -95,6 +101,7 @@ theorem finiteDiagonal_select_right
     change (a j : ℂ) • (P j * P i) = 0
     rw [horth j i hji, smul_zero]
 
+omit [CompleteSpace E] in
 /-- The Sylvester defect restricted to one spectral rectangle is scalar. -/
 theorem finiteDiagonal_sylvester_block
     {m n : ℕ}
@@ -118,6 +125,7 @@ theorem finiteDiagonal_sylvester_block
     map_sub, smul_apply] at hL hR ⊢
   rw [hL, hR, map_smul, map_smul, Complex.ofReal_sub, sub_smul]
 
+omit [CompleteSpace E] in
 /-- The full operator is the sum of all rectangular blocks. -/
 theorem eq_sum_rectangular_blocks
     {m n : ℕ}
@@ -132,8 +140,8 @@ theorem eq_sum_rectangular_blocks
       ext v
       simp
     _ = ∑ i, ∑ j, P i ∘L X ∘L Q j := by
-      simp only [ContinuousLinearMap.finset_sum_comp,
-        ContinuousLinearMap.comp_finset_sum]
+      simp only [ContinuousLinearMap.finsetSum_comp,
+        ContinuousLinearMap.comp_finsetSum]
       rw [Finset.sum_comm]
 
 /-- Expansion of the conjugated Sylvester defect into scalar spectral blocks. -/
@@ -156,8 +164,8 @@ theorem finiteDiagonal_orbit_expansion
           ((((a i - b j : ℝ) : ℂ)) • (P i ∘L X ∘L Q j)) := by
   rw [unitaryGroup_finiteDiagonal P a hPid hPorth hPsum t,
     unitaryGroup_finiteDiagonal Q b hQid hQorth hQsum (-t)]
-  simp only [ContinuousLinearMap.finset_sum_comp,
-    ContinuousLinearMap.comp_finset_sum, ContinuousLinearMap.smul_comp,
+  simp only [ContinuousLinearMap.finsetSum_comp,
+    ContinuousLinearMap.comp_finsetSum, ContinuousLinearMap.smul_comp,
     ContinuousLinearMap.comp_smul, Finset.smul_sum]
   rw [Finset.sum_comm]
   apply Finset.sum_congr rfl
@@ -171,6 +179,7 @@ theorem finiteDiagonal_orbit_expansion
   push_cast
   ring
 
+omit [CompleteSpace E] in
 /-- The separated finite diagonal Sylvester equation has an explicit
 blockwise solution. -/
 theorem finiteDiagonal_sylvester_solution
@@ -193,9 +202,9 @@ theorem finiteDiagonal_sylvester_solution
       (∑ i, ∑ j, ((((a i - b j)⁻¹ : ℝ) : ℂ)) • (P i ∘L C ∘L Q j)) =
       ∑ i, ∑ j, ((((a i - b j)⁻¹ : ℝ) : ℂ)) •
         ((a i : ℂ) • (P i ∘L C ∘L Q j)) := by
-    rw [ContinuousLinearMap.comp_finset_sum]
+    rw [ContinuousLinearMap.comp_finsetSum]
     refine Finset.sum_congr rfl fun i _ => ?_
-    rw [ContinuousLinearMap.comp_finset_sum]
+    rw [ContinuousLinearMap.comp_finsetSum]
     refine Finset.sum_congr rfl fun j _ => ?_
     rw [ContinuousLinearMap.comp_smul]
     congr 1
@@ -210,9 +219,9 @@ theorem finiteDiagonal_sylvester_solution
       finiteDiagonalOperator Q b =
       ∑ i, ∑ j, ((((a i - b j)⁻¹ : ℝ) : ℂ)) •
         ((b j : ℂ) • (P i ∘L C ∘L Q j)) := by
-    rw [ContinuousLinearMap.finset_sum_comp]
+    rw [ContinuousLinearMap.finsetSum_comp]
     refine Finset.sum_congr rfl fun i _ => ?_
-    rw [ContinuousLinearMap.finset_sum_comp]
+    rw [ContinuousLinearMap.finsetSum_comp]
     refine Finset.sum_congr rfl fun j _ => ?_
     rw [ContinuousLinearMap.smul_comp]
     congr 1
@@ -241,6 +250,7 @@ theorem finiteDiagonal_sylvester_solution
       rw [hone, one_smul]
     _ = C := (eq_sum_rectangular_blocks P Q hPsum hQsum C).symm
 
+omit [CompleteSpace E] in
 /-- Integrability of one scalar oscillatory block against an `L1` kernel. -/
 theorem integrable_scalar_oscillatory_block
     (μ : ℝ → ℂ) (hμ : Integrable μ)
@@ -322,10 +332,10 @@ theorem finiteDiagonal_sylvester_reconstruction
         μ t •
           (Complex.exp ((((t * (a i - b j) : ℝ) : ℂ) * Complex.I)) •
             ((((a i - b j : ℝ) : ℂ)) • (P i ∘L X ∘L Q j))) := by
-      rw [integral_finset_sum]
+      rw [integral_finsetSum]
       · apply Finset.sum_congr rfl
         intro i hi
-        rw [integral_finset_sum]
+        rw [integral_finsetSum]
         exact fun j hj => hintegrable i j
       · intro i hi
         exact (integrable_finsetSum _ fun j hj => hintegrable i j)
