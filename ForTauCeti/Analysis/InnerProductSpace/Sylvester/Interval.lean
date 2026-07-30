@@ -47,6 +47,43 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
   [FiniteDimensional 𝕜 E]
 variable {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
   [FiniteDimensional 𝕜 F]
+omit [FiniteDimensional 𝕜 E] [FiniteDimensional 𝕜 F] in
+/-- **A Sylvester equation is invariant under a common scalar shift.**  Replacing
+`A` and `B` by `A - m` and `B - m` leaves `A ∘ₗ X - X ∘ₗ B` unchanged, because
+the two `m • X` terms cancel.
+
+It is the opening move of every shift-and-invert argument here, and was inlined
+in each of them; `opNorm_sylvester_le_of_intervalGap` and
+`uiNorm_sylvester_le_of_intervalGap` now share this one statement. -/
+private theorem sylvester_sub_smul_id (A : F →ₗ[𝕜] F) (B : E →ₗ[𝕜] E)
+    (X C : E →ₗ[𝕜] F) (m : 𝕜) (hEq : A ∘ₗ X - X ∘ₗ B = C) :
+    (A - m • LinearMap.id) ∘ₗ X - X ∘ₗ (B - m • LinearMap.id) = C := by
+  ext x
+  have hx := LinearMap.congr_fun hEq x
+  simp only [LinearMap.comp_apply, LinearMap.sub_apply,
+    LinearMap.smul_apply, LinearMap.id_apply, map_sub, map_smul]
+  simp only [LinearMap.comp_apply, LinearMap.sub_apply] at hx
+  rw [← hx]
+  module
+
+/-- **A positive symmetric operator bounded below in norm has its eigenvalues
+bounded below.**  If `‖H y‖ ≥ c ‖y‖` for every `y` and `H` is positive, then every
+eigenvalue of `H` is at least `c`.
+
+The statement is about `TauCeti.abs`, not about Sylvester equations, and it is
+used by both interval-gap bounds below. -/
+private theorem le_eigenvalues_of_norm_lower_bound {H : F →ₗ[𝕜] F}
+    (hpos : H.IsPositive) (hHsym : H.IsSymmetric) {c : ℝ}
+    (hlow : ∀ y, c * ‖y‖ ≤ ‖H y‖) (i : Fin (Module.finrank 𝕜 F)) :
+    c ≤ hHsym.eigenvalues rfl i := by
+  have hi : c * ‖hHsym.eigenvectorBasis rfl i‖ ≤ ‖H (hHsym.eigenvectorBasis rfl i)‖ :=
+    hlow (hHsym.eigenvectorBasis rfl i)
+  have hnonneg := hpos.nonneg_eigenvalues rfl i
+  rw [hHsym.apply_eigenvectorBasis rfl i, norm_smul, RCLike.norm_ofReal,
+    abs_of_nonneg hnonneg,
+    (hHsym.eigenvectorBasis rfl).orthonormal.norm_eq_one, mul_one, mul_one] at hi
+  exact hi
+
 /-- Sharp operator-norm interval/exterior Sylvester estimate.
 
 The analytic step is the dimension-free polar-absorption theorem in
@@ -95,32 +132,20 @@ theorem opNorm_sylvester_le_of_intervalGap
     simpa [S, m, r] using
       norm_shift_lower_of_spectrumOutside hA hab hδ hgap.2
   have hHsym : H.IsSymmetric := (TauCeti.isPositive_abs S).isSymmetric
+  have hHlow : ∀ y, (r + δ) * ‖y‖ ≤ ‖H y‖ := by
+    intro y
+    -- `H` is `TauCeti.abs S` by definition, and the lower bound is stated for `abs S`;
+    -- the goal has to carry that spelling before it can be cited.
+    change (r + δ) * ‖y‖ ≤ ‖TauCeti.abs S y‖
+    rw [TauCeti.norm_abs_apply]
+    exact hSlower y
   have hHeig : ∀ i : Fin (Module.finrank 𝕜 F),
-      r + δ ≤ hHsym.eigenvalues rfl i := by
-    intro i
-    have hi : (r + δ) * ‖hHsym.eigenvectorBasis rfl i‖ ≤
-        ‖H (hHsym.eigenvectorBasis rfl i)‖ := by
-      -- `H` is `TauCeti.abs S` by definition, and the eigenvector lower bound below is
-      -- stated for `abs S`; the goal has to carry that spelling before it can be cited.
-      change (r + δ) * ‖hHsym.eigenvectorBasis rfl i‖ ≤
-        ‖TauCeti.abs S (hHsym.eigenvectorBasis rfl i)‖
-      rw [TauCeti.norm_abs_apply]
-      exact hSlower (hHsym.eigenvectorBasis rfl i)
-    have hnonneg := (TauCeti.isPositive_abs S).nonneg_eigenvalues rfl i
-    rw [hHsym.apply_eigenvectorBasis rfl i, norm_smul, RCLike.norm_ofReal,
-      abs_of_nonneg hnonneg,
-      (hHsym.eigenvectorBasis rfl).orthonormal.norm_eq_one, mul_one, mul_one] at hi
-    exact hi
+      r + δ ≤ hHsym.eigenvalues rfl i :=
+    le_eigenvalues_of_norm_lower_bound (TauCeti.isPositive_abs S) hHsym hHlow
   have hHform : ∀ y, (r + δ) * ‖y‖ ^ 2 ≤ RCLike.re ⟪H y, y⟫_𝕜 :=
     le_re_inner_of_le_eigenvalues hHsym hHeig
-  have hShift : S ∘ₗ X - X ∘ₗ T = C := by
-    ext x
-    have hx := LinearMap.congr_fun hEq x
-    simp only [S, T, LinearMap.comp_apply, LinearMap.sub_apply,
-      LinearMap.smul_apply, LinearMap.id_apply, map_sub, map_smul]
-    simp only [LinearMap.comp_apply, LinearMap.sub_apply] at hx
-    rw [← hx]
-    module
+  have hShift : S ∘ₗ X - X ∘ₗ T = C :=
+    sylvester_sub_smul_id A B X C (m : 𝕜) hEq
   have hPolar : H ∘ₗ X - Z ∘ₗ T = Y := by
     ext x
     have hx := LinearMap.congr_fun hShift x
@@ -372,32 +397,20 @@ theorem uiNorm_sylvester_le_of_intervalGap
     simpa [S, m, r] using
       norm_shift_lower_of_spectrumOutside hA hab hδ hgap.2
   have hHsym : H.IsSymmetric := (TauCeti.isPositive_abs S).isSymmetric
+  have hHlow : ∀ y, (r + δ) * ‖y‖ ≤ ‖H y‖ := by
+    intro y
+    -- `H` is `TauCeti.abs S` by definition, and the lower bound is stated for `abs S`;
+    -- the goal has to carry that spelling before it can be cited.
+    change (r + δ) * ‖y‖ ≤ ‖TauCeti.abs S y‖
+    rw [TauCeti.norm_abs_apply]
+    exact hSlower y
   have hHeig : ∀ i : Fin (Module.finrank 𝕜 F),
-      r + δ ≤ hHsym.eigenvalues rfl i := by
-    intro i
-    have hi : (r + δ) * ‖hHsym.eigenvectorBasis rfl i‖ ≤
-        ‖H (hHsym.eigenvectorBasis rfl i)‖ := by
-      -- `H` is `TauCeti.abs S` by definition, and the eigenvector lower bound below is
-      -- stated for `abs S`; the goal has to carry that spelling before it can be cited.
-      change (r + δ) * ‖hHsym.eigenvectorBasis rfl i‖ ≤
-        ‖TauCeti.abs S (hHsym.eigenvectorBasis rfl i)‖
-      rw [TauCeti.norm_abs_apply]
-      exact hSlower (hHsym.eigenvectorBasis rfl i)
-    have hnonneg := (TauCeti.isPositive_abs S).nonneg_eigenvalues rfl i
-    rw [hHsym.apply_eigenvectorBasis rfl i, norm_smul, RCLike.norm_ofReal,
-      abs_of_nonneg hnonneg,
-      (hHsym.eigenvectorBasis rfl).orthonormal.norm_eq_one, mul_one, mul_one] at hi
-    exact hi
+      r + δ ≤ hHsym.eigenvalues rfl i :=
+    le_eigenvalues_of_norm_lower_bound (TauCeti.isPositive_abs S) hHsym hHlow
   have hHform : ∀ y, (r + δ) * ‖y‖ ^ 2 ≤ RCLike.re ⟪H y, y⟫_𝕜 :=
     le_re_inner_of_le_eigenvalues hHsym hHeig
-  have hShift : S ∘ₗ X - X ∘ₗ T = C := by
-    ext x
-    have hx := LinearMap.congr_fun hEq x
-    simp only [S, T, LinearMap.comp_apply, LinearMap.sub_apply,
-      LinearMap.smul_apply, LinearMap.id_apply, map_sub, map_smul]
-    simp only [LinearMap.comp_apply, LinearMap.sub_apply] at hx
-    rw [← hx]
-    module
+  have hShift : S ∘ₗ X - X ∘ₗ T = C :=
+    sylvester_sub_smul_id A B X C (m : 𝕜) hEq
   have hPolar : H ∘ₗ X - Z ∘ₗ T = Y := by
     ext x
     have hx := LinearMap.congr_fun hShift x
