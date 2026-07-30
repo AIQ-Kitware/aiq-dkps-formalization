@@ -103,6 +103,57 @@ theorem restrictedSpectrum_eq_restrictionSpectrum
   · intro hr
     exact ⟨hU, hr⟩
 
+/-- `⊤` as a *continuous* linear equivalence.
+
+`Submodule.topEquiv` is linear only.  Both directions are continuous — inclusion is
+`Submodule.subtypeL` and the inverse is a `codRestrict` of the identity — so the upgrade costs
+nothing, but nothing in Mathlib performs it. -/
+def topContinuousLinearEquiv : (⊤ : Submodule 𝕜 E) ≃L[𝕜] E where
+  toLinearEquiv := Submodule.topEquiv
+  continuous_toFun := continuous_subtype_val
+  continuous_invFun := by
+    exact Continuous.subtype_mk continuous_id _
+
+/-- Conjugation by a continuous linear equivalence is an **algebra** isomorphism of the two
+continuous endomorphism algebras.
+
+Mathlib has `ContinuousLinearEquiv.arrowCongrSL`, which is an equivalence of the hom *space* and
+knows nothing about composition; and it has the conjugation algebra equivalence only for plain
+`Module.End`.  This is the continuous endomorphism version, which is what a spectrum argument
+needs, since `spectrum` is an algebra notion. -/
+def conjAlgEquiv (e : E ≃L[𝕜] F) : (E →L[𝕜] E) ≃ₐ[𝕜] (F →L[𝕜] F) where
+  toFun T := (e : E →L[𝕜] F) ∘L T ∘L (e.symm : F →L[𝕜] E)
+  invFun T := (e.symm : F →L[𝕜] E) ∘L T ∘L (e : E →L[𝕜] F)
+  left_inv T := by ext x; simp
+  right_inv T := by ext x; simp
+  map_mul' S T := by ext x; simp
+  map_add' S T := by ext x; simp
+  commutes' r := by
+    ext x
+    simp [Algebra.algebraMap_eq_smul_one]
+
+/-- Conjugation acts by transporting the argument, applying, and transporting back. -/
+@[simp] theorem conjAlgEquiv_apply (e : E ≃L[𝕜] F) (T : E →L[𝕜] E) (y : F) :
+    conjAlgEquiv e T y = e (T (e.symm y)) := rfl
+
+/-- **The restriction to `⊤` has the spectrum of the operator itself.**
+
+`restrictedSpectrum` is stated through `A.restrict`, whose codomain is `↥(⊤ : Submodule 𝕜 E)` and
+not `E`, so a fact about `realSpectrum A` cannot be used against a `SpectraSeparated _ ⊤ _ ⊤`
+hypothesis until this is available. -/
+theorem restrictedSpectrum_top (A : E →L[𝕜] E) :
+    restrictedSpectrum A (⊤ : Submodule 𝕜 E) = realSpectrum A := by
+  have hU : InvariantFor A (⊤ : Submodule 𝕜 E) := fun x _ => Submodule.mem_top
+  rw [restrictedSpectrum_eq_restrictionSpectrum A ⊤ hU]
+  have hconj : conjAlgEquiv (topContinuousLinearEquiv (𝕜 := 𝕜) (E := E)) (A.restrict hU) = A := by
+    ext x
+    rfl
+  have hspec : spectrum 𝕜 A = spectrum 𝕜 (A.restrict hU) := by
+    conv_lhs => rw [← hconj]
+    exact AlgEquiv.spectrum_eq _ _
+  ext r
+  simp [realSpectrum, hspec]
+
 /-- The spectrum of the actual restriction to `U` is contained in `s`.
 
 Invariance is part of the predicate, preventing a containment hypothesis from
@@ -140,6 +191,25 @@ def SpectraSeparated (A : E →L[𝕜] E) (U : Submodule 𝕜 E)
   InvariantFor A U ∧ InvariantFor B V ∧
     ∀ a ∈ restrictedSpectrum A U, ∀ b ∈ restrictedSpectrum B V,
       d ≤ |a - b|
+
+/-- **Separation on `⊤` is separation of the two real spectra**, with the invariance conjuncts
+discharged.
+
+This is the consumer-facing form of `restrictedSpectrum_top`: a `SpectraSeparated _ ⊤ _ ⊤`
+hypothesis is exactly a statement about `realSpectrum`, so any transport of `realSpectrum` —
+complexification, for instance — now applies to it. -/
+theorem spectraSeparated_top_iff (A : E →L[𝕜] E) (B : F →L[𝕜] F) (d : ℝ) :
+    SpectraSeparated A (⊤ : Submodule 𝕜 E) B (⊤ : Submodule 𝕜 F) d ↔
+      ∀ a ∈ realSpectrum A, ∀ b ∈ realSpectrum B, d ≤ |a - b| := by
+  have htopA : InvariantFor A (⊤ : Submodule 𝕜 E) := fun x _ => Submodule.mem_top
+  have htopB : InvariantFor B (⊤ : Submodule 𝕜 F) := fun x _ => Submodule.mem_top
+  constructor
+  · rintro ⟨-, -, h⟩ a ha b hb
+    exact h a (by rw [restrictedSpectrum_top]; exact ha) b (by rw [restrictedSpectrum_top]; exact hb)
+  · intro h
+    refine ⟨htopA, htopB, fun a ha b hb => ?_⟩
+    rw [restrictedSpectrum_top] at ha hb
+    exact h a ha b hb
 
 /-- Spectral separation is symmetric after exchanging the two restricted blocks. -/
 theorem SpectraSeparated.symm {A : E →L[𝕜] E} {U : Submodule 𝕜 E}
