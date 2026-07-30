@@ -455,28 +455,86 @@ theorem sinTheta_generalSeparation
 
 Genuinely constructing the measurable spectral subspace of a bounded
 self-adjoint operator over a general `RCLike` field requires the bounded Borel
-functional calculus: over `ℂ` this is the Spectra projection-valued measure
-(`DavisKahanExt.boundedSelfAdjointSpectralProjection` in
-`Experimental/InfiniteDimensional/Core/SpectralProjection.lean`), and the
-general case is its complexification transport.  The construction and its two
-characterizing properties are isolated below as leaf obligations so that the
-`sin Θ` consequences are fully proved relative to them.
+functional calculus.  Over `ℂ` that calculus exists in this development and is
+*not* experimental: it is `TauCeti.BorelCalculus.boundedPVM`, with the spectral
+subspace itself at
+`DavisKahan/SpectralTheory/BoundedSelfAdjointSpectralProjection.lean` as
+`boundedSelfAdjointSpectralSubspace`.  The general case is its complexification
+transport, which does not exist yet.
+
+That `ℂ` construction cannot simply be reused here, because
+`TauCeti.ProjValMeasure` fixes the scalar field **in its own binder** — it is
+declared over `[InnerProductSpace ℂ H]` — while this section is over a general
+`𝕜 : RCLike`.  Reusing it would mean either restricting this section to `ℂ` or
+generalising `ProjValMeasure`, and neither is necessary.
+
+So the `ℂ`-only ingredient is carried as a *hypothesis*, exactly as the operator
+absolute value is in the `OperatorAbsoluteValue` section below, and for the
+reason given there: an unproved `def` is an opaque term with no body, so no
+theorem about it can be proved at all, whereas the definitions below unfold.
+Relative to `BoundedBorelProjection` the three former leaf obligations are
+ordinary theorems, and the `sin Θ` consequences are fully proved.
 -/
 
-/-- **Leaf obligation.** The measurable spectral subspace of a bounded
-operator: the range of the projection-valued measure of `s`. -/
+section SpectralSubspace
+
+/-- **Hypothesis class: the bounded Borel functional calculus of a self-adjoint
+operator**, presented as the projection assignment it induces.
+
+Only the two laws actually needed downstream are demanded — idempotence, which
+makes the range a closed subspace with an orthogonal projection, and commutation
+with the operator, which makes that subspace reducing.  Nothing here asserts
+countable additivity or multiplicativity in `s`; a genuine projection-valued
+measure supplies this and much more, so the hypothesis is weaker than the object
+that discharges it.
+
+At `𝕜 = ℂ` it is discharged by `TauCeti.BorelCalculus.boundedPVM`: `proj_idem`
+is its `proj_idem` field, and `proj_comm` is the commutation of a spectral
+projection with its own operator.  The instance is deliberately *not* declared
+in this file, which would drag the whole Borel-calculus import chain into an
+experimental module; it belongs with the construction. -/
+class BoundedBorelProjection (𝕜 : Type u) (E : Type v) [RCLike 𝕜]
+    [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] where
+  /-- The spectral projection of `A` over a Borel set `s`. -/
+  proj : ∀ (A : E →L[𝕜] E), IsSelfAdjointOperator A →
+    ∀ s : Set ℝ, MeasurableSet s → E →L[𝕜] E
+  /-- Spectral projections are idempotent. -/
+  proj_idem : ∀ (A : E →L[𝕜] E) (hA : IsSelfAdjointOperator A)
+    (s : Set ℝ) (hs : MeasurableSet s), IsIdempotentElem (proj A hA s hs)
+  /-- Spectral projections commute with their operator. -/
+  proj_comm : ∀ (A : E →L[𝕜] E) (hA : IsSelfAdjointOperator A)
+    (s : Set ℝ) (hs : MeasurableSet s),
+    A ∘L proj A hA s hs = proj A hA s hs ∘L A
+
+variable [BoundedBorelProjection 𝕜 E]
+
+/-- The measurable spectral subspace of a bounded operator: the range of the
+spectral projection of `s`.
+
+Relative to the `BoundedBorelProjection` hypothesis this is a real definition
+rather than a leaf obligation, so the results below unfold it. -/
 noncomputable def spectralSubspace (A : E →L[𝕜] E) (hA : IsSelfAdjointOperator A)
     (s : Set ℝ) (hs : MeasurableSet s) :
     Submodule 𝕜 E :=
-  sorry
+  (BoundedBorelProjection.proj A hA s hs).range
 
-/-- **Leaf obligation.** The spectral subspace is closed, hence admits an
-orthogonal projection in the complete ambient space. -/
+/-- Unfolding lemma: the spectral subspace *is* the range of the spectral
+projection.  Stated so that downstream rewrites do not have to unfold a `def`. -/
+theorem spectralSubspace_eq_range (A : E →L[𝕜] E) (hA : IsSelfAdjointOperator A)
+    (s : Set ℝ) (hs : MeasurableSet s) :
+    spectralSubspace A hA s hs = (BoundedBorelProjection.proj A hA s hs).range :=
+  rfl
+
+/-- The spectral subspace is closed, hence admits an orthogonal projection in
+the complete ambient space.
+
+This needs only idempotence: the range of a bounded idempotent is closed. -/
 noncomputable instance spectralSubspace_hasOrthogonalProjection
     (A : E →L[𝕜] E) (hA : IsSelfAdjointOperator A)
     (s : Set ℝ) (hs : MeasurableSet s) :
     (spectralSubspace A hA s hs).HasOrthogonalProjection :=
-  sorry
+  ContinuousLinearMap.IsIdempotentElem.hasOrthogonalProjection_range
+    (BoundedBorelProjection.proj_idem A hA s hs)
 
 /-- The measurable spectral projection: the orthogonal projection onto the
 spectral subspace. -/
@@ -485,12 +543,19 @@ noncomputable def spectralProjection (A : E →L[𝕜] E) (hA : IsSelfAdjointOpe
     E →L[𝕜] E :=
   (spectralSubspace A hA s hs).starProjection
 
-/-- **Leaf obligation.** Spectral subspaces of a self-adjoint operator reduce
-it. -/
+/-- Spectral subspaces of a self-adjoint operator reduce it.
+
+Only invariance has to be checked: `IsSymmetric.reduces_of_invariant` supplies
+invariance of the orthogonal complement from symmetry of `A`.  Invariance is
+immediate from commutation, since `A (P y) = P (A y)` is again in the range. -/
 theorem isInvariant_spectralSubspace (A : E →L[𝕜] E)
     (hA : IsSelfAdjointOperator A) (s : Set ℝ) (hs : MeasurableSet s) :
-    Reduces A (spectralSubspace A hA s hs) :=
-  sorry
+    Reduces A (spectralSubspace A hA s hs) := by
+  refine ContinuousLinearMap.IsSymmetric.reduces_of_invariant hA ?_
+  rintro x ⟨y, rfl⟩
+  refine ⟨A y, ?_⟩
+  exact congrFun (congrArg DFunLike.coe
+    (BoundedBorelProjection.proj_comm A hA s hs).symm) y
 
 /-- The subspace projection of the spectral subspace is the spectral
 projection. -/
@@ -544,6 +609,8 @@ theorem spectralProjection_sinTheta
       = d * subspaceGap U V := by rw [hgapeq]
     _ ≤ ‖B - A‖ := h
 
+end SpectralSubspace
+
 /-! ## Ideal-valued form
 
 The ideal-valued projector-difference estimate below is a genuinely missing
@@ -569,7 +636,7 @@ Mathlib states the remaining gap explicitly: that continuous functional
 calculus instance is known only for `𝕜 = ℂ`, which is exactly why
 `instStarOrderedRingRCLike` is a lemma there rather than an instance.  So the
 absolute value is carried here as a *hypothesis*, not as an escape.  This is
-the difference between unproved and unprovable: a `sorry`ed `def` is an opaque
+the difference between unproved and unprovable: an unproved `def` is an opaque
 term with no body, so no theorem about it can be proved at all, whereas the
 definition below unfolds and discharges automatically at `𝕜 = ℂ`.
 -/
