@@ -262,7 +262,6 @@ RUNGS: list[tuple[str, str, list[str]]] = [
         "Analysis.InnerProductSpace.Sylvester.SpectralGap",
     ]),
     ("P", "Spectral subspace perturbation: the Davis-Kahan sin-Theta theorems (T17)", [
-        "Analysis.InnerProductSpace.BoundedOperator.Basic",
         "Analysis.InnerProductSpace.BoundedOperator.Projector",
         "Analysis.InnerProductSpace.BoundedOperator.SinTheta",
         "Analysis.InnerProductSpace.DoubleAngle.Vector",
