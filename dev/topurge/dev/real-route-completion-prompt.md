@@ -12,7 +12,7 @@ The complex source-facing sine-theta theorem is now admission-free. Verified by
 |---|---|
 | `ForMathlib.DavisKahanExt.ClosedOperator.realSpectrum` | clean (now a real definition, no longer an admission) |
 | `SpectraBridge.realSpectrum_eq_spectraSpectrum` | clean |
-| `genuineSylvesterIntervalExteriorGap_of_legacy` | clean |
+| `sylvesterIntervalExteriorGap_of_legacy` | clean |
 | `davisKahan1970_sylvester_complex` | clean |
 | `sinTheta_unbounded_complex`, `sinTheta_unbounded_exact_complex` | clean |
 | `generalizedSinTheta_unbounded_complex`, `..._exact_complex` | clean |

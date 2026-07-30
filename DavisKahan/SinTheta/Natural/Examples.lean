@@ -54,7 +54,7 @@ example
         selfAdjointSpectralSubspaceInclusion A hA S hS ∘L
           (selfAdjointSpectralSubspaceInclusion A hA S hS).adjoint) ∘L X‖ ≤
       ‖Rop‖ := by
-  have hmain := sinTheta_unbounded_spectralSubspace_of_genuineSpectrumGap
+  have hmain := sinTheta_unbounded_spectralSubspace_of_spectrumGap
     (KyFanDominantIdealFamily.operatorNorm (𝕜 := ℂ))
       A hA S hS A0 hA0 X Rop hX hXdom hReq hδ hgap (by
         rw [KyFanDominantIdealFamily.mem_iff]
@@ -81,7 +81,7 @@ example
       ≤ kyFanApproximationGauge 2 Rop := by
   have hk : 0 < (2 : ℕ) := by omega
   let N := KyFanDominantIdealFamily.kyFan (𝕜 := ℂ) 2 hk
-  have hmain := sinTheta_unbounded_spectralSubspace_of_genuineSpectrumGap
+  have hmain := sinTheta_unbounded_spectralSubspace_of_spectrumGap
     N A hA S hS A0 hA0 X Rop hX hXdom hReq hδ hgap
       (KyFanDominantIdealFamily.kyFan_mem (𝕜 := ℂ) 2 hk Rop)
   simpa only [N, KyFanDominantIdealFamily.kyFan_gauge] using hmain.2
@@ -144,7 +144,7 @@ example
         (selfAdjointSpectralSubspaceInclusion (ClosedOperator.ofBounded A)
           (ClosedOperator.ofBounded_isSelfAdjoint A hA) S hS).adjoint) ∘L X‖
       ≤ ‖generalResidual A X A0‖ := by
-  have hmain := sinTheta_bounded_spectralSubspace_of_genuineSpectrumGap
+  have hmain := sinTheta_bounded_spectralSubspace_of_spectrumGap
     (KyFanDominantIdealFamily.operatorNorm (𝕜 := ℂ))
       A hA S hS A0 hA0 X hX hδ hgap (by
         rw [KyFanDominantIdealFamily.mem_iff]

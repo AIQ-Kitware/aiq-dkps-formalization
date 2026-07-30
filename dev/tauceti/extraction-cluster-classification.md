@@ -149,7 +149,7 @@ Ownership classes: `mathlib` · `tauceti` · `davis-kahan` · `spectra-bridge` �
 * **Home**: `DavisKahan/Sylvester/PairwiseSpectrumGap.lean`,
   `…/PairwiseHomogeneousUniqueness.lean`.
 * **Ownership**: `tauceti`. **Status**: `blocked-on-spectra-removal`
-  (`GenuinePairwiseSpectrumGap` uses Spectra bridges).
+  (`PairwiseSpectrumGap` uses Spectra bridges).
 * **PR order**: PR 4 cluster.
 
 ### 2c. Finite-dimensional Sylvester multipliers

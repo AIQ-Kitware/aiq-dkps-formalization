@@ -63,7 +63,7 @@ theorem linearPMapSylvester_homogeneous_eq_zero_of_pairwiseSpectrumGap
     (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
     {X : F →L[ℂ] E} {δ : ℝ}
     (hδ : 0 < δ)
-    (hgap : LinearPMap.GenuinePairwiseSpectrumGap A B δ)
+    (hgap : LinearPMap.PairwiseSpectrumGap A B δ)
     (hEq : TauCeti.LinearPMap.SylvesterEquation A B X 0) :
     X = 0 := by
   exact linearPMapSylvester_homogeneous_eq_zero_of_disjoint_spectrum
@@ -74,7 +74,7 @@ solutions of the same Sylvester equation coincide as soon as the two spectra are
 *disjoint*; no quantitative gap is needed.
 
 The gap version below is this statement composed with
-`GenuinePairwiseSpectrumGap.disjoint`, so a positive separation buys nothing here — it is
+`PairwiseSpectrumGap.disjoint`, so a positive separation buys nothing here — it is
 needed only where a *bound* on the solution is wanted. -/
 theorem linearPMapSylvester_solution_unique_of_disjoint_spectrum
     {A : E →ₗ.[ℂ] E} {B : F →ₗ.[ℂ] F}
@@ -99,7 +99,7 @@ theorem linearPMapSylvester_solution_unique_of_pairwiseSpectrumGap
     (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
     {X Y C : F →L[ℂ] E} {δ : ℝ}
     (hδ : 0 < δ)
-    (hgap : LinearPMap.GenuinePairwiseSpectrumGap A B δ)
+    (hgap : LinearPMap.PairwiseSpectrumGap A B δ)
     (hX : TauCeti.LinearPMap.SylvesterEquation A B X C)
     (hY : TauCeti.LinearPMap.SylvesterEquation A B Y C) :
     X = Y :=
@@ -127,7 +127,7 @@ theorem closedSylvester_homogeneous_eq_zero_of_pairwiseSpectrumGap
     (hA : A.IsSelfAdjoint) (hB : B.IsSelfAdjoint)
     {X : F →L[ℂ] E} {δ : ℝ}
     (hδ : 0 < δ)
-    (hgap : GenuinePairwiseSpectrumGap A B δ)
+    (hgap : PairwiseSpectrumGap A B δ)
     (hEq : HasClosedSylvesterEquation A B X 0) :
     X = 0 := by
   exact linearPMapSylvester_homogeneous_eq_zero_of_pairwiseSpectrumGap
@@ -157,7 +157,7 @@ theorem closedSylvester_solution_unique_of_pairwiseSpectrumGap
     (hA : A.IsSelfAdjoint) (hB : B.IsSelfAdjoint)
     {X Y C : F →L[ℂ] E} {δ : ℝ}
     (hδ : 0 < δ)
-    (hgap : GenuinePairwiseSpectrumGap A B δ)
+    (hgap : PairwiseSpectrumGap A B δ)
     (hX : HasClosedSylvesterEquation A B X C)
     (hY : HasClosedSylvesterEquation A B Y C) :
     X = Y :=

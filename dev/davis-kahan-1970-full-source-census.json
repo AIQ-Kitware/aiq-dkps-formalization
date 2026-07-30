@@ -130,7 +130,7 @@
       ],
       "lean_declarations": [
         "TauCeti.DavisKahanTheory.partIII_tanTheta_ritzResidual_uiNorm",
-        "TauCeti.DavisKahanExt.tanTheta_genuineSpectrum"
+        "TauCeti.DavisKahanExt.tanTheta_spectrum"
       ],
       "notes": "Finite arbitrary-UI-norm and Hilbert-space operator-norm forms are compiled. The source Hilbert-space arbitrary-UI-norm residual and perturbation statements remain open.",
       "next_action": "Reuse the corrected directed Theorem 6.3 Ky-Fan core for the equal-rank source theorem and add the full perturbation companion.",
@@ -509,7 +509,7 @@
         "exact-source-wrappers"
       ],
       "lean_declarations": [
-        "TauCeti.DavisKahan.Experimental.ExactSinTheta.directGenuineOrderedSylvesterEngine_lowerUpper",
+        "TauCeti.DavisKahan.Experimental.ExactSinTheta.directOrderedSylvesterEngine_lowerUpper",
         "TauCeti.DavisKahan1970.unbounded_sylvester_intervalExterior_uiNorm_genuineSpectrum"
       ],
       "notes": "The completed Section 6 route contains the needed constant-one engines, while the exact source theorem alias is still in the full Part III repair campaign.",

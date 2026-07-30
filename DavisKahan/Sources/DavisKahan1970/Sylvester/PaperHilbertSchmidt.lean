@@ -45,7 +45,7 @@ theorem paperHilbertSchmidtEnergy_sylvester_le_of_pairwiseSpectrumGap
     {X C : F →L[ℂ] E}
     (hA : A.IsSelfAdjoint) (hB : B.IsSelfAdjoint)
     {δ : ℝ} (hδ : 0 < δ)
-    (hgap : GenuinePairwiseSpectrumGap A B δ)
+    (hgap : PairwiseSpectrumGap A B δ)
     (hEq : HasClosedSylvesterEquation A B X C) :
     ENNReal.ofReal (δ ^ 2) * paperHilbertSchmidtEnergy X ≤
       paperHilbertSchmidtEnergy C := by
@@ -85,7 +85,7 @@ theorem paperHilbertSchmidt_sylvester_le_of_pairwiseSpectrumGap
     {X C : F →L[ℂ] E}
     (hA : A.IsSelfAdjoint) (hB : B.IsSelfAdjoint)
     {δ : ℝ} (hδ : 0 < δ)
-    (hgap : GenuinePairwiseSpectrumGap A B δ)
+    (hgap : PairwiseSpectrumGap A B δ)
     (hEq : HasClosedSylvesterEquation A B X C)
     (hC : IsPaperHilbertSchmidt C) :
     IsPaperHilbertSchmidt X ∧

@@ -87,10 +87,6 @@ variable {E : Type u} {F : Type v} {G : Type w}
 /-- The modulus `|T| = (T⋆ T)^(1/2)` of a bounded operator between complex
 Hilbert spaces: the positive square root, through the continuous functional
 calculus, of the Gram operator `T⋆ T` on the source space. -/
--- `@[expose]` because consumers `rw [modulus]` to reach the functional-calculus form.
--- Recorded debt: a `modulus_def` lemma plus rewiring is the clean fix. Lane
--- recorded debt, not an endorsement.
-@[expose]
 noncomputable def modulus (T : E →L[ℂ] F) : E →L[ℂ] E :=
   CFC.sqrt (T.adjoint ∘L T)
 

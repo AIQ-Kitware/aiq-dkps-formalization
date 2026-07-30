@@ -35,39 +35,19 @@ variable {E : Type v} {F : Type vF}
   [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
   [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
 
-/-- A pointwise lower modulus comparison transports every approximation
-singular value.  The argument is the exact Courant--Fischer localization: any
-strict lower bound for `a_n A` is realized on an `(n+1)`-dimensional subspace,
-and the pointwise estimate carries that same subspace witness over to `B`.
-
-This is rank-safe.  No averaging of `A` against a second operator is performed,
-so no rank doubling can occur. -/
-theorem approximationSingularValue_le_of_norm_apply_le
-    {G : Type vG} [NormedAddCommGroup G] [InnerProductSpace ℂ G] [CompleteSpace G]
-    (A : E →L[ℂ] F) (B : E →L[ℂ] G) (h : ∀ x : E, ‖A x‖ ≤ ‖B x‖) (n : ℕ) :
-    A.approximationNumber n ≤ B.approximationNumber n :=
-  ContinuousLinearMap.approximationNumber_le_of_norm_apply_le A B h n
-
-/-- Pointwise equality of norms determines every approximation singular value
-on complex Hilbert spaces.  The two operators may have different targets, so
-the conclusion is the heterogeneous singular-sequence relation. -/
-theorem sameApproximationSingularValues_of_norm_apply_eq
-    {G : Type vG} [NormedAddCommGroup G] [InnerProductSpace ℂ G] [CompleteSpace G]
-    (A : E →L[ℂ] F) (B : E →L[ℂ] G) (h : ∀ x : E, ‖A x‖ = ‖B x‖) :
-    A.HasSameApproximationNumbers B :=
-  ContinuousLinearMap.hasSameApproximationNumbers_of_norm_apply_eq A B h
-
 /-- A rectangular operator and its positive source modulus have the same
-complete singular-value sequence.  The modulus acts on `E` while `T` maps into
-`F`, so this is the heterogeneous relation. -/
-theorem sameApproximationSingularValues_rectangularOperatorModulus
-    (T : E →L[ℂ] F) :
-    (ContinuousLinearMap.modulus T).HasSameApproximationNumbers T :=
-  T.modulus_hasSameApproximationNumbers
+complete approximation-number sequence.  The modulus acts on `E` while `T` maps
+into `F`, so this is the heterogeneous relation.
 
-/-- Square-operator specialization. -/
-theorem modulus_sameApproximationSingularValues
-    (T : E →L[ℂ] E) :
+Named for its conclusion.  The previous name said *singular values* where the
+conclusion says `HasSameApproximationNumbers`; the two agree in this
+development, but a name has to describe the statement it is attached to.
+
+The former `modulus_sameApproximationSingularValues`, a "square-operator
+specialization", is gone: its body was identical to this one and `F := E` is a
+legal instantiation, so it was the same theorem under a second name. -/
+theorem modulus_hasSameApproximationNumbers
+    (T : E →L[ℂ] F) :
     (ContinuousLinearMap.modulus T).HasSameApproximationNumbers T :=
   T.modulus_hasSameApproximationNumbers
 

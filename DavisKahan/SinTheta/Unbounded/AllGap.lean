@@ -37,10 +37,10 @@ variable {E F G H : Type v}
   [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
 
 /-- Raw partial-map presentation of the three genuine Spectra all-gap cases. -/
-inductive GenuineUnboundedSylvesterGapPMap
+inductive UnboundedSylvesterGapPMap
     (A : F →ₗ.[ℂ] F) (B : G →ₗ.[ℂ] G) (δ : ℝ) : Prop where
   | intervalExterior {β α : ℝ} (hβα : β ≤ α)
-      (hgap : GenuineUnboundedIntervalExteriorGapPMap A B β α δ)
+      (hgap : UnboundedIntervalExteriorGapPMap A B β α δ)
   | leftAboveRightBelow (c : ℝ)
       (hA : Complex.ofReal ⁻¹' TauCeti.LinearPMap.spectrum A ⊆
         Set.Ici (c + δ))
@@ -52,13 +52,13 @@ inductive GenuineUnboundedSylvesterGapPMap
       (hB : Complex.ofReal ⁻¹' TauCeti.LinearPMap.spectrum B ⊆
         Set.Ici (c + δ))
 
-namespace GenuineUnboundedSylvesterGapPMap
+namespace UnboundedSylvesterGapPMap
 
 omit [CompleteSpace E] [CompleteSpace F] [CompleteSpace G] in
 /-- Package a raw all-gap condition at the current Spectra boundary. -/
 theorem toClosed
     (D : UnboundedSinThetaDataPMap (𝕜 := ℂ) (E := E) (F := F) (G := G))
-    {δ : ℝ} (h : GenuineUnboundedSylvesterGapPMap D.A₀ D.Λ₁ δ) :
+    {δ : ℝ} (h : UnboundedSylvesterGapPMap D.A₀ D.Λ₁ δ) :
     GenuineUnboundedSylvesterGap D.toClosed.A₀ D.toClosed.Λ₁ δ := by
   cases h with
   | intervalExterior hβα hgap =>
@@ -68,7 +68,7 @@ theorem toClosed
   | leftBelowRightAbove c hA hB =>
       exact .leftBelowRightAbove c hA hB
 
-end GenuineUnboundedSylvesterGapPMap
+end UnboundedSylvesterGapPMap
 
 namespace GenuineUnboundedSylvesterGap
 
@@ -79,7 +79,7 @@ theorem toPMap
     {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := F)}
     {B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := G)}
     {δ : ℝ} (h : GenuineUnboundedSylvesterGap A B δ) :
-    GenuineUnboundedSylvesterGapPMap A.toLinearPMap B.toLinearPMap δ := by
+    UnboundedSylvesterGapPMap A.toLinearPMap B.toLinearPMap δ := by
   cases h with
   | intervalExterior hβα hgap =>
       exact .intervalExterior hβα hgap
@@ -92,7 +92,7 @@ end GenuineUnboundedSylvesterGap
 
 /-- Generalized complementary-block theorem with a genuine all-gap spectral
 hypothesis. -/
-theorem generalizedSinTheta_unbounded_of_genuineSpectrumGap
+theorem generalizedSinTheta_unbounded_of_spectrumGap
     (N : KyFanDominantIdealFamily (𝕜 := ℂ))
     (D : UnboundedSinThetaData (𝕜 := ℂ) (E := E) (F := F) (G := G))
     (hA : D.A.IsSelfAdjoint)
@@ -111,7 +111,7 @@ theorem generalizedSinTheta_unbounded_of_genuineSpectrumGap
         ≤ N.gauge D.residual := by
   have hEq := unbounded_adjoint_residual_block_identity D hA hA₀ hΛ₁
   have hC := adjointResidualBlock_mem_and_gauge_le N.toSymmetricOperatorIdealFamily D hF₁ hR
-  have hRaw := davisKahan1970_sylvester_of_genuineSpectrumGap
+  have hRaw := davisKahan1970_sylvester_of_spectrumGap
     N hA₀ hΛ₁ hδ hgap hEq hC.1
   have hFrame := lowerFrame_sinThetaBlock_mem_and_gauge_le
     N.toSymmetricOperatorIdealFamily D.X D.F₁ hframe hε hRaw.1
@@ -126,7 +126,7 @@ theorem generalizedSinTheta_unbounded_of_genuineSpectrumGap
 
 /-- Raw partial-map generalized sine-theta endpoint for the genuine all-gap
 Spectra boundary. -/
-theorem linearPMap_generalizedSinTheta_unbounded_of_genuineSpectrumGap
+theorem linearPMap_generalizedSinTheta_unbounded_of_spectrumGap
     (N : KyFanDominantIdealFamily (𝕜 := ℂ))
     (D : UnboundedSinThetaDataPMap (𝕜 := ℂ) (E := E) (F := F) (G := G))
     (hA : _root_.IsSelfAdjoint D.A)
@@ -136,16 +136,16 @@ theorem linearPMap_generalizedSinTheta_unbounded_of_genuineSpectrumGap
     {δ ε : ℝ}
     (hδ : 0 < δ) (hε : 0 < ε)
     (hframe : LowerFrameBound D.X ε)
-    (hgap : GenuineUnboundedSylvesterGapPMap D.A₀ D.Λ₁ δ)
+    (hgap : UnboundedSylvesterGapPMap D.A₀ D.Λ₁ δ)
     (hR : N.Mem D.residual) :
     N.Mem (sinThetaBlock D.X D.F₁ hframe hε) ∧
       δ * ε * N.gauge (sinThetaBlock D.X D.F₁ hframe hε) ≤
         N.gauge D.residual := by
-  exact generalizedSinTheta_unbounded_of_genuineSpectrumGap N D.toClosed
+  exact generalizedSinTheta_unbounded_of_spectrumGap N D.toClosed
     hA hA₀ hΛ₁ hF₁ hδ hε hframe hgap.toClosed hR
 
 /-- Exact directed-angle form of the genuine all-gap generalized theorem. -/
-theorem generalizedSinTheta_unbounded_exact_of_genuineSpectrumGap
+theorem generalizedSinTheta_unbounded_exact_of_spectrumGap
     (N : KyFanDominantIdealFamily (𝕜 := ℂ))
     (D : UnboundedSinThetaData (𝕜 := ℂ) (E := E) (F := F) (G := G))
     (F₀ : H →L[ℂ] E)
@@ -163,7 +163,7 @@ theorem generalizedSinTheta_unbounded_exact_of_genuineSpectrumGap
       δ * ε * N.gauge
           (directedSinThetaOperator D.X F₀ hframe hε)
         ≤ N.gauge D.residual := by
-  have hBlock := generalizedSinTheta_unbounded_of_genuineSpectrumGap
+  have hBlock := generalizedSinTheta_unbounded_of_spectrumGap
     N D hA hA₀ hΛ₁ hdecomp.isometry₁ hδ hε hframe hgap hR
   have hAngle := sinThetaBlock_mem_and_gauge_eq_directedSinThetaOperator
     N.toSymmetricOperatorIdealFamily D.X F₀ D.F₁ hframe hε hdecomp hBlock.1
@@ -174,7 +174,7 @@ theorem generalizedSinTheta_unbounded_exact_of_genuineSpectrumGap
 
 /-- Raw partial-map exact directed-angle endpoint for the genuine all-gap
 Spectra boundary. -/
-theorem linearPMap_generalizedSinTheta_unbounded_exact_of_genuineSpectrumGap
+theorem linearPMap_generalizedSinTheta_unbounded_exact_of_spectrumGap
     (N : KyFanDominantIdealFamily (𝕜 := ℂ))
     (D : UnboundedSinThetaDataPMap (𝕜 := ℂ) (E := E) (F := F) (G := G))
     (F₀ : H →L[ℂ] E)
@@ -185,14 +185,14 @@ theorem linearPMap_generalizedSinTheta_unbounded_exact_of_genuineSpectrumGap
     {δ ε : ℝ}
     (hδ : 0 < δ) (hε : 0 < ε)
     (hframe : LowerFrameBound D.X ε)
-    (hgap : GenuineUnboundedSylvesterGapPMap D.A₀ D.Λ₁ δ)
+    (hgap : UnboundedSylvesterGapPMap D.A₀ D.Λ₁ δ)
     (hR : N.Mem D.residual) :
     N.Mem
         (directedSinThetaOperator D.X F₀ hframe hε) ∧
       δ * ε * N.gauge
           (directedSinThetaOperator D.X F₀ hframe hε)
         ≤ N.gauge D.residual := by
-  have hBlock := linearPMap_generalizedSinTheta_unbounded_of_genuineSpectrumGap
+  have hBlock := linearPMap_generalizedSinTheta_unbounded_of_spectrumGap
     N D hA hA₀ hΛ₁ hdecomp.isometry₁ hδ hε hframe hgap hR
   have hAngle := sinThetaBlock_mem_and_gauge_eq_directedSinThetaOperator
     N.toSymmetricOperatorIdealFamily D.X F₀ D.F₁ hframe hε hdecomp hBlock.1
@@ -203,7 +203,7 @@ theorem linearPMap_generalizedSinTheta_unbounded_exact_of_genuineSpectrumGap
 
 /-- Raw partial-map isometric specialization of the genuine all-gap endpoint.
 It is derived from the raw lower-frame theorem at frame bound one. -/
-theorem linearPMap_sinTheta_unbounded_exact_of_genuineSpectrumGap
+theorem linearPMap_sinTheta_unbounded_exact_of_spectrumGap
     (N : KyFanDominantIdealFamily (𝕜 := ℂ))
     (D : UnboundedSinThetaDataPMap (𝕜 := ℂ) (E := E) (F := F) (G := G))
     (F₀ : H →L[ℂ] E)
@@ -213,21 +213,21 @@ theorem linearPMap_sinTheta_unbounded_exact_of_genuineSpectrumGap
     (hX : IsometricEmbedding D.X)
     (hdecomp : OrthogonalExactDecomposition F₀ D.F₁)
     {δ : ℝ} (hδ : 0 < δ)
-    (hgap : GenuineUnboundedSylvesterGapPMap D.A₀ D.Λ₁ δ)
+    (hgap : UnboundedSylvesterGapPMap D.A₀ D.Λ₁ δ)
     (hR : N.Mem D.residual) :
     N.Mem
         ((ContinuousLinearMap.id ℂ E - F₀ ∘L F₀.adjoint) ∘L D.X) ∧
       δ * N.gauge
           ((ContinuousLinearMap.id ℂ E - F₀ ∘L F₀.adjoint) ∘L D.X)
         ≤ N.gauge D.residual := by
-  have hGeneral := linearPMap_generalizedSinTheta_unbounded_exact_of_genuineSpectrumGap
+  have hGeneral := linearPMap_generalizedSinTheta_unbounded_exact_of_spectrumGap
     N D F₀ hA hA₀ hΛ₁ hdecomp hδ zero_lt_one
       (lowerFrameBound_one_of_isometry hX) hgap hR
   rw [directedSinThetaOperator_eq_of_isometry D.X F₀ hX] at hGeneral
   simpa using hGeneral
 
 /-- Exact isometric specialization of the genuine all-gap theorem. -/
-theorem sinTheta_unbounded_exact_of_genuineSpectrumGap
+theorem sinTheta_unbounded_exact_of_spectrumGap
     (N : KyFanDominantIdealFamily (𝕜 := ℂ))
     (D : UnboundedSinThetaData (𝕜 := ℂ) (E := E) (F := F) (G := G))
     (F₀ : H →L[ℂ] E)
@@ -246,7 +246,7 @@ theorem sinTheta_unbounded_exact_of_genuineSpectrumGap
         ≤ N.gauge D.residual := by
   have hEq := unbounded_adjoint_residual_block_identity D hA hA₀ hΛ₁
   have hC := adjointResidualBlock_mem_and_gauge_le N.toSymmetricOperatorIdealFamily D hdecomp.isometry₁ hR
-  have hRaw := davisKahan1970_sylvester_of_genuineSpectrumGap
+  have hRaw := davisKahan1970_sylvester_of_spectrumGap
     N hA₀ hΛ₁ hδ hgap hEq hC.1
   have hAngle := isometricComplementaryBlock_mem_and_gauge_eq_directed
     N.toSymmetricOperatorIdealFamily D.X F₀ D.F₁ hX hdecomp hRaw.1
@@ -288,7 +288,7 @@ theorem result
             (directedSinThetaOperator P.data.X P.exactMap
               P.lowerFrame P.frameLowerBound_pos)
         ≤ N.gauge P.data.residual :=
-  generalizedSinTheta_unbounded_exact_of_genuineSpectrumGap
+  generalizedSinTheta_unbounded_exact_of_spectrumGap
     N P.data P.exactMap P.ambient_selfAdjoint P.trial_selfAdjoint
       P.complement_selfAdjoint P.exact_decomposition P.gap_pos
       P.frameLowerBound_pos P.lowerFrame P.spectral_gap P.residual_mem
@@ -325,7 +325,7 @@ theorem result
           ((ContinuousLinearMap.id ℂ E -
             P.exactMap ∘L P.exactMap.adjoint) ∘L P.data.X)
         ≤ N.gauge P.data.residual :=
-  sinTheta_unbounded_exact_of_genuineSpectrumGap
+  sinTheta_unbounded_exact_of_spectrumGap
     N P.data P.exactMap P.ambient_selfAdjoint P.trial_selfAdjoint
       P.complement_selfAdjoint P.trial_isometry P.exact_decomposition
       P.gap_pos P.spectral_gap P.residual_mem
