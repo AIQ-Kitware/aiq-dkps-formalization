@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
-import DavisKahan.Experimental.MathAhead.HiddenFoundations.HilbertSchmidtComplexFamily
+import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtComplexFamily
 import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtFiniteRank
 import DavisKahan.SpectralTheory.ClosedOperator.Complexification
 
@@ -64,6 +64,9 @@ noncomputable def realPartOperator
       _ ≤ ‖T‖ * ‖ofReal x‖ := T.le_opNorm _
       _ = ‖T‖ * ‖x‖ := by rw [ofReal.norm_map]
 
+omit [CompleteSpace E] [CompleteSpace F] in
+/-- The real-part operator acts by taking the real coordinate of the
+complexified image of the real-coordinate embedding. -/
 @[simp]
 theorem realPartOperator_apply
     (T : Eℂ →L[ℂ] Fℂ) (x : E) :
@@ -73,19 +76,22 @@ theorem realPartOperator_apply
 def MapsRealCopy (T : Eℂ →L[ℂ] Fℂ) : Prop :=
   ∀ x : E, im (T (ofReal x)) = 0
 
+omit [CompleteSpace E] [CompleteSpace F] in
 /-- Every coordinatewise complexification maps real vectors to real vectors. -/
 theorem mapsRealCopy_complexify (T : E →L[ℝ] F) :
     MapsRealCopy (complexify T) := by
   intro x
-  simp [MapsRealCopy]
+  simp
 
+omit [CompleteSpace F] in
 /-- A vector with zero imaginary coordinate is its real-coordinate embedding. -/
 theorem eq_ofReal_re_of_im_eq_zero
     (z : Fℂ) (hz : im z = 0) : ofReal (re z) = z := by
   apply RealComplexification.ext
   · simp
-  · simpa [hz]
+  · simp [hz]
 
+omit [CompleteSpace E] [CompleteSpace F] in
 /-- A complex-linear operator that preserves the real copy is exactly the
 complexification of its real restriction. -/
 theorem complexify_realPartOperator_eq
@@ -102,6 +108,7 @@ theorem complexify_realPartOperator_eq
   rw [hz]
   simp only [map_add, map_smul, complexify_ofReal, hreal]
 
+omit [CompleteSpace E] [CompleteSpace F] in
 /-- Convergence in operator norm preserves the property of mapping the real
 copy into itself. -/
 theorem mapsRealCopy_of_tendsto

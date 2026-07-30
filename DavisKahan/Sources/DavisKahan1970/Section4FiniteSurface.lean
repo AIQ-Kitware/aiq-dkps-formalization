@@ -5,7 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
 import DavisKahan.FiniteDimensional.DirectRotation
-import DavisKahan.Experimental.MathAhead.Section4.InfiniteIdealDominance
+import DavisKahan.Sources.DavisKahan1970.Section4Dominance
 
 /-!
 # Certified finite-dimensional Section 4 surface
@@ -68,7 +68,7 @@ theorem finite_proposition4_1_approximationSingularValue
 
 /-- Package the finite Proposition 4.1 result as the certificate consumed by
 `restrictedDisplacement_idealGauge_le`. -/
-noncomputable def finite_restrictedDisplacementDominance
+theorem finite_restrictedDisplacementDominance
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hacute : DavisKahanTheory.IsAcute U V)

@@ -5,8 +5,10 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidt
 import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtBasis
+import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtComplexFamily
 import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtFiniteRank
 import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtFrobenius
+import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtRealDescent
 import DavisKahan.Sources.DavisKahan1970.Ideals.NormCorrespondence
 import DavisKahan.Sources.DavisKahan1970.Ideals.RankOneNormalization
 import DavisKahan.Sources.DavisKahan1970.Ideals.UnitaryInvariantNormDefinite
