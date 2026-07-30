@@ -41,9 +41,18 @@ obligation this document previously described is discharged: both bridges above
 were written, repaired, and accepted without narrowing the theorem, and the
 library carries **no proof escapes** across its 21 modules.
 
+### Axioms (recorded 2026-07-30, lane CLAIM-DOC)
+
+```
+'TauCeti.DavisKahan.FinishTanTwoTheta.paperFaithful_tanTwoTheta_uiNorm'
+  depends on axioms: [propext, Classical.choice, Quot.sound]
+```
+
+The three standard Lean axioms and nothing else — no `sorryAx`, no custom
+axiom. This discharges the obligation this document previously listed.
+
 What remains:
 
-* run `#print axioms` on the unrestricted theorem and record the result here;
 * the unrestricted **unbounded** sharp ideal theorem, which is separate work and
   not part of this bounded target.
 
@@ -54,3 +63,12 @@ green `lake build` does **not** compile anything here. The results above are
 proved but unguarded: a refactor elsewhere can break them while every gate stays
 green. Build it explicitly with `lake build FinishTanTwoTheta`. Adding the
 target is tracked as lane `FTT-PROMOTE` in `dev/LANES.md`.
+
+**This is no longer hypothetical.** On 2026-07-30 the library was found broken by
+lane CLAIM-DOC: the P-EXP migration retyped the Davis--Kahan ideal-family
+interface onto `TauCeti.SymmetricOperatorIdealFamily`, and eight `Experimental`
+modules this library depends on still passed the historical
+`RectangularSymmetricIdealFamily`. Every default gate was green throughout;
+`lake build FinishTanTwoTheta` failed. The modules were retyped and the library
+builds again (9204 jobs, 0 errors), but the failure mode this section warns about
+occurred exactly as described, roughly a day after it was written down.

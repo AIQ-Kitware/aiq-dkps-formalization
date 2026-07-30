@@ -38,8 +38,14 @@ These are no longer blockers for coverage of the paper's numbered theorems.
 `lakefile.toml` does not list `FinishYuWangSamworth` in `defaultTargets`, so a
 green `lake build` does **not** compile anything here. The generated census
 (`dev/yu-wang-samworth-2015-full-source-census.json`) quantifies what that
-costs: of **19 formalized items only 10 are guarded by the default build**, so
-nine proved results can be broken by a refactor while every gate stays green.
+costs. **Re-measured 2026-07-30 (lane CLAIM-DOC): the census now carries 22
+items, of which 12 resolve to declarations in `defaultTargets` libraries, 7
+resolve only into `Finish*`, and 3 could not be located by name at all.** The
+earlier figure in this document, 19 items with 10 guarded, is superseded.
+
+The three unlocatable items are worth a look on their own: a census entry whose
+declarations cannot be found by name is either renamed or gone, and neither is
+visible to any gate.
 
 Coverage and protection against regression are different properties. This
 document asserts the first; the second is not yet true. Build explicitly with
