@@ -49,6 +49,27 @@ operator applied at `x` is that value.
 
 Only **invariance** of `W` under `R` is assumed — not `Reduces`, and nothing
 about `Wᗮ`.  That is all the argument uses.
+
+## Sources
+
+*Follows nothing in particular*: the identity is the standard orthogonal
+splitting of a quadratic form, and the proof is Pythagoras plus the vanishing of
+the cross terms.
+
+## Provenance
+
+* Original repository: Davis--Kahan/DKPS formalization (Kitware, Inc.).
+* Original module: extracted from the bodies of
+  `ForTauCeti/Analysis/InnerProductSpace/BoundedOperator/SinTheta.lean`
+  (`sinTheta_directed_coercive`) and
+  `ForTauCeti/Analysis/InnerProductSpace/SinTheta/OperatorNorm.lean`
+  (`exists_isSymmetric_comp_sub_comp_eq`), where it had been proved four times
+  inline.
+* Extraction class: **de-duplicated in place** — no statement is new; the four
+  inline copies become one named lemma and its two callers.
+* Original authors / copyright: Jon Crall, Claude Opus 5; Copyright (c) 2026
+  Kitware, Inc.; Apache 2.0.
+* Spectra influence: **none** — imports only Mathlib.
 -/
 
 open scoped InnerProductSpace
