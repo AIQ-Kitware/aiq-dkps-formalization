@@ -141,7 +141,7 @@ PosDef.lean`). **Recommendation:** factorization → `PosDef.lean`; entry helper
 ## D-7. PSD — discovered upstream gap (NOT for now)
 
 **RESOLVED (Fable, 2026-06-12):** the gap is now filled — candidate #14
-(`ForMathlib/LinearAlgebra/Matrix/RankFactorization.lean`) supplies
+(`ForTauCeti/LinearAlgebra/Matrix/RankFactorization.lean`) supplies
 `exists_eq_mul_rank` / `exists_eq_mul_of_rank_le` / `rank_le_iff_exists_eq_mul`,
 and the PSD forward direction is reproved through it (square factorization →
 rank-factor → square factorization), eliminating the `Classical.choose`/embedding

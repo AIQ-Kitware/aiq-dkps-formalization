@@ -127,7 +127,7 @@ scope now.
 ### Track 3 — net-new Fable content (R4 + rank factorization DONE 2026-06-12, user-directed)
 
 **Rank factorization (fable-options #1) ✅ DONE** — candidate #14,
-`ForMathlib/LinearAlgebra/Matrix/RankFactorization.lean`
+`ForTauCeti/LinearAlgebra/Matrix/RankFactorization.lean`
 (`exists_eq_mul_rank` / `exists_eq_mul_of_rank_le` / `rank_le_iff_exists_eq_mul`).
 Used to reprove the PSD forward direction through-API (audit §2.3 discharged: the
 `Classical.choose`/embedding construction is gone; R2b verdict superseded).

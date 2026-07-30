@@ -1,7 +1,7 @@
 /-
 # Berge maximum theorem fragments (pending: likely too narrow) -- solution / dependency audit
 -/
-import ForMathlib.Topology.Berge
+import ForTauCeti.Topology.Berge
 
 #print axioms ForMathlib.upperHemicontinuousAt_isMinOn
 #print axioms ForMathlib.continuous_iInf_of_isCompact
