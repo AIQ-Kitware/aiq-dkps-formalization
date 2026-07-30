@@ -214,6 +214,7 @@ noncomputable def ofLp (b : HilbertBasis ι 𝕜 F) (f : lp (fun _ : ι => E) 2)
 omit [CompleteSpace F] in
 /-- The operator rebuilt from a column vector acts by summing the columns against the basis
 coefficients. -/
+@[simp]
 theorem ofLp_apply (b : HilbertBasis ι 𝕜 F) (f : lp (fun _ : ι => E) 2) (x : F) :
     ofLp b f x = ∑' i, (b.repr x i) • f i := rfl
 omit [CompleteSpace F] in
