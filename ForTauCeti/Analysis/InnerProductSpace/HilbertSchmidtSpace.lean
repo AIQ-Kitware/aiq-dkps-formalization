@@ -32,6 +32,13 @@ No tensor product is constructed anywhere.  The donor realises the same space
 as a Hilbert tensor product `conj F ⊗ E`, whose closure was measured at 21,581
 lines; the three statements below are what that closure was being paid for.
 
+## Sources
+
+The identification of the Hilbert--Schmidt class with `ℓ²` of columns is standard
+(Reed--Simon, *Methods of Modern Mathematical Physics I*; Simon, *Trace Ideals*);
+see `ForTauCeti/Analysis/InnerProductSpace/HilbertSchmidtLp.lean`, which carries
+the presentation this module packages.
+
 ## Provenance
 
 *New.*  The statements are chosen to match the shape of the donor's

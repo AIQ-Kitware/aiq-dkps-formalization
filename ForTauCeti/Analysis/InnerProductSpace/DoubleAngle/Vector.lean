@@ -79,6 +79,13 @@ recovers the left-hand side of the identity and yields
 * C. Davis and W. M. Kahan, *The rotation of eigenvectors by a
   perturbation. III*, SIAM J. Numer. Anal. 7 (1970), 1–46 (the sin 2Θ theorem).
 
+## Sources
+
+The double-angle identity for the vector case follows Davis--Kahan's
+`sin 2Θ`/`tan 2Θ` development; see
+`prose/distilled_literature/DavisKahan1970_part_III.tex` and, for the branch
+selection this avoids, `prose/distilled_literature/DoubleAngle_branch_selection_dossier.tex`.
+
 ## Provenance
 
 *Moved, not restated.*  This file was

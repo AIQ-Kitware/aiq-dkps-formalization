@@ -17,6 +17,11 @@ The sequence formulation is deliberate: it records exactly the two convergences
 the closed-graph argument consumes, without installing a second topology on the
 domain subtype.
 
+## Sources
+
+*Follows nothing in particular*: a sequence-level formulation of graph-norm density,
+chosen to avoid installing a second topology on the domain subtype.
+
 ## Provenance
 
 * Original module: `DavisKahan/Sources/DavisKahan1970/SineTheta/CommonCore.lean`,

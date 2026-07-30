@@ -11,6 +11,14 @@ import ForTauCeti.Analysis.InnerProductSpace.Residual.Ritz
 General trial-map residuals, complementary blocks, and the projected Sylvester
 identity before orthonormalization.
 
+## Sources
+
+The residual of a trial map generalises the Ritz residual of
+`ForTauCeti/Analysis/InnerProductSpace/Residual/Ritz.lean`, whose source is
+Davis--Kahan's residual form
+(`prose/core-arguments/Davis-Kahan-1970-part-III-core-arguments.tex`).  Dropping
+isometry to a lower frame bound is this library's generalisation.
+
 ## Provenance
 
 *Moved, not restated.*  This file was

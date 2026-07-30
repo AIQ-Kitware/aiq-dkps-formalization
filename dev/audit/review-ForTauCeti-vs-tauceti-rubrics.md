@@ -161,6 +161,19 @@ particular and the rubric says not to invent requirements. **The lane is to deci
 per module and write the citation where there is one** — the spectral theorem via
 the Cayley transform is textbook, and saying which textbook is cheap. → `RUB-ATTRIB`
 
+**DONE 2026-07-30, and the split was 23 / 9.** Twenty-three modules follow
+identifiable mathematics and now cite it — the classical spectral-theorem
+construction (Rudin, Reed–Simon) for the Borel-calculus chain and the unbounded
+spectral measure, the `ℓ²`-of-columns presentation (Reed–Simon, Simon's *Trace
+Ideals*) for the Hilbert–Schmidt group, `prose/core-arguments/Davis-Kahan-1970-part-III-core-arguments.tex`
+for the residual group, and `prose/distilled_literature/{BhatiaDavisMcIntosh1983_…,
+AlbeverioMakarovMotovilov2001_…}.tex` plus Rosenblum for the Sylvester group. Nine
+follow nothing in particular and **say so in words**, which is the rubric's own
+instruction for routine work and is what stops the next audit re-reporting them.
+Citations are by author and result and by in-tree path, deliberately without page
+or theorem numbers: a citation this tree cannot verify is worse than none. Modules
+citing no source: **32 → 0**.
+
 ## Negative results, recorded so they are not re-derived
 
 - **Naming does not overstate.** Zero `_iff`-named theorems without an `↔` in the

@@ -13,6 +13,13 @@ import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Bound
 The Sylvester operator, spectral-separation predicates, injectivity, and the
 canonical finite-dimensional solution.
 
+## Sources
+
+Solvability of `A X - X B = C` under separated spectra is Rosenblum's theorem, and
+the norm estimate under a spectral gap is Bhatia--Davis--McIntosh; both are
+distilled in
+`prose/distilled_literature/BhatiaDavisMcIntosh1983_spectral_subspaces_sylvester.tex`.
+
 ## Provenance
 
 *Moved, not restated.*  This file was

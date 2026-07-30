@@ -26,6 +26,11 @@ the argument is "a self-adjoint operator has no non-real eigenvalue".  Here
 `conj z = z`, so a vector orthogonal to the range is an honest eigenvector at
 `z`, and the lower bound kills it directly.
 
+## Sources
+
+*Follows nothing in particular*: the real-point case of a resolvent criterion, factored
+so that the caller supplies the lower bound the non-real case gets for free.
+
 ## Provenance
 
 *New.*  The closed-range argument follows `isClosed_range_shiftMap`, with the
