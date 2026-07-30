@@ -16,6 +16,7 @@ Built on the Sylvester operator bound (`opNorm_le_div_of_comp_sub_comp_eq`)
 without any dimension factor.
 -/
 
+import ForTauCeti.Analysis.InnerProductSpace.ReducedExtension
 import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Bound
 import ForTauCeti.Analysis.InnerProductSpace.DoubleAngle.Vector
 import ForTauCeti.Analysis.InnerProductSpace.CourantFischer
@@ -101,14 +102,8 @@ omit [FiniteDimensional 𝕜 E] [CompleteSpace E] in
 projection and of the complementary part add to the squared norm. -/
 private theorem norm_sq_eq_starProjection_add_sub' {W : Submodule 𝕜 E}
     [W.HasOrthogonalProjection] (x : E) :
-    ‖x‖ ^ 2 = ‖W.starProjection x‖ ^ 2 + ‖x - W.starProjection x‖ ^ 2 := by
-  have hpx : W.starProjection x ∈ W := W.starProjection_apply_mem x
-  have hrest : x - W.starProjection x ∈ Wᗮ := W.sub_starProjection_mem_orthogonal x
-  have h0 : RCLike.re ⟪W.starProjection x, x - W.starProjection x⟫_𝕜 = 0 := by
-    rw [Submodule.inner_right_of_mem_orthogonal hpx hrest]; simp
-  have hns := norm_add_sq (𝕜 := 𝕜) (W.starProjection x) (x - W.starProjection x)
-  rw [show W.starProjection x + (x - W.starProjection x) = x by abel, h0] at hns
-  linarith
+    ‖x‖ ^ 2 = ‖W.starProjection x‖ ^ 2 + ‖x - W.starProjection x‖ ^ 2 :=
+  TauCeti.norm_sq_eq_starProjection_add_sub x
 
 omit [CompleteSpace E] in
 /-- **The quadratic form of a reduced extension splits.**  For `R : E →ₗ[𝕜] E`
@@ -133,43 +128,14 @@ private theorem re_inner_reducedExtension_self' {R : E →ₗ[𝕜] E}
         + ((κ : ℝ) : 𝕜) • (1 - W.starProjection)) x, x⟫_𝕜
       = RCLike.re ⟪R (W.starProjection x), W.starProjection x⟫_𝕜
         + κ * ‖x - W.starProjection x‖ ^ 2 := by
-  have hpx : W.starProjection x ∈ W := W.starProjection_apply_mem x
-  have hrest : x - W.starProjection x ∈ Wᗮ := W.sub_starProjection_mem_orthogonal x
-  have hxeq : (LinearMap.toContinuousLinearMap R ∘L W.starProjection
+  have hval : (LinearMap.toContinuousLinearMap R ∘L W.starProjection
       + ((κ : ℝ) : 𝕜) • (1 - W.starProjection)) x
       = R (W.starProjection x) + ((κ : ℝ) : 𝕜) • (x - W.starProjection x) := by
     simp only [add_apply, ContinuousLinearMap.comp_apply,
       LinearMap.coe_toContinuousLinearMap', smul_apply, sub_apply,
       one_apply_eq_self]
-  have hre : RCLike.re ⟪(LinearMap.toContinuousLinearMap R ∘L W.starProjection
-        + ((κ : ℝ) : 𝕜) • (1 - W.starProjection)) x, x⟫_𝕜
-      = RCLike.re ⟪R (W.starProjection x), x⟫_𝕜
-        + κ * RCLike.re ⟪x - W.starProjection x, x⟫_𝕜 := by
-    rw [hxeq, inner_add_left, inner_smul_left, RCLike.conj_ofReal, map_add,
-      RCLike.re_ofReal_mul]
-  have h1 : RCLike.re ⟪R (W.starProjection x), x⟫_𝕜
-      = RCLike.re ⟪R (W.starProjection x), W.starProjection x⟫_𝕜 := by
-    have hz : ⟪R (W.starProjection x), x - W.starProjection x⟫_𝕜 = 0 :=
-      Submodule.inner_right_of_mem_orthogonal (hinv _ hpx) hrest
-    have hsplit : ⟪R (W.starProjection x), x⟫_𝕜
-        = ⟪R (W.starProjection x), W.starProjection x⟫_𝕜
-          + ⟪R (W.starProjection x), x - W.starProjection x⟫_𝕜 := by
-      rw [← inner_add_right]; congr 1; abel
-    rw [hsplit, hz, add_zero]
-  have h2 : RCLike.re ⟪x - W.starProjection x, x⟫_𝕜
-      = ‖x - W.starProjection x‖ ^ 2 := by
-    have hz : ⟪x - W.starProjection x, W.starProjection x⟫_𝕜 = 0 :=
-      Submodule.inner_left_of_mem_orthogonal hpx hrest
-    have hsplit : ⟪x - W.starProjection x, x⟫_𝕜
-        = ⟪x - W.starProjection x, x - W.starProjection x⟫_𝕜 := by
-      have h' : ⟪x - W.starProjection x, x⟫_𝕜
-          = ⟪x - W.starProjection x, W.starProjection x⟫_𝕜
-            + ⟪x - W.starProjection x, x - W.starProjection x⟫_𝕜 := by
-        rw [← inner_add_right]; congr 1; abel
-      rw [h', hz, zero_add]
-    rw [hsplit, inner_self_eq_norm_sq]
-  rw [hre, h1, h2]
-
+  rw [hval]
+  exact TauCeti.re_inner_reducedExtension_self hinv κ x
 
 /-- **The norm-free Davis–Kahan setup.**  From the two invariant subspaces and
 their quadratic-form separation, builds the coercive `A` and the bounded `B`
