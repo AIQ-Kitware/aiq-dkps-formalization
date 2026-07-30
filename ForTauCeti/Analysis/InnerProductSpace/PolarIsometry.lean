@@ -145,6 +145,7 @@ noncomputable def polarIsometryOfIsUnitModulus (M : E →L[ℂ] F) : E →L[ℂ]
   M ∘L Ring.inverse M.modulus
 
 /-- The defining formula: the polar isometry sends `x` to `M (|M|⁻¹ x)`. -/
+@[simp]
 theorem polarIsometryOfIsUnitModulus_apply (M : E →L[ℂ] F) (x : E) :
     M.polarIsometryOfIsUnitModulus x = M (Ring.inverse M.modulus x) := rfl
 
@@ -177,6 +178,7 @@ theorem polarIsometryOfIsUnitModulus_comp_modulus :
     one_def, comp_id]
 
 /-- The polar identity, pointwise: the polar isometry carries `|M| x` back to `M x`. -/
+@[simp]
 theorem polarIsometryOfIsUnitModulus_modulus_apply (x : E) :
     M.polarIsometryOfIsUnitModulus (M.modulus x) = M x := by
   rw [← comp_apply, polarIsometryOfIsUnitModulus_comp_modulus hM]

@@ -75,6 +75,7 @@ noncomputable def neumannFactor (z : 𝕜) : E →L[𝕜] E :=
 
 omit [CompleteSpace E] in
 /-- The Neumann factor acts as the geometric series `∑ ((z - w) R(z))ⁿ`. -/
+@[simp]
 theorem neumannFactor_apply (z : 𝕜) (ψ : E) :
     neumannFactor hz₀ z ψ = ψ - (z - z₀) • resolvent A hz₀ ψ := by
   simp [neumannFactor]

@@ -27,6 +27,13 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
 variable {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
   [CompleteSpace F]
 
+/-- The assumptions under which `sinAngleOperator` is defined in
+`SinTheta/General` — it is built from `CFC.abs`, whose continuous functional
+calculus Mathlib supplies for `𝕜 = ℂ`.  Lean includes these only in the
+declarations that actually mention the sine operator. -/
+variable [Algebra ℝ (E →L[𝕜] E)] [IsScalarTower ℝ 𝕜 (E →L[𝕜] E)]
+  [ContinuousFunctionalCalculus ℝ (E →L[𝕜] E) IsSelfAdjoint]
+
 /-- Mirror defect used in the reflection proof of `sin 2Θ`. -/
 noncomputable def reflectionDefect (U : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] (A : E →L[𝕜] E) : E →L[𝕜] E :=
