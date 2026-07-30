@@ -76,9 +76,14 @@ REPO_LEDGER = {
         "def SemiboundedBelow",
         "def SemiboundedAbove",
     ],
-    # Repointed 2026-07-30 (lane CLAIM-DOC): the Spectra snapshot moved from
-    # `vendor/` to `retired/` when the dependency was retired.  This is a grounding
-    # reference to the donor, not an import -- rule 6 still forbids importing it.
+    # EXTERNAL as of 2026-07-30 (lane SPECTRA-FORK): the vendored Spectra source was
+    # deleted from this repository.  This is a grounding reference to the donor, not an
+    # import -- rule 6 still forbids importing it -- and the three theorems live in
+    # UNMODIFIED upstream code, so they are not in `retired/patches-Spectra/` either: a
+    # diff only carries what changed.  The reference is therefore verifiable only against
+    # upstream, and `main()` reports it as EXTERNAL rather than passing or failing it.
+    # Silently dropping it would erase a real provenance claim; failing on it would make
+    # the gate red for something no local checkout can answer.
     "retired/Spectra/Spectra/SpectralTheory/Algebra.lean": [
         "theorem spectralProjection_congr",
         "theorem energy_lower_bound_of_spectralProjection_Iic_eq_zero",
@@ -102,10 +107,22 @@ FORBIDDEN = [
 ]
 
 
+#: Grounding references whose source is no longer in this repository.  Verifiable only
+#: against the upstream coordinates recorded in `retired/patches-Spectra/README.md`.
+EXTERNAL_PREFIXES = ("retired/Spectra/",)
+
+UPSTREAM_NOTE = ("github.com/adambornemann-glitch/Spectra @ "
+                 "8dbaaf6728d1342ae16acf79fd7eef7c59b37e63")
+
+
 def main() -> int:
     errors: list[str] = []
+    external: list[str] = []
     for rel, needles in REPO_LEDGER.items():
         path = REPO / rel
+        if rel.startswith(EXTERNAL_PREFIXES):
+            external.append(f"{rel} ({len(needles)} references)")
+            continue
         if not path.is_file():
             errors.append(f"missing source file: {rel}")
             continue
@@ -133,7 +150,14 @@ def main() -> int:
             print(f"- {error}", file=sys.stderr)
         return 1
     print("grounding audit passed")
-    print(f"checked {len(REPO_LEDGER)} repository source files")
+    print(f"checked {len(REPO_LEDGER) - len(external)} repository source files")
+    if external:
+        print(f"{len(external)} grounding reference(s) are EXTERNAL and were not checked "
+              f"locally -- the donor source is no longer vendored:")
+        for item in external:
+            print(f"  - {item}")
+        print(f"  verify against {UPSTREAM_NOTE}")
+        print("  (rebuild recipe: retired/patches-Spectra/README.md)")
     return 0
 
 
