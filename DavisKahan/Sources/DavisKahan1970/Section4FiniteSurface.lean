@@ -45,8 +45,8 @@ theorem finite_proposition4_1_singularValues
     (hacute : DavisKahanTheory.IsAcute U V)
     (W : E ≃ₗᵢ[𝕜] E) (hmap : U.map W.toLinearMap = V) (n : ℕ) :
     ((LinearMap.id - (DavisKahanTheory.directRotation U V hacute).toLinearMap) ∘ₗ
-        DavisKahanTheory.projection U).singularValues n ≤
-      ((LinearMap.id - W.toLinearMap) ∘ₗ DavisKahanTheory.projection U).singularValues n :=
+        TauCeti.projection U).singularValues n ≤
+      ((LinearMap.id - W.toLinearMap) ∘ₗ TauCeti.projection U).singularValues n :=
   DavisKahanTheory.singularValues_restrictedDisplacement_le U V hacute W hmap n
 
 /-- Finite-dimensional Proposition 4.1 rewritten with the same approximation
@@ -58,10 +58,10 @@ theorem finite_proposition4_1_approximationSingularValue
     (W : E ≃ₗᵢ[𝕜] E) (hmap : U.map W.toLinearMap = V) (n : ℕ) :
     approximationSingularValue n
         (((LinearMap.id - (DavisKahanTheory.directRotation U V hacute).toLinearMap) ∘ₗ
-          DavisKahanTheory.projection U).toContinuousLinearMap) ≤
+          TauCeti.projection U).toContinuousLinearMap) ≤
       approximationSingularValue n
         (((LinearMap.id - W.toLinearMap) ∘ₗ
-          DavisKahanTheory.projection U).toContinuousLinearMap) := by
+          TauCeti.projection U).toContinuousLinearMap) := by
   rw [approximationSingularValue_eq_singularValues,
     approximationSingularValue_eq_singularValues]
   exact finite_proposition4_1_singularValues U V hacute W hmap n
@@ -75,9 +75,9 @@ theorem finite_restrictedDisplacementDominance
     (W : E ≃ₗᵢ[𝕜] E) (hmap : U.map W.toLinearMap = V) :
     RestrictedDisplacementApproximationDominance
       (((LinearMap.id - (DavisKahanTheory.directRotation U V hacute).toLinearMap) ∘ₗ
-        DavisKahanTheory.projection U).toContinuousLinearMap)
+        TauCeti.projection U).toContinuousLinearMap)
       (((LinearMap.id - W.toLinearMap) ∘ₗ
-        DavisKahanTheory.projection U).toContinuousLinearMap) where
+        TauCeti.projection U).toContinuousLinearMap) where
   approximation_le :=
     finite_proposition4_1_approximationSingularValue U V hacute W hmap
 
@@ -90,8 +90,8 @@ theorem finite_corollary4_1_uiNorm
     (hacute : DavisKahanTheory.IsAcute U V)
     (W : E ≃ₗᵢ[𝕜] E) (hmap : U.map W.toLinearMap = V) :
     N ((LinearMap.id - (DavisKahanTheory.directRotation U V hacute).toLinearMap) ∘ₗ
-        DavisKahanTheory.projection U) ≤
-      N ((LinearMap.id - W.toLinearMap) ∘ₗ DavisKahanTheory.projection U) :=
+        TauCeti.projection U) ≤
+      N ((LinearMap.id - W.toLinearMap) ∘ₗ TauCeti.projection U) :=
   DavisKahanTheory.directRotation_minimizes_restrictedDisplacement_uiNorm
     N U V hacute W hmap
 

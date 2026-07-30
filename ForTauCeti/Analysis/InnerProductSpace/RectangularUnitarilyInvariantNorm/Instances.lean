@@ -66,9 +66,12 @@ noncomputable def adjointTransport
         N.smul_eq ((starRingEnd 𝕜) a) A.adjoint
       _ = ‖a‖ * N A.adjoint := by
         congr 1
+        -- names the application so the norm bound applies to it directly.
         change ‖star a‖ = ‖a‖
         exact norm_star a
   invariant' U V A := by
+    -- states the goal with the definition unfolded, in the shape the next step needs;
+    -- there is no `_apply` lemma to rewrite with here.
     change N (U.toLinearMap ∘ₗ A ∘ₗ V.toLinearMap).adjoint = N A.adjoint
     simpa only [LinearMap.adjoint_comp,
       V.adjoint_toLinearMap_eq_symm, U.adjoint_toLinearMap_eq_symm,
@@ -262,6 +265,8 @@ private theorem sqrt_sum_add_sq_le_rect {m : ℕ} (f g : Fin m → ℝ) :
     rw [EuclideanSpace.norm_eq]
     exact congrArg _ (Finset.sum_congr rfl fun i _ => by
       rw [PiLp.add_apply, show x i = f i from rfl,
+        -- states the goal with the definition unfolded, in the shape the next step needs;
+        -- there is no `_apply` lemma to rewrite with here.
         show y i = g i from rfl, Real.norm_eq_abs, sq_abs])
   rw [← hnx, ← hny, ← hnxy]
   exact norm_add_le x y
@@ -447,6 +452,7 @@ column norms in any orthonormal basis of the domain.
 theorem frobenius_apply (A : E →ₗ[𝕜] F)
     (b : OrthonormalBasis (Fin (finrank 𝕜 E)) 𝕜 E) :
     frobenius A = Real.sqrt (∑ i, ‖A (b i)‖ ^ 2) := by
+  -- names the application so the norm bound applies to it directly.
   change Real.sqrt (∑ i, ‖A (stdOrthonormalBasis 𝕜 E i)‖ ^ 2) = _
   rw [← sum_sq_singularValues A rfl (stdOrthonormalBasis 𝕜 E),
     ← sum_sq_singularValues A rfl b]
@@ -493,6 +499,8 @@ theorem rectangularKyFanSum_le_of_finiteUnitaryOrbitCertificate
     {mass : ℝ} {X C : E →ₗ[𝕜] F} (k : ℕ)
     (hcert : HasFiniteUnitaryOrbitCertificate mass X C) :
     rectangularKyFanSum k X ≤ mass * rectangularKyFanSum k C := by
+  -- states the goal with the definition unfolded, in the shape the next step needs;
+  -- there is no `_apply` lemma to rewrite with here.
   change kyFan k X ≤ mass * kyFan k C
   exact (kyFan k).apply_le_of_finiteUnitaryOrbitCertificate hcert
 

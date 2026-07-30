@@ -78,6 +78,7 @@ we merely flip slots by conjugation. -/
 lemma op_ext_of_inner_self {S T : H →L[ℂ] H}
     (h : ∀ ξ : H, ⟪ξ, S ξ⟫_ℂ = ⟪ξ, T ξ⟫_ℂ) : S = T := by
   refine ContinuousLinearMap.coe_injective ((ext_inner_map _ _).mp fun ξ => ?_)
+  -- states the goal as the inner-product identity the structure lemma expects.
   change ⟪S ξ, ξ⟫_ℂ = ⟪T ξ, ξ⟫_ℂ
   rw [← inner_conj_symm (S ξ) ξ, ← inner_conj_symm (T ξ) ξ, h ξ]
 

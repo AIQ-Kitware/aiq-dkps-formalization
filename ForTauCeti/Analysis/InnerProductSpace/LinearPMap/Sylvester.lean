@@ -90,6 +90,8 @@ theorem ofBounded
     simp
   · intro x
     have hx := congrArg (fun T : F →L[𝕜] E => T (x : F)) hEq
+    -- states the goal with the definition unfolded, in the shape the next step needs;
+    -- there is no `_apply` lemma to rewrite with here.
     change A (X (x : F)) - X (B (x : F)) = C (x : F)
     simpa only [ContinuousLinearMap.comp_apply, sub_apply] using hx
 
@@ -100,6 +102,8 @@ theorem zero (A : E →ₗ.[𝕜] E) (B : F →ₗ.[𝕜] F) :
   · intro x
     simp
   · intro x
+    -- states the goal with the definition unfolded, in the shape the next step needs;
+    -- there is no `_apply` lemma to rewrite with here.
     change A (0 : A.domain) - 0 = (0 : E)
     simp
 
@@ -121,6 +125,8 @@ theorem add {A : E →ₗ.[𝕜] E} {B : F →ₗ.[𝕜] F}
       simpa [uX] using hX.equation x
     have hEqY : A uY - Y (B x) = D (x : F) := by
       simpa [uY] using hY.equation x
+    -- states the goal with the definition unfolded, in the shape the next step needs;
+    -- there is no `_apply` lemma to rewrite with here.
     change A (uX + uY) - (X (B x) + Y (B x)) =
       C (x : F) + D (x : F)
     calc
@@ -143,6 +149,8 @@ theorem neg {A : E →ₗ.[𝕜] E} {B : F →ₗ.[𝕜] F}
     let uX : A.domain := ⟨X (x : F), hxX⟩
     have hEqX : A uX - X (B x) = C (x : F) := by
       simpa [uX] using hX.equation x
+    -- states the goal with the definition unfolded, in the shape the next step needs;
+    -- there is no `_apply` lemma to rewrite with here.
     change A (-uX) - (-X (B x)) = -C (x : F)
     calc
       A (-uX) - (-X (B x)) = -(A uX - X (B x)) := by
@@ -171,6 +179,8 @@ theorem smul {A : E →ₗ.[𝕜] E} {B : F →ₗ.[𝕜] F}
     let uX : A.domain := ⟨X (x : F), hxX⟩
     have hEqX : A uX - X (B x) = C (x : F) := by
       simpa [uX] using hX.equation x
+    -- states the goal with the definition unfolded, in the shape the next step needs;
+    -- there is no `_apply` lemma to rewrite with here.
     change A (c • uX) - c • X (B x) = c • C (x : F)
     calc
       A (c • uX) - c • X (B x) = c • (A uX - X (B x)) := by

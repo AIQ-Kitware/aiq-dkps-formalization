@@ -171,6 +171,8 @@ theorem borelCalculus_mem_domain_of_coord_mul
     have hgval : gsym w = (2 * Complex.I)⁻¹ * (1 - (w : ℂ)) := rfl
     have hκval : ((κ w : ℝ) : ℂ) + Complex.I = (2 * Complex.I) / (1 - (w : ℂ)) :=
       cayleyInv_add_I hA hw1
+    -- states the goal with the definition unfolded, in the shape the next step needs;
+    -- there is no `_apply` lemma to rewrite with here.
     change gsym w * (((κ w : ℂ) + Complex.I) * h w) = h w
     rw [hgval, hκval]
     field_simp

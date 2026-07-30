@@ -128,6 +128,8 @@ private theorem integral_Ioi_sq_div_sq_add_sq_sq {c : ℝ} (hc : 0 < c) :
     filter_upwards [eventually_gt_atTop 0] with x hx
     dsimp only [g]
     have hx0 : x ≠ 0 := hx.ne'
+    -- states the goal with the definition unfolded, in the shape the next step needs;
+    -- there is no `_apply` lemma to rewrite with here.
     change x⁻¹ / (c ^ 2 * x⁻¹ ^ 2 + 1) = x / (c ^ 2 + x ^ 2)
     field_simp [hx0]
   have hDerivIntegral : (∫ x : ℝ in Set.Ioi 0, g' x) = 0 := by
@@ -360,6 +362,7 @@ theorem integral_weight_mul_reciprocal_difference
           ∫ y : ℝ in Set.Ioi 0, F n y := by
         apply setIntegral_congr_fun measurableSet_Ioi
         intro y hy
+        -- names the application so the norm bound applies to it directly.
         change ‖F n y‖ = F n y
         rw [Real.norm_eq_abs, abs_of_nonneg (hFnonneg n hy)]
       _ = 2 * ((a + 2 * n + 1)⁻¹ - (a + 2 * n + 3)⁻¹) := hFintegral n

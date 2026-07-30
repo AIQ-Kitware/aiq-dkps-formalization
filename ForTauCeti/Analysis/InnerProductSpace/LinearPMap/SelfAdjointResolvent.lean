@@ -262,6 +262,8 @@ theorem mem_resolventSet_of_im_ne_zero {A : E →ₗ.[ℂ] E} (hA : IsSelfAdjoin
   refine mem_resolventSet_iff.mpr ⟨Rlin.mkContinuous (|z.im|⁻¹) hbound, ?_, ?_⟩
   · intro ψ
     have hinv : e.symm ((shiftMap A z) ψ) = ψ := e.symm_apply_apply ψ
+    -- states the goal with the definition unfolded, in the shape the next step needs;
+    -- there is no `_apply` lemma to rewrite with here.
     change ((e.symm (A ψ - z • (ψ : E)) : A.domain) : E) = (ψ : E)
     rw [show (A ψ - z • (ψ : E)) = (shiftMap A z) ψ from rfl, hinv]
   · intro φ
@@ -450,6 +452,8 @@ theorem cayley_apply {A : E →ₗ.[ℂ] E} (hA : IsSelfAdjoint A) (ξ : E) :
   have hsolve : A ⟨x, hmem⟩ - (-Complex.I) • x = ξ := sub_smul_resolvent h ξ
   have hAx : A ⟨x, hmem⟩ = ξ - Complex.I • x := by
     rw [← hsolve]; module
+  -- states the goal with the definition unfolded, in the shape the next step needs;
+  -- there is no `_apply` lemma to rewrite with here.
   change ξ - (2 * Complex.I) • x = A ⟨x, hmem⟩ - Complex.I • x
   rw [hAx]
   module
@@ -527,6 +531,8 @@ theorem cayley_mem_unitary {A : E →ₗ.[ℂ] E} (hA : IsSelfAdjoint A) :
     have : ContinuousLinearMap.adjoint (cayley hA) (cayley hA ζ) = ζ := by
       have := congrArg (fun T : E →L[ℂ] E => T ζ) hstar
       simpa using this
+    -- states the goal with the definition unfolded, in the shape the next step needs;
+    -- there is no `_apply` lemma to rewrite with here.
     change cayley hA (ContinuousLinearMap.adjoint (cayley hA) (cayley hA ζ)) = _
     rw [this]
     rfl

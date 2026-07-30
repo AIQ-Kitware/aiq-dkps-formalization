@@ -418,6 +418,8 @@ noncomputable def blockPolar (hnd : P.NonDegenerate P') (j : Fin m) :
     rintro ⟨y, hy⟩
     refine ⟨⟨P.proj j ((intertwiningUnitary hnd).symm y), LinearMap.mem_range_self _ _⟩, ?_⟩
     apply Subtype.ext
+    -- states the goal with the definition unfolded, in the shape the next step needs;
+    -- there is no `_apply` lemma to rewrite with here.
     change ((intertwiningUnitary hnd : E →ₗ[𝕜] E))
       (P.proj j ((intertwiningUnitary hnd).symm y)) = y
     have h := congrArg (fun f : E →ₗ[𝕜] E => f ((intertwiningUnitary hnd).symm y))
@@ -428,6 +430,7 @@ noncomputable def blockPolar (hnd : P.NonDegenerate P') (j : Fin m) :
     exact proj_apply_of_mem_range hy
   { LinearEquiv.ofBijective _ ⟨hinj, hsurj⟩ with
     norm_map' := fun v => by
+      -- names the application so the norm bound applies to it directly.
       change ‖((intertwiningUnitary hnd : E →ₗ[𝕜] E)) ↑v‖ = ‖(↑v : E)‖
       exact (intertwiningUnitary hnd).norm_map ↑v }
 

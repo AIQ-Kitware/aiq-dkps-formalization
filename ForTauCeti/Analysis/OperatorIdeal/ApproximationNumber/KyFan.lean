@@ -220,10 +220,12 @@ theorem approximationNumber_restrict_mono (T : E →L[𝕜] F) (n : ℕ) {U V : 
     (T ∘L U.subtypeL).approximationNumber n ≤ (T ∘L V.subtypeL).approximationNumber n := by
   let J : U →L[𝕜] V :=
     (Submodule.inclusion hUV).mkContinuous 1 fun x => by
+      -- names the application so the norm bound applies to it directly.
       change ‖((x : U) : E)‖ ≤ 1 * ‖x‖
       simp
   have hJnorm : ‖J‖ ≤ (1 : ℝ) :=
     J.opNorm_le_bound zero_le_one fun x => by
+      -- names the application so the norm bound applies to it directly.
       change ‖((x : U) : E)‖ ≤ 1 * ‖x‖
       simp
   have hcomp : T ∘L U.subtypeL = (T ∘L V.subtypeL) ∘L J := by
@@ -248,6 +250,8 @@ theorem approximationNumber_orthogonalProjectionOnto_comp_eq
   set AW : E →L[𝕜] W := W.orthogonalProjectionOnto ∘L A with hAW
   have hfactor : W.subtypeL ∘L AW = A := by
     ext x
+    -- states the goal with the definition unfolded, in the shape the next step needs;
+    -- there is no `_apply` lemma to rewrite with here.
     change W.starProjection (A x) = A x
     exact W.starProjection_eq_self_iff.mpr (hA x)
   have hproj : ‖W.orthogonalProjectionOnto‖ ≤ (1 : ℝ) := W.orthogonalProjectionOnto_norm_le

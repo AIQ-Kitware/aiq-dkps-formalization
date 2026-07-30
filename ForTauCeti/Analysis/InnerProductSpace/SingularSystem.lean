@@ -116,6 +116,8 @@ theorem orthonormal_leftSingularVector_subtype (A : E →ₗ[𝕜] F) :
     rw [map_inv₀, RCLike.conj_ofReal]
   rw [leftSingularVector, leftSingularVector, inner_smul_left, inner_smul_right, hconj,
     ← LinearMap.adjoint_inner_right,
+    -- states the goal with the definition unfolded, in the shape the next step needs;
+    -- there is no `_apply` lemma to rewrite with here.
     show A.adjoint (A (rightSingularBasis A j.1)) =
       (A.adjoint.comp A) (rightSingularBasis A j.1) from rfl,
     adjointCompSelf_apply_rightSingularBasis, inner_smul_right,
@@ -149,6 +151,8 @@ theorem adjoint_apply_leftSingularVector
       ((A.singularValues i : ℝ) : 𝕜) • rightSingularBasis A i := by
   have hσ : ((A.singularValues i : ℝ) : 𝕜) ≠ 0 := RCLike.ofReal_ne_zero.mpr hi
   rw [leftSingularVector, map_smul,
+    -- states the goal with the definition unfolded, in the shape the next step needs;
+    -- there is no `_apply` lemma to rewrite with here.
     show A.adjoint (A (rightSingularBasis A i)) =
       (A.adjoint.comp A) (rightSingularBasis A i) from rfl,
     adjointCompSelf_apply_rightSingularBasis, smul_smul, RCLike.ofReal_pow]
@@ -165,6 +169,8 @@ theorem selfCompAdjoint_apply_leftSingularVector
   have hadj : A.adjoint (leftSingularVector A i) =
       ((A.singularValues i : ℝ) : 𝕜) • rightSingularBasis A i := by
     rw [leftSingularVector, map_smul,
+      -- states the goal with the definition unfolded, in the shape the next step needs;
+      -- there is no `_apply` lemma to rewrite with here.
       show A.adjoint (A (rightSingularBasis A i)) =
         (A.adjoint.comp A) (rightSingularBasis A i) from rfl,
       adjointCompSelf_apply_rightSingularBasis, smul_smul, RCLike.ofReal_pow]
