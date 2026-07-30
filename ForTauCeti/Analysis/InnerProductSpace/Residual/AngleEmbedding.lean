@@ -277,6 +277,36 @@ def AvoidsQuarterTurnEmbedding (U : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] (X : F →ₗᵢ[𝕜] E) : Prop :=
   AvoidsQuarterTurn U (approximateSubspace X)
 
+omit [FiniteDimensional 𝕜 F] in
+/-- **The embedded quarter-turn condition unfolds to the ambient one.**
+
+The consuming lemma `AvoidsQuarterTurnEmbedding` lacked: it says that the
+definition is exactly `AvoidsQuarterTurn` on the range of `X`, so every fact
+proved about the ambient predicate — starting with `avoidsQuarterTurn_self` —
+applies to it.  Tau Ceti's `correctness` rubric rates an unexercised
+`Prop`-valued definition a block, on the ground that its faithfulness is
+otherwise unfalsifiable. -/
+theorem avoidsQuarterTurnEmbedding_iff (U : Submodule 𝕜 E)
+    [U.HasOrthogonalProjection] (X : F →ₗᵢ[𝕜] E) :
+    AvoidsQuarterTurnEmbedding U X ↔
+      ∀ i, principalAngles U (approximateSubspace X) i ≠ Real.pi / 4 :=
+  Iff.rfl
+
+omit [FiniteDimensional 𝕜 F] in
+/-- **A witness: an embedding whose range meets `U` at angle zero avoids the
+quarter turn.**  Instantiating the `iff` above at the configuration where every
+principal angle vanishes shows the predicate is satisfiable, which is what makes
+it falsifiable at all.  The ambient statement it specialises is
+`avoidsQuarterTurn_self`. -/
+theorem avoidsQuarterTurnEmbedding_of_principalAngles_eq_zero (U : Submodule 𝕜 E)
+    [U.HasOrthogonalProjection] (X : F →ₗᵢ[𝕜] E)
+    (hX : ∀ i, principalAngles U (approximateSubspace X) i = 0) :
+    AvoidsQuarterTurnEmbedding U X := by
+  refine (avoidsQuarterTurnEmbedding_iff U X).mpr fun i => ?_
+  rw [hX i]
+  have : (0 : ℝ) < Real.pi / 4 := by positivity
+  exact ne_of_lt this
+
 omit [FiniteDimensional 𝕜 E] [FiniteDimensional 𝕜 F] in
 /-- **The projected-residual (cross-block) Sylvester identity for an isometric
 trial map.**  This is the normalized specialization of

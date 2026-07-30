@@ -15,7 +15,7 @@ The genuinely-general measurability fact used along the way — that a continuou
 spectral function `Σₖ h(λₖ) uₖuₖᵀ` of a measurable Hermitian-matrix family is
 measurable (no functional calculus, no eigenbasis selection) — is staged
 independently as a Mathlib candidate in
-`ForMathlib/Analysis/Matrix/SpectralFunctionMeasurable.lean`
+`ForTauCeti/Analysis/Matrix/SpectralFunctionMeasurable.lean`
 (`TauCeti.Matrix.measurable_specTransform`).
 
 Formalized by Claude Fable 5 (claude-fable-5[1m]) and Claude Opus 4.8

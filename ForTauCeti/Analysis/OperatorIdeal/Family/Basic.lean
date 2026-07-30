@@ -121,6 +121,18 @@ open scoped ENNReal
 
 universe u v w
 
+-- What the linter reports, verbatim, with the suppression removed:
+--   `OperatorIdealFamily`: universes `v`, `w` only occur together.  This usually
+--   means there is a `max` expression in the type where none of these universes
+--   appear on their own.
+-- It is right, and the fix is an API change rather than a local one: the source and
+-- target universes are declared independent but the structure never uses them
+-- apart, so `max v w` is all that is ever elaborated and one variable would do.
+-- Collapsing them changes this structure's universe signature and every consumer's
+-- (`SymmetricOperatorIdealFamily` first), which is lane FTC-UNIV, not this one.
+-- Documented here rather than left silent: lane FTC-SETOPT found this the only one
+-- of the library's ten linter suppressions with no reason written at its site, and
+-- `ForTauCeti/README.md` §207 forbids silencing a linter without one.
 set_option linter.checkUnivs false in
 /-- A **rectangular operator ideal family** over `𝕜`, presented by its gauge.
 
